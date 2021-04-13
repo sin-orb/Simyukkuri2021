@@ -1,0 +1,227 @@
+package src.item;
+
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
+import java.awt.image.ImageObserver;
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+
+import javax.swing.ButtonGroup;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+
+import src.SimYukkuri;
+import src.base.Obj;
+import src.base.ObjEX;
+import src.draw.ModLoader;
+import src.draw.Translate;
+import src.enums.ObjEXType;
+import src.enums.Type;
+import src.system.Cash;
+
+/***************************************************
+トイレ
+*/
+public class Toilet extends ObjEX implements java.io.Serializable {
+	static final long serialVersionUID = 1L;
+
+	public static enum ToiletType {
+        NORMAL("安物"),
+        CLEAN("自動清掃"),
+        SLAVE("うんうんどれい"),
+		;
+        private String name;
+        ToiletType(String name) { this.name = name; }
+        public String toString() { return name; }
+	}
+
+	public static final int hitCheckObjType = ObjEX.SHIT;
+	private static BufferedImage[] images = new BufferedImage[6];
+	private static Rectangle boundary = new Rectangle();
+
+	private ItemRank itemRank;
+
+	private boolean autoClean;
+	private boolean bForSlave = false;
+
+	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
+
+		//上から順に普通&うんうん奴隷、自動清掃
+
+		images[0] = ModLoader.loadItemImage(loader, "toilet" + File.separator + "toilet.png");
+		images[1] = ModLoader.loadItemImage(loader, "toilet" + File.separator + "toilet2.png");
+
+		images[2] = ModLoader.loadItemImage(loader, "toilet" + File.separator + "toilet" + ModLoader.YK_WORD_NORA + ".png");
+		images[3] = ModLoader.loadItemImage(loader, "toilet" + File.separator + "toilet" + ModLoader.YK_WORD_NORA + "2.png");
+
+		images[4] = ModLoader.loadItemImage(loader, "toilet" + File.separator + "toilet" + ModLoader.YK_WORD_YASEI + ".png");
+		images[5] = ModLoader.loadItemImage(loader, "toilet" + File.separator + "toilet" + ModLoader.YK_WORD_YASEI + "2.png");
+
+		boundary.width = images[0].getWidth(io);
+		boundary.height = images[0].getHeight(io);
+		boundary.x = boundary.width >> 1;
+		boundary.y = boundary.height >> 1;
+	}
+
+	@Override
+	public int getImageLayer(BufferedImage[] layer) {
+		if(itemRank == ItemRank.HOUSE) {
+			if(autoClean) layer[0] = images[1];
+			else if( bForSlave) layer[0] = images[4];
+			else layer[0] = images[0];
+		}
+		else if(itemRank == ItemRank.NORA) {
+			if(autoClean) layer[0] = images[3];
+			else layer[0] = images[2];
+		}
+		else {
+			if(autoClean) layer[0] = images[5];
+			else layer[0] = images[4];
+		}
+		return 1;
+	}
+
+	@Override
+	public BufferedImage getShadowImage() {
+		return null;
+	}
+
+	public static Rectangle getBounding() {
+		return boundary;
+	}
+
+	@Override
+	public int getHitCheckObjType() {
+		if(autoClean) return hitCheckObjType;
+		return 0;
+	}
+
+	public boolean checkHitObj(Obj o) {
+		Rectangle tmpRect = new Rectangle();
+		getCollisionRect(tmpRect);
+		// 対象の座標をフィールド座標に変換
+		Translate.translate(o.getX(), o.getY(), tmpPos);
+		// 点が描画矩形に入ったかの判定
+		if(tmpRect.contains(tmpPos)) {
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public boolean checkHitObj(Rectangle colRect, Obj o) {
+		Rectangle tmpRect = new Rectangle();
+		getCollisionRect(tmpRect);
+		// 対象の座標をフィールド座標に変換
+		Translate.translate(o.getX(), o.getY(), tmpPos);
+		// 点が描画矩形に入ったかの判定
+		if(tmpRect.contains(tmpPos)) {
+			if(autoClean){
+				o.remove();
+			}
+			return true;
+		}
+		return false;
+	}
+	@Override
+	public void removeListData(){
+		SimYukkuri.world.currentMap.toilet.remove(this);
+	}
+
+	public boolean getAutoClean() {
+		return autoClean;
+	}
+
+	public boolean isForSlave(){
+		return bForSlave;
+	}
+
+	// initOption = 1 : 野良
+	public Toilet(int initX, int initY, int initOption) {
+		super(initX, initY, initOption);
+		setBoundary(boundary);
+		setCollisionSize(getPivotX(), getPivotY());
+		ArrayList<Toilet> list = SimYukkuri.world.currentMap.toilet;
+		list.add(this);
+		objType = Type.PLATFORM;
+		objEXType = ObjEXType.TOILET;
+		interval = 30;
+
+		boolean ret = setupToilet(this);
+		if(ret) {
+			itemRank = ItemRank.values()[initOption];
+			// 森なら野生に変更
+			if( SimYukkuri.world.currentMap.mapIndex == 5 ||  SimYukkuri.world.currentMap.mapIndex == 6 ){
+				if( itemRank == ItemRank.HOUSE ){
+					itemRank = ItemRank.YASEI;
+				}
+			}
+
+			if(itemRank == ItemRank.HOUSE) {
+				if(autoClean) {
+					value = 5000;
+					cost = 50;
+				}
+				else {
+					value = 1000;
+					cost = 0;
+				}
+			}
+			else {
+				value = 0;
+				cost = 0;
+			}
+		}
+		else {
+			list.remove(this);
+		}
+	}
+
+	public int objHitProcess( Obj o ) {
+		o.remove();
+		Cash.addCash(-getCost());
+		return 1;
+	}
+
+	// 設定メニュー
+	public static boolean setupToilet(Toilet t) {
+
+		JPanel mainPanel = new JPanel();
+		JRadioButton[] but = new JRadioButton[ToiletType.values().length];
+		boolean ret = false;
+
+		mainPanel.setLayout(new GridLayout(3, 1));
+		mainPanel.setPreferredSize(new Dimension(150, 100));
+		ButtonGroup bg = new ButtonGroup();
+
+		for(int i = 0; i < but.length; i++) {
+			but[i] = new JRadioButton(ToiletType.values()[i].toString());
+			bg.add(but[i]);
+
+			mainPanel.add(but[i]);
+		}
+
+		but[0].setSelected(true);
+
+		int dlgRet = JOptionPane.showConfirmDialog(SimYukkuri.mypane, mainPanel, "トイレ設定", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+		if(dlgRet == JOptionPane.OK_OPTION) {
+			if(but[0].isSelected()) t.autoClean = false;
+			if(but[1].isSelected()) t.autoClean = true;
+			if(but[2].isSelected())
+			{
+				t.bForSlave = true;
+				t.autoClean = false;
+			}
+			ret = true;
+		}
+		return ret;
+	}
+}
+
+
+

@@ -1,0 +1,1363 @@
+# レイパー怯え
+[ScareRapist]
+	<normal>
+		ゆんぎぃー！
+		ゆあぁぁん！
+	</normal>
+[/ScareRapist]
+
+# レイパーに攻撃
+[AttackRapist]
+	<normal>
+		<baby>
+			ゆんぐおおお！！！
+			ゆぐおぉ！！！
+			ゆばぁっ！！！
+			ごばああぁっ！！！
+		</baby>
+		<child>
+			ゆんぐおおお！！！
+			ゆぐおぉ！！！
+			ゆばぁっ！！！
+			ごばああぁっ！！！
+		</child>
+		<adult>
+			ゆんぐおおお！！！
+			ゆぐおぉ！！！
+			ゆばぁっ！！！
+			ごばああぁっ！！！
+		</adult>
+	</normal>
+[/AttackRapist]
+
+# レイパーに反撃命令
+[CounterRapist]
+	<normal>
+		<baby>
+			ゆっ？
+		</baby>
+		<child>
+			ゆっ？
+		</child>
+		<adult>
+			ゆっ？
+		</adult>
+	</normal>
+[/CounterRapist]
+
+# おかざりのないゆっくり発見
+[HateYukkuri]
+	<normal>
+		ゆぐっ？
+		ゆぐぐぐ、、、
+	</normal>
+[/HateYukkuri]
+
+# うんうん奴隷に認定する
+[EngageUnunSlave]
+	<normal>
+		ゆぴぴー！
+	</normal>
+[/EngageUnunSlave]
+
+# つがいを気遣う
+[ConcernAboutPartner]
+	<normal>
+		<baby>
+			ゆぴぃ、、、
+		</baby>
+		<child>
+			ゆぴぃ、、、
+		</child>
+		<adult>
+			ゆぴぃ、、、
+		</adult>
+	</normal>
+
+[/ConcernAboutPartner]
+
+# 子を気遣う
+[ConcernAboutChild]
+	<normal>
+		<baby>
+			ゆぴぃ、、、
+		</baby>
+		<child>
+			ゆぴぃ、、、
+		</child>
+		<adult>
+			ゆぴぃ、、、
+		</adult>
+	</normal>
+[/ConcernAboutChild]
+
+# 父を気遣う
+[ConcernAboutFather]
+	<normal>
+		<baby>
+			ゆぴぃ？
+			ゆぅ、、、
+		</baby>
+		<child>
+			ゆぴぃ？
+			ゆぅ、、、
+		</child>
+		<adult>
+			ゆぴぃ？
+			ゆぅ、、、
+		</adult>
+	</normal>
+[/ConcernAboutFather]
+
+# 母を気遣う
+[ConcernAboutMother]
+	<normal>
+		<baby>
+			ゆぴぃ？
+			ゆぅ、、、
+		</baby>
+		<child>
+			ゆぴぃ？
+			ゆぅ、、、
+		</child>
+		<adult>
+			ゆぴぃ？
+			ゆぅ、、、
+		</adult>
+	</normal>
+[/ConcernAboutMother]
+
+# 姉を気遣う
+[ConcernAboutEldersister]
+	<normal>
+		<baby>
+			ゆぴぃ、、、
+		</baby>
+		<child>
+			ゆぴぃ、、、
+		</child>
+		<adult>
+			ゆぴぃ、、、
+		</adult>
+	</normal>
+[/ConcernAboutEldersister]
+
+# 妹を気遣う
+[ConcernAboutSister]
+	<normal>
+		<baby>
+			ゆぴぃ、、、
+		</baby>
+		<child>
+			ゆぴぃ、、、
+		</child>
+		<adult>
+			ゆぴぃ、、、
+		</adult>
+	</normal>
+[/ConcernAboutSisterr]
+
+#子供をなめて治そうとする
+[TreatChildByPeropero]
+	<normal>
+		<baby>
+			ゆぴぃ、、ゆぴぃ、、、
+		</baby>
+		<child>
+			ゆぴぃ、、ゆぴぃ、、、
+		</child>
+		<adult>
+			ゆぴぃ、、ゆぴぃ、、、
+		</adult>
+	</normal>
+[/TreatChildByPeropero]
+
+#番をなめて治そうとする
+[TreatPartnerByPeropero]
+	<normal>
+		<baby>
+			ゆぴぃ、、ゆぴぃ、、、
+		</baby>
+		<child>
+			ゆぴぃ、、ゆぴぃ、、、
+		</child>
+		<adult>
+			ゆぴぃ、、ゆぴぃ、、、
+		</adult>
+	</normal>
+[/TreatPartnerByPeropero]
+
+#父親をなめて治そうとする
+[TreatFatherByPeropero]
+	<normal>
+		<baby>
+			ゆぴぃ、、ゆぴぃ、、、
+		</baby>
+		<child>
+			ゆぴぃ、、ゆぴぃ、、、
+		</child>
+		<adult>
+			ゆぴぃ、、ゆぴぃ、、、
+		</adult>
+	</normal>
+[/TreatFatherByPeropero]
+
+#母親をなめて治そうとする
+[TreatMotherByPeropero]
+	<normal>
+		<baby>
+			ゆぴぃ、、ゆぴぃ、、、
+		</baby>
+		<child>
+			ゆぴぃ、、ゆぴぃ、、、
+		</child>
+		<adult>
+			ゆぴぃ、、ゆぴぃ、、、
+		</adult>
+	</normal>
+[/TreatMotherByPeropero]
+
+#姉をなめて治そうとする
+[TreatElderSisterByPeropero]
+	<normal>
+		<baby>
+			ゆぴぃ、、ゆぴぃ、、、
+		</baby>
+		<child>
+			ゆぴぃ、、ゆぴぃ、、、
+		</child>
+		<adult>
+			ゆぴぃ、、ゆぴぃ、、、
+		</adult>
+	</normal>
+[/TreatElderSisterByPeropero]
+
+#妹をなめて治そうとする
+[TreatSisterByPeropero]
+	<normal>
+		<baby>
+			ゆぴぃ、、ゆぴぃ、、、
+		</baby>
+		<child>
+			ゆぴぃ、、ゆぴぃ、、、
+		</child>
+		<adult>
+			ゆぴぃ、、ゆぴぃ、、、
+		</adult>
+	</normal>
+[/TreatSisterByPeropero]
+
+#子供をすりすりして治そうとする
+[TreatChildBySurisuri]
+	<normal>
+		<baby>
+			ゆぴぃ、、ゆぴぃ、、、
+		</baby>
+		<child>
+			ゆぴぃ、、ゆぴぃ、、、
+		</child>
+		<adult>
+			ゆぴぃ、、ゆぴぃ、、、
+		</adult>
+	</normal>
+[/TreatChildBySurisuri]
+
+#番をすりすりして治そうとする
+[TreatPartnerBySurisuri]
+	<normal>
+		<baby>
+			ゆぴぃ、、ゆぴぃ、、、
+		</baby>
+		<child>
+			ゆぴぃ、、ゆぴぃ、、、
+		</child>
+		<adult>
+			ゆぴぃ、、ゆぴぃ、、、
+		</adult>
+	</normal>
+[/TreatPartnerBySurisuri]
+
+#父親をすりすりして治そうとする
+[TreatFatherBySurisuri]
+	<normal>
+		<baby>
+			ゆぴぃ、、ゆぴぃ、、、
+		</baby>
+		<child>
+			ゆぴぃ、、ゆぴぃ、、、
+		</child>
+		<adult>
+			ゆぴぃ、、ゆぴぃ、、、
+		</adult>
+	</normal>
+[/TreatFatherBySurisuri]
+
+#母親をすりすりして治そうとする
+[TreatMotherBySurisuri]
+	<normal>
+		<baby>
+			ゆぴぃ、、ゆぴぃ、、、
+		</baby>
+		<child>
+			ゆぴぃ、、ゆぴぃ、、、
+		</child>
+		<adult>
+			ゆぴぃ、、ゆぴぃ、、、
+		</adult>
+	</normal>
+[/TreatMotherBySurisuri]
+
+#姉をすりすりして治そうとする
+[TreatElderSisterBySurisuri]
+	<normal>
+		<baby>
+			ゆぴぃ、、ゆぴぃ、、、
+		</baby>
+		<child>
+			ゆぴぃ、、ゆぴぃ、、、
+		</child>
+		<adult>
+			ゆぴぃ、、ゆぴぃ、、、
+		</adult>
+	</normal>
+[/TreatElderSisterBySurisuri]
+
+#妹をすりすりして治そうとする
+[TreatSisterBySurisuri]
+	<normal>
+		<baby>
+			ゆぴぃ、、ゆぴぃ、、、
+		</baby>
+		<child>
+			ゆぴぃ、、ゆぴぃ、、、
+		</child>
+		<adult>
+			ゆぴぃ、、ゆぴぃ、、、
+		</adult>
+	</normal>
+[/TreatSisterBySurisuri]
+
+# 親を探す
+[LookForParents]
+	<normal>
+		<baby>
+			ゆぴぃ、、ゆぴぃ、、、
+		</baby>
+		<child>
+			ゆぴぃ、、ゆぴぃ、、、
+		</child>
+		<adult>
+			%dummy
+		</adult>
+	</normal>
+[/LookForParents]
+
+# つがい出産時
+[RootForPartner]
+	<normal>
+		<baby>
+			ゆぽぉ！ゆぽぉっ！
+			ゆぉお゛お゛〜♪
+		</baby>
+		<child>
+			ゆぽぉ！ゆぽぉっ！
+			ゆぉお゛お゛〜♪
+		</child>
+		<adult>
+			ゆぽぉ！ゆぽぉっ！
+			ゆぉお゛お゛〜♪
+		</adult>
+	</normal>
+[/RootForPartner]
+
+# 子への最初の挨拶
+[FirstGreeting]
+	<normal>
+		<baby>
+			ゆぐおぉー！！！
+			ゆんぎ〜♪
+		</baby>
+		<child>
+			ゆぐおぉー！！！
+			ゆんぎ〜♪
+		</child>
+		<adult>
+			ゆぐおぉー！！！
+			ゆんぎ〜♪
+		</adult>
+	</normal>
+[/FirstGreeting]
+
+# ゆっくりしているすぃーを見て
+[YukkuringSui]
+	<normal>
+		ゆぉー！
+	</normal>
+[/YukkuringSui]
+
+# すぃーを欲しがる
+[WantingSui]
+	<normal>
+		ゆぉー！ゆぉー！
+	</normal>
+[/WantingSui]
+
+# すぃーを欲しがっているゆっくりのパートナー
+[WantingSuiPartner]
+	<normal>
+		ゆぉー！ゆぉー！
+	</normal>
+[/WantingSuiPartner]
+
+# すぃーを欲しがっているゆっくりの親
+[WantingSuiParent]
+	<normal>
+		ゆぉー！ゆぉー！
+	</normal>
+[/WantingSuiParent]
+
+# すぃーを見つける
+[FindSui]
+	<normal>
+		ゆんぐぉ〜！
+	</normal>
+[/FindSui]
+
+# すぃーを自分のものにする
+[GetSui]
+	<normal>
+		ゆぉー！ゆぉー！
+	</normal>
+[/GetSui]
+
+# 自分のすぃーにのりにいく
+[FindGetSui]
+	<normal>
+		ゆぉー！
+	</normal>
+[/FindGetSui]
+
+# 自分以外のすぃーにのりにいく
+[FindGetSuiOtner]
+	<normal>
+		ゆぉー！
+	</normal>
+[/FindGetSuiOtner]
+
+# 自分以外のすぃーにのりにいくときに呼ぶ
+[WantRideSuiOtner]
+	<normal>
+		ゆぉー！ゆぉー！
+	</normal>
+[/WantRideSuiOtner]
+
+# すぃーにのる
+[RideSui]
+	<normal>
+		ゆぉー！
+	</normal>
+[/RideSui]
+
+# すぃーにのっている
+[RidingSui]
+	<normal>
+		ゆぉっ！ゆぉっ！ゆぉっ！
+		ゆぉ～！
+	</normal>
+[/RidingSui]
+
+# すぃーを運転する
+[DrivingSui]
+	<normal>
+		ゆぉ～！
+	</normal>
+[/DrivingSui]
+
+# すぃーを運転するパートナーをみて（自分はのっていない）
+[DrivingSuiPartner]
+	<normal>
+		ゆっほ！ゆっほ！ゆほほ〜い！
+	</normal>
+[/DrivingSuiPartner]
+
+# すぃーを運転するこどもをみて（自分はのっていない）
+[DrivingSuiChild]
+	<normal>
+		ゆっほ！ゆっほ！ゆほほ〜い！
+	</normal>
+[/DrivingSuiChild]
+
+# すぃーを運転する父親をみて（自分はのっていない）
+[DrivingSuiPAPA]
+	<normal>
+		ゆっほ！ゆっほ！ゆほほ〜い！
+	</normal>
+[/DrivingSuiPAPA]
+
+# すぃーを運転する母親をみて（自分はのっていない）
+[DrivingSuiMAMA]
+	<normal>
+		ゆっほ！ゆっほ！ゆほほ〜い！
+	</normal>
+[/DrivingSuiMAMA]
+
+# すぃーを運転する姉をみて（自分はのっていない）
+[DrivingSuiOldSister]
+	<normal>
+		ゆっほ！ゆっほ！ゆほほ〜い！
+	</normal>
+[/DrivingSuiOldSister]
+
+# すぃーを運転する妹をみて（自分はのっていない）
+[DrivingSuiYoungSister]
+	<normal>
+		ゆっほ！ゆっほ！ゆほほ〜い！
+	</normal>
+[/DrivingSuiYoungSister]
+
+# すぃーから降りる
+[RideOffSui]
+	<normal>
+		ゆごおぉっ！
+	</normal>
+[/RideOffSui]
+
+# 持っているすぃーを自慢する
+[hasSui]
+	<normal>
+		ゆぉ～！
+	</normal>
+	<rude>
+		ゆぉ～！
+	</rude>
+[/hasSui]
+
+# 持っているすぃーを自慢されるパートナー
+[hasSuiPartner]
+	<normal>
+		ゆぉ～♪ゆぉ～♪
+	</normal>
+[/hasSuiPartner]
+
+# こどもの持っているすぃーを自慢される親
+[hasSuiChild]
+	<normal>
+		ゆぉ～♪ゆぉ～♪
+	</normal>
+[/hasSuiChild]
+
+# 父親の持っているすぃーを自慢されるこども
+[hasSuiPAPAChild]
+	<normal>
+		ゆぉ～♪ゆぉ～♪
+	</normal>
+[/hasSuiPAPAChild]
+
+# 母親の持っているすぃーを自慢されるこども
+[hasSuiMAMAChild]
+	<normal>
+		ゆぉ～♪ゆぉ～♪
+	</normal>
+[/hasSuiMAMAChild]
+
+# 姉の持っているすぃーを自慢される
+[hasSuiOldSister]
+	<normal>
+		ゆぉ～♪ゆぉ～♪
+	</normal>
+[/hasSuiOldSister]
+
+# 妹の持っているすぃーを自慢される
+[hasSuiYoungSister]
+	<normal>
+		ゆぉ～♪ゆぉ～♪
+	</normal>
+[/hasSuiYoungSister]
+
+# 子の状態を喜ぶ
+[GladAboutChild]
+	<normal>
+		<baby>
+			ゆんぎぃ〜♪
+			ゆぐぉ〜♪
+		</baby>
+		<child>
+			ゆんぎぃ〜♪
+			ゆぐぉ〜♪
+		</child>
+		<adult>
+			ゆんぎぃ〜♪
+			ゆぐぉ〜♪
+		</adult>
+	</normal>
+[/GladAboutChild]
+
+# つがいの状態を喜ぶ
+[GladAboutPartner]
+	<normal>
+		<baby>
+			ゆんぎぃ〜♪
+			ゆぐぉ〜♪
+		</baby>
+		<child>
+			ゆんぎぃ〜♪
+			ゆぐぉ〜♪
+		</child>
+		<adult>
+			ゆんぎぃ〜♪
+			ゆぐぉ〜♪
+		</adult>
+	</normal>
+[/GladAboutPartner]
+
+# 父の状態を喜ぶ
+[GladAboutFather]
+	<normal>
+		<baby>
+			ゆんぎぃ〜♪
+			ゆぐぉ〜♪
+		</baby>
+		<child>
+			ゆんぎぃ〜♪
+			ゆぐぉ〜♪
+		</child>
+		<adult>
+			ゆんぎぃ〜♪
+			ゆぐぉ〜♪
+		</adult>
+	</normal>
+[/GladAboutFather]
+
+# 母の状態を喜ぶ
+[GladAboutMother]
+	<normal>
+		<baby>
+			ゆんぎぃ〜♪
+			ゆぐぉ〜♪
+		</baby>
+		<child>
+			ゆんぎぃ〜♪
+			ゆぐぉ〜♪
+		</child>
+		<adult>
+			ゆんぎぃ〜♪
+			ゆぐぉ〜♪
+		</adult>
+	</normal>
+[/GladAboutMother]
+
+# 姉の状態を喜ぶ
+[GladAboutEldersister]
+	<normal>
+		<baby>
+			ゆんぎぃ〜♪
+			ゆぐぉ〜♪
+		</baby>
+		<child>
+			ゆんぎぃ〜♪
+			ゆぐぉ〜♪
+		</child>
+		<adult>
+			ゆんぎぃ〜♪
+			ゆぐぉ〜♪
+		</adult>
+	</normal>
+[/GladAboutEldersister]
+
+# 妹の状態を喜ぶ
+[GladAboutSister]
+	<normal>
+		<baby>
+			ゆんぎぃ〜♪
+			ゆぐぉ〜♪
+		</baby>
+		<child>
+			ゆんぎぃ〜♪
+			ゆぐぉ〜♪
+		</child>
+		<adult>
+			ゆんぎぃ〜♪
+			ゆぐぉ〜♪
+		</adult>
+	</normal>
+[/GladAboutSister]
+
+#---------------------------------------------
+# 姉の状態をうらやましがる
+[EnvyAboutElderSister]
+	<normal>
+		<baby>
+			ゆぐぐ、、、
+			ゆんぐぅ〜、、、
+		</baby>
+		<child>
+			ゆぐぐ、、、
+			ゆんぐぅ〜、、、
+		</child>
+		<adult>
+			ゆぐぐ、、、
+			ゆんぐぅ〜、、、
+		</adult>
+	</normal>
+[/EnvyAboutElderSister]
+
+# 妹の状態をうらやましがる
+[EnvyAboutSister]
+	<normal>
+		<baby>
+			ゆぐぐ、、、
+			ゆんぐぅ〜、、、
+		</baby>
+		<child>
+			ゆぐぐ、、、
+			ゆんぐぅ〜、、、
+		</child>
+		<adult>
+			ゆぐぐ、、、
+			ゆんぐぅ〜、、、
+		</adult>
+	</normal>
+[/EnvyAboutSister]
+
+# 他人の状態をうらやましがる
+[EnvyAboutOther]
+	<normal>
+		<baby>
+			ゆぐぐ、、、
+			ゆんぐぅ〜、、、
+		</baby>
+		<child>
+			ゆぐぐ、、、
+			ゆんぐぅ〜、、、
+		</child>
+		<adult>
+			ゆぐぐ、、、
+			ゆんぐぅ〜、、、
+		</adult>
+	</normal>
+[/EnvyAboutOther]
+
+#---------------------------------------------
+# 姉の状態をうらやましがって泣く
+[EnvyCryAboutElderSister]
+	<normal>
+		<baby>
+			ゆぐぉーっ！
+			ゆんぐおおぉぉ！！！
+		</baby>
+		<child>
+			ゆぐぉーっ！
+			ゆんぐおおぉぉ！！！
+		</child>
+		<adult>
+			ゆぐぉーっ！
+			ゆんぐおおぉぉ！！！
+		</adult>
+	</normal>
+[/EnvyCryAboutElderSister]
+
+# 妹の状態をうらやましがって泣く
+[EnvyCryAboutSister]
+	<normal>
+		<baby>
+			ゆぐぉーっ！
+			ゆんぐおおぉぉ！！！
+		</baby>
+		<child>
+			ゆぐぉーっ！
+			ゆんぐおおぉぉ！！！
+		</child>
+		<adult>
+			ゆぐぉーっ！
+			ゆんぐおおぉぉ！！！
+		</adult>
+	</normal>
+[/EnvyCryAboutSister]
+
+# 他人の状態をうらやましがって泣く
+[EnvyCryAboutOther]
+	<normal>
+		<baby>
+			ゆぐぉーっ！
+			ゆんぐおおぉぉ！！！
+		</baby>
+		<child>
+			ゆぐぉーっ！
+			ゆんぐおおぉぉ！！！
+		</child>
+		<adult>
+			ゆぐぉーっ！
+			ゆんぐおおぉぉ！！！
+		</adult>
+	</normal>
+[/EnvyCryAboutOther]
+
+#---------------------------------------------
+# 子供の状態がうらやましすぎて憎む
+[HateWithEnvyAboutChild]
+	<normal>
+		<baby>
+			ゆぎぎ、、、
+			ゆっぐ ゆっぐ、、、
+		</baby>
+		<child>
+			ゆぎぎ、、、
+			ゆっぐ ゆっぐ、、、
+		</child>
+		<adult>
+			ゆぎぎ、、、
+			ゆっぐ ゆっぐ、、、
+		</adult>
+	</normal>
+[/HateWithEnvyAboutChild]
+
+# つがいの状態がうらやましすぎて憎む
+[HateWithEnvyAboutPartner]
+	<normal>
+		<baby>
+			ゆぎぎ、、、
+			ゆっぐ ゆっぐ、、、
+		</baby>
+		<child>
+			ゆぎぎ、、、
+			ゆっぐ ゆっぐ、、、
+		</child>
+		<adult>
+			ゆぎぎ、、、
+			ゆっぐ ゆっぐ、、、
+		</adult>
+	</normal>
+[/HateWithEnvyAboutPartner]
+
+# 父の状態がうらやましすぎて憎む
+[HateWithEnvyAboutFather]
+	<normal>
+		<baby>
+			ゆぎぎ、、、
+			ゆっぐ ゆっぐ、、、
+		</baby>
+		<child>
+			ゆぎぎ、、、
+			ゆっぐ ゆっぐ、、、
+		</child>
+		<adult>
+			ゆぎぎ、、、
+			ゆっぐ ゆっぐ、、、
+		</adult>
+	</normal>
+[/HateWithEnvyAboutFather]
+
+# 母の状態がうらやましすぎて憎む
+[HateWithEnvyAboutMother]
+	<normal>
+		<baby>
+			ゆぎぎ、、、
+			ゆっぐ ゆっぐ、、、
+		</baby>
+		<child>
+			ゆぎぎ、、、
+			ゆっぐ ゆっぐ、、、
+		</child>
+		<adult>
+			ゆぎぎ、、、
+			ゆっぐ ゆっぐ、、、
+		</adult>
+	</normal>
+[/HateWithEnvyAboutMother]
+
+# 姉の状態がうらやましすぎて憎む
+[HateWithEnvyAboutElderSister]
+	<normal>
+		<baby>
+			ゆぎぎ、、、
+			ゆっぐ ゆっぐ、、、
+		</baby>
+		<child>
+			ゆぎぎ、、、
+			ゆっぐ ゆっぐ、、、
+		</child>
+		<adult>
+			ゆぎぎ、、、
+			ゆっぐ ゆっぐ、、、
+		</adult>
+	</normal>
+[/HateWithEnvyAboutElderSister]
+
+# 妹の状態がうらやましすぎて憎む
+[HateWithEnvyAboutSister]
+	<normal>
+		<baby>
+			ゆぎぎ、、、
+			ゆっぐ ゆっぐ、、、
+		</baby>
+		<child>
+			ゆぎぎ、、、
+			ゆっぐ ゆっぐ、、、
+		</child>
+		<adult>
+			ゆぎぎ、、、
+			ゆっぐ ゆっぐ、、、
+		</adult>
+	</normal>
+[/HateWithEnvyAboutSister]
+
+# 他人の状態がうらやましすぎて憎む
+[HateWithEnvyAboutOther]
+	<normal>
+		<baby>
+			ゆぎぎ、、、
+			ゆっぐ ゆっぐ、、、
+		</baby>
+		<child>
+			ゆぎぎ、、、
+			ゆっぐ ゆっぐ、、、
+		</child>
+		<adult>
+			ゆぎぎ、、、
+			ゆっぐ ゆっぐ、、、
+		</adult>
+	</normal>
+[/HateWithEnvyAboutOther]
+
+# 他人を哀れに思う
+[MercyAboutOther]
+	<normal>
+		<baby>
+			ゆぎぎ、、、
+			ゆっぐ ゆっぐ、、、
+		</baby>
+		<child>
+			ゆぎぎ、、、
+			ゆっぐ ゆっぐ、、、
+		</child>
+		<adult>
+			ゆぎぎ、、、
+			ゆっぐ ゆっぐ、、、
+		</adult>
+	</normal>
+[/MercyAboutOther]
+
+#---------------------------------------------
+# プレイヤーにすりすりされた時限定のメッセージ
+#---------------------------------------------
+# すりすりされている
+[SuriSuriByPlayer]
+	<normal>
+		<baby>
+			ゆぐぉ〜♪ゆぐぉ〜♪
+			ゆぉお゛お゛〜♪
+		</baby>
+		<child>
+			ゆぐぉ〜♪ゆぐぉ〜♪
+			ゆぉお゛お゛〜♪
+		</child>
+		<adult>
+			ゆぐぉ〜♪ゆぐぉ〜♪
+			ゆぉお゛お゛〜♪
+			ゆぼぉ、、ゆぼぉおおぅ、、♥
+		</adult>
+	</normal>
+[/SuriSuriByPlayer]
+
+# 姉の状態をうらやましがる
+[EnvyAboutElderSisterInSurisuri]
+	<normal>
+		<baby>
+			ゆんがぁーっ！
+			ゆがががぁーーっ！！！
+		</baby>
+		<child>
+			ゆんがぁーっ！
+			ゆがががぁーーっ！！！
+		</child>
+		<adult>
+			ゆんがぁーっ！
+			ゆがががぁーーっ！！！
+		</adult>
+	</normal>
+[/EnvyAboutElderSisterInSurisuri]
+
+# 妹の状態をうらやましがる
+[EnvyAboutSisterInSurisuri]
+	<normal>
+		<baby>
+			ゆんがぁーっ！
+			ゆがががぁーーっ！！！
+		</baby>
+		<child>
+			ゆんがぁーっ！
+			ゆがががぁーーっ！！！
+		</child>
+		<adult>
+			ゆんがぁーっ！
+			ゆがががぁーーっ！！！
+		</adult>
+	</normal>
+[/EnvyAboutSisterInSurisuri]
+
+#---------------------------------------------
+# 姉の状態をうらやましがって泣く
+[EnvyCryAboutElderSisterInSurisuri]
+	<normal>
+		<baby>
+			ゆんがぁーっ！
+			ゆがががぁーーっ！！！
+		</baby>
+		<child>
+			ゆんがぁーっ！
+			ゆがががぁーーっ！！！
+		</child>
+		<adult>
+			ゆんがぁーっ！
+			ゆがががぁーーっ！！！
+		</adult>
+	</normal>
+[/EnvyCryAboutElderSisterInSurisuri]
+
+# 妹の状態をうらやましがって泣く
+[EnvyCryAboutSisterInSurisuri]
+	<normal>
+		<baby>
+			ゆんがぁーっ！
+			ゆがががぁーーっ！！！
+		</baby>
+		<child>
+			ゆんがぁーっ！
+			ゆがががぁーーっ！！！
+		</child>
+		<adult>
+			ゆんがぁーっ！
+			ゆがががぁーーっ！！！
+		</adult>
+	</normal>
+[/EnvyCryAboutSisterInSurisuri]
+
+#---------------------------------------------
+# うんうん体操のメッセージ
+#---------------------------------------------
+# 声かけ(親側)
+[ShitExercisesGOFrom]
+	<normal>
+		ゆぐおー！
+		ゆぐっ！ゆんぐっ！
+	</normal>
+[/ShitExercisesGOFrom]
+
+# 待機(親側)
+[ShitExercisesWAITFrom]
+	<normal>
+		ゆんぐっ！ゆごぉ？
+	</normal>
+[/ShitExercisesWAITFrom]
+
+# イベント開始(親側)
+[ShitExercisesSTARTFrom]
+	<normal>
+		ゆごゆご、ゆんごぉ～♪
+	</normal>
+[/ShitExercisesSTARTFrom]
+
+# ゆらゆら(親側)
+[ShitExercisesYURAYURAFrom]
+	<normal>
+		♪ゆごゆご ゆぐゆぐ ゆぉ〜♪ ゆぉ〜♪
+	</normal>
+[/ShitExercisesYURAYURAFrom]
+
+# のびのび(親側)
+[ShitExercisesNOBINOBIFrom]
+	<normal>
+		♪ゆごゆご ゆぐゆぐ ん〜ぐ♪ ん〜ぐ♪
+	</normal>
+[/ShitExercisesNOBINOBIFrom]
+
+# ぽかぽか(親側)
+[ShitExercisesPOKAPOKAFrom]
+	<normal>
+		♪ゆほゆほ ゆぐゆぐ ゆんぐぅ〜♪
+	</normal>
+[/ShitExercisesPOKAPOKAFrom]
+
+# うんうん(親側)
+[ShitExercisesUNUNFrom]
+	<normal>
+		♪ゆぐゆぐ ゆほゆほ ゆぶぶぶぅ〜♪
+	</normal>
+[/ShitExercisesUNUNFrom]
+
+# イベント終了(親側)
+[ShitExercisesENDFrom]
+	<normal>
+		ゆぐぅ！ゆんぐぅー！
+	</normal>
+[/ShitExercisesENDFrom]
+#---------------------------
+# 声かけ(子側)
+[ShitExercisesGO]
+	<normal>
+		ゆぐぉ〜♪
+		ゆんぐぅ～♪
+		ゆっぐ！ゆっぐ！
+	</normal>
+[/ShitExercisesGO]
+
+# 待機(子側)
+[ShitExercisesWAIT]
+	<normal>
+		ゆぐっ♪
+		ゆおっゆおっ♪
+	</normal>
+[/ShitExercisesWAIT]
+
+# イベント開始(子側)
+[ShitExercisesSTART]
+	<normal>
+		ゆー！
+		ゆぐゆぐおー！
+	</normal>
+[/ShitExercisesSTART]
+
+# ゆらゆら(子側)
+[ShitExercisesYURAYURA]
+	<normal>
+		ゆぐぉっ
+		ゆぐ～っ
+	</normal>
+[/ShitExercisesYURAYURA]
+
+# のびのび(子側)
+[ShitExercisesNOBINOBI]
+	<normal>
+		ゆおー！
+		ゆぐぐ～っ
+		ゆんぐ～っ
+	</normal>
+[/ShitExercisesNOBINOBI]
+
+# ぽかぽか(子側)
+[ShitExercisesPOKAPOKA]
+	<normal>
+		ゆぉ〜
+		ゆぐっ！ゆぐっ！
+		ゆんぐぉ〜
+	</normal>
+[/ShitExercisesPOKAPOKA]
+
+# うんうん(子側)
+[ShitExercisesUNUN]
+	<normal>
+		ゆぐぉーっ！
+		ぶぴぴぃっ！
+		びちびちびちぃっ！
+	</normal>
+[/ShitExercisesUNUN]
+
+#---------------------------
+# 家族で食事をする
+[FamilyEatingTimeWait]
+	<normal>
+		ゆぉ〜
+		ゆぐっ！ゆぐっ！
+	</normal>
+[/FamilyEatingTimeWait]
+
+# すーぱーむーしゃむーしゃたいむ
+[SuperEatingTime]
+	<normal>
+		ゆぉ〜
+		ゆぐっ！ゆぐっ！
+	</normal>
+[/SuperEatingTime]
+
+# おちびちゃん運び
+[RideOnMe]
+	<normal>
+		<adult>
+			ゆぐぐっ！
+		</adult>
+	</normal>
+[/RideOnMe]
+
+#おちび自慢(歌)
+[ProudChildsSING]
+	<normal>
+		ゆぴ～ゆぴぴ～～♪
+	</normal>
+[/ProudChildsSING]
+
+#おちび自慢(親側)
+[ProudChildsGOFrom]
+	<normal>
+		ゆぴぃ！
+	</normal>
+[/ProudChildsGOFrom]
+
+#おちび自慢(親側)
+[ProudChildsSTARTFrom]
+	<normal>
+		ゆっびびぃ！！
+	</normal>
+[/ProudChildsSTARTFrom]
+
+#おちび自慢(親側)
+[ProudChildsPROUDFrom]
+	<normal>
+		ゆっぴぴぃ～～
+	</normal>
+[/ProudChildsPROUDFrom]
+
+#おちび自慢(親側)
+[ProudChildsENDFrom]
+	<normal>
+		ゆびぃ！！
+	</normal>
+[/ProudChildsENDFrom]
+
+#おちび自慢(子供側)
+[ProudChildsGO]
+	<normal>
+		ゆぴ？
+	</normal>
+[/ProudChildsGO]
+
+#おちび自慢(子供側)
+[ProudChildsSTART]
+	<normal>
+		ゆぴ！
+	</normal>
+[/ProudChildsSTART]
+
+#おちび自慢(子供側)
+[ProudChildsPROUD]
+	<normal>
+		ゆっぴゃぁ～～♪
+	</normal>
+[/ProudChildsPROUD]
+
+#おちび自慢(子供側)
+[ProudChildsEND]
+	<normal>
+		ゆぴっ！！
+	</normal>
+[/ProudChildsEND]
+
+# 子供がかびた
+[SadnessForMoldyChild]
+	<normal>
+		ゆぴ？
+	</normal>
+[/SadnessForMoldyChild]
+
+# つがいがかびた
+[SadnessForMoldyPartner]
+	<normal>
+		ゆぴ？
+	</normal>
+[/SadnessForMoldyPartner]
+
+# 姉がかびた
+[SadnessForMoldyElderSister]
+	<normal>
+		ゆぴ？
+	</normal>
+[/SadnessForMoldyElderSister]
+
+# 妹がかびた
+[SadnessForMoldySister]
+	<normal>
+		ゆぴ？
+	</normal>
+[/SadnessForMoldySister]
+
+#子供に謝罪
+[ApologyToChild]
+	<normal>
+		ゆぴ、、、
+	</normal>
+[/ApologyToChild]
+
+#謝罪
+[ApologyToFamily]
+	<normal>
+		ゆぴ、、、
+	</normal>
+[/ApologyToFamily]
+
+#かびゆヘイト
+[HateMoldyYukkuri]
+	<normal>
+		ゆぴー！
+		ゆぴぴっ！
+	</normal>
+[/HateMoldyYukkuri]
+
+#おもちゃの悲鳴
+[DontPlayMe]
+	<normal>
+		ゆぴー！
+		ゆぴぴっ！
+	</normal>
+[/DontPlayMe]
+
+#プロポーズイベント関連
+#待ってください
+[PleaseWait]
+	<normal>
+		ゆぴー！
+		ゆぴぴっ！
+	</normal>
+[/PleaseWait]
+
+#プロポーズ
+[Propose]
+	<normal>
+		ゆぴー！
+		ゆぴぴっ！
+		ゆぴぴっ！ゆっくち！ゆっくち！
+		ゆくち！ゆっくち！！
+	</normal>
+[/Propose]
+
+#プロポーズ受諾
+[ProposeYes]
+	<normal>
+		ゆぴぴっ！
+	</normal>
+[/ProposeYes]
+
+#プロポーズ拒否
+[ProposeNo]
+	<normal>
+		ゆぴー！
+	</normal>
+[/ProposeNo]
+
+#やらないか
+[LetsPlay]
+	<normal>
+		ゆぴぃ、、、
+	</normal>
+[/LetsPlay]
+
+#いいよ、きて//
+[OKcome]
+	<normal>
+		ゆぴぃ、、
+	</normal>
+[/OKcome]
+
+#失恋
+[Heartbreak]
+	<normal>
+		ゆぴーーーーー！
+		ゆびぃぃぃぃぃぃぃ！！！
+	</normal>
+[/Heartbreak]
+
+#じゃましないでね！せいっさいするよ！
+[DontPreventUs]
+	<normal>
+		ゆぐぴぃーー！！
+		ゆぐおーー！ゆぐおーー！！
+	</normal>
+[/DontPreventUs]

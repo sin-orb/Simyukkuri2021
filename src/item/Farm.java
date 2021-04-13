@@ -1,0 +1,389 @@
+package src.item;
+
+
+import java.awt.Graphics2D;
+import java.awt.Point;
+import java.awt.TexturePaint;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.awt.image.ImageObserver;
+import java.io.File;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Random;
+
+import src.SimYukkuri;
+import src.base.Body;
+import src.base.Obj;
+import src.command.GadgetAction;
+import src.draw.ModLoader;
+import src.draw.Translate;
+import src.enums.BaryInUGState;
+import src.game.Shit;
+import src.game.Stalk;
+import src.game.Vomit;
+import src.system.FieldShapeBase;
+import src.system.ItemMenu.ShapeMenu;
+import src.system.ItemMenu.ShapeMenuTarget;
+import src.system.MapPlaceData;
+
+/***************************************************
+畑
+*/
+public class Farm extends FieldShapeBase implements Serializable {
+	static final long serialVersionUID = 1L;
+
+	private static final int MIN_SIZE = 8;
+
+	private static BufferedImage images;
+	private static TexturePaint texture;
+	private int amount = 1000;
+	private int[] anPointX = new int[4];
+	private int[] anPointY = new int[4];
+	protected Random rnd = new Random();
+
+	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
+		images = ModLoader.loadItemImage(loader, "farm" + File.separator + "farm.png");
+		texture = new TexturePaint(images, new Rectangle2D.Float(0, 0, images.getWidth(), images.getHeight()));
+	}
+	
+	@Override
+	public ShapeMenuTarget hasShapePopup() {
+		return ShapeMenuTarget.FARM;
+	}
+
+	@Override
+	public void executeShapePopup(ShapeMenu menu) {
+
+		ArrayList<Farm> list = SimYukkuri.world.currentMap.farm;
+		int pos;
+		
+		switch(menu) {
+			case SETUP:
+				break;
+			case HERVEST:
+				break;
+			case TOP:
+				list.remove(this);
+				list.add(0, this);
+				break;
+			case UP:
+				pos = list.indexOf(this);
+				if(pos > 0) {
+					list.remove(this);
+					list.add(pos - 1, this);
+				}
+				break;
+			case DOWN:
+				pos = list.indexOf(this);
+				if(pos < (list.size() - 1)) {
+					list.remove(this);
+					list.add(pos + 1, this);
+				}
+				break;
+			case BOTTOM:
+				list.remove(this);
+				list.add(this);
+				break;
+		}
+	}
+
+	@Override
+	public int getAttribute() {
+		return FIELD_FARM;
+	}
+
+	@Override
+	public int getMinimumSize() {
+		return MIN_SIZE;
+	}
+
+	public static void drawPreview(Graphics2D g2, int sx, int sy, int ex, int ey) {
+		int[] anPointX = new int[4];
+		int[] anPointY = new int[4];
+		Translate.getPolygonPoint(sx, sy, ex, ey, anPointX, anPointY);
+
+		g2.drawPolygon(anPointX, anPointY, 4 );
+	}
+
+	@Override
+	public void drawShape(Graphics2D g2) {
+		Translate.getPolygonPoint(fieldSX, fieldSY, fieldEX, fieldEY, anPointX, anPointY);
+		g2.setPaint(texture);
+		g2.fillPolygon(anPointX, anPointY, 4 );
+	}
+
+	public Farm(int fsx, int fsy, int fex, int fey) {
+		Point pS = Translate.getFieldLimitForMap( fsx, fsy );
+        Point pE = Translate.getFieldLimitForMap( fex, fey );
+        fieldSX = pS.x;
+        fieldSY = pS.y;
+        fieldEX = pE.x;
+        fieldEY = pE.y;
+
+		int[] anPointBaseX = new int[2];
+		int[] anPointBaseY = new int[2];
+		Translate.getMovedPoint(fieldSX, fieldSY, fieldEX, fieldEY, 0, 0, 0, 0, anPointBaseX, anPointBaseY );
+
+		// フィールド座標が渡ってくるのでマップ座標も計算しておく
+		Point pos = Translate.invertLimit(anPointBaseX[0], anPointBaseY[0]);
+		mapSX = Math.max(0, Math.min(pos.x, Translate.mapW));
+		mapSY = Math.max(0, Math.min(pos.y, Translate.mapH));
+		
+		pos = Translate.invertLimit(anPointBaseX[1], anPointBaseY[1]);
+		mapEX = Math.max(0, Math.min(pos.x, Translate.mapW));
+		mapEY = Math.max(0, Math.min(pos.y, Translate.mapH));
+		
+		// 規定サイズと位置へ合わせる
+		if((mapEX - mapSX) < MIN_SIZE) mapEX = mapSX + MIN_SIZE;
+		if((mapEY - mapSY) < MIN_SIZE) mapEY = mapSY + MIN_SIZE;
+		if(mapEX > Translate.mapW) {
+			mapSX -= (mapEX - Translate.mapW);
+			mapEX -= (mapEX - Translate.mapW);
+		}
+		if(mapEY > Translate.mapH) {
+			mapSY -= (mapEY - Translate.mapH);
+			mapEY -= (mapEY - Translate.mapH);
+		}
+
+		Point f = new Point();
+		Translate.translate(mapSX, mapSY, f);
+		fieldSX = f.x;
+		fieldSY = f.y;
+		Translate.translate(mapEX, mapEY, f);
+		fieldEX = f.x;
+		fieldEY = f.y;
+
+		fieldW = fieldEX - fieldSX + 1;
+		fieldH = fieldEY - fieldSY + 1;
+		mapW = mapEX - mapSX + 1;
+		mapH = mapEY - mapSY + 1;
+
+		SimYukkuri.world.currentMap.farm.add(this);
+		MapPlaceData.setFiledFlag(SimYukkuri.world.currentMap.fieldMap, mapSX, mapSY, mapW, mapH, true, FIELD_FARM);
+	}
+
+	// フィールド座標にあるシェイプ取得
+	public static Farm getFarm(int fx, int fy) {
+		
+		for(Farm bc :SimYukkuri.world.currentMap.farm) {
+			if(bc.fieldSX <= fx && fx <= bc.fieldEX
+					&& bc.fieldSY <= fy && fy <= bc.fieldEY) {
+				return bc;
+			}
+		}
+		return null;
+	}
+	
+	// 削除
+	public static void deleteFarm(Farm b) {
+		MapPlaceData.setFiledFlag(SimYukkuri.world.currentMap.fieldMap, b.mapSX, b.mapSY, b.mapW, b.mapH, false, FIELD_FARM);
+		SimYukkuri.world.currentMap.farm.remove(b);
+		// 重なってた部分の復元
+		for(Farm bc :SimYukkuri.world.currentMap.farm) {
+			MapPlaceData.setFiledFlag(SimYukkuri.world.currentMap.fieldMap, bc.mapSX, bc.mapSY, bc.mapW, bc.mapH, true, FIELD_FARM);
+		}
+	}
+	
+    public boolean checkContain( int inX, int inY , boolean bIsField )
+    {
+    	int nX = inX;
+    	int nY = inY;
+		if(bIsField )
+		{
+			Point pos = Translate.invertLimit( inX, inY );	
+			nX = pos.x;
+			nY = pos.y;
+		}
+		
+		Point posFirst = Translate.invertLimit( anPointX[0], anPointY[0] );
+		Point posSecond = Translate.invertLimit( anPointX[2], anPointY[2] );
+		if( posFirst != null && posSecond != null)
+		{
+			if( posFirst.x <= nX && nX <= posSecond.x && posFirst.y <= nY && nY <= posSecond.y )
+			{
+                return true;
+			}
+		}
+    	return false;
+    }
+    
+	public boolean checkHitObj(Obj o ) {
+		if( o == null )
+		{
+			return false;
+		}
+
+		if( !checkContain(o.getX(), o.getY(), false))
+		{
+			return false;
+		}
+		// エリア内
+		return true;
+	}
+	
+	public int objHitProcess( Obj o ) {
+		if( o == null )
+		{
+			return 0;
+		}
+		// 空中は無視
+		int nZ = o.getZ();
+		if( o instanceof Body)
+		{
+			Body b = (Body)o;
+//			int nH = b.getCollisionY();
+			if( 0 < nZ ){
+				if( b.getBaryState() != BaryInUGState.NONE ){
+					o.setMostDepth(0);
+					b.setLockmove(false);
+					b.setBaryState(BaryInUGState.NONE);
+					return 1;
+				}
+			}
+		}
+		else{
+			if( 0 < nZ ){
+				if( o.getMostDepth() != 0 ){
+					o.setMostDepth(0);
+				}
+				return 1;
+			}
+		}
+		
+		if( o instanceof Stalk )
+		{
+			o.setMostDepth(0);
+			o.setZ(0);
+			return 1;
+		}
+		
+		if( rnd.nextInt(20) != 0 )
+		{
+			return 1;
+		}		
+		// 肥料取得
+		getAmount(o);
+		
+		// 肥料を与える
+		giveAmount(o);
+		
+		return 1;
+	}
+	
+	public void getAmount(Obj o)
+	{
+		if( o == null )
+		{
+			return;
+		}
+		
+		if( 0 < o.getZ())
+		{
+			return;
+		}
+
+		int nTempAmount = 100;
+		if( o instanceof Shit )
+		{
+			Shit s = (Shit)o;
+			amount += nTempAmount;
+			s.eatShit(nTempAmount);
+		}
+		
+		if( o instanceof Vomit )
+		{
+			Vomit v = (Vomit)o;
+			amount += nTempAmount;
+			v.eatVomit(nTempAmount);
+		}
+
+		if( o instanceof Body ){
+			Body b = (Body)o;
+			if( b.isDead() ){
+				amount += nTempAmount;
+				b.eatBody(nTempAmount);
+				// 潰れてたり溶けてたらもう1回
+				if(b.isCrushed() || b.isMelt() ){
+					amount += nTempAmount;
+					b.eatBody(nTempAmount);
+				}
+			}
+			
+			int nShit = b.getShit();
+			// 体内のうんうんも吸う
+			if( o.getZ() < 0 &&nTempAmount < nShit )
+			{
+				b.setShit(nShit - nTempAmount, false );
+			}
+		}
+	}
+	
+
+	public void giveAmount(Obj o)
+	{
+		if( o == null )
+		{
+			return;
+		}
+		int nTempAmount = 100;
+		if( o instanceof Body )
+		{
+			Body b = (Body)o;
+			if( b.isDead() || b.isRemoved() )
+			{
+				return;
+			}
+
+			// 土にかなり埋まってたら茎がはえる
+			if( b.getBaryState() == BaryInUGState.NEARLY_ALL ||
+					 b.getBaryState() == BaryInUGState.ALL)
+			{			
+				// 茎が生えていたら救済モード(10%回復)
+				if( b.isHasStalk() && nTempAmount <= amount){
+					if(b.isSoHungry()){
+						amount -= nTempAmount;
+						b.addHungry(b.getHungryLimit()/10);
+					}
+					
+					if(b.isDamaged()  ){
+						amount -= nTempAmount;
+						b.addDamage(-b.getDamageLimit()/10);
+					}
+				}
+				
+				if( !b.isHasStalk() && 1000 < amount ){
+					GadgetAction.putObjEX(Stalk.class, b.getX(), b.getY(), b.getDirection().ordinal());
+					ArrayList<Stalk> stalkList = SimYukkuri.world.currentMap.stalk;
+					if( stalkList != null && stalkList.size() != 0 ){
+						Stalk currentStalk = stalkList.get(stalkList.size() - 1);
+						b.getStalks().add( currentStalk );
+						currentStalk.setPlantYukkuri( b );
+						b.setHasStalk(true);
+						amount -= 200;
+					}
+				}
+				else{
+					// 余裕がありそうならランダムで茎を生やす
+					if( 3000 < amount && !b.isDamaged()){
+						if(rnd.nextInt(100) == 0 ){
+							GadgetAction.putObjEX(Stalk.class, b.getX(), b.getY(), b.getDirection().ordinal());
+							ArrayList<Stalk> stalkList = SimYukkuri.world.currentMap.stalk;
+							if( stalkList != null && stalkList.size() != 0 ){
+								Stalk currentStalk = stalkList.get(stalkList.size() - 1);
+								b.getStalks().add( currentStalk );
+								currentStalk.setPlantYukkuri( b );
+								b.setHasStalk(true);
+								amount -= 200;
+							}							
+						}
+					}
+				}
+			}
+		}
+	}
+}
+
+
+

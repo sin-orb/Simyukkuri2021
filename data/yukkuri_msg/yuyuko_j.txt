@@ -1,0 +1,2192 @@
+# 餌発見
+[WantFood]
+	<normal>
+		<baby>
+			きょぼにぇ！
+		</baby>
+		<child>
+			こぼにぇ！
+		</child>
+		<adult>
+			こぼね！
+		</adult>
+	</normal>
+[/WantFood]
+
+# 餌なし
+[NoFood]
+	<normal>
+		<baby>
+			きょぼぼにぇー？
+			<damage>
+				きょぼにえぇぇ、、、
+			</damage>
+		</baby>
+		<child>
+			こぼにぇー？
+			<damage>
+				こぼねえぇぇ、、、
+			</damage>
+		</child>
+		<adult>
+			こぼねー？
+			<damage>
+				こぼねー、、、
+			</damage>
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			きょぼにぇ！きょぼにぇ！
+			<damage>
+				きょぼにぇぇぇ、、、
+			</damage>
+		</baby>
+		<child>
+			こぼにぇ！こぼにぇ！
+			<damage>
+				こぼねえぇぇ、、、
+			</damage>
+		</child>
+		<adult>
+			こぼね！こぼね！
+			<damage>
+				こぼねー、、、
+			</damage>
+		</adult>
+	</rude>
+[/NoFood]
+
+# 番要求
+[WantPartner]
+	<normal>
+		<baby>
+			%dummy
+		</baby>
+		<child>
+			%dummy
+		</child>
+		<adult>
+			おあいて……こぼねぇ……
+			こぼねぇ、こぼねぇ、、、
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			%dummy
+		</baby>
+		<child>
+			きょぼね！きょぼね！
+			きょぼね！　きょぼねきょぼね！　ちゃべるきょぼね！
+		</child>
+		<adult>
+			こぼね！こぼね！
+			こぼね！　こぼねこぼね！　たべるこぼね！
+		</adult>
+	</rude>
+[/WantPartner]
+
+# 発情
+[Excite]
+	<normal>
+		<baby>
+			きょぼにぇ！
+		</baby>
+		<child>
+			きょぼにぇ！
+		</child>
+		<adult>
+			こぼねー！
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			きょぼにぇ！
+		</baby>
+		<child>
+			きょぼにぇ！
+		</child>
+		<adult>
+			こぼねー！
+		</adult>
+	</rude>
+[/Excite]
+
+#れいぱー化して発情
+[ExciteForRaper]
+	<normal>
+		<baby>
+			きょぼにぇ！
+		</baby>
+		<child>
+			きょぼにぇ！
+		</child>
+		<adult>
+			こぼねー！
+		</adult>
+	</normal>
+[/ExciteForRaper]
+
+# ぺにぺに切断
+[PenipeniCutting]
+	<normal>
+		<baby>
+			きょぼにぇー？！
+		</baby>
+		<child>
+			こぼにぇー？！
+		</child>
+		<adult>
+			こぼねー？！
+		</adult>
+	</normal>
+[/PenipeniCutting]
+
+# ぺにぺに切断後
+[PenipeniCutted]
+	<normal>
+		<baby>
+			きょぼにぇー、、、
+		</baby>
+		<child>
+			こぼにぇー、、、
+		</child>
+		<adult>
+			こぼねー、、、
+		</adult>
+	</normal>
+[/PenipeniCutted]
+
+# ぺにぺにをつかえない
+[CantUsePenipeni]
+	<normal>
+		<baby>
+			きょぼにぇー、、、
+		</baby>
+		<child>
+			こぼにぇー、、、
+		</child>
+		<adult>
+			こぼねー、、、
+		</adult>
+	</normal>
+[/CantUsePenipeni]
+
+# リラックス
+[Relax]
+	<normal>
+		<baby>
+			きょぼにぇー！
+			きょぼにぇ♪
+		</baby>
+		<child>
+			こぼにぇー！
+			きょぼにぇ♪
+		</child>
+		<adult>
+			こぼねー！
+			こぼねー♪
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			きょーぼにぇー！
+			きょぼにぇ♪
+		</baby>
+		<child>
+			こーぼにぇー！
+			きょぼにぇ♪
+		</child>
+		<adult>
+			こーぼねー！
+			こぼねー♪
+		</adult>
+	</rude>
+[/Relax]
+
+# おくるみをはいてリラックス
+[RelaxOkurumi]
+	<normal>
+		<baby>
+			きょーぼにぇー！
+			きょぼにぇ♪
+		</baby>
+		<child>
+			こーぼにぇー！
+			きょぼにぇ♪
+		</child>
+		<adult>
+			こーぼねー！
+			こぼねー♪
+		</adult>
+	</normal>
+[/RelaxOkurumi]
+
+# 尻振り
+[FuriFuri]
+	<normal>
+		<baby>
+			きょーぼーにぇー！
+			きょーぼきょーぼ♪
+		</baby>
+		<child>
+			こーぼーにぇー！
+			きょーぼきょーぼ♪
+		</child>
+		<adult>
+			こーぼーねー！
+			こーぼこーぼ♪
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			きょーぼきょーぼ！きょぼーにぇー！
+			きょーぼきょーぼ♪
+		</baby>
+		<child>
+			こーぼーこーぼ！こーぼーにぇー！
+			きょーぼきょーぼ♪
+		</child>
+		<adult>
+			こーぼーこーぼ！こーぼーねー！
+			こーぼこーぼ♪
+		</adult>
+	</rude>
+[/FuriFuri]
+
+#キリッ
+[BeVain]
+	<normal>
+		<baby>
+			きょびょにぇっ！
+		</baby>
+		<child>
+			こぼにぇっ！
+		</child>
+		<adult>
+			こぼねっ！
+		</adult>
+	</normal>
+[/BeVain]
+
+# ゆっくりしていってね！
+[TakeItEasy]
+	<normal>
+		<baby>
+			きょぼにぇー！
+		</baby>
+		<child>
+			こぼにぇー！
+		</child>
+		<adult>
+			こぼねー！
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			きょぼにぇー！！！
+		</baby>
+		<child>
+			こぼにぇー！！！
+		</child>
+		<adult>
+			こぼねー！！！
+		</adult>
+	</rude>
+[/TakeItEasy]
+
+# 起床
+[Wakeup]
+	<normal>
+		<baby>
+			きょぼにぇー！
+		</baby>
+		<child>
+			こぼにぇー！
+		</child>
+		<adult>
+			こぼねー！
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			きょぼにぇー！！！
+		</baby>
+		<child>
+			こぼにぇー！！！
+		</child>
+		<adult>
+			こぼねー！！！
+		</adult>
+	</rude>
+[/Wakeup]
+
+# 睡眠
+[Sleep]
+	<normal>
+		<baby>
+			こぼぉ・・こぼぉ・・
+			・・・。
+		</baby>
+		<child>
+			こぼぉ・・こぼぉ・・
+			・・・。
+		</child>
+		<adult>
+			こぼぉ・・こぼぉ・・
+			こぼぉ・・こぼぉ・・
+			こぼぉ・・こぼぉ・・
+			こぼぉ・・こぼぉ・・
+			こぼぉ・・こぼぉ・・
+			こぼぉ・・こぼぉ・・
+			こぼぉ・・こぼぉ・・
+			こぼぉ・・こぼぉ・・
+			こぼぉ・・こぼぉ・・
+			こぼぉ・・こぼぉ・・
+			・・・。
+			・・・。
+			・・・。
+			・・・。
+			・・・。
+			・・・。
+			・・・。
+			・・・。
+			・・・。
+			・・・。
+			ようむ・・・
+			さくらのはながみたいわ・・・
+		</adult>
+	</normal>
+[/Sleep]
+
+# 悲鳴
+[Scream]
+	<normal>
+		<baby>
+			きょぼにゃー！
+			<damage>
+				きょ、きょ、きょ、、、
+			</damage>
+		</baby>
+		<child>
+			こぼ！こぼにぇー！
+			<damage>
+				こぼにぇー、、、
+			</damage>
+		</child>
+		<adult>
+			こぼねー！こぼねー！
+			<damage>
+				こぼねー、、、こぼねー、、、
+			</damage>
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			きょぼにゃー！
+			<damage>
+				きょ、きょ、きょ、、、
+			</damage>
+		</baby>
+		<child>
+			こぼにぇ！こぼにぇ！
+			<damage>
+				こぼにぇ、、、
+			</damage>
+		</child>
+		<adult>
+			こぼね！こぼね！
+			<damage>
+				こぼね、、、こぼね、、、
+			</damage>
+		</adult>
+	</rude>
+[/Scream]
+
+# 悲鳴2
+[Scream2]
+	<normal>
+		ごびょぉぉぉぉぉぉぉ！！！
+	</normal>
+[/Scream2]
+
+# 怯え
+[Scare]
+	<normal>
+		<baby>
+			きょぼにゃー！
+			<damage>
+				きょぼにゃー、、、
+			</damage>
+		</baby>
+		<child>
+			こぼねぇ！
+			<damage>
+				こぼにぇー、、、
+			</damage>
+		</child>
+		<adult>
+			こぼね！
+			<damage>
+				こぼ！こぼねー、、、
+			</damage>
+		</adult>
+	</normal>
+[/Scare]
+
+# 警戒
+[Alarm]
+	<normal>
+		<baby>
+			きょぼにぇ～
+			<damage>
+				きょぼにぇきょぼにぇ、、、
+			</damage>
+		</baby>
+		<child>
+			こぼにぇ～
+			<damage>
+				こぼにぇ～、、、
+			</damage>
+		</child>
+		<adult>
+			こぼね～！
+			<damage>
+				こぼね～、、、
+			</damage>
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			きょぼにぇ！
+			<damage>
+				きょきょきょぼにぇ、、、
+			</damage>
+		</baby>
+		<child>
+			こぼ！こぼ！こぼにぇ！
+			<damage>
+				こぼにぇ、、、
+			</damage>
+		</child>
+		<adult>
+			こ・ぼ・ね！
+			<damage>
+				こ、、、ぼ、、、ね、、、
+			</damage>
+		</adult>
+	</rude>
+[/Alarm]
+
+# 瀕死
+[Dying]
+	<normal>
+		<baby>
+			きょっ！
+		</baby>
+		<child>
+			こ、こ、こ、、、
+		</child>
+		<adult>
+			ごぼっ！
+		</adult>
+	</normal>
+[/Dying]
+
+# 死亡
+[Dead]
+	<normal>
+		<baby>
+			きょぼー、、、
+		</baby>
+		<child>
+			こぼ、、、にぇ、、、
+		</child>
+		<adult>
+			こぼね、、、ゆっくり
+		</adult>
+	</normal>
+[/Dead]
+
+# 食事
+[Eating]
+	<normal>
+		<baby>
+			ひゃーふゅひゃーふゅ、きょぼにぇー！
+			ひゃーふゅひゃーふゅ、きょぼにぇー！
+		</baby>
+		<child>
+			はーふゅはーひゅ、こぼにぇー！
+			はみゅはみゅ！
+		</child>
+		<adult>
+			はーふはーふ、こぼねー！
+			はむはむ、こぼねー！
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			ひゃーふゅひゃーふゅ、きょぼにぇー！
+			ひゃーふゅひゃーふゅ、きょぼにぇー！
+		</baby>
+		<child>
+			はーふゅはーふゅ、こぼね！
+			はーふゅはーふゅ
+		</child>
+		<adult>
+			はーふはーふ、こぼねぇぇ！
+			はむはむ
+		</adult>
+	</rude>
+[/Eating]
+
+# 食事(うんうん)
+[EatingShit]
+	<normal>
+		<baby>
+			ひゃーふゅひゃーふゅ、にぇー、、、
+		</baby>
+		<child>
+			はーふゅはーふゅ、ねぇ、、、
+		</child>
+		<adult>
+			はーふはーふ、こぼねー、、、
+		</adult>
+	</normal>
+[/EatingShit]
+
+# 餌運び
+[TransportFood]
+	<normal>
+		こぼねー！
+	</normal>
+[/TransportFood]
+
+# うんうん運び
+[TransportShit]
+	<normal>
+		こぼねー！
+	</normal>
+[/TransportShit]
+
+#アイテムを落とす
+[DropItem]
+	<normal>
+		こぼねー！
+	</normal>
+[/DropItem]
+
+# 食事(まずい)
+[EatingBadtasting]
+	<normal>
+		<baby>
+			はーふゅはーふゅ、きょびょにぇー、、、
+		</baby>
+		<child>
+			はーふゅはーふゅ、こびょねぇ、、、
+		</child>
+		<adult>
+			はーふはーふ、こぼねー、、、
+		</adult>
+	</normal>
+[/EatingBadtasting]
+
+# 食事(毒)
+[EatingBitter]
+	<normal>
+		<baby>
+			ひゃーふゅひゃーふゅ、ん゛にぇー！
+		</baby>
+		<child>
+			はーふゅはーふゅ、ね゛ぇー！
+		</child>
+		<adult>
+			はーふはーふ、ごぼぉ！
+		</adult>
+	</normal>
+[/EatingBitter]
+
+# 食事(嘔吐)
+[SpitFood]
+	<normal>
+		<baby>
+			こびょびょびょびょ、、、
+		</baby>
+		<child>
+			こびょびょびょびょ、、、
+		</child>
+		<adult>
+			こぼぼぼぼ、、、
+		</adult>
+	</normal>
+[/SpitFood]
+
+# 満腹
+[Full]
+	<normal>
+		<baby>
+			きょぼにぇー、、、
+		</baby>
+		<child>
+			こぼにぇ、、、
+		</child>
+		<adult>
+			こぼねー、、、
+		</adult>
+	</normal>
+[/Full]
+
+# 回復
+[Healing]
+	<normal>
+		<baby>
+			きょぼにぇー！
+			<damage>
+				ひゃふゅー！
+			</damage>
+		</baby>
+		<child>
+			こぼにぇー！
+			<damage>
+				はふゅー！
+			</damage>
+		</child>
+		<adult>
+			こぼねー！
+			<damage>
+				はふー！
+			</damage>
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			きょぼにぇ！
+			<damage>
+				きょぼにぇ！
+			</damage>
+		</baby>
+		<child>
+			こぼにぇ！
+			<damage>
+				はふゅ！
+			</damage>
+		</child>
+		<adult>
+			こぼね！
+			<damage>
+				はふ！
+			</damage>
+		</adult>
+	</rude>
+[/Healing]
+
+# 解放感を感じた時
+[ToFreedom]
+	<normal>
+		<baby>
+			きょぼー！
+		</baby>
+		<child>
+			こぼにぇー！
+		</child>
+		<adult>
+			こぼねー！
+		</adult>
+	</normal>
+[/ToFreedom]
+
+# 清掃された時
+[Cleaned]
+	<normal>
+		<baby>
+			きょぼー！
+		</baby>
+		<child>
+			こぼにぇー！
+		</child>
+		<adult>
+			こぼねー！
+		</adult>
+	</normal>
+[/Cleaned]
+
+# すっきり
+[Sukkiri]
+	<normal>
+		<baby>
+			きょぼー！
+		</baby>
+		<child>
+			こぼにぇー！
+		</child>
+		<adult>
+			こぼねー！
+		</adult>
+	</normal>
+[/Sukkiri]
+
+#れいぱー化してすっきりー！
+[SukkiriForRaper]
+	<normal>
+		<baby>
+			きょぼー！
+		</baby>
+		<child>
+			こぼにぇー！
+		</child>
+		<adult>
+			こぼねー！
+		</adult>
+	</normal>
+[/SukkiriForRaper]
+
+# レイパーとすっきり
+[RaperSukkiri]
+	<normal>
+		<baby>
+			こぼっ？こぼっ？
+			こぼにぇー？！
+		</baby>
+		<child>
+			こぼっ？こぼっ？
+			こぼにぇー？！
+		</child>
+		<adult>
+			ごぼっ？ごぼっ？
+			ごぼにぇー？！
+		</adult>
+	</normal>
+[/RaperSukkiri]
+
+# 養殖プールすっきり
+[PoolSukkiri]
+	<normal>
+		<baby>
+			こぼっ？こぼっ？
+			こぼにぇー？！
+		</baby>
+		<child>
+			こぼっ？こぼっ？
+			こぼにぇー？！
+		</child>
+		<adult>
+			ごぼっ？ごぼっ？
+			ごぼにぇー？！
+		</adult>
+	</normal>
+[/PoolSukkiri]
+
+# 誕生
+[Birth]
+	<normal>
+		きょぼにぇ～！
+	</normal>
+[/Birth]
+
+# 排泄
+[Shit]
+	<normal>
+		<baby>
+			きょびょきょびょ！
+			<pants>
+				きょびょー！
+			</pants>
+		</baby>
+		<child>
+			こびょこびょ！
+			<pants>
+				こびょー！
+			</pants>
+		</child>
+		<adult>
+			こぼこぼこぼ！
+			<pants>
+				こぼー！
+			</pants>
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			きょびょきょびょーっ！
+			<pants>
+				きょびょー！
+			</pants>
+		</baby>
+		<child>
+			こびょこびょーっ！
+			<pants>
+				こびょー！
+			</pants>
+		</child>
+		<adult>
+			こぼこぼこぼーっ！
+			<pants>
+				こぼー！
+			</pants>
+		</adult>
+	</rude>
+[/Shit]
+
+# 排泄2
+[Shit2]
+	<normal>
+		<baby>
+			きょびょー！
+			<pants>
+				きょぼにぇーっ！
+			</pants>
+		</baby>
+		<child>
+			きょびょー！
+			<pants>
+				こぼにぇー！
+			</pants>
+		</child>
+		<adult>
+			こぼー！
+			<pants>
+				こぼぉ、、、
+			</pants>
+		</adult>
+	</normal>
+[/Shit2]
+
+# すりすり
+[SuriSuri]
+	<normal>
+		<baby>
+			ちゅ～りちゅ～り♪
+			ちゅりちゅり♪こぼにぇー！
+		</baby>
+		<child>
+			しゅ～りしゅ～り♪
+			しゅりしゅり♪こぼにぇー！
+		</child>
+		<adult>
+			す〜りす〜り♪
+			すりすり♪こぼねー！
+		</adult>
+	</normal>
+[/SuriSuri]
+
+# ぺろぺろ
+[PeroPero]
+	<normal>
+		<baby>
+			ぺーりょぺーりょ♪
+			ぺりょぺりょ♪こぼにぇー！
+		</baby>
+		<child>
+			ぺーりょぺーりょ♪
+			ぺりょぺりょ♪こぼにぇー！
+		</child>
+		<adult>
+			ぺ〜ろぺ〜ろ♪
+			ぺろぺろ♪こぼねー！
+		</adult>
+	</normal>
+[/PeroPero]
+
+# 出産
+[Breed]
+	<normal>
+		こ、、、こぼね、、、
+	</normal>
+[/Breed]
+
+# 産後
+[Breed2]
+	<normal>
+		おちびっ！こぼねー！
+		<pants>
+			おちびっ！こぉー！
+		</pants>
+	</normal>
+[/Breed2]
+
+# うんうん発見
+[HateShit]
+	<normal>
+		<baby>
+			きょぼにぇ？！
+			<damage>
+				きょぼにぇ、、、
+			</damage>
+		</baby>
+		<child>
+			こ、こびょねぇ？！
+			<damage>
+				こびょにぇ、、、
+			</damage>
+		</child>
+		<adult>
+			こぼ、こぼねー！
+			<damage>
+				こぼこぼねー、、、
+			</damage>
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			きょぼにぇきょぼにぇ！
+			<damage>
+				きょぼにぇ、、、きょびょ、、、
+			</damage>
+		</baby>
+		<child>
+			こびょねぇ！！
+			<damage>
+				こびょねぇ、、、
+			</damage>
+		</child>
+		<adult>
+			こぼねこぼね！！
+			<damage>
+				こぼね、、、こぼね、、、
+			</damage>
+		</adult>
+	</rude>
+[/HateShit]
+
+#あほの子がうんうんを威嚇するセリフ
+[ShitIntimidation]
+	<normal>
+		きょぼぉぉ！！きょぼぉぉ！！
+	</normal>
+[/ShitIntimidation]
+
+# 空腹
+[Hungry]
+	<normal>
+		<baby>
+			きょびょにぇ？きょびょにぇー？
+			<damage>
+				きょびょにぇ、、、？きょびょにぇ、、、？
+			</damage>
+		</baby>
+		<child>
+			こびょにぇ？こびょにぇー？
+			<damage>
+				こびょにぇ、、、？こびょにぇ、、、？
+			</damage>
+		</child>
+		<adult>
+			こぼね？こぼねー？
+			<damage>
+				こぼね、、、？こぼね、、、？
+			</damage>
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			きょびょにぇー！きょびょにぇー！
+			<damage>
+				きょびょにぇ、、、きょびょにぇ、、、
+			</damage>
+		</baby>
+		<child>
+			こびょにぇー！こびょにぇー！
+			<damage>
+				こびょにぇ、、、こびょにぇ、、、
+			</damage>
+		</child>
+		<adult>
+			こぼねー！こぼねー！こぼねー！
+			<damage>
+				こぼね、、、こぼね、、、
+			</damage>
+		</adult>
+	</rude>
+[/Hungry]
+
+# おかざり没収
+[NoAccessory]
+	<normal>
+		<baby>
+			きょびょにぇ！きょびょにぇ！きょびょね！
+		</baby>
+		<child>
+			こびょね！こびょね！こびょね！
+		</child>
+		<adult>
+			こぼね！こぼね！こぼね！
+		</adult>
+	</normal>
+[/NoAccessory]
+
+# おかざりがなくなっていることに気がつく
+[NoticeNoAccessory]
+	<normal>
+		<baby>
+			きょびょにぇ！きょびょにぇ！きょびょね！
+		</baby>
+		<child>
+			こびょね！こびょね！こびょね！
+		</child>
+		<adult>
+			こぼね！こぼね！こぼね！
+		</adult>
+	</normal>
+[/NoticeNoAccessory]
+
+# 他ゆんのおかざりをこっそり奪う
+[GetOtherAccessoryStealthily]
+	<normal>
+		<baby>
+			きょびょにぇ！
+		</baby>
+		<child>
+			こびょね！
+		</child>
+		<adult>
+			こぼね！
+		</adult>
+	</normal>
+[/GetOtherAccessoryStealthily]
+
+# 持ち上げ
+[Flying]
+	<normal>
+		<baby>
+			きょーびょにぇー！
+		</baby>
+		<child>
+			こーびょにぇー！
+		</child>
+		<adult>
+			こーぼねー！
+		</adult>
+	</normal>
+[/Flying]
+
+# 子供死亡
+[SadnessForChild]
+	<normal>
+		こぼねぇー！
+	</normal>
+[/SadnessForChild]
+
+# つがい死亡
+[SadnessForPartner]
+	<normal>
+		%partnerこぼねえぇーっ！
+	</normal>
+[/SadnessForPartner]
+
+# 姉死亡
+[SadnessForEldersister]
+	<normal>
+		<baby>
+			きょびょにえぇーっ！
+		</baby>
+		<child>
+			きょびょにえぇーっ！
+		</child>
+		<adult>
+			こぼねえぇーっ！
+		</adult>
+	</normal>
+[/SadnessForEldersister]
+
+# 妹死亡
+[SadnessForSister]
+	<normal>
+		<baby>
+			こびょねえぇーっ！
+		</baby>
+		<child>
+			こびょねえぇーっ！
+		</child>
+		<adult>
+			こぼねえぇーっ！
+		</adult>
+	</normal>
+[/SadnessForSister]
+
+# 壁発見
+[BlockedByWall]
+	<normal>
+		<baby>
+			きょびょにぇ？！
+		</baby>
+		<child>
+			こびょにぇ？！
+		</child>
+		<adult>
+			こぼね？！
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			きょびょにぇ！！きょびょにぇ！！
+		</baby>
+		<child>
+			こびょにぇ！！こびょにぇ！！
+		</child>
+		<adult>
+			ぷくぅーっ、こぼねー！！
+		</adult>
+	</rude>
+[/BlockedByWall]
+
+# おもちゃ発見
+[GetTreasure]
+	<normal>
+		<baby>
+			きょびょにぇー！
+		</baby>
+		<child>
+			こびょにぇー！
+		</child>
+		<adult>
+			こぼねー！
+		</adult>
+	</normal>
+[/GetTreasure]
+
+# おもちゃ紛失
+[LostTreasure]
+	<normal>
+		<baby>
+			きょびょにぇー！きょびょー！
+		</baby>
+		<child>
+			こびょにぇー！こびょー！
+		</child>
+		<adult>
+			こぼねー！こぼー！
+		</adult>
+	</normal>
+[/LostTreasure]
+
+# 膨張
+[Inflation]
+	<normal>
+		<baby>
+			ぎよょょょょっ！
+		</baby>
+		<child>
+			ぎょびよょょょっ！
+		</child>
+		<adult>
+			こおぉぉぉぼおぉぉぉぉっ！
+		</adult>
+	</normal>
+[/Inflation]
+
+# 子虐待
+[AbuseBaby]
+	<normal>
+		<baby>
+			きょーっ！
+		</baby>
+		<child>
+			きょーっ！
+		</child>
+		<adult>
+			こぼねぇーっ！
+		</adult>
+	</normal>
+[/AbuseBaby]
+
+# 子虐待死
+[AbuseBabyKilled]
+	<normal>
+		<baby>
+			きょーっ！
+		</baby>
+		<child>
+			きょーっ！
+		</child>
+		<adult>
+			こぼねぇーっ！
+		</adult>
+	</normal>
+[/AbuseBabyKilled]
+
+# のびのび
+[Nobinobi]
+	<normal>
+		<baby>
+			にょーびにょーび、きょびょにぇー
+		</baby>
+		<child>
+			にょーびにょーび、こぼにぇー
+		</child>
+		<adult>
+			のーびのーび、こぼねー
+		</adult>
+	</normal>
+[/Nobinobi]
+
+# 出産前
+[NearToBirth]
+	<normal>
+		<baby>
+			き、、、きょびょ！
+		</baby>
+		<child>
+			こびょ！
+		</child>
+		<adult>
+			こぼっ！
+		</adult>
+	</normal>
+[/NearToBirth]
+
+# 毒
+[PoisonDamage]
+	<normal>
+		<baby>
+			ぎょびょょょょっ！！!
+			<damage>
+				お゛ぉ゛
+			</damage>
+		</baby>
+		<child>
+			こびょょょょょ！！
+			<damage>
+				ごぉ゛
+			</damage>
+		</child>
+		<adult>
+			ごぉ゛ぉ゛ぉ゛ぉ゛ぉ゛ぉ゛っ！！！
+			<damage>
+				ぉ゛ぉ゛ぉ゛ぉ゛
+			</damage>
+		</adult>
+	</normal>
+[/PoisonDamage]
+
+# 排泄不可
+[CantShit]
+	<normal>
+		<baby>
+			きょびょにぇー？！きょびょにぇー！
+		</baby>
+		<child>
+			こびょ？！こぼにぇー！
+		</child>
+		<adult>
+			こぼねー？！こぼね！
+		</adult>
+	</normal>
+[/CantShit]
+
+# 妊娠失敗
+[NoPregnancy]
+	<normal>
+		<baby>
+			きょぼにえぇぇ、、、
+		きょびょにぇー！
+		</baby>
+		<child>
+			きょぼにえぇぇ、、、
+		きょびょにぇー！
+		</child>
+		<adult>
+			きょぼにえぇぇ、、、
+		きょびょにぇー！
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			きょぼにえぇぇ、、、
+		きょびょにぇー！
+		</baby>
+		<child>
+			きょぼにえぇぇ、、、
+		きょびょにぇー！
+		</child>
+		<adult>
+			きょぼにえぇぇ、、、
+		きょびょにぇー！
+		</adult>
+	</rude>
+[/NoPregnancy]
+
+# 恐怖でパニック状態
+[Fear]
+	<normal>
+		<baby>
+			きょびょにぇー！
+		</baby>
+		<child>
+			きょびょにぇー！
+		</child>
+		<adult>
+			きょびょにぇー！
+		</adult>
+	</normal>
+[/Fear]
+
+# 火がついてる状態
+[Burning]
+	<normal>
+		<baby>
+			こびょょょょょ！！
+		</baby>
+		<child>
+			こびょょょょょ！！
+		</child>
+		<adult>
+			こびょょょょょ！！
+		</adult>
+	</normal>
+[/Burning]
+
+# 水をかけられた
+[Wet]
+	<normal>
+		<baby>
+			きょぼにえぇぇ、、、
+		</baby>
+		<child>
+			きょぼにえぇぇ、、、
+		</child>
+		<adult>
+			きょぼにえぇぇ、、、
+		</adult>
+	</normal>
+[/Wet]
+
+# 水の中にいる(浅瀬)
+[WetInShallowWater]
+	<normal>
+		<baby>
+			きょぼにえぇぇ、、、
+		</baby>
+		<child>
+			きょぼにえぇぇ、、、
+		</child>
+		<adult>
+			きょぼにえぇぇ、、、
+		</adult>
+	</normal>
+[/WetInShallowWater]
+
+# 水の中にいる(深瀬)
+[WetInDeepwWater]
+	<normal>
+		<baby>
+			きょぼにえぇぇ、、、
+		</baby>
+		<child>
+			きょぼにえぇぇ、、、
+		</child>
+		<adult>
+			きょぼにえぇぇ、、、
+		</adult>
+	</normal>
+[/WetInDeepwWater]
+
+# あにゃる閉鎖
+[AnalSealed]
+	<normal>
+		<baby>
+			こっ、こぼにぇ！
+		</baby>
+		<child>
+			こっ、こぼにぇ！
+		</child>
+		<adult>
+			こっ、こぼねー！
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			こっ、こぼにぇ！
+		</baby>
+		<child>
+			こっ、こぼにぇ！
+		</child>
+		<adult>
+			こっ、こぼねー！
+		</adult>
+	</rude>
+[/AnalSealed]
+
+# 針が刺さった時
+[NeedleStick]
+	<normal>
+		<baby>
+			きょぼにぇっ？
+		</baby>
+		<child>
+			こぼにぇっ？
+		</child>
+		<adult>
+			こぼねっ？
+		</adult>
+	</normal>
+[/NeedleStick]
+
+# 針が刺さっている時
+[NeedleScream]
+	<normal>
+		<baby>
+			きょぼー！きょぼー！
+		</baby>
+		<child>
+			こぼー！こぼー！
+		</child>
+		<adult>
+			こぼー！こぼー！
+		</adult>
+	</normal>
+[/NeedleScream]
+
+# あにゃるに針が刺さっている時
+[NeedleScreamInAnal]
+	<normal>
+		<baby>
+			きょぼー！きょぼー！
+		</baby>
+		<child>
+			こぼー！こぼー！
+		</child>
+		<adult>
+			こぼー！こぼー！
+		</adult>
+	</normal>
+[/NeedleScreamInAnal]
+
+# つがいの針をぐーりぐりする
+[ExtractingNeedlePartner]
+	<normal>
+		<baby>
+			きょーぼきょーぼ！
+		</baby>
+		<child>
+			こーぼこーぼ！
+		</child>
+		<adult>
+			こーぼこーぼ！
+		</adult>
+	</normal>
+[/ExtractingNeedlePartner]
+
+# 子の針をぐーりぐりする
+[ExtractingNeedleChild]
+	<normal>
+		<baby>
+			きょーぼきょーぼ！
+		</baby>
+		<child>
+			こーぼこーぼ！
+		</child>
+		<adult>
+			こーぼこーぼ！
+		</adult>
+	</normal>
+[/ExtractingNeedleChild]
+
+# 被ぐーりぐり時
+[NeedlePain]
+	<normal>
+		<baby>
+			きょぼにぇえ？きょぼにぇえ？
+		</baby>
+		<child>
+			こぼにぇえ？こぼにぇえ？
+		</child>
+		<adult>
+			こぼねー？こぼねー？
+		</adult>
+	</normal>
+[/NeedlePain]
+
+# 針を抜いた時
+[NeedleRemove]
+	<normal>
+		<baby>
+			きょぼーん、きょぼーん、、、
+		</baby>
+		<child>
+			こぼーん、こぼーん、、、
+		</child>
+		<adult>
+			こぼーん、こぼーん、、、
+		</adult>
+	</normal>
+[/NeedleRemove]
+
+# あまあま要求
+[WantAmaama]
+	<normal>
+		<baby>
+			こーぼねー！こーぼねー！
+		</baby>
+		<child>
+			こーぼねー！こーぼねー！
+		</child>
+		<adult>
+			こーぼねー！こーぼねー！
+		</adult>
+	</normal>
+[/WantAmaama]
+
+# 移動不能
+[CantMove]
+	<normal>
+		<baby>
+			こぼねっ？
+		</baby>
+		<child>
+			こぼねっ？
+		</child>
+		<adult>
+			こぼねっ？
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			こぼねっ？こぼっ！こぼっ！
+		</baby>
+		<child>
+			こぼねっ？こぼっ！こぼっ！
+		</child>
+		<adult>
+			こぼねっ？こぼっ！こぼっ！
+		</adult>
+	</rude>
+[/CantMove]
+
+# 移動不能2
+[CantMove2]
+	<normal>
+		<baby>
+			こぼねー？こぼねー？
+		</baby>
+		<child>
+			こぼねー？こぼねー？
+		</child>
+		<adult>
+			こぼねー？こぼねー？
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			こぼねー？こぼー！こぼー！
+		</baby>
+		<child>
+			こぼねー？こぼー！こぼー！
+		</child>
+		<adult>
+			こぼねー？こぼー！こぼー！
+		</adult>
+	</rude>
+[/CantMove2]
+
+# 目潰し
+[BLINDING]
+	<normal>
+		<baby>
+			きょびょねぇぇぇぇ！！！
+		</baby>
+		<child>
+			きょぼねぇぇぇぇ！！！
+		</child>
+		<adult>
+			こぼねぇぇぇぇ！！！
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			きょびょねぇぇぇぇ！！！
+		</baby>
+		<child>
+			きょぼねぇぇぇぇ！！！
+		</child>
+		<adult>
+			こぼねぇぇぇぇ！！！
+		</adult>
+	</rude>
+[/BLINDING]
+
+# 見えない
+[CANTSEE]
+	<normal>
+		<baby>
+			きょびょねー・・・
+		</baby>
+		<child>
+			きょぼねー・・・
+		</child>
+		<adult>
+			こぼねー・・・
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			きょびょねー・・・
+		</baby>
+		<child>
+			きょぼねー・・・
+		</child>
+		<adult>
+			こぼねー・・・
+		</adult>
+	</rude>
+[/CANTSEE]
+
+#むしる
+[PLUNCKING]
+	<normal>
+		<baby>
+			きょびょねぇぇぇぇ！！！
+		</baby>
+		<child>
+			きょぼねぇぇぇぇ！！！
+		</child>
+		<adult>
+			こぼねぇぇぇぇ！！！
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			きょびょねぇぇぇぇ！！！
+		</baby>
+		<child>
+			きょぼねぇぇぇぇ！！！
+		</child>
+		<adult>
+			こぼねぇぇぇぇ！！！
+		</adult>
+	</rude>
+[/PLUNCKING]
+
+#つちのなかにいる
+[BaryInUnderGround]
+	<normal>
+		<baby>
+			ぎょぼねー、、、
+		</baby>
+		<child>
+			ぎょぼねー、、、
+		</child>
+		<adult>
+			ぎょぼねー、、、
+		</adult>
+	</normal>
+[/BaryInUnderGround]
+
+# 引っ張る
+[Pull]
+	<normal>
+		<baby>
+			こぼねっ？
+		</baby>
+		<child>
+			こぼねっ？
+		</child>
+		<adult>
+			こぼねっ？
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			こぼねっ？
+		</baby>
+		<child>
+			こぼねっ？
+		</child>
+		<adult>
+			こぼねっ？
+		</adult>
+	</rude>
+[/Pull]
+
+# 引っ張る2
+[Pull2]
+	<normal>
+		<baby>
+			こぼにぇぇぇ！！！
+			こぼにぇー？！
+		</baby>
+		<child>
+			こぼにぇぇぇ！！！
+			こぼにぇー？！
+		</child>
+		<adult>
+			ごぼにぇぇぇ！！！
+			こぼにぇー？！
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			こぼにぇぇぇ！！！
+		</baby>
+		<child>
+			こぼにぇぇぇ！！！
+		</child>
+		<adult>
+			ごぼにぇぇぇ！！！
+			こぼにぇー？！
+		</adult>
+	</rude>
+[/Pull2]
+
+# つぶす
+[Press]
+	<normal>
+		<baby>
+			こぼねっ？
+		</baby>
+		<child>
+			こぼねっ？
+		</child>
+		<adult>
+			こぼねっ？
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			こぼねっ？
+		</baby>
+		<child>
+			こぼねっ？
+		</child>
+		<adult>
+			こぼねっ？
+		</adult>
+	</rude>
+[/Press]
+
+# つぶす2
+[Press2]
+	<normal>
+		<baby>
+			きょぼにぇぇぇ！！！
+		</baby>
+		<child>
+			きょぼにぇぇぇ！！！
+		</child>
+		<adult>
+			こぼねえぇぇぇ！！！
+		</adult>
+	</normal>
+[/Press2]
+
+#加工所でつぶされる
+[KilledInFactory]
+	<normal>
+		<baby>
+			きょぼにぇぇぇ！！！
+		</baby>
+		<child>
+			きょぼにぇぇぇ！！！
+		</child>
+		<adult>
+			こぼねえぇぇぇ！！！
+		</adult>
+	</normal>
+[/KilledInFactory]
+
+# あまあま発見
+[FindAmaama]
+	<normal>
+		<baby>
+			こぼにぇ～♪
+		</baby>
+		<child>
+			こぼにぇ～♪
+		</child>
+		<adult>
+			こぼね～♪
+		</adult>
+	</normal>
+[/FindAmaama]
+
+# あまあま食事
+[EatingAmaama]
+	<normal>
+		<baby>
+			こぼにぇー！
+		</baby>
+		<child>
+			こぼにぇー！
+		</child>
+		<adult>
+			こぼねー！
+		</adult>
+	</normal>
+[/EatingAmaama]
+
+# 野菜発見
+[FindVegetable]
+	<normal>
+		<baby>
+			こぼにぇー！
+		</baby>
+		<child>
+			こぼにぇー！
+		</child>
+		<adult>
+			こぼねー！
+		</adult>
+	</normal>
+[/FindVegetable]
+
+
+# 吐餡
+[Vomit]
+	<normal>
+		<baby>
+			ごぼぉ、、、
+		</baby>
+		<child>
+			ごぼぉ、、、
+		</child>
+		<adult>
+			ごぼぼ、、、
+		</adult>
+	</normal>
+[/Vomit]
+
+# 汎用、瀕死継続
+[Dying2]
+	<normal>
+		<baby>
+			きょぼっ、、きょぼっ、、
+		</baby>
+		<child>
+			きょぼっ、、きょぼっ、、
+		</child>
+		<adult>
+			こぼっ、、こぼっ、、
+		</adult>
+	</normal>
+[/Dying2]
+
+# 汎用、驚き
+[Surprise]
+	<normal>
+		<baby>
+			きょぼにぇー？！
+		</baby>
+		<child>
+			きょぼにぇー？！
+		</child>
+		<adult>
+			こっ こぼねー？！
+		</adult>
+	</normal>
+[/Surprise]
+
+# 皮を剥かれる
+[PEALING]
+	<normal>
+		<baby>
+			きょびょぉぉぉぉ！！！
+		</baby>
+		<child>
+			きょぼぉぉぉぉぉ！！！
+		</child>
+		<adult>
+			こぼぉぉぉぉぉぉ！！！
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			きょびょぉぉぉぉ！！！
+		</baby>
+		<child>
+			きょぼぉぉぉぉぉ！！！
+		</child>
+		<adult>
+			こぼぉぉぉぉぉぉ！！！
+		</adult>
+	</rude>
+[/PEALING]
+
+# 汎用、ゆっくりできなくて嘆く(低)
+[LamentLowYukkuri]
+	<normal>
+		<baby>
+			きょぼにぇ、、、
+			・・・。
+		</baby>
+		<child>
+			きょぼにぇ、、、
+			・・・。
+		</child>
+		<adult>
+			こぼにぇ、、、
+			・・・。
+		</adult>
+	</normal>
+[/LamentLowYukkuri]
+
+# 汎用、ゆっくりできなくて嘆く
+[LamentNoYukkuri]
+	<normal>
+		<baby>
+			きょぼっ、、きょぼっ、、
+			・・・。
+		</baby>
+		<child>
+			きょぼっ、、ごきょぼっ、、
+			・・・。
+		</child>
+		<adult>
+			ごぼっ、、ごぼっ、、
+			・・・。
+		</adult>
+	</normal>
+[/LamentNoYukkuri]
+
+#ゆんやああ
+[Yunnyaa]
+	<normal>
+		こぼぉぉぉぉぉぉぉぉぉ！！！！！
+	</normal>
+[/Yunnyaa]
+
+# 非ゆっくり症初期
+[NonYukkuriDiseaseNear]
+	<normal>
+		<baby>
+			きょぼっ！きょぼぼっ！！！
+			きょっ！きょっ！きょっ！きょっ！
+			<damage>
+				きょぼっ、、きょぼぼぉ、、
+				・・・。
+			</damage>
+		</baby>
+		<child>
+			きょぼっ！きょぼぼっ！！！
+			きょっ！きょっ！きょっ！きょっ！
+			<damage>
+				きょぼっ、、きょぼぼぉ、、
+				・・・。
+			</damage>
+		</child>
+		<adult>
+			こぼっ！こぼぼっ！！！
+			こぼっ！こぼっ！こぼっ！こぼっ！
+			<damage>
+				こぼっ、、こぼぼぉ、、
+				・・・。
+			</damage>
+		</adult>
+	</normal>
+[/NonYukkuriDiseaseNear]
+
+# 非ゆっくり症
+[NonYukkuriDisease]
+	<normal>
+		<baby>
+			・・・。
+			<damage>
+				・・・。
+			</damage>
+		</baby>
+		<child>
+			・・・。
+			<damage>
+				・・・。
+			</damage>
+		</child>
+		<adult>
+			・・・。
+			<damage>
+				・・・。
+				・・・。
+				・・・。
+				・・・。
+				ようむっ！ようむっ！ようむっ！ようむっ！ようむぅぅっっ！！！！！
+			</damage>
+		</adult>
+	</normal>
+[/NonYukkuriDisease]
+
+# 汎用、他のゆっくりに何かされたときに対する攻撃、反撃
+[RevengeAttack]
+	<rude>
+		<baby>
+			きょぼにぇー！
+		</baby>
+		<child>
+			きょぼにぇー！
+		</child>
+		<adult>
+			こぼねー！
+		</adult>
+	</rude>
+[/RevengeAttack]
+
+# おさげ、尻尾、羽をちぎる
+[BraidCut]
+	<normal>
+		<baby>
+			きょぼにぇー？！
+		</baby>
+		<child>
+			きょぼにぇー？！
+		</child>
+		<adult>
+			こぼねー？！
+		</adult>
+	</normal>
+[/BraidCut]
+
+# 汎用、他のゆっくりに生きたまま食べられる
+[EatenByBody]
+	<normal>
+		<baby>
+			きょぼにぇぇ！！！
+		</baby>
+		<child>
+			きょぼにぇぇ！！！
+		</child>
+		<adult>
+			こぼねぇぇぇ！！！
+		</adult>
+	</normal>
+[/EatenByBody]
+
+# 汎用、他のゆっくりに生きたまま吸われる
+[EatenByBody2]
+	<normal>
+		<baby>
+			きょぼにぇぇ、、、
+		</baby>
+		<child>
+			きょぼにぇぇ、、、
+		</child>
+		<adult>
+			こぼねぇぇ、、、
+		</adult>
+	</normal>
+[/EatenByBody2]
+
+# しゃべれない
+[CantTalk]
+	<normal>
+		<baby>
+			むーー！！
+			ーーーーー！！！
+			ゆむーー！！ゆむむーー！！
+		</baby>
+		<child>
+			むーー！！
+			ーーーーー！！！
+			ゆむーー！！ゆむむーー！！
+		</child>
+		<adult>
+			むーー！！
+			ーーーーー！！！
+			ゆぐーー！！ゆむぐーー！！
+		</adult>
+	</normal>
+[/CantTalk]
+
+# しゃべれない(非ゆっくり)
+[NYDCantTalk]
+	<normal>
+		<baby>
+			ゆぐむっ！ゆぐむっ！ゆぐむっ！ゆぐむっ！
+			ゆむぐっ！ゆむぐっ！ゆむぐっ！ゆむぐっ！
+			<damage>
+				ゆむっ！ゆぐっ！ゆむっ！ゆぐっ！ゆむっ！
+			</damage>
+		</baby>
+		<child>
+			ゆぐむっ！ゆぐむっ！ゆぐむっ！ゆぐむっ！
+			ゆむぐっ！ゆむぐっ！ゆむぐっ！ゆむぐっ！
+			<damage>
+				ゆむっ！ゆぐっ！ゆむっ！ゆぐっ！ゆむっ！
+			</damage>
+		</child>
+		<adult>
+			ゆぐむっ！ゆぐむっ！ゆぐむっ！ゆぐむっ！
+			ゆむぐっ！ゆむぐっ！ゆむぐっ！ゆむぐっ！
+			<damage>
+				ゆむっ！ゆぐっ！ゆむっ！ゆぐっ！ゆむっ！
+			</damage>
+		</adult>
+	</normal>
+[/NYDCantTalk]
+
+# れみりゃから逃げる
+[EscapeFromRemirya]
+	<normal>
+		<baby>
+			きょぼにぇぇ！！！
+		</baby>
+		<child>
+			きょぼにぇぇ！！！
+		</child>
+		<adult>
+			こぼねえぇぇ！！！
+		</adult>
+	</normal>
+[/EscapeFromRemirya]
+
+#汚い
+[Dirty]
+	<normal>
+		<baby>
+			きょびょぉぉ、、、
+		</baby>
+		<child>
+			%dummy
+		</child>
+		<adult>
+			%dummy
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			きょびょぉぉぉぉ！！！
+		</baby>
+		<child>
+			きょぼぉぉぉぉぉ！！！
+		</child>
+		<adult>
+			%dummy
+		</adult>
+	</rude>
+[/Dirty]
+
+# かびてる時の通常時
+[Moldy]
+	<normal>
+		<baby>
+			きょぼにぇー、、、
+		</baby>
+		<child>
+			こぼにぇー、、、
+		</child>
+		<adult>
+			こぼねー、、、
+		</adult>
+	</normal>
+[/Moldy]
+
+# 深刻なカビ
+[MoldySeriousry]
+	<normal>
+		<baby>
+			きょびょぉぉぉぉ！！！
+		</baby>
+		<child>
+			きょぼぉぉぉぉぉ！！！
+		</child>
+		<adult>
+			こぼぉぉぉぉぉぉ！！！
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			きょびょぉぉぉぉ！！！
+		</baby>
+		<child>
+			きょぼぉぉぉぉぉ！！！
+		</child>
+		<adult>
+			こぼぉぉぉぉぉぉ！！！
+		</adult>
+	</rude>
+[/MoldySeriousry]

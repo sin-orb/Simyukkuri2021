@@ -1,0 +1,616 @@
+package src.item;
+
+
+import java.awt.BasicStroke;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics2D;
+import java.awt.GridLayout;
+import java.awt.Point;
+import java.awt.Stroke;
+import java.awt.TexturePaint;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.awt.image.ImageObserver;
+import java.io.File;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.ArrayList;
+
+import javax.swing.BoxLayout;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+
+import src.SimYukkuri;
+import src.base.Body;
+import src.base.Obj;
+import src.draw.ModLoader;
+import src.draw.Translate;
+import src.game.Stalk;
+import src.system.FieldShapeBase;
+import src.system.ItemMenu.ShapeMenu;
+import src.system.ItemMenu.ShapeMenuTarget;
+import src.system.MapPlaceData;
+
+/***************************************************
+ベルコン
+*/
+public class Beltconveyor extends FieldShapeBase implements Serializable {
+	static final long serialVersionUID = 1L;
+
+	private static enum SetupMenu {
+		DIRECT("向き"),
+		SPEED("スピード"),
+
+		NORMAL_BABY(""),
+		NORMAL_CHILD(""),
+		NORMAL_ADULT(""),
+
+		PREDATOR_BABY(""),
+		PREDATOR_CHILD(""),
+		PREDATOR_ADULT(""),
+
+		RARE_BABY(""),
+		RARE_CHILD(""),
+		RARE_ADULT(""),
+
+		IDIOT_BABY(""),
+		IDIOT_CHILD(""),
+		IDIOT_ADULT(""),
+
+		HYBRID_BABY(""),
+		HYBRID_CHILD(""),
+		HYBRID_ADULT(""),
+
+		SHIT("うんうん"),
+		VOMIT("あんこ"),
+
+		FOOD("フード"),
+		STALK("茎"),
+		;
+		public String caption;
+
+		private SetupMenu(String cap) {
+			this.caption = cap;
+    }
+	@Override
+		public String toString() {
+			return this.caption;
+		}
+	}
+
+	private static enum SetupButton {
+		NORMAL("通常種", SetupMenu.NORMAL_BABY, SetupMenu.NORMAL_CHILD, SetupMenu.NORMAL_ADULT),
+		PREDATOR("捕食種", SetupMenu.PREDATOR_BABY, SetupMenu.PREDATOR_CHILD, SetupMenu.PREDATOR_ADULT),
+		RARE("希少種", SetupMenu.RARE_BABY, SetupMenu.RARE_CHILD, SetupMenu.RARE_ADULT),
+		IDIOT("足りないゆ", SetupMenu.IDIOT_BABY, SetupMenu.IDIOT_CHILD, SetupMenu.IDIOT_ADULT),
+		HYBRID("ハイブリッド", SetupMenu.HYBRID_BABY, SetupMenu.HYBRID_CHILD, SetupMenu.HYBRID_ADULT),
+		;
+		public String caption;
+		public SetupMenu[] check;
+
+		private SetupButton(String cap, SetupMenu chk1, SetupMenu chk2, SetupMenu chk3) {
+			this.caption = cap;
+			this.check = new SetupMenu[3];
+			this.check[0] = chk1;
+			this.check[1] = chk2;
+			this.check[2] = chk3;
+		}
+
+		@Override
+		public String toString() {
+			return this.caption;
+		}
+	}
+
+	private static enum DirectCombo {
+		RIGHT("右", 0),
+		UP("奥", 1),
+		LEFT("左", 2),
+		BOTTOM("手前", 3),
+		;
+		public String caption;
+		public int direct;
+
+		private DirectCombo(String cap, int dir) {
+			this.caption = cap;
+			this.direct = dir;
+    }
+
+	@Override
+		public String toString() {
+			return this.caption;
+	}
+    }
+
+	private static enum SpeedCombo {
+		SLOW("遅い", 1),
+		MIDDLE("普通", 2),
+		HIGH("速い", 4),
+		;
+		public String caption;
+		public int speed;
+
+		private SpeedCombo(String cap, int spd) {
+			this.caption = cap;
+			this.speed = spd;
+    }
+
+		@Override
+		public String toString() {
+			return this.caption;
+            		}
+            	}
+
+	public static final Stroke BELTCONVEYOR_STROKE = new BasicStroke(2.0f);
+	public static final Color BELTCONVEYOR_COLOR = Color.BLACK;
+	private static final int MIN_SIZE = 8;
+
+	private static BufferedImage[] images = new BufferedImage[4];
+	private static TexturePaint[] texture = new TexturePaint[4];
+
+	private boolean[][] setting = new boolean[SetupMenu.values().length][3];// = ObjEX.YUKKURI | ObjEX.SHIT | ObjEX.FOOD | ObjEX.VOMIT | ObjEX.STALK;
+	private DirectCombo direction;
+	private SpeedCombo beltSpeed;
+	private boolean sticky;
+
+	private static JComboBox<DirectCombo> dirCombo;
+	private static JComboBox<SpeedCombo> spdCombo;
+	private static JCheckBox[][] targetCheck = new JCheckBox[SetupMenu.values().length][3];
+
+	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
+		images[0] = ModLoader.loadItemImage(loader, "beltconveyor" + File.separator + "beltconveyor_r.png");
+		images[1] = ModLoader.loadItemImage(loader, "beltconveyor" + File.separator + "beltconveyor_u.png");
+		images[2] = ModLoader.loadItemImage(loader, "beltconveyor" + File.separator + "beltconveyor_l.png");
+		images[3] = ModLoader.loadItemImage(loader, "beltconveyor" + File.separator + "beltconveyor_d.png");
+		
+		for(int i = 0; i < 4; i++) {
+			texture[i] = new TexturePaint(images[i], new Rectangle2D.Float(0, 0, images[i].getWidth(), images[i].getHeight()));
+            }
+        }
+	
+	@Override
+	public ShapeMenuTarget hasShapePopup() {
+		return ShapeMenuTarget.BELT;
+    }
+
+	@Override
+	public void executeShapePopup(ShapeMenu menu) {
+        
+		ArrayList<Beltconveyor> list = SimYukkuri.world.currentMap.beltconveyor;
+		int pos;
+
+		switch(menu) {
+			case SETUP:
+				setupBelt(this);
+            				break;
+			case TOP:
+				list.remove(this);
+				list.add(0, this);
+				break;
+			case UP:
+				pos = list.indexOf(this);
+				if(pos > 0) {
+					list.remove(this);
+					list.add(pos - 1, this);
+            			}
+				break;
+			case DOWN:
+				pos = list.indexOf(this);
+				if(pos < (list.size() - 1)) {
+					list.remove(this);
+					list.add(pos + 1, this);
+            	        }
+				break;
+			case BOTTOM:
+				list.remove(this);
+				list.add(this);
+            	        	break ;
+            	        }
+            		}
+
+	@Override
+	public int getAttribute() {
+		return FIELD_BELT;
+	}
+
+	@Override
+	public int getMinimumSize() {
+		return MIN_SIZE;
+            	}
+
+	public static void drawPreview(Graphics2D g2, int sx, int sy, int ex, int ey) {
+		int[] anPointX = new int[4];
+		int[] anPointY = new int[4];
+		Translate.getPolygonPoint(sx, sy, ex, ey, anPointX, anPointY);
+
+		g2.drawPolygon(anPointX, anPointY, 4 );
+    }
+
+	@Override
+	public void drawShape(Graphics2D g2) {
+		int[] anPointX = new int[4];
+		int[] anPointY = new int[4];
+		Translate.getPolygonPoint(fieldSX, fieldSY, fieldEX, fieldEY, anPointX, anPointY);
+		
+		g2.setPaint(texture[direction.direct]);
+		g2.fillPolygon(anPointX, anPointY, 4 );
+//		g2.setStroke(Beltconveyor.BELTCONVEYOR_STROKE);
+//		g2.setColor(Beltconveyor.BELTCONVEYOR_COLOR);
+//		g2.fillPolygon(anPointX, anPointY, 4 );
+	}
+
+	public Beltconveyor(int fsx, int fsy, int fex, int fey) {
+		Point pS = Translate.getFieldLimitForMap( fsx, fsy );
+        Point pE = Translate.getFieldLimitForMap( fex, fey );
+        fieldSX = pS.x;
+        fieldSY = pS.y;
+        fieldEX = pE.x;
+        fieldEY = pE.y;
+
+		int[] anPointBaseX = new int[2];
+		int[] anPointBaseY = new int[2];
+		Translate.getMovedPoint(fieldSX, fieldSY, fieldEX, fieldEY, 0, 0, 0, 0, anPointBaseX, anPointBaseY );
+
+		// フィールド座標が渡ってくるのでマップ座標も計算しておく
+		Point pos = Translate.invertLimit(anPointBaseX[0], anPointBaseY[0]);
+		mapSX = Math.max(0, Math.min(pos.x, Translate.mapW));
+		mapSY = Math.max(0, Math.min(pos.y, Translate.mapH));
+		
+		pos = Translate.invertLimit(anPointBaseX[1], anPointBaseY[1]);
+		mapEX = Math.max(0, Math.min(pos.x, Translate.mapW));
+		mapEY = Math.max(0, Math.min(pos.y, Translate.mapH));
+		
+		// 規定サイズと位置へ合わせる
+		if((mapEX - mapSX) < MIN_SIZE) mapEX = mapSX + MIN_SIZE;
+		if((mapEY - mapSY) < MIN_SIZE) mapEY = mapSY + MIN_SIZE;
+		if(mapEX > Translate.mapW) {
+			mapSX -= (mapEX - Translate.mapW);
+			mapEX -= (mapEX - Translate.mapW);
+		}
+		if(mapEY > Translate.mapH) {
+			mapSY -= (mapEY - Translate.mapH);
+			mapEY -= (mapEY - Translate.mapH);
+		}
+
+		Point f = new Point();
+		Translate.translate(mapSX, mapSY, f);
+		fieldSX = f.x;
+		fieldSY = f.y;
+		Translate.translate(mapEX, mapEY, f);
+		fieldEX = f.x;
+		fieldEY = f.y;
+		
+		fieldW = fieldEX - fieldSX + 1;
+		fieldH = fieldEY - fieldSY + 1;
+		mapW = mapEX - mapSX + 1;
+		mapH = mapEY - mapSY + 1;
+
+		setting[2][0] = true;
+		setting[2][1] = true;
+		setting[2][2] = true;
+		direction = DirectCombo.RIGHT;
+		beltSpeed = SpeedCombo.MIDDLE;
+		sticky = true;
+
+		boolean ret = setupBelt(this);
+		if(ret) {
+			SimYukkuri.world.currentMap.beltconveyor.add(this);
+			MapPlaceData.setFiledFlag(SimYukkuri.world.currentMap.fieldMap, mapSX, mapSY, mapW, mapH, true, FIELD_BELT);
+		}
+	}
+
+	// 処理する必要のあるオブジェクトか判定
+	public boolean checkHitObj(Obj o) {
+		
+		boolean ret = false;
+
+		switch(o.getObjType()){
+			case YUKKURI:
+				Body b = (Body)o;
+				int ageIdx = b.getBodyAgeState().ordinal();
+				int bodyIdx;
+				if(b.isHybrid()) {
+					// ハイブリッド
+					bodyIdx = SetupMenu.HYBRID_BABY.ordinal();
+				} else if(b.isIdiot()) {
+					// 足りない
+					bodyIdx = SetupMenu.IDIOT_BABY.ordinal();
+				} else if(b.isRareType()) {
+					// 希少種
+					bodyIdx = SetupMenu.RARE_BABY.ordinal();
+				} else if(b.isPredatorType()) {
+					// 捕食種
+					bodyIdx = SetupMenu.PREDATOR_BABY.ordinal();
+				} else {
+					// 通常種
+					bodyIdx = SetupMenu.NORMAL_BABY.ordinal();
+				}
+				if(setting[bodyIdx][ageIdx]) ret = true;
+				break;
+			case SHIT:
+				if(setting[SetupMenu.SHIT.ordinal()][0]) ret = true;
+				break;
+			case OBJECT:
+				if(o instanceof Food) {
+					if(setting[SetupMenu.FOOD.ordinal()][0]) ret = true;
+				} else if(o instanceof Stalk) {
+					if(setting[SetupMenu.STALK.ordinal()][0]) ret = true;
+				}
+				break;
+			case VOMIT:
+				if(setting[SetupMenu.VOMIT.ordinal()][0]) ret = true;
+				break;
+	            default:
+	                break;
+		}
+		return ret;
+	}
+	
+	// ヒットしたオブジェクトの処理
+	public void processHitObj(Obj o) {
+	
+		switch(direction) {
+			case RIGHT:
+				o.addBxyz(beltSpeed.speed, 0, 0);
+	                break;
+			case UP:
+				o.addBxyz(0, -beltSpeed.speed, 0);
+				break;
+			case LEFT:
+				o.addBxyz(-beltSpeed.speed, 0, 0);
+				break;
+			case BOTTOM:
+				o.addBxyz(0, beltSpeed.speed, 0);
+	                break;
+	            }
+        	}
+
+	// フィールド座標にあるシェイプ取得
+	public static Beltconveyor getBeltconveyor(int fx, int fy) {
+		
+		for(Beltconveyor bc :SimYukkuri.world.currentMap.beltconveyor) {
+			if(bc.fieldSX <= fx && fx <= bc.fieldEX
+					&& bc.fieldSY <= fy && fy <= bc.fieldEY) {
+				return bc;
+			}
+		}
+		return null;
+        }
+
+	// 削除
+	public static void deleteBelt(Beltconveyor b) {
+		MapPlaceData.setFiledFlag(SimYukkuri.world.currentMap.fieldMap, b.mapSX, b.mapSY, b.mapW, b.mapH, false, FIELD_BELT);
+		SimYukkuri.world.currentMap.beltconveyor.remove(b);
+		// 重なってた部分の復元
+		for(Beltconveyor bc :SimYukkuri.world.currentMap.beltconveyor) {
+			MapPlaceData.setFiledFlag(SimYukkuri.world.currentMap.fieldMap, bc.mapSX, bc.mapSY, bc.mapW, bc.mapH, true, FIELD_BELT);
+		}
+    		}
+
+	// 設定メニュー
+	public static boolean setupBelt(Beltconveyor b) {
+
+		JPanel mainPanel = new JPanel();
+		JPanel northPanel = new JPanel();
+		JPanel westPanel = new JPanel();
+		JPanel centerPanel = new JPanel();
+		JPanel southPanel = new JPanel();
+		boolean ret = false;
+
+		// パネル全体
+		mainPanel.setLayout(new BorderLayout());
+		mainPanel.setPreferredSize(new Dimension(300, 300));
+		// 上部ラベル
+		northPanel.setLayout(new GridLayout(1, 3));
+		// 左側ボタン列
+		westPanel.setLayout(new GridLayout(6, 1));
+		westPanel.setPreferredSize(new Dimension(120, 300));
+		// 中央チェックボックス
+		centerPanel.setLayout(new GridLayout(6, 3));
+		// 下部その他設定
+		southPanel.setLayout(new GridLayout(2, 2));
+
+		ButtonListener butAction = new ButtonListener();
+
+		// 上
+		JPanel panel = new JPanel();
+		panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
+
+		JLabel label = new JLabel(SetupMenu.DIRECT.toString());
+		panel.add(label);
+		dirCombo = new JComboBox<Beltconveyor.DirectCombo>(DirectCombo.values());
+		dirCombo.setSelectedIndex(b.direction.ordinal());
+		dirCombo.setActionCommand(SetupMenu.SPEED.name());
+		panel.add(dirCombo);
+
+		panel.add(new JLabel("     "));
+
+		label = new JLabel(SetupMenu.SPEED.toString());
+		panel.add(label);
+		spdCombo = new JComboBox<Beltconveyor.SpeedCombo>(SpeedCombo.values());
+		spdCombo.setSelectedIndex(b.beltSpeed.ordinal());
+		spdCombo.setActionCommand(SetupMenu.SPEED.name());
+		panel.add(spdCombo);
+
+		northPanel.add(panel);
+		
+		// 左
+		westPanel.add(new JLabel(""));
+		for(SetupButton bp :SetupButton.values()) {
+			JButton but = new JButton(bp.toString());
+			but.addActionListener(butAction);
+			but.setActionCommand(bp.name());
+			westPanel.add(but);
+		}
+		
+		// 中
+		label = new JLabel("赤ゆ");
+		centerPanel.add(label);
+		label = new JLabel("子ゆ");
+		centerPanel.add(label);
+		label = new JLabel("成ゆ");
+		centerPanel.add(label);
+		SetupMenu[] body = SetupMenu.values();
+		int row = SetupMenu.NORMAL_BABY.ordinal();
+		int col = 0;
+		for(int i = SetupMenu.NORMAL_BABY.ordinal(); i <= SetupMenu.HYBRID_ADULT.ordinal(); i++) {
+			targetCheck[row][col] = new JCheckBox("");
+			targetCheck[row][col].setSelected(b.setting[row][col]);
+			targetCheck[row][col].setActionCommand(body[i].name());
+			centerPanel.add(targetCheck[row][col]);
+			col++;
+			if(col == 3) {
+				col = 0;
+				row++;
+			}
+		}
+		
+		// 下
+		row = SetupMenu.HYBRID_ADULT.ordinal() + 1;
+		for(int i = SetupMenu.SHIT.ordinal(); i <= SetupMenu.STALK.ordinal(); i++) {
+			targetCheck[row][0] = new JCheckBox(body[i].toString());
+			targetCheck[row][0].setSelected(b.setting[row][0]);
+			targetCheck[row][0].setActionCommand(body[i].name());
+			southPanel.add(targetCheck[row][0]);
+			row++;
+		}
+
+		mainPanel.add(BorderLayout.NORTH, northPanel);
+		mainPanel.add(BorderLayout.WEST, westPanel);
+		mainPanel.add(BorderLayout.CENTER, centerPanel);
+		mainPanel.add(BorderLayout.SOUTH, southPanel);
+
+		int dlgRet = JOptionPane.showConfirmDialog(SimYukkuri.mypane, mainPanel, "コンベア設定", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+		
+		if(dlgRet == JOptionPane.OK_OPTION) {
+			b.direction = DirectCombo.values()[dirCombo.getSelectedIndex()];
+			b.beltSpeed = SpeedCombo.values()[spdCombo.getSelectedIndex()];
+			
+			row = SetupMenu.NORMAL_BABY.ordinal();
+			col = 0;
+			for(int i = SetupMenu.NORMAL_BABY.ordinal(); i <= SetupMenu.HYBRID_ADULT.ordinal(); i++) {
+				b.setting[row][col] = targetCheck[row][col].isSelected();
+				col++;
+				if(col == 3) {
+					col = 0;
+					row++;
+				}
+			}
+			
+			row = SetupMenu.HYBRID_ADULT.ordinal() + 1;
+			for(int i = SetupMenu.SHIT.ordinal(); i <= SetupMenu.STALK.ordinal(); i++) {
+				b.setting[row][0] = targetCheck[row][0].isSelected();
+				row++;
+        	}
+			ret = true;
+        }
+		return ret;
+    }
+
+	public static class ButtonListener implements ActionListener {
+
+		@Override
+		public void actionPerformed(ActionEvent e) {
+			String command = e.getActionCommand();
+			
+			SetupButton but = SetupButton.valueOf(command);
+			int row = but.ordinal() + SetupMenu.NORMAL_BABY.ordinal();
+			if(targetCheck[row][0].isSelected()) {
+				targetCheck[row][0].setSelected(false);
+				targetCheck[row][1].setSelected(false);
+				targetCheck[row][2].setSelected(false);
+			} else {
+				targetCheck[row][0].setSelected(true);
+				targetCheck[row][1].setSelected(true);
+				targetCheck[row][2].setSelected(true);
+			}
+		}
+    }
+
+	
+	
+	
+	
+/*
+	public int checkHitObj(Rectangle colRect, Obj o) {
+
+		if(o instanceof Body) {
+			if(((Body)o).isCantMove()) return 0;
+		}
+		if (o.getZ() == 0) {	//空中の物、はりついてる物は移動させない
+			// 対象の座標をフィールド座標に変換
+			Translate.translate(o.getX(), o.getY(), tmpPos);
+			// 点が描画矩形に入ったかの判定
+			if(colRect.contains(tmpPos)) {
+				objHitProcess( o );
+				return 1;
+			}
+    }
+		return 0;
+	}
+
+	public int objHitProcess( Obj o ) {
+		int objX = o.getX();
+		int objY = o.getY();
+		int objW = o.getW();
+		int objH = o.getH();
+		int attr = Terrarium.MAP_ADULT;
+
+		if (o instanceof Body) {
+			attr = Terrarium.MAP_BODY[((Body)o).bodyAgeState.ordinal()];
+	        	}
+		
+		if (  !Barrier.onBarrier( objX, objY, objW >> 1, objH >> 2, attr)) {		//壁にひっかかっていれば移動させない
+			switch ( option ) {	//移動させる方向
+				case 0:
+				default:
+					o.setY(objY-beltSpeed);
+					break;
+				case 1:
+					o.setY(objY+beltSpeed);
+					break;
+				case 2:
+					o.setX(objX+beltSpeed);
+					break;
+				case 3:
+					o.setX(objX-beltSpeed);
+					break;
+	        	}
+	        }
+		return 0;
+        }
+        
+	@Override
+	public void upDate() {
+		if ( age % 2400 == 0 ) {
+			Cash.addCash(-getCost());
+		}
+    }
+
+	public int getBeltSpeed() {
+		return beltSpeed;
+    }
+	
+	@Override
+	public void removeListData(){
+		SimYukkuri.world.currentMap.beltconveyor.remove(this);
+	}
+	
+	@Override
+	public boolean checkInterval(int cnt) {
+		return true;
+	}
+*/
+	
+}
+
+
+

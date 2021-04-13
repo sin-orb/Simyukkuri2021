@@ -1,0 +1,2220 @@
+# 餌発見
+[WantFood]
+	<normal>
+		<baby>
+			じゃおーん！
+			じゃお♪
+		</baby>
+		<child>
+			じゃおーん！
+			じゃお♪
+		</child>
+		<adult>
+			じゃおーん！
+			じゃお♪
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			じゃおじゃおーん！
+			じゃお♪じゃお♪
+		</baby>
+		<child>
+			じゃおじゃおーん！
+			じゃお♪じゃお♪
+		</child>
+		<adult>
+			じゃおじゃおーん！
+			じゃお♪じゃお♪
+		</adult>
+	</rude>
+[/WantFood]
+
+# 餌なし
+[NoFood]
+	<normal>
+		<baby>
+			じゃお？
+			<damage>
+				じゃおん、、、
+			</damage>
+		</baby>
+		<child>
+			じゃお？
+			<damage>
+				じゃおん、、、
+			</damage>
+		</child>
+		<adult>
+			じゃお？
+			<damage>
+				じゃおん、、、
+			</damage>
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			じゃお？！じゃおーん！
+			<damage>
+				じゃおん、、、
+			</damage>
+		</baby>
+		<child>
+			じゃお？！じゃおーん！
+			<damage>
+				じゃおん、、、
+			</damage>
+		</child>
+		<adult>
+			じゃお？！じゃおーん！
+			<damage>
+				じゃおん、、、
+			</damage>
+		</adult>
+	</rude>
+[/NoFood]
+
+# 番要求
+[WantPartner]
+	<normal>
+		<baby>
+			%dummy
+		</baby>
+		<child>
+			%dummy
+		</child>
+		<adult>
+			じゃお、、、
+			じゃお、じゃおん……
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			%dummy
+		</baby>
+		<child>
+			ちゃお！　ちゃおちゃおちゃお！
+		</child>
+		<adult>
+			じゃお！　じゃおじゃおじゃお！
+		</adult>
+	</rude>
+[/WantPartner]
+
+# 発情
+[Excite]
+	<normal>
+		じゃお！
+	</normal>
+[/Excite]
+
+#れいぱー化して発情
+[ExciteForRaper]
+	<normal>
+		じゃお！
+	</normal>
+[/ExciteForRaper]
+
+# ぺにぺに切断
+[PenipeniCutting]
+	<normal>
+		<baby>
+			じゃおーん？！
+		</baby>
+		<child>
+			じゃおーん？！
+		</child>
+		<adult>
+			じゃおーん？！
+		</adult>
+	</normal>
+[/PenipeniCutting]
+
+# ぺにぺに切断後
+[PenipeniCutted]
+	<normal>
+		<baby>
+			じゃおん、、、
+		</baby>
+		<child>
+			じゃおん、、、
+		</child>
+		<adult>
+			じゃおん、、、
+		</adult>
+	</normal>
+[/PenipeniCutted]
+
+# ぺにぺにを使えない
+[CantUsePenipeni]
+	<normal>
+		<baby>
+			じゃおん、、、
+		</baby>
+		<child>
+			じゃおん、、、
+		</child>
+		<adult>
+			じゃおん、、、
+		</adult>
+	</normal>
+[/CantUsePenipeni]
+
+# リラックス
+[Relax]
+	<normal>
+		<baby>
+			じゃおーん！
+			じゃお～ん♪
+			おにいしゃん！じゃおじゃお！
+		</baby>
+		<child>
+			じゃおーん！
+			じゃお～ん♪
+			じゃおじゃお！
+		</child>
+		<adult>
+			じゃおーん！
+			じゃお～ん♪
+			じゃおじゃお！
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			じゃお！じゃおじゃおじゃおーん！じゃお！
+			じゃお～ん♪じゃお～ん♪
+		</baby>
+		<child>
+			じゃお！じゃおじゃおじゃおーん！じゃお！
+			じゃお～ん♪じゃお～ん♪
+		</child>
+		<adult>
+			じゃお！じゃおじゃおじゃおーん！じゃお！
+			じゃお～ん♪じゃお～ん♪
+		</adult>
+	</rude>
+[/Relax]
+
+# おくるみをはいてリラックス
+[RelaxOkurumi]
+	<normal>
+		<baby>
+			<pants>
+				じゃーお♪じゃーお♪
+			</pants>
+		</baby>
+		<child>
+			<pants>
+				じゃーお♪じゃーお♪
+			</pants>
+		</child>
+		<adult>
+			<pants>
+				じゃーお♪じゃーお♪
+			</pants>
+		</adult>
+	</normal>
+[/RelaxOkurumi]
+
+# 尻振り
+[FuriFuri]
+	<normal>
+		<baby>
+			じゃお！
+			じゃーお♪じゃーお♪
+		</baby>
+		<child>
+			じゃお！
+			じゃーお♪じゃーお♪
+		</child>
+		<adult>
+			じゃお！
+			じゃーお♪じゃーお♪
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			じゃおじゃお！じゃおーん！
+			じゃーお♪じゃーお♪
+		</baby>
+		<child>
+			じゃおじゃお！じゃおーん！
+			じゃーお♪じゃーお♪
+		</child>
+		<adult>
+			じゃおじゃお！じゃおーん！
+			じゃーお♪じゃーお♪
+		</adult>
+	</rude>
+[/FuriFuri]
+
+#キリッ
+[BeVain]
+	<normal>
+		<baby>
+			ちゃおっ！
+		</baby>
+		<child>
+			じゃおっ！
+		</child>
+		<adult>
+			じゃおっ！
+		</adult>
+	</normal>
+[/BeVain]
+
+# ゆっくりしていってね！
+[TakeItEasy]
+	<normal>
+		<baby>
+			じゃおーん！
+		</baby>
+		<child>
+			じゃおーん！
+		</child>
+		<adult>
+			じゃおーん！
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			じゃおーん！！！
+		</baby>
+		<child>
+			じゃおーん！！！
+		</child>
+		<adult>
+			じゃおーん！！！
+		</adult>
+	</rude>
+[/TakeItEasy]
+
+# 起床
+[Wakeup]
+	<normal>
+		<baby>
+			じゃおーん！
+		</baby>
+		<child>
+			じゃおーん！
+		</child>
+		<adult>
+			じゃおーん！
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			じゃおーん！！！
+		</baby>
+		<child>
+			じゃおーん！！！
+		</child>
+		<adult>
+			じゃおーん！！！
+		</adult>
+	</rude>
+[/Wakeup]
+
+# 睡眠
+[Sleep]
+	<normal>
+		じゃお・・じゃお・・
+		じゃおーん・・・
+	</normal>
+[/Sleep]
+
+# 悲鳴
+[Scream]
+	<normal>
+		<baby>
+			じゃお！！
+			<damage>
+				じゃお、、、
+			</damage>
+		</baby>
+		<child>
+			じゃお！じゃおーん？！
+			<damage>
+				じゃお、、、
+			</damage>
+		</child>
+		<adult>
+			じゃおじゃお！じゃおーん？！
+			<damage>
+				じゃおーん、、、
+			</damage>
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			じゃお！！
+			<damage>
+				じゃぉ、、、
+			</damage>
+		</baby>
+		<child>
+			じゃお！！！
+			<damage>
+				じゃお、、、
+			</damage>
+		</child>
+		<adult>
+			じゃおじゃお！じゃおーん！！
+			<damage>
+				じゃおじゃお、、、
+			</damage>
+		</adult>
+	</rude>
+[/Scream]
+
+# 悲鳴2
+[Scream2]
+	<normal>
+		じゃおぉぉぉぉぉぉぉ！！！
+	</normal>
+[/Scream2]
+
+# 怯え
+[Scare]
+	<normal>
+		<baby>
+			じゃおー！
+			<damage>
+				じゃおー、、、
+			</damage>
+		</baby>
+		<child>
+			じゃおー！
+			<damage>
+				じゃおー、、、
+			</damage>
+		</child>
+		<adult>
+			じゃおー！じゃおー！！
+			<damage>
+				じゃお、、、じゃおー、、、
+			</damage>
+		</adult>
+	</normal>
+[/Scare]
+
+# 警戒
+[Alarm]
+	<normal>
+		<baby>
+			じゃ、じゃおー！
+			<damage>
+				じゃおー、、、
+			</damage>
+		</baby>
+		<child>
+			じゃおー！
+			<damage>
+				じゃおー、、、
+			</damage>
+		</child>
+		<adult>
+			じゃおー！
+			<damage>
+				じゃお、、、じゃおー、、、
+			</damage>
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			じゃ、じゃおー！
+			<damage>
+				じゃおー、、、
+			</damage>
+		</baby>
+		<child>
+			じゃおー！
+			<damage>
+				じゃおー、、、
+			</damage>
+		</child>
+		<adult>
+			じゃおー！
+			<damage>
+				じゃお、、、じゃおー、、、
+			</damage>
+		</adult>
+	</rude>
+[/Alarm]
+
+# 瀕死
+[Dying]
+	<normal>
+		<baby>
+			じゃおー！
+		</baby>
+		<child>
+			じゃおー！
+		</child>
+		<adult>
+			じゃおー！
+		</adult>
+	</normal>
+[/Dying]
+
+# 死亡
+[Dead]
+	<normal>
+		<baby>
+			じゃおー、、、
+		</baby>
+		<child>
+			じゃおー、、、
+		</child>
+		<adult>
+			じゃおー、、、
+		</adult>
+	</normal>
+[/Dead]
+
+# 食事
+[Eating]
+	<normal>
+		<baby>
+			じゃお～、じゃお～
+		</baby>
+		<child>
+			じゃお～、じゃお～
+		</child>
+		<adult>
+			じゃお～、じゃお～
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			じゃお～
+		</baby>
+		<child>
+			じゃお～
+		</child>
+		<adult>
+			じゃお～
+		</adult>
+	</rude>
+[/Eating]
+
+# 食事(うんうん)
+[EatingShit]
+	<normal>
+		<baby>
+			じゃおー、、、
+		</baby>
+		<child>
+			じゃおー、、、
+		</child>
+		<adult>
+			じゃおー、、、
+		</adult>
+	</normal>
+[/EatingShit]
+
+# 餌運び
+[TransportFood]
+	<normal>
+		じゃお！
+	</normal>
+[/TransportFood]
+
+# うんうん運び
+[TransportShit]
+	<normal>
+		<baby>
+			じゃおー
+			<ununSlave>
+				じゃおー、、、
+			</ununSlave>
+		</baby>
+		<child>
+			じゃおー
+			<ununSlave>
+				じゃおー、、、
+			</ununSlave>
+		</child>
+		<adult>
+			じゃおー
+			<ununSlave>
+			じゃおー、、、
+			</ununSlave>
+		</adult>
+	</normal>
+[/TransportShit]
+
+#アイテムを落とす
+[DropItem]
+	<normal>
+		じゃおじゃお！
+	</normal>
+[/DropItem]
+
+# 食事(まずい)
+[EatingBadtasting]
+	<normal>
+		じゃおじゃお、、、
+	</normal>
+[/EatingBadtasting]
+
+# 食事(毒)
+[EatingBitter]
+	<normal>
+		<baby>
+			じゃおー！
+		</baby>
+		<child>
+			じゃおー！
+		</child>
+		<adult>
+			じゃおー！
+		</adult>
+	</normal>
+[/EatingBitter]
+
+# 満腹
+[SpitFood]
+	<normal>
+		<baby>
+			じゃおぉ、、、
+		</baby>
+		<child>
+			じゃおぉ、、、
+		</child>
+		<adult>
+			じゃおぉぉ、、、
+		</adult>
+	</normal>
+[/SpitFood]
+
+# 満腹
+[Full]
+	<normal>
+		<baby>
+			じゃお、、、
+		</baby>
+		<child>
+			じゃお、、、
+		</child>
+		<adult>
+			じゃお、、、
+		</adult>
+	</normal>
+[/Full]
+
+# 回復
+[Healing]
+	<normal>
+		<baby>
+			じゃお！
+			<damage>
+				じゃお！
+			</damage>
+		</baby>
+		<child>
+			じゃお！
+			<damage>
+				じゃお！
+			</damage>
+		</child>
+		<adult>
+			じゃお！
+			<damage>
+				じゃお！
+			</damage>
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			じゃお！
+			<damage>
+				じゃお！
+			</damage>
+		</baby>
+		<child>
+			じゃお！
+			<damage>
+				じゃお！
+			</damage>
+		</child>
+		<adult>
+			じゃお！
+			<damage>
+				じゃお！
+			</damage>
+		</adult>
+	</rude>
+[/Healing]
+
+# 解放感を感じた時
+[ToFreedom]
+	<normal>
+		<baby>
+			じゃおーん！
+		</baby>
+		<child>
+			じゃおーん！
+		</child>
+		<adult>
+			じゃおーん！
+		</adult>
+	</normal>
+[/ToFreedom]
+
+# 清掃された時
+[Cleaned]
+	<normal>
+		<baby>
+			じゃおーん！
+		</baby>
+		<child>
+			じゃおーん！
+		</child>
+		<adult>
+			じゃおーん！
+		</adult>
+	</normal>
+[/Cleaned]
+
+# すっきり
+[Sukkiri]
+	<normal>
+		<baby>
+			じゃおーん！
+		</baby>
+		<child>
+			じゃおーん！
+		</child>
+		<adult>
+			じゃおーん！
+		</adult>
+	</normal>
+[/Sukkiri]
+
+#れいぱー化してすっきりー！
+[SukkiriForRaper]
+	<normal>
+		じゃおじゃおーん！
+	</normal>
+[/SukkiriForRaper]
+
+# レイパーとすっきり
+[RaperSukkiri]
+	<normal>
+		<baby>
+			じゃおぉっ！！！
+			じゃ～お～んっ！！！
+		</baby>
+		<child>
+			じゃおぉっ！！！
+			じゃ～お～んっ！！！
+		</child>
+		<adult>
+			じゃおぉっ！！！
+			じゃ～お～んっ！！！
+		</adult>
+	</normal>
+[/RaperSukkiri]
+
+# 養殖プールすっきり
+[PoolSukkiri]
+	<normal>
+		<baby>
+			じゃおぉっ！！！
+			じゃ～お～んっ！！！
+		</baby>
+		<child>
+			じゃおぉっ！！！
+			じゃ～お～んっ！！！
+		</child>
+		<adult>
+			じゃおぉっ！！！
+			じゃ～お～んっ！！！
+		</adult>
+	</normal>
+[/PoolSukkiri]
+
+# 誕生
+[Birth]
+	<normal>
+		じゃお～ん！
+	</normal>
+[/Birth]
+
+# 排泄
+[Shit]
+	<normal>
+		<baby>
+			じゃお！
+			<pants>
+				じゃお？じゃおー？！
+			</pants>
+		</baby>
+		<child>
+			じゃお！
+			<pants>
+				じゃお？じゃおー？！
+			</pants>
+		</child>
+		<adult>
+			じゃお！
+			<pants>
+				じゃお？じゃおー？！
+			</pants>
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			じゃお！
+			<pants>
+				じゃお？じゃおー？！
+			</pants>
+		</baby>
+		<child>
+			じゃお！
+			<pants>
+				じゃお？じゃおー？！
+			</pants>
+		</child>
+		<adult>
+			じゃお！
+			<pants>
+				じゃお？じゃおー？！
+			</pants>
+		</adult>
+	</rude>
+[/Shit]
+
+# 排泄2
+[Shit2]
+	<normal>
+		<baby>
+			じゃおーん！
+			<pants>
+				じゃおー、、、
+			</pants>
+		</baby>
+		<child>
+			じゃおーん！
+			<pants>
+				じゃおー、、、
+			</pants>
+		</child>
+		<adult>
+			じゃおーん！
+			<pants>
+				じゃおー、、、
+			</pants>
+		</adult>
+	</normal>
+[/Shit2]
+
+# すりすり
+[SuriSuri]
+	<normal>
+		<baby>
+			じゃお！じゃおーん！
+			じゃお じゃお♪
+		</baby>
+		<child>
+			じゃお！じゃおーん！
+			じゃお じゃお♪
+		</child>
+		<adult>
+			じゃお！じゃおーん！
+			じゃお じゃお♪
+		</adult>
+	</normal>
+[/SuriSuri]
+
+# ぺろぺろ
+[PeroPero]
+	<normal>
+		<baby>
+			じゃおじゃお
+			じゃーぉ じゃーぉ♪
+		</baby>
+		<child>
+			じゃおじゃお
+			じゃーぉ じゃーぉ♪
+		</child>
+		<adult>
+			じゃおじゃお
+			じゃーぉ じゃーぉ♪
+		</adult>
+	</normal>
+[/PeroPero]
+
+# 出産
+[Breed]
+	<normal>
+		じゃ、じゃおお、、、
+	</normal>
+[/Breed]
+
+# 産後
+[Breed2]
+	<normal>
+		おちびっ！じゃおじゃおっ！
+		<pants>
+			じゃおぉぉ、、、！
+		</pants>
+	</normal>
+[/Breed2]
+
+# うんうん発見
+[HateShit]
+	<normal>
+		<baby>
+			じゃお！
+			<damage>
+				じゃお、、、
+			</damage>
+		</baby>
+		<child>
+			じゃお！
+			<damage>
+				じゃお、、、
+			</damage>
+		</child>
+		<adult>
+			じゃお！
+			<damage>
+				じゃお、、、
+			</damage>
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			じゃお！
+			<damage>
+				じゃお、、、
+			</damage>
+		</baby>
+		<child>
+			じゃお！
+			<damage>
+				じゃお、、、
+			</damage>
+		</child>
+		<adult>
+			じゃお！
+			<damage>
+				じゃお、、、
+			</damage>
+		</adult>
+	</rude>
+[/HateShit]
+
+#あほの子がうんうんを威嚇するセリフ
+[ShitIntimidation]
+	<normal>
+		<baby>
+			ちゃおぉぉ！！ちゃおぉぉ！！
+		</baby>
+		<child>
+			じゃおぉ！じゃおぉぉ！！
+		</child>
+		<adult>
+			%dummy
+		</adult>
+	</normal>
+[/ShitIntimidation]
+
+# 空腹
+[Hungry]
+	<normal>
+		<baby>
+			じゃお！
+			<damage>
+				じゃお、、、
+			</damage>
+		</baby>
+		<child>
+			じゃお！
+			<damage>
+				じゃお、、、
+			</damage>
+		</child>
+		<adult>
+			じゃお！
+			<damage>
+				じゃお、、、
+			</damage>
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			じゃお！
+			<damage>
+				じゃお、、、
+			</damage>
+		</baby>
+		<child>
+			じゃお！
+			<damage>
+				じゃお、、、
+			</damage>
+		</child>
+		<adult>
+			じゃお！
+			<damage>
+				じゃお、、、
+			</damage>
+		</adult>
+	</rude>
+[/Hungry]
+
+# おかざり没収
+[NoAccessory]
+	<normal>
+		<baby>
+			じゃお？！じゃおじゃおじゃおーん！
+		</baby>
+		<child>
+			じゃお？！じゃおじゃおじゃおーん！
+		</child>
+		<adult>
+			じゃお？！じゃおじゃおじゃおーん！
+		</adult>
+	</normal>
+[/NoAccessory]
+
+# おかざりがなくなっていることに気がつく
+[NoticeNoAccessory]
+	<normal>
+		<baby>
+			じゃお？！じゃおじゃおじゃおーん！？
+		</baby>
+		<child>
+			じゃお？！じゃおじゃおじゃおーん！？
+		</child>
+		<adult>
+			じゃお？！じゃおじゃおじゃおーん！？
+		</adult>
+	</normal>
+[/NoticeNoAccessory]
+
+# 他ゆんのおかざりをこっそり奪う
+[GetOtherAccessoryStealthily]
+	<normal>
+		じゃお！
+	</normal>
+[/GetOtherAccessoryStealthily]
+
+# おかざりのないゆっくり発見
+[HateYukkuri]
+	<normal>
+		<baby>
+			じゃお？じゃおじゃお、じゃおーん？！
+		</baby>
+		<child>
+			じゃお？じゃおじゃお、じゃおーん？！
+		</child>
+		<adult>
+			じゃお？じゃおじゃお、じゃおーん？！
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			じゃお？じゃおじゃお、じゃおーん！
+		</baby>
+		<child>
+			じゃお？じゃおじゃお、じゃおーん！
+		</child>
+		<adult>
+			じゃお？じゃおじゃお、じゃおーん！
+		</adult>
+	</rude>
+[/HateYukkuri]
+
+# 持ち上げ
+[Flying]
+	<normal>
+		<baby>
+			じゃおーん！
+		</baby>
+		<child>
+			じゃおーん！
+		</child>
+		<adult>
+			じゃおーん！
+		</adult>
+	</normal>
+[/Flying]
+
+# 子供死亡
+[SadnessForChild]
+	<normal>
+		じゃおおぉぉ、、、
+	</normal>
+[/SadnessForChild]
+
+# つがい死亡
+[SadnessForPartner]
+	<normal>
+		じゃおー！
+	</normal>
+[/SadnessForPartner]
+
+# 姉死亡
+[SadnessForEldersister]
+	<normal>
+		じゃおー！
+	</normal>
+[/SadnessForEldersister]
+
+# 妹死亡
+[SadnessForSister]
+	<normal>
+		じゃおー！
+	</normal>
+[/SadnessForSister]
+
+# 壁発見
+[BlockedByWall]
+	<normal>
+		<baby>
+			じゃおぉぉ？！
+		</baby>
+		<child>
+			じゃおぉぉ？！
+		</child>
+		<adult>
+			じゃおぉぉ？！
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			じゃおぉぉ？！じゃおじゃお！！
+		</baby>
+		<child>
+			じゃおぉぉ？！じゃじゃおじゃお！！
+		</child>
+		<adult>
+			じゃおぉぉ？！じゃお！じゃお！！
+		</adult>
+	</rude>
+[/BlockedByWall]
+
+# おもちゃ発見
+[GetTreasure]
+	<normal>
+		<baby>
+			じゃお！
+		</baby>
+		<child>
+			じゃお！
+		</child>
+		<adult>
+			じゃお！
+		</adult>
+	</normal>
+[/GetTreasure]
+
+# おもちゃ紛失
+[LostTreasure]
+	<normal>
+		<baby>
+			じゃお？！
+		</baby>
+		<child>
+			じゃお？！
+		</child>
+		<adult>
+			じゃお？！
+		</adult>
+	</normal>
+[/LostTreasure]
+
+# 膨張
+[Inflation]
+	<normal>
+		<baby>
+			じゃおおおおおお！
+		</baby>
+		<child>
+			じゃおおおおおお！
+		</child>
+		<adult>
+			じゃおおおおおお！
+		</adult>
+	</normal>
+[/Inflation]
+
+# 子虐待
+[AbuseBaby]
+	<normal>
+		<baby>
+			じゃおおおぉぉー！
+		</baby>
+		<child>
+			じゃおおおぉぉー！
+		</child>
+		<adult>
+			じゃおおおぉぉー！
+		</adult>
+	</normal>
+[/AbuseBaby]
+
+# 子虐待死
+[AbuseBabyKilled]
+	<normal>
+		<baby>
+			じゃおおおぉぉー！
+		</baby>
+		<child>
+			じゃおおおぉぉー！
+		</child>
+		<adult>
+			じゃおおおぉぉー！
+		</adult>
+	</normal>
+[/AbuseBabyKilled]
+
+# のびのび
+[Nobinobi]
+	<normal>
+		<baby>
+			じゃーおじゃーお
+			じゃ～お～♪
+		</baby>
+		<child>
+			じゃーおじゃーお
+			じゃ～お～♪
+		</child>
+		<adult>
+			じゃーおじゃーお
+			じゃ～お～♪
+		</adult>
+	</normal>
+[/Nobinobi]
+
+# 出産前
+[NearToBirth]
+	<normal>
+		<baby>
+			じゃお！
+		</baby>
+		<child>
+			じゃお！
+		</child>
+		<adult>
+			じゃお！
+		</adult>
+	</normal>
+[/NearToBirth]
+
+# 毒
+[PoisonDamage]
+	<normal>
+		<baby>
+			じゃおー!
+			<damage>
+				だお
+			</damage>
+		</baby>
+		<child>
+			じゃおー!
+			<damage>
+				だお
+			</damage>
+		</child>
+		<adult>
+			じゃおー！
+			<damage>
+				だお
+			</damage>
+		</adult>
+	</normal>
+[/PoisonDamage]
+
+# 排泄不可
+[CantShit]
+	<normal>
+		<baby>
+			じゃおー!
+		</baby>
+		<child>
+			じゃおー!
+		</child>
+		<adult>
+			じゃおー！
+		</adult>
+	</normal>
+[/CantShit]
+
+# 妊娠失敗
+[NoPregnancy]
+	<normal>
+		<baby>
+			じゃおー!
+		</baby>
+		<child>
+			じゃおー!
+		</child>
+		<adult>
+			じゃおん、、、
+		じゃおー!
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			じゃおー!
+		</baby>
+		<child>
+			じゃおー!
+		</child>
+		<adult>
+			じゃおん、、、
+		じゃおー!
+		</adult>
+	</rude>
+[/NoPregnancy]
+
+# 恐怖でパニック状態
+[Fear]
+	<normal>
+		<baby>
+			じゃおぉぉ！！！
+		</baby>
+		<child>
+			じゃおぉぉ！！！
+		</child>
+		<adult>
+			じゃおぉぉ！！！
+		</adult>
+	</normal>
+[/Fear]
+
+# 火がついてる状態
+[Burning]
+	<normal>
+		<baby>
+			じゃおじゃおじゃおーーん！！！
+		</baby>
+		<child>
+			じゃおじゃおじゃおーーん！！！
+		</child>
+		<adult>
+			じゃおじゃおじゃおーーん！！！
+			じゃおー！じゃおー！じゃおーー！！！
+		</adult>
+	</normal>
+[/Burning]
+
+# 水をかけられた
+[Wet]
+	<normal>
+		<baby>
+			じゃおぉぉ、、、
+		</baby>
+		<child>
+			じゃおぉぉ、、、
+		</child>
+		<adult>
+			じゃおぉぉ、、、
+		</adult>
+	</normal>
+[/Wet]
+
+# 水の中にいる(浅瀬)
+[WetInShallowWater]
+	<normal>
+		<baby>
+			じゃおぉぉ、、、
+		</baby>
+		<child>
+			じゃおぉぉ、、、
+		</child>
+		<adult>
+			じゃおぉぉ、、、
+		</adult>
+	</normal>
+[/WetInShallowWater]
+
+# 水の中にいる(深瀬)
+[WetInDeepwWater]
+	<normal>
+		<baby>
+			じゃおぉぉ、、、
+		</baby>
+		<child>
+			じゃおぉぉ、、、
+		</child>
+		<adult>
+			じゃおぉぉ、、、
+		</adult>
+	</normal>
+[/WetInDeepwWater]
+
+# あにゃる閉鎖
+[AnalSealed]
+	<normal>
+		<baby>
+			じゃおっじゃおっ！
+			じゃ、じゃお～！、、
+		</baby>
+		<child>
+			じゃおっじゃおっ！
+			じゃ、じゃお～！、、
+		</child>
+		<adult>
+			じゃおっじゃおっ！
+			じゃ、じゃお～！、、
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			じゃおっじゃおっ！
+			じゃ、じゃお～！、、
+		</baby>
+		<child>
+			じゃおっじゃおっ！
+			じゃ、じゃお～！、、
+		</child>
+		<adult>
+			じゃおっじゃおっ！
+			じゃ、じゃお～！、、
+		</adult>
+	</rude>
+[/AnalSealed]
+
+# 針が刺さった時
+[NeedleStick]
+	<normal>
+		<baby>
+			じゃおぉぉおおん！
+			じゃおっ？
+			じゃお？じゃおっ？
+		</baby>
+		<child>
+			じゃおぉぉおおん！
+			じゃおっ？
+			じゃお？じゃおっ？
+		</child>
+		<adult>
+			じゃおぉぉおおん！
+			じゃおっ？
+			じゃお？じゃおっ？
+		</adult>
+	</normal>
+[/NeedleStick]
+
+# 針が刺さっている時
+[NeedleScream]
+	<normal>
+		<baby>
+			じゃーおー！
+			じゃおー！じゃおー！じゃおー！
+			じゃおぉぉ、、、
+		</baby>
+		<child>
+			じゃーおー！
+			じゃおー！じゃおー！じゃおー！
+			じゃおぉぉ、、、
+		</child>
+		<adult>
+			じゃーおー！
+			じゃおー！じゃおー！じゃおー！
+			じゃおぉぉ、、、
+		</adult>
+	</normal>
+[/NeedleScream]
+
+# あにゃるに針が刺さっている時
+[NeedleScreamInAnal]
+	<normal>
+		<baby>
+			じゃーおー！
+			じゃおー！じゃおー！じゃおー！
+			じゃおぉぉ、、、
+		</baby>
+		<child>
+			じゃーおー！
+			じゃおー！じゃおー！じゃおー！
+			じゃおぉぉ、、、
+		</child>
+		<adult>
+			じゃーおー！
+			じゃおー！じゃおー！じゃおー！
+			じゃおぉぉ、、、
+		</adult>
+	</normal>
+[/NeedleScreamInAnal]
+
+# つがいの針をぐーりぐりする
+[ExtractingNeedlePartner]
+	<normal>
+		<baby>
+			じゃーお！じゃーお！
+			じゃおーじゃおー！
+			じゃおぉぉ！じゃおぉぉ！！！
+		</baby>
+		<child>
+			じゃーお！じゃーお！
+			じゃおーじゃおー！
+			じゃおぉぉ！じゃおぉぉ！！！
+		</child>
+		<adult>
+			じゃーお！じゃーお！
+			じゃおーじゃおー！
+			じゃおぉぉ！じゃおぉぉ！！！
+		</adult>
+	</normal>
+[/ExtractingNeedlePartner]
+
+# 子の針をぐーりぐりする
+[ExtractingNeedleChild]
+	<normal>
+		<baby>
+			じゃーお！じゃーお！
+			じゃおーじゃおー！
+			じゃおぉぉ！じゃおぉぉ！！！
+		</baby>
+		<child>
+			じゃーお！じゃーお！
+			じゃおーじゃおー！
+			じゃおぉぉ！じゃおぉぉ！！！
+		</child>
+		<adult>
+			じゃーお！じゃーお！
+			じゃおーじゃおー！
+			じゃおぉぉ！じゃおぉぉ！！！
+		</adult>
+	</normal>
+[/ExtractingNeedleChild]
+
+# 被ぐーりぐり時
+[NeedlePain]
+	<normal>
+		<baby>
+			じゃおん？じゃおぉおお！！！
+			じゃおん？じゃおん？じゃーおー！！！
+			じゃおぉぉ、、、ピギィィィィィィイ！
+		</baby>
+		<child>
+			じゃおん？じゃおぉおお！！！
+			じゃおん？じゃおん？じゃーおー！！！
+			じゃおぉぉ、、、ピギィィィィィィイ！
+		</child>
+		<adult>
+			じゃおん？じゃおぉおお！！！
+			じゃおん？じゃおん？じゃーおー！！！
+			じゃお、、、じゃおぉぉおおお！
+		</adult>
+	</normal>
+[/NeedlePain]
+
+# 針を抜いた時
+[NeedleRemove]
+	<normal>
+		<baby>
+			じゃおじゃお、じゃおーん、、、
+			じゃおーん、、、
+		</baby>
+		<child>
+			じゃおじゃお、じゃおーん、、、
+			じゃおーん、、、
+		</child>
+		<adult>
+			じゃおじゃお、じゃおーん、、、
+			じゃおーん、、、
+		</adult>
+	</normal>
+[/NeedleRemove]
+
+# あまあま要求
+[WantAmaama]
+	<normal>
+		<baby>
+			じゃおっ！じゃおっ！じゃおーん！！！
+		</baby>
+		<child>
+			じゃおっ！じゃおっ！じゃおーん！！！
+		</child>
+		<adult>
+			じゃおっ！じゃおっ！じゃおーん！！！
+		</adult>
+	</normal>
+[/WantAmaama]
+
+# 移動不能
+[CantMove]
+	<normal>
+		<baby>
+			じゃおっ？
+		</baby>
+		<child>
+			じゃおっ？
+		</child>
+		<adult>
+			じゃおっ？
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			じゃおっ？
+		</baby>
+		<child>
+			じゃおっ？
+		</child>
+		<adult>
+			じゃおっ？
+		</adult>
+	</rude>
+[/CantMove]
+
+# 移動不能2
+[CantMove2]
+	<normal>
+		<baby>
+			じゃおっ？じゃお～ん！
+		</baby>
+		<child>
+			じゃおっ？じゃお～ん！
+		</child>
+		<adult>
+			じゃおっ？じゃお～ん！
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			じゃおっ？じゃお～ん！
+		</baby>
+		<child>
+			じゃおっ？じゃお～ん！
+		</child>
+		<adult>
+			じゃおっ？じゃお～ん！
+		</adult>
+	</rude>
+[/CantMove2]
+
+# 目潰し
+[BLINDING]
+	<normal>
+		<baby>
+			じゃお！！
+			<damage>
+				じゃお、、、
+			</damage>
+		</baby>
+		<child>
+			じゃお！じゃおーん？！
+			<damage>
+				じゃお、、、
+			</damage>
+		</child>
+		<adult>
+			じゃおじゃお！じゃおーん？！
+			<damage>
+				じゃおーん、、、
+			</damage>
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			じゃお！！
+			<damage>
+				じゃぉ、、、
+			</damage>
+		</baby>
+		<child>
+			じゃお！！！
+			<damage>
+				じゃお、、、
+			</damage>
+		</child>
+		<adult>
+			じゃおじゃお！じゃおーん！！
+			<damage>
+				じゃおじゃお、、、
+			</damage>
+		</adult>
+	</rude>
+[/BLINDING]
+
+# 見えない
+[CANTSEE]
+	<normal>
+		<baby>
+			ちゃおお・・・
+		</baby>
+		<child>
+			じゃお・・・
+		</child>
+		<adult>
+			じゃお・・・
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			ちゃおお・・・
+		</baby>
+		<child>
+			じゃお・・・
+		</child>
+		<adult>
+			じゃお・・・
+	</rude>
+[/CANTSEE]
+
+#むしる
+[PLUNCKING]
+	<normal>
+		<baby>
+			じゃお！！
+			<damage>
+				じゃお、、、
+			</damage>
+		</baby>
+		<child>
+			じゃお！じゃおーん？！
+			<damage>
+				じゃお、、、
+			</damage>
+		</child>
+		<adult>
+			じゃおじゃお！じゃおーん？！
+			<damage>
+				じゃおーん、、、
+			</damage>
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			じゃお！！
+			<damage>
+				じゃぉ、、、
+			</damage>
+		</baby>
+		<child>
+			じゃお！！！
+			<damage>
+				じゃお、、、
+			</damage>
+		</child>
+		<adult>
+			じゃおじゃお！じゃおーん！！
+			<damage>
+				じゃおじゃお、、、
+			</damage>
+		</adult>
+	</rude>
+[/PLUNCKING]
+
+#つちのなかにいる
+[BaryInUnderGround]
+	<normal>
+		<baby>
+			じゃおー、、、じゃおー、、、
+		</baby>
+		<child>
+			じゃおー、、、じゃおー、、、
+		</child>
+		<adult>
+			じゃおー、、、じゃおー、、、
+		</adult>
+	</normal>
+[/BaryInUnderGround]
+
+# 引っ張る
+[Pull]
+	<normal>
+		<baby>
+			じゃおっ？
+		</baby>
+		<child>
+			じゃおっ？
+		</child>
+		<adult>
+			じゃおっ？
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			じゃおっ？
+		</baby>
+		<child>
+			じゃおっ？
+		</child>
+		<adult>
+			じゃおっ？
+		</adult>
+	</rude>
+[/Pull]
+
+# 引っ張る2
+[Pull2]
+	<normal>
+		<baby>
+			じゃおおぉぉ！！！
+			じゃおっ！じゃおっ！！！！
+		</baby>
+		<child>
+			じゃおおぉぉ！！！
+			じゃおっ！じゃおっ！！！！
+		</child>
+		<adult>
+			じゃおおぉぉ！！！
+			じゃおっ！じゃおっ！！！！
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			じゃおおぉぉ！！！
+			じゃおっ！じゃおっ！！！！
+		</baby>
+		<child>
+			じゃおおぉぉ！！！
+			じゃおっ！じゃおっ！！！！
+		</child>
+		<adult>
+			じゃおおぉぉ！！！
+			じゃおっ！じゃおっ！！！！
+		</adult>
+	</rude>
+[/Pull2]
+
+# つぶす
+[Press]
+	<normal>
+		<baby>
+			じゃお？
+		</baby>
+		<child>
+			じゃお？
+		</child>
+		<adult>
+			じゃお？じゃお？
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			じゃお？
+		</baby>
+		<child>
+			じゃお？
+		</child>
+		<adult>
+			じゃお？じゃお？
+		</adult>
+	</rude>
+[/Press]
+
+# つぶす2
+[Press2]
+	<normal>
+		<baby>
+			じゃお？じゃおおぉぉ！！！
+			じゃーおーぉーーー！！！
+		</baby>
+		<child>
+			じゃお？じゃおおぉぉ！！！
+			じゃーおーぉーーー！！！
+		</child>
+		<adult>
+			じゃお？じゃおおぉぉ！！！
+			じゃーおーぉーーー！！！
+		</adult>
+	</normal>
+[/Press2]
+
+#加工所でつぶされる
+[KilledInFactory]
+	<normal>
+		<baby>
+			じゃお？じゃおおぉぉ！！！
+			じゃーおーぉーーー！！！
+		</baby>
+		<child>
+			じゃお？じゃおおぉぉ！！！
+			じゃーおーぉーーー！！！
+		</child>
+		<adult>
+			じゃお？じゃおおぉぉ！！！
+			じゃーおーぉーーー！！！
+		</adult>
+	</normal>
+[/KilledInFactory]
+
+# あまあま発見
+[FindAmaama]
+	<normal>
+		<baby>
+			じゃおっ じゃおっ♪
+		</baby>
+		<child>
+			じゃおっ じゃおっ♪
+		</child>
+		<adult>
+			じゃおっ じゃおっ♪
+		</adult>
+	</normal>
+[/FindAmaama]
+
+# あまあま食事
+[EatingAmaama]
+	<normal>
+		<baby>
+			じゃーおー♪
+			じゃおじゃお じゃおーん♪
+		</baby>
+		<child>
+			じゃーおー♪
+			じゃおじゃお じゃおーん♪
+		</child>
+		<adult>
+			じゃーおー♪
+			じゃおじゃお じゃおーん♪
+		</adult>
+	</normal>
+[/EatingAmaama]
+
+# 野菜発見
+[FindVegetable]
+	<normal>
+		<baby>
+			じゃーおー♪
+		</baby>
+		<child>
+			じゃーおー♪
+		</child>
+		<adult>
+			じゃーおー♪
+		</adult>
+	</normal>
+[/FindVegetable]
+
+# 吐餡
+[Vomit]
+	<normal>
+		<baby>
+			じゃおぉぉっ！！！
+			ぐべぇ！
+		</baby>
+		<child>
+			じゃおぉぉっ！！！
+			ぐべぇ！
+		</child>
+		<adult>
+			じゃおぉぉっ！！！
+			ぐべぇ！
+		</adult>
+	</normal>
+[/Vomit]
+
+# 汎用、瀕死継続
+[Dying2]
+	<normal>
+		<baby>
+			じゃ・・・じゃおっ・・・
+		</baby>
+		<child>
+			じゃ・・・じゃおっ・・・
+		</child>
+		<adult>
+			じゃ・・・じゃおっ・・・
+		</adult>
+	</normal>
+[/Dying2]
+
+# 汎用、驚き
+[Surprise]
+	<normal>
+		<baby>
+			じゃおぉぉん？！
+		</baby>
+		<child>
+			じゃおぉぉん？！
+		</child>
+		<adult>
+			じゃおぉぉん？！
+		</adult>
+	</normal>
+[/Surprise]
+
+# 皮を剥かれる
+[PEALING]
+	<normal>
+		<baby>
+			ちゃぉぉぉぉぉぉぉ！！！
+		</baby>
+		<child>
+			じゃぉぉぉぉぉぉぉ！！！
+		</child>
+		<adult>
+			じゃぉぉぉぉぉぉぉ！！！
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			ちゃぉぉぉぉぉぉぉ！！！
+		</baby>
+		<child>
+			じゃぉぉぉぉぉぉぉ！！！
+		</child>
+		<adult>
+			じゃぉぉぉぉぉぉぉ！！！
+		</adult>
+	</rude>
+[/PEALING]
+
+# 汎用、ゆっくりできなくて嘆く(低)
+[LamentLowYukkuri]
+	<normal>
+		<baby>
+			ちゃおぉ、、、
+		</baby>
+		<child>
+			じゃおぉ、、、
+		</child>
+		<adult>
+			じゃお、、、
+		</adult>
+	</normal>
+[/LamentLowYukkuri]
+
+# 汎用、ゆっくりできなくて嘆く
+[LamentNoYukkuri]
+	<normal>
+		<baby>
+			ちゃおぉぉぉ！
+			ちゃおぉぉぉ？！！
+		</baby>
+		<child>
+			じゃおぉぉぉ！
+			じゃおおぉぉぉ？！！
+		</child>
+		<adult>
+			じゃおぉぉぉ！
+			じゃおおぉぉぉ？！！
+		</adult>
+	</normal>
+[/LamentNoYukkuri]
+
+#ゆんやああ
+[Yunnyaa]
+	<normal>
+		じゃおぉぉぉぉぉぉぉぉぉぉ！！！！！
+	</normal>
+[/Yunnyaa]
+
+# 非ゆっくり症初期
+[NonYukkuriDiseaseNear]
+	<normal>
+		･････････
+		じゃお、、、、、
+	</normal>
+[/NonYukkuriDiseaseNear]
+
+# 非ゆっくり症
+[NonYukkuriDisease]
+	<normal>
+		じゃおっ！！じゃおっ！！じゃおっ！！じゃおっ！！じゃおっ！！じゃおっ！！
+	</normal>
+[/NonYukkuriDisease]
+
+# 汎用、他のゆっくりに何かされたときに対する攻撃、反撃
+[RevengeAttack]
+	<normal>
+		<baby>
+			じゃっ！
+			じゃおっ！
+			じゃおらっ！！！
+			じゃおらららぁっ！！！
+		</baby>
+		<child>
+			じゃっ！
+			じゃおっ！
+			じゃおらっ！！！
+			じゃおらららぁっ！！！
+		</child>
+		<adult>
+			じゃっ！
+			じゃおっ！
+			じゃおらっ！！！
+			じゃおらららぁっ！！！
+		</adult>
+	</normal>
+[/RevengeAttack]
+
+# おさげ、尻尾、羽をちぎる
+[BraidCut]
+	<normal>
+		<baby>
+			じゃおじゃおっ？！
+		</baby>
+		<child>
+			じゃおじゃおっ？！
+		</child>
+		<adult>
+			じゃおじゃおっ？！
+		</adult>
+	</normal>
+[/BraidCut]
+
+# 汎用、他のゆっくりに生きたまま食べられる
+[EatenByBody]
+	<normal>
+		<baby>
+			じゃおぉぉ！じゃおぉぉ！
+		</baby>
+		<child>
+			じゃおぉぉ！じゃおぉぉ！
+		</child>
+		<adult>
+			じゃおぉぉ！じゃおぉぉ！
+		</adult>
+	</normal>
+[/EatenByBody]
+
+# 汎用、他のゆっくりに生きたまま吸われる
+[EatenByBody2]
+	<normal>
+		<baby>
+			じゃおぉぉ、、、
+		</baby>
+		<child>
+			じゃおぉぉ、、、
+		</child>
+		<adult>
+			じゃおぉぉ、、、
+		</adult>
+	</normal>
+[/EatenByBody2]
+
+# れみりゃから逃げる
+[EscapeFromRemirya]
+	<normal>
+		<baby>
+			じゃおぉぉぉぉ！！！
+			じゃお？じゃお？じゃお～ん！！！
+		</baby>
+		<child>
+			じゃおぉぉぉぉ！！！
+			じゃお？じゃお？じゃお～ん！！！
+		</child>
+		<adult>
+			じゃおぉぉぉぉ！！！
+			じゃお？じゃお？じゃお～ん！！！
+		</adult>
+	</normal>
+[/EscapeFromRemirya]
+
+# しゃべれない
+[CantTalk]
+	<normal>
+		<baby>
+			むーー！！
+			ーーーーー！！！
+			ゆむーー！！ゆむむーー！！
+		</baby>
+		<child>
+			むーー！！
+			ーーーーー！！！
+			ゆむーー！！ゆむむーー！！
+		</child>
+		<adult>
+			むーー！！
+			ーーーーー！！！
+			ゆぐーー！！ゆむぐーー！！
+		</adult>
+	</normal>
+[/CantTalk]
+
+# しゃべれない(非ゆっくり)
+[NYDCantTalk]
+	<normal>
+		<baby>
+			ゆぐむっ！ゆぐむっ！ゆぐむっ！ゆぐむっ！
+			ゆむぐっ！ゆむぐっ！ゆむぐっ！ゆむぐっ！
+			<damage>
+				ゆむっ！ゆぐっ！ゆむっ！ゆぐっ！ゆむっ！
+			</damage>
+		</baby>
+		<child>
+			ゆぐむっ！ゆぐむっ！ゆぐむっ！ゆぐむっ！
+			ゆむぐっ！ゆむぐっ！ゆむぐっ！ゆむぐっ！
+			<damage>
+				ゆむっ！ゆぐっ！ゆむっ！ゆぐっ！ゆむっ！
+			</damage>
+		</child>
+		<adult>
+			ゆぐむっ！ゆぐむっ！ゆぐむっ！ゆぐむっ！
+			ゆむぐっ！ゆむぐっ！ゆむぐっ！ゆむぐっ！
+			<damage>
+				ゆむっ！ゆぐっ！ゆむっ！ゆぐっ！ゆむっ！
+			</damage>
+		</adult>
+	</normal>
+[/NYDCantTalk]
+
+#汚い
+[Dirty]
+	<normal>
+		<baby>
+			ちゃぉぉ、、、
+		</baby>
+		<child>
+			%dummy
+		</child>
+		<adult>
+			%dummy
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			ちゃぉぉぉぉぉぉぉ！！！
+		</baby>
+		<child>
+			じゃぉぉぉぉぉぉぉ！！！
+		</child>
+		<adult>
+			%dummy
+		</adult>
+	</rude>
+[/Dirty]
+
+# かびてる時の通常時
+[Moldy]
+	<normal>
+		<baby>
+			じゃおん、、、
+		</baby>
+		<child>
+			じゃおん、、、
+		</child>
+		<adult>
+			じゃおん、、、
+		</adult>
+	</normal>
+[/Moldy]
+
+# 皮を剥かれる
+[MoldrySeriousry]
+	<normal>
+		<baby>
+			ちゃぉぉぉぉぉぉぉ！！！
+		</baby>
+		<child>
+			じゃぉぉぉぉぉぉぉ！！！
+		</child>
+		<adult>
+			じゃぉぉぉぉぉぉぉ！！！
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			ちゃぉぉぉぉぉぉぉ！！！
+		</baby>
+		<child>
+			じゃぉぉぉぉぉぉぉ！！！
+		</child>
+		<adult>
+			じゃぉぉぉぉぉぉぉ！！！
+		</adult>
+	</rude>
+[/MoldrySeriousry]

@@ -1,0 +1,88 @@
+package src.game;
+import src.base.Body;
+import src.enums.Attitude;
+import src.enums.Intelligence;
+import src.yukkuri.Tarinai;
+
+
+
+/****************************************
+ *  ゆっくりの遺伝子情報
+ */
+public class Dna implements java.io.Serializable {
+
+	private static final long serialVersionUID = 1L;
+	
+	/**
+	 * 種別
+	 * ゆっくりの種類とtypeの値 2021/04/10現在：
+	 * 0000	まりさ
+	 * 0001	れいむ
+	 * 0002	ありす
+	 * 0003	ぱちゅりー
+	 * 0004	ちぇん
+	 * 0005	みょん
+	 * 1000	ゆるさなえ
+	 * 1001	あや
+	 * 1002	てんこ
+	 * 1003	うどんげ
+	 * 1004	めーりん
+	 * 1005	すわこ
+	 * 1006	ちるの
+	 * 1007	えーき
+	 * 1008	らん
+	 * 1009	にとり
+	 * 1010	ゆうか
+	 * 1011	さくや
+	 * 2000	たりないゆ
+	 * 2001	わされいむ
+	 * 2002	つむり
+	 * 2003	きめぇまる
+	 * 2004	こたつむり
+	 * 2005	でいぶ
+	 * 2006	ドスまりさ
+	 * 2007	たりないれいむ
+	 * 3000	れみりゃ
+	 * 3001	ふらん
+	 * 3002	ゆゆこ
+	 * 10000	まりされいむ
+	 * 10001	れいむまりさ
+	 * 20000	ハイブリッド
+	 * */
+	public int type;	
+	/**性格*/
+	public Attitude attitude;
+	/**知能*/
+	public Intelligence intelligence;
+	/**レイプでできた子か*/
+	public boolean raperChild;
+	/**父ゆ*/
+	public Body father;
+	/**母ゆ*/
+	public Body mother;
+
+	/**
+	 * コンストラクタ
+	 * <br>引数なしの場合、足りないゆ、知能、性格共に中庸のものが生成される
+	 */
+	public Dna() {
+		type = Tarinai.type;
+		attitude = Attitude.AVERAGE;
+		intelligence = Intelligence.AVERAGE;
+		raperChild = false;
+	}
+	/**
+	 * コンストラクタ
+	 * 
+	 * @param t 種別
+	 * @param att 性格
+	 * @param intel 知能
+	 * @param rape レイプでできた子か
+	 */
+	public Dna(int t, Attitude att, Intelligence intel, boolean rape) {
+		type = t;
+		attitude = att;
+		intelligence = intel;
+		raperChild = rape;
+	}
+}

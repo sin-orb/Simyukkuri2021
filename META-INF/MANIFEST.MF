@@ -1,0 +1,2 @@
+# MANIFEST.MF
+Main-Class: src.SimYukkuri

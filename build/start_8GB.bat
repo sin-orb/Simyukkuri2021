@@ -1,0 +1,1 @@
+"java.exe" -Xms1024m -Xmx8192m -jar SimYukkuri.jar

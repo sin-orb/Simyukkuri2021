@@ -1,0 +1,1457 @@
+# 餌発見
+[WantFood]
+	<normal>
+		ゆっぴぃ♪ ゆっぴぃ♪
+		ゆぐおー！
+		ゆぐおー！ゆぐおー！
+		ゆっぐぢぃ！
+		ゆんぐぅ〜？
+		ゆんぐぐおぉ〜！
+	</normal>
+[/WantFood]
+
+# 餌なし
+[NoFood]
+	<normal>
+		ゆぅ、、、
+		ゆぅ？
+	</normal>
+[/NoFood]
+
+# 番要求
+[WantPartner]
+	<normal>
+		ゆぴっ！ゆびびっ！
+		ゆびびぃ！ゆびぃ！
+	</normal>
+[/WantPartner]
+
+# 発情
+[Excite]
+	<normal>
+		ゆぐぉーっ！
+		ゆんぎぃ～♪
+		ゆほぉっ！！！
+		ゆぴゃぴゃぴゃぴゃぴゃぴゃっ！！！
+	</normal>
+[/Excite]
+
+#れいぱー化して発情
+[ExciteForRaper]
+	<normal>
+		ゆぐぉーっ！
+		ゆんぎぃ～♪
+		ゆほぉっ！！！
+		ゆぴゃぴゃぴゃぴゃぴゃぴゃっ！！！
+	</normal>
+[/ExciteForRaper]
+
+# ぺにぺに切断
+[PenipeniCutting]
+	<normal>
+		ゆぎぎぃ？！
+		あがぁーっ！！！
+	</normal>
+[/PenipeniCutting]
+
+# ぺにぺに切断後
+[PenipeniCutted]
+	<normal>
+		ゆうぅぅ？
+	</normal>
+[/PenipeniCutted]
+
+# ぺにぺにをつかえない
+[CantUsePenipeni]
+	<normal>
+		ゆうぅぅ？
+	</normal>
+[/CantUsePenipeni]
+
+# リラックス
+[Relax]
+	<normal>
+		ゆ～ゆ～♪
+		ゆっぐぢぃ！
+		ゆっぐ！ゆっぐ！
+		ゆぉお゛お゛〜♪ ゆぉお゛お゛〜♪
+	</normal>
+[/Relax]
+
+# おくるみをはいてリラックス
+[RelaxOkurumi]
+	<normal>
+		ゆぐぉ〜♪
+		ゆんぐぉー！ ゆんぐぉー！
+	</normal>
+[/RelaxOkurumi]
+
+# 尻振り
+[FuriFuri]
+	<normal>
+		ゆぼぼっ！
+		ゆぼっ！ゆぼぼっ！
+		ゆ～ん ゆ～ん ゆ～ん！
+	</normal>
+[/FuriFuri]
+
+#キリッ
+[BeVain]
+	<normal>
+		ゆびょっ！！
+		ゆびょぼっ！
+	</normal>
+[/BeVain]
+
+# ゆっくりしていってね！
+[TakeItEasy]
+	<normal>
+		ゆっぐぢぃ！
+	</normal>
+[/TakeItEasy]
+
+# 起床
+[Wakeup]
+	<normal>
+		ゆぐおー！ ゆぐおー！ 
+		ゆっぐぢぃ！
+	</normal>
+[/Wakeup]
+
+# 睡眠
+[Sleep]
+	<normal>
+		ゆーゆー
+		ゆぴぴ・・ゆぴぴ・・
+	</normal>
+[/Sleep]
+
+# 悲鳴
+[Scream]
+	<normal>
+		ゆっぴー！
+		ゆびゃあ！！！
+		ゆぴぴぃ！
+	</normal>
+[/Scream]
+
+# 悲鳴2
+[Scream2]
+	<normal>
+		ゆびぃぃぃぃぃぃぃぃ！！
+		ゆぎぴぃぃぃぃぃぃぃ！！！
+		ゆぴぃぃぃぃぃぃぃぃ！！！
+		ぴぃぃぃぃぃぃぃぃぃ！！
+		ゆばぁぁぁぁぁぁぁぁ！！！
+		ゆげぴぃぃぃぃぃぃぃ！！！
+		ぴぎぃぃぃぃぃぃぃぃ！！
+		ゆごげぇぇぇぇぇぇぇ！！
+		ゆぎょぉぉぉぉぉぉぉ！！！
+		ゆぁぁぁぁぁぁぁぁぁ！！！
+		ゆぅぅぅぅぅぅぅぅぅ！！！
+		ぎぇぇぇぇぇぇぇぇぇ！！！
+	</normal>
+[/Scream2]
+
+# 怯え
+[Scare]
+	<normal>
+		ゆっぴー！
+		ゆびゃあ！！！
+		ゆぴぴぃ！
+	</normal>
+[/Scare]
+
+# 警戒
+[Alarm]
+	<normal>
+		ゆぅー、、、
+		ゆっ ゆっ ゆっ
+	</normal>
+[/Alarm]
+
+# 瀕死
+[Dying]
+	<normal>
+		ゆぴっ！
+		ゆぴゃあ！
+	</normal>
+[/Dying]
+
+# 死亡
+[Dead]
+	<normal>
+		ゆ、ゆ、ゆ、、、
+		ゆっ、、、
+	</normal>
+[/Dead]
+
+# 食事
+[Eating]
+	<normal>
+		くっちゃくっちゃ！
+		はっふ！はっふ！
+		くっちゃくっちゃ ゆ～！
+	</normal>
+[/Eating]
+
+# 食事(うんうん)
+[EatingShit]
+	<normal>
+		くっちゃくっちゃ♪
+		くっちゃくっちゃくっちゃくっちゃ♪
+	</normal>
+[/EatingShit]
+
+# 餌運び
+[TransportFood]
+	<normal>
+		ゆぴー！！
+	</normal>
+[/TransportFood]
+
+# うんうん運び
+[TransportShit]
+	<normal>
+		ゆびゃあ！！！
+	</normal>
+[/TransportShit]
+
+#アイテムを落とす
+[DropItem]
+	<normal>
+		ゆっゆっ！！
+	</normal>
+[/DropItem]
+
+# 食事(まずい)
+[EatingBadtasting]
+	<normal>
+		くっちゃくっちゃ、、、ゆびぃ、、、
+		くっちゃくっちゃ、、、ゆぴぃ、、、
+		くっちゃくっちゃ、、、ゆぴ、ゆぴ、、、
+		くっちゃくっちゃ、、、ゆっぷぇ、、、
+	</normal>
+	<rude>
+		くっちゃくっちゃ、、、ゆびぃぃぃぃ！！！
+		くっちゃくっちゃ、、、ゆぴぃぃぃぃ！！！
+		くっちゃくっちゃ、、、ゆぴ、ゆぴ、、、
+		くっちゃくっちゃ、、、ゆっぷぇ、、、
+	</rude>
+[/EatingBadtasting]
+
+# 食事(毒)
+[EatingBitter]
+	<normal>
+		くっちゃくっちゃ、、、ゆぴぴぃぃぃぃぃぃぃぃ！
+	</normal>
+[/EatingBitter]
+
+# 食事(嘔吐)
+[SpitFood]
+	<normal>
+		ゆびぇぇぇぇぇ、、、
+	</normal>
+[/SpitFood]
+
+# 満腹
+[Full]
+	<normal>
+		ゆぴ
+	</normal>
+[/Full]
+
+# 回復
+[Healing]
+	<normal>
+		ゆっぴー！
+	</normal>
+[/Healing]
+
+# 解放感を感じた時
+[ToFreedom]
+	<normal>
+		ゆぅおぉおぉおぉおぉん！！！
+	</normal>
+[/ToFreedom]
+
+# 清掃された時
+[Cleaned]
+	<normal>
+		ゆっぐぉ〜♪
+		ゆんぎぃ〜♪
+	</normal>
+[/Cleaned]
+
+# すっきり
+[Sukkiri]
+	<normal>
+		ゆぅおおおぉん！
+		ゆぐぉおおーーっ！
+	</normal>
+[/Sukkiri]
+
+#れいぱー化してすっきりー！
+[SukkiriForRaper]
+	<normal>
+		ゆぅおおおぉん！
+		ゆぐぉおおーーっ！
+	</normal>
+[/SukkiriForRaper]
+
+# レイパーとすっきり
+[RaperSukkiri]
+	<normal>
+		ゆぎゃああぁん！
+		ゆびゃあああ！！！
+	</normal>
+[/RaperSukkiri]
+
+# 養殖プールすっきり
+[PoolSukkiri]
+	<normal>
+		ゆぎゃああぁん！
+		ゆびゃあああ！！！
+	</normal>
+[/PoolSukkiri]
+
+# 誕生
+[Birth]
+	<normal>
+		ゆぴっゆぴっ！
+	</normal>
+[/Birth]
+
+# 排泄
+[Shit]
+	<normal>
+		ゆぶぶっ！
+		ゆほぉおおおん！
+	</normal>
+[/Shit]
+
+# 排泄2
+[Shit2]
+	<normal>
+		ゆっぴ～！
+	</normal>
+[/Shit2]
+
+# すりすり
+[SuriSuri]
+	<normal>
+		ゆ～ゆ～ゆ～
+		ゆ～ん ゆ～ん
+	</normal>
+[/SuriSuri]
+
+# ぺろぺろ
+[PeroPero]
+	<normal>
+		ゆーぴゃゆーぴゃ！
+		ゆっゆ～！
+	</normal>
+[/PeroPero]
+
+# 出産
+[Breed]
+	<normal>
+		ゆ、ゆ、、、
+	</normal>
+[/Breed]
+
+# 産後
+[Breed2]
+	<normal>
+		ゆっぴー！
+	</normal>
+[/Breed2]
+
+# うんうん発見
+[HateShit]
+	<normal>
+		ゆぴー！
+	</normal>
+[/HateShit]
+
+#あほの子がうんうんを威嚇するセリフ
+[ShitIntimidation]
+	<normal>
+		ゆっぴぃぃぃ！！ゆっぴぃぃぃ！！
+	</normal>
+[/ShitIntimidation]
+
+# 空腹
+[Hungry]
+	<normal>
+		ゆ、ゆ、ゆ
+		ゆ～、、、
+	</normal>
+[/Hungry]
+
+# おかざり没収
+[NoAccessory]
+	<normal>
+		ゆぴ？ゆぴぴ？
+	</normal>
+[/NoAccessory]
+
+# おかざりがなくなっていることに気がつく
+[NoticeNoAccessory]
+	<normal>
+		ゆぴ？ゆぴぴ？
+	</normal>
+[/NoticeNoAccessory]
+
+# 他ゆんのおかざりをこっそり奪う
+[GetOtherAccessoryStealthily]
+	<normal>
+		ゆっぴゃー！
+	</normal>
+[/GetOtherAccessoryStealthily]
+
+# 持ち上げ
+[Flying]
+	<normal>
+		ゆっぴゃー！
+	</normal>
+[/Flying]
+
+# 子供死亡
+[SadnessForChild]
+	<normal>
+		ゆぴ？
+	</normal>
+[/SadnessForChild]
+
+# つがい死亡
+[SadnessForPartner]
+	<normal>
+		ゆぴ？
+	</normal>
+[/SadnessForPartner]
+
+# 姉死亡
+[SadnessForEldersister]
+	<normal>
+		ゆぴ？
+	</normal>
+[/SadnessForEldersister]
+
+# 妹死亡
+[SadnessForSister]
+	<normal>
+		ゆぴ？
+	</normal>
+[/SadnessForSister]
+
+# 壁発見
+[BlockedByWall]
+	<normal>
+		ゆぴ？
+	</normal>
+[/BlockedByWall]
+
+# おもちゃ発見
+[GetTreasure]
+	<normal>
+		<baby>
+			ゆぴ？
+		</baby>
+		<child>
+			ゆっぴー！
+		</child>
+		<adult>
+			ゆっぴー！
+		</adult>
+	</normal>
+[/GetTreasure]
+
+# おもちゃ紛失
+[LostTreasure]
+	<normal>
+		<baby>
+			ゆっぴー！
+		</baby>
+		<child>
+			ゆっぴー！
+		</child>
+		<adult>
+			ゆっぴー！
+		</adult>
+	</normal>
+[/LostTreasure]
+
+# 膨張
+[Inflation]
+	<normal>
+		<baby>
+			ぴぃぃぃぃ！
+		</baby>
+		<child>
+			ぴいいいぃぃぃぃ！
+		</child>
+		<adult>
+			ぴぎいいいいぃぃぃぃ！
+		</adult>
+	</normal>
+[/Inflation]
+
+# 子虐待
+[AbuseBaby]
+	<normal>
+		<baby>
+			ゆぴー？
+			ゆぴゃっ！
+		</baby>
+		<child>
+			ゆぴー？
+			ゆぴゃっ！
+		</child>
+		<adult>
+			ゆぴいぃー？
+			ゆびゃあ！！！
+		</adult>
+	</normal>
+[/AbuseBaby]
+
+# 子虐待死
+[AbuseBabyKilled]
+	<normal>
+		<baby>
+			ゆぴー？
+			ゆぴゃっ！
+		</baby>
+		<child>
+			ゆぴー？
+			ゆぴゃっ！
+		</child>
+		<adult>
+			ゆぴいぃー？
+			ゆびゃあ！！！
+		</adult>
+	</normal>
+[/AbuseBabyKilled]
+
+# のびのび
+[Nobinobi]
+	<normal>
+		<baby>
+			ゆーぴゆーぴ
+			ゆ～♪ゆ～♪
+		</baby>
+		<child>
+			ゆーぴゆーぴ
+			ゆ～♪ゆ～♪
+		</child>
+		<adult>
+			ゆーぴゆーぴ
+			ゆ～♪ゆ～♪
+		</adult>
+	</normal>
+[/Nobinobi]
+
+# 出産前
+[NearToBirth]
+	<normal>
+		<baby>
+			ゆっぴー！
+		</baby>
+		<child>
+			ゆっぴー！
+		</child>
+		<adult>
+			ゆっぴー！
+		</adult>
+	</normal>
+[/NearToBirth]
+
+# 毒
+[PoisonDamage]
+	<normal>
+		<baby>
+			ゆびぃ!
+			<damage>
+				びきぃ
+			</damage>
+		</baby>
+		<child>
+			ゆびぃ!
+			<damage>
+				びきぃ
+			</damage>
+		</child>
+		<adult>
+			ゆびぃ！
+			<damage>
+				びきぃ
+			</damage>
+		</adult>
+	</normal>
+[/PoisonDamage]
+
+# 排泄不可
+[CantShit]
+	<normal>
+		<baby>
+			ゆぴぃ！？
+		</baby>
+		<child>
+			ゆぴぃ!？
+		</child>
+		<adult>
+			ゆぴぃ！？
+		</adult>
+	</normal>
+[/CantShit]
+
+
+# 妊娠失敗
+[NoPregnancy]
+	<normal>
+		<baby>
+			ゆぴ？
+		</baby>
+		<child>
+			ゆぴ？
+		</child>
+		<adult>
+			ゆぴ？
+		</adult>
+	</normal>
+[/NoPregnancy]
+
+# 恐怖でパニック状態
+[Fear]
+	<normal>
+		<baby>
+			ゆっぴー！
+			ゆぴぴぴぴぴぴぴぴぴぴぴ
+		</baby>
+		<child>
+			ゆっぴー！
+			ゆぴぴぴぴぴぴぴぴぴぴぴ
+		</child>
+		<adult>
+			ゆっぴー！
+			ゆぴぴぴぴぴぴぴぴぴぴぴ
+		</adult>
+	</normal>
+[/Fear]
+
+# 火がついてる状態
+[Burning]
+	<normal>
+		<baby>
+			ゆぴー？ゆぴー！
+			ゆっぴー！
+		</baby>
+		<child>
+			ゆぴー？ゆぴー！
+			ゆっぴー！
+		</child>
+		<adult>
+			ゆぴー？ゆぴー！
+			ゆっぴー！
+		</adult>
+	</normal>
+[/Burning]
+
+# 水をかけられた
+[Wet]
+	<normal>
+		<baby>
+			ゆっぴー！
+		</baby>
+		<child>
+			ゆっぴー！
+		</child>
+		<adult>
+			ゆっぴー！
+		</adult>
+	</normal>
+[/Wet]
+
+# 水の中にいる(浅瀬)
+[WetInShallowWater]
+	<normal>
+		<baby>
+			ゆっぴー！
+		</baby>
+		<child>
+			ゆっぴー！
+		</child>
+		<adult>
+			ゆっぴー！
+		</adult>
+	</normal>
+[/WetInShallowWater]
+
+# 水の中にいる(深瀬)
+[WetInDeepwWater]
+	<normal>
+		<baby>
+			ゆっぴー！
+		</baby>
+		<child>
+			ゆっぴー！
+		</child>
+		<adult>
+			ゆっぴー！
+		</adult>
+	</normal>
+[/WetInDeepwWater]
+
+# あにゃる閉鎖
+[AnalSealed]
+	<normal>
+		<baby>
+			ゆぴぴっ？
+			ゆっぴー！
+		</baby>
+		<child>
+			ゆぴぴっ？
+			ゆっぴー！
+		</child>
+		<adult>
+			ゆぴぴっ？
+			ゆっぴー！
+		</adult>
+	</normal>
+	<normal>
+		<baby>
+			ゆぴぴっ？
+			ゆっぴー！
+		</baby>
+		<child>
+			ゆぴぴっ？
+			ゆっぴー！
+		</child>
+		<adult>
+			ゆぴぴっ？
+			ゆっぴー！
+		</adult>
+	</normal>
+[/AnalSealed]
+
+# 針が刺さった時
+[NeedleStick]
+	<normal>
+		<baby>
+			ぴぎぃ！？
+			ゆぴぃ！？
+			ギピィイ！
+		</baby>
+		<child>
+			ぴぎぃ！？
+			ゆぴぃ！？
+			ギピィイ！
+		</child>
+		<adult>
+			ぴぎぃ！？
+			ゆぴぃ！？
+			ギピィイ！
+		</adult>
+	</normal>
+[/NeedleStick]
+
+# 針が刺さっている時
+[NeedleScream]
+	<normal>
+		<baby>
+			ぴぎぃ！？
+			ゆぴぃ！？
+			ギピィイ！
+		</baby>
+		<child>
+			ぴぎぃ！？
+			ゆぴぃ！？
+			ギピィイ！
+		</child>
+		<adult>
+			ぴぎぃ！？
+			ゆぴぃ！？
+			ギピィイ！
+		</adult>
+	</normal>
+[/NeedleScream]
+
+# あにゃるに針が刺さっている時
+[NeedleScreamInAnal]
+	<normal>
+		<baby>
+			ぴぎぃ！？
+			ゆぴぃ！？
+			ギピィイ！
+		</baby>
+		<child>
+			ぴぎぃ！？
+			ゆぴぃ！？
+			ギピィイ！
+		</child>
+		<adult>
+			ぴぎぃ！？
+			ゆぴぃ！？
+			ギピィイ！
+		</adult>
+	</normal>
+[/NeedleScreamInAnal]
+
+# つがいの針をぐーりぐりする
+[ExtractingNeedlePartner]
+	<normal>
+		<baby>
+			ゆぴ！ゆぴぴ！
+		</baby>
+		<child>
+			ゆぴ！ゆぴぴ！
+		</child>
+		<adult>
+			ゆぴ！ゆぴぴ！
+		</adult>
+	</normal>
+[/ExtractingNeedlePartner]
+
+# 子の針をぐーりぐりする
+[ExtractingNeedleChild]
+	<normal>
+		<baby>
+			ゆぴ！ゆぴぴ！
+		</baby>
+		<child>
+			ゆぴ！ゆぴぴ！
+		</child>
+		<adult>
+			ゆぴ！ゆぴぴ！
+		</adult>
+	</normal>
+[/ExtractingNeedleChild]
+
+# 被ぐーりぐり時
+[NeedlePain]
+	<normal>
+		<baby>
+			ゆびぃぃぃぃぃい！
+		</baby>
+		<child>
+			ゆびぃぃぃぃぃい！
+		</child>
+		<adult>
+			ゆびぃぃぃぃぃい！
+		</adult>
+	</normal>
+[/NeedlePain]
+
+# 針を抜いた時
+[NeedleRemove]
+	<normal>
+		<baby>
+			ゆぴぃ、、、
+		</baby>
+		<child>
+			ゆぴぃ、、、
+		</child>
+		<adult>
+			ゆぴぃ、、、
+		</adult>
+	</normal>
+[/NeedleRemove]
+
+# あまあま要求
+[WantAmaama]
+	<normal>
+		<baby>
+			ゆっぴー！
+		</baby>
+		<child>
+			ゆっぴー！
+		</child>
+		<adult>
+			ゆっぴー！
+		</adult>
+	</normal>
+[/WantAmaama]
+
+# 移動不能
+[CantMove]
+	<normal>
+		<baby>
+			ゆ～、、、
+			ゆゆ～、、ゆ～、、
+		</baby>
+		<child>
+			ゆ～、、、
+			ゆゆ～、、ゆ～、、
+		</child>
+		<adult>
+			ゆ～、、、
+			ゆゆ～、、ゆ～、、
+		</adult>
+	</normal>
+[/CantMove]
+
+# 移動不能2
+[CantMove2]
+	<normal>
+		<baby>
+			ゆ～？
+			ゆー！ゆー！
+		</baby>
+		<child>
+			ゆ～？
+			ゆー！ゆー！
+		</child>
+		<adult>
+			ゆ～？
+			ゆー！ゆー！
+		</adult>
+	</normal>
+[/CantMove2]
+
+#目潰し
+[BLINDING]
+	<normal>
+		<baby>
+			ゆっぴー！
+			ゆびゃあ！！！
+			ゆぴぴぃ！
+		</baby>
+		<child>
+			ゆっぴー！
+			ゆびゃあ！！！
+			ゆぴぴぃ！
+		</child>
+		<adult>
+			ゆっぴー！
+			ゆびゃあ！！！
+			ゆぴぴぃ！
+		</adult>
+	</normal>
+[/BLINDING]
+
+# みえない
+[CANTSEE]
+	<normal>
+		<baby>
+			ゆびひぃぃぃぃぃぃ、、
+		</baby>
+		<child>
+			ゆひゅひぃぃぃぃぃぃ、、
+		</child>
+		<adult>
+			ゆっひゅひぃぃぃぃぃぃ、、
+		</adult>
+	</normal>
+[/CANTSEE]
+
+# むしる
+[PLUNCKING]
+	<normal>
+		<baby>
+			ゆっぴー！
+			ゆびゃあ！！！
+			ゆぴぴぃ！
+		</baby>
+		<child>
+			ゆっぴー！
+			ゆびゃあ！！！
+			ゆぴぴぃ！
+		</child>
+		<adult>
+			ゆっぴー！
+			ゆびゃあ！！！
+			ゆぴぴぃ！
+		</adult>
+	</normal>
+[/PLUNCKING]
+
+#つちのなかにいる
+[BaryInUnderGround]
+	<normal>
+		<baby>
+			ぎゅぴー！！
+		</baby>
+		<child>
+			ぎゅぴー！！
+		</child>
+		<adult>
+			ぎゅぴー！！
+		</adult>
+	</normal>
+[/BaryInUnderGround]
+
+# 引っ張る
+[Pull]
+	<normal>
+		<baby>
+			ゆぴっ？
+			ゆ～？
+		</baby>
+		<child>
+			ゆぴっ？
+			ゆ～？
+		</child>
+		<adult>
+			ゆぴっ？
+			ゆ～？
+		</adult>
+	</normal>
+[/Pull]
+
+# 引っ張る2
+[Pull2]
+	<normal>
+		<baby>
+			ゆぴゃあ！
+			ゆべべ！
+		</baby>
+		<child>
+			ゆぴゃあ！
+			ゆべべ！
+		</child>
+		<adult>
+			ゆぴゃあ！
+			ゆべべ！
+		</adult>
+	</normal>
+[/Pull2]
+
+# つぶす
+[Press]
+	<normal>
+		<baby>
+			ゆぴっ？
+			ゆ～？
+		</baby>
+		<child>
+			ゆぴっ？
+			ゆ～？
+		</child>
+		<adult>
+			ゆぴっ？
+			ゆ～？
+		</adult>
+	</normal>
+[/Press]
+
+# つぶす2
+[Press2]
+	<normal>
+		<baby>
+			ゆぴゃあ！
+			ゆべべ！
+		</baby>
+		<child>
+			ゆぴゃあ！
+			ゆべべ！
+		</child>
+		<adult>
+			ゆぴゃあ！
+			ゆべべ！
+		</adult>
+	</normal>
+[/Press2]
+
+#加工所でつぶされる
+[KilledInFactory]
+	<normal>
+		<baby>
+			ゆぴゃあ！
+			ゆべべ！
+		</baby>
+		<child>
+			ゆぴゃあ！
+			ゆべべ！
+		</child>
+		<adult>
+			ゆぴゃあ！
+			ゆべべ！
+		</adult>
+	</normal>
+[/KilledInFactory]
+
+# あまあま発見
+[FindAmaama]
+	<normal>
+		<baby>
+			ゆっぴ！
+		</baby>
+		<child>
+			ゆっち！
+		</child>
+		<adult>
+			ゆゆくち！
+		</adult>
+	</normal>
+[/FindAmaama]
+
+# あまあま食事
+[EatingAmaama]
+	<normal>
+		<baby>
+			ゆぴぴぃぃぃぃ♪
+		</baby>
+		<child>
+			ゆっちぃぃぃぃ♪
+		</child>
+		<adult>
+			ゆゆっちぃぃぃぃ♪
+		</adult>
+	</normal>
+[/EatingAmaama]
+
+# 野菜発見
+[FindVegetable]
+	<normal>
+		<baby>
+			ゆぴぴぃぃぃぃ♪
+		</baby>
+		<child>
+			ゆっちぃぃぃぃ♪
+		</child>
+		<adult>
+			ゆゆっちぃぃぃぃ♪
+		</adult>
+	</normal>
+[/FindVegetable]
+
+# 吐餡
+[Vomit]
+	<normal>
+		<baby>
+			ゆびぇ・・・
+		</baby>
+		<child>
+			ゆぶぇ・・・
+		</child>
+		<adult>
+			ゆぶぶ・・・
+		</adult>
+	</normal>
+[/Vomit]
+
+# 汎用、瀕死継続
+[Dying2]
+	<normal>
+		<baby>
+			ゆっ・・・ゆぴっ・・・
+		</baby>
+		<child>
+			ゆびっ・・・ゆぎゅ・・・
+		</child>
+		<adult>
+			ゆぐっ・・・ゆばぁっ・・・
+		</adult>
+	</normal>
+[/Dying2]
+
+# 汎用、驚き
+[Surprise]
+	<normal>
+		<baby>
+			ゆぴぴぃぃぃぃ！？
+		</baby>
+		<child>
+			ゆぴぴぃぃぃぃ！？
+		</child>
+		<adult>
+			ゆぴぴぃぃぃぃ！？
+		</adult>
+	</normal>
+[/Surprise]
+
+# 皮を剥かれる
+[PEALING]
+	<normal>
+		<baby>
+			ぴぎぃぃぃぃぃぃぃぃぃ！！
+			ゆぎぃぃぃぃぃぃ！！
+		</baby>
+		<child>
+			ぴぎぃぃぃぃぃぃぃぃぃ！！
+			ゆぎぃぃぃぃぃぃ！！
+		</child>
+		<adult>
+			ぴぎぃぃぃぃぃぃぃぃぃ！！
+			ゆぎぃぃぃぃぃぃ！！
+		</adult>
+	</normal>
+[/PEALING]
+
+# 汎用、ゆっくりできなくて嘆く(低)
+[LamentLowYukkuri]
+	<normal>
+		<baby>
+			ゆびひぃぃぃぃぃぃ、、
+		</baby>
+		<child>
+			ゆひゅひぃぃぃぃぃぃ、、
+		</child>
+		<adult>
+			ゆっひゅひぃぃぃぃぃぃ、、
+		</adult>
+	</normal>
+[/LamentLowYukkuri]
+
+# 汎用、ゆっくりできなくて嘆く
+[LamentNoYukkuri]
+	<normal>
+		<baby>
+			ゆびびぃぃぃぃぃぃ！！
+		</baby>
+		<child>
+			ゆびゅびぃぃぃぃぃぃ！！
+		</child>
+		<adult>
+			ゆ゛っびゅびぃぃぃぃぃぃ！！
+		</adult>
+	</normal>
+[/LamentNoYukkuri]
+
+#ゆんやああ
+[Yunnyaa]
+	<normal>
+		ゆびぃぃぃぃぃぃぃぃぃぃ！！！！！
+	</normal>
+[/Yunnyaa]
+
+# 非ゆっくり症初期
+[NonYukkuriDiseaseNear]
+	<normal>
+		<baby>
+			ゆびゃっ、ゆびゃっ、ゆびゃっ、ゆびゃっ、ゆびゃっ、
+			<damage>
+				ゆ"っ！ゆ"っ！ゆ"っ！ゆ"っ！ゆ"っ！ゆ"っ！
+			</damage>
+		</baby>
+		<child>
+			ゆびゃっ、ゆびゃっ、ゆびゃっ、ゆびゃっ、ゆびゃっ、
+			<damage>
+				ゆ"っ！ゆ"っ！ゆ"っ！ゆ"っ！ゆ"っ！ゆ"っ！
+			</damage>
+		</child>
+		<adult>
+			ゆ゛っびゅびっ、ゆ゛っびゅびっ、ゆ゛っびゅびっ、ゆ゛っびゅびっ、ゆ゛っびゅびっ、
+			<damage>
+				ゆ"っ！ゆ"っ！ゆ"っ！ゆ"っ！ゆ"っ！ゆ"っ！
+			</damage>
+		</adult>
+	</normal>
+[/NonYukkuriDiseaseNear]
+
+# 非ゆっくり症
+[NonYukkuriDisease]
+	<normal>
+		<baby>
+			ゆびっ！ゆびっ！ゆびっ！ゆびっ！ゆびっ！ゆびっ！
+			<damage>
+				ゆ"っ！ゆ"っ！ゆ"っ！ゆ"っ！ゆ"っ！ゆ"っ！
+			</damage>
+		</baby>
+		<child>
+			ゆぶびっ！ゆぶびっ！ゆぶびっ！ゆぶびっ！ゆぶびっ！ゆぶびっ！
+			<damage>
+				ゆ"っ！ゆ"っ！ゆ"っ！ゆ"っ！ゆ"っ！ゆ"っ！
+			</damage>
+		</child>
+		<adult>
+			ゆぶびっ！ゆぶびっ！ゆぶびっ！ゆぶびっ！ゆぶびっ！ゆぶびっ！
+			<damage>
+				ゆ"っ！ゆ"っ！ゆ"っ！ゆ"っ！ゆ"っ！ゆ"っ！
+			</damage>
+		</adult>
+	</normal>
+[/NonYukkuriDisease]
+
+# 汎用、他のゆっくりに何かされたときに対する攻撃、反撃
+[RevengeAttack]
+	<normal>
+		<baby>
+			ゆんぐおおお！！！
+			ゆぐおぉ！！！
+			ゆばぁっ！！！
+			ごばああぁっ！！！
+		</baby>
+		<child>
+			ゆんぐおおお！！！
+			ゆぐおぉ！！！
+			ゆばぁっ！！！
+			ごばああぁっ！！！
+		</child>
+		<adult>
+			ゆんぐおおお！！！
+			ゆぐおぉ！！！
+			ゆばぁっ！！！
+			ごばああぁっ！！！
+		</adult>
+	</normal>
+[/RevengeAttack]
+
+# おさげ、尻尾、羽をちぎる
+[BraidCut]
+	<normal>
+		<baby>
+			ゆぎゃっ？
+			ゆぎぃっ！
+		</baby>
+		<child>
+			ゆぎゃっ？
+			ゆぎぃっ！
+		</child>
+		<adult>
+			ゆぎゃっ？
+			ゆぎぃっ！
+		</adult>
+	</normal>
+[/BraidCut]
+
+# 汎用、他のゆっくりに生きたまま食べられる
+[EatenByBody]
+	<normal>
+		<baby>
+			ゆ、ゆ、ゆ！！！
+			ゆー！ゆー！
+		</baby>
+		<child>
+			ゆ、ゆ、ゆ！！！
+			ゆー！ゆー！
+		</child>
+		<adult>
+			ゆ、ゆ、ゆ！！！
+			ゆー！ゆー！
+		</adult>
+	</normal>
+[/EatenByBody]
+
+# 汎用、他のゆっくりに生きたまま吸われる
+[EatenByBody2]
+	<normal>
+		<baby>
+			ゆひぃっ？
+			ゆっぴゃあ！
+		</baby>
+		<child>
+			ゆひぃっ？
+			ゆっぴゃあ！
+		</child>
+		<adult>
+			ゆひぃっ？
+			ゆっぴゃあ！
+		</adult>
+	</normal>
+[/EatenByBody2]
+
+# れみりゃから逃げる
+[EscapeFromRemirya]
+	<normal>
+		<baby>
+			ゆぴいぃぃぃ！！！
+			ゆぐぐぐ！！！
+		</baby>
+		<child>
+			ゆぴいぃぃぃ！！！
+			ゆぐぐぐ！！！
+		</child>
+		<adult>
+			ゆぴいぃぃぃ！！！
+			ゆぐぐぐ！！！
+		</adult>
+	</normal>
+[/EscapeFromRemirya]
+
+# しゃべれない
+[CantTalk]
+	<normal>
+		<baby>
+			むーー！！
+			ーーーーー！！！
+			ゆむーー！！ゆむむーー！！
+		</baby>
+		<child>
+			むーー！！
+			ーーーーー！！！
+			ゆむーー！！ゆむむーー！！
+		</child>
+		<adult>
+			むーー！！
+			ーーーーー！！！
+			ゆぐーー！！ゆむぐーー！！
+		</adult>
+	</normal>
+[/CantTalk]
+
+# しゃべれない(非ゆっくり)
+[NYDCantTalk]
+	<normal>
+		<baby>
+			ゆぐむっ！ゆぐむっ！ゆぐむっ！ゆぐむっ！
+			ゆむぐっ！ゆむぐっ！ゆむぐっ！ゆむぐっ！
+			<damage>
+				ゆむっ！ゆぐっ！ゆむっ！ゆぐっ！ゆむっ！
+			</damage>
+		</baby>
+		<child>
+			ゆぐむっ！ゆぐむっ！ゆぐむっ！ゆぐむっ！
+			ゆむぐっ！ゆむぐっ！ゆむぐっ！ゆむぐっ！
+			<damage>
+				ゆむっ！ゆぐっ！ゆむっ！ゆぐっ！ゆむっ！
+			</damage>
+		</child>
+		<adult>
+			ゆぐむっ！ゆぐむっ！ゆぐむっ！ゆぐむっ！
+			ゆむぐっ！ゆむぐっ！ゆむぐっ！ゆむぐっ！
+			<damage>
+				ゆむっ！ゆぐっ！ゆむっ！ゆぐっ！ゆむっ！
+			</damage>
+		</adult>
+	</normal>
+[/NYDCantTalk]
+
+#静かにする
+[BeingQuiet]
+	<normal>
+		ゆぎゅぐ、、、
+	</normal>
+[/BeingQuiet]
+
+#汚い
+[Dirty]
+	<normal>
+		<baby>
+			ゆぴいぃぃぃ！！！
+			ゆぎゅぅぅぅ！！！
+		</baby>
+		<child>
+			ゆぴいぃぃぃ！！！
+			ゆぎゅぅぅぅ！！！
+		</child>
+		<adult>
+			%dummy
+		</adult>
+	</normal>
+[/Dirty]
+# かびてる時の通常時
+[Moldy]
+	<normal>
+		ゆうぅぅ？
+	</normal>
+[/Moldy]
+
+# 深刻なカビ
+[MoldySeriousry]
+	<normal>
+		<baby>
+			ぴぎぃぃぃぃぃぃぃぃぃ！！
+			ゆぎぃぃぃぃぃぃ！！
+		</baby>
+		<child>
+			ぴぎぃぃぃぃぃぃぃぃぃ！！
+			ゆぎぃぃぃぃぃぃ！！
+		</child>
+		<adult>
+			ぴぎぃぃぃぃぃぃぃぃぃ！！
+			ゆぎぃぃぃぃぃぃ！！
+		</adult>
+	</normal>
+[/MoldySeriousry]
+
