@@ -2,6 +2,7 @@ package src.event;
 
 import java.util.Random;
 
+import src.attachment.Ants;
 import src.base.Body;
 import src.base.EventPacket;
 import src.base.Obj;
@@ -65,7 +66,12 @@ public class BreedEvent extends EventPacket implements java.io.Serializable {
 		if(!getFrom().hasOkazari() && b.getIntelligence() == Intelligence.FOOL) return false;
 
 		if(getFrom().isParent(b) || getFrom().isPartner(b) || b.isParent(getFrom()) || b.isPartner(getFrom())) return true;
-
+		
+		//アリにたかられてたらそれどころじゃないので参加しない
+		if (getFrom().getAttachmentSize(Ants.class) != 0 || getFrom().getNumOfAnts() != 0) {
+			return false;
+		}
+		
 		return ret;
 	}
 
@@ -91,8 +97,13 @@ public class BreedEvent extends EventPacket implements java.io.Serializable {
 		if (getFrom().isDead() || getFrom().isPealed() ||
 				getFrom().isBurned() || getFrom().isBurst()||
 				getFrom().isRemoved() || getFrom().isCrushed() ||
-				getFrom().isPacked() ) {
+				getFrom().isPacked() || !getFrom().nearToBirth()) {
 				return UpdateState.ABORT;
+		}
+
+		// アリにたかられたら参加どころではなくなる
+		if (b.getNumOfAnts() != 0 || b.getAttachmentSize(Ants.class) != 0) {
+			b.clearEvent();
 		}
 		
 		return null;

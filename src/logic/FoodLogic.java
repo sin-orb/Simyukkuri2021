@@ -155,7 +155,7 @@ public class FoodLogic {
 		Obj food = b.getMoveTarget();
 
 		//対象が決まってる時
-		if( b.isToFood() && food != null) {
+		if(( b.isToFood() || b.isToTakeout()) && food != null) {
 			// 途中で消されてたら他の餌候補を探す
 			if(food.isRemoved()) {
 				b.clearActions();
@@ -254,6 +254,7 @@ public class FoodLogic {
 							b.clearActions();
 							// お持ち帰りする
 							b.setTakeoutItem(TakeoutItemType.FOOD, f);
+							b.setToTakeout(true);
 							// 仮メッセージ
 							b.setMessage(MessagePool.getMessage(b, MessagePool.Action.TransportFood));
 							b.addStress(10);
@@ -271,6 +272,7 @@ public class FoodLogic {
 							// お持ち帰りする
 							b.setTakeoutItem(TakeoutItemType.SHIT, f);
 							b.clearActions();
+							b.setToTakeout(true);
 							// うんうん奴隷の場合
 							if( b.getPublicRank() == PublicRank.UnunSlave){
 								b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateShit));
@@ -492,19 +494,25 @@ public class FoodLogic {
 									b.setMessage(MessagePool.getMessage(b, MessagePool.Action.WantFood));
 							}
 						}
+						boolean takeOut = false;
+						if (b.isToTakeout()) takeOut = true;
 						b.moveToFood(found, ((Food)found).getFoodType(), found.getX(), found.getY(), mz);
+						if (takeOut) b.setToTakeout(true);
 					}
 					//見つけたエサがうんうんの時
 					else if (found instanceof Shit){
 						// うんうん奴隷が持って帰る場合
+						boolean takeOut = false;
 						if( b.getPublicRank() == PublicRank.UnunSlave && b.isToTakeout() ){
 							b.setMessage(MessagePool.getMessage(b, MessagePool.Action.TransportShit), false);
+							takeOut = true;
 						}
 						else{
 							//　食べる場合
 							b.setMessage(MessagePool.getMessage(b, MessagePool.Action.NoFood), false);
 						}
 						b.moveToFood(found, FoodType.SHIT, found.getX(), found.getY(), mz);
+						if (takeOut) b.setToTakeout(true);
 					}
 					//見つけたエサが同族の時
 					else if (found instanceof Body) {
@@ -757,7 +765,7 @@ public class FoodLogic {
 							flag = true;
 						}
 						else{
-//							flagtakeout = true;
+							flagtakeout = true;
 						}
 						break;
 				}
@@ -791,7 +799,7 @@ public class FoodLogic {
 			}
 		}
 		//ここまでで餌がみつからず、かつ満腹ならリターン
-		if(found == null && (b.isFull() || b.isOverEating())) return null;
+		if(found == null && b.isFull()) return null;
 
 		// 非常食検索
 		//第一候補：茎
@@ -1058,7 +1066,9 @@ public class FoodLogic {
 			found = found3;
 		}
 
-		if(found == null && b.isFull()) return found;
+		if(found == null && b.isFull()) {
+			return found;
+		}
 
 		// 非常食検索
 		ArrayList<Stalk> stalkList = SimYukkuri.world.currentMap.stalk;
@@ -1263,9 +1273,9 @@ public class FoodLogic {
 			}
 		}
 		//TODO:お腹いっぱいなら食わないということにしておく
-		if(b.isFull()) {
-			found = null;
-		}
+//		if(b.isTooFull()) {
+//			found = null;
+//		}
 		return found;
 	}
 

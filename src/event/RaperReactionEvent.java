@@ -98,9 +98,10 @@ public class RaperReactionEvent extends EventPacket implements java.io.Serializa
 				state = STATE.Escape;
 			}else{
 				// 飛べない固体
-				if(b.isAdult() && !b.isDamaged() && !b.isSick() && !b.hasBabyOrStalk()
-						&& (b.isSmart() && b.getIntelligence() == Intelligence.FOOL) && !b.isDontMove() ) {
-					// 健康でバカな善良な大人は迎撃に向かう
+				if((b.isAdult() && !b.isDamaged() && !b.isSick() && !b.hasBabyOrStalk()
+						&& (b.isSmart() && b.getIntelligence() == Intelligence.FOOL) && !b.isDontMove() ) ||
+						b.getType() == 2006) {
+					// 健康でバカな善良な大人（またはドスまりさは状態に限らず常に）迎撃に向かう
 					state = STATE.Attack;
 				} else {
 					// それ以外はひとまず逃げる
@@ -143,12 +144,12 @@ public class RaperReactionEvent extends EventPacket implements java.io.Serializa
 		}
 		
 		if(state == STATE.Attack) {
-			// 妊娠したら逃げに変更
-			if(b.hasBabyOrStalk()) {
+			// 妊娠したらドスでない限り逃げに変更
+			if(b.hasBabyOrStalk() && b.getType() != 2006) {
 				state = STATE.Escape;
 			}
 			else {
-				// 攻撃は敵に向かう
+				// 攻撃は敵に向かう。ドスは妊娠させられようが何しようが駆除に向かう。
 				b.setForceFace(ImageCode.PUFF.ordinal());
 				moveTarget(b);
 				if(rnd.nextInt(20) == 0) {
@@ -159,7 +160,9 @@ public class RaperReactionEvent extends EventPacket implements java.io.Serializa
 		else {
 			// 賢い固体は反撃チェック
 			if((age % 10) == 0) {
-				if(b.isAdult() && b.getIntelligence() == Intelligence.WISE && b.getPublicRank() != PublicRank.UnunSlave) {
+				if(b.getType() == 2006 ||
+					(b.isAdult() && b.getIntelligence() == Intelligence.WISE &&
+					 b.getPublicRank() != PublicRank.UnunSlave)) {
 					Body target = null;
 					// 何らかの原因で発情が解除されたら制裁
 					if(!getFrom().isExciting()) {
@@ -183,7 +186,10 @@ public class RaperReactionEvent extends EventPacket implements java.io.Serializa
 								else if(body.getAttitude() == Attitude.SHITHEAD) num = rnd.nextInt(3);
 								else if(body.getAttitude() == Attitude.AVERAGE) num = rnd.nextInt(2);
 								else num = 0;
-								
+								//ドスは常に参加。ドスはとにかく群れをゆっくりさせるため、れいぱー駆除に命をかける
+								if (body.getType() == 2006) {
+									num = 0;
+								}
 								if(num == 0) {
 									RaperReactionEvent ev = (RaperReactionEvent)body.getCurrentEvent();
 									ev.setFrom(target);

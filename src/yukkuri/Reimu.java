@@ -192,9 +192,9 @@ public class Reimu extends Body implements java.io.Serializable {
 	public Body checkTransform() {
 		// 自身が突然変異可能かチェック
 		if(!canTransform()) return null;
-		// 大人であり、夫がいて夫がゲスではない
+		// 大人であり、夫がいて夫がゲスではなく、自身がゲスではない
 		Body partner = getPartner();
-		if( isAdult() && partner != null && !partner.isRude()){
+		if( isAdult() && partner != null && !partner.isRude() && isRude()){
 			if(RND.nextInt(1000) == 0) {
 				return this;
 			}

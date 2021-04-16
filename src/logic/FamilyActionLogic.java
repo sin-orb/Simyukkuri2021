@@ -418,6 +418,7 @@ public class FamilyActionLogic {
 		if( bodyList != null && bodyList.size() != 0 ){
 			for(Body b:bodyList){
 				// うんうん奴隷はレイプ対象外なのでスキップ
+				// いや、うんうん奴隷もれいぷ対象やろ
 //				if( b.getPublicRank() == PublicRank.UnunSlave ){
 //					continue;
 //				}

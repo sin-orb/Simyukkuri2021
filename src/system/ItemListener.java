@@ -97,7 +97,9 @@ public class ItemListener {
 				case PICKUP:
 					SimYukkuri.world.player.itemList.addElement(ItemMenu.getTarget);
 					if(ItemMenu.getTarget instanceof Body) {
-						curMap.body.remove(ItemMenu.getTarget);
+						Body b = (Body)ItemMenu.getTarget;
+						b.removeAllStalks();
+						curMap.body.remove(b);
 					} else if(ItemMenu.getTarget instanceof Shit) {
 						curMap.shit.remove(ItemMenu.getTarget);
 					} else if(ItemMenu.getTarget instanceof Vomit) {

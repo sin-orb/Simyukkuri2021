@@ -26,7 +26,6 @@ import src.yukkuri.Tarinai;
 import src.yukkuri.TarinaiReimu;
 import src.yukkuri.WasaReimu;
 
-
 /***************************************************
   ゆっくり処理クラス
 
@@ -38,8 +37,8 @@ public class YukkuriUtil {
 	// クラス名からタイプ取得
 	public static final YukkuriType getYukkuriType(String className) {
 		YukkuriType ret = null;
-		for(YukkuriType y :YukkuriType.values()) {
-			if(y.className.equals(className)) {
+		for (YukkuriType y : YukkuriType.values()) {
+			if (y.className.equals(className)) {
 				ret = y;
 				break;
 			}
@@ -50,8 +49,8 @@ public class YukkuriUtil {
 	// タイプからクラス名取得
 	public static final String getYukkuriClassName(int type) {
 		String ret = null;
-		for(YukkuriType y :YukkuriType.values()) {
-			if(y.typeID == type) {
+		for (YukkuriType y : YukkuriType.values()) {
+			if (y.typeID == type) {
 				ret = y.className;
 				break;
 			}
@@ -61,12 +60,12 @@ public class YukkuriUtil {
 
 	// 両親から赤ゆ一匹分のDNAを作成。
 	// forceCreateをtrueで確実に赤ゆができる。まれに茎に１つも赤ゆができないのを回避できる
-	public static final Dna createBabyDna(Body mother, Body father, int iFatherType, Attitude fatherrAtt, Intelligence fatherInt, boolean isRape,boolean fatherDamage, boolean forceCreate) {
+	public static final Dna createBabyDna(Body mother, Body father, int iFatherType, Attitude fatherrAtt,
+			Intelligence fatherInt, boolean isRape, boolean fatherDamage, boolean forceCreate) {
 		Dna ret = null;
 
 		// 母がいないのはあり得ないのでエラー
-		if( mother == null )
-		{
+		if (mother == null) {
 			return null;
 		}
 
@@ -76,23 +75,18 @@ public class YukkuriUtil {
 		int fatherType = iFatherType;
 
 		ArrayList<Integer> motherAncestorList = mother.getAncestorList();
-		if( motherAncestorList != null && motherAncestorList.size() != 0 )
-		{
-			if( rnd.nextInt(100) == 0 )
-			{
+		if (motherAncestorList != null && motherAncestorList.size() != 0) {
+			if (rnd.nextInt(100) == 0) {
 				// 先祖返り
 				int nSize = motherAncestorList.size();
 				int nIndex = rnd.nextInt(nSize);
 				motherType = motherAncestorList.get(nIndex);
 			}
 		}
-		if( father != null )
-		{
+		if (father != null) {
 			ArrayList<Integer> fatherAncestorList = father.getAncestorList();
-			if( fatherAncestorList != null && fatherAncestorList.size() != 0 )
-			{
-				if( rnd.nextInt(100) == 0 )
-				{
+			if (fatherAncestorList != null && fatherAncestorList.size() != 0) {
+				if (rnd.nextInt(100) == 0) {
 					// 先祖返り
 					int nSize = fatherAncestorList.size();
 					int nIndex = rnd.nextInt(nSize);
@@ -110,36 +104,37 @@ public class YukkuriUtil {
 
 		// ハイブリッド判定
 		// 両方ハイブリッドではない
-		if ( (fatherType != HybridYukkuri.type) && (motherType != HybridYukkuri.type)) {
+		if ((fatherType != HybridYukkuri.type) && (motherType != HybridYukkuri.type)) {
 			// 同じタイプならハイブッリドを作らない
-			if( fatherType != motherType){
+			if (fatherType != motherType) {
 				// 両方普通
-				if(rnd.nextInt(70) == 0) {
+				if (rnd.nextInt(70) == 0) {
 					hybrid = true;
 					hybrid2 = true;
 				}
 			}
 		} else if ((fatherType == HybridYukkuri.type) && (motherType == HybridYukkuri.type)) {
 			// 両方ハイブリッド
-			if(rnd.nextInt(20) == 0) hybrid = true;
-		}else{
+			if (rnd.nextInt(20) == 0)
+				hybrid = true;
+		} else {
 			// 片方ハイブリッド
-			if(rnd.nextInt(50) == 0) hybrid = true;
+			if (rnd.nextInt(50) == 0)
+				hybrid = true;
 		}
 
 		// どちらかがドスまりさなら処理の都合でハイブリッドはなし
-		if( fatherType == DosMarisa.type || motherType == DosMarisa.type) {
+		if (fatherType == DosMarisa.type || motherType == DosMarisa.type) {
 			hybrid = false;
 		}
 
-		if(hybrid) {
-			if(hybrid2 && mother != null && rnd.nextBoolean()) {
-				babyType = mother.getHybridType( fatherType );
+		if (hybrid) {
+			if (hybrid2 && mother != null && rnd.nextBoolean()) {
+				babyType = mother.getHybridType(fatherType);
 			} else {
 				babyType = HybridYukkuri.type;
 			}
-		}
-		else{
+		} else {
 			if (rnd.nextBoolean()) {
 				babyType = fatherType;
 			} else {
@@ -147,10 +142,10 @@ public class YukkuriUtil {
 			}
 
 			// ドスまりさはただのまりさに変換
-			if(babyType == DosMarisa.type) {
+			if (babyType == DosMarisa.type) {
 				babyType = Marisa.type;
 			}
-			if(babyType == Deibu.type) {
+			if (babyType == Deibu.type) {
 				babyType = Reimu.type;
 			}
 		}
@@ -161,13 +156,14 @@ public class YukkuriUtil {
 		}
 
 		// ディフューザーでハイブリッド薬がまかれていたら強制的にハイブリッドにする
-		if( Terrarium.hybridSteam ){
-			if( (fatherType == Reimu.type) && (motherType == Marisa.type) && (mother != null) && (rnd.nextInt(5) == 0))
-			{
+		if (Terrarium.hybridSteam) {
+			if ((fatherType == Reimu.type) && (motherType == Marisa.type) && (mother != null)
+					&& (rnd.nextInt(5) == 0)) {
 				babyType = mother.getHybridType(fatherType);
-			}else if( (fatherType == Marisa.type) && (motherType == Reimu.type) && (mother != null) && (rnd.nextInt(5) == 0) ){
+			} else if ((fatherType == Marisa.type) && (motherType == Reimu.type) && (mother != null)
+					&& (rnd.nextInt(5) == 0)) {
 				babyType = mother.getHybridType(fatherType);
-			}else if( fatherType != motherType ){
+			} else if (fatherType != motherType) {
 				babyType = HybridYukkuri.type;
 			}
 		}
@@ -175,26 +171,24 @@ public class YukkuriUtil {
 		// 突然変異
 		if ((babyType == Reimu.type) && rnd.nextInt(20) == 0) {
 			babyType = WasaReimu.type;
-		}else if ((babyType == WasaReimu.type) && rnd.nextInt(20) != 0) {
+		} else if ((babyType == WasaReimu.type) && rnd.nextInt(20) != 0) {
 			babyType = Reimu.type;
-		}else if ((babyType == Marisa.type || babyType == MarisaKotatsumuri.type ) && rnd.nextInt(20) == 0){
+		} else if ((babyType == Marisa.type || babyType == MarisaKotatsumuri.type) && rnd.nextInt(20) == 0) {
 			babyType = MarisaTsumuri.type;
-		}else if ((babyType == Marisa.type || babyType == MarisaTsumuri.type  ) && rnd.nextInt(20) == 0){
+		} else if ((babyType == Marisa.type || babyType == MarisaTsumuri.type) && rnd.nextInt(20) == 0) {
 			babyType = MarisaKotatsumuri.type;
-		}else if ((babyType == MarisaTsumuri.type || babyType == MarisaKotatsumuri.type ) && rnd.nextInt(20) != 0){
+		} else if ((babyType == MarisaTsumuri.type || babyType == MarisaKotatsumuri.type) && rnd.nextInt(20) != 0) {
 			babyType = Marisa.type;
-		}else if ((babyType == Kimeemaru.type ) && rnd.nextInt(20) != 0){
+		} else if ((babyType == Kimeemaru.type) && rnd.nextInt(20) != 0) {
 			babyType = Ayaya.type;
-		}else if ((babyType == Ayaya.type ) && rnd.nextInt(20) == 0){
+		} else if ((babyType == Ayaya.type) && rnd.nextInt(20) == 0) {
 			babyType = Kimeemaru.type;
 		}
 
-
 		if (mother.isOverPregnantLimit() || mother.isSick() || mother.isDamagedHeavily() || fatherDamage) {
-			if(rnd.nextBoolean() && (babyType == Reimu.type || babyType == WasaReimu.type)) {
+			if (rnd.nextBoolean() && (babyType == Reimu.type || babyType == WasaReimu.type)) {
 				babyType = TarinaiReimu.type;
-			}
-			else {
+			} else {
 				babyType = Tarinai.type;
 			}
 		}
@@ -210,46 +204,46 @@ public class YukkuriUtil {
 		int attBase = mother.getAttitude().ordinal() + fatherrAtt.ordinal();
 		Attitude[] attitude = Attitude.values();
 
-		switch(attBase) {
-			case 0:
-				if(rnd.nextInt(20) == 0) {
-					ret.attitude = attitude[2 + rnd.nextInt(2)];
-				} else {
-					ret.attitude = attitude[rnd.nextInt(3)];
-				}
-				break;
-			case 1:
-			case 2:
-			case 3:
-				if(rnd.nextInt(15) == 0) {
-					ret.attitude = attitude[rnd.nextInt(2)];
-				} else {
-					ret.attitude = attitude[1 + rnd.nextInt(4)];
-				}
-				break;
-			case 4:
-				if(rnd.nextInt(10) == 0) {
-					ret.attitude = attitude[rnd.nextInt(3)];
-				} else {
-					ret.attitude = attitude[1 + rnd.nextInt(4)];
-				}
-				break;
-			case 5:
-			case 6:
-			case 7:
-				if(rnd.nextInt(15) == 0) {
-					ret.attitude = attitude[1 + rnd.nextInt(3)];
-				} else {
-					ret.attitude = attitude[2 + rnd.nextInt(3)];
-				}
-				break;
-			case 8:
-				if(rnd.nextInt(20) == 0) {
-					ret.attitude = attitude[rnd.nextInt(3)];
-				} else {
-					ret.attitude = attitude[3 + rnd.nextInt(2)];
-				}
-				break;
+		switch (attBase) {
+		case 0:
+			if (rnd.nextInt(20) == 0) {
+				ret.attitude = attitude[2 + rnd.nextInt(2)];
+			} else {
+				ret.attitude = attitude[rnd.nextInt(3)];
+			}
+			break;
+		case 1:
+		case 2:
+		case 3:
+			if (rnd.nextInt(15) == 0) {
+				ret.attitude = attitude[rnd.nextInt(2)];
+			} else {
+				ret.attitude = attitude[1 + rnd.nextInt(4)];
+			}
+			break;
+		case 4:
+			if (rnd.nextInt(10) == 0) {
+				ret.attitude = attitude[rnd.nextInt(3)];
+			} else {
+				ret.attitude = attitude[1 + rnd.nextInt(4)];
+			}
+			break;
+		case 5:
+		case 6:
+		case 7:
+			if (rnd.nextInt(15) == 0) {
+				ret.attitude = attitude[1 + rnd.nextInt(3)];
+			} else {
+				ret.attitude = attitude[2 + rnd.nextInt(3)];
+			}
+			break;
+		case 8:
+			if (rnd.nextInt(20) == 0) {
+				ret.attitude = attitude[rnd.nextInt(3)];
+			} else {
+				ret.attitude = attitude[3 + rnd.nextInt(2)];
+			}
+			break;
 		}
 
 		// 知能の設定
@@ -257,30 +251,30 @@ public class YukkuriUtil {
 		int intBase = mother.getIntelligence().ordinal() + fatherInt.ordinal();
 		Intelligence[] intel = Intelligence.values();
 
-		switch(intBase) {
-			case 0:
-				if(rnd.nextInt(15) == 0) {
-					ret.intelligence = intel[1 + rnd.nextInt(2)];
-				} else {
-					ret.intelligence = intel[rnd.nextInt(2)];
-				}
-				break;
-			case 1:
-			case 2:
-			case 3:
-				if(rnd.nextInt(10) == 0) {
-					ret.intelligence = intel[rnd.nextInt(3)];
-				} else {
-					ret.intelligence = intel[1];
-				}
-				break;
-			case 4:
-				if(rnd.nextInt(15) == 0) {
-					ret.intelligence = intel[rnd.nextInt(2)];
-				} else {
-					ret.intelligence = intel[1 + rnd.nextInt(2)];
-				}
-				break;
+		switch (intBase) {
+		case 0:
+			if (rnd.nextInt(15) == 0) {
+				ret.intelligence = intel[1 + rnd.nextInt(2)];
+			} else {
+				ret.intelligence = intel[rnd.nextInt(2)];
+			}
+			break;
+		case 1:
+		case 2:
+		case 3:
+			if (rnd.nextInt(10) == 0) {
+				ret.intelligence = intel[rnd.nextInt(3)];
+			} else {
+				ret.intelligence = intel[1];
+			}
+			break;
+		case 4:
+			if (rnd.nextInt(15) == 0) {
+				ret.intelligence = intel[rnd.nextInt(2)];
+			} else {
+				ret.intelligence = intel[1 + rnd.nextInt(2)];
+			}
+			break;
 		}
 		return ret;
 	}
@@ -330,7 +324,8 @@ public class YukkuriUtil {
 
 	// コピーしたくない変数はここで定義
 	// 主にゆっくり固有のステータス
-	private static final HashMap<String, Object> NO_COantProbabilityY_FIELD = new HashMap<String, Object>() {{
+	private static final HashMap<String, Object> NO_COantProbabilityY_FIELD = new HashMap<String, Object>() {
+		{
 			put("bodySpr", null);
 			put("expandSpr", null);
 			put("braidSpr", null);
@@ -389,84 +384,80 @@ public class YukkuriUtil {
 		fromField = from.getClass().getSuperclass().getSuperclass().getSuperclass().getDeclaredFields();
 		toClass = to.getClass().getSuperclass().getSuperclass().getSuperclass();
 
-		for(int i = 0; i < fromField.length; i++) {
-			int mod = fromField[i].getModifiers();
-			if(Modifier.isFinal(mod)) continue;
-			if(Modifier.isStatic(mod)) continue;
-			try {
+		try {
+			for (int i = 0; i < fromField.length; i++) {
+				int mod = fromField[i].getModifiers();
+				if (Modifier.isFinal(mod)) {
+					continue;
+				}
+				if (Modifier.isStatic(mod)) {
+					continue;
+				}
 				toField = toClass.getDeclaredField(fromField[i].getName());
 				toField.setAccessible(true);
 				toField.set(to, fromField[i].get(from));
-			} catch (SecurityException e) {
-				// Nop.
-			} catch (NoSuchFieldException e) {
-				// Nop.
-			} catch (IllegalArgumentException e) {
-				// Nop.
-			} catch (IllegalAccessException e) {
-				// Nop.
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-		
+
 		// BodyAttributesクラスのコピー
 		fromField = from.getClass().getSuperclass().getSuperclass().getDeclaredFields();
 		toClass = to.getClass().getSuperclass().getSuperclass();
 
-		for(int i = 0; i < fromField.length; i++) {
-			int mod = fromField[i].getModifiers();
-			if(Modifier.isFinal(mod)) continue;
-			if(Modifier.isStatic(mod)) continue;
-			try {
+		try {
+			for (int i = 0; i < fromField.length; i++) {
+				int mod = fromField[i].getModifiers();
+				if (Modifier.isFinal(mod)) {
+					continue;
+				}
+				if (Modifier.isStatic(mod)) {
+					continue;
+				}
 				toField = toClass.getDeclaredField(fromField[i].getName());
 				toField.setAccessible(true);
 				toField.set(to, fromField[i].get(from));
-			} catch (SecurityException e) {
-				// NOantProbability.
-			} catch (NoSuchFieldException e) {
-				// NOantProbability.
-			} catch (IllegalArgumentException e) {
-				// NOantProbability.
-			} catch (IllegalAccessException e) {
-				// NOantProbability.
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 
 		// Bodyクラスのコピー
 		fromField = from.getClass().getSuperclass().getDeclaredFields();
 		toClass = to.getClass().getSuperclass();
 
-		for(int i = 0; i < fromField.length; i++) {
-			int mod = fromField[i].getModifiers();
-			if(Modifier.isFinal(mod)) continue;
-			if(Modifier.isStatic(mod)) continue;
-			if(NO_COantProbabilityY_FIELD.containsKey(fromField[i].getName())) continue;
-			try {
+		try {
+			for (int i = 0; i < fromField.length; i++) {
+				int mod = fromField[i].getModifiers();
+				if (Modifier.isFinal(mod)) {
+					continue;
+				}
+				if (Modifier.isStatic(mod)) {
+					continue;
+				}
+				if (NO_COantProbabilityY_FIELD.containsKey(fromField[i].getName())) {
+					continue;
+				}
 				toField = toClass.getDeclaredField(fromField[i].getName());
 				toField.setAccessible(true);
 				toField.set(to, fromField[i].get(from));
-			} catch (SecurityException e) {
-				// NOantProbability.
-			} catch (NoSuchFieldException e) {
-				// NOantProbability.
-			} catch (IllegalArgumentException e) {
-				// NOantProbability.
-			} catch (IllegalAccessException e) {
-				// NOantProbability.
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 		//--------------------------------------------------
 		// 家族関係の再設定
 		Body partner = from.getPartner();
-		if( partner != null && partner.getPartner() == from ){
+		if (partner != null && partner.getPartner() == from) {
 			partner.setPartner(to);
 		}
 
-		if( from.getChildrenList() != null ){
-			for( Body child: from.getChildrenList() ){
-				if( child.getParents()[0] == from ){
+		if (from.getChildrenList() != null) {
+			for (Body child : from.getChildrenList()) {
+				if (child.getParents()[0] == from) {
 					child.getParents()[0] = to;
 				}
-				if( child.getParents()[1] == from ){
+				if (child.getParents()[1] == from) {
 					child.getParents()[1] = to;
 				}
 			}
@@ -474,51 +465,51 @@ public class YukkuriUtil {
 
 		//--------------------------------------------------
 		// 身分の補正
-			to.setBodyRank(from.getBodyRank());
-			to.setPublicRank(from.getPublicRank());
+		to.setBodyRank(from.getBodyRank());
+		to.setPublicRank(from.getPublicRank());
 		// 年齢の補正
 		switch (to.getBodyAgeState()) {
-			case BABY:
-				to.setAge(0);
-				break;
-			case CHILD:
-				to.setAge(to.getBABYLIMIT() + 1);
-				break;
-			case ADULT:
-			default:
-				to.setAge(to.getCHILDLIMIT() + 1);
-				break;
+		case BABY:
+			to.setAge(0);
+			break;
+		case CHILD:
+			to.setAge(to.getBABYLIMIT() + 1);
+			break;
+		case ADULT:
+		default:
+			to.setAge(to.getCHILDLIMIT() + 1);
+			break;
 		}
 	}
-	
+
 	/**
 	 * 新規でアリがたかるかどうか判定し、判定hitの場合はアリをたからせる。
 	 * @param b アリがたかるかどうか判定したいゆっくりのインスタンス
 	 */
 	public static void judgeNewAnt(Body b) {
 		int antProbability = 1;// アリのたかる確率
-		switch(b.getBodyAgeState()){
-			case BABY:
-				antProbability=240000;
-				break;
-			case CHILD:
-				antProbability=480000;
-				break;
-			case ADULT:
-				antProbability=960000;
-				break;
-			default:
-				//NOP.
+		switch (b.getBodyAgeState()) {
+		case BABY:
+			antProbability = 240000;
+			break;
+		case CHILD:
+			antProbability = 480000;
+			break;
+		case ADULT:
+			antProbability = 960000;
+			break;
+		default:
+			//NOP.
 		}
 		// 汚い、またはダメージを受けていると倍の確率でたかられる
-		if(b.isDirty() || b.isDamaged()){
-			antProbability/=2;
+		if (b.isDirty() || b.isDamaged()) {
+			antProbability /= 2;
 		}
 		// ジャンプできない状態だとさらに倍の確率
-		if(b.isDontJump()){
-			antProbability/=2;
+		if (b.isDontJump()) {
+			antProbability /= 2;
 		}
-		if(rnd.nextInt(antProbability)==1){
+		if (rnd.nextInt(antProbability) == 1) {
 			b.addAttachment(new Ants(b));
 			b.clearEvent();
 		}

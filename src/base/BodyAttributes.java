@@ -3899,7 +3899,11 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * @param numOfAnts たかっているアリの数 
 	 */
 	public void setNumOfAnts(int numOfAnts) {
-		this.numOfAnts = numOfAnts;
+		if (numOfAnts < 0) {
+			this.numOfAnts = 0;
+		} else {
+			this.numOfAnts = numOfAnts;
+		}
 	}
 	/**
 	 * うにょ機能を使用するかどうかのフラグ を取得する.
@@ -4784,6 +4788,9 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 */
 	public void substractNumOfAnts(int A) {
 		numOfAnts -= A;
+		if (numOfAnts < 0) {
+			numOfAnts = 0;
+		}
 	}
 
 	/**

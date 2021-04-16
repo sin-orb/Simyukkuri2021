@@ -83,7 +83,7 @@ public class BreedingAmpoule extends Attachment {
 		parent.addDamage(-100);
 		Random rnd = new Random();
 		int babyType;
-		if (rnd.nextInt(３) == 0) {
+		if (rnd.nextInt(3) == 0) {
 			babyType = rnd.nextInt(12);
 			switch (babyType) {
 			case 0: // まりさ
@@ -138,9 +138,10 @@ public class BreedingAmpoule extends Attachment {
 			if (babyType == 2006) {
 				babyType = getMarisaType();
 			}
-			parent.getBabyTypes().add(new Dna(babyType, null, null, false));
-			parent.setHasBaby(true);
 		}
+		parent.getBabyTypes().add(new Dna(babyType, null, null, false));
+		parent.setHasBaby(true);
+
 		return Event.DONOTHING;
 	}
 

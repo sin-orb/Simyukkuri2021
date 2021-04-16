@@ -375,7 +375,7 @@ public class BodyLogic {
 						return true;
 					}
 					//ドゲスの場合は50%の確率でプロポーズをする
-					if (b.getAttitude() != Attitude.SUPER_SHITHEAD || b.RND.nextInt(２) == 0) {
+					if (b.getAttitude() != Attitude.SUPER_SHITHEAD || b.RND.nextInt(2) == 0) {
 						EventLogic.addBodyEvent(b, new ProposeEvent(b, found, null, 1), null, null);
 						return true;
 					} else {

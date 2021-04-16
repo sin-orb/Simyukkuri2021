@@ -900,13 +900,14 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 					bBirthFlag = false;
 				}
 				// 動けない
-				if ((isLockmove() && !isFixBack()) && !isShitting()) {
+			if ((isLockmove() && (!isFixBack() || geteCoreAnkoState() != CoreAnkoState.NonYukkuriDisease)) && !isShitting()) {
 					bBirthFlag = false;
 				}
 				// 非ゆっくり症
-				if (geteCoreAnkoState() != CoreAnkoState.DEFAULT) {
-					bBirthFlag = false;
-				}
+				// 20210415 削除。非ゆっくり症だって出産くらいするでしょ
+//				if (geteCoreAnkoState() != CoreAnkoState.DEFAULT) {
+//					bBirthFlag = false;
+//				}
 				if (!bBirthFlag) {
 					// お腹の赤ゆだけクリア
 					getBabyTypes().clear();
@@ -4189,20 +4190,28 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	 *  おさげを破壊する.
 	 */
 	public void takeBraid() {
-		if (isDead() || !isBraidType() || !isHasBraid())
+		if (isDead() || !isBraidType())
 			return;
 
 		// なつき度設定
 		wakeup();
 		clearActions();
-		addLovePlayer(-300);
-		addStress(1200);
-		setHasBraid(false);
-		setForceFace(ImageCode.CRYING.ordinal());
-		setHappiness(Happiness.VERY_SAD);
-		setMessage(MessagePool.getMessage(this, MessagePool.Action.BraidCut), true);
-		// 実ゆの場合、親が反応する
-		checkReactionStalkMother(UnbirthBabyState.SAD);
+		if (isHasBraid()) {
+			addLovePlayer(-300);
+			addStress(1200);
+			setHasBraid(false);
+			setForceFace(ImageCode.CRYING.ordinal());
+			setHappiness(Happiness.VERY_SAD);
+			setMessage(MessagePool.getMessage(this, MessagePool.Action.BraidCut), true);
+			// 実ゆの場合、親が反応する
+			checkReactionStalkMother(UnbirthBabyState.SAD);
+		} else {
+			addLovePlayer(200);
+			addStress(-1000);
+			setHasBraid(true);
+			setForceFace(ImageCode.EMBARRASSED.ordinal());
+			setHappiness(Happiness.HAPPY);
+		}
 	}
 
 	/**
@@ -4483,6 +4492,26 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		getStalks().remove(s);
 		if (getStalks().size() == 0)
 			setHasStalk(false);
+	}
+	/**
+	 * 茎をすべて掃除する.
+	 * 右クリの「取る」でも茎は取り除かれてゆっくりのみ取れる。
+	 * 茎を「取る」ことはできないが、実ゆは個別に「取る」で取ることができる。
+	 */
+	public void removeAllStalks() {
+		setHasStalk(false);
+		//残念ながら茎だけ残して掃除することはできないので、茎も死んだ実ゆももろともに掃除される。
+		for (Stalk s : getStalks() ) {
+			for (Body child : s.getBindBaby()) {
+				if (child != null && (child.isDead() || child.isRemoved())){
+					//まだ死んでない無い実ゆだけは茎から落ちる。
+					child.remove();
+				}
+			}
+			s.setPlantYukkuri(null);
+			s.remove();
+			setStalks(new ArrayList<>());
+		}
 	}
 
 	/**
@@ -5089,7 +5118,8 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		}
 		// 確率ですりすりしてる方にもアリ伝染る
 		if (p.getAttachmentSize(Ants.class) > 0 && RND.nextInt(200) == 0) {
-			if (getNumOfAnts() == 0) {
+			if (getNumOfAnts() <= 0) {
+				setNumOfAnts(0);
 				addAttachment(new Ants(this));
 				addStress(50);
 				setHappiness(Happiness.VERY_SAD);
@@ -5214,17 +5244,15 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		}
 		//アリ減少
 		int ant = p.getNumOfAnts();
-		if(ant > 40) {
-			ant -= 40;
-			if (ant < 0) {
-				ant = 0;
-				p.removeAnts();
-			}
-			p.setNumOfAnts(ant);
+		ant -= 40;
+		if (ant <= 0) {
+			ant = 0;
+			p.removeAnts();
 		}
+		p.setNumOfAnts(ant);
 		// しかし確率でぺろぺろしてる方にもアリ伝染る
 		if (ant > 0 && RND.nextInt(200) == 0) {
-			if (getNumOfAnts() == 0) {
+			if (getNumOfAnts() <= 0) {
 				addAttachment(new Ants(this));
 				addStress(50);
 				setHappiness(Happiness.VERY_SAD);
@@ -6980,17 +7008,8 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		if (getPartner() != null)
 			getPartner().setPartner(null);
 		setPartner(null);
-		//残念ながら茎だけ残して掃除することはできないので、茎も死んだ実ゆももろともに掃除される。
-		for (Stalk s : getStalks() ) {
-			for (Body b : s.getBindBaby()) {
-				if (b != null && (b.isDead() || b.isRemoved())){
-					//まだ死んでない無い実ゆだけは茎から落ちる。
-					b.remove();
-				}
-			}
-			s.setPlantYukkuri(null);
-			s.remove();
-		}
+		removeAllStalks();
+		setStalks(null);
 		//ArrayList<Obj> bindObjList = new ArrayList<Obj>();
 		Body[] bodies = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
 		ArrayList<Body> copiedBodyList = new ArrayList<>(Arrays.asList(bodies));
@@ -8542,7 +8561,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		if (this.getTakeoutItem() == null || this.getTakeoutItem().size() == 0) {
 			strbufBodyState.append("運搬中アイテム: なし").append(",");
 		} else {
-			strbufBodyState.append("お気に入りアイテム: ");
+			strbufBodyState.append("運搬中アイテム: ");
 			for (TakeoutItemType item : this.getTakeoutItem().keySet()) {
 				strbufBodyState.append(this.getTakeoutItem(item).getClass().toString() + ",");
 			}
