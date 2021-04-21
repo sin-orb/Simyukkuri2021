@@ -2486,3 +2486,17 @@
 		</adult>
 	</normal>
 [/DontPlayMe]
+# 子供が捕食種に食われた際の反撃メッセージ
+[RevengeForChild]
+	<normal>
+		<baby>
+			おちびちゃあぁぁんん！！きゅしょれみりゃはしにぇええええ！！！
+		</baby>
+		<child>
+			おちびちゃあぁぁんん！！きゅしょれみりゃはしにぇええええ！！！
+		</child>
+		<adult>
+			おちびちゃあぁぁんん！！くそれみりゃはしんでね！！
+		</adult>
+	</normal>
+[/RevengeForChild]

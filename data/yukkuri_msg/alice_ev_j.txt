@@ -2838,3 +2838,18 @@
 		</adult>
 	</rude>
 [/DontPreventUs]
+
+# 子供が捕食種に食われた際の反撃メッセージ
+[RevengeForChild]
+	<normal>
+		<baby>
+			おちびちゃんんんん！！いなかもにょのれみりゃはしんでにぇ！！
+		</baby>
+		<child>
+			おちびちゃんんんん！！いなかもにょのれみりゃはしんでにぇ！！
+		</child>
+		<adult>
+			おちびちゃんんんん！！いなかもののれみりゃどもはしんでつぐなってね！！！
+		</adult>
+	</normal>
+[/RevengeForChild]

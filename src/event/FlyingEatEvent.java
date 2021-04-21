@@ -69,6 +69,7 @@ public class FlyingEatEvent extends EventPacket implements java.io.Serializable 
 
 		// 高度に達してたらexecuteへ
 		if(Math.abs(b.getZ() - Translate.getFlyHeightLimit()) < 3) return UpdateState.FORCE_EXEC;
+		b.moveToEvent(this, b.getX(), b.getY(),  Translate.getFlyHeightLimit());
 		return null;
 	}
 

@@ -5144,3 +5144,16 @@
 		</adult>
 	</normal>
 [/FuneralEND]
+[RevengeForChild]
+	<normal>
+		<baby>
+			おちびちゃあぁぁんん！！れみりゃはしんぢぇにぇ！！いましゅぐぢぇいいよ！！
+		</baby>
+		<child>
+			おちびちゃあぁぁんん！！れみりゃはしんでにぇ！！いましゅぐでいいよ！！
+		</child>
+		<adult>
+			%nameのかがやかしいおちびちゃあんがあああああ！！れみりゃはしんでね！！いますぐでいいよ！！
+		</adult>
+	</normal>
+[/RevengeForChild]

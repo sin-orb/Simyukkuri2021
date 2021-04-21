@@ -25,7 +25,7 @@ import src.system.MessagePool;
 public class RevengeAttackEvent extends EventPacket implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
-	Random rnd = new Random();
+	protected Random rnd = new Random();
 
 	public RevengeAttackEvent(Body f, Body t, Obj tgt, int cnt) {
 		super(f, t, tgt, cnt);

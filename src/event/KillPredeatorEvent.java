@@ -2,25 +2,23 @@ package src.event;
 
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Random;
 
 import src.Const;
 import src.SimYukkuri;
 import src.base.Body;
 import src.base.Obj;
-import src.enums.ActionState;
+import src.enums.Direction;
+import src.enums.EffectType;
 import src.enums.ImageCode;
 import src.enums.PublicRank;
 import src.item.Barrier;
+import src.logic.BodyLogic;
 import src.system.MessagePool;
 
 /**
  * 善良なゆっくりが主に参加し、ドスは捕食種がいる限り殺しに行く.
  */
-public class KillPredeatorEvent extends RaperReactionEvent implements Serializable {
-	
-	private Random rnd = new Random();
-	private int age = 0;
+public class KillPredeatorEvent extends RevengeAttackEvent implements Serializable {
 
 	/**
 	 * コンストラクタ.
@@ -41,10 +39,6 @@ public class KillPredeatorEvent extends RaperReactionEvent implements Serializab
 	@Override
 	public boolean checkEventResponse(Body b) {
 		priority = EventPriority.HIGH;
-		state = ActionState.ATTACK;
-		// 自分自身はスキップ
-		if (b == getFrom())
-			return false;
 		// 死体、睡眠、皮なし、目無しはスキップ
 		if (!b.canEventResponse())
 			return true;
@@ -54,81 +48,39 @@ public class KillPredeatorEvent extends RaperReactionEvent implements Serializab
 		boolean bIsNearPreadeator = false;
 		// 全ゆっくりに対してチェック
 		ArrayList<Body> bodyList = SimYukkuri.world.currentMap.body;
-		for (Body p:bodyList) {
+		for (Body p : bodyList) {
 			// 自分同士のチェックは無意味なのでスキップ
 			if (p == b) {
 				continue;
 			}
 			// 捕食種でないか、捕食種でも親子または姉妹であればスキップ
-			if( !p.isPredatorType() || p.isParent(b) || b.isParent(p) || b.isSister(p) || b.isElderSister(p)){
+			if (!p.isPredatorType() || p.isParent(b) || b.isParent(p) || b.isSister(p) || b.isElderSister(p)) {
 				continue;
 			}
 			// 相手との間に壁があればスキップ
-			if (Barrier.acrossBarrier(b.getX(), b.getY(), p.getX(), p.getY(), Barrier.MAP_BODY[b.getBodyAgeState().ordinal()]+Barrier.BARRIER_KEKKAI)) {
+			if (Barrier.acrossBarrier(b.getX(), b.getY(), p.getX(), p.getY(),
+					Barrier.MAP_BODY[b.getBodyAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
 				continue;
 			}
 			bIsNearPreadeator = true;
 			break;
 		}
 		// 捕食種が近くにいない
-		if( !bIsNearPreadeator)
-		{
+		if (!bIsNearPreadeator) {
 			return false;
 		}
-
-		// うんうん奴隷は逃げる
-		if (b.getPublicRank() == PublicRank.UnunSlave) {
-			state = ActionState.ESCAPE;
-		} else {
-			if ((b.isAdult() && !b.isDontMove())) {
-				// 動ける大人は母なら復讐に向かう
-				state = ActionState.ATTACK;
-			} else {
-				// それ以外はひとまず逃げる
-				state = ActionState.ESCAPE;
-			}
-		}
-		return true;
-	}
-
-	/**
-	 * 逃げるときのメッセージを設定する.
-	 * @param b 逃げる個体
-	 */
-	@Override
-	public void setScareWorldEventMessage(Body b) {
-		b.setWorldEventResMessage(MessagePool.getMessage(b, MessagePool.Action.EscapeFromRemirya), Const.HOLDMESSAGE, true, false);
-	}
-	/**
-	 * 反撃するときのメッセージを設定する.
-	 * @param b 反撃する個体
-	 */
-	@Override
-	public void setCounterWorldEventMessage(Body b) {
-		b.setWorldEventResMessage(MessagePool.getMessage(b, MessagePool.Action.RevengeAttack), Const.HOLDMESSAGE, true, false);
-	}
-
-	/**
-	 * 制裁されない条件。
-	 * れいぱーに対するリアクションであれば、れいぱーであり続ける場合
-	 * @return !制裁条件
-	 */
-	@Override
-	public boolean checkConditionOfTarget() {
 		return true;
 	}
 
 	/**
 	 * 次のターゲットを探す.
-	 * れいぱーに対するリアクションであれば、死んでない発情れいぱー
 	 * @return 次のターゲット
 	 */
-	@Override
 	public Body searchNextTarget() {
 		Body ret = null;
 		ArrayList<Body> bodyList = SimYukkuri.world.currentMap.body;
-		for(Body b :bodyList) {
-			if(b.isPredatorType()) {
+		for (Body b : bodyList) {
+			if (b.isPredatorType()) {
 				ret = b;
 				break;
 			}
@@ -136,73 +88,67 @@ public class KillPredeatorEvent extends RaperReactionEvent implements Serializab
 		return ret;
 	}
 
-	/**
-	 * 次の攻撃ターゲットを探す.
-	 * れいぱーに対するリアクションであれば、発情れいぱーですっきり中のやつ。
-	 * @return 次の攻撃ターゲット
-	 */
-	@Override
-	public Body searchAttackTarget() {
-		return searchNextTarget();
-	}
-	
 	@Override
 	public UpdateState update(Body b) {
-		// 相手が消えてしまったら他の捕食種を捜索
-		if(getFrom().isRemoved() || getFrom().isDead() || !getFrom().isPredatorType() ) {
-			setFrom(searchNextTarget());
-			if(getFrom() == null) return UpdateState.ABORT;
+		// ランダムで復讐を諦める
+		if(rnd.nextInt(1000) == 0) {
+			return UpdateState.ABORT;
 		}
 		
-		if(state == ActionState.ATTACK) {
-			b.setForceFace(ImageCode.PUFF.ordinal());
-			moveTarget(b);
-			if(rnd.nextInt(20) == 0) {
-				b.setWorldEventResMessage(MessagePool.getMessage(b, MessagePool.Action.RevengeAttack), Const.HOLDMESSAGE, true, false);
-			}
+		// 相手が消えてしまったら他の捕食種を捜索
+		if (getFrom().isRemoved() || getFrom().isDead() || !getFrom().isPredatorType()) {
+			setFrom(searchNextTarget());
+			if (getFrom() == null)
+				return UpdateState.ABORT;
 		}
-		else {
-			if((age % 10) == 0) {
-				if(b.getType() == 2006 ||
-					(b.isAdult() && b.getPublicRank() != PublicRank.UnunSlave)) {
-					Body target = null;
-					if(!checkConditionOfTarget()) {
-						target = getFrom();
-					}
-					else {
-						target = searchAttackTarget();
-					}
-					if(target != null) {
-						// 反撃対象が見つかったら同イベント実行中の固体イベントを書き換え
-						ArrayList<Body> bodyList = SimYukkuri.world.currentMap.body;
-						for(Body body :bodyList) {
-							if(body.getCurrentEvent() instanceof KillPredeatorEvent) {
-								// うんうん奴隷は不参加
-								if( body.getPublicRank() == PublicRank.UnunSlave ) continue;
-								// 妊娠、大人以外は不参加.動けない場合も不参加
-								if(body.hasBabyOrStalk() || body.isSick() || !body.isAdult() || body.isDontMove()) continue;
-								KillPredeatorEvent ev = (KillPredeatorEvent)body.getCurrentEvent();
-								ev.setFrom(target);
-								ev.state = ActionState.ATTACK;
-							}
-						}
-						setCounterWorldEventMessage(b);
-					}
-				}
+
+		b.setForceFace(ImageCode.PUFF.ordinal());
+		int colX = BodyLogic.calcCollisionX(b, getFrom());
+		b.moveToEvent(this, getFrom().getX() + colX, getFrom().getY());
+		if (b.getType() == 2006 ||
+				(b.isAdult() && b.getPublicRank() != PublicRank.UnunSlave)) {
+			Body target = searchNextTarget();
+			setFrom(target);
+			b.setWorldEventResMessage(MessagePool.getMessage(b, MessagePool.Action.RevengeForChild),
+						Const.HOLDMESSAGE, true, false);
+		}
+		return null;
+	}
+
+	@Override
+	public void start(Body b) {
+		if (b.isNYD()) {
+			return;
+		}
+		b.setAngry();
+		int colX = BodyLogic.calcCollisionX(b, getFrom());
+		b.moveToEvent(this, getFrom().getX() + colX, getFrom().getY());
+	}
+
+	@Override
+	public boolean execute(Body b) {
+		// 相手が消えてしまったら他の捕食種を捜索
+		if(getFrom().isRemoved() || getFrom().isDead()) {
+			setFrom(searchNextTarget());
+			// 捕食種全滅でイベント終了
+			if(getFrom() == null) return true;
+			return false;
+		}
+		if(getFrom().getZ() < 5) {
+			b.setWorldEventResMessage(MessagePool.getMessage(b, MessagePool.Action.RevengeForChild), Const.HOLDMESSAGE, true, false);
+			if(b.getDirection() == Direction.LEFT) {
+				SimYukkuri.mypane.terrarium.addEffect(EffectType.HIT, b.getX()-10, b.getY(), 0,
+														0, 0, 0, false, 500, 1, true, false, true);
 			}
 			else {
-				// 逃げは敵と反対方向へ
-				b.setForceFace(ImageCode.CRYING.ordinal());
-				if((age % 10) == 0) {
-					escapeTarget(b);
-				}
-				if(rnd.nextInt(20) == 0) {
-					setScareWorldEventMessage(b);
-				}
+				SimYukkuri.mypane.terrarium.addEffect(EffectType.HIT, b.getX()+10, b.getY(), 0,
+														0, 0, 0, true, 500, 1, true, false, true);
 			}
+			b.setForceFace(ImageCode.PUFF.ordinal());
+			getFrom().strikeByYukkuri(b, this, false);
+			b.addStress(-300);
 		}
-		age++;
-		return null;
+		return false;
 	}
 
 }

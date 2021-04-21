@@ -4944,3 +4944,28 @@
 		</adult>
 	</normal>
 [/FuneralEND]
+# 子供が捕食種に食われた際の反撃メッセージ
+[RevengeForChild]
+	<normal>
+		<baby>
+			%nameのおちびちゃあぁぁんん！！きゅしょれみりゃはしにぇええええ！！！
+		</baby>
+		<child>
+			%nameのおちびちゃあぁぁんん！！きゅしょれみりゃはしにぇええええ！！！
+		</child>
+		<adult>
+			%nameのおちびちゃあぁぁんん！！れみりゃはゆるさないよ！！
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			%nameのおちびちゃあぁぁんん！！きゅしょれみりゃはしにゅんだじぇえええ！！！
+		</baby>
+		<child>
+			%nameのおちびちゃあぁぁんん！！きゅしょれみりゃはしにゅんだじぇえええ！！！
+		</child>
+		<adult>
+			%nameのおちびちゃあぁぁんん！！くそれみりゃどもはこの%nameさまがねだやしにしてやるんだぜ！！
+		</adult>
+	</rude>
+[/RevengeForChild]

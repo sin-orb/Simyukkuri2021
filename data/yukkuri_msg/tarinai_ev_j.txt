@@ -1343,3 +1343,9 @@
 		ゆぐおーー！ゆぐおーー！！
 	</normal>
 [/DontPreventUs]
+# 子供が捕食種に食われた際の反撃メッセージ
+[RevengeForChild]
+	<normal>
+		ゆっぴ！ゆぴぃー！！！
+	</normal>
+[/RevengeForChild]

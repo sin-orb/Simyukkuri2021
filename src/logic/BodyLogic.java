@@ -14,7 +14,6 @@ import src.base.Obj;
 import src.base.Okazari.OkazariType;
 import src.draw.Terrarium;
 import src.draw.Translate;
-import src.enums.ActionState;
 import src.enums.AgeState;
 import src.enums.Attitude;
 import src.enums.BaryInUGState;
@@ -213,11 +212,11 @@ public class BodyLogic {
 				} else {
 					//捕食種はあっちいってね！イベントで攻撃のときはその個体は怯えない
 					if (b.getCurrentEvent() != null && b.getCurrentEvent().getClass().equals(KillPredeatorEvent.class)
-							&& ((KillPredeatorEvent)b.getCurrentEvent()).state ==ActionState.ATTACK 
 							&& b.isAdult() && b.isNotNYD() && !b.isPacked() && !b.isBurned()
 							&& !b.isHasBaby() && !b.isHasStalk() ){
 						b.setPanic(false, null);
 						b.setAngry();
+						continue;
 					} else {
 						// 捕食種から逃げる
 						int dist = Translate.distance(b.getX(), b.getY(), p.getX(), p.getY());

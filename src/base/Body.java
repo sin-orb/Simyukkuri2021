@@ -5959,10 +5959,10 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 					// 逃げる
 					runAway(enemy.getX(), enemy.getY());
 					setPikoMessage(MessagePool.getMessage(this, MessagePool.Action.DontPlayMe), true);
-					// おもちゃにされたとき、母がいたら「捕食種はあっちいってね！」イベントが発生。
-					if (getMother() != null && !getMother().isDead() && !getMother().isRemoved()) {
+					// おもちゃにされたとき、母がいたら33%の確率で「捕食種はあっちいってね！」イベントが発生。
+					if (RND.nextInt(3) == 0 && getMother() != null && !getMother().isDead() && !getMother().isRemoved()) {
 						getMother().clearEvent();
-						setAngry();
+						getMother().setAngry();
 						EventLogic.addBodyEvent(getMother(), new KillPredeatorEvent(this, enemy, null, 1), null, null);
 					}
 					if (RND.nextInt(10) == 0) {

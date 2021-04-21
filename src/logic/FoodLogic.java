@@ -291,18 +291,18 @@ public class FoodLogic {
 									// 空中での捕食は特殊なのでイベントで処理
 									b.clearActions();
 									EventLogic.addBodyEvent(b, new FlyingEatEvent(b, f, null, 1), null, null);
+									// 母のいるゆっくりを食べると33%の確率で母による「捕食種はあっちいってね！」イベントが発生
+									if (rnd.nextInt(3) == 0 && f.getMother() != null && !f.getMother().isDead() && !f.getMother().isRemoved()) {
+										f.getMother().clearEvent();
+										f.getMother().setAngry();
+										EventLogic.addBodyEvent(f.getMother(), new KillPredeatorEvent(f.getMother(), b, null, 1),
+													null, null);
+									}
 								} else {
 									eatFood(b, FoodType.BODY, Math.min(b.getEatAmount(), f.getBodyAmount()));
 									f.eatBody(Math.min(b.getEatAmount(), f.getBodyAmount()), b);
 									if (f.isSick())
 										b.addSickPeriod(100);
-								}
-								// 母のいるゆっくりを食べると母による「捕食種はあっちいってね！」イベントが発生
-								if (f.getMother() != null && !f.getMother().isDead() && !f.getMother().isRemoved()) {
-									f.getMother().clearEvent();
-									f.getMother().setAngry();
-									EventLogic.addBodyEvent(f.getMother(), new KillPredeatorEvent(f.getMother(), b, null, 1),
-												null, null);
 								}
 							} else {
 								// レイパーなら実ゆは食べる

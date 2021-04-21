@@ -1325,4 +1325,17 @@
 		くろー！
 	</normal>
 [/DontPlayMe]
-
+# 子供が捕食種に食われた際の反撃メッセージ
+[RevengeForChild]
+	<normal>
+		<baby>
+			おちび！きゅりょおぉ！！！
+		</baby>
+		<child>
+			おちび！きゅりょおぉ！！！
+		</child>
+		<adult>
+			おちび！！くろっ！くろっ！！！
+		</adult>
+	</normal>
+[/RevengeForChild]

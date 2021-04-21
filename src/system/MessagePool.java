@@ -10,7 +10,6 @@ import src.base.Body;
 import src.draw.ModLoader;
 import src.enums.AgeState;
 import src.enums.BodyRank;
-import src.enums.CoreAnkoState;
 import src.enums.FootBake;
 import src.enums.Intelligence;
 import src.enums.LovePlayer;
@@ -598,7 +597,8 @@ public class MessagePool {
 		FuneralENDFrom,
 		/** おとむらいイベント終了時(子側) */
 		FuneralEND,
-
+		/** 子供が捕食種に食われたとき */
+		RevengeForChild,
 	}
 
 	// 埋め込み文字定義
