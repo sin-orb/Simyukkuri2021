@@ -105,6 +105,12 @@ public class FlyingEatEvent extends EventPacket implements java.io.Serializable 
 				}
 			}
 			else {
+				if (b.isFull()) {
+					// うー。おなかいっぱいだからもういらないんだどー。ぽいするどー。
+					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.POI));
+					to.setLinkParent(null);
+					return true;
+				}
 				if( to.isNotNYD() ){
 					to.setMessage(MessagePool.getMessage(to, MessagePool.Action.EatenByBody2));
 					to.setHappiness(Happiness.VERY_SAD);

@@ -599,6 +599,8 @@ public class MessagePool {
 		FuneralEND,
 		/** 子供が捕食種に食われたとき */
 		RevengeForChild,
+		/** 腹いっぱいなのでメシを捨てるとき */
+		POI,
 	}
 
 	// 埋め込み文字定義
