@@ -130,7 +130,7 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 	}
 	
 	public void disBindBabys() {
-		if ( plantYukkuri != null ){
+		if ( plantYukkuri != null  && plantYukkuri.getStalks() != null) {
 			plantYukkuri.getStalks().set(plantYukkuri.getStalks().indexOf( this ), null );
 		}
 		for ( Body b : bindBaby ){

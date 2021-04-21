@@ -801,7 +801,7 @@ public class MessagePool {
 		if (body.isShutmouth()) {
 			if (body.isSleeping())
 				return null;
-			else if (body.geteCoreAnkoState() != CoreAnkoState.DEFAULT)
+			else if (body.isNYD())
 				action = MessagePool.Action.NYDCantTalk;
 			else
 				action = MessagePool.Action.CantTalk;

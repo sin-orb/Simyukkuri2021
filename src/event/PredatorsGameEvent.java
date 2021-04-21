@@ -290,7 +290,7 @@ public class PredatorsGameEvent extends EventPacket implements java.io.Serializa
 				return true;
 			}
 			else {
-				if( toy.geteCoreAnkoState() == CoreAnkoState.DEFAULT ){
+				if( toy.isNotNYD() ){
 					toy.setMessage(MessagePool.getMessage(toy, MessagePool.Action.EatenByBody2));
 					toy.setHappiness(Happiness.VERY_SAD);
 					toy.setForceFace(ImageCode.PAIN.ordinal());

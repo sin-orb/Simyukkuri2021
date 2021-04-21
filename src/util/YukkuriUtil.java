@@ -259,15 +259,6 @@ public class YukkuriUtil {
 				ret.intelligence = intel[rnd.nextInt(2)];
 			}
 			break;
-		case 1:
-		case 2:
-		case 3:
-			if (rnd.nextInt(10) == 0) {
-				ret.intelligence = intel[rnd.nextInt(3)];
-			} else {
-				ret.intelligence = intel[1];
-			}
-			break;
 		case 4:
 			if (rnd.nextInt(15) == 0) {
 				ret.intelligence = intel[rnd.nextInt(2)];
@@ -275,6 +266,12 @@ public class YukkuriUtil {
 				ret.intelligence = intel[1 + rnd.nextInt(2)];
 			}
 			break;
+		default:
+			if (rnd.nextInt(10) == 0) {
+				ret.intelligence = intel[rnd.nextInt(3)];
+			} else {
+				ret.intelligence = intel[1];
+			}
 		}
 		return ret;
 	}
@@ -294,32 +291,26 @@ public class YukkuriUtil {
 			int i = rnd.nextInt(6);
 			if (i == 0) {//まりさ
 				switch (rnd.nextInt(5)) {
-				case 0:
-				case 3:
-				case 4:
-					return 0;//普通のまりさ
 				case 1:
 					return 2004;//こたつむり
 				case 2:
 					return 2002;//つむり
 				default:
-					return 0;
+					return 0;//普通のまりさ
 				}
 			} else if (i == 1) {//れいむ
 				switch (rnd.nextInt(4)) {
-				case 0:
-				case 1:
-					return 1;//普通のれいむ
 				case 2:
 					return 2001;//わされいむ
 				case 3:
 					return 2005;//でいぶ
+				default:
+					return 1;//普通のれいむ
 				}
 			} else {
 				return i;
 			}
 		}
-		return 0;
 	}
 
 	// コピーしたくない変数はここで定義
@@ -384,66 +375,73 @@ public class YukkuriUtil {
 		fromField = from.getClass().getSuperclass().getSuperclass().getSuperclass().getDeclaredFields();
 		toClass = to.getClass().getSuperclass().getSuperclass().getSuperclass();
 
-		try {
-			for (int i = 0; i < fromField.length; i++) {
-				int mod = fromField[i].getModifiers();
-				if (Modifier.isFinal(mod)) {
-					continue;
-				}
-				if (Modifier.isStatic(mod)) {
-					continue;
-				}
+		for (int i = 0; i < fromField.length; i++) {
+			int mod = fromField[i].getModifiers();
+			if (Modifier.isFinal(mod)) {
+				continue;
+			}
+			if (Modifier.isStatic(mod)) {
+				continue;
+			}
+			try {
 				toField = toClass.getDeclaredField(fromField[i].getName());
 				toField.setAccessible(true);
+				fromField[i].setAccessible(true);
 				toField.set(to, fromField[i].get(from));
+			} catch (Exception e) {
+				e.printStackTrace();
+				continue;
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 
 		// BodyAttributesクラスのコピー
 		fromField = from.getClass().getSuperclass().getSuperclass().getDeclaredFields();
 		toClass = to.getClass().getSuperclass().getSuperclass();
 
-		try {
-			for (int i = 0; i < fromField.length; i++) {
-				int mod = fromField[i].getModifiers();
-				if (Modifier.isFinal(mod)) {
-					continue;
-				}
-				if (Modifier.isStatic(mod)) {
-					continue;
-				}
+		for (int i = 0; i < fromField.length; i++) {
+			int mod = fromField[i].getModifiers();
+			if (Modifier.isFinal(mod)) {
+				continue;
+			}
+			if (Modifier.isStatic(mod)) {
+				continue;
+			}
+			try {
 				toField = toClass.getDeclaredField(fromField[i].getName());
 				toField.setAccessible(true);
+				fromField[i].setAccessible(true);
 				toField.set(to, fromField[i].get(from));
+			} catch (Exception e) {
+				e.printStackTrace();
+				continue;
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 
 		// Bodyクラスのコピー
 		fromField = from.getClass().getSuperclass().getDeclaredFields();
 		toClass = to.getClass().getSuperclass();
 
-		try {
-			for (int i = 0; i < fromField.length; i++) {
-				int mod = fromField[i].getModifiers();
-				if (Modifier.isFinal(mod)) {
-					continue;
-				}
-				if (Modifier.isStatic(mod)) {
-					continue;
-				}
-				if (NO_COantProbabilityY_FIELD.containsKey(fromField[i].getName())) {
-					continue;
-				}
+		for (int i = 0; i < fromField.length; i++) {
+			int mod = fromField[i].getModifiers();
+			if (Modifier.isFinal(mod)) {
+				continue;
+			}
+			if (Modifier.isStatic(mod)) {
+				continue;
+			}
+			if (NO_COantProbabilityY_FIELD.containsKey(fromField[i].getName())) {
+				continue;
+			}
+			try {
 				toField = toClass.getDeclaredField(fromField[i].getName());
 				toField.setAccessible(true);
+				fromField[i].setAccessible(true);
 				toField.set(to, fromField[i].get(from));
+			} catch (Exception e) {
+				e.printStackTrace();
+				continue;
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
+
 		}
 		//--------------------------------------------------
 		// 家族関係の再設定
@@ -512,6 +510,92 @@ public class YukkuriUtil {
 		if (rnd.nextInt(antProbability) == 1) {
 			b.addAttachment(new Ants(b));
 			b.clearEvent();
+		}
+	}
+	/**
+	 * ランダムなゆっくりタイプを取得する.
+	 * ドスが親の場合は他のまりさが出る。
+	 * @param parent 親のゆっくり（ドスチェック）
+	 * @return ランダムなタイプのゆっくりタイプ（int）
+	 */
+	public static int getRandomYukkuriType(Body parent) {
+		int babyType = 0;
+		int i = rnd.nextInt(5);
+		if (i == 0 || i == 1) {
+			babyType = rnd.nextInt(12);
+			switch (babyType) {
+			case 0: // まりさ
+			case 8:
+				babyType = getMarisaType();
+				break;
+			case 1: // れいむ
+			case 9:
+				switch (rnd.nextInt(5)) {
+				case 0:
+				case 2:
+					babyType = 1;//普通のれいむ
+					break;
+				case 1:
+					babyType = 2001;//わされいむ
+					break;
+				case 4:
+					babyType = 2007;//たりないれいむ
+					break;
+				case 3:
+					babyType = 2005;//でいぶ
+					break;
+				default:
+					babyType = 1;
+				}
+				break;
+			case 3: // ありす
+				babyType = 2;
+				break;
+			case 4: // みょん
+				babyType = 5;
+				break;
+			case 5: // ちぇん
+				babyType = 4;
+				break;
+			case 6: // たりないゆ
+				babyType = 2000;
+				break;
+			case 7: // ゆるさなえ
+				babyType = 1000;
+				break;
+			case 10: // ぱちゅりー
+				babyType = 3;
+				break;
+			case 11: //希少種
+				babyType = 1000 + rnd.nextInt(12);
+				break;
+			}
+		} else {
+			if (parent != null) {
+				babyType = parent.getType();
+				// 親がドスなら他のまりさが均等に出る
+				if (babyType == 2006) {
+					babyType = getMarisaType();
+				}
+			} else {
+				babyType = rnd.nextInt(6);
+			}
+		}
+		return babyType;
+	}
+
+	/**
+	 * まりさの子供は何のまりさかランダムで決定。
+	 * @return まりさの子供タイプ
+	 */
+	public static int getMarisaType() {
+		switch (rnd.nextInt(5)) {
+		case 1:
+			return 2004;//こたつむり
+		case 2:
+			return 2002;//つむり
+		default:
+			return 0;
 		}
 	}
 }

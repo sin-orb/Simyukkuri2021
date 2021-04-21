@@ -55,7 +55,7 @@ public class ProposeEvent extends EventPacket implements java.io.Serializable {
 	public UpdateState update(Body b) {
 		if(getFrom()==null || to==null || getFrom().isDead() || getFrom().isRemoved())return UpdateState.ABORT;
 		//相手が死んだか 相手が消えてしまったか非ゆっくり症発症したらイベント中断
-		if(to.isDead() || to.isRemoved() || to.geteCoreAnkoState() != CoreAnkoState.DEFAULT) {
+		if(to.isDead() || to.isRemoved() || to.isNYD()) {
 			getFrom().setCalm();
 			getFrom().setBodyEventResMessage(MessagePool.getMessage(getFrom(), MessagePool.Action.Surprise), 30, true, false);
 			getFrom().setHappiness(Happiness.VERY_SAD);

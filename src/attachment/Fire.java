@@ -90,7 +90,7 @@ public class Fire extends Attachment {
 		// 生きてたらセリフとダメージ加算
 		if(!parent.isDead()) {
 			parent.clearActions();
-			if( parent.geteCoreAnkoState() == CoreAnkoState.DEFAULT ){
+			if( parent.isNotNYD() ){
 				if(!parent.isTalking()) {
 					parent.setMessage(MessagePool.getMessage(parent, MessagePool.Action.Burning), 20, true, true);
 				}
@@ -136,7 +136,7 @@ public class Fire extends Attachment {
 		if(rnd.nextInt(20) == 0){
 			Body bodyMother = parent.getBindStalkMotherCanNotice();
 			if ( bodyMother != null ) {
-				if( bodyMother.geteCoreAnkoState() == CoreAnkoState.DEFAULT ){
+				if( bodyMother.isNotNYD() ){
 					bodyMother.setHappiness(Happiness.VERY_SAD);
 					bodyMother.setMessage(MessagePool.getMessage(bodyMother, MessagePool.Action.AbuseBaby));
 					bodyMother.addStress(15);

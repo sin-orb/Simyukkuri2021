@@ -109,7 +109,7 @@ public class FuneralEvent extends EventPacket implements java.io.Serializable {
 		if( b == null || getFrom() == null ){
 			return UpdateState.ABORT;
 		}
-		if( b.geteCoreAnkoState() != CoreAnkoState.DEFAULT ){
+		if( b.isNYD() ){
 			return UpdateState.ABORT;
 		}
 		// 相手が消えてしまったら

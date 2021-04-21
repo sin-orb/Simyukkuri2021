@@ -29,7 +29,7 @@ public class RaperWakeupEvent extends EventPacket implements java.io.Serializabl
 		if(!b.canEventResponse()) return true;
 
 		//非ゆっくり症、針刺し状態のはスキップ
-		if( b.geteCoreAnkoState() != CoreAnkoState.DEFAULT ||b.isNeedled())
+		if( b.isNYD() ||b.isNeedled())
 		{
 			return false;
 		}

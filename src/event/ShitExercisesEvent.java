@@ -113,7 +113,7 @@ public class ShitExercisesEvent extends EventPacket implements java.io.Serializa
 		if( b == null || getFrom() == null ){
 			return UpdateState.ABORT;
 		}
-		if( b.geteCoreAnkoState() != CoreAnkoState.DEFAULT ){
+		if( b.isNYD() ){
 			return UpdateState.ABORT;
 		}
 		// 相手が消えてしまったら

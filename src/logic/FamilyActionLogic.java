@@ -78,7 +78,7 @@ public class FamilyActionLogic {
 		// うんうん奴隷の場合
 		if( b.getPublicRank() == PublicRank.UnunSlave ) return false;
 		// 非ゆっくり症の場合
-		if( b.geteCoreAnkoState() != CoreAnkoState.DEFAULT) return false;
+		if( b.isNYD()) return false;
 		// うんうん中、出産中、食事中は終了
 		if ( b.isShitting() || b.isBirth() || b.isEating() || b.nearToBirth() ) {
 			return false;

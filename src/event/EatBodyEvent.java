@@ -93,7 +93,7 @@ public class EatBodyEvent extends EventPacket implements java.io.Serializable {
 					b.addStress(700);
 					break;
 			}
-			if( b.geteCoreAnkoState() == CoreAnkoState.DEFAULT ){
+			if( b.isNotNYD() ){
 				b.setHappiness(Happiness.VERY_SAD);
 			}
 			return true;

@@ -43,7 +43,7 @@ public class ToiletLogic {
 			return false;
 		}
 		// 非ゆっくり症の場合
-		if( b.geteCoreAnkoState() != CoreAnkoState.DEFAULT ){
+		if( b.isNYD() ){
 			return false;
 		}
 
@@ -204,7 +204,7 @@ public class ToiletLogic {
 			return false;
 		}
 		// 非ゆっくり症の場合
-		if( b.geteCoreAnkoState() != CoreAnkoState.DEFAULT ){
+		if( b.isNYD() ){
 			return false;
 		}
 		if(b.getCurrentEvent() != null && b.getCurrentEvent().getPriority() != EventPacket.EventPriority.LOW) {

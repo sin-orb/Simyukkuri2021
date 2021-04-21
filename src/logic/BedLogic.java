@@ -52,7 +52,7 @@ public class BedLogic {
 		}
 */
 		// 非ゆっくり症の場合
-		if( b.geteCoreAnkoState() != CoreAnkoState.DEFAULT )
+		if( b.isNYD() )
 		{
 			return false;
 		}

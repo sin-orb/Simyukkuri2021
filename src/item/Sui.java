@@ -112,7 +112,7 @@ public class Sui extends ObjEX implements java.io.Serializable {
 		{
 			return false;
 		}
-		if( b.geteCoreAnkoState() != CoreAnkoState.DEFAULT )
+		if( b.isNYD() )
 		{
 			return false;
 		}

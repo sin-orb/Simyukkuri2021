@@ -113,7 +113,7 @@ public class BreedEvent extends EventPacket implements java.io.Serializable {
 	// trueを返すとイベント終了
 	public boolean execute(Body b) {
 		if(b.nearToBirth())return true;
-		if( b.geteCoreAnkoState() != CoreAnkoState.DEFAULT ){
+		if( b.isNYD() ){
 			return false;
 		}
 		// 相手が出産前なら応援

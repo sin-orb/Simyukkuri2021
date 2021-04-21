@@ -71,7 +71,7 @@ public class MachinePress extends ObjEX implements java.io.Serializable {
 	public int objHitProcess( Obj o ) {
 		if(o.getObjType() == Type.YUKKURI){
 			Body p = (Body)o;
-			if(!p.isDead() && p.geteCoreAnkoState() == CoreAnkoState.DEFAULT && rnd.nextInt(5) == 0){
+			if(!p.isDead() && p.isNotNYD() && rnd.nextInt(5) == 0){
 				p.setHappiness(Happiness.VERY_SAD);
 				p.setForceFace(ImageCode.CRYING.ordinal());
 				p.setMessage(MessagePool.getMessage(p, MessagePool.Action.KilledInFactory), 40, true, true);

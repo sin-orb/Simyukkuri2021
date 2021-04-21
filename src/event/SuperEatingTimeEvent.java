@@ -83,7 +83,7 @@ public class SuperEatingTimeEvent extends EventPacket implements java.io.Seriali
 			return true;
 		}
 
-		if( b.geteCoreAnkoState() != CoreAnkoState.DEFAULT )
+		if( b.isNYD() )
 		{
 			return false;
 		}
@@ -131,7 +131,7 @@ public class SuperEatingTimeEvent extends EventPacket implements java.io.Seriali
 		if( b == null || getFrom() == null){
 			return UpdateState.ABORT;
 		}
-		if( b.geteCoreAnkoState() != CoreAnkoState.DEFAULT ){
+		if( b.isNYD() ){
 			return UpdateState.ABORT;
 		}
 

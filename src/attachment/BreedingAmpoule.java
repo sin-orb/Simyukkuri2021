@@ -4,7 +4,6 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
-import java.util.Random;
 
 import src.base.Attachment;
 import src.base.Body;
@@ -14,6 +13,7 @@ import src.enums.AttachProperty;
 import src.enums.Direction;
 import src.enums.Event;
 import src.game.Dna;
+import src.util.YukkuriUtil;
 
 /****************************************
  *  精子アンプル
@@ -81,87 +81,11 @@ public class BreedingAmpoule extends Attachment {
 		}
 		parent.setHungry(100);
 		parent.addDamage(-100);
-		Random rnd = new Random();
-		int babyType;
-		if (rnd.nextInt(3) == 0) {
-			babyType = rnd.nextInt(12);
-			switch (babyType) {
-			case 0: // まりさ
-			case 8:
-				babyType = getMarisaType();
-				break;
-			case 1: // れいむ
-			case 9:
-				switch (rnd.nextInt(5)) {
-				case 0:
-				case 2:
-					babyType = 1;//普通のれいむ
-					break;
-				case 1:
-					babyType = 2001;//わされいむ
-					break;
-				case 4:
-					babyType = 2007;//たりないれいむ
-					break;
-				case 3:
-					babyType = 2005;//でいぶ
-					break;
-				default:
-					babyType = 1;
-				}
-				break;
-			case 3: // ありす
-				babyType = 2;
-				break;
-			case 4: // みょん
-				babyType = 5;
-				break;
-			case 5: // ちぇん
-				babyType = 4;
-				break;
-			case 6: // たりないゆ
-				babyType = 2000;
-				break;
-			case 7: // ゆるさなえ
-				babyType = 1000;
-				break;
-			case 10: // ぱちゅりー
-				babyType = 3;
-				break;
-			case 11: //希少種
-				babyType = 1000 + rnd.nextInt(12);
-				break;
-			}
-		} else {
-			babyType = parent.getType();
-			// 親がドスなら他のまりさが均等に出る
-			if (babyType == 2006) {
-				babyType = getMarisaType();
-			}
-		}
+		int babyType = YukkuriUtil.getRandomYukkuriType(parent);
 		parent.getBabyTypes().add(new Dna(babyType, null, null, false));
 		parent.setHasBaby(true);
 
 		return Event.DONOTHING;
-	}
-
-	/**
-	 * まりさの子供は何のまりさかランダムで決定。
-	 * @return まりさの子供タイプ
-	 */
-	private int getMarisaType() {
-		switch (rnd.nextInt(5)) {
-		case 0:
-		case 3:
-		case 4:
-			return 0;//普通のまりさ
-		case 1:
-			return 2004;//こたつむり
-		case 2:
-			return 2002;//つむり
-		default:
-			return 0;
-		}
 	}
 
 	@Override

@@ -177,6 +177,8 @@ public class GadgetMenu {
 		WATER(MainCategoryName.TOOL2, "水", null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL, null),
 		NEEDLE(MainCategoryName.TOOL2, "針", null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL_ONOFF, HelpContext.CTRL_LMB_ALL_INVERT),
 		BURY(MainCategoryName.TOOL2, "畑に埋める", null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL_ONOFF, HelpContext.CTRL_LMB_ALL_INVERT),
+		SET_SICK(MainCategoryName.TOOL2, "ゆかび治療", null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK, null, null),
+		SET_RAPER(MainCategoryName.TOOL2, "れいぱー治療", null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK, null, null),
 		//	 アンプルカテゴリ
 		ORANGE_AMP(MainCategoryName.AMPOULE, "オレンジアンプル", null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL_ONOFF, HelpContext.CTRL_LMB_ALL_INVERT),
 		ACCEL_AMP(MainCategoryName.AMPOULE, "成長促進アンプル", null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL_ONOFF, HelpContext.CTRL_LMB_ALL_INVERT),
@@ -268,7 +270,6 @@ public class GadgetMenu {
 		EVENT_EAT(MainCategoryName.TEST, "強制イベント：すーぱーむしゃむしゃタイム", null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK, null, null),
 		EVENT_RIDEYUKKURI(MainCategoryName.TEST, "強制イベント：おちびちゃん運び", null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK, null, null),
 		EVENT_PROUDCHILD(MainCategoryName.TEST, "強制イベント：おちびちゃん自慢", null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK, null, null),
-		SET_SICK(MainCategoryName.TEST, "強制コマンド：かもす", null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK, null, null),
 		SETVAIN(MainCategoryName.TEST, "強制コマンド：キリッ", null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK, null, null),
 		Yunnyaa(MainCategoryName.TEST, "強制コマンド：ゆんやあ", null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK, null, null),
 		BEGGINGFORLIFE(MainCategoryName.TEST, "強制コマンド：命乞い", null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK, null, null),
@@ -371,7 +372,9 @@ public class GadgetMenu {
 		GadgetList.LIGHTER,
 		GadgetList.NEEDLE,
 		GadgetList.WATER,
-		GadgetList.BURY
+		GadgetList.BURY,
+		GadgetList.SET_SICK,
+		GadgetList.SET_RAPER,
 	};
 	/**道具2カテゴリ用コンボボックス定義*/
 	public static DefaultComboBoxModel<GadgetList> toolModel2 = new DefaultComboBoxModel<GadgetList>(ToolCategory2);
@@ -518,7 +521,6 @@ public class GadgetMenu {
 		GadgetList.EVENT_EAT,
 		GadgetList.EVENT_RIDEYUKKURI,
 		GadgetList.EVENT_PROUDCHILD,
-		GadgetList.SET_SICK,
 		GadgetList.SETVAIN,
 		GadgetList.Yunnyaa,
 		GadgetList.BEGGINGFORLIFE,

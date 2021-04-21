@@ -119,9 +119,9 @@ public class FoodMaker extends ObjEX implements java.io.Serializable {
 				if ( b.isCrushed()  || b.isPealed() || b.isBaby()  ) {
 					if ( b.isSick() ) {//カビ
 						stockFood = 11;
-					}else if( b.geteCoreAnkoState() == CoreAnkoState.NonYukkuriDiseaseNear){//軽度の日ゆっくり症
+					}else if( b.geteCoreAnkoState() == CoreAnkoState.NonYukkuriDiseaseNear){//軽度の非ゆっくり症
 						stockFood = 12;
-					}else if( b.geteCoreAnkoState() == CoreAnkoState.NonYukkuriDisease){//重度の日ゆっくり症
+					}else if( b.geteCoreAnkoState() == CoreAnkoState.NonYukkuriDisease){//重度の非ゆっくり症
 						stockFood = 13;
 					}else if ( b.getType() == 2 ) {//ありす
 						stockFood = 2;
@@ -206,9 +206,9 @@ public class FoodMaker extends ObjEX implements java.io.Serializable {
 				if ( b.isCrushed()  || b.isPealed() || b.isBaby()  ) {
 					if ( b.isSick() ) {//カビ
 						foodType = foodTable[makeTable[stockFood][11]];
-					}else if( b.geteCoreAnkoState() == CoreAnkoState.NonYukkuriDiseaseNear){//軽度の日ゆっくり症
+					}else if( b.geteCoreAnkoState() == CoreAnkoState.NonYukkuriDiseaseNear){//軽度の非ゆっくり症
 						foodType = foodTable[makeTable[stockFood][12]];
-					}else if( b.geteCoreAnkoState() == CoreAnkoState.NonYukkuriDisease){//重度の日ゆっくり症
+					}else if( b.geteCoreAnkoState() == CoreAnkoState.NonYukkuriDisease){//重度の非ゆっくり症
 						foodType = foodTable[makeTable[stockFood][13]];
 					}else if ( b.getType() == 2 ) {//ありす
 						foodType = foodTable[makeTable[stockFood][2]];

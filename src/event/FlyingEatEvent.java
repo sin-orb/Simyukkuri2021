@@ -7,7 +7,6 @@ import src.base.EventPacket;
 import src.base.Obj;
 import src.draw.Translate;
 import src.enums.BodyRank;
-import src.enums.CoreAnkoState;
 import src.enums.Happiness;
 import src.enums.ImageCode;
 import src.item.Food;
@@ -105,7 +104,7 @@ public class FlyingEatEvent extends EventPacket implements java.io.Serializable 
 				}
 			}
 			else {
-				if( to.geteCoreAnkoState() == CoreAnkoState.DEFAULT ){
+				if( to.isNotNYD() ){
 					to.setMessage(MessagePool.getMessage(to, MessagePool.Action.EatenByBody2));
 					to.setHappiness(Happiness.VERY_SAD);
 					to.setForceFace(ImageCode.PAIN.ordinal());

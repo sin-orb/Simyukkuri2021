@@ -842,7 +842,7 @@ public class GadgetAction {
 				GadgetMenu.executeBodyMethod(ev, found, "takeBraid");
 				break;
 			case ANAL_CLOSE:
-				GadgetMenu.executeBodyMethod(ev, found, "getAnalClose", "setAnalClose", "invAnalClose");
+				GadgetMenu.executeBodyMethod(ev, found, "isAnalClose", "setAnalClose", "invAnalClose");
 				break;
 			case STALK_CUT:
 				GadgetMenu.executeBodyMethod(ev, found, "getStalkCastration", "setStalkCastration", "invStalkCastration");
@@ -869,6 +869,12 @@ public class GadgetAction {
 				break;
 			case BURY:
 				GadgetMenu.executeBodyMethod(ev, found, "baryInUnderGround");
+				break;
+			case SET_SICK:
+				GadgetMenu.executeBodyMethod(ev, found, "moldToggle");
+				break;
+			case SET_RAPER:
+				GadgetMenu.executeBodyMethod(ev, found, "raperToggle");
 				break;
 			default:
 				break;
@@ -1444,9 +1450,6 @@ public class GadgetAction {
 					}
 				}
 				break;
-			case SET_SICK:
-					GadgetMenu.executeBodyMethod(ev, found, "forceSetSick");
-					break;
 			case SETVAIN:
 				if (found instanceof Body) {
 					Body b = (Body)found;

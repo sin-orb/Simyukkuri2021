@@ -80,7 +80,7 @@ public class CutPenipeniEvent extends EventPacket implements java.io.Serializabl
 		else if(tick == 20) {
 			// 驚く
 			b.setLockmove(false);
-			if( b.geteCoreAnkoState() == CoreAnkoState.DEFAULT ){
+			if( b.isNotNYD() ){
 				b.setForceFace(ImageCode.SURPRISE.ordinal());
 				if(rnd.nextInt(2)==0)b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.Scream2), 30, true, false);
 				else b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.Surprise), 30, true, false);
@@ -88,7 +88,7 @@ public class CutPenipeniEvent extends EventPacket implements java.io.Serializabl
 		}
 		else if(tick == 40) {
 			// 反応する
-			if( b.geteCoreAnkoState() == CoreAnkoState.DEFAULT ){
+			if( b.isNotNYD() ){
 				b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.PenipeniCutting), 50, true, true);
 				b.setHappiness(Happiness.VERY_SAD);
 				b.setForceFace(ImageCode.CRYING.ordinal());

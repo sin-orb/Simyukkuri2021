@@ -9,9 +9,9 @@ import src.base.Body;
 import src.base.EventPacket;
 import src.base.Obj;
 import src.draw.Translate;
+import src.enums.ActionState;
 import src.enums.Attitude;
 import src.enums.BaryInUGState;
-import src.enums.CoreAnkoState;
 import src.enums.Direction;
 import src.enums.EffectType;
 import src.enums.Happiness;
@@ -35,14 +35,8 @@ public class RaperReactionEvent extends EventPacket implements java.io.Serializa
 	private static final long serialVersionUID = 1L;
 	private Random rnd = new Random();
 	private int age = 0;
-
-	// 行動ステート
-	enum STATE {
-		Escape,		// 逃げる
-		Attack,		// 攻撃
-	}
 	
-	public STATE state = null;
+	public ActionState state = null;
 
 	public RaperReactionEvent(Body f, Body t, Obj tgt, int cnt) {
 		super(f, t, tgt, cnt);
@@ -95,17 +89,17 @@ public class RaperReactionEvent extends EventPacket implements java.io.Serializa
 			// うんうん奴隷は逃げる
 			if( b.getPublicRank() == PublicRank.UnunSlave )
 			{
-				state = STATE.Escape;
+				state = ActionState.ESCAPE;
 			}else{
 				// 飛べない固体
 				if((b.isAdult() && !b.isDamaged() && !b.isSick() && !b.hasBabyOrStalk()
 						&& (b.isSmart() && b.getIntelligence() == Intelligence.FOOL) && !b.isDontMove() ) ||
 						b.getType() == 2006) {
 					// 健康でバカな善良な大人（またはドスまりさは状態に限らず常に）迎撃に向かう
-					state = STATE.Attack;
+					state = ActionState.ATTACK;
 				} else {
 					// それ以外はひとまず逃げる
-					state = STATE.Escape;
+					state = ActionState.ESCAPE;
 				}
 			}
 		}
@@ -114,10 +108,10 @@ public class RaperReactionEvent extends EventPacket implements java.io.Serializa
 
 	// イベント開始動作
 	public void start(Body b) {
-		if( b.geteCoreAnkoState() != CoreAnkoState.DEFAULT ){
+		if( b.isNYD() ){
 			return;
 		}
-		if(state == STATE.Attack) {
+		if(state == ActionState.ATTACK) {
 			// 攻撃は敵に向かう
 			moveTarget(b);
 			b.setAngry();
@@ -143,10 +137,10 @@ public class RaperReactionEvent extends EventPacket implements java.io.Serializa
 			}
 		}
 		
-		if(state == STATE.Attack) {
+		if(state == ActionState.ATTACK) {
 			// 妊娠したらドスでない限り逃げに変更
 			if(b.hasBabyOrStalk() && b.getType() != 2006) {
-				state = STATE.Escape;
+				state = ActionState.ESCAPE;
 			}
 			else {
 				// 攻撃は敵に向かう。ドスは妊娠させられようが何しようが駆除に向かう。
@@ -165,7 +159,7 @@ public class RaperReactionEvent extends EventPacket implements java.io.Serializa
 					 b.getPublicRank() != PublicRank.UnunSlave)) {
 					Body target = null;
 					// 何らかの原因で発情が解除されたら制裁
-					if(!getFrom().isExciting()) {
+					if(!checkConditionOfTarget()) {
 						target = getFrom();
 					}
 					else {
@@ -193,11 +187,11 @@ public class RaperReactionEvent extends EventPacket implements java.io.Serializa
 								if(num == 0) {
 									RaperReactionEvent ev = (RaperReactionEvent)body.getCurrentEvent();
 									ev.setFrom(target);
-									ev.state = STATE.Attack;
+									ev.state = ActionState.ATTACK;
 								}
 							}
 						}
-						b.setWorldEventResMessage(MessagePool.getMessage(b, MessagePool.Action.CounterRapist), Const.HOLDMESSAGE, true, false);
+						setCounterWorldEventMessage(b);
 					}
 				}
 			}
@@ -208,12 +202,36 @@ public class RaperReactionEvent extends EventPacket implements java.io.Serializa
 					escapeTarget(b);
 				}
 				if(rnd.nextInt(20) == 0) {
-					b.setWorldEventResMessage(MessagePool.getMessage(b, MessagePool.Action.ScareRapist), Const.HOLDMESSAGE, true, false);
+					setScareWorldEventMessage(b);
 				}
 			}
 		}
 		age++;
 		return null;
+	}
+
+	/**
+	 * 逃げるときのメッセージを設定する.
+	 * @param b 逃げる個体
+	 */
+	public void setScareWorldEventMessage(Body b) {
+		b.setWorldEventResMessage(MessagePool.getMessage(b, MessagePool.Action.ScareRapist), Const.HOLDMESSAGE, true, false);
+	}
+	/**
+	 * 反撃するときのメッセージを設定する.
+	 * @param b 反撃する個体
+	 */
+	public void setCounterWorldEventMessage(Body b) {
+		b.setWorldEventResMessage(MessagePool.getMessage(b, MessagePool.Action.CounterRapist), Const.HOLDMESSAGE, true, false);
+	}
+
+	/**
+	 * 制裁されない条件。
+	 * れいぱーに対するリアクションであれば、れいぱーであり続ける場合
+	 * @return !制裁条件
+	 */
+	public boolean checkConditionOfTarget() {
+		return getFrom().isExciting();
 	}
 
 	// イベント目標に到着した際に呼ばれる
@@ -227,7 +245,7 @@ public class RaperReactionEvent extends EventPacket implements java.io.Serializa
 			return false;
 		}
 
-		if(state == STATE.Attack && !b.isDontMove()) {
+		if(state == ActionState.ATTACK && !b.isDontMove()) {
 			// 攻撃
 			if(getFrom().getZ() < 5) {
 				b.setWorldEventResMessage(MessagePool.getMessage(b, MessagePool.Action.RevengeAttack), Const.HOLDMESSAGE, true, false);
@@ -248,14 +266,18 @@ public class RaperReactionEvent extends EventPacket implements java.io.Serializa
 			// 逃げ
 			escapeTarget(b);
 			if(rnd.nextInt(20) == 0) {
-				b.setWorldEventResMessage(MessagePool.getMessage(b, MessagePool.Action.ScareRapist), Const.HOLDMESSAGE, true, false);
+				setScareWorldEventMessage(b);
 			}
 		}
 		return false;
 	}
 	
-	// 場にいるレイパーを検索
-	private Body searchNextTarget() {
+	/**
+	 * 次のターゲットを探す.
+	 * れいぱーに対するリアクションであれば、死んでない発情れいぱー
+	 * @return 次のターゲット
+	 */
+	public Body searchNextTarget() {
 		Body ret = null;
 		ArrayList<Body> bodyList = SimYukkuri.world.currentMap.body;
 		for(Body b :bodyList) {
@@ -267,8 +289,12 @@ public class RaperReactionEvent extends EventPacket implements java.io.Serializa
 		return ret;
 	}
 
-	// すっきり中のレイパーを検索
-	private Body searchAttackTarget() {
+	/**
+	 * 次の攻撃ターゲットを探す.
+	 * れいぱーに対するリアクションであれば、発情れいぱーですっきり中のやつ。
+	 * @return 次の攻撃ターゲット
+	 */
+	public Body searchAttackTarget() {
 		Body ret = null;
 		ArrayList<Body> bodyList = SimYukkuri.world.currentMap.body;
 		for(Body b :bodyList) {
@@ -280,14 +306,20 @@ public class RaperReactionEvent extends EventPacket implements java.io.Serializa
 		return ret;
 	}
 
-	// 敵に向かって移動
-	private void moveTarget(Body b) {
+	/**
+	 * ターゲットまで移動する.
+	 * @param b ターゲット
+	 */
+	public void moveTarget(Body b) {
 		int colX = BodyLogic.calcCollisionX(b, getFrom());
 		b.moveToEvent(this, getFrom().getX() + colX, getFrom().getY());
 	}
 	
-	// 敵から逃げるように移動
-	private void escapeTarget(Body b) {
+	/**
+	 *  敵から逃げるように移動する.
+	 * @param b 敵
+	 */
+	protected void escapeTarget(Body b) {
 		int mapX = Translate.mapW;
 		int mapY = Translate.mapH;
 		

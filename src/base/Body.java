@@ -64,6 +64,7 @@ import src.event.BegForLifeEvent;
 import src.event.BreedEvent;
 import src.event.CutPenipeniEvent;
 import src.event.HateNoOkazariEvent;
+import src.event.KillPredeatorEvent;
 import src.event.PredatorsGameEvent;
 import src.event.ProposeEvent;
 import src.event.RaperReactionEvent;
@@ -205,7 +206,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		}
 
 		// 茎が生えていると茎の数*5倍だけさらに腹が減る
-		if (isHasStalk()) {
+		if (isHasStalk() && getStalks() != null) {
 			hungry -= TICK * getStalks().size() * 5;
 		}
 		// 胎生ゆがいるとその分さらに腹が減る
@@ -364,7 +365,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			setShitting(false);
 			setFurifuri(false);
 			wakeup();
-			if (geteCoreAnkoState() == CoreAnkoState.DEFAULT) {
+			if (isNotNYD()) {
 				setHappiness(Happiness.VERY_SAD);
 				if (getDamageState() != Damage.NONE) {
 					setNegiMessage(MessagePool.getMessage(this, MessagePool.Action.PoisonDamage), true);
@@ -414,7 +415,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			return false; // 実ゆではなく
 		if (getPublicRank() == PublicRank.UnunSlave)
 			return false; // うんうん奴隷ではなく
-		if (geteCoreAnkoState() != CoreAnkoState.DEFAULT)
+		if (isNYD())
 			return false; // 非ゆっくり症ではく
 		if (isBlind() || isPealed() || isPacked() || isShutmouth())
 			return false; //目抜き/皮むき/あにゃる封印/口封じされておらず
@@ -692,7 +693,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		}
 
 		// 非ゆっくり症ではない場合
-		if (geteCoreAnkoState() == CoreAnkoState.DEFAULT && getBaryState() == BaryInUGState.NONE) {
+		if (isNotNYD() && getBaryState() == BaryInUGState.NONE) {
 			// うんうん奴隷ではない場合
 			if (getPublicRank() != PublicRank.UnunSlave) {
 				Obj oTarget = getMoveTarget();
@@ -793,13 +794,13 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 					addStress(200);
 				}
 
-				if (isHasPants() || geteCoreAnkoState() != CoreAnkoState.DEFAULT) {
+				if (isHasPants() || isNYD()) {
 					setDirty(true);
 					setHappiness(Happiness.VERY_SAD);
 					addStress(400);
 				}
 
-				if (geteCoreAnkoState() == CoreAnkoState.DEFAULT) {
+				if (isNotNYD()) {
 					setMessage(MessagePool.getMessage(this, MessagePool.Action.Shit2));
 					stay();
 					if (!isHasPants()) {
@@ -820,7 +821,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			} else {
 				// 塞がってたら膨らんで破裂
 				wakeup();
-				if (geteCoreAnkoState() == CoreAnkoState.DEFAULT) {
+				if (isNotNYD()) {
 					if (getBurstState() == Burst.NEAR) {
 						if (RND.nextInt(10) == 0) {
 							setMessage(MessagePool.getMessage(this, MessagePool.Action.Inflation));
@@ -881,7 +882,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 				if (getBabyTypes().size() <= 0) {
 					setBirth(false);
 					pregnantPeriod = 0;
-					if (geteCoreAnkoState() == CoreAnkoState.DEFAULT) {
+					if (isNotNYD()) {
 						setMessage(MessagePool.getMessage(this, MessagePool.Action.Breed2), true);
 						if (!isHasPants()) {
 							if (willingFurifuri()) {
@@ -900,19 +901,20 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 					bBirthFlag = false;
 				}
 				// 動けない
-			if ((isLockmove() && (!isFixBack() || geteCoreAnkoState() != CoreAnkoState.NonYukkuriDisease)) && !isShitting()) {
+				if ((isLockmove() && (!isFixBack() || geteCoreAnkoState() != CoreAnkoState.NonYukkuriDisease))
+						&& !isShitting()) {
 					bBirthFlag = false;
 				}
 				// 非ゆっくり症
 				// 20210415 削除。非ゆっくり症だって出産くらいするでしょ
-//				if (geteCoreAnkoState() != CoreAnkoState.DEFAULT) {
-//					bBirthFlag = false;
-//				}
+				//				if (isNYD()) {
+				//					bBirthFlag = false;
+				//				}
 				if (!bBirthFlag) {
 					// お腹の赤ゆだけクリア
 					getBabyTypes().clear();
 					setDirty(true);
-					if (geteCoreAnkoState() == CoreAnkoState.DEFAULT) {
+					if (isNotNYD()) {
 						if (isLockmove() && !isHasPants()) {
 							setHasPants(true);
 							setMessage(MessagePool.getMessage(this, MessagePool.Action.Breed2), true);
@@ -1092,7 +1094,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		// 痛み：針が刺さっている、足カット、痛みを感じている、瀕死
 		// 拒絶：レイプされている、うんうん中、食事中、出産中、攻撃している、攻撃されている、
 		//-----------------------------------------------------------
-		if (geteCoreAnkoState() != CoreAnkoState.DEFAULT) {
+		if (isNYD()) {
 			return false;
 		}
 
@@ -1393,9 +1395,9 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 				if (hasBabyOrStalk() && !isRaper()) {
 					r = 1;
 				}
-//				if (isRaper() && (isExciting() || isForceExciting())) {
-//					setCurrentEvent(null);
-//				}
+				//				if (isRaper() && (isExciting() || isForceExciting())) {
+				//					setCurrentEvent(null);
+				//				}
 				if (r == 0 && getCurrentEvent() == null) {
 					ArrayList<Body> fianceList = BodyLogic.createActiveFianceeList(this, getBodyAgeState().ordinal());
 					if (fianceList == null || fianceList.size() < 1) {
@@ -1771,7 +1773,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		// ストレス限界を超えている場合
 		if (nStressLimit * nTolerance / 100 < getStress()) {
 			// 初回
-			if (geteCoreAnkoState() == CoreAnkoState.DEFAULT) {
+			if (isNotNYD()) {
 				seteCoreAnkoState(CoreAnkoState.NonYukkuriDiseaseNear);
 				nonYukkuriDiseasePeriod = 0;
 				speed = speed / 2;
@@ -1786,14 +1788,14 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			}
 		} else {
 			// 復帰時
-			if (geteCoreAnkoState() != CoreAnkoState.DEFAULT) {
+			if (isNYD()) {
 				speed = speed * 2;
 			}
 			seteCoreAnkoState(CoreAnkoState.DEFAULT);
 		}
 
 		// 通常のままなら終了
-		if (geteCoreAnkoState() == CoreAnkoState.DEFAULT) {
+		if (isNotNYD()) {
 			nonYukkuriDiseasePeriod = 0;
 			return false;
 		}
@@ -1807,8 +1809,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		setBirth(false);
 
 		//起こす
-		if ((geteCoreAnkoState() == CoreAnkoState.NonYukkuriDiseaseNear ||
-				geteCoreAnkoState() == CoreAnkoState.NonYukkuriDisease) && isSleeping()) {
+		if (isNYD() && isSleeping()) {
 			wakeup();
 		}
 		// 非ゆっくり症初期
@@ -2249,7 +2250,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	 * @return 何もしないイベント
 	 */
 	public Event checkFear() {
-		if (geteCoreAnkoState() != CoreAnkoState.DEFAULT) {
+		if (isNYD()) {
 			setPanic(false, null);
 		}
 		if (!isDead()) {
@@ -2345,7 +2346,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			setInOutTakeoutItem(false);
 		}
 		//しゃべれないor生まれていないor非ゆっくり症
-		if (isSilent() || isUnBirth() || geteCoreAnkoState() != CoreAnkoState.DEFAULT) {
+		if (isSilent() || isUnBirth() || isNYD()) {
 			return;
 		}
 
@@ -2497,7 +2498,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	 */
 	public void upDate() {
 		// Move Stalk
-		if (getStalks().size() > 0) {
+		if (getStalks() != null && getStalks().size() > 0) {
 			int direction = getDirection().ordinal();
 			int centerH = (getBodySpr()[getBodyAgeState().ordinal()].imageH + getExpandSizeW() + getExternalForceW());
 			// うにょ機能
@@ -3065,7 +3066,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	 */
 	public void setMessage(String message, WindowType type, int count, boolean interrupt, boolean piko, boolean NYD) {
 		if (!NYD
-				&& (geteCoreAnkoState() != CoreAnkoState.DEFAULT /*|| shutmouth*/ || isSleeping())) {
+				&& (isNYD() /*|| shutmouth*/ || isSleeping())) {
 			return;
 		}
 
@@ -3330,7 +3331,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	 */
 	public final void checkAttitude() {
 		//非ゆっくり症、足りないゆは変化しない
-		if (geteCoreAnkoState() != CoreAnkoState.DEFAULT || isIdiot()) {
+		if (isNYD() || isIdiot()) {
 			AttitudePoint = 0;
 			return;
 		}
@@ -3597,7 +3598,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	 */
 	public final void setForceFace(int f) {
 		//非ゆっくり症個体、皮むき済み個体は顔変化なし
-		if (isPealed() || geteCoreAnkoState() != CoreAnkoState.DEFAULT)
+		if (isPealed() || isNYD())
 			return;
 		else if (isRaperExcitingFace(f)) {
 			forceFace = ImageCode.EXCITING_raper.ordinal();
@@ -3620,7 +3621,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	 */
 	public final void setNYDForceFace(int f) {
 		//非ゆっくり症未発症個体、皮むき済み個体は顔変化なし
-		if (isPealed() || geteCoreAnkoState() == CoreAnkoState.DEFAULT)
+		if (isPealed() || isNotNYD())
 			return;
 		else
 			setForceFace(f);
@@ -3743,7 +3744,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	 * 怒らせる.
 	 */
 	public final void setAngry() {
-		if (isDead() || geteCoreAnkoState() != CoreAnkoState.DEFAULT || isSleeping()) {
+		if (isDead() || isNYD() || isSleeping()) {
 			return;
 		}
 		if (getDamageState() == Damage.NONE && !isVerySad()) {
@@ -3879,7 +3880,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			}
 
 			boolean kusogaki = (isRude() && isBaby()) || (isChild() && isVeryRude());
-			int c = kusogaki? 20 : 40;
+			int c = kusogaki ? 20 : 40;
 			if (getAge() % c != 0)
 				return;
 			//自分がゲス赤ゆか、ドゲス子ゆなら、短いスパンで泣き叫ぶ
@@ -4147,7 +4148,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	public final boolean hasDisorder() {
 		if (isIdiot())
 			return true;
-		if (geteCoreAnkoState() != CoreAnkoState.DEFAULT)
+		if (isNYD())
 			return true;
 		if (!hasOkazari())
 			return true;
@@ -4430,7 +4431,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			return true;
 		if (hasBabyOrStalk())
 			return true;
-		if (geteCoreAnkoState() != CoreAnkoState.DEFAULT)
+		if (isNYD())
 			return true;
 		if (isGotBurnedHeavily())
 			return true;
@@ -4461,6 +4462,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		}
 		return false;
 	}
+
 	/**
 	 * 生まれそうかどうかを返却する.
 	 * @return 生まれそうかどうか
@@ -4483,16 +4485,19 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	 */
 	public final void removeStalk(Stalk s) {
 		if (!isDead() && !isSleeping()) {
-			if (geteCoreAnkoState() == CoreAnkoState.DEFAULT) {
+			if (isNotNYD()) {
 				setHappiness(Happiness.VERY_SAD);
 				addStress(700);
 				setMessage(MessagePool.getMessage(this, MessagePool.Action.AbuseBaby));
 			}
 		}
-		getStalks().remove(s);
-		if (getStalks().size() == 0)
-			setHasStalk(false);
+		if (getStalks() != null) {
+			getStalks().remove(s);
+			if (getStalks().size() == 0)
+				setHasStalk(false);
+		}
 	}
+
 	/**
 	 * 茎をすべて掃除する.
 	 * 右クリの「取る」でも茎は取り除かれてゆっくりのみ取れる。
@@ -4501,16 +4506,20 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	public void removeAllStalks() {
 		setHasStalk(false);
 		//残念ながら茎だけ残して掃除することはできないので、茎も死んだ実ゆももろともに掃除される。
-		for (Stalk s : getStalks() ) {
-			for (Body child : s.getBindBaby()) {
-				if (child != null && (child.isDead() || child.isRemoved())){
-					//まだ死んでない無い実ゆだけは茎から落ちる。
-					child.remove();
+		if (getStalks() != null) {
+			for (Stalk s : getStalks()) {
+				if (s.getBindBaby() != null) {
+					for (Body child : s.getBindBaby()) {
+						if (child != null && (child.isDead() || child.isRemoved())) {
+							//まだ死んでない無い実ゆだけは茎から落ちる。
+							child.remove();
+						}
+					}
 				}
+				s.setPlantYukkuri(null);
+				s.remove();
+				setStalks(new ArrayList<>());
 			}
-			s.setPlantYukkuri(null);
-			s.remove();
-			setStalks(new ArrayList<>());
 		}
 	}
 
@@ -4547,7 +4556,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		}
 
 		// 非ゆっくり症の場合
-		if (bodyMother.geteCoreAnkoState() != CoreAnkoState.DEFAULT) {
+		if (bodyMother.isNYD()) {
 			return;
 		}
 
@@ -4596,7 +4605,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		if (isDead()) {
 			return;
 		}
-		if (geteCoreAnkoState() != CoreAnkoState.DEFAULT) {
+		if (isNYD()) {
 			return;
 		}
 		// change own state
@@ -4628,7 +4637,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		if (p.isDead()) {
 			return;
 		}
-		if (p.geteCoreAnkoState() == CoreAnkoState.DEFAULT) {
+		if (p.isNotNYD()) {
 			p.setStress(0);
 			p.addMemories(20);
 			// 相手の妊娠判定
@@ -4712,9 +4721,9 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		setSukkiri(true);
 		setHappiness(Happiness.HAPPY);
 		if (isRaper()) {
-			hungry -= (getHUNGRYLIMIT()[AgeState.BABY.ordinal()] /4);
+			hungry -= (getHUNGRYLIMIT()[AgeState.BABY.ordinal()] / 4);
 		} else {
-			hungry -= (getHUNGRYLIMIT()[AgeState.BABY.ordinal()] *4);
+			hungry -= (getHUNGRYLIMIT()[AgeState.BABY.ordinal()] * 4);
 		}
 		//hungryState = checkHungryState();
 		// if it has pants, cannot get pregnant
@@ -4746,7 +4755,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 
 		// 相手の妊娠判定
 		p.wakeup();
-		if (p.geteCoreAnkoState() == CoreAnkoState.DEFAULT) {
+		if (p.isNotNYD()) {
 			p.setMessage(MessagePool.getMessage(p, MessagePool.Action.RaperSukkiri), 60, true, false);
 			p.setSukkiri(true);
 			setCalm();
@@ -4769,10 +4778,10 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 					(isSickHeavily() || isStarving()), i == 4);
 			p.getStalkBabyTypes().add(baby);
 		}
-		EventLogic.addWorldEvent(new RaperWakeupEvent(this, null, null, 1), null, null);
 		if (isRaper()) {
 			//れいぱーは強制れいぽぅ
 			forceToRaperExcite(true);
+			EventLogic.addWorldEvent(new RaperWakeupEvent(this, null, null, 1), null, null);
 		} else if (getAttitude() == Attitude.SUPER_SHITHEAD) {
 			// ドゲスは婚姻関係を保ちつつもれいぽぅ
 			forceToRaperExcite(false);
@@ -4927,7 +4936,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			return;
 		}
 
-		if (geteCoreAnkoState() != CoreAnkoState.DEFAULT || isMelt()) {
+		if (isNYD() || isMelt()) {
 			stayPurupuru(20);
 			return;
 		}
@@ -4992,7 +5001,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		clearActions();
 		setExciting(raper);
 		setbForceExciting(raper);
-		if(raper) {
+		if (raper) {
 			setPartner(null);
 		}
 		stay();
@@ -5112,7 +5121,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			addStress(-100);
 			p.addStress(-100);
 			setHappiness(Happiness.VERY_HAPPY);
-			if (geteCoreAnkoState() == CoreAnkoState.DEFAULT) {
+			if (isNotNYD()) {
 				p.setHappiness(Happiness.VERY_HAPPY);
 			}
 		}
@@ -5130,20 +5139,20 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		setNobinobi(true);
 		stay(40);
 		p.stay(40);
-//		if (p.getIntelligence() != Intelligence.WISE && isBaby() && p.isAdult() && getSurisuriAccidentProb() != 0
-//				&& RND.nextInt(getSurisuriAccidentProb()) == 0) {
-//			strikeByHammer();
-//		}
-//		if (getIntelligence() != Intelligence.WISE && p.isBaby() && isAdult() && getSurisuriAccidentProb() != 0
-//				&& RND.nextInt(getSurisuriAccidentProb()) == 0) {
-//			p.strikeByHammer();
-//		}
+		//		if (p.getIntelligence() != Intelligence.WISE && isBaby() && p.isAdult() && getSurisuriAccidentProb() != 0
+		//				&& RND.nextInt(getSurisuriAccidentProb()) == 0) {
+		//			strikeByHammer();
+		//		}
+		//		if (getIntelligence() != Intelligence.WISE && p.isBaby() && isAdult() && getSurisuriAccidentProb() != 0
+		//				&& RND.nextInt(getSurisuriAccidentProb()) == 0) {
+		//			p.strikeByHammer();
+		//		}
 		if (getIntelligence() != Intelligence.WISE && getSurisuriAccidentProb() != 0
 				&& RND.nextInt(getSurisuriAccidentProb()) == 0) {
 			//すりすり事故、すっきりーになる
 			doSukkiri(p);
 		}
-		if (isSick()  && RND.nextInt(5) == 0) {
+		if (isSick() && RND.nextInt(5) == 0) {
 			p.addSickPeriod(100);
 		}
 		if (p.isSick() && RND.nextInt(5) == 0) {
@@ -5260,7 +5269,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			}
 			setNumOfAnts(getNumOfAnts() + 10);
 		}
-		
+
 		setPeropero(true);
 		stay(40);
 		p.stay(40);
@@ -5278,6 +5287,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			addSickPeriod(100);
 		}
 	}
+
 	/**
 	 *  母が子供の針をぐーりぐーりする
 	 * @param p 子供
@@ -5300,7 +5310,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			setMessage(MessagePool.getMessage(this, MessagePool.Action.ExtractingNeedleChild));
 		}
 
-		if (p.geteCoreAnkoState() == CoreAnkoState.DEFAULT) {
+		if (p.isNotNYD()) {
 			// ぐーりぐーりされた時のメッセージ
 			p.setMessage(MessagePool.getMessage(p, MessagePool.Action.NeedlePain), 60, true, false);
 			p.stayPurupuru(40);
@@ -5486,6 +5496,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	public final void moveToBody(Obj target, int toX, int toY) {
 		moveToBody(target, toX, toY, 0);
 	}
+
 	/**
 	 * なんかの方向に動く
 	 * @param target ターゲットのなんか
@@ -5610,7 +5621,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			return;
 		Vomit v = SimYukkuri.mypane.terrarium.addVomit(getX(), getY(), getZ(), this, getShitType());
 		v.crushVomit();
-		if (geteCoreAnkoState() == CoreAnkoState.DEFAULT) {
+		if (isNotNYD()) {
 			if (isSmart() || getBodyAgeState().ordinal() < eater.getBodyAgeState().ordinal() || isLockmove()
 					|| isGotBurnedHeavily()) {
 				// 善良か動けない状態か自分より大きい相手は逃げる
@@ -5643,7 +5654,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			Vomit v = SimYukkuri.mypane.terrarium.addVomit(getX(), getY(), getZ(), this, getShitType());
 			v.crushVomit();
 		}
-		if (geteCoreAnkoState() == CoreAnkoState.DEFAULT) {
+		if (isNotNYD()) {
 			//アリの場合の反応
 			if (P == 0) {
 				setHappiness(Happiness.VERY_SAD);
@@ -5934,7 +5945,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 				changeUnyo((int) (ap * 0.11f), 0, 0);
 				enemy.changeUnyo(RND.nextInt(3), 0, 0);
 			}
-			if (geteCoreAnkoState() == CoreAnkoState.DEFAULT) {
+			if (isNotNYD()) {
 				if (e instanceof HateNoOkazariEvent) {
 					//お飾りの迫害
 					setMessage(MessagePool.getMessage(this, MessagePool.Action.Scream), true);
@@ -5948,15 +5959,23 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 					// 逃げる
 					runAway(enemy.getX(), enemy.getY());
 					setPikoMessage(MessagePool.getMessage(this, MessagePool.Action.DontPlayMe), true);
-					if (RND.nextInt(10) == 0)
+					// おもちゃにされたとき、母がいたら「捕食種はあっちいってね！」イベントが発生。
+					if (getMother() != null && !getMother().isDead() && !getMother().isRemoved()) {
+						getMother().clearEvent();
+						setAngry();
+						EventLogic.addBodyEvent(getMother(), new KillPredeatorEvent(this, enemy, null, 1), null, null);
+					}
+					if (RND.nextInt(10) == 0) {
 						bodyInjure();
+					}
 				} else if (e instanceof RaperReactionEvent) {
 					// 自分がレイパーで攻撃されたとき
 					// 相手をレイプ対象に
 					int colX = BodyLogic.calcCollisionX(this, enemy);
 					moveToSukkiri(enemy, enemy.getX() + colX, enemy.getY());
-					if (RND.nextInt(200) == 0)
+					if (RND.nextInt(200) == 0) {
 						bodyInjure();
+					}
 				} else if (e instanceof AvoidMoldEvent) {
 					//自分がかびてる時
 					setMessage(MessagePool.getMessage(this, MessagePool.Action.Scream), true);
@@ -6351,7 +6370,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		if (!canAction()) {
 			return;
 		}
-		if (geteCoreAnkoState() == CoreAnkoState.DEFAULT) {
+		if (isNotNYD()) {
 			if (isStalkCastration()) {
 				// 閉鎖
 				setHappiness(Happiness.VERY_SAD);
@@ -6383,7 +6402,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		if (!canAction()) {
 			return;
 		}
-		if (geteCoreAnkoState() == CoreAnkoState.DEFAULT) {
+		if (isNotNYD()) {
 			if (isBodyCastration()) {
 				// 閉鎖
 				setHappiness(Happiness.VERY_SAD);
@@ -6444,7 +6463,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			checkReactionStalkMother(UnbirthBabyState.ATTAKED);
 		}
 
-		if (geteCoreAnkoState() == CoreAnkoState.DEFAULT) {
+		if (isNotNYD()) {
 			setPanicType(PanicType.BURN);
 		}
 		setWet(false);
@@ -7088,6 +7107,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		setDropShadow(true);
 		stopPlaying();
 	}
+
 	/**
 	 * 妊娠期間を早める
 	 */
@@ -7108,12 +7128,14 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	 * 茎を引っこ抜く.
 	 */
 	public void disPlantStalks() {
-		for (Stalk s : getStalks()) {
-			if (s != null) {
-				s.setPlantYukkuri(null);
+		if (getStalks() != null) {
+			for (Stalk s : getStalks()) {
+				if (s != null) {
+					s.setPlantYukkuri(null);
+				}
 			}
+			getStalks().clear();
 		}
-		getStalks().clear();
 	}
 
 	/**
@@ -7426,7 +7448,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		}
 
 		// 非ゆっくり症の場合
-		if (geteCoreAnkoState() != CoreAnkoState.DEFAULT) {
+		if (isNYD()) {
 			// 跳ねない
 			layer.option[0] = 0;
 		}
@@ -7469,7 +7491,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			idx += getImage(ImageCode.PEALEDFACE.ordinal(), direction, layer, idx);
 		}
 		// 非ゆっくり症など
-		else if (geteCoreAnkoState() != CoreAnkoState.DEFAULT) {
+		else if (isNYD()) {
 			// 死亡以外では表情を変えない
 			if (isUnBirth()) {
 				//未ゆ
@@ -7898,7 +7920,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	public final boolean canEventResponse() {
 		if (isDead() || getCriticalDamege() == CriticalDamegeType.CUT || isPealed() ||
 				isPacked() || isBlind() || isSleeping() || isShitting() || isBirth() || isSukkiri() ||
-				isbNeedled() || getCurrentEvent() != null || geteCoreAnkoState() != CoreAnkoState.DEFAULT
+				isbNeedled() || getCurrentEvent() != null || isNYD()
 				|| getBaryState() != BaryInUGState.NONE || isLockmove() || isStarving()) {
 			return false;
 		}
@@ -7917,7 +7939,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	public final boolean canAction() {
 		if (isDead() || getCriticalDamege() == CriticalDamegeType.CUT || isPealed() ||
 				isPacked() || isSleeping() || isShitting() || isBirth() || isSukkiri() || isbNeedled() ||
-				getCurrentEvent() != null || geteCoreAnkoState() != CoreAnkoState.DEFAULT ||
+				getCurrentEvent() != null || isNYD() ||
 				getBaryState() != BaryInUGState.NONE) {
 			return false;
 		}
@@ -8078,7 +8100,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			if (canFurifuri()) {
 				setMessage(MessagePool.getMessage(this, MessagePool.Action.FuriFuri), 30);
 				setFurifuri(true);
-			} else if (geteCoreAnkoState() == CoreAnkoState.DEFAULT) {
+			} else if (isNotNYD()) {
 				setMessage(MessagePool.getMessage(this, MessagePool.Action.CantMove), 30);
 				setHappiness(Happiness.VERY_SAD);
 			} else {
@@ -8124,7 +8146,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			dontMove = true;
 		}
 		if ((oldHasBaby && !hasBabyOrStalk()) || (!hasBabyOrStalk() && isBirth())) {
-			if (getStalks().size() <= 0 && isHasStalk()) {
+			if (getStalks() != null && getStalks().size() <= 0 && isHasStalk()) {
 				setHasStalk(false);
 			}
 			retval = Event.BIRTHBABY;
@@ -8132,7 +8154,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			if (getBabyTypes().size() != 0) {
 				setHasBaby(true);
 			}
-			if (getStalks().size() != 0) {
+			if (getStalks() != null && getStalks().size() != 0) {
 				setHasStalk(true);
 			}
 			return retval;
@@ -8141,12 +8163,12 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		if (getBabyTypes().size() != 0) {
 			setHasBaby(true);
 		}
-		if (getStalks().size() != 0) {
+		if (getStalks() != null && getStalks().size() != 0) {
 			setHasStalk(true);
 		}
 
 		// パニック時はただ走る
-		if (getPanicType() != null && !isbNeedled() && geteCoreAnkoState() == CoreAnkoState.DEFAULT) {
+		if (getPanicType() != null && !isbNeedled() && isNotNYD()) {
 			retval = checkFear();
 			if (isLockmove())
 				dontMove = true;
@@ -8187,7 +8209,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 							getBaryState() != BaryInUGState.NONE) {
 						retval = Event.DOCRUSHEDSHIT;
 					} else {
-						if (geteCoreAnkoState() == CoreAnkoState.DEFAULT) {
+						if (isNotNYD()) {
 							retval = Event.DOSHIT;
 						} else {
 							// 非ゆっくり症
@@ -8585,5 +8607,26 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 				.append(",");
 
 		System.out.println(strbufBodyState.toString());
+	}
+
+	/**
+	 * ゆかびのトグル.
+	 * かびていれば治療し、そうでなければかびさせる.
+	 */
+	public void moldToggle() {
+		if (sickPeriod > 0) {
+			sickPeriod = 0;
+		} else {
+			setMessage(MessagePool.getMessage(this, MessagePool.Action.Moldy));
+			forceSetSick();
+		}
+	}
+
+	/**
+	 * れいぱーのトグル.
+	 * れいぱーであれば治療し、そうでなければれいぱー覚醒させる.
+	 */
+	public void raperToggle() {
+		setRaper(!isRaper());
 	}
 }

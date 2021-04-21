@@ -14,10 +14,10 @@ import src.base.Obj;
 import src.base.Okazari.OkazariType;
 import src.draw.Terrarium;
 import src.draw.Translate;
+import src.enums.ActionState;
 import src.enums.AgeState;
 import src.enums.Attitude;
 import src.enums.BaryInUGState;
-import src.enums.CoreAnkoState;
 import src.enums.Direction;
 import src.enums.EnumRelationMine;
 import src.enums.GatheringDirection;
@@ -30,6 +30,7 @@ import src.enums.TakeoutItemType;
 import src.event.AvoidMoldEvent;
 import src.event.FuneralEvent;
 import src.event.HateNoOkazariEvent;
+import src.event.KillPredeatorEvent;
 import src.event.ProposeEvent;
 import src.item.Barrier;
 import src.item.Toilet;
@@ -49,42 +50,44 @@ public class BodyLogic {
 
 	private static final Random rnd = new Random();
 
-	public static enum eActionGo { NONE, WAIT, GO, BACK };
+	public static enum eActionGo {
+		NONE, WAIT, GO, BACK
+	};
 
 	// 自分が相手にとって何なのか判定
-	public static final EnumRelationMine checkMyRelation(Body me, Body you){
+	public static final EnumRelationMine checkMyRelation(Body me, Body you) {
 		// 父
-		if( me.isFather(you) ){
+		if (me.isFather(you)) {
 			return EnumRelationMine.FATHER;
 		}
 
 		// 母
-		if( me.isMother(you) ){
+		if (me.isMother(you)) {
 			return EnumRelationMine.MOTHER;
 		}
 
 		// つがい
-		if( me.isPartner(you) ){
+		if (me.isPartner(you)) {
 			return EnumRelationMine.PARTNAR;
 		}
 
 		// 父の子供
-		if( you.isFather(me)){
+		if (you.isFather(me)) {
 			return EnumRelationMine.CHILD_FATHER;
 		}
 
 		// 母の子供
-		if( you.isMother(me)){
+		if (you.isMother(me)) {
 			return EnumRelationMine.CHILD_MOTHER;
 		}
 
 		// 姉
-		if( (me.isElderSister(you))){
+		if ((me.isElderSister(you))) {
 			return EnumRelationMine.ELDERSISTER;
 		}
 
 		// 妹
-		if( (!me.isElderSister(you)) && me.isSister(you) ){
+		if ((!me.isElderSister(you)) && me.isSister(you)) {
 			return EnumRelationMine.YOUNGSISTER;
 		}
 		return EnumRelationMine.OTHER;
@@ -94,27 +97,26 @@ public class BodyLogic {
 	//
 	public static final boolean checkPartner(Body b) {
 		// 他の用事がある場合等
-		if( b.isToFood() ||/* b.isToBody() || b.isToSukkiri() || b.isToSteal() || */ b.isToBed() || b.isToShit() ){
+		if (b.isToFood() || /* b.isToBody() || b.isToSukkiri() || b.isToSteal() || */ b.isToBed() || b.isToShit()) {
 			return false;
 		}
-		if(/*b.isDontMove() || */(!b.isExciting() && !b.isRude() && b.wantToShit()) || b.nearToBirth() ){
+		if (/*b.isDontMove() || */(!b.isExciting() && !b.isRude() && b.wantToShit()) || b.nearToBirth()) {
 			return false;
 		}
 		// 非ゆっくり症ならなにもしない
-		if( b.geteCoreAnkoState() != CoreAnkoState.DEFAULT ){
+		if (b.isNYD()) {
 			return false;
 		}
 		// 自分がイベント中なら実行しない
-		if(b.getCurrentEvent() != null && b.getCurrentEvent().getPriority() != EventPriority.LOW){
+		if (b.getCurrentEvent() != null && b.getCurrentEvent().getPriority() != EventPriority.LOW) {
 			return false;
 		}
 		// うんうんを持っている場合
-		if( b.getTakeoutItem(TakeoutItemType.SHIT) != null ){
-			if( b.isExciting() ){
+		if (b.getTakeoutItem(TakeoutItemType.SHIT) != null) {
+			if (b.isExciting()) {
 				// 興奮している場合は捨てて行動する
 				b.dropTakeoutItem(TakeoutItemType.SHIT);
-			}
-			else{
+			} else {
 				return false;
 			}
 		}
@@ -129,19 +131,20 @@ public class BodyLogic {
 		/////////////////////////////////
 
 		// 対象が決まっていたら到達したかチェック
-		if((b.isToBody() || b.isToSukkiri()) && b.getMoveTarget() instanceof Body) {
-			Body p = (Body)b.getMoveTarget();
+		if ((b.isToBody() || b.isToSukkiri()) && b.getMoveTarget() instanceof Body) {
+			Body p = (Body) b.getMoveTarget();
 			found = p;
 			// 壁の向こうに移動していたらリセット
 			int dist = Translate.distance(b.getX(), b.getY(), p.getX(), p.getY());
 			if (minDistance > dist) {
-				if (Barrier.acrossBarrier(b.getX(), b.getY(), p.getX(), p.getY(), Barrier.MAP_BODY[b.getBodyAgeState().ordinal()]+Barrier.BARRIER_KEKKAI)) {
+				if (Barrier.acrossBarrier(b.getX(), b.getY(), p.getX(), p.getY(),
+						Barrier.MAP_BODY[b.getBodyAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
 					found = null;
 				}
 			}
-			if( found != null ){
+			if (found != null) {
 				// 接近していた場合、相手に対して行動を実施
-				return doActionOther( found,  b);
+				return doActionOther(found, b);
 			}
 		}
 
@@ -153,68 +156,80 @@ public class BodyLogic {
 		Body bodyHasPheromone = null;
 		Obj oMoveTarget = b.getMoveTarget();
 		Body bodyOldMoveTarget = null;
-		if( oMoveTarget instanceof Body ){
-			bodyOldMoveTarget = (Body)oMoveTarget;
+		if (oMoveTarget instanceof Body) {
+			bodyOldMoveTarget = (Body) oMoveTarget;
 		}
 
 		//発情時
 		// レイパーですっきり中なら続けて同ターゲットに
-		if(b.isExciting() && b.isRaper() && b.isToSukkiri() && bodyOldMoveTarget != null && !bodyOldMoveTarget.isRaper()) {
-			found = (Body)b.getMoveTarget();
+		if (b.isExciting() && b.isRaper() && b.isToSukkiri() && bodyOldMoveTarget != null
+				&& !bodyOldMoveTarget.isRaper()) {
+			found = (Body) b.getMoveTarget();
 			minDistance = Translate.distance(b.getX(), b.getY(), found.getX(), found.getY());
 		}
 		//つがいが既にいるなら優先して向かう
-		else if(b.isExciting() && b.getPartner() != null && !(b.getPartner().isDead()) && !b.isRaper()) {
-			if(b.getPublicRank() == b.getPartner().getPublicRank()){
+		else if (b.isExciting() && b.getPartner() != null && !(b.getPartner().isDead()) && !b.isRaper()) {
+			if (b.getPublicRank() == b.getPartner().getPublicRank()) {
 				found = b.getPartner();
 				minDistance = Translate.distance(b.getX(), b.getY(), found.getX(), found.getY());
 			}
 		}
 
 		//自分が泣き叫んでいるなら、他ゆに目をくれない。
-		else if(b.isCallingParents()){
+		else if (b.isCallingParents()) {
 			checkNearParent(b);
 			return false;
-		}
-		else{
+		} else {
 			// 全ゆっくりに対してチェック
 			ArrayList<Body> bodyList = SimYukkuri.world.currentMap.body;
-			if( bodyList == null ){
+			if (bodyList == null) {
 				return false;
 			}
-			for (Body p: bodyList) {
+			for (Body p : bodyList) {
 				// 自分同士のチェックは無意味なのでスキップ
-				if (p == b) continue;
+				if (p == b)
+					continue;
 				// 最小距離のものが見つかっていたら
-				if( minDistance < 1 && !p.isbPheromone()){
+				if (minDistance < 1 && !p.isbPheromone()) {
 					continue;
 				}
 				// 相手が浮いてて自分が飛べないならスキップ
-				if(!b.canflyCheck() && p.getZ() != 0) continue;
+				if (!b.canflyCheck() && p.getZ() != 0)
+					continue;
 
 				//以下、 捕食種が通常種に近づいた場合。
 				//捕食種がパックされてたらおびえない
-				if(p.isPacked()){
+				if (p.isPacked()) {
 				}
 				// さくや、めーりんはれみりゃやふらんにおびえない
-				else if((b.getType() == Sakuya.type || b.getType() == Meirin.type) && (p.getType() == Remirya.type || p.getType() == Fran.type)) {
+				else if ((b.getType() == Sakuya.type || b.getType() == Meirin.type)
+						&& (p.getType() == Remirya.type || p.getType() == Fran.type)) {
 				}
 				//家族もおびえない
-				else if(p.isFamily(b)){
+				else if (p.isFamily(b)) {
 				}
 				// 捕食防止
-				else if(Terrarium.predatorSteam){
-				}
-				else{
-					// 捕食種から逃げる
-					int dist = Translate.distance(b.getX(), b.getY(), p.getX(), p.getY());
-					if(p.isPredatorType() && dist<=b.getEYESIGHT() && b.getPanicType() == null) {
-						if(b.canAction() && !b.isPredatorType() && !p.isFamily(b) && !b.isSleeping()) {
-							// 最高高度の半分以下または相手が飛べるなら相手が認識
-							if(p.getZ() < Translate.getFlyHeightLimit() || b.canflyCheck()) {
-								if (!Barrier.acrossBarrier(b.getX(), b.getY(), p.getX(), p.getY(), Barrier.MAP_BODY[AgeState.ADULT.ordinal()]+Barrier.BARRIER_KEKKAI )) {
-									if( b.geteCoreAnkoState() == CoreAnkoState.DEFAULT && !b.isNeedled()){
-										b.setPanic(true, PanicType.REMIRYA);
+				else if (Terrarium.predatorSteam) {
+				} else {
+					//捕食種はあっちいってね！イベントで攻撃のときはその個体は怯えない
+					if (b.getCurrentEvent() != null && b.getCurrentEvent().getClass().equals(KillPredeatorEvent.class)
+							&& ((KillPredeatorEvent)b.getCurrentEvent()).state ==ActionState.ATTACK 
+							&& b.isAdult() && b.isNotNYD() && !b.isPacked() && !b.isBurned()
+							&& !b.isHasBaby() && !b.isHasStalk() ){
+						b.setPanic(false, null);
+						b.setAngry();
+					} else {
+						// 捕食種から逃げる
+						int dist = Translate.distance(b.getX(), b.getY(), p.getX(), p.getY());
+						if (p.isPredatorType() && dist <= b.getEYESIGHT() && b.getPanicType() == null) {
+							if (b.canAction() && !b.isPredatorType() && !p.isFamily(b) && !b.isSleeping()) {
+								// 最高高度の半分以下または相手が飛べるなら相手が認識
+								if (p.getZ() < Translate.getFlyHeightLimit() || b.canflyCheck()) {
+									if (!Barrier.acrossBarrier(b.getX(), b.getY(), p.getX(), p.getY(),
+											Barrier.MAP_BODY[AgeState.ADULT.ordinal()] + Barrier.BARRIER_KEKKAI)) {
+										if (b.isNotNYD() && !b.isNeedled()) {
+											b.setPanic(true, PanicType.REMIRYA);
+										}
 									}
 								}
 							}
@@ -225,28 +240,28 @@ public class BodyLogic {
 				//発情時
 				if (b.isExciting()) {
 					// 埋まっていたら無視
-					if( p.getBaryState() != BaryInUGState.NONE ){
+					if (p.getBaryState() != BaryInUGState.NONE) {
 						continue;
 					}
 					// 燃えているのも無視
-					if( p.getAttachmentSize(Fire.class) != 0 ){
+					if (p.getAttachmentSize(Fire.class) != 0) {
 						continue;
 					}
 					//饅頭も無視
-					if(p.isPacked()){
+					if (p.isPacked()) {
 						continue;
 					}
 					//れいぱーの時
 					if (b.isRaper()) {
 						//レイパー以外を狙う
-						if ((p.isDead() && p.isCrushed()) || p.isUnBirth() || p.isRaper() ) {
+						if ((p.isDead() && p.isCrushed()) || p.isUnBirth() || p.isRaper()) {
 							continue;
 						}
 						// うんうん奴隷も無視
 						//20210326 うんうん奴隷もれいぱーは狙うんじゃね？
-//						if( p.getPublicRank() == PublicRank.UnunSlave ){
-//							continue;
-//						}
+						//						if( p.getPublicRank() == PublicRank.UnunSlave ){
+						//							continue;
+						//						}
 					}
 					// 自分が通常の発情の場合
 					else {
@@ -255,40 +270,41 @@ public class BodyLogic {
 							continue;
 						}
 						// 強制発情状態ではない場合
-						if(!b.isForceExciting()){
+						if (!b.isForceExciting()) {
 							//うんうん奴隷ならうんうん奴隷同士で、そうでないならそうでない同士ですっきりする
-							if(b.getPublicRank() != p.getPublicRank()){
+							if (b.getPublicRank() != p.getPublicRank()) {
 								continue;
 							}
 							//自ゆんより年下と親子はスキップ
-							if ( b.getBodyAgeState().ordinal() > p.getBodyAgeState().ordinal() || p.isChild(b) || p.isParent(b)) {
+							if (b.getBodyAgeState().ordinal() > p.getBodyAgeState().ordinal() || p.isChild(b)
+									|| p.isParent(b)) {
 								continue;
 							}
 						}
 					}
-				}
-				else if (p.isDead() && (!p.hasOkazari() || b.isIdiot())) {
+				} else if (p.isDead() && (!p.hasOkazari() || b.isIdiot())) {
 					// 自分が足りないゆで相手がおかざりなしの死体なら食料扱いなのでスキップ
 					continue;
 				}
 				// 相手が発情中のレイパーなら何もしない
-				if( p.isRaper() && p.isExciting() ){
+				if (p.isRaper() && p.isExciting()) {
 					continue;
 				}
 				// 相手との間に壁があればスキップ
-				if (Barrier.acrossBarrier(b.getX(), b.getY(), p.getX(), p.getY(), Barrier.MAP_BODY[b.getBodyAgeState().ordinal()]+Barrier.BARRIER_KEKKAI )) {
+				if (Barrier.acrossBarrier(b.getX(), b.getY(), p.getX(), p.getY(),
+						Barrier.MAP_BODY[b.getBodyAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
 					continue;
 				}
 				// 完全に埋まっていたら無視
-				if( p.getBaryState() == BaryInUGState.ALL ){
+				if (p.getBaryState() == BaryInUGState.ALL) {
 					continue;
 				}
 				// ほぼ完全に埋まっていてお飾りなしなら無視
-				if( p.getBaryState() == BaryInUGState.NEARLY_ALL && !p.hasOkazari()){
+				if (p.getBaryState() == BaryInUGState.NEARLY_ALL && !p.hasOkazari()) {
 					continue;
 				}
 				// フェロモンを持っている相手ならキープ
-				if( p.isbPheromone() ){
+				if (p.isbPheromone()) {
 					// 相手発見確定
 					bodyHasPheromone = p;
 				}
@@ -298,31 +314,32 @@ public class BodyLogic {
 					// 一番近い相手に確定
 					minDistance = dist;
 					found = p;
-				}
-				else if(minDistance <= dist && dist < secondMinDistance){
+				} else if (minDistance <= dist && dist < secondMinDistance) {
 					//二番目に近い相手だと、ランダムでそっちに確定
 					secondMinDistance = dist;
-					if(rnd.nextBoolean()) found = p;
+					if (rnd.nextBoolean())
+						found = p;
 				}
 				// 自分のおかざりがなくて、相手にお飾りがある。うんうん奴隷のものは奪わない
-				if( !b.hasOkazari() && p.hasOkazari() && b.getBodyAgeState() == p.getBodyAgeState() &&
-					b.getType() == p.getType() && b.getType() != HybridYukkuri.type && p.getOkazari().getOkazariType() == OkazariType.DEFAULT &&
-					p.getPublicRank() == PublicRank.NONE && !b.isLockmove() ){
+				if (!b.hasOkazari() && p.hasOkazari() && b.getBodyAgeState() == p.getBodyAgeState() &&
+						b.getType() == p.getType() && b.getType() != HybridYukkuri.type
+						&& p.getOkazari().getOkazariType() == OkazariType.DEFAULT &&
+						p.getPublicRank() == PublicRank.NONE && !b.isLockmove()) {
 					// ゲス,ストレスが50%以上
-					if( b.isRude() && 50 <= 100*b.getStress()/b.getStressLimit() ){
+					if (b.isRude() && 50 <= 100 * b.getStress() / b.getStressLimit()) {
 						bodyHasOkazari = p;
 						// フェロモンを持っている相手ならキープ
-						if( p.isbPheromone() ){
+						if (p.isbPheromone()) {
 							bodyHasOkazariAndPherommone = p;
 						}
 					}
 				}
 			}
 			// フェロモンを持っている相手がいれば優先する
-			if( bodyHasPheromone != null ){
+			if (bodyHasPheromone != null) {
 				found = bodyHasPheromone;
 			}
-			if( bodyHasOkazariAndPherommone != null ){
+			if (bodyHasOkazariAndPherommone != null) {
 				bodyHasOkazari = bodyHasOkazariAndPherommone;
 			}
 		}
@@ -330,19 +347,19 @@ public class BodyLogic {
 		// 目標が定まっていないなら終了
 		if (found == null) {
 			//興奮してたらオナニー
-			if(b.isExciting() &&rnd.nextInt(60)==0){
+			if (b.isExciting() && rnd.nextInt(60) == 0) {
 				b.doOnanism();
 				return true;
 			}
 			// とくにすることがないなら親のそばに行く
-//			checkNearParent(b);
+			//			checkNearParent(b);
 			return ret;
 		}
 
 		// 目標が定まったら移動セット
 		int mz = 0;
 		// 飛行種はZも移動可能
-		if(b.canflyCheck()) {
+		if (b.canflyCheck()) {
 			mz = found.getZ();
 		}
 
@@ -352,25 +369,26 @@ public class BodyLogic {
 		// 相手が死体でなく、かつ除去されてなければ
 		if (!found.isDead() && !found.isRemoved()) {
 			// 生まれていない
-			if( b.isUnBirth() ){
+			if (b.isUnBirth()) {
 				return false;
 			}
 			// 生まれていない
-			if( found.isUnBirth()){
+			if (found.isUnBirth()) {
 				return false;
 			}
 
 			// 自分が発情していればすっきりに向かう
 			if (b.isExciting()) {
 				//自分がれいぱー/既婚/（ドゲスで1/10の確率）の場合はすっきりしに行く
-				if(b.isRaper() || (b.isVeryRude() && rnd.nextInt(10) == 0) || b.isPartner(found) || found.isPartner(b)){
+				if (b.isRaper() || (b.isVeryRude() && rnd.nextInt(10) == 0) || b.isPartner(found)
+						|| found.isPartner(b)) {
 					b.moveToSukkiri(found, found.getX() + colX, found.getY(), mz);
 					b.setTargetBind(true);
 				}
 				//れいぱーでない独身勢はプロポーズへ
 				else {
 					//ただし、相手が足りないゆの時はキャンセル
-					if(found.isIdiot() && !b.isIdiot()){
+					if (found.isIdiot() && !b.isIdiot()) {
 						b.setCalm();
 						return true;
 					}
@@ -385,21 +403,21 @@ public class BodyLogic {
 					}
 				}
 				ret = true;
-			}
-			else if (!found.hasOkazari() && b.getOkazari() != null && b.getOkazari().getOkazariType() == OkazariType.DEFAULT && b.isRude() && !b.isIdiot()
-						&& !b.isDamaged() && !found.isUnBirth() && b.getCurrentEvent() == null) {
+			} else if (!found.hasOkazari() && b.getOkazari() != null
+					&& b.getOkazari().getOkazariType() == OkazariType.DEFAULT && b.isRude() && !b.isIdiot()
+					&& !b.isDamaged() && !found.isUnBirth() && b.getCurrentEvent() == null) {
 				// 自分が通常種で相手が捕食種の場合は参加しない
-				if( b.isPredatorType() || !found.isPredatorType()){
+				if (b.isPredatorType() || !found.isPredatorType()) {
 					// 相手がおかざりのないゆっくりなら制裁を呼びかける
-					if(b.isVeryRude() || !found.isDamaged()) {
+					if (b.isVeryRude() || !found.isDamaged()) {
 						if (rnd.nextInt(20) == 0) {
 							if (!b.isTalking()) {
 								// 自分がうんうん奴隷ではない場合
-								if( b.getPublicRank() != PublicRank.UnunSlave )
-								{
+								if (b.getPublicRank() != PublicRank.UnunSlave) {
 									// 非ゆっくり症は参加しない
-									if( b.geteCoreAnkoState() == CoreAnkoState.DEFAULT && found.geteCoreAnkoState() == CoreAnkoState.DEFAULT ){
-										EventLogic.addWorldEvent(new HateNoOkazariEvent(b, found, null, 10), b, MessagePool.getMessage(b, MessagePool.Action.HateYukkuri));
+									if (b.isNotNYD() && found.isNotNYD()) {
+										EventLogic.addWorldEvent(new HateNoOkazariEvent(b, found, null, 10), b,
+												MessagePool.getMessage(b, MessagePool.Action.HateYukkuri));
 									}
 								}
 							}
@@ -410,45 +428,44 @@ public class BodyLogic {
 			}
 
 			// プレイヤーにすりすりされていた場合の処理
-			eActionGo eAct = checkActionSurisuriFromPlayer( b, found );
-			if( eAct != eActionGo.NONE ){
-				if( eAct == eActionGo.GO ){
+			eActionGo eAct = checkActionSurisuriFromPlayer(b, found);
+			if (eAct != eActionGo.NONE) {
+				if (eAct == eActionGo.GO) {
 					// 近づきすぎないように近づく
-					b.moveToBody(found, found.getX() + colX*2, found.getY(), mz);
+					b.moveToBody(found, found.getX() + colX * 2, found.getY(), mz);
 					b.setTargetBind(false);
 				}
 				return true;
 			}
 
-			if( checkEmotionFromUnunSlave( b, found ) ){
+			if (checkEmotionFromUnunSlave(b, found)) {
 				return true;
 			}
 
 			// 自分のおかざりがなくて、相手にお飾りがある。うんうん奴隷のものは奪わない
-			if( bodyHasOkazari != null ){
+			if (bodyHasOkazari != null) {
 				b.setToSteal(false);
 				// 視界内に起きているゆっくりがいない
-				if( !BodyLogic.checkWakeupOtherYukkuri( b ) || rnd.nextInt(20) == 0){
+				if (!BodyLogic.checkWakeupOtherYukkuri(b) || rnd.nextInt(20) == 0) {
 					b.moveToBody(bodyHasOkazari, bodyHasOkazari.getX() + colX, bodyHasOkazari.getY(), mz);
 					b.setTargetBind(false);
 					b.setToSteal(true);
 					return true;
 				}
 			}
-			if(b.getPublicRank() != found.getPublicRank()){
+			if (b.getPublicRank() != found.getPublicRank()) {
 				return false;
 			}
 
 			// 相手に針が刺さっている場合
-			if( found.isNeedled() ){
+			if (found.isNeedled()) {
 				// ランダムで向かう
-				if (rnd.nextInt(50) == 0){
+				if (rnd.nextInt(50) == 0) {
 					if (b.isAdult() && !found.isAdult() && (found.isChild(b) || b.isMother(found))) {
 						// 自分が母親で相手が針の刺さった子供ならぐーりぐーりしにいく
 						b.moveToBody(found, found.getX() + colX, found.getY(), mz);
 						b.setTargetBind(false);
-					}
-					else if (found.isPartner(b)) {
+					} else if (found.isPartner(b)) {
 						// つがいで相手が針の刺さっているならぐーりぐーりしにいく
 						b.moveToBody(found, found.getX() + colX, found.getY(), mz);
 						b.setTargetBind(false);
@@ -459,24 +476,25 @@ public class BodyLogic {
 
 			// 以下相手に針が刺さっていない場合
 
-			if(rnd.nextBoolean()){
-				if (b.isAdult() && !found.isAdult()  && (found.isChild(b) || b.isMother(found)) && (b.getIntelligence() == Intelligence.FOOL && !b.hasOkazari())) {
+			if (rnd.nextBoolean()) {
+				if (b.isAdult() && !found.isAdult() && (found.isChild(b) || b.isMother(found))
+						&& (b.getIntelligence() == Intelligence.FOOL && !b.hasOkazari())) {
 					// 相手が子供でも、子供にお飾りがなくてかつ親がバカならよらない
 					return true;
 				}
 				//相手が子か番で、アリに食われていたらそっちに向かう
-				if(((found.isChild(b) || b.isMother(found))|| b.isPartner(found)) && found.getAttachmentSize(Ants.class) != 0){
+				if (((found.isChild(b) || b.isMother(found)) || b.isPartner(found))
+						&& found.getAttachmentSize(Ants.class) != 0) {
 					b.moveToBody(found, found.getX() + colX, found.getY(), mz);
 					b.setTargetBind(true);
 					return true;
-				}
-				else if (b.isAdult() && !found.isAdult() && found.isNormalDirty() && (found.isChild(b) || b.isMother(found))) {
+				} else if (b.isAdult() && !found.isAdult() && found.isNormalDirty()
+						&& (found.isChild(b) || b.isMother(found))) {
 					// 相手が汚れた子供ならぺろぺろしに向かう
 					b.moveToBody(found, found.getX() + colX, found.getY(), mz);
 					b.setTargetBind(true);
 					return true;
-				}
-				else if (b.isChild(found) && !b.isAdult() && b.isDirty()) {
+				} else if (b.isChild(found) && !b.isAdult() && b.isDirty()) {
 					// 自分が汚れた子供なら家族のところへ向かう
 					b.moveToBody(found, found.getX() + colX, found.getY(), mz);
 					b.setTargetBind(true);
@@ -520,7 +538,7 @@ public class BodyLogic {
 				}
 			}
 
-			if( !ret ){
+			if (!ret) {
 				// 特にすることがないなら親のそばに行く
 				checkNearParent(b);
 			}
@@ -539,32 +557,31 @@ public class BodyLogic {
 				return ret;
 			}
 			// 片方だけがうんうん奴隷の場合はなにもしない
-			if(b.getPublicRank() == found.getPublicRank()){
+			if (b.getPublicRank() == found.getPublicRank()) {
 				// レイパーじゃないなら気にする
-				if(!b.isRaper()){
+				if (!b.isRaper()) {
 					// 家族の死体に嘆く
 					if (b.isAdult()) {
 						if (b.isParent(found) || b.isPartner(found) || found.isParent(b)) {
 							b.moveToBody(found, found.getX() + colX, found.getY(), mz);
 							b.setTargetBind(false);
 							ret = true;
-						}
-						else {
-							if((b.isPredatorType() && found.isPredatorType() || !b.isPredatorType()) && !Terrarium.predatorSteam) {
+						} else {
+							if ((b.isPredatorType() && found.isPredatorType() || !b.isPredatorType())
+									&& !Terrarium.predatorSteam) {
 								b.lookTo(found.getX() + colX, found.getY());
 							}
 						}
-					}
-					else {
+					} else {
 						//自身が対象死体の姉妹または対象死体が自身の親なら、そちらに向かう
 						if (b.isSister(found) || found.isParent(b)) {
 							b.moveToBody(found, found.getX() + colX, found.getY(), mz);
 							b.setTargetBind(false);
 							ret = true;
-						}
-						else {
+						} else {
 							//自身も対象死体も捕食種、または自身が通常種の場合、死体から逃げる
-							if((b.isPredatorType() && found.isPredatorType() || !b.isPredatorType()) && !Terrarium.predatorSteam) {
+							if ((b.isPredatorType() && found.isPredatorType() || !b.isPredatorType())
+									&& !Terrarium.predatorSteam) {
 								b.runAway(found.getX() + colX, found.getY());
 							}
 						}
@@ -574,10 +591,10 @@ public class BodyLogic {
 
 			// フィールドの死体に怯える
 			if (!b.isTalking()) {
-				if((b.isPredatorType() && found.isPredatorType() || !b.isPredatorType()) && !Terrarium.predatorSteam) {
-					if( b.geteCoreAnkoState() == CoreAnkoState.DEFAULT ){
+				if ((b.isPredatorType() && found.isPredatorType() || !b.isPredatorType()) && !Terrarium.predatorSteam) {
+					if (b.isNotNYD()) {
 						// レイパー,捕食種じゃないなら気にする
-						if(!b.isRaper() && !b.isPredatorType() ){
+						if (!b.isRaper() && !b.isPredatorType()) {
 							b.setMessage(MessagePool.getMessage(b, MessagePool.Action.Scare));
 							b.setHappiness(Happiness.SAD);
 							b.addMemories(-1);
@@ -590,9 +607,9 @@ public class BodyLogic {
 	}
 
 	// 接触している場合の動作
-	public static final boolean doActionOther(Body p, Body b){
+	public static final boolean doActionOther(Body p, Body b) {
 		// 途中で消されてたら他の候補を探す
-		if(p.isRemoved()) {
+		if (p.isRemoved()) {
 			b.clearActions();
 			return false;
 		}
@@ -603,20 +620,20 @@ public class BodyLogic {
 			return false;
 		}
 
-		if( b.geteCoreAnkoState() != CoreAnkoState.DEFAULT ){
+		if (b.isNYD()) {
 			return false;
 		}
 
 		// 片方だけがうんうん奴隷の場合はなにもしない
-		if(b.getPublicRank() != p.getPublicRank() && !(b.isRaper() && b.isExciting())) {
+		if (b.getPublicRank() != p.getPublicRank() && !(b.isRaper() && b.isExciting())) {
 			// 盗みに行かない場合は終了
-			if( !b.isToSteal()){
+			if (!b.isToSteal()) {
 				b.clearActions();
 				return false;
 			}
 		}
 
-		int rangeX = Translate.invertX((int)((b.getCollisionX() + p.getCollisionX()) * 0.6f), p.getY());
+		int rangeX = Translate.invertX((int) ((b.getCollisionX() + p.getCollisionX()) * 0.6f), p.getY());
 		rangeX = Translate.transSize(rangeX);
 		int distX = Math.abs(b.getX() - p.getX());
 		int distY = Math.abs(b.getY() - p.getY());
@@ -630,14 +647,13 @@ public class BodyLogic {
 				// 相手が死体の場合
 				// 発情してたらすっきり
 				if (b.isExciting()) {
-					if(b.isRaper()) {
-						if(!p.isRaper()){
+					if (b.isRaper()) {
+						if (!p.isRaper()) {
 							b.doRape(p);
 							b.clearActions();
 							return true;
 						}
-					}
-					else {
+					} else {
 						b.doOnanism(p);
 						b.clearActions();
 						return true;
@@ -650,13 +666,12 @@ public class BodyLogic {
 						if (b.isParent(p)) {
 							b.setMessage(MessagePool.getMessage(b, MessagePool.Action.SadnessForChild));
 							//if(rnd.nextInt(10)==0 ){
-								if(b.checkWait(2000) ){
-									b.setLastActionTime();
-									EventLogic.addWorldEvent(new FuneralEvent(b, p, null, 10), b, null);
-								}
+							if (b.checkWait(2000)) {
+								b.setLastActionTime();
+								EventLogic.addWorldEvent(new FuneralEvent(b, p, null, 10), b, null);
+							}
 							//}
-						}
-						else if (b.isPartner(p)) {
+						} else if (b.isPartner(p)) {
 							b.setMessage(MessagePool.getMessage(b, MessagePool.Action.SadnessForPartner));
 						}
 						b.setHappiness(Happiness.VERY_SAD);
@@ -679,13 +694,12 @@ public class BodyLogic {
 					//b.clearActions();
 					return true;
 				}
-				if (b.isSister(p)){
+				if (b.isSister(p)) {
 					// 相手が姉妹なら嘆く
 					if (!b.isTalking()) {
 						if (b.getAge() < p.getAge()) {
 							b.setMessage(MessagePool.getMessage(b, MessagePool.Action.SadnessForEldersister));
-						}
-						else {
+						} else {
 							b.setMessage(MessagePool.getMessage(b, MessagePool.Action.SadnessForSister));
 						}
 						b.setHappiness(Happiness.VERY_SAD);
@@ -700,26 +714,26 @@ public class BodyLogic {
 			}
 
 			// おかざり盗み
-			if( b.isToSteal()){
+			if (b.isToSteal()) {
 				// 自分のおかざりがなくて、相手にお飾りがある。うんうん奴隷のものは奪わない
-				if( !b.hasOkazari() && p.hasOkazari() && b.getBodyAgeState() == p.getBodyAgeState() &&
-					b.getType() == p.getType() && b.getType() != HybridYukkuri.type && p.getOkazari().getOkazariType() == OkazariType.DEFAULT &&
-					p.getPublicRank() == PublicRank.NONE && !b.isLockmove() )
-				{
+				if (!b.hasOkazari() && p.hasOkazari() && b.getBodyAgeState() == p.getBodyAgeState() &&
+						b.getType() == p.getType() && b.getType() != HybridYukkuri.type
+						&& p.getOkazari().getOkazariType() == OkazariType.DEFAULT &&
+						p.getPublicRank() == PublicRank.NONE && !b.isLockmove()) {
 					// ゲス,ストレスが50%以上
-					if( b.isRude() && 50 <= 100*b.getStress()/b.getStressLimit() ){
+					if (b.isRude() && 50 <= 100 * b.getStress() / b.getStressLimit()) {
 						// 視界内に起きている一般ゆがいない
-						if( !BodyLogic.checkWakeupOtherYukkuri( b ) ){
+						if (!BodyLogic.checkWakeupOtherYukkuri(b)) {
 							// 自分が奴隷で相手が奴隷ではないなら格上げ
-							if( b.getPublicRank() != PublicRank.NONE && p.getPublicRank() == PublicRank.NONE ){
+							if (b.getPublicRank() != PublicRank.NONE && p.getPublicRank() == PublicRank.NONE) {
 								b.setPublicRank(PublicRank.NONE);
 							}
 							p.takeOkazari(false);
-							b.giveOkazari( OkazariType.DEFAULT );
+							b.giveOkazari(OkazariType.DEFAULT);
 							b.setHappiness(Happiness.HAPPY);
 							b.setMessage(MessagePool.getMessage(b, MessagePool.Action.GetOtherAccessoryStealthily));
 							b.addMemories(100);
-							b.addStress(-b.getStressLimit()/2);
+							b.addStress(-b.getStressLimit() / 2);
 							b.clearActions();
 							b.stay();
 							return true;
@@ -734,12 +748,11 @@ public class BodyLogic {
 			// 自分が発情してたらすっきり実行
 			if (b.isExciting()) {
 				// れいぱーまたは確率でドゲスはれいぷする
-				if(b.isRaper() || b.isVeryRude()) {
-					if(!p.isRaper()) {
-						if(b.getX() < p.getX()) {
+				if (b.isRaper() || b.isVeryRude()) {
+					if (!p.isRaper()) {
+						if (b.getX() < p.getX()) {
 							b.setDirection(Direction.RIGHT);
-						}
-						else {
+						} else {
 							b.setDirection(Direction.LEFT);
 						}
 						b.constraintDirection(p, true);
@@ -749,20 +762,19 @@ public class BodyLogic {
 					}
 				} else {
 					// 大人が相手の場合は、プロポーズしてからすっきりする
-					if(p.isAdult() ){
+					if (p.isAdult()) {
 						b.constraintDirection(p, false);
 						b.clearActions();
-						if(b.isPartner(p) || p.isPartner(b)){
+						if (b.isPartner(p) || p.isPartner(b)) {
 							b.doSukkiri(p);
 							return true;
-						}
-						else{
+						} else {
 							b.doOnanism();
 							return true;
 						}
 					}
 					//強制的に発情させられた場合は見境なし
-					if(b.isForceExciting()){
+					if (b.isForceExciting()) {
 						b.doSukkiri(p);
 						b.clearActions();
 					}
@@ -770,18 +782,16 @@ public class BodyLogic {
 			}
 
 			// 相手に針が刺さっている場合
-			if( p.isNeedled()  ){
+			if (p.isNeedled()) {
 				if (b.isAdult() && !p.isAdult() && (p.isChild(b) || b.isMother(p))) {
 					// 自分が母親で相手が針の刺さった子供ならぐーりぐーり
 					b.constraintDirection(p, false);
 					b.doGuriguri(p);
-				}
-				else if (p.isPartner(b)) {
+				} else if (p.isPartner(b)) {
 					// つがいで相手が針の刺さっているならぐーりぐーり
 					b.constraintDirection(p, false);
 					b.doGuriguri(p);
-				}
-				else if (!b.isAdult() && b.isSister(p) && rnd.nextInt(1) == 0){
+				} else if (!b.isAdult() && b.isSister(p) && rnd.nextInt(1) == 0) {
 					// 姉妹で相手が針の刺さっているならぐーりぐーり
 					b.constraintDirection(p, false);
 					b.doGuriguri(p);
@@ -791,33 +801,35 @@ public class BodyLogic {
 			}
 
 			//自分がかびてなくてかつ、相手がかびてるとき
-			if (b.findSick(p) && !b.isSick()){
+			if (b.findSick(p) && !b.isSick()) {
 				EventLogic.addBodyEvent(b, new AvoidMoldEvent(b, p, null, 1), null, null);
 				return true;
 			}
 			//相手がかびてなくてかつ、自分がかびてるとき
-			if (p.findSick(b) && !p.isSick()){
+			if (p.findSick(b) && !p.isSick()) {
 				EventLogic.addBodyEvent(p, new AvoidMoldEvent(p, b, null, 1), null, null);
 				return true;
 			}
 			// 相手が子供でも、子供にお飾りがなくてかつ親がバカならなら制裁する
-			if (b.isAdult() && !p.isAdult() && (p.isChild(b) || b.isMother(p)) && (b.getIntelligence() == Intelligence.FOOL && !p.hasOkazari()) ) {
-				if(b.getCurrentEvent() == null && p.geteCoreAnkoState() != CoreAnkoState.DEFAULT  && rnd.nextBoolean() ){
+			if (b.isAdult() && !p.isAdult() && (p.isChild(b) || b.isMother(p))
+					&& (b.getIntelligence() == Intelligence.FOOL && !p.hasOkazari())) {
+				if (b.getCurrentEvent() == null && p.isNYD() && rnd.nextBoolean()) {
 					b.clearActions();
-					EventLogic.addWorldEvent(new HateNoOkazariEvent(b, p, null, 10), b, MessagePool.getMessage(b, MessagePool.Action.HateYukkuri));
+					EventLogic.addWorldEvent(new HateNoOkazariEvent(b, p, null, 10), b,
+							MessagePool.getMessage(b, MessagePool.Action.HateYukkuri));
 				}
 				return true;
 			}
 			//相手がありに食われてる時
-			if(p.getAttachmentSize(Ants.class)!=0){
+			if (p.getAttachmentSize(Ants.class) != 0) {
 				//自分がアリに食われてない時のみ相手をぺろぺろする余裕がある
-				if (b.getAttachmentSize(Ants.class)==0) {
+				if (b.getAttachmentSize(Ants.class) == 0) {
 					b.doPeropero(p);
 				}
 			}
 
 			// 餌を保持している
-			if(b.isParent(p) && p.isVeryHungry() && !p.isAdult() && b.getTakeoutItem(TakeoutItemType.FOOD) != null){
+			if (b.isParent(p) && p.isVeryHungry() && !p.isAdult() && b.getTakeoutItem(TakeoutItemType.FOOD) != null) {
 				// 吐き出す
 				b.setMessage(MessagePool.getMessage(b, MessagePool.Action.GiveFood), false);
 				b.dropTakeoutItem(TakeoutItemType.FOOD);
@@ -828,11 +840,11 @@ public class BodyLogic {
 				// 自分が親で相手が子供の時のスキンシップ
 				b.constraintDirection(p, false);
 				//相手が汚れていてかつ自分が母親の時か、ランダムでぺろぺろ
-				if((p.isDirty() &&b.isMother(p)) || rnd.nextBoolean()){
+				if ((p.isDirty() && b.isMother(p)) || rnd.nextBoolean()) {
 					b.doPeropero(p);
 				}
 				//他はすりすり
-				else if(rnd.nextBoolean()){
+				else if (rnd.nextBoolean()) {
 					b.doSurisuri(p);
 				}
 				b.clearActions();
@@ -845,19 +857,19 @@ public class BodyLogic {
 				b.clearActions();
 				return true;
 			}
-			if(!b.isAdult() && (b.isChild(p) || p.isParent(b)) ){
+			if (!b.isAdult() && (b.isChild(p) || p.isParent(b))) {
 				//自分が子供で、相手が親の時のスキンシップ
 				b.constraintDirection(p, false);
 				//自分が汚れた赤ゆなら、ぺろぺろしてもらう
-				if(b.isBaby() && b.isDirty() && p.isMother(b)){
+				if (b.isBaby() && b.isDirty() && p.isMother(b)) {
 					p.doPeropero(b);
 				}
 				//親がダメージ食らってたらランダムでぺろぺろ
-				if(p.isDamaged() && rnd.nextBoolean()){
+				if (p.isDamaged() && rnd.nextBoolean()) {
 					b.doPeropero(p);
 				}
 				//他はすりすり
-				else if(rnd.nextBoolean()){
+				else if (rnd.nextBoolean()) {
 					b.doSurisuri(p);
 				}
 				b.clearActions();
@@ -867,24 +879,21 @@ public class BodyLogic {
 				// 姉妹の場合のスキンシップ
 				//善良で、赤ゆでなく、相手が汚れていたら無条件でぺろぺろ
 				b.constraintDirection(p, false);
-				if ( b.isSmart() && !b.isBaby() && p.isDirty()) {
+				if (b.isSmart() && !b.isBaby() && p.isDirty()) {
 					b.doPeropero(p);
-				}
-				else {
+				} else {
 					if (p.isDamaged() && rnd.nextBoolean()) {
 						if (b.isElderSister(p)) {
 							b.setMessage(MessagePool.getMessage(b, MessagePool.Action.ConcernAboutEldersister));
-						} else{
+						} else {
 							b.setMessage(MessagePool.getMessage(b, MessagePool.Action.ConcernAboutSister));
 						}
 						b.setHappiness(Happiness.SAD);
 						b.stay();
 						p.stay();
-					}
-					else if(p.isDamaged() && rnd.nextBoolean()){
+					} else if (p.isDamaged() && rnd.nextBoolean()) {
 						b.doPeropero(p);
-					}
-					else if(rnd.nextBoolean()){
+					} else if (rnd.nextBoolean()) {
 						b.doSurisuri(p);
 					}
 				}
@@ -897,18 +906,19 @@ public class BodyLogic {
 		//非接触状態の場合
 		else {
 			int dir = 1;
-			if(b.getX() < p.getX()) dir = -1;
+			if (b.getX() < p.getX())
+				dir = -1;
 			rangeX *= dir;
-			if(b.canflyCheck()) {
+			if (b.canflyCheck()) {
 				b.moveTo(p.getX() + rangeX, p.getY(), p.getZ());
-			}
-			else {
+			} else {
 				b.moveTo(p.getX() + rangeX, p.getY());
 			}
 			// 相手に追いつけないケースがあるため、一定距離まで近づいたら相手を呼び止める
-			if(Translate.distance(b.getX(), b.getY(), p.getX(), p.getY()) < 2500) {
+			if (Translate.distance(b.getX(), b.getY(), p.getX(), p.getY()) < 2500) {
 				if (rnd.nextInt(3) == 0) {
-					if(b.isTargetBind()) p.stay();
+					if (b.isTargetBind())
+						p.stay();
 				}
 			}
 		}
@@ -917,440 +927,432 @@ public class BodyLogic {
 
 	// 体同士が触れる位置のX座標を求める
 	public static final int calcCollisionX(Body from, Body to) {
-		if(from == null || to == null )
-		{
+		if (from == null || to == null) {
 			return 0;
 		}
 
-		int colX = Translate.invertX((int)((from.getCollisionX() + to.getCollisionX()) * 0.6f), to.getY());
+		int colX = Translate.invertX((int) ((from.getCollisionX() + to.getCollisionX()) * 0.6f), to.getY());
 		colX = Translate.transSize(colX);
 
 		// お互いの位置から右と左最短距離を選択
 		int dir = 1;
-		if(from.getX() < to.getX()) dir = -1;
+		if (from.getX() < to.getX())
+			dir = -1;
 		colX *= dir;
 
 		return colX;
 	}
 
-
 	// 他のゆっくりがプレイヤーにすりすりされていた場合の行動判定
-	public static final eActionGo checkActionSurisuriFromPlayer(Body b, Body bodyTarget){
+	public static final eActionGo checkActionSurisuriFromPlayer(Body b, Body bodyTarget) {
 		// 例外除去
-		if( b==null || bodyTarget == null){
+		if (b == null || bodyTarget == null) {
 			return eActionGo.NONE;
 		}
-		if( !bodyTarget.isbSurisuriFromPlayer() ){
+		if (!bodyTarget.isbSurisuriFromPlayer()) {
 			return eActionGo.NONE;
 		}
 
 		// 一定確率以上は終了
-		if( rnd.nextInt(10) != 0){
+		if (rnd.nextInt(10) != 0) {
 			return eActionGo.NONE;
 		}
 
 		// 障害ゆは反応しない
-		if( b.isIdiot()){
+		if (b.isIdiot()) {
 			return eActionGo.NONE;
 		}
-		if( b.geteCoreAnkoState() != CoreAnkoState.DEFAULT ){
+		if (b.isNYD()) {
 			return eActionGo.NONE;
 		}
 
 		boolean[] abEmote = new boolean[7];
 		abEmote = EmotionLogic.checkEmotionForOther(b, bodyTarget);
 		// 自分との関係
-		EnumRelationMine eRelation = checkMyRelation(b ,bodyTarget);
+		EnumRelationMine eRelation = checkMyRelation(b, bodyTarget);
 		eActionGo eAct = eActionGo.NONE;
 
 		// 喜ぶ
-		if( (abEmote[0] )){
-			switch( eRelation ){
-				case FATHER: // 父
-				case MOTHER: // 母
-					// 子供の状態を喜ぶ
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.GladAboutChild));
-					b.setHappiness(Happiness.HAPPY);
-					b.stay();
-					eAct = eActionGo.GO;
-					break;
-				case PARTNAR: // つがい
-					// つがいの状態を喜ぶ
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.GladAboutPartner));
-					b.setHappiness(Happiness.HAPPY);
-					b.stay();
-					eAct = eActionGo.GO;
-					break;
-				case CHILD_FATHER: // 父の子供
-					// 父の状態を喜ぶ
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.GladAboutFather));
-					b.setHappiness(Happiness.HAPPY);
-					b.stay();
-					eAct = eActionGo.GO;
-					break;
-				case CHILD_MOTHER: // 母の子供
-					// 母の状態を喜ぶ
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.GladAboutMother));
-					b.setHappiness(Happiness.HAPPY);
-					b.stay();
-					eAct = eActionGo.GO;
-					break;
-				case ELDERSISTER: // 姉
-					// 妹の状態を喜ぶ
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.GladAboutSister));
-					b.setHappiness(Happiness.HAPPY);
-					b.stay();
-					eAct = eActionGo.GO;
-					break;
-				case YOUNGSISTER: // 妹
-					// 姉の状態を喜ぶ
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.GladAboutElderSister));
-					b.setHappiness(Happiness.HAPPY);
-					b.stay();
-					eAct = eActionGo.GO;
-					break;
-				default : // 他人
-					break;
+		if ((abEmote[0])) {
+			switch (eRelation) {
+			case FATHER: // 父
+			case MOTHER: // 母
+				// 子供の状態を喜ぶ
+				b.setMessage(MessagePool.getMessage(b, MessagePool.Action.GladAboutChild));
+				b.setHappiness(Happiness.HAPPY);
+				b.stay();
+				eAct = eActionGo.GO;
+				break;
+			case PARTNAR: // つがい
+				// つがいの状態を喜ぶ
+				b.setMessage(MessagePool.getMessage(b, MessagePool.Action.GladAboutPartner));
+				b.setHappiness(Happiness.HAPPY);
+				b.stay();
+				eAct = eActionGo.GO;
+				break;
+			case CHILD_FATHER: // 父の子供
+				// 父の状態を喜ぶ
+				b.setMessage(MessagePool.getMessage(b, MessagePool.Action.GladAboutFather));
+				b.setHappiness(Happiness.HAPPY);
+				b.stay();
+				eAct = eActionGo.GO;
+				break;
+			case CHILD_MOTHER: // 母の子供
+				// 母の状態を喜ぶ
+				b.setMessage(MessagePool.getMessage(b, MessagePool.Action.GladAboutMother));
+				b.setHappiness(Happiness.HAPPY);
+				b.stay();
+				eAct = eActionGo.GO;
+				break;
+			case ELDERSISTER: // 姉
+				// 妹の状態を喜ぶ
+				b.setMessage(MessagePool.getMessage(b, MessagePool.Action.GladAboutSister));
+				b.setHappiness(Happiness.HAPPY);
+				b.stay();
+				eAct = eActionGo.GO;
+				break;
+			case YOUNGSISTER: // 妹
+				// 姉の状態を喜ぶ
+				b.setMessage(MessagePool.getMessage(b, MessagePool.Action.GladAboutElderSister));
+				b.setHappiness(Happiness.HAPPY);
+				b.stay();
+				eAct = eActionGo.GO;
+				break;
+			default: // 他人
+				break;
 			}
 		}
 
 		// 処理が決まったら終了
-		if( eAct != eActionGo.NONE ){
+		if (eAct != eActionGo.NONE) {
 			return eAct;
 		}
-
 
 		// 羨望
 		// うらやましくて悲しいかつ怒ってない
-		if( (abEmote[2] ) && (abEmote[5] ) && !abEmote[1]){
-			switch( eRelation ){
-				case FATHER: // 父
-				case MOTHER: // 母
-				case PARTNAR: // つがい
-				case CHILD_FATHER: // 父の子供
-				case CHILD_MOTHER: // 母の子供
-				case ELDERSISTER: // 姉
-					// 妹の状態をうらやましがって泣く
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.EnvyCryAboutSisterInSurisuri));
-					b.setHappiness(Happiness.VERY_SAD);
-					b.stay();
-					eAct = eActionGo.GO;
-					break;
-				case YOUNGSISTER: // 妹
-					// 姉の状態をうらやましがって泣く
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.EnvyCryAboutElderSisterInSurisuri));
-					b.setHappiness(Happiness.VERY_SAD);
-					b.stay();
-					eAct = eActionGo.GO;
-					break;
-				default : // 他人
-					// 他人をうらやましがって泣く
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.EnvyCryAboutOther));
-					b.setHappiness(Happiness.SAD);
-					b.stay();
-					eAct = eActionGo.WAIT;
-					break;
+		if ((abEmote[2]) && (abEmote[5]) && !abEmote[1]) {
+			switch (eRelation) {
+			case FATHER: // 父
+			case MOTHER: // 母
+			case PARTNAR: // つがい
+			case CHILD_FATHER: // 父の子供
+			case CHILD_MOTHER: // 母の子供
+			case ELDERSISTER: // 姉
+				// 妹の状態をうらやましがって泣く
+				b.setMessage(MessagePool.getMessage(b, MessagePool.Action.EnvyCryAboutSisterInSurisuri));
+				b.setHappiness(Happiness.VERY_SAD);
+				b.stay();
+				eAct = eActionGo.GO;
+				break;
+			case YOUNGSISTER: // 妹
+				// 姉の状態をうらやましがって泣く
+				b.setMessage(MessagePool.getMessage(b, MessagePool.Action.EnvyCryAboutElderSisterInSurisuri));
+				b.setHappiness(Happiness.VERY_SAD);
+				b.stay();
+				eAct = eActionGo.GO;
+				break;
+			default: // 他人
+				// 他人をうらやましがって泣く
+				b.setMessage(MessagePool.getMessage(b, MessagePool.Action.EnvyCryAboutOther));
+				b.setHappiness(Happiness.SAD);
+				b.stay();
+				eAct = eActionGo.WAIT;
+				break;
 			}
 		}
 		// 処理が決まったら終了
-		if( eAct != eActionGo.NONE ){
+		if (eAct != eActionGo.NONE) {
 			return eAct;
 		}
-
 
 		// 羨望2
 		// うらやましいけど怒ってない
-		if( (abEmote[5] ) && !abEmote[1] ){
-			switch( eRelation ){
-				case FATHER: // 父
-				case MOTHER: // 母
-				case PARTNAR: // つがい
-				case CHILD_FATHER: // 父の子供
-				case CHILD_MOTHER: // 母の子供
-					break;
-				case ELDERSISTER: // 姉
-					// 姉の状態をうらやましがる
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.EnvyAboutSisterInSurisuri));
-					b.setHappiness(Happiness.SAD);
-					b.stay();
-					eAct = eActionGo.GO;
-					break;
-				case YOUNGSISTER: // 妹
-					// 姉の状態をうらやましがる
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.EnvyAboutSisterInSurisuri));
-					b.setHappiness(Happiness.SAD);
-					b.stay();
-					eAct = eActionGo.GO;
-					break;
-				default : // 他人
-					// 他人をうらやましがる
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.EnvyAboutOther));
-					b.setHappiness(Happiness.SAD);
-					b.stay();
-					eAct = eActionGo.WAIT;
-					break;
+		if ((abEmote[5]) && !abEmote[1]) {
+			switch (eRelation) {
+			case FATHER: // 父
+			case MOTHER: // 母
+			case PARTNAR: // つがい
+			case CHILD_FATHER: // 父の子供
+			case CHILD_MOTHER: // 母の子供
+				break;
+			case ELDERSISTER: // 姉
+				// 姉の状態をうらやましがる
+				b.setMessage(MessagePool.getMessage(b, MessagePool.Action.EnvyAboutSisterInSurisuri));
+				b.setHappiness(Happiness.SAD);
+				b.stay();
+				eAct = eActionGo.GO;
+				break;
+			case YOUNGSISTER: // 妹
+				// 姉の状態をうらやましがる
+				b.setMessage(MessagePool.getMessage(b, MessagePool.Action.EnvyAboutSisterInSurisuri));
+				b.setHappiness(Happiness.SAD);
+				b.stay();
+				eAct = eActionGo.GO;
+				break;
+			default: // 他人
+				// 他人をうらやましがる
+				b.setMessage(MessagePool.getMessage(b, MessagePool.Action.EnvyAboutOther));
+				b.setHappiness(Happiness.SAD);
+				b.stay();
+				eAct = eActionGo.WAIT;
+				break;
 			}
 		}
 		// 処理が決まったら終了
-		if( eAct != eActionGo.NONE ){
+		if (eAct != eActionGo.NONE) {
 			return eAct;
 		}
-
 
 		//羨望3
 		// うらやましくて怒ってる
-		if( (abEmote[5] ) && (abEmote[1] )){
+		if ((abEmote[5]) && (abEmote[1])) {
 			b.addMemories(-1);
 			// うらやましすぎて憎む
-			switch( eRelation ){
-				case FATHER: // 父
-				case MOTHER: // 母
-					// 子供の状態を憎む
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateWithEnvyAboutChild));
-					b.setHappiness(Happiness.VERY_SAD);
-					b.stay();
-					eAct = eActionGo.WAIT;
-					break;
-				case PARTNAR: // つがい
-					// 子供の状態を憎む
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateWithEnvyAboutPartner));
-					b.setHappiness(Happiness.VERY_SAD);
-					b.stay();
-					eAct = eActionGo.WAIT;
-					break;
-				case CHILD_FATHER: // 父の子供
-					// 父の状態を憎む
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateWithEnvyAboutFather));
-					b.setHappiness(Happiness.VERY_SAD);
-					b.stay();
-					eAct = eActionGo.WAIT;
-					break;
-				case CHILD_MOTHER: // 母の子供
-					// 母の状態を憎む
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateWithEnvyAboutMother));
-					b.setHappiness(Happiness.VERY_SAD);
-					b.stay();
-					eAct = eActionGo.WAIT;
-					break;
-				case ELDERSISTER: // 姉
-					// 妹の状態を憎む
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateWithEnvyAboutSister));
-					b.setHappiness(Happiness.VERY_SAD);
-					b.stay();
-					eAct = eActionGo.WAIT;
-					break;
-				case YOUNGSISTER: // 妹
-					// 姉の状態を憎む
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateWithEnvyAboutElderSister));
-					b.setHappiness(Happiness.VERY_SAD);
-					b.stay();
-					eAct = eActionGo.WAIT;
-					break;
-				default : // 他人
-					// 他人の状態を憎む
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateWithEnvyAboutOther));
-					b.setHappiness(Happiness.VERY_SAD);
-					b.stay();
-					eAct = eActionGo.WAIT;
-					break;
+			switch (eRelation) {
+			case FATHER: // 父
+			case MOTHER: // 母
+				// 子供の状態を憎む
+				b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateWithEnvyAboutChild));
+				b.setHappiness(Happiness.VERY_SAD);
+				b.stay();
+				eAct = eActionGo.WAIT;
+				break;
+			case PARTNAR: // つがい
+				// 子供の状態を憎む
+				b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateWithEnvyAboutPartner));
+				b.setHappiness(Happiness.VERY_SAD);
+				b.stay();
+				eAct = eActionGo.WAIT;
+				break;
+			case CHILD_FATHER: // 父の子供
+				// 父の状態を憎む
+				b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateWithEnvyAboutFather));
+				b.setHappiness(Happiness.VERY_SAD);
+				b.stay();
+				eAct = eActionGo.WAIT;
+				break;
+			case CHILD_MOTHER: // 母の子供
+				// 母の状態を憎む
+				b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateWithEnvyAboutMother));
+				b.setHappiness(Happiness.VERY_SAD);
+				b.stay();
+				eAct = eActionGo.WAIT;
+				break;
+			case ELDERSISTER: // 姉
+				// 妹の状態を憎む
+				b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateWithEnvyAboutSister));
+				b.setHappiness(Happiness.VERY_SAD);
+				b.stay();
+				eAct = eActionGo.WAIT;
+				break;
+			case YOUNGSISTER: // 妹
+				// 姉の状態を憎む
+				b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateWithEnvyAboutElderSister));
+				b.setHappiness(Happiness.VERY_SAD);
+				b.stay();
+				eAct = eActionGo.WAIT;
+				break;
+			default: // 他人
+				// 他人の状態を憎む
+				b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateWithEnvyAboutOther));
+				b.setHappiness(Happiness.VERY_SAD);
+				b.stay();
+				eAct = eActionGo.WAIT;
+				break;
 			}
 		}
 		// 処理が決まったら終了
-		if( eAct != eActionGo.NONE ){
+		if (eAct != eActionGo.NONE) {
 			return eAct;
 		}
 
-
 		//恐怖1
 		// 心配してない
-		if( !abEmote[2]  && (abEmote[4] ) ){
+		if (!abEmote[2] && (abEmote[4])) {
 			// ゆっくりできない
-			switch( eRelation ){
-				case FATHER: // 父
-				case MOTHER: // 母
-				case PARTNAR: // つがい
-				case CHILD_FATHER: // 父の子供
-				case CHILD_MOTHER: // 母の子供
-				case ELDERSISTER: // 姉
-				case YOUNGSISTER: // 妹
-				default : // 他人
-					eAct = eActionGo.WAIT;
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.Scare));
-					b.setHappiness(Happiness.SAD);
-					b.stay();
-					break;
+			switch (eRelation) {
+			case FATHER: // 父
+			case MOTHER: // 母
+			case PARTNAR: // つがい
+			case CHILD_FATHER: // 父の子供
+			case CHILD_MOTHER: // 母の子供
+			case ELDERSISTER: // 姉
+			case YOUNGSISTER: // 妹
+			default: // 他人
+				eAct = eActionGo.WAIT;
+				b.setMessage(MessagePool.getMessage(b, MessagePool.Action.Scare));
+				b.setHappiness(Happiness.SAD);
+				b.stay();
+				break;
 			}
 		}
 		// 処理が決まったら終了
-		if( eAct != eActionGo.NONE ){
+		if (eAct != eActionGo.NONE) {
 			return eAct;
 		}
 
 		//心配2
 		// +悲しい怖い
-		if( (abEmote[2] ) && (abEmote[6] ) && (abEmote[4] )){
-			switch( eRelation ){
+		if ((abEmote[2]) && (abEmote[6]) && (abEmote[4])) {
+			switch (eRelation) {
 			// 家族は怯えながら励ます
-				case FATHER: // 父
-				case MOTHER: // 母
-					// 子供を励ます
-					eAct = eActionGo.GO;
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.ConcernAboutChild));
-					b.setHappiness(Happiness.VERY_SAD);
-					b.stay();
-					break;
-				case PARTNAR: // つがい
-					// つがいを励ます
-					eAct = eActionGo.GO;
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.ConcernAboutPartner));
-					b.setHappiness(Happiness.VERY_SAD);
-					b.stay();
-					break;
-				case CHILD_FATHER: // 父の子供
-					// 父を励ます
-					eAct = eActionGo.GO;
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.ConcernAboutFather));
-					b.setHappiness(Happiness.VERY_SAD);
-					b.stay();
-					break;
-				case CHILD_MOTHER: // 母の子供
-					// 母を励ます
-					eAct = eActionGo.GO;
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.ConcernAboutMother));
-					b.setHappiness(Happiness.VERY_SAD);
-					b.stay();
-					break;
-				case ELDERSISTER: // 姉
-					// 姉を励ます
-					eAct = eActionGo.GO;
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.ConcernAboutEldersister));
-					b.setHappiness(Happiness.VERY_SAD);
-					b.stay();
-					break;
-				case YOUNGSISTER: // 妹
-					// 妹を励ます
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.ConcernAboutEldersister));
-					b.setHappiness(Happiness.VERY_SAD);
-					b.stay();
-					eAct = eActionGo.GO;
-					break;
-				default : // 他人
-					break;
+			case FATHER: // 父
+			case MOTHER: // 母
+				// 子供を励ます
+				eAct = eActionGo.GO;
+				b.setMessage(MessagePool.getMessage(b, MessagePool.Action.ConcernAboutChild));
+				b.setHappiness(Happiness.VERY_SAD);
+				b.stay();
+				break;
+			case PARTNAR: // つがい
+				// つがいを励ます
+				eAct = eActionGo.GO;
+				b.setMessage(MessagePool.getMessage(b, MessagePool.Action.ConcernAboutPartner));
+				b.setHappiness(Happiness.VERY_SAD);
+				b.stay();
+				break;
+			case CHILD_FATHER: // 父の子供
+				// 父を励ます
+				eAct = eActionGo.GO;
+				b.setMessage(MessagePool.getMessage(b, MessagePool.Action.ConcernAboutFather));
+				b.setHappiness(Happiness.VERY_SAD);
+				b.stay();
+				break;
+			case CHILD_MOTHER: // 母の子供
+				// 母を励ます
+				eAct = eActionGo.GO;
+				b.setMessage(MessagePool.getMessage(b, MessagePool.Action.ConcernAboutMother));
+				b.setHappiness(Happiness.VERY_SAD);
+				b.stay();
+				break;
+			case ELDERSISTER: // 姉
+				// 姉を励ます
+				eAct = eActionGo.GO;
+				b.setMessage(MessagePool.getMessage(b, MessagePool.Action.ConcernAboutEldersister));
+				b.setHappiness(Happiness.VERY_SAD);
+				b.stay();
+				break;
+			case YOUNGSISTER: // 妹
+				// 妹を励ます
+				b.setMessage(MessagePool.getMessage(b, MessagePool.Action.ConcernAboutEldersister));
+				b.setHappiness(Happiness.VERY_SAD);
+				b.stay();
+				eAct = eActionGo.GO;
+				break;
+			default: // 他人
+				break;
 			}
 		}
 		// 処理が決まったら終了
-		if( eAct != eActionGo.NONE ){
+		if (eAct != eActionGo.NONE) {
 			return eAct;
 		}
-
 
 		//心配3
 		//+悲しいかつ怖くない
-		if( (abEmote[2] ) && (abEmote[6] ) && !abEmote[4] ){
+		if ((abEmote[2]) && (abEmote[6]) && !abEmote[4]) {
 			// 家族は励ます
-			switch( eRelation ){
-				case FATHER: // 父
-				case MOTHER: // 母
-					// 子供を励ます
-					eAct = eActionGo.GO;
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.ConcernAboutChild));
-					b.setHappiness(Happiness.SAD);
-					b.stay();
-					break;
-				case PARTNAR: // つがい
-					// つがいを励ます
-					eAct = eActionGo.GO;
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.ConcernAboutPartner));
-					b.setHappiness(Happiness.SAD);
-					b.stay();
-					break;
-				case CHILD_FATHER: // 父の子供
-					// 父を励ます
-					eAct = eActionGo.GO;
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.ConcernAboutFather));
-					b.setHappiness(Happiness.SAD);
-					b.stay();
-					break;
-				case CHILD_MOTHER: // 母の子供
-					// 母を励ます
-					eAct = eActionGo.GO;
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.ConcernAboutMother));
-					b.setHappiness(Happiness.SAD);
-					b.stay();
-					break;
-				case ELDERSISTER: // 姉
-					// 姉を励ます
-					eAct = eActionGo.GO;
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.ConcernAboutEldersister));
-					b.setHappiness(Happiness.SAD);
-					b.stay();
-					break;
-				case YOUNGSISTER: // 妹
-					// 妹を励ます
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.ConcernAboutEldersister));
-					b.setHappiness(Happiness.SAD);
-					b.stay();
-					eAct = eActionGo.GO;
-					break;
-				default : // 他人
-					break;
+			switch (eRelation) {
+			case FATHER: // 父
+			case MOTHER: // 母
+				// 子供を励ます
+				eAct = eActionGo.GO;
+				b.setMessage(MessagePool.getMessage(b, MessagePool.Action.ConcernAboutChild));
+				b.setHappiness(Happiness.SAD);
+				b.stay();
+				break;
+			case PARTNAR: // つがい
+				// つがいを励ます
+				eAct = eActionGo.GO;
+				b.setMessage(MessagePool.getMessage(b, MessagePool.Action.ConcernAboutPartner));
+				b.setHappiness(Happiness.SAD);
+				b.stay();
+				break;
+			case CHILD_FATHER: // 父の子供
+				// 父を励ます
+				eAct = eActionGo.GO;
+				b.setMessage(MessagePool.getMessage(b, MessagePool.Action.ConcernAboutFather));
+				b.setHappiness(Happiness.SAD);
+				b.stay();
+				break;
+			case CHILD_MOTHER: // 母の子供
+				// 母を励ます
+				eAct = eActionGo.GO;
+				b.setMessage(MessagePool.getMessage(b, MessagePool.Action.ConcernAboutMother));
+				b.setHappiness(Happiness.SAD);
+				b.stay();
+				break;
+			case ELDERSISTER: // 姉
+				// 姉を励ます
+				eAct = eActionGo.GO;
+				b.setMessage(MessagePool.getMessage(b, MessagePool.Action.ConcernAboutEldersister));
+				b.setHappiness(Happiness.SAD);
+				b.stay();
+				break;
+			case YOUNGSISTER: // 妹
+				// 妹を励ます
+				b.setMessage(MessagePool.getMessage(b, MessagePool.Action.ConcernAboutEldersister));
+				b.setHappiness(Happiness.SAD);
+				b.stay();
+				eAct = eActionGo.GO;
+				break;
+			default: // 他人
+				break;
 			}
 		}
 		// 処理が決まったら終了
-		if( eAct != eActionGo.NONE ){
+		if (eAct != eActionGo.NONE) {
 			return eAct;
 		}
-
 
 		//心配4
 		// 悲しいけど心配していない
-		if( (abEmote[2] ) && !abEmote[6]){
+		if ((abEmote[2]) && !abEmote[6]) {
 			// 哀れみ
-			switch( eRelation ){
-				case FATHER: // 父
-				case MOTHER: // 母
-				case PARTNAR: // つがい
-				case CHILD_FATHER: // 父の子供
-				case CHILD_MOTHER: // 母の子供
-				case ELDERSISTER: // 姉
-				case YOUNGSISTER: // 妹
-					break;
-				default : // 他人
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.MercyAboutOther));
-					b.setHappiness(Happiness.SAD);
-					b.stay();
-					eAct = eActionGo.GO;
-					break;
+			switch (eRelation) {
+			case FATHER: // 父
+			case MOTHER: // 母
+			case PARTNAR: // つがい
+			case CHILD_FATHER: // 父の子供
+			case CHILD_MOTHER: // 母の子供
+			case ELDERSISTER: // 姉
+			case YOUNGSISTER: // 妹
+				break;
+			default: // 他人
+				b.setMessage(MessagePool.getMessage(b, MessagePool.Action.MercyAboutOther));
+				b.setHappiness(Happiness.SAD);
+				b.stay();
+				eAct = eActionGo.GO;
+				break;
 			}
 		}
 		// 処理が決まったら終了
-		if( eAct != eActionGo.NONE ){
+		if (eAct != eActionGo.NONE) {
 			return eAct;
 		}
 
-
 		//喜び1
 		// うれしくて楽しい
-		if( (abEmote[0] ) &&(abEmote[0] ) ){
+		if ((abEmote[0]) && (abEmote[0])) {
 			// 見下して喜ぶ
-			switch( eRelation ){
-				case FATHER: // 父
-				case MOTHER: // 母
-				case PARTNAR: // つがい
-				case CHILD_FATHER: // 父の子供
-				case CHILD_MOTHER: // 母の子供
-				case ELDERSISTER: // 姉
-				case YOUNGSISTER: // 妹
-					break;
-				default : // 他人
-					// 見下して喜ぶ
-					eAct = eActionGo.WAIT;
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateYukkuri));
-					break;
+			switch (eRelation) {
+			case FATHER: // 父
+			case MOTHER: // 母
+			case PARTNAR: // つがい
+			case CHILD_FATHER: // 父の子供
+			case CHILD_MOTHER: // 母の子供
+			case ELDERSISTER: // 姉
+			case YOUNGSISTER: // 妹
+				break;
+			default: // 他人
+				// 見下して喜ぶ
+				eAct = eActionGo.WAIT;
+				b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateYukkuri));
+				break;
 			}
 		}
 		// 処理が決まったら終了
-		if( eAct == eActionGo.NONE ){
+		if (eAct == eActionGo.NONE) {
 			return eAct;
 		}
 
@@ -1358,59 +1360,59 @@ public class BodyLogic {
 	}
 
 	//婚姻候補のリストを作る。既婚の場合は、相手のみを含むリストを作る
-	public static final ArrayList<Body> createActiveFianceeList(Body b , int age){
+	public static final ArrayList<Body> createActiveFianceeList(Body b, int age) {
 		// ほかにいないならスキップ
 		ArrayList<Body> bodyList = SimYukkuri.world.currentMap.body;
-		if( bodyList.size() <= 1 ){
+		if (bodyList.size() <= 1) {
 			return null;
 		}
 
-		ArrayList<Body> activeFianceeList =new ArrayList<Body>();
+		ArrayList<Body> activeFianceeList = new ArrayList<Body>();
 
 		//番がすでにいれば要素はそれのみに
-		if(b.getPartner() !=null){
+		if (b.getPartner() != null) {
 			activeFianceeList.add(b.getPartner());
 			return activeFianceeList;
 		}
 
-		for (Body f: bodyList) {
-			if( f == null ){
+		for (Body f : bodyList) {
+			if (f == null) {
 				continue;
 			}
 			//自身はスキップ
-			if(f==b) {
+			if (f == b) {
 				continue;
 			}
 			//死んでる
-			if( f.isDead()){
+			if (f.isDead()) {
 				continue;
 			}
 			//除去された
-			if( f.isRemoved()){
+			if (f.isRemoved()) {
 				continue;
 			}
 			//生まれてない
-			if( f.isUnBirth()){
+			if (f.isUnBirth()) {
 				continue;
 			}
 			// 相手に子供がいる場合はスキップ
-			if(f.getChildrenListSize() != 0){
+			if (f.getChildrenListSize() != 0) {
 				continue;
 			}
 			// 自分とランクが違ったらスキップ
-			if(b.getPublicRank() != f.getPublicRank()) {
-					continue;
+			if (b.getPublicRank() != f.getPublicRank()) {
+				continue;
 			}
 			//障害ゆんもスキップ
-			if( f.hasDisorder()){
+			if (f.hasDisorder()) {
 				continue;
 			}
 			//かびてるのもスキップ
-			if(b.findSick(f)){
+			if (b.findSick(f)) {
 				continue;
 			}
 			//ロリコンはいない
-			if(age > f.getBodyAgeState().ordinal()){
+			if (age > f.getBodyAgeState().ordinal()) {
 				continue;
 			}
 			activeFianceeList.add(f);
@@ -1418,50 +1420,49 @@ public class BodyLogic {
 		return activeFianceeList;
 	}
 
-	public static final ArrayList<Body> createActiveChildList(Body b, boolean bState){
+	public static final ArrayList<Body> createActiveChildList(Body b, boolean bState) {
 		// 子供がいないならスキップ
 		int nChildlenListSize = b.getChildrenListSize();
-		if( nChildlenListSize == 0 ){
+		if (nChildlenListSize == 0) {
 			return null;
 		}
-		ArrayList<Body> activeChildlenList =new ArrayList<Body>();
-		for( int i=0; i<nChildlenListSize; i++ ){
+		ArrayList<Body> activeChildlenList = new ArrayList<Body>();
+		for (int i = 0; i < nChildlenListSize; i++) {
 			Body bodyChild = b.getChildren(i);
-			if( bodyChild == null ){
+			if (bodyChild == null) {
 				continue;
 			}
 			//　死んでる
-			if( bodyChild.isDead()){
+			if (bodyChild.isDead()) {
 				continue;
 			}
 			//　除去された
-			if( bodyChild.isRemoved()){
+			if (bodyChild.isRemoved()) {
 				continue;
 			}
 			//　生まれてない
-			if( bodyChild.isUnBirth()){
+			if (bodyChild.isUnBirth()) {
 				continue;
 			}
 			// 子供に子供がいる場合はスキップ
-			if(bodyChild.getChildrenListSize() != 0){
+			if (bodyChild.getChildrenListSize() != 0) {
 				continue;
 			}
 			// うんうん奴隷はスキップ
-			if(bodyChild.getPublicRank() == PublicRank.UnunSlave){
+			if (bodyChild.getPublicRank() == PublicRank.UnunSlave) {
 				continue;
 			}
-			if( bodyChild.geteCoreAnkoState() != CoreAnkoState.DEFAULT  || bodyChild.isNotAllright()){
+			if (bodyChild.isNYD() || bodyChild.isNotAllright()) {
 				continue;
 			}
-			if(!bState){
+			if (!bState) {
 				// 赤ゆっくり以外参加しないのでスキップ
-				if( !bodyChild.isBaby()){
+				if (!bodyChild.isBaby()) {
 					continue;
 				}
-			}
-			else{
+			} else {
 				// 赤ゆっくり、子ゆっくり以外参加しないのでスキップ
-				if( bodyChild.isAdult()){
+				if (bodyChild.isAdult()) {
 					continue;
 				}
 			}
@@ -1469,48 +1470,49 @@ public class BodyLogic {
 		}
 		return activeChildlenList;
 	}
+
 	// ぜんゆん集合
-	public static final void gatheringYukkuri(){
+	public static final void gatheringYukkuri() {
 		ArrayList<Body> bodyList = SimYukkuri.world.currentMap.body;
-		if( bodyList != null && bodyList.size() != 0 )
-		{
+		if (bodyList != null && bodyList.size() != 0) {
 			ArrayList<Toilet> toiletList = SimYukkuri.world.currentMap.toilet;
-			if( toiletList != null && toiletList.size() != 0)
-			{
+			if (toiletList != null && toiletList.size() != 0) {
 				Obj o = toiletList.get(0);
-				gatheringYukkuriSquare(o, bodyList, GatheringDirection.UP, null );
+				gatheringYukkuriSquare(o, bodyList, GatheringDirection.UP, null);
 			}
 		}
 	}
 
 	// ぜんゆん集合(四角形前面)
-	public static final boolean gatheringYukkuriFront(Body bTop, ArrayList<Body>TargetList){
+	public static final boolean gatheringYukkuriFront(Body bTop, ArrayList<Body> TargetList) {
 		return gatheringYukkuriSquare(bTop, TargetList, GatheringDirection.DOWN, null);
 	}
+
 	// ぜんゆん集合(四角形前面)
-	public static final boolean gatheringYukkuriFront(Body bTop, ArrayList<Body>TargetList, EventPacket e){
+	public static final boolean gatheringYukkuriFront(Body bTop, ArrayList<Body> TargetList, EventPacket e) {
 		return gatheringYukkuriSquare(bTop, TargetList, GatheringDirection.DOWN, e);
 	}
 
-	public static final boolean gatheringYukkuriSquare(Obj oTop, ArrayList<Body>TargetList, GatheringDirection eDir, EventPacket e){
+	public static final boolean gatheringYukkuriSquare(Obj oTop, ArrayList<Body> TargetList, GatheringDirection eDir,
+			EventPacket e) {
 		int nMaxRowSize = 3;// 初期最大幅
 
-		if(oTop == null || TargetList == null){
+		if (oTop == null || TargetList == null) {
 			return false;
 		}
 		int nSize = TargetList.size();
-		if( nSize == 0 ){
+		if (nSize == 0) {
 			return false;
 		}
 
 		boolean bKi = true;
 		// 最大幅以下ならそれを最大幅にする
-		if( nSize < nMaxRowSize ){
+		if (nSize < nMaxRowSize) {
 			nMaxRowSize = nSize;
 		}
 
 		// 奇数か偶数か
-		if(nMaxRowSize%2 == 0){
+		if (nMaxRowSize % 2 == 0) {
 			// 偶数
 			bKi = false;
 		}
@@ -1525,16 +1527,13 @@ public class BodyLogic {
 		Obj objNextFrontCenter = null;
 
 		boolean bFlag = true;
-		for (Body b: TargetList)
-		{
+		for (Body b : TargetList) {
 			int nSpace = 10;
-			if( b == null)
-			{
+			if (b == null) {
 				continue;
 			}
 			// 別のイベント中なら集めない
-			if( e != null && b.getCurrentEvent() != null && b.getCurrentEvent() != e)
-			{
+			if (e != null && b.getCurrentEvent() != null && b.getCurrentEvent() != e) {
 				continue;
 			}
 
@@ -1542,7 +1541,7 @@ public class BodyLogic {
 			// 目標が定まったら移動セット
 			int mz = 0;
 			// 飛行種はZも移動可能
-			if(b.canflyCheck()) {
+			if (b.canflyCheck()) {
 				mz = oTop.getZ();
 			}
 
@@ -1553,31 +1552,26 @@ public class BodyLogic {
 			boolean bMoved = false;
 
 			//　一列目の一体目なら
-			if( (nMaxRowSize == 1) || (nCount%nMaxRowSize == 1))
-			{
+			if ((nMaxRowSize == 1) || (nCount % nMaxRowSize == 1)) {
 				// 次回は次の行
 				nCol++;
-				if( objNextFrontCenter != null )
-				{
+				if (objNextFrontCenter != null) {
 					objFrontCenter = objNextFrontCenter;
 				}
 				objNextFrontCenter = b;
-				int nLastLineSize = nSize - nMaxRowSize*(nCol-1);
-				if( (nLastLineSize < nMaxRowSize) && (0<nLastLineSize) )
-				{
+				int nLastLineSize = nSize - nMaxRowSize * (nCol - 1);
+				if ((nLastLineSize < nMaxRowSize) && (0 < nLastLineSize)) {
 					bKi = true;
 					// 最後の行が偶数の場合
-					if(nLastLineSize%2 == 0)
-					{
+					if (nLastLineSize % 2 == 0) {
 						bKi = false;
 					}
 				}
 
 				// 縦と横は別に計算したほうがいいとは思うけど雑に計算
-				nColY = colX+nSpace;
+				nColY = colX + nSpace;
 				// 座標計算
-				switch(eDir)
-				{
+				switch (eDir) {
 				case UP:
 					x = objFrontCenter.getX();
 					y = objFrontCenter.getY() - nColY;
@@ -1596,144 +1590,127 @@ public class BodyLogic {
 					break;
 				}
 
-				if( x < 0 )
-				{
+				if (x < 0) {
 					x = 0;
-				}else if( Translate.mapW < x){
+				} else if (Translate.mapW < x) {
 					x = Translate.mapW;
 				}
 
-				if( y < 0 )
-				{
+				if (y < 0) {
 					y = 0;
-				}else if( Translate.mapH < y){
+				} else if (Translate.mapH < y) {
 					y = Translate.mapH;
 				}
 
 				// 列はリセット
 				nRow = 1;
 				// 奇数
-				if(bKi)
-				{
+				if (bKi) {
 					// 正面に立つ
 					// 移動
-					if( e == null )
-					{
+					if (e == null) {
 						b.moveToBody(objFrontCenter, x, y, mz);
-					}else{
+					} else {
 						b.moveToEvent(e, x, y, mz);
 					}
 					bMoved = true;
 				}
 			}
 
-			if(!bMoved)
-			{
+			if (!bMoved) {
 				// 座標計算
-				switch(eDir)
-				{
+				switch (eDir) {
 				case UP:
 					// 奇数の場合
-					if(bKi)
-					{
-						x = objFrontCenter.getX() + (colX+nSpace)*nRow*nDir;
+					if (bKi) {
+						x = objFrontCenter.getX() + (colX + nSpace) * nRow * nDir;
 						y = objFrontCenter.getY() - nColY;
-					}else{
+					} else {
 						//最初の2体は間隔半分
-						if(nRow == 1)
-						{
-							nSpace = nSpace/2;
+						if (nRow == 1) {
+							nSpace = nSpace / 2;
 						}
-						x = objFrontCenter.getX() + (colX+nSpace)*(2*nRow-1)*nDir;
+						x = objFrontCenter.getX() + (colX + nSpace) * (2 * nRow - 1) * nDir;
 						y = objFrontCenter.getY() - nColY;
 					}
 					break;
 				case DOWN:
 					// 奇数の場合
-					if(bKi)
-					{
-						x = objFrontCenter.getX() + (colX+nSpace)*nRow*nDir;
+					if (bKi) {
+						x = objFrontCenter.getX() + (colX + nSpace) * nRow * nDir;
 						y = objFrontCenter.getY() + nColY;
-					}else{
+					} else {
 						//最初の2体は間隔半分
-						if(nRow == 1)
-						{
-							nSpace = nSpace/2;
+						if (nRow == 1) {
+							nSpace = nSpace / 2;
 						}
-						x = objFrontCenter.getX() + (colX*nRow+nSpace*3/2*nRow-1)*nDir;
+						x = objFrontCenter.getX() + (colX * nRow + nSpace * 3 / 2 * nRow - 1) * nDir;
 						y = objFrontCenter.getY() + nColY;
 					}
 					break;
 				case LEFT:
 					// 奇数の場合
-					if(bKi)
-					{
+					if (bKi) {
 						x = objFrontCenter.getX() - nColY;
-						y = objFrontCenter.getY() + (colX+nSpace)*nRow*nDir;
-					}else{
+						y = objFrontCenter.getY() + (colX + nSpace) * nRow * nDir;
+					} else {
 						//最初の2体は間隔半分
-						if(nRow == 1)
-						{
-							nSpace = nSpace/2;
+						if (nRow == 1) {
+							nSpace = nSpace / 2;
 						}
 						x = objFrontCenter.getX() - nColY;
-						y = objFrontCenter.getY() + (colX+nSpace)*(2*nRow-1)*nDir;
+						y = objFrontCenter.getY() + (colX + nSpace) * (2 * nRow - 1) * nDir;
 					}
 					break;
 				case RIGHT:
 					// 奇数の場合
-					if(bKi)
-					{
+					if (bKi) {
 						x = objFrontCenter.getX() + nColY;
-						y = objFrontCenter.getY() + (colX+nSpace)*nRow*nDir;
-					}else{
+						y = objFrontCenter.getY() + (colX + nSpace) * nRow * nDir;
+					} else {
 						//最初の2体は間隔半分
-						if(nRow == 1)
-						{
-							nSpace = nSpace/2;
+						if (nRow == 1) {
+							nSpace = nSpace / 2;
 						}
 						x = objFrontCenter.getX() + nColY;
-						y = objFrontCenter.getY() + (colX+nSpace)*(2*nRow-1)*nDir;
+						y = objFrontCenter.getY() + (colX + nSpace) * (2 * nRow - 1) * nDir;
 					}
 					break;
 				}
 
-				if( x < 0 )
-				{
+				if (x < 0) {
 					x = 0;
-				}else if( Translate.mapW < x){
+				} else if (Translate.mapW < x) {
 					x = Translate.mapW;
 				}
-				if( y < 0 )
-				{
+				if (y < 0) {
 					y = 0;
-				}else if( Translate.mapH < y){
+				} else if (Translate.mapH < y) {
 					y = Translate.mapH;
 				}
 
-				if( e == null )
-				{
+				if (e == null) {
 					b.moveToBody(oTop, x, y, mz);
-				}else{
+				} else {
 					b.moveToEvent(e, x, y, mz);
 				}
 
-				if( nDir == -1)
-				{
+				if (nDir == -1) {
 					nDir = 1;
-				}else{
+				} else {
 					nDir = -1;
 					nRow++;
 				}
 			}
 
 			// 壁に引っかかってるなら
-			if (Barrier.onBarrier(b.getX(), b.getY(), x, y, Barrier.MAP_BODY[b.getBodyAgeState().ordinal()]+Barrier.BARRIER_KEKKAI )) {
+			if (Barrier.onBarrier(b.getX(), b.getY(), x, y,
+					Barrier.MAP_BODY[b.getBodyAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
 				continue;
 			}
 
 			// 目的地にたどり着いていない
-			if(1 < Translate.distance(b.getX(), b.getY(), x, y)){
+			if (1 < Translate.distance(b.getX(), b.getY(), x, y)) {
 				bFlag = false;
 			}
 
@@ -1742,43 +1719,43 @@ public class BodyLogic {
 	}
 
 	// ぜんゆん集合(先頭の後ろに一列)
-	public static final boolean gatheringYukkuriBackLine(Body bTop, ArrayList<Body>TargetList,EventPacket e){
-		if( TargetList == null ){
+	public static final boolean gatheringYukkuriBackLine(Body bTop, ArrayList<Body> TargetList, EventPacket e) {
+		if (TargetList == null) {
 			return false;
 		}
 
 		Body bodyFound = bTop;
 		//int nDir = 1;
-		if( bodyFound.getDirection() == Direction.RIGHT){
-		//	nDir = -1;
+		if (bodyFound.getDirection() == Direction.RIGHT) {
+			//	nDir = -1;
 		}
 		boolean bResult = true;
 
-		for (Body b: TargetList) {
-			if( b == null){
+		for (Body b : TargetList) {
+			if (b == null) {
 				continue;
 			}
-			if( bodyFound == null ){
+			if (bodyFound == null) {
 				continue;
 			}
-			if(b.isDead()){
+			if (b.isDead()) {
 				continue;
 			}
 			// 別のイベント中なら集めない
-			if( e != null && b.getCurrentEvent() != null && b.getCurrentEvent() != e){
+			if (e != null && b.getCurrentEvent() != null && b.getCurrentEvent() != e) {
 				continue;
 			}
 			int colX = Math.abs(calcCollisionX(b, bodyFound));
 			// 目標が定まったら移動セット
 			int mz = 0;
 			// 飛行種はZも移動可能
-			if(b.canflyCheck()) {
+			if (b.canflyCheck()) {
 				mz = bodyFound.getZ();
 			}
 			int dist = Translate.getRealDistance(b.getX(), b.getY(), bodyFound.getX(), bodyFound.getY());
-			int nToDist = dist-colX*2;
+			int nToDist = dist - colX * 2;
 			// すでに近くにいる
-			if( nToDist < 1){
+			if (nToDist < 1) {
 				continue;
 			}
 			double dRad = Translate.getRadian(b.getX(), b.getY(), bodyFound.getX(), bodyFound.getY());
@@ -1787,45 +1764,44 @@ public class BodyLogic {
 			int x = p2.x;
 			int y = p2.y;
 			// 移動
-			if( e == null ){
+			if (e == null) {
 				b.moveToBody(bodyFound, x, y, mz);
-			}
-			else{
+			} else {
 				b.moveToEvent(e, x, y, mz);
 			}
 			b.setTargetBind(false);
 			bodyFound = b;
 			// 壁に引っかかってるなら
-			if (Barrier.onBarrier(b.getX(), b.getY(), x, y, Barrier.MAP_BODY[b.getBodyAgeState().ordinal()]+Barrier.BARRIER_KEKKAI )) {
+			if (Barrier.onBarrier(b.getX(), b.getY(), x, y,
+					Barrier.MAP_BODY[b.getBodyAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
 				continue;
 			}
 			// 目的地にたどり着いていない
-			if(1 < Translate.distance(b.getX(), b.getY(), x, y)){
+			if (1 < Translate.distance(b.getX(), b.getY(), x, y)) {
 				bResult = false;
-			}
-			else{
+			} else {
 				b.setDirection(bodyFound.getDirection());
 			}
 		}
 		return bResult;
 	}
 
-	public static boolean checkEmotionFromUnunSlave(Body b, Body bodyTarget){
-		if( b==null || bodyTarget == null){
+	public static boolean checkEmotionFromUnunSlave(Body b, Body bodyTarget) {
+		if (b == null || bodyTarget == null) {
 			return false;
 		}
 
 		// 一定確率以上は終了
-		if( rnd.nextInt(50) != 0){
+		if (rnd.nextInt(50) != 0) {
 			return false;
 		}
 
 		// 足りないゆは反応しない
-		if( b.isIdiot()){
+		if (b.isIdiot()) {
 			return false;
 		}
 
-		if( b.geteCoreAnkoState() != CoreAnkoState.DEFAULT ){
+		if (b.isNYD()) {
 			return false;
 		}
 
@@ -1833,36 +1809,35 @@ public class BodyLogic {
 		abEmote = EmotionLogic.checkEmotionForOther(b, bodyTarget);
 
 		// 自分との関係
-		EnumRelationMine eRelation = checkMyRelation(b ,bodyTarget);
+		EnumRelationMine eRelation = checkMyRelation(b, bodyTarget);
 
 		// 自分がうんうん奴隷で相手は違う場合
-		if( (b.getPublicRank() == PublicRank.UnunSlave) &&  (bodyTarget.getPublicRank() != PublicRank.UnunSlave)){
-			if( abEmote[5]  ){
+		if ((b.getPublicRank() == PublicRank.UnunSlave) && (bodyTarget.getPublicRank() != PublicRank.UnunSlave)) {
+			if (abEmote[5]) {
 				// うらやましがる
-				switch( eRelation )
-				{
-					case FATHER: // 父
-					case MOTHER: // 母
-						b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateWithEnvyAboutChild));
-						break;
-					case PARTNAR: // つがい
-						b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateWithEnvyAboutPartner));
-						break;
-					case CHILD_FATHER: // 父の子供
-						b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateWithEnvyAboutFather));
-						break;
-					case CHILD_MOTHER: // 母の子供
-						b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateWithEnvyAboutMother));
-						break;
-					case ELDERSISTER: // 姉
-						b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateWithEnvyAboutElderSister));
-						break;
-					case YOUNGSISTER: // 妹
-						b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateWithEnvyAboutSister));
-						break;
-					default : // 他人
-						b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateWithEnvyAboutOther));
-						break;
+				switch (eRelation) {
+				case FATHER: // 父
+				case MOTHER: // 母
+					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateWithEnvyAboutChild));
+					break;
+				case PARTNAR: // つがい
+					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateWithEnvyAboutPartner));
+					break;
+				case CHILD_FATHER: // 父の子供
+					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateWithEnvyAboutFather));
+					break;
+				case CHILD_MOTHER: // 母の子供
+					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateWithEnvyAboutMother));
+					break;
+				case ELDERSISTER: // 姉
+					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateWithEnvyAboutElderSister));
+					break;
+				case YOUNGSISTER: // 妹
+					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateWithEnvyAboutSister));
+					break;
+				default: // 他人
+					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateWithEnvyAboutOther));
+					break;
 				}
 				b.setHappiness(Happiness.VERY_SAD);
 				b.addStress(10);
@@ -1874,25 +1849,24 @@ public class BodyLogic {
 		return false;
 	}
 
-	public static void checkNearParent(Body b){
+	public static void checkNearParent(Body b) {
 		// 大人なら終了
-		if( b.isAdult()){
+		if (b.isAdult()) {
 			return;
 		}
 
 		int minDistance = b.getEYESIGHT();
 		Body bodyParent = b.getMother();
-		if( bodyParent == null){
+		if (bodyParent == null) {
 			bodyParent = b.getFather();
 		}
-		if( bodyParent == null){
+		if (bodyParent == null) {
 			int nSize = b.getElderSisterListSize();
-			if( 0 < nSize )
-			{
+			if (0 < nSize) {
 				bodyParent = b.getElderSister(0);
 			}
 		}
-		if( bodyParent == null){
+		if (bodyParent == null) {
 			return;
 		}
 
@@ -1900,62 +1874,69 @@ public class BodyLogic {
 		int nParcent = 32;
 
 		//子ゆが泣き叫んでる時
-		if(b.isCallingParents() && bodyParent.isSleeping())bodyParent.wakeup();
+		if (b.isCallingParents() && bodyParent.isSleeping())
+			bodyParent.wakeup();
 		//泣き叫びの原因がぺろぺろで対処できるとき
-		if( (b.isDirty() || b.getAttachmentSize(Ants.class)!=0) && bodyParent.canEventResponse()){
-			if(dist<=bodyParent.getStepDist()){
+		if ((b.isDirty() || b.getAttachmentSize(Ants.class) != 0) && bodyParent.canEventResponse()) {
+			if (dist <= bodyParent.getStepDist()) {
 				bodyParent.constraintDirection(b, false);
 				bodyParent.doPeropero(b);
 				return;
-			}
-			else {
-				b.moveTo( bodyParent.getX(), bodyParent.getY() );
-//				bodyParent.moveTo( b.getX(), b.getY() );
+			} else {
+				b.moveTo(bodyParent.getX(), bodyParent.getY());
+				//				bodyParent.moveTo( b.getX(), b.getY() );
 				return;
 			}
 		}
 
 		// 視界内の一定距離内ならなにもしない
-		if ( dist < minDistance/nParcent ) {
+		if (dist < minDistance / nParcent) {
 			return;
 		}
 
 		// 一定距離外なら
-		if ( minDistance/nParcent <= dist) {
+		if (minDistance / nParcent <= dist) {
 			// 相手との間に壁があれば終了
-			if (Barrier.acrossBarrier(b.getX(), b.getY(), bodyParent.getX(), bodyParent.getY(), Barrier.MAP_BODY[b.getBodyAgeState().ordinal()]+Barrier.BARRIER_KEKKAI )) {
+			if (Barrier.acrossBarrier(b.getX(), b.getY(), bodyParent.getX(), bodyParent.getY(),
+					Barrier.MAP_BODY[b.getBodyAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
 				return;
 			}
 
-			int nToDist = (int)Math.sqrt(dist) - (int)Math.sqrt(minDistance/nParcent);
+			int nToDist = (int) Math.sqrt(dist) - (int) Math.sqrt(minDistance / nParcent);
 			double dRad = Translate.getRadian(b.getX(), b.getY(), bodyParent.getX(), bodyParent.getY());
 			Point p2 = Translate.getPointByDistAndRad(b.getX(), b.getY(), nToDist, dRad);
 			// 視界内の一定距離内の地点まで移動する
-			b.moveTo( p2.x, p2.y, b.getZ() );
+			b.moveTo(p2.x, p2.y, b.getZ());
 		}
 	}
 
 	// 視界内に起きているゆっくりがいないかチェック
-	public static boolean checkWakeupOtherYukkuri( Body b ){
+	public static boolean checkWakeupOtherYukkuri(Body b) {
 		boolean bIsWakeup = false;
 		int minDistance = b.getEYESIGHT();
 		ArrayList<Body> bodyList = SimYukkuri.world.currentMap.body;
-		for (Body p: bodyList) {
+		for (Body p : bodyList) {
 			// 自分同士のチェックは無意味なのでスキップ
-			if(p == b) continue;
-			if(p.isDead() || p.isRemoved() || p.isUnBirth() ) continue;
-			if(p.geteCoreAnkoState() != CoreAnkoState.DEFAULT ) continue;
-			if(p.getPublicRank() == PublicRank.UnunSlave ) continue;
-			if(p.getBaryState() != BaryInUGState.NONE ) continue;
+			if (p == b)
+				continue;
+			if (p.isDead() || p.isRemoved() || p.isUnBirth())
+				continue;
+			if (p.isNYD())
+				continue;
+			if (p.getPublicRank() == PublicRank.UnunSlave)
+				continue;
+			if (p.getBaryState() != BaryInUGState.NONE)
+				continue;
 
 			int dist = Translate.distance(b.getX(), b.getY(), p.getX(), p.getY());
-			if(minDistance > dist) {
+			if (minDistance > dist) {
 				// 相手との間に壁があればスキップ
-				if(Barrier.acrossBarrier(b.getX(), b.getY(), p.getX(), p.getY(), Barrier.MAP_BODY[b.getBodyAgeState().ordinal()]+Barrier.BARRIER_KEKKAI )) {
+				if (Barrier.acrossBarrier(b.getX(), b.getY(), p.getX(), p.getY(),
+						Barrier.MAP_BODY[b.getBodyAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
 					continue;
 				}
 			}
-			if( !p.isSleeping()){
+			if (!p.isSleeping()) {
 				bIsWakeup = true;
 				break;
 			}

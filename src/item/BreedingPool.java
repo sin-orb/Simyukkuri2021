@@ -254,7 +254,7 @@ public class BreedingPool extends ObjEX implements java.io.Serializable {
 
 	public void cry(Body p){
 		if(p.hasBabyOrStalk()){
-			if(p.geteCoreAnkoState() != CoreAnkoState.DEFAULT){
+			if(p.isNYD()){
 				p.setNYDMessage(MessagePool.getMessage(p, MessagePool.Action.NonYukkuriDisease),false);
 			}
 			else if(rnd.nextInt(40) == 0){

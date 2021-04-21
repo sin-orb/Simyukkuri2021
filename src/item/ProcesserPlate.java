@@ -242,7 +242,7 @@ public class ProcesserPlate extends ObjEX implements java.io.Serializable {
 						bTarget.addDamage(20);
 						if(bTarget.isPealed())bTarget.addStress(400);
 						else bTarget.addStress(40);
-						if( bTarget.geteCoreAnkoState() == CoreAnkoState.DEFAULT ){
+						if( bTarget.isNotNYD() ){
 							bTarget.setHappiness(Happiness.VERY_SAD);
 							bTarget.setForceFace(ImageCode.PAIN.ordinal());
 							if(rnd.nextInt(10) == 0) {
@@ -257,7 +257,7 @@ public class ProcesserPlate extends ObjEX implements java.io.Serializable {
 						bTarget.addDamage(5);
 						if(bTarget.isPealed())bTarget.addStress(400);
 						else bTarget.addStress(30);
-						if( bTarget.geteCoreAnkoState() == CoreAnkoState.DEFAULT ){
+						if( bTarget.isNotNYD() ){
 							bTarget.setHappiness(Happiness.VERY_SAD);
 							bTarget.setForceFace(ImageCode.PAIN.ordinal());
 							if(rnd.nextInt(15) == 0) {

@@ -143,7 +143,7 @@ public class HotPlate extends ObjEX implements java.io.Serializable {
 					if(bindBody.getFootBakeLevel() == FootBake.CRITICAL){
 						bindBody.setPullAndPush(true);
 					}
-					if( bindBody.geteCoreAnkoState() == CoreAnkoState.DEFAULT ){
+					if( bindBody.isNotNYD() ){
 						bindBody.setHappiness(Happiness.VERY_SAD);
 						bindBody.setForceFace(ImageCode.PAIN.ordinal());
 					}

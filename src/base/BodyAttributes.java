@@ -5485,7 +5485,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 			happiness = Happiness.AVERAGE;
 			return;
 		}
-		if (geteCoreAnkoState() != CoreAnkoState.DEFAULT) {
+		if (isNYD()) {
 			happiness = Happiness.VERY_SAD;
 			sadPeriod = 1200 + RND.nextInt(400) - 200;
 			return;
@@ -5563,7 +5563,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 */
 	public void addLovePlayer(int val) {
 		//非ゆっくり症発症個体は常にプレイヤーを嫌いに
-		if (geteCoreAnkoState() != CoreAnkoState.DEFAULT) {
+		if (isNYD()) {
 			nLovePlayer = -1 * getLOVEPLAYERLIMIT();
 			return;
 		}
@@ -5640,4 +5640,21 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public final boolean isStubbornlyDirty(){
 		return  (!isDead() && stubbornlyDirty);
 	}
+	
+	/**
+	 * 非ゆっくり症(間近も含む)かどうかを返却する.
+	 * @return 非ゆっくり症(間近も含む)かどうか
+	 */
+	public final boolean isNYD() {
+		return geteCoreAnkoState() != CoreAnkoState.DEFAULT;
+	}
+	
+	/**
+	 * 非ゆっくり症ではないどうかを返却する.
+	 * @return 非ゆっくり症ではないかどうか
+	 */
+	public final boolean isNotNYD() {
+		return geteCoreAnkoState() == CoreAnkoState.DEFAULT;
+	}
+	
 }

@@ -26,6 +26,7 @@ import src.enums.ObjEXType;
 import src.enums.Type;
 import src.item.Food.FoodType;
 import src.system.Cash;
+import src.util.YukkuriUtil;
 
 
 /***************************************************
@@ -153,7 +154,9 @@ public class AutoFeeder extends ObjEX implements java.io.Serializable {
 		}
 		else if( mode == 0 || (getAge() % feedingInterval) == 0 && rnd.nextInt(feedingP)== 0){
 			if(type == FeedType.PROCESSED_BODY.ordinal()) {
-				food = SimYukkuri.mypane.terrarium.addBody(getX(), getY(), 0, rnd.nextInt(6), AgeState.BABY, null, null);
+				// オートフィーダで出るゆっくりのタイプを決める。
+				int type = makeRandomType();
+				food = SimYukkuri.mypane.terrarium.addBody(getX(), getY(), 0, type, AgeState.BABY, null, null);
 				Cash.buyYukkuri((Body)food);
 				Cash.addCash(-getCost());
 				// レイパーは生まれないようにする
@@ -164,7 +167,9 @@ public class AutoFeeder extends ObjEX implements java.io.Serializable {
 				((Body)food).setForceAnalClose(true);
 			}
 			else if(type == FeedType.BODY.ordinal()) {
-				food = SimYukkuri.mypane.terrarium.addBody(getX(), getY(), 0, rnd.nextInt(6), AgeState.BABY, null, null);
+				// オートフィーダで出るゆっくりのタイプを決める。
+				int type = makeRandomType();
+				food = SimYukkuri.mypane.terrarium.addBody(getX(), getY(), 0, type, AgeState.BABY, null, null);
 				Cash.buyYukkuri((Body)food);
 				Cash.addCash(-getCost()+5);
 			}
@@ -201,6 +206,10 @@ public class AutoFeeder extends ObjEX implements java.io.Serializable {
 				Cash.addCash(-getCost());
 			}
 		}
+	}
+
+	private int makeRandomType() {
+		return YukkuriUtil.getRandomYukkuriType(null);
 	}
 
 	public AutoFeeder(int initX, int initY, int initOption) {

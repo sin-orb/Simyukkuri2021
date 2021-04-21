@@ -86,7 +86,7 @@ public class Needle extends Attachment {
 			if( parent.isFixBack() ){
 				parent.setDirection(Direction.LEFT);
 			}
-			if( parent.geteCoreAnkoState() == CoreAnkoState.DEFAULT ){
+			if( parent.isNotNYD() ){
 				if( parent.isFixBack() ){
 					if(!parent.isTalking()) {
 						parent.setMessage(MessagePool.getMessage(parent, MessagePool.Action.NeedleScreamInAnal), 20, true, true);

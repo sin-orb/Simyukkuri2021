@@ -109,7 +109,7 @@ public class ProudChildEvent extends EventPacket implements java.io.Serializable
 		if(b.getPanicType() != null){
 			return UpdateState.ABORT;
 		}
-		if( b.geteCoreAnkoState() != CoreAnkoState.DEFAULT ){
+		if( b.isNYD() ){
 			return UpdateState.ABORT;
 		}
 		if(getFrom().isRemoved()) {
