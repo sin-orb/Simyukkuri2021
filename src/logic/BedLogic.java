@@ -11,7 +11,6 @@ import src.base.ObjEX;
 import src.draw.Terrarium;
 import src.draw.Translate;
 import src.enums.AgeState;
-import src.enums.CoreAnkoState;
 import src.enums.FavItemType;
 import src.enums.PublicRank;
 import src.enums.TakeoutItemType;
@@ -32,7 +31,8 @@ public class BedLogic {
 
 	public static final boolean checkBed(Body b) {
 		// 他の用事がある場合
-		if( b.isToFood() || b.isToBody() || /*b.isToBed() ||*/ b.isToShit() || b.isToSukkiri() || b.isToSteal() )
+		if( b.isToFood() || b.isToBody() || /*b.isToBed() ||*/ b.isToShit() || 
+				b.isToSukkiri() || b.isToSteal() || b.isToTakeout())
 		{
 			return false;
 		}

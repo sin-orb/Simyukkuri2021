@@ -1517,6 +1517,11 @@ public class GadgetAction {
 					Body b = (Body)found;
 					b.debugOutputState();
 				}
+			case DEBUG2:
+				if (found instanceof Body) {
+					Body b = (Body)found;
+					b.setHungry(0);
+				}
 				default:
 				break;
 		}

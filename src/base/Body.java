@@ -5888,6 +5888,12 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		if (isExciting()) {
 			ap *= 0.25f;
 		}
+		if (isPredatorType() && !enemy.isPredatorType()) {
+			ap *= 0.25f;
+		}
+		if (!isPredatorType() && enemy.isPredatorType()) {
+			ap *= 2f;
+		}
 		// 吹っ飛び設定
 		// 体重差
 		int kickX = (enemy.getWeight() - getWeight()) / 100;
@@ -5960,10 +5966,14 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 					runAway(enemy.getX(), enemy.getY());
 					setPikoMessage(MessagePool.getMessage(this, MessagePool.Action.DontPlayMe), true);
 					// おもちゃにされたとき、母がいたら33%の確率で「捕食種はあっちいってね！」イベントが発生。
-					if (RND.nextInt(3) == 0 && getMother() != null && !getMother().isDead() && !getMother().isRemoved()) {
-						getMother().clearEvent();
-						getMother().setAngry();
-						EventLogic.addBodyEvent(getMother(), new KillPredeatorEvent(this, enemy, null, 1), null, null);
+					Body m = getMother();
+					if (RND.nextInt(3) == 0 && m != null && !m.isDead() && !m.isRemoved()) {
+						m.clearEvent();
+						m.setAngry();
+						m.setPanic(false, null);
+						m.setPeropero(false);
+						EventLogic.addBodyEvent(m, new KillPredeatorEvent(m, enemy, null, 10),
+									null, null);
 					}
 					if (RND.nextInt(10) == 0) {
 						bodyInjure();
@@ -5983,7 +5993,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 						setAngry();
 						EventLogic.addBodyEvent(this, new RevengeAttackEvent(this, enemy, null, 1), null, null);
 					}
-				} else {
+				}  else {
 					setMessage(MessagePool.getMessage(this, MessagePool.Action.Scream), true);
 					if (getAttitude() != Attitude.VERY_NICE) {
 						setAngry();
@@ -8628,5 +8638,17 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	 */
 	public void raperToggle() {
 		setRaper(!isRaper());
+	}
+
+	/**
+	 * イベントのためのアクションのみのクリア
+	 */
+	public void clearActionsForEvent() {
+		setToSukkiri(false);
+		setToBed(false);
+		setToFood(false);
+		setToShit(false);
+		setToBody(false);
+		setToSteal(false);
 	}
 }

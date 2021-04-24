@@ -69,6 +69,7 @@ public class KillPredeatorEvent extends RevengeAttackEvent implements Serializab
 		if (!bIsNearPreadeator) {
 			return false;
 		}
+		b.clearActionsForEvent();
 		return true;
 	}
 

@@ -40,6 +40,12 @@ public class FlyingEatEvent extends EventPacket implements java.io.Serializable 
 
 	// イベント開始動作
 	public void start(Body b) {
+		b.setToFood(false);
+		b.setToBed(false);
+		b.setToShit(false);
+		b.setToSteal(false);
+		b.setToSukkiri(false);
+		b.setToTakeout(true);
 		b.moveToEvent(this, b.getX(), b.getY(),  Translate.getFlyHeightLimit());
 		to.setLinkParent(b);
 	}
@@ -49,12 +55,12 @@ public class FlyingEatEvent extends EventPacket implements java.io.Serializable 
 	public UpdateState update(Body b) {
 		// 相手が消えてしまったらイベント中断
 		if(to.isRemoved()) {
-			to.setLinkParent(null);
+			//to.setLinkParent(null);
 			return UpdateState.ABORT;
 		}
 		// 相手が捕まれたらイベント中断
 		if(to.isGrabbed()) {
-			to.setLinkParent(null);
+			//to.setLinkParent(null);
 			return UpdateState.ABORT;
 		}
 		/*// 相手が死んだらイベント中断
@@ -69,7 +75,6 @@ public class FlyingEatEvent extends EventPacket implements java.io.Serializable 
 
 		// 高度に達してたらexecuteへ
 		if(Math.abs(b.getZ() - Translate.getFlyHeightLimit()) < 3) return UpdateState.FORCE_EXEC;
-		b.moveToEvent(this, b.getX(), b.getY(),  Translate.getFlyHeightLimit());
 		return null;
 	}
 
@@ -78,12 +83,12 @@ public class FlyingEatEvent extends EventPacket implements java.io.Serializable 
 	public boolean execute(Body b) {
 		// 相手が消えてしまったらイベント中断
 		if(to.isRemoved()) {
-			to.setLinkParent(null);
+			//to.setLinkParent(null);
 			return true;
 		}
 		// 相手が捕まれたらイベント中断
 		if(to.isGrabbed()) {
-			to.setLinkParent(null);
+			//to.setLinkParent(null);
 			return true;
 		}
 
@@ -94,13 +99,13 @@ public class FlyingEatEvent extends EventPacket implements java.io.Serializable 
 			to.eatBody(Math.min(b.getEatAmount(), to.getBodyAmount()));
 			if (to.isSick() && rnd.nextBoolean()) b.addSickPeriod(100);
 			if(to.isCrushed()){
-				to.setLinkParent(null);
+				//to.setLinkParent(null);
 				return true;
 			}
 			else if(to.isDead()) {
 				to.setMessage(MessagePool.getMessage(to, MessagePool.Action.Dead));
 				if(b.getBodyRank()!=BodyRank.KAIYU || b.isRude()){
-					to.setLinkParent(null);
+					//to.setLinkParent(null);
 					return true;
 				}
 			}
@@ -108,7 +113,7 @@ public class FlyingEatEvent extends EventPacket implements java.io.Serializable 
 				if (b.isFull()) {
 					// うー。おなかいっぱいだからもういらないんだどー。ぽいするどー。
 					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.POI));
-					to.setLinkParent(null);
+					//to.setLinkParent(null);
 					return true;
 				}
 				if( to.isNotNYD() ){

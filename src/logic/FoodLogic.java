@@ -71,7 +71,11 @@ public class FoodLogic {
 				return false;
 			}
 		}
-
+		// 捕食種が空中で他のゆっくりを食べている最中の場合
+		if (b.getCurrentEvent() != null && b.getCurrentEvent() instanceof FlyingEatEvent) {
+			return false;
+		}
+		
 		//眠くて、空腹でない善良飼いゆか、満腹で賢くない野良の場合
 		if (b.isSleepy()) {
 			if ((!b.isHungry() && b.isSmart() && b.getBodyRank() == BodyRank.KAIYU)
@@ -287,22 +291,25 @@ public class FoodLogic {
 							if (b.isPredatorType() && !Terrarium.predatorSteam) {
 								// 捕食行動
 								f.bodyInjure();
-								if (b.canflyCheck() && b.getBodyAgeState().ordinal() > f.getBodyAgeState().ordinal()) {
+								if (b.canflyCheck()) {// && b.getBodyAgeState().ordinal() > f.getBodyAgeState().ordinal()) {
 									// 空中での捕食は特殊なのでイベントで処理
 									b.clearActions();
 									EventLogic.addBodyEvent(b, new FlyingEatEvent(b, f, null, 1), null, null);
-									// 母のいるゆっくりを食べると33%の確率で母による「捕食種はあっちいってね！」イベントが発生
-									if (rnd.nextInt(3) == 0 && f.getMother() != null && !f.getMother().isDead() && !f.getMother().isRemoved()) {
-										f.getMother().clearEvent();
-										f.getMother().setAngry();
-										EventLogic.addBodyEvent(f.getMother(), new KillPredeatorEvent(f.getMother(), b, null, 1),
-													null, null);
-									}
 								} else {
 									eatFood(b, FoodType.BODY, Math.min(b.getEatAmount(), f.getBodyAmount()));
 									f.eatBody(Math.min(b.getEatAmount(), f.getBodyAmount()), b);
 									if (f.isSick())
 										b.addSickPeriod(100);
+								}
+								// 母のいるゆっくりを食べると33%の確率で母による「捕食種はあっちいってね！」イベントが発生
+								Body m = f.getMother();
+								if (rnd.nextInt(3) == 0 && m != null && !m.isDead() && !m.isRemoved()) {
+									m.clearEvent();
+									m.setPanic(false, null);
+									m.setPeropero(false);
+									m.setAngry();
+									EventLogic.addBodyEvent(m, new KillPredeatorEvent(m, b, null, 10),
+												null, null);
 								}
 							} else {
 								// レイパーなら実ゆは食べる
@@ -388,7 +395,7 @@ public class FoodLogic {
 			}
 			//餌に未到着の時
 			else {
-				if (b.canflyCheck())
+				if (!b.canflyCheck())
 					b.moveTo(food.getX(), food.getY(), 0);
 				else
 					b.moveTo(food.getX(), food.getY(), food.getZ());

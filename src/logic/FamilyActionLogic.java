@@ -10,7 +10,6 @@ import src.base.EventPacket;
 import src.base.Obj;
 import src.draw.Terrarium;
 import src.draw.Translate;
-import src.enums.CoreAnkoState;
 import src.enums.PublicRank;
 import src.enums.TakeoutItemType;
 import src.enums.TangType;
@@ -35,7 +34,8 @@ public class FamilyActionLogic {
 
 	public static final boolean checkFamilyAction(Body b) {
 		// 他の用事がある場合
-		if( b.isToFood() || b.isToBody() || b.isToSukkiri() || b.isToBed() || b.isToShit() || b.isToSteal() ){
+		if( b.isToFood() || b.isToBody() || b.isToSukkiri() ||
+				b.isToBed() || b.isToShit() || b.isToSteal() || b.isToTakeout()) {
 			return false;
 		}
 		

@@ -10,7 +10,6 @@ import src.base.Obj;
 import src.draw.Terrarium;
 import src.draw.Translate;
 import src.enums.AgeState;
-import src.enums.CoreAnkoState;
 import src.enums.Happiness;
 import src.enums.ImageCode;
 import src.enums.PlayStyle;

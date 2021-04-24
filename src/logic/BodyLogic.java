@@ -216,7 +216,6 @@ public class BodyLogic {
 							&& !b.isHasBaby() && !b.isHasStalk() ){
 						b.setPanic(false, null);
 						b.setAngry();
-						continue;
 					} else {
 						// 捕食種から逃げる
 						int dist = Translate.distance(b.getX(), b.getY(), p.getX(), p.getY());
