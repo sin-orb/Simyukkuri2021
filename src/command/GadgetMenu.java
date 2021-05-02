@@ -277,8 +277,7 @@ public class GadgetMenu {
 		INVITEANTS(MainCategoryName.TEST, "強制コマンド：アリ招き", null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK, null, null),
 		FEED(MainCategoryName.TEST, "強制コマンド：強制給餌", null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK, null, null),
 		BADGE(MainCategoryName.TEST, "バッジ", null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK, null, null),
-		DEBUG1(MainCategoryName.TEST, "ゆっくりのデータのコンソール出力", null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK, null, null),
-		DEBUG2(MainCategoryName.TEST, "!!!TEST!!!", null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK, null, null),
+		DEBUG2(MainCategoryName.TEST, "テスト空腹", null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK, null, null),
 		;
 		private MainCategoryName group;
 		private String displayName;
@@ -529,7 +528,6 @@ public class GadgetMenu {
 		GadgetList.INVITEANTS,
 		GadgetList.FEED,
 		GadgetList.BADGE,
-		GadgetList.DEBUG1,
 		GadgetList.DEBUG2
 	};
 	/**テストカテゴリ用コンボボックス定義*/
