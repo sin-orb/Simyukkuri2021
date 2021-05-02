@@ -464,7 +464,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 							if (!canflyCheck()) {
 								if (getFootBakeLevel() == FootBake.NONE &&
 										!isDamaged() && !isSick() && !isFeelPain() && getLinkParent() == null
-										&& !isPeropero() && !(isEating() && !isPikopiko())) {
+										&& !isPeroPero() && !(isEating() && !isPikopiko())) {
 									changeUnyo(0, 0,
 											(int) (RND.nextInt(((int) UNYOSTRENGTH[getBodyAgeState().ordinal()] / 3)))
 													+ UNYOSTRENGTH[getBodyAgeState().ordinal()]);
@@ -472,7 +472,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 							} else if (z == 0) {
 								if (getFootBakeLevel() == FootBake.NONE &&
 										!isDamaged() && !isSick() && !isFeelPain() && getLinkParent() == null
-										&& !isPeropero() && !(isEating() && !isPikopiko())) {
+										&& !isPeroPero() && !(isEating() && !isPikopiko())) {
 									changeUnyo(0, 0,
 											(int) (RND.nextInt(((int) UNYOSTRENGTH[getBodyAgeState().ordinal()] / 3)))
 													+ UNYOSTRENGTH[getBodyAgeState().ordinal()]);
@@ -497,7 +497,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	 * @return 現在の状態でうにょ機能を適用できるかどうか
 	 */
 	public boolean isUnyoActionAll() {
-		return isShitting() || isBirth() || isFurifuri() || isEating() || isPeropero() || isSukkiri() ||
+		return isShitting() || isBirth() || isFurifuri() || isEating() || isPeroPero() || isSukkiri() ||
 				isEatingShit() || isNobinobi() || isVain() || isPikopiko() || isYunnyaa();
 		//		return shitting || birth || furifuri || strike || eating || peropero || sukkiri ||
 		//				eatingShit || silent || nobinobi || pikopiko;
@@ -625,7 +625,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		//うんうん無効判定
 		// 溶けている場合,完全足焼きした場合,食事中、ぺろぺろ中、すっきり中はうんうんしない
 		if ((getFootBakeLevel() == FootBake.CRITICAL && !isPealed()) ||
-				isMelt() || isEating() || isPeropero() || isSukkiri() || isPacked()) {
+				isMelt() || isEating() || isPeroPero() || isSukkiri() || isPacked()) {
 			return false;
 		}
 		// レイパー発情中はうんうん無効
@@ -2545,13 +2545,13 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			// if grabbed, it cannot move.
 			setFalldownDamage(0);
 			setbNoDamageNextFall(false);
-			bx = 0;
-			by = 0;
+			setBx(0);
+			setBy(0);
 			bz = 0;
 			return;
 		}
-		int mx = vx + bx;
-		int my = vy + by;
+		int mx = vx + getBx();
+		int my = vy + getBy();
 		int mz = vz + bz;
 
 		if (mx != 0) {
@@ -2662,8 +2662,8 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 					}
 				}
 			}
-			bx = 0;
-			by = 0;
+			setBx(0);
+			setBy(0);
 			bz = 0;
 			return;
 		}
@@ -2676,15 +2676,15 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		z = Math.min(z, Translate.mapZ);
 
 		if (dontMove || isLockmove()) {
-			bx = 0;
-			by = 0;
+			setBx(0);
+			setBy(0);
 			bz = 0;
 			return;
 		}
 		// 仮の処理 コンベア移動中は動けなくする
-		if ((bx + by + bz) != 0) {
-			bx = 0;
-			by = 0;
+		if ((getBx() + getBy() + bz) != 0) {
+			setBx(0);
+			setBy(0);
 			bz = 0;
 			return;
 		}
@@ -2714,8 +2714,8 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 
 		int freq = getSTEP()[AgeState.ADULT.ordinal()] / step;
 		if (getAge() % freq != 0) {
-			bx = 0;
-			by = 0;
+			setBx(0);
+			setBy(0);
 			bz = 0;
 			return;
 		}
@@ -2933,8 +2933,8 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		} else if (dirX == 1) {
 			setDirection(Direction.RIGHT);
 		}
-		bx = 0;
-		by = 0;
+		setBx(0);
+		setBy(0);
 		bz = 0;
 	}
 
@@ -5045,7 +5045,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		if (isVeryHungry()) {
 			return;
 		}
-		if (isPeropero()) {
+		if (isPeroPero()) {
 			return;
 		}
 		if (!canAction()) {
@@ -5973,7 +5973,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 						m.setPanic(false, null);
 						m.setPeropero(false);
 						EventLogic.addBodyEvent(m, new KillPredeatorEvent(m, enemy, null, 10),
-									null, null);
+								null, null);
 					}
 					if (RND.nextInt(10) == 0) {
 						bodyInjure();
@@ -5993,7 +5993,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 						setAngry();
 						EventLogic.addBodyEvent(this, new RevengeAttackEvent(this, enemy, null, 1), null, null);
 					}
-				}  else {
+				} else {
 					setMessage(MessagePool.getMessage(this, MessagePool.Action.Scream), true);
 					if (getAttitude() != Attitude.VERY_NICE) {
 						setAngry();
@@ -7292,15 +7292,18 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		//切断
 		if (getCriticalDamege() != null) {
 			if (getCriticalDamege() == CriticalDamegeType.CUT) {
-				getImage(ImageCode.BODY_CUT.ordinal(), direction, layer, idx);
+				idx += getImage(ImageCode.BODY_CUT.ordinal(), direction, layer, idx);
 			} else
-				getImage(ImageCode.BODY_INJURED.ordinal(), direction, layer, idx);
+				idx += getImage(ImageCode.BODY_INJURED.ordinal(), direction, layer, idx);
 		}
 		//溶解
-		if (isPealed()) {
-			getImage(ImageCode.MELT_PEALED.ordinal(), direction, layer, idx);
-		} else {
-			getImage(ImageCode.MELT.ordinal(), direction, layer, idx);
+		if (isMelt()) {
+
+			if (isPealed()) {
+				idx += getImage(ImageCode.MELT_PEALED.ordinal(), direction, layer, idx);
+			} else {
+				idx += getImage(ImageCode.MELT.ordinal(), direction, layer, idx);
+			}
 		}
 		return idx;
 	}
@@ -7451,7 +7454,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 				} else if (isYunnyaa() || isBeggingForLife()) {
 					layer.option[0] = 5; //ゆんやあ&命乞い
 				} else if (!isLockmove() && !isDontJump()
-						&& getLinkParent() == null && !isPeropero() && !(isEating() && !isPikopiko())) {
+						&& getLinkParent() == null && !isPeroPero() && !(isEating() && !isPikopiko())) {
 					layer.option[0] = 3; // 跳ねて移動
 				}
 			}
@@ -8215,7 +8218,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			if (!isHasPants()) {
 				if (!isAnalClose() && !(isFixBack() && isbNeedled())) {
 					// 寝ているか粘着床についているか針が刺さっていたら体勢をかえられずに漏らす
-					if (!(isLockmove() && isFixBack()) || isSleeping() || isbNeedled() ||
+					if ((isLockmove() && isFixBack()) || isSleeping() || isbNeedled() ||
 							getBaryState() != BaryInUGState.NONE) {
 						retval = Event.DOCRUSHEDSHIT;
 					} else {
@@ -8528,7 +8531,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		if (this.moveTarget == null) {
 			strbufBodyState.append("MoveTarget: Null, ");
 		} else {
-			strbufBodyState.append("MoveTarget:").append(this.moveTarget.bx + "," + this.moveTarget.by).append(" , ");
+			strbufBodyState.append("MoveTarget:").append(this.moveTarget.getBx() + "," + this.moveTarget.getBy()).append(" , ");
 		}
 
 		if (this.getCurrentEvent() == null) {

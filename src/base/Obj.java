@@ -17,7 +17,7 @@ import src.system.ItemMenu.UseMenuTarget;
  *  でいぶ、ドスなどの突然変異でエラーが出る可能性があるので
  *  private変数は使わず代わりにprotectedを使用してください
  */
-public class Obj implements java.io.Serializable {
+public class Obj implements java.io.Serializable, Comparable {
 	static final long serialVersionUID = 1L;
 		/**時間経過用係数*/
 	public static final int TICK = SimYukkuri.TICK;
@@ -37,7 +37,9 @@ public class Obj implements java.io.Serializable {
 	protected int vx, vy, vz;
 	/** 基本内部パラメータ5
 	 *コンベアなど拘束による移動量ベクトル*/
-	protected int bx, by, bz;
+	private int bx;
+	private int by;
+	protected int bz;
 	/**基本内部パラメータ6
 	 * 除去されたか否か*/
 	private boolean removed = false;
@@ -192,8 +194,8 @@ public class Obj implements java.io.Serializable {
 	 * @param z　z方向
 	 */
 	public void addBxyz(int x,int y,int z){
-		bx += x;
-		by += y;
+		setBx(getBx() + x);
+		setBy(getBy() + y);
 		bz += z;
 	}
 	/**移動量セット
@@ -202,14 +204,14 @@ public class Obj implements java.io.Serializable {
 	 * @param z　z方向
 	 */
 	public void setBxyz(int x,int y,int z){
-		bx = x;
-		by = y;
+		setBx(x);
+		setBy(y);
 		bz = z;
 	}
 	/**移動量リセット*/
 	public void resetBPos() {
-		bx = 0;
-		by = 0;
+		setBx(0);
+		setBy(0);
 		bz = 0;
 	}
 
@@ -412,8 +414,8 @@ public class Obj implements java.io.Serializable {
 		}
 
 		if (!grabbed) {
-			int mx = vx + bx;
-			int my = vy + by;
+			int mx = vx + getBx();
+			int my = vy + getBy();
 			int mz = vz + bz;
 
 			if (mx != 0) {
@@ -460,8 +462,8 @@ public class Obj implements java.io.Serializable {
 				}
 			}
 		}
-		bx = 0;
-		by = 0;
+		setBx(0);
+		setBy(0);
 		bz = 0;
 		return Event.DONOTHING;
 	}
@@ -507,5 +509,24 @@ public class Obj implements java.io.Serializable {
 		this.age = age;
 	}
 
+	public int getBx() {
+		return bx;
+	}
 
+	public void setBx(int bx) {
+		this.bx = bx;
+	}
+
+	public int getBy() {
+		return by;
+	}
+
+	public void setBy(int by) {
+		this.by = by;
+	}
+
+	@Override
+	public int compareTo(Object o) {
+		return 0;
+	}
 }

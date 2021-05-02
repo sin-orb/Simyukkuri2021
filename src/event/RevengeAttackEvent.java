@@ -33,6 +33,7 @@ public class RevengeAttackEvent extends EventPacket implements java.io.Serializa
 	
 	// 参加チェック
 	public boolean checkEventResponse(Body b) {
+		priority = EventPriority.HIGH;
 		// これは特殊な扱いをするイベントで先に条件をチェックしてから
 		// 自分自身のリストに登録するので無条件にtrue
 		return true;
@@ -40,6 +41,13 @@ public class RevengeAttackEvent extends EventPacket implements java.io.Serializa
 
 	// イベント開始動作
 	public void start(Body b) {
+		b.setToFood(false);
+		b.setToBed(false);
+		b.setToShit(false);
+		b.setToSteal(false);
+		b.setToSukkiri(false);
+		b.setToTakeout(true);
+		b.setWakeUpTime(b.getAge());//眠気が覚める
 		int colX = BodyLogic.calcCollisionX(b, to);
 		b.moveToEvent(this, to.getX() + colX, to.getY());
 	}
@@ -83,5 +91,10 @@ public class RevengeAttackEvent extends EventPacket implements java.io.Serializa
 			b.addStress(-500);
 		}
 		return true;
+	}
+	
+	@Override
+	public String toString() {
+		return "やりかえすよ！";
 	}
 }

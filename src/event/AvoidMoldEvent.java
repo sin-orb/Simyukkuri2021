@@ -288,4 +288,9 @@ public class AvoidMoldEvent extends EventPacket implements java.io.Serializable 
 		}*/
 		From.setBodyEventResMessage(message, Const.HOLDMESSAGE, true, rnd.nextBoolean());
 	}
+	
+	@Override
+	public String toString() {
+		return "かびゆしんでね！";
+	}
 }

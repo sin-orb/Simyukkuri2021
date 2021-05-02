@@ -6,7 +6,6 @@ import java.util.Random;
 import src.base.Body;
 import src.base.EventPacket;
 import src.base.Obj;
-import src.enums.CoreAnkoState;
 import src.enums.Happiness;
 import src.enums.ImageCode;
 import src.enums.PublicRank;
@@ -410,6 +409,11 @@ public class FuneralEvent extends EventPacket implements java.io.Serializable {
 	public void end(Body b) {
 		b.setCurrentEvent(null);
 		return;
+	}
+	
+	@Override
+	public String toString() {
+		return "おとむらい";
 	}
 }
 

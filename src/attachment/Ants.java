@@ -114,6 +114,11 @@ public class Ants extends Attachment {
 		//処理インターヴァルの変更
 		processInterval = 100;
 	}
+	
+	@Override
+	public String toString() {
+		return "蟻";
+	}
 }
 
 

@@ -5,7 +5,6 @@ import java.util.Random;
 import src.base.Body;
 import src.base.EventPacket;
 import src.base.Obj;
-import src.enums.CoreAnkoState;
 import src.enums.Happiness;
 import src.enums.ImageCode;
 import src.enums.Intelligence;
@@ -328,5 +327,10 @@ public class ProposeEvent extends EventPacket implements java.io.Serializable {
 		to.setCurrentEvent(null);
 		getFrom().setLockmove(false);
 		to.setLockmove(false);
+	}
+	
+	@Override
+	public String toString() {
+		return "いっしょにゆっくり";
 	}
 }

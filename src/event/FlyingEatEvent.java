@@ -47,6 +47,7 @@ public class FlyingEatEvent extends EventPacket implements java.io.Serializable 
 		b.setToSukkiri(false);
 		b.setToTakeout(true);
 		b.moveToEvent(this, b.getX(), b.getY(),  Translate.getFlyHeightLimit());
+		b.setWakeUpTime(b.getAge());//眠気が覚める
 		to.setLinkParent(b);
 	}
 
@@ -129,5 +130,10 @@ public class FlyingEatEvent extends EventPacket implements java.io.Serializable 
 	// イベント終了処理
 	public void end(Body b) {
 		to.setLinkParent(null);
+	}
+	
+	@Override
+	public String toString() {
+		return "空中捕食";
 	}
 }

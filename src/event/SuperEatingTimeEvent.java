@@ -7,7 +7,6 @@ import src.base.Body;
 import src.base.EventPacket;
 import src.base.Obj;
 import src.draw.Translate;
-import src.enums.CoreAnkoState;
 import src.enums.GatheringDirection;
 import src.enums.Happiness;
 import src.item.Barrier;
@@ -475,6 +474,11 @@ public class SuperEatingTimeEvent extends EventPacket implements java.io.Seriali
 	// trueを返すとイベント終了
 	public boolean execute(Body b) {
 		return false;
+	}
+	
+	@Override
+	public String toString() {
+		return "すーぱーむーしゃむーしゃたいむ";
 	}
 
 }

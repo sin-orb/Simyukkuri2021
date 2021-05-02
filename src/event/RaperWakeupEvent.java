@@ -3,7 +3,6 @@ package src.event;
 import src.base.Body;
 import src.base.EventPacket;
 import src.base.Obj;
-import src.enums.CoreAnkoState;
 import src.item.Barrier;
 import src.logic.EventLogic;
 
@@ -64,5 +63,10 @@ public class RaperWakeupEvent extends EventPacket implements java.io.Serializabl
 	// trueを返すとイベント終了
 	public boolean execute(Body b) {
 		return true;
+	}
+	
+	@Override
+	public String toString() {
+		return "れいぱーが覚醒";
 	}
 }

@@ -136,8 +136,8 @@ public class IniFileUtil {
 		//路上で踏み潰される確率
 		nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play", "CarAccidentProbablity");
 		b.setCarAccidentProb(nTemp);
-		//路上で踏み潰される確率
-		nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play", "BreakBodyByShitProbablity");
+		//あんよが傷ついていた場合、一定確率であんよが爆ぜる確率
+		nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play", "BreakBodyByShitProbability");
 		b.setBreakBodyByShitProb(nTemp);
 		//発情する確率
 		nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play", "GetExcitedProbablity");
@@ -170,7 +170,7 @@ public class IniFileUtil {
 		if( b.getAnChildName() != null && 0 < b.getAnChildName().length ){
 			int nSize = b.getAnChildName().length;
 			int nIndex = b.RND.nextInt(nSize);
-			// 名前リストで同じ並びの物があればを優先する
+			// 名前リストで同じ並びの物があれば先のものを優先する
 			if( nBeforeNameIndex < nSize ){
 				nIndex = nBeforeNameIndex;
 			}
@@ -180,7 +180,7 @@ public class IniFileUtil {
 		if( b.getAnAdultName() != null && 0 < b.getAnAdultName().length ){
 			int nSize = b.getAnAdultName().length;
 			int nIndex = b.RND.nextInt(nSize);
-			// 名前リストで同じ並びの物があればを優先する
+			// 名前リストで同じ並びの物があれば先のものを優先する
 			if( nBeforeNameIndex < nSize ){
 				nIndex = nBeforeNameIndex;
 			}

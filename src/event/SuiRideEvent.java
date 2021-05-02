@@ -250,4 +250,9 @@ public class SuiRideEvent extends EventPacket implements java.io.Serializable {
 
 		memberride = false;
 	}
+	
+	@Override
+	public String toString() {
+		return "すぃーにのるよ";
+	}
 }

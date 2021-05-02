@@ -112,4 +112,9 @@ public class HungryAmpoule extends Attachment {
 		value = 500;
 		cost = 0;
 	}
+	
+	@Override
+	public String toString() {
+		return "飢餓誘発アンプル";
+	}
 }

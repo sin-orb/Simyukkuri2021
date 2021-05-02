@@ -8,7 +8,6 @@ import src.base.EventPacket;
 import src.base.Obj;
 import src.draw.Translate;
 import src.enums.Attitude;
-import src.enums.CoreAnkoState;
 import src.enums.Direction;
 import src.enums.Happiness;
 import src.enums.ImageCode;
@@ -110,5 +109,10 @@ public class EatBodyEvent extends EventPacket implements java.io.Serializable {
 	public void end(Body b) {
 		b.setLockmove(false);
 		return;
+	}
+	
+	@Override
+	public String toString() {
+		return "たべないでぇ";
 	}
 }

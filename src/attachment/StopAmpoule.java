@@ -111,4 +111,9 @@ public class StopAmpoule extends Attachment {
 		//処理インターバルの変更
 		processInterval =100;
 	}
+	
+	@Override
+	public String toString() {
+		return "成長抑制アンプル";
+	}
 }

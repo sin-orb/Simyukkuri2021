@@ -72,7 +72,7 @@ public class AccelAmpoule extends Attachment {
 
 	@Override
 	protected Event update() {
-		if(!parent.isAdult()) {
+		if(!parent.isAdult() && !parent.isDead()) {
 			parent.addAge(TICK * 10000);
 		}
 		return Event.DONOTHING;
@@ -105,6 +105,11 @@ public class AccelAmpoule extends Attachment {
 		cost = 0;
 		//処理インターバルの変更
 		processInterval =100;
+	}
+	
+	@Override
+	public String toString() {
+		return "成長促進アンプル";
 	}
 }
 

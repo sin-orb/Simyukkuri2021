@@ -11,7 +11,6 @@ import src.base.Body;
 import src.draw.ModLoader;
 import src.enums.AgeState;
 import src.enums.AttachProperty;
-import src.enums.CoreAnkoState;
 import src.enums.Event;
 import src.enums.HairState;
 import src.enums.Happiness;
@@ -172,5 +171,8 @@ public class Fire extends Attachment {
 		//処理インターバルの変更
 		processInterval = 1;
 	}
-
+	@Override
+	public String toString() {
+		return "炎";
+	}
 }

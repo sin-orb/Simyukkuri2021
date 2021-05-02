@@ -116,13 +116,13 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 
 	/**移動目的*/
 	protected PurposeOfMoving purposeOfMoving = PurposeOfMoving.NONE;
-	
+
 	// Used in image loading.
 	private static BufferedImage[] shadowImages = new BufferedImage[3];
 	/**影画像のサイズ定義*/
 	protected static int[] shadowImgW = new int[3], shadowImgH = new int[3];
 	/**影画像の中心定義*/
-	protected static int[] shadowPivX = new int[3],shadowPivY = new int[3];
+	protected static int[] shadowPivX = new int[3], shadowPivY = new int[3];
 	/**本体のスプライト定義*/
 	protected Sprite[] bodySpr = new Sprite[3];
 	/**拡幅分のスプライト定義*/
@@ -608,6 +608,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public String[] getAnBabyName() {
 		return anBabyName;
 	}
+
 	/**
 	 * 赤ゆの一人称を設定する.
 	 * @param anBabyName 赤ゆの一人称
@@ -615,6 +616,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setAnBabyName(String[] anBabyName) {
 		this.anBabyName = anBabyName;
 	}
+
 	/**
 	 * 子ゆの一人称を取得する.
 	 * @return 子ゆの一人称
@@ -622,6 +624,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public String[] getAnChildName() {
 		return anChildName;
 	}
+
 	/**
 	 * 子ゆの一人称を設定する.
 	 * @param anChildName 子ゆの一人称
@@ -629,6 +632,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setAnChildName(String[] anChildName) {
 		this.anChildName = anChildName;
 	}
+
 	/**
 	 * 成ゆの一人称を取得する.
 	 * @return 成ゆの一人称
@@ -636,6 +640,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public String[] getAnAdultName() {
 		return anAdultName;
 	}
+
 	/**
 	 * 成ゆの一人称を設定する.
 	 * @param anAdultName 成ゆの一人称
@@ -643,6 +648,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setAnAdultName(String[] anAdultName) {
 		this.anAdultName = anAdultName;
 	}
+
 	/**
 	 * [0]:赤ゆの一人称 [1]:子ゆの一人称 [2]:大人ゆの一人称 を取得する.
 	 * @return [0]:赤ゆの一人称 [1]:子ゆの一人称 [2]:大人ゆの一人称 
@@ -650,6 +656,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public String[] getAnMyName() {
 		return anMyName;
 	}
+
 	/**
 	 * [0]:赤ゆの一人称 [1]:子ゆの一人称 [2]:大人ゆの一人称 を設定する.
 	 * @param anMyName [0]:赤ゆの一人称 [1]:子ゆの一人称 [2]:大人ゆの一人称 
@@ -657,6 +664,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setAnMyName(String[] anMyName) {
 		this.anMyName = anMyName;
 	}
+
 	/**
 	 * 赤ゆの一人称（ダメージ時）を返却する.
 	 * @return 赤ゆの一人称（ダメージ時）
@@ -664,6 +672,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public String[] getAnBabyNameD() {
 		return anBabyNameD;
 	}
+
 	/**
 	 * 赤ゆの一人称（ダメージ時）を設定する.
 	 * @param anBabyNameD 赤ゆの一人称（ダメージ時）
@@ -671,6 +680,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setAnBabyNameD(String[] anBabyNameD) {
 		this.anBabyNameD = anBabyNameD;
 	}
+
 	/**
 	 * 子ゆの一人称（ダメージ時）を取得する.
 	 * @return 子ゆの一人称（ダメージ時）
@@ -678,6 +688,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public String[] getAnChildNameD() {
 		return anChildNameD;
 	}
+
 	/**
 	 * 子ゆの一人称（ダメージ時）を設定する.
 	 * @param anChildNameD 子ゆの一人称（ダメージ時）
@@ -685,6 +696,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setAnChildNameD(String[] anChildNameD) {
 		this.anChildNameD = anChildNameD;
 	}
+
 	/**
 	 * 大人ゆの一人称（ダメージ時）を取得する.
 	 * @return 大人ゆの一人称（ダメージ時）
@@ -692,6 +704,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public String[] getAnAdultNameD() {
 		return anAdultNameD;
 	}
+
 	/**
 	 * 大人ゆの一人称（ダメージ時） を設定する.
 	 * @param anAdultNameD 大人ゆの一人称（ダメージ時）
@@ -699,6 +712,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setAnAdultNameD(String[] anAdultNameD) {
 		this.anAdultNameD = anAdultNameD;
 	}
+
 	/**
 	 * ダメージ時の、[0]:赤ゆの一人称 [1]:子ゆの一人称 [2]:大人ゆの一人称を取得する.
 	 * @return ダメージ時の、[0]:赤ゆの一人称 [1]:子ゆの一人称 [2]:大人ゆの一人称
@@ -706,6 +720,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public String[] getAnMyNameD() {
 		return anMyNameD;
 	}
+
 	/**
 	 * ダメージ時の、[0]:赤ゆの一人称 [1]:子ゆの一人称 [2]:大人ゆの一人称 を設定する.
 	 * @param anMyNameD ダメージ時の、[0]:赤ゆの一人称 [1]:子ゆの一人称 [2]:大人ゆの一人称
@@ -721,6 +736,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public static void setShadowImages(BufferedImage[] shadowImages) {
 		BodyAttributes.shadowImages = shadowImages;
 	}
+
 	/**
 	 * 影画像のサイズ定義を取得する.
 	 * @return 影画像のサイズ定義
@@ -728,6 +744,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public static int[] getShadowImgW() {
 		return shadowImgW;
 	}
+
 	/**
 	 * 影画像のサイズ定義を設定する.
 	 * @param shadowImgW 影画像のサイズ定義
@@ -743,6 +760,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public static void setShadowImgH(int[] shadowImgH) {
 		BodyAttributes.shadowImgH = shadowImgH;
 	}
+
 	/**
 	 * 影画像の中心定義を取得する.
 	 * @return 影画像の中心定義
@@ -750,6 +768,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public static int[] getShadowPivX() {
 		return shadowPivX;
 	}
+
 	/**
 	 * 影画像の中心定義を設定する.
 	 * @param shadowPivX 影画像の中心定義
@@ -765,6 +784,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public static void setShadowPivY(int[] shadowPivY) {
 		BodyAttributes.shadowPivY = shadowPivY;
 	}
+
 	/**
 	 * 本体のスプライト定義を取得する.
 	 * @return 本体のスプライト定義
@@ -772,6 +792,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public Sprite[] getBodySpr() {
 		return bodySpr;
 	}
+
 	/**
 	 * 本体のスプライト定義を設定する.
 	 * @param bodySpr 本体のスプライト定義
@@ -779,6 +800,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setBodySpr(Sprite[] bodySpr) {
 		this.bodySpr = bodySpr;
 	}
+
 	/**
 	 * 拡幅分のスプライト定義を取得する.
 	 * @return 拡幅分のスプライト定義
@@ -786,6 +808,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public Sprite[] getExpandSpr() {
 		return expandSpr;
 	}
+
 	/**
 	 * 拡幅分のスプライト定義を設定する.
 	 * @param expandSpr 拡幅分のスプライト定義
@@ -793,6 +816,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setExpandSpr(Sprite[] expandSpr) {
 		this.expandSpr = expandSpr;
 	}
+
 	/**
 	 * おさげのスプライト定義を取得する.
 	 * @return おさげのスプライト定義
@@ -800,6 +824,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public Sprite[] getBraidSpr() {
 		return braidSpr;
 	}
+
 	/**
 	 * おさげのスプライト定義を設定する.
 	 * @param braidSpr おさげのスプライト定義
@@ -807,6 +832,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setBraidSpr(Sprite[] braidSpr) {
 		this.braidSpr = braidSpr;
 	}
+
 	/**
 	 * 一回の食事量 を取得する.
 	 * @return 一回の食事量
@@ -814,6 +840,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int[] getEATAMOUNT() {
 		return EATAMOUNT;
 	}
+
 	/**
 	 * 一回の食事量 を設定する.
 	 * @param eATAMOUNT 一回の食事量 
@@ -829,6 +856,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int[] getWEIGHT() {
 		return WEIGHT;
 	}
+
 	/**
 	 * 体重を設定する.
 	 * @param wEIGHT 体重
@@ -836,6 +864,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setWEIGHT(int[] wEIGHT) {
 		WEIGHT = wEIGHT;
 	}
+
 	/**
 	 * 空腹限界を取得する.
 	 * @return 空腹限界
@@ -843,6 +872,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int[] getHUNGRYLIMIT() {
 		return HUNGRYLIMIT;
 	}
+
 	/**
 	 * 空腹限界を設定する.
 	 * @param hUNGRYLIMIT 空腹限界
@@ -850,6 +880,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setHUNGRYLIMIT(int[] hUNGRYLIMIT) {
 		HUNGRYLIMIT = hUNGRYLIMIT;
 	}
+
 	/**
 	 * うんうん限界を取得する.
 	 * @return うんうん限界
@@ -857,6 +888,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int[] getSHITLIMIT() {
 		return SHITLIMIT;
 	}
+
 	/**
 	 * うんうん限界を設定する.
 	 * @param sHITLIMIT うんうん限界
@@ -864,6 +896,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setSHITLIMIT(int[] sHITLIMIT) {
 		SHITLIMIT = sHITLIMIT;
 	}
+
 	/**
 	 * ダメージ限界を取得する.
 	 * @return ダメージ限界
@@ -871,6 +904,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int[] getDAMAGELIMIT() {
 		return DAMAGELIMIT;
 	}
+
 	/**
 	 * ダメージ限界を設定する.
 	 * @param dAMAGELIMIT ダメージ限界
@@ -878,6 +912,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setDAMAGELIMIT(int[] dAMAGELIMIT) {
 		DAMAGELIMIT = dAMAGELIMIT;
 	}
+
 	/**
 	 * ストレス限界を取得する.
 	 * @return ストレス限界
@@ -885,6 +920,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int[] getSTRESSLIMIT() {
 		return STRESSLIMIT;
 	}
+
 	/**
 	 * ストレス限界を設定する.
 	 * @param sTRESSLIMIT ストレス限界
@@ -892,6 +928,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setSTRESSLIMIT(int[] sTRESSLIMIT) {
 		STRESSLIMIT = sTRESSLIMIT;
 	}
+
 	/**
 	 * なつき度限界を取得する.
 	 * @return なつき度限界
@@ -899,6 +936,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getLOVEPLAYERLIMIT() {
 		return LOVEPLAYERLIMIT;
 	}
+
 	/**
 	 * なつき度限界を設定する. 
 	 * @param lOVEPLAYERLIMIT なつき度限界 
@@ -914,6 +952,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int[] getTANGLEVEL() {
 		return TANGLEVEL;
 	}
+
 	/**
 	 * 味覚レベル を設定する.
 	 * @param tANGLEVEL 味覚レベル
@@ -929,6 +968,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getBABYLIMIT() {
 		return BABYLIMIT;
 	}
+
 	/**
 	 * 赤ゆ期間 を設定する.
 	 * @param bABYLIMIT 赤ゆ期間 
@@ -936,6 +976,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setBABYLIMIT(int bABYLIMIT) {
 		BABYLIMIT = bABYLIMIT;
 	}
+
 	/**
 	 * 子ゆ期間 を取得する.
 	 * @return 子ゆ期間 
@@ -943,6 +984,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getCHILDLIMIT() {
 		return CHILDLIMIT;
 	}
+
 	/**
 	 * 子ゆ期間 を設定する.
 	 * @param cHILDLIMIT 子ゆ期間 
@@ -950,6 +992,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setCHILDLIMIT(int cHILDLIMIT) {
 		CHILDLIMIT = cHILDLIMIT;
 	}
+
 	/**
 	 * 寿命を取得する.
 	 * @return 寿命
@@ -957,6 +1000,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getLIFELIMIT() {
 		return LIFELIMIT;
 	}
+
 	/**
 	 * 寿命を設定する.
 	 * @param lIFELIMIT 寿命
@@ -964,6 +1008,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setLIFELIMIT(int lIFELIMIT) {
 		LIFELIMIT = lIFELIMIT;
 	}
+
 	/**
 	 * 腐敗日数 を取得する.
 	 * @return 腐敗日数
@@ -971,6 +1016,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getROTTINGTIME() {
 		return ROTTINGTIME;
 	}
+
 	/**
 	 * 腐敗日数 を設定する.
 	 * @param rOTTINGTIME 腐敗日数 
@@ -978,6 +1024,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setROTTINGTIME(int rOTTINGTIME) {
 		ROTTINGTIME = rOTTINGTIME;
 	}
+
 	/**
 	 * 足の速さを取得する.
 	 * @return 足の速さ
@@ -985,6 +1032,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int[] getSTEP() {
 		return STEP;
 	}
+
 	/**
 	 * 足の速さを設定する.
 	 * @param sTEP 足の速さ
@@ -992,6 +1040,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setSTEP(int[] sTEP) {
 		STEP = sTEP;
 	}
+
 	/**
 	 * リラックス状態の期間を取得する.
 	 * @return リラックス状態の期間
@@ -999,6 +1048,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getRELAXPERIOD() {
 		return RELAXPERIOD;
 	}
+
 	/**
 	 * リラックス状態の期間 を設定する.
 	 * @param rELAXPERIOD リラックス状態の期間
@@ -1006,6 +1056,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setRELAXPERIOD(int rELAXPERIOD) {
 		RELAXPERIOD = rELAXPERIOD;
 	}
+
 	/**
 	 * 発情状態の期間 を取得する.
 	 * @return 発情状態の期間
@@ -1013,6 +1064,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getEXCITEPERIOD() {
 		return EXCITEPERIOD;
 	}
+
 	/**
 	 * 発情状態の期間 を設定する.
 	 * @param eXCITEPERIOD 発情状態の期間 
@@ -1020,6 +1072,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setEXCITEPERIOD(int eXCITEPERIOD) {
 		EXCITEPERIOD = eXCITEPERIOD;
 	}
+
 	/**
 	 * 妊娠期間 を取得する.
 	 * @return 妊娠期間 
@@ -1027,6 +1080,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getPREGPERIOD() {
 		return PREGPERIOD;
 	}
+
 	/**
 	 * 妊娠期間 を設定する.
 	 * @param pREGPERIOD 妊娠期間 
@@ -1034,6 +1088,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setPREGPERIOD(int pREGPERIOD) {
 		PREGPERIOD = pREGPERIOD;
 	}
+
 	/**
 	 * 睡眠時間 を取得する.
 	 * @return 睡眠時間 
@@ -1041,6 +1096,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getSLEEPPERIOD() {
 		return SLEEPPERIOD;
 	}
+
 	/**
 	 * 睡眠時間 を設定する.
 	 * @param sLEEPPERIOD 睡眠時間 
@@ -1048,6 +1104,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setSLEEPPERIOD(int sLEEPPERIOD) {
 		SLEEPPERIOD = sLEEPPERIOD;
 	}
+
 	/**
 	 * アクティブな期間 を取得する.
 	 * @return アクティブな期間 
@@ -1055,6 +1112,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getACTIVEPERIOD() {
 		return ACTIVEPERIOD;
 	}
+
 	/**
 	 * アクティブな期間 を設定する.
 	 * @param aCTIVEPERIOD アクティブな期間 
@@ -1062,6 +1120,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setACTIVEPERIOD(int aCTIVEPERIOD) {
 		ACTIVEPERIOD = aCTIVEPERIOD;
 	}
+
 	/**
 	 * 怒り期間 を取得する.
 	 * @return 怒り期間 
@@ -1069,6 +1128,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getANGRYPERIOD() {
 		return ANGRYPERIOD;
 	}
+
 	/**
 	 * 怒り期間 を設定する.
 	 * @param aNGRYPERIOD 怒り期間 
@@ -1076,6 +1136,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setANGRYPERIOD(int aNGRYPERIOD) {
 		ANGRYPERIOD = aNGRYPERIOD;
 	}
+
 	/**
 	 * 恐怖期間 を取得する.
 	 * @return 恐怖期間 
@@ -1083,6 +1144,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getSCAREPERIOD() {
 		return SCAREPERIOD;
 	}
+
 	/**
 	 * 恐怖期間 を設定する.
 	 * @param sCAREPERIOD 恐怖期間 
@@ -1090,6 +1152,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setSCAREPERIOD(int sCAREPERIOD) {
 		SCAREPERIOD = sCAREPERIOD;
 	}
+
 	/**
 	 * 同一方向に動き続けるかを取得する.
 	 * @return 同一方向に動き続けるか
@@ -1097,6 +1160,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getSameDest() {
 		return sameDest;
 	}
+
 	/**
 	 * 同一方向に動き続けるかを設定する.
 	 * @param sameDest 同一方向に動き続けるか
@@ -1104,6 +1168,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setSameDest(int sameDest) {
 		this.sameDest = sameDest;
 	}
+
 	/**
 	 * ゲーム内12分、衝動の抑制のための変数 を取得する.
 	 * @return ゲーム内12分、衝動の抑制のための変数
@@ -1111,6 +1176,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getDECLINEPERIOD() {
 		return DECLINEPERIOD;
 	}
+
 	/**
 	 * ゲーム内12分、衝動の抑制のための変数 を設定する.
 	 * @param dECLINEPERIOD ゲーム内12分、衝動の抑制のための変数 
@@ -1118,6 +1184,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setDECLINEPERIOD(int dECLINEPERIOD) {
 		DECLINEPERIOD = dECLINEPERIOD;
 	}
+
 	/**
 	 * 壁等にブロックされた回数の限界（怒りだす等） を取得する.
 	 * @return 壁等にブロックされた回数の限界（怒りだす等） 
@@ -1125,6 +1192,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getBLOCKEDLIMIT() {
 		return BLOCKEDLIMIT;
 	}
+
 	/**
 	 * 壁等にブロックされた回数の限界（怒りだす等） を設定する.
 	 * @param bLOCKEDLIMIT 壁等にブロックされた回数の限界（怒りだす等） 
@@ -1132,6 +1200,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setBLOCKEDLIMIT(int bLOCKEDLIMIT) {
 		BLOCKEDLIMIT = bLOCKEDLIMIT;
 	}
+
 	/**
 	 * 汚れ限界（超えるとゆかび状態） を取得する.
 	 * @return 汚れ限界（超えるとゆかび状態） 
@@ -1139,6 +1208,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getDIRTYPERIOD() {
 		return DIRTYPERIOD;
 	}
+
 	/**
 	 * 汚れ限界（超えるとゆかび状態） を設定する.
 	 * @param dIRTYPERIOD 汚れ限界（超えるとゆかび状態） 
@@ -1146,6 +1216,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setDIRTYPERIOD(int dIRTYPERIOD) {
 		DIRTYPERIOD = dIRTYPERIOD;
 	}
+
 	/**
 	 * 視界を取得する.
 	 * @return 視界
@@ -1153,6 +1224,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getEYESIGHT() {
 		return EYESIGHT;
 	}
+
 	/**
 	 * 視界を設定する.
 	 * @param eYESIGHT 視界
@@ -1160,6 +1232,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setEYESIGHT(int eYESIGHT) {
 		EYESIGHT = eYESIGHT;
 	}
+
 	/**
 	 * 強さを取得する.
 	 * @return 強さ
@@ -1167,6 +1240,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int[] getSTRENGTH() {
 		return STRENGTH;
 	}
+
 	/**
 	 * 強さを設定する.
 	 * @param sTRENGTH 強さ
@@ -1174,6 +1248,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setSTRENGTH(int[] sTRENGTH) {
 		STRENGTH = sTRENGTH;
 	}
+
 	/**
 	 * ゆかびの潜伏期間 を取得する.
 	 * @return ゆかびの潜伏期間 
@@ -1181,6 +1256,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getINCUBATIONPERIOD() {
 		return INCUBATIONPERIOD;
 	}
+
 	/**
 	 * ゆかびの潜伏期間 を設定する.
 	 * @param iNCUBATIONPERIOD ゆかびの潜伏期間 
@@ -1188,6 +1264,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setINCUBATIONPERIOD(int iNCUBATIONPERIOD) {
 		INCUBATIONPERIOD = iNCUBATIONPERIOD;
 	}
+
 	/**
 	 * 攻撃された際のぴこぴこ破壊確率。0だと破壊されない を取得する.
 	 * @return 攻撃された際のぴこぴこ破壊確率。0だと破壊されない 
@@ -1195,6 +1272,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getnBreakBraidRand() {
 		return nBreakBraidRand;
 	}
+
 	/**
 	 * 攻撃された際のぴこぴこ破壊確率。0だと破壊されない を設定する.
 	 * @param nBreakBraidRand 攻撃された際のぴこぴこ破壊確率。0だと破壊されない 
@@ -1202,6 +1280,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setnBreakBraidRand(int nBreakBraidRand) {
 		this.nBreakBraidRand = nBreakBraidRand;
 	}
+
 	/**
 	 * 何回のうち1回の確率ですりすり事故で妊娠するかの値 を取得する.
 	 * @return 何回のうち1回の確率ですりすり事故で妊娠するかの値 
@@ -1209,6 +1288,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getSurisuriAccidentProb() {
 		return SurisuriAccidentProb;
 	}
+
 	/**
 	 * 何回のうち1回の確率ですりすり事故で妊娠するかの値 を設定する.
 	 * @param surisuriAccidentProb 何回のうち1回の確率ですりすり事故で妊娠するかの値 
@@ -1216,6 +1296,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setSurisuriAccidentProb(int surisuriAccidentProb) {
 		SurisuriAccidentProb = surisuriAccidentProb;
 	}
+
 	/**
 	 * 何回のうち1回の確率で路上で車に轢かれるかの値 を取得する.
 	 * @return 何回のうち1回の確率で路上で車に轢かれるかの値 
@@ -1223,6 +1304,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getCarAccidentProb() {
 		return CarAccidentProb;
 	}
+
 	/**
 	 * 何回のうち1回の確率で路上で車に轢かれるかの値 を設定する.
 	 * @param carAccidentProb 何回のうち1回の確率で路上で車に轢かれるかの値 
@@ -1230,6 +1312,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setCarAccidentProb(int carAccidentProb) {
 		CarAccidentProb = carAccidentProb;
 	}
+
 	/**
 	 * 何回のうち1回の確率であんよが傷ついているとあんよが破壊されるかの確率 を取得する.
 	 * @return 何回のうち1回の確率であんよが傷ついているとあんよが破壊されるかの確率
@@ -1237,6 +1320,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getBreakBodyByShitProb() {
 		return BreakBodyByShitProb;
 	}
+
 	/**
 	 * 何回のうち1回の確率であんよが傷ついているとあんよが破壊されるかの確率 を設定する.
 	 * @param breakBodyByShitProb 何回のうち1回の確率であんよが傷ついているとあんよが破壊されるかの確率 
@@ -1244,6 +1328,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setBreakBodyByShitProb(int breakBodyByShitProb) {
 		BreakBodyByShitProb = breakBodyByShitProb;
 	}
+
 	/**
 	 * 何回のうち1回の確率で苦いフードを食べた際にゆ下痢になるかの確率 を取得する.
 	 * @return 何回のうち1回の確率で苦いフードを食べた際にゆ下痢になるかの確率 
@@ -1251,6 +1336,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getDiarrheaProb() {
 		return diarrheaProb;
 	}
+
 	/**
 	 * 何回のうち1回の確率で苦いフードを食べた際にゆ下痢になるかの確率 を設定する.
 	 * @param diarrheaProb 何回のうち1回の確率で苦いフードを食べた際にゆ下痢になるかの確率 
@@ -1258,6 +1344,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setDiarrheaProb(int diarrheaProb) {
 		this.diarrheaProb = diarrheaProb;
 	}
+
 	/**
 	 * 何回のうち１回の確率で発情するかの確率 を取得する.
 	 * @return 何回のうち１回の確率で発情するかの確率 
@@ -1265,6 +1352,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getExciteProb() {
 		return exciteProb;
 	}
+
 	/**
 	 * 何回のうち１回の確率で発情するかの確率 を設定する.
 	 * @param exciteProb 何回のうち１回の確率で発情するかの確率 
@@ -1272,6 +1360,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setExciteProb(int exciteProb) {
 		this.exciteProb = exciteProb;
 	}
+
 	/**
 	 * 固有の免疫力（個体値。これは仮） を取得する.
 	 * @return 固有の免疫力（個体値。これは仮） 
@@ -1279,6 +1368,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getROBUSTNESS() {
 		return ROBUSTNESS;
 	}
+
 	/**
 	 * 固有の免疫力（個体値。これは仮） を設定する.
 	 * @param rOBUSTNESS 固有の免疫力（個体値。これは仮） 
@@ -1286,6 +1376,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setROBUSTNESS(int rOBUSTNESS) {
 		ROBUSTNESS = rOBUSTNESS;
 	}
+
 	/**
 	 * 免疫力(左から順に赤ゆ、子ゆ、成ゆ、老ゆ) を取得する.
 	 * @return 免疫力(左から順に赤ゆ、子ゆ、成ゆ、老ゆ) 
@@ -1293,6 +1384,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int[] getImmunity() {
 		return immunity;
 	}
+
 	/**
 	 * 免疫力(左から順に赤ゆ、子ゆ、成ゆ、老ゆ) を設定する.
 	 * @param immunity 免疫力(左から順に赤ゆ、子ゆ、成ゆ、老ゆ) 
@@ -1300,6 +1392,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setImmunity(int[] immunity) {
 		this.immunity = immunity;
 	}
+
 	/**
 	 * 性格変化の切り替え を取得する.
 	 * @return 性格変化の切り替え 
@@ -1307,6 +1400,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public boolean isNotChangeCharacter() {
 		return notChangeCharacter;
 	}
+
 	/**
 	 * 性格変化の切り替え を設定する.
 	 * @param notChangeCharacter 性格変化の切り替え 
@@ -1314,6 +1408,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setNotChangeCharacter(boolean notChangeCharacter) {
 		this.notChangeCharacter = notChangeCharacter;
 	}
+
 	/**
 	 * ゲスポイント を取得する.
 	 * @return ゲスポイント 
@@ -1321,6 +1416,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getAttitudePoint() {
 		return AttitudePoint;
 	}
+
 	/**
 	 * ゲスポイント を設定する.
 	 * @param attitudePoint ゲスポイント 
@@ -1328,6 +1424,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setAttitudePoint(int attitudePoint) {
 		AttitudePoint = attitudePoint;
 	}
+
 	/**
 	 * ゲス限界 を取得する.
 	 * @return ゲス限界 
@@ -1335,6 +1432,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int[] getRudeLimit() {
 		return RudeLimit;
 	}
+
 	/**
 	 * ゲス限界 を設定する.
 	 * @param rudeLimit ゲス限界 
@@ -1342,6 +1440,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setRudeLimit(int[] rudeLimit) {
 		RudeLimit = rudeLimit;
 	}
+
 	/**
 	 * 善良限界 を取得する.
 	 * @return 善良限界 
@@ -1349,6 +1448,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int[] getNiceLimit() {
 		return NiceLimit;
 	}
+
 	/**
 	 * 善良限界 を設定する.
 	 * @param niceLimit 善良限界 
@@ -1356,6 +1456,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setNiceLimit(int[] niceLimit) {
 		NiceLimit = niceLimit;
 	}
+
 	/**
 	 * 妊娠限界 を取得する.
 	 * @return 妊娠限界 
@@ -1363,6 +1464,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getPregnantLimit() {
 		return PregnantLimit;
 	}
+
 	/**
 	 * 妊娠限界 を設定する.
 	 * @param pregnantLimit 妊娠限界 
@@ -1370,6 +1472,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setPregnantLimit(int pregnantLimit) {
 		PregnantLimit = pregnantLimit;
 	}
+
 	/**
 	 * よりリアルな妊娠限界かどうか を取得する.
 	 * @return よりリアルな妊娠限界かどうか 
@@ -1377,6 +1480,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public boolean isRealPregnantLimit() {
 		return realPregnantLimit;
 	}
+
 	/**
 	 * よりリアルな妊娠限界かどうかを返却する.
 	 * @param realPregnantLimit よりリアルな妊娠限界かどうか
@@ -1384,6 +1488,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setRealPregnantLimit(boolean realPregnantLimit) {
 		this.realPregnantLimit = realPregnantLimit;
 	}
+
 	/**
 	 * 画像がまりちゃ流しか を設定する.
 	 * @return 画像がまりちゃ流しか 
@@ -1391,6 +1496,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public boolean isbImageNagasiMode() {
 		return bImageNagasiMode;
 	}
+
 	/**
 	 * 画像がまりちゃ流しか を設定する.
 	 * @param bImageNagasiMode 画像がまりちゃ流しか 
@@ -1398,6 +1504,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setbImageNagasiMode(boolean bImageNagasiMode) {
 		this.bImageNagasiMode = bImageNagasiMode;
 	}
+
 	/**
 	 * 飼いゆ、野良ゆなどのランク を取得する.
 	 * @return 飼いゆ、野良ゆなどのランク 
@@ -1405,6 +1512,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public BodyRank getBodyRank() {
 		return bodyRank;
 	}
+
 	/**
 	 * 飼いゆ、野良ゆなどのランク を設定する.
 	 * @param bodyRank 飼いゆ、野良ゆなどのランク 
@@ -1412,6 +1520,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setBodyRank(BodyRank bodyRank) {
 		this.bodyRank = bodyRank;
 	}
+
 	/**
 	 * 群れ内のうんうん奴隷などのランク を取得する.
 	 * @return 群れ内のうんうん奴隷などのランク 
@@ -1419,6 +1528,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public PublicRank getPublicRank() {
 		return publicRank;
 	}
+
 	/**
 	 * 群れ内のうんうん奴隷などのランク を設定する.
 	 * @param publicRank 群れ内のうんうん奴隷などのランク 
@@ -1426,6 +1536,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setPublicRank(PublicRank publicRank) {
 		this.publicRank = publicRank;
 	}
+
 	/**
 	 * 移動先目標 destination X座標を取得する.
 	 * @return 移動先目標 destination X座標 
@@ -1433,6 +1544,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getDestX() {
 		return destX;
 	}
+
 	/**
 	 * 移動先目標 destination X座標を設定する.
 	 * @param destX 移動先目標 destination X座標
@@ -1440,6 +1552,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setDestX(int destX) {
 		this.destX = destX;
 	}
+
 	/**
 	 * 移動先目標 destination Y座標を取得する.
 	 * @return 移動先目標 destination Y座標
@@ -1447,6 +1560,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getDestY() {
 		return destY;
 	}
+
 	/**
 	 * 移動先目標 destination Y座標を設定する.
 	 * @param destY 移動先目標 destination Y座標
@@ -1454,6 +1568,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setDestY(int destY) {
 		this.destY = destY;
 	}
+
 	/**
 	 * 移動先目標 destination Z座標を取得する.
 	 * @return 移動先目標 destination Z座標
@@ -1461,6 +1576,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getDestZ() {
 		return destZ;
 	}
+
 	/**
 	 * 移動先目標 destination Z座標を設定する.
 	 * @param destZ 移動先目標 destination Z座標座標
@@ -1468,6 +1584,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setDestZ(int destZ) {
 		this.destZ = destZ;
 	}
+
 	/**
 	 * 移動量 how many steps to same direction を取得する.
 	 * @return 移動量 how many steps to same direction 
@@ -1475,6 +1592,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getCountX() {
 		return countX;
 	}
+
 	/**
 	 * 移動量 how many steps to same direction X座標を設定する.
 	 * @param countX 移動量 how many steps to same direction X座標 
@@ -1482,6 +1600,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setCountX(int countX) {
 		this.countX = countX;
 	}
+
 	/**
 	 * 移動量 how many steps to same direction Y座標を取得する.
 	 * @return 移動量 how many steps to same direction Y座標
@@ -1489,6 +1608,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getCountY() {
 		return countY;
 	}
+
 	/**
 	 * 移動量 how many steps to same direction Y座標を設定する.
 	 * @param countY 移動量 how many steps to same direction Y座標
@@ -1496,6 +1616,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setCountY(int countY) {
 		this.countY = countY;
 	}
+
 	/**
 	 * 移動量 how many steps to same direction Z座標を取得する.
 	 * @return 移動量 how many steps to same direction Z座標
@@ -1503,6 +1624,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getCountZ() {
 		return countZ;
 	}
+
 	/**
 	 * 移動量 how many steps to same direction Z座標を設定する.
 	 * @param countZ 移動量 how many steps to same direction Z座標
@@ -1510,6 +1632,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setCountZ(int countZ) {
 		this.countZ = countZ;
 	}
+
 	/**
 	 * 移動方向 direction to move on X座標を取得する.
 	 * @return 移動方向 direction to move on X座標
@@ -1517,6 +1640,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getDirX() {
 		return dirX;
 	}
+
 	/**
 	 * 移動方向 direction to move on X座標を設定する.
 	 * @param dirX 移動方向 direction to move on X座標
@@ -1524,6 +1648,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setDirX(int dirX) {
 		this.dirX = dirX;
 	}
+
 	/**
 	 * 移動方向 direction to move on Y座標を取得する.
 	 * @return 移動方向 direction to move on Y座標
@@ -1531,6 +1656,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getDirY() {
 		return dirY;
 	}
+
 	/**
 	 * 移動方向 direction to move on Y座標を設定する.
 	 * @param dirY 移動方向 direction to move on Y座標
@@ -1538,6 +1664,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setDirY(int dirY) {
 		this.dirY = dirY;
 	}
+
 	/**
 	 * 移動方向 direction to move on Z座標を取得する.
 	 * @return 移動方向 direction to move on Z座標
@@ -1545,6 +1672,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getDirZ() {
 		return dirZ;
 	}
+
 	/**
 	 * 移動方向 direction to move on Z座標を設定する/
 	 * @param dirZ 移動方向 direction to move on Z座標
@@ -1552,6 +1680,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setDirZ(int dirZ) {
 		this.dirZ = dirZ;
 	}
+
 	/**
 	 * 顔の向き direction of face を取得する.
 	 * @return 顔の向き direction of face 
@@ -1559,6 +1688,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public Direction getDirection() {
 		return direction;
 	}
+
 	/**
 	 * 顔の向き direction of face を設定する.
 	 * @param direction 顔の向き direction of face 
@@ -1566,6 +1696,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setDirection(Direction direction) {
 		this.direction = direction;
 	}
+
 	/**
 	 * 蓄積ダメージ counter indicating damage を取得する.
 	 * @return 蓄積ダメージ counter indicating damage 
@@ -1573,6 +1704,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getDamage() {
 		return damage;
 	}
+
 	/**
 	 * 蓄積ダメージ counter indicating damage を設定する.
 	 * @param damage 蓄積ダメージ counter indicating damage 
@@ -1580,6 +1712,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setDamage(int damage) {
 		this.damage = damage;
 	}
+
 	/**
 	 * 蓄積ストレス を取得する.
 	 * @return 蓄積ストレス 
@@ -1587,6 +1720,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getStress() {
 		return stress;
 	}
+
 	/**
 	 * 舌の肥え を取得する.
 	 * @return 舌の肥え 
@@ -1594,6 +1728,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getTang() {
 		return tang;
 	}
+
 	/**
 	 * 舌の肥え を設定する.
 	 * @param tang 舌の肥え 
@@ -1601,6 +1736,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setTang(int tang) {
 		this.tang = tang;
 	}
+
 	/**
 	 * ダメージ外観 を設定する.
 	 * @param damageState ダメージ外観 
@@ -1608,6 +1744,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setDamageState(Damage damageState) {
 		this.damageState = damageState;
 	}
+
 	/**
 	 * 性格 counter indicating shithead/nice etc. を取得する. 
 	 * @return 性格 counter indicating shithead/nice etc.
@@ -1615,6 +1752,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public Attitude getAttitude() {
 		return attitude;
 	}
+
 	/**
 	 * 性格 counter indicating shithead/nice etc.を設定する. 
 	 * @param attitude 性格 counter indicating shithead/nice etc. 
@@ -1622,6 +1760,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setAttitude(Attitude attitude) {
 		this.attitude = attitude;
 	}
+
 	/**
 	 * 知性 を取得する.
 	 * @return 知性 
@@ -1629,6 +1768,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public Intelligence getIntelligence() {
 		return intelligence;
 	}
+
 	/**
 	 * 知性 を設定する.
 	 * @param intelligence 知性 
@@ -1636,6 +1776,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setIntelligence(Intelligence intelligence) {
 		this.intelligence = intelligence;
 	}
+
 	/**
 	 * 幸福度 を取得する.
 	 * @return 幸福度 
@@ -1643,6 +1784,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public Happiness getHappiness() {
 		return happiness;
 	}
+
 	/**
 	 * プレイヤーへのなつき度  を設定する.
 	 * @return プレイヤーへのなつき度  
@@ -1650,6 +1792,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getnLovePlayer() {
 		return nLovePlayer;
 	}
+
 	/**
 	 * プレイヤーへのなつき度 を設定する.
 	 * @param nLovePlayer プレイヤーへのなつき度 
@@ -1657,6 +1800,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setnLovePlayer(int nLovePlayer) {
 		this.nLovePlayer = nLovePlayer;
 	}
+
 	/**
 	 * プレイヤーへのなつき度概算 を取得する.
 	 * @return プレイヤーへのなつき度概算 
@@ -1664,6 +1808,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public LovePlayer geteLovePlayerState() {
 		return eLovePlayerState;
 	}
+
 	/**
 	 * プレイヤーへのなつき度概算 を設定する.
 	 * @param eLovePlayerState プレイヤーへのなつき度概算 
@@ -1671,6 +1816,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void seteLovePlayerState(LovePlayer eLovePlayerState) {
 		this.eLovePlayerState = eLovePlayerState;
 	}
+
 	/**
 	 * 髪の状態 を取得する.
 	 * @return 髪の状態 
@@ -1678,6 +1824,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public HairState geteHairState() {
 		return eHairState;
 	}
+
 	/**
 	 * 髪の状態 を設定する.
 	 * @param eHairState 髪の状態 
@@ -1685,6 +1832,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void seteHairState(HairState eHairState) {
 		this.eHairState = eHairState;
 	}
+
 	/**
 	 * うんうんの溜まり具合 を取得する.
 	 * @return うんうんの溜まり具合 
@@ -1692,6 +1840,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getShit() {
 		return shit;
 	}
+
 	/**
 	 * うんうんの溜まり具合 を設定する.
 	 * @param shit うんうんの溜まり具合 
@@ -1699,6 +1848,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setShit(int shit) {
 		this.shit = shit;
 	}
+
 	/**
 	 * 思い出（悪夢関連） を取得する.
 	 * @return 思い出（悪夢関連） 
@@ -1706,6 +1856,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getMemories() {
 		return memories;
 	}
+
 	/**
 	 * 思い出（悪夢関連） を設定する.
 	 * @param memories 思い出（悪夢関連） 
@@ -1713,6 +1864,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setMemories(int memories) {
 		this.memories = memories;
 	}
+
 	/**
 	 * トラウマ を取得する.
 	 * @return トラウマ 
@@ -1720,6 +1872,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public Trauma getTrauma() {
 		return trauma;
 	}
+
 	/**
 	 * トラウマ を設定する.
 	 * @param trauma トラウマ 
@@ -1727,6 +1880,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setTrauma(Trauma trauma) {
 		this.trauma = trauma;
 	}
+
 	/**
 	 * おかざり種別 を取得する.
 	 * @return おかざり種別 
@@ -1734,6 +1888,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public Okazari getOkazari() {
 		return okazari;
 	}
+
 	/**
 	 * おかざり種別 を設定する.
 	 * @param okazari おかざり種別 
@@ -1741,6 +1896,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setOkazari(Okazari okazari) {
 		this.okazari = okazari;
 	}
+
 	/**
 	 * 体の前後のどこにお飾りを持っているか(0は両方、1は前方のみ、2は後方のみ) を取得する.
 	 * @return 体の前後のどこにお飾りを持っているか(0は両方、1は前方のみ、2は後方のみ) 
@@ -1748,6 +1904,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getOkazariPosition() {
 		return okazariPosition;
 	}
+
 	/**
 	 * 体の前後のどこにお飾りを持っているか(0は両方、1は前方のみ、2は後方のみ) を設定する.
 	 * @param okazariPosition 体の前後のどこにお飾りを持っているか(0は両方、1は前方のみ、2は後方のみ) 
@@ -1755,6 +1912,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setOkazariPosition(int okazariPosition) {
 		this.okazariPosition = okazariPosition;
 	}
+
 	/**
 	 * おさげ、羽、尻尾有無 種族として何も持っていないものはtrue を取得する.
 	 * @return おさげ、羽、尻尾有無 種族として何も持っていないものはtrue 
@@ -1762,6 +1920,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public boolean isHasBraid() {
 		return hasBraid;
 	}
+
 	/**
 	 * おさげ、羽、尻尾有無 種族として何も持っていないものはtrue を設定する.
 	 * @param hasBraid おさげ、羽、尻尾有無 種族として何も持っていないものはtrue 
@@ -1769,6 +1928,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setHasBraid(boolean hasBraid) {
 		this.hasBraid = hasBraid;
 	}
+
 	/**
 	 * おくるみ有無 true if having pants を取得する.
 	 * @return おくるみ有無 true if having pants 
@@ -1776,6 +1936,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public boolean isHasPants() {
 		return hasPants;
 	}
+
 	/**
 	 * おくるみ有無 true if having pants を設定する.
 	 * @param hasPants おくるみ有無 true if having pants 
@@ -1783,6 +1944,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setHasPants(boolean hasPants) {
 		this.hasPants = hasPants;
 	}
+
 	/**
 	 * 胎生妊娠有無 having baby or not を取得する.
 	 * @return 胎生妊娠有無 having baby or not 
@@ -1790,6 +1952,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public boolean isHasBaby() {
 		return hasBaby;
 	}
+
 	/**
 	 * 胎生妊娠有無 having baby or not を設定する.
 	 * @param hasBaby 胎生妊娠有無 having baby or not 
@@ -1797,6 +1960,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setHasBaby(boolean hasBaby) {
 		this.hasBaby = hasBaby;
 	}
+
 	/**
 	 * 茎妊娠有無 having baby or not を取得する.
 	 * @return 茎妊娠有無 having baby or not 
@@ -1804,6 +1968,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public boolean isHasStalk() {
 		return hasStalk;
 	}
+
 	/**
 	 * 茎妊娠有無 having baby or not を設定する.
 	 * @param hasStalk 茎妊娠有無 having baby or not 
@@ -1811,6 +1976,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setHasStalk(boolean hasStalk) {
 		this.hasStalk = hasStalk;
 	}
+
 	/**
 	 * あにゃるふさぎ有無 を取得する.
 	 * @return あにゃるふさぎ有無 
@@ -1818,6 +1984,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public boolean isAnalClose() {
 		return analClose;
 	}
+
 	/**
 	 * あにゃるふさぎ有無 を設定する.
 	 * @param analClose あにゃるふさぎ有無 
@@ -1825,6 +1992,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setAnalClose(boolean analClose) {
 		this.analClose = analClose;
 	}
+
 	/**
 	 * 胎生去勢有無 を取得する.
 	 * @return 胎生去勢有無 
@@ -1832,6 +2000,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public boolean isBodyCastration() {
 		return bodyCastration;
 	}
+
 	/**
 	 * 胎生去勢有無 を設定する.
 	 * @param bodyCastration 胎生去勢有無 
@@ -1839,6 +2008,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setBodyCastration(boolean bodyCastration) {
 		this.bodyCastration = bodyCastration;
 	}
+
 	/**
 	 * 茎去勢有無 を取得する.
 	 * @return 茎去勢有無 
@@ -1846,6 +2016,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public boolean isStalkCastration() {
 		return stalkCastration;
 	}
+
 	/**
 	 * 茎去勢有無 を設定する.
 	 * @param stalkCastration 茎去勢有無 
@@ -1853,6 +2024,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setStalkCastration(boolean stalkCastration) {
 		this.stalkCastration = stalkCastration;
 	}
+
 	/**
 	 * ぺにぺにの去勢有無 を取得する.
 	 * @return ぺにぺにの去勢有無 
@@ -1860,6 +2032,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public boolean isbPenipeniCutted() {
 		return bPenipeniCutted;
 	}
+
 	/**
 	 * ぺにぺにの去勢有無 を設定する.
 	 * @param bPenipeniCutted ぺにぺにの去勢有無 
@@ -1867,6 +2040,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setbPenipeniCutted(boolean bPenipeniCutted) {
 		this.bPenipeniCutted = bPenipeniCutted;
 	}
+
 	/**
 	 * フェロモンの有無 を取得する.
 	 * @return フェロモンの有無 
@@ -1874,6 +2048,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public boolean isbPheromone() {
 		return bPheromone;
 	}
+
 	/**
 	 * フェロモンの有無 を設定する.
 	 * @param bPheromone フェロモンの有無 
@@ -1881,6 +2056,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setbPheromone(boolean bPheromone) {
 		this.bPheromone = bPheromone;
 	}
+
 	/**
 	 * 胎生ゆのリスト を取得する.
 	 * @return 胎生ゆのリスト 
@@ -1888,6 +2064,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public ArrayList<Dna> getBabyTypes() {
 		return babyTypes;
 	}
+
 	/**
 	 * 胎生ゆのリスト を設定する.
 	 * @param babyTypes 胎生ゆのリスト 
@@ -1895,6 +2072,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setBabyTypes(ArrayList<Dna> babyTypes) {
 		this.babyTypes = babyTypes;
 	}
+
 	/**
 	 * 実ゆのリスト を取得する.
 	 * @return 実ゆのリスト 
@@ -1902,6 +2080,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public ArrayList<Dna> getStalkBabyTypes() {
 		return stalkBabyTypes;
 	}
+
 	/**
 	 * 実ゆのリスト を設定する.
 	 * @param stalkBabyTypes 実ゆのリスト 
@@ -1909,6 +2088,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setStalkBabyTypes(ArrayList<Dna> stalkBabyTypes) {
 		this.stalkBabyTypes = stalkBabyTypes;
 	}
+
 	/**
 	 * 茎のリスト を取得する.
 	 * @return 茎のリスト 
@@ -1916,6 +2096,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public ArrayList<Stalk> getStalks() {
 		return stalks;
 	}
+
 	/**
 	 * 茎のリスト を設定する.
 	 * @param stalks 茎のリスト 
@@ -1923,6 +2104,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setStalks(ArrayList<Stalk> stalks) {
 		this.stalks = stalks;
 	}
+
 	/**
 	 * 自分がぶらさがっている茎 を取得する.
 	 * @return 自分がぶらさがっている茎 
@@ -1930,6 +2112,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public Stalk getBindStalk() {
 		return bindStalk;
 	}
+
 	/**
 	 * 自分がぶらさがっている茎 を設定する.
 	 * @param bindStalk 自分がぶらさがっている茎 
@@ -1937,6 +2120,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setBindStalk(Stalk bindStalk) {
 		this.bindStalk = bindStalk;
 	}
+
 	/**
 	 * 死亡フラグdead of alive を取得する.
 	 * @return 死亡フラグdead of alive 
@@ -1944,6 +2128,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public boolean isDead() {
 		return dead;
 	}
+
 	/**
 	 * 死亡フラグdead of alive を設定する.
 	 * @param dead 死亡フラグdead of alive 
@@ -1951,6 +2136,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setDead(boolean dead) {
 		this.dead = dead;
 	}
+
 	/**
 	 * うまれて初めての地面か を取得する.
 	 * @return うまれて初めての地面か 
@@ -1958,6 +2144,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public boolean isbFirstGround() {
 		return bFirstGround;
 	}
+
 	/**
 	 * うまれて初めての地面か を設定する.
 	 * @param bFirstGround うまれて初めての地面か 
@@ -1965,6 +2152,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setbFirstGround(boolean bFirstGround) {
 		this.bFirstGround = bFirstGround;
 	}
+
 	/**
 	 * うまれて初めての食事か を取得する.
 	 * @return うまれて初めての食事か 
@@ -1972,6 +2160,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public boolean isbFirstEatStalk() {
 		return bFirstEatStalk;
 	}
+
 	/**
 	 * うまれて初めての食事か を設定する.
 	 * @param bFirstEatStalk うまれて初めての食事か 
@@ -1979,6 +2168,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setbFirstEatStalk(boolean bFirstEatStalk) {
 		this.bFirstEatStalk = bFirstEatStalk;
 	}
+
 	/**
 	 * 死体が損壊されているか を取得する.
 	 * @return 死体が損壊されているか 
@@ -1986,6 +2176,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public boolean isCrushed() {
 		return crushed;
 	}
+
 	/**
 	 * 死体が損壊されているか を設定する.
 	 * @param crushed 死体が損壊されているか 
@@ -1993,6 +2184,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setCrushed(boolean crushed) {
 		this.crushed = crushed;
 	}
+
 	/**
 	 * 死体が焼損されているか を取得する.
 	 * @return 死体が焼損されているか 
@@ -2000,6 +2192,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public boolean isBurned() {
 		return burned;
 	}
+
 	/**
 	 * 中枢餡の状態（非ゆっくり症フラグ を取得する.
 	 * @return 中枢餡の状態（非ゆっくり症フラグ 
@@ -2007,6 +2200,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public CoreAnkoState geteCoreAnkoState() {
 		return eCoreAnkoState;
 	}
+
 	/**
 	 * 中枢餡の状態（非ゆっくり症フラグ を設定する.
 	 * @param eCoreAnkoState 中枢餡の状態（非ゆっくり症フラグ 
@@ -2014,6 +2208,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void seteCoreAnkoState(CoreAnkoState eCoreAnkoState) {
 		this.eCoreAnkoState = eCoreAnkoState;
 	}
+
 	/**
 	 * 発情フラグ want to sukkiri or not を設定する.
 	 * @param exciting 発情フラグ want to sukkiri or not 
@@ -2021,6 +2216,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setExciting(boolean exciting) {
 		this.exciting = exciting;
 	}
+
 	/**
 	 * 強制発情フラグ want to sukkiri or not を取得する.
 	 * @return 強制発情フラグ want to sukkiri or not 
@@ -2028,6 +2224,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public boolean isbForceExciting() {
 		return bForceExciting;
 	}
+
 	/**
 	 * 強制発情フラグ want to sukkiri or not を設定する.
 	 * @param bForceExciting 強制発情フラグ want to sukkiri or not 
@@ -2035,6 +2232,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setbForceExciting(boolean bForceExciting) {
 		this.bForceExciting = bForceExciting;
 	}
+
 	/**
 	 * ゆっくりしてるかどうか を取得する.
 	 * @return ゆっくりしてるかどうか 
@@ -2042,6 +2240,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public boolean isRelax() {
 		return relax;
 	}
+
 	/**
 	 * ゆっくりしてるかどうか を設定する.
 	 * @param relax ゆっくりしてるかどうか 
@@ -2049,6 +2248,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setRelax(boolean relax) {
 		this.relax = relax;
 	}
+
 	/**
 	 * 睡眠中かどうか を設定する.
 	 * @param sleeping 睡眠中かどうか 
@@ -2056,6 +2256,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setSleeping(boolean sleeping) {
 		this.sleeping = sleeping;
 	}
+
 	/**
 	 * 悪夢を見るかどうか を取得する.
 	 * @return 悪夢を見るかどうか 
@@ -2063,6 +2264,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public boolean isNightmare() {
 		return nightmare;
 	}
+
 	/**
 	 * 悪夢を見るかどうか を設定する.
 	 * @param nightmare 悪夢を見るかどうか 
@@ -2070,6 +2272,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setNightmare(boolean nightmare) {
 		this.nightmare = nightmare;
 	}
+
 	/**
 	 * 前回起きた時間 を取得する.
 	 * @return 前回起きた時間 
@@ -2077,6 +2280,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public long getWakeUpTime() {
 		return wakeUpTime;
 	}
+
 	/**
 	 * 前回起きた時間 を設定する.
 	 * @param wakeUpTime 前回起きた時間 
@@ -2084,6 +2288,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setWakeUpTime(long wakeUpTime) {
 		this.wakeUpTime = wakeUpTime;
 	}
+
 	/**
 	 * 汚れ有無 を設定する.
 	 * @param dirty 汚れ有無 
@@ -2091,6 +2296,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setDirty(boolean dirty) {
 		this.dirty = dirty;
 	}
+
 	/**
 	 * 頑固な汚れ有無 を設定する.
 	 * @param stubbornlyDirty 頑固な汚れ有無 
@@ -2098,6 +2304,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setStubbornlyDirty(boolean stubbornlyDirty) {
 		this.stubbornlyDirty = stubbornlyDirty;
 	}
+
 	/**
 	 * 針の有無 を取得する.
 	 * @return 針の有無 
@@ -2105,6 +2312,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public boolean isbNeedled() {
 		return bNeedled;
 	}
+
 	/**
 	 * 針の有無 を設定する.
 	 * @param bNeedled 針の有無 
@@ -2112,6 +2320,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setbNeedled(boolean bNeedled) {
 		this.bNeedled = bNeedled;
 	}
+
 	/**
 	 * レイパー化有無 を取得する.
 	 * @return レイパー化有無 
@@ -2119,6 +2328,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public boolean isRapist() {
 		return rapist;
 	}
+
 	/**
 	 * レイパー化有無 を設定する.
 	 * @param rapist レイパー化有無 
@@ -2126,6 +2336,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setRapist(boolean rapist) {
 		this.rapist = rapist;
 	}
+
 	/**
 	 * バイゆグラでレイパーになる、すーぱーれいぱー状態 を取得する.
 	 * @return バイゆグラでレイパーになる、すーぱーれいぱー状態 
@@ -2133,6 +2344,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public boolean isSuperRapist() {
 		return superRapist;
 	}
+
 	/**
 	 * バイゆグラでレイパーになる、すーぱーれいぱー状態 を設定する.
 	 * @param superRapist バイゆグラでレイパーになる、すーぱーれいぱー状態 
@@ -2140,6 +2352,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setSuperRapist(boolean superRapist) {
 		this.superRapist = superRapist;
 	}
+
 	/**
 	 * 濡れ状態 を取得する.
 	 * @return 濡れ状態 
@@ -2147,6 +2360,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public boolean isWet() {
 		return wet;
 	}
+
 	/**
 	 * 濡れ状態 を設定する.
 	 * @param wet 濡れ状態 
@@ -2154,6 +2368,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setWet(boolean wet) {
 		this.wet = wet;
 	}
+
 	/**
 	 * 水に溶けた状態 を取得する.
 	 * @return 水に溶けた状態 
@@ -2161,6 +2376,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public boolean isMelt() {
 		return melt;
 	}
+
 	/**
 	 * 水に溶けた状態 を設定する.
 	 * @param melt 水に溶けた状態 
@@ -2168,6 +2384,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setMelt(boolean melt) {
 		this.melt = melt;
 	}
+
 	/**
 	 * 皮をむいた状態 を取得する.
 	 * @return 皮をむいた状態 
@@ -2175,6 +2392,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public boolean isPealed() {
 		return pealed;
 	}
+
 	/**
 	 * 皮をむいた状態 を設定する.
 	 * @param pealed 皮をむいた状態 
@@ -2182,6 +2400,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setPealed(boolean pealed) {
 		this.pealed = pealed;
 	}
+
 	/**
 	 * 饅頭にされた状態 を取得する.
 	 * @return 饅頭にされた状態 
@@ -2189,6 +2408,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public boolean isPacked() {
 		return packed;
 	}
+
 	/**
 	 * 饅頭にされた状態 を設定する.
 	 * @param packed 饅頭にされた状態 
@@ -2196,6 +2416,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setPacked(boolean packed) {
 		this.packed = packed;
 	}
+
 	/**
 	 * アマギられた状態 かどうかを取得する.
 	 * @return アマギられた状態 かどうか
@@ -2203,6 +2424,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public boolean isBlind() {
 		return blind;
 	}
+
 	/**
 	 * アマギられた状態 かどうかを設定する.
 	 * @param blind アマギられた状態 かどうか
@@ -2210,6 +2432,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setBlind(boolean blind) {
 		this.blind = blind;
 	}
+
 	/**
 	 * おかざりがなくなっていることに気がついているか を取得する.
 	 * @return おかざりがなくなっていることに気がついているか 
@@ -2217,6 +2440,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public boolean isbNoticeNoOkazari() {
 		return bNoticeNoOkazari;
 	}
+
 	/**
 	 * おかざりがなくなっていることに気がついているか を設定する.
 	 * @param bNoticeNoOkazari おかざりがなくなっていることに気がついているか 
@@ -2224,6 +2448,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setbNoticeNoOkazari(boolean bNoticeNoOkazari) {
 		this.bNoticeNoOkazari = bNoticeNoOkazari;
 	}
+
 	/**
 	 * パニック種別 を取得する.
 	 * @return パニック種別 
@@ -2231,6 +2456,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public PanicType getPanicType() {
 		return panicType;
 	}
+
 	/**
 	 * パニック種別 を設定する.
 	 * @param panicType パニック種別 
@@ -2238,6 +2464,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setPanicType(PanicType panicType) {
 		this.panicType = panicType;
 	}
+
 	/**
 	 * 致命傷種別 を取得する.
 	 * @return 致命傷種別 
@@ -2245,6 +2472,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public CriticalDamegeType getCriticalDamege() {
 		return criticalDamege;
 	}
+
 	/**
 	 * 致命傷種別 を設定する.
 	 * @param criticalDamege 致命傷種別 
@@ -2252,6 +2480,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setCriticalDamege(CriticalDamegeType criticalDamege) {
 		this.criticalDamege = criticalDamege;
 	}
+
 	/**
 	 * つがい を取得する.
 	 * @return つがい 
@@ -2259,6 +2488,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public Body getPartner() {
 		return partner;
 	}
+
 	/**
 	 * つがい を設定する.
 	 * @param partner つがい 
@@ -2266,6 +2496,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setPartner(Body partner) {
 		this.partner = partner;
 	}
+
 	/**
 	 * 親を取得する.
 	 * @return 親
@@ -2273,6 +2504,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public Body[] getParents() {
 		return parents;
 	}
+
 	/**
 	 * 親を設定する.
 	 * @param parents 親
@@ -2280,6 +2512,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setParents(Body[] parents) {
 		this.parents = parents;
 	}
+
 	/**
 	 * 子供のリスト を取得する.
 	 * @return 子供のリスト 
@@ -2287,6 +2520,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public ArrayList<Body> getChildrenList() {
 		return childrenList;
 	}
+
 	/**
 	 * 子供のリスト を設定する.
 	 * @param childrenList 子供のリスト 
@@ -2294,6 +2528,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setChildrenList(ArrayList<Body> childrenList) {
 		this.childrenList = childrenList;
 	}
+
 	/**
 	 * 姉のリスト を取得する.
 	 * @return 姉のリスト 
@@ -2301,6 +2536,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public ArrayList<Body> getElderSisterList() {
 		return elderSisterList;
 	}
+
 	/**
 	 * 姉のリスト を設定する.
 	 * @param elderSisterList 姉のリスト 
@@ -2308,6 +2544,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setElderSisterList(ArrayList<Body> elderSisterList) {
 		this.elderSisterList = elderSisterList;
 	}
+
 	/**
 	 * 妹のリスト を取得する.
 	 * @return 妹のリスト 
@@ -2315,6 +2552,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public ArrayList<Body> getSisterList() {
 		return sisterList;
 	}
+
 	/**
 	 * 妹のリスト を設定する.
 	 * @param sisterList 妹のリスト 
@@ -2322,6 +2560,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setSisterList(ArrayList<Body> sisterList) {
 		this.sisterList = sisterList;
 	}
+
 	/**
 	 * 先祖のリスト を取得する.
 	 * @return 先祖のリスト 
@@ -2329,6 +2568,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public ArrayList<Integer> getAncestorList() {
 		return ancestorList;
 	}
+
 	/**
 	 * 先祖のリスト を設定する.
 	 * @param ancestorList 先祖のリスト 
@@ -2336,6 +2576,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setAncestorList(ArrayList<Integer> ancestorList) {
 		this.ancestorList = ancestorList;
 	}
+
 	/**
 	 * 自分がレイプでできた子か を取得する.
 	 * @return 自分がレイプでできた子か 
@@ -2343,6 +2584,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public boolean isFatherRaper() {
 		return fatherRaper;
 	}
+
 	/**
 	 * 自分がレイプでできた子か を設定する.
 	 * @param fatherRaper 自分がレイプでできた子か 
@@ -2350,6 +2592,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setFatherRaper(boolean fatherRaper) {
 		this.fatherRaper = fatherRaper;
 	}
+
 	/**
 	 * うんうん抑制 を取得する.
 	 * @return うんうん抑制 
@@ -2357,6 +2600,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getShittingDiscipline() {
 		return shittingDiscipline;
 	}
+
 	/**
 	 * うんうん抑制 を設定する.
 	 * @param shittingDiscipline うんうん抑制 
@@ -2364,6 +2608,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setShittingDiscipline(int shittingDiscipline) {
 		this.shittingDiscipline = shittingDiscipline;
 	}
+
 	/**
 	 * 興奮抑制 を取得する.
 	 * @return 興奮抑制 
@@ -2371,6 +2616,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getExcitingDiscipline() {
 		return excitingDiscipline;
 	}
+
 	/**
 	 * 興奮抑制 を設定する.
 	 * @param excitingDiscipline 興奮抑制 
@@ -2378,6 +2624,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setExcitingDiscipline(int excitingDiscipline) {
 		this.excitingDiscipline = excitingDiscipline;
 	}
+
 	/**
 	 * ふりふり抑制 を設定する.
 	 * @param furifuriDiscipline ふりふり抑制 
@@ -2385,6 +2632,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setFurifuriDiscipline(int furifuriDiscipline) {
 		this.furifuriDiscipline = furifuriDiscipline;
 	}
+
 	/**
 	 * おしゃべり抑制 を取得する.
 	 * @return おしゃべり抑制 
@@ -2392,6 +2640,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getMessageDiscipline() {
 		return messageDiscipline;
 	}
+
 	/**
 	 * おしゃべり抑制 を設定する.
 	 * @param messageDiscipline おしゃべり抑制 
@@ -2399,6 +2648,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setMessageDiscipline(int messageDiscipline) {
 		this.messageDiscipline = messageDiscipline;
 	}
+
 	/**
 	 * あまあまへの慣れ具合 を取得する.
 	 * @return あまあまへの慣れ具合 
@@ -2406,6 +2656,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getAmaamaDiscipline() {
 		return amaamaDiscipline;
 	}
+
 	/**
 	 * あまあまへの慣れ具合 を設定する.
 	 * @param amaamaDiscipline あまあまへの慣れ具合 
@@ -2413,6 +2664,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setAmaamaDiscipline(int amaamaDiscipline) {
 		this.amaamaDiscipline = amaamaDiscipline;
 	}
+
 	/**
 	 * 自身の持っているアタッチメント を取得する.
 	 * @return 自身の持っているアタッチメント 
@@ -2420,6 +2672,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public ArrayList<Attachment> getAttach() {
 		return attach;
 	}
+
 	/**
 	 * 自身の持っているアタッチメント を設定する.
 	 * @param attach 自身の持っているアタッチメント 
@@ -2427,6 +2680,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setAttach(ArrayList<Attachment> attach) {
 		this.attach = attach;
 	}
+
 	/**
 	 * なにかのオブジェクト（すぃー、親ゆなど）に載せられている等のリンクが有る際のそのオブジェクト を取得する.
 	 * @return なにかのオブジェクト（すぃー、親ゆなど）に載せられている等のリンクが有る際のそのオブジェクト 
@@ -2434,6 +2688,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public Obj getLinkParent() {
 		return linkParent;
 	}
+
 	/**
 	 * なにかのオブジェクト（すぃー、親ゆなど）に載せられている等のリンクが有る際のそのオブジェクト を設定する.
 	 * @param linkParent なにかのオブジェクト（すぃー、親ゆなど）に載せられている等のリンクが有る際のそのオブジェクト 
@@ -2441,6 +2696,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setLinkParent(Obj linkParent) {
 		this.linkParent = linkParent;
 	}
+
 	/**
 	 * 移動不可ベルトコンベアの有無 を取得する.
 	 * @return 移動不可ベルトコンベアの有無 
@@ -2448,6 +2704,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public boolean isbOnDontMoveBeltconveyor() {
 		return bOnDontMoveBeltconveyor;
 	}
+
 	/**
 	 * 移動不可ベルトコンベアの有無 を設定する.
 	 * @param bOnDontMoveBeltconveyor 移動不可ベルトコンベアの有無 
@@ -2455,6 +2712,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setbOnDontMoveBeltconveyor(boolean bOnDontMoveBeltconveyor) {
 		this.bOnDontMoveBeltconveyor = bOnDontMoveBeltconveyor;
 	}
+
 	/**
 	 * 埋まり状態 を取得する.
 	 * @return 埋まり状態 
@@ -2462,6 +2720,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public BaryInUGState getBaryState() {
 		return baryState;
 	}
+
 	/**
 	 * 埋まり状態 を設定する.
 	 * @param baryState 埋まり状態 
@@ -2469,6 +2728,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setBaryState(BaryInUGState baryState) {
 		this.baryState = baryState;
 	}
+
 	/**
 	 * 希少種か を取得する.
 	 * @return 希少種か 
@@ -2476,6 +2736,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public boolean isRareType() {
 		return rareType;
 	}
+
 	/**
 	 * 希少種か を設定する.
 	 * @param rareType 希少種か 
@@ -2483,6 +2744,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setRareType(boolean rareType) {
 		this.rareType = rareType;
 	}
+
 	/**
 	 * 苦いえさが好きか を取得する.
 	 * @return 苦いえさが好きか 
@@ -2490,6 +2752,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public boolean isLikeBitterFood() {
 		return likeBitterFood;
 	}
+
 	/**
 	 * 苦いえさが好きか を設定する.
 	 * @param likeBitterFood 苦いえさが好きか 
@@ -2497,6 +2760,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setLikeBitterFood(boolean likeBitterFood) {
 		this.likeBitterFood = likeBitterFood;
 	}
+
 	/**
 	 * 辛いえさが好きか を取得する.
 	 * @return 辛いえさが好きか 
@@ -2504,6 +2768,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public boolean isLikeHotFood() {
 		return likeHotFood;
 	}
+
 	/**
 	 * 辛いえさが好きか を設定する.
 	 * @param likeHotFood 辛いえさが好きか 
@@ -2511,6 +2776,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setLikeHotFood(boolean likeHotFood) {
 		this.likeHotFood = likeHotFood;
 	}
+
 	/**
 	 * 水が平気か を取得する.
 	 * @return 水が平気か 
@@ -2518,6 +2784,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public boolean isLikeWater() {
 		return likeWater;
 	}
+
 	/**
 	 * 水が平気か を設定する.
 	 * @param likeWater 水が平気か 
@@ -2525,6 +2792,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setLikeWater(boolean likeWater) {
 		this.likeWater = likeWater;
 	}
+
 	/**
 	 * 空を飛ぶか を取得する.
 	 * @return 空を飛ぶか 
@@ -2532,6 +2800,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public boolean isFlyingType() {
 		return flyingType;
 	}
+
 	/**
 	 * 空を飛ぶか を設定する.
 	 * @param flyingType 空を飛ぶか 
@@ -2539,6 +2808,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setFlyingType(boolean flyingType) {
 		this.flyingType = flyingType;
 	}
+
 	/**
 	 * 種族としてお下げ、羽、尻尾を持つか を取得する.
 	 * @return 種族としてお下げ、羽、尻尾を持つか 
@@ -2546,6 +2816,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public boolean isBraidType() {
 		return braidType;
 	}
+
 	/**
 	 * 種族としてお下げ、羽、尻尾を持つか を設定する.
 	 * @param braidType 種族としてお下げ、羽、尻尾を持つか 
@@ -2553,6 +2824,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setBraidType(boolean braidType) {
 		this.braidType = braidType;
 	}
+
 	/**
 	 * 捕食種タイプ を取得する.
 	 * @return 捕食種タイプ 
@@ -2560,6 +2832,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public PredatorType getPredatorType() {
 		return predatorType;
 	}
+
 	/**
 	 * 捕食種タイプ を設定する.
 	 * @param predatorType 捕食種タイプ 
@@ -2567,6 +2840,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setPredatorType(PredatorType predatorType) {
 		this.predatorType = predatorType;
 	}
+
 	/**
 	 * 動けないかどうか を取得する.
 	 * @return 動けないかどうか 
@@ -2574,6 +2848,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public boolean isLockmove() {
 		return lockmove;
 	}
+
 	/**
 	 * 動けないかどうか を設定する.
 	 * @param lockmove 動けないかどうか 
@@ -2581,6 +2856,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setLockmove(boolean lockmove) {
 		this.lockmove = lockmove;
 	}
+
 	/**
 	 * ひっぱり、押しつぶし可能か を取得する.
 	 * @return ひっぱり、押しつぶし可能か 
@@ -2588,6 +2864,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public boolean isPullAndPush() {
 		return pullAndPush;
 	}
+
 	/**
 	 * ひっぱり、押しつぶし可能か を設定する.
 	 * @param pullAndPush ひっぱり、押しつぶし可能か 
@@ -2595,6 +2872,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setPullAndPush(boolean pullAndPush) {
 		this.pullAndPush = pullAndPush;
 	}
+
 	/**
 	 * 動けない期間（押さえられてる等で） を取得する.
 	 * @return 動けない期間（押さえられてる等で） 
@@ -2602,6 +2880,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getLockmovePeriod() {
 		return lockmovePeriod;
 	}
+
 	/**
 	 * 動けない期間（押さえられてる等で） を設定する.
 	 * @param lockmovePeriod 動けない期間（押さえられてる等で） 
@@ -2609,6 +2888,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setLockmovePeriod(int lockmovePeriod) {
 		this.lockmovePeriod = lockmovePeriod;
 	}
+
 	/**
 	 * 外圧 を取得する.
 	 * @return 外圧 
@@ -2616,6 +2896,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getExtForce() {
 		return extForce;
 	}
+
 	/**
 	 * 外圧 を設定する.
 	 * @param extForce 外圧 
@@ -2623,6 +2904,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setExtForce(int extForce) {
 		this.extForce = extForce;
 	}
+
 	/**
 	 * まばたき、同じ表情の時にカウント を取得する.
 	 * @return まばたき、同じ表情の時にカウント 
@@ -2630,6 +2912,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getMabatakiCnt() {
 		return mabatakiCnt;
 	}
+
 	/**
 	 * まばたき、同じ表情の時にカウント を設定する.
 	 * @param mabatakiCnt まばたき、同じ表情の時にカウント 
@@ -2637,6 +2920,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setMabatakiCnt(int mabatakiCnt) {
 		this.mabatakiCnt = mabatakiCnt;
 	}
+
 	/**
 	 * まばたき、表情の値を代入 を取得する.
 	 * @return まばたき、表情の値を代入 
@@ -2644,6 +2928,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getMabatakiType() {
 		return mabatakiType;
 	}
+
 	/**
 	 * まばたき、表情の値を代入 を設定する.
 	 * @param mabatakiType まばたき、表情の値を代入 
@@ -2651,6 +2936,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setMabatakiType(int mabatakiType) {
 		this.mabatakiType = mabatakiType;
 	}
+
 	/**
 	 * プレイヤーにすりすりされているか を取得する.
 	 * @return プレイヤーにすりすりされているか 
@@ -2658,6 +2944,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public boolean isbSurisuriFromPlayer() {
 		return bSurisuriFromPlayer;
 	}
+
 	/**
 	 * プレイヤーにすりすりされているか を設定する.
 	 * @param bSurisuriFromPlayer プレイヤーにすりすりされているか 
@@ -2665,6 +2952,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setbSurisuriFromPlayer(boolean bSurisuriFromPlayer) {
 		this.bSurisuriFromPlayer = bSurisuriFromPlayer;
 	}
+
 	/**
 	 * ぷるぷる震えているか を取得する.
 	 * @return ぷるぷる震えているか 
@@ -2672,6 +2960,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public boolean isbPurupuru() {
 		return bPurupuru;
 	}
+
 	/**
 	 * ぷるぷる震えているか を設定する.
 	 * @param bPurupuru ぷるぷる震えているか 
@@ -2679,6 +2968,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setbPurupuru(boolean bPurupuru) {
 		this.bPurupuru = bPurupuru;
 	}
+
 	/**
 	 * 粘着板で背中を固定されているかを取得する.
 	 * @return 粘着板で背中を固定されているか
@@ -2686,6 +2976,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public boolean isFixBack() {
 		return fixBack;
 	}
+
 	/**
 	 * 粘着板で背中を固定されているかを設定する.
 	 * @param 粘着板で背中を固定されているか
@@ -2693,6 +2984,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setFixBack(boolean bFixBack) {
 		this.fixBack = bFixBack;
 	}
+
 	/**
 	 * ダメージを受けていない期間 を取得する.
 	 * @return ダメージを受けていない期間 
@@ -2700,6 +2992,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getNoDamagePeriod() {
 		return noDamagePeriod;
 	}
+
 	/**
 	 * ダメージを受けていない期間 を設定する.
 	 * @param noDamagePeriod ダメージを受けていない期間 
@@ -2707,6 +3000,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setNoDamagePeriod(int noDamagePeriod) {
 		this.noDamagePeriod = noDamagePeriod;
 	}
+
 	/**
 	 * 飢餓状態になっていない期間を取得する. 
 	 * @return 飢餓状態になっていない期間 
@@ -2714,6 +3008,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getNoHungryPeriod() {
 		return noHungryPeriod;
 	}
+
 	/**
 	 * 飢餓状態になっていない期間 を設定する.
 	 * @param noHungryPeriod 飢餓状態になっていない期間 
@@ -2721,6 +3016,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setNoHungryPeriod(int noHungryPeriod) {
 		this.noHungryPeriod = noHungryPeriod;
 	}
+
 	/**
 	 * スーパーむーしゃむーしゃタイムのおかげで飢餓状態にならない期間 を取得する.
 	 * @return スーパーむーしゃむーしゃタイムのおかげで飢餓状態にならない期間 
@@ -2728,6 +3024,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getNoHungrybySupereatingTimePeriod() {
 		return noHungrybySupereatingTimePeriod;
 	}
+
 	/**
 	 * スーパーむーしゃむーしゃタイムのおかげで飢餓状態にならない期間 を設定する.
 	 * @param noHungrybySupereatingTimePeriod スーパーむーしゃむーしゃタイムのおかげで飢餓状態にならない期間 
@@ -2735,6 +3032,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setNoHungrybySupereatingTimePeriod(int noHungrybySupereatingTimePeriod) {
 		this.noHungrybySupereatingTimePeriod = noHungrybySupereatingTimePeriod;
 	}
+
 	/**
 	 * 妊娠期間 を取得する.
 	 * @return 妊娠期間 
@@ -2742,6 +3040,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getPregnantPeriod() {
 		return pregnantPeriod;
 	}
+
 	/**
 	 * 妊娠期間 を設定する.
 	 * @param pregnantPeriod 妊娠期間 
@@ -2749,6 +3048,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setPregnantPeriod(int pregnantPeriod) {
 		this.pregnantPeriod = pregnantPeriod;
 	}
+
 	/**
 	 * 発情期間 を取得する.
 	 * @return 発情期間 
@@ -2756,6 +3056,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getExcitingPeriod() {
 		return excitingPeriod;
 	}
+
 	/**
 	 * 発情期間 を設定する.
 	 * @param excitingPeriod 発情期間 
@@ -2763,6 +3064,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setExcitingPeriod(int excitingPeriod) {
 		this.excitingPeriod = excitingPeriod;
 	}
+
 	/**
 	 * 睡眠期間 を取得する.
 	 * @return 睡眠期間 
@@ -2770,6 +3072,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getSleepingPeriod() {
 		return sleepingPeriod;
 	}
+
 	/**
 	 * 睡眠期間 を設定する.
 	 * @param sleepingPeriod 睡眠期間 
@@ -2777,6 +3080,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setSleepingPeriod(int sleepingPeriod) {
 		this.sleepingPeriod = sleepingPeriod;
 	}
+
 	/**
 	 * 汚れている期間 を取得する.
 	 * @return 汚れている期間 
@@ -2784,6 +3088,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getDirtyPeriod() {
 		return dirtyPeriod;
 	}
+
 	/**
 	 * 汚れている期間 を設定する.
 	 * @param dirtyPeriod 汚れている期間 
@@ -2791,6 +3096,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setDirtyPeriod(int dirtyPeriod) {
 		this.dirtyPeriod = dirtyPeriod;
 	}
+
 	/**
 	 * 汚れて泣き叫ぶ期間 を取得する.
 	 * @return 汚れて泣き叫ぶ期間 
@@ -2798,6 +3104,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getDirtyScreamPeriod() {
 		return dirtyScreamPeriod;
 	}
+
 	/**
 	 * 汚れて泣き叫ぶ期間 を設定する.
 	 * @param dirtyScreamPeriod 汚れて泣き叫ぶ期間 
@@ -2805,6 +3112,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setDirtyScreamPeriod(int dirtyScreamPeriod) {
 		this.dirtyScreamPeriod = dirtyScreamPeriod;
 	}
+
 	/**
 	 * ゆかびに侵されている期間 を取得する.
 	 * @return ゆかびに侵されている期間 
@@ -2812,6 +3120,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getSickPeriod() {
 		return sickPeriod;
 	}
+
 	/**
 	 * ゆかびに侵されている期間 を設定する.
 	 * @param sickPeriod ゆかびに侵されている期間 
@@ -2819,6 +3128,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setSickPeriod(int sickPeriod) {
 		this.sickPeriod = sickPeriod;
 	}
+
 	/**
 	 * 怒っている期間 を取得する.
 	 * @return 怒っている期間 
@@ -2826,6 +3136,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getAngryPeriod() {
 		return angryPeriod;
 	}
+
 	/**
 	 * 怒っている期間 を設定する.
 	 * @param angryPeriod 怒っている期間 
@@ -2833,6 +3144,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setAngryPeriod(int angryPeriod) {
 		this.angryPeriod = angryPeriod;
 	}
+
 	/**
 	 * 怖がっている期間 を取得する.
 	 * @return 怖がっている期間 
@@ -2840,6 +3152,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getScarePeriod() {
 		return scarePeriod;
 	}
+
 	/**
 	 * 怖がっている期間 を設定する.
 	 * @param scarePeriod 怖がっている期間 
@@ -2847,6 +3160,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setScarePeriod(int scarePeriod) {
 		this.scarePeriod = scarePeriod;
 	}
+
 	/**
 	 * 悲しんでいる期間 を取得する.
 	 * @return 悲しんでいる期間 
@@ -2854,6 +3168,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getSadPeriod() {
 		return sadPeriod;
 	}
+
 	/**
 	 * 悲しんでいる期間 を設定する.
 	 * @param sadPeriod 悲しんでいる期間 
@@ -2861,6 +3176,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setSadPeriod(int sadPeriod) {
 		this.sadPeriod = sadPeriod;
 	}
+
 	/**
 	 * 濡れている期間 
 	 * @return 濡れている期間 を取得する.
@@ -2868,6 +3184,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getWetPeriod() {
 		return wetPeriod;
 	}
+
 	/**
 	 * 濡れている期間 を設定する.
 	 * @param wetPeriod 濡れている期間 
@@ -2875,6 +3192,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setWetPeriod(int wetPeriod) {
 		this.wetPeriod = wetPeriod;
 	}
+
 	/**
 	 * パニック状態の期間 を取得する.
 	 * @return パニック状態の期間 
@@ -2882,6 +3200,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getPanicPeriod() {
 		return panicPeriod;
 	}
+
 	/**
 	 * パニック状態の期間 を設定する.
 	 * @param panicPeriod パニック状態の期間 
@@ -2889,6 +3208,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setPanicPeriod(int panicPeriod) {
 		this.panicPeriod = panicPeriod;
 	}
+
 	/**
 	 * 足焼きされている期間 を取得する.
 	 * @return 足焼きされている期間 
@@ -2896,6 +3216,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getFootBakePeriod() {
 		return footBakePeriod;
 	}
+
 	/**
 	 * 足焼きされている期間 を設定する.
 	 * @param footBakePeriod 足焼きされている期間 
@@ -2903,6 +3224,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setFootBakePeriod(int footBakePeriod) {
 		this.footBakePeriod = footBakePeriod;
 	}
+
 	/**
 	 * 背中を焼かれている期間 を取得する。
 	 * @return 背中を焼かれている期間 
@@ -2910,6 +3232,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getBodyBakePeriod() {
 		return bodyBakePeriod;
 	}
+
 	/**
 	 * 背中を焼かれている期間を取得する. 
 	 * @param bodyBakePeriod 背中を焼かれている期間 
@@ -2917,6 +3240,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setBodyBakePeriod(int bodyBakePeriod) {
 		this.bodyBakePeriod = bodyBakePeriod;
 	}
+
 	/**
 	 * 非ゆっくり症にかかっている期間 を取得する.
 	 * @return 非ゆっくり症にかかっている期間 
@@ -2924,6 +3248,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getNonYukkuriDiseasePeriod() {
 		return nonYukkuriDiseasePeriod;
 	}
+
 	/**
 	 * 非ゆっくり症にかかっている期間 を設定する.
 	 * @param nonYukkuriDiseasePeriod 非ゆっくり症にかかっている期間 
@@ -2931,6 +3256,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setNonYukkuriDiseasePeriod(int nonYukkuriDiseasePeriod) {
 		this.nonYukkuriDiseasePeriod = nonYukkuriDiseasePeriod;
 	}
+
 	/**
 	 * 死んでからの期間 を取得する.
 	 * @return 死んでからの期間 
@@ -2938,6 +3264,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getDeadPeriod() {
 		return deadPeriod;
 	}
+
 	/**
 	 * 死んでからの期間 を設定する.
 	 * @param deadPeriod 死んでからの期間 
@@ -2945,6 +3272,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setDeadPeriod(int deadPeriod) {
 		this.deadPeriod = deadPeriod;
 	}
+
 	/**
 	 * 最後にプレイヤーにすりすりしてもらった時間 を取得する.
 	 * @return 最後にプレイヤーにすりすりしてもらった時間 
@@ -2952,6 +3280,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public long getLnLastTimeSurisuri() {
 		return lnLastTimeSurisuri;
 	}
+
 	/**
 	 * 最後にプレイヤーにすりすりしてもらった時間 を設定する.
 	 * @param lnLastTimeSurisuri 最後にプレイヤーにすりすりしてもらった時間 
@@ -2959,6 +3288,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setLnLastTimeSurisuri(long lnLastTimeSurisuri) {
 		this.lnLastTimeSurisuri = lnLastTimeSurisuri;
 	}
+
 	/**
 	 * 最後にプレイヤーがアクションを行った時間 を取得する.
 	 * @return 最後にプレイヤーがアクションを行った時間 
@@ -2966,6 +3296,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public long getInLastActionTime() {
 		return inLastActionTime;
 	}
+
 	/**
 	 * 最後にプレイヤーがアクションを行った時間 を設定する.
 	 * @param inLastActionTime 最後にプレイヤーがアクションを行った時間 
@@ -2973,6 +3304,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setInLastActionTime(long inLastActionTime) {
 		this.inLastActionTime = inLastActionTime;
 	}
+
 	/**
 	 * 出産期間のブースト（この分だけ早まる） を取得する.
 	 * @return 出産期間のブースト（この分だけ早まる） 
@@ -2980,6 +3312,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getPregnantPeriodBoost() {
 		return pregnantPeriodBoost;
 	}
+
 	/**
 	 * 出産期間のブースト（この分だけ早まる） を設定する.
 	 * @param pregnantPeriodBoost 出産期間のブースト（この分だけ早まる） 
@@ -2987,6 +3320,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setPregnantPeriodBoost(int pregnantPeriodBoost) {
 		this.pregnantPeriodBoost = pregnantPeriodBoost;
 	}
+
 	/**
 	 * 発情期間のブースト（この分だけ早まる） を取得する.
 	 * @return 発情期間のブースト（この分だけ早まる） 
@@ -2994,6 +3328,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getExcitingPeriodBoost() {
 		return excitingPeriodBoost;
 	}
+
 	/**
 	 * 発情期間のブースト（この分だけ早まる） を設定する.
 	 * @param excitingPeriodBoost 発情期間のブースト（この分だけ早まる） 
@@ -3001,6 +3336,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setExcitingPeriodBoost(int excitingPeriodBoost) {
 		this.excitingPeriodBoost = excitingPeriodBoost;
 	}
+
 	/**
 	 * うんうんブースト を取得する.
 	 * @return うんうんブースト 
@@ -3008,6 +3344,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getShitBoost() {
 		return shitBoost;
 	}
+
 	/**
 	 * うんうんブースト を設定する.
 	 * @param shitBoost うんうんブースト 
@@ -3015,6 +3352,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setShitBoost(int shitBoost) {
 		this.shitBoost = shitBoost;
 	}
+
 	/**
 	 * 移動対象（移動先） を取得する.
 	 * @return 移動対象（移動先） 
@@ -3022,6 +3360,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public Obj getMoveTarget() {
 		return moveTarget;
 	}
+
 	/**
 	 * 移動対象（移動先） を設定する.
 	 * @param moveTarget 移動対象（移動先） 
@@ -3029,6 +3368,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setMoveTarget(Obj moveTarget) {
 		this.moveTarget = moveTarget;
 	}
+
 	/**
 	 * 移動対象のX座標オフセット を取得する.
 	 * @return 移動対象のX座標オフセット 
@@ -3036,6 +3376,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getTargetPosOfsX() {
 		return targetPosOfsX;
 	}
+
 	/**
 	 * 移動対象のX座標オフセット を設定する.
 	 * @param targetPosOfsX 移動対象のX座標オフセット 
@@ -3043,6 +3384,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setTargetPosOfsX(int targetPosOfsX) {
 		this.targetPosOfsX = targetPosOfsX;
 	}
+
 	/**
 	 * 移動対象のY座標オフセット を取得する.
 	 * @return 移動対象のY座標オフセット 
@@ -3050,6 +3392,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getTargetPosOfsY() {
 		return targetPosOfsY;
 	}
+
 	/**
 	 * 移動対象のY座標オフセット を設定する.
 	 * @param targetPosOfsY 移動対象のY座標オフセット 
@@ -3057,6 +3400,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setTargetPosOfsY(int targetPosOfsY) {
 		this.targetPosOfsY = targetPosOfsY;
 	}
+
 	/**
 	 * 対象を呼び止めるほど強い動機を持っているかどうか を取得する.
 	 * @return 対象を呼び止めるほど強い動機を持っているかどうか 
@@ -3064,6 +3408,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public boolean isTargetBind() {
 		return targetBind;
 	}
+
 	/**
 	 * 対象を呼び止めるほど強い動機を持っているかどうか を設定する.
 	 * @param targetBind 対象を呼び止めるほど強い動機を持っているかどうか 
@@ -3071,6 +3416,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setTargetBind(boolean targetBind) {
 		this.targetBind = targetBind;
 	}
+
 	/**
 	 * 移動目的がフードかどうかを取得する.
 	 * @return 移動目的がフードかどうか
@@ -3078,18 +3424,19 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public boolean isToFood() {
 		return purposeOfMoving == PurposeOfMoving.FOOD;
 	}
+
 	/**
 	 * 移動目的がフードかどうかを設定する.
 	 * @param b 移動目的がフードかどうか
 	 */
 	public void setToFood(boolean b) {
-		if(b){
+		if (b) {
 			purposeOfMoving = PurposeOfMoving.FOOD;
-		}
-		else if(purposeOfMoving == PurposeOfMoving.FOOD){
+		} else if (purposeOfMoving == PurposeOfMoving.FOOD) {
 			purposeOfMoving = PurposeOfMoving.NONE;
 		}
 	}
+
 	/**
 	 * 移動目的がすっきりかどうかを取得する.
 	 * @return 移動目的がすっきりかどうか
@@ -3097,18 +3444,19 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public boolean isToSukkiri() {
 		return purposeOfMoving == PurposeOfMoving.SUKKIRI;
 	}
+
 	/**
 	 * 移動目的がすっきりかどうかを設定する.
 	 * @param b 移動目的がすっきりかどうか
 	 */
 	public void setToSukkiri(boolean b) {
-		if(b){
+		if (b) {
 			purposeOfMoving = PurposeOfMoving.SUKKIRI;
-		}
-		else if(purposeOfMoving == PurposeOfMoving.SUKKIRI){
+		} else if (purposeOfMoving == PurposeOfMoving.SUKKIRI) {
 			purposeOfMoving = PurposeOfMoving.NONE;
 		}
 	}
+
 	/**
 	 * 移動目的がうんうんかどうかを取得する.
 	 * @return 移動目的がうんうんかどうか
@@ -3116,18 +3464,19 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public boolean isToShit() {
 		return purposeOfMoving == PurposeOfMoving.SHIT;
 	}
+
 	/**
 	 * 移動目的がうんうんかどうかを設定する.
 	 * @param flag 移動目的がうんうんかどうか
 	 */
 	public void setToShit(boolean flag) {
-		if(flag){
+		if (flag) {
 			purposeOfMoving = PurposeOfMoving.SHIT;
-		}
-		else if(purposeOfMoving == PurposeOfMoving.SHIT){
+		} else if (purposeOfMoving == PurposeOfMoving.SHIT) {
 			purposeOfMoving = PurposeOfMoving.NONE;
 		}
 	}
+
 	/**
 	 * 移動目的がベッドかどうかを取得する.
 	 * @return 移動目的がベッドかどうか
@@ -3135,18 +3484,19 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public boolean isToBed() {
 		return purposeOfMoving == PurposeOfMoving.BED;
 	}
+
 	/**
 	 * 移動目的がベッドかどうかを設定する.
 	 * @param flag 移動目的がベッドかどうか
 	 */
 	public void setToBed(boolean flag) {
-		if(flag){
+		if (flag) {
 			purposeOfMoving = PurposeOfMoving.BED;
-		}
-		else if(purposeOfMoving == PurposeOfMoving.BED){
+		} else if (purposeOfMoving == PurposeOfMoving.BED) {
 			purposeOfMoving = PurposeOfMoving.NONE;
 		}
 	}
+
 	/**
 	 * 移動目的が他のゆっくりかどうかを取得する.
 	 * @return 移動目的が他のゆっくりかどうか
@@ -3154,18 +3504,19 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public boolean isToBody() {
 		return purposeOfMoving == PurposeOfMoving.YUKKURI;
 	}
+
 	/**
 	 * 移動目的が他のゆっくりかどうかを設定する.
 	 * @param flag 移動目的が他のゆっくりかどうか
 	 */
 	public void setToBody(boolean flag) {
-		if(flag){
+		if (flag) {
 			purposeOfMoving = PurposeOfMoving.YUKKURI;
-		}
-		else if(purposeOfMoving == PurposeOfMoving.YUKKURI){
+		} else if (purposeOfMoving == PurposeOfMoving.YUKKURI) {
 			purposeOfMoving = PurposeOfMoving.NONE;
 		}
 	}
+
 	/**
 	 * 移動目的がおかざりを盗むためかどうかを取得する.
 	 * @return 移動目的がおかざりを盗むためかどうか
@@ -3173,18 +3524,19 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public boolean isToSteal() {
 		return purposeOfMoving == PurposeOfMoving.STEAL;
 	}
+
 	/**
 	 * 移動目的がおかざりを盗むためかどうかを設定する.
 	 * @param flag 移動目的がおかざりを盗むためかどうか
 	 */
 	public void setToSteal(boolean flag) {
-		if(flag){
+		if (flag) {
 			purposeOfMoving = PurposeOfMoving.STEAL;
-		}
-		else if(purposeOfMoving == PurposeOfMoving.STEAL){
+		} else if (purposeOfMoving == PurposeOfMoving.STEAL) {
 			purposeOfMoving = PurposeOfMoving.NONE;
 		}
 	}
+
 	/**
 	 * 移動目的がアイテムを持つことかどうかを取得する.
 	 * @return 移動目的がアイテムを持つことかどうか
@@ -3192,24 +3544,25 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public boolean isToTakeout() {
 		return purposeOfMoving == PurposeOfMoving.TAKEOUT;
 	}
+
 	/**
 	 * 移動目的がアイテムを持つことかどうかを設定する.
 	 * @param flag 移動目的がアイテムを持つことかどうか
 	 */
 	public void setToTakeout(boolean flag) {
-		if(flag){
+		if (flag) {
 			purposeOfMoving = PurposeOfMoving.TAKEOUT;
-		}
-		else if(purposeOfMoving == PurposeOfMoving.TAKEOUT){
+		} else if (purposeOfMoving == PurposeOfMoving.TAKEOUT) {
 			purposeOfMoving = PurposeOfMoving.NONE;
 		}
 	}
+
 	/**移動目標のみキャンセル*/
-	public final void clearTargets(){
+	public final void clearTargets() {
 		purposeOfMoving = PurposeOfMoving.NONE;
 		stopStaying();
 	}
-	
+
 	/**とどまるのをやめる
 	 * @see #stay()
 	 * @see #stay(int)
@@ -3218,9 +3571,10 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * @see #isStaying()
 	 * @see #stopStaying()
 	 * */
-	public final void stopStaying(){
+	public final void stopStaying() {
 		staycount = 0;
 	}
+
 	/**
 	 * アイテムを出し入れする動作フラグ を取得する.
 	 * @return アイテムを出し入れする動作フラグ 
@@ -3228,6 +3582,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public boolean isInOutTakeoutItem() {
 		return inOutTakeoutItem;
 	}
+
 	/**
 	 * アイテムを出し入れする動作フラグ を設定する.
 	 * @param bIsInOutTakeoutItem アイテムを出し入れする動作フラグ 
@@ -3235,6 +3590,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setInOutTakeoutItem(boolean bIsInOutTakeoutItem) {
 		this.inOutTakeoutItem = bIsInOutTakeoutItem;
 	}
+
 	/**
 	 * 待機アクション中かどうかを取得する.
 	 * @return 待機アクション中かどうか 
@@ -3242,6 +3598,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public boolean isStaying() {
 		return staying;
 	}
+
 	/**
 	 * 待機アクション中かどうかを設定する.
 	 * @param staying 待機アクション中かどうか
@@ -3249,6 +3606,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setStaying(boolean staying) {
 		this.staying = staying;
 	}
+
 	/**
 	 * うんうんアクション中 かどうかを設定する.
 	 * @param shitting うんうんアクション中 かどうか
@@ -3256,6 +3614,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setShitting(boolean shitting) {
 		this.shitting = shitting;
 	}
+
 	/**
 	 * 誕生済みか否か を設定する.
 	 * @param birth 誕生済みか否か 
@@ -3263,6 +3622,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setBirth(boolean birth) {
 		this.birth = birth;
 	}
+
 	/**
 	 * 怒っているか否か を設定する.
 	 * @param angry 怒っているか否か 
@@ -3270,6 +3630,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setAngry(boolean angry) {
 		this.angry = angry;
 	}
+
 	/**
 	 * ふりふりアクション中 かどうかを設定する.
 	 * @param furifuri ふりふりアクション中 かどうか
@@ -3277,6 +3638,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setFurifuri(boolean furifuri) {
 		this.furifuri = furifuri;
 	}
+
 	/**
 	 * 攻撃アクション中 かどうかを設定する.
 	 * @param strike 攻撃アクション中 かどうか
@@ -3284,6 +3646,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setStrike(boolean strike) {
 		this.strike = strike;
 	}
+
 	/**
 	 * 何かを食べ中 かどうかを設定する.
 	 * @param eating 何かを食べ中 かどうか
@@ -3291,13 +3654,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setEating(boolean eating) {
 		this.eating = eating;
 	}
-	/**
-	 * ぺろぺろ中 かどうかを取得する.
-	 * @return ぺろぺろ中 かどうか
-	 */
-	public boolean isPeropero() {
-		return peropero;
-	}
+
 	/**
 	 * ぺろぺろ中 かどうかを設定する.
 	 * @param peropero ぺろぺろ中 かどうか
@@ -3305,6 +3662,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setPeropero(boolean peropero) {
 		this.peropero = peropero;
 	}
+
 	/**
 	 * すっきり中 かどうかを設定する.
 	 * @param sukkiri すっきり中 かどうか
@@ -3312,6 +3670,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setSukkiri(boolean sukkiri) {
 		this.sukkiri = sukkiri;
 	}
+
 	/**
 	 * 怖がり中 かどうかを設定する.
 	 * @param scare 怖がり中 かどうか
@@ -3319,6 +3678,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setScare(boolean scare) {
 		this.scare = scare;
 	}
+
 	/**
 	 * うんうんを食べ中 かどうかを設定する.
 	 * @param eatingShit うんうんを食べ中 かどうか
@@ -3326,6 +3686,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setEatingShit(boolean eatingShit) {
 		this.eatingShit = eatingShit;
 	}
+
 	/**
 	 * 沈黙フラグ を取得する.
 	 * @return 沈黙フラグ 
@@ -3333,6 +3694,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public boolean isSilent() {
 		return silent;
 	}
+
 	/**
 	 * 沈黙フラグ を設定する.
 	 * @param silent 沈黙フラグ 
@@ -3340,6 +3702,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setSilent(boolean silent) {
 		this.silent = silent;
 	}
+
 	/**
 	 * 口ふさがれ中 かどうかを取得する.
 	 * @return 口ふさがれ中 かどうか
@@ -3347,6 +3710,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public boolean isShutmouth() {
 		return shutmouth;
 	}
+
 	/**
 	 * 口ふさがれ中 かどうかを設定する.
 	 * @param shutmouth 口ふさがれ中 かどうか
@@ -3354,6 +3718,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setShutmouth(boolean shutmouth) {
 		this.shutmouth = shutmouth;
 	}
+
 	/**
 	 * キリッ！中 かどうかを設定する.
 	 * @param beVain キリッ！中 かどうか
@@ -3361,6 +3726,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setBeVain(boolean beVain) {
 		this.beVain = beVain;
 	}
+
 	/**
 	 * ぴこぴこ中 かどうかを取得する.
 	 * @return ぴこぴこ中 かどうか
@@ -3368,6 +3734,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public boolean isPikopiko() {
 		return pikopiko;
 	}
+
 	/**
 	 * ぴこぴこ中 かどうかを設定する.
 	 * @param pikopiko ぴこぴこ中 かどうか
@@ -3375,6 +3742,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setPikopiko(boolean pikopiko) {
 		this.pikopiko = pikopiko;
 	}
+
 	/**
 	 * ぷるぷる中 かどうかを取得する.
 	 * @return ぷるぷる中 かどうか
@@ -3382,6 +3750,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public boolean isPurupuru() {
 		return purupuru;
 	}
+
 	/**
 	 * ぷるぷる中 かどうかを設定する.
 	 * @param purupuru ぷるぷる中 かどうか
@@ -3389,6 +3758,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setPurupuru(boolean purupuru) {
 		this.purupuru = purupuru;
 	}
+
 	/**
 	 * 親を呼んで泣き叫び中 かどうかを設定する.
 	 * @param callingParents 親を呼んで泣き叫び中 かどうか
@@ -3396,6 +3766,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setCallingParents(boolean callingParents) {
 		this.callingParents = callingParents;
 	}
+
 	/**
 	 * ゆんやぁ中 かどうかを設定する.
 	 * @param yunnyaa ゆんやぁ中 かどうか
@@ -3403,6 +3774,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setYunnyaa(boolean yunnyaa) {
 		this.yunnyaa = yunnyaa;
 	}
+
 	/**
 	 * 何で遊んでいるか を取得する.
 	 * @return 何で遊んでいるか 
@@ -3410,6 +3782,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public PlayStyle getPlaying() {
 		return playing;
 	}
+
 	/**
 	 * 何で遊んでいるか を設定する.
 	 * @param playing 何で遊んでいるか 
@@ -3417,6 +3790,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setPlaying(PlayStyle playing) {
 		this.playing = playing;
 	}
+
 	/**
 	 * 遊び時間上限 を取得する.
 	 * @return 遊び時間上限 
@@ -3424,6 +3798,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getPlayingLimit() {
 		return playingLimit;
 	}
+
 	/**
 	 * 遊び時間上限 を設定する.
 	 * @param playingLimit 遊び時間上限 
@@ -3431,6 +3806,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setPlayingLimit(int playingLimit) {
 		this.playingLimit = playingLimit;
 	}
+
 	/**
 	 * メッセージのバッファ を取得する.
 	 * @return メッセージのバッファ 
@@ -3438,6 +3814,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public String getMessageBuf() {
 		return messageBuf;
 	}
+
 	/**
 	 * メッセージのバッファ を設定する.
 	 * @param messageBuf メッセージのバッファ 
@@ -3445,6 +3822,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setMessageBuf(String messageBuf) {
 		this.messageBuf = messageBuf;
 	}
+
 	/**
 	 * いくつメッセージが溜まってるか を取得する.
 	 * @return いくつメッセージが溜まってるか 
@@ -3452,6 +3830,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getMessageCount() {
 		return messageCount;
 	}
+
 	/**
 	 * いくつメッセージが溜まってるか を設定する.
 	 * @param messageCount いくつメッセージが溜まってるか 
@@ -3459,6 +3838,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setMessageCount(int messageCount) {
 		this.messageCount = messageCount;
 	}
+
 	/**
 	 * その場に留まってる回数 を取得する.
 	 * @return その場に留まってる回数 
@@ -3466,6 +3846,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getStaycount() {
 		return staycount;
 	}
+
 	/**
 	 * その場に留まってる回数 を設定する.
 	 * @param staycount その場に留まってる回数 
@@ -3473,6 +3854,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setStaycount(int staycount) {
 		this.staycount = staycount;
 	}
+
 	/**
 	 * とどまる限界 を取得する.
 	 * @return とどまる限界 
@@ -3480,6 +3862,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getStayTime() {
 		return stayTime;
 	}
+
 	/**
 	 * とどまる限界 を設定する.
 	 * @param stayTime とどまる限界 
@@ -3487,6 +3870,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setStayTime(int stayTime) {
 		this.stayTime = stayTime;
 	}
+
 	/**
 	 * 落下ダメージ を取得する.
 	 * @return 落下ダメージ 
@@ -3494,6 +3878,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getFalldownDamage() {
 		return falldownDamage;
 	}
+
 	/**
 	 * 落下ダメージ を設定する.
 	 * @param falldownDamage 落下ダメージ 
@@ -3501,6 +3886,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setFalldownDamage(int falldownDamage) {
 		this.falldownDamage = falldownDamage;
 	}
+
 	/**
 	 * あんこ量 を取得する.
 	 * @return あんこ量 
@@ -3508,6 +3894,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getBodyAmount() {
 		return bodyAmount;
 	}
+
 	/**
 	 * あんこ量 を設定する.
 	 * @param bodyAmount あんこ量 
@@ -3515,6 +3902,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setBodyAmount(int bodyAmount) {
 		this.bodyAmount = bodyAmount;
 	}
+
 	/**
 	 * 壁に引っかかった回数 を取得する.
 	 * @return 壁に引っかかった回数 
@@ -3522,6 +3910,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getBlockedCount() {
 		return blockedCount;
 	}
+
 	/**
 	 * 壁に引っかかった回数 を設定する.
 	 * @param blockedCount 壁に引っかかった回数 
@@ -3529,6 +3918,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setBlockedCount(int blockedCount) {
 		this.blockedCount = blockedCount;
 	}
+
 	/**
 	 * 死なない期間 を取得する.
 	 * @return 死なない期間 
@@ -3536,6 +3926,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getCantDiePeriod() {
 		return cantDiePeriod;
 	}
+
 	/**
 	 * 死なない期間 を設定する.
 	 * @param cantDiePeriod 死なない期間 
@@ -3543,6 +3934,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setCantDiePeriod(int cantDiePeriod) {
 		this.cantDiePeriod = cantDiePeriod;
 	}
+
 	/**
 	 * 実ゆかどうか を取得する.
 	 * @return 実ゆかどうか 
@@ -3550,6 +3942,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public boolean isUnBirth() {
 		return unBirth;
 	}
+
 	/**
 	 * 実ゆかどうか を設定する.
 	 * @param unBirth 実ゆかどうか 
@@ -3557,6 +3950,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setUnBirth(boolean unBirth) {
 		this.unBirth = unBirth;
 	}
+
 	/**
 	 * 喋れる状態かどうか を取得する.
 	 * @return 喋れる状態かどうか 
@@ -3564,6 +3958,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public boolean isCanTalk() {
 		return canTalk;
 	}
+
 	/**
 	 * 喋れる状態かどうか を設定する.
 	 * @param canTalk 喋れる状態かどうか 
@@ -3571,6 +3966,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setCanTalk(boolean canTalk) {
 		this.canTalk = canTalk;
 	}
+
 	/**
 	 * メッセージラインの色 を取得する.
 	 * @return メッセージラインの色 
@@ -3578,6 +3974,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public Color getMessageLineColor() {
 		return messageLineColor;
 	}
+
 	/**
 	 * メッセージラインの色 を設定する.
 	 * @param messageLineColor メッセージラインの色 
@@ -3585,6 +3982,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setMessageLineColor(Color messageLineColor) {
 		this.messageLineColor = messageLineColor;
 	}
+
 	/**
 	 * メッセージボックスの色 を取得する.
 	 * @return メッセージボックスの色
@@ -3592,6 +3990,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public Color getMessageBoxColor() {
 		return messageBoxColor;
 	}
+
 	/**
 	 * メッセージボックスの色 を設定する.
 	 * @param messageBoxColor メッセージボックスの色 
@@ -3599,6 +3998,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setMessageBoxColor(Color messageBoxColor) {
 		this.messageBoxColor = messageBoxColor;
 	}
+
 	/**
 	 * メッセージテキストの色 を取得する.
 	 * @return メッセージテキストの色 
@@ -3606,6 +4006,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public Color getMessageTextColor() {
 		return messageTextColor;
 	}
+
 	/**
 	 * メッセージテキストの色 を設定する.
 	 * @param messageTextColor メッセージテキストの色 
@@ -3621,6 +4022,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setMessageWindowStroke(BasicStrokeEX messageWindowStroke) {
 		this.messageWindowStroke = messageWindowStroke;
 	}
+
 	/**
 	 * メッセージテキストのサイズ を取得する.
 	 * @return メッセージテキストのサイズ 
@@ -3628,6 +4030,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getMessageTextSize() {
 		return messageTextSize;
 	}
+
 	/**
 	 * メッセージテキストのサイズ を設定する.
 	 * @param messageTextSize メッセージテキストのサイズ 
@@ -3635,6 +4038,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setMessageTextSize(int messageTextSize) {
 		this.messageTextSize = messageTextSize;
 	}
+
 	/**
 	 * 強制的に誕生時メッセージを言わされるかどうか を取得する.
 	 * @return 強制的に誕生時メッセージを言わされるかどうか 
@@ -3642,6 +4046,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public boolean isForceBirthMessage() {
 		return forceBirthMessage;
 	}
+
 	/**
 	 * 強制的に誕生時メッセージを言わされるかどうか を設定する.
 	 * @param forceBirthMessage 強制的に誕生時メッセージを言わされるかどうか 
@@ -3649,6 +4054,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setForceBirthMessage(boolean forceBirthMessage) {
 		this.forceBirthMessage = forceBirthMessage;
 	}
+
 	/**
 	 * ゆっくりのオブジェクトのユニークIDを取得する.
 	 * @return ゆっくりのオブジェクトのユニークID
@@ -3656,6 +4062,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getUniqueID() {
 		return uniqueID;
 	}
+
 	/**
 	 * ゆっくりのオブジェクトのユニークIDを設定する.
 	 * @param uniqueID ゆっくりのオブジェクトのユニークID
@@ -3663,6 +4070,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setUniqueID(int uniqueID) {
 		this.uniqueID = uniqueID;
 	}
+
 	/**
 	 * どのゆっくり的なメッセージを言うか を取得する.
 	 * @return どのゆっくり的なメッセージを言うか 
@@ -3670,6 +4078,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public YukkuriType getMsgType() {
 		return msgType;
 	}
+
 	/**
 	 * どのゆっくり的なメッセージを言うか を設定する.
 	 * @param msgType どのゆっくり的なメッセージを言うか 
@@ -3677,6 +4086,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setMsgType(YukkuriType msgType) {
 		this.msgType = msgType;
 	}
+
 	/**
 	 * どのゆっくり的なうんうんをするか を取得する.
 	 * @return どのゆっくり的なうんうんをするか 
@@ -3684,6 +4094,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public YukkuriType getShitType() {
 		return shitType;
 	}
+
 	/**
 	 * どのゆっくり的なうんうんをするか を設定する.
 	 * @param shitType どのゆっくり的なうんうんをするか 
@@ -3691,6 +4102,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setShitType(YukkuriType shitType) {
 		this.shitType = shitType;
 	}
+
 	/**
 	 * 右ペインメニューのピン留めをされているかどうかを取得する.
 	 * @return 右ペインメニューのピン留めをされているかどうか 
@@ -3698,6 +4110,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public boolean isPin() {
 		return pin;
 	}
+
 	/**
 	 * 右ペインメニューのピン留めをされているかどうか を設定する.
 	 * @param pin 右ペインメニューのピン留めをされているかどうか 
@@ -3705,6 +4118,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setPin(boolean pin) {
 		this.pin = pin;
 	}
+
 	/**
 	 * ゆっくりの移動速度 を取得する.
 	 * @return ゆっくりの移動速度 
@@ -3712,6 +4126,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getSpeed() {
 		return speed;
 	}
+
 	/**
 	 * ゆっくりの移動速度 を設定する.
 	 * @param speed ゆっくりの移動速度 
@@ -3719,6 +4134,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setSpeed(int speed) {
 		this.speed = speed;
 	}
+
 	/**
 	 * 次の落下でダメージを受けないかどうか を取得する.
 	 * @return 次の落下でダメージを受けないかどうか 
@@ -3726,6 +4142,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public boolean isbNoDamageNextFall() {
 		return bNoDamageNextFall;
 	}
+
 	/**
 	 * 次の落下でダメージを受けないかどうか を設定する.
 	 * @param bNoDamageNextFall 次の落下でダメージを受けないかどうか 
@@ -3733,6 +4150,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setbNoDamageNextFall(boolean bNoDamageNextFall) {
 		this.bNoDamageNextFall = bNoDamageNextFall;
 	}
+
 	/**
 	 * この個体に対して発行されたイベントのリスト を取得する.
 	 * @return この個体に対して発行されたイベントのリスト 
@@ -3740,6 +4158,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public ArrayList<EventPacket> getEventList() {
 		return eventList;
 	}
+
 	/**
 	 * この個体に対して発行されたイベントのリスト を設定する.
 	 * @param eventList この個体に対して発行されたイベントのリスト 
@@ -3747,6 +4166,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setEventList(ArrayList<EventPacket> eventList) {
 		this.eventList = eventList;
 	}
+
 	/**
 	 * 現在実行中のイベント を取得する.
 	 * @return 現在実行中のイベント 
@@ -3754,6 +4174,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public EventPacket getCurrentEvent() {
 		return currentEvent;
 	}
+
 	/**
 	 * 現在実行中のイベント を設定する.
 	 * @param currentEvent 現在実行中のイベント 
@@ -3761,6 +4182,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setCurrentEvent(EventPacket currentEvent) {
 		this.currentEvent = currentEvent;
 	}
+
 	/**
 	 * 表情の強制設定 を取得する.
 	 * @return 表情の強制設定 
@@ -3768,6 +4190,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getForceFace() {
 		return forceFace;
 	}
+
 	/**
 	 * 表情の強制設定 を設定する.
 	 * @param forceFace 表情の強制設定 
@@ -3775,6 +4198,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setForceFace(int forceFace) {
 		this.forceFace = forceFace;
 	}
+
 	/**
 	 * 影の表示有無 を取得する.
 	 * @return 影の表示有無 
@@ -3782,6 +4206,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public boolean isDropShadow() {
 		return dropShadow;
 	}
+
 	/**
 	 * 影の表示有無 を設定する.
 	 * @param dropShadow 影の表示有無 
@@ -3789,6 +4214,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setDropShadow(boolean dropShadow) {
 		this.dropShadow = dropShadow;
 	}
+
 	/**
 	 * イベントで設定されたアクション を取得する.
 	 * @return イベントで設定されたアクション 
@@ -3796,6 +4222,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public Event getEventResultAction() {
 		return eventResultAction;
 	}
+
 	/**
 	 * イベントで設定されたアクション を設定する.
 	 * @param eventResultAction イベントで設定されたアクション 
@@ -3803,6 +4230,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setEventResultAction(Event eventResultAction) {
 		this.eventResultAction = eventResultAction;
 	}
+
 	/**
 	 * ゆ虐神拳により 膨らんでいるか/伸ばされているか/押さえつけられているか を取得する.
 	 * @return ゆ虐神拳により 膨らんでいるか/伸ばされているか/押さえつけられているか 
@@ -3810,6 +4238,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public boolean[] getAbFlagGodHand() {
 		return abFlagGodHand;
 	}
+
 	/**
 	 * ゆ虐神拳により 膨らんでいるか/伸ばされているか/押さえつけられているか を設定する.
 	 * @param abFlagGodHand ゆ虐神拳により 膨らんでいるか/伸ばされているか/押さえつけられているか 
@@ -3817,6 +4246,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setAbFlagGodHand(boolean[] abFlagGodHand) {
 		this.abFlagGodHand = abFlagGodHand;
 	}
+
 	/**
 	 * TODO:ゆ虐神拳の回数？ を取得する.
 	 * @return TODO:ゆ虐神拳の回数？ 
@@ -3824,6 +4254,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int[] getAnGodHandPoint() {
 		return anGodHandPoint;
 	}
+
 	/**
 	 * TODO:ゆ虐神拳の回数？ を設定する.
 	 * @param anGodHandPoint TODO:ゆ虐神拳の回数？ 
@@ -3831,6 +4262,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setAnGodHandPoint(int[] anGodHandPoint) {
 		this.anGodHandPoint = anGodHandPoint;
 	}
+
 	/**
 	 * お気に入りアイテム を取得する.
 	 * @return お気に入りアイテム 
@@ -3838,6 +4270,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public HashMap<FavItemType, Obj> getFavItem() {
 		return favItem;
 	}
+
 	/**
 	 * お気に入りアイテム を設定する.
 	 * @param favItem お気に入りアイテム 
@@ -3845,6 +4278,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setFavItem(HashMap<FavItemType, Obj> favItem) {
 		this.favItem = favItem;
 	}
+
 	/**
 	 * 持ち歩きアイテム を取得する.
 	 * @return 持ち歩きアイテム 
@@ -3852,6 +4286,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public HashMap<TakeoutItemType, Obj> getTakeoutItem() {
 		return takeoutItem;
 	}
+
 	/**
 	 * 持ち歩きアイテム を設定する.
 	 * @param takeoutItem 持ち歩きアイテム 
@@ -3859,6 +4294,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setTakeoutItem(HashMap<TakeoutItemType, Obj> takeoutItem) {
 		this.takeoutItem = takeoutItem;
 	}
+
 	/**
 	 * ゆっくり本体の購入基本額 を取得する.
 	 * @return ゆっくり本体の購入基本額 
@@ -3866,6 +4302,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getYcost() {
 		return Ycost;
 	}
+
 	/**
 	 * ゆっくり本体の購入基本額 を設定する.
 	 * @param ycost ゆっくり本体の購入基本額 
@@ -3873,6 +4310,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setYcost(int ycost) {
 		Ycost = ycost;
 	}
+
 	/**
 	 * ゆっくり本体、中身の売却基本額　飼いゆとしての価値/加工品としての価値 を取得する.
 	 * @return ゆっくり本体、中身の売却基本額　飼いゆとしての価値/加工品としての価値 
@@ -3880,6 +4318,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int[] getSaleValue() {
 		return saleValue;
 	}
+
 	/**
 	 * ゆっくり本体、中身の売却基本額　飼いゆとしての価値/加工品としての価値 を設定する.
 	 * @param value
@@ -3887,6 +4326,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setSaleValue(int[] value) {
 		saleValue = value;
 	}
+
 	/**
 	 * たかっているアリの数 を取得する.
 	 * @return たかっているアリの数 
@@ -3894,6 +4334,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getNumOfAnts() {
 		return numOfAnts;
 	}
+
 	/**
 	 * たかっているアリの数 を設定する.
 	 * @param numOfAnts たかっているアリの数 
@@ -3905,6 +4346,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 			this.numOfAnts = numOfAnts;
 		}
 	}
+
 	/**
 	 * うにょ機能を使用するかどうかのフラグ を取得する.
 	 * @return うにょ機能を使用するかどうかのフラグ 
@@ -3912,6 +4354,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getUnyoFlg() {
 		return unyoFlg;
 	}
+
 	/**
 	 * うにょ機能を使用するかどうかのフラグ を設定する.
 	 * @param unyoFlg うにょ機能を使用するかどうかのフラグ 
@@ -3919,6 +4362,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setUnyoFlg(int unyoFlg) {
 		this.unyoFlg = unyoFlg;
 	}
+
 	/**
 	 * うにょの高さ方向 を取得する.
 	 * @return うにょの高さ方向 
@@ -3926,6 +4370,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getUnyoForceH() {
 		return unyoForceH;
 	}
+
 	/**
 	 * うにょの高さ方向 を設定する.
 	 * @param unyoForceH うにょの高さ方向 
@@ -3933,6 +4378,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setUnyoForceH(int unyoForceH) {
 		this.unyoForceH = unyoForceH;
 	}
+
 	/**
 	 * うにょの横方向 を取得する.
 	 * @return うにょの横方向 
@@ -3940,6 +4386,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public int getUnyoForceW() {
 		return unyoForceW;
 	}
+
 	/**
 	 * うにょの横方向 を設定する.
 	 * @param unyoForceW うにょの横方向 
@@ -3947,6 +4394,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setUnyoForceW(int unyoForceW) {
 		this.unyoForceW = unyoForceW;
 	}
+
 	/**
 	 * ランダムのもと を取得する.
 	 * @return ランダムのもと 
@@ -3954,6 +4402,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public static Random getRnd() {
 		return RND;
 	}
+
 	/**
 	 * うにょの動きの強さ を取得する.
 	 * @return
@@ -4982,6 +5431,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 		}
 		return babyType;
 	}
+
 	/**
 	 * 茎妊娠してる茎を取得
 	 * <br>出産時に、順番に生んでゆくときの処理に使われている
@@ -5024,7 +5474,8 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 		if (s > 0 && eCoreAnkoState == CoreAnkoState.DEFAULT && getBurstState() != Burst.HALF)
 			plusShit(s / 5);
 		stress += TICK * s;
-		if (stress < 0) stress = 0;
+		if (stress < 0)
+			stress = 0;
 	}
 
 	/**
@@ -5041,7 +5492,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 */
 	public boolean isStressful() {
 		// ストレス限界の40%を超えている場合
-		if (STRESSLIMIT[getBodyAgeState().ordinal()] * checkNonYukkuriDiseaseTolerance() * 2 / 5 < stress) {
+		if (STRESSLIMIT[getBodyAgeState().ordinal()] * checkNonYukkuriDiseaseTolerance() / 100 * 2 / 5 < stress) {
 			return true;
 		}
 		return false;
@@ -5053,7 +5504,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 */
 	public boolean isVeryStressful() {
 		// ストレス限界の60%を超えている場合
-		if (STRESSLIMIT[getBodyAgeState().ordinal()] * checkNonYukkuriDiseaseTolerance() * 3 / 5 < stress) {
+		if (STRESSLIMIT[getBodyAgeState().ordinal()] * checkNonYukkuriDiseaseTolerance() / 100 * 3 / 5 < stress) {
 			return true;
 		}
 		return false;
@@ -5457,7 +5908,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 強制的にゆかびにする.
 	 */
 	public final void forceSetSick() {
-		sickPeriod = (INCUBATIONPERIOD *32) + 2;
+		sickPeriod = (INCUBATIONPERIOD * 32) + 2;
 	}
 
 	/**
@@ -5631,16 +6082,16 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 			amaamaDiscipline = 0;
 		}
 	}
-	
+
 	/**
 	 * 頑固な汚れかどうかを返却する.
 	 * 死んでいる場合は「頑固な汚れじゃない」.
 	 * @return 頑固な汚れかどうか
 	 */
-	public final boolean isStubbornlyDirty(){
-		return  (!isDead() && stubbornlyDirty);
+	public final boolean isStubbornlyDirty() {
+		return (!isDead() && stubbornlyDirty);
 	}
-	
+
 	/**
 	 * 非ゆっくり症(間近も含む)かどうかを返却する.
 	 * @return 非ゆっくり症(間近も含む)かどうか
@@ -5648,7 +6099,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public final boolean isNYD() {
 		return geteCoreAnkoState() != CoreAnkoState.DEFAULT;
 	}
-	
+
 	/**
 	 * 非ゆっくり症ではないどうかを返却する.
 	 * @return 非ゆっくり症ではないかどうか
@@ -5656,5 +6107,52 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public final boolean isNotNYD() {
 		return geteCoreAnkoState() == CoreAnkoState.DEFAULT;
 	}
-	
+
+	/**
+	 * 行動目的を取得する.
+	 * @return 行動目的
+	 */
+	public PurposeOfMoving getPurposeOfMoving() {
+		return purposeOfMoving;
+	}
+
+	/**
+	 * 行動目的を設定する.
+	 * @param purposeOfMoving 行動目的
+	 */
+	public void setPurposeOfMoving(PurposeOfMoving purposeOfMoving) {
+		this.purposeOfMoving = purposeOfMoving;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (o == null) {
+			return false;
+		}
+		if (!(o instanceof BodyAttributes)) {
+			return false;
+		}
+		BodyAttributes dest = (BodyAttributes) o;
+		if (getUniqueID() == dest.getUniqueID()) {
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return getUniqueID() * 13;
+	}
+
+	@Override
+	public int compareTo(Object o) {
+		if (o == null) {
+			return 0;
+		}
+		if (!(o instanceof BodyAttributes)) {
+			return 0;
+		}
+		BodyAttributes b = (BodyAttributes) o;
+		return getUniqueID() - b.getUniqueID();
+	}
 }

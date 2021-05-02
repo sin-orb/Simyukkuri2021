@@ -68,7 +68,7 @@ public class ItemMenu {
 	// 素手のとき
 	public static enum GetMenu {
 		PICKUP("取る"),
-		STATUS("ステータス(開発中)")
+		STATUS("ステータス")
 		;
 		public String name;
 		private GetMenu(String str) {

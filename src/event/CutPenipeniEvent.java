@@ -5,7 +5,6 @@ import java.util.Random;
 import src.base.Body;
 import src.base.EventPacket;
 import src.base.Obj;
-import src.enums.CoreAnkoState;
 import src.enums.Happiness;
 import src.enums.ImageCode;
 import src.system.MessagePool;
@@ -136,5 +135,10 @@ public class CutPenipeniEvent extends EventPacket implements java.io.Serializabl
 		b.setbPenipeniCutted(true);
 		b.setHappiness(Happiness.VERY_SAD);
 		b.setLockmove(false);
+	}
+	
+	@Override
+	public String toString() {
+		return "ぺにぺにがぁあ！";
 	}
 }

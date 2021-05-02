@@ -343,4 +343,8 @@ public class RaperReactionEvent extends EventPacket implements java.io.Serializa
 		}
 		b.moveToEvent(this, vx, vy);
 	}
+	@Override
+	public String toString() {
+		return "れいぱーじゃぁあ";
+	}
 }

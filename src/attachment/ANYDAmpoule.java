@@ -104,4 +104,9 @@ public class ANYDAmpoule extends Attachment {
 		value = 1000;
 		cost = 0;
 	}
+	
+	@Override
+	public String toString() {
+		return "非ゆっくり症防止アンプル";
+	}
 }

@@ -113,4 +113,9 @@ public class OrangeAmpoule extends Attachment {
 		value = 500;
 		cost = 0;
 	}
+	
+	@Override
+	public String toString() {
+		return "オレンジアンプル";
+	}
 }

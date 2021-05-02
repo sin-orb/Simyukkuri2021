@@ -1517,6 +1517,7 @@ public class GadgetAction {
 					Body b = (Body)found;
 					b.debugOutputState();
 				}
+				break;
 			case DEBUG2:
 				if (found instanceof Body) {
 					Body b = (Body)found;

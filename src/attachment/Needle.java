@@ -10,7 +10,6 @@ import src.base.Body;
 import src.draw.ModLoader;
 import src.enums.AgeState;
 import src.enums.AttachProperty;
-import src.enums.CoreAnkoState;
 import src.enums.Direction;
 import src.enums.Event;
 import src.enums.Happiness;
@@ -162,4 +161,8 @@ public class Needle extends Attachment {
 		processInterval = 1;
 	}
 
+	@Override
+	public String toString() {
+		return "針";
+	}
 }

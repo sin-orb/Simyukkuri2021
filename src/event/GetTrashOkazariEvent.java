@@ -50,4 +50,9 @@ public class GetTrashOkazariEvent extends EventPacket implements java.io.Seriali
 		b.giveOkazari(Okazari.getRandomOkazari(b.getBodyAgeState()));
 		return true;
 	}
+	
+	@Override
+	public String toString() {
+		return "ゴミおかざり拾い";
+	}
 }

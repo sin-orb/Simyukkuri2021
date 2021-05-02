@@ -131,4 +131,8 @@ public class Badge extends Attachment {
 		cost = 0;
 	}
 
+	@Override
+	public String toString() {
+		return "バッジ";
+	}
 }

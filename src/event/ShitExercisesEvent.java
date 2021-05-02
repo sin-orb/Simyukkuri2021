@@ -9,7 +9,6 @@ import src.base.EventPacket;
 import src.base.Obj;
 import src.draw.Translate;
 import src.enums.AgeState;
-import src.enums.CoreAnkoState;
 import src.enums.Event;
 import src.enums.Happiness;
 import src.enums.PublicRank;
@@ -472,4 +471,9 @@ public class ShitExercisesEvent extends EventPacket implements java.io.Serializa
 	/*public void end(Body b) {
 		return;
 	}*/
+	
+	@Override
+	public String toString() {
+		return "うんうんたいそう";
+	}
 }

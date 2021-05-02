@@ -8,7 +8,6 @@ import src.base.EventPacket;
 import src.base.Obj;
 import src.draw.Translate;
 import src.enums.BaryInUGState;
-import src.enums.CoreAnkoState;
 import src.enums.Happiness;
 import src.enums.Intelligence;
 import src.system.MessagePool;
@@ -149,5 +148,10 @@ public class BreedEvent extends EventPacket implements java.io.Serializable {
 			}
 			return true;
 		}
+	}
+	
+	@Override
+	public String toString() {
+		return "おちび迎え";
 	}
 }

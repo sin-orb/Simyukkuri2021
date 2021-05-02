@@ -191,4 +191,9 @@ public class BegForLifeEvent extends EventPacket implements java.io.Serializable
 		b.setBegging(false);
 		return;
 	}
+	
+	@Override
+	public String toString() {
+		return "たすけろじじい";
+	}
 }

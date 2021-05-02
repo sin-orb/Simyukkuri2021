@@ -8,6 +8,7 @@ import javax.swing.event.PopupMenuListener;
 
 import src.SimYukkuri;
 import src.base.Body;
+import src.command.ShowStatusFrame;
 import src.game.Shit;
 import src.game.Vomit;
 import src.system.ItemMenu.GetMenu;
@@ -108,7 +109,11 @@ public class ItemListener {
 					ItemMenu.getTarget = null;
 					break;
 				case STATUS:
-					ItemMenu.getTarget = null;
+					if (ItemMenu.getTarget == null) return;
+					Body b = (Body)ItemMenu.getTarget;
+					ShowStatusFrame instance = ShowStatusFrame.getInstance();
+					instance.giveBodyInfo(b);
+					instance.setVisible(true);
 					break;
 			}
 		}

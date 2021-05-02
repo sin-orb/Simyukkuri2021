@@ -159,4 +159,8 @@ public class HateNoOkazariEvent extends EventPacket implements java.io.Serializa
 		}
 		return true;
 	}
+	@Override
+	public String toString() {
+		return "無おかざりいじめ";
+	}
 }

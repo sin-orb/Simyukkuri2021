@@ -308,4 +308,9 @@ public class PredatorsGameEvent extends EventPacket implements java.io.Serializa
 			toy=null;
 		}
 	}
+	
+	@Override
+	public String toString() {
+		return "あそんじゃうぞー";
+	}
 }

@@ -237,4 +237,9 @@ public class YukkuriRideEvent extends EventPacket implements java.io.Serializabl
 		// 子供をおろす
 		to.setLinkParent(null);
 	}
+	
+	@Override
+	public String toString() {
+		return "おちびはこび";
+	}
 }

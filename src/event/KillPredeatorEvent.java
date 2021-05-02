@@ -152,4 +152,8 @@ public class KillPredeatorEvent extends RevengeAttackEvent implements Serializab
 		return false;
 	}
 
+	@Override
+	public String toString() {
+		return "くそれみりゃがぁあ";
+	}
 }

@@ -104,9 +104,10 @@ public class BedLogic {
 
 		// ベッドに向かう条件
 		boolean flag = false;
-		if (b.isSleepy()	//	眠い
+		if ((b.isSleepy()	//	眠い
 			|| Terrarium.getDayState().ordinal() >= Terrarium.DayState.EVENING.ordinal()	// 夜になった
-			|| b.nearToBirth()) {	// 出産間近
+			|| b.nearToBirth()) // 出産間近
+			&& b.getCurrentEvent() == null) {// イベントがない <- イベントありのままだと不眠ディフューザーとかでおかしくなる
 			flag = true;
 		}
 		if(b.getTakeoutItem(TakeoutItemType.FOOD) != null){

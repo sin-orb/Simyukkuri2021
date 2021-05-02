@@ -118,5 +118,8 @@ public class BreedingAmpoule extends Attachment {
 		value = 1000;
 		cost = 0;
 	}
-
+	@Override
+	public String toString() {
+		return "精子アンプル";
+	}
 }

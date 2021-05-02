@@ -49,4 +49,9 @@ public class FavCopyEvent extends EventPacket implements java.io.Serializable {
 	public boolean execute(Body b) {
 		return true;
 	}
+	
+	@Override
+	public String toString() {
+		return "おきにいりっ！";
+	}
 }
