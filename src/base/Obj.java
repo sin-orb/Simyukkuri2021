@@ -17,6 +17,7 @@ import src.system.ItemMenu.UseMenuTarget;
  *  でいぶ、ドスなどの突然変異でエラーが出る可能性があるので
  *  private変数は使わず代わりにprotectedを使用してください
  */
+@SuppressWarnings("rawtypes")
 public class Obj implements java.io.Serializable, Comparable {
 	static final long serialVersionUID = 1L;
 		/**時間経過用係数*/
@@ -109,17 +110,11 @@ public class Obj implements java.io.Serializable, Comparable {
 
 	/**x座標ゲッター*/
 	public int getX() {
-		if( x < 0 || Translate.mapW < x){
-//			System.out.println("Error x :" + x);
-		}
 		return x;
 	}
 
 	/**y座標ゲッター*/
 	public int getY() {
-		if( y < 0 || Translate.mapH < y){
-//			System.out.println("Error y :" + y);
-		}
 		return y;
 	}
 
@@ -178,15 +173,20 @@ public class Obj implements java.io.Serializable, Comparable {
 			z = Z;
 		}
 	}
-
+	/**
+	 * X座標を強制的に設定する.
+	 * @param X X座標
+	 */
 	public void setForceX (int X){
 		x = X;
 	}
+	/**
+	 * Y座標を強制的に設定suru.
+	 * @param Y Y座標
+	 */
 	public void setForceY (int Y) {
 		y = Y;
 	}
-
-
 
 	/**移動量追加
 	 * @param x　x方向
@@ -357,6 +357,7 @@ public class Obj implements java.io.Serializable, Comparable {
 
 	/**除去*/
 	public void remove(){
+		bindObj = null;
 		setRemoved(true);
 	}
 	/**除去されてるか否か*/
@@ -465,6 +466,12 @@ public class Obj implements java.io.Serializable, Comparable {
 		setBx(0);
 		setBy(0);
 		bz = 0;
+		if (x < 0) {
+			x = 5;
+		}
+		if (y < 0) {
+			y = 5;
+		}
 		return Event.DONOTHING;
 	}
 
@@ -508,19 +515,31 @@ public class Obj implements java.io.Serializable, Comparable {
 	public void setAge(long age) {
 		this.age = age;
 	}
-
+	/**
+	 * X座標の加速度を取得する.
+	 * @return X座標の加速度
+	 */
 	public int getBx() {
 		return bx;
 	}
-
+	/**
+	 * X座標の加速度を設定する.
+	 * @param bx X座標の加速度
+	 */
 	public void setBx(int bx) {
 		this.bx = bx;
 	}
-
+	/**
+	 * Y座標の加速度を取得する.
+	 * @param bx Y座標の加速度
+	 */
 	public int getBy() {
 		return by;
 	}
-
+	/**
+	 * Y座標の加速度を設定する.
+	 * @param by Y座標の加速度
+	 */
 	public void setBy(int by) {
 		this.by = by;
 	}
@@ -528,5 +547,24 @@ public class Obj implements java.io.Serializable, Comparable {
 	@Override
 	public int compareTo(Object o) {
 		return 0;
+	}
+	/**
+	 * 座標をマップの範囲内に収める
+	 */
+	public void calcPos() {
+		int mapX = Translate.mapW;
+		int mapY = Translate.mapH;
+		if (x < 0) {
+			x = 0;
+		}
+		if (y < 0) {
+			y = 0;
+		}
+		if (x > mapX) {
+			x = mapX;
+		}
+		if (y > mapY) {
+			y = mapY;
+		}
 	}
 }

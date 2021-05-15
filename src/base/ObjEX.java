@@ -264,6 +264,7 @@ public abstract class ObjEX extends Obj implements java.io.Serializable {
 		setBx(0);
 		setBy(0);
 		bz = 0;
+		calcPos();
 		return Event.DONOTHING;
 	}
 

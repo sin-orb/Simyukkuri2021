@@ -20,6 +20,7 @@ public class GadgetTool {
 			return;
 		}
 
+		@SuppressWarnings("static-access")
 		int nRnd = b.RND.nextInt(8);
 		switch( nRnd ){
 		case 0:

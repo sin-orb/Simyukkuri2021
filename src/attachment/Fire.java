@@ -46,7 +46,12 @@ public class Fire extends Attachment {
 
 	/**燃焼時間*/
 	private int burnPeriod;
-
+	/**
+	 * イメージをロードする.
+	 * @param loader ローダ
+	 * @param io イメージオブザーバ
+	 * @throws IOException IO例外
+	 */
 	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
 
 		int baby = AgeState.BABY.ordinal();

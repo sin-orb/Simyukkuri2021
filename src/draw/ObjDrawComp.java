@@ -5,11 +5,14 @@ import java.util.Comparator;
 import src.base.Body;
 import src.base.Obj;
 
-//描画用ソート
+/**
+ * 描画用ソートクラス
+ */
 public final class ObjDrawComp implements Comparator<Obj> {
 	public final static ObjDrawComp INSTANCE = new ObjDrawComp();
 
-	@Override final public int compare(Obj o1, Obj o2) {
+	@Override 
+	public final int compare(Obj o1, Obj o2) {
 		int c = o1.getY() - o2.getY();
 		if(c == 0) {
 			//Improve visibility: at the same y-coordinate, draw small

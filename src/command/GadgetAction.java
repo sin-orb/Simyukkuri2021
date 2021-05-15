@@ -106,7 +106,7 @@ public class GadgetAction {
 				break;
 		}
 
-		ArrayList<Body> bodyList = SimYukkuri.world.currentMap.body;
+		Body[] bodyList = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
 		ArrayList<Shit> shitList = SimYukkuri.world.currentMap.shit;
 		ArrayList<Vomit> vomitList = SimYukkuri.world.currentMap.vomit;
 		ArrayList<Food> foodList = SimYukkuri.world.currentMap.food;
@@ -118,8 +118,7 @@ public class GadgetAction {
 			}
 		}
 		if(isDead) {
-			Body[] bodies = bodyList.toArray(new Body[0]);
-			for (Body b: bodies) {
+			for (Body b: bodyList) {
 				if (b.isDead())
 					b.remove();
 			}
@@ -158,7 +157,7 @@ public class GadgetAction {
 				bodyTarget.setRemoved(true);
 				bodyTarget.release();
 			}
-			bodyList.clear();
+			SimYukkuri.world.currentMap.body.clear();
 			for (Shit s: shitList) {
 				s.remove();
 			}
@@ -541,7 +540,7 @@ public class GadgetAction {
 				break;
 			case SNAPPING:
 				if(ev.isShiftDown()) {
-					ArrayList<Body> bodyList = SimYukkuri.world.currentMap.body;
+					Body[] bodyList = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
 					for(Obj o :bodyList) {
 						o.kick();
 					}
@@ -577,7 +576,7 @@ public class GadgetAction {
 				break;
 			case HAMMER:
 				if(ev.isShiftDown()) {
-					ArrayList<Body> bodyList = SimYukkuri.world.currentMap.body;
+					Body[] bodyList = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
 					for(Body b :bodyList) {
 						b.strikeByHammer();
 						if (!b.isHasPants() && !b.isDead() && !b.isShutmouth()) {
@@ -640,7 +639,7 @@ public class GadgetAction {
 				break;
 			case PUNCH:
 				if(ev.isShiftDown()) {
-					ArrayList<Body> bodyList = SimYukkuri.world.currentMap.body;
+					Body[] bodyList = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
 					for(Body b :bodyList) {
 						b.strikeByPunch();
 						if (!b.isHasPants() && !b.isDead() && !b.isShutmouth()) {
@@ -670,11 +669,11 @@ public class GadgetAction {
 				break;
 			case GODHAND:
 				if(ev.isShiftDown()) {
-					ArrayList<Body> bodyList = SimYukkuri.world.currentMap.body;
-					int nSize = bodyList.size();
+					Body[] bodyList = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
+					int nSize = bodyList.length;
 					for( int i = nSize-1 ; -1 < i; i--)
 					{
-						Body b = bodyList.get( i );
+						Body b = bodyList[ i ];
 						if( b != null )
 						{
 							GadgetTool.doGodHand(b);
@@ -688,7 +687,7 @@ public class GadgetAction {
 				}
 				break;
 			case PEAL:
-				ArrayList<Body> bodyListP = SimYukkuri.world.currentMap.body;
+				Body[] bodyListP = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
 				if(ev.isShiftDown()) {
 					boolean flag = true;
 					if (found instanceof Body) {
@@ -716,11 +715,10 @@ public class GadgetAction {
 							((Body)found).Peal();
 					}
 				}
-//				GadgetMenu.executeBodyMethod(ev, found, "Peal");
 				break;
 
 			case Blind:
-				ArrayList<Body> bodyListB = SimYukkuri.world.currentMap.body;
+				Body[] bodyListB = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
 				if(ev.isShiftDown()) {
 					boolean flag = true;
 					if (found instanceof Body) {
@@ -748,10 +746,9 @@ public class GadgetAction {
 							((Body)found).breakeyes();
 					}
 				}
-//				GadgetMenu.executeBodyMethod(ev, found, "breakeyes");
 				break;
 			case SHUTMOUTH:
-				ArrayList<Body> bodyListS = SimYukkuri.world.currentMap.body;
+				Body[] bodyListS = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
 				if(ev.isShiftDown()) {
 					boolean flag = true;
 					if (found instanceof Body) {
@@ -778,7 +775,6 @@ public class GadgetAction {
 							((Body)found).ShutMouth();
 					}
 				}
-//				GadgetMenu.executeBodyMethod(ev, found, "ShutMouth");
 				break;
 			case HAIRCUT:
 				if(ev.isShiftDown()) {
@@ -787,7 +783,7 @@ public class GadgetAction {
 				GadgetMenu.executeBodyMethod(ev, found, "pickHair");
 				break;
 			case PACK:
-				ArrayList<Body> bodyListPa = SimYukkuri.world.currentMap.body;
+				Body[] bodyListPa = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
 				if(ev.isShiftDown()) {
 					boolean flag = true;
 					if (found instanceof Body) {
@@ -889,7 +885,7 @@ public class GadgetAction {
 	 * @param found 対象オブジェクト
 	 */
 	public static void evaluateAmpoule(GadgetList item, MouseEvent ev, Obj found) {
-		ArrayList<Body> bodyList = SimYukkuri.world.currentMap.body;
+		Body[] bodyList = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
 		switch (item) {
 			case ORANGE_AMP:
 				if(ev.isShiftDown()) {
@@ -1202,7 +1198,7 @@ public class GadgetAction {
 	 * @param found 対象オブジェクト
 	 */
 	public static void evaluateAccessory(GadgetList item, MouseEvent ev, Obj found) {
-		ArrayList<Body> bodyList = SimYukkuri.world.currentMap.body;
+		Body[] bodyList = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
 		if(ev.isShiftDown()) {
 			boolean flag = true;
 			if (found instanceof Body) {
@@ -1248,7 +1244,7 @@ public class GadgetAction {
 	 * @param found 対象オブジェクト
 	 */
 	public static void evaluatePants(GadgetList item, MouseEvent ev, Obj found) {
-		ArrayList<Body> bodyList = SimYukkuri.world.currentMap.body;
+		Body[] bodyList = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
 		if(ev.isShiftDown()) {
 			boolean flag = true;
 			if (found instanceof Body) {
@@ -1394,6 +1390,7 @@ public class GadgetAction {
 					PublicRank rank = b.getPublicRank();
 					if(rank == PublicRank.NONE) {
 						b.setPublicRank(PublicRank.UnunSlave);
+						b.getFavItem().clear();
 						Body p = b.getPartner();
 						if (p != null) {
 							// うんうんどれいになるようなくずとは りこんっ！だよ！！
@@ -1402,6 +1399,7 @@ public class GadgetAction {
 						}
 					} else {
 						b.setPublicRank(PublicRank.NONE);
+						b.getFavItem().clear();
 					}
 				}
 				break;
@@ -1515,7 +1513,7 @@ public class GadgetAction {
 			case DEBUG2:
 				if (found instanceof Body) {
 					Body b = (Body)found;
-					b.setHungry(0);
+					b.execTransform();
 				}
 				default:
 				break;

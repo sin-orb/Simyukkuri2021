@@ -29,15 +29,18 @@ public class YukkuriRideEvent extends EventPacket implements java.io.Serializabl
 	Random rnd = new Random();
 	int tick = 0;
 	boolean bMoveTarget = false;
-
+	/**
+	 * コンストラクタ.
+	 */
 	public YukkuriRideEvent(Body f, Body t, Obj tgt, int cnt) {
 		super(f, t, tgt, cnt);
-		priority = EventPriority.MIDDLE;	// 食事、睡眠、トイレよりは上
+		priority = EventPriority.MIDDLE;// 食事、睡眠、トイレよりは上
 	}
 
 	// 参加チェック
 	// ここで各種チェックを行い、イベントへ参加するかを返す
 	// また、イベント優先度も必要に応じて設定できる
+	@Override
 	public boolean checkEventResponse(Body b) {
 		if(to == null){
 			return false;
@@ -55,18 +58,21 @@ public class YukkuriRideEvent extends EventPacket implements java.io.Serializabl
 	}
 
 	// イベント開始動作
+	@Override
 	public void start(Body b) {
 		if(to == null ){
 			return;
 		}
 		b.setCurrentEvent(this);
+		b.clearActionsForEvent();
 		b.moveToEvent(this, to.getX(), to.getY());
 	}
 
 	// 毎フレーム処理
+	@Override
 	public UpdateState update(Body b) {
 		tick++;
-		if( getFrom() == null || getFrom().canAction()==false || getFrom().isRemoved() ){
+		if( getFrom() == null || getFrom().canActionForEvent()==false || getFrom().isRemoved() ){
 			return UpdateState.ABORT;
 		}
 		if( to == null || to.isDead() || to.isRemoved() ){
@@ -228,10 +234,11 @@ public class YukkuriRideEvent extends EventPacket implements java.io.Serializabl
 
 	// イベント目標に到着した際に呼ばれる
 	// trueを返すとイベント終了
+	@Override
 	public boolean execute(Body b) {
 		return false;
 	}
-
+	@Override
 	public void end(Body b) {
 		//他のイベントで強制的にイベントが終わることがある
 		// 子供をおろす

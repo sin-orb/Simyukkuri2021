@@ -1,6 +1,5 @@
 package src.yukkuri;
 
-
 import java.awt.Dimension;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
@@ -24,6 +23,7 @@ import src.enums.CriticalDamegeType;
 import src.enums.HairState;
 import src.enums.ImageCode;
 import src.enums.Intelligence;
+import src.enums.Numbering;
 import src.enums.PlayStyle;
 import src.enums.YukkuriType;
 import src.logic.ToyLogic;
@@ -45,7 +45,8 @@ public class Reimu extends Body implements java.io.Serializable {
 	private static BufferedImage[][][][] imagePack = new BufferedImage[BodyRank.values().length][][][];
 	private static BufferedImage[][][] imagesKai = new BufferedImage[ImageCode.values().length][2][3];
 	private static BufferedImage[][][] imagesNora = new BufferedImage[ImageCode.values().length][2][3];
-	private static BufferedImage[][][][] imagesNagasi = new BufferedImage[ImageCode.values().length][2][3][ModLoader.nMaxImgOtherVer + 1];
+	private static BufferedImage[][][][] imagesNagasi = new BufferedImage[ImageCode
+			.values().length][2][3][ModLoader.nMaxImgOtherVer + 1];
 	private static int directionOffset[][] = new int[ImageCode.values().length][2];
 	private static int directionOffsetNagasi[][] = new int[ImageCode.values().length][2];
 	private static Dimension[] boundary = new Dimension[3];
@@ -58,27 +59,30 @@ public class Reimu extends Body implements java.io.Serializable {
 	// 個別表情管理(まりちゃ流し用)
 	private int anImageVerStateCtrlNagasi[][] = new int[ImageCode.values().length][2];
 
-	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
+	public static void loadImages(ClassLoader loader, ImageObserver io) throws IOException {
 
-		if(imageLoaded) return;
+		if (imageLoaded)
+			return;
 
 		boolean res;
-		res = ModLoader.loadBodyImagePack(loader, imagesNora, directionOffset, ModLoader.YK_WORD_NORA, baseFileName, io);
-		if(!res) {
+		res = ModLoader.loadBodyImagePack(loader, imagesNora, directionOffset, ModLoader.YK_WORD_NORA, baseFileName,
+				io);
+		if (!res) {
 			imagesNora = null;
 		}
 		res = ModLoader.loadBodyImagePack(loader, imagesKai, directionOffset, null, baseFileName, io);
-		if(!res) {
+		if (!res) {
 			imagesKai = null;
 		}
 		imagePack[BodyRank.KAIYU.imageIndex] = imagesKai;
-		if(imagesNora != null) {
+		if (imagesNora != null) {
 			imagePack[BodyRank.NORAYU.imageIndex] = imagesNora;
 		} else {
 			imagePack[BodyRank.NORAYU.imageIndex] = imagesKai;
 		}
-		res = ModLoader.loadBodyImagePack(loader, imagesNagasi, directionOffsetNagasi, ModLoader.YK_WORD_NAGASI, baseFileName, io);
-		if(!res) {
+		res = ModLoader.loadBodyImagePack(loader, imagesNagasi, directionOffsetNagasi, ModLoader.YK_WORD_NAGASI,
+				baseFileName, io);
+		if (!res) {
 			imagesNagasi = null;
 		}
 
@@ -97,47 +101,42 @@ public class Reimu extends Body implements java.io.Serializable {
 	}
 
 	public int getImage(int type, int direction, BodyLayer layer, int index) {
-		if( !isbImageNagasiMode() || imagesNagasi == null)
-		{
-			layer.image[index] = imagePack[getBodyRank().imageIndex][type][direction * directionOffset[type][0]][getBodyAgeState().ordinal()];
+		if (!isbImageNagasiMode() || imagesNagasi == null) {
+			layer.image[index] = imagePack[getBodyRank().imageIndex][type][direction
+					* directionOffset[type][0]][getBodyAgeState().ordinal()];
 			layer.dir[index] = direction * directionOffset[type][1];
-		}
-		else{
+		} else {
 			// インターバル毎に初期化する
-			if( Terrarium.getInterval() == 0 && !isDead() )
-			{
-				for( int i=0; i<ImageCode.values().length; i++ )
-				{
+			if (Terrarium.getInterval() == 0 && !isDead()) {
+				for (int i = 0; i < ImageCode.values().length; i++) {
 					anImageVerStateCtrlNagasi[i][1] = 0;
 				}
 			}
 
 			// 前回と同じ表示
-			if(anImageVerStateCtrlNagasi[type][1] == 1)
-			{
+			if (anImageVerStateCtrlNagasi[type][1] == 1) {
 				int nIndex = anImageVerStateCtrlNagasi[type][0];
-				layer.image[index] = imagesNagasi[type][direction * directionOffsetNagasi[type][0]][getBodyAgeState().ordinal()][nIndex];
+				layer.image[index] = imagesNagasi[type][direction * directionOffsetNagasi[type][0]][getBodyAgeState()
+						.ordinal()][nIndex];
 
-			}
-			else{
+			} else {
 				int nOtherVerCount = 0;
-				for( int i=0; i < ModLoader.nMaxImgOtherVer; i++ )
-				{
-					if( imagesNagasi[type][direction * directionOffsetNagasi[type][0]][getBodyAgeState().ordinal()][i+1] != null )
-					{
+				for (int i = 0; i < ModLoader.nMaxImgOtherVer; i++) {
+					if (imagesNagasi[type][direction * directionOffsetNagasi[type][0]][getBodyAgeState().ordinal()][i
+							+ 1] != null) {
 						nOtherVerCount++;
 					}
 				}
 
-				if( nOtherVerCount != 0 )
-				{
-					int nRndIndex = RND.nextInt(nOtherVerCount+1);
+				if (nOtherVerCount != 0) {
+					int nRndIndex = RND.nextInt(nOtherVerCount + 1);
 					anImageVerStateCtrlNagasi[type][0] = nRndIndex;
-					//System.out.println("nOtherVerCount " + nOtherVerCount + " , nRndIndex " + nRndIndex );
-					layer.image[index] = imagesNagasi[type][direction * directionOffsetNagasi[type][0]][getBodyAgeState().ordinal()][nRndIndex];
-				}else{
+					layer.image[index] = imagesNagasi[type][direction
+							* directionOffsetNagasi[type][0]][getBodyAgeState().ordinal()][nRndIndex];
+				} else {
 					anImageVerStateCtrlNagasi[type][0] = 0;
-					layer.image[index] = imagesNagasi[type][direction * directionOffsetNagasi[type][0]][getBodyAgeState().ordinal()][0];
+					layer.image[index] = imagesNagasi[type][direction
+							* directionOffsetNagasi[type][0]][getBodyAgeState().ordinal()][0];
 				}
 
 				anImageVerStateCtrlNagasi[type][1] = 1;
@@ -155,34 +154,39 @@ public class Reimu extends Body implements java.io.Serializable {
 	 */
 	@Override
 	public boolean judgeCanTransForGodHand() {
-		if(isUnBirth()){
+		if (isUnBirth()) {
 			bodyBurst();
 			return false;
 		}
 		return true;
 	}
-	
+
 	/**
 	 * ゆ虐神拳を受けでいぶにトランスフォームする。
 	 */
 	@Override
 	public void execTransform() {
-		ArrayList<Body> bodyList = SimYukkuri.world.currentMap.body;
 		// でいぶ化
-		synchronized(SimYukkuri.lock) {
+		synchronized (SimYukkuri.lock) {
+			ArrayList<Body> bodyList = SimYukkuri.world.currentMap.body;
 			bodyList.remove(this);
 			Body to = new Deibu(getX(), getY(), getZ(), getBodyAgeState(), null, null);
-			YukkuriUtil.changeBody(to, this);
+			try {
+				YukkuriUtil.changeBody(to, this);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			to.setUniqueID(Numbering.INSTANCE.numberingYukkuriID());
 			bodyList.add(to);
 			to.setBaseBodyFileName("deibu");
 			IniFileUtil.readYukkuriIniFile(to);
-			if(MyPane.selectBody == this) {
+			if (MyPane.selectBody == this) {
 				MyPane.selectBody = to;
 			}
-			this.remove();
 		}
+		this.remove();
 	}
-	
+
 	/**
 	 * 突然変異チェックをする.
 	 * れいむ→でいぶ.
@@ -191,29 +195,30 @@ public class Reimu extends Body implements java.io.Serializable {
 	@Override
 	public Body checkTransform() {
 		// 自身が突然変異可能かチェック
-		if(!canTransform()) return null;
+		if (!canTransform())
+			return null;
 		// 大人であり、夫がいて夫がゲスではなく、自身がゲスではない
 		Body partner = getPartner();
-		if( isAdult() && partner != null && !partner.isRude() && isRude()){
-			if(RND.nextInt(1000) == 0) {
+		if (isAdult() && partner != null && !partner.isRude() && isRude()) {
+			if (RND.nextInt(1000) == 0) {
 				return this;
 			}
 		}
 		//または、ゲスでいぶの子供である
 		Body mother = getMother();
-		if( !isAdult() && mother != null && mother.getType() == Deibu.type && mother.isRude()){
+		if (!isAdult() && mother != null && mother.getType() == Deibu.type && mother.isRude()) {
 			//ゲスバカとドゲスは確実にでいぶ化
-			if((isRude() && getIntelligence() != Intelligence.FOOL) || getAttitude() == Attitude.SUPER_SHITHEAD){
+			if ((isRude() && getIntelligence() != Intelligence.FOOL) || getAttitude() == Attitude.SUPER_SHITHEAD) {
 				return this;
 			}
 			//あとは1/2。
-			else if(RND.nextBoolean()) {
+			else if (RND.nextBoolean()) {
 				return this;
 			}
 		}
 		return null;
 	}
-	
+
 	public Point[] getMountPoint(String key) {
 		return AttachOffset.get(key);
 	}
@@ -238,14 +243,14 @@ public class Reimu extends Body implements java.io.Serializable {
 	}
 
 	public String getMyName() {
-		if( anMyName[getBodyAgeState().ordinal()] != null ){
+		if (anMyName[getBodyAgeState().ordinal()] != null) {
 			return anMyName[getBodyAgeState().ordinal()];
 		}
 		return nameJ;
 	}
 
 	public String getMyNameD() {
-		if( anMyNameD[getBodyAgeState().ordinal()] != null ){
+		if (anMyNameD[getBodyAgeState().ordinal()] != null) {
 			return anMyNameD[getBodyAgeState().ordinal()];
 		}
 		return getMyName();
@@ -276,219 +281,203 @@ public class Reimu extends Body implements java.io.Serializable {
 		layer.option[1] = 0;
 		layer.option[2] = 0;
 
-		if(isBurned() && isDead()) {
+		if (isBurned() && isDead()) {
 			// 焼死体
 			idx += getImage(ImageCode.BURNED.ordinal(), Const.LEFT, layer, idx);
-		}
-		else if (isCrushed()) {
+		} else if (isCrushed()) {
 			// 潰れた死体
-			if(isBurned()) {
+			if (isBurned()) {
 				idx += getImage(ImageCode.BURNED2.ordinal(), Const.LEFT, layer, idx);
 			} else {
-				if(isPealed()){
+				if (isPealed()) {
 					idx += getImage(ImageCode.CRUSHED3.ordinal(), Const.LEFT, layer, idx);
-			}
-				else if(getOkazari() != null && getOkazari().getOkazariType() == OkazariType.DEFAULT) {
+				} else if (getOkazari() != null && getOkazari().getOkazariType() == OkazariType.DEFAULT) {
 					idx += getImage(ImageCode.CRUSHED.ordinal(), Const.LEFT, layer, idx);
 				} else {
 					idx += getImage(ImageCode.CRUSHED2.ordinal(), Const.LEFT, layer, idx);
 				}
 			}
-		}
-		else if(isPacked()){
-			if(isDead()){
+		} else if (isPacked()) {
+			if (isDead()) {
 				idx += getImage(ImageCode.PACKED_DEAD.ordinal(), Const.LEFT, layer, idx);
-			}
-			else if (getAge() % 6 <= 2) {
+			} else if (getAge() % 6 <= 2) {
 				idx += getImage(ImageCode.PACKED1.ordinal(), Const.LEFT, layer, idx);
-			}
-			else{
+			} else {
 				idx += getImage(ImageCode.PACKED2.ordinal(), Const.LEFT, layer, idx);
 			}
-		}
-		else if ( isShitting() || isBirth() && getBabyTypes().size() > 0 || (isFixBack() && !isFurifuri())) {
+		} else if (isShitting() || isBirth() && getBabyTypes().size() > 0 || (isFixBack() && !isFurifuri())) {
 			// 排泄、出産時
 			idx += getImage(ImageCode.FRONT_SHIT.ordinal(), Const.LEFT, layer, idx);
 
-			if(geteHairState() == HairState.DEFAULT) {
+			if (geteHairState() == HairState.DEFAULT) {
 				idx += getImage(ImageCode.FRONT_HAIR.ordinal(), Const.LEFT, layer, idx);
-				}
-			else if(geteHairState() == HairState.BRINDLED1 || geteHairState() == HairState.BRINDLED2) {
+			} else if (geteHairState() == HairState.BRINDLED1 || geteHairState() == HairState.BRINDLED2) {
 				idx += getImage(ImageCode.FRONT_HAIR2.ordinal(), Const.LEFT, layer, idx);
-				}
+			}
 
-			if(isAnalClose()) {
+			if (isAnalClose()) {
 				idx += getImage(ImageCode.FRONT_SEALED.ordinal(), Const.LEFT, layer, idx);
 			}
-			if(getCriticalDamege() == CriticalDamegeType.INJURED){
+			if (getCriticalDamege() == CriticalDamegeType.INJURED) {
 				idx += getImage(ImageCode.FRONT_INJURED.ordinal(), Const.LEFT, layer, idx);
 			}
-			if(isBlind()) {
+			if (isBlind()) {
 				idx += getImage(ImageCode.FRONT_BLIND.ordinal(), Const.LEFT, layer, idx);
 			}
-			if(isHasPants()) {
+			if (isHasPants()) {
 				idx += getImage(ImageCode.FRONT_PANTS.ordinal(), Const.LEFT, layer, idx);
 			}
-			if(isHasBraid()) {
+			if (isHasBraid()) {
 				idx += getImage(ImageCode.FRONT_BRAID.ordinal(), Const.LEFT, layer, idx);
 			}
-			if(getOkazari() != null && getOkazari().getOkazariType() == OkazariType.DEFAULT) {
+			if (getOkazari() != null && getOkazari().getOkazariType() == OkazariType.DEFAULT) {
 				idx += getImage(ImageCode.ROLL_ACCESSORY.ordinal(), Const.LEFT, layer, idx);
 			}
-		}
-		else if (isFurifuri() && !isSleeping() && (!isLockmove() || isFixBack())) {
+		} else if (isFurifuri() && !isSleeping() && (!isLockmove() || isFixBack())) {
 			// ふりふり
 			if (getAge() % 8 <= 3) {
 				idx += getImage(ImageCode.ROLL_LEFT_SHIT.ordinal(), Const.LEFT, layer, idx);
 
-				if(geteHairState() == HairState.DEFAULT) {
+				if (geteHairState() == HairState.DEFAULT) {
 					idx += getImage(ImageCode.ROLL_LEFT_HAIR.ordinal(), Const.LEFT, layer, idx);
-					}
-				else if(geteHairState() == HairState.BRINDLED1 || geteHairState() == HairState.BRINDLED2) {
+				} else if (geteHairState() == HairState.BRINDLED1 || geteHairState() == HairState.BRINDLED2) {
 					idx += getImage(ImageCode.FRONT_HAIR2.ordinal(), Const.LEFT, layer, idx);
-					}
+				}
 
-				if(isAnalClose()) {
+				if (isAnalClose()) {
 					idx += getImage(ImageCode.ROLL_LEFT_SEALED.ordinal(), Const.LEFT, layer, idx);
 				}
-				if(getCriticalDamege() == CriticalDamegeType.INJURED){
+				if (getCriticalDamege() == CriticalDamegeType.INJURED) {
 					idx += getImage(ImageCode.ROLL_LEFT_INJURED.ordinal(), Const.LEFT, layer, idx);
 				}
-				if(isBlind()) {
+				if (isBlind()) {
 					idx += getImage(ImageCode.ROLL_LEFT_BLIND.ordinal(), Const.LEFT, layer, idx);
 				}
-				if(isHasPants()) {
+				if (isHasPants()) {
 					idx += getImage(ImageCode.ROLL_LEFT_PANTS.ordinal(), Const.LEFT, layer, idx);
 				}
-				if(isHasBraid()) {
+				if (isHasBraid()) {
 					idx += getImage(ImageCode.ROLL_LEFT_BRAID.ordinal(), Const.LEFT, layer, idx);
 				}
 
-			}
-			else if (getAge() % 8 <= 7) {
+			} else if (getAge() % 8 <= 7) {
 				idx += getImage(ImageCode.ROLL_RIGHT_SHIT.ordinal(), Const.LEFT, layer, idx);
 
-				if(geteHairState() == HairState.DEFAULT) {
+				if (geteHairState() == HairState.DEFAULT) {
 					idx += getImage(ImageCode.ROLL_RIGHT_HAIR.ordinal(), Const.LEFT, layer, idx);
-					}
-				else if(geteHairState() == HairState.BRINDLED1 || geteHairState() == HairState.BRINDLED2) {
+				} else if (geteHairState() == HairState.BRINDLED1 || geteHairState() == HairState.BRINDLED2) {
 					idx += getImage(ImageCode.FRONT_HAIR2.ordinal(), Const.LEFT, layer, idx);
 				}
 
-				if(isAnalClose()) {
+				if (isAnalClose()) {
 					idx += getImage(ImageCode.ROLL_RIGHT_SEALED.ordinal(), Const.LEFT, layer, idx);
 				}
-				if(getCriticalDamege() == CriticalDamegeType.INJURED){
+				if (getCriticalDamege() == CriticalDamegeType.INJURED) {
 					idx += getImage(ImageCode.ROLL_RIGHT_INJURED.ordinal(), Const.LEFT, layer, idx);
 				}
-				if(isBlind()) {
+				if (isBlind()) {
 					idx += getImage(ImageCode.ROLL_RIGHT_BLIND.ordinal(), Const.LEFT, layer, idx);
 				}
-				if(isHasPants()) {
+				if (isHasPants()) {
 					idx += getImage(ImageCode.ROLL_RIGHT_PANTS.ordinal(), Const.LEFT, layer, idx);
 				}
-				if(isHasBraid()) {
+				if (isHasBraid()) {
 					idx += getImage(ImageCode.ROLL_RIGHT_BRAID.ordinal(), Const.LEFT, layer, idx);
 				}
 			}
-			if(getOkazari() != null && getOkazari().getOkazariType() == OkazariType.DEFAULT) {
+			if (getOkazari() != null && getOkazari().getOkazariType() == OkazariType.DEFAULT) {
 				idx += getImage(ImageCode.ROLL_ACCESSORY.ordinal(), Const.LEFT, layer, idx);
 			}
 		}
 		//れいむ種専用
-		else if(isYunnyaa()){
+		else if (isYunnyaa()) {
 			//ゆんやあ
-			/*if(getImageNagasiMode())*/{
+			/*if(getImageNagasiMode())*/ {
 				if (getAge() % 6 <= 1) {
 					idx += getImage(ImageCode.YUNYAA1.ordinal(), direction, layer, idx);
 
-					if(getOkazari() != null && getOkazari().getOkazariType() == OkazariType.DEFAULT) {
+					if (getOkazari() != null && getOkazari().getOkazariType() == OkazariType.DEFAULT) {
 						idx += getImage(ImageCode.YUNYAA1_ACCESSORY.ordinal(), direction, layer, idx);
 					}
-					if(geteHairState() == HairState.DEFAULT) {
+					if (geteHairState() == HairState.DEFAULT) {
 						idx += getImage(ImageCode.YUNYAA1_HAIR.ordinal(), direction, layer, idx);
-						}
-					else if(geteHairState() == HairState.BRINDLED1 || geteHairState() == HairState.BRINDLED2) {
+					} else if (geteHairState() == HairState.BRINDLED1 || geteHairState() == HairState.BRINDLED2) {
 						idx += getImage(ImageCode.YUNYAA1_HAIR2.ordinal(), direction, layer, idx);
 					}
-					if(getCriticalDamege() == CriticalDamegeType.INJURED){
+					if (getCriticalDamege() == CriticalDamegeType.INJURED) {
 						idx += getImage(ImageCode.YUNYAA1_INJURED.ordinal(), direction, layer, idx);
 					}
-					if(isBlind()) {
+					if (isBlind()) {
 						idx += getImage(ImageCode.YUNYAA1_BLIND.ordinal(), direction, layer, idx);
 					}
-					if(isHasPants()) {
+					if (isHasPants()) {
 						idx += getImage(ImageCode.YUNYAA1_PANTS.ordinal(), direction, layer, idx);
 					}
-					if(isDirty()){
+					if (isDirty()) {
 						idx += getImage(ImageCode.YUNYAA1_DIRTY.ordinal(), direction, layer, idx);
 					}
-					if(isHasBraid()) {
+					if (isHasBraid()) {
 						idx += getImage(ImageCode.YUNYAA1_BRAID.ordinal(), direction, layer, idx);
 					}
-					if(!isHasBraid()) {
+					if (!isHasBraid()) {
 						idx += getImage(ImageCode.YUNYAA1_CUTBRAID.ordinal(), direction, layer, idx);
 					}
-				}
-				else if (getAge() % 6 == 2 || getAge() % 6 == 5) {
+				} else if (getAge() % 6 == 2 || getAge() % 6 == 5) {
 					idx += getImage(ImageCode.YUNYAA2.ordinal(), direction, layer, idx);
 
-					if(getOkazari() != null && getOkazari().getOkazariType() == OkazariType.DEFAULT) {
+					if (getOkazari() != null && getOkazari().getOkazariType() == OkazariType.DEFAULT) {
 						idx += getImage(ImageCode.YUNYAA2_ACCESSORY.ordinal(), direction, layer, idx);
 					}
-					if(geteHairState() == HairState.DEFAULT) {
+					if (geteHairState() == HairState.DEFAULT) {
 						idx += getImage(ImageCode.YUNYAA2_HAIR.ordinal(), direction, layer, idx);
-						}
-					else if(geteHairState() == HairState.BRINDLED1 || geteHairState() == HairState.BRINDLED2) {
+					} else if (geteHairState() == HairState.BRINDLED1 || geteHairState() == HairState.BRINDLED2) {
 						idx += getImage(ImageCode.YUNYAA2_HAIR2.ordinal(), direction, layer, idx);
 					}
-					if(getCriticalDamege() == CriticalDamegeType.INJURED){
+					if (getCriticalDamege() == CriticalDamegeType.INJURED) {
 						idx += getImage(ImageCode.YUNYAA2_INJURED.ordinal(), direction, layer, idx);
 					}
-					if(isBlind()) {
+					if (isBlind()) {
 						idx += getImage(ImageCode.YUNYAA2_BLIND.ordinal(), direction, layer, idx);
 					}
-					if(isHasPants()) {
+					if (isHasPants()) {
 						idx += getImage(ImageCode.YUNYAA2_PANTS.ordinal(), direction, layer, idx);
 					}
-					if(isDirty()){
+					if (isDirty()) {
 						idx += getImage(ImageCode.YUNYAA2_DIRTY.ordinal(), direction, layer, idx);
 					}
-					if(isHasBraid()) {
+					if (isHasBraid()) {
 						idx += getImage(ImageCode.YUNYAA2_BRAID.ordinal(), direction, layer, idx);
 					}
-					if(!isHasBraid()) {
+					if (!isHasBraid()) {
 						idx += getImage(ImageCode.YUNYAA2_CUTBRAID.ordinal(), direction, layer, idx);
 					}
-				}
-				else /*if (getAge() % 6 <= 3)*/ {
+				} else /*if (getAge() % 6 <= 3)*/ {
 					idx += getImage(ImageCode.YUNYAA3.ordinal(), direction, layer, idx);
 
-					if(getOkazari() != null && getOkazari().getOkazariType() == OkazariType.DEFAULT) {
+					if (getOkazari() != null && getOkazari().getOkazariType() == OkazariType.DEFAULT) {
 						idx += getImage(ImageCode.YUNYAA3_ACCESSORY.ordinal(), direction, layer, idx);
 					}
-					if(geteHairState() == HairState.DEFAULT) {
+					if (geteHairState() == HairState.DEFAULT) {
 						idx += getImage(ImageCode.YUNYAA3_HAIR.ordinal(), direction, layer, idx);
-						}
-					else if(geteHairState() == HairState.BRINDLED1 || geteHairState() == HairState.BRINDLED2) {
+					} else if (geteHairState() == HairState.BRINDLED1 || geteHairState() == HairState.BRINDLED2) {
 						idx += getImage(ImageCode.YUNYAA3_HAIR3.ordinal(), direction, layer, idx);
 					}
-					if(getCriticalDamege() == CriticalDamegeType.INJURED){
+					if (getCriticalDamege() == CriticalDamegeType.INJURED) {
 						idx += getImage(ImageCode.YUNYAA3_INJURED.ordinal(), direction, layer, idx);
 					}
-					if(isBlind()) {
+					if (isBlind()) {
 						idx += getImage(ImageCode.YUNYAA3_BLIND.ordinal(), direction, layer, idx);
 					}
-					if(isHasPants()) {
+					if (isHasPants()) {
 						idx += getImage(ImageCode.YUNYAA3_PANTS.ordinal(), direction, layer, idx);
 					}
-					if(isDirty()){
+					if (isDirty()) {
 						idx += getImage(ImageCode.YUNYAA3_DIRTY.ordinal(), direction, layer, idx);
 					}
-					if(isHasBraid()) {
+					if (isHasBraid()) {
 						idx += getImage(ImageCode.YUNYAA3_BRAID.ordinal(), direction, layer, idx);
 					}
-					if(!isHasBraid()) {
+					if (!isHasBraid()) {
 						idx += getImage(ImageCode.YUNYAA3_CUTBRAID.ordinal(), direction, layer, idx);
 					}
 				}
@@ -497,11 +486,11 @@ public class Reimu extends Body implements java.io.Serializable {
 
 		else {
 			//皮むき時
-			if(isPealed()){
+			if (isPealed()) {
 				idx += getImage(ImageCode.PEALED.ordinal(), direction, layer, idx);
 			}
 			// 通常時
-			else{
+			else {
 				idx += getImage(ImageCode.BODY.ordinal(), direction, layer, idx);
 			}
 			layer.option[0] = 1;
@@ -511,16 +500,18 @@ public class Reimu extends Body implements java.io.Serializable {
 
 	//ゆっくりしてる時のアクション
 	//個別の動作がある種ははこれをオーバーライドしているので注意
-	public void killTime(){
-		if(getCurrentEvent() != null)return;
-		if(getPlaying()!=null)return;
-		int p=RND.nextInt(50);
+	public void killTime() {
+		if (getCurrentEvent() != null)
+			return;
+		if (getPlaying() != null)
+			return;
+		int p = RND.nextInt(50);
 		//7/50でキリッ
-		if (p<=6) {
+		if (p <= 6) {
 			getInVain(true);
 		}
 		//7/50でのびのび
-		else if (p<=14){
+		else if (p <= 14) {
 			// if yukkuri is not rude, she goes into her shell by discipline.
 			setMessage(MessagePool.getMessage(this, MessagePool.Action.Nobinobi), 40);
 			setNobinobi(true);
@@ -528,14 +519,14 @@ public class Reimu extends Body implements java.io.Serializable {
 			stay(40);
 		}
 		//7/50でおうた
-		else if(p<=21){
+		else if (p <= 21) {
 			setMessage(MessagePool.getMessage(this, MessagePool.Action.ProudChildsSING), 40);
 			setNobinobi(true);
 			addStress(-30);
 			stay(40);
 		}
 		//7/50でふりふり
-		else if (p<=28 && willingFurifuri()) {
+		else if (p <= 28 && willingFurifuri()) {
 			//if yukkuri is rude, she will not do furifuri by discipline.
 			setMessage(MessagePool.getMessage(this, MessagePool.Action.FuriFuri), 30);
 			setFurifuri(true);
@@ -543,44 +534,42 @@ public class Reimu extends Body implements java.io.Serializable {
 			stay(30);
 		}
 		//7/50でふりふりで腹減った
-		else if( (p<=35 && isHungry()) || isSoHungry()) {
+		else if ((p <= 35 && isHungry()) || isSoHungry()) {
 			// 空腹時
 			setMessage(MessagePool.getMessage(this, MessagePool.Action.Hungry), 30);
 			stay(30);
 		}
 		//4/50でおもちゃで遊ぶ
-		else if (p<=39){
-			if(ToyLogic.checkToy(this)){
+		else if (p <= 39) {
+			if (ToyLogic.checkToy(this)) {
 				setPlaying(PlayStyle.BALL);
-				playingLimit = 150 +RND.nextInt(100)-49;
+				playingLimit = 150 + RND.nextInt(100) - 49;
 				return;
-			}
-			else killTime();
+			} else
+				killTime();
 		}
 		//3/50でトランポリンで遊ぶ
-		else if (p<=42){
-			if(ToyLogic.checkTrampoline(this)){
+		else if (p <= 42) {
+			if (ToyLogic.checkTrampoline(this)) {
 				setPlaying(PlayStyle.TRAMPOLINE);
-				playingLimit = 150 +RND.nextInt(100)-49;
+				playingLimit = 150 + RND.nextInt(100) - 49;
 				return;
-			}
-			else killTime();
+			} else
+				killTime();
 		}
 		//1/50ですいーで遊ぶ
-		else if (p<=43){
-			if(ToyLogic.checkSui(this)){
+		else if (p <= 43) {
+			if (ToyLogic.checkSui(this)) {
 				setPlaying(PlayStyle.SUI);
-				playingLimit = 150 +RND.nextInt(100)-49;
+				playingLimit = 150 + RND.nextInt(100) - 49;
 				return;
-			}
-			else killTime();
-		}
-		else{
+			} else
+				killTime();
+		} else {
 			// おくるみありで汚れていない場合
-			if( isHasPants() && !isDirty() && RND.nextInt(5) == 0 ) {
+			if (isHasPants() && !isDirty() && RND.nextInt(5) == 0) {
 				setMessage(MessagePool.getMessage(this, MessagePool.Action.RelaxOkurumi));
-			}
-			else{
+			} else {
 				setMessage(MessagePool.getMessage(this, MessagePool.Action.Relax));
 			}
 			addStress(-50);
@@ -602,33 +591,33 @@ public class Reimu extends Body implements java.io.Serializable {
 		/*if (rnd.nextBoolean()) {
 		motherhood = true;
 		}*/
-		double factor = Math.random()*2+1;
+		double factor = Math.random() * 2 + 1;
 		HUNGRYLIMIT[AgeState.ADULT.ordinal()] *= factor;
 		HUNGRYLIMIT[AgeState.CHILD.ordinal()] *= factor;
 		HUNGRYLIMIT[AgeState.BABY.ordinal()] *= factor;
-		factor = Math.random()*2+1;
+		factor = Math.random() * 2 + 1;
 		SHITLIMIT[AgeState.ADULT.ordinal()] *= factor;
 		SHITLIMIT[AgeState.CHILD.ordinal()] *= factor;
 		SHITLIMIT[AgeState.BABY.ordinal()] *= factor;
-		factor = Math.random()+0.5;
+		factor = Math.random() + 0.5;
 		DAMAGELIMIT[AgeState.ADULT.ordinal()] *= factor;
 		DAMAGELIMIT[AgeState.CHILD.ordinal()] *= factor;
 		DAMAGELIMIT[AgeState.BABY.ordinal()] *= factor;
-		factor = Math.random()+0.5;
+		factor = Math.random() + 0.5;
 		BABYLIMIT *= factor;
 		CHILDLIMIT *= factor;
 		LIFELIMIT *= factor;
-		factor = Math.random()+1;
+		factor = Math.random() + 1;
 		RELAXPERIOD *= factor;
 		EXCITEPERIOD *= factor;
 		PREGPERIOD *= factor;
 		SLEEPPERIOD *= factor;
 		ACTIVEPERIOD *= factor;
-		sameDest = RND.nextInt(20)+20;
-		DECLINEPERIOD *= (Math.random()+0.5);
-		ROBUSTNESS = RND.nextInt(10)+1;
+		sameDest = RND.nextInt(20) + 20;
+		DECLINEPERIOD *= (Math.random() + 0.5);
+		ROBUSTNESS = RND.nextInt(10) + 1;
 		//EYESIGHT /= 4;
-		factor = Math.random()+0.5;
+		factor = Math.random() + 0.5;
 		STRENGTH[AgeState.ADULT.ordinal()] *= factor;
 		STRENGTH[AgeState.CHILD.ordinal()] *= factor;
 		STRENGTH[AgeState.BABY.ordinal()] *= factor;

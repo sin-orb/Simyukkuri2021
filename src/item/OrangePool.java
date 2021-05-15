@@ -25,11 +25,11 @@ import src.enums.Type;
 import src.system.Cash;
 
 /***************************************************
-オレンジプレート
-*/
+ * オレンジプレート
+ */
 public class OrangePool extends ObjEX implements java.io.Serializable {
 	static final long serialVersionUID = 1L;
-
+	/**タイプ*/
 	public static enum OrangeType {
         NORMAL("清涼飲料水"),
         RESCUE("救命用"),
@@ -38,7 +38,7 @@ public class OrangePool extends ObjEX implements java.io.Serializable {
         OrangeType(String name) { this.name = name; }
         public String toString() { return name; }
 	}
-
+	/**処理対象(ゆっくり)*/
 	public static final int hitCheckObjType = ObjEX.YUKKURI;
 	private static final int images_num = 6; //このクラスの総使用画像数
 	private static BufferedImage[] images = new BufferedImage[images_num];
@@ -48,7 +48,7 @@ public class OrangePool extends ObjEX implements java.io.Serializable {
 	private static int[] cost = {5,100};
 
 	private ItemRank itemRank;
-
+	/**画像ロード*/
 	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
 		images[0] = ModLoader.loadItemImage(loader, "orangepool" + File.separator + "orangepool.png");
 		images[1] = ModLoader.loadItemImage(loader, "orangepool" + File.separator + "orangepool_off.png");
@@ -83,7 +83,7 @@ public class OrangePool extends ObjEX implements java.io.Serializable {
 	public BufferedImage getShadowImage() {
 		return null;
 	}
-
+	/**境界線の取得*/
 	public static Rectangle getBounding() {
 		return boundary;
 	}
@@ -145,7 +145,12 @@ public class OrangePool extends ObjEX implements java.io.Serializable {
 		SimYukkuri.world.currentMap.orangePool.remove(this);
 	}
 	
-	// initOption = 1 野良用
+	/**
+	 * コンストラクタ
+	 * @param initX x座標
+	 * @param initY y座標
+	 * @param initOption 0:飼い用、1:野良用
+	 */
 	public OrangePool(int initX, int initY, int initOption) {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
@@ -173,7 +178,7 @@ public class OrangePool extends ObjEX implements java.io.Serializable {
 		}
 	}
 
-	// 設定メニュー
+	/** 設定メニュー*/
 	public static boolean setupOrange(OrangePool o, boolean init) {
 		
 		JPanel mainPanel = new JPanel();

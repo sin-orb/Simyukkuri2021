@@ -45,12 +45,12 @@ public class BedLogic {
 				return false;
 			}
 		}
-/*		else {
+		else {
 			if(p != null && p.getPriority() != EventPacket.EventPriority.LOW) {
 				return false;
 			}
 		}
-*/
+
 		// 非ゆっくり症の場合
 		if( b.isNYD() )
 		{

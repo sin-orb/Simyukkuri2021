@@ -31,21 +31,23 @@ public class SuperEatingTimeEvent extends EventPacket implements java.io.Seriali
 	public STATE state = STATE.WAIT;
 	int nLowestStep = 0;
 
-	// 行動ステート
+	/** 行動ステート */
 	public enum STATE {
-		GO,			// 移動
-		WAIT,		// 待機
-		START_BEFORE,// イベント開始直前
-		START,		// イベント開始時
-		END,		// イベント終了時
+		/** 移動 */GO,
+		/** 待機 */WAIT,
+		/** イベント開始直前 */START_BEFORE,
+		/** イベント開始時 */START,
+		/** イベント終了時 */END,
 	}
 
-
+	/**
+	 * コンストラクタ.
+	 */
 	public SuperEatingTimeEvent(Body f, Body t, Obj tgt, int cnt) {
 		super(f, t, tgt, cnt);
 		priority = EventPriority.HIGH;
 	}
-
+	@Override
 	public boolean simpleEventAction(Body b) {
 		if(getFrom().isShutmouth() ){
 			return true;
@@ -56,6 +58,7 @@ public class SuperEatingTimeEvent extends EventPacket implements java.io.Seriali
 	// 参加チェック
 	// ここで各種チェックを行い、イベントへ参加するかを返す
 	// また、イベント優先度も必要に応じて設定できる
+	@Override
 	public boolean checkEventResponse(Body b) {
 		boolean ret = false;
 		if(getFrom() == b && !(b.isShutmouth())) {
@@ -98,19 +101,9 @@ public class SuperEatingTimeEvent extends EventPacket implements java.io.Seriali
 	}
 
 	// イベント開始動作
+	@Override
 	public void start(Body b) {
 		b.setCurrentEvent(this);
-	}
-
-	public boolean checkWait(Body b,int nWaitTime)
-	{
-		b.checkWait(nWaitTime);
-		if( !b.checkWait(nWaitTime))
-		{
-			return false;
-		}
-		b.setLastActionTime();
-		return true;
 	}
 
 	public int getLowestStep()
@@ -126,7 +119,9 @@ public class SuperEatingTimeEvent extends EventPacket implements java.io.Seriali
 	// 毎フレーム処理
 	// trueを返すとイベント終了
 	// 親→子供→次のステート、の順で処理をする
+	@Override
 	public UpdateState update(Body b) {
+		b.clearActionsForEvent();
 		if( b == null || getFrom() == null){
 			return UpdateState.ABORT;
 		}
@@ -207,7 +202,7 @@ public class SuperEatingTimeEvent extends EventPacket implements java.io.Seriali
 			switch(state){
 				case WAIT:// ごはんさんをたべにいくよ！みんなあつまってね！
 					// 家族を集める
-					bResult = BodyLogic.gatheringYukkuriSquare(getFrom(), childrenList, GatheringDirection.DOWN, this);
+					bResult = BodyLogic.gatheringYukkuriSquare(getFrom(), childrenList.toArray(new Body[0]), GatheringDirection.DOWN, this);
 					for(Body bChild:childrenList){
 						if(bChild != null){
 							// 他に用事があれば除外
@@ -287,7 +282,7 @@ public class SuperEatingTimeEvent extends EventPacket implements java.io.Seriali
 					break;
 				case START_BEFORE:// ごはんの上に集合
 					b.stay();
-					bResult = BodyLogic.gatheringYukkuriSquare(target, childrenList, GatheringDirection.UP, this);
+					bResult = BodyLogic.gatheringYukkuriSquare(target, childrenList.toArray(new Body[0]), GatheringDirection.UP, this);
 					for(Body bChild:childrenList){
 						// 他に用事があれば除外
 						bChild.setMoveTarget(null);
@@ -472,6 +467,7 @@ public class SuperEatingTimeEvent extends EventPacket implements java.io.Seriali
 
 	// イベント目標に到着した際に呼ばれる
 	// trueを返すとイベント終了
+	@Override
 	public boolean execute(Body b) {
 		return false;
 	}

@@ -400,8 +400,8 @@ public class FamilyActionLogic {
 		boolean bIsNotRaperTarget = isRapeTarget();
 		// レイプ対象がいない
 		if( !bIsNotRaperTarget){
-			ArrayList<Body> bodyList = SimYukkuri.world.currentMap.body;
-			if( bodyList != null && bodyList.size() != 0 ){
+			Body[] bodyList = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
+			if( bodyList != null && bodyList.length != 0 ){
 				for(Body b:bodyList){
 					if( b.isRaper() ){
 						b.setExciting(false);
@@ -414,14 +414,9 @@ public class FamilyActionLogic {
 	}
 
 	public static final boolean isRapeTarget(){
-		ArrayList<Body> bodyList = SimYukkuri.world.currentMap.body;
-		if( bodyList != null && bodyList.size() != 0 ){
+		Body[] bodyList = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
+		if( bodyList != null && bodyList.length != 0 ){
 			for(Body b:bodyList){
-				// うんうん奴隷はレイプ対象外なのでスキップ
-				// いや、うんうん奴隷もれいぷ対象やろ
-//				if( b.getPublicRank() == PublicRank.UnunSlave ){
-//					continue;
-//				}
 				// レイプの対象がいる
 				if( !b.isUnBirth() && !b.isDead() && !b.isRemoved() && !b.isRaper()){
 					return true;

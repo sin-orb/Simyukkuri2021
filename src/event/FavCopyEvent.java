@@ -17,11 +17,13 @@ import src.item.Barrier;
 public class FavCopyEvent extends EventPacket implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
-
+	/**
+	 * コンストラクタ.
+	 */
 	public FavCopyEvent(Body f, Body t, Obj tgt, int cnt) {
 		super(f, t, tgt, cnt);
 	}
-
+	@Override
 	public boolean simpleEventAction(Body b) {
 		if(getFrom() == b) return false;
 		// イベントの発信者が家族かチェック
@@ -38,14 +40,14 @@ public class FavCopyEvent extends EventPacket implements java.io.Serializable {
 		}
 		return true;
 	}
-	
+	@Override
 	public boolean checkEventResponse(Body b) {
 		return false;
 	}
-
+	@Override
 	public void start(Body b) {
 	}
-	
+	@Override
 	public boolean execute(Body b) {
 		return true;
 	}

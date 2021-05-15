@@ -94,6 +94,7 @@ public class BodyLogic {
 
 	//行動トリガーと、移動先決定
 	//
+	@SuppressWarnings("static-access")
 	public static final boolean checkPartner(Body b) {
 		// 他の用事がある場合等
 		if (b.isToFood() || /* b.isToBody() || b.isToSukkiri() || b.isToSteal() || */ b.isToBed() || b.isToShit()) {
@@ -130,7 +131,7 @@ public class BodyLogic {
 		/////////////////////////////////
 
 		// 対象が決まっていたら到達したかチェック
-		if ((b.isToBody() || b.isToSukkiri()) && b.getMoveTarget() instanceof Body) {
+		if ((b.isToBody() || b.isToSukkiri() || b.isToSteal()) && b.getMoveTarget() instanceof Body) {
 			Body p = (Body) b.getMoveTarget();
 			found = p;
 			// 壁の向こうに移動していたらリセット
@@ -180,8 +181,8 @@ public class BodyLogic {
 			return false;
 		} else {
 			// 全ゆっくりに対してチェック
-			ArrayList<Body> bodyList = SimYukkuri.world.currentMap.body;
-			if (bodyList == null) {
+			Body[] bodyList = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
+			if (bodyList == null || bodyList.length == 0) {
 				return false;
 			}
 			for (Body p : bodyList) {
@@ -322,9 +323,10 @@ public class BodyLogic {
 				if (!b.hasOkazari() && p.hasOkazari() && b.getBodyAgeState() == p.getBodyAgeState() &&
 						b.getType() == p.getType() && b.getType() != HybridYukkuri.type
 						&& p.getOkazari().getOkazariType() == OkazariType.DEFAULT &&
-						p.getPublicRank() == PublicRank.NONE && !b.isLockmove()) {
-					// ゲス,ストレスが50%以上
-					if (b.isRude() && 50 <= 100 * b.getStress() / b.getStressLimit()) {
+						(p.getPublicRank() == PublicRank.NONE || b.getPublicRank() == PublicRank.UnunSlave )
+						&& !b.isLockmove()) {
+					// ゲス,ストレスが10%以上
+					if (b.isRude()) {
 						bodyHasOkazari = p;
 						// フェロモンを持っている相手ならキープ
 						if (p.isbPheromone()) {
@@ -713,18 +715,19 @@ public class BodyLogic {
 
 			// おかざり盗み
 			if (b.isToSteal()) {
-				// 自分のおかざりがなくて、相手にお飾りがある。うんうん奴隷のものは奪わない
+				// 自分のおかざりがなくて、相手にお飾りがある。自分がうんうん奴隷でない場合うんうん奴隷のものは奪わない
 				if (!b.hasOkazari() && p.hasOkazari() && b.getBodyAgeState() == p.getBodyAgeState() &&
 						b.getType() == p.getType() && b.getType() != HybridYukkuri.type
 						&& p.getOkazari().getOkazariType() == OkazariType.DEFAULT &&
-						p.getPublicRank() == PublicRank.NONE && !b.isLockmove()) {
+						(p.getPublicRank() == PublicRank.NONE || b.getPublicRank() == PublicRank.UnunSlave)&& !b.isLockmove()) {
 					// ゲス,ストレスが50%以上
-					if (b.isRude() && 50 <= 100 * b.getStress() / b.getStressLimit()) {
+					if (b.isRude()) {
 						// 視界内に起きている一般ゆがいない
 						if (!BodyLogic.checkWakeupOtherYukkuri(b)) {
-							// 自分が奴隷で相手が奴隷ではないなら格上げ
+							// 自分が奴隷で相手が奴隷ではないなら自分を格上げ、相手はうんうん奴隷に堕とす
 							if (b.getPublicRank() != PublicRank.NONE && p.getPublicRank() == PublicRank.NONE) {
 								b.setPublicRank(PublicRank.NONE);
+								p.setPublicRank(PublicRank.UnunSlave);
 							}
 							p.takeOkazari(false);
 							b.giveOkazari(OkazariType.DEFAULT);
@@ -1360,8 +1363,8 @@ public class BodyLogic {
 	//婚姻候補のリストを作る。既婚の場合は、相手のみを含むリストを作る
 	public static final ArrayList<Body> createActiveFianceeList(Body b, int age) {
 		// ほかにいないならスキップ
-		ArrayList<Body> bodyList = SimYukkuri.world.currentMap.body;
-		if (bodyList.size() <= 1) {
+		Body[] bodyList = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
+		if (bodyList.length <= 1) {
 			return null;
 		}
 
@@ -1471,8 +1474,8 @@ public class BodyLogic {
 
 	// ぜんゆん集合
 	public static final void gatheringYukkuri() {
-		ArrayList<Body> bodyList = SimYukkuri.world.currentMap.body;
-		if (bodyList != null && bodyList.size() != 0) {
+		Body[] bodyList = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
+		if (bodyList != null && bodyList.length != 0) {
 			ArrayList<Toilet> toiletList = SimYukkuri.world.currentMap.toilet;
 			if (toiletList != null && toiletList.size() != 0) {
 				Obj o = toiletList.get(0);
@@ -1483,22 +1486,22 @@ public class BodyLogic {
 
 	// ぜんゆん集合(四角形前面)
 	public static final boolean gatheringYukkuriFront(Body bTop, ArrayList<Body> TargetList) {
-		return gatheringYukkuriSquare(bTop, TargetList, GatheringDirection.DOWN, null);
+		return gatheringYukkuriSquare(bTop, TargetList.toArray(new Body[0]), GatheringDirection.DOWN, null);
 	}
 
 	// ぜんゆん集合(四角形前面)
 	public static final boolean gatheringYukkuriFront(Body bTop, ArrayList<Body> TargetList, EventPacket e) {
-		return gatheringYukkuriSquare(bTop, TargetList, GatheringDirection.DOWN, e);
+		return gatheringYukkuriSquare(bTop, TargetList.toArray(new Body[0]) , GatheringDirection.DOWN, e);
 	}
 
-	public static final boolean gatheringYukkuriSquare(Obj oTop, ArrayList<Body> TargetList, GatheringDirection eDir,
+	public static final boolean gatheringYukkuriSquare(Obj oTop, Body[] TargetList, GatheringDirection eDir,
 			EventPacket e) {
 		int nMaxRowSize = 3;// 初期最大幅
 
 		if (oTop == null || TargetList == null) {
 			return false;
 		}
-		int nSize = TargetList.size();
+		int nSize = TargetList.length;
 		if (nSize == 0) {
 			return false;
 		}
@@ -1921,7 +1924,7 @@ public class BodyLogic {
 				continue;
 			if (p.isNYD())
 				continue;
-			if (p.getPublicRank() == PublicRank.UnunSlave)
+			if (b.getPublicRank() == PublicRank.NONE && p.getPublicRank() == PublicRank.UnunSlave)
 				continue;
 			if (p.getBaryState() != BaryInUGState.NONE)
 				continue;

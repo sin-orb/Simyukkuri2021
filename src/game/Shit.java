@@ -20,21 +20,34 @@ import src.enums.YukkuriType;
 import src.item.Barrier;
 import src.system.ItemMenu.GetMenuTarget;
 import src.system.ItemMenu.UseMenuTarget;
-
+/**
+ * うんうんのクラス.
+ */
 public class Shit extends Obj implements java.io.Serializable {
 	static final long serialVersionUID = 2L;
 	
 	// public variables
+	/** 通常うんうん */
 	public static final int SHIT_NORMAL = 0;
+	/** ゆ下痢 */
 	public static final int SHIT_CRASHED = 1;
+	/** うんうんの影 */
 	public static final int SHIT_SHADOW = 2;
+	/** うんうんの状態数 */
 	public static final int NUM_OF_SHIT_STATE = 3;
 
 	private static final int SHITLIMIT[] = {100*24*2, 100*24*4, 100*24*8};
+	/** うんうんをしたゆっくりの名前。下のゆっくりへの参照自体はゆっくりがremoveされると消えてしまうため名前だけここで残す */
+	public String ownerName;
+	/** うんうんをしたゆっくり */
 	public Body owner;
+	/** どのステージのゆっくりがうんうんをしたか */
 	public AgeState ageState;
+	/** 落下時のダメージ */
 	public int falldownDamage = 0;
+	/** うんうんの量 */
 	public int amount = 0;
+	/** うんうんタイプ（あんこ、カスタード、クリーム等） */
 	public int shitType = 0;
 	
 	private static final float[] shitSize = {0.4f, 0.7f, 1.0f};
@@ -47,7 +60,12 @@ public class Shit extends Obj implements java.io.Serializable {
 	private static int[][] imgH = null;
 	private static int[][] pivX = null;
 	private static int[][] pivY = null;
-
+	/**
+	 * イメージをロードする.
+	 * @param loader ローダ
+	 * @param io イメージオブザーバ
+	 * @throws IOException IO例外
+	 */
 	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
 		final String path = "images/yukkuri/";
 		final YukkuriType[] name = YukkuriType.values();
@@ -97,15 +115,21 @@ public class Shit extends Obj implements java.io.Serializable {
 		StringBuilder ret = new StringBuilder("うんうん");
 		ret.append(shitSizeDisplayName[ageState.ordinal()]);
 		ret.append("(");
-		ret.append(owner.getNameJ());
+		ret.append(ownerName);
 		ret.append(")");
 		return ret.toString();
 	}
-	
+	/**
+	 * イメージを取得する.
+	 * @return イメージ
+	 */
 	public BufferedImage getImage() {
 		return (images[shitType][getShitState()][ageState.ordinal()]);
 	}
-	
+	/**
+	 * 影のイメージを取得する.
+	 * @return 影のイメージ
+	 */
 	public BufferedImage getShadowImage() {
 		return (images[shitType][SHIT_SHADOW][ageState.ordinal()]);
 	}
@@ -113,28 +137,42 @@ public class Shit extends Obj implements java.io.Serializable {
 	public int getSize() {
 		return imgW[shitType][ageState.ordinal()];
 	}
-	
+	/**
+	 * コンストラクタ.
+	 * @param initX 初期X座標
+	 * @param initY 初期Y座標
+	 * @param initZ 初期Z座標
+	 * @param b うんうんしたゆっくり
+	 * @param type うんうんタイプ
+	 */
 	public Shit (int initX, int initY, int initZ, Body b, YukkuriType type) {
 		objType = Type.SHIT;
 		shitType = type.ordinal();
+		ownerName = b.getNameJ();
+		owner = b;
 		x = initX;
 		y = initY;
 		z = initZ;
-		owner = b;
 		ageState = b.getBodyAgeState();
 		amount = imgW[shitType][ageState.ordinal()] * 12;
 		setRemoved(false);
 		setBoundary(pivX[shitType][ageState.ordinal()], pivY[shitType][ageState.ordinal()],
 					imgW[shitType][ageState.ordinal()], imgH[shitType][ageState.ordinal()]);
 	}
-
+	/**
+	 * うんうんの状態を取得する.
+	 * @return うんうんの状態
+	 */
 	public int getShitState() {
 		if (getAge() >= SHITLIMIT[ageState.ordinal()]/4) {
 			return 1;
 		}
 		return 0;
 	}
-
+	/**
+	 * うんうんが食べられたときの処理
+	 * @param eatAmount 食べられた量
+	 */
 	public void eatShit(int eatAmount) {
 		amount -= eatAmount;
 		if (amount < 0) {
@@ -142,16 +180,22 @@ public class Shit extends Obj implements java.io.Serializable {
 			setRemoved(true);
 		}
 	}
-
+	/**
+	 * うんうんを破壊しゆ下痢にする.
+	 */
 	public void crushShit() {
 		setAge(getAge() + SHITLIMIT[ageState.ordinal()]/2);
 	}
-	
+	/**
+	 * うんうんをキックする,
+	 */
 	public void kick() {
 		int blowLevel[] = {-6, -5, -4};
 		kick(0, blowLevel[ageState.ordinal()]*2, blowLevel[ageState.ordinal()]);
 	}
-
+	/**
+	 * うんうん量を取得する.
+	 */
 	public int getValue() {
 		return value[ageState.ordinal()];
 	}
@@ -165,13 +209,14 @@ public class Shit extends Obj implements java.io.Serializable {
 	public UseMenuTarget hasUsePopup() {
 		return UseMenuTarget.SHIT;
 	}
-
+	@Override
 	public Event clockTick()
 	{
 		if (!isRemoved()) {
 			//age += TICK;
 			if (getAge() >= SHITLIMIT[ageState.ordinal()]) {
 				setRemoved(true);
+				owner = null;
 			}
 
 			int mapX = Translate.mapW;
@@ -227,8 +272,15 @@ public class Shit extends Obj implements java.io.Serializable {
 					}
 				}
 			}
+			calcPos();
 			return Event.DONOTHING;
 		}
+		calcPos();
 		return Event.REMOVED;
+	}
+	@Override
+	public void remove() {
+		owner = null;
+		super.remove();
 	}
 }

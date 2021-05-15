@@ -14,7 +14,6 @@ import src.base.Effect;
 import src.base.Obj;
 import src.base.ObjEX;
 import src.draw.ModLoader;
-import src.enums.CoreAnkoState;
 import src.enums.CriticalDamegeType;
 import src.enums.EffectType;
 import src.enums.FootBake;
@@ -26,11 +25,11 @@ import src.system.Cash;
 import src.system.MessagePool;
 
 /***************************************************
-ホットプレート
-*/
+ * ホットプレート
+ */
 public class HotPlate extends ObjEX implements java.io.Serializable {
 	static final long serialVersionUID = 1L;
-
+	/**処理対象(ゆっくり)*/
 	public static final int hitCheckObjType = ObjEX.YUKKURI;
 	private static BufferedImage[] images = new BufferedImage[4];
 	private static Rectangle boundary = new Rectangle();
@@ -38,7 +37,7 @@ public class HotPlate extends ObjEX implements java.io.Serializable {
 	private Body bindBody = null;
 	private Effect smoke = null;
 	private Random rnd = new Random();
-
+	/**画像ロード*/
 	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
 		for(int i = 0; i < 3; i++) {
 			images[i] = ModLoader.loadItemImage(loader, "hotplate" + File.separator + "hotplate" + i + ".png");
@@ -80,7 +79,7 @@ public class HotPlate extends ObjEX implements java.io.Serializable {
 	public BufferedImage getShadowImage() {
 		return null;
 	}
-
+	/**境界線の取得*/
 	public static Rectangle getBounding() {
 		return boundary;
 	}
@@ -174,7 +173,7 @@ public class HotPlate extends ObjEX implements java.io.Serializable {
 		}
 		SimYukkuri.world.currentMap.hotPlate.remove(this);
 	}
-
+	/**コンストラクタ*/
 	public HotPlate(int initX, int initY, int initOption) {
 		super(initX, initY, initOption);
 		setBoundary(boundary);

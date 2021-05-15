@@ -23,14 +23,19 @@ public class BreedEvent extends EventPacket implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
 	Random rnd = new Random();
-
+	/**
+	 * コンストラクタ.
+	 */
 	public BreedEvent(Body f, Body t, Obj tgt, int cnt) {
 		super(f, t, tgt, cnt);
 	}
 	
-	// 参加チェック
-	// ここで各種チェックを行い、イベントへ参加するかを返す
-	// また、イベント優先度も必要に応じて設定できる
+	/**
+	 *  参加チェック
+	 *  ここで各種チェックを行い、イベントへ参加するかを返す
+	 *  また、イベント優先度も必要に応じて設定できる
+	 */
+	@Override
 	public boolean checkEventResponse(Body b) {
 		// このイベントは固体どうしのイベントだが親子関係の探索が面倒なので
 		// ワールドイベントとして登録、受け取り側が自分のつがいか親かを確認する
@@ -74,15 +79,20 @@ public class BreedEvent extends EventPacket implements java.io.Serializable {
 		return ret;
 	}
 
-	// イベント開始動作
+	/**
+	 *  イベント開始動作
+	 */
+	@Override
 	public void start(Body b) {
 		b.moveToEvent(this, getFrom().getX(), getFrom().getY());
 	}
 	
-	// 毎フレーム処理
-	// trueを返すとイベント終了
+	/**
+	 * 毎フレーム処理
+	 * UpdateState.ABORTを返すとイベント終了
+	 */
+	@Override
 	public UpdateState update(Body b) {
-
 		if(b.nearToBirth())return UpdateState.FORCE_EXEC;
 		// 相手の一定距離まで近づいたら移動終了
 		if(Translate.distance(b.getX(), b.getY(), getFrom().getX(), getFrom().getY()) < 20000) {
@@ -103,13 +113,17 @@ public class BreedEvent extends EventPacket implements java.io.Serializable {
 		// アリにたかられたら参加どころではなくなる
 		if (b.getNumOfAnts() != 0 || b.getAttachmentSize(Ants.class) != 0) {
 			b.clearEvent();
+			return UpdateState.ABORT;
 		}
 		
 		return null;
 	}
 
-	// イベント目標に到着した際に呼ばれる
-	// trueを返すとイベント終了
+	/**
+	 * イベント目標に到着した際に呼ばれる
+	 * trueを返すとイベント終了
+	 */
+	@Override
 	public boolean execute(Body b) {
 		if(b.nearToBirth())return true;
 		if( b.isNYD() ){
@@ -137,7 +151,7 @@ public class BreedEvent extends EventPacket implements java.io.Serializable {
 				else {
 					b.setHappiness(Happiness.VERY_HAPPY);
 					b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.FirstGreeting), 40, true, false);
-					b.setStress(0);
+					b.addStress(-30);
 					b.addMemories(20);
 				}
 			}

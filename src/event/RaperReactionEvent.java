@@ -1,6 +1,5 @@
 package src.event;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 import src.Const;
@@ -37,12 +36,15 @@ public class RaperReactionEvent extends EventPacket implements java.io.Serializa
 	private int age = 0;
 	
 	public ActionState state = null;
-
+	/**
+	 * コンストラクタ.
+	 */
 	public RaperReactionEvent(Body f, Body t, Obj tgt, int cnt) {
 		super(f, t, tgt, cnt);
 	}
 	
 	// 参加チェック
+	@Override
 	public boolean checkEventResponse(Body b) {
 		// 最低限のチェックはRaperWakeupEventで済んでるんで省略
 		priority = EventPriority.HIGH;
@@ -54,7 +56,7 @@ public class RaperReactionEvent extends EventPacket implements java.io.Serializa
 			boolean bIsNearRaper = false;
 
 			// 全ゆっくりに対してチェック
-			ArrayList<Body> bodyList = SimYukkuri.world.currentMap.body;
+			Body[] bodyList = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
 			for (Body p:bodyList) {
 				// 自分同士のチェックは無意味なのでスキップ
 				if (p == b) {
@@ -107,6 +109,7 @@ public class RaperReactionEvent extends EventPacket implements java.io.Serializa
 	}
 
 	// イベント開始動作
+	@Override
 	public void start(Body b) {
 		if( b.isNYD() ){
 			return;
@@ -124,6 +127,7 @@ public class RaperReactionEvent extends EventPacket implements java.io.Serializa
 	}
 	
 	// 毎フレーム処理
+	@Override
 	public UpdateState update(Body b) {
 		// 相手が消えてしまったら他のレイパーを捜索
 		if(getFrom().isRemoved() || getFrom().isDead() || !getFrom().isRaper() ) {
@@ -168,7 +172,7 @@ public class RaperReactionEvent extends EventPacket implements java.io.Serializa
 					if(target != null) {
 						int num = 0;
 						// 反撃対象が見つかったら同イベント実行中の固体イベントを書き換え
-						ArrayList<Body> bodyList = SimYukkuri.world.currentMap.body;
+						Body[] bodyList = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
 						for(Body body :bodyList) {
 							if(body.getCurrentEvent() instanceof RaperReactionEvent) {
 								// うんうん奴隷は不参加
@@ -236,6 +240,7 @@ public class RaperReactionEvent extends EventPacket implements java.io.Serializa
 
 	// イベント目標に到着した際に呼ばれる
 	// trueを返すとイベント終了
+	@Override
 	public boolean execute(Body b) {
 		// 相手が消えてしまったら他のレイパーを捜索
 		if(getFrom().isRemoved() || getFrom().isDead()) {
@@ -279,7 +284,7 @@ public class RaperReactionEvent extends EventPacket implements java.io.Serializa
 	 */
 	public Body searchNextTarget() {
 		Body ret = null;
-		ArrayList<Body> bodyList = SimYukkuri.world.currentMap.body;
+		Body[] bodyList = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
 		for(Body b :bodyList) {
 			if(b.isRaper() && b.isExciting() && !b.isDead()) {
 				ret = b;
@@ -296,7 +301,7 @@ public class RaperReactionEvent extends EventPacket implements java.io.Serializa
 	 */
 	public Body searchAttackTarget() {
 		Body ret = null;
-		ArrayList<Body> bodyList = SimYukkuri.world.currentMap.body;
+		Body[] bodyList = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
 		for(Body b :bodyList) {
 			if(b.isExciting() && b.isRaper() && b.isSukkiri()) {
 				ret = b;

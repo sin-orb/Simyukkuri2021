@@ -28,32 +28,48 @@ import src.yukkuri.HybridYukkuri;
 public class World implements Serializable {
 	static final long serialVersionUID = 1L;
 
-	// プレイヤー情報 ワールド内に1つのみ存在できる
+	/** プレイヤー情報 ワールド内に1つのみ存在できる */
 	public Player player;
-	// 現在画面に表示しているマップのデータ
+	/** 現在画面に表示しているマップのデータ */
 	public MapPlaceData currentMap;
 
-	// ウィンドウ、マップサイズ情報
+	/**  ウィンドウ情報 */
 	public int windowType;
+	/** マップサイズ情報 */
 	public int terrariumSizeIndex;
 
-	// マップ移動予定値
-	// すぐ切り替えずメインのスレッド動作に衝突しないようにタイミングを図るため
+	/** マップ移動予定値。すぐ切り替えずメインのスレッド動作に衝突しないようにタイミングを図るため */
 	private int nextMap;
-	// ワールド内のマップリスト
+	/** ワールド内のマップリスト */
 	private List<MapPlaceData> mapList;
 
 	// 当たり判定やソート用オブジェクトリストのグループ分け
+	/** ゆっくり/うんうん/吐餡/おかざりのリスト */
 	public ArrayList<Obj> yukkuriGroupList;
+	/** 床設置オブジェクトのリスト */
 	public ArrayList<ObjEX> platformGroupList;
+	/** プレス機/ゴミ収集所のリスト */
 	public ArrayList<ObjEX> fixObjGroupList;
+	/** フード/おもちゃ/茎/ディフューザー/ゆんば/すぃー/がらくた/トランポリン/石のリスト */
 	public ArrayList<ObjEX> objectGroupList;
-	public ArrayList<Obj> sortEffectGroupList;
-	public ArrayList<Obj> frontEffectGroupList;
+	//public ArrayList<Obj> sortEffectGroupList;
+	//public ArrayList<Obj> frontEffectGroupList;
+	/** ベルトコンベア/畑/池のリスト */
 	public ArrayList<FieldShapeBase> fieldShapeGroupList;
+	/**
+	 *  トイレ/ベッド/養殖プール/ダストシュート/ゴミ収集所/フードメイカー/オレンジプール/製品投入口/粘着板
+	 *  ホットプレート/フードプロセッサ/ミキサー/おうち/プレス機/すぃー/ベルトコンベア/自動給餌器/トランポリン/発電機
+	 *  のリスト
+	 */
 	public ArrayList<ObjEX> hitBaseGroupList;
+	/** ゆっくり/うんうん/吐餡/ふーど/茎/おもちゃ/石/おかざりのリスト */
 	public ArrayList<Obj> hitTargetGroupList;
 
+	/**
+	 * コンストラクタ.
+	 * @param winType Windowタイプ
+	 * @param sizeIndex サイズ
+	 */
 	public World(int winType, int sizeIndex) {
 
 		player = new Player();
@@ -74,37 +90,52 @@ public class World implements Serializable {
 		platformGroupList = new ArrayList<ObjEX>();
 		fixObjGroupList = new ArrayList<ObjEX>();
 		objectGroupList = new ArrayList<ObjEX>();
-//		sortEffectGroupList = new ArrayList<Obj>();  今はリストが1つだけなのでベースをそのまま返す
-//		frontEffectGroupList = new ArrayList<Obj>();
 		fieldShapeGroupList = new ArrayList<FieldShapeBase>();
 		hitBaseGroupList = new ArrayList<ObjEX>();
 		hitTargetGroupList = new ArrayList<Obj>();
 	}
-
+	/**
+	 * プレイヤーを取得する.
+	 * @return プレイヤー
+	 */
 	public Player getPlayer() {
 		return player;
 	}
-
+	/**
+	 * 現在のマップを取得する.
+	 * @return 現在のマップ
+	 */
 	public MapPlaceData getCurrentMap() {
 		return currentMap;
 	}
-
+	/**
+	 * 次のマップを取得する.
+	 * @return 次のマップ
+	 */
 	public int getNextMap() {
 		return nextMap;
 	}
-
+	/**
+	 * 次のマップを設定する.
+	 * @param idx 次のマップ（予定）
+	 */
 	public void setNextMap(int idx) {
 		nextMap = idx;
 	}
-
+	/**
+	 * マップを切り替える.
+	 * @return マップ情報
+	 */
 	public MapPlaceData changeMap() {
 		currentMap = mapList.get(nextMap);
 		nextMap = -1;
 		return currentMap;
 	}
 
-	// マップサイズの計算
-	// ゲーム開始時のダイアログ、データロード時のみ使われる
+	/**
+	 * マップサイズの計算
+	 * ゲーム開始時のダイアログ、データロード時のみ使われる
+	 */
 	public void recalcMapSize() {
 		int terrariumSizeParcent = SimYukkuri.fieldScaleData[terrariumSizeIndex];
 		int MAX_X = SimYukkuri.DEFAULT_MAP_X[windowType] * terrariumSizeParcent / 100;
@@ -114,7 +145,9 @@ public class World implements Serializable {
 		Translate.setMapSize(MAX_X, MAX_Y, MAX_Z);
 	}
 
-	// 全マップのゆっくりリストをスキャンして遅延読み込みの復元
+	/**
+	 * 全マップのゆっくりリストをスキャンして遅延読み込みの復元
+	 */
 	public void loadInterBodyImage() {
 		// 遅延読み込みの復元
 		for(MapPlaceData m :mapList) {
@@ -132,7 +165,10 @@ public class World implements Serializable {
 		}
 	}
 
-	// 描画や当たり判定といった目的別に結合した各種グループリスト
+	/**
+	 * ゆっくり/うんうん/吐餡/おかざりのリストを取得する.
+	 * @return ゆっくり/うんうん/吐餡/おかざりのリスト 
+	 */
 	public List<Obj> getYukkuriList(){
 		yukkuriGroupList.clear();
 		yukkuriGroupList.addAll(currentMap.body);
@@ -141,7 +177,10 @@ public class World implements Serializable {
 		yukkuriGroupList.addAll(currentMap.okazari);
 		return yukkuriGroupList;
 	 }
-
+	/**
+	 * 床設置オブジェクトのリストを取得する.
+	 * @return 床設置オブジェクトのリスト
+	 */
 	public List<ObjEX> getPlatformList(){
 		platformGroupList.clear();
 		platformGroupList.addAll(currentMap.toilet);
@@ -162,14 +201,20 @@ public class World implements Serializable {
 		platformGroupList.addAll(currentMap.generator);
 		return platformGroupList;
 	}
-
+	/**
+	 * プレス機/ゴミ収集所のリストを取得する.
+	 * @return プレス機/ゴミ収集所のリスト
+	 */
 	public List<ObjEX> getFixObjList(){
 		fixObjGroupList.clear();
 		fixObjGroupList.addAll(currentMap.machinePress);
 		fixObjGroupList.addAll(currentMap.garbageStation);
 		return fixObjGroupList;
 	}
-
+	/**
+	 * フード/おもちゃ/茎/ディフューザー/ゆんば/すぃー/がらくた/トランポリン/石のリストを取得する.
+	 * @return フード/おもちゃ/茎/ディフューザー/ゆんば/すぃー/がらくた/トランポリン/石のリスト 
+	 */
 	public List<ObjEX> getObjectList(){
 		objectGroupList.clear();
 		objectGroupList.addAll(currentMap.food);
@@ -183,15 +228,24 @@ public class World implements Serializable {
 		objectGroupList.addAll(currentMap.stone);
 		return objectGroupList;
 	}
-
+	/**
+	 * ソートされたエフェクトのリストを取得する.
+	 * @return ソートされたエフェクトのリスト
+	 */
 	public List<Effect> getSortEffectList(){
 		return currentMap.sortEffect;
 	}
-
+	/**
+	 * フロントのエフェクトのリストを取得する.
+	 * @return フロントのエフェクトのリスト
+	 */
 	public List<Effect> getFrontEffectList(){
 		return currentMap.frontEffect;
 	}
-
+	/**
+	 * ベルトコンベア/畑/池のリストを取得する.
+	 * @return ベルトコンベア/畑/池のリスト
+	 */
 	public List<FieldShapeBase> getFieldShapeList(){
 		fieldShapeGroupList.clear();
 		fieldShapeGroupList.addAll(currentMap.beltconveyor);
@@ -199,7 +253,10 @@ public class World implements Serializable {
 		fieldShapeGroupList.addAll(currentMap.pool);
 		return fieldShapeGroupList;
 	}
-
+	/**
+	 * 当たり判定のあるオブジェクトのリストを取得する.
+	 * @return トイレ/ベッド/養殖プール/ダストシュート/ゴミ収集所/フードメイカー/オレンジプール/製品投入口/粘着板 ホットプレート/フードプロセッサ/ミキサー/おうち/プレス機/すぃー/ベルトコンベア/自動給餌器/トランポリン/発電機 のリスト
+	 */
 	public List<ObjEX> getHitBaseList(){
 		hitBaseGroupList.clear();
 		hitBaseGroupList.addAll(currentMap.toilet);
@@ -223,7 +280,10 @@ public class World implements Serializable {
 		hitBaseGroupList.addAll(currentMap.generator);
 		return hitBaseGroupList;
 	}
-
+	/**
+	 * ゆっくり/うんうん/吐餡/ふーど/茎/おもちゃ/石/おかざりのリストを取得する.
+	 * @return ゆっくり/うんうん/吐餡/ふーど/茎/おもちゃ/石/おかざりのリスト 
+	 */
 	public List<Obj> getHitTargetList() {
 		hitTargetGroupList.clear();
 		hitTargetGroupList.addAll(currentMap.body);

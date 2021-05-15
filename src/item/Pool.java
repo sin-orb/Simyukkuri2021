@@ -26,11 +26,11 @@ import src.system.ItemMenu.ShapeMenuTarget;
 import src.system.MapPlaceData;
 
 /***************************************************
-池
-*/
+ * 池
+ */
 public class Pool extends FieldShapeBase implements Serializable {
 	static final long serialVersionUID = 1L;
-
+	/**池のふちどりの色*/
 	public static final Color ROCK_COLOR = new Color(200, 140, 30);
 	private static final int MIN_SIZE = 8;
 
@@ -40,14 +40,16 @@ public class Pool extends FieldShapeBase implements Serializable {
 	private int[] anWaterPointY = new int[4];
 
 	protected Random rnd = new Random();
+	/**池に捕まってるオブジェクトのリスト*/
 	ArrayList<Obj> bindObjList = new ArrayList<Obj>();
+	/**池の深さの列挙*/
 	public enum DEPTH {
 		NONE,	// エリア外
 		EDGE,	// 角でまだ入ってない
 		SHALLOW,// 浅い
 		DEEP,	// 深い
 		}
-
+	/**画像ロード*/
 	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
 		images = ModLoader.loadItemImage(loader, "pool" + File.separator + "pool.png");
 		texture = new TexturePaint(images, new Rectangle2D.Float(0, 0, images.getWidth(), images.getHeight()));
@@ -103,7 +105,7 @@ public class Pool extends FieldShapeBase implements Serializable {
 	public int getMinimumSize() {
 		return MIN_SIZE;
 	}
-
+	/**プレビューラインの描画*/
 	public static void drawPreview(Graphics2D g2, int sx, int sy, int ex, int ey) {
 		int[] anPointX = new int[4];
 		int[] anPointY = new int[4];
@@ -125,7 +127,13 @@ public class Pool extends FieldShapeBase implements Serializable {
 		g2.setPaint(texture);
 		g2.fillPolygon(anWaterPointX, anWaterPointY, 4 );
 	}
-
+	/**
+	 * コンストラクタ
+	 * @param fsx 設置起点のX座標
+	 * @param fsy 設置起点のY座標
+	 * @param fex 設置終点のX座標
+	 * @param fey 設置終点のY座標
+	 */
 	public Pool(int fsx, int fsy, int fex, int fey) {
 		Point pS = Translate.getFieldLimitForMap( fsx, fsy );
 		Point pE = Translate.getFieldLimitForMap( fex, fey );
@@ -176,7 +184,7 @@ public class Pool extends FieldShapeBase implements Serializable {
 		MapPlaceData.setFiledFlag(SimYukkuri.world.currentMap.fieldMap, mapSX, mapSY, mapW, mapH, true, FIELD_POOL);
 	}
 
-	// フィールド座標にあるシェイプ取得
+	/** フィールド座標にあるシェイプ取得*/
 	public static Pool getPool(int fx, int fy) {
 		
 		for(Pool bc :SimYukkuri.world.currentMap.pool) {
@@ -188,7 +196,7 @@ public class Pool extends FieldShapeBase implements Serializable {
 		return null;
 	}
 	
-	// 削除
+	/** 削除*/
 	public static void deletePool(Pool b) {
 		MapPlaceData.setFiledFlag(SimYukkuri.world.currentMap.fieldMap, b.mapSX, b.mapSY, b.mapW, b.mapH, false, FIELD_POOL);
 		SimYukkuri.world.currentMap.pool.remove(b);
@@ -197,7 +205,12 @@ public class Pool extends FieldShapeBase implements Serializable {
 			MapPlaceData.setFiledFlag(SimYukkuri.world.currentMap.fieldMap, bc.mapSX, bc.mapSY, bc.mapW, bc.mapH, true, FIELD_POOL);
 		}
 	}
-
+	/**
+	 * ある点が畑の範囲内かどうか
+	 * @param inX ある点のX座標
+	 * @param inY ある点Y座標
+	 * @param bIsField 渡された座標がフィールド座標かどうか
+	 */
     public boolean checkContain( int inX, int inY , boolean bIsField )
     {
     	int nX = inX;
@@ -221,7 +234,10 @@ public class Pool extends FieldShapeBase implements Serializable {
     	return false;
     }
     
-
+	/**
+	 * 渡されたオブジェクトが畑の中にあるかを判定
+	 * <br>動作はobjHitProcess( Obj o )で
+	 */
 	public boolean checkHitObj(Obj o ) {
 		if( o == null )
 		{
@@ -248,7 +264,7 @@ public class Pool extends FieldShapeBase implements Serializable {
 		// エリア内
 		return true;
 	}
-	
+	/**当たり判定されたオブジェクトへの処理*/
 	public int objHitProcess( Obj o ) {
 		// 空中は無視
 		int nZ = o.getZ();
@@ -394,7 +410,12 @@ public class Pool extends FieldShapeBase implements Serializable {
 
 		return 0;
 	}
-	
+	/**
+	 * ある点の池の深さを取得
+	 * @param x ある点のX座標
+	 * @param y ある点のY座標
+	 * @return ある点の池の深さ
+	 */
 	public DEPTH checkArea(int x, int y)
 	{
 		DEPTH eDepthW = DEPTH.NONE;

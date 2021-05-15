@@ -26,12 +26,15 @@ public class RevengeAttackEvent extends EventPacket implements java.io.Serializa
 
 	private static final long serialVersionUID = 1L;
 	protected Random rnd = new Random();
-
+	/**
+	 * コンストラクタ.
+	 */
 	public RevengeAttackEvent(Body f, Body t, Obj tgt, int cnt) {
 		super(f, t, tgt, cnt);
 	}
 	
 	// 参加チェック
+	@Override
 	public boolean checkEventResponse(Body b) {
 		priority = EventPriority.HIGH;
 		// これは特殊な扱いをするイベントで先に条件をチェックしてから
@@ -40,6 +43,7 @@ public class RevengeAttackEvent extends EventPacket implements java.io.Serializa
 	}
 
 	// イベント開始動作
+	@Override
 	public void start(Body b) {
 		b.setToFood(false);
 		b.setToBed(false);
@@ -53,7 +57,8 @@ public class RevengeAttackEvent extends EventPacket implements java.io.Serializa
 	}
 	
 	// 毎フレーム処理
-	// trueを返すとイベント終了
+	// UpdateState.ABORTを返すとイベント終了
+	@Override
 	public UpdateState update(Body b) {
 		// 相手が消えてしまったらイベント中断
 		if(to.isRemoved()) return UpdateState.ABORT;
@@ -68,6 +73,7 @@ public class RevengeAttackEvent extends EventPacket implements java.io.Serializa
 
 	// イベント目標に到着した際に呼ばれる
 	// trueを返すとイベント終了
+	@Override
 	public boolean execute(Body b) {
 		// 動けない場合と、ランダムであきらめる
 		if( b.isDontMove() || rnd.nextInt(50) == 0)

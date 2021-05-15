@@ -14,14 +14,13 @@ import src.game.Vomit;
 import src.system.ItemMenu.GetMenu;
 import src.system.ItemMenu.ShapeMenu;
 
-
 /**********************************************
 	オブジェクトコンテキストメニューのアクション
 
 
 */
 public class ItemListener {
-	
+
 	// 取得ポップアップアクション
 	public class GetPopupAction implements PopupMenuListener {
 		private int speedBackup;
@@ -90,31 +89,35 @@ public class ItemListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			GetMenu m = GetMenu.valueOf(e.getActionCommand());
-			if(m == null) return;
-			
+			if (m == null)
+				return;
+
 			MapPlaceData curMap = SimYukkuri.world.currentMap;
-			
-			switch(m) {
-				case PICKUP:
+
+			switch (m) {
+			case PICKUP:
+				synchronized (SimYukkuri.lock) {
 					SimYukkuri.world.player.itemList.addElement(ItemMenu.getTarget);
-					if(ItemMenu.getTarget instanceof Body) {
-						Body b = (Body)ItemMenu.getTarget;
+					if (ItemMenu.getTarget instanceof Body) {
+						Body b = (Body) ItemMenu.getTarget;
 						b.removeAllStalks();
 						curMap.body.remove(b);
-					} else if(ItemMenu.getTarget instanceof Shit) {
+					} else if (ItemMenu.getTarget instanceof Shit) {
 						curMap.shit.remove(ItemMenu.getTarget);
-					} else if(ItemMenu.getTarget instanceof Vomit) {
+					} else if (ItemMenu.getTarget instanceof Vomit) {
 						curMap.vomit.remove(ItemMenu.getTarget);
 					}
 					ItemMenu.getTarget = null;
-					break;
-				case STATUS:
-					if (ItemMenu.getTarget == null) return;
-					Body b = (Body)ItemMenu.getTarget;
-					ShowStatusFrame instance = ShowStatusFrame.getInstance();
-					instance.giveBodyInfo(b);
-					instance.setVisible(true);
-					break;
+				}
+				break;
+			case STATUS:
+				if (ItemMenu.getTarget == null)
+					return;
+				Body b = (Body) ItemMenu.getTarget;
+				ShowStatusFrame instance = ShowStatusFrame.getInstance();
+				instance.giveBodyInfo(b);
+				instance.setVisible(true);
+				break;
 			}
 		}
 	}
@@ -133,13 +136,11 @@ public class ItemListener {
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			ShapeMenu m = ShapeMenu.valueOf(e.getActionCommand());
-			if(m == null) return;
-			
+			if (m == null)
+				return;
+
 			ItemMenu.shapeTarget.executeShapePopup(m);
 			ItemMenu.shapeTarget = null;
 		}
 	}
 }
-
-
-

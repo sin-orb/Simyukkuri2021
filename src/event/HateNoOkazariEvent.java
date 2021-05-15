@@ -30,7 +30,9 @@ public class HateNoOkazariEvent extends EventPacket implements java.io.Serializa
 
 	private static final long serialVersionUID = 1L;
 	Random rnd = new Random();
-
+	/**
+	 * コンストラクタ.
+	 */
 	public HateNoOkazariEvent(Body f, Body t, Obj tgt, int cnt) {
 		super(f, t, tgt, cnt);
 	}
@@ -38,6 +40,7 @@ public class HateNoOkazariEvent extends EventPacket implements java.io.Serializa
 	// 参加チェック
 	// ここで各種チェックを行い、イベントへ参加するかを返す
 	// また、イベント優先度も必要に応じて設定できる
+	@Override
 	public boolean checkEventResponse(Body b) {
 		boolean ret = false;
 
@@ -88,13 +91,15 @@ public class HateNoOkazariEvent extends EventPacket implements java.io.Serializa
 	}
 
 	// イベント開始動作
+	@Override
 	public void start(Body b) {
 		int colX = BodyLogic.calcCollisionX(b, to);
 		b.moveToEvent(this, to.getX() + colX, to.getY());
 	}
 
 	// 毎フレーム処理
-	// trueを返すとイベント終了
+	// UpdateState.ABORTを返すとイベント終了
+	@Override
 	public UpdateState update(Body b) {
 		// 相手が消えてしまったらイベント中断
 		if(to.isRemoved()) return UpdateState.ABORT;
@@ -109,6 +114,7 @@ public class HateNoOkazariEvent extends EventPacket implements java.io.Serializa
 
 	// イベント目標に到着した際に呼ばれる
 	// trueを返すとイベント終了
+	@Override
 	public boolean execute(Body b) {
 		// 相手が残っていたら攻撃
 		if(!to.isDead() && !to.isRemoved() && to.getZ() < 5) {
@@ -126,6 +132,7 @@ public class HateNoOkazariEvent extends EventPacket implements java.io.Serializa
 				// うんうん奴隷用トイレがある場合
 				if( bIsInToiletForSlave ){
 					to.setPublicRank( PublicRank.UnunSlave ) ; // うんうんどれい認定
+					to.getFavItem().clear();
 					Body p = b.getPartner();
 					if (p != null) {
 						// うんうんどれいになるようなくずとは りこんっ！だよ！！

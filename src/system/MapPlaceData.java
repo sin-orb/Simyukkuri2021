@@ -233,7 +233,7 @@ public class MapPlaceData implements Serializable {
 	 * @param make 作る場合true、殺す場合false
 	 * @return ドス作成、または殺害に成功した場合true
 	 */
-	public synchronized boolean makeOrKillDos(boolean make) {
+	public boolean makeOrKillDos(boolean make) {
 		if (hasDos) {
 			if (make) {
 				return false;

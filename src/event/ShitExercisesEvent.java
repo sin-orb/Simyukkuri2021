@@ -32,25 +32,27 @@ public class ShitExercisesEvent extends EventPacket implements java.io.Serializa
 	boolean bUnunActionFlag = true;
 	int nFromWaitCount = 0;
 
-	// 行動ステート
+	/** 行動ステート */
 	enum STATE {
-		GO,			// 移動
-		WAIT,		// 待機
-		START,		// イベント開始時
-		YURAYURA,	// ♪みぎに　ひだりに　ゆ～ら♪　ゆ～ら♪
-		NOBINOBI,	// ♪おてんとさま　まで　の～び♪　の～び♪
-		POKAPOKA,	// ♪ぽんぽん　ぽかぽか　ゆわわ～い♪
-		UNUN,		// ♪うんうんさん　も　おでかけするよっ♪
-		END,		// イベント終了時
+		/** 移動 */GO,
+		/** 待機 */WAIT, 
+		/** イベント開始時 */START,
+		/** ♪みぎに　ひだりに　ゆ～ら♪　ゆ～ら♪ */YURAYURA,
+		/** ♪おてんとさま　まで　の～び♪　の～び♪ */NOBINOBI,
+		/** ♪ぽんぽん　ぽかぽか　ゆわわ～い♪ */POKAPOKA,
+		/** ♪うんうんさん　も　おでかけするよっ♪ */UNUN,
+		/** イベント終了時 */END
 	}
-
+	/** 状態 */
 	public STATE state = STATE.GO;
-
+	/**
+	 * コンストラクタ.
+	 */
 	public ShitExercisesEvent(Body f, Body t, Obj tgt, int cnt) {
 		super(f, t, tgt, cnt);
 		priority = EventPriority.HIGH;
 	}
-
+	@Override
 	public boolean simpleEventAction(Body b) {
 		if(getFrom().isShutmouth() ){
 			return true;
@@ -61,6 +63,7 @@ public class ShitExercisesEvent extends EventPacket implements java.io.Serializa
 	// 参加チェック
 	// ここで各種チェックを行い、イベントへ参加するかを返す
 	// また、イベント優先度も必要に応じて設定できる
+	@Override
 	public boolean checkEventResponse(Body b) {
 		boolean ret = false;
 		if(getFrom() == b) {
@@ -90,23 +93,15 @@ public class ShitExercisesEvent extends EventPacket implements java.io.Serializa
 	}
 
 	// イベント開始動作
+	@Override
 	public void start(Body b) {
 		b.setCurrentEvent(this);
-	}
-
-	public boolean checkWait(Body b,int nWaitTime)
-	{
-		if( !b.checkWait(nWaitTime))
-		{
-			return false;
-		}
-		b.setLastActionTime();
-		return true;
 	}
 
 	// 毎フレーム処理
 	// "UpdateState.ABORT"を返すとイベント終了
 	// 親→子供→次のステート、の順で処理をする
+	@Override
 	public UpdateState update(Body b) {
 		//イベント中止
 		if( b == null || getFrom() == null ){
@@ -464,6 +459,7 @@ public class ShitExercisesEvent extends EventPacket implements java.io.Serializa
 
 	// イベント目標に到着した際に呼ばれる
 	// trueを返すとイベント終了
+	@Override
 	public boolean execute(Body b) {
 		return false;
 	}

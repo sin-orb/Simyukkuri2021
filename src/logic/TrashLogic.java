@@ -26,7 +26,7 @@ public class TrashLogic {
 	public static final boolean checkTrashOkazari(Body b) {
 		
 		if(b.hasOkazari()) return false;
-		if(b.isVerySad()) return false;
+		//if(b.isVerySad()) return false;
 
 		Obj found = searchTrashObj(b);
 

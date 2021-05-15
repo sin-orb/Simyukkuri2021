@@ -20,7 +20,6 @@ import src.base.Body;
 import src.base.Obj;
 import src.base.ObjEX;
 import src.draw.ModLoader;
-import src.enums.CoreAnkoState;
 import src.enums.Happiness;
 import src.enums.ObjEXType;
 import src.enums.Type;
@@ -40,19 +39,17 @@ import src.yukkuri.TarinaiReimu;
 import src.yukkuri.WasaReimu;
 
 /***************************************************
-養殖プール
-*/
+ * 養殖プール
+ */
 public class BreedingPool extends ObjEX implements java.io.Serializable {
 	static final long serialVersionUID = 1L;
-
+	/**稼働タイプ*/
 	public static enum PoolType {
 		LOW("廉価品"),
-//        HIGH("こくまろ"),
 		RAPID("通常版"),
 		PRO("プロ用"),
 		INDUSTRY("工業用"),
 		LOWS("茎：廉価品"),
-//        HIGHS("茎：こくまろ"),
 		RAPIDS("茎：通常版"),
 		PROS("茎：プロ用"),
 		INDUSTRYS("茎：工業用"),
@@ -61,7 +58,7 @@ public class BreedingPool extends ObjEX implements java.io.Serializable {
 		PoolType(String name) { this.name = name; }
 		public String toString() { return name; }
 	}
-
+	/**処理対象(ゆっくり)*/
 	public static final int hitCheckObjType = ObjEX.YUKKURI;
 	private static final int images_num = 4; //このクラスの総使用画像数
 	private static BufferedImage[] images = new BufferedImage[images_num];
@@ -70,15 +67,13 @@ public class BreedingPool extends ObjEX implements java.io.Serializable {
 
 	private boolean highQuality;
 	private boolean stalkPool;
-	//以下二つはoptionの数字で判別
-	//private boolean rapidGrowth;
-	//private boolean industrial;
 	private static int[] value = {1000,5000,50000,450000,1000,5000,50000,600000};
 	private static int[] cost = {10,50,50,1500,10,50,50,1500};
+	/**プールの上で死亡して、精子餡に混ざった種類のDNA*/
 	public int liquidYukkuriType = -1;
 	private int lastSelected = 0;
 
-
+	/**画像ロード*/
 	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
 		for( int i = 0; i < images_num ; i++ ){
 			images[i] = ModLoader.loadItemImage(loader, "breedingpool" + File.separator + "breedingpool" + String.format("%03d",i+1) + ".png");
@@ -110,7 +105,7 @@ public class BreedingPool extends ObjEX implements java.io.Serializable {
 	public BufferedImage getShadowImage() {
 		return null;
 	}
-
+	/**境界線の取得*/
 	public static Rectangle getBounding() {
 		return boundary;
 	}
@@ -251,7 +246,7 @@ public class BreedingPool extends ObjEX implements java.io.Serializable {
 	public void removeListData() {
 		SimYukkuri.world.currentMap.breedingPool.remove(this);
 	}
-
+	/** プール上のゆっくりを泣かせる処理 */
 	public void cry(Body p){
 		if(p.hasBabyOrStalk()){
 			if(p.isNYD()){
@@ -265,7 +260,7 @@ public class BreedingPool extends ObjEX implements java.io.Serializable {
 			}
 		}
 	}
-
+	/**コンストラクタ*/
 	public BreedingPool(int initX, int initY,  int initOption) {
 		super(initX, initY, initOption);
 		setBoundary(boundary);

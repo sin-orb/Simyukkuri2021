@@ -19,18 +19,24 @@ import src.enums.YukkuriType;
 import src.item.Barrier;
 import src.system.ItemMenu.GetMenuTarget;
 import src.system.ItemMenu.UseMenuTarget;
-
+/**
+ * 吐餡クラス.
+ */
 public class Vomit extends Obj implements java.io.Serializable {
 	static final long serialVersionUID = 2L;
 	
 	// public variables
+	/** 通常の吐餡 */
 	public static final int VOMIT_NORMAL = 0;
+	/** 壊れた吐餡 */
 	public static final int VOMIT_CRASHED = 1;
+	/** 吐餡の影 */
 	public static final int VOMIT_SHADOW = 2;
+	/** 吐餡の状態 */
 	public static final int NUM_OF_VOMIT_STATE = 3;
 
 	private static final int VOMITLIMIT[] = {100*24*2, 100*24*4, 100*24*8};
-	private Body owner;
+	private String ownerName = null;;
 	private AgeState ageState;
 	private int falldownDamage = 0;
 	private int amount = 0;
@@ -44,7 +50,12 @@ public class Vomit extends Obj implements java.io.Serializable {
 	private static int[][] imgH = null;
 	private static int[][] pivX = null;
 	private static int[][] pivY = null;
-
+	/**
+	 * イメージをロードする.
+	 * @param loader ローダ
+	 * @param io イメージオブザーバ
+	 * @throws IOException IO例外
+	 */
 	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
 		final String path = "images/yukkuri/";
 		final YukkuriType[] name = YukkuriType.values();
@@ -94,26 +105,40 @@ public class Vomit extends Obj implements java.io.Serializable {
 	public String toString() {
 		StringBuilder ret = new StringBuilder("吐餡");
 		ret.append(sizeDisplayName[ageState.ordinal()]);
-		if(owner != null) {
-			ret.append("(");
-			ret.append(owner.getNameJ());
-			ret.append(")");
-		}
+		ret.append("(");
+		ret.append(ownerName);
+		ret.append(")");
 		return ret.toString();
 	}
-
+	/**
+	 * イメージを取得する.
+	 * @return イメージ
+	 */
 	public BufferedImage getImage() {
 		return (images[vomitType][getVomitState()][ageState.ordinal()]);
 	}
-	
+	/**
+	 * 影のイメージを取得する.
+	 * @return 影のイメージ
+	 */
 	public BufferedImage getShadowImage() {
 		return (images[vomitType][VOMIT_SHADOW][ageState.ordinal()]);
 	}
-
+	/**
+	 * サイズを取得する.
+	 * @return サイズ
+	 */
 	public int getSize() {
 		return imgW[vomitType][ageState.ordinal()];
 	}
-
+	/**
+	 * コンストラクタ
+	 * @param initX 初期X座標
+	 * @param initY 初期Y座標
+	 * @param initZ 初期Z座標
+	 * @param b 吐いたゆっくり
+	 * @param type 吐餡タイプ
+	 */
 	public Vomit (int initX, int initY, int initZ, Body b, YukkuriType type) {
 		objType = Type.VOMIT;
 		vomitType = type.ordinal();
@@ -121,10 +146,9 @@ public class Vomit extends Obj implements java.io.Serializable {
 		y = initY;
 		z = initZ;
 		if(b == null) {
-			owner = null;
 			ageState = AgeState.ADULT;
 		} else {
-			owner = b;
+			ownerName = b.getNameJ();
 			ageState = b.getBodyAgeState();
 		}
 		switch (ageState) {
@@ -138,20 +162,30 @@ public class Vomit extends Obj implements java.io.Serializable {
 			amount = 100*4;
 			break;
 		}
+		calcPos();
 		setRemoved(false);
 		setBoundary(pivX[vomitType][ageState.ordinal()], pivY[vomitType][ageState.ordinal()],
 					imgW[vomitType][ageState.ordinal()], imgH[vomitType][ageState.ordinal()]);
 	}
-
+	/**
+	 * 成長ステージを取得する.
+	 * @return 成長ステージ
+	 */
 	public AgeState getAgeState() { return ageState; }
-
+	/**
+	 * 吐餡の状態を取得する.
+	 * @return 吐餡の状態
+	 */
 	public int getVomitState() {
 		if (getAge() >= VOMITLIMIT[ageState.ordinal()]/4) {
 			return 1;
 		}
 		return 0;
 	}
-
+	/**
+	 * 吐餡を食べる.
+	 * @param eatAmount
+	 */
 	public void eatVomit(int eatAmount) {
 		amount -= eatAmount;
 		if (amount < 0) {
@@ -159,16 +193,22 @@ public class Vomit extends Obj implements java.io.Serializable {
 			setRemoved(true);
 		}
 	}
-
+	/**
+	 * 吐餡を壊す.
+	 */
 	public void crushVomit() {
 		setAge(getAge() + VOMITLIMIT[ageState.ordinal()]/2);
 	}
-	
+	/**
+	 * 吐餡をキックする.
+	 */
 	public void kick() {
 		int blowLevel[] = {-6, -5, -4};
 		kick(0, blowLevel[ageState.ordinal()]*2, blowLevel[ageState.ordinal()]);
 	}
-
+	/**
+	 * 吐餡の価格を取得する.
+	 */
 	public int getValue() {
 		return value[ageState.ordinal()];
 	}
@@ -182,7 +222,7 @@ public class Vomit extends Obj implements java.io.Serializable {
 	public UseMenuTarget hasUsePopup() {
 		return UseMenuTarget.NONE;
 	}
-
+	@Override
 	public Event clockTick()
 	{
 		if (!isRemoved()) {
@@ -240,8 +280,10 @@ public class Vomit extends Obj implements java.io.Serializable {
 					}
 				}
 			}
+			calcPos();
 			return Event.DONOTHING;
 		}
+		calcPos();
 		return Event.REMOVED;
 	}
 }

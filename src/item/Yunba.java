@@ -358,7 +358,8 @@ public class Yunba extends ObjEX implements java.io.Serializable {
 			}
 
 			if(bodyCheck && action == null) {
-				for(Body b: curMap.body) {
+				Body[] bodyList = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
+				for(Body b: bodyList) {
 					if(norndCheck==false && rnd.nextBoolean()) continue;
 					// 茎にぶら下がってる固体はスルー
 					if(b.isbindStalk() || b.getZ() > 0) continue;

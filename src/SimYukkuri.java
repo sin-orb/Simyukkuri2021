@@ -70,7 +70,7 @@ import src.system.MessagePool;
 public class SimYukkuri extends JFrame {
 	static final long serialVersionUID = 1L;
 	public static final String TITLE = "しむゆっくり/SimYukkuri";
-	public static final String VERSION = "Ver.2021/05/15リファクタリング版";
+	public static final String VERSION = "Ver.2021/05/02リファクタリング版";
 	public static boolean UNYO = true;
 	public static boolean DEBUG_OUTPUT = false;	// デバッグ用
 	public static int NAGASI_MODE = 0;	// 0:いつもの 1:まりちゃ流しOnly 2：共存環境

@@ -22,11 +22,11 @@ import src.system.Cash;
 import src.system.MessagePool;
 
 /***************************************************
-ダストシュート
-*/
+ * ダストシュート
+ */
 public class GarbageChute extends ObjEX implements java.io.Serializable {
 	static final long serialVersionUID = 1L;
-
+	/**処理対象(ゆっくり、うんうん、フード、吐餡、茎)*/
 	public static final int hitCheckObjType = ObjEX.YUKKURI | ObjEX.SHIT | ObjEX.FOOD | ObjEX.TOY | ObjEX.OBJECT | ObjEX.VOMIT| ObjEX.STALK;
 	private static final int images_num = 4; //このクラスの総使用画像数
 	private static BufferedImage[] images = new BufferedImage[images_num];
@@ -36,7 +36,7 @@ public class GarbageChute extends ObjEX implements java.io.Serializable {
 
 	private ItemRank itemRank;
 	private Body bindBody = null;
-
+	/**画像ロード*/
 	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
 		images[0] = ModLoader.loadItemImage(loader, "garbagechute" + File.separator + "garbagechute.png");
 		images[1] = ModLoader.loadItemImage(loader, "garbagechute" + File.separator + "garbagechute_off.png");
@@ -64,7 +64,7 @@ public class GarbageChute extends ObjEX implements java.io.Serializable {
 	public BufferedImage getShadowImage() {
 		return null;
 	}
-
+	/**境界線の取得*/
 	public static Rectangle getBounding() {
 		return boundary;
 	}
@@ -132,7 +132,12 @@ public class GarbageChute extends ObjEX implements java.io.Serializable {
 		SimYukkuri.world.currentMap.garbagechute.remove(this);
 	}
 
-	// initOption = 1 野良用
+	/**
+	 * コンストラクタ
+	 * @param initX x座標
+	 * @param initY y座標
+	 * @param initOption 0:飼い用、1;野良用
+	 */
 	public GarbageChute(int initX, int initY, int initOption) {
 		super(initX, initY, initOption);
 		setBoundary(boundary);

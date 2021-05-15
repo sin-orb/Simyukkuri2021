@@ -59,7 +59,7 @@ public class Diffuser extends ObjEX implements java.io.Serializable {
 
 	private boolean[] steamType = new boolean[SteamType.values().length];
 	private int steamNum = 0;
-
+	/** 画像ロード */
 	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
 		images[0] = ModLoader.loadItemImage(loader, "diffuser" + File.separator + "diffuser.png");
 		images[1] = ModLoader.loadItemImage(loader, "diffuser" + File.separator + "diffuser_off.png");
@@ -84,7 +84,7 @@ public class Diffuser extends ObjEX implements java.io.Serializable {
 	public BufferedImage getShadowImage() {
 		return images[2];
 	}
-
+	/**境界線の取得*/
 	public static Rectangle getBounding() {
 		return boundary;
 	}
@@ -117,11 +117,14 @@ public class Diffuser extends ObjEX implements java.io.Serializable {
 	public void removeListData(){
 		SimYukkuri.world.currentMap.diffuser.remove(this);
 	}
-	
+	/**
+	 * 蒸気タイプを取得する.
+	 * @return 蒸気タイプ
+	 */
 	public boolean[] getSteamType() {
 		return steamType;
 	}
-	
+	/** コンストラクタ */
 	public Diffuser(int initX, int initY, int initOption) {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
@@ -140,7 +143,7 @@ public class Diffuser extends ObjEX implements java.io.Serializable {
 		}
 	}
 
-	// 設定メニュー
+	/** 設定メニュー */
 	public static boolean setupDiffuser(Diffuser d, boolean init) {
 		
 		JPanel mainPanel = new JPanel();

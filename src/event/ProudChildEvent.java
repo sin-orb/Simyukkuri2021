@@ -29,18 +29,20 @@ public class ProudChildEvent extends EventPacket implements java.io.Serializable
 	boolean bUnunActionFlag = true;
 	int nFromWaitCount = 0;
 
-	// 行動ステート
+	/** 行動ステート */
 	enum STATE {
-		GO,			// 移動
-		WAIT,		// 待機
-		START,		// イベント開始時
-		SING,		//おうた
-		PROUD,		//おちび自慢or要求
-		END,		// イベント終了時
+		/** 移動 */GO, 
+		/** 待機 */WAIT,
+		/** イベント開始時 */START,
+		/** おうた */SING,
+		/** おちび自慢or要求 */PROUD,
+		/** イベント終了時 */END,
 	}
-
+	/** 状態 */
 	public STATE state = STATE.GO;
-
+	/**
+	 * コンストラクタ.
+	 */
 	public ProudChildEvent(Body f, Body t, Obj tgt, int cnt) {
 		super(f, t, tgt, cnt);
 		priority = EventPriority.MIDDLE;
@@ -86,14 +88,6 @@ public class ProudChildEvent extends EventPacket implements java.io.Serializable
 	@Override
 	public void start(Body b) {
 		b.setCurrentEvent(this);
-	}
-
-	public boolean checkWait(Body b,int nWaitTime){
-		if( !b.checkWait(nWaitTime)){
-			return false;
-		}
-		b.setLastActionTime();
-		return true;
 	}
 
 	// 毎フレーム処理
@@ -361,10 +355,11 @@ public class ProudChildEvent extends EventPacket implements java.io.Serializable
 
 	// イベント目標に到着した際に呼ばれる
 	// trueを返すとイベント終了
+	@Override
 	public boolean execute(Body b) {
 		return false;
 	}
-
+	@Override
 	public void end(Body b) {
 		b.setCurrentEvent(null);
 		return;

@@ -88,16 +88,34 @@ import src.yukkuri.Yurusanae;
 import src.yukkuri.Yuuka;
 import src.yukkuri.Yuyuko;
 
+/***************************************************
+ * 各種オブジェクトの更新命令の発令所
+ * <br>各種オブジェクトのインスタンス生成
+ * <br>ゲーム内環境の保持
+*/
 public class Terrarium {
-
+	/**起動時間*/
 	public static int operationTime = 0;
+	/** 昼の時間 */
 	public static final int dayTime = 100 * 24 * 2 / 3;
+	/** 夜の時間 */
 	public static final int nightTime = 100 * 24 - dayTime;
 
+	/**
+	 * 昼夜の状態
+	 */
 	public static enum DayState {
-		MORNING, DAY, EVENING, NIGHT
+		/** 朝 */
+		MORNING,
+		/** 昼 */
+		DAY,
+		/** 夕方 */
+		EVENING,
+		/** 夜 */
+		NIGHT
 	};
 
+	/**ディヒューザーの出している蒸気の有無*/
 	public static boolean humid = false;
 	public static boolean antifungalSteam = false;
 	public static boolean orangeSteam = false;
@@ -112,16 +130,24 @@ public class Terrarium {
 	public static boolean rapidPregnantSteam = false;
 	public static boolean antiNonYukkuriDiseaseSteam = false;
 	public static boolean endlessFurifuriSteam = false;
-
+	/** 処理の最小時間単位*/
 	public static final int TICK = 1;
-
+	/**ゆっくりのリスト*/
 	private static ArrayList<Body> babyList = new ArrayList<Body>();
+	/**マップ全体が警戒モードになる時間*/
 	private final static int ALARM_PERIOD = 300; // 30 seconds
+	/**処理インターバル(軽量化のため)*/
 	private static int intervalCount = 0;
+	/**汎用長方形*/
 	private static Rectangle tmpRect = new Rectangle();
-
+	/** ランダム */
 	protected static Random rnd = new Random();
 
+	/**
+	 * セーブの実行部
+	 * @param file ファイル
+	 * @throws IOException IO例外
+	 */
 	public static void saveState(File file) throws IOException {
 		ObjectOutputStream out = new ObjectOutputStream(
 				new BufferedOutputStream(
@@ -136,6 +162,12 @@ public class Terrarium {
 		}
 	}
 
+	/**
+	 * セーブの実行部
+	 * @param file ファイル
+	 * @throws IOException IO例外
+	 * @throws ClassNotFoundException クラスの存在しない場合の例外
+	 */
 	public static void loadState(File file) throws IOException, ClassNotFoundException {
 		ObjectInputStream in = new ObjectInputStream(
 				new BufferedInputStream(
@@ -179,7 +211,10 @@ public class Terrarium {
 		System.gc();
 	}
 
-	// パニック時の挙動
+	/**
+	 *  パニック時の挙動
+	 * @param b ゆっくり
+	 */
 	private void checkPanic(Body b) {
 		if (b.isDead() || b.isPealed()) {
 			return;
@@ -187,8 +222,7 @@ public class Terrarium {
 		int minDistance;
 
 		// 全ゆっくりに対してチェック
-		ArrayList<Body> bodyList = SimYukkuri.world.currentMap.body;
-
+		Body[] bodyList = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
 		for (Body p : bodyList) {
 			// 自分同士のチェックは無意味なのでスキップ
 			if (p == b) {
@@ -217,7 +251,10 @@ public class Terrarium {
 		}
 	}
 
-	// 引火処理
+	/**
+	 *  引火処理
+	 * @param b ゆっくり
+	 */
 	private void checkFire(Body b) {
 		int minDistance;
 		// 燃えてないなら終了
@@ -225,7 +262,7 @@ public class Terrarium {
 			return;
 		}
 		// 全ゆっくりに対してチェック
-		ArrayList<Body> bodyList = SimYukkuri.world.currentMap.body;
+		Body[] bodyList = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
 
 		// 全ゆっくりに対してチェック
 		for (Body p : bodyList) {
@@ -250,12 +287,31 @@ public class Terrarium {
 		}
 	}
 
+	/**赤ゆの追加(胎生出産時用)
+	 *
+	 * @param x 発生場所X座標
+	 * @param y 発生場所Y座標
+	 * @param z 発生場所Z座標
+	 * @param dna 赤ゆのDNA
+	 * @param p1 母親
+	 * @param p2 父親
+	 */
 	private void addBaby(int x, int y, int z, Dna dna, Body p1, Body p2) {
 		babyList.add(makeBody(x, y, z + 1, dna, AgeState.BABY, p1, p2));
 		babyList.get(babyList.size() - 1).kick(0, 5, -2);
 
 	}
 
+	/**赤ゆの追加(茎式出産時用)
+	 *
+	 * @param x 発生場所X座標
+	 * @param y 発生場所Y座標
+	 * @param z 発生場所Z座標
+	 * @param dna 赤ゆのDNA
+	 * @param p1 母親
+	 * @param p2 父親
+	 * @param stalk 出生もとの茎(なければnull)
+	 */
 	private void addBaby(int x, int y, int z, Dna dna, Body p1, Body p2, Stalk stalk) {
 		babyList.add(makeBody(x, y, z, dna, AgeState.BABY, p1, p2));
 		Body b = babyList.get(babyList.size() - 1);
@@ -265,17 +321,54 @@ public class Terrarium {
 		b.setDropShadow(false);
 	}
 
+	/**赤ゆの追加(主に爆発四散時用)
+	 *
+	  * @param x 発生場所X座標
+	 * @param y 発生場所Y座標
+	 * @param z 発生場所Z座標
+	 * @param vx 初速X成分
+	 * @param vy 初速Y成分
+	 * @param vz 初速Z成分
+	 * @param dna 赤ゆのDNA
+	 * @param p1 母親
+	 * @param p2 父親
+	 */
 	private void addBaby(int x, int y, int z, int vx, int vy, int vz, Dna dna, Body p1, Body p2) {
 		babyList.add(makeBody(x, y, z + 1, dna, AgeState.BABY, p1, p2));
 		babyList.get(babyList.size() - 1).kick(vx, vy, vz);
 
 	}
 
+	/**ゆっくりの追加(出産用ショートカット)
+	 *
+	 * @param x 発生場所X座標
+	 * @param y 発生場所Y座標
+	 * @param z 発生場所Z座標
+	 * @param dna ゆっくりのDNA
+	 * @param age 追加時の年齢
+	 * @param p1 母親
+	 * @param p2 父親
+	 * @return 生成したゆっくり
+	 */
 	public Body makeBody(int x, int y, int z, Dna dna, AgeState age, Body p1, Body p2) {
-		return makeBody(x, y, z, dna.type, dna, age, p1, p2);
+		return makeBody(x, y, z, dna.type, dna, age, p1, p2, true);
 	}
 
-	public Body makeBody(int x, int y, int z, int type, Dna dna, AgeState age, Body p1, Body p2) {
+	/**ゆっくりの追加実行部
+	 *
+	 * @param x 発生場所X座標
+	 * @param y 発生場所Y座標
+	 * @param z 発生場所Z座標
+	 * @param dna 赤ゆのDNA
+	 * @param type ゆっくりの種類
+	 * @param age 追加時の年齢
+	 * @param p1 母親
+	 * @param p2 父親
+	 * @param buildNewFamily 家族を作成するかどうか
+	 * @return 生成したゆっくり
+	 */
+	public Body makeBody(int x, int y, int z, int type, Dna dna, AgeState age, Body p1, Body p2,
+			boolean buildNewFamily) {
 
 		Body b;
 		Body papa = p2;
@@ -316,7 +409,11 @@ public class Terrarium {
 			b = new Deibu(x, y, z, age, mama, papa);
 			break;
 		case DosMarisa.type:
-			b = new DosMarisa(x, y, z, age, mama, papa);
+			if (SimYukkuri.world.currentMap.makeOrKillDos(true)) {
+				b = new DosMarisa(x, y, z, age, mama, papa);
+			} else {
+				b = new Marisa(x, y, z, age, mama, papa);
+			}
 			break;
 		case Tarinai.type:
 			b = new Tarinai(x, y, z, age, mama, papa);
@@ -408,78 +505,6 @@ public class Terrarium {
 			if (dna.intelligence != null)
 				b.setIntelligence(dna.intelligence);
 		}
-		/*コンストラクタのほうに移植中
-		// 生い立ちの設定
-		Body.BodyRank eBodyRank = Body.BodyRank.KAIYU;
-		Body.PublicRank ePublicRank = Body.PublicRank.NONE;
-		if(mama != null){
-			Body.BodyRank eMotherBodyRank = mama.getBodyRank();
-			// 母親のランクに応じて変更
-			switch(eMotherBodyRank){
-				case KAIYU:// 飼いゆ
-					eBodyRank = Body.BodyRank.KAIYU;
-					break;
-				case NORAYU:// 野良ゆ
-					eBodyRank = Body.BodyRank.NORAYU;
-					break;
-				default:
-					break;			
-			}
-		
-			Body.PublicRank eMotherPubRank = mama.getPublicRank();
-			// 母親のランクに応じて変更
-			switch(eMotherPubRank){
-				case NONE:
-					ePublicRank = Body.PublicRank.NONE;
-					break;
-				case UnunSlave:// うんうん奴隷
-					ePublicRank = Body.PublicRank.UnunSlave;
-					break;
-				default:
-					break;			
-			}
-			/*
-			//　141229時点で飼いゆと野良ゆしか機能していないので他の選択肢はコメントアウト
-			switch(eMotherBodyRank)
-			{
-				case KAIYU:// 飼いゆ
-					eBodyRank = Body.BodyRank.KAIYU;
-					break;
-				case SUTEYU:// 捨てゆ
-					eBodyRank = Body.BodyRank.NORAYU_CLEAN;
-					break;
-				case NORAYU_CLEAN:// きれいな野良ゆ
-					eBodyRank = Body.BodyRank.NORAYU_CLEAN;
-					break;
-				case NORAYU:// 野良ゆ
-					eBodyRank = Body.BodyRank.NORAYU_CLEAN;
-					break;
-				case YASEIYU://　野生ゆ
-					eBodyRank = Body.BodyRank.NORAYU_CLEAN;
-					break;
-				default:
-					break;			
-			}
-			
-		}
-		// 生い立ちを設定
-		b.setBodyRank(eBodyRank);
-		b.setPublicRank(ePublicRank);
-		
-		// 先祖の情報を引き継ぐ
-		if( mama != null ){
-			ArrayList<Integer> anTempList = mama.getAncestorList();
-			int nType = mama.getType();
-			b.addAncestorList( anTempList );
-			b.addAncestorList( nType );
-		}
-		if( papa != null ){
-			ArrayList<Integer> anTempList = papa.getAncestorList();
-			int nType = papa.getType();
-			b.addAncestorList( anTempList );
-			b.addAncestorList( nType );
-		}*/
-
 		// 共存環境の場合
 		if (SimYukkuri.NAGASI_MODE == 2) {
 			int nCount = 0;
@@ -514,25 +539,57 @@ public class Terrarium {
 				b.setbImageNagasiMode(true);
 			}
 		}
-		// 家族の関係を設定
-		setNewFamily(mama, papa, b);
+		if (buildNewFamily) {
+			// 家族の関係を設定
+			setNewFamily(mama, papa, b);
+		}
 		return b;
 	}
 
+	/**ゆっくりの追加(一般用ショートカット)
+	 *
+	 * @param x 発生場所X座標
+	 * @param y 発生場所Y座標
+	 * @param z 発生場所Z座標
+	 * @param type ゆっくりの種類
+	 * @param age 追加時の年齢
+	 * @param p1 母親
+	 * @param p2 父親
+	 * @return 生成したゆっくり
+	 */
 	public Body addBody(int x, int y, int z, int type, AgeState age, Body p1, Body p2) {
-		Body ret = makeBody(x, y, z, type, null, age, p1, p2);
+		Body ret = makeBody(x, y, z, type, null, age, p1, p2, true);
 		SimYukkuri.world.currentMap.body.add(ret);
 		return ret;
 	}
 
+	/**ゆっくりをリストに登録*/
 	public void addBody(Body b) {
 		SimYukkuri.world.currentMap.body.add(b);
 	}
 
+	/**
+	 * うんうんの追加＆リスト登録
+	 *
+	 * @param x 発生場所X座標
+	 * @param y 発生場所Y座標
+	 * @param z 発生場所Z座標
+	 * @param b 主
+	 * @param type 種類
+	 */
 	public void addShit(int x, int y, int z, Body b, YukkuriType type) {
 		SimYukkuri.world.currentMap.shit.add(new Shit(x, y, z, b, type));
 	}
 
+	/**
+	 * ゆ下痢の追加＆リスト登録
+	 *
+	 * @param x 発生場所X座標
+	 * @param y 発生場所Y座標
+	 * @param z 発生場所Z座標
+	 * @param b 主
+	 * @param type 種類
+	 */
 	public void addCrushedShit(int x, int y, int z, Body b, YukkuriType type) {
 		Shit s = new Shit(x, y, z, b, type);
 		s.crushShit();
@@ -543,6 +600,16 @@ public class Terrarium {
 		SimYukkuri.world.currentMap.shit.add(s);
 	}
 
+	/**
+	 * 吐餡追加＆リスト登録
+	 *
+	 * @param x 発生場所X座標
+	 * @param y 発生場所Y座標
+	 * @param z 発生場所Z座標
+	 * @param b 主
+	 * @param type 種類
+	 * @return 生成した吐餡
+	 */
 	public Vomit addVomit(int x, int y, int z, Body body, YukkuriType type) {
 		Vomit v = new Vomit(x, y, z, body, type);
 		SimYukkuri.world.currentMap.vomit.add(v);
@@ -553,6 +620,15 @@ public class Terrarium {
 		return v;
 	}
 
+	/**
+	 * つぶれ吐餡追加＆リスト登録
+	 *
+	 * @param x 発生場所X座標
+	 * @param y 発生場所Y座標
+	 * @param z 発生場所Z座標
+	 * @param b 主
+	 * @param type 種類
+	 */
 	public void addCrushedVomit(int x, int y, int z, Body body, YukkuriType type) {
 		Vomit v = new Vomit(x, y, z, body, type);
 		v.crushVomit();
@@ -563,6 +639,23 @@ public class Terrarium {
 		SimYukkuri.world.currentMap.vomit.add(v);
 	}
 
+	/**エフェクト追加
+	 *
+	 * @param type エフェクトの種類の指定
+	 * @param x 発生場所X座標
+	 * @param y 発生場所Y座標
+	 * @param z 発生場所Z座標
+	 * @param vx 初期の移動量ベクトルX成分
+	 * @param vy 初期の移動量ベクトルY成分
+	 * @param vz 初期の移動量ベクトルZ成分
+	 * @param invert 初期の向き(0で左、1で右)
+	 * @param life 継続時間
+	 * @param loop アニメのループの有無
+	 * @param end ループが一周したら消えるか否か
+	 * @param grav 重力の影響の有無
+	 * @param front エフェクトが親オブジェクトの前後どっちか(trueが前)
+	 * @return できたエフェクト
+	 */
 	public Effect addEffect(EffectType type, int x, int y, int z, int vx, int vy, int vz,
 			boolean invert, int life, int loop, boolean end, boolean grav, boolean front) {
 		Effect ret = null;
@@ -583,15 +676,21 @@ public class Terrarium {
 		return ret;
 	}
 
+	/**マップ全体を危険と認知させる*/
 	public static void setAlarm() {
 		SimYukkuri.world.currentMap.alarm = true;
 		SimYukkuri.world.currentMap.alarmPeriod = ALARM_PERIOD;
 	}
 
+	/**マップ全体で危険か否かを取得する.*/
 	public static boolean getAlarm() {
 		return SimYukkuri.world.currentMap.alarm;
 	}
 
+	/**
+	 * 一日の明るさを管理
+	 * <br>ゲーム開始時を昼にしている都合上12時間ずれている
+	 * <br>0～6時：昼、6～8時：夕方、8～19時：夜、19～20時：朝、20～24時：昼*/
 	public static DayState getDayState() {
 		if ((operationTime) % (dayTime + nightTime) < nightTime / 5) {
 			return DayState.MORNING;
@@ -604,6 +703,7 @@ public class Terrarium {
 		}
 	}
 
+	/**ディヒューザーによる影響のリセット*/
 	public static void resetTerrariumEnvironment() {
 		antifungalSteam = false;
 		humid = false;
@@ -621,25 +721,17 @@ public class Terrarium {
 		endlessFurifuriSteam = false;
 	}
 
+	/**稼働インターバル取得*/
 	public static int getInterval() {
 		return intervalCount;
 	}
 
-	// 全オブジェクトの更新 スレッドと紛らわしいので名前変更
+	/** 全オブジェクトの更新 スレッドと紛らわしいので名前変更*/
 	public void stepRun() {
-
-		//		// ログファイル出力
-		//		if( SimYukkuri.DEBUG_OUTPUT )
-		//		{
-		//			String strLog = new String();StackTraceElement throwableStackTraceElement = new Throwable().getStackTrace()[0];strLog += throwableStackTraceElement.getClassName();strLog += " : ";strLog += throwableStackTraceElement.getMethodName();strLog += " : ";strLog += throwableStackTraceElement.getLineNumber();
-		//			strLog += " : Start stepRun";
-		//			LoggerYukkuri.outputLogFile(strLog);
-		//		}
-
+		//マップ状況を取得
 		MapPlaceData curMap = SimYukkuri.world.currentMap;
-
 		intervalCount = (++intervalCount) & 255;
-
+		//マップ上での緊張状態の経過
 		if (curMap.alarmPeriod >= 0) {
 			curMap.alarmPeriod--;
 			if (curMap.alarmPeriod <= 0) {
@@ -671,7 +763,9 @@ public class Terrarium {
 		*/
 		// 床置きの判定
 		Event ret = Event.DONOTHING;
+		//このリストに登録してないと接触物に対し処理がなされないので注意
 		List<ObjEX> platformList = SimYukkuri.world.getHitBaseList();
+		//このリストに登録してないと処理がなされないので注意
 		List<Obj> objList = SimYukkuri.world.getHitTargetList();
 
 		for (Iterator<ObjEX> i = platformList.iterator(); i.hasNext();) {
@@ -827,13 +921,10 @@ public class Terrarium {
 			if (o == null || o.isRemoved())
 				continue;
 
-			if ((Translate.getCurrentFieldMapNum(o.getX(), o.getY()) & FieldShapeBase.FIELD_FARM) == 0)
-			//if((curMap.fieldMap[(o.getX()<0)?0:(o.getX()>Translate.mapW?Translate.mapW:o.getX())][(o.getY()<0)?0:(o.getY()>Translate.mapH?Translate.mapH:o.getY())] & FieldShapeBase.FIELD_POOL) == 0)
-			{
+			if ((Translate.getCurrentFieldMapNum(o.getX(), o.getY()) & FieldShapeBase.FIELD_FARM) == 0) {
 				continue;
 			}
-			//if((curMap.fieldMap[o.getX()][o.getY()] & FieldShapeBase.FIELD_BELT) == 0) continue;
-
+			// 畑更新
 			for (Iterator<Farm> i = farmList.iterator(); i.hasNext();) {
 				Farm farm = i.next();
 				ret = farm.clockTick();
@@ -847,30 +938,6 @@ public class Terrarium {
 				}
 			}
 		}
-		/*
-				List<Beltconveyor> beltList = curMap.beltconveyor;
-				objList = SimYukkuri.world.getHitTargetList();
-				
-				for (Iterator<Beltconveyor> i = beltList.iterator(); i.hasNext();) {
-					Beltconveyor belt = i.next();
-					ret = belt.clockTick();
-					if (ret == Obj.Event.REMOVED) {
-						i.remove();
-						continue;
-					}
-		
-					for (Obj o : objList) {
-						if(o.isRemoved()) continue;
-						if((curMap.fieldMap[o.getX()][o.getY()] & FieldShapeBase.FIELD_BELT) == 0) continue;
-						if(!belt.mapContains(o.getX(), o.getY())) continue;
-		
-						if(belt.checkHitObj(o)) {
-							belt.processHitObj(o);
-							continue;
-						}
-					}
-				}
-		*/
 		// オブジェクト更新
 		List<ObjEX> objectList = SimYukkuri.world.getObjectList();
 		resetTerrariumEnvironment();
@@ -914,8 +981,6 @@ public class Terrarium {
 			}
 		}
 
-		// 畑更新
-
 		// うんうん更新
 		for (Iterator<Shit> i = curMap.shit.iterator(); i.hasNext();) {
 			Shit s = i.next();
@@ -943,14 +1008,10 @@ public class Terrarium {
 			}
 		}
 
-		// ゆっくり更新
 		boolean transCheck = (operationTime % 60 == 0);
 		Body transBody = null;
-		// ゆっくりの密度を環境ストレスとして算出
-		//		int stress = bodyList.size() * 10000 / (Terrarium.terrariumSizeParcent*Terrarium.terrariumSizeParcent);
-		for (Iterator<Body> i = curMap.body.iterator(); i.hasNext();) {
-			Body b = i.next();
-			//			b.putStress(stress); // Yukkuri is getting stress according as number of bodies.
+		Body[] bodies = curMap.body.toArray(new Body[0]);
+		for (Body b : bodies) {
 			ret = b.clockTick();
 			switch (ret) {
 			case DEAD:
@@ -991,7 +1052,6 @@ public class Terrarium {
 					b.disPlantStalks();
 				}
 				b.upDate();
-				//				b.setForcePanicClear();
 				continue;
 			case BIRTHBABY:
 				if (b.getAge() % 10 == 0) {
@@ -1035,6 +1095,10 @@ public class Terrarium {
 					}
 					b.getStalks().clear();
 				}
+				if (b.getBabyTypes().size() == 0 || b.getStalks().size() == 0) {
+					b.setHasBaby(false);
+					b.setHasStalk(false);
+				}
 				break;
 			case DOSHIT:
 				addShit(b.getX(), b.getY(), b.getZ() + b.getSize() / 15, b, b.getShitType());
@@ -1048,8 +1112,9 @@ public class Terrarium {
 				addVomit(b.getX(), b.getY(), b.getZ(), b, b.getShitType());
 				break;
 			case REMOVED:
-				i.remove();
+				//i.remove();
 				b.upDate();
+				b.remove();
 				continue;
 			default:
 				break;
@@ -1059,7 +1124,7 @@ public class Terrarium {
 			// 石判定
 			StoneLogic.checkPubble(b);
 			// パニック時は別処理
-			if (b.getPanicType() != null) {
+			if (b.getPanicType() != null && !b.isUnBirth() && !b.isDamagedHeavily()) {
 				checkPanic(b);
 			} else {
 				// イベント処理
@@ -1074,11 +1139,8 @@ public class Terrarium {
 					bHasChildren = true;
 				}
 
-				/*logic周り
-				 * 
-				 */
+				//logic周り
 				boolean bCheck = true;
-				//				if( bCheck )
 				if (b.getBlockedCount() == 0)
 					bCheck = true;
 				else
@@ -1204,14 +1266,17 @@ public class Terrarium {
 		operationTime += TICK;
 	}
 
-	// 家族の関係を設定
+	/** 家族の関係を設定
+	 *
+	 * @param b 対象ゆっくり
+	 * @param p 対象のつがい
+	 * @param bodyNewChild 新たに家族に加える新しい個体
+	 */
 	public void setNewFamily(Body b, Body p, Body bodyNewChild) {
 		if (b == null) {
 			return;
 		}
 		ArrayList<Body> childrenListOld = b.getChildrenList(); //　子供のリスト
-		ArrayList<Body> elderSisterListOld = b.getElderSisterList(); //　姉のリスト
-		ArrayList<Body> sisterListOld = b.getSisterList(); //　妹のリスト	
 
 		// 子供のリスト
 		Iterator<Body> itr = childrenListOld.iterator();

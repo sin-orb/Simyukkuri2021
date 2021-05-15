@@ -25,11 +25,11 @@ import src.item.Food.FoodType;
 import src.system.Cash;
 
 /***************************************************
-フードメーカー
-*/
+ * フードメーカー
+ */
 public class FoodMaker extends ObjEX implements java.io.Serializable {
 	static final long serialVersionUID = 1L;
-
+	/**処理対象(ゆっくり、うんうん、フード、吐餡、茎)*/
 	public static final int hitCheckObjType = ObjEX.YUKKURI | ObjEX.SHIT | ObjEX.FOOD | ObjEX.VOMIT | ObjEX.STALK;
 	private static final int images_num = 6; //このクラスの総使用画像数
 	private static int AnimeImagesNum[] = {images_num};//アニメごとに何枚使うか
@@ -71,7 +71,7 @@ public class FoodMaker extends ObjEX implements java.io.Serializable {
 													 FoodType.WASTE,
 
 													};
-
+	/** 画像ロード */
 	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
 		for( int i = 0; i < images_num; i++ ){
 			images[i] = ModLoader.loadItemImage(loader, "foodmaker" + File.separator + "foodmaker" + String.format("%03d",i+1) + ".png");
@@ -97,7 +97,7 @@ public class FoodMaker extends ObjEX implements java.io.Serializable {
 	public BufferedImage getShadowImage() {
 		return null;
 	}
-
+	/**境界線の取得*/
 	public static Rectangle getBounding() {
 		return boundary;
 	}
@@ -155,7 +155,6 @@ public class FoodMaker extends ObjEX implements java.io.Serializable {
 						objHitProcess( o );
 					}
 					else{
-//						processReady = false;
 						b.remove();
 					}
 				}
@@ -185,17 +184,14 @@ public class FoodMaker extends ObjEX implements java.io.Serializable {
 						stockFood = 5;
 						break;
 				}
-//				processReady = false;
 				f.remove();
 			}else if ( o.getObjType() == Type.SHIT){
 				Shit s = (Shit)o;
 				stockFood = 5+5;
-//				processReady = false;
 				s.remove();
 			}else if (o.getObjType() == Type.VOMIT ){
 				Vomit v = (Vomit)o;
 				stockFood = 5+5;
-//				processReady = false;
 				v.remove();
 			}
 
@@ -238,7 +234,6 @@ public class FoodMaker extends ObjEX implements java.io.Serializable {
 						foodAmount += 4;
 						break;
 					}
-//					processReady = false;
 					Cash.addCash(-getCost());
 					b.remove();
 				}
@@ -268,21 +263,18 @@ public class FoodMaker extends ObjEX implements java.io.Serializable {
 						foodType = foodTable[makeTable[stockFood][5]];
 						break;
 				}
-//				processReady = false;
 				Cash.addCash(-getCost());
 				f.remove();
 			}
 			else if ( o.getObjType() == Type.SHIT ){
 				Shit s = (Shit)o;
 				foodType = foodTable[makeTable[stockFood][10]];
-//				processReady = false;
 				Cash.addCash(-getCost());
 				s.remove();
 			}
 			else if (o.getObjType() == Type.VOMIT){
 				Vomit v = (Vomit)o;
 				foodType = foodTable[makeTable[stockFood][10]];
-//				processReady = false;
 				Cash.addCash(-getCost());
 				v.remove();
 			}
@@ -317,7 +309,7 @@ public class FoodMaker extends ObjEX implements java.io.Serializable {
 	public void removeListData(){
 		SimYukkuri.world.currentMap.foodmaker.remove(this);
 	}
-
+	/** コンストラクタ*/
 	public FoodMaker(int initX, int initY, int initOption) {
 		super(initX, initY, initOption);
 		setBoundary(boundary);

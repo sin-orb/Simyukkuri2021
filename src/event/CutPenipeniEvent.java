@@ -21,7 +21,9 @@ public class CutPenipeniEvent extends EventPacket implements java.io.Serializabl
 	private static final long serialVersionUID = 1L;
 	Random rnd = new Random();
 	int tick = 0 ;
-
+	/**
+	 * コンストラクタ.
+	 */
 	public CutPenipeniEvent(Body f, Body t, Obj tgt, int cnt) {
 		super(f, t, tgt, cnt);
 	}
@@ -29,6 +31,7 @@ public class CutPenipeniEvent extends EventPacket implements java.io.Serializabl
 	// 参加チェック
 	// ここで各種チェックを行い、イベントへ参加するかを返す
 	// また、イベント優先度も必要に応じて設定できる
+	@Override
 	public boolean checkEventResponse(Body b) {
 
 		priority = EventPriority.HIGH;
@@ -37,11 +40,13 @@ public class CutPenipeniEvent extends EventPacket implements java.io.Serializabl
 	}
 
 	// イベント開始動作
+	@Override
 	public void start(Body b) {
 	}
 
 	// 毎フレーム処理
 	// UpdateState.ABORTを返すとイベント終了
+	@Override
 	public UpdateState update(Body b) {
 		if(b.isUnBirth()){
 			b.wakeup();
@@ -125,11 +130,13 @@ public class CutPenipeniEvent extends EventPacket implements java.io.Serializabl
 
 	// イベント目標に到着した際に呼ばれる
 	// trueを返すとイベント終了
+	@Override
 	public boolean execute(Body b) {
 		return true;
 	}
 	
 	// イベント終了処理
+	@Override
 	public void end(Body b) {
 		b.setCalm();
 		b.setbPenipeniCutted(true);

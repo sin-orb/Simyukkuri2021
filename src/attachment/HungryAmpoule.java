@@ -42,7 +42,12 @@ public class HungryAmpoule extends Attachment {
 		0,		// アニメループ回数
 		1		// アニメ画像枚数
 	};
-	
+	/**
+	 * イメージをロードする.
+	 * @param loader ローダ
+	 * @param io イメージオブザーバ
+	 * @throws IOException IO例外
+	 */
 	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
 		
 		int baby = AgeState.BABY.ordinal();
@@ -75,8 +80,11 @@ public class HungryAmpoule extends Attachment {
 
 	@Override
 	protected Event update() {
-		if(!parent.isEating() && parent.getHungry() >= 50) {
-			parent.addHungry(-TICK * 50);
+		if(!parent.isEating()) {
+			parent.addHungry(-TICK * 1000);
+			if (parent.getHungry() < 0) {
+				parent.setHungry(0);
+			}
 		}
 		return Event.DONOTHING;
 	}

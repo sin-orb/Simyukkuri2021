@@ -75,67 +75,48 @@ public class Okazari extends Obj {
 			boundary[i].y = boundary[i].height - 1;
 		}
 	}
-	
-	public BufferedImage getImage() {
-//		if( okazariType == OkazariType.DEFAULT )
-//		{
-//			if( imageDefault == null )
-//			{
-//				BodyLayer layer = new BodyLayer();
-//				if( owner.direction == Direction.LEFT )
-//				{
-//					owner.getImage(ImageCode.ACCESSORY.ordinal(), Body.LEFT, layer, 0);
-//					imageDefault = layer.image[0];
-//				}else{
-//					owner.getImage(ImageCode.ACCESSORY.ordinal(), Body.RIGHT, layer, 0);
-//					imageDefault = layer.image[0];		
-//				}
-//			}
-//			return imageDefault;
-//		}
-		return images[okazariType.ordinal()][0];
-	}
-	
+	/**
+	 * ゴミからランダムなおかざりを取得する.
+	 * @param ageState 成長段階
+	 * @return おかざりのタイプ
+	 */
 	public static final OkazariType getRandomOkazari(AgeState ageState) {
 		int num = OKAZARI_START[ageState.ordinal()] + rnd.nextInt(OKAZARI_NUM[ageState.ordinal()]);
 		return OkazariType.values()[num];
 	}
-	
+	/**
+	 * おかざりのイメージを取得する.
+	 * @param type おかざりのタイプ
+	 * @param direction 方向
+	 * @return おかざりのイメージ
+	 */
 	public static final BufferedImage getOkazariImage(OkazariType type, int direction) {
 		return images[type.ordinal()][direction];
 	}
-
+	/**
+	 * おかざりのタイプを取得する.
+	 * @return おかざりのタイプ
+	 */
 	public OkazariType getOkazariType() {
 		return okazariType;
 	}
-
+	/**
+	 * おかざりのオフセットポジションを取得する.
+	 * @return おかざりのオフセットポジション
+	 */
 	public Point getOkazariOfsPos() {
-//System.out.println(offsetPos[owner.bodyAgeState.ordinal()]);
 		return offsetPos[owner.getBodyAgeState().ordinal()];
 	}
-
+	/**
+	 * コンストラクタ.
+	 * @param b ゆっくりのインスタンス
+	 * @param type おかざりのタイプ
+	 */
 	public Okazari(Body b, OkazariType type) {
 
 		owner = b;
 		okazariType = type;
 		if(okazariType.fileName == null) {
-			if( b != null )
-			{
-//				BodyLayer layer = new BodyLayer();
-//				owner.getImage(ImageCode.ACCESSORY.ordinal(), Body.LEFT, layer, 0);
-//				imageDefault = layer.image[0];
-//				if( b.direction == Direction.LEFT )
-//				{
-//					BodyLayer layer = new BodyLayer();
-//					owner.getImage(ImageCode.ACCESSORY.ordinal(), Body.LEFT, layer, 0);
-//					imageDefault = layer.image[0];
-//				}else{
-//					BodyLayer layer = new BodyLayer();
-//					owner.getImage(ImageCode.ACCESSORY.ordinal(), Body.RIGHT, layer, 0);
-//					imageDefault = layer.image[0];				
-//				}
-			}
-
 			offsetPos = null;
 			setBoundary(64, 127, 128, 128);
 		}

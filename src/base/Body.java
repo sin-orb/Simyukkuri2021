@@ -7,7 +7,7 @@ import java.awt.image.ImageObserver;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Map;
+import java.util.Iterator;
 import java.util.Set;
 
 import javax.imageio.ImageIO;
@@ -639,8 +639,6 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			return false;
 		}
 		// 実験 イベント中は空腹、睡眠、便意が増えないように
-		if (getCurrentEvent() != null)
-			return false;
 		if (getCurrentEvent() != null && getCurrentEvent().getPriority() != EventPacket.EventPriority.LOW) {
 			return false;
 		}
@@ -1452,6 +1450,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 				}
 
 				if (bToExcite) {
+					clearActionsForEvent();
 					setExciting(true);
 					excitingPeriod = 0;
 					if (isRaper()) {
@@ -2250,8 +2249,9 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	 * @return 何もしないイベント
 	 */
 	public Event checkFear() {
-		if (isNYD()) {
+		if (isNYD() || isUnBirth()) {
 			setPanic(false, null);
+			return Event.DONOTHING;
 		}
 		if (!isDead()) {
 			messageCount--;
@@ -3940,8 +3940,8 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		if (!isDamaged() && !Ffrag)
 			return;
 
-		int NormalP = 5;
-		int RudeP = 10;
+		int NormalP = 2;
+		int RudeP = 3;
 		boolean frag = false;
 		//性格によって頑固さが決まる
 		switch (getAttitude()) {
@@ -4507,19 +4507,25 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		setHasStalk(false);
 		//残念ながら茎だけ残して掃除することはできないので、茎も死んだ実ゆももろともに掃除される。
 		if (getStalks() != null) {
-			for (Stalk s : getStalks()) {
-				if (s.getBindBaby() != null) {
-					for (Body child : s.getBindBaby()) {
+			Iterator<Stalk> itr = getStalks().iterator();
+			while (itr.hasNext()) {
+				try {
+					Stalk s = itr.next();
+					Iterator<Body> chit = s.getBindBaby().iterator();
+					while (chit.hasNext()) {
+						Body child = chit.next();
 						if (child != null && (child.isDead() || child.isRemoved())) {
 							//まだ死んでない無い実ゆだけは茎から落ちる。
 							child.remove();
 						}
 					}
+					s.setPlantYukkuri(null);
+					s.remove();
+				} catch (Exception e) {
+					continue;
 				}
-				s.setPlantYukkuri(null);
-				s.remove();
-				setStalks(new ArrayList<>());
 			}
+			setStalks(new ArrayList<>());
 		}
 	}
 
@@ -4927,7 +4933,6 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	 */
 	public void forceToExcite() {
 		if (isRaper() && !isDead()) {
-			//if( FamilyActionLogic.isRapeTarget()  )
 			{
 				forceToRaperExcite(true);
 				EventLogic.addWorldEvent(new RaperWakeupEvent(this, null, null, 1), this,
@@ -4962,6 +4967,8 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			addLovePlayer(-50);
 			return;
 		}
+		clearActionsForEvent();
+		setToSukkiri(true);
 		wakeup();
 		setMessage(MessagePool.getMessage(this, MessagePool.Action.Excite));
 		setForceFace(ImageCode.EXCITING.ordinal());
@@ -4973,11 +4980,6 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	 *  ぺにぺに切断のトグル
 	 */
 	public void cutPenipeni() {
-		// 興奮状態ではないなら終了
-		//20210325 いつでも切れるようにした
-		//		if(exciting == false){
-		//			return;
-		//		}
 		// ぺにぺにがないなら復活
 		if (isbPenipeniCutted()) {
 			//TODO:ペにペに復活イベントを作成しないとリアルにならない？
@@ -5951,7 +5953,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 				changeUnyo((int) (ap * 0.11f), 0, 0);
 				enemy.changeUnyo(RND.nextInt(3), 0, 0);
 			}
-			if (isNotNYD()) {
+			if (isNotNYD() && !isUnBirth()) {
 				if (e instanceof HateNoOkazariEvent) {
 					//お飾りの迫害
 					setMessage(MessagePool.getMessage(this, MessagePool.Action.Scream), true);
@@ -6038,7 +6040,6 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		int kick = (weight - getWeight()) / 100;
 		if (kick < 1)
 			kick = 1;
-		//System.out.println(vecX+","+vecY+":"+kick);
 		vecX *= kick;
 		vecY *= kick;
 		// 手加減あり
@@ -6473,7 +6474,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			checkReactionStalkMother(UnbirthBabyState.ATTAKED);
 		}
 
-		if (isNotNYD()) {
+		if (isNotNYD() && !isUnBirth()) {
 			setPanicType(PanicType.BURN);
 		}
 		setWet(false);
@@ -6486,6 +6487,14 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	 */
 	public final void invNeedle() {
 		setNeedle(!isbNeedled());
+	}
+
+	/**
+	 * 針に刺さっているかどうかを取得（Shiftキーでの針に対応）.
+	 * @return 針に刺さっているかどうか
+	 */
+	public final boolean getNeedle() {
+		return isbNeedled();
 	}
 
 	/**
@@ -6600,7 +6609,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	 *  水をかける
 	 */
 	public void giveWater() {
-		if (!isDead()) {
+		if (!isDead() && !isUnBirth()) {
 			// 寝てたら起きる
 			if (isSleeping())
 				wakeup();
@@ -6656,7 +6665,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	 * @param eDepth 深さ
 	 */
 	public void inWater(Pool.DEPTH eDepth) {
-		if (!isDead()) {
+		if (!isDead() && !isUnBirth()) {
 			// 寝てたら起きる
 			if (isSleeping())
 				wakeup();
@@ -6768,7 +6777,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	 * @param pType パニックのタイプ
 	 */
 	public void setPanic(boolean flag, PanicType pType) {
-		if (isDead() || isSleeping())
+		if (isDead() || isSleeping() || isUnBirth())
 			return;
 		// 足りないゆは不動
 		if (isIdiot())
@@ -7008,7 +7017,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	 * @param fromY Y座標
 	 */
 	public void runAway(int fromX, int fromY) {
-		if (!canAction() || isExciting() || isAngry()) {
+		if (!canAction() || isExciting() || isAngry() || isUnBirth()) {
 			return;
 		}
 		int toX, toY;
@@ -7031,37 +7040,44 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	//--------------------------------------------------
 	@Override
 	public void remove() {
-		setRemoved(true);
-		getParents()[Parent.PAPA.ordinal()] = null;
-		getParents()[Parent.MAMA.ordinal()] = null;
-		if (getPartner() != null)
-			getPartner().setPartner(null);
-		setPartner(null);
-		removeAllStalks();
-		setStalks(null);
-		//ArrayList<Obj> bindObjList = new ArrayList<Obj>();
-		Body[] bodies = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
-		ArrayList<Body> copiedBodyList = new ArrayList<>(Arrays.asList(bodies));
-		copiedBodyList.remove(this);
-		getChildrenList().clear();
-		getElderSisterList().clear();
-		getSisterList().clear();
-		for (Body b : copiedBodyList) {
-			if (b == this || b == null) {
-				continue;
+		synchronized (SimYukkuri.lock) {
+			setRemoved(true);
+			getParents()[Parent.PAPA.ordinal()] = null;
+			getParents()[Parent.MAMA.ordinal()] = null;
+			if (getPartner() != null)
+				getPartner().setPartner(null);
+			setPartner(null);
+			removeAllStalks();
+			setStalks(null);
+			Body[] bodies = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
+			ArrayList<Body> copiedBodyList = new ArrayList<>(Arrays.asList(bodies));
+			if (SimYukkuri.world.currentMap.body.contains(this)) {
+				SimYukkuri.world.currentMap.body.remove(this);
 			}
-			if (b.getChildrenList() != null) {
-				b.getChildrenList().remove(this);
+			getChildrenList().clear();
+			getElderSisterList().clear();
+			getSisterList().clear();
+			for (Body b : copiedBodyList) {
+				if (b == this || b == null) {
+					continue;
+				}
+				if (b.getChildrenList() != null) {
+					b.getChildrenList().remove(this);
+				}
+				if (b.getElderSisterList() != null) {
+					b.getElderSisterList().remove(this);
+				}
+				if (b.getSisterList() != null) {
+					b.getSisterList().remove(this);
+				}
 			}
-			if (b.getElderSisterList() != null) {
-				b.getElderSisterList().remove(this);
+			for (Shit shit : SimYukkuri.world.currentMap.shit) {
+				if (this == shit.owner) {
+					shit.owner = null;
+				}
 			}
-			if (b.getSisterList() != null) {
-				b.getSisterList().remove(this);
-			}
+			getAttach().clear();
 		}
-		getAttach().clear();
-		SimYukkuri.world.currentMap.body = copiedBodyList;
 	}
 
 	/**
@@ -7958,13 +7974,27 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		}
 		return true;
 	}
+	
+	/**
+	 * 行動できる状態かチェックする
+	 * ここでは動いたら見た目におかしくなる状況のみチェック
+	 * @return
+	 */
+	public final boolean canActionForEvent() {
+		if (isDead() || getCriticalDamege() == CriticalDamegeType.CUT || isPealed() ||
+				isPacked() || isSleeping() || isShitting() || isBirth() || isSukkiri() || isbNeedled() ||
+				isNYD() || getBaryState() != BaryInUGState.NONE) {
+			return false;
+		}
+		return true;
+	}
 
 	@Override
 	public void grab() {
 		grabbed = true;
 		if (getBindStalk() != null) {
 			checkReactionStalkMother(UnbirthBabyState.KILLED);
-			if (getBindStalk().getBindBaby() != null) {
+			if (getBindStalk().getBindBaby() != null && getBindStalk().getBindBaby().indexOf(this) >= 0) {
 				getBindStalk().getBindBaby().set(getBindStalk().getBindBaby().indexOf(this), null);
 			}
 			setBindStalk(null);
@@ -7976,6 +8006,9 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	 */
 	@Override
 	public Event clockTick() {
+		if (Terrarium.operationTime % 100 == 0) {
+			checkRemovedFamilyList();
+		}
 		// if removed, remove body
 		if (isRemoved()) {
 			disPlantStalks();
@@ -8020,6 +8053,8 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 					SimYukkuri.mypane.terrarium.addCrushedVomit(x, y, z, this, getShitType());
 					SimYukkuri.mypane.terrarium.addCrushedShit(x, y, z, this, getShitType());
 					remove();
+					disPlantStalks();
+					return Event.REMOVED;
 				}
 			}
 			return Event.DEAD;
@@ -8162,7 +8197,6 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			if (getStalks() != null && getStalks().size() <= 0 && isHasStalk()) {
 				setHasStalk(false);
 			}
-			retval = Event.BIRTHBABY;
 			// 出産に失敗するとfalseになるのでリセット
 			if (getBabyTypes().size() != 0) {
 				setHasBaby(true);
@@ -8170,7 +8204,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			if (getStalks() != null && getStalks().size() != 0) {
 				setHasStalk(true);
 			}
-			return retval;
+			return Event.BIRTHBABY;
 		}
 		// 出産に失敗するとfalseになるのでリセット
 		if (getBabyTypes().size() != 0) {
@@ -8193,6 +8227,8 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 				dontMove = true;
 			if (isbNeedled())
 				dontMove = true;
+			if (isUnBirth())
+				dontMove = true;
 			setHappiness(Happiness.VERY_SAD);
 			moveBody(dontMove);
 			return retval;
@@ -8203,7 +8239,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		//check can move or not
 		if (getCriticalDamegeType() == CriticalDamegeType.CUT ||
 				(getFootBakeLevel() == FootBake.CRITICAL && !canflyCheck()) ||
-				isbNeedled() || getBaryState() != BaryInUGState.NONE) {
+				isbNeedled() || getBaryState() != BaryInUGState.NONE || isUnBirth()) {
 			dontMove = true;
 		}
 
@@ -8243,7 +8279,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		}
 
 		//以下3項目のまとめ
-		if (checkSleep() || isLockmove() || isMelt() || isFurifuri() || isEating()) {
+		if (checkSleep() || isLockmove() || isMelt() || isFurifuri() || isEating() || isUnBirth()) {
 			dontMove = true;
 		}
 
@@ -8303,7 +8339,58 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 				setEventResultAction(Event.DONOTHING);
 			}
 		}
+		calcPos();
+		calcMoveTarget();
 		return retval;
+	}
+	/**
+	 * moveTargetが範囲外のとき、範囲内に収める
+	 */
+	public void calcMoveTarget() {
+		if (getMoveTarget() == null) {
+			return;
+		}
+		int mapX = Translate.mapW;
+		int mapY = Translate.mapH;
+		if (getMoveTarget().getX() < 0) {
+			getMoveTarget().setX(0);
+		}
+		if (getMoveTarget().getY() < 0) {
+			getMoveTarget().setY(0);
+		}
+		if (getMoveTarget().getX() > mapX) {
+			getMoveTarget().setX(mapX);
+		}
+		if (getMoveTarget().getX() > mapY) {
+			getMoveTarget().setX(mapY);
+		}
+	}
+
+	/**
+	 * Removeされたゆっくりが姉妹リスト、子リストにいたら削除する
+	 */
+	private void checkRemovedFamilyList() {
+		Body[] sisters = getSisterList().toArray(new Body[0]);
+		getSisterList().clear();
+		for (Body sister : sisters) {
+			if (!sister.isRemoved()) {
+				getSisterList().add(sister);
+			}
+		}
+		Body[] elderSisters = getElderSisterList().toArray(new Body[0]);
+		getElderSisterList().clear();
+		for (Body elderSister : elderSisters) {
+			if (!elderSister.isRemoved()) {
+				getElderSisterList().add(elderSister);
+			}
+		}
+		Body[] children = getChildrenList().toArray(new Body[0]);
+		getChildrenList().clear();
+		for (Body child : children) {
+			if (!child.isRemoved()) {
+				getChildrenList().add(child);
+			}
+		}
 	}
 
 	@Override
@@ -8514,112 +8601,6 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		}
 		//setlnLastActionTime(lnNowTime);
 		return true;
-	}
-
-	/**状態の出力*/
-	public void debugOutputState() {
-		// 名前、ID
-		StringBuffer strbufBodyState = new StringBuffer();
-		strbufBodyState.append("\nID:").append(this.getUniqueID()).append(", ");
-		strbufBodyState.append("Name:").append(this.getNameJ()).append(", ");
-		strbufBodyState.append("Age:").append(super.getAge()).append("\n");
-
-		// 行動フラグ
-		strbufBodyState.append("purposeOfMoving: ").append(this.purposeOfMoving).append(", ");
-
-		// 移動先、イベント
-		if (this.moveTarget == null) {
-			strbufBodyState.append("MoveTarget: Null, ");
-		} else {
-			strbufBodyState.append("MoveTarget:").append(this.moveTarget.getBx() + "," + this.moveTarget.getBy()).append(" , ");
-		}
-
-		if (this.getCurrentEvent() == null) {
-			strbufBodyState.append("Event: Null").append("\n");
-		} else {
-			strbufBodyState.append("Event:").append(this.getCurrentEvent().toString()).append("\n");
-		}
-
-		// 状態
-		strbufBodyState.append("非ゆっくり症耐性度:").append(this.checkNonYukkuriDiseaseTolerance()).append(",");
-		strbufBodyState.append("体力値:").append(this.getDamage()).append(",");
-		strbufBodyState.append("体力限界値:").append(this.getDamageLimit()).append(",");
-		strbufBodyState.append("満腹値:").append(this.getHungry()).append(",");
-		strbufBodyState.append("満腹限界値:").append(this.getHungryLimit()).append(",");
-		strbufBodyState.append("眠い:").append(this.isSleepy()).append(",");
-		strbufBodyState.append("足焼きレベル:").append(this.getFootBakeLevel().toString()).append(",\n");
-		strbufBodyState.append("病気レベル:").append(this.getSickPeriod()).append(",");
-		if (this.getFavItem() == null || this.getFavItem().size() == 0) {
-			strbufBodyState.append("お気に入りアイテム: なし").append(",");
-		} else {
-			strbufBodyState.append("お気に入りアイテム:");
-			for (Map.Entry<FavItemType, Obj> entry : this.getFavItem().entrySet()) {
-				strbufBodyState.append(entry.getKey() + ",");
-			}
-		}
-		strbufBodyState.append("致命傷:").append(this.getCriticalDamegeType()).append(",");
-		strbufBodyState.append("体重:").append(this.getWeight()).append(",");
-		strbufBodyState.append("あんこ量:").append(this.getBodyAmount()).append(",");
-		strbufBodyState.append("トラウマ:").append(this.getTrauma()).append(",\n");
-		if (this.getSisterList() == null || this.getSisterList().size() == 0) {
-			strbufBodyState.append("妹: なし").append(",");
-		} else {
-			strbufBodyState.append("妹: ");
-			for (Body y : this.getSisterList()) {
-				strbufBodyState.append(y.getUniqueID()).append(",");
-			}
-		}
-		if (this.getElderSisterList() == null || this.getElderSisterList().size() == 0) {
-			strbufBodyState.append("\n姉: なし").append(",");
-		} else {
-			strbufBodyState.append("\n姉: ");
-			for (Body y : this.getElderSisterList()) {
-				strbufBodyState.append(y.getUniqueID()).append(",");
-			}
-		}
-		if (this.getChildrenList() == null || this.getChildrenList().size() == 0) {
-			strbufBodyState.append("\n子: なし").append(",");
-		} else {
-			strbufBodyState.append("\n子: ");
-			for (Body y : this.getChildrenList()) {
-				strbufBodyState.append(y.getUniqueID()).append(",");
-			}
-		}
-		if (this.getAttach() == null || this.getAttach().size() == 0) {
-			strbufBodyState.append("\n装備品: なし").append(",");
-		} else {
-			strbufBodyState.append("\n装備品: ");
-			for (Attachment a : this.getAttach()) {
-				strbufBodyState.append(a.getClass()).append(",");
-			}
-		}
-		if (this.getTakeoutItem() == null || this.getTakeoutItem().size() == 0) {
-			strbufBodyState.append("運搬中アイテム: なし").append(",");
-		} else {
-			strbufBodyState.append("運搬中アイテム: ");
-			for (TakeoutItemType item : this.getTakeoutItem().keySet()) {
-				strbufBodyState.append(this.getTakeoutItem(item).getClass().toString() + ",");
-			}
-		}
-		strbufBodyState.append("幸福度: ").append(this.getHappiness()).append(",");
-		strbufBodyState.append("怒ってる: ").append(this.isAngry()).append(",");
-		strbufBodyState.append("怯えてる: ").append(this.isScare()).append(",");
-		strbufBodyState.append("父: ").append(this.getFather() != null ? this.getFather().getUniqueID() : "なし")
-				.append(",");
-		strbufBodyState.append("母: ").append(this.getMother() != null ? this.getMother().getUniqueID() : "なし")
-				.append(",");
-		strbufBodyState.append("食事中: ").append(this.isEating()).append(",");
-		strbufBodyState.append("痛み: ").append(this.getPainState()).append(",");
-		strbufBodyState.append("攻撃中: ").append(this.isStrike()).append(",\n");
-		strbufBodyState.append("命乞い中: ").append(this.isBeggingForLife()).append(",");
-		strbufBodyState.append("たかっているアリの数: ").append(this.getNumOfAnts()).append(",");
-		strbufBodyState.append("壁にブロックされた数: ").append(this.getBlockedCount()).append(",");
-		strbufBodyState.append("動ける: ").append(!this.isLockmove()).append(",");
-		strbufBodyState.append("父がレイパーか: ").append(this.isFatherRaper()).append(",");
-		strbufBodyState.append("パートナー: ").append(this.getPartner() != null ? this.getPartner().getUniqueID() : "なし")
-				.append(",");
-
-		System.out.println(strbufBodyState.toString());
 	}
 
 	/**

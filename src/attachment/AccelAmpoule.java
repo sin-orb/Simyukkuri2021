@@ -1,6 +1,5 @@
 package src.attachment;
 
-
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
@@ -14,7 +13,6 @@ import src.enums.AttachProperty;
 import src.enums.Direction;
 import src.enums.Event;
 
-
 /****************************************
  *  成長促進アンプル
  *
@@ -24,23 +22,23 @@ public class AccelAmpoule extends Attachment {
 	private static final long serialVersionUID = 1L;
 
 	private static final String POS_KEY = "AccelAmpoule";
-	private static BufferedImage[][] images;		// [年齢][左右反転]
+	private static BufferedImage[][] images; // [年齢][左右反転]
 	private static int[] imgW;
 	private static int[] imgH;
 	private static int[] pivX;
 	private static int[] pivY;
 	private static final int[] property = {
-		2,		// 赤ゆ用画像サイズ 原画をこの値で割る
-		2,		// 子ゆ用画像サイズ
-		1,		// 成ゆ用画像サイズ
-		1,		// 親オブジェクトの位置基準 	0:顔とお飾り向けの元サイズ 		1:妊娠などの膨らみも含むサイズ
-		0,		// アニメ速度
-		0,		// アニメループ回数
-		1		// アニメ画像枚数
+			2, // 赤ゆ用画像サイズ 原画をこの値で割る
+			2, // 子ゆ用画像サイズ
+			1, // 成ゆ用画像サイズ
+			1, // 親オブジェクトの位置基準 	0:顔とお飾り向けの元サイズ 		1:妊娠などの膨らみも含むサイズ
+			0, // アニメ速度
+			0, // アニメループ回数
+			1 // アニメ画像枚数
 	};
 
 	/***画像ロード*/
-	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
+	public static void loadImages(ClassLoader loader, ImageObserver io) throws IOException {
 
 		int baby = AgeState.BABY.ordinal();
 		int child = AgeState.CHILD.ordinal();
@@ -51,8 +49,10 @@ public class AccelAmpoule extends Attachment {
 
 		int w = images[adult][0].getWidth(io);
 		int h = images[adult][0].getHeight(io);
-		images[child][0] = ModLoader.scaleImage(images[adult][0], w / property[AttachProperty.CHILD_SIZE.ordinal()], h / property[AttachProperty.CHILD_SIZE.ordinal()]);
-		images[baby][0] = ModLoader.scaleImage(images[adult][0], w / property[AttachProperty.BABY_SIZE.ordinal()], h / property[AttachProperty.BABY_SIZE.ordinal()]);
+		images[child][0] = ModLoader.scaleImage(images[adult][0], w / property[AttachProperty.CHILD_SIZE.ordinal()],
+				h / property[AttachProperty.CHILD_SIZE.ordinal()]);
+		images[baby][0] = ModLoader.scaleImage(images[adult][0], w / property[AttachProperty.BABY_SIZE.ordinal()],
+				h / property[AttachProperty.BABY_SIZE.ordinal()]);
 
 		images[adult][1] = ModLoader.flipImage(images[adult][0]);
 		images[child][1] = ModLoader.flipImage(images[child][0]);
@@ -72,25 +72,30 @@ public class AccelAmpoule extends Attachment {
 
 	@Override
 	protected Event update() {
-		if(!parent.isAdult() && !parent.isDead()) {
-			parent.addAge(TICK * 10000);
+		if (!parent.isDead()) {
+			if (!parent.isAdult()) {
+				parent.addAge(TICK * 10000);
+			}
 		}
 		return Event.DONOTHING;
 	}
+
 	@Override
 	public BufferedImage getImage(Body b) {
-		if(b.getDirection() == Direction.RIGHT) {
+		if (b.getDirection() == Direction.RIGHT) {
 			return images[parent.getBodyAgeState().ordinal()][1];
 		}
 		return images[parent.getBodyAgeState().ordinal()][0];
 	}
+
 	@Override
-	public void resetBoundary(){
+	public void resetBoundary() {
 		setBoundary(pivX[parent.getBodyAgeState().ordinal()],
-					pivY[parent.getBodyAgeState().ordinal()],
-					imgW[parent.getBodyAgeState().ordinal()],
-					imgH[parent.getBodyAgeState().ordinal()]);
+				pivY[parent.getBodyAgeState().ordinal()],
+				imgW[parent.getBodyAgeState().ordinal()],
+				imgH[parent.getBodyAgeState().ordinal()]);
 	}
+
 	/**コンストラクタ
 	 * @param body 装着されるゆっくり
 	 */
@@ -98,19 +103,17 @@ public class AccelAmpoule extends Attachment {
 		super(body);
 		setAttachProperty(property, POS_KEY);
 		setBoundary(pivX[parent.getBodyAgeState().ordinal()],
-					pivY[parent.getBodyAgeState().ordinal()],
-					imgW[parent.getBodyAgeState().ordinal()],
-					imgH[parent.getBodyAgeState().ordinal()]);
+				pivY[parent.getBodyAgeState().ordinal()],
+				imgW[parent.getBodyAgeState().ordinal()],
+				imgH[parent.getBodyAgeState().ordinal()]);
 		value = 1000;
 		cost = 0;
 		//処理インターバルの変更
-		processInterval =100;
+		processInterval = 100;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "成長促進アンプル";
 	}
 }
-
-

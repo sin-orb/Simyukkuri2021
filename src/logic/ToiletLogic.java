@@ -9,7 +9,6 @@ import src.base.EventPacket;
 import src.base.Obj;
 import src.draw.Translate;
 import src.enums.AgeState;
-import src.enums.CoreAnkoState;
 import src.enums.ImageCode;
 import src.enums.Intelligence;
 import src.enums.PublicRank;
@@ -78,8 +77,8 @@ public class ToiletLogic {
 		}
 		// うんうん奴隷がいれば運ばない
 		if( bCanTransport  ){
-			ArrayList<Body> bodylist = SimYukkuri.world.currentMap.body;
-			for(Body bodyOther: bodylist){
+			Body[] bodyList = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
+			for(Body bodyOther : bodyList){
 				if(bodyOther == b || bodyOther.isDead() || bodyOther.isRemoved() ){
 					continue;
 				}
@@ -97,7 +96,7 @@ public class ToiletLogic {
 		if( bCanTransport ){
 			for (Shit s: shitList) {
 				if(s.getZ() != b.getZ()) continue;
-				if(s.owner != b ) continue;
+				if( b!= s.owner ) continue;
 
 				// 壁があるなら無視
 				if (Barrier.acrossBarrier(b.getX(), b.getY(), s.getX(), s.getY(), Barrier.MAP_BODY[b.getBodyAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {

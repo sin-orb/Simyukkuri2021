@@ -17,12 +17,13 @@ import src.enums.Type;
 */
 public class Bed extends ObjEX implements java.io.Serializable {
 	static final long serialVersionUID = 1L;
-
+	/**画像の入れ物*/
 	private static BufferedImage[] images;
+	/**判定用長方形*/
 	private static Rectangle boundary = new Rectangle();
-
+	/**ベッドのランク*/
 	private ItemRank itemRank;
-	
+	/**画像読み込み*/
 	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
 
 		images = new BufferedImage[3];
@@ -45,7 +46,7 @@ public class Bed extends ObjEX implements java.io.Serializable {
 	public BufferedImage getShadowImage() {
 		return null;
 	}
-
+	/**境界線の取得*/
 	public static Rectangle getBounding() {
 		return boundary;
 	}
@@ -60,7 +61,12 @@ public class Bed extends ObjEX implements java.io.Serializable {
 		return value;
 	}
 	
-	// initOption = 1 : 野良用
+	/**
+	 * 初期設定
+	 * @param initX x座標
+	 * @param initY ｙ座標
+	 * @param initOption ランク(0:普通、1:野良用)
+	 */
 	public Bed(int initX, int initY, int initOption) {
 		super(initX, initY, initOption);
 		setBoundary(boundary);

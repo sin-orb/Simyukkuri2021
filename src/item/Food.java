@@ -14,12 +14,12 @@ import src.enums.ObjEXType;
 import src.enums.Type;
 
 /***************************************************
-食べ物
-*/
+ * 食べ物
+ */
 public class Food extends ObjEX implements java.io.Serializable {
 	static final long serialVersionUID = 2L;
 
-	// 空き皿テーブル
+	/** 空き皿画像テーブル*/
 	public static enum EmptyImage {
 		DISH("empty.png"),
 		SWEETS("sweets_empty.png"),
@@ -39,7 +39,7 @@ public class Food extends ObjEX implements java.io.Serializable {
 		}
 	}
 	
-	// 食料タイプテーブル
+	/** 食料タイプテーブル */
 	public static enum FoodType {
 			// 値段 見た目  量         画像          空き皿           影
 		SWEETS1( 500, 999, 100*24*2, "sweets1.png", EmptyImage.SWEETS, true),
@@ -91,6 +91,7 @@ public class Food extends ObjEX implements java.io.Serializable {
 	}
 
 	private FoodType foodType;
+	/**量*/
 	public int amount;
 
 	private static BufferedImage[] emptyImages = new BufferedImage[EmptyImage.values().length];
@@ -100,7 +101,10 @@ public class Food extends ObjEX implements java.io.Serializable {
 	private static Rectangle[] boundary = new Rectangle[FoodType.values().length];
 
 	private static BufferedImage shadowImages;
-
+	/**
+	 * 画像ロード
+	 * <br>空のエサ皿→餌入りのエサ皿→影　の順に読み込み
+	 */
 	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
 		
 		for(EmptyImage i :EmptyImage.values()) {
@@ -138,16 +142,17 @@ public class Food extends ObjEX implements java.io.Serializable {
 		}
 		return 1;
 	}
-
+	/** 影イメージの取得 */
+	@Override
 	public BufferedImage getShadowImage() {
 		return shadowImages;
 	}
-
+	/**境界線の取得*/
 	public static Rectangle getBounding() {
 		return boundary[0];
 	}
 
-	// 餌ごとにサイズが違うので専用メソッド化
+	/**餌ごとにサイズが違うので専用メソッド化*/
 	public static Rectangle getFoodBounding(FoodType type) {
 		return boundary[type.ordinal()];
 	}
@@ -166,7 +171,12 @@ public class Food extends ObjEX implements java.io.Serializable {
 	public int getLooks() {
 		return foodType.looks;
 	}
-
+	/**
+	 * コンストラクタ
+	 * @param initX x座標
+	 * @param initY y座標
+	 * @param initOption 0:飼い用、1;野良用
+	 */
 	public Food(int initX, int initY, int initOption) {
 		super(initX, initY, initOption);
 		// 森なら野生に変更
@@ -213,15 +223,15 @@ public class Food extends ObjEX implements java.io.Serializable {
 		objEXType = ObjEXType.FOOD;
 		setRemoved(false);
 	}
-
+	/**フードタイプ取得*/
 	public FoodType getFoodType() {
 		return foodType;
 	}
-
+	/**空かどうか*/
 	public boolean isEmpty() {
 		return (amount == 0);
 	}
-
+	/**餌を食べられる処理*/
 	public void eatFood(int eatAmount)
 	{
 		if (isEmpty()) {

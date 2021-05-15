@@ -30,14 +30,19 @@ public class BegForLifeEvent extends EventPacket implements java.io.Serializable
 
 	int tick = 0 ;
 	private int wait = 0 ;
-
+	/**
+	 * コンストラクタ.
+	 */
 	public BegForLifeEvent(Body f, Body t, Obj tgt, int cnt) {
 		super(f, t, tgt, cnt);
 	}
 
-	// 参加チェック
-	// ここで各種チェックを行い、イベントへ参加するかを返す
-	// また、イベント優先度も必要に応じて設定できる
+	/**
+	 *  参加チェック
+	 *  ここで各種チェックを行い、イベントへ参加するかを返す
+	 *  また、イベント優先度も必要に応じて設定できる
+	 */
+	@Override
 	public boolean checkEventResponse(Body b) {
 
 		priority = EventPriority.HIGH;
@@ -45,12 +50,18 @@ public class BegForLifeEvent extends EventPacket implements java.io.Serializable
 		return false;
 	}
 
-	// イベント開始動作
+	/**
+	 *  イベント開始動作
+	 */
+	@Override
 	public void start(Body b) {
 	}
 
-	// 毎フレーム処理
-	// UpdateState.ABORTを返すとイベント終了
+	/**
+	 * 毎フレーム処理
+	 * UpdateState.ABORTを返すとイベント終了
+	 */
+	@Override
 	public UpdateState update(Body b) {
 		if(b.isTalking()){
 //			b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.ApologyToHuman), 20, false, true);
@@ -179,13 +190,18 @@ public class BegForLifeEvent extends EventPacket implements java.io.Serializable
 		return null;
 	}
 
-	// イベント目標に到着した際に呼ばれる
-	// trueを返すとイベント終了
+	/**
+	 * イベント目標に到着した際に呼ばれる
+	 * trueを返すとイベント終了
+	 */
+	@Override
 	public boolean execute(Body b) {
 		return true;
 	}
 
-	//もしもの後始末
+	/**
+	 * もしもの後始末
+	 */
 	@Override
 	public void end(Body b) {
 		b.setBegging(false);

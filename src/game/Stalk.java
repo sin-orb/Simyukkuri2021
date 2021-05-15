@@ -35,9 +35,14 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 
 	private Body plantYukkuri = null;		// この茎が生えてる親
 	private ArrayList<Body> bindBaby = new ArrayList<Body>();	// この茎にぶら下がってる子
-	
+	/** （食べたときの）量 */
 	public int amount = 0;
-
+	/**
+	 * イメージをロードする.
+	 * @param loader ローダ
+	 * @param io イメージオブザーバ
+	 * @throws IOException IO例外
+	 */
 	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
 		final String path = "images/yukkuri/general/";
 		for( int i = 0; images_num > i ; i++ ){
@@ -66,7 +71,10 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 		if(plantYukkuri == null) return images[2];
 		return null;
 	}
-
+	/**
+	 * 方向を設定する.
+	 * @param dir 方向
+	 */
 	public void setDirection( int dir ) {
 		if ( dir == 0 ){
 			option = 0;
@@ -105,11 +113,17 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 	public void removeListData(){
 		SimYukkuri.world.currentMap.stalk.remove(this);
 	}
-	
+	/**
+	 * この茎をはやしているゆっくりを設定する.
+	 * @param b この茎をはやしているゆっくり
+	 */
 	public void setPlantYukkuri( Body b ) {
 		plantYukkuri = b;
 	}
-	
+	/**
+	 * この茎をはやしているゆっくりを取得する.
+	 * @return この茎をはやしているゆっくり
+	 */
 	public Body getPlantYukkuri() {
 		return plantYukkuri;
 	}
@@ -118,17 +132,25 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 	public Obj getBindObj() {
 		return getPlantYukkuri();
 	}
-
+	/**
+	 * この茎に実ゆっくりを追加する.
+	 * @param b この茎に生やそうとしている実ゆっくり
+	 */
 	public void setBindBaby( Body b ) {
 		if ( bindBaby.size() < 5 ) {
 			bindBaby.add(b);
 		}
 	}
-	
+	/**
+	 * この茎に生えている実ゆっくりを取得する.
+	 * @return この茎に生えている実ゆっくり
+	 */
 	public ArrayList<Body> getBindBaby() {
 		return bindBaby;
 	}
-	
+	/**
+	 * 茎から実ゆっくりをすべて取り除く.
+	 */
 	public void disBindBabys() {
 		if ( plantYukkuri != null  && plantYukkuri.getStalks() != null) {
 			plantYukkuri.getStalks().set(plantYukkuri.getStalks().indexOf( this ), null );
@@ -139,7 +161,10 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 			}
 		}
 	}
-
+	/**
+	 * X座標を設定する.
+	 * @param X座標
+	 */
 	public void setX (int X)
 	{
 		if (X < 0 && plantYukkuri == null) {
@@ -152,7 +177,10 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 			x = X;
 		}
 	}
-
+	/**
+	 * Y座標を設定する.
+	 * @param Y座標
+	 */
 	public void setY (int Y) {
 		if (Y < 0 && plantYukkuri == null) {
 			y = 0;
@@ -164,7 +192,10 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 			y = Y;
 		}
 	}
-
+	/**
+	 * Z座標を設定する.
+	 * @param Z座標
+	 */
 	public void setZ(int Z)
 	{
 		if (Z < nMostDepth && plantYukkuri == null) {
@@ -182,7 +213,10 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 			z = Z;
 		}
 	}
-
+	/**
+	 * この茎がゆっくりから生えている状態であるかどうかを取得する.
+	 * @return この茎がゆっくりから生えている状態であるかどうか
+	 */
 	public boolean isPlantYukkuri(){
 		for ( Body b : bindBaby ){
 			if ( b != null ){
@@ -191,7 +225,10 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 		}
 		return (plantYukkuri!=null);
 	}
-
+	/**
+	 * 茎を食べる.
+	 * @param eatAmount 食べる量
+	 */
 	public void eatStalk(int eatAmount)
 	{
 		amount -= eatAmount;
@@ -214,7 +251,7 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 		}
 		setPlantYukkuri(null);
 	}
-	
+	@Override
 	public Event clockTick()
 	{
 		setAge(getAge() + TICK);
@@ -269,9 +306,15 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 			}
 		}
 		upDate();
+		calcPos();
 		return Event.DONOTHING;
 	}
-
+	/**
+	 * コンストラクタ.
+	 * @param initX 初期X座標
+	 * @param initY 初期Y座標
+	 * @param initOption オプション
+	 */
 	public Stalk(int initX, int initY, int initOption) {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
@@ -279,6 +322,7 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 		objEXType = ObjEXType.STALK;
 		amount = 100*24*5;
 		SimYukkuri.world.currentMap.stalk.add(this);
+		calcPos();
 	}
 
 	@Override
@@ -291,6 +335,20 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 	public int objHitProcess(Obj o) {
 		// TODO 自動生成されたメソッド・スタブ
 		return 0;
+	}
+	
+	@Override
+	public void remove() {
+		plantYukkuri = null;
+		Body[] babies = getBindBaby().toArray(new Body[0]);
+		for (Body baby : babies) {
+			if (baby != null) {
+				baby.setBindStalk(null);
+				baby.setBindObj(null);
+			}
+		}
+		bindBaby.clear();
+		super.remove();
 	}
 }
 

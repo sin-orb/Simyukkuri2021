@@ -26,13 +26,16 @@ public class ProposeEvent extends EventPacket implements java.io.Serializable {
 	int tick = 0;
 	Random rnd = new Random();
 	protected boolean started =false;
-
+	/**
+	 * コンストラクタ.
+	 */
 	public ProposeEvent(Body f, Body t, Obj tgt, int cnt) {
 		super(f, t, tgt, cnt);
 		priority = EventPriority.HIGH;
 	}
 
 	// 参加チェック
+	@Override
 	public boolean checkEventResponse(Body b) {
 		if(b==getFrom()||b==to)return true;
 
@@ -40,6 +43,7 @@ public class ProposeEvent extends EventPacket implements java.io.Serializable {
 	}
 
 	// イベント開始動作
+	@Override
 	public void start(Body b) {
 		to.wakeup();
 		getFrom().setCurrentEvent(this);
@@ -51,6 +55,7 @@ public class ProposeEvent extends EventPacket implements java.io.Serializable {
 
 	// 毎フレーム処理
 	// UpdateState.ABORTを返すとイベント終了
+	@Override
 	public UpdateState update(Body b) {
 		if(getFrom()==null || to==null || getFrom().isDead() || getFrom().isRemoved())return UpdateState.ABORT;
 		//相手が死んだか 相手が消えてしまったか非ゆっくり症発症したらイベント中断
@@ -108,6 +113,7 @@ public class ProposeEvent extends EventPacket implements java.io.Serializable {
 //		from.setCalm();
 //		from.setForceFace(ImageCode.EXCITING.ordinal());
 		getFrom().setExciting(true);
+		getFrom().clearActionsForEvent();
 		//相手も興奮して、ぺにぺに相撲になるのの防止
 		if(to.isExciting()){
 			to.setCalm();
@@ -123,6 +129,7 @@ public class ProposeEvent extends EventPacket implements java.io.Serializable {
 
 	// イベント目標に到着した際に呼ばれる
 	// trueを返すとイベント終了
+	@Override
 	public boolean execute(Body b) {
 		if(to.isGrabbed()){
 			return false;
@@ -283,6 +290,7 @@ public class ProposeEvent extends EventPacket implements java.io.Serializable {
 			//成功時はすっきりを迫る
 			if(getFrom().getPartner() == to){
 				getFrom().setHappiness(Happiness.VERY_HAPPY);
+				getFrom().clearActionsForEvent();
 				getFrom().setExciting(true);
 				getFrom().setForceFace(ImageCode.EXCITING.ordinal());
 				getFrom().setBodyEventResMessage(MessagePool.getMessage(getFrom(), MessagePool.Action.LetsPlay), 30, true, false);
@@ -306,7 +314,12 @@ public class ProposeEvent extends EventPacket implements java.io.Serializable {
 		return false;
 	}
 
-	//fのプロポーズのtによる判定。プロポーズはfがした側、tがされた側
+	/**
+	 * fのプロポーズのtによる判定。プロポーズはfがした側、tがされた側
+	 * @param f プロポーズした側
+	 * @param t プロポーズされた側
+	 * @return プロポーズ成功かどうか
+	 */
 	public boolean acceptPropose(Body f,Body t){
 		//既婚
 		if(t.getPartner()!=null)return false;
@@ -321,6 +334,7 @@ public class ProposeEvent extends EventPacket implements java.io.Serializable {
 	}
 	
 	// イベント終了処理
+	@Override
 	public void end(Body b) {
 		getFrom().setCalm();
 		getFrom().setCurrentEvent(null);

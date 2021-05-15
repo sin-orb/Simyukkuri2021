@@ -32,17 +32,20 @@ import src.system.MapPlaceData;
  */
 
 /***************************************************
-壁
-*/
+ * 壁
+ * <br>これはほかのアイテムと違い、ObjEXを継承していないので注意。
+ */
 public class Barrier extends FieldShapeBase implements Serializable {
 	private static final long serialVersionUID = 1L;
-	
+	/**壁の線のデザイン*/
 	public static final Stroke WALL_STROKE = new BasicStroke(3.0f);
+	/**最小サイズ*/
 	private static final int MIN_SIZE = 1;
-	
+	/**壁の色*/
 	private Color color;
+	/**壁の属性*/
 	private int attribute;
-
+	/**色の取得*/
 	public Color getColor() {
 		return color;
 	}
@@ -56,14 +59,21 @@ public class Barrier extends FieldShapeBase implements Serializable {
 	public int getMinimumSize() {
 		return MIN_SIZE;
 	}
-
+	/**コンストラクタ
+	 *
+	 * @param fsx 設置起点のX座標
+	 * @param fsy 設置起点のY座標
+	 * @param fex 設置終点のX座標
+	 * @param fey 設置終点のY座標
+	 * @param type 属性(どんな壁か)
+	 */
 	public Barrier(int fsx, int fsy, int fex, int fey, int type) {
 		// フィールド座標が渡ってくるのでマップ座標も計算しておく
 		fieldSX = fsx;
 		fieldSY = fsy;
 		fieldEX = fex;
 		fieldEY = fey;
-
+		// フィールド座標が渡ってくるのでマップ座標も計算しておく
 		Point pos;
 		pos = Translate.invertLimit(fieldSX, fieldSY);
 		mapSX = Math.max(0, Math.min(pos.x, Translate.mapW));
@@ -104,7 +114,7 @@ public class Barrier extends FieldShapeBase implements Serializable {
 		MapPlaceData.setWallLine(SimYukkuri.world.currentMap.wallMap, mapSX, mapSY, mapEX, mapEY, true, attribute);
 		SimYukkuri.world.currentMap.barrier.add(this);
 	}
-
+	/**プレビューの線の描画*/
 	public static void drawPreview(Graphics2D g2, int sx, int sy, int ex, int ey) {
 		g2.drawLine(sx, sy, ex, ey);
 	}
@@ -114,7 +124,7 @@ public class Barrier extends FieldShapeBase implements Serializable {
 		g2.setColor(color);
 		g2.drawLine(fieldSX, fieldSY, fieldEX, fieldEY);
 	}
-
+	/**除去*/
 	public static void clearBarrier(Barrier b) {
 		int x1 = b.getMapSX();
 		int y1 = b.getMapSY();
@@ -124,7 +134,7 @@ public class Barrier extends FieldShapeBase implements Serializable {
 			MapPlaceData.setWallLine(SimYukkuri.world.currentMap.wallMap, x1, y1, x2, y2, false, b.attribute);
 		}
 	}
-
+	/**壁に引っかかるかのチェック*/
 	public static boolean onBarrier(int cx, int cy, int thx, int thy, int attr) {
 		MapPlaceData tmp = SimYukkuri.world.currentMap;
 		int sx = Math.max(0, cx - thx/2);
@@ -140,7 +150,14 @@ public class Barrier extends FieldShapeBase implements Serializable {
 	}
 		return false;
 	}
-
+	/**
+	 * ある点が壁の上かの判定
+	 *
+	 * @param cx ある点のX座標
+	 * @param cy ある点のY座標
+	 * @param thickness 壁の厚さ
+	 * @return ある点が壁の上か
+	 */
 	public static Barrier getBarrier(int cx, int cy, int thickness) {
 		ArrayList<Barrier> barrierList = SimYukkuri.world.currentMap.barrier;
 		
@@ -164,7 +181,15 @@ public class Barrier extends FieldShapeBase implements Serializable {
 		}
 		return null;
 	}
-
+	/**
+	 * 壁が動線(視線)上にあるかどうか
+	 * @param x1 起点のX座標
+	 * @param y1 起点のY座標
+	 * @param x2 終点のX座標
+	 * @param y2 終点のY座標
+	 * @param attr さえぎる壁の属性
+	 * @return 壁が動線(視線)上にあるかどうか
+	 */
 	public static boolean acrossBarrier(int x1, int y1, int x2, int y2, int attr) {
 		MapPlaceData tmp = SimYukkuri.world.currentMap;
 		

@@ -3,7 +3,6 @@ package src.util;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Random;
 
 import src.attachment.Ants;
@@ -158,10 +157,10 @@ public class YukkuriUtil {
 		// ディフューザーでハイブリッド薬がまかれていたら強制的にハイブリッドにする
 		if (Terrarium.hybridSteam) {
 			if ((fatherType == Reimu.type) && (motherType == Marisa.type) && (mother != null)
-					&& (rnd.nextInt(5) == 0)) {
+					&& rnd.nextBoolean()) {
 				babyType = mother.getHybridType(fatherType);
 			} else if ((fatherType == Marisa.type) && (motherType == Reimu.type) && (mother != null)
-					&& (rnd.nextInt(5) == 0)) {
+					&& rnd.nextBoolean()) {
 				babyType = mother.getHybridType(fatherType);
 			} else if (fatherType != motherType) {
 				babyType = HybridYukkuri.type;
@@ -315,64 +314,83 @@ public class YukkuriUtil {
 
 	// コピーしたくない変数はここで定義
 	// 主にゆっくり固有のステータス
-	private static final HashMap<String, Object> NO_COantProbabilityY_FIELD = new HashMap<String, Object>() {
-		{
-			put("bodySpr", null);
-			put("expandSpr", null);
-			put("braidSpr", null);
-
-			put("EATAMOUNT", null);
-			put("WEIGHT", null);
-			put("HUNGRYLIMIT", null);
-			put("SHITLIMIT", null);
-			put("DAMAGELIMIT", null);
-			put("STRESSLIMIT", null);
-			put("TANGLEVEL", null);
-			put("BABYLIMIT", null);
-			put("CHILDLIMIT", null);
-			put("LIFELIMIT", null);
-			put("STEantProbability", null);
-			put("RELAXantProbabilityERIOD", null);
-			put("EXCITEantProbabilityERIOD", null);
-			put("antProbabilityREGantProbabilityERIOD", null);
-			put("SLEEantProbabilityantProbabilityERIOD", null);
-			put("ACTIVEantProbabilityERIOD", null);
-			put("ANGRYantProbabilityERIOD", null);
-			put("SCAREantProbabilityERIOD", null);
-			put("sameDest", null);
-			put("DECLINEantProbabilityERIOD", null);
-			put("DISCIantProbabilityLINELIMIT", null);
-			put("BLOCKEDLIMIT", null);
-			put("DIRTYantProbabilityERIOD", null);
-			put("ROBUSTNESS", null);
-			put("STRENGTH", null);
-
-			put("speed", null);
-			put("msgType", null);
-			put("shitType", null);
-			put("Ycost", null);
-			put("YValue", null);
-			put("AValue", null);
-			put("anBabyName", null);
-			put("anChildName", null);
-			put("anAdultName", null);
-			put("anMyName", null);
-			put("anBabyNameD", null);
-			put("anChildNameD", null);
-			put("anAdultNameD", null);
-			put("anMyNameD", null);
-		}
+	private static final String[] NOCOPY_FIELD = {
+			"bodySpr",
+			"expandSpr",
+			"braidSpr",
+			"EATAMOUNT",
+			"WEIGHT",
+			"HUNGRYLIMIT",
+			"SHITLIMIT",
+			"DAMAGELIMIT",
+			"STRESSLIMIT",
+			"TANGLEVEL",
+			"BABYLIMIT",
+			"CHILDLIMIT",
+			"LIFELIMIT",
+			"LOVEPLAYERLIMIT",
+			"ROTTINGTIME",
+			"STEP",
+			"RELAXPERIOD",
+			"EXCITEPERIOD",
+			"PREGPERIOD",
+			"SLEEPPERIOD",
+			"ACTIVEPERIOD",
+			"ANGRYPERIOD",
+			"SCAREPERIOD",
+			"sameDest",
+			"DECLINEPERIOD",
+			"DISCIPLINELIMIT",
+			"BLOCKEDLIMIT",
+			"DIRTYPERIOD",
+			"ROBUSTNESS",
+			"STRENGTH",
+			"EYESIGHT",
+			"INCUBATIONPERIOD",
+			"speed",
+			"Ycost",
+			"YValue",
+			"AValue",
+			"anBabyName",
+			"anChildName",
+			"anAdultName",
+			"anMyName",
+			"anBabyNameD",
+			"anChildNameD",
+			"anAdultNameD",
+			"anMyNameD",
+			"baseBodyFileName"
 	};
 
 	// ゆっくりのステータスをfrom->toへ複製
 	// シャローコピーなので複製元はbodyListから外しておかないと予期しない動作になるので注意
-	public static final void changeBody(Body to, Body from) {
+	public static final void changeBody(Body to, Body from) throws Exception {
 		Field[] fromField = null;
 		Class<?> toClass = null;
 		Field toField = null;
-
 		// Objクラスのコピー
 		fromField = from.getClass().getSuperclass().getSuperclass().getSuperclass().getDeclaredFields();
+		toClass = to.getClass().getSuperclass().getSuperclass().getSuperclass().getSuperclass();
+
+		for (int i = 0; i < fromField.length; i++) {
+			int mod = fromField[i].getModifiers();
+			if (Modifier.isFinal(mod)) {
+				continue;
+			}
+			if (Modifier.isStatic(mod)) {
+				continue;
+			}
+			if (isNoCopyField(fromField[i].getName())) {
+				continue;
+			}
+			toField = toClass.getDeclaredField(fromField[i].getName());
+			toField.setAccessible(true);
+			fromField[i].setAccessible(true);
+			toField.set(to, fromField[i].get(from));
+		}
+
+		// BodyAttributesクラスのコピー
+		fromField = from.getClass().getSuperclass().getSuperclass().getDeclaredFields();
 		toClass = to.getClass().getSuperclass().getSuperclass().getSuperclass();
 
 		for (int i = 0; i < fromField.length; i++) {
@@ -383,19 +401,17 @@ public class YukkuriUtil {
 			if (Modifier.isStatic(mod)) {
 				continue;
 			}
-			try {
-				toField = toClass.getDeclaredField(fromField[i].getName());
-				toField.setAccessible(true);
-				fromField[i].setAccessible(true);
-				toField.set(to, fromField[i].get(from));
-			} catch (Exception e) {
-				e.printStackTrace();
+			if (isNoCopyField(fromField[i].getName())) {
 				continue;
 			}
+			toField = toClass.getDeclaredField(fromField[i].getName());
+			toField.setAccessible(true);
+			fromField[i].setAccessible(true);
+			toField.set(to, fromField[i].get(from));
 		}
 
-		// BodyAttributesクラスのコピー
-		fromField = from.getClass().getSuperclass().getSuperclass().getDeclaredFields();
+		// Bodyクラスのコピー
+		fromField = from.getClass().getSuperclass().getDeclaredFields();
 		toClass = to.getClass().getSuperclass().getSuperclass();
 
 		for (int i = 0; i < fromField.length; i++) {
@@ -406,43 +422,17 @@ public class YukkuriUtil {
 			if (Modifier.isStatic(mod)) {
 				continue;
 			}
-			try {
-				toField = toClass.getDeclaredField(fromField[i].getName());
-				toField.setAccessible(true);
-				fromField[i].setAccessible(true);
-				toField.set(to, fromField[i].get(from));
-			} catch (Exception e) {
-				e.printStackTrace();
+			if (isNoCopyField(fromField[i].getName())) {
 				continue;
 			}
-		}
-
-		// Bodyクラスのコピー
-		fromField = from.getClass().getSuperclass().getDeclaredFields();
-		toClass = to.getClass().getSuperclass();
-
-		for (int i = 0; i < fromField.length; i++) {
-			int mod = fromField[i].getModifiers();
-			if (Modifier.isFinal(mod)) {
-				continue;
-			}
-			if (Modifier.isStatic(mod)) {
-				continue;
-			}
-			if (NO_COantProbabilityY_FIELD.containsKey(fromField[i].getName())) {
-				continue;
-			}
-			try {
-				toField = toClass.getDeclaredField(fromField[i].getName());
-				toField.setAccessible(true);
-				fromField[i].setAccessible(true);
-				toField.set(to, fromField[i].get(from));
-			} catch (Exception e) {
-				e.printStackTrace();
-				continue;
-			}
+			toField = toClass.getDeclaredField(fromField[i].getName());
+			toField.setAccessible(true);
+			fromField[i].setAccessible(true);
+			toField.set(to, fromField[i].get(from));
 
 		}
+		//まりさ、れいむクラスのコピーはしない（意味がない）
+
 		//--------------------------------------------------
 		// 家族関係の再設定
 		Body partner = from.getPartner();
@@ -466,7 +456,7 @@ public class YukkuriUtil {
 		to.setBodyRank(from.getBodyRank());
 		to.setPublicRank(from.getPublicRank());
 		// 年齢の補正
-		switch (to.getBodyAgeState()) {
+		switch (from.getBodyAgeState()) {
 		case BABY:
 			to.setAge(0);
 			break;
@@ -478,6 +468,15 @@ public class YukkuriUtil {
 			to.setAge(to.getCHILDLIMIT() + 1);
 			break;
 		}
+	}
+
+	private static boolean isNoCopyField(String name) {
+		for (String f : NOCOPY_FIELD) {
+			if (f.equals(name)) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -512,6 +511,7 @@ public class YukkuriUtil {
 			b.clearEvent();
 		}
 	}
+
 	/**
 	 * ランダムなゆっくりタイプを取得する.
 	 * ドスが親の場合は他のまりさが出る。

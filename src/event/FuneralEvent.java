@@ -40,9 +40,11 @@ public class FuneralEvent extends EventPacket implements java.io.Serializable {
 		GOODBYE,		//おわかれ
 		END,		// イベント終了時
 	}
-
+	/** 状態 */
 	public STATE state = STATE.GO;
-
+	/**
+	 * コンストラクタ.
+	 */
 	public FuneralEvent(Body f, Body t, Obj tgt, int cnt) {
 		super(f, t, tgt, cnt);
 		priority = EventPriority.HIGH;
@@ -89,14 +91,6 @@ public class FuneralEvent extends EventPacket implements java.io.Serializable {
 	@Override
 	public void start(Body b) {
 		b.setCurrentEvent(this);
-	}
-
-	public boolean checkWait(Body b,int nWaitTime){
-		if( !b.checkWait(nWaitTime)){
-			return false;
-		}
-		b.setLastActionTime();
-		return true;
 	}
 
 	// 毎フレーム処理
@@ -402,10 +396,11 @@ public class FuneralEvent extends EventPacket implements java.io.Serializable {
 
 	// イベント目標に到着した際に呼ばれる
 	// trueを返すとイベント終了
+	@Override
 	public boolean execute(Body b) {
 		return false;
 	}
-
+	@Override
 	public void end(Body b) {
 		b.setCurrentEvent(null);
 		return;

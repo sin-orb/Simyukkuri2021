@@ -13,11 +13,11 @@ import src.enums.ObjEXType;
 import src.enums.Type;
 
 /***************************************************
-おうち
-*/
+ * おうち
+ */
 public class House extends ObjEX implements java.io.Serializable {
 	static final long serialVersionUID = 1L;
-
+	/**おうちの種類テーブル*/
 	public static enum HouseTable {
 		HOUSE_NORA1("floor_nora1.png", "wall_nora1.png", "ceil_nora1.png", "door_nora1.png", 1),
 		HOUSE_NORA2("floor_nora2.png", "wall_nora2.png", "ceil_nora2.png", "door_nora2.png", 1),
@@ -41,7 +41,7 @@ public class House extends ObjEX implements java.io.Serializable {
 
 	private HouseTable houseType;
 	private ItemRank itemRank;
-
+	/**画像ロード*/
 	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
 
 		images = new BufferedImage[HouseTable.values().length][4];
@@ -70,7 +70,7 @@ public class House extends ObjEX implements java.io.Serializable {
 	public BufferedImage getShadowImage() {
 		return null;
 	}
-
+	/**境界線の取得*/
 	public static Rectangle getBounding() {
 		return boundary[0];
 	}
@@ -84,7 +84,12 @@ public class House extends ObjEX implements java.io.Serializable {
 	public int getValue() {
 		return value;
 	}
-	
+	/**
+	 * コンストラクタ
+	 * @param initX x座標
+	 * @param initY y座標
+	 * @param initOption 0:飼い用、1;野良用
+	 */
 	public House(int initX, int initY, int initOption) {
 		super(initX, initY, initOption);
 		houseType = HouseTable.values()[initOption];
@@ -94,8 +99,6 @@ public class House extends ObjEX implements java.io.Serializable {
 		objType = Type.PLATFORM;
 		objEXType = ObjEXType.HOUSE;
 		itemRank = ItemRank.values()[houseType.rank];
-		
-//		parts[0] = new HouseDummy(initX, initY, images, images[houseType.ordinal()][0]);
 
 		interval = 5000;
 

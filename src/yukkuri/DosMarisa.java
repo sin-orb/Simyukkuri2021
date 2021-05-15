@@ -19,7 +19,7 @@ import src.system.BodyLayer;
 import src.util.IniFileUtil;
 
 
-public class DosMarisa extends Body implements java.io.Serializable {
+public class DosMarisa extends Marisa implements java.io.Serializable {
 	static final long serialVersionUID = 2L;
 	public static final int type = 2006;
 	public static final String nameJ = "ドスまりさ";

@@ -44,7 +44,12 @@ public class Needle extends Attachment {
 		0,		// アニメループ回数
 		1		// アニメ画像枚数
 	};
-
+	/**
+	 * イメージをロードする.
+	 * @param loader ローダ
+	 * @param io イメージオブザーバ
+	 * @throws IOException IO例外
+	 */
 	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
 		
 		int baby = AgeState.BABY.ordinal();

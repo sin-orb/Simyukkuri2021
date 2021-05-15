@@ -116,7 +116,6 @@ public class Deibu extends Reimu implements java.io.Serializable {
 				{
 					int nRndIndex = RND.nextInt(nOtherVerCount+1);
 					anImageVerStateCtrlNagasi[type][0] = nRndIndex;
-					//System.out.println("nOtherVerCount " + nOtherVerCount + " , nRndIndex " + nRndIndex );
 					layer.image[index] = imagesNagasi[type][direction * directionOffsetNagasi[type][0]][getBodyAgeState().ordinal()][nRndIndex];
 				}else{
 					anImageVerStateCtrlNagasi[type][0] = 0;

@@ -21,17 +21,17 @@ abstract public class EventPacket implements java.io.Serializable{
 	/** イベント優先度。餌、睡眠などの標準処理に対する優先度
 	<br>ふりふり、のびのび ＜ LOW ＜ 食事、トイレ、睡眠など標準行動 ＜ MIDDLE ＜ かび、高ダメージなど生命の危険状態 ＜ HIGH*/
 	public static enum EventPriority {
-		LOW,						// 食事、トイレ、睡眠等でキャンセルされる低優先
-		MIDDLE,						// ダメージ50%以上でキャンセルされる標準優先
-		HIGH,						// 生きてる限りはイベントを実行しようとする
+		/** 食事、トイレ、睡眠等でキャンセルされる低優先 */LOW, 
+		/** ダメージ50%以上でキャンセルされる標準優先 */MIDDLE, 
+		/** 生きてる限りはイベントを実行しようとする */HIGH,
 	}
 
 	/** updateメソッドの戻り値
 	<br> 移動完了以外の条件でexecuteに移行させたい場合はFORCE_EXECを、イベントを中断したい場合はABORTを返す
 	*/
 	public static enum UpdateState {
-		FORCE_EXEC,
-		ABORT
+		/** イベント強制実行 */FORCE_EXEC,
+		/** イベント中断 */ABORT
 	}
 
 	/** イベントを発生させる側で設定する項目1
@@ -56,7 +56,8 @@ abstract public class EventPacket implements java.io.Serializable{
 
 	protected Random rnd = new Random();
 
-	/**コンストラクタ
+	/**
+	 * コンストラクタ
 	 *
 	 * @param f イベントを発した個体
 	 * @param t 特定の対象に向けた場合はその個体
@@ -98,7 +99,8 @@ abstract public class EventPacket implements java.io.Serializable{
 		target = o;
 	}
 
-	/** 内部ステータスを書き換えて終了など下の複雑な挙動を必要としないイベントはこのメソッドをオーバーライドする
+	/**
+	 *  内部ステータスを書き換えて終了など下の複雑な挙動を必要としないイベントはこのメソッドをオーバーライドする
 	<br> trueを返すとイベントは終了してcheckEventResponse以降は呼ばれない
 	 <br>また、このメソッドは例外的にイベント実行中でも呼ばれるので困る場合は
 	 このメソッド内でBody.currentEventがnullかチェックすること*/
@@ -106,69 +108,115 @@ abstract public class EventPacket implements java.io.Serializable{
 		return false;
 	}
 
-	/** イベント参加有無を返す
+	/** 
+	 * イベント参加有無を返す
 	 * <br>ここで各種チェックを行い、イベントへ参加するかを返す。また、イベント優先度も必要に応じて設定できる
 	 * <br>ワールドイベントの場合はイベント発行した本人に対してもチェックが発生するので
-	処理を避けたければここでチェックを忘れず行う*/
+	 * 処理を避けたければここでチェックを忘れず行う
+	 */
 	abstract public boolean checkEventResponse(Body b);
 
-	/** イベント開始動作
-	<br>checkEventResponseでtrueを返した場合に一度だけ呼ばれる。
-	主に移動先の設定などに使用。
-	イベント用の移動はBody.moveToEvent()を使用する*/
+	/** 
+	 * イベント開始動作
+	 * checkEventResponseでtrueを返した場合に一度だけ呼ばれる。
+	 * 主に移動先の設定などに使用。
+	 * イベント用の移動はBody.moveToEvent()を使用する
+	 */
 	abstract public void start(Body b);
 
-	/**毎フレーム呼ばれるメソッド
-	<br>startで移動先を指定すれば勝手に移動して完了後にexecuteが呼ばれるので、
-	普通は必要ないが特別に何かしたい場合はこれをオーバーライドする。
-	<br>例えば、対象のstay()を呼び続けることで相手の動きを止めておくことができる。
-	<br> また、ここでUpdateState.ABORTを返すとイベントを終了させたり、
-	 UpdateState.FORCE_EXECで強制的にexecuteへ移行できる。
-	<br>移動中に対象がremoveされたら困る場合などはここでチェックしてABORTなどを行う*/
+	/**
+	 * 毎フレーム呼ばれるメソッド
+	 * startで移動先を指定すれば勝手に移動して完了後にexecuteが呼ばれるので、
+	 * 普通は必要ないが特別に何かしたい場合はこれをオーバーライドする。
+	 * 例えば、対象のstay()を呼び続けることで相手の動きを止めておくことができる。
+	 * また、ここでUpdateState.ABORTを返すとイベントを終了させたり、
+	 * UpdateState.FORCE_EXECで強制的にexecuteへ移行できる。
+	 * 移動中に対象がremoveされたら困る場合などはここでチェックしてABORTなどを行う
+	 */
 	public UpdateState update(Body b) {
 		return null;
 	}
 
-	/**イベント目標に到着した際に呼ばれる
-	<br>trueを返すとイベントが終了し通常動作へ戻る。
-	falseを返している間は毎フレームupdateとexecuteが呼ばれるので、
-	<br>自前でステート管理すれば小芝居的なものも可能*/
+	/**
+	 * イベント目標に到着した際に呼ばれる
+	 * trueを返すとイベントが終了し通常動作へ戻る。
+	 * falseを返している間は毎フレームupdateとexecuteが呼ばれるので、
+	 * 自前でステート管理すれば小芝居的なものも可能
+	 */
 	abstract public boolean execute(Body b);
 
-	/** イベント終了時に呼ばれるメソッド。
-	<br> 完了、中断問わず終了時に一度だけ呼ばれる。
-	<br>外部からのアクションによってclearActions()が発生してイベントが消される場合も呼ばれる。
-	<br>普通は必要ないが後始末の処理が必要な場合はこれをオーバーライドする*/
+	/**
+	 *  イベント終了時に呼ばれるメソッド。
+	 *  完了、中断問わず終了時に一度だけ呼ばれる。
+	 *  外部からのアクションによってclearActions()が発生してイベントが消される場合も呼ばれる。
+	 *  普通は必要ないが後始末の処理が必要な場合はこれをオーバーライドする
+	 */
 	public void end(Body b) {
 		return;
 	}
-
+	/**
+	 * イベント呼び出し元の個体を返す.
+	 * @return イベント呼び出し元個体
+	 */
 	public Body getFrom() {
 		return from;
 	}
-
+	/**
+	 * 移動目標Z座標を返却する.
+	 * @return 移動目標Z座標
+	 */
 	public int getToZ() {
 		return toZ;
 	}
-
+	/**
+	 * 移動目標Z座標を設定する.
+	 * @param toZ 移動目標Z座標
+	 */
 	public void setToZ(int toZ) {
 		this.toZ = toZ;
 	}
-
+	/**
+	 * 移動目標X座標を取得する.
+	 * @return 移動目標X座標
+	 */
 	public int getToX() {
 		return toX;
 	}
-
+	/**
+	 * 移動目標X座標を設定する.
+	 * @param toX 移動目標X座標
+	 */
 	public void setToX(int toX) {
 		this.toX = toX;
 	}
-
+	/**
+	 * 移動目標Y座標を取得する.
+	 * @return 移動目標Y座標
+	 */
 	public int getToY() {
 		return toY;
 	}
-
+	/**
+	 * 移動目標Y座標を設定する.
+	 * @param toY 移動目標Y座標
+	 */
 	public void setToY(int toY) {
 		this.toY = toY;
+	}
+	/**
+	 * 待ち時間チェック
+	 * @param b ゆっくり
+	 * @param nWaitTime 待ち時間
+	 * @return 待ち時間が過ぎていたらtrue
+	 */
+	public boolean checkWait(Body b,int nWaitTime)
+	{
+		if( !b.checkWait(nWaitTime))
+		{
+			return false;
+		}
+		b.setLastActionTime();
+		return true;
 	}
 }
 

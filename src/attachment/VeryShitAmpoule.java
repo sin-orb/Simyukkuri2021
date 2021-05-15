@@ -43,7 +43,12 @@ public class VeryShitAmpoule extends Attachment {
 		0,		// アニメループ回数
 		1		// アニメ画像枚数
 	};
-	
+	/**
+	 * イメージをロードする.
+	 * @param loader ローダ
+	 * @param io イメージオブザーバ
+	 * @throws IOException IO例外
+	 */
 	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
 		
 		int baby = AgeState.BABY.ordinal();
@@ -76,6 +81,10 @@ public class VeryShitAmpoule extends Attachment {
 
 	@Override
 	protected Event update() {
+		if (parent.isDead()) {
+			// 死んだゆっくりはうんうんしない
+			return Event.DONOTHING;
+		}
 		// ちぎれていない場合
 		if( parent.getCriticalDamegeType() != CriticalDamegeType.CUT)
 		{

@@ -25,7 +25,9 @@ public class EatBodyEvent extends EventPacket implements java.io.Serializable {
 	private static final long serialVersionUID = 1L;
 	Random rnd = new Random();
 	int tick = 0;
-
+	/**
+	 * コンストラクタ.
+	 */
 	public EatBodyEvent(Body f, Body t, Obj tgt, int cnt) {
 		super(f, t, tgt, cnt);
 	}
@@ -33,12 +35,14 @@ public class EatBodyEvent extends EventPacket implements java.io.Serializable {
 	// 参加チェック
 	// ここで各種チェックを行い、イベントへ参加するかを返す
 	// また、イベント優先度も必要に応じて設定できる
+	@Override
 	public boolean checkEventResponse(Body b) {
 		if(getFrom() == b && b.canEventResponse() && b.getAttitude() != Attitude.SUPER_SHITHEAD)return true;
 		return false;
 	}
 
 	// イベント開始動作
+	@Override
 	public void start(Body b) {
 		// ゆっくりが隠れないように死体の奥に出る
 		b.moveToEvent(this, to.getX() + 5, to.getY() + 4);
@@ -46,6 +50,7 @@ public class EatBodyEvent extends EventPacket implements java.io.Serializable {
 
 	// イベント目標に到着した際に呼ばれる
 	// trueを返すとイベント終了
+	@Override
 	public boolean execute(Body b) {
 		// 複数の動作を順次行うのでtickで管理
 		if(tick == 0) {
@@ -106,6 +111,7 @@ public class EatBodyEvent extends EventPacket implements java.io.Serializable {
 	}
 	
 	//もしもの時のために解除
+	@Override
 	public void end(Body b) {
 		b.setLockmove(false);
 		return;

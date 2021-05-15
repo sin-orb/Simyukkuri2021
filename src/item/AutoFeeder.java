@@ -28,38 +28,54 @@ import src.item.Food.FoodType;
 import src.system.Cash;
 import src.util.YukkuriUtil;
 
-
 /***************************************************
 	自動給餌機
  */
 public class AutoFeeder extends ObjEX implements java.io.Serializable {
 	static final long serialVersionUID = 1L;
 
+	/** 出てくるエサタイプ */
 	public static enum FeedType {
-        NORMAL("ふつう"),
-        BITTER("苦い"),
-        LEMON_POP("ラムネ"),
-        HOT("辛い"),
-        VIYUGRA("バイゆグラ"),
-        SWEETS2("あまあま(普通)"),
-        SWEETS1("あまあま(高級)"),
-        WASTE("生ゴミ"),
-        BODY("無加工生餌"),
-        PROCESSED_BODY("加工済生餌"),
-		;
-        private String name;
-        FeedType(String name) { this.name = name; }
-        public String toString() { return name; }
-	}
-	public static enum FeedMode {
-        NORMAL_MODE("自動給餌"),
-        REGULAR_MODE("定期給餌"),
-		;
-        private String name;
-        FeedMode(String name) { this.name = name; }
-        public String toString() { return name; }
+		NORMAL("ふつう"), 
+		BITTER("苦い"),
+		LEMON_POP("ラムネ"),
+		HOT("辛い"),
+		VIYUGRA("バイゆグラ"),
+		SWEETS2("あまあま(普通)"),
+		SWEETS1("あまあま(高級)"),
+		WASTE("生ゴミ"),
+		BODY("無加工生餌"),
+		PROCESSED_BODY("加工済生餌"),
+				;
+
+		private String name;
+
+		FeedType(String name) {
+			this.name = name;
+		}
+
+		public String toString() {
+			return name;
+		}
 	}
 
+	/** 給餌モード */
+	public static enum FeedMode {
+		NORMAL_MODE("自動給餌"), REGULAR_MODE("定期給餌"),
+		;
+
+		private String name;
+
+		FeedMode(String name) {
+			this.name = name;
+		}
+
+		public String toString() {
+			return name;
+		}
+	}
+
+	/** 当たり判定 */
 	public static final int hitCheckObjType = 0;
 	private static final int images_num = 2;
 	private static BufferedImage[] images = new BufferedImage[images_num];
@@ -68,11 +84,16 @@ public class AutoFeeder extends ObjEX implements java.io.Serializable {
 	private Random rnd = new Random();
 	private int type = 0;
 	private int mode = 0;
-	private int feedingInterval =6*100;
+	private int feedingInterval = 6 * 100;
 	private int feedingP = 2;
 	private Obj food = null;
-
-	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
+	/**
+	 * イメージをロードする.
+	 * @param loader ローダ
+	 * @param io イメージオブザーバ
+	 * @throws IOException IO例外
+	 */
+	public static void loadImages(ClassLoader loader, ImageObserver io) throws IOException {
 		images[0] = ModLoader.loadItemImage(loader, "autofeeder" + File.separator + "autofeed.png");
 		images[1] = ModLoader.loadItemImage(loader, "autofeeder" + File.separator + "autofeed_off.png");
 		boundary.width = images[0].getWidth(io);
@@ -83,7 +104,7 @@ public class AutoFeeder extends ObjEX implements java.io.Serializable {
 
 	@Override
 	public int getImageLayer(BufferedImage[] layer) {
-		if(enabled) {
+		if (enabled) {
 			layer[0] = images[0];
 		} else {
 			layer[0] = images[1];
@@ -95,7 +116,10 @@ public class AutoFeeder extends ObjEX implements java.io.Serializable {
 	public BufferedImage getShadowImage() {
 		return null;
 	}
-
+	/**
+	 * 境界を取得する.
+	 * @return 境界
+	 */
 	public static Rectangle getBounding() {
 		return boundary;
 	}
@@ -116,90 +140,87 @@ public class AutoFeeder extends ObjEX implements java.io.Serializable {
 	}
 
 	@Override
-	public void removeListData(){
+	public void removeListData() {
 		SimYukkuri.world.currentMap.autofeeder.remove(this);
 	}
 
 	@Override
 	public void upDate() {
-		if(!enabled) return;
+		if (!enabled)
+			return;
 
-		if((getAge() % 20) != 0) return;
+		if ((getAge() % 20) != 0)
+			return;
 
 		// お持ち帰りされていたりしたら初期化
-		if( !SimYukkuri.world.currentMap.food.contains(food)  &&
-			!SimYukkuri.world.currentMap.body.contains(food) ){
+		if (!SimYukkuri.world.currentMap.food.contains(food) &&
+				!SimYukkuri.world.currentMap.body.contains(food)) {
 			food = null;
 		}
 
-		if(food != null) {
-			if(type == FeedType.BODY.ordinal() || type == FeedType.PROCESSED_BODY.ordinal()) {
-				Body b = (Body)food;
-				if(b.isDead()) {
+		if (food != null) {
+			if (type == FeedType.BODY.ordinal() || type == FeedType.PROCESSED_BODY.ordinal()) {
+				Body b = (Body) food;
+				if (b.isDead()) {
 					b.remove();
 				}
-				if(b.isRemoved()) {
+				if (b.isRemoved()) {
 					food = null;
 				}
-			}
-			else {
-				Food f = (Food)food;
-				if(f.isRemoved()) {
+			} else {
+				Food f = (Food) food;
+				if (f.isRemoved()) {
 					food = null;
-				}
-				else if(f.isEmpty()) {
+				} else if (f.isEmpty()) {
 					f.remove();
 				}
 			}
-		}
-		else if( mode == 0 || (getAge() % feedingInterval) == 0 && rnd.nextInt(feedingP)== 0){
-			if(type == FeedType.PROCESSED_BODY.ordinal()) {
+		} else if (mode == 0 || (getAge() % feedingInterval) == 0 && rnd.nextInt(feedingP) == 0) {
+			if (type == FeedType.PROCESSED_BODY.ordinal()) {
 				// オートフィーダで出るゆっくりのタイプを決める。
 				int type = makeRandomType();
 				food = SimYukkuri.mypane.terrarium.addBody(getX(), getY(), 0, type, AgeState.BABY, null, null);
-				Cash.buyYukkuri((Body)food);
+				Cash.buyYukkuri((Body) food);
 				Cash.addCash(-getCost());
 				// レイパーは生まれないようにする
-				((Body)food).setRaper(false);
+				((Body) food).setRaper(false);
 				//静音仕様
-				((Body)food).setShutmouth(true);
+				((Body) food).setShutmouth(true);
 				//糞害防止
-				((Body)food).setForceAnalClose(true);
-			}
-			else if(type == FeedType.BODY.ordinal()) {
+				((Body) food).setForceAnalClose(true);
+			} else if (type == FeedType.BODY.ordinal()) {
 				// オートフィーダで出るゆっくりのタイプを決める。
 				int type = makeRandomType();
 				food = SimYukkuri.mypane.terrarium.addBody(getX(), getY(), 0, type, AgeState.BABY, null, null);
-				Cash.buyYukkuri((Body)food);
-				Cash.addCash(-getCost()+5);
-			}
-			else {
+				Cash.buyYukkuri((Body) food);
+				Cash.addCash(-getCost() + 5);
+			} else {
 				FoodType f = FoodType.FOOD;
-				switch(type) {
-					case 0:
-						f = FoodType.FOOD;
-						break;
-					case 1:
-						f = FoodType.BITTER;
-						break;
-					case 2:
-						f = FoodType.LEMONPOP;
-						break;
-					case 3:
-						f = FoodType.HOT;
-						break;
-					case 4:
-						f = FoodType.VIYUGRA;
-						break;
-					case 5:
-						f = FoodType.SWEETS1;
-						break;
-					case 6:
-						f = FoodType.SWEETS2;
-						break;
-					case 7:
-						f = FoodType.WASTE;
-						break;
+				switch (type) {
+				case 0:
+					f = FoodType.FOOD;
+					break;
+				case 1:
+					f = FoodType.BITTER;
+					break;
+				case 2:
+					f = FoodType.LEMONPOP;
+					break;
+				case 3:
+					f = FoodType.HOT;
+					break;
+				case 4:
+					f = FoodType.VIYUGRA;
+					break;
+				case 5:
+					f = FoodType.SWEETS1;
+					break;
+				case 6:
+					f = FoodType.SWEETS2;
+					break;
+				case 7:
+					f = FoodType.WASTE;
+					break;
 				}
 				food = GadgetAction.putObjEX(Food.class, getX(), getY(), f.ordinal());
 				Cash.buyItem(food);
@@ -211,7 +232,9 @@ public class AutoFeeder extends ObjEX implements java.io.Serializable {
 	private int makeRandomType() {
 		return YukkuriUtil.getRandomYukkuriType(null);
 	}
-
+	/**
+	 * コンストラクタ.
+	 */
 	public AutoFeeder(int initX, int initY, int initOption) {
 
 		super(initX, initY, initOption);
@@ -224,19 +247,24 @@ public class AutoFeeder extends ObjEX implements java.io.Serializable {
 		objEXType = ObjEXType.AUTOFEEDER;
 
 		boolean ret = setupFeeder(this, false);
-		if(setupFeederMode(this, false)) {
+		if (setupFeederMode(this, false)) {
 			readIniFile();
-			ret =true;
-		}
-		else ret=false;
-		if(!ret) {
+			ret = true;
+		} else
+			ret = false;
+		if (!ret) {
 			list.remove(this);
 		}
 		value = 10000;
 		cost = 30;
 	}
 
-	// 設定メニュー
+	/**
+	 *  設定メニュー
+	 * @param o 自動給餌器
+	 * @param init 初期化するかどうか
+	 * @return 設定されたかどうか
+	 */
 	public static boolean setupFeeder(AutoFeeder o, boolean init) {
 
 		JPanel mainPanel = new JPanel();
@@ -247,18 +275,19 @@ public class AutoFeeder extends ObjEX implements java.io.Serializable {
 		mainPanel.setPreferredSize(new Dimension(250, 150));
 		ButtonGroup bg = new ButtonGroup();
 
-		for(int i = 0; i < but.length; i++) {
+		for (int i = 0; i < but.length; i++) {
 			but[i] = new JRadioButton(FeedType.values()[i].toString());
 			bg.add(but[i]);
 
 			mainPanel.add(but[i]);
 		}
 		but[0].setSelected(true);
-		int dlgRet = JOptionPane.showConfirmDialog(SimYukkuri.mypane, mainPanel, "自動給餌設定", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+		int dlgRet = JOptionPane.showConfirmDialog(SimYukkuri.mypane, mainPanel, "自動給餌設定", JOptionPane.OK_CANCEL_OPTION,
+				JOptionPane.PLAIN_MESSAGE);
 
-		if(dlgRet == JOptionPane.OK_OPTION) {
-			for(int i = 0; i < but.length; i++) {
-				if(but[i].isSelected()) {
+		if (dlgRet == JOptionPane.OK_OPTION) {
+			for (int i = 0; i < but.length; i++) {
+				if (but[i].isSelected()) {
 					o.type = i;
 					break;
 				}
@@ -268,7 +297,12 @@ public class AutoFeeder extends ObjEX implements java.io.Serializable {
 		return ret;
 	}
 
-	// 設定メニュー02
+	/**
+	 *  設定メニュー02
+	 * @param o 自動給餌器
+	 * @param init 初期化するか
+	 * @return 設定されたかどうか
+	 */
 	public static boolean setupFeederMode(AutoFeeder o, boolean init) {
 
 		JPanel mainPanel = new JPanel();
@@ -279,38 +313,41 @@ public class AutoFeeder extends ObjEX implements java.io.Serializable {
 		mainPanel.setPreferredSize(new Dimension(250, 150));
 		ButtonGroup bg = new ButtonGroup();
 
-		for(int i = 0; i < but.length; i++) {
+		for (int i = 0; i < but.length; i++) {
 			but[i] = new JRadioButton(FeedMode.values()[i].toString());
 			bg.add(but[i]);
 
 			mainPanel.add(but[i]);
 		}
 		but[0].setSelected(true);
-		int dlgRet = JOptionPane.showConfirmDialog(SimYukkuri.mypane, mainPanel, "稼働モード設定", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+		int dlgRet = JOptionPane.showConfirmDialog(SimYukkuri.mypane, mainPanel, "稼働モード設定",
+				JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
-		if(dlgRet == JOptionPane.OK_OPTION) {
-			for(int i = 0; i < but.length; i++) {
-				if(but[i].isSelected()) {
+		if (dlgRet == JOptionPane.OK_OPTION) {
+			for (int i = 0; i < but.length; i++) {
+				if (but[i].isSelected()) {
 					o.mode = i;
 					break;
 				}
 			}
-		ret = true;
+			ret = true;
 		}
 		return ret;
 	}
-
-	public void readIniFile(){
+	/**
+	 * INIファイルを読む.
+	 */
+	public void readIniFile() {
 		ClassLoader loader = this.getClass().getClassLoader();
 		int nTemp = 0;
 		//間隔
 		nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_ITEM_INI_DIR, "AutoFeeder", "FeedingInterval");
-		if(nTemp != 0)feedingInterval = nTemp;
+		if (nTemp != 0)
+			feedingInterval = nTemp;
 		//確率
 		nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_ITEM_INI_DIR, "AutoFeeder", "FeedingProbability");
-		if(nTemp != 0)feedingP = nTemp;
+		if (nTemp != 0)
+			feedingP = nTemp;
 	}
 
 }
-
-

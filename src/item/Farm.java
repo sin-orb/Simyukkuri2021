@@ -28,8 +28,9 @@ import src.system.ItemMenu.ShapeMenuTarget;
 import src.system.MapPlaceData;
 
 /***************************************************
-畑
-*/
+ * 畑
+ * <br>これはほかのアイテムと違い、ObjEXを継承していないので注意。
+ */
 public class Farm extends FieldShapeBase implements Serializable {
 	static final long serialVersionUID = 1L;
 
@@ -41,7 +42,7 @@ public class Farm extends FieldShapeBase implements Serializable {
 	private int[] anPointX = new int[4];
 	private int[] anPointY = new int[4];
 	protected Random rnd = new Random();
-
+	/**画像ロード*/
 	public static void loadImages(ClassLoader loader, ImageObserver io) throws IOException {
 		images = ModLoader.loadItemImage(loader, "farm" + File.separator + "farm.png");
 		texture = new TexturePaint(images, new Rectangle2D.Float(0, 0, images.getWidth(), images.getHeight()));
@@ -97,7 +98,7 @@ public class Farm extends FieldShapeBase implements Serializable {
 	public int getMinimumSize() {
 		return MIN_SIZE;
 	}
-
+	/**プレビューラインの描画*/
 	public static void drawPreview(Graphics2D g2, int sx, int sy, int ex, int ey) {
 		int[] anPointX = new int[4];
 		int[] anPointY = new int[4];
@@ -112,7 +113,13 @@ public class Farm extends FieldShapeBase implements Serializable {
 		g2.setPaint(texture);
 		g2.fillPolygon(anPointX, anPointY, 4);
 	}
-
+	/**
+	 * コンストラクタ
+	 * @param fsx 設置起点のX座標
+	 * @param fsy 設置起点のY座標
+	 * @param fex 設置終点のX座標
+	 * @param fey 設置終点のY座標
+	 */
 	public Farm(int fsx, int fsy, int fex, int fey) {
 		Point pS = Translate.getFieldLimitForMap(fsx, fsy);
 		Point pE = Translate.getFieldLimitForMap(fex, fey);
@@ -165,7 +172,7 @@ public class Farm extends FieldShapeBase implements Serializable {
 		MapPlaceData.setFiledFlag(SimYukkuri.world.currentMap.fieldMap, mapSX, mapSY, mapW, mapH, true, FIELD_FARM);
 	}
 
-	// フィールド座標にあるシェイプ取得
+	/** フィールド座標にあるシェイプ取得*/
 	public static Farm getFarm(int fx, int fy) {
 
 		for (Farm bc : SimYukkuri.world.currentMap.farm) {
@@ -177,7 +184,7 @@ public class Farm extends FieldShapeBase implements Serializable {
 		return null;
 	}
 
-	// 削除
+	/** 削除*/
 	public static void deleteFarm(Farm b) {
 		MapPlaceData.setFiledFlag(SimYukkuri.world.currentMap.fieldMap, b.mapSX, b.mapSY, b.mapW, b.mapH, false,
 				FIELD_FARM);
@@ -188,7 +195,12 @@ public class Farm extends FieldShapeBase implements Serializable {
 					FIELD_FARM);
 		}
 	}
-
+	/**
+	 * ある点が畑の範囲内かどうか
+	 * @param inX ある点のX座標
+	 * @param inY ある点Y座標
+	 * @param bIsField 渡された座標がフィールド座標かどうか
+	 */
 	public boolean checkContain(int inX, int inY, boolean bIsField) {
 		int nX = inX;
 		int nY = inY;
@@ -207,7 +219,10 @@ public class Farm extends FieldShapeBase implements Serializable {
 		}
 		return false;
 	}
-
+	/**
+	 * 渡されたオブジェクトが畑の中にあるかを判定
+	 * <br>動作はobjHitProcess( Obj o )で
+	 */
 	public boolean checkHitObj(Obj o) {
 		if (o == null) {
 			return false;
@@ -219,7 +234,7 @@ public class Farm extends FieldShapeBase implements Serializable {
 		// エリア内
 		return true;
 	}
-
+	/**当たり判定されたオブジェクトへの処理*/
 	public int objHitProcess(Obj o) {
 		if (o == null) {
 			return 0;
@@ -263,7 +278,7 @@ public class Farm extends FieldShapeBase implements Serializable {
 
 		return 1;
 	}
-
+	/**あるオブジェクトを肥料に変換する際に、そのオブジェクトの目方の減りを計算＆実行*/
 	public void getAmount(Obj o) {
 		if (o == null) {
 			return;
@@ -305,7 +320,7 @@ public class Farm extends FieldShapeBase implements Serializable {
 			}
 		}
 	}
-
+	/**畑の中のゆっくりに対し肥料を与え、茎を生やす*/
 	public void giveAmount(Obj o) {
 		if (o == null) {
 			return;

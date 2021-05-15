@@ -28,11 +28,11 @@ import src.item.Food.FoodType;
 
 
 /***************************************************
-ゴミ捨て場
-*/
+ * ゴミ捨て場
+ */
 public class GarbageStation extends ObjEX implements java.io.Serializable {
 	static final long serialVersionUID = 1L;
-
+	/**出す餌の種類テーブル*/
 	public static enum GomiType {
         WASTE("生ゴミ", FoodType.WASTE_NORA),
         BITTER("苦い", FoodType.BITTER_NORA),
@@ -51,7 +51,7 @@ public class GarbageStation extends ObjEX implements java.io.Serializable {
         }
         public String toString() { return name; }
 	}
-
+	/**ランダムテーブル(模擬的)*/
 	private static GomiType[] rndTable = {
 		GomiType.WASTE,
 		GomiType.NORMAL,
@@ -82,7 +82,7 @@ public class GarbageStation extends ObjEX implements java.io.Serializable {
 		GomiType.NORMAL,
 		GomiType.WASTE,
 	};
-
+	/**画像の入れもの*/
 	public static final int hitCheckObjType = 0;
 	private static BufferedImage images[] = new BufferedImage[3];
 	private static Rectangle boundary = new Rectangle();
@@ -91,9 +91,8 @@ public class GarbageStation extends ObjEX implements java.io.Serializable {
 	private boolean[] enable = null;
 	private Obj[] food = null;
 	private int throwingTime = 100;//ゴミ捨て時刻
-	//private int throwingInterval=2400;//一日
 	private int gettingP =1;
-
+	/**画像ロード*/
 	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
 		images[0] = ModLoader.loadItemImage(loader, "garbagestation" + File.separator + "garbagestation_base.png");
 		images[1] = ModLoader.loadItemImage(loader, "garbagestation" + File.separator + "garbagestation_l_close.png");
@@ -121,7 +120,7 @@ public class GarbageStation extends ObjEX implements java.io.Serializable {
 	public BufferedImage getShadowImage() {
 		return null;
 	}
-
+	/**境界線の取得*/
 	public static Rectangle getBounding() {
 		return boundary;
 	}
@@ -137,7 +136,7 @@ public class GarbageStation extends ObjEX implements java.io.Serializable {
 			}
 		}
 	}
-
+	/**餌を出す*/
 	private void feedAction(int idx) {
 		if(food[idx] != null) {
 			Food f = (Food)food[idx];
@@ -169,7 +168,7 @@ public class GarbageStation extends ObjEX implements java.io.Serializable {
 	public void removeListData(){
 		SimYukkuri.world.currentMap.garbageStation.remove(this);
 	}
-
+	/**コンストラクタ*/
 	public GarbageStation(int initX, int initY, int initOption) {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
@@ -191,7 +190,7 @@ public class GarbageStation extends ObjEX implements java.io.Serializable {
 		}
 	}
 
-	// 設定メニュー
+	/** 設定メニュー*/
 	public static boolean setupGarbageSt(GarbageStation d) {
 		JPanel mainPanel = new JPanel();
 		JCheckBox[] checkBox = new JCheckBox[GomiType.values().length];
@@ -220,7 +219,7 @@ public class GarbageStation extends ObjEX implements java.io.Serializable {
 		}
 		return ret;
 	}
-
+	/**iniファイル読み込み*/
 	public void readIniFile(){
 		ClassLoader loader = this.getClass().getClassLoader();
 		int nTemp = 0;

@@ -836,7 +836,6 @@ public class MessagePool {
 		act = map.get(action.name() + suffix);
 		// 読み込み失敗かつ飼いゆメッセージではないなら飼いゆメッセージを読み込む
 		if (act == null && body.getBodyRank().messageIndex != BodyRank.KAIYU.messageIndex) {
-			//System.out.println("NO NORA MESSAGE FILE: " + body.getNameJ() );
 			suffix = RANK_SUFFIX[BodyRank.KAIYU.messageIndex];
 			act = map.get(action.name() + suffix);
 		}
@@ -1011,30 +1010,6 @@ public class MessagePool {
 				}
 			} while (st != -1);
 		}
-		// デバッグ用
-		//System.out.println(action.name() + " " + ret.toString());
-
 		return ret.toString();
 	}
-
-	/*
-		private static final void test(ClassLoader loader)
-		{
-			try {
-				InputStream is = loader.getResourceAsStream("data/marisa_j.xls");
-				Workbook wb;
-				wb = WorkbookFactory.create(is);
-				Sheet sheet = wb.getSheetAt(0);
-				Row row = sheet.getRow(0);
-				Cell cell = row.getCell(0);
-				System.out.println(cell.getStringCellValue());
-			} catch (InvalidFormatException e) {
-				// TODO 自動生成された catch ブロック
-				e.printStackTrace();
-			} catch (IOException e) {
-				// TODO 自動生成された catch ブロック
-				e.printStackTrace();
-			}
-		}
-	*/
 }

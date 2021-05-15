@@ -27,18 +27,22 @@ public class FlyingEatEvent extends EventPacket implements java.io.Serializable 
 	private static final int[] ofsZ = {2, 0, -5};
 	int tick = 0;
 	Random rnd = new Random();
-
+	/**
+	 * コンストラクタ.
+	 */
 	public FlyingEatEvent(Body f, Body t, Obj tgt, int cnt) {
 		super(f, t, tgt, cnt);
 	}
 
 	// 参加チェック
+	@Override
 	public boolean checkEventResponse(Body b) {
 		priority = EventPriority.HIGH;
 		return true;
 	}
 
 	// イベント開始動作
+	@Override
 	public void start(Body b) {
 		b.setToFood(false);
 		b.setToBed(false);
@@ -52,7 +56,8 @@ public class FlyingEatEvent extends EventPacket implements java.io.Serializable 
 	}
 
 	// 毎フレーム処理
-	// trueを返すとイベント終了
+	// UpdateState.ABORTを返すとイベント終了
+	@Override
 	public UpdateState update(Body b) {
 		// 相手が消えてしまったらイベント中断
 		if(to.isRemoved()) {
@@ -81,6 +86,7 @@ public class FlyingEatEvent extends EventPacket implements java.io.Serializable 
 
 	// イベント目標に到着した際に呼ばれる
 	// trueを返すとイベント終了
+	@Override
 	public boolean execute(Body b) {
 		// 相手が消えてしまったらイベント中断
 		if(to.isRemoved()) {
@@ -128,6 +134,7 @@ public class FlyingEatEvent extends EventPacket implements java.io.Serializable 
 	}
 
 	// イベント終了処理
+	@Override
 	public void end(Body b) {
 		to.setLinkParent(null);
 	}

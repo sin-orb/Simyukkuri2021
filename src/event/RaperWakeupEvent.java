@@ -16,11 +16,13 @@ import src.logic.EventLogic;
 public class RaperWakeupEvent extends EventPacket implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
-
+	/**
+	 * コンストラクタ.
+	 */
 	public RaperWakeupEvent(Body f, Body t, Obj tgt, int cnt) {
 		super(f, t, tgt, cnt);
 	}
-
+	@Override
 	public boolean simpleEventAction(Body b) {
 		// 自分自身はスキップ
 		if(b == getFrom()) return false;
@@ -51,16 +53,19 @@ public class RaperWakeupEvent extends EventPacket implements java.io.Serializabl
 	}
 
 	// 参加チェック
+	@Override
 	public boolean checkEventResponse(Body b) {
 		return false;
 	}
 
 	// イベント開始動作
+	@Override
 	public void start(Body b) {
 	}
 	
 	// イベント目標に到着した際に呼ばれる
 	// trueを返すとイベント終了
+	@Override
 	public boolean execute(Body b) {
 		return true;
 	}

@@ -82,6 +82,7 @@ public abstract class Effect extends Obj {
 		else animate = true;
 		animeEnd = end;
 		enableGravity = grav;
+		calcPos();
 	}
 	/**アニメーションのどの画像を出すかのセッター*/
 	public void setAnimeFrame(int f) {
@@ -116,7 +117,7 @@ public abstract class Effect extends Obj {
 				}
 			}
 		}
-		
+		calcPos();
 		return Event.DONOTHING;
 	}
 }

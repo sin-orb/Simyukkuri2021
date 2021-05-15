@@ -22,11 +22,13 @@ public class SuiSpeake extends EventPacket implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
 	Random rnd = new Random();
-
+	/**
+	 * コンストラクタ.
+	 */
 	public SuiSpeake(Body f, Body t, Obj tgt, int cnt) {
 		super(f, t, tgt, cnt);
 	}
-	
+	@Override
 	public boolean simpleEventAction(Body b) {
 		if(b.getCurrentEvent() != null || b.isTalking() || rnd.nextInt(20) !=0) return true;
 		if( !b.canEventResponse() )
@@ -121,14 +123,14 @@ public class SuiSpeake extends EventPacket implements java.io.Serializable {
 		}
 		return true;
 	}
-	
+	@Override
 	public boolean checkEventResponse(Body b) {
 		return false;
 	}
-
+	@Override
 	public void start(Body b) {
 	}
-	
+	@Override
 	public boolean execute(Body b) {
 		return true;
 	}

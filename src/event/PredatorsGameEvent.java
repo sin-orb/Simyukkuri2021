@@ -1,6 +1,5 @@
 package src.event;
 
-import java.util.ArrayList;
 import java.util.Random;
 
 import src.SimYukkuri;
@@ -37,18 +36,22 @@ public class PredatorsGameEvent extends EventPacket implements java.io.Serializa
 	private static final int[] ofsZ = {2, 0, -5};
 	int tick = 0;
 	int tick2 = 0;
+	/** おもちゃにする対象のゆっくり */
 	protected Body toy = null;
 	boolean FlyGame = false;
 	boolean grabbing = false;
 	boolean snack = false;
 	Random rnd = new Random();
-
+	/**
+	 * コンストラクタ.
+	 */
 	public PredatorsGameEvent(Body f, Body t, Obj tgt, int cnt) {
 		super(f, t, tgt, cnt);
 	}
 
 	// 参加チェック
 	//このイベントがスタートできるのはれみりゃ、ふらんのみ
+	@Override
 	public boolean checkEventResponse(Body b) {
 		priority = EventPriority.LOW;
 
@@ -56,7 +59,7 @@ public class PredatorsGameEvent extends EventPacket implements java.io.Serializa
 
 		if(b.isPredatorType() && b== getFrom()){
 			//遊び相手の決定
-			ArrayList<Body> bodyList = SimYukkuri.world.currentMap.body;
+			Body[] bodyList = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
 			for (Body d: bodyList) {
 				int minDistance = b.getEYESIGHT();
 				int wallMode = b.getBodyAgeState().ordinal();
@@ -102,12 +105,14 @@ public class PredatorsGameEvent extends EventPacket implements java.io.Serializa
 	}
 
 	// イベント開始動作
+	@Override
 	public void start(Body b) {
 		b.setMessage(MessagePool.getMessage(b, MessagePool.Action.GameStart),true);
 	}
 
 	// 毎フレーム処理
 	// UpdateState.ABORTを返すとイベント終了
+	@Override
 	public UpdateState update(Body b) {
 		//対象が決定できなかったり、捕食防止ディフューザー環境だったりしたら中止。ボール遊びを試す
 		if(toy== null || Terrarium.predatorSteam){
@@ -256,6 +261,7 @@ public class PredatorsGameEvent extends EventPacket implements java.io.Serializa
 
 	// イベント目標に到着した際に呼ばれる(このイベントでは別挙動の扱いをしている)
 	// trueを返すとイベント終了
+	@Override
 	public boolean execute(Body b) {
 		// 相手が消えてしまったらイベント中断
 		if(toy.isRemoved()) {
@@ -300,6 +306,7 @@ public class PredatorsGameEvent extends EventPacket implements java.io.Serializa
 	}
 
 	// イベント終了処理
+	@Override
 	public void end(Body b) {
 		b.setMessage(MessagePool.getMessage(b, MessagePool.Action.GameEnd));
 		grabbing=false;

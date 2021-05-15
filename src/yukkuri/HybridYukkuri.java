@@ -56,7 +56,7 @@ public class HybridYukkuri extends Body implements java.io.Serializable {
 					doreiTmp = parentTmp.dorei;
 				}
 				else{
-					doreiTmp = SimYukkuri.mypane.terrarium.makeBody(0, 0, 0, getParents()[Parent.MAMA.ordinal()].getType(), null, AgeState.BABY, getParents()[Parent.MAMA.ordinal()], getParents()[Parent.PAPA.ordinal()]);
+					doreiTmp = SimYukkuri.mypane.terrarium.makeBody(0, 0, 0, getParents()[Parent.MAMA.ordinal()].getType(), null, AgeState.BABY, getParents()[Parent.MAMA.ordinal()], getParents()[Parent.PAPA.ordinal()], false);
 				}
 			}
 			else{
@@ -65,7 +65,7 @@ public class HybridYukkuri extends Body implements java.io.Serializable {
 					doreiTmp = parentTmp.dorei;
 				}
 				else{
-					doreiTmp = SimYukkuri.mypane.terrarium.makeBody(0, 0, 0, getParents()[Parent.PAPA.ordinal()].getType(), null, AgeState.BABY, getParents()[Parent.MAMA.ordinal()], getParents()[Parent.PAPA.ordinal()]);
+					doreiTmp = SimYukkuri.mypane.terrarium.makeBody(0, 0, 0, getParents()[Parent.PAPA.ordinal()].getType(), null, AgeState.BABY, getParents()[Parent.MAMA.ordinal()], getParents()[Parent.PAPA.ordinal()], false);
 				}
 			}
 
@@ -75,7 +75,7 @@ public class HybridYukkuri extends Body implements java.io.Serializable {
 					doreiTmp2 = parentTmp2.dorei;
 				}
 				else{
-					doreiTmp2 = SimYukkuri.mypane.terrarium.makeBody(0, 0, 0, getParents()[Parent.PAPA.ordinal()].getType(), null, AgeState.BABY, getParents()[Parent.MAMA.ordinal()], getParents()[Parent.PAPA.ordinal()]);
+					doreiTmp2 = SimYukkuri.mypane.terrarium.makeBody(0, 0, 0, getParents()[Parent.PAPA.ordinal()].getType(), null, AgeState.BABY, getParents()[Parent.MAMA.ordinal()], getParents()[Parent.PAPA.ordinal()], false);
 				}
 			}else{
 				doreiTmp2 = doreiTmp;
@@ -402,5 +402,14 @@ public class HybridYukkuri extends Body implements java.io.Serializable {
 		} catch (IOException e1) {
 			System.out.println("File I/O error");
 		}
+	}
+	
+	@Override
+	public void remove() {
+		super.remove();
+		dorei.remove();
+		dorei2.remove();
+		dorei3.remove();
+		dorei4.remove();
 	}
 }

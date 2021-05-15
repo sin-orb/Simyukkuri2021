@@ -25,11 +25,11 @@ import src.system.Cash;
 import src.system.MessagePool;
 
 /***************************************************
-ミキサー
-*/
+ * ミキサー
+ */
 public class Mixer extends ObjEX implements java.io.Serializable {
 	static final long serialVersionUID = 1L;
-
+	/**処理対象(ゆっくり)*/
 	public static final int hitCheckObjType = ObjEX.YUKKURI;
 	private static BufferedImage[] images = new BufferedImage[4];
 	private static Rectangle boundary = new Rectangle();
@@ -41,7 +41,7 @@ public class Mixer extends ObjEX implements java.io.Serializable {
 	private int sweet = 0;			// 糖度
 	private boolean sick = false;	// カビ混入
 	private Random rnd = new Random();
-
+	/**画像ロード*/
 	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
 		for(int i = 0; i < 3; i++) {
 			images[i] = ModLoader.loadItemImage(loader, "mixer" + File.separator + "mixer_" + i + ".png");
@@ -77,7 +77,7 @@ public class Mixer extends ObjEX implements java.io.Serializable {
 	public BufferedImage getShadowImage() {
 		return null;
 	}
-
+	/**境界線の取得*/
 	public static Rectangle getBounding() {
 		return boundary;
 	}
@@ -199,7 +199,7 @@ public class Mixer extends ObjEX implements java.io.Serializable {
 		}
 		SimYukkuri.world.currentMap.mixer.remove(this);
 	}
-
+	/** コンストラクタ */
 	public Mixer(int initX, int initY, int initOption) {
 		super(initX, initY, initOption);
 		setBoundary(boundary);

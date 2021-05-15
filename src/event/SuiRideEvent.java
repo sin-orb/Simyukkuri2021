@@ -29,7 +29,9 @@ public class SuiRideEvent extends EventPacket implements java.io.Serializable {
 	Random rnd = new Random();
 	int tick = 0;
 	boolean memberride=false;
-	
+	/**
+	 * コンストラクタ.
+	 */
 	public SuiRideEvent(Body f, Body t, Obj tgt, int cnt) {
 		super(f, t, tgt, cnt);
 		priority = EventPriority.MIDDLE;	// すぃーの乗車イベントを食事、睡眠、トイレより上にする
@@ -38,6 +40,7 @@ public class SuiRideEvent extends EventPacket implements java.io.Serializable {
 	// 参加チェック
 	// ここで各種チェックを行い、イベントへ参加するかを返す
 	// また、イベント優先度も必要に応じて設定できる
+	@Override
 	public boolean checkEventResponse(Body b) {
 //		boolean ret = false;
 		if(target == null )
@@ -102,6 +105,7 @@ public class SuiRideEvent extends EventPacket implements java.io.Serializable {
 	}
 
 	// イベント開始動作
+	@Override
 	public void start(Body b) {
 		if(target == null )
 		{
@@ -111,8 +115,8 @@ public class SuiRideEvent extends EventPacket implements java.io.Serializable {
 	}
 	
 	// 毎フレーム処理
+	@Override
 	public UpdateState update(Body b) {
-//		System.out.println(tick);
 		Sui s = (Sui)target;
 		if(s == null )
 		{
@@ -222,6 +226,7 @@ public class SuiRideEvent extends EventPacket implements java.io.Serializable {
 	
 	// イベント目標に到着した際に呼ばれる
 	// trueを返すとイベント終了
+	@Override
 	public boolean execute(Body b) {
 		if(target == null )
 		{
@@ -238,7 +243,7 @@ public class SuiRideEvent extends EventPacket implements java.io.Serializable {
 
 		return false;
 	}
-	
+	@Override
 	public void end(Body b) {
 		//他のイベントで強制的にイベントが終わることがある	
 		// すぃーにのってたら降りる

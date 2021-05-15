@@ -49,6 +49,12 @@ import src.system.Sprite;
 
 /**
  * ゆっくり本体の抽象クラスの属性/状態の取得を抜き出したクラス.
+ * 属性を増やしたらYukkuriUtil.NOCOPY_FIELDでコピーしたくない属性であれば定義する。
+ * コピーしたくない属性かどうかは、れいむ→でいぶ、まりさ→ドスまりさとなったときに
+ * もととなるゆっくりから変異後のゆっくりにコピーしたい属性かどうかで決める。
+ * 例えば、子供リスト等はコピーしたいが、自分の呼称やあんこ量等はコピーしたくない。
+ * （コピーしてもその後のINIファイル取得で上書きされるものもある）
+ * そこはいわゆる”ゆ虐の設定”に従うこと。
  */
 public abstract class BodyAttributes extends Obj implements Serializable {
 	/** ランダムのもと */
@@ -5271,7 +5277,6 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * @param all すべて除去かどうか
 	 */
 	public void removeAttachment(Class<?> type, boolean all) {
-
 		Iterator<Attachment> itr = attach.iterator();
 		while (itr.hasNext()) {
 			Attachment at = itr.next();
@@ -5301,9 +5306,8 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 */
 	public void addChildrenList(Body at) {
 		if (childrenList == null) {
-			return;
+			childrenList = new ArrayList<>();
 		}
-
 		if (at != null) {
 			childrenList.add(at);
 		}

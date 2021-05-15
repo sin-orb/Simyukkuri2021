@@ -637,7 +637,7 @@ public class FoodLogic {
 				minDistance = distance;
 			}
 		}
-		ArrayList<Body> bodyList = SimYukkuri.world.currentMap.body;
+		Body[] bodyList = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
 		for (Body d : bodyList) {
 			if (b == d)
 				continue;
@@ -871,7 +871,7 @@ public class FoodLogic {
 		}
 		//第三候補：死体
 		if (found == null) {
-			ArrayList<Body> bodyList = SimYukkuri.world.currentMap.body;
+			Body[] bodyList = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
 			for (Body d : bodyList) {
 				if (d == null || d.isRemoved()) {
 					continue;
@@ -942,7 +942,7 @@ public class FoodLogic {
 		}
 
 		// ゆっくりから検索
-		ArrayList<Body> bodyList = SimYukkuri.world.currentMap.body;
+		Body[] bodyList = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
 		for (Body d : bodyList) {
 			if (b == d)
 				continue;
@@ -1224,7 +1224,7 @@ public class FoodLogic {
 						continue;
 					}
 					if (checkTakeout(b, s)) {
-						ArrayList<Body> bodyList = SimYukkuri.world.currentMap.body;
+						Body[] bodyList = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
 						boolean bOtherTarget = false;
 						// 自分以外のゆっくりが処理対象にしていないか
 						for (Body bodyOther : bodyList) {
@@ -1269,7 +1269,7 @@ public class FoodLogic {
 		}
 
 		if (found == null) {
-			ArrayList<Body> bodyList = SimYukkuri.world.currentMap.body;
+			Body[] bodyList = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
 			for (Body d : bodyList) {
 				if (b == d)
 					continue;

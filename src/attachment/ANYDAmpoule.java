@@ -40,7 +40,12 @@ public class ANYDAmpoule extends Attachment {
 		0,		// アニメループ回数
 		1		// アニメ画像枚数
 	};
-	
+	/**
+	 * イメージのロード
+	 * @param loader ローダ
+	 * @param io イメージオブザーバ
+	 * @throws IOException IO例外
+	 */
 	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
 		
 		int baby = AgeState.BABY.ordinal();
@@ -84,6 +89,7 @@ public class ANYDAmpoule extends Attachment {
 		return images[parent.getBodyAgeState().ordinal()][0];
 	}
 
+	@Override
 	public void resetBoundary()
 	{
 		setBoundary(pivX[parent.getBodyAgeState().ordinal()],

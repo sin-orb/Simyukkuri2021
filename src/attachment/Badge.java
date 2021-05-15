@@ -58,7 +58,12 @@ public class Badge extends Attachment {
 	private static BufferedImage[][] images = new BufferedImage[3][BadgeRank.values().length];
 	/**ランクの入れ物*/
 	private BadgeRank eBadgeRank;
-	
+	/**
+	 * イメージをロードする.
+	 * @param loader ローダ
+	 * @param io イメージオブザーバ
+	 * @throws IOException IO例外
+	 */
 	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
 		
 		int baby = AgeState.BABY.ordinal();

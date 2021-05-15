@@ -25,14 +25,19 @@ public class AvoidMoldEvent extends EventPacket implements java.io.Serializable 
 
 	private static final long serialVersionUID = 1L;
 	Random rnd = new Random();
-
+	/**
+	 * コンストラクタ.
+	 */
 	public AvoidMoldEvent(Body f, Body t, Obj tgt, int cnt) {
 		super(f, t, tgt, cnt);
 	}
 
-	// 参加チェック
-	// ここで各種チェックを行い、イベントへ参加するかを返す
-	// また、イベント優先度も必要に応じて設定できる
+	/**
+	 *  参加チェック
+	 *  ここで各種チェックを行い、イベントへ参加するかを返す
+	 *  また、イベント優先度も必要に応じて設定できる
+	 */
+	@Override
 	public boolean checkEventResponse(Body b) {
 		priority = EventPriority.MIDDLE;
 		// うんうん奴隷は参加しない
@@ -48,14 +53,20 @@ public class AvoidMoldEvent extends EventPacket implements java.io.Serializable 
 		return true;
 	}
 
-	// イベント開始動作
+	/**
+	 *  イベント開始動作
+	 */
+	@Override
 	public void start(Body b) {
 		int colX = BodyLogic.calcCollisionX(b, to);
 		b.moveToEvent(this, to.getX() + colX, to.getY());
 	}
 
-	// 毎フレーム処理
-	// trueを返すとイベント終了
+	/**
+	 * 毎フレーム処理
+	 * UpdateState.ABORTを返すとイベント終了
+	 */
+	@Override
 	public UpdateState update(Body b) {
 		// 相手が消えてしまったらイベント中断
 		if(to.isDead() || to.isRemoved()) return UpdateState.ABORT;
@@ -65,8 +76,11 @@ public class AvoidMoldEvent extends EventPacket implements java.io.Serializable 
 		return null;
 	}
 
-	// イベント目標に到着した際に呼ばれる
-	// trueを返すとイベント終了
+	/**
+	 * イベント目標に到着した際に呼ばれる
+	 * trueを返すとイベント終了
+	 */
+	@Override
 	public boolean execute(Body b) {
 
 		//ドゲスの場合、楽しんで制裁
@@ -246,7 +260,11 @@ public class AvoidMoldEvent extends EventPacket implements java.io.Serializable 
 		}
 		return true;
 	}
-
+	/**
+	 * 悲しみのメッセージを言う
+	 * @param From イベント発生元
+	 * @param To イベント対象
+	 */
 	public void saySadMessage(Body From , Body To){
 		String message = null;
 		if(From.isParent(To)){
@@ -265,7 +283,11 @@ public class AvoidMoldEvent extends EventPacket implements java.io.Serializable 
 		}
 		From.setBodyEventResMessage(message, Const.HOLDMESSAGE, true, rnd.nextBoolean());
 	}
-
+	/**
+	 * 謝罪する.
+	 * @param From イベント発生元
+	 * @param To イベント対象
+	 */
 	public void sayApologyMessage(Body From , Body To){
 		String message = null;
 		if(From.isParent(To)){
@@ -274,18 +296,6 @@ public class AvoidMoldEvent extends EventPacket implements java.io.Serializable 
 		else if(To.isFamily(From)){
 			message = MessagePool.getMessage(getFrom(), MessagePool.Action.ApologyToFamily);
 		}
-		/*
-		else if(To.isPartner(From)){
-			message = MessagePool.getMessage(from, MessagePool.Action.ApologyToPartner);
-		}
-		else if(To.isParent(From)){
-			if(To.isFather(From))message = MessagePool.getMessage(from, MessagePool.Action.ApologyToFather);
-			else message = MessagePool.getMessage(from, MessagePool.Action.ApologyToMother);
-		}
-		else if(To.isSister(From)){
-			if(To.getAge()>=From.getAge())message = MessagePool.getMessage(from, MessagePool.Action.ApologyToEldersister);
-			else message = MessagePool.getMessage(from, MessagePool.Action.ApologyToMoldySister);
-		}*/
 		From.setBodyEventResMessage(message, Const.HOLDMESSAGE, true, rnd.nextBoolean());
 	}
 	

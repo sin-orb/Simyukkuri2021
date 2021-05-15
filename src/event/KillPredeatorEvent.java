@@ -1,7 +1,6 @@
 package src.event;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 import src.Const;
 import src.SimYukkuri;
@@ -47,7 +46,7 @@ public class KillPredeatorEvent extends RevengeAttackEvent implements Serializab
 			return false;
 		boolean bIsNearPreadeator = false;
 		// 全ゆっくりに対してチェック
-		ArrayList<Body> bodyList = SimYukkuri.world.currentMap.body;
+		Body[] bodyList = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
 		for (Body p : bodyList) {
 			// 自分同士のチェックは無意味なのでスキップ
 			if (p == b) {
@@ -79,7 +78,7 @@ public class KillPredeatorEvent extends RevengeAttackEvent implements Serializab
 	 */
 	public Body searchNextTarget() {
 		Body ret = null;
-		ArrayList<Body> bodyList = SimYukkuri.world.currentMap.body;
+		Body[] bodyList = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
 		for (Body b : bodyList) {
 			if (b.isPredatorType()) {
 				ret = b;

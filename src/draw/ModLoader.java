@@ -63,33 +63,47 @@ public class ModLoader
 	//表情の別バージョンの最大数
 	public static final int nMaxImgOtherVer = 6;
 	
-	// jarファイルのパスを取得
+	/**
+	 *  jarファイルのパスを取得して設定
+	 */
 	public static void setJarPath()
 	{
 		String tmp = System.getProperty("java.class.path");
 		jarPath = tmp.substring(0, tmp.lastIndexOf(File.separator)+1);
 		developRoot = jarPath + MOD_ROOT_DIR + File.separator + DATA_DEV_DIR;
-System.out.println("jarPath : " + jarPath);
+		System.out.println("jarPath : " + jarPath);
 	}
-	
+	/**
+	 * jarファイルのパスを取得.
+	 * @return jarファイルのパス
+	 */
 	public static String getJarPath()
 	{
 		return jarPath;
 	}
 
-	// mod/back/内のフォルダ一覧を作成して返す
+	/**
+	 *  mod/back/内のフォルダ一覧を作成して返す
+	 * @return mod/back/内のフォルダ一覧
+	 */
 	public static Vector<String> getBackThemeList()
 	{
 		return createThemeList(jarPath + MOD_ROOT_DIR + File.separator + MOD_BACK_DIR);
 	}
 
-	// mod/item/内のフォルダ一覧を作成して返す
+	/**
+	 *  mod/item/内のフォルダ一覧を作成して返す
+	 * @return mod/item/内のフォルダ一覧
+	 */
 	public static Vector<String> getItemThemeList()
 	{
 		return createThemeList(jarPath + MOD_ROOT_DIR + File.separator + MOD_ITEM_DIR);
 	}
 
-	// mod/yukkuri/内のフォルダ一覧を作成して返す
+	/**
+	 *  mod/yukkuri/内のフォルダ一覧を作成して返す
+	 * @return mod/yukkuri/内のフォルダ一覧
+	 */
 	public static Vector<String> getBodyThemeList(){
 		return createThemeList(jarPath + MOD_ROOT_DIR + File.separator + MOD_BODY_DIR);
 	}
@@ -115,11 +129,18 @@ System.out.println("jarPath : " + jarPath);
 	    }
 	    return list;
 	}
-	
+	/**
+	 * バックテーマパスを取得する.
+	 * @return バックテーマパス
+	 */
 	public static String getBackThemePath()
 	{
 		return backTheme;
 	}
+	/**
+	 * バックテーマパスを設定する.
+	 * @param path バックテーマパス
+	 */
 	public static void setBackThemePath(String path)
 	{
 		if(path == null)
@@ -131,11 +152,18 @@ System.out.println("jarPath : " + jarPath);
 			backTheme = jarPath + MOD_ROOT_DIR + File.separator + MOD_BACK_DIR + File.separator + path + File.separator;
 		}
 	}
-
+	/**
+	 * アイテムテーマパスを取得する.
+	 * @return アイテムテーマパス
+	 */
 	public static String getItemThemePath()
 	{
 		return itemTheme;
 	}
+	/**
+	 * アイテムテーマパスを設定する.
+	 * @param path アイテムテーマパス
+	 */
 	public static void setItemThemePath(String path)
 	{
 		if(path == null)
@@ -147,11 +175,18 @@ System.out.println("jarPath : " + jarPath);
 			itemTheme = jarPath + MOD_ROOT_DIR + File.separator + MOD_ITEM_DIR + File.separator + path + File.separator;
 		}
 	}
-
+	/**
+	 * ボディテーマパスを取得する.
+	 * @return ボディテーマパス
+	 */
 	public static String getBodyThemePath()
 	{
 		return bodyTheme;
 	}
+	/**
+	 * ボディテーマパスを設定する.
+	 * @param path ボディテーマパス
+	 */
 	public static void setBodyThemePath(String path)
 	{
 		if(path == null)
@@ -164,7 +199,14 @@ System.out.println("jarPath : " + jarPath);
 		}
 	}
 
-	// 旧背景読み込み
+	/**
+	 *  旧背景読み込み
+	 * @param loader ローダ
+	 * @param mapName マップ名
+	 * @param fileName ファイル名
+	 * @return バッファイメージ
+	 * @throws IOException IO例外
+	 */
 	public static BufferedImage loadBackImage(ClassLoader loader, String mapName, String fileName) throws IOException
 	{
 		BufferedImage ret = null;
@@ -183,7 +225,15 @@ System.out.println("jarPath : " + jarPath);
 		return ret;
 	}
 
-	// 新背景定義ファイル読み込み
+	/**
+	 *  新背景定義ファイル読み込み
+	 * @param loader ローダ
+	 * @param mapName マップ名
+	 * @param iniName INIファイル名
+	 * @param bgName 背景名
+	 * @return INIファイルリーダ
+	 * @throws IOException IO例外
+	 */
 	public static IniFileReader loadTerrainData(ClassLoader loader, String mapName, String iniName, String bgName) throws IOException
 	{
 		IniFileReader ret = null;
@@ -220,12 +270,25 @@ System.out.println("jarPath : " + jarPath);
 		return ret;
 	}
 
-	// 道具読み込み
+	/**
+	 *  道具読み込み
+	 * @param loader ローダ
+	 * @param fileName ファイル名
+	 * @return バッファイメージ
+	 * @throws IOException IO例外
+	 */
 	public static BufferedImage loadItemImage(ClassLoader loader, String fileName) throws IOException
 	{
 		return loadImage(loader, itemTheme, fileName);
 	}
-
+	/**
+	 * イメージをロードする.
+	 * @param loader ローダ
+	 * @param root ルートパス
+	 * @param fileName ファイル名
+	 * @return バッファイメージ
+	 * @throws IOException IO例外
+	 */
 	private static BufferedImage loadImage(ClassLoader loader, String root, String fileName) throws IOException
 	{
 		BufferedImage img = null;
@@ -249,32 +312,39 @@ System.out.println("jarPath : " + jarPath);
 		return img;
 	}
 	
-	// 外部ファイルの読み込み
+	/**
+	 * 外部ファイルの読み込み
+	 * @param root ルートパス
+	 * @param fileName ファイル名
+	 * @return バッファイメージ
+	 * @throws IOException IO例外
+	 */
 	private static BufferedImage loadModImage(String root, String fileName) throws IOException
 	{
 		File file = new File(root + fileName);
-//System.out.println("FileLoad : " + file.getAbsolutePath());
 		return ImageIO.read(file);
 	}
 	
-	// jarリソースからの読み込み
+	/**
+	 *  jarリソースからの読み込み
+	 * @param loader ローダ
+	 * @param fileName ファイル名
+	 * @return バッファイメージ
+	 * @throws IOException IO例外
+	 */
 	private static BufferedImage loadJarImage(ClassLoader loader, String fileName) throws IOException
 	{
-//		System.out.println("JarLoad : " + DEFAULT_IMG_ROOT_DIR + fileName);
-//		InputStream iStream = loader.getResourceAsStream(DEFAULT_IMG_ROOT_DIR + fileName);
-//		byte[] buf = new byte[1]; // この値は適当に変更してください
-//		int size = 0;
-//		if( iStream != null )
-//		{
-//			size = iStream.read(buf, 0, buf.length);
-//		}else{
-//			return null;
-//		}
-
 		return ImageIO.read( loader.getResourceAsStream(DEFAULT_IMG_ROOT_DIR + fileName) );
 	}
 	
-	// メッセージファイルを開く
+	/**
+	 *  メッセージファイルを開く
+	 * @param loader ローダ
+	 * @param path ファイルパス
+	 * @param name ファイル名
+	 * @param errStop エラーで止まるフラグ
+	 * @return バッファリーダ
+	 */
 	public static BufferedReader openMessageFile(ClassLoader loader, String path, String name, boolean errStop)
 	{
 		BufferedReader br = null;
@@ -287,7 +357,6 @@ System.out.println("jarPath : " + jarPath);
 			{
 				br = new BufferedReader(new InputStreamReader(new FileInputStream(file),"UTF-8"));
 				jarTry = false;
-//System.out.println("FileLoad : " + file.getAbsolutePath());
 			} catch (IOException e) {
 				
 			}
@@ -298,19 +367,23 @@ System.out.println("jarPath : " + jarPath);
 			try {
 				br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
 			} catch (Exception e1) {
-//System.out.println("JarError! : " + DEFAULT_MSG_DIR + path + "/" + name);
 				if(errStop) {
 					e1.printStackTrace();
 				} else {
 					br = null;
 				}
 			}
-//System.out.println("JarLoad : " + DEFAULT_MSG_DIR + path + "/" + name);
 		}
 		return br;
 	}
 	
-	// ゆっくり用iniファイルの読み込み
+	/**
+	 *  ゆっくり用iniファイルの読み込み
+	 * @param loader ローダ
+	 * @param path ファイルパス
+	 * @param name ファイル名
+	 * @return INIファイルマップ
+	 */
 	public static Map<String, Point[]> loadBodyIniMap(ClassLoader loader, String path, String name) {
 		
 		Map<String, Point[]> ret = null;
@@ -378,7 +451,14 @@ System.out.println("jarPath : " + jarPath);
 		return ret;
 	}
 	
-	// ゆっくり用iniファイルの読み込み(数値)
+	/**
+	 *  ゆっくり用iniファイルの読み込み(数値)
+	 * @param loader ローダ
+	 * @param path ファイルパス
+	 * @param name ファイル名
+	 * @param inKey 目的のキー
+	 * @return キーから取得されたINIファイル上の数値
+	 */
 	public static int loadBodyIniMapForInt(ClassLoader loader, String path, String name, String inKey) {
 		int nRet = 0;
 		IniFileReader iniFile = null;
@@ -415,7 +495,14 @@ System.out.println("jarPath : " + jarPath);
 		return nRet;
 	}
 
-	// ゆっくり用iniファイルの読み込み(文字配列)
+	/**
+	 *  ゆっくり用iniファイルの読み込み(文字配列)
+	 * @param loader ローダ
+	 * @param path ファイルパス
+	 * @param name ファイル名
+	 * @param inKey 目的のキー
+	 * @return キーから取得されたINIファイル上の文字列
+	 */
 	public static String[] loadBodyIniMapForArrayString(ClassLoader loader, String path, String name, String inKey) {
 		IniFileReader iniFile = null;
 		boolean jarTry = true;
@@ -455,7 +542,16 @@ System.out.println("jarPath : " + jarPath);
 		return anStr;
 	}
 	
-	// ゆっくりのパーツ画像読み込み
+	/**
+	 *  ゆっくりのパーツ画像読み込み
+	 * @param loader ローダ
+	 * @param images イメージ
+	 * @param dirOfs オフセット
+	 * @param suffix MODを読み込む接尾辞
+	 * @param bodyName ゆっくり名
+	 * @param io イメージオブザーバ
+	 * @return 読み込めたかどうか
+	 */
 	public static boolean loadBodyImagePack(ClassLoader loader, BufferedImage[][][] images, int[][] dirOfs, String suffix, String bodyName, ImageObserver io)
 	{
 		int babyIndex = Const.BABY_INDEX;
@@ -526,7 +622,16 @@ System.out.println("jarPath : " + jarPath);
 		return ret;
 	}
 
-	// ゆっくりのパーツ画像読み込み
+	/**
+	 *  ゆっくりのパーツ画像読み込み
+	 * @param loader ローダ
+	 * @param images イメージ
+	 * @param dirOfs オフセット
+	 * @param suffix MODを読み込む接尾辞
+	 * @param bodyName ゆっくり名
+	 * @param io イメージオブザーバ
+	 * @return 読み込めたかどうか
+	 */
 	public static boolean loadBodyImagePack(ClassLoader loader, BufferedImage[][][][] images, int[][] dirOfs, String suffix, String bodyName, ImageObserver io)
 	{
 		int babyIndex = Const.BABY_INDEX;
@@ -611,12 +716,24 @@ System.out.println("jarPath : " + jarPath);
 		return ret;
 	}
 	
-	// 画像サイズ設定
-	//通常用
+	/**
+	 * 画像サイズ設定：通常用
+	 * @param bodyImg イメージ
+	 * @param bodyRect ゆっくり胴体の矩形
+	 * @param braidRect ゆっくりのおさげの矩形
+	 * @param io イメージオブザーバ
+	 */
 	public static void setImageSize(BufferedImage[][][] bodyImg, Dimension[] bodyRect, Dimension[] braidRect, ImageObserver io) {
 		setImageSize(bodyImg,bodyRect,  braidRect,false, io);
 	}
-	//飛行種(おさげが前方に出ることのない種)はこっちを直接呼ぶ
+	/**
+	 * 画像サイズ設定：飛行種(おさげが前方に出ることのない種はこっちを直接呼ぶ）
+	 * @param bodyImg イメージ
+	 * @param bodyRect ゆっくり胴体の矩形
+	 * @param braidRect ゆっくりのおさげの矩形
+	 * @param BB おさげが胴体の後ろかどうか
+	 * @param io イメージオブザーバ
+	 */
 	public static void setImageSize(BufferedImage[][][] bodyImg, Dimension[] bodyRect, Dimension[] braidRect,boolean BB , ImageObserver io) {
 		for(int i = 0; i < 3; i++) {
 			bodyRect[i] = new Dimension();
@@ -650,14 +767,11 @@ System.out.println("jarPath : " + jarPath);
 		boolean[] sideFlag = {false, true};
 		boolean[] flipFlag = {false, true};
 
-//System.out.println("===================================================");
-//System.out.println("param [" + root + "] [" + suffix + "]");
 		// 左右パーツ読み込み
 		for(int i = 0; i < 2; i++) {
 			jarTry = false;
 			// 片方しかない画像はスキップ
 			if(i == 1 && !parts.hasSecondary()) break;
-//System.out.println("start " + i + " ---------------------------------------------------");
 			// MOD指定あり
 			if(root != null) {
 				String path;
@@ -669,7 +783,6 @@ System.out.println("jarPath : " + jarPath);
 				// ダミーファイルの存在チェック
 				File file = new File(path + File.separator + bodyName + File.separator + parts.getFilePath(sideFlag[i]) + ".txt");
 				if(file.exists()) {
-//System.out.println("F dummy ::" + file.getAbsolutePath());
 					// ダミーがある場合、画像はnullで返す
 					ret.img[i] = null;
 					ret.isDummy[i] = true;
@@ -678,30 +791,25 @@ System.out.println("jarPath : " + jarPath);
 					// 実画像の読み込み
 					file = new File(path + File.separator + bodyName + File.separator + parts.getFilePath(sideFlag[i]) + ".png");
 					if(!file.exists()) {
-//System.out.println("F not found ::" + file.getAbsolutePath());
 						// ファイルが無い場合
 						if(i == 1) {
 							// 右側の場合は左の画像が読めていれば反転フラグ設定
 							if(ret.img[0] != null || ret.isDummy[0]) {
-//System.out.println("F set flip");
 								ret.img[i] = null;
 								ret.isDummy[i] = false;
 								ret.isFlip = flipFlag[i];
 							}
 						} else {
 							// 左の場合はエラーケースでjar読み込みへ
-//System.out.println("F try jar 1");
 							jarTry = true;
 						}
 					} else {
-//System.out.println("F file load " + file.getAbsolutePath());
 						try {
 							ret.img[i] = ImageIO.read(file);
 							ret.isDummy[i] = false;
 							ret.isFlip = false;
 						} catch(IOException ioe) {
 							// 読み込めなかったらjar読み込み
-//System.out.println("F try jar 2");
 							jarTry = true;
 						}
 					}
@@ -718,7 +826,6 @@ System.out.println("jarPath : " + jarPath);
 				// ダミーファイルの存在チェック
 				String dummPath = path + "/" + bodyName + "/" + parts.getJarPath(sideFlag[i]) + ".txt";
 				if(loader.getResource(dummPath) != null) {
-//System.out.println("J dummy ::" + dummPath);
 					// ダミーがある場合、画像はnullで返す
 					ret.img[i] = null;
 					ret.isDummy[i] = true;
@@ -729,31 +836,26 @@ System.out.println("jarPath : " + jarPath);
 					path = path + "/" + bodyName + "/" + parts.getJarPath(sideFlag[i]) + ".png";
 
 					if(loader.getResource(path) == null) {
-//System.out.println("J not found ::" + path);
 						// ファイルが無い場合
 						if(i == 1) {
 							// 右側の場合は左の画像が読めていれば反転フラグ設定
 							if(ret.img[0] != null || ret.isDummy[0]) {
-//System.out.println("J set flip");
 								ret.img[i] = null;
 								ret.isDummy[i] = false;
 								ret.isFlip = flipFlag[i];
 							}
 						} else {
-//System.out.println("J err 1");
 							// 左の場合はエラーケースだがひとまずダミー扱い
 							ret.img[i] = null;
 							ret.isDummy[i] = false;
 							ret.isFlip = false;
 						}
 					} else {
-//System.out.println("J jar load ::" + path);
 						try {
 							ret.img[i] = ImageIO.read(loader.getResourceAsStream(path));
 							ret.isDummy[i] = false;
 							ret.isFlip = false;
 						} catch(IOException ioe) {
-//System.out.println("J err 2");
 							// 左の場合はエラーケースだがひとまずダミー扱い
 							ret.img[i] = null;
 							ret.isDummy[i] = false;
@@ -769,16 +871,13 @@ System.out.println("jarPath : " + jarPath);
 
 							if(loader.getResource( strTempPath ) == null)
 							{
-								//System.out.println("strTempPath null::" + strTempPath);
 								ret.imgOtherVer[i][j] = null;
 								continue;
 							}
 
 							try {
-//								System.out.println("strTempPath read::" + strTempPath);
 								ret.imgOtherVer[i][j] = ImageIO.read(loader.getResourceAsStream( strTempPath ));
 							} catch (IOException e) {
-								// TODO 自動生成された catch ブロック
 								e.printStackTrace();
 								break;
 							}
@@ -792,7 +891,11 @@ System.out.println("jarPath : " + jarPath);
 		return ret;
 	}
 
-	// 左右反転イメージを作成
+	/**
+	 *  左右反転イメージを作成
+	 * @param img イメージ
+	 * @return 左右反転イメージ
+	 */
 	public static BufferedImage flipImage(BufferedImage img) {
 
 		BufferedImage ret = null;
@@ -808,7 +911,13 @@ System.out.println("jarPath : " + jarPath);
 		return ret;
 	}
 
-	// 拡大縮小イメージを作成
+	/**
+	 *  拡大縮小イメージを作成
+	 * @param img イメージ
+	 * @param w 幅
+	 * @param h 高さ
+	 * @return 幅と高さに合わせて拡大/縮小されたイメージ
+	 */
 	public static BufferedImage scaleImage(BufferedImage img, int w, int h) {
 
 		BufferedImage ret = null;
@@ -816,9 +925,6 @@ System.out.println("jarPath : " + jarPath);
 		ret = new BufferedImage(w, h, BufferedImage.TYPE_4BYTE_ABGR);
 		Graphics2D g2 = ret.createGraphics();
 		g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-//		g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-//		g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
-//		g2.setRenderingHint(RenderingHints.KEY_ALPHA_INTERPOLATION, RenderingHints.VALUE_ALPHA_INTERPOLATION_QUALITY);
 		g2.drawImage(img, 0, 0, w, h, null);
 
 		return ret;
@@ -826,13 +932,17 @@ System.out.println("jarPath : " + jarPath);
 }
 
 
-// ゆっくり画像のテンポラリクラス
+/**
+ *  ゆっくり画像のテンポラリクラス
+ */
 final class BodyImage {
 	public BufferedImage[] img;	// 画像(左右)
 	public boolean[] isDummy;	// ダミーファイルあり
 	public boolean isFlip;	// 反転あり
 	public BufferedImage[][] imgOtherVer;	// 別バージョン画像(左右)
-	
+	/**
+	 * コンストラクタ.
+	 */
 	public BodyImage() {
 		img = new BufferedImage[2];
 		isDummy = new boolean[2];
