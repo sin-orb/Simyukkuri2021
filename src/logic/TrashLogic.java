@@ -1,7 +1,7 @@
 package src.logic;
 
 
-import java.util.ArrayList;
+import java.util.List;
 
 import src.SimYukkuri;
 import src.base.Body;
@@ -15,18 +15,20 @@ import src.item.Trash;
 
 
 /***************************************************
-	ガラクタ関係の処理
-	ゴミや武器が必要なときにガラクタを検索して
-	イベントで取りに行く
-
+ * ガラクタ関係の処理
+ * ゴミや武器が必要なときにガラクタを検索して
+ * イベントで取りに行く
  */
 public class TrashLogic {
 
-	// ゴミおかざりチェック
+	/**
+	 *  ゴミおかざりチェック
+	 * @param b ゆっくり
+	 * @return 処理が行われたか
+	 */
 	public static final boolean checkTrashOkazari(Body b) {
 		
 		if(b.hasOkazari()) return false;
-		//if(b.isVerySad()) return false;
 
 		Obj found = searchTrashObj(b);
 
@@ -48,7 +50,7 @@ public class TrashLogic {
 			wallMode = AgeState.ADULT.ordinal();
 		}
 
-		ArrayList<Trash> list = SimYukkuri.world.currentMap.trash;
+		List<Trash> list = SimYukkuri.world.currentMap.trash;
 		for (Trash t: list) {
 			// 最小距離のものが見つかっていたら
 			if( minDistance < 1 )

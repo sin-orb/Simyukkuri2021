@@ -6,7 +6,6 @@ import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
 
-import src.SimYukkuri;
 import src.base.ObjEX;
 import src.draw.ModLoader;
 import src.enums.ObjEXType;
@@ -114,7 +113,7 @@ public class Generator extends ObjEX implements java.io.Serializable {
 //
 	@Override
 	public void removeListData(){
-		SimYukkuri.world.currentMap.generator.remove(this);
+		//SimYukkuri.world.currentMap.generator.remove(this);
 	}
 //
 //	// initOption = 1 野良用
@@ -122,7 +121,7 @@ public class Generator extends ObjEX implements java.io.Serializable {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		SimYukkuri.world.currentMap.generator.add(this);
+		//SimYukkuri.world.currentMap.generator.add(this);
 		objType = Type.PLATFORM;
 		objEXType = ObjEXType.GENERATOR;
 		interval = 4;

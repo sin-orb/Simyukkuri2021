@@ -1,7 +1,8 @@
 package src.logic;
 
 import java.awt.Point;
-import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 
 import src.SimYukkuri;
@@ -40,10 +41,9 @@ import src.yukkuri.Meirin;
 import src.yukkuri.Remirya;
 import src.yukkuri.Sakuya;
 
-//カビゆの反応：493,804行目
 
 /***************************************************
-	ゆっくり同士の処理
+ * ゆっくり同士の処理
  */
 public class BodyLogic {
 
@@ -53,7 +53,12 @@ public class BodyLogic {
 		NONE, WAIT, GO, BACK
 	};
 
-	// 自分が相手にとって何なのか判定
+	/**
+	 * 自分が相手にとって何なのか判定
+	 * @param me 自分
+	 * @param you 相手
+	 * @return 関係性
+	 */
 	public static final EnumRelationMine checkMyRelation(Body me, Body you) {
 		// 父
 		if (me.isFather(you)) {
@@ -97,10 +102,10 @@ public class BodyLogic {
 	@SuppressWarnings("static-access")
 	public static final boolean checkPartner(Body b) {
 		// 他の用事がある場合等
-		if (b.isToFood() || /* b.isToBody() || b.isToSukkiri() || b.isToSteal() || */ b.isToBed() || b.isToShit()) {
+		if (b.isToFood() ||  b.isToBed() || b.isToShit()) {
 			return false;
 		}
-		if (/*b.isDontMove() || */(!b.isExciting() && !b.isRude() && b.wantToShit()) || b.nearToBirth()) {
+		if ((!b.isExciting() && !b.isRude() && b.wantToShit()) || b.nearToBirth()) {
 			return false;
 		}
 		// 非ゆっくり症ならなにもしない
@@ -226,7 +231,7 @@ public class BodyLogic {
 								if (p.getZ() < Translate.getFlyHeightLimit() || b.canflyCheck()) {
 									if (!Barrier.acrossBarrier(b.getX(), b.getY(), p.getX(), p.getY(),
 											Barrier.MAP_BODY[AgeState.ADULT.ordinal()] + Barrier.BARRIER_KEKKAI)) {
-										if (b.isNotNYD() && !b.isNeedled()) {
+										if (b.isNotNYD() && !b.isNeedled() && !b.isRaper()) {
 											b.setPanic(true, PanicType.REMIRYA);
 										}
 									}
@@ -256,11 +261,6 @@ public class BodyLogic {
 						if ((p.isDead() && p.isCrushed()) || p.isUnBirth() || p.isRaper()) {
 							continue;
 						}
-						// うんうん奴隷も無視
-						//20210326 うんうん奴隷もれいぱーは狙うんじゃね？
-						//						if( p.getPublicRank() == PublicRank.UnunSlave ){
-						//							continue;
-						//						}
 					}
 					// 自分が通常の発情の場合
 					else {
@@ -393,10 +393,10 @@ public class BodyLogic {
 						return true;
 					}
 					//ドゲスの場合は50%の確率でプロポーズをする
-					if (b.getAttitude() != Attitude.SUPER_SHITHEAD || b.RND.nextInt(2) == 0) {
+					if (b.getAttitude() != Attitude.SUPER_SHITHEAD || (b.getAttitude() == Attitude.SUPER_SHITHEAD && b.RND.nextBoolean())) {
 						EventLogic.addBodyEvent(b, new ProposeEvent(b, found, null, 1), null, null);
 						return true;
-					} else {
+					} else if (b.getAttitude() == Attitude.SUPER_SHITHEAD) {
 						// ドゲスの場合は50%の確率でレイプだけする
 						b.moveToSukkiri(found, found.getX() + colX, found.getY(), mz);
 						b.setTargetBind(true);
@@ -606,7 +606,12 @@ public class BodyLogic {
 		return ret;
 	}
 
-	// 接触している場合の動作
+	/**
+	 * 接触している場合の動作
+	 * @param p 自分
+	 * @param b 相手
+	 * @return 動作を行った場合
+	 */
 	public static final boolean doActionOther(Body p, Body b) {
 		// 途中で消されてたら他の候補を探す
 		if (p.isRemoved()) {
@@ -926,7 +931,12 @@ public class BodyLogic {
 		return true;
 	}
 
-	// 体同士が触れる位置のX座標を求める
+	/**
+	 *  体同士が触れる位置のX座標を求める
+	 * @param from ゆっくり
+	 * @param to 相手のゆっくり
+	 * @return X座標
+	 */
 	public static final int calcCollisionX(Body from, Body to) {
 		if (from == null || to == null) {
 			return 0;
@@ -944,7 +954,12 @@ public class BodyLogic {
 		return colX;
 	}
 
-	// 他のゆっくりがプレイヤーにすりすりされていた場合の行動判定
+	/**
+	 *  他のゆっくりがプレイヤーにすりすりされていた場合の行動判定
+	 * @param b 自分
+	 * @param bodyTarget 相手
+	 * @return 行動をしたかどうか
+	 */
 	public static final eActionGo checkActionSurisuriFromPlayer(Body b, Body bodyTarget) {
 		// 例外除去
 		if (b == null || bodyTarget == null) {
@@ -1360,15 +1375,20 @@ public class BodyLogic {
 		return eAct;
 	}
 
-	//婚姻候補のリストを作る。既婚の場合は、相手のみを含むリストを作る
-	public static final ArrayList<Body> createActiveFianceeList(Body b, int age) {
+	/**
+	 * 婚姻候補のリストを作る。既婚の場合は、相手のみを含むリストを作る
+	 * @param b 自分
+	 * @param age ゆん生のステージ
+	 * @return 婚姻候補のリスト
+	 */
+	public static final List<Body> createActiveFianceeList(Body b, int age) {
 		// ほかにいないならスキップ
 		Body[] bodyList = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
 		if (bodyList.length <= 1) {
 			return null;
 		}
 
-		ArrayList<Body> activeFianceeList = new ArrayList<Body>();
+		List<Body> activeFianceeList = new LinkedList<Body>();
 
 		//番がすでにいれば要素はそれのみに
 		if (b.getPartner() != null) {
@@ -1416,18 +1436,29 @@ public class BodyLogic {
 			if (age > f.getBodyAgeState().ordinal()) {
 				continue;
 			}
+			//お相手がすでにいるのは50%の確率でスキップ
+			if (f.getPartner() != null) {
+				if (rnd.nextBoolean()) {
+					continue;
+				}
+			}
 			activeFianceeList.add(f);
 		}
 		return activeFianceeList;
 	}
-
-	public static final ArrayList<Body> createActiveChildList(Body b, boolean bState) {
+	/**
+	 * アクティブな赤ゆ/子ゆのリストを作成する.
+	 * @param b ゆっくり
+	 * @param bState 子ゆっくりを入れるかどうか（これがfalseなら赤ゆのみのリストになる）
+	 * @return アクティブな赤ゆ/子ゆのリスト
+	 */
+	public static final List<Body> createActiveChildList(Body b, boolean bState) {
 		// 子供がいないならスキップ
 		int nChildlenListSize = b.getChildrenListSize();
 		if (nChildlenListSize == 0) {
 			return null;
 		}
-		ArrayList<Body> activeChildlenList = new ArrayList<Body>();
+		List<Body> activeChildlenList = new LinkedList<Body>();
 		for (int i = 0; i < nChildlenListSize; i++) {
 			Body bodyChild = b.getChildren(i);
 			if (bodyChild == null) {
@@ -1472,11 +1503,13 @@ public class BodyLogic {
 		return activeChildlenList;
 	}
 
-	// ぜんゆん集合
+	/**
+	 *  ぜんゆん集合
+	 */
 	public static final void gatheringYukkuri() {
 		Body[] bodyList = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
 		if (bodyList != null && bodyList.length != 0) {
-			ArrayList<Toilet> toiletList = SimYukkuri.world.currentMap.toilet;
+			List<Toilet> toiletList = SimYukkuri.world.currentMap.toilet;
 			if (toiletList != null && toiletList.size() != 0) {
 				Obj o = toiletList.get(0);
 				gatheringYukkuriSquare(o, bodyList, GatheringDirection.UP, null);
@@ -1484,16 +1517,34 @@ public class BodyLogic {
 		}
 	}
 
-	// ぜんゆん集合(四角形前面)
-	public static final boolean gatheringYukkuriFront(Body bTop, ArrayList<Body> TargetList) {
+	/**
+	 *  ぜんゆん集合(四角形前面)
+	 * @param bTop 先頭ゆ
+	 * @param TargetList 並べるゆっくりのリスト
+	 * @return 並んだかどうか
+	 */
+	public static final boolean gatheringYukkuriFront(Body bTop, List<Body> TargetList) {
 		return gatheringYukkuriSquare(bTop, TargetList.toArray(new Body[0]), GatheringDirection.DOWN, null);
 	}
 
-	// ぜんゆん集合(四角形前面)
-	public static final boolean gatheringYukkuriFront(Body bTop, ArrayList<Body> TargetList, EventPacket e) {
+	/**
+	 *  ぜんゆん集合(四角形前面)
+	 * @param bTop 先頭ゆ
+	 * @param TargetList 並べるゆっくりのリスト
+	 * @param e イベント
+	 * @return 並んだかどうか
+	 */
+	public static final boolean gatheringYukkuriFront(Body bTop, List<Body> TargetList, EventPacket e) {
 		return gatheringYukkuriSquare(bTop, TargetList.toArray(new Body[0]) , GatheringDirection.DOWN, e);
 	}
-
+	/**
+	 * ぜんゆん集合
+	 * @param oTop 先頭ゆ
+	 * @param TargetList 並べるゆっくりのリスト
+	 * @param eDir 並べる方向
+	 * @param e イベント
+	 * @return 並んだかどうか
+	 */
 	public static final boolean gatheringYukkuriSquare(Obj oTop, Body[] TargetList, GatheringDirection eDir,
 			EventPacket e) {
 		int nMaxRowSize = 3;// 初期最大幅
@@ -1719,8 +1770,14 @@ public class BodyLogic {
 		return bFlag;
 	}
 
-	// ぜんゆん集合(先頭の後ろに一列)
-	public static final boolean gatheringYukkuriBackLine(Body bTop, ArrayList<Body> TargetList, EventPacket e) {
+	/**
+	 *  ぜんゆん集合(先頭の後ろに一列)
+	 * @param bTop 先頭ゆ
+	 * @param TargetList 並べるゆっくりのリスト
+	 * @param e イベント
+	 * @return 並んだかどうか
+	 */
+	public static final boolean gatheringYukkuriBackLine(Body bTop, List<Body> TargetList, EventPacket e) {
 		if (TargetList == null) {
 			return false;
 		}
@@ -1786,7 +1843,12 @@ public class BodyLogic {
 		}
 		return bResult;
 	}
-
+	/**
+	 * うんうんどれいの感情処理
+	 * @param b 自分
+	 * @param bodyTarget 相手
+	 * @return 処理を行ったかどうか
+	 */
 	public static boolean checkEmotionFromUnunSlave(Body b, Body bodyTarget) {
 		if (b == null || bodyTarget == null) {
 			return false;
@@ -1849,7 +1911,10 @@ public class BodyLogic {
 
 		return false;
 	}
-
+	/**
+	 * 近い親をチェックする.
+	 * @param b 赤ゆなど
+	 */
 	public static void checkNearParent(Body b) {
 		// 大人なら終了
 		if (b.isAdult()) {
@@ -1911,11 +1976,15 @@ public class BodyLogic {
 		}
 	}
 
-	// 視界内に起きているゆっくりがいないかチェック
+	/**
+	 *  視界内に起きているゆっくりがいないかチェック
+	 * @param b ゆっくり
+	 * @return 視界内に起きているゆっくりがいるかどうか
+	 */
 	public static boolean checkWakeupOtherYukkuri(Body b) {
 		boolean bIsWakeup = false;
 		int minDistance = b.getEYESIGHT();
-		ArrayList<Body> bodyList = SimYukkuri.world.currentMap.body;
+		List<Body> bodyList = SimYukkuri.world.currentMap.body;
 		for (Body p : bodyList) {
 			// 自分同士のチェックは無意味なのでスキップ
 			if (p == b)

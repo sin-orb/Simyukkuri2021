@@ -14,14 +14,14 @@ import src.enums.ObjEXType;
 import src.enums.Type;
 
 /***************************************************
-がらくた
-*/
+ * がらくた
+ */
 public class Trash extends ObjEX implements java.io.Serializable {
 	static final long serialVersionUID = 1L;
 
 	private static BufferedImage[] images = new BufferedImage[2];
 	private static Rectangle boundary = new Rectangle();
-
+	/**画像ロード*/
 	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
 
 		images[0] = ModLoader.loadItemImage(loader, "trash" + File.separator + "trash.png");
@@ -39,7 +39,7 @@ public class Trash extends ObjEX implements java.io.Serializable {
 		layer[0] = images[0];
 		return 1;
 	}
-
+	/**境界線の取得*/
 	public static Rectangle getBounding() {
 		return boundary;
 	}
@@ -58,7 +58,12 @@ public class Trash extends ObjEX implements java.io.Serializable {
 	public void kick() {
 		kick(0, -8, -4);
 	}
-
+	/**
+	 * コンストラクタ
+	  * @param initX x座標
+	 * @param initY y座標
+	 * @param initOption 特に意味なし
+	 */
 	public Trash(int initX, int initY, int initOption) {
 		super(initX, initY, initOption);
 		setBoundary(boundary);

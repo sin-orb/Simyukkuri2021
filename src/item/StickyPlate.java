@@ -25,12 +25,13 @@ import src.enums.ObjEXType;
 import src.enums.Type;
 
 /***************************************************
-粘着板
-*/
+ * 粘着板
+ */
 public class StickyPlate extends ObjEX implements java.io.Serializable {
 	static final long serialVersionUID = 1L;
 
 	Random rnd = new Random();
+	/**どこをくっつけるか*/
 	public static enum StickyType {
         UNDER("あんよ固定"),
         BACK("背中固定"),
@@ -39,7 +40,7 @@ public class StickyPlate extends ObjEX implements java.io.Serializable {
         StickyType(String name) { this.name = name; }
         public String toString() { return name; }
 	}
-
+	/**処理対象(ゆっくり)*/
 	public static final int hitCheckObjType = ObjEX.YUKKURI;
 	private static BufferedImage[] images = new BufferedImage[4];
 	private static Rectangle boundary = new Rectangle();
@@ -48,7 +49,7 @@ public class StickyPlate extends ObjEX implements java.io.Serializable {
 	private boolean bFixBack = false;
 
 	private ItemRank itemRank;
-
+	/**画像ロード*/
 	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
 			images[0] = ModLoader.loadItemImage(loader, "stickyplate" + File.separator + "stickyplate.png");
 			images[1] = ModLoader.loadItemImage(loader, "stickyplate" + File.separator + "stickyplate_off.png");
@@ -77,7 +78,7 @@ public class StickyPlate extends ObjEX implements java.io.Serializable {
 	public BufferedImage getShadowImage() {
 		return null;
 	}
-
+	/**境界線の取得*/
 	public static Rectangle getBounding() {
 		return boundary;
 	}
@@ -176,7 +177,12 @@ public class StickyPlate extends ObjEX implements java.io.Serializable {
 		SimYukkuri.world.currentMap.stickyPlate.remove(this);
 	}
 
-	// initOption = 1 野良用
+	/**
+	 * コンストラクタ
+	 * @param initX x座標
+	 * @param initY y座標
+	 * @param initOption 0:飼い用、1;野良用
+	 */
 	public StickyPlate(int initX, int initY, int initOption) {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
@@ -200,7 +206,7 @@ public class StickyPlate extends ObjEX implements java.io.Serializable {
 		}
 	}
 
-	// 設定メニュー
+	/** 設定メニュー*/
 	public static boolean setupStickyPlate(StickyPlate s) {
 		
 		JPanel mainPanel = new JPanel();

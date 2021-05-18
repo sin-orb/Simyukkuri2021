@@ -11,7 +11,8 @@ import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 
 import src.SimYukkuri;
@@ -41,7 +42,7 @@ public class Pool extends FieldShapeBase implements Serializable {
 
 	protected Random rnd = new Random();
 	/**池に捕まってるオブジェクトのリスト*/
-	ArrayList<Obj> bindObjList = new ArrayList<Obj>();
+	List<Obj> bindObjList = new LinkedList<Obj>();
 	/**池の深さの列挙*/
 	public enum DEPTH {
 		NONE,	// エリア外
@@ -63,7 +64,7 @@ public class Pool extends FieldShapeBase implements Serializable {
 	@Override
 	public void executeShapePopup(ShapeMenu menu) {
 
-		ArrayList<Pool> list = SimYukkuri.world.currentMap.pool;
+		List<Pool> list = SimYukkuri.world.currentMap.pool;
 		int pos;
 		
 		switch(menu) {
@@ -249,7 +250,7 @@ public class Pool extends FieldShapeBase implements Serializable {
 			return false;
 		}
 		
-		ArrayList<BeltconveyorObj>  beltList = SimYukkuri.world.currentMap.beltconveyorObj;
+		List<BeltconveyorObj>  beltList = SimYukkuri.world.currentMap.beltconveyorObj;
 		if( beltList != null && beltList.size() != 0 )
 		{
 			for( BeltconveyorObj belt: beltList )

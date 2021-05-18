@@ -15,8 +15,8 @@ import src.enums.ObjEXType;
 import src.enums.Type;
 
 /***************************************************
-おもちゃ
-*/
+ * おもちゃ
+ */
 public class Toy extends ObjEX implements java.io.Serializable {
 	static final long serialVersionUID = 1L;
 
@@ -29,7 +29,7 @@ public class Toy extends ObjEX implements java.io.Serializable {
 	private Body owner = null;
 
 	private ItemRank itemRank;
-
+	/**画像ロード*/
 	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
 
 		images[BALL] = ModLoader.loadItemImage(loader, "toy" + File.separator + "ball.png");
@@ -51,7 +51,7 @@ public class Toy extends ObjEX implements java.io.Serializable {
 		}
 		return 1;
 	}
-
+	/**境界線の取得*/
 	public static Rectangle getBounding() {
 		return boundary;
 	}
@@ -76,20 +76,35 @@ public class Toy extends ObjEX implements java.io.Serializable {
 	public void kick() {
 		kick(0, -8, -4);
 	}
-	
+	/**
+	 * おもちゃの持ち主を設定する.
+	 * @param b おもちゃの持ち主
+	 */
 	public void setOwner(Body b) {
 		owner = b;
 	}
-	
+	/**
+	 * おもちゃの持ち主を取得する.
+	 * @return おもちゃの持ち主
+	 */
 	public Body getOwner() {
 		return owner;
 	}
-	
+	/**
+	 * そのゆっくりに所有されているかどうか
+	 * @param b 判定したいゆっくり
+	 * @return そのゆっくりに所有されているかどうか
+	 */
 	public boolean isOwned(Body b) {
 		return (owner == b);
 	}
 
-	// initOption = 1 野良用
+	/**
+	 * コンストラクタ
+	 * @param initX x座標
+	 * @param initY y座標
+	 * @param initOption 0:飼い用、1;野良用
+	 */
 	public Toy(int initX, int initY, int initOption) {
 		super(initX, initY, initOption);
 		setBoundary(boundary);

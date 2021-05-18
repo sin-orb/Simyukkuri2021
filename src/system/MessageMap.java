@@ -1,14 +1,14 @@
 package src.system;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /*****************************************************
-	1アクションのメッセージ格納
-*/
-
+ * 1アクションのメッセージ格納
+ */
 public class MessageMap
 {
-	// 現在有効なサブタグ
+	/** 現在有効なサブタグ */
 	public enum Tag {
 		normal,
 		rude,
@@ -24,12 +24,19 @@ public class MessageMap
 		fool,
 		wise,
 	}
+	/** ゲスでないゆっくりのフラグ */
 	public boolean normalFlag = false;
+	/** ゲスゆっくりフラグ */
 	public boolean rudeFlag = false;
+	/** ゲスでないゆっくりのタグ */
 	public boolean[] normalTag = null;
+	/** ゲスゆっくりのタグ */
 	public boolean[] rudeTag = null;
-	public HashMap<String, String[]> map = null;
-
+	/** マップ */
+	public Map<String, String[]> map = null;
+	/**
+	 * コンストラクタ.
+	 */
 	public MessageMap()
 	{
 		rudeFlag = false;

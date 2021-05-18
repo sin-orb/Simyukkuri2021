@@ -26,12 +26,18 @@ import src.system.BodyLayer;
 import src.system.MessagePool;
 import src.util.IniFileUtil;
 
-
+/**
+ * れみりゃ
+ */
 public class Remirya extends Body implements java.io.Serializable {
 	static final long serialVersionUID = 2L;
+	/** れみりゃのタイプ */
 	public static final int type = 3000;
+	/** れみりゃ和名 */
 	public static final String nameJ = "れみりゃ";
+	/** れみりゃ英名 */
 	public static final String nameE = "Remirya";
+	/** れみりゃベースファイル名 */
 	public static final String baseFileName = "remirya";
 	private static Map<String, Point[]> AttachOffset = new HashMap<String, Point[]>();
 
@@ -50,7 +56,7 @@ public class Remirya extends Body implements java.io.Serializable {
 	// 個別表情管理(まりちゃ流し用)
 	private int anImageVerStateCtrlNagasi[][] = new int[ImageCode.values().length][2];
 
-
+	/** イメージのロード */
 	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
 		if(imageLoaded) return;
 
@@ -77,16 +83,19 @@ public class Remirya extends Body implements java.io.Serializable {
 		ModLoader.setImageSize(imagesKai, boundary, braidBoundary,true, io);
 		imageLoaded = true;
 	}
-
+	@Override
 	public boolean isImageLoaded() {
 		return imageLoaded;
 	}
-
+	/**
+	 * INIファイルをロードする
+	 * @param loader クラスローダ
+	 */
 	public static void loadIniFile(ClassLoader loader) {
 		AttachOffset = ModLoader.loadBodyIniMap(loader, ModLoader.DATA_INI_DIR, baseFileName);
 		baseSpeed = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_INI_DIR, baseFileName, "speed");
 	}
-
+	@Override
 	public int getImage(int type, int direction, BodyLayer layer, int index) {
 		if( !isbImageNagasiMode() || imagesNagasi == null){
 			layer.image[index] = imagePack[getBodyRank().imageIndex][type][direction * directionOffset[type][0]][getBodyAgeState().ordinal()];
@@ -127,7 +136,7 @@ public class Remirya extends Body implements java.io.Serializable {
 		}
 		return 1;
 	}
-
+	@Override
 	public Point[] getMountPoint(String key) {
 		return AttachOffset.get(key);
 	}
@@ -141,25 +150,25 @@ public class Remirya extends Body implements java.io.Serializable {
 	public int getHybridType(int partnerType) {
 		return Remirya.type;
 	}
-
+	@Override
 	public String getNameJ() {
 		return nameJ;
 	}
-
+	@Override
 	public String getMyName() {
 		if( anMyName[getBodyAgeState().ordinal()] != null ){
 			return anMyName[getBodyAgeState().ordinal()];
 		}
 		return nameJ;
 	}
-
+	@Override
 	public String getMyNameD() {
 		if( anMyNameD[getBodyAgeState().ordinal()] != null ){
 			return anMyNameD[getBodyAgeState().ordinal()];
 		}
 		return getMyName();
 	}
-
+	@Override
 	public String getNameE() {
 		return nameE;
 	}
@@ -241,7 +250,7 @@ public class Remirya extends Body implements java.io.Serializable {
 		}
 	}
 
-	// public methods
+	/** コンストラクタ */
 	public Remirya(int initX, int initY, int initZ, AgeState initAgeState, Body p1, Body p2) {
 		super(initX, initY, initZ, initAgeState, p1, p2);
 		setBoundary(boundary, braidBoundary);
@@ -250,7 +259,7 @@ public class Remirya extends Body implements java.io.Serializable {
 		setBaseBodyFileName(baseFileName);
 		IniFileUtil.readYukkuriIniFile(this);
 	}
-
+	@Override
 	public void tuneParameters() {
 		/*if (rnd.nextBoolean()) {
 		motherhood = true;

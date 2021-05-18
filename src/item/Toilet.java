@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JOptionPane;
@@ -24,11 +24,11 @@ import src.enums.Type;
 import src.system.Cash;
 
 /***************************************************
-トイレ
-*/
+ * トイレ
+ */
 public class Toilet extends ObjEX implements java.io.Serializable {
 	static final long serialVersionUID = 1L;
-
+	/**トイレのタイプ*/
 	public static enum ToiletType {
         NORMAL("安物"),
         CLEAN("自動清掃"),
@@ -38,7 +38,7 @@ public class Toilet extends ObjEX implements java.io.Serializable {
         ToiletType(String name) { this.name = name; }
         public String toString() { return name; }
 	}
-
+	/**処理対象(うんうん)*/
 	public static final int hitCheckObjType = ObjEX.SHIT;
 	private static BufferedImage[] images = new BufferedImage[6];
 	private static Rectangle boundary = new Rectangle();
@@ -47,7 +47,7 @@ public class Toilet extends ObjEX implements java.io.Serializable {
 
 	private boolean autoClean;
 	private boolean bForSlave = false;
-
+	/**画像ロード*/
 	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
 
 		//上から順に普通&うんうん奴隷、自動清掃
@@ -89,7 +89,7 @@ public class Toilet extends ObjEX implements java.io.Serializable {
 	public BufferedImage getShadowImage() {
 		return null;
 	}
-
+	/**境界線の取得*/
 	public static Rectangle getBounding() {
 		return boundary;
 	}
@@ -131,21 +131,32 @@ public class Toilet extends ObjEX implements java.io.Serializable {
 	public void removeListData(){
 		SimYukkuri.world.currentMap.toilet.remove(this);
 	}
-
+	/**
+	 * 自動で掃除するかどうか
+	 * @return 自動で掃除するかどうか
+	 */
 	public boolean getAutoClean() {
 		return autoClean;
 	}
-
+	/**
+	 * うんうんどれい用トイレかどうか
+	 * @return うんうんどれい用トイレかどうか
+	 */
 	public boolean isForSlave(){
 		return bForSlave;
 	}
 
-	// initOption = 1 : 野良
+	/**
+	 * コンストラクタ
+	  * @param initX x座標
+	 * @param initY y座標
+	 * @param initOption 0:飼い用、1;野良用
+	 */
 	public Toilet(int initX, int initY, int initOption) {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		ArrayList<Toilet> list = SimYukkuri.world.currentMap.toilet;
+		List<Toilet> list = SimYukkuri.world.currentMap.toilet;
 		list.add(this);
 		objType = Type.PLATFORM;
 		objEXType = ObjEXType.TOILET;
@@ -187,7 +198,7 @@ public class Toilet extends ObjEX implements java.io.Serializable {
 		return 1;
 	}
 
-	// 設定メニュー
+	/** 設定メニュー */
 	public static boolean setupToilet(Toilet t) {
 
 		JPanel mainPanel = new JPanel();

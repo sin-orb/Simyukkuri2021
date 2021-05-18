@@ -22,12 +22,14 @@ import src.draw.TerrainField;
 import src.draw.Translate;
 import src.system.MainCommandUI.ToolButtonLabel;
 
-
+/**
+ * マップ移動ウィンドウの作成クラス
+ */
 public class MapWindow extends JDialog implements ActionListener, WindowListener {
 
 	private static final String TITLE = "マップ移動";
 
-	// 現在のマップリスト
+	/** 現在のマップリスト */
 	public static enum MAP {
 		MYROOM("自室", "myroom"),
 		GARDEN("庭", "garden"),
@@ -52,7 +54,10 @@ public class MapWindow extends JDialog implements ActionListener, WindowListener
 	}
 
 	private JToggleButton[] butList;
-
+	/**
+	 * コンストラクタ
+	 * @param frame フレーム
+	 */
 	public MapWindow(Frame frame) {
 		super(frame, TITLE, Dialog.ModalityType.MODELESS);
 		addWindowListener(this);

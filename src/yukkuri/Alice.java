@@ -5,8 +5,8 @@ import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import src.SimYukkuri;
@@ -24,12 +24,18 @@ import src.system.BodyLayer;
 import src.system.MessagePool;
 import src.util.IniFileUtil;
 
-
+/**
+ * ありす
+ */
 public class Alice extends Body implements java.io.Serializable {
 	static final long serialVersionUID = 1L;
+	/** ありすのタイプNo：2 */
 	public static final int type = 2;
+	/** 日本語名 */
 	public static final String nameJ = "ありす";
+	/** 英名 */
 	public static final String nameE = "Alice";
+	/** ベースファイル名 */
 	public static final String baseFileName = "alice";
 
 	private static BufferedImage[][][][] imagePack = new BufferedImage[BodyRank.values().length][][][];
@@ -49,6 +55,7 @@ public class Alice extends Body implements java.io.Serializable {
 	 * @param f ImageCodeのordinal
 	 * @returns れいぱーかつありすかつ興奮顔かどうか
 	 */
+	@Override
 	protected boolean isRaperExcitingFace(int f) {
 		return isRaper()  && f == ImageCode.EXCITING.ordinal();
 	};
@@ -57,11 +64,12 @@ public class Alice extends Body implements java.io.Serializable {
 	 * ありすのみオーバーライド。ありすかつれいぱーかどうかを返却する.
 	 * @return ありすかつれいぱーかどうか
 	 */
+	@Override
 	protected boolean isAliceRaper() {
 		return isRaper();
 	};
 
-	
+	/** 画像ロード */
 	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
 
 		if(imageLoaded) return;
@@ -85,23 +93,23 @@ public class Alice extends Body implements java.io.Serializable {
 
 		imageLoaded = true;
 	}
-
+	/** INIファイルロード */
 	public static void loadIniFile(ClassLoader loader) {
 		AttachOffset = ModLoader.loadBodyIniMap(loader, ModLoader.DATA_INI_DIR, baseFileName);
 		
 		baseSpeed = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_INI_DIR, baseFileName, "speed");
 	}
-
+	@Override
 	public boolean isImageLoaded() {
 		return imageLoaded;
 	}
-
+	@Override
 	public int getImage(int type, int direction, BodyLayer layer, int index) {
 		layer.image[index] = imagePack[getBodyRank().imageIndex][type][direction * directionOffset[type][0]][getBodyAgeState().ordinal()];
 		layer.dir[index] = direction * directionOffset[type][1];
 		return 1;
 	}
-
+	@Override
 	public Point[] getMountPoint(String key) {
 		return AttachOffset.get(key);
 	}
@@ -118,25 +126,25 @@ public class Alice extends Body implements java.io.Serializable {
 			return Alice.type;
 		}
 	}
-
+	@Override
 	public String getNameJ() {
 		return nameJ;
 	}
-
+	@Override
 	public String getMyName() {
 		if( anMyName[getBodyAgeState().ordinal()] != null ){
 			return anMyName[getBodyAgeState().ordinal()];
 		}
 		return nameJ;
 	}
-
+	@Override
 	public String getMyNameD() {
 		if( anMyNameD[getBodyAgeState().ordinal()] != null ){
 			return anMyNameD[getBodyAgeState().ordinal()];
 		}
 		return getMyName();
 	}
-
+	@Override
 	public String getNameE() {
 		return nameE;
 	}
@@ -229,9 +237,11 @@ public class Alice extends Body implements java.io.Serializable {
 			stay(30);
 		}
 	}
-
+	/**
+	 * こーでぃねーとをする.
+	 */
 	public void coordinate(){
-		ArrayList<Bed> list = SimYukkuri.world.currentMap.bed;
+		List<Bed> list = SimYukkuri.world.currentMap.bed;
 		if(list == null || list.size() == 0){
 			int i=0;
 			if(getBodyRank() == BodyRank.NORAYU || getBodyRank() == BodyRank.NORAYU_CLEAN || getBodyRank() == BodyRank.SUTEYU){
@@ -243,7 +253,9 @@ public class Alice extends Body implements java.io.Serializable {
 		}
 	}
 
-	// public methods
+	/**
+	 * コンストラクタ
+	 */
 	public Alice(int initX, int initY, int initZ, AgeState initAgeState, Body p1, Body p2) {
 		super(initX, initY, initZ, initAgeState, p1, p2);
 		setBoundary(boundary, braidBoundary);
@@ -252,7 +264,7 @@ public class Alice extends Body implements java.io.Serializable {
 		setBaseBodyFileName(baseFileName);
 		IniFileUtil.readYukkuriIniFile(this);
 	}
-
+	@Override
 	public void tuneParameters() {
 		/*if (rnd.nextBoolean()) {
 		motherhood = true;

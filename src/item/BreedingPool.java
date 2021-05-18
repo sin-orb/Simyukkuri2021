@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import javax.swing.ButtonGroup;
@@ -266,7 +266,7 @@ public class BreedingPool extends ObjEX implements java.io.Serializable {
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
 
-		ArrayList<BreedingPool> list = SimYukkuri.world.currentMap.breedingPool;
+		List<BreedingPool> list = SimYukkuri.world.currentMap.breedingPool;
 		list.add(this);
 
 		objType = Type.PLATFORM;

@@ -17,9 +17,9 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 
 import javax.swing.BoxLayout;
@@ -61,27 +61,36 @@ import src.system.FieldShapeBase;
 import src.system.IconPool;
 import src.system.ItemMenu;
 import src.system.ItemMenu.ShapeMenuTarget;
-import src.system.LoggerYukkuri;
 import src.system.MainCommandUI;
 import src.system.MapPlaceData;
 import src.system.MessagePool;
 
-
+/**
+ * しむゆっくりメイン
+ */
 public class SimYukkuri extends JFrame {
 	static final long serialVersionUID = 1L;
+	/** アプリ名 */
 	public static final String TITLE = "しむゆっくり/SimYukkuri";
+	/** バージョン */
 	public static final String VERSION = "Ver.2021/05/02リファクタリング版";
+	/** うにょフラグ */
 	public static boolean UNYO = true;
-	public static boolean DEBUG_OUTPUT = false;	// デバッグ用
-	public static int NAGASI_MODE = 0;	// 0:いつもの 1:まりちゃ流しOnly 2：共存環境
-
+	/** 流しモード（0:いつもの 1:まりちゃ流しOnly 2：共存環境） */
+	public static int NAGASI_MODE = 0;
+	/** 初期化済みフラグ */
 	public static boolean initialized = false;
+	/** ロック用オブジェクト */
 	public static final Object lock = new Object();
+	/** 時間最小単位 */
 	public static final int TICK = 1;
-
+	/** フィールド倍率 */
 	public static final String[] fieldScaleTbl = {"x0.5", "x1", "x2"};//, "x4", "x8"};
+	/** フィールド大きさ */
 	public static final int[] fieldScaleData = {50, 100, 200, 400, 800};
+	/** バッファ大きさ */
 	public static final int[] bufferSizeData = {50, 100, 200, 400, 200};
+	/** フィールド倍率レート */
 	public static final float fieldZoomRate[][] = {
 		{ 1.0f },
 		{ 1.0f, 0.8f, 0.7f, 0.6f, 0.5f },
@@ -90,46 +99,45 @@ public class SimYukkuri extends JFrame {
 		{ 1.0f, 0.9f, 0.8f, 0.7f, 0.6f, 0.5f, 0.4f, 0.3f, 0.2f, 0.125f },
 	};
 
-	// 標準ウィンドウのテラリウム描画エリアのサイズ
-	public static final int[] PAINT_PANE_X = {900, 1260};
-	public static final int[] PAINT_PANE_Y = {700, 980};
+	/** 標準ウィンドウのテラリウム描画エリアのサイズ */
+	public static final int[] PAINT_PANE_X = {900, 1260}, PAINT_PANE_Y = {700, 980};
+	/** 標準ウィンドウのテラリウム描画エリアのアスペクト比 */
 	public static final double ASPECT = 1.29;
-	// 標準ウィンドウの内部マップサイズ
-	public static final int[] DEFAULT_MAP_X = {300, 500, 500};
-	public static final int[] DEFAULT_MAP_Y = {300, 500, 500};
-	public static final int[] DEFAULT_MAP_Z = {100, 150, 150};
+	/** 標準ウィンドウの内部マップサイズ */
+	public static final int[] DEFAULT_MAP_X = {300, 500, 500}, DEFAULT_MAP_Y = {300, 500, 500}, DEFAULT_MAP_Z = {100, 150, 150};
+	/** ペインのindex */
 	public static int paintPaneMode = 0;
 
 	private static int windowType, scaleIndex;
-
+	/** 自オブジェクト */
 	public static SimYukkuri simYukkuri = null;
+	/** 世界 */
 	public static World world = null;
+	/** ペイン */
 	public static MyPane mypane  = new MyPane();
+	/** スレッド */
 	static Thread mythread;
-
+	/** ドラッグ始点 */
 	public static int fieldSX = -1, fieldSY = -1;
+	/** ドラッグ終点 */
 	public static int fieldEX = -1, fieldEY = -1;
+	/** 「フィールド」オブジェクトのタイプ */
 	public static int fieldType = 0;
 
-	// マウス処理の座標保存
+	/** マウス処理の座標保存*/
 	public static int mouseNewX = 0, mouseNewY = 0 , mouseOldX = 0, mouseOldY = 0 , mouseVX = 0, mouseVY = 0;
+	/**マウススクロール処理の座標保存*/
 	public static int scrollOldX = 0, scrollOldY = 0;
+	/**マウスのポイント座標*/
 	public static int[] fieldMousePos = new int[2];
-
+	/**精子餡インスタンス*/
 	public static Dna sperm = null;	// 精子餡
-
+	/**
+	 * コンストラクタ
+	 */
 	public SimYukkuri() {
 
 		super(TITLE + "  " + VERSION);
-
-		// ログファイル出力
-		if( SimYukkuri.DEBUG_OUTPUT )
-		{
-			String strLog = new String();
-			StackTraceElement throwableStackTraceElement = new Throwable().getStackTrace()[0];
-			strLog += throwableStackTraceElement.getClassName();strLog += " : ";strLog += throwableStackTraceElement.getMethodName();strLog += " : ";strLog += throwableStackTraceElement.getLineNumber();
-			LoggerYukkuri.outputLogFile(strLog);
-		}
 
 		ClassLoader loader = this.getClass().getClassLoader();
 
@@ -177,7 +185,9 @@ public class SimYukkuri extends JFrame {
 
 		NAGASI_MODE = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play", "NAGASI_MODE");
 	}
-
+	/**
+	 * セーブする.
+	 */
 	public void doSave() {
 		synchronized(lock) {
 			final JFileChooser fc = new JFileChooser(ModLoader.getJarPath());
@@ -192,7 +202,9 @@ public class SimYukkuri extends JFrame {
 			}
 		}
 	}
-
+	/**
+	 * ロードする.
+	 */
 	public void doLoad() {
 		synchronized(lock) {
 			final JFileChooser fc = new JFileChooser(ModLoader.getJarPath());
@@ -210,7 +222,10 @@ public class SimYukkuri extends JFrame {
 			}
 		}
 	}
-
+	/**
+	 * メインメソッド
+	 * @param args 引数
+	 */
 	public static void main(String[] args) {
 
 		try {
@@ -228,10 +243,15 @@ public class SimYukkuri extends JFrame {
 			System.exit(0);
 		}
 	}
-
+	/**
+	 * キーリスナ
+	 */
 	public class MyKeyListener implements KeyListener {
 		private int savedGameSpeed;
-
+		/**
+		 * キー押下
+		 */
+		@Override
 		public void keyPressed(KeyEvent e) {
 			switch (e.getKeyCode()) {
 			case KeyEvent.VK_ESCAPE:
@@ -302,38 +322,31 @@ public class SimYukkuri extends JFrame {
 					Translate.addBufferPos(Translate.getDisplayArea().width / 3, 0);
 				}
 				break;
-/*
-デバッグ用
-ハイブリッドを残して削除
-			case KeyEvent.VK_H:
-				synchronized(SimYukkuri.lock) {
-					for(Body b :Terrarium.bodyList) {
-						if(b.getType() != HybridYukkuri.type) b.remove();
-					}
-				}
-				break;
-*/
 			default:
 				break;
 			}
 		}
-
+		@Override
 		public void keyReleased(KeyEvent e) {
 		}
-
+		@Override
 		public void keyTyped(KeyEvent e) {
 		}
 	}
-
+	/**
+	 * マウスリスナ
+	 */
 	public class MyMouseListener extends MouseAdapter {
 		private Cursor cr = new Cursor(Cursor.HAND_CURSOR);
 		private Cursor defCr = new Cursor(Cursor.DEFAULT_CURSOR);
 		private Obj grabbedObj = null;
 		private int startY = -1, startZ = -1;
-		private int oX = 0, oY = 0, altitude = 0;
+		private int oX = 0, oY = 0;
+		@SuppressWarnings("unused")
+		private int altitude = 0;
 		private Point translatePos = new Point();
 		private Rectangle imageRect = new Rectangle();
-		private ArrayList<Obj> list4sort = new ArrayList<Obj>();
+		private List<Obj> list4sort = new LinkedList<Obj>();
 
 		// マウス位置の最も手前にあるオブジェクトを取得
 		private Obj getUpFront(int mx, int my, boolean stalkMode) {
@@ -463,7 +476,7 @@ public class SimYukkuri extends JFrame {
 			return null;
 		}
 
-		// マウスクリック
+		/** マウスクリック */
 		public void mouseClicked(MouseEvent e) {
 			synchronized(lock) {
 				Translate.transCanvasToField(e.getX(), e.getY(), fieldMousePos);
@@ -583,7 +596,7 @@ public class SimYukkuri extends JFrame {
 			}
 		}
 
-		// マウスボタンを押しただけ
+		/** マウスボタンを押しただけ */
 		public void mousePressed(MouseEvent e) {
 			synchronized(lock) {
 				ItemMenu.itemModeCancel(false);
@@ -645,7 +658,7 @@ public class SimYukkuri extends JFrame {
 				}
 		}
 
-		// マウスボタンを離す
+		/** マウスボタンを離す */
 		public void mouseReleased(MouseEvent e) {
 			synchronized(lock) {
 				Translate.transCanvasToField(e.getX(), e.getY(), fieldMousePos);
@@ -687,7 +700,7 @@ public class SimYukkuri extends JFrame {
 			}
 		}
 
-		// マウスドラッグ中
+		/** マウスドラッグ中 */
 		public void mouseDragged(MouseEvent e) {
 			synchronized(lock) {
 				Translate.transCanvasToField(e.getX(), e.getY(), fieldMousePos);
@@ -836,7 +849,7 @@ public class SimYukkuri extends JFrame {
 			}
 		}
 
-		// カーソル移動
+		/** カーソル移動 */
 		public void mouseMoved(MouseEvent e) {
 			// ほぼ毎フレーム呼ばれるので処理は最小限に
 			synchronized(lock) {
@@ -854,15 +867,15 @@ public class SimYukkuri extends JFrame {
 				mouseNewY = fieldMousePos[1];
 			}
 		}
-
+		@Override
 		public void mouseEntered(MouseEvent e) {
 			setCursor(cr);
 		}
-
+		@Override
 		public void mouseExited(MouseEvent e) {
 			setCursor(defCr);
 		}
-
+		@Override
 		public void mouseWheelMoved(MouseWheelEvent e) {
 			int select;
 
@@ -873,19 +886,22 @@ public class SimYukkuri extends JFrame {
 			MainCommandUI.gameSpeedCombo.setSelectedIndex(select);
 		}
 	}
-
+	/**マウスの運動量取得*/
 	public static void checkMouseVel() {
 		mouseVX = (mouseNewX - mouseOldX) + mouseVX/3*2;
 		mouseVY = (mouseNewY - mouseOldY) + mouseVY/3*2;
 		mouseOldX = mouseNewX;
 		mouseOldY = mouseNewY;
 	}
-
+	/**
+	 * ウィンドウの大きさ指定
+	 * @param size ウィンドウのサイズ
+	 * @param scale 拡大倍率
+	 */
 	public void setWindowMode(int size, int scale) {
 		paintPaneMode = size;
 
 		Insets inset = getInsets();
-System.out.println(getInsets());
 		setPreferredSize(new Dimension(PAINT_PANE_X[size] + MainCommandUI.MENU_PANE_X, PAINT_PANE_Y[size]));
 		setSize(inset.left + inset.right + PAINT_PANE_X[size] + MainCommandUI.MENU_PANE_X, inset.top + inset.bottom + PAINT_PANE_Y[size]);
 		setLocation(new Point(100, 0));
@@ -893,11 +909,11 @@ System.out.println(getInsets());
 		mypane.setPreferredSize(new Dimension(Translate.canvasW, Translate.canvasH));
 		mypane.setMinimumSize(new Dimension(Translate.canvasW, Translate.canvasH));
 		mypane.setMaximumSize(new Dimension(Translate.canvasW, Translate.canvasH));
-
-System.out.println("param " + getSize());
-System.out.println("value " + PAINT_PANE_X[size] + "," + PAINT_PANE_Y[size]);
 	}
-
+	/**
+	 * フルスクにする処理
+	 * @param scale 拡大倍率
+	 */
 	public void setFullScreenMode(int scale) {
         GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
         Rectangle rect = env.getMaximumWindowBounds();
@@ -916,11 +932,12 @@ System.out.println("value " + PAINT_PANE_X[size] + "," + PAINT_PANE_Y[size]);
 		mypane.setMinimumSize(new Dimension(Translate.canvasW, Translate.canvasH));
 		mypane.setMaximumSize(new Dimension(Translate.canvasW, Translate.canvasH));
 	}
-
+	/**最初に出てくるウィンドウの作成*/
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	void initTerrariumSize ()
 	{
 		String[] screen;
-		String mess1, mess2, mess3, mess4, mess5;
+		String mess1, mess2, mess3, mess4;
 		JComboBox windowModeCombo;
 		JComboBox fieldScaleCombo;
 		JComboBox bgModCombo;
@@ -936,7 +953,6 @@ System.out.println("value " + PAINT_PANE_X[size] + "," + PAINT_PANE_Y[size]);
 		mess2 = "背景テーマ";
 		mess3 = "道具テーマ";
 		mess4 = "ゆっくりテーマ";
-		mess5 = "メッセージテーマ";
 
 		JPanel mainPanel = new JPanel();
 		mainPanel.setLayout(new GridLayout(2, 1, 0, 0));

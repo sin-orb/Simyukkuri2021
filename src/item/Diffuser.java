@@ -9,7 +9,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
@@ -130,7 +130,7 @@ public class Diffuser extends ObjEX implements java.io.Serializable {
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), 8);
 		
-		ArrayList<Diffuser> list = SimYukkuri.world.currentMap.diffuser;
+		List<Diffuser> list = SimYukkuri.world.currentMap.diffuser;
 		list.add(this);
 		objType = Type.OBJECT;
 		objEXType = ObjEXType.DIFFUSER;

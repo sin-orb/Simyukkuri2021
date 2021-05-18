@@ -28,14 +28,19 @@ import src.base.Obj;
 import src.draw.Translate;
 import src.system.MainCommandUI.ToolButtonLabel;
 
-
+/**
+ * 持ち物ウィンドウの設計図クラス
+ */
 public class ItemWindow extends JDialog implements WindowListener, MouseListener, ActionListener, ListDataListener {
 
 	private static final String TITLE = "持ち物";
 
+	@SuppressWarnings("rawtypes")
 	private JList itemList;
 	private JButton delButton;
 
+	@SuppressWarnings("rawtypes")
+	/** コンストラクタ */
 	public ItemWindow(Frame frame) {
 		super(frame, TITLE, Dialog.ModalityType.MODELESS);
 		addWindowListener(this);
@@ -69,6 +74,7 @@ public class ItemWindow extends JDialog implements WindowListener, MouseListener
 		pack();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public void windowOpened(WindowEvent e) {
 		itemList.setModel(SimYukkuri.world.player.itemList);
@@ -113,17 +119,6 @@ public class ItemWindow extends JDialog implements WindowListener, MouseListener
 			SimYukkuri.world.player.holdItem = null;
 		}
 	}
-/*	
-	private void setDelButtonStatus() {
-
-		if(itemList.getSelectedIndices().length == 0) {
-			delButton.setEnabled(false);
-		} else {
-			delButton.setEnabled(true);
-		}
-		
-	}
-*/
 	@Override
 	public void mousePressed(MouseEvent e) {
 	}
@@ -140,7 +135,9 @@ public class ItemWindow extends JDialog implements WindowListener, MouseListener
 	public void mouseExited(MouseEvent e) {
 	}
 
-	// 捨てるボタン
+	/**
+	 *  捨てるボタン
+	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(itemList.getSelectedIndex() == -1) return;

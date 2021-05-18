@@ -14,17 +14,14 @@ import src.draw.MyPane;
 
 
 /**********************************************
-
-	各種アイコン、システム画像の保持
-
-
-*/
+ * 各種アイコン、システム画像の保持
+ */
 public class IconPool {
 
 	// ルートパス MODは非対応
 	private static final String IMAGE_PATH = "images/icon/";
 
-	// UIスキン
+	/** UIスキン */
 	public enum UISkin {
 		NINE_SLICE_UP("button0.png"),
 		NINE_SLICE_DOWN("button1.png"),
@@ -35,7 +32,7 @@ public class IconPool {
 		}
 	}
 
-	// ボタンアイコン
+	/** ボタンアイコン */
 	public enum ButtonIcon {
 		HELP_OFF("help_off.png"),
 		OPTION("option.png"),
@@ -49,7 +46,7 @@ public class IconPool {
 		}
 	}
 
-	// ステータスアイコン
+	/** ステータスアイコン */
 	public enum StatusIcon {
 		PREDATOR("predator.png", "捕食種"),
 		RAPER("raper.png", "れいぱー"),
@@ -69,7 +66,7 @@ public class IconPool {
 		}
 	}
 
-	// カーソル
+	/** カーソル */
 	public enum CursorIcon {
 		CTRL("ctrl.png"),
 		CUR_LB("cur_lb.png"),
@@ -90,7 +87,7 @@ public class IconPool {
 		}
 	}
 
-	// ヘルプ
+	/** ヘルプ */
 	public enum HelpIcon {
 		CTRL("ctrl.png"),
 		MOUSE_L("mouse_l.png"),
@@ -109,7 +106,7 @@ public class IconPool {
 	private static ImageIcon[] statusIconImage = new ImageIcon[StatusIcon.values().length];
 	private static BufferedImage[] cursorIconImage = new BufferedImage[CursorIcon.values().length];
 	private static BufferedImage[] helpIconImage = new BufferedImage[HelpIcon.values().length];
-
+	/** イメージのロード */
 	public static void loadImages(ClassLoader loader, ImageObserver io) throws IOException {
 
 		MediaTracker mt = new MediaTracker((MyPane)io);
@@ -142,45 +139,78 @@ public class IconPool {
 			e.printStackTrace();
 		}
 	}
-
+	/**
+	 * UIスキンイメージの取得
+	 * @return UIスキンイメージ
+	 */
 	public static BufferedImage[] getUISkinImageArray() {
 		return uiSkinImage;
 	}
-
+	/**
+	 * ボタンアイコンイメージの取得
+	 * @return ボタンアイコンイメージ
+	 */
 	public static BufferedImage[] getButtonIconImageArray() {
 		return buttonIconImage;
 	}
-
+	/**
+	 * ステータスアイコンのイメージの取得
+	 * @return ステータスアイコンのイメージ
+	 */
 	public static ImageIcon[] getStatusIconImageArray() {
 		return statusIconImage;
 	}
-
+	/**
+	 * カーソルアイコンのイメージの取得
+	 * @return カーソルアイコンのイメージ
+	 */
 	public static BufferedImage[] getCursorIconImageArray() {
 		return cursorIconImage;
 	}
-
+	/**
+	 * ヘルプアイコンのイメージの取得
+	 * @return ヘルプアイコンのイメージ
+	 */
 	public static BufferedImage[] getHelpIconImageArray() {
 		return helpIconImage;
 	}
-
-
-
+	/**
+	 * UIスキンイメージの取得
+	 * @param idx インデックス
+	 * @return UIスキンイメージ
+	 */
 	public static BufferedImage getUISkinImage(int idx) {
 		return uiSkinImage[idx];
 	}
-
+	/**
+	 * ボタンアイコンのイメージの取得
+	 * @param idx インデックス
+	 * @return ボタンアイコンのイメージ
+	 */
 	public static BufferedImage getButtonIconImage(int idx) {
 		return buttonIconImage[idx];
 	}
-
+	/**
+	 * ステータスアイコンのイメージの取得
+	 * @param idx インデックス
+	 * @return ステータスアイコンのイメージ
+	 */
 	public static ImageIcon getStatusIconImage(int idx) {
 		return statusIconImage[idx];
 	}
-
+	/**
+	 * カーソルアイコンのイメージの取得
+	 * @param idx インデックス
+	 * @return カーソルアイコンのイメージ
+	 */
 	public static BufferedImage getCursorIconImage(int idx) {
 		return cursorIconImage[idx];
 	}
-
+	/**
+	 * ヘルプアイコンのイメージの取得
+	 * @param idx インデックス
+	 * @return ヘルプアイコンのイメージ
+	 */
 	public static BufferedImage getHelpIconImage(int idx) {
 		return helpIconImage[idx];
 	}

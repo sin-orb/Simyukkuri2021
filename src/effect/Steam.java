@@ -5,7 +5,6 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import src.base.Effect;
 import src.draw.ModLoader;
@@ -17,9 +16,6 @@ import src.draw.ModLoader;
 public class Steam extends Effect {
 
 	private static final long serialVersionUID = 1L;
-
-	public static ArrayList<Effect> sortList;
-	public static ArrayList<Effect> frontList;
 
 	private static BufferedImage[] images;
 	private static int imgW;

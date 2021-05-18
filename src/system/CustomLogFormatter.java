@@ -5,11 +5,15 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.LogRecord;
 import java.util.logging.SimpleFormatter;
-
+/**
+ * カスタムログのフォーマッター
+ */
 public class CustomLogFormatter extends SimpleFormatter {
    private final SimpleDateFormat dateFormat =
          new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
-
+   /**
+    * フォーマットを行う.
+    */
    public String format(LogRecord logRecord) {
       final StringBuffer stringBuffer = new StringBuffer();
 

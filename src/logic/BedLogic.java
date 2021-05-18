@@ -1,6 +1,6 @@
 package src.logic;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import src.SimYukkuri;
@@ -23,12 +23,16 @@ import src.item.Toilet;
 
 
 /***************************************************
-	ベッド関係の処理
+ * ベッド関係の処理
  */
 public class BedLogic {
 
 	private static Random rnd = new Random();
-
+	/**
+	 * ベッド関連処理を行う
+	 * @param b ゆっくり
+	 * @return ベッド関連処理の対象かどうか
+	 */
 	public static final boolean checkBed(Body b) {
 		// 他の用事がある場合
 		if( b.isToFood() || b.isToBody() || /*b.isToBed() ||*/ b.isToShit() || 
@@ -138,7 +142,11 @@ public class BedLogic {
 		}
 		return ret;
 	}
-
+	/**
+	 * ベッドを探し出す.
+	 * @param b ゆっくり
+	 * @return 探しだしたベッドのオブジェクト
+	 */
 	public static Obj searchBed(Body b){
 		Obj found = b.getFavItem(FavItemType.BED);
 		int minDistance = b.getEYESIGHT();
@@ -163,7 +171,7 @@ public class BedLogic {
 		// うんうん奴隷ではない場合
 		if( b.getPublicRank() != PublicRank.UnunSlave){
 			if(found == null) {
-			ArrayList<Bed> list = SimYukkuri.world.currentMap.bed;
+			List<Bed> list = SimYukkuri.world.currentMap.bed;
 				for (ObjEX t: list) {
 					int distance = Translate.distance(b.getX(), b.getY(), t.getX(), t.getY());
 					if (minDistance > distance) {
@@ -177,7 +185,7 @@ public class BedLogic {
 			}
 	//// 仮 おうち検索
 			if(found == null) {
-			ArrayList<House> list = SimYukkuri.world.currentMap.house;
+			List<House> list = SimYukkuri.world.currentMap.house;
 			for (ObjEX t: list) {
 					int distance = Translate.distance(b.getX(), b.getY(), t.getX(), t.getY());
 					if (minDistance > distance) {
@@ -193,7 +201,7 @@ public class BedLogic {
 		else{
 			// うんうん奴隷の場合、トイレを探す
 			if(found == null) {
-			ArrayList<Toilet> list = SimYukkuri.world.currentMap.toilet;
+			List<Toilet> list = SimYukkuri.world.currentMap.toilet;
 				for (ObjEX t: list) {
 					int distance = Translate.distance(b.getX(), b.getY(), t.getX(), t.getY());
 					if (minDistance > distance) {

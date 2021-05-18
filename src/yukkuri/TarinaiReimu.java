@@ -19,12 +19,18 @@ import src.enums.YukkuriType;
 import src.system.BodyLayer;
 import src.util.IniFileUtil;
 
-
+/**
+ * たりないれいむ
+ */
 public class TarinaiReimu extends Tarinai implements java.io.Serializable {
 	static final long serialVersionUID = 1L;
+	/** たりないれいむのタイプ */
 	public static final int type = 2007;
+	/** たりないれいむの和名 */
 	public static final String nameJ = "たりないれいむ";
+	/** たりないれいむの英名 */
 	public static final String nameE = "TarinaiReimu";
+	/** たりないれいむベースファイル名 */
 	public static final String baseFileName = "tarinai_reimu";
 	
 	private static BufferedImage[][][][] imagePack = new BufferedImage[BodyRank.values().length][][][];
@@ -38,8 +44,8 @@ public class TarinaiReimu extends Tarinai implements java.io.Serializable {
 	//---
 	// iniファイルから読み込んだ初期値
 	private static int baseSpeed = 100;
-
-public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
+	/** イメージのロード */
+	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
 		
 		if(imageLoaded) return;
 
@@ -62,21 +68,22 @@ public static void loadImages (ClassLoader loader, ImageObserver io) throws IOEx
 
 		imageLoaded = true;
 	}
+	@Override
 	public boolean isImageLoaded() {
 		return imageLoaded;
 	}
-
+	/** INIファイルをロードする */
 	public static void loadIniFile(ClassLoader loader) {
 		AttachOffset = ModLoader.loadBodyIniMap(loader, ModLoader.DATA_INI_DIR, baseFileName);
 		baseSpeed = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_INI_DIR, baseFileName, "speed");
 	}
-	
+	@Override
 	public int getImage(int type, int direction, BodyLayer layer, int index) {
 		layer.image[index] = imagePack[getBodyRank().imageIndex][type][direction * directionOffset[type][0]][getBodyAgeState().ordinal()];
 		layer.dir[index] = direction * directionOffset[type][1];
 		return 1;
 	}
-
+	@Override
 	public Point[] getMountPoint(String key) {
 		return AttachOffset.get(key);
 	}
@@ -101,7 +108,7 @@ public static void loadImages (ClassLoader loader, ImageObserver io) throws IOEx
 		return nameJ;
 	}
 
-	// public methods
+	/** コンストラクタ */
 	public TarinaiReimu(int initX, int initY, int initZ, AgeState initAgeState, Body p1, Body p2) {
 		super(initX, initY, initZ, initAgeState, p1, p2);
 		setBoundary(boundary, braidBoundary);
@@ -120,7 +127,7 @@ public static void loadImages (ClassLoader loader, ImageObserver io) throws IOEx
 	public boolean isIdiot() {
 		return true;
 	}
-	
+	@Override
 	public void tuneParameters() {
 		setAttitude(Attitude.SUPER_SHITHEAD);
 		double factor = Math.random()*2+1;

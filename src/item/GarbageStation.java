@@ -9,7 +9,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import javax.swing.JCheckBox;
@@ -174,7 +174,7 @@ public class GarbageStation extends ObjEX implements java.io.Serializable {
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), 8);
 
-		ArrayList<GarbageStation> list = SimYukkuri.world.currentMap.garbageStation;
+		List<GarbageStation> list = SimYukkuri.world.currentMap.garbageStation;
 		list.add(this);
 		objType = Type.OBJECT;
 		objEXType = ObjEXType.GARBAGESTATION;

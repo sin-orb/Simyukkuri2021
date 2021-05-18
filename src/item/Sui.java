@@ -14,7 +14,6 @@ import src.base.Obj;
 import src.base.ObjEX;
 import src.draw.ModLoader;
 import src.draw.Translate;
-import src.enums.CoreAnkoState;
 import src.enums.Event;
 import src.enums.FavItemType;
 import src.enums.Intelligence;
@@ -23,11 +22,11 @@ import src.enums.Type;
 import src.system.MessagePool;
 
 /***************************************************
-すいー
-*/
+ * すぃー
+ */
 public class Sui extends ObjEX implements java.io.Serializable {
 	static final long serialVersionUID = 1L;
-
+	/**処理対象(ゆっくり)*/
 	public static final int hitCheckObjType = ObjEX.YUKKURI;
 	
 	private static int lurd = 0;
@@ -76,7 +75,7 @@ public class Sui extends ObjEX implements java.io.Serializable {
 	private int speed = 400;
 
 	private Random rnd = new Random();
-
+	/**画像ロード*/
 	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
 		String[] tmp = {"_shadow","1","2","3"};
 		for(int i=0;i<condition_num;i++){
@@ -106,7 +105,11 @@ public class Sui extends ObjEX implements java.io.Serializable {
 	public BufferedImage getShadowImage() {
 		return images[current_direction][shadow];
 	}
-	
+	/**
+	 * すぃーに乗る
+	 * @param b 乗るゆっくり
+	 * @return 乗れたかどうか
+	 */
 	public boolean rideOn(Body b){
 		if( b == null )
 		{
@@ -140,14 +143,6 @@ public class Sui extends ObjEX implements java.io.Serializable {
 			}
 		}
 
-		/*
-		// 乗客が上限なら終了
-		if(current_bindbody_num>=bindbody_num){
-			return false;
-		}
-		*/
-		
-
 		for(int i=0;i<bindbody_num;i++){
 			if(bindBody[i]==null){
 				bindBody[i]=b;
@@ -177,7 +172,10 @@ public class Sui extends ObjEX implements java.io.Serializable {
 		b.wakeup();
 		return true;
 	}
-	
+	/**
+	 * すぃーに乗れるかどうか
+	 * @return すぃ～に乗れるかどうか
+	 */
 	public boolean iscanriding(){
 		if(bindobj == null) return false;
 		for(int i=0;i<bindbody_num;i++){
@@ -187,6 +185,11 @@ public class Sui extends ObjEX implements java.io.Serializable {
 		}
 		return false;
 	}
+	/**
+	 * すぃ～に乗ってるかどうか
+	 * @param b 判定するゆっくり
+	 * @return すぃ～に乗ってるかどうか
+	 */
 	public boolean isriding(Body b){
 		if(b == null) return false;
 		for(int i=0;i<bindbody_num;i++){
@@ -196,14 +199,24 @@ public class Sui extends ObjEX implements java.io.Serializable {
 		}
 		return false;
 	}
+	/**
+	 * 何ゆんがすぃ～に乗ってるか
+	 * @return 何ゆんがすぃ～に乗ってるか
+	 */
 	public int getcurrent_bindbody_num(){
 		return current_bindbody_num;
 	}
-	
+	/**
+	 * 現在のすぃ～の状態を取得する.
+	 * @return 現在のすぃ～の状態
+	 */
 	public int getcurrent_condition(){
 		return current_condition;
 	}
-	
+	/**
+	 * すぃ～から降りる
+	 * @param b 降りるゆっくり
+	 */
 	public void rideOff(Body b){
 		if( b==null)
 		{
@@ -243,15 +256,21 @@ public class Sui extends ObjEX implements java.io.Serializable {
 			current_bindbody_num--;
 		}
 	}
-
+	/**
+	 * 誰も乗っていないかどうか
+	 * @return 誰も乗っていないかどうか
+	 */
 	public boolean NoCanBind(){
 		return (bindobj != null);
 	}
-	
+	/**
+	 * バンドオブジェクトを取得する.
+	 * @return バンドオブジェクト
+	 */
 	public Obj getbindobj(){
 		return bindobj;
 	}
-
+	/**境界線の取得*/
 	public static Rectangle getBounding() {
 		return boundary;
 	}
@@ -294,10 +313,6 @@ public class Sui extends ObjEX implements java.io.Serializable {
 			}
 			bindBody[i].setX(x+OfsX[i][current_direction]);
 			bindBody[i].setY(y+OfsY[i][current_direction]+10);
-//			bindBody[i].setZ(1);
-//			if(y < Translate.mapH) bindBody[i].setY(y + 1);
-//			else bindBody[i].setY(y);
-			//bindBody[i].setZ(OfsY[i][current_direction]);
 			bindBody[i].lookTo(destX, destY);
 		}
 	}
@@ -348,15 +363,6 @@ public class Sui extends ObjEX implements java.io.Serializable {
 				if(iscanriding()){
 					
 					Body b = (Body)bindobj;
-/*					Obj o = b.getTarget();
-					if(o != null){
-						int d = distance(b.getX(), b.getY(),o.getX(), o.getY());
-						if(d<(boundary.height/2)*(boundary.height/2)){
-							for(Body r:bindBody){
-								rideOff(r);
-							}
-						}
-					}*/
 					int bx = b.getDestX();
 					int by = b.getDestY();
 					if(bx == -1){
@@ -479,7 +485,7 @@ public class Sui extends ObjEX implements java.io.Serializable {
 			
 		}
 	}
-
+	/** コンストラクタ */
 	public Sui(int initX, int initY, int initOption) {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
@@ -494,7 +500,10 @@ public class Sui extends ObjEX implements java.io.Serializable {
 		value = 20000;
 		cost = 0;
 	}
-	
+	/**
+	 * Y座標を変更する.
+	 * @param A 変更するかどうか
+	 */
 	public void ChangeY(boolean A){
 		if(A){
 			setForceY(y+boundary.height/2);

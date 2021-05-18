@@ -3,18 +3,31 @@ package src.system;
 import src.SimYukkuri;
 import src.base.Body;
 import src.base.Obj;
-
+/**
+ * プレイヤーの所持金
+ */
 public class Cash {
-
+	/**
+	 * 所持金に加える.
+	 * @param val 加えたい金額
+	 */
 	public static void addCash(int val) {
 		SimYukkuri.world.getPlayer().addCash(val);
 	}
-
+	/**
+	 * アイテムを購入し所持金を減らす.
+	 * @param item アイテム
+	 * @return アイテムの金額
+	 */
 	public static long buyItem(Obj item) {
 		addCash(-item.getValue());
 		return item.getValue();
 	}
-
+	/**
+	 * ゆっくりを購入し所持金を減らす.
+	 * @param body ゆっくり
+	 * @return ゆっくりの金額
+	 */
 	public static long buyYukkuri(Body body) {
 		int val = 0;
 		val = body.getYcost();
@@ -32,7 +45,11 @@ public class Cash {
 		addCash(-val);
 		return val;
 	}
-
+	/**
+	 * ゆっくりを売り所持金を増やす.
+	 * @param body ゆっくり
+	 * @return ゆっくりの金額
+	 */
 	public static long sellYukkuri(Body body) {
 		int val = 0;
 		//工業製品として出荷

@@ -18,12 +18,20 @@ import src.enums.ImageCode;
 import src.enums.YukkuriType;
 import src.system.BodyLayer;
 import src.util.IniFileUtil;
-
+/**
+ * れいむまりさ。
+ * れいむとまりさのあいのこでたまに産まれる。
+ *設定的にはよくわからない…
+ */
 public class ReimuMarisa extends Marisa implements java.io.Serializable {
 	static final long serialVersionUID = 2L;
+	/** れいむまりさのタイプ */
 	public static final int type = 10001;
+	/** れいむまりさの和名 */
 	public static final String nameJ = "れいむまりさ";
+	/** れいむまりさの英名 */
 	public static final String nameE = "ReimuMarisa";
+	/** れいむまりさのベースファイル名 */
 	public static final String baseFileName = "reimu_marisa";
 
 	private static BufferedImage[][][][] imagePack = new BufferedImage[BodyRank.values().length][][][];
@@ -41,7 +49,7 @@ public class ReimuMarisa extends Marisa implements java.io.Serializable {
 	private static int baseSpeed = 100;
 	// 個別表情管理(まりちゃ流し用)
 	private int anImageVerStateCtrlNagasi[][] = new int[ImageCode.values().length][2];
-
+	/** イメージのロード */
 	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
 
 		if(imageLoaded) return;
@@ -74,17 +82,20 @@ public class ReimuMarisa extends Marisa implements java.io.Serializable {
 
 		imageLoaded = true;
 	}
-
+	/**
+	 * INIファイルをロードする
+	 * @param loader クラスローダ
+	 */
 	public static void loadIniFile(ClassLoader loader) {
 		AttachOffset = ModLoader.loadBodyIniMap(loader, ModLoader.DATA_INI_DIR, baseFileName);
 		baseSpeed = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_INI_DIR, baseFileName, "speed");
 	}
-
+	@Override
 	public boolean isImageLoaded() {
 		return imageLoaded;
 	}
 
-
+	@Override
 	public int getImage(int type, int direction, BodyLayer layer, int index) {
 		if( !isbImageNagasiMode() || imagesNagasi == null)
 		{
@@ -131,7 +142,7 @@ public class ReimuMarisa extends Marisa implements java.io.Serializable {
 		}
 		return 1;
 	}
-
+	@Override
 	public Point[] getMountPoint(String key) {
 		return AttachOffset.get(key);
 	}
@@ -140,25 +151,25 @@ public class ReimuMarisa extends Marisa implements java.io.Serializable {
 	public int getType() {
 		return type;
 	}
-
+	@Override
 	public String getNameJ() {
 		return nameJ;
 	}
-
+	@Override
 	public String getMyName() {
 		if( anMyName[getBodyAgeState().ordinal()] != null ){
 			return anMyName[getBodyAgeState().ordinal()];
 		}
 		return nameJ;
 	}
-
+	@Override
 	public String getMyNameD() {
 		if( anMyNameD[getBodyAgeState().ordinal()] != null ){
 			return anMyNameD[getBodyAgeState().ordinal()];
 		}
 		return getMyName();
 	}
-
+	@Override
 	public String getNameE() {
 		return nameE;
 	}
@@ -168,7 +179,7 @@ public class ReimuMarisa extends Marisa implements java.io.Serializable {
 		return true;
 	}
 	
-	// public methods
+	/** コンストラクタ */
 	public ReimuMarisa(int initX, int initY, int initZ, AgeState initAgeState, Body p1, Body p2) {
 		super(initX, initY, initZ, initAgeState, p1, p2);
 		setBoundary(boundary, braidBoundary);
@@ -177,7 +188,7 @@ public class ReimuMarisa extends Marisa implements java.io.Serializable {
 		setBaseBodyFileName(baseFileName);
 		IniFileUtil.readYukkuriIniFile(this);
 	}
-	
+	@Override
 	public void tuneParameters() {
 		double factor = Math.random()+1;
 		HUNGRYLIMIT[AgeState.ADULT.ordinal()] *= factor;

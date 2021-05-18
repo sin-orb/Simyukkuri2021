@@ -7,7 +7,7 @@ import java.awt.Graphics2D;
 import java.io.IOException;
 //import java.io.InputStream;
 import java.text.DecimalFormat;
-import java.util.ArrayList;
+import java.util.List;
 //import java.util.List;
 import java.util.logging.FileHandler;
 //import java.util.logging.Formatter;
@@ -26,8 +26,9 @@ import src.yukkuri.MarisaTsumuri;
 import src.yukkuri.WasaReimu;
 
 public class LoggerYukkuri {
-
+	/** 処理の最小単位（ティック） */
 	public static final int TICK = 1;
+	/** ログデータ格納の順番 */
 	public static final int NUM_OF_NORMAL = 0;
 	public static final int NUM_OF_PREDATOR = 1;
 	public static final int NUM_OF_RARE = 2;
@@ -40,8 +41,9 @@ public class LoggerYukkuri {
 	public static final int NUM_OF_SHIT = 9;
 	public static final int NUM_OF_CASH = 10;
 	public static final int NUM_OF_LOGDATA_TYPE = 11;
-
+	/** ログを見せるか否か */
 	public static boolean show = false;
+	/** ログクリアをした時間 */
 	public static int clearLogTime = 0;
 
 	private static final int NUM_OF_GRAPH_DATA = 120;
@@ -59,10 +61,13 @@ public class LoggerYukkuri {
 	private static Font textFonttext = new Font("Dialog", Font.PLAIN, 20);
 
 	private static int logPage = 0;
+	/** ロガー */
 	public static final Logger logger = Logger.getLogger("SampleLogging");
-
+	/**
+	 * ファイルにログを出力する.
+	 * @param str 出力する文字列
+	 */
 	public static void outputLogFile(String str) {
-		// this.getClass().getSimpleName()
 		if (logger.getHandlers() == null || logger.getHandlers().length == 0) {
 			try {
 				FileHandler fileHandler = new FileHandler(
@@ -82,7 +87,10 @@ public class LoggerYukkuri {
 		}
 		logger.info(str);
 	}
-
+	/**
+	 * ログページを指定する.
+	 * @param p ページ
+	 */
 	public static void setLogPage(int p) {
 		logPage = p;
 		if (logPage < 0)
@@ -98,11 +106,13 @@ public class LoggerYukkuri {
 		if (logPage >= 4)
 			logPage = 0;
 	}
-
+	/**
+	 * ロガーを実行する.
+	 */
 	public static void run() {
 
 		long logData[] = new long[NUM_OF_LOGDATA_TYPE];
-		ArrayList<Body> bodyList = SimYukkuri.world.currentMap.body;
+		List<Body> bodyList = SimYukkuri.world.currentMap.body;
 
 		try {
 			for (Body b : bodyList) {
@@ -164,11 +174,11 @@ public class LoggerYukkuri {
 			}
 		}
 	}
-
-	//	public static int getNumOfLogData(){
-	//		return logList.size();
-	//	}
-
+	/**
+	 * ログを取得する.
+	 * @param logRecord ログレコード
+	 * @return ログリスト
+	 */
 	public static long[] getLog(int logRecord) {
 		synchronized (lock) {
 			if ((logRecord < 0) || (logRecord >= NUM_OF_GRAPH_DATA)) {
@@ -180,15 +190,23 @@ public class LoggerYukkuri {
 			return logList[(logPointer + logRecord) % NUM_OF_GRAPH_DATA];
 		}
 	}
-
+	/**
+	 * ログデータ合計を取得する.
+	 * @return ログデータ合計
+	 */
 	public static long[] getNumOfObjSumLog() {
 		return logDataSum;
 	}
-
+	/**
+	 * 過去ログデータを取得する.
+	 * @return 過去ログデータ
+	 */
 	public static long[] getNumOfObjNowLog() {
 		return prevLogData;
 	}
-
+	/**
+	 * ログをクリアする.
+	 */
 	public static void clearLog() {
 		synchronized (lock) {
 			logPointer = 0;
@@ -196,7 +214,10 @@ public class LoggerYukkuri {
 		}
 		run();
 	}
-
+	/**
+	 * ログを表示する.
+	 * @param g2 Graphics2D
+	 */
 	public static void displayLog(Graphics2D g2) {
 		g2.setColor(backColor);
 		g2.fillRect(0, 0, Translate.canvasW, Translate.canvasH);

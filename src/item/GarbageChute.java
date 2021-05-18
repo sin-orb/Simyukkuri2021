@@ -6,7 +6,8 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 
 import src.SimYukkuri;
@@ -32,7 +33,7 @@ public class GarbageChute extends ObjEX implements java.io.Serializable {
 	private static BufferedImage[] images = new BufferedImage[images_num];
 	private static Rectangle boundary = new Rectangle();
 	protected Random rnd = new Random();
-	ArrayList<Obj> bindObjList = new ArrayList<Obj>();
+	List<Obj> bindObjList = new LinkedList<Obj>();
 
 	private ItemRank itemRank;
 	private Body bindBody = null;

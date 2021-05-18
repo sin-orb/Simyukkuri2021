@@ -1,7 +1,7 @@
 package src.draw;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 import src.SimYukkuri;
@@ -45,25 +45,25 @@ public class World implements Serializable {
 
 	// 当たり判定やソート用オブジェクトリストのグループ分け
 	/** ゆっくり/うんうん/吐餡/おかざりのリスト */
-	public ArrayList<Obj> yukkuriGroupList;
+	public List<Obj> yukkuriGroupList;
 	/** 床設置オブジェクトのリスト */
-	public ArrayList<ObjEX> platformGroupList;
+	public List<ObjEX> platformGroupList;
 	/** プレス機/ゴミ収集所のリスト */
-	public ArrayList<ObjEX> fixObjGroupList;
+	public List<ObjEX> fixObjGroupList;
 	/** フード/おもちゃ/茎/ディフューザー/ゆんば/すぃー/がらくた/トランポリン/石のリスト */
-	public ArrayList<ObjEX> objectGroupList;
-	//public ArrayList<Obj> sortEffectGroupList;
-	//public ArrayList<Obj> frontEffectGroupList;
+	public List<ObjEX> objectGroupList;
+	//public List<Obj> sortEffectGroupList;
+	//public List<Obj> frontEffectGroupList;
 	/** ベルトコンベア/畑/池のリスト */
-	public ArrayList<FieldShapeBase> fieldShapeGroupList;
+	public List<FieldShapeBase> fieldShapeGroupList;
 	/**
 	 *  トイレ/ベッド/養殖プール/ダストシュート/ゴミ収集所/フードメイカー/オレンジプール/製品投入口/粘着板
 	 *  ホットプレート/フードプロセッサ/ミキサー/おうち/プレス機/すぃー/ベルトコンベア/自動給餌器/トランポリン/発電機
 	 *  のリスト
 	 */
-	public ArrayList<ObjEX> hitBaseGroupList;
+	public List<ObjEX> hitBaseGroupList;
 	/** ゆっくり/うんうん/吐餡/ふーど/茎/おもちゃ/石/おかざりのリスト */
-	public ArrayList<Obj> hitTargetGroupList;
+	public List<Obj> hitTargetGroupList;
 
 	/**
 	 * コンストラクタ.
@@ -74,7 +74,7 @@ public class World implements Serializable {
 
 		player = new Player();
 		nextMap = -1;
-		mapList = new ArrayList<MapPlaceData>();
+		mapList = new LinkedList<MapPlaceData>();
 
 		windowType = winType;
 		terrariumSizeIndex = sizeIndex;
@@ -86,13 +86,13 @@ public class World implements Serializable {
 		}
 		currentMap = mapList.get(0);
 
-		yukkuriGroupList = new ArrayList<Obj>();
-		platformGroupList = new ArrayList<ObjEX>();
-		fixObjGroupList = new ArrayList<ObjEX>();
-		objectGroupList = new ArrayList<ObjEX>();
-		fieldShapeGroupList = new ArrayList<FieldShapeBase>();
-		hitBaseGroupList = new ArrayList<ObjEX>();
-		hitTargetGroupList = new ArrayList<Obj>();
+		yukkuriGroupList = new LinkedList<Obj>();
+		platformGroupList = new LinkedList<ObjEX>();
+		fixObjGroupList = new LinkedList<ObjEX>();
+		objectGroupList = new LinkedList<ObjEX>();
+		fieldShapeGroupList = new LinkedList<FieldShapeBase>();
+		hitBaseGroupList = new LinkedList<ObjEX>();
+		hitTargetGroupList = new LinkedList<Obj>();
 	}
 	/**
 	 * プレイヤーを取得する.
@@ -198,7 +198,7 @@ public class World implements Serializable {
 		platformGroupList.addAll(currentMap.autofeeder);
 		platformGroupList.addAll(currentMap.house);
 		platformGroupList.addAll(currentMap.beltconveyorObj);
-		platformGroupList.addAll(currentMap.generator);
+		//platformGroupList.addAll(currentMap.generator);
 		return platformGroupList;
 	}
 	/**
@@ -277,7 +277,7 @@ public class World implements Serializable {
 		hitBaseGroupList.addAll(currentMap.beltconveyorObj);
 		hitBaseGroupList.addAll(currentMap.autofeeder);
 		hitBaseGroupList.addAll(currentMap.trampoline);
-		hitBaseGroupList.addAll(currentMap.generator);
+		//hitBaseGroupList.addAll(currentMap.generator);
 		return hitBaseGroupList;
 	}
 	/**

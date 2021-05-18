@@ -29,9 +29,9 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.AttributedCharacterIterator;
 import java.text.AttributedString;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
@@ -165,8 +165,8 @@ public class MyPane extends JPanel implements Runnable {
 	private Graphics2D backBufferG2 = null;
 
 	/** 描画用テンポラリ*/
-	private ArrayList<Obj> list4sort = new ArrayList<Obj>();
-	private ArrayList<Body> msgList = new ArrayList<Body>(100);
+	private List<Obj> list4sort = new LinkedList<Obj>();
+	private List<Body> msgList = new LinkedList<Body>();
 	private int[] posTmp = new int[10];
 	private BufferedImage[] layerTmp = new BufferedImage[10];
 	/**拡大表示倍率*/
@@ -211,7 +211,7 @@ public class MyPane extends JPanel implements Runnable {
 	/** カーソルで選択されているゆっくり*/
 	public static Body selectBody = null;
 	/**カーソル描画用長方形*/
-	static ArrayList<Rectangle> markList = new ArrayList<Rectangle>();
+	static List<Rectangle> markList = new LinkedList<Rectangle>();
 
 	/** 標準のライン定数*/
 	private static final Stroke DEFAULT_STROKE = new BasicStroke(1.0f);
@@ -562,7 +562,7 @@ public class MyPane extends JPanel implements Runnable {
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void initBodies() {
-		ArrayList<Body> bodies = new ArrayList<Body>();
+		List<Body> bodies = new LinkedList<Body>();
 		String[] options;
 		String[] ages;
 		String[] rare;

@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import javax.swing.ButtonGroup;
@@ -240,7 +240,7 @@ public class AutoFeeder extends ObjEX implements java.io.Serializable {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		ArrayList<AutoFeeder> list = SimYukkuri.world.currentMap.autofeeder;
+		List<AutoFeeder> list = SimYukkuri.world.currentMap.autofeeder;
 		list.add(this);
 
 		objType = Type.PLATFORM;

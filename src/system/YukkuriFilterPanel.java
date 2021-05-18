@@ -6,7 +6,8 @@ import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -60,7 +61,7 @@ public class YukkuriFilterPanel {
 		YukkuriType.REIMUMARISA,
 		YukkuriType.HYBRIDYUKKURI,
 		};
-	
+	/** 選択アクション */
 	public static enum Action {
 		SELECT_ALL("全選択", ""),
 		DSELECT_ALL("全選択解除", ""),
@@ -69,14 +70,23 @@ public class YukkuriFilterPanel {
         Action(String nameJ, String nameE) { this.name = nameJ; }
         public String toString() { return name; }
 	}
-	
+	/** コンストラクタ */
 	public YukkuriFilterPanel() {
 		// TODO 自動生成されたコンストラクター・スタブ
 	}
-	
-	public static boolean openFilterPanel( String strHead, String strTop, ArrayList<String> istrOptionList, ArrayList<YukkuriType> ioResultSelectType, ArrayList<Boolean> obOptionSelection )
+	/**
+	 * フィルターパネルを開く.
+	 * @param strHead "対象設定"など
+	 * @param strTop トップに表示する文字列
+	 * @param istrOptionList フィルターするゆっくりの性質リスト
+	 * @param ioResultSelectType 選ばれるタイプのリスト
+	 * @param obOptionSelection 初期選択配列
+	 * @return OKされたかどうか
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked", "unused", "static-access" })
+	public static boolean openFilterPanel( String strHead, String strTop, List<String> istrOptionList,List<YukkuriType> ioResultSelectType, List<Boolean> obOptionSelection )
 	{
-	    ArrayList<YukkuriType> retSelectedType = new ArrayList<YukkuriType>();
+	    List<YukkuriType> retSelectedType = new LinkedList<YukkuriType>();
 	    int nListSize = yukkuriTypes.length;
 	    int nOptionListSize = 0;
 	    if( istrOptionList != null )
@@ -234,7 +244,9 @@ public class YukkuriFilterPanel {
 	    
 	    return false;
 	}
-	
+	/**
+	 * ボタンリスナ
+	 */
 	public static class ButtonListener implements ActionListener {
 
 		public static JCheckBox[] checkbox;

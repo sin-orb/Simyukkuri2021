@@ -6,38 +6,38 @@ import java.awt.Rectangle;
 
 
 /************************************************
-
-	仮想スプライト
-	
-	画像の実体は持たずサイズや中心点のみ定義
-
+ * 仮想スプライト
+ * 画像の実体は持たずサイズや中心点のみ定義
  */
 public class Sprite implements java.io.Serializable {
 	static final long serialVersionUID = 1L;
-
+	/** 中心点・真ん中/真ん中 */
 	public static final int PIVOT_CENTER_CENTER = 0;
+	/** 中心点・真ん中/下 */
 	public static final int PIVOT_CENTER_BOTTOM = 1;
 
 	// 原画サイズ
 	private int originalW;
 	private int originalH;
 
-	// 描画画像サイズ
-	// 拡大縮小で変動する
-	public int imageW;
-	public int imageH;
+	/** 描画画像サイズ 拡大縮小で変動する*/
+	public int imageW, imageH;
 	
-	// 描画原点
-	// 拡大縮小で変動する
-	public int pivotX;
-	public int pivotY;
-	public int pivotType;
+	/** 描画原点 拡大縮小で変動する */
+	public int pivotX,pivotY, pivotType;
 
-	// 描画スクリーン座標
-	// マウスとの判定で複数参照するのでキャッシュする
-	// [0]左 [1]右
+	/** 
+	 * 描画スクリーン座標
+	 *  マウスとの判定で複数参照するのでキャッシュする
+	 *   [0]左 [1]右
+	 */
 	public Rectangle[] screenRect;
-
+	/**
+	 * コンストラクタ.
+	 * @param w 幅
+	 * @param h 奥行き
+	 * @param piv 中心点
+	 */
 	public Sprite(int w, int h, int piv) {
 		originalW = w;
 		originalH = h;
@@ -53,7 +53,14 @@ public class Sprite implements java.io.Serializable {
 		screenRect[1] = new Rectangle();
 	}
 	
-	// 受け取ったスクリーン座標から左右向きの描画範囲計算
+	/**
+	 *  受け取ったスクリーン座標から左右向きの描画範囲計算
+	 * @param origin スクリーン座標
+	 * @param tx X座標
+	 * @param ty Y座標
+	 * @param tw 幅
+	 * @param th 奥行き
+	 */
 	public void calcScreenRect(Point origin, int tx, int ty, int tw, int th) {
 		// 左
 		screenRect[0].x = origin.x - tx;
@@ -68,20 +75,32 @@ public class Sprite implements java.io.Serializable {
 	}
 	
 	
-	// 描画画像サイズ更新
+	/**
+	 *  描画画像サイズ更新
+	 * @param w 幅
+	 * @param h 高さ
+	 */
 	public void setSpriteSize(int w, int h) {
 		imageW = w;
 		imageH = h;
 
 		calcPivot();
 	}
+	/**
+	 * スプライトサイズを加える
+	 * @param w 幅
+	 * @param h 高さ
+	 */
 	public void addSpriteSize(int w, int h) {
 		imageW = originalW + w;
 		imageH = originalH + h;
 
 		calcPivot();
 	}
-
+	/**
+	 * 中心点タイプを設定する.
+	 * @param type 中心点タイプ
+	 */
 	public void setPivotType(int type) {
 		pivotType = type;
 		calcPivot();

@@ -1,6 +1,6 @@
 package src.event;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import src.Const;
@@ -179,7 +179,7 @@ public class ShitExercisesEvent extends EventPacket implements java.io.Serializa
 			nFromWaitCount++;
 
 			// 赤ゆのみ集合
-			ArrayList<Body> childrenList = BodyLogic.createActiveChildList(getFrom(), false);
+			List<Body> childrenList = BodyLogic.createActiveChildList(getFrom(), false);
 			if( (childrenList == null) || (childrenList.size() == 0)){
 				return UpdateState.ABORT;
 			}

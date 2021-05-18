@@ -126,7 +126,10 @@ public class EventLogic {
 		return ret;
 	}
 
-	// ワールドイベントのチェック simpleEventAction用
+	/**
+	 * ワールドイベントのチェック simpleEventAction用
+	 * @param b ゆっくり
+	 */
 	public static final void checkSimpleWorldEvent(Body b) {
 		EventPacket e;
 		//リストに登録されているイベントすべてをチェック
@@ -140,7 +143,10 @@ public class EventLogic {
 		}
 	}
 
-	// 固体イベントのチェック simpleEventAction用
+	/**
+	 *  固体イベントのチェック simpleEventAction用
+	 * @param b ゆっくり
+	 */
 	public static final void checkSimpleBodyEvent(Body b) {
 		EventPacket e;
 
@@ -154,7 +160,10 @@ public class EventLogic {
 		}
 	}
 
-	// イベントの毎フレーム処理
+	/**
+	 *  イベントの毎フレーム処理
+	 * @param b ゆっくり
+	 */
 	public static final void eventUpdate(Body b) {
 		EventPacket.UpdateState state = null;
 		EventPacket ev = b.getCurrentEvent();

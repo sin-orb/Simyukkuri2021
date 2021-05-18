@@ -2,9 +2,7 @@ package src.system;
 
 
 /************************************************
-
-	フレームレート計測
-
+ * フレームレート計測
  */
 public class FrameRate {
     
@@ -12,17 +10,24 @@ public class FrameRate {
     private int     count;      //フレーム数
     private float   framerate;  //フレームレート
     
-    //コンストラクタ
+    /**
+     * コンストラクタ
+     */
     public FrameRate() {
         basetime = System.currentTimeMillis();  //基準時間をセット
     }
 
-    //フレームレートを取得
+    /**
+     * フレームレートを取得
+     * @return フレームレート
+     */
     public float getFrameRate() {
         return framerate;
     }
 
-    //描画時に呼ぶ
+    /**
+     * 描画時に呼ぶ
+     */
     public void count() {
         ++count;        //フレーム数をインクリメント
         long now = System.currentTimeMillis();      //現在時刻を取得

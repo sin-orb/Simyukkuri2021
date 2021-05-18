@@ -39,8 +39,13 @@ public class BodyUtil {
 	private static BodyLayer layer3 = new BodyLayer();
 	private static Rectangle rectTmp = new Rectangle();
 
-	// ゆっくり一体の描画(通常種用)
-	// Body内のSprite座標変換は呼び出し元で行っておく
+	/**
+	 * ゆっくり一体の描画(通常種用)
+	 * Body内のSprite座標変換は呼び出し元で行っておく
+	 * @param g2 Graphics2D
+	 * @param io イメージオブザーバ
+	 * @param b ゆっくり
+	 */
 	public static void drawBody(Graphics2D g2, ImageObserver io, Body b) {
 
 		int direction = b.getDirection().ordinal();
@@ -261,8 +266,6 @@ public class BodyUtil {
 				OkazariType otype = okazari.getOkazariType();
 				if(otype == OkazariType.DEFAULT) {
 					if(b.getOkazariPosition() !=2){
-//						g2.drawImage(layer.image[1], base.screenRect[layer.dir[1]].x, base.screenRect[layer.dir[1]].y + okazariOfsY,
-//								base.screenRect[layer.dir[1]].width, base.screenRect[layer.dir[1]].height, io);
 					// --> TEST
 						drawBody(g2, z, okazariOfsY, layer3.image[0], base.screenRect[layer3.dir[0]].x, base.screenRect[layer3.dir[0]].y + okazariOfsY,
 								base.screenRect[layer3.dir[0]].width, base.screenRect[layer3.dir[0]].height,
@@ -288,7 +291,6 @@ public class BodyUtil {
 					else {
 						bx += base.pivotX;
 					}
-					//g2.drawImage(layer.image[1], bx - okX + ofsX, by - okY + ofsY + okazariOfsY, okW, okH, io);
 					// --> TEST
 					drawBody(g2, z, okazariOfsY, layer3.image[0], bx - okX + ofsX, by - okY + ofsY + okazariOfsY, okW, okH, okW, okH, io);
 					// <-- TEST
@@ -339,7 +341,20 @@ public class BodyUtil {
 		}
 	}
 
-
+	/**
+	 * ゆっくりの描画
+	 * @param g2 Graphics2D
+	 * @param z 高さ
+	 * @param ofsY オフセットY座標
+	 * @param img バッファイメージ
+	 * @param x X座標
+	 * @param y Y座標
+	 * @param expandWidth 広がった幅
+	 * @param expandHeight 広がった奥行き
+	 * @param baseWidth 基本幅
+	 * @param basedHeight 基本奥行き
+	 * @param io イメージオブザーバ
+	 */
 	public static void drawBody(Graphics2D g2, int z, int ofsY, BufferedImage img, int x, int y, int expandWidth, int expandHeight, int baseWidth, int basedHeight, ImageObserver io )
 	{
 		if( img == null ){

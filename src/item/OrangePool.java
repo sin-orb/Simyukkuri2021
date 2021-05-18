@@ -7,7 +7,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JOptionPane;
@@ -156,7 +156,7 @@ public class OrangePool extends ObjEX implements java.io.Serializable {
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
 		
-		ArrayList<OrangePool> list = SimYukkuri.world.currentMap.orangePool;
+		List<OrangePool> list = SimYukkuri.world.currentMap.orangePool;
 			list.add(this);
 
 		objType = Type.PLATFORM;

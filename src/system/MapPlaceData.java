@@ -1,7 +1,8 @@
 package src.system;
 
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 
 import src.SimYukkuri;
@@ -25,7 +26,6 @@ import src.item.Food;
 import src.item.FoodMaker;
 import src.item.GarbageChute;
 import src.item.GarbageStation;
-import src.item.Generator;
 import src.item.HotPlate;
 import src.item.House;
 import src.item.MachinePress;
@@ -46,64 +46,106 @@ import src.item.Yunba;
 
 
 /**************************************************
-
-	1つのマップ内のオブジェクトなど
-	従来のセーブデータ内容をまとめている
-
-*/
+ * 1つのマップ内のオブジェクトなど
+ * 従来のセーブデータ内容をまとめている
+ */
 public class MapPlaceData implements Serializable {
 	static final long serialVersionUID = 1L;
 
-	// このマップのインデックス
+	/** このマップのインデックス */
 	public int mapIndex;
-
+	/** 乱数 */
 	public Random rnd;
+	/** アラーム時間 */
 	public int alarmPeriod;
+	/** アラーム */
 	public boolean alarm;
 
 	// シーン内の各オブジェクトリスト
-	public ArrayList<Body> body;
-	public ArrayList<Shit> shit;
-	public ArrayList<Vomit> vomit;
-	public ArrayList<Barrier> barrier;
-	public ArrayList<EventPacket> event;
-	public ArrayList<Effect> sortEffect;
-	public ArrayList<Effect> frontEffect;
-	public ArrayList<Food> food;
-	public ArrayList<Toilet> toilet;
-	public ArrayList<Bed> bed;
-	public ArrayList<Toy> toy;
-	public ArrayList<Stone> stone;
-	public ArrayList<Trampoline> trampoline;
-	public ArrayList<BreedingPool> breedingPool;
-	public ArrayList<GarbageChute> garbagechute;
-	public ArrayList<FoodMaker> foodmaker;
-	public ArrayList<OrangePool> orangePool;
-	public ArrayList<ProductChute> productchute;
-	public ArrayList<StickyPlate> stickyPlate;
-	public ArrayList<HotPlate> hotPlate;
-	public ArrayList<ProcesserPlate> processerPlate;
-	public ArrayList<Mixer> mixer;
-	public ArrayList<AutoFeeder> autofeeder;
-	public ArrayList<MachinePress> machinePress;
-	public ArrayList<Stalk> stalk;
-	public ArrayList<Diffuser> diffuser;
-	public ArrayList<Yunba> yunba;
-	public ArrayList<Sui> sui;
-	public ArrayList<Trash> trash;
-	public ArrayList<GarbageStation> garbageStation;
-	public ArrayList<House> house;
-	public ArrayList<BeltconveyorObj> beltconveyorObj;
-	public ArrayList<Beltconveyor> beltconveyor;
-	public ArrayList<Pool> pool;
-	public ArrayList<Farm> farm;
-	public ArrayList<Okazari> okazari;
-	public ArrayList<Generator> generator;
+	/** ゆっくりのリスト */
+	public List<Body> body;
+	/** うんうんリスト */
+	public List<Shit> shit;
+	/** 吐餡リスト */
+	public List<Vomit> vomit;
+	/** 壁リスト */
+	public List<Barrier> barrier;
+	/** イベントリスト */
+	public List<EventPacket> event;
+	/** 裏のエフェクト */
+	public List<Effect> sortEffect;
+	/** 表のエフェクト */
+	public List<Effect> frontEffect;
+	/** 食べ物リスト */
+	public List<Food> food;
+	/** トイレリスト */
+	public List<Toilet> toilet;
+	/** ベッドリスト */
+	public List<Bed> bed;
+	/** おもちゃリスト */
+	public List<Toy> toy;
+	/** 小石リスト */
+	public List<Stone> stone;
+	/** トランポリンリスト */
+	public List<Trampoline> trampoline;
+	/** 養殖プールリスト */
+	public List<BreedingPool> breedingPool;
+	/** ダストシュートリスト */
+	public List<GarbageChute> garbagechute;
+	/** フードメーカーリスト */
+	public List<FoodMaker> foodmaker;
+	/** オレンジプールリスト */
+	public List<OrangePool> orangePool;
+	/** 製品投入口リスト */
+	public List<ProductChute> productchute;
+	/** 粘着板リスト */
+	public List<StickyPlate> stickyPlate;
+	/** ホットプレートリスト */
+	public List<HotPlate> hotPlate;
+	/** 加工プレートリスト */
+	public List<ProcesserPlate> processerPlate;
+	/** ミキサーリスト */
+	public List<Mixer> mixer;
+	/** 自動給餌器リスト */
+	public List<AutoFeeder> autofeeder;
+	/** プレス機リスト */
+	public List<MachinePress> machinePress;
+	/** 茎リスト */
+	public List<Stalk> stalk;
+	/** ディフューザーリスト */
+	public List<Diffuser> diffuser;
+	/** ゆばリスト */
+	public List<Yunba> yunba;
+	/** すぃ～リスト */
+	public List<Sui> sui;
+	/** ガラクタリスト */
+	public List<Trash> trash;
+	/** ゴミ収集所リスト */
+	public List<GarbageStation> garbageStation;
+	/** おうちリスト */
+	public List<House> house;
+	/** ベルコンオブジェリスト */
+	public List<BeltconveyorObj> beltconveyorObj;
+	/** ベルコンリスト */
+	public List<Beltconveyor> beltconveyor;
+	/** 池リスト */
+	public List<Pool> pool;
+	/** 畑リスト */
+	public List<Farm> farm;
+	/** おかざりリスト */
+	public List<Okazari> okazari;
+	/** 発電機リスト */
+	//public List<Generator> generator;
+	/** マップにドスがいるかどうかのフラグ */
 	private volatile boolean hasDos;
-
+	/** 壁 */
 	public int wallMap[][];
+	/** フィールド */
 	public int fieldMap[][];
-
+	/**
+	 * コンストラクタ
+	 * @param idx インデックス(0：部屋)
+	 */
 	public MapPlaceData(int idx) {
 
 		mapIndex = idx;
@@ -112,43 +154,43 @@ public class MapPlaceData implements Serializable {
 		alarmPeriod = 0;
 		alarm = false;
 
-		body = new ArrayList<Body>();
-		shit = new ArrayList<Shit>();
-		vomit = new ArrayList<Vomit>();
-		barrier = new ArrayList<Barrier>();
-		event = new ArrayList<EventPacket>();
-		sortEffect = new ArrayList<Effect>();
-		frontEffect = new ArrayList<Effect>();
-		food = new ArrayList<Food>();
-		toilet = new ArrayList<Toilet>();
-		bed = new ArrayList<Bed>();
-		toy = new ArrayList<Toy>();
-		stone = new ArrayList<Stone>();
-		trampoline = new ArrayList<Trampoline>();
-		breedingPool = new ArrayList<BreedingPool>();
-		garbagechute = new ArrayList<GarbageChute>();
-		foodmaker = new ArrayList<FoodMaker>();
-		orangePool = new ArrayList<OrangePool>();
-		productchute = new ArrayList<ProductChute>();
-		stickyPlate = new ArrayList<StickyPlate>();
-		hotPlate = new ArrayList<HotPlate>();
-		processerPlate = new ArrayList<ProcesserPlate>();
-		mixer = new ArrayList<Mixer>();
-		autofeeder = new ArrayList<AutoFeeder>();
-		machinePress = new ArrayList<MachinePress>();
-		stalk = new ArrayList<Stalk>();
-		diffuser = new ArrayList<Diffuser>();
-		yunba = new ArrayList<Yunba>();
-		sui = new ArrayList<Sui>();
-		trash = new ArrayList<Trash>();
-		garbageStation = new ArrayList<GarbageStation>();
-		house = new ArrayList<House>();
-		beltconveyorObj = new ArrayList<BeltconveyorObj>();
-		beltconveyor = new ArrayList<Beltconveyor>();
-		pool = new ArrayList<Pool>();
-		farm = new ArrayList<Farm>();
-		okazari = new ArrayList<Okazari>();
-		generator = new ArrayList<Generator>();
+		body = new LinkedList<Body>();
+		shit = new LinkedList<Shit>();
+		vomit = new LinkedList<Vomit>();
+		barrier = new LinkedList<Barrier>();
+		event = new LinkedList<EventPacket>();
+		sortEffect = new LinkedList<Effect>();
+		frontEffect = new LinkedList<Effect>();
+		food = new LinkedList<Food>();
+		toilet = new LinkedList<Toilet>();
+		bed = new LinkedList<Bed>();
+		toy = new LinkedList<Toy>();
+		stone = new LinkedList<Stone>();
+		trampoline = new LinkedList<Trampoline>();
+		breedingPool = new LinkedList<BreedingPool>();
+		garbagechute = new LinkedList<GarbageChute>();
+		foodmaker = new LinkedList<FoodMaker>();
+		orangePool = new LinkedList<OrangePool>();
+		productchute = new LinkedList<ProductChute>();
+		stickyPlate = new LinkedList<StickyPlate>();
+		hotPlate = new LinkedList<HotPlate>();
+		processerPlate = new LinkedList<ProcesserPlate>();
+		mixer = new LinkedList<Mixer>();
+		autofeeder = new LinkedList<AutoFeeder>();
+		machinePress = new LinkedList<MachinePress>();
+		stalk = new LinkedList<Stalk>();
+		diffuser = new LinkedList<Diffuser>();
+		yunba = new LinkedList<Yunba>();
+		sui = new LinkedList<Sui>();
+		trash = new LinkedList<Trash>();
+		garbageStation = new LinkedList<GarbageStation>();
+		house = new LinkedList<House>();
+		beltconveyorObj = new LinkedList<BeltconveyorObj>();
+		beltconveyor = new LinkedList<Beltconveyor>();
+		pool = new LinkedList<Pool>();
+		farm = new LinkedList<Farm>();
+		okazari = new LinkedList<Okazari>();
+		//generator = new LinkedList<Generator>();
 
 		int mapW = Translate.mapW;
 		int mapH = Translate.mapH;
@@ -159,7 +201,10 @@ public class MapPlaceData implements Serializable {
 		clearMap(fieldMap);
 	}
 
-	// フラグマップ処理もろもろ
+	/**
+	 *  フラグマップ処理もろもろ
+	 * @param map フラグマップ
+	 */
 	public static void clearMap(int[][] map) {
 		for(int x = 0; x < map.length; x++) {
 			for(int y = 0; y < map[x].length; y++) {
@@ -167,7 +212,16 @@ public class MapPlaceData implements Serializable {
 			}
 		}
 	}
-
+	/**
+	 * フィールドフラグを設定する.
+	 * @param map フラグマップ
+	 * @param x X座標
+	 * @param y Y座標
+	 * @param w 横
+	 * @param h 縦
+	 * @param setFlag 追加モードフラグ
+	 * @param attribute 属性
+	 */
 	public static void setFiledFlag(int[][] map, int x, int y, int w, int h, boolean setFlag, int attribute) {
 		MapPlaceData tmp = SimYukkuri.world.currentMap;
 		int sx = Math.max(0, Math.min(x, Translate.mapW));
@@ -196,7 +250,16 @@ public class MapPlaceData implements Serializable {
 			}
 		}
 	}
-
+	/**
+	 * 壁ラインを設定する.
+	 * @param map フラグマップ
+	 * @param x1 始まりのX座標
+	 * @param y1 始まりのY座標
+	 * @param x2 終わりのX座標
+	 * @param y2 終わりのY座標
+	 * @param setFlag 追加フラグ
+	 * @param attribute 属性
+	 */
 	public static void setWallLine(int[][] map, int x1, int y1, int x2, int y2, boolean setFlag, int attribute) {
 		int distance = (int)Math.sqrt(Translate.distance(x1, y1, x2, y2));
 		double deltaX = (double)(x2 - x1) / (double)distance;

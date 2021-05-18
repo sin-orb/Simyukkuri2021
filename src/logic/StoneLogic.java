@@ -1,7 +1,6 @@
 package src.logic;
 
-import java.util.ArrayList;
-//import java.util.Random;
+import java.util.List;
 
 import src.SimYukkuri;
 import src.base.Body;
@@ -14,13 +13,14 @@ import src.item.Stone;
 //import src.EventPacket;
 
 /***************************************************
-		小石関係の処理
+ * 小石関係の処理
 */
 public class StoneLogic {
 
-//	private static final Random rnd = new Random();
-
-	// 小石
+	/**
+	 *  小石チェック
+	 * @param b ゆっくり
+	 */
 	public static final void checkPubble(Body b) {
 		if( b == null ){
 			return;
@@ -28,7 +28,7 @@ public class StoneLogic {
 		if( b.getCriticalDamegeType()  == CriticalDamegeType.CUT){
 			return;
 		}
-		ArrayList<Stone> list = SimYukkuri.world.currentMap.stone;
+		List<Stone> list = SimYukkuri.world.currentMap.stone;
 		if( list == null || list.size() == 0 ){
 			return;
 		}

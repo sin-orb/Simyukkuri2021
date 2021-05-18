@@ -2,8 +2,9 @@ package src.system;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 
 import src.base.Body;
@@ -17,9 +18,8 @@ import src.enums.PublicRank;
 import src.enums.YukkuriType;
 
 /*****************************************************
-	全キャラのメッセージ管理
-*/
-
+ * 全キャラのメッセージ管理
+ */
 public class MessagePool {
 	// アクション名定義
 	public enum Action {
@@ -603,20 +603,22 @@ public class MessagePool {
 		POI,
 	}
 
-	// 埋め込み文字定義
+	/** 埋め込み文字定義 */
 	public enum Replace {
 		name, name2, partner, dummy
 	}
 
-	// クラス別接尾子
+	/**クラス別接尾子 */
 	public static final String[] RANK_SUFFIX = { "", "_<nora>" };
 
 	private static Random rnd = new Random();
 	private static HashMap<String, MessageMap>[] pool_j = null;
 
-	// 全メッセージ読み込み
-	// ひとつの固体の複数ファイルに渡る全メッセージを1つのマップに格納するので
-	// アクション名の被りに注意
+	/**
+	 * 全メッセージ読み込み
+	 * ひとつの固体の複数ファイルに渡る全メッセージを1つのマップに格納するのでアクション名の被りに注意
+	 * @param loader クラスローダ
+	 */
 	@SuppressWarnings("unchecked")
 	public static final void loadMessage(ClassLoader loader) {
 		BufferedReader br = null;
@@ -676,7 +678,7 @@ public class MessagePool {
 		String actName = null;
 		MessageMap act = null;
 		String line = null;
-		ArrayList<String> msg = null;
+		List<String> msg = null;
 		boolean[] flags = null;
 		String tagName = null;
 
@@ -723,7 +725,7 @@ public class MessagePool {
 					if (key != null) {
 						act.map.put(key, (String[]) msg.toArray(new String[] {}));
 					}
-					msg = new ArrayList<String>();
+					msg = new LinkedList<String>();
 				}
 
 				// タグを閉じる
@@ -752,7 +754,7 @@ public class MessagePool {
 							if (act == null) {
 								act = new MessageMap();
 							}
-							msg = new ArrayList<String>();
+							msg = new LinkedList<String>();
 							flags = new boolean[MessageMap.Tag.values().length];
 							if (MessageMap.Tag.rude.equals(tag)) {
 								act.rudeFlag = true;
@@ -792,7 +794,12 @@ public class MessagePool {
 		return key.toString();
 	}
 
-	// メッセージ取得
+	/**
+	 * メッセージ取得
+	 * @param body ゆっくり
+	 * @param action アクション
+	 * @return メッセージ
+	 */
 	public static final String getMessage(Body body, Action action) {
 		//メッセージ変更
 		//皮むき時

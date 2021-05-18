@@ -1,6 +1,6 @@
 package src.logic;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import src.SimYukkuri;
@@ -49,7 +49,11 @@ public class FoodLogic {
 	private static final int HAMMER = 0;
 	private static final int HOLDMESSAGE = 0;
 
-	// フィールド内から餌候補の検索と移動、捕食処理
+	/**
+	 *  フィールド内から餌候補の検索と移動、捕食処理
+	 * @param b ゆっくり
+	 * @return 処理が行われたか
+	 */
 	public static final boolean checkFood(Body b) {
 		/*流れとしては、C1→C2→B1→B2　(Aはキャンセル判定)といった感じ
 		*/
@@ -567,7 +571,7 @@ public class FoodLogic {
 		}
 
 		// フィールドの餌検索
-		ArrayList<Food> foodList = SimYukkuri.world.currentMap.food;
+		List<Food> foodList = SimYukkuri.world.currentMap.food;
 		for (Food f : foodList) {
 			if (f.isEmpty()) {
 				continue;
@@ -586,7 +590,7 @@ public class FoodLogic {
 				minDistance = distance;
 			}
 		}
-		ArrayList<Stalk> stalkList = SimYukkuri.world.currentMap.stalk;
+		List<Stalk> stalkList = SimYukkuri.world.currentMap.stalk;
 		for (ObjEX s : stalkList) {
 			Body p = ((Stalk) s).getPlantYukkuri();
 			if (p != null) {
@@ -600,7 +604,7 @@ public class FoodLogic {
 				}
 
 				// 通常は実ゆつきは食べない
-				ArrayList<Body> babyList = ((Stalk) s).getBindBaby();
+				List<Body> babyList = ((Stalk) s).getBindBaby();
 				if (babyList != null && babyList.size() != 0) {
 					boolean bBabyFlag = false;
 					for (Body baby : babyList) {
@@ -625,7 +629,7 @@ public class FoodLogic {
 				minDistance = distance;
 			}
 		}
-		ArrayList<Vomit> vomitList = SimYukkuri.world.currentMap.vomit;
+		List<Vomit> vomitList = SimYukkuri.world.currentMap.vomit;
 		for (Vomit v : vomitList) {
 			int distance = Translate.distance(b.getX(), b.getY(), v.getX(), v.getY());
 			if (minDistance > distance) {
@@ -653,7 +657,7 @@ public class FoodLogic {
 				minDistance = distance;
 			}
 		}
-		ArrayList<Shit> shitList = SimYukkuri.world.currentMap.shit;
+		List<Shit> shitList = SimYukkuri.world.currentMap.shit;
 		for (Shit s : shitList) {
 			int distance = Translate.distance(b.getX(), b.getY(), s.getX(), s.getY());
 			if (minDistance > distance) {
@@ -692,7 +696,7 @@ public class FoodLogic {
 		}
 
 		// フィールドの餌検索
-		ArrayList<Food> foodList = SimYukkuri.world.currentMap.food;
+		List<Food> foodList = SimYukkuri.world.currentMap.food;
 		for (Food f : foodList) {
 			if (f.isEmpty()) {
 				continue;
@@ -815,7 +819,7 @@ public class FoodLogic {
 
 		// 非常食検索
 		//第一候補：茎
-		ArrayList<Stalk> stalkList = SimYukkuri.world.currentMap.stalk;
+		List<Stalk> stalkList = SimYukkuri.world.currentMap.stalk;
 		for (ObjEX s : stalkList) {
 			Body p = ((Stalk) s).getPlantYukkuri();
 			if (p != null) {
@@ -828,7 +832,7 @@ public class FoodLogic {
 					continue;
 				}
 				// 通常は実ゆつきは食べない
-				ArrayList<Body> babyList = ((Stalk) s).getBindBaby();
+				List<Body> babyList = ((Stalk) s).getBindBaby();
 				if (babyList != null && babyList.size() != 0) {
 					boolean bBabyFlag = false;
 					for (Body baby : babyList) {
@@ -856,7 +860,7 @@ public class FoodLogic {
 
 		//第二候補：吐餡
 		if (found == null) {
-			ArrayList<Vomit> vomitList = SimYukkuri.world.currentMap.vomit;
+			List<Vomit> vomitList = SimYukkuri.world.currentMap.vomit;
 			for (Vomit v : vomitList) {
 				int distance = Translate.distance(b.getX(), b.getY(), v.getX(), v.getY());
 				if (minDistance > distance) {
@@ -904,7 +908,7 @@ public class FoodLogic {
 		}
 		//第四候補:うんうん
 		if (found == null) {
-			ArrayList<Shit> shitList = SimYukkuri.world.currentMap.shit;
+			List<Shit> shitList = SimYukkuri.world.currentMap.shit;
 			for (Shit s : shitList) {
 				if (!b.isTooHungry()) {
 					break;
@@ -924,7 +928,12 @@ public class FoodLogic {
 	}
 
 	// 餌検索C
-	// 捕食種用
+	/**
+	 *  捕食種用エサ検索
+	 * @param b 捕食種
+	 * @param forceEat 強制給餌フラグ
+	 * @return 検索されたエサオブジェクト
+	 */
 	public static final Obj searchFoodPredetor(Body b, boolean[] forceEat) {
 		Obj found = null;
 		Obj found2 = null; // 副候補
@@ -1012,7 +1021,7 @@ public class FoodLogic {
 			found = found2;
 
 		// フィールドの餌検索
-		ArrayList<Food> foodList = SimYukkuri.world.currentMap.food;
+		List<Food> foodList = SimYukkuri.world.currentMap.food;
 		for (Food f : foodList) {
 			if (f.isEmpty()) {
 				continue;
@@ -1104,7 +1113,7 @@ public class FoodLogic {
 		}
 
 		// 非常食検索
-		ArrayList<Stalk> stalkList = SimYukkuri.world.currentMap.stalk;
+		List<Stalk> stalkList = SimYukkuri.world.currentMap.stalk;
 		for (ObjEX s : stalkList) {
 			Body p = ((Stalk) s).getPlantYukkuri();
 			if (p != null) {
@@ -1118,7 +1127,7 @@ public class FoodLogic {
 				}
 
 				// 通常は実ゆつきは食べない
-				ArrayList<Body> babyList = ((Stalk) s).getBindBaby();
+				List<Body> babyList = ((Stalk) s).getBindBaby();
 				if (babyList != null && babyList.size() != 0) {
 					boolean bBabyFlag = false;
 					for (Body baby : babyList) {
@@ -1149,7 +1158,7 @@ public class FoodLogic {
 			found = found3;
 
 		if (found == null) {
-			ArrayList<Vomit> vomitList = SimYukkuri.world.currentMap.vomit;
+			List<Vomit> vomitList = SimYukkuri.world.currentMap.vomit;
 			for (Vomit v : vomitList) {
 				int distance = Translate.distance(b.getX(), b.getY(), v.getX(), v.getY());
 				if (minDistance > distance) {
@@ -1163,7 +1172,7 @@ public class FoodLogic {
 			}
 		}
 		if (found == null) {
-			ArrayList<Shit> shitList = SimYukkuri.world.currentMap.shit;
+			List<Shit> shitList = SimYukkuri.world.currentMap.shit;
 			for (Shit s : shitList) {
 				if (!b.isTooHungry()) {
 					break;
@@ -1211,7 +1220,7 @@ public class FoodLogic {
 		}
 
 		if (found == null) {
-			ArrayList<Shit> shitList = SimYukkuri.world.currentMap.shit;
+			List<Shit> shitList = SimYukkuri.world.currentMap.shit;
 			for (Shit s : shitList) {
 				// 最小距離のものが見つかっていたら
 				if (minDistance < 1) {
@@ -1254,7 +1263,7 @@ public class FoodLogic {
 		}
 
 		if (found == null) {
-			ArrayList<Vomit> vomitList = SimYukkuri.world.currentMap.vomit;
+			List<Vomit> vomitList = SimYukkuri.world.currentMap.vomit;
 			for (Vomit v : vomitList) {
 				int distance = Translate.distance(b.getX(), b.getY(), v.getX(), v.getY());
 				if (minDistance > distance) {
@@ -1292,7 +1301,7 @@ public class FoodLogic {
 		}
 
 		if (found == null) {
-			ArrayList<Food> foodList = SimYukkuri.world.currentMap.food;
+			List<Food> foodList = SimYukkuri.world.currentMap.food;
 			for (Food f : foodList) {
 				if (f.isEmpty()) {
 					continue;
@@ -1318,7 +1327,12 @@ public class FoodLogic {
 		return found;
 	}
 
-	// 食事処理
+	/**
+	 *  食事処理
+	 * @param b ゆっくり
+	 * @param foodType エサタイプ
+	 * @param amount 食事量
+	 */
 	public static final void eatFood(Body b, FoodType foodType, int amount) {
 		if (b.isDead()) {
 			return;
@@ -1366,7 +1380,9 @@ public class FoodLogic {
 		b.eatFood(eatAmount);
 		b.checkTang();
 	}
-
+	/**
+	 * ゆっくりからのエサの好感度
+	 */
 	public static int[][] anLovePoint = {
 			// バカ舌,	普通,	肥えてる
 			{ -50, -100, -500 }, //	SHIT　うんうん
@@ -1881,7 +1897,12 @@ public class FoodLogic {
 		}
 	}
 
-	//お持ち帰り判定
+	/**
+	 * お持ち帰り判定
+	 * @param b ゆっくり
+	 * @param o エサオブジェクト
+	 * @return 持ち帰るかどうか
+	 */
 	public static boolean checkTakeout(Body b, Obj o) {
 		if (b == null || o == null) {
 			return false;
@@ -1900,7 +1921,7 @@ public class FoodLogic {
 				Shit s = (Shit) o;
 				boolean bIsInToiletForSlave = false;
 				boolean bIsToiletForSlave = false;
-				ArrayList<Toilet> toiletList = SimYukkuri.world.currentMap.toilet;
+				List<Toilet> toiletList = SimYukkuri.world.currentMap.toilet;
 				if (toiletList != null && toiletList.size() != 0) {
 					for (Toilet t : toiletList) {
 						// うんうん奴隷用トイレのどれかにあれば終了
@@ -1943,7 +1964,7 @@ public class FoodLogic {
 				ObjEX oExFav = (ObjEX) oFav;
 				// 家族がいる
 				if (b.getPartner() != null || b.getChildrenListSize() != 0) {
-					ArrayList<Food> foodList = SimYukkuri.world.currentMap.food;
+					List<Food> foodList = SimYukkuri.world.currentMap.food;
 					if (foodList != null && foodList.size() != 0) {
 						for (Food foodOnMyBed : foodList) {
 							// 空なら無視
@@ -1958,7 +1979,7 @@ public class FoodLogic {
 					}
 					// ベッドの上にない餌を対象にする
 					boolean bIsOnbed = false;
-					ArrayList<Bed> bedList = SimYukkuri.world.currentMap.bed;
+					List<Bed> bedList = SimYukkuri.world.currentMap.bed;
 					if (bedList != null && bedList.size() != 0) {
 						for (Bed bed : bedList) {
 							if (bed.checkHitObj(o, false)) {
@@ -1976,7 +1997,12 @@ public class FoodLogic {
 		return false;
 	}
 
-	//死体食べ判定
+	/**
+	 * 死体食べ判定
+	 * @param b ゆっくり
+	 * @param p 死体
+	 * @return 食べるかどうか
+	 */
 	public static boolean checkCanEatBody(Body b, Body p) {
 		if (b.isPredatorType())
 			return true;

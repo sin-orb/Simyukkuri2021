@@ -7,8 +7,8 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -108,18 +108,18 @@ public class TerrainField {
 				skyColor[1] = null;
 				skyColor[2] = null;
 				skyColor[3] = null;
-				floorList = new ArrayList<Obj>();
-				structList = new ArrayList<Obj>();
-				ceilingList = new ArrayList<Obj>();
+				floorList = new LinkedList<Obj>();
+				structList = new LinkedList<Obj>();
+				ceilingList = new LinkedList<Obj>();
 				isPers = true;
 				ownerType = 0;
 			} else {
 				// 新フォーマット
 				assetMap = new HashMap<String, BufferedImage>();
 				skyColor = new LinearGradientPaint[4];
-				floorList = new ArrayList<Obj>();
-				structList = new ArrayList<Obj>();
-				ceilingList = new ArrayList<Obj>();
+				floorList = new LinkedList<Obj>();
+				structList = new LinkedList<Obj>();
+				ceilingList = new LinkedList<Obj>();
 				loadTerrainAsset(loader, reader, mapName, io);
 			}
 		} catch (IOException e) {

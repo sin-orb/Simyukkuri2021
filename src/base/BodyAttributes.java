@@ -4,9 +4,10 @@ import java.awt.Color;
 import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 
 import src.Const;
@@ -293,11 +294,11 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	/** フェロモンの有無 */
 	private boolean bPheromone = false;
 	/** 胎生ゆのリスト */
-	private ArrayList<Dna> babyTypes = new ArrayList<Dna>();
+	private List<Dna> babyTypes = new LinkedList<Dna>();
 	/** 実ゆのリスト */
-	private ArrayList<Dna> stalkBabyTypes = new ArrayList<Dna>();
+	private List<Dna> stalkBabyTypes = new LinkedList<Dna>();
 	/** 茎のリスト */
-	private ArrayList<Stalk> stalks = new ArrayList<Stalk>();
+	private List<Stalk> stalks = new LinkedList<Stalk>();
 	/** 自分がぶらさがっている茎 */
 	private Stalk bindStalk = null;
 	/** 死亡フラグdead of alive */
@@ -355,13 +356,13 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	/** 親 */
 	private Body parents[] = { null, null };
 	/** 子供のリスト */
-	private ArrayList<Body> childrenList = new ArrayList<Body>();
+	private List<Body> childrenList = new LinkedList<Body>();
 	/** 姉のリスト */
-	private ArrayList<Body> elderSisterList = new ArrayList<Body>();
+	private List<Body> elderSisterList = new LinkedList<Body>();
 	/** 妹のリスト */
-	private ArrayList<Body> sisterList = new ArrayList<Body>();
+	private List<Body> sisterList = new LinkedList<Body>();
 	/** 先祖のリスト */
-	private ArrayList<Integer> ancestorList = new ArrayList<Integer>();
+	private List<Integer> ancestorList = new LinkedList<Integer>();
 	/** 自分がレイプでできた子か */
 	private boolean fatherRaper = false;
 	/** うんうん抑制 */
@@ -375,7 +376,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	/** あまあまへの慣れ具合 */
 	protected int amaamaDiscipline = 0;
 	/** 自身の持っているアタッチメント */
-	private ArrayList<Attachment> attach = new ArrayList<Attachment>();
+	private List<Attachment> attach = new LinkedList<Attachment>();
 	/** なにかのオブジェクト（すぃー、親ゆなど）に載せられている等のリンクが有る際のそのオブジェクト */
 	private Obj linkParent = null;
 	/** 移動不可ベルトコンベアの有無 */
@@ -559,7 +560,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	/** 次の落下でダメージを受けないかどうか */
 	private boolean bNoDamageNextFall = false;
 	/** この個体に対して発行されたイベントのリスト */
-	private ArrayList<EventPacket> eventList = new ArrayList<EventPacket>();
+	private List<EventPacket> eventList = new LinkedList<EventPacket>();
 	/** 現在実行中のイベント */
 	private EventPacket currentEvent = null;
 	/** 表情の強制設定 */
@@ -2067,7 +2068,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 胎生ゆのリスト を取得する.
 	 * @return 胎生ゆのリスト 
 	 */
-	public ArrayList<Dna> getBabyTypes() {
+	public List<Dna> getBabyTypes() {
 		return babyTypes;
 	}
 
@@ -2075,7 +2076,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 胎生ゆのリスト を設定する.
 	 * @param babyTypes 胎生ゆのリスト 
 	 */
-	public void setBabyTypes(ArrayList<Dna> babyTypes) {
+	public void setBabyTypes(List<Dna> babyTypes) {
 		this.babyTypes = babyTypes;
 	}
 
@@ -2083,7 +2084,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 実ゆのリスト を取得する.
 	 * @return 実ゆのリスト 
 	 */
-	public ArrayList<Dna> getStalkBabyTypes() {
+	public List<Dna> getStalkBabyTypes() {
 		return stalkBabyTypes;
 	}
 
@@ -2091,7 +2092,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 実ゆのリスト を設定する.
 	 * @param stalkBabyTypes 実ゆのリスト 
 	 */
-	public void setStalkBabyTypes(ArrayList<Dna> stalkBabyTypes) {
+	public void setStalkBabyTypes(List<Dna> stalkBabyTypes) {
 		this.stalkBabyTypes = stalkBabyTypes;
 	}
 
@@ -2099,7 +2100,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 茎のリスト を取得する.
 	 * @return 茎のリスト 
 	 */
-	public ArrayList<Stalk> getStalks() {
+	public List<Stalk> getStalks() {
 		return stalks;
 	}
 
@@ -2107,7 +2108,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 茎のリスト を設定する.
 	 * @param stalks 茎のリスト 
 	 */
-	public void setStalks(ArrayList<Stalk> stalks) {
+	public void setStalks(List<Stalk> stalks) {
 		this.stalks = stalks;
 	}
 
@@ -2523,7 +2524,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 子供のリスト を取得する.
 	 * @return 子供のリスト 
 	 */
-	public ArrayList<Body> getChildrenList() {
+	public List<Body> getChildrenList() {
 		return childrenList;
 	}
 
@@ -2531,7 +2532,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 子供のリスト を設定する.
 	 * @param childrenList 子供のリスト 
 	 */
-	public void setChildrenList(ArrayList<Body> childrenList) {
+	public void setChildrenList(List<Body> childrenList) {
 		this.childrenList = childrenList;
 	}
 
@@ -2539,7 +2540,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 姉のリスト を取得する.
 	 * @return 姉のリスト 
 	 */
-	public ArrayList<Body> getElderSisterList() {
+	public List<Body> getElderSisterList() {
 		return elderSisterList;
 	}
 
@@ -2547,7 +2548,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 姉のリスト を設定する.
 	 * @param elderSisterList 姉のリスト 
 	 */
-	public void setElderSisterList(ArrayList<Body> elderSisterList) {
+	public void setElderSisterList(List<Body> elderSisterList) {
 		this.elderSisterList = elderSisterList;
 	}
 
@@ -2555,7 +2556,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 妹のリスト を取得する.
 	 * @return 妹のリスト 
 	 */
-	public ArrayList<Body> getSisterList() {
+	public List<Body> getSisterList() {
 		return sisterList;
 	}
 
@@ -2563,7 +2564,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 妹のリスト を設定する.
 	 * @param sisterList 妹のリスト 
 	 */
-	public void setSisterList(ArrayList<Body> sisterList) {
+	public void setSisterList(List<Body> sisterList) {
 		this.sisterList = sisterList;
 	}
 
@@ -2571,7 +2572,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 先祖のリスト を取得する.
 	 * @return 先祖のリスト 
 	 */
-	public ArrayList<Integer> getAncestorList() {
+	public List<Integer> getAncestorList() {
 		return ancestorList;
 	}
 
@@ -2579,7 +2580,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 先祖のリスト を設定する.
 	 * @param ancestorList 先祖のリスト 
 	 */
-	public void setAncestorList(ArrayList<Integer> ancestorList) {
+	public void setAncestorList(List<Integer> ancestorList) {
 		this.ancestorList = ancestorList;
 	}
 
@@ -2675,7 +2676,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 自身の持っているアタッチメント を取得する.
 	 * @return 自身の持っているアタッチメント 
 	 */
-	public ArrayList<Attachment> getAttach() {
+	public List<Attachment> getAttach() {
 		return attach;
 	}
 
@@ -2683,7 +2684,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 自身の持っているアタッチメント を設定する.
 	 * @param attach 自身の持っているアタッチメント 
 	 */
-	public void setAttach(ArrayList<Attachment> attach) {
+	public void setAttach(List<Attachment> attach) {
 		this.attach = attach;
 	}
 
@@ -4161,7 +4162,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * この個体に対して発行されたイベントのリスト を取得する.
 	 * @return この個体に対して発行されたイベントのリスト 
 	 */
-	public ArrayList<EventPacket> getEventList() {
+	public List<EventPacket> getEventList() {
 		return eventList;
 	}
 
@@ -4169,7 +4170,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * この個体に対して発行されたイベントのリスト を設定する.
 	 * @param eventList この個体に対して発行されたイベントのリスト 
 	 */
-	public void setEventList(ArrayList<EventPacket> eventList) {
+	public void setEventList(List<EventPacket> eventList) {
 		this.eventList = eventList;
 	}
 
@@ -5306,7 +5307,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 */
 	public void addChildrenList(Body at) {
 		if (childrenList == null) {
-			childrenList = new ArrayList<>();
+			childrenList = new LinkedList<>();
 		}
 		if (at != null) {
 			childrenList.add(at);

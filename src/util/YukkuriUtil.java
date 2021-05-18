@@ -2,7 +2,7 @@ package src.util;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import src.attachment.Ants;
@@ -26,14 +26,17 @@ import src.yukkuri.TarinaiReimu;
 import src.yukkuri.WasaReimu;
 
 /***************************************************
-  ゆっくり処理クラス
-
+ *   ゆっくり処理クラス
  */
 public class YukkuriUtil {
 
 	private static Random rnd = new Random();
 
-	// クラス名からタイプ取得
+	/**
+	 *  クラス名からタイプ取得
+	 * @param className クラス名
+	 * @return ゆっくりのタイプ
+	 */
 	public static final YukkuriType getYukkuriType(String className) {
 		YukkuriType ret = null;
 		for (YukkuriType y : YukkuriType.values()) {
@@ -45,7 +48,11 @@ public class YukkuriUtil {
 		return ret;
 	}
 
-	// タイプからクラス名取得
+	/**
+	 *  タイプからクラス名取得
+	 * @param type タイプ
+	 * @return ゆっくりのクラス名
+	 */
 	public static final String getYukkuriClassName(int type) {
 		String ret = null;
 		for (YukkuriType y : YukkuriType.values()) {
@@ -57,8 +64,19 @@ public class YukkuriUtil {
 		return ret;
 	}
 
-	// 両親から赤ゆ一匹分のDNAを作成。
-	// forceCreateをtrueで確実に赤ゆができる。まれに茎に１つも赤ゆができないのを回避できる
+	/**
+	 *  両親から赤ゆ一匹分のDNAを作成。
+	 *  forceCreateをtrueで確実に赤ゆができる。まれに茎に１つも赤ゆができないのを回避できる
+	 * @param mother 母ゆ
+	 * @param father 父ゆ
+	 * @param iFatherType 父のタイプ
+	 * @param fatherrAtt 父の性格
+	 * @param fatherInt 父の知性
+	 * @param isRape レイプでできた子か
+	 * @param fatherDamage 父のダメージ
+	 * @param forceCreate 強制作成フラグ
+	 * @return 赤ゆのDNA
+	 */
 	public static final Dna createBabyDna(Body mother, Body father, int iFatherType, Attitude fatherrAtt,
 			Intelligence fatherInt, boolean isRape, boolean fatherDamage, boolean forceCreate) {
 		Dna ret = null;
@@ -73,7 +91,7 @@ public class YukkuriUtil {
 		int motherType = mother.getType();
 		int fatherType = iFatherType;
 
-		ArrayList<Integer> motherAncestorList = mother.getAncestorList();
+		List<Integer> motherAncestorList = mother.getAncestorList();
 		if (motherAncestorList != null && motherAncestorList.size() != 0) {
 			if (rnd.nextInt(100) == 0) {
 				// 先祖返り
@@ -83,7 +101,7 @@ public class YukkuriUtil {
 			}
 		}
 		if (father != null) {
-			ArrayList<Integer> fatherAncestorList = father.getAncestorList();
+			List<Integer> fatherAncestorList = father.getAncestorList();
 			if (fatherAncestorList != null && fatherAncestorList.size() != 0) {
 				if (rnd.nextInt(100) == 0) {
 					// 先祖返り
@@ -362,8 +380,13 @@ public class YukkuriUtil {
 			"baseBodyFileName"
 	};
 
-	// ゆっくりのステータスをfrom->toへ複製
-	// シャローコピーなので複製元はbodyListから外しておかないと予期しない動作になるので注意
+	/**
+	 * ゆっくりのステータスをfrom->toへ複製
+	 * シャローコピーなので複製元はbodyListから外しておかないと予期しない動作になるので注意
+	 * @param to 変異後のゆっくり
+	 * @param from 変異前のゆっくり
+	 * @throws Exception リフレクションでコピー中に発生する例外
+	 */
 	public static final void changeBody(Body to, Body from) throws Exception {
 		Field[] fromField = null;
 		Class<?> toClass = null;

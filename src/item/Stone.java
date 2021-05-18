@@ -8,25 +8,27 @@ import java.io.File;
 import java.io.IOException;
 
 import src.SimYukkuri;
+import src.base.Body;
+import src.base.Obj;
 import src.base.ObjEX;
 import src.draw.ModLoader;
+import src.enums.CriticalDamegeType;
 import src.enums.ObjEXType;
 import src.enums.Type;
 
 /***************************************************
-小石
-*/
+ * 小石
+ */
 public class Stone extends ObjEX implements java.io.Serializable {
 	static final long serialVersionUID = 1L;
-
+	/**処理対象(ゆっくり)*/
 	public static final int hitCheckObjType = ObjEX.YUKKURI;
 	private static final int NUM_OF_STONE_IMG = 3;
 	private static BufferedImage[] images = new BufferedImage[NUM_OF_STONE_IMG];
 	private static Rectangle boundary = new Rectangle();
-//	private Body owner = null;
 
 	private ItemRank itemRank;
-
+	/**画像ロード*/
 	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
 		images[0] = ModLoader.loadItemImage(loader, "stone" + File.separator + "pubble.png");
 		images[1] = ModLoader.loadItemImage(loader, "stone" + File.separator + "pubble" + ModLoader.YK_WORD_NORA + ".png");
@@ -48,7 +50,7 @@ public class Stone extends ObjEX implements java.io.Serializable {
 		}
 		return 1;
 	}
-
+	/**境界線の取得*/
 	public static Rectangle getBounding() {
 		return boundary;
 	}
@@ -57,21 +59,26 @@ public class Stone extends ObjEX implements java.io.Serializable {
 	public BufferedImage getShadowImage() {
 		return images[2];
 	}
-	
+	@Override
 	public int getHitCheckObjType() {
 		return hitCheckObjType;
-	}
-
-	
-/*	@Override	
+	}	
+	@Override
 	public int objHitProcess( Obj o ) {
-		if ( o.getObjType() == Obj.Type.YUKKURI ){
+		if ( o instanceof Body ){
 			Body b = (Body)o;
-			b.setMessage(MessagePool.getMessage(b, MessagePool.Action.Scream), 40, true, true);
-			b.bodyInjured();
+			if( b.getCriticalDamege()  == CriticalDamegeType.CUT){
+				return 0 ;
+			}
+			if(b.isBaby()) b.bodyCut();
+			else{
+				b.bodyInjure();
+				b.runAway(getX(),getY());
+			}
 		}
 		return 0;
-	}*/
+	}
+
 	
 	@Override
 	public void removeListData(){
@@ -88,7 +95,12 @@ public class Stone extends ObjEX implements java.io.Serializable {
 		kick(0, -8, -4);
 	}
 
-	// initOption = 1 野良用
+	/**
+	 * コンストラクタ
+	 * @param initX x座標
+	 * @param initY y座標
+	 * @param initOption 0:家の中、1家の外
+	 */
 	public Stone(int initX, int initY, int initOption) {
 		super(initX, initY, initOption);
 		setBoundary(boundary);

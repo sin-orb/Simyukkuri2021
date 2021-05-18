@@ -15,26 +15,42 @@ import src.enums.PredatorType;
 import src.enums.YukkuriType;
 import src.system.BodyLayer;
 
-
+/**
+ * ハイブリッドゆっくり。
+ * 2つの異なる種類のゆっくりを親に持ち、両方の親の特徴を受け継ぐハイブリッド。
+ * 親ゆっくりインスタンス４つをメンバに持つ。
+ */
 public class HybridYukkuri extends Body implements java.io.Serializable {
 	static final long serialVersionUID = 2L;
+	/** ハイブリッドゆっくりのタイプ */
 	public static final int type = 20000;
+	/** ハイブリッドゆっくりの和名 */
 	public String nameJ;
+	/** ハイブリッドゆっくりの英名 */
 	public String nameE;
+	/** ハイブリッドゆっくりの和名２ */
 	public String nameJ2;
+	/** ハイブリッドゆっくりの英名２ */
 	public String nameE2;
+	/** 型となるゆっくり１ */
 	protected Body dorei;
+	/** 型となるゆっくり２ */
 	protected Body dorei2;
+	/** 型となるゆっくり３ */
 	protected Body dorei3;
+	/** 型となるゆっくり４ */
 	protected Body dorei4;
 
 	private Body[] images;
 	private static Dimension[] boundary = new Dimension[3];
 	private static Dimension[] braidBoundary = new Dimension[3];
-
+	/** イメージのロード（なにもしない） */
 	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
 	}
-
+	/**
+	 * ハイブリッド用のイメージロード
+	 * @throws IOException IO例外
+	 */
 	public void loadImages_Hyblid () throws IOException {
 		HybridYukkuri	parentTmp =	null;
 		HybridYukkuri	parentTmp2 = null;
@@ -275,11 +291,11 @@ public class HybridYukkuri extends Body implements java.io.Serializable {
 			setPredatorType(null);
 		}
 	}
-
+	@Override
 	public boolean isImageLoaded() {
 		return true;
 	}
-
+	@Override
 	public void setBodyRank(BodyRank r) {
 		dorei.setBodyRank(r);
 		dorei2.setBodyRank(r);
@@ -287,20 +303,24 @@ public class HybridYukkuri extends Body implements java.io.Serializable {
 		dorei4.setBodyRank(r);
 		bodyRank = r;
 	}
-
+	@Override
 	public int getImage(int type, int direction, BodyLayer layer, int index) {
 		images[type].setAgeState(getBodyAgeState());
 		images[type].getImage(type, direction, layer, index);
 		return 1;
 	}
-
+	/**
+	 * 型となるゆっくりを返却する.
+	 * @param idx 型のインデックス
+	 * @return 型となるゆっくり
+	 */
 	public Body getBaseBody(int idx) {
 		if(idx == 0) return dorei;
 		else if(idx == 1) return dorei2;
 		else if(idx == 2) return dorei3;
 		return dorei4;
 	}
-
+	@Override
 	public Point[] getMountPoint(String key) {
 		return dorei.getMountPoint(key);
 	}
@@ -315,25 +335,25 @@ public class HybridYukkuri extends Body implements java.io.Serializable {
 	public int getHybridType(int partnerType) {
 		return HybridYukkuri.type;
 	}
-
+	@Override
 	public String getNameJ() {
 		return nameJ;
 	}
-
+	@Override
 	public String getMyName() {
 		if( anMyName[getBodyAgeState().ordinal()] != null ){
 			return anMyName[getBodyAgeState().ordinal()];
 		}
 		return nameJ;
 	}
-
+	@Override
 	public String getMyNameD() {
 		if( anMyNameD[getBodyAgeState().ordinal()] != null ){
 			return anMyNameD[getBodyAgeState().ordinal()];
 		}
 		return nameJ;
 	}
-
+	@Override
 	public String getNameE() {
 		return nameE;
 	}
@@ -354,14 +374,14 @@ public class HybridYukkuri extends Body implements java.io.Serializable {
 	}
 
 
-	// public methods
+	/** コンストラクタ */
 	public HybridYukkuri(int initX, int initY, int initZ, AgeState initAgeState, Body p1, Body p2) {
 		super(initX, initY, initZ, initAgeState, p1, p2);
 		setBoundary(boundary, braidBoundary);
 		setMsgType(YukkuriType.HYBRIDYUKKURI);
 		setShitType(p1.getShitType());
 	}
-
+	@Override
 	public void tuneParameters() {
 		/*if (rnd.nextBoolean()) {
 		motherhood = true;

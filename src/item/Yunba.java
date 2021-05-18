@@ -12,7 +12,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import javax.swing.JButton;
@@ -42,11 +42,11 @@ import src.system.Cash;
 import src.system.MapPlaceData;
 
 /***************************************************
-ゆんば
-*/
+ * ゆんば
+ */
 public class Yunba extends ObjEX implements java.io.Serializable {
 	static final long serialVersionUID = 1L;
-
+	/**アクションのテーブル*/
 	public static enum Action {
 		CLEAN("清掃", ""),
 		HEAL("回復", ""),
@@ -71,7 +71,7 @@ public class Yunba extends ObjEX implements java.io.Serializable {
         Action(String nameJ, String nameE) { this.name = nameJ; }
         public String toString() { return name; }
 	}
-
+	/**色のテーブル*/
 	private static final String[] COL_LIST = {
 		"黄色",
 		"白",
@@ -95,6 +95,7 @@ public class Yunba extends ObjEX implements java.io.Serializable {
 	private static boolean[][] defaultSetFlags = new boolean[Action.values().length][3];
 	private static boolean[][] defaultSetFlags2 = new boolean[1][5];
 	private static boolean[][] defaultSetFlags3 = new boolean[1][3];
+	@SuppressWarnings("rawtypes")
 	private static JComboBox colorBox;
 	private static int defaultColor = 0;
 
@@ -126,7 +127,7 @@ public class Yunba extends ObjEX implements java.io.Serializable {
 	private int defaultY;
 
 	private Random rnd = new Random();
-
+	/**画像ロード*/
 	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
 
 		bodyImages[0][0] = ModLoader.loadItemImage(loader, "yunba" + File.separator + "body_yellow_left.png");
@@ -190,7 +191,7 @@ public class Yunba extends ObjEX implements java.io.Serializable {
 	public boolean hasSetupMenu() {
 		return true;
 	}
-
+	/**境界線の取得*/
 	public static Rectangle getBounding() {
 		return boundary;
 	}
@@ -201,11 +202,15 @@ public class Yunba extends ObjEX implements java.io.Serializable {
 			Cash.addCash(-getCost());
 		}
 	}
-
+	/**
+	 * 値段を取得する.
+	 */
 	public int getValue() {
 		return value;
 	}
-
+	/**
+	 * コストを取得する.
+	 */
 	public int getCost() {
 		return cost;
 	}
@@ -258,7 +263,7 @@ public class Yunba extends ObjEX implements java.io.Serializable {
 
 					boolean bIsShitOnToilet = false;
 					// トイレの上のうんうんは無視。空中もチェック
-					ArrayList<Toilet> toiletList = SimYukkuri.world.currentMap.toilet;
+					List<Toilet> toiletList = SimYukkuri.world.currentMap.toilet;
 					for (Toilet t: toiletList) {
 						// Hitするなら終了
 						if( t.checkHitObj(o, true))
@@ -789,13 +794,18 @@ public class Yunba extends ObjEX implements java.io.Serializable {
 			direction = 1;
 		}
 	}
-
+	/**
+	 * コンストラクタ
+	  * @param initX x座標
+	 * @param initY y座標
+	 * @param initOption 0:飼い用、1;野良用
+	 */
 	public Yunba(int initX, int initY, int initOption) {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
 
-		ArrayList<Yunba> list = SimYukkuri.world.currentMap.yunba;
+		List<Yunba> list = SimYukkuri.world.currentMap.yunba;
 		list.add(this);
 		objType = Type.OBJECT;
 		objEXType = ObjEXType.YUNBA;
@@ -825,6 +835,7 @@ public class Yunba extends ObjEX implements java.io.Serializable {
 	}
 
 	// 設定メニュー
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public static boolean setupYunba(Yunba y, boolean init) {
 
 		JPanel mainPanel = new JPanel();
@@ -1127,7 +1138,7 @@ public class Yunba extends ObjEX implements java.io.Serializable {
 	// 他のゆんばのターゲットになっているか
 	public boolean cheackOtherYunbaTarget(Obj o)
 	{
-		ArrayList<Yunba> yunbaList = SimYukkuri.world.currentMap.yunba;
+		List<Yunba> yunbaList = SimYukkuri.world.currentMap.yunba;
 		for(Yunba yunba: yunbaList)
 		{
 			if( yunba == this ){

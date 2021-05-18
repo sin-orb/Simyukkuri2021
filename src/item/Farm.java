@@ -9,7 +9,7 @@ import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import src.SimYukkuri;
@@ -56,7 +56,7 @@ public class Farm extends FieldShapeBase implements Serializable {
 	@Override
 	public void executeShapePopup(ShapeMenu menu) {
 
-		ArrayList<Farm> list = SimYukkuri.world.currentMap.farm;
+		List<Farm> list = SimYukkuri.world.currentMap.farm;
 		int pos;
 
 		switch (menu) {
@@ -350,7 +350,7 @@ public class Farm extends FieldShapeBase implements Serializable {
 
 				if (!b.isHasStalk() && 1000 < amount) {
 					GadgetAction.putObjEX(Stalk.class, b.getX(), b.getY(), b.getDirection().ordinal());
-					ArrayList<Stalk> stalkList = SimYukkuri.world.currentMap.stalk;
+					List<Stalk> stalkList = SimYukkuri.world.currentMap.stalk;
 					if (stalkList != null && stalkList.size() != 0) {
 						Stalk currentStalk = stalkList.get(stalkList.size() - 1);
 						if (b.getStalks() != null) {
@@ -365,7 +365,7 @@ public class Farm extends FieldShapeBase implements Serializable {
 					if (3000 < amount && !b.isDamaged()) {
 						if (rnd.nextInt(100) == 0) {
 							GadgetAction.putObjEX(Stalk.class, b.getX(), b.getY(), b.getDirection().ordinal());
-							ArrayList<Stalk> stalkList = SimYukkuri.world.currentMap.stalk;
+							List<Stalk> stalkList = SimYukkuri.world.currentMap.stalk;
 							if (stalkList != null && stalkList.size() != 0) {
 								Stalk currentStalk = stalkList.get(stalkList.size() - 1);
 								if (b.getStalks() != null) {

@@ -1,6 +1,6 @@
 package src.event;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import src.Const;
@@ -121,7 +121,7 @@ public class HateNoOkazariEvent extends EventPacket implements java.io.Serializa
 			// うんうん奴隷ではない場合
 			if( to.getPublicRank() != PublicRank.UnunSlave ){
 				boolean bIsInToiletForSlave = false;
-				ArrayList<Toilet> toiletList = SimYukkuri.world.currentMap.toilet;
+				List<Toilet> toiletList = SimYukkuri.world.currentMap.toilet;
 				for (Toilet t: toiletList) {
 					// うんうん奴隷用トイレがあるか
 					if( t.isForSlave() ){

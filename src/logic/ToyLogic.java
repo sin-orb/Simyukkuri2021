@@ -1,6 +1,6 @@
 package src.logic;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import src.SimYukkuri;
@@ -22,19 +22,23 @@ import src.system.MessagePool;
 
 
 /***************************************************
-	おもちゃ関係の処理
+ * おもちゃ関係の処理
  */
 public class ToyLogic {
 
 	private static final Random rnd = new Random();
 
-	// ボール
+	/**
+	 *  ボールで遊ぶ
+	 * @param b ゆっくり
+	 * @return 処理が行われたか
+	 */
 	public static final boolean checkToy(Body b) {
 		if( b == null ){
 			return false;
 		}
 
-		ArrayList<Toy> list = SimYukkuri.world.currentMap.toy;
+		List<Toy> list = SimYukkuri.world.currentMap.toy;
 		if( list == null || list.size() == 0 ){
 			return false;
 		}
@@ -111,12 +115,10 @@ public class ToyLogic {
 					}
 				}
 				else if(rnd.nextInt(10) == 0){
-//					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.ProudTreasure), true);
-					b.getInVain(true/*false*/);
+					b.getInVain(true);
 				}
 				else{
 					found.kick(b.getDirX() * b.getStep(), b.getDirY() * b.getStep(), strength[b.getBodyAgeState().ordinal()]);
-//					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.PlayTreasure), true);
 				}
 			}
 			else {
@@ -141,9 +143,13 @@ public class ToyLogic {
 		return ret;
 	}
 
-	// すぃー
+	/**
+	 *  すぃーで遊ぶ
+	 * @param b ゆっくり
+	 * @return 処理が行われたか
+	 */
 	public static final boolean checkSui(Body b) {
-		ArrayList<Sui> list = SimYukkuri.world.currentMap.sui;
+		List<Sui> list = SimYukkuri.world.currentMap.sui;
 		if( list == null || list.size() == 0 ){
 			return false;
 		}
@@ -201,17 +207,6 @@ public class ToyLogic {
 		}
 		// すぃーが見つかった場合
 		if (found != null) {
-			/*if (minDistance <= Translate.distance(0, 0, b.getStep(), b.getStep())) {
-				b.setHappiness(Happiness.HAPPY);
-				b.addStress(-200);
-				if (!b.isTalking()) {
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.GetTreasure), true);
-				}
-				((Sui)found).rideOn(b);
-			}
-			else {
-				b.moveTo(found.getX(), found.getY());
-			}*/
 			Body bindBody =(Body)((Sui)found).getbindobj() ;
 			// プレイヤーに持ち上げられたら所有権を消す
 			if( found.isGrabbed() && found.getZ() != 0 ){
@@ -243,13 +238,17 @@ public class ToyLogic {
 		}
 		return ret;
 	}
-
+	/**
+	 * トランポリンで遊ぶ
+	 * @param b ゆっくり
+	 * @return 処理が行われたか
+	 */
 	public static final boolean checkTrampoline(Body b){
 		if( b == null ){
 			return false;
 		}
 
-		ArrayList<Trampoline> trampolineList = SimYukkuri.world.currentMap.trampoline;
+		List<Trampoline> trampolineList = SimYukkuri.world.currentMap.trampoline;
 		if( trampolineList == null || trampolineList.size() == 0 ){
 			return false;
 		}
@@ -259,11 +258,6 @@ public class ToyLogic {
 			return false;
 		}
 
-
-/*		if(rnd.nextInt(10) == 0){
-			return false;
-		}
-*/
 		Trampoline found = null;
 		// 視界内の一番近いトランポリンを取得
 		int minDistance = b.getEYESIGHT();
@@ -319,13 +313,17 @@ public class ToyLogic {
 		}
 			return true;
 	}
-
+	/**
+	 * 遊べる状態かどうか
+	 * @param b ゆっくり
+	 * @return 遊べる状態かどうか
+	 */
 	public static boolean canPlay(Body b){
 		// 他の用事がある場合
 		if( b.isToFood() || b.isToBody() || b.isToSukkiri() || b.isToSteal() || b.isToBed() || b.isToShit() ){
 			return false;
 		}
-		if (b.canAction()==false || b.isDontMove() || b.isExciting() || b.isScare() || b.isDamaged() ){
+		if (!b.canAction() || b.isDontMove() || b.isExciting() || b.isScare() || b.isDamaged() ){
 			return false;
 		}
 		if(b.getCurrentEvent() != null) {

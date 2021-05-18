@@ -12,16 +12,14 @@ import java.util.HashMap;
 
 
 /******************************************************************
-
-	読み込み専用iniファイルアクセス
-
-
-
+ * 読み込み専用iniファイルアクセス
  */
 public class IniFileReader {
-
+	/** INIファイル内のセクション */
 	public static final String INI_SECTION = "Section";
+	/** INIファイル内のキー */
 	public static final String INI_KEY = "Key";
+	/** INIファイル内の値 */
 	public static final String INI_VALUE = "Value";
 
 	private boolean isResource = false;
@@ -32,7 +30,11 @@ public class IniFileReader {
 	private String currentSection = null;
 	private String currentKey = null;
 	private String currentValue = null;
-
+	/**
+	 * コンストラクタ.
+	 * @param path パス
+	 * @param jar jarファイルのパス
+	 */
 	public IniFileReader(File path, String jar) {
 		file = path;
 		jarPath = jar;
@@ -41,7 +43,11 @@ public class IniFileReader {
 			isResource = true;
 		}
 	}
-	
+	/**iniファイルを開く
+	 * 
+	 * @param loader ローダー
+	 * @return 開けたか否か
+	 */
 	public boolean open(ClassLoader loader) {
 		boolean ret = true;
 		try {
@@ -61,14 +67,17 @@ public class IniFileReader {
 		}
 		return ret;
 	}
-	
+	/**iniファイルを閉じる*/
 	public void close() {
 		try {
 			reader.close();
 		} catch (IOException e) {
 		}
 	}
-
+	/**
+	 *  ini読み込み
+	 * @return INIファイルの内容のマップ
+	 */
 	public HashMap<String, String> readNext() {
 		HashMap<String, String> ret = null;
 		String strLine = null;

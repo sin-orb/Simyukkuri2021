@@ -7,7 +7,7 @@ import java.awt.Graphics2D;
 import java.awt.Point;
 import java.awt.Stroke;
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.List;
 
 import src.SimYukkuri;
 import src.draw.Translate;
@@ -159,7 +159,7 @@ public class Barrier extends FieldShapeBase implements Serializable {
 	 * @return ある点が壁の上か
 	 */
 	public static Barrier getBarrier(int cx, int cy, int thickness) {
-		ArrayList<Barrier> barrierList = SimYukkuri.world.currentMap.barrier;
+		List<Barrier> barrierList = SimYukkuri.world.currentMap.barrier;
 		
 		for (Barrier b: barrierList) {
 			int x1 = b.getMapSX();

@@ -1,7 +1,8 @@
 package src.logic;
 
-import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 
 import src.SimYukkuri;
@@ -31,7 +32,11 @@ import src.system.MessagePool;
 public class FamilyActionLogic {
 
 	private static Random rnd = new Random();
-
+	/**
+	 * 家族関係処理
+	 * @param b ゆっくり
+	 * @return 処理が行われたか
+	 */
 	public static final boolean checkFamilyAction(Body b) {
 		// 他の用事がある場合
 		if( b.isToFood() || b.isToBody() || b.isToSukkiri() ||
@@ -84,7 +89,7 @@ public class FamilyActionLogic {
 			return false;
 		}
 		//　子供のリストに生きている子供がいるか
-		ArrayList<Body>childrenList = BodyLogic.createActiveChildList(b, true);
+		List<Body>childrenList = BodyLogic.createActiveChildList(b, true);
 		if( childrenList == null || childrenList.size() == 0){
 			return false;
 		}
@@ -199,7 +204,7 @@ public class FamilyActionLogic {
 		}
 
 		// おチビちゃん運び判定
-		ArrayList<Body> childrenListForRideYukkuriTarget = new ArrayList<Body>();
+		List<Body> childrenListForRideYukkuriTarget = new LinkedList<Body>();
 		if( !bWantToShit && !bWantToEat){
 			// 子供がダメージを受けている、動けない場合は終了
 			for(Body bodyChild: childrenList){
@@ -281,7 +286,7 @@ public class FamilyActionLogic {
 		return false;
 	}
 	// うんうん体操
-	public static final boolean goToShit(Body b,ArrayList<Body>childrenList){
+	public static final boolean goToShit(Body b,List<Body>childrenList){
 		Obj found = searchToilet(b);
 		if(!b.checkWait(2000)){
 			return false;
@@ -295,9 +300,14 @@ public class FamilyActionLogic {
 		ev.start(b);
 		return true;
 	}
+	/**
+	 * トイレを探す
+	 * @param b ゆっくり
+	 * @return 探しだしたトイレオブジェクト
+	 */
 	public static Obj searchToilet(Body b){
 		Obj found = null;
-		ArrayList<Toilet> toiletList = SimYukkuri.world.currentMap.toilet;
+		List<Toilet> toiletList = SimYukkuri.world.currentMap.toilet;
 		int minDistance = b.getEYESIGHT();
 		for (Toilet t: toiletList) {
 			// 最小距離のものが見つかっていたら
@@ -317,8 +327,13 @@ public class FamilyActionLogic {
 	}
 	
 	
-	// 食事
-	public static final boolean goToEat(Body b,ArrayList<Body>childrenList){
+	/**
+	 *  食事に行く
+	 * @param b ゆっくり
+	 * @param childrenList 子供リスト
+	 * @return 処理が行われたか
+	 */
+	public static final boolean goToEat(Body b,List<Body>childrenList){
 		// 餌を持っていたら落とす
 		b.dropTakeoutItem(TakeoutItemType.FOOD);
 		// フィールドの餌検索
@@ -338,13 +353,18 @@ public class FamilyActionLogic {
 		ev.start(b);
 		return true;
 	}
+	/**
+	 * 餌を探す
+	 * @param b ゆっくり
+	 * @return 処理が行われたか
+	 */
 	public static final Obj searchFood(Body b){
 		Obj found = null;
 		int minDistance = b.getEYESIGHT();
 		int looks = -1000;
 		
 		// フィールドの餌検索
-		ArrayList<Food> foodList = SimYukkuri.world.currentMap.food;
+		List<Food> foodList = SimYukkuri.world.currentMap.food;
 		for (Food f: foodList) {
 			if (f.isEmpty()) {
 				continue;
@@ -395,7 +415,10 @@ public class FamilyActionLogic {
 		return found;
 	}
 	
-	// レイパーしかいないなら全員興奮終了
+	/**
+	 *  レイパーしかいないかどうか
+	 * @return レイパーしかいないかどうか
+	 */
 	public static final boolean checkRaperFamily(){
 		boolean bIsNotRaperTarget = isRapeTarget();
 		// レイプ対象がいない
@@ -412,7 +435,10 @@ public class FamilyActionLogic {
 		}
 		return false;
 	}
-
+	/**
+	 * れいぱーのターゲットかどうか
+	 * @return れいぱーのターゲットかどうか
+	 */
 	public static final boolean isRapeTarget(){
 		Body[] bodyList = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
 		if( bodyList != null && bodyList.length != 0 ){
@@ -425,8 +451,13 @@ public class FamilyActionLogic {
 		}
 		return false;
 	}
-
-	public static final boolean rideOnParent(Body b,ArrayList<Body>childrenList){
+	/**
+	 * 親に乗る処理
+	 * @param b ゆっくり
+	 * @param childrenList 子供リスト
+	 * @return 処理が行われたか
+	 */
+	public static final boolean rideOnParent(Body b,List<Body>childrenList){
 		if( childrenList == null || childrenList.size() == 0 ){
 			return false;
 		}
@@ -493,8 +524,13 @@ public class FamilyActionLogic {
 		}
 		return false;
 	}
-
-	public static final boolean proudChild(Body b,ArrayList<Body>childrenList){
+	/**
+	 * おちび自慢処理
+	 * @param b ゆっくり
+	 * @param childrenList 子供リスト
+	 * @return 処理が行われたか
+	 */
+	public static final boolean proudChild(Body b,List<Body>childrenList){
 		if(!b.checkWait(2000)){
 			return false;
 		}

@@ -4,7 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.event.PopupMenuEvent;
@@ -21,11 +21,13 @@ import src.system.MainCommandUI.SystemButtonLabel;
 import src.system.MainCommandUI.ToolButtonLabel;
 import src.util.IniFileUtil;
 
-
-
-
+/**
+ * メインコマンドリスナ
+ */
 public class MainCommandListener {
-
+	/**
+	 * ゲームスピードリスナ
+	 */
 	public class GameSpeedComboBoxListener implements ItemListener {
 		public void itemStateChanged(ItemEvent e) {
 			synchronized(SimYukkuri.lock) {
@@ -37,7 +39,9 @@ public class MainCommandListener {
 			}
 		}
 	}
-
+	/**
+	 * アイテムリスナ
+	 */
 	public class MainItemComboBoxListener implements ItemListener {
 		public void itemStateChanged(ItemEvent e) {
 			synchronized(SimYukkuri.lock) {
@@ -51,7 +55,9 @@ public class MainCommandListener {
 			}
 		}
 	}
-
+	/**
+	 * サブアイテムリスナ
+	 */
 	public class SubItemComboBoxListener implements ItemListener {
 		public void itemStateChanged(ItemEvent e) {
 			synchronized(SimYukkuri.lock) {
@@ -114,7 +120,9 @@ public class MainCommandListener {
 		}
 		return ret;
 	}
-
+	/**
+	 * ボタンリスナ
+	 */
 	public class ButtonListener implements ActionListener {
 
 		@Override
@@ -190,7 +198,9 @@ public class MainCommandListener {
 			}
 		}
 	}
-
+	/**
+	 * オプションメニューリスナ
+	 */
 	public class OptionMenuListener implements ActionListener {
 
 		@Override
@@ -201,7 +211,7 @@ public class MainCommandListener {
 			switch(sel) {
 				case INI_RELOAD:
 					SimYukkuri.mypane.loadImage(false, false, false, false, false, true);
-					ArrayList<Body> bodyList = SimYukkuri.world.currentMap.body;
+					List<Body> bodyList = SimYukkuri.world.currentMap.body;
 					if( bodyList != null && bodyList.size() != 0 )
 					{
 						for(Body b:bodyList)
@@ -218,7 +228,9 @@ public class MainCommandListener {
 			MainCommandUI.optionButton.setSelected(false);
 		}
 	}
-
+	/**
+	 * オプションポップアップリスナ
+	 */
 	public class OptionPopupListener implements PopupMenuListener {
 
 		@Override

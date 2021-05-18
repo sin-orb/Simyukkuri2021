@@ -6,7 +6,8 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
@@ -34,7 +35,7 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 	private static Rectangle boundary = new Rectangle();
 
 	private Body plantYukkuri = null;		// この茎が生えてる親
-	private ArrayList<Body> bindBaby = new ArrayList<Body>();	// この茎にぶら下がってる子
+	private List<Body> bindBaby = new LinkedList<Body>();	// この茎にぶら下がってる子
 	/** （食べたときの）量 */
 	public int amount = 0;
 	/**
@@ -145,7 +146,7 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 	 * この茎に生えている実ゆっくりを取得する.
 	 * @return この茎に生えている実ゆっくり
 	 */
-	public ArrayList<Body> getBindBaby() {
+	public List<Body> getBindBaby() {
 		return bindBaby;
 	}
 	/**

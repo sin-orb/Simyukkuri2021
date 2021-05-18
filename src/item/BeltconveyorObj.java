@@ -17,7 +17,8 @@ import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.JButton;
 import javax.swing.JComboBox;
@@ -70,11 +71,11 @@ public class BeltconveyorObj extends ObjEX implements java.io.Serializable {
 	private int targetType;
 	private int cantmove = 0;
 	private boolean bMoveOnce = false;
-	protected ArrayList<Obj> bindObjList = new ArrayList<Obj>(); //　ベルトコンベア上で移動不可能な状態になっているアイテムのリスト
+	protected List<Obj> bindObjList = new LinkedList<Obj>(); //　ベルトコンベア上で移動不可能な状態になっているアイテムのリスト
 
-	protected ArrayList<YukkuriType> selectedYukkuriType = new ArrayList<YukkuriType>(); // 処理対象のゆっくり
-	static protected ArrayList<String> istrOptionList = new ArrayList<String>(); // 処理対象設定(オプション)
-	protected ArrayList<Boolean> obOptionSelectionList = new ArrayList<Boolean>(); // 処理対象設定(オプション)の選択状態
+	protected List<YukkuriType> selectedYukkuriType = new LinkedList<YukkuriType>(); // 処理対象のゆっくり
+	static protected List<String> istrOptionList = new LinkedList<String>(); // 処理対象設定(オプション)
+	protected List<Boolean> obOptionSelectionList = new LinkedList<Boolean>(); // 処理対象設定(オプション)の選択状態
 
 	protected boolean bFilter = false;
 	protected int fieldSX;
@@ -597,23 +598,23 @@ public class BeltconveyorObj extends ObjEX implements java.io.Serializable {
 		bFilter = bFlag;
 	}
 
-	public ArrayList<YukkuriType> getYukkuriFilter() {
+	public List<YukkuriType> getYukkuriFilter() {
 		return selectedYukkuriType;
 	}
 
-	public void setYukkuriFilter(ArrayList<YukkuriType> arrayTemp) {
+	public void setYukkuriFilter(List<YukkuriType> arrayTemp) {
 		selectedYukkuriType = arrayTemp;
 	}
 
-	public ArrayList<String> getOptionFilter() {
+	public List<String> getOptionFilter() {
 		return istrOptionList;
 	}
 
-	public ArrayList<Boolean> getOptionResultFilter() {
+	public List<Boolean> getOptionResultFilter() {
 		return obOptionSelectionList;
 	}
 
-	public void setOptionResultFilter(ArrayList<Boolean> arrayTemp) {
+	public void setOptionResultFilter(List<Boolean> arrayTemp) {
 		obOptionSelectionList = arrayTemp;
 	}
 
@@ -628,9 +629,9 @@ public class BeltconveyorObj extends ObjEX implements java.io.Serializable {
 			}
 			switch (select) {
 			case YUKKURI_FILTER:
-				ArrayList<String> istrOptionList = master.getOptionFilter();
-				ArrayList<Boolean> obOptionSelectionList = master.getOptionResultFilter();
-				ArrayList<YukkuriType> arrayTemp = master.getYukkuriFilter();
+				List<String> istrOptionList = master.getOptionFilter();
+				List<Boolean> obOptionSelectionList = master.getOptionResultFilter();
+				List<YukkuriType> arrayTemp = master.getYukkuriFilter();
 				boolean bFilter = YukkuriFilterPanel.openFilterPanel("対象設定", "上段:ベルトコンベアで流さない種類を選択、下段:流す性質を選択",
 						istrOptionList, arrayTemp, obOptionSelectionList);
 				if (bFilter) {

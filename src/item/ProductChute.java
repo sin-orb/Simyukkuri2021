@@ -21,13 +21,13 @@ import src.system.Cash;
 */
 public class ProductChute extends ObjEX implements java.io.Serializable {
 	static final long serialVersionUID = 1L;
-
+	/**処理対象(ゆっくり、うんうん、フード、おもちゃ、物全般、吐餡、茎)*/
 	public static final int hitCheckObjType = ObjEX.YUKKURI + ObjEX.SHIT + ObjEX.FOOD + ObjEX.TOY + ObjEX.OBJECT + ObjEX.VOMIT + ObjEX.STALK;
 	private static final int images_num = 2; //このクラスの総使用画像数
 	private static BufferedImage[] images = new BufferedImage[images_num];
 	private static Rectangle boundary = new Rectangle();
 	protected Random rnd = new Random();
-
+	/**画像ロード*/
 	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
 		images[0] = ModLoader.loadItemImage(loader, "ProductChute" + File.separator + "ProductChute.png");
 		images[1] = ModLoader.loadItemImage(loader, "ProductChute" + File.separator + "ProductChute_off.png");
@@ -49,7 +49,7 @@ public class ProductChute extends ObjEX implements java.io.Serializable {
 	public BufferedImage getShadowImage() {
 		return null;
 	}
-
+	/**境界線の取得*/
 	public static Rectangle getBounding() {
 		return boundary;
 	}
@@ -80,7 +80,9 @@ public class ProductChute extends ObjEX implements java.io.Serializable {
 	public void removeListData(){
 		SimYukkuri.world.currentMap.productchute.remove(this);
 	}
-
+	/**
+	 * コンストラクタ
+	 */
 	public ProductChute(int initX, int initY, int initOption) {
 		super(initX, initY, initOption);
 		setBoundary(boundary);

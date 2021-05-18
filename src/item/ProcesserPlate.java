@@ -8,7 +8,8 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 
 import javax.swing.ButtonGroup;
@@ -24,7 +25,6 @@ import src.base.Obj;
 import src.base.ObjEX;
 import src.draw.ModLoader;
 import src.draw.Translate;
-import src.enums.CoreAnkoState;
 import src.enums.CriticalDamegeType;
 import src.enums.EffectType;
 import src.enums.FootBake;
@@ -36,20 +36,25 @@ import src.system.Cash;
 import src.system.MessagePool;
 
 /***************************************************
-加工プレート
-*/
+ * 加工プレート
+ */
 public class ProcesserPlate extends ObjEX implements java.io.Serializable {
 	static final long serialVersionUID = 1L;
-
+	/**処理対象(ゆっくり)*/
 	public static final int hitCheckObjType = ObjEX.YUKKURI;
 	private static BufferedImage[] images = new BufferedImage[2];
 	private static Rectangle boundary = new Rectangle();
 
 	private Random rnd = new Random();
-	protected ArrayList<Body> processedBodyList = new ArrayList<Body>();
-	protected ArrayList<Effect> processedBodyEffectList = new ArrayList<Effect>();
+	/**加工対象のリスト*/
+	protected List<Body> processedBodyList = new LinkedList<Body>();
+	/**加工エフェクトのリスト*/
+	protected List<Effect> processedBodyEffectList = new LinkedList<Effect>();
+	/**加工するタイプ*/
 	protected ProcessType enumProcessType;
+	/**ランニングコスト*/
 	protected int cost[] ={500,800,2000,3500};
+	/**加工モード*/
 	public static enum ProcessMode {
 		HOTPLATE,		// ホットプレート
 		PAIN,			// 痛い
@@ -61,7 +66,7 @@ public class ProcesserPlate extends ObjEX implements java.io.Serializable {
 		PLUCKING,			//むしる
 		PACKING			//パッキング
 	}
-
+	/**加工モード(詳細)*/
 	public static enum ProcessType {
 		HOTPLATE_MIN("加熱（最弱）",			ProcessMode.HOTPLATE,	50),
 		HOTPLATE_LOW("加熱（弱火）",			ProcessMode.HOTPLATE,	500),
@@ -87,7 +92,7 @@ public class ProcesserPlate extends ObjEX implements java.io.Serializable {
 		}
 	}
 
-
+	/**画像ロード*/
 	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
 		images[0] = ModLoader.loadItemImage(loader, "ProcesserPlate" + File.separator + "ProcesserPlate.png");
 		images[1] = ModLoader.loadItemImage(loader, "ProcesserPlate" + File.separator + "ProcesserPlate_off.png");
@@ -112,7 +117,7 @@ public class ProcesserPlate extends ObjEX implements java.io.Serializable {
 	public BufferedImage getShadowImage() {
 		return null;
 	}
-
+	/**境界線の取得*/
 	public static Rectangle getBounding() {
 		return boundary;
 	}
@@ -126,7 +131,11 @@ public class ProcesserPlate extends ObjEX implements java.io.Serializable {
 	public boolean enableHitCheck() {
 		return true;
 	}
-
+	/**
+	 * 当たり判定されるオブジェクトのチェック
+	 * <br>動作はobjHitProcess( Obj o )で
+	 * <br>これは例外的に、エフェクトを外す作業もここでやってる
+	 */
 	public boolean checkHitObj(Rectangle colRect, Obj o){
 		if(o.getZ() == 0){
 			Translate.translate(o.getX(), o.getY(), tmpPos);
@@ -426,7 +435,7 @@ public class ProcesserPlate extends ObjEX implements java.io.Serializable {
 		SimYukkuri.world.currentMap.processerPlate.remove(this);
 	}
 
-	// 設定メニュー
+	/** 設定メニュー*/
 	public static boolean setupProcesserPlate(ProcesserPlate plate) {
 
 		JPanel mainPanel = new JPanel();
@@ -466,7 +475,12 @@ public class ProcesserPlate extends ObjEX implements java.io.Serializable {
 		}
 		return ret;
 	}
-
+	/**
+	 * コンストラクタ
+	 * @param initX X座標
+	 * @param initY Y座標
+	 * @param initOption 未使用
+	 */
 	public ProcesserPlate(int initX, int initY, int initOption) {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
@@ -482,7 +496,7 @@ public class ProcesserPlate extends ObjEX implements java.io.Serializable {
 			SimYukkuri.world.currentMap.processerPlate.remove(this);
 		}
 	}
-
+	/**iniファイル読み込み*/
 	public void readIniFile(){
 		ClassLoader loader = this.getClass().getClassLoader();
 		int nTemp = 0;

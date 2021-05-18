@@ -18,12 +18,18 @@ import src.enums.YukkuriType;
 import src.system.BodyLayer;
 import src.util.IniFileUtil;
 
-
+/**
+ * みょん
+ */
 public class Myon extends Body implements java.io.Serializable {
 	static final long serialVersionUID = 2L;
+	/** みょんのタイプ */
 	public static final int type = 5;
+	/** みょん和名 */
 	public static final String nameJ = "みょん";
+	/** みょん英名 */
 	public static final String nameE = "Myon";
+	/** みょんベースファイル名 */
 	public static final String baseFileName = "myon";
 
 	private static BufferedImage[][][][] imagePack = new BufferedImage[BodyRank.values().length][][][];
@@ -37,7 +43,7 @@ public class Myon extends Body implements java.io.Serializable {
 	//---
 	// iniファイルから読み込んだ初期値
 	private static int baseSpeed = 100;
-
+	/** イメージのロード */
 	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
 
 		if(imageLoaded) return;
@@ -61,22 +67,25 @@ public class Myon extends Body implements java.io.Serializable {
 
 		imageLoaded = true;
 	}
-
+	/**
+	 * INIファイルをロードする
+	 * @param loader クラスローダ
+	 */
 	public static void loadIniFile(ClassLoader loader) {
 		AttachOffset = ModLoader.loadBodyIniMap(loader, ModLoader.DATA_INI_DIR, baseFileName);
 		baseSpeed = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_INI_DIR, baseFileName, "speed");
 	}
-
+	@Override
 	public boolean isImageLoaded() {
 		return imageLoaded;
 	}
-
+	@Override
 	public int getImage(int type, int direction, BodyLayer layer, int index) {
 		layer.image[index] = imagePack[getBodyRank().imageIndex][type][direction * directionOffset[type][0]][getBodyAgeState().ordinal()];
 		layer.dir[index] = direction * directionOffset[type][1];
 		return 1;
 	}
-
+	@Override
 	public Point[] getMountPoint(String key) {
 		return AttachOffset.get(key);
 	}
@@ -85,25 +94,25 @@ public class Myon extends Body implements java.io.Serializable {
 	public int getType() {
 		return type;
 	}
-
+	@Override
 	public String getNameJ() {
 		return nameJ;
 	}
-
+	@Override
 	public String getMyName() {
 		if( anMyName[getBodyAgeState().ordinal()] != null ){
 			return anMyName[getBodyAgeState().ordinal()];
 		}
 		return nameJ;
 	}
-
+	@Override
 	public String getMyNameD() {
 		if( anMyNameD[getBodyAgeState().ordinal()] != null ){
 			return anMyNameD[getBodyAgeState().ordinal()];
 		}
 		return getMyName();
 	}
-
+	@Override
 	public String getNameE() {
 		return nameE;
 	}
@@ -118,7 +127,7 @@ public class Myon extends Body implements java.io.Serializable {
 		return "";
 	}
 
-	// Constructor of this class.
+	/** コンストラクタ */
 	public Myon(int initX, int initY, int initZ, AgeState initAgeState, Body p1, Body p2) {
 		super(initX, initY, initZ, initAgeState, p1, p2);
 		setBoundary(boundary, braidBoundary);
@@ -127,7 +136,7 @@ public class Myon extends Body implements java.io.Serializable {
 		setBaseBodyFileName(baseFileName);
 		IniFileUtil.readYukkuriIniFile(this);
 	}
-
+	@Override
 	public void tuneParameters() {
 		// Tune individual parameters.
 		double factor = Math.random()+1;

@@ -81,7 +81,8 @@ public class BreedingAmpoule extends Attachment {
 
 	@Override
 	protected Event update() {
-		if (parent.isDead() || parent.isBurned() || parent.isCrushed()) {
+		// 死んでる/焼かれてる/壊れてる/胎生去勢　の場合は何もしない
+		if (parent.isDead() || parent.isBurned() || parent.isCrushed() || parent.isBodyCastration()){
 			return Event.DONOTHING;
 		}
 		parent.setHungry(100);

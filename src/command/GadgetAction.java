@@ -6,7 +6,7 @@ import java.awt.event.MouseEvent;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
+import java.util.List;
 
 import src.SimYukkuri;
 import src.attachment.ANYDAmpoule;
@@ -107,11 +107,11 @@ public class GadgetAction {
 		}
 
 		Body[] bodyList = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
-		ArrayList<Shit> shitList = SimYukkuri.world.currentMap.shit;
-		ArrayList<Vomit> vomitList = SimYukkuri.world.currentMap.vomit;
-		ArrayList<Food> foodList = SimYukkuri.world.currentMap.food;
-		ArrayList<Stalk> stalkList = SimYukkuri.world.currentMap.stalk;
-		ArrayList<Barrier> wallList = SimYukkuri.world.currentMap.barrier;
+		List<Shit> shitList = SimYukkuri.world.currentMap.shit;
+		List<Vomit> vomitList = SimYukkuri.world.currentMap.vomit;
+		List<Food> foodList = SimYukkuri.world.currentMap.food;
+		List<Stalk> stalkList = SimYukkuri.world.currentMap.stalk;
+		List<Barrier> wallList = SimYukkuri.world.currentMap.barrier;
 		if(isBody) {
 			for (Body b: bodyList) {
 				if (!b.isDead()) b.setCleaning();
@@ -544,11 +544,11 @@ public class GadgetAction {
 					for(Obj o :bodyList) {
 						o.kick();
 					}
-					ArrayList<Shit> shitList = SimYukkuri.world.currentMap.shit;
+					List<Shit> shitList = SimYukkuri.world.currentMap.shit;
 					for(Obj o :shitList) {
 						o.kick();
 					}
-					ArrayList<Vomit> vomitList = SimYukkuri.world.currentMap.vomit;
+					List<Vomit> vomitList = SimYukkuri.world.currentMap.vomit;
 					for(Obj o :vomitList) {
 						o.kick();
 					}
@@ -1407,7 +1407,7 @@ public class GadgetAction {
 				if (found instanceof Body) {
 					Body b = (Body)found;
 					b.wakeup();
-					ArrayList<Body>childrenList = BodyLogic.createActiveChildList(b, true);
+					List<Body>childrenList = BodyLogic.createActiveChildList(b, true);
 					if( childrenList != null && childrenList.size() != 0)
 					{
 						FamilyActionLogic.goToShit(b, childrenList);
@@ -1419,7 +1419,7 @@ public class GadgetAction {
 				if (found instanceof Body) {
 					Body b = (Body)found;
 					b.wakeup();
-					ArrayList<Body>childrenList = BodyLogic.createActiveChildList(b, true);
+					List<Body>childrenList = BodyLogic.createActiveChildList(b, true);
 					if( childrenList != null && childrenList.size() != 0)
 					{
 						FamilyActionLogic.goToEat(b, childrenList);
@@ -1430,7 +1430,7 @@ public class GadgetAction {
 				if (found instanceof Body) {
 					Body b = (Body)found;
 					b.wakeup();
-					ArrayList<Body>childrenList = BodyLogic.createActiveChildList(b, true);
+					List<Body>childrenList = BodyLogic.createActiveChildList(b, true);
 					if( childrenList != null && childrenList.size() != 0)
 					{
 						FamilyActionLogic.rideOnParent(b, childrenList);
@@ -1441,7 +1441,7 @@ public class GadgetAction {
 				if (found instanceof Body) {
 					Body b = (Body)found;
 					b.wakeup();
-					ArrayList<Body>childrenList = BodyLogic.createActiveChildList(b, true);
+					List<Body>childrenList = BodyLogic.createActiveChildList(b, true);
 					if( childrenList != null && childrenList.size() != 0)
 					{
 						FamilyActionLogic.proudChild(b, childrenList);
@@ -1513,7 +1513,7 @@ public class GadgetAction {
 			case DEBUG2:
 				if (found instanceof Body) {
 					Body b = (Body)found;
-					b.execTransform();
+					b.killTime();
 				}
 				default:
 				break;

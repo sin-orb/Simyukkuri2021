@@ -21,13 +21,11 @@ import src.system.ItemListener.UsePopupAction;
 
 
 /**********************************************
-	オブジェクトコンテキストメニューのまとめ
-
-
-*/
+ * オブジェクトコンテキストメニューのまとめ
+ */
 public class ItemMenu {
 
-	// クリック対象とメニュー項目の選択可否
+	/** クリック対象とメニュー項目の選択可否 */
 	public static enum GetMenuTarget {
 		NONE(false, false),
 		BODY(true, true),
@@ -42,13 +40,13 @@ public class ItemMenu {
 			this.canStatus = stat;
 		}
 	}
-
+	/** メニューのターゲット */
 	public static enum UseMenuTarget {
 		NONE,
 		BODY,
 		SHIT,
 	}
-
+	/** シェイプメニューのターゲット */
 	public static enum ShapeMenuTarget {
 		NONE(false, false, false),
 		BELT(true, true, false),
@@ -65,7 +63,7 @@ public class ItemMenu {
 		}
 	}
 
-	// 素手のとき
+	/** 素手のとき */
 	public static enum GetMenu {
 		PICKUP("取る"),
 		STATUS("ステータス")
@@ -80,7 +78,7 @@ public class ItemMenu {
 		}
 	}
 	
-	// アイテム持ち
+	/** アイテム持ち */
 	public static enum UseMenu {
 		TAKE("あげる(開発中)"),
 		THROW("ぶつける(開発中)"),
@@ -96,7 +94,7 @@ public class ItemMenu {
 		}
 	}
 	
-	// シェイプメニュー
+	/** シェイプメニュー */
 	public static enum ShapeMenu {
 		SETUP("設定変更"),
 		HERVEST("収穫"),
@@ -114,20 +112,25 @@ public class ItemMenu {
 			return this.name;
 		}
 	}
-
+	/** 取得するポップアップ */
 	public static JPopupMenu getPopup;
 	private static JMenuItem[] getMenu;
+	/** 取得のターゲット */
 	public static Obj getTarget;
-
+	/** 使用するポップアップ */
 	public static JPopupMenu usePopup;
 	private static JMenuItem[] useMenu;
+	/** 使用のターゲット */
 	public static Obj useTarget;
-
+	/** シェイプのポップアップ */
 	public static JPopupMenu shapePopup;
 	private static JMenuItem[] shapeMenu;
+	/** シェイプのターゲット */
 	public static FieldShapeBase shapeTarget;
 
-
+	/**
+	 * ポップアップメニューを作成する.
+	 */
 	public static final void createPopupMenu() {
 		
 		ItemListener pack = new ItemListener();
@@ -172,14 +175,20 @@ public class ItemMenu {
 		shapeTarget = null;
 	}
 
-	// 取得メニューを開く前にターゲットと有効なコマンド設定
+	/**
+	 *  取得メニューを開く前にターゲットと有効なコマンド設定
+	 * @param obj ターゲット
+	 */
 	public static final void setGetPopupMenu(Obj obj) {
 		getTarget = obj;
 		getMenu[0].setEnabled(obj.hasGetPopup().canPickup);
 		getMenu[1].setEnabled(obj.hasGetPopup().canStatus);
 	}
 
-	// シェイプメニューを開く前にターゲットと有効なコマンド設定
+	/**
+	 *  シェイプメニューを開く前にターゲットと有効なコマンド設定
+	 * @param shp ターゲット
+	 */
 	public static final void setShapePopupMenu(FieldShapeBase shp) {
 		shapeTarget = shp;
 		shapeMenu[0].setEnabled(shp.hasShapePopup().canSetup);
@@ -187,7 +196,10 @@ public class ItemMenu {
 		shapeMenu[2].setEnabled(shp.hasShapePopup().canSort);
 	}
 
-	// アイテム動作のキャンセル
+	/**
+	 *  アイテム動作のキャンセル
+	 * @param isholdCancel ホールドのキャンセル
+	 */
 	public static final void itemModeCancel(boolean isholdCancel) {
 		getPopup.setVisible(false);
 		usePopup.setVisible(false);
@@ -197,7 +209,10 @@ public class ItemMenu {
 		}
 	}
 	
-	// アイテム配置
+	/**
+	 * アイテム配置
+	 * @param e マウスイベント
+	 */
 	public static void dropItem(MouseEvent e) {
 		Point pos = Translate.invertLimit(e.getX(), e.getY());
 		Obj item = SimYukkuri.world.player.holdItem;

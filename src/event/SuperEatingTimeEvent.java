@@ -1,6 +1,6 @@
 package src.event;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import src.base.Body;
@@ -167,7 +167,7 @@ public class SuperEatingTimeEvent extends EventPacket implements java.io.Seriali
 			}
 			nFromWaitCount++;
 			// 子ゆがいなければ終了
-			ArrayList<Body> childrenList = BodyLogic.createActiveChildList(getFrom(), true);
+			List<Body> childrenList = BodyLogic.createActiveChildList(getFrom(), true);
 			if( (childrenList == null) || (childrenList.size() == 0)){
 				return UpdateState.ABORT;
 			}

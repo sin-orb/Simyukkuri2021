@@ -1,6 +1,6 @@
 package src.event;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import src.Const;
@@ -175,7 +175,7 @@ public class ProudChildEvent extends EventPacket implements java.io.Serializable
 			nFromWaitCount++;
 
 			// 子のみ集合
-			ArrayList<Body> childrenList = BodyLogic.createActiveChildList(getFrom(), false);
+			List<Body> childrenList = BodyLogic.createActiveChildList(getFrom(), false);
 			if( (childrenList == null) || (childrenList.size() == 0)){
 				return UpdateState.ABORT;
 			}

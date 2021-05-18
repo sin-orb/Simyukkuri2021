@@ -1,6 +1,6 @@
 package src.logic;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 import src.SimYukkuri;
@@ -21,12 +21,17 @@ import src.system.MessagePool;
 
 
 /***************************************************
-	トイレ関係の処理
+ *トイレ関係の処理
  */
 public class ToiletLogic {
+	/** うんうんどれい */
 	public static Body bodyUnunSlave;
 	protected static Random rnd = new Random();
-
+	/**
+	 * うんうん処理
+	 * @param b ゆっくり
+	 * @return 処理が行われたか
+	 */
 	public static final boolean checkShit(Body b) {
 		//A.トイレ行動中止
 		// 毎フレームチェックは重いのでインターバル
@@ -34,10 +39,6 @@ public class ToiletLogic {
 		if (b.canAction()==false|| b.isIdiot() || b.isExciting() || b.nearToBirth() ) {
 			return false;
 		}
-	/*	//飢餓状態のゲス＆赤ゆと、餓死寸前の善良はスキップ
-		if((b.isSmart() && b.isStarving()) || ((b.isBaby() || b.isRude()) && b.isTooHungry()) ){
-			return false;
-		}*/
 		if(b.getCurrentEvent() != null && b.getCurrentEvent().getPriority() != EventPacket.EventPriority.LOW) {
 			return false;
 		}
@@ -53,8 +54,8 @@ public class ToiletLogic {
 			bHasShit = true;
 		}
 
-		ArrayList<Toilet> toiletList = SimYukkuri.world.currentMap.toilet;
-		ArrayList<Shit> shitList = SimYukkuri.world.currentMap.shit;
+		List<Toilet> toiletList = SimYukkuri.world.currentMap.toilet;
+		List<Shit> shitList = SimYukkuri.world.currentMap.shit;
 		if( shitList == null || shitList.size() == 0 ){
 			return false;
 		}
@@ -192,7 +193,11 @@ public class ToiletLogic {
 		return ret;
 	}
 
-
+	/**
+	 * トイレ処理
+	 * @param b ゆっくり
+	 * @return 処理が行われたか
+	 */
 	public static final boolean checkToilet(Body b) {
 		//A.トイレ行動の中止
 		// 他の用事がある場合
@@ -231,7 +236,7 @@ public class ToiletLogic {
 			if(b.isToSteal()&& !b.wantToShit() ){
 					return false;
 			}
-			ArrayList<Toilet> toiletList = SimYukkuri.world.currentMap.toilet;
+			List<Toilet> toiletList = SimYukkuri.world.currentMap.toilet;
 			for (Toilet t: toiletList) {
 				// うんうん奴隷用トイレのどれかにいれば終了＝トイレに向かわない
 				if( ((Toilet)t).isForSlave()  && t.checkHitObj(null, b)){
@@ -251,7 +256,7 @@ public class ToiletLogic {
 		else{
 			// うんうん奴隷ではない場合、用がない、かつうんうんを持ってないなら終了
 			if ( !b.wantToShit() && !bHasShit ) {
-				ArrayList<Toilet> toiletList = SimYukkuri.world.currentMap.toilet;
+				List<Toilet> toiletList = SimYukkuri.world.currentMap.toilet;
 				for (Toilet t: toiletList) {
 					// 自動清掃でないトイレに入った時の反応
 					if(!((Toilet)t).getAutoClean() && t.checkHitObj(null, b) &&!b.isTalking()){
@@ -325,7 +330,7 @@ public class ToiletLogic {
 			wallMode = AgeState.ADULT.ordinal();
 		}
 
-		ArrayList<Toilet> toiletList = SimYukkuri.world.currentMap.toilet;
+		List<Toilet> toiletList = SimYukkuri.world.currentMap.toilet;
 		for (Toilet t: toiletList) {
 			int distance = Translate.distance(b.getX(), b.getY(), t.getX(), t.getY() - t.getH()/6);
 			if (minDistance > distance) {

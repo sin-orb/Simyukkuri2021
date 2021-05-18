@@ -24,19 +24,21 @@ import src.enums.ObjEXType;
 import src.enums.Type;
 
 /***************************************************
-とらんぽりん
-*/
+ * とらんぽりん
+ */
 public class Trampoline extends ObjEX implements java.io.Serializable {
 	static final long serialVersionUID = 1L;
 
 	private static BufferedImage[] images = new BufferedImage[2];
 	private static Rectangle boundary = new Rectangle();
 	public int option;
+	/**通常事故率*/
 	public int accident1;
+	/**餡子脳事故率*/
 	public int accident2;
-//	private ItemRank itemRank;
+	/**処理対象(ゆっくり)*/
 	public static final int hitCheckObjType = ObjEX.YUKKURI;
-
+	/**タイプ*/
 	public static enum TrampolineType {
         NORMAL("普通"),
         EX("進行方向"),
@@ -45,7 +47,7 @@ public class Trampoline extends ObjEX implements java.io.Serializable {
         TrampolineType(String name) { this.name = name; }
         public String toString() { return name; }
 	}
-
+	/**画像ロード*/
 	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
 
         images[0] = ModLoader.loadItemImage(loader, "toy/trampoline.png");
@@ -61,7 +63,7 @@ public class Trampoline extends ObjEX implements java.io.Serializable {
 		layer[0] = images[0];
 		return 1;
 	}
-
+	/**境界線の取得*/
 	public static Rectangle getBounding() {
 		return boundary;
 	}
@@ -90,7 +92,10 @@ public class Trampoline extends ObjEX implements java.io.Serializable {
 	public int getHitCheckObjType() {
 		return hitCheckObjType;
 	}
-
+	/**
+	 * 当たり判定
+	 * <br>ただし、これは特別に空中にいても当たり判定される
+	 */
 	public boolean checkHitObj(Obj o) {
 		Rectangle tmpRect = new Rectangle();
 		getCollisionRect(tmpRect);
@@ -114,7 +119,12 @@ public class Trampoline extends ObjEX implements java.io.Serializable {
 		return false;
 	}
 
-	// initOption = 1 野良用
+	/**
+	 * コンストラクタ
+	 * @param initX x座標
+	 * @param initY y座標
+	 * @param initOption 0:飼い用、1;野良用
+	 */
 	public Trampoline(int initX, int initY, int initOption) {
 		super(initX, initY, initOption);
         setBoundary(boundary);
@@ -132,13 +142,13 @@ public class Trampoline extends ObjEX implements java.io.Serializable {
         cost = 0;
 	}
 
-	// 設定メニュー
+	/** 設定メニュー*/
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static boolean setupTrampoline(Trampoline t) {
 		t.accident1 = 0;
 		t.accident2 = 0;
 		JPanel mainPanel = new JPanel();
 		JRadioButton but[] = new JRadioButton[TrampolineType.values().length];
-//		boolean ret = false;
 		mainPanel.setLayout(new GridLayout(4, 1));
 		mainPanel.setPreferredSize(new Dimension(150, 100));
 		ButtonGroup bg = new ButtonGroup();

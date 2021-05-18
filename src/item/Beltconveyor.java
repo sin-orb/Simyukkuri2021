@@ -17,7 +17,7 @@ import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -180,7 +180,7 @@ public class Beltconveyor extends FieldShapeBase implements Serializable {
 	@Override
 	public void executeShapePopup(ShapeMenu menu) {
 
-		ArrayList<Beltconveyor> list = SimYukkuri.world.currentMap.beltconveyor;
+		List<Beltconveyor> list = SimYukkuri.world.currentMap.beltconveyor;
 		int pos;
 
 		switch (menu) {

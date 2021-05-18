@@ -5,8 +5,8 @@ import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import src.Const;
@@ -32,9 +32,13 @@ import src.util.YukkuriUtil;
 */
 public class Marisa extends Body implements java.io.Serializable {
 	static final long serialVersionUID = 2L;
+	/** まりさのタイプ */
 	public static final int type = 0;
+	/** まりさ和名 */
 	public static final String nameJ = "まりさ";
+	/** まりさ英名 */
 	public static final String nameE = "Marisa";
+	/** まりさベースファイル名*/
 	public static final String baseFileName = "marisa";
 
 	private static BufferedImage[][][][] imagePack = new BufferedImage[BodyRank.values().length][][][];
@@ -53,7 +57,7 @@ public class Marisa extends Body implements java.io.Serializable {
 	private static int baseSpeed = 100;
 	// 個別表情管理(まりちゃ流し用)
 	private int anImageVerStateCtrlNagasi[][] = new int[ImageCode.values().length][2];
-
+	/** イメージのロード */
 	public static void loadImages(ClassLoader loader, ImageObserver io) throws IOException {
 
 		if (imageLoaded)
@@ -89,16 +93,19 @@ public class Marisa extends Body implements java.io.Serializable {
 
 		imageLoaded = true;
 	}
-
+	@Override
 	public boolean isImageLoaded() {
 		return imageLoaded;
 	}
-
+	/**
+	 * INIファイルをロードする
+	 * @param loader クラスローダ
+	 */
 	public static void loadIniFile(ClassLoader loader) {
 		AttachOffset = ModLoader.loadBodyIniMap(loader, ModLoader.DATA_INI_DIR, baseFileName);
 		baseSpeed = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_INI_DIR, baseFileName, "speed");
 	}
-
+	@Override
 	public int getImage(int type, int direction, BodyLayer layer, int index) {
 		if (!isbImageNagasiMode() || imagesNagasi == null) {
 			layer.image[index] = imagePack[getBodyRank().imageIndex][type][direction
@@ -170,7 +177,7 @@ public class Marisa extends Body implements java.io.Serializable {
 		if (isRude())
 			return;//ゲスもだめ
 		synchronized (SimYukkuri.lock) {
-			ArrayList<Body> bodyList = SimYukkuri.world.currentMap.body;
+			List<Body> bodyList = SimYukkuri.world.currentMap.body;
 			// ドス化
 			// ドスはフィールドに一体だけ
 			if (!SimYukkuri.world.currentMap.makeOrKillDos(true)) {
@@ -247,25 +254,25 @@ public class Marisa extends Body implements java.io.Serializable {
 			return Marisa.type;
 		}
 	}
-
+	@Override
 	public String getNameJ() {
 		return nameJ;
 	}
-
+	@Override
 	public String getMyName() {
 		if (anMyName[getBodyAgeState().ordinal()] != null) {
 			return anMyName[getBodyAgeState().ordinal()];
 		}
 		return nameJ;
 	}
-
+	@Override
 	public String getMyNameD() {
 		if (anMyNameD[getBodyAgeState().ordinal()] != null) {
 			return anMyNameD[getBodyAgeState().ordinal()];
 		}
 		return getMyName();
 	}
-
+	@Override
 	public String getNameE() {
 		return nameE;
 	}
@@ -587,7 +594,7 @@ public class Marisa extends Body implements java.io.Serializable {
 		return idx;
 	}
 
-	// Constructor of this class.
+	/** コンストラクタ */
 	public Marisa(int initX, int initY, int initZ, AgeState initAgeState, Body p1, Body p2) {
 		super(initX, initY, initZ, initAgeState, p1, p2);
 		setBoundary(boundary, braidBoundary);
@@ -596,7 +603,7 @@ public class Marisa extends Body implements java.io.Serializable {
 		setBaseBodyFileName(baseFileName);
 		IniFileUtil.readYukkuriIniFile(this);
 	}
-
+	@Override
 	public void tuneParameters() {
 		/*if (rnd.nextBoolean()) {
 		motherhood = true;

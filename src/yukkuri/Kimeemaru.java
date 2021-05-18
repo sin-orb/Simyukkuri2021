@@ -17,12 +17,16 @@ import src.enums.YukkuriType;
 import src.system.BodyLayer;
 import src.util.IniFileUtil;
 
-
+/** きめぇ丸 */
 public class Kimeemaru extends Body implements java.io.Serializable {
 	static final long serialVersionUID = 2L;
+	/** きめぇ丸のタイプ */
 	public static final int type = 2003;
+	/** きめぇ丸和名 */
 	public static final String nameJ = "きめぇまる";
+	/** きめぇ丸英名 */
 	public static final String nameE = "kimeemaru";
+	/** きめぇ丸ベースファイル名 */
 	public static final String baseFileName = "kimeemaru";
 
 	private static BufferedImage[][][][] imagePack = new BufferedImage[BodyRank.values().length][][][];
@@ -36,7 +40,7 @@ public class Kimeemaru extends Body implements java.io.Serializable {
 	//---
 	// iniファイルから読み込んだ初期値
 	private static int baseSpeed = 100;
-
+	/** イメージのロード */
 	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
 
 		if(imageLoaded) return;
@@ -60,22 +64,25 @@ public class Kimeemaru extends Body implements java.io.Serializable {
 
 		imageLoaded = true;
 	}
-
+	@Override
 	public boolean isImageLoaded() {
 		return imageLoaded;
 	}
-
+	/**
+	 * INIファイルをロードする
+	 * @param loader クラスローダ
+	 */
 	public static void loadIniFile(ClassLoader loader) {
 		AttachOffset = ModLoader.loadBodyIniMap(loader, ModLoader.DATA_INI_DIR, baseFileName);
 		baseSpeed = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_INI_DIR, baseFileName, "speed");
 	}
-
+	@Override
 	public int getImage(int type, int direction, BodyLayer layer, int index) {
 		layer.image[index] = imagePack[getBodyRank().imageIndex][type][direction * directionOffset[type][0]][getBodyAgeState().ordinal()];
 		layer.dir[index] = direction * directionOffset[type][1];
 		return 1;
 	}
-
+	@Override
 	public Point[] getMountPoint(String key) {
 		return AttachOffset.get(key);
 	}
@@ -89,25 +96,25 @@ public class Kimeemaru extends Body implements java.io.Serializable {
 	public int getHybridType(int partnerType) {
 			return Kimeemaru.type;
 	}
-
+	@Override
 	public String getNameJ() {
 		return nameJ;
 	}
-
+	@Override
 	public String getMyName() {
 		if( anMyName[getBodyAgeState().ordinal()] != null ){
 			return anMyName[getBodyAgeState().ordinal()];
 		}
 		return nameJ;
 	}
-
+	@Override
 	public String getMyNameD() {
 		if( anMyNameD[getBodyAgeState().ordinal()] != null ){
 			return anMyNameD[getBodyAgeState().ordinal()];
 		}
 		return getMyName();
 	}
-
+	@Override
 	public String getNameE() {
 		return nameE;
 	}
@@ -122,7 +129,7 @@ public class Kimeemaru extends Body implements java.io.Serializable {
 		return "";
 	}
 
-	// Constructor of this class.
+	/** コンストラクタ */
 	public Kimeemaru(int initX, int initY, int initZ, AgeState initAgeState, Body p1, Body p2) {
 		super(initX, initY, initZ, initAgeState, p1, p2);
 		setBoundary(boundary, braidBoundary);
@@ -131,7 +138,7 @@ public class Kimeemaru extends Body implements java.io.Serializable {
 		setBaseBodyFileName(baseFileName);
 		IniFileUtil.readYukkuriIniFile(this);
 	}
-
+	@Override
 	public void tuneParameters() {
 		/*if (rnd.nextBoolean()) {
 		motherhood = true;

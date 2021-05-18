@@ -12,6 +12,7 @@ public class IniFileUtil {
 	 * INIファイルを読み込む
 	 * @param b ゆっくり
 	 */
+	@SuppressWarnings("static-access")
 	public static void readIniFile(Body b){
 		ClassLoader loader = b.getClass().getClassLoader();
 		int nTemp = 0;
@@ -148,6 +149,7 @@ public class IniFileUtil {
 	 * ゆっくり用のINIファイルを読み込む
 	 * @param b ゆっくり
 	 */
+	@SuppressWarnings("static-access")
 	public static void readYukkuriIniFile(Body b) {
 		ClassLoader loader = b.getClass().getClassLoader();
 		// 一人称取得

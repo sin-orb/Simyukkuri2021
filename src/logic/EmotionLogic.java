@@ -4,9 +4,17 @@ import src.base.Body;
 import src.enums.EnumRelationMine;
 import src.enums.Happiness;
 
+/**
+ * ゆっくりの感情処理
+ */
 public class EmotionLogic {
 
-	// 相手に対する感情のチェック
+	/**
+	 *  相手に対する感情のチェック
+	 * @param b 自分
+	 * @param bodyTarget 相手
+	 * @return 喜//怒/哀/楽/恐怖/羨望/心配のbool値の配列
+	 */
 	public static boolean[] checkEmotionForOther(Body b, Body bodyTarget)
 	{
 		//-------------------------------------------------

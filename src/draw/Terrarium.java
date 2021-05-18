@@ -9,9 +9,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
 
@@ -133,7 +133,7 @@ public class Terrarium {
 	/** 処理の最小時間単位*/
 	public static final int TICK = 1;
 	/**ゆっくりのリスト*/
-	private static ArrayList<Body> babyList = new ArrayList<Body>();
+	private static List<Body> babyList = new LinkedList<Body>();
 	/**マップ全体が警戒モードになる時間*/
 	private final static int ALARM_PERIOD = 300; // 30 seconds
 	/**処理インターバル(軽量化のため)*/
@@ -222,8 +222,7 @@ public class Terrarium {
 		int minDistance;
 
 		// 全ゆっくりに対してチェック
-		Body[] bodyList = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
-		for (Body p : bodyList) {
+		for (Body p : SimYukkuri.world.currentMap.body) {
 			// 自分同士のチェックは無意味なのでスキップ
 			if (p == b) {
 				continue;
@@ -243,8 +242,8 @@ public class Terrarium {
 
 			// パニックの伝播
 			if (minDistance <= p.getEYESIGHT()) {
-				// 恐怖同士で伝播の無限ループに入らないように制限
-				if (b.getPanicType() == PanicType.BURN) {
+				// 恐怖同士で伝播の無限ループに入らないように制限。れいぱー覚醒してたら恐れない
+				if (b.getPanicType() == PanicType.BURN && !p.isRaper()) {
 					p.setPanic(true, PanicType.FEAR);
 				}
 			}
@@ -860,7 +859,7 @@ public class Terrarium {
 
 		// プールの判定
 		// 最前面のひとつだけに反応するのでターゲットを外ループに
-		ArrayList<Pool> poolList = curMap.pool;
+		List<Pool> poolList = curMap.pool;
 		objList = SimYukkuri.world.getHitTargetList();
 		for (Obj o : objList) {
 			if (poolList == null || poolList.size() == 0) {
@@ -911,7 +910,7 @@ public class Terrarium {
 
 		// 畑の判定
 		// 最前面のひとつだけに反応するのでターゲットを外ループに
-		ArrayList<Farm> farmList = curMap.farm;
+		List<Farm> farmList = curMap.farm;
 		objList = SimYukkuri.world.getHitTargetList();
 
 		for (Obj o : objList) {
@@ -1134,7 +1133,7 @@ public class Terrarium {
 
 				//　子供のリストに生きている子供がいるか
 				boolean bHasChildren = false;
-				ArrayList<Body> childrenList = BodyLogic.createActiveChildList(b, true);
+				List<Body> childrenList = BodyLogic.createActiveChildList(b, true);
 				if (childrenList != null && childrenList.size() != 0) {
 					bHasChildren = true;
 				}
@@ -1276,7 +1275,7 @@ public class Terrarium {
 		if (b == null) {
 			return;
 		}
-		ArrayList<Body> childrenListOld = b.getChildrenList(); //　子供のリスト
+		List<Body> childrenListOld = b.getChildrenList(); //　子供のリスト
 
 		// 子供のリスト
 		Iterator<Body> itr = childrenListOld.iterator();

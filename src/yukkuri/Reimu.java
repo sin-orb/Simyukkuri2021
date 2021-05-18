@@ -5,8 +5,8 @@ import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import src.Const;
@@ -37,9 +37,13 @@ import src.util.YukkuriUtil;
 */
 public class Reimu extends Body implements java.io.Serializable {
 	static final long serialVersionUID = 2L;
+	/** れいむのタイプ */
 	public static final int type = 1;
+	/** れいむ和名 */
 	public static final String nameJ = "れいむ";
+	/** れいむ英名 */
 	public static final String nameE = "Reimu";
+	/** れいむベースファイル名 */
 	public static final String baseFileName = "reimu";
 
 	private static BufferedImage[][][][] imagePack = new BufferedImage[BodyRank.values().length][][][];
@@ -58,7 +62,7 @@ public class Reimu extends Body implements java.io.Serializable {
 	private static int baseSpeed = 100;
 	// 個別表情管理(まりちゃ流し用)
 	private int anImageVerStateCtrlNagasi[][] = new int[ImageCode.values().length][2];
-
+	/** イメージのロード */
 	public static void loadImages(ClassLoader loader, ImageObserver io) throws IOException {
 
 		if (imageLoaded)
@@ -90,16 +94,19 @@ public class Reimu extends Body implements java.io.Serializable {
 
 		imageLoaded = true;
 	}
-
+	/**
+	 * INIファイルをロードする
+	 * @param loader クラスローダ
+	 */
 	public static void loadIniFile(ClassLoader loader) {
 		AttachOffset = ModLoader.loadBodyIniMap(loader, ModLoader.DATA_INI_DIR, baseFileName);
 		baseSpeed = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_INI_DIR, baseFileName, "speed");
 	}
-
+	@Override
 	public boolean isImageLoaded() {
 		return imageLoaded;
 	}
-
+	@Override
 	public int getImage(int type, int direction, BodyLayer layer, int index) {
 		if (!isbImageNagasiMode() || imagesNagasi == null) {
 			layer.image[index] = imagePack[getBodyRank().imageIndex][type][direction
@@ -168,7 +175,7 @@ public class Reimu extends Body implements java.io.Serializable {
 	public void execTransform() {
 		// でいぶ化
 		synchronized (SimYukkuri.lock) {
-			ArrayList<Body> bodyList = SimYukkuri.world.currentMap.body;
+			List<Body> bodyList = SimYukkuri.world.currentMap.body;
 			bodyList.remove(this);
 			Body to = new Deibu(getX(), getY(), getZ(), getBodyAgeState(), null, null);
 			try {
@@ -218,7 +225,7 @@ public class Reimu extends Body implements java.io.Serializable {
 		}
 		return null;
 	}
-
+	@Override
 	public Point[] getMountPoint(String key) {
 		return AttachOffset.get(key);
 	}
@@ -237,25 +244,25 @@ public class Reimu extends Body implements java.io.Serializable {
 			return Reimu.type;
 		}
 	}
-
+	@Override
 	public String getNameJ() {
 		return nameJ;
 	}
-
+	@Override
 	public String getMyName() {
 		if (anMyName[getBodyAgeState().ordinal()] != null) {
 			return anMyName[getBodyAgeState().ordinal()];
 		}
 		return nameJ;
 	}
-
+	@Override
 	public String getMyNameD() {
 		if (anMyNameD[getBodyAgeState().ordinal()] != null) {
 			return anMyNameD[getBodyAgeState().ordinal()];
 		}
 		return getMyName();
 	}
-
+	@Override
 	public String getNameE() {
 		return nameE;
 	}
@@ -500,6 +507,7 @@ public class Reimu extends Body implements java.io.Serializable {
 
 	//ゆっくりしてる時のアクション
 	//個別の動作がある種ははこれをオーバーライドしているので注意
+	@Override
 	public void killTime() {
 		if (getCurrentEvent() != null)
 			return;
@@ -577,7 +585,7 @@ public class Reimu extends Body implements java.io.Serializable {
 		}
 	}
 
-	// public methods
+	/** コンストラクタ */
 	public Reimu(int initX, int initY, int initZ, AgeState initAgeState, Body p1, Body p2) {
 		super(initX, initY, initZ, initAgeState, p1, p2);
 		setBoundary(boundary, braidBoundary);
@@ -586,7 +594,7 @@ public class Reimu extends Body implements java.io.Serializable {
 		setBaseBodyFileName(baseFileName);
 		IniFileUtil.readYukkuriIniFile(this);
 	}
-
+	@Override
 	public void tuneParameters() {
 		/*if (rnd.nextBoolean()) {
 		motherhood = true;

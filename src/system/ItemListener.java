@@ -15,13 +15,13 @@ import src.system.ItemMenu.GetMenu;
 import src.system.ItemMenu.ShapeMenu;
 
 /**********************************************
-	オブジェクトコンテキストメニューのアクション
-
-
-*/
+ * オブジェクトコンテキストメニューのアクション
+ */
 public class ItemListener {
 
-	// 取得ポップアップアクション
+	/**
+	 *  取得ポップアップアクション
+	 */
 	public class GetPopupAction implements PopupMenuListener {
 		private int speedBackup;
 
@@ -44,7 +44,9 @@ public class ItemListener {
 		}
 	}
 
-	// 使用ポップアップアクション
+	/**
+	 * 使用ポップアップアクション
+	 */
 	public class UsePopupAction implements PopupMenuListener {
 		private int speedBackup;
 
@@ -67,7 +69,9 @@ public class ItemListener {
 		}
 	}
 
-	// シェイプポップアップアクション
+	/**
+	 * シェイプポップアップアクション
+	 */
 	public class ShapePopupAction implements PopupMenuListener {
 
 		@Override
@@ -83,7 +87,9 @@ public class ItemListener {
 		}
 	}
 
-	// アイテム取得メニューアクション
+	/**
+	 * アイテム取得メニューアクション
+	 */
 	public class GetMenuAction implements ActionListener {
 
 		@Override
@@ -122,7 +128,9 @@ public class ItemListener {
 		}
 	}
 
-	// アイテム使用メニューアクション
+	/**
+	 * アイテム使用メニューアクション
+	 */
 	public class UseMenuAction implements ActionListener {
 
 		@Override
@@ -130,7 +138,9 @@ public class ItemListener {
 		}
 	}
 
-	// コンベア、池メニューアクション
+	/**
+	 *  コンベア、池メニューアクション
+	 */
 	public class ShapeMenuAction implements ActionListener {
 
 		@Override

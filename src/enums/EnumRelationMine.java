@@ -1,5 +1,5 @@
 package src.enums;
-
+/** ゆっくりの関係性 */
 public enum EnumRelationMine {
 	/** 他ゆん */OTHER,
 	/** おとーしゃん */FATHER,	

@@ -19,12 +19,18 @@ import src.enums.YukkuriType;
 import src.system.BodyLayer;
 import src.util.IniFileUtil;
 
-
+/**
+ * でいぶ
+ */
 public class Deibu extends Reimu implements java.io.Serializable {
 	static final long serialVersionUID = 2L;
+	/** でいぶのタイプ */
 	public static final int type = 2005;
+	/** でいぶ和名 */
 	public static final String nameJ = "でいぶ";
+	/** でいぶ英名 */
 	public static final String nameE = "Deibu";
+	/** でいぶベースファイル名 */
 	public static final String baseFileName = "deibu";
 
 	private static BufferedImage[][][][] imagePack = new BufferedImage[BodyRank.values().length][][][];
@@ -42,7 +48,7 @@ public class Deibu extends Reimu implements java.io.Serializable {
 	private static int baseSpeed = 100;
 	// 個別表情管理(まりちゃ流し用)
 	private int anImageVerStateCtrlNagasi[][] = new int[ImageCode.values().length][2];
-
+	/** イメージをロードする */
 	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
 
 		if(imageLoaded) return;
@@ -71,16 +77,19 @@ public class Deibu extends Reimu implements java.io.Serializable {
 
 		imageLoaded = true;
 	}
-
+	/**
+	 * イメージをロードする
+	 * @param loader クラスローダ
+	 */
 	public static void loadIniFile(ClassLoader loader) {
 		AttachOffset = ModLoader.loadBodyIniMap(loader, ModLoader.DATA_INI_DIR, baseFileName);
 		baseSpeed = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_INI_DIR, baseFileName, "speed");
 	}
-
+	@Override
 	public boolean isImageLoaded() {
 		return imageLoaded;
 	}
-
+	@Override
 	public int getImage(int type, int direction, BodyLayer layer, int index) {
 		if( !isbImageNagasiMode() || imagesNagasi == null)
 		{
@@ -129,7 +138,7 @@ public class Deibu extends Reimu implements java.io.Serializable {
 		}
 		return 1;
 	}
-
+	@Override
 	public Point[] getMountPoint(String key) {
 		return AttachOffset.get(key);
 	}
@@ -149,7 +158,7 @@ public class Deibu extends Reimu implements java.io.Serializable {
 		}
 	}
 
-	// public methods
+	/** コンストラクタ */
 	public Deibu(int initX, int initY, int initZ, AgeState initAgeState, Body p1, Body p2) {
 		super(initX, initY, initZ, initAgeState, p1, p2);
 		setBoundary(boundary, braidBoundary);
@@ -158,7 +167,7 @@ public class Deibu extends Reimu implements java.io.Serializable {
 		setBaseBodyFileName(baseFileName);
 		IniFileUtil.readYukkuriIniFile(this);
 	}
-
+	@Override
 	public void tuneParameters() {
 		/*if (rnd.nextBoolean()) {
 		motherhood = true;

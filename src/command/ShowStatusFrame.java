@@ -1,16 +1,22 @@
 package src.command;
 
+import java.awt.Color;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
+import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.stream.Collectors;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
@@ -74,7 +80,6 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		contentPane.add(lblNewLabel);
 		
 		textField = new JTextField();
-		textField.setEditable(false);
 		textField.setBounds(102, 12, 96, 19);
 		contentPane.add(textField);
 		textField.setColumns(10);
@@ -93,17 +98,328 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//ワールドのゆっくりリストから目的のゆっくりを探し出し、その情報を更新する。すでにいない場合は更新されない。
-				if (textField.getText()==null || textField.getText().length() == 0) {
+				int idTemp = 0;
+				try {
+					idTemp = Integer.parseInt(textField.getText());
+				} catch (Exception ex) {
+					showError("IDには数値を入力してください。");
 					return;
 				}
-				int id = Integer.parseInt(textField.getText());
-				SimYukkuri.world.currentMap.body.stream()
+				final int id = idTemp;
+				List<Body> yukkuris = SimYukkuri.world.currentMap.body.stream()
 					.filter(b -> b.getUniqueID() == id)
-					.forEach(i -> ShowStatusFrame.getInstance().giveBodyInfo(i));
+					.collect(Collectors.toList());
+				if (yukkuris.size() == 0) {
+					showError("存在しないゆっくりを参照しようとしています。");
+				} else {
+					ShowStatusFrame.getInstance().giveBodyInfo(yukkuris.get(0));
+				}
 			}
 		});
+
+		JButton btnNewButton_1 = new JButton("次ID表示");
+		btnNewButton_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int idTemp = 0;
+				try {
+					idTemp = Integer.parseInt(textField.getText());
+				} catch (Exception ex) {
+					showError("IDには数値を入力してください。");
+					return;
+				}
+				final int id = idTemp;
+				List<Body> sorted = SimYukkuri.world.currentMap.body.stream()
+				.sorted().collect(Collectors.toList());
+				int target = -1;
+				for (int i = 0; i < sorted.size(); i++) {
+					Body b = sorted.get(i);
+					if (b.getUniqueID() > id ) {
+						target = i;
+						break;
+					}
+				}
+				if (target < 0) {
+					target = 0;
+				}
+				if (sorted.size() == 0) {
+					showError("存在しないゆっくりを参照しようとしています。");
+					return;
+				} else {
+					ShowStatusFrame.getInstance().giveBodyInfo(sorted.get(target));
+				}
+			}
+		});
+		btnNewButton_1.setBounds(665, 42, 91, 21);
+		contentPane.add(btnNewButton_1);
+		JButton btnNewButton_2 = new JButton("前ID表示");
+		btnNewButton_2.addActionListener(new ActionListener() {
+			@SuppressWarnings("unchecked")
+			public void actionPerformed(ActionEvent e) {
+				int idTemp = 0;
+				try {
+					idTemp = Integer.parseInt(textField.getText());
+				} catch (Exception ex) {
+					showError("IDには数値を入力してください。");
+					return;
+				}
+				final int id = idTemp;
+				List<Body> sorted = (List<Body>) SimYukkuri.world.currentMap.body.stream()
+				.sorted(Comparator.reverseOrder()).collect(Collectors.toList());
+				int target = -1;
+				for (int i = 0; i < sorted.size(); i++) {
+					Body b = sorted.get(i);
+					if (b.getUniqueID() < id ) {
+						target = i;
+						break;
+					}
+				}
+				if (target < 0) {
+					target = 0;
+				}
+				if (sorted.size() == 0) {
+					showError("存在しないゆっくりを参照しようとしています。");
+					return;
+				} else {
+					ShowStatusFrame.getInstance().giveBodyInfo(sorted.get(target));
+				}
+			}
+		});
+		btnNewButton_2.setBounds(665, 73, 91, 21);
+		contentPane.add(btnNewButton_2);
 		btnNewButton.setBounds(665, 11, 91, 21);
 		contentPane.add(btnNewButton);
+		
+		JButton btnNewButton_3 = new JButton("最初");
+		btnNewButton_3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				List<Body> sorted = SimYukkuri.world.currentMap.body.stream()
+						.sorted().collect(Collectors.toList());
+				if (sorted.size() == 0) {
+					showError("存在しないゆっくりを参照しようとしています。");
+					return;
+				} else {
+					ShowStatusFrame.getInstance().giveBodyInfo(sorted.get(0));
+				}
+			}
+		});
+		btnNewButton_3.setBounds(665, 104, 91, 21);
+		contentPane.add(btnNewButton_3);
+
+		JButton btnNewButton_4 = new JButton("最後");
+		btnNewButton_4.addActionListener(new ActionListener() {
+			@SuppressWarnings("unchecked")
+			public void actionPerformed(ActionEvent e) {
+				List<Body> sorted = (List<Body>) SimYukkuri.world.currentMap.body.stream()
+						.sorted(Comparator.reverseOrder()).collect(Collectors.toList());
+				if (sorted.size() == 0) {
+					showError("存在しないゆっくりを参照しようとしています。");
+					return;
+				} else {
+					ShowStatusFrame.getInstance().giveBodyInfo(sorted.get(0));
+				}
+			}
+		});
+		btnNewButton_4.setBounds(665, 135, 91, 21);
+		contentPane.add(btnNewButton_4);
+		
+		JButton btnNewButton_5 = new JButton("ランダム");
+		btnNewButton_5.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int random = new Random().nextInt(SimYukkuri.world.currentMap.body.size());
+				ShowStatusFrame.getInstance().giveBodyInfo(SimYukkuri.world.currentMap.body.get(random));
+			}
+		});
+		btnNewButton_5.setBounds(665, 167, 91, 21);
+		contentPane.add(btnNewButton_5);
+		
+		JButton btnNewButton_6 = new JButton("妻（夫）");
+		btnNewButton_6.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int idTemp = 0;
+				try {
+					idTemp = Integer.parseInt(textField.getText());
+				} catch (Exception ex) {
+					showError("IDには数値を入力してください。");
+					return;
+				}
+				final int id = idTemp;
+				List<Body> yukkuris = SimYukkuri.world.currentMap.body.stream()
+					.filter(b -> b.getUniqueID() == id)
+					.collect(Collectors.toList());
+				if (yukkuris.size() == 0) {
+					showError("存在しないゆっくりを参照しようとしています。");
+					return;
+				} else {
+					Body partner = yukkuris.get(0).getPartner();
+					if (partner == null) {
+						showError("存在しないゆっくりを参照しようとしています。");
+						return;
+					} else {
+						ShowStatusFrame.getInstance().giveBodyInfo(partner);
+					}
+				}
+			}
+		});
+		btnNewButton_6.setBounds(665, 198, 91, 21);
+		contentPane.add(btnNewButton_6);
+		
+		JButton btnNewButton_7 = new JButton("子供");
+		btnNewButton_7.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int idTemp = 0;
+				try {
+					idTemp = Integer.parseInt(textField.getText());
+				} catch (Exception ex) {
+					showError("IDには数値を入力してください。");
+					return;
+				}
+				final int id = idTemp;
+				List<Body> yukkuris = SimYukkuri.world.currentMap.body.stream()
+					.filter(b -> b.getUniqueID() == id)
+					.collect(Collectors.toList());
+				if (yukkuris.size() == 0) {
+					showError("存在しないゆっくりを参照しようとしています。");
+					return;
+				} else {
+					List<Body> children = yukkuris.get(0).getChildrenList();
+					if (children.size() == 0) {
+						showError("存在しないゆっくりを参照しようとしています。");
+						return;
+					} else {
+						ShowStatusFrame.getInstance().giveBodyInfo(children.get(0));
+					}
+				}
+			}
+		});
+		btnNewButton_7.setBounds(665, 229, 91, 21);
+		contentPane.add(btnNewButton_7);
+		
+		JButton btnNewButton_8 = new JButton("姉");
+		btnNewButton_8.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int idTemp = 0;
+				try {
+					idTemp = Integer.parseInt(textField.getText());
+				} catch (Exception ex) {
+					showError("IDには数値を入力してください。");
+					return;
+				}
+				final int id = idTemp;
+				List<Body> yukkuris = SimYukkuri.world.currentMap.body.stream()
+					.filter(b -> b.getUniqueID() == id)
+					.collect(Collectors.toList());
+				if (yukkuris.size() == 0) {
+					showError("存在しないゆっくりを参照しようとしています。");
+					return;
+				} else {
+					List<Body> elderSisters = yukkuris.get(0).getElderSisterList();
+					if (elderSisters.size() == 0) {
+						showError("存在しないゆっくりを参照しようとしています。");
+						return;
+					} else {
+						ShowStatusFrame.getInstance().giveBodyInfo(elderSisters.get(0));
+					}
+				}
+			}
+		});
+		btnNewButton_8.setBounds(665, 260, 91, 21);
+		contentPane.add(btnNewButton_8);
+		
+		JButton btnNewButton_9 = new JButton("妹");
+		btnNewButton_9.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int idTemp = 0;
+				try {
+					idTemp = Integer.parseInt(textField.getText());
+				} catch (Exception ex) {
+					showError("IDには数値を入力してください。");
+					return;
+				}
+				final int id = idTemp;
+				List<Body> yukkuris = SimYukkuri.world.currentMap.body.stream()
+					.filter(b -> b.getUniqueID() == id)
+					.collect(Collectors.toList());
+				if (yukkuris.size() == 0) {
+					showError("存在しないゆっくりを参照しようとしています。");
+					return;
+				} else {
+					List<Body> sisters = yukkuris.get(0).getSisterList();
+					if (sisters.size() == 0) {
+						showError("存在しないゆっくりを参照しようとしています。");
+						return;
+					} else {
+						ShowStatusFrame.getInstance().giveBodyInfo(sisters.get(0));
+					}
+				}
+			}
+		});
+		btnNewButton_9.setBounds(665, 291, 91, 21);
+		contentPane.add(btnNewButton_9);
+		
+		JButton btnNewButton_10 = new JButton("父");
+		btnNewButton_10.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int idTemp = 0;
+				try {
+					idTemp = Integer.parseInt(textField.getText());
+				} catch (Exception ex) {
+					showError("IDには数値を入力してください。");
+					return;
+				}
+				final int id = idTemp;
+				List<Body> yukkuris = SimYukkuri.world.currentMap.body.stream()
+					.filter(b -> b.getUniqueID() == id)
+					.collect(Collectors.toList());
+				if (yukkuris.size() == 0) {
+					showError("存在しないゆっくりを参照しようとしています。");
+					return;
+				} else {
+					Body target = yukkuris.get(0);
+					Body father = target.getFather();
+					if (father == null) {
+						showError("存在しないゆっくりを参照しようとしています。");
+						return;
+					} else {
+						ShowStatusFrame.getInstance().giveBodyInfo(father);
+					}
+				}
+			}
+		});
+		btnNewButton_10.setBounds(665, 322, 91, 21);
+		contentPane.add(btnNewButton_10);
+		
+		JButton btnNewButton_11 = new JButton("母");
+		btnNewButton_11.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				int idTemp = 0;
+				try {
+					idTemp = Integer.parseInt(textField.getText());
+				} catch (Exception ex) {
+					showError("IDには数値を入力してください。");
+					return;
+				}
+				final int id = idTemp;
+				List<Body> yukkuris = SimYukkuri.world.currentMap.body.stream()
+					.filter(b -> b.getUniqueID() == id)
+					.collect(Collectors.toList());
+				if (yukkuris.size() == 0) {
+					showError("存在しないゆっくりを参照しようとしています。");
+					return;
+				} else {
+					Body target = yukkuris.get(0);
+					Body mother = target.getMother();
+					if (mother == null) {
+						showError("存在しないゆっくりを参照しようとしています。");
+						return;
+					} else {
+						ShowStatusFrame.getInstance().giveBodyInfo(mother);
+					}
+				}
+			}
+		});
+		btnNewButton_11.setBounds(665, 351, 91, 21);
+		contentPane.add(btnNewButton_11);
+
 		
 		JLabel lblNewLabel_2 = new JLabel("年齢");
 		lblNewLabel_2.setBounds(494, 16, 37, 13);
@@ -576,6 +892,11 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		textField_25.setText(b.isLockmove() ? "動けない" : "動ける");
 	}
 
+	public static void showError(String s) {
+		JLabel label = new JLabel(s);
+	    label.setForeground(Color.RED);
+	    JOptionPane.showMessageDialog(ShowStatusFrame.getInstance(), label);
+	}
 	@Override
 	public void windowOpened(WindowEvent e) {
 	}

@@ -14,13 +14,15 @@ import javax.swing.JTextArea;
 
 import src.SimYukkuri;
 
-
+/**
+ * 読み込み時に出てくるウィンドウのクラス
+ */
 public class LoadWindow extends JDialog {
 	
 	private JLabel loading;
 	private JTextArea log;
 	private JScrollPane logBar;
-
+	/** コンストラクタ. */
 	public LoadWindow(Frame frame) {
 		super(frame, SimYukkuri.TITLE, Dialog.ModalityType.MODELESS);
 		setAlwaysOnTop(true);
@@ -46,7 +48,10 @@ public class LoadWindow extends JDialog {
 
 		setLocationRelativeTo(null);
 	}
-	
+	/**
+	 * 読み込みウィンドウに文字列を加える.
+	 * @param str 加える文字列
+	 */
 	public void addLine(String str) {
 		log.append(str + "\r\n");
 	}

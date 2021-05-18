@@ -5,9 +5,10 @@ import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.awt.image.ImageObserver;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 import javax.imageio.ImageIO;
@@ -1019,7 +1020,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	 */
 	public boolean checkOnBed() {
 		Rectangle r = getScreenRect();
-		ArrayList<Bed> list = SimYukkuri.world.currentMap.bed;
+		List<Bed> list = SimYukkuri.world.currentMap.bed;
 		for (Bed bd : list) {
 			if (bd.getScreenRect().intersects(r))
 				return true;
@@ -1397,7 +1398,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 				//					setCurrentEvent(null);
 				//				}
 				if (r == 0 && getCurrentEvent() == null) {
-					ArrayList<Body> fianceList = BodyLogic.createActiveFianceeList(this, getBodyAgeState().ordinal());
+					List<Body> fianceList = BodyLogic.createActiveFianceeList(this, getBodyAgeState().ordinal());
 					if (fianceList == null || fianceList.size() < 1) {
 						setHappiness(Happiness.SAD);
 						setMessage(MessagePool.getMessage(this, MessagePool.Action.WantPartner));
@@ -1411,7 +1412,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 							}
 						} else {
 							// 自分の通常の子ゆリスト作成
-							ArrayList<Body> childrenList = BodyLogic.createActiveChildList(this, true);
+							List<Body> childrenList = BodyLogic.createActiveChildList(this, true);
 							//パートナーがいる場合
 							if (getPartner() != null) {
 								if (isVeryRude()) {
@@ -1500,34 +1501,34 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		if (getPlaying() != null)
 			return;
 		int p = RND.nextInt(50);
-		//8/50でキリッ
-		if (p <= 7) {
+		//6/50でキリッ
+		if (p <= 5) {
 			getInVain(true);
 		}
-		//8/50でのびのび
-		else if (p <= 15) {
+		//6/50でのびのび
+		else if (p <= 11) {
 			// if yukkuri is not rude, she goes into her shell by discipline.
 			setMessage(MessagePool.getMessage(this, MessagePool.Action.Nobinobi), 40);
 			setNobinobi(true);
 			addStress(-50);
 			stay(40);
 		}
-		//8/50でふりふり
-		else if (p <= 23 && willingFurifuri()) {
+		//6/50でふりふり
+		else if (p <= 17 && willingFurifuri()) {
 			//if yukkuri is rude, she will not do furifuri by discipline.
 			setMessage(MessagePool.getMessage(this, MessagePool.Action.FuriFuri), 40);
 			setFurifuri(true);
 			addStress(-70);
 			stay(30);
 		}
-		//8/50で腹減った
-		else if ((p <= 31 && isHungry()) || isSoHungry()) {
+		//6/50で腹減った
+		else if ((p <= 23 && isHungry()) || isSoHungry()) {
 			// 空腹時
 			setMessage(MessagePool.getMessage(this, MessagePool.Action.Hungry), 30);
 			stay(30);
 		}
-		//5/50でおもちゃで遊ぶ
-		else if (p <= 36) {
+		//6/50でおもちゃで遊ぶ
+		else if (p <= 29) {
 			if (ToyLogic.checkToy(this)) {
 				setPlaying(PlayStyle.BALL);
 				playingLimit = 150 + RND.nextInt(100) - 49;
@@ -1535,8 +1536,8 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			} else
 				killTime();
 		}
-		//3/50でトランポリンで遊ぶ
-		else if (p <= 39) {
+		//6/50でトランポリンで遊ぶ
+		else if (p <= 35) {
 			if (ToyLogic.checkTrampoline(this)) {
 				setPlaying(PlayStyle.TRAMPOLINE);
 				playingLimit = 150 + RND.nextInt(100) - 49;
@@ -1544,7 +1545,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			} else
 				killTime();
 		}
-		//2/50ですいーで遊ぶ
+		//6/50ですいーで遊ぶ
 		else if (p <= 41) {
 			if (ToyLogic.checkSui(this)) {
 				setPlaying(PlayStyle.SUI);
@@ -2623,7 +2624,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 					}
 
 					if (damageCut != 4) {
-						ArrayList<Trampoline> trampolineList = SimYukkuri.world.currentMap.trampoline;
+						List<Trampoline> trampolineList = SimYukkuri.world.currentMap.trampoline;
 						if (trampolineList != null && trampolineList.size() != 0) {
 							for (Trampoline t : trampolineList) {
 								if (t.checkHitObj(this)) {
@@ -3644,13 +3645,13 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 
 		//val.remove();
 		if (val instanceof Shit) {
-			ArrayList<Shit> shitList = SimYukkuri.world.currentMap.shit;
+			List<Shit> shitList = SimYukkuri.world.currentMap.shit;
 			shitList.remove((Shit) val);
 			val.setWhere(Where.IN_YUKKURI);
 		}
 
 		if (val instanceof Food) {
-			ArrayList<Food> foodList = SimYukkuri.world.currentMap.food;
+			List<Food> foodList = SimYukkuri.world.currentMap.food;
 			foodList.remove((Food) val);
 			val.setWhere(Where.IN_YUKKURI);
 		}
@@ -3669,7 +3670,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 
 		//落としたもの（うんうん）の処理
 		if (val instanceof Shit) {
-			ArrayList<Shit> shitList = SimYukkuri.world.currentMap.shit;
+			List<Shit> shitList = SimYukkuri.world.currentMap.shit;
 			shitList.add((Shit) val);
 			val.setX(x);
 			if (y + 3 <= Translate.mapH) {
@@ -3683,7 +3684,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		}
 		//落としたもの(餌)の処理
 		if (val instanceof Food) {
-			ArrayList<Food> foodList = SimYukkuri.world.currentMap.food;
+			List<Food> foodList = SimYukkuri.world.currentMap.food;
 			foodList.add((Food) val);
 			val.setX(x);
 			if (y + 3 <= Translate.mapH) {
@@ -4088,7 +4089,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	 * 先祖に加える
 	 * @param iAncList 先祖に加えたいリスト
 	 */
-	public final void addAncestorList(ArrayList<Integer> iAncList) {
+	public final void addAncestorList(List<Integer> iAncList) {
 		getAncestorList().addAll(iAncList);
 	}
 
@@ -4525,7 +4526,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 					continue;
 				}
 			}
-			setStalks(new ArrayList<>());
+			setStalks(new LinkedList<>());
 		}
 	}
 
@@ -6515,7 +6516,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 				removeAttachment(Needle.class, true);
 
 				// 粘着板で固定されていないなら背面固定解除
-				ArrayList<StickyPlate> stickyPlateList = SimYukkuri.world.currentMap.stickyPlate;
+				List<StickyPlate> stickyPlateList = SimYukkuri.world.currentMap.stickyPlate;
 				boolean bReset = true;
 				if (stickyPlateList != null && stickyPlateList.size() != 0) {
 					for (StickyPlate s : stickyPlateList) {
@@ -7050,7 +7051,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			removeAllStalks();
 			setStalks(null);
 			Body[] bodies = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
-			ArrayList<Body> copiedBodyList = new ArrayList<>(Arrays.asList(bodies));
+			List<Body> copiedBodyList = new LinkedList<>(Arrays.asList(bodies));
 			if (SimYukkuri.world.currentMap.body.contains(this)) {
 				SimYukkuri.world.currentMap.body.remove(this);
 			}
@@ -8571,13 +8572,13 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 
 		// 先祖の情報を引き継ぐ
 		if (mama != null) {
-			ArrayList<Integer> anTempList = mama.getAncestorList();
+			List<Integer> anTempList = mama.getAncestorList();
 			int nType = mama.getType();
 			addAncestorList(anTempList);
 			addAncestorList(nType);
 		}
 		if (papa != null) {
-			ArrayList<Integer> anTempList = papa.getAncestorList();
+			List<Integer> anTempList = papa.getAncestorList();
 			int nType = papa.getType();
 			addAncestorList(anTempList);
 			addAncestorList(nType);

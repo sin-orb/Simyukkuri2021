@@ -4,16 +4,18 @@ import java.awt.image.BufferedImage;
 
 
 /**************************************************
-
-	ゆっくりのレイヤー画像テンポラリ
-
-*/
+ * ゆっくりのレイヤー画像テンポラリ
+ */
 public class BodyLayer {
-	
-	public BufferedImage[] image;		// 画像実体への参照
-	public int[] dir;			// 使用する描画矩形
-	public int[] option;		// 汎用
-	
+	/** 画像実体への参照 */
+	public BufferedImage[] image;
+	/** 使用する描画矩形 */
+	public int[] dir;
+	/** 汎用 */
+	public int[] option;
+	/**
+	 * コンストラクタ.
+	 */
 	public BodyLayer() {
 		image = new BufferedImage[10];
 		dir = new int[10];

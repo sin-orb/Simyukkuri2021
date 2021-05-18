@@ -29,11 +29,12 @@ import src.system.MainCommandListener.OptionMenuListener;
 import src.system.MainCommandListener.OptionPopupListener;
 import src.system.MainCommandListener.SubItemComboBoxListener;
 
-
-
+/**
+ * メインコマンドUI（右ペイン）
+ */
 public class MainCommandUI {
 
-	// システムボタンテキスト
+	/** システムボタンテキスト */
 	static enum SystemButtonLabel {
 		ADDBODY("ゆっくり追加"),
 		SAVE("セーブ"),
@@ -47,7 +48,7 @@ public class MainCommandUI {
         SystemButtonLabel(String str) { this.label = str; }
 	}
 
-	// ツールボタン
+	/** ツールボタン */
 	static enum ToolButtonLabel {
 		MOVE("移動"),
 		BAG("持ち物"),
@@ -56,7 +57,7 @@ public class MainCommandUI {
         ToolButtonLabel(String str) { this.label = str; }
 	}
 
-	// ステータスのラベル
+	/** ステータスのラベル */
 	static enum StatusLabel {
 		MONEY(" 所持金: "),
 		LABEL("ゆっくりの状態"),
@@ -75,7 +76,7 @@ public class MainCommandUI {
         StatusLabel(String str) { this.label = str; }
 	}
 
-	// オプションポップアップ
+	/** オプションポップアップ */
 	static enum OptionPopup {
 		INI_RELOAD("iniファイル再読み込み")
 		;
@@ -87,27 +88,46 @@ public class MainCommandUI {
 	private static final String[] ATTITUDE_LEVEL_J = { "超善良", "善良", "普通", "ゲス", "ドゲス"};
 	private static final String[] INTEL_LEVEL_J = { "バッジ級", "普通", "餡子脳"};
 	private static final String[] TANG_LEVEL_J = { "バカ舌", "普通", "肥えてる"};
-
+	/** ゲームスピード */
 	public static int selectedGameSpeed = 1;
+	/** ズームスケール */
 	public static int selectedZoomScale = 0;
+	/** ゲームスピードコンボボックス */
+	@SuppressWarnings("rawtypes")
 	public static JComboBox gameSpeedCombo;
+	/** メインアイテムコンボボックス */
+	@SuppressWarnings("rawtypes")
 	public static JComboBox mainItemCombo;
+	/** サブアイテムコンボボックス */
+	@SuppressWarnings("rawtypes")
 	public static JComboBox subItemCombo;
+	/** ゆっくりステータスラベル */
 	public static JLabel[] yuStatusLabel = new JLabel[StatusLabel.values().length];
+	/** ステータスアイコンラベル */
 	public static JLabel[] statIconLabel = new JLabel[8];
+	/** アイテムアイコンラベル */
 	public static JLabel[] itemIconLabel = new JLabel[1];
-
+	/** システムボタン */
 	public static JButton[] systemButton = new JButton[SystemButtonLabel.values().length];
+	/** その他ボタン */
 	public static JToggleButton scriptButton, targetButton, pinButton, helpButton, optionButton;
+	/** プレイヤーボタン */
 	public static JToggleButton[] playerButton = new JToggleButton[ToolButtonLabel.values().length];
-
+	/** オプションポップアップ */
 	public static JPopupMenu optionPopup = new JPopupMenu();
+	/** マップウィンドウ */
 	public static MapWindow mapWindow;
+	/** アイテムウィンドウ */
 	public static ItemWindow itemWindow;
 
-	// メニューエリアの幅
+	/** メニューエリアの幅 */
 	public static final int MENU_PANE_X = 124;
-
+	/**
+	 * インターフェイス作成
+	 * @param windowHeight ウィンドウの高さ
+	 * @return パネルインスタンス
+	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static JPanel createInterface(int windowHeight) {
 
 		JPanel retpanel = new JPanel();
@@ -327,7 +347,9 @@ public class MainCommandUI {
 
 		return retpanel;
 	}
-
+	/**
+	 * ステータスをクリアする.
+	 */
 	public static void clearStatus() {
 		yuStatusLabel[StatusLabel.MONEY.ordinal()].setText(StatusLabel.MONEY.label + SimYukkuri.world.getPlayer().cash);
 		yuStatusLabel[StatusLabel.NAME.ordinal()].setText("");
@@ -353,7 +375,9 @@ public class MainCommandUI {
 		statIconLabel[4].setIcon(null);
 		statIconLabel[4].setToolTipText(null);
 	}
-
+	/**
+	 * プレイヤーのステータスを表示する.
+	 */
 	public static void showPlayerStatus() {
 		if( SimYukkuri.world == null )
 		{
@@ -374,7 +398,10 @@ public class MainCommandUI {
 		}
 
 	}
-
+	/**
+	 * ゆっくりのステータスを表示する.
+	 * @param b ゆっくり
+	 */
 	public static void showStatus(Body b) {
 		int damage = 100 * b.getDamage() / b.getDamageLimit();
 		int hungry = 100 * b.getHungry() / b.getHungryLimit();
