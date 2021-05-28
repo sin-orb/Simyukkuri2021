@@ -3,7 +3,6 @@ package src.logic;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
 
 import src.SimYukkuri;
 import src.base.Body;
@@ -31,7 +30,6 @@ import src.system.MessagePool;
  */
 public class FamilyActionLogic {
 
-	private static Random rnd = new Random();
 	/**
 	 * 家族関係処理
 	 * @param b ゆっくり
@@ -44,7 +42,7 @@ public class FamilyActionLogic {
 			return false;
 		}
 		
-		if(rnd.nextInt(300) != 0 ){
+		if(SimYukkuri.RND.nextInt(300) != 0 ){
 			return false;
 		}
 		
@@ -266,7 +264,7 @@ public class FamilyActionLogic {
 		}
 
 		//おちび自慢
-		if(rnd.nextBoolean()){
+		if(SimYukkuri.RND.nextBoolean()){
 			if( proudChild(b, childrenList) ){
 				return true;
 			}
@@ -307,7 +305,7 @@ public class FamilyActionLogic {
 	 */
 	public static Obj searchToilet(Body b){
 		Obj found = null;
-		List<Toilet> toiletList = SimYukkuri.world.currentMap.toilet;
+		List<Toilet> toiletList = SimYukkuri.world.getCurrentMap().toilet;
 		int minDistance = b.getEYESIGHT();
 		for (Toilet t: toiletList) {
 			// 最小距離のものが見つかっていたら
@@ -364,7 +362,7 @@ public class FamilyActionLogic {
 		int looks = -1000;
 		
 		// フィールドの餌検索
-		List<Food> foodList = SimYukkuri.world.currentMap.food;
+		List<Food> foodList = SimYukkuri.world.getCurrentMap().food;
 		for (Food f: foodList) {
 			if (f.isEmpty()) {
 				continue;
@@ -423,7 +421,7 @@ public class FamilyActionLogic {
 		boolean bIsNotRaperTarget = isRapeTarget();
 		// レイプ対象がいない
 		if( !bIsNotRaperTarget){
-			Body[] bodyList = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
+			Body[] bodyList = SimYukkuri.world.getCurrentMap().body.toArray(new Body[0]);
 			if( bodyList != null && bodyList.length != 0 ){
 				for(Body b:bodyList){
 					if( b.isRaper() ){
@@ -440,7 +438,7 @@ public class FamilyActionLogic {
 	 * @return れいぱーのターゲットかどうか
 	 */
 	public static final boolean isRapeTarget(){
-		Body[] bodyList = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
+		Body[] bodyList = SimYukkuri.world.getCurrentMap().body.toArray(new Body[0]);
 		if( bodyList != null && bodyList.length != 0 ){
 			for(Body b:bodyList){
 				// レイプの対象がいる

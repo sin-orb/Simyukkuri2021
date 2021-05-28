@@ -77,7 +77,7 @@ public class House extends ObjEX implements java.io.Serializable {
 
 	@Override
 	public void removeListData(){
-		SimYukkuri.world.currentMap.house.remove(this);
+		SimYukkuri.world.getCurrentMap().house.remove(this);
 	}
 
 	@Override
@@ -95,7 +95,7 @@ public class House extends ObjEX implements java.io.Serializable {
 		houseType = HouseTable.values()[initOption];
 		setBoundary(boundary[houseType.ordinal()]);
 		setCollisionSize(getPivotX(), getPivotY());
-		SimYukkuri.world.currentMap.house.add(this);
+		SimYukkuri.world.getCurrentMap().house.add(this);
 		objType = Type.PLATFORM;
 		objEXType = ObjEXType.HOUSE;
 		itemRank = ItemRank.values()[houseType.rank];

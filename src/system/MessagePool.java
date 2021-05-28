@@ -5,8 +5,8 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
 
+import src.SimYukkuri;
 import src.base.Body;
 import src.draw.ModLoader;
 import src.enums.AgeState;
@@ -611,7 +611,6 @@ public class MessagePool {
 	/**クラス別接尾子 */
 	public static final String[] RANK_SUFFIX = { "", "_<nora>" };
 
-	private static Random rnd = new Random();
 	private static HashMap<String, MessageMap>[] pool_j = null;
 
 	/**
@@ -824,7 +823,7 @@ public class MessagePool {
 		String suffix = RANK_SUFFIX[body.getBodyRank().messageIndex];
 		map = pool_j[body.getMsgType().ordinal()];
 		//name = body.getMyNameJ;
-		if (body.isStressful() && body.isDamaged() && rnd.nextBoolean()) {
+		if (body.isStressful() && body.isDamaged() && SimYukkuri.RND.nextBoolean()) {
 			name = body.getMyNameD();
 		} else {
 			name = body.getMyName();
@@ -977,7 +976,7 @@ public class MessagePool {
 		if (msg == null)
 			return "NO TAG <" + key.toString() + ">";
 
-		StringBuffer ret = new StringBuffer(msg[rnd.nextInt(msg.length)]);
+		StringBuffer ret = new StringBuffer(msg[SimYukkuri.RND.nextInt(msg.length)]);
 		// 埋め込み文字の置き換え
 		if (ret.indexOf("%") != -1) {
 			if (ret.indexOf("%" + Replace.dummy.name()) != -1)

@@ -1,7 +1,6 @@
 package src.logic;
 
 import java.util.List;
-import java.util.Random;
 
 import src.SimYukkuri;
 import src.base.Body;
@@ -44,7 +43,6 @@ import src.yukkuri.Sakuya;
  */
 public class FoodLogic {
 
-	private static final Random rnd = new Random();
 	private static final int NEEDLE = 0;
 	private static final int HAMMER = 0;
 	private static final int HOLDMESSAGE = 0;
@@ -146,11 +144,11 @@ public class FoodLogic {
 		}
 
 		//怖がっていたり、激しい痛みを感じている場合は50%の確率でキャンセル。
-		if ((b.isScare() || b.isFeelHardPain()) && rnd.nextBoolean()) {
+		if ((b.isScare() || b.isFeelHardPain()) && SimYukkuri.RND.nextBoolean()) {
 			return false;
 		}
 		// ランダムで餌の再検索
-		if (rnd.nextInt(300) == 0 && !b.isEating() && !bForceEat) {
+		if (SimYukkuri.RND.nextInt(300) == 0 && !b.isEating() && !bForceEat) {
 			b.clearActions();
 			return false;
 		}
@@ -307,7 +305,7 @@ public class FoodLogic {
 								}
 								// 母のいるゆっくりを食べると33%の確率で母による「捕食種はあっちいってね！」イベントが発生
 								Body m = f.getMother();
-								if (rnd.nextInt(3) == 0 && m != null && !m.isDead() && !m.isRemoved()) {
+								if (SimYukkuri.RND.nextInt(3) == 0 && m != null && !m.isDead() && !m.isRemoved()) {
 									m.clearEvent();
 									m.setPanic(false, null);
 									m.setPeropero(false);
@@ -337,7 +335,7 @@ public class FoodLogic {
 								b.clearActions();
 								EventLogic.addBodyEvent(b, new EatBodyEvent(b, f, null, 30), null, null);
 							}
-							if (f.isSick() && rnd.nextBoolean())
+							if (f.isSick() && SimYukkuri.RND.nextBoolean())
 								b.forceSetSick();
 						}
 					}
@@ -463,7 +461,7 @@ public class FoodLogic {
 								if (b.isTooHungry()) {
 									b.setMessage(MessagePool.getMessage(b, MessagePool.Action.WantAmaama));
 									b.setAngry();
-								} else if (rnd.nextInt(150) == 0) {
+								} else if (SimYukkuri.RND.nextInt(150) == 0) {
 									b.setMessage(MessagePool.getMessage(b, MessagePool.Action.WantAmaama));
 									//b.stay();
 									b.setAngry();
@@ -544,7 +542,7 @@ public class FoodLogic {
 			if (b.isNotNYD()) {
 				if (b.isSoHungry() && b.isLockmove()) {
 					b.setToFood(false);
-					if (!b.isTalking() && (rnd.nextInt(20) == 0)) {
+					if (!b.isTalking() && (SimYukkuri.RND.nextInt(20) == 0)) {
 						b.setMessage(MessagePool.getMessage(b, MessagePool.Action.NoFood), false);
 						b.stay();
 					}
@@ -571,7 +569,7 @@ public class FoodLogic {
 		}
 
 		// フィールドの餌検索
-		List<Food> foodList = SimYukkuri.world.currentMap.food;
+		List<Food> foodList = SimYukkuri.world.getCurrentMap().food;
 		for (Food f : foodList) {
 			if (f.isEmpty()) {
 				continue;
@@ -590,7 +588,7 @@ public class FoodLogic {
 				minDistance = distance;
 			}
 		}
-		List<Stalk> stalkList = SimYukkuri.world.currentMap.stalk;
+		List<Stalk> stalkList = SimYukkuri.world.getCurrentMap().stalk;
 		for (ObjEX s : stalkList) {
 			Body p = ((Stalk) s).getPlantYukkuri();
 			if (p != null) {
@@ -629,7 +627,7 @@ public class FoodLogic {
 				minDistance = distance;
 			}
 		}
-		List<Vomit> vomitList = SimYukkuri.world.currentMap.vomit;
+		List<Vomit> vomitList = SimYukkuri.world.getCurrentMap().vomit;
 		for (Vomit v : vomitList) {
 			int distance = Translate.distance(b.getX(), b.getY(), v.getX(), v.getY());
 			if (minDistance > distance) {
@@ -641,7 +639,7 @@ public class FoodLogic {
 				minDistance = distance;
 			}
 		}
-		Body[] bodyList = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
+		Body[] bodyList = SimYukkuri.world.getCurrentMap().body.toArray(new Body[0]);
 		for (Body d : bodyList) {
 			if (b == d)
 				continue;
@@ -657,7 +655,7 @@ public class FoodLogic {
 				minDistance = distance;
 			}
 		}
-		List<Shit> shitList = SimYukkuri.world.currentMap.shit;
+		List<Shit> shitList = SimYukkuri.world.getCurrentMap().shit;
 		for (Shit s : shitList) {
 			int distance = Translate.distance(b.getX(), b.getY(), s.getX(), s.getY());
 			if (minDistance > distance) {
@@ -696,7 +694,7 @@ public class FoodLogic {
 		}
 
 		// フィールドの餌検索
-		List<Food> foodList = SimYukkuri.world.currentMap.food;
+		List<Food> foodList = SimYukkuri.world.getCurrentMap().food;
 		for (Food f : foodList) {
 			if (f.isEmpty()) {
 				continue;
@@ -819,7 +817,7 @@ public class FoodLogic {
 
 		// 非常食検索
 		//第一候補：茎
-		List<Stalk> stalkList = SimYukkuri.world.currentMap.stalk;
+		List<Stalk> stalkList = SimYukkuri.world.getCurrentMap().stalk;
 		for (ObjEX s : stalkList) {
 			Body p = ((Stalk) s).getPlantYukkuri();
 			if (p != null) {
@@ -860,7 +858,7 @@ public class FoodLogic {
 
 		//第二候補：吐餡
 		if (found == null) {
-			List<Vomit> vomitList = SimYukkuri.world.currentMap.vomit;
+			List<Vomit> vomitList = SimYukkuri.world.getCurrentMap().vomit;
 			for (Vomit v : vomitList) {
 				int distance = Translate.distance(b.getX(), b.getY(), v.getX(), v.getY());
 				if (minDistance > distance) {
@@ -875,7 +873,7 @@ public class FoodLogic {
 		}
 		//第三候補：死体
 		if (found == null) {
-			Body[] bodyList = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
+			Body[] bodyList = SimYukkuri.world.getCurrentMap().body.toArray(new Body[0]);
 			for (Body d : bodyList) {
 				if (d == null || d.isRemoved()) {
 					continue;
@@ -908,7 +906,7 @@ public class FoodLogic {
 		}
 		//第四候補:うんうん
 		if (found == null) {
-			List<Shit> shitList = SimYukkuri.world.currentMap.shit;
+			List<Shit> shitList = SimYukkuri.world.getCurrentMap().shit;
 			for (Shit s : shitList) {
 				if (!b.isTooHungry()) {
 					break;
@@ -951,7 +949,7 @@ public class FoodLogic {
 		}
 
 		// ゆっくりから検索
-		Body[] bodyList = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
+		Body[] bodyList = SimYukkuri.world.getCurrentMap().body.toArray(new Body[0]);
 		for (Body d : bodyList) {
 			if (b == d)
 				continue;
@@ -1021,7 +1019,7 @@ public class FoodLogic {
 			found = found2;
 
 		// フィールドの餌検索
-		List<Food> foodList = SimYukkuri.world.currentMap.food;
+		List<Food> foodList = SimYukkuri.world.getCurrentMap().food;
 		for (Food f : foodList) {
 			if (f.isEmpty()) {
 				continue;
@@ -1113,7 +1111,7 @@ public class FoodLogic {
 		}
 
 		// 非常食検索
-		List<Stalk> stalkList = SimYukkuri.world.currentMap.stalk;
+		List<Stalk> stalkList = SimYukkuri.world.getCurrentMap().stalk;
 		for (ObjEX s : stalkList) {
 			Body p = ((Stalk) s).getPlantYukkuri();
 			if (p != null) {
@@ -1158,7 +1156,7 @@ public class FoodLogic {
 			found = found3;
 
 		if (found == null) {
-			List<Vomit> vomitList = SimYukkuri.world.currentMap.vomit;
+			List<Vomit> vomitList = SimYukkuri.world.getCurrentMap().vomit;
 			for (Vomit v : vomitList) {
 				int distance = Translate.distance(b.getX(), b.getY(), v.getX(), v.getY());
 				if (minDistance > distance) {
@@ -1172,7 +1170,7 @@ public class FoodLogic {
 			}
 		}
 		if (found == null) {
-			List<Shit> shitList = SimYukkuri.world.currentMap.shit;
+			List<Shit> shitList = SimYukkuri.world.getCurrentMap().shit;
 			for (Shit s : shitList) {
 				if (!b.isTooHungry()) {
 					break;
@@ -1220,7 +1218,7 @@ public class FoodLogic {
 		}
 
 		if (found == null) {
-			List<Shit> shitList = SimYukkuri.world.currentMap.shit;
+			List<Shit> shitList = SimYukkuri.world.getCurrentMap().shit;
 			for (Shit s : shitList) {
 				// 最小距離のものが見つかっていたら
 				if (minDistance < 1) {
@@ -1233,7 +1231,7 @@ public class FoodLogic {
 						continue;
 					}
 					if (checkTakeout(b, s)) {
-						Body[] bodyList = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
+						Body[] bodyList = SimYukkuri.world.getCurrentMap().body.toArray(new Body[0]);
 						boolean bOtherTarget = false;
 						// 自分以外のゆっくりが処理対象にしていないか
 						for (Body bodyOther : bodyList) {
@@ -1263,7 +1261,7 @@ public class FoodLogic {
 		}
 
 		if (found == null) {
-			List<Vomit> vomitList = SimYukkuri.world.currentMap.vomit;
+			List<Vomit> vomitList = SimYukkuri.world.getCurrentMap().vomit;
 			for (Vomit v : vomitList) {
 				int distance = Translate.distance(b.getX(), b.getY(), v.getX(), v.getY());
 				if (minDistance > distance) {
@@ -1278,7 +1276,7 @@ public class FoodLogic {
 		}
 
 		if (found == null) {
-			Body[] bodyList = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
+			Body[] bodyList = SimYukkuri.world.getCurrentMap().body.toArray(new Body[0]);
 			for (Body d : bodyList) {
 				if (b == d)
 					continue;
@@ -1301,7 +1299,7 @@ public class FoodLogic {
 		}
 
 		if (found == null) {
-			List<Food> foodList = SimYukkuri.world.currentMap.food;
+			List<Food> foodList = SimYukkuri.world.getCurrentMap().food;
 			for (Food f : foodList) {
 				if (f.isEmpty()) {
 					continue;
@@ -1353,7 +1351,7 @@ public class FoodLogic {
 			default:
 				b.setMessage(MessagePool.getMessage(b, MessagePool.Action.SpitFood));
 				b.setHappiness(Happiness.VERY_SAD);
-				SimYukkuri.mypane.terrarium.addVomit(b.getX() + 7 - rnd.nextInt(14), b.getY() + 7 - rnd.nextInt(14), 0,
+				SimYukkuri.mypane.terrarium.addVomit(b.getX() + 7 - SimYukkuri.RND.nextInt(14), b.getY() + 7 - SimYukkuri.RND.nextInt(14), 0,
 						b, b.getShitType());
 				return;
 			}
@@ -1475,7 +1473,7 @@ public class FoodLogic {
 			b.setHappiness(Happiness.VERY_HAPPY);
 			b.setMessage(MessagePool.getMessage(b, MessagePool.Action.Eating));
 			b.rapidExcitingDiscipline();
-			if (!b.isSuperRaper() && rnd.nextInt(10) == 0) {
+			if (!b.isSuperRaper() && SimYukkuri.RND.nextInt(10) == 0) {
 				b.setSuperRaper(true);
 				b.setRaper(true);
 			}
@@ -1636,7 +1634,7 @@ public class FoodLogic {
 			b.setHappiness(Happiness.HAPPY);
 			b.setMessage(MessagePool.getMessage(b, MessagePool.Action.Eating));
 			b.rapidExcitingDiscipline();
-			if (!b.isSuperRaper() && rnd.nextInt(10) == 0) {
+			if (!b.isSuperRaper() && SimYukkuri.RND.nextInt(10) == 0) {
 				b.setSuperRaper(true);
 				b.setRaper(true);
 			}
@@ -1806,7 +1804,7 @@ public class FoodLogic {
 				b.setHappiness(Happiness.SAD);
 			b.setMessage(MessagePool.getMessage(b, MessagePool.Action.EatingBadtasting));
 			b.rapidExcitingDiscipline();
-			if (!b.isSuperRaper() && rnd.nextInt(10) == 0) {
+			if (!b.isSuperRaper() && SimYukkuri.RND.nextInt(10) == 0) {
 				b.setSuperRaper(true);
 				b.setRaper(true);
 			}
@@ -1921,7 +1919,7 @@ public class FoodLogic {
 				Shit s = (Shit) o;
 				boolean bIsInToiletForSlave = false;
 				boolean bIsToiletForSlave = false;
-				List<Toilet> toiletList = SimYukkuri.world.currentMap.toilet;
+				List<Toilet> toiletList = SimYukkuri.world.getCurrentMap().toilet;
 				if (toiletList != null && toiletList.size() != 0) {
 					for (Toilet t : toiletList) {
 						// うんうん奴隷用トイレのどれかにあれば終了
@@ -1964,7 +1962,7 @@ public class FoodLogic {
 				ObjEX oExFav = (ObjEX) oFav;
 				// 家族がいる
 				if (b.getPartner() != null || b.getChildrenListSize() != 0) {
-					List<Food> foodList = SimYukkuri.world.currentMap.food;
+					List<Food> foodList = SimYukkuri.world.getCurrentMap().food;
 					if (foodList != null && foodList.size() != 0) {
 						for (Food foodOnMyBed : foodList) {
 							// 空なら無視
@@ -1979,7 +1977,7 @@ public class FoodLogic {
 					}
 					// ベッドの上にない餌を対象にする
 					boolean bIsOnbed = false;
-					List<Bed> bedList = SimYukkuri.world.currentMap.bed;
+					List<Bed> bedList = SimYukkuri.world.getCurrentMap().bed;
 					if (bedList != null && bedList.size() != 0) {
 						for (Bed bed : bedList) {
 							if (bed.checkHitObj(o, false)) {

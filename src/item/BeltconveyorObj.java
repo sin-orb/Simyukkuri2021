@@ -404,7 +404,7 @@ public class BeltconveyorObj extends ObjEX implements java.io.Serializable {
 			bindObjList.clear();
 		}
 
-		SimYukkuri.world.currentMap.beltconveyorObj.remove(this);
+		SimYukkuri.world.getCurrentMap().beltconveyorObj.remove(this);
 	}
 
 	public boolean checkInterval(int cnt) {
@@ -438,7 +438,7 @@ public class BeltconveyorObj extends ObjEX implements java.io.Serializable {
 		firstY = y;
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		SimYukkuri.world.currentMap.beltconveyorObj.add(this);
+		SimYukkuri.world.getCurrentMap().beltconveyorObj.add(this);
 		objType = Type.PLATFORM;
 		objEXType = ObjEXType.BELTCONVEYOR;
 		value = 3000;

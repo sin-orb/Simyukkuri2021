@@ -216,7 +216,7 @@ public class ItemMenu {
 	public static void dropItem(MouseEvent e) {
 		Point pos = Translate.invertLimit(e.getX(), e.getY());
 		Obj item = SimYukkuri.world.player.holdItem;
-		MapPlaceData curMap = SimYukkuri.world.currentMap;
+		MapPlaceData curMap = SimYukkuri.world.getCurrentMap();
 
 		if(item instanceof Body) {
 			curMap.body.add((Body)item);

@@ -159,7 +159,7 @@ public class Food extends ObjEX implements java.io.Serializable {
 
 	@Override
 	public void removeListData(){
-		SimYukkuri.world.currentMap.food.remove(this);
+		SimYukkuri.world.getCurrentMap().food.remove(this);
 	}
 
 	@Override
@@ -180,7 +180,7 @@ public class Food extends ObjEX implements java.io.Serializable {
 	public Food(int initX, int initY, int initOption) {
 		super(initX, initY, initOption);
 		// 森なら野生に変更
-		if( SimYukkuri.world.currentMap.mapIndex == 5 ||  SimYukkuri.world.currentMap.mapIndex == 6 ){
+		if( SimYukkuri.world.getCurrentMap().mapIndex == 5 ||  SimYukkuri.world.getCurrentMap().mapIndex == 6 ){
 			foodType = FoodType.values()[initOption];
 			switch(foodType){
 				case SWEETS1:
@@ -218,7 +218,7 @@ public class Food extends ObjEX implements java.io.Serializable {
 		amount = foodType.amount;
 		setBoundary(boundary[foodType.ordinal()]);
 		setCollisionSize(getPivotX(), getPivotY());
-		SimYukkuri.world.currentMap.food.add(this);
+		SimYukkuri.world.getCurrentMap().food.add(this);
 		objType = Type.OBJECT;
 		objEXType = ObjEXType.FOOD;
 		setRemoved(false);

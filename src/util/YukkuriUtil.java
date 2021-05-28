@@ -3,8 +3,8 @@ package src.util;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.List;
-import java.util.Random;
 
+import src.SimYukkuri;
 import src.attachment.Ants;
 import src.base.Body;
 import src.draw.Terrarium;
@@ -29,8 +29,6 @@ import src.yukkuri.WasaReimu;
  *   ゆっくり処理クラス
  */
 public class YukkuriUtil {
-
-	private static Random rnd = new Random();
 
 	/**
 	 *  クラス名からタイプ取得
@@ -93,20 +91,20 @@ public class YukkuriUtil {
 
 		List<Integer> motherAncestorList = mother.getAncestorList();
 		if (motherAncestorList != null && motherAncestorList.size() != 0) {
-			if (rnd.nextInt(100) == 0) {
+			if (SimYukkuri.RND.nextInt(100) == 0) {
 				// 先祖返り
 				int nSize = motherAncestorList.size();
-				int nIndex = rnd.nextInt(nSize);
+				int nIndex = SimYukkuri.RND.nextInt(nSize);
 				motherType = motherAncestorList.get(nIndex);
 			}
 		}
 		if (father != null) {
 			List<Integer> fatherAncestorList = father.getAncestorList();
 			if (fatherAncestorList != null && fatherAncestorList.size() != 0) {
-				if (rnd.nextInt(100) == 0) {
+				if (SimYukkuri.RND.nextInt(100) == 0) {
 					// 先祖返り
 					int nSize = fatherAncestorList.size();
-					int nIndex = rnd.nextInt(nSize);
+					int nIndex = SimYukkuri.RND.nextInt(nSize);
 					fatherType = fatherAncestorList.get(nIndex);
 				}
 			}
@@ -114,7 +112,7 @@ public class YukkuriUtil {
 
 		boolean hybrid = false;
 		boolean hybrid2 = false;
-		if (rnd.nextInt(2) == 0 && !forceCreate) {
+		if (SimYukkuri.RND.nextInt(2) == 0 && !forceCreate) {
 			// 作成失敗
 			return null;
 		}
@@ -125,18 +123,18 @@ public class YukkuriUtil {
 			// 同じタイプならハイブッリドを作らない
 			if (fatherType != motherType) {
 				// 両方普通
-				if (rnd.nextInt(70) == 0) {
+				if (SimYukkuri.RND.nextInt(70) == 0) {
 					hybrid = true;
 					hybrid2 = true;
 				}
 			}
 		} else if ((fatherType == HybridYukkuri.type) && (motherType == HybridYukkuri.type)) {
 			// 両方ハイブリッド
-			if (rnd.nextInt(20) == 0)
+			if (SimYukkuri.RND.nextInt(20) == 0)
 				hybrid = true;
 		} else {
 			// 片方ハイブリッド
-			if (rnd.nextInt(50) == 0)
+			if (SimYukkuri.RND.nextInt(50) == 0)
 				hybrid = true;
 		}
 
@@ -146,13 +144,13 @@ public class YukkuriUtil {
 		}
 
 		if (hybrid) {
-			if (hybrid2 && mother != null && rnd.nextBoolean()) {
+			if (hybrid2 && mother != null && SimYukkuri.RND.nextBoolean()) {
 				babyType = mother.getHybridType(fatherType);
 			} else {
 				babyType = HybridYukkuri.type;
 			}
 		} else {
-			if (rnd.nextBoolean()) {
+			if (SimYukkuri.RND.nextBoolean()) {
 				babyType = fatherType;
 			} else {
 				babyType = motherType;
@@ -168,17 +166,17 @@ public class YukkuriUtil {
 		}
 		// チェンジリング判定
 		// 上でどんな結果になろうと、チェンジリングが1/100の確率で発生する
-		if (rnd.nextInt(100) == 0) {
+		if (SimYukkuri.RND.nextInt(100) == 0) {
 			babyType = getChangelingBabyType();
 		}
 
 		// ディフューザーでハイブリッド薬がまかれていたら強制的にハイブリッドにする
 		if (Terrarium.hybridSteam) {
 			if ((fatherType == Reimu.type) && (motherType == Marisa.type) && (mother != null)
-					&& rnd.nextBoolean()) {
+					&& SimYukkuri.RND.nextBoolean()) {
 				babyType = mother.getHybridType(fatherType);
 			} else if ((fatherType == Marisa.type) && (motherType == Reimu.type) && (mother != null)
-					&& rnd.nextBoolean()) {
+					&& SimYukkuri.RND.nextBoolean()) {
 				babyType = mother.getHybridType(fatherType);
 			} else if (fatherType != motherType) {
 				babyType = HybridYukkuri.type;
@@ -186,24 +184,24 @@ public class YukkuriUtil {
 		}
 
 		// 突然変異
-		if ((babyType == Reimu.type) && rnd.nextInt(20) == 0) {
+		if ((babyType == Reimu.type) && SimYukkuri.RND.nextInt(20) == 0) {
 			babyType = WasaReimu.type;
-		} else if ((babyType == WasaReimu.type) && rnd.nextInt(20) != 0) {
+		} else if ((babyType == WasaReimu.type) && SimYukkuri.RND.nextInt(20) != 0) {
 			babyType = Reimu.type;
-		} else if ((babyType == Marisa.type || babyType == MarisaKotatsumuri.type) && rnd.nextInt(20) == 0) {
+		} else if ((babyType == Marisa.type || babyType == MarisaKotatsumuri.type) && SimYukkuri.RND.nextInt(20) == 0) {
 			babyType = MarisaTsumuri.type;
-		} else if ((babyType == Marisa.type || babyType == MarisaTsumuri.type) && rnd.nextInt(20) == 0) {
+		} else if ((babyType == Marisa.type || babyType == MarisaTsumuri.type) && SimYukkuri.RND.nextInt(20) == 0) {
 			babyType = MarisaKotatsumuri.type;
-		} else if ((babyType == MarisaTsumuri.type || babyType == MarisaKotatsumuri.type) && rnd.nextInt(20) != 0) {
+		} else if ((babyType == MarisaTsumuri.type || babyType == MarisaKotatsumuri.type) && SimYukkuri.RND.nextInt(20) != 0) {
 			babyType = Marisa.type;
-		} else if ((babyType == Kimeemaru.type) && rnd.nextInt(20) != 0) {
+		} else if ((babyType == Kimeemaru.type) && SimYukkuri.RND.nextInt(20) != 0) {
 			babyType = Ayaya.type;
-		} else if ((babyType == Ayaya.type) && rnd.nextInt(20) == 0) {
+		} else if ((babyType == Ayaya.type) && SimYukkuri.RND.nextInt(20) == 0) {
 			babyType = Kimeemaru.type;
 		}
 
 		if (mother.isOverPregnantLimit() || mother.isSick() || mother.isDamagedHeavily() || fatherDamage) {
-			if (rnd.nextBoolean() && (babyType == Reimu.type || babyType == WasaReimu.type)) {
+			if (SimYukkuri.RND.nextBoolean() && (babyType == Reimu.type || babyType == WasaReimu.type)) {
 				babyType = TarinaiReimu.type;
 			} else {
 				babyType = Tarinai.type;
@@ -223,42 +221,42 @@ public class YukkuriUtil {
 
 		switch (attBase) {
 		case 0:
-			if (rnd.nextInt(20) == 0) {
-				ret.attitude = attitude[2 + rnd.nextInt(2)];
+			if (SimYukkuri.RND.nextInt(20) == 0) {
+				ret.attitude = attitude[2 + SimYukkuri.RND.nextInt(2)];
 			} else {
-				ret.attitude = attitude[rnd.nextInt(3)];
+				ret.attitude = attitude[SimYukkuri.RND.nextInt(3)];
 			}
 			break;
 		case 1:
 		case 2:
 		case 3:
-			if (rnd.nextInt(15) == 0) {
-				ret.attitude = attitude[rnd.nextInt(2)];
+			if (SimYukkuri.RND.nextInt(15) == 0) {
+				ret.attitude = attitude[SimYukkuri.RND.nextInt(2)];
 			} else {
-				ret.attitude = attitude[1 + rnd.nextInt(4)];
+				ret.attitude = attitude[1 + SimYukkuri.RND.nextInt(4)];
 			}
 			break;
 		case 4:
-			if (rnd.nextInt(10) == 0) {
-				ret.attitude = attitude[rnd.nextInt(3)];
+			if (SimYukkuri.RND.nextInt(10) == 0) {
+				ret.attitude = attitude[SimYukkuri.RND.nextInt(3)];
 			} else {
-				ret.attitude = attitude[1 + rnd.nextInt(4)];
+				ret.attitude = attitude[1 + SimYukkuri.RND.nextInt(4)];
 			}
 			break;
 		case 5:
 		case 6:
 		case 7:
-			if (rnd.nextInt(15) == 0) {
-				ret.attitude = attitude[1 + rnd.nextInt(3)];
+			if (SimYukkuri.RND.nextInt(15) == 0) {
+				ret.attitude = attitude[1 + SimYukkuri.RND.nextInt(3)];
 			} else {
-				ret.attitude = attitude[2 + rnd.nextInt(3)];
+				ret.attitude = attitude[2 + SimYukkuri.RND.nextInt(3)];
 			}
 			break;
 		case 8:
-			if (rnd.nextInt(20) == 0) {
-				ret.attitude = attitude[rnd.nextInt(3)];
+			if (SimYukkuri.RND.nextInt(20) == 0) {
+				ret.attitude = attitude[SimYukkuri.RND.nextInt(3)];
 			} else {
-				ret.attitude = attitude[3 + rnd.nextInt(2)];
+				ret.attitude = attitude[3 + SimYukkuri.RND.nextInt(2)];
 			}
 			break;
 		}
@@ -270,22 +268,22 @@ public class YukkuriUtil {
 
 		switch (intBase) {
 		case 0:
-			if (rnd.nextInt(15) == 0) {
-				ret.intelligence = intel[1 + rnd.nextInt(2)];
+			if (SimYukkuri.RND.nextInt(15) == 0) {
+				ret.intelligence = intel[1 + SimYukkuri.RND.nextInt(2)];
 			} else {
-				ret.intelligence = intel[rnd.nextInt(2)];
+				ret.intelligence = intel[SimYukkuri.RND.nextInt(2)];
 			}
 			break;
 		case 4:
-			if (rnd.nextInt(15) == 0) {
-				ret.intelligence = intel[rnd.nextInt(2)];
+			if (SimYukkuri.RND.nextInt(15) == 0) {
+				ret.intelligence = intel[SimYukkuri.RND.nextInt(2)];
 			} else {
-				ret.intelligence = intel[1 + rnd.nextInt(2)];
+				ret.intelligence = intel[1 + SimYukkuri.RND.nextInt(2)];
 			}
 			break;
 		default:
-			if (rnd.nextInt(10) == 0) {
-				ret.intelligence = intel[rnd.nextInt(3)];
+			if (SimYukkuri.RND.nextInt(10) == 0) {
+				ret.intelligence = intel[SimYukkuri.RND.nextInt(3)];
 			} else {
 				ret.intelligence = intel[1];
 			}
@@ -300,14 +298,14 @@ public class YukkuriUtil {
 	 */
 	public static int getChangelingBabyType() {
 		// 66%で通常種、33%で希少種
-		if (rnd.nextInt(3) == 0) {
+		if (SimYukkuri.RND.nextInt(3) == 0) {
 			//希少種
-			return 1000 + rnd.nextInt(12);
+			return 1000 + SimYukkuri.RND.nextInt(12);
 		} else {
 			//通常種
-			int i = rnd.nextInt(6);
+			int i = SimYukkuri.RND.nextInt(6);
 			if (i == 0) {//まりさ
-				switch (rnd.nextInt(5)) {
+				switch (SimYukkuri.RND.nextInt(5)) {
 				case 1:
 					return 2004;//こたつむり
 				case 2:
@@ -316,7 +314,7 @@ public class YukkuriUtil {
 					return 0;//普通のまりさ
 				}
 			} else if (i == 1) {//れいむ
-				switch (rnd.nextInt(4)) {
+				switch (SimYukkuri.RND.nextInt(4)) {
 				case 2:
 					return 2001;//わされいむ
 				case 3:
@@ -529,7 +527,7 @@ public class YukkuriUtil {
 		if (b.isDontJump()) {
 			antProbability /= 2;
 		}
-		if (rnd.nextInt(antProbability) == 1) {
+		if (SimYukkuri.RND.nextInt(antProbability) == 1) {
 			b.addAttachment(new Ants(b));
 			b.clearEvent();
 		}
@@ -543,9 +541,9 @@ public class YukkuriUtil {
 	 */
 	public static int getRandomYukkuriType(Body parent) {
 		int babyType = 0;
-		int i = rnd.nextInt(5);
+		int i = SimYukkuri.RND.nextInt(5);
 		if (i == 0 || i == 1) {
-			babyType = rnd.nextInt(12);
+			babyType = SimYukkuri.RND.nextInt(12);
 			switch (babyType) {
 			case 0: // まりさ
 			case 8:
@@ -553,7 +551,7 @@ public class YukkuriUtil {
 				break;
 			case 1: // れいむ
 			case 9:
-				switch (rnd.nextInt(5)) {
+				switch (SimYukkuri.RND.nextInt(5)) {
 				case 0:
 				case 2:
 					babyType = 1;//普通のれいむ
@@ -590,7 +588,7 @@ public class YukkuriUtil {
 				babyType = 3;
 				break;
 			case 11: //希少種
-				babyType = 1000 + rnd.nextInt(12);
+				babyType = 1000 + SimYukkuri.RND.nextInt(12);
 				break;
 			}
 		} else {
@@ -601,7 +599,7 @@ public class YukkuriUtil {
 					babyType = getMarisaType();
 				}
 			} else {
-				babyType = rnd.nextInt(6);
+				babyType = SimYukkuri.RND.nextInt(6);
 			}
 		}
 		return babyType;
@@ -612,7 +610,7 @@ public class YukkuriUtil {
 	 * @return まりさの子供タイプ
 	 */
 	public static int getMarisaType() {
-		switch (rnd.nextInt(5)) {
+		switch (SimYukkuri.RND.nextInt(5)) {
 		case 1:
 			return 2004;//こたつむり
 		case 2:

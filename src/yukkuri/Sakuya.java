@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import src.SimYukkuri;
 import src.base.Body;
 import src.draw.ModLoader;
 import src.enums.AgeState;
@@ -140,7 +141,7 @@ public class Sakuya extends Body implements java.io.Serializable {
 	}
 	@Override
 	public void tuneParameters() {
-		/*if (rnd.nextBoolean()) {
+		/*if (SimYukkuri.RND.nextBoolean()) {
 		motherhood = true;
 		}*/
 		double factor = Math.random()*2+1;
@@ -165,9 +166,9 @@ public class Sakuya extends Body implements java.io.Serializable {
 		PREGPERIOD *= factor;
 		SLEEPPERIOD *= factor;
 		ACTIVEPERIOD *= factor;
-		sameDest = RND.nextInt(20)+20;
+		sameDest = SimYukkuri.RND.nextInt(20)+20;
 		DECLINEPERIOD *= (Math.random()+0.5);
-		ROBUSTNESS = RND.nextInt(10)+1;
+		ROBUSTNESS = SimYukkuri.RND.nextInt(10)+1;
 		//EYESIGHT /= 4;
 		factor = Math.random()+0.5;
 		STRENGTH[AgeState.ADULT.ordinal()] *= factor;

@@ -1,7 +1,5 @@
 package src.event;
 
-import java.util.Random;
-
 import src.SimYukkuri;
 import src.base.Body;
 import src.base.EventPacket;
@@ -23,8 +21,8 @@ import src.system.MessagePool;
 public class EatBodyEvent extends EventPacket implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
-	Random rnd = new Random();
 	int tick = 0;
+
 	/**
 	 * コンストラクタ.
 	 */
@@ -37,7 +35,8 @@ public class EatBodyEvent extends EventPacket implements java.io.Serializable {
 	// また、イベント優先度も必要に応じて設定できる
 	@Override
 	public boolean checkEventResponse(Body b) {
-		if(getFrom() == b && b.canEventResponse() && b.getAttitude() != Attitude.SUPER_SHITHEAD)return true;
+		if (getFrom() == b && b.canEventResponse() && b.getAttitude() != Attitude.SUPER_SHITHEAD)
+			return true;
 		return false;
 	}
 
@@ -53,70 +52,67 @@ public class EatBodyEvent extends EventPacket implements java.io.Serializable {
 	@Override
 	public boolean execute(Body b) {
 		// 複数の動作を順次行うのでtickで管理
-		if(tick == 0) {
+		if (tick == 0) {
 			// 固まる
 			b.lookTo(to.getX(), to.getY());
 			b.setLockmove(true);
 			b.setMessage(null, true);
 			b.setForceFace(ImageCode.NORMAL.ordinal());
 			b.stay();
-		}
-		else if(tick == 10) {
+		} else if (tick == 10) {
 			// 驚く
 			b.lookTo(to.getX(), to.getY());
 			b.setLockmove(false);
 			b.setForceFace(ImageCode.SURPRISE.ordinal());
 			b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.Surprise), 52, true, false);
 			b.stay();
-		}
-		else if(tick == 70) {
+		} else if (tick == 70) {
 			// 吐く
 			b.lookTo(to.getX(), to.getY());
 			b.setForceFace(ImageCode.CRYING.ordinal());
 			b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.Vomit), 62, true, false);
-			int ofsX = Translate.invertX(b.getCollisionX()>>1, b.getY());
-			if(b.getDirection() == Direction.LEFT) ofsX = -ofsX;
+			int ofsX = Translate.invertX(b.getCollisionX() >> 1, b.getY());
+			if (b.getDirection() == Direction.LEFT)
+				ofsX = -ofsX;
 			SimYukkuri.mypane.terrarium.addVomit(b.getX() + ofsX, b.getY(), b.getZ(), b, b.getShitType());
 			b.stay();
-		}
-		else if(tick == 120) {
+		} else if (tick == 120) {
 			// 善良ほどストレスを受ける
-			switch(b.getAttitude()) {
-				default:
-					break;
-				case VERY_NICE:
-					b.addStress(5000);
-					break;
-				case NICE:
-					b.addStress(3000);
-					break;
-				case AVERAGE:
-					b.addStress(2000);
-					break;
-				case SHITHEAD:
-					b.addStress(700);
-					break;
+			switch (b.getAttitude()) {
+			default:
+				break;
+			case VERY_NICE:
+				b.addStress(5000);
+				break;
+			case NICE:
+				b.addStress(3000);
+				break;
+			case AVERAGE:
+				b.addStress(2000);
+				break;
+			case SHITHEAD:
+				b.addStress(700);
+				break;
 			}
-			if( b.isNotNYD() ){
+			if (b.isNotNYD()) {
 				b.setHappiness(Happiness.VERY_SAD);
 			}
 			return true;
-		}
-		else {
+		} else {
 			b.lookTo(to.getX(), to.getY());
 			b.stay();
 		}
 		tick++;
 		return false;
 	}
-	
+
 	//もしもの時のために解除
 	@Override
 	public void end(Body b) {
 		b.setLockmove(false);
 		return;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "たべないでぇ";

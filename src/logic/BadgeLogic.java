@@ -125,7 +125,7 @@ public class BadgeLogic {
 		}
 		
 		if(b.getAttachmentSize(Badge.class) != 0 ){
-			b.removeAttachment(Badge.class, true);
+			b.removeAttachment(Badge.class);
 		}
 		else{
 			b.addAttachment(new Badge(b, eBadgeRank));

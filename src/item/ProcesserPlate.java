@@ -10,7 +10,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JOptionPane;
@@ -45,7 +44,6 @@ public class ProcesserPlate extends ObjEX implements java.io.Serializable {
 	private static BufferedImage[] images = new BufferedImage[2];
 	private static Rectangle boundary = new Rectangle();
 
-	private Random rnd = new Random();
 	/**加工対象のリスト*/
 	protected List<Body> processedBodyList = new LinkedList<Body>();
 	/**加工エフェクトのリスト*/
@@ -254,7 +252,7 @@ public class ProcesserPlate extends ObjEX implements java.io.Serializable {
 						if( bTarget.isNotNYD() ){
 							bTarget.setHappiness(Happiness.VERY_SAD);
 							bTarget.setForceFace(ImageCode.PAIN.ordinal());
-							if(rnd.nextInt(10) == 0) {
+							if(SimYukkuri.RND.nextInt(10) == 0) {
 								bTarget.setMessage(MessagePool.getMessage(bTarget, MessagePool.Action.Burning), 40, true, true);
 							}
 						}
@@ -269,7 +267,7 @@ public class ProcesserPlate extends ObjEX implements java.io.Serializable {
 						if( bTarget.isNotNYD() ){
 							bTarget.setHappiness(Happiness.VERY_SAD);
 							bTarget.setForceFace(ImageCode.PAIN.ordinal());
-							if(rnd.nextInt(15) == 0) {
+							if(SimYukkuri.RND.nextInt(15) == 0) {
 								bTarget.setMessage(MessagePool.getMessage(bTarget, MessagePool.Action.Scream), 40, true, true);
 							}
 						}
@@ -295,7 +293,7 @@ public class ProcesserPlate extends ObjEX implements java.io.Serializable {
 					}
 					else{
 						if(bTarget.getAttachmentSize(Fire.class) != 0){
-							bTarget.removeAttachment(Fire.class, true);
+							bTarget.removeAttachment(Fire.class);
 							//bTarget.giveWater(); // 水をかけると赤ゆが高確率で死ぬのでOFF
 							bTarget.setLockmove(false);
 							bTarget.setForcePanicClear();
@@ -372,7 +370,7 @@ public class ProcesserPlate extends ObjEX implements java.io.Serializable {
 					}
 					bTarget.setHappiness(Happiness.VERY_SAD);
 					bTarget.setForceFace(ImageCode.PAIN.ordinal());
-					if(rnd.nextInt(3) == 0){
+					if(SimYukkuri.RND.nextInt(3) == 0){
 						bTarget.setMessage(MessagePool.getMessage(bTarget, MessagePool.Action.Scream), 40, true, true);
 					}
 					else{
@@ -432,7 +430,7 @@ public class ProcesserPlate extends ObjEX implements java.io.Serializable {
 			processedBodyList.clear();
 			processedBodyEffectList.clear();
 		}
-		SimYukkuri.world.currentMap.processerPlate.remove(this);
+		SimYukkuri.world.getCurrentMap().processerPlate.remove(this);
 	}
 
 	/** 設定メニュー*/
@@ -485,7 +483,7 @@ public class ProcesserPlate extends ObjEX implements java.io.Serializable {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		SimYukkuri.world.currentMap.processerPlate.add(this);
+		SimYukkuri.world.getCurrentMap().processerPlate.add(this);
 		//objType = Type.PLATFORM;
 		objEXType = ObjEXType.PROCESSERPLATE;
 		interval = 5;
@@ -493,7 +491,7 @@ public class ProcesserPlate extends ObjEX implements java.io.Serializable {
 		readIniFile();
 		boolean ret = setupProcesserPlate(this);
 		if( !ret){
-			SimYukkuri.world.currentMap.processerPlate.remove(this);
+			SimYukkuri.world.getCurrentMap().processerPlate.remove(this);
 		}
 	}
 	/**iniファイル読み込み*/

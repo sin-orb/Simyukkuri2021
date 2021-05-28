@@ -1,7 +1,6 @@
 package src.event;
 
-import java.util.Random;
-
+import src.SimYukkuri;
 import src.base.Body;
 import src.base.EventPacket;
 import src.base.Obj;
@@ -22,9 +21,7 @@ import src.system.MessagePool;
 public class ProposeEvent extends EventPacket implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
-	//private static final int[] ofsZ = {2, 0, -5};
 	int tick = 0;
-	Random rnd = new Random();
 	protected boolean started =false;
 	/**
 	 * コンストラクタ.
@@ -64,12 +61,12 @@ public class ProposeEvent extends EventPacket implements java.io.Serializable {
 			getFrom().setBodyEventResMessage(MessagePool.getMessage(getFrom(), MessagePool.Action.Surprise), 30, true, false);
 			getFrom().setHappiness(Happiness.VERY_SAD);
 			getFrom().addStress(getFrom().getStressLimit()/10);
-			if(rnd.nextBoolean()){
+			if(SimYukkuri.RND.nextBoolean()){
 				getFrom().setForceFace(ImageCode.TIRED.ordinal());
 			}
 			else{
 				getFrom().setForceFace(ImageCode.CRYING.ordinal());
-				if(rnd.nextInt(3) == 0) getFrom().doYunnyaa(true);
+				if(SimYukkuri.RND.nextInt(3) == 0) getFrom().doYunnyaa(true);
 			}
 			return UpdateState.ABORT;
 		}
@@ -77,7 +74,7 @@ public class ProposeEvent extends EventPacket implements java.io.Serializable {
 		int colX = BodyLogic.calcCollisionX(b, to);
 		//相手がつかまれているとき
 		if(to.isGrabbed()){
-			getFrom().setBodyEventResMessage(MessagePool.getMessage(getFrom(), MessagePool.Action.DontPreventUs), 30, false, rnd.nextBoolean());
+			getFrom().setBodyEventResMessage(MessagePool.getMessage(getFrom(), MessagePool.Action.DontPreventUs), 30, false, SimYukkuri.RND.nextBoolean());
 			getFrom().setForceFace(ImageCode.PUFF.ordinal());
 			getFrom().setAngry();
 			started=false;
@@ -86,8 +83,8 @@ public class ProposeEvent extends EventPacket implements java.io.Serializable {
 			if(getFrom().canflyCheck()) getFrom().moveToEvent(this, to.getX() + colX, to.getY(),to.getZ());
 			else getFrom().moveToEvent(this, to.getX() + colX, to.getY());
 			//ランダムであきらめる
-			if(getFrom().getIntelligence() != Intelligence.FOOL && rnd.nextInt(1500)==0){
-				if(rnd.nextBoolean()){
+			if(getFrom().getIntelligence() != Intelligence.FOOL && SimYukkuri.RND.nextInt(1500)==0){
+				if(SimYukkuri.RND.nextBoolean()){
 					getFrom().setBodyEventResMessage(MessagePool.getMessage(getFrom(), MessagePool.Action.LamentNoYukkuri), 30, true, true);
 					getFrom().setHappiness(Happiness.VERY_SAD);
 					getFrom().setForceFace(ImageCode.CRYING.ordinal());
@@ -120,8 +117,8 @@ public class ProposeEvent extends EventPacket implements java.io.Serializable {
 			to.clearEvent();
 		}
 		to.stay();
-		if(rnd.nextInt(20)== 0){
-			if(rnd.nextBoolean())getFrom().setBodyEventResMessage(MessagePool.getMessage(getFrom(), MessagePool.Action.PleaseWait), 30, true, false);
+		if(SimYukkuri.RND.nextInt(20)== 0){
+			if(SimYukkuri.RND.nextBoolean())getFrom().setBodyEventResMessage(MessagePool.getMessage(getFrom(), MessagePool.Action.PleaseWait), 30, true, false);
 			else getFrom().setBodyEventResMessage(MessagePool.getMessage(getFrom(), MessagePool.Action.Excite), 30, true, false);
 		}
 		return null;
@@ -140,12 +137,12 @@ public class ProposeEvent extends EventPacket implements java.io.Serializable {
 			getFrom().setBodyEventResMessage(MessagePool.getMessage(getFrom(), MessagePool.Action.Surprise), 30, true, false);
 			getFrom().setHappiness(Happiness.VERY_SAD);
 			getFrom().addStress(getFrom().getStressLimit()/10);
-			if(rnd.nextBoolean()){
+			if(SimYukkuri.RND.nextBoolean()){
 				getFrom().setForceFace(ImageCode.TIRED.ordinal());
 			}
 			else{
 				getFrom().setForceFace(ImageCode.CRYING.ordinal());
-				if(rnd.nextInt(3) == 0) getFrom().doYunnyaa(true);
+				if(SimYukkuri.RND.nextInt(3) == 0) getFrom().doYunnyaa(true);
 			}
 			//夫婦関係の解消
 			getFrom().setPartner(null);
@@ -174,7 +171,7 @@ public class ProposeEvent extends EventPacket implements java.io.Serializable {
 		}
 		else if(tick == 20) {
 			// 告白
-			if(getFrom().isRude() || rnd.nextInt(20)==0)getFrom().setForceFace(ImageCode.VAIN.ordinal());
+			if(getFrom().isRude() || SimYukkuri.RND.nextInt(20)==0)getFrom().setForceFace(ImageCode.VAIN.ordinal());
 			else getFrom().setForceFace(ImageCode.EMBARRASSED.ordinal());
 			//カップルの設定(ただし、ここではやる側のみ)
 			getFrom().setPartner(to);

@@ -1,7 +1,6 @@
 package src.logic;
 
 import java.util.List;
-import java.util.Random;
 
 import src.SimYukkuri;
 import src.base.Body;
@@ -27,7 +26,6 @@ import src.item.Toilet;
  */
 public class BedLogic {
 
-	private static Random rnd = new Random();
 	/**
 	 * ベッド関連処理を行う
 	 * @param b ゆっくり
@@ -132,9 +130,9 @@ public class BedLogic {
 			}
 			else {
 				ofsX = Translate.invertX(found.getW(), found.getY() - 4);
-				ofsX = -(ofsX >> 1) + rnd.nextInt(ofsX);
+				ofsX = -(ofsX >> 1) + SimYukkuri.RND.nextInt(ofsX);
 				ofsY = Translate.invertY(found.getH() - 4);
-				ofsY = -(ofsY >> 1) + rnd.nextInt(ofsY);
+				ofsY = -(ofsY >> 1) + SimYukkuri.RND.nextInt(ofsY);
 			}
 			b.moveToBed(found, found.getX() + ofsX, found.getY() + ofsY, 0);
 			b.setTargetMoveOffset(ofsX, ofsY);
@@ -171,7 +169,7 @@ public class BedLogic {
 		// うんうん奴隷ではない場合
 		if( b.getPublicRank() != PublicRank.UnunSlave){
 			if(found == null) {
-			List<Bed> list = SimYukkuri.world.currentMap.bed;
+			List<Bed> list = SimYukkuri.world.getCurrentMap().bed;
 				for (ObjEX t: list) {
 					int distance = Translate.distance(b.getX(), b.getY(), t.getX(), t.getY());
 					if (minDistance > distance) {
@@ -185,7 +183,7 @@ public class BedLogic {
 			}
 	//// 仮 おうち検索
 			if(found == null) {
-			List<House> list = SimYukkuri.world.currentMap.house;
+			List<House> list = SimYukkuri.world.getCurrentMap().house;
 			for (ObjEX t: list) {
 					int distance = Translate.distance(b.getX(), b.getY(), t.getX(), t.getY());
 					if (minDistance > distance) {
@@ -201,7 +199,7 @@ public class BedLogic {
 		else{
 			// うんうん奴隷の場合、トイレを探す
 			if(found == null) {
-			List<Toilet> list = SimYukkuri.world.currentMap.toilet;
+			List<Toilet> list = SimYukkuri.world.getCurrentMap().toilet;
 				for (ObjEX t: list) {
 					int distance = Translate.distance(b.getX(), b.getY(), t.getX(), t.getY());
 					if (minDistance > distance) {

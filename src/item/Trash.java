@@ -51,7 +51,7 @@ public class Trash extends ObjEX implements java.io.Serializable {
 	
 	@Override
 	public void removeListData(){
-		SimYukkuri.world.currentMap.trash.remove(this);
+		SimYukkuri.world.getCurrentMap().trash.remove(this);
 	}
 	
 	@Override
@@ -68,7 +68,7 @@ public class Trash extends ObjEX implements java.io.Serializable {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		SimYukkuri.world.currentMap.trash.add(this);
+		SimYukkuri.world.getCurrentMap().trash.add(this);
 		objType = Type.OBJECT;
 		objEXType = ObjEXType.TRASH;
 		

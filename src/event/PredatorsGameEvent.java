@@ -1,7 +1,5 @@
 package src.event;
 
-import java.util.Random;
-
 import src.SimYukkuri;
 import src.base.Body;
 import src.base.EventPacket;
@@ -41,7 +39,6 @@ public class PredatorsGameEvent extends EventPacket implements java.io.Serializa
 	boolean FlyGame = false;
 	boolean grabbing = false;
 	boolean snack = false;
-	Random rnd = new Random();
 	/**
 	 * コンストラクタ.
 	 */
@@ -59,7 +56,7 @@ public class PredatorsGameEvent extends EventPacket implements java.io.Serializa
 
 		if(b.isPredatorType() && b== getFrom()){
 			//遊び相手の決定
-			Body[] bodyList = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
+			Body[] bodyList = SimYukkuri.world.getCurrentMap().body.toArray(new Body[0]);
 			for (Body d: bodyList) {
 				int minDistance = b.getEYESIGHT();
 				int wallMode = b.getBodyAgeState().ordinal();
@@ -118,7 +115,7 @@ public class PredatorsGameEvent extends EventPacket implements java.io.Serializa
 		if(toy== null || Terrarium.predatorSteam){
 			if(ToyLogic.checkToy(getFrom())){
 				getFrom().setPlaying(PlayStyle.BALL);
-				getFrom().setPlayingLimit(150 +rnd.nextInt(100)-49);
+				getFrom().setPlayingLimit(150 +SimYukkuri.RND.nextInt(100)-49);
 			}
 			return UpdateState.ABORT;
 		}
@@ -143,7 +140,7 @@ public class PredatorsGameEvent extends EventPacket implements java.io.Serializa
 			return UpdateState.FORCE_EXEC;
 		}
 		//満足したら辞める
-		if(getFrom().isVeryHungry() || getFrom().isSleepy() || rnd.nextInt(1000)==0){
+		if(getFrom().isVeryHungry() || getFrom().isSleepy() || SimYukkuri.RND.nextInt(1000)==0){
 			//b.setMessage(MessagePool.getMessage(b, MessagePool.Action.GameEnd));
 			toy.setLinkParent(null);
 			return UpdateState.ABORT;
@@ -151,7 +148,7 @@ public class PredatorsGameEvent extends EventPacket implements java.io.Serializa
 
 		//待機時間
 		if(tick>=0){
-			if(b.canflyCheck() && rnd.nextBoolean()){
+			if(b.canflyCheck() && SimYukkuri.RND.nextBoolean()){
 				FlyGame = true;
 			}
 			else{
@@ -166,9 +163,9 @@ public class PredatorsGameEvent extends EventPacket implements java.io.Serializa
 		//おもちゃをつかんでるとき
 		if(grabbing){
 			//おもちゃのセリフ
-			if(rnd.nextInt(8)==0){
+			if(SimYukkuri.RND.nextInt(8)==0){
 				toy.setForceFace(ImageCode.CRYING.ordinal());
-				if(rnd.nextBoolean() && toy.getZ()>0) toy.setPikoMessage(MessagePool.getMessage(toy, MessagePool.Action.Flying),true);
+				if(SimYukkuri.RND.nextBoolean() && toy.getZ()>0) toy.setPikoMessage(MessagePool.getMessage(toy, MessagePool.Action.Flying),true);
 				else toy.setPikoMessage(MessagePool.getMessage(toy, MessagePool.Action.DontPlayMe),true);
 			}
 			// 高度に達してたら落とす
@@ -180,7 +177,7 @@ public class PredatorsGameEvent extends EventPacket implements java.io.Serializa
 					return UpdateState.FORCE_EXEC;
 				}
 				//ランダムで落とす
-				if(rnd.nextInt(20)== 0){
+				if(SimYukkuri.RND.nextInt(20)== 0){
 					grabbing = false;
 					b.setForceFace(ImageCode.SMILE.ordinal());
 					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.DropYukkuri));
@@ -194,12 +191,12 @@ public class PredatorsGameEvent extends EventPacket implements java.io.Serializa
 				//それ以外は空中でいじめてダメージ
 				else{
 					b.moveTo(b.getX(), b.getY(), Translate.getFlyHeightLimit());
-					if(rnd.nextInt(12)==0){
-						if(b.isRude() && rnd.nextBoolean())b.setForceFace(ImageCode.RUDE.ordinal());
+					if(SimYukkuri.RND.nextInt(12)==0){
+						if(b.isRude() && SimYukkuri.RND.nextBoolean())b.setForceFace(ImageCode.RUDE.ordinal());
 						else b.setForceFace(ImageCode.SMILE.ordinal());
 						toy.setForceFace(ImageCode.PAIN.ordinal());
 						toy.setPikoMessage(MessagePool.getMessage(toy, MessagePool.Action.Scream),true);
-						if(rnd.nextInt(100)==0)toy.bodyInjure();
+						if(SimYukkuri.RND.nextInt(100)==0)toy.bodyInjure();
 						toy.addDamage(15);
 					}
 				}
@@ -227,7 +224,7 @@ public class PredatorsGameEvent extends EventPacket implements java.io.Serializa
 		if ((b.getStepDist() + 2) >= Translate.distance(b.getX(), b.getY(), toy.getX(),toy.getY())) {
 			//空中で遊ぶ場合はつかむ
 			if(FlyGame){
-				if(b.isRude() && rnd.nextBoolean())b.setForceFace(ImageCode.RUDE.ordinal());
+				if(b.isRude() && SimYukkuri.RND.nextBoolean())b.setForceFace(ImageCode.RUDE.ordinal());
 				else b.setForceFace(ImageCode.SMILE.ordinal());
 				b.setMessage(MessagePool.getMessage(b, MessagePool.Action.CaughtYou),true);
 				toy.setLinkParent(b);
@@ -237,7 +234,7 @@ public class PredatorsGameEvent extends EventPacket implements java.io.Serializa
 			//体当たりで遊ぶ
 			else{
 				//b.setMessage(MessagePool.getMessage(b, MessagePool.Action.PlayTreasure));
-				if(rnd.nextBoolean())b.setForceFace(ImageCode.RUDE.ordinal());
+				if(SimYukkuri.RND.nextBoolean())b.setForceFace(ImageCode.RUDE.ordinal());
 				else b.setForceFace(ImageCode.SMILE.ordinal());
 				toy.strikeByYukkuri(b, this,false);
 				if(b.canflyCheck()) b.moveTo(b.getX(), b.getY(), Translate.getFlyHeightLimit());
@@ -248,11 +245,11 @@ public class PredatorsGameEvent extends EventPacket implements java.io.Serializa
 		//非接触状態なら向かう
 		else{
 			b.moveTo(toy.getX(), toy.getY(), toy.getZ() /*Translate.getFlyHeightLimit()*/);
-			if(rnd.nextInt(10)==0){
-				if(b.isRude() && rnd.nextBoolean())b.setForceFace(ImageCode.RUDE.ordinal());
+			if(SimYukkuri.RND.nextInt(10)==0){
+				if(b.isRude() && SimYukkuri.RND.nextBoolean())b.setForceFace(ImageCode.RUDE.ordinal());
 				else b.setForceFace(ImageCode.SMILE.ordinal());
 			}
-			if(rnd.nextInt(15)==0)b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HeyYouWait));
+			if(SimYukkuri.RND.nextInt(15)==0)b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HeyYouWait));
 			toy.stay();
 		}
 
@@ -288,7 +285,7 @@ public class PredatorsGameEvent extends EventPacket implements java.io.Serializa
 			tick2 = 0;
 			FoodLogic.eatFood(b, Food.FoodType.BODY, Math.min(b.getEatAmount(), toy.getBodyAmount()));
 			toy.eatBody(Math.min(b.getEatAmount(), toy.getBodyAmount()));
-			if (toy.isSick() && rnd.nextBoolean()) b.addSickPeriod(100);
+			if (toy.isSick() && SimYukkuri.RND.nextBoolean()) b.addSickPeriod(100);
 			if(toy.isDead()) {
 				toy.setMessage(MessagePool.getMessage(toy, MessagePool.Action.Dead));
 				toy.setLinkParent(null);

@@ -136,7 +136,7 @@ public class Reimu extends Body implements java.io.Serializable {
 				}
 
 				if (nOtherVerCount != 0) {
-					int nRndIndex = RND.nextInt(nOtherVerCount + 1);
+					int nRndIndex = SimYukkuri.RND.nextInt(nOtherVerCount + 1);
 					anImageVerStateCtrlNagasi[type][0] = nRndIndex;
 					layer.image[index] = imagesNagasi[type][direction
 							* directionOffsetNagasi[type][0]][getBodyAgeState().ordinal()][nRndIndex];
@@ -175,7 +175,7 @@ public class Reimu extends Body implements java.io.Serializable {
 	public void execTransform() {
 		// でいぶ化
 		synchronized (SimYukkuri.lock) {
-			List<Body> bodyList = SimYukkuri.world.currentMap.body;
+			List<Body> bodyList = SimYukkuri.world.getCurrentMap().body;
 			bodyList.remove(this);
 			Body to = new Deibu(getX(), getY(), getZ(), getBodyAgeState(), null, null);
 			try {
@@ -207,7 +207,7 @@ public class Reimu extends Body implements java.io.Serializable {
 		// 大人であり、夫がいて夫がゲスではなく、自身がゲスではない
 		Body partner = getPartner();
 		if (isAdult() && partner != null && !partner.isRude() && isRude()) {
-			if (RND.nextInt(1000) == 0) {
+			if (SimYukkuri.RND.nextInt(1000) == 0) {
 				return this;
 			}
 		}
@@ -219,7 +219,7 @@ public class Reimu extends Body implements java.io.Serializable {
 				return this;
 			}
 			//あとは1/2。
-			else if (RND.nextBoolean()) {
+			else if (SimYukkuri.RND.nextBoolean()) {
 				return this;
 			}
 		}
@@ -513,7 +513,7 @@ public class Reimu extends Body implements java.io.Serializable {
 			return;
 		if (getPlaying() != null)
 			return;
-		int p = RND.nextInt(50);
+		int p = SimYukkuri.RND.nextInt(50);
 		//7/50でキリッ
 		if (p <= 6) {
 			getInVain(true);
@@ -551,7 +551,7 @@ public class Reimu extends Body implements java.io.Serializable {
 		else if (p <= 39) {
 			if (ToyLogic.checkToy(this)) {
 				setPlaying(PlayStyle.BALL);
-				playingLimit = 150 + RND.nextInt(100) - 49;
+				playingLimit = 150 + SimYukkuri.RND.nextInt(100) - 49;
 				return;
 			} else
 				killTime();
@@ -560,7 +560,7 @@ public class Reimu extends Body implements java.io.Serializable {
 		else if (p <= 42) {
 			if (ToyLogic.checkTrampoline(this)) {
 				setPlaying(PlayStyle.TRAMPOLINE);
-				playingLimit = 150 + RND.nextInt(100) - 49;
+				playingLimit = 150 + SimYukkuri.RND.nextInt(100) - 49;
 				return;
 			} else
 				killTime();
@@ -569,13 +569,13 @@ public class Reimu extends Body implements java.io.Serializable {
 		else if (p <= 43) {
 			if (ToyLogic.checkSui(this)) {
 				setPlaying(PlayStyle.SUI);
-				playingLimit = 150 + RND.nextInt(100) - 49;
+				playingLimit = 150 + SimYukkuri.RND.nextInt(100) - 49;
 				return;
 			} else
 				killTime();
 		} else {
 			// おくるみありで汚れていない場合
-			if (isHasPants() && !isDirty() && RND.nextInt(5) == 0) {
+			if (isHasPants() && !isDirty() && SimYukkuri.RND.nextInt(5) == 0) {
 				setMessage(MessagePool.getMessage(this, MessagePool.Action.RelaxOkurumi));
 			} else {
 				setMessage(MessagePool.getMessage(this, MessagePool.Action.Relax));
@@ -596,7 +596,7 @@ public class Reimu extends Body implements java.io.Serializable {
 	}
 	@Override
 	public void tuneParameters() {
-		/*if (rnd.nextBoolean()) {
+		/*if (SimYukkuri.RND.nextBoolean()) {
 		motherhood = true;
 		}*/
 		double factor = Math.random() * 2 + 1;
@@ -621,9 +621,9 @@ public class Reimu extends Body implements java.io.Serializable {
 		PREGPERIOD *= factor;
 		SLEEPPERIOD *= factor;
 		ACTIVEPERIOD *= factor;
-		sameDest = RND.nextInt(20) + 20;
+		sameDest = SimYukkuri.RND.nextInt(20) + 20;
 		DECLINEPERIOD *= (Math.random() + 0.5);
-		ROBUSTNESS = RND.nextInt(10) + 1;
+		ROBUSTNESS = SimYukkuri.RND.nextInt(10) + 1;
 		//EYESIGHT /= 4;
 		factor = Math.random() + 0.5;
 		STRENGTH[AgeState.ADULT.ordinal()] *= factor;

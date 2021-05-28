@@ -63,7 +63,7 @@ public class Toy extends ObjEX implements java.io.Serializable {
 	
 	@Override
 	public void removeListData(){
-		SimYukkuri.world.currentMap.toy.remove(this);
+		SimYukkuri.world.getCurrentMap().toy.remove(this);
 	}
 
 	@Override
@@ -109,7 +109,7 @@ public class Toy extends ObjEX implements java.io.Serializable {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		SimYukkuri.world.currentMap.toy.add(this);
+		SimYukkuri.world.getCurrentMap().toy.add(this);
 		objType = Type.OBJECT;
 		objEXType = ObjEXType.TOY;
 		

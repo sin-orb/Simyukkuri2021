@@ -1,7 +1,6 @@
 package src.event;
 
-import java.util.Random;
-
+import src.SimYukkuri;
 import src.base.Body;
 import src.base.EventPacket;
 import src.base.Obj;
@@ -19,8 +18,8 @@ import src.system.MessagePool;
 public class CutPenipeniEvent extends EventPacket implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
-	Random rnd = new Random();
-	int tick = 0 ;
+	int tick = 0;
+
 	/**
 	 * コンストラクタ.
 	 */
@@ -35,7 +34,8 @@ public class CutPenipeniEvent extends EventPacket implements java.io.Serializabl
 	public boolean checkEventResponse(Body b) {
 
 		priority = EventPriority.HIGH;
-		if(b == getFrom())return true;
+		if (b == getFrom())
+			return true;
 		return false;
 	}
 
@@ -48,7 +48,7 @@ public class CutPenipeniEvent extends EventPacket implements java.io.Serializabl
 	// UpdateState.ABORTを返すとイベント終了
 	@Override
 	public UpdateState update(Body b) {
-		if(b.isUnBirth()){
+		if (b.isUnBirth()) {
 			b.wakeup();
 			// ぺにぺ二があれば切断
 			b.setbPenipeniCutted(true);
@@ -65,8 +65,8 @@ public class CutPenipeniEvent extends EventPacket implements java.io.Serializabl
 			b.setCanTalk(false);
 			return UpdateState.FORCE_EXEC;
 		}
-		
-		if(tick == 0) {
+
+		if (tick == 0) {
 			b.wakeup();
 			// ぺにぺ二があれば切断
 			b.setbPenipeniCutted(true);
@@ -80,19 +80,19 @@ public class CutPenipeniEvent extends EventPacket implements java.io.Serializabl
 			b.addDamage(50);
 			b.setLockmove(true);
 			b.setForceFace(ImageCode.CUTPENIPENI.ordinal());
-		}
-		else if(tick == 20) {
+		} else if (tick == 20) {
 			// 驚く
 			b.setLockmove(false);
-			if( b.isNotNYD() ){
+			if (b.isNotNYD()) {
 				b.setForceFace(ImageCode.SURPRISE.ordinal());
-				if(rnd.nextInt(2)==0)b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.Scream2), 30, true, false);
-				else b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.Surprise), 30, true, false);
+				if (SimYukkuri.RND.nextInt(2) == 0)
+					b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.Scream2), 30, true, false);
+				else
+					b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.Surprise), 30, true, false);
 			}
-		}
-		else if(tick == 40) {
+		} else if (tick == 40) {
 			// 反応する
-			if( b.isNotNYD() ){
+			if (b.isNotNYD()) {
 				b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.PenipeniCutting), 50, true, true);
 				b.setHappiness(Happiness.VERY_SAD);
 				b.setForceFace(ImageCode.CRYING.ordinal());
@@ -102,26 +102,26 @@ public class CutPenipeniEvent extends EventPacket implements java.io.Serializabl
 			b.addLovePlayer(-500);
 			b.stay(20);
 			// ゲスほどストレスを受ける
-			switch(b.getAttitude()) {
-				default:
-					break;
-				case VERY_NICE:
-					b.addStress(b.getStressLimit()/10);
-					break;
-				case NICE:
-					b.addStress(b.getStressLimit()/8);
-					break;
-				case AVERAGE:
-					b.addStress(b.getStressLimit()/5);
-					break;
-				case SHITHEAD:
-				case SUPER_SHITHEAD:
-					b.addStress(b.getStressLimit()/3);
-					break;
+			switch (b.getAttitude()) {
+			default:
+				break;
+			case VERY_NICE:
+				b.addStress(b.getStressLimit() / 10);
+				break;
+			case NICE:
+				b.addStress(b.getStressLimit() / 8);
+				break;
+			case AVERAGE:
+				b.addStress(b.getStressLimit() / 5);
+				break;
+			case SHITHEAD:
+			case SUPER_SHITHEAD:
+				b.addStress(b.getStressLimit() / 3);
+				break;
 			}
-		}
-		else if(tick == 70) {
-			if(rnd.nextBoolean()) b.doYunnyaa(true);
+		} else if (tick == 70) {
+			if (SimYukkuri.RND.nextBoolean())
+				b.doYunnyaa(true);
 			return UpdateState.FORCE_EXEC;
 		}
 		tick++;
@@ -134,7 +134,7 @@ public class CutPenipeniEvent extends EventPacket implements java.io.Serializabl
 	public boolean execute(Body b) {
 		return true;
 	}
-	
+
 	// イベント終了処理
 	@Override
 	public void end(Body b) {
@@ -143,7 +143,7 @@ public class CutPenipeniEvent extends EventPacket implements java.io.Serializabl
 		b.setHappiness(Happiness.VERY_SAD);
 		b.setLockmove(false);
 	}
-	
+
 	@Override
 	public String toString() {
 		return "ぺにぺにがぁあ！";

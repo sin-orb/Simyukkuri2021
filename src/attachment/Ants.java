@@ -79,11 +79,11 @@ public class Ants extends Attachment {
 
 	@Override
 	public BufferedImage getImage(Body b) {
-		int Ants = b.getNumOfAnts();
-		if(Ants>= b.getDamageLimit()*2/3) {
+		int ants = b.getNumOfAnts();
+		if(ants>= b.getDamageLimit()*2/3) {
 			return images[b.getBodyAgeState().ordinal()][2];
 		}
-		else if(Ants>= b.getDamageLimit()/3) {
+		else if(ants>= b.getDamageLimit()/3) {
 			return images[b.getBodyAgeState().ordinal()][1];
 		}
 		return images[b.getBodyAgeState().ordinal()][0];

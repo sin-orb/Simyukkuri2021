@@ -46,10 +46,9 @@ import src.system.IconPool;
 import src.system.MainCommandUI;
 
 /**********************************************
-	各種コマンドメニューのまとめ
-
-
-*/
+ * 各種コマンドメニューのまとめ
+ * Ctrl+Shift+Fでのフォーマット禁止
+ */
 public class GadgetMenu {
 
 	/** ガジェットの効果対象*/
@@ -131,8 +130,9 @@ public class GadgetMenu {
 	 *  %sft : SHIFTキー
 	 *  %ctl : CTRLキー*/
 	public static enum HelpContext {
-		SHIFT_LMB_ALL("%sft,%mlb,全体実行"), SHIFT_LMB_ALL_ONOFF("%sft,%mlb,全体ON/OFF"), CTRL_LMB_ALL_INVERT(
-				"%ctl,%mlb,全体反転"),
+		SHIFT_LMB_ALL("%sft,%mlb,全体実行"), 
+		SHIFT_LMB_ALL_ONOFF("%sft,%mlb,全体ON/OFF"),
+		CTRL_LMB_ALL_INVERT("%ctl,%mlb,全体反転"),
 				;
 
 		private String name;
@@ -172,487 +172,153 @@ public class GadgetMenu {
 	/** 全メニュー項目*/
 	public static enum GadgetList {
 		// メインカテゴリ
-		TOOL(MainCategoryName.MAIN, "道具", null, 0, null, null, null, null), TOOL2(MainCategoryName.MAIN, "道具2", null, 0,
-				null, null, null, null), AMPOULE(MainCategoryName.MAIN, "アンプル", null, 0, null, null, null, null), FOODS(
-						MainCategoryName.MAIN, "えさ", null, 0, null, null, null,
-						null), CLEAN(MainCategoryName.MAIN, "清掃", null, 0, null, null, null, null), ACCESSORY(
-								MainCategoryName.MAIN, "おかざり", null, 0, null, null, null,
-								null), PANTS(MainCategoryName.MAIN, "おくるみ", null, 0, null, null, null, null), FLOOR(
-										MainCategoryName.MAIN, "床設置", null, 0, null, null, null,
-										null), BARRIER(MainCategoryName.MAIN, "フィールド", null, 0, null, null, null,
-												null), TOYS(MainCategoryName.MAIN, "おもちゃ", null, 0, null, null, null,
-														null), CONVEYOR(MainCategoryName.MAIN, "ベルトコンベア", null, 0, null,
-																null, null, null), VOICE(MainCategoryName.MAIN, "声掛け",
-																		null, 0, null, null, null,
-																		null), TEST(MainCategoryName.MAIN, "テスト", null,
-																				0, null, null, null, null),
+		TOOL(MainCategoryName.MAIN, "道具", null, 0, null, null, null, null), TOOL2(MainCategoryName.MAIN, "道具2", null, 0,null, null, null, null),
+		AMPOULE(MainCategoryName.MAIN, "アンプル", null, 0, null, null, null, null), 
+		FOODS(MainCategoryName.MAIN, "えさ", null, 0, null, null, null,null),
+		CLEAN(MainCategoryName.MAIN, "清掃", null, 0, null, null, null, null),
+		ACCESSORY(MainCategoryName.MAIN, "おかざり", null, 0, null, null, null,null),
+		PANTS(MainCategoryName.MAIN, "おくるみ", null, 0, null, null, null, null), 
+		FLOOR(MainCategoryName.MAIN, "床設置", null, 0, null, null, null,null),
+		BARRIER(MainCategoryName.MAIN, "フィールド", null, 0, null, null, null,null),
+		TOYS(MainCategoryName.MAIN, "おもちゃ", null, 0, null, null, null,null),
+		CONVEYOR(MainCategoryName.MAIN, "ベルトコンベア", null, 0, null,null, null, null),
+		VOICE(MainCategoryName.MAIN, "声掛け",null, 0, null, null, null,null),
+		TEST(MainCategoryName.MAIN, "テスト", null,0, null, null, null, null),
 		// ツールカテゴリ
-		PUNISH(MainCategoryName.TOOL, "おしおき", null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK,
-				HelpContext.SHIFT_LMB_ALL, null), SNAPPING(MainCategoryName.TOOL, "でこぴん", null, 0,
-						ActionTarget.BODY_AND_GADGET, ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL,
-						null), PICKUP(MainCategoryName.TOOL, "持ち上げる", null, 0, ActionTarget.BODY_AND_GADGET,
-								ActionControl.LEFT_DRAG, null, null), HOLD(MainCategoryName.TOOL, "押さえる", null, 0,
-										ActionTarget.BODY, ActionControl.LEFT_CLICK, null,
-										null), SURISURI(MainCategoryName.TOOL, "すりすり", null, 0, ActionTarget.BODY,
-												ActionControl.LEFT_DRAG, null, null), VIBRATOR(MainCategoryName.TOOL,
-														"バイブ", null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK,
-														HelpContext.SHIFT_LMB_ALL, null), PENICUT(MainCategoryName.TOOL,
-																"ぺにぺに切断", null, 0, ActionTarget.BODY,
-																ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL,
-																null), JUICE(MainCategoryName.TOOL, "ジュース", null, 0,
-																		ActionTarget.BODY, ActionControl.LEFT_CLICK,
-																		HelpContext.SHIFT_LMB_ALL,
-																		null), Medical_JUICE(MainCategoryName.TOOL,
-																				"回復用ジュース", null, 0, ActionTarget.BODY,
-																				ActionControl.LEFT_CLICK,
-																				HelpContext.SHIFT_LMB_ALL,
-																				null), LEMON_SPLAY(
-																						MainCategoryName.TOOL,
-																						"ラムネスプレー", null, 0,
-																						ActionTarget.BODY,
-																						ActionControl.LEFT_CLICK,
-																						HelpContext.SHIFT_LMB_ALL,
-																						null), Pheromone_SPLAY(
-																								MainCategoryName.TOOL,
-																								"フェロモンスプレー", null, 0,
-																								ActionTarget.BODY,
-																								ActionControl.LEFT_CLICK,
-																								HelpContext.SHIFT_LMB_ALL,
-																								null), HAMMER(
-																										MainCategoryName.TOOL,
-																										"ハンマー", null, 0,
-																										ActionTarget.BODY,
-																										ActionControl.LEFT_CLICK,
-																										HelpContext.SHIFT_LMB_ALL,
-																										null), GATHERINJECTINTO(
-																												MainCategoryName.TOOL,
-																												"精子餡採取・注入",
-																												null, 0,
-																												ActionTarget.BODY,
-																												ActionControl.LEFT_CLICK,
-																												null,
-																												null), DRIPSPERM(
-																														MainCategoryName.TOOL,
-																														"精子餡採取・滴下",
-																														null,
-																														0,
-																														ActionTarget.BODY,
-																														ActionControl.LEFT_CLICK,
-																														null,
-																														null), PUNCH(
-																																MainCategoryName.TOOL,
-																																"殴る",
-																																null,
-																																0,
-																																ActionTarget.BODY,
-																																ActionControl.LEFT_CLICK,
-																																null,
-																																null), GODHAND(
-																																		MainCategoryName.TOOL,
-																																		"ゆ虐神拳",
-																																		null,
-																																		0,
-																																		ActionTarget.BODY,
-																																		ActionControl.LEFT_CLICK,
-																																		null,
-																																		null), PEAL(
-																																				MainCategoryName.TOOL,
-																																				"皮むき",
-																																				null,
-																																				0,
-																																				ActionTarget.BODY,
-																																				ActionControl.LEFT_CLICK,
-																																				null,
-																																				null), Blind(
-																																						MainCategoryName.TOOL,
-																																						"目抜き",
-																																						null,
-																																						0,
-																																						ActionTarget.BODY,
-																																						ActionControl.LEFT_CLICK,
-																																						null,
-																																						null), SHUTMOUTH(
-																																								MainCategoryName.TOOL,
-																																								"口封じ",
-																																								null,
-																																								0,
-																																								ActionTarget.BODY,
-																																								ActionControl.LEFT_CLICK,
-																																								null,
-																																								null), HAIRCUT(
-																																										MainCategoryName.TOOL,
-																																										"むしる",
-																																										null,
-																																										0,
-																																										ActionTarget.BODY,
-																																										ActionControl.LEFT_CLICK,
-																																										null,
-																																										null), PACK(
-																																												MainCategoryName.TOOL,
-																																												"饅頭化",
-																																												null,
-																																												0,
-																																												ActionTarget.BODY,
-																																												ActionControl.LEFT_CLICK,
-																																												null,
-																																												null), STOMP(
-																																														MainCategoryName.TOOL,
-																																														"踏み潰す",
-																																														null,
-																																														0,
-																																														ActionTarget.BODY,
-																																														ActionControl.LEFT_CLICK,
-																																														null,
-																																														null),
+		PUNISH(MainCategoryName.TOOL, "おしおき", null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK,HelpContext.SHIFT_LMB_ALL, null),
+		SNAPPING(MainCategoryName.TOOL, "でこぴん", null, 0,ActionTarget.BODY_AND_GADGET, ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL,null),
+		PICKUP(MainCategoryName.TOOL, "持ち上げる", null, 0, ActionTarget.BODY_AND_GADGET,ActionControl.LEFT_DRAG, null, null),
+		HOLD(MainCategoryName.TOOL, "押さえる", null, 0,ActionTarget.BODY, ActionControl.LEFT_CLICK, null,null),
+		SURISURI(MainCategoryName.TOOL, "すりすり", null, 0, ActionTarget.BODY,ActionControl.LEFT_DRAG, null, null),
+		VIBRATOR(MainCategoryName.TOOL,"バイブ", null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK,HelpContext.SHIFT_LMB_ALL, null), 
+		PENICUT(MainCategoryName.TOOL,"ぺにぺに切断", null, 0, ActionTarget.BODY,ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL,null),
+		JUICE(MainCategoryName.TOOL, "ジュース", null, 0,ActionTarget.BODY, ActionControl.LEFT_CLICK,HelpContext.SHIFT_LMB_ALL,null),
+		Medical_JUICE(MainCategoryName.TOOL,"回復用ジュース", null, 0, ActionTarget.BODY,ActionControl.LEFT_CLICK,HelpContext.SHIFT_LMB_ALL,null),
+		LEMON_SPLAY(MainCategoryName.TOOL,"ラムネスプレー", null, 0,ActionTarget.BODY,ActionControl.LEFT_CLICK,HelpContext.SHIFT_LMB_ALL,null),
+		Pheromone_SPLAY(MainCategoryName.TOOL,"フェロモンスプレー", null, 0,ActionTarget.BODY,ActionControl.LEFT_CLICK,HelpContext.SHIFT_LMB_ALL,null),
+		HAMMER(MainCategoryName.TOOL,"ハンマー", null, 0,ActionTarget.BODY,ActionControl.LEFT_CLICK,HelpContext.SHIFT_LMB_ALL,null), 
+		GATHERINJECTINTO(MainCategoryName.TOOL,"精子餡採取・注入",null, 0,ActionTarget.BODY,ActionControl.LEFT_CLICK,null,null),
+		DRIPSPERM(MainCategoryName.TOOL,"精子餡採取・滴下",null,0,ActionTarget.BODY,ActionControl.LEFT_CLICK,null,null),
+		PUNCH(MainCategoryName.TOOL,"殴る",null,0,ActionTarget.BODY,ActionControl.LEFT_CLICK,null,null),
+		GODHAND(MainCategoryName.TOOL,"ゆ虐神拳",null,0,ActionTarget.BODY,ActionControl.LEFT_CLICK,null,null),
+		PEAL(MainCategoryName.TOOL,"皮むき",null,0,ActionTarget.BODY,ActionControl.LEFT_CLICK,null,null),
+		Blind(MainCategoryName.TOOL,"目抜き",null,0,ActionTarget.BODY,ActionControl.LEFT_CLICK,	null,null),
+		SHUTMOUTH(MainCategoryName.TOOL,"口封じ",null,0,ActionTarget.BODY,ActionControl.LEFT_CLICK,null,null),
+		HAIRCUT(MainCategoryName.TOOL,"むしる",null,0,ActionTarget.BODY,ActionControl.LEFT_CLICK,null,null),
+		PACK(MainCategoryName.TOOL,"饅頭化",null,0,ActionTarget.BODY,ActionControl.LEFT_CLICK,null,null),
+		STOMP(MainCategoryName.TOOL,"踏み潰す",null,0,ActionTarget.BODY,ActionControl.LEFT_CLICK,null,null),
 		// ツールカテゴリ2
-		BRAID_PLUCK(MainCategoryName.TOOL2, "ぴこぴこちぎり", null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK,
-				HelpContext.SHIFT_LMB_ALL, null), ANAL_CLOSE(MainCategoryName.TOOL2, "あにゃる閉鎖", null, 0,
-						ActionTarget.BODY, ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL_ONOFF,
-						HelpContext.CTRL_LMB_ALL_INVERT), STALK_CUT(MainCategoryName.TOOL2, "茎去勢", null, 0,
-								ActionTarget.BODY, ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL_ONOFF,
-								HelpContext.CTRL_LMB_ALL_INVERT), CASTRATION(MainCategoryName.TOOL2, "胎生去勢", null, 0,
-										ActionTarget.BODY, ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL_ONOFF,
-										HelpContext.CTRL_LMB_ALL_INVERT), STALK_UNPLUG(MainCategoryName.TOOL2, "茎ひっこぬき",
-												null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK, null,
-												null), LIGHTER(MainCategoryName.TOOL2, "ライター", null, 0,
-														ActionTarget.BODY, ActionControl.LEFT_CLICK,
-														HelpContext.SHIFT_LMB_ALL, null), WATER(MainCategoryName.TOOL2,
-																"水", null, 0, ActionTarget.BODY,
-																ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL,
-																null), NEEDLE(MainCategoryName.TOOL2, "針", null, 0,
-																		ActionTarget.BODY, ActionControl.LEFT_CLICK,
-																		HelpContext.SHIFT_LMB_ALL_ONOFF,
-																		HelpContext.CTRL_LMB_ALL_INVERT), BURY(
-																				MainCategoryName.TOOL2, "畑に埋める", null,
-																				0, ActionTarget.BODY,
-																				ActionControl.LEFT_CLICK,
-																				HelpContext.SHIFT_LMB_ALL_ONOFF,
-																				HelpContext.CTRL_LMB_ALL_INVERT), SET_SICK(
-																						MainCategoryName.TOOL2, "ゆかび治療",
-																						null, 0, ActionTarget.BODY,
-																						ActionControl.LEFT_CLICK, null,
-																						null), SET_RAPER(
-																								MainCategoryName.TOOL2,
-																								"れいぱー治療", null, 0,
-																								ActionTarget.BODY,
-																								ActionControl.LEFT_CLICK,
-																								null, null),
+		BRAID_PLUCK(MainCategoryName.TOOL2, "ぴこぴこちぎり", null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK,	HelpContext.SHIFT_LMB_ALL, null),
+		ANAL_CLOSE(MainCategoryName.TOOL2, "あにゃる閉鎖", null, 0,ActionTarget.BODY, ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL_ONOFF,HelpContext.CTRL_LMB_ALL_INVERT),
+		STALK_CUT(MainCategoryName.TOOL2, "茎去勢", null, 0,ActionTarget.BODY, ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL_ONOFF,HelpContext.CTRL_LMB_ALL_INVERT),
+		CASTRATION(MainCategoryName.TOOL2, "胎生去勢", null, 0,ActionTarget.BODY, ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL_ONOFF,HelpContext.CTRL_LMB_ALL_INVERT),
+		STALK_UNPLUG(MainCategoryName.TOOL2, "茎ひっこぬき",null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK, null,null), 
+		LIGHTER(MainCategoryName.TOOL2, "ライター", null, 0,ActionTarget.BODY, ActionControl.LEFT_CLICK,HelpContext.SHIFT_LMB_ALL, null),
+		WATER(MainCategoryName.TOOL2,"水", null, 0, ActionTarget.BODY,ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL,null),
+		NEEDLE(MainCategoryName.TOOL2, "針", null, 0,ActionTarget.BODY, ActionControl.LEFT_CLICK,HelpContext.SHIFT_LMB_ALL_ONOFF,HelpContext.CTRL_LMB_ALL_INVERT),
+		BURY(MainCategoryName.TOOL2, "畑に埋める", null,0, ActionTarget.BODY,ActionControl.LEFT_CLICK,HelpContext.SHIFT_LMB_ALL_ONOFF,HelpContext.CTRL_LMB_ALL_INVERT), 
+		SET_SICK(MainCategoryName.TOOL2, "ゆかび治療",null, 0, ActionTarget.BODY,ActionControl.LEFT_CLICK, null,null),
+		SET_RAPER(MainCategoryName.TOOL2,"れいぱー治療", null, 0,ActionTarget.BODY,ActionControl.LEFT_CLICK,null, null),
 		//	 アンプルカテゴリ
-		ORANGE_AMP(MainCategoryName.AMPOULE, "オレンジアンプル", null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK,
-				HelpContext.SHIFT_LMB_ALL_ONOFF, HelpContext.CTRL_LMB_ALL_INVERT), ACCEL_AMP(MainCategoryName.AMPOULE,
-						"成長促進アンプル", null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK,
-						HelpContext.SHIFT_LMB_ALL_ONOFF,
-						HelpContext.CTRL_LMB_ALL_INVERT), STOP_AMP(MainCategoryName.AMPOULE, "成長抑制アンプル", null, 0,
-								ActionTarget.BODY, ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL_ONOFF,
-								HelpContext.CTRL_LMB_ALL_INVERT), HUNGRY_AMP(MainCategoryName.AMPOULE, "飢餓誘発アンプル", null,
-										0, ActionTarget.BODY, ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL_ONOFF,
-										HelpContext.CTRL_LMB_ALL_INVERT), VERYSHIT_AMP(MainCategoryName.AMPOULE,
-												"うんうんアンプル", null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK,
-												HelpContext.SHIFT_LMB_ALL_ONOFF,
-												HelpContext.CTRL_LMB_ALL_INVERT), POISON_AMP(MainCategoryName.AMPOULE,
-														"毒アンプル", null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK,
-														HelpContext.SHIFT_LMB_ALL_ONOFF,
-														HelpContext.CTRL_LMB_ALL_INVERT), BREEDING_AMP(
-																MainCategoryName.AMPOULE, "精子アンプル", null, 0,
-																ActionTarget.BODY, ActionControl.LEFT_CLICK,
-																HelpContext.SHIFT_LMB_ALL_ONOFF,
-																HelpContext.CTRL_LMB_ALL_INVERT), ANYD_AMP(
-																		MainCategoryName.AMPOULE, "非ゆっくり症防止アンプル", null,
-																		0, ActionTarget.BODY, ActionControl.LEFT_CLICK,
-																		HelpContext.SHIFT_LMB_ALL_ONOFF,
-																		HelpContext.CTRL_LMB_ALL_INVERT),
+		ORANGE_AMP(MainCategoryName.AMPOULE, "オレンジアンプル", null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK,HelpContext.SHIFT_LMB_ALL_ONOFF, HelpContext.CTRL_LMB_ALL_INVERT),
+		ACCEL_AMP(MainCategoryName.AMPOULE,"成長促進アンプル", null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK,HelpContext.SHIFT_LMB_ALL_ONOFF,HelpContext.CTRL_LMB_ALL_INVERT), 
+		STOP_AMP(MainCategoryName.AMPOULE, "成長抑制アンプル", null, 0,ActionTarget.BODY, ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL_ONOFF,HelpContext.CTRL_LMB_ALL_INVERT),
+		HUNGRY_AMP(MainCategoryName.AMPOULE, "飢餓誘発アンプル", null,0, ActionTarget.BODY, ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL_ONOFF,HelpContext.CTRL_LMB_ALL_INVERT),
+		VERYSHIT_AMP(MainCategoryName.AMPOULE,"うんうんアンプル", null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK,HelpContext.SHIFT_LMB_ALL_ONOFF,HelpContext.CTRL_LMB_ALL_INVERT),
+		POISON_AMP(MainCategoryName.AMPOULE,"毒アンプル", null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK,HelpContext.SHIFT_LMB_ALL_ONOFF,HelpContext.CTRL_LMB_ALL_INVERT), 
+		BREEDING_AMP(MainCategoryName.AMPOULE, "精子アンプル", null, 0,ActionTarget.BODY, ActionControl.LEFT_CLICK,HelpContext.SHIFT_LMB_ALL_ONOFF,HelpContext.CTRL_LMB_ALL_INVERT),
+		ANYD_AMP(MainCategoryName.AMPOULE, "非ゆっくり症防止アンプル", null,0, ActionTarget.BODY, ActionControl.LEFT_CLICK,HelpContext.SHIFT_LMB_ALL_ONOFF,HelpContext.CTRL_LMB_ALL_INVERT),
 		// えさカテゴリ
-		NORMAL(MainCategoryName.FOODS, "ふつう", Food.class, 3, ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null,
-				null), BITTER(MainCategoryName.FOODS, "苦い", Food.class, 4, ActionTarget.TERRAIN,
-						ActionControl.LEFT_CLICK, null, null), LEMON_POP(MainCategoryName.FOODS, "ラムネ", Food.class, 5,
-								ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null, null), HOT(MainCategoryName.FOODS,
-										"辛い", Food.class, 6, ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null,
-										null), VIYUGRA(MainCategoryName.FOODS, "バイゆグラ", Food.class, 7,
-												ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null,
-												null), SWEETS1(MainCategoryName.FOODS, "あまあま(普通)", Food.class, 0,
-														ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null,
-														null), SWEETS2(MainCategoryName.FOODS, "あまあま(高級)", Food.class,
-																1, ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null,
-																null), WASTE(MainCategoryName.FOODS, "生ゴミ", Food.class,
-																		8, ActionTarget.TERRAIN,
-																		ActionControl.LEFT_CLICK, null,
-																		null), AUTO(MainCategoryName.FOODS, "自動給餌",
-																				AutoFeeder.class, 0,
-																				ActionTarget.TERRAIN,
-																				ActionControl.LEFT_CLICK, null, null),
+		NORMAL(MainCategoryName.FOODS, "ふつう", Food.class, 3, ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null,null),
+		BITTER(MainCategoryName.FOODS, "苦い", Food.class, 4, ActionTarget.TERRAIN,ActionControl.LEFT_CLICK, null, null),
+		LEMON_POP(MainCategoryName.FOODS, "ラムネ", Food.class, 5,ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null, null),
+		HOT(MainCategoryName.FOODS,"辛い", Food.class, 6, ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null,null),
+		VIYUGRA(MainCategoryName.FOODS, "バイゆグラ", Food.class, 7,ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null,null),
+		SWEETS1(MainCategoryName.FOODS, "あまあま(普通)", Food.class, 0,ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null,null),
+		SWEETS2(MainCategoryName.FOODS, "あまあま(高級)", Food.class,1, ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null,null),
+		WASTE(MainCategoryName.FOODS, "生ゴミ", Food.class,8, ActionTarget.TERRAIN,ActionControl.LEFT_CLICK, null,null),
+		AUTO(MainCategoryName.FOODS, "自動給餌",AutoFeeder.class, 0,ActionTarget.TERRAIN,ActionControl.LEFT_CLICK, null, null),
 		// 清掃カテゴリ
-		INDIVIDUAL(MainCategoryName.CLEAN, "個別", null, 0, ActionTarget.BODY_AND_GADGET, ActionControl.LEFT_CLICK, null,
-				null), YU_CLEAN(MainCategoryName.CLEAN, "全ゆ清掃", null, 0, ActionTarget.IMMEDIATE,
-						ActionControl.LEFT_CLICK, null, null), BODY(MainCategoryName.CLEAN, "死体", null, 0,
-								ActionTarget.IMMEDIATE, ActionControl.LEFT_CLICK, null,
-								null), SHIT(MainCategoryName.CLEAN, "うんうん", null, 0, ActionTarget.IMMEDIATE,
-										ActionControl.LEFT_CLICK, null, null), ETC(MainCategoryName.CLEAN, "その他", null,
-												0, ActionTarget.IMMEDIATE, ActionControl.LEFT_CLICK, null,
-												null), ALL(MainCategoryName.CLEAN, "全部", null, 0,
-														ActionTarget.IMMEDIATE, ActionControl.LEFT_CLICK, null, null),
+		INDIVIDUAL(MainCategoryName.CLEAN, "個別", null, 0, ActionTarget.BODY_AND_GADGET, ActionControl.LEFT_CLICK, null,null),
+		YU_CLEAN(MainCategoryName.CLEAN, "全ゆ清掃", null, 0, ActionTarget.IMMEDIATE,ActionControl.LEFT_CLICK, null, null),
+		BODY(MainCategoryName.CLEAN, "死体", null, 0,ActionTarget.IMMEDIATE, ActionControl.LEFT_CLICK, null,null),
+		SHIT(MainCategoryName.CLEAN, "うんうん", null, 0, ActionTarget.IMMEDIATE,ActionControl.LEFT_CLICK, null, null),
+		ETC(MainCategoryName.CLEAN, "その他", null,0, ActionTarget.IMMEDIATE, ActionControl.LEFT_CLICK, null,null),
+		ALL(MainCategoryName.CLEAN, "全部", null, 0,ActionTarget.IMMEDIATE, ActionControl.LEFT_CLICK, null, null),
 		// おかざりカテゴリ
-		OKAZARI_HIDE(MainCategoryName.ACCESSORY, "おかざり着脱", null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK,
-				HelpContext.SHIFT_LMB_ALL_ONOFF, HelpContext.CTRL_LMB_ALL_INVERT),
+		OKAZARI_HIDE(MainCategoryName.ACCESSORY, "おかざり着脱", null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK,HelpContext.SHIFT_LMB_ALL_ONOFF, HelpContext.CTRL_LMB_ALL_INVERT),
 		// おくるみカテゴリ
-		PANTS_NORMAL(MainCategoryName.PANTS, "おくるみ着脱", null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK,
-				HelpContext.SHIFT_LMB_ALL_ONOFF, HelpContext.CTRL_LMB_ALL_INVERT),
+		PANTS_NORMAL(MainCategoryName.PANTS, "おくるみ着脱", null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK,HelpContext.SHIFT_LMB_ALL_ONOFF, HelpContext.CTRL_LMB_ALL_INVERT),
 		// 床設置カテゴリ
-		TOILET(MainCategoryName.FLOOR, "トイレ", Toilet.class, 0, ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null,
-				null), BED(MainCategoryName.FLOOR, "ベッド", Bed.class, 0, ActionTarget.TERRAIN, ActionControl.LEFT_CLICK,
-						null, null), STICKY_PLATE(MainCategoryName.FLOOR, "粘着板", StickyPlate.class, 0,
-								ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null,
-								null), HOT_PLATE(MainCategoryName.FLOOR, "ホットプレート", HotPlate.class, 0,
-										ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null,
-										null), PROCESSER_PLATE(MainCategoryName.FLOOR, "加工プレート", ProcesserPlate.class,
-												0, ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null,
-												null), FOOD_MAKER(MainCategoryName.FLOOR, "フードメーカー", FoodMaker.class, 0,
-														ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null,
-														null), MIXER(MainCategoryName.FLOOR, "ミキサー", Mixer.class, 0,
-																ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null,
-																null), DIFFUSER(MainCategoryName.FLOOR, "ディフューザー",
-																		Diffuser.class, 0,
-																		ActionTarget.TERRAIN_AND_GADET,
-																		ActionControl.LEFT_CLICK, null,
-																		null), ORANGE_POOL(MainCategoryName.FLOOR,
-																				"オレンジプール", OrangePool.class, 0,
-																				ActionTarget.TERRAIN_AND_GADET,
-																				ActionControl.LEFT_CLICK, null,
-																				null), BREED_POOL(
-																						MainCategoryName.FLOOR, "養殖プール",
-																						BreedingPool.class, 0,
-																						ActionTarget.TERRAIN_AND_GADET,
-																						ActionControl.LEFT_CLICK, null,
-																						null), GARBAGE_CHUTE(
-																								MainCategoryName.FLOOR,
-																								"ダストシュート",
-																								GarbageChute.class, 0,
-																								ActionTarget.TERRAIN,
-																								ActionControl.LEFT_CLICK,
-																								null,
-																								null), MACHINE_PRESS(
-																										MainCategoryName.FLOOR,
-																										"プレス機",
-																										MachinePress.class,
-																										0,
-																										ActionTarget.TERRAIN,
-																										ActionControl.LEFT_CLICK,
-																										null,
-																										null), GENERATOR(
-																												MainCategoryName.FLOOR,
-																												"発電機",
-																												Generator.class,
-																												0,
-																												ActionTarget.TERRAIN,
-																												ActionControl.LEFT_CLICK,
-																												null,
-																												null), PRODUCT_CHUTE(
-																														MainCategoryName.FLOOR,
-																														"製品投入口",
-																														ProductChute.class,
-																														0,
-																														ActionTarget.TERRAIN,
-																														ActionControl.LEFT_CLICK,
-																														null,
-																														null),
+		TOILET(MainCategoryName.FLOOR, "トイレ", Toilet.class, 0, ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null,null),
+		BED(MainCategoryName.FLOOR, "ベッド", Bed.class, 0, ActionTarget.TERRAIN, ActionControl.LEFT_CLICK,null, null),
+		STICKY_PLATE(MainCategoryName.FLOOR, "粘着板", StickyPlate.class, 0,ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null,null),
+		HOT_PLATE(MainCategoryName.FLOOR, "ホットプレート", HotPlate.class, 0,ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null,null),
+		PROCESSER_PLATE(MainCategoryName.FLOOR, "加工プレート", ProcesserPlate.class,0, ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null,null),
+		FOOD_MAKER(MainCategoryName.FLOOR, "フードメーカー", FoodMaker.class, 0,ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null,null),
+		MIXER(MainCategoryName.FLOOR, "ミキサー", Mixer.class, 0,ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null,null),
+		DIFFUSER(MainCategoryName.FLOOR, "ディフューザー",Diffuser.class, 0,ActionTarget.TERRAIN_AND_GADET,ActionControl.LEFT_CLICK, null,null),
+		ORANGE_POOL(MainCategoryName.FLOOR,"オレンジプール", OrangePool.class, 0,ActionTarget.TERRAIN_AND_GADET,ActionControl.LEFT_CLICK, null,null),
+		BREED_POOL(MainCategoryName.FLOOR, "養殖プール",BreedingPool.class, 0,ActionTarget.TERRAIN_AND_GADET,ActionControl.LEFT_CLICK, null,null),
+		GARBAGE_CHUTE(MainCategoryName.FLOOR,"ダストシュート",GarbageChute.class, 0,ActionTarget.TERRAIN,ActionControl.LEFT_CLICK,null,null),
+		MACHINE_PRESS(MainCategoryName.FLOOR,"プレス機",MachinePress.class,0,ActionTarget.TERRAIN,ActionControl.LEFT_CLICK,null,null), 
+		GENERATOR(MainCategoryName.FLOOR,"発電機",Generator.class,0,ActionTarget.TERRAIN,ActionControl.LEFT_CLICK,null,null), 
+		PRODUCT_CHUTE(MainCategoryName.FLOOR,"製品投入口",ProductChute.class,0,ActionTarget.TERRAIN,ActionControl.LEFT_CLICK,null,null),
 		// フィールドカテゴリ
-		GAP_MINI(MainCategoryName.BARRIER, "段差(小)", null, 1, ActionTarget.TERRAIN, ActionControl.LEFT_MULTI_CLICK, null,
-				null), GAP_BIG(MainCategoryName.BARRIER, "段差(大)", null, 1, ActionTarget.TERRAIN,
-						ActionControl.LEFT_MULTI_CLICK, null, null), NET_MINI(MainCategoryName.BARRIER, "金網(小)", null,
-								1, ActionTarget.TERRAIN, ActionControl.LEFT_MULTI_CLICK, null,
-								null), NET_BIG(MainCategoryName.BARRIER, "金網(大)", null, 1, ActionTarget.TERRAIN,
-										ActionControl.LEFT_MULTI_CLICK, null, null), WALL(MainCategoryName.BARRIER, "壁",
-												null, 1, ActionTarget.TERRAIN, ActionControl.LEFT_MULTI_CLICK, null,
-												null), ITEM(MainCategoryName.BARRIER, "道具禁止", null, 1,
-														ActionTarget.TERRAIN, ActionControl.LEFT_MULTI_CLICK, null,
-														null), NoUNUN(MainCategoryName.BARRIER, "道具禁止(うんうん以外)", null, 1,
-																ActionTarget.TERRAIN, ActionControl.LEFT_MULTI_CLICK,
-																null, null), KEKKAI(MainCategoryName.BARRIER, "結界(笑)",
-																		null, 1, ActionTarget.TERRAIN,
-																		ActionControl.LEFT_MULTI_CLICK, null,
-																		null), POOL(MainCategoryName.BARRIER, "池", null,
-																				2, ActionTarget.TERRAIN,
-																				ActionControl.LEFT_MULTI_CLICK, null,
-																				null), FARM(MainCategoryName.BARRIER,
-																						"畑", null, 3,
-																						ActionTarget.TERRAIN,
-																						ActionControl.LEFT_MULTI_CLICK,
-																						null, null), BELTCONVEYOR(
-																								MainCategoryName.BARRIER,
-																								"ベルトコンベア", null, 4,
-																								ActionTarget.TERRAIN,
-																								ActionControl.LEFT_MULTI_CLICK,
-																								null,
-																								null), WALL_DELETE(
-																										MainCategoryName.BARRIER,
-																										"壁撤去", null, 0,
-																										ActionTarget.WALL,
-																										ActionControl.LEFT_CLICK,
-																										null,
-																										null), FIELD_DELETE(
-																												MainCategoryName.BARRIER,
-																												"フィールド撤去",
-																												null, 0,
-																												ActionTarget.FIELD,
-																												ActionControl.LEFT_CLICK,
-																												null,
-																												null), ALL_DELETE(
-																														MainCategoryName.BARRIER,
-																														"全撤去",
-																														null,
-																														0,
-																														ActionTarget.IMMEDIATE,
-																														ActionControl.LEFT_CLICK,
-																														null,
-																														null),
+		GAP_MINI(MainCategoryName.BARRIER, "段差(小)", null, 1, ActionTarget.TERRAIN, ActionControl.LEFT_MULTI_CLICK, null,null),
+		GAP_BIG(MainCategoryName.BARRIER, "段差(大)", null, 1, ActionTarget.TERRAIN,ActionControl.LEFT_MULTI_CLICK, null, null),
+		NET_MINI(MainCategoryName.BARRIER, "金網(小)", null,1, ActionTarget.TERRAIN, ActionControl.LEFT_MULTI_CLICK, null,null),
+		NET_BIG(MainCategoryName.BARRIER, "金網(大)", null, 1, ActionTarget.TERRAIN,ActionControl.LEFT_MULTI_CLICK, null, null),
+		WALL(MainCategoryName.BARRIER, "壁",null, 1, ActionTarget.TERRAIN, ActionControl.LEFT_MULTI_CLICK, null,null),
+		ITEM(MainCategoryName.BARRIER, "道具禁止", null, 1,ActionTarget.TERRAIN, ActionControl.LEFT_MULTI_CLICK, null,null),
+		NoUNUN(MainCategoryName.BARRIER, "道具禁止(うんうん以外)", null, 1,ActionTarget.TERRAIN, ActionControl.LEFT_MULTI_CLICK,null, null),
+		KEKKAI(MainCategoryName.BARRIER, "結界(笑)",null, 1, ActionTarget.TERRAIN,ActionControl.LEFT_MULTI_CLICK, null,null),
+		POOL(MainCategoryName.BARRIER, "池", null,2, ActionTarget.TERRAIN,ActionControl.LEFT_MULTI_CLICK, null,null),
+		FARM(MainCategoryName.BARRIER,"畑", null, 3,ActionTarget.TERRAIN,ActionControl.LEFT_MULTI_CLICK,null, null),
+		BELTCONVEYOR(MainCategoryName.BARRIER,"ベルトコンベア", null, 4,ActionTarget.TERRAIN,ActionControl.LEFT_MULTI_CLICK,null,null),
+		WALL_DELETE(MainCategoryName.BARRIER,"壁撤去", null, 0,ActionTarget.WALL,ActionControl.LEFT_CLICK,null,null),
+		FIELD_DELETE(MainCategoryName.BARRIER,"フィールド撤去",null, 0,ActionTarget.FIELD,ActionControl.LEFT_CLICK,null,null), 
+		ALL_DELETE(MainCategoryName.BARRIER,"全撤去",null,0,ActionTarget.IMMEDIATE,ActionControl.LEFT_CLICK,null,null),
 		// おもちゃカテゴリ
-		BALL(MainCategoryName.TOYS, "ボール", Toy.class, 0, ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null,
-				null), YUNBA(MainCategoryName.TOYS, "ゆンバ", Yunba.class, 0, ActionTarget.TERRAIN,
-						ActionControl.LEFT_CLICK, null, null), YUNBA_SETUP(MainCategoryName.TOYS, "ゆンバ設定変更", null, 0,
-								ActionTarget.GADGET, ActionControl.LEFT_CLICK, null, null), SUI(MainCategoryName.TOYS,
-										"すぃー", Sui.class, 0, ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null,
-										null), TRASH(MainCategoryName.TOYS, "ガラクタ", Trash.class, 0,
-												ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null,
-												null), TRAMPOLINE(MainCategoryName.TOYS, "トランポリン", Trampoline.class, 0,
-														ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null,
-														null), STONE(MainCategoryName.TOYS, "石", Stone.class, 0,
-																ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null,
-																null),
+		BALL(MainCategoryName.TOYS, "ボール", Toy.class, 0, ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null,null),
+		YUNBA(MainCategoryName.TOYS, "ゆンバ", Yunba.class, 0, ActionTarget.TERRAIN,ActionControl.LEFT_CLICK, null, null),
+		YUNBA_SETUP(MainCategoryName.TOYS, "ゆンバ設定変更", null, 0,ActionTarget.GADGET, ActionControl.LEFT_CLICK, null, null), 
+		SUI(MainCategoryName.TOYS,"すぃー", Sui.class, 0, ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null,null),
+		TRASH(MainCategoryName.TOYS, "ガラクタ", Trash.class, 0,ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null,null),
+		TRAMPOLINE(MainCategoryName.TOYS, "トランポリン", Trampoline.class, 0,ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null,null),
+		STONE(MainCategoryName.TOYS, "石", Stone.class, 0,ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null,null),
 		// コンベアカテゴリ
-		BELTCONVEYOR_CUSTOM(MainCategoryName.CONVEYOR, "カスタム", null, 5, ActionTarget.TERRAIN,
-				ActionControl.LEFT_MULTI_CLICK, null, null), BELTCONVEYOR_SETUP(MainCategoryName.CONVEYOR, "設定変更", null,
-						5, ActionTarget.GADGET, ActionControl.LEFT_CLICK, null, null),
+		BELTCONVEYOR_CUSTOM(MainCategoryName.CONVEYOR, "カスタム", null, 5, ActionTarget.TERRAIN,ActionControl.LEFT_MULTI_CLICK, null, null),
+		BELTCONVEYOR_SETUP(MainCategoryName.CONVEYOR, "設定変更", null,5, ActionTarget.GADGET, ActionControl.LEFT_CLICK, null, null),
 		// 声掛け
-		YUKKURISITEITTENE(MainCategoryName.VOICE, "ゆっくりしていってね！", null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK,
-				HelpContext.SHIFT_LMB_ALL_ONOFF, null), YUKKURIDIE(MainCategoryName.VOICE, "ゆっくりしないでしんでね！", null, 0,
-						ActionTarget.BODY, ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL_ONOFF,
-						null), YUKKURIFURIFURI(MainCategoryName.VOICE, "もるんもるんしてね！", null, 0, ActionTarget.BODY,
-								ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL_ONOFF, null),
+		YUKKURISITEITTENE(MainCategoryName.VOICE, "ゆっくりしていってね！", null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK,HelpContext.SHIFT_LMB_ALL_ONOFF, null),
+		YUKKURIDIE(MainCategoryName.VOICE, "ゆっくりしないでしんでね！", null, 0,ActionTarget.BODY, ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL_ONOFF,null),
+		YUKKURIFURIFURI(MainCategoryName.VOICE, "もるんもるんしてね！", null, 0, ActionTarget.BODY,ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL_ONOFF, null),
 		// テストコマンド
-		RANKSET(MainCategoryName.TEST, "捨てる／拾う", null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK, null,
-				null), RANKSET2(MainCategoryName.TEST, "うんうんどれい", null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK,
-						null, null), GARBAGE_STATION(MainCategoryName.TEST, "ゴミ集積所", GarbageStation.class, 0,
-								ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null,
-								null), BED_NORA(MainCategoryName.TEST, "ベッド(野良)", Bed.class, 1, ActionTarget.TERRAIN,
-										ActionControl.LEFT_CLICK, null, null), TOILET_NORA(MainCategoryName.TEST,
-												"トイレ(野良)", Toilet.class, 1, ActionTarget.TERRAIN,
-												ActionControl.LEFT_CLICK, null, null), HOUSE_NORA(MainCategoryName.TEST,
-														"おうち(野良)", House.class, 1, ActionTarget.TERRAIN,
-														ActionControl.LEFT_CLICK, null,
-														null), GARBAGE_NORA(MainCategoryName.TEST, "ダストシュート(野良)",
-																GarbageChute.class, 1, ActionTarget.TERRAIN,
-																ActionControl.LEFT_CLICK, null,
-																null), ORANGE_NORA(MainCategoryName.TEST, "オレンジプール(野良)",
-																		OrangePool.class, 1, ActionTarget.TERRAIN,
-																		ActionControl.LEFT_CLICK, null,
-																		null), STICKY_NORA(MainCategoryName.TEST,
-																				"粘着床(野良)", StickyPlate.class, 1,
-																				ActionTarget.TERRAIN,
-																				ActionControl.LEFT_CLICK, null,
-																				null), TOY_NORA(MainCategoryName.TEST,
-																						"おもちゃ(野良)", Toy.class, 1,
-																						ActionTarget.TERRAIN,
-																						ActionControl.LEFT_CLICK, null,
-																						null), REMOVEALL(
-																								MainCategoryName.TEST,
-																								"一斉駆除", null, 0,
-																								ActionTarget.IMMEDIATE,
-																								ActionControl.LEFT_CLICK,
-																								null, null), EVENT_SHIT(
-																										MainCategoryName.TEST,
-																										"強制イベント：うんうん体操",
-																										null, 0,
-																										ActionTarget.BODY,
-																										ActionControl.LEFT_CLICK,
-																										null,
-																										null), EVENT_EAT(
-																												MainCategoryName.TEST,
-																												"強制イベント：すーぱーむしゃむしゃタイム",
-																												null, 0,
-																												ActionTarget.BODY,
-																												ActionControl.LEFT_CLICK,
-																												null,
-																												null), EVENT_RIDEYUKKURI(
-																														MainCategoryName.TEST,
-																														"強制イベント：おちびちゃん運び",
-																														null,
-																														0,
-																														ActionTarget.BODY,
-																														ActionControl.LEFT_CLICK,
-																														null,
-																														null), EVENT_PROUDCHILD(
-																																MainCategoryName.TEST,
-																																"強制イベント：おちびちゃん自慢",
-																																null,
-																																0,
-																																ActionTarget.BODY,
-																																ActionControl.LEFT_CLICK,
-																																null,
-																																null), SETVAIN(
-																																		MainCategoryName.TEST,
-																																		"強制コマンド：キリッ",
-																																		null,
-																																		0,
-																																		ActionTarget.BODY,
-																																		ActionControl.LEFT_CLICK,
-																																		null,
-																																		null), Yunnyaa(
-																																				MainCategoryName.TEST,
-																																				"強制コマンド：ゆんやあ",
-																																				null,
-																																				0,
-																																				ActionTarget.BODY,
-																																				ActionControl.LEFT_CLICK,
-																																				null,
-																																				null), BEGGINGFORLIFE(
-																																						MainCategoryName.TEST,
-																																						"強制コマンド：命乞い",
-																																						null,
-																																						0,
-																																						ActionTarget.BODY,
-																																						ActionControl.LEFT_CLICK,
-																																						null,
-																																						null), PREDATORSGAME(
-																																								MainCategoryName.TEST,
-																																								"強制コマンド：捕食種の遊び",
-																																								null,
-																																								0,
-																																								ActionTarget.BODY,
-																																								ActionControl.LEFT_CLICK,
-																																								null,
-																																								null), INVITEANTS(
-																																										MainCategoryName.TEST,
-																																										"強制コマンド：アリ招き",
-																																										null,
-																																										0,
-																																										ActionTarget.BODY,
-																																										ActionControl.LEFT_CLICK,
-																																										null,
-																																										null), FEED(
-																																												MainCategoryName.TEST,
-																																												"強制コマンド：強制給餌",
-																																												null,
-																																												0,
-																																												ActionTarget.BODY,
-																																												ActionControl.LEFT_CLICK,
-																																												null,
-																																												null), BADGE(
-																																														MainCategoryName.TEST,
-																																														"バッジ",
-																																														null,
-																																														0,
-																																														ActionTarget.BODY,
-																																														ActionControl.LEFT_CLICK,
-																																														null,
-																																														null), DEBUG2(
-																																																MainCategoryName.TEST,
-																																																"テスト空腹",
-																																																null,
-																																																0,
-																																																ActionTarget.BODY,
-																																																ActionControl.LEFT_CLICK,
-																																																null,
-																																																null),
-																																																;
+		RANKSET(MainCategoryName.TEST, "捨てる／拾う", null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK, null,null),
+		RANKSET2(MainCategoryName.TEST, "うんうんどれい", null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK,null, null),
+		GARBAGE_STATION(MainCategoryName.TEST, "ゴミ集積所", GarbageStation.class, 0,ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null,null), 
+		BED_NORA(MainCategoryName.TEST, "ベッド(野良)", Bed.class, 1, ActionTarget.TERRAIN,ActionControl.LEFT_CLICK, null, null), 
+		TOILET_NORA(MainCategoryName.TEST,"トイレ(野良)", Toilet.class, 1, ActionTarget.TERRAIN,ActionControl.LEFT_CLICK, null, null),
+		HOUSE_NORA(MainCategoryName.TEST,"おうち(野良)", House.class, 1, ActionTarget.TERRAIN,ActionControl.LEFT_CLICK, null,null),
+		GARBAGE_NORA(MainCategoryName.TEST, "ダストシュート(野良)",GarbageChute.class, 1, ActionTarget.TERRAIN,ActionControl.LEFT_CLICK, null,null),
+		ORANGE_NORA(MainCategoryName.TEST, "オレンジプール(野良)",OrangePool.class, 1, ActionTarget.TERRAIN,ActionControl.LEFT_CLICK, null,null),
+		STICKY_NORA(MainCategoryName.TEST,"粘着床(野良)", StickyPlate.class, 1,ActionTarget.TERRAIN,ActionControl.LEFT_CLICK, null,null),
+		TOY_NORA(MainCategoryName.TEST,"おもちゃ(野良)", Toy.class, 1,ActionTarget.TERRAIN,ActionControl.LEFT_CLICK, null,null),
+		REMOVEALL(MainCategoryName.TEST,"一斉駆除", null, 0,ActionTarget.IMMEDIATE,ActionControl.LEFT_CLICK,null, null),
+		EVENT_SHIT(MainCategoryName.TEST,"強制イベント：うんうん体操",null, 0,ActionTarget.BODY,ActionControl.LEFT_CLICK,null,null),
+		EVENT_EAT(MainCategoryName.TEST,"強制イベント：すーぱーむしゃむしゃタイム",null, 0,ActionTarget.BODY,ActionControl.LEFT_CLICK,null,null),
+		EVENT_RIDEYUKKURI(MainCategoryName.TEST,"強制イベント：おちびちゃん運び",null,0,ActionTarget.BODY,ActionControl.LEFT_CLICK,null,null),
+		EVENT_PROUDCHILD(MainCategoryName.TEST,"強制イベント：おちびちゃん自慢",null,0,ActionTarget.BODY,ActionControl.LEFT_CLICK,null,null),
+		SETVAIN(MainCategoryName.TEST,"強制コマンド：キリッ",null,0,ActionTarget.BODY,ActionControl.LEFT_CLICK,null,null), 
+		Yunnyaa(MainCategoryName.TEST,"強制コマンド：ゆんやあ",	null,0,ActionTarget.BODY,ActionControl.LEFT_CLICK,null,null),
+		BEGGINGFORLIFE(MainCategoryName.TEST,"強制コマンド：命乞い",null,0,ActionTarget.BODY,ActionControl.LEFT_CLICK,null,null),
+		PREDATORSGAME(MainCategoryName.TEST,"強制コマンド：捕食種の遊び",null,0,ActionTarget.BODY,ActionControl.LEFT_CLICK,null,null),
+		INVITEANTS(MainCategoryName.TEST,"強制コマンド：アリ招き",null,0,ActionTarget.BODY,ActionControl.LEFT_CLICK,null,null),
+		FEED(MainCategoryName.TEST,"強制コマンド：強制給餌",null,0,ActionTarget.BODY,ActionControl.LEFT_CLICK,null,null),
+		BADGE(MainCategoryName.TEST,"バッジ",null,0,ActionTarget.BODY,ActionControl.LEFT_CLICK,	null,null),
+		DEBUG2(MainCategoryName.TEST,"強制コマンド：暇つぶし",null,0,ActionTarget.BODY,ActionControl.LEFT_CLICK,null,null),
+		;
 
 		private MainCategoryName group;
 		private String displayName;
@@ -699,10 +365,6 @@ public class GadgetMenu {
 			return this.actionControl;
 		}
 
-		//		public GadgetBridge getGadgetBridge() {
-		//			if(this.gadgetClass == null) return null;
-		//			return new GadgetBridge(this.gadgetClass, this.actionTarget, this.actionControl);
-		//		}
 		public HelpContext getHelp1() {
 			return this.help1;
 		}
@@ -938,8 +600,12 @@ public class GadgetMenu {
 
 	/**速度の種類定義*/
 	public static enum GameSpeed {
-		PAUSE("一時停止", "Pause"), X1("速度: x1", "Speed: x1"), X2("速度: x2", "Speed: x2"), X5("速度: x5",
-				"Speed: x5"), X10("速度: x10", "Speed: x10"), MAX("速度: 最大", "Speed: Max"),
+		PAUSE("一時停止", "Pause"), 
+		X1("速度: x1", "Speed: x1"), 
+		X2("速度: x2", "Speed: x2"), 
+		X5("速度: x5","Speed: x5"),
+		X10("速度: x10", "Speed: x10"),
+		MAX("速度: 最大", "Speed: Max"),
 				;
 
 		private String name;
@@ -1169,7 +835,7 @@ public class GadgetMenu {
 	public static final void executeBodyMethod(MouseEvent e, Obj found, String method) {
 		try {
 			Method m;
-			Body[] bodyList = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
+			Body[] bodyList = SimYukkuri.world.getCurrentMap().body.toArray(new Body[0]);
 			if (e.isShiftDown()) {
 				for (Body b : bodyList) {
 					m = b.getClass().getMethod(method, (Class<?>[]) null);
@@ -1204,7 +870,7 @@ public class GadgetMenu {
 	public static final void executeBodyMethod(MouseEvent e, Obj found, String method, int prm) {
 		try {
 			Method m;
-			Body[] bodyList = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
+			Body[] bodyList = SimYukkuri.world.getCurrentMap().body.toArray(new Body[0]);
 
 			if (e.isShiftDown()) {
 				for (Body b : bodyList) {
@@ -1239,11 +905,10 @@ public class GadgetMenu {
 	 * @param setMethod 実行したいメソッド名(その他用)
 	 * @param invMethod 反転実行系コマンド実行
 	 */
-	public static final void executeBodyMethod(MouseEvent e, Obj found, String getMethod, String setMethod,
-			String invMethod) {
+	public static final void executeBodyMethod(MouseEvent e, Obj found, String getMethod, String setMethod,String invMethod) {
 		try {
 			Method m;
-			Body[] bodyList = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
+			Body[] bodyList = SimYukkuri.world.getCurrentMap().body.toArray(new Body[0]);
 
 			if (e.isShiftDown()) {
 				boolean flag = true;
@@ -1284,7 +949,6 @@ public class GadgetMenu {
  * ポップアップの選択をUIへ反映
  *
  */
-
 class PopupAction implements ActionListener {
 	@Override
 	public final void actionPerformed(ActionEvent e) {

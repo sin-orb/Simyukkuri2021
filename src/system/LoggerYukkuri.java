@@ -112,7 +112,7 @@ public class LoggerYukkuri {
 	public static void run() {
 
 		long logData[] = new long[NUM_OF_LOGDATA_TYPE];
-		List<Body> bodyList = SimYukkuri.world.currentMap.body;
+		List<Body> bodyList = SimYukkuri.world.getCurrentMap().body;
 
 		try {
 			for (Body b : bodyList) {
@@ -158,7 +158,7 @@ public class LoggerYukkuri {
 			// list変更等の際は握りつぶしてしまう
 		}
 
-		logData[NUM_OF_SHIT] = SimYukkuri.world.currentMap.shit.size();
+		logData[NUM_OF_SHIT] = SimYukkuri.world.getCurrentMap().shit.size();
 
 		logData[NUM_OF_CASH] = SimYukkuri.world.getPlayer().getCash();
 

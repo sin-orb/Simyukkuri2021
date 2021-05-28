@@ -3,7 +3,6 @@ package src.system;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
 
 import src.SimYukkuri;
 import src.base.Body;
@@ -54,8 +53,6 @@ public class MapPlaceData implements Serializable {
 
 	/** このマップのインデックス */
 	public int mapIndex;
-	/** 乱数 */
-	public Random rnd;
 	/** アラーム時間 */
 	public int alarmPeriod;
 	/** アラーム */
@@ -149,8 +146,6 @@ public class MapPlaceData implements Serializable {
 	public MapPlaceData(int idx) {
 
 		mapIndex = idx;
-
-		rnd = new Random();
 		alarmPeriod = 0;
 		alarm = false;
 
@@ -223,7 +218,7 @@ public class MapPlaceData implements Serializable {
 	 * @param attribute 属性
 	 */
 	public static void setFiledFlag(int[][] map, int x, int y, int w, int h, boolean setFlag, int attribute) {
-		MapPlaceData tmp = SimYukkuri.world.currentMap;
+		MapPlaceData tmp = SimYukkuri.world.getCurrentMap();
 		int sx = Math.max(0, Math.min(x, Translate.mapW));
 		int sy = Math.max(0, Math.min(y, Translate.mapH));
 		if (setFlag) {

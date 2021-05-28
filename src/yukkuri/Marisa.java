@@ -134,7 +134,7 @@ public class Marisa extends Body implements java.io.Serializable {
 					}
 				}
 				if (nOtherVerCount != 0) {
-					int nRndIndex = RND.nextInt(nOtherVerCount + 1);
+					int nRndIndex = SimYukkuri.RND.nextInt(nOtherVerCount + 1);
 					anImageVerStateCtrlNagasi[type][0] = nRndIndex;
 					layer.image[index] = imagesNagasi[type][direction
 							* directionOffsetNagasi[type][0]][getBodyAgeState().ordinal()][nRndIndex];
@@ -177,10 +177,10 @@ public class Marisa extends Body implements java.io.Serializable {
 		if (isRude())
 			return;//ゲスもだめ
 		synchronized (SimYukkuri.lock) {
-			List<Body> bodyList = SimYukkuri.world.currentMap.body;
+			List<Body> bodyList = SimYukkuri.world.getCurrentMap().body;
 			// ドス化
 			// ドスはフィールドに一体だけ
-			if (!SimYukkuri.world.currentMap.makeOrKillDos(true)) {
+			if (!SimYukkuri.world.getCurrentMap().makeOrKillDos(true)) {
 				return;
 			}
 			bodyList.remove(this);
@@ -191,7 +191,7 @@ public class Marisa extends Body implements java.io.Serializable {
 				e.printStackTrace();
 			}
 			to.setUniqueID(Numbering.INSTANCE.numberingYukkuriID());
-			SimYukkuri.world.currentMap.body.add(to);
+			SimYukkuri.world.getCurrentMap().body.add(to);
 			//iniファイル再設定
 			to.setBaseBodyFileName("dosmarisa");
 			IniFileUtil.readYukkuriIniFile(to);
@@ -215,7 +215,7 @@ public class Marisa extends Body implements java.io.Serializable {
 
 		// 自分以外に幸せを感じている大人のゆっくりが10体以上いる
 		int nCount = 0;
-		Body[] bodyList = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
+		Body[] bodyList = SimYukkuri.world.getCurrentMap().body.toArray(new Body[0]);
 		for (Body bOther : bodyList) {
 			if (bOther == this) {
 				continue;
@@ -229,7 +229,7 @@ public class Marisa extends Body implements java.io.Serializable {
 		}
 
 		// その上で、1/300の確率で突然変異
-		if (RND.nextInt(300) == 0) {
+		if (SimYukkuri.RND.nextInt(300) == 0) {
 			return this;
 		}
 		return null;
@@ -631,9 +631,9 @@ public class Marisa extends Body implements java.io.Serializable {
 		PREGPERIOD *= factor;
 		SLEEPPERIOD *= factor;
 		ACTIVEPERIOD *= factor;
-		sameDest = RND.nextInt(10) + 10;
+		sameDest = SimYukkuri.RND.nextInt(10) + 10;
 		DECLINEPERIOD *= (Math.random() + 0.5);
-		ROBUSTNESS = RND.nextInt(10) + 1;
+		ROBUSTNESS = SimYukkuri.RND.nextInt(10) + 1;
 		//EYESIGHT /= 1;
 		factor = Math.random() + 1;
 		STRENGTH[AgeState.ADULT.ordinal()] *= factor;

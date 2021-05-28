@@ -82,7 +82,7 @@ public class Stone extends ObjEX implements java.io.Serializable {
 	
 	@Override
 	public void removeListData(){
-		SimYukkuri.world.currentMap.stone.remove(this);
+		SimYukkuri.world.getCurrentMap().stone.remove(this);
 	}
 
 	@Override
@@ -105,15 +105,15 @@ public class Stone extends ObjEX implements java.io.Serializable {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		SimYukkuri.world.currentMap.stone.add(this);
+		SimYukkuri.world.getCurrentMap().stone.add(this);
 		objType = Type.OBJECT;
 		objEXType = ObjEXType.STONE;
 		interval = 5;
 		itemRank = ItemRank.values()[initOption];
-		if( SimYukkuri.world.currentMap.mapIndex == 2 || SimYukkuri.world.currentMap.mapIndex == 3 || SimYukkuri.world.currentMap.mapIndex == 4){
+		if( SimYukkuri.world.getCurrentMap().mapIndex == 2 || SimYukkuri.world.getCurrentMap().mapIndex == 3 || SimYukkuri.world.getCurrentMap().mapIndex == 4){
 			itemRank = ItemRank.NORA;
 		}
-		if( SimYukkuri.world.currentMap.mapIndex == 5 ||  SimYukkuri.world.currentMap.mapIndex == 6 ){
+		if( SimYukkuri.world.getCurrentMap().mapIndex == 5 ||  SimYukkuri.world.getCurrentMap().mapIndex == 6 ){
 			itemRank = ItemRank.YASEI;
 		}
 		if(itemRank == ItemRank.HOUSE) {

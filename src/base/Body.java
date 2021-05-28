@@ -5,7 +5,6 @@ import java.awt.Dimension;
 import java.awt.Rectangle;
 import java.awt.image.ImageObserver;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -102,13 +101,12 @@ import src.util.YukkuriUtil;
 /*********************************************************
  *  ゆっくり本体の元となる抽象クラス（動作のみ。）
  *  属性に関しては親クラスのBodyAttributesにすべて定義。
- *  でいぶ、ドスなどの突然変異でエラーが出る可能性があるのでprivate変数は使わず代わりにpublicを使用してください
  *
  *  まりさとれいむは特殊なため各クラスで"public int getBodyBaseImage(BodyLayer layer)"をオーバーライドしているため要確認
  *  暇なときの挙動は"public void killTime()"にまとめてあるので、各種ごとに固有の挙動を追加したいときはそれを各種classでオーバーライドしてください。
  *  (現在オーバーライドしている種：れいむ、ありす、ふらん、れみりゃ)
- *キホン～logic系のループは"Terrarium.java"にあり
- *"ToyLogic"をobjループで呼び出すだけだと頻度が低いので、"ToyLogic"をインポート、"killtime()"内で一定確率で"ToyLogic"内のおもちゃで遊ぶ処理を呼び出すようにしてある。objループからは削除
+ * キホン～logic系のループは"Terrarium.java"にあり
+ * "ToyLogic"をobjループで呼び出すだけだと頻度が低いので、"ToyLogic"をインポート、"killtime()"内で一定確率で"ToyLogic"内のおもちゃで遊ぶ処理を呼び出すようにしてある。objループからは削除
  */
 
 public abstract class Body extends BodyAttributes implements java.io.Serializable {
@@ -243,7 +241,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			// かびている期間が潜伏期間の32倍を超え、かつダメージをヘビーに受けている場合
 			if (getSickPeriod() > (INCUBATIONPERIOD * 32) && isDamagedHeavily()) {
 				// 追加ダメージは1/3の確率で1
-				if (RND.nextInt(3) == 0)
+				if (SimYukkuri.RND.nextInt(3) == 0)
 					damage += TICK;
 			}
 			// かびている期間が潜伏期間の32倍を超えていて、ダメージがヘビーでない場合
@@ -282,7 +280,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 					wakeup();
 				Terrarium.setAlarm();
 				// 1/50の確率でしゃべる
-				if (RND.nextInt(50) == 0) {
+				if (SimYukkuri.RND.nextInt(50) == 0) {
 					if (geteCoreAnkoState() != CoreAnkoState.NonYukkuriDiseaseNear)
 						setNYDMessage(MessagePool.getMessage(this, MessagePool.Action.Dying2), false);
 					else
@@ -292,8 +290,9 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			// 傷を負っているとき
 			else if (getCriticalDamege() == CriticalDamegeType.INJURED && !isSleeping()) {
 				// 1/300の確率で餡子を漏らす
-				if (RND.nextInt(300) == 0) {
-					SimYukkuri.mypane.terrarium.addCrushedVomit(getX() + 3 - RND.nextInt(6), getY() - 2, 0, this,
+				if (SimYukkuri.RND.nextInt(300) == 0) {
+					SimYukkuri.mypane.terrarium.addCrushedVomit(getX() + 3 - SimYukkuri.RND.nextInt(6), getY() - 2, 0,
+							this,
 							getShitType());
 					setMessage(MessagePool.getMessage(this, MessagePool.Action.Scream));
 					setForceFace(ImageCode.PAIN.ordinal());
@@ -302,11 +301,11 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 					addDamage(50);
 				}
 				// お腹が一杯で、ダメージがないときに1/4800の確率で傷が治る
-				if (isFull() && isNoDamaged() && RND.nextInt(4800) == 0) {
+				if (isFull() && isNoDamaged() && SimYukkuri.RND.nextInt(4800) == 0) {
 					setCriticalDamege(null);
 				}
 				// ダメージがヘビーでない場合は1/33600の確率で傷が治る
-				else if (!isDamagedHeavily() && RND.nextInt(33600) == 0) {
+				else if (!isDamagedHeavily() && SimYukkuri.RND.nextInt(33600) == 0) {
 					setCriticalDamege(null);
 				}
 			}
@@ -333,13 +332,13 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			addStress(50);
 			addMemories(-2);
 			setCanTalk(false);
-			if (RND.nextInt(200) == 0)
+			if (SimYukkuri.RND.nextInt(200) == 0)
 				stayPurupuru(20);
 		}
 
 		//路上だと、善良なバッジ付き以外は、一定確率で踏み潰される
-		if (SimYukkuri.world.currentMap.mapIndex == 2 && !(isSmart() && getAttachmentSize(Badge.class) != 0)
-				&& getCarAccidentProb() != 0 && RND.nextInt(getCarAccidentProb()) == 0) {
+		if (SimYukkuri.world.getCurrentMap().mapIndex == 2 && !(isSmart() && getAttachmentSize(Badge.class) != 0)
+				&& getCarAccidentProb() != 0 && SimYukkuri.RND.nextInt(getCarAccidentProb()) == 0) {
 			strikeByPress();
 		}
 
@@ -442,7 +441,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			return;
 		}
 		// マップが部屋のとき、もしくは飛んでいるやつにアリはたからない
-		if (SimYukkuri.world.currentMap.mapIndex == 0 || getZ() != 0) {
+		if (SimYukkuri.world.getCurrentMap().mapIndex == 0 || getZ() != 0) {
 			return;
 		}
 		// 新規でアリたかる？
@@ -467,7 +466,8 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 										!isDamaged() && !isSick() && !isFeelPain() && getLinkParent() == null
 										&& !isPeroPero() && !(isEating() && !isPikopiko())) {
 									changeUnyo(0, 0,
-											(int) (RND.nextInt(((int) UNYOSTRENGTH[getBodyAgeState().ordinal()] / 3)))
+											(int) (SimYukkuri.RND
+													.nextInt(((int) UNYOSTRENGTH[getBodyAgeState().ordinal()] / 3)))
 													+ UNYOSTRENGTH[getBodyAgeState().ordinal()]);
 								}
 							} else if (z == 0) {
@@ -475,7 +475,8 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 										!isDamaged() && !isSick() && !isFeelPain() && getLinkParent() == null
 										&& !isPeroPero() && !(isEating() && !isPikopiko())) {
 									changeUnyo(0, 0,
-											(int) (RND.nextInt(((int) UNYOSTRENGTH[getBodyAgeState().ordinal()] / 3)))
+											(int) (SimYukkuri.RND
+													.nextInt(((int) UNYOSTRENGTH[getBodyAgeState().ordinal()] / 3)))
 													+ UNYOSTRENGTH[getBodyAgeState().ordinal()]);
 								}
 							}
@@ -484,10 +485,11 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 				}
 			}
 			// 常時ランダムで動く
-			if (RND.nextInt(30) == 0 && (isSleeping() ? RND.nextBoolean() : true)) {
-				changeUnyo((int) (RND.nextInt(2)), (int) (RND.nextInt(2)), (int) (RND.nextInt(2)));
+			if (SimYukkuri.RND.nextInt(30) == 0 && (isSleeping() ? SimYukkuri.RND.nextBoolean() : true)) {
+				changeUnyo((int) (SimYukkuri.RND.nextInt(2)), (int) (SimYukkuri.RND.nextInt(2)),
+						(int) (SimYukkuri.RND.nextInt(2)));
 			}
-			if (isDamaged() ? (RND.nextInt(5) == 0) : true) {
+			if (isDamaged() ? (SimYukkuri.RND.nextInt(5) == 0) : true) {
 				changeReUnyo();
 			}
 		}
@@ -543,22 +545,22 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	public void changeReUnyo() {
 		if (unyoForceH == 0) {
 		} else if (unyoForceH < Const.EXT_FORCE_PUSH_LIMIT[getBodyAgeState().ordinal()] * 0.6)
-			unyoForceH += RND.nextInt(3) + 5;
+			unyoForceH += SimYukkuri.RND.nextInt(3) + 5;
 		else if (unyoForceH < 0)
-			unyoForceH += RND.nextInt(3) + 2;
+			unyoForceH += SimYukkuri.RND.nextInt(3) + 2;
 		else if (unyoForceH > Const.EXT_FORCE_PULL_LIMIT[getBodyAgeState().ordinal()] * 0.6)
-			unyoForceH -= RND.nextInt(3) + 5;
+			unyoForceH -= SimYukkuri.RND.nextInt(3) + 5;
 		else if (unyoForceH > 0)
-			unyoForceH -= RND.nextInt(3) + 2;
+			unyoForceH -= SimYukkuri.RND.nextInt(3) + 2;
 		if (unyoForceW == 0) {
 		} else if (unyoForceW < Const.EXT_FORCE_PUSH_LIMIT[getBodyAgeState().ordinal()] * 0.6)
-			unyoForceW += RND.nextInt(3) + 5;
+			unyoForceW += SimYukkuri.RND.nextInt(3) + 5;
 		else if (unyoForceW < 0)
-			unyoForceW += RND.nextInt(3) + 2;
+			unyoForceW += SimYukkuri.RND.nextInt(3) + 2;
 		else if (unyoForceW > Const.EXT_FORCE_PULL_LIMIT[getBodyAgeState().ordinal()] * 0.6)
-			unyoForceW -= RND.nextInt(3) + 5;
+			unyoForceW -= SimYukkuri.RND.nextInt(3) + 5;
 		else if (unyoForceW > 0)
-			unyoForceW -= RND.nextInt(3) + 2;
+			unyoForceW -= SimYukkuri.RND.nextInt(3) + 2;
 	}
 
 	/**
@@ -613,7 +615,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 					setShitting(false);
 					addStress(100);
 					// 実ゆの場合、親が反応する
-					if (RND.nextInt(20) == 0) {
+					if (SimYukkuri.RND.nextInt(20) == 0) {
 						checkReactionStalkMother(UnbirthBabyState.SAD);
 					}
 				} else {
@@ -660,7 +662,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 
 		boolean cantMove = false;
 		// 蓄積実行
-		if (RND.nextInt(nDown) == 0) {
+		if (SimYukkuri.RND.nextInt(nDown) == 0) {
 			if (isFull()) {
 				shit += TICK * 2 + (shitBoost * 20);
 			} else {
@@ -671,7 +673,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		// ちぎれ状態の場合は餡子を漏らす
 		if ((getCriticalDamege() == CriticalDamegeType.CUT || isPealed()) && getBaryState() == BaryInUGState.NONE) {
 			if (shit > getSHITLIMIT()[getBodyAgeState().ordinal()] - TICK * Const.SHITSTAY * 2) {
-				SimYukkuri.mypane.terrarium.addCrushedVomit(getX() + 3 - RND.nextInt(6), getY() - 2, 0, this,
+				SimYukkuri.mypane.terrarium.addCrushedVomit(getX() + 3 - SimYukkuri.RND.nextInt(6), getY() - 2, 0, this,
 						getShitType());
 				addDamage(Const.NEEDLE * 2);
 				shit = 1;
@@ -822,12 +824,12 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 				wakeup();
 				if (isNotNYD()) {
 					if (getBurstState() == Burst.NEAR) {
-						if (RND.nextInt(10) == 0) {
+						if (SimYukkuri.RND.nextInt(10) == 0) {
 							setMessage(MessagePool.getMessage(this, MessagePool.Action.Inflation));
 							stay();
 						}
 					} else {
-						if (RND.nextInt(10) == 0) {
+						if (SimYukkuri.RND.nextInt(10) == 0) {
 							setMessage(MessagePool.getMessage(this, MessagePool.Action.CantShit), true);
 							stay();
 						}
@@ -835,7 +837,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 				}
 
 				setHappiness(Happiness.SAD);
-				//				if(rnd.nextInt(4) == 0){
+				//				if(SimYukkuri.RND.nextInt(4) == 0){
 				shit += TICK + (shitBoost * 10);
 				//				}
 
@@ -956,10 +958,11 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		if (isSleeping()) {
 			//ストレスフルだと悪夢
 			if (!isNightmare()
-					&& ((isStressful() && RND.nextInt(75) == 0) || (isVeryStressful() && RND.nextInt(25) == 0))) {
+					&& ((isStressful() && SimYukkuri.RND.nextInt(75) == 0)
+							|| (isVeryStressful() && SimYukkuri.RND.nextInt(25) == 0))) {
 				setNightmare(true);
 				setForceFace(ImageCode.NIGHTMARE.ordinal());
-			} else if (!isStressful() || RND.nextInt(100) == 0) {
+			} else if (!isStressful() || SimYukkuri.RND.nextInt(100) == 0) {
 				setNightmare(false);
 				setForceFace(ImageCode.SLEEPING.ordinal());
 			}
@@ -1020,7 +1023,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	 */
 	public boolean checkOnBed() {
 		Rectangle r = getScreenRect();
-		List<Bed> list = SimYukkuri.world.currentMap.bed;
+		List<Bed> list = SimYukkuri.world.getCurrentMap().bed;
 		for (Bed bd : list) {
 			if (bd.getScreenRect().intersects(r))
 				return true;
@@ -1101,7 +1104,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		// 興奮時
 		if (isExciting()) {
 			// すっきりー
-			if (RND.nextInt(5) == 0) {
+			if (SimYukkuri.RND.nextInt(5) == 0) {
 				setMessage(MessagePool.getMessage(this, MessagePool.Action.Sukkiri), 60, true, false);
 				setStress(0);
 				stayPurupuru(60);
@@ -1144,7 +1147,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			setForceFace(ImageCode.PAIN.ordinal());
 			clearActions();
 
-			if (RND.nextInt(2) == 0) {
+			if (SimYukkuri.RND.nextInt(2) == 0) {
 				setMessage(MessagePool.getMessage(this, MessagePool.Action.Dying2), 30, true, false);
 			} else {
 				setMessage(MessagePool.getMessage(this, MessagePool.Action.Dying), 30, true, false);
@@ -1161,7 +1164,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			addLovePlayer(-20);
 			setForceFace(ImageCode.PAIN.ordinal());
 			// ぐーりぐーりされた時のメッセージ
-			if (RND.nextBoolean())
+			if (SimYukkuri.RND.nextBoolean())
 				setMessage(MessagePool.getMessage(this, MessagePool.Action.NeedlePain), 60, true, false);
 			else
 				setMessage(MessagePool.getMessage(this, MessagePool.Action.NeedlePain), 60, true, true);
@@ -1180,7 +1183,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		setNobinobi(true);
 		addMemories(1);
 
-		int nRnd = RND.nextInt(5);
+		int nRnd = SimYukkuri.RND.nextInt(5);
 		if (nRnd == 0) {
 			setForceFace(ImageCode.SMILE.ordinal());
 		} else if (0 < nRnd && nRnd < 3) {
@@ -1191,7 +1194,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 
 		clearActions();
 		// 低確率で寝る
-		if (RND.nextInt(20) == 0) {
+		if (SimYukkuri.RND.nextInt(20) == 0) {
 			forceToSleep();
 		}
 		return true;
@@ -1271,13 +1274,13 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		}
 		//加工中を想定した反応
 		else if ((isDamaged() || hasDisorder()) && isbOnDontMoveBeltconveyor() && !hasBabyOrStalk() && !isPealed()) {
-			if (RND.nextInt(80) == 0) {
+			if (SimYukkuri.RND.nextInt(80) == 0) {
 				begForLife();
-			} else if (RND.nextInt(40) == 0) {
+			} else if (SimYukkuri.RND.nextInt(40) == 0) {
 				doYunnyaa(true);
-			} else if (RND.nextInt(3) == 0) {
+			} else if (SimYukkuri.RND.nextInt(3) == 0) {
 				setMessage(MessagePool.getMessage(this, MessagePool.Action.KilledInFactory), WindowType.NORMAL,
-						Const.HOLDMESSAGE, true, RND.nextBoolean(), false);
+						Const.HOLDMESSAGE, true, SimYukkuri.RND.nextBoolean(), false);
 			}
 		}
 		//状態異常時
@@ -1316,7 +1319,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		}
 
 		// 空腹時
-		if (isHungry() && RND.nextInt(50) == 0) {
+		if (isHungry() && SimYukkuri.RND.nextInt(50) == 0) {
 			if (isSoHungry())
 				setHappiness(Happiness.SAD);
 			setMessage(MessagePool.getMessage(this, MessagePool.Action.Hungry), 30);
@@ -1345,14 +1348,14 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		if (isNormalDirty() && !isSleeping()) {
 			//大人と、善良子ゆは勝手にきれいにする
 			if (isAdult() || (isChild() && isSmart())) {
-				if (RND.nextInt(600) == 0)
+				if (SimYukkuri.RND.nextInt(600) == 0)
 					cleaningItself();
 			} else {
 				if (dirtyScreamPeriod == 0) {
 					if (isRude())
-						dirtyScreamPeriod = 10 + RND.nextInt(15);
+						dirtyScreamPeriod = 10 + SimYukkuri.RND.nextInt(15);
 					else
-						dirtyScreamPeriod = 5 + RND.nextInt(10);
+						dirtyScreamPeriod = 5 + SimYukkuri.RND.nextInt(10);
 				} else
 					callParent();
 			}
@@ -1368,17 +1371,17 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 				&& getAttachmentSize(PoisonAmpoule.class) == 0) {
 			//&& moveTarget == null) {
 			//すっきり発動条件
-			if (!isExciting() && RND.nextInt(getExciteProb()) == 0) {
+			if (!isExciting() && SimYukkuri.RND.nextInt(getExciteProb()) == 0) {
 				int r = 1;
 				int adjust = excitingDiscipline * (isRude() ? 1 : 2);
 				if (isSuperRapist()) {
-					r = RND.nextInt(1 + adjust);
+					r = SimYukkuri.RND.nextInt(1 + adjust);
 				} else if (isRapist() && isRude()) {
-					r = RND.nextInt(6 + adjust);
+					r = SimYukkuri.RND.nextInt(6 + adjust);
 				} else if (isRapist() || isRude()) {
-					r = RND.nextInt(12 + adjust);
+					r = SimYukkuri.RND.nextInt(12 + adjust);
 				} else if (!isSoHungry() && !wantToShit()) {
-					r = RND.nextInt(24 + adjust);
+					r = SimYukkuri.RND.nextInt(24 + adjust);
 				}
 				// すっきりーしにいく条件判定
 				boolean bToExcite = false;
@@ -1463,7 +1466,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 				} else {
 					setRelax(true);
 					excitingPeriod = 0;
-					if (RND.nextInt(75) == 0)
+					if (SimYukkuri.RND.nextInt(75) == 0)
 						killTime();
 				}
 				setAngry(false);
@@ -1479,7 +1482,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 				}
 				// 興奮している場合、たまにつぶやく
 				if (isExciting()) {
-					if (RND.nextInt(30) == 0) {
+					if (SimYukkuri.RND.nextInt(30) == 0) {
 						if (isRaper()) {
 							setMessage(MessagePool.getMessage(this, MessagePool.Action.ExciteForRaper));
 						} else {
@@ -1500,7 +1503,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			return;
 		if (getPlaying() != null)
 			return;
-		int p = RND.nextInt(50);
+		int p = SimYukkuri.RND.nextInt(50);
 		//6/50でキリッ
 		if (p <= 5) {
 			getInVain(true);
@@ -1531,7 +1534,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		else if (p <= 29) {
 			if (ToyLogic.checkToy(this)) {
 				setPlaying(PlayStyle.BALL);
-				playingLimit = 150 + RND.nextInt(100) - 49;
+				playingLimit = 150 + SimYukkuri.RND.nextInt(100) - 49;
 				return;
 			} else
 				killTime();
@@ -1540,7 +1543,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		else if (p <= 35) {
 			if (ToyLogic.checkTrampoline(this)) {
 				setPlaying(PlayStyle.TRAMPOLINE);
-				playingLimit = 150 + RND.nextInt(100) - 49;
+				playingLimit = 150 + SimYukkuri.RND.nextInt(100) - 49;
 				return;
 			} else
 				killTime();
@@ -1549,13 +1552,13 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		else if (p <= 41) {
 			if (ToyLogic.checkSui(this)) {
 				setPlaying(PlayStyle.SUI);
-				playingLimit = 150 + RND.nextInt(100) - 49;
+				playingLimit = 150 + SimYukkuri.RND.nextInt(100) - 49;
 				return;
 			} else
 				killTime();
 		} else {
 			// おくるみありで汚れていない場合
-			if ((isHasPants()) && !isDirty() && (RND.nextInt(10) == 0)) {
+			if ((isHasPants()) && !isDirty() && (SimYukkuri.RND.nextInt(10) == 0)) {
 				setMessage(MessagePool.getMessage(this, MessagePool.Action.RelaxOkurumi));
 			} else {
 				setMessage(MessagePool.getMessage(this, MessagePool.Action.Relax));
@@ -1580,7 +1583,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	public void getInVain(boolean TF) {
 		if (TF)
 			setMessage(MessagePool.getMessage(this, MessagePool.Action.BeVain), 30);
-		if (isRude() && RND.nextBoolean())
+		if (isRude() && SimYukkuri.RND.nextBoolean())
 			setForceFace(ImageCode.RUDE.ordinal());
 		setBeVain(true);
 		addStress(-90);
@@ -1813,10 +1816,10 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			wakeup();
 		}
 		// 非ゆっくり症初期
-		if (geteCoreAnkoState() == CoreAnkoState.NonYukkuriDiseaseNear && RND.nextInt(nRnd) == 0) {
+		if (geteCoreAnkoState() == CoreAnkoState.NonYukkuriDiseaseNear && SimYukkuri.RND.nextInt(nRnd) == 0) {
 			switch (nonYukkuriDiseasePeriod) {
 			case 0:
-				if (RND.nextBoolean()) {
+				if (SimYukkuri.RND.nextBoolean()) {
 					nonYukkuriDiseasePeriod = 1;
 				} else {
 					nonYukkuriDiseasePeriod = 3;
@@ -1871,10 +1874,10 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		}
 		nRnd = 20;
 		// 非ゆっくり症
-		if (geteCoreAnkoState() == CoreAnkoState.NonYukkuriDisease && RND.nextInt(nRnd) == 0) {
+		if (geteCoreAnkoState() == CoreAnkoState.NonYukkuriDisease && SimYukkuri.RND.nextInt(nRnd) == 0) {
 			switch (nonYukkuriDiseasePeriod) {
 			case 0:
-				if (RND.nextBoolean()) {
+				if (SimYukkuri.RND.nextBoolean()) {
 					nonYukkuriDiseasePeriod = 1;
 					if (!isFixBack()) {
 						clearActions();
@@ -1889,7 +1892,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 				}
 				break;
 			case 1:
-				if (RND.nextBoolean()) {
+				if (SimYukkuri.RND.nextBoolean()) {
 					nonYukkuriDiseasePeriod = 2;
 				}
 				if (!isFixBack()) {
@@ -1898,7 +1901,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 				}
 				break;
 			case 2:
-				if (RND.nextBoolean()) {
+				if (SimYukkuri.RND.nextBoolean()) {
 					nonYukkuriDiseasePeriod = 3;
 				}
 				if (!isFixBack()) {
@@ -1915,7 +1918,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 				stayPurupuru(20);
 				break;
 			case 4:
-				if (RND.nextBoolean()) {
+				if (SimYukkuri.RND.nextBoolean()) {
 					nonYukkuriDiseasePeriod = 5;
 				}
 				if (!isFixBack()) {
@@ -1924,7 +1927,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 				}
 				break;
 			case 5:
-				if (RND.nextBoolean()) {
+				if (SimYukkuri.RND.nextBoolean()) {
 					nonYukkuriDiseasePeriod = 6;
 				}
 				if (!isFixBack()) {
@@ -1947,7 +1950,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			addMemories(-5);// 耐性が減っていく
 			setHappiness(Happiness.VERY_SAD);
 			setNYDMessage(MessagePool.getMessage(this, MessagePool.Action.NonYukkuriDisease), false);
-			if (RND.nextInt(nRnd) == 0)
+			if (SimYukkuri.RND.nextInt(nRnd) == 0)
 				nonYukkuriDiseasePeriod = 0;
 		}
 		return true;
@@ -1962,9 +1965,9 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			EYESIGHT = 5 * 5;
 			addStress(5);
 			setHappiness(Happiness.SAD);
-			if (RND.nextInt(40) <= 5) {
+			if (SimYukkuri.RND.nextInt(40) <= 5) {
 				setMessage(MessagePool.getMessage(this, MessagePool.Action.CANTSEE));
-			} else if (RND.nextInt(40) == 20) {
+			} else if (SimYukkuri.RND.nextInt(40) == 20) {
 				setMessage(MessagePool.getMessage(this, MessagePool.Action.LamentNoYukkuri));
 			}
 			return true;
@@ -1982,7 +1985,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			addStress(2);
 			setHappiness(Happiness.SAD);
 			setPeropero(false);
-			if (RND.nextInt(80) == 0 && !isSleeping()) {
+			if (SimYukkuri.RND.nextInt(80) == 0 && !isSleeping()) {
 				setMessage(MessagePool.getMessage(this, MessagePool.Action.CantTalk));
 			}
 			return true;
@@ -2019,7 +2022,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		//以下、しゃべってない時
 
 		if (lockmovePeriod < 400) {
-			if (RND.nextInt(15) == 0) {
+			if (SimYukkuri.RND.nextInt(15) == 0) {
 				clearActions();
 				// 土に埋まっている場合は苦しむ
 				if (getBaryState() == BaryInUGState.ALL || getBaryState() == BaryInUGState.NEARLY_ALL) {
@@ -2029,18 +2032,18 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 				} else {
 					setMessage(MessagePool.getMessage(this, MessagePool.Action.CantMove));
 					setAngry();
-					if (RND.nextInt(10) == 0) {
+					if (SimYukkuri.RND.nextInt(10) == 0) {
 						setNobinobi(true);
 					}
 				}
 				return true;
 			}
-			if (isHungry() && RND.nextInt(50) == 0) {
+			if (isHungry() && SimYukkuri.RND.nextInt(50) == 0) {
 				// 空腹時
 				setMessage(MessagePool.getMessage(this, MessagePool.Action.Hungry), 30);
 				setHappiness(Happiness.SAD);
 				stay(30);
-			} else if (RND.nextInt(15) == 0) {
+			} else if (SimYukkuri.RND.nextInt(15) == 0) {
 				clearActions();
 				// 土に埋まっている場合は苦しむ
 				if (getBaryState() == BaryInUGState.ALL || getBaryState() == BaryInUGState.NEARLY_ALL) {
@@ -2051,7 +2054,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 					setAngry();
 					setHappiness(Happiness.VERY_SAD);
 					setMessage(MessagePool.getMessage(this, MessagePool.Action.CantMove2));
-					if (RND.nextInt(10) == 0) {
+					if (SimYukkuri.RND.nextInt(10) == 0) {
 						setNobinobi(true);
 					}
 				}
@@ -2083,14 +2086,14 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 
 		// 足焼き（中）
 		if (getFootBakeLevel() == FootBake.MIDIUM) {
-			if (RND.nextInt(15) == 0) {
+			if (SimYukkuri.RND.nextInt(15) == 0) {
 				clearActions();
 				setAngry();
 				setHappiness(Happiness.SAD);
 				setMessage(MessagePool.getMessage(this, MessagePool.Action.LamentLowYukkuri));
 				return true;
 			}
-			if (isHungry() && RND.nextInt(400) == 0) {
+			if (isHungry() && SimYukkuri.RND.nextInt(400) == 0) {
 				// 空腹時
 				setMessage(MessagePool.getMessage(this, MessagePool.Action.Hungry), 30);
 				setHappiness(Happiness.SAD);
@@ -2100,18 +2103,18 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		// 足焼き(完全)
 		else if (getFootBakeLevel() == FootBake.CRITICAL) {
 			if (lockmovePeriod < 300) {
-				if (RND.nextInt(15) == 0) {
+				if (SimYukkuri.RND.nextInt(15) == 0) {
 					clearActions();
 					setAngry();
 					setHappiness(Happiness.SAD);
-					if (RND.nextInt(5) == 0) {
+					if (SimYukkuri.RND.nextInt(5) == 0) {
 						setMessage(MessagePool.getMessage(this, MessagePool.Action.LamentLowYukkuri));
 					} else {
 						setMessage(MessagePool.getMessage(this, MessagePool.Action.CantMove));
 					}
 					return true;
 				}
-				if (isHungry() && RND.nextInt(50) == 0) {
+				if (isHungry() && SimYukkuri.RND.nextInt(50) == 0) {
 					// 空腹時
 					setMessage(MessagePool.getMessage(this, MessagePool.Action.Hungry), 30);
 					setHappiness(Happiness.VERY_SAD);
@@ -2119,11 +2122,11 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 					return true;
 				}
 			} else {
-				if (RND.nextInt(15) == 0) {
+				if (SimYukkuri.RND.nextInt(15) == 0) {
 					clearActions();
 					setAngry();
 					setHappiness(Happiness.VERY_SAD);
-					if (RND.nextInt(5) != 0) {
+					if (SimYukkuri.RND.nextInt(5) != 0) {
 						setMessage(MessagePool.getMessage(this, MessagePool.Action.CantMove2));
 					} else {
 						setMessage(MessagePool.getMessage(this, MessagePool.Action.LamentNoYukkuri));
@@ -2153,7 +2156,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		if (isTalking()) {
 			return false;
 		}
-		if (RND.nextInt(50) == 0) {
+		if (SimYukkuri.RND.nextInt(50) == 0) {
 			clearActions();
 			setAngry();
 			setHappiness(Happiness.SAD);
@@ -2203,11 +2206,11 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 				setPikoMessage(MessagePool.getMessage(this, MessagePool.Action.MoldySeriousry), 40, true);
 				addStress(TICK * 100);
 				addMemories(-5);
-				if (RND.nextInt(60) == 0) {
+				if (SimYukkuri.RND.nextInt(60) == 0) {
 					setForceFace(ImageCode.PAIN.ordinal());
 				}
-				if (RND.nextInt(10) == 0) {
-					if (RND.nextBoolean())
+				if (SimYukkuri.RND.nextInt(10) == 0) {
+					if (SimYukkuri.RND.nextBoolean())
 						doYunnyaa(false);
 					else
 						setNobinobi(true);
@@ -2218,14 +2221,14 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 				}
 				return;
 			}
-			if (isSickHeavily() && RND.nextInt(600) == 0) {
+			if (isSickHeavily() && SimYukkuri.RND.nextInt(600) == 0) {
 				if (isSickTooHeavily())
 					setPikoMessage(MessagePool.getMessage(this, MessagePool.Action.Scream2), true);
 				else
 					setPikoMessage(MessagePool.getMessage(this, MessagePool.Action.Scream), true);
 				setForceFace(ImageCode.PAIN.ordinal());
 			}
-			if (isSick() && RND.nextInt(50) == 0) {
+			if (isSick() && SimYukkuri.RND.nextInt(50) == 0) {
 				setMessage(MessagePool.getMessage(this, MessagePool.Action.Moldy));
 			}
 			setHappiness(Happiness.SAD);
@@ -2269,7 +2272,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 				}
 			}
 		}
-		if (getPanicType() != PanicType.BURN) {
+		if (getPanicType() != null && getPanicType() != PanicType.BURN) {
 			panicPeriod += TICK;
 		}
 		if (panicPeriod > 50) {
@@ -2364,7 +2367,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			return;
 		} else if (getMessageBuf() == null) {
 			if (isSleeping()) {
-				if (RND.nextInt(10) == 0) {
+				if (SimYukkuri.RND.nextInt(10) == 0) {
 					if (isNightmare()) {
 						setNYDMessage(MessagePool.getMessage(this, MessagePool.Action.Nightmare), false);
 						addStress(20);
@@ -2381,7 +2384,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 					&& getCriticalDamege() != CriticalDamegeType.CUT && !isPealed() && !isBlind()) {
 				//持ち上げたとき
 				//妊娠限界を超えている場合
-				if (isStressful() && isOverPregnantLimit() && RND.nextBoolean()) {
+				if (isStressful() && isOverPregnantLimit() && SimYukkuri.RND.nextBoolean()) {
 					setPikoMessage(MessagePool.getMessage(this, MessagePool.Action.DontThrowMeAway), true);
 					setForceFace(ImageCode.CRYING.ordinal());
 					addStress(100);
@@ -2395,7 +2398,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 					// なつき度設定
 					addLovePlayer(10);
 				}
-			} else if (isStressful() && isOverPregnantLimit() && RND.nextBoolean() && grabbed) {
+			} else if (isStressful() && isOverPregnantLimit() && SimYukkuri.RND.nextBoolean() && grabbed) {
 				setPikoMessage(MessagePool.getMessage(this, MessagePool.Action.DontThrowMeAway), true);
 				setForceFace(ImageCode.CRYING.ordinal());
 				addStress(100);
@@ -2404,12 +2407,13 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			} else if (getBurstState() == Burst.NEAR) {
 				if (isSleeping())
 					wakeup();
-				if (RND.nextInt(8) == 0) {
-					setPikoMessage(MessagePool.getMessage(this, MessagePool.Action.Inflation), RND.nextBoolean());
+				if (SimYukkuri.RND.nextInt(8) == 0) {
+					setPikoMessage(MessagePool.getMessage(this, MessagePool.Action.Inflation),
+							SimYukkuri.RND.nextBoolean());
 				}
 			} else if (nearToBirth() && !isBirth()) {
 				//				if( baryState == Body.BaryInUGState.NONE ){
-				if (!isTalking() && getBaryState() == BaryInUGState.NONE && RND.nextInt(8) == 0) {
+				if (!isTalking() && getBaryState() == BaryInUGState.NONE && SimYukkuri.RND.nextInt(8) == 0) {
 					setMessage(MessagePool.getMessage(this, MessagePool.Action.NearToBirth));
 					EventLogic.addWorldEvent(new BreedEvent(this, null, null, 2), null, null);
 				}
@@ -2466,13 +2470,13 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	public final int randomDirection(int curDir) {
 		switch (curDir) {
 		case 0:
-			curDir = (RND.nextBoolean() ? 1 : -1);
+			curDir = (SimYukkuri.RND.nextBoolean() ? 1 : -1);
 			break;
 		case 1:
-			curDir = (RND.nextBoolean() ? 0 : curDir);
+			curDir = (SimYukkuri.RND.nextBoolean() ? 0 : curDir);
 			break;
 		case -1:
-			curDir = (RND.nextBoolean() ? 0 : curDir);
+			curDir = (SimYukkuri.RND.nextBoolean() ? 0 : curDir);
 			break;
 		}
 		return curDir;
@@ -2624,7 +2628,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 					}
 
 					if (damageCut != 4) {
-						List<Trampoline> trampolineList = SimYukkuri.world.currentMap.trampoline;
+						List<Trampoline> trampolineList = SimYukkuri.world.getCurrentMap().trampoline;
 						if (trampolineList != null && trampolineList.size() != 0) {
 							for (Trampoline t : trampolineList) {
 								if (t.checkHitObj(this)) {
@@ -2732,7 +2736,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 				countX = 0;
 				if (!hasOkazari() && (isSad() || isVerySad())) {
 					dirX = randomDirection(dirX);
-					if (RND.nextInt(10) == 0) {
+					if (SimYukkuri.RND.nextInt(10) == 0) {
 						setMessage(MessagePool.getMessage(this, MessagePool.Action.NoAccessory));
 					}
 				}
@@ -2749,7 +2753,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 				countY = 0;
 				dirY = randomDirection(dirY);
 				if (!hasOkazari() && (isSad() || isVerySad())) {
-					if (RND.nextInt(10) == 0) {
+					if (SimYukkuri.RND.nextInt(10) == 0) {
 						setMessage(MessagePool.getMessage(this, MessagePool.Action.NoAccessory));
 					}
 				}
@@ -2779,7 +2783,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		int vecZ = dirZ * step * speed / 100;
 		// 実験 speedの切り捨て部分の反映
 		if (speed % 100 > 0) {
-			if (RND.nextInt(100) < speed % 100) {
+			if (SimYukkuri.RND.nextInt(100) < speed % 100) {
 				vecX += dirX;
 				vecY += dirY;
 				vecZ += dirZ;
@@ -2848,7 +2852,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			if ((destX >= 0) || (destY >= 0) || (destZ >= 0)) {
 				setBlockedCount(Math.min(getBlockedCount() + 1, getBLOCKEDLIMIT() * 2));
 				if (getBlockedCount() > getBLOCKEDLIMIT()) {
-					if (RND.nextBoolean()) {
+					if (SimYukkuri.RND.nextBoolean()) {
 						dirX = randomDirection(dirX);
 					} else {
 						dirY = randomDirection(dirY);
@@ -2897,7 +2901,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 						break;
 					}
 
-					if (RND.nextInt(nRandom) != 0) {
+					if (SimYukkuri.RND.nextInt(nRandom) != 0) {
 						x -= vecX;
 						y -= vecY;
 						z -= vecZ;
@@ -3075,7 +3079,8 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		if (isSilent())
 			return;
 		//緊急時以外の自制時。静かにするよ！！と言ってしまう。
-		if (!interrupt && RND.nextInt(messageDiscipline + 1) != 0 && getIntelligence() != Intelligence.WISE) {
+		if (!interrupt && SimYukkuri.RND.nextInt(messageDiscipline + 1) != 0
+				&& getIntelligence() != Intelligence.WISE) {
 			message = MessagePool.getMessage(this, MessagePool.Action.BeingQuiet);
 			return;
 		}
@@ -3645,13 +3650,13 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 
 		//val.remove();
 		if (val instanceof Shit) {
-			List<Shit> shitList = SimYukkuri.world.currentMap.shit;
+			List<Shit> shitList = SimYukkuri.world.getCurrentMap().shit;
 			shitList.remove((Shit) val);
 			val.setWhere(Where.IN_YUKKURI);
 		}
 
 		if (val instanceof Food) {
-			List<Food> foodList = SimYukkuri.world.currentMap.food;
+			List<Food> foodList = SimYukkuri.world.getCurrentMap().food;
 			foodList.remove((Food) val);
 			val.setWhere(Where.IN_YUKKURI);
 		}
@@ -3670,7 +3675,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 
 		//落としたもの（うんうん）の処理
 		if (val instanceof Shit) {
-			List<Shit> shitList = SimYukkuri.world.currentMap.shit;
+			List<Shit> shitList = SimYukkuri.world.getCurrentMap().shit;
 			shitList.add((Shit) val);
 			val.setX(x);
 			if (y + 3 <= Translate.mapH) {
@@ -3684,7 +3689,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		}
 		//落としたもの(餌)の処理
 		if (val instanceof Food) {
-			List<Food> foodList = SimYukkuri.world.currentMap.food;
+			List<Food> foodList = SimYukkuri.world.getCurrentMap().food;
 			foodList.add((Food) val);
 			val.setX(x);
 			if (y + 3 <= Translate.mapH) {
@@ -3847,7 +3852,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			break;
 		}
 		//汚れが残る
-		if (RND.nextInt(P) != 0) {
+		if (SimYukkuri.RND.nextInt(P) != 0) {
 			setStubbornlyDirty(true);
 		}
 	}
@@ -3947,25 +3952,25 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		//性格によって頑固さが決まる
 		switch (getAttitude()) {
 		case VERY_NICE:
-			if (RND.nextInt(NormalP) == 0)
+			if (SimYukkuri.RND.nextInt(NormalP) == 0)
 				frag = true;
 			break;
 		case NICE:
 		case AVERAGE:
-			if (isStressful() && RND.nextInt(NormalP) == 0)
+			if (isStressful() && SimYukkuri.RND.nextInt(NormalP) == 0)
 				frag = true;
 			break;
 		case SHITHEAD:
-			if (isStressful() && getIntelligence() != Intelligence.FOOL && RND.nextInt(NormalP) == 0) {
+			if (isStressful() && getIntelligence() != Intelligence.FOOL && SimYukkuri.RND.nextInt(NormalP) == 0) {
 				frag = true;
-			} else if (isVeryStressful() && RND.nextInt(RudeP) == 0) {
+			} else if (isVeryStressful() && SimYukkuri.RND.nextInt(RudeP) == 0) {
 				frag = true;
 			}
 			break;
 		case SUPER_SHITHEAD:
-			if (isStressful() && getIntelligence() != Intelligence.FOOL && RND.nextInt(RudeP) == 0) {
+			if (isStressful() && getIntelligence() != Intelligence.FOOL && SimYukkuri.RND.nextInt(RudeP) == 0) {
 				frag = true;
-			} else if (isVeryStressful() && isDamagedHeavily() && RND.nextInt(RudeP) == 0) {
+			} else if (isVeryStressful() && isDamagedHeavily() && SimYukkuri.RND.nextInt(RudeP) == 0) {
 				frag = true;
 			}
 			break;
@@ -4354,7 +4359,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		clearActions();
 		addLovePlayer(-200);
 		addStress(500);
-		if (RND.nextInt(3) == 0) {
+		if (SimYukkuri.RND.nextInt(3) == 0) {
 			setMessage(MessagePool.getMessage(this, MessagePool.Action.Scream), true);
 			setForceFace(ImageCode.PAIN.ordinal());
 		} else {
@@ -4635,10 +4640,10 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			}
 			return;
 		}
-		if (isSick() && RND.nextBoolean()) {
+		if (isSick() && SimYukkuri.RND.nextBoolean()) {
 			p.addSickPeriod(100);
 		}
-		if (p.isSick() && RND.nextBoolean()) {
+		if (p.isSick() && SimYukkuri.RND.nextBoolean()) {
 			addSickPeriod(100);
 		}
 		if (p.isDead()) {
@@ -4658,7 +4663,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		p.hungry -= (getHUNGRYLIMIT()[AgeState.BABY.ordinal()] * 2);
 
 		// 妊娠タイプはランダムで決定
-		boolean stalkMode = RND.nextBoolean();
+		boolean stalkMode = SimYukkuri.RND.nextBoolean();
 		// 該当タイプが避妊されてたら妊娠失敗
 		if ((stalkMode && p.isStalkCastration())
 				|| (!stalkMode && p.isBodyCastration())
@@ -4745,16 +4750,16 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			return;
 		}
 		// ゆかび持ちとすっきりすると1/2の確率で伝染る
-		if ((isSick() || p.isSick()) && RND.nextBoolean()) {
+		if ((isSick() || p.isSick()) && SimYukkuri.RND.nextBoolean()) {
 			p.addSickPeriod(100);
 			addSickPeriod(100);
 		}
 		if (p.isDead()) {
-			if (RND.nextInt(3) == 0) {
+			if (SimYukkuri.RND.nextInt(3) == 0) {
 				p.setCrushed(true);
 			}
 			//死体とすっきりすると死体がゆかび持ちでなくとも1/4の確率でゆかび感染
-			if (RND.nextInt(4) == 0) {
+			if (SimYukkuri.RND.nextInt(4) == 0) {
 				addSickPeriod(100);
 			}
 			return;
@@ -4823,16 +4828,14 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		//hungryState = checkHungryState();
 		//パンツは汚れる
 		if (isHasPants()) {
-			if (isHasPants()) {
-				setDirty(true);
-			}
+			setDirty(true);
 		}
 		if (p != null) {
 			//性病持ちと死姦はカビの原因
-			if ((p.isDead() || p.isSick()) && RND.nextBoolean()) {
+			if ((p.isDead() || p.isSick()) && SimYukkuri.RND.nextBoolean()) {
 				addSickPeriod(100);
 			}
-			if (canAction()) {
+			if (p.canAction()) {
 				p.addStress(50);
 				p.addMemories(-5);
 				p.setMessage(MessagePool.getMessage(p, MessagePool.Action.Surprise), 60, true, false);
@@ -4878,7 +4881,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		for (int i = 0; i < 5; i++) {
 			Dna baby = YukkuriUtil.createBabyDna(this, dna.father, dna.type, dna.attitude, dna.intelligence, false,
 					false, true);
-			getStalkBabyTypes().add((RND.nextBoolean() ? baby : null));
+			getStalkBabyTypes().add((SimYukkuri.RND.nextBoolean() ? baby : null));
 		}
 		setHasStalk(true);
 		subtractPregnantLimit();
@@ -4896,7 +4899,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			//妊娠限界を超えてたら
 			if (getPregnantLimit() <= 0) {
 				//1/20の確率でまともなゆっくり
-				if (RND.nextInt(20) == 0) {
+				if (SimYukkuri.RND.nextInt(20) == 0) {
 					return false;
 				}
 				//19/20で足りないゆ
@@ -4906,7 +4909,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			// 妊娠限界が100以上の場合は、1/100で足りないゆ。
 			int tarinaiFactor = getPregnantLimit() > 100 ? 100 : getPregnantLimit();
 			// 1/100 または 1/妊娠限界 の確率で足りないゆ。
-			if (RND.nextInt(tarinaiFactor) == 0) {
+			if (SimYukkuri.RND.nextInt(tarinaiFactor) == 0) {
 				return true;
 			}
 			return false;
@@ -4934,11 +4937,9 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	 */
 	public void forceToExcite() {
 		if (isRaper() && !isDead()) {
-			{
-				forceToRaperExcite(true);
-				EventLogic.addWorldEvent(new RaperWakeupEvent(this, null, null, 1), this,
-						MessagePool.getMessage(this, MessagePool.Action.ExciteForRaper));
-			}
+			forceToRaperExcite(true);
+			EventLogic.addWorldEvent(new RaperWakeupEvent(this, null, null, 1), this,
+					MessagePool.getMessage(this, MessagePool.Action.ExciteForRaper));
 			return;
 		}
 
@@ -5129,7 +5130,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			}
 		}
 		// 確率ですりすりしてる方にもアリ伝染る
-		if (p.getAttachmentSize(Ants.class) > 0 && RND.nextInt(200) == 0) {
+		if (p.getAttachmentSize(Ants.class) > 0 && SimYukkuri.RND.nextInt(200) == 0) {
 			if (getNumOfAnts() <= 0) {
 				setNumOfAnts(0);
 				addAttachment(new Ants(this));
@@ -5142,23 +5143,15 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		setNobinobi(true);
 		stay(40);
 		p.stay(40);
-		//		if (p.getIntelligence() != Intelligence.WISE && isBaby() && p.isAdult() && getSurisuriAccidentProb() != 0
-		//				&& RND.nextInt(getSurisuriAccidentProb()) == 0) {
-		//			strikeByHammer();
-		//		}
-		//		if (getIntelligence() != Intelligence.WISE && p.isBaby() && isAdult() && getSurisuriAccidentProb() != 0
-		//				&& RND.nextInt(getSurisuriAccidentProb()) == 0) {
-		//			p.strikeByHammer();
-		//		}
 		if (getIntelligence() != Intelligence.WISE && getSurisuriAccidentProb() != 0
-				&& RND.nextInt(getSurisuriAccidentProb()) == 0) {
+				&& SimYukkuri.RND.nextInt(getSurisuriAccidentProb()) == 0) {
 			//すりすり事故、すっきりーになる
 			doSukkiri(p);
 		}
-		if (isSick() && RND.nextInt(5) == 0) {
+		if (isSick() && SimYukkuri.RND.nextInt(5) == 0) {
 			p.addSickPeriod(100);
 		}
-		if (p.isSick() && RND.nextInt(5) == 0) {
+		if (p.isSick() && SimYukkuri.RND.nextInt(5) == 0) {
 			addSickPeriod(100);
 		}
 	}
@@ -5263,7 +5256,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		}
 		p.setNumOfAnts(ant);
 		// しかし確率でぺろぺろしてる方にもアリ伝染る
-		if (ant > 0 && RND.nextInt(200) == 0) {
+		if (ant > 0 && SimYukkuri.RND.nextInt(200) == 0) {
 			if (getNumOfAnts() <= 0) {
 				addAttachment(new Ants(this));
 				addStress(50);
@@ -5283,10 +5276,10 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		if (!p.isHasPants()) {
 			p.setDirty(false);
 		}
-		if (isSick() && RND.nextBoolean()) {
+		if (isSick() && SimYukkuri.RND.nextBoolean()) {
 			p.addSickPeriod(100);
 		}
-		if (p.isSick() && RND.nextBoolean()) {
+		if (p.isSick() && SimYukkuri.RND.nextBoolean()) {
 			addSickPeriod(100);
 		}
 	}
@@ -5661,11 +5654,11 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			//アリの場合の反応
 			if (P == 0) {
 				setHappiness(Happiness.VERY_SAD);
-				if (RND.nextInt(4) == 0) {
-					if (!isAdult() && RND.nextInt(4) == 0) {
+				if (SimYukkuri.RND.nextInt(4) == 0) {
+					if (!isAdult() && SimYukkuri.RND.nextInt(4) == 0) {
 						callParent();
 					}
-					if (RND.nextInt(3) == 0) {
+					if (SimYukkuri.RND.nextInt(3) == 0) {
 						setMessage(MessagePool.getMessage(this, MessagePool.Action.Scream));
 						setForceFace(ImageCode.PAIN.ordinal());
 					} else {
@@ -5676,8 +5669,8 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 						stayPurupuru(10);
 					} else {
 						// 反撃
-						if (RND.nextInt(3) == 0) {
-							switch (RND.nextInt(3)) {
+						if (SimYukkuri.RND.nextInt(3) == 0) {
+							switch (SimYukkuri.RND.nextInt(3)) {
 							case 0:
 								if (!isShutmouth()) {
 									setPeropero(true);
@@ -5934,7 +5927,8 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		dropAllTakeoutItem();
 		strike(ap);
 		// ぴこぴこ破壊
-		if (!isBraidType() && isHasBraid() && 0 < getnBreakBraidRand() && RND.nextInt(getnBreakBraidRand()) == 0) {
+		if (!isBraidType() && isHasBraid() && 0 < getnBreakBraidRand()
+				&& SimYukkuri.RND.nextInt(getnBreakBraidRand()) == 0) {
 			setHasBraid(false);
 		}
 		setHappiness(Happiness.SAD);
@@ -5952,14 +5946,14 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			if (SimYukkuri.UNYO) {
 				// 0.25 多すぎる 0.01 少なすぎる 0.06 少なすぎる
 				changeUnyo((int) (ap * 0.11f), 0, 0);
-				enemy.changeUnyo(RND.nextInt(3), 0, 0);
+				enemy.changeUnyo(SimYukkuri.RND.nextInt(3), 0, 0);
 			}
 			if (isNotNYD() && !isUnBirth()) {
 				if (e instanceof HateNoOkazariEvent) {
 					//お飾りの迫害
 					setMessage(MessagePool.getMessage(this, MessagePool.Action.Scream), true);
 					if (getPublicRank() != PublicRank.UnunSlave
-							&& (isRude() || (getAttitude() == Attitude.AVERAGE && RND.nextBoolean()))) {
+							&& (isRude() || (getAttitude() == Attitude.AVERAGE && SimYukkuri.RND.nextBoolean()))) {
 						setAngry();
 						EventLogic.addBodyEvent(this, new RevengeAttackEvent(this, enemy, null, 1), null, null);
 					}
@@ -5970,7 +5964,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 					setPikoMessage(MessagePool.getMessage(this, MessagePool.Action.DontPlayMe), true);
 					// おもちゃにされたとき、母がいたら33%の確率で「捕食種はあっちいってね！」イベントが発生。
 					Body m = getMother();
-					if (RND.nextInt(3) == 0 && m != null && !m.isDead() && !m.isRemoved()) {
+					if (SimYukkuri.RND.nextInt(3) == 0 && m != null && !m.isDead() && !m.isRemoved()) {
 						m.clearEvent();
 						m.setAngry();
 						m.setPanic(false, null);
@@ -5978,7 +5972,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 						EventLogic.addBodyEvent(m, new KillPredeatorEvent(m, enemy, null, 10),
 								null, null);
 					}
-					if (RND.nextInt(10) == 0) {
+					if (SimYukkuri.RND.nextInt(10) == 0) {
 						bodyInjure();
 					}
 				} else if (e instanceof RaperReactionEvent) {
@@ -5986,7 +5980,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 					// 相手をレイプ対象に
 					int colX = BodyLogic.calcCollisionX(this, enemy);
 					moveToSukkiri(enemy, enemy.getX() + colX, enemy.getY());
-					if (RND.nextInt(200) == 0) {
+					if (SimYukkuri.RND.nextInt(200) == 0) {
 						bodyInjure();
 					}
 				} else if (e instanceof AvoidMoldEvent) {
@@ -6084,8 +6078,9 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			setMessage(MessagePool.getMessage(this, MessagePool.Action.Dying), true);
 			stay();
 			setCrushed(true);
-			for (int i = 0; i < (RND.nextInt(5) + 5); i++) {
-				SimYukkuri.mypane.terrarium.addCrushedVomit(getX() + 7 - RND.nextInt(14), getY() + 7 - RND.nextInt(14),
+			for (int i = 0; i < (SimYukkuri.RND.nextInt(5) + 5); i++) {
+				SimYukkuri.mypane.terrarium.addCrushedVomit(getX() + 7 - SimYukkuri.RND.nextInt(14),
+						getY() + 7 - SimYukkuri.RND.nextInt(14),
 						0, this, getShitType());
 			}
 		}
@@ -6099,7 +6094,8 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		setCriticalDamege(CriticalDamegeType.CUT);
 		if (getBaryState() == BaryInUGState.NONE) {
 			for (int i = 0; i < 5; i++) {
-				SimYukkuri.mypane.terrarium.addVomit(getX() + 7 - RND.nextInt(14), getY() + 7 - RND.nextInt(14), 0,
+				SimYukkuri.mypane.terrarium.addVomit(getX() + 7 - SimYukkuri.RND.nextInt(14),
+						getY() + 7 - SimYukkuri.RND.nextInt(14), 0,
 						this, getShitType());
 			}
 		}
@@ -6114,7 +6110,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		clearActions();
 		if (getCriticalDamege() == CriticalDamegeType.CUT)
 			return;
-		if (getCriticalDamege() == CriticalDamegeType.INJURED && RND.nextInt(50) == 0) {
+		if (getCriticalDamege() == CriticalDamegeType.INJURED && SimYukkuri.RND.nextInt(50) == 0) {
 			bodyCut();
 			return;
 		}
@@ -6124,7 +6120,8 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		setMessage(MessagePool.getMessage(this, MessagePool.Action.Scream), 40, true, true);
 		setCriticalDamege(CriticalDamegeType.INJURED);
 		if (getBaryState() == BaryInUGState.NONE) {
-			SimYukkuri.mypane.terrarium.addVomit(getX() + 7 - RND.nextInt(14), getY() + 7 - RND.nextInt(14), 0, this,
+			SimYukkuri.mypane.terrarium.addVomit(getX() + 7 - SimYukkuri.RND.nextInt(14),
+					getY() + 7 - SimYukkuri.RND.nextInt(14), 0, this,
 					getShitType());
 		}
 		// 実ゆの場合、親が反応する
@@ -6199,7 +6196,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			getOkazari().setX(x);
 			getOkazari().setY(y);
 			getOkazari().setZ(z + 10);
-			SimYukkuri.world.currentMap.okazari.add(getOkazari());
+			SimYukkuri.world.getCurrentMap().okazari.add(getOkazari());
 			setOkazari(null);
 		}
 	}
@@ -6271,7 +6268,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		setCalm();
 
 		if (getAttachmentSize(Fire.class) != 0) {
-			removeAttachment(Fire.class, true);
+			removeAttachment(Fire.class);
 		}
 		setHappiness(Happiness.VERY_HAPPY);
 		setStress(0);
@@ -6390,7 +6387,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 				setMessage(MessagePool.getMessage(this, MessagePool.Action.Alarm));
 				// なつき度設定
 				addLovePlayer(-400);
-				if (RND.nextBoolean())
+				if (SimYukkuri.RND.nextBoolean())
 					doYunnyaa(true);
 			} else {
 				// 開放
@@ -6422,7 +6419,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 				// なつき度設定
 				addLovePlayer(-400);
 				setMessage(MessagePool.getMessage(this, MessagePool.Action.Alarm));
-				if (RND.nextBoolean())
+				if (SimYukkuri.RND.nextBoolean())
 					doYunnyaa(true);
 			} else {
 				// 開放
@@ -6513,10 +6510,10 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 
 				setbNeedled(false);
 				setMessage(MessagePool.getMessage(this, MessagePool.Action.NeedleRemove));
-				removeAttachment(Needle.class, true);
+				removeAttachment(Needle.class);
 
 				// 粘着板で固定されていないなら背面固定解除
-				List<StickyPlate> stickyPlateList = SimYukkuri.world.currentMap.stickyPlate;
+				List<StickyPlate> stickyPlateList = SimYukkuri.world.getCurrentMap().stickyPlate;
 				boolean bReset = true;
 				if (stickyPlateList != null && stickyPlateList.size() != 0) {
 					for (StickyPlate s : stickyPlateList) {
@@ -6656,7 +6653,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		setWet(true);
 		wetPeriod = 0;
 		if (getAttachmentSize(Fire.class) != 0) {
-			removeAttachment(Fire.class, true);
+			removeAttachment(Fire.class);
 		}
 		setForcePanicClear();
 	}
@@ -6722,7 +6719,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		//			melt = true;
 		//		}
 		if (getAttachmentSize(Fire.class) != 0) {
-			removeAttachment(Fire.class, true);
+			removeAttachment(Fire.class);
 		}
 		setWet(true);
 		wetPeriod = 0;
@@ -6783,9 +6780,11 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		// 足りないゆは不動
 		if (isIdiot())
 			return;
-		// 発情レイパーには無効
-		if (isRaper() && isExciting())
+		// 発情レイパーにはパニック無効　燃えようがれみりゃがいようがれいぷっぷする
+		if (isRaper() && isExciting()) {
+			setForcePanicClear();
 			return;
+		}
 		if (flag) {
 			// 既にパニック状態の場合はカウンタのリセットのみ
 			if (getPanicType() != null) {
@@ -6806,7 +6805,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			if (!isFixBack()) {
 				setFurifuri(false);
 			} else {
-				if (!isSleeping() && isbNeedled() && RND.nextInt(10) == 0) {
+				if (!isSleeping() && isbNeedled() && SimYukkuri.RND.nextInt(10) == 0) {
 					setFurifuri(true);
 				}
 			}
@@ -6868,7 +6867,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			addStress(150);
 			// なつき度設定
 			addLovePlayer(-100);
-			if (RND.nextBoolean())
+			if (SimYukkuri.RND.nextBoolean())
 				doYunnyaa(true);
 			break;
 		}
@@ -6950,12 +6949,12 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 				bodyBurst();
 			} else if (extForce < (Const.EXT_FORCE_PUSH_LIMIT[getBodyAgeState().ordinal()] >> 1)) {
 				// 限界
-				if (RND.nextInt(10) == 0) {
+				if (SimYukkuri.RND.nextInt(10) == 0) {
 					setHappiness(Happiness.VERY_SAD);
 					setMessage(MessagePool.getMessage(this, MessagePool.Action.Press2), Const.HOLDMESSAGE, true, true);
 					addStress(25);
 				}
-				if (RND.nextInt(80) == 0) {
+				if (SimYukkuri.RND.nextInt(80) == 0) {
 					// あんこを吐き出す
 					int ofsX = Translate.invertX(getCollisionX() >> 1, y);
 					if (getDirection() == Direction.LEFT)
@@ -6965,7 +6964,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 					setMessage(MessagePool.getMessage(this, MessagePool.Action.Vomit), 30);
 				}
 			} else {
-				if (RND.nextInt(10) == 0) {
+				if (SimYukkuri.RND.nextInt(10) == 0) {
 					setHappiness(Happiness.AVERAGE);
 					setMessage(MessagePool.getMessage(this, MessagePool.Action.Press));
 				}
@@ -6979,13 +6978,13 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 				bodyCut();
 			} else if (extForce > Const.EXT_FORCE_PULL_LIMIT[getBodyAgeState().ordinal()] >> 1) {
 				// 限界
-				if (RND.nextInt(10) == 0) {
+				if (SimYukkuri.RND.nextInt(10) == 0) {
 					setHappiness(Happiness.VERY_SAD);
 					setMessage(MessagePool.getMessage(this, MessagePool.Action.Pull2), Const.HOLDMESSAGE, true, true);
 					addStress(20);
 				}
 			} else {
-				if (RND.nextInt(10) == 0) {
+				if (SimYukkuri.RND.nextInt(10) == 0) {
 					setHappiness(Happiness.AVERAGE);
 					setMessage(MessagePool.getMessage(this, MessagePool.Action.Pull));
 				}
@@ -7050,18 +7049,13 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			setPartner(null);
 			removeAllStalks();
 			setStalks(null);
-			Body[] bodies = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
-			List<Body> copiedBodyList = new LinkedList<>(Arrays.asList(bodies));
-			if (SimYukkuri.world.currentMap.body.contains(this)) {
-				SimYukkuri.world.currentMap.body.remove(this);
+			if (SimYukkuri.world.getCurrentMap().body.contains(this)) {
+				SimYukkuri.world.getCurrentMap().body.remove(this);
 			}
 			getChildrenList().clear();
 			getElderSisterList().clear();
 			getSisterList().clear();
-			for (Body b : copiedBodyList) {
-				if (b == this || b == null) {
-					continue;
-				}
+			for (Body b : SimYukkuri.world.getCurrentMap().body) {
 				if (b.getChildrenList() != null) {
 					b.getChildrenList().remove(this);
 				}
@@ -7072,12 +7066,17 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 					b.getSisterList().remove(this);
 				}
 			}
-			for (Shit shit : SimYukkuri.world.currentMap.shit) {
-				if (this == shit.owner) {
-					shit.owner = null;
-				}
-			}
 			getAttach().clear();
+			setOkazari(null);
+			getBabyTypes().clear();
+			getStalkBabyTypes().clear();
+			getAncestorList().clear();
+			setLinkParent(null);
+			setMoveTarget(null);
+			getEventList().clear();
+			setCurrentEvent(null);
+			getFavItem().clear();
+			getTakeoutItem().clear();
 		}
 	}
 
@@ -7152,7 +7151,9 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	}
 
 	/**
-	 * 茎を引っこ抜く.
+	 * （死んだときとかに）茎とゆっくりのバインドを解く.
+	 * 茎をゲームから取り除くわけではなく、何らかの形で残したい場合に使用する.
+	 * 茎を完全に取り除きたい場合はremoveAllStalks()を使用する.
 	 */
 	public void disPlantStalks() {
 		if (getStalks() != null) {
@@ -7597,8 +7598,8 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 							setMabatakiCnt(getMabatakiCnt() + 1);
 						}
 						if (getMabatakiType() == ImageCode.TIRED.ordinal() && getMabatakiCnt() > 100) {
-							if (RND.nextInt(30) != 0) {
-								setMabatakiCnt(RND.nextInt(30));
+							if (SimYukkuri.RND.nextInt(30) != 0) {
+								setMabatakiCnt(SimYukkuri.RND.nextInt(30));
 							} else {
 								setMabatakiCnt(85);
 							}
@@ -7619,7 +7620,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		}
 		//　ダメージ、痛み
 		else if (isDamaged() || isSick() || isFeelPain()) {
-			if (isFeelPain() && getAge() % 50 == 0 && RND.nextInt(50) == 0) {
+			if (isFeelPain() && getAge() % 50 == 0 && SimYukkuri.RND.nextInt(50) == 0) {
 				setForceFace(ImageCode.PAIN.ordinal());
 			}
 			if (isStrike() || isVerySad() || isFeelHardPain()) {
@@ -7642,8 +7643,8 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 							setMabatakiCnt(getMabatakiCnt() + 1);
 						}
 						if (getMabatakiType() == ImageCode.TIRED.ordinal() && getMabatakiCnt() > 100) {
-							if (RND.nextInt(30) != 0) {
-								setMabatakiCnt(RND.nextInt(30));
+							if (SimYukkuri.RND.nextInt(30) != 0) {
+								setMabatakiCnt(SimYukkuri.RND.nextInt(30));
 							} else {
 								setMabatakiCnt(85);
 							}
@@ -7681,8 +7682,8 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 							setMabatakiCnt(getMabatakiCnt() + 1);
 						}
 						if (getMabatakiType() == ImageCode.TIRED.ordinal() && getMabatakiCnt() > 100) {
-							if (RND.nextInt(30) != 0) {
-								setMabatakiCnt(RND.nextInt(30));
+							if (SimYukkuri.RND.nextInt(30) != 0) {
+								setMabatakiCnt(SimYukkuri.RND.nextInt(30));
 							} else {
 								setMabatakiCnt(85);
 							}
@@ -7719,8 +7720,8 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 							setMabatakiCnt(getMabatakiCnt() + 1);
 						}
 						if (getMabatakiType() == ImageCode.RUDE.ordinal() && getMabatakiCnt() > 100) {
-							if (RND.nextInt(30) != 0) {
-								setMabatakiCnt(RND.nextInt(30));
+							if (SimYukkuri.RND.nextInt(30) != 0) {
+								setMabatakiCnt(SimYukkuri.RND.nextInt(30));
 							} else {
 								setMabatakiCnt(85);
 							}
@@ -7753,8 +7754,8 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 							setMabatakiCnt(getMabatakiCnt() + 1);
 						}
 						if (getMabatakiType() == ImageCode.CHEER.ordinal() && getMabatakiCnt() > 100) {
-							if (RND.nextInt(30) != 0) {
-								setMabatakiCnt(RND.nextInt(30));
+							if (SimYukkuri.RND.nextInt(30) != 0) {
+								setMabatakiCnt(SimYukkuri.RND.nextInt(30));
 							} else {
 								setMabatakiCnt(85);
 							}
@@ -7789,8 +7790,8 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 							setMabatakiCnt(getMabatakiCnt() + 1);
 						}
 						if (getMabatakiType() == ImageCode.CHEER.ordinal() && getMabatakiCnt() > 100) {
-							if (RND.nextInt(30) != 0) {
-								setMabatakiCnt(RND.nextInt(30));
+							if (SimYukkuri.RND.nextInt(30) != 0) {
+								setMabatakiCnt(SimYukkuri.RND.nextInt(30));
 							} else {
 								setMabatakiCnt(85);
 							}
@@ -7824,8 +7825,8 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 							setMabatakiCnt(getMabatakiCnt() + 1);
 						}
 						if (getMabatakiType() == ImageCode.NORMAL.ordinal() && getMabatakiCnt() > 100) {
-							if (RND.nextInt(30) != 0) {
-								setMabatakiCnt(RND.nextInt(30));
+							if (SimYukkuri.RND.nextInt(30) != 0) {
+								setMabatakiCnt(SimYukkuri.RND.nextInt(30));
 							} else {
 								setMabatakiCnt(85);
 							}
@@ -7975,7 +7976,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		}
 		return true;
 	}
-	
+
 	/**
 	 * 行動できる状態かチェックする
 	 * ここでは動いたら見た目におかしくなる状況のみチェック
@@ -8012,7 +8013,8 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		}
 		// if removed, remove body
 		if (isRemoved()) {
-			disPlantStalks();
+			removeAllStalks();
+			remove();
 			return Event.REMOVED;
 		}
 
@@ -8186,7 +8188,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		checkWet();
 		checkAttitude();
 		//8秒に一回顔を
-		if (RND.nextInt(80) == 0)
+		if (SimYukkuri.RND.nextInt(80) == 0)
 			setForceFace(-1);
 
 		//妊娠状況チェック
@@ -8274,7 +8276,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			}
 			//あんよが傷ついていた場合、一定確率であんよが爆ぜる
 			if (getCriticalDamegeType() == CriticalDamegeType.INJURED && getBreakBodyByShitProb() != 0
-					&& RND.nextInt(getBreakBodyByShitProb()) == 0) {
+					&& SimYukkuri.RND.nextInt(getBreakBodyByShitProb()) == 0) {
 				bodyCut();
 			}
 		}
@@ -8322,7 +8324,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		// if there is no destination, walking randomly.
 		if (geteCoreAnkoState() == CoreAnkoState.NonYukkuriDiseaseNear) {
 			// 非ゆっくり症初期の場合はあまり動かない
-			if (RND.nextInt(5) == 0) {
+			if (SimYukkuri.RND.nextInt(5) == 0) {
 				moveBody(true);
 			} else {
 				moveBody(dontMove);
@@ -8344,6 +8346,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		calcMoveTarget();
 		return retval;
 	}
+
 	/**
 	 * moveTargetが範囲外のとき、範囲内に収める
 	 */
@@ -8426,15 +8429,15 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		getParents()[Parent.PAPA.ordinal()] = papa;
 		getParents()[Parent.MAMA.ordinal()] = mama;
 		setRemoved(false);
-		if (RND.nextBoolean()) {
+		if (SimYukkuri.RND.nextBoolean()) {
 			setAttitude((papa != null ? papa.getAttitude() : null));
 		} else {
 			setAttitude((mama != null ? mama.getAttitude() : null));
 		}
 		if (getAttitude() == null) {
-			setAttitude(Attitude.values()[RND.nextInt(5)]);
+			setAttitude(Attitude.values()[SimYukkuri.RND.nextInt(5)]);
 		}
-		switch (RND.nextInt(6)) {
+		switch (SimYukkuri.RND.nextInt(6)) {
 		case 0:
 		case 1:
 			setIntelligence(Intelligence.FOOL);
@@ -8449,10 +8452,10 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 
 		if (papa != null && mama != null) {
 			if (papa.getIntelligence() == Intelligence.FOOL && mama.getIntelligence() == Intelligence.FOOL
-					&& RND.nextBoolean()) {
+					&& SimYukkuri.RND.nextBoolean()) {
 				setIntelligence(Intelligence.FOOL);
 			} else if (papa.getIntelligence() == Intelligence.WISE && mama.getIntelligence() == Intelligence.WISE
-					&& RND.nextInt(5) <= 1) {
+					&& SimYukkuri.RND.nextInt(5) <= 1) {
 				setIntelligence(Intelligence.FOOL);
 			}
 		}
@@ -8465,7 +8468,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 
 		setOkazari(new Okazari(this, OkazariType.DEFAULT));
 
-		IniFileUtil.readIniFile(this); // iniファイル読み込み
+		IniFileUtil.readIniFile(this, false); // iniファイル読み込み
 		tuneParameters(); // Update individual parameters.
 
 		//年齢補正
@@ -8481,16 +8484,17 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			setAge(getCHILDLIMIT());
 			break;
 		}
-		setAge(getAge() + RND.nextInt(100));
+		setAge(getAge() + SimYukkuri.RND.nextInt(100));
 		getBodyAgeState();
 		getMindAgeState();
 		initAmount(initAgeState);
 		wakeUpTime = getAge();
-		shit = RND.nextInt(getSHITLIMIT()[getBodyAgeState().ordinal()] / 2);
+		shit = SimYukkuri.RND.nextInt(getSHITLIMIT()[getBodyAgeState().ordinal()] / 2);
 		if (getBodyAgeState() == AgeState.BABY) {
 			if (mama != null) {
 				if (mama.isDamaged()) {
-					damage = RND.nextInt(mama.damage) * getDAMAGELIMIT()[Const.BABY_INDEX] / mama.getDamageLimit();
+					damage = SimYukkuri.RND.nextInt(mama.damage) * getDAMAGELIMIT()[Const.BABY_INDEX]
+							/ mama.getDamageLimit();
 					getBodyAgeState();
 					getDamageState();
 				}
@@ -8499,7 +8503,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 				}
 				if (mama.isDead()) {
 					damage += getDAMAGELIMIT()[Const.BABY_INDEX] / 4 * 3
-							+ RND.nextInt(getDAMAGELIMIT()[Const.BABY_INDEX]);
+							+ SimYukkuri.RND.nextInt(getDAMAGELIMIT()[Const.BABY_INDEX]);
 				}
 				setForceBirthMessage(true);
 			}
@@ -8563,7 +8567,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 				break;
 			}
 		} else {
-			if (SimYukkuri.world.currentMap.mapIndex == 5 || SimYukkuri.world.currentMap.mapIndex == 6)
+			if (SimYukkuri.world.getCurrentMap().mapIndex == 5 || SimYukkuri.world.getCurrentMap().mapIndex == 6)
 				eBodyRank = BodyRank.YASEIYU;
 		}
 		// 生い立ちを設定

@@ -1,7 +1,5 @@
 package src.event;
 
-import java.util.Random;
-
 import src.Const;
 import src.SimYukkuri;
 import src.base.Body;
@@ -25,14 +23,14 @@ import src.system.MessagePool;
 public class RevengeAttackEvent extends EventPacket implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
-	protected Random rnd = new Random();
+
 	/**
 	 * コンストラクタ.
 	 */
 	public RevengeAttackEvent(Body f, Body t, Obj tgt, int cnt) {
 		super(f, t, tgt, cnt);
 	}
-	
+
 	// 参加チェック
 	@Override
 	public boolean checkEventResponse(Body b) {
@@ -55,15 +53,16 @@ public class RevengeAttackEvent extends EventPacket implements java.io.Serializa
 		int colX = BodyLogic.calcCollisionX(b, to);
 		b.moveToEvent(this, to.getX() + colX, to.getY());
 	}
-	
+
 	// 毎フレーム処理
 	// UpdateState.ABORTを返すとイベント終了
 	@Override
 	public UpdateState update(Body b) {
 		// 相手が消えてしまったらイベント中断
-		if(to.isRemoved()) return UpdateState.ABORT;
+		if (to.isRemoved())
+			return UpdateState.ABORT;
 		// 相手に追いつけないケースがあるため、一定距離まで近づいたら相手を呼び止める
-		if(Translate.distance(b.getX(), b.getY(), to.getX(), to.getY()) < 2500) {
+		if (Translate.distance(b.getX(), b.getY(), to.getX(), to.getY()) < 2500) {
 			to.stay();
 		}
 		int colX = BodyLogic.calcCollisionX(b, to);
@@ -76,21 +75,21 @@ public class RevengeAttackEvent extends EventPacket implements java.io.Serializa
 	@Override
 	public boolean execute(Body b) {
 		// 動けない場合と、ランダムであきらめる
-		if( b.isDontMove() || rnd.nextInt(50) == 0)
-		{
+		if (b.isDontMove() || SimYukkuri.RND.nextInt(50) == 0) {
 			b.setMessage(MessagePool.getMessage(b, MessagePool.Action.LamentNoYukkuri), 40, true, true);
 			b.setHappiness(Happiness.SAD);
 			return true;
 		}
 		// 相手が残っていたら攻撃
-		if(!to.isRemoved() && to.getZ() < 5) {
-			b.setWorldEventResMessage(MessagePool.getMessage(b, MessagePool.Action.RevengeAttack), Const.HOLDMESSAGE, true, false);
-			if(b.getDirection() == Direction.LEFT) {
-				SimYukkuri.mypane.terrarium.addEffect(EffectType.HIT, b.getX()-10, b.getY(), 0,
-														0, 0, 0, false, 500, 1, true, false, true);
+		if (!to.isRemoved() && to.getZ() < 5) {
+			b.setWorldEventResMessage(MessagePool.getMessage(b, MessagePool.Action.RevengeAttack), Const.HOLDMESSAGE,
+					true, false);
+			if (b.getDirection() == Direction.LEFT) {
+				SimYukkuri.mypane.terrarium.addEffect(EffectType.HIT, b.getX() - 10, b.getY(), 0,
+						0, 0, 0, false, 500, 1, true, false, true);
 			} else {
-				SimYukkuri.mypane.terrarium.addEffect(EffectType.HIT, b.getX()+10, b.getY(), 0,
-														0, 0, 0, true, 500, 1, true, false, true);
+				SimYukkuri.mypane.terrarium.addEffect(EffectType.HIT, b.getX() + 10, b.getY(), 0,
+						0, 0, 0, true, 500, 1, true, false, true);
 			}
 			b.setForceFace(ImageCode.PUFF.ordinal());
 			to.strikeByYukkuri(b, this, false);
@@ -98,7 +97,7 @@ public class RevengeAttackEvent extends EventPacket implements java.io.Serializa
 		}
 		return true;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "やりかえすよ！";

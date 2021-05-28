@@ -98,7 +98,7 @@ public class ItemListener {
 			if (m == null)
 				return;
 
-			MapPlaceData curMap = SimYukkuri.world.currentMap;
+			MapPlaceData curMap = SimYukkuri.world.getCurrentMap();
 
 			switch (m) {
 			case PICKUP:

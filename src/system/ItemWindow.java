@@ -36,7 +36,7 @@ public class ItemWindow extends JDialog implements WindowListener, MouseListener
 	private static final String TITLE = "持ち物";
 
 	@SuppressWarnings("rawtypes")
-	private JList itemList;
+	public JList itemList;
 	private JButton delButton;
 
 	@SuppressWarnings("rawtypes")

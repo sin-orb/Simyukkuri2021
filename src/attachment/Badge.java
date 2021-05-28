@@ -12,7 +12,6 @@ import src.base.Body;
 import src.draw.ModLoader;
 import src.enums.AgeState;
 import src.enums.AttachProperty;
-import src.enums.Direction;
 //import src.Attachment.AttachProperty;
 import src.enums.Event;
 
@@ -99,9 +98,6 @@ public class Badge extends Attachment {
 	
 	@Override
 	public BufferedImage getImage(Body b) {
-		if(b.getDirection() == Direction.RIGHT) {
-			//return null;
-		}
 		return images[parent.getBodyAgeState().ordinal()][eBadgeRank.ordinal()];
 	}
 	/**バッジランク取得*/

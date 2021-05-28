@@ -1,9 +1,5 @@
 package src.base;
 
-import java.util.Random;
-
-
-
 /*****************************************************
 	ゆっくり同士や環境とのメッセージ伝達を行うためのイベントパックの抽象クラス
 	<br>EventPacketにデータをセットして環境に対してアクションを起こす場合はTerrarium.eventListへ、
@@ -53,8 +49,6 @@ abstract public class EventPacket implements java.io.Serializable{
 	private int toX;
 	private int toY;
 	private int toZ;
-
-	protected Random rnd = new Random();
 
 	/**
 	 * コンストラクタ

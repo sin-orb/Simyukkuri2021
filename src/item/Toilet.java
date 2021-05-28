@@ -129,7 +129,7 @@ public class Toilet extends ObjEX implements java.io.Serializable {
 	}
 	@Override
 	public void removeListData(){
-		SimYukkuri.world.currentMap.toilet.remove(this);
+		SimYukkuri.world.getCurrentMap().toilet.remove(this);
 	}
 	/**
 	 * 自動で掃除するかどうか
@@ -156,7 +156,7 @@ public class Toilet extends ObjEX implements java.io.Serializable {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		List<Toilet> list = SimYukkuri.world.currentMap.toilet;
+		List<Toilet> list = SimYukkuri.world.getCurrentMap().toilet;
 		list.add(this);
 		objType = Type.PLATFORM;
 		objEXType = ObjEXType.TOILET;
@@ -166,7 +166,7 @@ public class Toilet extends ObjEX implements java.io.Serializable {
 		if(ret) {
 			itemRank = ItemRank.values()[initOption];
 			// 森なら野生に変更
-			if( SimYukkuri.world.currentMap.mapIndex == 5 ||  SimYukkuri.world.currentMap.mapIndex == 6 ){
+			if( SimYukkuri.world.getCurrentMap().mapIndex == 5 ||  SimYukkuri.world.getCurrentMap().mapIndex == 6 ){
 				if( itemRank == ItemRank.HOUSE ){
 					itemRank = ItemRank.YASEI;
 				}

@@ -6,7 +6,6 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
-import java.util.Random;
 
 import src.SimYukkuri;
 import src.base.Body;
@@ -74,7 +73,6 @@ public class Sui extends ObjEX implements java.io.Serializable {
 	private int vecX,vecY;
 	private int speed = 400;
 
-	private Random rnd = new Random();
 	/**画像ロード*/
 	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
 		String[] tmp = {"_shadow","1","2","3"};
@@ -319,7 +317,7 @@ public class Sui extends ObjEX implements java.io.Serializable {
 	
 	@Override
 	public void removeListData(){
-		SimYukkuri.world.currentMap.sui.remove(this);
+		SimYukkuri.world.getCurrentMap().sui.remove(this);
 	}
 	
 	@Override
@@ -372,10 +370,10 @@ public class Sui extends ObjEX implements java.io.Serializable {
 						by=y;
 					}
 					if(b.isIdiot()){
-						bx = rnd.nextInt(Translate.mapW);
-						by = rnd.nextInt(Translate.mapH - boundary.height/2);
+						bx = SimYukkuri.RND.nextInt(Translate.mapW);
+						by = SimYukkuri.RND.nextInt(Translate.mapH - boundary.height/2);
 					}
-					if(rnd.nextInt(100)==0 && b.getIntelligence() == Intelligence.FOOL){
+					if(SimYukkuri.RND.nextInt(100)==0 && b.getIntelligence() == Intelligence.FOOL){
 						speed=1000;
 					}
 					moveTo(bx, by);
@@ -490,7 +488,7 @@ public class Sui extends ObjEX implements java.io.Serializable {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		SimYukkuri.world.currentMap.sui.add(this);
+		SimYukkuri.world.getCurrentMap().sui.add(this);
 		objType = Type.OBJECT;
 		objEXType = ObjEXType.SUI;
 		

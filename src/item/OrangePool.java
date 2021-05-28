@@ -142,7 +142,7 @@ public class OrangePool extends ObjEX implements java.io.Serializable {
 	
 	@Override
 	public void removeListData(){
-		SimYukkuri.world.currentMap.orangePool.remove(this);
+		SimYukkuri.world.getCurrentMap().orangePool.remove(this);
 	}
 	
 	/**
@@ -156,7 +156,7 @@ public class OrangePool extends ObjEX implements java.io.Serializable {
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
 		
-		List<OrangePool> list = SimYukkuri.world.currentMap.orangePool;
+		List<OrangePool> list = SimYukkuri.world.getCurrentMap().orangePool;
 			list.add(this);
 
 		objType = Type.PLATFORM;
@@ -167,7 +167,7 @@ public class OrangePool extends ObjEX implements java.io.Serializable {
 		if(ret) {
 			itemRank = ItemRank.values()[initOption];
 			// 森なら野生に変更
-			if( SimYukkuri.world.currentMap.mapIndex == 5 ||  SimYukkuri.world.currentMap.mapIndex == 6 ){
+			if( SimYukkuri.world.getCurrentMap().mapIndex == 5 ||  SimYukkuri.world.getCurrentMap().mapIndex == 6 ){
 				if( itemRank == ItemRank.HOUSE ){
 					itemRank = ItemRank.YASEI;
 				}

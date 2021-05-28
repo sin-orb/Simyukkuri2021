@@ -5,7 +5,6 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
-import java.util.Random;
 
 import src.SimYukkuri;
 import src.base.Body;
@@ -26,7 +25,6 @@ public class ProductChute extends ObjEX implements java.io.Serializable {
 	private static final int images_num = 2; //このクラスの総使用画像数
 	private static BufferedImage[] images = new BufferedImage[images_num];
 	private static Rectangle boundary = new Rectangle();
-	protected Random rnd = new Random();
 	/**画像ロード*/
 	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
 		images[0] = ModLoader.loadItemImage(loader, "ProductChute" + File.separator + "ProductChute.png");
@@ -78,7 +76,7 @@ public class ProductChute extends ObjEX implements java.io.Serializable {
 
 	@Override
 	public void removeListData(){
-		SimYukkuri.world.currentMap.productchute.remove(this);
+		SimYukkuri.world.getCurrentMap().productchute.remove(this);
 	}
 	/**
 	 * コンストラクタ
@@ -87,7 +85,7 @@ public class ProductChute extends ObjEX implements java.io.Serializable {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		SimYukkuri.world.currentMap.productchute.add(this);
+		SimYukkuri.world.getCurrentMap().productchute.add(this);
 		objType = Type.PLATFORM;
 		objEXType = ObjEXType.PRODUCTCHUTE;
 		interval = 10;

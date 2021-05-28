@@ -98,7 +98,7 @@ public class HybridYukkuri extends Body implements java.io.Serializable {
 			}
 		}
 
-		if ( RND.nextBoolean() ){
+		if ( SimYukkuri.RND.nextBoolean() ){
 			dorei = doreiTmp;
 			dorei2 = doreiTmp2;
 		}
@@ -107,14 +107,14 @@ public class HybridYukkuri extends Body implements java.io.Serializable {
 			dorei2 = doreiTmp;
 		}
 
-		if ( RND.nextBoolean() ){
+		if ( SimYukkuri.RND.nextBoolean() ){
 			dorei3 = doreiTmp;
 		}
 		else{
 			dorei3 = doreiTmp2;
 		}
 
-		if ( RND.nextBoolean() ){
+		if ( SimYukkuri.RND.nextBoolean() ){
 			dorei4 = doreiTmp;
 		}
 		else{
@@ -126,7 +126,7 @@ public class HybridYukkuri extends Body implements java.io.Serializable {
 		nameE = dorei.getNameE();
 		nameJ2 = dorei2.getNameJ();
 		nameE2 = dorei2.getNameE();
-		setYcost(dorei.getYcost());
+		setcost(dorei.getYcost());
 		getSaleValue()[0] = dorei.getSellingPrice(0);
 		getSaleValue()[1] = dorei.getSellingPrice(1);
 
@@ -408,9 +408,9 @@ public class HybridYukkuri extends Body implements java.io.Serializable {
 		PREGPERIOD *= factor;
 		SLEEPPERIOD *= factor;
 		ACTIVEPERIOD *= factor;
-		sameDest = RND.nextInt(20)+20;
+		sameDest = SimYukkuri.RND.nextInt(20)+20;
 		DECLINEPERIOD *= (Math.random()+0.5);
-		ROBUSTNESS = RND.nextInt(10)+1;
+		ROBUSTNESS = SimYukkuri.RND.nextInt(10)+1;
 		//EYESIGHT /= 4;
 		factor = Math.random()+0.5;
 		STRENGTH[AgeState.ADULT.ordinal()] *= factor;

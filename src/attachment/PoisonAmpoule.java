@@ -6,6 +6,7 @@ import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
 
+import src.SimYukkuri;
 import src.base.Attachment;
 import src.base.Body;
 import src.draw.ModLoader;
@@ -95,7 +96,7 @@ public class PoisonAmpoule extends Attachment {
 			parent.wakeup();
 		}
 		parent.setHappiness(Happiness.SAD);
-		if(rnd.nextInt(1000) == 0){
+		if(SimYukkuri.RND.nextInt(1000) == 0){
 			parent.clearActions();
 			parent.setCalm();
 			parent.setHappiness(Happiness.VERY_SAD);

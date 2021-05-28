@@ -37,11 +37,11 @@ public class Shit extends Obj implements java.io.Serializable {
 	public static final int NUM_OF_SHIT_STATE = 3;
 
 	private static final int SHITLIMIT[] = {100*24*2, 100*24*4, 100*24*8};
-	/** うんうんをしたゆっくりの名前。下のゆっくりへの参照自体はゆっくりがremoveされると消えてしまうため名前だけここで残す */
+	/** うんうんをしたゆっくりの名前。toString用 */
 	public String ownerName;
-	/** うんうんをしたゆっくり */
-	public Body owner;
-	/** どのステージのゆっくりがうんうんをしたか */
+	/** うんうんをしたゆっくりのUniqueID。誰がしたうんうんか？で子供のだったらトイレに運ぶ、とかの処理が可能 */
+	public int ownerId;
+	/** 赤ゆ/子ゆ/成ゆ、どのゆっくりがうんうんをしたか */
 	public AgeState ageState;
 	/** 落下時のダメージ */
 	public int falldownDamage = 0;
@@ -149,7 +149,7 @@ public class Shit extends Obj implements java.io.Serializable {
 		objType = Type.SHIT;
 		shitType = type.ordinal();
 		ownerName = b.getNameJ();
-		owner = b;
+		ownerId = b.getUniqueID();
 		x = initX;
 		y = initY;
 		z = initZ;
@@ -177,7 +177,7 @@ public class Shit extends Obj implements java.io.Serializable {
 		amount -= eatAmount;
 		if (amount < 0) {
 			amount = 0;
-			setRemoved(true);
+			remove();
 		}
 	}
 	/**
@@ -215,8 +215,7 @@ public class Shit extends Obj implements java.io.Serializable {
 		if (!isRemoved()) {
 			//age += TICK;
 			if (getAge() >= SHITLIMIT[ageState.ordinal()]) {
-				setRemoved(true);
-				owner = null;
+				remove();
 			}
 
 			int mapX = Translate.mapW;
@@ -277,10 +276,5 @@ public class Shit extends Obj implements java.io.Serializable {
 		}
 		calcPos();
 		return Event.REMOVED;
-	}
-	@Override
-	public void remove() {
-		owner = null;
-		super.remove();
 	}
 }

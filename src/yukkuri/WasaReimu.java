@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import src.SimYukkuri;
 import src.base.Body;
 import src.draw.ModLoader;
 import src.draw.Terrarium;
@@ -120,7 +121,7 @@ public class WasaReimu extends Reimu implements java.io.Serializable {
 
 				if( nOtherVerCount != 0 )
 				{
-					int nRndIndex = RND.nextInt(nOtherVerCount+1);
+					int nRndIndex = SimYukkuri.RND.nextInt(nOtherVerCount+1);
 					anImageVerStateCtrlNagasi[type][0] = nRndIndex;
 					layer.image[index] = imagesNagasi[type][direction * directionOffsetNagasi[type][0]][getBodyAgeState().ordinal()][nRndIndex];
 				}else{

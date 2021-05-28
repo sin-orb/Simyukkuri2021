@@ -8,7 +8,6 @@ import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.Random;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JOptionPane;
@@ -36,16 +35,8 @@ public class AutoFeeder extends ObjEX implements java.io.Serializable {
 
 	/** 出てくるエサタイプ */
 	public static enum FeedType {
-		NORMAL("ふつう"), 
-		BITTER("苦い"),
-		LEMON_POP("ラムネ"),
-		HOT("辛い"),
-		VIYUGRA("バイゆグラ"),
-		SWEETS2("あまあま(普通)"),
-		SWEETS1("あまあま(高級)"),
-		WASTE("生ゴミ"),
-		BODY("無加工生餌"),
-		PROCESSED_BODY("加工済生餌"),
+		NORMAL("ふつう"), BITTER("苦い"), LEMON_POP("ラムネ"), HOT("辛い"), VIYUGRA("バイゆグラ"), SWEETS2("あまあま(普通)"), SWEETS1(
+				"あまあま(高級)"), WASTE("生ゴミ"), BODY("無加工生餌"), PROCESSED_BODY("加工済生餌"),
 				;
 
 		private String name;
@@ -80,13 +71,12 @@ public class AutoFeeder extends ObjEX implements java.io.Serializable {
 	private static final int images_num = 2;
 	private static BufferedImage[] images = new BufferedImage[images_num];
 	private static Rectangle boundary = new Rectangle();
-
-	private Random rnd = new Random();
 	private int type = 0;
 	private int mode = 0;
 	private int feedingInterval = 6 * 100;
 	private int feedingP = 2;
 	private Obj food = null;
+
 	/**
 	 * イメージをロードする.
 	 * @param loader ローダ
@@ -116,6 +106,7 @@ public class AutoFeeder extends ObjEX implements java.io.Serializable {
 	public BufferedImage getShadowImage() {
 		return null;
 	}
+
 	/**
 	 * 境界を取得する.
 	 * @return 境界
@@ -141,7 +132,7 @@ public class AutoFeeder extends ObjEX implements java.io.Serializable {
 
 	@Override
 	public void removeListData() {
-		SimYukkuri.world.currentMap.autofeeder.remove(this);
+		SimYukkuri.world.getCurrentMap().autofeeder.remove(this);
 	}
 
 	@Override
@@ -153,8 +144,8 @@ public class AutoFeeder extends ObjEX implements java.io.Serializable {
 			return;
 
 		// お持ち帰りされていたりしたら初期化
-		if (!SimYukkuri.world.currentMap.food.contains(food) &&
-				!SimYukkuri.world.currentMap.body.contains(food)) {
+		if (!SimYukkuri.world.getCurrentMap().food.contains(food) &&
+				!SimYukkuri.world.getCurrentMap().body.contains(food)) {
 			food = null;
 		}
 
@@ -175,7 +166,7 @@ public class AutoFeeder extends ObjEX implements java.io.Serializable {
 					f.remove();
 				}
 			}
-		} else if (mode == 0 || (getAge() % feedingInterval) == 0 && rnd.nextInt(feedingP) == 0) {
+		} else if (mode == 0 || (getAge() % feedingInterval) == 0 && SimYukkuri.RND.nextInt(feedingP) == 0) {
 			if (type == FeedType.PROCESSED_BODY.ordinal()) {
 				// オートフィーダで出るゆっくりのタイプを決める。
 				int type = makeRandomType();
@@ -232,6 +223,7 @@ public class AutoFeeder extends ObjEX implements java.io.Serializable {
 	private int makeRandomType() {
 		return YukkuriUtil.getRandomYukkuriType(null);
 	}
+
 	/**
 	 * コンストラクタ.
 	 */
@@ -240,7 +232,7 @@ public class AutoFeeder extends ObjEX implements java.io.Serializable {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		List<AutoFeeder> list = SimYukkuri.world.currentMap.autofeeder;
+		List<AutoFeeder> list = SimYukkuri.world.getCurrentMap().autofeeder;
 		list.add(this);
 
 		objType = Type.PLATFORM;
@@ -334,6 +326,7 @@ public class AutoFeeder extends ObjEX implements java.io.Serializable {
 		}
 		return ret;
 	}
+
 	/**
 	 * INIファイルを読む.
 	 */

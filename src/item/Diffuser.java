@@ -115,7 +115,7 @@ public class Diffuser extends ObjEX implements java.io.Serializable {
 
 	@Override
 	public void removeListData(){
-		SimYukkuri.world.currentMap.diffuser.remove(this);
+		SimYukkuri.world.getCurrentMap().diffuser.remove(this);
 	}
 	/**
 	 * 蒸気タイプを取得する.
@@ -130,7 +130,7 @@ public class Diffuser extends ObjEX implements java.io.Serializable {
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), 8);
 		
-		List<Diffuser> list = SimYukkuri.world.currentMap.diffuser;
+		List<Diffuser> list = SimYukkuri.world.getCurrentMap().diffuser;
 		list.add(this);
 		objType = Type.OBJECT;
 		objEXType = ObjEXType.DIFFUSER;

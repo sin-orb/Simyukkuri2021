@@ -1,7 +1,6 @@
 package src.logic;
 
 import java.util.List;
-import java.util.Random;
 
 import src.SimYukkuri;
 import src.base.Body;
@@ -26,8 +25,6 @@ import src.system.MessagePool;
  */
 public class ToyLogic {
 
-	private static final Random rnd = new Random();
-
 	/**
 	 *  ボールで遊ぶ
 	 * @param b ゆっくり
@@ -38,7 +35,7 @@ public class ToyLogic {
 			return false;
 		}
 
-		List<Toy> list = SimYukkuri.world.currentMap.toy;
+		List<Toy> list = SimYukkuri.world.getCurrentMap().toy;
 		if( list == null || list.size() == 0 ){
 			return false;
 		}
@@ -114,7 +111,7 @@ public class ToyLogic {
 						b.setMessage(MessagePool.getMessage(b, MessagePool.Action.GetTreasure), true);
 					}
 				}
-				else if(rnd.nextInt(10) == 0){
+				else if(SimYukkuri.RND.nextInt(10) == 0){
 					b.getInVain(true);
 				}
 				else{
@@ -149,20 +146,20 @@ public class ToyLogic {
 	 * @return 処理が行われたか
 	 */
 	public static final boolean checkSui(Body b) {
-		List<Sui> list = SimYukkuri.world.currentMap.sui;
+		List<Sui> list = SimYukkuri.world.getCurrentMap().sui;
 		if( list == null || list.size() == 0 ){
 			return false;
 		}
 
 		if(canPlay(b)==false)return false;
-		if (//				|| rnd.nextInt(100) != 0 ||
+		if (//				|| SimYukkuri.RND.nextInt(100) != 0 ||
 				b.getLinkParent() instanceof Sui) {
 			return false;
 		}
 
 		int sui_num = list.size();
 		// すぃーがあるかつ1/150の確率でゆっくりする
-		if(rnd.nextInt(150) == 0 && sui_num > 0) {
+		if(SimYukkuri.RND.nextInt(150) == 0 && sui_num > 0) {
 			if(!b.isTalking()) {
 				b.setMessage(MessagePool.getMessage(b, MessagePool.Action.YukkuringSui), true);
 			}
@@ -200,7 +197,7 @@ public class ToyLogic {
 				}
 			}
 		}
-		else if(rnd.nextBoolean() && !b.isTalking() && Translate.distance(b.getX(), b.getY(), found.getX(), found.getY()) < 200000){
+		else if(SimYukkuri.RND.nextBoolean() && !b.isTalking() && Translate.distance(b.getX(), b.getY(), found.getX(), found.getY()) < 200000){
 			b.setMessage(MessagePool.getMessage(b, MessagePool.Action.hasSui), true);
 			EventLogic.addWorldEvent(new SuiSpeake(b, null, found, 10), null, null);
 			return false;
@@ -233,7 +230,7 @@ public class ToyLogic {
 				}
 			}
 		}
-		else if(SimYukkuri.world.currentMap.sui.size() > 0){
+		else if(SimYukkuri.world.getCurrentMap().sui.size() > 0){
 			EventLogic.addBodyEvent(b,new SuiSpeake(null, null, null, 10), null, null);
 		}
 		return ret;
@@ -248,7 +245,7 @@ public class ToyLogic {
 			return false;
 		}
 
-		List<Trampoline> trampolineList = SimYukkuri.world.currentMap.trampoline;
+		List<Trampoline> trampolineList = SimYukkuri.world.getCurrentMap().trampoline;
 		if( trampolineList == null || trampolineList.size() == 0 ){
 			return false;
 		}
@@ -289,21 +286,21 @@ public class ToyLogic {
 
 			if(b.getZ() == 0){
 				if(found.option == 0){
-					if(b.getIntelligence() == Intelligence.FOOL && rnd.nextInt(100) + 1 < found.accident2 || b.getIntelligence() != Intelligence.FOOL && rnd.nextInt(100) + 1 < found.accident1)
+					if(b.getIntelligence() == Intelligence.FOOL && SimYukkuri.RND.nextInt(100) + 1 < found.accident2 || b.getIntelligence() != Intelligence.FOOL && SimYukkuri.RND.nextInt(100) + 1 < found.accident1)
 					{
-						b.kick(0, 0, ((strength[b.getBodyAgeState().ordinal()] + strength[b.getBodyAgeState().ordinal()] * rnd.nextInt(1)) - rnd.nextInt(5)) * 3);
+						b.kick(0, 0, ((strength[b.getBodyAgeState().ordinal()] + strength[b.getBodyAgeState().ordinal()] * SimYukkuri.RND.nextInt(1)) - SimYukkuri.RND.nextInt(5)) * 3);
 					}
 					else{
-						b.kick(0, 0, (strength[b.getBodyAgeState().ordinal()] + strength[b.getBodyAgeState().ordinal()] * rnd.nextInt(1)) - rnd.nextInt(5));
+						b.kick(0, 0, (strength[b.getBodyAgeState().ordinal()] + strength[b.getBodyAgeState().ordinal()] * SimYukkuri.RND.nextInt(1)) - SimYukkuri.RND.nextInt(5));
 					}
 				}
 				else{
-					if(b.getIntelligence() == Intelligence.FOOL && rnd.nextInt(100) + 1 <= found.accident2 || b.getIntelligence() != Intelligence.FOOL && rnd.nextInt(100) + 1 < found.accident1)
+					if(b.getIntelligence() == Intelligence.FOOL && SimYukkuri.RND.nextInt(100) + 1 <= found.accident2 || b.getIntelligence() != Intelligence.FOOL && SimYukkuri.RND.nextInt(100) + 1 < found.accident1)
 					{
-						b.kick(b.getDirX() * b.getStep(), b.getDirY() * b.getStep(), ((strength[b.getBodyAgeState().ordinal()] + strength[b.getBodyAgeState().ordinal()] * rnd.nextInt(1)) - rnd.nextInt(5)) * 3);
+						b.kick(b.getDirX() * b.getStep(), b.getDirY() * b.getStep(), ((strength[b.getBodyAgeState().ordinal()] + strength[b.getBodyAgeState().ordinal()] * SimYukkuri.RND.nextInt(1)) - SimYukkuri.RND.nextInt(5)) * 3);
 					}
 					else{
-						b.kick(b.getDirX() * b.getStep(), b.getDirY() * b.getStep(), (strength[b.getBodyAgeState().ordinal()] + strength[b.getBodyAgeState().ordinal()] * rnd.nextInt(1)) - rnd.nextInt(5));
+						b.kick(b.getDirX() * b.getStep(), b.getDirY() * b.getStep(), (strength[b.getBodyAgeState().ordinal()] + strength[b.getBodyAgeState().ordinal()] * SimYukkuri.RND.nextInt(1)) - SimYukkuri.RND.nextInt(5));
 					}
 				}
 			}

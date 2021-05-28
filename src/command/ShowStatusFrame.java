@@ -8,7 +8,6 @@ import java.awt.event.WindowListener;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.stream.Collectors;
@@ -63,7 +62,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 	private JTextField textField_25;
 
 	private static final ShowStatusFrame instance = new ShowStatusFrame();
-	
+
 	/**
 	 * コンストラクタ.
 	 */
@@ -74,26 +73,26 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
+
 		JLabel lblNewLabel = new JLabel("ゆっくりのID");
 		lblNewLabel.setBounds(12, 10, 78, 20);
 		contentPane.add(lblNewLabel);
-		
+
 		textField = new JTextField();
 		textField.setBounds(102, 12, 96, 19);
 		contentPane.add(textField);
 		textField.setColumns(10);
-		
+
 		JLabel lblNewLabel_1 = new JLabel("名称");
 		lblNewLabel_1.setBounds(243, 14, 29, 13);
 		contentPane.add(lblNewLabel_1);
-		
+
 		textField_1 = new JTextField();
 		textField_1.setEditable(false);
 		textField_1.setBounds(295, 10, 128, 19);
 		contentPane.add(textField_1);
 		textField_1.setColumns(10);
-		
+
 		JButton btnNewButton = new JButton("更新");
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -106,9 +105,9 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 					return;
 				}
 				final int id = idTemp;
-				List<Body> yukkuris = SimYukkuri.world.currentMap.body.stream()
-					.filter(b -> b.getUniqueID() == id)
-					.collect(Collectors.toList());
+				List<Body> yukkuris = SimYukkuri.world.getCurrentMap().body.stream()
+						.filter(b -> b.getUniqueID() == id)
+						.collect(Collectors.toList());
 				if (yukkuris.size() == 0) {
 					showError("存在しないゆっくりを参照しようとしています。");
 				} else {
@@ -128,12 +127,12 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 					return;
 				}
 				final int id = idTemp;
-				List<Body> sorted = SimYukkuri.world.currentMap.body.stream()
-				.sorted().collect(Collectors.toList());
+				List<Body> sorted = SimYukkuri.world.getCurrentMap().body.stream()
+						.sorted().collect(Collectors.toList());
 				int target = -1;
 				for (int i = 0; i < sorted.size(); i++) {
 					Body b = sorted.get(i);
-					if (b.getUniqueID() > id ) {
+					if (b.getUniqueID() > id) {
 						target = i;
 						break;
 					}
@@ -163,12 +162,12 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 					return;
 				}
 				final int id = idTemp;
-				List<Body> sorted = (List<Body>) SimYukkuri.world.currentMap.body.stream()
-				.sorted(Comparator.reverseOrder()).collect(Collectors.toList());
+				List<Body> sorted = (List<Body>) SimYukkuri.world.getCurrentMap().body.stream()
+						.sorted(Comparator.reverseOrder()).collect(Collectors.toList());
 				int target = -1;
 				for (int i = 0; i < sorted.size(); i++) {
 					Body b = sorted.get(i);
-					if (b.getUniqueID() < id ) {
+					if (b.getUniqueID() < id) {
 						target = i;
 						break;
 					}
@@ -188,11 +187,11 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		contentPane.add(btnNewButton_2);
 		btnNewButton.setBounds(665, 11, 91, 21);
 		contentPane.add(btnNewButton);
-		
+
 		JButton btnNewButton_3 = new JButton("最初");
 		btnNewButton_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				List<Body> sorted = SimYukkuri.world.currentMap.body.stream()
+				List<Body> sorted = SimYukkuri.world.getCurrentMap().body.stream()
 						.sorted().collect(Collectors.toList());
 				if (sorted.size() == 0) {
 					showError("存在しないゆっくりを参照しようとしています。");
@@ -209,7 +208,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		btnNewButton_4.addActionListener(new ActionListener() {
 			@SuppressWarnings("unchecked")
 			public void actionPerformed(ActionEvent e) {
-				List<Body> sorted = (List<Body>) SimYukkuri.world.currentMap.body.stream()
+				List<Body> sorted = (List<Body>) SimYukkuri.world.getCurrentMap().body.stream()
 						.sorted(Comparator.reverseOrder()).collect(Collectors.toList());
 				if (sorted.size() == 0) {
 					showError("存在しないゆっくりを参照しようとしています。");
@@ -221,17 +220,17 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		});
 		btnNewButton_4.setBounds(665, 135, 91, 21);
 		contentPane.add(btnNewButton_4);
-		
+
 		JButton btnNewButton_5 = new JButton("ランダム");
 		btnNewButton_5.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				int random = new Random().nextInt(SimYukkuri.world.currentMap.body.size());
-				ShowStatusFrame.getInstance().giveBodyInfo(SimYukkuri.world.currentMap.body.get(random));
+				int random = SimYukkuri.RND.nextInt(SimYukkuri.world.getCurrentMap().body.size());
+				ShowStatusFrame.getInstance().giveBodyInfo(SimYukkuri.world.getCurrentMap().body.get(random));
 			}
 		});
 		btnNewButton_5.setBounds(665, 167, 91, 21);
 		contentPane.add(btnNewButton_5);
-		
+
 		JButton btnNewButton_6 = new JButton("妻（夫）");
 		btnNewButton_6.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -243,9 +242,9 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 					return;
 				}
 				final int id = idTemp;
-				List<Body> yukkuris = SimYukkuri.world.currentMap.body.stream()
-					.filter(b -> b.getUniqueID() == id)
-					.collect(Collectors.toList());
+				List<Body> yukkuris = SimYukkuri.world.getCurrentMap().body.stream()
+						.filter(b -> b.getUniqueID() == id)
+						.collect(Collectors.toList());
 				if (yukkuris.size() == 0) {
 					showError("存在しないゆっくりを参照しようとしています。");
 					return;
@@ -262,7 +261,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		});
 		btnNewButton_6.setBounds(665, 198, 91, 21);
 		contentPane.add(btnNewButton_6);
-		
+
 		JButton btnNewButton_7 = new JButton("子供");
 		btnNewButton_7.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -274,9 +273,9 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 					return;
 				}
 				final int id = idTemp;
-				List<Body> yukkuris = SimYukkuri.world.currentMap.body.stream()
-					.filter(b -> b.getUniqueID() == id)
-					.collect(Collectors.toList());
+				List<Body> yukkuris = SimYukkuri.world.getCurrentMap().body.stream()
+						.filter(b -> b.getUniqueID() == id)
+						.collect(Collectors.toList());
 				if (yukkuris.size() == 0) {
 					showError("存在しないゆっくりを参照しようとしています。");
 					return;
@@ -293,7 +292,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		});
 		btnNewButton_7.setBounds(665, 229, 91, 21);
 		contentPane.add(btnNewButton_7);
-		
+
 		JButton btnNewButton_8 = new JButton("姉");
 		btnNewButton_8.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -305,9 +304,9 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 					return;
 				}
 				final int id = idTemp;
-				List<Body> yukkuris = SimYukkuri.world.currentMap.body.stream()
-					.filter(b -> b.getUniqueID() == id)
-					.collect(Collectors.toList());
+				List<Body> yukkuris = SimYukkuri.world.getCurrentMap().body.stream()
+						.filter(b -> b.getUniqueID() == id)
+						.collect(Collectors.toList());
 				if (yukkuris.size() == 0) {
 					showError("存在しないゆっくりを参照しようとしています。");
 					return;
@@ -324,7 +323,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		});
 		btnNewButton_8.setBounds(665, 260, 91, 21);
 		contentPane.add(btnNewButton_8);
-		
+
 		JButton btnNewButton_9 = new JButton("妹");
 		btnNewButton_9.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -336,9 +335,9 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 					return;
 				}
 				final int id = idTemp;
-				List<Body> yukkuris = SimYukkuri.world.currentMap.body.stream()
-					.filter(b -> b.getUniqueID() == id)
-					.collect(Collectors.toList());
+				List<Body> yukkuris = SimYukkuri.world.getCurrentMap().body.stream()
+						.filter(b -> b.getUniqueID() == id)
+						.collect(Collectors.toList());
 				if (yukkuris.size() == 0) {
 					showError("存在しないゆっくりを参照しようとしています。");
 					return;
@@ -355,7 +354,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		});
 		btnNewButton_9.setBounds(665, 291, 91, 21);
 		contentPane.add(btnNewButton_9);
-		
+
 		JButton btnNewButton_10 = new JButton("父");
 		btnNewButton_10.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -367,9 +366,9 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 					return;
 				}
 				final int id = idTemp;
-				List<Body> yukkuris = SimYukkuri.world.currentMap.body.stream()
-					.filter(b -> b.getUniqueID() == id)
-					.collect(Collectors.toList());
+				List<Body> yukkuris = SimYukkuri.world.getCurrentMap().body.stream()
+						.filter(b -> b.getUniqueID() == id)
+						.collect(Collectors.toList());
 				if (yukkuris.size() == 0) {
 					showError("存在しないゆっくりを参照しようとしています。");
 					return;
@@ -387,7 +386,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		});
 		btnNewButton_10.setBounds(665, 322, 91, 21);
 		contentPane.add(btnNewButton_10);
-		
+
 		JButton btnNewButton_11 = new JButton("母");
 		btnNewButton_11.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -399,9 +398,9 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 					return;
 				}
 				final int id = idTemp;
-				List<Body> yukkuris = SimYukkuri.world.currentMap.body.stream()
-					.filter(b -> b.getUniqueID() == id)
-					.collect(Collectors.toList());
+				List<Body> yukkuris = SimYukkuri.world.getCurrentMap().body.stream()
+						.filter(b -> b.getUniqueID() == id)
+						.collect(Collectors.toList());
 				if (yukkuris.size() == 0) {
 					showError("存在しないゆっくりを参照しようとしています。");
 					return;
@@ -420,77 +419,76 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		btnNewButton_11.setBounds(665, 351, 91, 21);
 		contentPane.add(btnNewButton_11);
 
-		
 		JLabel lblNewLabel_2 = new JLabel("年齢");
 		lblNewLabel_2.setBounds(494, 16, 37, 13);
 		contentPane.add(lblNewLabel_2);
-		
+
 		textField_2 = new JTextField();
 		textField_2.setEditable(false);
 		textField_2.setBounds(552, 13, 96, 19);
 		contentPane.add(textField_2);
 		textField_2.setColumns(10);
-		
+
 		JLabel lblNewLabel_3 = new JLabel("目的");
 		lblNewLabel_3.setBounds(12, 50, 78, 13);
 		contentPane.add(lblNewLabel_3);
-		
+
 		textField_3 = new JTextField();
 		textField_3.setEditable(false);
 		textField_3.setBounds(60, 48, 154, 19);
 		contentPane.add(textField_3);
 		textField_3.setColumns(10);
-		
+
 		JLabel lblNewLabel_4 = new JLabel("目的座標");
 		lblNewLabel_4.setBounds(224, 50, 62, 13);
 		contentPane.add(lblNewLabel_4);
-		
+
 		textField_4 = new JTextField();
 		textField_4.setEditable(false);
 		textField_4.setBounds(295, 46, 128, 19);
 		contentPane.add(textField_4);
 		textField_4.setColumns(10);
-		
+
 		JLabel lblNewLabel_5 = new JLabel("イベント");
 		lblNewLabel_5.setBounds(427, 51, 62, 13);
 		contentPane.add(lblNewLabel_5);
-		
+
 		textField_5 = new JTextField();
 		textField_5.setEditable(false);
 		textField_5.setBounds(479, 49, 169, 19);
 		contentPane.add(textField_5);
 		textField_5.setColumns(10);
-		
+
 		JLabel lblNewLabel_6 = new JLabel("非ゆっくり症耐性度");
 		lblNewLabel_6.setBounds(12, 85, 128, 13);
 		contentPane.add(lblNewLabel_6);
-		
+
 		textField_6 = new JTextField();
 		textField_6.setEditable(false);
 		textField_6.setBounds(133, 83, 96, 19);
 		contentPane.add(textField_6);
 		textField_6.setColumns(10);
-		
+
 		JLabel lblNewLabel_7 = new JLabel("現在HP / MAXHP");
 		lblNewLabel_7.setBounds(12, 120, 96, 13);
 		contentPane.add(lblNewLabel_7);
-		
+
 		textField_7 = new JTextField();
 		textField_7.setEditable(false);
 		textField_7.setBounds(122, 118, 96, 19);
 		contentPane.add(textField_7);
 		textField_7.setColumns(10);
-		
+
 		JLabel lblNewLabel_8 = new JLabel("現在満腹度 / MAX満腹度");
 		lblNewLabel_8.setBounds(389, 122, 140, 13);
 		contentPane.add(lblNewLabel_8);
-		
+
 		textField_8 = new JTextField();
 		textField_8.setEditable(false);
 		textField_8.setBounds(552, 119, 96, 19);
 		contentPane.add(textField_8);
 		textField_8.setColumns(10);
-		
+
 		JLabel lblNewLabel_9 = new JLabel("呼称");
 		lblNewLabel_9.setBounds(243, 85, 50, 13);
 		contentPane.add(lblNewLabel_9);
@@ -500,161 +498,161 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		textField_9.setBounds(295, 82, 128, 19);
 		contentPane.add(textField_9);
 		textField_9.setColumns(10);
-		
+
 		JLabel lblNewLabel_10 = new JLabel("ゆかびレベル");
 		lblNewLabel_10.setBounds(12, 155, 96, 13);
 		contentPane.add(lblNewLabel_10);
-		
+
 		textField_10 = new JTextField();
 		textField_10.setEditable(false);
 		textField_10.setBounds(102, 153, 96, 19);
 		contentPane.add(textField_10);
 		textField_10.setColumns(10);
-		
+
 		JLabel lblNewLabel_11 = new JLabel("体重");
 		lblNewLabel_11.setBounds(243, 155, 50, 13);
 		contentPane.add(lblNewLabel_11);
-		
+
 		textField_11 = new JTextField();
 		textField_11.setEditable(false);
 		textField_11.setBounds(295, 151, 128, 19);
 		contentPane.add(textField_11);
 		textField_11.setColumns(10);
-		
+
 		JLabel lblNewLabel_12 = new JLabel("あんこ量");
 		lblNewLabel_12.setBounds(479, 157, 61, 13);
 		contentPane.add(lblNewLabel_12);
-		
+
 		textField_12 = new JTextField();
 		textField_12.setEditable(false);
 		textField_12.setBounds(552, 154, 96, 19);
 		contentPane.add(textField_12);
 		textField_12.setColumns(10);
-		
+
 		JLabel lblNewLabel_13 = new JLabel("足焼きレベル");
 		lblNewLabel_13.setBounds(12, 188, 96, 13);
 		contentPane.add(lblNewLabel_13);
-		
+
 		textField_13 = new JTextField();
 		textField_13.setEditable(false);
 		textField_13.setBounds(102, 186, 96, 19);
 		contentPane.add(textField_13);
 		textField_13.setColumns(10);
-		
+
 		JLabel lblNewLabel_14 = new JLabel("お気に入りアイテム");
 		lblNewLabel_14.setBounds(427, 87, 140, 13);
 		contentPane.add(lblNewLabel_14);
-		
+
 		textField_14 = new JTextField();
 		textField_14.setEditable(false);
 		textField_14.setBounds(552, 84, 96, 19);
 		contentPane.add(textField_14);
 		textField_14.setColumns(10);
-		
+
 		JLabel lblNewLabel_15 = new JLabel("トラウマ");
 		lblNewLabel_15.setBounds(479, 187, 61, 13);
 		contentPane.add(lblNewLabel_15);
-		
+
 		textField_15 = new JTextField();
 		textField_15.setEditable(false);
 		textField_15.setBounds(552, 184, 96, 19);
 		contentPane.add(textField_15);
 		textField_15.setColumns(10);
-		
+
 		JLabel lblNewLabel_16 = new JLabel("姉");
 		lblNewLabel_16.setBounds(12, 221, 50, 13);
 		contentPane.add(lblNewLabel_16);
-		
+
 		textField_16 = new JTextField();
 		textField_16.setEditable(false);
 		textField_16.setBounds(43, 215, 603, 19);
 		contentPane.add(textField_16);
 		textField_16.setColumns(10);
-		
+
 		JLabel lblNewLabel_17 = new JLabel("妹");
 		lblNewLabel_17.setBounds(12, 247, 50, 13);
 		contentPane.add(lblNewLabel_17);
-		
+
 		textField_17 = new JTextField();
 		textField_17.setEditable(false);
 		textField_17.setBounds(43, 244, 603, 19);
 		contentPane.add(textField_17);
 		textField_17.setColumns(10);
-		
+
 		JLabel lblNewLabel_18 = new JLabel("子");
 		lblNewLabel_18.setBounds(12, 275, 50, 13);
 		contentPane.add(lblNewLabel_18);
-		
+
 		textField_18 = new JTextField();
 		textField_18.setEditable(false);
 		textField_18.setBounds(43, 272, 603, 19);
 		contentPane.add(textField_18);
 		textField_18.setColumns(10);
-		
+
 		JLabel lblNewLabel_19 = new JLabel("装備品");
 		lblNewLabel_19.setBounds(207, 309, 50, 13);
 		contentPane.add(lblNewLabel_19);
-		
+
 		JLabel lblNewLabel_20 = new JLabel("運搬中アイテム");
 		lblNewLabel_20.setBounds(441, 341, 91, 13);
 		contentPane.add(lblNewLabel_20);
-		
+
 		textField_20 = new JTextField();
 		textField_20.setEditable(false);
 		textField_20.setBounds(552, 336, 96, 19);
 		contentPane.add(textField_20);
 		textField_20.setColumns(10);
-		
+
 		JLabel lblNewLabel_21 = new JLabel("状態");
 		lblNewLabel_21.setBounds(12, 393, 50, 13);
 		contentPane.add(lblNewLabel_21);
-		
+
 		textField_21 = new JTextField();
 		textField_21.setEditable(false);
 		textField_21.setBounds(44, 389, 603, 19);
 		contentPane.add(textField_21);
 		textField_21.setColumns(10);
-		
+
 		JLabel lblNewLabel_22 = new JLabel("パートナー");
 		lblNewLabel_22.setBounds(14, 307, 76, 13);
 		contentPane.add(lblNewLabel_22);
-		
+
 		textField_22 = new JTextField();
 		textField_22.setEditable(false);
 		textField_22.setBounds(253, 305, 395, 19);
 		contentPane.add(textField_22);
 		textField_22.setColumns(10);
-		
+
 		textField_19 = new JTextField();
 		textField_19.setEditable(false);
 		textField_19.setBounds(99, 303, 96, 19);
 		contentPane.add(textField_19);
 		textField_19.setColumns(10);
-		
+
 		JLabel lblNewLabel_23 = new JLabel("たかっているアリの数");
 		lblNewLabel_23.setBounds(14, 337, 181, 13);
 		contentPane.add(lblNewLabel_23);
-		
+
 		textField_23 = new JTextField();
 		textField_23.setEditable(false);
 		textField_23.setBounds(170, 334, 96, 19);
 		contentPane.add(textField_23);
 		textField_23.setColumns(10);
-		
+
 		JLabel lblNewLabel_24 = new JLabel("壁にブロックされた数");
 		lblNewLabel_24.setBounds(14, 366, 164, 13);
 		contentPane.add(lblNewLabel_24);
-		
+
 		textField_24 = new JTextField();
 		textField_24.setEditable(false);
 		textField_24.setBounds(170, 363, 96, 19);
 		contentPane.add(textField_24);
 		textField_24.setColumns(10);
-		
+
 		JLabel lblNewLabel_25 = new JLabel("動ける状態か");
 		lblNewLabel_25.setBounds(441, 369, 80, 13);
 		contentPane.add(lblNewLabel_25);
-		
+
 		textField_25 = new JTextField();
 		textField_25.setEditable(false);
 		textField_25.setBounds(552, 365, 96, 19);
@@ -875,7 +873,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		}
 		textField_21.setText(emo);
 		String attach = "";
-		if(b.getAttach() != null && b.getAttach().size() != 0) {
+		if (b.getAttach() != null && b.getAttach().size() != 0) {
 			for (Attachment a : b.getAttach()) {
 				attach = attach += a.toString() + " / ";
 			}
@@ -886,7 +884,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 			attach = attach.substring(0, attach.length() - 2);
 		}
 		textField_22.setText(attach);
-		
+
 		textField_23.setText(String.valueOf(b.getNumOfAnts()));
 		textField_24.setText(String.valueOf(b.getBlockedCount()));
 		textField_25.setText(b.isLockmove() ? "動けない" : "動ける");
@@ -894,9 +892,10 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 
 	public static void showError(String s) {
 		JLabel label = new JLabel(s);
-	    label.setForeground(Color.RED);
-	    JOptionPane.showMessageDialog(ShowStatusFrame.getInstance(), label);
+		label.setForeground(Color.RED);
+		JOptionPane.showMessageDialog(ShowStatusFrame.getInstance(), label);
 	}
+
 	@Override
 	public void windowOpened(WindowEvent e) {
 	}
@@ -928,6 +927,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 	@Override
 	public void actionPerformed(ActionEvent e) {
 	}
+
 	/**
 	 * インスタンスを返す.
 	 * @return インスタンス

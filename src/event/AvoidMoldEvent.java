@@ -1,8 +1,7 @@
 package src.event;
 
-import java.util.Random;
-
 import src.Const;
+import src.SimYukkuri;
 import src.base.Body;
 import src.base.EventPacket;
 import src.base.Obj;
@@ -24,7 +23,6 @@ import src.system.MessagePool;
 public class AvoidMoldEvent extends EventPacket implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
-	Random rnd = new Random();
 	/**
 	 * コンストラクタ.
 	 */
@@ -104,7 +102,7 @@ public class AvoidMoldEvent extends EventPacket implements java.io.Serializable 
 				if (getFrom().isParent(to) || getFrom().isPartner(to)) {
 					switch(getFrom().getIntelligence()){
 						case FOOL:
-							if(rnd.nextInt(5) == 0){
+							if(SimYukkuri.RND.nextInt(5) == 0){
 								getFrom().doPeropero(to);
 								return true;
 							}
@@ -113,13 +111,13 @@ public class AvoidMoldEvent extends EventPacket implements java.io.Serializable 
 								return false;
 							}
 						case WISE:
-							if(rnd.nextInt(5) == 0){
+							if(SimYukkuri.RND.nextInt(5) == 0){
 								sayApologyMessage(getFrom(),to);
 								to.strikeByYukkuri(getFrom(), this, false);
 							}
 							return false;
 						default:
-							if(rnd.nextInt(5) == 0){
+							if(SimYukkuri.RND.nextInt(5) == 0){
 								sayApologyMessage(getFrom(),to);
 								to.strikeByYukkuri(getFrom(), this, false);
 								return true;
@@ -134,7 +132,7 @@ public class AvoidMoldEvent extends EventPacket implements java.io.Serializable 
 				else if(getFrom().isFamily(to)){
 					switch(getFrom().getIntelligence()){
 						case FOOL:
-							if(rnd.nextInt(5) == 0){
+							if(SimYukkuri.RND.nextInt(5) == 0){
 								getFrom().doPeropero(to);
 							}
 							else{
@@ -142,13 +140,13 @@ public class AvoidMoldEvent extends EventPacket implements java.io.Serializable 
 							}
 							return true;
 						case WISE:
-							if(rnd.nextInt(5) == 0){
+							if(SimYukkuri.RND.nextInt(5) == 0){
 								sayApologyMessage(getFrom(),to);
 								to.runAway(to.getX(),to.getY());
 							}
 							return true;
 						default:
-							if(rnd.nextInt(5) == 0){
+							if(SimYukkuri.RND.nextInt(5) == 0){
 								sayApologyMessage(getFrom(),to);
 								to.runAway(to.getX(),to.getY());
 								return true;
@@ -181,7 +179,7 @@ public class AvoidMoldEvent extends EventPacket implements java.io.Serializable 
 				b.addStress(70);
 				switch(getFrom().getIntelligence()){
 					case FOOL:
-						if(rnd.nextInt(5)==0){
+						if(SimYukkuri.RND.nextInt(5)==0){
 							getFrom().doPeropero(to);
 							return false;
 						}
@@ -190,7 +188,7 @@ public class AvoidMoldEvent extends EventPacket implements java.io.Serializable 
 							return false;
 						}
 				case WISE:
-					if(rnd.nextInt(5) == 0){
+					if(SimYukkuri.RND.nextInt(5) == 0){
 						sayApologyMessage(getFrom(),to);
 						to.runAway(to.getX(),to.getY());
 						return true;
@@ -200,12 +198,12 @@ public class AvoidMoldEvent extends EventPacket implements java.io.Serializable 
 						return false;
 					}
 				default:
-					if(rnd.nextInt(25) == 0){
+					if(SimYukkuri.RND.nextInt(25) == 0){
 						sayApologyMessage(getFrom(),to);
 						to.runAway(to.getX(),to.getY());
 						return true;
 					}
-					else if(rnd.nextInt(5)==0){
+					else if(SimYukkuri.RND.nextInt(5)==0){
 						getFrom().doPeropero(to);
 						return false;
 					}
@@ -219,7 +217,7 @@ public class AvoidMoldEvent extends EventPacket implements java.io.Serializable 
 			else if(to.isFamily(getFrom())){
 				switch(getFrom().getIntelligence()){
 					case FOOL:
-						if(rnd.nextInt(5)==0){
+						if(SimYukkuri.RND.nextInt(5)==0){
 							getFrom().doPeropero(to);
 							return false;
 						}
@@ -228,7 +226,7 @@ public class AvoidMoldEvent extends EventPacket implements java.io.Serializable 
 							return false;
 						}
 					case WISE:
-						if(rnd.nextInt(5) == 0){
+						if(SimYukkuri.RND.nextInt(5) == 0){
 							sayApologyMessage(getFrom(),to);
 							to.runAway(to.getX(),to.getY());
 							return true;
@@ -238,7 +236,7 @@ public class AvoidMoldEvent extends EventPacket implements java.io.Serializable 
 							return false;
 						}
 					default:
-						if(rnd.nextInt(10) == 0){
+						if(SimYukkuri.RND.nextInt(10) == 0){
 							sayApologyMessage(getFrom(),to);
 							to.runAway(to.getX(),to.getY());
 							return true;
@@ -281,7 +279,7 @@ public class AvoidMoldEvent extends EventPacket implements java.io.Serializable 
 			if(To.getAge()>=From.getAge())message = MessagePool.getMessage(getFrom(), MessagePool.Action.SadnessForEldersister);
 			else message = MessagePool.getMessage(getFrom(), MessagePool.Action.SadnessForMoldySister);
 		}
-		From.setBodyEventResMessage(message, Const.HOLDMESSAGE, true, rnd.nextBoolean());
+		From.setBodyEventResMessage(message, Const.HOLDMESSAGE, true, SimYukkuri.RND.nextBoolean());
 	}
 	/**
 	 * 謝罪する.
@@ -296,7 +294,7 @@ public class AvoidMoldEvent extends EventPacket implements java.io.Serializable 
 		else if(To.isFamily(From)){
 			message = MessagePool.getMessage(getFrom(), MessagePool.Action.ApologyToFamily);
 		}
-		From.setBodyEventResMessage(message, Const.HOLDMESSAGE, true, rnd.nextBoolean());
+		From.setBodyEventResMessage(message, Const.HOLDMESSAGE, true, SimYukkuri.RND.nextBoolean());
 	}
 	
 	@Override

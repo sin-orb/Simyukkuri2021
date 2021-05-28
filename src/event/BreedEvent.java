@@ -1,7 +1,5 @@
 package src.event;
 
-import java.util.Random;
-
 import src.attachment.Ants;
 import src.base.Body;
 import src.base.EventPacket;
@@ -22,7 +20,6 @@ import src.system.MessagePool;
 public class BreedEvent extends EventPacket implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
-	Random rnd = new Random();
 	/**
 	 * コンストラクタ.
 	 */

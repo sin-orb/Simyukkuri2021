@@ -75,7 +75,7 @@ public class Trampoline extends ObjEX implements java.io.Serializable {
 
 	@Override
 	public void removeListData(){
-		SimYukkuri.world.currentMap.trampoline.remove(this);
+		SimYukkuri.world.getCurrentMap().trampoline.remove(this);
 	}
 
 	@Override
@@ -129,13 +129,13 @@ public class Trampoline extends ObjEX implements java.io.Serializable {
 		super(initX, initY, initOption);
         setBoundary(boundary);
         setCollisionSize(getPivotX(), getPivotY());
-        SimYukkuri.world.currentMap.trampoline.add(this);
+        SimYukkuri.world.getCurrentMap().trampoline.add(this);
         objType = Type.OBJECT;
         objEXType = ObjEXType.TOY;
 		boolean bRet = setupTrampoline(this);
 		if( !bRet)
 		{
-			SimYukkuri.world.currentMap.trampoline.remove(this);
+			SimYukkuri.world.getCurrentMap().trampoline.remove(this);
 			return;
 		}
         value = 500;

@@ -107,7 +107,7 @@ public class MapWindow extends JDialog implements ActionListener, WindowListener
 	public void windowOpened(WindowEvent e) {
 		Point pos = SimYukkuri.simYukkuri.getLocation();
 		setLocation(pos.x + Translate.canvasW - 200, pos.y + 400);
-		butList[SimYukkuri.world.currentMap.mapIndex].setSelected(true);
+		butList[SimYukkuri.world.getCurrentMap().mapIndex].setSelected(true);
 	}
 
 	@Override

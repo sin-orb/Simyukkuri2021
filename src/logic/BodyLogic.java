@@ -3,7 +3,6 @@ package src.logic;
 import java.awt.Point;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
 
 import src.SimYukkuri;
 import src.attachment.Ants;
@@ -46,8 +45,6 @@ import src.yukkuri.Sakuya;
  * ゆっくり同士の処理
  */
 public class BodyLogic {
-
-	private static final Random rnd = new Random();
 
 	public static enum eActionGo {
 		NONE, WAIT, GO, BACK
@@ -97,9 +94,11 @@ public class BodyLogic {
 		return EnumRelationMine.OTHER;
 	}
 
-	//行動トリガーと、移動先決定
-	//
-	@SuppressWarnings("static-access")
+	/**
+	 * 行動トリガーと、移動先決定
+	 * @param b ゆっくり
+	 * @return 処理を行ったかどうか
+	 */
 	public static final boolean checkPartner(Body b) {
 		// 他の用事がある場合等
 		if (b.isToFood() ||  b.isToBed() || b.isToShit()) {
@@ -186,7 +185,7 @@ public class BodyLogic {
 			return false;
 		} else {
 			// 全ゆっくりに対してチェック
-			Body[] bodyList = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
+			Body[] bodyList = SimYukkuri.world.getCurrentMap().body.toArray(new Body[0]);
 			if (bodyList == null || bodyList.length == 0) {
 				return false;
 			}
@@ -316,7 +315,7 @@ public class BodyLogic {
 				} else if (minDistance <= dist && dist < secondMinDistance) {
 					//二番目に近い相手だと、ランダムでそっちに確定
 					secondMinDistance = dist;
-					if (rnd.nextBoolean())
+					if (SimYukkuri.RND.nextBoolean())
 						found = p;
 				}
 				// 自分のおかざりがなくて、相手にお飾りがある。うんうん奴隷のものは奪わない
@@ -347,7 +346,7 @@ public class BodyLogic {
 		// 目標が定まっていないなら終了
 		if (found == null) {
 			//興奮してたらオナニー
-			if (b.isExciting() && rnd.nextInt(60) == 0) {
+			if (b.isExciting() && SimYukkuri.RND.nextInt(60) == 0) {
 				b.doOnanism();
 				return true;
 			}
@@ -380,7 +379,7 @@ public class BodyLogic {
 			// 自分が発情していればすっきりに向かう
 			if (b.isExciting()) {
 				//自分がれいぱー/既婚/（ドゲスで1/10の確率）の場合はすっきりしに行く
-				if (b.isRaper() || (b.isVeryRude() && rnd.nextInt(10) == 0) || b.isPartner(found)
+				if (b.isRaper() || (b.isVeryRude() && SimYukkuri.RND.nextInt(10) == 0) || b.isPartner(found)
 						|| found.isPartner(b)) {
 					b.moveToSukkiri(found, found.getX() + colX, found.getY(), mz);
 					b.setTargetBind(true);
@@ -393,7 +392,7 @@ public class BodyLogic {
 						return true;
 					}
 					//ドゲスの場合は50%の確率でプロポーズをする
-					if (b.getAttitude() != Attitude.SUPER_SHITHEAD || (b.getAttitude() == Attitude.SUPER_SHITHEAD && b.RND.nextBoolean())) {
+					if (b.getAttitude() != Attitude.SUPER_SHITHEAD || (b.getAttitude() == Attitude.SUPER_SHITHEAD && SimYukkuri.RND.nextBoolean())) {
 						EventLogic.addBodyEvent(b, new ProposeEvent(b, found, null, 1), null, null);
 						return true;
 					} else if (b.getAttitude() == Attitude.SUPER_SHITHEAD) {
@@ -410,7 +409,7 @@ public class BodyLogic {
 				if (b.isPredatorType() || !found.isPredatorType()) {
 					// 相手がおかざりのないゆっくりなら制裁を呼びかける
 					if (b.isVeryRude() || !found.isDamaged()) {
-						if (rnd.nextInt(20) == 0) {
+						if (SimYukkuri.RND.nextInt(20) == 0) {
 							if (!b.isTalking()) {
 								// 自分がうんうん奴隷ではない場合
 								if (b.getPublicRank() != PublicRank.UnunSlave) {
@@ -446,7 +445,7 @@ public class BodyLogic {
 			if (bodyHasOkazari != null) {
 				b.setToSteal(false);
 				// 視界内に起きているゆっくりがいない
-				if (!BodyLogic.checkWakeupOtherYukkuri(b) || rnd.nextInt(20) == 0) {
+				if (!BodyLogic.checkWakeupOtherYukkuri(b) || SimYukkuri.RND.nextInt(20) == 0) {
 					b.moveToBody(bodyHasOkazari, bodyHasOkazari.getX() + colX, bodyHasOkazari.getY(), mz);
 					b.setTargetBind(false);
 					b.setToSteal(true);
@@ -460,7 +459,7 @@ public class BodyLogic {
 			// 相手に針が刺さっている場合
 			if (found.isNeedled()) {
 				// ランダムで向かう
-				if (rnd.nextInt(50) == 0) {
+				if (SimYukkuri.RND.nextInt(50) == 0) {
 					if (b.isAdult() && !found.isAdult() && (found.isChild(b) || b.isMother(found))) {
 						// 自分が母親で相手が針の刺さった子供ならぐーりぐーりしにいく
 						b.moveToBody(found, found.getX() + colX, found.getY(), mz);
@@ -476,7 +475,7 @@ public class BodyLogic {
 
 			// 以下相手に針が刺さっていない場合
 
-			if (rnd.nextBoolean()) {
+			if (SimYukkuri.RND.nextBoolean()) {
 				if (b.isAdult() && !found.isAdult() && (found.isChild(b) || b.isMother(found))
 						&& (b.getIntelligence() == Intelligence.FOOL && !b.hasOkazari())) {
 					// 相手が子供でも、子供にお飾りがなくてかつ親がバカならよらない
@@ -504,7 +503,7 @@ public class BodyLogic {
 
 			// ランダムでつがいのところへ向かう
 			if (found.isPartner(b)) {
-				if (rnd.nextInt(150) == 0) {
+				if (SimYukkuri.RND.nextInt(150) == 0) {
 					b.moveToBody(found, found.getX() + colX, found.getY(), mz);
 					b.setTargetBind(false);
 					return true;
@@ -513,7 +512,7 @@ public class BodyLogic {
 
 			// ランダムで親のところへ向かう
 			if (!b.isAdult() && b.isChild(found)) {
-				if (rnd.nextInt(100) == 0) {
+				if (SimYukkuri.RND.nextInt(100) == 0) {
 					b.moveToBody(found, found.getX() + colX, found.getY(), mz);
 					b.setTargetBind(false);
 					return true;
@@ -522,7 +521,7 @@ public class BodyLogic {
 
 			// ランダムで姉妹のところへ向かう
 			if (!b.isAdult() && b.isSister(found)) {
-				if (rnd.nextInt(150) == 0) {
+				if (SimYukkuri.RND.nextInt(150) == 0) {
 					b.moveToBody(found, found.getX() + colX, found.getY(), mz);
 					b.setTargetBind(false);
 					return true;
@@ -531,7 +530,7 @@ public class BodyLogic {
 
 			// ランダムで家族のところへ向かう
 			if (b.isAdult() && !found.isAdult() && b.isFamily(found)) {
-				if (rnd.nextInt(150) == 0) {
+				if (SimYukkuri.RND.nextInt(150) == 0) {
 					b.moveToBody(found, found.getX() + colX, found.getY(), mz);
 					b.setTargetBind(false);
 					return true;
@@ -553,7 +552,7 @@ public class BodyLogic {
 				b.setTargetBind(false);
 				return true;
 			}
-			if (rnd.nextInt(10) != 0) {
+			if (SimYukkuri.RND.nextInt(10) != 0) {
 				return ret;
 			}
 			// 片方だけがうんうん奴隷の場合はなにもしない
@@ -670,7 +669,7 @@ public class BodyLogic {
 					if (!b.isTalking()) {
 						if (b.isParent(p)) {
 							b.setMessage(MessagePool.getMessage(b, MessagePool.Action.SadnessForChild));
-							//if(rnd.nextInt(10)==0 ){
+							//if(SimYukkuri.RND.nextInt(10)==0 ){
 							if (b.checkWait(2000)) {
 								b.setLastActionTime();
 								EventLogic.addWorldEvent(new FuneralEvent(b, p, null, 10), b, null);
@@ -797,7 +796,7 @@ public class BodyLogic {
 					// つがいで相手が針の刺さっているならぐーりぐーり
 					b.constraintDirection(p, false);
 					b.doGuriguri(p);
-				} else if (!b.isAdult() && b.isSister(p) && rnd.nextInt(1) == 0) {
+				} else if (!b.isAdult() && b.isSister(p) && SimYukkuri.RND.nextInt(1) == 0) {
 					// 姉妹で相手が針の刺さっているならぐーりぐーり
 					b.constraintDirection(p, false);
 					b.doGuriguri(p);
@@ -819,7 +818,7 @@ public class BodyLogic {
 			// 相手が子供でも、子供にお飾りがなくてかつ親がバカならなら制裁する
 			if (b.isAdult() && !p.isAdult() && (p.isChild(b) || b.isMother(p))
 					&& (b.getIntelligence() == Intelligence.FOOL && !p.hasOkazari())) {
-				if (b.getCurrentEvent() == null && p.isNYD() && rnd.nextBoolean()) {
+				if (b.getCurrentEvent() == null && p.isNYD() && SimYukkuri.RND.nextBoolean()) {
 					b.clearActions();
 					EventLogic.addWorldEvent(new HateNoOkazariEvent(b, p, null, 10), b,
 							MessagePool.getMessage(b, MessagePool.Action.HateYukkuri));
@@ -846,17 +845,17 @@ public class BodyLogic {
 				// 自分が親で相手が子供の時のスキンシップ
 				b.constraintDirection(p, false);
 				//相手が汚れていてかつ自分が母親の時か、ランダムでぺろぺろ
-				if ((p.isDirty() && b.isMother(p)) || rnd.nextBoolean()) {
+				if ((p.isDirty() && b.isMother(p)) || SimYukkuri.RND.nextBoolean()) {
 					b.doPeropero(p);
 				}
 				//他はすりすり
-				else if (rnd.nextBoolean()) {
+				else if (SimYukkuri.RND.nextBoolean()) {
 					b.doSurisuri(p);
 				}
 				b.clearActions();
 				return true;
 			}
-			if (p.isPartner(b) && rnd.nextBoolean()) {
+			if (p.isPartner(b) && SimYukkuri.RND.nextBoolean()) {
 				// 相手が自分の番ならすりすり
 				b.constraintDirection(p, false);
 				b.doSurisuri(p);
@@ -871,24 +870,24 @@ public class BodyLogic {
 					p.doPeropero(b);
 				}
 				//親がダメージ食らってたらランダムでぺろぺろ
-				if (p.isDamaged() && rnd.nextBoolean()) {
+				if (p.isDamaged() && SimYukkuri.RND.nextBoolean()) {
 					b.doPeropero(p);
 				}
 				//他はすりすり
-				else if (rnd.nextBoolean()) {
+				else if (SimYukkuri.RND.nextBoolean()) {
 					b.doSurisuri(p);
 				}
 				b.clearActions();
 				return true;
 			}
-			if (!b.isAdult() && b.isSister(p) && rnd.nextBoolean()) {
+			if (!b.isAdult() && b.isSister(p) && SimYukkuri.RND.nextBoolean()) {
 				// 姉妹の場合のスキンシップ
 				//善良で、赤ゆでなく、相手が汚れていたら無条件でぺろぺろ
 				b.constraintDirection(p, false);
 				if (b.isSmart() && !b.isBaby() && p.isDirty()) {
 					b.doPeropero(p);
 				} else {
-					if (p.isDamaged() && rnd.nextBoolean()) {
+					if (p.isDamaged() && SimYukkuri.RND.nextBoolean()) {
 						if (b.isElderSister(p)) {
 							b.setMessage(MessagePool.getMessage(b, MessagePool.Action.ConcernAboutEldersister));
 						} else {
@@ -897,9 +896,9 @@ public class BodyLogic {
 						b.setHappiness(Happiness.SAD);
 						b.stay();
 						p.stay();
-					} else if (p.isDamaged() && rnd.nextBoolean()) {
+					} else if (p.isDamaged() && SimYukkuri.RND.nextBoolean()) {
 						b.doPeropero(p);
-					} else if (rnd.nextBoolean()) {
+					} else if (SimYukkuri.RND.nextBoolean()) {
 						b.doSurisuri(p);
 					}
 				}
@@ -922,7 +921,7 @@ public class BodyLogic {
 			}
 			// 相手に追いつけないケースがあるため、一定距離まで近づいたら相手を呼び止める
 			if (Translate.distance(b.getX(), b.getY(), p.getX(), p.getY()) < 2500) {
-				if (rnd.nextInt(3) == 0) {
+				if (SimYukkuri.RND.nextInt(3) == 0) {
 					if (b.isTargetBind())
 						p.stay();
 				}
@@ -970,7 +969,7 @@ public class BodyLogic {
 		}
 
 		// 一定確率以上は終了
-		if (rnd.nextInt(10) != 0) {
+		if (SimYukkuri.RND.nextInt(10) != 0) {
 			return eActionGo.NONE;
 		}
 
@@ -1383,7 +1382,7 @@ public class BodyLogic {
 	 */
 	public static final List<Body> createActiveFianceeList(Body b, int age) {
 		// ほかにいないならスキップ
-		Body[] bodyList = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
+		Body[] bodyList = SimYukkuri.world.getCurrentMap().body.toArray(new Body[0]);
 		if (bodyList.length <= 1) {
 			return null;
 		}
@@ -1438,7 +1437,7 @@ public class BodyLogic {
 			}
 			//お相手がすでにいるのは50%の確率でスキップ
 			if (f.getPartner() != null) {
-				if (rnd.nextBoolean()) {
+				if (SimYukkuri.RND.nextBoolean()) {
 					continue;
 				}
 			}
@@ -1507,9 +1506,9 @@ public class BodyLogic {
 	 *  ぜんゆん集合
 	 */
 	public static final void gatheringYukkuri() {
-		Body[] bodyList = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
+		Body[] bodyList = SimYukkuri.world.getCurrentMap().body.toArray(new Body[0]);
 		if (bodyList != null && bodyList.length != 0) {
-			List<Toilet> toiletList = SimYukkuri.world.currentMap.toilet;
+			List<Toilet> toiletList = SimYukkuri.world.getCurrentMap().toilet;
 			if (toiletList != null && toiletList.size() != 0) {
 				Obj o = toiletList.get(0);
 				gatheringYukkuriSquare(o, bodyList, GatheringDirection.UP, null);
@@ -1855,7 +1854,7 @@ public class BodyLogic {
 		}
 
 		// 一定確率以上は終了
-		if (rnd.nextInt(50) != 0) {
+		if (SimYukkuri.RND.nextInt(50) != 0) {
 			return false;
 		}
 
@@ -1984,7 +1983,7 @@ public class BodyLogic {
 	public static boolean checkWakeupOtherYukkuri(Body b) {
 		boolean bIsWakeup = false;
 		int minDistance = b.getEYESIGHT();
-		List<Body> bodyList = SimYukkuri.world.currentMap.body;
+		List<Body> bodyList = SimYukkuri.world.getCurrentMap().body;
 		for (Body p : bodyList) {
 			// 自分同士のチェックは無意味なのでスキップ
 			if (p == b)

@@ -6,6 +6,7 @@ import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
 
+import src.SimYukkuri;
 import src.base.Attachment;
 import src.base.Body;
 import src.draw.ModLoader;
@@ -103,13 +104,13 @@ public class Fire extends Attachment {
 			parent.addStress(50);
 			// 背面固定で針が刺さってないなら尻を振る
 			if( parent.isFixBack()  && !parent.isNeedled()){
-				if( rnd.nextInt(10) == 0){
+				if( SimYukkuri.RND.nextInt(10) == 0){
 					parent.setFurifuri(true);
 				}
 			}
 			else{
 				if(parent.isLockmove() ){
-					if( rnd.nextInt(20) == 0){
+					if( SimYukkuri.RND.nextInt(3) == 0){
 						parent.setNobinobi(true);
 					}
 				}
@@ -137,7 +138,7 @@ public class Fire extends Attachment {
 		}
 
 		// 実ゆの場合、親が反応する
-		if(rnd.nextInt(20) == 0){
+		if(SimYukkuri.RND.nextInt(3) == 0){
 			Body bodyMother = parent.getBindStalkMotherCanNotice();
 			if ( bodyMother != null ) {
 				if( bodyMother.isNotNYD() ){

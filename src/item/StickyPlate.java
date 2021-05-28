@@ -8,7 +8,6 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
-import java.util.Random;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JOptionPane;
@@ -30,7 +29,6 @@ import src.enums.Type;
 public class StickyPlate extends ObjEX implements java.io.Serializable {
 	static final long serialVersionUID = 1L;
 
-	Random rnd = new Random();
 	/**どこをくっつけるか*/
 	public static enum StickyType {
         UNDER("あんよ固定"),
@@ -139,7 +137,7 @@ public class StickyPlate extends ObjEX implements java.io.Serializable {
 			if( bFixBack){
 				// 針が刺さっていない
 				if( !bindBody.isNeedled() && !bindBody.isSleeping()){
-					if(rnd.nextInt(10) == 0){
+					if(SimYukkuri.RND.nextInt(10) == 0){
 						bindBody.setFurifuri(true);
 					}
 				}
@@ -174,7 +172,7 @@ public class StickyPlate extends ObjEX implements java.io.Serializable {
 			bindBody.setPullAndPush(false);
 			bindBody = null;
 		}
-		SimYukkuri.world.currentMap.stickyPlate.remove(this);
+		SimYukkuri.world.getCurrentMap().stickyPlate.remove(this);
 	}
 
 	/**
@@ -187,13 +185,13 @@ public class StickyPlate extends ObjEX implements java.io.Serializable {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		SimYukkuri.world.currentMap.stickyPlate.add(this);
+		SimYukkuri.world.getCurrentMap().stickyPlate.add(this);
 		objType = Type.PLATFORM;
 		objEXType = ObjEXType.STICKYPLATE;
 		interval = 5;
 		if( !setupStickyPlate(this))
 		{
-			SimYukkuri.world.currentMap.stickyPlate.remove(this);
+			SimYukkuri.world.getCurrentMap().stickyPlate.remove(this);
 			return;
 		}
 		itemRank = ItemRank.values()[initOption];

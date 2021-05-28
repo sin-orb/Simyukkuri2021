@@ -53,7 +53,7 @@ public class Bed extends ObjEX implements java.io.Serializable {
 
 	@Override
 	public void removeListData(){
-		SimYukkuri.world.currentMap.bed.remove(this);
+		SimYukkuri.world.getCurrentMap().bed.remove(this);
 	}
 
 	@Override
@@ -71,12 +71,12 @@ public class Bed extends ObjEX implements java.io.Serializable {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		SimYukkuri.world.currentMap.bed.add(this);
+		SimYukkuri.world.getCurrentMap().bed.add(this);
 		objType = Type.PLATFORM;
 		objEXType = ObjEXType.BED;
 		itemRank = ItemRank.values()[initOption];
 		// 森なら野生に変更
-		if( SimYukkuri.world.currentMap.mapIndex == 5 ||  SimYukkuri.world.currentMap.mapIndex == 6 ){
+		if( SimYukkuri.world.getCurrentMap().mapIndex == 5 ||  SimYukkuri.world.getCurrentMap().mapIndex == 6 ){
 			if( itemRank == ItemRank.HOUSE ){
 				itemRank = ItemRank.YASEI;
 			}

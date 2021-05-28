@@ -165,7 +165,7 @@ public class Alice extends Body implements java.io.Serializable {
 	public void killTime(){
 		if(getCurrentEvent() != null)return;
 		if(getPlaying()!=null)return;
-		int p=RND.nextInt(50);
+		int p=SimYukkuri.RND.nextInt(50);
 		//7/50でキリッ
 		if (p<=6) {
 			getInVain(true);
@@ -202,7 +202,7 @@ public class Alice extends Body implements java.io.Serializable {
 		else if (p<=39){
 			if(ToyLogic.checkToy(this)) {
 				setPlaying(PlayStyle.BALL);
-				playingLimit = 150 +RND.nextInt(100)-49;
+				playingLimit = 150 +SimYukkuri.RND.nextInt(100)-49;
 				return;
 			}
 			else killTime();
@@ -211,7 +211,7 @@ public class Alice extends Body implements java.io.Serializable {
 		else if (p<=42){
 			if(ToyLogic.checkTrampoline(this)){
 				setPlaying(PlayStyle.TRAMPOLINE);
-				playingLimit = 150 +RND.nextInt(100)-49;
+				playingLimit = 150 +SimYukkuri.RND.nextInt(100)-49;
 				return;
 			}
 			else killTime();
@@ -220,14 +220,14 @@ public class Alice extends Body implements java.io.Serializable {
 		else if (p<=43){
 			if(ToyLogic.checkSui(this)){
 				setPlaying(PlayStyle.SUI);
-				playingLimit = 150 +RND.nextInt(100)-49;
+				playingLimit = 150 +SimYukkuri.RND.nextInt(100)-49;
 				return;
 			}
 			else killTime();
 		}
 		else{
 			// おくるみありで汚れていない場合
-			if( isHasPants() && !isDirty() && RND.nextInt(5) == 0 ){
+			if( isHasPants() && !isDirty() && SimYukkuri.RND.nextInt(5) == 0 ){
 				setMessage(MessagePool.getMessage(this, MessagePool.Action.RelaxOkurumi));
 			}
 			else{
@@ -241,7 +241,7 @@ public class Alice extends Body implements java.io.Serializable {
 	 * こーでぃねーとをする.
 	 */
 	public void coordinate(){
-		List<Bed> list = SimYukkuri.world.currentMap.bed;
+		List<Bed> list = SimYukkuri.world.getCurrentMap().bed;
 		if(list == null || list.size() == 0){
 			int i=0;
 			if(getBodyRank() == BodyRank.NORAYU || getBodyRank() == BodyRank.NORAYU_CLEAN || getBodyRank() == BodyRank.SUTEYU){
@@ -266,10 +266,10 @@ public class Alice extends Body implements java.io.Serializable {
 	}
 	@Override
 	public void tuneParameters() {
-		/*if (rnd.nextBoolean()) {
+		/*if (SimYukkuri.RND.nextBoolean()) {
 		motherhood = true;
 		}*/
-		if (RND.nextInt(4) == 0) {
+		if (SimYukkuri.RND.nextInt(4) == 0) {
 			setRapist(true);
 		}
 		double factor = Math.random()+1;
@@ -294,9 +294,9 @@ public class Alice extends Body implements java.io.Serializable {
 		PREGPERIOD *= factor;
 		SLEEPPERIOD *= factor;
 		ACTIVEPERIOD *= factor;
-		sameDest = RND.nextInt(15)+15;
+		sameDest = SimYukkuri.RND.nextInt(15)+15;
 		DECLINEPERIOD *= (Math.random()+0.5);
-		ROBUSTNESS = RND.nextInt(10)+1;
+		ROBUSTNESS = SimYukkuri.RND.nextInt(10)+1;
 		//EYESIGHT /= 2;
 		factor = Math.random()+0.5;
 		STRENGTH[AgeState.ADULT.ordinal()] *= factor;

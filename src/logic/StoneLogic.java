@@ -28,7 +28,7 @@ public class StoneLogic {
 		if( b.getCriticalDamegeType()  == CriticalDamegeType.CUT){
 			return;
 		}
-		List<Stone> list = SimYukkuri.world.currentMap.stone;
+		List<Stone> list = SimYukkuri.world.getCurrentMap().stone;
 		if( list == null || list.size() == 0 ){
 			return;
 		}

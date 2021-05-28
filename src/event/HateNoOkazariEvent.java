@@ -1,7 +1,6 @@
 package src.event;
 
 import java.util.List;
-import java.util.Random;
 
 import src.Const;
 import src.SimYukkuri;
@@ -29,7 +28,6 @@ import src.system.MessagePool;
 public class HateNoOkazariEvent extends EventPacket implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
-	Random rnd = new Random();
 	/**
 	 * コンストラクタ.
 	 */
@@ -73,7 +71,7 @@ public class HateNoOkazariEvent extends EventPacket implements java.io.Serializa
 			else {
 				// ゲス、普通は相手が瀕死じゃなければ参加
 				if(!to.isDamaged()) {
-					if(b.isRude() || rnd.nextBoolean()) ret = true;
+					if(b.isRude() || SimYukkuri.RND.nextBoolean()) ret = true;
 				}
 			}
 		}
@@ -121,7 +119,7 @@ public class HateNoOkazariEvent extends EventPacket implements java.io.Serializa
 			// うんうん奴隷ではない場合
 			if( to.getPublicRank() != PublicRank.UnunSlave ){
 				boolean bIsInToiletForSlave = false;
-				List<Toilet> toiletList = SimYukkuri.world.currentMap.toilet;
+				List<Toilet> toiletList = SimYukkuri.world.getCurrentMap().toilet;
 				for (Toilet t: toiletList) {
 					// うんうん奴隷用トイレがあるか
 					if( t.isForSlave() ){
@@ -157,8 +155,8 @@ public class HateNoOkazariEvent extends EventPacket implements java.io.Serializa
 				SimYukkuri.mypane.terrarium.addEffect(EffectType.HIT,b.getX()+10, b.getY(),0,0,0,0,true, 500,1,true,false,true);
 			}
 			
-			// 瀕死の場合は攻撃されないで見逃される
-			if( !to.isDamagedHeavily() ){
+			// 瀕死かつたりないゆでない場合は攻撃されないで見逃される
+			if( !to.isDamagedHeavily() || to.isIdiot()){
 				to.strikeByYukkuri(b, this, true);
 			}
 			b.setForceFace(ImageCode.PUFF.ordinal());

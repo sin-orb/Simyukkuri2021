@@ -112,7 +112,8 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 
 	@Override
 	public void removeListData(){
-		SimYukkuri.world.currentMap.stalk.remove(this);
+		remove();
+		SimYukkuri.world.getCurrentMap().stalk.remove(this);
 	}
 	/**
 	 * この茎をはやしているゆっくりを設定する.
@@ -240,7 +241,8 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 					b.setBindStalk(null) ;
 				}
 			}
-			setRemoved(true);
+			remove();
+			SimYukkuri.world.getCurrentMap().stalk.remove(this);
 		}
 	}
 
@@ -322,7 +324,7 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 		objType = Type.OBJECT;
 		objEXType = ObjEXType.STALK;
 		amount = 100*24*5;
-		SimYukkuri.world.currentMap.stalk.add(this);
+		SimYukkuri.world.getCurrentMap().stalk.add(this);
 		calcPos();
 	}
 
@@ -349,7 +351,31 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 			}
 		}
 		bindBaby.clear();
+		//SimYukkuri.world.getCurrentMap().stalk.remove(this);
 		super.remove();
+	}
+	
+	@Override
+	public String toString() {
+		String ret = "";
+		ret += "茎（親：";
+		ret += (plantYukkuri == null ? "なし" : plantYukkuri.getNameJ());
+		ret += "）,子：（";
+		if (bindBaby == null || bindBaby.size() == 0) {
+			ret += "なし";
+		} else {
+			for (Body baby : bindBaby) {
+				if (baby == null) {
+					ret += "カラ";
+				} else {
+					ret += baby.getNameJ();
+				}
+				ret += ",";
+			}
+			ret = ret.substring(0, ret.length() - 1);
+		}
+		ret += "）";
+		return ret;
 	}
 }
 

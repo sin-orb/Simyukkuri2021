@@ -46,7 +46,7 @@ public class KillPredeatorEvent extends RevengeAttackEvent implements Serializab
 			return false;
 		boolean bIsNearPreadeator = false;
 		// 全ゆっくりに対してチェック
-		Body[] bodyList = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
+		Body[] bodyList = SimYukkuri.world.getCurrentMap().body.toArray(new Body[0]);
 		for (Body p : bodyList) {
 			// 自分同士のチェックは無意味なのでスキップ
 			if (p == b) {
@@ -78,7 +78,7 @@ public class KillPredeatorEvent extends RevengeAttackEvent implements Serializab
 	 */
 	public Body searchNextTarget() {
 		Body ret = null;
-		Body[] bodyList = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
+		Body[] bodyList = SimYukkuri.world.getCurrentMap().body.toArray(new Body[0]);
 		for (Body b : bodyList) {
 			if (b.isPredatorType()) {
 				ret = b;
@@ -91,10 +91,10 @@ public class KillPredeatorEvent extends RevengeAttackEvent implements Serializab
 	@Override
 	public UpdateState update(Body b) {
 		// ランダムで復讐を諦める
-		if(rnd.nextInt(1000) == 0) {
+		if (SimYukkuri.RND.nextInt(1000) == 0) {
 			return UpdateState.ABORT;
 		}
-		
+
 		// 相手が消えてしまったら他の捕食種を捜索
 		if (getFrom().isRemoved() || getFrom().isDead() || !getFrom().isPredatorType()) {
 			setFrom(searchNextTarget());
@@ -110,7 +110,7 @@ public class KillPredeatorEvent extends RevengeAttackEvent implements Serializab
 			Body target = searchNextTarget();
 			setFrom(target);
 			b.setWorldEventResMessage(MessagePool.getMessage(b, MessagePool.Action.RevengeForChild),
-						Const.HOLDMESSAGE, true, false);
+					Const.HOLDMESSAGE, true, false);
 		}
 		return null;
 	}
@@ -128,21 +128,22 @@ public class KillPredeatorEvent extends RevengeAttackEvent implements Serializab
 	@Override
 	public boolean execute(Body b) {
 		// 相手が消えてしまったら他の捕食種を捜索
-		if(getFrom().isRemoved() || getFrom().isDead()) {
+		if (getFrom().isRemoved() || getFrom().isDead()) {
 			setFrom(searchNextTarget());
 			// 捕食種全滅でイベント終了
-			if(getFrom() == null) return true;
+			if (getFrom() == null)
+				return true;
 			return false;
 		}
-		if(getFrom().getZ() < 5) {
-			b.setWorldEventResMessage(MessagePool.getMessage(b, MessagePool.Action.RevengeForChild), Const.HOLDMESSAGE, true, false);
-			if(b.getDirection() == Direction.LEFT) {
-				SimYukkuri.mypane.terrarium.addEffect(EffectType.HIT, b.getX()-10, b.getY(), 0,
-														0, 0, 0, false, 500, 1, true, false, true);
-			}
-			else {
-				SimYukkuri.mypane.terrarium.addEffect(EffectType.HIT, b.getX()+10, b.getY(), 0,
-														0, 0, 0, true, 500, 1, true, false, true);
+		if (getFrom().getZ() < 5) {
+			b.setWorldEventResMessage(MessagePool.getMessage(b, MessagePool.Action.RevengeForChild), Const.HOLDMESSAGE,
+					true, false);
+			if (b.getDirection() == Direction.LEFT) {
+				SimYukkuri.mypane.terrarium.addEffect(EffectType.HIT, b.getX() - 10, b.getY(), 0,
+						0, 0, 0, false, 500, 1, true, false, true);
+			} else {
+				SimYukkuri.mypane.terrarium.addEffect(EffectType.HIT, b.getX() + 10, b.getY(), 0,
+						0, 0, 0, true, 500, 1, true, false, true);
 			}
 			b.setForceFace(ImageCode.PUFF.ordinal());
 			getFrom().strikeByYukkuri(b, this, false);

@@ -8,7 +8,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
 
 import src.Const;
 import src.SimYukkuri;
@@ -58,8 +57,6 @@ import src.system.Sprite;
  * そこはいわゆる”ゆ虐の設定”に従うこと。
  */
 public abstract class BodyAttributes extends Obj implements Serializable {
-	/** ランダムのもと */
-	public static final Random RND = new Random();
 
 	/** ゆっくりのタイプ。まりさなら0、れいむなら1、等々ユニークなタイプを表す。 */
 	public abstract int getType();
@@ -620,7 +617,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 赤ゆの一人称を設定する.
 	 * @param anBabyName 赤ゆの一人称
 	 */
-	public void setAnBabyName(String[] anBabyName) {
+	public void setBABYNAME(String[] anBabyName) {
 		this.anBabyName = anBabyName;
 	}
 
@@ -636,7 +633,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 子ゆの一人称を設定する.
 	 * @param anChildName 子ゆの一人称
 	 */
-	public void setAnChildName(String[] anChildName) {
+	public void setCHILDNAME(String[] anChildName) {
 		this.anChildName = anChildName;
 	}
 
@@ -652,7 +649,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 成ゆの一人称を設定する.
 	 * @param anAdultName 成ゆの一人称
 	 */
-	public void setAnAdultName(String[] anAdultName) {
+	public void setADULTNAME(String[] anAdultName) {
 		this.anAdultName = anAdultName;
 	}
 
@@ -684,7 +681,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 赤ゆの一人称（ダメージ時）を設定する.
 	 * @param anBabyNameD 赤ゆの一人称（ダメージ時）
 	 */
-	public void setAnBabyNameD(String[] anBabyNameD) {
+	public void setBABYNAME_DAMAGED(String[] anBabyNameD) {
 		this.anBabyNameD = anBabyNameD;
 	}
 
@@ -700,7 +697,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 子ゆの一人称（ダメージ時）を設定する.
 	 * @param anChildNameD 子ゆの一人称（ダメージ時）
 	 */
-	public void setAnChildNameD(String[] anChildNameD) {
+	public void setCHILDNAME_DAMAGED(String[] anChildNameD) {
 		this.anChildNameD = anChildNameD;
 	}
 
@@ -716,7 +713,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 大人ゆの一人称（ダメージ時） を設定する.
 	 * @param anAdultNameD 大人ゆの一人称（ダメージ時）
 	 */
-	public void setAnAdultNameD(String[] anAdultNameD) {
+	public void setADULTNAME_DAMAGED(String[] anAdultNameD) {
 		this.anAdultNameD = anAdultNameD;
 	}
 
@@ -1284,7 +1281,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 攻撃された際のぴこぴこ破壊確率。0だと破壊されない を設定する.
 	 * @param nBreakBraidRand 攻撃された際のぴこぴこ破壊確率。0だと破壊されない 
 	 */
-	public void setnBreakBraidRand(int nBreakBraidRand) {
+	public void setBreakBraidRand(int nBreakBraidRand) {
 		this.nBreakBraidRand = nBreakBraidRand;
 	}
 
@@ -1300,7 +1297,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 何回のうち1回の確率ですりすり事故で妊娠するかの値 を設定する.
 	 * @param surisuriAccidentProb 何回のうち1回の確率ですりすり事故で妊娠するかの値 
 	 */
-	public void setSurisuriAccidentProb(int surisuriAccidentProb) {
+	public void setSurisuriAccidentProbablity(int surisuriAccidentProb) {
 		SurisuriAccidentProb = surisuriAccidentProb;
 	}
 
@@ -1316,7 +1313,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 何回のうち1回の確率で路上で車に轢かれるかの値 を設定する.
 	 * @param carAccidentProb 何回のうち1回の確率で路上で車に轢かれるかの値 
 	 */
-	public void setCarAccidentProb(int carAccidentProb) {
+	public void setCarAccidentProbablity(int carAccidentProb) {
 		CarAccidentProb = carAccidentProb;
 	}
 
@@ -1332,7 +1329,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 何回のうち1回の確率であんよが傷ついているとあんよが破壊されるかの確率 を設定する.
 	 * @param breakBodyByShitProb 何回のうち1回の確率であんよが傷ついているとあんよが破壊されるかの確率 
 	 */
-	public void setBreakBodyByShitProb(int breakBodyByShitProb) {
+	public void setBreakBodyByShitProbability(int breakBodyByShitProb) {
 		BreakBodyByShitProb = breakBodyByShitProb;
 	}
 
@@ -1364,7 +1361,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 何回のうち１回の確率で発情するかの確率 を設定する.
 	 * @param exciteProb 何回のうち１回の確率で発情するかの確率 
 	 */
-	public void setExciteProb(int exciteProb) {
+	public void setGetExcitedProbablity(int exciteProb) {
 		this.exciteProb = exciteProb;
 	}
 
@@ -4314,7 +4311,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * ゆっくり本体の購入基本額 を設定する.
 	 * @param ycost ゆっくり本体の購入基本額 
 	 */
-	public void setYcost(int ycost) {
+	public void setcost(int ycost) {
 		Ycost = ycost;
 	}
 
@@ -4400,14 +4397,6 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 */
 	public void setUnyoForceW(int unyoForceW) {
 		this.unyoForceW = unyoForceW;
-	}
-
-	/**
-	 * ランダムのもと を取得する.
-	 * @return ランダムのもと 
-	 */
-	public static Random getRnd() {
-		return RND;
 	}
 
 	/**
@@ -4529,7 +4518,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 			P /= 2;
 		if (P < 1)
 			P = 1;
-		return (RND.nextInt(P) == 0);
+		return (SimYukkuri.RND.nextInt(P) == 0);
 	}
 
 	/**
@@ -5234,7 +5223,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * アリを除去する.
 	 */
 	public void removeAnts() {
-		removeAttachment(Ants.class, true);
+		removeAttachment(Ants.class);
 		numOfAnts = 0;
 	}
 
@@ -5275,16 +5264,13 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	/**
 	 *  指定クラスのアタッチメント除去
 	 * @param type 指定クラス
-	 * @param all すべて除去かどうか
 	 */
-	public void removeAttachment(Class<?> type, boolean all) {
-		Iterator<Attachment> itr = attach.iterator();
-		while (itr.hasNext()) {
-			Attachment at = itr.next();
-			if (at.getClass().equals(type)) {
-				itr.remove();
-				if (!all)
-					break;
+	public void removeAttachment(Class<?> type) {
+		Attachment[] attachments = attach.toArray(new Attachment[0]);
+		attach.clear();
+		for (Attachment attachment : attachments) {
+			if (!attachment.getClass().equals(type)) {
+				attach.add(attachment);
 			}
 		}
 	}
@@ -5440,7 +5426,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	/**
 	 * 茎妊娠してる茎を取得
 	 * <br>出産時に、順番に生んでゆくときの処理に使われている
-	 * @return 茎妊娠してる赤ゆのDNA
+	 * @return 茎
 	 **/
 	public Stalk getStalksDequeue() {
 		Stalk stalk = null;
@@ -5539,7 +5525,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * @return 自主的にふりふりするかどうか
 	 */
 	public boolean willingFurifuri() {
-		if (isRude() && RND.nextInt(furifuriDiscipline + 1) == 0 && canFurifuri()) {
+		if (isRude() && SimYukkuri.RND.nextInt(furifuriDiscipline + 1) == 0 && canFurifuri()) {
 			return true;
 		}
 		return false;
@@ -5943,7 +5929,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 		}
 		if (isNYD()) {
 			happiness = Happiness.VERY_SAD;
-			sadPeriod = 1200 + RND.nextInt(400) - 200;
+			sadPeriod = 1200 + SimYukkuri.RND.nextInt(400) - 200;
 			return;
 		}
 		if (happy == Happiness.SAD) {
@@ -5958,7 +5944,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 			}
 		} else {
 			if (happy == Happiness.VERY_SAD) {
-				sadPeriod = 1200 + RND.nextInt(400) - 200;
+				sadPeriod = 1200 + SimYukkuri.RND.nextInt(400) - 200;
 			} else {
 				sadPeriod = 0;
 			}

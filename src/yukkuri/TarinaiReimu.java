@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import src.SimYukkuri;
 import src.base.Body;
 import src.draw.ModLoader;
 import src.enums.AgeState;
@@ -152,9 +153,9 @@ public class TarinaiReimu extends Tarinai implements java.io.Serializable {
 		PREGPERIOD *= factor;
 		SLEEPPERIOD *= factor;
 		ACTIVEPERIOD *= factor;
-		sameDest = RND.nextInt(20)+20;
+		sameDest = SimYukkuri.RND.nextInt(20)+20;
 		DECLINEPERIOD *= (Math.random()+0.5);
-		ROBUSTNESS = RND.nextInt(5)+1;
+		ROBUSTNESS = SimYukkuri.RND.nextInt(5)+1;
 		EYESIGHT /= 8;
 		factor = Math.random()+1;
 		STRENGTH[AgeState.ADULT.ordinal()] *= factor;

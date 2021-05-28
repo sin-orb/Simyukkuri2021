@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import src.SimYukkuri;
 import src.base.Body;
 import src.draw.ModLoader;
 import src.enums.AgeState;
@@ -168,9 +169,9 @@ public class Meirin extends Body implements java.io.Serializable {
 		PREGPERIOD *= factor;
 		SLEEPPERIOD *= factor;
 		ACTIVEPERIOD *= factor;
-		sameDest = RND.nextInt(15)+15;
+		sameDest = SimYukkuri.RND.nextInt(15)+15;
 		DECLINEPERIOD *= (Math.random()+0.5);
-		ROBUSTNESS = RND.nextInt(20)+1;
+		ROBUSTNESS = SimYukkuri.RND.nextInt(20)+1;
 		//EYESIGHT /= 2;
 		factor = Math.random()+0.5;
 		STRENGTH[AgeState.ADULT.ordinal()] *= factor;

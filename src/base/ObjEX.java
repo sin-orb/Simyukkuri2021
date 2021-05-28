@@ -1,10 +1,8 @@
 package src.base;
 
-
 import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.util.Random;
 
 import src.draw.Translate;
 import src.enums.Event;
@@ -23,31 +21,27 @@ public abstract class ObjEX extends Obj implements java.io.Serializable {
 	protected int option;
 
 	/** 排他的論理和でフラグ管理している ex) 0101 ならゆっくりと食物*/
-	public static final int
-			YUKKURI 	= (int)Math.pow(2, 0),
-			SHIT			= (int)Math.pow(2, 1),
-			FOOD 		= (int)Math.pow(2, 2),
-			TOILET		= (int)Math.pow(2, 3),
-			TOY			= (int)Math.pow(2, 4),
-			PLATFORM	= (int)Math.pow(2, 5),
-			FIX_OBJECT	= (int)Math.pow(2, 6),
-			OBJECT		= (int)Math.pow(2, 7),
-			VOMIT		= (int)Math.pow(2, 8),
-			STALK		= (int)Math.pow(2, 9);
+	public static final int YUKKURI = (int) Math.pow(2, 0),
+			SHIT = (int) Math.pow(2, 1),
+			FOOD = (int) Math.pow(2, 2),
+			TOILET = (int) Math.pow(2, 3),
+			TOY = (int) Math.pow(2, 4),
+			PLATFORM = (int) Math.pow(2, 5),
+			FIX_OBJECT = (int) Math.pow(2, 6),
+			OBJECT = (int) Math.pow(2, 7),
+			VOMIT = (int) Math.pow(2, 8),
+			STALK = (int) Math.pow(2, 9);
 	/**処理対象
 	 * <br>デフォルトは0(処理対象無し)*/
 	public static final int hitCheckObjType = 0;
 
 	/**アイテムのランク*/
 	public enum ItemRank {
-		HOUSE,
-		NORA,
-		YASEI
+		HOUSE, NORA, YASEI
 	}
+
 	/**標準用長方形型境界線*/
 	protected static Rectangle boundary = new Rectangle();
-	protected Random rnd = new Random();
-
 
 	/**親オブジェクト*/
 	protected Obj linkParent = null;
@@ -59,7 +53,7 @@ public abstract class ObjEX extends Obj implements java.io.Serializable {
 	protected boolean enabled = true;
 	/**原点からの当たり判定範囲
 	 * <br>画像=判定ならpivXYでOK プレス機など設置地面付近なら要調整*/
-	protected int colW = 0,colH = 0 ;
+	protected int colW = 0, colH = 0;
 	/**処理対象の位置*/
 	protected Point tmpPos = new Point();
 
@@ -83,7 +77,7 @@ public abstract class ObjEX extends Obj implements java.io.Serializable {
 	}
 
 	/**オプションのセッター*/
-	public void setOption( int setOption ) {
+	public void setOption(int setOption) {
 		option = setOption;
 	}
 
@@ -111,21 +105,23 @@ public abstract class ObjEX extends Obj implements java.io.Serializable {
 	public boolean getEnabled() {
 		return enabled;
 	}
+
 	/**稼働非稼働の切り替え*/
 	public void setEnabled(boolean enb) {
 		enabled = enb;
 	}
+
 	/**稼働状況逆転*/
 	public void invertEnabled() {
 		enabled = !enabled;
 	}
-
 
 	/**当たり判定の大きさセッター*/
 	protected void setCollisionSize(int halfW, int halfH) {
 		colW = halfW;
 		colH = halfH;
 	}
+
 	/**当たり判定の大きさゲッター
 	 * (Revtangle Ver)*/
 	public void getCollisionRect(Rectangle r) {
@@ -153,18 +149,18 @@ public abstract class ObjEX extends Obj implements java.io.Serializable {
 	 * @return 当たっているかどうか
 	 */
 	public boolean checkHitObj(Obj o, boolean bCheckZ) {
-		if( o == null ){
+		if (o == null) {
 			return false;
 		}
 		int objZ = o.getZ();
-		if ( (!bCheckZ || objZ == 0) ) {
+		if ((!bCheckZ || objZ == 0)) {
 			// フラグ非設定時は空中の物はチェックしない
 			Rectangle tmpRect = new Rectangle();
 			getCollisionRect(tmpRect);
 			// 対象の座標をフィールド座標に変換
 			Translate.translate(o.getX(), o.getY(), tmpPos);
 			// 点が描画矩形に入ったかの判定
-			if(tmpRect.contains(tmpPos)) {
+			if (tmpRect.contains(tmpPos)) {
 				return true;
 			}
 		}
@@ -177,16 +173,16 @@ public abstract class ObjEX extends Obj implements java.io.Serializable {
 	 * @param o 対象オブジェクト
 	 */
 	public boolean checkHitObj(Rectangle colRect, Obj o) {
-		if( o == null ){
+		if (o == null) {
 			return false;
 		}
 		int objZ = o.getZ();
-		if ( objZ == 0 ) {	//空中の物は移動させない
+		if (objZ == 0) { //空中の物は移動させない
 			// 対象の座標をフィールド座標に変換
 			Translate.translate(o.getX(), o.getY(), tmpPos);
 			// 点が描画矩形に入ったかの判定
-			if(colRect.contains(tmpPos)) {
-				objHitProcess( o );
+			if (colRect.contains(tmpPos)) {
+				objHitProcess(o);
 				return false;
 			}
 		}
@@ -194,14 +190,14 @@ public abstract class ObjEX extends Obj implements java.io.Serializable {
 	}
 
 	/**当たり判定されたオブジェクトへの処理*/
-	public int objHitProcess( Obj o ) {
+	public int objHitProcess(Obj o) {
 		return 0;
 	};
 
 	@Override
 	/**毎ティックごとの処理
 	 * <br>主に移動系*/
-	public Event clockTick(){
+	public Event clockTick() {
 		setAge(getAge() + TICK);
 		if (isRemoved()) {
 			removeListData();
@@ -221,12 +217,10 @@ public abstract class ObjEX extends Obj implements java.io.Serializable {
 				if (x < 0) {
 					x = 0;
 					vx *= -1;
-				}
-				else if (x > mapX) {
+				} else if (x > mapX) {
 					x = mapX;
 					vx *= -1;
-				}
-				else if (Barrier.onBarrier(x, y, getW() >> 2, getH() >> 2, Barrier.MAP_ITEM)) {
+				} else if (Barrier.onBarrier(x, y, getW() >> 2, getH() >> 2, Barrier.MAP_ITEM)) {
 					x -= vx;
 					vx = 0;
 				}
@@ -236,12 +230,10 @@ public abstract class ObjEX extends Obj implements java.io.Serializable {
 				if (y < 0) {
 					y = 0;
 					vy *= -1;
-				}
-				else if (y > mapY) {
+				} else if (y > mapY) {
 					y = mapY;
 					vy *= -1;
-				}
-				else if (Barrier.onBarrier(x, y, getW() >> 2, getH() >> 2, Barrier.MAP_ITEM)) {
+				} else if (Barrier.onBarrier(x, y, getW() >> 2, getH() >> 2, Barrier.MAP_ITEM)) {
 					y -= vy;
 					vy = 0;
 				}
@@ -250,8 +242,8 @@ public abstract class ObjEX extends Obj implements java.io.Serializable {
 				mz += 1;
 				vz += 1;
 				z -= mz;
-				if( !bFallingUnderGround || objType == Type.PLATFORM ){
-					if (z <= nMostDepth || objType == Type.PLATFORM ) {
+				if (!bFallingUnderGround || objType == Type.PLATFORM) {
+					if (z <= nMostDepth || objType == Type.PLATFORM) {
 						z = nMostDepth;
 						vx = 0;
 						vy = 0;

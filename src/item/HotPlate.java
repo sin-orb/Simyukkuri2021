@@ -6,7 +6,6 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
-import java.util.Random;
 
 import src.SimYukkuri;
 import src.base.Body;
@@ -36,7 +35,6 @@ public class HotPlate extends ObjEX implements java.io.Serializable {
 
 	private Body bindBody = null;
 	private Effect smoke = null;
-	private Random rnd = new Random();
 	/**画像ロード*/
 	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
 		for(int i = 0; i < 3; i++) {
@@ -146,7 +144,7 @@ public class HotPlate extends ObjEX implements java.io.Serializable {
 						bindBody.setHappiness(Happiness.VERY_SAD);
 						bindBody.setForceFace(ImageCode.PAIN.ordinal());
 					}
-					if(rnd.nextInt(10) == 0) {
+					if(SimYukkuri.RND.nextInt(10) == 0) {
 						bindBody.setMessage(MessagePool.getMessage(bindBody, MessagePool.Action.Burning), 40, true, true);
 					}
 				}
@@ -171,14 +169,14 @@ public class HotPlate extends ObjEX implements java.io.Serializable {
 			smoke.remove();
 			smoke = null;
 		}
-		SimYukkuri.world.currentMap.hotPlate.remove(this);
+		SimYukkuri.world.getCurrentMap().hotPlate.remove(this);
 	}
 	/**コンストラクタ*/
 	public HotPlate(int initX, int initY, int initOption) {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		SimYukkuri.world.currentMap.hotPlate.add(this);
+		SimYukkuri.world.getCurrentMap().hotPlate.add(this);
 		objType = Type.PLATFORM;
 		objEXType = ObjEXType.HOTPLATE;
 

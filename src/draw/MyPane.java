@@ -33,7 +33,6 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JCheckBox;
@@ -175,8 +174,6 @@ public class MyPane extends JPanel implements Runnable {
 	static boolean showLog = false;
 	/*フレームレート*/
 	static FrameRate fps = new FrameRate();
-
-	static final Random rnd = new Random();
 	/**ゲームスピードの定義
 	 * <br>順に、停止、1倍、2倍、4倍、10倍、最速*/
 	public static final int PAUSE = -1, MAX = 1, DECUPLE = 10, QUINTUPLE = 20, DOUBLE = 50, NORMAL = 100;
@@ -258,7 +255,7 @@ public class MyPane extends JPanel implements Runnable {
 			// 背景
 			if (isBg) {
 				win.addLine("Load Terrain");
-				TerrainField.loadTerrain(SimYukkuri.world.currentMap.mapIndex, loader, this);
+				TerrainField.loadTerrain(SimYukkuri.world.getCurrentMap().mapIndex, loader, this);
 			}
 
 			// 道具
@@ -665,38 +662,38 @@ public class MyPane extends JPanel implements Runnable {
 					selectAge = cb2.getSelectedIndex();
 					break;
 				case 1:
-					selectType = rnd.nextInt(namesCommonJ.length);
-					selectAge = rnd.nextInt(3);
+					selectType = SimYukkuri.RND.nextInt(namesCommonJ.length);
+					selectAge = SimYukkuri.RND.nextInt(3);
 					break;
 				case 2:
-					selectType = rnd.nextInt(namesRareJ.length) + 1000;
-					selectAge = rnd.nextInt(3);
+					selectType = SimYukkuri.RND.nextInt(namesRareJ.length) + 1000;
+					selectAge = SimYukkuri.RND.nextInt(3);
 					break;
 				case 3:
-					int selectRare = rnd.nextInt(2);
+					int selectRare = SimYukkuri.RND.nextInt(2);
 					switch (selectRare) {
 					case 0:
 					default:
-						selectType = rnd.nextInt(namesCommonJ.length);
+						selectType = SimYukkuri.RND.nextInt(namesCommonJ.length);
 						break;
 					case 1:
-						selectType = rnd.nextInt(namesRareJ.length) + 1000;
+						selectType = SimYukkuri.RND.nextInt(namesRareJ.length) + 1000;
 						break;
 					}
-					selectAge = rnd.nextInt(3);
+					selectAge = SimYukkuri.RND.nextInt(3);
 					break;
 				}
 
 				boolean bImageNagasiMode = false;
-				if (selectType == Reimu.type && rnd.nextInt(20) == 0)
+				if (selectType == Reimu.type && SimYukkuri.RND.nextInt(20) == 0)
 					selectType = WasaReimu.type;
-				if (selectType == Reimu.type && rnd.nextInt(15) == 0)
+				if (selectType == Reimu.type && SimYukkuri.RND.nextInt(15) == 0)
 					selectType = Deibu.type;
-				if (selectType == Marisa.type && rnd.nextInt(50) == 0)
+				if (selectType == Marisa.type && SimYukkuri.RND.nextInt(50) == 0)
 					selectType = MarisaTsumuri.type;
-				if (selectType == Marisa.type && rnd.nextInt(50) == 0)
+				if (selectType == Marisa.type && SimYukkuri.RND.nextInt(50) == 0)
 					selectType = MarisaKotatsumuri.type;
-				if (selectType == Ayaya.type && rnd.nextInt(20) == 0)
+				if (selectType == Ayaya.type && SimYukkuri.RND.nextInt(20) == 0)
 					selectType = Kimeemaru.type;
 
 				//if(selectType == Reimu.type || selectType == Marisa.type)
@@ -705,7 +702,7 @@ public class MyPane extends JPanel implements Runnable {
 						bImageNagasiMode = true;
 					}
 					if (SimYukkuri.NAGASI_MODE == 2) {
-						if (rnd.nextInt(20) == 0) {
+						if (SimYukkuri.RND.nextInt(20) == 0) {
 							bImageNagasiMode = true;
 						}
 					}
@@ -724,7 +721,8 @@ public class MyPane extends JPanel implements Runnable {
 					age = AgeState.ADULT;
 					break;
 				}
-				Body b = terrarium.makeBody(rnd.nextInt(Translate.mapW), rnd.nextInt(Translate.mapH), 0, selectType,
+				Body b = terrarium.makeBody(SimYukkuri.RND.nextInt(Translate.mapW),
+						SimYukkuri.RND.nextInt(Translate.mapH), 0, selectType,
 						null, age, null, null, true);
 				b.addAge(256);
 				if (cb6.isSelected()) {
@@ -1186,6 +1184,7 @@ public class MyPane extends JPanel implements Runnable {
 			}
 		}
 	}
+
 	/**文字メッセージの表示*/
 	private int drawStringMultiLine(Graphics2D g2d, String str, int posX, int posY, int width, boolean flag) {
 		AttributedString as = new AttributedString(str);

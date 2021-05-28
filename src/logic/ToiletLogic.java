@@ -1,7 +1,6 @@
 package src.logic;
 
 import java.util.List;
-import java.util.Random;
 
 import src.SimYukkuri;
 import src.base.Body;
@@ -26,7 +25,6 @@ import src.system.MessagePool;
 public class ToiletLogic {
 	/** うんうんどれい */
 	public static Body bodyUnunSlave;
-	protected static Random rnd = new Random();
 	/**
 	 * うんうん処理
 	 * @param b ゆっくり
@@ -54,8 +52,8 @@ public class ToiletLogic {
 			bHasShit = true;
 		}
 
-		List<Toilet> toiletList = SimYukkuri.world.currentMap.toilet;
-		List<Shit> shitList = SimYukkuri.world.currentMap.shit;
+		List<Toilet> toiletList = SimYukkuri.world.getCurrentMap().toilet;
+		List<Shit> shitList = SimYukkuri.world.getCurrentMap().shit;
 		if( shitList == null || shitList.size() == 0 ){
 			return false;
 		}
@@ -78,7 +76,7 @@ public class ToiletLogic {
 		}
 		// うんうん奴隷がいれば運ばない
 		if( bCanTransport  ){
-			Body[] bodyList = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
+			Body[] bodyList = SimYukkuri.world.getCurrentMap().body.toArray(new Body[0]);
 			for(Body bodyOther : bodyList){
 				if(bodyOther == b || bodyOther.isDead() || bodyOther.isRemoved() ){
 					continue;
@@ -97,7 +95,7 @@ public class ToiletLogic {
 		if( bCanTransport ){
 			for (Shit s: shitList) {
 				if(s.getZ() != b.getZ()) continue;
-				if( b!= s.owner ) continue;
+				if( b.getUniqueID() == s.ownerId ) continue;
 
 				// 壁があるなら無視
 				if (Barrier.acrossBarrier(b.getX(), b.getY(), s.getX(), s.getY(), Barrier.MAP_BODY[b.getBodyAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
@@ -141,9 +139,17 @@ public class ToiletLogic {
 			int nDistance = Translate.getRealDistance(b.getX(), b.getY(), s.getX(), s.getY());
 			// ある程度近いうんうんが自分の子供のものかチェック。すでにうんうんを運んでる、自分のうんうんがトイレ外にあれば無視する
 			if( bCanTransport  && nDistance < colX && !bHasShit && !bFoundMyShitOutOfToilet && bFoundMyToilet  ){
-				Body bodyOwner = s.owner;
+				int bodyOwnerId = s.ownerId;
+				Body owner = null;
+				Body[] bodies = SimYukkuri.world.getCurrentMap().body.toArray(new Body[0]);
+				for (Body body : bodies) {
+					if (body.getUniqueID() == bodyOwnerId) {
+						owner = body;
+						break;
+					}
+				}
 				// 自分の子ゆのうんうんは片付ける。
-				if( bodyOwner != null && b.isParent(bodyOwner) && !bodyOwner.isAdult()){
+				if( owner != null && b.isParent(owner) && !owner.isAdult()){
 					boolean bIsOnToilet = false;
 					if( toiletList != null && toiletList.size() != 0){
 						for (Toilet t: toiletList) {
@@ -174,12 +180,12 @@ public class ToiletLogic {
 				// 嫌がる
 				if (!b.isTalking() && !b.isToShit()) {
 					//うんうん奴隷じゃない、餡子脳の赤、子ゆはランダムで威嚇。
-					if(!b.isAdult() && b.getPublicRank() == PublicRank.NONE &&  b.getIntelligence() == Intelligence.FOOL && rnd.nextBoolean()){
+					if(!b.isAdult() && b.getPublicRank() == PublicRank.NONE &&  b.getIntelligence() == Intelligence.FOOL && SimYukkuri.RND.nextBoolean()){
 						b.setForceFace(ImageCode.PUFF.ordinal());
 						b.setMessage(MessagePool.getMessage(b, MessagePool.Action.ShitIntimidation), false);
 					}
 					//ついでに足りないゆも
-					else if(b.isIdiot() && rnd.nextBoolean()){
+					else if(b.isIdiot() && SimYukkuri.RND.nextBoolean()){
 						b.setForceFace(ImageCode.PUFF.ordinal());
 						b.setMessage(MessagePool.getMessage(b, MessagePool.Action.ShitIntimidation), false);
 					}
@@ -215,7 +221,6 @@ public class ToiletLogic {
 			return false;
 		}
 		//A2.フラグ設定
-//		Random rnd = new Random();
 		boolean bHasShit = false;
 		if( b.getTakeoutItem(TakeoutItemType.SHIT) != null ){
 			bHasShit = true;
@@ -236,7 +241,7 @@ public class ToiletLogic {
 			if(b.isToSteal()&& !b.wantToShit() ){
 					return false;
 			}
-			List<Toilet> toiletList = SimYukkuri.world.currentMap.toilet;
+			List<Toilet> toiletList = SimYukkuri.world.getCurrentMap().toilet;
 			for (Toilet t: toiletList) {
 				// うんうん奴隷用トイレのどれかにいれば終了＝トイレに向かわない
 				if( ((Toilet)t).isForSlave()  && t.checkHitObj(null, b)){
@@ -256,7 +261,7 @@ public class ToiletLogic {
 		else{
 			// うんうん奴隷ではない場合、用がない、かつうんうんを持ってないなら終了
 			if ( !b.wantToShit() && !bHasShit ) {
-				List<Toilet> toiletList = SimYukkuri.world.currentMap.toilet;
+				List<Toilet> toiletList = SimYukkuri.world.getCurrentMap().toilet;
 				for (Toilet t: toiletList) {
 					// 自動清掃でないトイレに入った時の反応
 					if(!((Toilet)t).getAutoClean() && t.checkHitObj(null, b) &&!b.isTalking()){
@@ -330,7 +335,7 @@ public class ToiletLogic {
 			wallMode = AgeState.ADULT.ordinal();
 		}
 
-		List<Toilet> toiletList = SimYukkuri.world.currentMap.toilet;
+		List<Toilet> toiletList = SimYukkuri.world.getCurrentMap().toilet;
 		for (Toilet t: toiletList) {
 			int distance = Translate.distance(b.getX(), b.getY(), t.getX(), t.getY() - t.getH()/6);
 			if (minDistance > distance) {

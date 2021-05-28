@@ -6,7 +6,6 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
-import java.util.Random;
 
 import src.SimYukkuri;
 import src.base.Body;
@@ -32,7 +31,6 @@ public class MachinePress extends ObjEX implements java.io.Serializable {
 	private static int AnimeImagesNum[] = {8};//アニメごとに何枚使うか
 	private static BufferedImage[] images = new BufferedImage[images_num + 1];
 	private static Rectangle boundary = new Rectangle();
-	private Random rnd = new Random();
 	/**画像ロード*/
 	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
 		for( int i = 0; i < images_num ; i++ ) {
@@ -70,7 +68,7 @@ public class MachinePress extends ObjEX implements java.io.Serializable {
 	public int objHitProcess( Obj o ) {
 		if(o.getObjType() == Type.YUKKURI){
 			Body p = (Body)o;
-			if(!p.isDead() && p.isNotNYD() && rnd.nextInt(5) == 0){
+			if(!p.isDead() && p.isNotNYD() && SimYukkuri.RND.nextInt(5) == 0){
 				p.setHappiness(Happiness.VERY_SAD);
 				p.setForceFace(ImageCode.CRYING.ordinal());
 				p.setMessage(MessagePool.getMessage(p, MessagePool.Action.KilledInFactory), 40, true, true);
@@ -93,14 +91,14 @@ public class MachinePress extends ObjEX implements java.io.Serializable {
 
 	@Override
 	public void removeListData(){
-		SimYukkuri.world.currentMap.machinePress.remove(this);
+		SimYukkuri.world.getCurrentMap().machinePress.remove(this);
 	}
 	/**コンストラクタ*/
 	public MachinePress(int initX, int initY, int initOption) {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), 8);
-		SimYukkuri.world.currentMap.machinePress.add(this);
+		SimYukkuri.world.getCurrentMap().machinePress.add(this);
 		objType = Type.FIX_OBJECT;
 		objEXType = ObjEXType.MACHINEPRESS;
 

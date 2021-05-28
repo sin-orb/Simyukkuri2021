@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import src.SimYukkuri;
 import src.base.Body;
 import src.draw.ModLoader;
 import src.draw.Translate;
@@ -162,9 +163,9 @@ public class Chiruno extends Body implements java.io.Serializable {
 		PREGPERIOD *= factor;
 		SLEEPPERIOD *= factor;
 		ACTIVEPERIOD *= factor;
-		sameDest = (RND.nextInt(10)+10);
+		sameDest = (SimYukkuri.RND.nextInt(10)+10);
 		DECLINEPERIOD *= (Math.random()+0.5);
-		ROBUSTNESS = (RND.nextInt(10)+1);
+		ROBUSTNESS = (SimYukkuri.RND.nextInt(10)+1);
 		//EYESIGHT /= 1;
 		factor = Math.random()+1;
 		STRENGTH[AgeState.ADULT.ordinal()] *= factor;

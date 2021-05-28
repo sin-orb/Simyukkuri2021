@@ -211,13 +211,13 @@ public class MainCommandListener {
 			switch(sel) {
 				case INI_RELOAD:
 					SimYukkuri.mypane.loadImage(false, false, false, false, false, true);
-					List<Body> bodyList = SimYukkuri.world.currentMap.body;
+					List<Body> bodyList = SimYukkuri.world.getCurrentMap().body;
 					if( bodyList != null && bodyList.size() != 0 )
 					{
 						for(Body b:bodyList)
 						{
-							IniFileUtil.readIniFile(b);
-							IniFileUtil.readYukkuriIniFile(b);
+							IniFileUtil.readIniFile(b, true);
+							IniFileUtil.readYukkuriIniFile(b, true);
 						}
 					}
 					break;

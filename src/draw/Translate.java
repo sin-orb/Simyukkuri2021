@@ -729,7 +729,7 @@ public class Translate {
 		int mSX = Math.max(0, Math.min(x, Translate.mapW));
 		int mSY = Math.max(0, Math.min(y, Translate.mapH));
 					
-		return SimYukkuri.world.currentMap.wallMap[mSX][mSY];
+		return SimYukkuri.world.getCurrentMap().wallMap[mSX][mSY];
 	}
 	/**
 	 * 壁の数設定
@@ -742,7 +742,7 @@ public class Translate {
 		int mSX = Math.max(0, Math.min(x, Translate.mapW));
 		int mSY = Math.max(0, Math.min(y, Translate.mapH));
 					
-		SimYukkuri.world.currentMap.wallMap[mSX][mSY] = num;
+		SimYukkuri.world.getCurrentMap().wallMap[mSX][mSY] = num;
 	}
 	
 	/**
@@ -756,7 +756,7 @@ public class Translate {
 		int mSX = Math.max(0, Math.min(x, Translate.mapW));
 		int mSY = Math.max(0, Math.min(y, Translate.mapH));
 					
-		return SimYukkuri.world.currentMap.fieldMap[mSX][mSY];
+		return SimYukkuri.world.getCurrentMap().fieldMap[mSX][mSY];
 	}
 	
 	/**
@@ -770,6 +770,6 @@ public class Translate {
 		int mSX = Math.max(0, Math.min(x, Translate.mapW));
 		int mSY = Math.max(0, Math.min(y, Translate.mapH));
 					
-		SimYukkuri.world.currentMap.fieldMap[mSX][mSY] = num;
+		SimYukkuri.world.getCurrentMap().fieldMap[mSX][mSY] = num;
 	}
 }

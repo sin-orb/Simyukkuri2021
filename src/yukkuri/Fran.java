@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
+import src.SimYukkuri;
 import src.base.Body;
 import src.draw.ModLoader;
 import src.draw.Translate;
@@ -145,7 +146,7 @@ public class Fran extends Body implements java.io.Serializable {
 	public void killTime(){
 		if(getCurrentEvent() != null)return;
 		if(getPlaying()!=null)return;
-		int p=RND.nextInt(50);
+		int p=SimYukkuri.RND.nextInt(50);
 		//8/50でキリッ
 		if (p<=7) {
 			getInVain(true);
@@ -181,7 +182,7 @@ public class Fran extends Body implements java.io.Serializable {
 		else if (p<=39){
 			if(ToyLogic.checkTrampoline(this)){
 				setPlaying(PlayStyle.TRAMPOLINE);
-				playingLimit = 150 +RND.nextInt(100)-49;
+				playingLimit = 150 +SimYukkuri.RND.nextInt(100)-49;
 				return;
 			}
 			else killTime();
@@ -190,14 +191,14 @@ public class Fran extends Body implements java.io.Serializable {
 		else if (p<=41){
 			if(ToyLogic.checkSui(this)){
 				setPlaying(PlayStyle.SUI);
-				playingLimit = 150 +RND.nextInt(100)-49;
+				playingLimit = 150 +SimYukkuri.RND.nextInt(100)-49;
 				return;
 			}
 			else killTime();
 		}
 		else{
 			// おくるみありで汚れていない場合
-			if( isHasPants() && !isDirty() && RND.nextInt(10) == 0 ){
+			if( isHasPants() && !isDirty() && SimYukkuri.RND.nextInt(10) == 0 ){
 				setMessage(MessagePool.getMessage(this, MessagePool.Action.RelaxOkurumi));
 			}
 			else{
@@ -244,9 +245,9 @@ public class Fran extends Body implements java.io.Serializable {
 		PREGPERIOD *= factor;
 		SLEEPPERIOD *= factor;
 		ACTIVEPERIOD *= factor;
-		sameDest = RND.nextInt(20)+20;
+		sameDest = SimYukkuri.RND.nextInt(20)+20;
 		DECLINEPERIOD *= (Math.random()+0.5);
-		ROBUSTNESS = RND.nextInt(15)+1;
+		ROBUSTNESS = SimYukkuri.RND.nextInt(15)+1;
 		//EYESIGHT /= 4;
 		factor = Math.random()+0.5;
 		STRENGTH[AgeState.ADULT.ordinal()] *= factor;

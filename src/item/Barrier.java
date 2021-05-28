@@ -111,8 +111,8 @@ public class Barrier extends FieldShapeBase implements Serializable {
 				break;	
 		}
 
-		MapPlaceData.setWallLine(SimYukkuri.world.currentMap.wallMap, mapSX, mapSY, mapEX, mapEY, true, attribute);
-		SimYukkuri.world.currentMap.barrier.add(this);
+		MapPlaceData.setWallLine(SimYukkuri.world.getCurrentMap().wallMap, mapSX, mapSY, mapEX, mapEY, true, attribute);
+		SimYukkuri.world.getCurrentMap().barrier.add(this);
 	}
 	/**プレビューの線の描画*/
 	public static void drawPreview(Graphics2D g2, int sx, int sy, int ex, int ey) {
@@ -130,13 +130,13 @@ public class Barrier extends FieldShapeBase implements Serializable {
 		int y1 = b.getMapSY();
 		int x2 = b.getMapEX();
 		int y2 = b.getMapEY();
-		if(SimYukkuri.world.currentMap.barrier.remove(b)) {
-			MapPlaceData.setWallLine(SimYukkuri.world.currentMap.wallMap, x1, y1, x2, y2, false, b.attribute);
+		if(SimYukkuri.world.getCurrentMap().barrier.remove(b)) {
+			MapPlaceData.setWallLine(SimYukkuri.world.getCurrentMap().wallMap, x1, y1, x2, y2, false, b.attribute);
 		}
 	}
 	/**壁に引っかかるかのチェック*/
 	public static boolean onBarrier(int cx, int cy, int thx, int thy, int attr) {
-		MapPlaceData tmp = SimYukkuri.world.currentMap;
+		MapPlaceData tmp = SimYukkuri.world.getCurrentMap();
 		int sx = Math.max(0, cx - thx/2);
 		int sy = Math.max(0, cy - thy/2);
 		int ex = Math.min(cx + thx/2, Translate.mapW);
@@ -159,7 +159,7 @@ public class Barrier extends FieldShapeBase implements Serializable {
 	 * @return ある点が壁の上か
 	 */
 	public static Barrier getBarrier(int cx, int cy, int thickness) {
-		List<Barrier> barrierList = SimYukkuri.world.currentMap.barrier;
+		List<Barrier> barrierList = SimYukkuri.world.getCurrentMap().barrier;
 		
 		for (Barrier b: barrierList) {
 			int x1 = b.getMapSX();
@@ -191,7 +191,7 @@ public class Barrier extends FieldShapeBase implements Serializable {
 	 * @return 壁が動線(視線)上にあるかどうか
 	 */
 	public static boolean acrossBarrier(int x1, int y1, int x2, int y2, int attr) {
-		MapPlaceData tmp = SimYukkuri.world.currentMap;
+		MapPlaceData tmp = SimYukkuri.world.getCurrentMap();
 		
 		x1 = Math.max(0, Math.min(x1, Translate.mapW));
 		x2 = Math.max(0, Math.min(x2, Translate.mapW));

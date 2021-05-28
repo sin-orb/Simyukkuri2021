@@ -183,9 +183,9 @@ public class DosMarisa extends Marisa implements java.io.Serializable {
 		PREGPERIOD *= factor;
 		SLEEPPERIOD *= factor;
 		ACTIVEPERIOD *= factor;
-		sameDest = RND.nextInt(10)+10;
+		sameDest = SimYukkuri.RND.nextInt(10)+10;
 		DECLINEPERIOD *= (Math.random()+0.5);
-		ROBUSTNESS = RND.nextInt(25)+1;
+		ROBUSTNESS = SimYukkuri.RND.nextInt(25)+1;
 		//EYESIGHT /= 1;
 		factor = Math.random()+6.0;
 		STRENGTH[AgeState.ADULT.ordinal()] *= factor;
@@ -198,6 +198,6 @@ public class DosMarisa extends Marisa implements java.io.Serializable {
 	@Override
 	public void remove() {
 		super.remove();
-		SimYukkuri.world.currentMap.makeOrKillDos(false);
+		SimYukkuri.world.getCurrentMap().makeOrKillDos(false);
 	}
 }

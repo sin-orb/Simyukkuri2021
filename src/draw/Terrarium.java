@@ -13,7 +13,6 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
 
 import src.SimYukkuri;
 import src.attachment.Fire;
@@ -54,6 +53,7 @@ import src.logic.FoodLogic;
 import src.logic.StoneLogic;
 import src.logic.ToiletLogic;
 import src.system.FieldShapeBase;
+import src.system.MainCommandUI;
 import src.system.MapPlaceData;
 import src.yukkuri.Alice;
 import src.yukkuri.Ayaya;
@@ -140,8 +140,6 @@ public class Terrarium {
 	private static int intervalCount = 0;
 	/**汎用長方形*/
 	private static Rectangle tmpRect = new Rectangle();
-	/** ランダム */
-	protected static Random rnd = new Random();
 
 	/**
 	 * セーブの実行部
@@ -163,11 +161,12 @@ public class Terrarium {
 	}
 
 	/**
-	 * セーブの実行部
+	 * ロードの実行部
 	 * @param file ファイル
 	 * @throws IOException IO例外
 	 * @throws ClassNotFoundException クラスの存在しない場合の例外
 	 */
+	@SuppressWarnings("unchecked")
 	public static void loadState(File file) throws IOException, ClassNotFoundException {
 		ObjectInputStream in = new ObjectInputStream(
 				new BufferedInputStream(
@@ -186,7 +185,9 @@ public class Terrarium {
 		} finally {
 			in.close();
 		}
-
+		// 持ち物を復元
+		MainCommandUI.itemWindow.itemList.setModel(tmpWorld.player.itemList);
+		
 		// ウィンドウサイズを復元
 		tmpWorld.recalcMapSize();
 		SimYukkuri.world = tmpWorld;
@@ -198,9 +199,9 @@ public class Terrarium {
 		}
 
 		// マップの復元
-		SimYukkuri.world.setNextMap(SimYukkuri.world.currentMap.mapIndex);
+		SimYukkuri.world.setNextMap(SimYukkuri.world.getCurrentMap().mapIndex);
 		SimYukkuri.mypane.loadTerrainFile();
-		SimYukkuri.world.currentMap = SimYukkuri.world.changeMap();
+		SimYukkuri.world.changeMap();
 
 		SimYukkuri.mypane.createBackBuffer();
 		Translate.createTransTable(TerrainField.isPers());
@@ -222,7 +223,7 @@ public class Terrarium {
 		int minDistance;
 
 		// 全ゆっくりに対してチェック
-		for (Body p : SimYukkuri.world.currentMap.body) {
+		for (Body p : SimYukkuri.world.getCurrentMap().body) {
 			// 自分同士のチェックは無意味なのでスキップ
 			if (p == b) {
 				continue;
@@ -261,7 +262,7 @@ public class Terrarium {
 			return;
 		}
 		// 全ゆっくりに対してチェック
-		Body[] bodyList = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
+		List<Body> bodyList = SimYukkuri.world.getCurrentMap().body;
 
 		// 全ゆっくりに対してチェック
 		for (Body p : bodyList) {
@@ -408,7 +409,7 @@ public class Terrarium {
 			b = new Deibu(x, y, z, age, mama, papa);
 			break;
 		case DosMarisa.type:
-			if (SimYukkuri.world.currentMap.makeOrKillDos(true)) {
+			if (SimYukkuri.world.getCurrentMap().makeOrKillDos(true)) {
 				b = new DosMarisa(x, y, z, age, mama, papa);
 			} else {
 				b = new Marisa(x, y, z, age, mama, papa);
@@ -519,16 +520,16 @@ public class Terrarium {
 				}
 			}
 			if (nCount == 0) {
-				if (rnd.nextInt(20) == 0) {
+				if (SimYukkuri.RND.nextInt(20) == 0) {
 					b.setbImageNagasiMode(true);
 				}
 			} else if (nCount == 1) {
 				// 片親がまりちゃ流しなら1/2
-				if (rnd.nextBoolean()) {
+				if (SimYukkuri.RND.nextBoolean()) {
 					b.setbImageNagasiMode(true);
 				}
 			} else {
-				if (rnd.nextInt(20) != 0) {
+				if (SimYukkuri.RND.nextInt(20) != 0) {
 					b.setbImageNagasiMode(true);
 				}
 			}
@@ -558,13 +559,13 @@ public class Terrarium {
 	 */
 	public Body addBody(int x, int y, int z, int type, AgeState age, Body p1, Body p2) {
 		Body ret = makeBody(x, y, z, type, null, age, p1, p2, true);
-		SimYukkuri.world.currentMap.body.add(ret);
+		SimYukkuri.world.getCurrentMap().body.add(ret);
 		return ret;
 	}
 
 	/**ゆっくりをリストに登録*/
 	public void addBody(Body b) {
-		SimYukkuri.world.currentMap.body.add(b);
+		SimYukkuri.world.getCurrentMap().body.add(b);
 	}
 
 	/**
@@ -577,7 +578,7 @@ public class Terrarium {
 	 * @param type 種類
 	 */
 	public void addShit(int x, int y, int z, Body b, YukkuriType type) {
-		SimYukkuri.world.currentMap.shit.add(new Shit(x, y, z, b, type));
+		SimYukkuri.world.getCurrentMap().shit.add(new Shit(x, y, z, b, type));
 	}
 
 	/**
@@ -596,7 +597,7 @@ public class Terrarium {
 			s.setMostDepth(b.getMostDepth());
 			s.setMostDepth(b.getZ());
 		}
-		SimYukkuri.world.currentMap.shit.add(s);
+		SimYukkuri.world.getCurrentMap().shit.add(s);
 	}
 
 	/**
@@ -611,7 +612,7 @@ public class Terrarium {
 	 */
 	public Vomit addVomit(int x, int y, int z, Body body, YukkuriType type) {
 		Vomit v = new Vomit(x, y, z, body, type);
-		SimYukkuri.world.currentMap.vomit.add(v);
+		SimYukkuri.world.getCurrentMap().vomit.add(v);
 		if (body != null && body.getMostDepth() < 0) {
 			v.setMostDepth(body.getMostDepth());
 			v.setMostDepth(body.getZ());
@@ -635,7 +636,7 @@ public class Terrarium {
 			v.setMostDepth(body.getMostDepth());
 			v.setMostDepth(body.getZ());
 		}
-		SimYukkuri.world.currentMap.vomit.add(v);
+		SimYukkuri.world.getCurrentMap().vomit.add(v);
 	}
 
 	/**エフェクト追加
@@ -677,13 +678,13 @@ public class Terrarium {
 
 	/**マップ全体を危険と認知させる*/
 	public static void setAlarm() {
-		SimYukkuri.world.currentMap.alarm = true;
-		SimYukkuri.world.currentMap.alarmPeriod = ALARM_PERIOD;
+		SimYukkuri.world.getCurrentMap().alarm = true;
+		SimYukkuri.world.getCurrentMap().alarmPeriod = ALARM_PERIOD;
 	}
 
 	/**マップ全体で危険か否かを取得する.*/
 	public static boolean getAlarm() {
-		return SimYukkuri.world.currentMap.alarm;
+		return SimYukkuri.world.getCurrentMap().alarm;
 	}
 
 	/**
@@ -728,7 +729,7 @@ public class Terrarium {
 	/** 全オブジェクトの更新 スレッドと紛らわしいので名前変更*/
 	public void stepRun() {
 		//マップ状況を取得
-		MapPlaceData curMap = SimYukkuri.world.currentMap;
+		MapPlaceData curMap = SimYukkuri.world.getCurrentMap();
 		intervalCount = (++intervalCount) & 255;
 		//マップ上での緊張状態の経過
 		if (curMap.alarmPeriod >= 0) {
@@ -1018,18 +1019,18 @@ public class Terrarium {
 					int burstPower = (b.getSize() - b.getOriginSize()) * 3 / 4;
 					for (Dna babyTypes : b.getBabyTypes()) {
 						addBaby(b.getX(), b.getY(), b.getZ() + b.getSize() / 20,
-								curMap.rnd.nextInt(burstPower / 4 + 1) - burstPower / 8,
-								curMap.rnd.nextInt(burstPower / 4 + 1) - burstPower / 8,
-								curMap.rnd.nextInt(burstPower / 5 + 1) - burstPower / 10 - 1, babyTypes, b,
+								SimYukkuri.RND.nextInt(burstPower / 4 + 1) - burstPower / 8,
+								SimYukkuri.RND.nextInt(burstPower / 4 + 1) - burstPower / 8,
+								SimYukkuri.RND.nextInt(burstPower / 5 + 1) - burstPower / 10 - 1, babyTypes, b,
 								b.getPartner());
 					}
 					b.getBabyTypes().clear();
 					if (b.getStalks() != null) {
 						for (Stalk s : b.getStalks()) {
 							if (s != null) {
-								s.kick(curMap.rnd.nextInt(burstPower / 4 + 1) - burstPower / 8,
-										curMap.rnd.nextInt(burstPower / 4 + 1) - burstPower / 8,
-										curMap.rnd.nextInt(burstPower / 5 + 1) - burstPower / 10 - 1);
+								s.kick(SimYukkuri.RND.nextInt(burstPower / 4 + 1) - burstPower / 8,
+										SimYukkuri.RND.nextInt(burstPower / 4 + 1) - burstPower / 8,
+										SimYukkuri.RND.nextInt(burstPower / 5 + 1) - burstPower / 10 - 1);
 							}
 						}
 					}
@@ -1038,9 +1039,9 @@ public class Terrarium {
 						for (int j = 0; b.getShit() / b.getSHITLIMIT()[b.getBodyAgeState().ordinal()] > j; j++) {
 							addShit(b.getX(), b.getY(), b.getZ() + b.getSize() / 15, b, b.getShitType());
 							curMap.shit.get(curMap.shit.size() - 1).kick(
-									curMap.rnd.nextInt(burstPower / 4 + 1) - burstPower / 8,
-									curMap.rnd.nextInt(burstPower / 4 + 1) - burstPower / 8,
-									curMap.rnd.nextInt(burstPower / 5 + 1) - burstPower / 10 - 1);
+									SimYukkuri.RND.nextInt(burstPower / 4 + 1) - burstPower / 8,
+									SimYukkuri.RND.nextInt(burstPower / 4 + 1) - burstPower / 8,
+									SimYukkuri.RND.nextInt(burstPower / 5 + 1) - burstPower / 10 - 1);
 						}
 					}
 					b.setShit(0);
@@ -1082,17 +1083,18 @@ public class Terrarium {
 							int fx, fy;
 							for (int f = 0; f < 5; f++) {
 								fx = s.getX() - 6 + (f * 7);
-								fy = s.getY() - 5 + curMap.rnd.nextInt(10);
+								fy = s.getY() - 5 + SimYukkuri.RND.nextInt(10);
 								fx = Math.max(0, fx);
 								fx = Math.min(fx, Translate.mapW);
 								fy = Math.max(0, fy);
 								fy = Math.min(fy, Translate.mapH);
-								GadgetAction.putObjEX(Food.class, fx, fy, Food.FoodType.STALK.ordinal());
+								Food food = (Food)GadgetAction.putObjEX(Food.class, fx, fy, Food.FoodType.STALK.ordinal());
+								SimYukkuri.world.getCurrentMap().food.add(food);
 							}
 							s.remove();
 						}
 					}
-					b.getStalks().clear();
+					b.removeAllStalks();
 				}
 				if (b.getBabyTypes().size() == 0 || b.getStalks().size() == 0) {
 					b.setHasBaby(false);
@@ -1111,7 +1113,6 @@ public class Terrarium {
 				addVomit(b.getX(), b.getY(), b.getZ(), b, b.getShitType());
 				break;
 			case REMOVED:
-				//i.remove();
 				b.upDate();
 				b.remove();
 				continue;

@@ -1,9 +1,9 @@
 package src.event;
 
 import java.util.List;
-import java.util.Random;
 
 import src.Const;
+import src.SimYukkuri;
 import src.base.Body;
 import src.base.EventPacket;
 import src.base.Obj;
@@ -23,7 +23,6 @@ import src.system.MessagePool;
 public class ProudChildEvent extends EventPacket implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
-	Random rnd = new Random();
 	int tick = 0;
 	boolean bActionFlag = true;
 	boolean bUnunActionFlag = true;
@@ -31,15 +30,23 @@ public class ProudChildEvent extends EventPacket implements java.io.Serializable
 
 	/** 行動ステート */
 	enum STATE {
-		/** 移動 */GO, 
-		/** 待機 */WAIT,
-		/** イベント開始時 */START,
-		/** おうた */SING,
-		/** おちび自慢or要求 */PROUD,
-		/** イベント終了時 */END,
+		/** 移動 */
+		GO,
+		/** 待機 */
+		WAIT,
+		/** イベント開始時 */
+		START,
+		/** おうた */
+		SING,
+		/** おちび自慢or要求 */
+		PROUD,
+		/** イベント終了時 */
+		END,
 	}
+
 	/** 状態 */
 	public STATE state = STATE.GO;
+
 	/**
 	 * コンストラクタ.
 	 */
@@ -50,7 +57,7 @@ public class ProudChildEvent extends EventPacket implements java.io.Serializable
 
 	@Override
 	public boolean simpleEventAction(Body b) {
-		if(getFrom().isShutmouth()){
+		if (getFrom().isShutmouth()) {
 			return true;
 		}
 		return false;
@@ -62,22 +69,27 @@ public class ProudChildEvent extends EventPacket implements java.io.Serializable
 	@Override
 	public boolean checkEventResponse(Body b) {
 		// うんうん奴隷の場合は参加しない
-		if( b.getPublicRank() == PublicRank.UnunSlave ) return false;
+		if (b.getPublicRank() == PublicRank.UnunSlave)
+			return false;
 		//父母がいない場合は参加しない
-		if(b.getFather() == null && b.getMother() == null) return false;
+		if (b.getFather() == null && b.getMother() == null)
+			return false;
 		// つがいも参加する
-		if(getFrom().isPartner(b)) {
+		if (getFrom().isPartner(b)) {
 			return true;
 		}
-		if(!b.canEventResponse()){
+		if (!b.canEventResponse()) {
 			return false;
 		}
 		// Fromの子供だけ参加する(※Fromが教育係のときは全ての子供が参加するようにする？)
-		if(!b.isChild(getFrom())) return false;
+		if (!b.isChild(getFrom()))
+			return false;
 		// 赤、子ゆのみ参加
-		if(b.isAdult() ) return false;
+		if (b.isAdult())
+			return false;
 
-		b.setWorldEventResMessage(MessagePool.getMessage(b, MessagePool.Action.ProudChildsGO), Const.HOLDMESSAGE, true, false);
+		b.setWorldEventResMessage(MessagePool.getMessage(b, MessagePool.Action.ProudChildsGO), Const.HOLDMESSAGE, true,
+				false);
 		b.setHappiness(Happiness.HAPPY);
 		b.wakeup();
 		b.clearActions();
@@ -96,256 +108,260 @@ public class ProudChildEvent extends EventPacket implements java.io.Serializable
 	@Override
 	public UpdateState update(Body b) {
 		//イベント中止のお知らせ
-		if( b == null || getFrom() == null ){
+		if (b == null || getFrom() == null) {
 			return UpdateState.ABORT;
 		}
-		if(b.getPanicType() != null){
+		if (b.getPanicType() != null) {
 			return UpdateState.ABORT;
 		}
-		if( b.isNYD() ){
+		if (b.isNYD()) {
 			return UpdateState.ABORT;
 		}
-		if(getFrom().isRemoved()) {
+		if (getFrom().isRemoved()) {
 			b.setHappiness(Happiness.SAD);
 			return UpdateState.ABORT;
 		}
-		if(getFrom().getCurrentEvent() == null){
+		if (getFrom().getCurrentEvent() == null) {
 			return UpdateState.ABORT;
 		}
 		// 産気づいたら
-		if( b.nearToBirth()){
+		if (b.nearToBirth()) {
 			return UpdateState.ABORT;
 		}
-		if(getFrom().isUnhappy()) {
+		if (getFrom().isUnhappy()) {
 			b.setHappiness(Happiness.SAD);
 			return UpdateState.ABORT;
 		}
 
 		//3秒に1回
-		if( tick%30 != 0){
+		if (tick % 30 != 0) {
 			return null;
 		}
 		//親を持ち上げたときの反応
-		if(!getFrom().canflyCheck() && getFrom().getZ()>=2) {
-			if(rnd.nextInt(50)==0)return UpdateState.ABORT;
-			else if(b==getFrom()){
+		if (!getFrom().canflyCheck() && getFrom().getZ() >= 2) {
+			if (SimYukkuri.RND.nextInt(50) == 0)
+				return UpdateState.ABORT;
+			else if (b == getFrom()) {
 				//空処理
-			}
-			else {
-				if(b.isSad())b.setMessage(MessagePool.getMessage(b, MessagePool.Action.LookForParents), false);
-				else b.setMessage(MessagePool.getMessage(b, MessagePool.Action.LookForParents), true);
+			} else {
+				if (b.isSad())
+					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.LookForParents), false);
+				else
+					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.LookForParents), true);
 				b.setHappiness(Happiness.SAD);
 				return null;
 			}
 		}
 
 		// 自慢中は寝ない
-		if(b.isSleeping())b.wakeup();
+		if (b.isSleeping())
+			b.wakeup();
 		// 満腹度が2%以下なら2%にする(強制イベント救済措置)
-		if( 2 > 100*b.getHungry()/b.getHungryLimit()){
-			b.setHungry(2*b.getHungryLimit()/100);
+		if (2 > 100 * b.getHungry() / b.getHungryLimit()) {
+			b.setHungry(2 * b.getHungryLimit() / 100);
 		}
 
 		// つがいは別処理
-		if(b.isPartner(getFrom()) ) {
-			if(rnd.nextInt(50) == 0){
+		if (b.isPartner(getFrom())) {
+			if (SimYukkuri.RND.nextInt(50) == 0) {
 				b.setMessage(MessagePool.getMessage(b, MessagePool.Action.GladAboutChild), true);
 			}
 			//集まるとき以外は留まる
-			if(state != STATE.GO ){
+			if (state != STATE.GO) {
 				b.stay();
-			}
-			else{
-				int colX = BodyLogic.calcCollisionX(b,getFrom());
-				b.moveTo( getFrom().getX()+colX*2, getFrom().getY());
+			} else {
+				int colX = BodyLogic.calcCollisionX(b, getFrom());
+				b.moveTo(getFrom().getX() + colX * 2, getFrom().getY());
 			}
 			return null;
 		}
-
 
 		//イベント本番
 		int nWait = 2000;
 		int nWait2 = 300;
 		// 親
-		if(b == getFrom()){
+		if (b == getFrom()) {
 			// 何らかの理由で終了しそうにないなら終わらせる
-			if( 2000 < nFromWaitCount ){
+			if (2000 < nFromWaitCount) {
 				return UpdateState.ABORT;
 			}
 			nFromWaitCount++;
 
 			// 子のみ集合
 			List<Body> childrenList = BodyLogic.createActiveChildList(getFrom(), false);
-			if( (childrenList == null) || (childrenList.size() == 0)){
+			if ((childrenList == null) || (childrenList.size() == 0)) {
 				return UpdateState.ABORT;
 			}
 
-			if( 10< nFromWaitCount ){
-			boolean bIsChildInEvent = false;
-			for( Body child:childrenList){
-				if( child.getCurrentEvent() == this ){
-					bIsChildInEvent = true;
-					break;
+			if (10 < nFromWaitCount) {
+				boolean bIsChildInEvent = false;
+				for (Body child : childrenList) {
+					if (child.getCurrentEvent() == this) {
+						bIsChildInEvent = true;
+						break;
+					}
+				}
+
+				if (!bIsChildInEvent) {
+					return UpdateState.ABORT;
 				}
 			}
 
-			if( !bIsChildInEvent){
-				return UpdateState.ABORT;
-			}
-		}
-
-			switch(state){
-				case GO:
-					if(rnd.nextInt(40) == 0){
-						b.setMessage(MessagePool.getMessage(b, MessagePool.Action.ProudChildsGOFrom), true);
-					}
-					b.setHappiness(Happiness.HAPPY);
-					//b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.ShitExercisesWAITFrom), 52, true, false);
-					boolean bResult = BodyLogic.gatheringYukkuriFront(getFrom(), childrenList, this);
-					if( bResult ){
-						state = STATE.START;
+			switch (state) {
+			case GO:
+				if (SimYukkuri.RND.nextInt(40) == 0) {
+					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.ProudChildsGOFrom), true);
+				}
+				b.setHappiness(Happiness.HAPPY);
+				//b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.ShitExercisesWAITFrom), 52, true, false);
+				boolean bResult = BodyLogic.gatheringYukkuriFront(getFrom(), childrenList, this);
+				if (bResult) {
+					state = STATE.START;
+					bActionFlag = false;
+				}
+				b.stay(nWait2);
+				break;
+			/*				case WAIT:
+								if( checkWait(b,nWait) )
+								{
+									b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.ProudChildsWAITFrom), 52, true, false);
+									state = STATE.START;
+									bActionFlag = false;
+								}
+								b.stay(nWait2);
+								break;*/
+			case START:
+				if (checkWait(b, nWait)) {
+					if (!bActionFlag) {
+						b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.ProudChildsSTARTFrom), 52,
+								true, false);
+						bActionFlag = true;
+						b.stay(nWait2 + 10);
+						b.addMemories(10);
+					} else {
+						state = STATE.SING;
 						bActionFlag = false;
 					}
-					b.stay(nWait2);
-					break;
-/*				case WAIT:
-					if( checkWait(b,nWait) )
-					{
-						b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.ProudChildsWAITFrom), 52, true, false);
-						state = STATE.START;
+				}
+				break;
+			case SING:
+				if (checkWait(b, nWait)) {
+					if (!bActionFlag) {
+						b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.ProudChildsSING), 52,
+								true, false);
+						if (SimYukkuri.RND.nextBoolean())
+							bActionFlag = true;
+						b.setNobinobi(true);
+						b.stay(nWait2);
+						b.addMemories(10);
+						b.setHappiness(Happiness.HAPPY);
+					} else {
+						state = STATE.PROUD;
 						bActionFlag = false;
 					}
-					b.stay(nWait2);
-					break;*/
-				case START:
-					if( checkWait(b,nWait) ){
-						if( !bActionFlag ){
-							b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.ProudChildsSTARTFrom), 52, true, false);
-							bActionFlag = true;
-							b.stay(nWait2+10);
-							b.addMemories(10);
-						}
-						else{
-							state = STATE.SING;
-							bActionFlag = false;
-						}
-					}
-					break;
-				case SING:
-					if( checkWait(b,nWait) )
-					{
-						if( !bActionFlag ){
-							b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.ProudChildsSING), 52, true, false);
-							if(rnd.nextBoolean())bActionFlag = true;
-							b.setNobinobi(true);
-							b.stay(nWait2);
-							b.addMemories(10);
-							b.setHappiness(Happiness.HAPPY);
-						}
-						else {
-							state = STATE.PROUD;
-							bActionFlag = false;
-						}
-					}
-					break;
-				case PROUD:
-					if( checkWait(b,nWait)){
-						if( !bActionFlag ){
-							b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.ProudChildsPROUDFrom), 52, true, false);
-							b.getInVain(false);
-							bActionFlag = true;
-							b.stay(nWait2);
-							b.setHappiness(Happiness.VERY_HAPPY);
-							b.addMemories(10);
-						}
-						else{
-							state = STATE.END;
-							bActionFlag = false;
-						}
-					}
-					break;
-				case END:
-					if( checkWait(b,nWait) ){
-						if( !bActionFlag ){
-							b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.ProudChildsENDFrom), 52, true, false);
-							bActionFlag = true;
-							b.stay(52);
-							b.addMemories(10);
-							b.setHappiness(Happiness.VERY_HAPPY);
-						return UpdateState.ABORT;
-						}
-					}
-				default:
-					break;
-			}
-		}
-		else{
-			// 子供
-			switch(state)
-			{
-				case GO:
-					// 壁に引っかかってるなら終了
-					if (Barrier.onBarrier(b.getX(), b.getY(), getFrom().getX(), getFrom().getY(), Barrier.MAP_BODY[b.getBodyAgeState().ordinal()]+Barrier.BARRIER_KEKKAI)) {
-						return UpdateState.ABORT;
-					}
-
-					if(b.isDontMove()){
-						return UpdateState.ABORT;
-					}
-
-					if(rnd.nextInt(30) == 0){
-						b.setMessage(MessagePool.getMessage(b, MessagePool.Action.ProudChildsGO), true);
+				}
+				break;
+			case PROUD:
+				if (checkWait(b, nWait)) {
+					if (!bActionFlag) {
+						b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.ProudChildsPROUDFrom), 52,
+								true, false);
+						b.getInVain(false);
+						bActionFlag = true;
+						b.stay(nWait2);
 						b.setHappiness(Happiness.VERY_HAPPY);
-						b.addMemories(5);
+						b.addMemories(10);
+					} else {
+						state = STATE.END;
+						bActionFlag = false;
 					}
+				}
+				break;
+			case END:
+				if (checkWait(b, nWait)) {
+					if (!bActionFlag) {
+						b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.ProudChildsENDFrom), 52,
+								true, false);
+						bActionFlag = true;
+						b.stay(52);
+						b.addMemories(10);
+						b.setHappiness(Happiness.VERY_HAPPY);
+						return UpdateState.ABORT;
+					}
+				}
+			default:
+				break;
+			}
+		} else {
+			// 子供
+			switch (state) {
+			case GO:
+				// 壁に引っかかってるなら終了
+				if (Barrier.onBarrier(b.getX(), b.getY(), getFrom().getX(), getFrom().getY(),
+						Barrier.MAP_BODY[b.getBodyAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
+					return UpdateState.ABORT;
+				}
 
-					break;
-/*				case WAIT:
-					if( checkWait(b,nWait)){
-						b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.ProudChildsWAIT), 52, true, false);
-						b.addMemories(5);
+				if (b.isDontMove()) {
+					return UpdateState.ABORT;
+				}
+
+				if (SimYukkuri.RND.nextInt(30) == 0) {
+					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.ProudChildsGO), true);
+					b.setHappiness(Happiness.VERY_HAPPY);
+					b.addMemories(5);
+				}
+
+				break;
+			/*				case WAIT:
+								if( checkWait(b,nWait)){
+									b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.ProudChildsWAIT), 52, true, false);
+									b.addMemories(5);
+								}
+								b.stay();
+								break;*/
+			case START:
+				if (bActionFlag) {
+					if (checkWait(b, nWait)) {
+						b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.ProudChildsSTART), 52,
+								true, false);
+						b.stay(nWait2);
+						b.addMemories(10);
 					}
-					b.stay();
-					break;*/
-				case START:
-					if( bActionFlag)
-					{
-						if( checkWait(b,nWait)){
-							b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.ProudChildsSTART), 52, true, false);
-							b.stay(nWait2);
-							b.addMemories(10);
-						}
+				}
+				break;
+			case SING:
+				if (!bActionFlag) {
+					if (checkWait(b, nWait)) {
+						b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.ProudChildsSING), 52,
+								true, false);
+						b.setNobinobi(true);
+						b.stay(nWait2);
+						b.addMemories(10);
 					}
-					break;
-				case SING:
-					if( !bActionFlag )
-					{
-						if( checkWait(b,nWait)){
-							b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.ProudChildsSING), 52, true, false);
-							b.setNobinobi(true);
-							b.stay(nWait2);
-							b.addMemories(10);
-						}
+				}
+				break;
+			case PROUD:
+				if (bActionFlag) {
+					if (checkWait(b, nWait)) {
+						b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.ProudChildsPROUD), 52,
+								true, false);
+						if (b.isRude() && SimYukkuri.RND.nextBoolean()) {
+							b.setFurifuri(true);
+						} else
+							b.getInVain(false);
+						b.stay(nWait2);
+						b.addMemories(10);
 					}
-					break;
-				case PROUD:
-					if( bActionFlag){
-						if( checkWait(b,nWait) ){
-							b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.ProudChildsPROUD), 52, true, false);
-							if(b.isRude() && rnd.nextBoolean()) {
-								b.setFurifuri(true);
-							}
-							else b.getInVain(false);
-							b.stay(nWait2);
-							b.addMemories(10);
-						}
-					}
-					break;
-				case END:
-					if(b.isRude())b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.ProudChildsEND), 52, true, false);
-					b.stay(52);
-				default:
-					break;
+				}
+				break;
+			case END:
+				if (b.isRude())
+					b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.ProudChildsEND), 52, true,
+							false);
+				b.stay(52);
+			default:
+				break;
 			}
 		}
 
@@ -359,12 +375,13 @@ public class ProudChildEvent extends EventPacket implements java.io.Serializable
 	public boolean execute(Body b) {
 		return false;
 	}
+
 	@Override
 	public void end(Body b) {
 		b.setCurrentEvent(null);
 		return;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "おちびおひろめ";

@@ -1,7 +1,5 @@
 package src.event;
 
-import java.util.Random;
-
 import src.Const;
 import src.SimYukkuri;
 import src.base.Body;
@@ -32,44 +30,44 @@ import src.system.MessagePool;
 public class RaperReactionEvent extends EventPacket implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
-	private Random rnd = new Random();
 	private int age = 0;
-	
+
 	public ActionState state = null;
+
 	/**
 	 * コンストラクタ.
 	 */
 	public RaperReactionEvent(Body f, Body t, Obj tgt, int cnt) {
 		super(f, t, tgt, cnt);
 	}
-	
+
 	// 参加チェック
 	@Override
 	public boolean checkEventResponse(Body b) {
 		// 最低限のチェックはRaperWakeupEventで済んでるんで省略
 		priority = EventPriority.HIGH;
-		if(b.canflyCheck()) {
+		if (b.canflyCheck()) {
 			// 飛べる固体
 			return false;
-		}
-		else {
+		} else {
 			boolean bIsNearRaper = false;
 
 			// 全ゆっくりに対してチェック
-			Body[] bodyList = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
-			for (Body p:bodyList) {
+			Body[] bodyList = SimYukkuri.world.getCurrentMap().body.toArray(new Body[0]);
+			for (Body p : bodyList) {
 				// 自分同士のチェックは無意味なのでスキップ
 				if (p == b) {
 					continue;
 				}
 
 				// 興奮したレイパーでなければスキップ
-				if( !p.isRaper() && !p.isExciting() && !p.isDead()){
+				if (!p.isRaper() && !p.isExciting() && !p.isDead()) {
 					continue;
 				}
 
 				// 相手との間に壁があればスキップ
-				if (Barrier.acrossBarrier(b.getX(), b.getY(), p.getX(), p.getY(), Barrier.MAP_BODY[b.getBodyAgeState().ordinal()]+Barrier.BARRIER_KEKKAI)) {
+				if (Barrier.acrossBarrier(b.getX(), b.getY(), p.getX(), p.getY(),
+						Barrier.MAP_BODY[b.getBodyAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
 					continue;
 				}
 
@@ -77,25 +75,22 @@ public class RaperReactionEvent extends EventPacket implements java.io.Serializa
 			}
 
 			// レイパーが近くにいない
-			if( !bIsNearRaper)
-			{
+			if (!bIsNearRaper) {
 				return false;
 			}
 
 			// 埋まっていたら参加しない
-			if( b.getBaryState() == BaryInUGState.ALL ||  b.getBaryState() == BaryInUGState.NEARLY_ALL )
-			{
+			if (b.getBaryState() == BaryInUGState.ALL || b.getBaryState() == BaryInUGState.NEARLY_ALL) {
 				return false;
 			}
 
 			// うんうん奴隷は逃げる
-			if( b.getPublicRank() == PublicRank.UnunSlave )
-			{
+			if (b.getPublicRank() == PublicRank.UnunSlave) {
 				state = ActionState.ESCAPE;
-			}else{
+			} else {
 				// 飛べない固体
-				if((b.isAdult() && !b.isDamaged() && !b.isSick() && !b.hasBabyOrStalk()
-						&& (b.isSmart() && b.getIntelligence() == Intelligence.FOOL) && !b.isDontMove() ) ||
+				if ((b.isAdult() && !b.isDamaged() && !b.isSick() && !b.hasBabyOrStalk()
+						&& (b.isSmart() && b.getIntelligence() == Intelligence.FOOL) && !b.isDontMove()) ||
 						b.getType() == 2006) {
 					// 健康でバカな善良な大人（またはドスまりさは状態に限らず常に）迎撃に向かう
 					state = ActionState.ATTACK;
@@ -111,85 +106,89 @@ public class RaperReactionEvent extends EventPacket implements java.io.Serializa
 	// イベント開始動作
 	@Override
 	public void start(Body b) {
-		if( b.isNYD() ){
+		if (b.isNYD()) {
 			return;
 		}
-		if(state == ActionState.ATTACK) {
+		if (state == ActionState.ATTACK) {
 			// 攻撃は敵に向かう
 			moveTarget(b);
 			b.setAngry();
-		}
-		else {
+		} else {
 			// 逃げは敵と反対方向へ
 			escapeTarget(b);
 			b.setHappiness(Happiness.VERY_SAD);
 		}
 	}
-	
+
 	// 毎フレーム処理
 	@Override
 	public UpdateState update(Body b) {
 		// 相手が消えてしまったら他のレイパーを捜索
-		if(getFrom().isRemoved() || getFrom().isDead() || !getFrom().isRaper() ) {
+		if (getFrom().isRemoved() || getFrom().isDead() || !getFrom().isRaper()) {
 			setFrom(searchNextTarget());
-			if(getFrom() == null) return UpdateState.ABORT;
+			if (getFrom() == null)
+				return UpdateState.ABORT;
 		}
-		
-		if( rnd.nextInt(500) == 0 ){
-			if( !FamilyActionLogic.isRapeTarget() ){
+
+		if (SimYukkuri.RND.nextInt(500) == 0) {
+			if (!FamilyActionLogic.isRapeTarget()) {
 				return UpdateState.ABORT;
 			}
 		}
-		
-		if(state == ActionState.ATTACK) {
+
+		if (state == ActionState.ATTACK) {
 			// 妊娠したらドスでない限り逃げに変更
-			if(b.hasBabyOrStalk() && b.getType() != 2006) {
+			if (b.hasBabyOrStalk() && b.getType() != 2006) {
 				state = ActionState.ESCAPE;
-			}
-			else {
+			} else {
 				// 攻撃は敵に向かう。ドスは妊娠させられようが何しようが駆除に向かう。
 				b.setForceFace(ImageCode.PUFF.ordinal());
 				moveTarget(b);
-				if(rnd.nextInt(20) == 0) {
-					b.setWorldEventResMessage(MessagePool.getMessage(b, MessagePool.Action.AttackRapist), Const.HOLDMESSAGE, true, false);
+				if (SimYukkuri.RND.nextInt(20) == 0) {
+					b.setWorldEventResMessage(MessagePool.getMessage(b, MessagePool.Action.AttackRapist),
+							Const.HOLDMESSAGE, true, false);
 				}
 			}
-		}
-		else {
+		} else {
 			// 賢い固体は反撃チェック
-			if((age % 10) == 0) {
-				if(b.getType() == 2006 ||
-					(b.isAdult() && b.getIntelligence() == Intelligence.WISE &&
-					 b.getPublicRank() != PublicRank.UnunSlave)) {
+			if ((age % 10) == 0) {
+				if (b.getType() == 2006 ||
+						(b.isAdult() && b.getIntelligence() == Intelligence.WISE &&
+								b.getPublicRank() != PublicRank.UnunSlave)) {
 					Body target = null;
 					// 何らかの原因で発情が解除されたら制裁
-					if(!checkConditionOfTarget()) {
+					if (!checkConditionOfTarget()) {
 						target = getFrom();
-					}
-					else {
+					} else {
 						target = searchAttackTarget();
 					}
-					if(target != null) {
+					if (target != null) {
 						int num = 0;
 						// 反撃対象が見つかったら同イベント実行中の固体イベントを書き換え
-						Body[] bodyList = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
-						for(Body body :bodyList) {
-							if(body.getCurrentEvent() instanceof RaperReactionEvent) {
+						Body[] bodyList = SimYukkuri.world.getCurrentMap().body.toArray(new Body[0]);
+						for (Body body : bodyList) {
+							if (body.getCurrentEvent() instanceof RaperReactionEvent) {
 								// うんうん奴隷は不参加
-								if( body.getPublicRank() == PublicRank.UnunSlave ) continue;
+								if (body.getPublicRank() == PublicRank.UnunSlave)
+									continue;
 								// 妊娠、大人以外は不参加.動けない場合も不参加
-								if(body.hasBabyOrStalk() || body.isSick() || !body.isAdult() || body.isDontMove()) continue;
+								if (body.hasBabyOrStalk() || body.isSick() || !body.isAdult() || body.isDontMove())
+									continue;
 								// ドゲスは不参加、善良ほど参加しやすく
-								if(body.getAttitude() == Attitude.SUPER_SHITHEAD) num = 1;
-								else if(body.getAttitude() == Attitude.SHITHEAD) num = rnd.nextInt(3);
-								else if(body.getAttitude() == Attitude.AVERAGE) num = rnd.nextInt(2);
-								else num = 0;
+								if (body.getAttitude() == Attitude.SUPER_SHITHEAD)
+									num = 1;
+								else if (body.getAttitude() == Attitude.SHITHEAD)
+									num = SimYukkuri.RND.nextInt(3);
+								else if (body.getAttitude() == Attitude.AVERAGE)
+									num = SimYukkuri.RND.nextInt(2);
+								else
+									num = 0;
 								//ドスは常に参加。ドスはとにかく群れをゆっくりさせるため、れいぱー駆除に命をかける
 								if (body.getType() == 2006) {
 									num = 0;
 								}
-								if(num == 0) {
-									RaperReactionEvent ev = (RaperReactionEvent)body.getCurrentEvent();
+								if (num == 0) {
+									RaperReactionEvent ev = (RaperReactionEvent) body.getCurrentEvent();
 									ev.setFrom(target);
 									ev.state = ActionState.ATTACK;
 								}
@@ -198,14 +197,13 @@ public class RaperReactionEvent extends EventPacket implements java.io.Serializa
 						setCounterWorldEventMessage(b);
 					}
 				}
-			}
-			else {
+			} else {
 				// 逃げは敵と反対方向へ
 				b.setForceFace(ImageCode.CRYING.ordinal());
-				if((age % 10) == 0) {
+				if ((age % 10) == 0) {
 					escapeTarget(b);
 				}
-				if(rnd.nextInt(20) == 0) {
+				if (SimYukkuri.RND.nextInt(20) == 0) {
 					setScareWorldEventMessage(b);
 				}
 			}
@@ -219,14 +217,17 @@ public class RaperReactionEvent extends EventPacket implements java.io.Serializa
 	 * @param b 逃げる個体
 	 */
 	public void setScareWorldEventMessage(Body b) {
-		b.setWorldEventResMessage(MessagePool.getMessage(b, MessagePool.Action.ScareRapist), Const.HOLDMESSAGE, true, false);
+		b.setWorldEventResMessage(MessagePool.getMessage(b, MessagePool.Action.ScareRapist), Const.HOLDMESSAGE, true,
+				false);
 	}
+
 	/**
 	 * 反撃するときのメッセージを設定する.
 	 * @param b 反撃する個体
 	 */
 	public void setCounterWorldEventMessage(Body b) {
-		b.setWorldEventResMessage(MessagePool.getMessage(b, MessagePool.Action.CounterRapist), Const.HOLDMESSAGE, true, false);
+		b.setWorldEventResMessage(MessagePool.getMessage(b, MessagePool.Action.CounterRapist), Const.HOLDMESSAGE, true,
+				false);
 	}
 
 	/**
@@ -243,40 +244,40 @@ public class RaperReactionEvent extends EventPacket implements java.io.Serializa
 	@Override
 	public boolean execute(Body b) {
 		// 相手が消えてしまったら他のレイパーを捜索
-		if(getFrom().isRemoved() || getFrom().isDead()) {
+		if (getFrom().isRemoved() || getFrom().isDead()) {
 			setFrom(searchNextTarget());
 			// レイパー全滅でイベント終了
-			if(getFrom() == null) return true;
+			if (getFrom() == null)
+				return true;
 			return false;
 		}
 
-		if(state == ActionState.ATTACK && !b.isDontMove()) {
+		if (state == ActionState.ATTACK && !b.isDontMove()) {
 			// 攻撃
-			if(getFrom().getZ() < 5) {
-				b.setWorldEventResMessage(MessagePool.getMessage(b, MessagePool.Action.RevengeAttack), Const.HOLDMESSAGE, true, false);
-				if(b.getDirection() == Direction.LEFT) {
-					SimYukkuri.mypane.terrarium.addEffect(EffectType.HIT, b.getX()-10, b.getY(), 0,
-															0, 0, 0, false, 500, 1, true, false, true);
-				}
-				else {
-					SimYukkuri.mypane.terrarium.addEffect(EffectType.HIT, b.getX()+10, b.getY(), 0,
-															0, 0, 0, true, 500, 1, true, false, true);
+			if (getFrom().getZ() < 5) {
+				b.setWorldEventResMessage(MessagePool.getMessage(b, MessagePool.Action.RevengeAttack),
+						Const.HOLDMESSAGE, true, false);
+				if (b.getDirection() == Direction.LEFT) {
+					SimYukkuri.mypane.terrarium.addEffect(EffectType.HIT, b.getX() - 10, b.getY(), 0,
+							0, 0, 0, false, 500, 1, true, false, true);
+				} else {
+					SimYukkuri.mypane.terrarium.addEffect(EffectType.HIT, b.getX() + 10, b.getY(), 0,
+							0, 0, 0, true, 500, 1, true, false, true);
 				}
 				b.setForceFace(ImageCode.PUFF.ordinal());
 				getFrom().strikeByYukkuri(b, this, false);
 				b.addStress(-300);
 			}
-		}
-		else {
+		} else {
 			// 逃げ
 			escapeTarget(b);
-			if(rnd.nextInt(20) == 0) {
+			if (SimYukkuri.RND.nextInt(20) == 0) {
 				setScareWorldEventMessage(b);
 			}
 		}
 		return false;
 	}
-	
+
 	/**
 	 * 次のターゲットを探す.
 	 * れいぱーに対するリアクションであれば、死んでない発情れいぱー
@@ -284,9 +285,9 @@ public class RaperReactionEvent extends EventPacket implements java.io.Serializa
 	 */
 	public Body searchNextTarget() {
 		Body ret = null;
-		Body[] bodyList = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
-		for(Body b :bodyList) {
-			if(b.isRaper() && b.isExciting() && !b.isDead()) {
+		Body[] bodyList = SimYukkuri.world.getCurrentMap().body.toArray(new Body[0]);
+		for (Body b : bodyList) {
+			if (b.isRaper() && b.isExciting() && !b.isDead()) {
 				ret = b;
 				break;
 			}
@@ -301,9 +302,9 @@ public class RaperReactionEvent extends EventPacket implements java.io.Serializa
 	 */
 	public Body searchAttackTarget() {
 		Body ret = null;
-		Body[] bodyList = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
-		for(Body b :bodyList) {
-			if(b.isExciting() && b.isRaper() && b.isSukkiri()) {
+		Body[] bodyList = SimYukkuri.world.getCurrentMap().body.toArray(new Body[0]);
+		for (Body b : bodyList) {
+			if (b.isExciting() && b.isRaper() && b.isSukkiri()) {
 				ret = b;
 				break;
 			}
@@ -319,7 +320,7 @@ public class RaperReactionEvent extends EventPacket implements java.io.Serializa
 		int colX = BodyLogic.calcCollisionX(b, getFrom());
 		b.moveToEvent(this, getFrom().getX() + colX, getFrom().getY());
 	}
-	
+
 	/**
 	 *  敵から逃げるように移動する.
 	 * @param b 敵
@@ -327,27 +328,32 @@ public class RaperReactionEvent extends EventPacket implements java.io.Serializa
 	protected void escapeTarget(Body b) {
 		int mapX = Translate.mapW;
 		int mapY = Translate.mapH;
-		
+
 		int vx = b.getX() - getFrom().getX();
-		if(b.getX() < 2) {
+		if (b.getX() < 2) {
 			vx = mapX;
-		} else if(b.getX() > mapX - 2) {
+		} else if (b.getX() > mapX - 2) {
 			vx = 0;
 		} else {
-			if(vx > 0) vx = mapX;
-			else vx = 0;
+			if (vx > 0)
+				vx = mapX;
+			else
+				vx = 0;
 		}
 		int vy = b.getY() - getFrom().getY();
-		if(b.getY() < 2) {
+		if (b.getY() < 2) {
 			vy = mapY;
-		} else if(b.getY() > mapY - 2) {
+		} else if (b.getY() > mapY - 2) {
 			vy = 0;
 		} else {
-			if(vy > 0) vy = mapY;
-			else vy = 0;
+			if (vy > 0)
+				vy = mapY;
+			else
+				vy = 0;
 		}
 		b.moveToEvent(this, vx, vy);
 	}
+
 	@Override
 	public String toString() {
 		return "れいぱーじゃぁあ";

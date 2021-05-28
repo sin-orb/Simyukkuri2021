@@ -10,7 +10,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.List;
-import java.util.Random;
 
 import src.SimYukkuri;
 import src.base.Body;
@@ -41,7 +40,7 @@ public class Farm extends FieldShapeBase implements Serializable {
 	private int amount = 1000;
 	private int[] anPointX = new int[4];
 	private int[] anPointY = new int[4];
-	protected Random rnd = new Random();
+
 	/**画像ロード*/
 	public static void loadImages(ClassLoader loader, ImageObserver io) throws IOException {
 		images = ModLoader.loadItemImage(loader, "farm" + File.separator + "farm.png");
@@ -56,7 +55,7 @@ public class Farm extends FieldShapeBase implements Serializable {
 	@Override
 	public void executeShapePopup(ShapeMenu menu) {
 
-		List<Farm> list = SimYukkuri.world.currentMap.farm;
+		List<Farm> list = SimYukkuri.world.getCurrentMap().farm;
 		int pos;
 
 		switch (menu) {
@@ -98,6 +97,7 @@ public class Farm extends FieldShapeBase implements Serializable {
 	public int getMinimumSize() {
 		return MIN_SIZE;
 	}
+
 	/**プレビューラインの描画*/
 	public static void drawPreview(Graphics2D g2, int sx, int sy, int ex, int ey) {
 		int[] anPointX = new int[4];
@@ -113,6 +113,7 @@ public class Farm extends FieldShapeBase implements Serializable {
 		g2.setPaint(texture);
 		g2.fillPolygon(anPointX, anPointY, 4);
 	}
+
 	/**
 	 * コンストラクタ
 	 * @param fsx 設置起点のX座標
@@ -168,14 +169,14 @@ public class Farm extends FieldShapeBase implements Serializable {
 		mapW = mapEX - mapSX + 1;
 		mapH = mapEY - mapSY + 1;
 
-		SimYukkuri.world.currentMap.farm.add(this);
-		MapPlaceData.setFiledFlag(SimYukkuri.world.currentMap.fieldMap, mapSX, mapSY, mapW, mapH, true, FIELD_FARM);
+		SimYukkuri.world.getCurrentMap().farm.add(this);
+		MapPlaceData.setFiledFlag(SimYukkuri.world.getCurrentMap().fieldMap, mapSX, mapSY, mapW, mapH, true, FIELD_FARM);
 	}
 
 	/** フィールド座標にあるシェイプ取得*/
 	public static Farm getFarm(int fx, int fy) {
 
-		for (Farm bc : SimYukkuri.world.currentMap.farm) {
+		for (Farm bc : SimYukkuri.world.getCurrentMap().farm) {
 			if (bc.fieldSX <= fx && fx <= bc.fieldEX
 					&& bc.fieldSY <= fy && fy <= bc.fieldEY) {
 				return bc;
@@ -186,15 +187,16 @@ public class Farm extends FieldShapeBase implements Serializable {
 
 	/** 削除*/
 	public static void deleteFarm(Farm b) {
-		MapPlaceData.setFiledFlag(SimYukkuri.world.currentMap.fieldMap, b.mapSX, b.mapSY, b.mapW, b.mapH, false,
+		MapPlaceData.setFiledFlag(SimYukkuri.world.getCurrentMap().fieldMap, b.mapSX, b.mapSY, b.mapW, b.mapH, false,
 				FIELD_FARM);
-		SimYukkuri.world.currentMap.farm.remove(b);
+		SimYukkuri.world.getCurrentMap().farm.remove(b);
 		// 重なってた部分の復元
-		for (Farm bc : SimYukkuri.world.currentMap.farm) {
-			MapPlaceData.setFiledFlag(SimYukkuri.world.currentMap.fieldMap, bc.mapSX, bc.mapSY, bc.mapW, bc.mapH, true,
+		for (Farm bc : SimYukkuri.world.getCurrentMap().farm) {
+			MapPlaceData.setFiledFlag(SimYukkuri.world.getCurrentMap().fieldMap, bc.mapSX, bc.mapSY, bc.mapW, bc.mapH, true,
 					FIELD_FARM);
 		}
 	}
+
 	/**
 	 * ある点が畑の範囲内かどうか
 	 * @param inX ある点のX座標
@@ -219,6 +221,7 @@ public class Farm extends FieldShapeBase implements Serializable {
 		}
 		return false;
 	}
+
 	/**
 	 * 渡されたオブジェクトが畑の中にあるかを判定
 	 * <br>動作はobjHitProcess( Obj o )で
@@ -234,6 +237,7 @@ public class Farm extends FieldShapeBase implements Serializable {
 		// エリア内
 		return true;
 	}
+
 	/**当たり判定されたオブジェクトへの処理*/
 	public int objHitProcess(Obj o) {
 		if (o == null) {
@@ -267,7 +271,7 @@ public class Farm extends FieldShapeBase implements Serializable {
 			return 1;
 		}
 
-		if (rnd.nextInt(20) != 0) {
+		if (SimYukkuri.RND.nextInt(20) != 0) {
 			return 1;
 		}
 		// 肥料取得
@@ -278,6 +282,7 @@ public class Farm extends FieldShapeBase implements Serializable {
 
 		return 1;
 	}
+
 	/**あるオブジェクトを肥料に変換する際に、そのオブジェクトの目方の減りを計算＆実行*/
 	public void getAmount(Obj o) {
 		if (o == null) {
@@ -320,6 +325,7 @@ public class Farm extends FieldShapeBase implements Serializable {
 			}
 		}
 	}
+
 	/**畑の中のゆっくりに対し肥料を与え、茎を生やす*/
 	public void giveAmount(Obj o) {
 		if (o == null) {
@@ -350,7 +356,7 @@ public class Farm extends FieldShapeBase implements Serializable {
 
 				if (!b.isHasStalk() && 1000 < amount) {
 					GadgetAction.putObjEX(Stalk.class, b.getX(), b.getY(), b.getDirection().ordinal());
-					List<Stalk> stalkList = SimYukkuri.world.currentMap.stalk;
+					List<Stalk> stalkList = SimYukkuri.world.getCurrentMap().stalk;
 					if (stalkList != null && stalkList.size() != 0) {
 						Stalk currentStalk = stalkList.get(stalkList.size() - 1);
 						if (b.getStalks() != null) {
@@ -363,9 +369,9 @@ public class Farm extends FieldShapeBase implements Serializable {
 				} else {
 					// 余裕がありそうならランダムで茎を生やす
 					if (3000 < amount && !b.isDamaged()) {
-						if (rnd.nextInt(100) == 0) {
+						if (SimYukkuri.RND.nextInt(100) == 0) {
 							GadgetAction.putObjEX(Stalk.class, b.getX(), b.getY(), b.getDirection().ordinal());
-							List<Stalk> stalkList = SimYukkuri.world.currentMap.stalk;
+							List<Stalk> stalkList = SimYukkuri.world.getCurrentMap().stalk;
 							if (stalkList != null && stalkList.size() != 0) {
 								Stalk currentStalk = stalkList.get(stalkList.size() - 1);
 								if (b.getStalks() != null) {

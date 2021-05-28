@@ -6,7 +6,6 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
-import java.util.Random;
 
 import src.SimYukkuri;
 import src.base.Body;
@@ -35,7 +34,6 @@ public class FoodMaker extends ObjEX implements java.io.Serializable {
 	private static int AnimeImagesNum[] = {images_num};//アニメごとに何枚使うか
 	private static BufferedImage[] images = new BufferedImage[images_num + 1];
 	private static Rectangle boundary = new Rectangle();
-	protected Random rnd = new Random();
 
 	protected boolean processReady = true;
 	protected int stockFood = -1;
@@ -307,14 +305,14 @@ public class FoodMaker extends ObjEX implements java.io.Serializable {
 
 	@Override
 	public void removeListData(){
-		SimYukkuri.world.currentMap.foodmaker.remove(this);
+		SimYukkuri.world.getCurrentMap().foodmaker.remove(this);
 	}
 	/** コンストラクタ*/
 	public FoodMaker(int initX, int initY, int initOption) {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		SimYukkuri.world.currentMap.foodmaker.add(this);
+		SimYukkuri.world.getCurrentMap().foodmaker.add(this);
 		objType = Type.PLATFORM;
 		objEXType = ObjEXType.FOODMAKER;
 

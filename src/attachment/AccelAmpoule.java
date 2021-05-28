@@ -72,10 +72,8 @@ public class AccelAmpoule extends Attachment {
 
 	@Override
 	protected Event update() {
-		if (!parent.isDead()) {
-			if (!parent.isAdult()) {
-				parent.addAge(TICK * 10000);
-			}
+		if (!parent.isDead() && !parent.isAdult()) {
+			parent.addAge(TICK * 10000);
 		}
 		return Event.DONOTHING;
 	}

@@ -6,7 +6,6 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
-import java.util.Random;
 
 import src.SimYukkuri;
 import src.base.Body;
@@ -40,7 +39,6 @@ public class Mixer extends ObjEX implements java.io.Serializable {
 	private int amount = 0;			// 保有原料
 	private int sweet = 0;			// 糖度
 	private boolean sick = false;	// カビ混入
-	private Random rnd = new Random();
 	/**画像ロード*/
 	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
 		for(int i = 0; i < 3; i++) {
@@ -143,7 +141,7 @@ public class Mixer extends ObjEX implements java.io.Serializable {
 					bindBody.addStress(100);
 						bindBody.setHappiness(Happiness.VERY_SAD);
 						bindBody.setForceFace(ImageCode.PAIN.ordinal());
-						if(rnd.nextInt(10) == 0) {
+						if(SimYukkuri.RND.nextInt(10) == 0) {
 							if(bindBody.getCriticalDamegeType() == CriticalDamegeType.CUT)bindBody.setMessage(MessagePool.getMessage(bindBody, MessagePool.Action.Scream2), true);
 							else bindBody.setMessage(MessagePool.getMessage(bindBody, MessagePool.Action.Scream), true);
 						}
@@ -197,14 +195,14 @@ public class Mixer extends ObjEX implements java.io.Serializable {
 			mix.remove();
 			mix = null;
 		}
-		SimYukkuri.world.currentMap.mixer.remove(this);
+		SimYukkuri.world.getCurrentMap().mixer.remove(this);
 	}
 	/** コンストラクタ */
 	public Mixer(int initX, int initY, int initOption) {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		SimYukkuri.world.currentMap.mixer.add(this);
+		SimYukkuri.world.getCurrentMap().mixer.add(this);
 		objType = Type.PLATFORM;
 		objEXType = ObjEXType.MIXER;
 

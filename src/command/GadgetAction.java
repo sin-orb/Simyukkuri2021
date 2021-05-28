@@ -54,8 +54,6 @@ import src.system.MainCommandUI;
 import src.system.MapPlaceData;
 import src.system.MessagePool;
 
-
-
 /******************************************************************
 
 	各コマンドの実行部分
@@ -78,107 +76,104 @@ public class GadgetAction {
 		boolean isRemoveAll = false;
 
 		switch (item) {
-			// 清掃
-			case YU_CLEAN:
-				isBody = true;
-				break;
-			case BODY:
-				isDead = true;
-				break;
-			case SHIT:
-				isShit = true;
-				break;
-			case ETC:
-				isFood = true;
-				break;
-			case ALL:
-				isShit = true;
-				isFood = true;
-				isDead = true;
-				break;
-			// 壁
-			case ALL_DELETE:
-				isWall = true;
-				break;
-			case REMOVEALL:
-				isRemoveAll = true;
-			default:
-				break;
+		// 清掃
+		case YU_CLEAN:
+			isBody = true;
+			break;
+		case BODY:
+			isDead = true;
+			break;
+		case SHIT:
+			isShit = true;
+			break;
+		case ETC:
+			isFood = true;
+			break;
+		case ALL:
+			isShit = true;
+			isFood = true;
+			isDead = true;
+			break;
+		// 壁
+		case ALL_DELETE:
+			isWall = true;
+			break;
+		case REMOVEALL:
+			isRemoveAll = true;
+		default:
+			break;
 		}
 
-		Body[] bodyList = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
-		List<Shit> shitList = SimYukkuri.world.currentMap.shit;
-		List<Vomit> vomitList = SimYukkuri.world.currentMap.vomit;
-		List<Food> foodList = SimYukkuri.world.currentMap.food;
-		List<Stalk> stalkList = SimYukkuri.world.currentMap.stalk;
-		List<Barrier> wallList = SimYukkuri.world.currentMap.barrier;
-		if(isBody) {
-			for (Body b: bodyList) {
-				if (!b.isDead()) b.setCleaning();
+		Body[] bodyList = SimYukkuri.world.getCurrentMap().body.toArray(new Body[0]);
+		List<Shit> shitList = SimYukkuri.world.getCurrentMap().shit;
+		List<Vomit> vomitList = SimYukkuri.world.getCurrentMap().vomit;
+		Food[] foodList = SimYukkuri.world.getCurrentMap().food.toArray(new Food[0]);
+		List<Stalk> stalkList = SimYukkuri.world.getCurrentMap().stalk;
+		List<Barrier> wallList = SimYukkuri.world.getCurrentMap().barrier;
+		if (isBody) {
+			for (Body b : bodyList) {
+				if (!b.isDead())
+					b.setCleaning();
 			}
 		}
-		if(isDead) {
-			for (Body b: bodyList) {
+		if (isDead) {
+			for (Body b : bodyList) {
 				if (b.isDead())
 					b.remove();
 			}
 		}
-		if(isShit) {
-			for (Shit s: shitList) {
+		if (isShit) {
+			for (Shit s : shitList) {
 				s.remove();
 			}
-			for (Vomit v: vomitList) {
+			for (Vomit v : vomitList) {
 				v.remove();
 			}
 		}
-		if(isFood) {
-			for (Food f: foodList) {
-				if (f.isEmpty())
+		if (isFood) {
+			for (Food f : foodList) {
+				if (f.isEmpty() || f.getFoodType() == Food.FoodType.STALK) {
 					f.remove();
-				if (f.getFoodType() == Food.FoodType.STALK)
-					f.remove();
+				}
 			}
-			for (Stalk s: stalkList) {
-				if (s.getPlantYukkuri() == null){
+			Stalk[] stalks = stalkList.toArray(new Stalk[0]);
+			for (Stalk s : stalks) {
+				if (s.getPlantYukkuri() == null) {
 					s.remove();
 				} else if (checkNoBabyStalk(s)) {
 					s.remove();
 				}
 			}
 		}
-		if(isWall) {
+		if (isWall) {
 			wallList.clear();
-			MapPlaceData.clearMap(SimYukkuri.world.currentMap.wallMap);
+			MapPlaceData.clearMap(SimYukkuri.world.getCurrentMap().wallMap);
 		}
-		if(isRemoveAll) {
-			for(Body bodyTarget:bodyList)
-			{
-				bodyTarget.disPlantStalks();
-				bodyTarget.setRemoved(true);
-				bodyTarget.release();
+		if (isRemoveAll) {
+			for (Body bodyTarget : bodyList) {
+				bodyTarget.remove();
 			}
-			SimYukkuri.world.currentMap.body.clear();
-			for (Shit s: shitList) {
+			for (Shit s : shitList) {
 				s.remove();
 			}
 			shitList.clear();
-			for (Vomit v: vomitList) {
+			for (Vomit v : vomitList) {
 				v.remove();
 			}
 			vomitList.clear();
-			for (Food f: foodList) {
+			for (Food f : foodList) {
 				if (f.isEmpty())
 					f.remove();
 				if (f.getFoodType() == Food.FoodType.STALK)
 					f.remove();
 			}
 
-			for (Stalk s: stalkList) {
-				if (s.getPlantYukkuri() == null){
+			for (Stalk s : stalkList) {
+				if (s.getPlantYukkuri() == null) {
 					s.remove();
 				}
 			}
-			MapPlaceData.clearMap(SimYukkuri.world.currentMap.wallMap);
+			MapPlaceData.clearMap(SimYukkuri.world.getCurrentMap().wallMap);
 		}
 	}
 
@@ -190,7 +185,7 @@ public class GadgetAction {
 			if (b != null) {
 				if (!b.isDead()) {
 					return false;
-				};
+				}
 			}
 		}
 		return true;
@@ -209,19 +204,19 @@ public class GadgetAction {
 		ActionTarget eActionTarget = item.getActionTarget();
 
 		//実行対象の選別
-		if( eActionTarget == ActionTarget.TERRAIN_AND_GADET){
-			if(target != null){
+		if (eActionTarget == ActionTarget.TERRAIN_AND_GADET) {
+			if (target != null) {
 				eActionTarget = ActionTarget.GADGET;
-			}
-			else{
+			} else {
 				eActionTarget = ActionTarget.TERRAIN;
 			}
 		}
 
 		// クリック対象とガジェットの選択モードチェック
-		if( eActionTarget == ActionTarget.TERRAIN) {
+		if (eActionTarget == ActionTarget.TERRAIN) {
 			// 背景設置物
-			if(target != null) return null;
+			if (target != null)
+				return null;
 
 			// 今のところキーは使用しないので未チェック
 			// 座標変換と設置可能範囲チェック
@@ -229,10 +224,9 @@ public class GadgetAction {
 			Method mtd;
 			Rectangle bound = null;
 			try {
-				mtd = cls.getMethod("getBounding", (Class<?>[])null);
-				bound = (Rectangle) mtd.invoke(cls, (Object[])null);
-			}
-			catch (NoSuchMethodException | SecurityException
+				mtd = cls.getMethod("getBounding", (Class<?>[]) null);
+				bound = (Rectangle) mtd.invoke(cls, (Object[]) null);
+			} catch (NoSuchMethodException | SecurityException
 					| IllegalAccessException | IllegalArgumentException
 					| InvocationTargetException e) {
 				e.printStackTrace();
@@ -244,7 +238,7 @@ public class GadgetAction {
 				try {
 					Constructor<?> cst = cls.getConstructor(int.class, int.class, int.class);
 					ret = (ObjEX) cst.newInstance(pos.x, pos.y, item.getInitOption());
-					if( ret != null ){
+					if (ret != null) {
 						Cash.buyItem(ret);
 					}
 				} catch (NoSuchMethodException | SecurityException | InstantiationException
@@ -252,85 +246,83 @@ public class GadgetAction {
 					e.printStackTrace();
 				}
 			}
-		}
-		else if(eActionTarget == ActionTarget.WALL) {
+		} else if (eActionTarget == ActionTarget.WALL) {
 			// 壁選択
-			switch(item){
-				case WALL_DELETE:
-					Point pos = Translate.invert(fieldMousePos[0], fieldMousePos[1]);
-					if(pos != null) {
-						Barrier found = Barrier.getBarrier(pos.x, pos.y, 1);
-						if (found != null) {
-							Barrier.clearBarrier(found);
-						}
+			switch (item) {
+			case WALL_DELETE:
+				Point pos = Translate.invert(fieldMousePos[0], fieldMousePos[1]);
+				if (pos != null) {
+					Barrier found = Barrier.getBarrier(pos.x, pos.y, 1);
+					if (found != null) {
+						Barrier.clearBarrier(found);
 					}
-					break;
-				default:
-					break;
+				}
+				break;
+			default:
+				break;
 			}
-		} else if(item.getActionTarget() == ActionTarget.FIELD) {
+		} else if (item.getActionTarget() == ActionTarget.FIELD) {
 			// フィールド選択
-			switch(item){
-				case FIELD_DELETE:
-					Beltconveyor belt = Beltconveyor.getBeltconveyor(fieldMousePos[0], fieldMousePos[1]);
-					if (belt != null) {
-						Beltconveyor.deleteBelt(belt);
-					}
-					else {
-						Farm farm = Farm.getFarm(fieldMousePos[0], fieldMousePos[1]);
-						if(farm != null) {
-							Farm.deleteFarm(farm);
-						}
-						else {
-							Pool pool = Pool.getPool(fieldMousePos[0], fieldMousePos[1]);
-							if(pool != null) {
-								Pool.deletePool(pool);
-							}
+			switch (item) {
+			case FIELD_DELETE:
+				Beltconveyor belt = Beltconveyor.getBeltconveyor(fieldMousePos[0], fieldMousePos[1]);
+				if (belt != null) {
+					Beltconveyor.deleteBelt(belt);
+				} else {
+					Farm farm = Farm.getFarm(fieldMousePos[0], fieldMousePos[1]);
+					if (farm != null) {
+						Farm.deleteFarm(farm);
+					} else {
+						Pool pool = Pool.getPool(fieldMousePos[0], fieldMousePos[1]);
+						if (pool != null) {
+							Pool.deletePool(pool);
 						}
 					}
-					break;
-				default:
-					break;
+				}
+				break;
+			default:
+				break;
 			}
 		} else {
 			// 選択物体
-			if(target == null) return null;
-			switch(item.getGroup()) {
-				case TOOL:
-					evaluateTool(item, ev, target);
-					break;
-				case TOOL2:
-					evaluateTool2(item, ev, target);
-					break;
-				case AMPOULE:
-					evaluateAmpoule(item, ev, target);
-					break;
-				case CLEAN:
-					evaluateClean(item, ev, target);
-					break;
-				case ACCESSORY:
-					evaluateAccessory(item, ev, target);
-					break;
-				case PANTS:
-					evaluatePants(item, ev, target);
-					break;
-				case FLOOR:
-					evaluateFloorItems(item, ev, target);
-					break;
-				case TOYS:
-					evaluateToys(item, ev, target);
-					break;
-				case CONVEYOR:
-					evaluateConveyor(item, ev, target);
-					break;
-				case VOICE:
-					evaluateCommunicate(item, ev, target);
-					break;
-				case TEST:
-					evaluateTest(item, ev, target);
-					break;
-				default:
-					break;
+			if (target == null)
+				return null;
+			switch (item.getGroup()) {
+			case TOOL:
+				evaluateTool(item, ev, target);
+				break;
+			case TOOL2:
+				evaluateTool2(item, ev, target);
+				break;
+			case AMPOULE:
+				evaluateAmpoule(item, ev, target);
+				break;
+			case CLEAN:
+				evaluateClean(item, ev, target);
+				break;
+			case ACCESSORY:
+				evaluateAccessory(item, ev, target);
+				break;
+			case PANTS:
+				evaluatePants(item, ev, target);
+				break;
+			case FLOOR:
+				evaluateFloorItems(item, ev, target);
+				break;
+			case TOYS:
+				evaluateToys(item, ev, target);
+				break;
+			case CONVEYOR:
+				evaluateConveyor(item, ev, target);
+				break;
+			case VOICE:
+				evaluateCommunicate(item, ev, target);
+				break;
+			case TEST:
+				evaluateTest(item, ev, target);
+				break;
+			default:
+				break;
 			}
 		}
 		return ret;
@@ -349,139 +341,136 @@ public class GadgetAction {
 		ObjEX ret = null;
 
 		// いまのところフィールドグループのみ使用
-		if(item.getActionTarget() == ActionTarget.TERRAIN) {
-			if(item.getGroup() == MainCategoryName.BARRIER) {
+		if (item.getActionTarget() == ActionTarget.TERRAIN) {
+			if (item.getGroup() == MainCategoryName.BARRIER) {
 				// 始点のクリック
-				if(SimYukkuri.fieldSX == -1 || SimYukkuri.fieldSY == -1) {
+				if (SimYukkuri.fieldSX == -1 || SimYukkuri.fieldSY == -1) {
 					// フィールドタイプの設定
 					SimYukkuri.fieldType = 0;
 					switch (item) {
-						case GAP_MINI:
-							SimYukkuri.fieldType = Barrier.BARRIER_GAP_MINI;
-							break;
-						case GAP_BIG:
-							SimYukkuri.fieldType = Barrier.BARRIER_GAP_BIG;
-							break;
-						case NET_MINI:
-							SimYukkuri.fieldType = Barrier.BARRIER_NET_MINI;
-							break;
-						case NET_BIG:
-							SimYukkuri.fieldType = Barrier.BARRIER_NET_BIG;
-							break;
-						case WALL:
-							SimYukkuri.fieldType = Barrier.BARRIER_WALL;
-							break;
-						case ITEM:
-							SimYukkuri.fieldType = Barrier.BARRIER_ITEM;
-							break;
-						case POOL:
-							SimYukkuri.fieldType = 100;	// 値に意味は無く0以外ならなんでも
-							break;
-						case FARM:
-							SimYukkuri.fieldType = 101;	// 値に意味は無く0以外ならなんでも
-							break;
-						case BELTCONVEYOR:
-							SimYukkuri.fieldType = 102;	// 値に意味は無く0以外ならなんでも
-						case NoUNUN:
-							SimYukkuri.fieldType = Barrier.BARRIER_NOUNUN;
-							break;
-						case KEKKAI:
-							SimYukkuri.fieldType = Barrier.BARRIER_KEKKAI;
-							break;
-						default:
-							break;
+					case GAP_MINI:
+						SimYukkuri.fieldType = Barrier.BARRIER_GAP_MINI;
+						break;
+					case GAP_BIG:
+						SimYukkuri.fieldType = Barrier.BARRIER_GAP_BIG;
+						break;
+					case NET_MINI:
+						SimYukkuri.fieldType = Barrier.BARRIER_NET_MINI;
+						break;
+					case NET_BIG:
+						SimYukkuri.fieldType = Barrier.BARRIER_NET_BIG;
+						break;
+					case WALL:
+						SimYukkuri.fieldType = Barrier.BARRIER_WALL;
+						break;
+					case ITEM:
+						SimYukkuri.fieldType = Barrier.BARRIER_ITEM;
+						break;
+					case POOL:
+						SimYukkuri.fieldType = 100; // 値に意味は無く0以外ならなんでも
+						break;
+					case FARM:
+						SimYukkuri.fieldType = 101; // 値に意味は無く0以外ならなんでも
+						break;
+					case BELTCONVEYOR:
+						SimYukkuri.fieldType = 102; // 値に意味は無く0以外ならなんでも
+					case NoUNUN:
+						SimYukkuri.fieldType = Barrier.BARRIER_NOUNUN;
+						break;
+					case KEKKAI:
+						SimYukkuri.fieldType = Barrier.BARRIER_KEKKAI;
+						break;
+					default:
+						break;
 					}
 
-					if(SimYukkuri.fieldType > 0) {
+					if (SimYukkuri.fieldType > 0) {
 						// フィールド外で線を引かせない
-						if( Translate.inInvertLimit(fieldMousePos[0], fieldMousePos[1])){
+						if (Translate.inInvertLimit(fieldMousePos[0], fieldMousePos[1])) {
 							SimYukkuri.fieldSX = fieldMousePos[0];
 							SimYukkuri.fieldSY = fieldMousePos[1];
 							SimYukkuri.fieldEX = SimYukkuri.fieldSX;
 							SimYukkuri.fieldEY = SimYukkuri.fieldSY;
 						}
 					}
-				}
-				else {
+				} else {
 					// 終点のクリック
 					switch (item) {
-						case GAP_MINI:
-						case GAP_BIG:
-						case NET_MINI:
-						case NET_BIG:
-						case WALL:
-						case ITEM:
-						case NoUNUN:
-						case KEKKAI:
-							// フィールド外で線を引かせない
-							if( !Translate.inInvertLimit(fieldMousePos[0], fieldMousePos[1])){
-								break;
-							}
-							SimYukkuri.fieldEX = fieldMousePos[0];
-							SimYukkuri.fieldEY = fieldMousePos[1];
-							if ((SimYukkuri.fieldSX != SimYukkuri.fieldEX)
+					case GAP_MINI:
+					case GAP_BIG:
+					case NET_MINI:
+					case NET_BIG:
+					case WALL:
+					case ITEM:
+					case NoUNUN:
+					case KEKKAI:
+						// フィールド外で線を引かせない
+						if (!Translate.inInvertLimit(fieldMousePos[0], fieldMousePos[1])) {
+							break;
+						}
+						SimYukkuri.fieldEX = fieldMousePos[0];
+						SimYukkuri.fieldEY = fieldMousePos[1];
+						if ((SimYukkuri.fieldSX != SimYukkuri.fieldEX)
 								|| (SimYukkuri.fieldSY != SimYukkuri.fieldEY)) {
-								new Barrier(SimYukkuri.fieldSX, SimYukkuri.fieldSY
-									, SimYukkuri.fieldEX, SimYukkuri.fieldEY, SimYukkuri.fieldType);
-							}
-							SimYukkuri.fieldSX = SimYukkuri.fieldEX;
-							SimYukkuri.fieldSY = SimYukkuri.fieldEY;
-							SimYukkuri.fieldEX = SimYukkuri.fieldSX;
-							SimYukkuri.fieldEY = SimYukkuri.fieldSY;
-							break;
-						case POOL:
-							SimYukkuri.fieldEX = fieldMousePos[0];
-							SimYukkuri.fieldEY = fieldMousePos[1];
-							new Pool(SimYukkuri.fieldSX, SimYukkuri.fieldSY,
-									SimYukkuri.fieldEX, SimYukkuri.fieldEY);
-							SimYukkuri.fieldSX = -1;
-							SimYukkuri.fieldSY = -1;
-							SimYukkuri.fieldEX = -1;
-							SimYukkuri.fieldEY = -1;
-							break;
-						case FARM:
-							SimYukkuri.fieldEX = fieldMousePos[0];
-							SimYukkuri.fieldEY = fieldMousePos[1];
-							new Farm(SimYukkuri.fieldSX, SimYukkuri.fieldSY
-									, SimYukkuri.fieldEX, SimYukkuri.fieldEY);
-							SimYukkuri.fieldSX = -1;
-							SimYukkuri.fieldSY = -1;
-							SimYukkuri.fieldEX = -1;
-							SimYukkuri.fieldEY = -1;
-							break;
-						case BELTCONVEYOR:
-							SimYukkuri.fieldEX = fieldMousePos[0];
-							SimYukkuri.fieldEY = fieldMousePos[1];
-							new Beltconveyor(SimYukkuri.fieldSX, SimYukkuri.fieldSY
-											, SimYukkuri.fieldEX, SimYukkuri.fieldEY);
-							SimYukkuri.fieldSX = -1;
-							SimYukkuri.fieldSY = -1;
-							SimYukkuri.fieldEX = -1;
-							SimYukkuri.fieldEY = -1;
-							break;
-						default:
-							break;
+							new Barrier(SimYukkuri.fieldSX, SimYukkuri.fieldSY, SimYukkuri.fieldEX, SimYukkuri.fieldEY,
+									SimYukkuri.fieldType);
+						}
+						SimYukkuri.fieldSX = SimYukkuri.fieldEX;
+						SimYukkuri.fieldSY = SimYukkuri.fieldEY;
+						SimYukkuri.fieldEX = SimYukkuri.fieldSX;
+						SimYukkuri.fieldEY = SimYukkuri.fieldSY;
+						break;
+					case POOL:
+						SimYukkuri.fieldEX = fieldMousePos[0];
+						SimYukkuri.fieldEY = fieldMousePos[1];
+						new Pool(SimYukkuri.fieldSX, SimYukkuri.fieldSY,
+								SimYukkuri.fieldEX, SimYukkuri.fieldEY);
+						SimYukkuri.fieldSX = -1;
+						SimYukkuri.fieldSY = -1;
+						SimYukkuri.fieldEX = -1;
+						SimYukkuri.fieldEY = -1;
+						break;
+					case FARM:
+						SimYukkuri.fieldEX = fieldMousePos[0];
+						SimYukkuri.fieldEY = fieldMousePos[1];
+						new Farm(SimYukkuri.fieldSX, SimYukkuri.fieldSY, SimYukkuri.fieldEX, SimYukkuri.fieldEY);
+						SimYukkuri.fieldSX = -1;
+						SimYukkuri.fieldSY = -1;
+						SimYukkuri.fieldEX = -1;
+						SimYukkuri.fieldEY = -1;
+						break;
+					case BELTCONVEYOR:
+						SimYukkuri.fieldEX = fieldMousePos[0];
+						SimYukkuri.fieldEY = fieldMousePos[1];
+						new Beltconveyor(SimYukkuri.fieldSX, SimYukkuri.fieldSY, SimYukkuri.fieldEX,
+								SimYukkuri.fieldEY);
+						SimYukkuri.fieldSX = -1;
+						SimYukkuri.fieldSY = -1;
+						SimYukkuri.fieldEX = -1;
+						SimYukkuri.fieldEY = -1;
+						break;
+					default:
+						break;
 					}
 				}
 			}
 
 			// オブジェクトでベルトコンベアを置きたい
-			if(item.getGroup() == MainCategoryName.CONVEYOR) {
+			if (item.getGroup() == MainCategoryName.CONVEYOR) {
 				// 始点のクリック
-				if(SimYukkuri.fieldSX == -1 || SimYukkuri.fieldSY == -1) {
+				if (SimYukkuri.fieldSX == -1 || SimYukkuri.fieldSY == -1) {
 
 					switch (item) {
-						case BELTCONVEYOR_CUSTOM:
-							SimYukkuri.fieldSX = fieldMousePos[0];
-							SimYukkuri.fieldSY = fieldMousePos[1];
-							SimYukkuri.fieldEX = SimYukkuri.fieldSX;
-							SimYukkuri.fieldEY = SimYukkuri.fieldSY;
+					case BELTCONVEYOR_CUSTOM:
+						SimYukkuri.fieldSX = fieldMousePos[0];
+						SimYukkuri.fieldSY = fieldMousePos[1];
+						SimYukkuri.fieldEX = SimYukkuri.fieldSX;
+						SimYukkuri.fieldEY = SimYukkuri.fieldSY;
 						break;
-						default:
-							break;
+					default:
+						break;
 					}
-				}
-				else {
+				} else {
 					// 終点のクリック
 					switch (item) {
 					case BELTCONVEYOR_CUSTOM:
@@ -492,7 +481,7 @@ public class GadgetAction {
 						SimYukkuri.fieldSY = -1;
 						SimYukkuri.fieldEX = -1;
 						SimYukkuri.fieldEY = -1;
-					break;
+						break;
 					default:
 						break;
 					}
@@ -515,14 +504,12 @@ public class GadgetAction {
 		try {
 			Constructor<?> cst = cls.getConstructor(int.class, int.class, int.class);
 			ret = (ObjEX) cst.newInstance(px, py, initOption);
-		}
-		catch (NoSuchMethodException | SecurityException | InstantiationException
+		} catch (NoSuchMethodException | SecurityException | InstantiationException
 				| IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			e.printStackTrace();
 		}
 		return ret;
 	}
-
 
 	// 対象物をクリックするアクション-----------------------------------------------
 
@@ -535,293 +522,294 @@ public class GadgetAction {
 	 */
 	public static void evaluateTool(GadgetList item, MouseEvent ev, Obj found) {
 		switch (item) {
-			case PUNISH:
-				GadgetMenu.executeBodyMethod(ev, found, "strikeByPunish");
-				break;
-			case SNAPPING:
-				if(ev.isShiftDown()) {
-					Body[] bodyList = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
-					for(Obj o :bodyList) {
-						o.kick();
-					}
-					List<Shit> shitList = SimYukkuri.world.currentMap.shit;
-					for(Obj o :shitList) {
-						o.kick();
-					}
-					List<Vomit> vomitList = SimYukkuri.world.currentMap.vomit;
-					for(Obj o :vomitList) {
-						o.kick();
-					}
-				} else {
-					found.kick();
+		case PUNISH:
+			GadgetMenu.executeBodyMethod(ev, found, "strikeByPunish");
+			break;
+		case SNAPPING:
+			if (ev.isShiftDown()) {
+				List<Body> bodyList = SimYukkuri.world.getCurrentMap().body;
+				for (Obj o : bodyList) {
+					o.kick();
 				}
-				break;
-			case VIBRATOR:
-				GadgetMenu.executeBodyMethod(ev, found, "forceToExcite");
-				break;
-			case PENICUT:
-				GadgetMenu.executeBodyMethod(ev, found, "cutPenipeni");
-				break;
-			case JUICE:
-				GadgetMenu.executeBodyMethod(ev, found, "giveJuice");
-				break;
-			case Medical_JUICE:
-				GadgetMenu.executeBodyMethod(ev, found, "injectJuice");
-				break;
-			case LEMON_SPLAY:
-				GadgetMenu.executeBodyMethod(ev, found, "forceToSleep");
-				break;
-			case Pheromone_SPLAY:
-				GadgetMenu.executeBodyMethod(ev, found, "invPheromone");
-				break;
-			case HAMMER:
-				if(ev.isShiftDown()) {
-					Body[] bodyList = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
-					for(Body b :bodyList) {
-						b.strikeByHammer();
-						if (!b.isHasPants() && !b.isDead() && !b.isShutmouth()) {
-							int ofsX = Translate.invertX(b.getCollisionX()>>1, b.getY());
-							if(b.getDirection() == Direction.LEFT) ofsX = -ofsX;
-							if(!b.isPacked()&&!b.isShutmouth())SimYukkuri.mypane.terrarium.addVomit(b.getX() + ofsX, b.getY(), b.getZ(), b, b.getShitType());
-							b.stay();
-						}
-						b.setDirty(true);
+				List<Shit> shitList = SimYukkuri.world.getCurrentMap().shit;
+				for (Obj o : shitList) {
+					o.kick();
+				}
+				List<Vomit> vomitList = SimYukkuri.world.getCurrentMap().vomit;
+				for (Obj o : vomitList) {
+					o.kick();
+				}
+			} else {
+				found.kick();
+			}
+			break;
+		case VIBRATOR:
+			GadgetMenu.executeBodyMethod(ev, found, "forceToExcite");
+			break;
+		case PENICUT:
+			GadgetMenu.executeBodyMethod(ev, found, "cutPenipeni");
+			break;
+		case JUICE:
+			GadgetMenu.executeBodyMethod(ev, found, "giveJuice");
+			break;
+		case Medical_JUICE:
+			GadgetMenu.executeBodyMethod(ev, found, "injectJuice");
+			break;
+		case LEMON_SPLAY:
+			GadgetMenu.executeBodyMethod(ev, found, "forceToSleep");
+			break;
+		case Pheromone_SPLAY:
+			GadgetMenu.executeBodyMethod(ev, found, "invPheromone");
+			break;
+		case HAMMER:
+			if (ev.isShiftDown()) {
+				List<Body> bodyList = SimYukkuri.world.getCurrentMap().body;
+				for (Body b : bodyList) {
+					b.strikeByHammer();
+					if (!b.isHasPants() && !b.isDead() && !b.isShutmouth()) {
+						int ofsX = Translate.invertX(b.getCollisionX() >> 1, b.getY());
+						if (b.getDirection() == Direction.LEFT)
+							ofsX = -ofsX;
+						if (!b.isPacked() && !b.isShutmouth())
+							SimYukkuri.mypane.terrarium.addVomit(b.getX() + ofsX, b.getY(), b.getZ(), b,
+									b.getShitType());
+						b.stay();
 					}
+					b.setDirty(true);
+				}
+				Terrarium.setAlarm();
+			} else {
+				if (found instanceof Body) {
+					Body b = (Body) found;
+					b.strikeByHammer();
+					if (!b.isHasPants() && !b.isDead() && !b.isShutmouth()) {
+						int ofsX = Translate.invertX(b.getCollisionX() >> 1, b.getY());
+						if (b.getDirection() == Direction.LEFT)
+							ofsX = -ofsX;
+						if (!b.isPacked() && !b.isShutmouth())
+							SimYukkuri.mypane.terrarium.addVomit(b.getX() + ofsX, b.getY(), b.getZ(), b,
+									b.getShitType());
+						b.stay();
+					}
+					b.setDirty(true);
 					Terrarium.setAlarm();
 				}
-				else {
-					if (found instanceof Body) {
-						Body b = (Body)found;
-						b.strikeByHammer();
-						if (!b.isHasPants() && !b.isDead() && !b.isShutmouth()) {
-							int ofsX = Translate.invertX(b.getCollisionX()>>1, b.getY());
-							if(b.getDirection() == Direction.LEFT) ofsX = -ofsX;
-							if(!b.isPacked()&&!b.isShutmouth())SimYukkuri.mypane.terrarium.addVomit(b.getX() + ofsX, b.getY(), b.getZ(), b, b.getShitType());
-							b.stay();
-						}
-						b.setDirty(true);
-						Terrarium.setAlarm();
-					}
-				}
-				break;
-			case GATHERINJECTINTO:
-				if (found instanceof Body) {
-					if(SimYukkuri.sperm == null){
-						SimYukkuri.sperm = ((Body)found).getDna();
-					}
-					else {
-						((Body)found).injectInto(SimYukkuri.sperm);
-						SimYukkuri.sperm = null;
-					}
-					// 精子餡の保持状態表示変更
-					MainCommandUI.showPlayerStatus();
-				}
-				else {
-					SimYukkuri.sperm = null;
-				}
-				break;
-			case DRIPSPERM:
-				if (found instanceof Body) {
-					if(SimYukkuri.sperm == null){
-						SimYukkuri.sperm = ((Body)found).getDna();
-						((Body)found).strikeByPunish();
-						Terrarium.setAlarm();
-					}
-					else {
-						((Body)found).dripSperm(SimYukkuri.sperm);
-						SimYukkuri.sperm = null;
-					}
-					// 精子餡の保持状態表示変更
-					MainCommandUI.showPlayerStatus();
+			}
+			break;
+		case GATHERINJECTINTO:
+			if (found instanceof Body) {
+				if (SimYukkuri.sperm == null) {
+					SimYukkuri.sperm = ((Body) found).getDna();
 				} else {
+					((Body) found).injectInto(SimYukkuri.sperm);
 					SimYukkuri.sperm = null;
 				}
-				break;
-			case PUNCH:
-				if(ev.isShiftDown()) {
-					Body[] bodyList = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
-					for(Body b :bodyList) {
-						b.strikeByPunch();
-						if (!b.isHasPants() && !b.isDead() && !b.isShutmouth()) {
-							int ofsX = Translate.invertX(b.getCollisionX()>>1, b.getY());
-							if(b.getDirection() == Direction.LEFT) ofsX = -ofsX;
-							if(!b.isPacked()&&!b.isShutmouth())SimYukkuri.mypane.terrarium.addVomit(b.getX() + ofsX, b.getY(), b.getZ(), b, b.getShitType());
-							b.stay();
-						}
-						b.setDirty(true);
+				// 精子餡の保持状態表示変更
+				MainCommandUI.showPlayerStatus();
+			} else {
+				SimYukkuri.sperm = null;
+			}
+			break;
+		case DRIPSPERM:
+			if (found instanceof Body) {
+				if (SimYukkuri.sperm == null) {
+					SimYukkuri.sperm = ((Body) found).getDna();
+					((Body) found).strikeByPunish();
+					Terrarium.setAlarm();
+				} else {
+					((Body) found).dripSperm(SimYukkuri.sperm);
+					SimYukkuri.sperm = null;
+				}
+				// 精子餡の保持状態表示変更
+				MainCommandUI.showPlayerStatus();
+			} else {
+				SimYukkuri.sperm = null;
+			}
+			break;
+		case PUNCH:
+			if (ev.isShiftDown()) {
+				List<Body> bodyList = SimYukkuri.world.getCurrentMap().body;
+				for (Body b : bodyList) {
+					b.strikeByPunch();
+					if (!b.isHasPants() && !b.isDead() && !b.isShutmouth()) {
+						int ofsX = Translate.invertX(b.getCollisionX() >> 1, b.getY());
+						if (b.getDirection() == Direction.LEFT)
+							ofsX = -ofsX;
+						if (!b.isPacked() && !b.isShutmouth())
+							SimYukkuri.mypane.terrarium.addVomit(b.getX() + ofsX, b.getY(), b.getZ(), b,
+									b.getShitType());
+						b.stay();
 					}
+					b.setDirty(true);
+				}
+				Terrarium.setAlarm();
+			} else {
+				if (found instanceof Body) {
+					Body b = (Body) found;
+					b.strikeByPunch();
+					if (!b.isHasPants() && !b.isDead() && !b.isShutmouth()) {
+						int ofsX = Translate.invertX(b.getCollisionX() >> 1, b.getY());
+						if (b.getDirection() == Direction.LEFT)
+							ofsX = -ofsX;
+						if (!b.isPacked() && !b.isShutmouth())
+							SimYukkuri.mypane.terrarium.addVomit(b.getX() + ofsX, b.getY(), b.getZ(), b,
+									b.getShitType());
+						b.stay();
+					}
+					b.setDirty(true);
 					Terrarium.setAlarm();
 				}
-				else {
-					if (found instanceof Body) {
-						Body b = (Body)found;
-						b.strikeByPunch();
-						if (!b.isHasPants() && !b.isDead() && !b.isShutmouth()) {
-							int ofsX = Translate.invertX(b.getCollisionX()>>1, b.getY());
-							if(b.getDirection() == Direction.LEFT) ofsX = -ofsX;
-							if(!b.isPacked()&&!b.isShutmouth())SimYukkuri.mypane.terrarium.addVomit(b.getX() + ofsX, b.getY(), b.getZ(), b, b.getShitType());
-							b.stay();
-						}
-						b.setDirty(true);
-						Terrarium.setAlarm();
-					}
-				}
-				break;
-			case GODHAND:
-				if(ev.isShiftDown()) {
-					Body[] bodyList = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
-					int nSize = bodyList.length;
-					for( int i = nSize-1 ; -1 < i; i--)
-					{
-						Body b = bodyList[ i ];
-						if( b != null )
-						{
-							GadgetTool.doGodHand(b);
-						}
-					}
-				} else {
-					if (found instanceof Body) {
-						Body b = (Body)found;
+			}
+			break;
+		case GODHAND:
+			if (ev.isShiftDown()) {
+				List<Body> bodyList = SimYukkuri.world.getCurrentMap().body;
+				int nSize = bodyList.size();
+				for (int i = nSize - 1; -1 < i; i--) {
+					Body b = bodyList.get(i);
+					if (b != null) {
 						GadgetTool.doGodHand(b);
 					}
 				}
-				break;
-			case PEAL:
-				Body[] bodyListP = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
-				if(ev.isShiftDown()) {
-					boolean flag = true;
-					if (found instanceof Body) {
-						flag = !((Body)found).isPealed();
-					}
-					for(Body b :bodyListP) {
-						if (!flag && b.isPealed())
-							b.Peal();
-						else if (flag && !b.isPealed())
-							b.Peal();
-					}
-				} else if(ev.isControlDown()) {
-					for(Body b :bodyListP) {
-						if (b.isPealed())
-							b.Peal();
-						else
-							b.Peal();
-					}
+			} else {
+				if (found instanceof Body) {
+					Body b = (Body) found;
+					GadgetTool.doGodHand(b);
 				}
-				else {
-					if (found instanceof Body) {
-						if (((Body)found).isPealed())
-							((Body)found).Peal();
-						else
-							((Body)found).Peal();
-					}
+			}
+			break;
+		case PEAL:
+			Body[] bodyListP = SimYukkuri.world.getCurrentMap().body.toArray(new Body[0]);
+			if (ev.isShiftDown()) {
+				boolean flag = true;
+				if (found instanceof Body) {
+					flag = !((Body) found).isPealed();
 				}
-				break;
+				for (Body b : bodyListP) {
+					if (!flag && b.isPealed())
+						b.Peal();
+					else if (flag && !b.isPealed())
+						b.Peal();
+				}
+			} else if (ev.isControlDown()) {
+				for (Body b : bodyListP) {
+					if (b.isPealed())
+						b.Peal();
+					else
+						b.Peal();
+				}
+			} else {
+				if (found instanceof Body) {
+					if (((Body) found).isPealed())
+						((Body) found).Peal();
+					else
+						((Body) found).Peal();
+				}
+			}
+			break;
 
-			case Blind:
-				Body[] bodyListB = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
-				if(ev.isShiftDown()) {
-					boolean flag = true;
-					if (found instanceof Body) {
-						flag = !((Body)found).isBlind();
-					}
-					for(Body b :bodyListB) {
-						if (!flag && b.isBlind())
-							b.breakeyes();
-						else if (flag && !b.isBlind())
-							b.breakeyes();
-					}
-				} else if(ev.isControlDown()) {
-					for(Body b :bodyListB) {
-						if (b.isBlind())
-							b.breakeyes();
-						else
-							b.breakeyes();
-					}
+		case Blind:
+			Body[] bodyListB = SimYukkuri.world.getCurrentMap().body.toArray(new Body[0]);
+			if (ev.isShiftDown()) {
+				boolean flag = true;
+				if (found instanceof Body) {
+					flag = !((Body) found).isBlind();
 				}
-				else {
-					if (found instanceof Body) {
-						if (((Body)found).isBlind())
-							((Body)found).breakeyes();
-						else
-							((Body)found).breakeyes();
-					}
+				for (Body b : bodyListB) {
+					if (!flag && b.isBlind())
+						b.breakeyes();
+					else if (flag && !b.isBlind())
+						b.breakeyes();
 				}
+			} else if (ev.isControlDown()) {
+				for (Body b : bodyListB) {
+					if (b.isBlind())
+						b.breakeyes();
+					else
+						b.breakeyes();
+				}
+			} else {
+				if (found instanceof Body) {
+					if (((Body) found).isBlind())
+						((Body) found).breakeyes();
+					else
+						((Body) found).breakeyes();
+				}
+			}
+			break;
+		case SHUTMOUTH:
+			Body[] bodyListS = SimYukkuri.world.getCurrentMap().body.toArray(new Body[0]);
+			if (ev.isShiftDown()) {
+				boolean flag = true;
+				if (found instanceof Body) {
+					flag = !((Body) found).isShutmouth();
+				}
+				for (Body b : bodyListS) {
+					if (!flag && b.isShutmouth())
+						b.ShutMouth();
+					else if (flag && !b.isShutmouth())
+						b.ShutMouth();
+				}
+			} else if (ev.isControlDown()) {
+				for (Body b : bodyListS) {
+					if (b.isShutmouth())
+						b.ShutMouth();
+					else
+						b.ShutMouth();
+				}
+			} else {
+				if (found instanceof Body) {
+					if (((Body) found).isShutmouth())
+						((Body) found).ShutMouth();
+					else
+						((Body) found).ShutMouth();
+				}
+			}
+			break;
+		case HAIRCUT:
+			if (ev.isShiftDown()) {
 				break;
-			case SHUTMOUTH:
-				Body[] bodyListS = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
-				if(ev.isShiftDown()) {
-					boolean flag = true;
-					if (found instanceof Body) {
-						flag = !((Body)found).isShutmouth();
-					}
-					for(Body b :bodyListS) {
-						if (!flag && b.isShutmouth())
-							b.ShutMouth();
-						else if (flag && !b.isShutmouth())
-							b.ShutMouth();
-					}
-				} else if(ev.isControlDown()) {
-					for(Body b :bodyListS) {
-						if (b.isShutmouth())
-							b.ShutMouth();
-						else
-							b.ShutMouth();
-					}
-				} else {
-					if (found instanceof Body) {
-						if (((Body)found).isShutmouth())
-							((Body)found).ShutMouth();
-						else
-							((Body)found).ShutMouth();
-					}
+			}
+			GadgetMenu.executeBodyMethod(ev, found, "pickHair");
+			break;
+		case PACK:
+			Body[] bodyListPa = SimYukkuri.world.getCurrentMap().body.toArray(new Body[0]);
+			if (ev.isShiftDown()) {
+				boolean flag = true;
+				if (found instanceof Body) {
+					flag = !((Body) found).isPacked();
 				}
-				break;
-			case HAIRCUT:
-				if(ev.isShiftDown()) {
-					break;
+				for (Body b : bodyListPa) {
+					if (!flag && b.isPacked())
+						b.pack();
+					else if (flag && !b.isPacked())
+						b.pack();
 				}
-				GadgetMenu.executeBodyMethod(ev, found, "pickHair");
-				break;
-			case PACK:
-				Body[] bodyListPa = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
-				if(ev.isShiftDown()) {
-					boolean flag = true;
-					if (found instanceof Body) {
-						flag = !((Body)found).isPacked();
-					}
-					for(Body b :bodyListPa) {
-						if (!flag && b.isPacked())
-							b.pack();
-						else if (flag && !b.isPacked())
-							b.pack();
-					}
+			} else if (ev.isControlDown()) {
+				for (Body b : bodyListPa) {
+					if (b.isPacked())
+						b.pack();
+					else
+						b.pack();
 				}
-				else if(ev.isControlDown()) {
-					for(Body b :bodyListPa) {
-						if (b.isPacked())
-							b.pack();
-						else
-							b.pack();
-					}
+			} else {
+				if (found instanceof Body) {
+					((Body) found).pack();
 				}
-				else {
-					if (found instanceof Body) {
-						((Body)found).pack();
-					}
-				}
-//				GadgetMenu.executeBodyMethod(ev, found, "Peal");
+			}
+			//				GadgetMenu.executeBodyMethod(ev, found, "Peal");
+			break;
+		case HOLD:
+			if (ev.isShiftDown()) {
 				break;
-			case HOLD:
-				if(ev.isShiftDown()) {
-					break;
-				}
-				GadgetMenu.executeBodyMethod(ev, found, "Hold");
-				break;
-			case STOMP:
-				GadgetMenu.executeBodyMethod(ev, found, "strikeByPress");
-				break;
-			default:
-				break;
+			}
+			GadgetMenu.executeBodyMethod(ev, found, "Hold");
+			break;
+		case STOMP:
+			GadgetMenu.executeBodyMethod(ev, found, "strikeByPress");
+			break;
+		default:
+			break;
 		}
 	}
 
@@ -834,46 +822,46 @@ public class GadgetAction {
 	 */
 	public static void evaluateTool2(GadgetList item, MouseEvent ev, Obj found) {
 		switch (item) {
-			case BRAID_PLUCK:
-				GadgetMenu.executeBodyMethod(ev, found, "takeBraid");
-				break;
-			case ANAL_CLOSE:
-				GadgetMenu.executeBodyMethod(ev, found, "isAnalClose", "setAnalClose", "invAnalClose");
-				break;
-			case STALK_CUT:
-				GadgetMenu.executeBodyMethod(ev, found, "getStalkCastration", "setStalkCastration", "invStalkCastration");
-				break;
-			case STALK_UNPLUG:
-				if (found instanceof Stalk){
-					Stalk s = ((Stalk)found);
-					if(s.getPlantYukkuri() != null) {
-						s.getPlantYukkuri().touchStalk();
-					}
+		case BRAID_PLUCK:
+			GadgetMenu.executeBodyMethod(ev, found, "takeBraid");
+			break;
+		case ANAL_CLOSE:
+			GadgetMenu.executeBodyMethod(ev, found, "isAnalClose", "setAnalClose", "invAnalClose");
+			break;
+		case STALK_CUT:
+			GadgetMenu.executeBodyMethod(ev, found, "getStalkCastration", "setStalkCastration", "invStalkCastration");
+			break;
+		case STALK_UNPLUG:
+			if (found instanceof Stalk) {
+				Stalk s = ((Stalk) found);
+				if (s.getPlantYukkuri() != null) {
+					s.getPlantYukkuri().touchStalk();
 				}
-				break;
-			case CASTRATION:
-				GadgetMenu.executeBodyMethod(ev, found, "getBodyCastration", "setBodyCastration", "invBodyCastration");
-				break;
-			case LIGHTER:
-				GadgetMenu.executeBodyMethod(ev, found, "giveFire");
-				break;
-			case NEEDLE:
-				GadgetMenu.executeBodyMethod(ev, found, "getNeedle", "setNeedle", "invNeedle");
-				break;
-			case WATER:
-				GadgetMenu.executeBodyMethod(ev, found, "giveWater");
-				break;
-			case BURY:
-				GadgetMenu.executeBodyMethod(ev, found, "baryInUnderGround");
-				break;
-			case SET_SICK:
-				GadgetMenu.executeBodyMethod(ev, found, "moldToggle");
-				break;
-			case SET_RAPER:
-				GadgetMenu.executeBodyMethod(ev, found, "raperToggle");
-				break;
-			default:
-				break;
+			}
+			break;
+		case CASTRATION:
+			GadgetMenu.executeBodyMethod(ev, found, "getBodyCastration", "setBodyCastration", "invBodyCastration");
+			break;
+		case LIGHTER:
+			GadgetMenu.executeBodyMethod(ev, found, "giveFire");
+			break;
+		case NEEDLE:
+			GadgetMenu.executeBodyMethod(ev, found, "getNeedle", "setNeedle", "invNeedle");
+			break;
+		case WATER:
+			GadgetMenu.executeBodyMethod(ev, found, "giveWater");
+			break;
+		case BURY:
+			GadgetMenu.executeBodyMethod(ev, found, "baryInUnderGround");
+			break;
+		case SET_SICK:
+			GadgetMenu.executeBodyMethod(ev, found, "moldToggle");
+			break;
+		case SET_RAPER:
+			GadgetMenu.executeBodyMethod(ev, found, "raperToggle");
+			break;
+		default:
+			break;
 		}
 	}
 
@@ -885,283 +873,283 @@ public class GadgetAction {
 	 * @param found 対象オブジェクト
 	 */
 	public static void evaluateAmpoule(GadgetList item, MouseEvent ev, Obj found) {
-		Body[] bodyList = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
+		List<Body> bodyList = SimYukkuri.world.getCurrentMap().body;
 		switch (item) {
-			case ORANGE_AMP:
-				if(ev.isShiftDown()) {
-					int flag = 0;
-					if (found instanceof Body) {
-						flag = ((Body)found).getAttachmentSize(OrangeAmpoule.class);
-					}
-					for(Body b :bodyList) {
-						if(flag == 0) {
-							if(b.getAttachmentSize(OrangeAmpoule.class) == 0)
-								b.addAttachment(new OrangeAmpoule(b));
-						} else {
-							if(b.getAttachmentSize(OrangeAmpoule.class) != 0)
-								b.removeAttachment(OrangeAmpoule.class, true);
-						}
-					}
-				} else if(ev.isControlDown()) {
-					for(Body b :bodyList) {
-						if(b.getAttachmentSize(OrangeAmpoule.class) != 0) {
-							b.removeAttachment(OrangeAmpoule.class, true);
-						} else {
+		case ORANGE_AMP:
+			if (ev.isShiftDown()) {
+				int flag = 0;
+				if (found instanceof Body) {
+					flag = ((Body) found).getAttachmentSize(OrangeAmpoule.class);
+				}
+				for (Body b : bodyList) {
+					if (flag == 0) {
+						if (b.getAttachmentSize(OrangeAmpoule.class) == 0)
 							b.addAttachment(new OrangeAmpoule(b));
-						}
-					}
-				} else {
-					if (found instanceof Body) {
-						Body b = (Body)found;
-						if(b.getAttachmentSize(OrangeAmpoule.class) != 0) {
-							b.removeAttachment(OrangeAmpoule.class, true);
-						} else {
-							b.addAttachment(new OrangeAmpoule((Body)found));
-						}
+					} else {
+						if (b.getAttachmentSize(OrangeAmpoule.class) != 0)
+							b.removeAttachment(OrangeAmpoule.class);
 					}
 				}
-				break;
-			case ACCEL_AMP:
-				if(ev.isShiftDown()) {
-					int flag = 0;
-					if (found instanceof Body) {
-						flag = ((Body)found).getAttachmentSize(AccelAmpoule.class);
+			} else if (ev.isControlDown()) {
+				for (Body b : bodyList) {
+					if (b.getAttachmentSize(OrangeAmpoule.class) != 0) {
+						b.removeAttachment(OrangeAmpoule.class);
+					} else {
+						b.addAttachment(new OrangeAmpoule(b));
 					}
-					for(Body b :bodyList) {
-						if(flag == 0) {
-							if(b.getAttachmentSize(AccelAmpoule.class) == 0)
-								b.addAttachment(new AccelAmpoule(b));
-						} else {
-							if(b.getAttachmentSize(AccelAmpoule.class) != 0)
-								b.removeAttachment(AccelAmpoule.class, true);
-						}
+				}
+			} else {
+				if (found instanceof Body) {
+					Body b = (Body) found;
+					if (b.getAttachmentSize(OrangeAmpoule.class) != 0) {
+						b.removeAttachment(OrangeAmpoule.class);
+					} else {
+						b.addAttachment(new OrangeAmpoule((Body) found));
 					}
-				} else if(ev.isControlDown()) {
-					for(Body b :bodyList) {
-						if(b.getAttachmentSize(AccelAmpoule.class) != 0) {
-							b.removeAttachment(AccelAmpoule.class, true);
-						} else {
+				}
+			}
+			break;
+		case ACCEL_AMP:
+			if (ev.isShiftDown()) {
+				int flag = 0;
+				if (found instanceof Body) {
+					flag = ((Body) found).getAttachmentSize(AccelAmpoule.class);
+				}
+				for (Body b : bodyList) {
+					if (flag == 0) {
+						if (b.getAttachmentSize(AccelAmpoule.class) == 0)
 							b.addAttachment(new AccelAmpoule(b));
-						}
-					}
-				} else {
-					if (found instanceof Body) {
-						Body b = (Body)found;
-						if(b.getAttachmentSize(AccelAmpoule.class) != 0) {
-							b.removeAttachment(AccelAmpoule.class, true);
-						} else {
-							b.addAttachment(new AccelAmpoule((Body)found));
-						}
+					} else {
+						if (b.getAttachmentSize(AccelAmpoule.class) != 0)
+							b.removeAttachment(AccelAmpoule.class);
 					}
 				}
-				break;
-			case STOP_AMP:
-				if(ev.isShiftDown()) {
-					int flag = 0;
-					if (found instanceof Body) {
-						flag = ((Body)found).getAttachmentSize(StopAmpoule.class);
+			} else if (ev.isControlDown()) {
+				for (Body b : bodyList) {
+					if (b.getAttachmentSize(AccelAmpoule.class) != 0) {
+						b.removeAttachment(AccelAmpoule.class);
+					} else {
+						b.addAttachment(new AccelAmpoule(b));
 					}
-					for(Body b :bodyList) {
-						if(flag == 0) {
-							if(b.getAttachmentSize(StopAmpoule.class) == 0)
-								b.addAttachment(new StopAmpoule(b));
-						} else {
-							if(b.getAttachmentSize(StopAmpoule.class) != 0)
-								b.removeAttachment(StopAmpoule.class, true);
-						}
+				}
+			} else {
+				if (found instanceof Body) {
+					Body b = (Body) found;
+					if (b.getAttachmentSize(AccelAmpoule.class) != 0) {
+						b.removeAttachment(AccelAmpoule.class);
+					} else {
+						b.addAttachment(new AccelAmpoule((Body) found));
 					}
-				} else if(ev.isControlDown()) {
-					for(Body b :bodyList) {
-						if(b.getAttachmentSize(StopAmpoule.class) != 0) {
-							b.removeAttachment(StopAmpoule.class, true);
-						} else {
+				}
+			}
+			break;
+		case STOP_AMP:
+			if (ev.isShiftDown()) {
+				int flag = 0;
+				if (found instanceof Body) {
+					flag = ((Body) found).getAttachmentSize(StopAmpoule.class);
+				}
+				for (Body b : bodyList) {
+					if (flag == 0) {
+						if (b.getAttachmentSize(StopAmpoule.class) == 0)
 							b.addAttachment(new StopAmpoule(b));
-						}
-					}
-				} else {
-					if (found instanceof Body) {
-						Body b = (Body)found;
-						if(b.getAttachmentSize(StopAmpoule.class) != 0) {
-							b.removeAttachment(StopAmpoule.class, true);
-						} else {
-							b.addAttachment(new StopAmpoule((Body)found));
-						}
+					} else {
+						if (b.getAttachmentSize(StopAmpoule.class) != 0)
+							b.removeAttachment(StopAmpoule.class);
 					}
 				}
-				break;
-			case HUNGRY_AMP:
-				if(ev.isShiftDown()) {
-					int flag = 0;
-					if (found instanceof Body) {
-						flag = ((Body)found).getAttachmentSize(HungryAmpoule.class);
+			} else if (ev.isControlDown()) {
+				for (Body b : bodyList) {
+					if (b.getAttachmentSize(StopAmpoule.class) != 0) {
+						b.removeAttachment(StopAmpoule.class);
+					} else {
+						b.addAttachment(new StopAmpoule(b));
 					}
-					for(Body b :bodyList) {
-						if(flag == 0) {
-							if(b.getAttachmentSize(HungryAmpoule.class) == 0)
-								b.addAttachment(new HungryAmpoule(b));
-						} else {
-							if(b.getAttachmentSize(HungryAmpoule.class) != 0)
-								b.removeAttachment(HungryAmpoule.class, true);
-						}
+				}
+			} else {
+				if (found instanceof Body) {
+					Body b = (Body) found;
+					if (b.getAttachmentSize(StopAmpoule.class) != 0) {
+						b.removeAttachment(StopAmpoule.class);
+					} else {
+						b.addAttachment(new StopAmpoule((Body) found));
 					}
-				} else if(ev.isControlDown()) {
-					for(Body b :bodyList) {
-						if(b.getAttachmentSize(HungryAmpoule.class) != 0) {
-							b.removeAttachment(HungryAmpoule.class, true);
-						} else {
+				}
+			}
+			break;
+		case HUNGRY_AMP:
+			if (ev.isShiftDown()) {
+				int flag = 0;
+				if (found instanceof Body) {
+					flag = ((Body) found).getAttachmentSize(HungryAmpoule.class);
+				}
+				for (Body b : bodyList) {
+					if (flag == 0) {
+						if (b.getAttachmentSize(HungryAmpoule.class) == 0)
 							b.addAttachment(new HungryAmpoule(b));
-						}
-					}
-				} else {
-					if (found instanceof Body) {
-						Body b = (Body)found;
-						if(b.getAttachmentSize(HungryAmpoule.class) != 0) {
-							b.removeAttachment(HungryAmpoule.class, true);
-						} else {
-							b.addAttachment(new HungryAmpoule((Body)found));
-						}
+					} else {
+						if (b.getAttachmentSize(HungryAmpoule.class) != 0)
+							b.removeAttachment(HungryAmpoule.class);
 					}
 				}
-				break;
-			case VERYSHIT_AMP:
-				if(ev.isShiftDown()) {
-					int flag = 0;
-					if (found instanceof Body) {
-						flag = ((Body)found).getAttachmentSize(VeryShitAmpoule.class);
+			} else if (ev.isControlDown()) {
+				for (Body b : bodyList) {
+					if (b.getAttachmentSize(HungryAmpoule.class) != 0) {
+						b.removeAttachment(HungryAmpoule.class);
+					} else {
+						b.addAttachment(new HungryAmpoule(b));
 					}
-					for(Body b :bodyList) {
-						if(flag == 0) {
-							if(b.getAttachmentSize(VeryShitAmpoule.class) == 0)
-								b.addAttachment(new VeryShitAmpoule(b));
-						} else {
-							if(b.getAttachmentSize(VeryShitAmpoule.class) != 0)
-								b.removeAttachment(VeryShitAmpoule.class, true);
-						}
+				}
+			} else {
+				if (found instanceof Body) {
+					Body b = (Body) found;
+					if (b.getAttachmentSize(HungryAmpoule.class) != 0) {
+						b.removeAttachment(HungryAmpoule.class);
+					} else {
+						b.addAttachment(new HungryAmpoule((Body) found));
 					}
-				} else if(ev.isControlDown()) {
-					for(Body b :bodyList) {
-						if(b.getAttachmentSize(VeryShitAmpoule.class) != 0) {
-							b.removeAttachment(VeryShitAmpoule.class, true);
-						} else {
+				}
+			}
+			break;
+		case VERYSHIT_AMP:
+			if (ev.isShiftDown()) {
+				int flag = 0;
+				if (found instanceof Body) {
+					flag = ((Body) found).getAttachmentSize(VeryShitAmpoule.class);
+				}
+				for (Body b : bodyList) {
+					if (flag == 0) {
+						if (b.getAttachmentSize(VeryShitAmpoule.class) == 0)
 							b.addAttachment(new VeryShitAmpoule(b));
-						}
-					}
-				} else {
-					if (found instanceof Body) {
-						Body b = (Body)found;
-						if(b.getAttachmentSize(VeryShitAmpoule.class) != 0) {
-							b.removeAttachment(VeryShitAmpoule.class, true);
-						} else {
-							b.addAttachment(new VeryShitAmpoule((Body)found));
-						}
+					} else {
+						if (b.getAttachmentSize(VeryShitAmpoule.class) != 0)
+							b.removeAttachment(VeryShitAmpoule.class);
 					}
 				}
-				break;
-			case POISON_AMP:
-				if(ev.isShiftDown()) {
-					int flag = 0;
-					if (found instanceof Body) {
-						flag = ((Body)found).getAttachmentSize(PoisonAmpoule.class);
+			} else if (ev.isControlDown()) {
+				for (Body b : bodyList) {
+					if (b.getAttachmentSize(VeryShitAmpoule.class) != 0) {
+						b.removeAttachment(VeryShitAmpoule.class);
+					} else {
+						b.addAttachment(new VeryShitAmpoule(b));
 					}
-					for(Body b :bodyList) {
-						if(flag == 0) {
-							if(b.getAttachmentSize(PoisonAmpoule.class) == 0)
-								b.addAttachment(new PoisonAmpoule(b));
-						} else {
-							if(b.getAttachmentSize(PoisonAmpoule.class) != 0)
-								b.removeAttachment(PoisonAmpoule.class, true);
-						}
+				}
+			} else {
+				if (found instanceof Body) {
+					Body b = (Body) found;
+					if (b.getAttachmentSize(VeryShitAmpoule.class) != 0) {
+						b.removeAttachment(VeryShitAmpoule.class);
+					} else {
+						b.addAttachment(new VeryShitAmpoule((Body) found));
 					}
-				} else if(ev.isControlDown()) {
-					for(Body b :bodyList) {
-						if(b.getAttachmentSize(PoisonAmpoule.class) != 0) {
-							b.removeAttachment(PoisonAmpoule.class, true);
-						} else {
+				}
+			}
+			break;
+		case POISON_AMP:
+			if (ev.isShiftDown()) {
+				int flag = 0;
+				if (found instanceof Body) {
+					flag = ((Body) found).getAttachmentSize(PoisonAmpoule.class);
+				}
+				for (Body b : bodyList) {
+					if (flag == 0) {
+						if (b.getAttachmentSize(PoisonAmpoule.class) == 0)
 							b.addAttachment(new PoisonAmpoule(b));
-						}
-					}
-				} else {
-					if (found instanceof Body) {
-						Body b = (Body)found;
-						if(b.getAttachmentSize(PoisonAmpoule.class) != 0) {
-							b.removeAttachment(PoisonAmpoule.class, true);
-						} else {
-							b.addAttachment(new PoisonAmpoule((Body)found));
-						}
+					} else {
+						if (b.getAttachmentSize(PoisonAmpoule.class) != 0)
+							b.removeAttachment(PoisonAmpoule.class);
 					}
 				}
-				break;
-			case BREEDING_AMP:
-				if(ev.isShiftDown()) {
-					int flag = 0;
-					if (found instanceof Body) {
-						flag = ((Body)found).getAttachmentSize(BreedingAmpoule.class);
+			} else if (ev.isControlDown()) {
+				for (Body b : bodyList) {
+					if (b.getAttachmentSize(PoisonAmpoule.class) != 0) {
+						b.removeAttachment(PoisonAmpoule.class);
+					} else {
+						b.addAttachment(new PoisonAmpoule(b));
 					}
-					for(Body b :bodyList) {
-						if(flag == 0) {
-							if(b.getAttachmentSize(BreedingAmpoule.class) == 0)
-								b.addAttachment(new BreedingAmpoule(b));
-						} else {
-							if(b.getAttachmentSize(BreedingAmpoule.class) != 0)
-								b.removeAttachment(BreedingAmpoule.class, true);
-						}
+				}
+			} else {
+				if (found instanceof Body) {
+					Body b = (Body) found;
+					if (b.getAttachmentSize(PoisonAmpoule.class) != 0) {
+						b.removeAttachment(PoisonAmpoule.class);
+					} else {
+						b.addAttachment(new PoisonAmpoule((Body) found));
 					}
-				} else if(ev.isControlDown()) {
-					for(Body b :bodyList) {
-						if(b.getAttachmentSize(BreedingAmpoule.class) != 0) {
-							b.removeAttachment(BreedingAmpoule.class, true);
-						} else {
+				}
+			}
+			break;
+		case BREEDING_AMP:
+			if (ev.isShiftDown()) {
+				int flag = 0;
+				if (found instanceof Body) {
+					flag = ((Body) found).getAttachmentSize(BreedingAmpoule.class);
+				}
+				for (Body b : bodyList) {
+					if (flag == 0) {
+						if (b.getAttachmentSize(BreedingAmpoule.class) == 0)
 							b.addAttachment(new BreedingAmpoule(b));
-						}
-					}
-				} else {
-					if (found instanceof Body) {
-						Body b = (Body)found;
-						if(b.getAttachmentSize(BreedingAmpoule.class) != 0) {
-							b.removeAttachment(BreedingAmpoule.class, true);
-						} else {
-							b.addAttachment(new BreedingAmpoule((Body)found));
-						}
+					} else {
+						if (b.getAttachmentSize(BreedingAmpoule.class) != 0)
+							b.removeAttachment(BreedingAmpoule.class);
 					}
 				}
-				break;
-			case ANYD_AMP:
-				if(ev.isShiftDown()) {
-					int flag = 0;
-					if (found instanceof Body) {
-						flag = ((Body)found).getAttachmentSize(ANYDAmpoule.class);
+			} else if (ev.isControlDown()) {
+				for (Body b : bodyList) {
+					if (b.getAttachmentSize(BreedingAmpoule.class) != 0) {
+						b.removeAttachment(BreedingAmpoule.class);
+					} else {
+						b.addAttachment(new BreedingAmpoule(b));
 					}
-					for(Body b :bodyList) {
-						if(flag == 0) {
-							if(b.getAttachmentSize(ANYDAmpoule.class) == 0)
-								b.addAttachment(new ANYDAmpoule(b));
-						} else {
-							if(b.getAttachmentSize(ANYDAmpoule.class) != 0)
-								b.removeAttachment(ANYDAmpoule.class, true);
-						}
+				}
+			} else {
+				if (found instanceof Body) {
+					Body b = (Body) found;
+					if (b.getAttachmentSize(BreedingAmpoule.class) != 0) {
+						b.removeAttachment(BreedingAmpoule.class);
+					} else {
+						b.addAttachment(new BreedingAmpoule((Body) found));
 					}
-				} else if(ev.isControlDown()) {
-					for(Body b :bodyList) {
-						if(b.getAttachmentSize(ANYDAmpoule.class) != 0) {
-							b.removeAttachment(ANYDAmpoule.class, true);
-						} else {
+				}
+			}
+			break;
+		case ANYD_AMP:
+			if (ev.isShiftDown()) {
+				int flag = 0;
+				if (found instanceof Body) {
+					flag = ((Body) found).getAttachmentSize(ANYDAmpoule.class);
+				}
+				for (Body b : bodyList) {
+					if (flag == 0) {
+						if (b.getAttachmentSize(ANYDAmpoule.class) == 0)
 							b.addAttachment(new ANYDAmpoule(b));
-						}
-					}
-				} else {
-					if (found instanceof Body) {
-						Body b = (Body)found;
-						if(b.getAttachmentSize(ANYDAmpoule.class) != 0) {
-							b.removeAttachment(ANYDAmpoule.class, true);
-						} else {
-							b.addAttachment(new ANYDAmpoule((Body)found));
-						}
+					} else {
+						if (b.getAttachmentSize(ANYDAmpoule.class) != 0)
+							b.removeAttachment(ANYDAmpoule.class);
 					}
 				}
-				break;
+			} else if (ev.isControlDown()) {
+				for (Body b : bodyList) {
+					if (b.getAttachmentSize(ANYDAmpoule.class) != 0) {
+						b.removeAttachment(ANYDAmpoule.class);
+					} else {
+						b.addAttachment(new ANYDAmpoule(b));
+					}
+				}
+			} else {
+				if (found instanceof Body) {
+					Body b = (Body) found;
+					if (b.getAttachmentSize(ANYDAmpoule.class) != 0) {
+						b.removeAttachment(ANYDAmpoule.class);
+					} else {
+						b.addAttachment(new ANYDAmpoule((Body) found));
+					}
+				}
+			}
+			break;
 
-			default:
-				break;
+		default:
+			break;
 		}
 	}
 
@@ -1173,20 +1161,20 @@ public class GadgetAction {
 	 * @param found 対象オブジェクト
 	 */
 	public static void evaluateClean(GadgetList item, MouseEvent ev, Obj found) {
-		switch(item){
-			case INDIVIDUAL:
-				if (found instanceof Body) {
-					if (((Body)found).isDead()) {
-						found.remove();
-					} else {
-						((Body)found).setCleaning();
-				}
-				} else {
+		switch (item) {
+		case INDIVIDUAL:
+			if (found instanceof Body) {
+				if (((Body) found).isDead()) {
 					found.remove();
+				} else {
+					((Body) found).setCleaning();
 				}
-				break;
-			default:
-				break;
+			} else {
+				found.remove();
+			}
+			break;
+		default:
+			break;
 		}
 	}
 
@@ -1198,34 +1186,30 @@ public class GadgetAction {
 	 * @param found 対象オブジェクト
 	 */
 	public static void evaluateAccessory(GadgetList item, MouseEvent ev, Obj found) {
-		Body[] bodyList = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
-		if(ev.isShiftDown()) {
+		List<Body> bodyList = SimYukkuri.world.getCurrentMap().body;
+		if (ev.isShiftDown()) {
 			boolean flag = true;
 			if (found instanceof Body) {
-				flag = !((Body)found).hasOkazari();
+				flag = !((Body) found).hasOkazari();
 			}
-			for(Body b :bodyList) {
+			for (Body b : bodyList) {
 				if (!flag && b.hasOkazari()) {
 					b.takeOkazari(true);
-				}
-				else if(flag && !b.hasOkazari()) {
+				} else if (flag && !b.hasOkazari()) {
 					b.giveOkazari(Okazari.OkazariType.DEFAULT);
 				}
 			}
-		}
-		else if(ev.isControlDown()) {
-			for(Body b :bodyList) {
+		} else if (ev.isControlDown()) {
+			for (Body b : bodyList) {
 				if (b.hasOkazari()) {
 					b.takeOkazari(true);
-				}
-				else {
+				} else {
 					b.giveOkazari(Okazari.OkazariType.DEFAULT);
 				}
 			}
-		}
-		else {
+		} else {
 			if (found instanceof Body) {
-				Body b = (Body)found;
+				Body b = (Body) found;
 				if (b.hasOkazari()) {
 					b.takeOkazari(true);
 				} else {
@@ -1235,7 +1219,6 @@ public class GadgetAction {
 		}
 	}
 
-
 	/**対象物をクリックするアクション6
 	 * <br>おくるみカテゴリの実行
 	 *
@@ -1244,20 +1227,20 @@ public class GadgetAction {
 	 * @param found 対象オブジェクト
 	 */
 	public static void evaluatePants(GadgetList item, MouseEvent ev, Obj found) {
-		Body[] bodyList = SimYukkuri.world.currentMap.body.toArray(new Body[0]);
-		if(ev.isShiftDown()) {
+		List<Body> bodyList = SimYukkuri.world.getCurrentMap().body;
+		if (ev.isShiftDown()) {
 			boolean flag = true;
 			if (found instanceof Body) {
-				flag = !((Body)found).isHasPants();
+				flag = !((Body) found).isHasPants();
 			}
-			for(Body b :bodyList) {
+			for (Body b : bodyList) {
 				if (!flag && b.isHasPants())
 					b.takePants();
 				else if (flag && !b.isHasPants())
 					b.givePants();
 			}
-		} else if(ev.isControlDown()) {
-			for(Body b :bodyList) {
+		} else if (ev.isControlDown()) {
+			for (Body b : bodyList) {
 				if (b.isHasPants())
 					b.takePants();
 				else
@@ -1265,10 +1248,10 @@ public class GadgetAction {
 			}
 		} else {
 			if (found instanceof Body) {
-				if (((Body)found).isHasPants())
-					((Body)found).takePants();
+				if (((Body) found).isHasPants())
+					((Body) found).takePants();
 				else
-					((Body)found).givePants();
+					((Body) found).givePants();
 			}
 		}
 	}
@@ -1282,23 +1265,23 @@ public class GadgetAction {
 	 */
 	public static void evaluateFloorItems(GadgetList item, MouseEvent ev, Obj found) {
 		switch (item) {
-			case DIFFUSER:
-				if (found instanceof Diffuser) {
-					Diffuser.setupDiffuser((Diffuser)found, true);
-				}
-				break;
-			case ORANGE_POOL:
-				if (found instanceof OrangePool) {
-					OrangePool.setupOrange((OrangePool)found, true);
-				}
-				break;
-			case BREED_POOL:
-				if (found instanceof BreedingPool) {
-					BreedingPool.setupPool((BreedingPool)found, true);
-				}
-				break;
-			default:
-				break;
+		case DIFFUSER:
+			if (found instanceof Diffuser) {
+				Diffuser.setupDiffuser((Diffuser) found, true);
+			}
+			break;
+		case ORANGE_POOL:
+			if (found instanceof OrangePool) {
+				OrangePool.setupOrange((OrangePool) found, true);
+			}
+			break;
+		case BREED_POOL:
+			if (found instanceof BreedingPool) {
+				BreedingPool.setupPool((BreedingPool) found, true);
+			}
+			break;
+		default:
+			break;
 		}
 	}
 
@@ -1313,7 +1296,7 @@ public class GadgetAction {
 		switch (item) {
 		case YUNBA_SETUP:
 			if (found instanceof Yunba) {
-				Yunba.setupYunba((Yunba)found, true);
+				Yunba.setupYunba((Yunba) found, true);
 			}
 			break;
 		default:
@@ -1332,7 +1315,7 @@ public class GadgetAction {
 		switch (item) {
 		case BELTCONVEYOR_SETUP:
 			if (found instanceof BeltconveyorObj) {
-				BeltconveyorObj.setBeltconveyor((BeltconveyorObj)found, true);
+				BeltconveyorObj.setBeltconveyor((BeltconveyorObj) found, true);
 			}
 			break;
 		default:
@@ -1348,18 +1331,18 @@ public class GadgetAction {
 	 * @param found 対象オブジェクト
 	 */
 	public static void evaluateCommunicate(GadgetList item, MouseEvent ev, Obj found) {
-		switch(item){
-			case YUKKURISITEITTENE:
-				GadgetMenu.executeBodyMethod(ev, found, "voiceReaction", 0);
-				return;
-			case YUKKURIDIE:
-				GadgetMenu.executeBodyMethod(ev, found, "voiceReaction", 1);
-				return;
-			case YUKKURIFURIFURI:
-				GadgetMenu.executeBodyMethod(ev, found, "voiceReaction", 2);
-				return;
-			default:
-				break;
+		switch (item) {
+		case YUKKURISITEITTENE:
+			GadgetMenu.executeBodyMethod(ev, found, "voiceReaction", 0);
+			return;
+		case YUKKURIDIE:
+			GadgetMenu.executeBodyMethod(ev, found, "voiceReaction", 1);
+			return;
+		case YUKKURIFURIFURI:
+			GadgetMenu.executeBodyMethod(ev, found, "voiceReaction", 2);
+			return;
+		default:
+			break;
 		}
 	}
 
@@ -1373,157 +1356,144 @@ public class GadgetAction {
 	public static void evaluateTest(GadgetList item, MouseEvent ev, Obj found) {
 
 		switch (item) {
-			case RANKSET:
-				if (found instanceof Body) {
-					Body b = (Body)found;
-					BodyRank rank = b.getBodyRank();
-					if(rank == BodyRank.KAIYU) {
-						b.setBodyRank(BodyRank.NORAYU);
-					} else {
-						b.setBodyRank(BodyRank.KAIYU);
-					}
+		case RANKSET:
+			if (found instanceof Body) {
+				Body b = (Body) found;
+				BodyRank rank = b.getBodyRank();
+				if (rank == BodyRank.KAIYU) {
+					b.setBodyRank(BodyRank.NORAYU);
+				} else {
+					b.setBodyRank(BodyRank.KAIYU);
 				}
-				break;
-			case RANKSET2:
-				if (found instanceof Body) {
-					Body b = (Body)found;
-					PublicRank rank = b.getPublicRank();
-					if(rank == PublicRank.NONE) {
-						b.setPublicRank(PublicRank.UnunSlave);
-						b.getFavItem().clear();
-						Body p = b.getPartner();
-						if (p != null) {
-							// うんうんどれいになるようなくずとは りこんっ！だよ！！
-							b.setPartner(null);
-							p.setPartner(null);
-						}
-					} else {
-						b.setPublicRank(PublicRank.NONE);
-						b.getFavItem().clear();
+			}
+			break;
+		case RANKSET2:
+			if (found instanceof Body) {
+				Body b = (Body) found;
+				PublicRank rank = b.getPublicRank();
+				if (rank == PublicRank.NONE) {
+					b.setPublicRank(PublicRank.UnunSlave);
+					b.getFavItem().clear();
+					Body p = b.getPartner();
+					if (p != null) {
+						// うんうんどれいになるようなくずとは りこんっ！だよ！！
+						b.setPartner(null);
+						p.setPartner(null);
 					}
+				} else {
+					b.setPublicRank(PublicRank.NONE);
+					b.getFavItem().clear();
 				}
-				break;
-			case EVENT_SHIT:
-				if (found instanceof Body) {
-					Body b = (Body)found;
-					b.wakeup();
-					List<Body>childrenList = BodyLogic.createActiveChildList(b, true);
-					if( childrenList != null && childrenList.size() != 0)
-					{
-						FamilyActionLogic.goToShit(b, childrenList);
+			}
+			break;
+		case EVENT_SHIT:
+			if (found instanceof Body) {
+				Body b = (Body) found;
+				b.wakeup();
+				List<Body> childrenList = BodyLogic.createActiveChildList(b, true);
+				if (childrenList != null && childrenList.size() != 0) {
+					FamilyActionLogic.goToShit(b, childrenList);
 
+				}
+			}
+			break;
+		case EVENT_EAT:
+			if (found instanceof Body) {
+				Body b = (Body) found;
+				b.wakeup();
+				List<Body> childrenList = BodyLogic.createActiveChildList(b, true);
+				if (childrenList != null && childrenList.size() != 0) {
+					FamilyActionLogic.goToEat(b, childrenList);
+				}
+			}
+			break;
+		case EVENT_RIDEYUKKURI:
+			if (found instanceof Body) {
+				Body b = (Body) found;
+				b.wakeup();
+				List<Body> childrenList = BodyLogic.createActiveChildList(b, true);
+				if (childrenList != null && childrenList.size() != 0) {
+					FamilyActionLogic.rideOnParent(b, childrenList);
+				}
+			}
+			break;
+		case EVENT_PROUDCHILD:
+			if (found instanceof Body) {
+				Body b = (Body) found;
+				b.wakeup();
+				List<Body> childrenList = BodyLogic.createActiveChildList(b, true);
+				if (childrenList != null && childrenList.size() != 0) {
+					FamilyActionLogic.proudChild(b, childrenList);
+				}
+			}
+			break;
+		case SETVAIN:
+			if (found instanceof Body) {
+				Body b = (Body) found;
+				b.getInVain(true);
+			}
+			break;
+		case Yunnyaa:
+			if (found instanceof Body) {
+				Body b = (Body) found;
+				b.doYunnyaa(true);
+			}
+			break;
+		case BEGGINGFORLIFE:
+			if (found instanceof Body) {
+				Body b = (Body) found;
+				b.begForLife(true);
+			}
+			break;
+		case PREDATORSGAME:
+			if (found instanceof Body) {
+				Body b = (Body) found;
+				if (b.isPredatorType())
+					EventLogic.addWorldEvent(new PredatorsGameEvent(b, null, null, 1), b,
+							MessagePool.getMessage(b, MessagePool.Action.GameStart));
+			}
+			break;
+		case INVITEANTS:
+			if (ev.isShiftDown() || ev.isControlDown()) {
+				break;
+			} else {
+				if (found instanceof Body) {
+					Body b = (Body) found;
+					if (b.getAttachmentSize(Ants.class) != 0) {
+						b.removeAnts();
+					} else {
+						b.addAttachment(new Ants((Body) found));
 					}
 				}
+			}
+			break;
+		case FEED:
+			if (ev.isShiftDown() || ev.isControlDown()) {
 				break;
-			case EVENT_EAT:
+			} else {
 				if (found instanceof Body) {
-					Body b = (Body)found;
-					b.wakeup();
-					List<Body>childrenList = BodyLogic.createActiveChildList(b, true);
-					if( childrenList != null && childrenList.size() != 0)
-					{
-						FamilyActionLogic.goToEat(b, childrenList);
-					}
+					Body b = (Body) found;
+					b.feed();
 				}
-				break;
-			case EVENT_RIDEYUKKURI:
-				if (found instanceof Body) {
-					Body b = (Body)found;
-					b.wakeup();
-					List<Body>childrenList = BodyLogic.createActiveChildList(b, true);
-					if( childrenList != null && childrenList.size() != 0)
-					{
-						FamilyActionLogic.rideOnParent(b, childrenList);
-					}
+			}
+			break;
+		case BADGE:
+			if (found instanceof Body) {
+				Body b = (Body) found;
+				if (b.getAttachmentSize(Badge.class) != 0) {
+					b.removeAttachment(Badge.class);
+				} else {
+					BadgeLogic.badgeTest(b);
 				}
-				break;
-			case EVENT_PROUDCHILD:
-				if (found instanceof Body) {
-					Body b = (Body)found;
-					b.wakeup();
-					List<Body>childrenList = BodyLogic.createActiveChildList(b, true);
-					if( childrenList != null && childrenList.size() != 0)
-					{
-						FamilyActionLogic.proudChild(b, childrenList);
-					}
-				}
-				break;
-			case SETVAIN:
-				if (found instanceof Body) {
-					Body b = (Body)found;
-					b.getInVain(true);
-				}
-				break;
-			case Yunnyaa:
-				if (found instanceof Body) {
-					Body b = (Body)found;
-					b.doYunnyaa(true);
-				}
-				break;
-			case BEGGINGFORLIFE:
-				if (found instanceof Body) {
-					Body b = (Body)found;
-					b.begForLife(true);
-				}
-				break;
-			case PREDATORSGAME:
-				if (found instanceof Body) {
-					Body b = (Body)found;
-					if(b.isPredatorType())EventLogic.addWorldEvent(new PredatorsGameEvent(b, null, null, 1), b, MessagePool.getMessage(b, MessagePool.Action.GameStart));
-				}
-				break;
-			case INVITEANTS:
-				if(ev.isShiftDown() || ev.isControlDown()) {
-					break;
-				}
-				else {
-					if (found instanceof Body) {
-						Body b = (Body)found;
-						if(b.getAttachmentSize(Ants.class) != 0) {
-							b.removeAnts();
-						}
-						else {
-							b.addAttachment(new Ants((Body)found));
-						}
-					}
-				}
-				break;
-			case FEED:
-				if(ev.isShiftDown() || ev.isControlDown()) {
-					break;
-				}
-				else {
-					if (found instanceof Body) {
-						Body b = (Body)found;
-						b.feed();
-					}
-				}
-				break;
-			case BADGE:
-				if (found instanceof Body) {
-					Body b = (Body)found;
-					if( b.getAttachmentSize(Badge.class) != 0 ){
-						b.removeAttachment(Badge.class, true);
-					}
-					else{
-						BadgeLogic.badgeTest(b);
-					}
-				}
-				break;
-			case DEBUG2:
-				if (found instanceof Body) {
-					Body b = (Body)found;
-					b.killTime();
-				}
-				default:
-				break;
+			}
+			break;
+		case DEBUG2:
+			if (found instanceof Body) {
+				Body b = (Body) found;
+				b.killTime();
+			}
+		default:
+			break;
 		}
 	}
 }
-
-
-
-
-
-
-

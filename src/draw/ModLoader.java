@@ -17,7 +17,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Random;
 import java.util.Vector;
 
 import javax.imageio.ImageIO;
@@ -58,8 +57,6 @@ public class ModLoader
 	private static String bodyTheme = null;
 	
 	private static String developRoot = null;
-	
-	protected static Random rnd = new Random();
 	//表情の別バージョンの最大数
 	public static final int nMaxImgOtherVer = 6;
 	

@@ -1,7 +1,6 @@
 package src.event;
 
-import java.util.Random;
-
+import src.SimYukkuri;
 import src.base.Body;
 import src.base.EventPacket;
 import src.base.Obj;
@@ -26,7 +25,6 @@ public class FlyingEatEvent extends EventPacket implements java.io.Serializable 
 	private static final long serialVersionUID = 1L;
 	private static final int[] ofsZ = {2, 0, -5};
 	int tick = 0;
-	Random rnd = new Random();
 	/**
 	 * コンストラクタ.
 	 */
@@ -104,7 +102,7 @@ public class FlyingEatEvent extends EventPacket implements java.io.Serializable 
 			tick = 0;
 			FoodLogic.eatFood(b, Food.FoodType.BODY, Math.min(b.getEatAmount(), to.getBodyAmount()));
 			to.eatBody(Math.min(b.getEatAmount(), to.getBodyAmount()));
-			if (to.isSick() && rnd.nextBoolean()) b.addSickPeriod(100);
+			if (to.isSick() && SimYukkuri.RND.nextBoolean()) b.addSickPeriod(100);
 			if(to.isCrushed()){
 				//to.setLinkParent(null);
 				return true;
