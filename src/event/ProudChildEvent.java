@@ -12,6 +12,7 @@ import src.enums.PublicRank;
 import src.item.Barrier;
 import src.logic.BodyLogic;
 import src.system.MessagePool;
+import src.system.ResourceUtil;
 
 /***************************************************
 	おちびちゃん自慢イベント
@@ -58,6 +59,9 @@ public class ProudChildEvent extends EventPacket implements java.io.Serializable
 	@Override
 	public boolean simpleEventAction(Body b) {
 		if (getFrom().isShutmouth()) {
+			return true;
+		}
+		if(getFrom() == b) {
 			return true;
 		}
 		return false;
@@ -384,6 +388,6 @@ public class ProudChildEvent extends EventPacket implements java.io.Serializable
 
 	@Override
 	public String toString() {
-		return "おちびおひろめ";
+		return ResourceUtil.getInstance().read("event_proudchild");
 	}
 }

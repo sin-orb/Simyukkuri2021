@@ -14,6 +14,7 @@ import src.enums.AttachProperty;
 import src.enums.CriticalDamegeType;
 import src.enums.Direction;
 import src.enums.Event;
+import src.system.ResourceUtil;
 
 
 /****************************************
@@ -126,6 +127,6 @@ public class VeryShitAmpoule extends Attachment {
 	
 	@Override
 	public String toString() {
-		return "うんうんアンプル";
+		return ResourceUtil.getInstance().read("item_veryshit");
 	}
 }

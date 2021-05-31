@@ -13,6 +13,7 @@ import src.enums.AgeState;
 import src.enums.AttachProperty;
 import src.enums.Direction;
 import src.enums.Event;
+import src.system.ResourceUtil;
 
 
 /****************************************
@@ -121,6 +122,6 @@ public class OrangeAmpoule extends Attachment {
 	
 	@Override
 	public String toString() {
-		return "オレンジアンプル";
+		return ResourceUtil.getInstance().read("item_orange");
 	}
 }

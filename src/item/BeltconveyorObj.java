@@ -39,6 +39,7 @@ import src.game.Shit;
 import src.game.Stalk;
 import src.game.Vomit;
 import src.system.Cash;
+import src.system.ResourceUtil;
 import src.system.YukkuriFilterPanel;
 import src.util.YukkuriUtil;
 
@@ -88,7 +89,7 @@ public class BeltconveyorObj extends ObjEX implements java.io.Serializable {
 	protected int[] anPointY = new int[4];
 
 	public static enum Action {
-		YUKKURI_FILTER("ゆっくりフィルタ設定", ""),
+		YUKKURI_FILTER(ResourceUtil.getInstance().read("item_filtersettings"), ""),
 		;
 
 		private String name;
@@ -116,15 +117,15 @@ public class BeltconveyorObj extends ObjEX implements java.io.Serializable {
 		boundary.y = boundary.height >> 1;
 
 		// オプション
-		istrOptionList.add("超善良");
-		istrOptionList.add("善良");
-		istrOptionList.add("普通");
-		istrOptionList.add("ゲス");
-		istrOptionList.add("ドゲス");
-		istrOptionList.add("バッジ級");
-		istrOptionList.add("普通");
-		istrOptionList.add("餡子脳");
-		istrOptionList.add("死体のみ");
+		istrOptionList.add(ResourceUtil.getInstance().read("attitude_verynice"));
+		istrOptionList.add(ResourceUtil.getInstance().read("attitude_nice"));
+		istrOptionList.add(ResourceUtil.getInstance().read("attitude_normal"));
+		istrOptionList.add(ResourceUtil.getInstance().read("attitude_shithead"));
+		istrOptionList.add(ResourceUtil.getInstance().read("attitude_supershithead"));
+		istrOptionList.add(ResourceUtil.getInstance().read("intel_badge"));
+		istrOptionList.add(ResourceUtil.getInstance().read("intel_normal"));
+		istrOptionList.add(ResourceUtil.getInstance().read("intel_fool"));
+		istrOptionList.add(ResourceUtil.getInstance().read("item_onlydeadbody"));
 	}
 
 	@Override
@@ -448,13 +449,23 @@ public class BeltconveyorObj extends ObjEX implements java.io.Serializable {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static boolean setBeltconveyor(BeltconveyorObj belt, boolean init) {
 		String HOU_LIST[] = {
-				"奥", "手前", "右", "左"
+				ResourceUtil.getInstance().read("inside"),
+				ResourceUtil.getInstance().read("outside"),
+				ResourceUtil.getInstance().read("right"),
+				ResourceUtil.getInstance().read("left")
 		};
 		String OBJ_LIST[] = {
-				"すべて", "ゆっくりのみ", "餡子系のみ", "フードのみ", "茎のみ", "ゆっくり以外"
+				ResourceUtil.getInstance().read("all"),
+				ResourceUtil.getInstance().read("item_onlyyu"),
+				ResourceUtil.getInstance().read("item_onlyanko"),
+				ResourceUtil.getInstance().read("item_onlyfood"),
+				ResourceUtil.getInstance().read("item_onlystalk"),
+				ResourceUtil.getInstance().read("item_exceptyu")
 		};
 		String MOVE_LIST[] = {
-				"移動可能", "移動不可", "移動不可(1つだけ流す)"
+				ResourceUtil.getInstance().read("item_movable"),
+				ResourceUtil.getInstance().read("item_immovable"),
+				ResourceUtil.getInstance().read("item_immovableonlyone")
 		};
 		String SPEED_LIST[] = {
 				"x1.00", "x2.00", "x3.00", "x4.00"
@@ -464,19 +475,19 @@ public class BeltconveyorObj extends ObjEX implements java.io.Serializable {
 		mainPanel.setLayout(new GridLayout(5, 2));
 		JComboBox hou_Box = new JComboBox(HOU_LIST);
 		hou_Box.setSelectedIndex(hou_default);
-		mainPanel.add(new JLabel("方向："));
+		mainPanel.add(new JLabel(ResourceUtil.getInstance().read("item_direction")));
 		mainPanel.add(hou_Box);
 		JComboBox obj_Box = new JComboBox(OBJ_LIST);
 		obj_Box.setSelectedIndex(obj_default);
-		mainPanel.add(new JLabel("対象："));
+		mainPanel.add(new JLabel(ResourceUtil.getInstance().read("item_target")));
 		mainPanel.add(obj_Box);
 		JComboBox move_Box = new JComboBox(MOVE_LIST);
 		move_Box.setSelectedIndex(move_default);
-		mainPanel.add(new JLabel("移動可否："));
+		mainPanel.add(new JLabel(ResourceUtil.getInstance().read("item_moveornot")));
 		mainPanel.add(move_Box);
 		JComboBox speed_Box = new JComboBox(SPEED_LIST);
 		speed_Box.setSelectedIndex(speed_default);
-		mainPanel.add(new JLabel("速度："));
+		mainPanel.add(new JLabel(ResourceUtil.getInstance().read("item_speed")));
 		mainPanel.add(speed_Box);
 
 		ButtonListener buttonListener = new ButtonListener();
@@ -497,7 +508,8 @@ public class BeltconveyorObj extends ObjEX implements java.io.Serializable {
 			speed_Box.setSelectedIndex(belt.speed_before);
 		}
 
-		int dlgRet = JOptionPane.showConfirmDialog(SimYukkuri.mypane, mainPanel, "ベルトコンベア設定", 2, -1);
+		int dlgRet = JOptionPane.showConfirmDialog(SimYukkuri.mypane, mainPanel, 
+				ResourceUtil.getInstance().read("item_belconsettings"), 2, -1);
 		if (dlgRet != 0) {
 			return false;
 		}
@@ -632,7 +644,8 @@ public class BeltconveyorObj extends ObjEX implements java.io.Serializable {
 				List<String> istrOptionList = master.getOptionFilter();
 				List<Boolean> obOptionSelectionList = master.getOptionResultFilter();
 				List<YukkuriType> arrayTemp = master.getYukkuriFilter();
-				boolean bFilter = YukkuriFilterPanel.openFilterPanel("対象設定", "上段:ベルトコンベアで流さない種類を選択、下段:流す性質を選択",
+				boolean bFilter = YukkuriFilterPanel.openFilterPanel(ResourceUtil.getInstance().read("item_targetsettings"),
+						ResourceUtil.getInstance().read("item_explanation"),
 						istrOptionList, arrayTemp, obOptionSelectionList);
 				if (bFilter) {
 					master.setFilter(bFilter);

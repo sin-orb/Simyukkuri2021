@@ -48,15 +48,15 @@ public class IconPool {
 
 	/** ステータスアイコン */
 	public enum StatusIcon {
-		PREDATOR("predator.png", "捕食種"),
-		RAPER("raper.png", "れいぱー"),
-		PENIPENICUT("penipenicut.png", "ぺにぺに去勢"),
-		SPERM("sperm.png", "精子餡"),
-		UNBABY("unbaby.png", "胎生去勢"),
-		UNSHIT("unshit.png", "あにゃる閉鎖"),
-		UNSTALK("unstalk.png", "茎去勢"),
-		PHEROMONE("pheromone.png", "フェロモン"),
-		UNUNSLAVE("ununslave.png", "うんうん奴隷")
+		PREDATOR("predator.png", ResourceUtil.getInstance().read("system_predator")),
+		RAPER("raper.png", ResourceUtil.getInstance().read("system_raper")),
+		PENIPENICUT("penipenicut.png", ResourceUtil.getInstance().read("system_penicas")),
+		SPERM("sperm.png", ResourceUtil.getInstance().read("system_sperm")),
+		UNBABY("unbaby.png", ResourceUtil.getInstance().read("system_babycas")),
+		UNSHIT("unshit.png", ResourceUtil.getInstance().read("system_analclose")),
+		UNSTALK("unstalk.png", ResourceUtil.getInstance().read("system_stalkcas")),
+		PHEROMONE("pheromone.png", ResourceUtil.getInstance().read("system_pheromone")),
+		UNUNSLAVE("ununslave.png", ResourceUtil.getInstance().read("system_ununslave"))
 		;
 		public String fileName;
 		public String help;

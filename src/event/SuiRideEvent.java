@@ -14,6 +14,7 @@ import src.item.Sui;
 import src.logic.BodyLogic;
 import src.logic.EventLogic;
 import src.system.MessagePool;
+import src.system.ResourceUtil;
 
 /***************************************************
 	すぃーの乗車管理イベント
@@ -250,6 +251,6 @@ public class SuiRideEvent extends EventPacket implements java.io.Serializable {
 
 	@Override
 	public String toString() {
-		return "すぃーにのるよ";
+		return ResourceUtil.getInstance().read("event_ridesui");
 	}
 }

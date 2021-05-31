@@ -4,6 +4,7 @@ import src.base.Body;
 import src.base.EventPacket;
 import src.base.Obj;
 import src.base.Okazari;
+import src.system.ResourceUtil;
 
 
 /***************************************************
@@ -58,6 +59,6 @@ public class GetTrashOkazariEvent extends EventPacket implements java.io.Seriali
 	
 	@Override
 	public String toString() {
-		return "ゴミおかざり拾い";
+		return ResourceUtil.getInstance().read("event_trashokazari");
 	}
 }

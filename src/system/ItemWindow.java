@@ -12,6 +12,7 @@ import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
+import java.util.Locale;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -33,7 +34,7 @@ import src.system.MainCommandUI.ToolButtonLabel;
  */
 public class ItemWindow extends JDialog implements WindowListener, MouseListener, ActionListener, ListDataListener {
 
-	private static final String TITLE = "持ち物";
+	private static final String TITLE = Locale.getDefault().getLanguage().equals(new Locale("ja").getLanguage())? "持ちもの": "Belongings";
 
 	@SuppressWarnings("rawtypes")
 	public JList itemList;
@@ -61,7 +62,7 @@ public class ItemWindow extends JDialog implements WindowListener, MouseListener
 		JPanel bp = new JPanel();
 		bp.setLayout(new BoxLayout(bp, BoxLayout.X_AXIS));
 
-		delButton = new JButton("捨てる");
+		delButton = new JButton(ResourceUtil.getInstance().read("system_throwaway"));
 //		delButton.setPreferredSize(new Dimension(80, 30));
 		delButton.addActionListener(this);
 		bp.add(delButton);

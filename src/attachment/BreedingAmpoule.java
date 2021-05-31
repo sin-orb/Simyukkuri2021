@@ -13,6 +13,7 @@ import src.enums.AttachProperty;
 import src.enums.Direction;
 import src.enums.Event;
 import src.game.Dna;
+import src.system.ResourceUtil;
 import src.util.YukkuriUtil;
 
 /****************************************
@@ -126,6 +127,6 @@ public class BreedingAmpoule extends Attachment {
 	}
 	@Override
 	public String toString() {
-		return "精子アンプル";
+		return ResourceUtil.getInstance().read("item_breeding");
 	}
 }

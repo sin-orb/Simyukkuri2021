@@ -23,6 +23,7 @@ import src.draw.Terrarium;
 import src.enums.ObjEXType;
 import src.enums.Type;
 import src.item.Food.FoodType;
+import src.system.ResourceUtil;
 
 /***************************************************
  * ゴミ捨て場
@@ -32,10 +33,14 @@ public class GarbageStation extends ObjEX implements java.io.Serializable {
 
 	/**出す餌の種類テーブル*/
 	public static enum GomiType {
-		WASTE("生ゴミ", FoodType.WASTE_NORA), BITTER("苦い", FoodType.BITTER_NORA), HOT("辛い", FoodType.HOT_NORA), LEMON_POP(
-				"ラムネ", FoodType.LEMONPOP_NORA), VIYUGRA("バイゆグラ", FoodType.VIYUGRA_NORA), NORMAL("ふつう",
-						FoodType.FOOD_NORA), SWEETS1("あまあま(普通)",
-								FoodType.SWEETS_NORA1), SWEETS2("あまあま(高級)", FoodType.SWEETS_NORA2),
+		WASTE(ResourceUtil.getInstance().read("command_food_garbage"), FoodType.WASTE_NORA),
+		BITTER(ResourceUtil.getInstance().read("command_food_bitter"), FoodType.BITTER_NORA), 
+		HOT(ResourceUtil.getInstance().read("command_food_hot"), FoodType.HOT_NORA), 
+		LEMON_POP(ResourceUtil.getInstance().read("command_food_ramune"), FoodType.LEMONPOP_NORA), 
+		VIYUGRA(ResourceUtil.getInstance().read("command_food_viagra"), FoodType.VIYUGRA_NORA),
+		NORMAL(ResourceUtil.getInstance().read("command_food_normal"),FoodType.FOOD_NORA),
+		SWEETS1(ResourceUtil.getInstance().read("command_food_sweet1"),FoodType.SWEETS_NORA1),
+		SWEETS2(ResourceUtil.getInstance().read("command_food_sweet2"), FoodType.SWEETS_NORA2),
 								;
 
 		public String name;

@@ -1,10 +1,12 @@
 package src.enums;
 
+import src.system.ResourceUtil;
+
 /** ゆっくりの成長段階（赤ゆ/子ゆ/成ゆ） */
 public enum AgeState {
-	BABY("赤ゆ"),
-	CHILD("子ゆ"),
-	ADULT("成ゆ")
+	BABY(ResourceUtil.getInstance().read("enums_babyyu")),
+	CHILD(ResourceUtil.getInstance().read("enums_childyu")),
+	ADULT(ResourceUtil.getInstance().read("enums_adultyu"))
 	;
 	/** ゆっくりの成長段階名称 */
 	public String name;

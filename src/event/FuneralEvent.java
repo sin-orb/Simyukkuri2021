@@ -12,6 +12,7 @@ import src.enums.PublicRank;
 import src.item.Barrier;
 import src.logic.BodyLogic;
 import src.system.MessagePool;
+import src.system.ResourceUtil;
 
 /***************************************************
 	葬式イベント
@@ -54,6 +55,9 @@ public class FuneralEvent extends EventPacket implements java.io.Serializable {
 	@Override
 	public boolean simpleEventAction(Body b) {
 		if (getFrom().isShutmouth()) {
+			return true;
+		}
+		if(getFrom() == b) {
 			return true;
 		}
 		return false;
@@ -374,8 +378,7 @@ public class FuneralEvent extends EventPacket implements java.io.Serializable {
 			case TALK:
 				if (bActionFlag) {
 					if (checkWait(b, nWait)) {
-						b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.FueralTALK), 52, true,
-								false);
+						b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.FuneralTalk), 52, true, false);
 						b.setHappiness(Happiness.HAPPY);
 						b.getInVain(false);
 						b.stay(nWait2);
@@ -426,6 +429,6 @@ public class FuneralEvent extends EventPacket implements java.io.Serializable {
 
 	@Override
 	public String toString() {
-		return "おとむらい";
+		return ResourceUtil.getInstance().read("event_funeral");
 	}
 }

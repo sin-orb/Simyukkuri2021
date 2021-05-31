@@ -16,6 +16,7 @@ import src.enums.Happiness;
 import src.enums.ImageCode;
 import src.enums.UnbirthBabyState;
 import src.system.MessagePool;
+import src.system.ResourceUtil;
 
 /****************************************
  *  針
@@ -167,6 +168,6 @@ public class Needle extends Attachment {
 
 	@Override
 	public String toString() {
-		return "針";
+		return ResourceUtil.getInstance().read("item_needle");
 	}
 }

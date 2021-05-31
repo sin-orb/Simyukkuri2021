@@ -2,6 +2,7 @@ package src.system;
 
 import java.awt.Point;
 import java.awt.event.MouseEvent;
+import java.util.Locale;
 
 import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
@@ -65,8 +66,8 @@ public class ItemMenu {
 
 	/** 素手のとき */
 	public static enum GetMenu {
-		PICKUP("取る"),
-		STATUS("ステータス")
+		PICKUP(Locale.getDefault().getLanguage().equals(new Locale("ja").getLanguage())? "持つ": "Take"),
+		STATUS(Locale.getDefault().getLanguage().equals(new Locale("ja").getLanguage())? "ステータス": "Status")
 		;
 		public String name;
 		private GetMenu(String str) {
@@ -96,12 +97,12 @@ public class ItemMenu {
 	
 	/** シェイプメニュー */
 	public static enum ShapeMenu {
-		SETUP("設定変更"),
-		HERVEST("収穫"),
-		TOP("最上位へ"),
-		UP("ひとつ上へ"),
-		DOWN("ひとつ下へ"),
-		BOTTOM("最下位へ")
+		SETUP(Locale.getDefault().getLanguage().equals(new Locale("ja").getLanguage())? "設定変更": "Change Settings"),
+		HERVEST(Locale.getDefault().getLanguage().equals(new Locale("ja").getLanguage())? "収穫": "Harvest"),
+		TOP(Locale.getDefault().getLanguage().equals(new Locale("ja").getLanguage())? "最上位へ": "To Highest"),
+		UP(Locale.getDefault().getLanguage().equals(new Locale("ja").getLanguage())? "ひとつ上へ": "higher one"),
+		DOWN(Locale.getDefault().getLanguage().equals(new Locale("ja").getLanguage())? "ひとつ下へ": "lower one"),
+		BOTTOM(Locale.getDefault().getLanguage().equals(new Locale("ja").getLanguage())? "最下位へ": "To Lowest")
 		;
 		public String name;
 		private ShapeMenu(String str) {

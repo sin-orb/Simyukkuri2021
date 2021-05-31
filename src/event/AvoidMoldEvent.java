@@ -12,6 +12,7 @@ import src.enums.PublicRank;
 import src.item.Barrier;
 import src.logic.BodyLogic;
 import src.system.MessagePool;
+import src.system.ResourceUtil;
 
 /***************************************************
 	かびたゆっくりへの反応イベント
@@ -299,6 +300,6 @@ public class AvoidMoldEvent extends EventPacket implements java.io.Serializable 
 	
 	@Override
 	public String toString() {
-		return "かびゆしんでね！";
+		return ResourceUtil.getInstance().read("event_mold");
 	}
 }

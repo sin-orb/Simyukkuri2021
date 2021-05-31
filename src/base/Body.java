@@ -94,6 +94,7 @@ import src.system.ItemMenu.GetMenuTarget;
 import src.system.ItemMenu.UseMenuTarget;
 import src.system.MainCommandUI;
 import src.system.MessagePool;
+import src.system.ResourceUtil;
 import src.system.Sprite;
 import src.util.IniFileUtil;
 import src.util.YukkuriUtil;
@@ -153,9 +154,10 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 
 	@Override
 	public String toString() {
-		StringBuilder ret = new StringBuilder(getNameJ());
+		String name = ResourceUtil.IS_JP ? getNameJ() : getNameE();
+		StringBuilder ret = new StringBuilder(name);
 		if (isUnBirth()) {
-			ret.append(" (実ゆ)");
+			ret.append("(" + ResourceUtil.getInstance().read("base_fruit") + ")" );
 		} else {
 			ret.append(" (" + getBodyAgeState().name + ")");
 		}
@@ -6366,6 +6368,21 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			stay();
 		}
 	}
+	/**
+	 * Shiftキー押下での動作.
+	 * @return 茎去勢有無
+	 */
+	public final boolean getStalkCastration() {
+		return isStalkCastration();
+	}
+
+	/**
+	 * Shiftキー押下での動作.
+	 * @return 胎生去勢有無
+	 */
+	public final boolean getBodyCastration() {
+		return isBodyCastration();
+	}
 
 	/**
 	 * 茎去勢を設定する.
@@ -7491,7 +7508,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			if (isShutmouth()) {
 				idx += getImage(ImageCode.SHUTMOUTH.ordinal(), direction, layer, idx);
 			}
-			//盲目蔵の追加
+			//盲目グラの追加
 			if (isBlind()) {
 				idx += getImage(ImageCode.BLIND.ordinal(), direction, layer, idx);
 			}
@@ -7844,7 +7861,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		if (isShutmouth()) {
 			idx += getImage(ImageCode.SHUTMOUTH.ordinal(), direction, layer, idx);
 		}
-		//盲目蔵の追加
+		//盲目グラの追加
 		if (isBlind()) {
 			idx += getImage(ImageCode.BLIND.ordinal(), direction, layer, idx);
 		}

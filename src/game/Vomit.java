@@ -19,6 +19,7 @@ import src.enums.YukkuriType;
 import src.item.Barrier;
 import src.system.ItemMenu.GetMenuTarget;
 import src.system.ItemMenu.UseMenuTarget;
+import src.system.ResourceUtil;
 /**
  * 吐餡クラス.
  */
@@ -42,7 +43,9 @@ public class Vomit extends Obj implements java.io.Serializable {
 	private int amount = 0;
 	private int vomitType = 0;
 	private static final float[] imageSize = {0.25f, 0.5f, 1.0f};
-	private static final String[] sizeDisplayName = {"小", "中", "大"};
+	private static final String[] sizeDisplayName = {ResourceUtil.getInstance().read("game_little"), 
+			ResourceUtil.getInstance().read("game_middle"),
+			ResourceUtil.getInstance().read("game_big")};
 	private static final int value[] = {50,100,300};
 	
 	private static BufferedImage[][][] images = null;
@@ -103,7 +106,7 @@ public class Vomit extends Obj implements java.io.Serializable {
 	
 	@Override
 	public String toString() {
-		StringBuilder ret = new StringBuilder("吐餡");
+		StringBuilder ret = new StringBuilder(ResourceUtil.getInstance().read("game_toan"));
 		ret.append(sizeDisplayName[ageState.ordinal()]);
 		ret.append("(");
 		ret.append(ownerName);
@@ -148,7 +151,7 @@ public class Vomit extends Obj implements java.io.Serializable {
 		if(b == null) {
 			ageState = AgeState.ADULT;
 		} else {
-			ownerName = b.getNameJ();
+			ownerName = ResourceUtil.IS_JP ? b.getNameJ() : b.getNameE();
 			ageState = b.getBodyAgeState();
 		}
 		switch (ageState) {

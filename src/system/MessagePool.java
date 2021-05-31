@@ -590,7 +590,7 @@ public class MessagePool {
 		/** おとむらいイベント雑談(親側) */
 		FuneralTalkFrom,
 		/** おとむらいイベント雑談(子側) */
-		FueralTALK,
+		FuneralTalk,
 		/** さようならっ！ */
 		GoodbyeForever,
 		/** おとむらいイベント終了時(親側) */
@@ -829,12 +829,12 @@ public class MessagePool {
 			name = body.getMyName();
 		}
 		if (name.isEmpty()) {
-			name = body.getNameJ();
+			name = ResourceUtil.IS_JP ? body.getNameJ() : body.getNameE();
 			//name =YukkuriUtil.getYukkuriClassName(body.getType());
 		}
-		name2 = body.getNameJ2();
+		name2 = ResourceUtil.IS_JP ? body.getNameJ2() : body.getNameE2();
 		if (body.getPartner() != null)
-			partnerName = body.getPartner().getNameJ();
+			partnerName = ResourceUtil.IS_JP ? body.getPartner().getNameJ() : body.getPartner().getNameE();
 
 		if (map == null)
 			return "NO MESSAGE FILE";

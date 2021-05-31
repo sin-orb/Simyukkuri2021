@@ -6,6 +6,7 @@ import src.base.Obj;
 import src.enums.FavItemType;
 import src.enums.PublicRank;
 import src.item.Barrier;
+import src.system.ResourceUtil;
 
 /***************************************************
 	お気に入りの情報を家族で共有するシンプルアクション
@@ -54,6 +55,6 @@ public class FavCopyEvent extends EventPacket implements java.io.Serializable {
 	
 	@Override
 	public String toString() {
-		return "おきにいりっ！";
+		return ResourceUtil.getInstance().read("event_favcopy");
 	}
 }

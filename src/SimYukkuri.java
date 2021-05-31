@@ -63,6 +63,7 @@ import src.system.ItemMenu.ShapeMenuTarget;
 import src.system.MainCommandUI;
 import src.system.MapPlaceData;
 import src.system.MessagePool;
+import src.system.ResourceUtil;
 
 /**
  * しむゆっくりメイン
@@ -70,9 +71,9 @@ import src.system.MessagePool;
 public class SimYukkuri extends JFrame {
 	static final long serialVersionUID = 1L;
 	/** アプリ名 */
-	public static final String TITLE = "しむゆっくり/SimYukkuri";
+	public static final String TITLE = ResourceUtil.getInstance().read("title");
 	/** バージョン */
-	public static final String VERSION = "Ver.2021/05/02リファクタリング版";
+	public static final String VERSION = ResourceUtil.getInstance().read("version");
 	/** うにょフラグ */
 	public static boolean UNYO = true;
 	/** 流しモード（0:いつもの 1:まりちゃ流しOnly 2：共存環境） */
@@ -139,7 +140,6 @@ public class SimYukkuri extends JFrame {
 	 * コンストラクタ
 	 */
 	public SimYukkuri() {
-
 		super(TITLE + "  " + VERSION);
 
 		ClassLoader loader = this.getClass().getClassLoader();
@@ -250,7 +250,7 @@ public class SimYukkuri extends JFrame {
 			mythread = new Thread(mypane);
 			mythread.start();
 		} catch (OutOfMemoryError e) {
-			JOptionPane.showMessageDialog(null, "メモリ不足です");
+			JOptionPane.showMessageDialog(null, ResourceUtil.getInstance().read("outofmemory"));
 			System.exit(0);
 		}
 	}
@@ -961,12 +961,14 @@ public class SimYukkuri extends JFrame {
 		JRadioButton draw2;
 		ButtonGroup drawGrp;
 
-		mess1 = "テラリウムサイズ";
-		screen = new String[] { "ウィンドウ(900*700)", "ウィンドウ(1260*980)", "フルスクリーン" };
+		mess1 = ResourceUtil.getInstance().read("terrarium_size");
+		screen = new String[] { ResourceUtil.getInstance().read("window_900_700"),
+				ResourceUtil.getInstance().read("window_1260_980"),
+				ResourceUtil.getInstance().read("full_screen") };
 
-		mess2 = "背景テーマ";
-		mess3 = "道具テーマ";
-		mess4 = "ゆっくりテーマ";
+		mess2 = ResourceUtil.getInstance().read("background_theme");
+		mess3 = ResourceUtil.getInstance().read("item_theme");
+		mess4 = ResourceUtil.getInstance().read("yukkuri_theme");
 
 		JPanel mainPanel = new JPanel();
 		mainPanel.setLayout(new GridLayout(2, 1, 0, 0));
@@ -987,16 +989,16 @@ public class SimYukkuri extends JFrame {
 		winPanel.add(fieldScaleCombo);
 
 		drawGrp = new ButtonGroup();
-		draw1 = new JRadioButton("速度優先");
+		draw1 = new JRadioButton(ResourceUtil.getInstance().read("priority_speed"));
 		draw1.setSelected(true);
 		drawGrp.add(draw1);
 		grpPanel.add(draw1);
-		draw2 = new JRadioButton("画質優先");
+		draw2 = new JRadioButton(ResourceUtil.getInstance().read("priority_quality"));
 		drawGrp.add(draw2);
 		grpPanel.add(draw2);
 
 		// --> うにょ版試験マージ
-		JCheckBox checkboxDebug = new JCheckBox("うにょON");
+		JCheckBox checkboxDebug = new JCheckBox(ResourceUtil.getInstance().read("unyo_on"));
 		grpPanel.add(checkboxDebug);
 		// <-- うにょ版試験マージ
 		winPanel.add(grpPanel);

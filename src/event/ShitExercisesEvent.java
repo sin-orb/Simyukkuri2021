@@ -15,6 +15,7 @@ import src.enums.PublicRank;
 import src.item.Barrier;
 import src.logic.BodyLogic;
 import src.system.MessagePool;
+import src.system.ResourceUtil;
 
 /***************************************************
 	うんうん体操イベント
@@ -467,6 +468,6 @@ public class ShitExercisesEvent extends EventPacket implements java.io.Serializa
 
 	@Override
 	public String toString() {
-		return "うんうんたいそう";
+		return ResourceUtil.getInstance().read("event_unun");
 	}
 }

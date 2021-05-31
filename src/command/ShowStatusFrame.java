@@ -27,6 +27,7 @@ import src.base.Obj;
 import src.enums.FavItemType;
 import src.enums.Pain;
 import src.enums.TakeoutItemType;
+import src.system.ResourceUtil;
 
 /**
  * ゆっくりのステータスを表示するFrame.
@@ -67,14 +68,14 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 	 * コンストラクタ.
 	 */
 	private ShowStatusFrame() {
-		setTitle("ゆっくりのステータス画面");
+		setTitle(ResourceUtil.getInstance().read("command_status_title"));
 		setBounds(100, 100, 788, 464);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
-		JLabel lblNewLabel = new JLabel("ゆっくりのID");
+		JLabel lblNewLabel = new JLabel(ResourceUtil.getInstance().read("command_status_id"));
 		lblNewLabel.setBounds(12, 10, 78, 20);
 		contentPane.add(lblNewLabel);
 
@@ -83,7 +84,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		contentPane.add(textField);
 		textField.setColumns(10);
 
-		JLabel lblNewLabel_1 = new JLabel("名称");
+		JLabel lblNewLabel_1 = new JLabel(ResourceUtil.getInstance().read("command_status_name"));
 		lblNewLabel_1.setBounds(243, 14, 29, 13);
 		contentPane.add(lblNewLabel_1);
 
@@ -93,7 +94,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		contentPane.add(textField_1);
 		textField_1.setColumns(10);
 
-		JButton btnNewButton = new JButton("更新");
+		JButton btnNewButton = new JButton(ResourceUtil.getInstance().read("command_status_new"));
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//ワールドのゆっくりリストから目的のゆっくりを探し出し、その情報を更新する。すでにいない場合は更新されない。
@@ -101,7 +102,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 				try {
 					idTemp = Integer.parseInt(textField.getText());
 				} catch (Exception ex) {
-					showError("IDには数値を入力してください。");
+					showError(ResourceUtil.getInstance().read("command_status_numericerror"));
 					return;
 				}
 				final int id = idTemp;
@@ -109,21 +110,21 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 						.filter(b -> b.getUniqueID() == id)
 						.collect(Collectors.toList());
 				if (yukkuris.size() == 0) {
-					showError("存在しないゆっくりを参照しようとしています。");
+					showError(ResourceUtil.getInstance().read("command_status_noexistyukkurierror"));
 				} else {
 					ShowStatusFrame.getInstance().giveBodyInfo(yukkuris.get(0));
 				}
 			}
 		});
 
-		JButton btnNewButton_1 = new JButton("次ID表示");
+		JButton btnNewButton_1 = new JButton(ResourceUtil.getInstance().read("command_status_nextid"));
 		btnNewButton_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int idTemp = 0;
 				try {
 					idTemp = Integer.parseInt(textField.getText());
 				} catch (Exception ex) {
-					showError("IDには数値を入力してください。");
+					showError(ResourceUtil.getInstance().read("command_status_numericerror"));
 					return;
 				}
 				final int id = idTemp;
@@ -141,7 +142,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 					target = 0;
 				}
 				if (sorted.size() == 0) {
-					showError("存在しないゆっくりを参照しようとしています。");
+					showError(ResourceUtil.getInstance().read("command_status_noexistyukkurierror"));
 					return;
 				} else {
 					ShowStatusFrame.getInstance().giveBodyInfo(sorted.get(target));
@@ -150,7 +151,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		});
 		btnNewButton_1.setBounds(665, 42, 91, 21);
 		contentPane.add(btnNewButton_1);
-		JButton btnNewButton_2 = new JButton("前ID表示");
+		JButton btnNewButton_2 = new JButton(ResourceUtil.getInstance().read("command_status_beforeid"));
 		btnNewButton_2.addActionListener(new ActionListener() {
 			@SuppressWarnings("unchecked")
 			public void actionPerformed(ActionEvent e) {
@@ -158,7 +159,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 				try {
 					idTemp = Integer.parseInt(textField.getText());
 				} catch (Exception ex) {
-					showError("IDには数値を入力してください。");
+					showError(ResourceUtil.getInstance().read("command_status_numericerror"));
 					return;
 				}
 				final int id = idTemp;
@@ -176,7 +177,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 					target = 0;
 				}
 				if (sorted.size() == 0) {
-					showError("存在しないゆっくりを参照しようとしています。");
+					showError(ResourceUtil.getInstance().read("command_status_noexistyukkurierror"));
 					return;
 				} else {
 					ShowStatusFrame.getInstance().giveBodyInfo(sorted.get(target));
@@ -188,13 +189,13 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		btnNewButton.setBounds(665, 11, 91, 21);
 		contentPane.add(btnNewButton);
 
-		JButton btnNewButton_3 = new JButton("最初");
+		JButton btnNewButton_3 = new JButton(ResourceUtil.getInstance().read("command_status_first"));
 		btnNewButton_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				List<Body> sorted = SimYukkuri.world.getCurrentMap().body.stream()
 						.sorted().collect(Collectors.toList());
 				if (sorted.size() == 0) {
-					showError("存在しないゆっくりを参照しようとしています。");
+					showError(ResourceUtil.getInstance().read("command_status_noexistyukkurierror"));
 					return;
 				} else {
 					ShowStatusFrame.getInstance().giveBodyInfo(sorted.get(0));
@@ -204,14 +205,14 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		btnNewButton_3.setBounds(665, 104, 91, 21);
 		contentPane.add(btnNewButton_3);
 
-		JButton btnNewButton_4 = new JButton("最後");
+		JButton btnNewButton_4 = new JButton(ResourceUtil.getInstance().read("command_status_last"));
 		btnNewButton_4.addActionListener(new ActionListener() {
 			@SuppressWarnings("unchecked")
 			public void actionPerformed(ActionEvent e) {
 				List<Body> sorted = (List<Body>) SimYukkuri.world.getCurrentMap().body.stream()
 						.sorted(Comparator.reverseOrder()).collect(Collectors.toList());
 				if (sorted.size() == 0) {
-					showError("存在しないゆっくりを参照しようとしています。");
+					showError(ResourceUtil.getInstance().read("command_status_noexistyukkurierror"));
 					return;
 				} else {
 					ShowStatusFrame.getInstance().giveBodyInfo(sorted.get(0));
@@ -221,7 +222,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		btnNewButton_4.setBounds(665, 135, 91, 21);
 		contentPane.add(btnNewButton_4);
 
-		JButton btnNewButton_5 = new JButton("ランダム");
+		JButton btnNewButton_5 = new JButton(ResourceUtil.getInstance().read("command_status_random"));
 		btnNewButton_5.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int random = SimYukkuri.RND.nextInt(SimYukkuri.world.getCurrentMap().body.size());
@@ -231,14 +232,14 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		btnNewButton_5.setBounds(665, 167, 91, 21);
 		contentPane.add(btnNewButton_5);
 
-		JButton btnNewButton_6 = new JButton("妻（夫）");
+		JButton btnNewButton_6 = new JButton(ResourceUtil.getInstance().read("command_status_partner"));
 		btnNewButton_6.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int idTemp = 0;
 				try {
 					idTemp = Integer.parseInt(textField.getText());
 				} catch (Exception ex) {
-					showError("IDには数値を入力してください。");
+					showError(ResourceUtil.getInstance().read("command_status_numericerror"));
 					return;
 				}
 				final int id = idTemp;
@@ -246,12 +247,12 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 						.filter(b -> b.getUniqueID() == id)
 						.collect(Collectors.toList());
 				if (yukkuris.size() == 0) {
-					showError("存在しないゆっくりを参照しようとしています。");
+					showError(ResourceUtil.getInstance().read("command_status_noexistyukkurierror"));
 					return;
 				} else {
 					Body partner = yukkuris.get(0).getPartner();
 					if (partner == null) {
-						showError("存在しないゆっくりを参照しようとしています。");
+						showError(ResourceUtil.getInstance().read("command_status_noexistyukkurierror"));
 						return;
 					} else {
 						ShowStatusFrame.getInstance().giveBodyInfo(partner);
@@ -262,14 +263,14 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		btnNewButton_6.setBounds(665, 198, 91, 21);
 		contentPane.add(btnNewButton_6);
 
-		JButton btnNewButton_7 = new JButton("子供");
+		JButton btnNewButton_7 = new JButton(ResourceUtil.getInstance().read("command_status_child"));
 		btnNewButton_7.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int idTemp = 0;
 				try {
 					idTemp = Integer.parseInt(textField.getText());
 				} catch (Exception ex) {
-					showError("IDには数値を入力してください。");
+					showError(ResourceUtil.getInstance().read("command_status_numericerror"));
 					return;
 				}
 				final int id = idTemp;
@@ -277,12 +278,12 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 						.filter(b -> b.getUniqueID() == id)
 						.collect(Collectors.toList());
 				if (yukkuris.size() == 0) {
-					showError("存在しないゆっくりを参照しようとしています。");
+					showError(ResourceUtil.getInstance().read("command_status_noexistyukkurierror"));
 					return;
 				} else {
 					List<Body> children = yukkuris.get(0).getChildrenList();
 					if (children.size() == 0) {
-						showError("存在しないゆっくりを参照しようとしています。");
+						showError(ResourceUtil.getInstance().read("command_status_noexistyukkurierror"));
 						return;
 					} else {
 						ShowStatusFrame.getInstance().giveBodyInfo(children.get(0));
@@ -293,14 +294,14 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		btnNewButton_7.setBounds(665, 229, 91, 21);
 		contentPane.add(btnNewButton_7);
 
-		JButton btnNewButton_8 = new JButton("姉");
+		JButton btnNewButton_8 = new JButton(ResourceUtil.getInstance().read("command_status_eldersister"));
 		btnNewButton_8.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int idTemp = 0;
 				try {
 					idTemp = Integer.parseInt(textField.getText());
 				} catch (Exception ex) {
-					showError("IDには数値を入力してください。");
+					showError(ResourceUtil.getInstance().read("command_status_numericerror"));
 					return;
 				}
 				final int id = idTemp;
@@ -308,12 +309,12 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 						.filter(b -> b.getUniqueID() == id)
 						.collect(Collectors.toList());
 				if (yukkuris.size() == 0) {
-					showError("存在しないゆっくりを参照しようとしています。");
+					showError(ResourceUtil.getInstance().read("command_status_noexistyukkurierror"));
 					return;
 				} else {
 					List<Body> elderSisters = yukkuris.get(0).getElderSisterList();
 					if (elderSisters.size() == 0) {
-						showError("存在しないゆっくりを参照しようとしています。");
+						showError(ResourceUtil.getInstance().read("command_status_noexistyukkurierror"));
 						return;
 					} else {
 						ShowStatusFrame.getInstance().giveBodyInfo(elderSisters.get(0));
@@ -324,14 +325,14 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		btnNewButton_8.setBounds(665, 260, 91, 21);
 		contentPane.add(btnNewButton_8);
 
-		JButton btnNewButton_9 = new JButton("妹");
+		JButton btnNewButton_9 = new JButton(ResourceUtil.getInstance().read("command_status_littlesister"));
 		btnNewButton_9.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int idTemp = 0;
 				try {
 					idTemp = Integer.parseInt(textField.getText());
 				} catch (Exception ex) {
-					showError("IDには数値を入力してください。");
+					showError(ResourceUtil.getInstance().read("command_status_numericerror"));
 					return;
 				}
 				final int id = idTemp;
@@ -339,12 +340,12 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 						.filter(b -> b.getUniqueID() == id)
 						.collect(Collectors.toList());
 				if (yukkuris.size() == 0) {
-					showError("存在しないゆっくりを参照しようとしています。");
+					showError(ResourceUtil.getInstance().read("command_status_noexistyukkurierror"));
 					return;
 				} else {
 					List<Body> sisters = yukkuris.get(0).getSisterList();
 					if (sisters.size() == 0) {
-						showError("存在しないゆっくりを参照しようとしています。");
+						showError(ResourceUtil.getInstance().read("command_status_noexistyukkurierror"));
 						return;
 					} else {
 						ShowStatusFrame.getInstance().giveBodyInfo(sisters.get(0));
@@ -355,14 +356,14 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		btnNewButton_9.setBounds(665, 291, 91, 21);
 		contentPane.add(btnNewButton_9);
 
-		JButton btnNewButton_10 = new JButton("父");
+		JButton btnNewButton_10 = new JButton(ResourceUtil.getInstance().read("command_status_father"));
 		btnNewButton_10.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int idTemp = 0;
 				try {
 					idTemp = Integer.parseInt(textField.getText());
 				} catch (Exception ex) {
-					showError("IDには数値を入力してください。");
+					showError(ResourceUtil.getInstance().read("command_status_numericerror"));
 					return;
 				}
 				final int id = idTemp;
@@ -370,13 +371,13 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 						.filter(b -> b.getUniqueID() == id)
 						.collect(Collectors.toList());
 				if (yukkuris.size() == 0) {
-					showError("存在しないゆっくりを参照しようとしています。");
+					showError(ResourceUtil.getInstance().read("command_status_noexistyukkurierror"));
 					return;
 				} else {
 					Body target = yukkuris.get(0);
 					Body father = target.getFather();
 					if (father == null) {
-						showError("存在しないゆっくりを参照しようとしています。");
+						showError(ResourceUtil.getInstance().read("command_status_noexistyukkurierror"));
 						return;
 					} else {
 						ShowStatusFrame.getInstance().giveBodyInfo(father);
@@ -387,14 +388,14 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		btnNewButton_10.setBounds(665, 322, 91, 21);
 		contentPane.add(btnNewButton_10);
 
-		JButton btnNewButton_11 = new JButton("母");
+		JButton btnNewButton_11 = new JButton(ResourceUtil.getInstance().read("command_status_mother"));
 		btnNewButton_11.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				int idTemp = 0;
 				try {
 					idTemp = Integer.parseInt(textField.getText());
 				} catch (Exception ex) {
-					showError("IDには数値を入力してください。");
+					showError(ResourceUtil.getInstance().read("command_status_numericerror"));
 					return;
 				}
 				final int id = idTemp;
@@ -402,13 +403,13 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 						.filter(b -> b.getUniqueID() == id)
 						.collect(Collectors.toList());
 				if (yukkuris.size() == 0) {
-					showError("存在しないゆっくりを参照しようとしています。");
+					showError(ResourceUtil.getInstance().read("command_status_noexistyukkurierror"));
 					return;
 				} else {
 					Body target = yukkuris.get(0);
 					Body mother = target.getMother();
 					if (mother == null) {
-						showError("存在しないゆっくりを参照しようとしています。");
+						showError(ResourceUtil.getInstance().read("command_status_noexistyukkurierror"));
 						return;
 					} else {
 						ShowStatusFrame.getInstance().giveBodyInfo(mother);
@@ -419,7 +420,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		btnNewButton_11.setBounds(665, 351, 91, 21);
 		contentPane.add(btnNewButton_11);
 
-		JLabel lblNewLabel_2 = new JLabel("年齢");
+		JLabel lblNewLabel_2 = new JLabel(ResourceUtil.getInstance().read("command_status_age"));
 		lblNewLabel_2.setBounds(494, 16, 37, 13);
 		contentPane.add(lblNewLabel_2);
 
@@ -429,7 +430,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		contentPane.add(textField_2);
 		textField_2.setColumns(10);
 
-		JLabel lblNewLabel_3 = new JLabel("目的");
+		JLabel lblNewLabel_3 = new JLabel(ResourceUtil.getInstance().read("command_status_purpose"));
 		lblNewLabel_3.setBounds(12, 50, 78, 13);
 		contentPane.add(lblNewLabel_3);
 
@@ -439,7 +440,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		contentPane.add(textField_3);
 		textField_3.setColumns(10);
 
-		JLabel lblNewLabel_4 = new JLabel("目的座標");
+		JLabel lblNewLabel_4 = new JLabel(ResourceUtil.getInstance().read("command_status_purposecoordinate"));
 		lblNewLabel_4.setBounds(224, 50, 62, 13);
 		contentPane.add(lblNewLabel_4);
 
@@ -449,7 +450,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		contentPane.add(textField_4);
 		textField_4.setColumns(10);
 
-		JLabel lblNewLabel_5 = new JLabel("イベント");
+		JLabel lblNewLabel_5 = new JLabel(ResourceUtil.getInstance().read("command_status_event"));
 		lblNewLabel_5.setBounds(427, 51, 62, 13);
 		contentPane.add(lblNewLabel_5);
 
@@ -459,7 +460,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		contentPane.add(textField_5);
 		textField_5.setColumns(10);
 
-		JLabel lblNewLabel_6 = new JLabel("非ゆっくり症耐性度");
+		JLabel lblNewLabel_6 = new JLabel(ResourceUtil.getInstance().read("command_status_nyd"));
 		lblNewLabel_6.setBounds(12, 85, 128, 13);
 		contentPane.add(lblNewLabel_6);
 
@@ -469,7 +470,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		contentPane.add(textField_6);
 		textField_6.setColumns(10);
 
-		JLabel lblNewLabel_7 = new JLabel("現在HP / MAXHP");
+		JLabel lblNewLabel_7 = new JLabel(ResourceUtil.getInstance().read("command_status_hp"));
 		lblNewLabel_7.setBounds(12, 120, 96, 13);
 		contentPane.add(lblNewLabel_7);
 
@@ -479,7 +480,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		contentPane.add(textField_7);
 		textField_7.setColumns(10);
 
-		JLabel lblNewLabel_8 = new JLabel("現在満腹度 / MAX満腹度");
+		JLabel lblNewLabel_8 = new JLabel(ResourceUtil.getInstance().read("command_status_stomach"));
 		lblNewLabel_8.setBounds(389, 122, 140, 13);
 		contentPane.add(lblNewLabel_8);
 
@@ -489,7 +490,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		contentPane.add(textField_8);
 		textField_8.setColumns(10);
 
-		JLabel lblNewLabel_9 = new JLabel("呼称");
+		JLabel lblNewLabel_9 = new JLabel(ResourceUtil.getInstance().read("command_status_naming"));
 		lblNewLabel_9.setBounds(243, 85, 50, 13);
 		contentPane.add(lblNewLabel_9);
 
@@ -499,7 +500,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		contentPane.add(textField_9);
 		textField_9.setColumns(10);
 
-		JLabel lblNewLabel_10 = new JLabel("ゆかびレベル");
+		JLabel lblNewLabel_10 = new JLabel(ResourceUtil.getInstance().read("command_status_moldlevel"));
 		lblNewLabel_10.setBounds(12, 155, 96, 13);
 		contentPane.add(lblNewLabel_10);
 
@@ -509,7 +510,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		contentPane.add(textField_10);
 		textField_10.setColumns(10);
 
-		JLabel lblNewLabel_11 = new JLabel("体重");
+		JLabel lblNewLabel_11 = new JLabel(ResourceUtil.getInstance().read("command_status_weight"));
 		lblNewLabel_11.setBounds(243, 155, 50, 13);
 		contentPane.add(lblNewLabel_11);
 
@@ -519,7 +520,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		contentPane.add(textField_11);
 		textField_11.setColumns(10);
 
-		JLabel lblNewLabel_12 = new JLabel("あんこ量");
+		JLabel lblNewLabel_12 = new JLabel(ResourceUtil.getInstance().read("command_status_quantity"));
 		lblNewLabel_12.setBounds(479, 157, 61, 13);
 		contentPane.add(lblNewLabel_12);
 
@@ -529,7 +530,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		contentPane.add(textField_12);
 		textField_12.setColumns(10);
 
-		JLabel lblNewLabel_13 = new JLabel("足焼きレベル");
+		JLabel lblNewLabel_13 = new JLabel(ResourceUtil.getInstance().read("command_status_footbakelevel"));
 		lblNewLabel_13.setBounds(12, 188, 96, 13);
 		contentPane.add(lblNewLabel_13);
 
@@ -539,7 +540,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		contentPane.add(textField_13);
 		textField_13.setColumns(10);
 
-		JLabel lblNewLabel_14 = new JLabel("お気に入りアイテム");
+		JLabel lblNewLabel_14 = new JLabel(ResourceUtil.getInstance().read("command_status_favs"));
 		lblNewLabel_14.setBounds(427, 87, 140, 13);
 		contentPane.add(lblNewLabel_14);
 
@@ -549,7 +550,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		contentPane.add(textField_14);
 		textField_14.setColumns(10);
 
-		JLabel lblNewLabel_15 = new JLabel("トラウマ");
+		JLabel lblNewLabel_15 = new JLabel(ResourceUtil.getInstance().read("command_status_trauma"));
 		lblNewLabel_15.setBounds(479, 187, 61, 13);
 		contentPane.add(lblNewLabel_15);
 
@@ -559,7 +560,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		contentPane.add(textField_15);
 		textField_15.setColumns(10);
 
-		JLabel lblNewLabel_16 = new JLabel("姉");
+		JLabel lblNewLabel_16 = new JLabel(ResourceUtil.getInstance().read("command_status_eldersister"));
 		lblNewLabel_16.setBounds(12, 221, 50, 13);
 		contentPane.add(lblNewLabel_16);
 
@@ -569,7 +570,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		contentPane.add(textField_16);
 		textField_16.setColumns(10);
 
-		JLabel lblNewLabel_17 = new JLabel("妹");
+		JLabel lblNewLabel_17 = new JLabel(ResourceUtil.getInstance().read("command_status_littlesister"));
 		lblNewLabel_17.setBounds(12, 247, 50, 13);
 		contentPane.add(lblNewLabel_17);
 
@@ -579,7 +580,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		contentPane.add(textField_17);
 		textField_17.setColumns(10);
 
-		JLabel lblNewLabel_18 = new JLabel("子");
+		JLabel lblNewLabel_18 = new JLabel(ResourceUtil.getInstance().read("command_status_child"));
 		lblNewLabel_18.setBounds(12, 275, 50, 13);
 		contentPane.add(lblNewLabel_18);
 
@@ -589,11 +590,11 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		contentPane.add(textField_18);
 		textField_18.setColumns(10);
 
-		JLabel lblNewLabel_19 = new JLabel("装備品");
+		JLabel lblNewLabel_19 = new JLabel(ResourceUtil.getInstance().read("command_status_equip"));
 		lblNewLabel_19.setBounds(207, 309, 50, 13);
 		contentPane.add(lblNewLabel_19);
 
-		JLabel lblNewLabel_20 = new JLabel("運搬中アイテム");
+		JLabel lblNewLabel_20 = new JLabel(ResourceUtil.getInstance().read("command_status_conveyitem"));
 		lblNewLabel_20.setBounds(441, 341, 91, 13);
 		contentPane.add(lblNewLabel_20);
 
@@ -603,7 +604,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		contentPane.add(textField_20);
 		textField_20.setColumns(10);
 
-		JLabel lblNewLabel_21 = new JLabel("状態");
+		JLabel lblNewLabel_21 = new JLabel(ResourceUtil.getInstance().read("command_status_status"));
 		lblNewLabel_21.setBounds(12, 393, 50, 13);
 		contentPane.add(lblNewLabel_21);
 
@@ -613,7 +614,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		contentPane.add(textField_21);
 		textField_21.setColumns(10);
 
-		JLabel lblNewLabel_22 = new JLabel("パートナー");
+		JLabel lblNewLabel_22 = new JLabel(ResourceUtil.getInstance().read("command_status_partner"));
 		lblNewLabel_22.setBounds(14, 307, 76, 13);
 		contentPane.add(lblNewLabel_22);
 
@@ -629,7 +630,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		contentPane.add(textField_19);
 		textField_19.setColumns(10);
 
-		JLabel lblNewLabel_23 = new JLabel("たかっているアリの数");
+		JLabel lblNewLabel_23 = new JLabel(ResourceUtil.getInstance().read("command_status_ants"));
 		lblNewLabel_23.setBounds(14, 337, 181, 13);
 		contentPane.add(lblNewLabel_23);
 
@@ -639,7 +640,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		contentPane.add(textField_23);
 		textField_23.setColumns(10);
 
-		JLabel lblNewLabel_24 = new JLabel("壁にブロックされた数");
+		JLabel lblNewLabel_24 = new JLabel(ResourceUtil.getInstance().read("command_status_blockcount"));
 		lblNewLabel_24.setBounds(14, 366, 164, 13);
 		contentPane.add(lblNewLabel_24);
 
@@ -649,7 +650,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		contentPane.add(textField_24);
 		textField_24.setColumns(10);
 
-		JLabel lblNewLabel_25 = new JLabel("動ける状態か");
+		JLabel lblNewLabel_25 = new JLabel(ResourceUtil.getInstance().read("command_status_canmove"));
 		lblNewLabel_25.setBounds(441, 369, 80, 13);
 		contentPane.add(lblNewLabel_25);
 
@@ -671,36 +672,36 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		String purpose = null;
 		switch (b.getPurposeOfMoving()) {
 		case BED:
-			purpose = "眠りたい";
+			purpose = ResourceUtil.getInstance().read("command_status_wantsleep");
 			break;
 		case FOOD:
-			purpose = "食事したい";
+			purpose = ResourceUtil.getInstance().read("command_status_wanteat");
 			break;
 		case NONE:
-			purpose = "特になし";
+			purpose = ResourceUtil.getInstance().read("command_status_noespecially");
 			break;
 		case SHIT:
-			purpose = "うんうんしたい";
+			purpose = ResourceUtil.getInstance().read("command_status_wantunun");
 			break;
 		case STEAL:
-			purpose = "おかざり盗みたい";
+			purpose = ResourceUtil.getInstance().read("command_status_wantsteal");
 			break;
 		case SUKKIRI:
-			purpose = "すっきりしたい";
+			purpose = ResourceUtil.getInstance().read("command_status_wantsukkiri");
 			break;
 		case TAKEOUT:
-			purpose = "アイテム持ち出したい";
+			purpose = ResourceUtil.getInstance().read("command_status_wanttakeout");
 			break;
 		default:
-			purpose = "ゆっくりしたい";
+			purpose = ResourceUtil.getInstance().read("command_status_wantyukkuri");
 		}
 		textField_3.setText(purpose);
-		String moveTarget = "なし";
+		String moveTarget = ResourceUtil.getInstance().read("command_status_nothing");
 		if (b.getMoveTarget() != null) {
 			moveTarget = b.getMoveTarget().getX() + "," + b.getMoveTarget().getY();
 		}
 		textField_4.setText(moveTarget);
-		String event = "参加イベントなし";
+		String event = ResourceUtil.getInstance().read("command_status_nothing");
 		if (b.getCurrentEvent() != null) {
 			event = b.getCurrentEvent().toString();
 		}
@@ -716,13 +717,13 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		String footBake = null;
 		switch (b.getFootBakeLevel()) {
 		case CRITICAL:
-			footBake = "致命的";
+			footBake = ResourceUtil.getInstance().read("command_status_fatal");
 			break;
 		case MIDIUM:
-			footBake = "中程度";
+			footBake = ResourceUtil.getInstance().read("command_status_middle");
 			break;
 		default:
-			footBake = "焼かれていない";
+			footBake = ResourceUtil.getInstance().read("command_status_nothing");
 		}
 		textField_13.setText(footBake);
 		String fav = "";
@@ -732,19 +733,19 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 			}
 			fav = fav.substring(0, fav.length() - 1);
 		} else {
-			fav = "なし";
+			fav = ResourceUtil.getInstance().read("command_status_nothing");
 		}
 		textField_14.setText(fav);
 		String trauma = null;
 		switch (b.getTrauma()) {
 		case Factory:
-			trauma = "加工所";
+			trauma = ResourceUtil.getInstance().read("command_status_plant");
 			break;
 		case Ubuse:
-			trauma = "虐待";
+			trauma = ResourceUtil.getInstance().read("command_status_abuse");
 			break;
 		default:
-			trauma = "なし";
+			trauma = ResourceUtil.getInstance().read("command_status_nothing");
 		}
 		textField_15.setText(trauma);
 		String elder = "";
@@ -758,7 +759,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 			}
 			elder = elder.substring(0, elder.length() - 2);
 		} else {
-			elder = "なし";
+			elder = ResourceUtil.getInstance().read("command_status_nothing");
 		}
 		textField_16.setText(elder);
 		String sister = "";
@@ -772,7 +773,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 			}
 			sister = sister.substring(0, sister.length() - 2);
 		} else {
-			sister = "なし";
+			sister = ResourceUtil.getInstance().read("command_status_nothing");
 		}
 		textField_17.setText(sister);
 		String child = "";
@@ -786,88 +787,88 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 			}
 			child = child.substring(0, child.length() - 1);
 		} else {
-			child = "なし";
+			child = ResourceUtil.getInstance().read("command_status_nothing");
 		}
 		textField_18.setText(child);
-		textField_19.setText(b.getPartner() != null ? String.valueOf(b.getPartner().getUniqueID()) : "なし");
+		textField_19.setText(b.getPartner() != null ? String.valueOf(b.getPartner().getUniqueID()) : ResourceUtil.getInstance().read("command_status_nothing"));
 		String bring = "";
 		if (b.getTakeoutItem().size() != 0) {
 			for (TakeoutItemType item : b.getTakeoutItem().keySet()) {
 				switch (item) {
 				case FOOD:
-					bring = "ふーど";
+					bring = ResourceUtil.getInstance().read("command_status_food");
 					break;
 				case SHIT:
-					bring = "うんうん";
+					bring = ResourceUtil.getInstance().read("command_status_unun");
 					break;
 				case TOY:
-					bring = "おもちゃ";
+					bring = ResourceUtil.getInstance().read("command_status_toys");
 					break;
 				default:
-					bring = "赤ゆ/子ゆ";
+					bring = ResourceUtil.getInstance().read("command_status_children");
 				}
 			}
 		} else {
-			bring = "なし";
+			bring = ResourceUtil.getInstance().read("command_status_nothing");
 		}
 		textField_20.setText(bring);
 		String emo = "";
 		if (b.isAngry()) {
-			emo += "怒 / ";
+			emo += ResourceUtil.getInstance().read("command_status_anger");
 		}
 		if (b.isScare()) {
-			emo += "怯 / ";
+			emo += ResourceUtil.getInstance().read("command_status_scare");
 		}
 		if (b.getPainState() != Pain.NONE) {
-			emo += "痛 / ";
+			emo += ResourceUtil.getInstance().read("command_status_hurt");
 		}
 		if (b.isSad()) {
-			emo += "悲 / ";
+			emo += ResourceUtil.getInstance().read("command_status_sad");
 		}
 		if (b.isBlind()) {
-			emo += "盲 / ";
+			emo += ResourceUtil.getInstance().read("command_status_blind");
 		}
 		if (b.isbPurupuru()) {
-			emo += "震 / ";
+			emo += ResourceUtil.getInstance().read("command_status_shake");
 		}
 		if (b.isDirty()) {
-			emo += "汚 / ";
+			emo += ResourceUtil.getInstance().read("command_status_dirty");
 		}
 		if (b.isExciting()) {
-			emo += "発情 / ";
+			emo += ResourceUtil.getInstance().read("command_status_hatsujou");
 		}
 		if (b.isHappy()) {
-			emo += "嬉 / ";
+			emo += ResourceUtil.getInstance().read("command_status_pleasure");
 		}
 		if (b.isMelt()) {
-			emo += "溶 / ";
+			emo += ResourceUtil.getInstance().read("command_status_melt");
 		}
 		if (b.isOnlyAmaama()) {
-			emo += "舌肥 / ";
+			emo += ResourceUtil.getInstance().read("command_status_tastedestruct");
 		}
 		if (b.isRelax()) {
-			emo += "ゆっくりしてる / ";
+			emo += ResourceUtil.getInstance().read("command_status_doyukkuri");
 		}
 		if (b.isSilent()) {
-			emo += "黙 / ";
+			emo += ResourceUtil.getInstance().read("command_status_silent");
 		}
 		if (b.isSleepy()) {
-			emo += "眠い / ";
+			emo += ResourceUtil.getInstance().read("command_status_sleepy");
 		}
 		if (b.isStaying()) {
-			emo += "待機 / ";
+			emo += ResourceUtil.getInstance().read("command_status_wait");
 		}
 		if (b.isVain()) {
-			emo += "キリッ / ";
+			emo += ResourceUtil.getInstance().read("command_status_vain");
 		}
 		if (b.isWet()) {
-			emo += "濡 / ";
+			emo += ResourceUtil.getInstance().read("command_status_wet");
 		}
 		if (b.isYunnyaa()) {
-			emo += "ゆんやあ / ";
+			emo += ResourceUtil.getInstance().read("command_status_yunyaa");
 		}
 		if (emo.length() == 0) {
-			emo = "特段の状態なし";
+			emo = ResourceUtil.getInstance().read("command_status_nostate");
 		} else {
 			emo = emo.substring(0, emo.length() - 2);
 		}
@@ -879,7 +880,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 			}
 		}
 		if (attach.length() == 0) {
-			attach = "なし";
+			attach = ResourceUtil.getInstance().read("command_status_nothing");
 		} else {
 			attach = attach.substring(0, attach.length() - 2);
 		}
@@ -887,7 +888,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 
 		textField_23.setText(String.valueOf(b.getNumOfAnts()));
 		textField_24.setText(String.valueOf(b.getBlockedCount()));
-		textField_25.setText(b.isLockmove() ? "動けない" : "動ける");
+		textField_25.setText(b.isLockmove() ? ResourceUtil.getInstance().read("command_status_cantmove") : ResourceUtil.getInstance().read("command_status_canmove"));
 	}
 
 	public static void showError(String s) {

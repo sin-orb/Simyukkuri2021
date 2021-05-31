@@ -110,6 +110,7 @@ import src.system.LoadWindow;
 import src.system.LoggerYukkuri;
 import src.system.MainCommandUI;
 import src.system.MapPlaceData;
+import src.system.ResourceUtil;
 import src.system.Sprite;
 import src.util.BodyUtil;
 import src.yukkuri.Alice;
@@ -195,11 +196,19 @@ public class MyPane extends JPanel implements Runnable {
 	/**ゆっくり追加ウィンドウ用チェックボックス群*/
 	static final String[] namesCommonJ = { Marisa.nameJ, Reimu.nameJ, Alice.nameJ, Patch.nameJ, Chen.nameJ,
 			Myon.nameJ };
+	/**ゆっくり追加ウィンドウ用チェックボックス群(英語)*/
+	static final String[] namesCommonE = { Marisa.nameE, Reimu.nameE, Alice.nameE, Patch.nameE, Chen.nameE,
+			Myon.nameE };
 	/**ゆっくり追加ウィンドウの、希少種用名前欄*/
 	static final String[] namesRareJ = { Yurusanae.nameJ, Ayaya.nameJ, Tenko.nameJ, Udonge.nameJ, Meirin.nameJ,
 			Suwako.nameJ, Chiruno.nameJ, Eiki.nameJ, Ran.nameJ, Nitori.nameJ, Yuuka.nameJ, Sakuya.nameJ };
+	/**ゆっくり追加ウィンドウの、希少種用名前欄（英語）*/
+	static final String[] namesRareE = { Yurusanae.nameE, Ayaya.nameE, Tenko.nameE, Udonge.nameE, Meirin.nameE,
+			Suwako.nameE, Chiruno.nameE, Eiki.nameE, Ran.nameE, Nitori.nameE, Yuuka.nameE, Sakuya.nameE };
 	/**ゆっくり追加ウィンドウの、捕食種用名前欄*/
 	static final String[] namesPredatorJ = { Remirya.nameJ, Fran.nameJ, Yuyuko.nameJ };
+	/**ゆっくり追加ウィンドウの、捕食種用名前欄(英語)*/
+	static final String[] namesPredatorE = { Remirya.nameE, Fran.nameE, Yuyuko.nameE };
 
 	/** 描画設定フラグ群*/
 	public static boolean isDisableScript = false;
@@ -430,7 +439,7 @@ public class MyPane extends JPanel implements Runnable {
 				// TODO 自動生成された catch ブロック
 				e.printStackTrace();
 			} catch (OutOfMemoryError e) {
-				JOptionPane.showMessageDialog(null, "メモリ不足です");
+				JOptionPane.showMessageDialog(null, ResourceUtil.getInstance().read("out_of_memory"));
 			}
 		}
 	}
@@ -514,15 +523,18 @@ public class MyPane extends JPanel implements Runnable {
 	public class MyAddYukkuriListener implements ItemListener, ActionListener {
 		@SuppressWarnings({ "unchecked", "rawtypes" })
 		public void itemStateChanged(ItemEvent e) {
-
+			boolean isJp = ResourceUtil.IS_JP;
 			if (e.getStateChange() == ItemEvent.SELECTED) {
 				if (e.getSource() == cb3) {
 					if (cb3.getSelectedIndex() == 0) {
-						cb1.setModel(new DefaultComboBoxModel(namesCommonJ));
+						String[] namesCommon = isJp ? namesCommonJ : namesCommonE;
+						cb1.setModel(new DefaultComboBoxModel(namesCommon));
 					} else if (cb3.getSelectedIndex() == 1) {
-						cb1.setModel(new DefaultComboBoxModel(namesRareJ));
+						String[] namesRare = isJp ? namesRareJ : namesRareE;
+						cb1.setModel(new DefaultComboBoxModel(namesRare));
 					} else {
-						cb1.setModel(new DefaultComboBoxModel(namesPredatorJ));
+						String[] namesPredator = isJp ? namesPredatorJ : namesPredatorE;
+						cb1.setModel(new DefaultComboBoxModel(namesPredator));
 					}
 				} else if (e.getSource() == cb4) {
 					if (cb4.getSelectedIndex() == 0) {
@@ -569,21 +581,21 @@ public class MyPane extends JPanel implements Runnable {
 		final int BABY = 0, CHILD = 1, ADULT = 2;
 		MyAddYukkuriListener mayl = new MyAddYukkuriListener();
 
-		String[] tempAges = { "赤ちゃん", "子供", "大人" };
+		String[] tempAges = { ResourceUtil.getInstance().read("draw_baby"), ResourceUtil.getInstance().read("draw_child"), ResourceUtil.getInstance().read("draw_adult") };
 		ages = tempAges;
-		String[] tempRare = { "通常種", "希少種", "捕食種" };
+		String[] tempRare = { ResourceUtil.getInstance().read("draw_normalsp"), ResourceUtil.getInstance().read("draw_raresp"), ResourceUtil.getInstance().read("draw_predsp") };
 		rare = tempRare;
-		String[] tempo = { "はい", "いいえ" };
+		String[] tempo = { ResourceUtil.getInstance().read("yes"), ResourceUtil.getInstance().read("no") };
 		options = tempo;
-		String[] tempmode = { "OFF", "通常種", "希少種", "通常種＋希少種" };
+		String[] tempmode = { ResourceUtil.getInstance().read("off"), ResourceUtil.getInstance().read("draw_normalsp"), ResourceUtil.getInstance().read("draw_raresp"), ResourceUtil.getInstance().read("draw_normraresp") };
 		mode = tempmode;
 		String[] tempnum = { "1", "2", "3", "4", "5", "10", "50", "100" };
 		num = tempnum;
-		mess1 = "どのゆっくりを追加しますか？";
-		mess2 = "もっと追加しますか？";
-		mess3 = "ランダムモード";
-		mess4 = "追加数";
-		mess5 = "強制レイパー化";
+		mess1 = ResourceUtil.getInstance().read("draw_addmes");
+		mess2 = ResourceUtil.getInstance().read("draw_addmore");
+		mess3 = ResourceUtil.getInstance().read("draw_randommode");
+		mess4 = ResourceUtil.getInstance().read("draw_addnum");
+		mess5 = ResourceUtil.getInstance().read("draw_raperize");
 
 		for (int choice = 0; choice == 0;) {
 			JPanel panel = new JPanel();
@@ -600,9 +612,9 @@ public class MyPane extends JPanel implements Runnable {
 			cb3.addItemListener(mayl);
 			cb1 = new JComboBox();
 			if (cb3.getSelectedIndex() == 0) {
-				cb1.setModel(new DefaultComboBoxModel(namesCommonJ));
+				cb1.setModel(new DefaultComboBoxModel(ResourceUtil.IS_JP?  namesCommonJ : namesCommonE));
 			} else {
-				cb1.setModel(new DefaultComboBoxModel(namesRareJ));
+				cb1.setModel(new DefaultComboBoxModel(ResourceUtil.IS_JP? namesRareJ : namesRareE));
 			}
 			cb1.setMaximumRowCount(8);
 			cb1.setSelectedIndex(0);

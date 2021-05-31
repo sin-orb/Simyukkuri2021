@@ -24,6 +24,7 @@ import javax.imageio.ImageIO;
 import src.Const;
 import src.enums.ImageCode;
 import src.system.IniFileReader;
+import src.system.ResourceUtil;
 
 /*****************************************************
 	データの読み込み拡張
@@ -108,7 +109,7 @@ public class ModLoader
 	private static Vector<String> createThemeList(String root)
 	{
 		Vector<String> list = new Vector<String>();
-		list.add("デフォルト");
+		list.add(ResourceUtil.getInstance().read("draw_dropdown_default"));
 		
 		// フォルダ一覧取得
 		File dir = new File(root);

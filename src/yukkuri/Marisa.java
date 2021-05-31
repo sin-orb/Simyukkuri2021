@@ -24,6 +24,7 @@ import src.enums.ImageCode;
 import src.enums.Numbering;
 import src.enums.YukkuriType;
 import src.system.BodyLayer;
+import src.system.ResourceUtil;
 import src.util.IniFileUtil;
 import src.util.YukkuriUtil;
 
@@ -263,7 +264,11 @@ public class Marisa extends Body implements java.io.Serializable {
 		if (anMyName[getBodyAgeState().ordinal()] != null) {
 			return anMyName[getBodyAgeState().ordinal()];
 		}
-		return nameJ;
+		if (ResourceUtil.IS_JP) {
+			return nameJ;
+		} else {
+			return nameE;
+		}
 	}
 	@Override
 	public String getMyNameD() {

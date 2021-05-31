@@ -19,6 +19,7 @@ import src.item.Barrier;
 import src.logic.BodyLogic;
 import src.logic.FamilyActionLogic;
 import src.system.MessagePool;
+import src.system.ResourceUtil;
 
 /***************************************************
 	レイパー襲撃に対する反応イベント
@@ -356,6 +357,6 @@ public class RaperReactionEvent extends EventPacket implements java.io.Serializa
 
 	@Override
 	public String toString() {
-		return "れいぱーじゃぁあ";
+		return ResourceUtil.getInstance().read("event_raperreaction");
 	}
 }

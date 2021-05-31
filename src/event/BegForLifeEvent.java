@@ -10,6 +10,7 @@ import src.enums.Happiness;
 import src.enums.ImageCode;
 import src.enums.Intelligence;
 import src.system.MessagePool;
+import src.system.ResourceUtil;
 
 /***************************************************
 	命乞いイベント
@@ -208,6 +209,6 @@ public class BegForLifeEvent extends EventPacket implements java.io.Serializable
 
 	@Override
 	public String toString() {
-		return "たすけろじじい";
+		return ResourceUtil.getInstance().read("event_beg");
 	}
 }

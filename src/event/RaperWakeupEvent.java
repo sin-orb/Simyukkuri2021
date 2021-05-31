@@ -5,6 +5,7 @@ import src.base.EventPacket;
 import src.base.Obj;
 import src.item.Barrier;
 import src.logic.EventLogic;
+import src.system.ResourceUtil;
 
 /***************************************************
 	レイパー発情通知イベント
@@ -72,6 +73,6 @@ public class RaperWakeupEvent extends EventPacket implements java.io.Serializabl
 	
 	@Override
 	public String toString() {
-		return "れいぱーが覚醒";
+		return ResourceUtil.getInstance().read("event_raperawakening");
 	}
 }

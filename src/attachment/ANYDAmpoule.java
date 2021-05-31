@@ -13,6 +13,7 @@ import src.enums.AgeState;
 import src.enums.AttachProperty;
 import src.enums.Direction;
 import src.enums.Event;
+import src.system.ResourceUtil;
 
 
 /****************************************
@@ -113,6 +114,6 @@ public class ANYDAmpoule extends Attachment {
 	
 	@Override
 	public String toString() {
-		return "非ゆっくり症防止アンプル";
+		return ResourceUtil.getInstance().read("item_anti_nyd");
 	}
 }

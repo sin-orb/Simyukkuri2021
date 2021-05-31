@@ -233,7 +233,8 @@ public class LoggerYukkuri {
 		long max = Runtime.getRuntime().maxMemory() / 1024;
 		long used = total - free;
 		double ratio = (used * 100 / (double) total);
-		String info = "メモリ使用量=" + f1.format(used) + " (" + f2.format(ratio) + "%)、" + "使用可能最大値=" + f1.format(max);
+		String info = ResourceUtil.getInstance().read("system_memoryusing") + f1.format(used) +
+				" (" + f2.format(ratio) + "%)、" + ResourceUtil.getInstance().read("system_maxmemory") + f1.format(max);
 		g2.drawString(info, 20, 40);
 
 		g2.setColor(textColor1);
@@ -293,30 +294,30 @@ public class LoggerYukkuri {
 
 		switch (logPage) {
 		case 0:
-			g2.drawString("現在のゆっくりの個体数(種族別)", 100, 100);
+			g2.drawString(ResourceUtil.getInstance().read("system_logcurrent"), 100, 100);
 			g2.setFont(textFonttext);
 			for (int i = 0; i < NUM_OF_HYBRID + 1; i++) {
 				g2.setColor(Color.WHITE);
 				g2.drawString(Long.toString(numOfObjNowLog[i]), LEGEND_OFFSETX + 130, 30 * i + 140);
 				switch (i) {
 				case NUM_OF_NORMAL:
-					g2.drawString("通常種", LEGEND_OFFSETX, 30 * i + 140);
+					g2.drawString(ResourceUtil.getInstance().read("draw_normalsp"), LEGEND_OFFSETX, 30 * i + 140);
 					g2.setColor(Color.LIGHT_GRAY);
 					break;
 				case NUM_OF_PREDATOR:
-					g2.drawString("捕食種", LEGEND_OFFSETX, 30 * i + 140);
+					g2.drawString(ResourceUtil.getInstance().read("draw_predsp"), LEGEND_OFFSETX, 30 * i + 140);
 					g2.setColor(Color.RED);
 					break;
 				case NUM_OF_RARE:
-					g2.drawString("希少種", LEGEND_OFFSETX, 30 * i + 140);
+					g2.drawString(ResourceUtil.getInstance().read("draw_raresp"), LEGEND_OFFSETX, 30 * i + 140);
 					g2.setColor(Color.YELLOW);
 					break;
 				case NUM_OF_TARINAI:
-					g2.drawString("足りないゆ", LEGEND_OFFSETX, 30 * i + 140);
+					g2.drawString(ResourceUtil.getInstance().read("item_tarinai"), LEGEND_OFFSETX, 30 * i + 140);
 					g2.setColor(Color.ORANGE);
 					break;
 				case NUM_OF_HYBRID:
-					g2.drawString("ハイブリッド", LEGEND_OFFSETX, 30 * i + 140);
+					g2.drawString(ResourceUtil.getInstance().read("enums_hybrid"), LEGEND_OFFSETX, 30 * i + 140);
 					g2.setColor(Color.MAGENTA);
 					break;
 				}
@@ -344,22 +345,22 @@ public class LoggerYukkuri {
 			break;
 
 		case 1:
-			g2.drawString("現在のゆっくりの個体数(年代別)", 100, 100);
+			g2.drawString(ResourceUtil.getInstance().read("system_logkotaisuu"), 100, 100);
 			g2.setFont(textFonttext);
 			for (int i = 0; i < 3; i++) {
 				g2.setColor(Color.WHITE);
 				g2.drawString(Long.toString(numOfObjNowLog[i + NUM_OF_BABY]), LEGEND_OFFSETX + 130, 30 * i + 140);
 				switch (i) {
 				case 0:
-					g2.drawString("赤ゆ", LEGEND_OFFSETX, 30 * i + 140);
+					g2.drawString(ResourceUtil.getInstance().read("enums_babyyu"), LEGEND_OFFSETX, 30 * i + 140);
 					g2.setColor(Color.ORANGE);
 					break;
 				case 1:
-					g2.drawString("子ゆ", LEGEND_OFFSETX, 30 * i + 140);
+					g2.drawString(ResourceUtil.getInstance().read("enums_childyu"), LEGEND_OFFSETX, 30 * i + 140);
 					g2.setColor(Color.YELLOW);
 					break;
 				case 2:
-					g2.drawString("成ゆ", LEGEND_OFFSETX, 30 * i + 140);
+					g2.drawString(ResourceUtil.getInstance().read("enums_adultyu"), LEGEND_OFFSETX, 30 * i + 140);
 					g2.setColor(Color.GREEN);
 					break;
 				}
@@ -388,20 +389,20 @@ public class LoggerYukkuri {
 			break;
 
 		case 2:
-			g2.drawString("ゆかび感染状況", 100, 100);
+			g2.drawString(ResourceUtil.getInstance().read("system_yukabi"), 100, 100);
 			g2.setFont(textFonttext);
 			for (int i = 0; i < 2; i++) {
 				g2.setColor(Color.WHITE);
 				switch (i) {
 				case 0:
 					g2.drawString(Long.toString(numOfObjNowLog[NUM_OF_SICK]), LEGEND_OFFSETX + 130, 30 * i + 140);
-					g2.drawString("発症/感染", LEGEND_OFFSETX, 30 * i + 140);
+					g2.drawString(ResourceUtil.getInstance().read("system_kansen"), LEGEND_OFFSETX, 30 * i + 140);
 					g2.setColor(Color.GREEN);
 					break;
 				case 1:
 					g2.drawString(Long.toString(numOfSumYukkuri - numOfObjNowLog[NUM_OF_SICK]), LEGEND_OFFSETX + 130,
 							30 * i + 140);
-					g2.drawString("未感染", LEGEND_OFFSETX, 30 * i + 140);
+					g2.drawString(ResourceUtil.getInstance().read("system_mikansen"), LEGEND_OFFSETX, 30 * i + 140);
 					g2.setColor(Color.LIGHT_GRAY);
 					break;
 				}
@@ -444,9 +445,9 @@ public class LoggerYukkuri {
 			break;
 
 		case 3:
-			g2.drawString("うんうんの数", 100, 100);
+			g2.drawString(ResourceUtil.getInstance().read("system_numberofunun"), 100, 100);
 			g2.setFont(textFonttext);
-			g2.drawString("うんうん", LEGEND_OFFSETX, 140);
+			g2.drawString(ResourceUtil.getInstance().read("command_clean_shit"), LEGEND_OFFSETX, 140);
 			g2.drawString(Long.toString(numOfObjNowLog[NUM_OF_SHIT]), LEGEND_OFFSETX + 130, 140);
 			g2.setColor(Color.GRAY);
 			for (int k = 0; k < NUM_OF_GRAPH_DATA; k++) {
@@ -470,7 +471,7 @@ public class LoggerYukkuri {
 			g2.drawString("0", GRAPH_OFFSETX - 12, GRAPH_OFFSETY + GRAPH_HEIGHT);
 			break;
 		case 4:
-			g2.drawString("収入･支出", 100, 100);
+			g2.drawString(ResourceUtil.getInstance().read("system_income"), 100, 100);
 			g2.setFont(textFonttext);
 			for (int i = 0; i < 1; i++) {
 				g2.setColor(Color.WHITE);
@@ -479,8 +480,8 @@ public class LoggerYukkuri {
 				g2.drawString(
 						Long.toString(numOfObjNowLog[NUM_OF_CASH] - logData[NUM_OF_LOGDATA_TYPE * 59 + NUM_OF_CASH]),
 						LEGEND_OFFSETX + 130, 30 * (i + 1) + 140);
-				g2.drawString("所持金", LEGEND_OFFSETX, 30 * i + 140);
-				g2.drawString("収益(￥/分)", LEGEND_OFFSETX, 30 * (i + 1) + 140);
+				g2.drawString(ResourceUtil.getInstance().read("system_money"), LEGEND_OFFSETX, 30 * i + 140);
+				g2.drawString(ResourceUtil.getInstance().read("system_shueki"), LEGEND_OFFSETX, 30 * (i + 1) + 140);
 				g2.setColor(Color.YELLOW);
 				if (i == 0) {
 					for (int k = 0; k < NUM_OF_GRAPH_DATA; k++) {
@@ -526,7 +527,8 @@ public class LoggerYukkuri {
 						graphx - offsetX, GRAPH_OFFSETY + GRAPH_HEIGHT + 18);
 				int day = (operationTime + 60 - 30 * i) / 240;
 				int hour = (time / 30 * 3 + 6) % 24;
-				g2.drawString(("(" + (Integer.toString(day)) + "日目:" + (Integer.toString(hour)) + "時)"),
+				g2.drawString(("(" + (Integer.toString(day)) + ResourceUtil.getInstance().read("system_nichime") +
+						(Integer.toString(hour)) + ResourceUtil.getInstance().read("system_time")),
 						graphx - offsetX, GRAPH_OFFSETY + GRAPH_HEIGHT + 36);
 			}
 		}

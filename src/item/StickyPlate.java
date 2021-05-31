@@ -22,6 +22,7 @@ import src.draw.ModLoader;
 import src.enums.CriticalDamegeType;
 import src.enums.ObjEXType;
 import src.enums.Type;
+import src.system.ResourceUtil;
 
 /***************************************************
  * 粘着板
@@ -31,8 +32,8 @@ public class StickyPlate extends ObjEX implements java.io.Serializable {
 
 	/**どこをくっつけるか*/
 	public static enum StickyType {
-        UNDER("あんよ固定"),
-        BACK("背中固定"),
+        UNDER(ResourceUtil.getInstance().read("item_footsticky")),
+        BACK(ResourceUtil.getInstance().read("item_backsticky")),
 		;
         private String name;
         StickyType(String name) { this.name = name; }
@@ -224,7 +225,9 @@ public class StickyPlate extends ObjEX implements java.io.Serializable {
 
 		but[0].setSelected(true);
 
-		int dlgRet = JOptionPane.showConfirmDialog(SimYukkuri.mypane, mainPanel, "粘着板設定", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+		int dlgRet = JOptionPane.showConfirmDialog(SimYukkuri.mypane, mainPanel, 
+				ResourceUtil.getInstance().read("item_stickysettings"), 
+				JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 		
 		if(dlgRet == JOptionPane.OK_OPTION) {
 			if(but[0].isSelected()) s.bFixBack = false;

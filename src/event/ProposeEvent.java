@@ -9,6 +9,7 @@ import src.enums.ImageCode;
 import src.enums.Intelligence;
 import src.logic.BodyLogic;
 import src.system.MessagePool;
+import src.system.ResourceUtil;
 
 
 /***************************************************
@@ -342,6 +343,6 @@ public class ProposeEvent extends EventPacket implements java.io.Serializable {
 	
 	@Override
 	public String toString() {
-		return "いっしょにゆっくり";
+		return ResourceUtil.getInstance().read("event_proposal");
 	}
 }

@@ -7,6 +7,7 @@ import src.base.Obj;
 import src.enums.Happiness;
 import src.enums.ImageCode;
 import src.system.MessagePool;
+import src.system.ResourceUtil;
 
 /***************************************************
 	ぺに切りの反応イベント
@@ -146,6 +147,6 @@ public class CutPenipeniEvent extends EventPacket implements java.io.Serializabl
 
 	@Override
 	public String toString() {
-		return "ぺにぺにがぁあ！";
+		return ResourceUtil.getInstance().read("event_cutpeni");
 	}
 }

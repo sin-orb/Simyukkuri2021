@@ -37,6 +37,7 @@ import src.system.FieldShapeBase;
 import src.system.ItemMenu.ShapeMenu;
 import src.system.ItemMenu.ShapeMenuTarget;
 import src.system.MapPlaceData;
+import src.system.ResourceUtil;
 
 /***************************************************
  * ベルコン
@@ -47,7 +48,8 @@ public class Beltconveyor extends FieldShapeBase implements Serializable {
 
 	/**セットアップメニューの項目*/
 	private static enum SetupMenu {
-		DIRECT("向き"), SPEED("スピード"),
+		DIRECT(ResourceUtil.getInstance().read("item_direction")),
+		SPEED(ResourceUtil.getInstance().read("item_speed")),
 
 		NORMAL_BABY(""), NORMAL_CHILD(""), NORMAL_ADULT(""),
 
@@ -59,9 +61,11 @@ public class Beltconveyor extends FieldShapeBase implements Serializable {
 
 		HYBRID_BABY(""), HYBRID_CHILD(""), HYBRID_ADULT(""),
 
-		SHIT("うんうん"), VOMIT("あんこ"),
+		SHIT(ResourceUtil.getInstance().read("command_status_unun")), 
+		VOMIT(ResourceUtil.getInstance().read("game_toan")),
 
-		FOOD("フード"), STALK("茎"),
+		FOOD(ResourceUtil.getInstance().read("command_status_food")),
+		STALK(ResourceUtil.getInstance().read("item_stalk")),
 		;
 
 		public String caption;
@@ -78,11 +82,11 @@ public class Beltconveyor extends FieldShapeBase implements Serializable {
 
 	/**セットアップメニューのボタンの列挙*/
 	private static enum SetupButton {
-		NORMAL("通常種", SetupMenu.NORMAL_BABY, SetupMenu.NORMAL_CHILD, SetupMenu.NORMAL_ADULT), PREDATOR("捕食種",
-				SetupMenu.PREDATOR_BABY, SetupMenu.PREDATOR_CHILD, SetupMenu.PREDATOR_ADULT), RARE("希少種",
-						SetupMenu.RARE_BABY, SetupMenu.RARE_CHILD, SetupMenu.RARE_ADULT), IDIOT("足りないゆ",
-								SetupMenu.IDIOT_BABY, SetupMenu.IDIOT_CHILD, SetupMenu.IDIOT_ADULT), HYBRID("ハイブリッド",
-										SetupMenu.HYBRID_BABY, SetupMenu.HYBRID_CHILD, SetupMenu.HYBRID_ADULT),
+		NORMAL(ResourceUtil.getInstance().read("draw_normalsp"), SetupMenu.NORMAL_BABY, SetupMenu.NORMAL_CHILD, SetupMenu.NORMAL_ADULT),
+		PREDATOR(ResourceUtil.getInstance().read("draw_predsp"),SetupMenu.PREDATOR_BABY, SetupMenu.PREDATOR_CHILD, SetupMenu.PREDATOR_ADULT),
+		RARE(ResourceUtil.getInstance().read("draw_raresp"),SetupMenu.RARE_BABY, SetupMenu.RARE_CHILD, SetupMenu.RARE_ADULT),
+		IDIOT(ResourceUtil.getInstance().read("item_tarinai"),SetupMenu.IDIOT_BABY, SetupMenu.IDIOT_CHILD, SetupMenu.IDIOT_ADULT),
+		HYBRID(ResourceUtil.getInstance().read("enums_hybrid"),SetupMenu.HYBRID_BABY, SetupMenu.HYBRID_CHILD, SetupMenu.HYBRID_ADULT),
 										;
 
 		public String caption;
@@ -105,7 +109,10 @@ public class Beltconveyor extends FieldShapeBase implements Serializable {
 
 	/**方向のコンボボックスの定義*/
 	private static enum DirectCombo {
-		RIGHT("右", 0), UP("奥", 1), LEFT("左", 2), BOTTOM("手前", 3),
+		RIGHT(ResourceUtil.getInstance().read("right"), 0),
+		UP(ResourceUtil.getInstance().read("inside"), 1),
+		LEFT(ResourceUtil.getInstance().read("left"), 2),
+		BOTTOM(ResourceUtil.getInstance().read("outside"), 3),
 		;
 
 		public String caption;
@@ -124,7 +131,9 @@ public class Beltconveyor extends FieldShapeBase implements Serializable {
 
 	/**スピードのコンボボックスの定義*/
 	private static enum SpeedCombo {
-		SLOW("遅い", 1), MIDDLE("普通", 2), HIGH("速い", 4),
+		SLOW(ResourceUtil.getInstance().read("item_speedslow"), 1),
+		MIDDLE(ResourceUtil.getInstance().read("item_speednorm"), 2),
+		HIGH(ResourceUtil.getInstance().read("item_speedfast"), 4),
 		;
 
 		public String caption;
@@ -501,7 +510,8 @@ public class Beltconveyor extends FieldShapeBase implements Serializable {
 		mainPanel.add(BorderLayout.CENTER, centerPanel);
 		mainPanel.add(BorderLayout.SOUTH, southPanel);
 
-		int dlgRet = JOptionPane.showConfirmDialog(SimYukkuri.mypane, mainPanel, "コンベア設定", JOptionPane.OK_CANCEL_OPTION,
+		int dlgRet = JOptionPane.showConfirmDialog(SimYukkuri.mypane, mainPanel, 
+				ResourceUtil.getInstance().read("item_coveyersettings"), JOptionPane.OK_CANCEL_OPTION,
 				JOptionPane.PLAIN_MESSAGE);
 
 		if (dlgRet == JOptionPane.OK_OPTION) {

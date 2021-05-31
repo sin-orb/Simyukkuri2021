@@ -20,6 +20,7 @@ import src.enums.YukkuriType;
 import src.item.Barrier;
 import src.system.ItemMenu.GetMenuTarget;
 import src.system.ItemMenu.UseMenuTarget;
+import src.system.ResourceUtil;
 /**
  * うんうんのクラス.
  */
@@ -51,7 +52,9 @@ public class Shit extends Obj implements java.io.Serializable {
 	public int shitType = 0;
 	
 	private static final float[] shitSize = {0.4f, 0.7f, 1.0f};
-	private static final String[] shitSizeDisplayName = {"小", "中", "大"};
+	private static final String[] shitSizeDisplayName = {ResourceUtil.getInstance().read("game_little"), 
+			ResourceUtil.getInstance().read("game_middle"),
+			ResourceUtil.getInstance().read("game_big")};
 
 	private static final int value[] = {50,100,300};
 	
@@ -148,7 +151,7 @@ public class Shit extends Obj implements java.io.Serializable {
 	public Shit (int initX, int initY, int initZ, Body b, YukkuriType type) {
 		objType = Type.SHIT;
 		shitType = type.ordinal();
-		ownerName = b.getNameJ();
+		ownerName = ResourceUtil.IS_JP ? b.getNameJ() : b.getNameE();
 		ownerId = b.getUniqueID();
 		x = initX;
 		y = initY;

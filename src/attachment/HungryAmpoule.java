@@ -13,6 +13,7 @@ import src.enums.AgeState;
 import src.enums.AttachProperty;
 import src.enums.Direction;
 import src.enums.Event;
+import src.system.ResourceUtil;
 
 
 /****************************************
@@ -123,6 +124,6 @@ public class HungryAmpoule extends Attachment {
 	
 	@Override
 	public String toString() {
-		return "飢餓誘発アンプル";
+		return ResourceUtil.getInstance().read("item_hungry");
 	}
 }
