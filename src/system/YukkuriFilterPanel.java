@@ -63,8 +63,8 @@ public class YukkuriFilterPanel {
 		};
 	/** 選択アクション */
 	public static enum Action {
-		SELECT_ALL("全選択", ""),
-		DSELECT_ALL("全選択解除", ""),
+		SELECT_ALL(ResourceUtil.getInstance().read("system_allselect"), ""),
+		DSELECT_ALL(ResourceUtil.getInstance().read("system_allselectoff"), ""),
 		;
         private String name;
         Action(String nameJ, String nameE) { this.name = nameJ; }

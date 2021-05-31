@@ -14,6 +14,7 @@ import src.enums.AgeState;
 import src.enums.AttachProperty;
 //import src.Attachment.AttachProperty;
 import src.enums.Event;
+import src.system.ResourceUtil;
 
 
 /****************************************
@@ -134,6 +135,6 @@ public class Badge extends Attachment {
 
 	@Override
 	public String toString() {
-		return "バッジ";
+		return ResourceUtil.getInstance().read("item_badge");
 	}
 }

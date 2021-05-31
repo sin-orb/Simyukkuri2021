@@ -14,6 +14,7 @@ import src.item.Food;
 import src.logic.BedLogic;
 import src.logic.FamilyActionLogic;
 import src.system.MessagePool;
+import src.system.ResourceUtil;
 
 /***************************************************
 	おちびちゃん運びイベント
@@ -240,6 +241,6 @@ public class YukkuriRideEvent extends EventPacket implements java.io.Serializabl
 
 	@Override
 	public String toString() {
-		return "おちびはこび";
+		return ResourceUtil.getInstance().read("event_ride");
 	}
 }

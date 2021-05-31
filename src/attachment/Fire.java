@@ -16,6 +16,7 @@ import src.enums.Event;
 import src.enums.HairState;
 import src.enums.Happiness;
 import src.system.MessagePool;
+import src.system.ResourceUtil;
 
 
 /****************************************
@@ -179,6 +180,6 @@ public class Fire extends Attachment {
 	}
 	@Override
 	public String toString() {
-		return "炎";
+		return ResourceUtil.getInstance().read("item_fire");
 	}
 }

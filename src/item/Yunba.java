@@ -39,6 +39,7 @@ import src.game.Stalk;
 import src.game.Vomit;
 import src.system.Cash;
 import src.system.MapPlaceData;
+import src.system.ResourceUtil;
 
 /***************************************************
  * ゆんば
@@ -47,40 +48,40 @@ public class Yunba extends ObjEX implements java.io.Serializable {
 	static final long serialVersionUID = 1L;
 	/**アクションのテーブル*/
 	public static enum Action {
-		CLEAN("清掃", ""),
-		HEAL("回復", ""),
-		KABI("かび処分", ""),
-		RUDE("ゲス矯正", ""),
-		OKAZARI("おかざり没収", ""),
-		DESTROY("無差別攻撃", ""),
-		BODY_REMOVE("死体掃除", ""),
-		BODY_OKAZARI("死体おかざり回収", ""),
-		SHIT("うんうん掃除", ""),
-		STALK("茎掃除",""),				//追加
-		WALLTHROUGH("壁スルー",""),
-		NORND("省エネモード",""),
-		KILL("攻撃力アップ",""),
-		MINEUTI("攻撃みねうち",""),
-		NODAMAGE_FALL("攻撃時落下ダメージ無し",""),
-		EMPFOOD("空の餌皿回収",""),
-		ANTIRAPER("れいぱー駆除",""),
-		WITHOUT_AND("処理対象外AND条件",""),
+		CLEAN(ResourceUtil.getInstance().read("command_clean"), ""),
+		HEAL(ResourceUtil.getInstance().read("item_yunbarecovery"), ""),
+		KABI(ResourceUtil.getInstance().read("item_yunbakillmold"), ""),
+		RUDE(ResourceUtil.getInstance().read("item_yunbacorrection"), ""),
+		OKAZARI(ResourceUtil.getInstance().read("item_yunbaaccessory"), ""),
+		DESTROY(ResourceUtil.getInstance().read("item_yunbaindiscriminate"), ""),
+		BODY_REMOVE(ResourceUtil.getInstance().read("item_yunbacleandead"), ""),
+		BODY_OKAZARI(ResourceUtil.getInstance().read("item_yunbaconfiscation"), ""),
+		SHIT(ResourceUtil.getInstance().read("item_yunbacleanunun"), ""),
+		STALK(ResourceUtil.getInstance().read("item_yunbacleanstalk"),""),				//追加
+		WALLTHROUGH(ResourceUtil.getInstance().read("item_yunbathroughwall"),""),
+		NORND(ResourceUtil.getInstance().read("item_yunbasaveenergy"),""),
+		KILL(ResourceUtil.getInstance().read("item_yunbaattackup"),""),
+		MINEUTI(ResourceUtil.getInstance().read("item_yunbaallowance"),""),
+		NODAMAGE_FALL(ResourceUtil.getInstance().read("item_yunbanofalldamage"),""),
+		EMPFOOD(ResourceUtil.getInstance().read("item_yunbadish"),""),
+		ANTIRAPER(ResourceUtil.getInstance().read("item_yunbakillraper"),""),
+		WITHOUT_AND(ResourceUtil.getInstance().read("item_yunbacondition"),""),
 		;
         private String name;
-        Action(String nameJ, String nameE) { this.name = nameJ; }
+        Action(String nameJ, String nameE) { this.name = ResourceUtil.IS_JP ? nameJ : nameE; }
         public String toString() { return name; }
 	}
 	/**色のテーブル*/
 	private static final String[] COL_LIST = {
-		"黄色",
-		"白",
-		"赤",
-		"ピンク",
-		"紫",
-		"緑",
-		"灰",
-		"青",
-		"黒",
+		ResourceUtil.getInstance().read("yellow"),
+		ResourceUtil.getInstance().read("white"),
+		ResourceUtil.getInstance().read("red"),
+		ResourceUtil.getInstance().read("pink"),
+		ResourceUtil.getInstance().read("purple"),
+		ResourceUtil.getInstance().read("green"),
+		ResourceUtil.getInstance().read("gray"),
+		ResourceUtil.getInstance().read("blue"),
+		ResourceUtil.getInstance().read("black"),
 	};
 
 	public static final int hitCheckObjType = 0;
@@ -854,11 +855,11 @@ public class Yunba extends ObjEX implements java.io.Serializable {
 
 		JLabel l1 = new JLabel("");
 		westPanel.add(l1);
-		JLabel l2 = new JLabel("赤ゆ");
+		JLabel l2 = new JLabel(ResourceUtil.getInstance().read("enums_babyyu"));
 		centerPanel.add(l2);
-		JLabel l3 = new JLabel("子ゆ");
+		JLabel l3 = new JLabel(ResourceUtil.getInstance().read("enums_childyu"));
 		centerPanel.add(l3);
-		JLabel l4 = new JLabel("成ゆ");
+		JLabel l4 = new JLabel(ResourceUtil.getInstance().read("enums_adultyu"));
 		centerPanel.add(l4);
 
 		ButtonListener buttonListener = new ButtonListener();
@@ -887,18 +888,18 @@ public class Yunba extends ObjEX implements java.io.Serializable {
 
 		JLabel lw2_1 = new JLabel("");
 		westPanel2.add(lw2_1);
-		JLabel lw2_2 = new JLabel("処理対象外");
+		JLabel lw2_2 = new JLabel(ResourceUtil.getInstance().read("item_noprocesstarget"));
 		westPanel2.add(lw2_2);
 
-		JLabel lc2_1 = new JLabel("超善良");
+		JLabel lc2_1 = new JLabel(ResourceUtil.getInstance().read("attitude_verynice"));
 		centerPanel2.add(lc2_1);
-		JLabel lc2_2 = new JLabel("善良");
+		JLabel lc2_2 = new JLabel(ResourceUtil.getInstance().read("attitude_nice"));
 		centerPanel2.add(lc2_2);
-		JLabel lc2_3 = new JLabel("普通");
+		JLabel lc2_3 = new JLabel(ResourceUtil.getInstance().read("attitude_normal"));
 		centerPanel2.add(lc2_3);
-		JLabel lc2_4 = new JLabel("ゲス");
+		JLabel lc2_4 = new JLabel(ResourceUtil.getInstance().read("attitude_shithead"));
 		centerPanel2.add(lc2_4);
-		JLabel lc2_5 = new JLabel("ドゲス");
+		JLabel lc2_5 = new JLabel(ResourceUtil.getInstance().read("attitude_supershithead"));
 		centerPanel2.add(lc2_5);
 		for(int i = 0; i < 1; i++) {
 			for(int j = 0; j < 5; j++) {
@@ -919,14 +920,14 @@ public class Yunba extends ObjEX implements java.io.Serializable {
 
 		JLabel lw3_1 = new JLabel("");
 		westPanel3.add(lw3_1);
-		JLabel lw3_2 = new JLabel("処理対象外");
+		JLabel lw3_2 = new JLabel(ResourceUtil.getInstance().read("item_noprocesstarget"));
 		westPanel3.add(lw3_2);
 
-		JLabel lc3_1 = new JLabel("バッジ級");
+		JLabel lc3_1 = new JLabel(ResourceUtil.getInstance().read("intel_badge"));
 		centerPanel3.add(lc3_1);
-		JLabel lc3_2 = new JLabel("普通");
+		JLabel lc3_2 = new JLabel(ResourceUtil.getInstance().read("intel_normal"));
 		centerPanel3.add(lc3_2);
-		JLabel lc3_3 = new JLabel("餡子脳");
+		JLabel lc3_3 = new JLabel(ResourceUtil.getInstance().read("intel_fool"));
 		centerPanel3.add(lc3_3);
 
 		for(int i = 0; i < 1; i++) {
@@ -989,7 +990,8 @@ public class Yunba extends ObjEX implements java.io.Serializable {
 		mainPanel.add(BorderLayout.LINE_START, topPanel2);
 		mainPanel.add(BorderLayout.SOUTH, southPanel);
 
-		int dlgRet = JOptionPane.showConfirmDialog(SimYukkuri.mypane, mainPanel, "ゆンバ設定", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+		int dlgRet = JOptionPane.showConfirmDialog(SimYukkuri.mypane, mainPanel, 
+				ResourceUtil.getInstance().read("item_yunbasettings"), JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
 		if(dlgRet == JOptionPane.OK_OPTION) {
 			for(int i = 0; i < 6; i++) {

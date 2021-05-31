@@ -15,6 +15,7 @@ import src.item.Food;
 import src.logic.FoodLogic;
 import src.logic.ToyLogic;
 import src.system.MessagePool;
+import src.system.ResourceUtil;
 import src.yukkuri.Fran;
 import src.yukkuri.Meirin;
 import src.yukkuri.Remirya;
@@ -315,6 +316,6 @@ public class PredatorsGameEvent extends EventPacket implements java.io.Serializa
 	
 	@Override
 	public String toString() {
-		return "あそんじゃうぞー";
+		return ResourceUtil.getInstance().read("event_pgame");
 	}
 }

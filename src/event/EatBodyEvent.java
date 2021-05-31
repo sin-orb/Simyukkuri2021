@@ -10,6 +10,7 @@ import src.enums.Direction;
 import src.enums.Happiness;
 import src.enums.ImageCode;
 import src.system.MessagePool;
+import src.system.ResourceUtil;
 
 /***************************************************
 	死体食事中におかざりがもどってきたイベント
@@ -115,6 +116,6 @@ public class EatBodyEvent extends EventPacket implements java.io.Serializable {
 
 	@Override
 	public String toString() {
-		return "たべないでぇ";
+		return ResourceUtil.getInstance().read("event_eaten");
 	}
 }

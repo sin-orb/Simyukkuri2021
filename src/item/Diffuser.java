@@ -23,28 +23,29 @@ import src.enums.EffectType;
 import src.enums.ObjEXType;
 import src.enums.Type;
 import src.system.Cash;
+import src.system.ResourceUtil;
 
 /***************************************************
-ディヒューザー
-*/
+ * ディヒューザー
+ */
 public class Diffuser extends ObjEX implements java.io.Serializable {
 	static final long serialVersionUID = 1L;
 
 	public static enum SteamType {
-        ANTI_FUNGAL("防カビ剤", 0),
-        STEAM("真水", 1),
-        ORANGE("オレンジ", 2),
-        AGE_BOOST("成長促進", 3),
-        AGE_STOP("成長抑制", 4),
-        ANTI_DOS("ドス化抑制", 5),
-        ANTI_YU("ゆっくり駆除剤", 6),
-        PREDATOR("捕食防止", 7),
-        SUGER("砂糖水", 8),
-        NOSLEEP("睡眠妨害", 9),
-        HYBRID("ハイブリッド化薬", 9),
-        RAPIDPREGNANT("早産化薬", 9),
-        ANTI_NONYUKKURI("非ゆっくり症防止薬", 9),
-        ENDLESS_FURIFURI("無限もるんもるん", 9),
+        ANTI_FUNGAL(ResourceUtil.getInstance().read("item_preventionmold"), 0),
+        STEAM(ResourceUtil.getInstance().read("item_water"), 1),
+        ORANGE(ResourceUtil.getInstance().read("item_orange"), 2),
+        AGE_BOOST(ResourceUtil.getInstance().read("item_accel"), 3),
+        AGE_STOP(ResourceUtil.getInstance().read("item_stop"), 4),
+        ANTI_DOS(ResourceUtil.getInstance().read("item_preventiondos"), 5),
+        ANTI_YU(ResourceUtil.getInstance().read("item_extermonation"), 6),
+        PREDATOR(ResourceUtil.getInstance().read("item_preventionpredation"), 7),
+        SUGER(ResourceUtil.getInstance().read("item_sugarwater"), 8),
+        NOSLEEP(ResourceUtil.getInstance().read("item_preventionsleep"), 9),
+        HYBRID(ResourceUtil.getInstance().read("item_hybridize"), 9),
+        RAPIDPREGNANT(ResourceUtil.getInstance().read("item_prophylactic"), 9),
+        ANTI_NONYUKKURI(ResourceUtil.getInstance().read("item_antinyd"), 9),
+        ENDLESS_FURIFURI(ResourceUtil.getInstance().read("item_infimorun"), 9),
 		;
         private String name;
         private int steamColor;
@@ -164,7 +165,9 @@ public class Diffuser extends ObjEX implements java.io.Serializable {
 			mainPanel.add(panel);
 		}
 
-		int dlgRet = JOptionPane.showConfirmDialog(SimYukkuri.mypane, mainPanel, "ディフューザー設定", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+		int dlgRet = JOptionPane.showConfirmDialog(SimYukkuri.mypane, mainPanel, 
+				ResourceUtil.getInstance().read("item_diffusersettings"),
+				JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 		
 		if(dlgRet == JOptionPane.OK_OPTION) {
 			for(int i = 0; i < checkBox.length; i++) {

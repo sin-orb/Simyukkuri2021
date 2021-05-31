@@ -22,6 +22,7 @@ import src.draw.Translate;
 import src.enums.ObjEXType;
 import src.enums.Type;
 import src.system.Cash;
+import src.system.ResourceUtil;
 
 /***************************************************
  * トイレ
@@ -30,9 +31,9 @@ public class Toilet extends ObjEX implements java.io.Serializable {
 	static final long serialVersionUID = 1L;
 	/**トイレのタイプ*/
 	public static enum ToiletType {
-        NORMAL("安物"),
-        CLEAN("自動清掃"),
-        SLAVE("うんうんどれい"),
+        NORMAL(ResourceUtil.getInstance().read("item_toiletcheap")),
+        CLEAN(ResourceUtil.getInstance().read("item_toiletautoclean")),
+        SLAVE(ResourceUtil.getInstance().read("item_toiletununsalve")),
 		;
         private String name;
         ToiletType(String name) { this.name = name; }

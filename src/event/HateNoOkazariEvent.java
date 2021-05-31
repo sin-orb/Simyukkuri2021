@@ -17,6 +17,7 @@ import src.item.Barrier;
 import src.item.Toilet;
 import src.logic.BodyLogic;
 import src.system.MessagePool;
+import src.system.ResourceUtil;
 
 /***************************************************
 	おかざりのないゆっくりへの攻撃イベント
@@ -166,6 +167,6 @@ public class HateNoOkazariEvent extends EventPacket implements java.io.Serializa
 	}
 	@Override
 	public String toString() {
-		return "無おかざりいじめ";
+		return ResourceUtil.getInstance().read("event_noacc");
 	}
 }

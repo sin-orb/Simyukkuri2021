@@ -13,6 +13,7 @@ import src.enums.PublicRank;
 import src.item.Barrier;
 import src.logic.BodyLogic;
 import src.system.MessagePool;
+import src.system.ResourceUtil;
 
 /**
  * 善良なゆっくりが主に参加し、ドスは捕食種がいる限り殺しに行く.
@@ -154,6 +155,6 @@ public class KillPredeatorEvent extends RevengeAttackEvent implements Serializab
 
 	@Override
 	public String toString() {
-		return "くそれみりゃがぁあ";
+		return ResourceUtil.getInstance().read("event_killremi");
 	}
 }

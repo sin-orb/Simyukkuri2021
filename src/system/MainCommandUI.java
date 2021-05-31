@@ -36,13 +36,13 @@ public class MainCommandUI {
 
 	/** システムボタンテキスト */
 	static enum SystemButtonLabel {
-		ADDBODY("ゆっくり追加"),
-		SAVE("セーブ"),
-		LOAD("ロード"),
+		ADDBODY(ResourceUtil.getInstance().read("system_addyukkuri")),
+		SAVE(ResourceUtil.getInstance().read("save")),
+		LOAD(ResourceUtil.getInstance().read("load")),
 		PREV("<<"),
-		LOG("ログ"),
+		LOG(ResourceUtil.getInstance().read("log")),
 		NEXT(">>"),
-		LOGCLEAR("ログクリア"),
+		LOGCLEAR(ResourceUtil.getInstance().read("logclear")),
 		;
         public String label;
         SystemButtonLabel(String str) { this.label = str; }
@@ -50,8 +50,8 @@ public class MainCommandUI {
 
 	/** ツールボタン */
 	static enum ToolButtonLabel {
-		MOVE("移動"),
-		BAG("持ち物"),
+		MOVE(ResourceUtil.getInstance().read("system_move")),
+		BAG(ResourceUtil.getInstance().read("system_belongings")),
 		;
         public String label;
         ToolButtonLabel(String str) { this.label = str; }
@@ -59,18 +59,18 @@ public class MainCommandUI {
 
 	/** ステータスのラベル */
 	static enum StatusLabel {
-		MONEY(" 所持金: "),
-		LABEL("ゆっくりの状態"),
+		MONEY(ResourceUtil.getInstance().read("system_money")),
+		LABEL(ResourceUtil.getInstance().read("system_statusofyukkuri")),
 		NAME(""),
-		RANK(" ランク: "),
-		PERSONALITY(" 性格: "),
-		INTEL(" 知能: "),
-		DAMAGE(" ダメージ: "),
-		STRESS(" ストレス: "),
-		HUNGER(" 満腹度: "),
-		TANG(" 味覚: "),
-		SHIT(" うんうん: "),
-		LOVEPLAYER(" なつき度: "),
+		RANK(ResourceUtil.getInstance().read("system_rank")),
+		PERSONALITY(ResourceUtil.getInstance().read("system_attitude")),
+		INTEL(ResourceUtil.getInstance().read("system_intelligence")),
+		DAMAGE(ResourceUtil.getInstance().read("system_damage")),
+		STRESS(ResourceUtil.getInstance().read("system_stress")),
+		HUNGER(ResourceUtil.getInstance().read("system_satis")),
+		TANG(ResourceUtil.getInstance().read("system_taste")),
+		SHIT(ResourceUtil.getInstance().read("system_unun")),
+		LOVEPLAYER(ResourceUtil.getInstance().read("system_familiality")),
 		;
         public String label;
         StatusLabel(String str) { this.label = str; }
@@ -78,7 +78,7 @@ public class MainCommandUI {
 
 	/** オプションポップアップ */
 	static enum OptionPopup {
-		INI_RELOAD("iniファイル再読み込み")
+		INI_RELOAD(ResourceUtil.getInstance().read("system_inireload"))
 		;
 		public String label;
 		OptionPopup(String str) { this.label = str; }
@@ -86,8 +86,11 @@ public class MainCommandUI {
 
 
 	private static final String[] ATTITUDE_LEVEL_J = { "超善良", "善良", "普通", "ゲス", "ドゲス"};
+	private static final String[] ATTITUDE_LEVEL_E = { "Very Nice", "Nice", "Normal", "Shithead", "Very Shithead"};
 	private static final String[] INTEL_LEVEL_J = { "バッジ級", "普通", "餡子脳"};
+	private static final String[] INTEL_LEVEL_E = { "Badge Class", "Normal", "Fool"};
 	private static final String[] TANG_LEVEL_J = { "バカ舌", "普通", "肥えてる"};
+	private static final String[] TANG_LEVEL_E = { "Paralyzed", "Normal", "Destroyed"};
 	/** ゲームスピード */
 	public static int selectedGameSpeed = 1;
 	/** ズームスケール */
@@ -410,14 +413,17 @@ public class MainCommandUI {
 		int nLovePlayer = 100 * b.getnLovePlayer() / b.getLOVEPLAYERLIMIT();
 
 		yuStatusLabel[StatusLabel.MONEY.ordinal()].setText(StatusLabel.MONEY.label + SimYukkuri.world.getPlayer().getCash());
-		yuStatusLabel[StatusLabel.NAME.ordinal()].setText(" " + b.getNameJ());
+		yuStatusLabel[StatusLabel.NAME.ordinal()].setText(" " + (ResourceUtil.IS_JP ? b.getNameJ() : b.getNameE()));
 		yuStatusLabel[StatusLabel.RANK.ordinal()].setText(StatusLabel.RANK.label + BodyRank.values()[b.getBodyRank().ordinal()].displayName);
-		yuStatusLabel[StatusLabel.PERSONALITY.ordinal()].setText(StatusLabel.PERSONALITY.label + ATTITUDE_LEVEL_J[b.getAttitude().ordinal()]);
-		yuStatusLabel[StatusLabel.INTEL.ordinal()].setText(StatusLabel.INTEL.label + INTEL_LEVEL_J[b.getIntelligence().ordinal()]);
+		yuStatusLabel[StatusLabel.PERSONALITY.ordinal()].setText(StatusLabel.PERSONALITY.label +
+				(ResourceUtil.IS_JP ? ATTITUDE_LEVEL_J[b.getAttitude().ordinal()] : ATTITUDE_LEVEL_E[b.getAttitude().ordinal()]));
+		yuStatusLabel[StatusLabel.INTEL.ordinal()].setText(StatusLabel.INTEL.label + 
+				(ResourceUtil.IS_JP ? INTEL_LEVEL_J[b.getIntelligence().ordinal()] : INTEL_LEVEL_E[b.getIntelligence().ordinal()] ));
 		yuStatusLabel[StatusLabel.DAMAGE.ordinal()].setText(StatusLabel.DAMAGE.label + damage + "%");
 		yuStatusLabel[StatusLabel.STRESS.ordinal()].setText(StatusLabel.STRESS.label + stress + "%");
 		yuStatusLabel[StatusLabel.HUNGER.ordinal()].setText(StatusLabel.HUNGER.label + hungry + "%");
-		yuStatusLabel[StatusLabel.TANG.ordinal()].setText(StatusLabel.TANG.label + TANG_LEVEL_J[b.getTangType().ordinal()]);
+		yuStatusLabel[StatusLabel.TANG.ordinal()].setText(StatusLabel.TANG.label + 
+				(ResourceUtil.IS_JP ? TANG_LEVEL_J[b.getTangType().ordinal()] : TANG_LEVEL_E[b.getTangType().ordinal()]));
 		yuStatusLabel[StatusLabel.SHIT.ordinal()].setText(StatusLabel.SHIT.label + shit + "%");
 		yuStatusLabel[StatusLabel.LOVEPLAYER.ordinal()].setText(StatusLabel.LOVEPLAYER.label + nLovePlayer + "%");
 

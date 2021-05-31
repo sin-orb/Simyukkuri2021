@@ -33,6 +33,7 @@ import src.enums.ImageCode;
 import src.enums.ObjEXType;
 import src.system.Cash;
 import src.system.MessagePool;
+import src.system.ResourceUtil;
 
 /***************************************************
  * 加工プレート
@@ -66,19 +67,19 @@ public class ProcesserPlate extends ObjEX implements java.io.Serializable {
 	}
 	/**加工モード(詳細)*/
 	public static enum ProcessType {
-		HOTPLATE_MIN("加熱（最弱）",			ProcessMode.HOTPLATE,	50),
-		HOTPLATE_LOW("加熱（弱火）",			ProcessMode.HOTPLATE,	500),
-		HOTPLATE_MIDDLE("加熱（中火で狐色まで)",	ProcessMode.HOTPLATE,	1000),
-		HOTPLATE_HIGH("加熱（強火）",			ProcessMode.HOTPLATE,	5000),
-		HOTPLATE_MAX("加熱（最強）",			ProcessMode.HOTPLATE,	20000),
-		PAIN("打撃",					ProcessMode.PAIN,		1),
-		BAIBAI_OKAZARI_WITH_FIRE("お飾り自動除去",	ProcessMode.BAIBAI_OKAZARI,		1),
-		PEALING("皮むき",	ProcessMode.PEALING,		1),
-		BLINDING("目潰し",	ProcessMode.BLINDING,		1),
-		ACCELERATE("成長加速",	ProcessMode.ACCELERATE,		1),
-		SHUTMOUTH("口封じ",	ProcessMode.SHUTMOUTH,		1),
-		PLUCKING("ハゲ饅頭",	ProcessMode.PLUCKING,		1),
-		PACKING("饅頭生産機",	ProcessMode.PACKING,		1)
+		HOTPLATE_MIN(ResourceUtil.getInstance().read("item_hotplatemin"),ProcessMode.HOTPLATE,	50),
+		HOTPLATE_LOW(ResourceUtil.getInstance().read("item_hotplatelow"),ProcessMode.HOTPLATE,	500),
+		HOTPLATE_MIDDLE(ResourceUtil.getInstance().read("item_hotplatemiddle"),ProcessMode.HOTPLATE,	1000),
+		HOTPLATE_HIGH(ResourceUtil.getInstance().read("item_hotplatehigh"),ProcessMode.HOTPLATE,	5000),
+		HOTPLATE_MAX(ResourceUtil.getInstance().read("item_hotplatemax"),ProcessMode.HOTPLATE,	20000),
+		PAIN(ResourceUtil.getInstance().read("item_hotplatepain"),ProcessMode.PAIN,		1),
+		BAIBAI_OKAZARI_WITH_FIRE(ResourceUtil.getInstance().read("item_autoremoval"),ProcessMode.BAIBAI_OKAZARI,		1),
+		PEALING(ResourceUtil.getInstance().read("command_peal"),ProcessMode.PEALING,		1),
+		BLINDING(ResourceUtil.getInstance().read("command_eyeball"),ProcessMode.BLINDING,		1),
+		ACCELERATE(ResourceUtil.getInstance().read("item_hotplateaccel"),ProcessMode.ACCELERATE,		1),
+		SHUTMOUTH(ResourceUtil.getInstance().read("command_mouthshut"),ProcessMode.SHUTMOUTH,		1),
+		PLUCKING(ResourceUtil.getInstance().read("command_manju"),ProcessMode.PLUCKING,		1),
+		PACKING(ResourceUtil.getInstance().read("item_hotplatepack"),ProcessMode.PACKING,		1)
 		;
 		private String name;
 		private ProcessMode eMode;

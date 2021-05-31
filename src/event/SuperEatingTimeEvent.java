@@ -14,6 +14,7 @@ import src.item.Food;
 import src.logic.BodyLogic;
 import src.logic.FoodLogic;
 import src.system.MessagePool;
+import src.system.ResourceUtil;
 
 /***************************************************
 	すーぱーむーしゃむーしゃたいむイベント
@@ -473,7 +474,7 @@ public class SuperEatingTimeEvent extends EventPacket implements java.io.Seriali
 
 	@Override
 	public String toString() {
-		return "すーぱーむーしゃむーしゃたいむ";
+		return ResourceUtil.getInstance().read("event_super");
 	}
 
 }

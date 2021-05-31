@@ -9,6 +9,7 @@ import src.enums.BaryInUGState;
 import src.enums.Happiness;
 import src.enums.Intelligence;
 import src.system.MessagePool;
+import src.system.ResourceUtil;
 
 /*
 	出産時の励ましイベント
@@ -163,6 +164,6 @@ public class BreedEvent extends EventPacket implements java.io.Serializable {
 	
 	@Override
 	public String toString() {
-		return "おちび迎え";
+		return ResourceUtil.getInstance().read("event_welcomechild");
 	}
 }

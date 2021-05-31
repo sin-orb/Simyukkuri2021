@@ -25,6 +25,7 @@ import src.enums.Type;
 import src.game.Dna;
 import src.system.Cash;
 import src.system.MessagePool;
+import src.system.ResourceUtil;
 import src.yukkuri.Ayaya;
 import src.yukkuri.Deibu;
 import src.yukkuri.DosMarisa;
@@ -45,8 +46,14 @@ public class BreedingPool extends ObjEX implements java.io.Serializable {
 
 	/**稼働タイプ*/
 	public static enum PoolType {
-		LOW("廉価品"), RAPID("通常版"), PRO("プロ用"), INDUSTRY("工業用"), LOWS("茎：廉価品"), RAPIDS("茎：通常版"), PROS("茎：プロ用"), INDUSTRYS(
-				"茎：工業用"),
+		LOW(ResourceUtil.getInstance().read("item_cheap")), 
+		RAPID(ResourceUtil.getInstance().read("item_normalbreed")), 
+		PRO(ResourceUtil.getInstance().read("item_forpro")),
+		INDUSTRY(ResourceUtil.getInstance().read("item_indust")),
+		LOWS(ResourceUtil.getInstance().read("item_cheapstalk")),
+		RAPIDS(ResourceUtil.getInstance().read("item_normalstalk")),
+		PROS(ResourceUtil.getInstance().read("item_forprostalk")),
+		INDUSTRYS(ResourceUtil.getInstance().read("item_induststalk")),
 				;
 
 		private String name;
@@ -310,7 +317,8 @@ public class BreedingPool extends ObjEX implements java.io.Serializable {
 		} else {
 			but[o.lastSelected].setSelected(true);
 		}
-		int dlgRet = JOptionPane.showConfirmDialog(SimYukkuri.mypane, mainPanel, "養殖プール設定",
+		int dlgRet = JOptionPane.showConfirmDialog(SimYukkuri.mypane, mainPanel, 
+				ResourceUtil.getInstance().read("item_poolsettings"),
 				JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
 		if (dlgRet == JOptionPane.OK_OPTION) {

@@ -13,6 +13,7 @@ import src.enums.AgeState;
 import src.enums.AttachProperty;
 import src.enums.Direction;
 import src.enums.Event;
+import src.system.ResourceUtil;
 
 
 /****************************************
@@ -119,6 +120,6 @@ public class StopAmpoule extends Attachment {
 	
 	@Override
 	public String toString() {
-		return "成長抑制アンプル";
+		return ResourceUtil.getInstance().read("item_stop");
 	}
 }

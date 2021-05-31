@@ -18,6 +18,7 @@ import src.enums.Event;
 import src.enums.Happiness;
 import src.enums.ImageCode;
 import src.system.MessagePool;
+import src.system.ResourceUtil;
 
 
 /****************************************
@@ -141,6 +142,6 @@ public class PoisonAmpoule extends Attachment {
 	
 	@Override
 	public String toString() {
-		return "毒アンプル";
+		return ResourceUtil.getInstance().read("item_poison");
 	}
 }

@@ -9,6 +9,7 @@ import src.draw.Translate;
 import src.item.Sui;
 import src.logic.EventLogic;
 import src.system.MessagePool;
+import src.system.ResourceUtil;
 
 /***************************************************
 	すぃーに関連した会話イベント
@@ -128,6 +129,6 @@ public class SuiSpeake extends EventPacket implements java.io.Serializable {
 
 	@Override
 	public String toString() {
-		return "すぃーのうわさ";
+		return ResourceUtil.getInstance().read("event_suispeak");
 	}
 }

@@ -27,20 +27,20 @@ import src.system.MainCommandUI.ToolButtonLabel;
  */
 public class MapWindow extends JDialog implements ActionListener, WindowListener {
 
-	private static final String TITLE = "マップ移動";
+	private static final String TITLE = ResourceUtil.getInstance().read("system_movemap");
 
 	/** 現在のマップリスト */
 	public static enum MAP {
-		MYROOM("自室", "myroom"),
-		GARDEN("庭", "garden"),
-		STREET("路上", "street"),
-		PARK1("公園１", "park1"),
-		PARK2("公園２", "park2"),
-		FOREST1("森林１", "forest1"),
-		FOREST2("森林２", "forest2"),
-		PLANT1("加工所１", "plant1"),
-		PLANT2("加工所２", "plant2"),
-		DISPOSER("廃棄物処理場", "disposer"),
+		MYROOM(ResourceUtil.getInstance().read("system_myroom"), "myroom"),
+		GARDEN(ResourceUtil.getInstance().read("system_yard"), "garden"),
+		STREET(ResourceUtil.getInstance().read("system_road"), "street"),
+		PARK1(ResourceUtil.getInstance().read("system_park1"), "park1"),
+		PARK2(ResourceUtil.getInstance().read("system_park2"), "park2"),
+		FOREST1(ResourceUtil.getInstance().read("system_forest1"), "forest1"),
+		FOREST2(ResourceUtil.getInstance().read("system_forest2"), "forest2"),
+		PLANT1(ResourceUtil.getInstance().read("system_plant1"), "plant1"),
+		PLANT2(ResourceUtil.getInstance().read("system_plant2"), "plant2"),
+		DISPOSER(ResourceUtil.getInstance().read("system_disposer"), "disposer"),
 		;
 		public String displayName;
 		public String filePath;

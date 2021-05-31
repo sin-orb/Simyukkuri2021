@@ -12,6 +12,7 @@ import src.enums.Happiness;
 import src.enums.ImageCode;
 import src.logic.BodyLogic;
 import src.system.MessagePool;
+import src.system.ResourceUtil;
 
 /***************************************************
 	ゆっくりが攻撃されたときの反撃イベント
@@ -100,6 +101,6 @@ public class RevengeAttackEvent extends EventPacket implements java.io.Serializa
 
 	@Override
 	public String toString() {
-		return "やりかえすよ！";
+		return ResourceUtil.getInstance().read("event_revenge");
 	}
 }

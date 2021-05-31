@@ -22,6 +22,7 @@ import src.enums.Event;
 import src.enums.ObjEXType;
 import src.enums.Type;
 import src.item.Barrier;
+import src.system.ResourceUtil;
 
 
 /**
@@ -358,23 +359,23 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 	@Override
 	public String toString() {
 		String ret = "";
-		ret += "茎（親：";
-		ret += (plantYukkuri == null ? "なし" : plantYukkuri.getNameJ());
-		ret += "）,子：（";
+		ret += ResourceUtil.getInstance().read("game_stalk1");
+		ret += (plantYukkuri == null ? ResourceUtil.getInstance().read("command_status_nothing") : ResourceUtil.IS_JP ? plantYukkuri.getNameJ() : plantYukkuri.getNameE());
+		ret += ResourceUtil.getInstance().read("game_stalk2");
 		if (bindBaby == null || bindBaby.size() == 0) {
-			ret += "なし";
+			ret += ResourceUtil.getInstance().read("command_status_nothing");
 		} else {
 			for (Body baby : bindBaby) {
 				if (baby == null) {
-					ret += "カラ";
+					ret += ResourceUtil.getInstance().read("game_empty");
 				} else {
-					ret += baby.getNameJ();
+					ret += ResourceUtil.IS_JP ? baby.getNameJ() : baby.getNameE();
 				}
 				ret += ",";
 			}
 			ret = ret.substring(0, ret.length() - 1);
 		}
-		ret += "）";
+		ret += ")";
 		return ret;
 	}
 }

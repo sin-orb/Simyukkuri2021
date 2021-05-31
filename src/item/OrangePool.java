@@ -23,6 +23,7 @@ import src.enums.FootBake;
 import src.enums.ObjEXType;
 import src.enums.Type;
 import src.system.Cash;
+import src.system.ResourceUtil;
 
 /***************************************************
  * オレンジプレート
@@ -31,8 +32,8 @@ public class OrangePool extends ObjEX implements java.io.Serializable {
 	static final long serialVersionUID = 1L;
 	/**タイプ*/
 	public static enum OrangeType {
-        NORMAL("清涼飲料水"),
-        RESCUE("救命用"),
+        NORMAL(ResourceUtil.getInstance().read("item_coolwater")),
+        RESCUE(ResourceUtil.getInstance().read("item_lifesaving")),
 		;
         private String name;
         OrangeType(String name) { this.name = name; }

@@ -25,6 +25,7 @@ import src.enums.ObjEXType;
 import src.enums.Type;
 import src.item.Food.FoodType;
 import src.system.Cash;
+import src.system.ResourceUtil;
 import src.util.YukkuriUtil;
 
 /***************************************************
@@ -35,8 +36,16 @@ public class AutoFeeder extends ObjEX implements java.io.Serializable {
 
 	/** 出てくるエサタイプ */
 	public static enum FeedType {
-		NORMAL("ふつう"), BITTER("苦い"), LEMON_POP("ラムネ"), HOT("辛い"), VIYUGRA("バイゆグラ"), SWEETS2("あまあま(普通)"), SWEETS1(
-				"あまあま(高級)"), WASTE("生ゴミ"), BODY("無加工生餌"), PROCESSED_BODY("加工済生餌"),
+		NORMAL(ResourceUtil.getInstance().read("command_food_normal")), 
+		BITTER(ResourceUtil.getInstance().read("command_food_bitter")), 
+		LEMON_POP(ResourceUtil.getInstance().read("command_food_ramune")), 
+		HOT(ResourceUtil.getInstance().read("command_food_hot")), 
+		VIYUGRA(ResourceUtil.getInstance().read("command_food_viagra")), 
+		SWEETS2(ResourceUtil.getInstance().read("command_food_sweet1")), 
+		SWEETS1(ResourceUtil.getInstance().read("command_food_sweet2")), 
+		WASTE(ResourceUtil.getInstance().read("command_food_garbage")), 
+		BODY(ResourceUtil.getInstance().read("item_noprocess")), 
+		PROCESSED_BODY(ResourceUtil.getInstance().read("item_processed")),
 				;
 
 		private String name;
@@ -52,7 +61,8 @@ public class AutoFeeder extends ObjEX implements java.io.Serializable {
 
 	/** 給餌モード */
 	public static enum FeedMode {
-		NORMAL_MODE("自動給餌"), REGULAR_MODE("定期給餌"),
+		NORMAL_MODE(ResourceUtil.getInstance().read("command_food_auto")), 
+		REGULAR_MODE(ResourceUtil.getInstance().read("item_fixedterm")),
 		;
 
 		private String name;
@@ -274,7 +284,8 @@ public class AutoFeeder extends ObjEX implements java.io.Serializable {
 			mainPanel.add(but[i]);
 		}
 		but[0].setSelected(true);
-		int dlgRet = JOptionPane.showConfirmDialog(SimYukkuri.mypane, mainPanel, "自動給餌設定", JOptionPane.OK_CANCEL_OPTION,
+		int dlgRet = JOptionPane.showConfirmDialog(SimYukkuri.mypane, mainPanel, 
+				ResourceUtil.getInstance().read("item_autosetting"), JOptionPane.OK_CANCEL_OPTION,
 				JOptionPane.PLAIN_MESSAGE);
 
 		if (dlgRet == JOptionPane.OK_OPTION) {
@@ -312,7 +323,8 @@ public class AutoFeeder extends ObjEX implements java.io.Serializable {
 			mainPanel.add(but[i]);
 		}
 		but[0].setSelected(true);
-		int dlgRet = JOptionPane.showConfirmDialog(SimYukkuri.mypane, mainPanel, "稼働モード設定",
+		int dlgRet = JOptionPane.showConfirmDialog(SimYukkuri.mypane, mainPanel, 
+				ResourceUtil.getInstance().read("item_movetypesettings"),
 				JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
 		if (dlgRet == JOptionPane.OK_OPTION) {

@@ -22,6 +22,7 @@ import src.draw.ModLoader;
 import src.draw.Translate;
 import src.enums.ObjEXType;
 import src.enums.Type;
+import src.system.ResourceUtil;
 
 /***************************************************
  * とらんぽりん
@@ -40,8 +41,8 @@ public class Trampoline extends ObjEX implements java.io.Serializable {
 	public static final int hitCheckObjType = ObjEX.YUKKURI;
 	/**タイプ*/
 	public static enum TrampolineType {
-        NORMAL("普通"),
-        EX("進行方向"),
+        NORMAL(ResourceUtil.getInstance().read("item_trampolinenorm")),
+        EX(ResourceUtil.getInstance().read("item_trampolinedirection")),
        ;
         private String name;
         TrampolineType(String name) { this.name = name; }
@@ -169,11 +170,12 @@ public class Trampoline extends ObjEX implements java.io.Serializable {
 		JComboBox accident2Box = new JComboBox(jogenmess);
 		accident1Box.setEditable(true);
 		accident2Box.setEditable(true);
-		mainPanel.add(new JLabel("通常事故率"));
+		mainPanel.add(new JLabel(ResourceUtil.getInstance().read("item_trampolineacciaccurate")));
 		mainPanel.add(accident1Box);
-		mainPanel.add(new JLabel("餡子脳事故率"));
+		mainPanel.add(new JLabel(ResourceUtil.getInstance().read("item_trampolineaccianko")));
 		mainPanel.add(accident2Box);
-		int dlgRet = JOptionPane.showConfirmDialog(SimYukkuri.mypane, mainPanel, "トランポリン設定", 2, -1);
+		int dlgRet = JOptionPane.showConfirmDialog(SimYukkuri.mypane, mainPanel,
+				ResourceUtil.getInstance().read("item_trampolinesettings"), 2, -1);
 		if(dlgRet == 0){
 			if(but[0].isSelected())
 				t.option = 0;
