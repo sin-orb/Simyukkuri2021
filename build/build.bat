@@ -1,8 +1,12 @@
 @echo off
-echo コンパイルを開始します。
-javac -encoding UTF-8 -sourcepath src -d classes src\SimYukkuri.java
-echo コンパイルが完了しました。続けて、jarファイルを作成します。
-jar cvfm SimYukkuri.jar META-INF\MANIFEST.MF -C classes .
-echo jarファイルの作成が完了しました。
+set d=%CD%
+cd %~dp0
+md classes 2> NUL
+echo Start compiling...
+javac -encoding UTF-8 -sourcepath .. -d classes ..\src\SimYukkuri.java
+echo Compile completed.Then making SimYukkuri.jar file...
+jar cvfe SimYukkuri.jar src.SimYukkuri -C classes . -C .. data -C .. images
+echo SimYukkuri.jar file have made.
+cd %d%
 pause
 
