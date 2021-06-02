@@ -2736,8 +2736,8 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		} else {
 			if (countX++ >= getSameDest() * getSTEP()[getBodyAgeState().ordinal()]) {
 				countX = 0;
+				dirX = randomDirection(dirX);
 				if (!hasOkazari() && (isSad() || isVerySad())) {
-					dirX = randomDirection(dirX);
 					if (SimYukkuri.RND.nextInt(10) == 0) {
 						setMessage(MessagePool.getMessage(this, MessagePool.Action.NoAccessory));
 					}
