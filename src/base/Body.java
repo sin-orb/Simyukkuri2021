@@ -2736,8 +2736,8 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		} else {
 			if (countX++ >= getSameDest() * getSTEP()[getBodyAgeState().ordinal()]) {
 				countX = 0;
+				dirX = randomDirection(dirX);
 				if (!hasOkazari() && (isSad() || isVerySad())) {
-					dirX = randomDirection(dirX);
 					if (SimYukkuri.RND.nextInt(10) == 0) {
 						setMessage(MessagePool.getMessage(this, MessagePool.Action.NoAccessory));
 					}
@@ -4991,6 +4991,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			return;
 		}
 		clearActions();
+		setSleeping(false);
 		EventLogic.addBodyEvent(this, new CutPenipeniEvent(this, null, null, 1), null, null);
 		checkReactionStalkMother(UnbirthBabyState.ATTAKED);
 	}
@@ -7967,8 +7968,8 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	 */
 	public final boolean canEventResponse() {
 		if (isDead() || getCriticalDamege() == CriticalDamegeType.CUT || isPealed() ||
-				isPacked() || isBlind() || isSleeping() || isShitting() || isBirth() || isSukkiri() ||
-				isbNeedled() || getCurrentEvent() != null || isNYD()
+				isPacked() || (isBlind() && !isCutPeni() ) || isSleeping() || isShitting() || isBirth() || isSukkiri() ||
+				isbNeedled() || getCurrentEvent() != null || isNYD() || isTaken()
 				|| getBaryState() != BaryInUGState.NONE || isLockmove() || isStarving()) {
 			return false;
 		}
@@ -7977,6 +7978,19 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			return false;
 		}
 		return true;
+	}
+	/**
+	 * ぺにぺに切断のみ、盲目状態でも起きて良い
+	 * @return ぺにぺに切断イベントが溜まってるかどうか
+	 */
+	protected boolean isCutPeni() {
+		if (getEventList() == null || getEventList().size() == 0) {
+			return false;
+		}
+		if (getEventList().get(0) instanceof CutPenipeniEvent) {
+			return true;
+		}
+		return false;
 	}
 
 	/**
@@ -8203,11 +8217,11 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		checkDiscipline();
 		// check wet
 		checkWet();
-		checkAttitude();
 		//8秒に一回顔を
-		if (SimYukkuri.RND.nextInt(80) == 0)
+		if (SimYukkuri.RND.nextInt(80) == 0) {
 			setForceFace(-1);
-
+			checkAttitude();
+		}
 		//妊娠状況チェック
 		boolean oldHasBaby = hasBabyOrStalk();
 		if (checkChildbirth()) {
@@ -8452,7 +8466,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			setAttitude((mama != null ? mama.getAttitude() : null));
 		}
 		if (getAttitude() == null) {
-			setAttitude(Attitude.values()[SimYukkuri.RND.nextInt(5)]);
+			setAttitude(getRandomAttitude());
 		}
 		switch (SimYukkuri.RND.nextInt(6)) {
 		case 0:
@@ -8533,21 +8547,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		BodyRank eBodyRank = BodyRank.KAIYU;
 		PublicRank ePublicRank = PublicRank.NONE;
 		if (mama != null) {
-			BodyRank eMotherBodyRank = mama.getBodyRank();
-			// 母親のランクに応じて変更
-			switch (eMotherBodyRank) {
-			case KAIYU:// 飼いゆ
-				eBodyRank = BodyRank.KAIYU;
-				break;
-			case NORAYU:// 野良ゆ
-				eBodyRank = BodyRank.NORAYU;
-				break;
-			case YASEIYU://　野生ゆ
-				eBodyRank = BodyRank.YASEIYU;
-				break;
-			default:
-				break;
-			}
+			eBodyRank = mama.getBodyRank();
 			/*
 			//　141229時点で飼いゆと野良ゆしか機能していないので他の選択肢はコメントアウト
 			switch(eMotherBodyRank){
@@ -8607,6 +8607,23 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 
 		hungry = getHUNGRYLIMIT()[getBodyAgeState().ordinal()] + (100 * getBodyAgeState().ordinal());
 
+	}
+
+	private Attitude getRandomAttitude() {
+		switch (SimYukkuri.RND.nextInt(9)) {
+		case 0:
+			return Attitude.VERY_NICE;
+		case 1:
+		case 2:
+			return Attitude.NICE;
+		case 3:
+		case 4:
+			return Attitude.SHITHEAD;
+		case 5:
+			return Attitude.SUPER_SHITHEAD;
+		default:
+			return Attitude.AVERAGE;
+		}
 	}
 
 	/**
