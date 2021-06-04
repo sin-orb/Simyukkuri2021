@@ -107,6 +107,7 @@ public class ItemListener {
 					if (ItemMenu.getTarget instanceof Body) {
 						Body b = (Body) ItemMenu.getTarget;
 						b.removeAllStalks();
+						b.setTaken(true);
 						curMap.body.remove(b);
 					} else if (ItemMenu.getTarget instanceof Shit) {
 						curMap.shit.remove(ItemMenu.getTarget);

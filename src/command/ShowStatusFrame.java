@@ -61,6 +61,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 	private JTextField textField_23;
 	private JTextField textField_24;
 	private JTextField textField_25;
+	private JTextField textField_26;
 
 	private static final ShowStatusFrame instance = new ShowStatusFrame();
 
@@ -85,7 +86,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		textField.setColumns(10);
 
 		JLabel lblNewLabel_1 = new JLabel(ResourceUtil.getInstance().read("command_status_name"));
-		lblNewLabel_1.setBounds(243, 14, 29, 13);
+		lblNewLabel_1.setBounds(241, 15, 48, 13);
 		contentPane.add(lblNewLabel_1);
 
 		textField_1 = new JTextField();
@@ -610,7 +611,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 
 		textField_21 = new JTextField();
 		textField_21.setEditable(false);
-		textField_21.setBounds(44, 389, 603, 19);
+		textField_21.setBounds(72, 389, 603, 19);
 		contentPane.add(textField_21);
 		textField_21.setColumns(10);
 
@@ -659,6 +660,18 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		textField_25.setBounds(552, 365, 96, 19);
 		contentPane.add(textField_25);
 		textField_25.setColumns(10);
+		
+		JLabel lblNewLabel_26 = new JLabel(ResourceUtil.getInstance().read("command_attitudepoint"));
+		lblNewLabel_26.setBounds(226, 188, 96, 13);
+		contentPane.add(lblNewLabel_26);
+		
+		textField_26 = new JTextField();
+		textField_26.setEnabled(false);
+		textField_26.setEditable(false);
+		textField_26.setBounds(295, 184, 128, 19);
+		contentPane.add(textField_26);
+		textField_26.setColumns(10);
+		
 	}
 
 	/**
@@ -889,6 +902,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		textField_23.setText(String.valueOf(b.getNumOfAnts()));
 		textField_24.setText(String.valueOf(b.getBlockedCount()));
 		textField_25.setText(b.isLockmove() ? ResourceUtil.getInstance().read("command_status_cantmove") : ResourceUtil.getInstance().read("command_status_canmove"));
+		textField_26.setText(String.valueOf(b.getAttitudePoint()));
 	}
 
 	public static void showError(String s) {
