@@ -71,7 +71,7 @@ public class SuperEatingTimeEvent extends EventPacket implements java.io.Seriali
 			return true;
 		}
 
-		if (b.isShutmouth()) {
+		if (b.isShutmouth() || b.isDead()) {
 			return false;
 		}
 
@@ -89,7 +89,7 @@ public class SuperEatingTimeEvent extends EventPacket implements java.io.Seriali
 			return true;
 		}
 
-		if (b.isNYD()) {
+		if (b.isNYD() || b.isTaken()) {
 			return false;
 		}
 

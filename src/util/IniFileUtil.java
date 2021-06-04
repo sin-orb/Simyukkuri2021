@@ -256,11 +256,11 @@ public class IniFileUtil {
 			//ゲス限界
 			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play", "RudeLimit");
 			b.getRudeLimit()[0] = -nTemp + SimYukkuri.RND.nextInt(20) - 10;
-			conf.put("RudeLimit", nTemp);
+			conf.put("RudeLimit", -nTemp);
 			//ドゲス限界
 			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play", "SuperRudeLimit");
 			b.getRudeLimit()[1] = -nTemp + SimYukkuri.RND.nextInt(20) - 10;
-			conf.put("VeryRudeLimit", nTemp);
+			conf.put("VeryRudeLimit", -nTemp);
 			//リアルな妊娠限界の入り切り
 			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play", "RealPregnantLimit");
 			if (nTemp == 1) {

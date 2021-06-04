@@ -220,7 +220,9 @@ public class ItemMenu {
 		MapPlaceData curMap = SimYukkuri.world.getCurrentMap();
 
 		if(item instanceof Body) {
-			curMap.body.add((Body)item);
+			Body b = (Body)item;
+			b.setTaken(false);
+			curMap.body.add(b);
 		} else if(item instanceof Shit) {
 			curMap.shit.add((Shit)item);
 		} else if(item instanceof Vomit) {
