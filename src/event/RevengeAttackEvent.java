@@ -60,7 +60,7 @@ public class RevengeAttackEvent extends EventPacket implements java.io.Serializa
 	@Override
 	public UpdateState update(Body b) {
 		// 相手が消えてしまったらイベント中断
-		if (to.isRemoved())
+		if (to.isRemoved() || to.isTaken())
 			return UpdateState.ABORT;
 		// 相手に追いつけないケースがあるため、一定距離まで近づいたら相手を呼び止める
 		if (Translate.distance(b.getX(), b.getY(), to.getX(), to.getY()) < 2500) {
