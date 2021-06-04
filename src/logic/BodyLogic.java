@@ -1475,6 +1475,10 @@ public class BodyLogic {
 			if (bodyChild.isUnBirth()) {
 				continue;
 			}
+			// プレイヤーにアイテムとして持たれてる
+			if (bodyChild.isTaken()) {
+				continue;
+			}
 			// 子供に子供がいる場合はスキップ
 			if (bodyChild.getChildrenListSize() != 0) {
 				continue;

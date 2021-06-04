@@ -588,6 +588,8 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	protected int unyoForceW = 0;
 	/** うにょの動きの強さ */
 	public final static int UNYOSTRENGTH[] = { 4, 7, 10 };
+	/** 「取る」で取られているかどうか */
+	private boolean taken = false;
 
 	/**
 	 * 各ゆっくりに特有の画像読み込みのためのファイル名を取得する.
@@ -6146,4 +6148,20 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 		BodyAttributes b = (BodyAttributes) o;
 		return getUniqueID() - b.getUniqueID();
 	}
+	/**
+	 * 取られているかどうかを取得する.
+	 * @return 取られているかどうか
+	 */
+	public boolean isTaken() {
+		return taken;
+	}
+	/**
+	 * 取られているかどうかを設定する.
+	 * @param taken 取られているかどうか
+	 */
+	public void setTaken(boolean taken) {
+		this.taken = taken;
+	}
+	
+	
 }
