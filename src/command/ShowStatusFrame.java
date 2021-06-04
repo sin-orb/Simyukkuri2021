@@ -606,12 +606,12 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		textField_20.setColumns(10);
 
 		JLabel lblNewLabel_21 = new JLabel(ResourceUtil.getInstance().read("command_status_status"));
-		lblNewLabel_21.setBounds(12, 393, 50, 13);
+		lblNewLabel_21.setBounds(12, 393, 80, 13);
 		contentPane.add(lblNewLabel_21);
 
 		textField_21 = new JTextField();
 		textField_21.setEditable(false);
-		textField_21.setBounds(72, 389, 603, 19);
+		textField_21.setBounds(102, 389, 603, 19);
 		contentPane.add(textField_21);
 		textField_21.setColumns(10);
 
@@ -666,9 +666,8 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		contentPane.add(lblNewLabel_26);
 		
 		textField_26 = new JTextField();
-		textField_26.setEnabled(false);
 		textField_26.setEditable(false);
-		textField_26.setBounds(295, 184, 128, 19);
+		textField_26.setBounds(315, 184, 128, 19);
 		contentPane.add(textField_26);
 		textField_26.setColumns(10);
 		
