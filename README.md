@@ -31,7 +31,7 @@
 
 しむゆっくりは「[Apache License, Version 2.0](https://www.apache.org/licenses/LICENSE-2.0)」でライセンスされています。
 
-詳しくは[LICENSE](LICENSE.md)をご覧ください。
+詳しくは[LICENSE](LICENSE)をご覧ください。
 
 Git管理される前の変更履歴
 ---
