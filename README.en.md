@@ -21,6 +21,7 @@ How To
 2. Execute build.bat inside the /build directory and a Simyukkuri.jar file will be created.
 3. Execute Simyukkuri.jar to play.
 
+* Alternatively, you can download the zip file from the binaries folder where the previous releases are located, unzip it, and run it according to the ReadMe.en.txt file in the unzipped folder.
 Contributing To The Project
 ---
 
