@@ -6578,7 +6578,6 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 					setEatingShit(false);
 					setNobinobi(false);
 					setYunnyaa(false);
-					setbNeedled(true);
 					setInOutTakeoutItem(false);
 					// 飛行種なら墜落させる
 					if (canflyCheck()) {
@@ -6592,6 +6591,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 					// 実ゆの場合、親が反応する
 					checkReactionStalkMother(UnbirthBabyState.ATTAKED);
 				}
+				setbNeedled(true);
 			}
 		}
 	}

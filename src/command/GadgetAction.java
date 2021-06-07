@@ -1473,6 +1473,8 @@ public class GadgetAction {
 			} else {
 				if (found instanceof Body) {
 					Body b = (Body) found;
+					if (b.isDead())
+						break;
 					b.feed();
 				}
 			}

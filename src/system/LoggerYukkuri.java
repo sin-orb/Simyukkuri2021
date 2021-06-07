@@ -103,7 +103,7 @@ public class LoggerYukkuri {
 		logPage += p;
 		if (logPage < 0)
 			logPage = 4;
-		if (logPage >= 4)
+		else if (logPage >= 4)
 			logPage = 0;
 	}
 	/**
