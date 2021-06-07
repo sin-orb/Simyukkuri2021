@@ -311,24 +311,8 @@ public class MyPane extends JPanel implements Runnable {
 
 			// ゆっくり達とサブパーツ
 			if (isBody) {
-				win.addLine("Load Yukkuri");
-				Alice.loadImages(loader, this);
-				Chen.loadImages(loader, this);
-				Deibu.loadImages(loader, this);
-				DosMarisa.loadImages(loader, this);
-				Marisa.loadImages(loader, this);
-				MarisaKotatsumuri.loadImages(loader, this);
-				MarisaReimu.loadImages(loader, this);
-				MarisaTsumuri.loadImages(loader, this);
-				Myon.loadImages(loader, this);
-				Patch.loadImages(loader, this);
-				Reimu.loadImages(loader, this);
-				ReimuMarisa.loadImages(loader, this);
-				Tarinai.loadImages(loader, this);
-				TarinaiReimu.loadImages(loader, this);
-				WasaReimu.loadImages(loader, this);
+				// 通常種はここで読んでいたが、マシンスペックの良くない人のため、作成されたときに読むように変更
 				Body.loadShadowImages(loader, this);
-
 				Shit.loadImages(loader, this);
 				Vomit.loadImages(loader, this);
 			}

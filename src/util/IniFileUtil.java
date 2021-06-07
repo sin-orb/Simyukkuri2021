@@ -87,17 +87,17 @@ public class IniFileUtil {
 			if (nTemp != 0) {
 				b.getWEIGHT()[0] = nTemp;
 			}
-			conf.put("WEIGHT.baby", b.getEATAMOUNT()[0]);
+			conf.put("WEIGHT.baby", b.getWEIGHT()[0]);
 			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play", "WEIGHT.child");
 			if (nTemp != 0) {
 				b.getWEIGHT()[1] = nTemp;
 			}
-			conf.put("WEIGHT.child", b.getEATAMOUNT()[1]);
+			conf.put("WEIGHT.child", b.getWEIGHT()[1]);
 			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play", "WEIGHT.adult");
 			if (nTemp != 0) {
 				b.getWEIGHT()[2] = nTemp;
 			}
-			conf.put("WEIGHT.adult", b.getEATAMOUNT()[2]);
+			conf.put("WEIGHT.adult", b.getWEIGHT()[2]);
 			//		public int STRENGTH[] = {500, 1000, 3000};					// 基準の攻撃力
 			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play", "STRENGTH.baby");
 			if (nTemp != 0) {
@@ -186,17 +186,17 @@ public class IniFileUtil {
 			if (nTemp != 0) {
 				b.getTANGLEVEL()[0] = nTemp;
 			}
-			conf.put("TANGLEVEL.baby", b.getSTRESSLIMIT()[0]);
+			conf.put("TANGLEVEL.baby", b.getTANGLEVEL()[0]);
 			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play", "TANGLEVEL.child");
 			if (nTemp != 0) {
 				b.getTANGLEVEL()[1] = nTemp;
 			}
-			conf.put("TANGLEVEL.child", b.getSTRESSLIMIT()[1]);
+			conf.put("TANGLEVEL.child", b.getTANGLEVEL()[1]);
 			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play", "TANGLEVEL.adult");
 			if (nTemp != 0) {
 				b.getTANGLEVEL()[2] = nTemp;
 			}
-			conf.put("TANGLEVEL.adult", b.getSTRESSLIMIT()[2]);
+			conf.put("TANGLEVEL.adult", b.getTANGLEVEL()[2]);
 			//		public int BABYLIMIT = 100*24*7;
 			//		public int CHILDLIMIT = 100*24*21;
 			//		public int LIFELIMIT = 100*24*365;

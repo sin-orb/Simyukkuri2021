@@ -226,6 +226,10 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		JButton btnNewButton_5 = new JButton(ResourceUtil.getInstance().read("command_status_random"));
 		btnNewButton_5.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if (SimYukkuri.world.getCurrentMap().body.size() == 0) {
+					showError(ResourceUtil.getInstance().read("command_status_noexistyukkurierror"));
+					return;
+				}
 				int random = SimYukkuri.RND.nextInt(SimYukkuri.world.getCurrentMap().body.size());
 				ShowStatusFrame.getInstance().giveBodyInfo(SimYukkuri.world.getCurrentMap().body.get(random));
 			}

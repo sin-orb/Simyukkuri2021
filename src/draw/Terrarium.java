@@ -379,55 +379,72 @@ public class Terrarium {
 
 		switch (type) {
 		case Marisa.type:
+			SimYukkuri.mypane.loadBodyImage(YukkuriType.MARISA);
 			b = new Marisa(x, y, z, age, mama, papa);
 			break;
 		case Reimu.type:
+			SimYukkuri.mypane.loadBodyImage(YukkuriType.REIMU);
 			b = new Reimu(x, y, z, age, mama, papa);
 			break;
 		case Alice.type:
+			SimYukkuri.mypane.loadBodyImage(YukkuriType.ALICE);
 			b = new Alice(x, y, z, age, mama, papa);
 			break;
 		case Patch.type:
+			SimYukkuri.mypane.loadBodyImage(YukkuriType.PATCH);
 			b = new Patch(x, y, z, age, mama, papa);
 			break;
 		case Chen.type:
+			SimYukkuri.mypane.loadBodyImage(YukkuriType.CHEN);
 			b = new Chen(x, y, z, age, mama, papa);
 			break;
 		case Myon.type:
+			SimYukkuri.mypane.loadBodyImage(YukkuriType.MYON);
 			b = new Myon(x, y, z, age, mama, papa);
 			break;
 		case WasaReimu.type:
+			SimYukkuri.mypane.loadBodyImage(YukkuriType.WASAREIMU);
 			b = new WasaReimu(x, y, z, age, mama, papa);
 			break;
 		case MarisaTsumuri.type:
+			SimYukkuri.mypane.loadBodyImage(YukkuriType.MARISATSUMURI);
 			b = new MarisaTsumuri(x, y, z, age, mama, papa);
 			break;
 		case MarisaKotatsumuri.type:
+			SimYukkuri.mypane.loadBodyImage(YukkuriType.MARISAKOTATSUMURI);
 			b = new MarisaKotatsumuri(x, y, z, age, mama, papa);
 			break;
 		case Deibu.type:
+			SimYukkuri.mypane.loadBodyImage(YukkuriType.DEIBU);
 			b = new Deibu(x, y, z, age, mama, papa);
 			break;
 		case DosMarisa.type:
 			if (SimYukkuri.world.getCurrentMap().makeOrKillDos(true)) {
+				SimYukkuri.mypane.loadBodyImage(YukkuriType.DOSMARISA);
 				b = new DosMarisa(x, y, z, age, mama, papa);
 			} else {
+				SimYukkuri.mypane.loadBodyImage(YukkuriType.MARISA);
 				b = new Marisa(x, y, z, age, mama, papa);
 			}
 			break;
 		case Tarinai.type:
+			SimYukkuri.mypane.loadBodyImage(YukkuriType.TARINAI);
 			b = new Tarinai(x, y, z, age, mama, papa);
 			break;
 		case TarinaiReimu.type:
+			SimYukkuri.mypane.loadBodyImage(YukkuriType.TARINAIREIMU);
 			b = new TarinaiReimu(x, y, z, age, mama, papa);
 			break;
 		case MarisaReimu.type:
+			SimYukkuri.mypane.loadBodyImage(YukkuriType.MARISAREIMU);
 			b = new MarisaReimu(x, y, z, age, mama, papa);
 			break;
 		case ReimuMarisa.type:
+			SimYukkuri.mypane.loadBodyImage(YukkuriType.REIMUMARISA);
 			b = new ReimuMarisa(x, y, z, age, mama, papa);
 			break;
 		case HybridYukkuri.type:
+			SimYukkuri.mypane.loadBodyImage(YukkuriType.HYBRIDYUKKURI);
 			b = new HybridYukkuri(x, y, z, age, mama, papa);
 			break;
 		case Remirya.type:
