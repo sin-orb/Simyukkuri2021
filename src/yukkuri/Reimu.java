@@ -177,6 +177,7 @@ public class Reimu extends Body implements java.io.Serializable {
 		synchronized (SimYukkuri.lock) {
 			List<Body> bodyList = SimYukkuri.world.getCurrentMap().body;
 			bodyList.remove(this);
+			SimYukkuri.mypane.loadBodyImage(YukkuriType.DEIBU);
 			Body to = new Deibu(getX(), getY(), getZ(), getBodyAgeState(), null, null);
 			try {
 				YukkuriUtil.changeBody(to, this);

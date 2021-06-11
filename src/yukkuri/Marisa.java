@@ -185,6 +185,7 @@ public class Marisa extends Body implements java.io.Serializable {
 				return;
 			}
 			bodyList.remove(this);
+			SimYukkuri.mypane.loadBodyImage(YukkuriType.DOSMARISA);
 			Body to = new DosMarisa(getX(), getY(), getZ(), getBodyAgeState(), null, null);
 			try {
 				YukkuriUtil.changeBody(to, this);
