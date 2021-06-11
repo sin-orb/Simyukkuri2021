@@ -312,6 +312,7 @@ public class MyPane extends JPanel implements Runnable {
 			// ゆっくり達とサブパーツ
 			if (isBody) {
 				// 通常種はここで読んでいたが、マシンスペックの良くない人のため、作成されたときに読むように変更
+				win.addLine("Load Shadow/Poo-poo/Vomit");
 				Body.loadShadowImages(loader, this);
 				Shit.loadImages(loader, this);
 				Vomit.loadImages(loader, this);
