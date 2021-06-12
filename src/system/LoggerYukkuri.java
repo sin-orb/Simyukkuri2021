@@ -94,7 +94,7 @@ public class LoggerYukkuri {
 	public static void setLogPage(int p) {
 		logPage = p;
 		if (logPage < 0)
-			logPage = 4;
+			logPage = 3;
 		if (logPage >= 4)
 			logPage = 0;
 	}
@@ -102,7 +102,7 @@ public class LoggerYukkuri {
 	public static void addLogPage(int p) {
 		logPage += p;
 		if (logPage < 0)
-			logPage = 4;
+			logPage = 3;
 		else if (logPage >= 4)
 			logPage = 0;
 	}
@@ -469,43 +469,6 @@ public class LoggerYukkuri {
 			g2.drawString(Long.toString(numOfMaxUnun / 2),
 					GRAPH_OFFSETX - String.valueOf(numOfMaxUnun).length() * 10 - 2, GRAPH_OFFSETY + GRAPH_HEIGHT / 2);
 			g2.drawString("0", GRAPH_OFFSETX - 12, GRAPH_OFFSETY + GRAPH_HEIGHT);
-			break;
-		case 4:
-			g2.drawString(ResourceUtil.getInstance().read("system_income"), 100, 100);
-			g2.setFont(textFonttext);
-			for (int i = 0; i < 1; i++) {
-				g2.setColor(Color.WHITE);
-				g2.drawString(Long.toString(numOfObjNowLog[i + NUM_OF_CASH]), LEGEND_OFFSETX + 130, 30 * i + 140);
-
-				g2.drawString(
-						Long.toString(numOfObjNowLog[NUM_OF_CASH] - logData[NUM_OF_LOGDATA_TYPE * 59 + NUM_OF_CASH]),
-						LEGEND_OFFSETX + 130, 30 * (i + 1) + 140);
-				g2.drawString(ResourceUtil.getInstance().read("system_money"), LEGEND_OFFSETX, 30 * i + 140);
-				g2.drawString(ResourceUtil.getInstance().read("system_shueki"), LEGEND_OFFSETX, 30 * (i + 1) + 140);
-				g2.setColor(Color.YELLOW);
-				if (i == 0) {
-					for (int k = 0; k < NUM_OF_GRAPH_DATA; k++) {
-						if (logData[NUM_OF_LOGDATA_TYPE * k + i + NUM_OF_CASH] > 0) {
-							yp[k] -= logData[NUM_OF_LOGDATA_TYPE * k + i + NUM_OF_CASH] * GRAPH_HEIGHT / numOfMaxCash;
-						} else if (logData[NUM_OF_LOGDATA_TYPE * k + i + NUM_OF_CASH] == 0) {
-							yp[k] -= logData[NUM_OF_LOGDATA_TYPE * k + i + NUM_OF_CASH] * GRAPH_HEIGHT / 1;
-						}
-					}
-					g2.fillPolygon(xp, yp, NUM_OF_GRAPH_DATA * 2);
-				}
-
-				for (int k = 0; k < NUM_OF_GRAPH_DATA; k++) {
-					yp[NUM_OF_GRAPH_DATA * 2 - k - 1] = yp[k];
-				}
-				g2.setColor(Color.WHITE);
-				g2.drawRect(GRAPH_OFFSETX, GRAPH_OFFSETY, GRAPH_WIDTH, GRAPH_HEIGHT);
-				g2.drawString(Long.toString(numOfMaxCash),
-						GRAPH_OFFSETX - String.valueOf(numOfMaxCash).length() * 10 - 2, GRAPH_OFFSETY);
-				g2.drawString(Long.toString(numOfMaxCash / 2),
-						GRAPH_OFFSETX - String.valueOf(numOfMaxCash).length() * 10 - 2,
-						GRAPH_OFFSETY + GRAPH_HEIGHT / 2);
-				g2.drawString("0", GRAPH_OFFSETX - 12, GRAPH_OFFSETY + GRAPH_HEIGHT);
-			}
 			break;
 		default:
 			break;
