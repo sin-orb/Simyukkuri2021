@@ -8,6 +8,7 @@ import src.enums.Happiness;
 import src.enums.ImageCode;
 import src.system.MessagePool;
 import src.system.ResourceUtil;
+import src.util.YukkuriUtil;
 
 /***************************************************
 	ぺに切りの反応イベント
@@ -28,6 +29,9 @@ public class CutPenipeniEvent extends EventPacket implements java.io.Serializabl
 		super(f, t, tgt, cnt);
 	}
 
+	public CutPenipeniEvent() {
+		
+	}
 	// 参加チェック
 	// ここで各種チェックを行い、イベントへ参加するかを返す
 	// また、イベント優先度も必要に応じて設定できる
@@ -35,7 +39,8 @@ public class CutPenipeniEvent extends EventPacket implements java.io.Serializabl
 	public boolean checkEventResponse(Body b) {
 
 		priority = EventPriority.HIGH;
-		if (b == getFrom())
+		Body p = YukkuriUtil.getBodyInstance(getFrom());
+		if (b == p)
 			return true;
 		return false;
 	}

@@ -1,11 +1,9 @@
 package src;
 
 import java.awt.Cursor;
-import java.awt.Dimension;
 import java.awt.GraphicsEnvironment;
 import java.awt.GridLayout;
 import java.awt.Insets;
-import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.event.KeyEvent;
@@ -46,6 +44,8 @@ import src.command.GadgetMenu.MainCategoryName;
 import src.draw.ModLoader;
 import src.draw.MyPane;
 import src.draw.ObjDrawComp;
+import src.draw.Point4y;
+import src.draw.Rectangle4y;
 import src.draw.TerrainField;
 import src.draw.Terrarium;
 import src.draw.Translate;
@@ -286,7 +286,7 @@ public class SimYukkuri extends JFrame {
 			case KeyEvent.VK_Z:
 				synchronized (SimYukkuri.lock) {
 					if (Translate.addZoomRate(-1)) {
-						Point mpos = getMousePosition();
+						java.awt.Point mpos = getMousePosition();
 						Translate.setBufferZoom();
 						if (mpos != null) {
 							Translate.transCanvasToField(mpos.x, mpos.x, fieldMousePos);
@@ -298,7 +298,7 @@ public class SimYukkuri extends JFrame {
 			case KeyEvent.VK_X:
 				synchronized (SimYukkuri.lock) {
 					if (Translate.addZoomRate(1)) {
-						Point mpos = getMousePosition();
+						java.awt.Point mpos = getMousePosition();
 						Translate.setBufferZoom();
 						if (mpos != null) {
 							Translate.transCanvasToField(mpos.x, mpos.x, fieldMousePos);
@@ -359,8 +359,8 @@ public class SimYukkuri extends JFrame {
 		private int oX = 0, oY = 0;
 		@SuppressWarnings("unused")
 		private int altitude = 0;
-		private Point translatePos = new Point();
-		private Rectangle imageRect = new Rectangle();
+		private Point4y translatePos = new Point4y();
+		private Rectangle4y imageRect = new Rectangle4y();
 		private List<Obj> list4sort = new LinkedList<Obj>();
 
 		// マウス位置の最も手前にあるオブジェクトを取得
@@ -398,16 +398,17 @@ public class SimYukkuri extends JFrame {
 				} else if (!stalkMode && o instanceof Stalk) {
 					// 茎ひっこぬき無効の場合は茎にヒットしても元のゆっくりを取得
 					stalk = (Stalk) o;
-					if (stalk.getPlantYukkuri() != null) {
-						parent = stalk.getPlantYukkuri();
+					Body b = SimYukkuri.world.getCurrentMap().body.get(stalk.getPlantYukkuri());
+					if (b != null) {
+						parent = b;
 					} else {
 						parent = stalk;
 					}
 				} else {
 					parent = o;
 				}
-
-				Rectangle screenRect = parent.getScreenRect();
+				Rectangle4y r = parent.getScreenRect();
+				Rectangle screenRect = new Rectangle(r.x, r.y, r.width, r.height);
 				if (screenRect.contains(mx, my)) {
 					// ヒットしたら画像の原点からの位置を記録
 					if (parent instanceof Body) {
@@ -427,7 +428,8 @@ public class SimYukkuri extends JFrame {
 				List<ObjEX> platformList = world.getPlatformList();
 				for (Iterator<ObjEX> i = platformList.iterator(); i.hasNext();) {
 					ObjEX oex = (ObjEX) i.next();
-					Rectangle screenRect = oex.getScreenRect();
+					Rectangle4y r = oex.getScreenRect();
+					Rectangle screenRect = new Rectangle(r.x, r.y, r.width, r.height);
 					oex.getBoundaryShape(imageRect);
 					if (oex instanceof BeltconveyorObj) {
 						if (((BeltconveyorObj) oex).checkContain(mx, my, true)) {
@@ -450,7 +452,7 @@ public class SimYukkuri extends JFrame {
 		// マウス位置の最も手前にあるシェイプを取得
 		private FieldShapeBase getShapeFront(int mx, int my) {
 
-			Point pos = Translate.invert(mx, my);
+			Point4y pos = Translate.invert(mx, my);
 			if (pos == null)
 				return null;
 			// フラグマップから大まかな判定取得
@@ -529,7 +531,7 @@ public class SimYukkuri extends JFrame {
 							}
 						} else {
 							// オブジェクトを右クリック
-							if (SimYukkuri.world.player.holdItem == null) {
+							if (SimYukkuri.world.player.getHoldItem() == null) {
 								// 手にアイテムを持っていない場合
 								if (found.hasGetPopup() != ItemMenu.GetMenuTarget.NONE) {
 									// アイテム取得メニュー表示
@@ -559,7 +561,7 @@ public class SimYukkuri extends JFrame {
 				ItemMenu.itemModeCancel(false);
 
 				// 左クリック処理
-				if (SimYukkuri.world.player.holdItem != null) {
+				if (SimYukkuri.world.player.getHoldItem() != null) {
 					// 手にアイテムを持っている場合は置く
 					ItemMenu.dropItem(e);
 					return;
@@ -913,15 +915,15 @@ public class SimYukkuri extends JFrame {
 		paintPaneMode = size;
 
 		Insets inset = getInsets();
-		setPreferredSize(new Dimension(PAINT_PANE_X[size] + MainCommandUI.MENU_PANE_X, PAINT_PANE_Y[size]));
+		setPreferredSize(new java.awt.Dimension(PAINT_PANE_X[size] + MainCommandUI.MENU_PANE_X, PAINT_PANE_Y[size]));
 		setSize(inset.left + inset.right + PAINT_PANE_X[size] + MainCommandUI.MENU_PANE_X,
 				inset.top + inset.bottom + PAINT_PANE_Y[size]);
-		setLocation(new Point(100, 0));
+		setLocation(new java.awt.Point(100, 0));
 		Translate.setCanvasSize(PAINT_PANE_X[size], PAINT_PANE_Y[size], fieldScaleData[scale], bufferSizeData[scale],
 				fieldZoomRate[scale]);
-		mypane.setPreferredSize(new Dimension(Translate.canvasW, Translate.canvasH));
-		mypane.setMinimumSize(new Dimension(Translate.canvasW, Translate.canvasH));
-		mypane.setMaximumSize(new Dimension(Translate.canvasW, Translate.canvasH));
+		mypane.setPreferredSize(new java.awt.Dimension(Translate.canvasW, Translate.canvasH));
+		mypane.setMinimumSize(new java.awt.Dimension(Translate.canvasW, Translate.canvasH));
+		mypane.setMaximumSize(new java.awt.Dimension(Translate.canvasW, Translate.canvasH));
 	}
 
 	/**
@@ -940,11 +942,11 @@ public class SimYukkuri extends JFrame {
 			h = (int) ((double) w / ASPECT);
 		}
 		setSize(w + MainCommandUI.MENU_PANE_X, h);
-		setLocation(new Point(0, 0));
+		setLocation(new java.awt.Point(0, 0));
 		Translate.setCanvasSize(w, h, fieldScaleData[scale], bufferSizeData[scale], fieldZoomRate[scale]);
-		mypane.setPreferredSize(new Dimension(Translate.canvasW, Translate.canvasH));
-		mypane.setMinimumSize(new Dimension(Translate.canvasW, Translate.canvasH));
-		mypane.setMaximumSize(new Dimension(Translate.canvasW, Translate.canvasH));
+		mypane.setPreferredSize(new java.awt.Dimension(Translate.canvasW, Translate.canvasH));
+		mypane.setMinimumSize(new java.awt.Dimension(Translate.canvasW, Translate.canvasH));
+		mypane.setMaximumSize(new java.awt.Dimension(Translate.canvasW, Translate.canvasH));
 	}
 
 	/**最初に出てくるウィンドウの作成*/
@@ -972,7 +974,7 @@ public class SimYukkuri extends JFrame {
 
 		JPanel mainPanel = new JPanel();
 		mainPanel.setLayout(new GridLayout(2, 1, 0, 0));
-		mainPanel.setPreferredSize(new Dimension(450, 220));
+		mainPanel.setPreferredSize(new java.awt.Dimension(450, 220));
 		JPanel winPanel = new JPanel();
 		JPanel grpPanel = new JPanel();
 		grpPanel.setLayout(new BoxLayout(grpPanel, BoxLayout.Y_AXIS));

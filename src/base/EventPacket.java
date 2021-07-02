@@ -1,5 +1,8 @@
 package src.base;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
+
 /*****************************************************
 	ゆっくり同士や環境とのメッセージ伝達を行うためのイベントパックの抽象クラス
 	<br>EventPacketにデータをセットして環境に対してアクションを起こす場合はTerrarium.eventListへ、
@@ -10,7 +13,7 @@ package src.base;
 
 	<br>追加用の処理は基本EventLogicにあるものを使う
 */
-
+@JsonTypeInfo(use = Id.CLASS)
 abstract public class EventPacket implements java.io.Serializable{
 	private static final long serialVersionUID = 1L;
 
@@ -32,11 +35,11 @@ abstract public class EventPacket implements java.io.Serializable{
 
 	/** イベントを発生させる側で設定する項目1
 	 * <br>イベントを発した個体と特定の対象に向けた場合はその個体*/
-	private Body from;
-	protected Body to;
+	private int from = -1;
+	private int to = -1;
 	/** イベントを発生させる側で設定する項目2
 	 * <br>イベント対象*/
-	protected Obj target;
+	protected int target;
 	/** イベントを発生させる側で設定する項目3
 	 * <br>イベントの有効期間*/
 	protected int count;
@@ -60,9 +63,13 @@ abstract public class EventPacket implements java.io.Serializable{
 	 */
 	public EventPacket(Body f, Body t, Obj tgt, int cnt) {
 		setFrom(f);
-		to = t;
-		target = tgt;
+		to = t == null? -1 : t.getUniqueID();
+		target = tgt == null ? -1 : tgt.objId;
 		count = cnt;
+	}
+	
+	public EventPacket() {
+		
 	}
 
 	/**有効期間のカウントダウン*/
@@ -80,17 +87,21 @@ abstract public class EventPacket implements java.io.Serializable{
 
 	/**イベントを発した個体セッター*/
 	public void setFrom(Body b) {
-		from = b;
+		if (b!= null) {
+			from = b.getUniqueID();
+		} else {
+			from = -1;
+		}
 	}
 
 	/**特定の対象に向けた場合はその個体セッター*/
 	public void setTo(Body b) {
-		to = b;
+		to = b.getUniqueID();
 	}
 
 	/**イベント対象セッター*/
 	public void setTarget(Obj o) {
-		target = o;
+		target = o.objId;
 	}
 
 	/**
@@ -152,9 +163,17 @@ abstract public class EventPacket implements java.io.Serializable{
 	 * イベント呼び出し元の個体を返す.
 	 * @return イベント呼び出し元個体
 	 */
-	public Body getFrom() {
+	public int getFrom() {
 		return from;
 	}
+	/**
+	 * イベント呼び出し先の個体を返す.
+	 * @return イベント呼び出し先個体 
+	 */
+	public int getTo() {
+		return to;
+	}
+	
 	/**
 	 * 移動目標Z座標を返却する.
 	 * @return 移動目標Z座標
@@ -211,6 +230,34 @@ abstract public class EventPacket implements java.io.Serializable{
 		}
 		b.setLastActionTime();
 		return true;
+	}
+
+	public int getTarget() {
+		return target;
+	}
+
+	public void setTarget(int target) {
+		this.target = target;
+	}
+
+	public int getCount() {
+		return count;
+	}
+
+	public void setCount(int count) {
+		this.count = count;
+	}
+
+	public void setFrom(int from) {
+		this.from = from;
+	}
+
+	public void setTo(int to) {
+		this.to = to;
+	}
+
+	public void setPriority(EventPriority priority) {
+		this.priority = priority;
 	}
 }
 

@@ -17,6 +17,7 @@ import src.enums.HairState;
 import src.enums.Happiness;
 import src.system.MessagePool;
 import src.system.ResourceUtil;
+import src.util.YukkuriUtil;
 
 
 /****************************************
@@ -88,31 +89,35 @@ public class Fire extends Attachment {
 
 	@Override
 	public BufferedImage getImage(Body b) {
-		return images[parent.getBodyAgeState().ordinal()][animeFrame];
+		Body pa = YukkuriUtil.getBodyInstance(parent);
+		if (pa == null) return null; 
+		return images[pa.getBodyAgeState().ordinal()][animeFrame];
 	}
 
 	@Override
 	protected Event update() {
+		Body pa = YukkuriUtil.getBodyInstance(parent);
+		if (pa == null) return Event.DONOTHING;
 		// 生きてたらセリフとダメージ加算
-		if(!parent.isDead()) {
-			parent.clearActions();
-			if( parent.isNotNYD() ){
-				if(!parent.isTalking()) {
-					parent.setMessage(MessagePool.getMessage(parent, MessagePool.Action.Burning), 20, true, true);
+		if(!pa.isDead()) {
+			pa.clearActions();
+			if( pa.isNotNYD() ){
+				if(!pa.isTalking()) {
+					pa.setMessage(MessagePool.getMessage(pa, MessagePool.Action.Burning), 20, true, true);
 				}
 			}
-			parent.addDamage(TICK * 90);
-			parent.addStress(50);
+			pa.addDamage(TICK * 90);
+			pa.addStress(50);
 			// 背面固定で針が刺さってないなら尻を振る
-			if( parent.isFixBack()  && !parent.isNeedled()){
+			if( pa.isFixBack()  && !pa.isNeedled()){
 				if( SimYukkuri.RND.nextInt(10) == 0){
-					parent.setFurifuri(true);
+					pa.setFurifuri(true);
 				}
 			}
 			else{
-				if(parent.isLockmove() ){
+				if(pa.isLockmove() ){
 					if( SimYukkuri.RND.nextInt(3) == 0){
-						parent.setNobinobi(true);
+						pa.setNobinobi(true);
 					}
 				}
 			}
@@ -120,27 +125,27 @@ public class Fire extends Attachment {
 		}
 		// 燃焼時間
 		burnPeriod += TICK*90 ;
-		parent.addBodyBakePeriod(90);
+		pa.addBodyBakePeriod(90);
 		// お飾り消失
-		if(burnPeriod > (parent.getDamageLimit() / 3) && parent.hasOkazari()) {
-			parent.takeOkazari(false);
+		if(burnPeriod > (pa.getDamageLimit() / 3) && pa.hasOkazari()) {
+			pa.takeOkazari(false);
 		}
-		else if(burnPeriod > (parent.getDamageLimit()*2 / 3) && parent.geteHairState()!=HairState.BALDHEAD){
-			parent.pickHair();
+		else if(burnPeriod > (pa.getDamageLimit()*2 / 3) && pa.geteHairState()!=HairState.BALDHEAD){
+			pa.pickHair();
 
 		}
-		else if(burnPeriod*90 > parent.getDamageLimit()) {
-			if (parent.isDead()) {
-				parent.setBurned(true);
+		else if(burnPeriod*90 > pa.getDamageLimit()) {
+			if (pa.isDead()) {
+				pa.setBurned(true);
 			}
 		}
-		if(parent.isDead() && parent.isBurned()) {
+		if(pa.isDead() && pa.isBurned()) {
 			return Event.REMOVED;
 		}
 
 		// 実ゆの場合、親が反応する
 		if(SimYukkuri.RND.nextInt(3) == 0){
-			Body bodyMother = parent.getBindStalkMotherCanNotice();
+			Body bodyMother = YukkuriUtil.getBodyInstance(pa.getBindStalkMotherCanNotice());
 			if ( bodyMother != null ) {
 				if( bodyMother.isNotNYD() ){
 					bodyMother.setHappiness(Happiness.VERY_SAD);
@@ -154,10 +159,12 @@ public class Fire extends Attachment {
 
 	@Override
 	public void resetBoundary(){
-		setBoundary(pivX[parent.getBodyAgeState().ordinal()],
-					pivY[parent.getBodyAgeState().ordinal()],
-					imgW[parent.getBodyAgeState().ordinal()],
-					imgH[parent.getBodyAgeState().ordinal()]);
+		Body pa = YukkuriUtil.getBodyInstance(parent);
+		if (pa == null) return;
+		setBoundary(pivX[pa.getBodyAgeState().ordinal()],
+					pivY[pa.getBodyAgeState().ordinal()],
+					imgW[pa.getBodyAgeState().ordinal()],
+					imgH[pa.getBodyAgeState().ordinal()]);
 	}
 
 	/**
@@ -167,10 +174,13 @@ public class Fire extends Attachment {
 	public Fire(Body body) {
 		super(body);
 		setAttachProperty(property, POS_KEY);
-		setBoundary(pivX[parent.getBodyAgeState().ordinal()],
-					pivY[parent.getBodyAgeState().ordinal()],
-					imgW[parent.getBodyAgeState().ordinal()],
-					imgH[parent.getBodyAgeState().ordinal()]);
+		Body pa = YukkuriUtil.getBodyInstance(parent);
+		if (pa != null) {
+		setBoundary(pivX[pa.getBodyAgeState().ordinal()],
+					pivY[pa.getBodyAgeState().ordinal()],
+					imgW[pa.getBodyAgeState().ordinal()],
+					imgH[pa.getBodyAgeState().ordinal()]);
+		}
 		burnPeriod = 0;
 		value = 0;
 		cost = 0;
@@ -178,6 +188,19 @@ public class Fire extends Attachment {
 		//処理インターバルの変更
 		processInterval = 1;
 	}
+	
+	public Fire() {
+		
+	}
+	
+	public int getBurnPeriod() {
+		return burnPeriod;
+	}
+
+	public void setBurnPeriod(int burnPeriod) {
+		this.burnPeriod = burnPeriod;
+	}
+
 	@Override
 	public String toString() {
 		return ResourceUtil.getInstance().read("item_fire");

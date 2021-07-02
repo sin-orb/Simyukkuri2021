@@ -1,7 +1,7 @@
 package src.system;
 
-import java.awt.Point;
-import java.awt.Rectangle;
+import src.draw.Point4y;
+import src.draw.Rectangle4y;
 
 
 
@@ -31,7 +31,7 @@ public class Sprite implements java.io.Serializable {
 	 *  マウスとの判定で複数参照するのでキャッシュする
 	 *   [0]左 [1]右
 	 */
-	public Rectangle[] screenRect;
+	public Rectangle4y[] screenRect;
 	/**
 	 * コンストラクタ.
 	 * @param w 幅
@@ -48,9 +48,12 @@ public class Sprite implements java.io.Serializable {
 		pivotType = piv;
 
 		calcPivot();
-		screenRect = new Rectangle[2];
-		screenRect[0] = new Rectangle();
-		screenRect[1] = new Rectangle();
+		screenRect = new Rectangle4y[2];
+		screenRect[0] = new Rectangle4y();
+		screenRect[1] = new Rectangle4y();
+	}
+	public Sprite() {
+		
 	}
 	
 	/**
@@ -61,7 +64,7 @@ public class Sprite implements java.io.Serializable {
 	 * @param tw 幅
 	 * @param th 奥行き
 	 */
-	public void calcScreenRect(Point origin, int tx, int ty, int tw, int th) {
+	public void calcScreenRect(Point4y origin, int tx, int ty, int tw, int th) {
 		// 左
 		screenRect[0].x = origin.x - tx;
 		screenRect[0].y = origin.y - ty;

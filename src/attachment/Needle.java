@@ -17,6 +17,7 @@ import src.enums.ImageCode;
 import src.enums.UnbirthBabyState;
 import src.system.MessagePool;
 import src.system.ResourceUtil;
+import src.util.YukkuriUtil;
 
 /****************************************
  *  針
@@ -85,61 +86,68 @@ public class Needle extends Attachment {
 
 	@Override
 	protected Event update() {
+		Body pa = YukkuriUtil.getBodyInstance(parent);
+		if (pa == null) return Event.DONOTHING;
 		// 生きてたらセリフとダメージ加算
-		if (!parent.isDead()) {
-			parent.clearActions();
-			if (parent.isSleeping())
-				parent.wakeup();
-			if (parent.isFixBack()) {
-				parent.setDirection(Direction.LEFT);
+		if (!pa.isDead()) {
+			pa.clearActions();
+			if (pa.isSleeping())
+				pa.wakeup();
+			if (pa.isFixBack()) {
+				pa.setDirection(Direction.LEFT);
 			}
-			if (parent.isNotNYD()) {
-				if (parent.isFixBack()) {
-					if (!parent.isTalking()) {
-						parent.setMessage(MessagePool.getMessage(parent, MessagePool.Action.NeedleScreamInAnal), 20,
+			if (pa.isNotNYD()) {
+				if (pa.isFixBack()) {
+					if (!pa.isTalking()) {
+						pa.setMessage(MessagePool.getMessage(pa, MessagePool.Action.NeedleScreamInAnal), 20,
 								true, true);
 					}
 				} else {
-					if (!parent.isTalking()) {
-						parent.setMessage(MessagePool.getMessage(parent, MessagePool.Action.NeedleScream), 20, true,
+					if (!pa.isTalking()) {
+						pa.setMessage(MessagePool.getMessage(pa, MessagePool.Action.NeedleScream), 20, true,
 								true);
 					}
 				}
-				parent.setHappiness(Happiness.VERY_SAD);
-				parent.setForceFace(ImageCode.PAIN.ordinal());
+				pa.setHappiness(Happiness.VERY_SAD);
+				pa.setForceFace(ImageCode.PAIN.ordinal());
 			}
 			if (SimYukkuri.RND.nextInt(50) == 0) {
-				parent.stayPurupuru(20);
+				pa.stayPurupuru(20);
 			}
 
-			parent.addDamage(TICK * 1);
-			parent.addStress(15);
+			pa.addDamage(TICK * 1);
+			pa.addStress(15);
 
 			// 実ゆの場合、親が反応する
 			if (SimYukkuri.RND.nextInt(50) == 0) {
-				parent.checkReactionStalkMother(UnbirthBabyState.ATTAKED);
+				pa.checkReactionStalkMother(UnbirthBabyState.ATTAKED);
 			}
 		} else {
 			// 死んでいたら背面固定解除
-			parent.setFixBack(false);
+			pa.setFixBack(false);
 		}
 		return Event.DONOTHING;
 	}
 
 	@Override
 	public BufferedImage getImage(Body b) {
+		Body pa = YukkuriUtil.getBodyInstance(parent);
+		if (pa == null) return null;
 		if (b.getDirection() == Direction.RIGHT) {
-			return images[parent.getBodyAgeState().ordinal()][1];
+			return images[pa.getBodyAgeState().ordinal()][1];
 		}
-		return images[parent.getBodyAgeState().ordinal()][0];
+		return images[pa.getBodyAgeState().ordinal()][0];
 	}
 
 	@Override
 	public void resetBoundary() {
-		setBoundary(pivX[parent.getBodyAgeState().ordinal()],
-				pivY[parent.getBodyAgeState().ordinal()],
-				imgW[parent.getBodyAgeState().ordinal()],
-				imgH[parent.getBodyAgeState().ordinal()]);
+		Body pa = YukkuriUtil.getBodyInstance(parent);
+		if (pa != null) {
+			setBoundary(pivX[pa.getBodyAgeState().ordinal()],
+				pivY[pa.getBodyAgeState().ordinal()],
+				imgW[pa.getBodyAgeState().ordinal()],
+				imgH[pa.getBodyAgeState().ordinal()]);
+		}
 	}
 
 	/**
@@ -156,14 +164,21 @@ public class Needle extends Attachment {
 		} else {
 			setAttachProperty(property, POS_KEY);
 		}
-		setBoundary(pivX[parent.getBodyAgeState().ordinal()],
-				pivY[parent.getBodyAgeState().ordinal()],
-				imgW[parent.getBodyAgeState().ordinal()],
-				imgH[parent.getBodyAgeState().ordinal()]);
+		Body pa = YukkuriUtil.getBodyInstance(parent);
+		if (pa != null) {
+			setBoundary(pivX[pa.getBodyAgeState().ordinal()],
+				pivY[pa.getBodyAgeState().ordinal()],
+				imgW[pa.getBodyAgeState().ordinal()],
+				imgH[pa.getBodyAgeState().ordinal()]);
+		}
 		value = 0;
 		cost = 0;
 		//処理インターバルの変更
 		processInterval = 1;
+	}
+	
+	public Needle() {
+		
 	}
 
 	@Override

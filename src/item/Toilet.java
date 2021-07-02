@@ -7,7 +7,6 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JOptionPane;
@@ -18,6 +17,7 @@ import src.SimYukkuri;
 import src.base.Obj;
 import src.base.ObjEX;
 import src.draw.ModLoader;
+import src.draw.Rectangle4y;
 import src.draw.Translate;
 import src.enums.ObjEXType;
 import src.enums.Type;
@@ -42,7 +42,7 @@ public class Toilet extends ObjEX implements java.io.Serializable {
 	/**処理対象(うんうん)*/
 	public static final int hitCheckObjType = ObjEX.SHIT;
 	private static BufferedImage[] images = new BufferedImage[6];
-	private static Rectangle boundary = new Rectangle();
+	private static Rectangle4y boundary = new Rectangle4y();
 
 	private ItemRank itemRank;
 
@@ -91,7 +91,7 @@ public class Toilet extends ObjEX implements java.io.Serializable {
 		return null;
 	}
 	/**境界線の取得*/
-	public static Rectangle getBounding() {
+	public static Rectangle4y getBounding() {
 		return boundary;
 	}
 
@@ -107,7 +107,7 @@ public class Toilet extends ObjEX implements java.io.Serializable {
 		// 対象の座標をフィールド座標に変換
 		Translate.translate(o.getX(), o.getY(), tmpPos);
 		// 点が描画矩形に入ったかの判定
-		if(tmpRect.contains(tmpPos)) {
+		if(tmpRect.contains(new java.awt.Point(tmpPos.x, tmpPos.y))) {
 			return true;
 		}
 		return false;
@@ -120,7 +120,7 @@ public class Toilet extends ObjEX implements java.io.Serializable {
 		// 対象の座標をフィールド座標に変換
 		Translate.translate(o.getX(), o.getY(), tmpPos);
 		// 点が描画矩形に入ったかの判定
-		if(tmpRect.contains(tmpPos)) {
+		if(tmpRect.contains(new java.awt.Point(tmpPos.x, tmpPos.y))) {
 			if(autoClean){
 				o.remove();
 			}
@@ -130,7 +130,7 @@ public class Toilet extends ObjEX implements java.io.Serializable {
 	}
 	@Override
 	public void removeListData(){
-		SimYukkuri.world.getCurrentMap().toilet.remove(this);
+		SimYukkuri.world.getCurrentMap().toilet.remove(objId);
 	}
 	/**
 	 * 自動で掃除するかどうか
@@ -157,8 +157,7 @@ public class Toilet extends ObjEX implements java.io.Serializable {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		List<Toilet> list = SimYukkuri.world.getCurrentMap().toilet;
-		list.add(this);
+		SimYukkuri.world.getCurrentMap().toilet.put(objId, this);
 		objType = Type.PLATFORM;
 		objEXType = ObjEXType.TOILET;
 		interval = 30;
@@ -189,8 +188,11 @@ public class Toilet extends ObjEX implements java.io.Serializable {
 			}
 		}
 		else {
-			list.remove(this);
+			SimYukkuri.world.getCurrentMap().toilet.remove(objId);
 		}
+	}
+	public Toilet() {
+		
 	}
 
 	public int objHitProcess( Obj o ) {

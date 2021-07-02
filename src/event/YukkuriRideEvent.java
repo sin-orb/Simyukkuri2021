@@ -15,6 +15,7 @@ import src.logic.BedLogic;
 import src.logic.FamilyActionLogic;
 import src.system.MessagePool;
 import src.system.ResourceUtil;
+import src.util.YukkuriUtil;
 
 /***************************************************
 	おちびちゃん運びイベント
@@ -36,17 +37,22 @@ public class YukkuriRideEvent extends EventPacket implements java.io.Serializabl
 		super(f, t, tgt, cnt);
 		priority = EventPriority.MIDDLE;// 食事、睡眠、トイレよりは上
 	}
+	
+	public YukkuriRideEvent() {
+		
+	}
 
 	// 参加チェック
 	// ここで各種チェックを行い、イベントへ参加するかを返す
 	// また、イベント優先度も必要に応じて設定できる
 	@Override
 	public boolean checkEventResponse(Body b) {
+		Body to = YukkuriUtil.getBodyInstance(getTo());
 		if (to == null) {
 			return false;
 		}
-
-		if (getFrom() == b) {
+		Body from = YukkuriUtil.getBodyInstance(getFrom());
+		if (from == b) {
 			return true;
 		}
 
@@ -60,6 +66,7 @@ public class YukkuriRideEvent extends EventPacket implements java.io.Serializabl
 	// イベント開始動作
 	@Override
 	public void start(Body b) {
+		Body to = YukkuriUtil.getBodyInstance(getTo());
 		if (to == null) {
 			return;
 		}
@@ -72,60 +79,62 @@ public class YukkuriRideEvent extends EventPacket implements java.io.Serializabl
 	@Override
 	public UpdateState update(Body b) {
 		tick++;
-		if (getFrom() == null || getFrom().canActionForEvent() == false || getFrom().isRemoved()) {
+		Body from = YukkuriUtil.getBodyInstance(getFrom());
+		if (from == null || from.canActionForEvent() == false || from.isRemoved()) {
 			return UpdateState.ABORT;
 		}
+		Body to = YukkuriUtil.getBodyInstance(getTo());
 		if (to == null || to.isDead() || to.isRemoved()) {
 			return UpdateState.ABORT;
 		}
 
-		if (getFrom().getCurrentEvent() != this) {
+		if (from.getCurrentEvent() != this) {
 			return UpdateState.ABORT;
 		}
 
-		if (!getFrom().isIdiot() && getFrom().getIntelligence() != Intelligence.FOOL && getFrom().findSick(to)) {
-			getFrom().setMessage(MessagePool.getMessage(to, MessagePool.Action.Surprise), 30);
-			getFrom().setHappiness(Happiness.VERY_SAD);
-			getFrom().setForceFace(ImageCode.CRYING.ordinal());
+		if (!from.isIdiot() && from.getIntelligence() != Intelligence.FOOL && from.findSick(to)) {
+			from.setMessage(MessagePool.getMessage(to, MessagePool.Action.Surprise), 30);
+			from.setHappiness(Happiness.VERY_SAD);
+			from.setForceFace(ImageCode.CRYING.ordinal());
 			return UpdateState.ABORT;
 		}
 
 		if (to.isNormalDirty()) {
-			to.setLinkParent(null);
-			getFrom().doPeropero(to);
+			to.setLinkParent(-1);
+			from.doPeropero(to);
 			return UpdateState.ABORT;
 		}
 
 		// 親
-		if (b == getFrom()) {
+		if (b == from) {
 			// 一定期間で終了
 			if (tick > 10000) {
-				to.setZ(getFrom().getZ());
-				to.setLinkParent(null);
+				to.setZ(from.getZ());
+				to.setLinkParent(-1);
 				return UpdateState.ABORT;
 			}
 
-			if (to.getLinkParent() == null) {
+			if (to.takeMappedObj(to.getLinkParent()) == null) {
 				if (tick % 20 != 0) {
 					return null;
 				}
-				int nDistance = Translate.getRealDistance(getFrom().getX(), getFrom().getY(), to.getX(), to.getY());
+				int nDistance = Translate.getRealDistance(from.getX(), from.getY(), to.getX(), to.getY());
 				if (3 < nDistance) {
 					// 子供に近づく
-					getFrom().moveToEvent(this, to.getX(), to.getY());
+					from.moveToEvent(this, to.getX(), to.getY());
 				} else {
 					// 子供を頭にのせる
-					to.setLinkParent(getFrom());
+					to.setLinkParent(from.objId);
 				}
 			} else {
 				// 子供をのせて移動する
-				to.setX(getFrom().getX());
-				to.setY(getFrom().getY());
-				int nZ = Translate.invertZ(getFrom().getCollisionY() + 15);
-				nZ += getFrom().getZ();
+				to.setX(from.getX());
+				to.setY(from.getY());
+				int nZ = Translate.invertZ(from.getCollisionY() + 15);
+				nZ += from.getZ();
 				to.setZ(nZ);
-				to.setDirection(getFrom().getDirection());
-
+				to.setDirection(from.getDirection());
+				Obj target = b.takeMappedObj(this.target);
 				if (target != null) {
 					bMoveTarget = true;
 				}
@@ -141,7 +150,7 @@ public class YukkuriRideEvent extends EventPacket implements java.io.Serializabl
 							if (found != null) {
 								target = found;
 								bMoveTarget = true;
-								getFrom().moveToEvent(this, target.getX(), target.getY());
+								from.moveToEvent(this, target.getX(), target.getY());
 							}
 						}
 					}
@@ -153,7 +162,7 @@ public class YukkuriRideEvent extends EventPacket implements java.io.Serializabl
 							if (found != null) {
 								target = found;
 								bMoveTarget = true;
-								getFrom().moveToEvent(this, target.getX(), target.getY());
+								from.moveToEvent(this, target.getX(), target.getY());
 							}
 						}
 					}
@@ -166,7 +175,7 @@ public class YukkuriRideEvent extends EventPacket implements java.io.Serializabl
 							if (found != null) {
 								target = found;
 								bMoveTarget = true;
-								getFrom().moveToEvent(this, target.getX(), target.getY());
+								from.moveToEvent(this, target.getX(), target.getY());
 							}
 						}
 					}
@@ -175,20 +184,20 @@ public class YukkuriRideEvent extends EventPacket implements java.io.Serializabl
 						// 餌を持っていたら落とす
 						if (b.getTakeoutItem(TakeoutItemType.FOOD) != null) {
 							b.dropTakeoutItem(TakeoutItemType.FOOD);
-							to.setZ(getFrom().getZ());
-							to.setLinkParent(null);
+							to.setZ(from.getZ());
+							to.setLinkParent(-1);
 							return UpdateState.ABORT;
 						}
 					}
 					// 目的地についたなら終了
 					if (target != null) {
-						int nDistance = Translate.getRealDistance(getFrom().getX(), getFrom().getY(), target.getX(),
+						int nDistance = Translate.getRealDistance(from.getX(), from.getY(), target.getX(),
 								target.getY());
 						if (3 < nDistance) {
-							getFrom().moveToEvent(this, target.getX(), target.getY());
+							from.moveToEvent(this, target.getX(), target.getY());
 						} else {
-							to.setZ(getFrom().getZ());
-							to.setLinkParent(null);
+							to.setZ(from.getZ());
+							to.setLinkParent(-1);
 							return UpdateState.ABORT;
 						}
 					}
@@ -196,11 +205,11 @@ public class YukkuriRideEvent extends EventPacket implements java.io.Serializabl
 			}
 		} else {
 			// 子供
-			if (b.getLinkParent() == null) {
-				int nDistance = Translate.getRealDistance(to.getX(), to.getY(), getFrom().getX(), getFrom().getY());
+			if (b.takeMappedObj(b.getLinkParent()) == null) {
+				int nDistance = Translate.getRealDistance(to.getX(), to.getY(), from.getX(), from.getY());
 				if (3 < nDistance) {
 					// 親に近づく
-					to.moveToEvent(this, getFrom().getX(), getFrom().getY());
+					to.moveToEvent(this, from.getX(), from.getY());
 				} else {
 					to.stay();
 				}
@@ -236,7 +245,8 @@ public class YukkuriRideEvent extends EventPacket implements java.io.Serializabl
 	public void end(Body b) {
 		//他のイベントで強制的にイベントが終わることがある
 		// 子供をおろす
-		to.setLinkParent(null);
+		Body to = YukkuriUtil.getBodyInstance(getTo());
+		if (to != null) to.setLinkParent(-1);
 	}
 
 	@Override

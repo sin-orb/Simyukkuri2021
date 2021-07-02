@@ -1,6 +1,7 @@
 package src.event;
 
 import java.io.Serializable;
+import java.util.Map;
 
 import src.Const;
 import src.SimYukkuri;
@@ -14,6 +15,7 @@ import src.item.Barrier;
 import src.logic.BodyLogic;
 import src.system.MessagePool;
 import src.system.ResourceUtil;
+import src.util.YukkuriUtil;
 
 /**
  * 善良なゆっくりが主に参加し、ドスは捕食種がいる限り殺しに行く.
@@ -29,6 +31,10 @@ public class KillPredeatorEvent extends RevengeAttackEvent implements Serializab
 	 */
 	public KillPredeatorEvent(Body f, Body t, Obj tgt, int cnt) {
 		super(f, t, tgt, cnt);
+	}
+	
+	public KillPredeatorEvent() {
+		
 	}
 
 	/**
@@ -47,8 +53,8 @@ public class KillPredeatorEvent extends RevengeAttackEvent implements Serializab
 			return false;
 		boolean bIsNearPreadeator = false;
 		// 全ゆっくりに対してチェック
-		Body[] bodyList = SimYukkuri.world.getCurrentMap().body.toArray(new Body[0]);
-		for (Body p : bodyList) {
+		for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().body.entrySet()) {
+			Body p = entry.getValue();
 			// 自分同士のチェックは無意味なのでスキップ
 			if (p == b) {
 				continue;
@@ -79,8 +85,8 @@ public class KillPredeatorEvent extends RevengeAttackEvent implements Serializab
 	 */
 	public Body searchNextTarget() {
 		Body ret = null;
-		Body[] bodyList = SimYukkuri.world.getCurrentMap().body.toArray(new Body[0]);
-		for (Body b : bodyList) {
+		for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().body.entrySet()) {
+			Body b = entry.getValue();
 			if (b.isPredatorType()) {
 				ret = b;
 				break;
@@ -95,17 +101,18 @@ public class KillPredeatorEvent extends RevengeAttackEvent implements Serializab
 		if (SimYukkuri.RND.nextInt(1000) == 0) {
 			return UpdateState.ABORT;
 		}
-
+		Body from = YukkuriUtil.getBodyInstance(getFrom());
 		// 相手が消えてしまったら他の捕食種を捜索
-		if (getFrom().isRemoved() || getFrom().isDead() || !getFrom().isPredatorType()) {
+		if (from.isRemoved() || from.isDead() || !from.isPredatorType()) {
 			setFrom(searchNextTarget());
-			if (getFrom() == null)
+			from = YukkuriUtil.getBodyInstance(getFrom());
+			if (from == null)
 				return UpdateState.ABORT;
 		}
 
 		b.setForceFace(ImageCode.PUFF.ordinal());
-		int colX = BodyLogic.calcCollisionX(b, getFrom());
-		b.moveToEvent(this, getFrom().getX() + colX, getFrom().getY());
+		int colX = BodyLogic.calcCollisionX(b, from);
+		b.moveToEvent(this, from.getX() + colX, from.getY());
 		if (b.getType() == 2006 ||
 				(b.isAdult() && b.getPublicRank() != PublicRank.UnunSlave)) {
 			Body target = searchNextTarget();
@@ -122,21 +129,24 @@ public class KillPredeatorEvent extends RevengeAttackEvent implements Serializab
 			return;
 		}
 		b.setAngry();
-		int colX = BodyLogic.calcCollisionX(b, getFrom());
-		b.moveToEvent(this, getFrom().getX() + colX, getFrom().getY());
+		Body from = YukkuriUtil.getBodyInstance(getFrom());
+		int colX = BodyLogic.calcCollisionX(b, from);
+		b.moveToEvent(this, from.getX() + colX, from.getY());
 	}
 
 	@Override
 	public boolean execute(Body b) {
+		Body from = YukkuriUtil.getBodyInstance(getFrom());
 		// 相手が消えてしまったら他の捕食種を捜索
-		if (getFrom().isRemoved() || getFrom().isDead()) {
+		if (from == null || from.isRemoved() || from.isDead()) {
 			setFrom(searchNextTarget());
+			from = YukkuriUtil.getBodyInstance(getFrom());
 			// 捕食種全滅でイベント終了
-			if (getFrom() == null)
+			if (from == null)
 				return true;
 			return false;
 		}
-		if (getFrom().getZ() < 5) {
+		if (from.getZ() < 5) {
 			b.setWorldEventResMessage(MessagePool.getMessage(b, MessagePool.Action.RevengeForChild), Const.HOLDMESSAGE,
 					true, false);
 			if (b.getDirection() == Direction.LEFT) {
@@ -147,7 +157,7 @@ public class KillPredeatorEvent extends RevengeAttackEvent implements Serializab
 						0, 0, 0, true, 500, 1, true, false, true);
 			}
 			b.setForceFace(ImageCode.PUFF.ordinal());
-			getFrom().strikeByYukkuri(b, this, false);
+			from.strikeByYukkuri(b, this, false);
 			b.addStress(-300);
 		}
 		return false;

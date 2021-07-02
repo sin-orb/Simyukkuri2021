@@ -1,5 +1,6 @@
 package src.logic;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import src.SimYukkuri;
@@ -35,7 +36,7 @@ public class ToyLogic {
 			return false;
 		}
 
-		List<Toy> list = SimYukkuri.world.getCurrentMap().toy;
+		List<Toy> list = new LinkedList<>(SimYukkuri.world.getCurrentMap().toy.values());
 		if( list == null || list.size() == 0 ){
 			return false;
 		}
@@ -47,7 +48,7 @@ public class ToyLogic {
 
 		boolean ret = true;
 		Toy found = null;
-		int minDistance = b.getEYESIGHT();
+		int minDistance = b.getEYESIGHTorg();
 		for (Toy t: list) {
 			// 最小距離のものが見つかっていたら
 			if( minDistance < b.getStepDist() ){
@@ -146,14 +147,14 @@ public class ToyLogic {
 	 * @return 処理が行われたか
 	 */
 	public static final boolean checkSui(Body b) {
-		List<Sui> list = SimYukkuri.world.getCurrentMap().sui;
+		List<Sui> list = new LinkedList<>(SimYukkuri.world.getCurrentMap().sui.values());
 		if( list == null || list.size() == 0 ){
 			return false;
 		}
 
 		if(canPlay(b)==false)return false;
 		if (//				|| SimYukkuri.RND.nextInt(100) != 0 ||
-				b.getLinkParent() instanceof Sui) {
+				b.takeMappedObj(b.getLinkParent()) instanceof Sui) {
 			return false;
 		}
 
@@ -170,7 +171,7 @@ public class ToyLogic {
 
 		// 自分のすぃーがない場合
 		if(found == null) {
-			int minDistance = b.getEYESIGHT();
+			int minDistance = b.getEYESIGHTorg();
 			for (ObjEX s: list) {
 				// 最小距離のものが見つかっていたら
 				if( minDistance < b.getStepDist()){
@@ -245,7 +246,7 @@ public class ToyLogic {
 			return false;
 		}
 
-		List<Trampoline> trampolineList = SimYukkuri.world.getCurrentMap().trampoline;
+		List<Trampoline> trampolineList = new LinkedList<>(SimYukkuri.world.getCurrentMap().trampoline.values());
 		if( trampolineList == null || trampolineList.size() == 0 ){
 			return false;
 		}
@@ -257,7 +258,7 @@ public class ToyLogic {
 
 		Trampoline found = null;
 		// 視界内の一番近いトランポリンを取得
-		int minDistance = b.getEYESIGHT();
+		int minDistance = b.getEYESIGHTorg();
 		for(Trampoline t: trampolineList ){
 			// 最小距離のものが見つかっていたら
 			if( minDistance < b.getStepDist() )

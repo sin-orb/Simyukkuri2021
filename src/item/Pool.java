@@ -3,7 +3,6 @@ package src.item;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.TexturePaint;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
@@ -18,6 +17,7 @@ import src.SimYukkuri;
 import src.base.Body;
 import src.base.Obj;
 import src.draw.ModLoader;
+import src.draw.Point4y;
 import src.draw.Translate;
 import src.enums.AgeState;
 import src.system.FieldShapeBase;
@@ -134,8 +134,8 @@ public class Pool extends FieldShapeBase implements Serializable {
 	 * @param fey 設置終点のY座標
 	 */
 	public Pool(int fsx, int fsy, int fex, int fey) {
-		Point pS = Translate.getFieldLimitForMap( fsx, fsy );
-		Point pE = Translate.getFieldLimitForMap( fex, fey );
+		Point4y pS = Translate.getFieldLimitForMap( fsx, fsy );
+		Point4y pE = Translate.getFieldLimitForMap( fex, fey );
 		fieldSX = pS.x;
 		fieldSY = pS.y;
 		fieldEX = pE.x;
@@ -146,7 +146,7 @@ public class Pool extends FieldShapeBase implements Serializable {
 		Translate.getMovedPoint(fieldSX, fieldSY, fieldEX, fieldEY, 0, 0, 0, 0, anPointBaseX, anPointBaseY );
 		
 		// フィールド座標が渡ってくるのでマップ座標も計算しておく
-		Point pos = Translate.invertLimit(anPointBaseX[0], anPointBaseY[0]);
+		Point4y pos = Translate.invertLimit(anPointBaseX[0], anPointBaseY[0]);
 		mapSX = Math.max(0, Math.min(pos.x, Translate.mapW));
 		mapSY = Math.max(0, Math.min(pos.y, Translate.mapH));
 		
@@ -166,7 +166,7 @@ public class Pool extends FieldShapeBase implements Serializable {
 			mapEY -= (mapEY - Translate.mapH);
 		}
 
-		Point f = new Point();
+		Point4y f = new Point4y();
 		Translate.translate(mapSX, mapSY, f);
 		fieldSX = f.x;
 		fieldSY = f.y;
@@ -181,6 +181,9 @@ public class Pool extends FieldShapeBase implements Serializable {
 
 		SimYukkuri.world.getCurrentMap().pool.add(this);
 		MapPlaceData.setFiledFlag(SimYukkuri.world.getCurrentMap().fieldMap, mapSX, mapSY, mapW, mapH, true, FIELD_POOL);
+	}
+	public Pool() {
+		
 	}
 
 	/** フィールド座標にあるシェイプ取得*/
@@ -216,13 +219,13 @@ public class Pool extends FieldShapeBase implements Serializable {
     	int nY = inY;
 		if(bIsField )
 		{
-			Point pos = Translate.invertLimit( inX, inY );	
+			Point4y pos = Translate.invertLimit( inX, inY );	
 			nX = pos.x;
 			nY = pos.y;
 		}
 		
-		Point posFirst = Translate.invertLimit( anWaterPointX[0], anWaterPointY[0] );
-		Point posSecond = Translate.invertLimit( anWaterPointX[2], anWaterPointY[2] );
+		Point4y posFirst = Translate.invertLimit( anWaterPointX[0], anWaterPointY[0] );
+		Point4y posSecond = Translate.invertLimit( anWaterPointX[2], anWaterPointY[2] );
 		if( posFirst != null && posSecond != null)
 		{
 			if( posFirst.x <= nX && nX <= posSecond.x && posFirst.y <= nY && nY <= posSecond.y )
@@ -248,7 +251,7 @@ public class Pool extends FieldShapeBase implements Serializable {
 			return false;
 		}
 		
-		List<BeltconveyorObj>  beltList = SimYukkuri.world.getCurrentMap().beltconveyorObj;
+		List<BeltconveyorObj>  beltList = new LinkedList<>(SimYukkuri.world.getCurrentMap().beltconveyorObj.values());
 		if( beltList != null && beltList.size() != 0 )
 		{
 			for( BeltconveyorObj belt: beltList )

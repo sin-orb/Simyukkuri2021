@@ -1,20 +1,19 @@
 package src.yukkuri;
 
-import java.awt.Dimension;
-import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.IOException;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import src.Const;
 import src.SimYukkuri;
 import src.base.Body;
 import src.base.Okazari.OkazariType;
+import src.draw.Dimension4y;
 import src.draw.ModLoader;
 import src.draw.MyPane;
+import src.draw.Point4y;
 import src.draw.Terrarium;
 import src.enums.AgeState;
 import src.enums.Attitude;
@@ -53,10 +52,10 @@ public class Reimu extends Body implements java.io.Serializable {
 			.values().length][2][3][ModLoader.nMaxImgOtherVer + 1];
 	private static int directionOffset[][] = new int[ImageCode.values().length][2];
 	private static int directionOffsetNagasi[][] = new int[ImageCode.values().length][2];
-	private static Dimension[] boundary = new Dimension[3];
-	private static Dimension[] braidBoundary = new Dimension[3];
+	private static Dimension4y[] boundary = new Dimension4y[3];
+	private static Dimension4y[] braidBoundary = new Dimension4y[3];
 	private static boolean imageLoaded = false;
-	private static Map<String, Point[]> AttachOffset = new HashMap<String, Point[]>();
+	private static Map<String, Point4y[]> AttachOffset = new HashMap<String, Point4y[]>();
 	//---
 	// iniファイルから読み込んだ初期値
 	private static int baseSpeed = 100;
@@ -175,8 +174,7 @@ public class Reimu extends Body implements java.io.Serializable {
 	public void execTransform() {
 		// でいぶ化
 		synchronized (SimYukkuri.lock) {
-			List<Body> bodyList = SimYukkuri.world.getCurrentMap().body;
-			bodyList.remove(this);
+			SimYukkuri.world.getCurrentMap().body.remove(this.getUniqueID());
 			SimYukkuri.mypane.loadBodyImage(YukkuriType.DEIBU);
 			Body to = new Deibu(getX(), getY(), getZ(), getBodyAgeState(), null, null);
 			try {
@@ -185,7 +183,7 @@ public class Reimu extends Body implements java.io.Serializable {
 				e.printStackTrace();
 			}
 			to.setUniqueID(Numbering.INSTANCE.numberingYukkuriID());
-			bodyList.add(to);
+			SimYukkuri.world.getCurrentMap().body.put(to.getUniqueID(), to);
 			to.setBaseBodyFileName("deibu");
 			IniFileUtil.readYukkuriIniFile(to);
 			if (MyPane.selectBody == this) {
@@ -205,15 +203,15 @@ public class Reimu extends Body implements java.io.Serializable {
 		// 自身が突然変異可能かチェック
 		if (!canTransform())
 			return null;
-		// 大人であり、夫がいて夫がゲスではなく、自身がゲスではない
-		Body partner = getPartner();
+		// 大人であり、夫がいて夫がゲスではなく、自身がゲス
+		Body partner = YukkuriUtil.getBodyInstance(getPartner());
 		if (isAdult() && partner != null && !partner.isRude() && isRude()) {
 			if (SimYukkuri.RND.nextInt(1000) == 0) {
 				return this;
 			}
 		}
 		//または、ゲスでいぶの子供である
-		Body mother = getMother();
+		Body mother = YukkuriUtil.getBodyInstance(getMother());
 		if (!isAdult() && mother != null && mother.getType() == Deibu.type && mother.isRude()) {
 			//ゲスバカとドゲスは確実にでいぶ化
 			if ((isRude() && getIntelligence() != Intelligence.FOOL) || getAttitude() == Attitude.SUPER_SHITHEAD) {
@@ -227,7 +225,7 @@ public class Reimu extends Body implements java.io.Serializable {
 		return null;
 	}
 	@Override
-	public Point[] getMountPoint(String key) {
+	public Point4y[] getMountPoint(String key) {
 		return AttachOffset.get(key);
 	}
 
@@ -595,41 +593,44 @@ public class Reimu extends Body implements java.io.Serializable {
 		setBaseBodyFileName(baseFileName);
 		IniFileUtil.readYukkuriIniFile(this);
 	}
+	public Reimu() {
+		
+	}
 	@Override
 	public void tuneParameters() {
 		/*if (SimYukkuri.RND.nextBoolean()) {
 		motherhood = true;
 		}*/
 		double factor = Math.random() * 2 + 1;
-		HUNGRYLIMIT[AgeState.ADULT.ordinal()] *= factor;
-		HUNGRYLIMIT[AgeState.CHILD.ordinal()] *= factor;
-		HUNGRYLIMIT[AgeState.BABY.ordinal()] *= factor;
+		HUNGRYLIMITorg[AgeState.ADULT.ordinal()] *= factor;
+		HUNGRYLIMITorg[AgeState.CHILD.ordinal()] *= factor;
+		HUNGRYLIMITorg[AgeState.BABY.ordinal()] *= factor;
 		factor = Math.random() * 2 + 1;
-		SHITLIMIT[AgeState.ADULT.ordinal()] *= factor;
-		SHITLIMIT[AgeState.CHILD.ordinal()] *= factor;
-		SHITLIMIT[AgeState.BABY.ordinal()] *= factor;
+		SHITLIMITorg[AgeState.ADULT.ordinal()] *= factor;
+		SHITLIMITorg[AgeState.CHILD.ordinal()] *= factor;
+		SHITLIMITorg[AgeState.BABY.ordinal()] *= factor;
 		factor = Math.random() + 0.5;
-		DAMAGELIMIT[AgeState.ADULT.ordinal()] *= factor;
-		DAMAGELIMIT[AgeState.CHILD.ordinal()] *= factor;
-		DAMAGELIMIT[AgeState.BABY.ordinal()] *= factor;
+		DAMAGELIMITorg[AgeState.ADULT.ordinal()] *= factor;
+		DAMAGELIMITorg[AgeState.CHILD.ordinal()] *= factor;
+		DAMAGELIMITorg[AgeState.BABY.ordinal()] *= factor;
 		factor = Math.random() + 0.5;
-		BABYLIMIT *= factor;
-		CHILDLIMIT *= factor;
-		LIFELIMIT *= factor;
+		BABYLIMITorg *= factor;
+		CHILDLIMITorg *= factor;
+		LIFELIMITorg *= factor;
 		factor = Math.random() + 1;
-		RELAXPERIOD *= factor;
-		EXCITEPERIOD *= factor;
-		PREGPERIOD *= factor;
-		SLEEPPERIOD *= factor;
-		ACTIVEPERIOD *= factor;
+		RELAXPERIODorg *= factor;
+		EXCITEPERIODorg *= factor;
+		PREGPERIODorg *= factor;
+		SLEEPPERIODorg *= factor;
+		ACTIVEPERIODorg *= factor;
 		sameDest = SimYukkuri.RND.nextInt(20) + 20;
-		DECLINEPERIOD *= (Math.random() + 0.5);
+		DECLINEPERIODorg *= (Math.random() + 0.5);
 		ROBUSTNESS = SimYukkuri.RND.nextInt(10) + 1;
 		//EYESIGHT /= 4;
 		factor = Math.random() + 0.5;
-		STRENGTH[AgeState.ADULT.ordinal()] *= factor;
-		STRENGTH[AgeState.CHILD.ordinal()] *= factor;
-		STRENGTH[AgeState.BABY.ordinal()] *= factor;
+		STRENGTHorg[AgeState.ADULT.ordinal()] *= factor;
+		STRENGTHorg[AgeState.CHILD.ordinal()] *= factor;
+		STRENGTHorg[AgeState.BABY.ordinal()] *= factor;
 
 		//speed = 120;
 		speed = baseSpeed;

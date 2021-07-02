@@ -1,7 +1,6 @@
 package src.item;
 
 
-import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
@@ -12,6 +11,7 @@ import src.base.Body;
 import src.base.Obj;
 import src.base.ObjEX;
 import src.draw.ModLoader;
+import src.draw.Rectangle4y;
 import src.draw.Translate;
 import src.enums.Event;
 import src.enums.FavItemType;
@@ -45,7 +45,7 @@ public class Sui extends ObjEX implements java.io.Serializable {
 	private static int condition_num = 4;
 	private static BufferedImage[][] images = new BufferedImage[direction_num][condition_num];
 	
-	private static Rectangle boundary = new Rectangle();
+	private static Rectangle4y boundary = new Rectangle4y();
 
 	private static int bindbody_num = 3;
 	private int current_bindbody_num = 0;
@@ -144,7 +144,7 @@ public class Sui extends ObjEX implements java.io.Serializable {
 		for(int i=0;i<bindbody_num;i++){
 			if(bindBody[i]==null){
 				bindBody[i]=b;
-				b.setLinkParent(this);
+				b.setLinkParent(this.objId);
 				bindBody[i].setX(x+OfsX[i][current_direction]);
 				bindBody[i].setY(y+OfsY[i][current_direction]+10);
 				bindBody[i].setZ(1);
@@ -236,14 +236,14 @@ public class Sui extends ObjEX implements java.io.Serializable {
 			for(int i=0;i<bindbody_num;i++){
 				if( bindBody[i] != null)
 				{
-					bindBody[i].setLinkParent(null);
+					bindBody[i].setLinkParent(-1);
 					bindBody[i]=null;
 				}
 			}
 			current_bindbody_num = 0;
 		}else{
 			// 対象だけ降ろす
-			b.setLinkParent(null);
+			b.setLinkParent(-1);
 			for(int i=0;i<bindbody_num;i++){
 				if( bindBody[i] == b)
 				{
@@ -269,7 +269,7 @@ public class Sui extends ObjEX implements java.io.Serializable {
 		return bindobj;
 	}
 	/**境界線の取得*/
-	public static Rectangle getBounding() {
+	public static Rectangle4y getBounding() {
 		return boundary;
 	}
 
@@ -317,7 +317,7 @@ public class Sui extends ObjEX implements java.io.Serializable {
 	
 	@Override
 	public void removeListData(){
-		SimYukkuri.world.getCurrentMap().sui.remove(this);
+		SimYukkuri.world.getCurrentMap().sui.remove(objId);
 	}
 	
 	@Override
@@ -488,7 +488,7 @@ public class Sui extends ObjEX implements java.io.Serializable {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		SimYukkuri.world.getCurrentMap().sui.add(this);
+		SimYukkuri.world.getCurrentMap().sui.put(objId, this);
 		objType = Type.OBJECT;
 		objEXType = ObjEXType.SUI;
 		
@@ -497,6 +497,9 @@ public class Sui extends ObjEX implements java.io.Serializable {
 		interval = 10;
 		value = 20000;
 		cost = 0;
+	}
+	public Sui() {
+		
 	}
 	/**
 	 * Y座標を変更する.

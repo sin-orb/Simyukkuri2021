@@ -3,6 +3,7 @@ package src.game;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
+import java.beans.Transient;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -14,6 +15,7 @@ import src.draw.ModLoader;
 import src.draw.Translate;
 import src.enums.AgeState;
 import src.enums.Event;
+import src.enums.Numbering;
 import src.enums.Type;
 import src.enums.YukkuriType;
 import src.item.Barrier;
@@ -117,6 +119,7 @@ public class Vomit extends Obj implements java.io.Serializable {
 	 * イメージを取得する.
 	 * @return イメージ
 	 */
+	@Transient
 	public BufferedImage getImage() {
 		return (images[vomitType][getVomitState()][ageState.ordinal()]);
 	}
@@ -124,6 +127,7 @@ public class Vomit extends Obj implements java.io.Serializable {
 	 * 影のイメージを取得する.
 	 * @return 影のイメージ
 	 */
+	@Transient
 	public BufferedImage getShadowImage() {
 		return (images[vomitType][VOMIT_SHADOW][ageState.ordinal()]);
 	}
@@ -143,6 +147,7 @@ public class Vomit extends Obj implements java.io.Serializable {
 	 * @param type 吐餡タイプ
 	 */
 	public Vomit (int initX, int initY, int initZ, Body b, YukkuriType type) {
+		objId = Numbering.INSTANCE.numberingObjId();
 		objType = Type.VOMIT;
 		vomitType = type.ordinal();
 		x = initX;
@@ -170,6 +175,11 @@ public class Vomit extends Obj implements java.io.Serializable {
 		setBoundary(pivX[vomitType][ageState.ordinal()], pivY[vomitType][ageState.ordinal()],
 					imgW[vomitType][ageState.ordinal()], imgH[vomitType][ageState.ordinal()]);
 	}
+	
+	public Vomit() {
+		
+	}
+	
 	/**
 	 * 成長ステージを取得する.
 	 * @return 成長ステージ
@@ -289,4 +299,41 @@ public class Vomit extends Obj implements java.io.Serializable {
 		calcPos();
 		return Event.REMOVED;
 	}
+
+	public String getOwnerName() {
+		return ownerName;
+	}
+
+	public void setOwnerName(String ownerName) {
+		this.ownerName = ownerName;
+	}
+
+	public int getFalldownDamage() {
+		return falldownDamage;
+	}
+
+	public void setFalldownDamage(int falldownDamage) {
+		this.falldownDamage = falldownDamage;
+	}
+
+	public int getAmount() {
+		return amount;
+	}
+
+	public void setAmount(int amount) {
+		this.amount = amount;
+	}
+
+	public int getVomitType() {
+		return vomitType;
+	}
+
+	public void setVomitType(int vomitType) {
+		this.vomitType = vomitType;
+	}
+
+	public void setAgeState(AgeState ageState) {
+		this.ageState = ageState;
+	}
+	
 }

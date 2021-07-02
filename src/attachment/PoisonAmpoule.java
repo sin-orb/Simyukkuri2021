@@ -19,6 +19,7 @@ import src.enums.Happiness;
 import src.enums.ImageCode;
 import src.system.MessagePool;
 import src.system.ResourceUtil;
+import src.util.YukkuriUtil;
 
 
 /****************************************
@@ -86,43 +87,50 @@ public class PoisonAmpoule extends Attachment {
 
 	@Override
 	protected Event update() {
-		if (parent.isDead()) {
+		Body pa = YukkuriUtil.getBodyInstance(parent);
+		if (pa == null) return Event.DONOTHING;
+		if (pa.isDead()) {
 			//死んだゆっくりはうんうんしない
 			return Event.DONOTHING;
 		}
 		// ちぎれていない場合
-		if( parent.getCriticalDamegeType() != CriticalDamegeType.CUT){
+		if( pa.getCriticalDamegeType() != CriticalDamegeType.CUT){
 			// 常にうんうんを足す
-			parent.plusShit(50);
-			parent.wakeup();
+			pa.plusShit(50);
+			pa.wakeup();
 		}
-		parent.setHappiness(Happiness.SAD);
+		pa.setHappiness(Happiness.SAD);
 		if(SimYukkuri.RND.nextInt(1000) == 0){
-			parent.clearActions();
-			parent.setCalm();
-			parent.setHappiness(Happiness.VERY_SAD);
-			parent.addDamage(200);
-			parent.setForceFace(ImageCode.PAIN.ordinal());
-			parent.setMessage(MessagePool.getMessage(parent, MessagePool.Action.PoisonDamage), 20, true, true);
+			pa.clearActions();
+			pa.setCalm();
+			pa.setHappiness(Happiness.VERY_SAD);
+			pa.addDamage(200);
+			pa.setForceFace(ImageCode.PAIN.ordinal());
+			pa.setMessage(MessagePool.getMessage(pa, MessagePool.Action.PoisonDamage), 20, true, true);
 		}
 		return Event.DONOTHING;
 	}
 
 	@Override
 	public BufferedImage getImage(Body b) {
+		Body pa = YukkuriUtil.getBodyInstance(parent);
+		if (pa == null) return null;
 		if(b.getDirection() == Direction.RIGHT) {
-			return images[parent.getBodyAgeState().ordinal()][1];
+			return images[pa.getBodyAgeState().ordinal()][1];
 		}
-		return images[parent.getBodyAgeState().ordinal()][0];
+		return images[pa.getBodyAgeState().ordinal()][0];
 	}
 
 	@Override
 	public void resetBoundary()
 	{
-		setBoundary(pivX[parent.getBodyAgeState().ordinal()],
-					pivY[parent.getBodyAgeState().ordinal()],
-					imgW[parent.getBodyAgeState().ordinal()],
-					imgH[parent.getBodyAgeState().ordinal()]);
+		Body pa = YukkuriUtil.getBodyInstance(parent);
+		if (pa != null) {
+			setBoundary(pivX[pa.getBodyAgeState().ordinal()],
+					pivY[pa.getBodyAgeState().ordinal()],
+					imgW[pa.getBodyAgeState().ordinal()],
+					imgH[pa.getBodyAgeState().ordinal()]);
+		}
 	}
 	
 	/**
@@ -132,12 +140,19 @@ public class PoisonAmpoule extends Attachment {
 	public PoisonAmpoule(Body body) {
 		super(body);
 		setAttachProperty(property, POS_KEY);
-		setBoundary(pivX[parent.getBodyAgeState().ordinal()],
-					pivY[parent.getBodyAgeState().ordinal()],
-					imgW[parent.getBodyAgeState().ordinal()],
-					imgH[parent.getBodyAgeState().ordinal()]);
+		Body pa = YukkuriUtil.getBodyInstance(parent);
+		if (pa != null) {
+			setBoundary(pivX[pa.getBodyAgeState().ordinal()],
+					pivY[pa.getBodyAgeState().ordinal()],
+					imgW[pa.getBodyAgeState().ordinal()],
+					imgH[pa.getBodyAgeState().ordinal()]);
+		}
 		value = 500;
 		cost = 0;
+	}
+	
+	public PoisonAmpoule() {
+		
 	}
 	
 	@Override

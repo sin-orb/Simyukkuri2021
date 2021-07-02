@@ -1,7 +1,6 @@
 package src.item;
 
 
-import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
@@ -12,6 +11,7 @@ import src.base.Body;
 import src.base.Obj;
 import src.base.ObjEX;
 import src.draw.ModLoader;
+import src.draw.Rectangle4y;
 import src.enums.Happiness;
 import src.enums.ImageCode;
 import src.enums.ObjEXType;
@@ -30,7 +30,7 @@ public class MachinePress extends ObjEX implements java.io.Serializable {
 	private static final int images_num = 8; //このクラスの総使用画像数
 	private static int AnimeImagesNum[] = {8};//アニメごとに何枚使うか
 	private static BufferedImage[] images = new BufferedImage[images_num + 1];
-	private static Rectangle boundary = new Rectangle();
+	private static Rectangle4y boundary = new Rectangle4y();
 	/**画像ロード*/
 	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
 		for( int i = 0; i < images_num ; i++ ) {
@@ -55,7 +55,7 @@ public class MachinePress extends ObjEX implements java.io.Serializable {
 		return null;
 	}
 	/**境界線の取得*/
-	public static Rectangle getBounding() {
+	public static Rectangle4y getBounding() {
 		return boundary;
 	}
 
@@ -91,19 +91,22 @@ public class MachinePress extends ObjEX implements java.io.Serializable {
 
 	@Override
 	public void removeListData(){
-		SimYukkuri.world.getCurrentMap().machinePress.remove(this);
+		SimYukkuri.world.getCurrentMap().machinePress.remove(objId);
 	}
 	/**コンストラクタ*/
 	public MachinePress(int initX, int initY, int initOption) {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), 8);
-		SimYukkuri.world.getCurrentMap().machinePress.add(this);
+		SimYukkuri.world.getCurrentMap().machinePress.put(objId, this);
 		objType = Type.FIX_OBJECT;
 		objEXType = ObjEXType.MACHINEPRESS;
 
 		value = 500000;
 		cost = 1500;
+	}
+	public MachinePress() {
+		
 	}
 }
 

@@ -78,7 +78,7 @@ public class ItemWindow extends JDialog implements WindowListener, MouseListener
 	@SuppressWarnings("unchecked")
 	@Override
 	public void windowOpened(WindowEvent e) {
-		itemList.setModel(SimYukkuri.world.player.itemList);
+		itemList.setModel(SimYukkuri.world.player.getItemList());
 		itemList.setSelectedIndex(-1);
 		Point pos = SimYukkuri.simYukkuri.getLocation();
 		setLocation(pos.x + Translate.canvasW - 200, pos.y + 100);
@@ -87,7 +87,7 @@ public class ItemWindow extends JDialog implements WindowListener, MouseListener
 	@Override
 	public void windowClosing(WindowEvent e) {
 		MainCommandUI.playerButton[ToolButtonLabel.BAG.ordinal()].setSelected(false);
-		SimYukkuri.world.player.holdItem = null;
+		SimYukkuri.world.player.setHoldItem(null);
 	}
 
 	@Override
@@ -115,9 +115,9 @@ public class ItemWindow extends JDialog implements WindowListener, MouseListener
 	public void mouseClicked(MouseEvent e) {
 		if(itemList.getSelectedIndices().length == 1) {
 			int index = itemList.locationToIndex(e.getPoint());
-			SimYukkuri.world.player.holdItem = SimYukkuri.world.player.itemList.get(index);
+			SimYukkuri.world.player.setHoldItem(SimYukkuri.world.player.getItemList().get(index));
 		} else {
-			SimYukkuri.world.player.holdItem = null;
+			SimYukkuri.world.player.setHoldItem(null);
 		}
 	}
 	@Override
@@ -146,14 +146,14 @@ public class ItemWindow extends JDialog implements WindowListener, MouseListener
 		int[] idx = itemList.getSelectedIndices();
 		Obj[] obj = new Obj[idx.length];
 		for(int i = 0; i < idx.length; i++) {
-			obj[i] = SimYukkuri.world.player.itemList.get(idx[i]);
+			obj[i] = SimYukkuri.world.player.getItemList().get(idx[i]);
 			if(obj[i] != null) obj[i].remove();
 		}
 		for(int i = 0; i < obj.length; i++) {
-			SimYukkuri.world.player.itemList.removeElement(obj[i]);
+			SimYukkuri.world.player.getItemList().removeElement(obj[i]);
 		}
 		itemList.setSelectedIndex(-1);
-		SimYukkuri.world.player.holdItem = null;
+		SimYukkuri.world.player.setHoldItem(null);
 	}
 
 	@Override

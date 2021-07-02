@@ -1,6 +1,9 @@
 package src.game;
 
+import java.beans.Transient;
 import java.io.Serializable;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.DefaultListModel;
 
@@ -18,11 +21,13 @@ public class Player extends Obj implements Serializable {
 	static final long serialVersionUID = 1L;
 
 	// 所持金
-	public long cash;
+	private long cash;
 	// 所持品
-	public DefaultListModel<Obj> itemList;
+	private DefaultListModel<Obj> itemList;
 	// アイテム
-	public Obj holdItem;
+	private Obj holdItem;
+	// セーブ用アイテムリスト
+	private List<Obj> itemForSave;
 	/**
 	 * 所持金を設定する.
 	 * @param val 所持金
@@ -53,6 +58,7 @@ public class Player extends Obj implements Serializable {
 		cash = 10000;
 		itemList = new DefaultListModel<Obj>();
 		holdItem = null;
+		itemForSave = new LinkedList<>();
 	}
 	/**
 	 * アイテムリストを設定する.
@@ -61,6 +67,24 @@ public class Player extends Obj implements Serializable {
 	public void setItemList(DefaultListModel<Obj> list) {
 		itemList = list;
 	}
+	public Obj getHoldItem() {
+		return holdItem;
+	}
+	public void setHoldItem(Obj holdItem) {
+		this.holdItem = holdItem;
+	}
+	@Transient
+	public DefaultListModel<Obj> getItemList() {
+		return itemList;
+	}
+	public List<Obj> getItemForSave() {
+		return itemForSave;
+	}
+	public void setItemForSave(List<Obj> itemForSave) {
+		this.itemForSave = itemForSave;
+	}
+	
+	
 }
 
 

@@ -2,6 +2,10 @@ package src.base;
 
 
 import java.awt.image.BufferedImage;
+import java.beans.Transient;
+
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
 import src.SimYukkuri;
 import src.enums.Event;
@@ -12,6 +16,7 @@ import src.enums.Type;
  * 
  * 
  */
+@JsonTypeInfo(use = Id.CLASS)
 public abstract class Effect extends Obj {
 
 	private static final long serialVersionUID = 1L;
@@ -40,6 +45,7 @@ public abstract class Effect extends Obj {
 	protected boolean enableGravity;
 
 	/**画像取得*/
+	@Transient
 	public abstract BufferedImage getImage();
 
 	/**コンストラクタ
@@ -61,10 +67,10 @@ public abstract class Effect extends Obj {
 						int life, int loop, boolean end, boolean grav, boolean front) {
 
 		if(front) {
-			SimYukkuri.world.getCurrentMap().frontEffect.add(this);
+			SimYukkuri.world.getCurrentMap().frontEffect.put(objId, this);
 		}
 		else {
-			SimYukkuri.world.getCurrentMap().sortEffect.add(this);
+			SimYukkuri.world.getCurrentMap().sortEffect.put(objId, this);
 		}
 		objType = Type.LIGHT_EFFECT;
 		x = sX;
@@ -84,6 +90,11 @@ public abstract class Effect extends Obj {
 		enableGravity = grav;
 		calcPos();
 	}
+	
+	public Effect() {
+		
+	}
+	
 	/**アニメーションのどの画像を出すかのセッター*/
 	public void setAnimeFrame(int f) {
 		animeFrame = f;		
@@ -120,4 +131,81 @@ public abstract class Effect extends Obj {
 		calcPos();
 		return Event.DONOTHING;
 	}
+
+	public int getDirection() {
+		return direction;
+	}
+
+	public void setDirection(int direction) {
+		this.direction = direction;
+	}
+
+	public int getInterval() {
+		return interval;
+	}
+
+	public void setInterval(int interval) {
+		this.interval = interval;
+	}
+
+	public int getFrames() {
+		return frames;
+	}
+
+	public void setFrames(int frames) {
+		this.frames = frames;
+	}
+
+	public int getLifeTime() {
+		return lifeTime;
+	}
+
+	public void setLifeTime(int lifeTime) {
+		this.lifeTime = lifeTime;
+	}
+
+	public boolean isAnimate() {
+		return animate;
+	}
+
+	public void setAnimate(boolean animate) {
+		this.animate = animate;
+	}
+
+	public int getAnimeInterval() {
+		return animeInterval;
+	}
+
+	public void setAnimeInterval(int animeInterval) {
+		this.animeInterval = animeInterval;
+	}
+
+	public int getAnimeLoop() {
+		return animeLoop;
+	}
+
+	public void setAnimeLoop(int animeLoop) {
+		this.animeLoop = animeLoop;
+	}
+
+	public boolean isAnimeEnd() {
+		return animeEnd;
+	}
+
+	public void setAnimeEnd(boolean animeEnd) {
+		this.animeEnd = animeEnd;
+	}
+
+	public boolean isEnableGravity() {
+		return enableGravity;
+	}
+
+	public void setEnableGravity(boolean enableGravity) {
+		this.enableGravity = enableGravity;
+	}
+
+	public int getAnimeFrame() {
+		return animeFrame;
+	}
+	
 }

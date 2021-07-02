@@ -1,6 +1,8 @@
 package src.logic;
 
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import src.SimYukkuri;
 import src.base.Body;
@@ -52,8 +54,8 @@ public class ToiletLogic {
 			bHasShit = true;
 		}
 
-		List<Toilet> toiletList = SimYukkuri.world.getCurrentMap().toilet;
-		List<Shit> shitList = SimYukkuri.world.getCurrentMap().shit;
+		List<Toilet> toiletList = new LinkedList<>(SimYukkuri.world.getCurrentMap().toilet.values());
+		List<Shit> shitList = new LinkedList<>(SimYukkuri.world.getCurrentMap().shit.values());
 		if( shitList == null || shitList.size() == 0 ){
 			return false;
 		}
@@ -76,8 +78,8 @@ public class ToiletLogic {
 		}
 		// うんうん奴隷がいれば運ばない
 		if( bCanTransport  ){
-			Body[] bodyList = SimYukkuri.world.getCurrentMap().body.toArray(new Body[0]);
-			for(Body bodyOther : bodyList){
+			for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().body.entrySet()) {
+				Body bodyOther = entry.getValue();
 				if(bodyOther == b || bodyOther.isDead() || bodyOther.isRemoved() ){
 					continue;
 				}
@@ -141,8 +143,8 @@ public class ToiletLogic {
 			if( bCanTransport  && nDistance < colX && !bHasShit && !bFoundMyShitOutOfToilet && bFoundMyToilet  ){
 				int bodyOwnerId = s.ownerId;
 				Body owner = null;
-				Body[] bodies = SimYukkuri.world.getCurrentMap().body.toArray(new Body[0]);
-				for (Body body : bodies) {
+				for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().body.entrySet()) {
+					Body body = entry.getValue();
 					if (body.getUniqueID() == bodyOwnerId) {
 						owner = body;
 						break;
@@ -225,7 +227,7 @@ public class ToiletLogic {
 		if( b.getTakeoutItem(TakeoutItemType.SHIT) != null ){
 			bHasShit = true;
 		}
-		Obj oTarget = b.getMoveTarget();
+		Obj oTarget = b.takeMoveTarget();
 		if( oTarget != null ){
 			if( !(oTarget instanceof Toilet)){
 				return false;
@@ -241,10 +243,10 @@ public class ToiletLogic {
 			if(b.isToSteal()&& !b.wantToShit() ){
 					return false;
 			}
-			List<Toilet> toiletList = SimYukkuri.world.getCurrentMap().toilet;
-			for (Toilet t: toiletList) {
+			for (Map.Entry<Integer, Toilet> entry : SimYukkuri.world.getCurrentMap().toilet.entrySet()) {
+				Toilet t = entry.getValue();
 				// うんうん奴隷用トイレのどれかにいれば終了＝トイレに向かわない
-				if( ((Toilet)t).isForSlave()  && t.checkHitObj(null, b)){
+				if( t.isForSlave()  && t.checkHitObj(null, b)){
 					// うんうんを持ち歩いている場合
 					if(bHasShit ){
 						b.dropTakeoutItem(TakeoutItemType.SHIT);
@@ -261,10 +263,10 @@ public class ToiletLogic {
 		else{
 			// うんうん奴隷ではない場合、用がない、かつうんうんを持ってないなら終了
 			if ( !b.wantToShit() && !bHasShit ) {
-				List<Toilet> toiletList = SimYukkuri.world.getCurrentMap().toilet;
-				for (Toilet t: toiletList) {
+				for (Map.Entry<Integer, Toilet> entry : SimYukkuri.world.getCurrentMap().toilet.entrySet()) {
+					Toilet t = entry.getValue();
 					// 自動清掃でないトイレに入った時の反応
-					if(!((Toilet)t).getAutoClean() && t.checkHitObj(null, b) &&!b.isTalking()){
+					if(!t.getAutoClean() && t.checkHitObj(null, b) &&!b.isTalking()){
 						if(b.isSleeping()) b.wakeup();
 						b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateShit));
 						b.runAway(t.getX(), t.getY());
@@ -277,16 +279,17 @@ public class ToiletLogic {
 
 
 		// 対象が決まっていたら到達したかチェック
-		if( (b.isToShit() || ePublicRank == PublicRank.UnunSlave || bHasShit) && b.getMoveTarget() != null) {
+		Obj target = b.takeMoveTarget();
+		if( (b.isToShit() || ePublicRank == PublicRank.UnunSlave || bHasShit) && target != null) {
 			// 途中で消されてたら他の候補を探す
-			if(b.getMoveTarget().isRemoved()) {
+			if(target.isRemoved()) {
 				b.clearActions();
 				return false;
 			}
 			//到着済み
-			if (b.getStepDist() >= Translate.distance(b.getX(), b.getY(), b.getMoveTarget().getX(), b.getMoveTarget().getY())) {
+			if (b.getStepDist() >= Translate.distance(b.getX(), b.getY(), target.getX(), target.getY())) {
 				//トイレが空中にあるとき
-				if (b.getMoveTarget().getZ() != 0) {
+				if (target.getZ() != 0) {
 					// 他の候補を探す
 					b.clearActions();
 					return false;
@@ -320,7 +323,7 @@ public class ToiletLogic {
 			}
 			//未到着の場合
 			else{
-				b.moveTo(b.getMoveTarget().getX(), b.getMoveTarget().getY(), 0);
+				b.moveTo(target.getX(), target.getY(), 0);
 			}
 			return true;
 		}
@@ -328,15 +331,15 @@ public class ToiletLogic {
 		//対象が未決定の場合
 		boolean ret = false;
 		Toilet found = null;
-		int minDistance = b.getEYESIGHT();
+		int minDistance = b.getEYESIGHTorg();
 		int wallMode = b.getBodyAgeState().ordinal();
 		// 飛行可能なら壁以外は通過可能
 		if(b.canflyCheck()) {
 			wallMode = AgeState.ADULT.ordinal();
 		}
 
-		List<Toilet> toiletList = SimYukkuri.world.getCurrentMap().toilet;
-		for (Toilet t: toiletList) {
+		for (Map.Entry<Integer, Toilet> entry : SimYukkuri.world.getCurrentMap().toilet.entrySet()) {
+			Toilet t = entry.getValue();
 			int distance = Translate.distance(b.getX(), b.getY(), t.getX(), t.getY() - t.getH()/6);
 			if (minDistance > distance) {
 				if (!b.isRude()) {

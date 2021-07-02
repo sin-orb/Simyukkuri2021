@@ -4,6 +4,7 @@ import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
+import java.beans.Transient;
 
 import src.base.Obj;
 import src.enums.Type;
@@ -26,6 +27,7 @@ public class TerrainBillboard extends Obj {
 		xform = new AffineTransform();
 	}
 	/**イメージ取得*/
+	@Transient
 	public BufferedImage getImage() {
 		return image;
 	}

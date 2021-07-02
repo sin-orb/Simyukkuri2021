@@ -20,7 +20,7 @@ public class Generator extends ObjEX implements java.io.Serializable {
 //	public static final int hitCheckObjType = ObjEX.YUKKURI;
 	private static final int images_num = 2; //このクラスの総使用画像数
 	private static BufferedImage[] images = new BufferedImage[images_num];
-//	private static Rectangle boundary = new Rectangle();
+//	private static Rectangle boundary = new Rectangle4y()();
 //	protected Random rnd = new Random();
 //	protected ArrayList<Body> fuelBodyList = new ArrayList<Body>();
 //	protected ArrayList<Obj> bindObjList = new ArrayList<Obj>();

@@ -44,6 +44,7 @@ public class Hit extends Effect {
 	/**
 	 * イメージを取得する.
 	 */
+	@Override
 	public BufferedImage getImage() {
 		return images[direction][animeFrame];
 	}
@@ -56,5 +57,9 @@ public class Hit extends Effect {
 		setBoundary(pivX, pivY, imgW, imgH);
 		interval = 1;
 		frames = 4;
+	}
+	
+	public Hit() {
+		
 	}
 }

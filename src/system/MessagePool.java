@@ -16,6 +16,7 @@ import src.enums.Intelligence;
 import src.enums.LovePlayer;
 import src.enums.PublicRank;
 import src.enums.YukkuriType;
+import src.util.YukkuriUtil;
 
 /*****************************************************
  * 全キャラのメッセージ管理
@@ -833,8 +834,8 @@ public class MessagePool {
 			//name =YukkuriUtil.getYukkuriClassName(body.getType());
 		}
 		name2 = ResourceUtil.IS_JP ? body.getNameJ2() : body.getNameE2();
-		if (body.getPartner() != null)
-			partnerName = ResourceUtil.IS_JP ? body.getPartner().getNameJ() : body.getPartner().getNameE();
+		Body pa = YukkuriUtil.getBodyInstance(body.getPartner());
+		if (pa != null) partnerName = ResourceUtil.IS_JP ? pa.getNameJ() : pa.getNameE();
 
 		if (map == null)
 			return "NO MESSAGE FILE";

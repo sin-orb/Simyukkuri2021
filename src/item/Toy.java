@@ -1,7 +1,6 @@
 package src.item;
 
 
-import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
@@ -11,6 +10,7 @@ import src.SimYukkuri;
 import src.base.Body;
 import src.base.ObjEX;
 import src.draw.ModLoader;
+import src.draw.Rectangle4y;
 import src.enums.ObjEXType;
 import src.enums.Type;
 
@@ -25,7 +25,7 @@ public class Toy extends ObjEX implements java.io.Serializable {
 	private static final int SHADOW = 2;
 	private static final int NUM_OF_BALL_IMG = 3;
 	private static BufferedImage[] images = new BufferedImage[NUM_OF_BALL_IMG];
-	private static Rectangle boundary = new Rectangle();
+	private static Rectangle4y boundary = new Rectangle4y();
 	private Body owner = null;
 
 	private ItemRank itemRank;
@@ -52,7 +52,7 @@ public class Toy extends ObjEX implements java.io.Serializable {
 		return 1;
 	}
 	/**境界線の取得*/
-	public static Rectangle getBounding() {
+	public static Rectangle4y getBounding() {
 		return boundary;
 	}
 
@@ -63,7 +63,7 @@ public class Toy extends ObjEX implements java.io.Serializable {
 	
 	@Override
 	public void removeListData(){
-		SimYukkuri.world.getCurrentMap().toy.remove(this);
+		SimYukkuri.world.getCurrentMap().toy.remove(objId);
 	}
 
 	@Override
@@ -109,7 +109,7 @@ public class Toy extends ObjEX implements java.io.Serializable {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		SimYukkuri.world.getCurrentMap().toy.add(this);
+		SimYukkuri.world.getCurrentMap().toy.put(objId, this);
 		objType = Type.OBJECT;
 		objEXType = ObjEXType.TOY;
 		
@@ -121,6 +121,9 @@ public class Toy extends ObjEX implements java.io.Serializable {
 			value = 0;
 			cost = 0;
 		}
+		
+	}
+	public Toy() {
 		
 	}
 }

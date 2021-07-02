@@ -15,6 +15,7 @@ import src.logic.BodyLogic;
 import src.logic.EventLogic;
 import src.system.MessagePool;
 import src.system.ResourceUtil;
+import src.util.YukkuriUtil;
 
 /***************************************************
 	すぃーの乗車管理イベント
@@ -36,6 +37,9 @@ public class SuiRideEvent extends EventPacket implements java.io.Serializable {
 		super(f, t, tgt, cnt);
 		priority = EventPriority.MIDDLE; // すぃーの乗車イベントを食事、睡眠、トイレより上にする
 	}
+	
+	public SuiRideEvent() {
+	}
 
 	// 参加チェック
 	// ここで各種チェックを行い、イベントへ参加するかを返す
@@ -43,24 +47,26 @@ public class SuiRideEvent extends EventPacket implements java.io.Serializable {
 	@Override
 	public boolean checkEventResponse(Body b) {
 		//		boolean ret = false;
+		Obj target = b.takeMappedObj(this.target);
 		if (target == null) {
 			return false;
 		}
-
-		if (getFrom() == b) {
+		Body from = YukkuriUtil.getBodyInstance(getFrom());
+		if (from == null) return false;
+		if (from == b) {
 			return true;
 		}
 		if (!b.canEventResponse()) {
 			return false;
-		} else if (getFrom().getCurrentEvent() == this) {
-			if (b.isParent(getFrom()) || getFrom().isParent(b) || b.isPartner(getFrom()) || getFrom().isSister(b)) {
+		} else if (from.getCurrentEvent() == this) {
+			if (b.isParent(from) || from.isParent(b) || b.isPartner(from) || from.isSister(b)) {
 				if (b.canAction() == false || b.isExciting() || b.isScare()) {
 					return false;
 				}
 				// うんうん奴隷の場合
 				if (b.getPublicRank() == PublicRank.UnunSlave) {
 					// 自分との関係
-					EnumRelationMine eRelation = BodyLogic.checkMyRelation(b, getFrom());
+					EnumRelationMine eRelation = BodyLogic.checkMyRelation(b, from);
 					// 嘆く
 					switch (eRelation) {
 					case FATHER: // 父
@@ -103,6 +109,7 @@ public class SuiRideEvent extends EventPacket implements java.io.Serializable {
 	// イベント開始動作
 	@Override
 	public void start(Body b) {
+		Obj target = b.takeMappedObj(this.target);
 		if (target == null) {
 			return;
 		}
@@ -112,6 +119,7 @@ public class SuiRideEvent extends EventPacket implements java.io.Serializable {
 	// 毎フレーム処理
 	@Override
 	public UpdateState update(Body b) {
+		Obj target = b.takeMappedObj(this.target);
 		Sui s = (Sui) target;
 		if (s == null) {
 			return UpdateState.ABORT;
@@ -124,8 +132,9 @@ public class SuiRideEvent extends EventPacket implements java.io.Serializable {
 			if (!s.isriding(b)) {
 				return null;
 			}
-
-			if (getFrom() == b) {
+			Body from = YukkuriUtil.getBodyInstance(getFrom());
+			if (from == null) return UpdateState.ABORT;
+			if (from == b) {
 				// 乗客数が上限、またはカウント50以上の場合
 				if (s.getcurrent_bindbody_num() >= 3 || tick > 50) {
 					b.setHappiness(Happiness.HAPPY);
@@ -174,7 +183,7 @@ public class SuiRideEvent extends EventPacket implements java.io.Serializable {
 				}
 
 				// イベント実施中ではない、かつすぃーが待機中の場合
-				if (getFrom().getCurrentEvent() != this && s.getcurrent_condition() == 1) {
+				if (from.getCurrentEvent() != this && s.getcurrent_condition() == 1) {
 					// すぃーからおりる
 					if (!b.isTalking()) {
 						b.setMessage(MessagePool.getMessage(b, MessagePool.Action.RideOffSui), true);
@@ -187,17 +196,18 @@ public class SuiRideEvent extends EventPacket implements java.io.Serializable {
 			// すぃーを所持していない場合
 
 			// いずれかのすぃーに乗っている場合
-			if (b.getLinkParent() != null) {
+			if (b.takeMappedObj(b.getLinkParent()) != null) {
 				return null;
 			}
-
+			Body from = YukkuriUtil.getBodyInstance(getFrom());
 			// 移動する
 			b.moveToEvent(this, target.getX(), target.getY());
-			if (getFrom() == b && s.iscanriding() || s.getcurrent_bindbody_num() >= 3) {
+			if (from == null) return UpdateState.ABORT;
+			if (from == b && s.iscanriding() || s.getcurrent_bindbody_num() >= 3) {
 				memberride = false;
 				return UpdateState.ABORT;
 			}
-			if (getFrom() != b && getFrom().getCurrentEvent() == null) {
+			if (from != b && from.getCurrentEvent() == null) {
 				memberride = false;
 				return UpdateState.ABORT;
 			}
@@ -205,13 +215,13 @@ public class SuiRideEvent extends EventPacket implements java.io.Serializable {
 				memberride = false;
 				return UpdateState.ABORT;
 			}
-			if (getFrom() != b && getFrom().getFavItem(FavItemType.SUI) != null
+			if (from != b && from.getFavItem(FavItemType.SUI) != null
 					&& b.getFavItem(FavItemType.SUI) == null && memberride == false && SimYukkuri.RND.nextBoolean()) {
 				if (!b.isTalking()) {
 					// 他人のすぃーに乗りたがる
 					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.WantRideSuiOtner), true);
 				}
-				getFrom().moveTo(b.getX(), b.getY());
+				from.moveTo(b.getX(), b.getY());
 				memberride = true;
 			}
 		}
@@ -222,6 +232,7 @@ public class SuiRideEvent extends EventPacket implements java.io.Serializable {
 	// trueを返すとイベント終了
 	@Override
 	public boolean execute(Body b) {
+		Obj target = b.takeMappedObj(this.target);
 		if (target == null) {
 			return false;
 		}
@@ -241,7 +252,7 @@ public class SuiRideEvent extends EventPacket implements java.io.Serializable {
 	public void end(Body b) {
 		//他のイベントで強制的にイベントが終わることがある	
 		// すぃーにのってたら降りる
-		Sui s = (Sui) b.getLinkParent();
+		Sui s = (Sui) b.takeMappedObj(b.getLinkParent());
 		if (s != null) {
 			s.rideOff(b);
 		}

@@ -1,7 +1,6 @@
 package src.item;
 
 
-import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
@@ -12,6 +11,7 @@ import src.base.Body;
 import src.base.Obj;
 import src.base.ObjEX;
 import src.draw.ModLoader;
+import src.draw.Rectangle4y;
 import src.enums.CriticalDamegeType;
 import src.enums.ObjEXType;
 import src.enums.Type;
@@ -25,7 +25,7 @@ public class Stone extends ObjEX implements java.io.Serializable {
 	public static final int hitCheckObjType = ObjEX.YUKKURI;
 	private static final int NUM_OF_STONE_IMG = 3;
 	private static BufferedImage[] images = new BufferedImage[NUM_OF_STONE_IMG];
-	private static Rectangle boundary = new Rectangle();
+	private static Rectangle4y boundary = new Rectangle4y();
 
 	private ItemRank itemRank;
 	/**画像ロード*/
@@ -51,7 +51,7 @@ public class Stone extends ObjEX implements java.io.Serializable {
 		return 1;
 	}
 	/**境界線の取得*/
-	public static Rectangle getBounding() {
+	public static Rectangle4y getBounding() {
 		return boundary;
 	}
 
@@ -82,7 +82,7 @@ public class Stone extends ObjEX implements java.io.Serializable {
 	
 	@Override
 	public void removeListData(){
-		SimYukkuri.world.getCurrentMap().stone.remove(this);
+		SimYukkuri.world.getCurrentMap().stone.remove(objId);
 	}
 
 	@Override
@@ -105,7 +105,7 @@ public class Stone extends ObjEX implements java.io.Serializable {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		SimYukkuri.world.getCurrentMap().stone.add(this);
+		SimYukkuri.world.getCurrentMap().stone.put(objId, this);
 		objType = Type.OBJECT;
 		objEXType = ObjEXType.STONE;
 		interval = 5;
@@ -124,6 +124,9 @@ public class Stone extends ObjEX implements java.io.Serializable {
 			value = 0;
 			cost = 0;
 		}
+		
+	}
+	public Stone() {
 		
 	}
 }

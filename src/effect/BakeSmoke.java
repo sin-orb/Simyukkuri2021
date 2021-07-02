@@ -44,6 +44,7 @@ public class BakeSmoke extends Effect {
 	/**
 	 * イメージを取得する.
 	 */
+	@Override
 	public BufferedImage getImage() {
 		return images[animeFrame];
 	}
@@ -56,5 +57,9 @@ public class BakeSmoke extends Effect {
 		setBoundary(pivX, pivY, imgW, imgH);
 		interval = 0;
 		frames = 3;
+	}
+	
+	public BakeSmoke() {
+		
 	}
 }

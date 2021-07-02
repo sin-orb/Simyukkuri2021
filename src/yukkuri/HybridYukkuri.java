@@ -1,12 +1,12 @@
 package src.yukkuri;
 
-import java.awt.Dimension;
-import java.awt.Point;
 import java.awt.image.ImageObserver;
 import java.io.IOException;
 
 import src.SimYukkuri;
 import src.base.Body;
+import src.draw.Dimension4y;
+import src.draw.Point4y;
 import src.enums.AgeState;
 import src.enums.BodyRank;
 import src.enums.ImageCode;
@@ -14,6 +14,7 @@ import src.enums.Parent;
 import src.enums.PredatorType;
 import src.enums.YukkuriType;
 import src.system.BodyLayer;
+import src.util.YukkuriUtil;
 
 /**
  * ハイブリッドゆっくり。
@@ -42,8 +43,8 @@ public class HybridYukkuri extends Body implements java.io.Serializable {
 	protected Body dorei4;
 
 	private Body[] images;
-	private static Dimension[] boundary = new Dimension[3];
-	private static Dimension[] braidBoundary = new Dimension[3];
+	private static Dimension4y[] boundary = new Dimension4y[3];
+	private static Dimension4y[] braidBoundary = new Dimension4y[3];
 	/** イメージのロード（なにもしない） */
 	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
 	}
@@ -60,38 +61,43 @@ public class HybridYukkuri extends Body implements java.io.Serializable {
 		nameE = "Yukkuri";
 		nameJ2 = "ゆっくり";
 		nameE2 = "Yukkuri";
+		Body mama = YukkuriUtil.getBodyInstance(getParents()[Parent.MAMA.ordinal()]);
+		Body papa = YukkuriUtil.getBodyInstance(getParents()[Parent.PAPA.ordinal()]);
 
-		if(  getParents()[Parent.MAMA.ordinal()] == null && getParents()[Parent.PAPA.ordinal()] == null  ){
+		if(  mama== null && papa == null  ){
 			doreiTmp = new Reimu(100, 100, 0, AgeState.BABY, null, null);
 			doreiTmp2 = dorei;
 		}
 		else{
-			if ( getParents()[Parent.MAMA.ordinal()] != null ){
-				if ( getParents()[Parent.MAMA.ordinal()].getType() == 20000 ){
-					parentTmp = (HybridYukkuri)getParents()[Parent.MAMA.ordinal()];
+			if ( mama != null ){
+				if ( mama.getType() == 20000 ){
+					parentTmp = (HybridYukkuri)mama;
 					doreiTmp = parentTmp.dorei;
 				}
 				else{
-					doreiTmp = SimYukkuri.mypane.terrarium.makeBody(0, 0, 0, getParents()[Parent.MAMA.ordinal()].getType(), null, AgeState.BABY, getParents()[Parent.MAMA.ordinal()], getParents()[Parent.PAPA.ordinal()], false);
+					doreiTmp = SimYukkuri.mypane.terrarium.makeBody(0, 0, 0,
+							mama.getType(), null, AgeState.BABY, mama, papa, false);
 				}
 			}
 			else{
-				if ( getParents()[Parent.PAPA.ordinal()].getType() == 20000 ){
-					parentTmp = (HybridYukkuri)getParents()[Parent.PAPA.ordinal()];
+				if ( papa.getType() == 20000 ){
+					parentTmp = (HybridYukkuri)papa;
 					doreiTmp = parentTmp.dorei;
 				}
 				else{
-					doreiTmp = SimYukkuri.mypane.terrarium.makeBody(0, 0, 0, getParents()[Parent.PAPA.ordinal()].getType(), null, AgeState.BABY, getParents()[Parent.MAMA.ordinal()], getParents()[Parent.PAPA.ordinal()], false);
+					doreiTmp = SimYukkuri.mypane.terrarium.makeBody(0, 0, 0, papa.getType(), 
+							null, AgeState.BABY, mama, papa, false);
 				}
 			}
 
-			if ( getParents()[Parent.PAPA.ordinal()] != null ){
-				if ( getParents()[Parent.PAPA.ordinal()].getType() == 20000 ){
-					parentTmp2 = (HybridYukkuri)getParents()[Parent.PAPA.ordinal()];
+			if ( papa != null ){
+				if ( papa.getType() == 20000 ){
+					parentTmp2 = (HybridYukkuri)papa;
 					doreiTmp2 = parentTmp2.dorei;
 				}
 				else{
-					doreiTmp2 = SimYukkuri.mypane.terrarium.makeBody(0, 0, 0, getParents()[Parent.PAPA.ordinal()].getType(), null, AgeState.BABY, getParents()[Parent.MAMA.ordinal()], getParents()[Parent.PAPA.ordinal()], false);
+					doreiTmp2 = SimYukkuri.mypane.terrarium.makeBody(0, 0, 0, papa.getType(), 
+							null, AgeState.BABY, mama, papa, false);
 				}
 			}else{
 				doreiTmp2 = doreiTmp;
@@ -251,12 +257,12 @@ public class HybridYukkuri extends Body implements java.io.Serializable {
 
 		for(int i = 0; i < 3; i++) {
 			images[ImageCode.BODY.ordinal()].setAgeState(AgeState.values()[i]);
-			boundary[i] = new Dimension();
+			boundary[i] = new Dimension4y();
 			boundary[i].width = images[ImageCode.BODY.ordinal()].getW();
 			boundary[i].height = images[ImageCode.BODY.ordinal()].getH();
 
 			images[ImageCode.BRAID.ordinal()].setAgeState(AgeState.values()[i]);
-			braidBoundary[i] = new Dimension();
+			braidBoundary[i] = new Dimension4y();
 			if(dorei3.getType() == Remirya .type || dorei3.getType() == Fran .type || dorei3.getType() == Chiruno .type){
 				braidBoundary[i].width = images[ImageCode.BRAID_BACK.ordinal()].getBraidW();
 				braidBoundary[i].height = images[ImageCode.BRAID_BACK.ordinal()].getBraidH();
@@ -321,7 +327,7 @@ public class HybridYukkuri extends Body implements java.io.Serializable {
 		return dorei4;
 	}
 	@Override
-	public Point[] getMountPoint(String key) {
+	public Point4y[] getMountPoint(String key) {
 		return dorei.getMountPoint(key);
 	}
 
@@ -381,41 +387,44 @@ public class HybridYukkuri extends Body implements java.io.Serializable {
 		setMsgType(YukkuriType.HYBRIDYUKKURI);
 		setShitType(p1.getShitType());
 	}
+	public HybridYukkuri() {
+		
+	}
 	@Override
 	public void tuneParameters() {
 		/*if (rnd.nextBoolean()) {
 		motherhood = true;
 		}*/
 		double factor = Math.random()*2+1;
-		HUNGRYLIMIT[AgeState.ADULT.ordinal()] *= factor;
-		HUNGRYLIMIT[AgeState.CHILD.ordinal()] *= factor;
-		HUNGRYLIMIT[AgeState.BABY.ordinal()] *= factor;
+		HUNGRYLIMITorg[AgeState.ADULT.ordinal()] *= factor;
+		HUNGRYLIMITorg[AgeState.CHILD.ordinal()] *= factor;
+		HUNGRYLIMITorg[AgeState.BABY.ordinal()] *= factor;
 		factor = Math.random()*2+1;
-		SHITLIMIT[AgeState.ADULT.ordinal()] *= factor;
-		SHITLIMIT[AgeState.CHILD.ordinal()] *= factor;
-		SHITLIMIT[AgeState.BABY.ordinal()] *= factor;
+		SHITLIMITorg[AgeState.ADULT.ordinal()] *= factor;
+		SHITLIMITorg[AgeState.CHILD.ordinal()] *= factor;
+		SHITLIMITorg[AgeState.BABY.ordinal()] *= factor;
 		factor = Math.random()+0.5;
-		DAMAGELIMIT[AgeState.ADULT.ordinal()] *= factor;
-		DAMAGELIMIT[AgeState.CHILD.ordinal()] *= factor;
-		DAMAGELIMIT[AgeState.BABY.ordinal()] *= factor;
+		DAMAGELIMITorg[AgeState.ADULT.ordinal()] *= factor;
+		DAMAGELIMITorg[AgeState.CHILD.ordinal()] *= factor;
+		DAMAGELIMITorg[AgeState.BABY.ordinal()] *= factor;
 		factor = Math.random()+0.5;
-		BABYLIMIT *= factor;
-		CHILDLIMIT *= factor;
-		LIFELIMIT *= factor;
+		BABYLIMITorg *= factor;
+		CHILDLIMITorg *= factor;
+		LIFELIMITorg *= factor;
 		factor = Math.random()+1;
-		RELAXPERIOD *= factor;
-		EXCITEPERIOD *= factor;
-		PREGPERIOD *= factor;
-		SLEEPPERIOD *= factor;
-		ACTIVEPERIOD *= factor;
+		RELAXPERIODorg *= factor;
+		EXCITEPERIODorg *= factor;
+		PREGPERIODorg *= factor;
+		SLEEPPERIODorg *= factor;
+		ACTIVEPERIODorg *= factor;
 		sameDest = SimYukkuri.RND.nextInt(20)+20;
-		DECLINEPERIOD *= (Math.random()+0.5);
+		DECLINEPERIODorg *= (Math.random()+0.5);
 		ROBUSTNESS = SimYukkuri.RND.nextInt(10)+1;
 		//EYESIGHT /= 4;
 		factor = Math.random()+0.5;
-		STRENGTH[AgeState.ADULT.ordinal()] *= factor;
-		STRENGTH[AgeState.CHILD.ordinal()] *= factor;
-		STRENGTH[AgeState.BABY.ordinal()] *= factor;
+		STRENGTHorg[AgeState.ADULT.ordinal()] *= factor;
+		STRENGTHorg[AgeState.CHILD.ordinal()] *= factor;
+		STRENGTHorg[AgeState.BABY.ordinal()] *= factor;
 		images = new Body[ImageCode.values().length];
 		try {
 			loadImages_Hyblid();

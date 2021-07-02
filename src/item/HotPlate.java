@@ -1,7 +1,6 @@
 package src.item;
 
 
-import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
@@ -13,6 +12,7 @@ import src.base.Effect;
 import src.base.Obj;
 import src.base.ObjEX;
 import src.draw.ModLoader;
+import src.draw.Rectangle4y;
 import src.enums.CriticalDamegeType;
 import src.enums.EffectType;
 import src.enums.FootBake;
@@ -31,7 +31,7 @@ public class HotPlate extends ObjEX implements java.io.Serializable {
 	/**処理対象(ゆっくり)*/
 	public static final int hitCheckObjType = ObjEX.YUKKURI;
 	private static BufferedImage[] images = new BufferedImage[4];
-	private static Rectangle boundary = new Rectangle();
+	private static Rectangle4y boundary = new Rectangle4y();
 
 	private Body bindBody = null;
 	private Effect smoke = null;
@@ -78,7 +78,7 @@ public class HotPlate extends ObjEX implements java.io.Serializable {
 		return null;
 	}
 	/**境界線の取得*/
-	public static Rectangle getBounding() {
+	public static Rectangle4y getBounding() {
 		return boundary;
 	}
 
@@ -169,20 +169,23 @@ public class HotPlate extends ObjEX implements java.io.Serializable {
 			smoke.remove();
 			smoke = null;
 		}
-		SimYukkuri.world.getCurrentMap().hotPlate.remove(this);
+		SimYukkuri.world.getCurrentMap().hotPlate.remove(objId);
 	}
 	/**コンストラクタ*/
 	public HotPlate(int initX, int initY, int initOption) {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		SimYukkuri.world.getCurrentMap().hotPlate.add(this);
+		SimYukkuri.world.getCurrentMap().hotPlate.put(objId, this);
 		objType = Type.PLATFORM;
 		objEXType = ObjEXType.HOTPLATE;
 
 		interval = 5;
 		value = 5000;
 		cost = 100;
+	}
+	public HotPlate() {
+		
 	}
 }
 

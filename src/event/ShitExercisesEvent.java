@@ -16,6 +16,7 @@ import src.item.Barrier;
 import src.logic.BodyLogic;
 import src.system.MessagePool;
 import src.system.ResourceUtil;
+import src.util.YukkuriUtil;
 
 /***************************************************
 	うんうん体操イベント
@@ -62,10 +63,15 @@ public class ShitExercisesEvent extends EventPacket implements java.io.Serializa
 		super(f, t, tgt, cnt);
 		priority = EventPriority.HIGH;
 	}
+	
+	public ShitExercisesEvent() {
+		
+	}
 
 	@Override
 	public boolean simpleEventAction(Body b) {
-		if (getFrom().isShutmouth()) {
+		Body from = YukkuriUtil.getBodyInstance(getFrom());
+		if (from == null || from.isShutmouth()) {
 			return true;
 		}
 		return false;
@@ -76,8 +82,10 @@ public class ShitExercisesEvent extends EventPacket implements java.io.Serializa
 	// また、イベント優先度も必要に応じて設定できる
 	@Override
 	public boolean checkEventResponse(Body b) {
+		Body from = YukkuriUtil.getBodyInstance(getFrom());
+		if (from == null) return false;
 		boolean ret = false;
-		if (getFrom() == b) {
+		if (from == b) {
 			return true;
 		}
 		// うんうん奴隷の場合は参加しない
@@ -85,14 +93,14 @@ public class ShitExercisesEvent extends EventPacket implements java.io.Serializa
 			return false;
 
 		// つがいも参加する
-		if (getFrom().isPartner(b)) {
+		if (from.isPartner(b)) {
 			return true;
 		}
 		if (!b.canEventResponse()) {
 			return false;
 		}
 		// Fromの子供だけ参加する(※Fromが教育係のときは全ての子供が参加するようにする？)
-		if (!b.isChild(getFrom()))
+		if (!b.isChild(from))
 			return false;
 		// 赤ゆ以外は終了
 		if (!b.isBaby())
@@ -118,19 +126,20 @@ public class ShitExercisesEvent extends EventPacket implements java.io.Serializa
 	// 親→子供→次のステート、の順で処理をする
 	@Override
 	public UpdateState update(Body b) {
+		Body from = YukkuriUtil.getBodyInstance(getFrom());
 		//イベント中止
-		if (b == null || getFrom() == null) {
+		if (b == null || from == null) {
 			return UpdateState.ABORT;
 		}
 		if (b.isNYD()) {
 			return UpdateState.ABORT;
 		}
 		// 相手が消えてしまったら
-		if (getFrom().isRemoved()) {
+		if (from.isRemoved()) {
 			b.setHappiness(Happiness.VERY_HAPPY);
 			return UpdateState.ABORT;
 		}
-		if (getFrom().getCurrentEvent() == null) {
+		if (from.getCurrentEvent() == null) {
 			return UpdateState.ABORT;
 		}
 		// 産気づいたら
@@ -138,10 +147,10 @@ public class ShitExercisesEvent extends EventPacket implements java.io.Serializa
 			return UpdateState.ABORT;
 		}
 		//親を持ち上げたときの反応
-		if (!getFrom().canflyCheck() && getFrom().getZ() >= 2) {
+		if (!from.canflyCheck() && from.getZ() >= 2) {
 			if (SimYukkuri.RND.nextInt(50) == 0)
 				return UpdateState.ABORT;
-			else if (b == getFrom()) {
+			else if (b == from) {
 				//空処理
 			} else {
 				if (b.isSad())
@@ -167,7 +176,7 @@ public class ShitExercisesEvent extends EventPacket implements java.io.Serializa
 		}
 
 		// つがいはスキップ
-		if (b.isPartner(getFrom())) {
+		if (b.isPartner(from)) {
 			if (SimYukkuri.RND.nextInt(100) == 0) {
 				b.setMessage(MessagePool.getMessage(b, MessagePool.Action.GladAboutChild), true);
 			}
@@ -175,8 +184,8 @@ public class ShitExercisesEvent extends EventPacket implements java.io.Serializa
 			if (state != STATE.GO) {
 				b.stay();
 			} else {
-				int colX = BodyLogic.calcCollisionX(b, getFrom());
-				b.moveTo(getFrom().getX() + colX * 2, getFrom().getY());
+				int colX = BodyLogic.calcCollisionX(b, from);
+				b.moveTo(from.getX() + colX * 2, from.getY());
 			}
 
 			return null;
@@ -185,7 +194,7 @@ public class ShitExercisesEvent extends EventPacket implements java.io.Serializa
 		int nWait = 2000;
 		int nWait2 = 300;
 		// 親
-		if (b == getFrom()) {
+		if (b == from) {
 			// 何らかの理由で終了しそうにないなら終わらせる
 			if (2000 < nFromWaitCount) {
 				return UpdateState.ABORT;
@@ -193,7 +202,7 @@ public class ShitExercisesEvent extends EventPacket implements java.io.Serializa
 			nFromWaitCount++;
 
 			// 赤ゆのみ集合
-			List<Body> childrenList = BodyLogic.createActiveChildList(getFrom(), false);
+			List<Body> childrenList = BodyLogic.createActiveChildList(from, false);
 			if ((childrenList == null) || (childrenList.size() == 0)) {
 				return UpdateState.ABORT;
 			}
@@ -216,9 +225,10 @@ public class ShitExercisesEvent extends EventPacket implements java.io.Serializa
 					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.ShitExercisesGOFrom), true);
 				}
 				//b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.ShitExercisesWAITFrom), 52, true, false);
-				boolean bResult = BodyLogic.gatheringYukkuriFront(getFrom(), childrenList, this);
+				boolean bResult = BodyLogic.gatheringYukkuriFront(from, childrenList, this);
 
 				int nDistanceToilet = 0;
+				Obj target = b.takeMappedObj(this.target);
 				if (target != null) {
 					nDistanceToilet = Translate.getRealDistance(b.getX(), b.getY(), target.getX(), target.getY() - 20);
 				}
@@ -339,7 +349,7 @@ public class ShitExercisesEvent extends EventPacket implements java.io.Serializa
 			switch (state) {
 			case GO:
 				// 壁に引っかかってるなら終了
-				if (Barrier.onBarrier(b.getX(), b.getY(), getFrom().getX(), getFrom().getY(),
+				if (Barrier.onBarrier(b.getX(), b.getY(), from.getX(), from.getY(),
 						Barrier.MAP_BODY[b.getBodyAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
 					return UpdateState.ABORT;
 				}
@@ -421,8 +431,8 @@ public class ShitExercisesEvent extends EventPacket implements java.io.Serializa
 									b.setDirty(true);
 									// 汚れた場合、親の元に移動
 									// ゆっくり同士が重ならないように目標地点は体のサイズを考慮
-									int colX = BodyLogic.calcCollisionX(b, getFrom());
-									b.moveToBody(getFrom(), getFrom().getX() + colX, getFrom().getY());
+									int colX = BodyLogic.calcCollisionX(b, from);
+									b.moveToBody(from, from.getX() + colX, from.getY());
 									b.setTargetBind(true);
 								}
 							}

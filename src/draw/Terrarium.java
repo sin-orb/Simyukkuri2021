@@ -13,6 +13,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import src.SimYukkuri;
 import src.attachment.Fire;
@@ -55,6 +56,7 @@ import src.logic.ToiletLogic;
 import src.system.FieldShapeBase;
 import src.system.MainCommandUI;
 import src.system.MapPlaceData;
+import src.util.YukkuriUtil;
 import src.yukkuri.Alice;
 import src.yukkuri.Ayaya;
 import src.yukkuri.Chen;
@@ -139,7 +141,7 @@ public class Terrarium {
 	/**処理インターバル(軽量化のため)*/
 	private static int intervalCount = 0;
 	/**汎用長方形*/
-	private static Rectangle tmpRect = new Rectangle();
+	private static Rectangle4y tmpRect = new Rectangle4y();
 
 	/**
 	 * セーブの実行部
@@ -147,6 +149,17 @@ public class Terrarium {
 	 * @throws IOException IO例外
 	 */
 	public static void saveState(File file) throws IOException {
+//		ObjectMapper mapper = buildMapper();
+//		SimYukkuri.world.setMaxUniqueId(Numbering.INSTANCE.getYukkuriID());
+//		SimYukkuri.world.setMaxObjId(Numbering.INSTANCE.getObjId());
+//		Enumeration<Obj> enu = SimYukkuri.world.player.getItemList().elements();
+//		while (enu.hasMoreElements()) {
+//			SimYukkuri.world.player.getItemForSave().add(enu.nextElement());
+//		}
+//		String json = mapper.writeValueAsString(SimYukkuri.world);
+//		try (FileWriter filewriter = new FileWriter(file);) {
+//			filewriter.write(json);
+//		}
 		ObjectOutputStream out = new ObjectOutputStream(
 				new BufferedOutputStream(
 						new FileOutputStream(file)));
@@ -168,6 +181,22 @@ public class Terrarium {
 	 */
 	@SuppressWarnings("unchecked")
 	public static void loadState(File file) throws IOException, ClassNotFoundException {
+//		World tmpWorld = null;
+//		String json =null;
+//		try (BufferedReader  in = new BufferedReader (
+//				new InputStreamReader(new FileInputStream(file), "UTF-8"))) {
+//			json = in.readLine();
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+//		ObjectMapper mapper = buildMapper();
+//		tmpWorld = mapper.readValue(json,World.class);
+//		Numbering.INSTANCE.setYukkuriID(tmpWorld.getMaxUniqueId());
+//		Numbering.INSTANCE.setObjId(tmpWorld.getMaxObjId());
+//		tmpWorld.player.getItemList().clear();
+//		for (Obj o : tmpWorld.player.getItemForSave()) {
+//			tmpWorld.player.getItemList().addElement(o);
+//		}
 		ObjectInputStream in = new ObjectInputStream(
 				new BufferedInputStream(
 						new FileInputStream(file)));
@@ -186,8 +215,8 @@ public class Terrarium {
 			in.close();
 		}
 		// 持ち物を復元
-		MainCommandUI.itemWindow.itemList.setModel(tmpWorld.player.itemList);
-		
+		MainCommandUI.itemWindow.itemList.setModel(tmpWorld.player.getItemList());
+
 		// ウィンドウサイズを復元
 		tmpWorld.recalcMapSize();
 		SimYukkuri.world = tmpWorld;
@@ -223,7 +252,8 @@ public class Terrarium {
 		int minDistance;
 
 		// 全ゆっくりに対してチェック
-		for (Body p : SimYukkuri.world.getCurrentMap().body) {
+		for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().body.entrySet()) {
+			Body p = entry.getValue();
 			// 自分同士のチェックは無意味なのでスキップ
 			if (p == b) {
 				continue;
@@ -242,7 +272,7 @@ public class Terrarium {
 			}*/
 
 			// パニックの伝播
-			if (minDistance <= p.getEYESIGHT()) {
+			if (minDistance <= p.getEYESIGHTorg()) {
 				// 恐怖同士で伝播の無限ループに入らないように制限。れいぱー覚醒してたら恐れない
 				if (b.getPanicType() == PanicType.BURN && !p.isRaper()) {
 					p.setPanic(true, PanicType.FEAR);
@@ -262,10 +292,8 @@ public class Terrarium {
 			return;
 		}
 		// 全ゆっくりに対してチェック
-		List<Body> bodyList = SimYukkuri.world.getCurrentMap().body;
-
-		// 全ゆっくりに対してチェック
-		for (Body p : bodyList) {
+		for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().body.entrySet()) {
+			Body p = entry.getValue();
 			// 自分同士のチェックは無意味なのでスキップ
 			if (p == b) {
 				continue;
@@ -374,7 +402,7 @@ public class Terrarium {
 		Body papa = p2;
 		Body mama = p1;
 		if (papa == null && dna != null) {
-			papa = dna.father;
+			papa = YukkuriUtil.getBodyInstance(dna.father);
 		}
 
 		switch (type) {
@@ -403,10 +431,12 @@ public class Terrarium {
 			b = new Myon(x, y, z, age, mama, papa);
 			break;
 		case WasaReimu.type:
+			SimYukkuri.mypane.loadBodyImage(YukkuriType.REIMU);
 			SimYukkuri.mypane.loadBodyImage(YukkuriType.WASAREIMU);
 			b = new WasaReimu(x, y, z, age, mama, papa);
 			break;
 		case MarisaTsumuri.type:
+			SimYukkuri.mypane.loadBodyImage(YukkuriType.MARISA);
 			SimYukkuri.mypane.loadBodyImage(YukkuriType.MARISATSUMURI);
 			b = new MarisaTsumuri(x, y, z, age, mama, papa);
 			break;
@@ -415,6 +445,7 @@ public class Terrarium {
 			b = new MarisaKotatsumuri(x, y, z, age, mama, papa);
 			break;
 		case Deibu.type:
+			SimYukkuri.mypane.loadBodyImage(YukkuriType.REIMU);
 			SimYukkuri.mypane.loadBodyImage(YukkuriType.DEIBU);
 			b = new Deibu(x, y, z, age, mama, papa);
 			break;
@@ -432,14 +463,17 @@ public class Terrarium {
 			b = new Tarinai(x, y, z, age, mama, papa);
 			break;
 		case TarinaiReimu.type:
+			SimYukkuri.mypane.loadBodyImage(YukkuriType.TARINAI);
 			SimYukkuri.mypane.loadBodyImage(YukkuriType.TARINAIREIMU);
 			b = new TarinaiReimu(x, y, z, age, mama, papa);
 			break;
 		case MarisaReimu.type:
+			SimYukkuri.mypane.loadBodyImage(YukkuriType.REIMU);
 			SimYukkuri.mypane.loadBodyImage(YukkuriType.MARISAREIMU);
 			b = new MarisaReimu(x, y, z, age, mama, papa);
 			break;
 		case ReimuMarisa.type:
+			SimYukkuri.mypane.loadBodyImage(YukkuriType.MARISA);
 			SimYukkuri.mypane.loadBodyImage(YukkuriType.REIMUMARISA);
 			b = new ReimuMarisa(x, y, z, age, mama, papa);
 			break;
@@ -576,13 +610,13 @@ public class Terrarium {
 	 */
 	public Body addBody(int x, int y, int z, int type, AgeState age, Body p1, Body p2) {
 		Body ret = makeBody(x, y, z, type, null, age, p1, p2, true);
-		SimYukkuri.world.getCurrentMap().body.add(ret);
+		SimYukkuri.world.getCurrentMap().body.put(ret.getUniqueID(), ret);
 		return ret;
 	}
 
 	/**ゆっくりをリストに登録*/
 	public void addBody(Body b) {
-		SimYukkuri.world.getCurrentMap().body.add(b);
+		SimYukkuri.world.getCurrentMap().body.put(b.getUniqueID(), b);
 	}
 
 	/**
@@ -594,8 +628,10 @@ public class Terrarium {
 	 * @param b 主
 	 * @param type 種類
 	 */
-	public void addShit(int x, int y, int z, Body b, YukkuriType type) {
-		SimYukkuri.world.getCurrentMap().shit.add(new Shit(x, y, z, b, type));
+	public int addShit(int x, int y, int z, Body b, YukkuriType type) {
+		Shit shit = new Shit(x, y, z, b, type);
+		SimYukkuri.world.getCurrentMap().shit.put(shit.objId, shit);
+		return shit.objId;
 	}
 
 	/**
@@ -614,7 +650,7 @@ public class Terrarium {
 			s.setMostDepth(b.getMostDepth());
 			s.setMostDepth(b.getZ());
 		}
-		SimYukkuri.world.getCurrentMap().shit.add(s);
+		SimYukkuri.world.getCurrentMap().shit.put(s.objId, s);
 	}
 
 	/**
@@ -629,7 +665,7 @@ public class Terrarium {
 	 */
 	public Vomit addVomit(int x, int y, int z, Body body, YukkuriType type) {
 		Vomit v = new Vomit(x, y, z, body, type);
-		SimYukkuri.world.getCurrentMap().vomit.add(v);
+		SimYukkuri.world.getCurrentMap().vomit.put(v.objId, v);
 		if (body != null && body.getMostDepth() < 0) {
 			v.setMostDepth(body.getMostDepth());
 			v.setMostDepth(body.getZ());
@@ -653,7 +689,7 @@ public class Terrarium {
 			v.setMostDepth(body.getMostDepth());
 			v.setMostDepth(body.getZ());
 		}
-		SimYukkuri.world.getCurrentMap().vomit.add(v);
+		SimYukkuri.world.getCurrentMap().vomit.put(v.objId, v);
 	}
 
 	/**エフェクト追加
@@ -756,16 +792,6 @@ public class Terrarium {
 				curMap.alarm = false;
 			}
 		}
-
-		if (Terrarium.getInterval() == 0) {
-			// シャッフル(シャッフルする意味がありそうなもののみ)
-			Collections.shuffle(curMap.body);
-			Collections.shuffle(curMap.food);
-			Collections.shuffle(curMap.shit);
-			Collections.shuffle(curMap.stalk);
-			Collections.shuffle(curMap.vomit);
-		}
-
 		/*
 			地面に貼りついてるガジェットとオブジェクトの当たり判定
 			床置きと他シェイプの優先順は以下で固定
@@ -804,7 +830,11 @@ public class Terrarium {
 			if (!platform.checkInterval(intervalCount))
 				continue;
 
-			platform.getCollisionRect(tmpRect);
+			Rectangle re = platform.getCollisionRect(translateRectangles(tmpRect));
+			tmpRect.x = re.x;
+			tmpRect.y = re.y;
+			tmpRect.width = re.width;
+			tmpRect.height = re.height;
 
 			for (Obj o : objList) {
 				int objType = 0;
@@ -843,7 +873,7 @@ public class Terrarium {
 					break;
 				}
 				if ((objType & platform.getHitCheckObjType()) != 0) {
-					platform.checkHitObj(tmpRect, o);
+					platform.checkHitObj(translateRectangles(tmpRect), o);
 				}
 			}
 		}
@@ -864,8 +894,8 @@ public class Terrarium {
 				ret = belt.clockTick();
 				if (ret == Event.REMOVED) {
 					i.remove();
-					continue;
-				}
+						continue;
+					}
 				if (!belt.mapContains(o.getX(), o.getY()))
 					continue;
 				if (belt.checkHitObj(o)) {
@@ -999,35 +1029,53 @@ public class Terrarium {
 		}
 
 		// うんうん更新
-		for (Iterator<Shit> i = curMap.shit.iterator(); i.hasNext();) {
-			Shit s = i.next();
+		List<Shit> shits = new LinkedList<Shit>();
+		for (Map.Entry<Integer, Shit> entry : curMap.shit.entrySet()) {
+			Shit s = entry.getValue();
 			ret = s.clockTick();
-			if (ret == Event.REMOVED) {
-				i.remove();
+			if (ret != Event.REMOVED) {
+				shits.add(s);
 			}
+		}
+		curMap.shit.clear();
+		for (Shit shit : shits) {
+			curMap.shit.put(shit.objId, shit);
 		}
 
 		// 吐餡更新
-		for (Iterator<Vomit> i = curMap.vomit.iterator(); i.hasNext();) {
-			Vomit v = i.next();
+		List<Vomit> vomits = new LinkedList<Vomit>();
+		for (Map.Entry<Integer, Vomit> entry : curMap.vomit.entrySet()) {
+			Vomit v = entry.getValue();
 			ret = v.clockTick();
-			if (ret == Event.REMOVED) {
-				i.remove();
+			if (ret != Event.REMOVED) {
+				vomits.add(v);
 			}
+		}
+		curMap.vomit.clear();
+		for (Vomit vomit : vomits) {
+			curMap.vomit.put(vomit.objId, vomit);
 		}
 
 		// おかざり更新
-		for (Iterator<Okazari> i = curMap.okazari.iterator(); i.hasNext();) {
-			Okazari o = i.next();
+		List<Okazari> okazaris = new LinkedList<Okazari>();
+		for (Map.Entry<Integer, Okazari> entry : curMap.okazari.entrySet()) {
+			Okazari o = entry.getValue();
 			ret = o.clockTick();
-			if (ret == Event.REMOVED) {
-				i.remove();
+			if (ret != Event.REMOVED) {
+				okazaris.add(o);
 			}
+		}
+		curMap.okazari.clear();
+		for (Okazari o : okazaris) {
+			curMap.okazari.put(o.objId, o);
 		}
 
 		boolean transCheck = (operationTime % 60 == 0);
 		Body transBody = null;
-		Body[] bodies = curMap.body.toArray(new Body[0]);
+		List<Body> bodies = new LinkedList<Body>(curMap.body.values());
+		if (Terrarium.getInterval() == 0) {
+			Collections.shuffle(bodies);
+		}
 		for (Body b : bodies) {
 			ret = b.clockTick();
 			switch (ret) {
@@ -1039,7 +1087,7 @@ public class Terrarium {
 								SimYukkuri.RND.nextInt(burstPower / 4 + 1) - burstPower / 8,
 								SimYukkuri.RND.nextInt(burstPower / 4 + 1) - burstPower / 8,
 								SimYukkuri.RND.nextInt(burstPower / 5 + 1) - burstPower / 10 - 1, babyTypes, b,
-								b.getPartner());
+								YukkuriUtil.getBodyInstance(b.getPartner()));
 					}
 					b.getBabyTypes().clear();
 					if (b.getStalks() != null) {
@@ -1052,10 +1100,10 @@ public class Terrarium {
 						}
 					}
 					b.disPlantStalks();
-					if (b.getShit() > b.getSHITLIMIT()[b.getBodyAgeState().ordinal()]) {
-						for (int j = 0; b.getShit() / b.getSHITLIMIT()[b.getBodyAgeState().ordinal()] > j; j++) {
-							addShit(b.getX(), b.getY(), b.getZ() + b.getSize() / 15, b, b.getShitType());
-							curMap.shit.get(curMap.shit.size() - 1).kick(
+					if (b.getShit() > b.getSHITLIMITorg()[b.getBodyAgeState().ordinal()]) {
+						for (int j = 0; b.getShit() / b.getSHITLIMITorg()[b.getBodyAgeState().ordinal()] > j; j++) {
+							int i = addShit(b.getX(), b.getY(), b.getZ() + b.getSize() / 15, b, b.getShitType());
+							curMap.shit.get(i).kick(
 									SimYukkuri.RND.nextInt(burstPower / 4 + 1) - burstPower / 8,
 									SimYukkuri.RND.nextInt(burstPower / 4 + 1) - burstPower / 8,
 									SimYukkuri.RND.nextInt(burstPower / 5 + 1) - burstPower / 10 - 1);
@@ -1075,14 +1123,19 @@ public class Terrarium {
 					if (!b.isHasPants()) {
 						Dna babyType = b.getBabyTypesDequeue();
 						if (babyType != null) {
-							addBaby(b.getX(), b.getY(), b.getZ() + b.getSize() / 15, babyType, b, b.getPartner());
+							addBaby(b.getX(), b.getY(), b.getZ() + b.getSize() / 15, babyType, b,
+									YukkuriUtil.getBodyInstance(b.getPartner()));
 						}
 					}
 				}
 				if (b.getStalks() != null) {
 					for (Stalk s : b.getStalks()) {
 						if (s != null) {
-							for (Body ba : s.getBindBaby()) {
+							for (Integer bab : s.getBindBabies()) {
+								if (bab == null) {
+									continue;
+								}
+								Body ba = YukkuriUtil.getBodyInstance(bab);
 								if (ba != null) {
 									ba.setUnBirth(false);
 									ba.setDropShadow(true);
@@ -1094,7 +1147,7 @@ public class Terrarium {
 									ba.kick(0, 0, 0);
 								}
 							}
-							s.getBindBaby().clear();
+							s.getBindBabies().clear();
 							s.setPlantYukkuri(null);
 							// 正常な出産時は茎をフード化
 							int fx, fy;
@@ -1105,8 +1158,9 @@ public class Terrarium {
 								fx = Math.min(fx, Translate.mapW);
 								fy = Math.max(0, fy);
 								fy = Math.min(fy, Translate.mapH);
-								Food food = (Food)GadgetAction.putObjEX(Food.class, fx, fy, Food.FoodType.STALK.ordinal());
-								SimYukkuri.world.getCurrentMap().food.add(food);
+								Food food = (Food) GadgetAction.putObjEX(Food.class, fx, fy,
+										Food.FoodType.STALK.ordinal());
+								SimYukkuri.world.getCurrentMap().food.put(food.objId, food);
 							}
 							s.remove();
 						}
@@ -1119,8 +1173,8 @@ public class Terrarium {
 				}
 				break;
 			case DOSHIT:
-				addShit(b.getX(), b.getY(), b.getZ() + b.getSize() / 15, b, b.getShitType());
-				curMap.shit.get(curMap.shit.size() - 1).kick(0, 1, 1);
+				int objId = addShit(b.getX(), b.getY(), b.getZ() + b.getSize() / 15, b, b.getShitType());
+				curMap.shit.get(objId).kick(0, 1, 1);
 				break;
 			case DOCRUSHEDSHIT:
 				// 漏らした場合
@@ -1226,19 +1280,19 @@ public class Terrarium {
 
 			if (b.getStalkBabyTypes().size() > 0) {
 				int j = 0;
-				Stalk currentStalk = null;
+				Stalk s = null;
 				for (Dna babyTypes : b.getStalkBabyTypes()) {
 					if (j % 5 == 0) {
-						GadgetAction.putObjEX(Stalk.class, b.getX(), b.getY(), b.getDirection().ordinal());
-						currentStalk = curMap.stalk.get(curMap.stalk.size() - 1);
-						b.getStalks().add(currentStalk);
-						currentStalk.setPlantYukkuri(b);
+						s = (Stalk)GadgetAction.putObjEX(Stalk.class, b.getX(), b.getY(), b.getDirection().ordinal());
+						b.getStalks().add(s);
+						s.setPlantYukkuri(b);
 					}
 					if (babyTypes != null) {
-						addBaby(b.getX(), b.getY(), 0, babyTypes, b, b.getPartner(), currentStalk);
-						babyList.get(babyList.size() - 1).setBindStalk(currentStalk);
+						addBaby(b.getX(), b.getY(), 0, babyTypes, b, YukkuriUtil.getBodyInstance(b.getPartner()),
+								s);
+						babyList.get(babyList.size() - 1).setBindStalk(s);
 					} else {
-						currentStalk.setBindBaby(null);
+						s.setBindBaby(null);
 					}
 					j++;
 				}
@@ -1254,24 +1308,37 @@ public class Terrarium {
 		}
 		// add babies.
 		if (!babyList.isEmpty()) {
-			curMap.body.addAll(babyList);
+			for (Body baby : babyList) {
+				curMap.body.put(baby.getUniqueID(), baby);
+			}
 			babyList.clear();
 		}
 
 		// エフェクト
-		for (Iterator<Effect> i = curMap.sortEffect.iterator(); i.hasNext();) {
-			Effect ef = i.next();
+		List<Effect> effects = new LinkedList<Effect>();
+		for (Map.Entry<Integer, Effect> entry : curMap.sortEffect.entrySet()) {
+			Effect ef = entry.getValue();
 			ret = ef.clockTick();
-			if (ret == Event.REMOVED) {
-				i.remove();
+			if (ret != Event.REMOVED) {
+				effects.add(ef);
 			}
 		}
-		for (Iterator<Effect> i = curMap.frontEffect.iterator(); i.hasNext();) {
-			Effect ef = i.next();
+		curMap.sortEffect.clear();
+		for (Effect e : effects) {
+			curMap.sortEffect.put(e.objId, e);
+		}
+		
+		effects.clear();
+		for (Map.Entry<Integer, Effect> entry : curMap.frontEffect.entrySet()) {
+			Effect ef = entry.getValue();
 			ret = ef.clockTick();
-			if (ret == Event.REMOVED) {
-				i.remove();
+			if (ret != Event.REMOVED) {
+				effects.add(ef);
 			}
+		}
+		curMap.frontEffect.clear();
+		for (Effect e : effects) {
+			curMap.frontEffect.put(e.objId, e);
 		}
 		// イベントリストの有効期間チェック
 		EventLogic.clockWorldEvent();
@@ -1281,6 +1348,10 @@ public class Terrarium {
 			transBody.execTransform();
 		}
 		operationTime += TICK;
+	}
+
+	private Rectangle translateRectangles(Rectangle4y r) {
+		return new Rectangle(r.x, r.y, r.width, r.height);
 	}
 
 	/** 家族の関係を設定
@@ -1293,12 +1364,12 @@ public class Terrarium {
 		if (b == null) {
 			return;
 		}
-		List<Body> childrenListOld = b.getChildrenList(); //　子供のリスト
+		List<Integer> childrenListOld = b.getChildrenList(); //　子供のリスト
 
 		// 子供のリスト
-		Iterator<Body> itr = childrenListOld.iterator();
+		Iterator<Integer> itr = childrenListOld.iterator();
 		while (itr.hasNext()) {
-			Body child = itr.next();
+			Body child = YukkuriUtil.getBodyInstance(itr.next());
 			if (child == null) {
 				continue;
 			}

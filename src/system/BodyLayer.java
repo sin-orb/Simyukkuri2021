@@ -8,7 +8,7 @@ import java.awt.image.BufferedImage;
  */
 public class BodyLayer {
 	/** 画像実体への参照 */
-	public BufferedImage[] image;
+	public transient BufferedImage[] image;
 	/** 使用する描画矩形 */
 	public int[] dir;
 	/** 汎用 */

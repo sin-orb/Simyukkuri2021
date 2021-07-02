@@ -2,10 +2,8 @@ package src.draw;
 
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.MediaTracker;
-import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
@@ -382,9 +380,9 @@ public class ModLoader
 	 * @param name ファイル名
 	 * @return INIファイルマップ
 	 */
-	public static Map<String, Point[]> loadBodyIniMap(ClassLoader loader, String path, String name) {
+	public static Map<String, Point4y[]> loadBodyIniMap(ClassLoader loader, String path, String name) {
 		
-		Map<String, Point[]> ret = null;
+		Map<String, Point4y[]> ret = null;
 		IniFileReader iniFile = null;
 		boolean jarTry = true;
 		
@@ -404,10 +402,10 @@ public class ModLoader
 		boolean err = iniFile.open(loader);
 		if(!err) return null;
 
-		ret = new HashMap<String, Point[]>();
+		ret = new HashMap<String, Point4y[]>();
 		HashMap<String, String> map = null;
 		int x,y;
-		Point[] pnt = null;
+		Point4y[] pnt = null;
 		String[] keyArr = null;
 		String[] valArr = null;
 		while((map = iniFile.readNext()) != null) {
@@ -427,18 +425,18 @@ public class ModLoader
 			// キーから年齢を切り離す
 			keyArr = key.split("\\.");
 			if("baby".equals(keyArr[1])) {
-				pnt = new Point[3];
-				pnt[0] = new Point();
+				pnt = new Point4y[3];
+				pnt[0] = new Point4y();
 				pnt[0].x = x;
 				pnt[0].y = y;
 			}
 			else if("child".equals(keyArr[1])) {
-				pnt[1] = new Point();
+				pnt[1] = new Point4y();
 				pnt[1].x = x;
 				pnt[1].y = y;
 			}
 			else if("adult".equals(keyArr[1])) {
-				pnt[2] = new Point();
+				pnt[2] = new Point4y();
 				pnt[2].x = x;
 				pnt[2].y = y;
 				ret.put(keyArr[0], pnt);
@@ -721,7 +719,7 @@ public class ModLoader
 	 * @param braidRect ゆっくりのおさげの矩形
 	 * @param io イメージオブザーバ
 	 */
-	public static void setImageSize(BufferedImage[][][] bodyImg, Dimension[] bodyRect, Dimension[] braidRect, ImageObserver io) {
+	public static void setImageSize(BufferedImage[][][] bodyImg, Dimension4y[] bodyRect, Dimension4y[] braidRect, ImageObserver io) {
 		setImageSize(bodyImg,bodyRect,  braidRect,false, io);
 	}
 	/**
@@ -732,26 +730,26 @@ public class ModLoader
 	 * @param BB おさげが胴体の後ろかどうか
 	 * @param io イメージオブザーバ
 	 */
-	public static void setImageSize(BufferedImage[][][] bodyImg, Dimension[] bodyRect, Dimension[] braidRect,boolean BB , ImageObserver io) {
+	public static void setImageSize(BufferedImage[][][] bodyImg, Dimension4y[] bodyRect, Dimension4y[] braidRect,boolean BB , ImageObserver io) {
 		for(int i = 0; i < 3; i++) {
-			bodyRect[i] = new Dimension();
+			bodyRect[i] = new Dimension4y();
 			bodyRect[i].width = bodyImg[0][0][i].getWidth(io);
 			bodyRect[i].height = bodyImg[0][0][i].getHeight(io);
 
 			if(BB){
 				if(bodyImg[ImageCode.BRAID_BACK.ordinal()][0][i] != null) {
-					braidRect[i] = new Dimension(bodyImg[ImageCode.BRAID_BACK.ordinal()][0][i].getWidth(io), bodyImg[ImageCode.BRAID_BACK.ordinal()][0][i].getHeight(io));
+					braidRect[i] = new Dimension4y(bodyImg[ImageCode.BRAID_BACK.ordinal()][0][i].getWidth(io), bodyImg[ImageCode.BRAID_BACK.ordinal()][0][i].getHeight(io));
 				}
 				else if(bodyImg[ImageCode.BRAID_BACK.ordinal()][1][i] != null) {
-					braidRect[i] = new Dimension(bodyImg[ImageCode.BRAID_BACK.ordinal()][1][i].getWidth(io), bodyImg[ImageCode.BRAID_BACK.ordinal()][1][i].getHeight(io));
+					braidRect[i] = new Dimension4y(bodyImg[ImageCode.BRAID_BACK.ordinal()][1][i].getWidth(io), bodyImg[ImageCode.BRAID_BACK.ordinal()][1][i].getHeight(io));
 				}
 			}
 			else{
 				if(bodyImg[ImageCode.BRAID.ordinal()][0][i] != null) {
-					braidRect[i] = new Dimension(bodyImg[ImageCode.BRAID.ordinal()][0][i].getWidth(io), bodyImg[ImageCode.BRAID.ordinal()][0][i].getHeight(io));
+					braidRect[i] = new Dimension4y(bodyImg[ImageCode.BRAID.ordinal()][0][i].getWidth(io), bodyImg[ImageCode.BRAID.ordinal()][0][i].getHeight(io));
 				}
 				else if(bodyImg[ImageCode.BRAID.ordinal()][1][i] != null) {
-					braidRect[i] = new Dimension(bodyImg[ImageCode.BRAID.ordinal()][1][i].getWidth(io), bodyImg[ImageCode.BRAID.ordinal()][1][i].getHeight(io));
+					braidRect[i] = new Dimension4y(bodyImg[ImageCode.BRAID.ordinal()][1][i].getWidth(io), bodyImg[ImageCode.BRAID.ordinal()][1][i].getHeight(io));
 				}
 			}
 		}

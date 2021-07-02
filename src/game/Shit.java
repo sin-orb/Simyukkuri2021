@@ -4,6 +4,7 @@ package src.game;
 //import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
+import java.beans.Transient;
 import java.io.IOException;
 
 import javax.imageio.ImageIO;
@@ -15,6 +16,7 @@ import src.draw.ModLoader;
 import src.draw.Translate;
 import src.enums.AgeState;
 import src.enums.Event;
+import src.enums.Numbering;
 import src.enums.Type;
 import src.enums.YukkuriType;
 import src.item.Barrier;
@@ -115,7 +117,7 @@ public class Shit extends Obj implements java.io.Serializable {
 	
 	@Override
 	public String toString() {
-		StringBuilder ret = new StringBuilder("うんうん");
+		StringBuilder ret = new StringBuilder(ResourceUtil.getInstance().read("system_unun"));
 		ret.append(shitSizeDisplayName[ageState.ordinal()]);
 		ret.append("(");
 		ret.append(ownerName);
@@ -126,6 +128,7 @@ public class Shit extends Obj implements java.io.Serializable {
 	 * イメージを取得する.
 	 * @return イメージ
 	 */
+	@Transient
 	public BufferedImage getImage() {
 		return (images[shitType][getShitState()][ageState.ordinal()]);
 	}
@@ -133,6 +136,7 @@ public class Shit extends Obj implements java.io.Serializable {
 	 * 影のイメージを取得する.
 	 * @return 影のイメージ
 	 */
+	@Transient
 	public BufferedImage getShadowImage() {
 		return (images[shitType][SHIT_SHADOW][ageState.ordinal()]);
 	}
@@ -149,6 +153,7 @@ public class Shit extends Obj implements java.io.Serializable {
 	 * @param type うんうんタイプ
 	 */
 	public Shit (int initX, int initY, int initZ, Body b, YukkuriType type) {
+		objId = Numbering.INSTANCE.numberingObjId();
 		objType = Type.SHIT;
 		shitType = type.ordinal();
 		ownerName = ResourceUtil.IS_JP ? b.getNameJ() : b.getNameE();
@@ -162,6 +167,11 @@ public class Shit extends Obj implements java.io.Serializable {
 		setBoundary(pivX[shitType][ageState.ordinal()], pivY[shitType][ageState.ordinal()],
 					imgW[shitType][ageState.ordinal()], imgH[shitType][ageState.ordinal()]);
 	}
+	
+	public Shit() {
+		
+	}
+	
 	/**
 	 * うんうんの状態を取得する.
 	 * @return うんうんの状態
@@ -280,4 +290,54 @@ public class Shit extends Obj implements java.io.Serializable {
 		calcPos();
 		return Event.REMOVED;
 	}
+
+	public String getOwnerName() {
+		return ownerName;
+	}
+
+	public void setOwnerName(String ownerName) {
+		this.ownerName = ownerName;
+	}
+
+	public int getOwnerId() {
+		return ownerId;
+	}
+
+	public void setOwnerId(int ownerId) {
+		this.ownerId = ownerId;
+	}
+
+	public AgeState getAgeState() {
+		return ageState;
+	}
+
+	public void setAgeState(AgeState ageState) {
+		this.ageState = ageState;
+	}
+
+	public int getFalldownDamage() {
+		return falldownDamage;
+	}
+
+	public void setFalldownDamage(int falldownDamage) {
+		this.falldownDamage = falldownDamage;
+	}
+
+	public int getAmount() {
+		return amount;
+	}
+
+	public void setAmount(int amount) {
+		this.amount = amount;
+	}
+
+	public int getShitType() {
+		return shitType;
+	}
+
+	public void setShitType(int shitType) {
+		this.shitType = shitType;
+	}
+	
+	
 }

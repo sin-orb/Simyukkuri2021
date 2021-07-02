@@ -7,7 +7,7 @@ import java.awt.Graphics2D;
 import java.io.IOException;
 //import java.io.InputStream;
 import java.text.DecimalFormat;
-import java.util.List;
+import java.util.Map;
 //import java.util.List;
 import java.util.logging.FileHandler;
 //import java.util.logging.Formatter;
@@ -63,6 +63,7 @@ public class LoggerYukkuri {
 	private static int logPage = 0;
 	/** ロガー */
 	public static final Logger logger = Logger.getLogger("SampleLogging");
+
 	/**
 	 * ファイルにログを出力する.
 	 * @param str 出力する文字列
@@ -87,6 +88,7 @@ public class LoggerYukkuri {
 		}
 		logger.info(str);
 	}
+
 	/**
 	 * ログページを指定する.
 	 * @param p ページ
@@ -106,16 +108,16 @@ public class LoggerYukkuri {
 		else if (logPage >= 4)
 			logPage = 0;
 	}
+
 	/**
 	 * ロガーを実行する.
 	 */
 	public static void run() {
 
 		long logData[] = new long[NUM_OF_LOGDATA_TYPE];
-		List<Body> bodyList = SimYukkuri.world.getCurrentMap().body;
-
 		try {
-			for (Body b : bodyList) {
+			for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().body.entrySet()) {
+				Body b = entry.getValue();
 				if (!b.isDead()) {
 					if (b.isPredatorType()) {
 						// 捕食種
@@ -174,6 +176,7 @@ public class LoggerYukkuri {
 			}
 		}
 	}
+
 	/**
 	 * ログを取得する.
 	 * @param logRecord ログレコード
@@ -190,6 +193,7 @@ public class LoggerYukkuri {
 			return logList[(logPointer + logRecord) % NUM_OF_GRAPH_DATA];
 		}
 	}
+
 	/**
 	 * ログデータ合計を取得する.
 	 * @return ログデータ合計
@@ -197,6 +201,7 @@ public class LoggerYukkuri {
 	public static long[] getNumOfObjSumLog() {
 		return logDataSum;
 	}
+
 	/**
 	 * 過去ログデータを取得する.
 	 * @return 過去ログデータ
@@ -204,6 +209,7 @@ public class LoggerYukkuri {
 	public static long[] getNumOfObjNowLog() {
 		return prevLogData;
 	}
+
 	/**
 	 * ログをクリアする.
 	 */
@@ -214,6 +220,7 @@ public class LoggerYukkuri {
 		}
 		run();
 	}
+
 	/**
 	 * ログを表示する.
 	 * @param g2 Graphics2D

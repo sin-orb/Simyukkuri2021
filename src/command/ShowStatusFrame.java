@@ -6,10 +6,9 @@ import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
 import java.util.Comparator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import javax.swing.JButton;
@@ -24,10 +23,12 @@ import src.SimYukkuri;
 import src.base.Attachment;
 import src.base.Body;
 import src.base.Obj;
+import src.draw.MyPane;
 import src.enums.FavItemType;
 import src.enums.Pain;
 import src.enums.TakeoutItemType;
 import src.system.ResourceUtil;
+import src.util.YukkuriUtil;
 
 /**
  * ゆっくりのステータスを表示するFrame.
@@ -107,13 +108,11 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 					return;
 				}
 				final int id = idTemp;
-				List<Body> yukkuris = SimYukkuri.world.getCurrentMap().body.stream()
-						.filter(b -> b.getUniqueID() == id)
-						.collect(Collectors.toList());
-				if (yukkuris.size() == 0) {
+				Body yukkuri = SimYukkuri.world.getCurrentMap().body.get(id);
+				if (yukkuri == null) {
 					showError(ResourceUtil.getInstance().read("command_status_noexistyukkurierror"));
 				} else {
-					ShowStatusFrame.getInstance().giveBodyInfo(yukkuris.get(0));
+					ShowStatusFrame.getInstance().giveBodyInfo(yukkuri);
 				}
 			}
 		});
@@ -129,7 +128,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 					return;
 				}
 				final int id = idTemp;
-				List<Body> sorted = SimYukkuri.world.getCurrentMap().body.stream()
+				List<Body> sorted = new LinkedList<Body>(SimYukkuri.world.getCurrentMap().body.values()).stream()
 						.sorted().collect(Collectors.toList());
 				int target = -1;
 				for (int i = 0; i < sorted.size(); i++) {
@@ -164,7 +163,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 					return;
 				}
 				final int id = idTemp;
-				List<Body> sorted = (List<Body>) SimYukkuri.world.getCurrentMap().body.stream()
+				List<Body> sorted = (List<Body>)new LinkedList<Body>(SimYukkuri.world.getCurrentMap().body.values()).stream()
 						.sorted(Comparator.reverseOrder()).collect(Collectors.toList());
 				int target = -1;
 				for (int i = 0; i < sorted.size(); i++) {
@@ -193,7 +192,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		JButton btnNewButton_3 = new JButton(ResourceUtil.getInstance().read("command_status_first"));
 		btnNewButton_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				List<Body> sorted = SimYukkuri.world.getCurrentMap().body.stream()
+				List<Body> sorted = new LinkedList<Body>(SimYukkuri.world.getCurrentMap().body.values()).stream()
 						.sorted().collect(Collectors.toList());
 				if (sorted.size() == 0) {
 					showError(ResourceUtil.getInstance().read("command_status_noexistyukkurierror"));
@@ -210,7 +209,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		btnNewButton_4.addActionListener(new ActionListener() {
 			@SuppressWarnings("unchecked")
 			public void actionPerformed(ActionEvent e) {
-				List<Body> sorted = (List<Body>) SimYukkuri.world.getCurrentMap().body.stream()
+				List<Body> sorted = (List<Body>) new LinkedList<>(SimYukkuri.world.getCurrentMap().body.values()).stream()
 						.sorted(Comparator.reverseOrder()).collect(Collectors.toList());
 				if (sorted.size() == 0) {
 					showError(ResourceUtil.getInstance().read("command_status_noexistyukkurierror"));
@@ -231,7 +230,11 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 					return;
 				}
 				int random = SimYukkuri.RND.nextInt(SimYukkuri.world.getCurrentMap().body.size());
-				ShowStatusFrame.getInstance().giveBodyInfo(SimYukkuri.world.getCurrentMap().body.get(random));
+				List<Body> bodies = new LinkedList<>();
+				for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().body.entrySet()) {
+					bodies.add(entry.getValue());
+				}
+				ShowStatusFrame.getInstance().giveBodyInfo(bodies.get(random));
 			}
 		});
 		btnNewButton_5.setBounds(665, 167, 91, 21);
@@ -248,14 +251,12 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 					return;
 				}
 				final int id = idTemp;
-				List<Body> yukkuris = SimYukkuri.world.getCurrentMap().body.stream()
-						.filter(b -> b.getUniqueID() == id)
-						.collect(Collectors.toList());
-				if (yukkuris.size() == 0) {
+				Body yukkuri = SimYukkuri.world.getCurrentMap().body.get(id);
+				if (yukkuri == null) {
 					showError(ResourceUtil.getInstance().read("command_status_noexistyukkurierror"));
 					return;
 				} else {
-					Body partner = yukkuris.get(0).getPartner();
+					Body partner = YukkuriUtil.getBodyInstance(yukkuri.getPartner());
 					if (partner == null) {
 						showError(ResourceUtil.getInstance().read("command_status_noexistyukkurierror"));
 						return;
@@ -279,19 +280,17 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 					return;
 				}
 				final int id = idTemp;
-				List<Body> yukkuris = SimYukkuri.world.getCurrentMap().body.stream()
-						.filter(b -> b.getUniqueID() == id)
-						.collect(Collectors.toList());
-				if (yukkuris.size() == 0) {
+				Body yukkuri = SimYukkuri.world.getCurrentMap().body.get(id);
+				if (yukkuri == null) {
 					showError(ResourceUtil.getInstance().read("command_status_noexistyukkurierror"));
 					return;
 				} else {
-					List<Body> children = yukkuris.get(0).getChildrenList();
+					List<Integer> children = yukkuri.getChildrenList();
 					if (children.size() == 0) {
 						showError(ResourceUtil.getInstance().read("command_status_noexistyukkurierror"));
 						return;
 					} else {
-						ShowStatusFrame.getInstance().giveBodyInfo(children.get(0));
+						ShowStatusFrame.getInstance().giveBodyInfo(YukkuriUtil.getBodyInstance(children.get(0)));
 					}
 				}
 			}
@@ -310,19 +309,17 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 					return;
 				}
 				final int id = idTemp;
-				List<Body> yukkuris = SimYukkuri.world.getCurrentMap().body.stream()
-						.filter(b -> b.getUniqueID() == id)
-						.collect(Collectors.toList());
-				if (yukkuris.size() == 0) {
+				Body yukkuri = SimYukkuri.world.getCurrentMap().body.get(id);
+				if (yukkuri == null) {
 					showError(ResourceUtil.getInstance().read("command_status_noexistyukkurierror"));
 					return;
 				} else {
-					List<Body> elderSisters = yukkuris.get(0).getElderSisterList();
+					List<Integer> elderSisters = yukkuri.getElderSisterList();
 					if (elderSisters.size() == 0) {
 						showError(ResourceUtil.getInstance().read("command_status_noexistyukkurierror"));
 						return;
 					} else {
-						ShowStatusFrame.getInstance().giveBodyInfo(elderSisters.get(0));
+						ShowStatusFrame.getInstance().giveBodyInfo(YukkuriUtil.getBodyInstance(elderSisters.get(0)));
 					}
 				}
 			}
@@ -341,19 +338,17 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 					return;
 				}
 				final int id = idTemp;
-				List<Body> yukkuris = SimYukkuri.world.getCurrentMap().body.stream()
-						.filter(b -> b.getUniqueID() == id)
-						.collect(Collectors.toList());
-				if (yukkuris.size() == 0) {
+				Body yukkuri = SimYukkuri.world.getCurrentMap().body.get(id);
+				if (yukkuri == null) {
 					showError(ResourceUtil.getInstance().read("command_status_noexistyukkurierror"));
 					return;
 				} else {
-					List<Body> sisters = yukkuris.get(0).getSisterList();
+					List<Integer> sisters = yukkuri.getSisterList();
 					if (sisters.size() == 0) {
 						showError(ResourceUtil.getInstance().read("command_status_noexistyukkurierror"));
 						return;
 					} else {
-						ShowStatusFrame.getInstance().giveBodyInfo(sisters.get(0));
+						ShowStatusFrame.getInstance().giveBodyInfo(YukkuriUtil.getBodyInstance(sisters.get(0)));
 					}
 				}
 			}
@@ -372,15 +367,12 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 					return;
 				}
 				final int id = idTemp;
-				List<Body> yukkuris = SimYukkuri.world.getCurrentMap().body.stream()
-						.filter(b -> b.getUniqueID() == id)
-						.collect(Collectors.toList());
-				if (yukkuris.size() == 0) {
+				Body yukkuri = SimYukkuri.world.getCurrentMap().body.get(id);
+				if (yukkuri == null) {
 					showError(ResourceUtil.getInstance().read("command_status_noexistyukkurierror"));
 					return;
 				} else {
-					Body target = yukkuris.get(0);
-					Body father = target.getFather();
+					Body father = YukkuriUtil.getBodyInstance(yukkuri.getFather());
 					if (father == null) {
 						showError(ResourceUtil.getInstance().read("command_status_noexistyukkurierror"));
 						return;
@@ -404,15 +396,12 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 					return;
 				}
 				final int id = idTemp;
-				List<Body> yukkuris = SimYukkuri.world.getCurrentMap().body.stream()
-						.filter(b -> b.getUniqueID() == id)
-						.collect(Collectors.toList());
-				if (yukkuris.size() == 0) {
+				Body yukkuri = SimYukkuri.world.getCurrentMap().body.get(id);
+				if (yukkuri == null) {
 					showError(ResourceUtil.getInstance().read("command_status_noexistyukkurierror"));
 					return;
 				} else {
-					Body target = yukkuris.get(0);
-					Body mother = target.getMother();
+					Body mother = YukkuriUtil.getBodyInstance(yukkuri.getMother());
 					if (mother == null) {
 						showError(ResourceUtil.getInstance().read("command_status_noexistyukkurierror"));
 						return;
@@ -713,8 +702,9 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		}
 		textField_3.setText(purpose);
 		String moveTarget = ResourceUtil.getInstance().read("command_status_nothing");
-		if (b.getMoveTarget() != null) {
-			moveTarget = b.getMoveTarget().getX() + "," + b.getMoveTarget().getY();
+		Obj o = b.takeMappedObj(b.getMoveTarget());
+		if (o != null) {
+			moveTarget = o.getX() + "," + o.getY();
 		}
 		textField_4.setText(moveTarget);
 		String event = ResourceUtil.getInstance().read("command_status_nothing");
@@ -725,7 +715,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 
 		textField_6.setText(String.valueOf(b.checkNonYukkuriDiseaseTolerance()));
 		textField_7.setText((b.getDamageLimit() - b.getDamage()) + " / " + b.getDamageLimit());
-		textField_8.setText(b.getHungry() + " / " + b.getHUNGRYLIMIT()[b.getBodyAgeState().ordinal()]);
+		textField_8.setText(b.getHungry() + " / " + b.getHUNGRYLIMITorg()[b.getBodyAgeState().ordinal()]);
 		textField_9.setText(b.getMyName());
 		textField_10.setText(String.valueOf(b.getSickPeriod()));
 		textField_11.setText(String.valueOf(b.getWeight()));
@@ -744,7 +734,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		textField_13.setText(footBake);
 		String fav = "";
 		if (b.getFavItem().size() != 0) {
-			for (Map.Entry<FavItemType, Obj> entry : b.getFavItem().entrySet()) {
+			for (Map.Entry<FavItemType, Integer> entry : b.getFavItem().entrySet()) {
 				fav += entry.getKey() + ",";
 			}
 			fav = fav.substring(0, fav.length() - 1);
@@ -766,12 +756,8 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		textField_15.setText(trauma);
 		String elder = "";
 		if (b.getElderSisterList().size() != 0) {
-			Set<Body> s = new TreeSet<>();
-			for (Body y : b.getElderSisterList()) {
-				s.add(y);
-			}
-			for (Body y : s) {
-				elder = elder += y.getUniqueID() + ", ";
+			for (int y : b.getElderSisterList()) {
+				elder = elder += y + ", ";
 			}
 			elder = elder.substring(0, elder.length() - 2);
 		} else {
@@ -780,12 +766,8 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		textField_16.setText(elder);
 		String sister = "";
 		if (b.getSisterList().size() != 0) {
-			Set<Body> s = new TreeSet<>();
-			for (Body y : b.getSisterList()) {
-				s.add(y);
-			}
-			for (Body y : s) {
-				sister += y.getUniqueID() + ", ";
+			for (int y : b.getSisterList()) {
+				sister += y + ", ";
 			}
 			sister = sister.substring(0, sister.length() - 2);
 		} else {
@@ -794,19 +776,16 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		textField_17.setText(sister);
 		String child = "";
 		if (b.getChildrenList().size() != 0) {
-			Set<Body> s = new TreeSet<>();
-			for (Body y : b.getChildrenList()) {
-				s.add(y);
-			}
-			for (Body y : s) {
-				child += y.getUniqueID() + ",";
+			for (int y : b.getChildrenList()) {
+				child += y + ",";
 			}
 			child = child.substring(0, child.length() - 1);
 		} else {
 			child = ResourceUtil.getInstance().read("command_status_nothing");
 		}
 		textField_18.setText(child);
-		textField_19.setText(b.getPartner() != null ? String.valueOf(b.getPartner().getUniqueID()) : ResourceUtil.getInstance().read("command_status_nothing"));
+		textField_19.setText(YukkuriUtil.getBodyInstance(b.getPartner()) != null ? 
+				String.valueOf(b.getPartner()) : ResourceUtil.getInstance().read("command_status_nothing"));
 		String bring = "";
 		if (b.getTakeoutItem().size() != 0) {
 			for (TakeoutItemType item : b.getTakeoutItem().keySet()) {
@@ -906,6 +885,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		textField_24.setText(String.valueOf(b.getBlockedCount()));
 		textField_25.setText(b.isLockmove() ? ResourceUtil.getInstance().read("command_status_cantmove") : ResourceUtil.getInstance().read("command_status_canmove"));
 		textField_26.setText(String.valueOf(b.getAttitudePoint()));
+		MyPane.selectBody = b;
 	}
 
 	public static void showError(String s) {

@@ -15,6 +15,7 @@ import src.enums.CriticalDamegeType;
 import src.enums.Direction;
 import src.enums.Event;
 import src.system.ResourceUtil;
+import src.util.YukkuriUtil;
 
 
 /****************************************
@@ -82,33 +83,40 @@ public class VeryShitAmpoule extends Attachment {
 
 	@Override
 	protected Event update() {
-		if (parent.isDead()) {
+		Body pa = YukkuriUtil.getBodyInstance(parent);
+		if (pa == null) return Event.DONOTHING;
+		if (pa.isDead()) {
 			// 死んだゆっくりはうんうんしない
 			return Event.DONOTHING;
 		}
 		// ちぎれていない場合
-		if( parent.getCriticalDamegeType() != CriticalDamegeType.CUT)
+		if( pa.getCriticalDamegeType() != CriticalDamegeType.CUT)
 		{
 			// 常にうんうんを最高の状態にする
-			parent.setShit( 50, true );
-			parent.wakeup();
+			pa.setShit( 50, true );
+			pa.wakeup();
 		}
 		return Event.DONOTHING;
 	}
 	@Override
 	public BufferedImage getImage(Body b) {
+		Body pa = YukkuriUtil.getBodyInstance(parent);
+		if (pa == null) return null;
 		if(b.getDirection() == Direction.RIGHT) {
-			return images[parent.getBodyAgeState().ordinal()][1];
+			return images[pa.getBodyAgeState().ordinal()][1];
 		}
-		return images[parent.getBodyAgeState().ordinal()][0];
+		return images[pa.getBodyAgeState().ordinal()][0];
 	}
 	@Override
 	public void resetBoundary()
 	{
-		setBoundary(pivX[parent.getBodyAgeState().ordinal()],
-					pivY[parent.getBodyAgeState().ordinal()],
-					imgW[parent.getBodyAgeState().ordinal()],
-					imgH[parent.getBodyAgeState().ordinal()]);
+		Body pa = YukkuriUtil.getBodyInstance(parent);
+		if (pa != null) {
+			setBoundary(pivX[pa.getBodyAgeState().ordinal()],
+					pivY[pa.getBodyAgeState().ordinal()],
+					imgW[pa.getBodyAgeState().ordinal()],
+					imgH[pa.getBodyAgeState().ordinal()]);
+		}
 	}
 	/**
 	 * コンストラクタ
@@ -117,12 +125,19 @@ public class VeryShitAmpoule extends Attachment {
 	public VeryShitAmpoule(Body body) {
 		super(body);
 		setAttachProperty(property, POS_KEY);
-		setBoundary(pivX[parent.getBodyAgeState().ordinal()],
-					pivY[parent.getBodyAgeState().ordinal()],
-					imgW[parent.getBodyAgeState().ordinal()],
-					imgH[parent.getBodyAgeState().ordinal()]);
+		Body pa = YukkuriUtil.getBodyInstance(parent);
+		if (pa != null) {
+			setBoundary(pivX[pa.getBodyAgeState().ordinal()],
+					pivY[pa.getBodyAgeState().ordinal()],
+					imgW[pa.getBodyAgeState().ordinal()],
+					imgH[pa.getBodyAgeState().ordinal()]);
+		}
 		value = 500;
 		cost = 0;
+	}
+	
+	public VeryShitAmpoule() {
+		
 	}
 	
 	@Override

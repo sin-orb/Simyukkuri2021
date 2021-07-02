@@ -2,7 +2,9 @@ package src.util;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import src.SimYukkuri;
 import src.attachment.Ants;
@@ -211,8 +213,8 @@ public class YukkuriUtil {
 		ret = new Dna();
 		ret.type = babyType;
 		ret.raperChild = isRape;
-		ret.mother = mother;
-		ret.father = father;
+		ret.mother = mother.getUniqueID();
+		ret.father = father.getUniqueID();
 
 		// 性格の設定
 		// 0(大善良+大善良)～8(ドゲス+ドゲス)
@@ -456,18 +458,19 @@ public class YukkuriUtil {
 
 		//--------------------------------------------------
 		// 家族関係の再設定
-		Body partner = from.getPartner();
-		if (partner != null && partner.getPartner() == from) {
-			partner.setPartner(to);
+		Body partner = getBodyInstance(from.getPartner());
+		if (partner != null && getBodyInstance(partner.getPartner()) == from) {
+			partner.setPartner(to.getUniqueID());
 		}
 
 		if (from.getChildrenList() != null) {
-			for (Body child : from.getChildrenList()) {
-				if (child.getParents()[0] == from) {
-					child.getParents()[0] = to;
+			for (int c : from.getChildrenList()) {
+				Body child = getBodyInstance(c);
+				if (child.getParents()[0] == from.getUniqueID()) {
+					child.getParents()[0] = to.getUniqueID();
 				}
-				if (child.getParents()[1] == from) {
-					child.getParents()[1] = to;
+				if (child.getParents()[1] == from.getUniqueID()) {
+					child.getParents()[1] = to.getUniqueID();
 				}
 			}
 		}
@@ -482,11 +485,11 @@ public class YukkuriUtil {
 			to.setAge(0);
 			break;
 		case CHILD:
-			to.setAge(to.getBABYLIMIT() + 1);
+			to.setAge(to.getBABYLIMITorg() + 1);
 			break;
 		case ADULT:
 		default:
-			to.setAge(to.getCHILDLIMIT() + 1);
+			to.setAge(to.getCHILDLIMITorg() + 1);
 			break;
 		}
 	}
@@ -617,6 +620,71 @@ public class YukkuriUtil {
 			return 2002;//つむり
 		default:
 			return 0;
+		}
+	}
+	
+	/**
+	 * ユニークIDからゆっくりのインスタンスを取得する
+	 * @param i ユニークID
+	 * @return ユニークIDが指し示すゆっくり
+	 */
+	public static Body getBodyInstance(int i) {
+		if (i == -1) {
+			return null;
+		}
+		Map<Integer, Body> bodies = SimYukkuri.world.getCurrentMap().body;
+		if (bodies.containsKey(i)) {
+			return bodies.get(i);
+		}
+		return null;
+	}
+	/**
+	 * オブジェクトIDからゆっくりを引いてくる
+	 * @param i オブジェクトID
+	 * @return 対象のゆっくり
+	 */
+	public static Body getBodyInstanceFromObjId(int i) {
+		if (i == -1) {
+			return null;
+		}
+		for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().body.entrySet()) {
+			Body b = entry.getValue();
+			if (b.objId == i) {
+				return b;
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * 現在のマップに属するゆっくりを配列にして返す.
+	 * @return 現在のマップに属するゆっくりの配列
+	 */
+	public static Body[] getBodyInstances() {
+		List<Body> bodies = new LinkedList<>();
+		for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().body.entrySet()) {
+			Body p = entry.getValue();
+			bodies.add(p);
+		}
+		return bodies.toArray(new Body[0]);
+	}
+
+	/**
+	 * リストから数値その値のもの（indexではなく）を取り除く
+	 * @param list 取り除きたいリスト
+	 * @param num 取り除きたい値
+	 */
+	public static void removeContent(List<Integer> list, int num) {
+		int removal = -1;
+		for (int i = 0; i < list.size();i++) {
+			int val = list.get(i);
+			if (val == num) {
+				removal = i;
+				break;
+			}
+		} 
+		if (removal != -1) {
+			list.remove(removal);
 		}
 	}
 }

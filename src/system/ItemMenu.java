@@ -1,6 +1,5 @@
 package src.system;
 
-import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.util.Locale;
 
@@ -10,6 +9,7 @@ import javax.swing.JPopupMenu;
 import src.SimYukkuri;
 import src.base.Body;
 import src.base.Obj;
+import src.draw.Point4y;
 import src.draw.Translate;
 import src.game.Shit;
 import src.game.Vomit;
@@ -206,7 +206,7 @@ public class ItemMenu {
 		usePopup.setVisible(false);
 		shapePopup.setVisible(false);
 		if(isholdCancel) {
-			SimYukkuri.world.player.holdItem = null;
+			SimYukkuri.world.player.setHoldItem(null);
 		}
 	}
 	
@@ -215,24 +215,24 @@ public class ItemMenu {
 	 * @param e マウスイベント
 	 */
 	public static void dropItem(MouseEvent e) {
-		Point pos = Translate.invertLimit(e.getX(), e.getY());
-		Obj item = SimYukkuri.world.player.holdItem;
+		Point4y pos = Translate.invertLimit(e.getX(), e.getY());
+		Obj item = SimYukkuri.world.player.getHoldItem();
 		MapPlaceData curMap = SimYukkuri.world.getCurrentMap();
 
 		if(item instanceof Body) {
 			Body b = (Body)item;
 			b.setTaken(false);
-			curMap.body.add(b);
+			curMap.body.put(b.getUniqueID(), b);
 		} else if(item instanceof Shit) {
-			curMap.shit.add((Shit)item);
+			curMap.shit.put(item.objId, (Shit)item);
 		} else if(item instanceof Vomit) {
-			curMap.vomit.add((Vomit)item);
+			curMap.vomit.put(item.objId, (Vomit)item);
 		}
 		item.setX(pos.x);
 		item.setY(pos.y);
 		item.setZ(0);
-		SimYukkuri.world.player.itemList.removeElement(item);
-		SimYukkuri.world.player.holdItem = null;
+		SimYukkuri.world.player.getItemList().removeElement(item);
+		SimYukkuri.world.player.setHoldItem(null);
 	}
 }
 

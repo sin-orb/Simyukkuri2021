@@ -4,12 +4,10 @@ package src.item;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
-import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
@@ -19,6 +17,7 @@ import src.SimYukkuri;
 import src.base.Effect;
 import src.base.ObjEX;
 import src.draw.ModLoader;
+import src.draw.Rectangle4y;
 import src.enums.EffectType;
 import src.enums.ObjEXType;
 import src.enums.Type;
@@ -56,7 +55,7 @@ public class Diffuser extends ObjEX implements java.io.Serializable {
 
 	public static final int hitCheckObjType = 0;
 	private static BufferedImage images[] = new BufferedImage[3];
-	private static Rectangle boundary = new Rectangle();
+	private static Rectangle4y boundary = new Rectangle4y();
 
 	private boolean[] steamType = new boolean[SteamType.values().length];
 	private int steamNum = 0;
@@ -86,7 +85,7 @@ public class Diffuser extends ObjEX implements java.io.Serializable {
 		return images[2];
 	}
 	/**境界線の取得*/
-	public static Rectangle getBounding() {
+	public static Rectangle4y getBounding() {
 		return boundary;
 	}
 
@@ -116,7 +115,7 @@ public class Diffuser extends ObjEX implements java.io.Serializable {
 
 	@Override
 	public void removeListData(){
-		SimYukkuri.world.getCurrentMap().diffuser.remove(this);
+		SimYukkuri.world.getCurrentMap().diffuser.remove(objId);
 	}
 	/**
 	 * 蒸気タイプを取得する.
@@ -131,8 +130,7 @@ public class Diffuser extends ObjEX implements java.io.Serializable {
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), 8);
 		
-		List<Diffuser> list = SimYukkuri.world.getCurrentMap().diffuser;
-		list.add(this);
+		SimYukkuri.world.getCurrentMap().diffuser.put(objId, this);
 		objType = Type.OBJECT;
 		objEXType = ObjEXType.DIFFUSER;
 		value = 15000;
@@ -140,8 +138,12 @@ public class Diffuser extends ObjEX implements java.io.Serializable {
 
 		boolean ret = setupDiffuser(this, false);
 		if(!ret) {
-			list.remove(this);
+			SimYukkuri.world.getCurrentMap().diffuser.remove(objId);
 		}
+	}
+	
+	public Diffuser() {
+		
 	}
 
 	/** 設定メニュー */

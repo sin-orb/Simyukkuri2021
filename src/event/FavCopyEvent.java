@@ -7,6 +7,7 @@ import src.enums.FavItemType;
 import src.enums.PublicRank;
 import src.item.Barrier;
 import src.system.ResourceUtil;
+import src.util.YukkuriUtil;
 
 /***************************************************
 	お気に入りの情報を家族で共有するシンプルアクション
@@ -24,18 +25,22 @@ public class FavCopyEvent extends EventPacket implements java.io.Serializable {
 	public FavCopyEvent(Body f, Body t, Obj tgt, int cnt) {
 		super(f, t, tgt, cnt);
 	}
+	public FavCopyEvent() {
+		
+	}
 	@Override
 	public boolean simpleEventAction(Body b) {
-		if(getFrom() == b) return false;
+		Body from = YukkuriUtil.getBodyInstance(getFrom());
+		if(from == b || from == null) return false;
 		// イベントの発信者が家族かチェック
-		if(b.isParent(getFrom()) || getFrom().isParent(b) || b.isPartner(getFrom())) {
-			if (!Barrier.acrossBarrier(b.getX(), b.getY(), getFrom().getX(), getFrom().getY(), Barrier.MAP_BODY[b.getBodyAgeState().ordinal()]+Barrier.BARRIER_KEKKAI)) {
+		if(b.isParent(from) || from.isParent(b) || b.isPartner(from)) {
+			if (!Barrier.acrossBarrier(b.getX(), b.getY(), from.getX(), from.getY(), Barrier.MAP_BODY[b.getBodyAgeState().ordinal()]+Barrier.BARRIER_KEKKAI)) {
 
 				// 片方だけがうんうん奴隷の場合はなにもしない
-				if( ((b.getPublicRank() == PublicRank.UnunSlave) && (getFrom().getPublicRank() == PublicRank.UnunSlave)) ||
-					((b.getPublicRank() != PublicRank.UnunSlave) && (getFrom().getPublicRank() != PublicRank.UnunSlave)) )
+				if( ((b.getPublicRank() == PublicRank.UnunSlave) && (from.getPublicRank() == PublicRank.UnunSlave)) ||
+					((b.getPublicRank() != PublicRank.UnunSlave) && (from.getPublicRank() != PublicRank.UnunSlave)) )
 				{
-					b.setFavItem(FavItemType.BED, getFrom().getFavItem(FavItemType.BED));
+					b.setFavItem(FavItemType.BED, from.getFavItem(FavItemType.BED));
 				}
 			}
 		}

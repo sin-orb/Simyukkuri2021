@@ -1,7 +1,6 @@
 package src.item;
 
 
-import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
@@ -13,6 +12,7 @@ import src.base.Obj;
 import src.base.ObjEX;
 import src.command.GadgetAction;
 import src.draw.ModLoader;
+import src.draw.Rectangle4y;
 import src.draw.Translate;
 import src.enums.CoreAnkoState;
 import src.enums.ObjEXType;
@@ -33,7 +33,7 @@ public class FoodMaker extends ObjEX implements java.io.Serializable {
 	private static final int images_num = 6; //このクラスの総使用画像数
 	private static int AnimeImagesNum[] = {images_num};//アニメごとに何枚使うか
 	private static BufferedImage[] images = new BufferedImage[images_num + 1];
-	private static Rectangle boundary = new Rectangle();
+	private static Rectangle4y boundary = new Rectangle4y();
 
 	protected boolean processReady = true;
 	protected int stockFood = -1;
@@ -96,7 +96,7 @@ public class FoodMaker extends ObjEX implements java.io.Serializable {
 		return null;
 	}
 	/**境界線の取得*/
-	public static Rectangle getBounding() {
+	public static Rectangle4y getBounding() {
 		return boundary;
 	}
 
@@ -286,7 +286,8 @@ public class FoodMaker extends ObjEX implements java.io.Serializable {
 			}
 			else{
 				for(int i = 0;i<(foodAmount>>1);i++){
-					GadgetAction.putObjEX(Food.class, x + (40 * dir), y, foodType.ordinal());
+					Food f = (Food)GadgetAction.putObjEX(Food.class, x + (40 * dir), y, foodType.ordinal());
+					SimYukkuri.world.getCurrentMap().food.put(f.objId, f);
 				}
 				foodAmount = 0;
 
@@ -305,20 +306,24 @@ public class FoodMaker extends ObjEX implements java.io.Serializable {
 
 	@Override
 	public void removeListData(){
-		SimYukkuri.world.getCurrentMap().foodmaker.remove(this);
+		SimYukkuri.world.getCurrentMap().foodmaker.remove(objId);
 	}
 	/** コンストラクタ*/
 	public FoodMaker(int initX, int initY, int initOption) {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		SimYukkuri.world.getCurrentMap().foodmaker.add(this);
+		SimYukkuri.world.getCurrentMap().foodmaker.put(objId, this);
 		objType = Type.PLATFORM;
 		objEXType = ObjEXType.FOODMAKER;
 
 		interval = 20;
 		value = 50000;
 		cost = 30;
+	}
+	
+	public FoodMaker() {
+		
 	}
 }
 

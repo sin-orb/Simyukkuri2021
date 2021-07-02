@@ -1,8 +1,8 @@
 package src.logic;
 
-import java.awt.Point;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import src.SimYukkuri;
 import src.attachment.Ants;
@@ -12,6 +12,7 @@ import src.base.EventPacket;
 import src.base.EventPacket.EventPriority;
 import src.base.Obj;
 import src.base.Okazari.OkazariType;
+import src.draw.Point4y;
 import src.draw.Terrarium;
 import src.draw.Translate;
 import src.enums.AgeState;
@@ -34,6 +35,7 @@ import src.event.ProposeEvent;
 import src.item.Barrier;
 import src.item.Toilet;
 import src.system.MessagePool;
+import src.util.YukkuriUtil;
 import src.yukkuri.Fran;
 import src.yukkuri.HybridYukkuri;
 import src.yukkuri.Meirin;
@@ -128,15 +130,16 @@ public class BodyLogic {
 		//初期値
 		boolean ret = false;
 		Body found = null;
-		int minDistance = b.getEYESIGHT();
-		int secondMinDistance = b.getEYESIGHT();
+		int minDistance = b.getEYESIGHTorg();
+		int secondMinDistance = b.getEYESIGHTorg();
 		/////////////////////////////////
 		// 行動判定
 		/////////////////////////////////
 
 		// 対象が決まっていたら到達したかチェック
-		if ((b.isToBody() || b.isToSukkiri() || b.isToSteal()) && b.getMoveTarget() instanceof Body) {
-			Body p = (Body) b.getMoveTarget();
+		Obj target = b.takeMappedObj(b.getMoveTarget());
+		if ((b.isToBody() || b.isToSukkiri() || b.isToSteal()) && target instanceof Body) {
+			Body p = (Body) target;
 			found = p;
 			// 壁の向こうに移動していたらリセット
 			int dist = Translate.distance(b.getX(), b.getY(), p.getX(), p.getY());
@@ -158,7 +161,7 @@ public class BodyLogic {
 		Body bodyHasOkazari = null;
 		Body bodyHasOkazariAndPherommone = null;
 		Body bodyHasPheromone = null;
-		Obj oMoveTarget = b.getMoveTarget();
+		Obj oMoveTarget = b.takeMoveTarget();
 		Body bodyOldMoveTarget = null;
 		if (oMoveTarget instanceof Body) {
 			bodyOldMoveTarget = (Body) oMoveTarget;
@@ -166,16 +169,18 @@ public class BodyLogic {
 
 		//発情時
 		// レイパーですっきり中なら続けて同ターゲットに
+		Body pa = YukkuriUtil.getBodyInstance(b.getPartner());
 		if (b.isExciting() && b.isRaper() && b.isToSukkiri() && bodyOldMoveTarget != null
 				&& !bodyOldMoveTarget.isRaper()) {
-			found = (Body) b.getMoveTarget();
+			found = (Body) b.takeMoveTarget();
 			minDistance = Translate.distance(b.getX(), b.getY(), found.getX(), found.getY());
 		}
 		//つがいが既にいるなら優先して向かう
-		else if (b.isExciting() && b.getPartner() != null && !(b.getPartner().isDead()) && !b.isRaper()) {
-			if (b.getPublicRank() == b.getPartner().getPublicRank()) {
-				found = b.getPartner();
-				minDistance = Translate.distance(b.getX(), b.getY(), found.getX(), found.getY());
+		else if (b.isExciting() && pa != null &&
+				!(pa.isDead()) && !b.isRaper()) {
+			if (b.getPublicRank() == pa.getPublicRank()) {
+				found = pa;
+				minDistance = Translate.distance(b.getX(), b.getY(), pa.getX(), pa.getY());
 			}
 		}
 
@@ -185,11 +190,8 @@ public class BodyLogic {
 			return false;
 		} else {
 			// 全ゆっくりに対してチェック
-			Body[] bodyList = SimYukkuri.world.getCurrentMap().body.toArray(new Body[0]);
-			if (bodyList == null || bodyList.length == 0) {
-				return false;
-			}
-			for (Body p : bodyList) {
+			for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().body.entrySet()) {
+				Body p = entry.getValue();
 				// 自分同士のチェックは無意味なのでスキップ
 				if (p == b)
 					continue;
@@ -224,7 +226,7 @@ public class BodyLogic {
 					} else {
 						// 捕食種から逃げる
 						int dist = Translate.distance(b.getX(), b.getY(), p.getX(), p.getY());
-						if (p.isPredatorType() && dist <= b.getEYESIGHT() && b.getPanicType() == null) {
+						if (p.isPredatorType() && dist <= b.getEYESIGHTorg() && b.getPanicType() == null) {
 							if (b.canAction() && !b.isPredatorType() && !p.isFamily(b) && !b.isSleeping()) {
 								// 最高高度の半分以下または相手が飛べるなら相手が認識
 								if (p.getZ() < Translate.getFlyHeightLimit() || b.canflyCheck()) {
@@ -1382,20 +1384,21 @@ public class BodyLogic {
 	 */
 	public static final List<Body> createActiveFianceeList(Body b, int age) {
 		// ほかにいないならスキップ
-		Body[] bodyList = SimYukkuri.world.getCurrentMap().body.toArray(new Body[0]);
-		if (bodyList.length <= 1) {
+		if (SimYukkuri.world.getCurrentMap().body.size() <= 1) {
 			return null;
 		}
 
 		List<Body> activeFianceeList = new LinkedList<Body>();
 
 		//番がすでにいれば要素はそれのみに
-		if (b.getPartner() != null) {
-			activeFianceeList.add(b.getPartner());
+		Body pa = YukkuriUtil.getBodyInstance(b.getPartner());
+		if (pa != null) {
+			activeFianceeList.add(pa);
 			return activeFianceeList;
 		}
 
-		for (Body f : bodyList) {
+		for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().body.entrySet()) {
+			Body f = entry.getValue();
 			if (f == null) {
 				continue;
 			}
@@ -1436,7 +1439,7 @@ public class BodyLogic {
 				continue;
 			}
 			//お相手がすでにいるのは50%の確率でスキップ
-			if (f.getPartner() != null) {
+			if (YukkuriUtil.getBodyInstance(f.getPartner()) != null) {
 				if (SimYukkuri.RND.nextBoolean()) {
 					continue;
 				}
@@ -1510,12 +1513,15 @@ public class BodyLogic {
 	 *  ぜんゆん集合
 	 */
 	public static final void gatheringYukkuri() {
-		Body[] bodyList = SimYukkuri.world.getCurrentMap().body.toArray(new Body[0]);
-		if (bodyList != null && bodyList.length != 0) {
-			List<Toilet> toiletList = SimYukkuri.world.getCurrentMap().toilet;
-			if (toiletList != null && toiletList.size() != 0) {
-				Obj o = toiletList.get(0);
-				gatheringYukkuriSquare(o, bodyList, GatheringDirection.UP, null);
+		Body[] bodyList = YukkuriUtil.getBodyInstances();
+		if (bodyList.length != 0) {
+			Toilet t = null;
+			for (Map.Entry<Integer, Toilet> entry : SimYukkuri.world.getCurrentMap().toilet.entrySet()) {
+				t = entry.getValue();
+				break;
+			}
+			if (t != null) {
+				gatheringYukkuriSquare(t, bodyList, GatheringDirection.UP, null);
 			}
 		}
 	}
@@ -1820,7 +1826,7 @@ public class BodyLogic {
 				continue;
 			}
 			double dRad = Translate.getRadian(b.getX(), b.getY(), bodyFound.getX(), bodyFound.getY());
-			Point p2 = Translate.getPointByDistAndRad(b.getX(), b.getY(), nToDist, dRad);
+			Point4y p2 = Translate.getPointByDistAndRad(b.getX(), b.getY(), nToDist, dRad);
 			// 視界内の一定距離内の地点まで移動する
 			int x = p2.x;
 			int y = p2.y;
@@ -1924,10 +1930,10 @@ public class BodyLogic {
 			return;
 		}
 
-		int minDistance = b.getEYESIGHT();
-		Body bodyParent = b.getMother();
+		int minDistance = b.getEYESIGHTorg();
+		Body bodyParent = YukkuriUtil.getBodyInstance(b.getMother());
 		if (bodyParent == null) {
-			bodyParent = b.getFather();
+			bodyParent = YukkuriUtil.getBodyInstance(b.getFather());
 		}
 		if (bodyParent == null) {
 			int nSize = b.getElderSisterListSize();
@@ -1973,7 +1979,7 @@ public class BodyLogic {
 
 			int nToDist = (int) Math.sqrt(dist) - (int) Math.sqrt(minDistance / nParcent);
 			double dRad = Translate.getRadian(b.getX(), b.getY(), bodyParent.getX(), bodyParent.getY());
-			Point p2 = Translate.getPointByDistAndRad(b.getX(), b.getY(), nToDist, dRad);
+			Point4y p2 = Translate.getPointByDistAndRad(b.getX(), b.getY(), nToDist, dRad);
 			// 視界内の一定距離内の地点まで移動する
 			b.moveTo(p2.x, p2.y, b.getZ());
 		}
@@ -1986,9 +1992,9 @@ public class BodyLogic {
 	 */
 	public static boolean checkWakeupOtherYukkuri(Body b) {
 		boolean bIsWakeup = false;
-		int minDistance = b.getEYESIGHT();
-		List<Body> bodyList = SimYukkuri.world.getCurrentMap().body;
-		for (Body p : bodyList) {
+		int minDistance = b.getEYESIGHTorg();
+		for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().body.entrySet()) {
+			Body p = entry.getValue();
 			// 自分同士のチェックは無意味なのでスキップ
 			if (p == b)
 				continue;

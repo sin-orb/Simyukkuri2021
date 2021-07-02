@@ -1,7 +1,6 @@
 package src.item;
 
 
-import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
@@ -14,6 +13,7 @@ import src.base.Obj;
 import src.base.ObjEX;
 import src.command.GadgetAction;
 import src.draw.ModLoader;
+import src.draw.Rectangle4y;
 import src.enums.CriticalDamegeType;
 import src.enums.EffectType;
 import src.enums.Happiness;
@@ -22,6 +22,7 @@ import src.enums.ObjEXType;
 import src.enums.Type;
 import src.system.Cash;
 import src.system.MessagePool;
+import src.util.YukkuriUtil;
 
 /***************************************************
  * ミキサー
@@ -31,9 +32,9 @@ public class Mixer extends ObjEX implements java.io.Serializable {
 	/**処理対象(ゆっくり)*/
 	public static final int hitCheckObjType = ObjEX.YUKKURI;
 	private static BufferedImage[] images = new BufferedImage[4];
-	private static Rectangle boundary = new Rectangle();
+	private static Rectangle4y boundary = new Rectangle4y();
 
-	private Body bindBody = null;
+	private int bind = -1;
 	private Effect mix = null;
 	private int counter = 0;		// ゆっくりが乗ってからの経過時間
 	private int amount = 0;			// 保有原料
@@ -54,6 +55,7 @@ public class Mixer extends ObjEX implements java.io.Serializable {
 
 	@Override
 	public int getImageLayer(BufferedImage[] layer) {
+		Body bindBody = YukkuriUtil.getBodyInstance(bind);
 		if(enabled) {
 			if(bindBody != null) {
 				if(counter > 60) {
@@ -76,7 +78,7 @@ public class Mixer extends ObjEX implements java.io.Serializable {
 		return null;
 	}
 	/**境界線の取得*/
-	public static Rectangle getBounding() {
+	public static Rectangle4y getBounding() {
 		return boundary;
 	}
 
@@ -87,6 +89,7 @@ public class Mixer extends ObjEX implements java.io.Serializable {
 
 	@Override
 	public boolean enableHitCheck() {
+		Body bindBody = YukkuriUtil.getBodyInstance(bind);
 		if(bindBody != null) return false;
 		return true;
 	}
@@ -94,12 +97,12 @@ public class Mixer extends ObjEX implements java.io.Serializable {
 	@Override
 	public int objHitProcess( Obj o ) {
 		if(!enabled)return 0;
-		bindBody = (Body)o;
+		Body bindBody = (Body)o;
 		bindBody.clearActions();
 		bindBody.setX(x);
 		bindBody.setY(y);
 		bindBody.setLockmove(true);
-
+		bind = bindBody.getUniqueID();
 		counter = 0;
 
 		return 1;
@@ -110,7 +113,7 @@ public class Mixer extends ObjEX implements java.io.Serializable {
 		if ( getAge() % 2400 == 0 ) {
 			Cash.addCash(-getCost());
 		}
-
+		Body bindBody = YukkuriUtil.getBodyInstance(bind);
 		if(bindBody != null && enabled) {
 			bindBody.setDropShadow(false);
 			if(grabbed) {
@@ -120,12 +123,13 @@ public class Mixer extends ObjEX implements java.io.Serializable {
 					mix.setX(x);
 					mix.setY(y);
 				}
+				bind = bindBody.getUniqueID();
 			} else if(bindBody.getX() != x || bindBody.getY() != y || bindBody.getZ() != z || bindBody.isRemoved()) {
 				if(counter > 60) bindBody.setCriticalDamegeType(CriticalDamegeType.CUT);
 				bindBody.setForceFace(-1);
 				bindBody.setLockmove(false);
 				bindBody.setDropShadow(true);
-				bindBody = null;
+				bind = -1;
 				return;
 			}
 			counter++;
@@ -152,7 +156,7 @@ public class Mixer extends ObjEX implements java.io.Serializable {
 				if(bindBody.isSick()) sick = true;
 				if(bindBody.addAmount(-100)) {
 					bindBody.remove();
-					bindBody = null;
+					bind = -1;
 					if(mix != null) {
 						mix.remove();
 						mix = null;
@@ -170,6 +174,7 @@ public class Mixer extends ObjEX implements java.io.Serializable {
 							oex = GadgetAction.putObjEX(Food.class, getX(), getY(), Food.FoodType.FOOD.ordinal());
 					}
 					oex.kick(0, 6, -4);
+					SimYukkuri.world.getCurrentMap().food.put(oex.objId, (Food)oex);
 					amount -= 8400;
 					sweet = 0;
 					sick = false;
@@ -186,29 +191,33 @@ public class Mixer extends ObjEX implements java.io.Serializable {
 
 	@Override
 	public void removeListData(){
+		Body bindBody = YukkuriUtil.getBodyInstance(bind);
 		if(bindBody != null) {
 			bindBody.setForceFace(-1);
 			bindBody.setLockmove(false);
-			bindBody = null;
+			bind = -1;
 		}
 		if(mix != null) {
 			mix.remove();
 			mix = null;
 		}
-		SimYukkuri.world.getCurrentMap().mixer.remove(this);
+		SimYukkuri.world.getCurrentMap().mixer.remove(objId);
 	}
 	/** コンストラクタ */
 	public Mixer(int initX, int initY, int initOption) {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		SimYukkuri.world.getCurrentMap().mixer.add(this);
+		SimYukkuri.world.getCurrentMap().mixer.put(objId, this);
 		objType = Type.PLATFORM;
 		objEXType = ObjEXType.MIXER;
 
 		interval = 5;
 		value = 3000;
 		cost = 50;
+	}
+	public Mixer() {
+		
 	}
 }
 

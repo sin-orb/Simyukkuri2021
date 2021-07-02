@@ -11,6 +11,7 @@ import src.enums.ImageCode;
 import src.enums.Intelligence;
 import src.system.MessagePool;
 import src.system.ResourceUtil;
+import src.util.YukkuriUtil;
 
 /***************************************************
 	命乞いイベント
@@ -36,6 +37,10 @@ public class BegForLifeEvent extends EventPacket implements java.io.Serializable
 		super(f, t, tgt, cnt);
 	}
 
+	public BegForLifeEvent() {
+		
+	}
+	
 	/**
 	 *  参加チェック
 	 *  ここで各種チェックを行い、イベントへ参加するかを返す
@@ -45,7 +50,8 @@ public class BegForLifeEvent extends EventPacket implements java.io.Serializable
 	public boolean checkEventResponse(Body b) {
 
 		priority = EventPriority.HIGH;
-		if (b == getFrom() && !b.isUnBirth())
+		Body from = YukkuriUtil.getBodyInstance(getFrom());
+		if (b == from && !b.isUnBirth())
 			return true;
 		return false;
 	}

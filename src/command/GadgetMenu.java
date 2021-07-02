@@ -7,6 +7,8 @@ import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JMenu;
@@ -837,7 +839,7 @@ public class GadgetMenu {
 	public static final void executeBodyMethod(MouseEvent e, Obj found, String method) {
 		try {
 			Method m;
-			Body[] bodyList = SimYukkuri.world.getCurrentMap().body.toArray(new Body[0]);
+			List<Body> bodyList = new LinkedList<Body>(SimYukkuri.world.getCurrentMap().body.values());
 			if (e.isShiftDown()) {
 				for (Body b : bodyList) {
 					m = b.getClass().getMethod(method, (Class<?>[]) null);
@@ -872,7 +874,7 @@ public class GadgetMenu {
 	public static final void executeBodyMethod(MouseEvent e, Obj found, String method, int prm) {
 		try {
 			Method m;
-			Body[] bodyList = SimYukkuri.world.getCurrentMap().body.toArray(new Body[0]);
+			List<Body> bodyList = new LinkedList<Body>(SimYukkuri.world.getCurrentMap().body.values());
 
 			if (e.isShiftDown()) {
 				for (Body b : bodyList) {
@@ -910,7 +912,7 @@ public class GadgetMenu {
 	public static final void executeBodyMethod(MouseEvent e, Obj found, String getMethod, String setMethod,String invMethod) {
 		try {
 			Method m;
-			Body[] bodyList = SimYukkuri.world.getCurrentMap().body.toArray(new Body[0]);
+			List<Body> bodyList = new LinkedList<Body>(SimYukkuri.world.getCurrentMap().body.values());
 
 			if (e.isShiftDown()) {
 				boolean flag = true;

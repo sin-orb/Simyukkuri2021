@@ -6,6 +6,7 @@ import src.base.Obj;
 import src.item.Barrier;
 import src.logic.EventLogic;
 import src.system.ResourceUtil;
+import src.util.YukkuriUtil;
 
 /***************************************************
 	レイパー発情通知イベント
@@ -23,10 +24,16 @@ public class RaperWakeupEvent extends EventPacket implements java.io.Serializabl
 	public RaperWakeupEvent(Body f, Body t, Obj tgt, int cnt) {
 		super(f, t, tgt, cnt);
 	}
+	
+	public RaperWakeupEvent() {
+		
+	}
+	
 	@Override
 	public boolean simpleEventAction(Body b) {
 		// 自分自身はスキップ
-		if(b == getFrom()) return false;
+		Body from = YukkuriUtil.getBodyInstance(getFrom());
+		if(b == from) return false;
 		// 死体、睡眠、皮なし、目無しはスキップ
 		if(!b.canEventResponse()) return true;
 
@@ -37,7 +44,7 @@ public class RaperWakeupEvent extends EventPacket implements java.io.Serializabl
 		}
 
 		// 相手との間に壁があればスキップ
-		if (Barrier.acrossBarrier(b.getX(), b.getY(), getFrom().getX(), getFrom().getY(), Barrier.MAP_BODY[b.getBodyAgeState().ordinal()]+Barrier.BARRIER_KEKKAI)) {
+		if (Barrier.acrossBarrier(b.getX(), b.getY(), from.getX(), from.getY(), Barrier.MAP_BODY[b.getBodyAgeState().ordinal()]+Barrier.BARRIER_KEKKAI)) {
 			return false;
 		}
 		
@@ -49,7 +56,7 @@ public class RaperWakeupEvent extends EventPacket implements java.io.Serializabl
 		
 		// 一般人の反応
 		// 固体ごとに異なる行動をするため新しいイベントのインスタンスを作成して固体イベントに登録
-		EventLogic.addBodyEvent(b, new RaperReactionEvent(getFrom(), null, null, 1), null, null);
+		EventLogic.addBodyEvent(b, new RaperReactionEvent(from, null, null, 1), null, null);
 		return true;
 	}
 

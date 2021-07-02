@@ -1,7 +1,6 @@
 package src.attachment;
 
 
-//import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
@@ -15,6 +14,7 @@ import src.enums.AttachProperty;
 //import src.Attachment.AttachProperty;
 import src.enums.Event;
 import src.system.ResourceUtil;
+import src.util.YukkuriUtil;
 
 
 /****************************************
@@ -99,7 +99,9 @@ public class Badge extends Attachment {
 	
 	@Override
 	public BufferedImage getImage(Body b) {
-		return images[parent.getBodyAgeState().ordinal()][eBadgeRank.ordinal()];
+		Body pa = YukkuriUtil.getBodyInstance(parent);
+		if (pa == null) return null;
+		return images[pa.getBodyAgeState().ordinal()][eBadgeRank.ordinal()];
 	}
 	/**バッジランク取得*/
 	public BadgeRank getBadgeRank()
@@ -110,10 +112,12 @@ public class Badge extends Attachment {
 	@Override
 	public void resetBoundary()
 	{
-		setBoundary(pivX[parent.getBodyAgeState().ordinal()],
-					pivY[parent.getBodyAgeState().ordinal()],
-					imgW[parent.getBodyAgeState().ordinal()],
-					imgH[parent.getBodyAgeState().ordinal()]);
+		Body pa = YukkuriUtil.getBodyInstance(parent);
+		if (pa == null) return;
+		setBoundary(pivX[pa.getBodyAgeState().ordinal()],
+					pivY[pa.getBodyAgeState().ordinal()],
+					imgW[pa.getBodyAgeState().ordinal()],
+					imgH[pa.getBodyAgeState().ordinal()]);
 	}
 	/**
 	 * コンストラクタ.
@@ -124,15 +128,21 @@ public class Badge extends Attachment {
 		super(body);
 		setAttachProperty(property, POS_KEY);
 		eBadgeRank = ieBadgeRank;
-
-		setBoundary(pivX[parent.getBodyAgeState().ordinal()],
-					pivY[parent.getBodyAgeState().ordinal()],
-					imgW[parent.getBodyAgeState().ordinal()],
-					imgH[parent.getBodyAgeState().ordinal()]);
+		Body pa = YukkuriUtil.getBodyInstance(parent);
+		if (pa != null) {
+			setBoundary(pivX[pa.getBodyAgeState().ordinal()],
+					pivY[pa.getBodyAgeState().ordinal()],
+					imgW[pa.getBodyAgeState().ordinal()],
+					imgH[pa.getBodyAgeState().ordinal()]);
+		}
 		value = 0;
 		cost = 0;
 	}
 
+	public Badge() {
+		
+	}
+	
 	@Override
 	public String toString() {
 		return ResourceUtil.getInstance().read("item_badge");

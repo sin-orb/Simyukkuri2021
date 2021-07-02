@@ -2,12 +2,11 @@ package src.item;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
+import java.util.Map;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JOptionPane;
@@ -20,8 +19,10 @@ import src.base.Obj;
 import src.base.ObjEX;
 import src.command.GadgetAction;
 import src.draw.ModLoader;
+import src.draw.Rectangle4y;
 import src.enums.AgeState;
 import src.enums.ObjEXType;
+import src.enums.TakeoutItemType;
 import src.enums.Type;
 import src.item.Food.FoodType;
 import src.system.Cash;
@@ -80,7 +81,7 @@ public class AutoFeeder extends ObjEX implements java.io.Serializable {
 	public static final int hitCheckObjType = 0;
 	private static final int images_num = 2;
 	private static BufferedImage[] images = new BufferedImage[images_num];
-	private static Rectangle boundary = new Rectangle();
+	private static Rectangle4y boundary = new Rectangle4y();
 	private int type = 0;
 	private int mode = 0;
 	private int feedingInterval = 6 * 100;
@@ -121,7 +122,7 @@ public class AutoFeeder extends ObjEX implements java.io.Serializable {
 	 * 境界を取得する.
 	 * @return 境界
 	 */
-	public static Rectangle getBounding() {
+	public static Rectangle4y getBounding() {
 		return boundary;
 	}
 
@@ -142,7 +143,7 @@ public class AutoFeeder extends ObjEX implements java.io.Serializable {
 
 	@Override
 	public void removeListData() {
-		SimYukkuri.world.getCurrentMap().autofeeder.remove(this);
+		SimYukkuri.world.getCurrentMap().autofeeder.remove(objId);
 	}
 
 	@Override
@@ -154,8 +155,8 @@ public class AutoFeeder extends ObjEX implements java.io.Serializable {
 			return;
 
 		// お持ち帰りされていたりしたら初期化
-		if (!SimYukkuri.world.getCurrentMap().food.contains(food) &&
-				!SimYukkuri.world.getCurrentMap().body.contains(food)) {
+		if (food != null && !SimYukkuri.world.getCurrentMap().food.containsValue(food) &&
+			isTakenOut()) {
 			food = null;
 		}
 
@@ -224,10 +225,25 @@ public class AutoFeeder extends ObjEX implements java.io.Serializable {
 					break;
 				}
 				food = GadgetAction.putObjEX(Food.class, getX(), getY(), f.ordinal());
+				SimYukkuri.world.getCurrentMap().food.put(food.objId, (Food)food);
 				Cash.buyItem(food);
 				Cash.addCash(-getCost());
 			}
 		}
+	}
+
+	private boolean isTakenOut() {
+		for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().body.entrySet()) {
+			Body b = entry.getValue();
+			Integer i = b.getTakeoutItem().get(TakeoutItemType.FOOD);
+			if (i == null) {
+				continue;
+			}
+			if (i.intValue() == food.objId) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	private int makeRandomType() {
@@ -238,12 +254,10 @@ public class AutoFeeder extends ObjEX implements java.io.Serializable {
 	 * コンストラクタ.
 	 */
 	public AutoFeeder(int initX, int initY, int initOption) {
-
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		List<AutoFeeder> list = SimYukkuri.world.getCurrentMap().autofeeder;
-		list.add(this);
+		SimYukkuri.world.getCurrentMap().autofeeder.put(objId, this);
 
 		objType = Type.PLATFORM;
 		objEXType = ObjEXType.AUTOFEEDER;
@@ -255,10 +269,13 @@ public class AutoFeeder extends ObjEX implements java.io.Serializable {
 		} else
 			ret = false;
 		if (!ret) {
-			list.remove(this);
+			SimYukkuri.world.getCurrentMap().autofeeder.remove(objId);
 		}
 		value = 10000;
 		cost = 30;
+	}
+	public AutoFeeder() {
+		
 	}
 
 	/**
@@ -353,6 +370,46 @@ public class AutoFeeder extends ObjEX implements java.io.Serializable {
 		nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_ITEM_INI_DIR, "AutoFeeder", "FeedingProbability");
 		if (nTemp != 0)
 			feedingP = nTemp;
+	}
+
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
+	}
+
+	public int getMode() {
+		return mode;
+	}
+
+	public void setMode(int mode) {
+		this.mode = mode;
+	}
+
+	public int getFeedingInterval() {
+		return feedingInterval;
+	}
+
+	public void setFeedingInterval(int feedingInterval) {
+		this.feedingInterval = feedingInterval;
+	}
+
+	public int getFeedingP() {
+		return feedingP;
+	}
+
+	public void setFeedingP(int feedingP) {
+		this.feedingP = feedingP;
+	}
+
+	public Obj getFood() {
+		return food;
+	}
+
+	public void setFood(Obj food) {
+		this.food = food;
 	}
 
 }

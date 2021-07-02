@@ -9,6 +9,7 @@ import java.io.IOException;
 import src.SimYukkuri;
 import src.base.ObjEX;
 import src.draw.ModLoader;
+import src.draw.Rectangle4y;
 import src.enums.ObjEXType;
 import src.enums.Type;
 
@@ -20,7 +21,7 @@ public class Bed extends ObjEX implements java.io.Serializable {
 	/**画像の入れ物*/
 	private static BufferedImage[] images;
 	/**判定用長方形*/
-	private static Rectangle boundary = new Rectangle();
+	private static Rectangle4y boundary = new Rectangle4y();
 	/**ベッドのランク*/
 	private ItemRank itemRank;
 	/**画像読み込み*/
@@ -47,18 +48,25 @@ public class Bed extends ObjEX implements java.io.Serializable {
 		return null;
 	}
 	/**境界線の取得*/
-	public static Rectangle getBounding() {
+	public static Rectangle4y getBounding() {
 		return boundary;
 	}
 
 	@Override
 	public void removeListData(){
-		SimYukkuri.world.getCurrentMap().bed.remove(this);
+		SimYukkuri.world.getCurrentMap().bed.remove(objId);
 	}
 
 	@Override
 	public int getValue() {
 		return value;
+	}
+	/**
+	 * Screen用の四角形を取得する.
+	 * @return Screen用の四角形
+	 */
+	public Rectangle takeScreenRect() {
+		return new Rectangle(boundary.x, boundary.y, boundary.width, boundary.height);
 	}
 	
 	/**
@@ -71,7 +79,7 @@ public class Bed extends ObjEX implements java.io.Serializable {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		SimYukkuri.world.getCurrentMap().bed.add(this);
+		SimYukkuri.world.getCurrentMap().bed.put(objId, this);
 		objType = Type.PLATFORM;
 		objEXType = ObjEXType.BED;
 		itemRank = ItemRank.values()[initOption];
@@ -91,6 +99,10 @@ public class Bed extends ObjEX implements java.io.Serializable {
 			value = 0;
 			cost = 0;
 		}
+	}
+	
+	public Bed() {
+		
 	}
 }
 

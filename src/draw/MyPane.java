@@ -2,15 +2,12 @@ package src.draw;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Image;
 import java.awt.LinearGradientPaint;
-import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.RenderingHints;
 import java.awt.Stroke;
 import java.awt.event.ActionEvent;
@@ -217,7 +214,7 @@ public class MyPane extends JPanel implements Runnable {
 	/** カーソルで選択されているゆっくり*/
 	public static Body selectBody = null;
 	/**カーソル描画用長方形*/
-	static List<Rectangle> markList = new LinkedList<Rectangle>();
+	static List<Rectangle4y> markList = new LinkedList<Rectangle4y>();
 
 	/** 標準のライン定数*/
 	private static final Stroke DEFAULT_STROKE = new BasicStroke(1.0f);
@@ -232,9 +229,9 @@ public class MyPane extends JPanel implements Runnable {
 	private static final Ellipse2D.Float ITEM_CUR_SHAPE = new Ellipse2D.Float(-16, -16, 32, 32);
 
 	/** 計算テンポラリ*/
-	private static Point tmpPoint = new Point();
+	private static Point4y tmpPoint = new Point4y();
 	/**画像描画用の標準汎用長方形*/
-	private static Rectangle tmpRect = new Rectangle();
+	private static Rectangle4y tmpRect = new Rectangle4y();
 
 	// ini設定
 	/**ログダイアログへの出力有無*/
@@ -389,7 +386,7 @@ public class MyPane extends JPanel implements Runnable {
 		} catch (IOException e1) {
 			System.out.println("File I/O error");
 		} catch (OutOfMemoryError e) {
-			JOptionPane.showMessageDialog(null, "メモリ不足です");
+			JOptionPane.showMessageDialog(null, "Out of Memory!!");
 		}
 	}
 
@@ -614,7 +611,7 @@ public class MyPane extends JPanel implements Runnable {
 			panel3.add(numlabel);
 			cb5 = new JComboBox(num);
 			cb5.setEditable(true);
-			cb5.setPreferredSize(new Dimension(60, 32));
+			cb5.setPreferredSize(new java.awt.Dimension(60, 32));
 			cb5.addActionListener(mayl);
 			panel3.add(cb5);
 			JLabel rapelabel = new JLabel(mess5);
@@ -628,7 +625,7 @@ public class MyPane extends JPanel implements Runnable {
 			panel.add(panel3);
 			panel.add(panel4);
 			panel.setLayout(new GridLayout(4, 1));
-			panel.setPreferredSize(new Dimension(400, 180));
+			panel.setPreferredSize(new java.awt.Dimension(400, 180));
 
 			int ret = JOptionPane.showConfirmDialog(this, panel, SimYukkuri.TITLE, JOptionPane.OK_CANCEL_OPTION,
 					JOptionPane.QUESTION_MESSAGE);
@@ -748,7 +745,7 @@ public class MyPane extends JPanel implements Runnable {
 	 * @param origin 対象ゆっくりの原点
 	 * @param spr 対象ゆっくりのスプライト
 	 */
-	private void calcDrawBodyPosition(Point origin, Sprite spr) {
+	private void calcDrawBodyPosition(Point4y origin, Sprite spr) {
 		int sizeW = Translate.transSize(spr.imageW);
 		int sizeH = Translate.transSize(spr.imageH);
 		int pivX = Translate.transSize(spr.pivotX);
@@ -763,7 +760,7 @@ public class MyPane extends JPanel implements Runnable {
 	 * @param o 描画対象オブジェクト
 	 * @param rect オブジェクトの占有長方形
 	 */
-	private void calcDrawPosition(Obj o, Rectangle rect) {
+	private void calcDrawPosition(Obj o, Rectangle4y rect) {
 		int sizeW = Translate.transSize(o.getW());
 		int sizeH = Translate.transSize(o.getH());
 		int pivX = Translate.transSize(o.getPivotX());
@@ -801,7 +798,7 @@ public class MyPane extends JPanel implements Runnable {
 			g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_SPEED);
 			g2.setRenderingHint(RenderingHints.KEY_INTERPOLATION, renderScale);
 
-			Rectangle dispArea = Translate.getDisplayArea();
+			Rectangle4y dispArea = Translate.getDisplayArea();
 			backBufferG2.setClip(dispArea.x, dispArea.y, dispArea.width, dispArea.height);
 
 			msgList.clear();
@@ -846,7 +843,7 @@ public class MyPane extends JPanel implements Runnable {
 				calcDrawPosition(oex, tmpRect);
 				int layerNum = oex.getImageLayer(layerTmp);
 				if (oex instanceof BeltconveyorObj) {
-					((BeltconveyorObj) (oex)).getImageLayer(backBufferG2, layerTmp, tmpRect);
+					((BeltconveyorObj) (oex)).getImageLayer(backBufferG2, layerTmp);
 				} else {
 					for (int j = 0; j < layerNum; j++) {
 						backBufferG2.drawImage(layerTmp[j], tmpRect.x, tmpRect.y, tmpRect.width, tmpRect.height, this);
@@ -892,7 +889,8 @@ public class MyPane extends JPanel implements Runnable {
 					calcDrawBodyPosition(tmpPoint, braid);
 
 					boolean bDrawShadow = true;
-					if (b.getLinkParent() != null && b.getLinkParent().getZ() < b.getZ()) {
+					Obj obj = b.takeMappedObj(b.getLinkParent());
+					if (obj != null && obj.getZ() < b.getZ()) {
 						bDrawShadow = false;
 					}
 					// 影
@@ -924,7 +922,7 @@ public class MyPane extends JPanel implements Runnable {
 
 					// カーソル登録
 					if (b.isPin()) {
-						//						Rectangle rect = new Rectangle();
+						//						Rectangle rect = new Rectangle4y()();
 						//						rect.x = bodyExpandRect.x;
 						//						rect.y = bodyExpandRect.y;
 						//						rect.width = bodyExpandRect.width;
@@ -1022,12 +1020,12 @@ public class MyPane extends JPanel implements Runnable {
 			TerrainField.drawCeiling(backBufferG2, this);
 
 			// 各種カーソル表示
-			Point mousePos = getMousePosition();
+			java.awt.Point mousePos = getMousePosition();
 
 			if (isEnableTarget) {
 				Image[] cursor = IconPool.getCursorIconImageArray();
 				int st = IconPool.CursorIcon.CUR_LB.ordinal();
-				for (Rectangle rect : markList) {
+				for (Rectangle4y rect : markList) {
 					backBufferG2.drawImage(cursor[st + 1], rect.x, rect.y, this);
 					backBufferG2.drawImage(cursor[st + 0], rect.x, rect.y + rect.width - 20, this);
 					backBufferG2.drawImage(cursor[st + 2], rect.x + rect.width - 20, rect.y + rect.width - 20, this);
@@ -1041,13 +1039,13 @@ public class MyPane extends JPanel implements Runnable {
 			if (selectBody != null) {
 				Image[] select = IconPool.getCursorIconImageArray();
 				int st = IconPool.CursorIcon.SEL_0.ordinal();
-				Rectangle r = selectBody.getScreenRect();
+				Rectangle4y r = selectBody.getScreenRect();
 				int x = r.x + (r.width >> 1) - 12;
 				int y = r.y + r.height + 2;
 				backBufferG2.drawImage(select[st + (int) (selectBody.getAge() % 4)], x, y, this);
 			}
 
-			if (SimYukkuri.world.player.holdItem != null && mousePos != null) {
+			if (SimYukkuri.world.player.getHoldItem() != null && mousePos != null) {
 				backBufferG2.translate(mousePos.x, mousePos.y);
 				backBufferG2.setStroke(ITEM_CUR_STROKE);
 				backBufferG2.setColor(ITEM_CUR_COLOR);
@@ -1119,7 +1117,7 @@ public class MyPane extends JPanel implements Runnable {
 			String message;
 			int fontSize;
 			int wx, wy;
-			Rectangle bodyRect;
+			Rectangle4y bodyRect;
 			for (Body b : msgList) {
 				message = b.getMessageBuf();
 				fontSize = b.getMessageTextSize();
@@ -1138,13 +1136,16 @@ public class MyPane extends JPanel implements Runnable {
 				//				if(wx + width > Translate.canvasW) wx = Translate.canvasW - width; 
 				wy = posTmp[1] - height - 4;
 				//				if(wy < 0) wy = 0;
-				g2.setColor(b.getMessageBoxColor());
+				Color4y c = b.getMessageBoxColor();
+				g2.setColor(new Color(c.red, c.green, c.blue, c.alpha));
 				g2.fillRoundRect(wx, wy, width + 8, height + 8, 8, 8);
-				g2.setColor(b.getMessageLineColor()); // no transparent black.
+				c = b.getMessageLineColor();
+				g2.setColor(new Color(c.red, c.green, c.blue, c.alpha)); // no transparent black.
 				g2.setStroke(b.getMessageWindowStroke());
 				g2.drawRoundRect(wx, wy, width + 8, height + 8, 8, 8);
 				g2.setStroke(DEFAULT_STROKE);
-				g2.setColor(b.getMessageTextColor()); // no transparent black.
+				c = b.getMessageLineColor();
+				g2.setColor(new Color(c.red, c.green, c.blue, c.alpha)); // no transparent black.
 				drawStringMultiLine(g2, message, wx + 4, wy + 4, width, true);
 				g2.setFont(DEFAULT_FONT);
 			}

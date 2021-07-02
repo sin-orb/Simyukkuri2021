@@ -1,7 +1,7 @@
 package src.logic;
 
 
-import java.util.List;
+import java.util.Map;
 
 import src.SimYukkuri;
 import src.base.Body;
@@ -43,15 +43,15 @@ public class TrashLogic {
 	private static final Obj searchTrashObj(Body b) {
 
 		Obj found = null;
-		int minDistance = b.getEYESIGHT();
+		int minDistance = b.getEYESIGHTorg();
 		int wallMode = b.getBodyAgeState().ordinal();
 		// 飛行可能なら壁以外は通過可能
 		if(b.canflyCheck()) {
 			wallMode = AgeState.ADULT.ordinal();
 		}
 
-		List<Trash> list = SimYukkuri.world.getCurrentMap().trash;
-		for (Trash t: list) {
+		for (Map.Entry<Integer, Trash> entry : SimYukkuri.world.getCurrentMap().trash.entrySet()) {
+			Trash t = entry.getValue();
 			// 最小距離のものが見つかっていたら
 			if( minDistance < 1 )
 			{

@@ -6,7 +6,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
-import java.awt.Point;
 import java.awt.Stroke;
 import java.awt.TexturePaint;
 import java.awt.event.ActionEvent;
@@ -31,7 +30,9 @@ import src.SimYukkuri;
 import src.base.Body;
 import src.base.Obj;
 import src.draw.ModLoader;
+import src.draw.Point4y;
 import src.draw.Translate;
+import src.enums.Numbering;
 import src.game.Stalk;
 import src.system.FieldShapeBase;
 import src.system.ItemMenu.ShapeMenu;
@@ -157,8 +158,8 @@ public class Beltconveyor extends FieldShapeBase implements Serializable {
 	/**最小サイズ*/
 	private static final int MIN_SIZE = 8;
 
-	private static BufferedImage[] images = new BufferedImage[4];
-	private static TexturePaint[] texture = new TexturePaint[4];
+	private static transient BufferedImage[] images = new BufferedImage[4];
+	private static transient TexturePaint[] texture = new TexturePaint[4];
 
 	private boolean[][] setting = new boolean[SetupMenu.values().length][3];// = ObjEX.YUKKURI | ObjEX.SHIT | ObjEX.FOOD | ObjEX.VOMIT | ObjEX.STALK;
 	private DirectCombo direction;
@@ -167,6 +168,8 @@ public class Beltconveyor extends FieldShapeBase implements Serializable {
 	private static JComboBox<DirectCombo> dirCombo;
 	private static JComboBox<SpeedCombo> spdCombo;
 	private static JCheckBox[][] targetCheck = new JCheckBox[SetupMenu.values().length][3];
+	/** オブジェクトのユニークID */
+	public int objId = 0;
 
 	/**画像ロード*/
 	public static void loadImages(ClassLoader loader, ImageObserver io) throws IOException {
@@ -262,8 +265,9 @@ public class Beltconveyor extends FieldShapeBase implements Serializable {
 	 * @param fey 設置終点のY座標
 	 */
 	public Beltconveyor(int fsx, int fsy, int fex, int fey) {
-		Point pS = Translate.getFieldLimitForMap(fsx, fsy);
-		Point pE = Translate.getFieldLimitForMap(fex, fey);
+		objId = Numbering.INSTANCE.numberingObjId();
+		Point4y pS = Translate.getFieldLimitForMap(fsx, fsy);
+		Point4y pE = Translate.getFieldLimitForMap(fex, fey);
 		fieldSX = pS.x;
 		fieldSY = pS.y;
 		fieldEX = pE.x;
@@ -274,7 +278,7 @@ public class Beltconveyor extends FieldShapeBase implements Serializable {
 		Translate.getMovedPoint(fieldSX, fieldSY, fieldEX, fieldEY, 0, 0, 0, 0, anPointBaseX, anPointBaseY);
 
 		// フィールド座標が渡ってくるのでマップ座標も計算しておく
-		Point pos = Translate.invertLimit(anPointBaseX[0], anPointBaseY[0]);
+		Point4y pos = Translate.invertLimit(anPointBaseX[0], anPointBaseY[0]);
 		mapSX = Math.max(0, Math.min(pos.x, Translate.mapW));
 		mapSY = Math.max(0, Math.min(pos.y, Translate.mapH));
 
@@ -296,7 +300,7 @@ public class Beltconveyor extends FieldShapeBase implements Serializable {
 			mapEY -= (mapEY - Translate.mapH);
 		}
 
-		Point f = new Point();
+		Point4y f = new Point4y();
 		Translate.translate(mapSX, mapSY, f);
 		fieldSX = f.x;
 		fieldSY = f.y;
@@ -320,6 +324,10 @@ public class Beltconveyor extends FieldShapeBase implements Serializable {
 			SimYukkuri.world.getCurrentMap().beltconveyor.add(this);
 			MapPlaceData.setFiledFlag(SimYukkuri.world.getCurrentMap().fieldMap, mapSX, mapSY, mapW, mapH, true, FIELD_BELT);
 		}
+	}
+	
+	public Beltconveyor() {
+		
 	}
 
 	/** 処理する必要のあるオブジェクトか判定*/

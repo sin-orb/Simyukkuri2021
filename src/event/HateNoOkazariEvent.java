@@ -1,6 +1,6 @@
 package src.event;
 
-import java.util.List;
+import java.util.Map;
 
 import src.Const;
 import src.SimYukkuri;
@@ -18,6 +18,7 @@ import src.item.Toilet;
 import src.logic.BodyLogic;
 import src.system.MessagePool;
 import src.system.ResourceUtil;
+import src.util.YukkuriUtil;
 
 /***************************************************
 	おかざりのないゆっくりへの攻撃イベント
@@ -36,6 +37,10 @@ public class HateNoOkazariEvent extends EventPacket implements java.io.Serializa
 		super(f, t, tgt, cnt);
 	}
 	
+	public HateNoOkazariEvent() {
+		
+	}
+	
 	// 参加チェック
 	// ここで各種チェックを行い、イベントへ参加するかを返す
 	// また、イベント優先度も必要に応じて設定できる
@@ -50,7 +55,8 @@ public class HateNoOkazariEvent extends EventPacket implements java.io.Serializa
 		if(b.isSmart()) return false;
 		// 足りないゆは参加しない
 		if(b.isIdiot()) return false;
-		
+		Body to = YukkuriUtil.getBodyInstance(getTo());
+		if (to == null) return false;
 		// 自分が賢い場合はおかざりがなくても家族を認識して参加しない
 		if(b.getIntelligence() == Intelligence.WISE) {
 			if(to.isParent(b) || to.isPartner(b) || b.isParent(to) || b.isPartner(to)) return false;
@@ -82,7 +88,8 @@ public class HateNoOkazariEvent extends EventPacket implements java.io.Serializa
 		}
 		
 		if(ret) {
-			if(getFrom() != b) {
+			Body from = YukkuriUtil.getBodyInstance(getFrom());
+			if(from != b) {
 				b.setWorldEventResMessage(MessagePool.getMessage(b, MessagePool.Action.HateYukkuri), Const.HOLDMESSAGE, true, false);
 			}
 		}
@@ -92,6 +99,8 @@ public class HateNoOkazariEvent extends EventPacket implements java.io.Serializa
 	// イベント開始動作
 	@Override
 	public void start(Body b) {
+		Body to = YukkuriUtil.getBodyInstance(getTo());
+		if (to == null) return;
 		int colX = BodyLogic.calcCollisionX(b, to);
 		b.moveToEvent(this, to.getX() + colX, to.getY());
 	}
@@ -100,8 +109,9 @@ public class HateNoOkazariEvent extends EventPacket implements java.io.Serializa
 	// UpdateState.ABORTを返すとイベント終了
 	@Override
 	public UpdateState update(Body b) {
+		Body to = YukkuriUtil.getBodyInstance(getTo());
 		// 相手が消えてしまったらイベント中断
-		if(to.isRemoved()) return UpdateState.ABORT;
+		if(to ==null || to.isRemoved()) return UpdateState.ABORT;
 		// 相手に追いつけないケースがあるため、一定距離まで近づいたら相手を呼び止める
 		if(Translate.distance(b.getX(), b.getY(), to.getX(), to.getY()) < 2500) {
 			to.stay();
@@ -115,15 +125,15 @@ public class HateNoOkazariEvent extends EventPacket implements java.io.Serializa
 	// trueを返すとイベント終了
 	@Override
 	public boolean execute(Body b) {
+		Body to = YukkuriUtil.getBodyInstance(getTo());
 		// 相手が残っていたら攻撃
-		if(!to.isDead() && !to.isRemoved() && to.getZ() < 5) {
+		if(to != null && !to.isDead() && !to.isRemoved() && to.getZ() < 5) {
 			// うんうん奴隷ではない場合
 			if( to.getPublicRank() != PublicRank.UnunSlave ){
 				boolean bIsInToiletForSlave = false;
-				List<Toilet> toiletList = SimYukkuri.world.getCurrentMap().toilet;
-				for (Toilet t: toiletList) {
+				for (Map.Entry<Integer, Toilet> entry : SimYukkuri.world.getCurrentMap().toilet.entrySet()) {
 					// うんうん奴隷用トイレがあるか
-					if( t.isForSlave() ){
+					if( entry.getValue().isForSlave() ){
 						bIsInToiletForSlave = true;
 						break;
 					}
@@ -132,11 +142,11 @@ public class HateNoOkazariEvent extends EventPacket implements java.io.Serializa
 				if( bIsInToiletForSlave ){
 					to.setPublicRank( PublicRank.UnunSlave ) ; // うんうんどれい認定
 					to.getFavItem().clear();
-					Body p = b.getPartner();
+					Body p = YukkuriUtil.getBodyInstance(b.getPartner());
 					if (p != null) {
 						// うんうんどれいになるようなくずとは りこんっ！だよ！！
-						b.setPartner(null);
-						p.setPartner(null);
+						b.setPartner(-1);
+						p.setPartner(-1);
 					}
 					b.setWorldEventResMessage(MessagePool.getMessage(b, MessagePool.Action.EngageUnunSlave), Const.HOLDMESSAGE, true, false);
 				}

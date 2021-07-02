@@ -4,7 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.util.List;
+import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.event.PopupMenuEvent;
@@ -170,7 +170,7 @@ public class MainCommandListener {
 					MainCommandUI.itemWindow.setVisible(true);
 				} else {
 					MainCommandUI.itemWindow.setVisible(false);
-					SimYukkuri.world.player.holdItem = null;
+					SimYukkuri.world.player.setHoldItem(null);
 				}
 			}
 			else if(source.equals(MainCommandUI.scriptButton)) {
@@ -211,10 +211,8 @@ public class MainCommandListener {
 			switch(sel) {
 				case INI_RELOAD:
 					SimYukkuri.mypane.loadImage(false, false, false, false, false, true);
-					List<Body> bodyList = SimYukkuri.world.getCurrentMap().body;
-					if( bodyList != null && bodyList.size() != 0 )
-					{
-						for(Body b:bodyList)
+					for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().body.entrySet()) {
+						Body b = entry.getValue();
 						{
 							IniFileUtil.readIniFile(b, true);
 							IniFileUtil.readYukkuriIniFile(b, true);

@@ -13,6 +13,7 @@ import src.enums.AgeState;
 import src.enums.AttachProperty;
 import src.enums.Event;
 import src.system.ResourceUtil;
+import src.util.YukkuriUtil;
 
 
 /****************************************
@@ -74,7 +75,9 @@ public class Ants extends Attachment {
 
 	@Override
 	protected Event update() {
-		parent.beEaten((parent.getNumOfAnts()/3), 0, false);
+		Body pa = YukkuriUtil.getBodyInstance(parent);
+		if (pa == null) return Event.DONOTHING;
+		pa.beEaten((pa.getNumOfAnts()/3), 0, false);
 		return Event.DONOTHING;
 	}
 
@@ -92,10 +95,12 @@ public class Ants extends Attachment {
 
 	@Override
 	public void resetBoundary(){
-		setBoundary(pivX[parent.getBodyAgeState().ordinal()],
-					pivY[parent.getBodyAgeState().ordinal()],
-					imgW[parent.getBodyAgeState().ordinal()],
-					imgH[parent.getBodyAgeState().ordinal()]);
+		Body pa = YukkuriUtil.getBodyInstance(parent);
+		if (pa == null) return;
+		setBoundary(pivX[pa.getBodyAgeState().ordinal()],
+					pivY[pa.getBodyAgeState().ordinal()],
+					imgW[pa.getBodyAgeState().ordinal()],
+					imgH[pa.getBodyAgeState().ordinal()]);
 	}
 
 	/**コンストラクタ
@@ -104,11 +109,14 @@ public class Ants extends Attachment {
 	public Ants(Body body) {
 		super(body);
 		setAttachProperty(property, POS_KEY);
-		setBoundary(pivX[parent.getBodyAgeState().ordinal()],
-					pivY[parent.getBodyAgeState().ordinal()],
-					imgW[parent.getBodyAgeState().ordinal()],
-					imgH[parent.getBodyAgeState().ordinal()]);
-		parent.setNumOfAnts(50);
+		Body pa = YukkuriUtil.getBodyInstance(parent);
+		if (pa != null)  {
+			setBoundary(pivX[pa.getBodyAgeState().ordinal()],
+					pivY[pa.getBodyAgeState().ordinal()],
+					imgW[pa.getBodyAgeState().ordinal()],
+					imgH[pa.getBodyAgeState().ordinal()]);
+			pa.setNumOfAnts(50);
+		}
 		value = 0;
 		cost = 0;
 		
@@ -116,6 +124,9 @@ public class Ants extends Attachment {
 		processInterval = 100;
 	}
 	
+	public Ants() {
+		
+	}
 	@Override
 	public String toString() {
 		return ResourceUtil.getInstance().read("item_ants");

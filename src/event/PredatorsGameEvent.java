@@ -1,5 +1,7 @@
 package src.event;
 
+import java.util.Map;
+
 import src.SimYukkuri;
 import src.base.Body;
 import src.base.EventPacket;
@@ -16,6 +18,7 @@ import src.logic.FoodLogic;
 import src.logic.ToyLogic;
 import src.system.MessagePool;
 import src.system.ResourceUtil;
+import src.util.YukkuriUtil;
 import src.yukkuri.Fran;
 import src.yukkuri.Meirin;
 import src.yukkuri.Remirya;
@@ -36,7 +39,7 @@ public class PredatorsGameEvent extends EventPacket implements java.io.Serializa
 	int tick = 0;
 	int tick2 = 0;
 	/** おもちゃにする対象のゆっくり */
-	protected Body toy = null;
+	protected int toy = -1;
 	boolean FlyGame = false;
 	boolean grabbing = false;
 	boolean snack = false;
@@ -46,6 +49,10 @@ public class PredatorsGameEvent extends EventPacket implements java.io.Serializa
 	public PredatorsGameEvent(Body f, Body t, Obj tgt, int cnt) {
 		super(f, t, tgt, cnt);
 	}
+	
+	public PredatorsGameEvent() {
+		
+	}
 
 	// 参加チェック
 	//このイベントがスタートできるのはれみりゃ、ふらんのみ
@@ -54,12 +61,12 @@ public class PredatorsGameEvent extends EventPacket implements java.io.Serializa
 		priority = EventPriority.LOW;
 
 		if(b.isDead()) return false;
-
-		if(b.isPredatorType() && b== getFrom()){
+		Body from = YukkuriUtil.getBodyInstance(getFrom());
+		if(b.isPredatorType() && b== from){
 			//遊び相手の決定
-			Body[] bodyList = SimYukkuri.world.getCurrentMap().body.toArray(new Body[0]);
-			for (Body d: bodyList) {
-				int minDistance = b.getEYESIGHT();
+			for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().body.entrySet()) {
+				Body d = entry.getValue();
+				int minDistance = b.getEYESIGHTorg();
 				int wallMode = b.getBodyAgeState().ordinal();
 				int size = b.getBodyAgeState().ordinal();
 				// 飛行可能なら壁以外は通過可能
@@ -90,7 +97,7 @@ public class PredatorsGameEvent extends EventPacket implements java.io.Serializa
 							if (Barrier.acrossBarrier(b.getX(), b.getY(), d.getX(), d.getY(), Barrier.MAP_BODY[wallMode] + Barrier.BARRIER_KEKKAI)) {
 								continue;
 							}
-							toy = d;
+							toy = d.objId;
 							minDistance = distance;
 							size = d.getBodyAgeState().ordinal();
 						}
@@ -112,28 +119,30 @@ public class PredatorsGameEvent extends EventPacket implements java.io.Serializa
 	// UpdateState.ABORTを返すとイベント終了
 	@Override
 	public UpdateState update(Body b) {
+		Body from = YukkuriUtil.getBodyInstance(getFrom());
+		Body toy = YukkuriUtil.getBodyInstance(this.toy);
 		//対象が決定できなかったり、捕食防止ディフューザー環境だったりしたら中止。ボール遊びを試す
-		if(toy== null || Terrarium.predatorSteam){
-			if(ToyLogic.checkToy(getFrom())){
-				getFrom().setPlaying(PlayStyle.BALL);
-				getFrom().setPlayingLimit(150 +SimYukkuri.RND.nextInt(100)-49);
+		if(from == null || toy == null || Terrarium.predatorSteam){
+			if(ToyLogic.checkToy(from)){
+				from.setPlaying(PlayStyle.BALL);
+				from.setPlayingLimit(150 +SimYukkuri.RND.nextInt(100)-49);
 			}
 			return UpdateState.ABORT;
 		}
 		// 相手が消えてしまったらイベント中断
 		if(toy.isRemoved() || toy.isGrabbed()) {
-			toy.setLinkParent(null);
+			toy.setLinkParent(-1);
 			return UpdateState.ABORT;
 		}
 		// 相手が死んだらイベント中断
 		if(toy.isDead()) {
-			getFrom().setMessage(MessagePool.getMessage(b, MessagePool.Action.ComplainAboutFragleness),true);
-			getFrom().setForceFace(ImageCode.PUFF.ordinal());
-			toy.setLinkParent(null);
+			from.setMessage(MessagePool.getMessage(b, MessagePool.Action.ComplainAboutFragleness),true);
+			from.setForceFace(ImageCode.PUFF.ordinal());
+			toy.setLinkParent(-1);
 			return UpdateState.ABORT;
 		}
 		//各動作は1回ずつ
-		if(b!=getFrom()){
+		if(b!=from){
 			return  null;
 		}
 		//おやつ中は別挙動
@@ -141,9 +150,9 @@ public class PredatorsGameEvent extends EventPacket implements java.io.Serializa
 			return UpdateState.FORCE_EXEC;
 		}
 		//満足したら辞める
-		if(getFrom().isVeryHungry() || getFrom().isSleepy() || SimYukkuri.RND.nextInt(1000)==0){
+		if(from.isVeryHungry() || from.isSleepy() || SimYukkuri.RND.nextInt(1000)==0){
 			//b.setMessage(MessagePool.getMessage(b, MessagePool.Action.GameEnd));
-			toy.setLinkParent(null);
+			toy.setLinkParent(-1);
 			return UpdateState.ABORT;
 		}
 
@@ -172,7 +181,7 @@ public class PredatorsGameEvent extends EventPacket implements java.io.Serializa
 			// 高度に達してたら落とす
 			if(Math.abs(b.getZ() - Translate.getFlyHeightLimit()) < 3) {
 				//空腹だったらおやつに食べる。優先度も変更
-				if(getFrom().isHungry()){
+				if(from.isHungry()){
 					snack = true;
 					priority = EventPriority.MIDDLE;
 					return UpdateState.FORCE_EXEC;
@@ -183,7 +192,7 @@ public class PredatorsGameEvent extends EventPacket implements java.io.Serializa
 					b.setForceFace(ImageCode.SMILE.ordinal());
 					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.DropYukkuri));
 					b.addStress(-100);
-					toy.setLinkParent(null);
+					toy.setLinkParent(-1);
 					toy.strikeByYukkuri(b, this,false);
 					b.moveTo(toy.getX(), toy.getY(), Translate.getFlyHeightLimit());
 					//toy.addDamage(25);
@@ -228,7 +237,7 @@ public class PredatorsGameEvent extends EventPacket implements java.io.Serializa
 				if(b.isRude() && SimYukkuri.RND.nextBoolean())b.setForceFace(ImageCode.RUDE.ordinal());
 				else b.setForceFace(ImageCode.SMILE.ordinal());
 				b.setMessage(MessagePool.getMessage(b, MessagePool.Action.CaughtYou),true);
-				toy.setLinkParent(b);
+				toy.setLinkParent(b.objId);
 				grabbing = true;
 				b.moveTo(b.getX(), b.getY(), 5);
 			}
@@ -261,25 +270,29 @@ public class PredatorsGameEvent extends EventPacket implements java.io.Serializa
 	// trueを返すとイベント終了
 	@Override
 	public boolean execute(Body b) {
+		Body toy = YukkuriUtil.getBodyInstance(this.toy);
 		// 相手が消えてしまったらイベント中断
-		if(toy.isRemoved()) {
-			toy.setLinkParent(null);
+		if(toy == null || toy.isRemoved()) {
+			toy.setLinkParent(-1);
 			return true;
 		}
+		Body from = YukkuriUtil.getBodyInstance(getFrom());
+		if (from == null) return true;
 		// 相手が捕まれたらイベント中断
 		if(toy.isGrabbed()) {
-			to.setLinkParent(null);
+			Body to = YukkuriUtil.getBodyInstance(getTo());
+			if (to != null) to.setLinkParent(-1);
 			return true;
 		}
 		// 相手が死んだらイベント中断
 		if(toy.isDead()) {
-			toy.setLinkParent(null);
+			toy.setLinkParent(-1);
 			return true;
 		}
 		// 相手の座標を縛る
-		toy.setX(getFrom().getX());
-		toy.setY(getFrom().getY() + 1);
-		toy.setZ(getFrom().getZ() + ofsZ[toy.getBodyAgeState().ordinal()]);
+		toy.setX(from.getX());
+		toy.setY(from.getY() + 1);
+		toy.setZ(from.getZ() + ofsZ[toy.getBodyAgeState().ordinal()]);
 
 		tick2++;
 		if(tick2 == 20) {
@@ -289,7 +302,7 @@ public class PredatorsGameEvent extends EventPacket implements java.io.Serializa
 			if (toy.isSick() && SimYukkuri.RND.nextBoolean()) b.addSickPeriod(100);
 			if(toy.isDead()) {
 				toy.setMessage(MessagePool.getMessage(toy, MessagePool.Action.Dead));
-				toy.setLinkParent(null);
+				toy.setLinkParent(-1);
 				return true;
 			}
 			else {
@@ -308,8 +321,9 @@ public class PredatorsGameEvent extends EventPacket implements java.io.Serializa
 	public void end(Body b) {
 		b.setMessage(MessagePool.getMessage(b, MessagePool.Action.GameEnd));
 		grabbing=false;
+		Body toy = YukkuriUtil.getBodyInstance(this.toy);
 		if(toy!=null){
-			toy.setLinkParent(null);
+			toy.setLinkParent(-1);
 			toy=null;
 		}
 	}

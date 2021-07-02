@@ -3,7 +3,6 @@ package src.item;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
@@ -19,6 +18,7 @@ import src.base.Body;
 import src.base.Obj;
 import src.base.ObjEX;
 import src.draw.ModLoader;
+import src.draw.Rectangle4y;
 import src.enums.CriticalDamegeType;
 import src.enums.ObjEXType;
 import src.enums.Type;
@@ -42,7 +42,7 @@ public class StickyPlate extends ObjEX implements java.io.Serializable {
 	/**処理対象(ゆっくり)*/
 	public static final int hitCheckObjType = ObjEX.YUKKURI;
 	private static BufferedImage[] images = new BufferedImage[4];
-	private static Rectangle boundary = new Rectangle();
+	private static Rectangle4y boundary = new Rectangle4y();
 
 	private Body bindBody = null;
 	private boolean bFixBack = false;
@@ -78,7 +78,7 @@ public class StickyPlate extends ObjEX implements java.io.Serializable {
 		return null;
 	}
 	/**境界線の取得*/
-	public static Rectangle getBounding() {
+	public static Rectangle4y getBounding() {
 		return boundary;
 	}
 
@@ -173,7 +173,7 @@ public class StickyPlate extends ObjEX implements java.io.Serializable {
 			bindBody.setPullAndPush(false);
 			bindBody = null;
 		}
-		SimYukkuri.world.getCurrentMap().stickyPlate.remove(this);
+		SimYukkuri.world.getCurrentMap().stickyPlate.remove(objId);
 	}
 
 	/**
@@ -186,13 +186,13 @@ public class StickyPlate extends ObjEX implements java.io.Serializable {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		SimYukkuri.world.getCurrentMap().stickyPlate.add(this);
+		SimYukkuri.world.getCurrentMap().stickyPlate.put(objId, this);
 		objType = Type.PLATFORM;
 		objEXType = ObjEXType.STICKYPLATE;
 		interval = 5;
 		if( !setupStickyPlate(this))
 		{
-			SimYukkuri.world.getCurrentMap().stickyPlate.remove(this);
+			SimYukkuri.world.getCurrentMap().stickyPlate.remove(objId);
 			return;
 		}
 		itemRank = ItemRank.values()[initOption];
@@ -203,6 +203,9 @@ public class StickyPlate extends ObjEX implements java.io.Serializable {
 			value = 0;
 			cost = 0;
 		}
+	}
+	public StickyPlate() {
+		
 	}
 
 	/** 設定メニュー*/

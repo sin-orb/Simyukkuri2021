@@ -1,6 +1,6 @@
 package src.logic;
 
-import java.util.List;
+import java.util.Map;
 
 import src.SimYukkuri;
 import src.base.Body;
@@ -28,11 +28,9 @@ public class StoneLogic {
 		if( b.getCriticalDamegeType()  == CriticalDamegeType.CUT){
 			return;
 		}
-		List<Stone> list = SimYukkuri.world.getCurrentMap().stone;
-		if( list == null || list.size() == 0 ){
-			return;
-		}
-		for (Stone t: list) {
+		for (Map.Entry<Integer, Stone> entry : SimYukkuri.world.getCurrentMap().stone.entrySet()) {
+			Stone t = entry.getValue();
+
 			int distance = Translate.distance(b.getX(), b.getY(), t.getX(), t.getY());
 			if(t.getZ() != b.getZ()){
 				continue;

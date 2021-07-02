@@ -82,33 +82,39 @@ public class BreedingAmpoule extends Attachment {
 
 	@Override
 	protected Event update() {
+		Body pa = YukkuriUtil.getBodyInstance(parent);
+		if (pa == null) return Event.DONOTHING;
 		// 死んでる/焼かれてる/壊れてる/胎生去勢　の場合は何もしない
-		if (parent.isDead() || parent.isBurned() || parent.isCrushed() || parent.isBodyCastration()){
+		if (pa.isDead() || pa.isBurned() || pa.isCrushed() || pa.isBodyCastration()){
 			return Event.DONOTHING;
 		}
-		parent.setHungry(100);
-		parent.addDamage(-100);
-		int babyType = YukkuriUtil.getRandomYukkuriType(parent);
-		parent.getBabyTypes().add(new Dna(babyType, null, null, false));
-		parent.setHasBaby(true);
+		pa.setHungry(100);
+		pa.addDamage(-100);
+		int babyType = YukkuriUtil.getRandomYukkuriType(pa);
+		pa.getBabyTypes().add(new Dna(babyType, null, null, false));
+		pa.setHasBaby(true);
 
 		return Event.DONOTHING;
 	}
 
 	@Override
 	public BufferedImage getImage(Body b) {
+		Body pa = YukkuriUtil.getBodyInstance(parent);
+		if (pa == null) return null;
 		if (b.getDirection() == Direction.RIGHT) {
-			return images[parent.getBodyAgeState().ordinal()][1];
+			return images[pa.getBodyAgeState().ordinal()][1];
 		}
-		return images[parent.getBodyAgeState().ordinal()][0];
+		return images[pa.getBodyAgeState().ordinal()][0];
 	}
 
 	@Override
 	public void resetBoundary() {
-		setBoundary(pivX[parent.getBodyAgeState().ordinal()],
-				pivY[parent.getBodyAgeState().ordinal()],
-				imgW[parent.getBodyAgeState().ordinal()],
-				imgH[parent.getBodyAgeState().ordinal()]);
+		Body pa = YukkuriUtil.getBodyInstance(parent);
+		if (pa == null) return;
+		setBoundary(pivX[pa.getBodyAgeState().ordinal()],
+				pivY[pa.getBodyAgeState().ordinal()],
+				imgW[pa.getBodyAgeState().ordinal()],
+				imgH[pa.getBodyAgeState().ordinal()]);
 	}
 
 	/**
@@ -118,13 +124,21 @@ public class BreedingAmpoule extends Attachment {
 	public BreedingAmpoule(Body body) {
 		super(body);
 		setAttachProperty(property, POS_KEY);
-		setBoundary(pivX[parent.getBodyAgeState().ordinal()],
-				pivY[parent.getBodyAgeState().ordinal()],
-				imgW[parent.getBodyAgeState().ordinal()],
-				imgH[parent.getBodyAgeState().ordinal()]);
+		Body pa = YukkuriUtil.getBodyInstance(parent);
+		if (pa != null) {
+			setBoundary(pivX[pa.getBodyAgeState().ordinal()],
+				pivY[pa.getBodyAgeState().ordinal()],
+				imgW[pa.getBodyAgeState().ordinal()],
+				imgH[pa.getBodyAgeState().ordinal()]);
+		}
 		value = 1000;
 		cost = 0;
 	}
+	
+	public BreedingAmpoule() {
+		
+	}
+	
 	@Override
 	public String toString() {
 		return ResourceUtil.getInstance().read("item_breeding");

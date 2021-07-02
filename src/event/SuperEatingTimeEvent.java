@@ -15,6 +15,7 @@ import src.logic.BodyLogic;
 import src.logic.FoodLogic;
 import src.system.MessagePool;
 import src.system.ResourceUtil;
+import src.util.YukkuriUtil;
 
 /***************************************************
 	すーぱーむーしゃむーしゃたいむイベント
@@ -52,10 +53,15 @@ public class SuperEatingTimeEvent extends EventPacket implements java.io.Seriali
 		super(f, t, tgt, cnt);
 		priority = EventPriority.HIGH;
 	}
+	
+	public SuperEatingTimeEvent() {
+		
+	}
 
 	@Override
 	public boolean simpleEventAction(Body b) {
-		if (getFrom().isShutmouth()) {
+		Body from = YukkuriUtil.getBodyInstance(getFrom());
+		if (from == null || from.isShutmouth()) {
 			return true;
 		}
 		return false;
@@ -67,7 +73,9 @@ public class SuperEatingTimeEvent extends EventPacket implements java.io.Seriali
 	@Override
 	public boolean checkEventResponse(Body b) {
 		boolean ret = false;
-		if (getFrom() == b && !(b.isShutmouth())) {
+		Body from = YukkuriUtil.getBodyInstance(getFrom());
+		if (from == null) return false;
+		if (from == b && !(b.isShutmouth())) {
 			return true;
 		}
 
@@ -75,7 +83,7 @@ public class SuperEatingTimeEvent extends EventPacket implements java.io.Seriali
 			return false;
 		}
 
-		if (b.getPublicRank() != getFrom().getPublicRank()) {
+		if (b.getPublicRank() != from.getPublicRank()) {
 			return false;
 		}
 
@@ -85,7 +93,7 @@ public class SuperEatingTimeEvent extends EventPacket implements java.io.Seriali
 		}
 
 		// つがいも参加する
-		if (getFrom().isPartner(b)) {
+		if (from.isPartner(b)) {
 			return true;
 		}
 
@@ -94,7 +102,7 @@ public class SuperEatingTimeEvent extends EventPacket implements java.io.Seriali
 		}
 
 		// Fromの子供だけ参加する(※Fromが教育係のときは全ての子供が参加するようにする？)
-		if (!b.isChild(getFrom()))
+		if (!b.isChild(from))
 			return false;
 		// 大人は終了
 		if (b.isAdult())
@@ -125,7 +133,8 @@ public class SuperEatingTimeEvent extends EventPacket implements java.io.Seriali
 	@Override
 	public UpdateState update(Body b) {
 		b.clearActionsForEvent();
-		if (b == null || getFrom() == null) {
+		Body from = YukkuriUtil.getBodyInstance(getFrom());
+		if (b == null || from == null) {
 			return UpdateState.ABORT;
 		}
 		if (b.isNYD()) {
@@ -133,13 +142,14 @@ public class SuperEatingTimeEvent extends EventPacket implements java.io.Seriali
 		}
 
 		// 親が消えてしまったらイベント中断
-		if (getFrom().isRemoved())
+		if (from.isRemoved())
 			return UpdateState.ABORT;
 		// ターゲットが消えてしまったらイベント中断
+		Obj target = b.takeMappedObj(this.target);
 		if (target == null || target.isRemoved()) {
-			getFrom().setMessage(MessagePool.getMessage(getFrom(), MessagePool.Action.NoFood));
-			getFrom().setHappiness(Happiness.VERY_SAD);
-			getFrom().stay();
+			from.setMessage(MessagePool.getMessage(from, MessagePool.Action.NoFood));
+			from.setHappiness(Happiness.VERY_SAD);
+			from.stay();
 			return UpdateState.ABORT;
 		}
 
@@ -148,7 +158,7 @@ public class SuperEatingTimeEvent extends EventPacket implements java.io.Seriali
 			return UpdateState.ABORT;
 		}
 
-		if ((10 < nFromWaitCount && getFrom().getCurrentEvent() == null) || target == null || target.isRemoved()) {
+		if ((10 < nFromWaitCount && from.getCurrentEvent() == null) || target == null || target.isRemoved()) {
 			return UpdateState.ABORT;
 		}
 
@@ -164,14 +174,14 @@ public class SuperEatingTimeEvent extends EventPacket implements java.io.Seriali
 		b.wakeup();
 
 		// 親
-		if (b == getFrom()) {
+		if (b == from) {
 			// 何らかの理由で終了しそうにないなら終わらせる
 			if (5000 < nFromWaitCount) {
 				return UpdateState.ABORT;
 			}
 			nFromWaitCount++;
 			// 子ゆがいなければ終了
-			List<Body> childrenList = BodyLogic.createActiveChildList(getFrom(), true);
+			List<Body> childrenList = BodyLogic.createActiveChildList(from, true);
 			if ((childrenList == null) || (childrenList.size() == 0)) {
 				return UpdateState.ABORT;
 			}
@@ -196,8 +206,8 @@ public class SuperEatingTimeEvent extends EventPacket implements java.io.Seriali
 			}
 
 			//番の設定
-			Body partner = getFrom().getPartner();
-			if (partner == getFrom()) {
+			Body partner = YukkuriUtil.getBodyInstance(from.getPartner());
+			if (partner == from) {
 				partner = null;
 			}
 
@@ -206,12 +216,12 @@ public class SuperEatingTimeEvent extends EventPacket implements java.io.Seriali
 			switch (state) {
 			case WAIT:// ごはんさんをたべにいくよ！みんなあつまってね！
 				// 家族を集める
-				bResult = BodyLogic.gatheringYukkuriSquare(getFrom(), childrenList.toArray(new Body[0]),
+				bResult = BodyLogic.gatheringYukkuriSquare(from, childrenList.toArray(new Body[0]),
 						GatheringDirection.DOWN, this);
 				for (Body bChild : childrenList) {
 					if (bChild != null) {
 						// 他に用事があれば除外
-						bChild.setMoveTarget(null);
+						bChild.setMoveTarget(-1);
 						bChild.wakeup();
 					}
 				}
@@ -221,11 +231,11 @@ public class SuperEatingTimeEvent extends EventPacket implements java.io.Seriali
 				b.setHappiness(Happiness.HAPPY);
 				// 番の処理
 				if (partner != null) {
-					int colX = BodyLogic.calcCollisionX(partner, getFrom());
-					partner.moveTo(getFrom().getX() + colX * 2, getFrom().getY());
+					int colX = BodyLogic.calcCollisionX(partner, from);
+					partner.moveTo(from.getX() + colX * 2, from.getY());
 					partner.setHappiness(Happiness.HAPPY);
 					// 他に用事があれば除外
-					partner.setMoveTarget(null);
+					partner.setMoveTarget(-1);
 				}
 				//ステート移行
 				if (bResult) {
@@ -241,10 +251,10 @@ public class SuperEatingTimeEvent extends EventPacket implements java.io.Seriali
 				break;
 			case GO:// ごはんさんのにおいがするよ！
 				// 移動開始
-				bResult = BodyLogic.gatheringYukkuriBackLine(getFrom(), childrenList, this);
+				bResult = BodyLogic.gatheringYukkuriBackLine(from, childrenList, this);
 				for (Body bChild : childrenList) {
 					// 他に用事があれば除外
-					bChild.setMoveTarget(null);
+					bChild.setMoveTarget(-1);
 					bChild.wakeup();
 				}
 				int nDistance = Translate.getRealDistance(b.getX(), b.getY(), bodyTarget.getX(), bodyTarget.getY());
@@ -256,11 +266,11 @@ public class SuperEatingTimeEvent extends EventPacket implements java.io.Seriali
 
 				// 番の処理
 				if (partner != null) {
-					int colX = BodyLogic.calcCollisionX(partner, getFrom());
-					partner.moveTo(getFrom().getX() + colX * 2, getFrom().getY());
+					int colX = BodyLogic.calcCollisionX(partner, from);
+					partner.moveTo(from.getX() + colX * 2, from.getY());
 					partner.setHappiness(Happiness.HAPPY);
 					// 他に用事があれば除外
-					partner.setMoveTarget(null);
+					partner.setMoveTarget(-1);
 					if (SimYukkuri.RND.nextInt(50) == 0) {
 						partner.setMessage(MessagePool.getMessage(partner, MessagePool.Action.WantFood));
 					}
@@ -290,7 +300,7 @@ public class SuperEatingTimeEvent extends EventPacket implements java.io.Seriali
 						GatheringDirection.UP, this);
 				for (Body bChild : childrenList) {
 					// 他に用事があれば除外
-					bChild.setMoveTarget(null);
+					bChild.setMoveTarget(-1);
 					bChild.wakeup();
 				}
 
@@ -318,11 +328,11 @@ public class SuperEatingTimeEvent extends EventPacket implements java.io.Seriali
 				} else {
 					// 番の処理
 					if (partner != null) {
-						colX = BodyLogic.calcCollisionX(partner, getFrom());
-						partner.moveTo((int) (getFrom().getX() + colX * 1.5), getFrom().getY());
+						colX = BodyLogic.calcCollisionX(partner, from);
+						partner.moveTo((int) (from.getX() + colX * 1.5), from.getY());
 						partner.setHappiness(Happiness.HAPPY);
 						// 他に用事があれば除外
-						partner.setMoveTarget(null);
+						partner.setMoveTarget(-1);
 					}
 				}
 				break;
@@ -345,7 +355,7 @@ public class SuperEatingTimeEvent extends EventPacket implements java.io.Seriali
 					if (bChild != null) {
 						bChild.wakeup();
 						if (bChild.getHungryLimit() * 10 / 100 > bChild.getHungry()) {
-							bChild.setMoveTarget(target);
+							bChild.setMoveTarget(target.objId);
 							bChild.setToFood(true);
 							bIsHungry = true;
 						} else {
@@ -357,13 +367,13 @@ public class SuperEatingTimeEvent extends EventPacket implements java.io.Seriali
 
 				if (!bIsHungry) {
 					// 子供の食事が終わってから食べる
-					b.setMoveTarget(target);
+					b.setMoveTarget(target.objId);
 					b.setToFood(true);
 					b.setNoHungrybySupereatingTimePeriod(noHungerPeriod);
 					b.addMemories(10);
 					// 番の処理
 					if (partner != null) {
-						partner.setMoveTarget(target);
+						partner.setMoveTarget(target.objId);
 						partner.setToFood(true);
 						partner.setNoHungrybySupereatingTimePeriod(noHungerPeriod);
 						partner.addMemories(10);
@@ -381,10 +391,10 @@ public class SuperEatingTimeEvent extends EventPacket implements java.io.Seriali
 				} else {
 					// 子供の食事が終わってなくても空腹なら食べる
 					if (b.isHungry()) {
-						b.setMoveTarget(target);
+						b.setMoveTarget(target.objId);
 						b.setToFood(true);
 					} else {
-						b.setMoveTarget(null);
+						b.setMoveTarget(-1);
 						b.stay(100);
 						if (SimYukkuri.RND.nextInt(30) == 0) {
 							// 余裕なら子供の状態を喜ぶ
@@ -396,10 +406,10 @@ public class SuperEatingTimeEvent extends EventPacket implements java.io.Seriali
 					if (partner != null) {
 						// 子供の食事が終わってなくても空腹なら食べる
 						if (partner.isHungry()) {
-							partner.setMoveTarget(target);
+							partner.setMoveTarget(target.objId);
 							partner.setToFood(true);
 						} else {
-							partner.setMoveTarget(null);
+							partner.setMoveTarget(-1);
 							partner.stay(100);
 							if (SimYukkuri.RND.nextInt(30) == 0) {
 								// 余裕なら子供の状態を喜ぶ
@@ -418,9 +428,9 @@ public class SuperEatingTimeEvent extends EventPacket implements java.io.Seriali
 		//親以外の処理
 		else {
 			// つがいはスキップ。主催側で処理
-			if (b.isPartner(getFrom())) {
+			if (b.isPartner(from)) {
 				// 壁に引っかかってるなら終了
-				if (Barrier.onBarrier(b.getX(), b.getY(), getFrom().getX(), getFrom().getY(),
+				if (Barrier.onBarrier(b.getX(), b.getY(), from.getX(), from.getY(),
 						Barrier.MAP_BODY[b.getBodyAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
 					b.clearEvent();
 				}
@@ -431,7 +441,7 @@ public class SuperEatingTimeEvent extends EventPacket implements java.io.Seriali
 			switch (state) {
 			case GO:
 				// 壁に引っかかってるなら終了
-				if (Barrier.onBarrier(b.getX(), b.getY(), getFrom().getX(), getFrom().getY(),
+				if (Barrier.onBarrier(b.getX(), b.getY(), from.getX(), from.getY(),
 						Barrier.MAP_BODY[b.getBodyAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
 					b.clearEvent();
 					return null;

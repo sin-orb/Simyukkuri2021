@@ -1,12 +1,12 @@
 package src.command;
 
-import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import src.SimYukkuri;
 import src.attachment.ANYDAmpoule;
@@ -26,6 +26,8 @@ import src.base.Okazari;
 import src.command.GadgetMenu.ActionTarget;
 import src.command.GadgetMenu.GadgetList;
 import src.command.GadgetMenu.MainCategoryName;
+import src.draw.Point4y;
+import src.draw.Rectangle4y;
 import src.draw.Terrarium;
 import src.draw.Translate;
 import src.enums.BodyRank;
@@ -53,6 +55,7 @@ import src.system.Cash;
 import src.system.MainCommandUI;
 import src.system.MapPlaceData;
 import src.system.MessagePool;
+import src.util.YukkuriUtil;
 
 /******************************************************************
 
@@ -104,11 +107,11 @@ public class GadgetAction {
 			break;
 		}
 
-		Body[] bodyList = SimYukkuri.world.getCurrentMap().body.toArray(new Body[0]);
-		List<Shit> shitList = SimYukkuri.world.getCurrentMap().shit;
-		List<Vomit> vomitList = SimYukkuri.world.getCurrentMap().vomit;
-		Food[] foodList = SimYukkuri.world.getCurrentMap().food.toArray(new Food[0]);
-		List<Stalk> stalkList = SimYukkuri.world.getCurrentMap().stalk;
+		List<Body> bodyList = new LinkedList<Body>(SimYukkuri.world.getCurrentMap().body.values());
+		List<Shit> shitList = new LinkedList<Shit>(SimYukkuri.world.getCurrentMap().shit.values());
+		List<Vomit> vomitList = new LinkedList<Vomit>(SimYukkuri.world.getCurrentMap().vomit.values());
+		List<Food> foodList = new LinkedList<Food>(SimYukkuri.world.getCurrentMap().food.values());
+		List<Stalk> stalkList = new LinkedList<Stalk>(SimYukkuri.world.getCurrentMap().stalk.values());
 		List<Barrier> wallList = SimYukkuri.world.getCurrentMap().barrier;
 		if (isBody) {
 			for (Body b : bodyList) {
@@ -138,7 +141,8 @@ public class GadgetAction {
 			}
 			Stalk[] stalks = stalkList.toArray(new Stalk[0]);
 			for (Stalk s : stalks) {
-				if (s.getPlantYukkuri() == null) {
+				int id = s.getPlantYukkuri();
+				if (SimYukkuri.world.getCurrentMap().body.get(id) == null) {
 					s.remove();
 				} else if (checkNoBabyStalk(s)) {
 					s.remove();
@@ -156,11 +160,11 @@ public class GadgetAction {
 			for (Shit s : shitList) {
 				s.remove();
 			}
-			shitList.clear();
+			SimYukkuri.world.getCurrentMap().shit.clear();
 			for (Vomit v : vomitList) {
 				v.remove();
 			}
-			vomitList.clear();
+			SimYukkuri.world.getCurrentMap().vomit.clear();
 			for (Food f : foodList) {
 				if (f.isEmpty())
 					f.remove();
@@ -169,7 +173,8 @@ public class GadgetAction {
 			}
 
 			for (Stalk s : stalkList) {
-				if (s.getPlantYukkuri() == null) {
+				int id = s.getPlantYukkuri();
+				if (SimYukkuri.world.getCurrentMap().body.get(id) == null) {
 					s.remove();
 				}
 			}
@@ -178,10 +183,14 @@ public class GadgetAction {
 	}
 
 	private static boolean checkNoBabyStalk(Stalk s) {
-		if (s.getBindBaby().size() == 0) {
+		if (s.getBindBabies().size() == 0) {
 			return true;
 		}
-		for (Body b : s.getBindBaby()) {
+		for (Integer i : s.getBindBabies()) {
+			if (i == null) {
+				continue;
+			}
+			Body b = YukkuriUtil.getBodyInstance(i);
 			if (b != null) {
 				if (!b.isDead()) {
 					return false;
@@ -222,17 +231,17 @@ public class GadgetAction {
 			// 座標変換と設置可能範囲チェック
 			Class<?> cls = item.getGadgetClass();
 			Method mtd;
-			Rectangle bound = null;
+			Rectangle4y bound = null;
 			try {
 				mtd = cls.getMethod("getBounding", (Class<?>[]) null);
-				bound = (Rectangle) mtd.invoke(cls, (Object[]) null);
+				bound = (Rectangle4y) mtd.invoke(cls, (Object[]) null);
 			} catch (NoSuchMethodException | SecurityException
 					| IllegalAccessException | IllegalArgumentException
 					| InvocationTargetException e) {
 				e.printStackTrace();
 			}
 
-			Point pos = Translate.calcObjctPutPoint(fieldMousePos[0], fieldMousePos[1], bound);
+			Point4y pos = Translate.calcObjctPutPoint(fieldMousePos[0], fieldMousePos[1], bound);
 			if (pos != null) {
 				// 設置実行
 				try {
@@ -250,7 +259,7 @@ public class GadgetAction {
 			// 壁選択
 			switch (item) {
 			case WALL_DELETE:
-				Point pos = Translate.invert(fieldMousePos[0], fieldMousePos[1]);
+				Point4y pos = Translate.invert(fieldMousePos[0], fieldMousePos[1]);
 				if (pos != null) {
 					Barrier found = Barrier.getBarrier(pos.x, pos.y, 1);
 					if (found != null) {
@@ -527,17 +536,16 @@ public class GadgetAction {
 			break;
 		case SNAPPING:
 			if (ev.isShiftDown()) {
-				List<Body> bodyList = SimYukkuri.world.getCurrentMap().body;
-				for (Obj o : bodyList) {
-					o.kick();
+				for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().body.entrySet()) {
+					entry.getValue().kick();
 				}
-				List<Shit> shitList = SimYukkuri.world.getCurrentMap().shit;
-				for (Obj o : shitList) {
-					o.kick();
+				Map<Integer, Shit> shits = SimYukkuri.world.getCurrentMap().shit;
+				for (Map.Entry<Integer, Shit> entry : shits.entrySet()) {
+					entry.getValue().kick();
 				}
-				List<Vomit> vomitList = SimYukkuri.world.getCurrentMap().vomit;
-				for (Obj o : vomitList) {
-					o.kick();
+				Map<Integer, Vomit> vomits = SimYukkuri.world.getCurrentMap().vomit;
+				for (Map.Entry<Integer, Vomit> entry : vomits.entrySet()) {
+					entry.getValue().kick();
 				}
 			} else {
 				found.kick();
@@ -563,8 +571,8 @@ public class GadgetAction {
 			break;
 		case HAMMER:
 			if (ev.isShiftDown()) {
-				List<Body> bodyList = SimYukkuri.world.getCurrentMap().body;
-				for (Body b : bodyList) {
+				for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().body.entrySet()) {
+					Body b = entry.getValue();
 					b.strikeByHammer();
 					if (!b.isHasPants() && !b.isDead() && !b.isShutmouth()) {
 						int ofsX = Translate.invertX(b.getCollisionX() >> 1, b.getY());
@@ -628,8 +636,8 @@ public class GadgetAction {
 			break;
 		case PUNCH:
 			if (ev.isShiftDown()) {
-				List<Body> bodyList = SimYukkuri.world.getCurrentMap().body;
-				for (Body b : bodyList) {
+				for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().body.entrySet()) {
+					Body b = entry.getValue();
 					b.strikeByPunch();
 					if (!b.isHasPants() && !b.isDead() && !b.isShutmouth()) {
 						int ofsX = Translate.invertX(b.getCollisionX() >> 1, b.getY());
@@ -663,7 +671,7 @@ public class GadgetAction {
 			break;
 		case GODHAND:
 			if (ev.isShiftDown()) {
-				List<Body> bodyList = SimYukkuri.world.getCurrentMap().body;
+				List<Body> bodyList = new LinkedList<Body>(SimYukkuri.world.getCurrentMap().body.values());
 				int nSize = bodyList.size();
 				for (int i = nSize - 1; -1 < i; i--) {
 					Body b = bodyList.get(i);
@@ -679,37 +687,20 @@ public class GadgetAction {
 			}
 			break;
 		case PEAL:
-			Body[] bodyListP = SimYukkuri.world.getCurrentMap().body.toArray(new Body[0]);
-			if (ev.isShiftDown()) {
-				boolean flag = true;
-				if (found instanceof Body) {
-					flag = !((Body) found).isPealed();
-				}
+			List<Body> bodyListP = new LinkedList<Body>(SimYukkuri.world.getCurrentMap().body.values());
+			if (ev.isShiftDown() || ev.isControlDown()) {
 				for (Body b : bodyListP) {
-					if (!flag && b.isPealed())
-						b.Peal();
-					else if (flag && !b.isPealed())
-						b.Peal();
+					b.peal();
 				}
-			} else if (ev.isControlDown()) {
-				for (Body b : bodyListP) {
-					if (b.isPealed())
-						b.Peal();
-					else
-						b.Peal();
-				}
-			} else {
+			}  else {
 				if (found instanceof Body) {
-					if (((Body) found).isPealed())
-						((Body) found).Peal();
-					else
-						((Body) found).Peal();
+					((Body) found).peal();
 				}
 			}
 			break;
 
 		case Blind:
-			Body[] bodyListB = SimYukkuri.world.getCurrentMap().body.toArray(new Body[0]);
+			List<Body> bodyListB = new LinkedList<Body>(SimYukkuri.world.getCurrentMap().body.values());
 			if (ev.isShiftDown()) {
 				boolean flag = true;
 				if (found instanceof Body) {
@@ -738,7 +729,7 @@ public class GadgetAction {
 			}
 			break;
 		case SHUTMOUTH:
-			Body[] bodyListS = SimYukkuri.world.getCurrentMap().body.toArray(new Body[0]);
+			List<Body> bodyListS = new LinkedList<Body>(SimYukkuri.world.getCurrentMap().body.values());
 			if (ev.isShiftDown()) {
 				boolean flag = true;
 				if (found instanceof Body) {
@@ -773,7 +764,7 @@ public class GadgetAction {
 			GadgetMenu.executeBodyMethod(ev, found, "pickHair");
 			break;
 		case PACK:
-			Body[] bodyListPa = SimYukkuri.world.getCurrentMap().body.toArray(new Body[0]);
+			List<Body> bodyListPa = new LinkedList<Body>(SimYukkuri.world.getCurrentMap().body.values());
 			if (ev.isShiftDown()) {
 				boolean flag = true;
 				if (found instanceof Body) {
@@ -834,8 +825,10 @@ public class GadgetAction {
 		case STALK_UNPLUG:
 			if (found instanceof Stalk) {
 				Stalk s = ((Stalk) found);
-				if (s.getPlantYukkuri() != null) {
-					s.getPlantYukkuri().touchStalk();
+				int id = s.getPlantYukkuri();
+				if (SimYukkuri.world.getCurrentMap().body.get(id) == null) {
+					int id2 = s.getPlantYukkuri();
+					SimYukkuri.world.getCurrentMap().body.get(id2).touchStalk();
 				}
 			}
 			break;
@@ -873,7 +866,7 @@ public class GadgetAction {
 	 * @param found 対象オブジェクト
 	 */
 	public static void evaluateAmpoule(GadgetList item, MouseEvent ev, Obj found) {
-		List<Body> bodyList = SimYukkuri.world.getCurrentMap().body;
+		List<Body> bodyList = new LinkedList<Body>(SimYukkuri.world.getCurrentMap().body.values());
 		switch (item) {
 		case ORANGE_AMP:
 			if (ev.isShiftDown()) {
@@ -1186,7 +1179,7 @@ public class GadgetAction {
 	 * @param found 対象オブジェクト
 	 */
 	public static void evaluateAccessory(GadgetList item, MouseEvent ev, Obj found) {
-		List<Body> bodyList = SimYukkuri.world.getCurrentMap().body;
+		List<Body> bodyList = new LinkedList<Body>(SimYukkuri.world.getCurrentMap().body.values());
 		if (ev.isShiftDown()) {
 			boolean flag = true;
 			if (found instanceof Body) {
@@ -1227,7 +1220,7 @@ public class GadgetAction {
 	 * @param found 対象オブジェクト
 	 */
 	public static void evaluatePants(GadgetList item, MouseEvent ev, Obj found) {
-		List<Body> bodyList = SimYukkuri.world.getCurrentMap().body;
+		List<Body> bodyList = new LinkedList<Body>(SimYukkuri.world.getCurrentMap().body.values());
 		if (ev.isShiftDown()) {
 			boolean flag = true;
 			if (found instanceof Body) {
@@ -1374,11 +1367,11 @@ public class GadgetAction {
 				if (rank == PublicRank.NONE) {
 					b.setPublicRank(PublicRank.UnunSlave);
 					b.getFavItem().clear();
-					Body p = b.getPartner();
+					Body p = YukkuriUtil.getBodyInstance(b.getPartner());
 					if (p != null) {
 						// うんうんどれいになるようなくずとは りこんっ！だよ！！
-						b.setPartner(null);
-						p.setPartner(null);
+						b.setPartner(-1);
+						p.setPartner(-1);
 					}
 				} else {
 					b.setPublicRank(PublicRank.NONE);

@@ -1,8 +1,10 @@
 package src.draw;
 
+import java.beans.Transient;
 import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import src.SimYukkuri;
 import src.base.Body;
@@ -37,10 +39,53 @@ public class World implements Serializable {
 	/** マップサイズ情報 */
 	public int terrariumSizeIndex;
 
+	private int maxObjId = 0;
+	private int maxUniqueId = 0;
+	
 	/** マップ移動予定値。すぐ切り替えずメインのスレッド動作に衝突しないようにタイミングを図るため */
 	private int nextMap;
 	/** ワールド内のマップリスト */
 	private List<MapPlaceData> mapList;
+	
+	public int getCurrentMapIdx() {
+		return currentMapIdx;
+	}
+
+	public void setCurrentMapIdx(int currentMapIdx) {
+		this.currentMapIdx = currentMapIdx;
+	}
+
+	public int getWindowType() {
+		return windowType;
+	}
+
+	public void setWindowType(int windowType) {
+		this.windowType = windowType;
+	}
+
+	public int getTerrariumSizeIndex() {
+		return terrariumSizeIndex;
+	}
+
+	public void setTerrariumSizeIndex(int terrariumSizeIndex) {
+		this.terrariumSizeIndex = terrariumSizeIndex;
+	}
+
+	public List<MapPlaceData> getMapList() {
+		return mapList;
+	}
+
+	public void setMapList(List<MapPlaceData> mapList) {
+		this.mapList = mapList;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	public void setPlayer(Player player) {
+		this.player = player;
+	}
 
 	/**
 	 * コンストラクタ.
@@ -62,6 +107,19 @@ public class World implements Serializable {
 			mapList.add(new MapPlaceData(i));
 		}
 	}
+	
+	public World() {
+		player = new Player();
+		nextMap = -1;
+		mapList = new LinkedList<MapPlaceData>();
+
+		recalcMapSize();
+
+		for(int i = 0; i < MapWindow.MAP.values().length; i++) {
+			mapList.add(new MapPlaceData(i));
+		}
+	}
+	
 	/**
 	 * プレイヤーを取得する.
 	 * @return プレイヤー
@@ -119,7 +177,8 @@ public class World implements Serializable {
 	public void loadInterBodyImage() {
 		// 遅延読み込みの復元
 		for(MapPlaceData m :mapList) {
-			for(Body b :m.body) {
+			for(Map.Entry<Integer, Body> entry : m.body.entrySet()) {
+				Body b = entry.getValue();
 				if(b.getType() == HybridYukkuri.type) {
 					HybridYukkuri hb = (HybridYukkuri)b;
 					SimYukkuri.mypane.loadBodyImage(YukkuriUtil.getYukkuriType(hb.getBaseBody(0).getClass().getSimpleName()));
@@ -139,33 +198,36 @@ public class World implements Serializable {
 	 */
 	public List<Obj> getYukkuriList(){
 		List<Obj> yukkuriGroupList = new LinkedList<>();
-		yukkuriGroupList.addAll(mapList.get(currentMapIdx).body);
-		yukkuriGroupList.addAll(mapList.get(currentMapIdx).shit);
-		yukkuriGroupList.addAll(mapList.get(currentMapIdx).vomit);
-		yukkuriGroupList.addAll(mapList.get(currentMapIdx).okazari);
+		for (Map.Entry<Integer, Body> entry : mapList.get(currentMapIdx).body.entrySet()) {
+			yukkuriGroupList.add(entry.getValue());
+		}
+		yukkuriGroupList.addAll(new LinkedList<Obj>(mapList.get(currentMapIdx).shit.values()));
+		yukkuriGroupList.addAll(new LinkedList<Obj>(mapList.get(currentMapIdx).vomit.values()));
+		yukkuriGroupList.addAll(new LinkedList<Obj>(mapList.get(currentMapIdx).okazari.values()));
 		return yukkuriGroupList;
 	 }
 	/**
 	 * 床設置オブジェクトのリストを取得する.
 	 * @return 床設置オブジェクトのリスト
 	 */
+	@Transient
 	public List<ObjEX> getPlatformList(){
 		List<ObjEX>  platformGroupList = new LinkedList<>();
-		platformGroupList.addAll(mapList.get(currentMapIdx).toilet);
-		platformGroupList.addAll(mapList.get(currentMapIdx).bed);
-		platformGroupList.addAll(mapList.get(currentMapIdx).breedingPool);
-		platformGroupList.addAll(mapList.get(currentMapIdx).garbagechute);
-		platformGroupList.addAll(mapList.get(currentMapIdx).garbageStation);
-		platformGroupList.addAll(mapList.get(currentMapIdx).foodmaker);
-		platformGroupList.addAll(mapList.get(currentMapIdx).orangePool);
-		platformGroupList.addAll(mapList.get(currentMapIdx).productchute);
-		platformGroupList.addAll(mapList.get(currentMapIdx).stickyPlate);
-		platformGroupList.addAll(mapList.get(currentMapIdx).hotPlate);
-		platformGroupList.addAll(mapList.get(currentMapIdx).processerPlate);
-		platformGroupList.addAll(mapList.get(currentMapIdx).mixer);
-		platformGroupList.addAll(mapList.get(currentMapIdx).autofeeder);
-		platformGroupList.addAll(mapList.get(currentMapIdx).house);
-		platformGroupList.addAll(mapList.get(currentMapIdx).beltconveyorObj);
+		platformGroupList.addAll(new LinkedList<ObjEX>(mapList.get(currentMapIdx).toilet.values()));
+		platformGroupList.addAll(new LinkedList<ObjEX>(mapList.get(currentMapIdx).bed.values()));
+		platformGroupList.addAll(new LinkedList<ObjEX>(mapList.get(currentMapIdx).breedingPool.values()));
+		platformGroupList.addAll(new LinkedList<ObjEX>(mapList.get(currentMapIdx).garbagechute.values()));
+		platformGroupList.addAll(new LinkedList<ObjEX>(mapList.get(currentMapIdx).garbageStation.values()));
+		platformGroupList.addAll(new LinkedList<ObjEX>(mapList.get(currentMapIdx).foodmaker.values()));
+		platformGroupList.addAll(new LinkedList<ObjEX>(mapList.get(currentMapIdx).orangePool.values()));
+		platformGroupList.addAll(new LinkedList<ObjEX>(mapList.get(currentMapIdx).productchute.values()));
+		platformGroupList.addAll(new LinkedList<ObjEX>(mapList.get(currentMapIdx).stickyPlate.values()));
+		platformGroupList.addAll(new LinkedList<ObjEX>(mapList.get(currentMapIdx).hotPlate.values()));
+		platformGroupList.addAll(new LinkedList<ObjEX>(mapList.get(currentMapIdx).processerPlate.values()));
+		platformGroupList.addAll(new LinkedList<ObjEX>(mapList.get(currentMapIdx).mixer.values()));
+		platformGroupList.addAll(new LinkedList<ObjEX>(mapList.get(currentMapIdx).autofeeder.values()));
+		platformGroupList.addAll(new LinkedList<ObjEX>(mapList.get(currentMapIdx).house.values()));
+		platformGroupList.addAll(new LinkedList<ObjEX>(mapList.get(currentMapIdx).beltconveyorObj.values()));
 		//platformGroupList.addAll(currentMap.generator);
 		return platformGroupList;
 	}
@@ -173,47 +235,52 @@ public class World implements Serializable {
 	 * プレス機/ゴミ収集所のリストを取得する.
 	 * @return プレス機/ゴミ収集所のリスト
 	 */
+	@Transient
 	public List<ObjEX> getFixObjList(){
 		List<ObjEX> fixObjGroupList = new LinkedList<>();
-		fixObjGroupList.addAll(mapList.get(currentMapIdx).machinePress);
-		fixObjGroupList.addAll(mapList.get(currentMapIdx).garbageStation);
+		fixObjGroupList.addAll(new LinkedList<ObjEX>(mapList.get(currentMapIdx).machinePress.values()));
+		fixObjGroupList.addAll(new LinkedList<ObjEX>(mapList.get(currentMapIdx).garbageStation.values()));
 		return fixObjGroupList;
 	}
 	/**
 	 * フード/おもちゃ/茎/ディフューザー/ゆんば/すぃー/がらくた/トランポリン/石のリストを取得する.
 	 * @return フード/おもちゃ/茎/ディフューザー/ゆんば/すぃー/がらくた/トランポリン/石のリスト 
 	 */
+	@Transient
 	public List<ObjEX> getObjectList(){
 		List<ObjEX> objectGroupList = new LinkedList<>();
-		objectGroupList.addAll(mapList.get(currentMapIdx).food);
-		objectGroupList.addAll(mapList.get(currentMapIdx).toy);
-		objectGroupList.addAll(mapList.get(currentMapIdx).stalk);
-		objectGroupList.addAll(mapList.get(currentMapIdx).diffuser);
-		objectGroupList.addAll(mapList.get(currentMapIdx).yunba);
-		objectGroupList.addAll(mapList.get(currentMapIdx).sui);
-		objectGroupList.addAll(mapList.get(currentMapIdx).trash);
-		objectGroupList.addAll(mapList.get(currentMapIdx).trampoline);
-		objectGroupList.addAll(mapList.get(currentMapIdx).stone);
+		objectGroupList.addAll(new LinkedList<ObjEX>(mapList.get(currentMapIdx).food.values()));
+		objectGroupList.addAll(new LinkedList<ObjEX>(mapList.get(currentMapIdx).toy.values()));
+		objectGroupList.addAll(new LinkedList<ObjEX>(mapList.get(currentMapIdx).stalk.values()));
+		objectGroupList.addAll(new LinkedList<ObjEX>(mapList.get(currentMapIdx).diffuser.values()));
+		objectGroupList.addAll(new LinkedList<ObjEX>(mapList.get(currentMapIdx).yunba.values()));
+		objectGroupList.addAll(new LinkedList<ObjEX>(mapList.get(currentMapIdx).sui.values()));
+		objectGroupList.addAll(new LinkedList<ObjEX>(mapList.get(currentMapIdx).trash.values()));
+		objectGroupList.addAll(new LinkedList<ObjEX>(mapList.get(currentMapIdx).trampoline.values()));
+		objectGroupList.addAll(new LinkedList<ObjEX>(mapList.get(currentMapIdx).stone.values()));
 		return objectGroupList;
 	}
 	/**
 	 * ソートされたエフェクトのリストを取得する.
 	 * @return ソートされたエフェクトのリスト
 	 */
+	@Transient
 	public List<Effect> getSortEffectList(){
-		return mapList.get(currentMapIdx).sortEffect;
+		return new LinkedList<Effect>(mapList.get(currentMapIdx).sortEffect.values());
 	}
 	/**
 	 * フロントのエフェクトのリストを取得する.
 	 * @return フロントのエフェクトのリスト
 	 */
+	@Transient
 	public List<Effect> getFrontEffectList(){
-		return mapList.get(currentMapIdx).frontEffect;
+		return new LinkedList<Effect>(mapList.get(currentMapIdx).frontEffect.values());
 	}
 	/**
 	 * ベルトコンベア/畑/池のリストを取得する.
 	 * @return ベルトコンベア/畑/池のリスト
 	 */
+	@Transient
 	public List<FieldShapeBase> getFieldShapeList(){
 		List<FieldShapeBase> fieldShapeGroupList = new LinkedList<>();
 		fieldShapeGroupList.addAll(mapList.get(currentMapIdx).beltconveyor);
@@ -225,26 +292,27 @@ public class World implements Serializable {
 	 * 当たり判定のあるオブジェクトのリストを取得する.
 	 * @return トイレ/ベッド/養殖プール/ダストシュート/ゴミ収集所/フードメイカー/オレンジプール/製品投入口/粘着板 ホットプレート/フードプロセッサ/ミキサー/おうち/プレス機/すぃー/ベルトコンベア/自動給餌器/トランポリン/発電機 のリスト
 	 */
+	@Transient
 	public List<ObjEX> getHitBaseList(){
 		List<ObjEX> hitBaseGroupList = new LinkedList<>();
-		hitBaseGroupList.addAll(mapList.get(currentMapIdx).toilet);
-		hitBaseGroupList.addAll(mapList.get(currentMapIdx).bed);
-		hitBaseGroupList.addAll(mapList.get(currentMapIdx).breedingPool);
-		hitBaseGroupList.addAll(mapList.get(currentMapIdx).garbagechute);
-		hitBaseGroupList.addAll(mapList.get(currentMapIdx).garbageStation);
-		hitBaseGroupList.addAll(mapList.get(currentMapIdx).foodmaker);
-		hitBaseGroupList.addAll(mapList.get(currentMapIdx).orangePool);
-		hitBaseGroupList.addAll(mapList.get(currentMapIdx).productchute);
-		hitBaseGroupList.addAll(mapList.get(currentMapIdx).stickyPlate);
-		hitBaseGroupList.addAll(mapList.get(currentMapIdx).hotPlate);
-		hitBaseGroupList.addAll(mapList.get(currentMapIdx).processerPlate);
-		hitBaseGroupList.addAll(mapList.get(currentMapIdx).mixer);
-		hitBaseGroupList.addAll(mapList.get(currentMapIdx).house);
-		hitBaseGroupList.addAll(mapList.get(currentMapIdx).machinePress);
-		hitBaseGroupList.addAll(mapList.get(currentMapIdx).sui);
-		hitBaseGroupList.addAll(mapList.get(currentMapIdx).beltconveyorObj);
-		hitBaseGroupList.addAll(mapList.get(currentMapIdx).autofeeder);
-		hitBaseGroupList.addAll(mapList.get(currentMapIdx).trampoline);
+		hitBaseGroupList.addAll(new LinkedList<ObjEX>(mapList.get(currentMapIdx).toilet.values()));
+		hitBaseGroupList.addAll(new LinkedList<ObjEX>(mapList.get(currentMapIdx).bed.values()));
+		hitBaseGroupList.addAll(new LinkedList<ObjEX>(mapList.get(currentMapIdx).breedingPool.values()));
+		hitBaseGroupList.addAll(new LinkedList<ObjEX>(mapList.get(currentMapIdx).garbagechute.values()));
+		hitBaseGroupList.addAll(new LinkedList<ObjEX>(mapList.get(currentMapIdx).garbageStation.values()));
+		hitBaseGroupList.addAll(new LinkedList<ObjEX>(mapList.get(currentMapIdx).foodmaker.values()));
+		hitBaseGroupList.addAll(new LinkedList<ObjEX>(mapList.get(currentMapIdx).orangePool.values()));
+		hitBaseGroupList.addAll(new LinkedList<ObjEX>(mapList.get(currentMapIdx).productchute.values()));
+		hitBaseGroupList.addAll(new LinkedList<ObjEX>(mapList.get(currentMapIdx).stickyPlate.values()));
+		hitBaseGroupList.addAll(new LinkedList<ObjEX>(mapList.get(currentMapIdx).hotPlate.values()));
+		hitBaseGroupList.addAll(new LinkedList<ObjEX>(mapList.get(currentMapIdx).processerPlate.values()));
+		hitBaseGroupList.addAll(new LinkedList<ObjEX>(mapList.get(currentMapIdx).mixer.values()));
+		hitBaseGroupList.addAll(new LinkedList<ObjEX>(mapList.get(currentMapIdx).house.values()));
+		hitBaseGroupList.addAll(new LinkedList<ObjEX>(mapList.get(currentMapIdx).machinePress.values()));
+		hitBaseGroupList.addAll(new LinkedList<ObjEX>(mapList.get(currentMapIdx).sui.values()));
+		hitBaseGroupList.addAll(new LinkedList<ObjEX>(mapList.get(currentMapIdx).beltconveyorObj.values()));
+		hitBaseGroupList.addAll(new LinkedList<ObjEX>(mapList.get(currentMapIdx).autofeeder.values()));
+		hitBaseGroupList.addAll(new LinkedList<ObjEX>(mapList.get(currentMapIdx).trampoline.values()));
 		//hitBaseGroupList.addAll(currentMap.generator);
 		return hitBaseGroupList;
 	}
@@ -252,17 +320,38 @@ public class World implements Serializable {
 	 * ゆっくり/うんうん/吐餡/ふーど/茎/おもちゃ/石/おかざりのリストを取得する.
 	 * @return ゆっくり/うんうん/吐餡/ふーど/茎/おもちゃ/石/おかざりのリスト 
 	 */
+	@Transient
 	public List<Obj> getHitTargetList() {
 		List<Obj> hitTargetGroupList = new LinkedList<>();
-		hitTargetGroupList.addAll(mapList.get(currentMapIdx).body);
-		hitTargetGroupList.addAll(mapList.get(currentMapIdx).shit);
-		hitTargetGroupList.addAll(mapList.get(currentMapIdx).vomit);
-		hitTargetGroupList.addAll(mapList.get(currentMapIdx).food);
-		hitTargetGroupList.addAll(mapList.get(currentMapIdx).stalk);
-		hitTargetGroupList.addAll(mapList.get(currentMapIdx).toy);
-		hitTargetGroupList.addAll(mapList.get(currentMapIdx).stone);
-		hitTargetGroupList.addAll(mapList.get(currentMapIdx).okazari);
+		for (Map.Entry<Integer, Body> entry : mapList.get(currentMapIdx).body.entrySet()) {
+			hitTargetGroupList.add(entry.getValue());
+		}
+		hitTargetGroupList.addAll(new LinkedList<Obj>(mapList.get(currentMapIdx).shit.values()));
+		hitTargetGroupList.addAll(new LinkedList<Obj>(mapList.get(currentMapIdx).vomit.values()));
+		hitTargetGroupList.addAll(new LinkedList<Obj>(mapList.get(currentMapIdx).food.values()));
+		hitTargetGroupList.addAll(new LinkedList<Obj>(mapList.get(currentMapIdx).stalk.values()));
+		hitTargetGroupList.addAll(new LinkedList<Obj>(mapList.get(currentMapIdx).toy.values()));
+		hitTargetGroupList.addAll(new LinkedList<Obj>(mapList.get(currentMapIdx).stone.values()));
+		hitTargetGroupList.addAll(new LinkedList<Obj>(mapList.get(currentMapIdx).okazari.values()));
 		return hitTargetGroupList;
 	}
+
+	public int getMaxObjId() {
+		return maxObjId;
+	}
+
+	public void setMaxObjId(int maxObjId) {
+		this.maxObjId = maxObjId;
+	}
+
+	public int getMaxUniqueId() {
+		return maxUniqueId;
+	}
+
+	public void setMaxUniqueId(int maxUniqueId) {
+		this.maxUniqueId = maxUniqueId;
+	}
+	
+	
 }
 

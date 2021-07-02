@@ -12,6 +12,7 @@ import src.item.Food;
 import src.logic.FoodLogic;
 import src.system.MessagePool;
 import src.system.ResourceUtil;
+import src.util.YukkuriUtil;
 
 
 /***************************************************
@@ -32,7 +33,9 @@ public class FlyingEatEvent extends EventPacket implements java.io.Serializable 
 	public FlyingEatEvent(Body f, Body t, Obj tgt, int cnt) {
 		super(f, t, tgt, cnt);
 	}
-
+	public FlyingEatEvent() {
+		
+	}
 	// 参加チェック
 	@Override
 	public boolean checkEventResponse(Body b) {
@@ -43,23 +46,26 @@ public class FlyingEatEvent extends EventPacket implements java.io.Serializable 
 	// イベント開始動作
 	@Override
 	public void start(Body b) {
-		b.setToFood(false);
+		Body to = YukkuriUtil.getBodyInstance(getTo());
+		if (to == null) return;
 		b.setToBed(false);
+		b.setToFood(false);
 		b.setToShit(false);
 		b.setToSteal(false);
 		b.setToSukkiri(false);
 		b.setToTakeout(true);
 		b.moveToEvent(this, b.getX(), b.getY(),  Translate.getFlyHeightLimit());
 		b.setWakeUpTime(b.getAge());//眠気が覚める
-		to.setLinkParent(b);
+		to.setLinkParent(b.objId);
 	}
 
 	// 毎フレーム処理
 	// UpdateState.ABORTを返すとイベント終了
 	@Override
 	public UpdateState update(Body b) {
+		Body to = YukkuriUtil.getBodyInstance(getTo());
 		// 相手が消えてしまったらイベント中断
-		if(to.isRemoved()) {
+		if(to == null || to.isRemoved()) {
 			//to.setLinkParent(null);
 			return UpdateState.ABORT;
 		}
@@ -87,6 +93,8 @@ public class FlyingEatEvent extends EventPacket implements java.io.Serializable 
 	// trueを返すとイベント終了
 	@Override
 	public boolean execute(Body b) {
+		Body to = YukkuriUtil.getBodyInstance(getTo());
+		if (to == null) return true;
 		// 相手が消えてしまったらイベント中断
 		if(to.isRemoved()) {
 			//to.setLinkParent(null);
@@ -103,12 +111,12 @@ public class FlyingEatEvent extends EventPacket implements java.io.Serializable 
 			tick = 0;
 			FoodLogic.eatFood(b, Food.FoodType.BODY, Math.min(b.getEatAmount(), to.getBodyAmount()));
 			to.eatBody(Math.min(b.getEatAmount(), to.getBodyAmount()));
-			if (to.isSick() && SimYukkuri.RND.nextBoolean()) b.addSickPeriod(100);
-			if(to.isCrushed()){
+			if (to != null && to.isSick() && SimYukkuri.RND.nextBoolean()) b.addSickPeriod(100);
+			if(to != null && to.isCrushed()){
 				//to.setLinkParent(null);
 				return true;
 			}
-			else if(to.isDead()) {
+			else if(to != null && to.isDead()) {
 				to.setMessage(MessagePool.getMessage(to, MessagePool.Action.Dead));
 				if(b.getBodyRank()!=BodyRank.KAIYU || b.isRude()){
 					//to.setLinkParent(null);
@@ -122,7 +130,7 @@ public class FlyingEatEvent extends EventPacket implements java.io.Serializable 
 					//to.setLinkParent(null);
 					return true;
 				}
-				if( to.isNotNYD() ){
+				if( to != null && to.isNotNYD() ){
 					to.setMessage(MessagePool.getMessage(to, MessagePool.Action.EatenByBody2));
 					to.setHappiness(Happiness.VERY_SAD);
 					to.setForceFace(ImageCode.PAIN.ordinal());
@@ -135,7 +143,8 @@ public class FlyingEatEvent extends EventPacket implements java.io.Serializable 
 	// イベント終了処理
 	@Override
 	public void end(Body b) {
-		to.setLinkParent(null);
+		Body to = YukkuriUtil.getBodyInstance(getTo());
+		if (to != null)to.setLinkParent(-1);
 	}
 	
 	@Override

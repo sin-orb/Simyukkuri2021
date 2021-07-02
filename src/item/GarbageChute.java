@@ -1,6 +1,5 @@
 package src.item;
 
-import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
@@ -13,6 +12,7 @@ import src.base.Body;
 import src.base.Obj;
 import src.base.ObjEX;
 import src.draw.ModLoader;
+import src.draw.Rectangle4y;
 import src.draw.Translate;
 import src.enums.Happiness;
 import src.enums.ObjEXType;
@@ -30,7 +30,7 @@ public class GarbageChute extends ObjEX implements java.io.Serializable {
 			| ObjEX.VOMIT | ObjEX.STALK;
 	private static final int images_num = 4; //このクラスの総使用画像数
 	private static BufferedImage[] images = new BufferedImage[images_num];
-	private static Rectangle boundary = new Rectangle();
+	private static Rectangle4y boundary = new Rectangle4y();
 	List<Obj> bindObjList = new LinkedList<Obj>();
 
 	private ItemRank itemRank;
@@ -72,7 +72,7 @@ public class GarbageChute extends ObjEX implements java.io.Serializable {
 	}
 
 	/**境界線の取得*/
-	public static Rectangle getBounding() {
+	public static Rectangle4y getBounding() {
 		return boundary;
 	}
 
@@ -137,7 +137,7 @@ public class GarbageChute extends ObjEX implements java.io.Serializable {
 
 	@Override
 	public void removeListData() {
-		SimYukkuri.world.getCurrentMap().garbagechute.remove(this);
+		SimYukkuri.world.getCurrentMap().garbagechute.remove(objId);
 	}
 
 	/**
@@ -150,7 +150,7 @@ public class GarbageChute extends ObjEX implements java.io.Serializable {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		SimYukkuri.world.getCurrentMap().garbagechute.add(this);
+		SimYukkuri.world.getCurrentMap().garbagechute.put(objId, this);
 		objType = Type.PLATFORM;
 		objEXType = ObjEXType.GARBAGECHUTE;
 
@@ -164,5 +164,8 @@ public class GarbageChute extends ObjEX implements java.io.Serializable {
 			value = 0;
 			cost = 0;
 		}
+	}
+	public GarbageChute() {
+		
 	}
 }

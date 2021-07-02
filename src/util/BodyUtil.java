@@ -1,8 +1,6 @@
 package src.util;
 
 import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 
@@ -11,6 +9,8 @@ import src.base.Body;
 import src.base.Obj;
 import src.base.Okazari;
 import src.base.Okazari.OkazariType;
+import src.draw.Point4y;
+import src.draw.Rectangle4y;
 import src.draw.Translate;
 import src.enums.Direction;
 import src.enums.HairState;
@@ -37,7 +37,7 @@ public class BodyUtil {
 	private static BodyLayer layer = new BodyLayer();
 	private static BodyLayer layer2 = new BodyLayer();
 	private static BodyLayer layer3 = new BodyLayer();
-	private static Rectangle rectTmp = new Rectangle();
+	private static Rectangle4y rectTmp = new Rectangle4y();
 
 	/**
 	 * ゆっくり一体の描画(通常種用)
@@ -129,7 +129,7 @@ public class BodyUtil {
 			expand.screenRect[1].height += jh;
 
 			//何かとリンクしてる場合の全体の高度補正
-			Obj oLinkParent = b.getLinkParent();
+			Obj oLinkParent = b.takeMappedObj(b.getLinkParent());
 			if( oLinkParent != null && oLinkParent.getZ() < b.getZ() && oLinkParent instanceof Body ){
 				Body bLink = (Body)oLinkParent;
 				int jyLink = 0;
@@ -274,7 +274,7 @@ public class BodyUtil {
 					}
 				}
 				else {
-					Point ofs = okazari.getOkazariOfsPos();
+					Point4y ofs = okazari.takeOkazariOfsPos();
 					okazari.getBoundaryShape(rectTmp);
 					int okX = Translate.transSize(rectTmp.x);
 					int okY = Translate.transSize(rectTmp.y);

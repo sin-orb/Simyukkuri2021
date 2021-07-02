@@ -1,8 +1,5 @@
 package src.yukkuri;
 
-
-import java.awt.Dimension;
-import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.IOException;
@@ -11,7 +8,9 @@ import java.util.Map;
 
 import src.SimYukkuri;
 import src.base.Body;
+import src.draw.Dimension4y;
 import src.draw.ModLoader;
+import src.draw.Point4y;
 import src.enums.AgeState;
 import src.enums.BodyRank;
 import src.enums.ImageCode;
@@ -37,10 +36,10 @@ public class Yuuka extends Body implements java.io.Serializable {
 	private static BufferedImage[][][] imagesKai = new BufferedImage[ImageCode.values().length][2][3];
 	private static BufferedImage[][][] imagesNora = new BufferedImage[ImageCode.values().length][2][3];
 	private static int directionOffset[][] = new int[ImageCode.values().length][2];
-	private static Dimension[] boundary = new Dimension[3];
-	private static Dimension[] braidBoundary = new Dimension[3];
+	private static Dimension4y[] boundary = new Dimension4y[3];
+	private static Dimension4y[] braidBoundary = new Dimension4y[3];
 	private static boolean imageLoaded = false;
-	private static Map<String, Point[]> AttachOffset = new HashMap<String, Point[]>();
+	private static Map<String, Point4y[]> AttachOffset = new HashMap<String, Point4y[]>();
 	//---
 	// iniファイルから読み込んだ初期値
 	private static int baseSpeed = 100;
@@ -84,7 +83,7 @@ public class Yuuka extends Body implements java.io.Serializable {
 		return 1;
 	}
 	@Override
-	public Point[] getMountPoint(String key) {
+	public Point4y[] getMountPoint(String key) {
 		return AttachOffset.get(key);
 	}
 
@@ -142,38 +141,41 @@ public class Yuuka extends Body implements java.io.Serializable {
 		setBaseBodyFileName(baseFileName);
 		IniFileUtil.readYukkuriIniFile(this);
 	}
+	public Yuuka() {
+		
+	}
 	@Override
 	public void tuneParameters() {
 		double factor = Math.random()+1;
-		HUNGRYLIMIT[AgeState.ADULT.ordinal()] *= factor;
-		HUNGRYLIMIT[AgeState.CHILD.ordinal()] *= factor;
-		HUNGRYLIMIT[AgeState.BABY.ordinal()] *= factor;
+		HUNGRYLIMITorg[AgeState.ADULT.ordinal()] *= factor;
+		HUNGRYLIMITorg[AgeState.CHILD.ordinal()] *= factor;
+		HUNGRYLIMITorg[AgeState.BABY.ordinal()] *= factor;
 		factor = Math.random()+1;
-		SHITLIMIT[AgeState.ADULT.ordinal()] *= factor;
-		SHITLIMIT[AgeState.CHILD.ordinal()] *= factor;
-		SHITLIMIT[AgeState.BABY.ordinal()] *= factor;
+		SHITLIMITorg[AgeState.ADULT.ordinal()] *= factor;
+		SHITLIMITorg[AgeState.CHILD.ordinal()] *= factor;
+		SHITLIMITorg[AgeState.BABY.ordinal()] *= factor;
 		factor = Math.random()+1;
-		DAMAGELIMIT[AgeState.ADULT.ordinal()] *= factor;
-		DAMAGELIMIT[AgeState.CHILD.ordinal()] *= factor;
-		DAMAGELIMIT[AgeState.BABY.ordinal()] *= factor;
+		DAMAGELIMITorg[AgeState.ADULT.ordinal()] *= factor;
+		DAMAGELIMITorg[AgeState.CHILD.ordinal()] *= factor;
+		DAMAGELIMITorg[AgeState.BABY.ordinal()] *= factor;
 		factor = Math.random()+0.5;
-		BABYLIMIT *= factor;
-		CHILDLIMIT *= factor;
-		LIFELIMIT *= factor;
+		BABYLIMITorg *= factor;
+		CHILDLIMITorg *= factor;
+		LIFELIMITorg *= factor;
 		factor = Math.random()+1;
-		RELAXPERIOD *= factor;
-		EXCITEPERIOD *= factor;
-		PREGPERIOD *= factor;
-		SLEEPPERIOD *= factor;
-		ACTIVEPERIOD *= factor;
+		RELAXPERIODorg *= factor;
+		EXCITEPERIODorg *= factor;
+		PREGPERIODorg *= factor;
+		SLEEPPERIODorg *= factor;
+		ACTIVEPERIODorg *= factor;
 		sameDest = SimYukkuri.RND.nextInt(15)+15;
-		DECLINEPERIOD *= (Math.random()+0.5);
+		DECLINEPERIODorg *= (Math.random()+0.5);
 		ROBUSTNESS = SimYukkuri.RND.nextInt(10)+1;
 		//EYESIGHT /= 2;
 		factor = Math.random()+0.5;
-		STRENGTH[AgeState.ADULT.ordinal()] *= factor;
-		STRENGTH[AgeState.CHILD.ordinal()] *= factor;
-		STRENGTH[AgeState.BABY.ordinal()] *= factor;
+		STRENGTHorg[AgeState.ADULT.ordinal()] *= factor;
+		STRENGTHorg[AgeState.CHILD.ordinal()] *= factor;
+		STRENGTHorg[AgeState.BABY.ordinal()] *= factor;
 
 		speed = baseSpeed;
 	}

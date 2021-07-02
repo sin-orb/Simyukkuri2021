@@ -1,9 +1,14 @@
 package src.base;
 
-import java.awt.Point;
-import java.awt.Rectangle;
+import java.beans.Transient;
+import java.util.Map;
+
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
 import src.SimYukkuri;
+import src.draw.Point4y;
+import src.draw.Rectangle4y;
 import src.draw.Translate;
 import src.enums.Event;
 import src.enums.Type;
@@ -11,6 +16,7 @@ import src.enums.Where;
 import src.item.Barrier;
 import src.system.ItemMenu.GetMenuTarget;
 import src.system.ItemMenu.UseMenuTarget;
+import src.system.MapPlaceData;
 
 /*********************************************************
  *  すべてのゲーム内オブジェクトの元となるクラス
@@ -18,6 +24,7 @@ import src.system.ItemMenu.UseMenuTarget;
  *  private変数は使わず代わりにprotectedを使用してください
  */
 @SuppressWarnings("rawtypes")
+@JsonTypeInfo(use = Id.CLASS)
 public class Obj implements java.io.Serializable, Comparable {
 	static final long serialVersionUID = 1L;
 		/**時間経過用係数*/
@@ -55,7 +62,7 @@ public class Obj implements java.io.Serializable, Comparable {
 	protected boolean enableWall = true;
 	/**基本内部パラメータ10
 	 * */
-	protected Obj bindObj = null;
+	protected int bindObj = 0;
 	/**基本内部パラメータ11
 	 * 価値*/
 	protected int value = 0;
@@ -78,10 +85,10 @@ public class Obj implements java.io.Serializable, Comparable {
 	// 画面描画情報
 	/**画面描画情報1
 	 * 描画原点*/
-	protected Point screenPivot = new Point();
+	protected Point4y screenPivot = new Point4y();
 	/**画面描画情報1
 	 * 描画XYWH(xy座標+WHで縦横サイズ)*/
-	protected Rectangle screenRect = new Rectangle(); //
+	protected Rectangle4y screenRect = new Rectangle4y(); //
 	/**画面描画情報2
 	 * 画像サイズ*/
 	protected int imgW, imgH;
@@ -91,7 +98,11 @@ public class Obj implements java.io.Serializable, Comparable {
 	/**画面描画情報4
 	 * 描画オフセット 振動など判定を無視した演出用*/
 	protected int ofsX,ofsY;
-
+	/**
+	 * このオブジェクトのユニークID
+	 */
+	public int objId = 0;
+	
 	@Override
 	public String toString() {
 		return "名前未設定";
@@ -125,6 +136,7 @@ public class Obj implements java.io.Serializable, Comparable {
 
 	/**外力による移動量ゲッター
 	 * @return 外力による移動量のx,y,z,成分*/
+	@Transient
 	public int[] getVxyz(){
 		int V[] = {vx,vy,vz};
 		return V;
@@ -225,10 +237,12 @@ public class Obj implements java.io.Serializable, Comparable {
 		ofsY = Y;
 	}
 	/**描画時の実際のx座標ゲッター*/
+	@Transient
 	public int getDrawOfsX(){
 		return x + ofsX;
 	}
 	/**描画時の実際のy座標ゲッター*/
+	@Transient
 	public int getDrawOfsY(){
 		return y + ofsY;
 	}
@@ -244,7 +258,7 @@ public class Obj implements java.io.Serializable, Comparable {
 
 	/**オブジェクト画像の原点とサイズをセット
 	 * <br> Rectagleを利用するVer*/
-	protected void setBoundary(Rectangle r) {
+	protected void setBoundary(Rectangle4y r) {
 		pivX = r.x;
 		pivY = r.y;
 		imgW = r.width;
@@ -268,8 +282,140 @@ public class Obj implements java.io.Serializable, Comparable {
 		return pivY;
 	}
 
+	public int getVx() {
+		return vx;
+	}
+
+	public void setVx(int vx) {
+		this.vx = vx;
+	}
+
+	public int getVy() {
+		return vy;
+	}
+
+	public void setVy(int vy) {
+		this.vy = vy;
+	}
+
+	public int getVz() {
+		return vz;
+	}
+
+	public void setVz(int vz) {
+		this.vz = vz;
+	}
+
+	public int getBz() {
+		return bz;
+	}
+
+	public void setBz(int bz) {
+		this.bz = bz;
+	}
+
+	public boolean isEnableWall() {
+		return enableWall;
+	}
+
+	public void setEnableWall(boolean enableWall) {
+		this.enableWall = enableWall;
+	}
+
+	public Where geteWhere() {
+		return eWhere;
+	}
+
+	public void seteWhere(Where eWhere) {
+		this.eWhere = eWhere;
+	}
+
+	public boolean isbFallingUnderGround() {
+		return bFallingUnderGround;
+	}
+
+	public void setbFallingUnderGround(boolean bFallingUnderGround) {
+		this.bFallingUnderGround = bFallingUnderGround;
+	}
+
+	public boolean isbInPool() {
+		return bInPool;
+	}
+
+	public void setbInPool(boolean bInPool) {
+		this.bInPool = bInPool;
+	}
+
+	public int getnMostDepth() {
+		return nMostDepth;
+	}
+
+	public void setnMostDepth(int nMostDepth) {
+		this.nMostDepth = nMostDepth;
+	}
+
+	public void setW(int imgW) {
+		this.imgW = imgW;
+	}
+
+	public void setH(int imgH) {
+		this.imgH = imgH;
+	}
+
+	public void setPivotX(int pivX) {
+		this.pivX = pivX;
+	}
+	
+	public void setPivotY(int pivY) {
+		this.pivY = pivY;
+	}
+
+	public int getOfsX() {
+		return ofsX;
+	}
+
+	public void setOfsX(int ofsX) {
+		this.ofsX = ofsX;
+	}
+
+	public int getOfsY() {
+		return ofsY;
+	}
+
+	public void setOfsY(int ofsY) {
+		this.ofsY = ofsY;
+	}
+
+	public int getObjId() {
+		return objId;
+	}
+
+	public void setObjId(int objId) {
+		this.objId = objId;
+	}
+
+	public void setObjType(Type objType) {
+		this.objType = objType;
+	}
+
+	public void setCanGrab(boolean canGrab) {
+		this.canGrab = canGrab;
+	}
+
+	public void setGrabbed(boolean grabbed) {
+		this.grabbed = grabbed;
+	}
+
+	public void setValue(int value) {
+		this.value = value;
+	}
+
+	public void setCost(int cost) {
+		this.cost = cost;
+	}
+
 	/**画像範囲ゲッター*/
-	public void getBoundaryShape(Rectangle r) {
+	public void getBoundaryShape(Rectangle4y r) {
 		r.x = pivX;
 		r.y = pivY;
 		r.width = imgW;
@@ -285,33 +431,33 @@ public class Obj implements java.io.Serializable, Comparable {
 
 	/** 画面上に描画されているオブジェクトの原点をセット
 	 * <br>Pointを利用するVer*/
-	public void setScreenPivot(Point rect) {
+	public void setScreenPivot(Point4y rect) {
 		screenPivot.x = rect.x;
 		screenPivot.y = rect.y;
 	}
 	/**画面上に描画されているオブジェクトの原点をゲット*/
-	public Point getScreenPivot() {
+	public Point4y getScreenPivot() {
 		return screenPivot;
 	}
 
 	/** 画面上に描画されているオブジェクトの左上座標とサイズをセット
 	 * <br>直接座標を入力するVer*/
 	public void setScreenRect(int x, int y, int w, int h) {
-		screenRect.x = x;
-		screenRect.y = y;
-		screenRect.width = w;
-		screenRect.height = h;
+		screenRect.setX(x);
+		screenRect.setY(y);
+		screenRect.setWidth(w);
+		screenRect.setHeight(h);
 	}
 	/** 画面上に描画されているオブジェクトの左上座標とサイズをセット
 	 * <br>Rectangle利用するVer*/
-	public void setScreenRect(Rectangle rect) {
-		screenRect.x = rect.x;
-		screenRect.y = rect.y;
-		screenRect.width = rect.width;
-		screenRect.height = rect.height;
+	public void setScreenRect(Rectangle4y rect) {
+		screenRect.setX(rect.x);
+		screenRect.setY(rect.y);
+		screenRect.setWidth(rect.width);
+		screenRect.setHeight(rect.height);
 	}
 	/** 画面上に描画されているオブジェクトの左上座標とサイズをゲット*/
-	public Rectangle getScreenRect() {
+	public Rectangle4y getScreenRect() {
 		return screenRect;
 	}
 
@@ -357,7 +503,7 @@ public class Obj implements java.io.Serializable, Comparable {
 
 	/**除去*/
 	public void remove(){
-		bindObj = null;
+		bindObj = -1;
 		setRemoved(true);
 	}
 	/**除去されてるか否か*/
@@ -376,11 +522,117 @@ public class Obj implements java.io.Serializable, Comparable {
 	}
 
 	/**移動の親元オブジェクトゲッター*/
-	public Obj getBindObj() {
+	public int getBindObj() {
 		return bindObj;
 	}
+	/**
+	 * MapPlaceDataからobjIdをもつObjを取得する.
+	 * @param i objId
+	 * @return Obj
+	 */
+	public Obj takeMappedObj(int i) {
+		MapPlaceData m = SimYukkuri.world.getCurrentMap();
+		if(m.autofeeder.containsKey(i)) {
+			return m.autofeeder.get(i);
+		}
+		if (m.bed.containsKey(i)) {
+			return m.bed.get(i);
+		}
+		if (m.beltconveyorObj.containsKey(i)) {
+			return m.beltconveyorObj.get(i);
+		}
+		if (m.breedingPool.containsKey(i)) {
+			return m.breedingPool.get(i);
+		}
+		if(m.diffuser.containsKey(i)) {
+			return m.diffuser.get(i);
+		}
+		if (m.food.containsKey(i)) {
+			return m.food.get(i);
+		}
+		if (m.foodmaker.containsKey(i)) {
+			return m.foodmaker.get(i);
+		}
+		if (m.frontEffect.containsKey(i)) {
+			return m.frontEffect.get(i);
+		}
+		if(m.garbagechute.containsKey(i)) {
+			return m.garbagechute.get(i);
+		}
+		if(m.garbageStation.containsKey(i)) {
+			return m.garbageStation.get(i);
+		}
+		if(m.hotPlate.containsKey(i)) {
+			return m.hotPlate.get(i);
+		}
+		if (m.house.containsKey(i)) {
+			return m.house.get(i);
+		}
+		if(m.machinePress.containsKey(i)) {
+			return m.machinePress.get(i);
+		}
+		if(m.mixer.containsKey(i)) {
+			return m.mixer.get(i);
+		}
+		if(m.okazari.containsKey(i)) {
+			return m.okazari.get(i);
+		}
+		if(m.orangePool.containsKey(i)) {
+			return m.orangePool.get(i);
+		}
+		if(m.processerPlate.containsKey(i)) {
+			return m.processerPlate.get(i);
+		}
+		if(m.productchute.containsKey(i)) {
+			return m.productchute.get(i);
+		}
+		if (m.shit.containsKey(i)) {
+			return m.shit.get(i);
+		}
+		if(m.sortEffect.containsKey(i)) {
+			return m.sortEffect.get(i);
+		}
+		if (m.stalk.containsKey(i)) {
+			return m.stalk.get(i);
+		}
+		if (m.stickyPlate.containsKey(i)) {
+			return m.stickyPlate.get(i);
+		}
+		if (m.stone.containsKey(i)) {
+			return m.stone.get(i);
+		}
+		if (m.sui.containsKey(i)) {
+			return m.sui.get(i);
+		}
+		if (m.toilet.containsKey(i)) {
+			return m.toilet.get(i);
+		}
+		if (m.toy.containsKey(i)) {
+			return m.toy.get(i);
+		}
+		if (m.trampoline.containsKey(i)) {
+			return m.trampoline.get(i);
+		}
+		if (m.trash.containsKey(i)) {
+			return m.trash.get(i);
+		}
+		if (m.vomit.containsKey(i)) {
+			return m.vomit.get(i);
+		}
+		if (m.yunba.containsKey(i)) {
+			return m.yunba.get(i);
+		}
+		for (Map.Entry<Integer, Body> entry : m.body.entrySet()) {
+			Body b = entry.getValue();
+			if (b.objId == i) {
+				return b;
+			}
+		}
+		return null;
+	}
+
 	/**移動の親元オブジェクトセッター*/
-	public void setBindObj( Obj obj ) {
+	public void setBindObj( int obj ) {
 		bindObj = obj;
 	}
 

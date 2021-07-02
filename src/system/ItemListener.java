@@ -103,16 +103,16 @@ public class ItemListener {
 			switch (m) {
 			case PICKUP:
 				synchronized (SimYukkuri.lock) {
-					SimYukkuri.world.player.itemList.addElement(ItemMenu.getTarget);
+					SimYukkuri.world.player.getItemList().addElement(ItemMenu.getTarget);
 					if (ItemMenu.getTarget instanceof Body) {
 						Body b = (Body) ItemMenu.getTarget;
 						b.removeAllStalks();
 						b.setTaken(true);
-						curMap.body.remove(b);
+						curMap.body.remove(b.getUniqueID());
 					} else if (ItemMenu.getTarget instanceof Shit) {
-						curMap.shit.remove(ItemMenu.getTarget);
+						curMap.shit.remove(ItemMenu.getTarget.objId);
 					} else if (ItemMenu.getTarget instanceof Vomit) {
-						curMap.vomit.remove(ItemMenu.getTarget);
+						curMap.vomit.remove(ItemMenu.getTarget.objId);
 					}
 					ItemMenu.getTarget = null;
 				}

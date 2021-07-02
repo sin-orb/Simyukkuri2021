@@ -6,6 +6,7 @@ import src.SimYukkuri;
 import src.base.Body;
 import src.base.EventPacket;
 import src.draw.Translate;
+import src.util.YukkuriUtil;
 
 /***************************************************
 	イベントの処理ロジック
@@ -135,8 +136,8 @@ public class EventLogic {
 		//リストに登録されているイベントすべてをチェック
 		for (Iterator<EventPacket> i = SimYukkuri.world.getCurrentMap().event.iterator(); i.hasNext();) {
 			e = i.next();
-
-			if(e.getFrom() == b) continue;
+			Body from = YukkuriUtil.getBodyInstance(e.getFrom());
+			if(from == b) continue;
 			if(e.simpleEventAction(b)) {
 				continue;
 			}

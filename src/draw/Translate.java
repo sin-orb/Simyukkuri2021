@@ -1,6 +1,5 @@
 package src.draw;
 
-import java.awt.Point;
 import java.awt.Polygon;
 import java.awt.Rectangle;
 
@@ -35,7 +34,7 @@ public class Translate {
 	public static int bufferW;
 	public static int bufferH;
 	/** バックバッファ描画位置、サイズ */
-	private static Rectangle displayArea = new Rectangle();
+	private static Rectangle4y displayArea = new Rectangle4y();
 	private static float[] zoomTable;
 	private static int zoomRate = 0;
 	
@@ -182,7 +181,7 @@ public class Translate {
 	 * 描画エリアを取得する.
 	 * @return 描画エリア
 	 */
-	public static final Rectangle getDisplayArea() {
+	public static final Rectangle4y getDisplayArea() {
 		return displayArea;
 	}
 
@@ -276,7 +275,7 @@ public class Translate {
 	 * @param y Y座標
 	 * @param pos Point
 	 */
-	public static final void translate(int x, int y, Point pos) {
+	public static final void translate(int x, int y, Point4y pos) {
 		if(y < 0) y = 0;
 		if(y >= mapH) y = mapH - 1;
 		pos.x = ofsX[y] + (int)(rateX[y] * x);
@@ -298,7 +297,7 @@ public class Translate {
 	 * @param y Y座標
 	 * @return Point
 	 */
-	public static final Point invert(int x, int y) {
+	public static final Point4y invert(int x, int y) {
 		if(y < 0) return null;
 		if(y >= fieldH) return null;
 		
@@ -307,7 +306,7 @@ public class Translate {
 		int px = (int)((x - ofsX[py]) / rateX[py]);
 		if(px < 0) return null;
 		if(px >= mapW) return null;
-		Point ret = new Point();
+		Point4y ret = new Point4y();
 		ret.x = px;
 		ret.y = py;
 		return ret;
@@ -319,7 +318,7 @@ public class Translate {
 	 * @param y Y座標
 	 * @return Point
 	 */
-	public static final Point invertLimit(int x, int y) {
+	public static final Point4y invertLimit(int x, int y) {
 		if(y < 0) y = 0;
 		if(y >= fieldH) y = fieldH - 1;
 		
@@ -328,7 +327,7 @@ public class Translate {
 		int px = (int)((x - ofsX[py]) / rateX[py]);
 		if(px < 0) px = 0;
 		if(px >= mapW) px = mapW - 1;
-		Point ret = new Point();
+		Point4y ret = new Point4y();
 		ret.x = px;
 		ret.y = py;
 		return ret;
@@ -370,7 +369,7 @@ public class Translate {
 	 * @param margin Y座標猶予
 	 * @return Point
 	 */
-	public static final Point invertObject(int x, int y, int pivX, int margin) {
+	public static final Point4y invertObject(int x, int y, int pivX, int margin) {
 		int minY = y - margin;
 		int maxY = y + margin;
 		if(minY < fieldMinY) {
@@ -392,7 +391,7 @@ public class Translate {
 			x = maxX - pivX;
 		}
 		int px = (int)((x - ofsX[py]) / rateX[py]);
-		Point ret = new Point();
+		Point4y ret = new Point4y();
 		ret.x = px;
 		ret.y = py;
 		return ret;
@@ -406,7 +405,7 @@ public class Translate {
 	 * @param pivY Y座標猶予
 	 * @param pos 位置
 	 */
-	public static final void invertGround(int x, int y, int pivX, int pivY, Point pos) {
+	public static final void invertGround(int x, int y, int pivX, int pivY, Point4y pos) {
 		int minY = y - pivY;
 		int maxY = y + pivY;
 		if(minY < fieldMinY) {
@@ -440,7 +439,7 @@ public class Translate {
 	 * @param pivX X座標猶予
 	 * @param pos 位置
 	 */
-	public static final void invertFlying(int x, int y, int z, int pivX, Point pos) {
+	public static final void invertFlying(int x, int y, int z, int pivX, Point4y pos) {
 		int py = fieldToMapY[y];
 		if(py < 0) py = 0;
 
@@ -465,7 +464,7 @@ public class Translate {
 	 * @param y Y座標
 	 * @param pos 位置
 	 */
-	public static final void invertDelta(int x, int y, Point pos) {
+	public static final void invertDelta(int x, int y, Point4y pos) {
 		if(y < 0) y = 0;
 		if(y >= fieldH) y = fieldH - 1;
 
@@ -497,8 +496,8 @@ public class Translate {
 	 * @param rect 矩形
 	 * @return 位置
 	 */
-	public static Point calcObjctPutPoint(int mx, int my, Rectangle rect) {
-		Point ret = null;
+	public static Point4y calcObjctPutPoint(int mx, int my, Rectangle4y rect) {
+		Point4y ret = null;
 
 		int colH = rect.height - rect.y;
 		Rectangle r = new Rectangle(mx - rect.x, my - colH, rect.width, colH << 1);
@@ -593,9 +592,9 @@ public class Translate {
 	 * @param radian 角度
 	 * @return 位置
 	 */
-	public static final Point getPointByDistAndRad( int x, int y, int radius, double radian)
+	public static final Point4y getPointByDistAndRad( int x, int y, int radius, double radian)
 	{
-		Point p1 = new Point();
+		Point4y p1 = new Point4y();
 		p1.x = x +(int)(Math.cos(radian) * radius);
 		p1.y = y + (int)(Math.sin(radian) * radius);
 		return p1;
@@ -612,7 +611,7 @@ public class Translate {
 	public static final void getPolygonPoint( int sx, int sy, int ex, int ey, int[] anPointX, int[] anPointY )
 	{
 		// フィールド座標が渡ってくるのでマップ座標も計算しておく
-		Point pos;
+		Point4y pos;
 		pos = Translate.invertLimit(sx, sy);
 		int mSX = Math.max(0, Math.min(pos.x, Translate.mapW));
 		int mSY = Math.max(0, Math.min(pos.y, Translate.mapH));
@@ -622,7 +621,7 @@ public class Translate {
 		int mEY = Math.max(0, Math.min(pos.y, Translate.mapH));
 
 		// EX,EYのマップ座標xからSYにおけるフィールド座標xを取得する
-		Point posInv = new Point();
+		Point4y posInv = new Point4y();
 		Translate.translate(mEX, mSY, posInv);
 		int fieldSX2 = posInv.x;
 		Translate.translate(mSX, mEY, posInv);
@@ -663,7 +662,7 @@ public class Translate {
 		int nDecY = nexty - firsty;
 	
 		// フィールド座標が渡ってくるのでマップ座標も計算しておく
-		Point pos;
+		Point4y pos;
 		pos = Translate.invertLimit(sx, sy);
 		int mSX = Math.max(0, Math.min(pos.x, Translate.mapW));
 		int mSY = Math.max(0, Math.min(pos.y, Translate.mapH));
@@ -691,7 +690,7 @@ public class Translate {
 			mEY = nTemp;
 		}		
 		// マップ座標で調整されたフィールド座標を再取得する
-		Point posInv = new Point();
+		Point4y posInv = new Point4y();
 		Translate.translate(mSX, mSY, posInv);
 		anPointX[0] = posInv.x;
 		anPointY[0] = posInv.y;
@@ -705,15 +704,15 @@ public class Translate {
 	 * @param y Y座標
 	 * @return 位置
 	 */
-	public static Point getFieldLimitForMap(int x, int y )
+	public static Point4y getFieldLimitForMap(int x, int y )
 	{
 		// フィールド座標が渡ってくるのでマップ座標も計算しておく
-		Point pos = Translate.invertLimit(x, y);
+		Point4y pos = Translate.invertLimit(x, y);
 		int mSX = Math.max(0, Math.min(pos.x, Translate.mapW));
 		int mSY = Math.max(0, Math.min(pos.y, Translate.mapH));
 		
 		// マップ座標で調整されたフィールド座標を再取得する
-		Point retPos = new Point();
+		Point4y retPos = new Point4y();
 		Translate.translate(mSX, mSY, retPos);
 		return retPos;
 	}

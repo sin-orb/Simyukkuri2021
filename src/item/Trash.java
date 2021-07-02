@@ -1,7 +1,6 @@
 package src.item;
 
 
-import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
@@ -10,6 +9,7 @@ import java.io.IOException;
 import src.SimYukkuri;
 import src.base.ObjEX;
 import src.draw.ModLoader;
+import src.draw.Rectangle4y;
 import src.enums.ObjEXType;
 import src.enums.Type;
 
@@ -20,7 +20,7 @@ public class Trash extends ObjEX implements java.io.Serializable {
 	static final long serialVersionUID = 1L;
 
 	private static BufferedImage[] images = new BufferedImage[2];
-	private static Rectangle boundary = new Rectangle();
+	private static Rectangle4y boundary = new Rectangle4y();
 	/**画像ロード*/
 	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
 
@@ -40,7 +40,7 @@ public class Trash extends ObjEX implements java.io.Serializable {
 		return 1;
 	}
 	/**境界線の取得*/
-	public static Rectangle getBounding() {
+	public static Rectangle4y getBounding() {
 		return boundary;
 	}
 
@@ -51,7 +51,7 @@ public class Trash extends ObjEX implements java.io.Serializable {
 	
 	@Override
 	public void removeListData(){
-		SimYukkuri.world.getCurrentMap().trash.remove(this);
+		SimYukkuri.world.getCurrentMap().trash.remove(objId);
 	}
 	
 	@Override
@@ -68,12 +68,15 @@ public class Trash extends ObjEX implements java.io.Serializable {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		SimYukkuri.world.getCurrentMap().trash.add(this);
+		SimYukkuri.world.getCurrentMap().trash.put(objId, this);
 		objType = Type.OBJECT;
 		objEXType = ObjEXType.TRASH;
 		
 		value = 0;
 		cost = 0;
+	}
+	public Trash() {
+		
 	}
 }
 

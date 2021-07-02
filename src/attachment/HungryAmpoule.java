@@ -14,6 +14,7 @@ import src.enums.AttachProperty;
 import src.enums.Direction;
 import src.enums.Event;
 import src.system.ResourceUtil;
+import src.util.YukkuriUtil;
 
 
 /****************************************
@@ -81,10 +82,12 @@ public class HungryAmpoule extends Attachment {
 
 	@Override
 	protected Event update() {
-		if(!parent.isEating()) {
-			parent.addHungry(-TICK * 1000);
-			if (parent.getHungry() < 0) {
-				parent.setHungry(0);
+		Body pa = YukkuriUtil.getBodyInstance(parent);
+		if (pa == null) return Event.DONOTHING;
+		if(!pa.isEating()) {
+			pa.addHungry(-TICK * 1000);
+			if (pa.getHungry() < 0) {
+				pa.setHungry(0);
 			}
 		}
 		return Event.DONOTHING;
@@ -92,19 +95,23 @@ public class HungryAmpoule extends Attachment {
 
 	@Override
 	public BufferedImage getImage(Body b) {
+		Body pa = YukkuriUtil.getBodyInstance(parent);
+		if (pa == null) return null;
 		if(b.getDirection() == Direction.RIGHT) {
-			return images[parent.getBodyAgeState().ordinal()][1];
+			return images[pa.getBodyAgeState().ordinal()][1];
 		}
-		return images[parent.getBodyAgeState().ordinal()][0];
+		return images[pa.getBodyAgeState().ordinal()][0];
 	}
 
 	@Override
 	public void resetBoundary()
 	{
-		setBoundary(pivX[parent.getBodyAgeState().ordinal()],
-					pivY[parent.getBodyAgeState().ordinal()],
-					imgW[parent.getBodyAgeState().ordinal()],
-					imgH[parent.getBodyAgeState().ordinal()]);
+		Body pa = YukkuriUtil.getBodyInstance(parent);
+		if (pa == null) return;
+		setBoundary(pivX[pa.getBodyAgeState().ordinal()],
+					pivY[pa.getBodyAgeState().ordinal()],
+					imgW[pa.getBodyAgeState().ordinal()],
+					imgH[pa.getBodyAgeState().ordinal()]);
 	}
 	
 	/**
@@ -114,12 +121,19 @@ public class HungryAmpoule extends Attachment {
 	public HungryAmpoule(Body body) {
 		super(body);
 		setAttachProperty(property, POS_KEY);
-		setBoundary(pivX[parent.getBodyAgeState().ordinal()],
-					pivY[parent.getBodyAgeState().ordinal()],
-					imgW[parent.getBodyAgeState().ordinal()],
-					imgH[parent.getBodyAgeState().ordinal()]);
+		Body pa = YukkuriUtil.getBodyInstance(parent);
+		if (pa != null) {
+			setBoundary(pivX[pa.getBodyAgeState().ordinal()],
+					pivY[pa.getBodyAgeState().ordinal()],
+					imgW[pa.getBodyAgeState().ordinal()],
+					imgH[pa.getBodyAgeState().ordinal()]);
+		}
 		value = 500;
 		cost = 0;
+	}
+	
+	public HungryAmpoule() {
+		
 	}
 	
 	@Override

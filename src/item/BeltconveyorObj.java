@@ -8,7 +8,6 @@ package src.item;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
 import java.awt.Image;
-import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.TexturePaint;
 import java.awt.event.ActionEvent;
@@ -31,6 +30,8 @@ import src.base.Body;
 import src.base.Obj;
 import src.base.ObjEX;
 import src.draw.ModLoader;
+import src.draw.Point4y;
+import src.draw.Rectangle4y;
 import src.draw.Translate;
 import src.enums.ObjEXType;
 import src.enums.Type;
@@ -57,7 +58,7 @@ public class BeltconveyorObj extends ObjEX implements java.io.Serializable {
 			5, 5
 	};
 	private static BufferedImage[] images = new BufferedImage[images_num];
-	private static Rectangle boundary = new Rectangle();
+	private static Rectangle4y boundary = new Rectangle4y();
 	static int hou_default = 0;
 	static int obj_default = 0;
 	static int move_default = 0;
@@ -154,7 +155,7 @@ public class BeltconveyorObj extends ObjEX implements java.io.Serializable {
 		return 1;
 	}
 
-	public int getImageLayer(Graphics2D g2, BufferedImage[] layer, Rectangle rect) {
+	public int getImageLayer(Graphics2D g2, BufferedImage[] layer) {
 		int[] anPointBaseX = new int[2];
 		int[] anPointBaseY = new int[2];
 		Translate.getMovedPoint(fieldSX, fieldSY, fieldEX, fieldEY, firstX, firstY, x, y, anPointBaseX, anPointBaseY);
@@ -188,7 +189,7 @@ public class BeltconveyorObj extends ObjEX implements java.io.Serializable {
 		g2.drawPolygon(anPointX, anPointY, 4);
 	}
 
-	public static Rectangle getBounding() {
+	public static Rectangle4y getBounding() {
 		return boundary;
 	}
 
@@ -200,13 +201,13 @@ public class BeltconveyorObj extends ObjEX implements java.io.Serializable {
 		int nX = inX;
 		int nY = inY;
 		if (bIsField) {
-			Point pos = Translate.invertLimit(inX, inY);
+			Point4y pos = Translate.invertLimit(inX, inY);
 			nX = pos.x;
 			nY = pos.y;
 		}
 
-		Point posFirst = Translate.invertLimit(anPointX[0], anPointY[0]);
-		Point posSecond = Translate.invertLimit(anPointX[2], anPointY[2]);
+		Point4y posFirst = Translate.invertLimit(anPointX[0], anPointY[0]);
+		Point4y posSecond = Translate.invertLimit(anPointX[2], anPointY[2]);
 		if (posFirst != null && posSecond != null) {
 			if (posFirst.x <= nX && nX <= posSecond.x && posFirst.y <= nY && nY <= posSecond.y) {
 				return true;
@@ -405,7 +406,7 @@ public class BeltconveyorObj extends ObjEX implements java.io.Serializable {
 			bindObjList.clear();
 		}
 
-		SimYukkuri.world.getCurrentMap().beltconveyorObj.remove(this);
+		SimYukkuri.world.getCurrentMap().beltconveyorObj.remove(objId);
 	}
 
 	public boolean checkInterval(int cnt) {
@@ -439,13 +440,17 @@ public class BeltconveyorObj extends ObjEX implements java.io.Serializable {
 		firstY = y;
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		SimYukkuri.world.getCurrentMap().beltconveyorObj.add(this);
+		SimYukkuri.world.getCurrentMap().beltconveyorObj.put(objId, this);
 		objType = Type.PLATFORM;
 		objEXType = ObjEXType.BELTCONVEYOR;
 		value = 3000;
 		cost = 25;
 	}
 
+	public BeltconveyorObj() {
+		
+	}
+	
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static boolean setBeltconveyor(BeltconveyorObj belt, boolean init) {
 		String HOU_LIST[] = {
@@ -578,8 +583,8 @@ public class BeltconveyorObj extends ObjEX implements java.io.Serializable {
 		belt.beltSpeed = speed + 1;
 		//----------------------
 		if (!init) {
-			Point pS = Translate.getFieldLimitForMap(SimYukkuri.fieldSX, SimYukkuri.fieldSY);
-			Point pE = Translate.getFieldLimitForMap(SimYukkuri.fieldEX, SimYukkuri.fieldEY);
+			Point4y pS = Translate.getFieldLimitForMap(SimYukkuri.fieldSX, SimYukkuri.fieldSY);
+			Point4y pE = Translate.getFieldLimitForMap(SimYukkuri.fieldEX, SimYukkuri.fieldEY);
 			belt.fieldSX = pS.x;
 			belt.fieldSY = pS.y;
 			belt.fieldEX = pE.x;
@@ -592,7 +597,7 @@ public class BeltconveyorObj extends ObjEX implements java.io.Serializable {
 
 			int nTempX = anPointBaseX[0] + Math.abs(anPointBaseX[1] - anPointBaseX[0]) / 2;
 			int nTempY = anPointBaseY[0] + Math.abs(anPointBaseY[1] - anPointBaseY[0]) / 2;
-			Point pos = Translate.invertLimit(nTempX, nTempY);
+			Point4y pos = Translate.invertLimit(nTempX, nTempY);
 			BeltconveyorObj.x_default = pos.x;
 			BeltconveyorObj.y_default = pos.y;
 			belt.setX(pos.x);

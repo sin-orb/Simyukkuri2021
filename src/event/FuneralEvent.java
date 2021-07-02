@@ -13,6 +13,7 @@ import src.item.Barrier;
 import src.logic.BodyLogic;
 import src.system.MessagePool;
 import src.system.ResourceUtil;
+import src.util.YukkuriUtil;
 
 /***************************************************
 	葬式イベント
@@ -51,13 +52,15 @@ public class FuneralEvent extends EventPacket implements java.io.Serializable {
 		super(f, t, tgt, cnt);
 		priority = EventPriority.HIGH;
 	}
-
+	public FuneralEvent() {
+	}
 	@Override
 	public boolean simpleEventAction(Body b) {
-		if (getFrom().isShutmouth()) {
+		Body from = YukkuriUtil.getBodyInstance(getFrom());
+		if (from == null || from.isShutmouth()) {
 			return true;
 		}
-		if(getFrom() == b) {
+		if(from == b) {
 			return true;
 		}
 		return false;
@@ -68,22 +71,24 @@ public class FuneralEvent extends EventPacket implements java.io.Serializable {
 	// また、イベント優先度も必要に応じて設定できる
 	@Override
 	public boolean checkEventResponse(Body b) {
+		Body from = YukkuriUtil.getBodyInstance(getFrom());
 		// うんうん奴隷の場合は参加しない
-		if (b.getPublicRank() == PublicRank.UnunSlave)
+		if (from == null || b.getPublicRank() == PublicRank.UnunSlave)
 			return false;
 		//父母がいない場合は参加しない
-		if (b.getFather() == null && b.getMother() == null)
+		if (YukkuriUtil.getBodyInstance(b.getFather()) == null && 
+				YukkuriUtil.getBodyInstance(b.getMother()) == null)
 			return false;
 		//例外状況
 		if (!b.canEventResponse()) {
 			return false;
 		}
 		// つがいも参加する
-		if (getFrom().isPartner(b)) {
+		if (from.isPartner(b)) {
 			return true;
 		}
 		// Fromの子供だけ参加する(※Fromが教育係のときは全ての子供が参加するようにする？)
-		if (!b.isChild(getFrom()))
+		if (!b.isChild(from))
 			return false;
 		// 赤、子ゆのみ参加
 		if (b.isAdult())
@@ -107,19 +112,20 @@ public class FuneralEvent extends EventPacket implements java.io.Serializable {
 	// 親→子供→次のステート、の順で処理をする
 	@Override
 	public UpdateState update(Body b) {
+		Body from = YukkuriUtil.getBodyInstance(getFrom());
 		//イベント中止
-		if (b == null || getFrom() == null) {
+		if (b == null || from == null) {
 			return UpdateState.ABORT;
 		}
 		if (b.isNYD()) {
 			return UpdateState.ABORT;
 		}
 		// 相手が消えてしまったら
-		if (getFrom().isRemoved()) {
+		if (from.isRemoved()) {
 			b.setHappiness(Happiness.VERY_HAPPY);
 			return UpdateState.ABORT;
 		}
-		if (getFrom().getCurrentEvent() == null) {
+		if (from.getCurrentEvent() == null) {
 			return UpdateState.ABORT;
 		}
 		// 産気づいたら
@@ -131,10 +137,10 @@ public class FuneralEvent extends EventPacket implements java.io.Serializable {
 			return null;
 		}
 		//親を持ち上げたときの反応
-		if (!getFrom().canflyCheck() && getFrom().getZ() >= 5) {
+		if (!from.canflyCheck() && from.getZ() >= 5) {
 			if (SimYukkuri.RND.nextInt(50) == 0)
 				return UpdateState.ABORT;
-			else if (b == getFrom()) {
+			else if (b == from) {
 				//空処理
 			} else {
 				if (b.isSad())
@@ -155,7 +161,7 @@ public class FuneralEvent extends EventPacket implements java.io.Serializable {
 		}
 
 		// つがいは別処理
-		if (b.isPartner(getFrom())) {
+		if (b.isPartner(from)) {
 			if (SimYukkuri.RND.nextInt(50) == 0) {
 				b.setMessage(MessagePool.getMessage(b, MessagePool.Action.SadnessForChild), true);
 			}
@@ -163,8 +169,8 @@ public class FuneralEvent extends EventPacket implements java.io.Serializable {
 			if (state != STATE.GO) {
 				b.stay();
 			} else {
-				int colX = BodyLogic.calcCollisionX(b, getFrom());
-				b.moveTo(getFrom().getX() + colX * 2, getFrom().getY());
+				int colX = BodyLogic.calcCollisionX(b, from);
+				b.moveTo(from.getX() + colX * 2, from.getY());
 			}
 			return null;
 		}
@@ -173,14 +179,14 @@ public class FuneralEvent extends EventPacket implements java.io.Serializable {
 		int nWait = 2000;
 		int nWait2 = 300;
 		// 親
-		if (b == getFrom()) {
+		if (b == from) {
 			// 何らかの理由で終了しそうにないなら終わらせる
 			if (2000 < nFromWaitCount) {
 				return UpdateState.ABORT;
 			}
 			nFromWaitCount++;
 			// 子のみ集合
-			List<Body> childrenList = BodyLogic.createActiveChildList(getFrom(), false);
+			List<Body> childrenList = BodyLogic.createActiveChildList(from, false);
 			if ((childrenList == null) || (childrenList.size() == 0)) {
 				return UpdateState.ABORT;
 			}
@@ -203,7 +209,7 @@ public class FuneralEvent extends EventPacket implements java.io.Serializable {
 					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.ProudChildsGOFrom), true);
 				}
 				b.setHappiness(Happiness.SAD);
-				boolean bResult = BodyLogic.gatheringYukkuriFront(getFrom(), childrenList, this);
+				boolean bResult = BodyLogic.gatheringYukkuriFront(from, childrenList, this);
 				if (bResult) {
 					state = STATE.FIND;
 					bActionFlag = false;
@@ -287,10 +293,13 @@ public class FuneralEvent extends EventPacket implements java.io.Serializable {
 						b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.GoodbyeForever), 52, true,
 								false);
 						b.getInVain(false);
-						to.takeOkazari(false);
-						bActionFlag = true;
-						b.stay(nWait2);
-						b.addMemories(10);
+						Body to = YukkuriUtil.getBodyInstance(getTo());
+						if (to != null) {
+							to.takeOkazari(false);
+							bActionFlag = true;
+							b.stay(nWait2);
+							b.addMemories(10);
+						}
 					} else {
 						state = STATE.END;
 						bActionFlag = false;
@@ -317,7 +326,7 @@ public class FuneralEvent extends EventPacket implements java.io.Serializable {
 			switch (state) {
 			case GO:
 				// 壁に引っかかってるなら終了
-				if (Barrier.onBarrier(b.getX(), b.getY(), getFrom().getX(), getFrom().getY(),
+				if (Barrier.onBarrier(b.getX(), b.getY(), from.getX(), from.getY(),
 						Barrier.MAP_BODY[b.getBodyAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
 					return UpdateState.ABORT;
 				}
@@ -330,16 +339,19 @@ public class FuneralEvent extends EventPacket implements java.io.Serializable {
 				break;
 			case FIND:
 				if (checkWait(b, nWait)) {
-					if (to.isElderSister(b)) {
-						b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.SadnessForEldersister),
-								52, true, false);
-					} else {
-						b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.SadnessForSister), 52,
-								true, false);
+					Body to = YukkuriUtil.getBodyInstance(getTo());
+					if (to != null) {
+						if (to.isElderSister(b)) {
+							b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.SadnessForEldersister),
+									52, true, false);
+						} else {
+							b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.SadnessForSister), 52,
+									true, false);
+						}
+						b.setHappiness(Happiness.VERY_SAD);
+						b.setForceFace(ImageCode.CRYING.ordinal());
+						b.addMemories(5);
 					}
-					b.setHappiness(Happiness.VERY_SAD);
-					b.setForceFace(ImageCode.CRYING.ordinal());
-					b.addMemories(5);
 				}
 				b.stay();
 				break;

@@ -1,15 +1,16 @@
 package src.item;
 
 
-import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
+import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
 
 import src.SimYukkuri;
 import src.base.ObjEX;
 import src.draw.ModLoader;
+import src.draw.Rectangle4y;
 import src.enums.ObjEXType;
 import src.enums.Type;
 
@@ -95,10 +96,10 @@ public class Food extends ObjEX implements java.io.Serializable {
 	public int amount;
 
 	private static BufferedImage[] emptyImages = new BufferedImage[EmptyImage.values().length];
-	private static Rectangle[] emptyBoundary = new Rectangle[EmptyImage.values().length];
+	private static Rectangle4y[] emptyBoundary = new Rectangle4y[EmptyImage.values().length];
 
 	private static BufferedImage[] images = new BufferedImage[FoodType.values().length];
-	private static Rectangle[] boundary = new Rectangle[FoodType.values().length];
+	private static Rectangle4y[] boundary = new Rectangle4y[FoodType.values().length];
 
 	private static BufferedImage shadowImages;
 	/**
@@ -111,7 +112,7 @@ public class Food extends ObjEX implements java.io.Serializable {
 			if(i.fileName == null) continue;
 
 			emptyImages[i.ordinal()] = ModLoader.loadItemImage(loader, "food" + File.separator + i.fileName);
-			emptyBoundary[i.ordinal()] = new Rectangle();
+			emptyBoundary[i.ordinal()] = new Rectangle4y();
 			emptyBoundary[i.ordinal()].width = emptyImages[i.ordinal()].getWidth(io);
 			emptyBoundary[i.ordinal()].height = emptyImages[i.ordinal()].getHeight(io);
 			emptyBoundary[i.ordinal()].x = emptyBoundary[i.ordinal()].width >> 1;
@@ -122,7 +123,7 @@ public class Food extends ObjEX implements java.io.Serializable {
 			if(i.fileName == null) continue;
 
 			images[i.ordinal()] = ModLoader.loadItemImage(loader, "food" + File.separator + i.fileName);
-			boundary[i.ordinal()] = new Rectangle();
+			boundary[i.ordinal()] = new Rectangle4y();
 			boundary[i.ordinal()].width = images[i.ordinal()].getWidth(io);
 			boundary[i.ordinal()].height = images[i.ordinal()].getHeight(io);
 			boundary[i.ordinal()].x = boundary[i.ordinal()].width >> 1;
@@ -144,22 +145,23 @@ public class Food extends ObjEX implements java.io.Serializable {
 	}
 	/** 影イメージの取得 */
 	@Override
+	@Transient
 	public BufferedImage getShadowImage() {
 		return shadowImages;
 	}
 	/**境界線の取得*/
-	public static Rectangle getBounding() {
+	public static Rectangle4y getBounding() {
 		return boundary[0];
 	}
 
 	/**餌ごとにサイズが違うので専用メソッド化*/
-	public static Rectangle getFoodBounding(FoodType type) {
+	public static Rectangle4y getFoodBounding(FoodType type) {
 		return boundary[type.ordinal()];
 	}
 
 	@Override
 	public void removeListData(){
-		SimYukkuri.world.getCurrentMap().food.remove(this);
+		SimYukkuri.world.getCurrentMap().food.remove(objId);
 	}
 
 	@Override
@@ -218,11 +220,16 @@ public class Food extends ObjEX implements java.io.Serializable {
 		amount = foodType.amount;
 		setBoundary(boundary[foodType.ordinal()]);
 		setCollisionSize(getPivotX(), getPivotY());
-		SimYukkuri.world.getCurrentMap().food.add(this);
+		SimYukkuri.world.getCurrentMap().food.put(objId, this);
 		objType = Type.OBJECT;
 		objEXType = ObjEXType.FOOD;
 		setRemoved(false);
 	}
+	public Food() {
+		
+	}
+	
+	
 	/**フードタイプ取得*/
 	public FoodType getFoodType() {
 		return foodType;

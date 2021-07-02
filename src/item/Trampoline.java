@@ -19,6 +19,7 @@ import src.SimYukkuri;
 import src.base.Obj;
 import src.base.ObjEX;
 import src.draw.ModLoader;
+import src.draw.Rectangle4y;
 import src.draw.Translate;
 import src.enums.ObjEXType;
 import src.enums.Type;
@@ -31,7 +32,7 @@ public class Trampoline extends ObjEX implements java.io.Serializable {
 	static final long serialVersionUID = 1L;
 
 	private static BufferedImage[] images = new BufferedImage[2];
-	private static Rectangle boundary = new Rectangle();
+	private static Rectangle4y boundary = new Rectangle4y();
 	public int option;
 	/**通常事故率*/
 	public int accident1;
@@ -65,7 +66,7 @@ public class Trampoline extends ObjEX implements java.io.Serializable {
 		return 1;
 	}
 	/**境界線の取得*/
-	public static Rectangle getBounding() {
+	public static Rectangle4y getBounding() {
 		return boundary;
 	}
 
@@ -76,7 +77,7 @@ public class Trampoline extends ObjEX implements java.io.Serializable {
 
 	@Override
 	public void removeListData(){
-		SimYukkuri.world.getCurrentMap().trampoline.remove(this);
+		SimYukkuri.world.getCurrentMap().trampoline.remove(objId);
 	}
 
 	@Override
@@ -103,7 +104,7 @@ public class Trampoline extends ObjEX implements java.io.Serializable {
 		// 対象の座標をフィールド座標に変換
 		Translate.translate(o.getX(), o.getY(), tmpPos);
 		// 点が描画矩形に入ったかの判定
-		if(tmpRect.contains(tmpPos)) {
+		if(tmpRect.contains(new java.awt.Point(tmpPos.x, tmpPos.y))) {
 			return true;
 		}
 
@@ -130,17 +131,20 @@ public class Trampoline extends ObjEX implements java.io.Serializable {
 		super(initX, initY, initOption);
         setBoundary(boundary);
         setCollisionSize(getPivotX(), getPivotY());
-        SimYukkuri.world.getCurrentMap().trampoline.add(this);
+        SimYukkuri.world.getCurrentMap().trampoline.put(objId, this);
         objType = Type.OBJECT;
         objEXType = ObjEXType.TOY;
 		boolean bRet = setupTrampoline(this);
 		if( !bRet)
 		{
-			SimYukkuri.world.getCurrentMap().trampoline.remove(this);
+			SimYukkuri.world.getCurrentMap().trampoline.remove(objId);
 			return;
 		}
         value = 500;
         cost = 0;
+	}
+	public Trampoline() {
+		
 	}
 
 	/** 設定メニュー*/

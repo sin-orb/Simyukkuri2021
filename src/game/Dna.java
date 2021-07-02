@@ -1,5 +1,4 @@
 package src.game;
-import src.base.Body;
 import src.enums.Attitude;
 import src.enums.Intelligence;
 import src.yukkuri.Tarinai;
@@ -57,9 +56,9 @@ public class Dna implements java.io.Serializable {
 	/**レイプでできた子か*/
 	public boolean raperChild;
 	/**父ゆ*/
-	public Body father;
+	public int father;
 	/**母ゆ*/
-	public Body mother;
+	public int mother;
 
 	/**
 	 * コンストラクタ
@@ -85,4 +84,42 @@ public class Dna implements java.io.Serializable {
 		intelligence = intel;
 		raperChild = rape;
 	}
+	public int getType() {
+		return type;
+	}
+	public void setType(int type) {
+		this.type = type;
+	}
+	public Attitude getAttitude() {
+		return attitude;
+	}
+	public void setAttitude(Attitude attitude) {
+		this.attitude = attitude;
+	}
+	public Intelligence getIntelligence() {
+		return intelligence;
+	}
+	public void setIntelligence(Intelligence intelligence) {
+		this.intelligence = intelligence;
+	}
+	public boolean isRaperChild() {
+		return raperChild;
+	}
+	public void setRaperChild(boolean raperChild) {
+		this.raperChild = raperChild;
+	}
+	public int getFather() {
+		return father;
+	}
+	public void setFather(int father) {
+		this.father = father;
+	}
+	public int getMother() {
+		return mother;
+	}
+	public void setMother(int mother) {
+		this.mother = mother;
+	}
+	
+	
 }

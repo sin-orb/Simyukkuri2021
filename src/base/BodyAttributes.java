@@ -1,17 +1,22 @@
 package src.base;
 
 import java.awt.Color;
-import java.awt.Point;
 import java.awt.image.BufferedImage;
+import java.beans.Transient;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
+
 import src.Const;
 import src.SimYukkuri;
 import src.attachment.Ants;
+import src.draw.Color4y;
+import src.draw.Point4y;
 import src.enums.AgeState;
 import src.enums.Attitude;
 import src.enums.BaryInUGState;
@@ -45,7 +50,9 @@ import src.game.Dna;
 import src.game.Stalk;
 import src.system.BasicStrokeEX;
 import src.system.BodyLayer;
+import src.system.MapPlaceData;
 import src.system.Sprite;
+import src.util.YukkuriUtil;
 
 /**
  * ゆっくり本体の抽象クラスの属性/状態の取得を抜き出したクラス.
@@ -56,6 +63,7 @@ import src.system.Sprite;
  * （コピーしてもその後のINIファイル取得で上書きされるものもある）
  * そこはいわゆる”ゆ虐の設定”に従うこと。
  */
+@JsonTypeInfo(use = Id.CLASS)
 public abstract class BodyAttributes extends Obj implements Serializable {
 
 	/** ゆっくりのタイプ。まりさなら0、れいむなら1、等々ユニークなタイプを表す。 */
@@ -89,7 +97,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public abstract boolean isImageLoaded();
 
 	/** 各ゆっくり用iniファイルからマウントポイントを取得する */
-	public abstract Point[] getMountPoint(String key);
+	public abstract Point4y[] getMountPoint(String key);
 
 	/**
 	 * 非ゆっくり症のチェックメソッド.
@@ -136,59 +144,59 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 
 	// .INIファイルで変更可能な各ゆっくりのパラメータ.
 	/** 一回の食事量 */
-	protected int EATAMOUNT[] = { 100 * 6, 100 * 12, 100 * 24 };
+	protected int EATAMOUNTorg[] = { 100 * 6, 100 * 12, 100 * 24 };
 	/** 体重 */
-	protected int WEIGHT[] = { 100, 300, 600 };
+	protected int WEIGHTorg[] = { 100, 300, 600 };
 	/** 空腹限界 */
-	protected int HUNGRYLIMIT[] = { 100 * 24, 100 * 24 * 2, 100 * 24 * 4 };
+	protected int HUNGRYLIMITorg[] = { 100 * 24, 100 * 24 * 2, 100 * 24 * 4 };
 	/** うんうん限界 */
-	protected int SHITLIMIT[] = { 100 * 12, 100 * 24, 100 * 24 };
+	protected int SHITLIMITorg[] = { 100 * 12, 100 * 24, 100 * 24 };
 	/** ダメージ限界 */
-	protected int DAMAGELIMIT[] = { 100 * 24, 100 * 24 * 3, 100 * 24 * 7 };
+	protected int DAMAGELIMITorg[] = { 100 * 24, 100 * 24 * 3, 100 * 24 * 7 };
 	/** ストレス限界 */
-	private int STRESSLIMIT[] = { 100 * 24, 100 * 24 * 3, 100 * 24 * 7 };
+	private int STRESSLIMITorg[] = { 100 * 24, 100 * 24 * 3, 100 * 24 * 7 };
 	/** なつき度限界 */
-	private int LOVEPLAYERLIMIT = 1000;
+	private int LOVEPLAYERLIMITorg = 1000;
 	/** 味覚レベル */
-	private int TANGLEVEL[] = { 300, 600, 1000 };
+	private int TANGLEVELorg[] = { 300, 600, 1000 };
 	/** 赤ゆ期間 */
-	protected int BABYLIMIT = 100 * 24 * 7;
+	protected int BABYLIMITorg = 100 * 24 * 7;
 	/** 子ゆ期間 */
-	protected int CHILDLIMIT = 100 * 24 * 21;
+	protected int CHILDLIMITorg = 100 * 24 * 21;
 	/** 寿命 */
-	protected int LIFELIMIT = 100 * 24 * 365;
+	protected int LIFELIMITorg = 100 * 24 * 365;
 	/** 腐敗日数 */
-	private int ROTTINGTIME = 100 * 24 * 3;
+	private int ROTTINGTIMEorg = 100 * 24 * 3;
 	/** 足の速さ */
-	private int STEP[] = { 1, 2, 4 };
+	private int STEPorg[] = { 1, 2, 4 };
 	/** リラックス状態の期間 */
-	protected int RELAXPERIOD = 100 * 1;
+	protected int RELAXPERIODorg = 100 * 1;
 	/** 発情状態の期間 */
-	protected int EXCITEPERIOD = 100 * 3;
+	protected int EXCITEPERIODorg = 100 * 3;
 	/** 妊娠期間 */
-	protected int PREGPERIOD = 100 * 24;
+	protected int PREGPERIODorg = 100 * 24;
 	/** 睡眠時間 */
-	protected int SLEEPPERIOD = 100 * 3;
+	protected int SLEEPPERIODorg = 100 * 3;
 	/** アクティブな期間 */
-	protected int ACTIVEPERIOD = 100 * 6;
+	protected int ACTIVEPERIODorg = 100 * 6;
 	/** 怒り期間 */
-	private int ANGRYPERIOD = 100 * 1;
+	private int ANGRYPERIODorg = 100 * 1;
 	/** 恐怖期間 */
-	private int SCAREPERIOD = 100 * 1;
+	private int SCAREPERIODorg = 100 * 1;
 	/** 同一方向に動き続ける */
 	protected int sameDest = 30;
 	/** ゲーム内12分、衝動の抑制のための変数 */
-	protected int DECLINEPERIOD = 20;
+	protected int DECLINEPERIODorg = 20;
 	/** 壁等にブロックされた回数の限界（怒りだす等） */
-	private int BLOCKEDLIMIT = 60;
+	private int BLOCKEDLIMITorg = 60;
 	/** 汚れ限界（超えるとゆかび状態） */
-	private int DIRTYPERIOD = 300;
+	private int DIRTYPERIODorg = 300;
 	/** 視界の広さ */
-	protected int EYESIGHT = 4000 * 4000;
+	protected int EYESIGHTorg = 4000 * 4000;
 	/** 赤ゆ、子ゆ、成ゆの攻撃力 */
-	protected int STRENGTH[] = { 500, 1000, 3000 };
+	protected int STRENGTHorg[] = { 500, 1000, 3000 };
 	/** ゆかびの潜伏期間 */
-	protected int INCUBATIONPERIOD = 100 * 12;
+	protected int INCUBATIONPERIODorg = 100 * 12;
 	/** 攻撃された際のぴこぴこ破壊確率。0だと破壊されない */
 	private int nBreakBraidRand = 0;
 	/** 何回のうち1回の確率ですりすり事故で妊娠するかの値 */
@@ -349,15 +357,15 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	/** 致命傷種別 */
 	private CriticalDamegeType criticalDamege = null;
 	/** つがい */
-	private Body partner = null;
+	private int partner = -1;
 	/** 親 */
-	private Body parents[] = { null, null };
+	private int[] parents = { -1, -1 };
 	/** 子供のリスト */
-	private List<Body> childrenList = new LinkedList<Body>();
+	private List<Integer> childrenList = new LinkedList<Integer>();
 	/** 姉のリスト */
-	private List<Body> elderSisterList = new LinkedList<Body>();
+	private List<Integer> elderSisterList = new LinkedList<Integer>();
 	/** 妹のリスト */
-	private List<Body> sisterList = new LinkedList<Body>();
+	private List<Integer> sisterList = new LinkedList<Integer>();
 	/** 先祖のリスト */
 	private List<Integer> ancestorList = new LinkedList<Integer>();
 	/** 自分がレイプでできた子か */
@@ -375,7 +383,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	/** 自身の持っているアタッチメント */
 	private List<Attachment> attach = new LinkedList<Attachment>();
 	/** なにかのオブジェクト（すぃー、親ゆなど）に載せられている等のリンクが有る際のそのオブジェクト */
-	private Obj linkParent = null;
+	private int linkParent = -1;
 	/** 移動不可ベルトコンベアの有無 */
 	private boolean bOnDontMoveBeltconveyor = false;
 	/** 埋まり状態 */
@@ -459,7 +467,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	/** うんうんブースト */
 	protected int shitBoost = 0;
 	/** 移動対象（移動先） */
-	protected Obj moveTarget = null;
+	protected int moveTarget = -1;
 	/** 移動対象のX座標オフセット */
 	private int targetPosOfsX = 0;
 	/** 移動対象のY座標オフセット */
@@ -533,11 +541,11 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	/** 喋れる状態かどうか */
 	private boolean canTalk = true;
 	/** メッセージラインの色 */
-	private Color messageLineColor;
+	private Color4y messageLineColor;
 	/** メッセージボックスの色 */
-	private Color messageBoxColor;
+	private Color4y messageBoxColor;
 	/** メッセージテキストの色 */
-	private Color messageTextColor;
+	private Color4y messageTextColor;
 	// TODO:使途不明
 	private BasicStrokeEX messageWindowStroke;
 	/** メッセージテキストのサイズ */
@@ -571,9 +579,9 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	/** TODO:ゆ虐神拳の回数？ */
 	private int[] anGodHandPoint = { 0, 0, 0 };
 	/** お気に入りアイテム */
-	private HashMap<FavItemType, Obj> favItem = new HashMap<FavItemType, Obj>();
+	private HashMap<FavItemType, Integer> favItem = new HashMap<FavItemType, Integer>();
 	/** 持ち歩きアイテム */
-	private HashMap<TakeoutItemType, Obj> takeoutItem = new HashMap<TakeoutItemType, Obj>();
+	private HashMap<TakeoutItemType, Integer> takeoutItem = new HashMap<TakeoutItemType, Integer>();
 	/** ゆっくり本体の購入基本額 */
 	private int Ycost = 200;
 	/** ゆっくり本体、中身の売却基本額　飼いゆとしての価値/加工品としての価値 */
@@ -619,7 +627,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 赤ゆの一人称を設定する.
 	 * @param anBabyName 赤ゆの一人称
 	 */
-	public void setBABYNAME(String[] anBabyName) {
+	public void setAnBabyName(String[] anBabyName) {
 		this.anBabyName = anBabyName;
 	}
 
@@ -635,7 +643,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 子ゆの一人称を設定する.
 	 * @param anChildName 子ゆの一人称
 	 */
-	public void setCHILDNAME(String[] anChildName) {
+	public void setAnChildName(String[] anChildName) {
 		this.anChildName = anChildName;
 	}
 
@@ -651,7 +659,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 成ゆの一人称を設定する.
 	 * @param anAdultName 成ゆの一人称
 	 */
-	public void setADULTNAME(String[] anAdultName) {
+	public void setAnAdultName(String[] anAdultName) {
 		this.anAdultName = anAdultName;
 	}
 
@@ -683,7 +691,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 赤ゆの一人称（ダメージ時）を設定する.
 	 * @param anBabyNameD 赤ゆの一人称（ダメージ時）
 	 */
-	public void setBABYNAME_DAMAGED(String[] anBabyNameD) {
+	public void setAnBabyNameD(String[] anBabyNameD) {
 		this.anBabyNameD = anBabyNameD;
 	}
 
@@ -699,7 +707,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 子ゆの一人称（ダメージ時）を設定する.
 	 * @param anChildNameD 子ゆの一人称（ダメージ時）
 	 */
-	public void setCHILDNAME_DAMAGED(String[] anChildNameD) {
+	public void setAnChildNameD(String[] anChildNameD) {
 		this.anChildNameD = anChildNameD;
 	}
 
@@ -715,7 +723,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 大人ゆの一人称（ダメージ時） を設定する.
 	 * @param anAdultNameD 大人ゆの一人称（ダメージ時）
 	 */
-	public void setADULTNAME_DAMAGED(String[] anAdultNameD) {
+	public void setAnAdultNameD(String[] anAdultNameD) {
 		this.anAdultNameD = anAdultNameD;
 	}
 
@@ -843,320 +851,320 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 一回の食事量 を取得する.
 	 * @return 一回の食事量
 	 */
-	public int[] getEATAMOUNT() {
-		return EATAMOUNT;
+	public int[] getEATAMOUNTorg() {
+		return EATAMOUNTorg;
 	}
 
 	/**
 	 * 一回の食事量 を設定する.
 	 * @param eATAMOUNT 一回の食事量 
 	 */
-	public void setEATAMOUNT(int[] eATAMOUNT) {
-		EATAMOUNT = eATAMOUNT;
+	public void setEATAMOUNTorg(int[] eATAMOUNT) {
+		EATAMOUNTorg = eATAMOUNT;
 	}
 
 	/**
 	 * 体重を取得する.
 	 * @return 体重
 	 */
-	public int[] getWEIGHT() {
-		return WEIGHT;
+	public int[] getWEIGHTorg() {
+		return WEIGHTorg;
 	}
 
 	/**
 	 * 体重を設定する.
 	 * @param wEIGHT 体重
 	 */
-	public void setWEIGHT(int[] wEIGHT) {
-		WEIGHT = wEIGHT;
+	public void setWEIGHTorg(int[] wEIGHT) {
+		WEIGHTorg = wEIGHT;
 	}
 
 	/**
 	 * 空腹限界を取得する.
 	 * @return 空腹限界
 	 */
-	public int[] getHUNGRYLIMIT() {
-		return HUNGRYLIMIT;
+	public int[] getHUNGRYLIMITorg() {
+		return HUNGRYLIMITorg;
 	}
 
 	/**
 	 * 空腹限界を設定する.
 	 * @param hUNGRYLIMIT 空腹限界
 	 */
-	public void setHUNGRYLIMIT(int[] hUNGRYLIMIT) {
-		HUNGRYLIMIT = hUNGRYLIMIT;
+	public void setHUNGRYLIMITorg(int[] hUNGRYLIMIT) {
+		HUNGRYLIMITorg = hUNGRYLIMIT;
 	}
 
 	/**
 	 * うんうん限界を取得する.
 	 * @return うんうん限界
 	 */
-	public int[] getSHITLIMIT() {
-		return SHITLIMIT;
+	public int[] getSHITLIMITorg() {
+		return SHITLIMITorg;
 	}
 
 	/**
 	 * うんうん限界を設定する.
 	 * @param sHITLIMIT うんうん限界
 	 */
-	public void setSHITLIMIT(int[] sHITLIMIT) {
-		SHITLIMIT = sHITLIMIT;
+	public void setSHITLIMITorg(int[] sHITLIMIT) {
+		SHITLIMITorg = sHITLIMIT;
 	}
 
 	/**
 	 * ダメージ限界を取得する.
 	 * @return ダメージ限界
 	 */
-	public int[] getDAMAGELIMIT() {
-		return DAMAGELIMIT;
+	public int[] getDAMAGELIMITorg() {
+		return DAMAGELIMITorg;
 	}
 
 	/**
 	 * ダメージ限界を設定する.
 	 * @param dAMAGELIMIT ダメージ限界
 	 */
-	public void setDAMAGELIMIT(int[] dAMAGELIMIT) {
-		DAMAGELIMIT = dAMAGELIMIT;
+	public void setDAMAGELIMITorg(int[] dAMAGELIMIT) {
+		DAMAGELIMITorg = dAMAGELIMIT;
 	}
 
 	/**
 	 * ストレス限界を取得する.
 	 * @return ストレス限界
 	 */
-	public int[] getSTRESSLIMIT() {
-		return STRESSLIMIT;
+	public int[] getSTRESSLIMITorg() {
+		return STRESSLIMITorg;
 	}
 
 	/**
 	 * ストレス限界を設定する.
 	 * @param sTRESSLIMIT ストレス限界
 	 */
-	public void setSTRESSLIMIT(int[] sTRESSLIMIT) {
-		STRESSLIMIT = sTRESSLIMIT;
+	public void setSTRESSLIMITorg(int[] sTRESSLIMIT) {
+		STRESSLIMITorg = sTRESSLIMIT;
 	}
 
 	/**
 	 * なつき度限界を取得する.
 	 * @return なつき度限界
 	 */
-	public int getLOVEPLAYERLIMIT() {
-		return LOVEPLAYERLIMIT;
+	public int getLOVEPLAYERLIMITorg() {
+		return LOVEPLAYERLIMITorg;
 	}
 
 	/**
 	 * なつき度限界を設定する. 
 	 * @param lOVEPLAYERLIMIT なつき度限界 
 	 */
-	public void setLOVEPLAYERLIMIT(int lOVEPLAYERLIMIT) {
-		LOVEPLAYERLIMIT = lOVEPLAYERLIMIT;
+	public void setLOVEPLAYERLIMITorg(int lOVEPLAYERLIMIT) {
+		LOVEPLAYERLIMITorg = lOVEPLAYERLIMIT;
 	}
 
 	/**
 	 * 味覚レベル を取得する.
 	 * @return 味覚レベル 
 	 */
-	public int[] getTANGLEVEL() {
-		return TANGLEVEL;
+	public int[] getTANGLEVELorg() {
+		return TANGLEVELorg;
 	}
 
 	/**
 	 * 味覚レベル を設定する.
 	 * @param tANGLEVEL 味覚レベル
 	 */
-	public void setTANGLEVEL(int[] tANGLEVEL) {
-		TANGLEVEL = tANGLEVEL;
+	public void setTANGLEVELorg(int[] tANGLEVEL) {
+		TANGLEVELorg = tANGLEVEL;
 	}
 
 	/**
 	 * 赤ゆ期間 を取得する.
 	 * @return 赤ゆ期間
 	 */
-	public int getBABYLIMIT() {
-		return BABYLIMIT;
+	public int getBABYLIMITorg() {
+		return BABYLIMITorg;
 	}
 
 	/**
 	 * 赤ゆ期間 を設定する.
 	 * @param bABYLIMIT 赤ゆ期間 
 	 */
-	public void setBABYLIMIT(int bABYLIMIT) {
-		BABYLIMIT = bABYLIMIT;
+	public void setBABYLIMITorg(int bABYLIMIT) {
+		BABYLIMITorg = bABYLIMIT;
 	}
 
 	/**
 	 * 子ゆ期間 を取得する.
 	 * @return 子ゆ期間 
 	 */
-	public int getCHILDLIMIT() {
-		return CHILDLIMIT;
+	public int getCHILDLIMITorg() {
+		return CHILDLIMITorg;
 	}
 
 	/**
 	 * 子ゆ期間 を設定する.
 	 * @param cHILDLIMIT 子ゆ期間 
 	 */
-	public void setCHILDLIMIT(int cHILDLIMIT) {
-		CHILDLIMIT = cHILDLIMIT;
+	public void setCHILDLIMITorg(int cHILDLIMIT) {
+		CHILDLIMITorg = cHILDLIMIT;
 	}
 
 	/**
 	 * 寿命を取得する.
 	 * @return 寿命
 	 */
-	public int getLIFELIMIT() {
-		return LIFELIMIT;
+	public int getLIFELIMITorg() {
+		return LIFELIMITorg;
 	}
 
 	/**
 	 * 寿命を設定する.
 	 * @param lIFELIMIT 寿命
 	 */
-	public void setLIFELIMIT(int lIFELIMIT) {
-		LIFELIMIT = lIFELIMIT;
+	public void setLIFELIMITorg(int lIFELIMIT) {
+		LIFELIMITorg = lIFELIMIT;
 	}
 
 	/**
 	 * 腐敗日数 を取得する.
 	 * @return 腐敗日数
 	 */
-	public int getROTTINGTIME() {
-		return ROTTINGTIME;
+	public int getROTTINGTIMEorg() {
+		return ROTTINGTIMEorg;
 	}
 
 	/**
 	 * 腐敗日数 を設定する.
 	 * @param rOTTINGTIME 腐敗日数 
 	 */
-	public void setROTTINGTIME(int rOTTINGTIME) {
-		ROTTINGTIME = rOTTINGTIME;
+	public void setROTTINGTIMEorg(int rOTTINGTIME) {
+		ROTTINGTIMEorg = rOTTINGTIME;
 	}
 
 	/**
 	 * 足の速さを取得する.
 	 * @return 足の速さ
 	 */
-	public int[] getSTEP() {
-		return STEP;
+	public int[] getSTEPorg() {
+		return STEPorg;
 	}
 
 	/**
 	 * 足の速さを設定する.
 	 * @param sTEP 足の速さ
 	 */
-	public void setSTEP(int[] sTEP) {
-		STEP = sTEP;
+	public void setSTEPorg(int[] sTEP) {
+		STEPorg = sTEP;
 	}
 
 	/**
 	 * リラックス状態の期間を取得する.
 	 * @return リラックス状態の期間
 	 */
-	public int getRELAXPERIOD() {
-		return RELAXPERIOD;
+	public int getRELAXPERIODorg() {
+		return RELAXPERIODorg;
 	}
 
 	/**
 	 * リラックス状態の期間 を設定する.
 	 * @param rELAXPERIOD リラックス状態の期間
 	 */
-	public void setRELAXPERIOD(int rELAXPERIOD) {
-		RELAXPERIOD = rELAXPERIOD;
+	public void setRELAXPERIODorg(int rELAXPERIOD) {
+		RELAXPERIODorg = rELAXPERIOD;
 	}
 
 	/**
 	 * 発情状態の期間 を取得する.
 	 * @return 発情状態の期間
 	 */
-	public int getEXCITEPERIOD() {
-		return EXCITEPERIOD;
+	public int getEXCITEPERIODorg() {
+		return EXCITEPERIODorg;
 	}
 
 	/**
 	 * 発情状態の期間 を設定する.
 	 * @param eXCITEPERIOD 発情状態の期間 
 	 */
-	public void setEXCITEPERIOD(int eXCITEPERIOD) {
-		EXCITEPERIOD = eXCITEPERIOD;
+	public void setEXCITEPERIODorg(int eXCITEPERIOD) {
+		EXCITEPERIODorg = eXCITEPERIOD;
 	}
 
 	/**
 	 * 妊娠期間 を取得する.
 	 * @return 妊娠期間 
 	 */
-	public int getPREGPERIOD() {
-		return PREGPERIOD;
+	public int getPREGPERIODorg() {
+		return PREGPERIODorg;
 	}
 
 	/**
 	 * 妊娠期間 を設定する.
 	 * @param pREGPERIOD 妊娠期間 
 	 */
-	public void setPREGPERIOD(int pREGPERIOD) {
-		PREGPERIOD = pREGPERIOD;
+	public void setPREGPERIODorg(int pREGPERIOD) {
+		PREGPERIODorg = pREGPERIOD;
 	}
 
 	/**
 	 * 睡眠時間 を取得する.
 	 * @return 睡眠時間 
 	 */
-	public int getSLEEPPERIOD() {
-		return SLEEPPERIOD;
+	public int getSLEEPPERIODorg() {
+		return SLEEPPERIODorg;
 	}
 
 	/**
 	 * 睡眠時間 を設定する.
 	 * @param sLEEPPERIOD 睡眠時間 
 	 */
-	public void setSLEEPPERIOD(int sLEEPPERIOD) {
-		SLEEPPERIOD = sLEEPPERIOD;
+	public void setSLEEPPERIODorg(int sLEEPPERIOD) {
+		SLEEPPERIODorg = sLEEPPERIOD;
 	}
 
 	/**
 	 * アクティブな期間 を取得する.
 	 * @return アクティブな期間 
 	 */
-	public int getACTIVEPERIOD() {
-		return ACTIVEPERIOD;
+	public int getACTIVEPERIODorg() {
+		return ACTIVEPERIODorg;
 	}
 
 	/**
 	 * アクティブな期間 を設定する.
 	 * @param aCTIVEPERIOD アクティブな期間 
 	 */
-	public void setACTIVEPERIOD(int aCTIVEPERIOD) {
-		ACTIVEPERIOD = aCTIVEPERIOD;
+	public void setACTIVEPERIODorg(int aCTIVEPERIOD) {
+		ACTIVEPERIODorg = aCTIVEPERIOD;
 	}
 
 	/**
 	 * 怒り期間 を取得する.
 	 * @return 怒り期間 
 	 */
-	public int getANGRYPERIOD() {
-		return ANGRYPERIOD;
+	public int getANGRYPERIODorg() {
+		return ANGRYPERIODorg;
 	}
 
 	/**
 	 * 怒り期間 を設定する.
 	 * @param aNGRYPERIOD 怒り期間 
 	 */
-	public void setANGRYPERIOD(int aNGRYPERIOD) {
-		ANGRYPERIOD = aNGRYPERIOD;
+	public void setANGRYPERIODorg(int aNGRYPERIOD) {
+		ANGRYPERIODorg = aNGRYPERIOD;
 	}
 
 	/**
 	 * 恐怖期間 を取得する.
 	 * @return 恐怖期間 
 	 */
-	public int getSCAREPERIOD() {
-		return SCAREPERIOD;
+	public int getSCAREPERIODorg() {
+		return SCAREPERIODorg;
 	}
 
 	/**
 	 * 恐怖期間 を設定する.
 	 * @param sCAREPERIOD 恐怖期間 
 	 */
-	public void setSCAREPERIOD(int sCAREPERIOD) {
-		SCAREPERIOD = sCAREPERIOD;
+	public void setSCAREPERIODorg(int sCAREPERIOD) {
+		SCAREPERIODorg = sCAREPERIOD;
 	}
 
 	/**
@@ -1179,96 +1187,96 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * ゲーム内12分、衝動の抑制のための変数 を取得する.
 	 * @return ゲーム内12分、衝動の抑制のための変数
 	 */
-	public int getDECLINEPERIOD() {
-		return DECLINEPERIOD;
+	public int getDECLINEPERIODorg() {
+		return DECLINEPERIODorg;
 	}
 
 	/**
 	 * ゲーム内12分、衝動の抑制のための変数 を設定する.
 	 * @param dECLINEPERIOD ゲーム内12分、衝動の抑制のための変数 
 	 */
-	public void setDECLINEPERIOD(int dECLINEPERIOD) {
-		DECLINEPERIOD = dECLINEPERIOD;
+	public void setDECLINEPERIODorg(int dECLINEPERIOD) {
+		DECLINEPERIODorg = dECLINEPERIOD;
 	}
 
 	/**
 	 * 壁等にブロックされた回数の限界（怒りだす等） を取得する.
 	 * @return 壁等にブロックされた回数の限界（怒りだす等） 
 	 */
-	public int getBLOCKEDLIMIT() {
-		return BLOCKEDLIMIT;
+	public int getBLOCKEDLIMITorg() {
+		return BLOCKEDLIMITorg;
 	}
 
 	/**
 	 * 壁等にブロックされた回数の限界（怒りだす等） を設定する.
 	 * @param bLOCKEDLIMIT 壁等にブロックされた回数の限界（怒りだす等） 
 	 */
-	public void setBLOCKEDLIMIT(int bLOCKEDLIMIT) {
-		BLOCKEDLIMIT = bLOCKEDLIMIT;
+	public void setBLOCKEDLIMITorg(int bLOCKEDLIMIT) {
+		BLOCKEDLIMITorg = bLOCKEDLIMIT;
 	}
 
 	/**
 	 * 汚れ限界（超えるとゆかび状態） を取得する.
 	 * @return 汚れ限界（超えるとゆかび状態） 
 	 */
-	public int getDIRTYPERIOD() {
-		return DIRTYPERIOD;
+	public int getDIRTYPERIODorg() {
+		return DIRTYPERIODorg;
 	}
 
 	/**
 	 * 汚れ限界（超えるとゆかび状態） を設定する.
 	 * @param dIRTYPERIOD 汚れ限界（超えるとゆかび状態） 
 	 */
-	public void setDIRTYPERIOD(int dIRTYPERIOD) {
-		DIRTYPERIOD = dIRTYPERIOD;
+	public void setDIRTYPERIODorg(int dIRTYPERIOD) {
+		DIRTYPERIODorg = dIRTYPERIOD;
 	}
 
 	/**
 	 * 視界を取得する.
 	 * @return 視界
 	 */
-	public int getEYESIGHT() {
-		return EYESIGHT;
+	public int getEYESIGHTorg() {
+		return EYESIGHTorg;
 	}
 
 	/**
 	 * 視界を設定する.
 	 * @param eYESIGHT 視界
 	 */
-	public void setEYESIGHT(int eYESIGHT) {
-		EYESIGHT = eYESIGHT;
+	public void setEYESIGHTorg(int eYESIGHT) {
+		EYESIGHTorg = eYESIGHT;
 	}
 
 	/**
 	 * 強さを取得する.
 	 * @return 強さ
 	 */
-	public int[] getSTRENGTH() {
-		return STRENGTH;
+	public int[] getSTRENGTHorg() {
+		return STRENGTHorg;
 	}
 
 	/**
 	 * 強さを設定する.
 	 * @param sTRENGTH 強さ
 	 */
-	public void setSTRENGTH(int[] sTRENGTH) {
-		STRENGTH = sTRENGTH;
+	public void setSTRENGTHorg(int[] sTRENGTH) {
+		STRENGTHorg = sTRENGTH;
 	}
 
 	/**
 	 * ゆかびの潜伏期間 を取得する.
 	 * @return ゆかびの潜伏期間 
 	 */
-	public int getINCUBATIONPERIOD() {
-		return INCUBATIONPERIOD;
+	public int getINCUBATIONPERIODorg() {
+		return INCUBATIONPERIODorg;
 	}
 
 	/**
 	 * ゆかびの潜伏期間 を設定する.
 	 * @param iNCUBATIONPERIOD ゆかびの潜伏期間 
 	 */
-	public void setINCUBATIONPERIOD(int iNCUBATIONPERIOD) {
-		INCUBATIONPERIOD = iNCUBATIONPERIOD;
+	public void setINCUBATIONPERIODorg(int iNCUBATIONPERIOD) {
+		INCUBATIONPERIODorg = iNCUBATIONPERIOD;
 	}
 
 	/**
@@ -1283,7 +1291,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 攻撃された際のぴこぴこ破壊確率。0だと破壊されない を設定する.
 	 * @param nBreakBraidRand 攻撃された際のぴこぴこ破壊確率。0だと破壊されない 
 	 */
-	public void setBreakBraidRand(int nBreakBraidRand) {
+	public void setnBreakBraidRand(int nBreakBraidRand) {
 		this.nBreakBraidRand = nBreakBraidRand;
 	}
 
@@ -1299,7 +1307,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 何回のうち1回の確率ですりすり事故で妊娠するかの値 を設定する.
 	 * @param surisuriAccidentProb 何回のうち1回の確率ですりすり事故で妊娠するかの値 
 	 */
-	public void setSurisuriAccidentProbablity(int surisuriAccidentProb) {
+	public void setSurisuriAccidentProb(int surisuriAccidentProb) {
 		SurisuriAccidentProb = surisuriAccidentProb;
 	}
 
@@ -1315,7 +1323,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 何回のうち1回の確率で路上で車に轢かれるかの値 を設定する.
 	 * @param carAccidentProb 何回のうち1回の確率で路上で車に轢かれるかの値 
 	 */
-	public void setCarAccidentProbablity(int carAccidentProb) {
+	public void setCarAccidentProb(int carAccidentProb) {
 		CarAccidentProb = carAccidentProb;
 	}
 
@@ -1331,7 +1339,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 何回のうち1回の確率であんよが傷ついているとあんよが破壊されるかの確率 を設定する.
 	 * @param breakBodyByShitProb 何回のうち1回の確率であんよが傷ついているとあんよが破壊されるかの確率 
 	 */
-	public void setBreakBodyByShitProbability(int breakBodyByShitProb) {
+	public void setBreakBodyByShitProb(int breakBodyByShitProb) {
 		BreakBodyByShitProb = breakBodyByShitProb;
 	}
 
@@ -1363,7 +1371,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 何回のうち１回の確率で発情するかの確率 を設定する.
 	 * @param exciteProb 何回のうち１回の確率で発情するかの確率 
 	 */
-	public void setGetExcitedProbablity(int exciteProb) {
+	public void setExciteProb(int exciteProb) {
 		this.exciteProb = exciteProb;
 	}
 
@@ -2491,7 +2499,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * つがい を取得する.
 	 * @return つがい 
 	 */
-	public Body getPartner() {
+	public int getPartner() {
 		return partner;
 	}
 
@@ -2499,7 +2507,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * つがい を設定する.
 	 * @param partner つがい 
 	 */
-	public void setPartner(Body partner) {
+	public void setPartner(int partner) {
 		this.partner = partner;
 	}
 
@@ -2507,7 +2515,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 親を取得する.
 	 * @return 親
 	 */
-	public Body[] getParents() {
+	public int[] getParents() {
 		return parents;
 	}
 
@@ -2515,7 +2523,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 親を設定する.
 	 * @param parents 親
 	 */
-	public void setParents(Body[] parents) {
+	public void setParents(int[] parents) {
 		this.parents = parents;
 	}
 
@@ -2523,7 +2531,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 子供のリスト を取得する.
 	 * @return 子供のリスト 
 	 */
-	public List<Body> getChildrenList() {
+	public List<Integer> getChildrenList() {
 		return childrenList;
 	}
 
@@ -2531,7 +2539,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 子供のリスト を設定する.
 	 * @param childrenList 子供のリスト 
 	 */
-	public void setChildrenList(List<Body> childrenList) {
+	public void setChildrenList(List<Integer> childrenList) {
 		this.childrenList = childrenList;
 	}
 
@@ -2539,7 +2547,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 姉のリスト を取得する.
 	 * @return 姉のリスト 
 	 */
-	public List<Body> getElderSisterList() {
+	public List<Integer> getElderSisterList() {
 		return elderSisterList;
 	}
 
@@ -2547,7 +2555,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 姉のリスト を設定する.
 	 * @param elderSisterList 姉のリスト 
 	 */
-	public void setElderSisterList(List<Body> elderSisterList) {
+	public void setElderSisterList(List<Integer> elderSisterList) {
 		this.elderSisterList = elderSisterList;
 	}
 
@@ -2555,7 +2563,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 妹のリスト を取得する.
 	 * @return 妹のリスト 
 	 */
-	public List<Body> getSisterList() {
+	public List<Integer> getSisterList() {
 		return sisterList;
 	}
 
@@ -2563,7 +2571,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 妹のリスト を設定する.
 	 * @param sisterList 妹のリスト 
 	 */
-	public void setSisterList(List<Body> sisterList) {
+	public void setSisterList(List<Integer> sisterList) {
 		this.sisterList = sisterList;
 	}
 
@@ -2691,7 +2699,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * なにかのオブジェクト（すぃー、親ゆなど）に載せられている等のリンクが有る際のそのオブジェクト を取得する.
 	 * @return なにかのオブジェクト（すぃー、親ゆなど）に載せられている等のリンクが有る際のそのオブジェクト 
 	 */
-	public Obj getLinkParent() {
+	public int getLinkParent() {
 		return linkParent;
 	}
 
@@ -2699,7 +2707,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * なにかのオブジェクト（すぃー、親ゆなど）に載せられている等のリンクが有る際のそのオブジェクト を設定する.
 	 * @param linkParent なにかのオブジェクト（すぃー、親ゆなど）に載せられている等のリンクが有る際のそのオブジェクト 
 	 */
-	public void setLinkParent(Obj linkParent) {
+	public void setLinkParent(int linkParent) {
 		this.linkParent = linkParent;
 	}
 
@@ -3363,7 +3371,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 移動対象（移動先） を取得する.
 	 * @return 移動対象（移動先） 
 	 */
-	public Obj getMoveTarget() {
+	public int getMoveTarget() {
 		return moveTarget;
 	}
 
@@ -3371,7 +3379,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 移動対象（移動先） を設定する.
 	 * @param moveTarget 移動対象（移動先） 
 	 */
-	public void setMoveTarget(Obj moveTarget) {
+	public void setMoveTarget(int moveTarget) {
 		this.moveTarget = moveTarget;
 	}
 
@@ -3977,7 +3985,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * メッセージラインの色 を取得する.
 	 * @return メッセージラインの色 
 	 */
-	public Color getMessageLineColor() {
+	public Color4y getMessageLineColor() {
 		return messageLineColor;
 	}
 
@@ -3985,7 +3993,16 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * メッセージラインの色 を設定する.
 	 * @param messageLineColor メッセージラインの色 
 	 */
-	public void setMessageLineColor(Color messageLineColor) {
+	public void setOrigMessageLineColor(Color messageLineColor) {
+		this.messageLineColor = new Color4y(messageLineColor.getRed(), messageLineColor.getGreen(),
+				messageLineColor.getBlue(), messageLineColor.getAlpha());
+	}
+	
+	/**
+	 * メッセージラインの色 を設定する.
+	 * @param messageLineColor メッセージラインの色 
+	 */
+	public void setMessageLineColor(Color4y messageLineColor) {
 		this.messageLineColor = messageLineColor;
 	}
 
@@ -3993,7 +4010,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * メッセージボックスの色 を取得する.
 	 * @return メッセージボックスの色
 	 */
-	public Color getMessageBoxColor() {
+	public Color4y getMessageBoxColor() {
 		return messageBoxColor;
 	}
 
@@ -4001,15 +4018,24 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * メッセージボックスの色 を設定する.
 	 * @param messageBoxColor メッセージボックスの色 
 	 */
-	public void setMessageBoxColor(Color messageBoxColor) {
+	public void setMessageBoxColor(Color4y messageBoxColor) {
 		this.messageBoxColor = messageBoxColor;
+	}
+	
+	/**
+	 * メッセージボックスの色 を設定する.
+	 * @param messageBoxColor メッセージボックスの色 
+	 */
+	public void setOrigMessageBoxColor(Color messageBoxColor) {
+		this.messageBoxColor = new Color4y(messageBoxColor.getRed(), messageBoxColor.getGreen(),
+				messageBoxColor.getBlue(), messageBoxColor.getAlpha());
 	}
 
 	/**
 	 * メッセージテキストの色 を取得する.
 	 * @return メッセージテキストの色 
 	 */
-	public Color getMessageTextColor() {
+	public Color4y getMessageTextColor() {
 		return messageTextColor;
 	}
 
@@ -4017,8 +4043,17 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * メッセージテキストの色 を設定する.
 	 * @param messageTextColor メッセージテキストの色 
 	 */
-	public void setMessageTextColor(Color messageTextColor) {
+	public void setMessageTextColor(Color4y messageTextColor) {
 		this.messageTextColor = messageTextColor;
+	}
+	
+	/**
+	 * メッセージテキストの色 を設定する.
+	 * @param messageTextColor メッセージテキストの色 
+	 */
+	public void setOrigMessageTextColor(Color messageTextColor) {
+		this.messageTextColor = new Color4y(messageTextColor.getRed(), messageTextColor.getGreen(),
+				messageTextColor.getBlue(), messageTextColor.getAlpha());
 	}
 
 	public BasicStrokeEX getMessageWindowStroke() {
@@ -4273,7 +4308,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * お気に入りアイテム を取得する.
 	 * @return お気に入りアイテム 
 	 */
-	public HashMap<FavItemType, Obj> getFavItem() {
+	public HashMap<FavItemType, Integer> getFavItem() {
 		return favItem;
 	}
 
@@ -4281,7 +4316,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * お気に入りアイテム を設定する.
 	 * @param favItem お気に入りアイテム 
 	 */
-	public void setFavItem(HashMap<FavItemType, Obj> favItem) {
+	public void setFavItem(HashMap<FavItemType, Integer> favItem) {
 		this.favItem = favItem;
 	}
 
@@ -4289,7 +4324,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 持ち歩きアイテム を取得する.
 	 * @return 持ち歩きアイテム 
 	 */
-	public HashMap<TakeoutItemType, Obj> getTakeoutItem() {
+	public HashMap<TakeoutItemType, Integer> getTakeoutItem() {
 		return takeoutItem;
 	}
 
@@ -4297,7 +4332,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 持ち歩きアイテム を設定する.
 	 * @param takeoutItem 持ち歩きアイテム 
 	 */
-	public void setTakeoutItem(HashMap<TakeoutItemType, Obj> takeoutItem) {
+	public void setTakeoutItem(HashMap<TakeoutItemType, Integer> takeoutItem) {
 		this.takeoutItem = takeoutItem;
 	}
 
@@ -4449,7 +4484,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * @return 妹のインスタンス
 	 */
 	public Body getSister(int nIndex) {
-		return sisterList.get(nIndex);
+		return YukkuriUtil.getBodyInstance(sisterList.get(nIndex));
 	}
 
 	/**
@@ -4466,7 +4501,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * @return 姉のインスタンス
 	 */
 	public Body getElderSister(int nIndex) {
-		return elderSisterList.get(nIndex);
+		return YukkuriUtil.getBodyInstance(elderSisterList.get(nIndex));
 	}
 
 	/**
@@ -4489,7 +4524,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 		if (childrenList == null) {
 			return null;
 		}
-		return childrenList.get(nIndex);
+		return YukkuriUtil.getBodyInstance(childrenList.get(nIndex));
 	}
 
 	/**
@@ -4500,9 +4535,9 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 		if (setAgeState == AgeState.BABY) {
 			setAge(0);
 		} else if (setAgeState == AgeState.CHILD) {
-			setAge(BABYLIMIT);
+			setAge(BABYLIMITorg);
 		} else if (setAgeState == AgeState.ADULT) {
-			setAge(CHILDLIMIT);
+			setAge(CHILDLIMITorg);
 		}
 	}
 
@@ -4689,7 +4724,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 *  父親を取得
 	 * @return 父親のインスタンス
 	 */
-	public Body getFather() {
+	public int getFather() {
 		return parents[Parent.PAPA.ordinal()];
 	}
 
@@ -4697,7 +4732,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 母親を取得
 	 * @return 母親のインスタンス
 	 */
-	public Body getMother() {
+	public int getMother() {
 		return parents[Parent.MAMA.ordinal()];
 	}
 
@@ -4772,9 +4807,9 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * @return この個体の属する、体のAgeState
 	 */
 	public AgeState getBodyAgeState() {
-		if (getAge() < BABYLIMIT) {
+		if (getAge() < BABYLIMITorg) {
 			return AgeState.BABY;
-		} else if (getAge() < CHILDLIMIT) {
+		} else if (getAge() < CHILDLIMITorg) {
 			return AgeState.CHILD;
 		}
 		return AgeState.ADULT;
@@ -4793,14 +4828,14 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * @return この個体のダメージ具合から計算した、相当するDamage(Enum)
 	 */
 	public Damage getDamageState() {
-		if (damage > DAMAGELIMIT[getBodyAgeState().ordinal()]) {
+		if (damage > DAMAGELIMITorg[getBodyAgeState().ordinal()]) {
 			toDead();
 			return Damage.TOOMUCH;
 		}
-		if (damage >= DAMAGELIMIT[getBodyAgeState().ordinal()] * 3 / 4) {
+		if (damage >= DAMAGELIMITorg[getBodyAgeState().ordinal()] * 3 / 4) {
 			return Damage.TOOMUCH;
 		}
-		if (damage >= DAMAGELIMIT[getBodyAgeState().ordinal()] / 2) {
+		if (damage >= DAMAGELIMITorg[getBodyAgeState().ordinal()] / 2) {
 			return Damage.VERY;
 		}
 		return Damage.NONE;
@@ -4943,7 +4978,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * @return  食べ過ぎかどうか
 	 */
 	public boolean isOverEating() {
-		return (!dead && (hungry >= HUNGRYLIMIT[getBodyAgeState().ordinal()] * 1.3f));
+		return (!dead && (hungry >= HUNGRYLIMITorg[getBodyAgeState().ordinal()] * 1.3f));
 	}
 
 	/**
@@ -4952,7 +4987,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * @return お腹いっぱいかどうか
 	 */
 	public boolean isTooFull() {
-		return (!dead && hungry >= HUNGRYLIMIT[getBodyAgeState().ordinal()]);
+		return (!dead && hungry >= HUNGRYLIMITorg[getBodyAgeState().ordinal()]);
 	}
 
 	/**
@@ -4961,7 +4996,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * @return お腹いっぱい気味かどうか
 	 */
 	public boolean isFull() {
-		return (!dead && (hungry >= HUNGRYLIMIT[getBodyAgeState().ordinal()] * 0.8f));
+		return (!dead && (hungry >= HUNGRYLIMITorg[getBodyAgeState().ordinal()] * 0.8f));
 	}
 
 	/**
@@ -4970,7 +5005,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * @return お腹へってきているかどうか
 	 */
 	public boolean isHungry() {
-		return (!dead && (hungry <= HUNGRYLIMIT[getBodyAgeState().ordinal()] / 2));
+		return (!dead && (hungry <= HUNGRYLIMITorg[getBodyAgeState().ordinal()] / 2));
 	}
 
 	/**
@@ -4979,7 +5014,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * @return お腹減り気味かどうか
 	 */
 	public boolean isSoHungry() {
-		return (!dead && (hungry <= HUNGRYLIMIT[getBodyAgeState().ordinal()] * 0.2f));
+		return (!dead && (hungry <= HUNGRYLIMITorg[getBodyAgeState().ordinal()] * 0.2f));
 	}
 
 	/**
@@ -5038,7 +5073,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * @return 段階別（赤/子/成）の飢餓状態限界
 	 */
 	public int getHungryLimit() {
-		return HUNGRYLIMIT[getBodyAgeState().ordinal()];
+		return HUNGRYLIMITorg[getBodyAgeState().ordinal()];
 	}
 
 	/**
@@ -5080,7 +5115,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * @return 眠いかどうか
 	 */
 	public boolean isSleepy() {
-		if (!sleeping && wakeUpTime + ACTIVEPERIOD < getAge()) {
+		if (!sleeping && wakeUpTime + ACTIVEPERIODorg < getAge()) {
 			return true;
 		}
 		return false;
@@ -5199,7 +5234,20 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * @return 運んでいるアイテム
 	 */
 	public Obj getTakeoutItem(TakeoutItemType key) {
-		return takeoutItem.get(key);
+		if (takeoutItem == null) {
+			return null;
+		}
+		if (takeoutItem.get(key) == null) {
+			return null;
+		}
+		MapPlaceData m = SimYukkuri.world.getCurrentMap();
+		if (m.takenOutFood.containsKey(takeoutItem.get(key))) {
+			return m.takenOutFood.get(takeoutItem.get(key));
+		}
+		if (m.takenOutShit.containsKey(takeoutItem.get(key))) {
+			return m.takenOutShit.get(takeoutItem.get(key));
+		}
+		return YukkuriUtil.getBodyInstanceFromObjId(takeoutItem.get(key));
 	}
 
 	/**
@@ -5298,7 +5346,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 			childrenList = new LinkedList<>();
 		}
 		if (at != null) {
-			childrenList.add(at);
+			childrenList.add(at.getUniqueID());
 		}
 	}
 
@@ -5310,9 +5358,9 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 		if (bTarget == null) {
 			return;
 		}
-		Iterator<Body> itr = childrenList.iterator();
+		Iterator<Integer> itr = childrenList.iterator();
 		while (itr.hasNext()) {
-			Body at = itr.next();
+			Body at = YukkuriUtil.getBodyInstance(itr.next());
 			if (at == bTarget) {
 				itr.remove();
 			}
@@ -5326,7 +5374,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 */
 	public void addElderSisterList(Body at) {
 		if (at != null) {
-			elderSisterList.add(at);
+			elderSisterList.add(at.getUniqueID());
 		}
 	}
 
@@ -5338,9 +5386,9 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 		if (bTarget == null) {
 			return;
 		}
-		Iterator<Body> itr = elderSisterList.iterator();
+		Iterator<Integer> itr = elderSisterList.iterator();
 		while (itr.hasNext()) {
-			Body at = itr.next();
+			Body at = YukkuriUtil.getBodyInstance(itr.next());
 			if (at == bTarget) {
 				itr.remove();
 			}
@@ -5354,7 +5402,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 */
 	public void addSisterList(Body at) {
 		if (at != null) {
-			sisterList.add(at);
+			sisterList.add(at.getUniqueID());
 		}
 	}
 
@@ -5366,9 +5414,9 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 		if (bTarget == null) {
 			return;
 		}
-		Iterator<Body> itr = sisterList.iterator();
+		Iterator<Integer> itr = sisterList.iterator();
 		while (itr.hasNext()) {
-			Body at = itr.next();
+			Body at = YukkuriUtil.getBodyInstance(itr.next());
 			if (at == bTarget) {
 				itr.remove();
 			}
@@ -5380,7 +5428,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * @return うんうん限界
 	 */
 	public int getShitLimit() {
-		return SHITLIMIT[getBodyAgeState().ordinal()];
+		return SHITLIMITorg[getBodyAgeState().ordinal()];
 	}
 
 	/**
@@ -5403,8 +5451,8 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 		if (shitting)
 			return;
 		if (ibVeryShit) {
-			if (shit < SHITLIMIT[getBodyAgeState().ordinal()]) {
-				shit = SHITLIMIT[getBodyAgeState().ordinal()] - inShit;
+			if (shit < SHITLIMITorg[getBodyAgeState().ordinal()]) {
+				shit = SHITLIMITorg[getBodyAgeState().ordinal()] - inShit;
 			}
 		} else {
 			shit = inShit;
@@ -5444,7 +5492,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * @return 赤/子/成ゆのダメージ限界
 	 */
 	public int getDamageLimit() {
-		return getDAMAGELIMIT()[getBodyAgeState().ordinal()];
+		return getDAMAGELIMITorg()[getBodyAgeState().ordinal()];
 	}
 
 	/**
@@ -5476,7 +5524,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * @return 赤/子/成ゆのストレス値の限界
 	 */
 	public int getStressLimit() {
-		return STRESSLIMIT[getBodyAgeState().ordinal()];
+		return STRESSLIMITorg[getBodyAgeState().ordinal()];
 	}
 
 	/**
@@ -5485,7 +5533,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 */
 	public boolean isStressful() {
 		// ストレス限界の40%を超えている場合
-		if (STRESSLIMIT[getBodyAgeState().ordinal()] * checkNonYukkuriDiseaseTolerance() / 100 * 2 / 5 < stress) {
+		if (STRESSLIMITorg[getBodyAgeState().ordinal()] * checkNonYukkuriDiseaseTolerance() / 100 * 2 / 5 < stress) {
 			return true;
 		}
 		return false;
@@ -5497,7 +5545,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 */
 	public boolean isVeryStressful() {
 		// ストレス限界の60%を超えている場合
-		if (STRESSLIMIT[getBodyAgeState().ordinal()] * checkNonYukkuriDiseaseTolerance() / 100 * 3 / 5 < stress) {
+		if (STRESSLIMITorg[getBodyAgeState().ordinal()] * checkNonYukkuriDiseaseTolerance() / 100 * 3 / 5 < stress) {
 			return true;
 		}
 		return false;
@@ -5585,9 +5633,9 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 		if (footBakePeriod < 0) {
 			footBakePeriod = 0;
 		}
-		if (footBakePeriod > DAMAGELIMIT[getBodyAgeState().ordinal()]) {
+		if (footBakePeriod > DAMAGELIMITorg[getBodyAgeState().ordinal()]) {
 			ret = FootBake.CRITICAL;
-		} else if (footBakePeriod > (DAMAGELIMIT[getBodyAgeState().ordinal()] >> 1)) {
+		} else if (footBakePeriod > (DAMAGELIMITorg[getBodyAgeState().ordinal()] >> 1)) {
 			ret = FootBake.MIDIUM;
 		}
 		return ret;
@@ -5620,7 +5668,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * @param val 成長段階
 	 */
 	public void initAmount(AgeState val) {
-		bodyAmount = DAMAGELIMIT[val.ordinal()];
+		bodyAmount = DAMAGELIMITorg[val.ordinal()];
 	}
 
 	public int getCollisionX() {
@@ -5636,11 +5684,11 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * @return 足の速さ
 	 */
 	public int getStep() {
-		return (STEP[getBodyAgeState().ordinal()]);
+		return (STEPorg[getBodyAgeState().ordinal()]);
 	}
 
 	public int getStepDist() {
-		int p = (STEP[getBodyAgeState().ordinal()]) * (STEP[getBodyAgeState().ordinal()]);
+		int p = (STEPorg[getBodyAgeState().ordinal()]) * (STEPorg[getBodyAgeState().ordinal()]);
 		return p;
 	}
 
@@ -5656,6 +5704,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 		return braidSpr[getBodyAgeState().ordinal()];
 	}
 
+	@Transient
 	public BufferedImage getShadowImage() {
 		return shadowImages[getBodyAgeState().ordinal()];
 	}
@@ -5698,7 +5747,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * @return 体重
 	 */
 	public int getWeight() {
-		return (WEIGHT[getBodyAgeState().ordinal()] + (babyTypes.size() + stalkBabyTypes.size()) * 50);
+		return (WEIGHTorg[getBodyAgeState().ordinal()] + (babyTypes.size() + stalkBabyTypes.size()) * 50);
 	}
 
 	/**
@@ -5723,7 +5772,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * @return お気に入りアイテムのインスタンス
 	 */
 	public Obj getFavItem(FavItemType key) {
-		return favItem.get(key);
+		return favItem.get(key) == null ? null : takeMappedObj(favItem.get(key));
 	}
 
 	/**
@@ -5732,7 +5781,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * @param val お気に入りアイテムのインスタンス
 	 */
 	public void setFavItem(FavItemType key, Obj val) {
-		favItem.put(key, val);
+		favItem.put(key, val == null ? -1 : val.objId);
 	}
 
 	/**
@@ -5869,7 +5918,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * @return ゆかび第一段階以上になっているかどうか
 	 */
 	public boolean isSick() {
-		if (sickPeriod > INCUBATIONPERIOD) {
+		if (sickPeriod > INCUBATIONPERIODorg) {
 			return true;
 		} else
 			return false;
@@ -5880,7 +5929,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * @return ゆかび第二段階になっているかどうか
 	 */
 	public boolean isSickHeavily() {
-		if (sickPeriod > (INCUBATIONPERIOD * 8)) {
+		if (sickPeriod > (INCUBATIONPERIODorg * 8)) {
 			return true;
 		} else
 			return false;
@@ -5891,7 +5940,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * @return ゆかび第三段階になっているかどうか
 	 */
 	public boolean isSickTooHeavily() {
-		if (sickPeriod > (INCUBATIONPERIOD * 32) && isDamaged()) {
+		if (sickPeriod > (INCUBATIONPERIODorg * 32) && isDamaged()) {
 			return true;
 		} else
 			return false;
@@ -5901,7 +5950,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 強制的にゆかびにする.
 	 */
 	public final void forceSetSick() {
-		sickPeriod = (INCUBATIONPERIOD * 32) + 2;
+		sickPeriod = (INCUBATIONPERIODorg * 32) + 2;
 	}
 
 	/**
@@ -5909,7 +5958,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * @return 老ゆかどうか
 	 */
 	public final boolean isOld() {
-		return getAge() > (getLIFELIMIT() * 9 / 10);
+		return getAge() > (getLIFELIMITorg() * 9 / 10);
 	}
 
 	/**
@@ -5969,9 +6018,9 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 		if (bodyBakePeriod < 0) {
 			footBakePeriod = 0;
 		}
-		if (bodyBakePeriod > getDAMAGELIMIT()[getBodyAgeState().ordinal()] * 3 / 4) {
+		if (bodyBakePeriod > getDAMAGELIMITorg()[getBodyAgeState().ordinal()] * 3 / 4) {
 			ret = BodyBake.CRITICAL;
-		} else if (bodyBakePeriod > (getDAMAGELIMIT()[getBodyAgeState().ordinal()] * 2 / 5)) {
+		} else if (bodyBakePeriod > (getDAMAGELIMITorg()[getBodyAgeState().ordinal()] * 2 / 5)) {
 			ret = BodyBake.MIDIUM;
 		}
 		return ret;
@@ -6008,16 +6057,16 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void addLovePlayer(int val) {
 		//非ゆっくり症発症個体は常にプレイヤーを嫌いに
 		if (isNYD()) {
-			nLovePlayer = -1 * getLOVEPLAYERLIMIT();
+			nLovePlayer = -1 * getLOVEPLAYERLIMITorg();
 			return;
 		}
 		nLovePlayer += (TICK * val);
-		if (nLovePlayer < -1 * getLOVEPLAYERLIMIT()) {
+		if (nLovePlayer < -1 * getLOVEPLAYERLIMITorg()) {
 			// 下限設定
-			nLovePlayer = -1 * getLOVEPLAYERLIMIT();
-		} else if (getLOVEPLAYERLIMIT() < nLovePlayer) {
+			nLovePlayer = -1 * getLOVEPLAYERLIMITorg();
+		} else if (getLOVEPLAYERLIMITorg() < nLovePlayer) {
 			// 上限設定
-			nLovePlayer = getLOVEPLAYERLIMIT();
+			nLovePlayer = getLOVEPLAYERLIMITorg();
 		}
 	}
 
@@ -6044,9 +6093,9 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 */
 	public TangType getTangType() {
 		TangType ret;
-		if (getTang() < getTANGLEVEL()[0]) {
+		if (getTang() < getTANGLEVELorg()[0]) {
 			ret = TangType.POOR;
-		} else if (getTang() < getTANGLEVEL()[1]) {
+		} else if (getTang() < getTANGLEVELorg()[1]) {
 			ret = TangType.NORMAL;
 		} else {
 			ret = TangType.GOURMET;
@@ -6059,7 +6108,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * @return 一回の食事量
 	 */
 	public int getEatAmount() {
-		return getEATAMOUNT()[getBodyAgeState().ordinal()];
+		return getEATAMOUNTorg()[getBodyAgeState().ordinal()];
 	}
 
 	/**
@@ -6162,6 +6211,20 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void setTaken(boolean taken) {
 		this.taken = taken;
 	}
-	
-	
+
+	public boolean isPeropero() {
+		return peropero;
+	}
+
+	public boolean isBeVain() {
+		return beVain;
+	}
+
+	public boolean isBegging() {
+		return begging;
+	}
+
+	public void setYcost(int ycost) {
+		Ycost = ycost;
+	}
 }

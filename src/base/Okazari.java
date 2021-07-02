@@ -1,7 +1,5 @@
 package src.base;
 
-import java.awt.Point;
-import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
@@ -9,8 +7,11 @@ import java.io.IOException;
 
 import src.SimYukkuri;
 import src.draw.ModLoader;
+import src.draw.Point4y;
+import src.draw.Rectangle4y;
 import src.enums.AgeState;
 import src.enums.Type;
+import src.util.YukkuriUtil;
 
 /***************************************************
   おかざりオブジェクトクラス 
@@ -38,12 +39,12 @@ public class Okazari extends Obj {
 	private static final int[] OKAZARI_NUM = { 2, 2, 3 };
 
 	private static BufferedImage[][] images = new BufferedImage[OkazariType.values().length][2];
-	private static Rectangle[] boundary = new Rectangle[OkazariType.values().length];
+	private static Rectangle4y[] boundary = new Rectangle4y[OkazariType.values().length];
 
-	private Body owner;
+	private int owner;
 	private OkazariType okazariType;
 	// 胴体に対するオフセット
-	private Point[] offsetPos;
+	private Point4y[] offsetPos;
 
 	/**
 	 *  ゴミおかざりの画像読み込み
@@ -58,7 +59,7 @@ public class Okazari extends Obj {
 			images[i][0] = ModLoader.loadItemImage(loader, "trash" + File.separator + o[i].fileName + ".png");
 			images[i][1] = ModLoader.flipImage(images[i][0]);
 
-			boundary[i] = new Rectangle();
+			boundary[i] = new Rectangle4y();
 			boundary[i].width = images[i][0].getWidth(io);
 			boundary[i].height = images[i][0].getHeight(io);
 			boundary[i].x = boundary[i].width >> 1;
@@ -98,8 +99,13 @@ public class Okazari extends Obj {
 	 * おかざりのオフセットポジションを取得する.
 	 * @return おかざりのオフセットポジション
 	 */
-	public Point getOkazariOfsPos() {
-		return offsetPos[owner.getBodyAgeState().ordinal()];
+	public Point4y takeOkazariOfsPos() {
+		if (offsetPos == null) {
+			return null;
+		}
+		Body o = YukkuriUtil.getBodyInstance(owner);
+		if  (o == null) return null;
+		return offsetPos[YukkuriUtil.getBodyInstance(owner).getBodyAgeState().ordinal()];
 	}
 
 	/**
@@ -109,17 +115,44 @@ public class Okazari extends Obj {
 	 */
 	public Okazari(Body b, OkazariType type) {
 
-		owner = b;
+		owner = b.getUniqueID();
 		okazariType = type;
 		if (okazariType.fileName == null) {
 			offsetPos = null;
 			setBoundary(64, 127, 128, 128);
 		} else {
-			offsetPos = owner.getMountPoint(okazariType.fileName);
-			setBoundary(boundary[type.ordinal()]);
+			Body o = YukkuriUtil.getBodyInstance(owner);
+			if (o != null) {
+				offsetPos = YukkuriUtil.getBodyInstance(owner).getMountPoint(okazariType.fileName);
+				setBoundary(boundary[type.ordinal()]);
+			}
 		}
 		objType = Type.OKAZARI;
 		value = 0;
 		cost = 0;
 	}
+
+	public Okazari() {
+	}
+	
+	public int getOwner() {
+		return owner;
+	}
+
+	public void setOwner(int owner) {
+		this.owner = owner;
+	}
+
+	public Point4y[] getOffsetPos() {
+		return offsetPos;
+	}
+
+	public void setOffsetPos(Point4y[] offsetPos) {
+		this.offsetPos = offsetPos;
+	}
+
+	public void setOkazariType(OkazariType okazariType) {
+		this.okazariType = okazariType;
+	}
+	
 }

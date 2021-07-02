@@ -53,6 +53,7 @@ public class Steam extends Effect {
 	/**
 	 * イメージを取得する.
 	 */
+	@Override
 	public BufferedImage getImage() {
 		return images[animeFrame];
 	}
@@ -65,5 +66,9 @@ public class Steam extends Effect {
 		setBoundary(pivX, pivY, imgW, imgH);
 		interval = 0;
 		frames = 1;
+	}
+	
+	public Steam() {
+		
 	}
 }

@@ -354,7 +354,7 @@ public class MainCommandUI {
 	 * ステータスをクリアする.
 	 */
 	public static void clearStatus() {
-		yuStatusLabel[StatusLabel.MONEY.ordinal()].setText(StatusLabel.MONEY.label + SimYukkuri.world.getPlayer().cash);
+		yuStatusLabel[StatusLabel.MONEY.ordinal()].setText(StatusLabel.MONEY.label + SimYukkuri.world.getPlayer().getCash());
 		yuStatusLabel[StatusLabel.NAME.ordinal()].setText("");
 		yuStatusLabel[StatusLabel.RANK.ordinal()].setText(StatusLabel.RANK.label);
 		yuStatusLabel[StatusLabel.PERSONALITY.ordinal()].setText(StatusLabel.PERSONALITY.label);
@@ -410,7 +410,7 @@ public class MainCommandUI {
 		int hungry = 100 * b.getHungry() / b.getHungryLimit();
 		int shit = 100 * b.getShit() / b.getShitLimit();
 		int stress = 100 * b.getStress() / b.getStressLimit();
-		int nLovePlayer = 100 * b.getnLovePlayer() / b.getLOVEPLAYERLIMIT();
+		int nLovePlayer = 100 * b.getnLovePlayer() / b.getLOVEPLAYERLIMITorg();
 
 		yuStatusLabel[StatusLabel.MONEY.ordinal()].setText(StatusLabel.MONEY.label + SimYukkuri.world.getPlayer().getCash());
 		yuStatusLabel[StatusLabel.NAME.ordinal()].setText(" " + (ResourceUtil.IS_JP ? b.getNameJ() : b.getNameE()));

@@ -23,6 +23,7 @@ import src.base.Effect;
 import src.base.Obj;
 import src.base.ObjEX;
 import src.draw.ModLoader;
+import src.draw.Rectangle4y;
 import src.draw.Translate;
 import src.enums.CriticalDamegeType;
 import src.enums.EffectType;
@@ -43,7 +44,7 @@ public class ProcesserPlate extends ObjEX implements java.io.Serializable {
 	/**処理対象(ゆっくり)*/
 	public static final int hitCheckObjType = ObjEX.YUKKURI;
 	private static BufferedImage[] images = new BufferedImage[2];
-	private static Rectangle boundary = new Rectangle();
+	private static Rectangle4y boundary = new Rectangle4y();
 
 	/**加工対象のリスト*/
 	protected List<Body> processedBodyList = new LinkedList<Body>();
@@ -117,7 +118,7 @@ public class ProcesserPlate extends ObjEX implements java.io.Serializable {
 		return null;
 	}
 	/**境界線の取得*/
-	public static Rectangle getBounding() {
+	public static Rectangle4y getBounding() {
 		return boundary;
 	}
 
@@ -138,7 +139,7 @@ public class ProcesserPlate extends ObjEX implements java.io.Serializable {
 	public boolean checkHitObj(Rectangle colRect, Obj o){
 		if(o.getZ() == 0){
 			Translate.translate(o.getX(), o.getY(), tmpPos);
-			if(colRect.contains(tmpPos)){
+			if(colRect.contains(new java.awt.Point(tmpPos.x, tmpPos.y))){
 					objHitProcess(o);
 						return true;
 			}
@@ -312,7 +313,7 @@ public class ProcesserPlate extends ObjEX implements java.io.Serializable {
 					}
 					if(bTarget.isSleeping()) bTarget.wakeup();
 					bTarget.cutHair();
-					bTarget.Peal();
+					bTarget.peal();
 					/*if(bTarget.hasBraidCheck()){
 						bTarget.takeBraid();
 					}*/
@@ -431,7 +432,7 @@ public class ProcesserPlate extends ObjEX implements java.io.Serializable {
 			processedBodyList.clear();
 			processedBodyEffectList.clear();
 		}
-		SimYukkuri.world.getCurrentMap().processerPlate.remove(this);
+		SimYukkuri.world.getCurrentMap().processerPlate.remove(objId);
 	}
 
 	/** 設定メニュー*/
@@ -484,7 +485,7 @@ public class ProcesserPlate extends ObjEX implements java.io.Serializable {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		SimYukkuri.world.getCurrentMap().processerPlate.add(this);
+		SimYukkuri.world.getCurrentMap().processerPlate.put(objId, this);
 		//objType = Type.PLATFORM;
 		objEXType = ObjEXType.PROCESSERPLATE;
 		interval = 5;
@@ -492,8 +493,11 @@ public class ProcesserPlate extends ObjEX implements java.io.Serializable {
 		readIniFile();
 		boolean ret = setupProcesserPlate(this);
 		if( !ret){
-			SimYukkuri.world.getCurrentMap().processerPlate.remove(this);
+			SimYukkuri.world.getCurrentMap().processerPlate.remove(objId);
 		}
+	}
+	public ProcesserPlate() {
+		
 	}
 	/**iniファイル読み込み*/
 	public void readIniFile(){

@@ -1,11 +1,17 @@
 package src.base;
 
-import java.awt.Point;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
+import java.beans.Transient;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
+
+import src.draw.Point4y;
+import src.draw.Rectangle4y;
 import src.draw.Translate;
 import src.enums.Event;
+import src.enums.Numbering;
 import src.enums.ObjEXType;
 import src.enums.Type;
 import src.item.Barrier;
@@ -13,6 +19,7 @@ import src.item.Barrier;
 /*********************************************************
  *  ゆっくり以外のゲーム内オブジェクトの元となるクラス
  */
+@JsonTypeInfo(use = Id.CLASS)
 public abstract class ObjEX extends Obj implements java.io.Serializable {
 	static final long serialVersionUID = 1L;
 	/**オブジェクトタイプ*/
@@ -41,10 +48,10 @@ public abstract class ObjEX extends Obj implements java.io.Serializable {
 	}
 
 	/**標準用長方形型境界線*/
-	protected static Rectangle boundary = new Rectangle();
+	protected static Rectangle4y boundary = new Rectangle4y();
 
 	/**親オブジェクト*/
-	protected Obj linkParent = null;
+	protected int linkParent = -1;
 	/**ゆっくりに対しての見た目(FOODでのみ使用)*/
 	protected int looks = 0;
 	/**負荷分散のためのインターバル値*/
@@ -55,12 +62,13 @@ public abstract class ObjEX extends Obj implements java.io.Serializable {
 	 * <br>画像=判定ならpivXYでOK プレス機など設置地面付近なら要調整*/
 	protected int colW = 0, colH = 0;
 	/**処理対象の位置*/
-	protected Point tmpPos = new Point();
+	protected Point4y tmpPos = new Point4y();
 
 	/**画像レイヤー*/
 	abstract public int getImageLayer(BufferedImage[] layer);
 
 	/**影の画像*/
+	@Transient
 	abstract public BufferedImage getShadowImage();
 
 	/**リストから除去*/
@@ -87,7 +95,7 @@ public abstract class ObjEX extends Obj implements java.io.Serializable {
 	}
 
 	/**親オブジェクトのゲッター*/
-	public Obj getParent() {
+	public int getLinkParent() {
 		return linkParent;
 	}
 
@@ -124,13 +132,14 @@ public abstract class ObjEX extends Obj implements java.io.Serializable {
 
 	/**当たり判定の大きさゲッター
 	 * (Revtangle Ver)*/
-	public void getCollisionRect(Rectangle r) {
+	public Rectangle getCollisionRect(Rectangle r) {
 		int x = getScreenPivot().x;
 		int y = getScreenPivot().y;
 		r.x = x - colW;
 		r.y = y - colH;
 		r.width = colW << 1;
 		r.height = colH << 1;
+		return r;
 	}
 
 	/**あたり判定の可否*/
@@ -160,7 +169,7 @@ public abstract class ObjEX extends Obj implements java.io.Serializable {
 			// 対象の座標をフィールド座標に変換
 			Translate.translate(o.getX(), o.getY(), tmpPos);
 			// 点が描画矩形に入ったかの判定
-			if (tmpRect.contains(tmpPos)) {
+			if (tmpRect.contains(new java.awt.Point(tmpPos.x, tmpPos.y))) {
 				return true;
 			}
 		}
@@ -181,7 +190,7 @@ public abstract class ObjEX extends Obj implements java.io.Serializable {
 			// 対象の座標をフィールド座標に変換
 			Translate.translate(o.getX(), o.getY(), tmpPos);
 			// 点が描画矩形に入ったかの判定
-			if (colRect.contains(tmpPos)) {
+			if (colRect.contains(new java.awt.Point(tmpPos.x, tmpPos.y))) {
 				objHitProcess(o);
 				return false;
 			}
@@ -268,11 +277,16 @@ public abstract class ObjEX extends Obj implements java.io.Serializable {
 
 	/**初期設定*/
 	public ObjEX(int initX, int initY, int initOption) {
+		objId = Numbering.INSTANCE.numberingObjId();
 		objType = Type.PLATFORM;
 		x = initX;
 		y = initY;
 		z = 0;
 		option = initOption;
 		enabled = true;
+	}
+	
+	public ObjEX() {
+		
 	}
 }

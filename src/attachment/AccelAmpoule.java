@@ -13,6 +13,7 @@ import src.enums.AttachProperty;
 import src.enums.Direction;
 import src.enums.Event;
 import src.system.ResourceUtil;
+import src.util.YukkuriUtil;
 
 /****************************************
  *  成長促進アンプル
@@ -73,26 +74,32 @@ public class AccelAmpoule extends Attachment {
 
 	@Override
 	protected Event update() {
-		if (!parent.isDead() && !parent.isAdult()) {
-			parent.addAge(TICK * 10000);
+		Body pa = YukkuriUtil.getBodyInstance(parent);
+		if (pa == null) return null;
+		if (!pa.isDead() && !pa.isAdult()) {
+			pa.addAge(TICK * 10000);
 		}
 		return Event.DONOTHING;
 	}
 
 	@Override
 	public BufferedImage getImage(Body b) {
+		Body pa = YukkuriUtil.getBodyInstance(parent);
+		if (pa == null) return null;
 		if (b.getDirection() == Direction.RIGHT) {
-			return images[parent.getBodyAgeState().ordinal()][1];
+			return images[pa.getBodyAgeState().ordinal()][1];
 		}
-		return images[parent.getBodyAgeState().ordinal()][0];
+		return images[pa.getBodyAgeState().ordinal()][0];
 	}
 
 	@Override
 	public void resetBoundary() {
-		setBoundary(pivX[parent.getBodyAgeState().ordinal()],
-				pivY[parent.getBodyAgeState().ordinal()],
-				imgW[parent.getBodyAgeState().ordinal()],
-				imgH[parent.getBodyAgeState().ordinal()]);
+		Body pa = YukkuriUtil.getBodyInstance(parent);
+		if (pa == null) return;
+		setBoundary(pivX[pa.getBodyAgeState().ordinal()],
+				pivY[pa.getBodyAgeState().ordinal()],
+				imgW[pa.getBodyAgeState().ordinal()],
+				imgH[pa.getBodyAgeState().ordinal()]);
 	}
 
 	/**コンストラクタ
@@ -101,16 +108,22 @@ public class AccelAmpoule extends Attachment {
 	public AccelAmpoule(Body body) {
 		super(body);
 		setAttachProperty(property, POS_KEY);
-		setBoundary(pivX[parent.getBodyAgeState().ordinal()],
-				pivY[parent.getBodyAgeState().ordinal()],
-				imgW[parent.getBodyAgeState().ordinal()],
-				imgH[parent.getBodyAgeState().ordinal()]);
+		Body pa = YukkuriUtil.getBodyInstance(parent);
+		if (pa != null) {
+			setBoundary(pivX[pa.getBodyAgeState().ordinal()],
+				pivY[pa.getBodyAgeState().ordinal()],
+				imgW[pa.getBodyAgeState().ordinal()],
+				imgH[pa.getBodyAgeState().ordinal()]);
+		}
 		value = 1000;
 		cost = 0;
 		//処理インターバルの変更
 		processInterval = 100;
 	}
-
+	
+	public AccelAmpoule() {
+	}
+	
 	@Override
 	public String toString() {
 		return ResourceUtil.getInstance().read("item_accell_ampoule");

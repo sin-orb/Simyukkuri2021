@@ -5,14 +5,15 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -28,6 +29,7 @@ import src.base.Obj;
 import src.base.ObjEX;
 import src.base.Okazari.OkazariType;
 import src.draw.ModLoader;
+import src.draw.Rectangle4y;
 import src.draw.Translate;
 import src.enums.Attitude;
 import src.enums.Event;
@@ -87,7 +89,7 @@ public class Yunba extends ObjEX implements java.io.Serializable {
 	public static final int hitCheckObjType = 0;
 	private static BufferedImage bodyImages[][] = new BufferedImage[10][2];
 	private static BufferedImage images[][] = new BufferedImage[6][2];
-	private static Rectangle boundary = new Rectangle();
+	private static Rectangle4y boundary = new Rectangle4y();
 
 	private static JCheckBox[][] checkBox;
 	private static JCheckBox[][] checkBox2;
@@ -191,7 +193,7 @@ public class Yunba extends ObjEX implements java.io.Serializable {
 		return true;
 	}
 	/**境界線の取得*/
-	public static Rectangle getBounding() {
+	public static Rectangle4y getBounding() {
 		return boundary;
 	}
 
@@ -216,7 +218,7 @@ public class Yunba extends ObjEX implements java.io.Serializable {
 
 	@Override
 	public void removeListData() {
-		SimYukkuri.world.getCurrentMap().yunba.remove(this);
+		SimYukkuri.world.getCurrentMap().yunba.remove(objId);
 	}
 
 	@Override
@@ -249,7 +251,8 @@ public class Yunba extends ObjEX implements java.io.Serializable {
 			setAge(0);
 
 			if(shitCheck) {
-				for(Shit o: curMap.shit) {
+				for(Map.Entry<Integer, Shit> entry : curMap.shit.entrySet()) {
+					Shit o = entry.getValue();
 					if(SimYukkuri.RND.nextBoolean()) continue;
 					// 追加
 					if (!actionFlags[Action.WALLTHROUGH.ordinal()][0] && Barrier.acrossBarrier(getX(), getY(), o.getX(), o.getY(), Barrier.MAP_ITEM)) {
@@ -262,7 +265,7 @@ public class Yunba extends ObjEX implements java.io.Serializable {
 
 					boolean bIsShitOnToilet = false;
 					// トイレの上のうんうんは無視。空中もチェック
-					List<Toilet> toiletList = SimYukkuri.world.getCurrentMap().toilet;
+					List<Toilet> toiletList = new LinkedList<>(SimYukkuri.world.getCurrentMap().toilet.values());
 					for (Toilet t: toiletList) {
 						// Hitするなら終了
 						if( t.checkHitObj(o, true))
@@ -288,7 +291,8 @@ public class Yunba extends ObjEX implements java.io.Serializable {
 					target = o;
 					break;
 				}
-				for(Vomit o: curMap.vomit) {
+				for(Map.Entry<Integer, Vomit> entry : curMap.vomit.entrySet()) {
+					Vomit o = entry.getValue();
 					if(SimYukkuri.RND.nextBoolean()) continue;
 					// 追加
 					if (!actionFlags[Action.WALLTHROUGH.ordinal()][0] && Barrier.acrossBarrier(getX(), getY(), o.getX(), o.getY(), Barrier.MAP_ITEM)) {
@@ -313,9 +317,11 @@ public class Yunba extends ObjEX implements java.io.Serializable {
 			if(stalkCheck && action == null){ // 追加
 				if( curMap.stalk != null )
 				{
-					for(Stalk s: curMap.stalk) {
+					for(Map.Entry<Integer, Stalk> entry : curMap.stalk.entrySet()) {
+						Stalk s = entry.getValue();
 						if(norndCheck==false && SimYukkuri.RND.nextBoolean()) continue;
-						if(s.getPlantYukkuri() != null) continue;
+						int id = s.getPlantYukkuri();
+						if(SimYukkuri.world.getCurrentMap().body.get(id) != null) continue;
 						if (!actionFlags[Action.WALLTHROUGH.ordinal()][0] && Barrier.acrossBarrier(getX(), getY(), s.getX(), s.getY(), Barrier.MAP_ITEM)) {
 							continue;
 						}
@@ -338,7 +344,8 @@ public class Yunba extends ObjEX implements java.io.Serializable {
 
 				if( curMap.food != null )
 				{
-					for(Food f: curMap.food) {
+					for(Map.Entry<Integer, Food> entry : curMap.food.entrySet()) {
+						Food f = entry.getValue();
 						if(f.getFoodType() != Food.FoodType.STALK) continue;
 						if(SimYukkuri.RND.nextBoolean()) continue;
 						if (!actionFlags[Action.WALLTHROUGH.ordinal()][0] && Barrier.acrossBarrier(getX(), getY(), f.getX(), f.getY(), Barrier.MAP_ITEM)) {
@@ -362,8 +369,8 @@ public class Yunba extends ObjEX implements java.io.Serializable {
 			}
 
 			if(bodyCheck && action == null) {
-				Body[] bodyList = SimYukkuri.world.getCurrentMap().body.toArray(new Body[0]);
-				for(Body b: bodyList) {
+				for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().body.entrySet()) {
+					Body b = entry.getValue();
 					if(norndCheck==false && SimYukkuri.RND.nextBoolean()) continue;
 					// 茎にぶら下がってる固体はスルー
 					if(b.isbindStalk() || b.getZ() > 0) continue;
@@ -561,7 +568,8 @@ public class Yunba extends ObjEX implements java.io.Serializable {
 
 			// 空の餌皿掃除
 			if(foodCheck && action == null) {
-				for(Food f: curMap.food) {
+				for(Map.Entry<Integer, Food> entry : curMap.food.entrySet()) {
+					Food f = entry.getValue();
 					if(SimYukkuri.RND.nextBoolean()) continue;
 					if(!f.isEmpty()) continue;
 					if (!actionFlags[Action.WALLTHROUGH.ordinal()][0] && Barrier.acrossBarrier(getX(), getY(), f.getX(), f.getY(), Barrier.MAP_ITEM)) {
@@ -804,8 +812,7 @@ public class Yunba extends ObjEX implements java.io.Serializable {
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
 
-		List<Yunba> list = SimYukkuri.world.getCurrentMap().yunba;
-		list.add(this);
+		SimYukkuri.world.getCurrentMap().yunba.put(objId, this);
 		objType = Type.OBJECT;
 		objEXType = ObjEXType.YUNBA;
 		interval = 5;
@@ -829,8 +836,11 @@ public class Yunba extends ObjEX implements java.io.Serializable {
 			}
 		}
 		else {
-			list.remove(this);
+			SimYukkuri.world.getCurrentMap().yunba.remove(objId);
 		}
+	}
+	public Yunba() {
+		
 	}
 
 	// 設定メニュー
@@ -1138,9 +1148,9 @@ public class Yunba extends ObjEX implements java.io.Serializable {
 	// 他のゆんばのターゲットになっているか
 	public boolean cheackOtherYunbaTarget(Obj o)
 	{
-		List<Yunba> yunbaList = SimYukkuri.world.getCurrentMap().yunba;
-		for(Yunba yunba: yunbaList)
+		for(Map.Entry<Integer, Yunba> entry : SimYukkuri.world.getCurrentMap().yunba.entrySet())
 		{
+			Yunba yunba = entry.getValue();
 			if( yunba == this ){
 				continue;
 			}

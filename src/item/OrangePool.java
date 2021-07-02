@@ -2,12 +2,10 @@ package src.item;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
-import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 import javax.swing.ButtonGroup;
 import javax.swing.JOptionPane;
@@ -19,6 +17,7 @@ import src.base.Body;
 import src.base.Obj;
 import src.base.ObjEX;
 import src.draw.ModLoader;
+import src.draw.Rectangle4y;
 import src.enums.FootBake;
 import src.enums.ObjEXType;
 import src.enums.Type;
@@ -43,7 +42,7 @@ public class OrangePool extends ObjEX implements java.io.Serializable {
 	public static final int hitCheckObjType = ObjEX.YUKKURI;
 	private static final int images_num = 6; //このクラスの総使用画像数
 	private static BufferedImage[] images = new BufferedImage[images_num];
-	private static Rectangle boundary = new Rectangle();
+	private static Rectangle4y boundary = new Rectangle4y();
 	private boolean rescue;
 	private static int[] value = {500,10000};
 	private static int[] cost = {5,100};
@@ -85,7 +84,7 @@ public class OrangePool extends ObjEX implements java.io.Serializable {
 		return null;
 	}
 	/**境界線の取得*/
-	public static Rectangle getBounding() {
+	public static Rectangle4y getBounding() {
 		return boundary;
 	}
 
@@ -143,7 +142,7 @@ public class OrangePool extends ObjEX implements java.io.Serializable {
 	
 	@Override
 	public void removeListData(){
-		SimYukkuri.world.getCurrentMap().orangePool.remove(this);
+		SimYukkuri.world.getCurrentMap().orangePool.remove(objId);
 	}
 	
 	/**
@@ -157,8 +156,7 @@ public class OrangePool extends ObjEX implements java.io.Serializable {
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
 		
-		List<OrangePool> list = SimYukkuri.world.getCurrentMap().orangePool;
-			list.add(this);
+		SimYukkuri.world.getCurrentMap().orangePool.put(objId, this);
 
 		objType = Type.PLATFORM;
 		objEXType = ObjEXType.ORANGEPOOL;
@@ -175,8 +173,11 @@ public class OrangePool extends ObjEX implements java.io.Serializable {
 			}
 		}
 		else {
-			list.remove(this);
+			SimYukkuri.world.getCurrentMap().orangePool.remove(objId);
 		}
+	}
+	public OrangePool() {
+		
 	}
 
 	/** 設定メニュー*/

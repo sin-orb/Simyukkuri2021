@@ -1,7 +1,6 @@
 package src.item;
 
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.TexturePaint;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
@@ -16,6 +15,7 @@ import src.base.Body;
 import src.base.Obj;
 import src.command.GadgetAction;
 import src.draw.ModLoader;
+import src.draw.Point4y;
 import src.draw.Translate;
 import src.enums.BaryInUGState;
 import src.game.Shit;
@@ -122,8 +122,8 @@ public class Farm extends FieldShapeBase implements Serializable {
 	 * @param fey 設置終点のY座標
 	 */
 	public Farm(int fsx, int fsy, int fex, int fey) {
-		Point pS = Translate.getFieldLimitForMap(fsx, fsy);
-		Point pE = Translate.getFieldLimitForMap(fex, fey);
+		Point4y pS = Translate.getFieldLimitForMap(fsx, fsy);
+		Point4y pE = Translate.getFieldLimitForMap(fex, fey);
 		fieldSX = pS.x;
 		fieldSY = pS.y;
 		fieldEX = pE.x;
@@ -134,7 +134,7 @@ public class Farm extends FieldShapeBase implements Serializable {
 		Translate.getMovedPoint(fieldSX, fieldSY, fieldEX, fieldEY, 0, 0, 0, 0, anPointBaseX, anPointBaseY);
 
 		// フィールド座標が渡ってくるのでマップ座標も計算しておく
-		Point pos = Translate.invertLimit(anPointBaseX[0], anPointBaseY[0]);
+		Point4y pos = Translate.invertLimit(anPointBaseX[0], anPointBaseY[0]);
 		mapSX = Math.max(0, Math.min(pos.x, Translate.mapW));
 		mapSY = Math.max(0, Math.min(pos.y, Translate.mapH));
 
@@ -156,7 +156,7 @@ public class Farm extends FieldShapeBase implements Serializable {
 			mapEY -= (mapEY - Translate.mapH);
 		}
 
-		Point f = new Point();
+		Point4y f = new Point4y();
 		Translate.translate(mapSX, mapSY, f);
 		fieldSX = f.x;
 		fieldSY = f.y;
@@ -171,6 +171,10 @@ public class Farm extends FieldShapeBase implements Serializable {
 
 		SimYukkuri.world.getCurrentMap().farm.add(this);
 		MapPlaceData.setFiledFlag(SimYukkuri.world.getCurrentMap().fieldMap, mapSX, mapSY, mapW, mapH, true, FIELD_FARM);
+	}
+	
+	public Farm() {
+		
 	}
 
 	/** フィールド座標にあるシェイプ取得*/
@@ -207,13 +211,13 @@ public class Farm extends FieldShapeBase implements Serializable {
 		int nX = inX;
 		int nY = inY;
 		if (bIsField) {
-			Point pos = Translate.invertLimit(inX, inY);
+			Point4y pos = Translate.invertLimit(inX, inY);
 			nX = pos.x;
 			nY = pos.y;
 		}
 
-		Point posFirst = Translate.invertLimit(anPointX[0], anPointY[0]);
-		Point posSecond = Translate.invertLimit(anPointX[2], anPointY[2]);
+		Point4y posFirst = Translate.invertLimit(anPointX[0], anPointY[0]);
+		Point4y posSecond = Translate.invertLimit(anPointX[2], anPointY[2]);
 		if (posFirst != null && posSecond != null) {
 			if (posFirst.x <= nX && nX <= posSecond.x && posFirst.y <= nY && nY <= posSecond.y) {
 				return true;
@@ -355,32 +359,26 @@ public class Farm extends FieldShapeBase implements Serializable {
 				}
 
 				if (!b.isHasStalk() && 1000 < amount) {
-					GadgetAction.putObjEX(Stalk.class, b.getX(), b.getY(), b.getDirection().ordinal());
-					List<Stalk> stalkList = SimYukkuri.world.getCurrentMap().stalk;
-					if (stalkList != null && stalkList.size() != 0) {
-						Stalk currentStalk = stalkList.get(stalkList.size() - 1);
-						if (b.getStalks() != null) {
-							b.getStalks().add(currentStalk);
-							currentStalk.setPlantYukkuri(b);
-							b.setHasStalk(true);
-							amount -= 200;
-						}
+					Stalk s = (Stalk)GadgetAction.putObjEX(Stalk.class, b.getX(), b.getY(), b.getDirection().ordinal());
+					SimYukkuri.world.getCurrentMap().stalk.put(s.objId, s);
+					if (b.getStalks() != null) {
+						b.getStalks().add(s);
+						s.setPlantYukkuri(b);
+						b.setHasStalk(true);
+						amount -= 200;
 					}
 				} else {
 					// 余裕がありそうならランダムで茎を生やす
 					if (3000 < amount && !b.isDamaged()) {
 						if (SimYukkuri.RND.nextInt(100) == 0) {
-							GadgetAction.putObjEX(Stalk.class, b.getX(), b.getY(), b.getDirection().ordinal());
-							List<Stalk> stalkList = SimYukkuri.world.getCurrentMap().stalk;
-							if (stalkList != null && stalkList.size() != 0) {
-								Stalk currentStalk = stalkList.get(stalkList.size() - 1);
-								if (b.getStalks() != null) {
-									b.getStalks().add(currentStalk);
-									currentStalk.setPlantYukkuri(b);
-									b.setHasStalk(true);
-								}
-								amount -= 200;
+							Stalk s = (Stalk)GadgetAction.putObjEX(Stalk.class, b.getX(), b.getY(), b.getDirection().ordinal());
+							SimYukkuri.world.getCurrentMap().stalk.put(s.objId, s);
+							if (b.getStalks() != null) {
+								b.getStalks().add(s);
+								s.setPlantYukkuri(b);
+								b.setHasStalk(true);
 							}
+							amount -= 200;
 						}
 					}
 				}

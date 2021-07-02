@@ -10,6 +10,7 @@ import src.enums.Happiness;
 import src.enums.Intelligence;
 import src.system.MessagePool;
 import src.system.ResourceUtil;
+import src.util.YukkuriUtil;
 
 /*
 	出産時の励ましイベント
@@ -28,6 +29,10 @@ public class BreedEvent extends EventPacket implements java.io.Serializable {
 		super(f, t, tgt, cnt);
 	}
 	
+	public BreedEvent() {
+		
+	}
+	
 	/**
 	 *  参加チェック
 	 *  ここで各種チェックを行い、イベントへ参加するかを返す
@@ -40,10 +45,12 @@ public class BreedEvent extends EventPacket implements java.io.Serializable {
 		boolean ret = false;
 
 		priority = EventPriority.MIDDLE;
+		Body from = YukkuriUtil.getBodyInstance(getFrom());
+		if (from == null) return false;
 
 		if(b.nearToBirth())return false;
 		if(b.isUnBirth()) return false;
-		if(getFrom() == b) return false;
+		if(from == b) return false;
 		if(!b.canEventResponse()) return false;
 		
 		// 興奮してるレイパーは参加しない
@@ -53,7 +60,7 @@ public class BreedEvent extends EventPacket implements java.io.Serializable {
 		}
 		
 		// うんうん奴隷など格差があれば祝わない
-		if( b.getPublicRank() != getFrom().getPublicRank() )
+		if( b.getPublicRank() != from.getPublicRank() )
 		{
 			return false;
 		}
@@ -65,12 +72,12 @@ public class BreedEvent extends EventPacket implements java.io.Serializable {
 		}
 
 		// 自分が馬鹿で親におかざりがなかったら参加しない
-		if(!getFrom().hasOkazari() && b.getIntelligence() == Intelligence.FOOL) return false;
+		if(!from.hasOkazari() && b.getIntelligence() == Intelligence.FOOL) return false;
 
-		if(getFrom().isParent(b) || getFrom().isPartner(b) || b.isParent(getFrom()) || b.isPartner(getFrom())) return true;
+		if(from.isParent(b) || from.isPartner(b) || b.isParent(from) || b.isPartner(from)) return true;
 		
 		//アリにたかられてたらそれどころじゃないので参加しない
-		if (getFrom().getAttachmentSize(Ants.class) != 0 || getFrom().getNumOfAnts() != 0) {
+		if (from.getAttachmentSize(Ants.class) != 0 || from.getNumOfAnts() != 0) {
 			return false;
 		}
 		
@@ -82,7 +89,8 @@ public class BreedEvent extends EventPacket implements java.io.Serializable {
 	 */
 	@Override
 	public void start(Body b) {
-		b.moveToEvent(this, getFrom().getX(), getFrom().getY());
+		Body from = YukkuriUtil.getBodyInstance(getFrom());
+		if (from != null) b.moveToEvent(this, from.getX(), from.getY());
 	}
 	
 	/**
@@ -91,20 +99,22 @@ public class BreedEvent extends EventPacket implements java.io.Serializable {
 	 */
 	@Override
 	public UpdateState update(Body b) {
-		if(b.nearToBirth())return UpdateState.FORCE_EXEC;
+		Body from = YukkuriUtil.getBodyInstance(getFrom());
+		if (from == null) return UpdateState.ABORT;
+		if(b.nearToBirth()) return UpdateState.FORCE_EXEC;
 		// 相手の一定距離まで近づいたら移動終了
-		if(Translate.distance(b.getX(), b.getY(), getFrom().getX(), getFrom().getY()) < 20000) {
+		if(Translate.distance(b.getX(), b.getY(), from.getX(), from.getY()) < 20000) {
 			b.moveToEvent(this, b.getX(), b.getY());
 			return UpdateState.FORCE_EXEC;
 		}
 		else {
-			b.moveToEvent(this, getFrom().getX(), getFrom().getY());
+			b.moveToEvent(this, from.getX(), from.getY());
 		}
 		
-		if (getFrom().isDead() || getFrom().isPealed() ||
-				getFrom().isBurned() || getFrom().isBurst()||
-				getFrom().isRemoved() || getFrom().isCrushed() ||
-				getFrom().isPacked() || !getFrom().nearToBirth()) {
+		if (from.isDead() || from.isPealed() ||
+				from.isBurned() || from.isBurst()||
+				from.isRemoved() || from.isCrushed() ||
+				from.isPacked() || !from.nearToBirth()) {
 				return UpdateState.ABORT;
 		}
 
@@ -127,20 +137,22 @@ public class BreedEvent extends EventPacket implements java.io.Serializable {
 		if( b.isNYD() ){
 			return false;
 		}
+		Body from = YukkuriUtil.getBodyInstance(getFrom());
+		if (from == null) return true;
 		// 相手が出産前なら応援
-		if(getFrom().isBirth()) {
+		if(from.isBirth()) {
 			b.setHappiness(Happiness.AVERAGE);
-			b.lookTo(getFrom().getX(), getFrom().getY());
+			b.lookTo(from.getX(), from.getY());
 			b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.RootForPartner), 40, false, false);
-			getFrom().addMemories(1);
+			from.addMemories(1);
 			b.addMemories(1);
 			return false;
 		}
 		else {
 			// 誕生
-			if(!getFrom().hasBabyOrStalk()) {
-				b.lookTo(getFrom().getX(), getFrom().getY());
-				if(getFrom().isHasPants()) {
+			if(!from.hasBabyOrStalk()) {
+				b.lookTo(from.getX(), from.getY());
+				if(from.isHasPants()) {
 					b.setHappiness(Happiness.VERY_SAD);
 					b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.Surprise), 40, true, true);
 					b.addStress(1800);
@@ -155,7 +167,7 @@ public class BreedEvent extends EventPacket implements java.io.Serializable {
 			}
 			else {
 				b.setHappiness(Happiness.AVERAGE);
-				b.lookTo(getFrom().getX(), getFrom().getY());
+				b.lookTo(from.getX(), from.getY());
 				return false;
 			}
 			return true;

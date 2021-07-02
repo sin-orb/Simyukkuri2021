@@ -1,8 +1,5 @@
 package src.yukkuri;
 
-
-import java.awt.Dimension;
-import java.awt.Point;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.IOException;
@@ -11,7 +8,9 @@ import java.util.Map;
 
 import src.SimYukkuri;
 import src.base.Body;
+import src.draw.Dimension4y;
 import src.draw.ModLoader;
+import src.draw.Point4y;
 import src.draw.Terrarium;
 import src.enums.AgeState;
 import src.enums.BodyRank;
@@ -40,10 +39,10 @@ public class WasaReimu extends Reimu implements java.io.Serializable {
 	private static BufferedImage[][][][] imagesNagasi = new BufferedImage[ImageCode.values().length][2][3][ModLoader.nMaxImgOtherVer + 1];
 	private static int directionOffset[][] = new int[ImageCode.values().length][2];
 	private static int directionOffsetNagasi[][] = new int[ImageCode.values().length][2];
-	private static Dimension[] boundary = new Dimension[3];
-	private static Dimension[] braidBoundary = new Dimension[3];
+	private static Dimension4y[] boundary = new Dimension4y[3];
+	private static Dimension4y[] braidBoundary = new Dimension4y[3];
 	private static boolean imageLoaded = false;
-	private static Map<String, Point[]> AttachOffset = new HashMap<String, Point[]>();
+	private static Map<String, Point4y[]> AttachOffset = new HashMap<String, Point4y[]>();
 	//---
 	// iniファイルから読み込んだ初期値
 	private static int baseSpeed = 100;
@@ -137,7 +136,7 @@ public class WasaReimu extends Reimu implements java.io.Serializable {
 		return 1;
 	}
 	@Override
-	public Point[] getMountPoint(String key) {
+	public Point4y[] getMountPoint(String key) {
 		return AttachOffset.get(key);
 	}
 
@@ -155,6 +154,9 @@ public class WasaReimu extends Reimu implements java.io.Serializable {
 		speed = baseSpeed;
 		setBaseBodyFileName(baseFileName);
 		IniFileUtil.readYukkuriIniFile(this);
+	}
+	public WasaReimu() {
+		
 	}
 }
 

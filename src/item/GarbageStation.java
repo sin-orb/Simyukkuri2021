@@ -3,12 +3,10 @@ package src.item;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
-import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 
 import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
@@ -19,6 +17,7 @@ import src.base.Obj;
 import src.base.ObjEX;
 import src.command.GadgetAction;
 import src.draw.ModLoader;
+import src.draw.Rectangle4y;
 import src.draw.Terrarium;
 import src.enums.ObjEXType;
 import src.enums.Type;
@@ -90,7 +89,7 @@ public class GarbageStation extends ObjEX implements java.io.Serializable {
 	/**画像の入れもの*/
 	public static final int hitCheckObjType = 0;
 	private static BufferedImage images[] = new BufferedImage[3];
-	private static Rectangle boundary = new Rectangle();
+	private static Rectangle4y boundary = new Rectangle4y();
 
 	private boolean[] enable = null;
 	private Obj[] food = null;
@@ -127,7 +126,7 @@ public class GarbageStation extends ObjEX implements java.io.Serializable {
 	}
 
 	/**境界線の取得*/
-	public static Rectangle getBounding() {
+	public static Rectangle4y getBounding() {
 		return boundary;
 	}
 
@@ -166,12 +165,13 @@ public class GarbageStation extends ObjEX implements java.io.Serializable {
 			FoodType f = rndTable[type].foodType;
 			int px = (idx == 0 ? -20 : 20);
 			food[idx] = GadgetAction.putObjEX(Food.class, getX() + px, getY(), f.ordinal());
+			SimYukkuri.world.getCurrentMap().food.put(food[idx].objId, (Food)food[idx]);
 		}
 	}
 
 	@Override
 	public void removeListData() {
-		SimYukkuri.world.getCurrentMap().garbageStation.remove(this);
+		SimYukkuri.world.getCurrentMap().garbageStation.remove(objId);
 	}
 
 	/**コンストラクタ*/
@@ -180,8 +180,7 @@ public class GarbageStation extends ObjEX implements java.io.Serializable {
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), 8);
 
-		List<GarbageStation> list = SimYukkuri.world.getCurrentMap().garbageStation;
-		list.add(this);
+		SimYukkuri.world.getCurrentMap().garbageStation.put(objId, this);
 		objType = Type.OBJECT;
 		objEXType = ObjEXType.GARBAGESTATION;
 		enable = new boolean[rndTable.length];
@@ -192,8 +191,11 @@ public class GarbageStation extends ObjEX implements java.io.Serializable {
 		boolean ret = setupGarbageSt(this);
 		readIniFile();
 		if (!ret) {
-			list.remove(this);
+			SimYukkuri.world.getCurrentMap().garbageStation.remove(objId);
 		}
+	}
+	public GarbageStation() {
+		
 	}
 
 	/** 設定メニュー*/

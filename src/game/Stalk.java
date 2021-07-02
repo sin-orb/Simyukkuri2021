@@ -2,9 +2,9 @@ package src.game;
 
 
 
-import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
+import java.beans.Transient;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
@@ -16,6 +16,7 @@ import src.base.Body;
 import src.base.Obj;
 import src.base.ObjEX;
 import src.draw.ModLoader;
+import src.draw.Rectangle4y;
 import src.draw.Translate;
 import src.enums.Direction;
 import src.enums.Event;
@@ -23,6 +24,7 @@ import src.enums.ObjEXType;
 import src.enums.Type;
 import src.item.Barrier;
 import src.system.ResourceUtil;
+import src.util.YukkuriUtil;
 
 
 /**
@@ -32,11 +34,11 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 	static final long serialVersionUID = 1L;
 
 	private static final int images_num = 1; //このクラスの総使用画像数
-	private static BufferedImage[] images = new BufferedImage[images_num*2+1];
-	private static Rectangle boundary = new Rectangle();
+	private static transient BufferedImage[] images = new BufferedImage[images_num*2+1];
+	private static Rectangle4y boundary = new Rectangle4y();
 
-	private Body plantYukkuri = null;		// この茎が生えてる親
-	private List<Body> bindBaby = new LinkedList<Body>();	// この茎にぶら下がってる子
+	private int plantYukkuri = -1;		// この茎が生えてる親
+	private List<Integer> bindBabies = new LinkedList<Integer>();	// この茎にぶら下がってる子のID
 	/** （食べたときの）量 */
 	public int amount = 0;
 	/**
@@ -69,8 +71,9 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 	}
 
 	@Override
+	@Transient
 	public BufferedImage getShadowImage() {
-		if(plantYukkuri == null) return images[2];
+		if(plantYukkuri == -1) return images[2];
 		return null;
 	}
 	/**
@@ -90,7 +93,15 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 		int i = 0;
 		int babyX = 0;
 		int babyZ = 0;
-		for (Body b : getBindBaby()){
+		if (getBindBabies() == null) {
+			return;
+		}
+		for (Integer j : getBindBabies()){
+			if (j == null) {
+				i++;
+				continue;
+			}
+			Body b = YukkuriUtil.getBodyInstance(j);
 			if ( b == null ) {
 				i++;
 				continue;
@@ -114,51 +125,60 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 	@Override
 	public void removeListData(){
 		remove();
-		SimYukkuri.world.getCurrentMap().stalk.remove(this);
+		SimYukkuri.world.getCurrentMap().stalk.remove(objId);
 	}
 	/**
 	 * この茎をはやしているゆっくりを設定する.
 	 * @param b この茎をはやしているゆっくり
 	 */
 	public void setPlantYukkuri( Body b ) {
-		plantYukkuri = b;
+		if (b == null) {
+			plantYukkuri = -1;
+		} else {
+			plantYukkuri = b.getUniqueID();
+		}
 	}
 	/**
 	 * この茎をはやしているゆっくりを取得する.
 	 * @return この茎をはやしているゆっくり
 	 */
-	public Body getPlantYukkuri() {
+	public int getPlantYukkuri() {
 		return plantYukkuri;
 	}
 
 	@Override
-	public Obj getBindObj() {
-		return getPlantYukkuri();
+	public int getBindObj() {
+		return plantYukkuri;
 	}
 	/**
 	 * この茎に実ゆっくりを追加する.
 	 * @param b この茎に生やそうとしている実ゆっくり
 	 */
 	public void setBindBaby( Body b ) {
-		if ( bindBaby.size() < 5 ) {
-			bindBaby.add(b);
+		if ( bindBabies.size() < 5 ) {
+			bindBabies.add(b == null ? -1 : b.getUniqueID());
 		}
 	}
 	/**
 	 * この茎に生えている実ゆっくりを取得する.
 	 * @return この茎に生えている実ゆっくり
 	 */
-	public List<Body> getBindBaby() {
-		return bindBaby;
+	public List<Integer> getBindBabies() {
+		return bindBabies;
 	}
 	/**
 	 * 茎から実ゆっくりをすべて取り除く.
 	 */
 	public void disBindBabys() {
-		if ( plantYukkuri != null  && plantYukkuri.getStalks() != null) {
-			plantYukkuri.getStalks().set(plantYukkuri.getStalks().indexOf( this ), null );
+		if ( plantYukkuri != -1) {
+			Body planted = YukkuriUtil.getBodyInstance(plantYukkuri);
+			if (planted != null && planted.getStalks() != null) {
+				planted.getStalks().set(planted.getStalks().indexOf( this ), null );
+			}
 		}
-		for ( Body b : bindBaby ){
+
+		for ( int i : bindBabies ){
+			Body b = YukkuriUtil.getBodyInstance(i);
 			if ( b != null ){
 				b.setBindStalk(null) ;
 			}
@@ -170,10 +190,10 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 	 */
 	public void setX (int X)
 	{
-		if (X < 0 && plantYukkuri == null) {
+		if (X < 0 && plantYukkuri == -1) {
 			x = 0;
 		}
-		else if (X > Translate.mapW && plantYukkuri == null) {
+		else if (X > Translate.mapW && plantYukkuri == -1) {
 			x = Translate.mapW;
 		}
 		else {
@@ -185,10 +205,10 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 	 * @param Y座標
 	 */
 	public void setY (int Y) {
-		if (Y < 0 && plantYukkuri == null) {
+		if (Y < 0 && plantYukkuri == -1) {
 			y = 0;
 		}
-		else if(Y > Translate.mapH && plantYukkuri == null) {
+		else if(Y > Translate.mapH && plantYukkuri == -1) {
 			y = Translate.mapH;
 		}
 		else {
@@ -201,7 +221,7 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 	 */
 	public void setZ(int Z)
 	{
-		if (Z < nMostDepth && plantYukkuri == null) {
+		if (Z < nMostDepth && plantYukkuri == -1) {
 			if( bFallingUnderGround )
 			{
 				z = Z;
@@ -209,7 +229,7 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 				z = nMostDepth;				
 			}
 		}
-		else if (Z > Translate.mapZ && plantYukkuri == null) {
+		else if (Z > Translate.mapZ && plantYukkuri == -1) {
 			z = Translate.mapZ;
 		}
 		else {
@@ -221,12 +241,13 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 	 * @return この茎がゆっくりから生えている状態であるかどうか
 	 */
 	public boolean isPlantYukkuri(){
-		for ( Body b : bindBaby ){
+		for ( int i : bindBabies ){
+			Body b = YukkuriUtil.getBodyInstance(i);
 			if ( b != null ){
 				return true;
 			}
 		}
-		return (plantYukkuri!=null);
+		return (plantYukkuri != -1);
 	}
 	/**
 	 * 茎を食べる.
@@ -237,24 +258,37 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 		amount -= eatAmount;
 		if (amount <= 0) {
 			amount = 0;
-			for ( Body b : bindBaby ){
+			for ( Integer i : bindBabies ){
+				if (i == null) {
+					continue;
+				}
+				Body b = YukkuriUtil.getBodyInstance(i);
 				if ( b != null ){
 					b.setBindStalk(null) ;
 				}
 			}
 			remove();
-			SimYukkuri.world.getCurrentMap().stalk.remove(this);
+			SimYukkuri.world.getCurrentMap().stalk.remove(objId);
 		}
 	}
 
 	@Override
 	public void grab() {
 		grabbed = true;
-		if ( getPlantYukkuri() != null ){
-			getPlantYukkuri().removeStalk(this);
+		if ( takePlantYukkuri() != null ){
+			takePlantYukkuri().removeStalk(this);
 		}
 		setPlantYukkuri(null);
 	}
+	
+	/**
+	 * 生えているゆっくりを取得する.
+	 * @return 生えているゆっくり
+	 */
+	public Body takePlantYukkuri() {
+		return SimYukkuri.world.getCurrentMap().body.get(plantYukkuri);
+	}
+
 	@Override
 	public Event clockTick()
 	{
@@ -264,7 +298,7 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 			disBindBabys();
 			return Event.REMOVED;
 		}
-		if (!grabbed && plantYukkuri == null) {
+		if (!grabbed && plantYukkuri == -1) {
 			if (vx != 0) {
 				x += vx;
 				if (x < 0) {
@@ -325,47 +359,57 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 		objType = Type.OBJECT;
 		objEXType = ObjEXType.STALK;
 		amount = 100*24*5;
-		SimYukkuri.world.getCurrentMap().stalk.add(this);
+		SimYukkuri.world.getCurrentMap().stalk.put(objId, this);
 		calcPos();
+	}
+	
+	public Stalk() {
+		
 	}
 
 	@Override
 	public int getHitCheckObjType() {
-		// TODO 自動生成されたメソッド・スタブ
 		return 0;
 	}
 
 	@Override
 	public int objHitProcess(Obj o) {
-		// TODO 自動生成されたメソッド・スタブ
 		return 0;
 	}
 	
 	@Override
 	public void remove() {
-		plantYukkuri = null;
-		Body[] babies = getBindBaby().toArray(new Body[0]);
-		for (Body baby : babies) {
+		plantYukkuri = -1;
+		for (Integer i : getBindBabies()) {
+			if (i == null) {
+				continue;
+			}
+			Body baby = YukkuriUtil.getBodyInstance(i);
 			if (baby != null) {
 				baby.setBindStalk(null);
-				baby.setBindObj(null);
+				baby.setBindObj(-1);
 			}
 		}
-		bindBaby.clear();
+		bindBabies.clear();
 		//SimYukkuri.world.getCurrentMap().stalk.remove(this);
 		super.remove();
 	}
 	
 	@Override
 	public String toString() {
+		Body p = YukkuriUtil.getBodyInstance(plantYukkuri);
 		String ret = "";
 		ret += ResourceUtil.getInstance().read("game_stalk1");
-		ret += (plantYukkuri == null ? ResourceUtil.getInstance().read("command_status_nothing") : ResourceUtil.IS_JP ? plantYukkuri.getNameJ() : plantYukkuri.getNameE());
+		if (p != null) {
+		ret += (plantYukkuri == -1 ? ResourceUtil.getInstance().read("command_status_nothing") : ResourceUtil.IS_JP ? 
+				p.getNameJ() : p.getNameE());
+		}
 		ret += ResourceUtil.getInstance().read("game_stalk2");
-		if (bindBaby == null || bindBaby.size() == 0) {
+		if (bindBabies == null || bindBabies.size() == 0) {
 			ret += ResourceUtil.getInstance().read("command_status_nothing");
 		} else {
-			for (Body baby : bindBaby) {
+			for (int i : bindBabies) {
+				Body baby = YukkuriUtil.getBodyInstance(i);
 				if (baby == null) {
 					ret += ResourceUtil.getInstance().read("game_empty");
 				} else {
@@ -378,5 +422,22 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 		ret += ")";
 		return ret;
 	}
+
+	public int getAmount() {
+		return amount;
+	}
+
+	public void setAmount(int amount) {
+		this.amount = amount;
+	}
+
+	public void setPlantYukkuri(int plantYukkuri) {
+		this.plantYukkuri = plantYukkuri;
+	}
+
+	public void setBindBabies(List<Integer> bindBaby) {
+		this.bindBabies = bindBaby;
+	}
+	
 }
 

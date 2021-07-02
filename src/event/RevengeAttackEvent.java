@@ -13,6 +13,7 @@ import src.enums.ImageCode;
 import src.logic.BodyLogic;
 import src.system.MessagePool;
 import src.system.ResourceUtil;
+import src.util.YukkuriUtil;
 
 /***************************************************
 	ゆっくりが攻撃されたときの反撃イベント
@@ -31,6 +32,10 @@ public class RevengeAttackEvent extends EventPacket implements java.io.Serializa
 	public RevengeAttackEvent(Body f, Body t, Obj tgt, int cnt) {
 		super(f, t, tgt, cnt);
 	}
+	
+	public RevengeAttackEvent() {
+		
+	}
 
 	// 参加チェック
 	@Override
@@ -44,6 +49,7 @@ public class RevengeAttackEvent extends EventPacket implements java.io.Serializa
 	// イベント開始動作
 	@Override
 	public void start(Body b) {
+		Body to = YukkuriUtil.getBodyInstance(getTo());
 		b.setToFood(false);
 		b.setToBed(false);
 		b.setToShit(false);
@@ -51,16 +57,19 @@ public class RevengeAttackEvent extends EventPacket implements java.io.Serializa
 		b.setToSukkiri(false);
 		b.setToTakeout(true);
 		b.setWakeUpTime(b.getAge());//眠気が覚める
-		int colX = BodyLogic.calcCollisionX(b, to);
-		b.moveToEvent(this, to.getX() + colX, to.getY());
+		if (to != null) {
+			int colX = BodyLogic.calcCollisionX(b, to);
+			b.moveToEvent(this, to.getX() + colX, to.getY());
+		}
 	}
 
 	// 毎フレーム処理
 	// UpdateState.ABORTを返すとイベント終了
 	@Override
 	public UpdateState update(Body b) {
+		Body to = YukkuriUtil.getBodyInstance(getTo());
 		// 相手が消えてしまったらイベント中断
-		if (to.isRemoved() || to.isTaken())
+		if (to == null || to.isRemoved() || to.isTaken())
 			return UpdateState.ABORT;
 		// 相手に追いつけないケースがあるため、一定距離まで近づいたら相手を呼び止める
 		if (Translate.distance(b.getX(), b.getY(), to.getX(), to.getY()) < 2500) {
@@ -81,8 +90,9 @@ public class RevengeAttackEvent extends EventPacket implements java.io.Serializa
 			b.setHappiness(Happiness.SAD);
 			return true;
 		}
+		Body to = YukkuriUtil.getBodyInstance(getTo());
 		// 相手が残っていたら攻撃
-		if (!to.isRemoved() && to.getZ() < 5) {
+		if (to != null && !to.isRemoved() && to.getZ() < 5) {
 			b.setWorldEventResMessage(MessagePool.getMessage(b, MessagePool.Action.RevengeAttack), Const.HOLDMESSAGE,
 					true, false);
 			if (b.getDirection() == Direction.LEFT) {

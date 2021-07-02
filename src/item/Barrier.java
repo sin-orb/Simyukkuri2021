@@ -4,12 +4,12 @@ package src.item;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.awt.Point;
 import java.awt.Stroke;
 import java.io.Serializable;
 import java.util.List;
 
 import src.SimYukkuri;
+import src.draw.Point4y;
 import src.draw.Translate;
 import src.system.FieldShapeBase;
 import src.system.MapPlaceData;
@@ -74,7 +74,7 @@ public class Barrier extends FieldShapeBase implements Serializable {
 		fieldEX = fex;
 		fieldEY = fey;
 		// フィールド座標が渡ってくるのでマップ座標も計算しておく
-		Point pos;
+		Point4y pos;
 		pos = Translate.invertLimit(fieldSX, fieldSY);
 		mapSX = Math.max(0, Math.min(pos.x, Translate.mapW));
 		mapSY = Math.max(0, Math.min(pos.y, Translate.mapH));
@@ -113,6 +113,10 @@ public class Barrier extends FieldShapeBase implements Serializable {
 
 		MapPlaceData.setWallLine(SimYukkuri.world.getCurrentMap().wallMap, mapSX, mapSY, mapEX, mapEY, true, attribute);
 		SimYukkuri.world.getCurrentMap().barrier.add(this);
+	}
+	
+	public Barrier() {
+		
 	}
 	/**プレビューの線の描画*/
 	public static void drawPreview(Graphics2D g2, int sx, int sy, int ex, int ey) {

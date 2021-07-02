@@ -1,6 +1,6 @@
 package src.logic;
 
-import java.util.List;
+import java.util.Map;
 
 import src.SimYukkuri;
 import src.base.Body;
@@ -60,7 +60,7 @@ public class BedLogic {
 		}
 
 		// 対象が決まっていたら到達したかチェック
-		Obj target = b.getMoveTarget();
+		Obj target = b.takeMappedObj(b.getMoveTarget());
 		if(b.isToBed() && target != null) {
 			// 途中で消されてたら他の候補を探す
 			if(target.isRemoved()) {
@@ -147,7 +147,7 @@ public class BedLogic {
 	 */
 	public static Obj searchBed(Body b){
 		Obj found = b.getFavItem(FavItemType.BED);
-		int minDistance = b.getEYESIGHT();
+		int minDistance = b.getEYESIGHTorg();
 		// うんうん奴隷の場合
 		if( b.getPublicRank() == PublicRank.UnunSlave){
 			b.setFavItem(FavItemType.BED, null);
@@ -169,8 +169,8 @@ public class BedLogic {
 		// うんうん奴隷ではない場合
 		if( b.getPublicRank() != PublicRank.UnunSlave){
 			if(found == null) {
-			List<Bed> list = SimYukkuri.world.getCurrentMap().bed;
-				for (ObjEX t: list) {
+				for (Map.Entry<Integer, Bed> entry : SimYukkuri.world.getCurrentMap().bed.entrySet()) {
+					ObjEX t = entry.getValue();
 					int distance = Translate.distance(b.getX(), b.getY(), t.getX(), t.getY());
 					if (minDistance > distance) {
 						if (Barrier.acrossBarrier(b.getX(), b.getY(), t.getX(), t.getY(), Barrier.MAP_BODY[wallMode] + Barrier.BARRIER_KEKKAI)) {
@@ -183,8 +183,8 @@ public class BedLogic {
 			}
 	//// 仮 おうち検索
 			if(found == null) {
-			List<House> list = SimYukkuri.world.getCurrentMap().house;
-			for (ObjEX t: list) {
+				for (Map.Entry<Integer, House> entry : SimYukkuri.world.getCurrentMap().house.entrySet()) {
+					ObjEX t = entry.getValue();
 					int distance = Translate.distance(b.getX(), b.getY(), t.getX(), t.getY());
 					if (minDistance > distance) {
 						if (Barrier.acrossBarrier(b.getX(), b.getY(), t.getX(), t.getY(), Barrier.MAP_BODY[wallMode] + Barrier.BARRIER_KEKKAI)) {
@@ -199,8 +199,8 @@ public class BedLogic {
 		else{
 			// うんうん奴隷の場合、トイレを探す
 			if(found == null) {
-			List<Toilet> list = SimYukkuri.world.getCurrentMap().toilet;
-				for (ObjEX t: list) {
+				for (Map.Entry<Integer, Toilet> entry : SimYukkuri.world.getCurrentMap().toilet.entrySet()) {
+					ObjEX t = entry.getValue();
 					int distance = Translate.distance(b.getX(), b.getY(), t.getX(), t.getY());
 					if (minDistance > distance) {
 						if (Barrier.acrossBarrier(b.getX(), b.getY(), t.getX(), t.getY(), Barrier.MAP_BODY[wallMode] + Barrier.BARRIER_KEKKAI)) {
