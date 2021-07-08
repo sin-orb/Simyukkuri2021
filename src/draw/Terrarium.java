@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -150,12 +151,12 @@ public class Terrarium {
 	 */
 	public static void saveState(File file) throws IOException {
 //		ObjectMapper mapper = buildMapper();
-//		SimYukkuri.world.setMaxUniqueId(Numbering.INSTANCE.getYukkuriID());
-//		SimYukkuri.world.setMaxObjId(Numbering.INSTANCE.getObjId());
-//		Enumeration<Obj> enu = SimYukkuri.world.player.getItemList().elements();
-//		while (enu.hasMoreElements()) {
-//			SimYukkuri.world.player.getItemForSave().add(enu.nextElement());
-//		}
+		SimYukkuri.world.setMaxUniqueId(Numbering.INSTANCE.getYukkuriID());
+		SimYukkuri.world.setMaxObjId(Numbering.INSTANCE.getObjId());
+		Enumeration<Obj> enu = SimYukkuri.world.player.getItemList().elements();
+		while (enu.hasMoreElements()) {
+			SimYukkuri.world.player.getItemForSave().add(enu.nextElement());
+		}
 //		String json = mapper.writeValueAsString(SimYukkuri.world);
 //		try (FileWriter filewriter = new FileWriter(file);) {
 //			filewriter.write(json);
@@ -165,7 +166,6 @@ public class Terrarium {
 						new FileOutputStream(file)));
 		try {
 			out.writeUTF(Terrarium.class.getCanonicalName());
-			out.writeObject(Numbering.INSTANCE.getYukkuriID());
 			out.writeObject(SimYukkuri.world);
 			out.flush();
 		} finally {
@@ -208,11 +208,16 @@ public class Terrarium {
 				String errMsg = "Bad save: " + s;
 				throw new IOException(errMsg);
 			}
-			Numbering.INSTANCE.setYukkuriID(((Integer) in.readObject()).intValue());
 			tmpWorld = (World) in.readObject();
 
 		} finally {
 			in.close();
+		}
+		Numbering.INSTANCE.setYukkuriID(tmpWorld.getMaxUniqueId());
+		Numbering.INSTANCE.setObjId(tmpWorld.getMaxObjId());
+		tmpWorld.player.getItemList().clear();
+		for (Obj o : tmpWorld.player.getItemForSave()) {
+			tmpWorld.player.getItemList().addElement(o);
 		}
 		// 持ち物を復元
 		MainCommandUI.itemWindow.itemList.setModel(tmpWorld.player.getItemList());

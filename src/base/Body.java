@@ -1035,10 +1035,14 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		Rectangle r = takeScreenRect();
 		for (Map.Entry<Integer, Bed> entry : SimYukkuri.world.getCurrentMap().bed.entrySet()) {
 			Bed bd = entry.getValue();
-			if (bd.takeScreenRect().intersects(r))
+			if (takeScreenRect(bd.getScreenRect()).intersects(r))
 				return true;
 		}
 		return false;
+	}
+
+	private Rectangle takeScreenRect(Rectangle4y screenRect) {
+		return new Rectangle(screenRect.getX(), screenRect.getY(), screenRect.getWidth(), screenRect.getHeight());
 	}
 
 	private Rectangle takeScreenRect() {
