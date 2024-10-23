@@ -691,10 +691,12 @@ public class GadgetAction {
 			if (ev.isShiftDown() || ev.isControlDown()) {
 				for (Body b : bodyListP) {
 					b.peal();
+					b.setStubbornlyDirty(false);
 				}
 			}  else {
 				if (found instanceof Body) {
 					((Body) found).peal();
+					((Body) found).setStubbornlyDirty(false);
 				}
 			}
 			break;
