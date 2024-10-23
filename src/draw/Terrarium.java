@@ -9,6 +9,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Iterator;
@@ -216,8 +217,13 @@ public class Terrarium {
 		Numbering.INSTANCE.setYukkuriID(tmpWorld.getMaxUniqueId());
 		Numbering.INSTANCE.setObjId(tmpWorld.getMaxObjId());
 		tmpWorld.player.getItemList().clear();
+		List<Integer> _list = new ArrayList<Integer>();
 		for (Obj o : tmpWorld.player.getItemForSave()) {
-			tmpWorld.player.getItemList().addElement(o);
+			int id = o.getObjId();
+			if (!_list.contains(id)) {
+				_list.add(id);
+				tmpWorld.player.getItemList().addElement(o);
+			}
 		}
 		// 持ち物を復元
 		MainCommandUI.itemWindow.itemList.setModel(tmpWorld.player.getItemList());
