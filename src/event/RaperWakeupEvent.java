@@ -17,7 +17,8 @@ import src.util.YukkuriUtil;
 */
 public class RaperWakeupEvent extends EventPacket implements java.io.Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1123319861445649770L;
+
 	/**
 	 * コンストラクタ.
 	 */

@@ -2,6 +2,7 @@ package src.item;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
+import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
@@ -24,7 +25,8 @@ import src.system.MessagePool;
  * ダストシュート
  */
 public class GarbageChute extends ObjEX implements java.io.Serializable {
-	static final long serialVersionUID = 1L;
+
+	private static final long serialVersionUID = -2629236583041612041L;
 	/**処理対象(ゆっくり、うんうん、フード、吐餡、茎)*/
 	public static final int hitCheckObjType = ObjEX.YUKKURI | ObjEX.SHIT | ObjEX.FOOD | ObjEX.TOY | ObjEX.OBJECT
 			| ObjEX.VOMIT | ObjEX.STALK;
@@ -67,6 +69,7 @@ public class GarbageChute extends ObjEX implements java.io.Serializable {
 	}
 
 	@Override
+	@Transient
 	public BufferedImage getShadowImage() {
 		return null;
 	}
@@ -77,6 +80,7 @@ public class GarbageChute extends ObjEX implements java.io.Serializable {
 	}
 
 	@Override
+	@Transient
 	public int getHitCheckObjType() {
 		return hitCheckObjType;
 	}
@@ -168,4 +172,29 @@ public class GarbageChute extends ObjEX implements java.io.Serializable {
 	public GarbageChute() {
 		
 	}
+
+	public List<Obj> getBindObjList() {
+		return bindObjList;
+	}
+
+	public void setBindObjList(List<Obj> bindObjList) {
+		this.bindObjList = bindObjList;
+	}
+
+	public ItemRank getItemRank() {
+		return itemRank;
+	}
+
+	public void setItemRank(ItemRank itemRank) {
+		this.itemRank = itemRank;
+	}
+
+	public Body getBindBody() {
+		return bindBody;
+	}
+
+	public void setBindBody(Body bindBody) {
+		this.bindBody = bindBody;
+	}
+	
 }

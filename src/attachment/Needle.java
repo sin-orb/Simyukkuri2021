@@ -25,7 +25,7 @@ import src.util.YukkuriUtil;
  */
 public class Needle extends Attachment {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 4370778209880937836L;
 	/**識別キー*/
 	private static final String POS_KEY = "Needle", POS_KEY_IN_ANAL = "Needle_In_Anal";
 	/**画像の入れ物

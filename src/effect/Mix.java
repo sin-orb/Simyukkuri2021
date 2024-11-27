@@ -3,6 +3,7 @@ package src.effect;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
+import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
 
@@ -15,13 +16,12 @@ import src.draw.ModLoader;
  */
 public class Mix extends Effect {
 
-	private static final long serialVersionUID = 1L;
-
-	private static BufferedImage[] images;
-	private static int imgW;
-	private static int imgH;
-	private static int pivX;
-	private static int pivY;
+	private static final long serialVersionUID = 3746115855650888135L;
+	public static BufferedImage[] images;
+	public static int imgW;
+	public static int imgH;
+	public static int pivX;
+	public static int pivY;
 	/**
 	 * イメージをロードする.
 	 * @param loader ローダ
@@ -44,6 +44,7 @@ public class Mix extends Effect {
 	 * イメージを取得する.
 	 */
 	@Override
+	@Transient
 	public BufferedImage getImage() {
 		return images[animeFrame];
 	}
@@ -60,5 +61,11 @@ public class Mix extends Effect {
 	
 	public Mix() {
 		
+	}
+	public static BufferedImage[] getImages() {
+		return images;
+	}
+	public static void setImages(BufferedImage[] images) {
+		Mix.images = images;
 	}
 }

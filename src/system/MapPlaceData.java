@@ -51,8 +51,8 @@ import src.item.Yunba;
  * 従来のセーブデータ内容をまとめている
  */
 public class MapPlaceData implements Serializable {
-	static final long serialVersionUID = 1L;
 
+	private static final long serialVersionUID = -7909654211347203362L;
 	/** このマップのインデックス */
 	public int mapIndex;
 	/** アラーム時間 */
@@ -370,6 +370,359 @@ public class MapPlaceData implements Serializable {
 			}
 		}
 	}
+
+	public int getMapIndex() {
+		return mapIndex;
+	}
+
+	public void setMapIndex(int mapIndex) {
+		this.mapIndex = mapIndex;
+	}
+
+	public int getAlarmPeriod() {
+		return alarmPeriod;
+	}
+
+	public void setAlarmPeriod(int alarmPeriod) {
+		this.alarmPeriod = alarmPeriod;
+	}
+
+	public boolean isAlarm() {
+		return alarm;
+	}
+
+	public void setAlarm(boolean alarm) {
+		this.alarm = alarm;
+	}
+
+	public Map<Integer, Body> getBody() {
+		return body;
+	}
+
+	public void setBody(Map<Integer, Body> body) {
+		this.body = body;
+	}
+
+	public Map<Integer, Shit> getShit() {
+		return shit;
+	}
+
+	public void setShit(Map<Integer, Shit> shit) {
+		this.shit = shit;
+	}
+
+	public Map<Integer, Vomit> getVomit() {
+		return vomit;
+	}
+
+	public void setVomit(Map<Integer, Vomit> vomit) {
+		this.vomit = vomit;
+	}
+
+	public List<Barrier> getBarrier() {
+		return barrier;
+	}
+
+	public void setBarrier(List<Barrier> barrier) {
+		this.barrier = barrier;
+	}
+
+	public List<EventPacket> getEvent() {
+		return event;
+	}
+
+	public void setEvent(List<EventPacket> event) {
+		this.event = event;
+	}
+
+	public Map<Integer, Effect> getSortEffect() {
+		return sortEffect;
+	}
+
+	public void setSortEffect(Map<Integer, Effect> sortEffect) {
+		this.sortEffect = sortEffect;
+	}
+
+	public Map<Integer, Effect> getFrontEffect() {
+		return frontEffect;
+	}
+
+	public void setFrontEffect(Map<Integer, Effect> frontEffect) {
+		this.frontEffect = frontEffect;
+	}
+
+	public Map<Integer, Food> getFood() {
+		return food;
+	}
+
+	public void setFood(Map<Integer, Food> food) {
+		this.food = food;
+	}
+
+	public Map<Integer, Food> getTakenOutFood() {
+		return takenOutFood;
+	}
+
+	public void setTakenOutFood(Map<Integer, Food> takenOutFood) {
+		this.takenOutFood = takenOutFood;
+	}
+
+	public Map<Integer, Shit> getTakenOutShit() {
+		return takenOutShit;
+	}
+
+	public void setTakenOutShit(Map<Integer, Shit> takenOutShit) {
+		this.takenOutShit = takenOutShit;
+	}
+
+	public Map<Integer, Toilet> getToilet() {
+		return toilet;
+	}
+
+	public void setToilet(Map<Integer, Toilet> toilet) {
+		this.toilet = toilet;
+	}
+
+	public Map<Integer, Bed> getBed() {
+		return bed;
+	}
+
+	public void setBed(Map<Integer, Bed> bed) {
+		this.bed = bed;
+	}
+
+	public Map<Integer, Toy> getToy() {
+		return toy;
+	}
+
+	public void setToy(Map<Integer, Toy> toy) {
+		this.toy = toy;
+	}
+
+	public Map<Integer, Stone> getStone() {
+		return stone;
+	}
+
+	public void setStone(Map<Integer, Stone> stone) {
+		this.stone = stone;
+	}
+
+	public Map<Integer, Trampoline> getTrampoline() {
+		return trampoline;
+	}
+
+	public void setTrampoline(Map<Integer, Trampoline> trampoline) {
+		this.trampoline = trampoline;
+	}
+
+	public Map<Integer, BreedingPool> getBreedingPool() {
+		return breedingPool;
+	}
+
+	public void setBreedingPool(Map<Integer, BreedingPool> breedingPool) {
+		this.breedingPool = breedingPool;
+	}
+
+	public Map<Integer, GarbageChute> getGarbagechute() {
+		return garbagechute;
+	}
+
+	public void setGarbagechute(Map<Integer, GarbageChute> garbagechute) {
+		this.garbagechute = garbagechute;
+	}
+
+	public Map<Integer, FoodMaker> getFoodmaker() {
+		return foodmaker;
+	}
+
+	public void setFoodmaker(Map<Integer, FoodMaker> foodmaker) {
+		this.foodmaker = foodmaker;
+	}
+
+	public Map<Integer, OrangePool> getOrangePool() {
+		return orangePool;
+	}
+
+	public void setOrangePool(Map<Integer, OrangePool> orangePool) {
+		this.orangePool = orangePool;
+	}
+
+	public Map<Integer, ProductChute> getProductchute() {
+		return productchute;
+	}
+
+	public void setProductchute(Map<Integer, ProductChute> productchute) {
+		this.productchute = productchute;
+	}
+
+	public Map<Integer, StickyPlate> getStickyPlate() {
+		return stickyPlate;
+	}
+
+	public void setStickyPlate(Map<Integer, StickyPlate> stickyPlate) {
+		this.stickyPlate = stickyPlate;
+	}
+
+	public Map<Integer, HotPlate> getHotPlate() {
+		return hotPlate;
+	}
+
+	public void setHotPlate(Map<Integer, HotPlate> hotPlate) {
+		this.hotPlate = hotPlate;
+	}
+
+	public Map<Integer, ProcesserPlate> getProcesserPlate() {
+		return processerPlate;
+	}
+
+	public void setProcesserPlate(Map<Integer, ProcesserPlate> processerPlate) {
+		this.processerPlate = processerPlate;
+	}
+
+	public Map<Integer, Mixer> getMixer() {
+		return mixer;
+	}
+
+	public void setMixer(Map<Integer, Mixer> mixer) {
+		this.mixer = mixer;
+	}
+
+	public Map<Integer, AutoFeeder> getAutofeeder() {
+		return autofeeder;
+	}
+
+	public void setAutofeeder(Map<Integer, AutoFeeder> autofeeder) {
+		this.autofeeder = autofeeder;
+	}
+
+	public Map<Integer, MachinePress> getMachinePress() {
+		return machinePress;
+	}
+
+	public void setMachinePress(Map<Integer, MachinePress> machinePress) {
+		this.machinePress = machinePress;
+	}
+
+	public Map<Integer, Stalk> getStalk() {
+		return stalk;
+	}
+
+	public void setStalk(Map<Integer, Stalk> stalk) {
+		this.stalk = stalk;
+	}
+
+	public Map<Integer, Diffuser> getDiffuser() {
+		return diffuser;
+	}
+
+	public void setDiffuser(Map<Integer, Diffuser> diffuser) {
+		this.diffuser = diffuser;
+	}
+
+	public Map<Integer, Yunba> getYunba() {
+		return yunba;
+	}
+
+	public void setYunba(Map<Integer, Yunba> yunba) {
+		this.yunba = yunba;
+	}
+
+	public Map<Integer, Sui> getSui() {
+		return sui;
+	}
+
+	public void setSui(Map<Integer, Sui> sui) {
+		this.sui = sui;
+	}
+
+	public Map<Integer, Trash> getTrash() {
+		return trash;
+	}
+
+	public void setTrash(Map<Integer, Trash> trash) {
+		this.trash = trash;
+	}
+
+	public Map<Integer, GarbageStation> getGarbageStation() {
+		return garbageStation;
+	}
+
+	public void setGarbageStation(Map<Integer, GarbageStation> garbageStation) {
+		this.garbageStation = garbageStation;
+	}
+
+	public Map<Integer, House> getHouse() {
+		return house;
+	}
+
+	public void setHouse(Map<Integer, House> house) {
+		this.house = house;
+	}
+
+	public Map<Integer, BeltconveyorObj> getBeltconveyorObj() {
+		return beltconveyorObj;
+	}
+
+	public void setBeltconveyorObj(Map<Integer, BeltconveyorObj> beltconveyorObj) {
+		this.beltconveyorObj = beltconveyorObj;
+	}
+
+	public List<Beltconveyor> getBeltconveyor() {
+		return beltconveyor;
+	}
+
+	public void setBeltconveyor(List<Beltconveyor> beltconveyor) {
+		this.beltconveyor = beltconveyor;
+	}
+
+	public List<Pool> getPool() {
+		return pool;
+	}
+
+	public void setPool(List<Pool> pool) {
+		this.pool = pool;
+	}
+
+	public List<Farm> getFarm() {
+		return farm;
+	}
+
+	public void setFarm(List<Farm> farm) {
+		this.farm = farm;
+	}
+
+	public Map<Integer, Okazari> getOkazari() {
+		return okazari;
+	}
+
+	public void setOkazari(Map<Integer, Okazari> okazari) {
+		this.okazari = okazari;
+	}
+
+	public boolean isHasDos() {
+		return hasDos;
+	}
+
+	public void setHasDos(boolean hasDos) {
+		this.hasDos = hasDos;
+	}
+
+	public int[][] getWallMap() {
+		return wallMap;
+	}
+
+	public void setWallMap(int[][] wallMap) {
+		this.wallMap = wallMap;
+	}
+
+	public int[][] getFieldMap() {
+		return fieldMap;
+	}
+
+	public void setFieldMap(int[][] fieldMap) {
+		this.fieldMap = fieldMap;
+	}
+	
 }
 
 

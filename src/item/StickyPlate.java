@@ -5,6 +5,7 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
+import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
 
@@ -28,7 +29,8 @@ import src.system.ResourceUtil;
  * 粘着板
  */
 public class StickyPlate extends ObjEX implements java.io.Serializable {
-	static final long serialVersionUID = 1L;
+
+	private static final long serialVersionUID = -4372169494877309751L;
 
 	/**どこをくっつけるか*/
 	public static enum StickyType {
@@ -74,6 +76,7 @@ public class StickyPlate extends ObjEX implements java.io.Serializable {
 	}
 
 	@Override
+	@Transient
 	public BufferedImage getShadowImage() {
 		return null;
 	}
@@ -83,6 +86,7 @@ public class StickyPlate extends ObjEX implements java.io.Serializable {
 	}
 
 	@Override
+	@Transient
 	public int getHitCheckObjType() {
 		return hitCheckObjType;
 	}
@@ -238,6 +242,31 @@ public class StickyPlate extends ObjEX implements java.io.Serializable {
 			ret = true;
 		}
 		return ret;
+	}
+
+
+	public boolean isbFixBack() {
+		return bFixBack;
+	}
+
+
+	public void setbFixBack(boolean bFixBack) {
+		this.bFixBack = bFixBack;
+	}
+
+
+	public ItemRank getItemRank() {
+		return itemRank;
+	}
+
+
+	public void setItemRank(ItemRank itemRank) {
+		this.itemRank = itemRank;
+	}
+
+
+	public void setBindBody(Body bindBody) {
+		this.bindBody = bindBody;
 	}
 	
 }

@@ -24,7 +24,7 @@ import src.util.YukkuriUtil;
 */
 public class ProudChildEvent extends EventPacket implements java.io.Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -7224287918980312380L;
 	int tick = 0;
 	boolean bActionFlag = true;
 	boolean bUnunActionFlag = true;

@@ -3,6 +3,7 @@ package src.item;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
+import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
 
@@ -28,7 +29,8 @@ import src.util.YukkuriUtil;
  * ミキサー
  */
 public class Mixer extends ObjEX implements java.io.Serializable {
-	static final long serialVersionUID = 1L;
+
+	private static final long serialVersionUID = 6267442912877753797L;
 	/**処理対象(ゆっくり)*/
 	public static final int hitCheckObjType = ObjEX.YUKKURI;
 	private static BufferedImage[] images = new BufferedImage[4];
@@ -74,6 +76,7 @@ public class Mixer extends ObjEX implements java.io.Serializable {
 	}
 
 	@Override
+	@Transient
 	public BufferedImage getShadowImage() {
 		return null;
 	}
@@ -83,6 +86,7 @@ public class Mixer extends ObjEX implements java.io.Serializable {
 	}
 
 	@Override
+	@Transient
 	public int getHitCheckObjType() {
 		return hitCheckObjType;
 	}
@@ -136,7 +140,7 @@ public class Mixer extends ObjEX implements java.io.Serializable {
 			// ミキサー駆動開始
 			if(counter > 60) {
 				if(mix == null) {
-					mix = SimYukkuri.mypane.terrarium.addEffect(EffectType.MIX, bindBody.getX(), bindBody.getY() + 1,
+					mix = SimYukkuri.mypane.getTerrarium().addEffect(EffectType.MIX, bindBody.getX(), bindBody.getY() + 1,
 																	-2, 0, 0, 0, false, -1, -1, false, false, false);
 				}
 				if(!bindBody.isDead()) {
@@ -219,6 +223,67 @@ public class Mixer extends ObjEX implements java.io.Serializable {
 	public Mixer() {
 		
 	}
+
+
+	public int getBind() {
+		return bind;
+	}
+
+
+	public void setBind(int bind) {
+		this.bind = bind;
+	}
+
+
+	public Effect getMix() {
+		return mix;
+	}
+
+
+	public void setMix(Effect mix) {
+		this.mix = mix;
+	}
+
+
+	public int getCounter() {
+		return counter;
+	}
+
+
+	public void setCounter(int counter) {
+		this.counter = counter;
+	}
+
+
+	public int getAmount() {
+		return amount;
+	}
+
+
+	public void setAmount(int amount) {
+		this.amount = amount;
+	}
+
+
+	public int getSweet() {
+		return sweet;
+	}
+
+
+	public void setSweet(int sweet) {
+		this.sweet = sweet;
+	}
+
+
+	public boolean isSick() {
+		return sick;
+	}
+
+
+	public void setSick(boolean sick) {
+		this.sick = sick;
+	}
+	
 }
 
 

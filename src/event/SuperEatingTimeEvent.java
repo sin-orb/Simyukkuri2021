@@ -26,7 +26,7 @@ import src.util.YukkuriUtil;
 */
 public class SuperEatingTimeEvent extends EventPacket implements java.io.Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -2604356330046082053L;
 	int tick = 0;
 	int nFromWaitCount = 0;
 	public STATE state = STATE.WAIT;
@@ -456,8 +456,8 @@ public class SuperEatingTimeEvent extends EventPacket implements java.io.Seriali
 				int nDistance = Translate.getRealDistance(b.getX(), b.getY(), target.getX(), target.getY());
 				if (nDistance < 3) {
 					Food f = (Food) target;
-					FoodLogic.eatFood(b, f.getFoodType(), Math.min(b.getEatAmount(), f.amount));
-					f.eatFood(Math.min(b.getEatAmount(), f.amount));
+					FoodLogic.eatFood(b, f.getFoodType(), Math.min(b.getEatAmount(), f.getAmount()));
+					f.eatFood(Math.min(b.getEatAmount(), f.getAmount()));
 					b.addMemories(10);
 					b.clearActions();
 				} else {

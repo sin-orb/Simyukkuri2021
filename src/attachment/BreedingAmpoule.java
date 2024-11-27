@@ -22,8 +22,7 @@ import src.util.YukkuriUtil;
  */
 public class BreedingAmpoule extends Attachment {
 
-	private static final long serialVersionUID = 1L;
-
+	private static final long serialVersionUID = 5344418800988304456L;
 	private static final String POS_KEY = "AccelAmpoule";
 	/**画像の入れ物
 	 * <br>[年齢][左右反転]*/

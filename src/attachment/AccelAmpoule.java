@@ -21,14 +21,13 @@ import src.util.YukkuriUtil;
  */
 public class AccelAmpoule extends Attachment {
 
-	private static final long serialVersionUID = 1L;
-
+	private static final long serialVersionUID = 1447650571714261341L;
 	private static final String POS_KEY = "AccelAmpoule";
-	private static BufferedImage[][] images; // [年齢][左右反転]
-	private static int[] imgW;
-	private static int[] imgH;
-	private static int[] pivX;
-	private static int[] pivY;
+	public static BufferedImage[][] images; // [年齢][左右反転]
+	public static int[] imgW;
+	public static int[] imgH;
+	public static int[] pivX;
+	public static int[] pivY;
 	private static final int[] property = {
 			2, // 赤ゆ用画像サイズ 原画をこの値で割る
 			2, // 子ゆ用画像サイズ
@@ -128,4 +127,37 @@ public class AccelAmpoule extends Attachment {
 	public String toString() {
 		return ResourceUtil.getInstance().read("item_accell_ampoule");
 	}
+
+	public static BufferedImage[][] getImages() {
+		return images;
+	}
+
+	public static void setImages(BufferedImage[][] images) {
+		AccelAmpoule.images = images;
+	}
+
+	public static void setImgW(int[] imgW) {
+		AccelAmpoule.imgW = imgW;
+	}
+
+	public static void setImgH(int[] imgH) {
+		AccelAmpoule.imgH = imgH;
+	}
+
+	public static void setPivX(int[] pivX) {
+		AccelAmpoule.pivX = pivX;
+	}
+
+	public static void setPivY(int[] pivY) {
+		AccelAmpoule.pivY = pivY;
+	}
+
+	public static String getPosKey() {
+		return POS_KEY;
+	}
+
+	public static int[] getProperty() {
+		return property;
+	}
+	
 }

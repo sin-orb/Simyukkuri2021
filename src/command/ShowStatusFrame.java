@@ -35,6 +35,7 @@ import src.util.YukkuriUtil;
  */
 public class ShowStatusFrame extends JFrame implements ActionListener, WindowListener {
 
+	private static final long serialVersionUID = -5118988467314035506L;
 	private JPanel contentPane;
 	private JTextField textField;
 	private JTextField textField_1;
@@ -883,7 +884,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 
 		textField_23.setText(String.valueOf(b.getNumOfAnts()));
 		textField_24.setText(String.valueOf(b.getBlockedCount()));
-		textField_25.setText(b.isLockmove() ? ResourceUtil.getInstance().read("command_status_cantmove") : ResourceUtil.getInstance().read("command_status_canmove"));
+		textField_25.setText(b.isLockmove() || b.isDead() ? ResourceUtil.getInstance().read("command_status_cantmove") : ResourceUtil.getInstance().read("command_status_canmove"));
 		textField_26.setText(String.valueOf(b.getAttitudePoint()));
 		MyPane.selectBody = b;
 	}

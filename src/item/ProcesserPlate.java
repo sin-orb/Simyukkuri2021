@@ -6,6 +6,7 @@ import java.awt.GridLayout;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
+import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
@@ -40,7 +41,7 @@ import src.system.ResourceUtil;
  * 加工プレート
  */
 public class ProcesserPlate extends ObjEX implements java.io.Serializable {
-	static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -32909400197144018L;
 	/**処理対象(ゆっくり)*/
 	public static final int hitCheckObjType = ObjEX.YUKKURI;
 	private static BufferedImage[] images = new BufferedImage[2];
@@ -53,7 +54,7 @@ public class ProcesserPlate extends ObjEX implements java.io.Serializable {
 	/**加工するタイプ*/
 	protected ProcessType enumProcessType;
 	/**ランニングコスト*/
-	protected int cost[] ={500,800,2000,3500};
+	protected int runningCost[] ={500,800,2000,3500};
 	/**加工モード*/
 	public static enum ProcessMode {
 		HOTPLATE,		// ホットプレート
@@ -114,6 +115,7 @@ public class ProcesserPlate extends ObjEX implements java.io.Serializable {
 	}
 
 	@Override
+	@Transient
 	public BufferedImage getShadowImage() {
 		return null;
 	}
@@ -123,6 +125,7 @@ public class ProcesserPlate extends ObjEX implements java.io.Serializable {
 	}
 
 	@Override
+	@Transient
 	public int getHitCheckObjType() {
 		return hitCheckObjType;
 	}
@@ -178,7 +181,7 @@ public class ProcesserPlate extends ObjEX implements java.io.Serializable {
 				Effect effect;
 				switch( enumProcessType.eMode){
 					case HOTPLATE:
-							effect = SimYukkuri.mypane.terrarium.addEffect(EffectType.BAKE, bTarget.getX(), bTarget.getY() + 1,
+							effect = SimYukkuri.mypane.getTerrarium().addEffect(EffectType.BAKE, bTarget.getX(), bTarget.getY() + 1,
 									-2, 0, 0, 0, false, -1, -1, false, false, false);
 						break;
 					default:
@@ -398,21 +401,22 @@ public class ProcesserPlate extends ObjEX implements java.io.Serializable {
 	}
 
 	@Override
+	@Transient
 	public int getCost(){
 		switch( enumProcessType.eMode){
 			case PAIN:
-				return cost[0];
+				return runningCost[0];
 			case HOTPLATE:
 			case ACCELERATE:
-				return cost[1];
+				return runningCost[1];
 			case BAIBAI_OKAZARI:// お飾り除去（燃やす）
 			case BLINDING:
 			case SHUTMOUTH:
-				return cost[2];
+				return runningCost[2];
 			case PEALING:
 			case PLUCKING:
 			case PACKING:
-				return cost[3];
+				return runningCost[3];
 		}
 		return 0;
 	}
@@ -505,18 +509,49 @@ public class ProcesserPlate extends ObjEX implements java.io.Serializable {
 		int nTemp = 0;
 		//自動お仕置きプレートコスト
 		nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_ITEM_INI_DIR, "ProcesserPlate", "MachineCost");
-		cost[0] = nTemp;
+		runningCost[0] = nTemp;
 		//軽加工プレートコスト
 		nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_ITEM_INI_DIR, "ProcesserPlate", "LightProcessCost");
-		cost[1] = nTemp;
+		runningCost[1] = nTemp;
 		//中加工プレートコスト
 		nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_ITEM_INI_DIR, "ProcesserPlate", "MidiumProcessCost");
-		cost[2] = nTemp;
+		runningCost[2] = nTemp;
 		//重加工プレートコスト
 		nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_ITEM_INI_DIR, "ProcesserPlate", "HeavyProcessCost");
-		cost[3] = nTemp;
+		runningCost[3] = nTemp;
 	}
 
+	public List<Body> getProcessedBodyList() {
+		return processedBodyList;
+	}
+
+	public void setProcessedBodyList(List<Body> processedBodyList) {
+		this.processedBodyList = processedBodyList;
+	}
+
+	public List<Effect> getProcessedBodyEffectList() {
+		return processedBodyEffectList;
+	}
+
+	public void setProcessedBodyEffectList(List<Effect> processedBodyEffectList) {
+		this.processedBodyEffectList = processedBodyEffectList;
+	}
+
+	public ProcessType getEnumProcessType() {
+		return enumProcessType;
+	}
+
+	public void setEnumProcessType(ProcessType enumProcessType) {
+		this.enumProcessType = enumProcessType;
+	}
+
+	public int[] getRunningCost() {
+		return runningCost;
+	}
+
+	public void setRunningCost(int[] runningCost) {
+		this.runningCost = runningCost;
+	}
 }
 
 

@@ -26,7 +26,7 @@ import src.util.YukkuriUtil;
 */
 public class SuiRideEvent extends EventPacket implements java.io.Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -3480227497799647328L;
 	int tick = 0;
 	boolean memberride = false;
 
@@ -136,10 +136,10 @@ public class SuiRideEvent extends EventPacket implements java.io.Serializable {
 			if (from == null) return UpdateState.ABORT;
 			if (from == b) {
 				// 乗客数が上限、またはカウント50以上の場合
-				if (s.getcurrent_bindbody_num() >= 3 || tick > 50) {
+				if (s.getCurrent_bindbody_num() >= 3 || tick > 50) {
 					b.setHappiness(Happiness.HAPPY);
 					// すぃーが待機中の場合
-					if (s.getcurrent_condition() == 1) {
+					if (s.getCurrent_condition() == 1) {
 						// 乗ろうとしているゆっくりがいない、またはカウントが50の倍数の場合ランダムに移動する
 						// ※移動中はすぃーの状態を変えるなりなんなりした方がいいのでは
 						if (!memberride || tick % 50 == 0) {
@@ -176,14 +176,14 @@ public class SuiRideEvent extends EventPacket implements java.io.Serializable {
 			} else {
 				// 処理対象とすぃーに乗ろうとしているゆっくりが異なる場合
 				// しゃべっていないかつ、すぃーが待機中ではない場合
-				if (!b.isTalking() && s.getcurrent_condition() != 1) {
+				if (!b.isTalking() && s.getCurrent_condition() != 1) {
 					// すぃーに乗っている時のセリフ
 					b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.RidingSui), Const.HOLDMESSAGE,
 							true, false);
 				}
 
 				// イベント実施中ではない、かつすぃーが待機中の場合
-				if (from.getCurrentEvent() != this && s.getcurrent_condition() == 1) {
+				if (from.getCurrentEvent() != this && s.getCurrent_condition() == 1) {
 					// すぃーからおりる
 					if (!b.isTalking()) {
 						b.setMessage(MessagePool.getMessage(b, MessagePool.Action.RideOffSui), true);
@@ -203,7 +203,7 @@ public class SuiRideEvent extends EventPacket implements java.io.Serializable {
 			// 移動する
 			b.moveToEvent(this, target.getX(), target.getY());
 			if (from == null) return UpdateState.ABORT;
-			if (from == b && s.iscanriding() || s.getcurrent_bindbody_num() >= 3) {
+			if (from == b && s.iscanriding() || s.getCurrent_bindbody_num() >= 3) {
 				memberride = false;
 				return UpdateState.ABORT;
 			}
@@ -239,7 +239,7 @@ public class SuiRideEvent extends EventPacket implements java.io.Serializable {
 
 		Sui s = (Sui) target;
 		// すぃーが待機状態
-		if (s.getcurrent_condition() == 1) {
+		if (s.getCurrent_condition() == 1) {
 			// すぃーに乗る
 			s.rideOn(b);
 			memberride = false;

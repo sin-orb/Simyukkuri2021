@@ -3,6 +3,8 @@ package src.draw;
 import java.io.Serializable;
 
 public class Color4y implements Serializable {
+
+	private static final long serialVersionUID = 6628001935213373183L;
 	public int red;
 	public int blue;
 	public int green;

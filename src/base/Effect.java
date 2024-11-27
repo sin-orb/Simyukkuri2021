@@ -19,8 +19,7 @@ import src.enums.Type;
 @JsonTypeInfo(use = Id.CLASS)
 public abstract class Effect extends Obj {
 
-	private static final long serialVersionUID = 1L;
-
+	private static final long serialVersionUID = 8592462375468621258L;
 	/**向き*/
 	protected int direction;
 	/**アニメーション間隔*/

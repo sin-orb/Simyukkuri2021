@@ -9,9 +9,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -97,7 +97,9 @@ import src.yukkuri.Yuyuko;
  * <br>各種オブジェクトのインスタンス生成
  * <br>ゲーム内環境の保持
 */
-public class Terrarium {
+public class Terrarium implements Serializable{
+
+	private static final long serialVersionUID = 7825541796890014097L;
 	/**起動時間*/
 	public static int operationTime = 0;
 	/** 昼の時間 */
@@ -151,13 +153,13 @@ public class Terrarium {
 	 * @throws IOException IO例外
 	 */
 	public static void saveState(File file) throws IOException {
-//		ObjectMapper mapper = buildMapper();
-		SimYukkuri.world.setMaxUniqueId(Numbering.INSTANCE.getYukkuriID());
-		SimYukkuri.world.setMaxObjId(Numbering.INSTANCE.getObjId());
-		Enumeration<Obj> enu = SimYukkuri.world.player.getItemList().elements();
-		while (enu.hasMoreElements()) {
-			SimYukkuri.world.player.getItemForSave().add(enu.nextElement());
-		}
+//		ObjectMapper mapper = new ObjectMapper();
+//		SimYukkuri.world.setMaxUniqueId(Numbering.INSTANCE.getYukkuriID());
+//		SimYukkuri.world.setMaxObjId(Numbering.INSTANCE.getObjId());
+//		Enumeration<Obj> enu = SimYukkuri.world.player.getItemList().elements();
+//		while (enu.hasMoreElements()) {
+//			SimYukkuri.world.player.getItemForSave().add(enu.nextElement());
+//		}
 //		String json = mapper.writeValueAsString(SimYukkuri.world);
 //		try (FileWriter filewriter = new FileWriter(file);) {
 //			filewriter.write(json);
@@ -190,14 +192,8 @@ public class Terrarium {
 //		} catch (Exception e) {
 //			e.printStackTrace();
 //		}
-//		ObjectMapper mapper = buildMapper();
+//		ObjectMapper mapper = new ObjectMapper();
 //		tmpWorld = mapper.readValue(json,World.class);
-//		Numbering.INSTANCE.setYukkuriID(tmpWorld.getMaxUniqueId());
-//		Numbering.INSTANCE.setObjId(tmpWorld.getMaxObjId());
-//		tmpWorld.player.getItemList().clear();
-//		for (Obj o : tmpWorld.player.getItemForSave()) {
-//			tmpWorld.player.getItemList().addElement(o);
-//		}
 		ObjectInputStream in = new ObjectInputStream(
 				new BufferedInputStream(
 						new FileInputStream(file)));
@@ -390,7 +386,7 @@ public class Terrarium {
 	 * @return 生成したゆっくり
 	 */
 	public Body makeBody(int x, int y, int z, Dna dna, AgeState age, Body p1, Body p2) {
-		return makeBody(x, y, z, dna.type, dna, age, p1, p2, true);
+		return makeBody(x, y, z, dna.getType(), dna, age, p1, p2, true);
 	}
 
 	/**ゆっくりの追加実行部
@@ -413,7 +409,7 @@ public class Terrarium {
 		Body papa = p2;
 		Body mama = p1;
 		if (papa == null && dna != null) {
-			papa = YukkuriUtil.getBodyInstance(dna.father);
+			papa = YukkuriUtil.getBodyInstance(dna.getFather());
 		}
 
 		switch (type) {
@@ -562,10 +558,10 @@ public class Terrarium {
 
 		// DNA情報が渡されてたらステータス上書き
 		if (dna != null) {
-			if (dna.attitude != null)
-				b.setAttitude(dna.attitude);
-			if (dna.intelligence != null)
-				b.setIntelligence(dna.intelligence);
+			if (dna.getAttitude() != null)
+				b.setAttitude(dna.getAttitude());
+			if (dna.getIntelligence() != null)
+				b.setIntelligence(dna.getIntelligence());
 		}
 		// 共存環境の場合
 		if (SimYukkuri.NAGASI_MODE == 2) {

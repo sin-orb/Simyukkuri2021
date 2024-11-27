@@ -7,6 +7,7 @@ import java.io.Serializable;
  */
 public class Point4y implements Serializable {
 
+	private static final long serialVersionUID = 4990971219226306239L;
 	public int x;
 	public int y;
 	public int getX() {

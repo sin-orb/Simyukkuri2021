@@ -23,8 +23,7 @@ import src.util.YukkuriUtil;
  */
 public class OrangeAmpoule extends Attachment {
 
-	private static final long serialVersionUID = 1L;
-
+	private static final long serialVersionUID = -2223559074687491881L;
 	/**識別キー*/
 	private static final String POS_KEY = "OrangeAmpoule";
 	/**画像の入れ物

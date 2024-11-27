@@ -65,6 +65,7 @@ import src.util.YukkuriUtil;
  */
 @JsonTypeInfo(use = Id.CLASS)
 public abstract class BodyAttributes extends Obj implements Serializable {
+	private static final long serialVersionUID = 4867243705470540257L;
 
 	/** ゆっくりのタイプ。まりさなら0、れいむなら1、等々ユニークなタイプを表す。 */
 	public abstract int getType();
@@ -4474,6 +4475,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 *  妹の数を取得する.
 	 * @return 妹の数
 	 */
+	@Transient
 	public int getSisterListSize() {
 		return sisterList.size();
 	}
@@ -4491,6 +4493,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 *  姉の数を取得する.
 	 * @return 姉の数
 	 */
+	@Transient
 	public int getElderSisterListSize() {
 		return elderSisterList.size();
 	}
@@ -4508,6 +4511,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 *  子供の数を取得する.
 	 * @return 子供の数
 	 */
+	@Transient
 	public int getChildrenListSize() {
 		if (childrenList == null) {
 			return 0;
@@ -4545,6 +4549,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * ゆ下痢かどうかを返却する.
 	 * @return ゆ下痢かどうか
 	 */
+	@Transient
 	public boolean getDiarrhea() {
 		//飼いゆだったら無条件で下す
 		if (getBodyRank() == BodyRank.KAIYU)
@@ -4562,6 +4567,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * ダメージなしかどうかを返却する.
 	 * @return ダメージなしかどうか
 	 */
+	@Transient
 	public boolean isNoDamaged() {
 		return (getDamageState() == Damage.NONE);
 	}
@@ -4570,6 +4576,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 軽いダメージかどうかを返却する.
 	 * @return 軽いダメージかどうか
 	 */
+	@Transient
 	public boolean isDamagedLightly() {
 		return (getDamageState() == Damage.SOME || getDamageState() == Damage.VERY
 				|| getDamageState() == Damage.TOOMUCH);
@@ -4579,6 +4586,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * ダメージを受けているかどうかを返却する.
 	 * @return ダメージを受けているかどうか
 	 */
+	@Transient
 	public boolean isDamaged() {
 		return (getDamageState() == Damage.VERY || getDamageState() == Damage.TOOMUCH);
 	}
@@ -4587,6 +4595,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 重いダメージを受けているかどうかを返却する.
 	 * @return 重いダメージかどうか
 	 */
+	@Transient
 	public boolean isDamagedHeavily() {
 		return (getDamageState() == Damage.TOOMUCH);
 	}
@@ -4606,6 +4615,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 死んでいないことが条件。
 	 * @return 命乞い中かどうか
 	 */
+	@Transient
 	public boolean isBeggingForLife() {
 		return (!dead && begging);
 	}
@@ -4623,6 +4633,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 痛みを感じているかどうかを返却する.
 	 * @return 痛みを感じているか
 	 */
+	@Transient
 	public boolean isFeelPain() {
 		return (getPainState() == Pain.VERY || getPainState() == Pain.SOME);
 	}
@@ -4631,6 +4642,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 激しい痛みを感じているかどうかを取得する.
 	 * @return 激しい痛みを感じているかどうか
 	 */
+	@Transient
 	public boolean isFeelHardPain() {
 		return (getPainState() == Pain.VERY);
 	}
@@ -4663,14 +4675,6 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	}
 
 	/**
-	 * ぺろぺろ中か否かを返却する.
-	 * @return ぺろぺろ中か否か
-	 */
-	public boolean isPeroPero() {
-		return (!dead && peropero);
-	}
-
-	/**
 	 * すっきり中か否かを返却する.
 	 * 死んでいないことが条件.
 	 * @return すっきり中か否か
@@ -4684,6 +4688,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 死んでいないことが条件.
 	 * @return 針でさされ中か否か
 	 */
+	@Transient
 	public boolean isNeedled() {
 		return (!dead && bNeedled);
 	}
@@ -4692,6 +4697,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * ドゲスか否かを返却する.
 	 * @return ドゲスか否か
 	 */
+	@Transient
 	public boolean isVeryRude() {
 		return (attitude == Attitude.SUPER_SHITHEAD);
 	}
@@ -4700,6 +4706,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * ゲスまたはドゲスか否かを返却する.
 	 * @return ゲスまたはドゲスか否か
 	 */
+	@Transient
 	public boolean isRude() {
 		return (attitude == Attitude.SHITHEAD || attitude == Attitude.SUPER_SHITHEAD);
 	}
@@ -4708,6 +4715,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * ゲス/善良の区分で普通か否かを返却する.
 	 * @return ゲス/善良の区分で普通か否か
 	 */
+	@Transient
 	public boolean isNormal() {
 		return (attitude == Attitude.AVERAGE);
 	}
@@ -4716,6 +4724,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 善良または超善良か否かを返却する.
 	 * @return 善良または超善良か否か
 	 */
+	@Transient
 	public boolean isSmart() {
 		return (attitude == Attitude.VERY_NICE || attitude == Attitude.NICE);
 	}
@@ -4724,6 +4733,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 *  父親を取得
 	 * @return 父親のインスタンス
 	 */
+	@Transient
 	public int getFather() {
 		return parents[Parent.PAPA.ordinal()];
 	}
@@ -4732,6 +4742,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 母親を取得
 	 * @return 母親のインスタンス
 	 */
+	@Transient
 	public int getMother() {
 		return parents[Parent.MAMA.ordinal()];
 	}
@@ -4740,6 +4751,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * この個体の痛みを感じている程度から、相当するPain(Enum)を返却する.
 	 * @return この個体に相当するPain
 	 */
+	@Transient
 	public Pain getPainState() {
 		if (getBurstState() == Burst.NEAR || getBurstState() == Burst.BURST || isNeedled()) {
 			return Pain.VERY;
@@ -4754,6 +4766,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * この個体がどれくらい破裂しそうか、相当するBurst(Enum)を返却する.
 	 * @return この個体に相当するBurst
 	 */
+	@Transient
 	public Burst getBurstState() {
 		if (getSize() * 4 / getOriginSize() >= 8) {
 			return Burst.BURST;
@@ -4771,6 +4784,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 画像上のゆっくりの大きさを取得する.
 	 * @return 画像上のゆっくりの大きさ
 	 */
+	@Transient
 	public int getSize() {
 		if (SimYukkuri.UNYO) {
 			return bodySpr[getBodyAgeState().ordinal()].imageW + getExpandSizeW() + unyoForceW;
@@ -4782,6 +4796,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 画像上のゆっくりのオリジナルサイズを取得する.
 	 * @return 画像上のゆっくりのオリジナルサイズ
 	 */
+	@Transient
 	public int getOriginSize() {
 		return bodySpr[getBodyAgeState().ordinal()].imageW;
 	}
@@ -4790,6 +4805,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 妊娠、うんうん、過食などによる横方向の体型のふくらみ取得
 	 * @return 妊娠、うんうん、過食などによる横方向の体型のふくらみ
 	 */
+	@Transient
 	public int getExpandSizeW() {
 		return 0;
 	}
@@ -4798,6 +4814,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 妊娠、うんうんなどによる縦方向の体型のふくらみ取得
 	 * @return 妊娠、うんうんなどによる縦方向の体型のふくらみ
 	 */
+	@Transient
 	public int getExpandSizeH() {
 		return 0;
 	}
@@ -4806,6 +4823,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * この個体の属する、体のAgeState(Enum)を返却する.
 	 * @return この個体の属する、体のAgeState
 	 */
+	@Transient
 	public AgeState getBodyAgeState() {
 		if (getAge() < BABYLIMITorg) {
 			return AgeState.BABY;
@@ -4819,6 +4837,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * この個体の属する、精神のAgeState(Enum)を返却する.
 	 * @return この個体の属する、精神のAgeState
 	 */
+	@Transient
 	public AgeState getMindAgeState() {
 		return getBodyAgeState();
 	}
@@ -4827,6 +4846,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * この個体のダメージ具合から、相当するDamage(Enum)を返却する.
 	 * @return この個体のダメージ具合から計算した、相当するDamage(Enum)
 	 */
+	@Transient
 	public Damage getDamageState() {
 		if (damage > DAMAGELIMITorg[getBodyAgeState().ordinal()]) {
 			toDead();
@@ -4855,6 +4875,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 死ねない期間中かどうかを取得する.
 	 * @return 死ねない期間中かどうか
 	 */
+	@Transient
 	public boolean isCantDie() {
 		return (cantDiePeriod > 0);
 	}
@@ -4863,6 +4884,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 破裂しているかどうかを取得する.
 	 * @return 破裂しているかどうか
 	 */
+	@Transient
 	public boolean isBurst() {
 		return (getBurstState() == Burst.BURST);
 	}
@@ -4871,6 +4893,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * まさに破裂するところかどうかを取得する.
 	 * @return まさに破裂するところかどうか
 	 */
+	@Transient
 	public boolean isAboutToBurst() {
 		return (getBurstState() == Burst.NEAR);
 	}
@@ -4879,6 +4902,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 破裂状態が通常でないかどうかを取得する.
 	 * @return 破裂状態が通常でないかどうか
 	 */
+	@Transient
 	public boolean isInfration() {
 		return (getBurstState() != Burst.NONE);
 	}
@@ -4906,6 +4930,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * たりないゆ、たりないれいむクラスでオーバーライドする.
 	 * @return たりないゆかどうか
 	 */
+	@Transient
 	public boolean isIdiot() {
 		return false;
 	}
@@ -4941,6 +4966,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 死んでいないことが条件.
 	 * @return 悲しんでいるかどうか
 	 */
+	@Transient
 	public boolean isSad() {
 		return (!dead && happiness == Happiness.SAD);
 	}
@@ -4950,6 +4976,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 死んでいないことが条件.
 	 * @return とても悲しんでいるかどうか
 	 */
+	@Transient
 	public boolean isVerySad() {
 		return (!dead && happiness == Happiness.VERY_SAD);
 	}
@@ -4959,6 +4986,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 死んでいないことが条件.
 	 * @return 喜んでいるかどうか
 	 */
+	@Transient
 	public boolean isHappy() {
 		return (!dead && (happiness == Happiness.HAPPY || happiness == Happiness.VERY_HAPPY));
 	}
@@ -4968,6 +4996,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 死んでいないことが条件.
 	 * @return 悲しんでいるか、もしくはとても悲しんでいるか
 	 */
+	@Transient
 	public boolean isUnhappy() {
 		return (!dead && (happiness == Happiness.SAD || happiness == Happiness.VERY_SAD));
 	}
@@ -4977,6 +5006,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 死んでいないことが条件.
 	 * @return  食べ過ぎかどうか
 	 */
+	@Transient
 	public boolean isOverEating() {
 		return (!dead && (hungry >= HUNGRYLIMITorg[getBodyAgeState().ordinal()] * 1.3f));
 	}
@@ -4986,6 +5016,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 死んでいないことが条件.
 	 * @return お腹いっぱいかどうか
 	 */
+	@Transient
 	public boolean isTooFull() {
 		return (!dead && hungry >= HUNGRYLIMITorg[getBodyAgeState().ordinal()]);
 	}
@@ -4995,6 +5026,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 死んでいないことが条件.
 	 * @return お腹いっぱい気味かどうか
 	 */
+	@Transient
 	public boolean isFull() {
 		return (!dead && (hungry >= HUNGRYLIMITorg[getBodyAgeState().ordinal()] * 0.8f));
 	}
@@ -5004,6 +5036,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 死んでいないことが条件.
 	 * @return お腹へってきているかどうか
 	 */
+	@Transient
 	public boolean isHungry() {
 		return (!dead && (hungry <= HUNGRYLIMITorg[getBodyAgeState().ordinal()] / 2));
 	}
@@ -5013,6 +5046,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 死んでいないことが条件.
 	 * @return お腹減り気味かどうか
 	 */
+	@Transient
 	public boolean isSoHungry() {
 		return (!dead && (hungry <= HUNGRYLIMITorg[getBodyAgeState().ordinal()] * 0.2f));
 	}
@@ -5022,6 +5056,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 死んでいないことが条件.
 	 * @return お腹が減っているかどうか
 	 */
+	@Transient
 	public boolean isVeryHungry() {
 		return (!dead && hungry <= 0);
 	}
@@ -5031,6 +5066,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 死んでいないことが条件.
 	 * @return お腹が減りすぎているかどうか
 	 */
+	@Transient
 	public boolean isTooHungry() {
 		return (!dead && hungry <= 0 && getDamageState() != Damage.NONE);
 	}
@@ -5040,6 +5076,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 死んでいないことが条件.
 	 * @return 餓死寸前かどうか
 	 */
+	@Transient
 	public boolean isStarving() {
 		return (!dead && hungry <= 0 && getDamageState() == Damage.TOOMUCH);
 	}
@@ -5072,6 +5109,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 段階別（赤/子/成）の飢餓状態限界を取得する.
 	 * @return 段階別（赤/子/成）の飢餓状態限界
 	 */
+	@Transient
 	public int getHungryLimit() {
 		return HUNGRYLIMITorg[getBodyAgeState().ordinal()];
 	}
@@ -5080,6 +5118,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 成ゆかどうかを取得する.
 	 * @return 成ゆかどうか
 	 */
+	@Transient
 	public boolean isAdult() {
 		return (getBodyAgeState() == AgeState.ADULT);
 	}
@@ -5088,6 +5127,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 子ゆかどうかを取得する.
 	 * @return 子ゆかどうか
 	 */
+	@Transient
 	public boolean isChild() {
 		return (getBodyAgeState() == AgeState.CHILD);
 	}
@@ -5096,6 +5136,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 赤ゆかどうかを取得する.
 	 * @return 赤ゆかどうか
 	 */
+	@Transient
 	public boolean isBaby() {
 		return (getBodyAgeState() == AgeState.BABY);
 	}
@@ -5114,6 +5155,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 死んでいないことが条件.
 	 * @return 眠いかどうか
 	 */
+	@Transient
 	public boolean isSleepy() {
 		if (!sleeping && wakeUpTime + ACTIVEPERIODorg < getAge()) {
 			return true;
@@ -5154,6 +5196,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 死んでいないことが条件.
 	 * @return 強制発情状態かどうか
 	 */
+	@Transient
 	public boolean isForceExciting() {
 		return (!dead && exciting && bForceExciting);
 	}
@@ -5197,17 +5240,9 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * ハイブリッドのクラスでオーバーライドする.
 	 * @return ハイブリッドかどうか
 	 */
+	@Transient
 	public boolean isHybrid() {
 		return false;
-	}
-
-	/**
-	 *  汚れ、濡れを解除する.
-	 */
-	public void setCleaning() {
-		setDirty(false);
-		wet = false;
-		wetPeriod = 0;
 	}
 
 	/**
@@ -5224,6 +5259,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 死んでいないことが条件.
 	 * @return 普通の汚れかどうか
 	 */
+	@Transient
 	public boolean isNormalDirty() {
 		return (!dead && dirty);
 	}
@@ -5262,6 +5298,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 動物（というか現在はアリ一択か）に食べられてるかを返却する.
 	 * @return 動物（というか現在はアリ一択か）に食べられてるか
 	 */
+	@Transient
 	public boolean isEatenByAnimals() {
 		if (getAttachmentSize(Ants.class) != 0)
 			return true;
@@ -5427,6 +5464,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * うんうん限界を返却する.
 	 * @return うんうん限界
 	 */
+	@Transient
 	public int getShitLimit() {
 		return SHITLIMITorg[getBodyAgeState().ordinal()];
 	}
@@ -5464,6 +5502,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * <br>出産時に、順番に生んでゆくときの処理に使われている
 	 * @return 胎生妊娠してる赤ゆのDNA
 	 **/
+	@Transient
 	public Dna getBabyTypesDequeue() {
 		Dna babyType = null;
 		if (babyTypes.size() > 0) {
@@ -5478,6 +5517,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * <br>出産時に、順番に生んでゆくときの処理に使われている
 	 * @return 茎
 	 **/
+	@Transient
 	public Stalk getStalksDequeue() {
 		Stalk stalk = null;
 		if (stalks.size() > 0) {
@@ -5491,6 +5531,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * ダメージ限界を返却する.
 	 * @return 赤/子/成ゆのダメージ限界
 	 */
+	@Transient
 	public int getDamageLimit() {
 		return getDAMAGELIMITorg()[getBodyAgeState().ordinal()];
 	}
@@ -5523,6 +5564,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * ストレス値の限界を取得する.
 	 * @return 赤/子/成ゆのストレス値の限界
 	 */
+	@Transient
 	public int getStressLimit() {
 		return STRESSLIMITorg[getBodyAgeState().ordinal()];
 	}
@@ -5531,6 +5573,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * ストレスフルかどうかを返却する.
 	 * @return  ストレスフルかどうか
 	 */
+	@Transient
 	public boolean isStressful() {
 		// ストレス限界の40%を超えている場合
 		if (STRESSLIMITorg[getBodyAgeState().ordinal()] * checkNonYukkuriDiseaseTolerance() / 100 * 2 / 5 < stress) {
@@ -5543,6 +5586,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * とてもストレスフルかどうかを返却する.
 	 * @return とてもストレスフルかどうか
 	 */
+	@Transient
 	public boolean isVeryStressful() {
 		// ストレス限界の60%を超えている場合
 		if (STRESSLIMITorg[getBodyAgeState().ordinal()] * checkNonYukkuriDiseaseTolerance() / 100 * 3 / 5 < stress) {
@@ -5628,6 +5672,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 足焼きレベルを取得する.
 	 * @return 足焼きレベル
 	 */
+	@Transient
 	public FootBake getFootBakeLevel() {
 		FootBake ret = FootBake.NONE;
 		if (footBakePeriod < 0) {
@@ -5645,6 +5690,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * キリッ！かどうかを取得する.
 	 * @return キリッ！かどうか
 	 */
+	@Transient
 	public boolean isVain() {
 		return (!dead && beVain);
 	}
@@ -5670,11 +5716,11 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void initAmount(AgeState val) {
 		bodyAmount = DAMAGELIMITorg[val.ordinal()];
 	}
-
+	@Transient
 	public int getCollisionX() {
 		return (bodySpr[getBodyAgeState().ordinal()].imageW + getExpandSizeW()) >> 1;
 	}
-
+	@Transient
 	public int getCollisionY() {
 		return (bodySpr[getBodyAgeState().ordinal()].imageH + getExpandSizeH()) >> 1;
 	}
@@ -5683,60 +5729,60 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 足の速さを取得する.
 	 * @return 足の速さ
 	 */
+	@Transient
 	public int getStep() {
 		return (STEPorg[getBodyAgeState().ordinal()]);
 	}
-
+	@Transient
 	public int getStepDist() {
 		int p = (STEPorg[getBodyAgeState().ordinal()]) * (STEPorg[getBodyAgeState().ordinal()]);
 		return p;
 	}
-
+	@Transient
 	public Sprite getBodyBaseSpr() {
 		return bodySpr[getBodyAgeState().ordinal()];
 	}
-
+	@Transient
 	public Sprite getBodyExpandSpr() {
 		return expandSpr[getBodyAgeState().ordinal()];
 	}
-
+	@Transient
 	public Sprite getBraidSprite() {
 		return braidSpr[getBodyAgeState().ordinal()];
 	}
-
 	@Transient
 	public BufferedImage getShadowImage() {
 		return shadowImages[getBodyAgeState().ordinal()];
 	}
-
+	@Transient
 	public int getShadowH() {
 		return shadowImgH[getBodyAgeState().ordinal()];
 	}
-
+	@Transient
 	public int getW() {
 		return bodySpr[getBodyAgeState().ordinal()].imageW;
 	}
-
+	@Transient
 	public int getH() {
 		return bodySpr[getBodyAgeState().ordinal()].imageH;
 	}
-
+	@Transient
 	public int getPivotX() {
 		return bodySpr[getBodyAgeState().ordinal()].pivotX;
 	}
-
+	@Transient
 	public int getPivotY() {
 		return bodySpr[getBodyAgeState().ordinal()].pivotY;
 	}
-
+	@Transient
 	public int getBraidW() {
 		return braidSpr[getBodyAgeState().ordinal()].imageW;
 	}
-
+	@Transient
 	public int getBraidH() {
 		return braidSpr[getBodyAgeState().ordinal()].imageH;
 	}
-
+	@Transient
 	public int getMaxHaveBaby() {
 		return getDamageLimit() / 300;
 	}
@@ -5746,6 +5792,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 外力を算出するときに使用する.
 	 * @return 体重
 	 */
+	@Transient
 	public int getWeight() {
 		return (WEIGHTorg[getBodyAgeState().ordinal()] + (babyTypes.size() + stalkBabyTypes.size()) * 50);
 	}
@@ -5803,6 +5850,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 捕食種かどうかを取得する.
 	 * @return
 	 */
+	@Transient
 	public boolean isPredatorType() {
 		return (predatorType != null);
 	}
@@ -5811,6 +5859,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 茎または腹ではらんでいるかどうかを取得する.
 	 * @return 茎または腹ではらんでいるかどうか
 	 */
+	@Transient
 	public boolean hasBabyOrStalk() {
 		return (hasBaby || hasStalk);
 	}
@@ -5819,6 +5868,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * おかざりがあるかどうかを取得する.
 	 * @return おかざりがあるかどうか
 	 */
+	@Transient
 	public final boolean hasOkazari() {
 		return (okazari != null);
 	}
@@ -5835,30 +5885,6 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 */
 	public void takePants() {
 		setHasPants(false);
-	}
-
-	/**
-	 * あにゃる閉鎖を設定する.
-	 * @param flag あにゃる閉鎖かどうか
-	 */
-	public void setForceAnalClose(boolean flag) {
-		setAnalClose(flag);
-	}
-
-	/**
-	 * 茎を去勢する.
-	 */
-	public void invStalkCastration() {
-		boolean stalkCastration = !isStalkCastration();
-		setStalkCastration(stalkCastration);
-	}
-
-	/**
-	 * 胎生去勢をする.
-	 */
-	public final void invBodyCastration() {
-		boolean bodyCastration = !isBodyCastration();
-		setBodyCastration(bodyCastration);
 	}
 
 	/**
@@ -5917,6 +5943,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * ゆかび第一段階(自覚症状)
 	 * @return ゆかび第一段階以上になっているかどうか
 	 */
+	@Transient
 	public boolean isSick() {
 		if (sickPeriod > INCUBATIONPERIODorg) {
 			return true;
@@ -5928,6 +5955,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * ゆかび第二段階
 	 * @return ゆかび第二段階になっているかどうか
 	 */
+	@Transient
 	public boolean isSickHeavily() {
 		if (sickPeriod > (INCUBATIONPERIODorg * 8)) {
 			return true;
@@ -5939,6 +5967,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * ゆかび第三段階、かつダメージ有
 	 * @return ゆかび第三段階になっているかどうか
 	 */
+	@Transient
 	public boolean isSickTooHeavily() {
 		if (sickPeriod > (INCUBATIONPERIODorg * 32) && isDamaged()) {
 			return true;
@@ -5957,6 +5986,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 老ゆかどうかを取得する.
 	 * @return 老ゆかどうか
 	 */
+	@Transient
 	public final boolean isOld() {
 		return getAge() > (getLIFELIMITorg() * 9 / 10);
 	}
@@ -5965,6 +5995,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 喋っているかどうかを取得する.
 	 * @return 喋っているかどうか
 	 */
+	@Transient
 	public final boolean isTalking() {
 		return (messageCount > 0);
 	}
@@ -6013,6 +6044,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 足焼きレベルを取得する．
 	 * @return 足焼きレベル
 	 */
+	@Transient
 	public final BodyBake getBodyBakeLevel() {
 		BodyBake ret = BodyBake.NONE;
 		if (bodyBakePeriod < 0) {
@@ -6030,6 +6062,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * やけどの有無を取得する.
 	 * @return やけどの有無
 	 */
+	@Transient
 	public boolean isGotBurned() {
 		if (getFootBakeLevel() == FootBake.NONE && getBodyBakeLevel() == BodyBake.NONE) {
 			return false;
@@ -6042,6 +6075,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 深刻なやけどの有無を取得する.
 	 * @return 深刻なやけどの有無
 	 */
+	@Transient
 	public boolean isGotBurnedHeavily() {
 		if (getFootBakeLevel() != FootBake.NONE || getBodyBakeLevel() == BodyBake.CRITICAL) {
 			return true;
@@ -6091,6 +6125,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 舌の肥度合いを取得する.
 	 * @return 舌の肥度合い
 	 */
+	@Transient
 	public TangType getTangType() {
 		TangType ret;
 		if (getTang() < getTANGLEVELorg()[0]) {
@@ -6107,6 +6142,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 一回の食事量を取得する.
 	 * @return 一回の食事量
 	 */
+	@Transient
 	public int getEatAmount() {
 		return getEATAMOUNTorg()[getBodyAgeState().ordinal()];
 	}
@@ -6138,6 +6174,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 非ゆっくり症(間近も含む)かどうかを返却する.
 	 * @return 非ゆっくり症(間近も含む)かどうか
 	 */
+	@Transient
 	public final boolean isNYD() {
 		return geteCoreAnkoState() != CoreAnkoState.DEFAULT;
 	}
@@ -6146,6 +6183,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 非ゆっくり症ではないどうかを返却する.
 	 * @return 非ゆっくり症ではないかどうか
 	 */
+	@Transient
 	public final boolean isNotNYD() {
 		return geteCoreAnkoState() == CoreAnkoState.DEFAULT;
 	}
@@ -6213,7 +6251,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	}
 
 	public boolean isPeropero() {
-		return peropero;
+		return (!dead && peropero);
 	}
 
 	public boolean isBeVain() {

@@ -23,6 +23,7 @@ import src.util.YukkuriUtil;
  */
 public class ANYDAmpoule extends Attachment {
 
+	private static final long serialVersionUID = -8444054215424177161L;
 	/**識別キー*/
 	private static final String POS_KEY = "ANYDAmpoule";
 	/**画像の入れ物

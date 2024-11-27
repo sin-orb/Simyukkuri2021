@@ -2,6 +2,7 @@ package src.yukkuri;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
+import java.beans.Transient;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,7 +24,7 @@ import src.util.IniFileUtil;
  * たりないれいむ
  */
 public class TarinaiReimu extends Tarinai implements java.io.Serializable {
-	static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 669696546423582239L;
 	/** たりないれいむのタイプ */
 	public static final int type = 2007;
 	/** たりないれいむの和名 */
@@ -69,6 +70,7 @@ public class TarinaiReimu extends Tarinai implements java.io.Serializable {
 		imageLoaded = true;
 	}
 	@Override
+	@Transient
 	public boolean isImageLoaded() {
 		return imageLoaded;
 	}
@@ -89,6 +91,7 @@ public class TarinaiReimu extends Tarinai implements java.io.Serializable {
 	}
 
 	@Override
+	@Transient
 	public int getType() {
 		return type;
 	}
@@ -104,6 +107,7 @@ public class TarinaiReimu extends Tarinai implements java.io.Serializable {
 	}
 	
 	@Override
+	@Transient
 	public String getNameJ() {
 		return nameJ;
 	}
@@ -127,6 +131,7 @@ public class TarinaiReimu extends Tarinai implements java.io.Serializable {
 	 * @return たりないゆかどうか
 	 */
 	@Override
+	@Transient
 	public boolean isIdiot() {
 		return true;
 	}
@@ -166,4 +171,5 @@ public class TarinaiReimu extends Tarinai implements java.io.Serializable {
 
 		speed = baseSpeed;
 	}
+	
 }

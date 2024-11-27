@@ -2,6 +2,7 @@ package src.item;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
+import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
 
@@ -19,7 +20,8 @@ import src.system.Cash;
 製品投入口
 */
 public class ProductChute extends ObjEX implements java.io.Serializable {
-	static final long serialVersionUID = 1L;
+
+	private static final long serialVersionUID = 3997454948004838706L;
 	/**処理対象(ゆっくり、うんうん、フード、おもちゃ、物全般、吐餡、茎)*/
 	public static final int hitCheckObjType = ObjEX.YUKKURI + ObjEX.SHIT + ObjEX.FOOD + ObjEX.TOY + ObjEX.OBJECT + ObjEX.VOMIT + ObjEX.STALK;
 	private static final int images_num = 2; //このクラスの総使用画像数
@@ -44,6 +46,7 @@ public class ProductChute extends ObjEX implements java.io.Serializable {
 	}
 
 	@Override
+	@Transient
 	public BufferedImage getShadowImage() {
 		return null;
 	}
@@ -53,6 +56,7 @@ public class ProductChute extends ObjEX implements java.io.Serializable {
 	}
 
 	@Override
+	@Transient
 	public int getHitCheckObjType() {
 		return hitCheckObjType;
 	}
@@ -95,6 +99,7 @@ public class ProductChute extends ObjEX implements java.io.Serializable {
 	public ProductChute() {
 		
 	}
+	
 }
 
 

@@ -13,6 +13,8 @@ import src.enums.Type;
 背景の部品画像管理
 */
 public class TerrainBillboard extends Obj {
+
+	private static final long serialVersionUID = -587830180580728404L;
 	/**画像*/
 	private BufferedImage image;
 	/**変形用ベクトル*/
@@ -55,4 +57,14 @@ public class TerrainBillboard extends Obj {
 	public void draw(Graphics2D g2, ImageObserver obs) {
 		g2.drawImage(image, xform, obs);
 	}
+	public AffineTransform getXform() {
+		return xform;
+	}
+	public void setXform(AffineTransform xform) {
+		this.xform = xform;
+	}
+	public void setImage(BufferedImage image) {
+		this.image = image;
+	}
+	
 }

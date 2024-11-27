@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
+import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
 
@@ -41,7 +42,8 @@ import src.yukkuri.WasaReimu;
  * 養殖プール
  */
 public class BreedingPool extends ObjEX implements java.io.Serializable {
-	static final long serialVersionUID = 1L;
+
+	private static final long serialVersionUID = -2544191380264314199L;
 
 	/**稼働タイプ*/
 	public static enum PoolType {
@@ -109,6 +111,7 @@ public class BreedingPool extends ObjEX implements java.io.Serializable {
 	}
 
 	@Override
+	@Transient
 	public BufferedImage getShadowImage() {
 		return null;
 	}
@@ -119,6 +122,7 @@ public class BreedingPool extends ObjEX implements java.io.Serializable {
 	}
 
 	@Override
+	@Transient
 	public int getHitCheckObjType() {
 		return hitCheckObjType;
 	}
@@ -400,4 +404,37 @@ public class BreedingPool extends ObjEX implements java.io.Serializable {
 		}
 		return ret;
 	}
+
+	public boolean isHighQuality() {
+		return highQuality;
+	}
+
+	public void setHighQuality(boolean highQuality) {
+		this.highQuality = highQuality;
+	}
+
+	public boolean isStalkPool() {
+		return stalkPool;
+	}
+
+	public void setStalkPool(boolean stalkPool) {
+		this.stalkPool = stalkPool;
+	}
+
+	public int getLiquidYukkuriType() {
+		return liquidYukkuriType;
+	}
+
+	public void setLiquidYukkuriType(int liquidYukkuriType) {
+		this.liquidYukkuriType = liquidYukkuriType;
+	}
+
+	public int getLastSelected() {
+		return lastSelected;
+	}
+
+	public void setLastSelected(int lastSelected) {
+		this.lastSelected = lastSelected;
+	}
+	
 }

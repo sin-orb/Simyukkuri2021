@@ -3,6 +3,7 @@ package src.item;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
+import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
 
@@ -17,7 +18,8 @@ import src.enums.Type;
 ベッド
 */
 public class Bed extends ObjEX implements java.io.Serializable {
-	static final long serialVersionUID = 1L;
+
+	private static final long serialVersionUID = -2355710591796200973L;
 	/**画像の入れ物*/
 	private static BufferedImage[] images;
 	/**判定用長方形*/
@@ -44,6 +46,7 @@ public class Bed extends ObjEX implements java.io.Serializable {
 	}
 
 	@Override
+	@Transient
 	public BufferedImage getShadowImage() {
 		return null;
 	}
@@ -104,6 +107,15 @@ public class Bed extends ObjEX implements java.io.Serializable {
 	public Bed() {
 		
 	}
+
+	public ItemRank getItemRank() {
+		return itemRank;
+	}
+
+	public void setItemRank(ItemRank itemRank) {
+		this.itemRank = itemRank;
+	}
+	
 }
 
 

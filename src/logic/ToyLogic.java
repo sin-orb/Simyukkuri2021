@@ -187,7 +187,7 @@ public class ToyLogic {
 
 					// 所有できない場合
 					if(((Sui)s).NoCanBind()) {
-						Body bindBody = (Body)((Sui)s).getbindobj();
+						Body bindBody = (Body)((Sui)s).getBindobj();
 						// 所有者が家族ではないならなにもしない
 						if(!(b.isParent(bindBody) || bindBody.isParent(b) || b.isPartner(bindBody) || bindBody.isSister(b))){
 							continue;
@@ -205,7 +205,7 @@ public class ToyLogic {
 		}
 		// すぃーが見つかった場合
 		if (found != null) {
-			Body bindBody =(Body)((Sui)found).getbindobj() ;
+			Body bindBody =(Body)((Sui)found).getBindobj() ;
 			// プレイヤーに持ち上げられたら所有権を消す
 			if( found.isGrabbed() && found.getZ() != 0 ){
 				bindBody = null;

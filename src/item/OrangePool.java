@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
+import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
 
@@ -28,7 +29,8 @@ import src.system.ResourceUtil;
  * オレンジプレート
  */
 public class OrangePool extends ObjEX implements java.io.Serializable {
-	static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -5312430078640748031L;
+
 	/**タイプ*/
 	public static enum OrangeType {
         NORMAL(ResourceUtil.getInstance().read("item_coolwater")),
@@ -80,6 +82,7 @@ public class OrangePool extends ObjEX implements java.io.Serializable {
 	}
 
 	@Override
+	@Transient
 	public BufferedImage getShadowImage() {
 		return null;
 	}
@@ -89,6 +92,7 @@ public class OrangePool extends ObjEX implements java.io.Serializable {
 	}
 
 	@Override
+	@Transient
 	public int getHitCheckObjType() {
 		return hitCheckObjType;
 	}
@@ -119,6 +123,7 @@ public class OrangePool extends ObjEX implements java.io.Serializable {
 	}
 	
 	@Override
+	@Transient
 	public int getValue() {
 		if(itemRank == ItemRank.HOUSE) {
 			if(rescue) return value[1];
@@ -130,6 +135,7 @@ public class OrangePool extends ObjEX implements java.io.Serializable {
 	}
 
 	@Override
+	@Transient
 	public int getCost() {
 		if(itemRank == ItemRank.HOUSE) {
 			if(rescue) return cost[1];
@@ -218,6 +224,23 @@ public class OrangePool extends ObjEX implements java.io.Serializable {
 		}
 		return ret;
 	}
+
+	public boolean isRescue() {
+		return rescue;
+	}
+
+	public void setRescue(boolean rescue) {
+		this.rescue = rescue;
+	}
+
+	public ItemRank getItemRank() {
+		return itemRank;
+	}
+
+	public void setItemRank(ItemRank itemRank) {
+		this.itemRank = itemRank;
+	}
+	
 }
 
 

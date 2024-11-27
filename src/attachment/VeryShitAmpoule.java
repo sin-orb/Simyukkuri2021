@@ -23,9 +23,7 @@ import src.util.YukkuriUtil;
  * 
  */
 public class VeryShitAmpoule extends Attachment {
-
-	private static final long serialVersionUID = 1L;
-	
+	private static final long serialVersionUID = 7496900639692483839L;
 	/**識別キー*/
 	private static final String POS_KEY = "VeryShitAmpoule";
 	/**画像の入れ物

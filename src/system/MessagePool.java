@@ -779,7 +779,7 @@ public class MessagePool {
 
 	// フラグからマップキー作成
 	private static final String createTagKey(boolean[] flags) {
-		StringBuffer key = new StringBuffer("");
+		StringBuilder key = new StringBuilder("");
 		MessageMap.Tag[] tags = MessageMap.Tag.values();
 
 		for (int i = 0; i < tags.length; i++) {
@@ -977,7 +977,7 @@ public class MessagePool {
 		if (msg == null)
 			return "NO TAG <" + key.toString() + ">";
 
-		StringBuffer ret = new StringBuffer(msg[SimYukkuri.RND.nextInt(msg.length)]);
+		StringBuilder ret = new StringBuilder(msg[SimYukkuri.RND.nextInt(msg.length)]);
 		// 埋め込み文字の置き換え
 		if (ret.indexOf("%") != -1) {
 			if (ret.indexOf("%" + Replace.dummy.name()) != -1)

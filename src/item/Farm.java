@@ -5,6 +5,7 @@ import java.awt.TexturePaint;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
+import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
@@ -31,7 +32,8 @@ import src.system.MapPlaceData;
  * <br>これはほかのアイテムと違い、ObjEXを継承していないので注意。
  */
 public class Farm extends FieldShapeBase implements Serializable {
-	static final long serialVersionUID = 1L;
+
+	private static final long serialVersionUID = 2194998702502315898L;
 
 	private static final int MIN_SIZE = 8;
 
@@ -89,11 +91,13 @@ public class Farm extends FieldShapeBase implements Serializable {
 	}
 
 	@Override
+	@Transient
 	public int getAttribute() {
 		return FIELD_FARM;
 	}
 
 	@Override
+	@Transient
 	public int getMinimumSize() {
 		return MIN_SIZE;
 	}
@@ -385,4 +389,29 @@ public class Farm extends FieldShapeBase implements Serializable {
 			}
 		}
 	}
+
+	public int getAmount() {
+		return amount;
+	}
+
+	public void setAmount(int amount) {
+		this.amount = amount;
+	}
+
+	public int[] getAnPointX() {
+		return anPointX;
+	}
+
+	public void setAnPointX(int[] anPointX) {
+		this.anPointX = anPointX;
+	}
+
+	public int[] getAnPointY() {
+		return anPointY;
+	}
+
+	public void setAnPointY(int[] anPointY) {
+		this.anPointY = anPointY;
+	}
+	
 }

@@ -148,13 +148,14 @@ import src.yukkuri.Yuyuko;
  *
  */
 public class MyPane extends JPanel implements Runnable {
-	static final long serialVersionUID = 4L;
+
+	private static final long serialVersionUID = 3984934418500303781L;
 	/**メッセージボックスの位置行当たりの文字数*/
 	static final int MSG_BOX_CHAR_NUM = 13;
 	/**スレッドが走っているか否か*/
-	public boolean isRunning = false;
+	private boolean isRunning = false;
 	/**ゲーム内環境*/
-	public Terrarium terrarium = new Terrarium();
+	private Terrarium terrarium = new Terrarium();
 
 	/**背景用バッファ*/
 	private BufferedImage backBuffer = null;
@@ -1210,5 +1211,85 @@ public class MyPane extends JPanel implements Runnable {
 			drawPosY += layout.getDescent() + layout.getLeading();
 		}
 		return (int) Math.ceil(drawPosY);
+	}
+
+	public boolean isRunning() {
+		return isRunning;
+	}
+
+	public void setRunning(boolean isRunning) {
+		this.isRunning = isRunning;
+	}
+
+	public Terrarium getTerrarium() {
+		return terrarium;
+	}
+
+	public void setTerrarium(Terrarium terrarium) {
+		this.terrarium = terrarium;
+	}
+
+	public BufferedImage getBackBuffer() {
+		return backBuffer;
+	}
+
+	public void setBackBuffer(BufferedImage backBuffer) {
+		this.backBuffer = backBuffer;
+	}
+
+	public Graphics2D getBackBufferG2() {
+		return backBufferG2;
+	}
+
+	public void setBackBufferG2(Graphics2D backBufferG2) {
+		this.backBufferG2 = backBufferG2;
+	}
+
+	public List<Obj> getList4sort() {
+		return list4sort;
+	}
+
+	public void setList4sort(List<Obj> list4sort) {
+		this.list4sort = list4sort;
+	}
+
+	public List<Body> getMsgList() {
+		return msgList;
+	}
+
+	public void setMsgList(List<Body> msgList) {
+		this.msgList = msgList;
+	}
+
+	public int[] getPosTmp() {
+		return posTmp;
+	}
+
+	public void setPosTmp(int[] posTmp) {
+		this.posTmp = posTmp;
+	}
+
+	public BufferedImage[] getLayerTmp() {
+		return layerTmp;
+	}
+
+	public void setLayerTmp(BufferedImage[] layerTmp) {
+		this.layerTmp = layerTmp;
+	}
+
+	public Object getRenderScale() {
+		return renderScale;
+	}
+
+	public static Stroke getItemCurStroke() {
+		return ITEM_CUR_STROKE;
+	}
+
+	public static Color getItemCurColor() {
+		return ITEM_CUR_COLOR;
+	}
+
+	public static Ellipse2D.Float getItemCurShape() {
+		return ITEM_CUR_SHAPE;
 	}
 }

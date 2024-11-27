@@ -26,7 +26,9 @@ import src.system.MapPlaceData;
 @SuppressWarnings("rawtypes")
 @JsonTypeInfo(use = Id.CLASS)
 public class Obj implements java.io.Serializable, Comparable {
-	static final long serialVersionUID = 1L;
+
+	private static final long serialVersionUID = 4119096412988786726L;
+
 		/**時間経過用係数*/
 	public static final int TICK = SimYukkuri.TICK;
 
@@ -465,9 +467,6 @@ public class Obj implements java.io.Serializable, Comparable {
 	public boolean isCanGrab() {
 		return canGrab;
 	}
-	/*public void setCanGrab(boolean b) {
-		canGrab = b;
-	}*/
 
 	/**掴まれる処理*/
 	public void grab() {
@@ -496,10 +495,6 @@ public class Obj implements java.io.Serializable, Comparable {
 	public int getCost() {
 		return cost;
 	}
-
-	/*public void setEnableWall( boolean flag ) {
-		enableWall = flag;
-	}*/
 
 	/**除去*/
 	public void remove(){
@@ -636,10 +631,11 @@ public class Obj implements java.io.Serializable, Comparable {
 		bindObj = obj;
 	}
 
-
+	@Transient
 	public GetMenuTarget hasGetPopup() {
 		return GetMenuTarget.NONE;
 	}
+	@Transient
 	public UseMenuTarget hasUsePopup() {
 		return UseMenuTarget.NONE;
 	}
@@ -647,6 +643,7 @@ public class Obj implements java.io.Serializable, Comparable {
 	/**どこにいるか取得
 	 * @return 床の上か、ゆっくりの上or中か
 	 */
+	@Transient
 	public Where getWhere(){
 		return eWhere;
 	}
@@ -819,4 +816,37 @@ public class Obj implements java.io.Serializable, Comparable {
 			y = mapY;
 		}
 	}
+
+	public int getImgW() {
+		return imgW;
+	}
+
+	public void setImgW(int imgW) {
+		this.imgW = imgW;
+	}
+
+	public int getImgH() {
+		return imgH;
+	}
+
+	public void setImgH(int imgH) {
+		this.imgH = imgH;
+	}
+
+	public int getPivX() {
+		return pivX;
+	}
+
+	public void setPivX(int pivX) {
+		this.pivX = pivX;
+	}
+
+	public int getPivY() {
+		return pivY;
+	}
+
+	public void setPivY(int pivY) {
+		this.pivY = pivY;
+	}
+	
 }

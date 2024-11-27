@@ -3,6 +3,7 @@ package src.item;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
+import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
 
@@ -17,8 +18,8 @@ import src.enums.Type;
  * がらくた
  */
 public class Trash extends ObjEX implements java.io.Serializable {
-	static final long serialVersionUID = 1L;
 
+	private static final long serialVersionUID = 4386384968548796846L;
 	private static BufferedImage[] images = new BufferedImage[2];
 	private static Rectangle4y boundary = new Rectangle4y();
 	/**画像ロード*/
@@ -45,6 +46,7 @@ public class Trash extends ObjEX implements java.io.Serializable {
 	}
 
 	@Override
+	@Transient
 	public BufferedImage getShadowImage() {
 		return images[1];
 	}
@@ -78,6 +80,7 @@ public class Trash extends ObjEX implements java.io.Serializable {
 	public Trash() {
 		
 	}
+	
 }
 
 

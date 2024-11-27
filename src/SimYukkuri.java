@@ -246,7 +246,7 @@ public class SimYukkuri extends JFrame {
 				simYukkuri = new SimYukkuri();
 			}
 			Translate.createTransTable(TerrainField.isPers());
-			mypane.isRunning = true;
+			mypane.setRunning(true);
 			mythread = new Thread(mypane);
 			mythread.start();
 		} catch (OutOfMemoryError e) {

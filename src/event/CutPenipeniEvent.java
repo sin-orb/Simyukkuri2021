@@ -19,7 +19,7 @@ import src.util.YukkuriUtil;
 */
 public class CutPenipeniEvent extends EventPacket implements java.io.Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -9152418777999085341L;
 	int tick = 0;
 
 	/**

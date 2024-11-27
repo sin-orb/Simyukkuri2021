@@ -6,6 +6,8 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import src.SimYukkuri;
 import src.base.Body;
 import src.base.Effect;
@@ -27,9 +29,10 @@ import src.yukkuri.HybridYukkuri;
 	セーブデータになる
 
 */
+@JsonIgnoreProperties(ignoreUnknown=true)
 public class World implements Serializable {
-	static final long serialVersionUID = 1L;
 
+	private static final long serialVersionUID = 1586355554271822104L;
 	/** プレイヤー情報 ワールド内に1つのみ存在できる */
 	public Player player;
 	/** 現在の画面のindex */
@@ -131,6 +134,7 @@ public class World implements Serializable {
 	 * 現在のマップを取得する.
 	 * @return 現在のマップ
 	 */
+	@Transient
 	public MapPlaceData getCurrentMap() {
 		return mapList.get(currentMapIdx);
 	}
@@ -196,6 +200,7 @@ public class World implements Serializable {
 	 * ゆっくり/うんうん/吐餡/おかざりのリストを取得する.
 	 * @return ゆっくり/うんうん/吐餡/おかざりのリスト 
 	 */
+	@Transient
 	public List<Obj> getYukkuriList(){
 		List<Obj> yukkuriGroupList = new LinkedList<>();
 		for (Map.Entry<Integer, Body> entry : mapList.get(currentMapIdx).body.entrySet()) {

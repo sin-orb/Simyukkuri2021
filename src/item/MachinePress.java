@@ -3,6 +3,7 @@ package src.item;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
+import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
 
@@ -24,7 +25,8 @@ import src.system.MessagePool;
  * プレス機
  */
 public class MachinePress extends ObjEX implements java.io.Serializable {
-	static final long serialVersionUID = 1L;
+
+	private static final long serialVersionUID = 5340736342470019134L;
 	/**処理対象(ゆっくり、うんうん、吐餡)*/
 	public static final int hitCheckObjType = ObjEX.YUKKURI | ObjEX.SHIT | ObjEX.VOMIT;
 	private static final int images_num = 8; //このクラスの総使用画像数
@@ -51,6 +53,7 @@ public class MachinePress extends ObjEX implements java.io.Serializable {
 	}
 
 	@Override
+	@Transient
 	public BufferedImage getShadowImage() {
 		return null;
 	}
@@ -60,6 +63,7 @@ public class MachinePress extends ObjEX implements java.io.Serializable {
 	}
 
 	@Override
+	@Transient
 	public int getHitCheckObjType() {
 		return hitCheckObjType;
 	}
@@ -108,6 +112,7 @@ public class MachinePress extends ObjEX implements java.io.Serializable {
 	public MachinePress() {
 		
 	}
+	
 }
 
 

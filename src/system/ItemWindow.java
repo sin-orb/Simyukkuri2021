@@ -33,6 +33,7 @@ import src.system.MainCommandUI.ToolButtonLabel;
  * 持ち物ウィンドウの設計図クラス
  */
 public class ItemWindow extends JDialog implements WindowListener, MouseListener, ActionListener, ListDataListener {
+	private static final long serialVersionUID = 1359537638021473531L;
 
 	private static final String TITLE = Locale.getDefault().getLanguage().equals(new Locale("ja").getLanguage())? "持ちもの": "Belongings";
 

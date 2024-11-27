@@ -29,7 +29,7 @@ import src.util.YukkuriUtil;
 */
 public class HateNoOkazariEvent extends EventPacket implements java.io.Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 7555245333944945758L;
 	/**
 	 * コンストラクタ.
 	 */
@@ -159,11 +159,11 @@ public class HateNoOkazariEvent extends EventPacket implements java.io.Serializa
 			}
 			
 			if(b.getDirection() == Direction.LEFT) {
-				SimYukkuri.mypane.terrarium.addEffect(EffectType.HIT, b.getX()-10, b.getY(), 0,
+				SimYukkuri.mypane.getTerrarium().addEffect(EffectType.HIT, b.getX()-10, b.getY(), 0,
 														0, 0, 0, false, 500, 1, true, false, true);
 			}
 			else {
-				SimYukkuri.mypane.terrarium.addEffect(EffectType.HIT,b.getX()+10, b.getY(),0,0,0,0,true, 500,1,true,false,true);
+				SimYukkuri.mypane.getTerrarium().addEffect(EffectType.HIT,b.getX()+10, b.getY(),0,0,0,0,true, 500,1,true,false,true);
 			}
 			
 			// 瀕死かつたりないゆでない場合は攻撃されないで見逃される

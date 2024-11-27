@@ -2,6 +2,7 @@ package src.event;
 
 import java.util.List;
 
+import src.Const;
 import src.SimYukkuri;
 import src.base.Body;
 import src.base.EventPacket;
@@ -24,7 +25,7 @@ import src.util.YukkuriUtil;
 */
 public class FuneralEvent extends EventPacket implements java.io.Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 3784662418868039745L;
 	int tick = 0;
 	boolean bActionFlag = true;
 	boolean bUnunActionFlag = true;
@@ -72,6 +73,9 @@ public class FuneralEvent extends EventPacket implements java.io.Serializable {
 	@Override
 	public boolean checkEventResponse(Body b) {
 		Body from = YukkuriUtil.getBodyInstance(getFrom());
+		if(from.getUniqueID() == b.getUniqueID()) {
+			return true;
+		}
 		// うんうん奴隷の場合は参加しない
 		if (from == null || b.getPublicRank() == PublicRank.UnunSlave)
 			return false;
@@ -88,14 +92,15 @@ public class FuneralEvent extends EventPacket implements java.io.Serializable {
 			return true;
 		}
 		// Fromの子供だけ参加する(※Fromが教育係のときは全ての子供が参加するようにする？)
-		if (!b.isChild(from))
+		if (!b.isChild(from)) {
 			return false;
+		}
 		// 赤、子ゆのみ参加
-		if (b.isAdult())
+		if (b.isAdult()) {
 			return false;
-
-		//b.setWorldEventResMessage(MessagePool.getMessage(b, MessagePool.Action.ProudChildsGO), Body.HOLDMESSAGE, true, false);
-		//b.setHappiness(Happiness.HAPPY);
+		}
+		b.setWorldEventResMessage(MessagePool.getMessage(b, MessagePool.Action.ProudChildsGO), Const.HOLDMESSAGE, true, false);
+		b.setHappiness(Happiness.HAPPY);
 		b.wakeup();
 		b.clearActions();
 		return true;
@@ -125,9 +130,9 @@ public class FuneralEvent extends EventPacket implements java.io.Serializable {
 			b.setHappiness(Happiness.VERY_HAPPY);
 			return UpdateState.ABORT;
 		}
-		if (from.getCurrentEvent() == null) {
-			return UpdateState.ABORT;
-		}
+//		if (from.getCurrentEvent() == null) {
+//			return UpdateState.ABORT;
+//		}
 		// 産気づいたら
 		if (b.nearToBirth()) {
 			return UpdateState.ABORT;

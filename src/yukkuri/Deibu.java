@@ -2,6 +2,7 @@ package src.yukkuri;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
+import java.beans.Transient;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,7 +25,7 @@ import src.util.IniFileUtil;
  * でいぶ
  */
 public class Deibu extends Reimu implements java.io.Serializable {
-	static final long serialVersionUID = 2L;
+	private static final long serialVersionUID = -7772663089015103382L;
 	/** でいぶのタイプ */
 	public static final int type = 2005;
 	/** でいぶ和名 */
@@ -87,6 +88,7 @@ public class Deibu extends Reimu implements java.io.Serializable {
 		baseSpeed = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_INI_DIR, baseFileName, "speed");
 	}
 	@Override
+	@Transient
 	public boolean isImageLoaded() {
 		return imageLoaded;
 	}
@@ -145,6 +147,7 @@ public class Deibu extends Reimu implements java.io.Serializable {
 	}
 
 	@Override
+	@Transient
 	public int getType() {
 		return type;
 	}
@@ -219,4 +222,11 @@ public class Deibu extends Reimu implements java.io.Serializable {
 
 		speed = baseSpeed;
 	}
+	public int[][] getAnImageVerStateCtrlNagasi() {
+		return anImageVerStateCtrlNagasi;
+	}
+	public void setAnImageVerStateCtrlNagasi(int[][] anImageVerStateCtrlNagasi) {
+		this.anImageVerStateCtrlNagasi = anImageVerStateCtrlNagasi;
+	}
+	
 }

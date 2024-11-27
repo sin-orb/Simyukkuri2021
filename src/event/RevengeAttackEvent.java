@@ -24,7 +24,7 @@ import src.util.YukkuriUtil;
 */
 public class RevengeAttackEvent extends EventPacket implements java.io.Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -7412180348011586698L;
 
 	/**
 	 * コンストラクタ.
@@ -96,10 +96,10 @@ public class RevengeAttackEvent extends EventPacket implements java.io.Serializa
 			b.setWorldEventResMessage(MessagePool.getMessage(b, MessagePool.Action.RevengeAttack), Const.HOLDMESSAGE,
 					true, false);
 			if (b.getDirection() == Direction.LEFT) {
-				SimYukkuri.mypane.terrarium.addEffect(EffectType.HIT, b.getX() - 10, b.getY(), 0,
+				SimYukkuri.mypane.getTerrarium().addEffect(EffectType.HIT, b.getX() - 10, b.getY(), 0,
 						0, 0, 0, false, 500, 1, true, false, true);
 			} else {
-				SimYukkuri.mypane.terrarium.addEffect(EffectType.HIT, b.getX() + 10, b.getY(), 0,
+				SimYukkuri.mypane.getTerrarium().addEffect(EffectType.HIT, b.getX() + 10, b.getY(), 0,
 						0, 0, 0, true, 500, 1, true, false, true);
 			}
 			b.setForceFace(ImageCode.PUFF.ordinal());

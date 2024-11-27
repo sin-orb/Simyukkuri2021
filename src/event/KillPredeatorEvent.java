@@ -22,6 +22,8 @@ import src.util.YukkuriUtil;
  */
 public class KillPredeatorEvent extends RevengeAttackEvent implements Serializable {
 
+	private static final long serialVersionUID = -3947180002572305098L;
+
 	/**
 	 * コンストラクタ.
 	 * @param f イベントを発した個体
@@ -150,10 +152,10 @@ public class KillPredeatorEvent extends RevengeAttackEvent implements Serializab
 			b.setWorldEventResMessage(MessagePool.getMessage(b, MessagePool.Action.RevengeForChild), Const.HOLDMESSAGE,
 					true, false);
 			if (b.getDirection() == Direction.LEFT) {
-				SimYukkuri.mypane.terrarium.addEffect(EffectType.HIT, b.getX() - 10, b.getY(), 0,
+				SimYukkuri.mypane.getTerrarium().addEffect(EffectType.HIT, b.getX() - 10, b.getY(), 0,
 						0, 0, 0, false, 500, 1, true, false, true);
 			} else {
-				SimYukkuri.mypane.terrarium.addEffect(EffectType.HIT, b.getX() + 10, b.getY(), 0,
+				SimYukkuri.mypane.getTerrarium().addEffect(EffectType.HIT, b.getX() + 10, b.getY(), 0,
 						0, 0, 0, true, 500, 1, true, false, true);
 			}
 			b.setForceFace(ImageCode.PUFF.ordinal());

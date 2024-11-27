@@ -34,7 +34,7 @@ import src.yukkuri.Sakuya;
 */
 public class PredatorsGameEvent extends EventPacket implements java.io.Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -1709368077378752533L;
 	private static final int[] ofsZ = {2, 0, -5};
 	int tick = 0;
 	int tick2 = 0;

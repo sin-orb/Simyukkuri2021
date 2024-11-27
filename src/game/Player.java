@@ -18,8 +18,8 @@ import src.system.MainCommandUI;
 
 */
 public class Player extends Obj implements Serializable {
-	static final long serialVersionUID = 1L;
 
+	private static final long serialVersionUID = 2359877855058696480L;
 	// 所持金
 	private long cash;
 	// 所持品

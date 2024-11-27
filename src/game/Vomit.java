@@ -26,8 +26,8 @@ import src.system.ResourceUtil;
  * 吐餡クラス.
  */
 public class Vomit extends Obj implements java.io.Serializable {
-	static final long serialVersionUID = 2L;
 	
+	private static final long serialVersionUID = -5000572959095410611L;
 	// public variables
 	/** 通常の吐餡 */
 	public static final int VOMIT_NORMAL = 0;
@@ -135,6 +135,7 @@ public class Vomit extends Obj implements java.io.Serializable {
 	 * サイズを取得する.
 	 * @return サイズ
 	 */
+	@Transient
 	public int getSize() {
 		return imgW[vomitType][ageState.ordinal()];
 	}
@@ -189,6 +190,7 @@ public class Vomit extends Obj implements java.io.Serializable {
 	 * 吐餡の状態を取得する.
 	 * @return 吐餡の状態
 	 */
+	@Transient
 	public int getVomitState() {
 		if (getAge() >= VOMITLIMIT[ageState.ordinal()]/4) {
 			return 1;
@@ -222,6 +224,7 @@ public class Vomit extends Obj implements java.io.Serializable {
 	/**
 	 * 吐餡の価格を取得する.
 	 */
+	@Transient
 	public int getValue() {
 		return value[ageState.ordinal()];
 	}

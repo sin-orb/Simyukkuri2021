@@ -3,6 +3,7 @@ package src.base;
 import java.awt.Color;
 import java.awt.Rectangle;
 import java.awt.image.ImageObserver;
+import java.beans.Transient;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Iterator;
@@ -119,7 +120,7 @@ import src.util.YukkuriUtil;
  */
 @JsonTypeInfo(use = Id.CLASS)
 public abstract class Body extends BodyAttributes implements java.io.Serializable {
-	static final long serialVersionUID = 7L;
+	private static final long serialVersionUID = 8856385435939508588L;
 
 	/**
 	 * ゆ虐神拳を受けてドス等にトランスフォーム可能かどうかを返却する.
@@ -301,12 +302,12 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			else if (getCriticalDamege() == CriticalDamegeType.INJURED && !isSleeping()) {
 				// 1/300の確率で餡子を漏らす
 				if (SimYukkuri.RND.nextInt(300) == 0) {
-					SimYukkuri.mypane.terrarium.addCrushedVomit(getX() + 3 - SimYukkuri.RND.nextInt(6), getY() - 2, 0,
+					SimYukkuri.mypane.getTerrarium().addCrushedVomit(getX() + 3 - SimYukkuri.RND.nextInt(6), getY() - 2, 0,
 							this,
 							getShitType());
 					setMessage(MessagePool.getMessage(this, MessagePool.Action.Scream));
 					setForceFace(ImageCode.PAIN.ordinal());
-					setDirty(true);
+					makeDirty(true);
 					addStress(5);
 					addDamage(50);
 				}
@@ -474,7 +475,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 							if (!canflyCheck()) {
 								if (getFootBakeLevel() == FootBake.NONE &&
 										!isDamaged() && !isSick() && !isFeelPain() && takeMappedObj(getLinkParent()) == null
-										&& !isPeroPero() && !(isEating() && !isPikopiko())) {
+										&& !isPeropero() && !(isEating() && !isPikopiko())) {
 									changeUnyo(0, 0,
 											(int) (SimYukkuri.RND
 													.nextInt(((int) UNYOSTRENGTH[getBodyAgeState().ordinal()] / 3)))
@@ -483,7 +484,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 							} else if (z == 0) {
 								if (getFootBakeLevel() == FootBake.NONE &&
 										!isDamaged() && !isSick() && !isFeelPain() && takeMappedObj(getLinkParent()) == null
-										&& !isPeroPero() && !(isEating() && !isPikopiko())) {
+										&& !isPeropero() && !(isEating() && !isPikopiko())) {
 									changeUnyo(0, 0,
 											(int) (SimYukkuri.RND
 													.nextInt(((int) UNYOSTRENGTH[getBodyAgeState().ordinal()] / 3)))
@@ -509,8 +510,9 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	 * うにょ機能が使用されるゆっくりのアクション
 	 * @return 現在の状態でうにょ機能を適用できるかどうか
 	 */
+	@Transient
 	public boolean isUnyoActionAll() {
-		return isShitting() || isBirth() || isFurifuri() || isEating() || isPeroPero() || isSukkiri() ||
+		return isShitting() || isBirth() || isFurifuri() || isEating() || isPeropero() || isSukkiri() ||
 				isEatingShit() || isNobinobi() || isVain() || isPikopiko() || isYunnyaa();
 		//		return shitting || birth || furifuri || strike || eating || peropero || sukkiri ||
 		//				eatingShit || silent || nobinobi || pikopiko;
@@ -610,7 +612,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 						}
 					} else {
 						// あなる未閉鎖
-						setDirty(true);
+						makeDirty(true);
 						// おくるみあり
 						if (isHasPants()) {
 							setHappiness(Happiness.VERY_SAD);
@@ -638,7 +640,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		//うんうん無効判定
 		// 溶けている場合,完全足焼きした場合,食事中、ぺろぺろ中、すっきり中はうんうんしない
 		if ((getFootBakeLevel() == FootBake.CRITICAL && !isPealed()) ||
-				isMelt() || isEating() || isPeroPero() || isSukkiri() || isPacked()) {
+				isMelt() || isEating() || isPeropero() || isSukkiri() || isPacked()) {
 			return false;
 		}
 		// レイパー発情中はうんうん無効
@@ -683,7 +685,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		// ちぎれ状態の場合は餡子を漏らす
 		if ((getCriticalDamege() == CriticalDamegeType.CUT || isPealed()) && getBaryState() == BaryInUGState.NONE) {
 			if (shit > getSHITLIMITorg()[getBodyAgeState().ordinal()] - TICK * Const.SHITSTAY * 2) {
-				SimYukkuri.mypane.terrarium.addCrushedVomit(getX() + 3 - SimYukkuri.RND.nextInt(6), getY() - 2, 0, this,
+				SimYukkuri.mypane.getTerrarium().addCrushedVomit(getX() + 3 - SimYukkuri.RND.nextInt(6), getY() - 2, 0, this,
 						getShitType());
 				addDamage(Const.NEEDLE * 2);
 				shit = 1;
@@ -750,7 +752,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 					// 寝ているか埋まっているか粘着床(あんよ固定)についているか針が刺さっていたら体勢をかえられずに漏らす
 					if ((isLockmove() && !isFixBack()) || isSleeping() || isbNeedled()
 							|| getBaryState() != BaryInUGState.NONE) {
-						setDirty(true);
+						makeDirty(true);
 						setHappiness(Happiness.VERY_SAD);
 						addStress(150);
 						shit = 0;
@@ -800,13 +802,13 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 				clearActions();
 				shit = 0;
 				if (getBodyAgeState() == AgeState.BABY) {
-					setDirty(true);
+					makeDirty(true);
 					setHappiness(Happiness.SAD);
 					addStress(200);
 				}
 
 				if (isHasPants() || isNYD()) {
-					setDirty(true);
+					makeDirty(true);
 					setHappiness(Happiness.VERY_SAD);
 					addStress(400);
 				}
@@ -924,7 +926,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 				if (!bBirthFlag) {
 					// お腹の赤ゆだけクリア
 					getBabyTypes().clear();
-					setDirty(true);
+					makeDirty(true);
 					if (isNotNYD()) {
 						if (isLockmove() && !isHasPants()) {
 							setHasPants(true);
@@ -3245,6 +3247,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	 * 実ゆ（自分）が茎で生きている親につながっているかを返却する.
 	 * @return 実ゆ（自分）が茎で生きている親につながっているか
 	 */
+	@Transient
 	public final boolean isPlantForUnbirthChild() {
 		if (isUnBirth()) {
 			// 茎がある
@@ -3268,9 +3271,10 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	 * この個体のDNAを取得する.
 	 * @return この個体のDNA
 	 */
+	@Transient
 	public Dna getDna() {
 		Dna ret = new Dna(getType(), getAttitude(), getIntelligence(), false);
-		ret.father = getUniqueID();
+		ret.setFather(getUniqueID());
 		return ret;
 	}
 
@@ -3470,6 +3474,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	 * あまあましか受け付けないかどうかを返却する.
 	 * @return あまあましか受け付けないかどうか
 	 */
+	@Transient
 	public final boolean isOnlyAmaama() {
 		//動けない
 		if (getFootBakeLevel() == FootBake.CRITICAL && !canflyCheck())
@@ -3506,6 +3511,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	 * 妊娠、うんうん、過食などによる横方向の体型のふくらみ取得
 	 */
 	@Override
+	@Transient
 	public int getExpandSizeW() {
 		int OE = 100 * hungry / getHungryLimit();
 		if (OE <= 5)
@@ -3524,6 +3530,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	 * 妊娠、うんうんなどによる縦方向の体型のふくらみ取得
 	 */
 	@Override
+	@Transient
 	public int getExpandSizeH() {
 		return (20 - 20 / (getBabyTypes().size() + 1)) + getBabyTypes().size() * 2
 				+ ((shit * 4 / 5) / getSHITLIMITorg()[getBodyAgeState().ordinal()]) * 5
@@ -3534,6 +3541,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	 *  ひっぱり、押しつぶしによる体型の変形を取得する.
 	 * @return ひっぱり、押しつぶしによる体型の変形
 	 */
+	@Transient
 	private int getExternalForceW() {
 		int ret = 0;
 		// +ひっぱり -押しつぶし
@@ -3542,6 +3550,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		return ret;
 	}
 
+	@Transient
 	private int getExternalForceH() {
 		int ret = 0;
 		// +ひっぱり -押しつぶし
@@ -3821,7 +3830,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	/**
 	 * 汚れさせる.
 	 */
-	public final void setDirty(boolean flag) {
+	public final void makeDirty(boolean flag) {
 		dirty = flag;
 		// 死んでる場合はスキップ
 		if (isDead()) {
@@ -3850,7 +3859,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	 * @param b 汚れ
 	 */
 	public final void setDirtyFlag(boolean b) {
-		setDirty(b);
+		makeDirty(b);
 	}
 
 	/**
@@ -3865,7 +3874,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		}
 		if (canFurifuri())
 			setFurifuri(true);
-		setDirty(false);
+		makeDirty(false);
 		int P = 1;
 		switch (getIntelligence()) {
 		case WISE:
@@ -4146,6 +4155,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	 * れいぱーかどうか
 	 * @return れいぱーかどうか
 	 */
+	@Transient
 	public final boolean isRaper() {
 		if (isUnBirth()) {
 			return false;
@@ -4169,6 +4179,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	 * スーパーれいぱーかどうか
 	 * @return スーパーれいぱーかどうか
 	 */
+	@Transient
 	public final boolean isSuperRaper() {
 		if (isUnBirth()) {
 			return false;
@@ -4294,6 +4305,30 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	}
 
 	/**
+	 * 茎を去勢する.
+	 */
+	public void invStalkCastration() {
+		boolean stalkCastration = !isStalkCastration();
+		castrateStalk(stalkCastration);
+	}
+
+	/**
+	 * 胎生去勢をする.
+	 */
+	public final void invBodyCastration() {
+		boolean bodyCastration = !isBodyCastration();
+		castrateBody(bodyCastration);
+	}
+	
+	/**
+	 * あにゃる閉鎖を設定する.
+	 * @param flag あにゃる閉鎖かどうか
+	 */
+	public void setForceAnalClose(boolean flag) {
+		closeAnal(flag);
+	}
+	
+	/**
 	 * 饅頭化または治す（トグル）
 	 */
 	public void pack() {
@@ -4301,8 +4336,8 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			return;
 		if (isPacked()) {
 			setCanTalk(true);
-			setAnalClose(false);
-			setBodyCastration(false);
+			closeAnal(false);
+			castrateBody(false);
 			//			stalkCastration = false;
 			setPacked(false);
 			peal();
@@ -4315,8 +4350,8 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		setPealed(false);
 		setOkazari(null);
 		setHasBaby(false);
-		setAnalClose(true);
-		setBodyCastration(true);
+		closeAnal(true);
+		castrateBody(true);
 		setCanTalk(false);
 		setBlind(true);
 		seteHairState(HairState.BALDHEAD);
@@ -4421,6 +4456,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	 * 動けないかどうかを返却する.
 	 * @return 動けないかどうか
 	 */
+	@Transient
 	public final boolean isDontMove() {
 		if (isDead()
 				|| isRemoved()
@@ -4449,6 +4485,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	 * 大丈夫じゃないかどうかを返却する.
 	 * @return 大丈夫じゃないかどうか
 	 */
+	@Transient
 	public final boolean isNotAllright() {
 		if (isDead()
 				|| isRemoved()
@@ -4473,6 +4510,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	 * ピョンピョンできないかどうかを返却する.
 	 * @return ピョンピョンできないかどうか
 	 */
+	@Transient
 	public final boolean isDontJump() {
 		if (isDontMove())
 			return true;
@@ -4583,6 +4621,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	 *  実ゆの親が存在し、実ゆの状態に気が付けるならそのインスタンスを取得する
 	 * @return 気づいた実ゆの親インスタンス
 	 */
+	@Transient
 	public final int getBindStalkMotherCanNotice() {
 		// 実ゆの場合、親が反応する
 		if (getBindStalk() != null) {
@@ -4679,9 +4718,9 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		// if it has pants, cannot get pregnant
 		if (isHasPants() || p.isHasPants()) {
 			if (isHasPants()) {
-				setDirty(true);
+				makeDirty(true);
 			} else {
-				p.setDirty(true);
+				p.makeDirty(true);
 			}
 			return;
 		}
@@ -4788,9 +4827,9 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			p.setMessage(MessagePool.getMessage(p, MessagePool.Action.ScareRapist));
 			p.setHappiness(Happiness.SAD);
 			if (isHasPants()) {
-				setDirty(true);
+				makeDirty(true);
 			} else {
-				p.setDirty(true);
+				p.makeDirty(true);
 			}
 			return;
 		}
@@ -4873,7 +4912,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		//hungryState = checkHungryState();
 		//パンツは汚れる
 		if (isHasPants()) {
-			setDirty(true);
+			makeDirty(true);
 		}
 		if (p != null) {
 			//性病持ちと死姦はカビの原因
@@ -4905,8 +4944,8 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		if (dna == null || isBodyCastration()) {
 			return;
 		}
-		Dna baby = YukkuriUtil.createBabyDna(this, YukkuriUtil.getBodyInstance(dna.father),
-				dna.type, dna.attitude, dna.intelligence, false, false, true);
+		Dna baby = YukkuriUtil.createBabyDna(this, YukkuriUtil.getBodyInstance(dna.getFather()),
+				dna.getType(), dna.getAttitude(), dna.getIntelligence(), false, false, true);
 		getBabyTypes().add(baby);
 		setHasBaby(true);
 		subtractPregnantLimit();
@@ -4924,8 +4963,8 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			return;
 		}
 		for (int i = 0; i < 5; i++) {
-			Dna baby = YukkuriUtil.createBabyDna(this, YukkuriUtil.getBodyInstance(dna.father), 
-					dna.type, dna.attitude, dna.intelligence, false, false, true);
+			Dna baby = YukkuriUtil.createBabyDna(this, YukkuriUtil.getBodyInstance(dna.getFather()), 
+					dna.getType(), dna.getAttitude(), dna.getIntelligence(), false, false, true);
 			getStalkBabyTypes().add((SimYukkuri.RND.nextBoolean() ? baby : null));
 		}
 		setHasStalk(true);
@@ -4937,6 +4976,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	 * 妊娠限界のチェック
 	 * @return 妊娠限界かどうか
 	 */
+	@Transient
 	public boolean isOverPregnantLimit() {
 		//20210327
 		// リアルな妊娠限界のとき
@@ -5095,7 +5135,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		if (isVeryHungry()) {
 			return;
 		}
-		if (isPeroPero()) {
+		if (isPeropero()) {
 			return;
 		}
 		if (!canAction()) {
@@ -5320,7 +5360,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			substractNumOfAnts(10 * getBodyAgeState().ordinal() * getBodyAgeState().ordinal());
 		}
 		if (!p.isHasPants()) {
-			p.setDirty(false);
+			p.makeDirty(false);
 		}
 		if (isSick() && SimYukkuri.RND.nextBoolean()) {
 			p.addSickPeriod(100);
@@ -5661,7 +5701,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			return;
 		if (isUnBirth())
 			return;
-		Vomit v = SimYukkuri.mypane.terrarium.addVomit(getX(), getY(), getZ(), this, getShitType());
+		Vomit v = SimYukkuri.mypane.getTerrarium().addVomit(getX(), getY(), getZ(), this, getShitType());
 		v.crushVomit();
 		if (isNotNYD()) {
 			if (isSmart() || getBodyAgeState().ordinal() < eater.getBodyAgeState().ordinal() || isLockmove()
@@ -5687,13 +5727,13 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	 */
 	public void beEaten(int amount, int P, boolean AV) {
 		eatBody(amount);
-		setDirty(true);
+		makeDirty(true);
 		if (isDead())
 			return;
 		if (isUnBirth())
 			return;
 		if (AV) {
-			Vomit v = SimYukkuri.mypane.terrarium.addVomit(getX(), getY(), getZ(), this, getShitType());
+			Vomit v = SimYukkuri.mypane.getTerrarium().addVomit(getX(), getY(), getZ(), this, getShitType());
 			v.crushVomit();
 		}
 		if (isNotNYD()) {
@@ -6053,6 +6093,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	 * 攻撃力の基準
 	 * @return 攻撃力
 	 */
+	@Transient
 	public final int getStrength() {
 		return getSTRENGTHorg()[getBodyAgeState().ordinal()];
 	}
@@ -6127,7 +6168,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			stay();
 			setCrushed(true);
 			for (int i = 0; i < (SimYukkuri.RND.nextInt(5) + 5); i++) {
-				SimYukkuri.mypane.terrarium.addCrushedVomit(getX() + 7 - SimYukkuri.RND.nextInt(14),
+				SimYukkuri.mypane.getTerrarium().addCrushedVomit(getX() + 7 - SimYukkuri.RND.nextInt(14),
 						getY() + 7 - SimYukkuri.RND.nextInt(14),
 						0, this, getShitType());
 			}
@@ -6142,7 +6183,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		setCriticalDamege(CriticalDamegeType.CUT);
 		if (getBaryState() == BaryInUGState.NONE) {
 			for (int i = 0; i < 5; i++) {
-				SimYukkuri.mypane.terrarium.addVomit(getX() + 7 - SimYukkuri.RND.nextInt(14),
+				SimYukkuri.mypane.getTerrarium().addVomit(getX() + 7 - SimYukkuri.RND.nextInt(14),
 						getY() + 7 - SimYukkuri.RND.nextInt(14), 0,
 						this, getShitType());
 			}
@@ -6168,7 +6209,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		setMessage(MessagePool.getMessage(this, MessagePool.Action.Scream), 40, true, true);
 		setCriticalDamege(CriticalDamegeType.INJURED);
 		if (getBaryState() == BaryInUGState.NONE) {
-			SimYukkuri.mypane.terrarium.addVomit(getX() + 7 - SimYukkuri.RND.nextInt(14),
+			SimYukkuri.mypane.getTerrarium().addVomit(getX() + 7 - SimYukkuri.RND.nextInt(14),
 					getY() + 7 - SimYukkuri.RND.nextInt(14), 0, this,
 					getShitType());
 		}
@@ -6387,13 +6428,13 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	 *  あにゃる閉鎖のトグル
 	 */
 	public final void invAnalClose() {
-		setAnalClose(!isAnalClose());
+		closeAnal(!isAnalClose());
 	}
 
 	/**
-	 * あにゃる閉鎖を設定する.
+	 * あにゃる閉鎖する.
 	 */
-	public final void setAnalClose(boolean flag) {
+	public final void closeAnal(boolean flag) {
 		if (isDead()) {
 			return;
 		}
@@ -6414,6 +6455,15 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			stay();
 		}
 	}
+	
+	/**
+	 * あにゃる閉鎖を設定する.
+	 * @param flag あにゃる閉鎖するか否か
+	 */
+	public final void setAnalClose(boolean flag) {
+		this.analClose = flag;
+	}
+	
 	/**
 	 * Shiftキー押下での動作.
 	 * @return 茎去勢有無
@@ -6433,7 +6483,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	/**
 	 * 茎去勢を設定する.
 	 */
-	public void setStalkCastration(boolean flag) {
+	public void castrateStalk(boolean flag) {
 		if (isDead()) {
 			return;
 		}
@@ -6465,7 +6515,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	/**
 	 * 胎生去勢を設定する.
 	 */
-	public void setBodyCastration(boolean flag) {
+	public void castrateBody(boolean flag) {
 		if (isDead()) {
 			return;
 		}
@@ -6493,6 +6543,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			}
 		}
 	}
+	
 
 	/**
 	 * 火をつける
@@ -7021,7 +7072,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 					int ofsX = Translate.invertX(getCollisionX() >> 1, y);
 					if (getDirection() == Direction.LEFT)
 						ofsX = -ofsX;
-					SimYukkuri.mypane.terrarium.addVomit(getX() + ofsX, getY() + 2, getZ(), this, getShitType());
+					SimYukkuri.mypane.getTerrarium().addVomit(getX() + ofsX, getY() + 2, getZ(), this, getShitType());
 					damage += Const.HAMMER / 2;
 					setMessage(MessagePool.getMessage(this, MessagePool.Action.Vomit), 30);
 				}
@@ -7067,12 +7118,21 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			extForce = 0;
 		} else {
 			strikeByHammer();
-			setDirty(true);
+			makeDirty(true);
 			extForce = 0;
 		}
 		return;
 	}
 
+	/**
+	 *  汚れ、濡れを解除する.
+	 */
+	public void setCleaning() {
+		makeDirty(false);
+		setWet(false);
+		wetPeriod = 0;
+	}
+	
 	/**
 	 * 逃げる
 	 * @param fromX X座標
@@ -7538,7 +7598,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 				} else if (isYunnyaa() || isBeggingForLife()) {
 					layer.option[0] = 5; //ゆんやあ&命乞い
 				} else if (!isLockmove() && !isDontJump()
-						&& takeMappedObj(getLinkParent()) == null && !isPeroPero() && !(isEating() && !isPikopiko())) {
+						&& takeMappedObj(getLinkParent()) == null && !isPeropero() && !(isEating() && !isPikopiko())) {
 					layer.option[0] = 3; // 跳ねて移動
 				}
 			}
@@ -7562,7 +7622,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 				idx += getImage(ImageCode.BLIND.ordinal(), direction, layer, idx);
 			}
 			//舌の追加
-			if (isPeroPero() || isInOutTakeoutItem()) {
+			if (isPeropero() || isInOutTakeoutItem()) {
 				if (getMessageBuf() != null) {
 					idx += getImage(ImageCode.LICK.ordinal(), direction, layer, idx);
 				}
@@ -7644,7 +7704,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			idx += getImage(ImageCode.CRYING.ordinal(), direction, layer, idx);
 		}
 		//　ぺろぺろまたは食事、口から物を出し入れするとき
-		else if (isPeroPero() || isEating() || isInOutTakeoutItem()) {
+		else if (isPeropero() || isEating() || isInOutTakeoutItem()) {
 			if (isStrike() || isVerySad() || isFeelHardPain()) {
 				idx += getImage(ImageCode.CRYING.ordinal(), direction, layer, idx);
 			} else if (isSad() || isEatingShit() || isFeelPain()) {
@@ -7915,7 +7975,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			idx += getImage(ImageCode.BLIND.ordinal(), direction, layer, idx);
 		}
 		//舌の追加
-		if (isPeroPero() || isInOutTakeoutItem()) {
+		if (isPeropero() || isInOutTakeoutItem()) {
 			if (getMessageBuf() != null) {
 				idx += getImage(ImageCode.LICK.ordinal(), direction, layer, idx);
 			}
@@ -7932,6 +7992,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	 * ありすかつれいぱーかどうかを返却する.
 	 * @return ありすかつれいぱーかどうか
 	 */
+	@Transient
 	protected boolean isAliceRaper() {
 		return false;
 	};
@@ -8031,6 +8092,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	 * ぺにぺに切断のみ、盲目状態でも起きて良い
 	 * @return ぺにぺに切断イベントが溜まってるかどうか
 	 */
+	@Transient
 	protected boolean isCutPeni() {
 		if (getEventList() == null || getEventList().size() == 0) {
 			return false;
@@ -8132,8 +8194,8 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 					setDeadPeriod(0);
 				} else {
 					// うんうんと吐餡に変わって消える
-					SimYukkuri.mypane.terrarium.addCrushedVomit(x, y, z, this, getShitType());
-					SimYukkuri.mypane.terrarium.addCrushedShit(x, y, z, this, getShitType());
+					SimYukkuri.mypane.getTerrarium().addCrushedVomit(x, y, z, this, getShitType());
+					SimYukkuri.mypane.getTerrarium().addCrushedShit(x, y, z, this, getShitType());
 					remove();
 					disPlantStalks();
 					return Event.REMOVED;
@@ -8740,6 +8802,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		hungry = getHUNGRYLIMITorg()[getBodyAgeState().ordinal()] + (100 * getBodyAgeState().ordinal());
 	}
 	
+	@Transient
 	private Attitude getRandomAttitude() {
 		switch (SimYukkuri.RND.nextInt(9)) {
 		case 0:

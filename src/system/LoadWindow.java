@@ -18,7 +18,7 @@ import src.SimYukkuri;
  * 読み込み時に出てくるウィンドウのクラス
  */
 public class LoadWindow extends JDialog {
-	
+	private static final long serialVersionUID = 7062407460609428689L;
 	private JLabel loading;
 	private JTextArea log;
 	private JScrollPane logBar;
@@ -54,6 +54,24 @@ public class LoadWindow extends JDialog {
 	 */
 	public void addLine(String str) {
 		log.append(str + "\r\n");
+	}
+	public JLabel getLoading() {
+		return loading;
+	}
+	public void setLoading(JLabel loading) {
+		this.loading = loading;
+	}
+	public JTextArea getLog() {
+		return log;
+	}
+	public void setLog(JTextArea log) {
+		this.log = log;
+	}
+	public JScrollPane getLogBar() {
+		return logBar;
+	}
+	public void setLogBar(JScrollPane logBar) {
+		this.logBar = logBar;
 	}
 
 }

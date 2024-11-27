@@ -22,7 +22,7 @@ import src.util.YukkuriUtil;
 */
 public class EatBodyEvent extends EventPacket implements java.io.Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -4086868596282761812L;
 	int tick = 0;
 
 	/**
@@ -84,7 +84,7 @@ public class EatBodyEvent extends EventPacket implements java.io.Serializable {
 			int ofsX = Translate.invertX(b.getCollisionX() >> 1, b.getY());
 			if (b.getDirection() == Direction.LEFT)
 				ofsX = -ofsX;
-			SimYukkuri.mypane.terrarium.addVomit(b.getX() + ofsX, b.getY(), b.getZ(), b, b.getShitType());
+			SimYukkuri.mypane.getTerrarium().addVomit(b.getX() + ofsX, b.getY(), b.getZ(), b, b.getShitType());
 			b.stay();
 		} else if (tick == 120) {
 			// 善良ほどストレスを受ける

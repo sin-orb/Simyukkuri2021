@@ -23,8 +23,7 @@ import src.util.YukkuriUtil;
  */
 public class Badge extends Attachment {
 
-	private static final long serialVersionUID = 1L;
-
+	private static final long serialVersionUID = -3180311818627859673L;
 	private static final String POS_KEY = "Badge";
 	/**画像のサイズ*/
 	private static int[] imgW,imgH;
@@ -104,14 +103,12 @@ public class Badge extends Attachment {
 		return images[pa.getBodyAgeState().ordinal()][eBadgeRank.ordinal()];
 	}
 	/**バッジランク取得*/
-	public BadgeRank getBadgeRank()
-	{
+	public BadgeRank getBadgeRank() {
 		return eBadgeRank;
 	}
 	
 	@Override
-	public void resetBoundary()
-	{
+	public void resetBoundary() {
 		Body pa = YukkuriUtil.getBodyInstance(parent);
 		if (pa == null) return;
 		setBoundary(pivX[pa.getBodyAgeState().ordinal()],
@@ -147,4 +144,13 @@ public class Badge extends Attachment {
 	public String toString() {
 		return ResourceUtil.getInstance().read("item_badge");
 	}
+
+	public BadgeRank geteBadgeRank() {
+		return eBadgeRank;
+	}
+
+	public void seteBadgeRank(BadgeRank eBadgeRank) {
+		this.eBadgeRank = eBadgeRank;
+	}
+	
 }

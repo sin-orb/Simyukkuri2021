@@ -9,6 +9,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
+import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
 import java.util.LinkedList;
@@ -47,7 +48,9 @@ import src.system.ResourceUtil;
  * ゆんば
  */
 public class Yunba extends ObjEX implements java.io.Serializable {
-	static final long serialVersionUID = 1L;
+
+	private static final long serialVersionUID = 3347291782760455512L;
+
 	/**アクションのテーブル*/
 	public static enum Action {
 		CLEAN(ResourceUtil.getInstance().read("command_clean"), ""),
@@ -184,6 +187,7 @@ public class Yunba extends ObjEX implements java.io.Serializable {
 	}
 
 	@Override
+	@Transient
 	public BufferedImage getShadowImage() {
 		return images[3][direction];
 	}
@@ -1160,6 +1164,237 @@ public class Yunba extends ObjEX implements java.io.Serializable {
 		}
 		return true;
 	}
+
+
+	public ItemRank getItemRank() {
+		return itemRank;
+	}
+
+
+	public void setItemRank(ItemRank itemRank) {
+		this.itemRank = itemRank;
+	}
+
+
+	public int getColor() {
+		return color;
+	}
+
+
+	public void setColor(int color) {
+		this.color = color;
+	}
+
+
+	public int getDirection() {
+		return direction;
+	}
+
+
+	public void setDirection(int direction) {
+		this.direction = direction;
+	}
+
+
+	public boolean[][] getActionFlags() {
+		return actionFlags;
+	}
+
+
+	public void setActionFlags(boolean[][] actionFlags) {
+		this.actionFlags = actionFlags;
+	}
+
+
+	public boolean[][] getActionFlags2() {
+		return actionFlags2;
+	}
+
+
+	public void setActionFlags2(boolean[][] actionFlags2) {
+		this.actionFlags2 = actionFlags2;
+	}
+
+
+	public boolean[][] getActionFlags3() {
+		return actionFlags3;
+	}
+
+
+	public void setActionFlags3(boolean[][] actionFlags3) {
+		this.actionFlags3 = actionFlags3;
+	}
+
+
+	public boolean isBodyCheck() {
+		return bodyCheck;
+	}
+
+
+	public void setBodyCheck(boolean bodyCheck) {
+		this.bodyCheck = bodyCheck;
+	}
+
+
+	public boolean isShitCheck() {
+		return shitCheck;
+	}
+
+
+	public void setShitCheck(boolean shitCheck) {
+		this.shitCheck = shitCheck;
+	}
+
+
+	public boolean isStalkCheck() {
+		return stalkCheck;
+	}
+
+
+	public void setStalkCheck(boolean stalkCheck) {
+		this.stalkCheck = stalkCheck;
+	}
+
+
+	public boolean isNorndCheck() {
+		return norndCheck;
+	}
+
+
+	public void setNorndCheck(boolean norndCheck) {
+		this.norndCheck = norndCheck;
+	}
+
+
+	public boolean isKillCheck() {
+		return killCheck;
+	}
+
+
+	public void setKillCheck(boolean killCheck) {
+		this.killCheck = killCheck;
+	}
+
+
+	public boolean isMineutiCheck() {
+		return mineutiCheck;
+	}
+
+
+	public void setMineutiCheck(boolean mineutiCheck) {
+		this.mineutiCheck = mineutiCheck;
+	}
+
+
+	public boolean isNoDamageFallCheck() {
+		return noDamageFallCheck;
+	}
+
+
+	public void setNoDamageFallCheck(boolean noDamageFallCheck) {
+		this.noDamageFallCheck = noDamageFallCheck;
+	}
+
+
+	public boolean isFoodCheck() {
+		return foodCheck;
+	}
+
+
+	public void setFoodCheck(boolean foodCheck) {
+		this.foodCheck = foodCheck;
+	}
+
+
+	public int[] getDrawLayer() {
+		return drawLayer;
+	}
+
+
+	public void setDrawLayer(int[] drawLayer) {
+		this.drawLayer = drawLayer;
+	}
+
+
+	public int getLayerCount() {
+		return layerCount;
+	}
+
+
+	public void setLayerCount(int layerCount) {
+		this.layerCount = layerCount;
+	}
+
+
+	public Action getAction() {
+		return action;
+	}
+
+
+	public void setAction(Action action) {
+		this.action = action;
+	}
+
+
+	public Obj getTarget() {
+		return target;
+	}
+
+
+	public void setTarget(Obj target) {
+		this.target = target;
+	}
+
+
+	public int getDestX() {
+		return destX;
+	}
+
+
+	public void setDestX(int destX) {
+		this.destX = destX;
+	}
+
+
+	public int getDestY() {
+		return destY;
+	}
+
+
+	public void setDestY(int destY) {
+		this.destY = destY;
+	}
+
+
+	public int getSpeed() {
+		return speed;
+	}
+
+
+	public void setSpeed(int speed) {
+		this.speed = speed;
+	}
+
+
+	public int getDefaultX() {
+		return defaultX;
+	}
+
+
+	public void setDefaultX(int defaultX) {
+		this.defaultX = defaultX;
+	}
+
+
+	public int getDefaultY() {
+		return defaultY;
+	}
+
+
+	public void setDefaultY(int defaultY) {
+		this.defaultY = defaultY;
+	}
+	
 }
 
 

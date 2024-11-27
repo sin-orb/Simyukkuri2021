@@ -211,10 +211,10 @@ public class YukkuriUtil {
 		}
 
 		ret = new Dna();
-		ret.type = babyType;
-		ret.raperChild = isRape;
-		ret.mother = mother.getUniqueID();
-		ret.father = father.getUniqueID();
+		ret.setType(babyType);
+		ret.setRaperChild(isRape);
+		ret.setMother(mother.getUniqueID());
+		ret.setFather(father.getUniqueID());
 
 		// 性格の設定
 		// 0(大善良+大善良)～8(ドゲス+ドゲス)
@@ -224,41 +224,41 @@ public class YukkuriUtil {
 		switch (attBase) {
 		case 0:
 			if (SimYukkuri.RND.nextInt(20) == 0) {
-				ret.attitude = attitude[2 + SimYukkuri.RND.nextInt(2)];
+				ret.setAttitude(attitude[2 + SimYukkuri.RND.nextInt(2)]);
 			} else {
-				ret.attitude = attitude[SimYukkuri.RND.nextInt(3)];
+				ret.setAttitude(attitude[SimYukkuri.RND.nextInt(3)]);
 			}
 			break;
 		case 1:
 		case 2:
 		case 3:
 			if (SimYukkuri.RND.nextInt(15) == 0) {
-				ret.attitude = attitude[SimYukkuri.RND.nextInt(2)];
+				ret.setAttitude(attitude[SimYukkuri.RND.nextInt(2)]);
 			} else {
-				ret.attitude = attitude[1 + SimYukkuri.RND.nextInt(4)];
+				ret.setAttitude(attitude[1 + SimYukkuri.RND.nextInt(4)]);
 			}
 			break;
 		case 4:
 			if (SimYukkuri.RND.nextInt(10) == 0) {
-				ret.attitude = attitude[SimYukkuri.RND.nextInt(3)];
+				ret.setAttitude(attitude[SimYukkuri.RND.nextInt(3)]);
 			} else {
-				ret.attitude = attitude[1 + SimYukkuri.RND.nextInt(4)];
+				ret.setAttitude(attitude[1 + SimYukkuri.RND.nextInt(4)]);
 			}
 			break;
 		case 5:
 		case 6:
 		case 7:
 			if (SimYukkuri.RND.nextInt(15) == 0) {
-				ret.attitude = attitude[1 + SimYukkuri.RND.nextInt(3)];
+				ret.setAttitude(attitude[1 + SimYukkuri.RND.nextInt(3)]);
 			} else {
-				ret.attitude = attitude[2 + SimYukkuri.RND.nextInt(3)];
+				ret.setAttitude(attitude[2 + SimYukkuri.RND.nextInt(3)]);
 			}
 			break;
 		case 8:
 			if (SimYukkuri.RND.nextInt(20) == 0) {
-				ret.attitude = attitude[SimYukkuri.RND.nextInt(3)];
+				ret.setAttitude(attitude[SimYukkuri.RND.nextInt(3)]);
 			} else {
-				ret.attitude = attitude[3 + SimYukkuri.RND.nextInt(2)];
+				ret.setAttitude(attitude[3 + SimYukkuri.RND.nextInt(2)]);
 			}
 			break;
 		}
@@ -271,23 +271,23 @@ public class YukkuriUtil {
 		switch (intBase) {
 		case 0:
 			if (SimYukkuri.RND.nextInt(15) == 0) {
-				ret.intelligence = intel[1 + SimYukkuri.RND.nextInt(2)];
+				ret.setIntelligence(intel[1 + SimYukkuri.RND.nextInt(2)]);
 			} else {
-				ret.intelligence = intel[SimYukkuri.RND.nextInt(2)];
+				ret.setIntelligence(intel[SimYukkuri.RND.nextInt(2)]);
 			}
 			break;
 		case 4:
 			if (SimYukkuri.RND.nextInt(15) == 0) {
-				ret.intelligence = intel[SimYukkuri.RND.nextInt(2)];
+				ret.setIntelligence(intel[SimYukkuri.RND.nextInt(2)]);
 			} else {
-				ret.intelligence = intel[1 + SimYukkuri.RND.nextInt(2)];
+				ret.setIntelligence(intel[1 + SimYukkuri.RND.nextInt(2)]);
 			}
 			break;
 		default:
 			if (SimYukkuri.RND.nextInt(10) == 0) {
-				ret.intelligence = intel[SimYukkuri.RND.nextInt(3)];
+				ret.setIntelligence(intel[SimYukkuri.RND.nextInt(3)]);
 			} else {
-				ret.intelligence = intel[1];
+				ret.setIntelligence(intel[1]);
 			}
 		}
 		return ret;

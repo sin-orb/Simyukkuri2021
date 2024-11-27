@@ -19,6 +19,8 @@ import src.util.YukkuriUtil;
  */
 public class Okazari extends Obj {
 
+	private static final long serialVersionUID = 5562152108201566916L;
+
 	/** おかざりの種類とファイル名兼マップキー */
 	public enum OkazariType {
 		DEFAULT(null), BABY1("okazari_baby_01"), BABY2("okazari_baby_02"), CHILD1("okazari_child_01"), CHILD2(

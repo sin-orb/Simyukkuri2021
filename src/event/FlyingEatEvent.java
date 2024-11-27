@@ -24,7 +24,7 @@ import src.util.YukkuriUtil;
 */
 public class FlyingEatEvent extends EventPacket implements java.io.Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -5535956926516784919L;
 	private static final int[] ofsZ = {2, 0, -5};
 	int tick = 0;
 	/**

@@ -21,7 +21,8 @@ import src.util.YukkuriUtil;
 */
 public class BreedEvent extends EventPacket implements java.io.Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -569342508529969710L;
+
 	/**
 	 * コンストラクタ.
 	 */

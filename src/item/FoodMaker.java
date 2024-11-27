@@ -3,6 +3,7 @@ package src.item;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
+import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
 
@@ -27,7 +28,8 @@ import src.system.Cash;
  * フードメーカー
  */
 public class FoodMaker extends ObjEX implements java.io.Serializable {
-	static final long serialVersionUID = 1L;
+
+	private static final long serialVersionUID = 2267609715917033769L;
 	/**処理対象(ゆっくり、うんうん、フード、吐餡、茎)*/
 	public static final int hitCheckObjType = ObjEX.YUKKURI | ObjEX.SHIT | ObjEX.FOOD | ObjEX.VOMIT | ObjEX.STALK;
 	private static final int images_num = 6; //このクラスの総使用画像数
@@ -92,6 +94,7 @@ public class FoodMaker extends ObjEX implements java.io.Serializable {
 	}
 
 	@Override
+	@Transient
 	public BufferedImage getShadowImage() {
 		return null;
 	}
@@ -101,6 +104,7 @@ public class FoodMaker extends ObjEX implements java.io.Serializable {
 	}
 
 	@Override
+	@Transient
 	public int getHitCheckObjType() {
 		return hitCheckObjType;
 	}
@@ -282,7 +286,7 @@ public class FoodMaker extends ObjEX implements java.io.Serializable {
 			int dir = 1;
 			if(x + 40 >= Translate.mapW) dir = -1;
 			if (foodType == FoodType.SHIT){
-				SimYukkuri.mypane.terrarium.addVomit(x + (40 * dir), y, 0, null, YukkuriType.REIMU);
+				SimYukkuri.mypane.getTerrarium().addVomit(x + (40 * dir), y, 0, null, YukkuriType.REIMU);
 			}
 			else{
 				for(int i = 0;i<(foodAmount>>1);i++){
@@ -325,6 +329,31 @@ public class FoodMaker extends ObjEX implements java.io.Serializable {
 	public FoodMaker() {
 		
 	}
+
+	public boolean isProcessReady() {
+		return processReady;
+	}
+
+	public void setProcessReady(boolean processReady) {
+		this.processReady = processReady;
+	}
+
+	public int getStockFood() {
+		return stockFood;
+	}
+
+	public void setStockFood(int stockFood) {
+		this.stockFood = stockFood;
+	}
+
+	public int getFoodAmount() {
+		return foodAmount;
+	}
+
+	public void setFoodAmount(int foodAmount) {
+		this.foodAmount = foodAmount;
+	}
+	
 }
 
 

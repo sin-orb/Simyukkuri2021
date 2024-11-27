@@ -23,8 +23,7 @@ import src.util.YukkuriUtil;
  */
 public class HungryAmpoule extends Attachment {
 
-	private static final long serialVersionUID = 1L;
-
+	private static final long serialVersionUID = -6250785205892747212L;
 	/**識別キー*/
 	private static final String POS_KEY = "HungryAmpoule";
 	/**画像の入れ物

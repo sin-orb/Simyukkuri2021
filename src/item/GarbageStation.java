@@ -5,6 +5,7 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
+import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
 
@@ -28,7 +29,8 @@ import src.system.ResourceUtil;
  * ゴミ捨て場
  */
 public class GarbageStation extends ObjEX implements java.io.Serializable {
-	static final long serialVersionUID = 1L;
+
+	private static final long serialVersionUID = -3307339525828240055L;
 
 	/**出す餌の種類テーブル*/
 	public static enum GomiType {
@@ -121,6 +123,7 @@ public class GarbageStation extends ObjEX implements java.io.Serializable {
 	}
 
 	@Override
+	@Transient
 	public BufferedImage getShadowImage() {
 		return null;
 	}
@@ -245,4 +248,37 @@ public class GarbageStation extends ObjEX implements java.io.Serializable {
 		if (nTemp != 0)
 			gettingP = nTemp;
 	}
+
+	public boolean[] getEnable() {
+		return enable;
+	}
+
+	public void setEnable(boolean[] enable) {
+		this.enable = enable;
+	}
+
+	public Obj[] getFood() {
+		return food;
+	}
+
+	public void setFood(Obj[] food) {
+		this.food = food;
+	}
+
+	public int getThrowingTime() {
+		return throwingTime;
+	}
+
+	public void setThrowingTime(int throwingTime) {
+		this.throwingTime = throwingTime;
+	}
+
+	public int getGettingP() {
+		return gettingP;
+	}
+
+	public void setGettingP(int gettingP) {
+		this.gettingP = gettingP;
+	}
+	
 }

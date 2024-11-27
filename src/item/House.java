@@ -2,6 +2,7 @@ package src.item;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
+import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
 
@@ -16,7 +17,8 @@ import src.enums.Type;
  * おうち
  */
 public class House extends ObjEX implements java.io.Serializable {
-	static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -6609787822366581526L;
+
 	/**おうちの種類テーブル*/
 	public static enum HouseTable {
 		HOUSE_NORA1("floor_nora1.png", "wall_nora1.png", "ceil_nora1.png", "door_nora1.png", 1),
@@ -67,10 +69,12 @@ public class House extends ObjEX implements java.io.Serializable {
 	}
 
 	@Override
+	@Transient
 	public BufferedImage getShadowImage() {
 		return null;
 	}
 	/**境界線の取得*/
+	@Transient
 	public static Rectangle4y getBounding() {
 		return boundary[0];
 	}
@@ -113,6 +117,23 @@ public class House extends ObjEX implements java.io.Serializable {
 	public House() {
 		
 	}
+
+	public HouseTable getHouseType() {
+		return houseType;
+	}
+
+	public void setHouseType(HouseTable houseType) {
+		this.houseType = houseType;
+	}
+
+	public ItemRank getItemRank() {
+		return itemRank;
+	}
+
+	public void setItemRank(ItemRank itemRank) {
+		this.itemRank = itemRank;
+	}
+	
 }
 
 

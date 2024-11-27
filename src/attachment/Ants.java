@@ -22,7 +22,7 @@ import src.util.YukkuriUtil;
  */
 public class Ants extends Attachment {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -6854644108381452452L;
 	/**識別キー*/
 	private static final String POS_KEY = "Ants";
 	/**画像の入れ物

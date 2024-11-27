@@ -6,6 +6,7 @@ import java.awt.GridLayout;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
+import java.beans.Transient;
 import java.io.IOException;
 
 import javax.swing.ButtonGroup;
@@ -29,8 +30,7 @@ import src.system.ResourceUtil;
  * とらんぽりん
  */
 public class Trampoline extends ObjEX implements java.io.Serializable {
-	static final long serialVersionUID = 1L;
-
+	private static final long serialVersionUID = -128936287118191969L;
 	private static BufferedImage[] images = new BufferedImage[2];
 	private static Rectangle4y boundary = new Rectangle4y();
 	public int option;
@@ -71,6 +71,7 @@ public class Trampoline extends ObjEX implements java.io.Serializable {
 	}
 
 	@Override
+	@Transient
 	public BufferedImage getShadowImage() {
 		return images[1];
 	}
@@ -91,6 +92,7 @@ public class Trampoline extends ObjEX implements java.io.Serializable {
 	}
 
 	@Override
+	@Transient
 	public int getHitCheckObjType() {
 		return hitCheckObjType;
 	}
@@ -214,6 +216,31 @@ public class Trampoline extends ObjEX implements java.io.Serializable {
 
 		return true;
 	}
+
+	public int getOption() {
+		return option;
+	}
+
+	public void setOption(int option) {
+		this.option = option;
+	}
+
+	public int getAccident1() {
+		return accident1;
+	}
+
+	public void setAccident1(int accident1) {
+		this.accident1 = accident1;
+	}
+
+	public int getAccident2() {
+		return accident2;
+	}
+
+	public void setAccident2(int accident2) {
+		this.accident2 = accident2;
+	}
+	
 }
 
 

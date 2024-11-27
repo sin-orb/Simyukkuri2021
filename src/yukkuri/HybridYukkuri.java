@@ -1,6 +1,7 @@
 package src.yukkuri;
 
 import java.awt.image.ImageObserver;
+import java.beans.Transient;
 import java.io.IOException;
 
 import src.SimYukkuri;
@@ -22,7 +23,7 @@ import src.util.YukkuriUtil;
  * 親ゆっくりインスタンス４つをメンバに持つ。
  */
 public class HybridYukkuri extends Body implements java.io.Serializable {
-	static final long serialVersionUID = 2L;
+	private static final long serialVersionUID = -4811724924330805888L;
 	/** ハイブリッドゆっくりのタイプ */
 	public static final int type = 20000;
 	/** ハイブリッドゆっくりの和名 */
@@ -75,7 +76,7 @@ public class HybridYukkuri extends Body implements java.io.Serializable {
 					doreiTmp = parentTmp.dorei;
 				}
 				else{
-					doreiTmp = SimYukkuri.mypane.terrarium.makeBody(0, 0, 0,
+					doreiTmp = SimYukkuri.mypane.getTerrarium().makeBody(0, 0, 0,
 							mama.getType(), null, AgeState.BABY, mama, papa, false);
 				}
 			}
@@ -85,7 +86,7 @@ public class HybridYukkuri extends Body implements java.io.Serializable {
 					doreiTmp = parentTmp.dorei;
 				}
 				else{
-					doreiTmp = SimYukkuri.mypane.terrarium.makeBody(0, 0, 0, papa.getType(), 
+					doreiTmp = SimYukkuri.mypane.getTerrarium().makeBody(0, 0, 0, papa.getType(), 
 							null, AgeState.BABY, mama, papa, false);
 				}
 			}
@@ -96,7 +97,7 @@ public class HybridYukkuri extends Body implements java.io.Serializable {
 					doreiTmp2 = parentTmp2.dorei;
 				}
 				else{
-					doreiTmp2 = SimYukkuri.mypane.terrarium.makeBody(0, 0, 0, papa.getType(), 
+					doreiTmp2 = SimYukkuri.mypane.getTerrarium().makeBody(0, 0, 0, papa.getType(), 
 							null, AgeState.BABY, mama, papa, false);
 				}
 			}else{
@@ -298,6 +299,7 @@ public class HybridYukkuri extends Body implements java.io.Serializable {
 		}
 	}
 	@Override
+	@Transient
 	public boolean isImageLoaded() {
 		return true;
 	}
@@ -333,19 +335,23 @@ public class HybridYukkuri extends Body implements java.io.Serializable {
 
 
 	@Override
+	@Transient
 	public int getType() {
 		return type;
 	}
 
 	@Override
+	@Transient
 	public int getHybridType(int partnerType) {
 		return HybridYukkuri.type;
 	}
 	@Override
+	@Transient
 	public String getNameJ() {
 		return nameJ;
 	}
 	@Override
+	@Transient
 	public String getMyName() {
 		if( anMyName[getBodyAgeState().ordinal()] != null ){
 			return anMyName[getBodyAgeState().ordinal()];
@@ -353,6 +359,7 @@ public class HybridYukkuri extends Body implements java.io.Serializable {
 		return nameJ;
 	}
 	@Override
+	@Transient
 	public String getMyNameD() {
 		if( anMyNameD[getBodyAgeState().ordinal()] != null ){
 			return anMyNameD[getBodyAgeState().ordinal()];
@@ -375,6 +382,7 @@ public class HybridYukkuri extends Body implements java.io.Serializable {
 	}
 
 	@Override
+	@Transient
 	public boolean isHybrid () {
 		return true;
 	}
@@ -441,4 +449,47 @@ public class HybridYukkuri extends Body implements java.io.Serializable {
 		dorei3.remove();
 		dorei4.remove();
 	}
+	public Body getDorei() {
+		return dorei;
+	}
+	public void setDorei(Body dorei) {
+		this.dorei = dorei;
+	}
+	public Body getDorei2() {
+		return dorei2;
+	}
+	public void setDorei2(Body dorei2) {
+		this.dorei2 = dorei2;
+	}
+	public Body getDorei3() {
+		return dorei3;
+	}
+	public void setDorei3(Body dorei3) {
+		this.dorei3 = dorei3;
+	}
+	public Body getDorei4() {
+		return dorei4;
+	}
+	public void setDorei4(Body dorei4) {
+		this.dorei4 = dorei4;
+	}
+	public Body[] getImages() {
+		return images;
+	}
+	public void setImages(Body[] images) {
+		this.images = images;
+	}
+	public void setNameJ(String nameJ) {
+		this.nameJ = nameJ;
+	}
+	public void setNameE(String nameE) {
+		this.nameE = nameE;
+	}
+	public void setNameJ2(String nameJ2) {
+		this.nameJ2 = nameJ2;
+	}
+	public void setNameE2(String nameE2) {
+		this.nameE2 = nameE2;
+	}
+	
 }

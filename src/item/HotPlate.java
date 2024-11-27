@@ -3,6 +3,7 @@ package src.item;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
+import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
 
@@ -27,7 +28,8 @@ import src.system.MessagePool;
  * ホットプレート
  */
 public class HotPlate extends ObjEX implements java.io.Serializable {
-	static final long serialVersionUID = 1L;
+
+	private static final long serialVersionUID = -7407652564177670504L;
 	/**処理対象(ゆっくり)*/
 	public static final int hitCheckObjType = ObjEX.YUKKURI;
 	private static BufferedImage[] images = new BufferedImage[4];
@@ -74,6 +76,7 @@ public class HotPlate extends ObjEX implements java.io.Serializable {
 	}
 
 	@Override
+	@Transient
 	public BufferedImage getShadowImage() {
 		return null;
 	}
@@ -83,6 +86,7 @@ public class HotPlate extends ObjEX implements java.io.Serializable {
 	}
 
 	@Override
+	@Transient
 	public int getHitCheckObjType() {
 		return hitCheckObjType;
 	}
@@ -103,7 +107,7 @@ public class HotPlate extends ObjEX implements java.io.Serializable {
 		bindBody.setY(y);
 		bindBody.setLockmove(true);
 		if(smoke == null) {
-			smoke = SimYukkuri.mypane.terrarium.addEffect(EffectType.BAKE, bindBody.getX(), bindBody.getY() + 1,
+			smoke = SimYukkuri.mypane.getTerrarium().addEffect(EffectType.BAKE, bindBody.getX(), bindBody.getY() + 1,
 															-2, 0, 0, 0, false, -1, -1, false, false, false);
 		}
 		return 1;
@@ -187,6 +191,23 @@ public class HotPlate extends ObjEX implements java.io.Serializable {
 	public HotPlate() {
 		
 	}
+
+	public Body getBindBody() {
+		return bindBody;
+	}
+
+	public void setBindBody(Body bindBody) {
+		this.bindBody = bindBody;
+	}
+
+	public Effect getSmoke() {
+		return smoke;
+	}
+
+	public void setSmoke(Effect smoke) {
+		this.smoke = smoke;
+	}
+	
 }
 
 

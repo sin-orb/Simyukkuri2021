@@ -31,8 +31,8 @@ import src.util.YukkuriUtil;
  * 茎
  */
 public class Stalk extends ObjEX implements java.io.Serializable {
-	static final long serialVersionUID = 1L;
 
+	private static final long serialVersionUID = -7644967944795406729L;
 	private static final int images_num = 1; //このクラスの総使用画像数
 	private static transient BufferedImage[] images = new BufferedImage[images_num*2+1];
 	private static Rectangle4y boundary = new Rectangle4y();
@@ -40,7 +40,7 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 	private int plantYukkuri = -1;		// この茎が生えてる親
 	private List<Integer> bindBabies = new LinkedList<Integer>();	// この茎にぶら下がってる子のID
 	/** （食べたときの）量 */
-	public int amount = 0;
+	private int amount = 0;
 	/**
 	 * イメージをロードする.
 	 * @param loader ローダ
@@ -368,6 +368,7 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 	}
 
 	@Override
+	@Transient
 	public int getHitCheckObjType() {
 		return 0;
 	}

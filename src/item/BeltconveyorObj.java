@@ -15,6 +15,7 @@ import java.awt.event.ActionListener;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
+import java.beans.Transient;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
@@ -50,7 +51,7 @@ import src.util.YukkuriUtil;
  */
 public class BeltconveyorObj extends ObjEX implements java.io.Serializable {
 
-	static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -2840212904501204971L;
 	public static final int hitCheckObjType = ObjEX.YUKKURI + ObjEX.SHIT + ObjEX.FOOD + ObjEX.TOY + ObjEX.VOMIT
 			+ ObjEX.STALK;
 	private static final int images_num = 10;
@@ -173,11 +174,13 @@ public class BeltconveyorObj extends ObjEX implements java.io.Serializable {
 		return null;
 	}
 
+	@Transient
 	public int getImageLayerCount() {
 		return 0;
 	}
 
 	@Override
+	@Transient
 	public BufferedImage getShadowImage() {
 		return null;
 	}
@@ -193,6 +196,7 @@ public class BeltconveyorObj extends ObjEX implements java.io.Serializable {
 		return boundary;
 	}
 
+	@Transient
 	public int getHitCheckObjType() {
 		return hitCheckObjType;
 	}
@@ -633,6 +637,162 @@ public class BeltconveyorObj extends ObjEX implements java.io.Serializable {
 
 	public void setOptionResultFilter(List<Boolean> arrayTemp) {
 		obOptionSelectionList = arrayTemp;
+	}
+
+	public int getHou_before() {
+		return hou_before;
+	}
+
+	public void setHou_before(int hou_before) {
+		this.hou_before = hou_before;
+	}
+
+	public int getObj_before() {
+		return obj_before;
+	}
+
+	public void setObj_before(int obj_before) {
+		this.obj_before = obj_before;
+	}
+
+	public int getMove_before() {
+		return move_before;
+	}
+
+	public void setMove_before(int move_before) {
+		this.move_before = move_before;
+	}
+
+	public int getSpeed_before() {
+		return speed_before;
+	}
+
+	public void setSpeed_before(int speed_before) {
+		this.speed_before = speed_before;
+	}
+
+	public int getTargetType() {
+		return targetType;
+	}
+
+	public void setTargetType(int targetType) {
+		this.targetType = targetType;
+	}
+
+	public int getCantmove() {
+		return cantmove;
+	}
+
+	public void setCantmove(int cantmove) {
+		this.cantmove = cantmove;
+	}
+
+	public boolean isbMoveOnce() {
+		return bMoveOnce;
+	}
+
+	public void setbMoveOnce(boolean bMoveOnce) {
+		this.bMoveOnce = bMoveOnce;
+	}
+
+	public List<Obj> getBindObjList() {
+		return bindObjList;
+	}
+
+	public void setBindObjList(List<Obj> bindObjList) {
+		this.bindObjList = bindObjList;
+	}
+
+	public List<YukkuriType> getSelectedYukkuriType() {
+		return selectedYukkuriType;
+	}
+
+	public void setSelectedYukkuriType(List<YukkuriType> selectedYukkuriType) {
+		this.selectedYukkuriType = selectedYukkuriType;
+	}
+
+	public List<Boolean> getObOptionSelectionList() {
+		return obOptionSelectionList;
+	}
+
+	public void setObOptionSelectionList(List<Boolean> obOptionSelectionList) {
+		this.obOptionSelectionList = obOptionSelectionList;
+	}
+
+	public boolean isbFilter() {
+		return bFilter;
+	}
+
+	public void setbFilter(boolean bFilter) {
+		this.bFilter = bFilter;
+	}
+
+	public int getFieldSX() {
+		return fieldSX;
+	}
+
+	public void setFieldSX(int fieldSX) {
+		this.fieldSX = fieldSX;
+	}
+
+	public int getFieldSY() {
+		return fieldSY;
+	}
+
+	public void setFieldSY(int fieldSY) {
+		this.fieldSY = fieldSY;
+	}
+
+	public int getFieldEX() {
+		return fieldEX;
+	}
+
+	public void setFieldEX(int fieldEX) {
+		this.fieldEX = fieldEX;
+	}
+
+	public int getFieldEY() {
+		return fieldEY;
+	}
+
+	public void setFieldEY(int fieldEY) {
+		this.fieldEY = fieldEY;
+	}
+
+	public int getFirstX() {
+		return firstX;
+	}
+
+	public void setFirstX(int firstX) {
+		this.firstX = firstX;
+	}
+
+	public int getFirstY() {
+		return firstY;
+	}
+
+	public void setFirstY(int firstY) {
+		this.firstY = firstY;
+	}
+
+	public int[] getAnPointX() {
+		return anPointX;
+	}
+
+	public void setAnPointX(int[] anPointX) {
+		this.anPointX = anPointX;
+	}
+
+	public int[] getAnPointY() {
+		return anPointY;
+	}
+
+	public void setAnPointY(int[] anPointY) {
+		this.anPointY = anPointY;
+	}
+
+	public void setBeltSpeed(int beltSpeed) {
+		this.beltSpeed = beltSpeed;
 	}
 
 	public static class ButtonListener implements ActionListener {

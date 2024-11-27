@@ -16,7 +16,8 @@ import src.system.ResourceUtil;
 */
 public class GetTrashOkazariEvent extends EventPacket implements java.io.Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -1160350622771927821L;
+
 	/**
 	 * コンストラクタ.
 	 */

@@ -10,8 +10,7 @@ import src.yukkuri.Tarinai;
  */
 public class Dna implements java.io.Serializable {
 
-	private static final long serialVersionUID = 1L;
-	
+	private static final long serialVersionUID = -3273354546305188434L;
 	/**
 	 * 種別
 	 * ゆっくりの種類とtypeの値 2021/04/10現在：
@@ -48,17 +47,17 @@ public class Dna implements java.io.Serializable {
 	 * 10001	れいむまりさ
 	 * 20000	ハイブリッド
 	 * */
-	public int type;	
+	private int type;	
 	/**性格*/
-	public Attitude attitude;
+	private Attitude attitude;
 	/**知能*/
-	public Intelligence intelligence;
+	private Intelligence intelligence;
 	/**レイプでできた子か*/
-	public boolean raperChild;
+	private boolean raperChild;
 	/**父ゆ*/
-	public int father;
+	private int father;
 	/**母ゆ*/
-	public int mother;
+	private int mother;
 
 	/**
 	 * コンストラクタ

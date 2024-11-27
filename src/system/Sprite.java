@@ -106,7 +106,7 @@ public class Sprite implements java.io.Serializable {
 	 */
 	public void setPivotType(int type) {
 		pivotType = type;
-		calcPivot();
+		//calcPivot();
 	}
 
 	private void calcPivot() {
@@ -121,6 +121,51 @@ public class Sprite implements java.io.Serializable {
 				pivotY = imageH - 1;
 				break;
 		}
+	}
+	public int getOriginalW() {
+		return originalW;
+	}
+	public void setOriginalW(int originalW) {
+		this.originalW = originalW;
+	}
+	public int getOriginalH() {
+		return originalH;
+	}
+	public void setOriginalH(int originalH) {
+		this.originalH = originalH;
+	}
+	public int getImageW() {
+		return imageW;
+	}
+	public void setImageW(int imageW) {
+		this.imageW = imageW;
+	}
+	public int getImageH() {
+		return imageH;
+	}
+	public void setImageH(int imageH) {
+		this.imageH = imageH;
+	}
+	public int getPivotX() {
+		return pivotX;
+	}
+	public void setPivotX(int pivotX) {
+		this.pivotX = pivotX;
+	}
+	public int getPivotY() {
+		return pivotY;
+	}
+	public void setPivotY(int pivotY) {
+		this.pivotY = pivotY;
+	}
+	public Rectangle4y[] getScreenRect() {
+		return screenRect;
+	}
+	public void setScreenRect(Rectangle4y[] screenRect) {
+		this.screenRect = screenRect;
+	}
+	public int getPivotType() {
+		return pivotType;
 	}
 }
 

@@ -13,6 +13,7 @@ import java.awt.event.ActionListener;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
+import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
@@ -45,8 +46,8 @@ import src.system.ResourceUtil;
  * <br>これはほかのアイテムと違い、ObjEXを継承していないので注意。
  */
 public class Beltconveyor extends FieldShapeBase implements Serializable {
-	static final long serialVersionUID = 1L;
 
+	private static final long serialVersionUID = -4483279905064301375L;
 	/**セットアップメニューの項目*/
 	private static enum SetupMenu {
 		DIRECT(ResourceUtil.getInstance().read("item_direction")),
@@ -169,7 +170,7 @@ public class Beltconveyor extends FieldShapeBase implements Serializable {
 	private static JComboBox<SpeedCombo> spdCombo;
 	private static JCheckBox[][] targetCheck = new JCheckBox[SetupMenu.values().length][3];
 	/** オブジェクトのユニークID */
-	public int objId = 0;
+	private int objId = 0;
 
 	/**画像ロード*/
 	public static void loadImages(ClassLoader loader, ImageObserver io) throws IOException {
@@ -227,11 +228,13 @@ public class Beltconveyor extends FieldShapeBase implements Serializable {
 	}
 
 	@Override
+	@Transient
 	public int getAttribute() {
 		return FIELD_BELT;
 	}
 
 	@Override
+	@Transient
 	public int getMinimumSize() {
 		return MIN_SIZE;
 	}
@@ -566,4 +569,36 @@ public class Beltconveyor extends FieldShapeBase implements Serializable {
 			}
 		}
 	}
+	public boolean[][] getSetting() {
+		return setting;
+	}
+
+	public void setSetting(boolean[][] setting) {
+		this.setting = setting;
+	}
+
+	public DirectCombo getDirection() {
+		return direction;
+	}
+
+	public void setDirection(DirectCombo direction) {
+		this.direction = direction;
+	}
+
+	public SpeedCombo getBeltSpeed() {
+		return beltSpeed;
+	}
+
+	public void setBeltSpeed(SpeedCombo beltSpeed) {
+		this.beltSpeed = beltSpeed;
+	}
+
+	public int getObjId() {
+		return objId;
+	}
+
+	public void setObjId(int objId) {
+		this.objId = objId;
+	}
+	
 }

@@ -18,8 +18,7 @@ import src.util.YukkuriUtil;
 @JsonTypeInfo(use = Id.CLASS)
 public abstract class Attachment extends Obj {
 
-	private static final long serialVersionUID = 1L;
-
+	private static final long serialVersionUID = 4324305548250241185L;
 	/**アタッチメントのつけられている元のID*/
 	protected int parent;
 	/**アニメーションするかどうか*/
@@ -44,6 +43,7 @@ public abstract class Attachment extends Obj {
 	public abstract BufferedImage getImage(Body b);
 
 	/**X方向の描画座標オフセット分*/
+	@Transient
 	public int getOfsX() {
 		Body pa = YukkuriUtil.getBodyInstance(parent);
 		if (pa == null) return -1;
@@ -51,6 +51,7 @@ public abstract class Attachment extends Obj {
 	}
 
 	/**Y方向の描画座標オフセット分*/
+	@Transient
 	public int getOfsY() {
 		Body pa = YukkuriUtil.getBodyInstance(parent);
 		if (pa == null) return -1;
@@ -58,6 +59,7 @@ public abstract class Attachment extends Obj {
 	}
 
 	/**親オブジェクトの原点取得*/
+	@Transient
 	public int getParentOrigin() {
 		return attachProperty[AttachProperty.OFS_ORIGIN.ordinal()];
 	}

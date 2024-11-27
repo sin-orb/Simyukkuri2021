@@ -27,8 +27,8 @@ import src.system.ResourceUtil;
  * うんうんのクラス.
  */
 public class Shit extends Obj implements java.io.Serializable {
-	static final long serialVersionUID = 2L;
-	
+
+	private static final long serialVersionUID = 8099262268179611867L;
 	// public variables
 	/** 通常うんうん */
 	public static final int SHIT_NORMAL = 0;
@@ -141,6 +141,7 @@ public class Shit extends Obj implements java.io.Serializable {
 		return (images[shitType][SHIT_SHADOW][ageState.ordinal()]);
 	}
 
+	@Transient
 	public int getSize() {
 		return imgW[shitType][ageState.ordinal()];
 	}
@@ -176,6 +177,7 @@ public class Shit extends Obj implements java.io.Serializable {
 	 * うんうんの状態を取得する.
 	 * @return うんうんの状態
 	 */
+	@Transient
 	public int getShitState() {
 		if (getAge() >= SHITLIMIT[ageState.ordinal()]/4) {
 			return 1;
@@ -209,6 +211,7 @@ public class Shit extends Obj implements java.io.Serializable {
 	/**
 	 * うんうん量を取得する.
 	 */
+	@Transient
 	public int getValue() {
 		return value[ageState.ordinal()];
 	}

@@ -27,7 +27,7 @@ import src.util.YukkuriUtil;
 */
 public class ShitExercisesEvent extends EventPacket implements java.io.Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2219635802037985212L;
 	int tick = 0;
 	boolean bActionFlag = true;
 	boolean bUnunActionFlag = true;
@@ -428,7 +428,7 @@ public class ShitExercisesEvent extends EventPacket implements java.io.Serializa
 								b.addStress(250);
 								// お尻が汚れる
 								if (SimYukkuri.RND.nextInt(4) == 0) {
-									b.setDirty(true);
+									b.makeDirty(true);
 									// 汚れた場合、親の元に移動
 									// ゆっくり同士が重ならないように目標地点は体のサイズを考慮
 									int colX = BodyLogic.calcCollisionX(b, from);

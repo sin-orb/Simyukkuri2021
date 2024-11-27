@@ -21,7 +21,7 @@ import src.util.YukkuriUtil;
 */
 public class SuiSpeake extends EventPacket implements java.io.Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -2170271875003339906L;
 
 	/**
 	 * コンストラクタ.
@@ -54,7 +54,7 @@ public class SuiSpeake extends EventPacket implements java.io.Serializable {
 				}
 			} else {
 				if (Translate.distance(b.getX(), b.getY(), target.getX(), target.getY()) < 200000) {
-					Body db = (Body) ((Sui) target).getbindobj();
+					Body db = (Body) ((Sui) target).getBindobj();
 					if (db == null)
 						return false;
 					if (db.isParent(b)) {

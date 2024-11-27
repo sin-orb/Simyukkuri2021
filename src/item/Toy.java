@@ -3,6 +3,7 @@ package src.item;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
+import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
 
@@ -18,8 +19,8 @@ import src.enums.Type;
  * おもちゃ
  */
 public class Toy extends ObjEX implements java.io.Serializable {
-	static final long serialVersionUID = 1L;
 
+	private static final long serialVersionUID = -5700583776006467893L;
 	private static final int BALL = 0;
 	private static final int BALL_NORA = 1;
 	private static final int SHADOW = 2;
@@ -57,6 +58,7 @@ public class Toy extends ObjEX implements java.io.Serializable {
 	}
 
 	@Override
+	@Transient
 	public BufferedImage getShadowImage() {
 		return images[SHADOW];
 	}
@@ -95,6 +97,7 @@ public class Toy extends ObjEX implements java.io.Serializable {
 	 * @param b 判定したいゆっくり
 	 * @return そのゆっくりに所有されているかどうか
 	 */
+	@Transient
 	public boolean isOwned(Body b) {
 		return (owner == b);
 	}
@@ -126,6 +129,15 @@ public class Toy extends ObjEX implements java.io.Serializable {
 	public Toy() {
 		
 	}
+
+	public ItemRank getItemRank() {
+		return itemRank;
+	}
+
+	public void setItemRank(ItemRank itemRank) {
+		this.itemRank = itemRank;
+	}
+	
 }
 
 

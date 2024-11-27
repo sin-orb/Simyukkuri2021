@@ -6,6 +6,7 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
+import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
 
@@ -28,7 +29,8 @@ import src.system.ResourceUtil;
  * ディヒューザー
  */
 public class Diffuser extends ObjEX implements java.io.Serializable {
-	static final long serialVersionUID = 1L;
+
+	private static final long serialVersionUID = -1780241956081220439L;
 
 	public static enum SteamType {
         ANTI_FUNGAL(ResourceUtil.getInstance().read("item_preventionmold"), 0),
@@ -81,6 +83,7 @@ public class Diffuser extends ObjEX implements java.io.Serializable {
 	}
 
 	@Override
+	@Transient
 	public BufferedImage getShadowImage() {
 		return images[2];
 	}
@@ -98,7 +101,7 @@ public class Diffuser extends ObjEX implements java.io.Serializable {
 		
 		if ( getAge() % 40 == 0 ) {
 			if(steamType[steamNum]) {
-				Effect e = SimYukkuri.mypane.terrarium.addEffect(EffectType.STEAM, x, y, z + getH() >> 3,
+				Effect e = SimYukkuri.mypane.getTerrarium().addEffect(EffectType.STEAM, x, y, z + getH() >> 3,
 						0, 0, -1, false, 30, 0, false, false, false);
 					
 				e.setAnimeFrame(SteamType.values()[steamNum].getColor());
@@ -179,6 +182,19 @@ public class Diffuser extends ObjEX implements java.io.Serializable {
 		}
 		return ret;
 	}
+
+	public int getSteamNum() {
+		return steamNum;
+	}
+
+	public void setSteamNum(int steamNum) {
+		this.steamNum = steamNum;
+	}
+
+	public void setSteamType(boolean[] steamType) {
+		this.steamType = steamType;
+	}
+	
 }
 
 

@@ -6,7 +6,9 @@ import java.awt.LinearGradientPaint;
 import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
+import java.beans.Transient;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -21,8 +23,9 @@ import src.system.MapWindow;
 	背景データクラス
 
 */
-public class TerrainField {
+public class TerrainField implements Serializable {
 
+	private static final long serialVersionUID = 2617040226660851211L;
 	// iniファイルのキー
 	public static final String SECTION_ASSET = "Asset";
 	public static final String SECTION_ENV = "Environment";
@@ -181,6 +184,7 @@ public class TerrainField {
 	 * オーナータイプ（旧フォーマットの場合は0）を取得する.
 	 * @return オーナータイプ
 	 */
+	@Transient
 	public int getOwnerType() {
 		return ownerType;
 	}

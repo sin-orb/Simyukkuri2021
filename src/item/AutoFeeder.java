@@ -4,6 +4,7 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
+import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
 import java.util.Map;
@@ -33,7 +34,8 @@ import src.util.YukkuriUtil;
 	自動給餌機
  */
 public class AutoFeeder extends ObjEX implements java.io.Serializable {
-	static final long serialVersionUID = 1L;
+
+	private static final long serialVersionUID = -1132194333169381556L;
 
 	/** 出てくるエサタイプ */
 	public static enum FeedType {
@@ -127,6 +129,7 @@ public class AutoFeeder extends ObjEX implements java.io.Serializable {
 	}
 
 	@Override
+	@Transient
 	public int getHitCheckObjType() {
 		return hitCheckObjType;
 	}
@@ -181,7 +184,7 @@ public class AutoFeeder extends ObjEX implements java.io.Serializable {
 			if (type == FeedType.PROCESSED_BODY.ordinal()) {
 				// オートフィーダで出るゆっくりのタイプを決める。
 				int type = makeRandomType();
-				food = SimYukkuri.mypane.terrarium.addBody(getX(), getY(), 0, type, AgeState.BABY, null, null);
+				food = SimYukkuri.mypane.getTerrarium().addBody(getX(), getY(), 0, type, AgeState.BABY, null, null);
 				Cash.buyYukkuri((Body) food);
 				Cash.addCash(-getCost());
 				// レイパーは生まれないようにする
@@ -193,7 +196,7 @@ public class AutoFeeder extends ObjEX implements java.io.Serializable {
 			} else if (type == FeedType.BODY.ordinal()) {
 				// オートフィーダで出るゆっくりのタイプを決める。
 				int type = makeRandomType();
-				food = SimYukkuri.mypane.terrarium.addBody(getX(), getY(), 0, type, AgeState.BABY, null, null);
+				food = SimYukkuri.mypane.getTerrarium().addBody(getX(), getY(), 0, type, AgeState.BABY, null, null);
 				Cash.buyYukkuri((Body) food);
 				Cash.addCash(-getCost() + 5);
 			} else {

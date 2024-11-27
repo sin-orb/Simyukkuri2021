@@ -22,7 +22,7 @@ import src.util.YukkuriUtil;
 */
 public class BegForLifeEvent extends EventPacket implements java.io.Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 9141159728976292371L;
 	private int roop = 0;
 	private int roop2 = 0;
 	private int roop3 = 0;

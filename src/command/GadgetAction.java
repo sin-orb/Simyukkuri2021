@@ -579,11 +579,11 @@ public class GadgetAction {
 						if (b.getDirection() == Direction.LEFT)
 							ofsX = -ofsX;
 						if (!b.isPacked() && !b.isShutmouth())
-							SimYukkuri.mypane.terrarium.addVomit(b.getX() + ofsX, b.getY(), b.getZ(), b,
+							SimYukkuri.mypane.getTerrarium().addVomit(b.getX() + ofsX, b.getY(), b.getZ(), b,
 									b.getShitType());
 						b.stay();
 					}
-					b.setDirty(true);
+					b.makeDirty(true);
 				}
 				Terrarium.setAlarm();
 			} else {
@@ -595,11 +595,11 @@ public class GadgetAction {
 						if (b.getDirection() == Direction.LEFT)
 							ofsX = -ofsX;
 						if (!b.isPacked() && !b.isShutmouth())
-							SimYukkuri.mypane.terrarium.addVomit(b.getX() + ofsX, b.getY(), b.getZ(), b,
+							SimYukkuri.mypane.getTerrarium().addVomit(b.getX() + ofsX, b.getY(), b.getZ(), b,
 									b.getShitType());
 						b.stay();
 					}
-					b.setDirty(true);
+					b.makeDirty(true);
 					Terrarium.setAlarm();
 				}
 			}
@@ -644,11 +644,11 @@ public class GadgetAction {
 						if (b.getDirection() == Direction.LEFT)
 							ofsX = -ofsX;
 						if (!b.isPacked() && !b.isShutmouth())
-							SimYukkuri.mypane.terrarium.addVomit(b.getX() + ofsX, b.getY(), b.getZ(), b,
+							SimYukkuri.mypane.getTerrarium().addVomit(b.getX() + ofsX, b.getY(), b.getZ(), b,
 									b.getShitType());
 						b.stay();
 					}
-					b.setDirty(true);
+					b.makeDirty(true);
 				}
 				Terrarium.setAlarm();
 			} else {
@@ -660,11 +660,11 @@ public class GadgetAction {
 						if (b.getDirection() == Direction.LEFT)
 							ofsX = -ofsX;
 						if (!b.isPacked() && !b.isShutmouth())
-							SimYukkuri.mypane.terrarium.addVomit(b.getX() + ofsX, b.getY(), b.getZ(), b,
+							SimYukkuri.mypane.getTerrarium().addVomit(b.getX() + ofsX, b.getY(), b.getZ(), b,
 									b.getShitType());
 						b.stay();
 					}
-					b.setDirty(true);
+					b.makeDirty(true);
 					Terrarium.setAlarm();
 				}
 			}
@@ -822,7 +822,7 @@ public class GadgetAction {
 			GadgetMenu.executeBodyMethod(ev, found, "isAnalClose", "setAnalClose", "invAnalClose");
 			break;
 		case STALK_CUT:
-			GadgetMenu.executeBodyMethod(ev, found, "getStalkCastration", "setStalkCastration", "invStalkCastration");
+			GadgetMenu.executeBodyMethod(ev, found, "getStalkCastration", "castrateStalk", "invStalkCastration");
 			break;
 		case STALK_UNPLUG:
 			if (found instanceof Stalk) {
@@ -835,7 +835,7 @@ public class GadgetAction {
 			}
 			break;
 		case CASTRATION:
-			GadgetMenu.executeBodyMethod(ev, found, "getBodyCastration", "setBodyCastration", "invBodyCastration");
+			GadgetMenu.executeBodyMethod(ev, found, "getBodyCastration", "castrateBody", "invBodyCastration");
 			break;
 		case LIGHTER:
 			GadgetMenu.executeBodyMethod(ev, found, "giveFire");

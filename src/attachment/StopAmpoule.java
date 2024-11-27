@@ -23,8 +23,7 @@ import src.util.YukkuriUtil;
  */
 public class StopAmpoule extends Attachment {
 
-	private static final long serialVersionUID = 1L;
-
+	private static final long serialVersionUID = 7429098217158133561L;
 	/**識別キー*/
 	private static final String POS_KEY = "StopAmpoule";
 	/**画像の入れ物

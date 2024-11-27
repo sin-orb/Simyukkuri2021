@@ -6,7 +6,8 @@ import java.io.Serializable;
  * Rectangleの循環参照をなくしたクラス.
  */
 public class Rectangle4y implements Serializable {
-	
+
+	private static final long serialVersionUID = 4035949738478762553L;
 	public int x;
 	public int y;
 	public int width;

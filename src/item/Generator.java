@@ -3,6 +3,7 @@ package src.item;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
+import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
 
@@ -15,6 +16,8 @@ import src.enums.Type;
 発電機(開発途上)
 */
 public class Generator extends ObjEX implements java.io.Serializable {
+
+	private static final long serialVersionUID = -4583197623536851356L;
 //	static final long serialVersionUID = 1L;
 //
 //	public static final int hitCheckObjType = ObjEX.YUKKURI;
@@ -44,6 +47,7 @@ public class Generator extends ObjEX implements java.io.Serializable {
 	}
 //
 	@Override
+	@Transient
 	public BufferedImage getShadowImage() {
 		return null;
 	}

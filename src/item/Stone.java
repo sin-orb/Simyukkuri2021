@@ -3,6 +3,7 @@ package src.item;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
+import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
 
@@ -20,7 +21,7 @@ import src.enums.Type;
  * 小石
  */
 public class Stone extends ObjEX implements java.io.Serializable {
-	static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 6460240997300861568L;
 	/**処理対象(ゆっくり)*/
 	public static final int hitCheckObjType = ObjEX.YUKKURI;
 	private static final int NUM_OF_STONE_IMG = 3;
@@ -56,10 +57,12 @@ public class Stone extends ObjEX implements java.io.Serializable {
 	}
 
 	@Override
+	@Transient
 	public BufferedImage getShadowImage() {
 		return images[2];
 	}
 	@Override
+	@Transient
 	public int getHitCheckObjType() {
 		return hitCheckObjType;
 	}	
@@ -129,5 +132,14 @@ public class Stone extends ObjEX implements java.io.Serializable {
 	public Stone() {
 		
 	}
+
+	public ItemRank getItemRank() {
+		return itemRank;
+	}
+
+	public void setItemRank(ItemRank itemRank) {
+		this.itemRank = itemRank;
+	}
+	
 }
 

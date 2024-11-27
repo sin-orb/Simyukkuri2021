@@ -2,6 +2,7 @@ package src.yukkuri;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
+import java.beans.Transient;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,7 +25,7 @@ import src.util.IniFileUtil;
  *設定的にはよくわからない…
  */
 public class ReimuMarisa extends Marisa implements java.io.Serializable {
-	static final long serialVersionUID = 2L;
+	private static final long serialVersionUID = 5775612102900628176L;
 	/** れいむまりさのタイプ */
 	public static final int type = 10001;
 	/** れいむまりさの和名 */
@@ -91,6 +92,7 @@ public class ReimuMarisa extends Marisa implements java.io.Serializable {
 		baseSpeed = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_INI_DIR, baseFileName, "speed");
 	}
 	@Override
+	@Transient
 	public boolean isImageLoaded() {
 		return imageLoaded;
 	}
@@ -148,14 +150,17 @@ public class ReimuMarisa extends Marisa implements java.io.Serializable {
 	}
 
 	@Override
+	@Transient
 	public int getType() {
 		return type;
 	}
 	@Override
+	@Transient
 	public String getNameJ() {
 		return nameJ;
 	}
 	@Override
+	@Transient
 	public String getMyName() {
 		if( anMyName[getBodyAgeState().ordinal()] != null ){
 			return anMyName[getBodyAgeState().ordinal()];
@@ -163,6 +168,7 @@ public class ReimuMarisa extends Marisa implements java.io.Serializable {
 		return nameJ;
 	}
 	@Override
+	@Transient
 	public String getMyNameD() {
 		if( anMyNameD[getBodyAgeState().ordinal()] != null ){
 			return anMyNameD[getBodyAgeState().ordinal()];
@@ -170,11 +176,13 @@ public class ReimuMarisa extends Marisa implements java.io.Serializable {
 		return getMyName();
 	}
 	@Override
+	@Transient
 	public String getNameE() {
 		return nameE;
 	}
 
 	@Override
+	@Transient
 	public boolean isHybrid() {
 		return true;
 	}
@@ -227,4 +235,11 @@ public class ReimuMarisa extends Marisa implements java.io.Serializable {
 		//speed = 130;
 		speed = baseSpeed;
 	}
+	public int[][] getAnImageVerStateCtrlNagasi() {
+		return anImageVerStateCtrlNagasi;
+	}
+	public void setAnImageVerStateCtrlNagasi(int[][] anImageVerStateCtrlNagasi) {
+		this.anImageVerStateCtrlNagasi = anImageVerStateCtrlNagasi;
+	}
+	
 }

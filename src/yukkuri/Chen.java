@@ -4,6 +4,7 @@ package src.yukkuri;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
+import java.beans.Transient;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,7 +25,8 @@ import src.util.IniFileUtil;
  * ちぇん
  */
 public class Chen extends Body implements java.io.Serializable {
-	static final long serialVersionUID = 2L;
+
+	private static final long serialVersionUID = 6045679671933105545L;
 	/** ちぇんのタイプ */
 	public static final int type = 4;
 	/** ちぇんの日本語名 */
@@ -80,6 +82,7 @@ public class Chen extends Body implements java.io.Serializable {
 		baseSpeed = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_INI_DIR, baseFileName, "speed");
 	}
 	@Override
+	@Transient
 	public boolean isImageLoaded() {
 		return imageLoaded;
 	}
@@ -95,14 +98,17 @@ public class Chen extends Body implements java.io.Serializable {
 	}
 
 	@Override
+	@Transient
 	public int getType() {
 		return type;
 	}
 	@Override
+	@Transient
 	public String getNameJ() {
 		return nameJ;
 	}
 	@Override
+	@Transient
 	public String getMyName() {
 		if( anMyName[getBodyAgeState().ordinal()] != null ){
 			return anMyName[getBodyAgeState().ordinal()];
@@ -110,6 +116,7 @@ public class Chen extends Body implements java.io.Serializable {
 		return nameJ;
 	}
 	@Override
+	@Transient
 	public String getMyNameD() {
 		if( anMyNameD[getBodyAgeState().ordinal()] != null ){
 			return anMyNameD[getBodyAgeState().ordinal()];
@@ -117,16 +124,19 @@ public class Chen extends Body implements java.io.Serializable {
 		return getMyName();
 	}
 	@Override
+	@Transient
 	public String getNameE() {
 		return nameE;
 	}
 
 	@Override
+	@Transient
 	public String getNameJ2() {
 		return "";
 	}
 
 	@Override
+	@Transient
 	public String getNameE2() {
 		return "";
 	}
@@ -181,4 +191,5 @@ public class Chen extends Body implements java.io.Serializable {
 
 		speed = baseSpeed;
 	}
+	
 }

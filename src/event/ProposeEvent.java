@@ -21,7 +21,7 @@ import src.util.YukkuriUtil;
 */
 public class ProposeEvent extends EventPacket implements java.io.Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 8482363173818957959L;
 	int tick = 0;
 	protected boolean started = false;
 

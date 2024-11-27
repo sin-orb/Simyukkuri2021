@@ -15,7 +15,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 */
 @JsonTypeInfo(use = Id.CLASS)
 abstract public class EventPacket implements java.io.Serializable{
-	private static final long serialVersionUID = 1L;
+
+	private static final long serialVersionUID = -6144966939057792982L;
 
 	/** イベント優先度。餌、睡眠などの標準処理に対する優先度
 	<br>ふりふり、のびのび ＜ LOW ＜ 食事、トイレ、睡眠など標準行動 ＜ MIDDLE ＜ かび、高ダメージなど生命の危険状態 ＜ HIGH*/

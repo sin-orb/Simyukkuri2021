@@ -18,7 +18,8 @@ import src.enums.Type;
  * 食べ物
  */
 public class Food extends ObjEX implements java.io.Serializable {
-	static final long serialVersionUID = 2L;
+
+	private static final long serialVersionUID = -3577739035547355691L;
 
 	/** 空き皿画像テーブル*/
 	public static enum EmptyImage {
@@ -93,7 +94,7 @@ public class Food extends ObjEX implements java.io.Serializable {
 
 	private FoodType foodType;
 	/**量*/
-	public int amount;
+	private int amount;
 
 	private static BufferedImage[] emptyImages = new BufferedImage[EmptyImage.values().length];
 	private static Rectangle4y[] emptyBoundary = new Rectangle4y[EmptyImage.values().length];
@@ -165,11 +166,13 @@ public class Food extends ObjEX implements java.io.Serializable {
 	}
 
 	@Override
+	@Transient
 	public int getValue() {
 		return foodType.value;
 	}
 
 	@Override
+	@Transient
 	public int getLooks() {
 		return foodType.looks;
 	}
@@ -235,6 +238,7 @@ public class Food extends ObjEX implements java.io.Serializable {
 		return foodType;
 	}
 	/**空かどうか*/
+	@Transient
 	public boolean isEmpty() {
 		return (amount == 0);
 	}
@@ -254,6 +258,19 @@ public class Food extends ObjEX implements java.io.Serializable {
 	public void kick() {
 		kick(0,  -8,  -4);
 	}
+
+	public int getAmount() {
+		return amount;
+	}
+
+	public void setAmount(int amount) {
+		this.amount = amount;
+	}
+
+	public void setFoodType(FoodType foodType) {
+		this.foodType = foodType;
+	}
+	
 }
 
 

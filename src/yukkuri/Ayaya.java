@@ -2,6 +2,7 @@ package src.yukkuri;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
+import java.beans.Transient;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,7 +22,7 @@ import src.util.IniFileUtil;
  * ゆっくりあや
  */
 public class Ayaya extends Body implements java.io.Serializable {
-	static final long serialVersionUID = 2L;
+	private static final long serialVersionUID = 1210488778765181283L;
 	/** あやのタイプ */
 	public static final int type = 1001;
 	/** あや日本語名 */
@@ -67,6 +68,7 @@ public class Ayaya extends Body implements java.io.Serializable {
 		imageLoaded = true;
 	}
 	@Override
+	@Transient
 	public boolean isImageLoaded() {
 		return imageLoaded;
 	}
@@ -90,6 +92,7 @@ public class Ayaya extends Body implements java.io.Serializable {
 	}
 
 	@Override
+	@Transient
 	public int getType() {
 		return type;
 	}
@@ -99,10 +102,12 @@ public class Ayaya extends Body implements java.io.Serializable {
 			return Ayaya.type;
 	}
 	@Override
+	@Transient
 	public String getNameJ() {
 		return nameJ;
 	}
 	@Override
+	@Transient
 	public String getMyName() {
 		if( anMyName[getBodyAgeState().ordinal()] != null ){
 			return anMyName[getBodyAgeState().ordinal()];
@@ -110,6 +115,7 @@ public class Ayaya extends Body implements java.io.Serializable {
 		return nameJ;
 	}
 	@Override
+	@Transient
 	public String getMyNameD() {
 		if( anMyNameD[getBodyAgeState().ordinal()] != null ){
 			return anMyNameD[getBodyAgeState().ordinal()];
@@ -117,16 +123,19 @@ public class Ayaya extends Body implements java.io.Serializable {
 		return getMyName();
 	}
 	@Override
+	@Transient
 	public String getNameE() {
 		return nameE;
 	}
 
 	@Override
+	@Transient
 	public String getNameJ2() {
 		return "";
 	}
 
 	@Override
+	@Transient
 	public String getNameE2() {
 		return "";
 	}
@@ -181,4 +190,5 @@ public class Ayaya extends Body implements java.io.Serializable {
 		STRENGTHorg[AgeState.BABY.ordinal()] *= factor;
 		speed = baseSpeed;
 	}
+	
 }

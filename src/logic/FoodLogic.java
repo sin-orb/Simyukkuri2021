@@ -225,8 +225,8 @@ public class FoodLogic {
 						}
 						//お持ち帰りしようとしてないか、とても空腹なとき
 						if (!b.isToTakeout() || b.isVeryHungry()) {
-							eatFood(b, f.getFoodType(), Math.min(b.getEatAmount(), f.amount));
-							f.eatFood(Math.min(b.getEatAmount(), f.amount));
+							eatFood(b, f.getFoodType(), Math.min(b.getEatAmount(), f.getAmount()));
+							f.eatFood(Math.min(b.getEatAmount(), f.getAmount()));
 							// 食べ切ったら消滅
 							if (f.getFoodType() == FoodType.STALK && f.isEmpty())
 								f.remove();
@@ -362,8 +362,8 @@ public class FoodLogic {
 						Stalk s = (Stalk) food;
 						Body p = SimYukkuri.world.getCurrentMap().body.get(s.getPlantYukkuri());
 						if (s.getZ() == 0 && p == null) {
-							eatFood(b, FoodType.STALK, Math.min(b.getEatAmount(), s.amount));
-							s.eatStalk(Math.min(b.getEatAmount(), s.amount));
+							eatFood(b, FoodType.STALK, Math.min(b.getEatAmount(), s.getAmount()));
+							s.eatStalk(Math.min(b.getEatAmount(), s.getAmount()));
 						} else {
 							if (p != null) {
 								p.removeStalk(s);
@@ -1367,7 +1367,7 @@ public class FoodLogic {
 			default:
 				b.setMessage(MessagePool.getMessage(b, MessagePool.Action.SpitFood));
 				b.setHappiness(Happiness.VERY_SAD);
-				SimYukkuri.mypane.terrarium.addVomit(b.getX() + 7 - SimYukkuri.RND.nextInt(14),
+				SimYukkuri.mypane.getTerrarium().addVomit(b.getX() + 7 - SimYukkuri.RND.nextInt(14),
 						b.getY() + 7 - SimYukkuri.RND.nextInt(14), 0,
 						b, b.getShitType());
 				return;
@@ -2016,8 +2016,10 @@ public class FoodLogic {
 	 * @return 食べるかどうか
 	 */
 	public static boolean checkCanEatBody(Body b, Body p) {
-		if (b.isPredatorType())
+		if (b.isPredatorType()) {
 			return true;
+		}
+			
 		if (!p.isDead())
 			return false;
 		if (p.isbindStalk())

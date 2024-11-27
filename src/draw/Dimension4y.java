@@ -7,6 +7,7 @@ import java.io.Serializable;
  */
 public class Dimension4y implements Serializable {
 
+	private static final long serialVersionUID = -7555703845901421580L;
 	public int width;
 	public int height;
 	public int getWidth() {

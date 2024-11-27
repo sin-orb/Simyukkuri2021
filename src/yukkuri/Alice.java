@@ -2,6 +2,7 @@ package src.yukkuri;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
+import java.beans.Transient;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,7 +28,8 @@ import src.util.IniFileUtil;
  * ありす
  */
 public class Alice extends Body implements java.io.Serializable {
-	static final long serialVersionUID = 1L;
+
+	private static final long serialVersionUID = -2849085882014396337L;
 	/** ありすのタイプNo：2 */
 	public static final int type = 2;
 	/** 日本語名 */
@@ -64,6 +66,7 @@ public class Alice extends Body implements java.io.Serializable {
 	 * @return ありすかつれいぱーかどうか
 	 */
 	@Override
+	@Transient
 	protected boolean isAliceRaper() {
 		return isRaper();
 	};
@@ -99,6 +102,7 @@ public class Alice extends Body implements java.io.Serializable {
 		baseSpeed = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_INI_DIR, baseFileName, "speed");
 	}
 	@Override
+	@Transient
 	public boolean isImageLoaded() {
 		return imageLoaded;
 	}
@@ -114,11 +118,13 @@ public class Alice extends Body implements java.io.Serializable {
 	}
 
 	@Override
+	@Transient
 	public int getType() {
 		return type;
 	}
 
 	@Override
+	@Transient
 	public int getHybridType(int partnerType) {
 		switch (partnerType) {
 		default:
@@ -126,10 +132,12 @@ public class Alice extends Body implements java.io.Serializable {
 		}
 	}
 	@Override
+	@Transient
 	public String getNameJ() {
 		return nameJ;
 	}
 	@Override
+	@Transient
 	public String getMyName() {
 		if( anMyName[getBodyAgeState().ordinal()] != null ){
 			return anMyName[getBodyAgeState().ordinal()];
@@ -137,6 +145,7 @@ public class Alice extends Body implements java.io.Serializable {
 		return nameJ;
 	}
 	@Override
+	@Transient
 	public String getMyNameD() {
 		if( anMyNameD[getBodyAgeState().ordinal()] != null ){
 			return anMyNameD[getBodyAgeState().ordinal()];
@@ -144,16 +153,19 @@ public class Alice extends Body implements java.io.Serializable {
 		return getMyName();
 	}
 	@Override
+	@Transient
 	public String getNameE() {
 		return nameE;
 	}
 
 	@Override
+	@Transient
 	public String getNameJ2() {
 		return "";
 	}
 
 	@Override
+	@Transient
 	public String getNameE2() {
 		return "";
 	}

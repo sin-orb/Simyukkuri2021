@@ -2,6 +2,7 @@ package src.yukkuri;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
+import java.beans.Transient;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -33,7 +34,8 @@ import src.util.YukkuriUtil;
  * まりさ。れいむまりさ、つむりまりさはこれを継承している
 */
 public class Marisa extends Body implements java.io.Serializable {
-	static final long serialVersionUID = 2L;
+
+	private static final long serialVersionUID = -7022828510837286120L;
 	/** まりさのタイプ */
 	public static final int type = 0;
 	/** まりさ和名 */
@@ -96,6 +98,7 @@ public class Marisa extends Body implements java.io.Serializable {
 		imageLoaded = true;
 	}
 	@Override
+	@Transient
 	public boolean isImageLoaded() {
 		return imageLoaded;
 	}
@@ -242,6 +245,7 @@ public class Marisa extends Body implements java.io.Serializable {
 	}
 
 	@Override
+	@Transient
 	public int getType() {
 		return type;
 	}
@@ -257,10 +261,12 @@ public class Marisa extends Body implements java.io.Serializable {
 		}
 	}
 	@Override
+	@Transient
 	public String getNameJ() {
 		return nameJ;
 	}
 	@Override
+	@Transient
 	public String getMyName() {
 		if (anMyName[getBodyAgeState().ordinal()] != null) {
 			return anMyName[getBodyAgeState().ordinal()];
@@ -272,6 +278,7 @@ public class Marisa extends Body implements java.io.Serializable {
 		}
 	}
 	@Override
+	@Transient
 	public String getMyNameD() {
 		if (anMyNameD[getBodyAgeState().ordinal()] != null) {
 			return anMyNameD[getBodyAgeState().ordinal()];
@@ -279,16 +286,19 @@ public class Marisa extends Body implements java.io.Serializable {
 		return getMyName();
 	}
 	@Override
+	@Transient
 	public String getNameE() {
 		return nameE;
 	}
 
 	@Override
+	@Transient
 	public String getNameJ2() {
 		return "";
 	}
 
 	@Override
+	@Transient
 	public String getNameE2() {
 		return "";
 	}
@@ -650,4 +660,11 @@ public class Marisa extends Body implements java.io.Serializable {
 		STRENGTHorg[AgeState.BABY.ordinal()] *= factor;
 		speed = baseSpeed;
 	}
+	public int[][] getAnImageVerStateCtrlNagasi() {
+		return anImageVerStateCtrlNagasi;
+	}
+	public void setAnImageVerStateCtrlNagasi(int[][] anImageVerStateCtrlNagasi) {
+		this.anImageVerStateCtrlNagasi = anImageVerStateCtrlNagasi;
+	}
+	
 }

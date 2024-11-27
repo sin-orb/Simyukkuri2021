@@ -3,6 +3,7 @@ package src.item;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
+import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
 
@@ -24,7 +25,9 @@ import src.system.MessagePool;
  * すぃー
  */
 public class Sui extends ObjEX implements java.io.Serializable {
-	static final long serialVersionUID = 1L;
+
+	private static final long serialVersionUID = 1901238489894890272L;
+
 	/**処理対象(ゆっくり)*/
 	public static final int hitCheckObjType = ObjEX.YUKKURI;
 	
@@ -100,6 +103,7 @@ public class Sui extends ObjEX implements java.io.Serializable {
 	}
 
 	@Override
+	@Transient
 	public BufferedImage getShadowImage() {
 		return images[current_direction][shadow];
 	}
@@ -174,6 +178,7 @@ public class Sui extends ObjEX implements java.io.Serializable {
 	 * すぃーに乗れるかどうか
 	 * @return すぃ～に乗れるかどうか
 	 */
+	@Transient
 	public boolean iscanriding(){
 		if(bindobj == null) return false;
 		for(int i=0;i<bindbody_num;i++){
@@ -196,20 +201,6 @@ public class Sui extends ObjEX implements java.io.Serializable {
 			}
 		}
 		return false;
-	}
-	/**
-	 * 何ゆんがすぃ～に乗ってるか
-	 * @return 何ゆんがすぃ～に乗ってるか
-	 */
-	public int getcurrent_bindbody_num(){
-		return current_bindbody_num;
-	}
-	/**
-	 * 現在のすぃ～の状態を取得する.
-	 * @return 現在のすぃ～の状態
-	 */
-	public int getcurrent_condition(){
-		return current_condition;
 	}
 	/**
 	 * すぃ～から降りる
@@ -261,19 +252,14 @@ public class Sui extends ObjEX implements java.io.Serializable {
 	public boolean NoCanBind(){
 		return (bindobj != null);
 	}
-	/**
-	 * バンドオブジェクトを取得する.
-	 * @return バンドオブジェクト
-	 */
-	public Obj getbindobj(){
-		return bindobj;
-	}
+	
 	/**境界線の取得*/
 	public static Rectangle4y getBounding() {
 		return boundary;
 	}
 
 	@Override
+	@Transient
 	public int getHitCheckObjType() {
 		return hitCheckObjType;
 	}
@@ -521,6 +507,107 @@ public class Sui extends ObjEX implements java.io.Serializable {
 			}
 		}
 	}
+
+
+	public int getCurrent_bindbody_num() {
+		return current_bindbody_num;
+	}
+
+
+	public void setCurrent_bindbody_num(int current_bindbody_num) {
+		this.current_bindbody_num = current_bindbody_num;
+	}
+
+
+	public Body[] getBindBody() {
+		return bindBody;
+	}
+
+
+	public void setBindBody(Body[] bindBody) {
+		this.bindBody = bindBody;
+	}
+
+
+	public Obj getBindobj() {
+		return bindobj;
+	}
+
+
+	public void setBindobj(Obj bindobj) {
+		this.bindobj = bindobj;
+	}
+
+
+	public int getCurrent_direction() {
+		return current_direction;
+	}
+
+
+	public void setCurrent_direction(int current_direction) {
+		this.current_direction = current_direction;
+	}
+
+
+	public int getCurrent_condition() {
+		return current_condition;
+	}
+
+
+	public void setCurrent_condition(int current_condition) {
+		this.current_condition = current_condition;
+	}
+
+
+	public int getDestX() {
+		return destX;
+	}
+
+
+	public void setDestX(int destX) {
+		this.destX = destX;
+	}
+
+
+	public int getDestY() {
+		return destY;
+	}
+
+
+	public void setDestY(int destY) {
+		this.destY = destY;
+	}
+
+
+	public int getVecX() {
+		return vecX;
+	}
+
+
+	public void setVecX(int vecX) {
+		this.vecX = vecX;
+	}
+
+
+	public int getVecY() {
+		return vecY;
+	}
+
+
+	public void setVecY(int vecY) {
+		this.vecY = vecY;
+	}
+
+
+	public int getSpeed() {
+		return speed;
+	}
+
+
+	public void setSpeed(int speed) {
+		this.speed = speed;
+	}
+	
 }
 
 

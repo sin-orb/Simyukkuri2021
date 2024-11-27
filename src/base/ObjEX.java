@@ -21,7 +21,7 @@ import src.item.Barrier;
  */
 @JsonTypeInfo(use = Id.CLASS)
 public abstract class ObjEX extends Obj implements java.io.Serializable {
-	static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 2057945721758966589L;
 	/**オブジェクトタイプ*/
 	protected ObjEXType objEXType;
 	/**追加情報用の汎用定数*/
@@ -148,6 +148,7 @@ public abstract class ObjEX extends Obj implements java.io.Serializable {
 	}
 
 	/**当たり判定されているオブジェクトのタイプ取得*/
+	@Transient
 	public int getHitCheckObjType() {
 		return hitCheckObjType;
 	};
@@ -286,6 +287,50 @@ public abstract class ObjEX extends Obj implements java.io.Serializable {
 		enabled = true;
 	}
 	
+	public int getInterval() {
+		return interval;
+	}
+
+	public void setInterval(int interval) {
+		this.interval = interval;
+	}
+
+	public int getColW() {
+		return colW;
+	}
+
+	public void setColW(int colW) {
+		this.colW = colW;
+	}
+
+	public int getColH() {
+		return colH;
+	}
+
+	public void setColH(int colH) {
+		this.colH = colH;
+	}
+
+	public Point4y getTmpPos() {
+		return tmpPos;
+	}
+
+	public void setTmpPos(Point4y tmpPos) {
+		this.tmpPos = tmpPos;
+	}
+
+	public void setObjEXType(ObjEXType objEXType) {
+		this.objEXType = objEXType;
+	}
+
+	public void setLinkParent(int linkParent) {
+		this.linkParent = linkParent;
+	}
+
+	public void setLooks(int looks) {
+		this.looks = looks;
+	}
+
 	public ObjEX() {
 		
 	}

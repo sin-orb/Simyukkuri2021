@@ -15,36 +15,36 @@ public class CustomLogFormatter extends SimpleFormatter {
     * フォーマットを行う.
     */
    public String format(LogRecord logRecord) {
-      final StringBuffer stringBuffer = new StringBuffer();
+      final StringBuilder builder = new StringBuilder();
 
-      stringBuffer.append(this.dateFormat.format(new Date(logRecord.getMillis())));
-      stringBuffer.append(" ");
+      builder.append(this.dateFormat.format(new Date(logRecord.getMillis())));
+      builder.append(" ");
 
       Level level = logRecord.getLevel();
       if (level == Level.FINEST) {
-         stringBuffer.append("FINEST");
+         builder.append("FINEST");
       } else if (level == Level.FINER) {
-         stringBuffer.append("FINER ");
+         builder.append("FINER ");
       } else if (level == Level.FINE) {
-         stringBuffer.append("FINE ");
+         builder.append("FINE ");
       } else if (level == Level.CONFIG) {
-         stringBuffer.append("CONFIG");
+         builder.append("CONFIG");
       } else if (level == Level.INFO) {
-         stringBuffer.append("INFO ");
+         builder.append("INFO ");
       } else if (level == Level.WARNING) {
-         stringBuffer.append("WARN ");
+         builder.append("WARN ");
       } else if (level == Level.SEVERE) {
-         stringBuffer.append("SEVERE");
+         builder.append("SEVERE");
       } else {
-         stringBuffer.append(Integer.toString(logRecord.getLevel().intValue()));
-         stringBuffer.append(" ");
+         builder.append(Integer.toString(logRecord.getLevel().intValue()));
+         builder.append(" ");
       }
-      stringBuffer.append(" ");
-      stringBuffer.append(logRecord.getLoggerName());
-      stringBuffer.append(" - ");
-      stringBuffer.append(logRecord.getMessage());
-      stringBuffer.append("\n");
+      builder.append(" ");
+      builder.append(logRecord.getLoggerName());
+      builder.append(" - ");
+      builder.append(logRecord.getMessage());
+      builder.append("\n");
 
-      return stringBuffer.toString();
+      return builder.toString();
    }
 }

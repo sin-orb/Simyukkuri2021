@@ -19,7 +19,7 @@ import src.system.ItemMenu.ShapeMenuTarget;
  *<br>継承先：壁、ベルコン、畑、池
  */
 public abstract class FieldShapeBase implements Serializable {
-	protected static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 7126507907121745508L;
 	/**時定数*/
 	public static final int TICK = SimYukkuri.TICK;
 	/**ストロークの定義*/
@@ -180,6 +180,65 @@ public abstract class FieldShapeBase implements Serializable {
 	abstract public int getMinimumSize();
 	/**配置時の境界線を描く*/
 	abstract public void drawShape(Graphics2D g2);
+	public int getMapW() {
+		return mapW;
+	}
+	public void setMapW(int mapW) {
+		this.mapW = mapW;
+	}
+	public int getMapH() {
+		return mapH;
+	}
+	public void setMapH(int mapH) {
+		this.mapH = mapH;
+	}
+	public int getFieldW() {
+		return fieldW;
+	}
+	public void setFieldW(int fieldW) {
+		this.fieldW = fieldW;
+	}
+	public int getFieldH() {
+		return fieldH;
+	}
+	public void setFieldH(int fieldH) {
+		this.fieldH = fieldH;
+	}
+	public long getAge() {
+		return age;
+	}
+	public void setAge(long age) {
+		this.age = age;
+	}
+	public void setMapSX(int mapSX) {
+		this.mapSX = mapSX;
+	}
+	public void setMapSY(int mapSY) {
+		this.mapSY = mapSY;
+	}
+	public void setMapEX(int mapEX) {
+		this.mapEX = mapEX;
+	}
+	public void setMapEY(int mapEY) {
+		this.mapEY = mapEY;
+	}
+	public void setFieldSX(int fieldSX) {
+		this.fieldSX = fieldSX;
+	}
+	public void setFieldSY(int fieldSY) {
+		this.fieldSY = fieldSY;
+	}
+	public void setFieldEX(int fieldEX) {
+		this.fieldEX = fieldEX;
+	}
+	public void setFieldEY(int fieldEY) {
+		this.fieldEY = fieldEY;
+	}
+	public void setRemoved(boolean removed) {
+		this.removed = removed;
+	}
+	
+	
 }
 
 

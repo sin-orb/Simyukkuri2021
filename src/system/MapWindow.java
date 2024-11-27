@@ -27,6 +27,7 @@ import src.system.MainCommandUI.ToolButtonLabel;
  */
 public class MapWindow extends JDialog implements ActionListener, WindowListener {
 
+	private static final long serialVersionUID = -742083190961529494L;
 	private static final String TITLE = ResourceUtil.getInstance().read("system_movemap");
 
 	/** 現在のマップリスト */

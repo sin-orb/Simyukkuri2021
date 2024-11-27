@@ -1,5 +1,7 @@
 package src.system;
 
+import java.awt.BasicStroke;
+import java.lang.reflect.Field;
 
 /*****************************************************************************
 
@@ -20,7 +22,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 
 */
-public class BasicStrokeEX extends java.awt.BasicStroke implements java.io.Serializable {
+public class BasicStrokeEX extends BasicStroke implements java.io.Serializable {
 
 	private static class Serial implements java.io.Serializable {
 		static final long serialVersionUID = 5538700973722429161L+1;
@@ -95,6 +97,79 @@ public class BasicStrokeEX extends java.awt.BasicStroke implements java.io.Seria
 	private Object writeReplace() throws java.io.ObjectStreamException {
 		return new Serial(this);
 	}
+	
+	public void setLineWidth(float width) {
+		Class<?> superClazz = this.getClass().getSuperclass();
+		Field field = null;
+		try {
+			field = superClazz.getDeclaredField("width");
+			field.setAccessible(true);
+			field.set(this, width);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    }
+
+    public void setEndCap(int cap) {
+    	Class<?> superClazz = this.getClass().getSuperclass();
+		Field field = null;
+		try {
+			field = superClazz.getDeclaredField("cap");
+			field.setAccessible(true);
+			field.set(this, cap);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    }
+
+    public void setLineJoin(int join) {
+    	Class<?> superClazz = this.getClass().getSuperclass();
+		Field field = null;
+		try {
+			field = superClazz.getDeclaredField("join");
+			field.setAccessible(true);
+			field.set(this, join);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    }
+
+    public void setMiterLimit(float miterlimit) {
+    	Class<?> superClazz = this.getClass().getSuperclass();
+		Field field = null;
+		try {
+			field = superClazz.getDeclaredField("miterlimit");
+			field.setAccessible(true);
+			field.set(this, miterlimit);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    }
+
+    public void setDashArray(float[] dash) {
+    	Class<?> superClazz = this.getClass().getSuperclass();
+		Field field = null;
+		try {
+			field = superClazz.getDeclaredField("dash");
+			field.setAccessible(true);
+			field.set(this, dash);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    }
+
+    public void setDashPhase(float dash_phase) {
+    	Class<?> superClazz = this.getClass().getSuperclass();
+		Field field = null;
+		try {
+			field = superClazz.getDeclaredField("dash_phase");
+			field.setAccessible(true);
+			field.set(this, dash_phase);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+    }
+
 }
 
 

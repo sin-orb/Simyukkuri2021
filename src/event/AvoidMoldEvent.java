@@ -24,7 +24,8 @@ import src.util.YukkuriUtil;
 */
 public class AvoidMoldEvent extends EventPacket implements java.io.Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -8441703224895176376L;
+
 	/**
 	 * コンストラクタ.
 	 */

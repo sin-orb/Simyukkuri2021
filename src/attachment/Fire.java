@@ -26,8 +26,7 @@ import src.util.YukkuriUtil;
  */
 public class Fire extends Attachment {
 
-	private static final long serialVersionUID = 1L;
-
+	private static final long serialVersionUID = 6287719941237079636L;
 	private static final String POS_KEY = "Fire";
 	/**画像の入れ物
 	 * <br>[年齢][左右反転][アニメパターン]*/

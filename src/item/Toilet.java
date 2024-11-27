@@ -5,6 +5,7 @@ import java.awt.GridLayout;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
+import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
 
@@ -28,7 +29,8 @@ import src.system.ResourceUtil;
  * トイレ
  */
 public class Toilet extends ObjEX implements java.io.Serializable {
-	static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -484401473340388552L;
+
 	/**トイレのタイプ*/
 	public static enum ToiletType {
         NORMAL(ResourceUtil.getInstance().read("item_toiletcheap")),
@@ -87,6 +89,7 @@ public class Toilet extends ObjEX implements java.io.Serializable {
 	}
 
 	@Override
+	@Transient
 	public BufferedImage getShadowImage() {
 		return null;
 	}
@@ -96,6 +99,7 @@ public class Toilet extends ObjEX implements java.io.Serializable {
 	}
 
 	@Override
+	@Transient
 	public int getHitCheckObjType() {
 		if(autoClean) return hitCheckObjType;
 		return 0;
@@ -143,6 +147,7 @@ public class Toilet extends ObjEX implements java.io.Serializable {
 	 * うんうんどれい用トイレかどうか
 	 * @return うんうんどれい用トイレかどうか
 	 */
+	@Transient
 	public boolean isForSlave(){
 		return bForSlave;
 	}
@@ -235,6 +240,27 @@ public class Toilet extends ObjEX implements java.io.Serializable {
 		}
 		return ret;
 	}
+
+	public ItemRank getItemRank() {
+		return itemRank;
+	}
+
+	public void setItemRank(ItemRank itemRank) {
+		this.itemRank = itemRank;
+	}
+
+	public boolean isbForSlave() {
+		return bForSlave;
+	}
+
+	public void setbForSlave(boolean bForSlave) {
+		this.bForSlave = bForSlave;
+	}
+
+	public void setAutoClean(boolean autoClean) {
+		this.autoClean = autoClean;
+	}
+	
 }
 
 

@@ -26,7 +26,7 @@ import src.util.YukkuriUtil;
 */
 public class YukkuriRideEvent extends EventPacket implements java.io.Serializable {
 
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 7916220303996368395L;
 	int tick = 0;
 	boolean bMoveTarget = false;
 

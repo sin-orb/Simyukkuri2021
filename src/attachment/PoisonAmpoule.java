@@ -28,8 +28,7 @@ import src.util.YukkuriUtil;
  */
 public class PoisonAmpoule extends Attachment {
 
-	private static final long serialVersionUID = 1L;
-	
+	private static final long serialVersionUID = 2199136938994133802L;
 	/**識別キー*/
 	private static final String POS_KEY = "PoisonAmpoule";
 	/**画像の入れ物

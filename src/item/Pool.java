@@ -7,6 +7,7 @@ import java.awt.TexturePaint;
 import java.awt.geom.Rectangle2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
+import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
@@ -29,7 +30,8 @@ import src.system.MapPlaceData;
  * 池
  */
 public class Pool extends FieldShapeBase implements Serializable {
-	static final long serialVersionUID = 1L;
+
+	private static final long serialVersionUID = 745411694776554936L;
 	/**池のふちどりの色*/
 	public static final Color ROCK_COLOR = new Color(200, 140, 30);
 	private static final int MIN_SIZE = 8;
@@ -96,11 +98,13 @@ public class Pool extends FieldShapeBase implements Serializable {
 	}
 
 	@Override
+	@Transient
 	public int getAttribute() {
 		return FIELD_POOL;
 	}
 
 	@Override
+	@Transient
 	public int getMinimumSize() {
 		return MIN_SIZE;
 	}
@@ -468,6 +472,31 @@ public class Pool extends FieldShapeBase implements Serializable {
 		
 		return eDepthRet;
 	}
+
+	public int[] getAnWaterPointX() {
+		return anWaterPointX;
+	}
+
+	public void setAnWaterPointX(int[] anWaterPointX) {
+		this.anWaterPointX = anWaterPointX;
+	}
+
+	public int[] getAnWaterPointY() {
+		return anWaterPointY;
+	}
+
+	public void setAnWaterPointY(int[] anWaterPointY) {
+		this.anWaterPointY = anWaterPointY;
+	}
+
+	public List<Obj> getBindObjList() {
+		return bindObjList;
+	}
+
+	public void setBindObjList(List<Obj> bindObjList) {
+		this.bindObjList = bindObjList;
+	}
+	
 }
 
 

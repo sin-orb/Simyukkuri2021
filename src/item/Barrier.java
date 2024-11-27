@@ -5,6 +5,7 @@ import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
+import java.beans.Transient;
 import java.io.Serializable;
 import java.util.List;
 
@@ -36,7 +37,7 @@ import src.system.MapPlaceData;
  * <br>これはほかのアイテムと違い、ObjEXを継承していないので注意。
  */
 public class Barrier extends FieldShapeBase implements Serializable {
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = -1750205300136035405L;
 	/**壁の線のデザイン*/
 	public static final Stroke WALL_STROKE = new BasicStroke(3.0f);
 	/**最小サイズ*/
@@ -56,6 +57,7 @@ public class Barrier extends FieldShapeBase implements Serializable {
 	}
 
 	@Override
+	@Transient
 	public int getMinimumSize() {
 		return MIN_SIZE;
 	}

@@ -2,6 +2,7 @@ package src.yukkuri;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
+import java.beans.Transient;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,7 +24,7 @@ import src.util.IniFileUtil;
  * ゆるさなえ
  */
 public class Yurusanae extends Body implements java.io.Serializable {
-	static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 877378525371487134L;
 	/** ゆるさなえのタイプ */
 	public static final int type = 1000;
 	/** ゆるさなえ和名 */
@@ -69,6 +70,7 @@ public class Yurusanae extends Body implements java.io.Serializable {
 		imageLoaded = true;
 	}
 	@Override
+	@Transient
 	public boolean isImageLoaded() {
 		return imageLoaded;
 	}
@@ -84,11 +86,13 @@ public class Yurusanae extends Body implements java.io.Serializable {
 		return 1;
 	}
 	@Override
+	@Transient
 	public Point4y[] getMountPoint(String key) {
 		return AttachOffset.get(key);
 	}
 
 	@Override
+	@Transient
 	public int getType() {
 		return type;
 	}
@@ -101,10 +105,12 @@ public class Yurusanae extends Body implements java.io.Serializable {
 		}
 	}
 	@Override
+	@Transient
 	public String getNameJ() {
 		return nameJ;
 	}
 	@Override
+	@Transient
 	public String getMyName() {
 		if( anMyName[getBodyAgeState().ordinal()] != null ){
 			return anMyName[getBodyAgeState().ordinal()];
@@ -112,6 +118,7 @@ public class Yurusanae extends Body implements java.io.Serializable {
 		return nameJ;
 	}
 	@Override
+	@Transient
 	public String getMyNameD() {
 		if( anMyNameD[getBodyAgeState().ordinal()] != null ){
 			return anMyNameD[getBodyAgeState().ordinal()];
@@ -119,16 +126,19 @@ public class Yurusanae extends Body implements java.io.Serializable {
 		return getMyName();
 	}
 	@Override
+	@Transient
 	public String getNameE() {
 		return nameE;
 	}
 
 	@Override
+	@Transient
 	public String getNameJ2() {
 		return "";
 	}
 
 	@Override
+	@Transient
 	public String getNameE2() {
 		return "";
 	}
@@ -181,4 +191,5 @@ public class Yurusanae extends Body implements java.io.Serializable {
 		speed = baseSpeed;
 		setBraidType(false);
 	}
+	
 }
