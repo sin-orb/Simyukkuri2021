@@ -24,7 +24,6 @@ import src.enums.ObjEXType;
 import src.enums.Type;
 import src.item.Barrier;
 import src.system.ItemMenu.GetMenuTarget;
-import src.system.ResourceUtil;
 import src.util.YukkuriUtil;
 
 
@@ -132,12 +131,14 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 	 * この茎をはやしているゆっくりを設定する.
 	 * @param b この茎をはやしているゆっくり
 	 */
+	@Transient
 	public void setPlantYukkuri( Body b ) {
 		if (b == null) {
 			plantYukkuri = -1;
 		} else {
 			plantYukkuri = b.getUniqueID();
 		}
+		bindObj = plantYukkuri;
 	}
 	/**
 	 * この茎をはやしているゆっくりを取得する.
@@ -147,6 +148,13 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 		return plantYukkuri;
 	}
 
+	public Integer getPyForSeri() {
+		return plantYukkuri;
+	}
+	public void setPyForSeri(Integer s) {
+		this.plantYukkuri = s;
+		this.bindObj = s;
+	}
 	/*
 	@Override
 	public int getBindObj() {
@@ -157,6 +165,7 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 	 * この茎に実ゆっくりを追加する.
 	 * @param b この茎に生やそうとしている実ゆっくり
 	 */
+	@Transient
 	public void setBindBaby( Body b ) {
 		if ( bindBabies.size() < 5 ) {
 			bindBabies.add(b == null ? -1 : b.getUniqueID());
@@ -191,6 +200,7 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 	 * X座標を設定する.
 	 * @param X座標
 	 */
+	@Transient
 	public void setCalcX (int X)
 	{
 		if (X < 0 && plantYukkuri == -1) {
@@ -207,6 +217,7 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 	 * Y座標を設定する.
 	 * @param Y座標
 	 */
+	@Transient
 	public void setCalcY (int Y) {
 		if (Y < 0 && plantYukkuri == -1) {
 			y = 0;
@@ -222,6 +233,7 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 	 * Z座標を設定する.
 	 * @param Z座標
 	 */
+	@Transient
 	public void setCalcZ(int Z)
 	{
 		if (Z < nMostDepth && plantYukkuri == -1) {
@@ -368,7 +380,12 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 	}
 	
 	public Stalk() {
-		
+		setBoundary(boundary);
+		objType = Type.OBJECT;
+		objEXType = ObjEXType.STALK;
+		amount = 100*24*5;
+		SimYukkuri.world.getCurrentMap().stalk.put(objId, this);
+		calcPos();
 	}
 
 	@Override
@@ -400,38 +417,38 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 		super.remove();
 	}
 	
-	@Override
-	public String toString() {
-		Body p = YukkuriUtil.getBodyInstance(plantYukkuri);
-		String ret = "";
-		ret += ResourceUtil.getInstance().read("game_stalk1");
-		if (p != null) {
-		ret += (plantYukkuri == -1 ? ResourceUtil.getInstance().read("command_status_nothing") : ResourceUtil.IS_JP ? 
-				p.getNameJ() : p.getNameE());
-		}
-		ret += ResourceUtil.getInstance().read("game_stalk2");
-		if (bindBabies == null || bindBabies.size() == 0) {
-			ret += ResourceUtil.getInstance().read("command_status_nothing");
-		} else {
-			for (Object o : bindBabies) {
-				if (o == null) {
-					continue;
-				} else {
-					Integer b = (Integer)o;
-					Body baby = YukkuriUtil.getBodyInstance(b);
-					if (baby == null) {
-						ret += ResourceUtil.getInstance().read("game_empty");
-					} else {
-						ret += ResourceUtil.IS_JP ? baby.getNameJ() : baby.getNameE();
-					}
-					ret += ",";
-				}
-			}
-			ret = ret.substring(0, ret.length() - 1);
-		}
-		ret += ")";
-		return ret;
-	}
+//	@Override
+//	public String toString() {
+//		Body p = YukkuriUtil.getBodyInstance(plantYukkuri);
+//		String ret = "";
+//		ret += ResourceUtil.getInstance().read("game_stalk1");
+//		if (p != null) {
+//		ret += (plantYukkuri == -1 ? ResourceUtil.getInstance().read("command_status_nothing") : ResourceUtil.IS_JP ? 
+//				p.getNameJ() : p.getNameE());
+//		}
+//		ret += ResourceUtil.getInstance().read("game_stalk2");
+//		if (bindBabies == null || bindBabies.size() == 0) {
+//			ret += ResourceUtil.getInstance().read("command_status_nothing");
+//		} else {
+//			for (Object o : bindBabies) {
+//				if (o == null) {
+//					continue;
+//				} else {
+//					Integer b = (Integer)o;
+//					Body baby = YukkuriUtil.getBodyInstance(b);
+//					if (baby == null) {
+//						ret += ResourceUtil.getInstance().read("game_empty");
+//					} else {
+//						ret += ResourceUtil.IS_JP ? baby.getNameJ() : baby.getNameE();
+//					}
+//					ret += ",";
+//				}
+//			}
+//			ret = ret.substring(0, ret.length() - 1);
+//		}
+//		ret += ")";
+//		return ret;
+//	}
 
 	public int getAmount() {
 		return amount;

@@ -237,8 +237,6 @@ public abstract class FieldShapeBase implements Serializable {
 	public void setRemoved(boolean removed) {
 		this.removed = removed;
 	}
-	
-	
 }
 
 

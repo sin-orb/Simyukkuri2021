@@ -105,10 +105,10 @@ public class Obj implements java.io.Serializable, Comparable {
 	 */
 	public int objId = 0;
 	
-	@Override
-	public String toString() {
-		return "名前未設定";
-	}
+//	@Override
+//	public String toString() {
+//		return "名前未設定";
+//	}
 
 	/**経過時間ゲッター*/
 	public long getAge() {

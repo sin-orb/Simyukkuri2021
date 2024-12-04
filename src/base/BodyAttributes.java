@@ -5097,6 +5097,15 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 		return hungry;
 	}
 
+	public int getJkHung() {
+		return hungry;
+	}
+
+	public void setJkHung(int j) {
+		this.hungry = j;
+	}
+
+	
 	/**
 	 * 満腹度を設定する.
 	 * @param val 満腹度
