@@ -28,17 +28,20 @@ public class ItemMenu {
 
 	/** クリック対象とメニュー項目の選択可否 */
 	public static enum GetMenuTarget {
-		NONE(false, false),
-		BODY(true, true),
-		SHIT(true, false),
-		VOMIT(true, false),
-		FOOD(true, false)
+		NONE(false, false, false),
+		BODY(true, true, true),
+		SHIT(true, false, true),
+		VOMIT(true, false, true),
+		FOOD(true, false, true),
+		STALK(false, false, true)
 		;
 		public boolean canPickup;
 		public boolean canStatus;
-		private GetMenuTarget(boolean pick, boolean stat) {
+		public boolean canDebug;
+		private GetMenuTarget(boolean pick, boolean stat, boolean debug) {
 			this.canPickup = pick;
 			this.canStatus = stat;
+			this.canDebug = debug;
 		}
 	}
 	/** メニューのターゲット */
@@ -67,7 +70,8 @@ public class ItemMenu {
 	/** 素手のとき */
 	public static enum GetMenu {
 		PICKUP(Locale.getDefault().getLanguage().equals(new Locale("ja").getLanguage())? "持つ": "Take"),
-		STATUS(Locale.getDefault().getLanguage().equals(new Locale("ja").getLanguage())? "ステータス": "Status")
+		STATUS(Locale.getDefault().getLanguage().equals(new Locale("ja").getLanguage())? "ステータス": "Status"),
+		DEBUG(Locale.getDefault().getLanguage().equals(new Locale("ja").getLanguage())? "デバッグ": "Debug")
 		;
 		public String name;
 		private GetMenu(String str) {
@@ -184,6 +188,7 @@ public class ItemMenu {
 		getTarget = obj;
 		getMenu[0].setEnabled(obj.hasGetPopup().canPickup);
 		getMenu[1].setEnabled(obj.hasGetPopup().canStatus);
+		getMenu[2].setEnabled(obj.hasGetPopup().canDebug);
 	}
 
 	/**
@@ -228,9 +233,9 @@ public class ItemMenu {
 		} else if(item instanceof Vomit) {
 			curMap.vomit.put(item.objId, (Vomit)item);
 		}
-		item.setX(pos.x);
-		item.setY(pos.y);
-		item.setZ(0);
+		item.setCalcX(pos.x);
+		item.setCalcY(pos.y);
+		item.setCalcZ(0);
 		SimYukkuri.world.player.getItemList().removeElement(item);
 		SimYukkuri.world.player.setHoldItem(null);
 	}

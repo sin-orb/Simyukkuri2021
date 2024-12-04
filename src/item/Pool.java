@@ -288,7 +288,7 @@ public class Pool extends FieldShapeBase implements Serializable {
 			o.setMostDepth(0);
 			if( nZ < 0 )
 			{
-				o.setZ(0);
+				o.setCalcZ(0);
 			}
 			break;
 		case SHALLOW:
@@ -301,7 +301,7 @@ public class Pool extends FieldShapeBase implements Serializable {
 
 			if( nZ == 0 )
 			{
-				o.setZ(-1);
+				o.setCalcZ(-1);
 			}
 			break;
 		case DEEP:
@@ -313,7 +313,7 @@ public class Pool extends FieldShapeBase implements Serializable {
 			}
 			if( nZ == 0 || nZ == -1)
 			{
-				o.setZ(-2);
+				o.setCalcZ(-2);
 			}
 			break;
 		default:
@@ -396,7 +396,7 @@ public class Pool extends FieldShapeBase implements Serializable {
 					{
 						bodyTarget.setFallingUnderGround(true);
 						o.setMostDepth(nZ-1);
-						o.setZ(nZ-1);
+						o.setCalcZ(nZ-1);
 					}
 				}
 				

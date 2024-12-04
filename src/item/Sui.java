@@ -149,9 +149,9 @@ public class Sui extends ObjEX implements java.io.Serializable {
 			if(bindBody[i]==null){
 				bindBody[i]=b;
 				b.setLinkParent(this.objId);
-				bindBody[i].setX(x+OfsX[i][current_direction]);
-				bindBody[i].setY(y+OfsY[i][current_direction]+10);
-				bindBody[i].setZ(1);
+				bindBody[i].setCalcX(x+OfsX[i][current_direction]);
+				bindBody[i].setCalcY(y+OfsY[i][current_direction]+10);
+				bindBody[i].setCalcZ(1);
 				// すいーの所有者がいないなら所有者になる
 				if(bindobj==null){
 					bindobj=b;
@@ -295,8 +295,8 @@ public class Sui extends ObjEX implements java.io.Serializable {
 				rideOff(bindBody[i]);
 				continue;
 			}
-			bindBody[i].setX(x+OfsX[i][current_direction]);
-			bindBody[i].setY(y+OfsY[i][current_direction]+10);
+			bindBody[i].setCalcX(x+OfsX[i][current_direction]);
+			bindBody[i].setCalcY(y+OfsY[i][current_direction]+10);
 			bindBody[i].lookTo(destX, destY);
 		}
 	}

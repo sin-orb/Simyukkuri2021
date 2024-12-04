@@ -30,4 +30,8 @@ public class Dimension4y implements Serializable {
 		this.width = width;
 		this.height = height;
 	}
+	
+	public String toString() {
+		return "width :" + width + ", height:" + height;
+	}
 }

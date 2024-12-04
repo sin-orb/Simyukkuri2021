@@ -80,9 +80,9 @@ public class FlyingEatEvent extends EventPacket implements java.io.Serializable 
 			return UpdateState.ABORT;
 		}*/
 		// 相手の座標を縛る
-		to.setX(b.getX());
-		to.setY(b.getY() + 1);
-		to.setZ(b.getZ() + ofsZ[to.getBodyAgeState().ordinal()]);
+		to.setCalcX(b.getX());
+		to.setCalcY(b.getY() + 1);
+		to.setCalcZ(b.getZ() + ofsZ[to.getBodyAgeState().ordinal()]);
 
 		// 高度に達してたらexecuteへ
 		if(Math.abs(b.getZ() - Translate.getFlyHeightLimit()) < 3) return UpdateState.FORCE_EXEC;

@@ -58,4 +58,8 @@ public class Rectangle4y implements Serializable {
 		this.width = width;
 		this.height = height;
 	}
+	
+	public String toString() {
+		return "x: " + x + ", y: " + y +  ", width :" + width + ", height:" + height;
+	}
 }

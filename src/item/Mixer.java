@@ -103,8 +103,8 @@ public class Mixer extends ObjEX implements java.io.Serializable {
 		if(!enabled)return 0;
 		Body bindBody = (Body)o;
 		bindBody.clearActions();
-		bindBody.setX(x);
-		bindBody.setY(y);
+		bindBody.setCalcX(x);
+		bindBody.setCalcY(y);
 		bindBody.setLockmove(true);
 		bind = bindBody.getUniqueID();
 		counter = 0;
@@ -121,11 +121,11 @@ public class Mixer extends ObjEX implements java.io.Serializable {
 		if(bindBody != null && enabled) {
 			bindBody.setDropShadow(false);
 			if(grabbed) {
-				bindBody.setX(x);
-				bindBody.setY(y);
+				bindBody.setCalcX(x);
+				bindBody.setCalcY(y);
 				if(mix != null) {
-					mix.setX(x);
-					mix.setY(y);
+					mix.setCalcX(x);
+					mix.setCalcY(y);
 				}
 				bind = bindBody.getUniqueID();
 			} else if(bindBody.getX() != x || bindBody.getY() != y || bindBody.getZ() != z || bindBody.isRemoved()) {

@@ -216,11 +216,11 @@ public class PredatorsGameEvent extends EventPacket implements java.io.Serializa
 				//高度を稼ぐ
 				b.moveTo(b.getX(), b.getY(), Translate.getFlyHeightLimit());
 				// 相手の座標を縛る
-				toy.setX(b.getX());
-				toy.setY(b.getY() + 1);
+				toy.setCalcX(b.getX());
+				toy.setCalcY(b.getY() + 1);
 				int toysHeight=b.getZ() + ofsZ[toy.getBodyAgeState().ordinal()];
-				if(toysHeight>=0)toy.setZ(toysHeight);
-				else toy.setZ(0);
+				if(toysHeight>=0)toy.setCalcZ(toysHeight);
+				else toy.setCalcZ(0);
 			}
 			return null;
 		}
@@ -290,9 +290,9 @@ public class PredatorsGameEvent extends EventPacket implements java.io.Serializa
 			return true;
 		}
 		// 相手の座標を縛る
-		toy.setX(from.getX());
-		toy.setY(from.getY() + 1);
-		toy.setZ(from.getZ() + ofsZ[toy.getBodyAgeState().ordinal()]);
+		toy.setCalcX(from.getX());
+		toy.setCalcY(from.getY() + 1);
+		toy.setCalcZ(from.getZ() + ofsZ[toy.getBodyAgeState().ordinal()]);
 
 		tick2++;
 		if(tick2 == 20) {

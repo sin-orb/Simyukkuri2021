@@ -3,6 +3,7 @@ package src.draw;
 import java.awt.Rectangle;
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -12,10 +13,15 @@ import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Enumeration;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import src.SimYukkuri;
 import src.attachment.Fire;
@@ -146,24 +152,13 @@ public class Terrarium implements Serializable{
 	private static int intervalCount = 0;
 	/**汎用長方形*/
 	private static Rectangle4y tmpRect = new Rectangle4y();
-
+	
 	/**
 	 * セーブの実行部
 	 * @param file ファイル
 	 * @throws IOException IO例外
 	 */
 	public static void saveState(File file) throws IOException {
-//		ObjectMapper mapper = new ObjectMapper();
-//		SimYukkuri.world.setMaxUniqueId(Numbering.INSTANCE.getYukkuriID());
-//		SimYukkuri.world.setMaxObjId(Numbering.INSTANCE.getObjId());
-//		Enumeration<Obj> enu = SimYukkuri.world.player.getItemList().elements();
-//		while (enu.hasMoreElements()) {
-//			SimYukkuri.world.player.getItemForSave().add(enu.nextElement());
-//		}
-//		String json = mapper.writeValueAsString(SimYukkuri.world);
-//		try (FileWriter filewriter = new FileWriter(file);) {
-//			filewriter.write(json);
-//		}
 		ObjectOutputStream out = new ObjectOutputStream(
 				new BufferedOutputStream(
 						new FileOutputStream(file)));
@@ -175,6 +170,34 @@ public class Terrarium implements Serializable{
 			out.close();
 		}
 	}
+	
+	/**
+	 * セーブの実行部
+	 * @param file ファイル
+	 * @throws IOException IO例外
+	 */
+	public static void saveStateTemporary(File file) throws IOException {
+		ObjectMapper mapper = new ObjectMapper();
+		SimYukkuri.world.setMaxUniqueId(Numbering.INSTANCE.getYukkuriID());
+		SimYukkuri.world.setMaxObjId(Numbering.INSTANCE.getObjId());
+		Enumeration<Obj> enu = SimYukkuri.world.player.getItemList().elements();
+		while (enu.hasMoreElements()) {
+			SimYukkuri.world.player.getItemForSave().add(enu.nextElement());
+		}
+		String json = mapper.writeValueAsString(SimYukkuri.world);
+		try {
+			// JSON文字列をバイト配列に変換
+			byte[] jsonBytes = json.getBytes("UTF-8");
+
+			// GZIP形式で圧縮して保存
+			try (FileOutputStream fos = new FileOutputStream(file.getAbsoluteFile());
+				 GZIPOutputStream gos = new GZIPOutputStream(fos)) {
+				gos.write(jsonBytes);
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 
 	/**
 	 * ロードの実行部
@@ -184,21 +207,10 @@ public class Terrarium implements Serializable{
 	 */
 	@SuppressWarnings("unchecked")
 	public static void loadState(File file) throws IOException, ClassNotFoundException {
-//		World tmpWorld = null;
-//		String json =null;
-//		try (BufferedReader  in = new BufferedReader (
-//				new InputStreamReader(new FileInputStream(file), "UTF-8"))) {
-//			json = in.readLine();
-//		} catch (Exception e) {
-//			e.printStackTrace();
-//		}
-//		ObjectMapper mapper = new ObjectMapper();
-//		tmpWorld = mapper.readValue(json,World.class);
+		World tmpWorld = null;
 		ObjectInputStream in = new ObjectInputStream(
 				new BufferedInputStream(
 						new FileInputStream(file)));
-		World tmpWorld;
-
 		try {
 			String s = in.readUTF();
 			if (!Terrarium.class.getCanonicalName().equals(s)) {
@@ -247,7 +259,68 @@ public class Terrarium implements Serializable{
 
 		System.gc();
 	}
+	
+	@SuppressWarnings("unchecked")
+	public static void loadStateTemporary(File file) throws IOException, ClassNotFoundException {
+		World tmpWorld = null;
+		String json =decompressGzipToString(file.getAbsolutePath());
+		ObjectMapper mapper = new ObjectMapper();
+		tmpWorld = mapper.readValue(json,World.class);
 
+		Numbering.INSTANCE.setYukkuriID(tmpWorld.getMaxUniqueId());
+		Numbering.INSTANCE.setObjId(tmpWorld.getMaxObjId());
+		tmpWorld.player.getItemList().clear();
+		List<Integer> _list = new ArrayList<Integer>();
+		for (Obj o : tmpWorld.player.getItemForSave()) {
+			int id = o.getObjId();
+			if (!_list.contains(id)) {
+				_list.add(id);
+				tmpWorld.player.getItemList().addElement(o);
+			}
+		}
+		// 持ち物を復元
+		MainCommandUI.itemWindow.itemList.setModel(tmpWorld.player.getItemList());
+
+		// ウィンドウサイズを復元
+		tmpWorld.recalcMapSize();
+		SimYukkuri.world = tmpWorld;
+
+		if (SimYukkuri.world.windowType != 2) {
+			SimYukkuri.simYukkuri.setWindowMode(SimYukkuri.world.windowType, SimYukkuri.world.terrariumSizeIndex);
+		} else {
+			SimYukkuri.simYukkuri.setFullScreenMode(SimYukkuri.world.terrariumSizeIndex);
+		}
+
+		// マップの復元
+		SimYukkuri.world.setNextMap(SimYukkuri.world.getCurrentMap().mapIndex);
+		SimYukkuri.mypane.loadTerrainFile();
+		SimYukkuri.world.changeMap();
+
+		SimYukkuri.mypane.createBackBuffer();
+		Translate.createTransTable(TerrainField.isPers());
+
+		// 遅延読み込みの復元
+		SimYukkuri.world.loadInterBodyImage();
+
+		System.gc();
+	}
+
+	 // GZIPファイルを解凍して文字列として返すメソッド
+	public static String decompressGzipToString(String filePath) throws IOException {
+		try (FileInputStream fis = new FileInputStream(filePath);
+			 GZIPInputStream gis = new GZIPInputStream(fis);
+			 ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
+			// バッファを使ってデータを読み込む
+			byte[] buffer = new byte[1024];
+			int bytesRead;
+			while ((bytesRead = gis.read(buffer)) != -1) {
+				baos.write(buffer, 0, bytesRead);
+			}
+			// バイト配列をUTF-8エンコードの文字列に変換
+			return baos.toString("UTF-8");
+		}
+	}
+	
 	/**
 	 *  パニック時の挙動
 	 * @param b ゆっくり
@@ -925,7 +998,7 @@ public class Terrarium implements Serializable{
 					o.setInPool(false);
 					o.setFallingUnderGround(false);
 					if (o.getZ() < 0) {
-						o.setZ(0);
+						o.setCalcZ(0);
 					}
 				}
 				continue;
@@ -943,7 +1016,7 @@ public class Terrarium implements Serializable{
 					o.setInPool(false);
 					o.setFallingUnderGround(false);
 					if (o.getZ() < 0) {
-						o.setZ(0);
+						o.setCalcZ(0);
 					}
 				}
 				continue;

@@ -361,16 +361,16 @@ public class BeltconveyorObj extends ObjEX implements java.io.Serializable {
 				switch (option) {
 				case 0: // '\0'
 				default:
-					o.setY(objY - beltSpeed);
+					o.setCalcY(objY - beltSpeed);
 					break;
 				case 1: // '\001'
-					o.setY(objY + beltSpeed);
+					o.setCalcY(objY + beltSpeed);
 					break;
 				case 2: // '\002'
-					o.setX(objX + beltSpeed);
+					o.setCalcX(objX + beltSpeed);
 					break;
 				case 3: // '\003'
-					o.setX(objX - beltSpeed);
+					o.setCalcX(objX - beltSpeed);
 					break;
 				}
 			}
@@ -604,8 +604,8 @@ public class BeltconveyorObj extends ObjEX implements java.io.Serializable {
 			Point4y pos = Translate.invertLimit(nTempX, nTempY);
 			BeltconveyorObj.x_default = pos.x;
 			BeltconveyorObj.y_default = pos.y;
-			belt.setX(pos.x);
-			belt.setY(pos.y);
+			belt.setCalcX(pos.x);
+			belt.setCalcY(pos.y);
 
 			BeltconveyorObj.boundary.width = Math.abs(anPointBaseX[1] - anPointBaseX[0]);
 			BeltconveyorObj.boundary.height = Math.abs(SimYukkuri.fieldEY - SimYukkuri.fieldSY);

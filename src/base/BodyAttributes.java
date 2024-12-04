@@ -2156,7 +2156,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * うまれて初めての地面か を取得する.
 	 * @return うまれて初めての地面か 
 	 */
-	public boolean isbFirstGround() {
+	public boolean isBFirstGround() {
 		return bFirstGround;
 	}
 
@@ -2164,7 +2164,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * うまれて初めての地面か を設定する.
 	 * @param bFirstGround うまれて初めての地面か 
 	 */
-	public void setbFirstGround(boolean bFirstGround) {
+	public void setBFirstGround(boolean bFirstGround) {
 		this.bFirstGround = bFirstGround;
 	}
 
@@ -5101,8 +5101,16 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 満腹度を設定する.
 	 * @param val 満腹度
 	 */
-	public void setHungry(int val) {
-		hungry = val;
+	public void setHungry(int hungry) {
+		this.hungry = hungry;
+	}
+
+	public boolean isbFirstGround() {
+		return bFirstGround;
+	}
+
+	public void setbFirstGround(boolean bFirstGround) {
+		this.bFirstGround = bFirstGround;
 	}
 
 	/**

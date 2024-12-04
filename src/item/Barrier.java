@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import src.SimYukkuri;
+import src.draw.Color4y;
 import src.draw.Point4y;
 import src.draw.Translate;
 import src.system.FieldShapeBase;
@@ -43,11 +44,11 @@ public class Barrier extends FieldShapeBase implements Serializable {
 	/**最小サイズ*/
 	private static final int MIN_SIZE = 1;
 	/**壁の色*/
-	private Color color;
+	private Color4y color;
 	/**壁の属性*/
 	private int attribute;
 	/**色の取得*/
-	public Color getColor() {
+	public Color4y getColor() {
 		return color;
 	}
 
@@ -88,28 +89,28 @@ public class Barrier extends FieldShapeBase implements Serializable {
 		attribute = type;
 		switch(type) {
 			case BARRIER_GAP_MINI:
-				color = Color.YELLOW;
+				color = new Color4y(255, 255, 0, 255);
 				break;
 			case BARRIER_GAP_BIG:
-				color = Color.ORANGE;
+				color = new Color4y(255, 200, 0, 255);
 				break;
 			case BARRIER_NET_MINI:
-				color = Color.PINK;
+				color = new Color4y(255, 175, 175, 255);
 				break;
 			case BARRIER_NET_BIG:
-				color = Color.MAGENTA;
+				color = new Color4y(255, 0, 255, 255);
 				break;
 			case BARRIER_WALL:
-				color = Color.GRAY;
+				color = new Color4y(128, 128, 128, 255);
 				break;
 			case BARRIER_ITEM:
-				color = Color.GREEN;
+				color = new Color4y(0, 255, 0, 255);
 				break;
 			case BARRIER_NOUNUN:
-				color = Color.RED;
+				color = new Color4y(255, 0, 0, 255);
 				break;			
 			case BARRIER_KEKKAI:
-				color = Color.LIGHT_GRAY;
+				color = new Color4y(192, 192, 192, 255);
 				break;	
 		}
 
@@ -127,7 +128,7 @@ public class Barrier extends FieldShapeBase implements Serializable {
 
 	@Override
 	public void drawShape(Graphics2D g2) {
-		g2.setColor(color);
+		g2.setColor(new Color(color.getRed(), color.getGreen(), color.getBlue()));
 		g2.drawLine(fieldSX, fieldSY, fieldEX, fieldEY);
 	}
 	/**除去*/

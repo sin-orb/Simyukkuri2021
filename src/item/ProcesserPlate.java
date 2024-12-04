@@ -238,8 +238,8 @@ public class ProcesserPlate extends ObjEX implements java.io.Serializable {
 				continue;
 			}
 			if( effect != null ){
-				effect.setX(bTarget.getX());
-				effect.setY(bTarget.getY()+2);
+				effect.setCalcX(bTarget.getX());
+				effect.setCalcY(bTarget.getY()+2);
 			}
 			bTarget.clearActions();
 			bTarget.setDropShadow(false);

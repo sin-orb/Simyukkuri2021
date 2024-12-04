@@ -109,7 +109,7 @@ public class YukkuriRideEvent extends EventPacket implements java.io.Serializabl
 		if (b == from) {
 			// 一定期間で終了
 			if (tick > 10000) {
-				to.setZ(from.getZ());
+				to.setCalcZ(from.getZ());
 				to.setLinkParent(-1);
 				return UpdateState.ABORT;
 			}
@@ -128,11 +128,11 @@ public class YukkuriRideEvent extends EventPacket implements java.io.Serializabl
 				}
 			} else {
 				// 子供をのせて移動する
-				to.setX(from.getX());
-				to.setY(from.getY());
+				to.setCalcX(from.getX());
+				to.setCalcY(from.getY());
 				int nZ = Translate.invertZ(from.getCollisionY() + 15);
 				nZ += from.getZ();
-				to.setZ(nZ);
+				to.setCalcZ(nZ);
 				to.setDirection(from.getDirection());
 				Obj target = b.takeMappedObj(this.target);
 				if (target != null) {
@@ -184,7 +184,7 @@ public class YukkuriRideEvent extends EventPacket implements java.io.Serializabl
 						// 餌を持っていたら落とす
 						if (b.getTakeoutItem(TakeoutItemType.FOOD) != null) {
 							b.dropTakeoutItem(TakeoutItemType.FOOD);
-							to.setZ(from.getZ());
+							to.setCalcZ(from.getZ());
 							to.setLinkParent(-1);
 							return UpdateState.ABORT;
 						}
@@ -196,7 +196,7 @@ public class YukkuriRideEvent extends EventPacket implements java.io.Serializabl
 						if (3 < nDistance) {
 							from.moveToEvent(this, target.getX(), target.getY());
 						} else {
-							to.setZ(from.getZ());
+							to.setCalcZ(from.getZ());
 							to.setLinkParent(-1);
 							return UpdateState.ABORT;
 						}

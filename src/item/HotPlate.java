@@ -103,8 +103,8 @@ public class HotPlate extends ObjEX implements java.io.Serializable {
 		bindBody = (Body)o;
 		if(bindBody.getCriticalDamegeType() == CriticalDamegeType.CUT) return 0;
 		bindBody.clearActions();
-		bindBody.setX(x);
-		bindBody.setY(y);
+		bindBody.setCalcX(x);
+		bindBody.setCalcY(y);
 		bindBody.setLockmove(true);
 		if(smoke == null) {
 			smoke = SimYukkuri.mypane.getTerrarium().addEffect(EffectType.BAKE, bindBody.getX(), bindBody.getY() + 1,
@@ -121,11 +121,11 @@ public class HotPlate extends ObjEX implements java.io.Serializable {
 		if(bindBody != null) {
 			bindBody.setDropShadow(false);
 			if(grabbed) {
-				bindBody.setX(x);
-				bindBody.setY(y);
+				bindBody.setCalcX(x);
+				bindBody.setCalcY(y);
 				if(smoke != null) {
-					smoke.setX(x);
-					smoke.setY(y);
+					smoke.setCalcX(x);
+					smoke.setCalcY(y);
 				}
 			}
 			else if(bindBody.getX() != x || bindBody.getY() != y || bindBody.getZ() != z || bindBody.isRemoved()) {

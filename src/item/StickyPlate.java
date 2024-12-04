@@ -120,8 +120,8 @@ public class StickyPlate extends ObjEX implements java.io.Serializable {
 			bindBody = (Body)o;
 			bindBody.clearActions();			
 		}
-		bindBody.setX(x);
-		bindBody.setY(y);
+		bindBody.setCalcX(x);
+		bindBody.setCalcY(y);
 		bindBody.setLockmove(true);
 		if( !bFixBack || bindBody.isPealed()){
 			bindBody.setPullAndPush(true);
@@ -149,8 +149,8 @@ public class StickyPlate extends ObjEX implements java.io.Serializable {
 			}
 			
 			if(grabbed) {
-				bindBody.setX(x);
-				bindBody.setY(y);
+				bindBody.setCalcX(x);
+				bindBody.setCalcY(y);
 
 			}
 			else{

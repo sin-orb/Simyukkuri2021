@@ -2548,13 +2548,13 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 					ofsX = Translate.invertX(sX, getY());
 					ofsX = Translate.transSize(ofsX);
 					stalk.setMostDepth(getMostDepth());
-					stalk.setX(getX() + ofsX);
-					stalk.setY(getY());
+					stalk.setCalcX(getX() + ofsX);
+					stalk.setCalcY(getY());
 					// 完全に埋まっていたら茎だけ地上に出す
 					if (getBaryState() == BaryInUGState.ALL) {
-						stalk.setZ(0);
+						stalk.setCalcZ(0);
 					} else {
-						stalk.setZ(getZ() + (int) (centerH * 0.09f) + Const.STALK_OF_S_Y[k]);
+						stalk.setCalcZ(getZ() + (int) (centerH * 0.09f) + Const.STALK_OF_S_Y[k]);
 					}
 					stalk.upDate();
 				}
@@ -2644,7 +2644,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 						damageCut = 4;
 					} else {
 						// ベッドの上以外で生まれた時にダメージを受けた場合、つらい思い出が残る(暫定で良い思いしてない時に落下ダメージ受けたら）
-						if (isbFirstGround()) {
+						if (isBFirstGround()) {
 							addMemories(-20);
 						}
 					}
@@ -2670,13 +2670,13 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 					}
 
 					// 生まれて最初の挨拶
-					if (isbFirstGround()) {
+					if (isBFirstGround()) {
 						setMessage(MessagePool.getMessage(this, MessagePool.Action.TakeItEasy));
 						addStress(-400);
 						addMemories(20);
 					}
 					// 地面についたのでフラグをリセット
-					setbFirstGround(false);
+					setBFirstGround(false);
 
 					if (isPealed())
 						toDead();
@@ -3230,7 +3230,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		unBirth = flag;
 		enableWall = !flag;
 		setCanTalk(!flag);
-		setbFirstGround(true);
+		setBFirstGround(true);
 		if (flag) {
 			setMessage(null);
 			forceToSleep();
@@ -3252,7 +3252,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		if (isUnBirth()) {
 			// 茎がある
 			if (getBindStalk() != null) {
-				int id = getBindStalk().getBindObj();
+				int id = getBindStalk().getPlantYukkuri();
 				Obj oBind = SimYukkuri.world.getCurrentMap().body.get(id);
 				if (oBind != null && oBind instanceof Body) {
 					Body bodyBind = (Body) oBind;
@@ -3714,13 +3714,13 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			Map<Integer, Shit> shits = SimYukkuri.world.getCurrentMap().shit;
 			shits.put(val.objId, (Shit) val);
 			SimYukkuri.world.getCurrentMap().takenOutShit.remove(val.objId);
-			val.setX(x);
+			val.setCalcX(x);
 			if (y + 3 <= Translate.mapH) {
-				val.setY(y);
+				val.setCalcY(y);
 			} else {
-				val.setY(y + 3);
+				val.setCalcY(y + 3);
 			}
-			val.setZ(z + 10);
+			val.setCalcZ(z + 10);
 			val.setWhere(Where.ON_FLOOR);
 			getTakeoutItem().remove(key);
 		}
@@ -3729,13 +3729,13 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			Map<Integer, Food> foods = SimYukkuri.world.getCurrentMap().food;
 			foods.put(val.objId, (Food) val);
 			SimYukkuri.world.getCurrentMap().takenOutFood.remove(val.objId);
-			val.setX(x);
+			val.setCalcX(x);
 			if (y + 3 <= Translate.mapH) {
-				val.setY(y + 3);
+				val.setCalcY(y + 3);
 			} else {
-				val.setY(y);
+				val.setCalcY(y);
 			}
-			val.setZ(z + 10);
+			val.setCalcZ(z + 10);
 			val.setWhere(Where.ON_FLOOR);
 			getTakeoutItem().remove(key);
 		}
@@ -6282,9 +6282,9 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	 */
 	public void dropOkazari() {
 		if (getOkazari() != null) {
-			getOkazari().setX(x);
-			getOkazari().setY(y);
-			getOkazari().setZ(z + 10);
+			getOkazari().setCalcX(x);
+			getOkazari().setCalcY(y);
+			getOkazari().setCalcZ(z + 10);
 			SimYukkuri.world.getCurrentMap().okazari.put(getOkazari().objId, getOkazari());
 			setOkazari(null);
 		}
@@ -6862,17 +6862,17 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		case NONE:
 			setBaryState(BaryInUGState.HALF);
 			setMostDepth(-nH / 16);
-			setZ(-nH / 16);
+			setCalcZ(-nH / 16);
 			break;
 		case HALF:
 			setBaryState(BaryInUGState.NEARLY_ALL);
 			setMostDepth(-nH / 8);
-			setZ(-nH / 8);
+			setCalcZ(-nH / 8);
 			break;
 		case NEARLY_ALL:
 			setBaryState(BaryInUGState.ALL);
 			setMostDepth(-nH / 3);
-			setZ(-nH / 3);
+			setCalcZ(-nH / 3);
 			break;
 		case ALL:
 			break;
@@ -7028,7 +7028,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		}
 		// なつき度設定
 		if (getZ() > 0)
-			setZ(0);
+			setCalcZ(0);
 		Terrarium.setAlarm();
 		setPullAndPush(true);
 		setLockmove(true);
@@ -7058,7 +7058,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 				// 圧死
 				setLockmove(false);
 				extForce = 0;
-				setZ(0);
+				setCalcZ(0);
 				bodyBurst();
 			} else if (extForce < (Const.EXT_FORCE_PUSH_LIMIT[getBodyAgeState().ordinal()] >> 1)) {
 				// 限界
@@ -8499,16 +8499,16 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		int mapX = Translate.mapW;
 		int mapY = Translate.mapH;
 		if (o.getX() < 0) {
-			o.setX(0);
+			o.setCalcX(0);
 		}
 		if (o.getY() < 0) {
-			o.setY(0);
+			o.setCalcY(0);
 		}
 		if (o.getX() > mapX) {
-			o.setX(mapX);
+			o.setCalcX(mapX);
 		}
 		if (o.getX() > mapY) {
-			o.setX(mapY);
+			o.setCalcX(mapY);
 		}
 	}
 
@@ -8598,9 +8598,9 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		y = initY;
 		z = initZ;
 		if (z == 0) {
-			setbFirstGround(false);
+			setBFirstGround(false);
 		} else {
-			setbFirstGround(true);
+			setBFirstGround(true);
 		}
 		getParents()[Parent.PAPA.ordinal()] = papa == null ? -1 : papa.getUniqueID();
 		getParents()[Parent.MAMA.ordinal()] = mama == null ? -1 : mama.getUniqueID();
@@ -8757,9 +8757,9 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	public Body() {
 		objType = Type.YUKKURI;
 		if (z == 0) {
-			setbFirstGround(false);
+			setBFirstGround(false);
 		} else {
-			setbFirstGround(true);
+			setBFirstGround(true);
 		}
 		setRemoved(false);
 		if (getAttitude() == null) {

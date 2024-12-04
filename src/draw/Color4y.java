@@ -47,4 +47,8 @@ public class Color4y implements Serializable {
 		this.blue = blue;
 		this.alpha = alpha;
 	}
+	
+	public String toString() {
+		return "red: " + red + ", green: " + green + ", blue: " + blue + ", alpha: " + alpha;
+	}
 }

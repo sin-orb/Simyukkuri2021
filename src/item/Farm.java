@@ -275,7 +275,7 @@ public class Farm extends FieldShapeBase implements Serializable {
 
 		if (o instanceof Stalk) {
 			o.setMostDepth(0);
-			o.setZ(0);
+			o.setCalcZ(0);
 			return 1;
 		}
 

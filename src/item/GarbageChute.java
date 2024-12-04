@@ -126,10 +126,10 @@ public class GarbageChute extends ObjEX implements java.io.Serializable {
 			if (o == null || o.isRemoved()) {
 				continue;
 			}
-			o.setX(this.getX());
-			o.setY(this.getY());
+			o.setCalcX(this.getX());
+			o.setCalcY(this.getY());
 			int nZ = o.getZ();
-			o.setZ(nZ - 2);
+			o.setCalcZ(nZ - 2);
 			int tz = Translate.translateZ(nZ - 1);
 			int nColX = o.getH();
 			if (tz < -nColX) {

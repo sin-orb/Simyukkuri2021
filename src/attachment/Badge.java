@@ -3,6 +3,7 @@ package src.attachment;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
+import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
 
@@ -103,6 +104,7 @@ public class Badge extends Attachment {
 		return images[pa.getBodyAgeState().ordinal()][eBadgeRank.ordinal()];
 	}
 	/**バッジランク取得*/
+	@Transient
 	public BadgeRank getBadgeRank() {
 		return eBadgeRank;
 	}
@@ -145,11 +147,11 @@ public class Badge extends Attachment {
 		return ResourceUtil.getInstance().read("item_badge");
 	}
 
-	public BadgeRank geteBadgeRank() {
+	public BadgeRank getEBadgeRank() {
 		return eBadgeRank;
 	}
 
-	public void seteBadgeRank(BadgeRank eBadgeRank) {
+	public void setEBadgeRank(BadgeRank eBadgeRank) {
 		this.eBadgeRank = eBadgeRank;
 	}
 	

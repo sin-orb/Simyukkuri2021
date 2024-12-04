@@ -145,7 +145,7 @@ public class Obj implements java.io.Serializable, Comparable {
 	}
 
 	/**x座標セッター*/
-	public void setX (int X){
+	public void setCalcX (int X){
 		if (X < 0 && enableWall ) {
 			x = 0;
 		}
@@ -158,7 +158,7 @@ public class Obj implements java.io.Serializable, Comparable {
 	}
 
 	/**y座標セッター*/
-	public void setY (int Y) {
+	public void setCalcY (int Y) {
 		if (Y < 0 && enableWall ) {
 			y = 0;
 		}
@@ -171,7 +171,7 @@ public class Obj implements java.io.Serializable, Comparable {
 	}
 
 	/**z座標セッター*/
-	public void setZ(int Z){
+	public void setCalcZ(int Z){
 		if (z < nMostDepth && enableWall ) {
 			if( bFallingUnderGround  ){
 				z = Z;
@@ -187,6 +187,19 @@ public class Obj implements java.io.Serializable, Comparable {
 			z = Z;
 		}
 	}
+	
+	public void setX(int x) {
+		this.x = x;
+	}
+
+	public void setY(int y) {
+		this.y = y;
+	}
+
+	public void setZ(int z) {
+		this.z = z;
+	}
+
 	/**
 	 * X座標を強制的に設定する.
 	 * @param X X座標
@@ -434,8 +447,7 @@ public class Obj implements java.io.Serializable, Comparable {
 	/** 画面上に描画されているオブジェクトの原点をセット
 	 * <br>Pointを利用するVer*/
 	public void setScreenPivot(Point4y rect) {
-		screenPivot.x = rect.x;
-		screenPivot.y = rect.y;
+		screenPivot = rect;
 	}
 	/**画面上に描画されているオブジェクトの原点をゲット*/
 	public Point4y getScreenPivot() {
@@ -453,10 +465,7 @@ public class Obj implements java.io.Serializable, Comparable {
 	/** 画面上に描画されているオブジェクトの左上座標とサイズをセット
 	 * <br>Rectangle利用するVer*/
 	public void setScreenRect(Rectangle4y rect) {
-		screenRect.setX(rect.x);
-		screenRect.setY(rect.y);
-		screenRect.setWidth(rect.width);
-		screenRect.setHeight(rect.height);
+		screenRect = rect;
 	}
 	/** 画面上に描画されているオブジェクトの左上座標とサイズをゲット*/
 	public Rectangle4y getScreenRect() {

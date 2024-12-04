@@ -23,6 +23,7 @@ import src.enums.Event;
 import src.enums.ObjEXType;
 import src.enums.Type;
 import src.item.Barrier;
+import src.system.ItemMenu.GetMenuTarget;
 import src.system.ResourceUtil;
 import src.util.YukkuriUtil;
 
@@ -114,9 +115,9 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 				b.setDirection(Direction.LEFT);
 			}
 			babyZ = (( i % 5 ) * -2 + 14);
-			b.setX( getX() + babyX );
-			b.setY( getY() + 1 );
-			b.setZ( getZ() + babyZ );
+			b.setCalcX( getX() + babyX );
+			b.setCalcY( getY() + 1 );
+			b.setCalcZ( getZ() + babyZ );
 			b.kick(0,0,0);
 			i++;
 		}
@@ -146,10 +147,12 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 		return plantYukkuri;
 	}
 
+	/*
 	@Override
 	public int getBindObj() {
 		return plantYukkuri;
 	}
+	*/
 	/**
 	 * この茎に実ゆっくりを追加する.
 	 * @param b この茎に生やそうとしている実ゆっくり
@@ -188,7 +191,7 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 	 * X座標を設定する.
 	 * @param X座標
 	 */
-	public void setX (int X)
+	public void setCalcX (int X)
 	{
 		if (X < 0 && plantYukkuri == -1) {
 			x = 0;
@@ -204,7 +207,7 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 	 * Y座標を設定する.
 	 * @param Y座標
 	 */
-	public void setY (int Y) {
+	public void setCalcY (int Y) {
 		if (Y < 0 && plantYukkuri == -1) {
 			y = 0;
 		}
@@ -219,7 +222,7 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 	 * Z座標を設定する.
 	 * @param Z座標
 	 */
-	public void setZ(int Z)
+	public void setCalcZ(int Z)
 	{
 		if (Z < nMostDepth && plantYukkuri == -1) {
 			if( bFallingUnderGround )
@@ -240,6 +243,7 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 	 * この茎がゆっくりから生えている状態であるかどうかを取得する.
 	 * @return この茎がゆっくりから生えている状態であるかどうか
 	 */
+	@Transient
 	public boolean isPlantYukkuri(){
 		for ( int i : bindBabies ){
 			Body b = YukkuriUtil.getBodyInstance(i);
@@ -409,14 +413,19 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 		if (bindBabies == null || bindBabies.size() == 0) {
 			ret += ResourceUtil.getInstance().read("command_status_nothing");
 		} else {
-			for (int i : bindBabies) {
-				Body baby = YukkuriUtil.getBodyInstance(i);
-				if (baby == null) {
-					ret += ResourceUtil.getInstance().read("game_empty");
+			for (Object o : bindBabies) {
+				if (o == null) {
+					continue;
 				} else {
-					ret += ResourceUtil.IS_JP ? baby.getNameJ() : baby.getNameE();
+					Integer b = (Integer)o;
+					Body baby = YukkuriUtil.getBodyInstance(b);
+					if (baby == null) {
+						ret += ResourceUtil.getInstance().read("game_empty");
+					} else {
+						ret += ResourceUtil.IS_JP ? baby.getNameJ() : baby.getNameE();
+					}
+					ret += ",";
 				}
-				ret += ",";
 			}
 			ret = ret.substring(0, ret.length() - 1);
 		}
@@ -439,6 +448,10 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 	public void setBindBabies(List<Integer> bindBaby) {
 		this.bindBabies = bindBaby;
 	}
-	
+
+	@Override
+	public GetMenuTarget hasGetPopup() {
+		return GetMenuTarget.STALK;
+	}
 }
 

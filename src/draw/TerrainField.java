@@ -381,7 +381,7 @@ public class TerrainField implements Serializable {
 			pivY = (y * (double) Translate.bufferH - z * (double) Translate.bufferH) - ((double) h - 1.0);
 			ret.trans(pivX, pivY);
 			int oy = (int) (y * (double) Translate.bufferH);
-			ret.setY(Translate.invertBgY(oy));
+			ret.setCalcY(Translate.invertBgY(oy));
 			break;
 		case 1:
 		case 2:
