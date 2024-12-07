@@ -370,6 +370,7 @@ public class SimYukkuri extends JFrame {
 			list4sort.addAll(world.getYukkuriList());
 			list4sort.addAll(world.getFixObjList());
 			list4sort.addAll(world.getObjectList());
+			list4sort.addAll(world.getPlatformList());
 
 			Collections.sort(list4sort, ObjDrawComp.INSTANCE);
 			// Check whether hit or not.
@@ -402,7 +403,7 @@ public class SimYukkuri extends JFrame {
 					if (b != null) {
 						parent = b;
 					} else {
-						parent = stalk;
+						parent = o;
 					}
 				} else {
 					parent = o;

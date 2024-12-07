@@ -249,14 +249,23 @@ public class Toilet extends ObjEX implements java.io.Serializable {
 		this.itemRank = itemRank;
 	}
 
-	public boolean isbForSlave() {
+//	public boolean isbForSlave() {
+//		return bForSlave;
+//	}
+//
+//	public void setbForSlave(boolean bForSlave) {
+//		this.bForSlave = bForSlave;
+//	}
+
+	public boolean isBForSlave() {
 		return bForSlave;
 	}
 
-	public void setbForSlave(boolean bForSlave) {
+	public void setBForSlave(boolean bForSlave) {
 		this.bForSlave = bForSlave;
 	}
 
+	
 	public void setAutoClean(boolean autoClean) {
 		this.autoClean = autoClean;
 	}

@@ -26,9 +26,12 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
 import src.SimYukkuri;
+import src.base.Body;
 import src.draw.ModLoader;
 import src.draw.Terrarium;
+import src.game.Stalk;
 import src.system.ResourceUtil;
+import src.util.YukkuriUtil;
 
 public class DebugFrame extends JFrame implements ActionListener, WindowListener {
 	private static final long serialVersionUID = -8472477224379296555L;
@@ -37,6 +40,13 @@ public class DebugFrame extends JFrame implements ActionListener, WindowListener
 	private JPanel contentPane;
 	private JTextField textField;
 	private JScrollPane scrollPane;
+	private JButton btnNewButton_2;
+	private JButton btnNewButton_3;
+	private JButton btnNewButton_4;
+	private JButton btnNewButton_5;
+	private JButton btnNewButton_6;
+	private JButton btnNewButton_7;
+	private JButton btnNewButton_8;
 	/**
 	 * Create the frame.
 	 */
@@ -106,12 +116,90 @@ public class DebugFrame extends JFrame implements ActionListener, WindowListener
 		contentPane.add(btnNewButton_1);
 		
 		scrollPane = new JScrollPane();
-		scrollPane.setBounds(22, 43, 724, 358);
+		scrollPane.setBounds(22, 80, 724, 321);
 		contentPane.add(scrollPane);
+		
+		btnNewButton_2 = new JButton("father");
+		btnNewButton_2.setBounds(22, 40, 91, 21);
+		contentPane.add(btnNewButton_2);
+		
+		btnNewButton_3 = new JButton("mother");
+		btnNewButton_3.setBounds(128, 40, 91, 21);
+		contentPane.add(btnNewButton_3);
+		
+		btnNewButton_4 = new JButton("Stalk_1");
+		btnNewButton_4.setBounds(231, 40, 91, 21);
+		contentPane.add(btnNewButton_4);
+		
+		btnNewButton_5 = new JButton("child_1");
+		btnNewButton_5.setBounds(334, 41, 91, 21);
+		contentPane.add(btnNewButton_5);
+		
+		btnNewButton_6 = new JButton("Under Construction");
+		btnNewButton_6.setBounds(439, 41, 91, 21);
+		contentPane.add(btnNewButton_6);
+		
+		btnNewButton_7 = new JButton("Under Construction");
+		btnNewButton_7.setBounds(542, 41, 91, 21);
+		contentPane.add(btnNewButton_7);
+		
+		btnNewButton_8 = new JButton("Under Construction");
+		btnNewButton_8.setBounds(645, 41, 91, 21);
+		contentPane.add(btnNewButton_8);
 	}
 	
 	public void setObjAndDisplay(Object o) {
 		textField.setText(o.getClass().getCanonicalName());
+		
+		btnNewButton_2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (o instanceof Body) {
+					Body father = YukkuriUtil.getBodyInstance(((Body)o).getFather());
+					if (father != null) {
+						DebugFrame df = new DebugFrame();
+						df.setObjAndDisplay(father);
+						df.setVisible(true);
+					}
+				}
+			}
+		});
+		btnNewButton_3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (o instanceof Body) {
+					Body mother = YukkuriUtil.getBodyInstance(((Body)o).getMother());
+					if (mother != null) {
+						DebugFrame df = new DebugFrame();
+						df.setObjAndDisplay(mother);
+						df.setVisible(true);
+					}
+				}
+			}
+		});
+		btnNewButton_4.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (o instanceof Body) {
+					Stalk s = ((Body)o).getStalks().get(0);
+					if (s != null) {
+						DebugFrame df = new DebugFrame();
+						df.setObjAndDisplay(s);
+						df.setVisible(true);
+					}
+				}
+			}
+		});
+		btnNewButton_5.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (o instanceof Body) {
+					Body firstChild = YukkuriUtil.getBodyInstance(((Body)o).getChildrenList().get(0));
+					if (firstChild != null) {
+						DebugFrame df = new DebugFrame();
+						df.setObjAndDisplay(firstChild);
+						df.setVisible(true);
+					}
+				}
+			}
+		});
+		
 		DefaultTableModel tableModel = new DefaultTableModel(COLUMN_NAMES, 0);
 
 		// Mapをアルファベット順にソート（TreeMapを使用）

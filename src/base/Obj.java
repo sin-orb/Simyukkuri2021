@@ -447,7 +447,8 @@ public class Obj implements java.io.Serializable, Comparable {
 	/** 画面上に描画されているオブジェクトの原点をセット
 	 * <br>Pointを利用するVer*/
 	public void setScreenPivot(Point4y rect) {
-		screenPivot = rect;
+		screenPivot.x = rect.x;
+		screenPivot.y = rect.y;
 	}
 	/**画面上に描画されているオブジェクトの原点をゲット*/
 	public Point4y getScreenPivot() {
@@ -465,7 +466,10 @@ public class Obj implements java.io.Serializable, Comparable {
 	/** 画面上に描画されているオブジェクトの左上座標とサイズをセット
 	 * <br>Rectangle利用するVer*/
 	public void setScreenRect(Rectangle4y rect) {
-		screenRect = rect;
+		screenRect.setX(rect.x);
+		screenRect.setY(rect.y);
+		screenRect.setWidth(rect.width);
+		screenRect.setHeight(rect.height);
 	}
 	/** 画面上に描画されているオブジェクトの左上座標とサイズをゲット*/
 	public Rectangle4y getScreenRect() {

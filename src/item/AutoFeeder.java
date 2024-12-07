@@ -116,6 +116,7 @@ public class AutoFeeder extends ObjEX implements java.io.Serializable {
 	}
 
 	@Override
+	@Transient
 	public BufferedImage getShadowImage() {
 		return null;
 	}
