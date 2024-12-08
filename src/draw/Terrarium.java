@@ -159,6 +159,12 @@ public class Terrarium implements Serializable{
 	 * @throws IOException IO例外
 	 */
 	public static void saveState(File file) throws IOException {
+		SimYukkuri.world.setMaxUniqueId(Numbering.INSTANCE.getYukkuriID());
+		SimYukkuri.world.setMaxObjId(Numbering.INSTANCE.getObjId());
+		Enumeration<Obj> enu = SimYukkuri.world.player.getItemList().elements();
+		while (enu.hasMoreElements()) {
+			SimYukkuri.world.player.getItemForSave().add(enu.nextElement());
+		}
 		ObjectOutputStream out = new ObjectOutputStream(
 				new BufferedOutputStream(
 						new FileOutputStream(file)));
