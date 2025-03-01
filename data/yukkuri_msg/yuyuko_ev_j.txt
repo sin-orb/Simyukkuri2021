@@ -1528,3 +1528,445 @@
 		</adult>
 	</normal>
 [/GameEnd]
+
+#人間に謝罪
+[ApologyToHuman]
+	<normal>
+		<baby>
+			きょびょにぇぇぇぇぇぇぇ！！！きょぼにぇっ！きょびょにぇえぇぇぇぇ！！
+			
+		</baby>
+		<child>
+			こびょねぇぇぇぇぇぇ！！！こびょねっ！こびょねえぇぇぇぇ！！
+		</child>
+		<adult>
+			こぼねぇぇぇぇぇぇ！！！こぼねぇっ！こぼねえぇぇぇぇ！！
+		</adult>
+	</normal>
+[/ApologyToHuman]
+
+#命乞い
+[BegForLife]
+	<normal>
+		<baby>
+			きょびょきょびょ！！きょびょにぇーーー！！！きょびょにぇ！きょびょにぇえぇぇぇぇ！！
+		</baby>
+		<child>
+			こびょこびょ！！こびょねーーー！！！こぼにぇ！こぼにぇえぇぇぇぇ！！
+		</child>
+		<adult>
+			こぼこぼ！！こぼねーーー！！！こぼね！こぼねえぇぇぇぇ！！
+		</adult>
+	</normal>
+[/BegForLife]
+
+#人間に感謝
+[ThanksHuman]
+	<normal>
+		<baby>
+			きょびょにぇぇぇ！！！きょぼにぇっ！！
+		</baby>
+		<child>
+			こぼにぇぇぇ！！！こびょにぇ！！
+		</child>
+		<adult>
+			こぼねぇぇ！！！こぼね！！
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			きょびょ、、、？きょびょにぇぇぇ！！！きょぼにぇっ！！きょぼにぇっ！！
+			きょ～びょ きょびょ きょびょぉ！きょびょにぇっ！！
+		</baby>
+		<child>
+			こびょ、、、？こぼにぇぇぇ！！！こびょにぇ！！こびょにぇ！！
+			こ～びょ こびょ こびょぉ！こびょねっ！！
+		</child>
+		<adult>
+			こぼ、、、？こぼねぇぇ！！！こぼね！！こぼね！！
+			こ～ぼ こぼ こぼぉ！こぼねっ！！
+		</adult>
+	</rude>
+[/ThanksHuman]
+
+#人間に感謝(ダメージ有)
+[ThanksHuman2]
+	<normal>
+		<baby>
+			ぎょ、ぎょびょ、、、
+		</baby>
+		<child>
+			ご、ごびょ、、、
+		</child>
+		<adult>
+			ご、ごぼ、、、
+		</adult>
+	</normal>
+[/ThanksHuman2]
+
+#独り言
+[Monologue]
+	<normal>
+		<baby>
+			きょびょ、、、
+			<damage>
+				きょびょぉ、、きょびょ、、
+			</damage>
+		</baby>
+		<child>
+			こびょ、、、
+			<damage>
+				こびょぉ、、こびょ、、
+			</damage>
+		</child>
+		<adult>
+			こぼ、、、
+			<damage>
+				こぼぉ、、こぼ、、
+			</damage>
+		</adult>
+	</normal>
+[/Monologue]
+
+# おそうしきすたーと(親側)
+[FuneralSTARTFrom]
+	<normal>
+		<baby>
+			%dummy
+		</baby>
+		<child>
+			こびょにぇ、こびょこびょ、こびょ
+		</child>
+		<adult>
+			こぼね、こぼこぼ、こぼ
+		</adult>
+	</normal>
+[/FuneralSTARTFrom]
+
+# おそうしきすたーと(子側)
+[FuneralSTART]
+	<normal>
+		こびょ、、、
+		きょびょぉ、、、
+		、、、きょびょ
+	</normal>
+[/FuneralSTART]
+
+# おそうしきの説明(親側)
+[FuneralIntroduceFrom]
+	<normal>
+		<baby>
+			%dummy
+		</baby>
+		<child>
+			こーびょこびょ、こぼにぇ
+		</child>
+		<adult>
+			こーぼこぼ、こぼね
+		</adult>
+	</normal>
+[/FuneralIntroduceFrom]
+
+# おそうしきの説明時の子の反応
+[FuneralIntroduce]
+	<normal>
+		<baby>
+			きょびょっ！
+		<child>
+			こびょっ！
+		</child>
+		<adult>
+			こぼっ！
+		</adult>
+	</normal>
+[/FuneralIntroduce]
+
+# ちんこんか
+[Requiem]
+	<normal>
+		<baby>
+			きょびょにぇ♪きょびょにぇ♪きょびょにぇ♪きょびょにぇ♪
+			きょびょっ♪にぇっ♪きょびょにぇ♪きょびょ～♪にぇ～♪きょびょにぇ♪
+			きょびょきょびょきょびょにぇ、きょびょきょびょにぇ～♪きょびょにぇ、きょびょにぇ、きょびょきょびょにぇ～～～♪
+			きょびょにぇ♪きょびょにぇ♪きょびょにぇ♪きょびょきょびょにぇ～～～
+			きょびょにぇ～♪きょびょきょびょ～♪きょびょ～♪きょびょにぇ～♪
+			きょ～びょ～きょ～びょ～～～
+		</baby>
+		<child>
+			こぼにぇ♪こびょにぇ♪こぼにぇ♪こびょにぇ♪
+			こぼっ♪にぇっ♪こぼにぇ♪こぼ～♪にぇ～♪こぼにぇ♪
+			こぼこぼこぼにぇ、こぼこぼにぇ～♪こぼにぇ、こぼにぇ、こびょこびょにぇ～～～♪
+			こぼにぇ♪こびょにぇ♪こぼにぇ♪こびょこびょにぇ～～～
+			こびょにぇ～♪こびょこびょ～♪こびょ～♪こびょにぇ～♪
+			こ～ぼ～こ～ぼ～～～
+		</child>
+		<adult>
+			こぼね♪こぼね♪こぼね♪こぼね♪
+			こぼっ♪ねっ♪こぼね♪こぼ～♪ね～♪こぼね♪
+			こぼこぼこぼね、こぼこぼね～♪こぼね、こぼね、こぼこぼね～～～♪
+			こぼね♪こぼね♪こぼね♪こぼこぼね～～～
+			こぼね～♪こぼこぼ～♪こぼ～♪こぼね～♪
+			こ～ぼ～こ～ぼ～～～
+		</adult>
+	</normal>
+[/Requiem]
+
+# 雑談(親側)
+[FuneralTalkFrom]
+	<normal>
+		<baby>
+			%dummy
+		</baby>
+		<child>
+			こびょ～♪こびょこびょっ！
+		</child>
+		<adult>
+			こぼ～♪こぼこぼっ！
+		</adult>
+	</normal>
+[/FuneralTalkFrom]
+
+# 雑談(子側)
+[FuneralTalk]
+	<normal>
+		<baby>
+			きょびょっ！
+			きょびょ～♪
+			きょびょにぇ♪おねーちゃ、きょびょにぇ！！
+		</baby>
+		<child>
+			こぼっ！
+			こぼ～♪
+			こぼにぇ♪いもーと、こぼにぇ！！
+		</child>
+		<adult>
+			こぼっ！
+			こぼ～♪
+			こぼね♪いもーと、こぼね！！
+		</adult>
+	</normal>
+[/FuneralTalk]
+
+# さようならっ！
+[GoodbyeForever]
+	<normal>
+		<baby>
+			きょびょにぇっ！！
+		</baby>
+		<child>
+			こぼにぇっ！！
+		</child>
+		<adult>
+			こぼねっ！！
+		</adult>
+	</normal>
+[/GoodbyeForever]
+
+# 終了時(親側)
+[FuneralENDFrom]
+	<normal>
+		<baby>
+			%dummy
+		</baby>
+		<child>
+			こぼにぇ～？
+		</child>
+		<adult>
+			こぼね～？
+		</adult>
+	</normal>
+[/FuneralENDFrom]
+
+# 終了時(子側)
+[FuneralEND]
+	<normal>
+		<baby>
+			きょびょっ！！
+		</baby>
+		<child>
+			こぼっ！！
+		</child>
+		<adult>
+			こぼっ！！
+		</adult>
+	</normal>
+[/FuneralEND]
+
+
+# アリ
+[EatenByAnts]
+	<normal>
+		<baby>
+			きょっびょおお！！！
+		</baby>
+		<child>
+			こっびょおおお！！！
+		</child>
+		<adult>
+			こぼおおお！！
+		</adult>
+	</normal>
+[/EatenByAnts]
+
+[RevengeAnts]
+	<normal>
+		<baby>
+			きょびょきょびょ！！！
+		</baby>
+		<child>
+			こびょこびょ！！！
+		</child>
+		<adult>
+			こぼこぼ！！
+		</adult>
+	</normal>
+[/RevengeAnts]
+
+#プロポーズイベント関連
+#待ってください
+[PleaseWait]
+	<normal>
+		<baby>
+			%partner！きょびょにぇーー！
+			きょびょっ！きょびょにぇっ！きょびょにぇっ！
+		</baby>
+		<child>
+			%partner！こぼにぇーー！
+			こびょっ！こぼにぇっ！こぼにぇっ！
+		</child>
+		<adult>
+			%partner！こぼねーー！
+			こぼっ！こぼねっ！こぼねっ！
+		</adult>
+	</normal>
+[/PleaseWait]
+
+#プロポーズ
+[Propose]
+	<normal>
+		<baby>
+			きょびょっ！きょびょきょびょ、きょびょにぇっ！
+		</baby>
+		<child>
+			こびょっ！こぼこぼ、こぼにぇっ！
+		</child>
+		<adult>
+			こぼっ！こぼこぼ、こぼねっ！
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			きょびょっ！きょびょきょびょ、きょびょにぇっ！
+			きょ～びょきょびょ！%partner！きょびょにぇっ！
+		</baby>
+		<child>
+			こびょっ！こぼこぼ、こぼにぇっ！
+			こ～ぼこぼ！%partner！こぼにぇっ！
+		</child>
+		<adult>
+			こぼっ！こぼこぼ、こぼねっ！
+			こ～ぼこぼ！%partner！こぼねっ！
+		</adult>
+	</rude>
+[/Propose]
+
+#プロポーズ受諾
+[ProposeYes]
+	<normal>
+		<baby>
+			%partner！きょびょにぇ！
+			きょびょ//きょびょにぇ！
+		</baby>
+		<child>
+			%partner！こぼにぇ！
+			こぼ//こぼにぇ！
+		</child>
+		<adult>
+			%partner！こぼね！
+			こぼ//こぼね！
+		</adult>
+	</normal>
+[/ProposeYes]
+
+#プロポーズ拒否
+[ProposeNo]
+	<normal>
+		<baby>
+			きょびょ、、、
+		<child>
+			こぼ、、、
+		</child>
+		<adult>
+			こぼ、、、
+		</adult>
+	</normal>
+[/ProposeNo]
+
+#やらないか
+[LetsPlay]
+	<normal>
+		<baby>
+			きょびょぉ、、//
+			%partner、、、おちびちゃんっ、、、
+		</baby>
+		<child>
+			こぼぉ、、//
+			%partner、、、おちびちゃんっ、、、
+		</child>
+		<adult>
+			こぼぉ、、//
+			%partner、、、おちびちゃんっ、、、
+		</adult>
+	</normal>
+[/LetsPlay]
+
+#いいよ、きて//
+[OKcome]
+	<normal>
+		<baby>
+			きょびょ//
+		</baby>
+		<child>
+			こぼ//
+		</child>
+		<adult>
+			こぼ//
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			きょびょ//
+			きょっびょびょーい！
+		</baby>
+		<child>
+			こぼ//
+			こっぼぼーい！
+		</child>
+		<adult>
+			こぼ//
+			こっぼぼーい！
+		</adult>
+	</rude>
+[/OKcome]
+
+#失恋
+[Heartbreak]
+	<normal>
+		こびょぉぉぉぉぉぉぇん！！
+	</normal>
+[/Heartbreak]
+
+#じゃましないでね！せいっさいするよ！
+[DontPreventUs]
+	<normal>
+		<baby>
+			きょびょきょびょ！
+		</baby>
+		<child>
+			こぼこぼ！
+		</child>
+		<adult>
+			こぼこぼ！
+		</adult>
+	</normal>
+[/DontPreventUs]

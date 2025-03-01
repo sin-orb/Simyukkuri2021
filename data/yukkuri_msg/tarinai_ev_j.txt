@@ -1349,3 +1349,202 @@
 		ゆっぴ！ゆぴぃー！！！
 	</normal>
 [/RevengeForChild]
+
+#人間に謝罪
+[ApologyToHuman]
+	<normal>
+		<baby>
+			ゆぴぃぃぃぃぃぃぃぃぃぃぃぃぃ！！！！！！
+		</baby>
+		<child>
+			ゆぴぃぃぃぃぃぃぃぃぃぃぃぃぃ！！！！！！
+		</child>
+		<adult>
+			ゆぴぃぃぃぃぃぃぃぃぃぃぃぃぃ！！！！！！
+		</adult>
+	</normal>
+[/ApologyToHuman]
+
+#命乞い
+[BegForLife]
+	<normal>
+		<baby>
+			ゆぴぃぃぃぃぃぃぃぃぃぃぃぃぃ！！！！！！
+		</baby>
+		<child>
+			ゆぴぃぃぃぃぃぃぃぃぃぃぃぃぃ！！！！！！
+		</child>
+		<adult>
+			ゆぴぃぃぃぃぃぃぃぃぃぃぃぃぃ！！！！！！
+		</adult>
+	</normal>
+[/BegForLife]
+
+#人間に感謝
+[ThanksHuman]
+	<normal>
+		<baby>
+			ゆ、、、、？ゆくち！ゆっくち！！
+		</baby>
+		<child>
+			ゆ、、、、？ゆくち！ゆっくち！！
+		</child>
+		<adult>
+			ゆ、、、、？ゆくち！ゆっくち！！
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			ゆ、、、、？ゆぐおーー！！
+		</baby>
+		<child>
+			ゆ、、、、？ゆぐおーー！！
+		</child>
+		<adult>
+			ゆ、、、、？ゆぐおーー！！
+		</adult>
+	</rude>
+[/ThanksHuman]
+
+#人間に感謝(ダメージ有)
+[ThanksHuman2]
+	<normal>
+		<baby>
+			ゆ、、、、？ゆくち、、ゆっくち、、、
+		</baby>
+		<child>
+			ゆ、、、、？ゆくち、、ゆっくち、、、
+		</child>
+		<adult>
+			ゆ、、、、？ゆくち、、ゆっくち、、、
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			ゆ、、、、？ゆぐお、、、
+		</baby>
+		<child>
+			ゆ、、、、？ゆぐお、、、
+		</child>
+		<adult>
+			ゆ、、、、？ゆぐお、、、
+		</adult>
+	</rude>
+[/ThanksHuman2]
+
+#独り言
+[Monologue]
+	<normal>
+		<baby>
+			ゆぅぅ、、ゆぴぴ、、、
+			<damage>
+				ゆっぐぢ、、、
+			</damage>
+		</baby>
+		<child>
+			ゆぅぅ、、ゆぴぴ、、、
+			<damage>
+				ゆっぐぢ、、、
+			</damage>
+		</child>
+		<adult>
+			ゆぅぅ、、ゆぴぴ、、、
+			<damage>
+				ゆっぐぢ、、、
+			</damage>
+		</adult>
+	</normal>
+[/Monologue]
+
+# おそうしきすたーと(親側)
+[FuneralSTARTFrom]
+	<normal>
+		ゆくち、、、ゆっくち！
+	</normal>
+[/FuneralSTARTFrom]
+
+# おそうしきすたーと(子側)
+[FuneralSTART]
+	<normal>
+		ゆぴ、、、？
+		ゆぅ、、、
+		、、、ゆぴぃ
+	</normal>
+[/FuneralSTART]
+
+# おそうしきの説明(親側)
+[FuneralIntroduceFrom]
+	<normal>
+		ゆっぴー！ゆっくちーー！
+	</normal>
+[/FuneralIntroduceFrom]
+
+# おそうしきの説明時の子の反応
+[FuneralIntroduce]
+	<normal>
+		ゆっぴー！
+	</normal>
+[/FuneralIntroduce]
+
+# ちんこんか
+[Requiem]
+	<normal>
+		ゆっぴ♪ゆっぴ♪ゆっぴ♪
+		ゆっ♪ゆっ♪ゆっぴ♪ゆ～♪ゆっぴ♪
+		ゆっぴゆっぴゆぴぴ～♪ゆぴゆぴ～～～♪
+		ゆっくち♪ゆっくち♪
+		ゆっぴ～ゆっぴ～～♪
+		ゆっぴぃ～～～♪
+	</normal>
+[/Requiem]
+
+# 雑談(親側)
+[FuneralTalkFrom]
+	<normal>
+		ゆぴぴ～～♪
+	</normal>
+[/FuneralTalkFrom]
+
+# 雑談(子側)
+[FuneralTalk]
+	<normal>
+		ゆぴ？
+		ゆっくち～～♪
+	</normal>
+[/FuneralTalk]
+
+# さようならっ！
+[GoodbyeForever]
+	<normal>
+		ゆぴーー！
+	</normal>
+[/GoodbyeForever]
+
+# 終了時(親側)
+[FuneralENDFrom]
+	<normal>
+		ゆぴぴっ！
+	</normal>
+[/FuneralENDFrom]
+
+# 終了時(子側)
+[FuneralEND]
+	<normal>
+		ゆぴぴ！
+		ゆっくち！
+	</normal>
+[/FuneralEND]
+
+
+# アリ
+[EatenByAnts]
+	<normal>
+		ゆっぴ！ゆぴぃー！！！
+	</normal>
+[/EatenByAnts]
+
+[RevengeAnts]
+	<normal>
+		ゆぐおーー！！
+	</normal>
+[/RevengeAnts]

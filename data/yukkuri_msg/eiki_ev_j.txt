@@ -1,3 +1,4 @@
+
 # レイパー怯え
 [ScareRapist]
 	<normal>
@@ -1339,3 +1340,596 @@
 		</adult>
 	</normal>
 [/RevengeForChild]
+
+#人間に謝罪
+[ApologyToHuman]
+	<normal>
+		<baby>
+			くりょぉぉぉぉぉぉ！！！くりょ！くりょぉぉぉぉ！！
+			みゃっちりょー！！！にんげんぢゃびゃぁぁぁぁ！！みゃっちりょぉぉぉ！！
+		</baby>
+		<child>
+			くりょぉぉぉぉぉぉ！！！くりょ！くりょぉぉぉぉ！！
+			みゃっちりょー！！！にんげんぢゃびゃぁぁぁぁ！！みゃっちりょぉぉぉ！！
+		</child>
+		<adult>
+			くろぉぉぉぉぉぉ！！！くろ！くろぉぉぉぉ！！
+			みゃっちりょー！！！にんげんぢゃびゃぁぁぁぁ！！みゃっちりょぉぉぉ！！
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			くりょぉぉぉぉぉぉ！！！くりょ！くりょぉぉぉぉ！！
+			みゃっちりょー！！！にんげんぢゃびゃぁぁぁぁ！！みゃっちりょぉぉぉ！！
+		</baby>
+		<child>
+			くりょぉぉぉぉぉぉ！！！くりょ！くりょぉぉぉぉ！！
+			みゃっちりょー！！！にんげんぢゃびゃぁぁぁぁ！！みゃっちりょぉぉぉ！！
+		</child>
+		<adult>
+			くろぉぉぉぉぉぉ！！！くろ！くろぉぉぉぉ！！
+			まっしろー！！！にんげんさまぁぁぁぁ！！まっしろぉぉぉ！！
+		</adult>
+	</rude>
+[/ApologyToHuman]
+
+#命乞い
+[BegForLife]
+	<normal>
+		<baby>
+			みゃっちりょーにんげんぢゃびゃぁぁぁぁ！！じぇんきょぉぉぉ！！！じぇんきょぉぉをぉぉぉ！！！
+			ちけいっ！！？みゃっきゅりょ！！ちけいみゃっきゅっりょーーー！！！
+		</baby>
+		<child>
+			みゃっちりょーにんげんぢゃびゃぁぁぁぁ！！じぇんきょぉぉぉ！！！じぇんきょぉぉをぉぉぉ！！！
+			ちけいっ！！？みゃっきゅりょ！！ちけいみゃっきゅっりょーーー！！！
+		</child>
+		<adult>
+			まっしろーにんげんさまぁぁぁぁ！！ぜんこーぉぉぉ！！！ぜんこーをぉぉぉ！！！
+			しけいっ！！？まっくろ！！しけいまっくろーーー！！！
+		</adult>
+	</normal>
+[/BegForLife]
+
+#人間に感謝
+[ThanksHuman]
+	<normal>
+		<baby>
+			にんぎぇんちゃんっ！！よいじょぉぉ！！
+			ぜんきょーーー！！ぜんきょーーよぉぉぉ！！
+			まっちりょーおにいちゃん！！ゆっぎゅり！！ゆっきゅりぃぃぃ！！
+		</baby>
+		<child>
+			にんぎぇんしゃんっ！！よいじょぉぉ！！
+			ぜんきょーーー！！ぜんきょーーよぉぉぉ！！
+			まっしりょーおにいしゃん！！ゆっぎゅり！！ゆっきゅりぃぃぃ！！
+		</child>
+		<adult>
+			にんげんさんっ！！よいぞぉぉ！
+			ぜんこーーー！！ぜんこーーよぉぉぉ！！
+			まっしろーおにいさん！！ゆっくり！！ゆっくりぃぃぃ！！
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			にんぎぇんちゃんっ！！よいじょぉぉ！！
+			ぜんきょーーー！！ぜんきょーーよぉぉぉ！！
+			まっちりょーおにいちゃん！！ゆっぎゅり！！ゆっきゅりぃぃぃ！！
+		</baby>
+		<child>
+			にんぎぇんしゃんっ！！よいじょぉぉ！！
+			ぜんきょーーー！！ぜんきょーーよぉぉぉ！！
+			まっしりょーおにいしゃん！！ゆっぎゅり！！ゆっきゅりぃぃぃ！！
+		</child>
+		<adult>
+			にんげんさんっ！！よいぞぉぉ！
+			ぜんこーーー！！ぜんこーーよぉぉぉ！！
+			まっしろーおにいさん！！ゆっくり！！ゆっくりぃぃぃ！！
+		</adult>
+	</rude>
+[/ThanksHuman]
+
+#人間に感謝(ダメージ有)
+[ThanksHuman2]
+	<normal>
+		<baby>
+			ま、まっぢりょ、、にんげん、ぢゃ、、
+			じりょ、、、
+		</baby>
+		<child>
+			ま、まっぢりょ、、にんげん、じゃ、、
+			じろ、、、
+		</child>
+		<adult>
+			ま、まっぢりょ、、にんげん、ざ、、
+			じろ、、、
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			ま、まっぢりょ、、にんげん、ぢゃ、、
+			じりょ、、、ぐりょ、、？
+		</baby>
+		<child>
+			ま、まっぢりょ、、にんげん、じゃ、、
+			じろ、、、ぐろ？
+		</child>
+		<adult>
+			ま、まっぢりょ、、にんげん、ざ、、
+			じろ、、、ぐろ？
+		</adult>
+	</rude>
+[/ThanksHuman2]
+
+#独り言
+[Monologue]
+	<normal>
+		<baby>
+			くりょ、、にんげんくりょぉ、、、
+			<damage>
+				ゆふー、、じりょ、、、
+			</damage>
+		</baby>
+		<child>
+			くりょ、、にんげんくりょぉ、、、
+			<damage>
+				ゆふー、、じりょ、、、
+			</damage>
+		</child>
+		<adult>
+			くりょ、、にんげんくろぉ、、、
+			<damage>
+				ゆふー、、じろ、、、
+			</damage>
+			</damage>
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			くりょ、、にんげんくりょぉ、、、
+			ちけいっ、、、にんげんん、、、
+			<damage>
+				ゆふー、、じりょ、、、
+				ぐりょ、、、
+			</damage>
+		</baby>
+		<child>
+			くりょ、、にんげんくりょぉ、、、
+			ちけいっ、、、にんげんん、、、
+			<damage>
+				ゆふー、、じりょ、、、
+				ぐりょ、、、
+			</damage>
+		</child>
+		<adult>
+			くりょ、、にんげんくろぉ、、、
+			しけいっ、、、にんげんん、、、
+			<damage>
+				ゆふー、、じろ、、、
+				
+			</damage>
+			</damage>
+		</adult>
+	</rude>
+[/Monologue]
+
+# おそうしきすたーと(親側)
+[FuneralSTARTFrom]
+	<normal>
+		<baby>
+			%dummy
+		</baby>
+		<child>
+			おちびちゃん、しろ、、、
+		</child>
+		<adult>
+			しろ、、、
+		</adult>
+	</normal>
+[/FuneralSTARTFrom]
+
+# おそうしきすたーと(子側)
+[FuneralSTART]
+	<normal>
+		、、、しりょ
+	</normal>
+[/FuneralSTART]
+
+# おそうしきの説明(親側)
+[FuneralIntroduceFrom]
+	<normal>
+		<baby>
+			%dummy
+		</baby>
+		<child>
+			しりょお～
+		</child>
+		<adult>
+			しろお～
+		</adult>
+	</normal>
+[/FuneralIntroduceFrom]
+
+# おそうしきの説明時の子の反応
+[FuneralIntroduce]
+	<normal>
+		<baby>
+			ゆっ！しりょっ！
+			おねーちゃ、しりょ！！
+		</baby>
+		<child>
+			ゆっ！しりょっ！
+			いもーと、しりょっ！！
+		</child>
+		<adult>
+			ゆっ！しろっ！
+			いもーと、しろっ！！
+		</adult>
+	</normal>
+[/FuneralIntroduce]
+
+# ちんこんか
+[Requiem]
+	<normal>
+		<baby>
+			ゆっきゅち♪ゆっきゅち♪ゆっきゅち♪ゆっきゅち♪
+			ゆっ♪ゆっ♪ゆっきゅち♪ゆ～♪ゆ～♪ゆっきゅち♪
+			しりょしりょゆっきゅちしーりょしりょ～♪しりょしりょゆっきゅち、しーりょしりょ～～♪
+			まっしりょ♪ゆっきゅち♪しーりょ♪しりょ～～
+			しーりょ～♪ゆっきゅち～♪あぁ～♪おねーちゃ～♪
+			し～りょ～し～りょ～～～
+		</baby>
+		<child>
+			ゆっきゅり♪ゆっきゅり♪ゆっきゅり♪ゆっきゅり♪
+			ゆっ♪ゆっ♪ゆっきゅり♪ゆ～♪ゆ～♪ゆっきゅり♪
+			しりょしりょゆっきゅりしーりょしりょ～♪しりょしりょゆっきゅり、しーりょしりょ～～♪
+			まっしりょ♪ゆっきゅり♪しーりょ♪しりょ～～
+			しーりょ～♪ゆっきゅり～♪あぁ～♪いもーと～♪
+			し～りょ～し～りょ～～～
+		</child>
+		<adult>
+			ゆっくり♪ゆっくり♪ゆっくり♪ゆっくり♪
+			ゆっ♪ゆっ♪ゆっくり♪ゆ～♪ゆ～♪ゆっくり♪
+			しろしろゆっくりしーろしろ～♪しろしろゆっくし、しーろしろ～～♪
+			まっしろ♪ゆっくり♪しーろ♪しろ～～
+			しーろ～♪ゆっくり～♪あぁ～♪いもーと～♪
+			し～ろ～し～ろ～～～
+		</adult>
+	</normal>
+[/Requiem]
+
+# 雑談(親側)
+[FuneralTalkFrom]
+	<normal>
+		<baby>
+			%dummy
+		</baby>
+		<child>
+			ゆ～ん♪しりょぉっ
+			ゆゆ～ん♪%おちびちゃん、しりょ！！
+			ぜんきょーよ！
+			こっちのおちびちゃんもしりょっ！
+		</child>
+		<adult>
+			ゆ～ん♪しろぉっ
+			ゆゆ～ん♪%おちびちゃん、しろ！！
+			ぜんこーよ！
+			こっちのおちびちゃんもしろっ！
+		</adult>
+	</normal>
+[/FuneralTalkFrom]
+
+# 雑談(子側)
+[FuneralTalk]
+	<normal>
+		<baby>
+			しりょっ！
+			ゆゆ～ん♪
+			じぇんきょー！
+			ゆゆ～ん♪おねーちゃ、しりょっ！！
+		</baby>
+		<child>
+			しりょっ！
+			ゆゆ～ん♪
+			ぜんきょーよ！
+			ゆゆ～ん♪いもーと、しりょっ！！
+		</child>
+		<adult>
+			しろっ！
+			ゆゆ～ん♪
+			ぜんこーよ！
+			ゆゆ～ん♪いもーと、しろっ！！
+		</adult>
+	</normal>
+[/FuneralTalk]
+
+# さようならっ！
+[GoodbyeForever]
+	<normal>
+		<baby>
+			おねーちゃ、しりょっ！！
+		</baby>
+		<child>
+			いもーと、しりょっ！！
+		</child>
+		<adult>
+			いもーと、しろっ！！
+		</adult>
+	</normal>
+[/GoodbyeForever]
+
+# 終了時(親側)
+[FuneralENDFrom]
+	<normal>
+		<baby>
+			%dummy
+		</baby>
+		<child>
+			しりょ～？
+		</child>
+		<adult>
+			しりょ～？
+		</adult>
+	</normal>
+[/FuneralENDFrom]
+
+# 終了時(子側)
+[FuneralEND]
+	<normal>
+		<baby>
+			しりょっ！！
+		</baby>
+		<child>
+			しりょっ！！
+		</child>
+		<adult>
+			しろっ！！
+		</adult>
+	</normal>
+[/FuneralEND]
+
+
+# アリ
+[EatenByAnts]
+	<normal>
+		<baby>
+			ぐっりょぉぉ！アリしゃんくりょ～～！！！
+		</baby>
+		<child>
+			ぐっりょぉぉ！アリしゃんくりょ～～！！！
+		</child>
+		<adult>
+			ぐっろぉぉ！アリくろ～～！！！
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			じじぃぃ！！アリくりょぉぉ！！
+		</baby>
+		<child>
+			じじぃぃ！！アリくりょぉぉ！！
+		</child>
+		<adult>
+			ぐっろぉぉ！！くそじじいい！！アリくろおお！！！
+		</adult>
+	</rude>
+[/EatenByAnts]
+
+[RevengeAnts]
+	<normal>
+		<baby>
+			アリしゃん、くりょっ！！！
+		</baby>
+		<child>
+			アリしゃん、くりょっ！！！
+		</child>
+		<adult>
+			アリ、くろっ！！
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			アリ、ちけいっ！！！
+		</baby>
+		<child>
+			アリ、しけいっ！！！
+		</child>
+		<adult>
+			アリ、しけいっ！！！
+		</adult>
+	</rude>
+[/RevengeAnts]
+
+#プロポーズイベント関連
+#待ってください
+[PleaseWait]
+	<normal>
+		<baby>
+			しりょーーー！！しりょーーーーー！
+			よいじょー！！よいじょーーー！！
+			しりょっしりょっ！！しりょっしりょっしりょー！！
+		</baby>
+		<child>
+			しりょーーー！！しりょーーーーー！
+			よいじょー！！よいじょーーー！！
+			しりょっしりょっ！！しりょっしりょっしりょー！！
+		</child>
+		<adult>
+			しろーーー！！しろーーーーー！
+			よいぞー！！よいぞーーー！！
+			しろっしろっ！！しろっしろっしろー！！
+		</adult>
+	</normal>
+[/PleaseWait]
+
+#プロポーズ
+[Propose]
+	<normal>
+		<baby>
+			しりょっ！%partner！じぇんきょーよ！
+			ゆっきゅりしりょっ！%partner！！
+			%partner！しりょしりょ！よいじょ～！！
+		</baby>
+		<child>
+			しりょっ！%partner！じぇんきょーよ！
+			ゆっきゅりしりょっ！%partner！！
+			%partner！しりょしりょ！よいじょ～！！
+		</child>
+		<adult>
+			しろっ！%partner！ぜんこーよ！
+			ゆっくりしろっ！%partner！！
+			%partner！しろしろ！よいぞ～！！
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			しりょっ！%partner！じぇんきょーよ！
+			ゆっきゅりしりょっ！%partner！！
+			%partner！しりょしりょ！よいじょ～！！
+		</baby>
+		<child>
+			しりょっ！%partner！じぇんきょーよ！
+			ゆっきゅりしりょっ！%partner！！
+			%partner！しりょしりょ！よいじょ～！！
+			じぇんきょーよ！じぇんきょーー！！
+		</child>
+		<adult>
+			しろっ！%partner！ぜんこーよ！
+			ゆっくりしろっ！%partner！！
+			%partner！しろしろ！よいぞ～！！
+			ぜんこーよ！ぜんこーー！！
+		</adult>
+	</rude>
+[/Propose]
+
+#プロポーズ受諾
+[ProposeYes]
+	<normal>
+		<baby>
+			しりょっ！！よいじょ～～！！
+			%partner…しりょっ！！
+			よいじょ//%partner…ゆっきゅりしりょっ！
+		</baby>
+		<child>
+			しりょっ！！よいじょ～～！！
+			%partner…しりょっ！！
+			よいじょ//%partner…ゆっきゅりしりょっ！
+		</child>
+		<adult>
+			しろっ！！よいぞ～～！！
+			%partner…しろっ！！
+			よいぞ//%partner…ゆっくりしろっ！
+		</adult>
+	</normal>
+[/ProposeYes]
+
+#プロポーズ拒否
+[ProposeNo]
+	<normal>
+		<baby>
+			くりょ、、、
+		</baby>
+		<child>
+			くりょ、、、
+		</child>
+		<adult>
+			くろ、、、
+		</adult>
+	</normal>
+[/ProposeNo]
+
+#やらないか
+[LetsPlay]
+	<normal>
+		<baby>
+			しりょ、、//
+			%partner…じぇんきょーょぉ…
+			おちびちゃん…よいじょぉ～～…
+		</baby>
+		<child>
+			しりょ、、//
+			%partner…じぇんきょーょぉ…
+			おちびちゃん…よいじょぉ～～…
+		</child>
+		<adult>
+			しろ、、//
+			%partner…ぜんこーよぉ…
+			おちびちゃん…よいぞ～～…
+		</adult>
+	</normal>
+[/LetsPlay]
+
+#いいよ、きて//
+[OKcome]
+	<normal>
+		<baby>
+			しりょ、じぇんきょー//
+			よいじょ…//
+		</baby>
+		<child>
+			しりょ、じぇんきょー//
+			よいじょ…//
+		</child>
+		<adult>
+			しろ、ぜんこー//
+			よいぞ…//
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			しりょ、じぇんきょー//
+			しりょしりょーー！
+		</baby>
+		<child>
+			しりょ、じぇんきょー//
+			しりょしりょーー！
+		</child>
+		<adult>
+			しろ、ぜんこー//
+			しろしろーー！
+		</adult>
+	</rude>
+[/OKcome]
+
+#失恋
+[Heartbreak]
+	<normal>
+		くろぉぉぉぉぉぉぉっ！！
+		しけいーーーーー！！
+	</normal>
+[/Heartbreak]
+
+#じゃましないでね！せいっさいするよ！
+[DontPreventUs]
+	<normal>
+		<baby>
+			くりょーーー！
+			おにいちゃん、くりょ！
+			くりょっ！%partner、ゆっきゅりしりょっ！
+		</baby>
+		<child>
+			くりょーーー！
+			おにいしゃん、くりょ！
+			くりょっ！%partner、ゆっきゅりしりょっ！
+		</child>
+		<adult>
+			くろーーー！
+			おにいさん、くろ！
+			くろっ！%partner、ゆっくりしろっ！
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			くりょーーー！
+			おにいちゃん、くりょ！しけいっ！！
+		</baby>
+		<child>
+			くりょーーー！
+			おにいしゃん、くりょ！しけいっ！！
+		</child>
+		<adult>
+			くろーーー！
+			おにいさん、くろ！しけいっ！！！
+		</adult>
+	</rude>
+[/DontPreventUs]

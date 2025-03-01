@@ -112,7 +112,7 @@
 	</rude>
 [/Excite]
 
-#れいぱー化して発情
+# れいぱー化して発情
 [ExciteForRaper]
 	<normal>
 		<baby>
@@ -254,7 +254,7 @@
 	</rude>
 [/FuriFuri]
 
-#キリッ
+# キリッ
 [BeVain]
 	<normal>
 		<baby>
@@ -440,7 +440,7 @@
 		<baby>
 			きょぼにぇ～
 			<damage>
-				きょぼにぇきょぼにぇ、、、
+				きょぼきょぼにぇ、、、
 			</damage>
 		</baby>
 		<child>
@@ -569,7 +569,7 @@
 	</normal>
 [/TransportShit]
 
-#アイテムを落とす
+# アイテムを落とす
 [DropItem]
 	<normal>
 		こぼねー！
@@ -725,7 +725,7 @@
 	</normal>
 [/Sukkiri]
 
-#れいぱー化してすっきりー！
+# れいぱー化してすっきりー！
 [SukkiriForRaper]
 	<normal>
 		<baby>
@@ -928,7 +928,7 @@
 	</normal>
 	<rude>
 		<baby>
-			きょぼにぇきょぼにぇ！
+			きょぼきょぼにぇ！
 			<damage>
 				きょぼにぇ、、、きょびょ、、、
 			</damage>
@@ -948,7 +948,7 @@
 	</rude>
 [/HateShit]
 
-#あほの子がうんうんを威嚇するセリフ
+# あほの子がうんうんを威嚇するセリフ
 [ShitIntimidation]
 	<normal>
 		きょぼぉぉ！！きょぼぉぉ！！
@@ -1630,7 +1630,7 @@
 	</rude>
 [/CANTSEE]
 
-#むしる
+# むしる
 [PLUNCKING]
 	<normal>
 		<baby>
@@ -1656,7 +1656,7 @@
 	</rude>
 [/PLUNCKING]
 
-#つちのなかにいる
+# つちのなかにいる
 [BaryInUnderGround]
 	<normal>
 		<baby>
@@ -1768,7 +1768,7 @@
 	</normal>
 [/Press2]
 
-#加工所でつぶされる
+# 加工所でつぶされる
 [KilledInFactory]
 	<normal>
 		<baby>
@@ -1936,7 +1936,7 @@
 	</normal>
 [/LamentNoYukkuri]
 
-#ゆんやああ
+# ゆんやああ
 [Yunnyaa]
 	<normal>
 		こぼぉぉぉぉぉぉぉぉぉ！！！！！
@@ -2124,7 +2124,7 @@
 	</normal>
 [/EscapeFromRemirya]
 
-#汚い
+# 汚い
 [Dirty]
 	<normal>
 		<baby>
@@ -2190,3 +2190,69 @@
 		</adult>
 	</rude>
 [/MoldySeriousry]
+
+# 悪夢
+[Nightmare]
+	<normal>
+		<baby>
+			きょびょぉぉぉぉぉぉ、、、、
+			きょびょきょびょきょびょぉぉ、、、
+			ようみゅぅぅぅ、、、
+		</baby>
+		<child>
+			きょぼぉぉぉぉぉぉ、、、、
+			きょぼきょぼきょぼぉぉ、、、
+			ようみゅぅぅぅ、、、
+		</child>
+		<adult>
+			こぼぉぉぉぉぉぉ、、、、
+			こぼこぼこぼぉぉ、、、
+			ようむぅぅぅ、、、
+			
+		</adult>
+	</normal>
+[/Nightmare]
+
+# 加工所でつぶされる
+[KilledInFactory]
+	<normal>
+		<baby>
+			ようみゅう゛うううう！！！
+			おどーちゃぁぁぁぁぁ！！！！おがーじゃぁぁぁぁぁ！！
+			おどーちゃぁぁぁーーーきょびょおぉぉぉ！！
+			おがーちゃぁぁぁぁ！！！
+			きょびょっ！きょびょっ！きょびょきょびょきょびょぉぉぉぉぉ！！！
+		</baby>
+		<child>
+			ようむう゛うううう！！！
+			おどーちゃぁぁぁぁぁ！！！！おがーじゃぁぁぁぁぁ！！
+			おどーちゃぁぁぁーーーきょぼおぉぉぉ！！
+			おがーちゃぁぁぁぁ！！！
+			きょぼっ！きょぼっ！きょぼきょぼきょぼぉぉぉぉぉ！！！
+		</child>
+		<adult>
+			ようむう゛うううう！！！
+			こぼっ！こぼっ！こぼこぼこぼぉぉぉぉぉ！！！
+		</adult>
+	</normal>
+[/KilledInFactory]
+
+# 静かにする
+[BeingQuiet]
+	<normal>
+		<baby>
+			しー、きょびょ、、、
+			きょびょびょ、、
+		</baby>
+		<child>
+			しー、きょぼ、、、
+			きょぼぼ、、
+		</child>
+		<adult>
+			しー、こぼ、、、
+			こぼぼ、、
+		</adult>
+	</normal>
+[/DontThrowMeAway]
+
+

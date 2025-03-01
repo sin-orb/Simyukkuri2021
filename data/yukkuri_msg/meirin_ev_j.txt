@@ -1,3 +1,4 @@
+
 # レイパー怯え
 [ScareRapist]
 	<normal>
@@ -683,13 +684,13 @@
 [GladAboutChild]
 	<normal>
 		<baby>
-			おちびっ！じゃーお！じゃーお！
+			おちびちゃんっ！じゃーお！じゃーお！
 		</baby>
 		<child>
-			おちびっ！じゃーお！じゃーお！
+			おちびちゃんっ！じゃーお！じゃーお！
 		</child>
 		<adult>
-			おちびっ！じゃーお！じゃーお！
+			おちびちゃんっ！じゃーお！じゃーお！
 		</adult>
 	</normal>
 [/GladAboutChild]
@@ -866,13 +867,13 @@
 [HateWithEnvyAboutChild]
 	<normal>
 		<baby>
-			おちび、、じゃおぉ、、
+			おちびちゃん、、じゃおぉ、、
 		</baby>
 		<child>
-			おちび、、じゃおぉ、、
+			おちびちゃん、、じゃおぉ、、
 		</child>
 		<adult>
-			おちび、、じゃおぉ、、
+			おちびちゃん、、じゃおぉ、、
 		</adult>
 	</normal>
 [/HateWithEnvyAboutChild]
@@ -1123,7 +1124,7 @@
 [ShitExercisesENDFrom]
 	<normal>
 		じゃお〜ん！じゃおじゃおっ！
-		じゃお〜、、、おちびっ、じゃおじゃおっ！
+		じゃお〜、、、おちびちゃんっ、じゃおじゃおっ！
 	</normal>
 [/ShitExercisesENDFrom]
 #---------------------------
@@ -1217,7 +1218,7 @@
 	</normal>
 [/RideOnMe]
 
-#おちび自慢(歌)
+#おちびちゃん自慢(歌)
 [ProudChildsSING]
 	<normal>
 		<baby>
@@ -1233,7 +1234,7 @@
 
 [/ProudChildsSING]
 
-#おちび自慢(親側)
+#おちびちゃん自慢(親側)
 [ProudChildsGOFrom]
 	<normal>
 		<baby>
@@ -1248,7 +1249,7 @@
 	</normal>
 [/ProudChildsGOFrom]
 
-#おちび自慢(親側)
+#おちびちゃん自慢(親側)
 [ProudChildsSTARTFrom]
 	<normal>
 		<baby>
@@ -1263,7 +1264,7 @@
 	</normal>
 [/ProudChildsSTARTFrom]
 
-#おちび自慢(親側)
+#おちびちゃん自慢(親側)
 [ProudChildsPROUDFrom]
 	<normal>
 		<baby>
@@ -1278,7 +1279,7 @@
 	</normal>
 [/ProudChildsPROUDFrom]
 
-#おちび自慢(親側)
+#おちびちゃん自慢(親側)
 [ProudChildsENDFrom]
 	<normal>
 		<baby>
@@ -1293,7 +1294,7 @@
 	</normal>
 [/ProudChildsENDFrom]
 
-#おちび自慢(子供側)
+#おちびちゃん自慢(子供側)
 [ProudChildsGO]
 	<normal>
 		<baby>
@@ -1308,7 +1309,7 @@
 	</normal>
 [/ProudChildsGO]
 
-#おちび自慢(子供側)
+#おちびちゃん自慢(子供側)
 [ProudChildsSTART]
 	<normal>
 		<baby>
@@ -1323,7 +1324,7 @@
 	</normal>
 [/ProudChildsSTART]
 
-#おちび自慢(子供側)
+#おちびちゃん自慢(子供側)
 [ProudChildsPROUD]
 	<normal>
 		<baby>
@@ -1338,7 +1339,7 @@
 	</normal>
 [/ProudChildsPROUD]
 
-#おちび自慢(子供側)
+#おちびちゃん自慢(子供側)
 [ProudChildsEND]
 	<normal>
 		<baby>
@@ -1409,3 +1410,542 @@
 	</normal>
 [/DontPlayMe]
 
+#人間に謝罪
+[ApologyToHuman]
+	<normal>
+		<baby>
+			じゃおぉぉぉぉぉぉ！！！じゃお！じゃおぉぉぉぉ！！
+			じゃおぉぉーん！！！にんげんぢゃびゃぁぁぁぁ！！じゃっおぉぉぉん！！
+		</baby>
+		<child>
+			じゃおぉぉぉぉぉぉ！！！じゃお！じゃおぉぉぉぉ！！
+			じゃおぉぉーん！！！にんげんぢゃびゃぁぁぁぁ！！じゃっおぉぉぉん！！
+		</child>
+		<adult>
+			じゃおぉぉぉぉぉぉ！！！じゃお！じゃおぉぉぉぉ！！
+			じゃおぉぉーん！！！にんげんぢゃびゃぁぁぁぁ！！じゃっおぉぉぉん！！
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			じゃおぉぉぉぉぉぉ！！！じゃお！じゃおぉぉぉぉ！！
+			じゃおぉぉーん！！！にんげんぢゃびゃぁぁぁぁ！！じゃっおぉぉぉん！！
+		</baby>
+		<child>
+			じゃおぉぉぉぉぉぉ！！！じゃお！じゃおぉぉぉぉ！！
+			じゃおぉぉーん！！！にんげんぢゃびゃぁぁぁぁ！！じゃっおぉぉぉん！！
+		</child>
+		<adult>
+			じゃおぉぉぉぉぉぉ！！！じゃお！じゃおぉぉぉぉ！！
+			じゃおー！！！にんげんさまぁぁぁぁ！！じゃおぉぉぉ！！
+		</adult>
+	</rude>
+[/ApologyToHuman]
+
+#命乞い
+[BegForLife]
+	<normal>
+		<baby>
+			みゃっちりょーにんげんぢゃびゃぁぁぁぁ！！じゃおーぉぉぉ！！！じゃおーぉぉぉ！！！
+			ぢゃおっ！！？じゃおぉぉぉ！！じゃおおぉぉーーー！！！
+		</baby>
+		<child>
+			みゃっちりょーにんげんぢゃびゃぁぁぁぁ！！じゃおーぉぉぉ！！！じゃおーぉぉぉ！！！
+			ぢゃおっ！！？じゃおぉぉぉ！！じゃおおぉぉーーー！！！
+		</child>
+		<adult>
+			じゃおーにんげんさまぁぁぁぁ！！じゃおーぉぉぉ！！！じゃおーぉぉぉ！！！
+			じゃお！！？じゃお！！じゃおおぉぉーーー！！！
+		</adult>
+	</normal>
+[/BegForLife]
+
+#人間に感謝
+[ThanksHuman]
+	<normal>
+		<baby>
+			にんぎぇんちゃんっ！！じゃおぉぉぉ！！
+			じゃおーーー！！じゃおーーー！！
+			ちゃおぉーおにいちゃん！！ゆっぎゅり！！ゆっきゅりぃぃぃ！！
+		</baby>
+		<child>
+			にんぎぇんしゃんっ！！じゃおぉぉぉ！！
+			じゃおーーー！！じゃおーーー！！
+			じゃおーおにいしゃん！！ゆっぎゅり！！ゆっきゅりぃぃぃ！！
+		</child>
+		<adult>
+			にんげんさんっ！！じゃおぉぉ
+			じゃおーーー！！じゃおーーー！！
+			じゃおーおにいさん！！ゆっくり！！ゆっくりぃぃぃ！！
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			にんぎぇんっ！！じゃおぉぉぉ！！
+			じゃおーーー！！じゃおーーー！！
+			ちゃおぉーおにいちゃん！！ゆっぎゅり！！ゆっきゅりぃぃぃ！！
+		</baby>
+		<child>
+			にんぎぇんっ！！じゃおぉぉぉ！！
+			じゃおーーー！！じゃおーーー！！
+			じゃおーおにいしゃん！！ゆっぎゅり！！ゆっきゅりぃぃぃ！！
+		</child>
+		<adult>
+			にんげんっ！！じゃおぉぉ
+			じゃおーーー！！じゃおーーー！！
+			じゃおーおにいさん！！ゆっくり！！ゆっくりぃぃぃ！！
+		</adult>
+	</rude>
+[/ThanksHuman]
+
+#人間に感謝(ダメージ有)
+[ThanksHuman2]
+	<normal>
+		<baby>
+			じゃ、じゃおぉ、、にんげん、ぢゃ、、
+			じゃお、、、
+		</baby>
+		<child>
+			じゃ、じゃおぉ、、にんげん、じゃ、、
+			じゃお、、、
+		</child>
+		<adult>
+			じゃ、じゃおぉ、、にんげん、ざ、、
+			じゃお、、、
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			じゃ、じゃおぉ、、にんげん、、
+			じゃお、、、じゃお、、？
+		</baby>
+		<child>
+			じゃ、じゃおぉ、、にんげん、、
+			じゃお、、、じゃお？
+		</child>
+		<adult>
+			じゃ、じゃおぉ、、にんげん、、
+			じゃお、、、じゃお？
+		</adult>
+	</rude>
+[/ThanksHuman2]
+
+#独り言
+[Monologue]
+	<normal>
+		<baby>
+			じゃお、、にんげんちゃ、、、
+			<damage>
+				ゆふー、、じゃお、、、
+			</damage>
+		</baby>
+		<child>
+			じゃお、、にんげんしゃ、、、
+			<damage>
+				ゆふー、、じゃお、、、
+			</damage>
+		</child>
+		<adult>
+			じゃお、、にんげんさん、、、
+			<damage>
+				ゆふー、、じゃお、、、
+			</damage>
+			</damage>
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			じゃお、、にんげん、、、
+			ぢゃおらっ、、、にんげんん、、、
+			<damage>
+				ゆふー、、じゃお、、、
+				じゃお、、、
+			</damage>
+		</baby>
+		<child>
+			じゃお、、にんげん、、、
+			じゃおらっ、、、にんげんん、、、
+			<damage>
+				ゆふー、、じゃお、、、
+				じゃお、、、
+			</damage>
+		</child>
+		<adult>
+			じゃお、、にんげん、、、
+			じゃおら、、、にんげんん、、、
+			<damage>
+				ゆふー、、じゃお、、、
+				
+			</damage>
+			</damage>
+		</adult>
+	</rude>
+[/Monologue]
+
+# おそうしきすたーと(親側)
+[FuneralSTARTFrom]
+	<normal>
+		<baby>
+			%dummy
+		</baby>
+		<child>
+			おちびちゃん、じゃお、、、
+		</child>
+		<adult>
+			じゃお、、、
+		</adult>
+	</normal>
+[/FuneralSTARTFrom]
+
+# おそうしきすたーと(子側)
+[FuneralSTART]
+	<normal>
+		、、、じゃお
+	</normal>
+[/FuneralSTART]
+
+# おそうしきの説明(親側)
+[FuneralIntroduceFrom]
+	<normal>
+		<baby>
+			%dummy
+		</baby>
+		<child>
+			じゃおお～
+		</child>
+		<adult>
+			じゃおお～
+		</adult>
+	</normal>
+[/FuneralIntroduceFrom]
+
+# おそうしきの説明時の子の反応
+[FuneralIntroduce]
+	<normal>
+		<baby>
+			ゆっ！じゃおっ！
+			じゃお！！
+		</baby>
+		<child>
+			ゆっ！じゃおっ！
+			じゃおっ！！
+		</child>
+		<adult>
+			ゆっ！じゃおっ！
+			じゃおっ！！
+		</adult>
+	</normal>
+[/FuneralIntroduce]
+
+# ちんこんか
+[Requiem]
+	<normal>
+		<baby>
+			ゆっきゅち♪ゆっきゅち♪ゆっきゅち♪ゆっきゅち♪
+			ゆっ♪ゆっ♪ゆっきゅち♪ゆ～♪ゆ～♪ゆっきゅち♪
+			じゃおじゃおゆっきゅち、じゃーおじゃお～♪じゃおじゃおゆっきゅち、じゃーおじゃお～～♪
+			じゃお♪ゆっきゅち♪じゃーお♪じゃお～～
+			じゃーお～♪ゆっきゅち～♪あぁ～♪おねーちゃ～♪
+			じゃ～お～じゃ～お～～～
+		</baby>
+		<child>
+			ゆっきゅり♪ゆっきゅり♪ゆっきゅり♪ゆっきゅり♪
+			ゆっ♪ゆっ♪ゆっきゅり♪ゆ～♪ゆ～♪ゆっきゅり♪
+			じゃおじゃおゆっきゅり、じゃーおじゃお～♪じゃおじゃおゆっきゅり、じゃーおじゃお～～♪
+			じゃお♪ゆっきゅり♪じゃーお♪じゃお～～
+			じゃーお～♪ゆっきゅり～♪あぁ～♪いもーと～♪
+			じゃ～お～じゃ～お～～～
+		</child>
+		<adult>
+			ゆっくり♪ゆっくり♪ゆっくり♪ゆっくり♪
+			ゆっ♪ゆっ♪ゆっくり♪ゆ～♪ゆ～♪ゆっくり♪
+			じゃおじゃおゆっくり、じゃーおじゃお～♪じゃおじゃおゆっくし、じゃーおじゃお～～♪
+			じゃお♪ゆっくり♪じゃーお♪じゃお～～
+			じゃーお～♪ゆっくり～♪あぁ～♪いもーと～♪
+			じゃ～お～じゃ～お～～～
+		</adult>
+	</normal>
+[/Requiem]
+
+# 雑談(子側)
+[FuneralTalk]
+	<normal>
+		<baby>
+			じゃおっ！
+			ゆゆ～ん♪
+			じゃおーー！
+			ゆゆ～ん♪じゃおっ！！
+		</baby>
+		<child>
+			じゃおっ！
+			ゆゆ～ん♪
+			じゃおー！
+			ゆゆ～ん♪じゃおっ！！
+		</child>
+		<adult>
+			じゃおっ！
+			ゆゆ～ん♪
+			じゃおー！
+			ゆゆ～ん♪じゃおっ！！
+		</adult>
+	</normal>
+[/FuneralTalk]
+
+# さようならっ！
+[GoodbyeForever]
+	<normal>
+		<baby>
+			じゃおっ！！
+		</baby>
+		<child>
+			じゃおっ！！
+		</child>
+		<adult>
+			じゃおっ！！
+		</adult>
+	</normal>
+[/GoodbyeForever]
+
+# 終了時(親側)
+[FuneralENDFrom]
+	<normal>
+		<baby>
+			%dummy
+		</baby>
+		<child>
+			じゃお～？
+		</child>
+		<adult>
+			じゃお～？
+		</adult>
+	</normal>
+[/FuneralENDFrom]
+
+# 終了時(子側)
+[FuneralEND]
+	<normal>
+		<baby>
+			じゃおっ！！
+		</baby>
+		<child>
+			じゃおっ！！
+		</child>
+		<adult>
+			じゃおっ！！
+		</adult>
+	</normal>
+[/FuneralEND]
+
+
+# アリ
+[EatenByAnts]
+	<normal>
+		<baby>
+			ぢゃおぉぉぉぉん！！
+		</baby>
+		<child>
+			じゃおぉぉぉぉん！！
+		</child>
+		<adult>
+			じゃおぉぉぉぉん！！
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			ぢゃおぉぉぉぉん！！！
+		</baby>
+		<child>
+			じゃおぉぉぉぉん！！！
+		</child>
+		<adult>
+			じゃおぉぉぉぉん！！！
+		</adult>
+	</rude>
+[/EatenByAnts]
+
+[RevengeAnts]
+	<normal>
+		<baby>
+			ぢゃおりゃぁぁ！！
+		</baby>
+		<child>
+			じゃおらぁぁ！！
+		</child>
+		<adult>
+			じゃおらぁぁ！！
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			ぢゃおりゃぁぁ！！！
+		</baby>
+		<child>
+			じゃおらぁぁ！！！
+		</child>
+		<adult>
+			じゃおらぁぁ！！！
+		</adult>
+	</rude>
+[/RevengeAnts]
+
+#プロポーズイベント関連
+#待ってください
+[PleaseWait]
+	<normal>
+		<baby>
+			じゃおじゃお！！じゃお～ん！
+		</baby>
+		<child>
+			じゃおじゃお！！じゃお～ん！
+		</child>
+		<adult>
+			じゃおじゃお！！じゃお～ん！
+		</adult>
+	</normal>
+[/PleaseWait]
+
+#プロポーズ
+[Propose]
+	<normal>
+		<baby>
+			じゃお！じゃお！じゃおじゃお！
+		</baby>
+		<child>
+			じゃお！じゃお！じゃおじゃお！
+		</child>
+		<adult>
+			じゃお！じゃお！じゃおじゃお！
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			じゃお！じゃお！じゃおじゃお！
+		</baby>
+		<child>
+			じゃお！じゃお！じゃおじゃお！
+		</child>
+		<adult>
+			じゃお！じゃお！じゃおじゃお！
+		</adult>
+	</rude>
+[/Propose]
+
+#プロポーズ受諾
+[ProposeYes]
+	<normal>
+		<baby>
+			じゃお！じゃおじゃおーん！！
+			じゃお//じゃお…じゃおじゃおー！
+		</baby>
+		<child>
+			じゃお！じゃおじゃおーん！！
+			じゃお//じゃお…じゃおじゃおー！
+		</child>
+		<adult>
+			じゃお！じゃおじゃおーん！！
+			じゃお//じゃお…じゃおじゃおー！
+		</adult>
+	</normal>
+[/ProposeYes]
+
+#プロポーズ拒否
+[ProposeNo]
+	<normal>
+		<baby>
+			ちゃお、、、じゃお、じゃおじゃおー、、、
+			じゃお、じゃおじゃお～、、、
+		</baby>
+		<child>
+			じゃお、、、じゃお、じゃおじゃおー、、、
+			じゃお、じゃおじゃお～、、、
+		</child>
+		<adult>
+			じゃお、、、じゃお、じゃおじゃおー、、、
+			じゃお、じゃおじゃお～、、、
+		</adult>
+	</normal>
+[/ProposeNo]
+
+#やらないか
+[LetsPlay]
+	<normal>
+		<baby>
+			ぢゃお、、//
+			じゃお…じゃおじゃおおぉ…
+			じゃお、、じゃおじゃおじゃおぉ、、、
+		</baby>
+		<child>
+			じゃお、、//
+			じゃお…じゃおじゃおおぉ…
+			じゃお、、じゃおじゃおじゃおぉ、、、
+		</child>
+		<adult>
+			じゃお、、//
+			じゃお…じゃおじゃおおぉ…
+			じゃお、、じゃおじゃおじゃおぉ、、、
+		</adult>
+	</normal>
+[/LetsPlay]
+
+#いいよ、きて//
+[OKcome]
+	<normal>
+		<baby>
+			じゃお、じゃおん//
+		</baby>
+		<child>
+			じゃお、じゃおん//
+		</child>
+		<adult>
+			じゃお、じゃおん//
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			じゃお、じゃおん//
+			じゃおおーん！
+		</baby>
+		<child>
+			じゃお、じゃおん//
+			じゃおおーん！
+		</child>
+		<adult>
+			じゃお、じゃおん//
+			じゃおおーん！
+		</adult>
+	</rude>
+[/OKcome]
+
+#失恋
+[Heartbreak]
+	<normal>
+		じゃぉぉぉぉぉぉぉん！！
+		じゃおぉーーーーーー！？
+	</normal>
+[/Heartbreak]
+
+#じゃましないでね！せいっさいするよ！
+[DontPreventUs]
+	<normal>
+		<baby>
+			ぢゃお！じゃおじゃお！
+		</baby>
+		<child>
+			じゃお！じゃおじゃお！
+		</child>
+		<adult>
+			じゃお！じゃおじゃお！
+		</adult>
+	</normal>
+	<rude>
+		<baby>
+			ぢゃおらぁぁ！じゃおじゃおん！
+		</baby>
+		<child>
+			じゃおらぁぁ！じゃおじゃおん！
+		</child>
+		<adult>
+			じゃおらぁぁ！じゃおじゃおん！
+		</adult>
+	</rude>
+[/DontPreventUs]
