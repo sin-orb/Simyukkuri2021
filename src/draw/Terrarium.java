@@ -307,6 +307,37 @@ public class Terrarium implements Serializable{
 
 		// 遅延読み込みの復元
 		SimYukkuri.world.loadInterBodyImage();
+		
+		for (MapPlaceData mpd : SimYukkuri.world.getMapList()) {
+			for (Stalk s : mpd.stalk.values()) {
+				Body b = YukkuriUtil.getBodyInstance(s.getPlantYukkuri());
+				if (b != null) {
+					// ゾンビ除去: ID一致のStalkを除去してから、Map側のインスタンスで上書き
+					b.getStalks().removeIf(z -> z.getStalkId().equals(s.getStalkId()));
+					b.getStalks().add(s);
+				}
+			}
+			for (Stalk s : mpd.stalk.values()) {
+				Body parent = YukkuriUtil.getBodyInstance(s.getPlantYukkuri());
+
+				for (Integer babyId : s.getBindBabies()) {
+					Body baby = YukkuriUtil.getBodyInstance(babyId);
+
+					if (baby != null && parent != null && baby.isUnBirth()) {
+						baby.setLinkParent(parent.getUniqueID());
+						baby.setBindStalk(s);
+						int i = s.getBindBabies().indexOf(babyId);
+						int babyZ = ((i % 5) * -2 + 14);
+
+						int actualZ = s.getZ() + babyZ;
+
+						baby.setZ(actualZ);
+						baby.setCalcZ(actualZ);
+					}
+				}
+			}
+		}
+
 
 		System.gc();
 	}
@@ -1226,6 +1257,7 @@ public class Terrarium implements Serializable{
 									ba.setUnBirth(false);
 									ba.setDropShadow(true);
 									ba.setBindStalk(null);
+									ba.setLinkParent(-1);
 									// 赤ゆなら胎生妊娠と合わせるため年齢リセット
 									if (ba.isBaby()) {
 										ba.setAgeState(AgeState.BABY);

@@ -8,6 +8,7 @@ import java.beans.Transient;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 
 import javax.imageio.ImageIO;
 
@@ -41,6 +42,22 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 	private List<Integer> bindBabies = new LinkedList<Integer>();	// この茎にぶら下がってる子のID
 	/** （食べたときの）量 */
 	private int amount = 0;
+	private UUID stalkId = UUID.randomUUID();
+
+	/**
+	 * StalkのUUIDを取得する.
+	 * @return StalkのUUID
+	 */
+	public UUID getStalkId() {
+		return stalkId;
+	}
+	/**
+	 * StalkのUUIDを設定する.
+	 * @param id StalkのUUID
+	 */
+	public void setStalkId(UUID id) {
+	    this.stalkId = id;
+	}
 	/**
 	 * イメージをロードする.
 	 * @param loader ローダ
@@ -96,6 +113,7 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 		if (getBindBabies() == null) {
 			return;
 		}
+		Body parent = YukkuriUtil.getBodyInstance(this.getPlantYukkuri());
 		for (Integer j : getBindBabies()){
 			if (j == null) {
 				i++;
@@ -106,9 +124,13 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 				i++;
 				continue;
 			}
+			if (parent != null && b.isUnBirth()) {
+				b.setLinkParent(parent.getUniqueID());
+				b.setBindStalk(this);
+			}
 			if (option == 0) {
 				babyX = (( i % 5 ) * -5 + 14);
-				b.setDirection(Direction.RIGHT);
+				b.setDirection(Direction.RIGHT);	
 			}else{
 				babyX = (( i % 5 ) * -5 + 14) * -1;
 				b.setDirection(Direction.LEFT);

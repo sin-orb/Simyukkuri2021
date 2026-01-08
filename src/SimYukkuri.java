@@ -654,7 +654,31 @@ public class SimYukkuri extends JFrame {
 							}
 						}
 					} else {
+						if (grabbedObj instanceof Body) {
+						    Body b = (Body) grabbedObj;
 
+						    if (b.getBindStalk() != null) {
+						        // ★ 茎からのリンク解除
+						        b.setBindStalk(null);
+						        b.setLinkParent(-1);
+
+						        // ★ 高さ補正
+						        b.setZ(0);
+						        b.setCalcZ(0);
+
+						        // ★ 状態再初期化（物理再評価などがあればここに追加）
+						        b.kick(0, 0, 0);  // ← 強制再物理処理開始（たぶん実在。何もなければ無害）
+						        b.setZ(b.getZ() - 1);
+						        b.setCalcZ(b.getZ());
+
+						        // ※ 必要なら、b.setBodyAgeState() や b.setDamageState() なども再設定可
+						    }
+						    if (b.getBindStalk() == null && b.getLinkParent() == -1) {
+						        // 既にリンク解除済み → Z補正だけ行う
+						        b.setZ(0);
+						        b.setCalcZ(0);
+						    }
+						}
 						// yukkuri has been grabbed.
 						startY = fieldMousePos[1];
 						startZ = fieldMousePos[1] + Translate.transSize(grabbedObj.getZ() * 58 / 10);
