@@ -282,7 +282,7 @@ public class BodyLogic {
 							}
 						}
 					}
-				} else if (p.isDead() && (!p.hasOkazari() || b.isIdiot())) {
+				} else if (p.isDead() && !p.hasOkazari() && b.isIdiot()) {
 					// 自分が足りないゆで相手がおかざりなしの死体なら食料扱いなのでスキップ
 					continue;
 				}
@@ -646,8 +646,10 @@ public class BodyLogic {
 		int range = Math.abs(rangeX - distX);
 		// 見つかった相手に対するコリジョンチェック
 		// 体が隣接するように横長のボックスで判定を取る
+		// Y軸の閾値をrangeXに比例させる(distY < 5だと厳しすぎて到達できない問題の修正)
+		int rangeY = Math.max(rangeX / 2, 10);
 
-		if (range < 3 && distY < 5) {
+		if (range < 3 && distY < rangeY) {
 			// 相手との距離が隣接状態と判断された場合
 			if (p.isDead()) {
 				// 相手が死体の場合

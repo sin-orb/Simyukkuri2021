@@ -10,6 +10,7 @@ import src.base.ObjEX;
 import src.draw.Terrarium;
 import src.draw.Translate;
 import src.enums.AgeState;
+import src.enums.Direction;
 import src.enums.FavItemType;
 import src.enums.PublicRank;
 import src.enums.TakeoutItemType;
@@ -127,6 +128,15 @@ public class BedLogic {
 			if(b.hasBabyOrStalk()) {
 				ofsY = Translate.invertY(found.getH() - 4);
 				ofsY = -(ofsY >> 1);
+				// 茎妊娠の場合は茎がベッドの上に収まるように親を茎の反対方向にオフセット
+				if(b.isHasStalk()) {
+					int stalkOffset = Translate.invertX(15, found.getY());
+					if(b.getDirection() == Direction.RIGHT) {
+						ofsX = -stalkOffset; // 茎が右にあるので親を左に
+					} else {
+						ofsX = stalkOffset; // 茎が左にあるので親を右に
+					}
+				}
 			}
 			else {
 				ofsX = Translate.invertX(found.getW(), found.getY() - 4);

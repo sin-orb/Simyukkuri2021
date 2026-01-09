@@ -136,6 +136,10 @@ public class FoodLogic {
 
 		//その他
 		if (b.isExciting() && !b.isRaper() && !b.isSoHungry()) {
+			// 発情を優先するため食事フラグをクリア
+			if (b.isToFood()) {
+				b.setToFood(false);
+			}
 			return false;
 		}
 		if (b.isExciting() && !b.isRaper() && b.isSoHungry()) {

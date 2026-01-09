@@ -2879,7 +2879,12 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 					}
 					destX = -1;
 					destY = -1;
-					clearActions();
+					// イベント中の場合はイベントをクリアしない(壁衝突でうろうろし続ける問題の修正)
+					if (getCurrentEvent() != null) {
+						clearActionsForEvent();
+					} else {
+						clearActions();
+					}
 					if (getIntelligence() == Intelligence.FOOL && getPanicType() != null) {
 						setHappiness(Happiness.VERY_SAD);
 					}

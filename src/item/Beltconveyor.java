@@ -343,21 +343,23 @@ public class Beltconveyor extends FieldShapeBase implements Serializable {
 			Body b = (Body) o;
 			int ageIdx = b.getBodyAgeState().ordinal();
 			int bodyIdx;
+			// settingのインデックスはSetupButton.ordinal() + SetupMenu.NORMAL_BABY.ordinal()
+			// setupBeltで連続した行(2,3,4,5,6)に保存しているため
 			if (b.isHybrid()) {
 				// ハイブリッド
-				bodyIdx = SetupMenu.HYBRID_BABY.ordinal();
+				bodyIdx = SetupButton.HYBRID.ordinal() + SetupMenu.NORMAL_BABY.ordinal();
 			} else if (b.isIdiot()) {
 				// 足りない
-				bodyIdx = SetupMenu.IDIOT_BABY.ordinal();
+				bodyIdx = SetupButton.IDIOT.ordinal() + SetupMenu.NORMAL_BABY.ordinal();
 			} else if (b.isRareType()) {
 				// 希少種
-				bodyIdx = SetupMenu.RARE_BABY.ordinal();
+				bodyIdx = SetupButton.RARE.ordinal() + SetupMenu.NORMAL_BABY.ordinal();
 			} else if (b.isPredatorType()) {
 				// 捕食種
-				bodyIdx = SetupMenu.PREDATOR_BABY.ordinal();
+				bodyIdx = SetupButton.PREDATOR.ordinal() + SetupMenu.NORMAL_BABY.ordinal();
 			} else {
 				// 通常種
-				bodyIdx = SetupMenu.NORMAL_BABY.ordinal();
+				bodyIdx = SetupButton.NORMAL.ordinal() + SetupMenu.NORMAL_BABY.ordinal();
 			}
 			if (setting[bodyIdx][ageIdx])
 				ret = true;

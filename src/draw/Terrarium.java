@@ -1,15 +1,11 @@
 package src.draw;
 
 import java.awt.Rectangle;
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -159,30 +155,6 @@ public class Terrarium implements Serializable{
 	 * @throws IOException IO例外
 	 */
 	public static void saveState(File file) throws IOException {
-		SimYukkuri.world.setMaxUniqueId(Numbering.INSTANCE.getYukkuriID());
-		SimYukkuri.world.setMaxObjId(Numbering.INSTANCE.getObjId());
-		Enumeration<Obj> enu = SimYukkuri.world.player.getItemList().elements();
-		while (enu.hasMoreElements()) {
-			SimYukkuri.world.player.getItemForSave().add(enu.nextElement());
-		}
-		ObjectOutputStream out = new ObjectOutputStream(
-				new BufferedOutputStream(
-						new FileOutputStream(file)));
-		try {
-			out.writeUTF(Terrarium.class.getCanonicalName());
-			out.writeObject(SimYukkuri.world);
-			out.flush();
-		} finally {
-			out.close();
-		}
-	}
-	
-	/**
-	 * セーブの実行部
-	 * @param file ファイル
-	 * @throws IOException IO例外
-	 */
-	public static void saveStateTemporary(File file) throws IOException {
 		ObjectMapper mapper = new ObjectMapper();
 		SimYukkuri.world.setMaxUniqueId(Numbering.INSTANCE.getYukkuriID());
 		SimYukkuri.world.setMaxObjId(Numbering.INSTANCE.getObjId());
@@ -191,17 +163,13 @@ public class Terrarium implements Serializable{
 			SimYukkuri.world.player.getItemForSave().add(enu.nextElement());
 		}
 		String json = mapper.writeValueAsString(SimYukkuri.world);
-		try {
-			// JSON文字列をバイト配列に変換
-			byte[] jsonBytes = json.getBytes("UTF-8");
+		// JSON文字列をバイト配列に変換
+		byte[] jsonBytes = json.getBytes("UTF-8");
 
-			// GZIP形式で圧縮して保存
-			try (FileOutputStream fos = new FileOutputStream(file.getAbsoluteFile());
-				 GZIPOutputStream gos = new GZIPOutputStream(fos)) {
-				gos.write(jsonBytes);
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
+		// GZIP形式で圧縮して保存
+		try (FileOutputStream fos = new FileOutputStream(file.getAbsoluteFile());
+			 GZIPOutputStream gos = new GZIPOutputStream(fos)) {
+			gos.write(jsonBytes);
 		}
 	}
 
@@ -211,67 +179,11 @@ public class Terrarium implements Serializable{
 	 * @throws IOException IO例外
 	 * @throws ClassNotFoundException クラスの存在しない場合の例外
 	 */
-	@SuppressWarnings("unchecked")
 	public static void loadState(File file) throws IOException, ClassNotFoundException {
 		World tmpWorld = null;
-		ObjectInputStream in = new ObjectInputStream(
-				new BufferedInputStream(
-						new FileInputStream(file)));
-		try {
-			String s = in.readUTF();
-			if (!Terrarium.class.getCanonicalName().equals(s)) {
-				String errMsg = "Bad save: " + s;
-				throw new IOException(errMsg);
-			}
-			tmpWorld = (World) in.readObject();
-
-		} finally {
-			in.close();
-		}
-		Numbering.INSTANCE.setYukkuriID(tmpWorld.getMaxUniqueId());
-		Numbering.INSTANCE.setObjId(tmpWorld.getMaxObjId());
-		tmpWorld.player.getItemList().clear();
-		List<Integer> _list = new ArrayList<Integer>();
-		for (Obj o : tmpWorld.player.getItemForSave()) {
-			int id = o.getObjId();
-			if (!_list.contains(id)) {
-				_list.add(id);
-				tmpWorld.player.getItemList().addElement(o);
-			}
-		}
-		// 持ち物を復元
-		MainCommandUI.itemWindow.itemList.setModel(tmpWorld.player.getItemList());
-
-		// ウィンドウサイズを復元
-		tmpWorld.recalcMapSize();
-		SimYukkuri.world = tmpWorld;
-
-		if (SimYukkuri.world.windowType != 2) {
-			SimYukkuri.simYukkuri.setWindowMode(SimYukkuri.world.windowType, SimYukkuri.world.terrariumSizeIndex);
-		} else {
-			SimYukkuri.simYukkuri.setFullScreenMode(SimYukkuri.world.terrariumSizeIndex);
-		}
-
-		// マップの復元
-		SimYukkuri.world.setNextMap(SimYukkuri.world.getCurrentMap().mapIndex);
-		SimYukkuri.mypane.loadTerrainFile();
-		SimYukkuri.world.changeMap();
-
-		SimYukkuri.mypane.createBackBuffer();
-		Translate.createTransTable(TerrainField.isPers());
-
-		// 遅延読み込みの復元
-		SimYukkuri.world.loadInterBodyImage();
-
-		System.gc();
-	}
-	
-	@SuppressWarnings("unchecked")
-	public static void loadStateTemporary(File file) throws IOException, ClassNotFoundException {
-		World tmpWorld = null;
-		String json =decompressGzipToString(file.getAbsolutePath());
+		String json = decompressGzipToString(file.getAbsolutePath());
 		ObjectMapper mapper = new ObjectMapper();
-		tmpWorld = mapper.readValue(json,World.class);
+		tmpWorld = mapper.readValue(json, World.class);
 
 		Numbering.INSTANCE.setYukkuriID(tmpWorld.getMaxUniqueId());
 		Numbering.INSTANCE.setObjId(tmpWorld.getMaxObjId());
@@ -307,7 +219,8 @@ public class Terrarium implements Serializable{
 
 		// 遅延読み込みの復元
 		SimYukkuri.world.loadInterBodyImage();
-		
+
+		// 茎と実ゆの参照を復元
 		for (MapPlaceData mpd : SimYukkuri.world.getMapList()) {
 			for (Stalk s : mpd.stalk.values()) {
 				Body b = YukkuriUtil.getBodyInstance(s.getPlantYukkuri());
@@ -337,7 +250,6 @@ public class Terrarium implements Serializable{
 				}
 			}
 		}
-
 
 		System.gc();
 	}
@@ -1025,6 +937,16 @@ public class Terrarium implements Serializable{
 		// プールの判定
 		// 最前面のひとつだけに反応するのでターゲットを外ループに
 		List<Pool> poolList = curMap.pool;
+		// 全プールのclockTickを先に実行（オブジェクトループの外で1回だけ呼ぶ）
+		if (poolList != null && poolList.size() > 0) {
+			for (Iterator<Pool> i = poolList.iterator(); i.hasNext();) {
+				Pool pool = i.next();
+				ret = pool.clockTick();
+				if (ret == Event.REMOVED) {
+					i.remove();
+				}
+			}
+		}
 		objList = SimYukkuri.world.getHitTargetList();
 		for (Obj o : objList) {
 			if (poolList == null || poolList.size() == 0) {
@@ -1059,13 +981,7 @@ public class Terrarium implements Serializable{
 				continue;
 			}
 			//if((curMap.fieldMap[o.getX()][o.getY()] & FieldShapeBase.FIELD_BELT) == 0) continue;
-			for (Iterator<Pool> i = poolList.iterator(); i.hasNext();) {
-				Pool pool = i.next();
-				ret = pool.clockTick();
-				if (ret == Event.REMOVED) {
-					i.remove();
-					continue;
-				}
+			for (Pool pool : poolList) {
 				if (pool.checkHitObj(o)) {
 					pool.objHitProcess(o);
 					break;
@@ -1076,6 +992,16 @@ public class Terrarium implements Serializable{
 		// 畑の判定
 		// 最前面のひとつだけに反応するのでターゲットを外ループに
 		List<Farm> farmList = curMap.farm;
+		// 全畑のclockTickを先に実行（オブジェクトループの外で1回だけ呼ぶ）
+		if (farmList != null && farmList.size() > 0) {
+			for (Iterator<Farm> i = farmList.iterator(); i.hasNext();) {
+				Farm farm = i.next();
+				ret = farm.clockTick();
+				if (ret == Event.REMOVED) {
+					i.remove();
+				}
+			}
+		}
 		objList = SimYukkuri.world.getHitTargetList();
 
 		for (Obj o : objList) {
@@ -1088,14 +1014,8 @@ public class Terrarium implements Serializable{
 			if ((Translate.getCurrentFieldMapNum(o.getX(), o.getY()) & FieldShapeBase.FIELD_FARM) == 0) {
 				continue;
 			}
-			// 畑更新
-			for (Iterator<Farm> i = farmList.iterator(); i.hasNext();) {
-				Farm farm = i.next();
-				ret = farm.clockTick();
-				if (ret == Event.REMOVED) {
-					i.remove();
-					continue;
-				}
+			// 畑ヒット判定
+			for (Farm farm : farmList) {
 				if (farm.checkHitObj(o)) {
 					farm.objHitProcess(o);
 					break;
@@ -1285,8 +1205,10 @@ public class Terrarium implements Serializable{
 					}
 					b.removeAllStalks();
 				}
-				if (b.getBabyTypes().size() == 0 || b.getStalks().size() == 0) {
+				if (b.getBabyTypes().size() == 0) {
 					b.setHasBaby(false);
+				}
+				if (b.getStalks() == null || b.getStalks().size() == 0) {
 					b.setHasStalk(false);
 				}
 				break;

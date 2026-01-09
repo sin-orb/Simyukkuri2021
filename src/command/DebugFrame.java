@@ -4,8 +4,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowEvent;
 import java.awt.event.WindowListener;
-import java.io.File;
-import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 import java.util.HashMap;
@@ -14,10 +12,8 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import javax.swing.JButton;
-import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
@@ -25,10 +21,7 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 
-import src.SimYukkuri;
 import src.base.Body;
-import src.draw.ModLoader;
-import src.draw.Terrarium;
 import src.game.Stalk;
 import src.system.ResourceUtil;
 import src.util.YukkuriUtil;
@@ -66,55 +59,7 @@ public class DebugFrame extends JFrame implements ActionListener, WindowListener
 		textField.setBounds(170, 12, 400, 19);
 		contentPane.add(textField);
 		textField.setColumns(10);
-		
-		JButton btnNewButton = new JButton(ResourceUtil.getInstance().read("command_debug_tmpsave"));
-		btnNewButton.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				synchronized (SimYukkuri.lock) {
-					final JFileChooser fc = new JFileChooser(ModLoader.getJarPath());
-					int result = fc.showSaveDialog(DebugFrame.this);
-					if (result != JFileChooser.APPROVE_OPTION)
-						return;
-					File file = fc.getSelectedFile();
-					try {
-						Terrarium.saveStateTemporary(file);
-					} catch (IOException ex) {
-						System.out.println(ex);
-						JOptionPane.showMessageDialog(DebugFrame.this, ex.getLocalizedMessage(), SimYukkuri.TITLE,
-								JOptionPane.ERROR_MESSAGE);
-					}
-				}
-			}
-		});
-		btnNewButton.setBounds(580, 10, 91, 21);
-		contentPane.add(btnNewButton);
 
-		JButton btnNewButton_1 = new JButton(ResourceUtil.getInstance().read("command_debug_tmpload"));
-		btnNewButton_1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				synchronized (SimYukkuri.lock) {
-					final JFileChooser fc = new JFileChooser(ModLoader.getJarPath());
-					int result = fc.showOpenDialog(DebugFrame.this);
-					if (result != JFileChooser.APPROVE_OPTION)
-						return;
-					File file = fc.getSelectedFile();
-					try {
-						Terrarium.loadStateTemporary(file);
-					} catch (IOException ex) {
-						System.out.println(ex);
-						JOptionPane.showMessageDialog(DebugFrame.this, ex.getLocalizedMessage(), SimYukkuri.TITLE,
-								JOptionPane.ERROR_MESSAGE);
-					} catch (ClassNotFoundException ex) {
-						System.out.println(ex);
-						JOptionPane.showMessageDialog(DebugFrame.this, ex.getLocalizedMessage(), SimYukkuri.TITLE,
-								JOptionPane.ERROR_MESSAGE);
-					}
-				}
-			}
-		});
-		btnNewButton_1.setBounds(680, 10, 91, 21);
-		contentPane.add(btnNewButton_1);
-		
 		scrollPane = new JScrollPane();
 		scrollPane.setBounds(22, 80, 724, 321);
 		contentPane.add(scrollPane);
