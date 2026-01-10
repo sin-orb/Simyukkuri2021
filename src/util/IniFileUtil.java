@@ -71,6 +71,16 @@ public class IniFileUtil {
 			b.getRudeLimit()[0] = (int) conf.get("RudeLimit") + SimYukkuri.RND.nextInt(20) - 10;
 			b.getRudeLimit()[1] = (int) conf.get("VeryRudeLimit") + SimYukkuri.RND.nextInt(20) - 10;
 			b.setRealPregnantLimit((int) conf.get("RealPregnantLimit") == 1);
+			// 自主洗浄失敗確率
+			b.getCleaningFailProbWise()[0] = (int) conf.get("CleaningFailProb.Wise.baby");
+			b.getCleaningFailProbWise()[1] = (int) conf.get("CleaningFailProb.Wise.child");
+			b.getCleaningFailProbWise()[2] = (int) conf.get("CleaningFailProb.Wise.adult");
+			b.getCleaningFailProbAverage()[0] = (int) conf.get("CleaningFailProb.Average.baby");
+			b.getCleaningFailProbAverage()[1] = (int) conf.get("CleaningFailProb.Average.child");
+			b.getCleaningFailProbAverage()[2] = (int) conf.get("CleaningFailProb.Average.adult");
+			b.getCleaningFailProbFool()[0] = (int) conf.get("CleaningFailProb.Fool.baby");
+			b.getCleaningFailProbFool()[1] = (int) conf.get("CleaningFailProb.Fool.child");
+			b.getCleaningFailProbFool()[2] = (int) conf.get("CleaningFailProb.Fool.adult");
 		} else {
 			Map<String, Object> conf = new HashMap<String, Object>();
 			ClassLoader loader = clazz.getClassLoader();
@@ -304,6 +314,63 @@ public class IniFileUtil {
 				b.setExciteProb(nTemp);
 			}
 			conf.put("GetExcitedProbablity", b.getExciteProb());
+			// 自主洗浄失敗確率（賢い）
+			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play",
+					"CleaningFailProb.Wise.baby");
+			if (nTemp != 0) {
+				b.getCleaningFailProbWise()[0] = nTemp;
+			}
+			conf.put("CleaningFailProb.Wise.baby", b.getCleaningFailProbWise()[0]);
+			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play",
+					"CleaningFailProb.Wise.child");
+			if (nTemp != 0) {
+				b.getCleaningFailProbWise()[1] = nTemp;
+			}
+			conf.put("CleaningFailProb.Wise.child", b.getCleaningFailProbWise()[1]);
+			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play",
+					"CleaningFailProb.Wise.adult");
+			if (nTemp != 0) {
+				b.getCleaningFailProbWise()[2] = nTemp;
+			}
+			conf.put("CleaningFailProb.Wise.adult", b.getCleaningFailProbWise()[2]);
+			// 自主洗浄失敗確率（普通）
+			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play",
+					"CleaningFailProb.Average.baby");
+			if (nTemp != 0) {
+				b.getCleaningFailProbAverage()[0] = nTemp;
+			}
+			conf.put("CleaningFailProb.Average.baby", b.getCleaningFailProbAverage()[0]);
+			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play",
+					"CleaningFailProb.Average.child");
+			if (nTemp != 0) {
+				b.getCleaningFailProbAverage()[1] = nTemp;
+			}
+			conf.put("CleaningFailProb.Average.child", b.getCleaningFailProbAverage()[1]);
+			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play",
+					"CleaningFailProb.Average.adult");
+			if (nTemp != 0) {
+				b.getCleaningFailProbAverage()[2] = nTemp;
+			}
+			conf.put("CleaningFailProb.Average.adult", b.getCleaningFailProbAverage()[2]);
+			// 自主洗浄失敗確率（餡子脳）
+			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play",
+					"CleaningFailProb.Fool.baby");
+			if (nTemp != 0) {
+				b.getCleaningFailProbFool()[0] = nTemp;
+			}
+			conf.put("CleaningFailProb.Fool.baby", b.getCleaningFailProbFool()[0]);
+			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play",
+					"CleaningFailProb.Fool.child");
+			if (nTemp != 0) {
+				b.getCleaningFailProbFool()[1] = nTemp;
+			}
+			conf.put("CleaningFailProb.Fool.child", b.getCleaningFailProbFool()[1]);
+			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play",
+					"CleaningFailProb.Fool.adult");
+			if (nTemp != 0) {
+				b.getCleaningFailProbFool()[2] = nTemp;
+			}
+			conf.put("CleaningFailProb.Fool.adult", b.getCleaningFailProbFool()[2]);
 			configsForIni.put(clazz, conf);
 		}
 	}

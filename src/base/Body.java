@@ -3880,32 +3880,23 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		if (canFurifuri())
 			setFurifuri(true);
 		makeDirty(false);
+		// 年齢インデックス: 0=赤ゆ, 1=子ゆ, 2=成ゆ
+		int ageIndex = isBaby() ? 0 : (isChild() ? 1 : 2);
 		int P = 1;
 		switch (getIntelligence()) {
 		case WISE:
-			if (isBaby())
-				P = 10;
-			else if (isChild())
-				P = 5;
-			else if (isAdult())
-				P = 2;
+			P = getCleaningFailProbWise()[ageIndex];
 			break;
 		case AVERAGE:
-			if (isBaby())
-				P = 25;
-			else if (isChild())
-				P = 8;
-			else if (isAdult())
-				P = 3;
+			P = getCleaningFailProbAverage()[ageIndex];
 			break;
 		case FOOL:
-			if (isBaby())
-				P = 50;
-			else if (isChild())
-				P = 10;
-			else if (isAdult())
-				P = 5;
+			P = getCleaningFailProbFool()[ageIndex];
 			break;
+		}
+		// P が 0 以下の場合は失敗しない（安全対策）
+		if (P <= 0) {
+			P = 1;
 		}
 		//汚れが残る
 		if (SimYukkuri.RND.nextInt(P) != 0) {

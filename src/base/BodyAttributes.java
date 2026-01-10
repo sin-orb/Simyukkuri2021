@@ -229,6 +229,13 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	/** よりリアルな妊娠限界 */
 	private boolean realPregnantLimit = true;
 
+	/** 自主洗浄失敗確率 - 賢い [0]:赤ゆ [1]:子ゆ [2]:成ゆ */
+	private int[] cleaningFailProbWise = { 10, 5, 2 };
+	/** 自主洗浄失敗確率 - 普通 [0]:赤ゆ [1]:子ゆ [2]:成ゆ */
+	private int[] cleaningFailProbAverage = { 25, 8, 3 };
+	/** 自主洗浄失敗確率 - 餡子脳 [0]:赤ゆ [1]:子ゆ [2]:成ゆ */
+	private int[] cleaningFailProbFool = { 50, 10, 5 };
+
 	// individual state variables for each Yukkuri.
 	/** 画像がまりちゃ流しか */
 	private boolean bImageNagasiMode = false;
@@ -1498,6 +1505,60 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 */
 	public void setDiarrheaProb(int diarrheaProb) {
 		this.diarrheaProb = diarrheaProb;
+	}
+
+	/**
+	 * 自主洗浄失敗確率（賢い）を取得する.
+	 *
+	 * @return 自主洗浄失敗確率配列 [0]:赤ゆ [1]:子ゆ [2]:成ゆ
+	 */
+	public int[] getCleaningFailProbWise() {
+		return cleaningFailProbWise;
+	}
+
+	/**
+	 * 自主洗浄失敗確率（賢い）を設定する.
+	 *
+	 * @param cleaningFailProbWise 自主洗浄失敗確率配列 [0]:赤ゆ [1]:子ゆ [2]:成ゆ
+	 */
+	public void setCleaningFailProbWise(int[] cleaningFailProbWise) {
+		this.cleaningFailProbWise = cleaningFailProbWise;
+	}
+
+	/**
+	 * 自主洗浄失敗確率（普通）を取得する.
+	 *
+	 * @return 自主洗浄失敗確率配列 [0]:赤ゆ [1]:子ゆ [2]:成ゆ
+	 */
+	public int[] getCleaningFailProbAverage() {
+		return cleaningFailProbAverage;
+	}
+
+	/**
+	 * 自主洗浄失敗確率（普通）を設定する.
+	 *
+	 * @param cleaningFailProbAverage 自主洗浄失敗確率配列 [0]:赤ゆ [1]:子ゆ [2]:成ゆ
+	 */
+	public void setCleaningFailProbAverage(int[] cleaningFailProbAverage) {
+		this.cleaningFailProbAverage = cleaningFailProbAverage;
+	}
+
+	/**
+	 * 自主洗浄失敗確率（餡子脳）を取得する.
+	 *
+	 * @return 自主洗浄失敗確率配列 [0]:赤ゆ [1]:子ゆ [2]:成ゆ
+	 */
+	public int[] getCleaningFailProbFool() {
+		return cleaningFailProbFool;
+	}
+
+	/**
+	 * 自主洗浄失敗確率（餡子脳）を設定する.
+	 *
+	 * @param cleaningFailProbFool 自主洗浄失敗確率配列 [0]:赤ゆ [1]:子ゆ [2]:成ゆ
+	 */
+	public void setCleaningFailProbFool(int[] cleaningFailProbFool) {
+		this.cleaningFailProbFool = cleaningFailProbFool;
 	}
 
 	/**
