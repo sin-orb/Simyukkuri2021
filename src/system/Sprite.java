@@ -66,15 +66,15 @@ public class Sprite implements java.io.Serializable {
 	 */
 	public void calcScreenRect(Point4y origin, int tx, int ty, int tw, int th) {
 		// 左
-		screenRect[0].x = origin.x - tx;
-		screenRect[0].y = origin.y - ty;
-		screenRect[0].width = tw;
-		screenRect[0].height = th;
+		screenRect[0].setX(origin.getX() - tx);
+		screenRect[0].setY(origin.getY() - ty);
+		screenRect[0].setWidth(tw);
+		screenRect[0].setHeight(th);
 		// 右
-		screenRect[1].x = origin.x + tx;
-		screenRect[1].y = origin.y - ty;
-		screenRect[1].width = -tw;
-		screenRect[1].height = th;
+		screenRect[1].setX(origin.getX() + tx);
+		screenRect[1].setY(origin.getY() - ty);
+		screenRect[1].setWidth(-tw);
+		screenRect[1].setHeight(th);
 	}
 	
 	

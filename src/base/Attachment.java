@@ -13,61 +13,67 @@ import src.enums.Type;
 import src.util.YukkuriUtil;
 
 /****************************************
- *  ゆっくりの体に付くアタッチメントのベースクラス
+ * ゆっくりの体に付くアタッチメントのベースクラス
  */
 @JsonTypeInfo(use = Id.CLASS)
 public abstract class Attachment extends Obj {
 
 	private static final long serialVersionUID = 4324305548250241185L;
-	/**アタッチメントのつけられている元のID*/
+	/** アタッチメントのつけられている元のID */
 	protected int parent;
-	/**アニメーションするかどうか*/
+	/** アニメーションするかどうか */
 	protected boolean animate;
-	/**アニメーション表示フレームの数*/
+	/** アニメーション表示フレームの数 */
 	protected int animeFrame;
-	/**アニメーションの描画間隔*/
+	/** アニメーションの描画間隔 */
 	protected int animeInterval;
-	/**アニメループ回数。0でアニメなし*/
+	/** アニメループ回数。0でアニメなし */
 	protected int animeLoop;
-	/**どの種類の画像を使うか*/
+	/** どの種類の画像を使うか */
 	protected int[] attachProperty;
-	/**毎時処理が必要ないもののための処理インターバル
-	 * <br>初期値は10=1s*/
+	/**
+	 * 毎時処理が必要ないもののための処理インターバル
+	 * <br>
+	 * 初期値は10=1s
+	 */
 	protected int processInterval = 10;
 
-	/**各年齢での描画オフセット*/
+	/** 各年齢での描画オフセット */
 	protected Point4y[] posOfs;
 
-	/**画像取得*/
+	/** 画像取得 */
 	@Transient
 	public abstract BufferedImage getImage(Body b);
 
-	/**X方向の描画座標オフセット分*/
+	/** X方向の描画座標オフセット分 */
 	@Transient
 	public int getOfsX() {
 		Body pa = YukkuriUtil.getBodyInstance(parent);
-		if (pa == null) return -1;
-		return posOfs[pa.getBodyAgeState().ordinal()].x;
+		if (pa == null)
+			return -1;
+		return posOfs[pa.getBodyAgeState().ordinal()].getX();
 	}
 
-	/**Y方向の描画座標オフセット分*/
+	/** Y方向の描画座標オフセット分 */
 	@Transient
 	public int getOfsY() {
 		Body pa = YukkuriUtil.getBodyInstance(parent);
-		if (pa == null) return -1;
-		return posOfs[pa.getBodyAgeState().ordinal()].y;
+		if (pa == null)
+			return -1;
+		return posOfs[pa.getBodyAgeState().ordinal()].getY();
 	}
 
-	/**親オブジェクトの原点取得*/
+	/** 親オブジェクトの原点取得 */
 	@Transient
 	public int getParentOrigin() {
 		return attachProperty[AttachProperty.OFS_ORIGIN.ordinal()];
 	}
 
-	/**アタッチメントの詳細設定*/
+	/** アタッチメントの詳細設定 */
 	protected void setAttachProperty(int[] p, String ofsKey) {
 		Body pa = YukkuriUtil.getBodyInstance(parent);
-		if (pa == null) return;
+		if (pa == null)
+			return;
 		posOfs = pa.getMountPoint(ofsKey);
 		attachProperty = p;
 		animeInterval = 0;
@@ -80,21 +86,22 @@ public abstract class Attachment extends Obj {
 
 	/**
 	 * コンストラクタ
+	 * 
 	 * @param body つけられるゆっくり
 	 */
 	public Attachment(Body body) {
 		objType = Type.ATTACHMENT;
 		parent = body.getUniqueID();
 	}
-	
+
 	public Attachment() {
 		posOfs = new Point4y[3];
 	}
 
-	/**毎ティックごとの処理*/
+	/** 毎ティックごとの処理 */
 	abstract protected Event update();
 
-	/**描画用の境界線のリセット*/
+	/** 描画用の境界線のリセット */
 	abstract public void resetBoundary();
 
 	@Override
@@ -105,7 +112,7 @@ public abstract class Attachment extends Obj {
 	public Event clockTick() {
 		Event ret = Event.DONOTHING;
 		setAge(getAge() + TICK);
-		//処理量軽減処置
+		// 処理量軽減処置
 		if (getAge() % processInterval == 0) {
 			ret = update();
 		}

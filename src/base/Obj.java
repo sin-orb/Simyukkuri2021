@@ -440,15 +440,15 @@ public class Obj implements java.io.Serializable, Comparable {
 	/** 画面上に描画されているオブジェクトの原点をセット
 	 * <br>直接座標を入力するVer*/
 	public void setScreenPivot(int x, int y) {
-		screenPivot.x = x;
-		screenPivot.y = y;
+		screenPivot.setX(x);
+		screenPivot.setY(y);
 	}
 
 	/** 画面上に描画されているオブジェクトの原点をセット
 	 * <br>Pointを利用するVer*/
 	public void setScreenPivot(Point4y rect) {
-		screenPivot.x = rect.x;
-		screenPivot.y = rect.y;
+		screenPivot.setX(rect.getX());
+		screenPivot.setY(rect.getY());
 	}
 	/**画面上に描画されているオブジェクトの原点をゲット*/
 	public Point4y getScreenPivot() {

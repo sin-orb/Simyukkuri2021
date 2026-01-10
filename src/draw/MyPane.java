@@ -144,43 +144,47 @@ import src.yukkuri.Yuyuko;
 
 /**
  * SimYukuri.javaの補完
- * <br>画像の読み込みや描画関連、スレッドを走らせることをメインにやっている模様
+ * <br>
+ * 画像の読み込みや描画関連、スレッドを走らせることをメインにやっている模様
  *
  */
 public class MyPane extends JPanel implements Runnable {
 
 	private static final long serialVersionUID = 3984934418500303781L;
-	/**メッセージボックスの位置行当たりの文字数*/
+	/** メッセージボックスの位置行当たりの文字数 */
 	static final int MSG_BOX_CHAR_NUM = 13;
-	/**スレッドが走っているか否か*/
+	/** スレッドが走っているか否か */
 	private boolean isRunning = false;
-	/**ゲーム内環境*/
+	/** ゲーム内環境 */
 	private Terrarium terrarium = new Terrarium();
 
-	/**背景用バッファ*/
+	/** 背景用バッファ */
 	private BufferedImage backBuffer = null;
-	/**背景用画像*/
+	/** 背景用画像 */
 	private Graphics2D backBufferG2 = null;
 
-	/** 描画用テンポラリ*/
+	/** 描画用テンポラリ */
 	private List<Obj> list4sort = new LinkedList<Obj>();
 	private List<Body> msgList = new LinkedList<Body>();
 	private int[] posTmp = new int[10];
 	private BufferedImage[] layerTmp = new BufferedImage[10];
-	/**拡大表示倍率*/
+	/** 拡大表示倍率 */
 	private Object renderScale;
 
 	static boolean showLog = false;
-	/*フレームレート*/
+	/* フレームレート */
 	static FrameRate fps = new FrameRate();
-	/**ゲームスピードの定義
-	 * <br>順に、停止、1倍、2倍、4倍、10倍、最速*/
+	/**
+	 * ゲームスピードの定義
+	 * <br>
+	 * 順に、停止、1倍、2倍、4倍、10倍、最速
+	 */
 	public static final int PAUSE = -1, MAX = 1, DECUPLE = 10, QUINTUPLE = 20, DOUBLE = 50, NORMAL = 100;
-	/**スピードの値管理*/
+	/** スピードの値管理 */
 	public static final int gameSpeed[] = { PAUSE, NORMAL, DOUBLE, QUINTUPLE, DECUPLE, MAX };
 
 	@SuppressWarnings("rawtypes")
-	/**ゆっくり追加ウィンドウ用コンボボックス群*/
+	/** ゆっくり追加ウィンドウ用コンボボックス群 */
 	static JComboBox cb1;
 	@SuppressWarnings("rawtypes")
 	static JComboBox cb2;
@@ -191,37 +195,37 @@ public class MyPane extends JPanel implements Runnable {
 	@SuppressWarnings("rawtypes")
 	static JComboBox cb5;
 	static JCheckBox cb6;
-	/**ゆっくり追加ウィンドウ用チェックボックス群*/
+	/** ゆっくり追加ウィンドウ用チェックボックス群 */
 	static final String[] namesCommonJ = { Marisa.nameJ, Reimu.nameJ, Alice.nameJ, Patch.nameJ, Chen.nameJ,
 			Myon.nameJ };
-	/**ゆっくり追加ウィンドウ用チェックボックス群(英語)*/
+	/** ゆっくり追加ウィンドウ用チェックボックス群(英語) */
 	static final String[] namesCommonE = { Marisa.nameE, Reimu.nameE, Alice.nameE, Patch.nameE, Chen.nameE,
 			Myon.nameE };
-	/**ゆっくり追加ウィンドウの、希少種用名前欄*/
+	/** ゆっくり追加ウィンドウの、希少種用名前欄 */
 	static final String[] namesRareJ = { Yurusanae.nameJ, Ayaya.nameJ, Tenko.nameJ, Udonge.nameJ, Meirin.nameJ,
 			Suwako.nameJ, Chiruno.nameJ, Eiki.nameJ, Ran.nameJ, Nitori.nameJ, Yuuka.nameJ, Sakuya.nameJ };
-	/**ゆっくり追加ウィンドウの、希少種用名前欄（英語）*/
+	/** ゆっくり追加ウィンドウの、希少種用名前欄（英語） */
 	static final String[] namesRareE = { Yurusanae.nameE, Ayaya.nameE, Tenko.nameE, Udonge.nameE, Meirin.nameE,
 			Suwako.nameE, Chiruno.nameE, Eiki.nameE, Ran.nameE, Nitori.nameE, Yuuka.nameE, Sakuya.nameE };
-	/**ゆっくり追加ウィンドウの、捕食種用名前欄*/
+	/** ゆっくり追加ウィンドウの、捕食種用名前欄 */
 	static final String[] namesPredatorJ = { Remirya.nameJ, Fran.nameJ, Yuyuko.nameJ };
-	/**ゆっくり追加ウィンドウの、捕食種用名前欄(英語)*/
+	/** ゆっくり追加ウィンドウの、捕食種用名前欄(英語) */
 	static final String[] namesPredatorE = { Remirya.nameE, Fran.nameE, Yuyuko.nameE };
 
-	/** 描画設定フラグ群*/
+	/** 描画設定フラグ群 */
 	public static boolean isDisableScript = false;
 	public static boolean isEnableTarget = false;
 	public static boolean isDisableHelp = false;
-	/** カーソルで選択されているゆっくり*/
+	/** カーソルで選択されているゆっくり */
 	public static Body selectBody = null;
-	/**カーソル描画用長方形*/
+	/** カーソル描画用長方形 */
 	static List<Rectangle4y> markList = new LinkedList<Rectangle4y>();
 
-	/** 標準のライン定数*/
+	/** 標準のライン定数 */
 	private static final Stroke DEFAULT_STROKE = new BasicStroke(1.0f);
-	/**標準フォント*/
+	/** 標準フォント */
 	private static final Font DEFAULT_FONT = new Font(Font.MONOSPACED, Font.PLAIN, 12);
-	/**ねぎぃメッセージ用フォント*/
+	/** ねぎぃメッセージ用フォント */
 	private static final Font NEGI_FONT = new Font(Font.MONOSPACED, Font.PLAIN, 120);
 
 	// アイテムカーソル
@@ -229,27 +233,28 @@ public class MyPane extends JPanel implements Runnable {
 	private static final Color ITEM_CUR_COLOR = new Color(0, 0, 0);
 	private static final Ellipse2D.Float ITEM_CUR_SHAPE = new Ellipse2D.Float(-16, -16, 32, 32);
 
-	/** 計算テンポラリ*/
+	/** 計算テンポラリ */
 	private static Point4y tmpPoint = new Point4y();
-	/**画像描画用の標準汎用長方形*/
+	/** 画像描画用の標準汎用長方形 */
 	private static Rectangle4y tmpRect = new Rectangle4y();
 
 	// ini設定
-	/**ログダイアログへの出力有無*/
+	/** ログダイアログへの出力有無 */
 	private static int nLogOutput = 1;
-	/**赤ゆサイズのうんうんの影描写の有無*/
+	/** 赤ゆサイズのうんうんの影描写の有無 */
 	private static int nDrawShadowShit_Baby = 1;
-	/**赤ゆサイズの吐餡の影描写の有無*/
+	/** 赤ゆサイズの吐餡の影描写の有無 */
 	private static int nDrawShadowVomit_Baby = 1;
 
 	/**
-	 *  全画像の読み込み
-	 * @param isBg 背景を読み込むか否か
-	 * @param isItem アイテム画像を読み込むか否か
+	 * 全画像の読み込み
+	 * 
+	 * @param isBg     背景を読み込むか否か
+	 * @param isItem   アイテム画像を読み込むか否か
 	 * @param isEffect エフェクト画像を読み込むか否か
-	 * @param isBody ゆっくり(通常種のみ)を読み込むか否か
+	 * @param isBody   ゆっくり(通常種のみ)を読み込むか否か
 	 * @param isAttach アタッチメント一式を読み込むか否か
-	 * @param isIni iniファイルの読み込み
+	 * @param isIni    iniファイルの読み込み
 	 */
 	public void loadImage(boolean isBg, boolean isItem, boolean isEffect, boolean isBody, boolean isAttach,
 			boolean isIni) {
@@ -391,7 +396,8 @@ public class MyPane extends JPanel implements Runnable {
 		}
 	}
 
-	/** ゆっくり用遅延読み込み
+	/**
+	 * ゆっくり用遅延読み込み
 	 *
 	 * @param type 読み込むゆっくりの種
 	 */
@@ -427,21 +433,24 @@ public class MyPane extends JPanel implements Runnable {
 		}
 	}
 
-	/** 背景ファイルリロード*/
+	/** 背景ファイルリロード */
 	public void loadTerrainFile() {
 		ClassLoader loader = this.getClass().getClassLoader();
 		TerrainField.loadTerrain(SimYukkuri.world.getNextMap(), loader, this);
 		System.gc();
 	}
 
-	/**ズーム時の中心の表示倍率
+	/**
+	 * ズーム時の中心の表示倍率
+	 * 
 	 * @param hint オブジェクト
 	 */
 	public void setRenderScale(Object hint) {
 		renderScale = hint;
 	}
 
-	/**背景画像用バッファ作成
+	/**
+	 * 背景画像用バッファ作成
 	 *
 	 */
 	public void createBackBuffer() {
@@ -469,7 +478,8 @@ public class MyPane extends JPanel implements Runnable {
 					continue;
 				}
 
-				//				stress = 100 * Terrarium.bodyList.size() / Body.getHeadageLimit() * 10000 / (Terrarium.terrariumSizeParcent*Terrarium.terrariumSizeParcent);
+				// stress = 100 * Terrarium.bodyList.size() / Body.getHeadageLimit() * 10000 /
+				// (Terrarium.terrariumSizeParcent*Terrarium.terrariumSizeParcent);
 				speed = gameSpeed[MainCommandUI.selectedGameSpeed];
 			}
 
@@ -502,7 +512,7 @@ public class MyPane extends JPanel implements Runnable {
 		return this.getClass().getClassLoader();
 	}
 
-	/**ゆっくり追加用クラス*/
+	/** ゆっくり追加用クラス */
 	public class MyAddYukkuriListener implements ItemListener, ActionListener {
 		@SuppressWarnings({ "unchecked", "rawtypes" })
 		public void itemStateChanged(ItemEvent e) {
@@ -564,13 +574,16 @@ public class MyPane extends JPanel implements Runnable {
 		final int BABY = 0, CHILD = 1, ADULT = 2;
 		MyAddYukkuriListener mayl = new MyAddYukkuriListener();
 
-		String[] tempAges = { ResourceUtil.getInstance().read("draw_baby"), ResourceUtil.getInstance().read("draw_child"), ResourceUtil.getInstance().read("draw_adult") };
+		String[] tempAges = { ResourceUtil.getInstance().read("draw_baby"),
+				ResourceUtil.getInstance().read("draw_child"), ResourceUtil.getInstance().read("draw_adult") };
 		ages = tempAges;
-		String[] tempRare = { ResourceUtil.getInstance().read("draw_normalsp"), ResourceUtil.getInstance().read("draw_raresp"), ResourceUtil.getInstance().read("draw_predsp") };
+		String[] tempRare = { ResourceUtil.getInstance().read("draw_normalsp"),
+				ResourceUtil.getInstance().read("draw_raresp"), ResourceUtil.getInstance().read("draw_predsp") };
 		rare = tempRare;
 		String[] tempo = { ResourceUtil.getInstance().read("yes"), ResourceUtil.getInstance().read("no") };
 		options = tempo;
-		String[] tempmode = { ResourceUtil.getInstance().read("off"), ResourceUtil.getInstance().read("draw_normalsp"), ResourceUtil.getInstance().read("draw_raresp"), ResourceUtil.getInstance().read("draw_normraresp") };
+		String[] tempmode = { ResourceUtil.getInstance().read("off"), ResourceUtil.getInstance().read("draw_normalsp"),
+				ResourceUtil.getInstance().read("draw_raresp"), ResourceUtil.getInstance().read("draw_normraresp") };
 		mode = tempmode;
 		String[] tempnum = { "1", "2", "3", "4", "5", "10", "50", "100" };
 		num = tempnum;
@@ -595,9 +608,9 @@ public class MyPane extends JPanel implements Runnable {
 			cb3.addItemListener(mayl);
 			cb1 = new JComboBox();
 			if (cb3.getSelectedIndex() == 0) {
-				cb1.setModel(new DefaultComboBoxModel(ResourceUtil.IS_JP?  namesCommonJ : namesCommonE));
+				cb1.setModel(new DefaultComboBoxModel(ResourceUtil.IS_JP ? namesCommonJ : namesCommonE));
 			} else {
-				cb1.setModel(new DefaultComboBoxModel(ResourceUtil.IS_JP? namesRareJ : namesRareE));
+				cb1.setModel(new DefaultComboBoxModel(ResourceUtil.IS_JP ? namesRareJ : namesRareE));
 			}
 			cb1.setMaximumRowCount(8);
 			cb1.setSelectedIndex(0);
@@ -646,37 +659,37 @@ public class MyPane extends JPanel implements Runnable {
 				int selectType;
 				int selectAge;
 				switch (rndType) {
-				case 0:
-				default:
-					selectType = cb1.getSelectedIndex();
-					if (cb3.getSelectedIndex() == 1) {
-						selectType += 1000;
-					} else if (cb3.getSelectedIndex() == 2) {
-						selectType += 3000;
-					}
-					selectAge = cb2.getSelectedIndex();
-					break;
-				case 1:
-					selectType = SimYukkuri.RND.nextInt(namesCommonJ.length);
-					selectAge = SimYukkuri.RND.nextInt(3);
-					break;
-				case 2:
-					selectType = SimYukkuri.RND.nextInt(namesRareJ.length) + 1000;
-					selectAge = SimYukkuri.RND.nextInt(3);
-					break;
-				case 3:
-					int selectRare = SimYukkuri.RND.nextInt(2);
-					switch (selectRare) {
 					case 0:
 					default:
-						selectType = SimYukkuri.RND.nextInt(namesCommonJ.length);
+						selectType = cb1.getSelectedIndex();
+						if (cb3.getSelectedIndex() == 1) {
+							selectType += 1000;
+						} else if (cb3.getSelectedIndex() == 2) {
+							selectType += 3000;
+						}
+						selectAge = cb2.getSelectedIndex();
 						break;
 					case 1:
-						selectType = SimYukkuri.RND.nextInt(namesRareJ.length) + 1000;
+						selectType = SimYukkuri.RND.nextInt(namesCommonJ.length);
+						selectAge = SimYukkuri.RND.nextInt(3);
 						break;
-					}
-					selectAge = SimYukkuri.RND.nextInt(3);
-					break;
+					case 2:
+						selectType = SimYukkuri.RND.nextInt(namesRareJ.length) + 1000;
+						selectAge = SimYukkuri.RND.nextInt(3);
+						break;
+					case 3:
+						int selectRare = SimYukkuri.RND.nextInt(2);
+						switch (selectRare) {
+							case 0:
+							default:
+								selectType = SimYukkuri.RND.nextInt(namesCommonJ.length);
+								break;
+							case 1:
+								selectType = SimYukkuri.RND.nextInt(namesRareJ.length) + 1000;
+								break;
+						}
+						selectAge = SimYukkuri.RND.nextInt(3);
+						break;
 				}
 
 				boolean bImageNagasiMode = false;
@@ -691,7 +704,7 @@ public class MyPane extends JPanel implements Runnable {
 				if (selectType == Ayaya.type && SimYukkuri.RND.nextInt(20) == 0)
 					selectType = Kimeemaru.type;
 
-				//if(selectType == Reimu.type || selectType == Marisa.type)
+				// if(selectType == Reimu.type || selectType == Marisa.type)
 				{
 					if (SimYukkuri.NAGASI_MODE == 1) {
 						bImageNagasiMode = true;
@@ -705,16 +718,16 @@ public class MyPane extends JPanel implements Runnable {
 
 				AgeState age;
 				switch (selectAge) {
-				case BABY:
-					age = AgeState.BABY;
-					break;
-				case CHILD:
-					age = AgeState.CHILD;
-					break;
-				case ADULT:
-				default:
-					age = AgeState.ADULT;
-					break;
+					case BABY:
+						age = AgeState.BABY;
+						break;
+					case CHILD:
+						age = AgeState.CHILD;
+						break;
+					case ADULT:
+					default:
+						age = AgeState.ADULT;
+						break;
 				}
 				Body b = terrarium.makeBody(SimYukkuri.RND.nextInt(Translate.mapW),
 						SimYukkuri.RND.nextInt(Translate.mapH), 0, selectType,
@@ -742,9 +755,11 @@ public class MyPane extends JPanel implements Runnable {
 		}
 	}
 
-	/** ゆっくり用描画位置の計算
+	/**
+	 * ゆっくり用描画位置の計算
+	 * 
 	 * @param origin 対象ゆっくりの原点
-	 * @param spr 対象ゆっくりのスプライト
+	 * @param spr    対象ゆっくりのスプライト
 	 */
 	private void calcDrawBodyPosition(Point4y origin, Sprite spr) {
 		int sizeW = Translate.transSize(spr.imageW);
@@ -756,9 +771,10 @@ public class MyPane extends JPanel implements Runnable {
 		spr.calcScreenRect(origin, pivX, pivY, sizeW, sizeH);
 	}
 
-	/** 汎用の描画位置の計算
+	/**
+	 * 汎用の描画位置の計算
 	 *
-	 * @param o 描画対象オブジェクト
+	 * @param o    描画対象オブジェクト
 	 * @param rect オブジェクトの占有長方形
 	 */
 	private void calcDrawPosition(Obj o, Rectangle4y rect) {
@@ -767,8 +783,8 @@ public class MyPane extends JPanel implements Runnable {
 		int pivX = Translate.transSize(o.getPivotX());
 		int pivY = Translate.transSize(o.getPivotY());
 		Translate.translate(o.getX(), o.getY(), tmpPoint);
-		rect.x = tmpPoint.x - pivX;
-		rect.y = tmpPoint.y - pivY;
+		rect.x = tmpPoint.getX() - pivX;
+		rect.y = tmpPoint.getY() - pivY;
 		rect.width = sizeW;
 		rect.height = sizeH;
 
@@ -785,7 +801,7 @@ public class MyPane extends JPanel implements Runnable {
 
 			MapPlaceData curMap = SimYukkuri.world.getCurrentMap();
 
-			//			fps.count();
+			// fps.count();
 
 			list4sort.clear();
 			list4sort.addAll(SimYukkuri.world.getYukkuriList());
@@ -867,144 +883,150 @@ public class MyPane extends JPanel implements Runnable {
 
 			for (Obj o : list4sort) {
 				switch (o.getObjType()) {
-				case YUKKURI: {
-					Body b = (Body) o;
-					// 選択中の固体がいるかチェック用
-					if (b == selectBody) {
-						selectBodyCheck = b;
+					case YUKKURI: {
+						Body b = (Body) o;
+						// 選択中の固体がいるかチェック用
+						if (b == selectBody) {
+							selectBodyCheck = b;
+						}
+
+						int direction = b.getDirection().ordinal();
+						// 妊娠などによるゆっくり画像サイズを最新のものに計算
+						b.updateSpriteSize();
+						base = b.getBodyBaseSpr();
+						expand = b.getBodyExpandSpr();
+						braid = b.getBraidSprite();
+
+						int shadowH = b.getShadowH(); // 影の画像高さ 横は体の幅を使う
+
+						// マップ上の位置から背景上の位置へ変換
+						Translate.translate(b.getDrawOfsX(), b.getDrawOfsY(), tmpPoint);
+						calcDrawBodyPosition(tmpPoint, base);
+						calcDrawBodyPosition(tmpPoint, expand);
+						calcDrawBodyPosition(tmpPoint, braid);
+
+						boolean bDrawShadow = true;
+						Obj obj = b.takeMappedObj(b.getLinkParent());
+						if (obj != null && obj.getZ() < b.getZ()) {
+							bDrawShadow = false;
+						}
+						// 影
+						if (bDrawShadow && b.isDropShadow() && !b.isUnBirth() && 0 <= b.getZ()) {
+							if (b.getType() == Remirya.type && b.isbImageNagasiMode()) {
+								backBufferG2.drawImage(b.getShadowImage(), expand.screenRect[direction].x,
+										expand.screenRect[direction].y + expand.screenRect[direction].height * 11 / 12
+												- shadowH,
+										expand.screenRect[direction].width, shadowH, this);
+							} else {
+								backBufferG2.drawImage(b.getShadowImage(), expand.screenRect[direction].x,
+										expand.screenRect[direction].y + expand.screenRect[direction].height - shadowH,
+										expand.screenRect[direction].width, shadowH, this);
+							}
+						}
+
+						// 本体が宙に浮いてる分
+						int tz = Translate.translateZ(b.getZ());
+						base.screenRect[0].y -= tz;
+						expand.screenRect[0].y -= tz;
+						braid.screenRect[0].y -= tz;
+						base.screenRect[1].y -= tz;
+						expand.screenRect[1].y -= tz;
+						braid.screenRect[1].y -= tz;
+
+						// 描画情報の登録
+						b.setScreenPivot(tmpPoint);
+						b.setScreenRect(expand.screenRect[0]);
+
+						// カーソル登録
+						if (b.isPin()) {
+							// Rectangle rect = new Rectangle4y()();
+							// rect.x = bodyExpandRect.x;
+							// rect.y = bodyExpandRect.y;
+							// rect.width = bodyExpandRect.width;
+							// rect.height = bodyExpandRect.height;
+							markList.add(expand.screenRect[0]);
+						}
+
+						// 本体描画
+						if (b.getBaryState() != BaryInUGState.ALL) {
+							BodyUtil.drawBody(backBufferG2, this, b);
+						}
+						// メッセージ固体登録
+						if (b.getMessageBuf() != null && !isDisableScript) {
+							msgList.add(b);
+						}
+						// {
+						// Point pp = new Point();
+						// Translate.translate(b.destX, b.destY, pp);
+						// g2.drawRect(pp.x, pp.y, 3, 3);
+						// }
 					}
-
-					int direction = b.getDirection().ordinal();
-					// 妊娠などによるゆっくり画像サイズを最新のものに計算
-					b.updateSpriteSize();
-					base = b.getBodyBaseSpr();
-					expand = b.getBodyExpandSpr();
-					braid = b.getBraidSprite();
-
-					int shadowH = b.getShadowH(); // 影の画像高さ  横は体の幅を使う
-
-					// マップ上の位置から背景上の位置へ変換
-					Translate.translate(b.getDrawOfsX(), b.getDrawOfsY(), tmpPoint);
-					calcDrawBodyPosition(tmpPoint, base);
-					calcDrawBodyPosition(tmpPoint, expand);
-					calcDrawBodyPosition(tmpPoint, braid);
-
-					boolean bDrawShadow = true;
-					Obj obj = b.takeMappedObj(b.getLinkParent());
-					if (obj != null && obj.getZ() < b.getZ()) {
-						bDrawShadow = false;
+						break;
+					case SHIT: {
+						Shit s = (Shit) o;
+						calcDrawPosition(s, tmpRect);
+						// 赤ゆでかつ接地している場合は影を描画しない
+						if (nDrawShadowShit_Baby == 1 || s.ageState != AgeState.BABY || 0 < s.getZ()) {
+							backBufferG2.drawImage(s.getShadowImage(), tmpRect.x, tmpRect.y, tmpRect.width,
+									tmpRect.height,
+									this);
+						}
+						tmpRect.y -= Translate.translateZ(s.getZ());
+						backBufferG2.drawImage(s.getImage(), tmpRect.x, tmpRect.y, tmpRect.width, tmpRect.height, this);
 					}
-					// 影
-					if (bDrawShadow && b.isDropShadow() && !b.isUnBirth() && 0 <= b.getZ()) {
-						if (b.getType() == Remirya.type && b.isbImageNagasiMode()) {
-							backBufferG2.drawImage(b.getShadowImage(), expand.screenRect[direction].x,
-									expand.screenRect[direction].y + expand.screenRect[direction].height * 11 / 12
-											- shadowH,
-									expand.screenRect[direction].width, shadowH, this);
-						} else {
-							backBufferG2.drawImage(b.getShadowImage(), expand.screenRect[direction].x,
-									expand.screenRect[direction].y + expand.screenRect[direction].height - shadowH,
-									expand.screenRect[direction].width, shadowH, this);
+						break;
+					case VOMIT: {
+						Vomit v = (Vomit) o;
+						calcDrawPosition(v, tmpRect);
+						// 赤ゆでかつ接地している場合は影を描画しない
+						if (nDrawShadowVomit_Baby == 1 || v.getAgeState() != AgeState.BABY || 0 < v.getZ()) {
+							backBufferG2.drawImage(v.getShadowImage(), tmpRect.x, tmpRect.y, tmpRect.width,
+									tmpRect.height,
+									this);
+						}
+						tmpRect.y -= Translate.translateZ(v.getZ());
+						backBufferG2.drawImage(v.getImage(), tmpRect.x, tmpRect.y, tmpRect.width, tmpRect.height, this);
+					}
+						break;
+					case FIX_OBJECT: {
+						ObjEX oex = (ObjEX) o;
+						calcDrawPosition(oex, tmpRect);
+						int layerNum = oex.getImageLayer(layerTmp);
+						for (int i = 0; i < layerNum; i++) {
+							backBufferG2.drawImage(layerTmp[i], tmpRect.x, tmpRect.y, tmpRect.width, tmpRect.height,
+									this);
 						}
 					}
-
-					// 本体が宙に浮いてる分
-					int tz = Translate.translateZ(b.getZ());
-					base.screenRect[0].y -= tz;
-					expand.screenRect[0].y -= tz;
-					braid.screenRect[0].y -= tz;
-					base.screenRect[1].y -= tz;
-					expand.screenRect[1].y -= tz;
-					braid.screenRect[1].y -= tz;
-
-					// 描画情報の登録
-					b.setScreenPivot(tmpPoint);
-					b.setScreenRect(expand.screenRect[0]);
-
-					// カーソル登録
-					if (b.isPin()) {
-						//						Rectangle rect = new Rectangle4y()();
-						//						rect.x = bodyExpandRect.x;
-						//						rect.y = bodyExpandRect.y;
-						//						rect.width = bodyExpandRect.width;
-						//						rect.height = bodyExpandRect.height;
-						markList.add(expand.screenRect[0]);
+						break;
+					case OBJECT: {
+						ObjEX oex = (ObjEX) o;
+						calcDrawPosition(oex, tmpRect);
+						backBufferG2.drawImage(oex.getShadowImage(), tmpRect.x, tmpRect.y, tmpRect.width,
+								tmpRect.height,
+								this);
+						tmpRect.y -= Translate.translateZ(oex.getZ());
+						int layerNum = oex.getImageLayer(layerTmp);
+						for (int i = 0; i < layerNum; i++) {
+							backBufferG2.drawImage(layerTmp[i], tmpRect.x, tmpRect.y, tmpRect.width, tmpRect.height,
+									this);
+						}
 					}
-
-					// 本体描画
-					if (b.getBaryState() != BaryInUGState.ALL) {
-						BodyUtil.drawBody(backBufferG2, this, b);
-					}
-					// メッセージ固体登録
-					if (b.getMessageBuf() != null && !isDisableScript) {
-						msgList.add(b);
-					}
-					//{
-					//	Point pp = new Point();
-					//	Translate.translate(b.destX, b.destY, pp);
-					//	g2.drawRect(pp.x, pp.y, 3, 3);				
-					//}
-				}
-					break;
-				case SHIT: {
-					Shit s = (Shit) o;
-					calcDrawPosition(s, tmpRect);
-					// 赤ゆでかつ接地している場合は影を描画しない
-					if (nDrawShadowShit_Baby == 1 || s.ageState != AgeState.BABY || 0 < s.getZ()) {
-						backBufferG2.drawImage(s.getShadowImage(), tmpRect.x, tmpRect.y, tmpRect.width, tmpRect.height,
+						break;
+					case LIGHT_EFFECT: {
+						Effect ef = (Effect) o;
+						calcDrawPosition(ef, tmpRect);
+						tmpRect.y -= Translate.translateZ(ef.getZ());
+						backBufferG2.drawImage(ef.getImage(), tmpRect.x, tmpRect.y, tmpRect.width, tmpRect.height,
 								this);
 					}
-					tmpRect.y -= Translate.translateZ(s.getZ());
-					backBufferG2.drawImage(s.getImage(), tmpRect.x, tmpRect.y, tmpRect.width, tmpRect.height, this);
-				}
-					break;
-				case VOMIT: {
-					Vomit v = (Vomit) o;
-					calcDrawPosition(v, tmpRect);
-					// 赤ゆでかつ接地している場合は影を描画しない
-					if (nDrawShadowVomit_Baby == 1 || v.getAgeState() != AgeState.BABY || 0 < v.getZ()) {
-						backBufferG2.drawImage(v.getShadowImage(), tmpRect.x, tmpRect.y, tmpRect.width, tmpRect.height,
-								this);
+						break;
+					case BG_OBJECT: {
+						TerrainBillboard tb = (TerrainBillboard) o;
+						tb.draw(backBufferG2, this);
 					}
-					tmpRect.y -= Translate.translateZ(v.getZ());
-					backBufferG2.drawImage(v.getImage(), tmpRect.x, tmpRect.y, tmpRect.width, tmpRect.height, this);
-				}
-					break;
-				case FIX_OBJECT: {
-					ObjEX oex = (ObjEX) o;
-					calcDrawPosition(oex, tmpRect);
-					int layerNum = oex.getImageLayer(layerTmp);
-					for (int i = 0; i < layerNum; i++) {
-						backBufferG2.drawImage(layerTmp[i], tmpRect.x, tmpRect.y, tmpRect.width, tmpRect.height, this);
-					}
-				}
-					break;
-				case OBJECT: {
-					ObjEX oex = (ObjEX) o;
-					calcDrawPosition(oex, tmpRect);
-					backBufferG2.drawImage(oex.getShadowImage(), tmpRect.x, tmpRect.y, tmpRect.width, tmpRect.height,
-							this);
-					tmpRect.y -= Translate.translateZ(oex.getZ());
-					int layerNum = oex.getImageLayer(layerTmp);
-					for (int i = 0; i < layerNum; i++) {
-						backBufferG2.drawImage(layerTmp[i], tmpRect.x, tmpRect.y, tmpRect.width, tmpRect.height, this);
-					}
-				}
-					break;
-				case LIGHT_EFFECT: {
-					Effect ef = (Effect) o;
-					calcDrawPosition(ef, tmpRect);
-					tmpRect.y -= Translate.translateZ(ef.getZ());
-					backBufferG2.drawImage(ef.getImage(), tmpRect.x, tmpRect.y, tmpRect.width, tmpRect.height, this);
-				}
-					break;
-				case BG_OBJECT: {
-					TerrainBillboard tb = (TerrainBillboard) o;
-					tb.draw(backBufferG2, this);
-				}
-					break;
-				default:
-					break;
+						break;
+					default:
+						break;
 				}
 			}
 
@@ -1063,29 +1085,29 @@ public class MyPane extends JPanel implements Runnable {
 					backBufferG2.setStroke(FieldShapeBase.PREVIEW_STROKE);
 					backBufferG2.setColor(FieldShapeBase.PREVIEW_COLOR);
 					switch (curGadget) {
-					case GAP_MINI:
-					case GAP_BIG:
-					case NET_MINI:
-					case NET_BIG:
-					case WALL:
-					case ITEM:
-					case NoUNUN:
-					case KEKKAI:
-						Barrier.drawPreview(backBufferG2, SimYukkuri.fieldSX,
-								SimYukkuri.fieldSY, SimYukkuri.fieldEX, SimYukkuri.fieldEY);
-						break;
-					case POOL:
-						Pool.drawPreview(backBufferG2, SimYukkuri.fieldSX,
-								SimYukkuri.fieldSY, SimYukkuri.fieldEX, SimYukkuri.fieldEY);
-						break;
-					case FARM:
-						Farm.drawPreview(backBufferG2, SimYukkuri.fieldSX,
-								SimYukkuri.fieldSY, SimYukkuri.fieldEX, SimYukkuri.fieldEY);
-						break;
-					case BELTCONVEYOR:
-						Beltconveyor.drawPreview(backBufferG2, SimYukkuri.fieldSX,
-								SimYukkuri.fieldSY, SimYukkuri.fieldEX, SimYukkuri.fieldEY);
-						break;
+						case GAP_MINI:
+						case GAP_BIG:
+						case NET_MINI:
+						case NET_BIG:
+						case WALL:
+						case ITEM:
+						case NoUNUN:
+						case KEKKAI:
+							Barrier.drawPreview(backBufferG2, SimYukkuri.fieldSX,
+									SimYukkuri.fieldSY, SimYukkuri.fieldEX, SimYukkuri.fieldEY);
+							break;
+						case POOL:
+							Pool.drawPreview(backBufferG2, SimYukkuri.fieldSX,
+									SimYukkuri.fieldSY, SimYukkuri.fieldEX, SimYukkuri.fieldEY);
+							break;
+						case FARM:
+							Farm.drawPreview(backBufferG2, SimYukkuri.fieldSX,
+									SimYukkuri.fieldSY, SimYukkuri.fieldEX, SimYukkuri.fieldEY);
+							break;
+						case BELTCONVEYOR:
+							Beltconveyor.drawPreview(backBufferG2, SimYukkuri.fieldSX,
+									SimYukkuri.fieldSY, SimYukkuri.fieldEX, SimYukkuri.fieldEY);
+							break;
 					}
 				}
 			}
@@ -1096,10 +1118,10 @@ public class MyPane extends JPanel implements Runnable {
 					backBufferG2.setStroke(FieldShapeBase.PREVIEW_STROKE);
 					backBufferG2.setColor(FieldShapeBase.PREVIEW_COLOR);
 					switch (curGadget) {
-					case BELTCONVEYOR_CUSTOM:
-						BeltconveyorObj.drawPreview(backBufferG2, SimYukkuri.fieldSX,
-								SimYukkuri.fieldSY, SimYukkuri.fieldEX, SimYukkuri.fieldEY);
-						break;
+						case BELTCONVEYOR_CUSTOM:
+							BeltconveyorObj.drawPreview(backBufferG2, SimYukkuri.fieldSX,
+									SimYukkuri.fieldSY, SimYukkuri.fieldEX, SimYukkuri.fieldEY);
+							break;
 					}
 				}
 			}
@@ -1114,7 +1136,7 @@ public class MyPane extends JPanel implements Runnable {
 				g2.fillRect(0, 0, Translate.fieldW * 100 / Translate.mapScale,
 						Translate.fieldH * 100 / Translate.mapScale);
 			}
-			//メッセージ表示
+			// メッセージ表示
 			String message;
 			int fontSize;
 			int wx, wy;
@@ -1134,19 +1156,19 @@ public class MyPane extends JPanel implements Runnable {
 
 				Translate.transFieldToCanvas(bodyRect.x, bodyRect.y, posTmp);
 				wx = posTmp[0] + 14;
-				//				if(wx + width > Translate.canvasW) wx = Translate.canvasW - width; 
+				// if(wx + width > Translate.canvasW) wx = Translate.canvasW - width;
 				wy = posTmp[1] - height - 4;
-				//				if(wy < 0) wy = 0;
+				// if(wy < 0) wy = 0;
 				Color4y c = b.getMessageBoxColor();
-				g2.setColor(new Color(c.red, c.green, c.blue, c.alpha));
+				g2.setColor(new Color(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha()));
 				g2.fillRoundRect(wx, wy, width + 8, height + 8, 8, 8);
 				c = b.getMessageLineColor();
-				g2.setColor(new Color(c.red, c.green, c.blue, c.alpha)); // no transparent black.
+				g2.setColor(new Color(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha())); // no transparent black.
 				g2.setStroke(b.getMessageWindowStroke());
 				g2.drawRoundRect(wx, wy, width + 8, height + 8, 8, 8);
 				g2.setStroke(DEFAULT_STROKE);
 				c = b.getMessageLineColor();
-				g2.setColor(new Color(c.red, c.green, c.blue, c.alpha)); // no transparent black.
+				g2.setColor(new Color(c.getRed(), c.getGreen(), c.getBlue(), c.getAlpha())); // no transparent black.
 				drawStringMultiLine(g2, message, wx + 4, wy + 4, width, true);
 				g2.setFont(DEFAULT_FONT);
 			}
@@ -1184,7 +1206,7 @@ public class MyPane extends JPanel implements Runnable {
 		}
 	}
 
-	/**文字メッセージの表示*/
+	/** 文字メッセージの表示 */
 	private int drawStringMultiLine(Graphics2D g2d, String str, int posX, int posY, int width, boolean flag) {
 		AttributedString as = new AttributedString(str);
 		as.addAttribute(TextAttribute.FONT, g2d.getFont());

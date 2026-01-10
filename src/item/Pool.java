@@ -140,23 +140,23 @@ public class Pool extends FieldShapeBase implements Serializable {
 	public Pool(int fsx, int fsy, int fex, int fey) {
 		Point4y pS = Translate.getFieldLimitForMap( fsx, fsy );
 		Point4y pE = Translate.getFieldLimitForMap( fex, fey );
-		fieldSX = pS.x;
-		fieldSY = pS.y;
-		fieldEX = pE.x;
-		fieldEY = pE.y;
-		
+		fieldSX = pS.getX();
+		fieldSY = pS.getY();
+		fieldEX = pE.getX();
+		fieldEY = pE.getY();
+
 		int[] anPointBaseX = new int[2];
 		int[] anPointBaseY = new int[2];
 		Translate.getMovedPoint(fieldSX, fieldSY, fieldEX, fieldEY, 0, 0, 0, 0, anPointBaseX, anPointBaseY );
-		
+
 		// フィールド座標が渡ってくるのでマップ座標も計算しておく
 		Point4y pos = Translate.invertLimit(anPointBaseX[0], anPointBaseY[0]);
-		mapSX = Math.max(0, Math.min(pos.x, Translate.mapW));
-		mapSY = Math.max(0, Math.min(pos.y, Translate.mapH));
-		
+		mapSX = Math.max(0, Math.min(pos.getX(), Translate.mapW));
+		mapSY = Math.max(0, Math.min(pos.getY(), Translate.mapH));
+
 		pos = Translate.invertLimit(anPointBaseX[1], anPointBaseY[1]);
-		mapEX = Math.max(0, Math.min(pos.x, Translate.mapW));
-		mapEY = Math.max(0, Math.min(pos.y, Translate.mapH));
+		mapEX = Math.max(0, Math.min(pos.getX(), Translate.mapW));
+		mapEY = Math.max(0, Math.min(pos.getY(), Translate.mapH));
 
 		// 規定サイズと位置へ合わせる
 		if((mapEX - mapSX) < MIN_SIZE) mapEX = mapSX + MIN_SIZE;
@@ -172,11 +172,11 @@ public class Pool extends FieldShapeBase implements Serializable {
 
 		Point4y f = new Point4y();
 		Translate.translate(mapSX, mapSY, f);
-		fieldSX = f.x;
-		fieldSY = f.y;
+		fieldSX = f.getX();
+		fieldSY = f.getY();
 		Translate.translate(mapEX, mapEY, f);
-		fieldEX = f.x;
-		fieldEY = f.y;
+		fieldEX = f.getX();
+		fieldEY = f.getY();
 
 		fieldW = fieldEX - fieldSX + 1;
 		fieldH = fieldEY - fieldSY + 1;
@@ -223,16 +223,16 @@ public class Pool extends FieldShapeBase implements Serializable {
     	int nY = inY;
 		if(bIsField )
 		{
-			Point4y pos = Translate.invertLimit( inX, inY );	
-			nX = pos.x;
-			nY = pos.y;
+			Point4y pos = Translate.invertLimit( inX, inY );
+			nX = pos.getX();
+			nY = pos.getY();
 		}
-		
+
 		Point4y posFirst = Translate.invertLimit( anWaterPointX[0], anWaterPointY[0] );
 		Point4y posSecond = Translate.invertLimit( anWaterPointX[2], anWaterPointY[2] );
 		if( posFirst != null && posSecond != null)
 		{
-			if( posFirst.x <= nX && nX <= posSecond.x && posFirst.y <= nY && nY <= posSecond.y )
+			if( posFirst.getX() <= nX && nX <= posSecond.getX() && posFirst.getY() <= nY && nY <= posSecond.getY() )
 			{
                 return true;
 			}

@@ -233,8 +233,8 @@ public class ItemMenu {
 		} else if(item instanceof Vomit) {
 			curMap.vomit.put(item.objId, (Vomit)item);
 		}
-		item.setCalcX(pos.x);
-		item.setCalcY(pos.y);
+		item.setCalcX(pos.getX());
+		item.setCalcY(pos.getY());
 		item.setCalcZ(0);
 		SimYukkuri.world.player.getItemList().removeElement(item);
 		SimYukkuri.world.player.setHoldItem(null);

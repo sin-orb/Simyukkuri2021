@@ -458,13 +458,13 @@ public class SimYukkuri extends JFrame {
 				return null;
 			// フラグマップから大まかな判定取得
 			MapPlaceData curMap = SimYukkuri.world.getCurrentMap();
-			int flags = Translate.getCurrentFieldMapNum(pos.x, pos.y);
+			int flags = Translate.getCurrentFieldMapNum(pos.getX(), pos.getY());
 			// コンベア
 			if ((flags & FieldShapeBase.FIELD_BELT) != 0) {
 				int num = curMap.beltconveyor.size();
 				for (int i = num - 1; i >= 0; i--) {
 					Beltconveyor b = curMap.beltconveyor.get(i);
-					if (b.mapContains(pos.x, pos.y)) {
+					if (b.mapContains(pos.getX(), pos.getY())) {
 						return b;
 					}
 				}
@@ -474,7 +474,7 @@ public class SimYukkuri extends JFrame {
 				int num = curMap.farm.size();
 				for (int i = num - 1; i >= 0; i--) {
 					Farm b = curMap.farm.get(i);
-					if (b.mapContains(pos.x, pos.y)) {
+					if (b.mapContains(pos.getX(), pos.getY())) {
 						return b;
 					}
 				}
@@ -484,7 +484,7 @@ public class SimYukkuri extends JFrame {
 				int num = curMap.pool.size();
 				for (int i = num - 1; i >= 0; i--) {
 					Pool b = curMap.pool.get(i);
-					if (b.mapContains(pos.x, pos.y)) {
+					if (b.mapContains(pos.getX(), pos.getY())) {
 						return b;
 					}
 				}
@@ -779,9 +779,9 @@ public class SimYukkuri extends JFrame {
 								hitX = 4;
 								altitude = startZ - fieldMousePos[1];
 								Translate.invertFlying(newX, newY, newZ, hitX, translatePos);
-								grabbedObj.setCalcX(translatePos.x);
+								grabbedObj.setCalcX(translatePos.getX());
 								if (newZ > 0) {
-									grabbedObj.setCalcZ(translatePos.y);
+									grabbedObj.setCalcZ(translatePos.getY());
 								}
 							}
 							break;
@@ -792,14 +792,14 @@ public class SimYukkuri extends JFrame {
 							hitX = grabbedObj.getPivotX();
 							altitude = startZ - fieldMousePos[1];
 							Translate.invertFlying(newX, newY, newZ, hitX, translatePos);
-							grabbedObj.setCalcX(translatePos.x);
-							grabbedObj.setCalcZ(translatePos.y);
+							grabbedObj.setCalcX(translatePos.getX());
+							grabbedObj.setCalcZ(translatePos.getY());
 							break;
 						case PLATFORM:
 							hitX = grabbedObj.getPivotX();
 							altitude = startZ - fieldMousePos[1];
 							Translate.invertFlying(newX, newY, newZ, hitX, translatePos);
-							grabbedObj.setCalcX(translatePos.x);
+							grabbedObj.setCalcX(translatePos.getX());
 							break;
 						default:
 							hitX = 1;
@@ -842,8 +842,8 @@ public class SimYukkuri extends JFrame {
 						}
 						// ずらした位置をマップ座標に変換してオブジェクトに反映
 						Translate.invertGround(newX, newY, hitX, hitY, translatePos);
-						grabbedObj.setCalcX(translatePos.x);
-						grabbedObj.setCalcY(translatePos.y);
+						grabbedObj.setCalcX(translatePos.getX());
+						grabbedObj.setCalcY(translatePos.getY());
 					}
 					// すりすり
 					if ((button == 1) && (sel == GadgetList.SURISURI)) {

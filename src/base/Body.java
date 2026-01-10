@@ -8777,7 +8777,6 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		setOkazari(new Okazari(this, OkazariType.DEFAULT));
 
 		IniFileUtil.readIniFile(this, false); // iniファイル読み込み
-		tuneParameters(); // Update individual parameters.
 
 		setAge(getAge() + SimYukkuri.RND.nextInt(100));
 		getBodyAgeState();

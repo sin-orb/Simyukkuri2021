@@ -9,6 +9,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
@@ -147,28 +148,40 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 
 	// .INIファイルで変更可能な各ゆっくりのパラメータ.
 	/** 一回の食事量 */
+	@JsonProperty
 	protected int EATAMOUNTorg[] = { 100 * 6, 100 * 12, 100 * 24 };
 	/** 体重 */
+	@JsonProperty
 	protected int WEIGHTorg[] = { 100, 300, 600 };
 	/** 空腹限界 */
+	@JsonProperty
 	protected int HUNGRYLIMITorg[] = { 100 * 24, 100 * 24 * 2, 100 * 24 * 4 };
 	/** うんうん限界 */
+	@JsonProperty
 	protected int SHITLIMITorg[] = { 100 * 12, 100 * 24, 100 * 24 };
 	/** ダメージ限界 */
+	@JsonProperty
 	protected int DAMAGELIMITorg[] = { 100 * 24, 100 * 24 * 3, 100 * 24 * 7 };
 	/** ストレス限界 */
+	@JsonProperty
 	private int STRESSLIMITorg[] = { 100 * 24, 100 * 24 * 3, 100 * 24 * 7 };
 	/** なつき度限界 */
+	@JsonProperty
 	private int LOVEPLAYERLIMITorg = 1000;
 	/** 味覚レベル */
+	@JsonProperty
 	private int TANGLEVELorg[] = { 300, 600, 1000 };
 	/** 赤ゆ期間 */
+	@JsonProperty
 	protected int BABYLIMITorg = 100 * 24 * 7;
 	/** 子ゆ期間 */
+	@JsonProperty
 	protected int CHILDLIMITorg = 100 * 24 * 21;
 	/** 寿命 */
+	@JsonProperty
 	protected int LIFELIMITorg = 100 * 24 * 365;
 	/** 腐敗日数 */
+	@JsonProperty
 	private int ROTTINGTIMEorg = 100 * 24 * 3;
 	/** 足の速さ */
 	private int STEPorg[] = { 1, 2, 4 };
@@ -5676,7 +5689,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 
 	 * @return お腹へってきているかどうか
 	 */
-	@Transient
+	@JsonIgnore
 	public boolean isHungry() {
 		return (!dead && (hungry <= HUNGRYLIMITorg[getBodyAgeState().ordinal()] / 2));
 	}
@@ -5739,6 +5752,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 
 	 * @return 満腹度
 	 */
+	@JsonProperty("hungry")
 	public int getHungry() {
 		return hungry;
 	}
@@ -5758,6 +5772,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 
 	 * @param val 満腹度
 	 */
+	@JsonProperty("hungry")
 	public void setHungry(int hungry) {
 		this.hungry = hungry;
 	}

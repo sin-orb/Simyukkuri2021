@@ -47,7 +47,8 @@ import src.util.YukkuriUtil;
 
 /***************************************************
  * ベルコン2
- * <br>拡張、YukkuriFilterPanel
+ * <br>
+ * 拡張、YukkuriFilterPanel
  */
 public class BeltconveyorObj extends ObjEX implements java.io.Serializable {
 
@@ -74,7 +75,7 @@ public class BeltconveyorObj extends ObjEX implements java.io.Serializable {
 	private int targetType;
 	private int cantmove = 0;
 	private boolean bMoveOnce = false;
-	protected List<Obj> bindObjList = new LinkedList<Obj>(); //　ベルトコンベア上で移動不可能な状態になっているアイテムのリスト
+	protected List<Obj> bindObjList = new LinkedList<Obj>(); // ベルトコンベア上で移動不可能な状態になっているアイテムのリスト
 
 	protected List<YukkuriType> selectedYukkuriType = new LinkedList<YukkuriType>(); // 処理対象のゆっくり
 	static protected List<String> istrOptionList = new LinkedList<String>(); // 処理対象設定(オプション)
@@ -137,20 +138,20 @@ public class BeltconveyorObj extends ObjEX implements java.io.Serializable {
 		if (enabled)
 			frame = (int) getAge();
 
-		switch (option) { //楽にアニメ指定できるようにしたいが後で
-		case 0:
-		default:
-			layer[0] = images[frame / 4 % AnimeImagesNum[0]]; //4フレームに1回画像更新
-			break;
-		case 1:
-			layer[0] = images[4 - (frame / 4 % AnimeImagesNum[0])];
-			break;
-		case 2:
-			layer[0] = images[9 - frame / 4 % AnimeImagesNum[1]];
-			break;
-		case 3:
-			layer[0] = images[5 + (frame / 4 % AnimeImagesNum[1])];
-			break;
+		switch (option) { // 楽にアニメ指定できるようにしたいが後で
+			case 0:
+			default:
+				layer[0] = images[frame / 4 % AnimeImagesNum[0]]; // 4フレームに1回画像更新
+				break;
+			case 1:
+				layer[0] = images[4 - (frame / 4 % AnimeImagesNum[0])];
+				break;
+			case 2:
+				layer[0] = images[9 - frame / 4 % AnimeImagesNum[1]];
+				break;
+			case 3:
+				layer[0] = images[5 + (frame / 4 % AnimeImagesNum[1])];
+				break;
 		}
 
 		return 1;
@@ -162,7 +163,8 @@ public class BeltconveyorObj extends ObjEX implements java.io.Serializable {
 		Translate.getMovedPoint(fieldSX, fieldSY, fieldEX, fieldEY, firstX, firstY, x, y, anPointBaseX, anPointBaseY);
 		Translate.getPolygonPoint(anPointBaseX[0], anPointBaseY[0], anPointBaseX[1], anPointBaseY[1], anPointX,
 				anPointY);
-		//Translate.getPolygonPoint(fieldSX, fieldSY, fieldEX, fieldEY, anPointX, anPointY);
+		// Translate.getPolygonPoint(fieldSX, fieldSY, fieldEX, fieldEY, anPointX,
+		// anPointY);
 		TexturePaint texture = new TexturePaint(layer[0],
 				new Rectangle2D.Float(0, 0, layer[0].getWidth() - 10, layer[0].getHeight() - 10));
 		g2.setPaint(texture);
@@ -206,14 +208,14 @@ public class BeltconveyorObj extends ObjEX implements java.io.Serializable {
 		int nY = inY;
 		if (bIsField) {
 			Point4y pos = Translate.invertLimit(inX, inY);
-			nX = pos.x;
-			nY = pos.y;
+			nX = pos.getX();
+			nY = pos.getY();
 		}
 
 		Point4y posFirst = Translate.invertLimit(anPointX[0], anPointY[0]);
 		Point4y posSecond = Translate.invertLimit(anPointX[2], anPointY[2]);
 		if (posFirst != null && posSecond != null) {
-			if (posFirst.x <= nX && nX <= posSecond.x && posFirst.y <= nY && nY <= posSecond.y) {
+			if (posFirst.getX() <= nX && nX <= posSecond.getX() && posFirst.getY() <= nY && nY <= posSecond.getY()) {
 				return true;
 			}
 		}
@@ -260,41 +262,41 @@ public class BeltconveyorObj extends ObjEX implements java.io.Serializable {
 			if (obOptionSelectionList != null && obOptionSelectionList.size() == 9) {
 				// 性格
 				switch (bodyTarget.getAttitude()) {
-				case VERY_NICE:
-					if (!obOptionSelectionList.get(0))
-						return 0;
-					break;
-				case NICE:
-					if (!obOptionSelectionList.get(1))
-						return 0;
-					break;
-				case AVERAGE:
-					if (!obOptionSelectionList.get(2))
-						return 0;
-					break;
-				case SHITHEAD:
-					if (!obOptionSelectionList.get(3))
-						return 0;
-					break;
-				case SUPER_SHITHEAD:
-					if (!obOptionSelectionList.get(4))
-						return 0;
-					break;
+					case VERY_NICE:
+						if (!obOptionSelectionList.get(0))
+							return 0;
+						break;
+					case NICE:
+						if (!obOptionSelectionList.get(1))
+							return 0;
+						break;
+					case AVERAGE:
+						if (!obOptionSelectionList.get(2))
+							return 0;
+						break;
+					case SHITHEAD:
+						if (!obOptionSelectionList.get(3))
+							return 0;
+						break;
+					case SUPER_SHITHEAD:
+						if (!obOptionSelectionList.get(4))
+							return 0;
+						break;
 				}
 				// 知性
 				switch (bodyTarget.getIntelligence()) {
-				case WISE:
-					if (!obOptionSelectionList.get(5))
-						return 0;
-					break;
-				case AVERAGE:
-					if (!obOptionSelectionList.get(6))
-						return 0;
-					break;
-				case FOOL:
-					if (!obOptionSelectionList.get(7))
-						return 0;
-					break;
+					case WISE:
+						if (!obOptionSelectionList.get(5))
+							return 0;
+						break;
+					case AVERAGE:
+						if (!obOptionSelectionList.get(6))
+							return 0;
+						break;
+					case FOOL:
+						if (!obOptionSelectionList.get(7))
+							return 0;
+						break;
 				}
 				// 死体のみチェック
 				if (obOptionSelectionList.get(8)) {
@@ -307,26 +309,26 @@ public class BeltconveyorObj extends ObjEX implements java.io.Serializable {
 
 		if (targetType != 0) {
 			switch (targetType) {
-			case 1:
-				if (!(o instanceof Body))
-					return 0;
-				break;
-			case 2:
-				if (!(o instanceof Shit || o instanceof Vomit))
-					return 0;
-				break;
-			case 3:
-				if (!(o instanceof Food) || o instanceof Shit || o instanceof Vomit || o instanceof Body)
-					return 0;
-				break;
-			case 4:
-				if (!(o instanceof Stalk))
-					return 0;
-				break;
-			default:
-				if (o instanceof Body)
-					return 0;
-				break;
+				case 1:
+					if (!(o instanceof Body))
+						return 0;
+					break;
+				case 2:
+					if (!(o instanceof Shit || o instanceof Vomit))
+						return 0;
+					break;
+				case 3:
+					if (!(o instanceof Food) || o instanceof Shit || o instanceof Vomit || o instanceof Body)
+						return 0;
+					break;
+				case 4:
+					if (!(o instanceof Stalk))
+						return 0;
+					break;
+				default:
+					if (o instanceof Body)
+						return 0;
+					break;
 			}
 		}
 		if (o instanceof Body)
@@ -359,19 +361,19 @@ public class BeltconveyorObj extends ObjEX implements java.io.Serializable {
 			}
 			if (bMove == true) {
 				switch (option) {
-				case 0: // '\0'
-				default:
-					o.setCalcY(objY - beltSpeed);
-					break;
-				case 1: // '\001'
-					o.setCalcY(objY + beltSpeed);
-					break;
-				case 2: // '\002'
-					o.setCalcX(objX + beltSpeed);
-					break;
-				case 3: // '\003'
-					o.setCalcX(objX - beltSpeed);
-					break;
+					case 0: // '\0'
+					default:
+						o.setCalcY(objY - beltSpeed);
+						break;
+					case 1: // '\001'
+						o.setCalcY(objY + beltSpeed);
+						break;
+					case 2: // '\002'
+						o.setCalcX(objX + beltSpeed);
+						break;
+					case 3: // '\003'
+						o.setCalcX(objX - beltSpeed);
+						break;
 				}
 			}
 		}
@@ -452,9 +454,9 @@ public class BeltconveyorObj extends ObjEX implements java.io.Serializable {
 	}
 
 	public BeltconveyorObj() {
-		
+
 	}
-	
+
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static boolean setBeltconveyor(BeltconveyorObj belt, boolean init) {
 		String HOU_LIST[] = {
@@ -517,7 +519,7 @@ public class BeltconveyorObj extends ObjEX implements java.io.Serializable {
 			speed_Box.setSelectedIndex(belt.speed_before);
 		}
 
-		int dlgRet = JOptionPane.showConfirmDialog(SimYukkuri.mypane, mainPanel, 
+		int dlgRet = JOptionPane.showConfirmDialog(SimYukkuri.mypane, mainPanel,
 				ResourceUtil.getInstance().read("item_belconsettings"), 2, -1);
 		if (dlgRet != 0) {
 			return false;
@@ -534,45 +536,47 @@ public class BeltconveyorObj extends ObjEX implements java.io.Serializable {
 
 		belt.setOption(hou);
 		switch (obj) {
-		case 0:
-			belt.targetType = 0;
-			break;
-		case 1:
-			belt.targetType = 1;
-			break;
-		case 2:
-			belt.targetType = 2;
-			break;
-		case 3:
-			belt.targetType = 3;
-			break;
-		case 4:
-			belt.targetType = 4;
-			break;
-		default:
-			belt.targetType = 5;
-			break;
+			case 0:
+				belt.targetType = 0;
+				break;
+			case 1:
+				belt.targetType = 1;
+				break;
+			case 2:
+				belt.targetType = 2;
+				break;
+			case 3:
+				belt.targetType = 3;
+				break;
+			case 4:
+				belt.targetType = 4;
+				break;
+			default:
+				belt.targetType = 5;
+				break;
 		}
 
-		/*if(obj == 0){
-			belt.targetType = 0;
-		}
-		else if(obj == 1){
-			belt.targetType = 1;
-		}
-		else if(obj == 2){
-			belt.targetType = 2;
-		//			belt.targetType2 = src.Obj.Type.VOMIT;
-		}
-		else if(obj == 3){
-			belt.targetType = 3;
-		}
-		else if(obj == 4){
-			belt.targetType = 4;
-		}
-		else{
-			belt.targetType = 5;
-		}*/
+		/*
+		 * if(obj == 0){
+		 * belt.targetType = 0;
+		 * }
+		 * else if(obj == 1){
+		 * belt.targetType = 1;
+		 * }
+		 * else if(obj == 2){
+		 * belt.targetType = 2;
+		 * // belt.targetType2 = src.Obj.Type.VOMIT;
+		 * }
+		 * else if(obj == 3){
+		 * belt.targetType = 3;
+		 * }
+		 * else if(obj == 4){
+		 * belt.targetType = 4;
+		 * }
+		 * else{
+		 * belt.targetType = 5;
+		 * }
+		 */
 		if (move == 0) {
 			// 移動可能
 			belt.cantmove = 0;
@@ -585,14 +589,14 @@ public class BeltconveyorObj extends ObjEX implements java.io.Serializable {
 			belt.bMoveOnce = true;
 		}
 		belt.beltSpeed = speed + 1;
-		//----------------------
+		// ----------------------
 		if (!init) {
 			Point4y pS = Translate.getFieldLimitForMap(SimYukkuri.fieldSX, SimYukkuri.fieldSY);
 			Point4y pE = Translate.getFieldLimitForMap(SimYukkuri.fieldEX, SimYukkuri.fieldEY);
-			belt.fieldSX = pS.x;
-			belt.fieldSY = pS.y;
-			belt.fieldEX = pE.x;
-			belt.fieldEY = pE.y;
+			belt.fieldSX = pS.getX();
+			belt.fieldSY = pS.getY();
+			belt.fieldEX = pE.getX();
+			belt.fieldEY = pE.getY();
 
 			int[] anPointBaseX = new int[2];
 			int[] anPointBaseY = new int[2];
@@ -602,10 +606,10 @@ public class BeltconveyorObj extends ObjEX implements java.io.Serializable {
 			int nTempX = anPointBaseX[0] + Math.abs(anPointBaseX[1] - anPointBaseX[0]) / 2;
 			int nTempY = anPointBaseY[0] + Math.abs(anPointBaseY[1] - anPointBaseY[0]) / 2;
 			Point4y pos = Translate.invertLimit(nTempX, nTempY);
-			BeltconveyorObj.x_default = pos.x;
-			BeltconveyorObj.y_default = pos.y;
-			belt.setCalcX(pos.x);
-			belt.setCalcY(pos.y);
+			BeltconveyorObj.x_default = pos.getX();
+			BeltconveyorObj.y_default = pos.getY();
+			belt.setCalcX(pos.getX());
+			belt.setCalcY(pos.getY());
 
 			BeltconveyorObj.boundary.width = Math.abs(anPointBaseX[1] - anPointBaseX[0]);
 			BeltconveyorObj.boundary.height = Math.abs(SimYukkuri.fieldEY - SimYukkuri.fieldSY);
@@ -805,20 +809,21 @@ public class BeltconveyorObj extends ObjEX implements java.io.Serializable {
 				return;
 			}
 			switch (select) {
-			case YUKKURI_FILTER:
-				List<String> istrOptionList = master.getOptionFilter();
-				List<Boolean> obOptionSelectionList = master.getOptionResultFilter();
-				List<YukkuriType> arrayTemp = master.getYukkuriFilter();
-				boolean bFilter = YukkuriFilterPanel.openFilterPanel(ResourceUtil.getInstance().read("item_targetsettings"),
-						ResourceUtil.getInstance().read("item_explanation"),
-						istrOptionList, arrayTemp, obOptionSelectionList);
-				if (bFilter) {
-					master.setFilter(bFilter);
-					master.setYukkuriFilter(arrayTemp);
-					master.setOptionResultFilter(obOptionSelectionList);
-				}
-			default:
-				break;
+				case YUKKURI_FILTER:
+					List<String> istrOptionList = master.getOptionFilter();
+					List<Boolean> obOptionSelectionList = master.getOptionResultFilter();
+					List<YukkuriType> arrayTemp = master.getYukkuriFilter();
+					boolean bFilter = YukkuriFilterPanel.openFilterPanel(
+							ResourceUtil.getInstance().read("item_targetsettings"),
+							ResourceUtil.getInstance().read("item_explanation"),
+							istrOptionList, arrayTemp, obOptionSelectionList);
+					if (bFilter) {
+						master.setFilter(bFilter);
+						master.setYukkuriFilter(arrayTemp);
+						master.setOptionResultFilter(obOptionSelectionList);
+					}
+				default:
+					break;
 			}
 		}
 	}

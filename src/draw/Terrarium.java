@@ -1,13 +1,19 @@
 package src.draw;
 
 import java.awt.Rectangle;
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.security.GeneralSecurityException;
+import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.Enumeration;
 import java.util.Iterator;
@@ -16,6 +22,11 @@ import java.util.List;
 import java.util.Map;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
+
+import javax.crypto.Cipher;
+import javax.crypto.Mac;
+import javax.crypto.spec.IvParameterSpec;
+import javax.crypto.spec.SecretKeySpec;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -148,6 +159,18 @@ public class Terrarium implements Serializable{
 	private static int intervalCount = 0;
 	/**汎用長方形*/
 	private static Rectangle4y tmpRect = new Rectangle4y();
+	/** Save format */
+	private static final byte[] SAVE_MAGIC = new byte[] { 'S', 'Y', 'S', 'V' };
+	private static final byte SAVE_VERSION = 1;
+	private static final int SALT_LEN = 16;
+	private static final int NONCE_LEN = 16;
+	private static final int HMAC_LEN = 32;
+	private static final byte[] PEPPER = new byte[] {
+			0x41, 0x33, 0x6d, 0x52, 0x27, 0x7a, 0x11, 0x5c,
+			0x09, 0x2f, 0x6a, 0x1b, 0x5e, 0x3c, 0x7d, 0x22,
+			0x19, 0x4a, 0x6e, 0x0b, 0x2d, 0x71, 0x12, 0x53,
+			0x3a, 0x68, 0x25, 0x7c, 0x04, 0x1f, 0x55, 0x2a
+	};
 	
 	/**
 	 * セーブの実行部
@@ -163,14 +186,9 @@ public class Terrarium implements Serializable{
 			SimYukkuri.world.player.getItemForSave().add(enu.nextElement());
 		}
 		String json = mapper.writeValueAsString(SimYukkuri.world);
-		// JSON文字列をバイト配列に変換
-		byte[] jsonBytes = json.getBytes("UTF-8");
-
-		// GZIP形式で圧縮して保存
-		try (FileOutputStream fos = new FileOutputStream(file.getAbsoluteFile());
-			 GZIPOutputStream gos = new GZIPOutputStream(fos)) {
-			gos.write(jsonBytes);
-		}
+		byte[] gzBytes = compressStringToGzipBytes(json);
+		byte[] encrypted = encryptSaveBytes(gzBytes);
+		Files.write(file.toPath(), encrypted);
 	}
 
 	/**
@@ -181,7 +199,9 @@ public class Terrarium implements Serializable{
 	 */
 	public static void loadState(File file) throws IOException, ClassNotFoundException {
 		World tmpWorld = null;
-		String json = decompressGzipToString(file.getAbsolutePath());
+		byte[] payload = Files.readAllBytes(file.toPath());
+		byte[] gzBytes = decryptSaveBytes(payload);
+		String json = decompressGzipToString(gzBytes);
 		ObjectMapper mapper = new ObjectMapper();
 		tmpWorld = mapper.readValue(json, World.class);
 
@@ -254,10 +274,10 @@ public class Terrarium implements Serializable{
 		System.gc();
 	}
 
-	 // GZIPファイルを解凍して文字列として返すメソッド
-	public static String decompressGzipToString(String filePath) throws IOException {
-		try (FileInputStream fis = new FileInputStream(filePath);
-			 GZIPInputStream gis = new GZIPInputStream(fis);
+	// GZIPバイト列を解凍して文字列として返す
+	public static String decompressGzipToString(byte[] gzipBytes) throws IOException {
+		try (ByteArrayInputStream bais = new ByteArrayInputStream(gzipBytes);
+			 GZIPInputStream gis = new GZIPInputStream(bais);
 			 ByteArrayOutputStream baos = new ByteArrayOutputStream()) {
 			// バッファを使ってデータを読み込む
 			byte[] buffer = new byte[1024];
@@ -268,6 +288,131 @@ public class Terrarium implements Serializable{
 			// バイト配列をUTF-8エンコードの文字列に変換
 			return baos.toString("UTF-8");
 		}
+	}
+
+	private static byte[] compressStringToGzipBytes(String json) throws IOException {
+		byte[] jsonBytes = json.getBytes(StandardCharsets.UTF_8);
+		try (ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			 GZIPOutputStream gos = new GZIPOutputStream(baos)) {
+			gos.write(jsonBytes);
+			gos.finish();
+			return baos.toByteArray();
+		}
+	}
+
+	private static byte[] encryptSaveBytes(byte[] plain) throws IOException {
+		byte[] salt = new byte[SALT_LEN];
+		byte[] nonce = new byte[NONCE_LEN];
+		SecureRandom rnd = new SecureRandom();
+		rnd.nextBytes(salt);
+		rnd.nextBytes(nonce);
+
+		try {
+			byte[] encKey = hkdf("enc", salt, 16);
+			byte[] macKey = hkdf("mac", salt, HMAC_LEN);
+			byte[] cipherText = aesCtr(plain, encKey, nonce);
+
+			ByteArrayOutputStream header = new ByteArrayOutputStream();
+			try (DataOutputStream dos = new DataOutputStream(header)) {
+				dos.write(SAVE_MAGIC);
+				dos.writeByte(SAVE_VERSION);
+				dos.writeByte(0);
+				dos.write(salt);
+				dos.write(nonce);
+				dos.writeInt(cipherText.length);
+			}
+
+			byte[] headerBytes = header.toByteArray();
+			byte[] hmac = hmacSha256(macKey, headerBytes, cipherText);
+
+			ByteArrayOutputStream out = new ByteArrayOutputStream();
+			out.write(headerBytes);
+			out.write(cipherText);
+			out.write(hmac);
+			return out.toByteArray();
+		} catch (GeneralSecurityException e) {
+			throw new IOException("save encrypt failed", e);
+		}
+	}
+
+	private static byte[] decryptSaveBytes(byte[] payload) throws IOException {
+		try (DataInputStream dis = new DataInputStream(new ByteArrayInputStream(payload))) {
+			byte[] magic = new byte[SAVE_MAGIC.length];
+			dis.readFully(magic);
+			if (!Arrays.equals(magic, SAVE_MAGIC)) {
+				throw new IOException("save magic mismatch");
+			}
+			byte ver = dis.readByte();
+			if (ver != SAVE_VERSION) {
+				throw new IOException("save version mismatch");
+			}
+			dis.readByte(); // flags
+			byte[] salt = new byte[SALT_LEN];
+			byte[] nonce = new byte[NONCE_LEN];
+			dis.readFully(salt);
+			dis.readFully(nonce);
+			int len = dis.readInt();
+			if (len < 0 || len > payload.length) {
+				throw new IOException("save length invalid");
+			}
+
+			byte[] cipherText = new byte[len];
+			dis.readFully(cipherText);
+			byte[] storedHmac = new byte[HMAC_LEN];
+			dis.readFully(storedHmac);
+
+			byte[] encKey = hkdf("enc", salt, 16);
+			byte[] macKey = hkdf("mac", salt, HMAC_LEN);
+
+			byte[] headerBytes = Arrays.copyOfRange(payload, 0, SAVE_MAGIC.length + 1 + 1 + SALT_LEN + NONCE_LEN + 4);
+			byte[] calcHmac = hmacSha256(macKey, headerBytes, cipherText);
+			if (!Arrays.equals(storedHmac, calcHmac)) {
+				throw new IOException("save tampered");
+			}
+
+			return aesCtr(cipherText, encKey, nonce);
+		} catch (GeneralSecurityException e) {
+			throw new IOException("save decrypt failed", e);
+		}
+	}
+
+	private static byte[] aesCtr(byte[] input, byte[] key, byte[] nonce) throws GeneralSecurityException {
+		Cipher cipher = Cipher.getInstance("AES/CTR/NoPadding");
+		SecretKeySpec keySpec = new SecretKeySpec(key, "AES");
+		IvParameterSpec iv = new IvParameterSpec(nonce);
+		cipher.init(Cipher.ENCRYPT_MODE, keySpec, iv);
+		return cipher.doFinal(input);
+	}
+
+	private static byte[] hkdf(String info, byte[] salt, int len) throws GeneralSecurityException {
+		Mac mac = Mac.getInstance("HmacSHA256");
+		mac.init(new SecretKeySpec(salt, "HmacSHA256"));
+		byte[] prk = mac.doFinal(PEPPER);
+
+		mac.init(new SecretKeySpec(prk, "HmacSHA256"));
+		byte[] infoBytes = info.getBytes(StandardCharsets.UTF_8);
+		byte[] t = new byte[0];
+		ByteArrayOutputStream okm = new ByteArrayOutputStream();
+		byte counter = 1;
+		while (okm.size() < len) {
+			mac.reset();
+			mac.update(t);
+			mac.update(infoBytes);
+			mac.update(counter);
+			t = mac.doFinal();
+			okm.write(t, 0, t.length);
+			counter++;
+		}
+		byte[] out = okm.toByteArray();
+		return Arrays.copyOf(out, len);
+	}
+
+	private static byte[] hmacSha256(byte[] key, byte[] header, byte[] body) throws GeneralSecurityException {
+		Mac mac = Mac.getInstance("HmacSHA256");
+		mac.init(new SecretKeySpec(key, "HmacSHA256"));
+		mac.update(header);
+		mac.update(body);
+		return mac.doFinal();
 	}
 	
 	/**

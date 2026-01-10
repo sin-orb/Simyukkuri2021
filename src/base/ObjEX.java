@@ -133,8 +133,8 @@ public abstract class ObjEX extends Obj implements java.io.Serializable {
 	/**当たり判定の大きさゲッター
 	 * (Revtangle Ver)*/
 	public Rectangle getCollisionRect(Rectangle r) {
-		int x = getScreenPivot().x;
-		int y = getScreenPivot().y;
+		int x = getScreenPivot().getX();
+		int y = getScreenPivot().getY();
 		r.x = x - colW;
 		r.y = y - colH;
 		r.width = colW << 1;
@@ -170,7 +170,7 @@ public abstract class ObjEX extends Obj implements java.io.Serializable {
 			// 対象の座標をフィールド座標に変換
 			Translate.translate(o.getX(), o.getY(), tmpPos);
 			// 点が描画矩形に入ったかの判定
-			if (tmpRect.contains(new java.awt.Point(tmpPos.x, tmpPos.y))) {
+			if (tmpRect.contains(new java.awt.Point(tmpPos.getX(), tmpPos.getY()))) {
 				return true;
 			}
 		}
@@ -191,7 +191,7 @@ public abstract class ObjEX extends Obj implements java.io.Serializable {
 			// 対象の座標をフィールド座標に変換
 			Translate.translate(o.getX(), o.getY(), tmpPos);
 			// 点が描画矩形に入ったかの判定
-			if (colRect.contains(new java.awt.Point(tmpPos.x, tmpPos.y))) {
+			if (colRect.contains(new java.awt.Point(tmpPos.getX(), tmpPos.getY()))) {
 				objHitProcess(o);
 				return false;
 			}
