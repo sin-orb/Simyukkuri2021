@@ -1,6 +1,8 @@
 package src;
 
+import java.awt.BorderLayout;
 import java.awt.Cursor;
+import java.awt.Dialog;
 import java.awt.GraphicsEnvironment;
 import java.awt.GridLayout;
 import java.awt.Insets;
@@ -23,12 +25,15 @@ import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JProgressBar;
 import javax.swing.JRadioButton;
+import javax.swing.SwingWorker;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
@@ -213,24 +218,56 @@ public class SimYukkuri extends JFrame {
 	 * ロードする.
 	 */
 	public void doLoad() {
-		synchronized (lock) {
-			final JFileChooser fc = new JFileChooser(ModLoader.getJarPath());
-			int result = fc.showOpenDialog(SimYukkuri.this);
-			if (result != JFileChooser.APPROVE_OPTION)
-				return;
-			File file = fc.getSelectedFile();
-			try {
-				Terrarium.loadState(file);
-			} catch (IOException e) {
-				System.out.println(e);
-				JOptionPane.showMessageDialog(SimYukkuri.this, e.getLocalizedMessage(), SimYukkuri.TITLE,
-						JOptionPane.ERROR_MESSAGE);
-			} catch (ClassNotFoundException e) {
-				System.out.println(e);
-				JOptionPane.showMessageDialog(SimYukkuri.this, e.getLocalizedMessage(), SimYukkuri.TITLE,
-						JOptionPane.ERROR_MESSAGE);
-			}
+		final JFileChooser fc = new JFileChooser(ModLoader.getJarPath());
+		int result = fc.showOpenDialog(SimYukkuri.this);
+		if (result != JFileChooser.APPROVE_OPTION) {
+			return;
 		}
+		final File file = fc.getSelectedFile();
+		final JDialog loadingDialog = createLoadingDialog();
+		final Exception[] err = new Exception[1];
+		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
+			@Override
+			protected Void doInBackground() {
+				synchronized (lock) {
+					try {
+						Terrarium.loadState(file);
+					} catch (IOException | ClassNotFoundException e) {
+						err[0] = e;
+					}
+				}
+				return null;
+			}
+
+			@Override
+			protected void done() {
+				loadingDialog.dispose();
+				if (err[0] != null) {
+					System.out.println(err[0]);
+					JOptionPane.showMessageDialog(SimYukkuri.this, err[0].getLocalizedMessage(), SimYukkuri.TITLE,
+							JOptionPane.ERROR_MESSAGE);
+				}
+			}
+		};
+		worker.execute();
+		loadingDialog.setVisible(true);
+	}
+
+	private JDialog createLoadingDialog() {
+		String msg = ResourceUtil.IS_JP ? "読み込み中..." : "Loading...";
+		JDialog dialog = new JDialog(SimYukkuri.this, msg, Dialog.ModalityType.APPLICATION_MODAL);
+		dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
+		dialog.setResizable(false);
+		JPanel panel = new JPanel(new BorderLayout(10, 10));
+		panel.setBorder(new EmptyBorder(12, 16, 12, 16));
+		panel.add(new JLabel(msg), BorderLayout.NORTH);
+		JProgressBar bar = new JProgressBar();
+		bar.setIndeterminate(true);
+		panel.add(bar, BorderLayout.CENTER);
+		dialog.getContentPane().add(panel);
+		dialog.pack();
+		dialog.setLocationRelativeTo(SimYukkuri.this);
+		return dialog;
 	}
 
 	/**
