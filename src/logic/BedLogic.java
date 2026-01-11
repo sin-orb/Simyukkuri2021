@@ -179,7 +179,7 @@ public class BedLogic {
 		// うんうん奴隷ではない場合
 		if( b.getPublicRank() != PublicRank.UnunSlave){
 			if(found == null) {
-				for (Map.Entry<Integer, Bed> entry : SimYukkuri.world.getCurrentMap().bed.entrySet()) {
+				for (Map.Entry<Integer, Bed> entry : SimYukkuri.world.getCurrentMap().getBed().entrySet()) {
 					ObjEX t = entry.getValue();
 					int distance = Translate.distance(b.getX(), b.getY(), t.getX(), t.getY());
 					if (minDistance > distance) {
@@ -193,7 +193,7 @@ public class BedLogic {
 			}
 	//// 仮 おうち検索
 			if(found == null) {
-				for (Map.Entry<Integer, House> entry : SimYukkuri.world.getCurrentMap().house.entrySet()) {
+				for (Map.Entry<Integer, House> entry : SimYukkuri.world.getCurrentMap().getHouse().entrySet()) {
 					ObjEX t = entry.getValue();
 					int distance = Translate.distance(b.getX(), b.getY(), t.getX(), t.getY());
 					if (minDistance > distance) {
@@ -209,7 +209,7 @@ public class BedLogic {
 		else{
 			// うんうん奴隷の場合、トイレを探す
 			if(found == null) {
-				for (Map.Entry<Integer, Toilet> entry : SimYukkuri.world.getCurrentMap().toilet.entrySet()) {
+				for (Map.Entry<Integer, Toilet> entry : SimYukkuri.world.getCurrentMap().getToilet().entrySet()) {
 					ObjEX t = entry.getValue();
 					int distance = Translate.distance(b.getX(), b.getY(), t.getX(), t.getY());
 					if (minDistance > distance) {
@@ -226,4 +226,5 @@ public class BedLogic {
 		return found;
 	}
 }
+
 

@@ -33,10 +33,10 @@ public class Generator extends ObjEX implements java.io.Serializable {
 	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
 		images[0] = ModLoader.loadItemImage(loader, "garbagechute" + File.separator + "garbagechute.png");
 		images[1] = ModLoader.loadItemImage(loader, "garbagechute" + File.separator + "garbagechute_off.png");
-		boundary.width = images[0].getWidth(io);
-		boundary.height = images[0].getHeight(io);
-		boundary.x = boundary.width >> 1;
-		boundary.y = boundary.height >> 1;
+		boundary.setWidth(images[0].getWidth(io));
+		boundary.setHeight(images[0].getHeight(io));
+		boundary.setX(boundary.getWidth() >> 1);
+		boundary.setY(boundary.getHeight() >> 1);
 	}
 //
 	@Override

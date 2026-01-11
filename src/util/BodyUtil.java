@@ -63,30 +63,30 @@ public class BodyUtil {
 		int numBB = b.getBodyBaseImage(layer);
 
 		// 正面向き
-		if (layer.option[0] == 0) {
+		if (layer.getOption()[0] == 0) {
 			// 全レイヤーを同一座標に描画
 			for (int i = 0; i < numBB; i++) {
-				drawBody(g2, z, 0, layer.image[i], expand.screenRect[layer.dir[i]].x, expand.screenRect[layer.dir[i]].y,
-						expand.screenRect[layer.dir[i]].width, expand.screenRect[layer.dir[i]].height,
-						base.screenRect[layer.dir[i]].width, base.screenRect[layer.dir[i]].height, io);
+				drawBody(g2, z, 0, layer.getImage()[i], expand.getScreenRect()[layer.getDir()[i]].getX(), expand.getScreenRect()[layer.getDir()[i]].getY(),
+						expand.getScreenRect()[layer.getDir()[i]].getWidth(), expand.getScreenRect()[layer.getDir()[i]].getHeight(),
+						base.getScreenRect()[layer.getDir()[i]].getWidth(), base.getScreenRect()[layer.getDir()[i]].getHeight(), io);
 			}
 			// <-- TEST
 		}
 
 		// 通常(斜視)
-		else if (layer.option[0] == 1) {
+		else if (layer.getOption()[0] == 1) {
 			int faceOfsY = 0;
 			int faceOfsH = 0;
 			int okazariOfsY = 0;
 			// 妊娠時の各種位置ののオフセット計算
-			okazariOfsY -= (int) ((expand.screenRect[direction].height - base.screenRect[direction].height) * 0.9f);
-			faceOfsY -= (int) ((expand.screenRect[direction].height - base.screenRect[direction].height) * 0.6f);
+			okazariOfsY -= (int) ((expand.getScreenRect()[direction].getHeight() - base.getScreenRect()[direction].getHeight()) * 0.9f);
+			faceOfsY -= (int) ((expand.getScreenRect()[direction].getHeight() - base.getScreenRect()[direction].getHeight()) * 0.6f);
 
 			// 表情取得＆位置計算
 			int jy = 0;
 			int jh = 0;
 			int num2 = b.getFaceImage(layer2);
-			switch (layer2.option[0]) {
+			switch (layer2.getOption()[0]) {
 				case 0:
 				default:
 					break;
@@ -117,16 +117,16 @@ public class BodyUtil {
 					jy = -jh;
 					break;
 			}
-			base.screenRect[0].y += jy;
-			base.screenRect[1].y += jy;
-			expand.screenRect[0].y += jy;
-			expand.screenRect[1].y += jy;
-			braid.screenRect[0].y += jy;
-			braid.screenRect[1].y += jy;
-			base.screenRect[0].height += jh;
-			base.screenRect[1].height += jh;
-			expand.screenRect[0].height += jh;
-			expand.screenRect[1].height += jh;
+			base.getScreenRect()[0].setY(base.getScreenRect()[0].getY() + jy);
+			base.getScreenRect()[1].setY(base.getScreenRect()[1].getY() + jy);
+			expand.getScreenRect()[0].setY(expand.getScreenRect()[0].getY() + jy);
+			expand.getScreenRect()[1].setY(expand.getScreenRect()[1].getY() + jy);
+			braid.getScreenRect()[0].setY(braid.getScreenRect()[0].getY() + jy);
+			braid.getScreenRect()[1].setY(braid.getScreenRect()[1].getY() + jy);
+			base.getScreenRect()[0].setHeight(base.getScreenRect()[0].getHeight() + jh);
+			base.getScreenRect()[1].setHeight(base.getScreenRect()[1].getHeight() + jh);
+			expand.getScreenRect()[0].setHeight(expand.getScreenRect()[0].getHeight() + jh);
+			expand.getScreenRect()[1].setHeight(expand.getScreenRect()[1].getHeight() + jh);
 
 			// 何かとリンクしてる場合の全体の高度補正
 			Obj oLinkParent = b.takeMappedObj(b.getLinkParent());
@@ -136,7 +136,7 @@ public class BodyUtil {
 				int jhLink = 0;
 				BodyLayer layer2Link = new BodyLayer();
 				bLink.getFaceImage(layer2Link);
-				switch (layer2Link.option[0]) {
+				switch (layer2Link.getOption()[0]) {
 					case 0:
 					default:
 						break;
@@ -169,12 +169,12 @@ public class BodyUtil {
 						jy = -jh;
 						break;
 				}
-				base.screenRect[0].y += jyLink;
-				base.screenRect[1].y += jyLink;
-				expand.screenRect[0].y += jyLink;
-				expand.screenRect[1].y += jyLink;
-				braid.screenRect[0].y += jyLink;
-				braid.screenRect[1].y += jyLink;
+				base.getScreenRect()[0].setY(base.getScreenRect()[0].getY() + jyLink);
+				base.getScreenRect()[1].setY(base.getScreenRect()[1].getY() + jyLink);
+				expand.getScreenRect()[0].setY(expand.getScreenRect()[0].getY() + jyLink);
+				expand.getScreenRect()[1].setY(expand.getScreenRect()[1].getY() + jyLink);
+				braid.getScreenRect()[0].setY(braid.getScreenRect()[0].getY() + jyLink);
+				braid.getScreenRect()[1].setY(braid.getScreenRect()[1].getY() + jyLink);
 			}
 
 			// ひっぱり時の各種の位置補正計算
@@ -195,49 +195,49 @@ public class BodyUtil {
 				OkazariType otype = okazari.getOkazariType();
 				if (otype == OkazariType.DEFAULT) {
 					b.getOlazariImage(layer3, 1);
-					drawBody(g2, z, okazariOfsY, layer3.image[0], base.screenRect[layer3.dir[0]].x,
-							base.screenRect[layer3.dir[0]].y + okazariOfsY,
-							base.screenRect[layer3.dir[0]].width, base.screenRect[layer3.dir[0]].height,
-							base.screenRect[layer3.dir[0]].width, base.screenRect[layer3.dir[0]].height, io);
+					drawBody(g2, z, okazariOfsY, layer3.getImage()[0], base.getScreenRect()[layer3.getDir()[0]].getX(),
+							base.getScreenRect()[layer3.getDir()[0]].getY() + okazariOfsY,
+							base.getScreenRect()[layer3.getDir()[0]].getWidth(), base.getScreenRect()[layer3.getDir()[0]].getHeight(),
+							base.getScreenRect()[layer3.getDir()[0]].getWidth(), base.getScreenRect()[layer3.getDir()[0]].getHeight(), io);
 				}
 			}
 			// 奥側のおさげ
 			if (b.isBraidType()) {
 				int numBr = b.getBraidImage(layer3, 1);
 				for (int i = 0; i < numBr; i++) {
-					// g2.drawImage(layer.image[i], braid.screenRect[layer.dir[i]].x,
-					// braid.screenRect[layer.dir[i]].y + faceOfsY,
-					// braid.screenRect[layer.dir[i]].width, braid.screenRect[layer.dir[i]].height,
+					// g2.drawImage(layer.getImage()[i], braid.getScreenRect()[layer.getDir()[i]].x,
+					// braid.getScreenRect()[layer.getDir()[i]].y + faceOfsY,
+					// braid.getScreenRect()[layer.getDir()[i]].width, braid.getScreenRect()[layer.getDir()[i]].height,
 					// io);
-					drawBody(g2, z, faceOfsY, layer3.image[i], braid.screenRect[layer3.dir[i]].x,
-							braid.screenRect[layer3.dir[i]].y + faceOfsY,
-							braid.screenRect[layer3.dir[i]].width, braid.screenRect[layer3.dir[i]].height,
-							braid.screenRect[layer3.dir[i]].width, braid.screenRect[layer3.dir[i]].height, io);
+					drawBody(g2, z, faceOfsY, layer3.getImage()[i], braid.getScreenRect()[layer3.getDir()[i]].getX(),
+							braid.getScreenRect()[layer3.getDir()[i]].getY() + faceOfsY,
+							braid.getScreenRect()[layer3.getDir()[i]].getWidth(), braid.getScreenRect()[layer3.getDir()[i]].getHeight(),
+							braid.getScreenRect()[layer3.getDir()[i]].getWidth(), braid.getScreenRect()[layer3.getDir()[i]].getHeight(), io);
 				}
 			}
 
 			// 胴体描画
-			drawBody(g2, z, 0, layer.image[0], expand.screenRect[layer.dir[0]].x, expand.screenRect[layer.dir[0]].y,
-					expand.screenRect[layer.dir[0]].width, expand.screenRect[layer.dir[0]].height,
-					base.screenRect[layer.dir[0]].width, base.screenRect[layer.dir[0]].height, io);
+			drawBody(g2, z, 0, layer.getImage()[0], expand.getScreenRect()[layer.getDir()[0]].getX(), expand.getScreenRect()[layer.getDir()[0]].getY(),
+					expand.getScreenRect()[layer.getDir()[0]].getWidth(), expand.getScreenRect()[layer.getDir()[0]].getHeight(),
+					base.getScreenRect()[layer.getDir()[0]].getWidth(), base.getScreenRect()[layer.getDir()[0]].getHeight(), io);
 
 			// 切断&溶解マスク
 			int numAB = b.getAbnormalBodyImage(layer);
 			if (numAB != 0) {
 				for (int i = 0; i < numAB; i++) {
-					drawBody(g2, z, (expand.screenRect[layer.dir[i]].height / 4), layer.image[i],
-							expand.screenRect[layer.dir[i]].x,
-							expand.screenRect[layer.dir[i]].y + (expand.screenRect[layer.dir[i]].height / 4),
-							expand.screenRect[layer.dir[i]].width, expand.screenRect[layer.dir[i]].height,
-							base.screenRect[layer.dir[i]].width, base.screenRect[layer.dir[i]].height, io);
+					drawBody(g2, z, (expand.getScreenRect()[layer.getDir()[i]].getHeight() / 4), layer.getImage()[i],
+							expand.getScreenRect()[layer.getDir()[i]].getX(),
+							expand.getScreenRect()[layer.getDir()[i]].getY() + (expand.getScreenRect()[layer.getDir()[i]].getHeight() / 4),
+							expand.getScreenRect()[layer.getDir()[i]].getWidth(), expand.getScreenRect()[layer.getDir()[i]].getHeight(),
+							base.getScreenRect()[layer.getDir()[i]].getWidth(), base.getScreenRect()[layer.getDir()[i]].getHeight(), io);
 				}
 			}
 
 			for (int i = 0; i < num2; i++) {
-				drawBody(g2, z, faceOfsY, layer2.image[i], base.screenRect[layer2.dir[i]].x,
-						base.screenRect[layer2.dir[i]].y + faceOfsY,
-						base.screenRect[layer2.dir[i]].width, base.screenRect[layer2.dir[i]].height + faceOfsH,
-						base.screenRect[layer2.dir[i]].width, base.screenRect[layer2.dir[i]].height, io);
+				drawBody(g2, z, faceOfsY, layer2.getImage()[i], base.getScreenRect()[layer2.getDir()[i]].getX(),
+						base.getScreenRect()[layer2.getDir()[i]].getY() + faceOfsY,
+						base.getScreenRect()[layer2.getDir()[i]].getWidth(), base.getScreenRect()[layer2.getDir()[i]].getHeight() + faceOfsH,
+						base.getScreenRect()[layer2.getDir()[i]].getWidth(), base.getScreenRect()[layer2.getDir()[i]].getHeight(), io);
 			}
 
 			// 口封じマスク描画は顔グラフィック表示のほうに含めたためオミット
@@ -252,16 +252,16 @@ public class BodyUtil {
 					b.getImage(ImageCode.HAIR2.ordinal(), direction, layer, 0);
 				}
 
-				drawBody(g2, z, 0, layer.image[0], expand.screenRect[layer.dir[0]].x, expand.screenRect[layer.dir[0]].y,
-						expand.screenRect[layer.dir[0]].width, expand.screenRect[layer.dir[0]].height,
-						base.screenRect[layer.dir[0]].width, base.screenRect[layer.dir[0]].height, io);
+				drawBody(g2, z, 0, layer.getImage()[0], expand.getScreenRect()[layer.getDir()[0]].getX(), expand.getScreenRect()[layer.getDir()[0]].getY(),
+						expand.getScreenRect()[layer.getDir()[0]].getWidth(), expand.getScreenRect()[layer.getDir()[0]].getHeight(),
+						base.getScreenRect()[layer.getDir()[0]].getWidth(), base.getScreenRect()[layer.getDir()[0]].getHeight(), io);
 			}
 			// 体表エフェクト表示
 			int numE = b.getEffectImage(layer);
 			for (int i = 0; i < numE; i++) {
-				drawBody(g2, z, 0, layer.image[i], expand.screenRect[layer.dir[i]].x, expand.screenRect[layer.dir[i]].y,
-						expand.screenRect[layer.dir[i]].width, expand.screenRect[layer.dir[i]].height,
-						base.screenRect[layer.dir[i]].width, base.screenRect[layer.dir[i]].height, io);
+				drawBody(g2, z, 0, layer.getImage()[i], expand.getScreenRect()[layer.getDir()[i]].getX(), expand.getScreenRect()[layer.getDir()[i]].getY(),
+						expand.getScreenRect()[layer.getDir()[i]].getWidth(), expand.getScreenRect()[layer.getDir()[i]].getHeight(),
+						base.getScreenRect()[layer.getDir()[i]].getWidth(), base.getScreenRect()[layer.getDir()[i]].getHeight(), io);
 			}
 			/* 皮むき描画はベース描画に含めたため、オミット */
 			/* 盲目マスク描画は、顔グラ表示のほうに入れたためオミット */
@@ -274,31 +274,31 @@ public class BodyUtil {
 				if (otype == OkazariType.DEFAULT) {
 					if (b.getOkazariPosition() != 2) {
 						// --> TEST
-						drawBody(g2, z, okazariOfsY, layer3.image[0], base.screenRect[layer3.dir[0]].x,
-								base.screenRect[layer3.dir[0]].y + okazariOfsY,
-								base.screenRect[layer3.dir[0]].width, base.screenRect[layer3.dir[0]].height,
-								base.screenRect[layer3.dir[0]].width, base.screenRect[layer3.dir[0]].height, io);
+						drawBody(g2, z, okazariOfsY, layer3.getImage()[0], base.getScreenRect()[layer3.getDir()[0]].getX(),
+								base.getScreenRect()[layer3.getDir()[0]].getY() + okazariOfsY,
+								base.getScreenRect()[layer3.getDir()[0]].getWidth(), base.getScreenRect()[layer3.getDir()[0]].getHeight(),
+								base.getScreenRect()[layer3.getDir()[0]].getWidth(), base.getScreenRect()[layer3.getDir()[0]].getHeight(), io);
 						// <-- TEST
 					}
 				} else {
 					Point4y ofs = okazari.takeOkazariOfsPos();
 					okazari.getBoundaryShape(rectTmp);
-					int okX = Translate.transSize(rectTmp.x);
-					int okY = Translate.transSize(rectTmp.y);
-					int okW = Translate.transSize(rectTmp.width);
-					int okH = Translate.transSize(rectTmp.height);
+					int okX = Translate.transSize(rectTmp.getX());
+					int okY = Translate.transSize(rectTmp.getY());
+					int okW = Translate.transSize(rectTmp.getWidth());
+					int okH = Translate.transSize(rectTmp.getHeight());
 					int ofsX = Translate.transSize(ofs.getX());
 					int ofsY = Translate.transSize(ofs.getY());
-					int bx = base.screenRect[direction].x;
-					int by = base.screenRect[direction].y + base.pivotY;
+					int bx = base.getScreenRect()[direction].getX();
+					int by = base.getScreenRect()[direction].getY() + base.getPivotY();
 					if (b.getDirection() == Direction.RIGHT) {
-						bx -= base.pivotX;
+						bx -= base.getPivotX();
 						ofsX = -ofsX;
 					} else {
-						bx += base.pivotX;
+						bx += base.getPivotX();
 					}
 					// --> TEST
-					drawBody(g2, z, okazariOfsY, layer3.image[0], bx - okX + ofsX, by - okY + ofsY + okazariOfsY, okW,
+					drawBody(g2, z, okazariOfsY, layer3.getImage()[0], bx - okX + ofsX, by - okY + ofsY + okazariOfsY, okW,
 							okH, okW, okH, io);
 					// <-- TEST
 				}
@@ -308,14 +308,14 @@ public class BodyUtil {
 			if (b.isBraidType()) {
 				int numBr = b.getBraidImage(layer3, 0);
 				for (int i = 0; i < numBr; i++) {
-					// g2.drawImage(layer.image[i], braid.screenRect[layer.dir[i]].x,
-					// braid.screenRect[layer.dir[i]].y + faceOfsY,
-					// braid.screenRect[layer.dir[i]].width, braid.screenRect[layer.dir[i]].height,
+					// g2.drawImage(layer.getImage()[i], braid.getScreenRect()[layer.getDir()[i]].x,
+					// braid.getScreenRect()[layer.getDir()[i]].y + faceOfsY,
+					// braid.getScreenRect()[layer.getDir()[i]].width, braid.getScreenRect()[layer.getDir()[i]].height,
 					// io);
-					drawBody(g2, z, faceOfsY, layer3.image[i], braid.screenRect[layer3.dir[i]].x,
-							braid.screenRect[layer3.dir[i]].y + faceOfsY,
-							braid.screenRect[layer3.dir[i]].width, braid.screenRect[layer3.dir[i]].height,
-							braid.screenRect[layer3.dir[i]].width, braid.screenRect[layer3.dir[i]].height, io);
+					drawBody(g2, z, faceOfsY, layer3.getImage()[i], braid.getScreenRect()[layer3.getDir()[i]].getX(),
+							braid.getScreenRect()[layer3.getDir()[i]].getY() + faceOfsY,
+							braid.getScreenRect()[layer3.getDir()[i]].getWidth(), braid.getScreenRect()[layer3.getDir()[i]].getHeight(),
+							braid.getScreenRect()[layer3.getDir()[i]].getWidth(), braid.getScreenRect()[layer3.getDir()[i]].getHeight(), io);
 				}
 			}
 
@@ -324,26 +324,26 @@ public class BodyUtil {
 		// アタッチメントの描画
 		for (Attachment at : b.getAttach()) {
 			at.getBoundaryShape(rectTmp);
-			int atX = Translate.transSize(rectTmp.x);
-			int atY = Translate.transSize(rectTmp.y);
-			int atW = Translate.transSize(rectTmp.width);
-			int atH = Translate.transSize(rectTmp.height);
+			int atX = Translate.transSize(rectTmp.getX());
+			int atY = Translate.transSize(rectTmp.getY());
+			int atW = Translate.transSize(rectTmp.getWidth());
+			int atH = Translate.transSize(rectTmp.getHeight());
 			int ofsX = Translate.transSize(at.getOfsX());
 			int ofsY = Translate.transSize(at.getOfsY());
 			int parentOrigin = at.getParentOrigin();
 			int bx, by;
 			if (parentOrigin == 0) {
-				bx = base.screenRect[direction].x;
-				by = base.screenRect[direction].y + base.pivotY;
+				bx = base.getScreenRect()[direction].getX();
+				by = base.getScreenRect()[direction].getY() + base.getPivotY();
 			} else {
-				bx = expand.screenRect[direction].x;
-				by = expand.screenRect[direction].y + base.pivotY;
+				bx = expand.getScreenRect()[direction].getX();
+				by = expand.getScreenRect()[direction].getY() + base.getPivotY();
 			}
 			if (b.getDirection() == Direction.RIGHT) {
-				bx -= base.pivotX;
+				bx -= base.getPivotX();
 				ofsX = -ofsX;
 			} else {
-				bx += base.pivotX;
+				bx += base.getPivotX();
 			}
 			// g2.drawImage(at.getImage(b), bx - atX + ofsX, by - atY + ofsY, atW, atH, io);
 			drawBody(g2, z, ofsY, at.getImage(b), bx - atX + ofsX, by - atY + ofsY, atW, atH, atW, atH, io);
@@ -382,7 +382,7 @@ public class BodyUtil {
 			}
 		}
 		// 領域外は描写しない
-		if (Translate.fieldH < y) {
+		if (Translate.getFieldH() < y) {
 			return;
 		}
 
@@ -399,3 +399,4 @@ public class BodyUtil {
 		g2.drawImage(img, dx1, dy1, dx2, dy2, sx1, sy1, sx2, sy2, io);
 	}
 }
+

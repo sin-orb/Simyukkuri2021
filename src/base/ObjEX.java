@@ -214,8 +214,8 @@ public abstract class ObjEX extends Obj implements java.io.Serializable {
 			return Event.REMOVED;
 		}
 
-		int mapX = Translate.mapW;
-		int mapY = Translate.mapH;
+		int mapX = Translate.getMapW();
+		int mapY = Translate.getMapH();
 
 		if (!grabbed) {
 			int mx = vx + getBx();

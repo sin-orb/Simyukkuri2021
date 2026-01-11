@@ -29,7 +29,7 @@ public class SuperEatingTimeEvent extends EventPacket implements java.io.Seriali
 	private static final long serialVersionUID = -2604356330046082053L;
 	int tick = 0;
 	int nFromWaitCount = 0;
-	public STATE state = STATE.WAIT;
+	private STATE state = STATE.WAIT;
 	int nLowestStep = 0;
 
 	/** 行動ステート */
@@ -125,6 +125,10 @@ public class SuperEatingTimeEvent extends EventPacket implements java.io.Seriali
 
 	public STATE getState() {
 		return state;
+	}
+	
+	public void setState(STATE state) {
+		this.state = state;
 	}
 
 	// 毎フレーム処理

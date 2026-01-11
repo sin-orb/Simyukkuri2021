@@ -21,17 +21,17 @@ public class Sprite implements java.io.Serializable {
 	private int originalH;
 
 	/** 描画画像サイズ 拡大縮小で変動する*/
-	public int imageW, imageH;
+	private int imageW, imageH;
 	
 	/** 描画原点 拡大縮小で変動する */
-	public int pivotX,pivotY, pivotType;
+	private int pivotX,pivotY, pivotType;
 
 	/** 
 	 * 描画スクリーン座標
 	 *  マウスとの判定で複数参照するのでキャッシュする
 	 *   [0]左 [1]右
 	 */
-	public Rectangle4y[] screenRect;
+	private Rectangle4y[] screenRect;
 	/**
 	 * コンストラクタ.
 	 * @param w 幅
@@ -168,5 +168,6 @@ public class Sprite implements java.io.Serializable {
 		return pivotType;
 	}
 }
+
 
 

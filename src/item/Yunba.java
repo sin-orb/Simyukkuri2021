@@ -160,10 +160,10 @@ public class Yunba extends ObjEX implements java.io.Serializable {
 			images[i][1] = ModLoader.flipImage(images[i][0]);
 		}
 
-		boundary.width = bodyImages[0][0].getWidth(io);
-		boundary.height = bodyImages[0][0].getHeight(io);
-		boundary.x = boundary.width >> 1;
-		boundary.y = boundary.height - 1;
+		boundary.setWidth(bodyImages[0][0].getWidth(io));
+		boundary.setHeight(bodyImages[0][0].getHeight(io));
+		boundary.setX(boundary.getWidth() >> 1);
+		boundary.setY(boundary.getHeight() - 1);
 
 		defaultSetFlags[Action.SHIT.ordinal()][0] = true;
 		defaultSetFlags[Action.EMPFOOD.ordinal()][0] = true;
@@ -222,7 +222,7 @@ public class Yunba extends ObjEX implements java.io.Serializable {
 
 	@Override
 	public void removeListData() {
-		SimYukkuri.world.getCurrentMap().yunba.remove(objId);
+		SimYukkuri.world.getCurrentMap().getYunba().remove(objId);
 	}
 
 	@Override
@@ -255,7 +255,7 @@ public class Yunba extends ObjEX implements java.io.Serializable {
 			setAge(0);
 
 			if(shitCheck) {
-				for(Map.Entry<Integer, Shit> entry : curMap.shit.entrySet()) {
+				for(Map.Entry<Integer, Shit> entry : curMap.getShit().entrySet()) {
 					Shit o = entry.getValue();
 					if(SimYukkuri.RND.nextBoolean()) continue;
 					// 追加
@@ -269,7 +269,7 @@ public class Yunba extends ObjEX implements java.io.Serializable {
 
 					boolean bIsShitOnToilet = false;
 					// トイレの上のうんうんは無視。空中もチェック
-					List<Toilet> toiletList = new LinkedList<>(SimYukkuri.world.getCurrentMap().toilet.values());
+					List<Toilet> toiletList = new LinkedList<>(SimYukkuri.world.getCurrentMap().getToilet().values());
 					for (Toilet t: toiletList) {
 						// Hitするなら終了
 						if( t.checkHitObj(o, true))
@@ -295,7 +295,7 @@ public class Yunba extends ObjEX implements java.io.Serializable {
 					target = o;
 					break;
 				}
-				for(Map.Entry<Integer, Vomit> entry : curMap.vomit.entrySet()) {
+				for(Map.Entry<Integer, Vomit> entry : curMap.getVomit().entrySet()) {
 					Vomit o = entry.getValue();
 					if(SimYukkuri.RND.nextBoolean()) continue;
 					// 追加
@@ -319,13 +319,13 @@ public class Yunba extends ObjEX implements java.io.Serializable {
 				}
 			}
 			if(stalkCheck && action == null){ // 追加
-				if( curMap.stalk != null )
+				if( curMap.getStalk() != null )
 				{
-					for(Map.Entry<Integer, Stalk> entry : curMap.stalk.entrySet()) {
+					for(Map.Entry<Integer, Stalk> entry : curMap.getStalk().entrySet()) {
 						Stalk s = entry.getValue();
 						if(norndCheck==false && SimYukkuri.RND.nextBoolean()) continue;
 						int id = s.getPlantYukkuri();
-						if(SimYukkuri.world.getCurrentMap().body.get(id) != null) continue;
+						if(SimYukkuri.world.getCurrentMap().getBody().get(id) != null) continue;
 						if (!actionFlags[Action.WALLTHROUGH.ordinal()][0] && Barrier.acrossBarrier(getX(), getY(), s.getX(), s.getY(), Barrier.MAP_ITEM)) {
 							continue;
 						}
@@ -346,9 +346,9 @@ public class Yunba extends ObjEX implements java.io.Serializable {
 					}
 				}
 
-				if( curMap.food != null )
+				if( curMap.getFood() != null )
 				{
-					for(Map.Entry<Integer, Food> entry : curMap.food.entrySet()) {
+					for(Map.Entry<Integer, Food> entry : curMap.getFood().entrySet()) {
 						Food f = entry.getValue();
 						if(f.getFoodType() != Food.FoodType.STALK) continue;
 						if(SimYukkuri.RND.nextBoolean()) continue;
@@ -373,7 +373,7 @@ public class Yunba extends ObjEX implements java.io.Serializable {
 			}
 
 			if(bodyCheck && action == null) {
-				for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().body.entrySet()) {
+				for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().getBody().entrySet()) {
 					Body b = entry.getValue();
 					if(norndCheck==false && SimYukkuri.RND.nextBoolean()) continue;
 					// 茎にぶら下がってる固体はスルー
@@ -572,7 +572,7 @@ public class Yunba extends ObjEX implements java.io.Serializable {
 
 			// 空の餌皿掃除
 			if(foodCheck && action == null) {
-				for(Map.Entry<Integer, Food> entry : curMap.food.entrySet()) {
+				for(Map.Entry<Integer, Food> entry : curMap.getFood().entrySet()) {
 					Food f = entry.getValue();
 					if(SimYukkuri.RND.nextBoolean()) continue;
 					if(!f.isEmpty()) continue;
@@ -598,7 +598,7 @@ public class Yunba extends ObjEX implements java.io.Serializable {
 			if(action == null) {
 				if(destX == -1 && destY == -1) {
 					moveTo( defaultX, defaultY);
-					//moveTo(SimYukkuri.RND.nextInt(Translate.mapW), SimYukkuri.RND.nextInt(Translate.mapH));
+					//moveTo(SimYukkuri.RND.nextInt(Translate.getMapW()), SimYukkuri.RND.nextInt(Translate.getMapH()));
 					speed = 400;
 				}
 			} else {
@@ -720,8 +720,8 @@ public class Yunba extends ObjEX implements java.io.Serializable {
 
 	private void moveTo(int toX, int toY)
 	{
-		destX = Math.max(-10, Math.min(toX, Translate.mapW + 10));
-		destY = Math.max(-10, Math.min(toY, Translate.mapH + 10));
+		destX = Math.max(-10, Math.min(toX, Translate.getMapW() + 10));
+		destY = Math.max(-10, Math.min(toY, Translate.getMapH() + 10));
 	}
 
 	private int decideDirection(int curPos, int destPos, int range) {
@@ -778,8 +778,8 @@ public class Yunba extends ObjEX implements java.io.Serializable {
 		if(vecY < 0 && y < destY) y = destY;
 		if(vecY > 0 && y > destY) y = destY;
 
-		int maxX = Translate.mapW;
-		int maxY = Translate.mapH;
+		int maxX = Translate.getMapW();
+		int maxY = Translate.getMapH();
 
 		if (x < 0) {
 			x = 0;
@@ -816,7 +816,7 @@ public class Yunba extends ObjEX implements java.io.Serializable {
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
 
-		SimYukkuri.world.getCurrentMap().yunba.put(objId, this);
+		SimYukkuri.world.getCurrentMap().getYunba().put(objId, this);
 		objType = Type.OBJECT;
 		objEXType = ObjEXType.YUNBA;
 		interval = 5;
@@ -829,10 +829,10 @@ public class Yunba extends ObjEX implements java.io.Serializable {
 
 		boolean ret = setupYunba(this, false);
 		if(ret) {
-			moveTo(SimYukkuri.RND.nextInt(Translate.mapW), SimYukkuri.RND.nextInt(Translate.mapH));
+			moveTo(SimYukkuri.RND.nextInt(Translate.getMapW()), SimYukkuri.RND.nextInt(Translate.getMapH()));
 			itemRank = ItemRank.values()[initOption];
 			// 森なら野生に変更
-			if( SimYukkuri.world.getCurrentMap().mapIndex == 5 ||  SimYukkuri.world.getCurrentMap().mapIndex == 6 )
+			if( SimYukkuri.world.getCurrentMap().getMapIndex() == 5 ||  SimYukkuri.world.getCurrentMap().getMapIndex() == 6 )
 			{
 				if( itemRank == ItemRank.HOUSE ){
 					itemRank = ItemRank.YASEI;
@@ -840,7 +840,7 @@ public class Yunba extends ObjEX implements java.io.Serializable {
 			}
 		}
 		else {
-			SimYukkuri.world.getCurrentMap().yunba.remove(objId);
+			SimYukkuri.world.getCurrentMap().getYunba().remove(objId);
 		}
 	}
 	public Yunba() {
@@ -1152,7 +1152,7 @@ public class Yunba extends ObjEX implements java.io.Serializable {
 	// 他のゆんばのターゲットになっているか
 	public boolean cheackOtherYunbaTarget(Obj o)
 	{
-		for(Map.Entry<Integer, Yunba> entry : SimYukkuri.world.getCurrentMap().yunba.entrySet())
+		for(Map.Entry<Integer, Yunba> entry : SimYukkuri.world.getCurrentMap().getYunba().entrySet())
 		{
 			Yunba yunba = entry.getValue();
 			if( yunba == this ){
@@ -1396,5 +1396,6 @@ public class Yunba extends ObjEX implements java.io.Serializable {
 	}
 	
 }
+
 
 

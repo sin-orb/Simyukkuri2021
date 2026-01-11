@@ -384,7 +384,7 @@ public class GadgetMenu {
 	}
 
 	/**メインカテゴリボタンの種類*/
-	public static GadgetList[] MainCategory = {
+	private static final GadgetList[] MainCategory = {
 			GadgetList.TOOL,
 			GadgetList.TOOL2,
 			GadgetList.AMPOULE,
@@ -400,10 +400,10 @@ public class GadgetMenu {
 			GadgetList.TEST
 	};
 	/**メインカテゴリ用コンボボックス定義*/
-	public static DefaultComboBoxModel<GadgetList> mainModel = new DefaultComboBoxModel<GadgetList>(MainCategory);
+	private static final DefaultComboBoxModel<GadgetList> mainModel = new DefaultComboBoxModel<GadgetList>(MainCategory);
 
 	/**道具カテゴリボタンの種類*/
-	public static GadgetList[] ToolCategory = {
+	private static final GadgetList[] ToolCategory = {
 			GadgetList.PUNISH,
 			GadgetList.SNAPPING,
 			GadgetList.PICKUP,
@@ -428,10 +428,10 @@ public class GadgetMenu {
 			GadgetList.GODHAND
 	};
 	/**道具カテゴリ用コンボボックス定義*/
-	public static DefaultComboBoxModel<GadgetList> toolModel = new DefaultComboBoxModel<GadgetList>(ToolCategory);
+	private static final DefaultComboBoxModel<GadgetList> toolModel = new DefaultComboBoxModel<GadgetList>(ToolCategory);
 
 	/**道具2カテゴリボタンの種類*/
-	public static GadgetList[] ToolCategory2 = {
+	private static final GadgetList[] ToolCategory2 = {
 			GadgetList.BRAID_PLUCK,
 			GadgetList.ANAL_CLOSE,
 			GadgetList.STALK_CUT,
@@ -445,10 +445,10 @@ public class GadgetMenu {
 			GadgetList.SET_RAPER,
 	};
 	/**道具2カテゴリ用コンボボックス定義*/
-	public static DefaultComboBoxModel<GadgetList> toolModel2 = new DefaultComboBoxModel<GadgetList>(ToolCategory2);
+	private static final DefaultComboBoxModel<GadgetList> toolModel2 = new DefaultComboBoxModel<GadgetList>(ToolCategory2);
 
 	/**アンプルカテゴリボタンの種類*/
-	public static GadgetList[] AmpouleCategory = {
+	private static final GadgetList[] AmpouleCategory = {
 			GadgetList.ORANGE_AMP,
 			GadgetList.ACCEL_AMP,
 			GadgetList.STOP_AMP,
@@ -459,10 +459,10 @@ public class GadgetMenu {
 			GadgetList.ANYD_AMP,
 	};
 	/**アンプルカテゴリ用コンボボックス定義*/
-	public static DefaultComboBoxModel<GadgetList> AmpouleModel = new DefaultComboBoxModel<GadgetList>(AmpouleCategory);
+	private static final DefaultComboBoxModel<GadgetList> AmpouleModel = new DefaultComboBoxModel<GadgetList>(AmpouleCategory);
 
 	/**えさカテゴリボタンの種類*/
-	public static GadgetList[] FoodCategory = {
+	private static final GadgetList[] FoodCategory = {
 			GadgetList.NORMAL,
 			GadgetList.BITTER,
 			GadgetList.LEMON_POP,
@@ -474,10 +474,10 @@ public class GadgetMenu {
 			GadgetList.AUTO
 	};
 	/**えさカテゴリ用コンボボックス定義*/
-	public static DefaultComboBoxModel<GadgetList> foodModel = new DefaultComboBoxModel<GadgetList>(FoodCategory);
+	private static final DefaultComboBoxModel<GadgetList> foodModel = new DefaultComboBoxModel<GadgetList>(FoodCategory);
 
 	/**清掃カテゴリボタンの種類*/
-	public static GadgetList[] CleanCategory = {
+	private static final GadgetList[] CleanCategory = {
 			GadgetList.INDIVIDUAL,
 			GadgetList.YU_CLEAN,
 			GadgetList.BODY,
@@ -486,24 +486,24 @@ public class GadgetMenu {
 			GadgetList.ALL
 	};
 	/**清掃カテゴリ用コンボボックス定義*/
-	public static DefaultComboBoxModel<GadgetList> cleanModel = new DefaultComboBoxModel<GadgetList>(CleanCategory);
+	private static final DefaultComboBoxModel<GadgetList> cleanModel = new DefaultComboBoxModel<GadgetList>(CleanCategory);
 
 	/**おかざりカテゴリボタンの種類*/
-	public static GadgetList[] OkazariCategory = {
+	private static final GadgetList[] OkazariCategory = {
 			GadgetList.OKAZARI_HIDE,
 	};
 	/**おかざりカテゴリ用コンボボックス定義*/
-	public static DefaultComboBoxModel<GadgetList> okazariModel = new DefaultComboBoxModel<GadgetList>(OkazariCategory);
+	private static final DefaultComboBoxModel<GadgetList> okazariModel = new DefaultComboBoxModel<GadgetList>(OkazariCategory);
 
 	/**おくるみカテゴリボタンの種類*/
-	public static GadgetList[] PantsCategory = {
+	private static final GadgetList[] PantsCategory = {
 			GadgetList.PANTS_NORMAL,
 	};
 	/**おくるみカテゴリ用コンボボックス定義*/
-	public static DefaultComboBoxModel<GadgetList> pantsModel = new DefaultComboBoxModel<GadgetList>(PantsCategory);
+	private static final DefaultComboBoxModel<GadgetList> pantsModel = new DefaultComboBoxModel<GadgetList>(PantsCategory);
 
 	/**床設置カテゴリボタンの種類*/
-	public static GadgetList[] FloorCategory = {
+	private static final GadgetList[] FloorCategory = {
 			GadgetList.TOILET,
 			GadgetList.BED,
 			GadgetList.STICKY_PLATE,
@@ -520,10 +520,10 @@ public class GadgetMenu {
 			GadgetList.PRODUCT_CHUTE
 	};
 	/**床設置カテゴリ用コンボボックス定義*/
-	public static DefaultComboBoxModel<GadgetList> floorModel = new DefaultComboBoxModel<GadgetList>(FloorCategory);
+	private static final DefaultComboBoxModel<GadgetList> floorModel = new DefaultComboBoxModel<GadgetList>(FloorCategory);
 
 	/**フィールドカテゴリボタンの種類*/
-	public static GadgetList[] BarrierCategory = {
+	private static final GadgetList[] BarrierCategory = {
 			GadgetList.GAP_MINI,
 			GadgetList.GAP_BIG,
 			GadgetList.NET_MINI,
@@ -540,10 +540,10 @@ public class GadgetMenu {
 			GadgetList.ALL_DELETE
 	};
 	/**フィールド用コンボボックス定義*/
-	public static DefaultComboBoxModel<GadgetList> barrierModel = new DefaultComboBoxModel<GadgetList>(BarrierCategory);
+	private static final DefaultComboBoxModel<GadgetList> barrierModel = new DefaultComboBoxModel<GadgetList>(BarrierCategory);
 
 	/**おもちゃカテゴリボタンの種類*/
-	public static GadgetList[] ToysCategory = {
+	private static final GadgetList[] ToysCategory = {
 			GadgetList.BALL,
 			GadgetList.YUNBA,
 			GadgetList.YUNBA_SETUP,
@@ -553,28 +553,28 @@ public class GadgetMenu {
 			GadgetList.STONE
 	};
 	/**おもちゃ用コンボボックス定義*/
-	public static DefaultComboBoxModel<GadgetList> toyModel = new DefaultComboBoxModel<GadgetList>(ToysCategory);
+	private static final DefaultComboBoxModel<GadgetList> toyModel = new DefaultComboBoxModel<GadgetList>(ToysCategory);
 
 	/**コンベアカテゴリボタンの種類*/
-	public static GadgetList[] ConveyorCategory = {
+	private static final GadgetList[] ConveyorCategory = {
 			GadgetList.BELTCONVEYOR_CUSTOM,
 			GadgetList.BELTCONVEYOR_SETUP
 	};
 	/**コンベアカテゴリ用コンボボックス定義*/
-	public static DefaultComboBoxModel<GadgetList> conveyorModel = new DefaultComboBoxModel<GadgetList>(
+	private static final DefaultComboBoxModel<GadgetList> conveyorModel = new DefaultComboBoxModel<GadgetList>(
 			ConveyorCategory);
 
 	/**声かけカテゴリボタンの種類*/
-	public static GadgetList[] VoiceCategory = {
+	private static final GadgetList[] VoiceCategory = {
 			GadgetList.YUKKURISITEITTENE,
 			GadgetList.YUKKURIDIE,
 			GadgetList.YUKKURIFURIFURI
 	};
 	/**声かけ用コンボボックス定義*/
-	public static DefaultComboBoxModel<GadgetList> voiceModel = new DefaultComboBoxModel<GadgetList>(VoiceCategory);
+	private static final DefaultComboBoxModel<GadgetList> voiceModel = new DefaultComboBoxModel<GadgetList>(VoiceCategory);
 
 	/**テストカテゴリボタンの種類*/
-	public static GadgetList[] TestCategory = {
+	private static final GadgetList[] TestCategory = {
 			GadgetList.RANKSET,
 			GadgetList.RANKSET2,
 			GadgetList.GARBAGE_STATION,
@@ -600,7 +600,7 @@ public class GadgetMenu {
 			GadgetList.DEBUG2
 	};
 	/**テストカテゴリ用コンボボックス定義*/
-	public static DefaultComboBoxModel<GadgetList> testModel = new DefaultComboBoxModel<GadgetList>(TestCategory);
+	private static final DefaultComboBoxModel<GadgetList> testModel = new DefaultComboBoxModel<GadgetList>(TestCategory);
 
 	/**速度の種類定義*/
 	public static enum GameSpeed {
@@ -626,23 +626,23 @@ public class GadgetMenu {
 
 	/**右上の真ん中のウィンドウ
 	 * <br>初期は”道具”となってるところ*/
-	public static GadgetList selectMain = GadgetList.TOOL;
+	private static GadgetList selectMain = GadgetList.TOOL;
 	/**右上の一番下のウィンドウ
 	 * <br>初期は”おしおき”となってるところ*/
-	public static GadgetList selectSub = GadgetList.PUNISH;
+	private static GadgetList selectSub = GadgetList.PUNISH;
 
 	/**ポップアップ汎用*/
-	public static JPopupMenu popup = new JPopupMenu();
+	private static final JPopupMenu popup = new JPopupMenu();
 	/**ポップアップが開いているかどうか*/
-	public static boolean popupDisplay = false;
+	private static boolean popupDisplay = false;
 	/** ヘルプの番号 */
-	public static int currentHelpNum = 0;
+	private static int currentHelpNum = 0;
 	/** ヘルプのバッファ */
-	public static String[][] currentHelpBuf = null;
+	private static String[][] currentHelpBuf = null;
 	/** ヘルプアイコン */
-	public static HelpIcon[][] currentHelpIcon = null;
+	private static HelpIcon[][] currentHelpIcon = null;
 	/** ヘルプの幅・高さ */
-	public static int helpW, helpH;
+	private static int helpW, helpH;
 
 	/**アイコンの画像の入れ物*/
 	private static BufferedImage[] icon;
@@ -650,6 +650,166 @@ public class GadgetMenu {
 	private static PopupAction action = new PopupAction();
 	/** ヘルプ */
 	private static HelpContext[] currentHelp = new HelpContext[4];
+
+	public static GadgetList[] getMainCategory() {
+		return MainCategory;
+	}
+
+	public static DefaultComboBoxModel<GadgetList> getMainModel() {
+		return mainModel;
+	}
+
+	public static GadgetList[] getToolCategory() {
+		return ToolCategory;
+	}
+
+	public static DefaultComboBoxModel<GadgetList> getToolModel() {
+		return toolModel;
+	}
+
+	public static GadgetList[] getToolCategory2() {
+		return ToolCategory2;
+	}
+
+	public static DefaultComboBoxModel<GadgetList> getToolModel2() {
+		return toolModel2;
+	}
+
+	public static GadgetList[] getAmpouleCategory() {
+		return AmpouleCategory;
+	}
+
+	public static DefaultComboBoxModel<GadgetList> getAmpouleModel() {
+		return AmpouleModel;
+	}
+
+	public static GadgetList[] getFoodCategory() {
+		return FoodCategory;
+	}
+
+	public static DefaultComboBoxModel<GadgetList> getFoodModel() {
+		return foodModel;
+	}
+
+	public static GadgetList[] getCleanCategory() {
+		return CleanCategory;
+	}
+
+	public static DefaultComboBoxModel<GadgetList> getCleanModel() {
+		return cleanModel;
+	}
+
+	public static GadgetList[] getOkazariCategory() {
+		return OkazariCategory;
+	}
+
+	public static DefaultComboBoxModel<GadgetList> getOkazariModel() {
+		return okazariModel;
+	}
+
+	public static GadgetList[] getPantsCategory() {
+		return PantsCategory;
+	}
+
+	public static DefaultComboBoxModel<GadgetList> getPantsModel() {
+		return pantsModel;
+	}
+
+	public static GadgetList[] getFloorCategory() {
+		return FloorCategory;
+	}
+
+	public static DefaultComboBoxModel<GadgetList> getFloorModel() {
+		return floorModel;
+	}
+
+	public static GadgetList[] getBarrierCategory() {
+		return BarrierCategory;
+	}
+
+	public static DefaultComboBoxModel<GadgetList> getBarrierModel() {
+		return barrierModel;
+	}
+
+	public static GadgetList[] getToysCategory() {
+		return ToysCategory;
+	}
+
+	public static DefaultComboBoxModel<GadgetList> getToyModel() {
+		return toyModel;
+	}
+
+	public static GadgetList[] getConveyorCategory() {
+		return ConveyorCategory;
+	}
+
+	public static DefaultComboBoxModel<GadgetList> getConveyorModel() {
+		return conveyorModel;
+	}
+
+	public static GadgetList[] getVoiceCategory() {
+		return VoiceCategory;
+	}
+
+	public static DefaultComboBoxModel<GadgetList> getVoiceModel() {
+		return voiceModel;
+	}
+
+	public static GadgetList[] getTestCategory() {
+		return TestCategory;
+	}
+
+	public static DefaultComboBoxModel<GadgetList> getTestModel() {
+		return testModel;
+	}
+
+	public static GadgetList getSelectMain() {
+		return selectMain;
+	}
+
+	public static void setSelectMain(GadgetList selectMain) {
+		GadgetMenu.selectMain = selectMain;
+	}
+
+	public static GadgetList getSelectSub() {
+		return selectSub;
+	}
+
+	public static void setSelectSub(GadgetList selectSub) {
+		GadgetMenu.selectSub = selectSub;
+	}
+
+	public static JPopupMenu getPopup() {
+		return popup;
+	}
+
+	public static boolean isPopupDisplay() {
+		return popupDisplay;
+	}
+
+	public static void setPopupDisplay(boolean popupDisplay) {
+		GadgetMenu.popupDisplay = popupDisplay;
+	}
+
+	public static int getCurrentHelpNum() {
+		return currentHelpNum;
+	}
+
+	public static String[][] getCurrentHelpBuf() {
+		return currentHelpBuf;
+	}
+
+	public static HelpIcon[][] getCurrentHelpIcon() {
+		return currentHelpIcon;
+	}
+
+	public static int getHelpW() {
+		return helpW;
+	}
+
+	public static int getHelpH() {
+		return helpH;
+	}
 
 	/**最新状態の右上の、中と下のウィンドウの表示のゲッター*/
 	public static final GadgetList getCurrentGadget() {
@@ -725,61 +885,61 @@ public class GadgetMenu {
 		synchronized (SimYukkuri.lock) {
 			switch (mainSel) {
 			case TOOL:
-				MainCommandUI.subItemCombo.setModel(toolModel);
-				GadgetMenu.selectSub = GadgetMenu.ToolCategory[subSel];
+				MainCommandUI.getSubItemCombo().setModel(toolModel);
+				GadgetMenu.setSelectSub(GadgetMenu.getToolCategory()[subSel]);
 				break;
 			case TOOL2:
-				MainCommandUI.subItemCombo.setModel(toolModel2);
-				GadgetMenu.selectSub = GadgetMenu.ToolCategory2[subSel];
+				MainCommandUI.getSubItemCombo().setModel(toolModel2);
+				GadgetMenu.setSelectSub(GadgetMenu.getToolCategory2()[subSel]);
 				break;
 			case AMPOULE:
-				MainCommandUI.subItemCombo.setModel(AmpouleModel);
-				GadgetMenu.selectSub = GadgetMenu.AmpouleCategory[subSel];
+				MainCommandUI.getSubItemCombo().setModel(AmpouleModel);
+				GadgetMenu.setSelectSub(GadgetMenu.getAmpouleCategory()[subSel]);
 				break;
 			case FOODS:
-				MainCommandUI.subItemCombo.setModel(foodModel);
-				GadgetMenu.selectSub = GadgetMenu.FoodCategory[subSel];
+				MainCommandUI.getSubItemCombo().setModel(foodModel);
+				GadgetMenu.setSelectSub(GadgetMenu.getFoodCategory()[subSel]);
 				break;
 			case CLEAN:
-				MainCommandUI.subItemCombo.setModel(cleanModel);
-				GadgetMenu.selectSub = GadgetMenu.CleanCategory[subSel];
+				MainCommandUI.getSubItemCombo().setModel(cleanModel);
+				GadgetMenu.setSelectSub(GadgetMenu.getCleanCategory()[subSel]);
 				break;
 			case ACCESSORY:
-				MainCommandUI.subItemCombo.setModel(okazariModel);
-				GadgetMenu.selectSub = GadgetMenu.OkazariCategory[subSel];
+				MainCommandUI.getSubItemCombo().setModel(okazariModel);
+				GadgetMenu.setSelectSub(GadgetMenu.getOkazariCategory()[subSel]);
 				break;
 			case PANTS:
-				MainCommandUI.subItemCombo.setModel(pantsModel);
-				GadgetMenu.selectSub = GadgetMenu.PantsCategory[subSel];
+				MainCommandUI.getSubItemCombo().setModel(pantsModel);
+				GadgetMenu.setSelectSub(GadgetMenu.getPantsCategory()[subSel]);
 				break;
 			case FLOOR:
-				MainCommandUI.subItemCombo.setModel(floorModel);
-				GadgetMenu.selectSub = GadgetMenu.FloorCategory[subSel];
+				MainCommandUI.getSubItemCombo().setModel(floorModel);
+				GadgetMenu.setSelectSub(GadgetMenu.getFloorCategory()[subSel]);
 				break;
 			case BARRIER:
-				MainCommandUI.subItemCombo.setModel(barrierModel);
-				GadgetMenu.selectSub = GadgetMenu.BarrierCategory[subSel];
+				MainCommandUI.getSubItemCombo().setModel(barrierModel);
+				GadgetMenu.setSelectSub(GadgetMenu.getBarrierCategory()[subSel]);
 				break;
 			case TOYS:
-				MainCommandUI.subItemCombo.setModel(toyModel);
-				GadgetMenu.selectSub = GadgetMenu.ToysCategory[subSel];
+				MainCommandUI.getSubItemCombo().setModel(toyModel);
+				GadgetMenu.setSelectSub(GadgetMenu.getToysCategory()[subSel]);
 				break;
 			case CONVEYOR:
-				MainCommandUI.subItemCombo.setModel(conveyorModel);
-				GadgetMenu.selectSub = GadgetMenu.ConveyorCategory[subSel];
+				MainCommandUI.getSubItemCombo().setModel(conveyorModel);
+				GadgetMenu.setSelectSub(GadgetMenu.getConveyorCategory()[subSel]);
 				break;
 			case VOICE:
-				MainCommandUI.subItemCombo.setModel(voiceModel);
-				GadgetMenu.selectSub = GadgetMenu.VoiceCategory[subSel];
+				MainCommandUI.getSubItemCombo().setModel(voiceModel);
+				GadgetMenu.setSelectSub(GadgetMenu.getVoiceCategory()[subSel]);
 				break;
 			case TEST:
-				MainCommandUI.subItemCombo.setModel(testModel);
-				GadgetMenu.selectSub = GadgetMenu.TestCategory[subSel];
+				MainCommandUI.getSubItemCombo().setModel(testModel);
+				GadgetMenu.setSelectSub(GadgetMenu.getTestCategory()[subSel]);
 				break;
 			default:
 				break;
 			}
-			MainCommandUI.subItemCombo.setSelectedIndex(subSel);
+			MainCommandUI.getSubItemCombo().setSelectedIndex(subSel);
 		}
 	}
 
@@ -839,7 +999,7 @@ public class GadgetMenu {
 	public static final void executeBodyMethod(MouseEvent e, Obj found, String method) {
 		try {
 			Method m;
-			List<Body> bodyList = new LinkedList<Body>(SimYukkuri.world.getCurrentMap().body.values());
+			List<Body> bodyList = new LinkedList<Body>(SimYukkuri.world.getCurrentMap().getBody().values());
 			if (e.isShiftDown()) {
 				for (Body b : bodyList) {
 					m = b.getClass().getMethod(method, (Class<?>[]) null);
@@ -874,7 +1034,7 @@ public class GadgetMenu {
 	public static final void executeBodyMethod(MouseEvent e, Obj found, String method, int prm) {
 		try {
 			Method m;
-			List<Body> bodyList = new LinkedList<Body>(SimYukkuri.world.getCurrentMap().body.values());
+			List<Body> bodyList = new LinkedList<Body>(SimYukkuri.world.getCurrentMap().getBody().values());
 
 			if (e.isShiftDown()) {
 				for (Body b : bodyList) {
@@ -912,7 +1072,7 @@ public class GadgetMenu {
 	public static final void executeBodyMethod(MouseEvent e, Obj found, String getMethod, String setMethod,String invMethod) {
 		try {
 			Method m;
-			List<Body> bodyList = new LinkedList<Body>(SimYukkuri.world.getCurrentMap().body.values());
+			List<Body> bodyList = new LinkedList<Body>(SimYukkuri.world.getCurrentMap().getBody().values());
 
 			if (e.isShiftDown()) {
 				boolean flag = true;
@@ -960,90 +1120,92 @@ class PopupAction implements ActionListener {
 		String command = e.getActionCommand();
 
 		GadgetList sel = GadgetList.valueOf(command);
-		MainCommandUI.mainItemCombo.setSelectedIndex(sel.getGroup().ordinal() - 1);
-		GadgetMenu.selectMain = GadgetList.values()[sel.getGroup().ordinal() - 1];
-		GadgetMenu.selectSub = sel;
+		MainCommandUI.getMainItemCombo().setSelectedIndex(sel.getGroup().ordinal() - 1);
+		GadgetMenu.setSelectMain(GadgetList.values()[sel.getGroup().ordinal() - 1]);
+		GadgetMenu.setSelectSub(sel);
 		GadgetMenu.setActionHelp(sel);
 		int idx = getIndex(sel);
-		MainCommandUI.subItemCombo.setSelectedIndex(idx);
+		MainCommandUI.getSubItemCombo().setSelectedIndex(idx);
 
 		// 即時実行コマンドはここで実行
 		if (sel.getActionTarget() == ActionTarget.IMMEDIATE) {
 			GadgetAction.immediateEvaluate(sel);
 		}
 
-		GadgetMenu.popupDisplay = false;
+		GadgetMenu.setPopupDisplay(false);
 	}
 
 	/**いくつのコンボをつなげるかを返す*/
 	private final int getIndex(GadgetList item) {
 
 		int num;
-		num = GadgetMenu.ToolCategory.length;
+		num = GadgetMenu.getToolCategory().length;
 		for (int i = 0; i < num; i++) {
-			if (item == GadgetMenu.ToolCategory[i])
+			if (item == GadgetMenu.getToolCategory()[i])
 				return i;
 		}
-		num = GadgetMenu.ToolCategory2.length;
+		num = GadgetMenu.getToolCategory2().length;
 		for (int i = 0; i < num; i++) {
-			if (item == GadgetMenu.ToolCategory2[i])
+			if (item == GadgetMenu.getToolCategory2()[i])
 				return i;
 		}
-		num = GadgetMenu.AmpouleCategory.length;
+		num = GadgetMenu.getAmpouleCategory().length;
 		for (int i = 0; i < num; i++) {
-			if (item == GadgetMenu.AmpouleCategory[i])
+			if (item == GadgetMenu.getAmpouleCategory()[i])
 				return i;
 		}
-		num = GadgetMenu.FoodCategory.length;
+		num = GadgetMenu.getFoodCategory().length;
 		for (int i = 0; i < num; i++) {
-			if (item == GadgetMenu.FoodCategory[i])
+			if (item == GadgetMenu.getFoodCategory()[i])
 				return i;
 		}
-		num = GadgetMenu.CleanCategory.length;
+		num = GadgetMenu.getCleanCategory().length;
 		for (int i = 0; i < num; i++) {
-			if (item == GadgetMenu.CleanCategory[i])
+			if (item == GadgetMenu.getCleanCategory()[i])
 				return i;
 		}
-		num = GadgetMenu.OkazariCategory.length;
+		num = GadgetMenu.getOkazariCategory().length;
 		for (int i = 0; i < num; i++) {
-			if (item == GadgetMenu.OkazariCategory[i])
+			if (item == GadgetMenu.getOkazariCategory()[i])
 				return i;
 		}
-		num = GadgetMenu.PantsCategory.length;
+		num = GadgetMenu.getPantsCategory().length;
 		for (int i = 0; i < num; i++) {
-			if (item == GadgetMenu.PantsCategory[i])
+			if (item == GadgetMenu.getPantsCategory()[i])
 				return i;
 		}
-		num = GadgetMenu.FloorCategory.length;
+		num = GadgetMenu.getFloorCategory().length;
 		for (int i = 0; i < num; i++) {
-			if (item == GadgetMenu.FloorCategory[i])
+			if (item == GadgetMenu.getFloorCategory()[i])
 				return i;
 		}
-		num = GadgetMenu.BarrierCategory.length;
+		num = GadgetMenu.getBarrierCategory().length;
 		for (int i = 0; i < num; i++) {
-			if (item == GadgetMenu.BarrierCategory[i])
+			if (item == GadgetMenu.getBarrierCategory()[i])
 				return i;
 		}
-		num = GadgetMenu.ToysCategory.length;
+		num = GadgetMenu.getToysCategory().length;
 		for (int i = 0; i < num; i++) {
-			if (item == GadgetMenu.ToysCategory[i])
+			if (item == GadgetMenu.getToysCategory()[i])
 				return i;
 		}
-		num = GadgetMenu.ConveyorCategory.length;
+		num = GadgetMenu.getConveyorCategory().length;
 		for (int i = 0; i < num; i++) {
-			if (item == GadgetMenu.ConveyorCategory[i])
+			if (item == GadgetMenu.getConveyorCategory()[i])
 				return i;
 		}
-		num = GadgetMenu.VoiceCategory.length;
+		num = GadgetMenu.getVoiceCategory().length;
 		for (int i = 0; i < num; i++) {
-			if (item == GadgetMenu.VoiceCategory[i])
+			if (item == GadgetMenu.getVoiceCategory()[i])
 				return i;
 		}
-		num = GadgetMenu.TestCategory.length;
+		num = GadgetMenu.getTestCategory().length;
 		for (int i = 0; i < num; i++) {
-			if (item == GadgetMenu.TestCategory[i])
+			if (item == GadgetMenu.getTestCategory()[i])
 				return i;
 		}
 		return 0;
 	}
 }
+
+

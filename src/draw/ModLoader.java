@@ -29,22 +29,22 @@ import src.system.ResourceUtil;
  */
 
 public class ModLoader {
-	public static final String DEFAULT_IMG_ROOT_DIR = "images/";
-	public static final String DEFAULT_DATA_DIR = "data/";
-	public static final String MOD_ROOT_DIR = "mod";
-	public static final String MOD_BACK_DIR = "back";
-	public static final String MOD_ITEM_DIR = "item";
-	public static final String MOD_BODY_DIR = "yukkuri";
-	public static final String DATA_DEV_DIR = "develop";
-	public static final String DATA_MSG_DIR = "yukkuri_msg";
-	public static final String DATA_INI_DIR = "yukkuri_ini";
-	public static final String DATA_ITEM_INI_DIR = "item_ini";
-	public static final String DATA_WORLD_INI_DIR = "world_ini";
+	private static final String DEFAULT_IMG_ROOT_DIR = "images/";
+	private static final String DEFAULT_DATA_DIR = "data/";
+	private static final String MOD_ROOT_DIR = "mod";
+	private static final String MOD_BACK_DIR = "back";
+	private static final String MOD_ITEM_DIR = "item";
+	private static final String MOD_BODY_DIR = "yukkuri";
+	private static final String DATA_DEV_DIR = "develop";
+	private static final String DATA_MSG_DIR = "yukkuri_msg";
+	private static final String DATA_INI_DIR = "yukkuri_ini";
+	private static final String DATA_ITEM_INI_DIR = "item_ini";
+	private static final String DATA_WORLD_INI_DIR = "world_ini";
 
-	public static final String YK_WORD_NORA = "_nora";
-	public static final String YK_WORD_YASEI = "_yasei";
+	private static final String YK_WORD_NORA = "_nora";
+	private static final String YK_WORD_YASEI = "_yasei";
 
-	public static final String YK_WORD_NAGASI = "_nagasi"; // 画像をまりちゃ流しモードのものにする
+	private static final String YK_WORD_NAGASI = "_nagasi"; // 画像をまりちゃ流しモードのものにする
 	// jarファイルのパス
 	private static String jarPath = "";
 
@@ -55,7 +55,67 @@ public class ModLoader {
 
 	private static String developRoot = null;
 	// 表情の別バージョンの最大数
-	public static final int nMaxImgOtherVer = 6;
+	private static final int nMaxImgOtherVer = 6;
+
+	public static String getDefaultImgRootDir() {
+		return DEFAULT_IMG_ROOT_DIR;
+	}
+
+	public static String getDefaultDataDir() {
+		return DEFAULT_DATA_DIR;
+	}
+
+	public static String getModRootDir() {
+		return MOD_ROOT_DIR;
+	}
+
+	public static String getModBackDir() {
+		return MOD_BACK_DIR;
+	}
+
+	public static String getModItemDir() {
+		return MOD_ITEM_DIR;
+	}
+
+	public static String getModBodyDir() {
+		return MOD_BODY_DIR;
+	}
+
+	public static String getDataDevDir() {
+		return DATA_DEV_DIR;
+	}
+
+	public static String getDataMsgDir() {
+		return DATA_MSG_DIR;
+	}
+
+	public static String getDataIniDir() {
+		return DATA_INI_DIR;
+	}
+
+	public static String getDataItemIniDir() {
+		return DATA_ITEM_INI_DIR;
+	}
+
+	public static String getDataWorldIniDir() {
+		return DATA_WORLD_INI_DIR;
+	}
+
+	public static String getYkWordNora() {
+		return YK_WORD_NORA;
+	}
+
+	public static String getYkWordYasei() {
+		return YK_WORD_YASEI;
+	}
+
+	public static String getYkWordNagasi() {
+		return YK_WORD_NAGASI;
+	}
+
+	public static int getMaxImgOtherVer() {
+		return nMaxImgOtherVer;
+	}
 
 	/**
 	 * jarファイルのパスを取得して設定
@@ -562,9 +622,9 @@ public class ModLoader {
 		int max = parts.length;
 		for (int i = 0; i < max; i++) {
 			tmp = loadBodyImage(loader, bodyTheme, suffix, bodyName, parts[i]);
-			images[i][Const.LEFT][adultIndex] = tmp.img[Const.LEFT];
-			images[i][Const.RIGHT][adultIndex] = tmp.img[Const.RIGHT];
-			if (tmp.isFlip) {
+			images[i][Const.LEFT][adultIndex] = tmp.getImg()[Const.LEFT];
+			images[i][Const.RIGHT][adultIndex] = tmp.getImg()[Const.RIGHT];
+			if (tmp.isFlip()) {
 				dirOfs[i][0] = 0;
 				dirOfs[i][1] = 1;
 			} else {
@@ -643,16 +703,16 @@ public class ModLoader {
 		int max = parts.length;
 		for (int i = 0; i < max; i++) {
 			tmp = loadBodyImage(loader, bodyTheme, suffix, bodyName, parts[i]);
-			images[i][Const.LEFT][adultIndex][0] = tmp.img[Const.LEFT];
-			images[i][Const.RIGHT][adultIndex][0] = tmp.img[Const.RIGHT];
+			images[i][Const.LEFT][adultIndex][0] = tmp.getImg()[Const.LEFT];
+			images[i][Const.RIGHT][adultIndex][0] = tmp.getImg()[Const.RIGHT];
 
 			for (int j = 0; j < ModLoader.nMaxImgOtherVer; j++) {
-				images[i][Const.LEFT][adultIndex][j + 1] = tmp.imgOtherVer[Const.LEFT][j];
-				images[i][Const.RIGHT][adultIndex][j + 1] = tmp.imgOtherVer[Const.RIGHT][j];
+				images[i][Const.LEFT][adultIndex][j + 1] = tmp.getImgOtherVer()[Const.LEFT][j];
+				images[i][Const.RIGHT][adultIndex][j + 1] = tmp.getImgOtherVer()[Const.RIGHT][j];
 
 			}
 
-			if (tmp.isFlip) {
+			if (tmp.isFlip()) {
 				dirOfs[i][0] = 0;
 				dirOfs[i][1] = 1;
 			} else {
@@ -732,8 +792,8 @@ public class ModLoader {
 			boolean BB, ImageObserver io) {
 		for (int i = 0; i < 3; i++) {
 			bodyRect[i] = new Dimension4y();
-			bodyRect[i].width = bodyImg[0][0][i].getWidth(io);
-			bodyRect[i].height = bodyImg[0][0][i].getHeight(io);
+			bodyRect[i].setWidth(bodyImg[0][0][i].getWidth(io));
+			bodyRect[i].setHeight(bodyImg[0][0][i].getHeight(io));
 
 			if (BB) {
 				if (bodyImg[ImageCode.BRAID_BACK.ordinal()][0][i] != null) {
@@ -783,9 +843,9 @@ public class ModLoader {
 						path + File.separator + bodyName + File.separator + parts.getFilePath(sideFlag[i]) + ".txt");
 				if (file.exists()) {
 					// ダミーがある場合、画像はnullで返す
-					ret.img[i] = null;
-					ret.isDummy[i] = true;
-					ret.isFlip = false;
+					ret.getImg()[i] = null;
+					ret.getIsDummy()[i] = true;
+					ret.setFlip(false);
 				} else {
 					// 実画像の読み込み
 					file = new File(path + File.separator + bodyName + File.separator + parts.getFilePath(sideFlag[i])
@@ -794,10 +854,10 @@ public class ModLoader {
 						// ファイルが無い場合
 						if (i == 1) {
 							// 右側の場合は左の画像が読めていれば反転フラグ設定
-							if (ret.img[0] != null || ret.isDummy[0]) {
-								ret.img[i] = null;
-								ret.isDummy[i] = false;
-								ret.isFlip = flipFlag[i];
+							if (ret.getImg()[0] != null || ret.getIsDummy()[0]) {
+								ret.getImg()[i] = null;
+								ret.getIsDummy()[i] = false;
+								ret.setFlip(flipFlag[i]);
 							}
 						} else {
 							// 左の場合はエラーケースでjar読み込みへ
@@ -805,9 +865,9 @@ public class ModLoader {
 						}
 					} else {
 						try {
-							ret.img[i] = ImageIO.read(file);
-							ret.isDummy[i] = false;
-							ret.isFlip = false;
+							ret.getImg()[i] = ImageIO.read(file);
+							ret.getIsDummy()[i] = false;
+							ret.setFlip(false);
 						} catch (IOException ioe) {
 							// 読み込めなかったらjar読み込み
 							jarTry = true;
@@ -827,9 +887,9 @@ public class ModLoader {
 				String dummPath = path + "/" + bodyName + "/" + parts.getJarPath(sideFlag[i]) + ".txt";
 				if (loader.getResource(dummPath) != null) {
 					// ダミーがある場合、画像はnullで返す
-					ret.img[i] = null;
-					ret.isDummy[i] = true;
-					ret.isFlip = false;
+					ret.getImg()[i] = null;
+					ret.getIsDummy()[i] = true;
+					ret.setFlip(false);
 				} else {
 					String strBeforeTemp = path + "/" + bodyName + "/" + parts.getJarPath(sideFlag[i]);
 					// 実画像の読み込み
@@ -839,27 +899,27 @@ public class ModLoader {
 						// ファイルが無い場合
 						if (i == 1) {
 							// 右側の場合は左の画像が読めていれば反転フラグ設定
-							if (ret.img[0] != null || ret.isDummy[0]) {
-								ret.img[i] = null;
-								ret.isDummy[i] = false;
-								ret.isFlip = flipFlag[i];
+							if (ret.getImg()[0] != null || ret.getIsDummy()[0]) {
+								ret.getImg()[i] = null;
+								ret.getIsDummy()[i] = false;
+								ret.setFlip(flipFlag[i]);
 							}
 						} else {
 							// 左の場合はエラーケースだがひとまずダミー扱い
-							ret.img[i] = null;
-							ret.isDummy[i] = false;
-							ret.isFlip = false;
+							ret.getImg()[i] = null;
+							ret.getIsDummy()[i] = false;
+							ret.setFlip(false);
 						}
 					} else {
 						try {
-							ret.img[i] = ImageIO.read(loader.getResourceAsStream(path));
-							ret.isDummy[i] = false;
-							ret.isFlip = false;
+							ret.getImg()[i] = ImageIO.read(loader.getResourceAsStream(path));
+							ret.getIsDummy()[i] = false;
+							ret.setFlip(false);
 						} catch (IOException ioe) {
 							// 左の場合はエラーケースだがひとまずダミー扱い
-							ret.img[i] = null;
-							ret.isDummy[i] = false;
-							ret.isFlip = false;
+							ret.getImg()[i] = null;
+							ret.getIsDummy()[i] = false;
+							ret.setFlip(false);
 						}
 
 						// ver違いの画像があった場合の採用チェック
@@ -869,12 +929,12 @@ public class ModLoader {
 							String strTempPath = strBeforeTemp + "_v" + nTempVer + ".png";
 
 							if (loader.getResource(strTempPath) == null) {
-								ret.imgOtherVer[i][j] = null;
+								ret.getImgOtherVer()[i][j] = null;
 								continue;
 							}
 
 							try {
-								ret.imgOtherVer[i][j] = ImageIO.read(loader.getResourceAsStream(strTempPath));
+								ret.getImgOtherVer()[i][j] = ImageIO.read(loader.getResourceAsStream(strTempPath));
 							} catch (IOException e) {
 								e.printStackTrace();
 								break;
@@ -935,10 +995,10 @@ public class ModLoader {
  * ゆっくり画像のテンポラリクラス
  */
 final class BodyImage {
-	public BufferedImage[] img; // 画像(左右)
-	public boolean[] isDummy; // ダミーファイルあり
-	public boolean isFlip; // 反転あり
-	public BufferedImage[][] imgOtherVer; // 別バージョン画像(左右)
+	private BufferedImage[] img; // 画像(左右)
+	private boolean[] isDummy; // ダミーファイルあり
+	private boolean isFlip; // 反転あり
+	private BufferedImage[][] imgOtherVer; // 別バージョン画像(左右)
 
 	/**
 	 * コンストラクタ.
@@ -947,6 +1007,26 @@ final class BodyImage {
 		img = new BufferedImage[2];
 		isDummy = new boolean[2];
 		isFlip = false;
-		imgOtherVer = new BufferedImage[2][ModLoader.nMaxImgOtherVer];
+		imgOtherVer = new BufferedImage[2][ModLoader.getMaxImgOtherVer()];
+	}
+
+	public BufferedImage[] getImg() {
+		return img;
+	}
+
+	public boolean[] getIsDummy() {
+		return isDummy;
+	}
+
+	public boolean isFlip() {
+		return isFlip;
+	}
+
+	public void setFlip(boolean flip) {
+		isFlip = flip;
+	}
+
+	public BufferedImage[][] getImgOtherVer() {
+		return imgOtherVer;
 	}
 }

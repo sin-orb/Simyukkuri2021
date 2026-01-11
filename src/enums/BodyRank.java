@@ -11,11 +11,11 @@ public enum BodyRank {
 	/** 野生ゆ */YASEIYU(0, 1, ResourceUtil.getInstance().read("enums_wildyu")),
 	;
 	/** ランクに対応した画像のindex */
-	public int imageIndex;
+	private final int imageIndex;
 	/** ランクに対応したメッセージのindex */
-	public int messageIndex;
+	private final int messageIndex;
 	/** ランクに対応した文字列（"飼いゆ","捨てゆ"など） */
-	public String displayName;
+	private final String displayName;
 
 	/**
 	 * コンストラクタ.
@@ -27,5 +27,17 @@ public enum BodyRank {
 		this.imageIndex = img;
 		this.messageIndex = msg;
 		this.displayName = str;
+	}
+
+	public int getImageIndex() {
+		return imageIndex;
+	}
+
+	public int getMessageIndex() {
+		return messageIndex;
+	}
+
+	public String getDisplayName() {
+		return displayName;
 	}
 }

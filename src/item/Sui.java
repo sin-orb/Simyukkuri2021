@@ -89,10 +89,10 @@ public class Sui extends ObjEX implements java.io.Serializable {
 			images[ruld][i] = ModLoader.loadItemImage(loader, "sui" + File.separator + "sui_gray" + File.separator + "ruld" + tmp[i] +".png");
 			images[rdlu][i] = ModLoader.flipImage(images[ruld][i]);
 		}
-			boundary.width = images[0][0].getWidth(io);
-			boundary.height = images[0][0].getHeight(io);
-			boundary.x = boundary.width >> 1;
-			boundary.y = boundary.height >> 1;
+			boundary.setWidth(images[0][0].getWidth(io));
+			boundary.setHeight(images[0][0].getHeight(io));
+			boundary.setX(boundary.getWidth() >> 1);
+			boundary.setY(boundary.getHeight() >> 1);
 	}
 
 
@@ -303,7 +303,7 @@ public class Sui extends ObjEX implements java.io.Serializable {
 	
 	@Override
 	public void removeListData(){
-		SimYukkuri.world.getCurrentMap().sui.remove(objId);
+		SimYukkuri.world.getCurrentMap().getSui().remove(objId);
 	}
 	
 	@Override
@@ -356,8 +356,8 @@ public class Sui extends ObjEX implements java.io.Serializable {
 						by=y;
 					}
 					if(b.isIdiot()){
-						bx = SimYukkuri.RND.nextInt(Translate.mapW);
-						by = SimYukkuri.RND.nextInt(Translate.mapH - boundary.height/2);
+						bx = SimYukkuri.RND.nextInt(Translate.getMapW());
+						by = SimYukkuri.RND.nextInt(Translate.getMapH() - boundary.getHeight() / 2);
 					}
 					if(SimYukkuri.RND.nextInt(100)==0 && b.getIntelligence() == Intelligence.FOOL){
 						speed=1000;
@@ -376,8 +376,8 @@ public class Sui extends ObjEX implements java.io.Serializable {
 	
 	private void moveTo(int toX, int toY)
 	{
-		destX = Math.max(0, Math.min(toX, Translate.mapW));
-		destY = Math.max(0, Math.min(toY, (Translate.mapH - 1)));
+		destX = Math.max(0, Math.min(toX, Translate.getMapW()));
+		destY = Math.max(0, Math.min(toY, (Translate.getMapH() - 1)));
 	}
 
 	private int decideDirection(int curPos, int destPos, int range) {
@@ -441,16 +441,16 @@ public class Sui extends ObjEX implements java.io.Serializable {
 			x = 0;
 			dirX = 1;
 		}
-		else if (x > Translate.mapW) {
-			x = Translate.mapW;
+		else if (x > Translate.getMapW()) {
+			x = Translate.getMapW();
 			dirX = -1;
 		}
 		if (y < 0) {
 			y = 0;
 			dirY = 1;
 		}
-		else if (y > Translate.mapH - boundary.height/2) {
-			y = Translate.mapH - boundary.height/2;
+		else if (y > Translate.getMapH() - boundary.getHeight() / 2) {
+			y = Translate.getMapH() - boundary.getHeight() / 2;
 			dirY = -1;
 		}
 		// update direction of the face
@@ -474,7 +474,7 @@ public class Sui extends ObjEX implements java.io.Serializable {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		SimYukkuri.world.getCurrentMap().sui.put(objId, this);
+		SimYukkuri.world.getCurrentMap().getSui().put(objId, this);
 		objType = Type.OBJECT;
 		objEXType = ObjEXType.SUI;
 		
@@ -493,17 +493,17 @@ public class Sui extends ObjEX implements java.io.Serializable {
 	 */
 	public void ChangeY(boolean A){
 		if(A){
-			setForceY(y+boundary.height/2);
+			setForceY(y + boundary.getHeight() / 2);
 			for(Body b: bindBody){
 				if(b==null) continue;
-				b.setForceY(b.getY()+boundary.height);
+				b.setForceY(b.getY() + boundary.getHeight());
 			}
 		}
 		else{
-			setForceY(y-boundary.height/2);
+			setForceY(y - boundary.getHeight() / 2);
 			for(Body b: bindBody){
 				if(b==null) continue;
-				b.setForceY(b.getY()-boundary.height);
+				b.setForceY(b.getY() - boundary.getHeight());
 			}
 		}
 	}
@@ -609,6 +609,7 @@ public class Sui extends ObjEX implements java.io.Serializable {
 	}
 	
 }
+
 
 
 

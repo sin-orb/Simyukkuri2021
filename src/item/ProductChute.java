@@ -31,10 +31,10 @@ public class ProductChute extends ObjEX implements java.io.Serializable {
 	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
 		images[0] = ModLoader.loadItemImage(loader, "ProductChute" + File.separator + "ProductChute.png");
 		images[1] = ModLoader.loadItemImage(loader, "ProductChute" + File.separator + "ProductChute_off.png");
-		boundary.width = images[0].getWidth(io);
-		boundary.height = images[0].getHeight(io);
-		boundary.x = boundary.width >> 1;
-		boundary.y = boundary.height >> 1;
+		boundary.setWidth(images[0].getWidth(io));
+		boundary.setHeight(images[0].getHeight(io));
+		boundary.setX(boundary.getWidth() >> 1);
+		boundary.setY(boundary.getHeight() >> 1);
 	}
 
 
@@ -80,7 +80,7 @@ public class ProductChute extends ObjEX implements java.io.Serializable {
 
 	@Override
 	public void removeListData(){
-		SimYukkuri.world.getCurrentMap().productchute.remove(objId);
+		SimYukkuri.world.getCurrentMap().getProductchute().remove(objId);
 	}
 	/**
 	 * コンストラクタ
@@ -89,7 +89,7 @@ public class ProductChute extends ObjEX implements java.io.Serializable {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		SimYukkuri.world.getCurrentMap().productchute.put(objId, this);
+		SimYukkuri.world.getCurrentMap().getProductchute().put(objId, this);
 		objType = Type.PLATFORM;
 		objEXType = ObjEXType.PRODUCTCHUTE;
 		interval = 10;
@@ -101,5 +101,6 @@ public class ProductChute extends ObjEX implements java.io.Serializable {
 	}
 	
 }
+
 
 

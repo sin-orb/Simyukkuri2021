@@ -32,8 +32,8 @@ public class MainCommandListener {
 		public void itemStateChanged(ItemEvent e) {
 			synchronized(SimYukkuri.lock) {
 			    if (e.getStateChange() == ItemEvent.SELECTED){
-			    	if (e.getSource() == MainCommandUI.gameSpeedCombo) {
-			    		MainCommandUI.selectedGameSpeed = MainCommandUI.gameSpeedCombo.getSelectedIndex();
+			    	if (e.getSource() == MainCommandUI.getGameSpeedCombo()) {
+			    		MainCommandUI.setSelectedGameSpeed(MainCommandUI.getGameSpeedCombo().getSelectedIndex());
 			    	}
 			    }
 			}
@@ -46,10 +46,10 @@ public class MainCommandListener {
 		public void itemStateChanged(ItemEvent e) {
 			synchronized(SimYukkuri.lock) {
 			    if (e.getStateChange() == ItemEvent.SELECTED){
-			    	if (e.getSource() == MainCommandUI.mainItemCombo) {
-			    		GadgetMenu.selectMain = GadgetMenu.MainCategory[MainCommandUI.mainItemCombo.getSelectedIndex()];
-			    		GadgetMenu.setSelectCategory(GadgetMenu.selectMain, 0);
-			    		GadgetMenu.selectSub = getSubItem(GadgetMenu.selectMain, 0);
+			    	if (e.getSource() == MainCommandUI.getMainItemCombo()) {
+			    		GadgetMenu.setSelectMain(GadgetMenu.getMainCategory()[MainCommandUI.getMainItemCombo().getSelectedIndex()]);
+			    		GadgetMenu.setSelectCategory(GadgetMenu.getSelectMain(), 0);
+			    		GadgetMenu.setSelectSub(getSubItem(GadgetMenu.getSelectMain(), 0));
 			    	}
 			    }
 			}
@@ -62,9 +62,9 @@ public class MainCommandListener {
 		public void itemStateChanged(ItemEvent e) {
 			synchronized(SimYukkuri.lock) {
 			    if (e.getStateChange() == ItemEvent.SELECTED){
-			    	if (e.getSource() == MainCommandUI.subItemCombo) {
-			    		int sel = MainCommandUI.subItemCombo.getSelectedIndex();
-			    		GadgetMenu.selectSub = getSubItem(GadgetMenu.selectMain, sel);
+			    	if (e.getSource() == MainCommandUI.getSubItemCombo()) {
+			    		int sel = MainCommandUI.getSubItemCombo().getSelectedIndex();
+			    		GadgetMenu.setSelectSub(getSubItem(GadgetMenu.getSelectMain(), sel));
 			    	}
 			    }
 			}
@@ -76,43 +76,43 @@ public class MainCommandListener {
 
 		switch(mainSel) {
 			case TOOL:
-				ret = GadgetMenu.ToolCategory[subSel];
+				ret = GadgetMenu.getToolCategory()[subSel];
 				break;
 			case TOOL2:
-				ret = GadgetMenu.ToolCategory2[subSel];
+				ret = GadgetMenu.getToolCategory2()[subSel];
 				break;
 			case AMPOULE:
-				ret = GadgetMenu.AmpouleCategory[subSel];
+				ret = GadgetMenu.getAmpouleCategory()[subSel];
 				break;
 			case FOODS:
-				ret = GadgetMenu.FoodCategory[subSel];
+				ret = GadgetMenu.getFoodCategory()[subSel];
 				break;
 			case CLEAN:
-				ret = GadgetMenu.CleanCategory[subSel];
+				ret = GadgetMenu.getCleanCategory()[subSel];
 				break;
 			case ACCESSORY:
-				ret = GadgetMenu.OkazariCategory[subSel];
+				ret = GadgetMenu.getOkazariCategory()[subSel];
 				break;
 			case PANTS:
-				ret = GadgetMenu.PantsCategory[subSel];
+				ret = GadgetMenu.getPantsCategory()[subSel];
 				break;
 			case FLOOR:
-				ret = GadgetMenu.FloorCategory[subSel];
+				ret = GadgetMenu.getFloorCategory()[subSel];
 				break;
 			case BARRIER:
-				ret = GadgetMenu.BarrierCategory[subSel];
+				ret = GadgetMenu.getBarrierCategory()[subSel];
 				break;
 			case TOYS:
-				ret = GadgetMenu.ToysCategory[subSel];
+				ret = GadgetMenu.getToysCategory()[subSel];
 				break;
 			case CONVEYOR:
-				ret = GadgetMenu.ConveyorCategory[subSel];
+				ret = GadgetMenu.getConveyorCategory()[subSel];
 				break;
 			case VOICE:
-				ret = GadgetMenu.VoiceCategory[subSel];
+				ret = GadgetMenu.getVoiceCategory()[subSel];
 				break;
 			case TEST:
-				ret = GadgetMenu.TestCategory[subSel];
+				ret = GadgetMenu.getTestCategory()[subSel];
 				break;
 			default:
 				ret = null;
@@ -134,7 +134,7 @@ public class MainCommandListener {
 			}
 			
 			Object source = e.getSource();
-			JButton[] items = MainCommandUI.systemButton;
+			JButton[] items = MainCommandUI.getSystemButton();
 
 			if(source.equals(items[SystemButtonLabel.SAVE.ordinal()])) {
 				SimYukkuri.simYukkuri.doSave();
@@ -149,51 +149,51 @@ public class MainCommandListener {
 				LoggerYukkuri.addLogPage(-1);
 			}
 			else if(source.equals(items[SystemButtonLabel.LOG.ordinal()])) {
-				LoggerYukkuri.show = !LoggerYukkuri.show;
+				LoggerYukkuri.setShow(!LoggerYukkuri.isShow());
 			}
 			else if(source.equals(items[SystemButtonLabel.NEXT.ordinal()])) {
 				LoggerYukkuri.addLogPage(1);
 			}
 			else if(source.equals(items[SystemButtonLabel.LOGCLEAR.ordinal()])) {
 				LoggerYukkuri.clearLog();
-				LoggerYukkuri.clearLogTime = Terrarium.operationTime;
+				LoggerYukkuri.setClearLogTime(Terrarium.getOperationTime());
 			}
-			else if(source.equals(MainCommandUI.playerButton[ToolButtonLabel.MOVE.ordinal()])) {
-				if(MainCommandUI.playerButton[ToolButtonLabel.MOVE.ordinal()].isSelected()) {
-					MainCommandUI.mapWindow.setVisible(true);
+			else if(source.equals(MainCommandUI.getPlayerButton()[ToolButtonLabel.MOVE.ordinal()])) {
+				if(MainCommandUI.getPlayerButton()[ToolButtonLabel.MOVE.ordinal()].isSelected()) {
+					MainCommandUI.getMapWindow().setVisible(true);
 				} else {
-					MainCommandUI.mapWindow.setVisible(false);
+					MainCommandUI.getMapWindow().setVisible(false);
 				}
 			}
-			else if(source.equals(MainCommandUI.playerButton[ToolButtonLabel.BAG.ordinal()])) {
-				if(MainCommandUI.playerButton[ToolButtonLabel.BAG.ordinal()].isSelected()) {
-					MainCommandUI.itemWindow.setVisible(true);
+			else if(source.equals(MainCommandUI.getPlayerButton()[ToolButtonLabel.BAG.ordinal()])) {
+				if(MainCommandUI.getPlayerButton()[ToolButtonLabel.BAG.ordinal()].isSelected()) {
+					MainCommandUI.getItemWindow().setVisible(true);
 				} else {
-					MainCommandUI.itemWindow.setVisible(false);
-					SimYukkuri.world.player.setHoldItem(null);
+					MainCommandUI.getItemWindow().setVisible(false);
+					SimYukkuri.world.getPlayer().setHoldItem(null);
 				}
 			}
-			else if(source.equals(MainCommandUI.scriptButton)) {
-				MyPane.isDisableScript = MainCommandUI.scriptButton.isSelected();
+			else if(source.equals(MainCommandUI.getScriptButton())) {
+				MyPane.setDisableScript(MainCommandUI.getScriptButton().isSelected());
 			}
-			else if(source.equals(MainCommandUI.targetButton)) {
-				MyPane.isEnableTarget = MainCommandUI.targetButton.isSelected();
+			else if(source.equals(MainCommandUI.getTargetButton())) {
+				MyPane.setEnableTarget(MainCommandUI.getTargetButton().isSelected());
 			}
-			else if(source.equals(MainCommandUI.helpButton)) {
-				MyPane.isDisableHelp = MainCommandUI.helpButton.isSelected();
+			else if(source.equals(MainCommandUI.getHelpButton())) {
+				MyPane.setDisableHelp(MainCommandUI.getHelpButton().isSelected());
 			}
-			else if(source.equals(MainCommandUI.optionButton)) {
-				if(MainCommandUI.optionButton.isSelected()) {
-					MainCommandUI.optionPopup.show(MainCommandUI.optionButton, 0, MainCommandUI.optionButton.getHeight());
+			else if(source.equals(MainCommandUI.getOptionButton())) {
+				if(MainCommandUI.getOptionButton().isSelected()) {
+					MainCommandUI.getOptionPopup().show(MainCommandUI.getOptionButton(), 0, MainCommandUI.getOptionButton().getHeight());
 				} else {
-					MainCommandUI.optionPopup.setVisible(false);
+					MainCommandUI.getOptionPopup().setVisible(false);
 				}
 			}
-			else if(source.equals(MainCommandUI.pinButton)) {
-				if(MyPane.selectBody != null && !MyPane.selectBody.isRemoved())
+			else if(source.equals(MainCommandUI.getPinButton())) {
+				if(MyPane.getSelectBody() != null && !MyPane.getSelectBody().isRemoved())
 				{
-					if(MainCommandUI.pinButton.isSelected()) MyPane.selectBody.setPin(true);
-					else MyPane.selectBody.setPin(false);
+					if(MainCommandUI.getPinButton().isSelected()) MyPane.getSelectBody().setPin(true);
+					else MyPane.getSelectBody().setPin(false);
 				}
 			}
 		}
@@ -211,7 +211,7 @@ public class MainCommandListener {
 			switch(sel) {
 				case INI_RELOAD:
 					SimYukkuri.mypane.loadImage(false, false, false, false, false, true);
-					for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().body.entrySet()) {
+					for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().getBody().entrySet()) {
 						Body b = entry.getValue();
 						{
 							IniFileUtil.readIniFile(b, true);
@@ -222,8 +222,8 @@ public class MainCommandListener {
 				default:
 					break;
 			}
-			MainCommandUI.optionPopup.setVisible(false);
-			MainCommandUI.optionButton.setSelected(false);
+			MainCommandUI.getOptionPopup().setVisible(false);
+			MainCommandUI.getOptionButton().setSelected(false);
 		}
 	}
 	/**
@@ -237,7 +237,7 @@ public class MainCommandListener {
 
 		@Override
 		public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
-			MainCommandUI.optionButton.setSelected(false);
+			MainCommandUI.getOptionButton().setSelected(false);
 		}
 
 		@Override
@@ -247,5 +247,7 @@ public class MainCommandListener {
 	}
 
 }
+
+
 
 

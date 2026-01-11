@@ -48,10 +48,10 @@ public class Mixer extends ObjEX implements java.io.Serializable {
 			images[i] = ModLoader.loadItemImage(loader, "mixer" + File.separator + "mixer_" + i + ".png");
 		}
 		images[3] = ModLoader.loadItemImage(loader, "mixer" + File.separator + "mixer_off.png");
-		boundary.width = images[0].getWidth(io);
-		boundary.height = images[0].getHeight(io);
-		boundary.x = boundary.width >> 1;
-		boundary.y = boundary.height >> 1;
+		boundary.setWidth(images[0].getWidth(io));
+		boundary.setHeight(images[0].getHeight(io));
+		boundary.setX(boundary.getWidth() >> 1);
+		boundary.setY(boundary.getHeight() >> 1);
 	}
 
 
@@ -178,7 +178,7 @@ public class Mixer extends ObjEX implements java.io.Serializable {
 							oex = GadgetAction.putObjEX(Food.class, getX(), getY(), Food.FoodType.FOOD.ordinal());
 					}
 					oex.kick(0, 6, -4);
-					SimYukkuri.world.getCurrentMap().food.put(oex.objId, (Food)oex);
+					SimYukkuri.world.getCurrentMap().getFood().put(oex.objId, (Food)oex);
 					amount -= 8400;
 					sweet = 0;
 					sick = false;
@@ -205,14 +205,14 @@ public class Mixer extends ObjEX implements java.io.Serializable {
 			mix.remove();
 			mix = null;
 		}
-		SimYukkuri.world.getCurrentMap().mixer.remove(objId);
+		SimYukkuri.world.getCurrentMap().getMixer().remove(objId);
 	}
 	/** コンストラクタ */
 	public Mixer(int initX, int initY, int initOption) {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		SimYukkuri.world.getCurrentMap().mixer.put(objId, this);
+		SimYukkuri.world.getCurrentMap().getMixer().put(objId, this);
 		objType = Type.PLATFORM;
 		objEXType = ObjEXType.MIXER;
 
@@ -285,6 +285,7 @@ public class Mixer extends ObjEX implements java.io.Serializable {
 	}
 	
 }
+
 
 
 

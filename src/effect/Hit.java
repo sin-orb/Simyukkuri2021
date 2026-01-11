@@ -17,11 +17,11 @@ import src.draw.ModLoader;
 public class Hit extends Effect {
 
 	private static final long serialVersionUID = -4151167914114725276L;
-	public static BufferedImage[][] images;
-	public static int imgW;
-	public static int imgH;
-	public static int pivX;
-	public static int pivY;
+	private static BufferedImage[][] images;
+	private static int imgW;
+	private static int imgH;
+	private static int pivX;
+	private static int pivY;
 	/**
 	 * イメージをロードする.
 	 * @param loader ローダ

@@ -49,7 +49,7 @@ public class Marisa extends Body implements java.io.Serializable {
 	private static BufferedImage[][][] imagesKai = new BufferedImage[ImageCode.values().length][2][3];
 	private static BufferedImage[][][] imagesNora = new BufferedImage[ImageCode.values().length][2][3];
 	private static BufferedImage[][][][] imagesNagasi = new BufferedImage[ImageCode
-			.values().length][2][3][ModLoader.nMaxImgOtherVer + 1];
+			.values().length][2][3][ModLoader.getMaxImgOtherVer() + 1];
 	private static int directionOffset[][] = new int[ImageCode.values().length][2];
 	private static int directionOffsetNagasi[][] = new int[ImageCode.values().length][2];
 	private static Dimension4y[] boundary = new Dimension4y[3];
@@ -68,12 +68,12 @@ public class Marisa extends Body implements java.io.Serializable {
 			return;
 
 		boolean res;
-		res = ModLoader.loadBodyImagePack(loader, imagesNagasi, directionOffsetNagasi, ModLoader.YK_WORD_NAGASI,
+		res = ModLoader.loadBodyImagePack(loader, imagesNagasi, directionOffsetNagasi, ModLoader.getYkWordNagasi(),
 				baseFileName, io);
 		if (!res) {
 			imagesNagasi = null;
 		}
-		res = ModLoader.loadBodyImagePack(loader, imagesNora, directionOffset, ModLoader.YK_WORD_NORA, baseFileName,
+		res = ModLoader.loadBodyImagePack(loader, imagesNora, directionOffset, ModLoader.getYkWordNora(), baseFileName,
 				io);
 		if (!res) {
 			imagesNora = null;
@@ -84,13 +84,13 @@ public class Marisa extends Body implements java.io.Serializable {
 		}
 
 		// 飼い
-		imagePack[BodyRank.KAIYU.imageIndex] = imagesKai;
+		imagePack[BodyRank.KAIYU.getImageIndex()] = imagesKai;
 
 		// 野良
 		if (imagesNora != null) {
-			imagePack[BodyRank.NORAYU.imageIndex] = imagesNora;
+			imagePack[BodyRank.NORAYU.getImageIndex()] = imagesNora;
 		} else {
-			imagePack[BodyRank.NORAYU.imageIndex] = imagesKai;
+			imagePack[BodyRank.NORAYU.getImageIndex()] = imagesKai;
 		}
 
 		ModLoader.setImageSize(imagesKai, boundary, braidBoundary, io);
@@ -107,15 +107,15 @@ public class Marisa extends Body implements java.io.Serializable {
 	 * @param loader クラスローダ
 	 */
 	public static void loadIniFile(ClassLoader loader) {
-		AttachOffset = ModLoader.loadBodyIniMap(loader, ModLoader.DATA_INI_DIR, baseFileName);
-		baseSpeed = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_INI_DIR, baseFileName, "speed");
+		AttachOffset = ModLoader.loadBodyIniMap(loader, ModLoader.getDataIniDir(), baseFileName);
+		baseSpeed = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataIniDir(), baseFileName, "speed");
 	}
 	@Override
 	public int getImage(int type, int direction, BodyLayer layer, int index) {
 		if (!isbImageNagasiMode() || imagesNagasi == null) {
-			layer.image[index] = imagePack[getBodyRank().imageIndex][type][direction
+			layer.getImage()[index] = imagePack[getBodyRank().getImageIndex()][type][direction
 					* directionOffset[type][0]][getBodyAgeState().ordinal()];
-			layer.dir[index] = direction * directionOffset[type][1];
+			layer.getDir()[index] = direction * directionOffset[type][1];
 		}
 		//流し絵の場合
 		else {
@@ -128,11 +128,11 @@ public class Marisa extends Body implements java.io.Serializable {
 			// 前回と同じ表示
 			if (anImageVerStateCtrlNagasi[type][1] == 1) {
 				int nIndex = anImageVerStateCtrlNagasi[type][0];
-				layer.image[index] = imagesNagasi[type][direction * directionOffsetNagasi[type][0]][getBodyAgeState()
+				layer.getImage()[index] = imagesNagasi[type][direction * directionOffsetNagasi[type][0]][getBodyAgeState()
 						.ordinal()][nIndex];
 			} else {
 				int nOtherVerCount = 0;
-				for (int i = 0; i < ModLoader.nMaxImgOtherVer; i++) {
+				for (int i = 0; i < ModLoader.getMaxImgOtherVer(); i++) {
 					if (imagesNagasi[type][direction * directionOffsetNagasi[type][0]][getBodyAgeState().ordinal()][i
 							+ 1] != null) {
 						nOtherVerCount++;
@@ -141,16 +141,16 @@ public class Marisa extends Body implements java.io.Serializable {
 				if (nOtherVerCount != 0) {
 					int nRndIndex = SimYukkuri.RND.nextInt(nOtherVerCount + 1);
 					anImageVerStateCtrlNagasi[type][0] = nRndIndex;
-					layer.image[index] = imagesNagasi[type][direction
+					layer.getImage()[index] = imagesNagasi[type][direction
 							* directionOffsetNagasi[type][0]][getBodyAgeState().ordinal()][nRndIndex];
 				} else {
 					anImageVerStateCtrlNagasi[type][0] = 0;
-					layer.image[index] = imagesNagasi[type][direction
+					layer.getImage()[index] = imagesNagasi[type][direction
 							* directionOffsetNagasi[type][0]][getBodyAgeState().ordinal()][0];
 				}
 				anImageVerStateCtrlNagasi[type][1] = 1;
 			}
-			layer.dir[index] = direction * directionOffsetNagasi[type][1];
+			layer.getDir()[index] = direction * directionOffsetNagasi[type][1];
 		}
 		return 1;
 	}
@@ -187,7 +187,7 @@ public class Marisa extends Body implements java.io.Serializable {
 			if (!SimYukkuri.world.getCurrentMap().makeOrKillDos(true)) {
 				return;
 			}
-			SimYukkuri.world.getCurrentMap().body.remove(this.getUniqueID());
+			SimYukkuri.world.getCurrentMap().getBody().remove(this.getUniqueID());
 			SimYukkuri.mypane.loadBodyImage(YukkuriType.DOSMARISA);
 			Body to = new DosMarisa(getX(), getY(), getZ(), getBodyAgeState(), null, null);
 			try {
@@ -196,12 +196,12 @@ public class Marisa extends Body implements java.io.Serializable {
 				e.printStackTrace();
 			}
 			to.setUniqueID(Numbering.INSTANCE.numberingYukkuriID());
-			SimYukkuri.world.getCurrentMap().body.put(to.getUniqueID(), to);
+			SimYukkuri.world.getCurrentMap().getBody().put(to.getUniqueID(), to);
 			//iniファイル再設定
 			to.setBaseBodyFileName("dosmarisa");
 			IniFileUtil.readYukkuriIniFile(to);
-			if (MyPane.selectBody == this) {
-				MyPane.selectBody = to;
+			if (MyPane.getSelectBody() == this) {
+				MyPane.setSelectBody(to);
 			}
 			remove();
 		}
@@ -220,7 +220,7 @@ public class Marisa extends Body implements java.io.Serializable {
 
 		// 自分以外に幸せを感じている大人のゆっくりが10体以上いる
 		int nCount = 0;
-		List<Body> bodyList = new LinkedList<Body>(SimYukkuri.world.getCurrentMap().body.values());
+		List<Body> bodyList = new LinkedList<Body>(SimYukkuri.world.getCurrentMap().getBody().values());
 		for (Body bOther : bodyList) {
 			if (bOther == this) {
 				continue;
@@ -310,9 +310,9 @@ public class Marisa extends Body implements java.io.Serializable {
 		int direction = this.getDirection().ordinal();
 		int idx = 0;
 
-		layer.option[0] = 0;
-		layer.option[1] = 0;
-		layer.option[2] = 0;
+		layer.getOption()[0] = 0;
+		layer.getOption()[1] = 0;
+		layer.getOption()[2] = 0;
 
 		if (isBurned() && isDead()) {
 			// 焼死体
@@ -605,7 +605,7 @@ public class Marisa extends Body implements java.io.Serializable {
 			else {
 				idx += getImage(ImageCode.BODY.ordinal(), direction, layer, idx);
 			}
-			layer.option[0] = 1;
+			layer.getOption()[0] = 1;
 		}
 		return idx;
 	}
@@ -668,3 +668,5 @@ public class Marisa extends Body implements java.io.Serializable {
 	}
 	
 }
+
+

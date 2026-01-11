@@ -77,10 +77,10 @@ public class FoodMaker extends ObjEX implements java.io.Serializable {
 			images[i] = ModLoader.loadItemImage(loader, "foodmaker" + File.separator + "foodmaker" + String.format("%03d",i+1) + ".png");
 		}
 		images[images_num] = ModLoader.loadItemImage(loader, "foodmaker" + File.separator + "foodmaker_off.png");
-		boundary.width = images[0].getWidth(io);
-		boundary.height = images[0].getHeight(io);
-		boundary.x = boundary.width >> 1;
-		boundary.y = boundary.height >> 1;
+		boundary.setWidth(images[0].getWidth(io));
+		boundary.setHeight(images[0].getHeight(io));
+		boundary.setX(boundary.getWidth() >> 1);
+		boundary.setY(boundary.getHeight() >> 1);
 	}
 
 	@Override
@@ -284,14 +284,14 @@ public class FoodMaker extends ObjEX implements java.io.Serializable {
 				return 0;
 			}
 			int dir = 1;
-			if(x + 40 >= Translate.mapW) dir = -1;
+			if(x + 40 >= Translate.getMapW()) dir = -1;
 			if (foodType == FoodType.SHIT){
 				SimYukkuri.mypane.getTerrarium().addVomit(x + (40 * dir), y, 0, null, YukkuriType.REIMU);
 			}
 			else{
 				for(int i = 0;i<(foodAmount>>1);i++){
 					Food f = (Food)GadgetAction.putObjEX(Food.class, x + (40 * dir), y, foodType.ordinal());
-					SimYukkuri.world.getCurrentMap().food.put(f.objId, f);
+					SimYukkuri.world.getCurrentMap().getFood().put(f.objId, f);
 				}
 				foodAmount = 0;
 
@@ -310,14 +310,14 @@ public class FoodMaker extends ObjEX implements java.io.Serializable {
 
 	@Override
 	public void removeListData(){
-		SimYukkuri.world.getCurrentMap().foodmaker.remove(objId);
+		SimYukkuri.world.getCurrentMap().getFoodmaker().remove(objId);
 	}
 	/** コンストラクタ*/
 	public FoodMaker(int initX, int initY, int initOption) {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		SimYukkuri.world.getCurrentMap().foodmaker.put(objId, this);
+		SimYukkuri.world.getCurrentMap().getFoodmaker().put(objId, this);
 		objType = Type.PLATFORM;
 		objEXType = ObjEXType.FOODMAKER;
 
@@ -355,6 +355,7 @@ public class FoodMaker extends ObjEX implements java.io.Serializable {
 	}
 	
 }
+
 
 
 

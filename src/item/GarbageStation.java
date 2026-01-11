@@ -44,12 +44,20 @@ public class GarbageStation extends ObjEX implements java.io.Serializable {
 		SWEETS2(ResourceUtil.getInstance().read("command_food_sweet2"), FoodType.SWEETS_NORA2),
 								;
 
-		public String name;
-		public FoodType foodType;
+		private final String name;
+		private final FoodType foodType;
 
 		GomiType(String name, FoodType type) {
 			this.name = name;
 			this.foodType = type;
+		}
+
+		public String getName() {
+			return name;
+		}
+
+		public FoodType getFoodType() {
+			return foodType;
 		}
 
 		public String toString() {
@@ -103,10 +111,10 @@ public class GarbageStation extends ObjEX implements java.io.Serializable {
 		images[0] = ModLoader.loadItemImage(loader, "garbagestation" + File.separator + "garbagestation_base.png");
 		images[1] = ModLoader.loadItemImage(loader, "garbagestation" + File.separator + "garbagestation_l_close.png");
 		images[2] = ModLoader.loadItemImage(loader, "garbagestation" + File.separator + "garbagestation_off.png");
-		boundary.width = images[0].getWidth(io);
-		boundary.height = images[0].getHeight(io);
-		boundary.x = boundary.width >> 1;
-		boundary.y = boundary.height - 1;
+		boundary.setWidth(images[0].getWidth(io));
+		boundary.setHeight(images[0].getHeight(io));
+		boundary.setX(boundary.getWidth() >> 1);
+		boundary.setY(boundary.getHeight() - 1);
 	}
 
 	@Override
@@ -137,7 +145,7 @@ public class GarbageStation extends ObjEX implements java.io.Serializable {
 	public void upDate() {
 		if (!enabled)
 			return;
-		if ((Terrarium.operationTime - throwingTime) % 2400 == 0) {
+		if ((Terrarium.getOperationTime() - throwingTime) % 2400 == 0) {
 			for (int i = 0; i < 2; i++) {
 				if (SimYukkuri.RND.nextInt(gettingP) == 0) {
 					feedAction(i);
@@ -165,16 +173,16 @@ public class GarbageStation extends ObjEX implements java.io.Serializable {
 					type = -1;
 				}
 			} while (type < 0);
-			FoodType f = rndTable[type].foodType;
+			FoodType f = rndTable[type].getFoodType();
 			int px = (idx == 0 ? -20 : 20);
 			food[idx] = GadgetAction.putObjEX(Food.class, getX() + px, getY(), f.ordinal());
-			SimYukkuri.world.getCurrentMap().food.put(food[idx].objId, (Food)food[idx]);
+			SimYukkuri.world.getCurrentMap().getFood().put(food[idx].objId, (Food)food[idx]);
 		}
 	}
 
 	@Override
 	public void removeListData() {
-		SimYukkuri.world.getCurrentMap().garbageStation.remove(objId);
+		SimYukkuri.world.getCurrentMap().getGarbageStation().remove(objId);
 	}
 
 	/**コンストラクタ*/
@@ -183,7 +191,7 @@ public class GarbageStation extends ObjEX implements java.io.Serializable {
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), 8);
 
-		SimYukkuri.world.getCurrentMap().garbageStation.put(objId, this);
+		SimYukkuri.world.getCurrentMap().getGarbageStation().put(objId, this);
 		objType = Type.OBJECT;
 		objEXType = ObjEXType.GARBAGESTATION;
 		enable = new boolean[rndTable.length];
@@ -194,7 +202,7 @@ public class GarbageStation extends ObjEX implements java.io.Serializable {
 		boolean ret = setupGarbageSt(this);
 		readIniFile();
 		if (!ret) {
-			SimYukkuri.world.getCurrentMap().garbageStation.remove(objId);
+			SimYukkuri.world.getCurrentMap().getGarbageStation().remove(objId);
 		}
 	}
 	public GarbageStation() {
@@ -237,13 +245,13 @@ public class GarbageStation extends ObjEX implements java.io.Serializable {
 		ClassLoader loader = this.getClass().getClassLoader();
 		int nTemp = 0;
 		//時間
-		nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_ITEM_INI_DIR, "GarbageStation", "throwingTime");
+		nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataItemIniDir(), "GarbageStation", "throwingTime");
 		if (nTemp >= 6)
 			throwingTime = nTemp * 100 - 600;
 		else if (nTemp >= 0)
 			throwingTime = nTemp * 100 + 1800;
 		//確率
-		nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_ITEM_INI_DIR, "GarbageStation",
+		nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataItemIniDir(), "GarbageStation",
 				"gettingProbability");
 		if (nTemp != 0)
 			gettingP = nTemp;
@@ -282,3 +290,4 @@ public class GarbageStation extends ObjEX implements java.io.Serializable {
 	}
 	
 }
+

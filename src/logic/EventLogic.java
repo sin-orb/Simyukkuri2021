@@ -31,7 +31,7 @@ public class EventLogic {
 	 * @param count しゃべる時間
 	 */
 	public static final void addWorldEvent(EventPacket event, Body msgBody, String message, int count) {
-		SimYukkuri.world.getCurrentMap().event.add(event);
+		SimYukkuri.world.getCurrentMap().getEvent().add(event);
 		if(msgBody != null) {
 			msgBody.setWorldEventSendMessage(message, count);
 		}
@@ -67,7 +67,7 @@ public class EventLogic {
 	public static final void clockWorldEvent() {
 		EventPacket e;
 		//リストに登録されているイベントすべてをチェック
-		for (Iterator<EventPacket> i = SimYukkuri.world.getCurrentMap().event.iterator(); i.hasNext();) {
+		for (Iterator<EventPacket> i = SimYukkuri.world.getCurrentMap().getEvent().iterator(); i.hasNext();) {
 			e = i.next();
 			if(e.countDown()) {
 				i.remove();
@@ -84,7 +84,7 @@ public class EventLogic {
 		EventPacket ret = null;
 		EventPacket e;
 		//リストに登録されているイベントすべてをチェック
-		for (Iterator<EventPacket> i = SimYukkuri.world.getCurrentMap().event.iterator(); i.hasNext();) {
+		for (Iterator<EventPacket> i = SimYukkuri.world.getCurrentMap().getEvent().iterator(); i.hasNext();) {
 			e = i.next();
 //			if(e.from == b) continue;
 			if(e.simpleEventAction(b)) {
@@ -134,7 +134,7 @@ public class EventLogic {
 	public static final void checkSimpleWorldEvent(Body b) {
 		EventPacket e;
 		//リストに登録されているイベントすべてをチェック
-		for (Iterator<EventPacket> i = SimYukkuri.world.getCurrentMap().event.iterator(); i.hasNext();) {
+		for (Iterator<EventPacket> i = SimYukkuri.world.getCurrentMap().getEvent().iterator(); i.hasNext();) {
 			e = i.next();
 			Body from = YukkuriUtil.getBodyInstance(e.getFrom());
 			if(from == b) continue;
@@ -191,5 +191,6 @@ public class EventLogic {
 		}
 	}
 }
+
 
 

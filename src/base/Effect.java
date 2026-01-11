@@ -66,10 +66,10 @@ public abstract class Effect extends Obj {
 						int life, int loop, boolean end, boolean grav, boolean front) {
 
 		if(front) {
-			SimYukkuri.world.getCurrentMap().frontEffect.put(objId, this);
+			SimYukkuri.world.getCurrentMap().getFrontEffect().put(objId, this);
 		}
 		else {
-			SimYukkuri.world.getCurrentMap().sortEffect.put(objId, this);
+			SimYukkuri.world.getCurrentMap().getSortEffect().put(objId, this);
 		}
 		objType = Type.LIGHT_EFFECT;
 		x = sX;

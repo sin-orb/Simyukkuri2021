@@ -72,10 +72,14 @@ public class Beltconveyor extends FieldShapeBase implements Serializable {
 		STALK(ResourceUtil.getInstance().read("item_stalk")),
 		;
 
-		public String caption;
+		private final String caption;
 
 		private SetupMenu(String cap) {
 			this.caption = cap;
+		}
+
+		public String getCaption() {
+			return caption;
 		}
 
 		@Override
@@ -98,8 +102,8 @@ public class Beltconveyor extends FieldShapeBase implements Serializable {
 				SetupMenu.HYBRID_ADULT),
 				;
 
-		public String caption;
-		public SetupMenu[] check;
+		private final String caption;
+		private final SetupMenu[] check;
 
 		/** セットアップ用ボタン */
 		private SetupButton(String cap, SetupMenu chk1, SetupMenu chk2, SetupMenu chk3) {
@@ -108,6 +112,14 @@ public class Beltconveyor extends FieldShapeBase implements Serializable {
 			this.check[0] = chk1;
 			this.check[1] = chk2;
 			this.check[2] = chk3;
+		}
+
+		public String getCaption() {
+			return caption;
+		}
+
+		public SetupMenu[] getCheck() {
+			return check;
 		}
 
 		@Override
@@ -124,12 +136,20 @@ public class Beltconveyor extends FieldShapeBase implements Serializable {
 		BOTTOM(ResourceUtil.getInstance().read("outside"), 3),
 		;
 
-		public String caption;
-		public int direct;
+		private final String caption;
+		private final int direct;
 
 		private DirectCombo(String cap, int dir) {
 			this.caption = cap;
 			this.direct = dir;
+		}
+
+		public String getCaption() {
+			return caption;
+		}
+
+		public int getDirect() {
+			return direct;
 		}
 
 		@Override
@@ -145,12 +165,20 @@ public class Beltconveyor extends FieldShapeBase implements Serializable {
 		HIGH(ResourceUtil.getInstance().read("item_speedfast"), 4),
 		;
 
-		public String caption;
-		public int speed;
+		private final String caption;
+		private final int speed;
 
 		private SpeedCombo(String cap, int spd) {
 			this.caption = cap;
 			this.speed = spd;
+		}
+
+		public String getCaption() {
+			return caption;
+		}
+
+		public int getSpeed() {
+			return speed;
 		}
 
 		@Override
@@ -201,7 +229,7 @@ public class Beltconveyor extends FieldShapeBase implements Serializable {
 	@Override
 	public void executeShapePopup(ShapeMenu menu) {
 
-		List<Beltconveyor> list = SimYukkuri.world.getCurrentMap().beltconveyor;
+		List<Beltconveyor> list = SimYukkuri.world.getCurrentMap().getBeltconveyor();
 		int pos;
 
 		switch (menu) {
@@ -262,7 +290,7 @@ public class Beltconveyor extends FieldShapeBase implements Serializable {
 		int[] anPointY = new int[4];
 		Translate.getPolygonPoint(fieldSX, fieldSY, fieldEX, fieldEY, anPointX, anPointY);
 
-		g2.setPaint(texture[direction.direct]);
+		g2.setPaint(texture[direction.getDirect()]);
 		g2.fillPolygon(anPointX, anPointY, 4);
 		// g2.setStroke(Beltconveyor.BELTCONVEYOR_STROKE);
 		// g2.setColor(Beltconveyor.BELTCONVEYOR_COLOR);
@@ -292,25 +320,25 @@ public class Beltconveyor extends FieldShapeBase implements Serializable {
 
 		// フィールド座標が渡ってくるのでマップ座標も計算しておく
 		Point4y pos = Translate.invertLimit(anPointBaseX[0], anPointBaseY[0]);
-		mapSX = Math.max(0, Math.min(pos.getX(), Translate.mapW));
-		mapSY = Math.max(0, Math.min(pos.getY(), Translate.mapH));
+		mapSX = Math.max(0, Math.min(pos.getX(), Translate.getMapW()));
+		mapSY = Math.max(0, Math.min(pos.getY(), Translate.getMapH()));
 
 		pos = Translate.invertLimit(anPointBaseX[1], anPointBaseY[1]);
-		mapEX = Math.max(0, Math.min(pos.getX(), Translate.mapW));
-		mapEY = Math.max(0, Math.min(pos.getY(), Translate.mapH));
+		mapEX = Math.max(0, Math.min(pos.getX(), Translate.getMapW()));
+		mapEY = Math.max(0, Math.min(pos.getY(), Translate.getMapH()));
 
 		// 規定サイズと位置へ合わせる
 		if ((mapEX - mapSX) < MIN_SIZE)
 			mapEX = mapSX + MIN_SIZE;
 		if ((mapEY - mapSY) < MIN_SIZE)
 			mapEY = mapSY + MIN_SIZE;
-		if (mapEX > Translate.mapW) {
-			mapSX -= (mapEX - Translate.mapW);
-			mapEX -= (mapEX - Translate.mapW);
+		if (mapEX > Translate.getMapW()) {
+			mapSX -= (mapEX - Translate.getMapW());
+			mapEX -= (mapEX - Translate.getMapW());
 		}
-		if (mapEY > Translate.mapH) {
-			mapSY -= (mapEY - Translate.mapH);
-			mapEY -= (mapEY - Translate.mapH);
+		if (mapEY > Translate.getMapH()) {
+			mapSY -= (mapEY - Translate.getMapH());
+			mapEY -= (mapEY - Translate.getMapH());
 		}
 
 		Point4y f = new Point4y();
@@ -334,8 +362,8 @@ public class Beltconveyor extends FieldShapeBase implements Serializable {
 
 		boolean ret = setupBelt(this);
 		if (ret) {
-			SimYukkuri.world.getCurrentMap().beltconveyor.add(this);
-			MapPlaceData.setFiledFlag(SimYukkuri.world.getCurrentMap().fieldMap, mapSX, mapSY, mapW, mapH, true,
+			SimYukkuri.world.getCurrentMap().getBeltconveyor().add(this);
+			MapPlaceData.setFiledFlag(SimYukkuri.world.getCurrentMap().getFieldMap(), mapSX, mapSY, mapW, mapH, true,
 					FIELD_BELT);
 		}
 	}
@@ -403,16 +431,16 @@ public class Beltconveyor extends FieldShapeBase implements Serializable {
 
 		switch (direction) {
 			case RIGHT:
-				o.addBxyz(beltSpeed.speed, 0, 0);
+				o.addBxyz(beltSpeed.getSpeed(), 0, 0);
 				break;
 			case UP:
-				o.addBxyz(0, -beltSpeed.speed, 0);
+				o.addBxyz(0, -beltSpeed.getSpeed(), 0);
 				break;
 			case LEFT:
-				o.addBxyz(-beltSpeed.speed, 0, 0);
+				o.addBxyz(-beltSpeed.getSpeed(), 0, 0);
 				break;
 			case BOTTOM:
-				o.addBxyz(0, beltSpeed.speed, 0);
+				o.addBxyz(0, beltSpeed.getSpeed(), 0);
 				break;
 		}
 	}
@@ -420,7 +448,7 @@ public class Beltconveyor extends FieldShapeBase implements Serializable {
 	/** フィールド座標にあるシェイプ取得 */
 	public static Beltconveyor getBeltconveyor(int fx, int fy) {
 
-		for (Beltconveyor bc : SimYukkuri.world.getCurrentMap().beltconveyor) {
+		for (Beltconveyor bc : SimYukkuri.world.getCurrentMap().getBeltconveyor()) {
 			if (bc.fieldSX <= fx && fx <= bc.fieldEX
 					&& bc.fieldSY <= fy && fy <= bc.fieldEY) {
 				return bc;
@@ -431,12 +459,12 @@ public class Beltconveyor extends FieldShapeBase implements Serializable {
 
 	/** 削除 */
 	public static void deleteBelt(Beltconveyor b) {
-		MapPlaceData.setFiledFlag(SimYukkuri.world.getCurrentMap().fieldMap, b.mapSX, b.mapSY, b.mapW, b.mapH, false,
+		MapPlaceData.setFiledFlag(SimYukkuri.world.getCurrentMap().getFieldMap(), b.mapSX, b.mapSY, b.mapW, b.mapH, false,
 				FIELD_BELT);
-		SimYukkuri.world.getCurrentMap().beltconveyor.remove(b);
+		SimYukkuri.world.getCurrentMap().getBeltconveyor().remove(b);
 		// 重なってた部分の復元
-		for (Beltconveyor bc : SimYukkuri.world.getCurrentMap().beltconveyor) {
-			MapPlaceData.setFiledFlag(SimYukkuri.world.getCurrentMap().fieldMap, bc.mapSX, bc.mapSY, bc.mapW, bc.mapH,
+		for (Beltconveyor bc : SimYukkuri.world.getCurrentMap().getBeltconveyor()) {
+			MapPlaceData.setFiledFlag(SimYukkuri.world.getCurrentMap().getFieldMap(), bc.mapSX, bc.mapSY, bc.mapW, bc.mapH,
 					true,
 					FIELD_BELT);
 		}
@@ -618,3 +646,4 @@ public class Beltconveyor extends FieldShapeBase implements Serializable {
 	}
 
 }
+

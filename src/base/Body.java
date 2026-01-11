@@ -168,7 +168,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		if (isUnBirth()) {
 			ret.append("(" + ResourceUtil.getInstance().read("base_fruit") + ")" );
 		} else {
-			ret.append(" (" + getBodyAgeState().name + ")");
+			ret.append(" (" + getBodyAgeState().getName() + ")");
 		}
 
 		return ret.toString();
@@ -348,19 +348,19 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		}
 
 		//路上だと、善良なバッジ付き以外は、一定確率で踏み潰される
-		if (SimYukkuri.world.getCurrentMap().mapIndex == 2 && !(isSmart() && getAttachmentSize(Badge.class) != 0)
+		if (SimYukkuri.world.getCurrentMap().getMapIndex() == 2 && !(isSmart() && getAttachmentSize(Badge.class) != 0)
 				&& getCarAccidentProb() != 0 && SimYukkuri.RND.nextInt(getCarAccidentProb()) == 0) {
 			strikeByPress();
 		}
 
 		//ディヒューザーオレンジ
-		if (Terrarium.orangeSteam) {
+		if (Terrarium.isOrangeSteam()) {
 			if (bHealFlag) {
 				damage -= TICK * 50;
 			}
 		}
 		//ディヒューザー砂糖水
-		if (Terrarium.sugerSteam) {
+		if (Terrarium.isSugerSteam()) {
 			// ダメージ限界の8割以上の場合
 			if (damage >= getDAMAGELIMITorg()[getBodyAgeState().ordinal()] * 80 / 100) {
 				if (bHealFlag) {
@@ -369,7 +369,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			}
 		}
 		//ディヒューザー駆除剤
-		if (Terrarium.poisonSteam) {
+		if (Terrarium.isPoisonSteam()) {
 			damage += TICK * 100;
 			clearActions();
 			setExciting(false);
@@ -440,7 +440,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	 */
 	public void checkAnts() {
 		//すでに潰れてるかアリの数が0かディフューザー無限もるんもるんの場合、アリ解除
-		if (isCrushed() || Terrarium.endlessFurifuriSteam) {
+		if (isCrushed() || Terrarium.isEndlessFurifuriSteam()) {
 			removeAnts();
 			return;
 		}
@@ -452,7 +452,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			return;
 		}
 		// マップが部屋のとき、もしくは飛んでいるやつにアリはたからない
-		if (SimYukkuri.world.getCurrentMap().mapIndex == 0 || getZ() != 0) {
+		if (SimYukkuri.world.getCurrentMap().getMapIndex() == 0 || getZ() != 0) {
 			return;
 		}
 		// 新規でアリたかる？
@@ -949,7 +949,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	 */
 	public boolean checkSleep() {
 		// ディフューザーで睡眠妨害されている場合、眠気をなくす
-		if (Terrarium.noSleepSteam) {
+		if (Terrarium.isNoSleepSteam()) {
 			// 正常な実ゆ以外なら
 			if (!isUnBirth() || !isPlantForUnbirthChild()) {
 				setSleepingPeriod(0);
@@ -1003,7 +1003,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 				return isSleeping();
 			}
 			if (Terrarium.getDayState() == Terrarium.DayState.NIGHT) {
-				if ((getAge() % (Terrarium.nightTime / getSLEEPPERIODorg() + 1)) == 0) {
+				if ((getAge() % (Terrarium.getNightTime() / getSLEEPPERIODorg() + 1)) == 0) {
 					sleepingPeriod += TICK;
 				}
 			} else {
@@ -1035,7 +1035,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	 */
 	public boolean checkOnBed() {
 		Rectangle r = takeScreenRect();
-		for (Map.Entry<Integer, Bed> entry : SimYukkuri.world.getCurrentMap().bed.entrySet()) {
+		for (Map.Entry<Integer, Bed> entry : SimYukkuri.world.getCurrentMap().getBed().entrySet()) {
 			Bed bd = entry.getValue();
 			if (takeScreenRect(bd.getScreenRect()).intersects(r))
 				return true;
@@ -1788,7 +1788,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	 */
 	private boolean checkNonYukkuriDisease() {
 		// 非ゆっくり症防止ディフューザー、非ゆっくり症防止アンプルの際は非ゆっくり症にならない/治る
-		if (Terrarium.antiNonYukkuriDiseaseSteam || getAttachmentSize(ANYDAmpoule.class) != 0) {
+		if (Terrarium.isAntiNonYukkuriDiseaseSteam() || getAttachmentSize(ANYDAmpoule.class) != 0) {
 			seteCoreAnkoState(CoreAnkoState.DEFAULT);
 			return false;
 		}
@@ -2195,8 +2195,8 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	 */
 	public void checkSick() {
 		// （汚くてダメージを受けている、またはディフューザーで湿度が高まっていてダメージを受けている）、かつディフューザーでゆかび禁止になっていないとき
-		if (((isDirty() && isDamaged()) || (Terrarium.humid && damage > 0)) && !Terrarium.antifungalSteam) {
-			if (Terrarium.humid) {
+		if (((isDirty() && isDamaged()) || (Terrarium.isHumid() && damage > 0)) && !Terrarium.isAntifungalSteam()) {
+			if (Terrarium.isHumid()) {
 				dirtyPeriod += TICK * 4;
 			} else {
 				dirtyPeriod += TICK;
@@ -2215,7 +2215,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			dirtyPeriod = 0;
 		}
 		if (isSick()) {
-			if (Terrarium.humid) {
+			if (Terrarium.isHumid()) {
 				sickPeriod += 4;
 			} else {
 				sickPeriod++;
@@ -2527,10 +2527,10 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		// Move Stalk
 		if (getStalks() != null && getStalks().size() > 0) {
 			int direction = getDirection().ordinal();
-			int centerH = (getBodySpr()[getBodyAgeState().ordinal()].imageH + getExpandSizeW() + getExternalForceW());
+			int centerH = (getBodySpr()[getBodyAgeState().ordinal()].getImageH() + getExpandSizeW() + getExternalForceW());
 			// うにょ機能
 			if (SimYukkuri.UNYO) {
-				centerH = (getBodySpr()[getBodyAgeState().ordinal()].imageH + getExpandSizeH() + getExternalForceW()
+				centerH = (getBodySpr()[getBodyAgeState().ordinal()].getImageH() + getExpandSizeH() + getExternalForceW()
 						+ unyoForceH);
 			}
 			int sX;
@@ -2590,9 +2590,9 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 				falldownDamage += Math.abs(vx);
 				x = 0;
 				vx = 0;
-			} else if (x > Translate.mapW) {
+			} else if (x > Translate.getMapW()) {
 				falldownDamage += Math.abs(vx);
-				x = Translate.mapW;
+				x = Translate.getMapW();
 				vx = 0;
 			}
 		}
@@ -2607,9 +2607,9 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 				y = 0;
 				vy = 0;
 				dirY = 1;
-			} else if (y > Translate.mapH) {
+			} else if (y > Translate.getMapH()) {
 				falldownDamage += Math.abs(vy);
-				y = Translate.mapH;
+				y = Translate.getMapH();
 				vy = 0;
 				dirY = -1;
 			}
@@ -2650,7 +2650,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 					}
 
 					if (damageCut != 4) {
-							for (Map.Entry<Integer, Trampoline> entry : SimYukkuri.world.getCurrentMap().trampoline.entrySet()) {
+							for (Map.Entry<Integer, Trampoline> entry : SimYukkuri.world.getCurrentMap().getTrampoline().entrySet()) {
 								Trampoline t = entry.getValue();
 								if (t.checkHitObj(this)) {
 									damageCut = 100;
@@ -2694,11 +2694,11 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		}
 
 		x = Math.max(0, x);
-		x = Math.min(x, Translate.mapW);
+		x = Math.min(x, Translate.getMapW());
 		y = Math.max(0, y);
-		y = Math.min(y, Translate.mapH);
+		y = Math.min(y, Translate.getMapH());
 		//z = Math.max(0, z);
-		z = Math.min(z, Translate.mapZ);
+		z = Math.min(z, Translate.getMapZ());
 
 		if (dontMove || isLockmove()) {
 			setBx(0);
@@ -2941,21 +2941,21 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		if (x < 0) {
 			x = 0;
 			dirX = 1;
-		} else if (x > Translate.mapW) {
-			x = Translate.mapW;
+		} else if (x > Translate.getMapW()) {
+			x = Translate.getMapW();
 			dirX = -1;
 		}
 		if (y < 0) {
 			y = 0;
 			dirY = 1;
-		} else if (y > Translate.mapH) {
-			y = Translate.mapH;
+		} else if (y > Translate.getMapH()) {
+			y = Translate.getMapH();
 			dirY = -1;
 		}
 		if (z < 0) {
 			//z = 0;
-		} else if (z > Translate.mapZ) {
-			z = Translate.mapZ;
+		} else if (z > Translate.getMapZ()) {
+			z = Translate.getMapZ();
 		}
 		// update direction of the face
 		if (dirX == -1) {
@@ -3258,7 +3258,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			// 茎がある
 			if (getBindStalk() != null) {
 				int id = getBindStalk().getPlantYukkuri();
-				Obj oBind = SimYukkuri.world.getCurrentMap().body.get(id);
+				Obj oBind = SimYukkuri.world.getCurrentMap().getBody().get(id);
 				if (oBind != null && oBind instanceof Body) {
 					Body bodyBind = (Body) oBind;
 					// 茎があって親が生きてる
@@ -3527,7 +3527,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			OE = 100;
 		return (20 - 20 / (getBabyTypes().size() + 1)) + getBabyTypes().size() * 2
 				+ ((shit * 4 / 5) / getSHITLIMITorg()[getBodyAgeState().ordinal()]) * 5
-				+ getBodySpr()[getBodyAgeState().ordinal()].imageW * (OE - 100) / 100
+				+ getBodySpr()[getBodyAgeState().ordinal()].getImageW() * (OE - 100) / 100
 				+ getAnGodHandPoint()[0] / 2;
 	}
 
@@ -3574,12 +3574,12 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	 */
 	public void setBoundary(Dimension4y[] body, Dimension4y[] braid) {
 		for (int i = 0; i < body.length; i++) {
-			getBodySpr()[i] = new Sprite(body[i].width, body[i].height, Sprite.PIVOT_CENTER_BOTTOM);
-			getExpandSpr()[i] = new Sprite(body[i].width, body[i].height, Sprite.PIVOT_CENTER_BOTTOM);
+			getBodySpr()[i] = new Sprite(body[i].getWidth(), body[i].getHeight(), Sprite.PIVOT_CENTER_BOTTOM);
+			getExpandSpr()[i] = new Sprite(body[i].getWidth(), body[i].getHeight(), Sprite.PIVOT_CENTER_BOTTOM);
 		}
 		for (int i = 0; i < braid.length; i++) {
 			if (braid[i] != null) {
-				getBraidSpr()[i] = new Sprite(braid[i].width, braid[i].height, Sprite.PIVOT_CENTER_BOTTOM);
+				getBraidSpr()[i] = new Sprite(braid[i].getWidth(), braid[i].getHeight(), Sprite.PIVOT_CENTER_BOTTOM);
 			} else {
 				getBraidSpr()[i] = new Sprite(0, 0, Sprite.PIVOT_CENTER_CENTER);
 			}
@@ -3603,22 +3603,22 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	}
 
 	public final void getBoundaryShape(Rectangle r) {
-		r.x = getBodySpr()[getBodyAgeState().ordinal()].pivotX;
-		r.y = getBodySpr()[getBodyAgeState().ordinal()].pivotY;
-		r.width = getBodySpr()[getBodyAgeState().ordinal()].imageW;
-		r.height = getBodySpr()[getBodyAgeState().ordinal()].imageH;
+		r.x = getBodySpr()[getBodyAgeState().ordinal()].getPivotX();
+		r.y = getBodySpr()[getBodyAgeState().ordinal()].getPivotY();
+		r.width = getBodySpr()[getBodyAgeState().ordinal()].getImageW();
+		r.height = getBodySpr()[getBodyAgeState().ordinal()].getImageH();
 	}
 
 	public final void getExpandShape(Rectangle4y r) {
-		r.width = getExpandSpr()[getBodyAgeState().ordinal()].screenRect[0].width;
-		r.height = getExpandSpr()[getBodyAgeState().ordinal()].screenRect[0].height;
+		r.setWidth(getExpandSpr()[getBodyAgeState().ordinal()].getScreenRect()[0].getWidth());
+		r.setHeight(getExpandSpr()[getBodyAgeState().ordinal()].getScreenRect()[0].getHeight());
 		if (SimYukkuri.UNYO) {
-			r.width = getExpandSpr()[getBodyAgeState().ordinal()].screenRect[0].width + unyoForceW;
-			r.height = getExpandSpr()[getBodyAgeState().ordinal()].screenRect[0].height + unyoForceH;
+			r.setWidth(getExpandSpr()[getBodyAgeState().ordinal()].getScreenRect()[0].getWidth() + unyoForceW);
+			r.setHeight(getExpandSpr()[getBodyAgeState().ordinal()].getScreenRect()[0].getHeight() + unyoForceH);
 		}
 
-		r.x = r.width >> 1;
-		r.y = r.height - 1;
+		r.setX(r.getWidth() >> 1);
+		r.setY(r.getHeight() - 1);
 	}
 
 	/**
@@ -3685,16 +3685,16 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 
 		//val.remove();
 		if (val instanceof Shit) {
-			Map<Integer, Shit> shits = SimYukkuri.world.getCurrentMap().shit;
+			Map<Integer, Shit> shits = SimYukkuri.world.getCurrentMap().getShit();
 			shits.remove(val.objId);
-			SimYukkuri.world.getCurrentMap().takenOutShit.put(val.objId, (Shit)val);
+			SimYukkuri.world.getCurrentMap().getTakenOutShit().put(val.objId, (Shit)val);
 			val.setWhere(Where.IN_YUKKURI);
 		}
 
 		if (val instanceof Food) {
-			Map<Integer, Food> foods = SimYukkuri.world.getCurrentMap().food;
+			Map<Integer, Food> foods = SimYukkuri.world.getCurrentMap().getFood();
 			foods.remove(val.objId);
-			SimYukkuri.world.getCurrentMap().takenOutFood.put(val.objId, (Food)val);
+			SimYukkuri.world.getCurrentMap().getTakenOutFood().put(val.objId, (Food)val);
 			val.setWhere(Where.IN_YUKKURI);
 		}
 	}
@@ -3716,11 +3716,11 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 
 		//落としたもの（うんうん）の処理
 		if (val instanceof Shit) {
-			Map<Integer, Shit> shits = SimYukkuri.world.getCurrentMap().shit;
+			Map<Integer, Shit> shits = SimYukkuri.world.getCurrentMap().getShit();
 			shits.put(val.objId, (Shit) val);
-			SimYukkuri.world.getCurrentMap().takenOutShit.remove(val.objId);
+			SimYukkuri.world.getCurrentMap().getTakenOutShit().remove(val.objId);
 			val.setCalcX(x);
-			if (y + 3 <= Translate.mapH) {
+			if (y + 3 <= Translate.getMapH()) {
 				val.setCalcY(y);
 			} else {
 				val.setCalcY(y + 3);
@@ -3731,11 +3731,11 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		}
 		//落としたもの(餌)の処理
 		if (val instanceof Food) {
-			Map<Integer, Food> foods = SimYukkuri.world.getCurrentMap().food;
+			Map<Integer, Food> foods = SimYukkuri.world.getCurrentMap().getFood();
 			foods.put(val.objId, (Food) val);
-			SimYukkuri.world.getCurrentMap().takenOutFood.remove(val.objId);
+			SimYukkuri.world.getCurrentMap().getTakenOutFood().remove(val.objId);
 			val.setCalcX(x);
-			if (y + 3 <= Translate.mapH) {
+			if (y + 3 <= Translate.getMapH()) {
 				val.setCalcY(y + 3);
 			} else {
 				val.setCalcY(y);
@@ -3751,11 +3751,11 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		Integer i = getTakeoutItem().get(key);
 		if (i == null) return null;
 		MapPlaceData m = SimYukkuri.world.getCurrentMap();
-		if (m.takenOutFood.containsKey(i.intValue())) {
-			return m.takenOutFood.get(i.intValue());
+		if (m.getTakenOutFood().containsKey(i.intValue())) {
+			return m.getTakenOutFood().get(i.intValue());
 		}
-		if (m.takenOutShit.containsKey(i.intValue())) {
-			return m.takenOutShit.get(i.intValue());
+		if (m.getTakenOutShit().containsKey(i.intValue())) {
+			return m.getTakenOutShit().get(i.intValue());
 		}
 		return null;
 	}
@@ -4622,7 +4622,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		// 実ゆの場合、親が反応する
 		if (getBindStalk() != null) {
 			int id = getBindStalk().getPlantYukkuri();
-			Body bodyMother = SimYukkuri.world.getCurrentMap().body.get(id);
+			Body bodyMother = SimYukkuri.world.getCurrentMap().getBody().get(id);
 			if (bodyMother != null) {
 				if (!bodyMother.isDead() || bodyMother.isSleeping()) {
 					return bodyMother.getUniqueID();
@@ -4637,7 +4637,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	 * @param eState 実ゆの状態
 	 */
 	public void checkReactionStalkMother(UnbirthBabyState eState) {
-		Body bodyMother = SimYukkuri.world.getCurrentMap().body.get(getBindStalkMotherCanNotice());
+		Body bodyMother = SimYukkuri.world.getCurrentMap().getBody().get(getBindStalkMotherCanNotice());
 		if (bodyMother == null) {
 			return;
 		}
@@ -5445,9 +5445,9 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		if (getBlockedCount() != 0) {
 			return;
 		}
-		destX = Math.max(0, Math.min(toX, Translate.mapW));
-		destY = Math.max(0, Math.min(toY, Translate.mapH));
-		destZ = Math.max(0, Math.min(toZ, Translate.mapZ));
+		destX = Math.max(0, Math.min(toX, Translate.getMapW()));
+		destY = Math.max(0, Math.min(toY, Translate.getMapH()));
+		destZ = Math.max(0, Math.min(toZ, Translate.getMapZ()));
 	}
 
 	/**
@@ -5458,7 +5458,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		if (isDead()) {
 			return;
 		}
-		destZ = Math.max(0, Math.min(toZ, Translate.mapZ));
+		destZ = Math.max(0, Math.min(toZ, Translate.getMapZ()));
 	}
 
 	public final void setTargetMoveOffset(int ox, int oy) {
@@ -5613,9 +5613,9 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		e.setToX(toX);
 		e.setToY(toY);
 		e.setToZ(toZ);
-		destX = Math.max(0, Math.min(toX, Translate.mapW));
-		destY = Math.max(0, Math.min(toY, Translate.mapH));
-		destZ = Math.max(0, Math.min(toZ, Translate.mapZ));
+		destX = Math.max(0, Math.min(toX, Translate.getMapW()));
+		destY = Math.max(0, Math.min(toY, Translate.getMapH()));
+		destZ = Math.max(0, Math.min(toZ, Translate.getMapZ()));
 	}
 
 	/**
@@ -6281,7 +6281,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			getOkazari().setCalcX(x);
 			getOkazari().setCalcY(y);
 			getOkazari().setCalcZ(z + 10);
-			SimYukkuri.world.getCurrentMap().okazari.put(getOkazari().objId, getOkazari());
+			SimYukkuri.world.getCurrentMap().getOkazari().put(getOkazari().objId, getOkazari());
 			setOkazari(null);
 		}
 	}
@@ -6623,7 +6623,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 				removeAttachment(Needle.class);
 
 				// 粘着板で固定されていないなら背面固定解除
-				Map<Integer, StickyPlate> stickyPlates = SimYukkuri.world.getCurrentMap().stickyPlate;
+				Map<Integer, StickyPlate> stickyPlates = SimYukkuri.world.getCurrentMap().getStickyPlate();
 				boolean bReset = true;
 					for (Map.Entry<Integer, StickyPlate> entry : stickyPlates.entrySet()) {
 						StickyPlate s = entry.getValue();
@@ -7140,12 +7140,12 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		}
 		int toX, toY;
 		if (x > fromX) {
-			toX = Translate.mapW;
+			toX = Translate.getMapW();
 		} else {
 			toX = 0;
 		}
 		if (y > fromY) {
-			toY = Translate.mapH;
+			toY = Translate.getMapH();
 		} else {
 			toY = 0;
 		}
@@ -7168,13 +7168,13 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			setPartner(-1);
 			removeAllStalks();
 			setStalks(null);
-			if (SimYukkuri.world.getCurrentMap().body.containsKey(this.getUniqueID())) {
-				SimYukkuri.world.getCurrentMap().body.remove(this.getUniqueID());
+			if (SimYukkuri.world.getCurrentMap().getBody().containsKey(this.getUniqueID())) {
+				SimYukkuri.world.getCurrentMap().getBody().remove(this.getUniqueID());
 			}
 			getChildrenList().clear();
 			getElderSisterList().clear();
 			getSisterList().clear();
-			List<Body> bodies = new LinkedList<Body>(SimYukkuri.world.getCurrentMap().body.values());
+			List<Body> bodies = new LinkedList<Body>(SimYukkuri.world.getCurrentMap().getBody().values());
 			for (Body b : bodies) {
 				if (b.getChildrenList() != null) {
 					YukkuriUtil.removeContent(b.getChildrenList(), getUniqueID());
@@ -7300,10 +7300,10 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		int idx = 0;
 
 		//正面かそうでないか
-		layer.option[0] = 0;
+		layer.getOption()[0] = 0;
 		//
-		layer.option[1] = 0;
-		layer.option[2] = 0;
+		layer.getOption()[1] = 0;
+		layer.getOption()[2] = 0;
 
 		if (isBurned() && isDead()) {
 			// 焼死体
@@ -7416,7 +7416,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 			else {
 				idx += getImage(ImageCode.BODY.ordinal(), direction, layer, idx);
 			}
-			layer.option[0] = 1;
+			layer.getOption()[0] = 1;
 		}
 		return idx;
 	}
@@ -7458,7 +7458,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		int direction = this.getDirection().ordinal();
 		int idx = 0;
 		if (getOkazari() == null) {
-			layer.image[idx] = null;
+			layer.getImage()[idx] = null;
 			idx++;
 		} else {
 			if (type == 0) {
@@ -7467,7 +7467,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 				}
 				// ゴミおかざり
 				else {
-					layer.image[idx] = Okazari.getOkazariImage(getOkazari().getOkazariType(), direction);
+					layer.getImage()[idx] = Okazari.getOkazariImage(getOkazari().getOkazariType(), direction);
 					idx++;
 				}
 			} else {
@@ -7485,7 +7485,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	public int getEffectImage(BodyLayer layer) {
 		int direction = this.getDirection().ordinal();
 		int idx = 0;
-		//layer.option[0] = 0;
+		//layer.getOption()[0] = 0;
 		//死亡
 		if (isDead())
 			idx += getImage(ImageCode.DEAD_BODY.ordinal(), direction, layer, idx);
@@ -7567,35 +7567,35 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		int idx = 0;
 
 		// 跳ねない
-		layer.option[0] = 0;
+		layer.getOption()[0] = 0;
 		// optionは移動関係の設定
 		if (isFlyingType()) {
 			if (!isGrabbed() && !isSleeping() && !isPurupuru()) {
 				if (isExciting()) {
-					layer.option[0] = 1; // 大ジャンプ
+					layer.getOption()[0] = 1; // 大ジャンプ
 				} else if (isSukkiri()) {
-					layer.option[0] = 2; // すっきり
+					layer.getOption()[0] = 2; // すっきり
 				} else if (isNobinobi()) {
-					layer.option[0] = 4; // のびのび
+					layer.getOption()[0] = 4; // のびのび
 				} else if (isYunnyaa() || isBeggingForLife()) {
-					layer.option[0] = 5; //ゆんやあ&命乞い
+					layer.getOption()[0] = 5; //ゆんやあ&命乞い
 				} else if (!isLockmove() && canflyCheck() && !isDontJump()) {
-					layer.option[0] = 3; // 跳ねて移動
+					layer.getOption()[0] = 3; // 跳ねて移動
 				}
 			}
 		} else {
 			if (!isGrabbed() && getZ() == 0 && !isSleeping() && !isPurupuru()) {
 				if (isExciting() && !isDontJump() && !isbNeedled()) {
-					layer.option[0] = 1; // 大ジャンプ
+					layer.getOption()[0] = 1; // 大ジャンプ
 				} else if (isSukkiri()) {
-					layer.option[0] = 2; // すっきり
+					layer.getOption()[0] = 2; // すっきり
 				} else if (isNobinobi()) {
-					layer.option[0] = 4; // のびのび
+					layer.getOption()[0] = 4; // のびのび
 				} else if (isYunnyaa() || isBeggingForLife()) {
-					layer.option[0] = 5; //ゆんやあ&命乞い
+					layer.getOption()[0] = 5; //ゆんやあ&命乞い
 				} else if (!isLockmove() && !isDontJump()
 						&& takeMappedObj(getLinkParent()) == null && !isPeropero() && !(isEating() && !isPikopiko())) {
-					layer.option[0] = 3; // 跳ねて移動
+					layer.getOption()[0] = 3; // 跳ねて移動
 				}
 			}
 		}
@@ -7603,7 +7603,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		// 非ゆっくり症の場合
 		if (isNYD()) {
 			// 跳ねない
-			layer.option[0] = 0;
+			layer.getOption()[0] = 0;
 		}
 
 		// 表情固定
@@ -7685,7 +7685,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 						idx += getImage(ImageCode.SLEEPING.ordinal(), direction, layer, idx);
 				}
 				setMabatakiType(ImageCode.SLEEPING.ordinal());
-				if (MainCommandUI.selectedGameSpeed != 0 /*&& mabatakiType < 100*/) {
+				if (MainCommandUI.getSelectedGameSpeed() != 0 /*&& mabatakiType < 100*/) {
 					setMabatakiCnt(getMabatakiCnt() + 1);
 				}
 			} else {
@@ -7716,7 +7716,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 							idx += getImage(ImageCode.TIRED.ordinal(), direction, layer, idx);
 						}
 						setMabatakiType(ImageCode.TIRED.ordinal());
-						if (MainCommandUI.selectedGameSpeed != 0) {
+						if (MainCommandUI.getSelectedGameSpeed() != 0) {
 							setMabatakiCnt(getMabatakiCnt() + 1);
 						}
 						if (getMabatakiType() == ImageCode.TIRED.ordinal() && getMabatakiCnt() > 100) {
@@ -7761,7 +7761,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 							idx += getImage(ImageCode.TIRED.ordinal(), direction, layer, idx);
 						}
 						setMabatakiType(ImageCode.TIRED.ordinal());
-						if (MainCommandUI.selectedGameSpeed != 0) {
+						if (MainCommandUI.getSelectedGameSpeed() != 0) {
 							setMabatakiCnt(getMabatakiCnt() + 1);
 						}
 						if (getMabatakiType() == ImageCode.TIRED.ordinal() && getMabatakiCnt() > 100) {
@@ -7800,7 +7800,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 							idx += getImage(ImageCode.TIRED.ordinal(), direction, layer, idx);
 						}
 						setMabatakiType(ImageCode.TIRED.ordinal());
-						if (MainCommandUI.selectedGameSpeed != 0) {
+						if (MainCommandUI.getSelectedGameSpeed() != 0) {
 							setMabatakiCnt(getMabatakiCnt() + 1);
 						}
 						if (getMabatakiType() == ImageCode.TIRED.ordinal() && getMabatakiCnt() > 100) {
@@ -7838,7 +7838,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 							idx += getImage(ImageCode.RUDE.ordinal(), direction, layer, idx);
 						}
 						setMabatakiType(ImageCode.RUDE.ordinal());
-						if (MainCommandUI.selectedGameSpeed != 0) {
+						if (MainCommandUI.getSelectedGameSpeed() != 0) {
 							setMabatakiCnt(getMabatakiCnt() + 1);
 						}
 						if (getMabatakiType() == ImageCode.RUDE.ordinal() && getMabatakiCnt() > 100) {
@@ -7872,7 +7872,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 							idx += getImage(ImageCode.CHEER.ordinal(), direction, layer, idx);
 						}
 						setMabatakiType(ImageCode.CHEER.ordinal());
-						if (MainCommandUI.selectedGameSpeed != 0) {
+						if (MainCommandUI.getSelectedGameSpeed() != 0) {
 							setMabatakiCnt(getMabatakiCnt() + 1);
 						}
 						if (getMabatakiType() == ImageCode.CHEER.ordinal() && getMabatakiCnt() > 100) {
@@ -7908,7 +7908,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 							idx += getImage(ImageCode.CHEER.ordinal(), direction, layer, idx);
 						}
 						setMabatakiType(ImageCode.CHEER.ordinal());
-						if (MainCommandUI.selectedGameSpeed != 0) {
+						if (MainCommandUI.getSelectedGameSpeed() != 0) {
 							setMabatakiCnt(getMabatakiCnt() + 1);
 						}
 						if (getMabatakiType() == ImageCode.CHEER.ordinal() && getMabatakiCnt() > 100) {
@@ -7943,7 +7943,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 							idx += getImage(ImageCode.NORMAL.ordinal(), direction, layer, idx);
 						}
 						setMabatakiType(ImageCode.NORMAL.ordinal());
-						if (MainCommandUI.selectedGameSpeed != 0) {
+						if (MainCommandUI.getSelectedGameSpeed() != 0) {
 							setMabatakiCnt(getMabatakiCnt() + 1);
 						}
 						if (getMabatakiType() == ImageCode.NORMAL.ordinal() && getMabatakiCnt() > 100) {
@@ -8145,7 +8145,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	 */
 	@Override
 	public Event clockTick() {
-		if (Terrarium.operationTime % 100 == 0) {
+		if (Terrarium.getOperationTime() % 100 == 0) {
 			checkRemovedFamilyList();
 		}
 		// if removed, remove body
@@ -8223,14 +8223,14 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		}
 
 		if (Terrarium.getInterval() == 0) {
-			if (Terrarium.ageBoostSteam && getBodyAgeState() != AgeState.ADULT)
+			if (Terrarium.isAgeBoostSteam() && getBodyAgeState() != AgeState.ADULT)
 				addAge(10000);
-			if (Terrarium.ageStopSteam && !bAccelAmple)
+			if (Terrarium.isAgeStopSteam() && !bAccelAmple)
 				addAge(-256);
 		}
 
 		if (getBaryState() == BaryInUGState.NONE || getBaryState() == BaryInUGState.HALF) {
-			if (Terrarium.rapidPregnantSteam)
+			if (Terrarium.isRapidPregnantSteam())
 				rapidPregnantPeriod();
 		}
 
@@ -8252,7 +8252,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		FootBake foot = getFootBakeLevel();
 		if (curAge.ordinal() < getBodyAgeState().ordinal()) {
 			// 状態変更有かつ成長抑制されている場合は強制的に元に戻す。成長促進アンプルが刺さっていたら成長する
-			if (((Terrarium.ageStopSteam) || (bStopAmple)) && !bAccelAmple) {
+			if (((Terrarium.isAgeStopSteam()) || (bStopAmple)) && !bAccelAmple) {
 				setAgeState(curAge);
 				setAge(getAge() + TICK);
 			} else {
@@ -8282,7 +8282,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		}
 
 		// 無限もるんもるん
-		if (Terrarium.endlessFurifuriSteam) {
+		if (Terrarium.isEndlessFurifuriSteam()) {
 			clearActions();
 			checkMessage();
 			if (canFurifuri()) {
@@ -8492,8 +8492,8 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		if (o == null) {
 			return;
 		}
-		int mapX = Translate.mapW;
-		int mapY = Translate.mapH;
+		int mapX = Translate.getMapW();
+		int mapY = Translate.getMapH();
 		if (o.getX() < 0) {
 			o.setCalcX(0);
 		}
@@ -8725,7 +8725,7 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 				break;
 			}
 		} else {
-			if (SimYukkuri.world.getCurrentMap().mapIndex == 5 || SimYukkuri.world.getCurrentMap().mapIndex == 6)
+			if (SimYukkuri.world.getCurrentMap().getMapIndex() == 5 || SimYukkuri.world.getCurrentMap().getMapIndex() == 6)
 				eBodyRank = BodyRank.YASEIYU;
 		}
 		// 生い立ちを設定
@@ -8823,8 +8823,8 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 	public final boolean checkWait(int nWaitTime) {
 		long lnNowTime = System.currentTimeMillis();
 		long lnLastActionTime = getInLastActionTime();
-		int speed = MyPane.gameSpeed[MainCommandUI.selectedGameSpeed];
-		if (lnNowTime - lnLastActionTime < nWaitTime * speed / MyPane.NORMAL) {
+		int speed = MyPane.getGameSpeed()[MainCommandUI.getSelectedGameSpeed()];
+		if (lnNowTime - lnLastActionTime < nWaitTime * speed / MyPane.getNormalSpeed()) {
 			return false;
 		}
 		//setlnLastActionTime(lnNowTime);
@@ -8864,3 +8864,6 @@ public abstract class Body extends BodyAttributes implements java.io.Serializabl
 		setToSteal(false);
 	}
 }
+
+
+

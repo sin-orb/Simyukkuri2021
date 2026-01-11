@@ -43,10 +43,10 @@ public class HotPlate extends ObjEX implements java.io.Serializable {
 			images[i] = ModLoader.loadItemImage(loader, "hotplate" + File.separator + "hotplate" + i + ".png");
 		}
 		images[3] = ModLoader.loadItemImage(loader, "hotplate" + File.separator + "hotplate_off.png");
-		boundary.width = images[0].getWidth(io);
-		boundary.height = images[0].getHeight(io);
-		boundary.x = boundary.width >> 1;
-		boundary.y = boundary.height >> 1;
+		boundary.setWidth(images[0].getWidth(io));
+		boundary.setHeight(images[0].getHeight(io));
+		boundary.setX(boundary.getWidth() >> 1);
+		boundary.setY(boundary.getHeight() >> 1);
 	}
 
 	@Override
@@ -173,14 +173,14 @@ public class HotPlate extends ObjEX implements java.io.Serializable {
 			smoke.remove();
 			smoke = null;
 		}
-		SimYukkuri.world.getCurrentMap().hotPlate.remove(objId);
+		SimYukkuri.world.getCurrentMap().getHotPlate().remove(objId);
 	}
 	/**コンストラクタ*/
 	public HotPlate(int initX, int initY, int initOption) {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		SimYukkuri.world.getCurrentMap().hotPlate.put(objId, this);
+		SimYukkuri.world.getCurrentMap().getHotPlate().put(objId, this);
 		objType = Type.PLATFORM;
 		objEXType = ObjEXType.HOTPLATE;
 
@@ -209,5 +209,6 @@ public class HotPlate extends ObjEX implements java.io.Serializable {
 	}
 	
 }
+
 
 

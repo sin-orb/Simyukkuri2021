@@ -16,11 +16,11 @@ import src.draw.ModLoader;
 public class BakeSmoke extends Effect {
 
 	private static final long serialVersionUID = 5547702513633744632L;
-	public static BufferedImage[] images;
-	public static int imgW;
-	public static int imgH;
-	public static int pivX;
-	public static int pivY;
+	private static BufferedImage[] images;
+	private static int imgW;
+	private static int imgH;
+	private static int pivX;
+	private static int pivY;
 
 	/**
 	 * イメージをロードする.

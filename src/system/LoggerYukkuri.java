@@ -42,9 +42,9 @@ public class LoggerYukkuri {
 	public static final int NUM_OF_CASH = 10;
 	public static final int NUM_OF_LOGDATA_TYPE = 11;
 	/** ログを見せるか否か */
-	public static boolean show = false;
+	private static boolean show = false;
 	/** ログクリアをした時間 */
-	public static int clearLogTime = 0;
+	private static int clearLogTime = 0;
 
 	private static final int NUM_OF_GRAPH_DATA = 120;
 	private static int logPointer = 0;
@@ -108,6 +108,22 @@ public class LoggerYukkuri {
 		else if (logPage >= 4)
 			logPage = 0;
 	}
+	
+	public static boolean isShow() {
+		return show;
+	}
+	
+	public static void setShow(boolean show) {
+		LoggerYukkuri.show = show;
+	}
+	
+	public static int getClearLogTime() {
+		return clearLogTime;
+	}
+	
+	public static void setClearLogTime(int clearLogTime) {
+		LoggerYukkuri.clearLogTime = clearLogTime;
+	}
 
 	/**
 	 * ロガーを実行する.
@@ -116,7 +132,7 @@ public class LoggerYukkuri {
 
 		long logData[] = new long[NUM_OF_LOGDATA_TYPE];
 		try {
-			for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().body.entrySet()) {
+			for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().getBody().entrySet()) {
 				Body b = entry.getValue();
 				if (!b.isDead()) {
 					if (b.isPredatorType()) {
@@ -160,7 +176,7 @@ public class LoggerYukkuri {
 			// list変更等の際は握りつぶしてしまう
 		}
 
-		logData[NUM_OF_SHIT] = SimYukkuri.world.getCurrentMap().shit.size();
+		logData[NUM_OF_SHIT] = SimYukkuri.world.getCurrentMap().getShit().size();
 
 		logData[NUM_OF_CASH] = SimYukkuri.world.getPlayer().getCash();
 
@@ -227,7 +243,7 @@ public class LoggerYukkuri {
 	 */
 	public static void displayLog(Graphics2D g2) {
 		g2.setColor(backColor);
-		g2.fillRect(0, 0, Translate.canvasW, Translate.canvasH);
+		g2.fillRect(0, 0, Translate.getCanvasW(), Translate.getCanvasH());
 
 		// 空きメモリ表示
 		g2.setColor(textColor1);
@@ -481,7 +497,7 @@ public class LoggerYukkuri {
 			break;
 		}
 
-		int operationTime = Terrarium.operationTime / 10;
+		int operationTime = Terrarium.getOperationTime() / 10;
 		int opetmp = operationTime % NUM_OF_GRAPH_DATA;
 		for (int i = 0; i < NUM_OF_GRAPH_DATA / 30 + 1; i++) {
 			int graphx = GRAPH_WIDTH - (((GRAPH_WIDTH) * 30 * i) / NUM_OF_GRAPH_DATA)
@@ -504,3 +520,4 @@ public class LoggerYukkuri {
 		}
 	}
 }
+

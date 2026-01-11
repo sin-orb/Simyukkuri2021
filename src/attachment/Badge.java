@@ -48,9 +48,13 @@ public class Badge extends Attachment {
 		SILVER("silver.png"),
 		GOLD("gold.png"),
 		;
-		public String fileName;
+		private final String fileName;
 		BadgeRank(String fn) {
 			fileName = fn;
+		}
+
+		public String getFileName() {
+			return fileName;
 		}
 	}
 	/**画像の入れ物
@@ -71,9 +75,9 @@ public class Badge extends Attachment {
 		int adult = AgeState.ADULT.ordinal();
 
 		for(BadgeRank i :BadgeRank.values()) {
-			if(i.fileName == null) continue;
+			if(i.getFileName() == null) continue;
 
-			images[adult][i.ordinal()] = ModLoader.loadItemImage(loader, "badge" + File.separator + i.fileName);
+			images[adult][i.ordinal()] = ModLoader.loadItemImage(loader, "badge" + File.separator + i.getFileName());
 			int w = images[adult][i.ordinal()].getWidth(io);
 			int h = images[adult][i.ordinal()].getHeight(io);
 			images[child][i.ordinal()] = ModLoader.scaleImage(images[adult][i.ordinal()], w / property[AttachProperty.CHILD_SIZE.ordinal()], h / property[AttachProperty.CHILD_SIZE.ordinal()]);

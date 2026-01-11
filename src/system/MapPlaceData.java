@@ -54,97 +54,97 @@ public class MapPlaceData implements Serializable {
 
 	private static final long serialVersionUID = -7909654211347203362L;
 	/** このマップのインデックス */
-	public int mapIndex;
+	private int mapIndex;
 	/** アラーム時間 */
-	public int alarmPeriod;
+	private int alarmPeriod;
 	/** アラーム */
-	public boolean alarm;
+	private boolean alarm;
 
 	// シーン内の各オブジェクトリスト
 	/** ゆっくりのリスト */
-	public Map<Integer, Body> body;
+	private Map<Integer, Body> body;
 	/** うんうんリスト */
-	public Map<Integer, Shit> shit;
+	private Map<Integer, Shit> shit;
 	/** 吐餡リスト */
-	public Map<Integer, Vomit> vomit;
+	private Map<Integer, Vomit> vomit;
 	/** 壁リスト */
-	public List<Barrier> barrier;
+	private List<Barrier> barrier;
 	/** イベントリスト */
-	public List<EventPacket> event;
+	private List<EventPacket> event;
 	/** 裏のエフェクト */
-	public Map<Integer, Effect> sortEffect;
+	private Map<Integer, Effect> sortEffect;
 	/** 表のエフェクト */
-	public Map<Integer, Effect> frontEffect;
+	private Map<Integer, Effect> frontEffect;
 	/** 食べ物リスト */
-	public Map<Integer, Food> food;
+	private Map<Integer, Food> food;
 	/** お持ち帰り中の食べ物リスト */
-	public Map<Integer, Food> takenOutFood;
+	private Map<Integer, Food> takenOutFood;
 	/** お持ち帰り中のうんうんリスト */
-	public Map<Integer, Shit> takenOutShit;
+	private Map<Integer, Shit> takenOutShit;
 	/** トイレリスト */
-	public Map<Integer, Toilet> toilet;
+	private Map<Integer, Toilet> toilet;
 	/** ベッドリスト */
-	public Map<Integer, Bed> bed;
+	private Map<Integer, Bed> bed;
 	/** おもちゃリスト */
-	public Map<Integer, Toy> toy;
+	private Map<Integer, Toy> toy;
 	/** 小石リスト */
-	public Map<Integer, Stone> stone;
+	private Map<Integer, Stone> stone;
 	/** トランポリンリスト */
-	public Map<Integer, Trampoline> trampoline;
+	private Map<Integer, Trampoline> trampoline;
 	/** 養殖プールリスト */
-	public Map<Integer, BreedingPool> breedingPool;
+	private Map<Integer, BreedingPool> breedingPool;
 	/** ダストシュートリスト */
-	public Map<Integer, GarbageChute> garbagechute;
+	private Map<Integer, GarbageChute> garbagechute;
 	/** フードメーカーリスト */
-	public Map<Integer, FoodMaker> foodmaker;
+	private Map<Integer, FoodMaker> foodmaker;
 	/** オレンジプールリスト */
-	public Map<Integer, OrangePool> orangePool;
+	private Map<Integer, OrangePool> orangePool;
 	/** 製品投入口リスト */
-	public Map<Integer, ProductChute> productchute;
+	private Map<Integer, ProductChute> productchute;
 	/** 粘着板リスト */
-	public Map<Integer, StickyPlate> stickyPlate;
+	private Map<Integer, StickyPlate> stickyPlate;
 	/** ホットプレートリスト */
-	public Map<Integer, HotPlate> hotPlate;
+	private Map<Integer, HotPlate> hotPlate;
 	/** 加工プレートリスト */
-	public Map<Integer, ProcesserPlate> processerPlate;
+	private Map<Integer, ProcesserPlate> processerPlate;
 	/** ミキサーリスト */
-	public Map<Integer, Mixer> mixer;
+	private Map<Integer, Mixer> mixer;
 	/** 自動給餌器リスト */
-	public Map<Integer, AutoFeeder> autofeeder;
+	private Map<Integer, AutoFeeder> autofeeder;
 	/** プレス機リスト */
-	public Map<Integer, MachinePress> machinePress;
+	private Map<Integer, MachinePress> machinePress;
 	/** 茎リスト */
-	public Map<Integer, Stalk> stalk;
+	private Map<Integer, Stalk> stalk;
 	/** ディフューザーリスト */
-	public Map<Integer, Diffuser> diffuser;
+	private Map<Integer, Diffuser> diffuser;
 	/** ゆばリスト */
-	public Map<Integer, Yunba> yunba;
+	private Map<Integer, Yunba> yunba;
 	/** すぃ～リスト */
-	public Map<Integer, Sui> sui;
+	private Map<Integer, Sui> sui;
 	/** ガラクタリスト */
-	public Map<Integer, Trash> trash;
+	private Map<Integer, Trash> trash;
 	/** ゴミ収集所リスト */
-	public Map<Integer, GarbageStation> garbageStation;
+	private Map<Integer, GarbageStation> garbageStation;
 	/** おうちリスト */
-	public Map<Integer, House> house;
+	private Map<Integer, House> house;
 	/** ベルコンオブジェリスト */
-	public Map<Integer, BeltconveyorObj> beltconveyorObj;
+	private Map<Integer, BeltconveyorObj> beltconveyorObj;
 	/** ベルコンリスト */
-	public List<Beltconveyor> beltconveyor;
+	private List<Beltconveyor> beltconveyor;
 	/** 池リスト */
-	public List<Pool> pool;
+	private List<Pool> pool;
 	/** 畑リスト */
-	public List<Farm> farm;
+	private List<Farm> farm;
 	/** おかざりリスト */
-	public Map<Integer, Okazari> okazari;
+	private Map<Integer, Okazari> okazari;
 	/** 発電機リスト */
 	//public List<Generator> generator;
 	/** マップにドスがいるかどうかのフラグ */
 	private volatile boolean hasDos;
 	/** 壁 */
-	public int wallMap[][];
+	private int wallMap[][];
 	/** フィールド */
-	public int fieldMap[][];
+	private int fieldMap[][];
 	/**
 	 * コンストラクタ
 	 * @param idx インデックス(0：部屋)
@@ -195,8 +195,8 @@ public class MapPlaceData implements Serializable {
 		takenOutShit = new HashMap<>();
 		//generator = new LinkedList<Generator>();
 
-		int mapW = Translate.mapW;
-		int mapH = Translate.mapH;
+		int mapW = Translate.getMapW();
+		int mapH = Translate.getMapH();
 
 		wallMap = new int[mapW+1][mapH+1];
 		clearMap(wallMap);
@@ -249,8 +249,8 @@ public class MapPlaceData implements Serializable {
 		takenOutShit = new HashMap<>();
 		//generator = new LinkedList<Generator>();
 
-		int mapW = Translate.mapW;
-		int mapH = Translate.mapH;
+		int mapW = Translate.getMapW();
+		int mapH = Translate.getMapH();
 
 		wallMap = new int[mapW+1][mapH+1];
 		clearMap(wallMap);
@@ -281,28 +281,28 @@ public class MapPlaceData implements Serializable {
 	 */
 	public static void setFiledFlag(int[][] map, int x, int y, int w, int h, boolean setFlag, int attribute) {
 		MapPlaceData tmp = SimYukkuri.world.getCurrentMap();
-		int sx = Math.max(0, Math.min(x, Translate.mapW));
-		int sy = Math.max(0, Math.min(y, Translate.mapH));
+		int sx = Math.max(0, Math.min(x, Translate.getMapW()));
+		int sy = Math.max(0, Math.min(y, Translate.getMapH()));
 		if (setFlag) {
 			// 追加モード
 			int ex = x + w;
 			int ey = y + h;
-			ex = Math.max(0, Math.min(ex, Translate.mapW));
-			ey = Math.max(0, Math.min(ey, Translate.mapH));
+			ex = Math.max(0, Math.min(ex, Translate.getMapW()));
+			ey = Math.max(0, Math.min(ey, Translate.getMapH()));
 			for(int py = sy; py < ey; py++) {
 				for(int px = sx; px < ex; px++) {
-					tmp.fieldMap[px][py] = tmp.fieldMap[px][py] | attribute;
+					tmp.getFieldMap()[px][py] = tmp.getFieldMap()[px][py] | attribute;
 				}
 			}
 		} else {
 			// 削除モード
 			int ex = x + w;
 			int ey = y + h;
-			ex = Math.max(0, Math.min(ex, Translate.mapW));
-			ey = Math.max(0, Math.min(ey, Translate.mapH));
+			ex = Math.max(0, Math.min(ex, Translate.getMapW()));
+			ey = Math.max(0, Math.min(ey, Translate.getMapH()));
 			for(int py = sy; py < ey; py++) {
 				for(int px = sx; px < ex; px++) {
-					tmp.fieldMap[px][py] = tmp.fieldMap[px][py] & (~attribute);
+					tmp.getFieldMap()[px][py] = tmp.getFieldMap()[px][py] & (~attribute);
 				}
 			}
 		}
@@ -327,8 +327,8 @@ public class MapPlaceData implements Serializable {
 			for (int t = 0; t <= distance; t++) {
 				int x = sX + (int)(deltaX * t);
 				int y = sY + (int)(deltaY * t);
-				int nx = Math.min(x+1, Translate.mapW);
-				int ny = Math.min(y+1, Translate.mapH);
+				int nx = Math.min(x+1, Translate.getMapW());
+				int ny = Math.min(y+1, Translate.getMapH());
 
 					map[x][y] = map[x][y] | attribute;
 					map[nx][y] = map[nx][y] | attribute;
@@ -338,8 +338,8 @@ public class MapPlaceData implements Serializable {
 			for (int t = 0; t <= distance; t++) {
 				int x = sX + (int)(deltaX * t);
 				int y = sY + (int)(deltaY * t);
-				int nx = Math.min(x+1, Translate.mapW);
-				int ny = Math.min(y+1, Translate.mapH);
+				int nx = Math.min(x+1, Translate.getMapW());
+				int ny = Math.min(y+1, Translate.getMapH());
 
 				map[x][y] = map[x][y] & (~attribute);
 				map[nx][y] = map[nx][y] & (~attribute);
@@ -724,6 +724,7 @@ public class MapPlaceData implements Serializable {
 	}
 	
 }
+
 
 
 

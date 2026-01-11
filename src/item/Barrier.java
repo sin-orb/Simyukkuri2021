@@ -81,12 +81,12 @@ public class Barrier extends FieldShapeBase implements Serializable {
 		// フィールド座標が渡ってくるのでマップ座標も計算しておく
 		Point4y pos;
 		pos = Translate.invertLimit(fieldSX, fieldSY);
-		mapSX = Math.max(0, Math.min(pos.getX(), Translate.mapW));
-		mapSY = Math.max(0, Math.min(pos.getY(), Translate.mapH));
+		mapSX = Math.max(0, Math.min(pos.getX(), Translate.getMapW()));
+		mapSY = Math.max(0, Math.min(pos.getY(), Translate.getMapH()));
 
 		pos = Translate.invertLimit(fieldEX, fieldEY);
-		mapEX = Math.max(0, Math.min(pos.getX(), Translate.mapW));
-		mapEY = Math.max(0, Math.min(pos.getY(), Translate.mapH));
+		mapEX = Math.max(0, Math.min(pos.getX(), Translate.getMapW()));
+		mapEY = Math.max(0, Math.min(pos.getY(), Translate.getMapH()));
 
 		attribute = type;
 		switch (type) {
@@ -116,8 +116,8 @@ public class Barrier extends FieldShapeBase implements Serializable {
 				break;
 		}
 
-		MapPlaceData.setWallLine(SimYukkuri.world.getCurrentMap().wallMap, mapSX, mapSY, mapEX, mapEY, true, attribute);
-		SimYukkuri.world.getCurrentMap().barrier.add(this);
+		MapPlaceData.setWallLine(SimYukkuri.world.getCurrentMap().getWallMap(), mapSX, mapSY, mapEX, mapEY, true, attribute);
+		SimYukkuri.world.getCurrentMap().getBarrier().add(this);
 	}
 
 	public Barrier() {
@@ -141,8 +141,8 @@ public class Barrier extends FieldShapeBase implements Serializable {
 		int y1 = b.getMapSY();
 		int x2 = b.getMapEX();
 		int y2 = b.getMapEY();
-		if (SimYukkuri.world.getCurrentMap().barrier.remove(b)) {
-			MapPlaceData.setWallLine(SimYukkuri.world.getCurrentMap().wallMap, x1, y1, x2, y2, false, b.attribute);
+		if (SimYukkuri.world.getCurrentMap().getBarrier().remove(b)) {
+			MapPlaceData.setWallLine(SimYukkuri.world.getCurrentMap().getWallMap(), x1, y1, x2, y2, false, b.attribute);
 		}
 	}
 
@@ -151,11 +151,11 @@ public class Barrier extends FieldShapeBase implements Serializable {
 		MapPlaceData tmp = SimYukkuri.world.getCurrentMap();
 		int sx = Math.max(0, cx - thx / 2);
 		int sy = Math.max(0, cy - thy / 2);
-		int ex = Math.min(cx + thx / 2, Translate.mapW);
-		int ey = Math.min(cy + thy / 2, Translate.mapH);
+		int ex = Math.min(cx + thx / 2, Translate.getMapW());
+		int ey = Math.min(cy + thy / 2, Translate.getMapH());
 		for (int x = sx; x < ex; x++) {
 			for (int y = sy; y < ey; y++) {
-				if ((tmp.wallMap[x][y] & attr) != 0) {
+				if ((tmp.getWallMap()[x][y] & attr) != 0) {
 					return true;
 				}
 			}
@@ -172,7 +172,7 @@ public class Barrier extends FieldShapeBase implements Serializable {
 	 * @return ある点が壁の上か
 	 */
 	public static Barrier getBarrier(int cx, int cy, int thickness) {
-		List<Barrier> barrierList = SimYukkuri.world.getCurrentMap().barrier;
+		List<Barrier> barrierList = SimYukkuri.world.getCurrentMap().getBarrier();
 
 		for (Barrier b : barrierList) {
 			int x1 = b.getMapSX();
@@ -208,10 +208,10 @@ public class Barrier extends FieldShapeBase implements Serializable {
 	public static boolean acrossBarrier(int x1, int y1, int x2, int y2, int attr) {
 		MapPlaceData tmp = SimYukkuri.world.getCurrentMap();
 
-		x1 = Math.max(0, Math.min(x1, Translate.mapW));
-		x2 = Math.max(0, Math.min(x2, Translate.mapW));
-		y1 = Math.max(0, Math.min(y1, Translate.mapH));
-		y2 = Math.max(0, Math.min(y2, Translate.mapH));
+		x1 = Math.max(0, Math.min(x1, Translate.getMapW()));
+		x2 = Math.max(0, Math.min(x2, Translate.getMapW()));
+		y1 = Math.max(0, Math.min(y1, Translate.getMapH()));
+		y2 = Math.max(0, Math.min(y2, Translate.getMapH()));
 
 		int distance = (int) Math.sqrt(Translate.distance(x1, y1, x2, y2));
 		double deltaX = (double) (x2 - x1) / (double) distance;
@@ -221,10 +221,11 @@ public class Barrier extends FieldShapeBase implements Serializable {
 		for (int t = 0; t <= distance; t++) {
 			int x = sX + (int) (deltaX * t);
 			int y = sY + (int) (deltaY * t);
-			if ((tmp.wallMap[x][y] & attr) != 0) {
+			if ((tmp.getWallMap()[x][y] & attr) != 0) {
 				return true;
 			}
 		}
 		return false;
 	}
 }
+

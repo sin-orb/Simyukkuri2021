@@ -31,12 +31,12 @@ public class Bed extends ObjEX implements java.io.Serializable {
 
 		images = new BufferedImage[3];
 		images[0] = ModLoader.loadItemImage(loader, "bed" + File.separator + "bed.png");
-		images[1] = ModLoader.loadItemImage(loader, "bed" + File.separator + "bed" + ModLoader.YK_WORD_NORA + ".png");
-		images[2] = ModLoader.loadItemImage(loader, "bed" + File.separator + "bed" + ModLoader.YK_WORD_YASEI + ".png");
-		boundary.width = images[0].getWidth(io);
-		boundary.height = images[0].getHeight(io);
-		boundary.x = boundary.width >> 1;
-		boundary.y = boundary.height >> 1;
+		images[1] = ModLoader.loadItemImage(loader, "bed" + File.separator + "bed" + ModLoader.getYkWordNora() + ".png");
+		images[2] = ModLoader.loadItemImage(loader, "bed" + File.separator + "bed" + ModLoader.getYkWordYasei() + ".png");
+		boundary.setWidth(images[0].getWidth(io));
+		boundary.setHeight(images[0].getHeight(io));
+		boundary.setX(boundary.getWidth() >> 1);
+		boundary.setY(boundary.getHeight() >> 1);
 	}
 
 	@Override
@@ -57,7 +57,7 @@ public class Bed extends ObjEX implements java.io.Serializable {
 
 	@Override
 	public void removeListData(){
-		SimYukkuri.world.getCurrentMap().bed.remove(objId);
+		SimYukkuri.world.getCurrentMap().getBed().remove(objId);
 	}
 
 	@Override
@@ -69,7 +69,7 @@ public class Bed extends ObjEX implements java.io.Serializable {
 	 * @return Screen用の四角形
 	 */
 	public Rectangle takeScreenRect() {
-		return new Rectangle(boundary.x, boundary.y, boundary.width, boundary.height);
+		return new Rectangle(boundary.getX(), boundary.getY(), boundary.getWidth(), boundary.getHeight());
 	}
 	
 	/**
@@ -82,12 +82,12 @@ public class Bed extends ObjEX implements java.io.Serializable {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		SimYukkuri.world.getCurrentMap().bed.put(objId, this);
+		SimYukkuri.world.getCurrentMap().getBed().put(objId, this);
 		objType = Type.PLATFORM;
 		objEXType = ObjEXType.BED;
 		itemRank = ItemRank.values()[initOption];
 		// 森なら野生に変更
-		if( SimYukkuri.world.getCurrentMap().mapIndex == 5 ||  SimYukkuri.world.getCurrentMap().mapIndex == 6 ){
+		if( SimYukkuri.world.getCurrentMap().getMapIndex() == 5 ||  SimYukkuri.world.getCurrentMap().getMapIndex() == 6 ){
 			if( itemRank == ItemRank.HOUSE ){
 				itemRank = ItemRank.YASEI;
 			}
@@ -117,5 +117,6 @@ public class Bed extends ObjEX implements java.io.Serializable {
 	}
 	
 }
+
 
 

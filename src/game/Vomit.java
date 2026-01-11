@@ -74,11 +74,11 @@ public class Vomit extends Obj implements java.io.Serializable {
 		int sx, sy;
 
 		for(int i = 0; i < name.length; i++) {
-			if(name[i].imageDirName.length() == 0) continue;
+			if(name[i].getImageDirName().length() == 0) continue;
 			
-			images[i][VOMIT_NORMAL][Const.ADULT_INDEX] = ImageIO.read(loader.getResourceAsStream(path+name[i].imageDirName+"/toan.png"));
-			images[i][VOMIT_CRASHED][Const.ADULT_INDEX] = ImageIO.read(loader.getResourceAsStream(path+name[i].imageDirName+"/toan2.png"));
-			images[i][VOMIT_SHADOW][Const.ADULT_INDEX] = ImageIO.read(loader.getResourceAsStream(path+name[i].imageDirName+"/toan_shadow.png"));
+			images[i][VOMIT_NORMAL][Const.ADULT_INDEX] = ImageIO.read(loader.getResourceAsStream(path+name[i].getImageDirName()+"/toan.png"));
+			images[i][VOMIT_CRASHED][Const.ADULT_INDEX] = ImageIO.read(loader.getResourceAsStream(path+name[i].getImageDirName()+"/toan2.png"));
+			images[i][VOMIT_SHADOW][Const.ADULT_INDEX] = ImageIO.read(loader.getResourceAsStream(path+name[i].getImageDirName()+"/toan_shadow.png"));
 
 			for(int j = 0; j < NUM_OF_VOMIT_STATE; j++) {
 				imgW[i][Const.ADULT_INDEX] = images[i][0][Const.ADULT_INDEX].getWidth(io);
@@ -253,8 +253,8 @@ public class Vomit extends Obj implements java.io.Serializable {
 						x = 0;
 						vx *= -1;
 					}
-					else if (x > Translate.mapW) {
-						x = Translate.mapW;
+					else if (x > Translate.getMapW()) {
+						x = Translate.getMapW();
 						vx *= -1;
 					}
 					else if (Barrier.onBarrier(x, y, getW() >> 2, getH() >> 2, Barrier.MAP_ITEM)) {
@@ -268,8 +268,8 @@ public class Vomit extends Obj implements java.io.Serializable {
 						y = 0;
 						vy = 0;
 					}
-					else if (y > Translate.mapH) {
-						y = Translate.mapH;
+					else if (y > Translate.getMapH()) {
+						y = Translate.getMapH();
 						vy = 0;
 					}
 					else if (Barrier.onBarrier(x, y, getW() >> 2, getH() >> 2, Barrier.MAP_ITEM)) {

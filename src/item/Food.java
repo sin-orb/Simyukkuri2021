@@ -35,9 +35,13 @@ public class Food extends ObjEX implements java.io.Serializable {
 		STALK(null),
 		FUEL(null),
 		;
-		public String fileName;
+		private final String fileName;
 		EmptyImage(String fn) {
 			fileName = fn;
+		}
+
+		public String getFileName() {
+			return fileName;
 		}
 	}
 	
@@ -76,12 +80,12 @@ public class Food extends ObjEX implements java.io.Serializable {
 		SHIT(   0,-500, 0, null, null, false),
 		BODY(   0,-999, 0, null, null, false),
 		;
-		public int value;
-		public int looks;
-		public int amount;
-		public String fileName;
-		public EmptyImage emptyImg;
-		public boolean shadow;
+		private final int value;
+		private final int looks;
+		private final int amount;
+		private final String fileName;
+		private final EmptyImage emptyImg;
+		private final boolean shadow;
 		FoodType(int val, int look, int amt, String fn, EmptyImage emp, boolean sh) {
 			value = val;
 			looks = look;
@@ -89,6 +93,30 @@ public class Food extends ObjEX implements java.io.Serializable {
 			fileName = fn;
 			emptyImg = emp;
 			shadow = sh;
+		}
+
+		public int getValue() {
+			return value;
+		}
+
+		public int getLooks() {
+			return looks;
+		}
+
+		public int getAmount() {
+			return amount;
+		}
+
+		public String getFileName() {
+			return fileName;
+		}
+
+		public EmptyImage getEmptyImg() {
+			return emptyImg;
+		}
+
+		public boolean hasShadow() {
+			return shadow;
 		}
 	}
 
@@ -110,25 +138,25 @@ public class Food extends ObjEX implements java.io.Serializable {
 	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
 		
 		for(EmptyImage i :EmptyImage.values()) {
-			if(i.fileName == null) continue;
+			if(i.getFileName() == null) continue;
 
-			emptyImages[i.ordinal()] = ModLoader.loadItemImage(loader, "food" + File.separator + i.fileName);
+			emptyImages[i.ordinal()] = ModLoader.loadItemImage(loader, "food" + File.separator + i.getFileName());
 			emptyBoundary[i.ordinal()] = new Rectangle4y();
-			emptyBoundary[i.ordinal()].width = emptyImages[i.ordinal()].getWidth(io);
-			emptyBoundary[i.ordinal()].height = emptyImages[i.ordinal()].getHeight(io);
-			emptyBoundary[i.ordinal()].x = emptyBoundary[i.ordinal()].width >> 1;
-			emptyBoundary[i.ordinal()].y = emptyBoundary[i.ordinal()].height - 1;
+			emptyBoundary[i.ordinal()].setWidth(emptyImages[i.ordinal()].getWidth(io));
+			emptyBoundary[i.ordinal()].setHeight(emptyImages[i.ordinal()].getHeight(io));
+			emptyBoundary[i.ordinal()].setX(emptyBoundary[i.ordinal()].getWidth() >> 1);
+			emptyBoundary[i.ordinal()].setY(emptyBoundary[i.ordinal()].getHeight() - 1);
 		}
 
 		for(FoodType i :FoodType.values()) {
-			if(i.fileName == null) continue;
+			if(i.getFileName() == null) continue;
 
-			images[i.ordinal()] = ModLoader.loadItemImage(loader, "food" + File.separator + i.fileName);
+			images[i.ordinal()] = ModLoader.loadItemImage(loader, "food" + File.separator + i.getFileName());
 			boundary[i.ordinal()] = new Rectangle4y();
-			boundary[i.ordinal()].width = images[i.ordinal()].getWidth(io);
-			boundary[i.ordinal()].height = images[i.ordinal()].getHeight(io);
-			boundary[i.ordinal()].x = boundary[i.ordinal()].width >> 1;
-			boundary[i.ordinal()].y = boundary[i.ordinal()].height - 1;
+			boundary[i.ordinal()].setWidth(images[i.ordinal()].getWidth(io));
+			boundary[i.ordinal()].setHeight(images[i.ordinal()].getHeight(io));
+			boundary[i.ordinal()].setX(boundary[i.ordinal()].getWidth() >> 1);
+			boundary[i.ordinal()].setY(boundary[i.ordinal()].getHeight() - 1);
 		}
 
 		shadowImages = ModLoader.loadItemImage(loader, "food" + File.separator + "gohan_shadow.png");
@@ -138,7 +166,7 @@ public class Food extends ObjEX implements java.io.Serializable {
 	@Override
 	public int getImageLayer(BufferedImage[] layer) {
 		if (isEmpty()) {
-			layer[0] = emptyImages[foodType.emptyImg.ordinal()];
+			layer[0] = emptyImages[foodType.getEmptyImg().ordinal()];
 		} else {
 			layer[0] = images[foodType.ordinal()];	
 		}
@@ -162,19 +190,19 @@ public class Food extends ObjEX implements java.io.Serializable {
 
 	@Override
 	public void removeListData(){
-		SimYukkuri.world.getCurrentMap().food.remove(objId);
+		SimYukkuri.world.getCurrentMap().getFood().remove(objId);
 	}
 
 	@Override
 	@Transient
 	public int getValue() {
-		return foodType.value;
+		return foodType.getValue();
 	}
 
 	@Override
 	@Transient
 	public int getLooks() {
-		return foodType.looks;
+		return foodType.getLooks();
 	}
 	/**
 	 * コンストラクタ
@@ -185,7 +213,7 @@ public class Food extends ObjEX implements java.io.Serializable {
 	public Food(int initX, int initY, int initOption) {
 		super(initX, initY, initOption);
 		// 森なら野生に変更
-		if( SimYukkuri.world.getCurrentMap().mapIndex == 5 ||  SimYukkuri.world.getCurrentMap().mapIndex == 6 ){
+		if( SimYukkuri.world.getCurrentMap().getMapIndex() == 5 ||  SimYukkuri.world.getCurrentMap().getMapIndex() == 6 ){
 			foodType = FoodType.values()[initOption];
 			switch(foodType){
 				case SWEETS1:
@@ -220,10 +248,10 @@ public class Food extends ObjEX implements java.io.Serializable {
 		}else{
 			foodType = FoodType.values()[initOption];
 		}
-		amount = foodType.amount;
+		amount = foodType.getAmount();
 		setBoundary(boundary[foodType.ordinal()]);
 		setCollisionSize(getPivotX(), getPivotY());
-		SimYukkuri.world.getCurrentMap().food.put(objId, this);
+		SimYukkuri.world.getCurrentMap().getFood().put(objId, this);
 		objType = Type.OBJECT;
 		objEXType = ObjEXType.FOOD;
 		setRemoved(false);
@@ -272,5 +300,6 @@ public class Food extends ObjEX implements java.io.Serializable {
 	}
 	
 }
+
 
 

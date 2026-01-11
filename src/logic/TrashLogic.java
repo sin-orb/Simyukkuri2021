@@ -50,7 +50,7 @@ public class TrashLogic {
 			wallMode = AgeState.ADULT.ordinal();
 		}
 
-		for (Map.Entry<Integer, Trash> entry : SimYukkuri.world.getCurrentMap().trash.entrySet()) {
+		for (Map.Entry<Integer, Trash> entry : SimYukkuri.world.getCurrentMap().getTrash().entrySet()) {
 			Trash t = entry.getValue();
 			// 最小距離のものが見つかっていたら
 			if( minDistance < 1 )
@@ -69,5 +69,6 @@ public class TrashLogic {
 		return found;
 	}
 }
+
 
 

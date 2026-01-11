@@ -24,17 +24,37 @@ public class House extends ObjEX implements java.io.Serializable {
 		HOUSE_NORA1("floor_nora1.png", "wall_nora1.png", "ceil_nora1.png", "door_nora1.png", 1),
 		HOUSE_NORA2("floor_nora2.png", "wall_nora2.png", "ceil_nora2.png", "door_nora2.png", 1),
 		;
-		public String floorName;
-		public String wallName;
-		public String ceilName;
-		public String doorName;
-		public int rank;
+		private final String floorName;
+		private final String wallName;
+		private final String ceilName;
+		private final String doorName;
+		private final int rank;
 		HouseTable(String f, String w, String c, String d, int r) {
 			floorName = f;
 			wallName = w;
 			ceilName = c;
 			doorName = d;
 			rank = r;
+		}
+
+		public String getFloorName() {
+			return floorName;
+		}
+
+		public String getWallName() {
+			return wallName;
+		}
+
+		public String getCeilName() {
+			return ceilName;
+		}
+
+		public String getDoorName() {
+			return doorName;
+		}
+
+		public int getRank() {
+			return rank;
 		}
 	}
 
@@ -50,15 +70,15 @@ public class House extends ObjEX implements java.io.Serializable {
 		boundary = new Rectangle4y[HouseTable.values().length];
 		
 		for(HouseTable i :HouseTable.values()) {
-			images[i.ordinal()][0] = ModLoader.loadItemImage(loader, "house" + File.separator + i.floorName);
-			images[i.ordinal()][1] = ModLoader.loadItemImage(loader, "house" + File.separator + i.wallName);
-			images[i.ordinal()][2] = ModLoader.loadItemImage(loader, "house" + File.separator + i.ceilName);
-			images[i.ordinal()][3] = ModLoader.loadItemImage(loader, "house" + File.separator + i.doorName);
+			images[i.ordinal()][0] = ModLoader.loadItemImage(loader, "house" + File.separator + i.getFloorName());
+			images[i.ordinal()][1] = ModLoader.loadItemImage(loader, "house" + File.separator + i.getWallName());
+			images[i.ordinal()][2] = ModLoader.loadItemImage(loader, "house" + File.separator + i.getCeilName());
+			images[i.ordinal()][3] = ModLoader.loadItemImage(loader, "house" + File.separator + i.getDoorName());
 			boundary[i.ordinal()] = new Rectangle4y();
-			boundary[i.ordinal()].width = images[i.ordinal()][0].getWidth(io);
-			boundary[i.ordinal()].height = images[i.ordinal()][0].getHeight(io);
-			boundary[i.ordinal()].x = boundary[i.ordinal()].width >> 1;
-			boundary[i.ordinal()].y = boundary[i.ordinal()].height >> 1;
+			boundary[i.ordinal()].setWidth(images[i.ordinal()][0].getWidth(io));
+			boundary[i.ordinal()].setHeight(images[i.ordinal()][0].getHeight(io));
+			boundary[i.ordinal()].setX(boundary[i.ordinal()].getWidth() >> 1);
+			boundary[i.ordinal()].setY(boundary[i.ordinal()].getHeight() >> 1);
 		}
 	}
 	
@@ -81,7 +101,7 @@ public class House extends ObjEX implements java.io.Serializable {
 
 	@Override
 	public void removeListData(){
-		SimYukkuri.world.getCurrentMap().house.remove(objId);
+		SimYukkuri.world.getCurrentMap().getHouse().remove(objId);
 	}
 
 	@Override
@@ -99,10 +119,10 @@ public class House extends ObjEX implements java.io.Serializable {
 		houseType = HouseTable.values()[initOption];
 		setBoundary(boundary[houseType.ordinal()]);
 		setCollisionSize(getPivotX(), getPivotY());
-		SimYukkuri.world.getCurrentMap().house.put(objId, this);
+		SimYukkuri.world.getCurrentMap().getHouse().put(objId, this);
 		objType = Type.PLATFORM;
 		objEXType = ObjEXType.HOUSE;
-		itemRank = ItemRank.values()[houseType.rank];
+		itemRank = ItemRank.values()[houseType.getRank()];
 
 		interval = 5000;
 
@@ -135,6 +155,7 @@ public class House extends ObjEX implements java.io.Serializable {
 	}
 	
 }
+
 
 
 

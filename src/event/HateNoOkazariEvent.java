@@ -131,7 +131,7 @@ public class HateNoOkazariEvent extends EventPacket implements java.io.Serializa
 			// うんうん奴隷ではない場合
 			if( to.getPublicRank() != PublicRank.UnunSlave ){
 				boolean bIsInToiletForSlave = false;
-				for (Map.Entry<Integer, Toilet> entry : SimYukkuri.world.getCurrentMap().toilet.entrySet()) {
+				for (Map.Entry<Integer, Toilet> entry : SimYukkuri.world.getCurrentMap().getToilet().entrySet()) {
 					// うんうん奴隷用トイレがあるか
 					if( entry.getValue().isForSlave() ){
 						bIsInToiletForSlave = true;

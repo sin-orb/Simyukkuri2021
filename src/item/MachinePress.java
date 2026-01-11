@@ -39,10 +39,10 @@ public class MachinePress extends ObjEX implements java.io.Serializable {
 			images[i] = ModLoader.loadItemImage(loader, "machinepress" + File.separator + "machinepress" + String.format("%03d",i+1) + ".png");
 		}
 		images[images_num] = ModLoader.loadItemImage(loader, "machinepress" + File.separator + "machinepress_off.png");
-		boundary.width = images[0].getWidth(io);
-		boundary.height = images[0].getHeight(io);
-		boundary.x = boundary.width >> 1;
-		boundary.y = boundary.height - 1;
+		boundary.setWidth(images[0].getWidth(io));
+		boundary.setHeight(images[0].getHeight(io));
+		boundary.setX(boundary.getWidth() >> 1);
+		boundary.setY(boundary.getHeight() - 1);
 	}
 
 	@Override
@@ -95,14 +95,14 @@ public class MachinePress extends ObjEX implements java.io.Serializable {
 
 	@Override
 	public void removeListData(){
-		SimYukkuri.world.getCurrentMap().machinePress.remove(objId);
+		SimYukkuri.world.getCurrentMap().getMachinePress().remove(objId);
 	}
 	/**コンストラクタ*/
 	public MachinePress(int initX, int initY, int initOption) {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), 8);
-		SimYukkuri.world.getCurrentMap().machinePress.put(objId, this);
+		SimYukkuri.world.getCurrentMap().getMachinePress().put(objId, this);
 		objType = Type.FIX_OBJECT;
 		objEXType = ObjEXType.MACHINEPRESS;
 
@@ -114,5 +114,6 @@ public class MachinePress extends ObjEX implements java.io.Serializable {
 	}
 	
 }
+
 
 

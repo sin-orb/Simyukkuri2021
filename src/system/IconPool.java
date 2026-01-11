@@ -26,9 +26,13 @@ public class IconPool {
 		NINE_SLICE_UP("button0.png"),
 		NINE_SLICE_DOWN("button1.png"),
 		;
-		public String fileName;
+		private final String fileName;
 		UISkin(String str) {
 			fileName = str;
+		}
+
+		public String getFileName() {
+			return fileName;
 		}
 	}
 
@@ -40,9 +44,13 @@ public class IconPool {
 		POPUP_OFF("popup_off.png"),
 		TARGET("target.png")
 		;
-		public String fileName;
+		private final String fileName;
 		ButtonIcon(String str) {
 			fileName = str;
+		}
+
+		public String getFileName() {
+			return fileName;
 		}
 	}
 
@@ -58,11 +66,19 @@ public class IconPool {
 		PHEROMONE("pheromone.png", ResourceUtil.getInstance().read("system_pheromone")),
 		UNUNSLAVE("ununslave.png", ResourceUtil.getInstance().read("system_ununslave"))
 		;
-		public String fileName;
-		public String help;
+		private final String fileName;
+		private final String help;
 		StatusIcon(String f, String h) {
 			fileName = f;
 			help = h;
+		}
+
+		public String getFileName() {
+			return fileName;
+		}
+
+		public String getHelp() {
+			return help;
 		}
 	}
 
@@ -81,9 +97,13 @@ public class IconPool {
 		SEL_3("sel_3.png"),
 		SHIFT("shift.png")
 		;
-		public String fileName;
+		private final String fileName;
 		CursorIcon(String str) {
 			fileName = str;
+		}
+
+		public String getFileName() {
+			return fileName;
 		}
 	}
 
@@ -94,9 +114,13 @@ public class IconPool {
 		MOUSE_R("mouse_r.png"),
 		SHIFT("shift.png")
 		;
-		public String fileName;
+		private final String fileName;
 		HelpIcon(String str) {
 			fileName = str;
+		}
+
+		public String getFileName() {
+			return fileName;
 		}
 	}
 
@@ -112,24 +136,24 @@ public class IconPool {
 		MediaTracker mt = new MediaTracker((MyPane)io);
 
 		for(UISkin i :UISkin.values()) {
-			uiSkinImage[i.ordinal()] = ImageIO.read(loader.getResourceAsStream(IMAGE_PATH + i.fileName));
+			uiSkinImage[i.ordinal()] = ImageIO.read(loader.getResourceAsStream(IMAGE_PATH + i.getFileName()));
 			mt.addImage(uiSkinImage[i.ordinal()], 0);
 		}
 		for(ButtonIcon i :ButtonIcon.values()) {
-			buttonIconImage[i.ordinal()] = ImageIO.read(loader.getResourceAsStream(IMAGE_PATH + i.fileName));
+			buttonIconImage[i.ordinal()] = ImageIO.read(loader.getResourceAsStream(IMAGE_PATH + i.getFileName()));
 			mt.addImage(buttonIconImage[i.ordinal()], 0);
 		}
 		for(StatusIcon i :StatusIcon.values()) {
-			Image img = ImageIO.read(loader.getResourceAsStream(IMAGE_PATH + i.fileName));
+			Image img = ImageIO.read(loader.getResourceAsStream(IMAGE_PATH + i.getFileName()));
 			statusIconImage[i.ordinal()] = new ImageIcon(img);
 			mt.addImage(img, 0);
 		}
 		for(CursorIcon i :CursorIcon.values()) {
-			cursorIconImage[i.ordinal()] = ImageIO.read(loader.getResourceAsStream(IMAGE_PATH + i.fileName));
+			cursorIconImage[i.ordinal()] = ImageIO.read(loader.getResourceAsStream(IMAGE_PATH + i.getFileName()));
 			mt.addImage(cursorIconImage[i.ordinal()], 0);
 		}
 		for(HelpIcon i :HelpIcon.values()) {
-			helpIconImage[i.ordinal()] = ImageIO.read(loader.getResourceAsStream(IMAGE_PATH + i.fileName));
+			helpIconImage[i.ordinal()] = ImageIO.read(loader.getResourceAsStream(IMAGE_PATH + i.getFileName()));
 			mt.addImage(helpIconImage[i.ordinal()], 0);
 		}
 

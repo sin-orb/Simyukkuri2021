@@ -35,13 +35,25 @@ public class ItemMenu {
 		FOOD(true, false, true),
 		STALK(false, false, true)
 		;
-		public boolean canPickup;
-		public boolean canStatus;
-		public boolean canDebug;
+		private final boolean canPickup;
+		private final boolean canStatus;
+		private final boolean canDebug;
 		private GetMenuTarget(boolean pick, boolean stat, boolean debug) {
 			this.canPickup = pick;
 			this.canStatus = stat;
 			this.canDebug = debug;
+		}
+
+		public boolean canPickup() {
+			return canPickup;
+		}
+
+		public boolean canStatus() {
+			return canStatus;
+		}
+
+		public boolean canDebug() {
+			return canDebug;
 		}
 	}
 	/** メニューのターゲット */
@@ -57,13 +69,25 @@ public class ItemMenu {
 		POOL(false, true, false),
 		FARM(false, true, true)
 		;
-		public boolean canSetup;
-		public boolean canSort;
-		public boolean isFarm;
+		private final boolean canSetup;
+		private final boolean canSort;
+		private final boolean isFarm;
 		private ShapeMenuTarget(boolean setup, boolean sort, boolean farm) {
 			this.canSetup = setup;
 			this.canSort = sort;
 			this.isFarm = farm;
+		}
+
+		public boolean canSetup() {
+			return canSetup;
+		}
+
+		public boolean canSort() {
+			return canSort;
+		}
+
+		public boolean isFarm() {
+			return isFarm;
 		}
 	}
 
@@ -73,9 +97,13 @@ public class ItemMenu {
 		STATUS(Locale.getDefault().getLanguage().equals(new Locale("ja").getLanguage())? "ステータス": "Status"),
 		DEBUG(Locale.getDefault().getLanguage().equals(new Locale("ja").getLanguage())? "デバッグ": "Debug")
 		;
-		public String name;
+		private final String name;
 		private GetMenu(String str) {
 			this.name = str;
+		}
+
+		public String getName() {
+			return name;
 		}
 		@Override
 		public String toString() {
@@ -89,9 +117,13 @@ public class ItemMenu {
 		THROW("ぶつける(開発中)"),
 		EAT("食べさせる(開発中)")
 		;
-		public String name;
+		private final String name;
 		private UseMenu(String str) {
 			this.name = str;
+		}
+
+		public String getName() {
+			return name;
 		}
 		@Override
 		public String toString() {
@@ -108,9 +140,13 @@ public class ItemMenu {
 		DOWN(Locale.getDefault().getLanguage().equals(new Locale("ja").getLanguage())? "ひとつ下へ": "lower one"),
 		BOTTOM(Locale.getDefault().getLanguage().equals(new Locale("ja").getLanguage())? "最下位へ": "To Lowest")
 		;
-		public String name;
+		private final String name;
 		private ShapeMenu(String str) {
 			this.name = str;
+		}
+
+		public String getName() {
+			return name;
 		}
 		@Override
 		public String toString() {
@@ -118,20 +154,20 @@ public class ItemMenu {
 		}
 	}
 	/** 取得するポップアップ */
-	public static JPopupMenu getPopup;
+	private static JPopupMenu getPopup;
 	private static JMenuItem[] getMenu;
 	/** 取得のターゲット */
-	public static Obj getTarget;
+	private static Obj getTarget;
 	/** 使用するポップアップ */
-	public static JPopupMenu usePopup;
+	private static JPopupMenu usePopup;
 	private static JMenuItem[] useMenu;
 	/** 使用のターゲット */
-	public static Obj useTarget;
+	private static Obj useTarget;
 	/** シェイプのポップアップ */
-	public static JPopupMenu shapePopup;
+	private static JPopupMenu shapePopup;
 	private static JMenuItem[] shapeMenu;
 	/** シェイプのターゲット */
-	public static FieldShapeBase shapeTarget;
+	private static FieldShapeBase shapeTarget;
 
 	/**
 	 * ポップアップメニューを作成する.
@@ -186,9 +222,9 @@ public class ItemMenu {
 	 */
 	public static final void setGetPopupMenu(Obj obj) {
 		getTarget = obj;
-		getMenu[0].setEnabled(obj.hasGetPopup().canPickup);
-		getMenu[1].setEnabled(obj.hasGetPopup().canStatus);
-		getMenu[2].setEnabled(obj.hasGetPopup().canDebug);
+		getMenu[0].setEnabled(obj.hasGetPopup().canPickup());
+		getMenu[1].setEnabled(obj.hasGetPopup().canStatus());
+		getMenu[2].setEnabled(obj.hasGetPopup().canDebug());
 	}
 
 	/**
@@ -197,9 +233,9 @@ public class ItemMenu {
 	 */
 	public static final void setShapePopupMenu(FieldShapeBase shp) {
 		shapeTarget = shp;
-		shapeMenu[0].setEnabled(shp.hasShapePopup().canSetup);
-		shapeMenu[1].setVisible(shp.hasShapePopup().isFarm);
-		shapeMenu[2].setEnabled(shp.hasShapePopup().canSort);
+		shapeMenu[0].setEnabled(shp.hasShapePopup().canSetup());
+		shapeMenu[1].setVisible(shp.hasShapePopup().isFarm());
+		shapeMenu[2].setEnabled(shp.hasShapePopup().canSort());
 	}
 
 	/**
@@ -211,34 +247,83 @@ public class ItemMenu {
 		usePopup.setVisible(false);
 		shapePopup.setVisible(false);
 		if(isholdCancel) {
-			SimYukkuri.world.player.setHoldItem(null);
+			SimYukkuri.world.getPlayer().setHoldItem(null);
 		}
 	}
 	
+	public static JPopupMenu getGetPopup() {
+		return getPopup;
+	}
+	
+	public static void setGetPopup(JPopupMenu getPopup) {
+		ItemMenu.getPopup = getPopup;
+	}
+	
+	public static Obj getGetTarget() {
+		return getTarget;
+	}
+	
+	public static void setGetTarget(Obj getTarget) {
+		ItemMenu.getTarget = getTarget;
+	}
+	
+	public static JPopupMenu getUsePopup() {
+		return usePopup;
+	}
+	
+	public static void setUsePopup(JPopupMenu usePopup) {
+		ItemMenu.usePopup = usePopup;
+	}
+	
+	public static Obj getUseTarget() {
+		return useTarget;
+	}
+	
+	public static void setUseTarget(Obj useTarget) {
+		ItemMenu.useTarget = useTarget;
+	}
+	
+	public static JPopupMenu getShapePopup() {
+		return shapePopup;
+	}
+	
+	public static void setShapePopup(JPopupMenu shapePopup) {
+		ItemMenu.shapePopup = shapePopup;
+	}
+	
+	public static FieldShapeBase getShapeTarget() {
+		return shapeTarget;
+	}
+	
+	public static void setShapeTarget(FieldShapeBase shapeTarget) {
+		ItemMenu.shapeTarget = shapeTarget;
+	}
+
 	/**
 	 * アイテム配置
 	 * @param e マウスイベント
 	 */
 	public static void dropItem(MouseEvent e) {
 		Point4y pos = Translate.invertLimit(e.getX(), e.getY());
-		Obj item = SimYukkuri.world.player.getHoldItem();
+		Obj item = SimYukkuri.world.getPlayer().getHoldItem();
 		MapPlaceData curMap = SimYukkuri.world.getCurrentMap();
 
 		if(item instanceof Body) {
 			Body b = (Body)item;
 			b.setTaken(false);
-			curMap.body.put(b.getUniqueID(), b);
+			curMap.getBody().put(b.getUniqueID(), b);
 		} else if(item instanceof Shit) {
-			curMap.shit.put(item.objId, (Shit)item);
+			curMap.getShit().put(item.objId, (Shit)item);
 		} else if(item instanceof Vomit) {
-			curMap.vomit.put(item.objId, (Vomit)item);
+			curMap.getVomit().put(item.objId, (Vomit)item);
 		}
 		item.setCalcX(pos.getX());
 		item.setCalcY(pos.getY());
 		item.setCalcZ(0);
-		SimYukkuri.world.player.getItemList().removeElement(item);
-		SimYukkuri.world.player.setHoldItem(null);
+		SimYukkuri.world.getPlayer().getItemList().removeElement(item);
+		SimYukkuri.world.getPlayer().setHoldItem(null);
 	}
 }
+
 
 

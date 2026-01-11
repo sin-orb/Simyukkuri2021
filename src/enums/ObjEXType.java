@@ -29,6 +29,10 @@ public enum ObjEXType {
 	HOUSE(src.item.House.class),
 	GENERATOR(src.item.Generator.class),
 	;
-	public Class<?> classPack;
+	private final Class<?> classPack;
 	ObjEXType(Class<?> cls) { this.classPack = cls; }
+
+	public Class<?> getClassPack() {
+		return classPack;
+	}
 }

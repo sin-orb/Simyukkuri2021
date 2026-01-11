@@ -28,7 +28,7 @@ public class StoneLogic {
 		if( b.getCriticalDamegeType()  == CriticalDamegeType.CUT){
 			return;
 		}
-		for (Map.Entry<Integer, Stone> entry : SimYukkuri.world.getCurrentMap().stone.entrySet()) {
+		for (Map.Entry<Integer, Stone> entry : SimYukkuri.world.getCurrentMap().getStone().entrySet()) {
 			Stone t = entry.getValue();
 
 			int distance = Translate.distance(b.getX(), b.getY(), t.getX(), t.getY());
@@ -51,3 +51,4 @@ public class StoneLogic {
 		return;
 	}
 }
+

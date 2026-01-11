@@ -99,10 +99,10 @@ public class ProcesserPlate extends ObjEX implements java.io.Serializable {
 	public static void loadImages(ClassLoader loader, ImageObserver io) throws IOException {
 		images[0] = ModLoader.loadItemImage(loader, "ProcesserPlate" + File.separator + "ProcesserPlate.png");
 		images[1] = ModLoader.loadItemImage(loader, "ProcesserPlate" + File.separator + "ProcesserPlate_off.png");
-		boundary.width = images[0].getWidth(io);
-		boundary.height = images[0].getHeight(io);
-		boundary.x = boundary.width >> 1;
-		boundary.y = boundary.height >> 1;
+		boundary.setWidth(images[0].getWidth(io));
+		boundary.setHeight(images[0].getHeight(io));
+		boundary.setX(boundary.getWidth() >> 1);
+		boundary.setY(boundary.getHeight() >> 1);
 	}
 
 	@Override
@@ -462,7 +462,7 @@ public class ProcesserPlate extends ObjEX implements java.io.Serializable {
 			processedBodyList.clear();
 			processedBodyEffectList.clear();
 		}
-		SimYukkuri.world.getCurrentMap().processerPlate.remove(objId);
+		SimYukkuri.world.getCurrentMap().getProcesserPlate().remove(objId);
 	}
 
 	/** 設定メニュー */
@@ -531,7 +531,7 @@ public class ProcesserPlate extends ObjEX implements java.io.Serializable {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		SimYukkuri.world.getCurrentMap().processerPlate.put(objId, this);
+		SimYukkuri.world.getCurrentMap().getProcesserPlate().put(objId, this);
 		// objType = Type.PLATFORM;
 		objEXType = ObjEXType.PROCESSERPLATE;
 		interval = 5;
@@ -539,7 +539,7 @@ public class ProcesserPlate extends ObjEX implements java.io.Serializable {
 		readIniFile();
 		boolean ret = setupProcesserPlate(this);
 		if (!ret) {
-			SimYukkuri.world.getCurrentMap().processerPlate.remove(objId);
+			SimYukkuri.world.getCurrentMap().getProcesserPlate().remove(objId);
 		}
 	}
 
@@ -552,18 +552,18 @@ public class ProcesserPlate extends ObjEX implements java.io.Serializable {
 		ClassLoader loader = this.getClass().getClassLoader();
 		int nTemp = 0;
 		// 自動お仕置きプレートコスト
-		nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_ITEM_INI_DIR, "ProcesserPlate", "MachineCost");
+		nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataItemIniDir(), "ProcesserPlate", "MachineCost");
 		runningCost[0] = nTemp;
 		// 軽加工プレートコスト
-		nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_ITEM_INI_DIR, "ProcesserPlate",
+		nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataItemIniDir(), "ProcesserPlate",
 				"LightProcessCost");
 		runningCost[1] = nTemp;
 		// 中加工プレートコスト
-		nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_ITEM_INI_DIR, "ProcesserPlate",
+		nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataItemIniDir(), "ProcesserPlate",
 				"MidiumProcessCost");
 		runningCost[2] = nTemp;
 		// 重加工プレートコスト
-		nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_ITEM_INI_DIR, "ProcesserPlate",
+		nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataItemIniDir(), "ProcesserPlate",
 				"HeavyProcessCost");
 		runningCost[3] = nTemp;
 	}
@@ -600,3 +600,4 @@ public class ProcesserPlate extends ObjEX implements java.io.Serializable {
 		this.runningCost = runningCost;
 	}
 }
+

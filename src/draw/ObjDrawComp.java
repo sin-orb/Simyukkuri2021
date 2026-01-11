@@ -9,7 +9,11 @@ import src.base.Obj;
  * 描画用ソートクラス
  */
 public final class ObjDrawComp implements Comparator<Obj> {
-	public final static ObjDrawComp INSTANCE = new ObjDrawComp();
+	private static final ObjDrawComp INSTANCE = new ObjDrawComp();
+
+	public static ObjDrawComp getInstance() {
+		return INSTANCE;
+	}
 
 	@Override 
 	public final int compare(Obj o1, Obj o2) {

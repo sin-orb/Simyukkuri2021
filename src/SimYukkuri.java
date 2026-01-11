@@ -186,7 +186,7 @@ public class SimYukkuri extends JFrame {
 
 		// 初期設定
 
-		NAGASI_MODE = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play", "NAGASI_MODE");
+		NAGASI_MODE = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "NAGASI_MODE");
 	}
 
 	/**
@@ -269,13 +269,13 @@ public class SimYukkuri extends JFrame {
 			switch (e.getKeyCode()) {
 			case KeyEvent.VK_ESCAPE:
 				synchronized (SimYukkuri.lock) {
-					if (MainCommandUI.selectedGameSpeed != 0) {
-						savedGameSpeed = MainCommandUI.selectedGameSpeed;
-						MainCommandUI.selectedGameSpeed = 0;
+					if (MainCommandUI.getSelectedGameSpeed() != 0) {
+						savedGameSpeed = MainCommandUI.getSelectedGameSpeed();
+						MainCommandUI.setSelectedGameSpeed(0);
 					} else {
-						MainCommandUI.selectedGameSpeed = savedGameSpeed;
+						MainCommandUI.setSelectedGameSpeed(savedGameSpeed);
 					}
-					MainCommandUI.gameSpeedCombo.setSelectedIndex(MainCommandUI.selectedGameSpeed);
+					MainCommandUI.getGameSpeedCombo().setSelectedIndex(MainCommandUI.getSelectedGameSpeed());
 				}
 				break;
 			case KeyEvent.VK_DELETE:
@@ -316,22 +316,22 @@ public class SimYukkuri extends JFrame {
 				break;
 			case KeyEvent.VK_W:
 				synchronized (SimYukkuri.lock) {
-					Translate.addBufferPos(0, -Translate.getDisplayArea().height / 3);
+					Translate.addBufferPos(0, -Translate.getDisplayArea().getHeight() / 3);
 				}
 				break;
 			case KeyEvent.VK_S:
 				synchronized (SimYukkuri.lock) {
-					Translate.addBufferPos(0, Translate.getDisplayArea().height / 3);
+					Translate.addBufferPos(0, Translate.getDisplayArea().getHeight() / 3);
 				}
 				break;
 			case KeyEvent.VK_A:
 				synchronized (SimYukkuri.lock) {
-					Translate.addBufferPos(-Translate.getDisplayArea().width / 3, 0);
+					Translate.addBufferPos(-Translate.getDisplayArea().getWidth() / 3, 0);
 				}
 				break;
 			case KeyEvent.VK_D:
 				synchronized (SimYukkuri.lock) {
-					Translate.addBufferPos(Translate.getDisplayArea().width / 3, 0);
+					Translate.addBufferPos(Translate.getDisplayArea().getWidth() / 3, 0);
 				}
 				break;
 			default:
@@ -372,7 +372,7 @@ public class SimYukkuri extends JFrame {
 			list4sort.addAll(world.getObjectList());
 			list4sort.addAll(world.getPlatformList());
 
-			Collections.sort(list4sort, ObjDrawComp.INSTANCE);
+			Collections.sort(list4sort, ObjDrawComp.getInstance());
 			// Check whether hit or not.
 			Obj found = null;
 			Obj parent = null;
@@ -399,7 +399,7 @@ public class SimYukkuri extends JFrame {
 				} else if (!stalkMode && o instanceof Stalk) {
 					// 茎ひっこぬき無効の場合は茎にヒットしても元のゆっくりを取得
 					stalk = (Stalk) o;
-					Body b = SimYukkuri.world.getCurrentMap().body.get(stalk.getPlantYukkuri());
+					Body b = SimYukkuri.world.getCurrentMap().getBody().get(stalk.getPlantYukkuri());
 					if (b != null) {
 						parent = b;
 					} else {
@@ -409,7 +409,7 @@ public class SimYukkuri extends JFrame {
 					parent = o;
 				}
 				Rectangle4y r = parent.getScreenRect();
-				Rectangle screenRect = new Rectangle(r.x, r.y, r.width, r.height);
+				Rectangle screenRect = new Rectangle(r.getX(), r.getY(), r.getWidth(), r.getHeight());
 				if (screenRect.contains(mx, my)) {
 					// ヒットしたら画像の原点からの位置を記録
 					if (parent instanceof Body) {
@@ -419,8 +419,8 @@ public class SimYukkuri extends JFrame {
 						parent.getBoundaryShape(imageRect);
 					}
 					found = parent;
-					oX = screenRect.x + Translate.transSize(imageRect.x) - mx;
-					oY = screenRect.y + Translate.transSize(imageRect.y) - my;
+					oX = screenRect.x + Translate.transSize(imageRect.getX()) - mx;
+					oY = screenRect.y + Translate.transSize(imageRect.getY()) - my;
 					break;
 				}
 			}
@@ -430,19 +430,19 @@ public class SimYukkuri extends JFrame {
 				for (Iterator<ObjEX> i = platformList.iterator(); i.hasNext();) {
 					ObjEX oex = (ObjEX) i.next();
 					Rectangle4y r = oex.getScreenRect();
-					Rectangle screenRect = new Rectangle(r.x, r.y, r.width, r.height);
+					Rectangle screenRect = new Rectangle(r.getX(), r.getY(), r.getWidth(), r.getHeight());
 					oex.getBoundaryShape(imageRect);
 					if (oex instanceof BeltconveyorObj) {
 						if (((BeltconveyorObj) oex).checkContain(mx, my, true)) {
 							found = oex;
-							oX = screenRect.x + Translate.transSize(imageRect.x) - mx;
-							oY = screenRect.y + Translate.transSize(imageRect.y) - my;
+							oX = screenRect.x + Translate.transSize(imageRect.getX()) - mx;
+							oY = screenRect.y + Translate.transSize(imageRect.getY()) - my;
 						}
 					} else {
 						if (screenRect.contains(mx, my)) {
 							found = oex;
-							oX = screenRect.x + Translate.transSize(imageRect.x) - mx;
-							oY = screenRect.y + Translate.transSize(imageRect.y) - my;
+							oX = screenRect.x + Translate.transSize(imageRect.getX()) - mx;
+							oY = screenRect.y + Translate.transSize(imageRect.getY()) - my;
 						}
 					}
 				}
@@ -461,9 +461,9 @@ public class SimYukkuri extends JFrame {
 			int flags = Translate.getCurrentFieldMapNum(pos.getX(), pos.getY());
 			// コンベア
 			if ((flags & FieldShapeBase.FIELD_BELT) != 0) {
-				int num = curMap.beltconveyor.size();
+				int num = curMap.getBeltconveyor().size();
 				for (int i = num - 1; i >= 0; i--) {
-					Beltconveyor b = curMap.beltconveyor.get(i);
+					Beltconveyor b = curMap.getBeltconveyor().get(i);
 					if (b.mapContains(pos.getX(), pos.getY())) {
 						return b;
 					}
@@ -471,9 +471,9 @@ public class SimYukkuri extends JFrame {
 			}
 			// 畑
 			if ((flags & FieldShapeBase.FIELD_FARM) != 0) {
-				int num = curMap.farm.size();
+				int num = curMap.getFarm().size();
 				for (int i = num - 1; i >= 0; i--) {
-					Farm b = curMap.farm.get(i);
+					Farm b = curMap.getFarm().get(i);
 					if (b.mapContains(pos.getX(), pos.getY())) {
 						return b;
 					}
@@ -481,9 +481,9 @@ public class SimYukkuri extends JFrame {
 			}
 			// 池
 			if ((flags & FieldShapeBase.FIELD_POOL) != 0) {
-				int num = curMap.pool.size();
+				int num = curMap.getPool().size();
 				for (int i = num - 1; i >= 0; i--) {
-					Pool b = curMap.pool.get(i);
+					Pool b = curMap.getPool().get(i);
 					if (b.mapContains(pos.getX(), pos.getY())) {
 						return b;
 					}
@@ -517,27 +517,27 @@ public class SimYukkuri extends JFrame {
 							FieldShapeBase foundShape = getShapeFront(fieldMousePos[0], fieldMousePos[1]);
 							if (foundShape != null && foundShape.hasShapePopup() != ShapeMenuTarget.NONE) {
 								ItemMenu.setShapePopupMenu(foundShape);
-								ItemMenu.shapePopup.show(mypane, e.getX() + 10, e.getY());
+								ItemMenu.getShapePopup().show(mypane, e.getX() + 10, e.getY());
 							} else {
 								// 何も無いスペースを右クリック
 								ItemMenu.itemModeCancel(true);
 								// ガジェットメニュー表示
-								if (GadgetMenu.popupDisplay) {
-									GadgetMenu.popup.setVisible(false);
-									GadgetMenu.popupDisplay = false;
+								if (GadgetMenu.isPopupDisplay()) {
+									GadgetMenu.getPopup().setVisible(false);
+									GadgetMenu.setPopupDisplay(false);
 								} else {
-									GadgetMenu.popup.show(mypane, e.getX(), mypane.getY());
-									GadgetMenu.popupDisplay = true;
+									GadgetMenu.getPopup().show(mypane, e.getX(), mypane.getY());
+									GadgetMenu.setPopupDisplay(true);
 								}
 							}
 						} else {
 							// オブジェクトを右クリック
-							if (SimYukkuri.world.player.getHoldItem() == null) {
+							if (SimYukkuri.world.getPlayer().getHoldItem() == null) {
 								// 手にアイテムを持っていない場合
 								if (found.hasGetPopup() != ItemMenu.GetMenuTarget.NONE) {
 									// アイテム取得メニュー表示
 									ItemMenu.setGetPopupMenu(found);
-									ItemMenu.getPopup.show(mypane, e.getX() + 10, e.getY());
+									ItemMenu.getGetPopup().show(mypane, e.getX() + 10, e.getY());
 								} else {
 									ItemMenu.itemModeCancel(true);
 									// 道具の場合スイッチ切り替え
@@ -551,18 +551,18 @@ public class SimYukkuri extends JFrame {
 								// 手に持っている場合
 								if (found.hasUsePopup() != ItemMenu.UseMenuTarget.NONE) {
 									// アイテム使用メニュー表示
-									ItemMenu.usePopup.show(mypane, e.getX() + 10, e.getY());
+									ItemMenu.getUsePopup().show(mypane, e.getX() + 10, e.getY());
 								}
 							}
 						}
 					}
 					return;
 				}
-				GadgetMenu.popupDisplay = false;
+				GadgetMenu.setPopupDisplay(false);
 				ItemMenu.itemModeCancel(false);
 
 				// 左クリック処理
-				if (SimYukkuri.world.player.getHoldItem() != null) {
+				if (SimYukkuri.world.getPlayer().getHoldItem() != null) {
 					// 手にアイテムを持っている場合は置く
 					ItemMenu.dropItem(e);
 					return;
@@ -588,7 +588,7 @@ public class SimYukkuri extends JFrame {
 
 				if (found instanceof Body) {
 					MainCommandUI.showStatus((Body) found);
-					MyPane.selectBody = (Body) found;
+					MyPane.setSelectBody((Body) found);
 					foundType = ActionTarget.BODY;
 				} else if (found != null) {
 					foundType = ActionTarget.GADGET;
@@ -685,7 +685,7 @@ public class SimYukkuri extends JFrame {
 						grabbedObj.grab();
 						if (grabbedObj instanceof Body) {
 							MainCommandUI.showStatus((Body) grabbedObj);
-							MyPane.selectBody = (Body) grabbedObj;
+							MyPane.setSelectBody((Body) grabbedObj);
 						}
 					}
 				}
@@ -774,7 +774,7 @@ public class SimYukkuri extends JFrame {
 							if (b.isPullAndPush() && !b.isDead()) {
 								b.wakeup();
 								if (b.getZ() <= 0)
-									b.lockSetZ(newZ * Translate.mapZ / Translate.canvasH);
+									b.lockSetZ(newZ * Translate.getMapZ() / Translate.getCanvasH());
 							} else {
 								hitX = 4;
 								altitude = startZ - fieldMousePos[1];
@@ -913,13 +913,13 @@ public class SimYukkuri extends JFrame {
 		public void mouseWheelMoved(MouseWheelEvent e) {
 			int select;
 
-			select = MainCommandUI.gameSpeedCombo.getSelectedIndex();
+			select = MainCommandUI.getGameSpeedCombo().getSelectedIndex();
 			select += e.getWheelRotation();
 			if (select < 0)
 				select = 0;
-			if (select >= MainCommandUI.gameSpeedCombo.getItemCount())
-				select = MainCommandUI.gameSpeedCombo.getItemCount() - 1;
-			MainCommandUI.gameSpeedCombo.setSelectedIndex(select);
+			if (select >= MainCommandUI.getGameSpeedCombo().getItemCount())
+				select = MainCommandUI.getGameSpeedCombo().getItemCount() - 1;
+			MainCommandUI.getGameSpeedCombo().setSelectedIndex(select);
 		}
 	}
 
@@ -946,9 +946,9 @@ public class SimYukkuri extends JFrame {
 		setLocation(new java.awt.Point(100, 0));
 		Translate.setCanvasSize(PAINT_PANE_X[size], PAINT_PANE_Y[size], fieldScaleData[scale], bufferSizeData[scale],
 				fieldZoomRate[scale]);
-		mypane.setPreferredSize(new java.awt.Dimension(Translate.canvasW, Translate.canvasH));
-		mypane.setMinimumSize(new java.awt.Dimension(Translate.canvasW, Translate.canvasH));
-		mypane.setMaximumSize(new java.awt.Dimension(Translate.canvasW, Translate.canvasH));
+		mypane.setPreferredSize(new java.awt.Dimension(Translate.getCanvasW(), Translate.getCanvasH()));
+		mypane.setMinimumSize(new java.awt.Dimension(Translate.getCanvasW(), Translate.getCanvasH()));
+		mypane.setMaximumSize(new java.awt.Dimension(Translate.getCanvasW(), Translate.getCanvasH()));
 	}
 
 	/**
@@ -969,9 +969,9 @@ public class SimYukkuri extends JFrame {
 		setSize(w + MainCommandUI.MENU_PANE_X, h);
 		setLocation(new java.awt.Point(0, 0));
 		Translate.setCanvasSize(w, h, fieldScaleData[scale], bufferSizeData[scale], fieldZoomRate[scale]);
-		mypane.setPreferredSize(new java.awt.Dimension(Translate.canvasW, Translate.canvasH));
-		mypane.setMinimumSize(new java.awt.Dimension(Translate.canvasW, Translate.canvasH));
-		mypane.setMaximumSize(new java.awt.Dimension(Translate.canvasW, Translate.canvasH));
+		mypane.setPreferredSize(new java.awt.Dimension(Translate.getCanvasW(), Translate.getCanvasH()));
+		mypane.setMinimumSize(new java.awt.Dimension(Translate.getCanvasW(), Translate.getCanvasH()));
+		mypane.setMaximumSize(new java.awt.Dimension(Translate.getCanvasW(), Translate.getCanvasH()));
 	}
 
 	/**最初に出てくるウィンドウの作成*/
@@ -1094,3 +1094,5 @@ public class SimYukkuri extends JFrame {
 		}
 	}
 }
+
+

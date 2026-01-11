@@ -43,12 +43,21 @@ public class MapWindow extends JDialog implements ActionListener, WindowListener
 		PLANT2(ResourceUtil.getInstance().read("system_plant2"), "plant2"),
 		DISPOSER(ResourceUtil.getInstance().read("system_disposer"), "disposer"),
 		;
-		public String displayName;
-		public String filePath;
+		private final String displayName;
+		private final String filePath;
 		private MAP(String disp, String path) {
 			this.displayName = disp;
 			this.filePath = path;
 		}
+
+		public String getDisplayName() {
+			return displayName;
+		}
+
+		public String getFilePath() {
+			return filePath;
+		}
+
 		public String toString() {
 			return this.displayName;
 		}
@@ -71,7 +80,7 @@ public class MapWindow extends JDialog implements ActionListener, WindowListener
 		ButtonGroup bg = new ButtonGroup();
 		int i = 0;
 		for(MAP m :MAP.values()) {
-			butList[i] = new JToggleButton(m.displayName);
+			butList[i] = new JToggleButton(m.getDisplayName());
 			butList[i].addActionListener(this);
 			bg.add(butList[i]);
 			panel.add(butList[i]);
@@ -101,19 +110,19 @@ public class MapWindow extends JDialog implements ActionListener, WindowListener
 		SimYukkuri.mypane.loadTerrainFile();
 		Translate.createTransTable(TerrainField.isPers());
 		SimYukkuri.world.changeMap();
-		MyPane.selectBody = null;
+		MyPane.setSelectBody(null);
 	}
 
 	@Override
 	public void windowOpened(WindowEvent e) {
 		Point pos = SimYukkuri.simYukkuri.getLocation();
-		setLocation(pos.x + Translate.canvasW - 200, pos.y + 400);
-		butList[SimYukkuri.world.getCurrentMap().mapIndex].setSelected(true);
+		setLocation(pos.x + Translate.getCanvasW() - 200, pos.y + 400);
+		butList[SimYukkuri.world.getCurrentMap().getMapIndex()].setSelected(true);
 	}
 
 	@Override
 	public void windowClosing(WindowEvent e) {
-		MainCommandUI.playerButton[ToolButtonLabel.MOVE.ordinal()].setSelected(false);
+		MainCommandUI.getPlayerButton()[ToolButtonLabel.MOVE.ordinal()].setSelected(false);
 	}
 
 	@Override
@@ -136,4 +145,6 @@ public class MapWindow extends JDialog implements ActionListener, WindowListener
 	public void windowDeactivated(WindowEvent e) {
 	}
 }
+
+
 

@@ -114,10 +114,10 @@ public class BeltconveyorObj extends ObjEX implements java.io.Serializable {
 							Integer.valueOf(i + 1)
 					})).append(".png").toString());
 
-		boundary.width = images[0].getWidth(io);
-		boundary.height = images[0].getHeight(io);
-		boundary.x = boundary.width >> 1;
-		boundary.y = boundary.height >> 1;
+		boundary.setWidth(images[0].getWidth(io));
+		boundary.setHeight(images[0].getHeight(io));
+		boundary.setX(boundary.getWidth() >> 1);
+		boundary.setY(boundary.getHeight() >> 1);
 
 		// オプション
 		istrOptionList.add(ResourceUtil.getInstance().read("attitude_verynice"));
@@ -412,7 +412,7 @@ public class BeltconveyorObj extends ObjEX implements java.io.Serializable {
 			bindObjList.clear();
 		}
 
-		SimYukkuri.world.getCurrentMap().beltconveyorObj.remove(objId);
+		SimYukkuri.world.getCurrentMap().getBeltconveyorObj().remove(objId);
 	}
 
 	public boolean checkInterval(int cnt) {
@@ -446,7 +446,7 @@ public class BeltconveyorObj extends ObjEX implements java.io.Serializable {
 		firstY = y;
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		SimYukkuri.world.getCurrentMap().beltconveyorObj.put(objId, this);
+		SimYukkuri.world.getCurrentMap().getBeltconveyorObj().put(objId, this);
 		objType = Type.PLATFORM;
 		objEXType = ObjEXType.BELTCONVEYOR;
 		value = 3000;
@@ -611,10 +611,10 @@ public class BeltconveyorObj extends ObjEX implements java.io.Serializable {
 			belt.setCalcX(pos.getX());
 			belt.setCalcY(pos.getY());
 
-			BeltconveyorObj.boundary.width = Math.abs(anPointBaseX[1] - anPointBaseX[0]);
-			BeltconveyorObj.boundary.height = Math.abs(SimYukkuri.fieldEY - SimYukkuri.fieldSY);
-			BeltconveyorObj.boundary.x = Math.abs(anPointBaseX[1] - anPointBaseX[0]) >> 1;
-			BeltconveyorObj.boundary.y = Math.abs(anPointBaseY[1] - anPointBaseY[0]) >> 1;
+			BeltconveyorObj.boundary.setWidth(Math.abs(anPointBaseX[1] - anPointBaseX[0]));
+			BeltconveyorObj.boundary.setHeight(Math.abs(SimYukkuri.fieldEY - SimYukkuri.fieldSY));
+			BeltconveyorObj.boundary.setX(Math.abs(anPointBaseX[1] - anPointBaseX[0]) >> 1);
+			BeltconveyorObj.boundary.setY(Math.abs(anPointBaseY[1] - anPointBaseY[0]) >> 1);
 		}
 		return true;
 	}

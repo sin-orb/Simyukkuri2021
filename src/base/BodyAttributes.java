@@ -5417,9 +5417,9 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	@Transient
 	public int getSize() {
 		if (SimYukkuri.UNYO) {
-			return bodySpr[getBodyAgeState().ordinal()].imageW + getExpandSizeW() + unyoForceW;
+			return bodySpr[getBodyAgeState().ordinal()].getImageW() + getExpandSizeW() + unyoForceW;
 		}
-		return bodySpr[getBodyAgeState().ordinal()].imageW + getExpandSizeW();
+		return bodySpr[getBodyAgeState().ordinal()].getImageW() + getExpandSizeW();
 	}
 
 	/**
@@ -5429,7 +5429,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 */
 	@Transient
 	public int getOriginSize() {
-		return bodySpr[getBodyAgeState().ordinal()].imageW;
+		return bodySpr[getBodyAgeState().ordinal()].getImageW();
 	}
 
 	/**
@@ -5974,11 +5974,11 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 			return null;
 		}
 		MapPlaceData m = SimYukkuri.world.getCurrentMap();
-		if (m.takenOutFood.containsKey(takeoutItem.get(key))) {
-			return m.takenOutFood.get(takeoutItem.get(key));
+		if (m.getTakenOutFood().containsKey(takeoutItem.get(key))) {
+			return m.getTakenOutFood().get(takeoutItem.get(key));
 		}
-		if (m.takenOutShit.containsKey(takeoutItem.get(key))) {
-			return m.takenOutShit.get(takeoutItem.get(key));
+		if (m.getTakenOutShit().containsKey(takeoutItem.get(key))) {
+			return m.getTakenOutShit().get(takeoutItem.get(key));
 		}
 		return YukkuriUtil.getBodyInstanceFromObjId(takeoutItem.get(key));
 	}
@@ -6453,12 +6453,12 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 
 	@Transient
 	public int getCollisionX() {
-		return (bodySpr[getBodyAgeState().ordinal()].imageW + getExpandSizeW()) >> 1;
+		return (bodySpr[getBodyAgeState().ordinal()].getImageW() + getExpandSizeW()) >> 1;
 	}
 
 	@Transient
 	public int getCollisionY() {
-		return (bodySpr[getBodyAgeState().ordinal()].imageH + getExpandSizeH()) >> 1;
+		return (bodySpr[getBodyAgeState().ordinal()].getImageH() + getExpandSizeH()) >> 1;
 	}
 
 	/**
@@ -6504,32 +6504,32 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 
 	@Transient
 	public int getW() {
-		return bodySpr[getBodyAgeState().ordinal()].imageW;
+		return bodySpr[getBodyAgeState().ordinal()].getImageW();
 	}
 
 	@Transient
 	public int getH() {
-		return bodySpr[getBodyAgeState().ordinal()].imageH;
+		return bodySpr[getBodyAgeState().ordinal()].getImageH();
 	}
 
 	@Transient
 	public int getPivotX() {
-		return bodySpr[getBodyAgeState().ordinal()].pivotX;
+		return bodySpr[getBodyAgeState().ordinal()].getPivotX();
 	}
 
 	@Transient
 	public int getPivotY() {
-		return bodySpr[getBodyAgeState().ordinal()].pivotY;
+		return bodySpr[getBodyAgeState().ordinal()].getPivotY();
 	}
 
 	@Transient
 	public int getBraidW() {
-		return braidSpr[getBodyAgeState().ordinal()].imageW;
+		return braidSpr[getBodyAgeState().ordinal()].getImageW();
 	}
 
 	@Transient
 	public int getBraidH() {
-		return braidSpr[getBodyAgeState().ordinal()].imageH;
+		return braidSpr[getBodyAgeState().ordinal()].getImageH();
 	}
 
 	@Transient
@@ -7052,3 +7052,4 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 		Ycost = ycost;
 	}
 }
+

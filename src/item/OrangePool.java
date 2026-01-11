@@ -54,14 +54,14 @@ public class OrangePool extends ObjEX implements java.io.Serializable {
 	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
 		images[0] = ModLoader.loadItemImage(loader, "orangepool" + File.separator + "orangepool.png");
 		images[1] = ModLoader.loadItemImage(loader, "orangepool" + File.separator + "orangepool_off.png");
-		images[2] = ModLoader.loadItemImage(loader, "orangepool" + File.separator + "orangepool" + ModLoader.YK_WORD_NORA + ".png");
-		images[3] = ModLoader.loadItemImage(loader, "orangepool" + File.separator + "orangepool" + ModLoader.YK_WORD_NORA + "_off.png");
-		images[4] = ModLoader.loadItemImage(loader, "orangepool" + File.separator + "orangepool" + ModLoader.YK_WORD_YASEI + ".png");
-		images[5] = ModLoader.loadItemImage(loader, "orangepool" + File.separator + "orangepool" + ModLoader.YK_WORD_YASEI + "_off.png");
-		boundary.width = images[0].getWidth(io);
-		boundary.height = images[0].getHeight(io);
-		boundary.x = boundary.width >> 1;
-		boundary.y = boundary.height >> 1;
+		images[2] = ModLoader.loadItemImage(loader, "orangepool" + File.separator + "orangepool" + ModLoader.getYkWordNora() + ".png");
+		images[3] = ModLoader.loadItemImage(loader, "orangepool" + File.separator + "orangepool" + ModLoader.getYkWordNora() + "_off.png");
+		images[4] = ModLoader.loadItemImage(loader, "orangepool" + File.separator + "orangepool" + ModLoader.getYkWordYasei() + ".png");
+		images[5] = ModLoader.loadItemImage(loader, "orangepool" + File.separator + "orangepool" + ModLoader.getYkWordYasei() + "_off.png");
+		boundary.setWidth(images[0].getWidth(io));
+		boundary.setHeight(images[0].getHeight(io));
+		boundary.setX(boundary.getWidth() >> 1);
+		boundary.setY(boundary.getHeight() >> 1);
 	}
 
 	@Override
@@ -148,7 +148,7 @@ public class OrangePool extends ObjEX implements java.io.Serializable {
 	
 	@Override
 	public void removeListData(){
-		SimYukkuri.world.getCurrentMap().orangePool.remove(objId);
+		SimYukkuri.world.getCurrentMap().getOrangePool().remove(objId);
 	}
 	
 	/**
@@ -162,7 +162,7 @@ public class OrangePool extends ObjEX implements java.io.Serializable {
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
 		
-		SimYukkuri.world.getCurrentMap().orangePool.put(objId, this);
+		SimYukkuri.world.getCurrentMap().getOrangePool().put(objId, this);
 
 		objType = Type.PLATFORM;
 		objEXType = ObjEXType.ORANGEPOOL;
@@ -172,14 +172,14 @@ public class OrangePool extends ObjEX implements java.io.Serializable {
 		if(ret) {
 			itemRank = ItemRank.values()[initOption];
 			// 森なら野生に変更
-			if( SimYukkuri.world.getCurrentMap().mapIndex == 5 ||  SimYukkuri.world.getCurrentMap().mapIndex == 6 ){
+			if( SimYukkuri.world.getCurrentMap().getMapIndex() == 5 ||  SimYukkuri.world.getCurrentMap().getMapIndex() == 6 ){
 				if( itemRank == ItemRank.HOUSE ){
 					itemRank = ItemRank.YASEI;
 				}
 			}
 		}
 		else {
-			SimYukkuri.world.getCurrentMap().orangePool.remove(objId);
+			SimYukkuri.world.getCurrentMap().getOrangePool().remove(objId);
 		}
 	}
 	public OrangePool() {
@@ -242,5 +242,6 @@ public class OrangePool extends ObjEX implements java.io.Serializable {
 	}
 	
 }
+
 
 

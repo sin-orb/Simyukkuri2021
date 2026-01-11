@@ -36,7 +36,7 @@ public class ToyLogic {
 			return false;
 		}
 
-		List<Toy> list = new LinkedList<>(SimYukkuri.world.getCurrentMap().toy.values());
+		List<Toy> list = new LinkedList<>(SimYukkuri.world.getCurrentMap().getToy().values());
 		if( list == null || list.size() == 0 ){
 			return false;
 		}
@@ -147,7 +147,7 @@ public class ToyLogic {
 	 * @return 処理が行われたか
 	 */
 	public static final boolean checkSui(Body b) {
-		List<Sui> list = new LinkedList<>(SimYukkuri.world.getCurrentMap().sui.values());
+		List<Sui> list = new LinkedList<>(SimYukkuri.world.getCurrentMap().getSui().values());
 		if( list == null || list.size() == 0 ){
 			return false;
 		}
@@ -231,7 +231,7 @@ public class ToyLogic {
 				}
 			}
 		}
-		else if(SimYukkuri.world.getCurrentMap().sui.size() > 0){
+		else if(SimYukkuri.world.getCurrentMap().getSui().size() > 0){
 			EventLogic.addBodyEvent(b,new SuiSpeake(null, null, null, 10), null, null);
 		}
 		return ret;
@@ -246,7 +246,7 @@ public class ToyLogic {
 			return false;
 		}
 
-		List<Trampoline> trampolineList = new LinkedList<>(SimYukkuri.world.getCurrentMap().trampoline.values());
+		List<Trampoline> trampolineList = new LinkedList<>(SimYukkuri.world.getCurrentMap().getTrampoline().values());
 		if( trampolineList == null || trampolineList.size() == 0 ){
 			return false;
 		}
@@ -286,8 +286,8 @@ public class ToyLogic {
 			}
 
 			if(b.getZ() == 0){
-				if(found.option == 0){
-					if(b.getIntelligence() == Intelligence.FOOL && SimYukkuri.RND.nextInt(100) + 1 < found.accident2 || b.getIntelligence() != Intelligence.FOOL && SimYukkuri.RND.nextInt(100) + 1 < found.accident1)
+				if(found.getOption() == 0){
+					if(b.getIntelligence() == Intelligence.FOOL && SimYukkuri.RND.nextInt(100) + 1 < found.getAccident2() || b.getIntelligence() != Intelligence.FOOL && SimYukkuri.RND.nextInt(100) + 1 < found.getAccident1())
 					{
 						b.kick(0, 0, ((strength[b.getBodyAgeState().ordinal()] + strength[b.getBodyAgeState().ordinal()] * SimYukkuri.RND.nextInt(1)) - SimYukkuri.RND.nextInt(5)) * 3);
 					}
@@ -296,7 +296,7 @@ public class ToyLogic {
 					}
 				}
 				else{
-					if(b.getIntelligence() == Intelligence.FOOL && SimYukkuri.RND.nextInt(100) + 1 <= found.accident2 || b.getIntelligence() != Intelligence.FOOL && SimYukkuri.RND.nextInt(100) + 1 < found.accident1)
+					if(b.getIntelligence() == Intelligence.FOOL && SimYukkuri.RND.nextInt(100) + 1 <= found.getAccident2() || b.getIntelligence() != Intelligence.FOOL && SimYukkuri.RND.nextInt(100) + 1 < found.getAccident1())
 					{
 						b.kick(b.getDirX() * b.getStep(), b.getDirY() * b.getStep(), ((strength[b.getBodyAgeState().ordinal()] + strength[b.getBodyAgeState().ordinal()] * SimYukkuri.RND.nextInt(1)) - SimYukkuri.RND.nextInt(5)) * 3);
 					}
@@ -334,5 +334,6 @@ public class ToyLogic {
 	}
 
 }
+
 
 

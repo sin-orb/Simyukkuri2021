@@ -9,10 +9,14 @@ public enum AgeState {
 	ADULT(ResourceUtil.getInstance().read("enums_adultyu"))
 	;
 	/** ゆっくりの成長段階名称 */
-	public String name;
+	private final String name;
 	/**
 	 * コンストラクタ.
 	 * @param str ゆっくりの成長段階名称
 	 */
 	AgeState(String str) { this.name = str; }
+
+	public String getName() {
+		return name;
+	}
 }

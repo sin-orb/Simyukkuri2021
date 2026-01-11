@@ -309,7 +309,7 @@ public class FamilyActionLogic {
 	public static Obj searchToilet(Body b) {
 		Obj found = null;
 		int minDistance = b.getEYESIGHTorg();
-		for (Map.Entry<Integer, Toilet> entry : SimYukkuri.world.getCurrentMap().toilet.entrySet()) {
+		for (Map.Entry<Integer, Toilet> entry : SimYukkuri.world.getCurrentMap().getToilet().entrySet()) {
 			Toilet t = entry.getValue();
 			// 最小距離のものが見つかっていたら
 			if (minDistance < 1) {
@@ -366,7 +366,7 @@ public class FamilyActionLogic {
 		int looks = -1000;
 
 		// フィールドの餌検索
-		for (Map.Entry<Integer, Food> entry : SimYukkuri.world.getCurrentMap().food.entrySet()) {
+		for (Map.Entry<Integer, Food> entry : SimYukkuri.world.getCurrentMap().getFood().entrySet()) {
 			Food f = entry.getValue();
 			if (f.isEmpty()) {
 				continue;
@@ -427,7 +427,7 @@ public class FamilyActionLogic {
 		boolean bIsNotRaperTarget = isRapeTarget();
 		// レイプ対象がいない
 		if (!bIsNotRaperTarget) {
-			for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().body.entrySet()) {
+			for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().getBody().entrySet()) {
 				Body b = entry.getValue();
 				if (b.isRaper()) {
 					b.setExciting(false);
@@ -443,7 +443,7 @@ public class FamilyActionLogic {
 	 * @return れいぱーのターゲットかどうか
 	 */
 	public static final boolean isRapeTarget() {
-		for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().body.entrySet()) {
+		for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().getBody().entrySet()) {
 			Body b = entry.getValue();
 			// レイプの対象がいる
 			if (!b.isUnBirth() && !b.isDead() && !b.isRemoved() && !b.isRaper()) {
@@ -547,3 +547,4 @@ public class FamilyActionLogic {
 		return true;
 	}
 }
+

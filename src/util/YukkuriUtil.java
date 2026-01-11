@@ -40,7 +40,7 @@ public class YukkuriUtil {
 	public static final YukkuriType getYukkuriType(String className) {
 		YukkuriType ret = null;
 		for (YukkuriType y : YukkuriType.values()) {
-			if (y.className.equals(className)) {
+			if (y.getClassName().equals(className)) {
 				ret = y;
 				break;
 			}
@@ -56,8 +56,8 @@ public class YukkuriUtil {
 	public static final String getYukkuriClassName(int type) {
 		String ret = null;
 		for (YukkuriType y : YukkuriType.values()) {
-			if (y.typeID == type) {
-				ret = y.className;
+			if (y.getTypeID() == type) {
+				ret = y.getClassName();
 				break;
 			}
 		}
@@ -173,7 +173,7 @@ public class YukkuriUtil {
 		}
 
 		// ディフューザーでハイブリッド薬がまかれていたら強制的にハイブリッドにする
-		if (Terrarium.hybridSteam) {
+		if (Terrarium.isHybridSteam()) {
 			if ((fatherType == Reimu.type) && (motherType == Marisa.type) && (mother != null)
 					&& SimYukkuri.RND.nextBoolean()) {
 				babyType = mother.getHybridType(fatherType);
@@ -632,7 +632,7 @@ public class YukkuriUtil {
 		if (i == -1) {
 			return null;
 		}
-		Map<Integer, Body> bodies = SimYukkuri.world.getCurrentMap().body;
+		Map<Integer, Body> bodies = SimYukkuri.world.getCurrentMap().getBody();
 		if (bodies.containsKey(i)) {
 			return bodies.get(i);
 		}
@@ -647,7 +647,7 @@ public class YukkuriUtil {
 		if (i == -1) {
 			return null;
 		}
-		for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().body.entrySet()) {
+		for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().getBody().entrySet()) {
 			Body b = entry.getValue();
 			if (b.objId == i) {
 				return b;
@@ -662,7 +662,7 @@ public class YukkuriUtil {
 	 */
 	public static Body[] getBodyInstances() {
 		List<Body> bodies = new LinkedList<>();
-		for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().body.entrySet()) {
+		for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().getBody().entrySet()) {
 			Body p = entry.getValue();
 			bodies.add(p);
 		}
@@ -688,3 +688,4 @@ public class YukkuriUtil {
 		}
 	}
 }
+

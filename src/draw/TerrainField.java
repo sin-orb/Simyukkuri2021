@@ -27,26 +27,26 @@ public class TerrainField implements Serializable {
 
 	private static final long serialVersionUID = 2617040226660851211L;
 	// iniファイルのキー
-	public static final String SECTION_ASSET = "Asset";
-	public static final String SECTION_ENV = "Environment";
-	public static final String SECTION_OBJ = "Object";
-	public static final String SECTION_FLOOR = "Floor";
-	public static final String SECTION_CEIL = "Ceiling";
-	public static final String SECTION_OWNER = "Owner";
+	private static final String SECTION_ASSET = "Asset";
+	private static final String SECTION_ENV = "Environment";
+	private static final String SECTION_OBJ = "Object";
+	private static final String SECTION_FLOOR = "Floor";
+	private static final String SECTION_CEIL = "Ceiling";
+	private static final String SECTION_OWNER = "Owner";
 
-	public static final String ASSET_IMG = "img";
+	private static final String ASSET_IMG = "img";
 
-	public static final String ENV_BASE = "base";
-	public static final String ENV_TOP_MORNING = "morning_top_rgba";
-	public static final String ENV_BOTTOM_MORNING = "morning_bottom_rgba";
-	public static final String ENV_TOP_DAY = "day_top_rgba";
-	public static final String ENV_BOTTOM_DAY = "day_bottom_rgba";
-	public static final String ENV_TOP_EVENING = "evening_top_rgba";
-	public static final String ENV_BOTTOM_EVENING = "evening_bottom_rgba";
-	public static final String ENV_TOP_NIGHT = "night_top_rgba";
-	public static final String ENV_BOTTOM_NIGHT = "night_bottom_rgba";
-	public static final String OWN_PERS = "perspective";
-	public static final String OWN_OWNER = "owner";
+	private static final String ENV_BASE = "base";
+	private static final String ENV_TOP_MORNING = "morning_top_rgba";
+	private static final String ENV_BOTTOM_MORNING = "morning_bottom_rgba";
+	private static final String ENV_TOP_DAY = "day_top_rgba";
+	private static final String ENV_BOTTOM_DAY = "day_bottom_rgba";
+	private static final String ENV_TOP_EVENING = "evening_top_rgba";
+	private static final String ENV_BOTTOM_EVENING = "evening_bottom_rgba";
+	private static final String ENV_TOP_NIGHT = "night_top_rgba";
+	private static final String ENV_BOTTOM_NIGHT = "night_bottom_rgba";
+	private static final String OWN_PERS = "perspective";
+	private static final String OWN_OWNER = "owner";
 
 	private static final String BG_FILE_NAME = "bg.ini";
 	private static final String OLD_BG_NAME = "back.jpg";
@@ -94,11 +94,11 @@ public class TerrainField implements Serializable {
 
 		IniFileReader reader = null;
 
-		scaleRateW = (double) Translate.bufferW / (double) BG_W;
-		scaleRateH = (double) Translate.bufferH / (double) BG_H;
+		scaleRateW = (double) Translate.getBufferW() / (double) BG_W;
+		scaleRateH = (double) Translate.getBufferH() / (double) BG_H;
 		try {
 			//現在いるマップの種類(室内、路上1/2、加工所1/2、、、といったもの)
-			String mapName = MapWindow.MAP.values()[index].filePath;
+			String mapName = MapWindow.MAP.values()[index].getFilePath();
 			// 読み込みフォーマット判定
 			reader = ModLoader.loadTerrainData(loader, mapName, BG_FILE_NAME, OLD_BG_NAME);
 
@@ -142,7 +142,7 @@ public class TerrainField implements Serializable {
 			}
 			col[0] = defaultDayColor[i][0];
 			col[1] = defaultDayColor[i][1];
-			skyColor[i] = new LinearGradientPaint(0.0f, 0.0f, 0.0f, (float) Translate.bufferH, frac, col);
+			skyColor[i] = new LinearGradientPaint(0.0f, 0.0f, 0.0f, (float) Translate.getBufferH(), frac, col);
 		}
 	}
 
@@ -327,7 +327,7 @@ public class TerrainField implements Serializable {
 			}
 			col[0] = topCol[i];
 			col[1] = botCol[i];
-			skyColor[i] = new LinearGradientPaint(0.0f, 0.0f, 0.0f, (float) Translate.bufferH, frac, col);
+			skyColor[i] = new LinearGradientPaint(0.0f, 0.0f, 0.0f, (float) Translate.getBufferH(), frac, col);
 		}
 
 	}
@@ -377,10 +377,10 @@ public class TerrainField implements Serializable {
 			ret.scale(scaleRateW, scaleRateH);
 			w = (int) ((double) ret.getImage().getWidth(io) * scaleRateW);
 			h = (int) ((double) ret.getImage().getHeight(io) * scaleRateH);
-			pivX = x * (double) Translate.bufferW - ((double) w * 0.5);
-			pivY = (y * (double) Translate.bufferH - z * (double) Translate.bufferH) - ((double) h - 1.0);
+			pivX = x * (double) Translate.getBufferW() - ((double) w * 0.5);
+			pivY = (y * (double) Translate.getBufferH() - z * (double) Translate.getBufferH()) - ((double) h - 1.0);
 			ret.trans(pivX, pivY);
-			int oy = (int) (y * (double) Translate.bufferH);
+			int oy = (int) (y * (double) Translate.getBufferH());
 			ret.setCalcY(Translate.invertBgY(oy));
 			break;
 		case 1:
@@ -391,8 +391,8 @@ public class TerrainField implements Serializable {
 			ret.scale(scaleRateW, scaleRateH);
 			w = (int) ((double) ret.getImage().getWidth(io) * scaleRateW);
 			h = (int) ((double) ret.getImage().getHeight(io) * scaleRateH);
-			pivX = x * (double) Translate.bufferW - ((double) w * 0.5);
-			pivY = (y * (double) Translate.bufferH - z * (double) Translate.bufferH) - ((double) h * 0.5);
+			pivX = x * (double) Translate.getBufferW() - ((double) w * 0.5);
+			pivY = (y * (double) Translate.getBufferH() - z * (double) Translate.getBufferH()) - ((double) h * 0.5);
 			ret.trans(pivX, pivY);
 			break;
 		}

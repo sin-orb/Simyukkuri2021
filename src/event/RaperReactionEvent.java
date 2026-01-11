@@ -37,7 +37,7 @@ public class RaperReactionEvent extends EventPacket implements java.io.Serializa
 
 	private int age = 0;
 
-	public ActionState state = null;
+	private ActionState state = null;
 
 	/**
 	 * コンストラクタ.
@@ -62,7 +62,7 @@ public class RaperReactionEvent extends EventPacket implements java.io.Serializa
 			boolean bIsNearRaper = false;
 
 			// 全ゆっくりに対してチェック
-			for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().body.entrySet()) {
+			for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().getBody().entrySet()) {
 				Body p = entry.getValue();
 				// 自分同士のチェックは無意味なのでスキップ
 				if (p == b) {
@@ -128,6 +128,14 @@ public class RaperReactionEvent extends EventPacket implements java.io.Serializa
 			b.setHappiness(Happiness.VERY_SAD);
 		}
 	}
+	
+	public ActionState getState() {
+		return state;
+	}
+	
+	public void setState(ActionState state) {
+		this.state = state;
+	}
 
 	// 毎フレーム処理
 	@Override
@@ -178,7 +186,7 @@ public class RaperReactionEvent extends EventPacket implements java.io.Serializa
 					if (target != null) {
 						int num = 0;
 						// 反撃対象が見つかったら同イベント実行中の固体イベントを書き換え
-						for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().body.entrySet()) {
+						for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().getBody().entrySet()) {
 							Body body = entry.getValue();
 							if (body.getCurrentEvent() instanceof RaperReactionEvent) {
 								// うんうん奴隷は不参加
@@ -308,7 +316,7 @@ public class RaperReactionEvent extends EventPacket implements java.io.Serializa
 	 */
 	public Body searchNextTarget() {
 		Body ret = null;
-		for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().body.entrySet()) {
+		for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().getBody().entrySet()) {
 			Body b = entry.getValue();
 			if (b.isRaper() && b.isExciting() && !b.isDead()) {
 				ret = b;
@@ -325,7 +333,7 @@ public class RaperReactionEvent extends EventPacket implements java.io.Serializa
 	 */
 	public Body searchAttackTarget() {
 		Body ret = null;
-		for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().body.entrySet()) {
+		for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().getBody().entrySet()) {
 			Body b = entry.getValue();
 			if (!b.isDead()&& b.isExciting() && b.isRaper() && b.isSukkiri()) {
 				ret = b;
@@ -353,8 +361,8 @@ public class RaperReactionEvent extends EventPacket implements java.io.Serializa
 	 * @param b 敵
 	 */
 	protected void escapeTarget(Body b) {
-		int mapX = Translate.mapW;
-		int mapY = Translate.mapH;
+		int mapX = Translate.getMapW();
+		int mapY = Translate.getMapH();
 		Body from = YukkuriUtil.getBodyInstance(getFrom());
 		if (from == null) {
 			return;
@@ -389,3 +397,4 @@ public class RaperReactionEvent extends EventPacket implements java.io.Serializa
 		return ResourceUtil.getInstance().read("event_raperreaction");
 	}
 }
+

@@ -44,7 +44,7 @@ public class FuneralEvent extends EventPacket implements java.io.Serializable {
 	}
 
 	/** 状態 */
-	public STATE state = STATE.GO;
+	private STATE state = STATE.GO;
 
 	/**
 	 * コンストラクタ.
@@ -110,6 +110,14 @@ public class FuneralEvent extends EventPacket implements java.io.Serializable {
 	@Override
 	public void start(Body b) {
 		b.setCurrentEvent(this);
+	}
+	
+	public STATE getState() {
+		return state;
+	}
+	
+	public void setState(STATE state) {
+		this.state = state;
 	}
 
 	// 毎フレーム処理

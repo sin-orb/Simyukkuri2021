@@ -37,7 +37,7 @@ public class WasaReimu extends Reimu implements java.io.Serializable {
 	private static BufferedImage[][][][] imagePack = new BufferedImage[BodyRank.values().length][][][];
 	private static BufferedImage[][][] imagesKai = new BufferedImage[ImageCode.values().length][2][3];
 	private static BufferedImage[][][] imagesNora = new BufferedImage[ImageCode.values().length][2][3];
-	private static BufferedImage[][][][] imagesNagasi = new BufferedImage[ImageCode.values().length][2][3][ModLoader.nMaxImgOtherVer + 1];
+	private static BufferedImage[][][][] imagesNagasi = new BufferedImage[ImageCode.values().length][2][3][ModLoader.getMaxImgOtherVer() + 1];
 	private static int directionOffset[][] = new int[ImageCode.values().length][2];
 	private static int directionOffsetNagasi[][] = new int[ImageCode.values().length][2];
 	private static Dimension4y[] boundary = new Dimension4y[3];
@@ -55,7 +55,7 @@ public class WasaReimu extends Reimu implements java.io.Serializable {
 		if(imageLoaded) return;
 
 		boolean res;
-		res = ModLoader.loadBodyImagePack(loader, imagesNora, directionOffset, ModLoader.YK_WORD_NORA, baseFileName, io);
+		res = ModLoader.loadBodyImagePack(loader, imagesNora, directionOffset, ModLoader.getYkWordNora(), baseFileName, io);
 		if(!res) {
 			imagesNora = null;
 		}
@@ -63,13 +63,13 @@ public class WasaReimu extends Reimu implements java.io.Serializable {
 		if(!res) {
 			imagesKai = null;
 		}
-		imagePack[BodyRank.KAIYU.imageIndex] = imagesKai;
+		imagePack[BodyRank.KAIYU.getImageIndex()] = imagesKai;
 		if(imagesNora != null) {
-			imagePack[BodyRank.NORAYU.imageIndex] = imagesNora;
+			imagePack[BodyRank.NORAYU.getImageIndex()] = imagesNora;
 		} else {
-			imagePack[BodyRank.NORAYU.imageIndex] = imagesKai;
+			imagePack[BodyRank.NORAYU.getImageIndex()] = imagesKai;
 		}
-		res = ModLoader.loadBodyImagePack(loader, imagesNagasi, directionOffsetNagasi, ModLoader.YK_WORD_NAGASI, baseFileName, io);
+		res = ModLoader.loadBodyImagePack(loader, imagesNagasi, directionOffsetNagasi, ModLoader.getYkWordNagasi(), baseFileName, io);
 		if(!res) {
 			imagesNagasi = null;
 		}
@@ -80,8 +80,8 @@ public class WasaReimu extends Reimu implements java.io.Serializable {
 	}
 	/** INIファイルのロード */
 	public static void loadIniFile(ClassLoader loader) {
-		AttachOffset = ModLoader.loadBodyIniMap(loader, ModLoader.DATA_INI_DIR, baseFileName);
-		baseSpeed = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_INI_DIR, baseFileName, "speed");
+		AttachOffset = ModLoader.loadBodyIniMap(loader, ModLoader.getDataIniDir(), baseFileName);
+		baseSpeed = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataIniDir(), baseFileName, "speed");
 	}
 	@Override
 	@Transient
@@ -92,8 +92,8 @@ public class WasaReimu extends Reimu implements java.io.Serializable {
 	public int getImage(int type, int direction, BodyLayer layer, int index) {
 		if( !isbImageNagasiMode() || imagesNagasi == null)
 		{
-			layer.image[index] = imagePack[getBodyRank().imageIndex][type][direction * directionOffset[type][0]][getBodyAgeState().ordinal()];
-			layer.dir[index] = direction * directionOffset[type][1];
+			layer.getImage()[index] = imagePack[getBodyRank().getImageIndex()][type][direction * directionOffset[type][0]][getBodyAgeState().ordinal()];
+			layer.getDir()[index] = direction * directionOffset[type][1];
 		}else{
 			// インターバル毎に初期化する
 			if( Terrarium.getInterval() == 0 && !isDead() )
@@ -108,11 +108,11 @@ public class WasaReimu extends Reimu implements java.io.Serializable {
 			if(anImageVerStateCtrlNagasi[type][1] == 1)
 			{
 				int nIndex = anImageVerStateCtrlNagasi[type][0];
-				layer.image[index] = imagesNagasi[type][direction * directionOffsetNagasi[type][0]][getBodyAgeState().ordinal()][nIndex];
+				layer.getImage()[index] = imagesNagasi[type][direction * directionOffsetNagasi[type][0]][getBodyAgeState().ordinal()][nIndex];
 
 			}else{
 				int nOtherVerCount = 0;
-				for( int i=0; i < ModLoader.nMaxImgOtherVer; i++ )
+				for( int i=0; i < ModLoader.getMaxImgOtherVer(); i++ )
 				{
 					if( imagesNagasi[type][direction * directionOffsetNagasi[type][0]][getBodyAgeState().ordinal()][i+1] != null )
 					{
@@ -124,16 +124,16 @@ public class WasaReimu extends Reimu implements java.io.Serializable {
 				{
 					int nRndIndex = SimYukkuri.RND.nextInt(nOtherVerCount+1);
 					anImageVerStateCtrlNagasi[type][0] = nRndIndex;
-					layer.image[index] = imagesNagasi[type][direction * directionOffsetNagasi[type][0]][getBodyAgeState().ordinal()][nRndIndex];
+					layer.getImage()[index] = imagesNagasi[type][direction * directionOffsetNagasi[type][0]][getBodyAgeState().ordinal()][nRndIndex];
 				}else{
 					anImageVerStateCtrlNagasi[type][0] = 0;
-					layer.image[index] = imagesNagasi[type][direction * directionOffsetNagasi[type][0]][getBodyAgeState().ordinal()][0];
+					layer.getImage()[index] = imagesNagasi[type][direction * directionOffsetNagasi[type][0]][getBodyAgeState().ordinal()][0];
 				}
 
 				anImageVerStateCtrlNagasi[type][1] = 1;
 			}
 
-			layer.dir[index] = direction * directionOffsetNagasi[type][1];
+			layer.getDir()[index] = direction * directionOffsetNagasi[type][1];
 		}
 		return 1;
 	}
@@ -169,4 +169,5 @@ public class WasaReimu extends Reimu implements java.io.Serializable {
 	}
 	
 }
+
 

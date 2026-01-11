@@ -41,17 +41,17 @@ public class Shit extends Obj implements java.io.Serializable {
 
 	private static final int SHITLIMIT[] = {100*24*2, 100*24*4, 100*24*8};
 	/** うんうんをしたゆっくりの名前。toString用 */
-	public String ownerName;
+	private String ownerName;
 	/** うんうんをしたゆっくりのUniqueID。誰がしたうんうんか？で子供のだったらトイレに運ぶ、とかの処理が可能 */
-	public int ownerId;
+	private int ownerId;
 	/** 赤ゆ/子ゆ/成ゆ、どのゆっくりがうんうんをしたか */
-	public AgeState ageState;
+	private AgeState ageState;
 	/** 落下時のダメージ */
-	public int falldownDamage = 0;
+	private int falldownDamage = 0;
 	/** うんうんの量 */
-	public int amount = 0;
+	private int amount = 0;
 	/** うんうんタイプ（あんこ、カスタード、クリーム等） */
-	public int shitType = 0;
+	private int shitType = 0;
 	
 	private static final float[] shitSize = {0.4f, 0.7f, 1.0f};
 	private static final String[] shitSizeDisplayName = {ResourceUtil.getInstance().read("game_little"), 
@@ -84,11 +84,11 @@ public class Shit extends Obj implements java.io.Serializable {
 		int sx, sy;
 		
 		for(int i = 0; i < name.length; i++) {
-			if(name[i].imageDirName.length() == 0) continue;
+			if(name[i].getImageDirName().length() == 0) continue;
 			
-			images[i][SHIT_NORMAL][Const.ADULT_INDEX] = ImageIO.read(loader.getResourceAsStream(path+name[i].imageDirName+"/unun.png"));
-			images[i][SHIT_CRASHED][Const.ADULT_INDEX] = ImageIO.read(loader.getResourceAsStream(path+name[i].imageDirName+"/unun2.png"));
-			images[i][SHIT_SHADOW][Const.ADULT_INDEX] = ImageIO.read(loader.getResourceAsStream(path+name[i].imageDirName+"/unun-shadow.png"));
+			images[i][SHIT_NORMAL][Const.ADULT_INDEX] = ImageIO.read(loader.getResourceAsStream(path+name[i].getImageDirName()+"/unun.png"));
+			images[i][SHIT_CRASHED][Const.ADULT_INDEX] = ImageIO.read(loader.getResourceAsStream(path+name[i].getImageDirName()+"/unun2.png"));
+			images[i][SHIT_SHADOW][Const.ADULT_INDEX] = ImageIO.read(loader.getResourceAsStream(path+name[i].getImageDirName()+"/unun-shadow.png"));
 
 			for(int j = 0; j < NUM_OF_SHIT_STATE; j++) {
 				imgW[i][Const.ADULT_INDEX] = images[i][0][Const.ADULT_INDEX].getWidth(io);
@@ -234,8 +234,8 @@ public class Shit extends Obj implements java.io.Serializable {
 				remove();
 			}
 
-			int mapX = Translate.mapW;
-			int mapY = Translate.mapH;
+			int mapX = Translate.getMapW();
+			int mapY = Translate.getMapH();
 
 			if (!grabbed) {
 				if (vx != 0) {

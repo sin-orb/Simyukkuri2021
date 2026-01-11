@@ -30,15 +30,15 @@ public class ItemListener {
 		@Override
 		public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
 			// 時間を止める
-			speedBackup = MainCommandUI.selectedGameSpeed;
-			MainCommandUI.gameSpeedCombo.setSelectedIndex(0);
+			speedBackup = MainCommandUI.getSelectedGameSpeed();
+			MainCommandUI.getGameSpeedCombo().setSelectedIndex(0);
 		}
 
 		@Override
 		public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
 			// 時間を戻す
-			MainCommandUI.selectedGameSpeed = speedBackup;
-			MainCommandUI.gameSpeedCombo.setSelectedIndex(speedBackup);
+			MainCommandUI.setSelectedGameSpeed(speedBackup);
+			MainCommandUI.getGameSpeedCombo().setSelectedIndex(speedBackup);
 		}
 
 		@Override
@@ -55,15 +55,15 @@ public class ItemListener {
 		@Override
 		public void popupMenuWillBecomeVisible(PopupMenuEvent e) {
 			// 時間を止める
-			speedBackup = MainCommandUI.selectedGameSpeed;
-			MainCommandUI.gameSpeedCombo.setSelectedIndex(0);
+			speedBackup = MainCommandUI.getSelectedGameSpeed();
+			MainCommandUI.getGameSpeedCombo().setSelectedIndex(0);
 		}
 
 		@Override
 		public void popupMenuWillBecomeInvisible(PopupMenuEvent e) {
 			// 時間を戻す
-			MainCommandUI.selectedGameSpeed = speedBackup;
-			MainCommandUI.gameSpeedCombo.setSelectedIndex(speedBackup);
+			MainCommandUI.setSelectedGameSpeed(speedBackup);
+			MainCommandUI.getGameSpeedCombo().setSelectedIndex(speedBackup);
 		}
 
 		@Override
@@ -105,32 +105,32 @@ public class ItemListener {
 			switch (m) {
 			case PICKUP:
 				synchronized (SimYukkuri.lock) {
-					SimYukkuri.world.player.getItemList().addElement(ItemMenu.getTarget);
-					if (ItemMenu.getTarget instanceof Body) {
-						Body b = (Body) ItemMenu.getTarget;
+					SimYukkuri.world.getPlayer().getItemList().addElement(ItemMenu.getGetTarget());
+					if (ItemMenu.getGetTarget() instanceof Body) {
+						Body b = (Body) ItemMenu.getGetTarget();
 						b.removeAllStalks();
 						b.setTaken(true);
-						curMap.body.remove(b.getUniqueID());
-					} else if (ItemMenu.getTarget instanceof Shit) {
-						curMap.shit.remove(ItemMenu.getTarget.objId);
-					} else if (ItemMenu.getTarget instanceof Vomit) {
-						curMap.vomit.remove(ItemMenu.getTarget.objId);
+						curMap.getBody().remove(b.getUniqueID());
+					} else if (ItemMenu.getGetTarget() instanceof Shit) {
+						curMap.getShit().remove(ItemMenu.getGetTarget().objId);
+					} else if (ItemMenu.getGetTarget() instanceof Vomit) {
+						curMap.getVomit().remove(ItemMenu.getGetTarget().objId);
 					}
-					ItemMenu.getTarget = null;
+					ItemMenu.setGetTarget(null);
 				}
 				break;
 			case STATUS:
-				if (ItemMenu.getTarget == null)
+				if (ItemMenu.getGetTarget() == null)
 					return;
-				Body b = (Body) ItemMenu.getTarget;
+				Body b = (Body) ItemMenu.getGetTarget();
 				ShowStatusFrame instance = ShowStatusFrame.getInstance();
 				instance.giveBodyInfo(b);
 				instance.setVisible(true);
 				break;
 			case DEBUG:
-				if (ItemMenu.getTarget == null)
+				if (ItemMenu.getGetTarget() == null)
 					return;
-				Obj o = ItemMenu.getTarget;
+				Obj o = ItemMenu.getGetTarget();
 				DebugFrame df = new DebugFrame();
 				df.setObjAndDisplay(o);
 				df.setVisible(true);
@@ -160,8 +160,9 @@ public class ItemListener {
 			if (m == null)
 				return;
 
-			ItemMenu.shapeTarget.executeShapePopup(m);
-			ItemMenu.shapeTarget = null;
+			ItemMenu.getShapeTarget().executeShapePopup(m);
+			ItemMenu.setShapeTarget(null);
 		}
 	}
 }
+

@@ -68,16 +68,36 @@ public enum YukkuriType {
 	YUUKA("Yuuka", "yuuka", "yuuka", ResourceUtil.IS_JP ? Yuuka.nameJ : Yuuka.nameE, Yuuka.type),
 	YUYUKO("Yuyuko", "yuyuko", "yuyuko", ResourceUtil.IS_JP ? Yuyuko.nameJ : Yuyuko.nameE, Yuyuko.type),
 	;
-	public String className;
-	public String messageFileName;
-	public String imageDirName;
-	public String nameJ;
-	public int typeID;
+	private final String className;
+	private final String messageFileName;
+	private final String imageDirName;
+	private final String nameJ;
+	private final int typeID;
 	YukkuriType(String clsName, String msgFile, String imgDir, String nameJ, int id) {
 		this.className = clsName;
 		this.messageFileName = msgFile;
 		this.imageDirName = imgDir;
 		this.nameJ = nameJ;
 		this.typeID = id;
+	}
+
+	public String getClassName() {
+		return className;
+	}
+
+	public String getMessageFileName() {
+		return messageFileName;
+	}
+
+	public String getImageDirName() {
+		return imageDirName;
+	}
+
+	public String getNameJ() {
+		return nameJ;
+	}
+
+	public int getTypeID() {
+		return typeID;
 	}
 }

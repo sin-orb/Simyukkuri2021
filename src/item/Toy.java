@@ -34,13 +34,13 @@ public class Toy extends ObjEX implements java.io.Serializable {
 	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
 
 		images[BALL] = ModLoader.loadItemImage(loader, "toy" + File.separator + "ball.png");
-		images[BALL_NORA] = ModLoader.loadItemImage(loader, "toy" + File.separator + "ball" + ModLoader.YK_WORD_NORA + ".png");
+		images[BALL_NORA] = ModLoader.loadItemImage(loader, "toy" + File.separator + "ball" + ModLoader.getYkWordNora() + ".png");
 		images[SHADOW] = ModLoader.loadItemImage(loader, "toy" + File.separator + "shadow.png");
 		
-		boundary.width = images[0].getWidth(io);
-		boundary.height = images[0].getHeight(io);
-		boundary.x = boundary.width >> 1;
-		boundary.y = boundary.height - 1;
+		boundary.setWidth(images[0].getWidth(io));
+		boundary.setHeight(images[0].getHeight(io));
+		boundary.setX(boundary.getWidth() >> 1);
+		boundary.setY(boundary.getHeight() - 1);
 	}
 
 	@Override
@@ -65,7 +65,7 @@ public class Toy extends ObjEX implements java.io.Serializable {
 	
 	@Override
 	public void removeListData(){
-		SimYukkuri.world.getCurrentMap().toy.remove(objId);
+		SimYukkuri.world.getCurrentMap().getToy().remove(objId);
 	}
 
 	@Override
@@ -112,7 +112,7 @@ public class Toy extends ObjEX implements java.io.Serializable {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		SimYukkuri.world.getCurrentMap().toy.put(objId, this);
+		SimYukkuri.world.getCurrentMap().getToy().put(objId, this);
 		objType = Type.OBJECT;
 		objEXType = ObjEXType.TOY;
 		
@@ -139,6 +139,7 @@ public class Toy extends ObjEX implements java.io.Serializable {
 	}
 	
 }
+
 
 
 

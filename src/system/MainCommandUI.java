@@ -44,8 +44,12 @@ public class MainCommandUI {
 		NEXT(">>"),
 		LOGCLEAR(ResourceUtil.getInstance().read("logclear")),
 		;
-        public String label;
+        private final String label;
         SystemButtonLabel(String str) { this.label = str; }
+
+        public String getLabel() {
+        	return label;
+        }
 	}
 
 	/** ツールボタン */
@@ -53,8 +57,12 @@ public class MainCommandUI {
 		MOVE(ResourceUtil.getInstance().read("system_move")),
 		BAG(ResourceUtil.getInstance().read("system_belongings")),
 		;
-        public String label;
+        private final String label;
         ToolButtonLabel(String str) { this.label = str; }
+
+        public String getLabel() {
+        	return label;
+        }
 	}
 
 	/** ステータスのラベル */
@@ -72,16 +80,24 @@ public class MainCommandUI {
 		SHIT(ResourceUtil.getInstance().read("system_unun")),
 		LOVEPLAYER(ResourceUtil.getInstance().read("system_familiality")),
 		;
-        public String label;
+        private final String label;
         StatusLabel(String str) { this.label = str; }
+
+        public String getLabel() {
+        	return label;
+        }
 	}
 
 	/** オプションポップアップ */
 	static enum OptionPopup {
 		INI_RELOAD(ResourceUtil.getInstance().read("system_inireload"))
 		;
-		public String label;
+		private final String label;
 		OptionPopup(String str) { this.label = str; }
+
+		public String getLabel() {
+			return label;
+		}
 	}
 
 
@@ -92,36 +108,36 @@ public class MainCommandUI {
 	private static final String[] TANG_LEVEL_J = { "バカ舌", "普通", "肥えてる"};
 	private static final String[] TANG_LEVEL_E = { "Paralyzed", "Normal", "Destroyed"};
 	/** ゲームスピード */
-	public static int selectedGameSpeed = 1;
+	private static int selectedGameSpeed = 1;
 	/** ズームスケール */
-	public static int selectedZoomScale = 0;
+	private static int selectedZoomScale = 0;
 	/** ゲームスピードコンボボックス */
 	@SuppressWarnings("rawtypes")
-	public static JComboBox gameSpeedCombo;
+	private static JComboBox gameSpeedCombo;
 	/** メインアイテムコンボボックス */
 	@SuppressWarnings("rawtypes")
-	public static JComboBox mainItemCombo;
+	private static JComboBox mainItemCombo;
 	/** サブアイテムコンボボックス */
 	@SuppressWarnings("rawtypes")
-	public static JComboBox subItemCombo;
+	private static JComboBox subItemCombo;
 	/** ゆっくりステータスラベル */
-	public static JLabel[] yuStatusLabel = new JLabel[StatusLabel.values().length];
+	private static JLabel[] yuStatusLabel = new JLabel[StatusLabel.values().length];
 	/** ステータスアイコンラベル */
-	public static JLabel[] statIconLabel = new JLabel[8];
+	private static JLabel[] statIconLabel = new JLabel[8];
 	/** アイテムアイコンラベル */
-	public static JLabel[] itemIconLabel = new JLabel[1];
+	private static JLabel[] itemIconLabel = new JLabel[1];
 	/** システムボタン */
-	public static JButton[] systemButton = new JButton[SystemButtonLabel.values().length];
+	private static JButton[] systemButton = new JButton[SystemButtonLabel.values().length];
 	/** その他ボタン */
-	public static JToggleButton scriptButton, targetButton, pinButton, helpButton, optionButton;
+	private static JToggleButton scriptButton, targetButton, pinButton, helpButton, optionButton;
 	/** プレイヤーボタン */
-	public static JToggleButton[] playerButton = new JToggleButton[ToolButtonLabel.values().length];
+	private static JToggleButton[] playerButton = new JToggleButton[ToolButtonLabel.values().length];
 	/** オプションポップアップ */
-	public static JPopupMenu optionPopup = new JPopupMenu();
+	private static JPopupMenu optionPopup = new JPopupMenu();
 	/** マップウィンドウ */
-	public static MapWindow mapWindow;
+	private static MapWindow mapWindow;
 	/** アイテムウィンドウ */
-	public static ItemWindow itemWindow;
+	private static ItemWindow itemWindow;
 
 	/** メニューエリアの幅 */
 	public static final int MENU_PANE_X = 124;
@@ -154,14 +170,14 @@ public class MainCommandUI {
 		mainItemCombo = new JComboBox();
 		mainItemCombo.setFocusable(false);
 		mainItemCombo.addItemListener(mil);
-		mainItemCombo.setModel(GadgetMenu.mainModel);
+		mainItemCombo.setModel(GadgetMenu.getMainModel());
 		retpanel.add(mainItemCombo);
 
 		SubItemComboBoxListener sil = listenerPack.new SubItemComboBoxListener();
 		subItemCombo = new JComboBox();
 		subItemCombo.setFocusable(false);
 		subItemCombo.addItemListener(sil);
-		subItemCombo.setModel(GadgetMenu.toolModel);
+		subItemCombo.setModel(GadgetMenu.getToolModel());
 		retpanel.add(subItemCombo);
 
 		ButtonListener buttonListener = listenerPack.new ButtonListener();
@@ -169,7 +185,7 @@ public class MainCommandUI {
 
 		// ゆっくり追加ボタン
 		butID = SystemButtonLabel.ADDBODY.ordinal();
-		systemButton[butID] = new JButton(SystemButtonLabel.ADDBODY.label);
+		systemButton[butID] = new JButton(SystemButtonLabel.ADDBODY.getLabel());
 		systemButton[butID].addActionListener(buttonListener);
 		systemButton[butID].setFocusable(false);
 		retpanel.add(systemButton[butID]);
@@ -179,14 +195,14 @@ public class MainCommandUI {
 		butID = SystemButtonLabel.SAVE.ordinal();
 		saveLoad.setLayout(new GridLayout(1, 2, 0, 0));
 		saveLoad.setBorder(new EmptyBorder(0, 0, 0, 0));
-		systemButton[butID] = new JButton(SystemButtonLabel.SAVE.label);
+		systemButton[butID] = new JButton(SystemButtonLabel.SAVE.getLabel());
 		systemButton[butID].addActionListener(buttonListener);
 		systemButton[butID].setMargin(new Insets(0, 0, 0, 0));
 		systemButton[butID].setFocusable(false);
 		saveLoad.add(systemButton[butID]);
 
 		butID = SystemButtonLabel.LOAD.ordinal();
-		systemButton[butID] = new JButton(SystemButtonLabel.LOAD.label);
+		systemButton[butID] = new JButton(SystemButtonLabel.LOAD.getLabel());
 		systemButton[butID].addActionListener(buttonListener);
 		systemButton[butID].setMargin(new Insets(0, 0, 0, 0));
 		systemButton[butID].setFocusable(false);
@@ -198,21 +214,21 @@ public class MainCommandUI {
 		butID = SystemButtonLabel.PREV.ordinal();
 		log.setLayout(new GridLayout(1, 3, 0, 0));
 		log.setBorder(new EmptyBorder(0, 0, 0, 0));
-		systemButton[butID] = new JButton(SystemButtonLabel.PREV.label);
+		systemButton[butID] = new JButton(SystemButtonLabel.PREV.getLabel());
 		systemButton[butID].addActionListener(buttonListener);
 		systemButton[butID].setMargin(new Insets(0, 0, 0, 0));
 		systemButton[butID].setFocusable(false);
 		log.add(systemButton[butID]);
 
 		butID = SystemButtonLabel.LOG.ordinal();
-		systemButton[butID] = new JButton(SystemButtonLabel.LOG.label);
+		systemButton[butID] = new JButton(SystemButtonLabel.LOG.getLabel());
 		systemButton[butID].addActionListener(buttonListener);
 		systemButton[butID].setMargin(new Insets(0, 0, 0, 0));
 		systemButton[butID].setFocusable(false);
 		log.add(systemButton[butID]);
 
 		butID = SystemButtonLabel.NEXT.ordinal();
-		systemButton[butID] = new JButton(SystemButtonLabel.NEXT.label);
+		systemButton[butID] = new JButton(SystemButtonLabel.NEXT.getLabel());
 		systemButton[butID].addActionListener(buttonListener);
 		systemButton[butID].setMargin(new Insets(0, 0, 0, 0));
 		systemButton[butID].setFocusable(false);
@@ -221,7 +237,7 @@ public class MainCommandUI {
 
 		// ログクリアボタン
 		butID = SystemButtonLabel.LOGCLEAR.ordinal();
-		systemButton[butID] = new JButton(SystemButtonLabel.LOGCLEAR.label);
+		systemButton[butID] = new JButton(SystemButtonLabel.LOGCLEAR.getLabel());
 		systemButton[butID].addActionListener(buttonListener);
 		systemButton[butID].setFocusable(false);
 		retpanel.add(systemButton[butID]);
@@ -262,7 +278,7 @@ public class MainCommandUI {
 		optionPopup.addPopupMenuListener(opl);
 		int size = OptionPopup.values().length;
 		for(int i = 0; i < size; i++) {
-			JMenuItem menu = new JMenuItem(OptionPopup.values()[i].label);
+			JMenuItem menu = new JMenuItem(OptionPopup.values()[i].getLabel());
 			menu.addActionListener(oml);
 			menu.setActionCommand(OptionPopup.values()[i].name());
 			optionPopup.add(menu);
@@ -273,14 +289,14 @@ public class MainCommandUI {
 		butID = ToolButtonLabel.MOVE.ordinal();
 		action.setLayout(new GridLayout(1, 2, 0, 0));
 		action.setBorder(new EmptyBorder(0, 0, 0, 0));
-		playerButton[butID] = new JToggleButton(ToolButtonLabel.MOVE.label);
+		playerButton[butID] = new JToggleButton(ToolButtonLabel.MOVE.getLabel());
 		playerButton[butID].addActionListener(buttonListener);
 		playerButton[butID].setMargin(new Insets(0, 0, 0, 0));
 		playerButton[butID].setFocusable(false);
 		action.add(playerButton[butID]);
 
 		butID = ToolButtonLabel.BAG.ordinal();
-		playerButton[butID] = new JToggleButton(ToolButtonLabel.BAG.label);
+		playerButton[butID] = new JToggleButton(ToolButtonLabel.BAG.getLabel());
 		playerButton[butID].addActionListener(buttonListener);
 		playerButton[butID].setMargin(new Insets(0, 0, 0, 0));
 		playerButton[butID].setFocusable(false);
@@ -303,9 +319,9 @@ public class MainCommandUI {
 		item.setBorder(new EmptyBorder(0, 0, 0, 0));
 		for(int i = 0; i < yuStatusLabel.length; i++) {
 			if(i == 1) {
-				yuStatusLabel[i] = new JLabel(enums[i].label);
+				yuStatusLabel[i] = new JLabel(enums[i].getLabel());
 			} else {
-				yuStatusLabel[i] = new JLabel(enums[i].label + " - ");
+				yuStatusLabel[i] = new JLabel(enums[i].getLabel() + " - ");
 			}
 			item.add(yuStatusLabel[i]);
 		}
@@ -354,16 +370,16 @@ public class MainCommandUI {
 	 * ステータスをクリアする.
 	 */
 	public static void clearStatus() {
-		yuStatusLabel[StatusLabel.MONEY.ordinal()].setText(StatusLabel.MONEY.label + SimYukkuri.world.getPlayer().getCash());
+		yuStatusLabel[StatusLabel.MONEY.ordinal()].setText(StatusLabel.MONEY.getLabel() + SimYukkuri.world.getPlayer().getCash());
 		yuStatusLabel[StatusLabel.NAME.ordinal()].setText("");
-		yuStatusLabel[StatusLabel.RANK.ordinal()].setText(StatusLabel.RANK.label);
-		yuStatusLabel[StatusLabel.PERSONALITY.ordinal()].setText(StatusLabel.PERSONALITY.label);
-		yuStatusLabel[StatusLabel.INTEL.ordinal()].setText(StatusLabel.INTEL.label);
-		yuStatusLabel[StatusLabel.DAMAGE.ordinal()].setText(StatusLabel.DAMAGE.label);
-		yuStatusLabel[StatusLabel.STRESS.ordinal()].setText(StatusLabel.STRESS.label);
-		yuStatusLabel[StatusLabel.HUNGER.ordinal()].setText(StatusLabel.HUNGER.label);
-		yuStatusLabel[StatusLabel.TANG.ordinal()].setText(StatusLabel.TANG.label);
-		yuStatusLabel[StatusLabel.SHIT.ordinal()].setText(StatusLabel.SHIT.label);
+		yuStatusLabel[StatusLabel.RANK.ordinal()].setText(StatusLabel.RANK.getLabel());
+		yuStatusLabel[StatusLabel.PERSONALITY.ordinal()].setText(StatusLabel.PERSONALITY.getLabel());
+		yuStatusLabel[StatusLabel.INTEL.ordinal()].setText(StatusLabel.INTEL.getLabel());
+		yuStatusLabel[StatusLabel.DAMAGE.ordinal()].setText(StatusLabel.DAMAGE.getLabel());
+		yuStatusLabel[StatusLabel.STRESS.ordinal()].setText(StatusLabel.STRESS.getLabel());
+		yuStatusLabel[StatusLabel.HUNGER.ordinal()].setText(StatusLabel.HUNGER.getLabel());
+		yuStatusLabel[StatusLabel.TANG.ordinal()].setText(StatusLabel.TANG.getLabel());
+		yuStatusLabel[StatusLabel.SHIT.ordinal()].setText(StatusLabel.SHIT.getLabel());
 
 		pinButton.setSelected(false);
 
@@ -387,14 +403,14 @@ public class MainCommandUI {
 			return;
 		}
 		// 現金更新
-		yuStatusLabel[StatusLabel.MONEY.ordinal()].setText(StatusLabel.MONEY.label + SimYukkuri.world.getPlayer().getCash());
+		yuStatusLabel[StatusLabel.MONEY.ordinal()].setText(StatusLabel.MONEY.getLabel() + SimYukkuri.world.getPlayer().getCash());
 
 		IconPool.StatusIcon[] stat = IconPool.StatusIcon.values();
 		ImageIcon[] img = IconPool.getStatusIconImageArray();
 		//　精子餡保持状態更新
 		if(SimYukkuri.sperm != null) {
 			itemIconLabel[0].setIcon(img[IconPool.StatusIcon.SPERM.ordinal()]);
-			itemIconLabel[0].setToolTipText(stat[IconPool.StatusIcon.SPERM.ordinal()].help);
+			itemIconLabel[0].setToolTipText(stat[IconPool.StatusIcon.SPERM.ordinal()].getHelp());
 		} else {
 			itemIconLabel[0].setIcon(null);
 			itemIconLabel[0].setToolTipText(null);
@@ -412,20 +428,20 @@ public class MainCommandUI {
 		int stress = 100 * b.getStress() / b.getStressLimit();
 		int nLovePlayer = 100 * b.getnLovePlayer() / b.getLOVEPLAYERLIMITorg();
 
-		yuStatusLabel[StatusLabel.MONEY.ordinal()].setText(StatusLabel.MONEY.label + SimYukkuri.world.getPlayer().getCash());
+		yuStatusLabel[StatusLabel.MONEY.ordinal()].setText(StatusLabel.MONEY.getLabel() + SimYukkuri.world.getPlayer().getCash());
 		yuStatusLabel[StatusLabel.NAME.ordinal()].setText(" " + (ResourceUtil.IS_JP ? b.getNameJ() : b.getNameE()));
-		yuStatusLabel[StatusLabel.RANK.ordinal()].setText(StatusLabel.RANK.label + BodyRank.values()[b.getBodyRank().ordinal()].displayName);
-		yuStatusLabel[StatusLabel.PERSONALITY.ordinal()].setText(StatusLabel.PERSONALITY.label +
+		yuStatusLabel[StatusLabel.RANK.ordinal()].setText(StatusLabel.RANK.getLabel() + BodyRank.values()[b.getBodyRank().ordinal()].getDisplayName());
+		yuStatusLabel[StatusLabel.PERSONALITY.ordinal()].setText(StatusLabel.PERSONALITY.getLabel() +
 				(ResourceUtil.IS_JP ? ATTITUDE_LEVEL_J[b.getAttitude().ordinal()] : ATTITUDE_LEVEL_E[b.getAttitude().ordinal()]));
-		yuStatusLabel[StatusLabel.INTEL.ordinal()].setText(StatusLabel.INTEL.label + 
+		yuStatusLabel[StatusLabel.INTEL.ordinal()].setText(StatusLabel.INTEL.getLabel() + 
 				(ResourceUtil.IS_JP ? INTEL_LEVEL_J[b.getIntelligence().ordinal()] : INTEL_LEVEL_E[b.getIntelligence().ordinal()] ));
-		yuStatusLabel[StatusLabel.DAMAGE.ordinal()].setText(StatusLabel.DAMAGE.label + damage + "%");
-		yuStatusLabel[StatusLabel.STRESS.ordinal()].setText(StatusLabel.STRESS.label + stress + "%");
-		yuStatusLabel[StatusLabel.HUNGER.ordinal()].setText(StatusLabel.HUNGER.label + hungry + "%");
-		yuStatusLabel[StatusLabel.TANG.ordinal()].setText(StatusLabel.TANG.label + 
+		yuStatusLabel[StatusLabel.DAMAGE.ordinal()].setText(StatusLabel.DAMAGE.getLabel() + damage + "%");
+		yuStatusLabel[StatusLabel.STRESS.ordinal()].setText(StatusLabel.STRESS.getLabel() + stress + "%");
+		yuStatusLabel[StatusLabel.HUNGER.ordinal()].setText(StatusLabel.HUNGER.getLabel() + hungry + "%");
+		yuStatusLabel[StatusLabel.TANG.ordinal()].setText(StatusLabel.TANG.getLabel() + 
 				(ResourceUtil.IS_JP ? TANG_LEVEL_J[b.getTangType().ordinal()] : TANG_LEVEL_E[b.getTangType().ordinal()]));
-		yuStatusLabel[StatusLabel.SHIT.ordinal()].setText(StatusLabel.SHIT.label + shit + "%");
-		yuStatusLabel[StatusLabel.LOVEPLAYER.ordinal()].setText(StatusLabel.LOVEPLAYER.label + nLovePlayer + "%");
+		yuStatusLabel[StatusLabel.SHIT.ordinal()].setText(StatusLabel.SHIT.getLabel() + shit + "%");
+		yuStatusLabel[StatusLabel.LOVEPLAYER.ordinal()].setText(StatusLabel.LOVEPLAYER.getLabel() + nLovePlayer + "%");
 
 		pinButton.setSelected(b.isPin());
 
@@ -434,7 +450,7 @@ public class MainCommandUI {
 
 		if(b.isAnalClose()) {
 			statIconLabel[0].setIcon(img[IconPool.StatusIcon.UNSHIT.ordinal()]);
-			statIconLabel[0].setToolTipText(stat[IconPool.StatusIcon.UNSHIT.ordinal()].help);
+			statIconLabel[0].setToolTipText(stat[IconPool.StatusIcon.UNSHIT.ordinal()].getHelp());
 		}
 		else {
 			statIconLabel[0].setIcon(null);
@@ -442,7 +458,7 @@ public class MainCommandUI {
 		}
 		if(b.isStalkCastration()) {
 			statIconLabel[1].setIcon(img[IconPool.StatusIcon.UNSTALK.ordinal()]);
-			statIconLabel[1].setToolTipText(stat[IconPool.StatusIcon.UNSTALK.ordinal()].help);
+			statIconLabel[1].setToolTipText(stat[IconPool.StatusIcon.UNSTALK.ordinal()].getHelp());
 		}
 		else {
 			statIconLabel[1].setIcon(null);
@@ -450,7 +466,7 @@ public class MainCommandUI {
 		}
 		if(b.isBodyCastration()) {
 			statIconLabel[2].setIcon(img[IconPool.StatusIcon.UNBABY.ordinal()]);
-			statIconLabel[2].setToolTipText(stat[IconPool.StatusIcon.UNBABY.ordinal()].help);
+			statIconLabel[2].setToolTipText(stat[IconPool.StatusIcon.UNBABY.ordinal()].getHelp());
 		}
 		else {
 			statIconLabel[2].setIcon(null);
@@ -458,7 +474,7 @@ public class MainCommandUI {
 		}
 		if(b.isPredatorType()) {
 			statIconLabel[3].setIcon(img[IconPool.StatusIcon.PREDATOR.ordinal()]);
-			statIconLabel[3].setToolTipText(stat[IconPool.StatusIcon.PREDATOR.ordinal()].help);
+			statIconLabel[3].setToolTipText(stat[IconPool.StatusIcon.PREDATOR.ordinal()].getHelp());
 		}
 		else {
 			statIconLabel[3].setIcon(null);
@@ -466,7 +482,7 @@ public class MainCommandUI {
 		}
 		if(b.isRaper()) {
 			statIconLabel[4].setIcon(img[IconPool.StatusIcon.RAPER.ordinal()]);
-			statIconLabel[4].setToolTipText(stat[IconPool.StatusIcon.RAPER.ordinal()].help);
+			statIconLabel[4].setToolTipText(stat[IconPool.StatusIcon.RAPER.ordinal()].getHelp());
 		}
 		else {
 			statIconLabel[4].setIcon(null);
@@ -474,7 +490,7 @@ public class MainCommandUI {
 		}
 		if(b.isbPenipeniCutted()) {
 			statIconLabel[5].setIcon(img[IconPool.StatusIcon.PENIPENICUT.ordinal()]);
-			statIconLabel[5].setToolTipText(stat[IconPool.StatusIcon.PENIPENICUT.ordinal()].help);
+			statIconLabel[5].setToolTipText(stat[IconPool.StatusIcon.PENIPENICUT.ordinal()].getHelp());
 		}
 		else {
 			statIconLabel[5].setIcon(null);
@@ -482,7 +498,7 @@ public class MainCommandUI {
 		}
 		if(b.isbPheromone()) {
 			statIconLabel[6].setIcon(img[IconPool.StatusIcon.PHEROMONE.ordinal()]);
-			statIconLabel[6].setToolTipText(stat[IconPool.StatusIcon.PHEROMONE.ordinal()].help);
+			statIconLabel[6].setToolTipText(stat[IconPool.StatusIcon.PHEROMONE.ordinal()].getHelp());
 		}
 		else {
 			statIconLabel[6].setIcon(null);
@@ -490,7 +506,7 @@ public class MainCommandUI {
 		}
 		if(b.getPublicRank() == PublicRank.UnunSlave) {
 			statIconLabel[7].setIcon(img[IconPool.StatusIcon.UNUNSLAVE.ordinal()]);
-			statIconLabel[7].setToolTipText(stat[IconPool.StatusIcon.UNUNSLAVE.ordinal()].help);
+			statIconLabel[7].setToolTipText(stat[IconPool.StatusIcon.UNUNSLAVE.ordinal()].getHelp());
 		}
 		else {
 			statIconLabel[7].setIcon(null);
@@ -498,7 +514,157 @@ public class MainCommandUI {
 		}
 	}
 
+	public static int getSelectedGameSpeed() {
+		return selectedGameSpeed;
+	}
+	
+	public static void setSelectedGameSpeed(int selectedGameSpeed) {
+		MainCommandUI.selectedGameSpeed = selectedGameSpeed;
+	}
+	
+	public static int getSelectedZoomScale() {
+		return selectedZoomScale;
+	}
+	
+	public static void setSelectedZoomScale(int selectedZoomScale) {
+		MainCommandUI.selectedZoomScale = selectedZoomScale;
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public static JComboBox getGameSpeedCombo() {
+		return gameSpeedCombo;
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public static void setGameSpeedCombo(JComboBox gameSpeedCombo) {
+		MainCommandUI.gameSpeedCombo = gameSpeedCombo;
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public static JComboBox getMainItemCombo() {
+		return mainItemCombo;
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public static void setMainItemCombo(JComboBox mainItemCombo) {
+		MainCommandUI.mainItemCombo = mainItemCombo;
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public static JComboBox getSubItemCombo() {
+		return subItemCombo;
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public static void setSubItemCombo(JComboBox subItemCombo) {
+		MainCommandUI.subItemCombo = subItemCombo;
+	}
+	
+	public static JLabel[] getYuStatusLabel() {
+		return yuStatusLabel;
+	}
+	
+	public static void setYuStatusLabel(JLabel[] yuStatusLabel) {
+		MainCommandUI.yuStatusLabel = yuStatusLabel;
+	}
+	
+	public static JLabel[] getStatIconLabel() {
+		return statIconLabel;
+	}
+	
+	public static void setStatIconLabel(JLabel[] statIconLabel) {
+		MainCommandUI.statIconLabel = statIconLabel;
+	}
+	
+	public static JLabel[] getItemIconLabel() {
+		return itemIconLabel;
+	}
+	
+	public static void setItemIconLabel(JLabel[] itemIconLabel) {
+		MainCommandUI.itemIconLabel = itemIconLabel;
+	}
+	
+	public static JButton[] getSystemButton() {
+		return systemButton;
+	}
+	
+	public static void setSystemButton(JButton[] systemButton) {
+		MainCommandUI.systemButton = systemButton;
+	}
+	
+	public static JToggleButton getScriptButton() {
+		return scriptButton;
+	}
+	
+	public static void setScriptButton(JToggleButton scriptButton) {
+		MainCommandUI.scriptButton = scriptButton;
+	}
+	
+	public static JToggleButton getTargetButton() {
+		return targetButton;
+	}
+	
+	public static void setTargetButton(JToggleButton targetButton) {
+		MainCommandUI.targetButton = targetButton;
+	}
+	
+	public static JToggleButton getPinButton() {
+		return pinButton;
+	}
+	
+	public static void setPinButton(JToggleButton pinButton) {
+		MainCommandUI.pinButton = pinButton;
+	}
+	
+	public static JToggleButton getHelpButton() {
+		return helpButton;
+	}
+	
+	public static void setHelpButton(JToggleButton helpButton) {
+		MainCommandUI.helpButton = helpButton;
+	}
+	
+	public static JToggleButton getOptionButton() {
+		return optionButton;
+	}
+	
+	public static void setOptionButton(JToggleButton optionButton) {
+		MainCommandUI.optionButton = optionButton;
+	}
+	
+	public static JToggleButton[] getPlayerButton() {
+		return playerButton;
+	}
+	
+	public static void setPlayerButton(JToggleButton[] playerButton) {
+		MainCommandUI.playerButton = playerButton;
+	}
+	
+	public static JPopupMenu getOptionPopup() {
+		return optionPopup;
+	}
+	
+	public static void setOptionPopup(JPopupMenu optionPopup) {
+		MainCommandUI.optionPopup = optionPopup;
+	}
+	
+	public static MapWindow getMapWindow() {
+		return mapWindow;
+	}
+	
+	public static void setMapWindow(MapWindow mapWindow) {
+		MainCommandUI.mapWindow = mapWindow;
+	}
+	
+	public static ItemWindow getItemWindow() {
+		return itemWindow;
+	}
+	
+	public static void setItemWindow(ItemWindow itemWindow) {
+		MainCommandUI.itemWindow = itemWindow;
+	}
 }
+
 
 
 

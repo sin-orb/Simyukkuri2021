@@ -23,11 +23,11 @@ public class AccelAmpoule extends Attachment {
 
 	private static final long serialVersionUID = 1447650571714261341L;
 	private static final String POS_KEY = "AccelAmpoule";
-	public static BufferedImage[][] images; // [年齢][左右反転]
-	public static int[] imgW;
-	public static int[] imgH;
-	public static int[] pivX;
-	public static int[] pivY;
+	private static BufferedImage[][] images; // [年齢][左右反転]
+	private static int[] imgW;
+	private static int[] imgH;
+	private static int[] pivX;
+	private static int[] pivY;
 	private static final int[] property = {
 			2, // 赤ゆ用画像サイズ 原画をこの値で割る
 			2, // 子ゆ用画像サイズ
@@ -161,3 +161,4 @@ public class AccelAmpoule extends Attachment {
 	}
 	
 }
+

@@ -43,13 +43,13 @@ public class GarbageChute extends ObjEX implements java.io.Serializable {
 		images[0] = ModLoader.loadItemImage(loader, "garbagechute" + File.separator + "garbagechute.png");
 		images[1] = ModLoader.loadItemImage(loader, "garbagechute" + File.separator + "garbagechute_off.png");
 		images[2] = ModLoader.loadItemImage(loader,
-				"garbagechute" + File.separator + "garbagechute" + ModLoader.YK_WORD_NORA + ".png");
+				"garbagechute" + File.separator + "garbagechute" + ModLoader.getYkWordNora() + ".png");
 		images[3] = ModLoader.loadItemImage(loader,
-				"garbagechute" + File.separator + "garbagechute" + ModLoader.YK_WORD_NORA + "_off.png");
-		boundary.width = images[0].getWidth(io);
-		boundary.height = images[0].getHeight(io);
-		boundary.x = boundary.width >> 1;
-		boundary.y = boundary.height >> 1;
+				"garbagechute" + File.separator + "garbagechute" + ModLoader.getYkWordNora() + "_off.png");
+		boundary.setWidth(images[0].getWidth(io));
+		boundary.setHeight(images[0].getHeight(io));
+		boundary.setX(boundary.getWidth() >> 1);
+		boundary.setY(boundary.getHeight() >> 1);
 	}
 
 	@Override
@@ -141,7 +141,7 @@ public class GarbageChute extends ObjEX implements java.io.Serializable {
 
 	@Override
 	public void removeListData() {
-		SimYukkuri.world.getCurrentMap().garbagechute.remove(objId);
+		SimYukkuri.world.getCurrentMap().getGarbagechute().remove(objId);
 	}
 
 	/**
@@ -154,7 +154,7 @@ public class GarbageChute extends ObjEX implements java.io.Serializable {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		SimYukkuri.world.getCurrentMap().garbagechute.put(objId, this);
+		SimYukkuri.world.getCurrentMap().getGarbagechute().put(objId, this);
 		objType = Type.PLATFORM;
 		objEXType = ObjEXType.GARBAGECHUTE;
 
@@ -198,3 +198,4 @@ public class GarbageChute extends ObjEX implements java.io.Serializable {
 	}
 	
 }
+

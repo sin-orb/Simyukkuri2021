@@ -27,13 +27,13 @@ public class HybridYukkuri extends Body implements java.io.Serializable {
 	/** ハイブリッドゆっくりのタイプ */
 	public static final int type = 20000;
 	/** ハイブリッドゆっくりの和名 */
-	public String nameJ;
+	private String nameJ;
 	/** ハイブリッドゆっくりの英名 */
-	public String nameE;
+	private String nameE;
 	/** ハイブリッドゆっくりの和名２ */
-	public String nameJ2;
+	private String nameJ2;
 	/** ハイブリッドゆっくりの英名２ */
-	public String nameE2;
+	private String nameE2;
 	/** 型となるゆっくり１ */
 	protected Body dorei;
 	/** 型となるゆっくり２ */
@@ -259,18 +259,18 @@ public class HybridYukkuri extends Body implements java.io.Serializable {
 		for(int i = 0; i < 3; i++) {
 			images[ImageCode.BODY.ordinal()].setAgeState(AgeState.values()[i]);
 			boundary[i] = new Dimension4y();
-			boundary[i].width = images[ImageCode.BODY.ordinal()].getW();
-			boundary[i].height = images[ImageCode.BODY.ordinal()].getH();
+			boundary[i].setWidth(images[ImageCode.BODY.ordinal()].getW());
+			boundary[i].setHeight(images[ImageCode.BODY.ordinal()].getH());
 
 			images[ImageCode.BRAID.ordinal()].setAgeState(AgeState.values()[i]);
 			braidBoundary[i] = new Dimension4y();
 			if(dorei3.getType() == Remirya .type || dorei3.getType() == Fran .type || dorei3.getType() == Chiruno .type){
-				braidBoundary[i].width = images[ImageCode.BRAID_BACK.ordinal()].getBraidW();
-				braidBoundary[i].height = images[ImageCode.BRAID_BACK.ordinal()].getBraidH();
+				braidBoundary[i].setWidth(images[ImageCode.BRAID_BACK.ordinal()].getBraidW());
+				braidBoundary[i].setHeight(images[ImageCode.BRAID_BACK.ordinal()].getBraidH());
 			}
 			else{
-				braidBoundary[i].width = images[ImageCode.BRAID.ordinal()].getBraidW();
-				braidBoundary[i].height = images[ImageCode.BRAID.ordinal()].getBraidH();
+				braidBoundary[i].setWidth(images[ImageCode.BRAID.ordinal()].getBraidW());
+				braidBoundary[i].setHeight(images[ImageCode.BRAID.ordinal()].getBraidH());
 			}
 		}
 

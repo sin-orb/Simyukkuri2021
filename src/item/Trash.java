@@ -28,10 +28,10 @@ public class Trash extends ObjEX implements java.io.Serializable {
 		images[0] = ModLoader.loadItemImage(loader, "trash" + File.separator + "trash.png");
 		images[1] = ModLoader.loadItemImage(loader, "trash" + File.separator + "trash_shadow.png");
 		
-		boundary.width = images[0].getWidth(io);
-		boundary.height = images[0].getHeight(io);
-		boundary.x = boundary.width >> 1;
-		boundary.y = boundary.height - 1;
+		boundary.setWidth(images[0].getWidth(io));
+		boundary.setHeight(images[0].getHeight(io));
+		boundary.setX(boundary.getWidth() >> 1);
+		boundary.setY(boundary.getHeight() - 1);
 	}
 
 
@@ -53,7 +53,7 @@ public class Trash extends ObjEX implements java.io.Serializable {
 	
 	@Override
 	public void removeListData(){
-		SimYukkuri.world.getCurrentMap().trash.remove(objId);
+		SimYukkuri.world.getCurrentMap().getTrash().remove(objId);
 	}
 	
 	@Override
@@ -70,7 +70,7 @@ public class Trash extends ObjEX implements java.io.Serializable {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		SimYukkuri.world.getCurrentMap().trash.put(objId, this);
+		SimYukkuri.world.getCurrentMap().getTrash().put(objId, this);
 		objType = Type.OBJECT;
 		objEXType = ObjEXType.TRASH;
 		
@@ -82,5 +82,6 @@ public class Trash extends ObjEX implements java.io.Serializable {
 	}
 	
 }
+
 
 

@@ -88,10 +88,10 @@ public class BreedingPool extends ObjEX implements java.io.Serializable {
 			images[i] = ModLoader.loadItemImage(loader,
 					"breedingpool" + File.separator + "breedingpool" + String.format("%03d", i + 1) + ".png");
 		}
-		boundary.width = images[0].getWidth(io);
-		boundary.height = images[0].getHeight(io);
-		boundary.x = boundary.width >> 1;
-		boundary.y = boundary.height >> 1;
+		boundary.setWidth(images[0].getWidth(io));
+		boundary.setHeight(images[0].getHeight(io));
+		boundary.setX(boundary.getWidth() >> 1);
+		boundary.setY(boundary.getHeight() >> 1);
 	}
 
 	@Override
@@ -261,7 +261,7 @@ public class BreedingPool extends ObjEX implements java.io.Serializable {
 
 	@Override
 	public void removeListData() {
-		SimYukkuri.world.getCurrentMap().breedingPool.remove(objId);
+		SimYukkuri.world.getCurrentMap().getBreedingPool().remove(objId);
 	}
 
 	/** プール上のゆっくりを泣かせる処理 */
@@ -283,7 +283,7 @@ public class BreedingPool extends ObjEX implements java.io.Serializable {
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
 
-		SimYukkuri.world.getCurrentMap().breedingPool.put(objId, this);
+		SimYukkuri.world.getCurrentMap().getBreedingPool().put(objId, this);
 
 		objType = Type.PLATFORM;
 		objEXType = ObjEXType.BREEDINGPOOL;
@@ -292,7 +292,7 @@ public class BreedingPool extends ObjEX implements java.io.Serializable {
 
 		boolean ret = setupPool(this, false);
 		if (!ret) {
-			SimYukkuri.world.getCurrentMap().breedingPool.remove(objId);
+			SimYukkuri.world.getCurrentMap().getBreedingPool().remove(objId);
 		}
 	}
 	
@@ -438,3 +438,4 @@ public class BreedingPool extends ObjEX implements java.io.Serializable {
 	}
 	
 }
+

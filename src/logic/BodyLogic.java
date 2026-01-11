@@ -191,7 +191,7 @@ public class BodyLogic {
 			return false;
 		} else {
 			// 全ゆっくりに対してチェック
-			for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().body.entrySet()) {
+			for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().getBody().entrySet()) {
 				Body p = entry.getValue();
 				// 自分同士のチェックは無意味なのでスキップ
 				if (p == b)
@@ -216,7 +216,7 @@ public class BodyLogic {
 				else if (p.isFamily(b)) {
 				}
 				// 捕食防止
-				else if (Terrarium.predatorSteam) {
+				else if (Terrarium.isPredatorSteam()) {
 				} else {
 					// 捕食種はあっちいってね！イベントで攻撃のときはその個体は怯えない
 					if (b.getCurrentEvent() != null && b.getCurrentEvent().getClass().equals(KillPredeatorEvent.class)
@@ -571,7 +571,7 @@ public class BodyLogic {
 							ret = true;
 						} else {
 							if ((b.isPredatorType() && found.isPredatorType() || !b.isPredatorType())
-									&& !Terrarium.predatorSteam) {
+									&& !Terrarium.isPredatorSteam()) {
 								b.lookTo(found.getX() + colX, found.getY());
 							}
 						}
@@ -584,7 +584,7 @@ public class BodyLogic {
 						} else {
 							// 自身も対象死体も捕食種、または自身が通常種の場合、死体から逃げる
 							if ((b.isPredatorType() && found.isPredatorType() || !b.isPredatorType())
-									&& !Terrarium.predatorSteam) {
+									&& !Terrarium.isPredatorSteam()) {
 								b.runAway(found.getX() + colX, found.getY());
 							}
 						}
@@ -594,7 +594,7 @@ public class BodyLogic {
 
 			// フィールドの死体に怯える
 			if (!b.isTalking()) {
-				if ((b.isPredatorType() && found.isPredatorType() || !b.isPredatorType()) && !Terrarium.predatorSteam) {
+				if ((b.isPredatorType() && found.isPredatorType() || !b.isPredatorType()) && !Terrarium.isPredatorSteam()) {
 					if (b.isNotNYD()) {
 						// レイパー,捕食種じゃないなら気にする
 						if (!b.isRaper() && !b.isPredatorType()) {
@@ -1393,7 +1393,7 @@ public class BodyLogic {
 	 */
 	public static final List<Body> createActiveFianceeList(Body b, int age) {
 		// ほかにいないならスキップ
-		if (SimYukkuri.world.getCurrentMap().body.size() <= 1) {
+		if (SimYukkuri.world.getCurrentMap().getBody().size() <= 1) {
 			return null;
 		}
 
@@ -1406,7 +1406,7 @@ public class BodyLogic {
 			return activeFianceeList;
 		}
 
-		for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().body.entrySet()) {
+		for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().getBody().entrySet()) {
 			Body f = entry.getValue();
 			if (f == null) {
 				continue;
@@ -1527,7 +1527,7 @@ public class BodyLogic {
 		Body[] bodyList = YukkuriUtil.getBodyInstances();
 		if (bodyList.length != 0) {
 			Toilet t = null;
-			for (Map.Entry<Integer, Toilet> entry : SimYukkuri.world.getCurrentMap().toilet.entrySet()) {
+			for (Map.Entry<Integer, Toilet> entry : SimYukkuri.world.getCurrentMap().getToilet().entrySet()) {
 				t = entry.getValue();
 				break;
 			}
@@ -1668,14 +1668,14 @@ public class BodyLogic {
 
 				if (x < 0) {
 					x = 0;
-				} else if (Translate.mapW < x) {
-					x = Translate.mapW;
+				} else if (Translate.getMapW() < x) {
+					x = Translate.getMapW();
 				}
 
 				if (y < 0) {
 					y = 0;
-				} else if (Translate.mapH < y) {
-					y = Translate.mapH;
+				} else if (Translate.getMapH() < y) {
+					y = Translate.getMapH();
 				}
 
 				// 列はリセット
@@ -1756,13 +1756,13 @@ public class BodyLogic {
 
 				if (x < 0) {
 					x = 0;
-				} else if (Translate.mapW < x) {
-					x = Translate.mapW;
+				} else if (Translate.getMapW() < x) {
+					x = Translate.getMapW();
 				}
 				if (y < 0) {
 					y = 0;
-				} else if (Translate.mapH < y) {
-					y = Translate.mapH;
+				} else if (Translate.getMapH() < y) {
+					y = Translate.getMapH();
 				}
 
 				if (e == null) {
@@ -2014,7 +2014,7 @@ public class BodyLogic {
 	public static boolean checkWakeupOtherYukkuri(Body b) {
 		boolean bIsWakeup = false;
 		int minDistance = b.getEYESIGHTorg();
-		for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().body.entrySet()) {
+		for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().getBody().entrySet()) {
 			Body p = entry.getValue();
 			// 自分同士のチェックは無意味なのでスキップ
 			if (p == b)
@@ -2044,3 +2044,4 @@ public class BodyLogic {
 		return bIsWakeup;
 	}
 }
+

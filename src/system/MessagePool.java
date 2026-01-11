@@ -100,7 +100,7 @@ public class MessagePool {
 		RaperSukkiri,
 		/** 養殖プールで繁殖 */
 		PoolSukkiri,
-		//PoolSukkiriStalk 		//茎式養殖プールで繁殖
+		// PoolSukkiriStalk //茎式養殖プールで繁殖
 		/** 誕生 */
 		Birth,
 		/** 排泄 */
@@ -121,7 +121,7 @@ public class MessagePool {
 		HateShit,
 		/** うんうん威嚇 */
 		ShitIntimidation,
-		//		HateToilet,			//トイレに入ってしまった時
+		// HateToilet, //トイレに入ってしまった時
 		/** 空腹 */
 		Hungry,
 		/** おかざり没収 */
@@ -150,8 +150,8 @@ public class MessagePool {
 		GetTreasure,
 		/** おもちゃ紛失 */
 		LostTreasure,
-		//		PlayTreasure,		// おもちゃ遊び-捕食種のお遊びイベントでも使用
-		//		ProudTreasure,		//おもちゃ自慢
+		// PlayTreasure, // おもちゃ遊び-捕食種のお遊びイベントでも使用
+		// ProudTreasure, //おもちゃ自慢
 		/** 膨張 */
 		Inflation,
 		/** 子虐待 */
@@ -169,9 +169,9 @@ public class MessagePool {
 		/** 妊娠失敗 */
 		NoPregnancy,
 		/** ぺにぺに切断 */
-		PenipeniCutting, 
+		PenipeniCutting,
 		/** ぺにぺに切断後 */
-		PenipeniCutted, 
+		PenipeniCutted,
 		/** すっきりしたくない */
 		CantUsePenipeni,
 		/** 恐怖でパニック状態 */
@@ -213,7 +213,7 @@ public class MessagePool {
 		/** むしられる */
 		PLUNCKING,
 		/** つちのなかにいる */
-		BaryInUnderGround, 
+		BaryInUnderGround,
 		/** 引っ張る */
 		Pull,
 		/** 引っ張る2 */
@@ -239,11 +239,11 @@ public class MessagePool {
 		/** ゆっくりできない(低) */
 		LamentLowYukkuri,
 		/** ゆっくりできない(完全) */
-		LamentNoYukkuri, 
+		LamentNoYukkuri,
 		/** ゆんやぁぁぁ */
 		Yunnyaa,
 		/** 非ゆっくり症初期 */
-		NonYukkuriDiseaseNear, 
+		NonYukkuriDiseaseNear,
 		/** 非ゆっくり症 */
 		NonYukkuriDisease,
 		/** 汎用、他のゆっくりに何かされたときに対する攻撃、反撃 */
@@ -259,7 +259,7 @@ public class MessagePool {
 		/** 蟻に反撃 */
 		RevengeAnts,
 		/** れみりゃから逃げる */
-		EscapeFromRemirya, 
+		EscapeFromRemirya,
 		/** 口がふさがれている */
 		CantTalk,
 		/** しゃべれない状態で日ゆっくり */
@@ -274,12 +274,12 @@ public class MessagePool {
 		MoldySeriousry,
 
 		// イベント系メッセージ
-		//うんうん奴隷関連
+		// うんうん奴隷関連
 		/** おかざりのないゆっくり発見 */
 		HateYukkuri,
 		/** うんうん奴隷に認定する */
 		EngageUnunSlave,
-		//気遣い関連
+		// 気遣い関連
 		/** つがいを気遣う */
 		ConcernAboutPartner,
 		/** 父を気遣う */
@@ -317,36 +317,37 @@ public class MessagePool {
 		/** 妹をすりすりで治療行為を試みる */
 		TreatSisterBySurisuri,
 
-		/*相手によってすりすり、ぺろぺろのセリフを変えるようにする処理。現在はセリフ制作時に作者の血管が切れそうなのでオミット
-		//ふつうのぺろぺろ
-		peroperoChild,		// 子を
-		peroperoPartner,		// つがいを
-		peroperoFather,		// 父親を
-		peroperoMother,		// 母親を
-		peroperoElderSister,		// 姉を
-		peroperoSister,		// 妹を
-		//ふつうのすりすり
-		SurisuriWithChild,		// 子を
-		SurisuriWithPartner,		// つがいを
-		SurisuriWithDad,		// 父親を
-		SurisuriWithMom,		// 母親を
-		SurisuriWithElderSister,		// 姉を
-		SurisuriWithSister,		//妹と
-		*/
+		/*
+		 * 相手によってすりすり、ぺろぺろのセリフを変えるようにする処理。現在はセリフ制作時に作者の血管が切れそうなのでオミット
+		 * //ふつうのぺろぺろ
+		 * peroperoChild, // 子を
+		 * peroperoPartner, // つがいを
+		 * peroperoFather, // 父親を
+		 * peroperoMother, // 母親を
+		 * peroperoElderSister, // 姉を
+		 * peroperoSister, // 妹を
+		 * //ふつうのすりすり
+		 * SurisuriWithChild, // 子を
+		 * SurisuriWithPartner, // つがいを
+		 * SurisuriWithDad, // 父親を
+		 * SurisuriWithMom, // 母親を
+		 * SurisuriWithElderSister, // 姉を
+		 * SurisuriWithSister, //妹と
+		 */
 
-		//出産イベント関連
+		// 出産イベント関連
 		/** つがい出産時 */
 		RootForPartner,
 		/** 子への最初の挨拶 */
 		FirstGreeting,
-		//れいぱー関連
+		// れいぱー関連
 		/** レイパー怯え */
 		ScareRapist,
 		/** レイパーに攻撃 */
 		AttackRapist,
 		/** レイパーに反撃命令 */
 		CounterRapist,
-		//すいーイベント関連
+		// すいーイベント関連
 		/** ゆっくりしているすぃーを見て */
 		YukkuringSui,
 		/** すぃーを欲しがる */
@@ -399,7 +400,7 @@ public class MessagePool {
 		hasSuiOldSister,
 		/** 妹の持っているすぃーを自慢される */
 		hasSuiYoungSister,
-		//家族の反応系
+		// 家族の反応系
 		/** 子の状態を喜ぶ */
 		GladAboutChild,
 		/** つがいの状態を喜ぶ */
@@ -419,7 +420,7 @@ public class MessagePool {
 		/** 他人の状態をうらやましがる */
 		EnvyAboutOther,
 		/** 姉の状態をうらやましがって泣く */
-		EnvyCryAboutElderSister, 
+		EnvyCryAboutElderSister,
 		/** 妹の状態をうらやましがって泣く */
 		EnvyCryAboutSister,
 		/** 他人の状態をうらやましがって泣く */
@@ -451,12 +452,12 @@ public class MessagePool {
 		/** 妹の状態をうらやましがって泣く(プレイヤーによるすりすり時) */
 		EnvyCryAboutSisterInSurisuri,
 		/** うんうん体操イベント親1 */
-		ShitExercisesGOFrom, 
+		ShitExercisesGOFrom,
 		/** うんうん体操イベント親2 */
 		ShitExercisesWAITFrom,
 		/** うんうん体操イベント親3 */
 		ShitExercisesSTARTFrom,
-		/**うんうん体操イベント 親4 */
+		/** うんうん体操イベント 親4 */
 		ShitExercisesYURAYURAFrom,
 		/** うんうん体操イベント親5 */
 		ShitExercisesNOBINOBIFrom,
@@ -480,7 +481,7 @@ public class MessagePool {
 		ShitExercisesPOKAPOKA,
 		/** うんうん体操イベント子7 */
 		ShitExercisesUNUN,
-		//そのほか家族イベント
+		// そのほか家族イベント
 		/** 家族で食事に行く（待機中） */
 		FamilyEatingTimeWait,
 		/** すーぱーむーしゃむーしゃたいむ */
@@ -512,13 +513,13 @@ public class MessagePool {
 		ProudChildsPROUD,
 		/** おちび自慢イベント子：終わる */
 		ProudChildsEND,
-		//カビイベント
+		// カビイベント
 		/** 子供かびる */
 		SadnessForMoldyChild,
 		/** 父かびる */
 		SadnessForMoldyFather,
 		/** 母かびる */
-		SadnessForMoldyMother, 
+		SadnessForMoldyMother,
 		/** つがいかびる */
 		SadnessForMoldyPartner,
 		/** 姉かびる */
@@ -526,15 +527,15 @@ public class MessagePool {
 		/** 妹かびる */
 		SadnessForMoldySister,
 		/** 子供に謝罪 */
-		ApologyToChild, 
-		/** 家族に謝罪	//下の三つは現状で内容が一緒なため、共用 */
+		ApologyToChild,
+		/** 家族に謝罪 //下の三つは現状で内容が一緒なため、共用 */
 		ApologyToFamily, //
-		//		ApologyToPartner,		//番に謝罪
-		//		ApologyToElderSister,		//姉に謝罪
-		//		ApologyToSister,		//妹に謝罪
+		// ApologyToPartner, //番に謝罪
+		// ApologyToElderSister, //姉に謝罪
+		// ApologyToSister, //妹に謝罪
 		/** かびゆヘイト */
-		HateMoldyYukkuri, 
-		//命乞いイベント
+		HateMoldyYukkuri,
+		// 命乞いイベント
 		/** 人間に謝罪 */
 		ApologyToHuman,
 		/** 命乞い */
@@ -545,22 +546,22 @@ public class MessagePool {
 		ThanksHuman2,
 		/** 命乞いのあとの独り言 */
 		Monologue,
-		
+
 		/** 捕食種の遊びイベント開始 */
 		GameStart,
 		/** まて～ */
-		HeyYouWait, 
+		HeyYouWait,
 		/** つっかまえた */
 		CaughtYou,
 		/** 落っことす */
 		DropYukkuri,
 		/** 私で遊ぶな */
-		DontPlayMe, 
+		DontPlayMe,
 		/** もろさに文句 */
 		ComplainAboutFragleness,
 		/** 捕食種の遊びイベント終了 */
 		GameEnd, //
-		//プロポーズイベント
+		// プロポーズイベント
 		/** 待ってください */
 		PleaseWait,
 		/** プロポーズ */
@@ -572,14 +573,14 @@ public class MessagePool {
 		/** それじゃすっきりしよう */
 		LetsPlay,
 		/** いいよ、きて// */
-		OKcome, 
+		OKcome,
 		/** 失恋 */
-		Heartbreak, 
+		Heartbreak,
 		/** じゃましないでね！せいっさいするよ！ */
 		DontPreventUs,
-		//おとむらいイベント
+		// おとむらいイベント
 		/** おとむらいイベント開始時(親側) */
-		FuneralSTARTFrom, 
+		FuneralSTARTFrom,
 		/** おとむらいイベント開始時(子側) */
 		FuneralSTART,
 		/** おとむらいイベント説明(親側) */
@@ -609,7 +610,7 @@ public class MessagePool {
 		name, name2, partner, dummy
 	}
 
-	/**クラス別接尾子 */
+	/** クラス別接尾子 */
 	public static final String[] RANK_SUFFIX = { "", "_<nora>" };
 
 	private static HashMap<String, MessageMap>[] pool_j = null;
@@ -617,6 +618,7 @@ public class MessagePool {
 	/**
 	 * 全メッセージ読み込み
 	 * ひとつの固体の複数ファイルに渡る全メッセージを1つのマップに格納するのでアクション名の被りに注意
+	 * 
 	 * @param loader クラスローダ
 	 */
 	@SuppressWarnings("unchecked")
@@ -630,17 +632,19 @@ public class MessagePool {
 			pool_j[i] = new HashMap<String, MessageMap>();
 			// 飼いゆ
 			// 汎用メッセージ
-			br = ModLoader.openMessageFile(loader, ModLoader.DATA_MSG_DIR, yk[i].messageFileName + "_j.txt", true);
+			br = ModLoader.openMessageFile(loader, ModLoader.getDataMsgDir(), yk[i].getMessageFileName() + "_j.txt",
+					true);
 			try {
-				readMessageMap(br, pool_j[i], RANK_SUFFIX[BodyRank.KAIYU.messageIndex]);
+				readMessageMap(br, pool_j[i], RANK_SUFFIX[BodyRank.KAIYU.getMessageIndex()]);
 				br.close();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 			// イベントメッセージ
-			br = ModLoader.openMessageFile(loader, ModLoader.DATA_MSG_DIR, yk[i].messageFileName + "_ev_j.txt", true);
+			br = ModLoader.openMessageFile(loader, ModLoader.getDataMsgDir(), yk[i].getMessageFileName() + "_ev_j.txt",
+					true);
 			try {
-				readMessageMap(br, pool_j[i], RANK_SUFFIX[BodyRank.KAIYU.messageIndex]);
+				readMessageMap(br, pool_j[i], RANK_SUFFIX[BodyRank.KAIYU.getMessageIndex()]);
 				br.close();
 			} catch (IOException e) {
 				e.printStackTrace();
@@ -648,22 +652,22 @@ public class MessagePool {
 
 			// 野良ゆ
 			// 汎用メッセージ
-			br = ModLoader.openMessageFile(loader, ModLoader.DATA_MSG_DIR + ModLoader.YK_WORD_NORA,
-					yk[i].messageFileName + "_j.txt", false);
+			br = ModLoader.openMessageFile(loader, ModLoader.getDataMsgDir() + ModLoader.getYkWordNora(),
+					yk[i].getMessageFileName() + "_j.txt", false);
 			if (br != null) {
 				try {
-					readMessageMap(br, pool_j[i], RANK_SUFFIX[BodyRank.NORAYU.messageIndex]);
+					readMessageMap(br, pool_j[i], RANK_SUFFIX[BodyRank.NORAYU.getMessageIndex()]);
 					br.close();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			}
 			// イベントメッセージ
-			br = ModLoader.openMessageFile(loader, ModLoader.DATA_MSG_DIR + ModLoader.YK_WORD_NORA,
-					yk[i].messageFileName + "_ev_j.txt", false);
+			br = ModLoader.openMessageFile(loader, ModLoader.getDataMsgDir() + ModLoader.getYkWordNora(),
+					yk[i].getMessageFileName() + "_ev_j.txt", false);
 			if (br != null) {
 				try {
-					readMessageMap(br, pool_j[i], RANK_SUFFIX[BodyRank.NORAYU.messageIndex]);
+					readMessageMap(br, pool_j[i], RANK_SUFFIX[BodyRank.NORAYU.getMessageIndex()]);
 					br.close();
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -723,7 +727,7 @@ public class MessagePool {
 				if (msg != null && msg.size() > 0) {
 					String key = createTagKey(flags);
 					if (key != null) {
-						act.map.put(key, (String[]) msg.toArray(new String[] {}));
+						act.getMap().put(key, (String[]) msg.toArray(new String[] {}));
 					}
 					msg = new LinkedList<String>();
 				}
@@ -757,16 +761,16 @@ public class MessagePool {
 							msg = new LinkedList<String>();
 							flags = new boolean[MessageMap.Tag.values().length];
 							if (MessageMap.Tag.rude.equals(tag)) {
-								act.rudeFlag = true;
+								act.setRudeFlag(true);
 							} else {
-								act.normalFlag = true;
+								act.setNormalFlag(true);
 							}
 						}
 						flags[tag.ordinal()] = true;
 						if (flags[MessageMap.Tag.normal.ordinal()]) {
-							act.normalTag[tag.ordinal()] = true;
+							act.getNormalTag()[tag.ordinal()] = true;
 						} else if (flags[MessageMap.Tag.rude.ordinal()]) {
-							act.rudeTag[tag.ordinal()] = true;
+							act.getRudeTag()[tag.ordinal()] = true;
 						}
 					}
 				}
@@ -796,17 +800,18 @@ public class MessagePool {
 
 	/**
 	 * メッセージ取得
-	 * @param body ゆっくり
+	 * 
+	 * @param body   ゆっくり
 	 * @param action アクション
 	 * @return メッセージ
 	 */
 	public static final String getMessage(Body body, Action action) {
-		//メッセージ変更
-		//皮むき時
+		// メッセージ変更
+		// 皮むき時
 		if (body.isPealed() && action == MessagePool.Action.Scream) {
 			action = MessagePool.Action.Scream2;
 		}
-		//口封じ時
+		// 口封じ時
 		if (body.isShutmouth()) {
 			if (body.isSleeping())
 				return null;
@@ -821,9 +826,9 @@ public class MessagePool {
 		String name = "";
 		String name2 = "";
 		String partnerName = "";
-		String suffix = RANK_SUFFIX[body.getBodyRank().messageIndex];
+		String suffix = RANK_SUFFIX[body.getBodyRank().getMessageIndex()];
 		map = pool_j[body.getMsgType().ordinal()];
-		//name = body.getMyNameJ;
+		// name = body.getMyNameJ;
 		if (body.isStressful() && body.isDamaged() && SimYukkuri.RND.nextBoolean()) {
 			name = body.getMyNameD();
 		} else {
@@ -831,19 +836,20 @@ public class MessagePool {
 		}
 		if (name.isEmpty()) {
 			name = ResourceUtil.IS_JP ? body.getNameJ() : body.getNameE();
-			//name =YukkuriUtil.getYukkuriClassName(body.getType());
+			// name =YukkuriUtil.getYukkuriClassName(body.getType());
 		}
 		name2 = ResourceUtil.IS_JP ? body.getNameJ2() : body.getNameE2();
 		Body pa = YukkuriUtil.getBodyInstance(body.getPartner());
-		if (pa != null) partnerName = ResourceUtil.IS_JP ? pa.getNameJ() : pa.getNameE();
+		if (pa != null)
+			partnerName = ResourceUtil.IS_JP ? pa.getNameJ() : pa.getNameE();
 
 		if (map == null)
 			return "NO MESSAGE FILE";
 
 		act = map.get(action.name() + suffix);
 		// 読み込み失敗かつ飼いゆメッセージではないなら飼いゆメッセージを読み込む
-		if (act == null && body.getBodyRank().messageIndex != BodyRank.KAIYU.messageIndex) {
-			suffix = RANK_SUFFIX[BodyRank.KAIYU.messageIndex];
+		if (act == null && body.getBodyRank().getMessageIndex() != BodyRank.KAIYU.getMessageIndex()) {
+			suffix = RANK_SUFFIX[BodyRank.KAIYU.getMessageIndex()];
 			act = map.get(action.name() + suffix);
 		}
 
@@ -855,16 +861,16 @@ public class MessagePool {
 		String[] beforeMsg = null;
 		String[] tmpMsg = null;
 		// ゲスチェック
-		if ((body.isRude() && act.rudeFlag) || !act.normalFlag) {
-			flags = act.rudeTag;
+		if ((body.isRude() && act.isRudeFlag()) || !act.isNormalFlag()) {
+			flags = act.getRudeTag();
 			key = new StringBuilder(MessageMap.Tag.rude.name() + "_");
 		} else {
-			flags = act.normalTag;
+			flags = act.getNormalTag();
 			key = new StringBuilder(MessageMap.Tag.normal.name() + "_");
 		}
 
 		// 上位タグの文字列を保存
-		tmpMsg = act.map.get(key.toString());
+		tmpMsg = act.getMap().get(key.toString());
 		if (tmpMsg != null) {
 			beforeMsg = tmpMsg;
 		}
@@ -874,7 +880,7 @@ public class MessagePool {
 			key.append(MessageMap.Tag.baby.name() + "_");
 
 			// 上位タグの文字列を保存
-			tmpMsg = act.map.get(key.toString());
+			tmpMsg = act.getMap().get(key.toString());
 			if (tmpMsg != null) {
 				beforeMsg = tmpMsg;
 			}
@@ -882,14 +888,14 @@ public class MessagePool {
 			key.append(MessageMap.Tag.child.name() + "_");
 
 			// 上位タグの文字列を保存
-			tmpMsg = act.map.get(key.toString());
+			tmpMsg = act.getMap().get(key.toString());
 			if (tmpMsg != null) {
 				beforeMsg = tmpMsg;
 			}
 		} else if (body.getMindAgeState() == AgeState.ADULT && flags[MessageMap.Tag.adult.ordinal()]) {
 			key.append(MessageMap.Tag.adult.name() + "_");
 			// 上位タグの文字列を保存
-			tmpMsg = act.map.get(key.toString());
+			tmpMsg = act.getMap().get(key.toString());
 			if (tmpMsg != null) {
 				beforeMsg = tmpMsg;
 			}
@@ -899,7 +905,7 @@ public class MessagePool {
 		if (body.isDamaged() && flags[MessageMap.Tag.damage.ordinal()]) {
 			key.append(MessageMap.Tag.damage.name() + "_");
 			// 上位タグの文字列を保存
-			tmpMsg = act.map.get(key.toString());
+			tmpMsg = act.getMap().get(key.toString());
 			if (tmpMsg != null) {
 				beforeMsg = tmpMsg;
 			}
@@ -908,7 +914,7 @@ public class MessagePool {
 		if (body.getFootBakeLevel() == FootBake.CRITICAL && flags[MessageMap.Tag.footbake.ordinal()]) {
 			key.append(MessageMap.Tag.footbake.name() + "_");
 			// 上位タグの文字列を保存
-			tmpMsg = act.map.get(key.toString());
+			tmpMsg = act.getMap().get(key.toString());
 			if (tmpMsg != null) {
 				beforeMsg = tmpMsg;
 			}
@@ -917,7 +923,7 @@ public class MessagePool {
 		if (body.isHasPants() && flags[MessageMap.Tag.pants.ordinal()]) {
 			key.append(MessageMap.Tag.pants.name() + "_");
 			// 上位タグの文字列を保存
-			tmpMsg = act.map.get(key.toString());
+			tmpMsg = act.getMap().get(key.toString());
 			if (tmpMsg != null) {
 				beforeMsg = tmpMsg;
 			}
@@ -926,7 +932,7 @@ public class MessagePool {
 		if ((body.checkLovePlayerState() == LovePlayer.GOOD) && flags[MessageMap.Tag.loveplayer.ordinal()]) {
 			key.append(MessageMap.Tag.loveplayer.name() + "_");
 			// 上位タグの文字列を保存
-			tmpMsg = act.map.get(key.toString());
+			tmpMsg = act.getMap().get(key.toString());
 			if (tmpMsg != null) {
 				beforeMsg = tmpMsg;
 			}
@@ -934,7 +940,7 @@ public class MessagePool {
 		} else if ((body.checkLovePlayerState() == LovePlayer.BAD) && flags[MessageMap.Tag.dislikeplayer.ordinal()]) {
 			key.append(MessageMap.Tag.dislikeplayer.name() + "_");
 			// 上位タグの文字列を保存
-			tmpMsg = act.map.get(key.toString());
+			tmpMsg = act.getMap().get(key.toString());
 			if (tmpMsg != null) {
 				beforeMsg = tmpMsg;
 			}
@@ -944,7 +950,7 @@ public class MessagePool {
 		if (body.getPublicRank() == PublicRank.UnunSlave && flags[MessageMap.Tag.ununSlave.ordinal()]) {
 			key.append(MessageMap.Tag.ununSlave.name() + "_");
 			// 上位タグの文字列を保存
-			tmpMsg = act.map.get(key.toString());
+			tmpMsg = act.getMap().get(key.toString());
 			if (tmpMsg != null) {
 				beforeMsg = tmpMsg;
 			}
@@ -954,7 +960,7 @@ public class MessagePool {
 		if (body.getIntelligence() == Intelligence.WISE && flags[MessageMap.Tag.wise.ordinal()]) {
 			key.append(MessageMap.Tag.wise.name() + "_");
 			// 上位タグの文字列を保存
-			tmpMsg = act.map.get(key.toString());
+			tmpMsg = act.getMap().get(key.toString());
 			if (tmpMsg != null) {
 				beforeMsg = tmpMsg;
 			}
@@ -963,13 +969,13 @@ public class MessagePool {
 		if (body.getIntelligence() == Intelligence.FOOL && flags[MessageMap.Tag.fool.ordinal()]) {
 			key.append(MessageMap.Tag.fool.name() + "_");
 			// 上位タグの文字列を保存
-			tmpMsg = act.map.get(key.toString());
+			tmpMsg = act.getMap().get(key.toString());
 			if (tmpMsg != null) {
 				beforeMsg = tmpMsg;
 			}
 		}
 
-		String[] msg = act.map.get(key.toString());
+		String[] msg = act.getMap().get(key.toString());
 		if (msg == null) {
 			msg = beforeMsg;
 		}

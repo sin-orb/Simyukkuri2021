@@ -32,13 +32,13 @@ public class Stone extends ObjEX implements java.io.Serializable {
 	/**画像ロード*/
 	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
 		images[0] = ModLoader.loadItemImage(loader, "stone" + File.separator + "pubble.png");
-		images[1] = ModLoader.loadItemImage(loader, "stone" + File.separator + "pubble" + ModLoader.YK_WORD_NORA + ".png");
+		images[1] = ModLoader.loadItemImage(loader, "stone" + File.separator + "pubble" + ModLoader.getYkWordNora() + ".png");
 		images[2] = ModLoader.loadItemImage(loader, "stone" + File.separator + "shadow.png");
 		
-		boundary.width = images[0].getWidth(io);
-		boundary.height = images[0].getHeight(io);
-		boundary.x = boundary.width >> 1;
-		boundary.y = boundary.height - 1;
+		boundary.setWidth(images[0].getWidth(io));
+		boundary.setHeight(images[0].getHeight(io));
+		boundary.setX(boundary.getWidth() >> 1);
+		boundary.setY(boundary.getHeight() - 1);
 	}
 
 	@Override
@@ -85,7 +85,7 @@ public class Stone extends ObjEX implements java.io.Serializable {
 	
 	@Override
 	public void removeListData(){
-		SimYukkuri.world.getCurrentMap().stone.remove(objId);
+		SimYukkuri.world.getCurrentMap().getStone().remove(objId);
 	}
 
 	@Override
@@ -108,15 +108,15 @@ public class Stone extends ObjEX implements java.io.Serializable {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		SimYukkuri.world.getCurrentMap().stone.put(objId, this);
+		SimYukkuri.world.getCurrentMap().getStone().put(objId, this);
 		objType = Type.OBJECT;
 		objEXType = ObjEXType.STONE;
 		interval = 5;
 		itemRank = ItemRank.values()[initOption];
-		if( SimYukkuri.world.getCurrentMap().mapIndex == 2 || SimYukkuri.world.getCurrentMap().mapIndex == 3 || SimYukkuri.world.getCurrentMap().mapIndex == 4){
+		if( SimYukkuri.world.getCurrentMap().getMapIndex() == 2 || SimYukkuri.world.getCurrentMap().getMapIndex() == 3 || SimYukkuri.world.getCurrentMap().getMapIndex() == 4){
 			itemRank = ItemRank.NORA;
 		}
-		if( SimYukkuri.world.getCurrentMap().mapIndex == 5 ||  SimYukkuri.world.getCurrentMap().mapIndex == 6 ){
+		if( SimYukkuri.world.getCurrentMap().getMapIndex() == 5 ||  SimYukkuri.world.getCurrentMap().getMapIndex() == 6 ){
 			itemRank = ItemRank.YASEI;
 		}
 		if(itemRank == ItemRank.HOUSE) {
@@ -142,4 +142,5 @@ public class Stone extends ObjEX implements java.io.Serializable {
 	}
 	
 }
+
 

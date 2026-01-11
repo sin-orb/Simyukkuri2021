@@ -64,7 +64,7 @@ public class PredatorsGameEvent extends EventPacket implements java.io.Serializa
 		Body from = YukkuriUtil.getBodyInstance(getFrom());
 		if(b.isPredatorType() && b== from){
 			//遊び相手の決定
-			for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().body.entrySet()) {
+			for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().getBody().entrySet()) {
 				Body d = entry.getValue();
 				int minDistance = b.getEYESIGHTorg();
 				int wallMode = b.getBodyAgeState().ordinal();
@@ -122,7 +122,7 @@ public class PredatorsGameEvent extends EventPacket implements java.io.Serializa
 		Body from = YukkuriUtil.getBodyInstance(getFrom());
 		Body toy = YukkuriUtil.getBodyInstance(this.toy);
 		//対象が決定できなかったり、捕食防止ディフューザー環境だったりしたら中止。ボール遊びを試す
-		if(from == null || toy == null || Terrarium.predatorSteam){
+		if(from == null || toy == null || Terrarium.isPredatorSteam()){
 			if(ToyLogic.checkToy(from)){
 				from.setPlaying(PlayStyle.BALL);
 				from.setPlayingLimit(150 +SimYukkuri.RND.nextInt(100)-49);

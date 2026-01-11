@@ -143,10 +143,10 @@ public class YukkuriFilterPanel {
 	    String names2[] = new String[nListSize+nOptionListSize];
 	    for(int k = 0; k < nListSize ; k++)
 	    {
-	    	String strTemp = yukkuriTypes[k].nameJ;
+	    	String strTemp = yukkuriTypes[k].getNameJ();
 	    	if( strTemp.length() != 0 )
 	    	{
-	    		names2[k] = yukkuriTypes[k].nameJ;
+	    		names2[k] = yukkuriTypes[k].getNameJ();
 	    	}else{
 	    		names2[k] = yukkuriTypes[k].toString();
 	    	}
@@ -202,7 +202,7 @@ public class YukkuriFilterPanel {
 	    }
 
 		ButtonListener buttonListener = new ButtonListener();
-		buttonListener.checkbox = checkBox;
+		ButtonListener.setCheckbox(checkBox);
 		
 		Action[] action = Action.values();
 		for(int i = 0; i < action.length; i++) {
@@ -249,7 +249,15 @@ public class YukkuriFilterPanel {
 	 */
 	public static class ButtonListener implements ActionListener {
 
-		public static JCheckBox[] checkbox;
+		private static JCheckBox[] checkbox;
+		
+		public static JCheckBox[] getCheckbox() {
+			return checkbox;
+		}
+		
+		public static void setCheckbox(JCheckBox[] checkbox) {
+			ButtonListener.checkbox = checkbox;
+		}
 		@Override
 		public void actionPerformed(ActionEvent e) {
 			String command = e.getActionCommand();

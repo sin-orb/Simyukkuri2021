@@ -19,9 +19,9 @@ import src.system.ItemMenu.UseMenuTarget;
 import src.system.MapPlaceData;
 
 /*********************************************************
- *  すべてのゲーム内オブジェクトの元となるクラス
- *  でいぶ、ドスなどの突然変異でエラーが出る可能性があるので
- *  private変数は使わず代わりにprotectedを使用してください
+ * すべてのゲーム内オブジェクトの元となるクラス
+ * でいぶ、ドスなどの突然変異でエラーが出る可能性があるので
+ * private変数は使わず代わりにprotectedを使用してください
  */
 @SuppressWarnings("rawtypes")
 @JsonTypeInfo(use = Id.CLASS)
@@ -29,165 +29,204 @@ public class Obj implements java.io.Serializable, Comparable {
 
 	private static final long serialVersionUID = 4119096412988786726L;
 
-		/**時間経過用係数*/
+	/** 時間経過用係数 */
 	public static final int TICK = SimYukkuri.TICK;
 
 	// 基本内部パラメータ
-	/** 基本内部パラメータ1
-	 * オブジェクトの種類(YUKKURI, SHIT, FOOD, TOILET, TOY)*/
+	/**
+	 * 基本内部パラメータ1
+	 * オブジェクトの種類(YUKKURI, SHIT, FOOD, TOILET, TOY)
+	 */
 	protected Type objType;
-	/** 基本内部パラメータ2
-	 * オブジェクトの発生からの経過時間*/
+	/**
+	 * 基本内部パラメータ2
+	 * オブジェクトの発生からの経過時間
+	 */
 	private long age;
-	/** 基本内部パラメータ3
-	 * マップ座標*/
+	/**
+	 * 基本内部パラメータ3
+	 * マップ座標
+	 */
 	protected int x, y, z;
-	/** 基本内部パラメータ4
-	 *衝撃を伴う、外力による移動量ベクトル*/
+	/**
+	 * 基本内部パラメータ4
+	 * 衝撃を伴う、外力による移動量ベクトル
+	 */
 	protected int vx, vy, vz;
-	/** 基本内部パラメータ5
-	 *コンベアなど拘束による移動量ベクトル*/
+	/**
+	 * 基本内部パラメータ5
+	 * コンベアなど拘束による移動量ベクトル
+	 */
 	private int bx;
 	private int by;
 	protected int bz;
-	/**基本内部パラメータ6
-	 * 除去されたか否か*/
+	/**
+	 * 基本内部パラメータ6
+	 * 除去されたか否か
+	 */
 	private boolean removed = false;
-	/**基本内部パラメータ7
-	 * 掴めるか否か*/
+	/**
+	 * 基本内部パラメータ7
+	 * 掴めるか否か
+	 */
 	protected boolean canGrab = true;
-	/**基本内部パラメータ8
-	 * 掴まれているか否か*/
+	/**
+	 * 基本内部パラメータ8
+	 * 掴まれているか否か
+	 */
 	protected boolean grabbed = false;
-	/**基本内部パラメータ9
-	 * 壁に影響されるか否か*/
+	/**
+	 * 基本内部パラメータ9
+	 * 壁に影響されるか否か
+	 */
 	protected boolean enableWall = true;
-	/**基本内部パラメータ10
-	 * */
+	/**
+	 * 基本内部パラメータ10
+	 */
 	protected int bindObj = 0;
-	/**基本内部パラメータ11
-	 * 価値*/
+	/**
+	 * 基本内部パラメータ11
+	 * 価値
+	 */
 	protected int value = 0;
-	/**基本内部パラメータ12
-	 * 価格*/
+	/**
+	 * 基本内部パラメータ12
+	 * 価格
+	 */
 	protected int cost = 0;
-	/**基本内部パラメータ13
-	 * どこにあるか*/
+	/**
+	 * 基本内部パラメータ13
+	 * どこにあるか
+	 */
 	protected Where eWhere = Where.ON_FLOOR;
-	/**基本内部パラメータ14
-	 * 地下に落下中か*/
+	/**
+	 * 基本内部パラメータ14
+	 * 地下に落下中か
+	 */
 	protected boolean bFallingUnderGround = false;
-	/**基本内部パラメータ15
-	 * プールの中にいるか否か*/
+	/**
+	 * 基本内部パラメータ15
+	 * プールの中にいるか否か
+	 */
 	protected boolean bInPool = false;
-	/**基本内部パラメータ16
-	 * 最大深度*/
+	/**
+	 * 基本内部パラメータ16
+	 * 最大深度
+	 */
 	protected int nMostDepth = 0;
 
 	// 画面描画情報
-	/**画面描画情報1
-	 * 描画原点*/
+	/**
+	 * 画面描画情報1
+	 * 描画原点
+	 */
 	protected Point4y screenPivot = new Point4y();
-	/**画面描画情報1
-	 * 描画XYWH(xy座標+WHで縦横サイズ)*/
+	/**
+	 * 画面描画情報1
+	 * 描画XYWH(xy座標+WHで縦横サイズ)
+	 */
 	protected Rectangle4y screenRect = new Rectangle4y(); //
-	/**画面描画情報2
-	 * 画像サイズ*/
+	/**
+	 * 画面描画情報2
+	 * 画像サイズ
+	 */
 	protected int imgW, imgH;
-	/**画面描画情報3
-	 * 画像原点 基本床敷きは中心、立っているものは足元*/
-	protected int pivX,pivY;
-	/**画面描画情報4
-	 * 描画オフセット 振動など判定を無視した演出用*/
-	protected int ofsX,ofsY;
+	/**
+	 * 画面描画情報3
+	 * 画像原点 基本床敷きは中心、立っているものは足元
+	 */
+	protected int pivX, pivY;
+	/**
+	 * 画面描画情報4
+	 * 描画オフセット 振動など判定を無視した演出用
+	 */
+	protected int ofsX, ofsY;
 	/**
 	 * このオブジェクトのユニークID
 	 */
 	public int objId = 0;
-	
-//	@Override
-//	public String toString() {
-//		return "名前未設定";
-//	}
 
-	/**経過時間ゲッター*/
+	// @Override
+	// public String toString() {
+	// return "名前未設定";
+	// }
+
+	/** 経過時間ゲッター */
 	public long getAge() {
 		return age;
 	}
 
-	/**経過時間追加*/
+	/** 経過時間追加 */
 	public void addAge(long val) {
 		setAge(getAge() + val);
-		if(getAge() < 0) setAge(0);
+		if (getAge() < 0)
+			setAge(0);
 	}
 
-	/**x座標ゲッター*/
+	/** x座標ゲッター */
 	public int getX() {
 		return x;
 	}
 
-	/**y座標ゲッター*/
+	/** y座標ゲッター */
 	public int getY() {
 		return y;
 	}
 
-	/**z座標ゲッター*/
+	/** z座標ゲッター */
 	public int getZ() {
 		return z;
 	}
 
-	/**外力による移動量ゲッター
-	 * @return 外力による移動量のx,y,z,成分*/
+	/**
+	 * 外力による移動量ゲッター
+	 * 
+	 * @return 外力による移動量のx,y,z,成分
+	 */
 	@Transient
-	public int[] getVxyz(){
-		int V[] = {vx,vy,vz};
+	public int[] getVxyz() {
+		int V[] = { vx, vy, vz };
 		return V;
 	}
 
-	/**x座標セッター*/
-	public void setCalcX (int X){
-		if (X < 0 && enableWall ) {
+	/** x座標セッター */
+	public void setCalcX(int X) {
+		if (X < 0 && enableWall) {
 			x = 0;
-		}
-		else if (X > Translate.mapW && enableWall ) {
-			x = Translate.mapW;
-		}
-		else {
+		} else if (X > Translate.getMapW() && enableWall) {
+			x = Translate.getMapW();
+		} else {
 			x = X;
 		}
 	}
 
-	/**y座標セッター*/
-	public void setCalcY (int Y) {
-		if (Y < 0 && enableWall ) {
+	/** y座標セッター */
+	public void setCalcY(int Y) {
+		if (Y < 0 && enableWall) {
 			y = 0;
-		}
-		else if(Y > Translate.mapH && enableWall ) {
-			y = Translate.mapH;
-		}
-		else {
+		} else if (Y > Translate.getMapH() && enableWall) {
+			y = Translate.getMapH();
+		} else {
 			y = Y;
 		}
 	}
 
-	/**z座標セッター*/
-	public void setCalcZ(int Z){
-		if (z < nMostDepth && enableWall ) {
-			if( bFallingUnderGround  ){
+	/** z座標セッター */
+	public void setCalcZ(int Z) {
+		if (z < nMostDepth && enableWall) {
+			if (bFallingUnderGround) {
 				z = Z;
-			}
-			else{
+			} else {
 				z = nMostDepth;
 			}
 		}
-		if (Z > Translate.mapZ && enableWall ) {
-			z = Translate.mapZ;
-		}
-		else {
+		if (Z > Translate.getMapZ() && enableWall) {
+			z = Translate.getMapZ();
+		} else {
 			z = Z;
 		}
 	}
-	
+
 	public void setX(int x) {
 		this.x = x;
 	}
@@ -202,68 +241,83 @@ public class Obj implements java.io.Serializable, Comparable {
 
 	/**
 	 * X座標を強制的に設定する.
+	 * 
 	 * @param X X座標
 	 */
-	public void setForceX (int X){
+	public void setForceX(int X) {
 		x = X;
 	}
+
 	/**
 	 * Y座標を強制的に設定suru.
+	 * 
 	 * @param Y Y座標
 	 */
-	public void setForceY (int Y) {
+	public void setForceY(int Y) {
 		y = Y;
 	}
 
-	/**移動量追加
-	 * @param x　x方向
-	 * @param y　y方向
-	 * @param z　z方向
+	/**
+	 * 移動量追加
+	 * 
+	 * @param x x方向
+	 * @param y y方向
+	 * @param z z方向
 	 */
-	public void addBxyz(int x,int y,int z){
+	public void addBxyz(int x, int y, int z) {
 		setBx(getBx() + x);
 		setBy(getBy() + y);
 		bz += z;
 	}
-	/**移動量セット
-	 * @param x　x方向
-	 * @param y　y方向
-	 * @param z　z方向
+
+	/**
+	 * 移動量セット
+	 * 
+	 * @param x x方向
+	 * @param y y方向
+	 * @param z z方向
 	 */
-	public void setBxyz(int x,int y,int z){
+	public void setBxyz(int x, int y, int z) {
 		setBx(x);
 		setBy(y);
 		bz = z;
 	}
-	/**移動量リセット*/
+
+	/** 移動量リセット */
 	public void resetBPos() {
 		setBx(0);
 		setBy(0);
 		bz = 0;
 	}
 
-
-	/**オフセット量設定
+	/**
+	 * オフセット量設定
+	 * 
 	 * @param X
 	 * @param Y
 	 */
-	public void setOfsXY(int X,int Y){
+	public void setOfsXY(int X, int Y) {
 		ofsX = X;
 		ofsY = Y;
 	}
-	/**描画時の実際のx座標ゲッター*/
+
+	/** 描画時の実際のx座標ゲッター */
 	@Transient
-	public int getDrawOfsX(){
+	public int getDrawOfsX() {
 		return x + ofsX;
 	}
-	/**描画時の実際のy座標ゲッター*/
+
+	/** 描画時の実際のy座標ゲッター */
 	@Transient
-	public int getDrawOfsY(){
+	public int getDrawOfsY() {
 		return y + ofsY;
 	}
 
-	/** オブジェクト画像の原点とサイズをセット
-	 * <br>直接座標値を入力するVer*/
+	/**
+	 * オブジェクト画像の原点とサイズをセット
+	 * <br>
+	 * 直接座標値を入力するVer
+	 */
 	protected void setBoundary(int px, int py, int w, int h) {
 		pivX = px;
 		pivY = py;
@@ -271,28 +325,34 @@ public class Obj implements java.io.Serializable, Comparable {
 		imgH = h;
 	}
 
-	/**オブジェクト画像の原点とサイズをセット
-	 * <br> Rectagleを利用するVer*/
+	/**
+	 * オブジェクト画像の原点とサイズをセット
+	 * <br>
+	 * Rectagleを利用するVer
+	 */
 	protected void setBoundary(Rectangle4y r) {
-		pivX = r.x;
-		pivY = r.y;
-		imgW = r.width;
-		imgH = r.height;
+		pivX = r.getX();
+		pivY = r.getY();
+		imgW = r.getWidth();
+		imgH = r.getHeight();
 	}
 
-	/**画像の幅ゲッター*/
+	/** 画像の幅ゲッター */
 	public int getW() {
 		return imgW;
 	}
-	/**画像の高さゲッター*/
+
+	/** 画像の高さゲッター */
 	public int getH() {
 		return imgH;
 	}
-	/**画像原点のx座標ゲッター*/
+
+	/** 画像原点のx座標ゲッター */
 	public int getPivotX() {
 		return pivX;
 	}
-	/**画像原点のy座標ゲッター*/
+
+	/** 画像原点のy座標ゲッター */
 	public int getPivotY() {
 		return pivY;
 	}
@@ -380,7 +440,7 @@ public class Obj implements java.io.Serializable, Comparable {
 	public void setPivotX(int pivX) {
 		this.pivX = pivX;
 	}
-	
+
 	public void setPivotY(int pivY) {
 		this.pivY = pivY;
 	}
@@ -429,208 +489,229 @@ public class Obj implements java.io.Serializable, Comparable {
 		this.cost = cost;
 	}
 
-	/**画像範囲ゲッター*/
+	/** 画像範囲ゲッター */
 	public void getBoundaryShape(Rectangle4y r) {
-		r.x = pivX;
-		r.y = pivY;
-		r.width = imgW;
-		r.height = imgH;
+		r.setX(pivX);
+		r.setY(pivY);
+		r.setWidth(imgW);
+		r.setHeight(imgH);
 	}
 
-	/** 画面上に描画されているオブジェクトの原点をセット
-	 * <br>直接座標を入力するVer*/
+	/**
+	 * 画面上に描画されているオブジェクトの原点をセット
+	 * <br>
+	 * 直接座標を入力するVer
+	 */
 	public void setScreenPivot(int x, int y) {
 		screenPivot.setX(x);
 		screenPivot.setY(y);
 	}
 
-	/** 画面上に描画されているオブジェクトの原点をセット
-	 * <br>Pointを利用するVer*/
+	/**
+	 * 画面上に描画されているオブジェクトの原点をセット
+	 * <br>
+	 * Pointを利用するVer
+	 */
 	public void setScreenPivot(Point4y rect) {
 		screenPivot.setX(rect.getX());
 		screenPivot.setY(rect.getY());
 	}
-	/**画面上に描画されているオブジェクトの原点をゲット*/
+
+	/** 画面上に描画されているオブジェクトの原点をゲット */
 	public Point4y getScreenPivot() {
 		return screenPivot;
 	}
 
-	/** 画面上に描画されているオブジェクトの左上座標とサイズをセット
-	 * <br>直接座標を入力するVer*/
+	/**
+	 * 画面上に描画されているオブジェクトの左上座標とサイズをセット
+	 * <br>
+	 * 直接座標を入力するVer
+	 */
 	public void setScreenRect(int x, int y, int w, int h) {
 		screenRect.setX(x);
 		screenRect.setY(y);
 		screenRect.setWidth(w);
 		screenRect.setHeight(h);
 	}
-	/** 画面上に描画されているオブジェクトの左上座標とサイズをセット
-	 * <br>Rectangle利用するVer*/
+
+	/**
+	 * 画面上に描画されているオブジェクトの左上座標とサイズをセット
+	 * <br>
+	 * Rectangle利用するVer
+	 */
 	public void setScreenRect(Rectangle4y rect) {
-		screenRect.setX(rect.x);
-		screenRect.setY(rect.y);
-		screenRect.setWidth(rect.width);
-		screenRect.setHeight(rect.height);
+		screenRect.setX(rect.getX());
+		screenRect.setY(rect.getY());
+		screenRect.setWidth(rect.getWidth());
+		screenRect.setHeight(rect.getHeight());
 	}
-	/** 画面上に描画されているオブジェクトの左上座標とサイズをゲット*/
+
+	/** 画面上に描画されているオブジェクトの左上座標とサイズをゲット */
 	public Rectangle4y getScreenRect() {
 		return screenRect;
 	}
 
-	/**掴めるか否か*/
+	/** 掴めるか否か */
 	public boolean isCanGrab() {
 		return canGrab;
 	}
 
-	/**掴まれる処理*/
+	/** 掴まれる処理 */
 	public void grab() {
 		grabbed = true;
 	}
-	/**放される処理*/
+
+	/** 放される処理 */
 	public void release() {
 		grabbed = false;
 	}
 
-	/**掴まれてるか*/
+	/** 掴まれてるか */
 	public boolean isGrabbed() {
 		return grabbed;
 	}
 
-	/**オブジェクトタイプゲッター*/
+	/** オブジェクトタイプゲッター */
 	public Type getObjType() {
 		return objType;
 	}
 
-	/**購入価格のゲッター*/
+	/** 購入価格のゲッター */
 	public int getValue() {
 		return value;
 	}
-	/**ランニングコストのゲッター*/
+
+	/** ランニングコストのゲッター */
 	public int getCost() {
 		return cost;
 	}
 
-	/**除去*/
-	public void remove(){
+	/** 除去 */
+	public void remove() {
 		bindObj = -1;
 		setRemoved(true);
 	}
-	/**除去されてるか否か*/
+
+	/** 除去されてるか否か */
 	public boolean isRemoved() {
 		return removed;
 	}
 
-	/**ケリを入れられる*/
+	/** ケリを入れられる */
 	public void kick(int vX, int vY, int vZ) {
 		vx = vX;
 		vy = vY;
 		vz = vZ;
 	}
-	/**kick(int vX, int vY, int vZ)のショートカット*/
+
+	/** kick(int vX, int vY, int vZ)のショートカット */
 	public void kick() {
 	}
 
-	/**移動の親元オブジェクトゲッター*/
+	/** 移動の親元オブジェクトゲッター */
 	public int getBindObj() {
 		return bindObj;
 	}
+
 	/**
 	 * MapPlaceDataからobjIdをもつObjを取得する.
+	 * 
 	 * @param i objId
 	 * @return Obj
 	 */
 	public Obj takeMappedObj(int i) {
 		MapPlaceData m = SimYukkuri.world.getCurrentMap();
-		if(m.autofeeder.containsKey(i)) {
-			return m.autofeeder.get(i);
+		if (m.getAutofeeder().containsKey(i)) {
+			return m.getAutofeeder().get(i);
 		}
-		if (m.bed.containsKey(i)) {
-			return m.bed.get(i);
+		if (m.getBed().containsKey(i)) {
+			return m.getBed().get(i);
 		}
-		if (m.beltconveyorObj.containsKey(i)) {
-			return m.beltconveyorObj.get(i);
+		if (m.getBeltconveyorObj().containsKey(i)) {
+			return m.getBeltconveyorObj().get(i);
 		}
-		if (m.breedingPool.containsKey(i)) {
-			return m.breedingPool.get(i);
+		if (m.getBreedingPool().containsKey(i)) {
+			return m.getBreedingPool().get(i);
 		}
-		if(m.diffuser.containsKey(i)) {
-			return m.diffuser.get(i);
+		if (m.getDiffuser().containsKey(i)) {
+			return m.getDiffuser().get(i);
 		}
-		if (m.food.containsKey(i)) {
-			return m.food.get(i);
+		if (m.getFood().containsKey(i)) {
+			return m.getFood().get(i);
 		}
-		if (m.foodmaker.containsKey(i)) {
-			return m.foodmaker.get(i);
+		if (m.getFoodmaker().containsKey(i)) {
+			return m.getFoodmaker().get(i);
 		}
-		if (m.frontEffect.containsKey(i)) {
-			return m.frontEffect.get(i);
+		if (m.getFrontEffect().containsKey(i)) {
+			return m.getFrontEffect().get(i);
 		}
-		if(m.garbagechute.containsKey(i)) {
-			return m.garbagechute.get(i);
+		if (m.getGarbagechute().containsKey(i)) {
+			return m.getGarbagechute().get(i);
 		}
-		if(m.garbageStation.containsKey(i)) {
-			return m.garbageStation.get(i);
+		if (m.getGarbageStation().containsKey(i)) {
+			return m.getGarbageStation().get(i);
 		}
-		if(m.hotPlate.containsKey(i)) {
-			return m.hotPlate.get(i);
+		if (m.getHotPlate().containsKey(i)) {
+			return m.getHotPlate().get(i);
 		}
-		if (m.house.containsKey(i)) {
-			return m.house.get(i);
+		if (m.getHouse().containsKey(i)) {
+			return m.getHouse().get(i);
 		}
-		if(m.machinePress.containsKey(i)) {
-			return m.machinePress.get(i);
+		if (m.getMachinePress().containsKey(i)) {
+			return m.getMachinePress().get(i);
 		}
-		if(m.mixer.containsKey(i)) {
-			return m.mixer.get(i);
+		if (m.getMixer().containsKey(i)) {
+			return m.getMixer().get(i);
 		}
-		if(m.okazari.containsKey(i)) {
-			return m.okazari.get(i);
+		if (m.getOkazari().containsKey(i)) {
+			return m.getOkazari().get(i);
 		}
-		if(m.orangePool.containsKey(i)) {
-			return m.orangePool.get(i);
+		if (m.getOrangePool().containsKey(i)) {
+			return m.getOrangePool().get(i);
 		}
-		if(m.processerPlate.containsKey(i)) {
-			return m.processerPlate.get(i);
+		if (m.getProcesserPlate().containsKey(i)) {
+			return m.getProcesserPlate().get(i);
 		}
-		if(m.productchute.containsKey(i)) {
-			return m.productchute.get(i);
+		if (m.getProductchute().containsKey(i)) {
+			return m.getProductchute().get(i);
 		}
-		if (m.shit.containsKey(i)) {
-			return m.shit.get(i);
+		if (m.getShit().containsKey(i)) {
+			return m.getShit().get(i);
 		}
-		if(m.sortEffect.containsKey(i)) {
-			return m.sortEffect.get(i);
+		if (m.getSortEffect().containsKey(i)) {
+			return m.getSortEffect().get(i);
 		}
-		if (m.stalk.containsKey(i)) {
-			return m.stalk.get(i);
+		if (m.getStalk().containsKey(i)) {
+			return m.getStalk().get(i);
 		}
-		if (m.stickyPlate.containsKey(i)) {
-			return m.stickyPlate.get(i);
+		if (m.getStickyPlate().containsKey(i)) {
+			return m.getStickyPlate().get(i);
 		}
-		if (m.stone.containsKey(i)) {
-			return m.stone.get(i);
+		if (m.getStone().containsKey(i)) {
+			return m.getStone().get(i);
 		}
-		if (m.sui.containsKey(i)) {
-			return m.sui.get(i);
+		if (m.getSui().containsKey(i)) {
+			return m.getSui().get(i);
 		}
-		if (m.toilet.containsKey(i)) {
-			return m.toilet.get(i);
+		if (m.getToilet().containsKey(i)) {
+			return m.getToilet().get(i);
 		}
-		if (m.toy.containsKey(i)) {
-			return m.toy.get(i);
+		if (m.getToy().containsKey(i)) {
+			return m.getToy().get(i);
 		}
-		if (m.trampoline.containsKey(i)) {
-			return m.trampoline.get(i);
+		if (m.getTrampoline().containsKey(i)) {
+			return m.getTrampoline().get(i);
 		}
-		if (m.trash.containsKey(i)) {
-			return m.trash.get(i);
+		if (m.getTrash().containsKey(i)) {
+			return m.getTrash().get(i);
 		}
-		if (m.vomit.containsKey(i)) {
-			return m.vomit.get(i);
+		if (m.getVomit().containsKey(i)) {
+			return m.getVomit().get(i);
 		}
-		if (m.yunba.containsKey(i)) {
-			return m.yunba.get(i);
+		if (m.getYunba().containsKey(i)) {
+			return m.getYunba().get(i);
 		}
-		for (Map.Entry<Integer, Body> entry : m.body.entrySet()) {
+		for (Map.Entry<Integer, Body> entry : m.getBody().entrySet()) {
 			Body b = entry.getValue();
 			if (b.objId == i) {
 				return b;
@@ -639,8 +720,8 @@ public class Obj implements java.io.Serializable, Comparable {
 		return null;
 	}
 
-	/**移動の親元オブジェクトセッター*/
-	public void setBindObj( int obj ) {
+	/** 移動の親元オブジェクトセッター */
+	public void setBindObj(int obj) {
 		bindObj = obj;
 	}
 
@@ -648,29 +729,37 @@ public class Obj implements java.io.Serializable, Comparable {
 	public GetMenuTarget hasGetPopup() {
 		return GetMenuTarget.NONE;
 	}
+
 	@Transient
 	public UseMenuTarget hasUsePopup() {
 		return UseMenuTarget.NONE;
 	}
 
-	/**どこにいるか取得
+	/**
+	 * どこにいるか取得
+	 * 
 	 * @return 床の上か、ゆっくりの上or中か
 	 */
 	@Transient
-	public Where getWhere(){
+	public Where getWhere() {
 		return eWhere;
 	}
 
-	/**どこにいるかセット
+	/**
+	 * どこにいるかセット
+	 * 
 	 * @param ieWhere 床の上か、ゆっくりの上or中か
 	 */
-	public void setWhere(Where ieWhere){
+	public void setWhere(Where ieWhere) {
 		eWhere = ieWhere;
 	}
 
-	/**オブジェクトごとに毎ティックごとに呼び出される処理
-	 * <br>オーバーライドしてるものが多い*/
-	public Event clockTick(){
+	/**
+	 * オブジェクトごとに毎ティックごとに呼び出される処理
+	 * <br>
+	 * オーバーライドしてるものが多い
+	 */
+	public Event clockTick() {
 		setAge(getAge() + TICK);
 		if (isRemoved()) {
 			return Event.REMOVED;
@@ -686,12 +775,10 @@ public class Obj implements java.io.Serializable, Comparable {
 				if (x < 0) {
 					x = 0;
 					vx *= -1;
-				}
-				else if (x > Translate.mapW) {
-					x = Translate.mapW;
+				} else if (x > Translate.getMapW()) {
+					x = Translate.getMapW();
 					vx *= -1;
-				}
-				else if (Barrier.onBarrier(x, y, 16, 16, Barrier.MAP_ITEM)) {
+				} else if (Barrier.onBarrier(x, y, 16, 16, Barrier.MAP_ITEM)) {
 					x -= vx;
 					vx = 0;
 				}
@@ -701,12 +788,10 @@ public class Obj implements java.io.Serializable, Comparable {
 				if (y < 0) {
 					y = 0;
 					vy *= -1;
-				}
-				else if (y > Translate.mapH) {
-					y = Translate.mapH;
+				} else if (y > Translate.getMapH()) {
+					y = Translate.getMapH();
 					vy *= -1;
-				}
-				else if (Barrier.onBarrier(x, y, 16, 16, Barrier.MAP_ITEM)) {
+				} else if (Barrier.onBarrier(x, y, 16, 16, Barrier.MAP_ITEM)) {
 					y -= vy;
 					vy = 0;
 				}
@@ -716,7 +801,7 @@ public class Obj implements java.io.Serializable, Comparable {
 				vz += 1;
 				z -= mz;
 				if (z <= nMostDepth) {
-					if( !bFallingUnderGround ){
+					if (!bFallingUnderGround) {
 						z = nMostDepth;
 						vz = 0;
 					}
@@ -737,69 +822,84 @@ public class Obj implements java.io.Serializable, Comparable {
 		return Event.DONOTHING;
 	}
 
-	/**地面に堕ちつつあるか否か*/
-	public boolean getFallingUnderGround(){
+	/** 地面に堕ちつつあるか否か */
+	public boolean getFallingUnderGround() {
 		return bFallingUnderGround;
 	}
-	/**地面に落とすセッター*/
-	public void setFallingUnderGround( boolean bFlag ){
+
+	/** 地面に落とすセッター */
+	public void setFallingUnderGround(boolean bFlag) {
 		bFallingUnderGround = bFlag;
 	}
 
-	/**池の中か否か*/
-	public boolean getInPool(){
+	/** 池の中か否か */
+	public boolean getInPool() {
 		return bInPool;
 	}
-	/**池の中にいるかフラグのセッター*/
-	public void setInPool( boolean bFlag ){
+
+	/** 池の中にいるかフラグのセッター */
+	public void setInPool(boolean bFlag) {
 		bInPool = bFlag;
 	}
 
-	/**最大深度ゲッター*/
-	public int getMostDepth(){
+	/** 最大深度ゲッター */
+	public int getMostDepth() {
 		return nMostDepth;
 	}
-	/**最大深度セッター*/
-	public void setMostDepth( int nTemp ){
+
+	/** 最大深度セッター */
+	public void setMostDepth(int nTemp) {
 		nMostDepth = nTemp;
 	}
+
 	/**
 	 * 取り除かれてるかどうかを設定する.
+	 * 
 	 * @param removed 取り除かれてるかどうか
 	 */
 	public void setRemoved(boolean removed) {
 		this.removed = removed;
 	}
+
 	/**
 	 * 存続期間を設定する.
+	 * 
 	 * @param age 存続期間
 	 */
 	public void setAge(long age) {
 		this.age = age;
 	}
+
 	/**
 	 * X座標の加速度を取得する.
+	 * 
 	 * @return X座標の加速度
 	 */
 	public int getBx() {
 		return bx;
 	}
+
 	/**
 	 * X座標の加速度を設定する.
+	 * 
 	 * @param bx X座標の加速度
 	 */
 	public void setBx(int bx) {
 		this.bx = bx;
 	}
+
 	/**
 	 * Y座標の加速度を取得する.
+	 * 
 	 * @param bx Y座標の加速度
 	 */
 	public int getBy() {
 		return by;
 	}
+
 	/**
 	 * Y座標の加速度を設定する.
+	 * 
 	 * @param by Y座標の加速度
 	 */
 	public void setBy(int by) {
@@ -810,12 +910,13 @@ public class Obj implements java.io.Serializable, Comparable {
 	public int compareTo(Object o) {
 		return 0;
 	}
+
 	/**
 	 * 座標をマップの範囲内に収める
 	 */
 	public void calcPos() {
-		int mapX = Translate.mapW;
-		int mapY = Translate.mapH;
+		int mapX = Translate.getMapW();
+		int mapY = Translate.getMapH();
 		if (x < 0) {
 			x = 0;
 		}
@@ -861,5 +962,5 @@ public class Obj implements java.io.Serializable, Comparable {
 	public void setPivY(int pivY) {
 		this.pivY = pivY;
 	}
-	
+
 }

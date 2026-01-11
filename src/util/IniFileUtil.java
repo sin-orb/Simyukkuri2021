@@ -86,132 +86,132 @@ public class IniFileUtil {
 			ClassLoader loader = clazz.getClassLoader();
 			int nTemp = 0;
 			//		public int EATAMOUNT[] = {100*6, 100*12, 100*24};		// 一回の食事量
-			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play", "EATAMOUNT.baby");
+			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "EATAMOUNT.baby");
 			if (nTemp != 0) {
 				b.getEATAMOUNTorg()[0] = nTemp;
 			}
 			conf.put("EATAMOUNT.baby", b.getEATAMOUNTorg()[0]);
-			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play", "EATAMOUNT.child");
+			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "EATAMOUNT.child");
 			if (nTemp != 0) {
 				b.getEATAMOUNTorg()[1] = nTemp;
 			}
 			conf.put("EATAMOUNT.child", b.getEATAMOUNTorg()[1]);
-			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play", "EATAMOUNT.adult");
+			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "EATAMOUNT.adult");
 			if (nTemp != 0) {
 				b.getEATAMOUNTorg()[2] = nTemp;
 			}
 			conf.put("EATAMOUNT.adult", b.getEATAMOUNTorg()[2]);
 			//		public int WEIGHT[] = {100, 300, 600};					// 体重
-			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play", "WEIGHT.baby");
+			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "WEIGHT.baby");
 			if (nTemp != 0) {
 				b.getWEIGHTorg()[0] = nTemp;
 			}
 			conf.put("WEIGHT.baby", b.getWEIGHTorg()[0]);
-			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play", "WEIGHT.child");
+			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "WEIGHT.child");
 			if (nTemp != 0) {
 				b.getWEIGHTorg()[1] = nTemp;
 			}
 			conf.put("WEIGHT.child", b.getWEIGHTorg()[1]);
-			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play", "WEIGHT.adult");
+			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "WEIGHT.adult");
 			if (nTemp != 0) {
 				b.getWEIGHTorg()[2] = nTemp;
 			}
 			conf.put("WEIGHT.adult", b.getWEIGHTorg()[2]);
 			//		public int STRENGTH[] = {500, 1000, 3000};					// 基準の攻撃力
-			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play", "STRENGTH.baby");
+			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "STRENGTH.baby");
 			if (nTemp != 0) {
 				b.getSTRENGTHorg()[0] = nTemp;
 			}
 			conf.put("STRENGTH.baby", b.getSTRENGTHorg()[0]);
-			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play", "STRENGTH.child");
+			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "STRENGTH.child");
 			if (nTemp != 0) {
 				b.getSTRENGTHorg()[1] = nTemp;
 			}
 			conf.put("STRENGTH.child", b.getSTRENGTHorg()[1]);
-			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play", "STRENGTH.adult");
+			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "STRENGTH.adult");
 			if (nTemp != 0) {
 				b.getSTRENGTHorg()[2] = nTemp;
 			}
 			conf.put("STRENGTH.adult", b.getSTRENGTHorg()[2]);
 			//		public int HUNGRYLIMIT[] = {100*24, 100*24*2, 100*24*4}; // 空腹限界
-			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play", "HUNGRYLIMIT.baby");
+			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "HUNGRYLIMIT.baby");
 			if (nTemp != 0) {
 				b.getHUNGRYLIMITorg()[0] = nTemp;
 			}
 			conf.put("HUNGRYLIMIT.baby", b.getHUNGRYLIMITorg()[0]);
-			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play", "HUNGRYLIMIT.child");
+			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "HUNGRYLIMIT.child");
 			if (nTemp != 0) {
 				b.getHUNGRYLIMITorg()[1] = nTemp;
 			}
 			conf.put("HUNGRYLIMIT.child", b.getHUNGRYLIMITorg()[1]);
-			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play", "HUNGRYLIMIT.adult");
+			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "HUNGRYLIMIT.adult");
 			if (nTemp != 0) {
 				b.getHUNGRYLIMITorg()[2] = nTemp;
 			}
 			conf.put("HUNGRYLIMIT.adult", b.getHUNGRYLIMITorg()[2]);
 
 			//		public int SHITLIMIT[] = {100*12, 100*24, 100*24};		// うんうん限界
-			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play", "SHITLIMIT.baby");
+			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "SHITLIMIT.baby");
 			if (nTemp != 0) {
 				b.getSHITLIMITorg()[0] = nTemp;
 			}
 			conf.put("SHITLIMIT.baby", b.getSHITLIMITorg()[0]);
-			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play", "SHITLIMIT.child");
+			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "SHITLIMIT.child");
 			if (nTemp != 0) {
 				b.getSHITLIMITorg()[1] = nTemp;
 			}
 			conf.put("SHITLIMIT.child", b.getSHITLIMITorg()[1]);
-			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play", "SHITLIMIT.adult");
+			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "SHITLIMIT.adult");
 			if (nTemp != 0) {
 				b.getSHITLIMITorg()[2] = nTemp;
 			}
 			conf.put("SHITLIMIT.adult", b.getSHITLIMITorg()[2]);
 
 			//		public int DAMAGELIMIT[] = {100*24, 100*24*3, 100*24*7}; // ダメージ限界
-			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play", "DAMAGELIMIT.baby");
+			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "DAMAGELIMIT.baby");
 			if (nTemp != 0) {
 				b.getDAMAGELIMITorg()[0] = nTemp;
 			}
 			conf.put("DAMAGELIMIT.baby", b.getDAMAGELIMITorg()[0]);
-			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play", "DAMAGELIMIT.child");
+			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "DAMAGELIMIT.child");
 			if (nTemp != 0) {
 				b.getDAMAGELIMITorg()[1] = nTemp;
 			}
 			conf.put("DAMAGELIMIT.child", b.getDAMAGELIMITorg()[1]);
-			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play", "DAMAGELIMIT.adult");
+			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "DAMAGELIMIT.adult");
 			if (nTemp != 0) {
 				b.getDAMAGELIMITorg()[2] = nTemp;
 			}
 			conf.put("DAMAGELIMIT.adult", b.getDAMAGELIMITorg()[2]);
 
 			//		public int STRESSLIMIT[] = {100*24, 100*24*3, 100*24*7}; // ストレス限界
-			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play", "STRESSLIMIT.baby");
+			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "STRESSLIMIT.baby");
 			if (nTemp != 0) {
 				b.getSTRESSLIMITorg()[0] = nTemp;
 			}
 			conf.put("STRESSLIMIT.baby", b.getSTRESSLIMITorg()[0]);
-			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play", "STRESSLIMIT.child");
+			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "STRESSLIMIT.child");
 			if (nTemp != 0) {
 				b.getSTRESSLIMITorg()[1] = nTemp;
 			}
 			conf.put("STRESSLIMIT.child", b.getSTRESSLIMITorg()[1]);
-			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play", "STRESSLIMIT.adult");
+			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "STRESSLIMIT.adult");
 			if (nTemp != 0) {
 				b.getSTRESSLIMITorg()[2] = nTemp;
 			}
 			conf.put("STRESSLIMIT.adult", b.getSTRESSLIMITorg()[2]);
 			//		public int TANGLEVEL[] = {300, 600, 1000};				// 味覚レベル
-			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play", "TANGLEVEL.baby");
+			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "TANGLEVEL.baby");
 			if (nTemp != 0) {
 				b.getTANGLEVELorg()[0] = nTemp;
 			}
 			conf.put("TANGLEVEL.baby", b.getTANGLEVELorg()[0]);
-			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play", "TANGLEVEL.child");
+			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "TANGLEVEL.child");
 			if (nTemp != 0) {
 				b.getTANGLEVELorg()[1] = nTemp;
 			}
 			conf.put("TANGLEVEL.child", b.getTANGLEVELorg()[1]);
-			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play", "TANGLEVEL.adult");
+			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "TANGLEVEL.adult");
 			if (nTemp != 0) {
 				b.getTANGLEVELorg()[2] = nTemp;
 			}
@@ -219,69 +219,69 @@ public class IniFileUtil {
 			//		public int BABYLIMIT = 100*24*7;
 			//		public int CHILDLIMIT = 100*24*21;
 			//		public int LIFELIMIT = 100*24*365;
-			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play", "BABYLIMIT");
+			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "BABYLIMIT");
 			if (nTemp != 0) {
 				b.setBABYLIMITorg(nTemp);
 			}
 			conf.put("BABYLIMIT", b.getBABYLIMITorg());
-			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play", "CHILDLIMIT");
+			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "CHILDLIMIT");
 			if (nTemp != 0) {
 				b.setCHILDLIMITorg(nTemp);
 			}
 			conf.put("CHILDLIMIT", b.getCHILDLIMITorg());
-			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play", "LIFELIMIT");
+			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "LIFELIMIT");
 			if (nTemp != 0) {
 				b.setLIFELIMITorg(nTemp);
 			}
 			conf.put("LIFELIMIT", b.getLIFELIMITorg());
 
 			// 腐敗速度
-			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play", "ROTTINGTIME");
+			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "ROTTINGTIME");
 			if (nTemp != 0) {
 				b.setROTTINGTIMEorg(nTemp);
 			}
 			conf.put("ROTTINGTIME", b.getROTTINGTIMEorg());
 
 			//赤ゆの免疫力
-			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play", "BabyImmunity");
+			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "BabyImmunity");
 			b.getImmunity()[0] = nTemp;
 			conf.put("Immunity.0", nTemp);
 			//子ゆの免疫力
-			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play", "ChildImmunity");
+			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "ChildImmunity");
 			b.getImmunity()[1] = nTemp;
 			conf.put("Immunity.1", nTemp);
 			//成ゆの免疫力
-			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play", "AdultImmunity");
+			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "AdultImmunity");
 			b.getImmunity()[2] = nTemp;
 			conf.put("Immunity.2", nTemp);
 			//老ゆの免疫力
-			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play", "OldImmunity");
+			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "OldImmunity");
 			b.getImmunity()[3] = nTemp;
 			conf.put("Immunity.3", nTemp);
 			//性格変更入り切り
-			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play", "ChangeCharacter");
+			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "ChangeCharacter");
 			if (nTemp == 0) {
 				b.setNotChangeCharacter(true);
 			}
 			conf.put("NotChangeCharacter", nTemp);
 			//超善良限界
-			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play", "VeryNiceLimit");
+			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "VeryNiceLimit");
 			b.getNiceLimit()[1] = nTemp + SimYukkuri.RND.nextInt(20) - 10;
 			conf.put("VeryNiceLimit", nTemp);
 			//善良限界
-			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play", "NiceLimit");
+			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "NiceLimit");
 			b.getNiceLimit()[0] = nTemp + SimYukkuri.RND.nextInt(20) - 10;
 			conf.put("NiceLimit", nTemp);
 			//ゲス限界
-			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play", "RudeLimit");
+			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "RudeLimit");
 			b.getRudeLimit()[0] = -nTemp + SimYukkuri.RND.nextInt(20) - 10;
 			conf.put("RudeLimit", -nTemp);
 			//ドゲス限界
-			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play", "SuperRudeLimit");
+			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "SuperRudeLimit");
 			b.getRudeLimit()[1] = -nTemp + SimYukkuri.RND.nextInt(20) - 10;
 			conf.put("VeryRudeLimit", -nTemp);
 			//リアルな妊娠限界の入り切り
-			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play", "RealPregnantLimit");
+			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "RealPregnantLimit");
 			if (nTemp == 1) {
 				b.setRealPregnantLimit(true);
 			} else {
@@ -289,83 +289,83 @@ public class IniFileUtil {
 			}
 			conf.put("RealPregnantLimit", nTemp);
 			// せいっさいっ！時にお飾りが破壊される割合
-			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play", "BreakBraidRand");
+			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "BreakBraidRand");
 			b.setnBreakBraidRand(nTemp);
 			conf.put("BreakBraidRand", nTemp);
 			//すりすりで事故る確率
-			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play",
+			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play",
 					"SurisuriAccidentProbablity");
 			b.setSurisuriAccidentProb(nTemp);
 			conf.put("SurisuriAccidentProbablity", nTemp);
 			//路上で踏み潰される確率
-			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play",
+			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play",
 					"CarAccidentProbablity");
 			b.setCarAccidentProb(nTemp);
 			conf.put("CarAccidentProbablity", nTemp);
 			//あんよが傷ついていた場合、一定確率であんよが爆ぜる確率
-			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play",
+			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play",
 					"BreakBodyByShitProbability");
 			b.setBreakBodyByShitProb(nTemp);
 			conf.put("BreakBodyByShitProbability", nTemp);
 			//発情する確率
-			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play",
+			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play",
 					"GetExcitedProbablity");
 			if (nTemp != 0) {
 				b.setExciteProb(nTemp);
 			}
 			conf.put("GetExcitedProbablity", b.getExciteProb());
 			// 自主洗浄失敗確率（賢い）
-			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play",
+			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play",
 					"CleaningFailProb.Wise.baby");
 			if (nTemp != 0) {
 				b.getCleaningFailProbWise()[0] = nTemp;
 			}
 			conf.put("CleaningFailProb.Wise.baby", b.getCleaningFailProbWise()[0]);
-			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play",
+			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play",
 					"CleaningFailProb.Wise.child");
 			if (nTemp != 0) {
 				b.getCleaningFailProbWise()[1] = nTemp;
 			}
 			conf.put("CleaningFailProb.Wise.child", b.getCleaningFailProbWise()[1]);
-			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play",
+			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play",
 					"CleaningFailProb.Wise.adult");
 			if (nTemp != 0) {
 				b.getCleaningFailProbWise()[2] = nTemp;
 			}
 			conf.put("CleaningFailProb.Wise.adult", b.getCleaningFailProbWise()[2]);
 			// 自主洗浄失敗確率（普通）
-			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play",
+			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play",
 					"CleaningFailProb.Average.baby");
 			if (nTemp != 0) {
 				b.getCleaningFailProbAverage()[0] = nTemp;
 			}
 			conf.put("CleaningFailProb.Average.baby", b.getCleaningFailProbAverage()[0]);
-			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play",
+			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play",
 					"CleaningFailProb.Average.child");
 			if (nTemp != 0) {
 				b.getCleaningFailProbAverage()[1] = nTemp;
 			}
 			conf.put("CleaningFailProb.Average.child", b.getCleaningFailProbAverage()[1]);
-			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play",
+			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play",
 					"CleaningFailProb.Average.adult");
 			if (nTemp != 0) {
 				b.getCleaningFailProbAverage()[2] = nTemp;
 			}
 			conf.put("CleaningFailProb.Average.adult", b.getCleaningFailProbAverage()[2]);
 			// 自主洗浄失敗確率（餡子脳）
-			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play",
+			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play",
 					"CleaningFailProb.Fool.baby");
 			if (nTemp != 0) {
 				b.getCleaningFailProbFool()[0] = nTemp;
 			}
 			conf.put("CleaningFailProb.Fool.baby", b.getCleaningFailProbFool()[0]);
-			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play",
+			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play",
 					"CleaningFailProb.Fool.child");
 			if (nTemp != 0) {
 				b.getCleaningFailProbFool()[1] = nTemp;
 			}
 			conf.put("CleaningFailProb.Fool.child", b.getCleaningFailProbFool()[1]);
-			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_WORLD_INI_DIR, "play",
+			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play",
 					"CleaningFailProb.Fool.adult");
 			if (nTemp != 0) {
 				b.getCleaningFailProbFool()[2] = nTemp;
@@ -413,19 +413,19 @@ public class IniFileUtil {
 			ClassLoader loader = clazz.getClassLoader();
 			// 一人称取得
 			String[] anStrTemp;
-			anStrTemp = ModLoader.loadBodyIniMapForArrayString(loader, ModLoader.DATA_INI_DIR, b.getBaseBodyFileName(),
+			anStrTemp = ModLoader.loadBodyIniMapForArrayString(loader, ModLoader.getDataIniDir(), b.getBaseBodyFileName(),
 					"BABYNAME");
 			if (anStrTemp != null) {
 				b.setAnBabyName(anStrTemp);
 			}
 			conf.put("BABYNAME", b.getAnBabyName());
-			anStrTemp = ModLoader.loadBodyIniMapForArrayString(loader, ModLoader.DATA_INI_DIR, b.getBaseBodyFileName(),
+			anStrTemp = ModLoader.loadBodyIniMapForArrayString(loader, ModLoader.getDataIniDir(), b.getBaseBodyFileName(),
 					"CHILDNAME");
 			if (anStrTemp != null) {
 				b.setAnChildName(anStrTemp);
 			}
 			conf.put("CHILDNAME", b.getAnChildName());
-			anStrTemp = ModLoader.loadBodyIniMapForArrayString(loader, ModLoader.DATA_INI_DIR, b.getBaseBodyFileName(),
+			anStrTemp = ModLoader.loadBodyIniMapForArrayString(loader, ModLoader.getDataIniDir(), b.getBaseBodyFileName(),
 					"ADULTNAME");
 			if (anStrTemp != null) {
 				b.setAnAdultName(anStrTemp);
@@ -433,19 +433,19 @@ public class IniFileUtil {
 			conf.put("ADULTNAME", b.getAnAdultName());
 			
 			//ダメージ時一人称取得
-			anStrTemp = ModLoader.loadBodyIniMapForArrayString(loader, ModLoader.DATA_INI_DIR, b.getBaseBodyFileName(),
+			anStrTemp = ModLoader.loadBodyIniMapForArrayString(loader, ModLoader.getDataIniDir(), b.getBaseBodyFileName(),
 					"BABYNAME_DAMAGED");
 			if (anStrTemp != null) {
 				b.setAnBabyNameD(anStrTemp);
 			}
 			conf.put("BABYNAME_DAMAGED", b.getAnBabyNameD());
-			anStrTemp = ModLoader.loadBodyIniMapForArrayString(loader, ModLoader.DATA_INI_DIR, b.getBaseBodyFileName(),
+			anStrTemp = ModLoader.loadBodyIniMapForArrayString(loader, ModLoader.getDataIniDir(), b.getBaseBodyFileName(),
 					"CHILDNAME_DAMAGED");
 			if (anStrTemp != null) {
 				b.setAnChildNameD(anStrTemp);
 			}
 			conf.put("CHILDNAME_DAMAGED", b.getAnChildNameD());
-			anStrTemp = ModLoader.loadBodyIniMapForArrayString(loader, ModLoader.DATA_INI_DIR, b.getBaseBodyFileName(),
+			anStrTemp = ModLoader.loadBodyIniMapForArrayString(loader, ModLoader.getDataIniDir(), b.getBaseBodyFileName(),
 					"ADULTNAME_DAMAGED");
 			if (anStrTemp != null) {
 				b.setAnAdultNameD(anStrTemp);
@@ -455,28 +455,28 @@ public class IniFileUtil {
 			setFirstPersonName(b);
 			// 値段取得
 			int NTemp;
-			NTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_INI_DIR, b.getBaseBodyFileName(), "cost");
+			NTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataIniDir(), b.getBaseBodyFileName(), "cost");
 			b.setcost(NTemp);
 			conf.put("cost", b.getYcost());
-			NTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_INI_DIR, b.getBaseBodyFileName(), "value");
+			NTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataIniDir(), b.getBaseBodyFileName(), "value");
 			b.getSaleValue()[0] = NTemp;
-			NTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_INI_DIR, b.getBaseBodyFileName(),
+			NTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataIniDir(), b.getBaseBodyFileName(),
 					"contentValue");
 			b.getSaleValue()[1] = NTemp;
 			conf.put("saleValue", b.getSaleValue());
 			
 			//妊娠限界取得
-			NTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_INI_DIR, b.getBaseBodyFileName(),
+			NTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataIniDir(), b.getBaseBodyFileName(),
 					"pregnantLimit");
 			b.setPregnantLimit(NTemp + SimYukkuri.RND.nextInt(100));
 			conf.put("pregnantLimit", NTemp);
 			//下痢になる確率取得
-			NTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_INI_DIR, b.getBaseBodyFileName(),
+			NTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataIniDir(), b.getBaseBodyFileName(),
 					"GetDiarrheaProbability");
 			b.setDiarrheaProb(NTemp + SimYukkuri.RND.nextInt(2));
 			conf.put("GetDiarrheaProbability", NTemp);
 			//お飾りの位置設定
-			NTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_INI_DIR, b.getBaseBodyFileName(),
+			NTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataIniDir(), b.getBaseBodyFileName(),
 					"OkazariPosition");
 			b.setOkazariPosition(NTemp);
 			conf.put("OkazariPosition", NTemp);

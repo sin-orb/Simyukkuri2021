@@ -32,11 +32,11 @@ public class Trampoline extends ObjEX implements java.io.Serializable {
 	private static final long serialVersionUID = -128936287118191969L;
 	private static BufferedImage[] images = new BufferedImage[2];
 	private static Rectangle4y boundary = new Rectangle4y();
-	public int option;
+	private int option;
 	/** 通常事故率 */
-	public int accident1;
+	private int accident1;
 	/** 餡子脳事故率 */
-	public int accident2;
+	private int accident2;
 	/** 処理対象(ゆっくり) */
 	public static final int hitCheckObjType = ObjEX.YUKKURI;
 
@@ -62,10 +62,10 @@ public class Trampoline extends ObjEX implements java.io.Serializable {
 
 		images[0] = ModLoader.loadItemImage(loader, "toy/trampoline.png");
 		images[1] = ModLoader.loadItemImage(loader, "toy/shadow2.png");
-		boundary.width = images[0].getWidth(io);
-		boundary.height = images[0].getHeight(io);
-		boundary.x = boundary.width >> 1;
-		boundary.y = boundary.height - 1;
+		boundary.setWidth(images[0].getWidth(io));
+		boundary.setHeight(images[0].getHeight(io));
+		boundary.setX(boundary.getWidth() >> 1);
+		boundary.setY(boundary.getHeight() - 1);
 	}
 
 	@Override
@@ -87,7 +87,7 @@ public class Trampoline extends ObjEX implements java.io.Serializable {
 
 	@Override
 	public void removeListData() {
-		SimYukkuri.world.getCurrentMap().trampoline.remove(objId);
+		SimYukkuri.world.getCurrentMap().getTrampoline().remove(objId);
 	}
 
 	@Override
@@ -144,12 +144,12 @@ public class Trampoline extends ObjEX implements java.io.Serializable {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		SimYukkuri.world.getCurrentMap().trampoline.put(objId, this);
+		SimYukkuri.world.getCurrentMap().getTrampoline().put(objId, this);
 		objType = Type.OBJECT;
 		objEXType = ObjEXType.TOY;
 		boolean bRet = setupTrampoline(this);
 		if (!bRet) {
-			SimYukkuri.world.getCurrentMap().trampoline.remove(objId);
+			SimYukkuri.world.getCurrentMap().getTrampoline().remove(objId);
 			return;
 		}
 		value = 500;
@@ -248,3 +248,4 @@ public class Trampoline extends ObjEX implements java.io.Serializable {
 	}
 
 }
+

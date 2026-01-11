@@ -54,12 +54,12 @@ public class StickyPlate extends ObjEX implements java.io.Serializable {
 	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
 			images[0] = ModLoader.loadItemImage(loader, "stickyplate" + File.separator + "stickyplate.png");
 			images[1] = ModLoader.loadItemImage(loader, "stickyplate" + File.separator + "stickyplate_off.png");
-			images[2] = ModLoader.loadItemImage(loader, "stickyplate" + File.separator + "stickyplate" + ModLoader.YK_WORD_NORA + ".png");
-			images[3] = ModLoader.loadItemImage(loader, "stickyplate" + File.separator + "stickyplate" + ModLoader.YK_WORD_NORA + "_off.png");
-			boundary.width = images[0].getWidth(io);
-			boundary.height = images[0].getHeight(io);
-			boundary.x = boundary.width >> 1;
-			boundary.y = boundary.height >> 1;
+			images[2] = ModLoader.loadItemImage(loader, "stickyplate" + File.separator + "stickyplate" + ModLoader.getYkWordNora() + ".png");
+			images[3] = ModLoader.loadItemImage(loader, "stickyplate" + File.separator + "stickyplate" + ModLoader.getYkWordNora() + "_off.png");
+			boundary.setWidth(images[0].getWidth(io));
+			boundary.setHeight(images[0].getHeight(io));
+			boundary.setX(boundary.getWidth() >> 1);
+			boundary.setY(boundary.getHeight() >> 1);
 	}
 
 
@@ -177,7 +177,7 @@ public class StickyPlate extends ObjEX implements java.io.Serializable {
 			bindBody.setPullAndPush(false);
 			bindBody = null;
 		}
-		SimYukkuri.world.getCurrentMap().stickyPlate.remove(objId);
+		SimYukkuri.world.getCurrentMap().getStickyPlate().remove(objId);
 	}
 
 	/**
@@ -190,13 +190,13 @@ public class StickyPlate extends ObjEX implements java.io.Serializable {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		SimYukkuri.world.getCurrentMap().stickyPlate.put(objId, this);
+		SimYukkuri.world.getCurrentMap().getStickyPlate().put(objId, this);
 		objType = Type.PLATFORM;
 		objEXType = ObjEXType.STICKYPLATE;
 		interval = 5;
 		if( !setupStickyPlate(this))
 		{
-			SimYukkuri.world.getCurrentMap().stickyPlate.remove(objId);
+			SimYukkuri.world.getCurrentMap().getStickyPlate().remove(objId);
 			return;
 		}
 		itemRank = ItemRank.values()[initOption];
@@ -270,5 +270,6 @@ public class StickyPlate extends ObjEX implements java.io.Serializable {
 	}
 	
 }
+
 
 

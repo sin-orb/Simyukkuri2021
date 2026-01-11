@@ -99,10 +99,10 @@ public class AutoFeeder extends ObjEX implements java.io.Serializable {
 	public static void loadImages(ClassLoader loader, ImageObserver io) throws IOException {
 		images[0] = ModLoader.loadItemImage(loader, "autofeeder" + File.separator + "autofeed.png");
 		images[1] = ModLoader.loadItemImage(loader, "autofeeder" + File.separator + "autofeed_off.png");
-		boundary.width = images[0].getWidth(io);
-		boundary.height = images[0].getHeight(io);
-		boundary.x = boundary.width >> 1;
-		boundary.y = boundary.height >> 1;
+		boundary.setWidth(images[0].getWidth(io));
+		boundary.setHeight(images[0].getHeight(io));
+		boundary.setX(boundary.getWidth() >> 1);
+		boundary.setY(boundary.getHeight() >> 1);
 	}
 
 	@Override
@@ -147,7 +147,7 @@ public class AutoFeeder extends ObjEX implements java.io.Serializable {
 
 	@Override
 	public void removeListData() {
-		SimYukkuri.world.getCurrentMap().autofeeder.remove(objId);
+		SimYukkuri.world.getCurrentMap().getAutofeeder().remove(objId);
 	}
 
 	@Override
@@ -159,7 +159,7 @@ public class AutoFeeder extends ObjEX implements java.io.Serializable {
 			return;
 
 		// お持ち帰りされていたりしたら初期化
-		if (food != null && !SimYukkuri.world.getCurrentMap().food.containsValue(food) &&
+		if (food != null && !SimYukkuri.world.getCurrentMap().getFood().containsValue(food) &&
 			isTakenOut()) {
 			food = null;
 		}
@@ -229,7 +229,7 @@ public class AutoFeeder extends ObjEX implements java.io.Serializable {
 					break;
 				}
 				food = GadgetAction.putObjEX(Food.class, getX(), getY(), f.ordinal());
-				SimYukkuri.world.getCurrentMap().food.put(food.objId, (Food)food);
+				SimYukkuri.world.getCurrentMap().getFood().put(food.objId, (Food)food);
 				Cash.buyItem(food);
 				Cash.addCash(-getCost());
 			}
@@ -237,7 +237,7 @@ public class AutoFeeder extends ObjEX implements java.io.Serializable {
 	}
 
 	private boolean isTakenOut() {
-		for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().body.entrySet()) {
+		for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().getBody().entrySet()) {
 			Body b = entry.getValue();
 			Integer i = b.getTakeoutItem().get(TakeoutItemType.FOOD);
 			if (i == null) {
@@ -261,7 +261,7 @@ public class AutoFeeder extends ObjEX implements java.io.Serializable {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		SimYukkuri.world.getCurrentMap().autofeeder.put(objId, this);
+		SimYukkuri.world.getCurrentMap().getAutofeeder().put(objId, this);
 
 		objType = Type.PLATFORM;
 		objEXType = ObjEXType.AUTOFEEDER;
@@ -273,7 +273,7 @@ public class AutoFeeder extends ObjEX implements java.io.Serializable {
 		} else
 			ret = false;
 		if (!ret) {
-			SimYukkuri.world.getCurrentMap().autofeeder.remove(objId);
+			SimYukkuri.world.getCurrentMap().getAutofeeder().remove(objId);
 		}
 		value = 10000;
 		cost = 30;
@@ -367,11 +367,11 @@ public class AutoFeeder extends ObjEX implements java.io.Serializable {
 		ClassLoader loader = this.getClass().getClassLoader();
 		int nTemp = 0;
 		//間隔
-		nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_ITEM_INI_DIR, "AutoFeeder", "FeedingInterval");
+		nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataItemIniDir(), "AutoFeeder", "FeedingInterval");
 		if (nTemp != 0)
 			feedingInterval = nTemp;
 		//確率
-		nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_ITEM_INI_DIR, "AutoFeeder", "FeedingProbability");
+		nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataItemIniDir(), "AutoFeeder", "FeedingProbability");
 		if (nTemp != 0)
 			feedingP = nTemp;
 	}
@@ -417,3 +417,4 @@ public class AutoFeeder extends ObjEX implements java.io.Serializable {
 	}
 
 }
+

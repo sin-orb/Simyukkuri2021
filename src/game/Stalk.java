@@ -71,10 +71,10 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 			images[i*2+1] = ModLoader.flipImage(images[i*2]);
 		}
 		images[images_num*2] = ImageIO.read(loader.getResourceAsStream(path + "stalk_shadow.png"));
-		boundary.width = images[0].getWidth(io);
-		boundary.height = images[0].getHeight(io);
-		boundary.x = boundary.width >> 1;
-		boundary.y = boundary.height - 1;
+		boundary.setWidth(images[0].getWidth(io));
+		boundary.setHeight(images[0].getHeight(io));
+		boundary.setX(boundary.getWidth() >> 1);
+		boundary.setY(boundary.getHeight() - 1);
 	}
 
 	@Override
@@ -147,7 +147,7 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 	@Override
 	public void removeListData(){
 		remove();
-		SimYukkuri.world.getCurrentMap().stalk.remove(objId);
+		SimYukkuri.world.getCurrentMap().getStalk().remove(objId);
 	}
 	/**
 	 * この茎をはやしているゆっくりを設定する.
@@ -228,8 +228,8 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 		if (X < 0 && plantYukkuri == -1) {
 			x = 0;
 		}
-		else if (X > Translate.mapW && plantYukkuri == -1) {
-			x = Translate.mapW;
+		else if (X > Translate.getMapW() && plantYukkuri == -1) {
+			x = Translate.getMapW();
 		}
 		else {
 			x = X;
@@ -244,8 +244,8 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 		if (Y < 0 && plantYukkuri == -1) {
 			y = 0;
 		}
-		else if(Y > Translate.mapH && plantYukkuri == -1) {
-			y = Translate.mapH;
+		else if(Y > Translate.getMapH() && plantYukkuri == -1) {
+			y = Translate.getMapH();
 		}
 		else {
 			y = Y;
@@ -266,8 +266,8 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 				z = nMostDepth;				
 			}
 		}
-		else if (Z > Translate.mapZ && plantYukkuri == -1) {
-			z = Translate.mapZ;
+		else if (Z > Translate.getMapZ() && plantYukkuri == -1) {
+			z = Translate.getMapZ();
 		}
 		else {
 			z = Z;
@@ -306,7 +306,7 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 				}
 			}
 			remove();
-			SimYukkuri.world.getCurrentMap().stalk.remove(objId);
+			SimYukkuri.world.getCurrentMap().getStalk().remove(objId);
 		}
 	}
 
@@ -324,7 +324,7 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 	 * @return 生えているゆっくり
 	 */
 	public Body takePlantYukkuri() {
-		return SimYukkuri.world.getCurrentMap().body.get(plantYukkuri);
+		return SimYukkuri.world.getCurrentMap().getBody().get(plantYukkuri);
 	}
 
 	@Override
@@ -343,8 +343,8 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 					x = 0;
 					vx *= -1;
 				}
-				else if (x > Translate.mapW) {
-					x = Translate.mapW;
+				else if (x > Translate.getMapW()) {
+					x = Translate.getMapW();
 					vx *= -1;
 				}
 				else if (Barrier.onBarrier(x, y, getW() >> 2, getH() >> 2, Barrier.MAP_ITEM)) {
@@ -358,8 +358,8 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 					y = 0;
 					vy *= -1;
 				}
-				else if (y > Translate.mapH) {
-					y = Translate.mapH;
+				else if (y > Translate.getMapH()) {
+					y = Translate.getMapH();
 					vy *= -1;
 				}
 				else if (Barrier.onBarrier(x, y, getW() >> 2, getH() >> 2, Barrier.MAP_ITEM)) {
@@ -397,7 +397,7 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 		objType = Type.OBJECT;
 		objEXType = ObjEXType.STALK;
 		amount = 100*24*5;
-		SimYukkuri.world.getCurrentMap().stalk.put(objId, this);
+		SimYukkuri.world.getCurrentMap().getStalk().put(objId, this);
 		calcPos();
 	}
 	
@@ -406,7 +406,7 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 		objType = Type.OBJECT;
 		objEXType = ObjEXType.STALK;
 		amount = 100*24*5;
-		SimYukkuri.world.getCurrentMap().stalk.put(objId, this);
+		SimYukkuri.world.getCurrentMap().getStalk().put(objId, this);
 		calcPos();
 	}
 
@@ -435,7 +435,7 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 			}
 		}
 		bindBabies.clear();
-		//SimYukkuri.world.getCurrentMap().stalk.remove(this);
+		//SimYukkuri.world.getCurrentMap().getStalk().remove(this);
 		super.remove();
 	}
 	
@@ -493,4 +493,5 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 		return GetMenuTarget.STALK;
 	}
 }
+
 

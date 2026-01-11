@@ -26,7 +26,15 @@ import src.system.MessagePool;
  */
 public class ToiletLogic {
 	/** うんうんどれい */
-	public static Body bodyUnunSlave;
+	private static Body bodyUnunSlave;
+	
+	public static Body getBodyUnunSlave() {
+		return bodyUnunSlave;
+	}
+	
+	public static void setBodyUnunSlave(Body bodyUnunSlave) {
+		ToiletLogic.bodyUnunSlave = bodyUnunSlave;
+	}
 	/**
 	 * うんうん処理
 	 * @param b ゆっくり
@@ -54,8 +62,8 @@ public class ToiletLogic {
 			bHasShit = true;
 		}
 
-		List<Toilet> toiletList = new LinkedList<>(SimYukkuri.world.getCurrentMap().toilet.values());
-		List<Shit> shitList = new LinkedList<>(SimYukkuri.world.getCurrentMap().shit.values());
+		List<Toilet> toiletList = new LinkedList<>(SimYukkuri.world.getCurrentMap().getToilet().values());
+		List<Shit> shitList = new LinkedList<>(SimYukkuri.world.getCurrentMap().getShit().values());
 		if( shitList == null || shitList.size() == 0 ){
 			return false;
 		}
@@ -78,7 +86,7 @@ public class ToiletLogic {
 		}
 		// うんうん奴隷がいれば運ばない
 		if( bCanTransport  ){
-			for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().body.entrySet()) {
+			for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().getBody().entrySet()) {
 				Body bodyOther = entry.getValue();
 				if(bodyOther == b || bodyOther.isDead() || bodyOther.isRemoved() ){
 					continue;
@@ -97,7 +105,7 @@ public class ToiletLogic {
 		if( bCanTransport ){
 			for (Shit s: shitList) {
 				if(s.getZ() != b.getZ()) continue;
-				if( b.getUniqueID() == s.ownerId ) continue;
+				if( b.getUniqueID() == s.getOwnerId() ) continue;
 
 				// 壁があるなら無視
 				if (Barrier.acrossBarrier(b.getX(), b.getY(), s.getX(), s.getY(), Barrier.MAP_BODY[b.getBodyAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
@@ -141,9 +149,9 @@ public class ToiletLogic {
 			int nDistance = Translate.getRealDistance(b.getX(), b.getY(), s.getX(), s.getY());
 			// ある程度近いうんうんが自分の子供のものかチェック。すでにうんうんを運んでる、自分のうんうんがトイレ外にあれば無視する
 			if( bCanTransport  && nDistance < colX && !bHasShit && !bFoundMyShitOutOfToilet && bFoundMyToilet  ){
-				int bodyOwnerId = s.ownerId;
+				int bodyOwnerId = s.getOwnerId();
 				Body owner = null;
-				for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().body.entrySet()) {
+				for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().getBody().entrySet()) {
 					Body body = entry.getValue();
 					if (body.getUniqueID() == bodyOwnerId) {
 						owner = body;
@@ -243,7 +251,7 @@ public class ToiletLogic {
 			if(b.isToSteal()&& !b.wantToShit() ){
 					return false;
 			}
-			for (Map.Entry<Integer, Toilet> entry : SimYukkuri.world.getCurrentMap().toilet.entrySet()) {
+			for (Map.Entry<Integer, Toilet> entry : SimYukkuri.world.getCurrentMap().getToilet().entrySet()) {
 				Toilet t = entry.getValue();
 				// うんうん奴隷用トイレのどれかにいれば終了＝トイレに向かわない
 				if( t.isForSlave()  && t.checkHitObj(null, b)){
@@ -263,7 +271,7 @@ public class ToiletLogic {
 		else{
 			// うんうん奴隷ではない場合、用がない、かつうんうんを持ってないなら終了
 			if ( !b.wantToShit() && !bHasShit ) {
-				for (Map.Entry<Integer, Toilet> entry : SimYukkuri.world.getCurrentMap().toilet.entrySet()) {
+				for (Map.Entry<Integer, Toilet> entry : SimYukkuri.world.getCurrentMap().getToilet().entrySet()) {
 					Toilet t = entry.getValue();
 					// 自動清掃でないトイレに入った時の反応
 					if(!t.getAutoClean() && t.checkHitObj(null, b) &&!b.isTalking()){
@@ -338,7 +346,7 @@ public class ToiletLogic {
 			wallMode = AgeState.ADULT.ordinal();
 		}
 
-		for (Map.Entry<Integer, Toilet> entry : SimYukkuri.world.getCurrentMap().toilet.entrySet()) {
+		for (Map.Entry<Integer, Toilet> entry : SimYukkuri.world.getCurrentMap().getToilet().entrySet()) {
 			Toilet t = entry.getValue();
 			int distance = Translate.distance(b.getX(), b.getY(), t.getX(), t.getY() - t.getH()/6);
 			if (minDistance > distance) {
@@ -387,5 +395,6 @@ public class ToiletLogic {
 		return ret;
 	}
 }
+
 
 

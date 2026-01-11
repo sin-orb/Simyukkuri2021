@@ -27,10 +27,14 @@ public class Okazari extends Obj {
 				"okazari_child_02"), ADULT1("okazari_adult_01"), ADULT2("okazari_adult_02"), ADULT3("okazari_adult_03"),
 				;
 
-		public String fileName;
+		private final String fileName;
 
 		OkazariType(String name) {
 			this.fileName = name;
+		}
+
+		public String getFileName() {
+			return fileName;
 		}
 	}
 
@@ -58,14 +62,14 @@ public class Okazari extends Obj {
 
 		OkazariType[] o = OkazariType.values();
 		for (int i = 1; i < o.length; i++) {
-			images[i][0] = ModLoader.loadItemImage(loader, "trash" + File.separator + o[i].fileName + ".png");
+			images[i][0] = ModLoader.loadItemImage(loader, "trash" + File.separator + o[i].getFileName() + ".png");
 			images[i][1] = ModLoader.flipImage(images[i][0]);
 
 			boundary[i] = new Rectangle4y();
-			boundary[i].width = images[i][0].getWidth(io);
-			boundary[i].height = images[i][0].getHeight(io);
-			boundary[i].x = boundary[i].width >> 1;
-			boundary[i].y = boundary[i].height - 1;
+			boundary[i].setWidth(images[i][0].getWidth(io));
+			boundary[i].setHeight(images[i][0].getHeight(io));
+			boundary[i].setX(boundary[i].getWidth() >> 1);
+			boundary[i].setY(boundary[i].getHeight() - 1);
 		}
 	}
 
@@ -119,13 +123,13 @@ public class Okazari extends Obj {
 
 		owner = b.getUniqueID();
 		okazariType = type;
-		if (okazariType.fileName == null) {
+		if (okazariType.getFileName() == null) {
 			offsetPos = null;
 			setBoundary(64, 127, 128, 128);
 		} else {
 			Body o = YukkuriUtil.getBodyInstance(owner);
 			if (o != null) {
-				offsetPos = YukkuriUtil.getBodyInstance(owner).getMountPoint(okazariType.fileName);
+				offsetPos = YukkuriUtil.getBodyInstance(owner).getMountPoint(okazariType.getFileName());
 				setBoundary(boundary[type.ordinal()]);
 			}
 		}

@@ -50,7 +50,7 @@ public class Myon extends Body implements java.io.Serializable {
 		if(imageLoaded) return;
 
 		boolean res;
-		res = ModLoader.loadBodyImagePack(loader, imagesNora, directionOffset, ModLoader.YK_WORD_NORA, baseFileName, io);
+		res = ModLoader.loadBodyImagePack(loader, imagesNora, directionOffset, ModLoader.getYkWordNora(), baseFileName, io);
 		if(!res) {
 			imagesNora = null;
 		}
@@ -58,11 +58,11 @@ public class Myon extends Body implements java.io.Serializable {
 		if(!res) {
 			imagesKai = null;
 		}
-		imagePack[BodyRank.KAIYU.imageIndex] = imagesKai;
+		imagePack[BodyRank.KAIYU.getImageIndex()] = imagesKai;
 		if(imagesNora != null) {
-			imagePack[BodyRank.NORAYU.imageIndex] = imagesNora;
+			imagePack[BodyRank.NORAYU.getImageIndex()] = imagesNora;
 		} else {
-			imagePack[BodyRank.NORAYU.imageIndex] = imagesKai;
+			imagePack[BodyRank.NORAYU.getImageIndex()] = imagesKai;
 		}
 		ModLoader.setImageSize(imagesKai, boundary, braidBoundary, io);
 
@@ -73,8 +73,8 @@ public class Myon extends Body implements java.io.Serializable {
 	 * @param loader クラスローダ
 	 */
 	public static void loadIniFile(ClassLoader loader) {
-		AttachOffset = ModLoader.loadBodyIniMap(loader, ModLoader.DATA_INI_DIR, baseFileName);
-		baseSpeed = ModLoader.loadBodyIniMapForInt(loader, ModLoader.DATA_INI_DIR, baseFileName, "speed");
+		AttachOffset = ModLoader.loadBodyIniMap(loader, ModLoader.getDataIniDir(), baseFileName);
+		baseSpeed = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataIniDir(), baseFileName, "speed");
 	}
 	@Override
 	@Transient
@@ -83,8 +83,8 @@ public class Myon extends Body implements java.io.Serializable {
 	}
 	@Override
 	public int getImage(int type, int direction, BodyLayer layer, int index) {
-		layer.image[index] = imagePack[getBodyRank().imageIndex][type][direction * directionOffset[type][0]][getBodyAgeState().ordinal()];
-		layer.dir[index] = direction * directionOffset[type][1];
+		layer.getImage()[index] = imagePack[getBodyRank().getImageIndex()][type][direction * directionOffset[type][0]][getBodyAgeState().ordinal()];
+		layer.getDir()[index] = direction * directionOffset[type][1];
 		return 1;
 	}
 	@Override

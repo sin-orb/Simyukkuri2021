@@ -55,7 +55,7 @@ public class KillPredeatorEvent extends RevengeAttackEvent implements Serializab
 			return false;
 		boolean bIsNearPreadeator = false;
 		// 全ゆっくりに対してチェック
-		for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().body.entrySet()) {
+		for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().getBody().entrySet()) {
 			Body p = entry.getValue();
 			// 自分同士のチェックは無意味なのでスキップ
 			if (p == b) {
@@ -87,7 +87,7 @@ public class KillPredeatorEvent extends RevengeAttackEvent implements Serializab
 	 */
 	public Body searchNextTarget() {
 		Body ret = null;
-		for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().body.entrySet()) {
+		for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().getBody().entrySet()) {
 			Body b = entry.getValue();
 			if (b.isPredatorType()) {
 				ret = b;
@@ -170,3 +170,4 @@ public class KillPredeatorEvent extends RevengeAttackEvent implements Serializab
 		return ResourceUtil.getInstance().read("event_killremi");
 	}
 }
+

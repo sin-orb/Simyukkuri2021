@@ -18,47 +18,123 @@ public class Translate {
 	private static final float wallY = 0.7f;
 
 	/** 飛行種の最大高度、適当に画面外に出ない値で */
-	public static final float flyLimit = 0.175f;
+	private static final float flyLimit = 0.175f;
 
 	/** スケール値、内部規定値*スケールがマップサイズになる */
-	public static int mapScale;
+	private static int mapScale;
 	/** マップサイズ 内部計算で使用するオブジェクトの位置座標 */
-	public static int mapW;
-	public static int mapH;
-	public static int mapZ;
+	private static int mapW;
+	private static int mapH;
+	private static int mapZ;
 	/** フィールドサイズ 実際に描画されるフィールドのピクセル値 */
-	public static int fieldW;
-	public static int fieldH;
+	private static int fieldW;
+	private static int fieldH;
 	/** バックバッファサイズ */
-	public static int bufferW;
-	public static int bufferH;
+	private static int bufferW;
+	private static int bufferH;
 	/** バックバッファ描画位置、サイズ */
 	private static Rectangle4y displayArea = new Rectangle4y();
 	private static float[] zoomTable;
 	private static int zoomRate = 0;
 
 	/** キャンバスサイズ 画面に描画されるウィンドウ枠の大きさ */
-	public static int canvasW;
-	public static int canvasH;
+	private static int canvasW;
+	private static int canvasH;
 
 	// 四角のマップを台形に歪めて配置するため
 	/** フィールド各Y座標でのXのスケールレートをテーブル化 */
-	public static float[] rateX;
-	public static int[] ofsX;
+	private static float[] rateX;
+	private static int[] ofsX;
 	/** Y座標は直線なので単純なテーブル引きで済む */
-	public static int[] mapToFieldY;
-	public static int fieldMinY;
+	private static int[] mapToFieldY;
+	private static int fieldMinY;
 	/** Z座標はテーブルを使わずレート計算 */
-	public static float rateZ;
+	private static float rateZ;
 
 	/**
 	 * マウスクリックなどフィールドのクリック位置からマップ座標へ変換するテーブル
 	 * Xはマップ->フィールドから逆引きできるのでYのみ作成
 	 */
-	public static int[] fieldToMapY;
+	private static int[] fieldToMapY;
 
 	/** オブジェクトの内包を簡易判定するためのシェイプ */
-	public static Polygon fieldPoly;
+	private static Polygon fieldPoly;
+
+	public static float getFlyLimit() {
+		return flyLimit;
+	}
+
+	public static int getMapScale() {
+		return mapScale;
+	}
+
+	public static void setMapScale(int scale) {
+		mapScale = scale;
+	}
+
+	public static int getMapW() {
+		return mapW;
+	}
+
+	public static int getMapH() {
+		return mapH;
+	}
+
+	public static int getMapZ() {
+		return mapZ;
+	}
+
+	public static int getFieldW() {
+		return fieldW;
+	}
+
+	public static int getFieldH() {
+		return fieldH;
+	}
+
+	public static int getBufferW() {
+		return bufferW;
+	}
+
+	public static int getBufferH() {
+		return bufferH;
+	}
+
+	public static int getCanvasW() {
+		return canvasW;
+	}
+
+	public static int getCanvasH() {
+		return canvasH;
+	}
+
+	public static float[] getRateX() {
+		return rateX;
+	}
+
+	public static int[] getOfsX() {
+		return ofsX;
+	}
+
+	public static int[] getMapToFieldY() {
+		return mapToFieldY;
+	}
+
+	public static int getFieldMinY() {
+		return fieldMinY;
+	}
+
+	public static float getRateZ() {
+		return rateZ;
+	}
+
+	public static int[] getFieldToMapY() {
+		return fieldToMapY;
+	}
+
+	public static Polygon getFieldPoly() {
+		return fieldPoly;
+	}
 
 	/**
 	 * マップサイズを設定する.
@@ -97,8 +173,8 @@ public class Translate {
 		zoomRate = 0;
 
 		setBufferZoom();
-		displayArea.x = 0;
-		displayArea.y = 0;
+		displayArea.setX(0);
+		displayArea.setY(0);
 	}
 
 	/**
@@ -147,8 +223,8 @@ public class Translate {
 	 * バッファズームを設定する.
 	 */
 	public static final void setBufferZoom() {
-		displayArea.width = (int) ((float) fieldW * zoomTable[zoomRate]);
-		displayArea.height = (int) ((float) fieldH * zoomTable[zoomRate]);
+		displayArea.setWidth((int) ((float) fieldW * zoomTable[zoomRate]));
+		displayArea.setHeight((int) ((float) fieldH * zoomTable[zoomRate]));
 	}
 
 	/**
@@ -158,8 +234,8 @@ public class Translate {
 	 * @param sy バックバッファ描画位置Y座標
 	 */
 	public static final void setBufferPos(int sx, int sy) {
-		displayArea.x = sx;
-		displayArea.y = sy;
+		displayArea.setX(sx);
+		displayArea.setY(sy);
 		checkDisplayLimit();
 	}
 
@@ -170,8 +246,8 @@ public class Translate {
 	 * @param sy バックバッファ描画位置Y座標
 	 */
 	public static final void setBufferCenterPos(int sx, int sy) {
-		displayArea.x = sx - (displayArea.width >> 1);
-		displayArea.y = sy - (displayArea.height >> 1);
+		displayArea.setX(sx - (displayArea.getWidth() >> 1));
+		displayArea.setY(sy - (displayArea.getHeight() >> 1));
 		checkDisplayLimit();
 	}
 
@@ -182,21 +258,21 @@ public class Translate {
 	 * @param sy 加えるバックバッファ描画位置Y座標
 	 */
 	public static final void addBufferPos(int sx, int sy) {
-		displayArea.x += sx;
-		displayArea.y += sy;
+		displayArea.setX(displayArea.getX() + sx);
+		displayArea.setY(displayArea.getY() + sy);
 		checkDisplayLimit();
 	}
 
 	private static final void checkDisplayLimit() {
-		if (displayArea.x < 0)
-			displayArea.x = 0;
-		else if ((displayArea.x + displayArea.width) >= fieldW)
-			displayArea.x = fieldW - displayArea.width;
+		if (displayArea.getX() < 0)
+			displayArea.setX(0);
+		else if ((displayArea.getX() + displayArea.getWidth()) >= fieldW)
+			displayArea.setX(fieldW - displayArea.getWidth());
 
-		if (displayArea.y < 0)
-			displayArea.y = 0;
-		else if ((displayArea.y + displayArea.height) >= fieldH)
-			displayArea.y = fieldH - displayArea.height;
+		if (displayArea.getY() < 0)
+			displayArea.setY(0);
+		else if ((displayArea.getY() + displayArea.getHeight()) >= fieldH)
+			displayArea.setY(fieldH - displayArea.getHeight());
 	}
 
 	/**
@@ -216,8 +292,8 @@ public class Translate {
 	 * @param out 変換後座標
 	 */
 	public static final void transCanvasToField(int x, int y, int[] out) {
-		out[0] = displayArea.x + (int) (x * fieldW / canvasW * zoomTable[zoomRate]);
-		out[1] = displayArea.y + (int) (y * fieldH / canvasH * zoomTable[zoomRate]);
+		out[0] = displayArea.getX() + (int) (x * fieldW / canvasW * zoomTable[zoomRate]);
+		out[1] = displayArea.getY() + (int) (y * fieldH / canvasH * zoomTable[zoomRate]);
 	}
 
 	/**
@@ -228,8 +304,8 @@ public class Translate {
 	 * @param out 変換後座標
 	 */
 	public static final void transFieldToCanvas(int x, int y, int[] out) {
-		out[0] = (int) ((x - displayArea.x) * canvasW / fieldW / zoomTable[zoomRate]);
-		out[1] = (int) ((y - displayArea.y) * canvasH / fieldH / zoomTable[zoomRate]);
+		out[0] = (int) ((x - displayArea.getX()) * canvasW / fieldW / zoomTable[zoomRate]);
+		out[1] = (int) ((y - displayArea.getY()) * canvasH / fieldH / zoomTable[zoomRate]);
 	}
 
 	/**
@@ -562,8 +638,8 @@ public class Translate {
 	public static Point4y calcObjctPutPoint(int mx, int my, Rectangle4y rect) {
 		Point4y ret = null;
 
-		int colH = rect.height - rect.y;
-		Rectangle r = new Rectangle(mx - rect.x, my - colH, rect.width, colH << 1);
+		int colH = rect.getHeight() - rect.getY();
+		Rectangle r = new Rectangle(mx - rect.getX(), my - colH, rect.getWidth(), colH << 1);
 		if (fieldPoly.contains(r)) {
 			ret = invert(mx, my);
 		}
@@ -805,7 +881,7 @@ public class Translate {
 		int mSX = Math.max(0, Math.min(x, Translate.mapW));
 		int mSY = Math.max(0, Math.min(y, Translate.mapH));
 
-		return SimYukkuri.world.getCurrentMap().wallMap[mSX][mSY];
+		return SimYukkuri.world.getCurrentMap().getWallMap()[mSX][mSY];
 	}
 
 	/**
@@ -819,7 +895,7 @@ public class Translate {
 		int mSX = Math.max(0, Math.min(x, Translate.mapW));
 		int mSY = Math.max(0, Math.min(y, Translate.mapH));
 
-		SimYukkuri.world.getCurrentMap().wallMap[mSX][mSY] = num;
+		SimYukkuri.world.getCurrentMap().getWallMap()[mSX][mSY] = num;
 	}
 
 	/**
@@ -833,7 +909,7 @@ public class Translate {
 		int mSX = Math.max(0, Math.min(x, Translate.mapW));
 		int mSY = Math.max(0, Math.min(y, Translate.mapH));
 
-		return SimYukkuri.world.getCurrentMap().fieldMap[mSX][mSY];
+		return SimYukkuri.world.getCurrentMap().getFieldMap()[mSX][mSY];
 	}
 
 	/**
@@ -847,6 +923,7 @@ public class Translate {
 		int mSX = Math.max(0, Math.min(x, Translate.mapW));
 		int mSY = Math.max(0, Math.min(y, Translate.mapH));
 
-		SimYukkuri.world.getCurrentMap().fieldMap[mSX][mSY] = num;
+		SimYukkuri.world.getCurrentMap().getFieldMap()[mSX][mSY] = num;
 	}
 }
+

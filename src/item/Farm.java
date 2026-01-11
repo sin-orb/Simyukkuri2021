@@ -58,7 +58,7 @@ public class Farm extends FieldShapeBase implements Serializable {
 	@Override
 	public void executeShapePopup(ShapeMenu menu) {
 
-		List<Farm> list = SimYukkuri.world.getCurrentMap().farm;
+		List<Farm> list = SimYukkuri.world.getCurrentMap().getFarm();
 		int pos;
 
 		switch (menu) {
@@ -141,25 +141,25 @@ public class Farm extends FieldShapeBase implements Serializable {
 
 		// フィールド座標が渡ってくるのでマップ座標も計算しておく
 		Point4y pos = Translate.invertLimit(anPointBaseX[0], anPointBaseY[0]);
-		mapSX = Math.max(0, Math.min(pos.getX(), Translate.mapW));
-		mapSY = Math.max(0, Math.min(pos.getY(), Translate.mapH));
+		mapSX = Math.max(0, Math.min(pos.getX(), Translate.getMapW()));
+		mapSY = Math.max(0, Math.min(pos.getY(), Translate.getMapH()));
 
 		pos = Translate.invertLimit(anPointBaseX[1], anPointBaseY[1]);
-		mapEX = Math.max(0, Math.min(pos.getX(), Translate.mapW));
-		mapEY = Math.max(0, Math.min(pos.getY(), Translate.mapH));
+		mapEX = Math.max(0, Math.min(pos.getX(), Translate.getMapW()));
+		mapEY = Math.max(0, Math.min(pos.getY(), Translate.getMapH()));
 
 		// 規定サイズと位置へ合わせる
 		if ((mapEX - mapSX) < MIN_SIZE)
 			mapEX = mapSX + MIN_SIZE;
 		if ((mapEY - mapSY) < MIN_SIZE)
 			mapEY = mapSY + MIN_SIZE;
-		if (mapEX > Translate.mapW) {
-			mapSX -= (mapEX - Translate.mapW);
-			mapEX -= (mapEX - Translate.mapW);
+		if (mapEX > Translate.getMapW()) {
+			mapSX -= (mapEX - Translate.getMapW());
+			mapEX -= (mapEX - Translate.getMapW());
 		}
-		if (mapEY > Translate.mapH) {
-			mapSY -= (mapEY - Translate.mapH);
-			mapEY -= (mapEY - Translate.mapH);
+		if (mapEY > Translate.getMapH()) {
+			mapSY -= (mapEY - Translate.getMapH());
+			mapEY -= (mapEY - Translate.getMapH());
 		}
 
 		Point4y f = new Point4y();
@@ -175,8 +175,8 @@ public class Farm extends FieldShapeBase implements Serializable {
 		mapW = mapEX - mapSX + 1;
 		mapH = mapEY - mapSY + 1;
 
-		SimYukkuri.world.getCurrentMap().farm.add(this);
-		MapPlaceData.setFiledFlag(SimYukkuri.world.getCurrentMap().fieldMap, mapSX, mapSY, mapW, mapH, true,
+		SimYukkuri.world.getCurrentMap().getFarm().add(this);
+		MapPlaceData.setFiledFlag(SimYukkuri.world.getCurrentMap().getFieldMap(), mapSX, mapSY, mapW, mapH, true,
 				FIELD_FARM);
 	}
 
@@ -187,7 +187,7 @@ public class Farm extends FieldShapeBase implements Serializable {
 	/** フィールド座標にあるシェイプ取得 */
 	public static Farm getFarm(int fx, int fy) {
 
-		for (Farm bc : SimYukkuri.world.getCurrentMap().farm) {
+		for (Farm bc : SimYukkuri.world.getCurrentMap().getFarm()) {
 			if (bc.fieldSX <= fx && fx <= bc.fieldEX
 					&& bc.fieldSY <= fy && fy <= bc.fieldEY) {
 				return bc;
@@ -198,12 +198,12 @@ public class Farm extends FieldShapeBase implements Serializable {
 
 	/** 削除 */
 	public static void deleteFarm(Farm b) {
-		MapPlaceData.setFiledFlag(SimYukkuri.world.getCurrentMap().fieldMap, b.mapSX, b.mapSY, b.mapW, b.mapH, false,
+		MapPlaceData.setFiledFlag(SimYukkuri.world.getCurrentMap().getFieldMap(), b.mapSX, b.mapSY, b.mapW, b.mapH, false,
 				FIELD_FARM);
-		SimYukkuri.world.getCurrentMap().farm.remove(b);
+		SimYukkuri.world.getCurrentMap().getFarm().remove(b);
 		// 重なってた部分の復元
-		for (Farm bc : SimYukkuri.world.getCurrentMap().farm) {
-			MapPlaceData.setFiledFlag(SimYukkuri.world.getCurrentMap().fieldMap, bc.mapSX, bc.mapSY, bc.mapW, bc.mapH,
+		for (Farm bc : SimYukkuri.world.getCurrentMap().getFarm()) {
+			MapPlaceData.setFiledFlag(SimYukkuri.world.getCurrentMap().getFieldMap(), bc.mapSX, bc.mapSY, bc.mapW, bc.mapH,
 					true,
 					FIELD_FARM);
 		}
@@ -371,7 +371,7 @@ public class Farm extends FieldShapeBase implements Serializable {
 				if (!b.isHasStalk() && 1000 < amount) {
 					Stalk s = (Stalk) GadgetAction.putObjEX(Stalk.class, b.getX(), b.getY(),
 							b.getDirection().ordinal());
-					SimYukkuri.world.getCurrentMap().stalk.put(s.objId, s);
+					SimYukkuri.world.getCurrentMap().getStalk().put(s.objId, s);
 					if (b.getStalks() != null) {
 						b.getStalks().add(s);
 						s.setPlantYukkuri(b);
@@ -384,7 +384,7 @@ public class Farm extends FieldShapeBase implements Serializable {
 						if (SimYukkuri.RND.nextInt(100) == 0) {
 							Stalk s = (Stalk) GadgetAction.putObjEX(Stalk.class, b.getX(), b.getY(),
 									b.getDirection().ordinal());
-							SimYukkuri.world.getCurrentMap().stalk.put(s.objId, s);
+							SimYukkuri.world.getCurrentMap().getStalk().put(s.objId, s);
 							if (b.getStalks() != null) {
 								b.getStalks().add(s);
 								s.setPlantYukkuri(b);
@@ -423,3 +423,4 @@ public class Farm extends FieldShapeBase implements Serializable {
 	}
 
 }
+

@@ -68,19 +68,19 @@ public class Toilet extends ObjEX implements java.io.Serializable {
 		images[1] = ModLoader.loadItemImage(loader, "toilet" + File.separator + "toilet2.png");
 
 		images[2] = ModLoader.loadItemImage(loader,
-				"toilet" + File.separator + "toilet" + ModLoader.YK_WORD_NORA + ".png");
+				"toilet" + File.separator + "toilet" + ModLoader.getYkWordNora() + ".png");
 		images[3] = ModLoader.loadItemImage(loader,
-				"toilet" + File.separator + "toilet" + ModLoader.YK_WORD_NORA + "2.png");
+				"toilet" + File.separator + "toilet" + ModLoader.getYkWordNora() + "2.png");
 
 		images[4] = ModLoader.loadItemImage(loader,
-				"toilet" + File.separator + "toilet" + ModLoader.YK_WORD_YASEI + ".png");
+				"toilet" + File.separator + "toilet" + ModLoader.getYkWordYasei() + ".png");
 		images[5] = ModLoader.loadItemImage(loader,
-				"toilet" + File.separator + "toilet" + ModLoader.YK_WORD_YASEI + "2.png");
+				"toilet" + File.separator + "toilet" + ModLoader.getYkWordYasei() + "2.png");
 
-		boundary.width = images[0].getWidth(io);
-		boundary.height = images[0].getHeight(io);
-		boundary.x = boundary.width >> 1;
-		boundary.y = boundary.height >> 1;
+		boundary.setWidth(images[0].getWidth(io));
+		boundary.setHeight(images[0].getHeight(io));
+		boundary.setX(boundary.getWidth() >> 1);
+		boundary.setY(boundary.getHeight() >> 1);
 	}
 
 	@Override
@@ -155,7 +155,7 @@ public class Toilet extends ObjEX implements java.io.Serializable {
 
 	@Override
 	public void removeListData() {
-		SimYukkuri.world.getCurrentMap().toilet.remove(objId);
+		SimYukkuri.world.getCurrentMap().getToilet().remove(objId);
 	}
 
 	/**
@@ -188,7 +188,7 @@ public class Toilet extends ObjEX implements java.io.Serializable {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		SimYukkuri.world.getCurrentMap().toilet.put(objId, this);
+		SimYukkuri.world.getCurrentMap().getToilet().put(objId, this);
 		objType = Type.PLATFORM;
 		objEXType = ObjEXType.TOILET;
 		interval = 30;
@@ -197,7 +197,7 @@ public class Toilet extends ObjEX implements java.io.Serializable {
 		if (ret) {
 			itemRank = ItemRank.values()[initOption];
 			// 森なら野生に変更
-			if (SimYukkuri.world.getCurrentMap().mapIndex == 5 || SimYukkuri.world.getCurrentMap().mapIndex == 6) {
+			if (SimYukkuri.world.getCurrentMap().getMapIndex() == 5 || SimYukkuri.world.getCurrentMap().getMapIndex() == 6) {
 				if (itemRank == ItemRank.HOUSE) {
 					itemRank = ItemRank.YASEI;
 				}
@@ -216,7 +216,7 @@ public class Toilet extends ObjEX implements java.io.Serializable {
 				cost = 0;
 			}
 		} else {
-			SimYukkuri.world.getCurrentMap().toilet.remove(objId);
+			SimYukkuri.world.getCurrentMap().getToilet().remove(objId);
 		}
 	}
 
@@ -296,3 +296,4 @@ public class Toilet extends ObjEX implements java.io.Serializable {
 	}
 
 }
+

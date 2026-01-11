@@ -18,12 +18,12 @@ import src.system.ResourceUtil;
 import src.util.YukkuriUtil;
 
 /***************************************************
-	すぃーの乗車管理イベント
-	protected Body from;			// 乗るゆっくり
-	protected Body to;				// 未使用
-	protected Obj target;			// すぃー
-	protected int count;			// 100
-*/
+ * すぃーの乗車管理イベント
+ * protected Body from; // 乗るゆっくり
+ * protected Body to; // 未使用
+ * protected Obj target; // すぃー
+ * protected int count; // 100
+ */
 public class SuiRideEvent extends EventPacket implements java.io.Serializable {
 
 	private static final long serialVersionUID = -3480227497799647328L;
@@ -37,7 +37,7 @@ public class SuiRideEvent extends EventPacket implements java.io.Serializable {
 		super(f, t, tgt, cnt);
 		priority = EventPriority.MIDDLE; // すぃーの乗車イベントを食事、睡眠、トイレより上にする
 	}
-	
+
 	public SuiRideEvent() {
 	}
 
@@ -46,13 +46,14 @@ public class SuiRideEvent extends EventPacket implements java.io.Serializable {
 	// また、イベント優先度も必要に応じて設定できる
 	@Override
 	public boolean checkEventResponse(Body b) {
-		//		boolean ret = false;
+		// boolean ret = false;
 		Obj target = b.takeMappedObj(this.target);
 		if (target == null) {
 			return false;
 		}
 		Body from = YukkuriUtil.getBodyInstance(getFrom());
-		if (from == null) return false;
+		if (from == null)
+			return false;
 		if (from == b) {
 			return true;
 		}
@@ -69,27 +70,27 @@ public class SuiRideEvent extends EventPacket implements java.io.Serializable {
 					EnumRelationMine eRelation = BodyLogic.checkMyRelation(b, from);
 					// 嘆く
 					switch (eRelation) {
-					case FATHER: // 父
-					case MOTHER: // 母
-						b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateWithEnvyAboutMother));
-						break;
-					case PARTNAR: // つがい
-						b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateWithEnvyAboutPartner));
-						break;
-					case CHILD_FATHER: // 父の子供
-						b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateWithEnvyAboutFather));
-						break;
-					case CHILD_MOTHER: // 母の子供
-						b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateWithEnvyAboutMother));
-						break;
-					case ELDERSISTER: // 姉
-						b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateWithEnvyAboutSister));
-						break;
-					case YOUNGSISTER: // 妹
-						b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateWithEnvyAboutElderSister));
-						break;
-					default: // 他人
-						break;
+						case FATHER: // 父
+						case MOTHER: // 母
+							b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateWithEnvyAboutMother));
+							break;
+						case PARTNAR: // つがい
+							b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateWithEnvyAboutPartner));
+							break;
+						case CHILD_FATHER: // 父の子供
+							b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateWithEnvyAboutFather));
+							break;
+						case CHILD_MOTHER: // 母の子供
+							b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateWithEnvyAboutMother));
+							break;
+						case ELDERSISTER: // 姉
+							b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateWithEnvyAboutSister));
+							break;
+						case YOUNGSISTER: // 妹
+							b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateWithEnvyAboutElderSister));
+							break;
+						default: // 他人
+							break;
 					}
 					b.setHappiness(Happiness.VERY_SAD);
 					b.stay();
@@ -128,12 +129,13 @@ public class SuiRideEvent extends EventPacket implements java.io.Serializable {
 		// すぃーを所持している場合
 		if (b.getFavItem(FavItemType.SUI) != null) {
 
-			//　対象のすぃーに乗っていない場合は終了
+			// 対象のすぃーに乗っていない場合は終了
 			if (!s.isriding(b)) {
 				return null;
 			}
 			Body from = YukkuriUtil.getBodyInstance(getFrom());
-			if (from == null) return UpdateState.ABORT;
+			if (from == null)
+				return UpdateState.ABORT;
 			if (from == b) {
 				// 乗客数が上限、またはカウント50以上の場合
 				if (s.getCurrent_bindbody_num() >= 3 || tick > 50) {
@@ -143,8 +145,8 @@ public class SuiRideEvent extends EventPacket implements java.io.Serializable {
 						// 乗ろうとしているゆっくりがいない、またはカウントが50の倍数の場合ランダムに移動する
 						// ※移動中はすぃーの状態を変えるなりなんなりした方がいいのでは
 						if (!memberride || tick % 50 == 0) {
-							b.moveTo(SimYukkuri.RND.nextInt(Translate.mapW),
-									SimYukkuri.RND.nextInt(Translate.mapH - Sui.getBounding().height / 2));
+							b.moveTo(SimYukkuri.RND.nextInt(Translate.getMapW()),
+									SimYukkuri.RND.nextInt(Translate.getMapH() - Sui.getBounding().getHeight() / 2));
 						}
 						// カウントが500を超える場合
 						if (tick > 500) {
@@ -202,7 +204,8 @@ public class SuiRideEvent extends EventPacket implements java.io.Serializable {
 			Body from = YukkuriUtil.getBodyInstance(getFrom());
 			// 移動する
 			b.moveToEvent(this, target.getX(), target.getY());
-			if (from == null) return UpdateState.ABORT;
+			if (from == null)
+				return UpdateState.ABORT;
 			if (from == b && s.iscanriding() || s.getCurrent_bindbody_num() >= 3) {
 				memberride = false;
 				return UpdateState.ABORT;
@@ -250,7 +253,7 @@ public class SuiRideEvent extends EventPacket implements java.io.Serializable {
 
 	@Override
 	public void end(Body b) {
-		//他のイベントで強制的にイベントが終わることがある	
+		// 他のイベントで強制的にイベントが終わることがある
 		// すぃーにのってたら降りる
 		Sui s = (Sui) b.takeMappedObj(b.getLinkParent());
 		if (s != null) {
