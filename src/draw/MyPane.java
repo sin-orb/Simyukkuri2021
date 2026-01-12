@@ -693,95 +693,105 @@ public class MyPane extends JPanel implements Runnable {
 			} catch (NumberFormatException ne) {
 				maxNum = 1;
 			}
-
-			int rndType = cb4.getSelectedIndex();
-			for (int i = 0; i < maxNum; i++) {
-				int selectType;
-				int selectAge;
-				switch (rndType) {
-					case 0:
-					default:
-						selectType = cb1.getSelectedIndex();
-						if (cb3.getSelectedIndex() == 1) {
-							selectType += 1000;
-						} else if (cb3.getSelectedIndex() == 2) {
-							selectType += 3000;
-						}
-						selectAge = cb2.getSelectedIndex();
-						break;
-					case 1:
-						selectType = SimYukkuri.RND.nextInt(namesCommonJ.length);
-						selectAge = SimYukkuri.RND.nextInt(3);
-						break;
-					case 2:
-						selectType = SimYukkuri.RND.nextInt(namesRareJ.length) + 1000;
-						selectAge = SimYukkuri.RND.nextInt(3);
-						break;
-					case 3:
-						int selectRare = SimYukkuri.RND.nextInt(2);
-						switch (selectRare) {
-							case 0:
-							default:
-								selectType = SimYukkuri.RND.nextInt(namesCommonJ.length);
-								break;
-							case 1:
-								selectType = SimYukkuri.RND.nextInt(namesRareJ.length) + 1000;
-								break;
-						}
-						selectAge = SimYukkuri.RND.nextInt(3);
-						break;
-				}
-
-				boolean bImageNagasiMode = false;
-				if (selectType == Reimu.type && SimYukkuri.RND.nextInt(20) == 0)
-					selectType = WasaReimu.type;
-				if (selectType == Reimu.type && SimYukkuri.RND.nextInt(15) == 0)
-					selectType = Deibu.type;
-				if (selectType == Marisa.type && SimYukkuri.RND.nextInt(50) == 0)
-					selectType = MarisaTsumuri.type;
-				if (selectType == Marisa.type && SimYukkuri.RND.nextInt(50) == 0)
-					selectType = MarisaKotatsumuri.type;
-				if (selectType == Ayaya.type && SimYukkuri.RND.nextInt(20) == 0)
-					selectType = Kimeemaru.type;
-
-				// if(selectType == Reimu.type || selectType == Marisa.type)
-				{
-					if (SimYukkuri.NAGASI_MODE == 1) {
-						bImageNagasiMode = true;
+			final int fMaxNum = maxNum;
+			final int fRndType = cb4.getSelectedIndex();
+			final int fBaseType = cb1.getSelectedIndex();
+			final int fRareType = cb3.getSelectedIndex();
+			final int fAgeType = cb2.getSelectedIndex();
+			final boolean fRaper = cb6.isSelected();
+			final String loadingMsg = ResourceUtil.IS_JP ? "読み込み中..." : "Loading...";
+			SimYukkuri.simYukkuri.runWithLoadingDialog(loadingMsg, () -> {
+				for (int i = 0; i < fMaxNum; i++) {
+					int selectType;
+					int selectAge;
+					switch (fRndType) {
+						case 0:
+						default:
+							selectType = fBaseType;
+							if (fRareType == 1) {
+								selectType += 1000;
+							} else if (fRareType == 2) {
+								selectType += 3000;
+							}
+							selectAge = fAgeType;
+							break;
+						case 1:
+							selectType = SimYukkuri.RND.nextInt(namesCommonJ.length);
+							selectAge = SimYukkuri.RND.nextInt(3);
+							break;
+						case 2:
+							selectType = SimYukkuri.RND.nextInt(namesRareJ.length) + 1000;
+							selectAge = SimYukkuri.RND.nextInt(3);
+							break;
+						case 3:
+							int selectRare = SimYukkuri.RND.nextInt(2);
+							switch (selectRare) {
+								case 0:
+								default:
+									selectType = SimYukkuri.RND.nextInt(namesCommonJ.length);
+									break;
+								case 1:
+									selectType = SimYukkuri.RND.nextInt(namesRareJ.length) + 1000;
+									break;
+							}
+							selectAge = SimYukkuri.RND.nextInt(3);
+							break;
 					}
-					if (SimYukkuri.NAGASI_MODE == 2) {
-						if (SimYukkuri.RND.nextInt(20) == 0) {
+
+					boolean bImageNagasiMode = false;
+					if (selectType == Reimu.type && SimYukkuri.RND.nextInt(20) == 0)
+						selectType = WasaReimu.type;
+					if (selectType == Reimu.type && SimYukkuri.RND.nextInt(15) == 0)
+						selectType = Deibu.type;
+					if (selectType == Marisa.type && SimYukkuri.RND.nextInt(50) == 0)
+						selectType = MarisaTsumuri.type;
+					if (selectType == Marisa.type && SimYukkuri.RND.nextInt(50) == 0)
+						selectType = MarisaKotatsumuri.type;
+					if (selectType == Ayaya.type && SimYukkuri.RND.nextInt(20) == 0)
+						selectType = Kimeemaru.type;
+
+					// if(selectType == Reimu.type || selectType == Marisa.type)
+					{
+						if (SimYukkuri.NAGASI_MODE == 1) {
 							bImageNagasiMode = true;
 						}
+						if (SimYukkuri.NAGASI_MODE == 2) {
+							if (SimYukkuri.RND.nextInt(20) == 0) {
+								bImageNagasiMode = true;
+							}
+						}
 					}
-				}
 
-				AgeState age;
-				switch (selectAge) {
-					case BABY:
-						age = AgeState.BABY;
-						break;
-					case CHILD:
-						age = AgeState.CHILD;
-						break;
-					case ADULT:
-					default:
-						age = AgeState.ADULT;
-						break;
-				}
-				Body b = terrarium.makeBody(SimYukkuri.RND.nextInt(Translate.getMapW()),
-						SimYukkuri.RND.nextInt(Translate.getMapH()), 0, selectType,
-						null, age, null, null, true);
-				b.addAge(256);
-				if (cb6.isSelected()) {
-					b.setRaper(true);
-				} else {
-					b.setRaper(false);
-				}
-				b.setbImageNagasiMode(bImageNagasiMode);
+					AgeState age;
+					switch (selectAge) {
+						case BABY:
+							age = AgeState.BABY;
+							break;
+						case CHILD:
+							age = AgeState.CHILD;
+							break;
+						case ADULT:
+						default:
+							age = AgeState.ADULT;
+							break;
+					}
+					Body b;
+					synchronized (SimYukkuri.lock) {
+						b = terrarium.makeBody(SimYukkuri.RND.nextInt(Translate.getMapW()),
+								SimYukkuri.RND.nextInt(Translate.getMapH()), 0, selectType,
+								null, age, null, null, true);
+					}
+					b.addAge(256);
+					if (fRaper) {
+						b.setRaper(true);
+					} else {
+						b.setRaper(false);
+					}
+					b.setbImageNagasiMode(bImageNagasiMode);
 
-				bodies.add(b);
-			}
+					bodies.add(b);
+				}
+			});
 			choice = 1;
 			choice = JOptionPane.showOptionDialog(this, mess2 + System.getProperty("line.separator"), SimYukkuri.TITLE,
 					JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);

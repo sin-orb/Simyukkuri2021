@@ -224,17 +224,28 @@ public class SimYukkuri extends JFrame {
 			return;
 		}
 		final File file = fc.getSelectedFile();
-		final JDialog loadingDialog = createLoadingDialog();
-		final Exception[] err = new Exception[1];
+		String msg = ResourceUtil.IS_JP ? "読み込み中..." : "Loading...";
+		runWithLoadingDialog(msg, () -> {
+			synchronized (lock) {
+				try {
+					Terrarium.loadState(file);
+				} catch (IOException | ClassNotFoundException e) {
+					throw new RuntimeException(e);
+				}
+			}
+		});
+	}
+
+	public void runWithLoadingDialog(String message, Runnable task) {
+		final JDialog loadingDialog = createLoadingDialog(message);
+		final Throwable[] err = new Throwable[1];
 		SwingWorker<Void, Void> worker = new SwingWorker<Void, Void>() {
 			@Override
 			protected Void doInBackground() {
-				synchronized (lock) {
-					try {
-						Terrarium.loadState(file);
-					} catch (IOException | ClassNotFoundException e) {
-						err[0] = e;
-					}
+				try {
+					task.run();
+				} catch (Throwable t) {
+					err[0] = t;
 				}
 				return null;
 			}
@@ -243,8 +254,12 @@ public class SimYukkuri extends JFrame {
 			protected void done() {
 				loadingDialog.dispose();
 				if (err[0] != null) {
-					System.out.println(err[0]);
-					JOptionPane.showMessageDialog(SimYukkuri.this, err[0].getLocalizedMessage(), SimYukkuri.TITLE,
+					Throwable t = err[0];
+					if (t instanceof RuntimeException && t.getCause() != null) {
+						t = t.getCause();
+					}
+					System.out.println(t);
+					JOptionPane.showMessageDialog(SimYukkuri.this, t.getLocalizedMessage(), SimYukkuri.TITLE,
 							JOptionPane.ERROR_MESSAGE);
 				}
 			}
@@ -253,8 +268,8 @@ public class SimYukkuri extends JFrame {
 		loadingDialog.setVisible(true);
 	}
 
-	private JDialog createLoadingDialog() {
-		String msg = ResourceUtil.IS_JP ? "読み込み中..." : "Loading...";
+	private JDialog createLoadingDialog(String message) {
+		String msg = message == null ? "" : message;
 		JDialog dialog = new JDialog(SimYukkuri.this, msg, Dialog.ModalityType.APPLICATION_MODAL);
 		dialog.setDefaultCloseOperation(JDialog.DO_NOTHING_ON_CLOSE);
 		dialog.setResizable(false);
