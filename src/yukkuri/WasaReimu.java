@@ -23,7 +23,7 @@ import src.util.IniFileUtil;
 /**
  * わされいむ
  */
-public class WasaReimu extends Reimu implements java.io.Serializable {
+public class WasaReimu extends Reimu {
 	private static final long serialVersionUID = -6456378316922420937L;
 	/** わされいむのタイプ */
 	public static final int type = 2001;

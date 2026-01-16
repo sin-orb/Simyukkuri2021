@@ -1,6 +1,5 @@
 package src.item;
 
-
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.beans.Transient;
@@ -18,7 +17,7 @@ import src.enums.Type;
 /***************************************************
  * おもちゃ
  */
-public class Toy extends ObjEX implements java.io.Serializable {
+public class Toy extends ObjEX {
 
 	private static final long serialVersionUID = -5700583776006467893L;
 	private static final int BALL = 0;
@@ -30,13 +29,15 @@ public class Toy extends ObjEX implements java.io.Serializable {
 	private Body owner = null;
 
 	private ItemRank itemRank;
-	/**画像ロード*/
-	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
+
+	/** 画像ロード */
+	public static void loadImages(ClassLoader loader, ImageObserver io) throws IOException {
 
 		images[BALL] = ModLoader.loadItemImage(loader, "toy" + File.separator + "ball.png");
-		images[BALL_NORA] = ModLoader.loadItemImage(loader, "toy" + File.separator + "ball" + ModLoader.getYkWordNora() + ".png");
+		images[BALL_NORA] = ModLoader.loadItemImage(loader,
+				"toy" + File.separator + "ball" + ModLoader.getYkWordNora() + ".png");
 		images[SHADOW] = ModLoader.loadItemImage(loader, "toy" + File.separator + "shadow.png");
-		
+
 		boundary.setWidth(images[0].getWidth(io));
 		boundary.setHeight(images[0].getHeight(io));
 		boundary.setX(boundary.getWidth() >> 1);
@@ -45,14 +46,15 @@ public class Toy extends ObjEX implements java.io.Serializable {
 
 	@Override
 	public int getImageLayer(BufferedImage[] layer) {
-		if(itemRank == ItemRank.HOUSE) {
+		if (itemRank == ItemRank.HOUSE) {
 			layer[0] = images[BALL];
 		} else {
 			layer[0] = images[BALL_NORA];
 		}
 		return 1;
 	}
-	/**境界線の取得*/
+
+	/** 境界線の取得 */
 	public static Rectangle4y getBounding() {
 		return boundary;
 	}
@@ -62,9 +64,9 @@ public class Toy extends ObjEX implements java.io.Serializable {
 	public BufferedImage getShadowImage() {
 		return images[SHADOW];
 	}
-	
+
 	@Override
-	public void removeListData(){
+	public void removeListData() {
 		SimYukkuri.world.getCurrentMap().getToy().remove(objId);
 	}
 
@@ -73,27 +75,33 @@ public class Toy extends ObjEX implements java.io.Serializable {
 		owner = null;
 		grabbed = true;
 	}
-	
+
 	@Override
 	public void kick() {
 		kick(0, -8, -4);
 	}
+
 	/**
 	 * おもちゃの持ち主を設定する.
+	 * 
 	 * @param b おもちゃの持ち主
 	 */
 	public void setOwner(Body b) {
 		owner = b;
 	}
+
 	/**
 	 * おもちゃの持ち主を取得する.
+	 * 
 	 * @return おもちゃの持ち主
 	 */
 	public Body getOwner() {
 		return owner;
 	}
+
 	/**
 	 * そのゆっくりに所有されているかどうか
+	 * 
 	 * @param b 判定したいゆっくり
 	 * @return そのゆっくりに所有されているかどうか
 	 */
@@ -104,8 +112,9 @@ public class Toy extends ObjEX implements java.io.Serializable {
 
 	/**
 	 * コンストラクタ
-	 * @param initX x座標
-	 * @param initY y座標
+	 * 
+	 * @param initX      x座標
+	 * @param initY      y座標
 	 * @param initOption 0:飼い用、1;野良用
 	 */
 	public Toy(int initX, int initY, int initOption) {
@@ -115,19 +124,20 @@ public class Toy extends ObjEX implements java.io.Serializable {
 		SimYukkuri.world.getCurrentMap().getToy().put(objId, this);
 		objType = Type.OBJECT;
 		objEXType = ObjEXType.TOY;
-		
+
 		itemRank = ItemRank.values()[initOption];
-		if(itemRank == ItemRank.HOUSE) {
+		if (itemRank == ItemRank.HOUSE) {
 			value = 500;
 			cost = 0;
 		} else {
 			value = 0;
 			cost = 0;
 		}
-		
+
 	}
+
 	public Toy() {
-		
+
 	}
 
 	public ItemRank getItemRank() {
@@ -137,9 +147,5 @@ public class Toy extends ObjEX implements java.io.Serializable {
 	public void setItemRank(ItemRank itemRank) {
 		this.itemRank = itemRank;
 	}
-	
+
 }
-
-
-
-

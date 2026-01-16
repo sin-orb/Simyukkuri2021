@@ -1,6 +1,5 @@
 package src.item;
 
-
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.image.BufferedImage;
@@ -28,20 +27,28 @@ import src.system.ResourceUtil;
 /***************************************************
  * 粘着板
  */
-public class StickyPlate extends ObjEX implements java.io.Serializable {
+public class StickyPlate extends ObjEX {
 
 	private static final long serialVersionUID = -4372169494877309751L;
 
-	/**どこをくっつけるか*/
+	/** どこをくっつけるか */
 	public static enum StickyType {
-        UNDER(ResourceUtil.getInstance().read("item_footsticky")),
-        BACK(ResourceUtil.getInstance().read("item_backsticky")),
+		UNDER(ResourceUtil.getInstance().read("item_footsticky")),
+		BACK(ResourceUtil.getInstance().read("item_backsticky")),
 		;
-        private String name;
-        StickyType(String name) { this.name = name; }
-        public String toString() { return name; }
+
+		private String name;
+
+		StickyType(String name) {
+			this.name = name;
+		}
+
+		public String toString() {
+			return name;
+		}
 	}
-	/**処理対象(ゆっくり)*/
+
+	/** 処理対象(ゆっくり) */
 	public static final int hitCheckObjType = ObjEX.YUKKURI;
 	private static BufferedImage[] images = new BufferedImage[4];
 	private static Rectangle4y boundary = new Rectangle4y();
@@ -50,27 +57,33 @@ public class StickyPlate extends ObjEX implements java.io.Serializable {
 	private boolean bFixBack = false;
 
 	private ItemRank itemRank;
-	/**画像ロード*/
-	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
-			images[0] = ModLoader.loadItemImage(loader, "stickyplate" + File.separator + "stickyplate.png");
-			images[1] = ModLoader.loadItemImage(loader, "stickyplate" + File.separator + "stickyplate_off.png");
-			images[2] = ModLoader.loadItemImage(loader, "stickyplate" + File.separator + "stickyplate" + ModLoader.getYkWordNora() + ".png");
-			images[3] = ModLoader.loadItemImage(loader, "stickyplate" + File.separator + "stickyplate" + ModLoader.getYkWordNora() + "_off.png");
-			boundary.setWidth(images[0].getWidth(io));
-			boundary.setHeight(images[0].getHeight(io));
-			boundary.setX(boundary.getWidth() >> 1);
-			boundary.setY(boundary.getHeight() >> 1);
-	}
 
+	/** 画像ロード */
+	public static void loadImages(ClassLoader loader, ImageObserver io) throws IOException {
+		images[0] = ModLoader.loadItemImage(loader, "stickyplate" + File.separator + "stickyplate.png");
+		images[1] = ModLoader.loadItemImage(loader, "stickyplate" + File.separator + "stickyplate_off.png");
+		images[2] = ModLoader.loadItemImage(loader,
+				"stickyplate" + File.separator + "stickyplate" + ModLoader.getYkWordNora() + ".png");
+		images[3] = ModLoader.loadItemImage(loader,
+				"stickyplate" + File.separator + "stickyplate" + ModLoader.getYkWordNora() + "_off.png");
+		boundary.setWidth(images[0].getWidth(io));
+		boundary.setHeight(images[0].getHeight(io));
+		boundary.setX(boundary.getWidth() >> 1);
+		boundary.setY(boundary.getHeight() >> 1);
+	}
 
 	@Override
 	public int getImageLayer(BufferedImage[] layer) {
-		if(itemRank == ItemRank.HOUSE) {
-			if(enabled) layer[0] = images[0];
-			else layer[0] = images[1];
+		if (itemRank == ItemRank.HOUSE) {
+			if (enabled)
+				layer[0] = images[0];
+			else
+				layer[0] = images[1];
 		} else {
-			if(enabled) layer[0] = images[2];
-			else layer[0] = images[3];
+			if (enabled)
+				layer[0] = images[2];
+			else
+				layer[0] = images[3];
 		}
 		return 1;
 	}
@@ -80,7 +93,8 @@ public class StickyPlate extends ObjEX implements java.io.Serializable {
 	public BufferedImage getShadowImage() {
 		return null;
 	}
-	/**境界線の取得*/
+
+	/** 境界線の取得 */
 	public static Rectangle4y getBounding() {
 		return boundary;
 	}
@@ -91,42 +105,44 @@ public class StickyPlate extends ObjEX implements java.io.Serializable {
 		return hitCheckObjType;
 	}
 
-	@Override	
+	@Override
 	public boolean enableHitCheck() {
-		if(bindBody != null) return false;
+		if (bindBody != null)
+			return false;
 		return true;
 	}
-	
-	public Body getBindBody(){
+
+	public Body getBindBody() {
 		return bindBody;
 	}
 
-	@Override	
-	public int objHitProcess( Obj o ) {
-		if(((Body)o).isDead()) return 0;
-		if(((Body)o).getCriticalDamegeType() == CriticalDamegeType.CUT) return 0;
+	@Override
+	public int objHitProcess(Obj o) {
+		if (((Body) o).isDead())
+			return 0;
+		if (((Body) o).getCriticalDamegeType() == CriticalDamegeType.CUT)
+			return 0;
 
-		if( bindBody != (Body)o){
+		if (bindBody != (Body) o) {
 			// 入れ替える場合
-			if(bindBody != null){
+			if (bindBody != null) {
 				bindBody.setPullAndPush(false);
-				
+
 				// 針が刺さっていない、死んでる
-				if( !bindBody.isNeedled() || bindBody.isDead() ){
+				if (!bindBody.isNeedled() || bindBody.isDead()) {
 					bindBody.setLockmove(false);
 					bindBody.setFixBack(false);
 				}
 			}
-			bindBody = (Body)o;
-			bindBody.clearActions();			
+			bindBody = (Body) o;
+			bindBody.clearActions();
 		}
 		bindBody.setCalcX(x);
 		bindBody.setCalcY(y);
 		bindBody.setLockmove(true);
-		if( !bFixBack || bindBody.isPealed()){
+		if (!bFixBack || bindBody.isPealed()) {
 			bindBody.setPullAndPush(true);
-		}
-		else {
+		} else {
 			bindBody.setFixBack(true);
 		}
 		return 0;
@@ -134,33 +150,31 @@ public class StickyPlate extends ObjEX implements java.io.Serializable {
 
 	@Override
 	public void upDate() {
-		if(!enabled && bindBody != null){
+		if (!enabled && bindBody != null) {
 			bindBody.setLockmove(false);
-			return ;
+			return;
 		}
-		if(bindBody != null) {
-			if( bFixBack){
+		if (bindBody != null) {
+			if (bFixBack) {
 				// 針が刺さっていない
-				if( !bindBody.isNeedled() && !bindBody.isSleeping()){
-					if(SimYukkuri.RND.nextInt(10) == 0){
+				if (!bindBody.isNeedled() && !bindBody.isSleeping()) {
+					if (SimYukkuri.RND.nextInt(10) == 0) {
 						bindBody.setFurifuri(true);
 					}
 				}
 			}
-			
-			if(grabbed) {
+
+			if (grabbed) {
 				bindBody.setCalcX(x);
 				bindBody.setCalcY(y);
 
-			}
-			else{
+			} else {
 				// ぷるぷる以外が原因で座標がずれている、死んでいる場合は初期化
-				if( ((bindBody.getX() != x || bindBody.getY() != y) && !bindBody.isPurupuru()) ||
-					( bindBody.isRemoved() || bindBody.isDead()) )
-				{
+				if (((bindBody.getX() != x || bindBody.getY() != y) && !bindBody.isPurupuru()) ||
+						(bindBody.isRemoved() || bindBody.isDead())) {
 					bindBody.setPullAndPush(false);
 					// 針が刺さっていない、死んでる
-					if( !bindBody.isNeedled() || bindBody.isDead()  ){
+					if (!bindBody.isNeedled() || bindBody.isDead()) {
 						bindBody.setLockmove(false);
 						bindBody.setFixBack(false);
 					}
@@ -169,10 +183,10 @@ public class StickyPlate extends ObjEX implements java.io.Serializable {
 			}
 		}
 	}
-	
+
 	@Override
-	public void removeListData(){
-		if(bindBody != null) {
+	public void removeListData() {
+		if (bindBody != null) {
 			bindBody.setLockmove(false);
 			bindBody.setPullAndPush(false);
 			bindBody = null;
@@ -182,8 +196,9 @@ public class StickyPlate extends ObjEX implements java.io.Serializable {
 
 	/**
 	 * コンストラクタ
-	 * @param initX x座標
-	 * @param initY y座標
+	 * 
+	 * @param initX      x座標
+	 * @param initY      y座標
 	 * @param initOption 0:飼い用、1;野良用
 	 */
 	public StickyPlate(int initX, int initY, int initOption) {
@@ -194,13 +209,12 @@ public class StickyPlate extends ObjEX implements java.io.Serializable {
 		objType = Type.PLATFORM;
 		objEXType = ObjEXType.STICKYPLATE;
 		interval = 5;
-		if( !setupStickyPlate(this))
-		{
+		if (!setupStickyPlate(this)) {
 			SimYukkuri.world.getCurrentMap().getStickyPlate().remove(objId);
 			return;
 		}
 		itemRank = ItemRank.values()[initOption];
-		if(itemRank == ItemRank.HOUSE) {
+		if (itemRank == ItemRank.HOUSE) {
 			value = 2000;
 			cost = 0;
 		} else {
@@ -208,22 +222,23 @@ public class StickyPlate extends ObjEX implements java.io.Serializable {
 			cost = 0;
 		}
 	}
+
 	public StickyPlate() {
-		
+
 	}
 
-	/** 設定メニュー*/
+	/** 設定メニュー */
 	public static boolean setupStickyPlate(StickyPlate s) {
-		
+
 		JPanel mainPanel = new JPanel();
 		JRadioButton[] but = new JRadioButton[StickyType.values().length];
 		boolean ret = false;
-		
+
 		mainPanel.setLayout(new GridLayout(2, 1));
 		mainPanel.setPreferredSize(new Dimension(100, 100));
 		ButtonGroup bg = new ButtonGroup();
 
-		for(int i = 0; i < but.length; i++) {
+		for (int i = 0; i < but.length; i++) {
 			but[i] = new JRadioButton(StickyType.values()[i].toString());
 			bg.add(but[i]);
 
@@ -232,44 +247,38 @@ public class StickyPlate extends ObjEX implements java.io.Serializable {
 
 		but[0].setSelected(true);
 
-		int dlgRet = JOptionPane.showConfirmDialog(SimYukkuri.mypane, mainPanel, 
-				ResourceUtil.getInstance().read("item_stickysettings"), 
+		int dlgRet = JOptionPane.showConfirmDialog(SimYukkuri.mypane, mainPanel,
+				ResourceUtil.getInstance().read("item_stickysettings"),
 				JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
-		
-		if(dlgRet == JOptionPane.OK_OPTION) {
-			if(but[0].isSelected()) s.bFixBack = false;
-			if(but[1].isSelected()) s.bFixBack = true;
+
+		if (dlgRet == JOptionPane.OK_OPTION) {
+			if (but[0].isSelected())
+				s.bFixBack = false;
+			if (but[1].isSelected())
+				s.bFixBack = true;
 			ret = true;
 		}
 		return ret;
 	}
 
-
 	public boolean isbFixBack() {
 		return bFixBack;
 	}
-
 
 	public void setbFixBack(boolean bFixBack) {
 		this.bFixBack = bFixBack;
 	}
 
-
 	public ItemRank getItemRank() {
 		return itemRank;
 	}
-
 
 	public void setItemRank(ItemRank itemRank) {
 		this.itemRank = itemRank;
 	}
 
-
 	public void setBindBody(Body bindBody) {
 		this.bindBody = bindBody;
 	}
-	
+
 }
-
-
-

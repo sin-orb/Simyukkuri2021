@@ -17,13 +17,13 @@ import src.system.ResourceUtil;
 import src.util.YukkuriUtil;
 
 /***************************************************
-	葬式イベント
-	protected Body from;			// イベントを発した個体
-	protected Body to;				// 弔われる個体
-	protected Obj target;			// 未使用
-	protected int count;			// 10
-*/
-public class FuneralEvent extends EventPacket implements java.io.Serializable {
+ * 葬式イベント
+ * protected Body from; // イベントを発した個体
+ * protected Body to; // 弔われる個体
+ * protected Obj target; // 未使用
+ * protected int count; // 10
+ */
+public class FuneralEvent extends EventPacket {
 
 	private static final long serialVersionUID = 3784662418868039745L;
 	int tick = 0;
@@ -35,11 +35,11 @@ public class FuneralEvent extends EventPacket implements java.io.Serializable {
 	enum STATE {
 		GO, // 移動
 		FIND, // 待機
-		INTRODUCE, //死亡説明
+		INTRODUCE, // 死亡説明
 		START, // イベント開始時
-		SING, //おとむらい
-		TALK, //おしゃべり
-		GOODBYE, //おわかれ
+		SING, // おとむらい
+		TALK, // おしゃべり
+		GOODBYE, // おわかれ
 		END, // イベント終了時
 	}
 
@@ -53,15 +53,17 @@ public class FuneralEvent extends EventPacket implements java.io.Serializable {
 		super(f, t, tgt, cnt);
 		priority = EventPriority.HIGH;
 	}
+
 	public FuneralEvent() {
 	}
+
 	@Override
 	public boolean simpleEventAction(Body b) {
 		Body from = YukkuriUtil.getBodyInstance(getFrom());
 		if (from == null || from.isShutmouth()) {
 			return true;
 		}
-		if(from == b) {
+		if (from == b) {
 			return true;
 		}
 		return false;
@@ -73,17 +75,17 @@ public class FuneralEvent extends EventPacket implements java.io.Serializable {
 	@Override
 	public boolean checkEventResponse(Body b) {
 		Body from = YukkuriUtil.getBodyInstance(getFrom());
-		if(from.getUniqueID() == b.getUniqueID()) {
+		if (from.getUniqueID() == b.getUniqueID()) {
 			return true;
 		}
 		// うんうん奴隷の場合は参加しない
 		if (from == null || b.getPublicRank() == PublicRank.UnunSlave)
 			return false;
-		//父母がいない場合は参加しない
-		if (YukkuriUtil.getBodyInstance(b.getFather()) == null && 
+		// 父母がいない場合は参加しない
+		if (YukkuriUtil.getBodyInstance(b.getFather()) == null &&
 				YukkuriUtil.getBodyInstance(b.getMother()) == null)
 			return false;
-		//例外状況
+		// 例外状況
 		if (!b.canEventResponse()) {
 			return false;
 		}
@@ -99,7 +101,8 @@ public class FuneralEvent extends EventPacket implements java.io.Serializable {
 		if (b.isAdult()) {
 			return false;
 		}
-		b.setWorldEventResMessage(MessagePool.getMessage(b, MessagePool.Action.ProudChildsGO), Const.HOLDMESSAGE, true, false);
+		b.setWorldEventResMessage(MessagePool.getMessage(b, MessagePool.Action.ProudChildsGO), Const.HOLDMESSAGE, true,
+				false);
 		b.setHappiness(Happiness.HAPPY);
 		b.wakeup();
 		b.clearActions();
@@ -111,11 +114,11 @@ public class FuneralEvent extends EventPacket implements java.io.Serializable {
 	public void start(Body b) {
 		b.setCurrentEvent(this);
 	}
-	
+
 	public STATE getState() {
 		return state;
 	}
-	
+
 	public void setState(STATE state) {
 		this.state = state;
 	}
@@ -126,7 +129,7 @@ public class FuneralEvent extends EventPacket implements java.io.Serializable {
 	@Override
 	public UpdateState update(Body b) {
 		Body from = YukkuriUtil.getBodyInstance(getFrom());
-		//イベント中止
+		// イベント中止
 		if (b == null || from == null) {
 			return UpdateState.ABORT;
 		}
@@ -138,23 +141,23 @@ public class FuneralEvent extends EventPacket implements java.io.Serializable {
 			b.setHappiness(Happiness.VERY_HAPPY);
 			return UpdateState.ABORT;
 		}
-//		if (from.getCurrentEvent() == null) {
-//			return UpdateState.ABORT;
-//		}
+		// if (from.getCurrentEvent() == null) {
+		// return UpdateState.ABORT;
+		// }
 		// 産気づいたら
 		if (b.nearToBirth()) {
 			return UpdateState.ABORT;
 		}
-		//3秒に1回
+		// 3秒に1回
 		if (tick % 30 != 0) {
 			return null;
 		}
-		//親を持ち上げたときの反応
+		// 親を持ち上げたときの反応
 		if (!from.canflyCheck() && from.getZ() >= 5) {
 			if (SimYukkuri.RND.nextInt(50) == 0)
 				return UpdateState.ABORT;
 			else if (b == from) {
-				//空処理
+				// 空処理
 			} else {
 				if (b.isSad())
 					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.LookForParents), false);
@@ -178,7 +181,7 @@ public class FuneralEvent extends EventPacket implements java.io.Serializable {
 			if (SimYukkuri.RND.nextInt(50) == 0) {
 				b.setMessage(MessagePool.getMessage(b, MessagePool.Action.SadnessForChild), true);
 			}
-			//集まるとき以外は留まる
+			// 集まるとき以外は留まる
 			if (state != STATE.GO) {
 				b.stay();
 			} else {
@@ -188,7 +191,7 @@ public class FuneralEvent extends EventPacket implements java.io.Serializable {
 			return null;
 		}
 
-		//イベント本番
+		// イベント本番
 		int nWait = 2000;
 		int nWait2 = 300;
 		// 親
@@ -217,221 +220,231 @@ public class FuneralEvent extends EventPacket implements java.io.Serializable {
 			}
 
 			switch (state) {
-			case GO:
-				if (SimYukkuri.RND.nextInt(40) == 0) {
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.ProudChildsGOFrom), true);
-				}
-				b.setHappiness(Happiness.SAD);
-				boolean bResult = BodyLogic.gatheringYukkuriFront(from, childrenList, this);
-				if (bResult) {
-					state = STATE.FIND;
-					bActionFlag = false;
-				}
-				b.stay(nWait2);
-				break;
-			case FIND:
-				if (checkWait(b, nWait)) {
-					b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.SadnessForChild), 52, true,
-							false);
-					state = STATE.START;
-					bActionFlag = false;
-				}
-				b.stay(nWait2);
-				break;
-			case START:
-				if (checkWait(b, nWait)) {
-					if (!bActionFlag) {
-						b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.FuneralSTARTFrom), 52,
-								true, false);
-						b.setHappiness(Happiness.AVERAGE);
-						bActionFlag = true;
-						b.stay(nWait2 + 10);
-						b.addMemories(10);
-					} else {
-						state = STATE.INTRODUCE;
+				case GO:
+					if (SimYukkuri.RND.nextInt(40) == 0) {
+						b.setMessage(MessagePool.getMessage(b, MessagePool.Action.ProudChildsGOFrom), true);
+					}
+					b.setHappiness(Happiness.SAD);
+					boolean bResult = BodyLogic.gatheringYukkuriFront(from, childrenList, this);
+					if (bResult) {
+						state = STATE.FIND;
 						bActionFlag = false;
 					}
-				}
-				break;
-			case INTRODUCE:
-				if (checkWait(b, nWait)) {
-					if (!bActionFlag) {
-						b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.FuneralIntroduceFrom), 52,
-								true, false);
-						bActionFlag = true;
-						b.stay(nWait2 + 10);
-						b.addMemories(10);
-					} else {
-						state = STATE.SING;
-						bActionFlag = false;
-					}
-				}
-				break;
-			case SING:
-				if (checkWait(b, nWait)) {
-					if (!bActionFlag) {
-						b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.Requiem), 52, true,
+					b.stay(nWait2);
+					break;
+				case FIND:
+					if (checkWait(b, nWait)) {
+						b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.SadnessForChild), 52,
+								true,
 								false);
-						if (SimYukkuri.RND.nextBoolean())
-							bActionFlag = true;
-						b.setNobinobi(true);
-						b.stay(nWait2);
-						b.addMemories(10);
-						b.setHappiness(Happiness.HAPPY);
-					} else {
-						state = STATE.TALK;
+						state = STATE.START;
 						bActionFlag = false;
 					}
-				}
-				break;
-			case TALK:
-				if (checkWait(b, nWait)) {
-					if (!bActionFlag) {
-						b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.FuneralTalkFrom), 52,
-								true, false);
-						if (SimYukkuri.RND.nextInt(4) == 0)
+					b.stay(nWait2);
+					break;
+				case START:
+					if (checkWait(b, nWait)) {
+						if (!bActionFlag) {
+							b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.FuneralSTARTFrom), 52,
+									true, false);
+							b.setHappiness(Happiness.AVERAGE);
 							bActionFlag = true;
-						b.stay(nWait2);
-						b.setHappiness(Happiness.HAPPY);
-						b.addMemories(10);
-					} else {
-						state = STATE.GOODBYE;
-						bActionFlag = false;
+							b.stay(nWait2 + 10);
+							b.addMemories(10);
+						} else {
+							state = STATE.INTRODUCE;
+							bActionFlag = false;
+						}
 					}
-				}
-				break;
-			case GOODBYE:
-				if (checkWait(b, nWait)) {
-					if (!bActionFlag) {
-						b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.GoodbyeForever), 52, true,
-								false);
-						b.getInVain(false);
-						Body to = YukkuriUtil.getBodyInstance(getTo());
-						if (to != null) {
-							to.takeOkazari(false);
+					break;
+				case INTRODUCE:
+					if (checkWait(b, nWait)) {
+						if (!bActionFlag) {
+							b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.FuneralIntroduceFrom),
+									52,
+									true, false);
 							bActionFlag = true;
+							b.stay(nWait2 + 10);
+							b.addMemories(10);
+						} else {
+							state = STATE.SING;
+							bActionFlag = false;
+						}
+					}
+					break;
+				case SING:
+					if (checkWait(b, nWait)) {
+						if (!bActionFlag) {
+							b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.Requiem), 52, true,
+									false);
+							if (SimYukkuri.RND.nextBoolean())
+								bActionFlag = true;
+							b.setNobinobi(true);
 							b.stay(nWait2);
 							b.addMemories(10);
+							b.setHappiness(Happiness.HAPPY);
+						} else {
+							state = STATE.TALK;
+							bActionFlag = false;
 						}
-					} else {
-						state = STATE.END;
-						bActionFlag = false;
 					}
-				}
-				break;
-			case END:
-				if (checkWait(b, nWait)) {
-					if (!bActionFlag) {
-						b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.FuneralENDFrom), 52, true,
-								false);
-						bActionFlag = true;
-						b.stay(52);
-						b.addMemories(10);
-						b.setHappiness(Happiness.HAPPY);
-						return UpdateState.ABORT;
+					break;
+				case TALK:
+					if (checkWait(b, nWait)) {
+						if (!bActionFlag) {
+							b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.FuneralTalkFrom), 52,
+									true, false);
+							if (SimYukkuri.RND.nextInt(4) == 0)
+								bActionFlag = true;
+							b.stay(nWait2);
+							b.setHappiness(Happiness.HAPPY);
+							b.addMemories(10);
+						} else {
+							state = STATE.GOODBYE;
+							bActionFlag = false;
+						}
 					}
-				}
-			default:
-				break;
+					break;
+				case GOODBYE:
+					if (checkWait(b, nWait)) {
+						if (!bActionFlag) {
+							b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.GoodbyeForever), 52,
+									true,
+									false);
+							b.getInVain(false);
+							Body to = YukkuriUtil.getBodyInstance(getTo());
+							if (to != null) {
+								to.takeOkazari(false);
+								bActionFlag = true;
+								b.stay(nWait2);
+								b.addMemories(10);
+							}
+						} else {
+							state = STATE.END;
+							bActionFlag = false;
+						}
+					}
+					break;
+				case END:
+					if (checkWait(b, nWait)) {
+						if (!bActionFlag) {
+							b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.FuneralENDFrom), 52,
+									true,
+									false);
+							bActionFlag = true;
+							b.stay(52);
+							b.addMemories(10);
+							b.setHappiness(Happiness.HAPPY);
+							return UpdateState.ABORT;
+						}
+					}
+				default:
+					break;
 			}
 		} else {
 			// 子供
 			switch (state) {
-			case GO:
-				// 壁に引っかかってるなら終了
-				if (Barrier.onBarrier(b.getX(), b.getY(), from.getX(), from.getY(),
-						Barrier.MAP_BODY[b.getBodyAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
-					return UpdateState.ABORT;
-				}
-				if (b.isDontMove()) {
-					return UpdateState.ABORT;
-				}
-				if (SimYukkuri.RND.nextInt(30) == 0) {
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.ProudChildsGO), true);
-				}
-				break;
-			case FIND:
-				if (checkWait(b, nWait)) {
-					Body to = YukkuriUtil.getBodyInstance(getTo());
-					if (to != null) {
-						if (to.isElderSister(b)) {
-							b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.SadnessForEldersister),
-									52, true, false);
-						} else {
-							b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.SadnessForSister), 52,
-									true, false);
+				case GO:
+					// 壁に引っかかってるなら終了
+					if (Barrier.onBarrier(b.getX(), b.getY(), from.getX(), from.getY(),
+							Barrier.MAP_BODY[b.getBodyAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
+						return UpdateState.ABORT;
+					}
+					if (b.isDontMove()) {
+						return UpdateState.ABORT;
+					}
+					if (SimYukkuri.RND.nextInt(30) == 0) {
+						b.setMessage(MessagePool.getMessage(b, MessagePool.Action.ProudChildsGO), true);
+					}
+					break;
+				case FIND:
+					if (checkWait(b, nWait)) {
+						Body to = YukkuriUtil.getBodyInstance(getTo());
+						if (to != null) {
+							if (to.isElderSister(b)) {
+								b.setBodyEventResMessage(
+										MessagePool.getMessage(b, MessagePool.Action.SadnessForEldersister),
+										52, true, false);
+							} else {
+								b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.SadnessForSister),
+										52,
+										true, false);
+							}
+							b.setHappiness(Happiness.VERY_SAD);
+							b.setForceFace(ImageCode.CRYING.ordinal());
+							b.addMemories(5);
 						}
-						b.setHappiness(Happiness.VERY_SAD);
-						b.setForceFace(ImageCode.CRYING.ordinal());
-						b.addMemories(5);
 					}
-				}
-				b.stay();
-				break;
-			case START:
-				if (bActionFlag) {
-					if (checkWait(b, nWait)) {
-						b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.FuneralSTART), 52, true,
-								false);
-						b.stay(nWait2);
-						b.addMemories(10);
+					b.stay();
+					break;
+				case START:
+					if (bActionFlag) {
+						if (checkWait(b, nWait)) {
+							b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.FuneralSTART), 52,
+									true,
+									false);
+							b.stay(nWait2);
+							b.addMemories(10);
+						}
 					}
-				}
-				break;
-			case INTRODUCE:
-				if (bActionFlag) {
-					if (checkWait(b, nWait)) {
-						b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.FuneralIntroduce), 52,
-								true, false);
-						b.setHappiness(Happiness.SAD);
-						b.stay(nWait2);
-						b.addMemories(10);
+					break;
+				case INTRODUCE:
+					if (bActionFlag) {
+						if (checkWait(b, nWait)) {
+							b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.FuneralIntroduce), 52,
+									true, false);
+							b.setHappiness(Happiness.SAD);
+							b.stay(nWait2);
+							b.addMemories(10);
+						}
 					}
-				}
-				break;
-			case SING:
-				if (!bActionFlag) {
-					if (checkWait(b, nWait)) {
-						b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.Requiem), 52, true,
-								false);
-						b.setNobinobi(true);
-						b.stay(nWait2);
-						b.addMemories(10);
+					break;
+				case SING:
+					if (!bActionFlag) {
+						if (checkWait(b, nWait)) {
+							b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.Requiem), 52, true,
+									false);
+							b.setNobinobi(true);
+							b.stay(nWait2);
+							b.addMemories(10);
+						}
 					}
-				}
-				break;
-			case TALK:
-				if (bActionFlag) {
-					if (checkWait(b, nWait)) {
-						b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.FuneralTalk), 52, true, false);
-						b.setHappiness(Happiness.HAPPY);
-						b.getInVain(false);
-						b.stay(nWait2);
-						b.addMemories(10);
-					}
-				}
-				break;
-			case GOODBYE:
-				if (bActionFlag) {
-					if (checkWait(b, nWait)) {
-						b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.GoodbyeForever), 52, true,
-								false);
-						if (b.isRude() && SimYukkuri.RND.nextBoolean()) {
-							b.setFurifuri(true);
-						} else
+					break;
+				case TALK:
+					if (bActionFlag) {
+						if (checkWait(b, nWait)) {
+							b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.FuneralTalk), 52,
+									true, false);
+							b.setHappiness(Happiness.HAPPY);
 							b.getInVain(false);
-						b.stay(nWait2);
-						b.addMemories(10);
+							b.stay(nWait2);
+							b.addMemories(10);
+						}
 					}
-				}
-				break;
-			case END:
-				if (b.isRude())
-					b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.FuneralEND), 52, true, false);
-				b.setHappiness(Happiness.HAPPY);
-				b.stay(52);
-			default:
-				break;
+					break;
+				case GOODBYE:
+					if (bActionFlag) {
+						if (checkWait(b, nWait)) {
+							b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.GoodbyeForever), 52,
+									true,
+									false);
+							if (b.isRude() && SimYukkuri.RND.nextBoolean()) {
+								b.setFurifuri(true);
+							} else
+								b.getInVain(false);
+							b.stay(nWait2);
+							b.addMemories(10);
+						}
+					}
+					break;
+				case END:
+					if (b.isRude())
+						b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.FuneralEND), 52, true,
+								false);
+					b.setHappiness(Happiness.HAPPY);
+					b.stay(52);
+				default:
+					break;
 			}
 		}
 

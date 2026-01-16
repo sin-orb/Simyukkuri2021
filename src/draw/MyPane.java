@@ -218,7 +218,7 @@ public class MyPane extends JPanel implements Runnable {
 	private static boolean isDisableHelp = false;
 	/** カーソルで選択されているゆっくり */
 	private static Body selectBody = null;
-	
+
 	public static int getNormalSpeed() {
 		return NORMAL;
 	}
@@ -258,6 +258,7 @@ public class MyPane extends JPanel implements Runnable {
 	public static void setSelectBody(Body body) {
 		selectBody = body;
 	}
+
 	/** カーソル描画用長方形 */
 	static List<Rectangle4y> markList = new LinkedList<Rectangle4y>();
 
@@ -450,22 +451,16 @@ public class MyPane extends JPanel implements Runnable {
 				Method m = c.getMethod("loadImages", ClassLoader.class, ImageObserver.class);
 				m.invoke(null, loader, this);
 			} catch (SecurityException e) {
-				// TODO 自動生成された catch ブロック
 				e.printStackTrace();
 			} catch (NoSuchMethodException e) {
-				// TODO 自動生成された catch ブロック
 				e.printStackTrace();
 			} catch (ClassNotFoundException e) {
-				// TODO 自動生成された catch ブロック
 				e.printStackTrace();
 			} catch (IllegalArgumentException e) {
-				// TODO 自動生成された catch ブロック
 				e.printStackTrace();
 			} catch (IllegalAccessException e) {
-				// TODO 自動生成された catch ブロック
 				e.printStackTrace();
 			} catch (InvocationTargetException e) {
-				// TODO 自動生成された catch ブロック
 				e.printStackTrace();
 			} catch (OutOfMemoryError e) {
 				JOptionPane.showMessageDialog(null, ResourceUtil.getInstance().read("out_of_memory"));
@@ -913,7 +908,8 @@ public class MyPane extends JPanel implements Runnable {
 					((BeltconveyorObj) (oex)).getImageLayer(backBufferG2, layerTmp);
 				} else {
 					for (int j = 0; j < layerNum; j++) {
-						backBufferG2.drawImage(layerTmp[j], tmpRect.getX(), tmpRect.getY(), tmpRect.getWidth(), tmpRect.getHeight(), this);
+						backBufferG2.drawImage(layerTmp[j], tmpRect.getX(), tmpRect.getY(), tmpRect.getWidth(),
+								tmpRect.getHeight(), this);
 					}
 				}
 			}
@@ -964,12 +960,14 @@ public class MyPane extends JPanel implements Runnable {
 						if (bDrawShadow && b.isDropShadow() && !b.isUnBirth() && 0 <= b.getZ()) {
 							if (b.getType() == Remirya.type && b.isbImageNagasiMode()) {
 								backBufferG2.drawImage(b.getShadowImage(), expand.getScreenRect()[direction].getX(),
-										expand.getScreenRect()[direction].getY() + expand.getScreenRect()[direction].getHeight() * 11 / 12
+										expand.getScreenRect()[direction].getY()
+												+ expand.getScreenRect()[direction].getHeight() * 11 / 12
 												- shadowH,
 										expand.getScreenRect()[direction].getWidth(), shadowH, this);
 							} else {
 								backBufferG2.drawImage(b.getShadowImage(), expand.getScreenRect()[direction].getX(),
-										expand.getScreenRect()[direction].getY() + expand.getScreenRect()[direction].getHeight() - shadowH,
+										expand.getScreenRect()[direction].getY()
+												+ expand.getScreenRect()[direction].getHeight() - shadowH,
 										expand.getScreenRect()[direction].getWidth(), shadowH, this);
 							}
 						}
@@ -1017,12 +1015,14 @@ public class MyPane extends JPanel implements Runnable {
 						calcDrawPosition(s, tmpRect);
 						// 赤ゆでかつ接地している場合は影を描画しない
 						if (nDrawShadowShit_Baby == 1 || s.getAgeState() != AgeState.BABY || 0 < s.getZ()) {
-							backBufferG2.drawImage(s.getShadowImage(), tmpRect.getX(), tmpRect.getY(), tmpRect.getWidth(),
+							backBufferG2.drawImage(s.getShadowImage(), tmpRect.getX(), tmpRect.getY(),
+									tmpRect.getWidth(),
 									tmpRect.getHeight(),
 									this);
 						}
 						tmpRect.setY(tmpRect.getY() - Translate.translateZ(s.getZ()));
-						backBufferG2.drawImage(s.getImage(), tmpRect.getX(), tmpRect.getY(), tmpRect.getWidth(), tmpRect.getHeight(), this);
+						backBufferG2.drawImage(s.getImage(), tmpRect.getX(), tmpRect.getY(), tmpRect.getWidth(),
+								tmpRect.getHeight(), this);
 					}
 						break;
 					case VOMIT: {
@@ -1030,12 +1030,14 @@ public class MyPane extends JPanel implements Runnable {
 						calcDrawPosition(v, tmpRect);
 						// 赤ゆでかつ接地している場合は影を描画しない
 						if (nDrawShadowVomit_Baby == 1 || v.getAgeState() != AgeState.BABY || 0 < v.getZ()) {
-							backBufferG2.drawImage(v.getShadowImage(), tmpRect.getX(), tmpRect.getY(), tmpRect.getWidth(),
+							backBufferG2.drawImage(v.getShadowImage(), tmpRect.getX(), tmpRect.getY(),
+									tmpRect.getWidth(),
 									tmpRect.getHeight(),
 									this);
 						}
 						tmpRect.setY(tmpRect.getY() - Translate.translateZ(v.getZ()));
-						backBufferG2.drawImage(v.getImage(), tmpRect.getX(), tmpRect.getY(), tmpRect.getWidth(), tmpRect.getHeight(), this);
+						backBufferG2.drawImage(v.getImage(), tmpRect.getX(), tmpRect.getY(), tmpRect.getWidth(),
+								tmpRect.getHeight(), this);
 					}
 						break;
 					case FIX_OBJECT: {
@@ -1043,7 +1045,8 @@ public class MyPane extends JPanel implements Runnable {
 						calcDrawPosition(oex, tmpRect);
 						int layerNum = oex.getImageLayer(layerTmp);
 						for (int i = 0; i < layerNum; i++) {
-							backBufferG2.drawImage(layerTmp[i], tmpRect.getX(), tmpRect.getY(), tmpRect.getWidth(), tmpRect.getHeight(),
+							backBufferG2.drawImage(layerTmp[i], tmpRect.getX(), tmpRect.getY(), tmpRect.getWidth(),
+									tmpRect.getHeight(),
 									this);
 						}
 					}
@@ -1057,7 +1060,8 @@ public class MyPane extends JPanel implements Runnable {
 						tmpRect.setY(tmpRect.getY() - Translate.translateZ(oex.getZ()));
 						int layerNum = oex.getImageLayer(layerTmp);
 						for (int i = 0; i < layerNum; i++) {
-							backBufferG2.drawImage(layerTmp[i], tmpRect.getX(), tmpRect.getY(), tmpRect.getWidth(), tmpRect.getHeight(),
+							backBufferG2.drawImage(layerTmp[i], tmpRect.getX(), tmpRect.getY(), tmpRect.getWidth(),
+									tmpRect.getHeight(),
 									this);
 						}
 					}
@@ -1066,7 +1070,8 @@ public class MyPane extends JPanel implements Runnable {
 						Effect ef = (Effect) o;
 						calcDrawPosition(ef, tmpRect);
 						tmpRect.setY(tmpRect.getY() - Translate.translateZ(ef.getZ()));
-						backBufferG2.drawImage(ef.getImage(), tmpRect.getX(), tmpRect.getY(), tmpRect.getWidth(), tmpRect.getHeight(),
+						backBufferG2.drawImage(ef.getImage(), tmpRect.getX(), tmpRect.getY(), tmpRect.getWidth(),
+								tmpRect.getHeight(),
 								this);
 					}
 						break;
@@ -1086,7 +1091,8 @@ public class MyPane extends JPanel implements Runnable {
 				ef = (Effect) o;
 				calcDrawPosition(ef, tmpRect);
 				tmpRect.setY(tmpRect.getY() - Translate.translateZ(ef.getZ()));
-				backBufferG2.drawImage(ef.getImage(), tmpRect.getX(), tmpRect.getY(), tmpRect.getWidth(), tmpRect.getHeight(), this);
+				backBufferG2.drawImage(ef.getImage(), tmpRect.getX(), tmpRect.getY(), tmpRect.getWidth(),
+						tmpRect.getHeight(), this);
 			}
 
 			// 最全面背景描画
@@ -1101,7 +1107,8 @@ public class MyPane extends JPanel implements Runnable {
 				for (Rectangle4y rect : markList) {
 					backBufferG2.drawImage(cursor[st + 1], rect.getX(), rect.getY(), this);
 					backBufferG2.drawImage(cursor[st + 0], rect.getX(), rect.getY() + rect.getWidth() - 20, this);
-					backBufferG2.drawImage(cursor[st + 2], rect.getX() + rect.getWidth() - 20, rect.getY() + rect.getWidth() - 20, this);
+					backBufferG2.drawImage(cursor[st + 2], rect.getX() + rect.getWidth() - 20,
+							rect.getY() + rect.getWidth() - 20, this);
 					backBufferG2.drawImage(cursor[st + 3], rect.getX() + rect.getWidth() - 20, rect.getY(), this);
 				}
 			}
@@ -1177,7 +1184,8 @@ public class MyPane extends JPanel implements Runnable {
 			}
 			// バックバッファの転送
 			g2.drawImage(backBuffer, 0, 0, Translate.getCanvasW(), Translate.getCanvasH(),
-					dispArea.getX(), dispArea.getY(), dispArea.getX() + dispArea.getWidth(), dispArea.getY() + dispArea.getHeight(), this);
+					dispArea.getX(), dispArea.getY(), dispArea.getX() + dispArea.getWidth(),
+					dispArea.getY() + dispArea.getHeight(), this);
 
 			// 時間帯グラデ
 			LinearGradientPaint sky = TerrainField.getSkyGrad(Terrarium.getDayState().ordinal());
@@ -1365,4 +1373,3 @@ public class MyPane extends JPanel implements Runnable {
 		return ITEM_CUR_SHAPE;
 	}
 }
-

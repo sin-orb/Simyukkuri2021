@@ -17,17 +17,16 @@ import src.enums.Type;
 import src.item.Barrier;
 
 /*********************************************************
- *  ゆっくり以外のゲーム内オブジェクトの元となるクラス
+ * ゆっくり以外のゲーム内オブジェクトの元となるクラス
  */
 @JsonTypeInfo(use = Id.CLASS)
-public abstract class ObjEX extends Obj implements java.io.Serializable {
-	private static final long serialVersionUID = 2057945721758966589L;
-	/**オブジェクトタイプ*/
+public abstract class ObjEX extends Obj {
+	/** オブジェクトタイプ */
 	protected ObjEXType objEXType;
-	/**追加情報用の汎用定数*/
+	/** 追加情報用の汎用定数 */
 	protected int option;
 
-	/** 排他的論理和でフラグ管理している ex) 0101 ならゆっくりと食物*/
+	/** 排他的論理和でフラグ管理している ex) 0101 ならゆっくりと食物 */
 	public static final int YUKKURI = (int) Math.pow(2, 0),
 			SHIT = (int) Math.pow(2, 1),
 			FOOD = (int) Math.pow(2, 2),
@@ -38,100 +37,108 @@ public abstract class ObjEX extends Obj implements java.io.Serializable {
 			OBJECT = (int) Math.pow(2, 7),
 			VOMIT = (int) Math.pow(2, 8),
 			STALK = (int) Math.pow(2, 9);
-	/**処理対象
-	 * <br>デフォルトは0(処理対象無し)*/
+	/**
+	 * 処理対象
+	 * <br>
+	 * デフォルトは0(処理対象無し)
+	 */
 	public static final int hitCheckObjType = 0;
 
-	/**アイテムのランク*/
+	/** アイテムのランク */
 	public enum ItemRank {
 		HOUSE, NORA, YASEI
 	}
 
-	/**標準用長方形型境界線*/
+	/** 標準用長方形型境界線 */
 	protected static Rectangle4y boundary = new Rectangle4y();
 
-	/**親オブジェクト*/
+	/** 親オブジェクト */
 	protected int linkParent = -1;
-	/**ゆっくりに対しての見た目(FOODでのみ使用)*/
+	/** ゆっくりに対しての見た目(FOODでのみ使用) */
 	protected int looks = 0;
-	/**負荷分散のためのインターバル値*/
+	/** 負荷分散のためのインターバル値 */
 	protected int interval = 1;
-	/**汎用スイッチ*/
+	/** 汎用スイッチ */
 	protected boolean enabled = true;
-	/**原点からの当たり判定範囲
-	 * <br>画像=判定ならpivXYでOK プレス機など設置地面付近なら要調整*/
+	/**
+	 * 原点からの当たり判定範囲
+	 * <br>
+	 * 画像=判定ならpivXYでOK プレス機など設置地面付近なら要調整
+	 */
 	protected int colW = 0, colH = 0;
-	/**処理対象の位置*/
+	/** 処理対象の位置 */
 	protected Point4y tmpPos = new Point4y();
 
-	/**画像レイヤー*/
+	/** 画像レイヤー */
 	abstract public int getImageLayer(BufferedImage[] layer);
 
-	/**影の画像*/
+	/** 影の画像 */
 	@Transient
 	abstract public BufferedImage getShadowImage();
 
-	/**リストから除去*/
+	/** リストから除去 */
 	abstract public void removeListData();
 
-	/**オブジェクトのタイプのゲッター*/
+	/** オブジェクトのタイプのゲッター */
 	public ObjEXType getObjEXType() {
 		return objEXType;
 	}
 
-	/**オプションのゲッター*/
+	/** オプションのゲッター */
 	public int getOption() {
 		return option;
 	}
 
-	/**オプションのセッター*/
+	/** オプションのセッター */
 	public void setOption(int setOption) {
 		option = setOption;
 	}
 
-	/**セットアップのためのメニューの有無*/
+	/** セットアップのためのメニューの有無 */
 	public boolean hasSetupMenu() {
 		return false;
 	}
 
-	/**親オブジェクトのゲッター*/
+	/** 親オブジェクトのゲッター */
 	public int getLinkParent() {
 		return linkParent;
 	}
 
-	/**見た目*/
+	/** 見た目 */
 	public int getLooks() {
 		return looks;
 	}
 
-	/**チェックされるべき時かどうか*/
+	/** チェックされるべき時かどうか */
 	public boolean checkInterval(int cnt) {
 		return ((cnt % interval) == 0);
 	}
 
-	/**稼働中か否か*/
+	/** 稼働中か否か */
 	public boolean getEnabled() {
 		return enabled;
 	}
 
-	/**稼働非稼働の切り替え*/
+	/** 稼働非稼働の切り替え */
 	public void setEnabled(boolean enb) {
 		enabled = enb;
 	}
 
-	/**稼働状況逆転*/
+	/** 稼働状況逆転 */
 	public void invertEnabled() {
 		enabled = !enabled;
 	}
 
-	/**当たり判定の大きさセッター*/
+	/** 当たり判定の大きさセッター */
 	protected void setCollisionSize(int halfW, int halfH) {
 		colW = halfW;
 		colH = halfH;
 	}
 
-	/**当たり判定の大きさゲッター
-	 * (Revtangle Ver)*/
+	/**
+	 * 当たり判定の大きさゲッター
+	 * (Revtangle Ver)
+	 */
 	public Rectangle getCollisionRect(Rectangle r) {
 		int x = getScreenPivot().getX();
 		int y = getScreenPivot().getY();
@@ -142,19 +149,21 @@ public abstract class ObjEX extends Obj implements java.io.Serializable {
 		return r;
 	}
 
-	/**あたり判定の可否*/
+	/** あたり判定の可否 */
 	public boolean enableHitCheck() {
 		return true;
 	}
 
-	/**当たり判定されているオブジェクトのタイプ取得*/
+	/** 当たり判定されているオブジェクトのタイプ取得 */
 	@Transient
 	public int getHitCheckObjType() {
 		return hitCheckObjType;
 	};
 
-	/** 当たり判定
-	 * @param o 判定を受けるオブジェクト
+	/**
+	 * 当たり判定
+	 * 
+	 * @param o       判定を受けるオブジェクト
 	 * @param bCheckZ 空中のものもチェックするかどうか
 	 * @return 当たっているかどうか
 	 */
@@ -177,17 +186,20 @@ public abstract class ObjEX extends Obj implements java.io.Serializable {
 		return false;
 	}
 
-	/** 当たり判定されるオブジェクトのチェック
-	 * <br>動作はobjHitProcess( Obj o )で
+	/**
+	 * 当たり判定されるオブジェクトのチェック
+	 * <br>
+	 * 動作はobjHitProcess( Obj o )で
+	 * 
 	 * @param colRect 判定用長方形
-	 * @param o 対象オブジェクト
+	 * @param o       対象オブジェクト
 	 */
 	public boolean checkHitObj(Rectangle colRect, Obj o) {
 		if (o == null) {
 			return false;
 		}
 		int objZ = o.getZ();
-		if (objZ == 0) { //空中の物は移動させない
+		if (objZ == 0) { // 空中の物は移動させない
 			// 対象の座標をフィールド座標に変換
 			Translate.translate(o.getX(), o.getY(), tmpPos);
 			// 点が描画矩形に入ったかの判定
@@ -199,14 +211,17 @@ public abstract class ObjEX extends Obj implements java.io.Serializable {
 		return true;
 	}
 
-	/**当たり判定されたオブジェクトへの処理*/
+	/** 当たり判定されたオブジェクトへの処理 */
 	public int objHitProcess(Obj o) {
 		return 0;
 	};
 
 	@Override
-	/**毎ティックごとの処理
-	 * <br>主に移動系*/
+	/**
+	 * 毎ティックごとの処理
+	 * <br>
+	 * 主に移動系
+	 */
 	public Event clockTick() {
 		setAge(getAge() + TICK);
 		if (isRemoved()) {
@@ -270,13 +285,16 @@ public abstract class ObjEX extends Obj implements java.io.Serializable {
 		return Event.DONOTHING;
 	}
 
-	/**毎ティックごとの処理
-	 * <br>メインが長いときの分割分*/
+	/**
+	 * 毎ティックごとの処理
+	 * <br>
+	 * メインが長いときの分割分
+	 */
 	public void upDate() {
-		//処理なし
+		// 処理なし
 	};
 
-	/**初期設定*/
+	/** 初期設定 */
 	public ObjEX(int initX, int initY, int initOption) {
 		objId = Numbering.INSTANCE.numberingObjId();
 		objType = Type.PLATFORM;
@@ -286,7 +304,7 @@ public abstract class ObjEX extends Obj implements java.io.Serializable {
 		option = initOption;
 		enabled = true;
 	}
-	
+
 	public int getInterval() {
 		return interval;
 	}
@@ -332,6 +350,6 @@ public abstract class ObjEX extends Obj implements java.io.Serializable {
 	}
 
 	public ObjEX() {
-		
+
 	}
 }

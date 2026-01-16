@@ -15,24 +15,27 @@ import src.enums.ObjEXType;
 import src.enums.Type;
 
 /***************************************************
-ベッド
-*/
-public class Bed extends ObjEX implements java.io.Serializable {
+ * ベッド
+ */
+public class Bed extends ObjEX {
 
 	private static final long serialVersionUID = -2355710591796200973L;
-	/**画像の入れ物*/
+	/** 画像の入れ物 */
 	private static BufferedImage[] images;
-	/**判定用長方形*/
+	/** 判定用長方形 */
 	private static Rectangle4y boundary = new Rectangle4y();
-	/**ベッドのランク*/
+	/** ベッドのランク */
 	private ItemRank itemRank;
-	/**画像読み込み*/
-	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
+
+	/** 画像読み込み */
+	public static void loadImages(ClassLoader loader, ImageObserver io) throws IOException {
 
 		images = new BufferedImage[3];
 		images[0] = ModLoader.loadItemImage(loader, "bed" + File.separator + "bed.png");
-		images[1] = ModLoader.loadItemImage(loader, "bed" + File.separator + "bed" + ModLoader.getYkWordNora() + ".png");
-		images[2] = ModLoader.loadItemImage(loader, "bed" + File.separator + "bed" + ModLoader.getYkWordYasei() + ".png");
+		images[1] = ModLoader.loadItemImage(loader,
+				"bed" + File.separator + "bed" + ModLoader.getYkWordNora() + ".png");
+		images[2] = ModLoader.loadItemImage(loader,
+				"bed" + File.separator + "bed" + ModLoader.getYkWordYasei() + ".png");
 		boundary.setWidth(images[0].getWidth(io));
 		boundary.setHeight(images[0].getHeight(io));
 		boundary.setX(boundary.getWidth() >> 1);
@@ -50,13 +53,14 @@ public class Bed extends ObjEX implements java.io.Serializable {
 	public BufferedImage getShadowImage() {
 		return null;
 	}
-	/**境界線の取得*/
+
+	/** 境界線の取得 */
 	public static Rectangle4y getBounding() {
 		return boundary;
 	}
 
 	@Override
-	public void removeListData(){
+	public void removeListData() {
 		SimYukkuri.world.getCurrentMap().getBed().remove(objId);
 	}
 
@@ -64,18 +68,21 @@ public class Bed extends ObjEX implements java.io.Serializable {
 	public int getValue() {
 		return value;
 	}
+
 	/**
 	 * Screen用の四角形を取得する.
+	 * 
 	 * @return Screen用の四角形
 	 */
 	public Rectangle takeScreenRect() {
 		return new Rectangle(boundary.getX(), boundary.getY(), boundary.getWidth(), boundary.getHeight());
 	}
-	
+
 	/**
 	 * 初期設定
-	 * @param initX x座標
-	 * @param initY ｙ座標
+	 * 
+	 * @param initX      x座標
+	 * @param initY      ｙ座標
 	 * @param initOption ランク(0:普通、1:野良用)
 	 */
 	public Bed(int initX, int initY, int initOption) {
@@ -87,25 +94,25 @@ public class Bed extends ObjEX implements java.io.Serializable {
 		objEXType = ObjEXType.BED;
 		itemRank = ItemRank.values()[initOption];
 		// 森なら野生に変更
-		if( SimYukkuri.world.getCurrentMap().getMapIndex() == 5 ||  SimYukkuri.world.getCurrentMap().getMapIndex() == 6 ){
-			if( itemRank == ItemRank.HOUSE ){
+		if (SimYukkuri.world.getCurrentMap().getMapIndex() == 5
+				|| SimYukkuri.world.getCurrentMap().getMapIndex() == 6) {
+			if (itemRank == ItemRank.HOUSE) {
 				itemRank = ItemRank.YASEI;
 			}
 		}
 		interval = 5000;
 
-		if(itemRank == ItemRank.HOUSE) {
+		if (itemRank == ItemRank.HOUSE) {
 			value = 3000;
 			cost = 0;
-		}
-		else {
+		} else {
 			value = 0;
 			cost = 0;
 		}
 	}
-	
+
 	public Bed() {
-		
+
 	}
 
 	public ItemRank getItemRank() {
@@ -115,8 +122,5 @@ public class Bed extends ObjEX implements java.io.Serializable {
 	public void setItemRank(ItemRank itemRank) {
 		this.itemRank = itemRank;
 	}
-	
+
 }
-
-
-

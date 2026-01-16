@@ -13,13 +13,13 @@ import src.system.ResourceUtil;
 import src.util.YukkuriUtil;
 
 /***************************************************
-	プロポーズイベント
-	protected Body from;			// イベントを発した個体
-	protected Body to;				// 結婚対象
-	protected Obj target;			// 未使用
-	protected int count;			// 1
-*/
-public class ProposeEvent extends EventPacket implements java.io.Serializable {
+ * プロポーズイベント
+ * protected Body from; // イベントを発した個体
+ * protected Body to; // 結婚対象
+ * protected Obj target; // 未使用
+ * protected int count; // 1
+ */
+public class ProposeEvent extends EventPacket {
 
 	private static final long serialVersionUID = 8482363173818957959L;
 	int tick = 0;
@@ -32,9 +32,9 @@ public class ProposeEvent extends EventPacket implements java.io.Serializable {
 		super(f, t, tgt, cnt);
 		priority = EventPriority.HIGH;
 	}
-	
+
 	public ProposeEvent() {
-		
+
 	}
 
 	// 参加チェック
@@ -74,7 +74,7 @@ public class ProposeEvent extends EventPacket implements java.io.Serializable {
 		Body from = YukkuriUtil.getBodyInstance(getFrom());
 		if (from == null || to == null || from.isDead() || from.isRemoved())
 			return UpdateState.ABORT;
-		//相手が死んだか 相手が消えてしまったか非ゆっくり症発症したか取られたらイベント中断
+		// 相手が死んだか 相手が消えてしまったか非ゆっくり症発症したか取られたらイベント中断
 		if (to.isDead() || to.isRemoved() || to.isNYD() || to.isTaken()) {
 			from.setCalm();
 			from.setBodyEventResMessage(MessagePool.getMessage(from, MessagePool.Action.Surprise), 30, true,
@@ -92,7 +92,7 @@ public class ProposeEvent extends EventPacket implements java.io.Serializable {
 		}
 
 		int colX = BodyLogic.calcCollisionX(b, to);
-		//相手がつかまれているとき
+		// 相手がつかまれているとき
 		if (to.isGrabbed()) {
 			from.setBodyEventResMessage(MessagePool.getMessage(from, MessagePool.Action.DontPreventUs), 30,
 					false, SimYukkuri.RND.nextBoolean());
@@ -105,7 +105,7 @@ public class ProposeEvent extends EventPacket implements java.io.Serializable {
 				from.moveToEvent(this, to.getX() + colX, to.getY(), to.getZ());
 			else
 				from.moveToEvent(this, to.getX() + colX, to.getY());
-			//ランダムであきらめる
+			// ランダムであきらめる
 			if (from.getIntelligence() != Intelligence.FOOL && SimYukkuri.RND.nextInt(1500) == 0) {
 				if (SimYukkuri.RND.nextBoolean()) {
 					from.setBodyEventResMessage(
@@ -123,22 +123,22 @@ public class ProposeEvent extends EventPacket implements java.io.Serializable {
 			return null;
 		}
 
-		//イベントが始まってたら飛ばす
+		// イベントが始まってたら飛ばす
 		if (started)
 			return UpdateState.FORCE_EXEC;
 
-		//たどり着くまで
+		// たどり着くまで
 		if (from.canflyCheck())
 			from.moveToEvent(this, to.getX() + colX, to.getY(), to.getZ());
 		else
 			from.moveToEvent(this, to.getX() + colX, to.getY());
 		tick = 0;
-		//行動主の呼び止め
-		//		from.setCalm();
-		//		from.setForceFace(ImageCode.EXCITING.ordinal());
+		// 行動主の呼び止め
+		// from.setCalm();
+		// from.setForceFace(ImageCode.EXCITING.ordinal());
 		from.setExciting(true);
 		from.clearActionsForEvent();
-		//相手も興奮して、ぺにぺに相撲になるのの防止
+		// 相手も興奮して、ぺにぺに相撲になるのの防止
 		if (to.isExciting()) {
 			to.setCalm();
 			to.clearEvent();
@@ -161,11 +161,12 @@ public class ProposeEvent extends EventPacket implements java.io.Serializable {
 	public boolean execute(Body b) {
 		Body to = YukkuriUtil.getBodyInstance(getTo());
 		Body from = YukkuriUtil.getBodyInstance(getFrom());
-		if (to == null || from == null) return true;
+		if (to == null || from == null)
+			return true;
 		if (to.isGrabbed()) {
 			return false;
 		}
-		//相手がかびてるor食われてる時の挙動
+		// 相手がかびてるor食われてる時の挙動
 		if (from.findSick(to) || to.isEatenByAnimals() || to.hasDisorder()) {
 			from.setCalm();
 			from.setBodyEventResMessage(MessagePool.getMessage(from, MessagePool.Action.Surprise), 30, true,
@@ -179,7 +180,7 @@ public class ProposeEvent extends EventPacket implements java.io.Serializable {
 				if (SimYukkuri.RND.nextInt(3) == 0)
 					from.doYunnyaa(true);
 			}
-			//夫婦関係の解消
+			// 夫婦関係の解消
 			from.setPartner(-1);
 			if (to.getPartner() == from.getUniqueID()) {
 				to.setPartner(-1);
@@ -188,7 +189,7 @@ public class ProposeEvent extends EventPacket implements java.io.Serializable {
 		}
 
 		if (tick == 0) {
-			//行動主の呼び止め
+			// 行動主の呼び止め
 			from.setCalm();
 			from.stayPurupuru(30);
 			from.addStress(10);
@@ -200,7 +201,7 @@ public class ProposeEvent extends EventPacket implements java.io.Serializable {
 					false);
 			started = true;
 		} else if (tick == 5) {
-			//振り向く
+			// 振り向く
 			to.setCurrentEvent(this);
 			to.constraintDirection(from, false);
 			from.setLockmove(true);
@@ -211,19 +212,19 @@ public class ProposeEvent extends EventPacket implements java.io.Serializable {
 				from.setForceFace(ImageCode.VAIN.ordinal());
 			else
 				from.setForceFace(ImageCode.EMBARRASSED.ordinal());
-			//カップルの設定(ただし、ここではやる側のみ)
+			// カップルの設定(ただし、ここではやる側のみ)
 			from.setPartner(to.getUniqueID());
-			//告白セリフ
+			// 告白セリフ
 			from.setBodyEventResMessage(MessagePool.getMessage(from, MessagePool.Action.Propose), 30, true,
 					false);
 			from.stayPurupuru(50);
 			to.setForceFace(ImageCode.EMBARRASSED.ordinal());
 		} else if (tick == 40) {
-			//双方の反応
-			//成功判定
+			// 双方の反応
+			// 成功判定
 			boolean sayOK = acceptPropose(from, to);
 
-			//成功
+			// 成功
 			if (sayOK) {
 				to.setForceFace(ImageCode.SMILE.ordinal());
 				to.setPartner(from.getUniqueID());
@@ -231,45 +232,45 @@ public class ProposeEvent extends EventPacket implements java.io.Serializable {
 						false);
 				// ゲスほど幸福度は低い
 				switch (from.getAttitude()) {
-				case VERY_NICE:
-					from.addStress(-from.getStressLimit() / 5);
-					from.addMemories(50);
-					break;
-				case NICE:
-					from.addStress(-from.getStressLimit() / 10);
-					from.addMemories(40);
-					break;
-				case AVERAGE:
-					from.addStress(-from.getStressLimit() / 20);
-					from.addMemories(30);
-					break;
-				case SHITHEAD:
-				case SUPER_SHITHEAD:
-					from.addStress(-from.getStressLimit() / 30);
-					from.addMemories(30);
-					break;
+					case VERY_NICE:
+						from.addStress(-from.getStressLimit() / 5);
+						from.addMemories(50);
+						break;
+					case NICE:
+						from.addStress(-from.getStressLimit() / 10);
+						from.addMemories(40);
+						break;
+					case AVERAGE:
+						from.addStress(-from.getStressLimit() / 20);
+						from.addMemories(30);
+						break;
+					case SHITHEAD:
+					case SUPER_SHITHEAD:
+						from.addStress(-from.getStressLimit() / 30);
+						from.addMemories(30);
+						break;
 				}
 				switch (to.getAttitude()) {
-				case VERY_NICE:
-					to.addStress(-to.getStressLimit() / 5);
-					to.addMemories(50);
-					break;
-				case NICE:
-					to.addStress(-to.getStressLimit() / 10);
-					to.addMemories(40);
-					break;
-				case AVERAGE:
-					to.addStress(-to.getStressLimit() / 20);
-					to.addMemories(30);
-					break;
-				case SHITHEAD:
-				case SUPER_SHITHEAD:
-					to.addStress(-to.getStressLimit() / 30);
-					to.addMemories(30);
-					break;
+					case VERY_NICE:
+						to.addStress(-to.getStressLimit() / 5);
+						to.addMemories(50);
+						break;
+					case NICE:
+						to.addStress(-to.getStressLimit() / 10);
+						to.addMemories(40);
+						break;
+					case AVERAGE:
+						to.addStress(-to.getStressLimit() / 20);
+						to.addMemories(30);
+						break;
+					case SHITHEAD:
+					case SUPER_SHITHEAD:
+						to.addStress(-to.getStressLimit() / 30);
+						to.addMemories(30);
+						break;
 				}
 			}
-			//失敗
+			// 失敗
 			else {
 				if (to.findSick(from)) {
 					to.setBodyEventResMessage(MessagePool.getMessage(to, MessagePool.Action.HateMoldyYukkuri),
@@ -287,42 +288,42 @@ public class ProposeEvent extends EventPacket implements java.io.Serializable {
 				from.setPartner(-1);
 				// ストレスと思い出の上下
 				switch (from.getAttitude()) {
-				case VERY_NICE:
-					from.addStress(from.getStressLimit() / 20);
-					from.addMemories(-50);
-					break;
-				case NICE:
-					from.addStress(from.getStressLimit() / 16);
-					from.addMemories(-40);
-					break;
-				case AVERAGE:
-					from.addStress(from.getStressLimit() / 10);
-					from.addMemories(-30);
-					break;
-				case SHITHEAD:
-				case SUPER_SHITHEAD:
-					from.addStress(from.getStressLimit() / 6);
-					from.addMemories(-20);
-					break;
+					case VERY_NICE:
+						from.addStress(from.getStressLimit() / 20);
+						from.addMemories(-50);
+						break;
+					case NICE:
+						from.addStress(from.getStressLimit() / 16);
+						from.addMemories(-40);
+						break;
+					case AVERAGE:
+						from.addStress(from.getStressLimit() / 10);
+						from.addMemories(-30);
+						break;
+					case SHITHEAD:
+					case SUPER_SHITHEAD:
+						from.addStress(from.getStressLimit() / 6);
+						from.addMemories(-20);
+						break;
 				}
 				switch (to.getAttitude()) {
-				case VERY_NICE:
-					to.addStress(-to.getStressLimit() / 20);
-					break;
-				case NICE:
-					to.addStress(-to.getStressLimit() / 16);
-					break;
-				case AVERAGE:
-					to.addStress(-to.getStressLimit() / 10);
-					break;
-				case SHITHEAD:
-				case SUPER_SHITHEAD:
-					to.addStress(-to.getStressLimit() / 6);
-					break;
+					case VERY_NICE:
+						to.addStress(-to.getStressLimit() / 20);
+						break;
+					case NICE:
+						to.addStress(-to.getStressLimit() / 16);
+						break;
+					case AVERAGE:
+						to.addStress(-to.getStressLimit() / 10);
+						break;
+					case SHITHEAD:
+					case SUPER_SHITHEAD:
+						to.addStress(-to.getStressLimit() / 6);
+						break;
 				}
 			}
 		} else if (tick == 60) {
-			//成功時はすっきりを迫る
+			// 成功時はすっきりを迫る
 			if (from.getPartner() == to.getUniqueID()) {
 				from.setHappiness(Happiness.VERY_HAPPY);
 				from.clearActionsForEvent();
@@ -333,7 +334,7 @@ public class ProposeEvent extends EventPacket implements java.io.Serializable {
 				to.setBodyEventResMessage(MessagePool.getMessage(to, MessagePool.Action.OKcome), 30, true,
 						false);
 			}
-			//失敗時は泣いて逃げる
+			// 失敗時は泣いて逃げる
 			else {
 				from.setHappiness(Happiness.VERY_SAD);
 				from.setForceFace(ImageCode.CRYING.ordinal());
@@ -353,21 +354,22 @@ public class ProposeEvent extends EventPacket implements java.io.Serializable {
 
 	/**
 	 * fのプロポーズのtによる判定。プロポーズはfがした側、tがされた側
+	 * 
 	 * @param f プロポーズした側
 	 * @param t プロポーズされた側
 	 * @return プロポーズ成功かどうか
 	 */
 	public boolean acceptPropose(Body f, Body t) {
-		//既婚
+		// 既婚
 		if (YukkuriUtil.getBodyInstance(t.getPartner()) != null)
 			return false;
-		//カビ発見
+		// カビ発見
 		if (t.findSick(f))
 			return false;
-		//妊娠中個体
+		// 妊娠中個体
 		if (f.hasBabyOrStalk())
 			return false;
-		//障害ゆん
+		// 障害ゆん
 		if (f.hasDisorder())
 			return false;
 
@@ -379,7 +381,8 @@ public class ProposeEvent extends EventPacket implements java.io.Serializable {
 	public void end(Body b) {
 		Body to = YukkuriUtil.getBodyInstance(getTo());
 		Body from = YukkuriUtil.getBodyInstance(getFrom());
-		if (from == null || to == null) return;
+		if (from == null || to == null)
+			return;
 		from.setCalm();
 		from.setCurrentEvent(null);
 		if (to != null) {

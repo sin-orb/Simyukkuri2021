@@ -9,13 +9,13 @@ import src.system.ResourceUtil;
 import src.util.YukkuriUtil;
 
 /***************************************************
-	レイパー発情通知イベント
-	protected Body from;			// レイパー
-	protected Body to;				// 未使用
-	protected Obj target;			// 未使用
-	protected int count;			// 1
-*/
-public class RaperWakeupEvent extends EventPacket implements java.io.Serializable {
+ * レイパー発情通知イベント
+ * protected Body from; // レイパー
+ * protected Body to; // 未使用
+ * protected Obj target; // 未使用
+ * protected int count; // 1
+ */
+public class RaperWakeupEvent extends EventPacket {
 
 	private static final long serialVersionUID = 1123319861445649770L;
 
@@ -25,36 +25,38 @@ public class RaperWakeupEvent extends EventPacket implements java.io.Serializabl
 	public RaperWakeupEvent(Body f, Body t, Obj tgt, int cnt) {
 		super(f, t, tgt, cnt);
 	}
-	
+
 	public RaperWakeupEvent() {
-		
+
 	}
-	
+
 	@Override
 	public boolean simpleEventAction(Body b) {
 		// 自分自身はスキップ
 		Body from = YukkuriUtil.getBodyInstance(getFrom());
-		if(b == from) return false;
+		if (b == from)
+			return false;
 		// 死体、睡眠、皮なし、目無しはスキップ
-		if(!b.canEventResponse()) return true;
+		if (!b.canEventResponse())
+			return true;
 
-		//非ゆっくり症、針刺し状態のはスキップ
-		if( b.isNYD() ||b.isNeedled())
-		{
+		// 非ゆっくり症、針刺し状態のはスキップ
+		if (b.isNYD() || b.isNeedled()) {
 			return false;
 		}
 
 		// 相手との間に壁があればスキップ
-		if (Barrier.acrossBarrier(b.getX(), b.getY(), from.getX(), from.getY(), Barrier.MAP_BODY[b.getBodyAgeState().ordinal()]+Barrier.BARRIER_KEKKAI)) {
+		if (Barrier.acrossBarrier(b.getX(), b.getY(), from.getX(), from.getY(),
+				Barrier.MAP_BODY[b.getBodyAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
 			return false;
 		}
-		
+
 		// 自分もレイパーなら連鎖して発情
-		if(b.isRaper()) {
+		if (b.isRaper()) {
 			b.forceToRaperExcite(true);
 			return true;
 		}
-		
+
 		// 一般人の反応
 		// 固体ごとに異なる行動をするため新しいイベントのインスタンスを作成して固体イベントに登録
 		EventLogic.addBodyEvent(b, new RaperReactionEvent(from, null, null, 1), null, null);
@@ -71,14 +73,14 @@ public class RaperWakeupEvent extends EventPacket implements java.io.Serializabl
 	@Override
 	public void start(Body b) {
 	}
-	
+
 	// イベント目標に到着した際に呼ばれる
 	// trueを返すとイベント終了
 	@Override
 	public boolean execute(Body b) {
 		return true;
 	}
-	
+
 	@Override
 	public String toString() {
 		return ResourceUtil.getInstance().read("event_raperawakening");

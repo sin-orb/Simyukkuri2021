@@ -34,8 +34,8 @@ import src.util.YukkuriUtil;
 
 /*****************************************************
  * れいむ。でいぶ、わさ、まりされいむはこれを継承している
-*/
-public class Reimu extends Body implements java.io.Serializable {
+ */
+public class Reimu extends Body {
 	private static final long serialVersionUID = -7573106487924456286L;
 	/** れいむのタイプ */
 	public static final int type = 1;
@@ -57,11 +57,12 @@ public class Reimu extends Body implements java.io.Serializable {
 	private static Dimension4y[] braidBoundary = new Dimension4y[3];
 	private static boolean imageLoaded = false;
 	private static Map<String, Point4y[]> AttachOffset = new HashMap<String, Point4y[]>();
-	//---
+	// ---
 	// iniファイルから読み込んだ初期値
 	private static int baseSpeed = 100;
 	// 個別表情管理(まりちゃ流し用)
 	private int anImageVerStateCtrlNagasi[][] = new int[ImageCode.values().length][2];
+
 	/** イメージのロード */
 	public static void loadImages(ClassLoader loader, ImageObserver io) throws IOException {
 
@@ -94,19 +95,23 @@ public class Reimu extends Body implements java.io.Serializable {
 
 		imageLoaded = true;
 	}
+
 	/**
 	 * INIファイルをロードする
+	 * 
 	 * @param loader クラスローダ
 	 */
 	public static void loadIniFile(ClassLoader loader) {
 		AttachOffset = ModLoader.loadBodyIniMap(loader, ModLoader.getDataIniDir(), baseFileName);
 		baseSpeed = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataIniDir(), baseFileName, "speed");
 	}
+
 	@Override
 	@Transient
 	public boolean isImageLoaded() {
 		return imageLoaded;
 	}
+
 	@Override
 	public int getImage(int type, int direction, BodyLayer layer, int index) {
 		if (!isbImageNagasiMode() || imagesNagasi == null) {
@@ -124,8 +129,9 @@ public class Reimu extends Body implements java.io.Serializable {
 			// 前回と同じ表示
 			if (anImageVerStateCtrlNagasi[type][1] == 1) {
 				int nIndex = anImageVerStateCtrlNagasi[type][0];
-				layer.getImage()[index] = imagesNagasi[type][direction * directionOffsetNagasi[type][0]][getBodyAgeState()
-						.ordinal()][nIndex];
+				layer.getImage()[index] = imagesNagasi[type][direction
+						* directionOffsetNagasi[type][0]][getBodyAgeState()
+								.ordinal()][nIndex];
 
 			} else {
 				int nOtherVerCount = 0;
@@ -158,6 +164,7 @@ public class Reimu extends Body implements java.io.Serializable {
 	/**
 	 * ゆ虐神拳を受けてドス等にトランスフォーム可能かどうかを返却する.
 	 * 実ゆでなければ可能を返却する.
+	 * 
 	 * @return ゆ虐神拳を受けてドス等にトランスフォーム可能かどうか
 	 */
 	@Override
@@ -198,6 +205,7 @@ public class Reimu extends Body implements java.io.Serializable {
 	/**
 	 * 突然変異チェックをする.
 	 * れいむ→でいぶ.
+	 * 
 	 * @return 突然変異する際のゆっくり
 	 */
 	@Override
@@ -212,20 +220,21 @@ public class Reimu extends Body implements java.io.Serializable {
 				return this;
 			}
 		}
-		//または、ゲスでいぶの子供である
+		// または、ゲスでいぶの子供である
 		Body mother = YukkuriUtil.getBodyInstance(getMother());
 		if (!isAdult() && mother != null && mother.getType() == Deibu.type && mother.isRude()) {
-			//ゲスバカとドゲスは確実にでいぶ化
+			// ゲスバカとドゲスは確実にでいぶ化
 			if ((isRude() && getIntelligence() != Intelligence.FOOL) || getAttitude() == Attitude.SUPER_SHITHEAD) {
 				return this;
 			}
-			//あとは1/2。
+			// あとは1/2。
 			else if (SimYukkuri.RND.nextBoolean()) {
 				return this;
 			}
 		}
 		return null;
 	}
+
 	@Override
 	public Point4y[] getMountPoint(String key) {
 		return AttachOffset.get(key);
@@ -241,17 +250,19 @@ public class Reimu extends Body implements java.io.Serializable {
 	@Transient
 	public int getHybridType(int partnerType) {
 		switch (partnerType) {
-		case Marisa.type:
-			return MarisaReimu.type;
-		default:
-			return Reimu.type;
+			case Marisa.type:
+				return MarisaReimu.type;
+			default:
+				return Reimu.type;
 		}
 	}
+
 	@Override
 	@Transient
 	public String getNameJ() {
 		return nameJ;
 	}
+
 	@Override
 	@Transient
 	public String getMyName() {
@@ -260,6 +271,7 @@ public class Reimu extends Body implements java.io.Serializable {
 		}
 		return nameJ;
 	}
+
 	@Override
 	@Transient
 	public String getMyNameD() {
@@ -268,6 +280,7 @@ public class Reimu extends Body implements java.io.Serializable {
 		}
 		return getMyName();
 	}
+
 	@Override
 	@Transient
 	public String getNameE() {
@@ -405,10 +418,10 @@ public class Reimu extends Body implements java.io.Serializable {
 				idx += getImage(ImageCode.ROLL_ACCESSORY.ordinal(), Const.LEFT, layer, idx);
 			}
 		}
-		//れいむ種専用
+		// れいむ種専用
 		else if (isYunnyaa()) {
-			//ゆんやあ
-			/*if(getImageNagasiMode())*/ {
+			// ゆんやあ
+			/* if(getImageNagasiMode()) */ {
 				if (getAge() % 6 <= 1) {
 					idx += getImage(ImageCode.YUNYAA1.ordinal(), direction, layer, idx);
 
@@ -467,7 +480,7 @@ public class Reimu extends Body implements java.io.Serializable {
 					if (!isHasBraid()) {
 						idx += getImage(ImageCode.YUNYAA2_CUTBRAID.ordinal(), direction, layer, idx);
 					}
-				} else /*if (getAge() % 6 <= 3)*/ {
+				} else /* if (getAge() % 6 <= 3) */ {
 					idx += getImage(ImageCode.YUNYAA3.ordinal(), direction, layer, idx);
 
 					if (getOkazari() != null && getOkazari().getOkazariType() == OkazariType.DEFAULT) {
@@ -501,7 +514,7 @@ public class Reimu extends Body implements java.io.Serializable {
 		}
 
 		else {
-			//皮むき時
+			// 皮むき時
 			if (isPealed()) {
 				idx += getImage(ImageCode.PEALED.ordinal(), direction, layer, idx);
 			}
@@ -514,8 +527,8 @@ public class Reimu extends Body implements java.io.Serializable {
 		return idx;
 	}
 
-	//ゆっくりしてる時のアクション
-	//個別の動作がある種ははこれをオーバーライドしているので注意
+	// ゆっくりしてる時のアクション
+	// 個別の動作がある種ははこれをオーバーライドしているので注意
 	@Override
 	public void killTime() {
 		if (getCurrentEvent() != null)
@@ -523,11 +536,11 @@ public class Reimu extends Body implements java.io.Serializable {
 		if (getPlaying() != null)
 			return;
 		int p = SimYukkuri.RND.nextInt(50);
-		//7/50でキリッ
+		// 7/50でキリッ
 		if (p <= 6) {
 			getInVain(true);
 		}
-		//7/50でのびのび
+		// 7/50でのびのび
 		else if (p <= 14) {
 			// if yukkuri is not rude, she goes into her shell by discipline.
 			setMessage(MessagePool.getMessage(this, MessagePool.Action.Nobinobi), 40);
@@ -535,28 +548,28 @@ public class Reimu extends Body implements java.io.Serializable {
 			addStress(-30);
 			stay(40);
 		}
-		//7/50でおうた
+		// 7/50でおうた
 		else if (p <= 21) {
 			setMessage(MessagePool.getMessage(this, MessagePool.Action.ProudChildsSING), 40);
 			setNobinobi(true);
 			addStress(-30);
 			stay(40);
 		}
-		//7/50でふりふり
+		// 7/50でふりふり
 		else if (p <= 28 && willingFurifuri()) {
-			//if yukkuri is rude, she will not do furifuri by discipline.
+			// if yukkuri is rude, she will not do furifuri by discipline.
 			setMessage(MessagePool.getMessage(this, MessagePool.Action.FuriFuri), 30);
 			setFurifuri(true);
 			addStress(-50);
 			stay(30);
 		}
-		//7/50でふりふりで腹減った
+		// 7/50でふりふりで腹減った
 		else if ((p <= 35 && isHungry()) || isSoHungry()) {
 			// 空腹時
 			setMessage(MessagePool.getMessage(this, MessagePool.Action.Hungry), 30);
 			stay(30);
 		}
-		//4/50でおもちゃで遊ぶ
+		// 4/50でおもちゃで遊ぶ
 		else if (p <= 39) {
 			if (ToyLogic.checkToy(this)) {
 				setPlaying(PlayStyle.BALL);
@@ -565,7 +578,7 @@ public class Reimu extends Body implements java.io.Serializable {
 			} else
 				killTime();
 		}
-		//3/50でトランポリンで遊ぶ
+		// 3/50でトランポリンで遊ぶ
 		else if (p <= 42) {
 			if (ToyLogic.checkTrampoline(this)) {
 				setPlaying(PlayStyle.TRAMPOLINE);
@@ -574,7 +587,7 @@ public class Reimu extends Body implements java.io.Serializable {
 			} else
 				killTime();
 		}
-		//1/50ですいーで遊ぶ
+		// 1/50ですいーで遊ぶ
 		else if (p <= 43) {
 			if (ToyLogic.checkSui(this)) {
 				setPlaying(PlayStyle.SUI);
@@ -603,14 +616,18 @@ public class Reimu extends Body implements java.io.Serializable {
 		setBaseBodyFileName(baseFileName);
 		IniFileUtil.readYukkuriIniFile(this);
 	}
+
 	public Reimu() {
-		
+
 	}
+
 	@Override
 	public void tuneParameters() {
-		/*if (SimYukkuri.RND.nextBoolean()) {
-		motherhood = true;
-		}*/
+		/*
+		 * if (SimYukkuri.RND.nextBoolean()) {
+		 * motherhood = true;
+		 * }
+		 */
 		double factor = Math.random() * 2 + 1;
 		HUNGRYLIMITorg[AgeState.ADULT.ordinal()] *= factor;
 		HUNGRYLIMITorg[AgeState.CHILD.ordinal()] *= factor;
@@ -636,22 +653,22 @@ public class Reimu extends Body implements java.io.Serializable {
 		sameDest = SimYukkuri.RND.nextInt(20) + 20;
 		DECLINEPERIODorg *= (Math.random() + 0.5);
 		ROBUSTNESS = SimYukkuri.RND.nextInt(10) + 1;
-		//EYESIGHT /= 4;
+		// EYESIGHT /= 4;
 		factor = Math.random() + 0.5;
 		STRENGTHorg[AgeState.ADULT.ordinal()] *= factor;
 		STRENGTHorg[AgeState.CHILD.ordinal()] *= factor;
 		STRENGTHorg[AgeState.BABY.ordinal()] *= factor;
 
-		//speed = 120;
+		// speed = 120;
 		speed = baseSpeed;
 	}
+
 	public int[][] getAnImageVerStateCtrlNagasi() {
 		return anImageVerStateCtrlNagasi;
 	}
+
 	public void setAnImageVerStateCtrlNagasi(int[][] anImageVerStateCtrlNagasi) {
 		this.anImageVerStateCtrlNagasi = anImageVerStateCtrlNagasi;
 	}
-	
+
 }
-
-

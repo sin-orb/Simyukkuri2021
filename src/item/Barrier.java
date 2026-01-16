@@ -5,7 +5,6 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Stroke;
 import java.beans.Transient;
-import java.io.Serializable;
 import java.util.List;
 
 import src.SimYukkuri;
@@ -36,7 +35,7 @@ import src.system.MapPlaceData;
  * <br>
  * これはほかのアイテムと違い、ObjEXを継承していないので注意。
  */
-public class Barrier extends FieldShapeBase implements Serializable {
+public class Barrier extends FieldShapeBase {
 	private static final long serialVersionUID = -1750205300136035405L;
 	/** 壁の線のデザイン */
 	public static final Stroke WALL_STROKE = new BasicStroke(3.0f);
@@ -116,7 +115,8 @@ public class Barrier extends FieldShapeBase implements Serializable {
 				break;
 		}
 
-		MapPlaceData.setWallLine(SimYukkuri.world.getCurrentMap().getWallMap(), mapSX, mapSY, mapEX, mapEY, true, attribute);
+		MapPlaceData.setWallLine(SimYukkuri.world.getCurrentMap().getWallMap(), mapSX, mapSY, mapEX, mapEY, true,
+				attribute);
 		SimYukkuri.world.getCurrentMap().getBarrier().add(this);
 	}
 
@@ -228,4 +228,3 @@ public class Barrier extends FieldShapeBase implements Serializable {
 		return false;
 	}
 }
-

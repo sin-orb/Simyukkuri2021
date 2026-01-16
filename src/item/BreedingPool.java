@@ -41,21 +41,21 @@ import src.yukkuri.WasaReimu;
 /***************************************************
  * 養殖プール
  */
-public class BreedingPool extends ObjEX implements java.io.Serializable {
+public class BreedingPool extends ObjEX {
 
 	private static final long serialVersionUID = -2544191380264314199L;
 
-	/**稼働タイプ*/
+	/** 稼働タイプ */
 	public static enum PoolType {
-		LOW(ResourceUtil.getInstance().read("item_cheap")), 
-		RAPID(ResourceUtil.getInstance().read("item_normalbreed")), 
+		LOW(ResourceUtil.getInstance().read("item_cheap")),
+		RAPID(ResourceUtil.getInstance().read("item_normalbreed")),
 		PRO(ResourceUtil.getInstance().read("item_forpro")),
 		INDUSTRY(ResourceUtil.getInstance().read("item_indust")),
 		LOWS(ResourceUtil.getInstance().read("item_cheapstalk")),
 		RAPIDS(ResourceUtil.getInstance().read("item_normalstalk")),
 		PROS(ResourceUtil.getInstance().read("item_forprostalk")),
 		INDUSTRYS(ResourceUtil.getInstance().read("item_induststalk")),
-				;
+		;
 
 		private String name;
 
@@ -68,9 +68,9 @@ public class BreedingPool extends ObjEX implements java.io.Serializable {
 		}
 	}
 
-	/**処理対象(ゆっくり)*/
+	/** 処理対象(ゆっくり) */
 	public static final int hitCheckObjType = ObjEX.YUKKURI;
-	private static final int images_num = 4; //このクラスの総使用画像数
+	private static final int images_num = 4; // このクラスの総使用画像数
 	private static BufferedImage[] images = new BufferedImage[images_num];
 	private static Rectangle4y boundary = new Rectangle4y();
 
@@ -78,11 +78,11 @@ public class BreedingPool extends ObjEX implements java.io.Serializable {
 	private boolean stalkPool;
 	private static int[] value = { 1000, 5000, 50000, 450000, 1000, 5000, 50000, 600000 };
 	private static int[] cost = { 10, 50, 50, 1500, 10, 50, 50, 1500 };
-	/**プールの上で死亡して、精子餡に混ざった種類のDNA*/
+	/** プールの上で死亡して、精子餡に混ざった種類のDNA */
 	public int liquidYukkuriType = -1;
 	private int lastSelected = 0;
 
-	/**画像ロード*/
+	/** 画像ロード */
 	public static void loadImages(ClassLoader loader, ImageObserver io) throws IOException {
 		for (int i = 0; i < images_num; i++) {
 			images[i] = ModLoader.loadItemImage(loader,
@@ -116,7 +116,7 @@ public class BreedingPool extends ObjEX implements java.io.Serializable {
 		return null;
 	}
 
-	/**境界線の取得*/
+	/** 境界線の取得 */
 	public static Rectangle4y getBounding() {
 		return boundary;
 	}
@@ -139,27 +139,27 @@ public class BreedingPool extends ObjEX implements java.io.Serializable {
 			if (p.isStalkCastration() && stalkPool)
 				return 0;
 
-			//工業用専用の特殊処理
+			// 工業用専用の特殊処理
 			if (option == 3 || option == 7) {
-				//一日ごとのコスト
+				// 一日ごとのコスト
 				if (getAge() % 2400 == 0) {
 					Cash.addCash(-getCost());
 				}
-				//赤ゆには茎を実らせない
+				// 赤ゆには茎を実らせない
 				if (stalkPool) {
 					if (p.isBaby())
 						return 0;
 				}
-				//ゆっくりが膨らんでる時の糞抜き
+				// ゆっくりが膨らんでる時の糞抜き
 				if (p.isInfration()) {
 					p.setShit(0, false);
-					//胎生妊娠プールの場合爆発寸前でストップ
+					// 胎生妊娠プールの場合爆発寸前でストップ
 					if (!stalkPool && p.isAboutToBurst()) {
 						cry(p);
 						return 0;
 					}
 				}
-				//母体の自動回復
+				// 母体の自動回復
 				if (p.isDamaged()) {
 					p.injectJuice();
 				}
@@ -167,7 +167,7 @@ public class BreedingPool extends ObjEX implements java.io.Serializable {
 
 			if (!p.isDead()
 					&& (int) getAge() % (((highQuality == true) ? 5 : 10) * ((stalkPool == true) ? 2 : 1)) == 0) {
-				//赤ゆのDNA決定
+				// 赤ゆのDNA決定
 				for (int i = 0; i < 5; i++) {
 					int babyType;
 					if (liquidYukkuriType == -1) {
@@ -213,12 +213,12 @@ public class BreedingPool extends ObjEX implements java.io.Serializable {
 							babyType = Tarinai.type;
 						}
 					}
-					//実らせる
+					// 実らせる
 					if (stalkPool) {
 						cry(p);
 						p.setHappiness(Happiness.VERY_SAD);
 						p.addStress(50);
-						//p.addMemories(-10);
+						// p.addMemories(-10);
 						p.getStalkBabyTypes()
 								.add((SimYukkuri.RND.nextBoolean() ? new Dna(babyType, null, null, false) : null));
 						p.setHasStalk(true);
@@ -228,16 +228,16 @@ public class BreedingPool extends ObjEX implements java.io.Serializable {
 						p.getBabyTypes().add(new Dna(babyType, null, null, false));
 						p.setHasBaby(true);
 						p.addStress(50);
-						//p.addMemories(-10);
+						// p.addMemories(-10);
 						break;
 					}
 				}
 				p.subtractPregnantLimit();
-				//廉価版では成長促進効果なし
+				// 廉価版では成長促進効果なし
 				if (option != 0 && option != 4) {
 					p.rapidPregnantPeriod();
 				}
-				//一匹一匹でコストになるのは工業用以外
+				// 一匹一匹でコストになるのは工業用以外
 				if (option != 3 && option != 7) {
 					Cash.addCash(-getCost());
 				}
@@ -277,7 +277,7 @@ public class BreedingPool extends ObjEX implements java.io.Serializable {
 		}
 	}
 
-	/**コンストラクタ*/
+	/** コンストラクタ */
 	public BreedingPool(int initX, int initY, int initOption) {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
@@ -295,9 +295,9 @@ public class BreedingPool extends ObjEX implements java.io.Serializable {
 			SimYukkuri.world.getCurrentMap().getBreedingPool().remove(objId);
 		}
 	}
-	
+
 	public BreedingPool() {
-		
+
 	}
 
 	// 設定メニュー
@@ -323,80 +323,80 @@ public class BreedingPool extends ObjEX implements java.io.Serializable {
 		} else {
 			but[o.lastSelected].setSelected(true);
 		}
-		int dlgRet = JOptionPane.showConfirmDialog(SimYukkuri.mypane, mainPanel, 
+		int dlgRet = JOptionPane.showConfirmDialog(SimYukkuri.mypane, mainPanel,
 				ResourceUtil.getInstance().read("item_poolsettings"),
 				JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
 		if (dlgRet == JOptionPane.OK_OPTION) {
-			//廉価版
+			// 廉価版
 			if (but[0].isSelected()) {
 				o.highQuality = false;
-				//				o.rapidGrowth = false;
+				// o.rapidGrowth = false;
 				o.stalkPool = false;
-				//				o.industrial = false;
+				// o.industrial = false;
 				o.lastSelected = 0;
 				o.option = 0;
 			}
-			//通常版
+			// 通常版
 			else if (but[1].isSelected()) {
 				o.highQuality = false;
-				//				o.rapidGrowth = true;
+				// o.rapidGrowth = true;
 				o.stalkPool = false;
-				//				o.industrial = false;
+				// o.industrial = false;
 				o.lastSelected = 1;
 				o.option = 1;
 			}
-			//プロ用
+			// プロ用
 			else if (but[2].isSelected()) {
 				o.highQuality = true;
-				//				o.rapidGrowth = true;
+				// o.rapidGrowth = true;
 				o.stalkPool = false;
-				//				o.industrial = false;
+				// o.industrial = false;
 				o.lastSelected = 2;
 				o.option = 2;
 			}
-			//工業用
+			// 工業用
 			else if (but[3].isSelected()) {
 				o.highQuality = true;
-				//				o.rapidGrowth = true;
+				// o.rapidGrowth = true;
 				o.stalkPool = false;
-				//				o.industrial = true;
+				// o.industrial = true;
 				o.lastSelected = 3;
 				o.option = 3;
 			}
-			//廉価版(茎)
+			// 廉価版(茎)
 			else if (but[4].isSelected()) {
 				o.highQuality = false;
-				//				o.rapidGrowth = false;
+				// o.rapidGrowth = false;
 				o.stalkPool = true;
-				//				o.industrial = false;
+				// o.industrial = false;
 				o.lastSelected = 4;
 				o.option = 4;
 			}
-			//通常版(茎)
+			// 通常版(茎)
 			else if (but[5].isSelected()) {
 				o.highQuality = false;
-				//				o.rapidGrowth = true;
+				// o.rapidGrowth = true;
 				o.stalkPool = true;
-				//				o.industrial = false;
+				// o.industrial = false;
 				o.lastSelected = 5;
 				o.option = 5;
 			}
-			//プロ用(茎)
+			// プロ用(茎)
 			else if (but[6].isSelected()) {
 				o.highQuality = true;
-				//				o.rapidGrowth = true;
+				// o.rapidGrowth = true;
 				o.stalkPool = true;
-				//				o.industrial = false;
+				// o.industrial = false;
 				o.lastSelected = 6;
 				o.option = 6;
 			}
-			//工業用(茎)
+			// 工業用(茎)
 			else if (but[7].isSelected()) {
 				o.highQuality = true;
-				//				o.rapidGrowth = true;
+				// o.rapidGrowth = true;
 				o.stalkPool = true;
-				//				o.industrial = true;
+				// o.industrial = true;
 				o.lastSelected = 7;
 				o.option = 7;
 			}
@@ -436,6 +436,5 @@ public class BreedingPool extends ObjEX implements java.io.Serializable {
 	public void setLastSelected(int lastSelected) {
 		this.lastSelected = lastSelected;
 	}
-	
-}
 
+}

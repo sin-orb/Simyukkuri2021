@@ -1,6 +1,5 @@
 package src.event;
 
-import java.io.Serializable;
 import java.util.Map;
 
 import src.Const;
@@ -20,23 +19,24 @@ import src.util.YukkuriUtil;
 /**
  * 善良なゆっくりが主に参加し、ドスは捕食種がいる限り殺しに行く.
  */
-public class KillPredeatorEvent extends RevengeAttackEvent implements Serializable {
+public class KillPredeatorEvent extends RevengeAttackEvent {
 
 	private static final long serialVersionUID = -3947180002572305098L;
 
 	/**
 	 * コンストラクタ.
-	 * @param f イベントを発した個体
-	 * @param t 攻撃対象の捕食種
+	 * 
+	 * @param f   イベントを発した個体
+	 * @param t   攻撃対象の捕食種
 	 * @param tgt 未使用
 	 * @param cnt 10
 	 */
 	public KillPredeatorEvent(Body f, Body t, Obj tgt, int cnt) {
 		super(f, t, tgt, cnt);
 	}
-	
+
 	public KillPredeatorEvent() {
-		
+
 	}
 
 	/**
@@ -50,7 +50,7 @@ public class KillPredeatorEvent extends RevengeAttackEvent implements Serializab
 		// 死体、睡眠、皮なし、目無しはスキップ
 		if (!b.canEventResponse())
 			return true;
-		//非ゆっくり症、針刺し状態はスキップ
+		// 非ゆっくり症、針刺し状態はスキップ
 		if (b.isNYD() || b.isNeedled())
 			return false;
 		boolean bIsNearPreadeator = false;
@@ -83,6 +83,7 @@ public class KillPredeatorEvent extends RevengeAttackEvent implements Serializab
 
 	/**
 	 * 次のターゲットを探す.
+	 * 
 	 * @return 次のターゲット
 	 */
 	public Body searchNextTarget() {
@@ -170,4 +171,3 @@ public class KillPredeatorEvent extends RevengeAttackEvent implements Serializab
 		return ResourceUtil.getInstance().read("event_killremi");
 	}
 }
-

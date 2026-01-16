@@ -16,19 +16,21 @@ import src.enums.Type;
 /***************************************************
  * おうち
  */
-public class House extends ObjEX implements java.io.Serializable {
+public class House extends ObjEX {
 	private static final long serialVersionUID = -6609787822366581526L;
 
-	/**おうちの種類テーブル*/
+	/** おうちの種類テーブル */
 	public static enum HouseTable {
 		HOUSE_NORA1("floor_nora1.png", "wall_nora1.png", "ceil_nora1.png", "door_nora1.png", 1),
 		HOUSE_NORA2("floor_nora2.png", "wall_nora2.png", "ceil_nora2.png", "door_nora2.png", 1),
 		;
+
 		private final String floorName;
 		private final String wallName;
 		private final String ceilName;
 		private final String doorName;
 		private final int rank;
+
 		HouseTable(String f, String w, String c, String d, int r) {
 			floorName = f;
 			wallName = w;
@@ -63,13 +65,14 @@ public class House extends ObjEX implements java.io.Serializable {
 
 	private HouseTable houseType;
 	private ItemRank itemRank;
-	/**画像ロード*/
-	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
+
+	/** 画像ロード */
+	public static void loadImages(ClassLoader loader, ImageObserver io) throws IOException {
 
 		images = new BufferedImage[HouseTable.values().length][4];
 		boundary = new Rectangle4y[HouseTable.values().length];
-		
-		for(HouseTable i :HouseTable.values()) {
+
+		for (HouseTable i : HouseTable.values()) {
 			images[i.ordinal()][0] = ModLoader.loadItemImage(loader, "house" + File.separator + i.getFloorName());
 			images[i.ordinal()][1] = ModLoader.loadItemImage(loader, "house" + File.separator + i.getWallName());
 			images[i.ordinal()][2] = ModLoader.loadItemImage(loader, "house" + File.separator + i.getCeilName());
@@ -81,7 +84,7 @@ public class House extends ObjEX implements java.io.Serializable {
 			boundary[i.ordinal()].setY(boundary[i.ordinal()].getHeight() >> 1);
 		}
 	}
-	
+
 	@Override
 	public int getImageLayer(BufferedImage[] layer) {
 		layer[0] = images[0][0];
@@ -93,14 +96,15 @@ public class House extends ObjEX implements java.io.Serializable {
 	public BufferedImage getShadowImage() {
 		return null;
 	}
-	/**境界線の取得*/
+
+	/** 境界線の取得 */
 	@Transient
 	public static Rectangle4y getBounding() {
 		return boundary[0];
 	}
 
 	@Override
-	public void removeListData(){
+	public void removeListData() {
 		SimYukkuri.world.getCurrentMap().getHouse().remove(objId);
 	}
 
@@ -108,10 +112,12 @@ public class House extends ObjEX implements java.io.Serializable {
 	public int getValue() {
 		return value;
 	}
+
 	/**
 	 * コンストラクタ
-	 * @param initX x座標
-	 * @param initY y座標
+	 * 
+	 * @param initX      x座標
+	 * @param initY      y座標
 	 * @param initOption 0:飼い用、1;野良用
 	 */
 	public House(int initX, int initY, int initOption) {
@@ -126,7 +132,7 @@ public class House extends ObjEX implements java.io.Serializable {
 
 		interval = 5000;
 
-		if(itemRank == ItemRank.HOUSE) {
+		if (itemRank == ItemRank.HOUSE) {
 			value = 3000;
 			cost = 0;
 		} else {
@@ -134,8 +140,9 @@ public class House extends ObjEX implements java.io.Serializable {
 			cost = 0;
 		}
 	}
+
 	public House() {
-		
+
 	}
 
 	public HouseTable getHouseType() {
@@ -153,10 +160,5 @@ public class House extends ObjEX implements java.io.Serializable {
 	public void setItemRank(ItemRank itemRank) {
 		this.itemRank = itemRank;
 	}
-	
+
 }
-
-
-
-
-

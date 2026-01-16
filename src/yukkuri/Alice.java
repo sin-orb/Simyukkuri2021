@@ -27,7 +27,7 @@ import src.util.IniFileUtil;
 /**
  * ありす
  */
-public class Alice extends Body implements java.io.Serializable {
+public class Alice extends Body {
 
 	private static final long serialVersionUID = -2849085882014396337L;
 	/** ありすのタイプNo：2 */
@@ -47,22 +47,24 @@ public class Alice extends Body implements java.io.Serializable {
 	private static Dimension4y[] braidBoundary = new Dimension4y[3];
 	private static boolean imageLoaded = false;
 	private static Map<String, Point4y[]> AttachOffset = new HashMap<String, Point4y[]>();
-	//---
+	// ---
 	// iniファイルから読み込んだ初期値
 	private static int baseSpeed = 100;
 
 	/**
 	 * ありすのみオーバーライド。レイパーかつありすかつ興奮顔かどうかを返却する.
+	 * 
 	 * @param f ImageCodeのordinal
 	 * @returns れいぱーかつありすかつ興奮顔かどうか
 	 */
 	@Override
 	protected boolean isRaperExcitingFace(int f) {
-		return isRaper()  && f == ImageCode.EXCITING.ordinal();
+		return isRaper() && f == ImageCode.EXCITING.ordinal();
 	};
-	
+
 	/**
 	 * ありすのみオーバーライド。ありすかつれいぱーかどうかを返却する.
+	 * 
 	 * @return ありすかつれいぱーかどうか
 	 */
 	@Override
@@ -72,21 +74,23 @@ public class Alice extends Body implements java.io.Serializable {
 	};
 
 	/** 画像ロード */
-	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
+	public static void loadImages(ClassLoader loader, ImageObserver io) throws IOException {
 
-		if(imageLoaded) return;
+		if (imageLoaded)
+			return;
 
 		boolean res;
-		res = ModLoader.loadBodyImagePack(loader, imagesNora, directionOffset, ModLoader.getYkWordNora(), baseFileName, io);
-		if(!res) {
+		res = ModLoader.loadBodyImagePack(loader, imagesNora, directionOffset, ModLoader.getYkWordNora(), baseFileName,
+				io);
+		if (!res) {
 			imagesNora = null;
 		}
 		res = ModLoader.loadBodyImagePack(loader, imagesKai, directionOffset, null, baseFileName, io);
-		if(!res) {
+		if (!res) {
 			imagesKai = null;
 		}
 		imagePack[BodyRank.KAIYU.getImageIndex()] = imagesKai;
-		if(imagesNora != null) {
+		if (imagesNora != null) {
 			imagePack[BodyRank.NORAYU.getImageIndex()] = imagesNora;
 		} else {
 			imagePack[BodyRank.NORAYU.getImageIndex()] = imagesKai;
@@ -95,23 +99,28 @@ public class Alice extends Body implements java.io.Serializable {
 
 		imageLoaded = true;
 	}
+
 	/** INIファイルロード */
 	public static void loadIniFile(ClassLoader loader) {
 		AttachOffset = ModLoader.loadBodyIniMap(loader, ModLoader.getDataIniDir(), baseFileName);
-		
+
 		baseSpeed = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataIniDir(), baseFileName, "speed");
 	}
+
 	@Override
 	@Transient
 	public boolean isImageLoaded() {
 		return imageLoaded;
 	}
+
 	@Override
 	public int getImage(int type, int direction, BodyLayer layer, int index) {
-		layer.getImage()[index] = imagePack[getBodyRank().getImageIndex()][type][direction * directionOffset[type][0]][getBodyAgeState().ordinal()];
+		layer.getImage()[index] = imagePack[getBodyRank().getImageIndex()][type][direction
+				* directionOffset[type][0]][getBodyAgeState().ordinal()];
 		layer.getDir()[index] = direction * directionOffset[type][1];
 		return 1;
 	}
+
 	@Override
 	public Point4y[] getMountPoint(String key) {
 		return AttachOffset.get(key);
@@ -127,31 +136,35 @@ public class Alice extends Body implements java.io.Serializable {
 	@Transient
 	public int getHybridType(int partnerType) {
 		switch (partnerType) {
-		default:
-			return Alice.type;
+			default:
+				return Alice.type;
 		}
 	}
+
 	@Override
 	@Transient
 	public String getNameJ() {
 		return nameJ;
 	}
+
 	@Override
 	@Transient
 	public String getMyName() {
-		if( anMyName[getBodyAgeState().ordinal()] != null ){
+		if (anMyName[getBodyAgeState().ordinal()] != null) {
 			return anMyName[getBodyAgeState().ordinal()];
 		}
 		return nameJ;
 	}
+
 	@Override
 	@Transient
 	public String getMyNameD() {
-		if( anMyNameD[getBodyAgeState().ordinal()] != null ){
+		if (anMyNameD[getBodyAgeState().ordinal()] != null) {
 			return anMyNameD[getBodyAgeState().ordinal()];
 		}
 		return getMyName();
 	}
+
 	@Override
 	@Transient
 	public String getNameE() {
@@ -170,95 +183,97 @@ public class Alice extends Body implements java.io.Serializable {
 		return "";
 	}
 
-	//ゆっくりしてる時のアクション
-	//個別の動作がある種ははこれをオーバーライドしているので注意
+	// ゆっくりしてる時のアクション
+	// 個別の動作がある種ははこれをオーバーライドしているので注意
 	@Override
-	public void killTime(){
-		if(getCurrentEvent() != null)return;
-		if(getPlaying()!=null)return;
-		int p=SimYukkuri.RND.nextInt(50);
-		//7/50でキリッ
-		if (p<=6) {
+	public void killTime() {
+		if (getCurrentEvent() != null)
+			return;
+		if (getPlaying() != null)
+			return;
+		int p = SimYukkuri.RND.nextInt(50);
+		// 7/50でキリッ
+		if (p <= 6) {
 			getInVain(true);
 		}
-		//7/50でのびのび
-		else if (p<=14){
+		// 7/50でのびのび
+		else if (p <= 14) {
 			// if yukkuri is not rude, she goes into her shell by discipline.
 			setMessage(MessagePool.getMessage(this, MessagePool.Action.Nobinobi), 40);
 			setNobinobi(true);
 			addStress(-30);
 			stay(40);
 		}
-		//7/50でこーでねーと
-		else if(p<=21 && getBodyRank() != BodyRank.KAIYU){
+		// 7/50でこーでねーと
+		else if (p <= 21 && getBodyRank() != BodyRank.KAIYU) {
 			coordinate();
 			addStress(-30);
 			stay(40);
 		}
-		//7/50でふりふり
-		else if (p<=28 && willingFurifuri()) {
-			//if yukkuri is rude, she will not do furifuri by discipline.
+		// 7/50でふりふり
+		else if (p <= 28 && willingFurifuri()) {
+			// if yukkuri is rude, she will not do furifuri by discipline.
 			setMessage(MessagePool.getMessage(this, MessagePool.Action.FuriFuri), 30);
 			setFurifuri(true);
 			addStress(-50);
 			stay(30);
 		}
-		//7/50でふりふりで腹減った
-		else if( (p<=35 && isHungry()) || isSoHungry()) {
+		// 7/50でふりふりで腹減った
+		else if ((p <= 35 && isHungry()) || isSoHungry()) {
 			// 空腹時
 			setMessage(MessagePool.getMessage(this, MessagePool.Action.Hungry), 30);
 			stay(30);
 		}
-		//4/50でおもちゃで遊ぶ
-		else if (p<=39){
-			if(ToyLogic.checkToy(this)) {
+		// 4/50でおもちゃで遊ぶ
+		else if (p <= 39) {
+			if (ToyLogic.checkToy(this)) {
 				setPlaying(PlayStyle.BALL);
-				playingLimit = 150 +SimYukkuri.RND.nextInt(100)-49;
+				playingLimit = 150 + SimYukkuri.RND.nextInt(100) - 49;
 				return;
-			}
-			else killTime();
+			} else
+				killTime();
 		}
-		//3/50でトランポリンで遊ぶ
-		else if (p<=42){
-			if(ToyLogic.checkTrampoline(this)){
+		// 3/50でトランポリンで遊ぶ
+		else if (p <= 42) {
+			if (ToyLogic.checkTrampoline(this)) {
 				setPlaying(PlayStyle.TRAMPOLINE);
-				playingLimit = 150 +SimYukkuri.RND.nextInt(100)-49;
+				playingLimit = 150 + SimYukkuri.RND.nextInt(100) - 49;
 				return;
-			}
-			else killTime();
+			} else
+				killTime();
 		}
-		//1/50ですいーで遊ぶ
-		else if (p<=43){
-			if(ToyLogic.checkSui(this)){
+		// 1/50ですいーで遊ぶ
+		else if (p <= 43) {
+			if (ToyLogic.checkSui(this)) {
 				setPlaying(PlayStyle.SUI);
-				playingLimit = 150 +SimYukkuri.RND.nextInt(100)-49;
+				playingLimit = 150 + SimYukkuri.RND.nextInt(100) - 49;
 				return;
-			}
-			else killTime();
-		}
-		else{
+			} else
+				killTime();
+		} else {
 			// おくるみありで汚れていない場合
-			if( isHasPants() && !isDirty() && SimYukkuri.RND.nextInt(5) == 0 ){
+			if (isHasPants() && !isDirty() && SimYukkuri.RND.nextInt(5) == 0) {
 				setMessage(MessagePool.getMessage(this, MessagePool.Action.RelaxOkurumi));
-			}
-			else{
+			} else {
 				setMessage(MessagePool.getMessage(this, MessagePool.Action.Relax));
 			}
 			addStress(-50);
 			stay(30);
 		}
 	}
+
 	/**
 	 * こーでぃねーとをする.
 	 */
-	public void coordinate(){
-		if(SimYukkuri.world.getCurrentMap().getBed().size() == 0){
-			int i=0;
-			if(getBodyRank() == BodyRank.NORAYU || getBodyRank() == BodyRank.NORAYU_CLEAN || getBodyRank() == BodyRank.SUTEYU){
-				i=1;
+	public void coordinate() {
+		if (SimYukkuri.world.getCurrentMap().getBed().size() == 0) {
+			int i = 0;
+			if (getBodyRank() == BodyRank.NORAYU || getBodyRank() == BodyRank.NORAYU_CLEAN
+					|| getBodyRank() == BodyRank.SUTEYU) {
+				i = 1;
 			}
 			getInVain(true);
-			Bed bed = (Bed)GadgetAction.putObjEX(Bed.class, getX(), getY(), i);
+			Bed bed = (Bed) GadgetAction.putObjEX(Bed.class, getX(), getY(), i);
 			SimYukkuri.world.getCurrentMap().getBed().put(bed.objId, bed);
 			return;
 		}
@@ -275,48 +290,51 @@ public class Alice extends Body implements java.io.Serializable {
 		setBaseBodyFileName(baseFileName);
 		IniFileUtil.readYukkuriIniFile(this);
 	}
+
 	public Alice() {
-		
+
 	}
+
 	@Override
 	public void tuneParameters() {
-		/*if (SimYukkuri.RND.nextBoolean()) {
-		motherhood = true;
-		}*/
+		/*
+		 * if (SimYukkuri.RND.nextBoolean()) {
+		 * motherhood = true;
+		 * }
+		 */
 		if (SimYukkuri.RND.nextInt(4) == 0) {
 			setRapist(true);
 		}
-		double factor = Math.random()+1;
+		double factor = Math.random() + 1;
 		HUNGRYLIMITorg[AgeState.ADULT.ordinal()] *= factor;
 		HUNGRYLIMITorg[AgeState.CHILD.ordinal()] *= factor;
 		HUNGRYLIMITorg[AgeState.BABY.ordinal()] *= factor;
-		factor = Math.random()+1;
+		factor = Math.random() + 1;
 		SHITLIMITorg[AgeState.ADULT.ordinal()] *= factor;
 		SHITLIMITorg[AgeState.CHILD.ordinal()] *= factor;
 		SHITLIMITorg[AgeState.BABY.ordinal()] *= factor;
-		factor = Math.random()+1;
+		factor = Math.random() + 1;
 		DAMAGELIMITorg[AgeState.ADULT.ordinal()] *= factor;
 		DAMAGELIMITorg[AgeState.CHILD.ordinal()] *= factor;
 		DAMAGELIMITorg[AgeState.BABY.ordinal()] *= factor;
-		factor = Math.random()+0.5;
-		BABYLIMITorg *=  factor;
+		factor = Math.random() + 0.5;
+		BABYLIMITorg *= factor;
 		CHILDLIMITorg *= factor;
-		LIFELIMITorg *=  factor;
-		factor = Math.random()+1;
+		LIFELIMITorg *= factor;
+		factor = Math.random() + 1;
 		RELAXPERIODorg *= factor;
 		EXCITEPERIODorg *= factor;
 		PREGPERIODorg *= factor;
 		SLEEPPERIODorg *= factor;
 		ACTIVEPERIODorg *= factor;
-		sameDest = SimYukkuri.RND.nextInt(15)+15;
-		DECLINEPERIODorg *= (Math.random()+0.5);
-		ROBUSTNESS = SimYukkuri.RND.nextInt(10)+1;
-		//EYESIGHT /= 2;
-		factor = Math.random()+0.5;
+		sameDest = SimYukkuri.RND.nextInt(15) + 15;
+		DECLINEPERIODorg *= (Math.random() + 0.5);
+		ROBUSTNESS = SimYukkuri.RND.nextInt(10) + 1;
+		// EYESIGHT /= 2;
+		factor = Math.random() + 0.5;
 		STRENGTHorg[AgeState.ADULT.ordinal()] *= factor;
 		STRENGTHorg[AgeState.CHILD.ordinal()] *= factor;
 		STRENGTHorg[AgeState.BABY.ordinal()] *= factor;
 		speed = baseSpeed;
 	}
 }
-

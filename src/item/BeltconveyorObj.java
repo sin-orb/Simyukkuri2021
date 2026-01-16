@@ -50,7 +50,7 @@ import src.util.YukkuriUtil;
  * <br>
  * 拡張、YukkuriFilterPanel
  */
-public class BeltconveyorObj extends ObjEX implements java.io.Serializable {
+public class BeltconveyorObj extends ObjEX {
 
 	private static final long serialVersionUID = -2840212904501204971L;
 	public static final int hitCheckObjType = ObjEX.YUKKURI + ObjEX.SHIT + ObjEX.FOOD + ObjEX.TOY + ObjEX.VOMIT

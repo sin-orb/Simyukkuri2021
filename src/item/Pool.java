@@ -9,7 +9,6 @@ import java.awt.image.ImageObserver;
 import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -28,7 +27,7 @@ import src.system.MapPlaceData;
 /***************************************************
  * 池
  */
-public class Pool extends FieldShapeBase implements Serializable {
+public class Pool extends FieldShapeBase {
 
 	private static final long serialVersionUID = 745411694776554936L;
 	/** 池のふちどりの色 */

@@ -1,6 +1,5 @@
 package src.item;
 
-
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.beans.Transient;
@@ -20,21 +19,23 @@ import src.enums.Type;
 /***************************************************
  * 小石
  */
-public class Stone extends ObjEX implements java.io.Serializable {
+public class Stone extends ObjEX {
 	private static final long serialVersionUID = 6460240997300861568L;
-	/**処理対象(ゆっくり)*/
+	/** 処理対象(ゆっくり) */
 	public static final int hitCheckObjType = ObjEX.YUKKURI;
 	private static final int NUM_OF_STONE_IMG = 3;
 	private static BufferedImage[] images = new BufferedImage[NUM_OF_STONE_IMG];
 	private static Rectangle4y boundary = new Rectangle4y();
 
 	private ItemRank itemRank;
-	/**画像ロード*/
-	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
+
+	/** 画像ロード */
+	public static void loadImages(ClassLoader loader, ImageObserver io) throws IOException {
 		images[0] = ModLoader.loadItemImage(loader, "stone" + File.separator + "pubble.png");
-		images[1] = ModLoader.loadItemImage(loader, "stone" + File.separator + "pubble" + ModLoader.getYkWordNora() + ".png");
+		images[1] = ModLoader.loadItemImage(loader,
+				"stone" + File.separator + "pubble" + ModLoader.getYkWordNora() + ".png");
 		images[2] = ModLoader.loadItemImage(loader, "stone" + File.separator + "shadow.png");
-		
+
 		boundary.setWidth(images[0].getWidth(io));
 		boundary.setHeight(images[0].getHeight(io));
 		boundary.setX(boundary.getWidth() >> 1);
@@ -43,15 +44,15 @@ public class Stone extends ObjEX implements java.io.Serializable {
 
 	@Override
 	public int getImageLayer(BufferedImage[] layer) {
-		if(itemRank == ItemRank.HOUSE) {
+		if (itemRank == ItemRank.HOUSE) {
 			layer[0] = images[0];
-		}
-		else {
+		} else {
 			layer[0] = images[1];
 		}
 		return 1;
 	}
-	/**境界線の取得*/
+
+	/** 境界線の取得 */
 	public static Rectangle4y getBounding() {
 		return boundary;
 	}
@@ -61,30 +62,32 @@ public class Stone extends ObjEX implements java.io.Serializable {
 	public BufferedImage getShadowImage() {
 		return images[2];
 	}
+
 	@Override
 	@Transient
 	public int getHitCheckObjType() {
 		return hitCheckObjType;
-	}	
+	}
+
 	@Override
-	public int objHitProcess( Obj o ) {
-		if ( o instanceof Body ){
-			Body b = (Body)o;
-			if( b.getCriticalDamege()  == CriticalDamegeType.CUT){
-				return 0 ;
+	public int objHitProcess(Obj o) {
+		if (o instanceof Body) {
+			Body b = (Body) o;
+			if (b.getCriticalDamege() == CriticalDamegeType.CUT) {
+				return 0;
 			}
-			if(b.isBaby()) b.bodyCut();
-			else{
+			if (b.isBaby())
+				b.bodyCut();
+			else {
 				b.bodyInjure();
-				b.runAway(getX(),getY());
+				b.runAway(getX(), getY());
 			}
 		}
 		return 0;
 	}
 
-	
 	@Override
-	public void removeListData(){
+	public void removeListData() {
 		SimYukkuri.world.getCurrentMap().getStone().remove(objId);
 	}
 
@@ -92,7 +95,7 @@ public class Stone extends ObjEX implements java.io.Serializable {
 	public void grab() {
 		grabbed = true;
 	}
-	
+
 	@Override
 	public void kick() {
 		kick(0, -8, -4);
@@ -100,8 +103,9 @@ public class Stone extends ObjEX implements java.io.Serializable {
 
 	/**
 	 * コンストラクタ
-	 * @param initX x座標
-	 * @param initY y座標
+	 * 
+	 * @param initX      x座標
+	 * @param initY      y座標
 	 * @param initOption 0:家の中、1家の外
 	 */
 	public Stone(int initX, int initY, int initOption) {
@@ -113,24 +117,26 @@ public class Stone extends ObjEX implements java.io.Serializable {
 		objEXType = ObjEXType.STONE;
 		interval = 5;
 		itemRank = ItemRank.values()[initOption];
-		if( SimYukkuri.world.getCurrentMap().getMapIndex() == 2 || SimYukkuri.world.getCurrentMap().getMapIndex() == 3 || SimYukkuri.world.getCurrentMap().getMapIndex() == 4){
+		if (SimYukkuri.world.getCurrentMap().getMapIndex() == 2 || SimYukkuri.world.getCurrentMap().getMapIndex() == 3
+				|| SimYukkuri.world.getCurrentMap().getMapIndex() == 4) {
 			itemRank = ItemRank.NORA;
 		}
-		if( SimYukkuri.world.getCurrentMap().getMapIndex() == 5 ||  SimYukkuri.world.getCurrentMap().getMapIndex() == 6 ){
+		if (SimYukkuri.world.getCurrentMap().getMapIndex() == 5
+				|| SimYukkuri.world.getCurrentMap().getMapIndex() == 6) {
 			itemRank = ItemRank.YASEI;
 		}
-		if(itemRank == ItemRank.HOUSE) {
+		if (itemRank == ItemRank.HOUSE) {
+			value = 0;
+			cost = 0;
+		} else {
 			value = 0;
 			cost = 0;
 		}
-		else {
-			value = 0;
-			cost = 0;
-		}
-		
+
 	}
+
 	public Stone() {
-		
+
 	}
 
 	public ItemRank getItemRank() {
@@ -140,7 +146,5 @@ public class Stone extends ObjEX implements java.io.Serializable {
 	public void setItemRank(ItemRank itemRank) {
 		this.itemRank = itemRank;
 	}
-	
+
 }
-
-

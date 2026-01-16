@@ -16,7 +16,6 @@ import java.awt.image.ImageObserver;
 import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.List;
 
 import javax.swing.BoxLayout;
@@ -46,7 +45,7 @@ import src.system.ResourceUtil;
  * <br>
  * これはほかのアイテムと違い、ObjEXを継承していないので注意。
  */
-public class Beltconveyor extends FieldShapeBase implements Serializable {
+public class Beltconveyor extends FieldShapeBase {
 
 	private static final long serialVersionUID = -4483279905064301375L;
 
@@ -78,6 +77,7 @@ public class Beltconveyor extends FieldShapeBase implements Serializable {
 			this.caption = cap;
 		}
 
+		@SuppressWarnings("unused")
 		public String getCaption() {
 			return caption;
 		}
@@ -114,10 +114,12 @@ public class Beltconveyor extends FieldShapeBase implements Serializable {
 			this.check[2] = chk3;
 		}
 
+		@SuppressWarnings("unused")
 		public String getCaption() {
 			return caption;
 		}
 
+		@SuppressWarnings("unused")
 		public SetupMenu[] getCheck() {
 			return check;
 		}
@@ -144,6 +146,7 @@ public class Beltconveyor extends FieldShapeBase implements Serializable {
 			this.direct = dir;
 		}
 
+		@SuppressWarnings("unused")
 		public String getCaption() {
 			return caption;
 		}
@@ -173,6 +176,7 @@ public class Beltconveyor extends FieldShapeBase implements Serializable {
 			this.speed = spd;
 		}
 
+		@SuppressWarnings("unused")
 		public String getCaption() {
 			return caption;
 		}
@@ -459,12 +463,14 @@ public class Beltconveyor extends FieldShapeBase implements Serializable {
 
 	/** 削除 */
 	public static void deleteBelt(Beltconveyor b) {
-		MapPlaceData.setFiledFlag(SimYukkuri.world.getCurrentMap().getFieldMap(), b.mapSX, b.mapSY, b.mapW, b.mapH, false,
+		MapPlaceData.setFiledFlag(SimYukkuri.world.getCurrentMap().getFieldMap(), b.mapSX, b.mapSY, b.mapW, b.mapH,
+				false,
 				FIELD_BELT);
 		SimYukkuri.world.getCurrentMap().getBeltconveyor().remove(b);
 		// 重なってた部分の復元
 		for (Beltconveyor bc : SimYukkuri.world.getCurrentMap().getBeltconveyor()) {
-			MapPlaceData.setFiledFlag(SimYukkuri.world.getCurrentMap().getFieldMap(), bc.mapSX, bc.mapSY, bc.mapW, bc.mapH,
+			MapPlaceData.setFiledFlag(SimYukkuri.world.getCurrentMap().getFieldMap(), bc.mapSX, bc.mapSY, bc.mapW,
+					bc.mapH,
 					true,
 					FIELD_BELT);
 		}
@@ -646,4 +652,3 @@ public class Beltconveyor extends FieldShapeBase implements Serializable {
 	}
 
 }
-

@@ -16,13 +16,13 @@ import src.system.ResourceUtil;
 import src.util.YukkuriUtil;
 
 /***************************************************
-	ゆっくりが攻撃されたときの反撃イベント
-	protected Body from;			// イベントを発した個体
-	protected Body to;				// 攻撃対象
-	protected Obj target;			// 未使用
-	protected int count;			// 1
-*/
-public class RevengeAttackEvent extends EventPacket implements java.io.Serializable {
+ * ゆっくりが攻撃されたときの反撃イベント
+ * protected Body from; // イベントを発した個体
+ * protected Body to; // 攻撃対象
+ * protected Obj target; // 未使用
+ * protected int count; // 1
+ */
+public class RevengeAttackEvent extends EventPacket {
 
 	private static final long serialVersionUID = -7412180348011586698L;
 
@@ -32,9 +32,9 @@ public class RevengeAttackEvent extends EventPacket implements java.io.Serializa
 	public RevengeAttackEvent(Body f, Body t, Obj tgt, int cnt) {
 		super(f, t, tgt, cnt);
 	}
-	
+
 	public RevengeAttackEvent() {
-		
+
 	}
 
 	// 参加チェック
@@ -56,7 +56,7 @@ public class RevengeAttackEvent extends EventPacket implements java.io.Serializa
 		b.setToSteal(false);
 		b.setToSukkiri(false);
 		b.setToTakeout(true);
-		b.setWakeUpTime(b.getAge());//眠気が覚める
+		b.setWakeUpTime(b.getAge());// 眠気が覚める
 		if (to != null) {
 			int colX = BodyLogic.calcCollisionX(b, to);
 			b.moveToEvent(this, to.getX() + colX, to.getY());

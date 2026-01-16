@@ -274,6 +274,7 @@ public class Terrarium implements Serializable {
 	 * @throws IOException            IO例外
 	 * @throws ClassNotFoundException クラスの存在しない場合の例外
 	 */
+	@SuppressWarnings("unchecked")
 	public static void loadState(File file) throws IOException, ClassNotFoundException {
 		World tmpWorld = null;
 		byte[] payload = Files.readAllBytes(file.toPath());

@@ -20,11 +20,10 @@ import src.enums.YukkuriType;
 import src.system.BodyLayer;
 import src.util.IniFileUtil;
 
-
 /**
  * ゆゆこ
  */
-public class Yuyuko extends Body implements java.io.Serializable {
+public class Yuyuko extends Body {
 	private static final long serialVersionUID = 7983987778701042156L;
 	/** ゆゆこのタイプ */
 	public static final int type = 3002;
@@ -43,25 +42,28 @@ public class Yuyuko extends Body implements java.io.Serializable {
 	private static Dimension4y[] braidBoundary = new Dimension4y[3];
 	private static boolean imageLoaded = false;
 	private static Map<String, Point4y[]> AttachOffset = new HashMap<String, Point4y[]>();
-	//---
+	// ---
 	// iniファイルから読み込んだ初期値
 	private static int baseSpeed = 100;
-	/** イメージのロード */
-	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
 
-		if(imageLoaded) return;
+	/** イメージのロード */
+	public static void loadImages(ClassLoader loader, ImageObserver io) throws IOException {
+
+		if (imageLoaded)
+			return;
 
 		boolean res;
-		res = ModLoader.loadBodyImagePack(loader, imagesNora, directionOffset, ModLoader.getYkWordNora(), baseFileName, io);
-		if(!res) {
+		res = ModLoader.loadBodyImagePack(loader, imagesNora, directionOffset, ModLoader.getYkWordNora(), baseFileName,
+				io);
+		if (!res) {
 			imagesNora = null;
 		}
 		res = ModLoader.loadBodyImagePack(loader, imagesKai, directionOffset, null, baseFileName, io);
-		if(!res) {
+		if (!res) {
 			imagesKai = null;
 		}
 		imagePack[BodyRank.KAIYU.getImageIndex()] = imagesKai;
-		if(imagesNora != null) {
+		if (imagesNora != null) {
 			imagePack[BodyRank.NORAYU.getImageIndex()] = imagesNora;
 		} else {
 			imagePack[BodyRank.NORAYU.getImageIndex()] = imagesKai;
@@ -70,22 +72,27 @@ public class Yuyuko extends Body implements java.io.Serializable {
 
 		imageLoaded = true;
 	}
+
 	@Override
 	@Transient
 	public boolean isImageLoaded() {
 		return imageLoaded;
 	}
+
 	/** INIファイルのロード */
 	public static void loadIniFile(ClassLoader loader) {
 		AttachOffset = ModLoader.loadBodyIniMap(loader, ModLoader.getDataIniDir(), baseFileName);
 		baseSpeed = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataIniDir(), baseFileName, "speed");
 	}
+
 	@Override
 	public int getImage(int type, int direction, BodyLayer layer, int index) {
-		layer.getImage()[index] = imagePack[getBodyRank().getImageIndex()][type][direction * directionOffset[type][0]][getBodyAgeState().ordinal()];
+		layer.getImage()[index] = imagePack[getBodyRank().getImageIndex()][type][direction
+				* directionOffset[type][0]][getBodyAgeState().ordinal()];
 		layer.getDir()[index] = direction * directionOffset[type][1];
 		return 1;
 	}
+
 	@Override
 	public Point4y[] getMountPoint(String key) {
 		return AttachOffset.get(key);
@@ -99,29 +106,33 @@ public class Yuyuko extends Body implements java.io.Serializable {
 
 	@Override
 	public int getHybridType(int partnerType) {
-			return Yuyuko.type;
+		return Yuyuko.type;
 	}
+
 	@Override
 	@Transient
 	public String getNameJ() {
 		return nameJ;
 	}
+
 	@Override
 	@Transient
 	public String getMyName() {
-		if( anMyName[getBodyAgeState().ordinal()] != null ){
+		if (anMyName[getBodyAgeState().ordinal()] != null) {
 			return anMyName[getBodyAgeState().ordinal()];
 		}
 		return nameJ;
 	}
+
 	@Override
 	@Transient
 	public String getMyNameD() {
-		if( anMyNameD[getBodyAgeState().ordinal()] != null ){
+		if (anMyNameD[getBodyAgeState().ordinal()] != null) {
 			return anMyNameD[getBodyAgeState().ordinal()];
 		}
 		return getMyName();
 	}
+
 	@Override
 	@Transient
 	public String getNameE() {
@@ -149,9 +160,11 @@ public class Yuyuko extends Body implements java.io.Serializable {
 		setBaseBodyFileName(baseFileName);
 		IniFileUtil.readYukkuriIniFile(this);
 	}
+
 	public Yuyuko() {
-		
+
 	}
+
 	@Override
 	public void tuneParameters() {
 		// Tune individual parameters.
@@ -159,33 +172,33 @@ public class Yuyuko extends Body implements java.io.Serializable {
 		EATAMOUNTorg[AgeState.ADULT.ordinal()] *= factor;
 		EATAMOUNTorg[AgeState.CHILD.ordinal()] *= factor;
 		EATAMOUNTorg[AgeState.BABY.ordinal()] *= factor;
-		factor = Math.random()*2+1;
+		factor = Math.random() * 2 + 1;
 		HUNGRYLIMITorg[AgeState.ADULT.ordinal()] *= factor;
 		HUNGRYLIMITorg[AgeState.CHILD.ordinal()] *= factor;
 		HUNGRYLIMITorg[AgeState.BABY.ordinal()] *= factor;
-		factor = Math.random()+1;
+		factor = Math.random() + 1;
 		SHITLIMITorg[AgeState.ADULT.ordinal()] *= factor;
 		SHITLIMITorg[AgeState.CHILD.ordinal()] *= factor;
 		SHITLIMITorg[AgeState.BABY.ordinal()] *= factor;
-		factor = Math.random()*2+1;
+		factor = Math.random() * 2 + 1;
 		DAMAGELIMITorg[AgeState.ADULT.ordinal()] *= factor;
 		DAMAGELIMITorg[AgeState.CHILD.ordinal()] *= factor;
 		DAMAGELIMITorg[AgeState.BABY.ordinal()] *= factor;
-		factor = Math.random()+0.5;
+		factor = Math.random() + 0.5;
 		BABYLIMITorg *= factor;
 		CHILDLIMITorg *= factor;
 		LIFELIMITorg *= factor;
-		factor = Math.random()+1;
+		factor = Math.random() + 1;
 		RELAXPERIODorg *= factor;
 		EXCITEPERIODorg *= factor;
 		PREGPERIODorg *= factor;
 		SLEEPPERIODorg *= factor;
 		ACTIVEPERIODorg *= factor;
-		sameDest = SimYukkuri.RND.nextInt(10)+10;
-		DECLINEPERIODorg *= (Math.random()+0.5);
-		ROBUSTNESS = SimYukkuri.RND.nextInt(15)+1;
-		//EYESIGHT /= 1;
-		factor = Math.random()+1;
+		sameDest = SimYukkuri.RND.nextInt(10) + 10;
+		DECLINEPERIODorg *= (Math.random() + 0.5);
+		ROBUSTNESS = SimYukkuri.RND.nextInt(15) + 1;
+		// EYESIGHT /= 1;
+		factor = Math.random() + 1;
 		STRENGTHorg[AgeState.ADULT.ordinal()] *= factor;
 		STRENGTHorg[AgeState.CHILD.ordinal()] *= factor;
 		STRENGTHorg[AgeState.BABY.ordinal()] *= factor;
@@ -195,5 +208,5 @@ public class Yuyuko extends Body implements java.io.Serializable {
 		speed = baseSpeed;
 		setBraidType(false);
 	}
-	
+
 }

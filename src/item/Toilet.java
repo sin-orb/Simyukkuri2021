@@ -28,7 +28,7 @@ import src.system.ResourceUtil;
 /***************************************************
  * トイレ
  */
-public class Toilet extends ObjEX implements java.io.Serializable {
+public class Toilet extends ObjEX {
 	private static final long serialVersionUID = -484401473340388552L;
 
 	/** トイレのタイプ */
@@ -197,7 +197,8 @@ public class Toilet extends ObjEX implements java.io.Serializable {
 		if (ret) {
 			itemRank = ItemRank.values()[initOption];
 			// 森なら野生に変更
-			if (SimYukkuri.world.getCurrentMap().getMapIndex() == 5 || SimYukkuri.world.getCurrentMap().getMapIndex() == 6) {
+			if (SimYukkuri.world.getCurrentMap().getMapIndex() == 5
+					|| SimYukkuri.world.getCurrentMap().getMapIndex() == 6) {
 				if (itemRank == ItemRank.HOUSE) {
 					itemRank = ItemRank.YASEI;
 				}
@@ -296,4 +297,3 @@ public class Toilet extends ObjEX implements java.io.Serializable {
 	}
 
 }
-

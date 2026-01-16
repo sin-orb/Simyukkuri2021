@@ -8,7 +8,6 @@ import java.awt.image.ImageObserver;
 import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
-import java.io.Serializable;
 import java.util.List;
 
 import src.SimYukkuri;
@@ -32,7 +31,7 @@ import src.system.MapPlaceData;
  * <br>
  * これはほかのアイテムと違い、ObjEXを継承していないので注意。
  */
-public class Farm extends FieldShapeBase implements Serializable {
+public class Farm extends FieldShapeBase {
 
 	private static final long serialVersionUID = 2194998702502315898L;
 
@@ -198,12 +197,14 @@ public class Farm extends FieldShapeBase implements Serializable {
 
 	/** 削除 */
 	public static void deleteFarm(Farm b) {
-		MapPlaceData.setFiledFlag(SimYukkuri.world.getCurrentMap().getFieldMap(), b.mapSX, b.mapSY, b.mapW, b.mapH, false,
+		MapPlaceData.setFiledFlag(SimYukkuri.world.getCurrentMap().getFieldMap(), b.mapSX, b.mapSY, b.mapW, b.mapH,
+				false,
 				FIELD_FARM);
 		SimYukkuri.world.getCurrentMap().getFarm().remove(b);
 		// 重なってた部分の復元
 		for (Farm bc : SimYukkuri.world.getCurrentMap().getFarm()) {
-			MapPlaceData.setFiledFlag(SimYukkuri.world.getCurrentMap().getFieldMap(), bc.mapSX, bc.mapSY, bc.mapW, bc.mapH,
+			MapPlaceData.setFiledFlag(SimYukkuri.world.getCurrentMap().getFieldMap(), bc.mapSX, bc.mapSY, bc.mapW,
+					bc.mapH,
 					true,
 					FIELD_FARM);
 		}
@@ -423,4 +424,3 @@ public class Farm extends FieldShapeBase implements Serializable {
 	}
 
 }
-

@@ -18,13 +18,13 @@ import src.system.ResourceUtil;
 import src.util.YukkuriUtil;
 
 /***************************************************
-	おちびちゃん運びイベント
-	protected Body from;			// 乗せるゆっくり
-	protected Body to;				// 乗るゆっくり
-	protected Obj target;			// 未使用
-	protected int count;			// 100
-*/
-public class YukkuriRideEvent extends EventPacket implements java.io.Serializable {
+ * おちびちゃん運びイベント
+ * protected Body from; // 乗せるゆっくり
+ * protected Body to; // 乗るゆっくり
+ * protected Obj target; // 未使用
+ * protected int count; // 100
+ */
+public class YukkuriRideEvent extends EventPacket {
 
 	private static final long serialVersionUID = 7916220303996368395L;
 	int tick = 0;
@@ -37,9 +37,9 @@ public class YukkuriRideEvent extends EventPacket implements java.io.Serializabl
 		super(f, t, tgt, cnt);
 		priority = EventPriority.MIDDLE;// 食事、睡眠、トイレよりは上
 	}
-	
+
 	public YukkuriRideEvent() {
-		
+
 	}
 
 	// 参加チェック
@@ -243,10 +243,11 @@ public class YukkuriRideEvent extends EventPacket implements java.io.Serializabl
 
 	@Override
 	public void end(Body b) {
-		//他のイベントで強制的にイベントが終わることがある
+		// 他のイベントで強制的にイベントが終わることがある
 		// 子供をおろす
 		Body to = YukkuriUtil.getBodyInstance(getTo());
-		if (to != null) to.setLinkParent(-1);
+		if (to != null)
+			to.setLinkParent(-1);
 	}
 
 	@Override

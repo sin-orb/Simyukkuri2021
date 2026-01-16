@@ -18,13 +18,13 @@ import src.system.ResourceUtil;
 import src.util.YukkuriUtil;
 
 /***************************************************
-	すーぱーむーしゃむーしゃたいむイベント
-	protected Body from;			// イベントを発した個体
-	protected Body to;				// 未使用
-	protected Obj target;			// 移動先
-	protected int count;			// 10
-*/
-public class SuperEatingTimeEvent extends EventPacket implements java.io.Serializable {
+ * すーぱーむーしゃむーしゃたいむイベント
+ * protected Body from; // イベントを発した個体
+ * protected Body to; // 未使用
+ * protected Obj target; // 移動先
+ * protected int count; // 10
+ */
+public class SuperEatingTimeEvent extends EventPacket {
 
 	private static final long serialVersionUID = -2604356330046082053L;
 	int tick = 0;
@@ -53,9 +53,9 @@ public class SuperEatingTimeEvent extends EventPacket implements java.io.Seriali
 		super(f, t, tgt, cnt);
 		priority = EventPriority.HIGH;
 	}
-	
+
 	public SuperEatingTimeEvent() {
-		
+
 	}
 
 	@Override
@@ -74,7 +74,8 @@ public class SuperEatingTimeEvent extends EventPacket implements java.io.Seriali
 	public boolean checkEventResponse(Body b) {
 		boolean ret = false;
 		Body from = YukkuriUtil.getBodyInstance(getFrom());
-		if (from == null) return false;
+		if (from == null)
+			return false;
 		if (from == b && !(b.isShutmouth())) {
 			return true;
 		}
@@ -126,7 +127,7 @@ public class SuperEatingTimeEvent extends EventPacket implements java.io.Seriali
 	public STATE getState() {
 		return state;
 	}
-	
+
 	public void setState(STATE state) {
 		this.state = state;
 	}
@@ -190,7 +191,7 @@ public class SuperEatingTimeEvent extends EventPacket implements java.io.Seriali
 				return UpdateState.ABORT;
 			}
 
-			//最小歩幅の設定と、子ゆがイベント中かのチェック
+			// 最小歩幅の設定と、子ゆがイベント中かのチェック
 			Body bodyTarget = childrenList.get(0);
 			boolean bIsChildInEvent = false;
 			for (Body child : childrenList) {
@@ -209,227 +210,229 @@ public class SuperEatingTimeEvent extends EventPacket implements java.io.Seriali
 				}
 			}
 
-			//番の設定
+			// 番の設定
 			Body partner = YukkuriUtil.getBodyInstance(from.getPartner());
 			if (partner == from) {
 				partner = null;
 			}
 
-			//親のステート
+			// 親のステート
 			boolean bResult = false;
 			switch (state) {
-			case WAIT:// ごはんさんをたべにいくよ！みんなあつまってね！
-				// 家族を集める
-				bResult = BodyLogic.gatheringYukkuriSquare(from, childrenList.toArray(new Body[0]),
-						GatheringDirection.DOWN, this);
-				for (Body bChild : childrenList) {
-					if (bChild != null) {
-						// 他に用事があれば除外
-						bChild.setMoveTarget(-1);
-						bChild.wakeup();
-					}
-				}
-				if (SimYukkuri.RND.nextInt(100) == 0) {
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.FamilyEatingTimeWait), true);
-				}
-				b.setHappiness(Happiness.HAPPY);
-				// 番の処理
-				if (partner != null) {
-					int colX = BodyLogic.calcCollisionX(partner, from);
-					partner.moveTo(from.getX() + colX * 2, from.getY());
-					partner.setHappiness(Happiness.HAPPY);
-					// 他に用事があれば除外
-					partner.setMoveTarget(-1);
-				}
-				//ステート移行
-				if (bResult) {
-					state = STATE.GO;
-				} else {
-					b.stay(100);
-				}
-				// 何らかの理由で終了しそうにないなら終わらせる
-				if (1000 < nFromWaitCount) {
-					return UpdateState.ABORT;
-				}
-				nFromWaitCount++;
-				break;
-			case GO:// ごはんさんのにおいがするよ！
-				// 移動開始
-				bResult = BodyLogic.gatheringYukkuriBackLine(from, childrenList, this);
-				for (Body bChild : childrenList) {
-					// 他に用事があれば除外
-					bChild.setMoveTarget(-1);
-					bChild.wakeup();
-				}
-				int nDistance = Translate.getRealDistance(b.getX(), b.getY(), bodyTarget.getX(), bodyTarget.getY());
-				int colXChild = Math.abs(BodyLogic.calcCollisionX(b, bodyTarget));
-				// 一定距離を保つ
-				if (colXChild * 3 < nDistance) {
-					b.stay();
-				}
-
-				// 番の処理
-				if (partner != null) {
-					int colX = BodyLogic.calcCollisionX(partner, from);
-					partner.moveTo(from.getX() + colX * 2, from.getY());
-					partner.setHappiness(Happiness.HAPPY);
-					// 他に用事があれば除外
-					partner.setMoveTarget(-1);
-					if (SimYukkuri.RND.nextInt(50) == 0) {
-						partner.setMessage(MessagePool.getMessage(partner, MessagePool.Action.WantFood));
-					}
-				}
-
-				int colX = Translate.invertX(b.getCollisionX(), target.getY());
-				colX = Translate.transSize(colX);
-				int nDistanceFood = Translate.getRealDistance(b.getX(), b.getY(), target.getX(), target.getY() - 20);
-				// 餌の近くで待つ
-				if (nDistanceFood <= 1) {
-					if (bResult) {
-						state = STATE.START_BEFORE;
-					}
-					b.stay();
-				}
-				// 餌に近づく
-				else {
-					b.moveToEvent(this, target.getX(), target.getY() - 20);
-					if (SimYukkuri.RND.nextInt(50) == 0) {
-						b.setMessage(MessagePool.getMessage(b, MessagePool.Action.WantFood));
-					}
-				}
-				break;
-			case START_BEFORE:// ごはんの上に集合
-				b.stay();
-				bResult = BodyLogic.gatheringYukkuriSquare(target, childrenList.toArray(new Body[0]),
-						GatheringDirection.UP, this);
-				for (Body bChild : childrenList) {
-					// 他に用事があれば除外
-					bChild.setMoveTarget(-1);
-					bChild.wakeup();
-				}
-
-				// 配置済みの場合
-				if (bResult) {
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.SuperEatingTime));
-					b.setHappiness(Happiness.VERY_HAPPY);
-					b.addMemories(1);
-					// 番の処理
-					if (partner != null) {
-						partner.setMessage(MessagePool.getMessage(partner, MessagePool.Action.SuperEatingTime));
-						partner.setHappiness(Happiness.VERY_HAPPY);
-						partner.addMemories(1);
-					}
-					//子ゆの処理
+				case WAIT:// ごはんさんをたべにいくよ！みんなあつまってね！
+					// 家族を集める
+					bResult = BodyLogic.gatheringYukkuriSquare(from, childrenList.toArray(new Body[0]),
+							GatheringDirection.DOWN, this);
 					for (Body bChild : childrenList) {
 						if (bChild != null) {
-							bChild.setMessage(MessagePool.getMessage(b, MessagePool.Action.SuperEatingTime));
-							bChild.setHappiness(Happiness.VERY_HAPPY);
-							bChild.stay();
-							bChild.addMemories(1);
+							// 他に用事があれば除外
+							bChild.setMoveTarget(-1);
+							bChild.wakeup();
 						}
 					}
-					state = STATE.START;
-				} else {
+					if (SimYukkuri.RND.nextInt(100) == 0) {
+						b.setMessage(MessagePool.getMessage(b, MessagePool.Action.FamilyEatingTimeWait), true);
+					}
+					b.setHappiness(Happiness.HAPPY);
 					// 番の処理
 					if (partner != null) {
-						colX = BodyLogic.calcCollisionX(partner, from);
-						partner.moveTo((int) (from.getX() + colX * 1.5), from.getY());
+						int colX = BodyLogic.calcCollisionX(partner, from);
+						partner.moveTo(from.getX() + colX * 2, from.getY());
 						partner.setHappiness(Happiness.HAPPY);
 						// 他に用事があれば除外
 						partner.setMoveTarget(-1);
 					}
-				}
-				break;
-			case START:
-				boolean bIsHungry = false;
-				int noHungerPeriod = 500;
-
-				// ご飯がない時の処理
-				if (target instanceof Food) {
-					Food food = (Food) target;
-					if (food.isEmpty()) {
-						b.setMessage(MessagePool.getMessage(b, MessagePool.Action.NoFood));
-						b.setHappiness(Happiness.VERY_SAD);
-						b.stay();
+					// ステート移行
+					if (bResult) {
+						state = STATE.GO;
+					} else {
+						b.stay(100);
+					}
+					// 何らかの理由で終了しそうにないなら終わらせる
+					if (1000 < nFromWaitCount) {
 						return UpdateState.ABORT;
 					}
-				}
-
-				for (Body bChild : childrenList) {
-					if (bChild != null) {
+					nFromWaitCount++;
+					break;
+				case GO:// ごはんさんのにおいがするよ！
+					// 移動開始
+					bResult = BodyLogic.gatheringYukkuriBackLine(from, childrenList, this);
+					for (Body bChild : childrenList) {
+						// 他に用事があれば除外
+						bChild.setMoveTarget(-1);
 						bChild.wakeup();
-						if (bChild.getHungryLimit() * 10 / 100 > bChild.getHungry()) {
-							bChild.setMoveTarget(target.objId);
-							bChild.setToFood(true);
-							bIsHungry = true;
-						} else {
-							bChild.addMemories(10);
-						}
-						bChild.setNoHungrybySupereatingTimePeriod(noHungerPeriod);
 					}
-				}
+					int nDistance = Translate.getRealDistance(b.getX(), b.getY(), bodyTarget.getX(), bodyTarget.getY());
+					int colXChild = Math.abs(BodyLogic.calcCollisionX(b, bodyTarget));
+					// 一定距離を保つ
+					if (colXChild * 3 < nDistance) {
+						b.stay();
+					}
 
-				if (!bIsHungry) {
-					// 子供の食事が終わってから食べる
-					b.setMoveTarget(target.objId);
-					b.setToFood(true);
-					b.setNoHungrybySupereatingTimePeriod(noHungerPeriod);
-					b.addMemories(10);
 					// 番の処理
 					if (partner != null) {
-						partner.setMoveTarget(target.objId);
-						partner.setToFood(true);
-						partner.setNoHungrybySupereatingTimePeriod(noHungerPeriod);
-						partner.addMemories(10);
+						int colX = BodyLogic.calcCollisionX(partner, from);
+						partner.moveTo(from.getX() + colX * 2, from.getY());
+						partner.setHappiness(Happiness.HAPPY);
+						// 他に用事があれば除外
+						partner.setMoveTarget(-1);
+						if (SimYukkuri.RND.nextInt(50) == 0) {
+							partner.setMessage(MessagePool.getMessage(partner, MessagePool.Action.WantFood));
+						}
 					}
 
-					if (b.getHungry() < b.getHungryLimit() * 10 / 100) {
+					int colX = Translate.invertX(b.getCollisionX(), target.getY());
+					colX = Translate.transSize(colX);
+					int nDistanceFood = Translate.getRealDistance(b.getX(), b.getY(), target.getX(),
+							target.getY() - 20);
+					// 餌の近くで待つ
+					if (nDistanceFood <= 1) {
+						if (bResult) {
+							state = STATE.START_BEFORE;
+						}
+						b.stay();
+					}
+					// 餌に近づく
+					else {
+						b.moveToEvent(this, target.getX(), target.getY() - 20);
+						if (SimYukkuri.RND.nextInt(50) == 0) {
+							b.setMessage(MessagePool.getMessage(b, MessagePool.Action.WantFood));
+						}
+					}
+					break;
+				case START_BEFORE:// ごはんの上に集合
+					b.stay();
+					bResult = BodyLogic.gatheringYukkuriSquare(target, childrenList.toArray(new Body[0]),
+							GatheringDirection.UP, this);
+					for (Body bChild : childrenList) {
+						// 他に用事があれば除外
+						bChild.setMoveTarget(-1);
+						bChild.wakeup();
+					}
+
+					// 配置済みの場合
+					if (bResult) {
+						b.setMessage(MessagePool.getMessage(b, MessagePool.Action.SuperEatingTime));
+						b.setHappiness(Happiness.VERY_HAPPY);
+						b.addMemories(1);
+						// 番の処理
 						if (partner != null) {
-							if (partner.getHungry() < partner.getHungryLimit() * 10 / 100) {
-								return UpdateState.ABORT;
+							partner.setMessage(MessagePool.getMessage(partner, MessagePool.Action.SuperEatingTime));
+							partner.setHappiness(Happiness.VERY_HAPPY);
+							partner.addMemories(1);
+						}
+						// 子ゆの処理
+						for (Body bChild : childrenList) {
+							if (bChild != null) {
+								bChild.setMessage(MessagePool.getMessage(b, MessagePool.Action.SuperEatingTime));
+								bChild.setHappiness(Happiness.VERY_HAPPY);
+								bChild.stay();
+								bChild.addMemories(1);
 							}
-						} else {
+						}
+						state = STATE.START;
+					} else {
+						// 番の処理
+						if (partner != null) {
+							colX = BodyLogic.calcCollisionX(partner, from);
+							partner.moveTo((int) (from.getX() + colX * 1.5), from.getY());
+							partner.setHappiness(Happiness.HAPPY);
+							// 他に用事があれば除外
+							partner.setMoveTarget(-1);
+						}
+					}
+					break;
+				case START:
+					boolean bIsHungry = false;
+					int noHungerPeriod = 500;
+
+					// ご飯がない時の処理
+					if (target instanceof Food) {
+						Food food = (Food) target;
+						if (food.isEmpty()) {
+							b.setMessage(MessagePool.getMessage(b, MessagePool.Action.NoFood));
+							b.setHappiness(Happiness.VERY_SAD);
+							b.stay();
 							return UpdateState.ABORT;
 						}
 					}
-				} else {
-					// 子供の食事が終わってなくても空腹なら食べる
-					if (b.isHungry()) {
-						b.setMoveTarget(target.objId);
-						b.setToFood(true);
-					} else {
-						b.setMoveTarget(-1);
-						b.stay(100);
-						if (SimYukkuri.RND.nextInt(30) == 0) {
-							// 余裕なら子供の状態を喜ぶ
-							b.setMessage(MessagePool.getMessage(b, MessagePool.Action.GladAboutChild), false);
-							b.setHappiness(Happiness.VERY_HAPPY);
+
+					for (Body bChild : childrenList) {
+						if (bChild != null) {
+							bChild.wakeup();
+							if (bChild.getHungryLimit() * 10 / 100 > bChild.getHungry()) {
+								bChild.setMoveTarget(target.objId);
+								bChild.setToFood(true);
+								bIsHungry = true;
+							} else {
+								bChild.addMemories(10);
+							}
+							bChild.setNoHungrybySupereatingTimePeriod(noHungerPeriod);
 						}
 					}
-					// 番の処理
-					if (partner != null) {
-						// 子供の食事が終わってなくても空腹なら食べる
-						if (partner.isHungry()) {
+
+					if (!bIsHungry) {
+						// 子供の食事が終わってから食べる
+						b.setMoveTarget(target.objId);
+						b.setToFood(true);
+						b.setNoHungrybySupereatingTimePeriod(noHungerPeriod);
+						b.addMemories(10);
+						// 番の処理
+						if (partner != null) {
 							partner.setMoveTarget(target.objId);
 							partner.setToFood(true);
+							partner.setNoHungrybySupereatingTimePeriod(noHungerPeriod);
+							partner.addMemories(10);
+						}
+
+						if (b.getHungry() < b.getHungryLimit() * 10 / 100) {
+							if (partner != null) {
+								if (partner.getHungry() < partner.getHungryLimit() * 10 / 100) {
+									return UpdateState.ABORT;
+								}
+							} else {
+								return UpdateState.ABORT;
+							}
+						}
+					} else {
+						// 子供の食事が終わってなくても空腹なら食べる
+						if (b.isHungry()) {
+							b.setMoveTarget(target.objId);
+							b.setToFood(true);
 						} else {
-							partner.setMoveTarget(-1);
-							partner.stay(100);
+							b.setMoveTarget(-1);
+							b.stay(100);
 							if (SimYukkuri.RND.nextInt(30) == 0) {
 								// 余裕なら子供の状態を喜ぶ
-								partner.setMessage(MessagePool.getMessage(b, MessagePool.Action.GladAboutChild), false);
-								partner.setHappiness(Happiness.VERY_HAPPY);
+								b.setMessage(MessagePool.getMessage(b, MessagePool.Action.GladAboutChild), false);
+								b.setHappiness(Happiness.VERY_HAPPY);
+							}
+						}
+						// 番の処理
+						if (partner != null) {
+							// 子供の食事が終わってなくても空腹なら食べる
+							if (partner.isHungry()) {
+								partner.setMoveTarget(target.objId);
+								partner.setToFood(true);
+							} else {
+								partner.setMoveTarget(-1);
+								partner.stay(100);
+								if (SimYukkuri.RND.nextInt(30) == 0) {
+									// 余裕なら子供の状態を喜ぶ
+									partner.setMessage(MessagePool.getMessage(b, MessagePool.Action.GladAboutChild),
+											false);
+									partner.setHappiness(Happiness.VERY_HAPPY);
+								}
 							}
 						}
 					}
-				}
-				break;
-			default:
-				break;
+					break;
+				default:
+					break;
 			}
 		}
 
-		//親以外の処理
+		// 親以外の処理
 		else {
 			// つがいはスキップ。主催側で処理
 			if (b.isPartner(from)) {
@@ -443,36 +446,36 @@ public class SuperEatingTimeEvent extends EventPacket implements java.io.Seriali
 
 			// 子供
 			switch (state) {
-			case GO:
-				// 壁に引っかかってるなら終了
-				if (Barrier.onBarrier(b.getX(), b.getY(), from.getX(), from.getY(),
-						Barrier.MAP_BODY[b.getBodyAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
-					b.clearEvent();
-					return null;
-				}
-				b.setHappiness(Happiness.HAPPY);
-				if (SimYukkuri.RND.nextInt(50) == 0) {
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.WantFood));
-				}
-				break;
-			case START:
-				b.setHappiness(Happiness.VERY_HAPPY);
-				int nDistance = Translate.getRealDistance(b.getX(), b.getY(), target.getX(), target.getY());
-				if (nDistance < 3) {
-					Food f = (Food) target;
-					FoodLogic.eatFood(b, f.getFoodType(), Math.min(b.getEatAmount(), f.getAmount()));
-					f.eatFood(Math.min(b.getEatAmount(), f.getAmount()));
-					b.addMemories(10);
-					b.clearActions();
-				} else {
-					b.moveToEvent(this, target.getX(), target.getY());
-					b.setToFood(true);
-				}
-				//return UpdateState.FORCE_EXEC;
-				break;
-			default:
-				b.setHappiness(Happiness.HAPPY);
-				break;
+				case GO:
+					// 壁に引っかかってるなら終了
+					if (Barrier.onBarrier(b.getX(), b.getY(), from.getX(), from.getY(),
+							Barrier.MAP_BODY[b.getBodyAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
+						b.clearEvent();
+						return null;
+					}
+					b.setHappiness(Happiness.HAPPY);
+					if (SimYukkuri.RND.nextInt(50) == 0) {
+						b.setMessage(MessagePool.getMessage(b, MessagePool.Action.WantFood));
+					}
+					break;
+				case START:
+					b.setHappiness(Happiness.VERY_HAPPY);
+					int nDistance = Translate.getRealDistance(b.getX(), b.getY(), target.getX(), target.getY());
+					if (nDistance < 3) {
+						Food f = (Food) target;
+						FoodLogic.eatFood(b, f.getFoodType(), Math.min(b.getEatAmount(), f.getAmount()));
+						f.eatFood(Math.min(b.getEatAmount(), f.getAmount()));
+						b.addMemories(10);
+						b.clearActions();
+					} else {
+						b.moveToEvent(this, target.getX(), target.getY());
+						b.setToFood(true);
+					}
+					// return UpdateState.FORCE_EXEC;
+					break;
+				default:
+					b.setHappiness(Happiness.HAPPY);
+					break;
 			}
 		}
 

@@ -24,13 +24,13 @@ import src.system.MessagePool;
 /***************************************************
  * ダストシュート
  */
-public class GarbageChute extends ObjEX implements java.io.Serializable {
+public class GarbageChute extends ObjEX {
 
 	private static final long serialVersionUID = -2629236583041612041L;
-	/**処理対象(ゆっくり、うんうん、フード、吐餡、茎)*/
+	/** 処理対象(ゆっくり、うんうん、フード、吐餡、茎) */
 	public static final int hitCheckObjType = ObjEX.YUKKURI | ObjEX.SHIT | ObjEX.FOOD | ObjEX.TOY | ObjEX.OBJECT
 			| ObjEX.VOMIT | ObjEX.STALK;
-	private static final int images_num = 4; //このクラスの総使用画像数
+	private static final int images_num = 4; // このクラスの総使用画像数
 	private static BufferedImage[] images = new BufferedImage[images_num];
 	private static Rectangle4y boundary = new Rectangle4y();
 	List<Obj> bindObjList = new LinkedList<Obj>();
@@ -38,7 +38,7 @@ public class GarbageChute extends ObjEX implements java.io.Serializable {
 	private ItemRank itemRank;
 	private Body bindBody = null;
 
-	/**画像ロード*/
+	/** 画像ロード */
 	public static void loadImages(ClassLoader loader, ImageObserver io) throws IOException {
 		images[0] = ModLoader.loadItemImage(loader, "garbagechute" + File.separator + "garbagechute.png");
 		images[1] = ModLoader.loadItemImage(loader, "garbagechute" + File.separator + "garbagechute_off.png");
@@ -74,7 +74,7 @@ public class GarbageChute extends ObjEX implements java.io.Serializable {
 		return null;
 	}
 
-	/**境界線の取得*/
+	/** 境界線の取得 */
 	public static Rectangle4y getBounding() {
 		return boundary;
 	}
@@ -146,8 +146,9 @@ public class GarbageChute extends ObjEX implements java.io.Serializable {
 
 	/**
 	 * コンストラクタ
-	 * @param initX x座標
-	 * @param initY y座標
+	 * 
+	 * @param initX      x座標
+	 * @param initY      y座標
 	 * @param initOption 0:飼い用、1;野良用
 	 */
 	public GarbageChute(int initX, int initY, int initOption) {
@@ -169,8 +170,9 @@ public class GarbageChute extends ObjEX implements java.io.Serializable {
 			cost = 0;
 		}
 	}
+
 	public GarbageChute() {
-		
+
 	}
 
 	public List<Obj> getBindObjList() {
@@ -196,6 +198,5 @@ public class GarbageChute extends ObjEX implements java.io.Serializable {
 	public void setBindBody(Body bindBody) {
 		this.bindBody = bindBody;
 	}
-	
-}
 
+}

@@ -25,13 +25,13 @@ import src.system.ResourceUtil;
 import src.util.YukkuriUtil;
 
 /***************************************************
-	レイパー襲撃に対する反応イベント
-	protected Body from;			// レイパー
-	protected Body getTo();				// 未使用
-	protected Obj target;			// 未使用
-	protected int count;			// 1
-*/
-public class RaperReactionEvent extends EventPacket implements java.io.Serializable {
+ * レイパー襲撃に対する反応イベント
+ * protected Body from; // レイパー
+ * protected Body getTo(); // 未使用
+ * protected Obj target; // 未使用
+ * protected int count; // 1
+ */
+public class RaperReactionEvent extends EventPacket {
 
 	private static final long serialVersionUID = 4071981374906143863L;
 
@@ -45,9 +45,9 @@ public class RaperReactionEvent extends EventPacket implements java.io.Serializa
 	public RaperReactionEvent(Body f, Body t, Obj tgt, int cnt) {
 		super(f, t, tgt, cnt);
 	}
-	
+
 	public RaperReactionEvent() {
-		
+
 	}
 
 	// 参加チェック
@@ -128,11 +128,11 @@ public class RaperReactionEvent extends EventPacket implements java.io.Serializa
 			b.setHappiness(Happiness.VERY_SAD);
 		}
 	}
-	
+
 	public ActionState getState() {
 		return state;
 	}
-	
+
 	public void setState(ActionState state) {
 		this.state = state;
 	}
@@ -204,7 +204,7 @@ public class RaperReactionEvent extends EventPacket implements java.io.Serializa
 									num = SimYukkuri.RND.nextInt(2);
 								else
 									num = 0;
-								//ドスは常に参加。ドスはとにかく群れをゆっくりさせるため、れいぱー駆除に命をかける
+								// ドスは常に参加。ドスはとにかく群れをゆっくりさせるため、れいぱー駆除に命をかける
 								if (body.getType() == 2006) {
 									num = 0;
 								}
@@ -238,6 +238,7 @@ public class RaperReactionEvent extends EventPacket implements java.io.Serializa
 
 	/**
 	 * 逃げるときのメッセージを設定する.
+	 * 
 	 * @param b 逃げる個体
 	 */
 	public void setScareWorldEventMessage(Body b) {
@@ -247,6 +248,7 @@ public class RaperReactionEvent extends EventPacket implements java.io.Serializa
 
 	/**
 	 * 反撃するときのメッセージを設定する.
+	 * 
 	 * @param b 反撃する個体
 	 */
 	public void setCounterWorldEventMessage(Body b) {
@@ -257,11 +259,12 @@ public class RaperReactionEvent extends EventPacket implements java.io.Serializa
 	/**
 	 * 制裁されない条件。
 	 * れいぱーに対するリアクションであれば、れいぱーであり続ける場合
+	 * 
 	 * @return !制裁条件
 	 */
 	public boolean checkConditionOfTarget() {
 		Body from = YukkuriUtil.getBodyInstance(getFrom());
-		if(from == null) {
+		if (from == null) {
 			setFrom(-1);
 			return false;
 		}
@@ -312,6 +315,7 @@ public class RaperReactionEvent extends EventPacket implements java.io.Serializa
 	/**
 	 * 次のターゲットを探す.
 	 * れいぱーに対するリアクションであれば、死んでない発情れいぱー
+	 * 
 	 * @return 次のターゲット
 	 */
 	public Body searchNextTarget() {
@@ -329,13 +333,14 @@ public class RaperReactionEvent extends EventPacket implements java.io.Serializa
 	/**
 	 * 次の攻撃ターゲットを探す.
 	 * れいぱーに対するリアクションであれば、発情れいぱーですっきり中のやつ。
+	 * 
 	 * @return 次の攻撃ターゲット
 	 */
 	public Body searchAttackTarget() {
 		Body ret = null;
 		for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().getBody().entrySet()) {
 			Body b = entry.getValue();
-			if (!b.isDead()&& b.isExciting() && b.isRaper() && b.isSukkiri()) {
+			if (!b.isDead() && b.isExciting() && b.isRaper() && b.isSukkiri()) {
 				ret = b;
 				break;
 			}
@@ -345,6 +350,7 @@ public class RaperReactionEvent extends EventPacket implements java.io.Serializa
 
 	/**
 	 * ターゲットまで移動する.
+	 * 
 	 * @param b ターゲット
 	 */
 	public void moveTarget(Body b) {
@@ -357,7 +363,8 @@ public class RaperReactionEvent extends EventPacket implements java.io.Serializa
 	}
 
 	/**
-	 *  敵から逃げるように移動する.
+	 * 敵から逃げるように移動する.
+	 * 
 	 * @param b 敵
 	 */
 	protected void escapeTarget(Body b) {
@@ -397,4 +404,3 @@ public class RaperReactionEvent extends EventPacket implements java.io.Serializa
 		return ResourceUtil.getInstance().read("event_raperreaction");
 	}
 }
-

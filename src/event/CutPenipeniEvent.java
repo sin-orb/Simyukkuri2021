@@ -11,13 +11,13 @@ import src.system.ResourceUtil;
 import src.util.YukkuriUtil;
 
 /***************************************************
-	ぺに切りの反応イベント
-	protected Body from;			// イベントを発した個体
-	protected Body to;				// 攻撃対象
-	protected Obj target;			// 未使用
-	protected int count;			// 10
-*/
-public class CutPenipeniEvent extends EventPacket implements java.io.Serializable {
+ * ぺに切りの反応イベント
+ * protected Body from; // イベントを発した個体
+ * protected Body to; // 攻撃対象
+ * protected Obj target; // 未使用
+ * protected int count; // 10
+ */
+public class CutPenipeniEvent extends EventPacket {
 
 	private static final long serialVersionUID = -9152418777999085341L;
 	int tick = 0;
@@ -30,8 +30,9 @@ public class CutPenipeniEvent extends EventPacket implements java.io.Serializabl
 	}
 
 	public CutPenipeniEvent() {
-		
+
 	}
+
 	// 参加チェック
 	// ここで各種チェックを行い、イベントへ参加するかを返す
 	// また、イベント優先度も必要に応じて設定できる
@@ -109,21 +110,21 @@ public class CutPenipeniEvent extends EventPacket implements java.io.Serializabl
 			b.stay(20);
 			// ゲスほどストレスを受ける
 			switch (b.getAttitude()) {
-			default:
-				break;
-			case VERY_NICE:
-				b.addStress(b.getStressLimit() / 10);
-				break;
-			case NICE:
-				b.addStress(b.getStressLimit() / 8);
-				break;
-			case AVERAGE:
-				b.addStress(b.getStressLimit() / 5);
-				break;
-			case SHITHEAD:
-			case SUPER_SHITHEAD:
-				b.addStress(b.getStressLimit() / 3);
-				break;
+				default:
+					break;
+				case VERY_NICE:
+					b.addStress(b.getStressLimit() / 10);
+					break;
+				case NICE:
+					b.addStress(b.getStressLimit() / 8);
+					break;
+				case AVERAGE:
+					b.addStress(b.getStressLimit() / 5);
+					break;
+				case SHITHEAD:
+				case SUPER_SHITHEAD:
+					b.addStress(b.getStressLimit() / 3);
+					break;
 			}
 		} else if (tick == 70) {
 			if (SimYukkuri.RND.nextBoolean())

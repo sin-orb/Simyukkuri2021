@@ -13,13 +13,13 @@ import src.system.ResourceUtil;
 import src.util.YukkuriUtil;
 
 /***************************************************
-	すぃーに関連した会話イベント
-	protected Body from;			// 乗るゆっくり
-	protected Body to;				// 未使用
-	protected Obj target;			// すぃー
-	protected int count;			// 1
-*/
-public class SuiSpeake extends EventPacket implements java.io.Serializable {
+ * すぃーに関連した会話イベント
+ * protected Body from; // 乗るゆっくり
+ * protected Body to; // 未使用
+ * protected Obj target; // すぃー
+ * protected int count; // 1
+ */
+public class SuiSpeake extends EventPacket {
 
 	private static final long serialVersionUID = -2170271875003339906L;
 
@@ -29,9 +29,9 @@ public class SuiSpeake extends EventPacket implements java.io.Serializable {
 	public SuiSpeake(Body f, Body t, Obj tgt, int cnt) {
 		super(f, t, tgt, cnt);
 	}
-	
+
 	public SuiSpeake() {
-		
+
 	}
 
 	@Override

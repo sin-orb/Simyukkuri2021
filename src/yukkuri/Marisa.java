@@ -32,8 +32,8 @@ import src.util.YukkuriUtil;
 
 /*****************************************************
  * まりさ。れいむまりさ、つむりまりさはこれを継承している
-*/
-public class Marisa extends Body implements java.io.Serializable {
+ */
+public class Marisa extends Body {
 
 	private static final long serialVersionUID = -7022828510837286120L;
 	/** まりさのタイプ */
@@ -42,7 +42,7 @@ public class Marisa extends Body implements java.io.Serializable {
 	public static final String nameJ = "まりさ";
 	/** まりさ英名 */
 	public static final String nameE = "Marisa";
-	/** まりさベースファイル名*/
+	/** まりさベースファイル名 */
 	public static final String baseFileName = "marisa";
 
 	private static BufferedImage[][][][] imagePack = new BufferedImage[BodyRank.values().length][][][];
@@ -56,11 +56,12 @@ public class Marisa extends Body implements java.io.Serializable {
 	private static Dimension4y[] braidBoundary = new Dimension4y[3];
 	private static boolean imageLoaded = false;
 	private static Map<String, Point4y[]> AttachOffset = new HashMap<String, Point4y[]>();
-	//---
+	// ---
 	// iniファイルから読み込んだ初期値
 	private static int baseSpeed = 100;
 	// 個別表情管理(まりちゃ流し用)
 	private int anImageVerStateCtrlNagasi[][] = new int[ImageCode.values().length][2];
+
 	/** イメージのロード */
 	public static void loadImages(ClassLoader loader, ImageObserver io) throws IOException {
 
@@ -97,19 +98,23 @@ public class Marisa extends Body implements java.io.Serializable {
 
 		imageLoaded = true;
 	}
+
 	@Override
 	@Transient
 	public boolean isImageLoaded() {
 		return imageLoaded;
 	}
+
 	/**
 	 * INIファイルをロードする
+	 * 
 	 * @param loader クラスローダ
 	 */
 	public static void loadIniFile(ClassLoader loader) {
 		AttachOffset = ModLoader.loadBodyIniMap(loader, ModLoader.getDataIniDir(), baseFileName);
 		baseSpeed = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataIniDir(), baseFileName, "speed");
 	}
+
 	@Override
 	public int getImage(int type, int direction, BodyLayer layer, int index) {
 		if (!isbImageNagasiMode() || imagesNagasi == null) {
@@ -117,7 +122,7 @@ public class Marisa extends Body implements java.io.Serializable {
 					* directionOffset[type][0]][getBodyAgeState().ordinal()];
 			layer.getDir()[index] = direction * directionOffset[type][1];
 		}
-		//流し絵の場合
+		// 流し絵の場合
 		else {
 			// インターバル毎に初期化する
 			if (Terrarium.getInterval() == 0 && !isDead()) {
@@ -128,8 +133,9 @@ public class Marisa extends Body implements java.io.Serializable {
 			// 前回と同じ表示
 			if (anImageVerStateCtrlNagasi[type][1] == 1) {
 				int nIndex = anImageVerStateCtrlNagasi[type][0];
-				layer.getImage()[index] = imagesNagasi[type][direction * directionOffsetNagasi[type][0]][getBodyAgeState()
-						.ordinal()][nIndex];
+				layer.getImage()[index] = imagesNagasi[type][direction
+						* directionOffsetNagasi[type][0]][getBodyAgeState()
+								.ordinal()][nIndex];
 			} else {
 				int nOtherVerCount = 0;
 				for (int i = 0; i < ModLoader.getMaxImgOtherVer(); i++) {
@@ -158,6 +164,7 @@ public class Marisa extends Body implements java.io.Serializable {
 	/**
 	 * ゆ虐神拳を受けてドス等にトランスフォーム可能かどうかを返却する.
 	 * ドスがいない状態&（実ゆもしくは赤ゆでない）で可能を返却.
+	 * 
 	 * @return ゆ虐神拳を受けてドス等にトランスフォーム可能かどうか
 	 */
 	@Override
@@ -180,7 +187,7 @@ public class Marisa extends Body implements java.io.Serializable {
 		if (!canTransform())
 			return;
 		if (isRude())
-			return;//ゲスもだめ
+			return;// ゲスもだめ
 		synchronized (SimYukkuri.lock) {
 			// ドス化
 			// ドスはフィールドに一体だけ
@@ -197,7 +204,7 @@ public class Marisa extends Body implements java.io.Serializable {
 			}
 			to.setUniqueID(Numbering.INSTANCE.numberingYukkuriID());
 			SimYukkuri.world.getCurrentMap().getBody().put(to.getUniqueID(), to);
-			//iniファイル再設定
+			// iniファイル再設定
 			to.setBaseBodyFileName("dosmarisa");
 			IniFileUtil.readYukkuriIniFile(to);
 			if (MyPane.getSelectBody() == this) {
@@ -210,6 +217,7 @@ public class Marisa extends Body implements java.io.Serializable {
 	/**
 	 * 突然変異チェックをする.
 	 * まりさ→ドス.
+	 * 
 	 * @return 突然変異する際のゆっくり
 	 */
 	@Override
@@ -253,18 +261,20 @@ public class Marisa extends Body implements java.io.Serializable {
 	@Override
 	public int getHybridType(int partnerType) {
 		switch (partnerType) {
-		case Reimu.type:
-		case WasaReimu.type:
-			return ReimuMarisa.type;
-		default:
-			return Marisa.type;
+			case Reimu.type:
+			case WasaReimu.type:
+				return ReimuMarisa.type;
+			default:
+				return Marisa.type;
 		}
 	}
+
 	@Override
 	@Transient
 	public String getNameJ() {
 		return nameJ;
 	}
+
 	@Override
 	@Transient
 	public String getMyName() {
@@ -277,6 +287,7 @@ public class Marisa extends Body implements java.io.Serializable {
 			return nameE;
 		}
 	}
+
 	@Override
 	@Transient
 	public String getMyNameD() {
@@ -285,6 +296,7 @@ public class Marisa extends Body implements java.io.Serializable {
 		}
 		return getMyName();
 	}
+
 	@Override
 	@Transient
 	public String getNameE() {
@@ -368,7 +380,7 @@ public class Marisa extends Body implements java.io.Serializable {
 			}
 		} else if (isFurifuri() && !isSleeping() && (!isLockmove() || isFixBack())) {
 			// ふりふり
-			//流し用もるもる
+			// 流し用もるもる
 			if (isbImageNagasiMode()) {
 				if (getAge() % 8 == 0) {
 					idx += getImage(ImageCode.MROLL_LEFT2_SHIT.ordinal(), Const.LEFT, layer, idx);
@@ -541,7 +553,7 @@ public class Marisa extends Body implements java.io.Serializable {
 				}
 			}
 
-			//以下、普通のふりふり
+			// 以下、普通のふりふり
 			else {
 				if (getAge() % 8 <= 3) {
 					idx += getImage(ImageCode.ROLL_LEFT_SHIT.ordinal(), Const.LEFT, layer, idx);
@@ -597,7 +609,7 @@ public class Marisa extends Body implements java.io.Serializable {
 				}
 			}
 		} else {
-			//皮むき時
+			// 皮むき時
 			if (isPealed()) {
 				idx += getImage(ImageCode.PEALED.ordinal(), direction, layer, idx);
 			}
@@ -619,14 +631,18 @@ public class Marisa extends Body implements java.io.Serializable {
 		setBaseBodyFileName(baseFileName);
 		IniFileUtil.readYukkuriIniFile(this);
 	}
+
 	public Marisa() {
-		
+
 	}
+
 	@Override
 	public void tuneParameters() {
-		/*if (rnd.nextBoolean()) {
-		motherhood = true;
-		}*/
+		/*
+		 * if (rnd.nextBoolean()) {
+		 * motherhood = true;
+		 * }
+		 */
 		// Tune individual parameters.
 		double factor = Math.random() + 1;
 		HUNGRYLIMITorg[AgeState.ADULT.ordinal()] *= factor;
@@ -653,20 +669,20 @@ public class Marisa extends Body implements java.io.Serializable {
 		sameDest = SimYukkuri.RND.nextInt(10) + 10;
 		DECLINEPERIODorg *= (Math.random() + 0.5);
 		ROBUSTNESS = SimYukkuri.RND.nextInt(10) + 1;
-		//EYESIGHT /= 1;
+		// EYESIGHT /= 1;
 		factor = Math.random() + 1;
 		STRENGTHorg[AgeState.ADULT.ordinal()] *= factor;
 		STRENGTHorg[AgeState.CHILD.ordinal()] *= factor;
 		STRENGTHorg[AgeState.BABY.ordinal()] *= factor;
 		speed = baseSpeed;
 	}
+
 	public int[][] getAnImageVerStateCtrlNagasi() {
 		return anImageVerStateCtrlNagasi;
 	}
+
 	public void setAnImageVerStateCtrlNagasi(int[][] anImageVerStateCtrlNagasi) {
 		this.anImageVerStateCtrlNagasi = anImageVerStateCtrlNagasi;
 	}
-	
+
 }
-
-

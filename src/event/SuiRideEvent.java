@@ -24,7 +24,7 @@ import src.util.YukkuriUtil;
  * protected Obj target; // すぃー
  * protected int count; // 100
  */
-public class SuiRideEvent extends EventPacket implements java.io.Serializable {
+public class SuiRideEvent extends EventPacket {
 
 	private static final long serialVersionUID = -3480227497799647328L;
 	int tick = 0;

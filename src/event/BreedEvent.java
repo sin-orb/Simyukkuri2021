@@ -19,7 +19,7 @@ import src.util.YukkuriUtil;
 	protected Obj target;			// 未使用
 	protected int count;			// 2
 */
-public class BreedEvent extends EventPacket implements java.io.Serializable {
+public class BreedEvent extends EventPacket {
 
 	private static final long serialVersionUID = -569342508529969710L;
 
@@ -29,15 +29,15 @@ public class BreedEvent extends EventPacket implements java.io.Serializable {
 	public BreedEvent(Body f, Body t, Obj tgt, int cnt) {
 		super(f, t, tgt, cnt);
 	}
-	
+
 	public BreedEvent() {
-		
+
 	}
-	
+
 	/**
-	 *  参加チェック
-	 *  ここで各種チェックを行い、イベントへ参加するかを返す
-	 *  また、イベント優先度も必要に応じて設定できる
+	 * 参加チェック
+	 * ここで各種チェックを行い、イベントへ参加するかを返す
+	 * また、イベント優先度も必要に応じて設定できる
 	 */
 	@Override
 	public boolean checkEventResponse(Body b) {
@@ -47,53 +47,58 @@ public class BreedEvent extends EventPacket implements java.io.Serializable {
 
 		priority = EventPriority.MIDDLE;
 		Body from = YukkuriUtil.getBodyInstance(getFrom());
-		if (from == null) return false;
+		if (from == null)
+			return false;
 
-		if(b.nearToBirth())return false;
-		if(b.isUnBirth()) return false;
-		if(from == b) return false;
-		if(!b.canEventResponse()) return false;
-		
+		if (b.nearToBirth())
+			return false;
+		if (b.isUnBirth())
+			return false;
+		if (from == b)
+			return false;
+		if (!b.canEventResponse())
+			return false;
+
 		// 興奮してるレイパーは参加しない
-		if(b.isRaper() && b.isExciting())
-		{
+		if (b.isRaper() && b.isExciting()) {
 			return false;
 		}
-		
+
 		// うんうん奴隷など格差があれば祝わない
-		if( b.getPublicRank() != from.getPublicRank() )
-		{
+		if (b.getPublicRank() != from.getPublicRank()) {
 			return false;
 		}
 
 		// 埋まっていたら参加しない
-		if( b.getBaryState() != BaryInUGState.NONE )
-		{
+		if (b.getBaryState() != BaryInUGState.NONE) {
 			return false;
 		}
 
 		// 自分が馬鹿で親におかざりがなかったら参加しない
-		if(!from.hasOkazari() && b.getIntelligence() == Intelligence.FOOL) return false;
+		if (!from.hasOkazari() && b.getIntelligence() == Intelligence.FOOL)
+			return false;
 
-		if(from.isParent(b) || from.isPartner(b) || b.isParent(from) || b.isPartner(from)) return true;
-		
-		//アリにたかられてたらそれどころじゃないので参加しない
+		if (from.isParent(b) || from.isPartner(b) || b.isParent(from) || b.isPartner(from))
+			return true;
+
+		// アリにたかられてたらそれどころじゃないので参加しない
 		if (from.getAttachmentSize(Ants.class) != 0 || from.getNumOfAnts() != 0) {
 			return false;
 		}
-		
+
 		return ret;
 	}
 
 	/**
-	 *  イベント開始動作
+	 * イベント開始動作
 	 */
 	@Override
 	public void start(Body b) {
 		Body from = YukkuriUtil.getBodyInstance(getFrom());
-		if (from != null) b.moveToEvent(this, from.getX(), from.getY());
+		if (from != null)
+			b.moveToEvent(this, from.getX(), from.getY());
 	}
-	
+
 	/**
 	 * 毎フレーム処理
 	 * UpdateState.ABORTを返すとイベント終了
@@ -101,22 +106,23 @@ public class BreedEvent extends EventPacket implements java.io.Serializable {
 	@Override
 	public UpdateState update(Body b) {
 		Body from = YukkuriUtil.getBodyInstance(getFrom());
-		if (from == null) return UpdateState.ABORT;
-		if(b.nearToBirth()) return UpdateState.FORCE_EXEC;
+		if (from == null)
+			return UpdateState.ABORT;
+		if (b.nearToBirth())
+			return UpdateState.FORCE_EXEC;
 		// 相手の一定距離まで近づいたら移動終了
-		if(Translate.distance(b.getX(), b.getY(), from.getX(), from.getY()) < 20000) {
+		if (Translate.distance(b.getX(), b.getY(), from.getX(), from.getY()) < 20000) {
 			b.moveToEvent(this, b.getX(), b.getY());
 			return UpdateState.FORCE_EXEC;
-		}
-		else {
+		} else {
 			b.moveToEvent(this, from.getX(), from.getY());
 		}
-		
+
 		if (from.isDead() || from.isPealed() ||
-				from.isBurned() || from.isBurst()||
+				from.isBurned() || from.isBurst() ||
 				from.isRemoved() || from.isCrushed() ||
 				from.isPacked() || !from.nearToBirth()) {
-				return UpdateState.ABORT;
+			return UpdateState.ABORT;
 		}
 
 		// アリにたかられたら参加どころではなくなる
@@ -124,7 +130,7 @@ public class BreedEvent extends EventPacket implements java.io.Serializable {
 			b.clearEvent();
 			return UpdateState.ABORT;
 		}
-		
+
 		return null;
 	}
 
@@ -134,39 +140,39 @@ public class BreedEvent extends EventPacket implements java.io.Serializable {
 	 */
 	@Override
 	public boolean execute(Body b) {
-		if(b.nearToBirth())return true;
-		if( b.isNYD() ){
+		if (b.nearToBirth())
+			return true;
+		if (b.isNYD()) {
 			return false;
 		}
 		Body from = YukkuriUtil.getBodyInstance(getFrom());
-		if (from == null) return true;
+		if (from == null)
+			return true;
 		// 相手が出産前なら応援
-		if(from.isBirth()) {
+		if (from.isBirth()) {
 			b.setHappiness(Happiness.AVERAGE);
 			b.lookTo(from.getX(), from.getY());
 			b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.RootForPartner), 40, false, false);
 			from.addMemories(1);
 			b.addMemories(1);
 			return false;
-		}
-		else {
+		} else {
 			// 誕生
-			if(!from.hasBabyOrStalk()) {
+			if (!from.hasBabyOrStalk()) {
 				b.lookTo(from.getX(), from.getY());
-				if(from.isHasPants()) {
+				if (from.isHasPants()) {
 					b.setHappiness(Happiness.VERY_SAD);
 					b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.Surprise), 40, true, true);
 					b.addStress(1800);
 					b.addMemories(-30);
-				}
-				else {
+				} else {
 					b.setHappiness(Happiness.VERY_HAPPY);
-					b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.FirstGreeting), 40, true, false);
+					b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.FirstGreeting), 40, true,
+							false);
 					b.addStress(-30);
 					b.addMemories(20);
 				}
-			}
-			else {
+			} else {
 				b.setHappiness(Happiness.AVERAGE);
 				b.lookTo(from.getX(), from.getY());
 				return false;
@@ -174,7 +180,7 @@ public class BreedEvent extends EventPacket implements java.io.Serializable {
 			return true;
 		}
 	}
-	
+
 	@Override
 	public String toString() {
 		return ResourceUtil.getInstance().read("event_welcomechild");

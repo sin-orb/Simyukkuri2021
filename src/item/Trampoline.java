@@ -28,7 +28,7 @@ import src.system.ResourceUtil;
 /***************************************************
  * とらんぽりん
  */
-public class Trampoline extends ObjEX implements java.io.Serializable {
+public class Trampoline extends ObjEX {
 	private static final long serialVersionUID = -128936287118191969L;
 	private static BufferedImage[] images = new BufferedImage[2];
 	private static Rectangle4y boundary = new Rectangle4y();
@@ -248,4 +248,3 @@ public class Trampoline extends ObjEX implements java.io.Serializable {
 	}
 
 }
-

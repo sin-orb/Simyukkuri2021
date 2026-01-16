@@ -39,7 +39,7 @@ import src.system.ResourceUtil;
 /***************************************************
  * 加工プレート
  */
-public class ProcesserPlate extends ObjEX implements java.io.Serializable {
+public class ProcesserPlate extends ObjEX {
 	private static final long serialVersionUID = -32909400197144018L;
 	/** 処理対象(ゆっくり) */
 	public static final int hitCheckObjType = ObjEX.YUKKURI;
@@ -600,4 +600,3 @@ public class ProcesserPlate extends ObjEX implements java.io.Serializable {
 		this.runningCost = runningCost;
 	}
 }
-

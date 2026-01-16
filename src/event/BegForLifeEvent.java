@@ -14,13 +14,13 @@ import src.system.ResourceUtil;
 import src.util.YukkuriUtil;
 
 /***************************************************
-	命乞いイベント
-	protected Body from;			// イベントを発した個体
-	protected Body to;				// 攻撃対象
-	protected Obj target;			// 未使用
-	protected int count;			// 10
-*/
-public class BegForLifeEvent extends EventPacket implements java.io.Serializable {
+ * 命乞いイベント
+ * protected Body from; // イベントを発した個体
+ * protected Body to; // 攻撃対象
+ * protected Obj target; // 未使用
+ * protected int count; // 10
+ */
+public class BegForLifeEvent extends EventPacket {
 
 	private static final long serialVersionUID = 9141159728976292371L;
 	private int roop = 0;
@@ -38,13 +38,13 @@ public class BegForLifeEvent extends EventPacket implements java.io.Serializable
 	}
 
 	public BegForLifeEvent() {
-		
+
 	}
-	
+
 	/**
-	 *  参加チェック
-	 *  ここで各種チェックを行い、イベントへ参加するかを返す
-	 *  また、イベント優先度も必要に応じて設定できる
+	 * 参加チェック
+	 * ここで各種チェックを行い、イベントへ参加するかを返す
+	 * また、イベント優先度も必要に応じて設定できる
 	 */
 	@Override
 	public boolean checkEventResponse(Body b) {
@@ -57,7 +57,7 @@ public class BegForLifeEvent extends EventPacket implements java.io.Serializable
 	}
 
 	/**
-	 *  イベント開始動作
+	 * イベント開始動作
 	 */
 	@Override
 	public void start(Body b) {
@@ -70,7 +70,8 @@ public class BegForLifeEvent extends EventPacket implements java.io.Serializable
 	@Override
 	public UpdateState update(Body b) {
 		if (b.isTalking()) {
-			//			b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.ApologyToHuman), 20, false, true);
+			// b.setBodyEventResMessage(MessagePool.getMessage(b,
+			// MessagePool.Action.ApologyToHuman), 20, false, true);
 			return null;
 		}
 		if (b.getDamage() == 0) {
@@ -108,48 +109,48 @@ public class BegForLifeEvent extends EventPacket implements java.io.Serializable
 			wait = 0;
 		} else if (wait == 50 && roop == 0 && roop2 == 0 && roop3 != 0) {
 			b.setBegging(false);
-			//着火状態か足が破れてる状態で見逃してもらう
+			// 着火状態か足が破れてる状態で見逃してもらう
 			if (b.getAttachmentSize(Fire.class) != 0 || b.getCriticalDamegeType() == CriticalDamegeType.CUT) {
 				b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.ThanksHuman2), 25, true, false);
 				b.setHappiness(Happiness.VERY_SAD);
 				b.setForceFace(ImageCode.CRYING.ordinal());
 				return UpdateState.ABORT;
 			}
-			//ダメージ状態で見逃してもらう
+			// ダメージ状態で見逃してもらう
 			if (b.isDamaged()) {
 				b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.ThanksHuman2), 25, true, false);
 				b.setHappiness(Happiness.SAD);
 				b.setForceFace(ImageCode.TIRED.ordinal());
-				//増長
+				// 増長
 				switch (b.getAttitude()) {
-				case VERY_NICE:
-					b.addStress(b.getStressLimit() / 30);
-					b.plusAttitude(10);
-					break;
-				case NICE:
-					b.addStress(b.getStressLimit() / 20);
-					b.plusAttitude(5);
-					break;
-				case AVERAGE:
-					b.addStress(b.getStressLimit() / 20);
-					//b.plusAttitude(0);
-					break;
-				case SHITHEAD:
-				case SUPER_SHITHEAD:
-					b.addStress(b.getStressLimit() / 10);
-					if (b.getIntelligence() == Intelligence.FOOL)
-						b.plusAttitude(-30);
-					else
-						b.plusAttitude(-20);
-					break;
-				default:
-					break;
+					case VERY_NICE:
+						b.addStress(b.getStressLimit() / 30);
+						b.plusAttitude(10);
+						break;
+					case NICE:
+						b.addStress(b.getStressLimit() / 20);
+						b.plusAttitude(5);
+						break;
+					case AVERAGE:
+						b.addStress(b.getStressLimit() / 20);
+						// b.plusAttitude(0);
+						break;
+					case SHITHEAD:
+					case SUPER_SHITHEAD:
+						b.addStress(b.getStressLimit() / 10);
+						if (b.getIntelligence() == Intelligence.FOOL)
+							b.plusAttitude(-30);
+						else
+							b.plusAttitude(-20);
+						break;
+					default:
+						break;
 				}
 			}
 
-			//命乞い成功
+			// 命乞い成功
 			else {
-				//賢くないゲス
+				// 賢くないゲス
 				if (b.isRude() && b.getIntelligence() != Intelligence.WISE) {
 					b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.ThanksHuman), 25, true, true);
 					b.setHappiness(Happiness.VERY_HAPPY);
@@ -160,33 +161,33 @@ public class BegForLifeEvent extends EventPacket implements java.io.Serializable
 					b.setForceFace(ImageCode.SMILE.ordinal());
 				}
 
-				//増長
+				// 増長
 				switch (b.getAttitude()) {
-				case VERY_NICE:
-					b.addStress(-b.getStressLimit() / 20);
-					b.plusAttitude(10);
-					break;
-				case NICE:
-					b.addStress(-b.getStressLimit() / 10);
-					//b.plusAttitude(0);
-					break;
-				case AVERAGE:
-					b.addStress(-b.getStressLimit() / 5);
-					b.plusAttitude(-30);
-					break;
-				case SHITHEAD:
-				case SUPER_SHITHEAD:
-					b.addStress(-b.getStressLimit() / 3);
-					b.plusAttitude(-50);
-					break;
-				default:
-					break;
+					case VERY_NICE:
+						b.addStress(-b.getStressLimit() / 20);
+						b.plusAttitude(10);
+						break;
+					case NICE:
+						b.addStress(-b.getStressLimit() / 10);
+						// b.plusAttitude(0);
+						break;
+					case AVERAGE:
+						b.addStress(-b.getStressLimit() / 5);
+						b.plusAttitude(-30);
+						break;
+					case SHITHEAD:
+					case SUPER_SHITHEAD:
+						b.addStress(-b.getStressLimit() / 3);
+						b.plusAttitude(-50);
+						break;
+					default:
+						break;
 				}
 			}
 			roop3--;
 			wait = 0;
 		} else if (wait == 30 && roop == 0 && roop2 == 0 && roop3 == 0) {
-			//独り言ちる
+			// 独り言ちる
 			b.setMessage(MessagePool.getMessage(b, MessagePool.Action.Monologue), true);
 			return UpdateState.ABORT;
 		}
