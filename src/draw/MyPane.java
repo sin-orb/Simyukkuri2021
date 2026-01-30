@@ -179,9 +179,9 @@ public class MyPane extends JPanel implements Runnable {
 	 * <br>
 	 * 順に、停止、1倍、2倍、4倍、10倍、最速
 	 */
-	private static final int PAUSE = -1, MAX = 1, DECUPLE = 10, QUINTUPLE = 20, DOUBLE = 50, NORMAL = 100;
+	public static final int PAUSE = -1, MAX = 1, DECUPLE = 10, QUINTUPLE = 20, DOUBLE = 50, NORMAL = 100;
 	/** スピードの値管理 */
-	private static final int gameSpeed[] = { PAUSE, NORMAL, DOUBLE, QUINTUPLE, DECUPLE, MAX };
+	public static final int gameSpeed[] = { PAUSE, NORMAL, DOUBLE, QUINTUPLE, DECUPLE, MAX };
 
 	@SuppressWarnings("rawtypes")
 	/** ゆっくり追加ウィンドウ用コンボボックス群 */
@@ -1309,21 +1309,6 @@ public class MyPane extends JPanel implements Runnable {
 		this.terrarium = terrarium;
 	}
 
-	public BufferedImage getBackBuffer() {
-		return backBuffer;
-	}
-
-	public void setBackBuffer(BufferedImage backBuffer) {
-		this.backBuffer = backBuffer;
-	}
-
-	public Graphics2D getBackBufferG2() {
-		return backBufferG2;
-	}
-
-	public void setBackBufferG2(Graphics2D backBufferG2) {
-		this.backBufferG2 = backBufferG2;
-	}
 
 	public List<Obj> getList4sort() {
 		return list4sort;

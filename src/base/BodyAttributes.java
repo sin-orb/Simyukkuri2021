@@ -3,13 +3,11 @@ package src.base;
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.beans.Transient;
-import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
@@ -66,7 +64,7 @@ import src.util.YukkuriUtil;
  * そこはいわゆる”ゆ虐の設定”に従うこと。
  */
 @JsonTypeInfo(use = Id.CLASS)
-public abstract class BodyAttributes extends Obj implements Serializable {
+public abstract class BodyAttributes extends Obj {
 	private static final long serialVersionUID = 4867243705470540257L;
 
 	/** ゆっくりのタイプ。まりさなら0、れいむなら1、等々ユニークなタイプを表す。 */
@@ -148,40 +146,28 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 
 	// .INIファイルで変更可能な各ゆっくりのパラメータ.
 	/** 一回の食事量 */
-	@JsonProperty
 	protected int EATAMOUNTorg[] = { 100 * 6, 100 * 12, 100 * 24 };
 	/** 体重 */
-	@JsonProperty
 	protected int WEIGHTorg[] = { 100, 300, 600 };
 	/** 空腹限界 */
-	@JsonProperty
 	protected int HUNGRYLIMITorg[] = { 100 * 24, 100 * 24 * 2, 100 * 24 * 4 };
 	/** うんうん限界 */
-	@JsonProperty
 	protected int SHITLIMITorg[] = { 100 * 12, 100 * 24, 100 * 24 };
 	/** ダメージ限界 */
-	@JsonProperty
 	protected int DAMAGELIMITorg[] = { 100 * 24, 100 * 24 * 3, 100 * 24 * 7 };
 	/** ストレス限界 */
-	@JsonProperty
 	private int STRESSLIMITorg[] = { 100 * 24, 100 * 24 * 3, 100 * 24 * 7 };
 	/** なつき度限界 */
-	@JsonProperty
 	private int LOVEPLAYERLIMITorg = 1000;
 	/** 味覚レベル */
-	@JsonProperty
 	private int TANGLEVELorg[] = { 300, 600, 1000 };
 	/** 赤ゆ期間 */
-	@JsonProperty
 	protected int BABYLIMITorg = 100 * 24 * 7;
 	/** 子ゆ期間 */
-	@JsonProperty
 	protected int CHILDLIMITorg = 100 * 24 * 21;
 	/** 寿命 */
-	@JsonProperty
 	protected int LIFELIMITorg = 100 * 24 * 365;
 	/** 腐敗日数 */
-	@JsonProperty
 	private int ROTTINGTIMEorg = 100 * 24 * 3;
 	/** 足の速さ */
 	private int STEPorg[] = { 1, 2, 4 };
@@ -569,7 +555,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	private Color4y messageBoxColor;
 	/** メッセージテキストの色 */
 	private Color4y messageTextColor;
-	// TODO:使途不明
+	/** メッセージストローク */
 	private BasicStrokeEX messageWindowStroke;
 	/** メッセージテキストのサイズ */
 	private int messageTextSize;
@@ -599,8 +585,10 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	private Event eventResultAction = Event.DONOTHING;
 	/** ゆ虐神拳により 膨らんでいるか/伸ばされているか/押さえつけられているか */
 	private boolean[] abFlagGodHand = { false, false, false };
-	/** TODO:ゆ虐神拳の回数？ */
-	private int[] anGodHandPoint = { 0, 0, 0 };
+	/** ゆ虐神拳の回数 */
+	private int godHandHoldPoint = 0;
+	private int godHandStretchPoint = 0;
+	private int godHandCompressPoint = 0;
 	/** お気に入りアイテム */
 	private HashMap<FavItemType, Integer> favItem = new HashMap<FavItemType, Integer>();
 	/** 持ち歩きアイテム */
@@ -4608,10 +4596,20 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 				messageTextColor.getBlue(), messageTextColor.getAlpha());
 	}
 
+	/**
+	 * メッセージウィンドウの枠線のスタイル を取得する.
+	 * 
+	 * @return メッセージウィンドウの枠線のスタイル
+	 */
 	public BasicStrokeEX getMessageWindowStroke() {
 		return messageWindowStroke;
 	}
 
+	/**
+	 * メッセージウィンドウの枠線のスタイル を設定する.
+	 * 
+	 * @param messageWindowStroke メッセージウィンドウの枠線のスタイル
+	 */
 	public void setMessageWindowStroke(BasicStrokeEX messageWindowStroke) {
 		this.messageWindowStroke = messageWindowStroke;
 	}
@@ -4869,21 +4867,57 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	}
 
 	/**
-	 * TODO:ゆ虐神拳の回数？ を取得する.
+	 * ゆ虐神拳の回数を取得する.
 	 * 
-	 * @return TODO:ゆ虐神拳の回数？
+	 * @return ゆ虐神拳の回数
 	 */
-	public int[] getAnGodHandPoint() {
-		return anGodHandPoint;
+	public int getGodHandHoldPoint() {
+		return godHandHoldPoint;
 	}
 
 	/**
-	 * TODO:ゆ虐神拳の回数？ を設定する.
+	 * ゆ虐神拳の回数（押さえ）を設定する.
 	 * 
-	 * @param anGodHandPoint TODO:ゆ虐神拳の回数？
+	 * @param v ゆ虐神拳の回数（押さえ）
 	 */
-	public void setAnGodHandPoint(int[] anGodHandPoint) {
-		this.anGodHandPoint = anGodHandPoint;
+	public void setGodHandHoldPoint(int v) {
+		this.godHandHoldPoint = v;
+	}
+
+	/**
+	 * ゆ虐神拳の回数（伸ばし）を取得する.
+	 * 
+	 * @return ゆ虐神拳の回数（伸ばし）
+	 */
+	public int getGodHandStretchPoint() {
+		return godHandStretchPoint;
+	}
+
+	/**
+	 * ゆ虐神拳の回数（伸ばし）を設定する.
+	 * 
+	 * @param v ゆ虐神拳の回数（伸ばし）
+	 */
+	public void setGodHandStretchPoint(int v) {
+		this.godHandStretchPoint = v;
+	}
+
+	/**
+	 * ゆ虐神拳の回数（押さえ）を取得する.
+	 * 
+	 * @return ゆ虐神拳の回数（押さえ）
+	 */
+	public int getGodHandCompressPoint() {
+		return godHandCompressPoint;
+	}
+
+	/**
+	 * ゆ虐神拳の回数（押さえ）を設定する.
+	 * 
+	 * @param v ゆ虐神拳の回数（押さえ）
+	 */
+	public void setGodHandCompressPoint(int v) {
+		this.godHandCompressPoint = v;
 	}
 
 	/**
@@ -5503,7 +5537,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	public void toDead() {
 		if (!isCantDie() && !dead) {
 			dead = true;
-			anGodHandPoint[0] = 0;// 死んだらゆ虐神拳1をリセット
+			godHandHoldPoint = 0;// 死んだらゆ虐神拳1をリセット
 		}
 	}
 
@@ -5689,7 +5723,7 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 
 	 * @return お腹へってきているかどうか
 	 */
-	@JsonIgnore
+	@Transient
 	public boolean isHungry() {
 		return (!dead && (hungry <= HUNGRYLIMITorg[getBodyAgeState().ordinal()] / 2));
 	}
@@ -5752,7 +5786,6 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 
 	 * @return 満腹度
 	 */
-	@JsonProperty("hungry")
 	public int getHungry() {
 		return hungry;
 	}
@@ -5772,7 +5805,6 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 	 * 
 	 * @param val 満腹度
 	 */
-	@JsonProperty("hungry")
 	public void setHungry(int hungry) {
 		this.hungry = hungry;
 	}
@@ -7052,4 +7084,3 @@ public abstract class BodyAttributes extends Obj implements Serializable {
 		Ycost = ycost;
 	}
 }
-

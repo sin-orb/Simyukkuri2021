@@ -131,6 +131,39 @@ public class Ants extends Attachment {
 	public String toString() {
 		return ResourceUtil.getInstance().read("item_ants");
 	}
+
+	// テスト用静的アクセサ
+	public static BufferedImage[][] getImages() {
+		return images;
+	}
+
+	public static void setImages(BufferedImage[][] images) {
+		Ants.images = images;
+	}
+
+	public static void setImgW(int[] imgW) {
+		Ants.imgW = imgW;
+	}
+
+	public static void setImgH(int[] imgH) {
+		Ants.imgH = imgH;
+	}
+
+	public static void setPivX(int[] pivX) {
+		Ants.pivX = pivX;
+	}
+
+	public static void setPivY(int[] pivY) {
+		Ants.pivY = pivY;
+	}
+
+	public static String getPosKey() {
+		return POS_KEY;
+	}
+
+	public static int[] getProperty() {
+		return property;
+	}
 }
 
 

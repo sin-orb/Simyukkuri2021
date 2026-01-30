@@ -28,21 +28,21 @@ import src.system.ResourceUtil;
 /***************************************************
  * ゴミ捨て場
  */
-public class GarbageStation extends ObjEX implements java.io.Serializable {
+public class GarbageStation extends ObjEX {
 
 	private static final long serialVersionUID = -3307339525828240055L;
 
-	/**出す餌の種類テーブル*/
+	/** 出す餌の種類テーブル */
 	public static enum GomiType {
 		WASTE(ResourceUtil.getInstance().read("command_food_garbage"), FoodType.WASTE_NORA),
-		BITTER(ResourceUtil.getInstance().read("command_food_bitter"), FoodType.BITTER_NORA), 
-		HOT(ResourceUtil.getInstance().read("command_food_hot"), FoodType.HOT_NORA), 
-		LEMON_POP(ResourceUtil.getInstance().read("command_food_ramune"), FoodType.LEMONPOP_NORA), 
+		BITTER(ResourceUtil.getInstance().read("command_food_bitter"), FoodType.BITTER_NORA),
+		HOT(ResourceUtil.getInstance().read("command_food_hot"), FoodType.HOT_NORA),
+		LEMON_POP(ResourceUtil.getInstance().read("command_food_ramune"), FoodType.LEMONPOP_NORA),
 		VIYUGRA(ResourceUtil.getInstance().read("command_food_viagra"), FoodType.VIYUGRA_NORA),
-		NORMAL(ResourceUtil.getInstance().read("command_food_normal"),FoodType.FOOD_NORA),
-		SWEETS1(ResourceUtil.getInstance().read("command_food_sweet1"),FoodType.SWEETS_NORA1),
+		NORMAL(ResourceUtil.getInstance().read("command_food_normal"), FoodType.FOOD_NORA),
+		SWEETS1(ResourceUtil.getInstance().read("command_food_sweet1"), FoodType.SWEETS_NORA1),
 		SWEETS2(ResourceUtil.getInstance().read("command_food_sweet2"), FoodType.SWEETS_NORA2),
-								;
+		;
 
 		private final String name;
 		private final FoodType foodType;
@@ -65,7 +65,7 @@ public class GarbageStation extends ObjEX implements java.io.Serializable {
 		}
 	}
 
-	/**ランダムテーブル(模擬的)*/
+	/** ランダムテーブル(模擬的) */
 	private static GomiType[] rndTable = {
 			GomiType.WASTE,
 			GomiType.NORMAL,
@@ -96,17 +96,17 @@ public class GarbageStation extends ObjEX implements java.io.Serializable {
 			GomiType.NORMAL,
 			GomiType.WASTE,
 	};
-	/**画像の入れもの*/
+	/** 画像の入れもの */
 	public static final int hitCheckObjType = 0;
 	private static BufferedImage images[] = new BufferedImage[3];
 	private static Rectangle4y boundary = new Rectangle4y();
 
 	private boolean[] enable = null;
 	private Obj[] food = null;
-	private int throwingTime = 100;//ゴミ捨て時刻
+	private int throwingTime = 100;// ゴミ捨て時刻
 	private int gettingP = 1;
 
-	/**画像ロード*/
+	/** 画像ロード */
 	public static void loadImages(ClassLoader loader, ImageObserver io) throws IOException {
 		images[0] = ModLoader.loadItemImage(loader, "garbagestation" + File.separator + "garbagestation_base.png");
 		images[1] = ModLoader.loadItemImage(loader, "garbagestation" + File.separator + "garbagestation_l_close.png");
@@ -136,7 +136,7 @@ public class GarbageStation extends ObjEX implements java.io.Serializable {
 		return null;
 	}
 
-	/**境界線の取得*/
+	/** 境界線の取得 */
 	public static Rectangle4y getBounding() {
 		return boundary;
 	}
@@ -154,7 +154,7 @@ public class GarbageStation extends ObjEX implements java.io.Serializable {
 		}
 	}
 
-	/**餌を出す*/
+	/** 餌を出す */
 	private void feedAction(int idx) {
 		if (food[idx] != null) {
 			Food f = (Food) food[idx];
@@ -176,7 +176,7 @@ public class GarbageStation extends ObjEX implements java.io.Serializable {
 			FoodType f = rndTable[type].getFoodType();
 			int px = (idx == 0 ? -20 : 20);
 			food[idx] = GadgetAction.putObjEX(Food.class, getX() + px, getY(), f.ordinal());
-			SimYukkuri.world.getCurrentMap().getFood().put(food[idx].objId, (Food)food[idx]);
+			SimYukkuri.world.getCurrentMap().getFood().put(food[idx].objId, (Food) food[idx]);
 		}
 	}
 
@@ -185,7 +185,7 @@ public class GarbageStation extends ObjEX implements java.io.Serializable {
 		SimYukkuri.world.getCurrentMap().getGarbageStation().remove(objId);
 	}
 
-	/**コンストラクタ*/
+	/** コンストラクタ */
 	public GarbageStation(int initX, int initY, int initOption) {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
@@ -205,11 +205,12 @@ public class GarbageStation extends ObjEX implements java.io.Serializable {
 			SimYukkuri.world.getCurrentMap().getGarbageStation().remove(objId);
 		}
 	}
+
 	public GarbageStation() {
-		
+
 	}
 
-	/** 設定メニュー*/
+	/** 設定メニュー */
 	public static boolean setupGarbageSt(GarbageStation d) {
 		JPanel mainPanel = new JPanel();
 		JCheckBox[] checkBox = new JCheckBox[GomiType.values().length];
@@ -240,17 +241,17 @@ public class GarbageStation extends ObjEX implements java.io.Serializable {
 		return ret;
 	}
 
-	/**iniファイル読み込み*/
+	/** iniファイル読み込み */
 	public void readIniFile() {
 		ClassLoader loader = this.getClass().getClassLoader();
 		int nTemp = 0;
-		//時間
+		// 時間
 		nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataItemIniDir(), "GarbageStation", "throwingTime");
 		if (nTemp >= 6)
 			throwingTime = nTemp * 100 - 600;
 		else if (nTemp >= 0)
 			throwingTime = nTemp * 100 + 1800;
-		//確率
+		// 確率
 		nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataItemIniDir(), "GarbageStation",
 				"gettingProbability");
 		if (nTemp != 0)
@@ -288,6 +289,5 @@ public class GarbageStation extends ObjEX implements java.io.Serializable {
 	public void setGettingP(int gettingP) {
 		this.gettingP = gettingP;
 	}
-	
-}
 
+}

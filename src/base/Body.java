@@ -109,58 +109,58 @@ import src.util.IniFileUtil;
 import src.util.YukkuriUtil;
 
 /*********************************************************
- * �?っくり本体�?��?となる抽象クラス?��動作�?�み。�?
- * 属性に関しては親クラスのBodyAttributesにすべて定義�?
+ * ゆっくり本体の元となる抽象クラス（動作のみ。）
+ * 属性に関しては親クラスのBodyAttributesにすべて定義。
  *
- * まりさとれいむは特殊なため�?クラスで"public int getBodyBaseImage(BodyLayer
- * layer)"をオーバ�?�ライドして�?るため要確�?
- * �?なとき�?�挙動は"public void
- * killTime()"にまとめてあるので、各種ごとに固有�?�挙動を追加した�?とき�?�それを各種classでオーバ�?�ライドしてください�?
- * (現在オーバ�?�ライドして�?る種?��れ�?む、ありす、�?�らん、れみりゃ)
- * キホン?��logic系のループ�?�"Terrarium.java"にあり
- * "ToyLogic"をobjループで呼び出すだけだと頻度が低いので�?"ToyLogic"をインポ�?�ト�?"killtime()"�?で一定確�?で"ToyLogic"�?のおもち�?で遊�?�処�?を呼び出すよ�?にしてある。objループから�?�削除
+ * まりさとれいむは特殊なため各クラスで"public int getBodyBaseImage(BodyLayer
+ * layer)"をオーバーライドしているため要確認
+ * 暇なときの挙動は"public void
+ * killTime()"にまとめてあるので、各種ごとに固有の挙動を追加したいときはそれを各種classでオーバーライドしてください。
+ * (現在オーバーライドしている種：れいむ、ありす、ふらん、れみりゃ)
+ * キホン～logic系のループは"Terrarium.java"にあり
+ * "ToyLogic"をobjループで呼び出すだけだと頻度が低いので、"ToyLogic"をインポート、"killtime()"内で一定確率で"ToyLogic"内のおもちゃで遊ぶ処理を呼び出すようにしてある。objループからは削除
  */
 @JsonTypeInfo(use = Id.CLASS)
 public abstract class Body extends BodyAttributes {
 	private static final long serialVersionUID = 8856385435939508588L;
 
 	/**
-	 * �?虐神拳を受けてドス等にトランスフォーム可能かど�?かを返却する.
+	 * ゆ虐神拳を受けてドス等にトランスフォーム可能かどうかを返却する.
 	 * まりさ/れいむの一部でtrue.
-	 * トランスフォーム可能な子クラスでオーバ�?�ライドす�?.
+	 * トランスフォーム可能な子クラスでオーバーライドする.
 	 * 
-	 * @return �?虐神拳を受けてドス等にトランスフォーム可能かど�?�?
+	 * @return ゆ虐神拳を受けてドス等にトランスフォーム可能かどうか
 	 */
 	public boolean judgeCanTransForGodHand() {
 		return false;
 	}
 
 	/**
-	 * (�?虐神拳を受けて)ドス等にトランスフォームする�?
+	 * (ゆ虐神拳を受けて)ドス等にトランスフォームする。
 	 * まりさ/れいむで実行可.
-	 * トランスフォーム可能な子クラスでオーバ�?�ライドす�?.
+	 * トランスフォーム可能な子クラスでオーバーライドする.
 	 */
 	public void execTransform() {
 		return;
 	}
 
 	/**
-	 * ハイブリ�?ド�?�タイプを返却する.
-	 * 子クラスでオーバ�?�ライドす�?.
+	 * ハイブリッドのタイプを返却する.
+	 * 子クラスでオーバーライドする.
 	 * 
-	 * @param partnerType パ�?�トナーのタイ�?
-	 * @return ハイブリ�?ド�?�タイ�?
+	 * @param partnerType パートナーのタイプ
+	 * @return ハイブリッドのタイプ
 	 */
 	public int getHybridType(int partnerType) {
 		return getType();
 	}
 
 	/**
-	 * 突然変異チェ�?クをす�?.
-	 * 現状 れいむ→で�?ぶ/まりさ→ど�? のみ.
-	 * 突然変異可能な子クラスでオーバ�?�ライドす�?.
+	 * 突然変異チェックをする.
+	 * 現状 れいむ→でいぶ/まりさ→どす のみ.
+	 * 突然変異可能な子クラスでオーバーライドする.
 	 * 
-	 * @return 突然変異する際�?��?っくりのインスタンス
+	 * @return 突然変異する際のゆっくりのインスタンス
 	 */
 	public Body checkTransform() {
 		return null;
@@ -180,11 +180,11 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * checkと�?�?つつ空腹操作をして�?るメソ�?�?.
-	 * �?っくりの様�?な状態に応じて腹を減らして�?る�?
+	 * checkといいつつ空腹操作をしているメソッド.
+	 * ゆっくりの様々な状態に応じて腹を減らしている。
 	 */
 	public void checkHungry() {
-		// す�?�ぱーむーしゃむーしゃたいむ実施後�?�一定期間お腹が減らな�?、と�?�?か�?�しろ腹�?っぱ�?になって�?�?
+		// すーぱーむーしゃむーしゃたいむ実施後は一定期間お腹が減らない、というかむしろ腹いっぱいになっていく
 		if (0 < getNoHungrybySupereatingTimePeriod()) {
 			noHungrybySupereatingTimePeriod--;
 			if (hungry <= getHungryLimit()) {
@@ -193,47 +193,47 @@ public abstract class Body extends BodyAttributes {
 			return;
 		}
 
-		// 皮が�?�かれて�?�?/�?頭化させられて�?る場合�?�通常の1/7の速度で腹が減る
+		// 皮がむかれている/饅頭化させられている場合は通常の1/7の速度で腹が減る
 		if (isPealed() || isPacked()) {
 			if (getAge() % 7 == 0)
 				hungry -= TICK;
 		}
 
-		// 生まれて�?な�?場�?
+		// 生まれていない場合
 		if (isUnBirth()) {
-			// 親と茎で繋がって�?な�?場合�?�み通常の100倍空腹にな�?
+			// 親と茎で繋がっていない場合のみ通常の100倍空腹になる
 			if (!isPlantForUnbirthChild()) {
 				hungry -= TICK * 100;
 			}
 		}
-		// 寝て�?る場合�?�空腹は通常の1/2�?
+		// 寝ている場合の空腹は通常の1/2倍
 		else if (isSleeping()) {
 			if (getAge() % 2 == 0)
 				hungry -= TICK;
 		}
-		// レイパ�?�ではな�?が発�?して�?る場合�?�空腹は通常の(抱えて�?る胎生ゆの数+1)倍空腹にな�?
+		// レイパーではないが発情している場合の空腹は通常の(抱えている胎生ゆの数+1)倍空腹になる
 		else if (isExciting() && !isRaper()) {
 			hungry -= TICK * (getBabyTypes().size() + 1);
 		}
-		// それ以外�?�場合�?�通常の腹減り
+		// それ以外の場合は通常の腹減り
 		else {
 			hungry -= TICK;
 		}
 
-		// 茎が生えて�?ると茎�?�数*5倍だけさらに腹が減る
+		// 茎が生えていると茎の数*5倍だけさらに腹が減る
 		if (isHasStalk() && getStalks() != null) {
 			hungry -= TICK * getStalks().size() * 5;
 		}
-		// 胎生�?がいるとそ�?��?さらに腹が減る
+		// 胎生ゆがいるとその分さらに腹が減る
 		if (isHasBaby()) {
 			hungry -= TICK * getBabyTypes().size();
 		}
-		// 満腹度�?0になって腹が減るとそ�?��?ダメージにな�?
+		// 満腹度が0になって腹が減るとその分ダメージになる
 		if (hungry <= 0) {
 			damage += (-hungry);
 			hungry = 0;
 		}
-		// 腹が減っておらず、寝てもいな�?状態でこ�?�1Tickを過ごすと「飢餓状態になって�?な�?期間」を1増や�?
+		// 腹が減っておらず、寝てもいない状態でこの1Tickを過ごすと「飢餓状態になっていない期間」を1増やす
 		if (!isHungry() && !isSleeping()) {
 			noHungryPeriod += TICK;
 		} else {
@@ -242,60 +242,60 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * checkと�?�?つつダメージ計算をして�?るメソ�?�?.
+	 * checkといいつつダメージ計算をしているメソッド.
 	 */
 	public void checkDamage() {
-		// オレンジジュース�?砂糖水などで体力が回復するかど�?か�?�フラグ
+		// オレンジジュースや砂糖水などで体力が回復するかどうかのフラグ
 		boolean bHealFlag = true;
-		// 実ゆの場合、茎で生きて�?る親につながって�?るなら回復フラグON
+		// 実ゆの場合、茎で生きている親につながっているなら回復フラグON
 		if (isUnBirth()) {
 			bHealFlag = isPlantForUnbirthChild();
 		}
 
-		// か�?�てる時のダメージ加�?
+		// かびてる時のダメージ加算
 		if (isSick()) {
-			// か�?�て�?る期間が潜伏期間�?�32倍を�?え、かつダメージを�?�ビーに受けて�?る場�?
+			// かびている期間が潜伏期間の32倍を超え、かつダメージをヘビーに受けている場合
 			if (getSickPeriod() > (INCUBATIONPERIODorg * 32) && isDamagedHeavily()) {
-				// 追加ダメージは1/3の確�?で1
+				// 追加ダメージは1/3の確率で1
 				if (SimYukkuri.RND.nextInt(3) == 0)
 					damage += TICK;
 			}
-			// か�?�て�?る期間が潜伏期間�?�32倍を�?えて�?て、ダメージが�?�ビーでな�?場�?
+			// かびている期間が潜伏期間の32倍を超えていて、ダメージがヘビーでない場合
 			else if (getSickPeriod() > (INCUBATIONPERIODorg * 32)) {
 				// 通常の3倍ダメージ
 				damage += TICK * 3;
 			}
-			// か�?�て�?る期間が潜伏期間�?�8倍を�?えて�?る場�?
+			// かびている期間が潜伏期間の8倍を超えている場合
 			else if (getSickPeriod() > (INCUBATIONPERIODorg * 8)) {
-				// 通常の2倍�?�ダメージ
+				// 通常の2倍のダメージ
 				damage += TICK * 2;
 			}
-			// か�?�て�?る期間が潜伏期間と同じ
+			// かびている期間が潜伏期間と同じ
 			else if (getSickPeriod() > INCUBATIONPERIODorg) {
 				// 通常ダメージ
 				damage += TICK;
 			}
 		}
-		// 非空腹状態では回復する(か�?�てるとき�?�非適用)
+		// 非空腹状態では回復する(かびてるときは非適用)
 		else if (!isHungry()) {
 			damage -= TICK;
 		}
-		// 空腹による消耗（空腹時に更に腹がへることによって受けるダメージとは別。そちら�?�ダメージ計算メソ�?ドで行う。�?
+		// 空腹による消耗（空腹時に更に腹がへることによって受けるダメージとは別。そちらはダメージ計算メソッドで行う。）
 		if (hungry <= 0) {
 			damage += TICK;
 		}
 
 		// ケガしてる時
 		if (getCriticalDamege() != null) {
-			// �?られてると�?
+			// 切られてるとき
 			if (getCriticalDamege() == CriticalDamegeType.CUT) {
-				// 100倍�?�ダメージ
+				// 100倍のダメージ
 				damage += TICK * 100;
 				addStress(50);
 				if (isSleeping())
 					wakeup();
 				Terrarium.setAlarm();
-				// 1/50の確�?でしゃべ�?
+				// 1/50の確率でしゃべる
 				if (SimYukkuri.RND.nextInt(50) == 0) {
 					if (geteCoreAnkoState() != CoreAnkoState.NonYukkuriDiseaseNear)
 						setNYDMessage(MessagePool.getMessage(this, MessagePool.Action.Dying2), false);
@@ -303,9 +303,9 @@ public abstract class Body extends BodyAttributes {
 						setMessage(MessagePool.getMessage(this, MessagePool.Action.Dying2));
 				}
 			}
-			// 傷を負って�?ると�?
+			// 傷を負っているとき
 			else if (getCriticalDamege() == CriticalDamegeType.INJURED && !isSleeping()) {
-				// 1/300の確�?で餡子を漏ら�?
+				// 1/300の確率で餡子を漏らす
 				if (SimYukkuri.RND.nextInt(300) == 0) {
 					SimYukkuri.mypane.getTerrarium().addCrushedVomit(getX() + 3 - SimYukkuri.RND.nextInt(6), getY() - 2,
 							0,
@@ -317,17 +317,17 @@ public abstract class Body extends BodyAttributes {
 					addStress(5);
 					addDamage(50);
 				}
-				// お�?�が一杯で、ダメージがな�?ときに1/4800の確�?で傷が治�?
+				// お腹が一杯で、ダメージがないときに1/4800の確率で傷が治る
 				if (isFull() && isNoDamaged() && SimYukkuri.RND.nextInt(4800) == 0) {
 					setCriticalDamege(null);
 				}
-				// ダメージが�?�ビーでな�?場合�?�1/33600の確�?で傷が治�?
+				// ダメージがヘビーでない場合は1/33600の確率で傷が治る
 				else if (!isDamagedHeavily() && SimYukkuri.RND.nextInt(33600) == 0) {
 					setCriticalDamege(null);
 				}
 			}
 		}
-		// 皮むき時の基本反�?
+		// 皮むき時の基本反応
 		if (isPealed()) {
 			if (isSleeping())
 				wakeup();
@@ -342,7 +342,7 @@ public abstract class Body extends BodyAttributes {
 			}
 			setMessage(MessagePool.getMessage(this, MessagePool.Action.Dying2));
 		}
-		// �?頭化されたとき�?�基本反�?
+		// 饅頭化されたときの基本反応
 		if (isPacked()) {
 			Terrarium.setAlarm();
 			setPeropero(false);
@@ -353,28 +353,28 @@ public abstract class Body extends BodyAttributes {
 				stayPurupuru(20);
 		}
 
-		// 路上だと、善良なバッジ付き以外�?�、一定確�?で踏み潰され�?
+		// 路上だと、善良なバッジ付き以外は、一定確率で踏み潰される
 		if (SimYukkuri.world.getCurrentMap().getMapIndex() == 2 && !(isSmart() && getAttachmentSize(Badge.class) != 0)
 				&& getCarAccidentProb() != 0 && SimYukkuri.RND.nextInt(getCarAccidentProb()) == 0) {
 			strikeByPress();
 		}
 
-		// �?ィヒューザーオレンジ
+		// ディヒューザーオレンジ
 		if (Terrarium.isOrangeSteam()) {
 			if (bHealFlag) {
 				damage -= TICK * 50;
 			}
 		}
-		// �?ィヒューザー砂糖水
+		// ディヒューザー砂糖水
 		if (Terrarium.isSugerSteam()) {
-			// ダメージ限界の8割以上�?�場�?
+			// ダメージ限界の8割以上の場合
 			if (damage >= getDAMAGELIMITorg()[getBodyAgeState().ordinal()] * 80 / 100) {
 				if (bHealFlag) {
 					damage -= TICK * 100;
 				}
 			}
 		}
-		// �?ィヒューザー�?除剤
+		// ディヒューザー駆除剤
 		if (Terrarium.isPoisonSteam()) {
 			damage += TICK * 100;
 			clearActions();
@@ -398,83 +398,83 @@ public abstract class Body extends BodyAttributes {
 			damage = 0;
 		}
 		Damage newDamageState = getDamageState();
-		// ダメージ外観と今回判定含めたダメージ判定がノ�?�ダメの場合、寝て�?な�?時間をノーダメージ期間に加�?
+		// ダメージ外観と今回判定含めたダメージ判定がノーダメの場合、寝ていない時間をノーダメージ期間に加算
 		if (getDamageState() == Damage.NONE && newDamageState == Damage.NONE && !isSleeping()) {
 			noDamagePeriod += TICK;
 		} else {
 			noDamagePeriod = 0;
 		}
-		// ダメージ外観と今回のダメージを合わせ�?
+		// ダメージ外観と今回のダメージを合わせる
 		setDamageState(newDamageState);
 		if (getDamageState() == Damage.TOOMUCH && getCurrentEvent() != null
 				&& getCurrentEvent().getPriority() != EventPacket.EventPriority.HIGH) {
-			// ダメージおいすぎてる場合、イベント優先度が高でな�?すべてのイベントをクリア�?
+			// ダメージおいすぎてる場合、イベント優先度が高でないすべてのイベントをクリア。
 			clearEvent();
 		}
 	}
 
 	/**
-	 * 自身が突然変異可能な状態かど�?かチェ�?ク
+	 * 自身が突然変異可能な状態かどうかチェック
 	 * 
-	 * @return 自身が突然変異可能な状態かど�?�?
+	 * @return 自身が突然変異可能な状態かどうか
 	 */
 	public boolean canTransform() {
 		if (isDead())
 			return false; // 生きてて
 		if (getStress() > 0)
-			return false; // ストレスがな�?
+			return false; // ストレスがなく
 		if (getTangType() == TangType.POOR)
-			return false; // バカ舌ではな�?
+			return false; // バカ舌ではなく
 		if (isDamaged())
-			return false; // 致命�?ダメージ無�?
+			return false; // 致命的ダメージ無く
 		if (isFeelPain())
-			return false; // 破裂しかけて�?な�?
+			return false; // 破裂しかけていなく
 		if (isUnBirth())
-			return false; // 実ゆではな�?
+			return false; // 実ゆではなく
 		if (getPublicRank() == PublicRank.UnunSlave)
-			return false; // �?んうん奴隷ではな�?
+			return false; // うんうん奴隷ではなく
 		if (isNYD())
-			return false; // 非ゆっくり�?では�?
+			return false; // 非ゆっくり症ではく
 		if (isBlind() || isPealed() || isPacked() || isShutmouth())
-			return false; // 目抜き/皮む�?/あに�?る封印/口封じされておら�?
+			return false; // 目抜き/皮むき/あにゃる封印/口封じされておらず
 		if (geteHairState() != HairState.DEFAULT)
-			return false; // はげまんじ�?�?にされて�?な�?
-		return true;// そ�?�ような場合�?�み、突然変異可能
+			return false; // はげまんじゅうにされていない
+		return true;// そのような場合のみ、突然変異可能
 	}
 
 	/**
-	 * アリ関連の処�?.
+	 * アリ関連の処理.
 	 */
 	public void checkAnts() {
-		// すでに潰れてるかアリの数�?0かディフューザー無限もるんもるん�?�場合、アリ解除
+		// すでに潰れてるかアリの数が0かディフューザー無限もるんもるんの場合、アリ解除
 		if (isCrushed() || Terrarium.isEndlessFurifuriSteam()) {
 			removeAnts();
 			return;
 		}
-		// すでにアリがたかって�?ると�?5回に1回、アリの数�?2増え�?
+		// すでにアリがたかっていると、5回に1回、アリの数が2増える
 		if (getAttachmentSize(Ants.class) != 0 && getAge() % 5 == 0) {
 			numOfAnts += TICK * 2;
-			// アリにたかられてたらイベントどころじゃな�?でしょ
+			// アリにたかられてたらイベントどころじゃないでしょ
 			clearEvent();
 			return;
 		}
-		// マップが部屋�?�とき、もしくは飛んで�?るやつにアリはたからな�?
+		// マップが部屋のとき、もしくは飛んでいるやつにアリはたからない
 		if (SimYukkuri.world.getCurrentMap().getMapIndex() == 0 || getZ() != 0) {
 			return;
 		}
-		// 新規でアリたかる�?
+		// 新規でアリたかる？
 		YukkuriUtil.judgeNewAnt(this);
 	}
 
 	/**
-	 * �?に�?機�?��?
-	 * �?っくりがうに�?�?に�?動く機�?�、�?�ようだ�?
-	 * 重いため、シム�?っくり起動時にチェ�?クボックスで機�?�をONにするかど�?かを決めることができる�?
+	 * うにょ機能。
+	 * ゆっくりがうにょうにょ動く機能、のようだ。
+	 * 重いため、シムゆっくり起動時にチェックボックスで機能をONにするかどうかを決めることができる。
 	 */
 	public void checkUnyo() {
 		if (SimYukkuri.UNYO) {
-			// 移動時にサイズを変更、z座標では管�?しておらずlayerのmodeとage % 9で判定されて�?るもよう
-			// 条件式�?�顔画像�?�layer条件を流用
+			// 移動時にサイズを変更、z座標では管理しておらずlayerのmodeとage % 9で判定されているもよう
+			// 条件式は顔画像のlayer条件を流用
 			if (getAge() % 9 == 0) {
 				if (!isDead() && !isLockmove()) {
 					if (getCriticalDamegeType() != CriticalDamegeType.CUT && !grabbed && !isPealed() && !isPacked()) {
@@ -516,9 +516,9 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * �?に�?機�?�が使用されるゆっくりのアクション
+	 * うにょ機能が使用されるゆっくりのアクション
 	 * 
-	 * @return 現在の状態で�?に�?機�?�を適用できるかど�?�?
+	 * @return 現在の状態でうにょ機能を適用できるかどうか
 	 */
 	@Transient
 	public boolean isUnyoActionAll() {
@@ -532,9 +532,9 @@ public abstract class Body extends BodyAttributes {
 	/**
 	 * Adjusts unyo offsets based on input deltas.
 	 * 
-	 * @param x
-	 * @param y
-	 * @param z
+	 * @param x x offset
+	 * @param y y offset
+	 * @param z z offset
 	 */
 	public void changeUnyo(int x, int y, int z) {
 		if (!isDead() && !isCrushed()) {
@@ -550,7 +550,7 @@ public abstract class Body extends BodyAttributes {
 				unyoForceH -= z;
 				unyoForceW += z;
 			}
-			// 限界を越えて�?ると描画が裏返るので調整
+			// 限界を越えていると描画が裏返るので調整
 			if (unyoForceH > Const.EXT_FORCE_PULL_LIMIT[getBodyAgeState().ordinal()])
 				unyoForceH = Const.EXT_FORCE_PULL_LIMIT[getBodyAgeState().ordinal()];
 			else if (unyoForceH < Const.EXT_FORCE_PUSH_LIMIT[getBodyAgeState().ordinal()])
@@ -563,7 +563,6 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * �?に�?で体が戻る�?��?、だそうだ…
 	 * Eases unyo offsets back toward neutral.
 	 */
 	public void changeReUnyo() {
@@ -588,7 +587,6 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * �?に�?のリセ�?トらしい�?
 	 * Resets unyo offsets to neutral.
 	 */
 	public void resetUnyo() {
@@ -597,29 +595,29 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * �?んうん関連処�?.
-	 * trueを返すと�?っくりは動かな�?。直後うんうん動作をしたりするときに使用する.
-	 * shitting = trueで�?んうん動作をし、shit=0 にすると�?んうんが出され�?.
-	 * また、うんうん�?�時間経過加算もここで行う.
+	 * うんうん関連処理.
+	 * trueを返すとゆっくりは動かない。直後うんうん動作をしたりするときに使用する.
+	 * shitting = trueでうんうん動作をし、shit=0 にするとうんうんが出される.
+	 * また、うんうんの時間経過加算もここで行う.
 	 * 
-	 * @return こ�?�あと動くかど�?�?
+	 * @return このあと動くかどうか
 	 */
 	public boolean checkShit() {
-		// 実ゆっくりの場�?
+		// 実ゆっくりの場合
 		if (isUnBirth()) {
-			// �?んうんアンプルが刺さって�?�?
+			// うんうんアンプルが刺さっている
 			if (getAttachmentSize(VeryShitAmpoule.class) != 0) {
-				// 限界を�?えた場合�?�チェ�?ク
+				// 限界を超えた場合のチェック
 				if (shit > getSHITLIMITorg()[getBodyAgeState().ordinal()]) {
 					int nNowDamage = 100 * damage / getDamageLimit();
-					// 現在のダメージがダメージ限界の1/10以下ならダメージを与え�?
+					// 現在のダメージがダメージ限界の1/10以下ならダメージを与える
 					if (nNowDamage < 10) {
 						addDamage(Const.NEEDLE * 5);
 					}
 					// あなる閉鎖時
 					if (isAnalClose() || (isFixBack() && isbNeedled())) {
 						setHappiness(Happiness.VERY_SAD);
-						// 破裂寸前まで�?んうんをため�?
+						// 破裂寸前までうんうんをためる
 						if (getBurstState() != Burst.NEAR) {
 							shit += TICK * 2 + (shitBoost * 20);
 						}
@@ -639,7 +637,7 @@ public abstract class Body extends BodyAttributes {
 					}
 					setShitting(false);
 					addStress(100);
-					// 実ゆの場合、親が反応す�?
+					// 実ゆの場合、親が反応する
 					if (SimYukkuri.RND.nextInt(20) == 0) {
 						checkReactionStalkMother(UnbirthBabyState.SAD);
 					}
@@ -650,13 +648,13 @@ public abstract class Body extends BodyAttributes {
 			return true;
 		}
 
-		// �?んうん無効判�?
-		// 溶けて�?る場�?,完�?�足焼きした場�?,食事中、ぺろぺろ中、すっきり中は�?んうんしな�?
+		// うんうん無効判定
+		// 溶けている場合,完全足焼きした場合,食事中、ぺろぺろ中、すっきり中はうんうんしない
 		if ((getFootBakeLevel() == FootBake.CRITICAL && !isPealed()) ||
 				isMelt() || isEating() || isPeropero() || isSukkiri() || isPacked()) {
 			return false;
 		}
-		// レイパ�?�発�?中は�?んうん無効
+		// レイパー発情中はうんうん無効
 		if (isRaper() && isExciting()) {
 			setShitting(false);
 			shit--;
@@ -666,15 +664,15 @@ public abstract class Body extends BodyAttributes {
 			setStaying(false);
 			return false;
 		}
-		// 実�? イベント中は空腹、睡眠、便意が増えな�?ように
+		// 実験 イベント中は空腹、睡眠、便意が増えないように
 		if (getCurrentEvent() != null && getCurrentEvent().getPriority() != EventPacket.EventPriority.LOW) {
 			return false;
 		}
 
-		// �?んうん蓄積�?��?
-		// �?んうん�?��?積�?�減少度判�?
+		// うんうん蓄積処理
+		// うんうんの蓄積の減少度判定
 		int nDown = 1;
-		// �?んうん奴隷
+		// うんうん奴隷
 		if (getPublicRank() == PublicRank.UnunSlave) {
 			if (!isShitting()) {
 				nDown = 5;
@@ -686,7 +684,7 @@ public abstract class Body extends BodyAttributes {
 		}
 
 		boolean cantMove = false;
-		// �?積実�?
+		// 蓄積実行
 		if (SimYukkuri.RND.nextInt(nDown) == 0) {
 			if (isFull()) {
 				shit += TICK * 2 + (shitBoost * 20);
@@ -695,7 +693,7 @@ public abstract class Body extends BodyAttributes {
 			}
 		}
 
-		// ちぎれ状態�?�場合�?�餡子を漏ら�?
+		// ちぎれ状態の場合は餡子を漏らす
 		if ((getCriticalDamege() == CriticalDamegeType.CUT || isPealed()) && getBaryState() == BaryInUGState.NONE) {
 			if (shit > getSHITLIMITorg()[getBodyAgeState().ordinal()] - TICK * Const.SHITSTAY * 2) {
 				SimYukkuri.mypane.getTerrarium().addCrushedVomit(getX() + 3 - SimYukkuri.RND.nextInt(6), getY() - 2, 0,
@@ -711,7 +709,7 @@ public abstract class Body extends BodyAttributes {
 			}
 		}
 
-		// 寝て�?る場合�?��?んうん限界�?�1.5倍までは我�?�できる
+		// 寝ている場合はうんうん限界の1.5倍までは我慢できる
 		if (isSleeping()) {
 			if (shit < (getSHITLIMITorg()[getBodyAgeState().ordinal()] * 1.5f)) {
 				setShitting(false);
@@ -719,39 +717,39 @@ public abstract class Body extends BodyAttributes {
 			}
 		}
 
-		// 非ゆっくり�?ではな�?場�?
+		// 非ゆっくり症ではない場合
 		if (isNotNYD() && getBaryState() == BaryInUGState.NONE) {
-			// �?んうん奴隷ではな�?場�?
+			// うんうん奴隷ではない場合
 			if (getPublicRank() != PublicRank.UnunSlave) {
 				Obj oTarget = takeMoveTarget();
-				// もしトイレに到着して�?たら即排�?へ
+				// もしトイレに到着していたら即排泄へ
 				if (isToShit() && oTarget instanceof Toilet) {
 					if (((Toilet) oTarget).checkHitObj(this)) {
 						if (shit < getSHITLIMITorg()[getBodyAgeState().ordinal()] - TICK * Const.SHITSTAY + 1) {
 							shit = getSHITLIMITorg()[getBodyAgeState().ordinal()] - TICK * Const.SHITSTAY + 1;
 						}
-					} else if (checkOnBed()) {// トイレがある場�?
+					} else if (checkOnBed()) {// トイレがある場合
 						// 大人で寝てたなら起きる
 						if (getBodyAgeState() == AgeState.ADULT && isSleeping()) {
 							wakeup();
 						}
-						// トイレに到着して�?な�?かつベッド�?�上では我�?�する
+						// トイレに到着していないかつベッドの上では我慢する
 						if (shit < (getSHITLIMITorg()[getBodyAgeState().ordinal()] * 1.5f)) {
 							setShitting(false);
 							return false;
 						}
 					} else if ((getAttitude() == Attitude.NICE || getAttitude() == Attitude.VERY_NICE)
 							|| (getAttitude() == Attitude.AVERAGE && getIntelligence() == Intelligence.WISE)) {
-						// 性格が善良か普通でも知能が高けれ�?�トイレに着くまで150%まで我�?�できる
+						// 性格が善良か普通でも知能が高ければトイレに着くまで150%まで我慢できる
 						if (shit < (getSHITLIMITorg()[getBodyAgeState().ordinal()] * 1.5f)) {
 							setShitting(false);
 							return false;
 						}
 					}
 				}
-				// トイレがな�?場�?
+				// トイレがない場合
 				else if (checkOnBed()) {
-					// ベッド�?�上では我�?�する
+					// ベッドの上では我慢する
 					if (shit < (getSHITLIMITorg()[getBodyAgeState().ordinal()] * 1.5f)) {
 						setShitting(false);
 						return false;
@@ -759,11 +757,11 @@ public abstract class Body extends BodyAttributes {
 				}
 			}
 
-			// 限界が近づ�?たら排�?チェ�?ク
+			// 限界が近づいたら排泄チェック
 			if (shit > getSHITLIMITorg()[getBodyAgeState().ordinal()] - TICK * Const.SHITSTAY) {
-				// あなるがふさがれて�?な�?
+				// あなるがふさがれていない
 				if (!isAnalClose() && !(isFixBack() && isbNeedled())) {
-					// 寝て�?るか埋まって�?るか粘着�?(あんよ固�?)につ�?て�?るか針が刺さって�?たら体勢をかえられずに漏ら�?
+					// 寝ているか埋まっているか粘着床(あんよ固定)についているか針が刺さっていたら体勢をかえられずに漏らす
 					if ((isLockmove() && !isFixBack()) || isSleeping() || isbNeedled()
 							|| getBaryState() != BaryInUGState.NONE) {
 						makeDirty(true);
@@ -780,12 +778,12 @@ public abstract class Body extends BodyAttributes {
 					}
 				}
 
-				// 排�?準備
+				// 排泄準備
 				if (isHasPants()) {
 					setHappiness(Happiness.SAD);
 				}
 
-				// あなるがふさがれて�?な�?
+				// あなるがふさがれていない
 				if (!isAnalClose() && !(isFixBack() && isbNeedled())) {
 					if (getAge() % 100 == 0) {
 						if (!isShitting()) {
@@ -809,9 +807,9 @@ public abstract class Body extends BodyAttributes {
 			}
 		}
 
-		// 限界を�?えた場合�?�チェ�?ク
+		// 限界を超えた場合のチェック
 		if (shit > getSHITLIMITorg()[getBodyAgeState().ordinal()]) {
-			// 肛門が塞がれてなければ排�?
+			// 肛門が塞がれてなければ排泄
 			if (!isAnalClose() && !(isFixBack() || isbNeedled()) && getBaryState() == BaryInUGState.NONE) {
 				setShitting(false);
 				clearActions();
@@ -847,7 +845,7 @@ public abstract class Body extends BodyAttributes {
 					addStress(400);
 				}
 			} else {
-				// 塞がってたら膨らんで破�?
+				// 塞がってたら膨らんで破裂
 				wakeup();
 				if (isNotNYD()) {
 					if (getBurstState() == Burst.NEAR) {
@@ -878,16 +876,16 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * 出産関連チェ�?ク.
+	 * 出産関連チェック.
 	 * 
-	 * @return trueで出産に向けて�?っくりが動かなくなる�?
+	 * @return trueで出産に向けてゆっくりが動かなくなる。
 	 */
 	public boolean checkChildbirth() {
-		// こ�?�あと動かなくなるフラグ
+		// このあと動かなくなるフラグ
 		boolean cantMove = false;
 		if (hasBabyOrStalk() || (!hasBabyOrStalk() && isBirth())) {
 			pregnantPeriod += TICK + (pregnantPeriodBoost / 2);
-			// 出産直�?
+			// 出産直前
 			if (pregnantPeriod > getPREGPERIODorg() - TICK * 100) {
 				if (!isBirth() && hasBabyOrStalk()) {
 					setMessage(MessagePool.getMessage(this, MessagePool.Action.Breed), true);
@@ -897,7 +895,7 @@ public abstract class Body extends BodyAttributes {
 				setBirth(true);
 				pregnantPeriodBoost = 0;
 			}
-			// 皮がな�?時�?�出産
+			// 皮がない時の出産
 			if (pregnantPeriod > getPREGPERIODorg() && isPealed()) {
 				damage += 40000;
 				toDead();
@@ -925,22 +923,22 @@ public abstract class Body extends BodyAttributes {
 					cantMove = true;
 				}
 				boolean bBirthFlag = true;
-				// 穴が�?�さがれて�?�?
+				// 穴がふさがれている
 				if (isHasPants() || (isFixBack() && isbNeedled())) {
 					bBirthFlag = false;
 				}
-				// 動けな�?
+				// 動けない
 				if ((isLockmove() && (!isFixBack() || geteCoreAnkoState() != CoreAnkoState.NonYukkuriDisease))
 						&& !isShitting()) {
 					bBirthFlag = false;
 				}
-				// 非ゆっくり�?
-				// 20210415 削除。非�?っくり�?だって出産くら�?するでしょ
+				// 非ゆっくり症
+				// 20210415 削除。非ゆっくり症だって出産くらいするでしょ
 				// if (isNYD()) {
 				// bBirthFlag = false;
 				// }
 				if (!bBirthFlag) {
-					// お�?�の赤�?だけクリア
+					// お腹の赤ゆだけクリア
 					getBabyTypes().clear();
 					makeDirty(true);
 					if (isNotNYD()) {
@@ -960,14 +958,14 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * 睡眠チェ�?クをす�?.
+	 * 睡眠チェックをする.
 	 * 
-	 * @return こ�?�あと動けなくなるフラグ
+	 * @return このあと動けなくなるフラグ
 	 */
 	public boolean checkSleep() {
-		// �?ィフューザーで睡眠妨害されて�?る場合、眠気をなくす
+		// ディフューザーで睡眠妨害されている場合、眠気をなくす
 		if (Terrarium.isNoSleepSteam()) {
-			// 正常な実ゆ以外な�?
+			// 正常な実ゆ以外なら
 			if (!isUnBirth() || !isPlantForUnbirthChild()) {
 				setSleepingPeriod(0);
 				setSleeping(false);
@@ -976,7 +974,7 @@ public abstract class Body extends BodyAttributes {
 			}
 		}
 
-		// 飛行種で眠くなったら地面に降り�?
+		// 飛行種で眠くなったら地面に降りる
 		if (canflyCheck() && isSleepy()) {
 			moveToZ(0);
 			if (z != 0) {
@@ -997,7 +995,7 @@ public abstract class Body extends BodyAttributes {
 			}
 		}
 
-		// 飢餓状態�?�時�?�起きる
+		// 飢餓状態の時は起きる
 		if (isSleeping() && isStarving()) {
 			setMessage(MessagePool.getMessage(this, MessagePool.Action.Hungry));
 			setHappiness(Happiness.SAD);
@@ -1032,7 +1030,7 @@ public abstract class Body extends BodyAttributes {
 				wakeup();
 			}
 		} else {
-			// 実�? イベント中は空腹、睡眠、便意が増えな�?ように
+			// 実験 イベント中は空腹、睡眠、便意が増えないように
 			if (getCurrentEvent() != null)
 				return false;
 			sleepingPeriod = 0;
@@ -1047,9 +1045,9 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * ベッド�?�上に�?るかど�?かをチェ�?クする.
+	 * ベッドの上にいるかどうかをチェックする.
 	 * 
-	 * @return ベッド�?�上に�?るかど�?�?
+	 * @return ベッドの上にいるかどうか
 	 */
 	public boolean checkOnBed() {
 		Rectangle r = takeScreenRect();
@@ -1070,8 +1068,8 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * 死ねな�?期間かど�?かをチェ�?クする.
-	 * TICKで期間�?1減ら�?.
+	 * 死ねない期間かどうかをチェックする.
+	 * TICKで期間を1減らす.
 	 */
 	public void checkCantDie() {
 		if (cantDiePeriod > 0) {
@@ -1080,8 +1078,8 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * 寝て�?るゆっくりを起こす.
-	 * また�?�寝て�?るゆっくりが起きる.
+	 * 寝ているゆっくりを起こす.
+	 * または寝ているゆっくりが起きる.
 	 */
 	public void wakeup() {
 		setSleepingPeriod(0);
@@ -1091,23 +1089,23 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * プレイヤーにすりすりされたとき�?�処�?.
+	 * プレイヤーにすりすりされたときの処理.
 	 * 
-	 * @return 感情処�?を終えるかど�?�?
+	 * @return 感情処理を終えるかどうか
 	 */
 	public boolean doSurisuriByPlayer() {
-		// プレイヤーにすりすりされて�?な�?なら終�?
+		// プレイヤーにすりすりされていないなら終了
 		if (!isbSurisuriFromPlayer()) {
 			return false;
 		}
 
 		boolean bFlag = false;
-		// 初回なら時間を初期�?
+		// 初回なら時間を初期化
 		if (lnLastTimeSurisuri == 0) {
 			lnLastTimeSurisuri = System.currentTimeMillis();
 			bFlag = true;
 		} else {
-			// 二回目以降�?�前回より3秒以上経過してたら処�?実�?
+			// 二回目以降は前回より3秒以上経過してたら処理実行
 			long lnTimeNow = System.currentTimeMillis();
 			long lnSec = lnTimeNow - lnLastTimeSurisuri;
 			if (2000 < lnSec) {
@@ -1120,7 +1118,7 @@ public abstract class Body extends BodyAttributes {
 			return false;
 		}
 
-		// 動けな�?場�?,パニ�?ク中,すぃーに乗って�?�?
+		// 動けない場合,パニック中,すぃーに乗っている
 		if ((isLockmove()) ||
 				(getPanicType() != null) ||
 				(isSleeping()) ||
@@ -1129,18 +1127,18 @@ public abstract class Body extends BodyAttributes {
 		}
 
 		// -----------------------------------------------------------
-		// 処�?を�??けよ�?
-		// 無反応：�?�ット�?�レート、ミキサー、足焼き、寝て�?る時、す�?ーに乗って�?る�?
-		// すっきりー?���?�奮中
-		// 痛み?���?�が刺さって�?る、足カ�?ト、痛みを感じて�?る、瀕死
-		// 拒絶?��レイプされて�?る、うんうん中�?食事中、�?�産中、攻�?して�?る、攻�?されて�?る�?
+		// 処理を分けよう
+		// 無反応：ホットプレート、ミキサー、足焼き、寝ている時、すぃーに乗っている、
+		// すっきりー：興奮中
+		// 痛み：針が刺さっている、足カット、痛みを感じている、瀕死
+		// 拒絶：レイプされている、うんうん中、食事中、出産中、攻撃している、攻撃されている、
 		// -----------------------------------------------------------
 		if (isNYD()) {
 			return false;
 		}
 
-		// すりすり実�?
-		// 興奮�?
+		// すりすり実行
+		// 興奮時
 		if (isExciting()) {
 			// すっきりー
 			if (SimYukkuri.RND.nextInt(5) == 0) {
@@ -1151,16 +1149,16 @@ public abstract class Body extends BodyAttributes {
 				setExciting(false);
 				setHappiness(Happiness.HAPPY);
 				clearActions();
-				// なつき度設�?
+				// なつき度設定
 				addLovePlayer(100);
 
-				// おくるみは�?てたら茎が生え�?
+				// おくるみはいてたら茎が生える
 				if (isHasPants()) {
 					dripSperm(getDna());
 				}
 			} else {
 				stayPurupuru(30);
-				// なつき度設�?
+				// なつき度設定
 				addLovePlayer(10);
 				if (isRaper()) {
 					setMessage(MessagePool.getMessage(this, MessagePool.Action.ExciteForRaper));
@@ -1172,7 +1170,7 @@ public abstract class Body extends BodyAttributes {
 			return true;
 		}
 
-		// �?断されて�?る場�?
+		// 切断されている場合
 		if ((getCriticalDamege() == CriticalDamegeType.CUT) ||
 				(getFootBakeLevel() == FootBake.CRITICAL) ||
 				isDamaged() ||
@@ -1181,7 +1179,7 @@ public abstract class Body extends BodyAttributes {
 			stayPurupuru(20);
 			setHappiness(Happiness.VERY_SAD);
 			addStress(100);
-			// なつき度設�?
+			// なつき度設定
 			addLovePlayer(-20);
 			setForceFace(ImageCode.PAIN.ordinal());
 			clearActions();
@@ -1194,15 +1192,15 @@ public abstract class Body extends BodyAttributes {
 			return true;
 		}
 
-		// 針が刺さって�?る場�?
+		// 針が刺さっている場合
 		if (isbNeedled()) {
 			stayPurupuru(40);
 			setHappiness(Happiness.VERY_SAD);
 			addStress(50);
-			// なつき度設�?
+			// なつき度設定
 			addLovePlayer(-20);
 			setForceFace(ImageCode.PAIN.ordinal());
-			// ぐ�?�りぐーりされた時�?�メ�?セージ
+			// ぐーりぐーりされた時のメッセージ
 			if (SimYukkuri.RND.nextBoolean())
 				setMessage(MessagePool.getMessage(this, MessagePool.Action.NeedlePain), 60, true, false);
 			else
@@ -1211,10 +1209,10 @@ public abstract class Body extends BodyAttributes {
 			return true;
 		}
 
-		// �?フォルトすりす�?
+		// デフォルトすりすり
 		addStress(-100);
 		stay(40);
-		// なつき度設�?
+		// なつき度設定
 		addLovePlayer(10);
 		setHappiness(Happiness.VERY_HAPPY);
 		setForceFace(ImageCode.CHEER.ordinal());
@@ -1232,7 +1230,7 @@ public abstract class Body extends BodyAttributes {
 		}
 
 		clearActions();
-		// 低確�?で寝る
+		// 低確率で寝る
 		if (SimYukkuri.RND.nextInt(20) == 0) {
 			forceToSleep();
 		}
@@ -1243,7 +1241,7 @@ public abstract class Body extends BodyAttributes {
 	 * 自身の状態に対する反応を記述する.
 	 */
 	public void checkEmotion() {
-		// 怒り状態�?�経過
+		// 怒り状態の経過
 		if (isAngry()) {
 			angryPeriod += TICK;
 			if (angryPeriod > getANGRYPERIODorg()) {
@@ -1251,7 +1249,7 @@ public abstract class Body extends BodyAttributes {
 				setAngry(false);
 			}
 		}
-		// 恐怖状態�?�経過
+		// 恐怖状態の経過
 		if (isScare()) {
 			scarePeriod += TICK;
 			if (scarePeriod > getSCAREPERIODorg()) {
@@ -1259,7 +1257,7 @@ public abstract class Body extends BodyAttributes {
 				setScare(false);
 			}
 		}
-		// 落ち込み状態�?�経過
+		// 落ち込み状態の経過
 		if (getHappiness() == Happiness.VERY_SAD) {
 			sadPeriod--;
 			if (sadPeriod < 0) {
@@ -1267,7 +1265,7 @@ public abstract class Body extends BodyAttributes {
 				setHappiness(Happiness.SAD);
 			}
 		}
-		// お遊び状態�?�経過
+		// お遊び状態の経過
 		if (getPlaying() != null) {
 			playingLimit--;
 			boolean P = false;
@@ -1290,7 +1288,7 @@ public abstract class Body extends BodyAttributes {
 			}
 		}
 
-		// 非ゆっくり�?チェ�?ク
+		// 非ゆっくり症チェック
 		if (checkNonYukkuriDisease()) {
 			return;
 		}
@@ -1298,12 +1296,12 @@ public abstract class Body extends BodyAttributes {
 		else if (getCurrentEvent() != null) {
 			return;
 		}
-		// プレイヤーにすりすりされて�?�?
+		// プレイヤーにすりすりされている
 		else if (doSurisuriByPlayer()) {
 			return;
 		}
 
-		// �?んやー
+		// ゆんやー
 		if (isYunnyaa() && !isSleeping()) {
 			setMessage(MessagePool.getMessage(this, MessagePool.Action.Yunnyaa), 30, false, true);
 			setYunnyaa(true);
@@ -1311,7 +1309,7 @@ public abstract class Body extends BodyAttributes {
 			setHappiness(Happiness.VERY_SAD);
 			return;
 		}
-		// 加工中を想定した反�?
+		// 加工中を想定した反応
 		else if ((isDamaged() || hasDisorder()) && isbOnDontMoveBeltconveyor() && !hasBabyOrStalk() && !isPealed()) {
 			if (SimYukkuri.RND.nextInt(80) == 0) {
 				begForLife();
@@ -1322,8 +1320,8 @@ public abstract class Body extends BodyAttributes {
 						Const.HOLDMESSAGE, true, SimYukkuri.RND.nextBoolean(), false);
 			}
 		}
-		// 状態異常�?
-		// 足�?断
+		// 状態異常時
+		// 足切断
 		else if (getCriticalDamege() == CriticalDamegeType.CUT || isPealed() || isPacked()) {
 			return;
 		}
@@ -1331,11 +1329,11 @@ public abstract class Body extends BodyAttributes {
 		else if (checkEmotionBlind()) {
 			return;
 		}
-		// しゃべれな�?
+		// しゃべれない
 		else if (checkEmotionCantSpeak()) {
 			return;
 		}
-		// 粘着系オブジェクト�?�貼り付け状�?
+		// 粘着系オブジェクトの貼り付け状態
 		else if (checkEmotionLockmove()) {
 			return;
 		}
@@ -1347,17 +1345,17 @@ public abstract class Body extends BodyAttributes {
 		else if (TrashLogic.checkTrashOkazari(this)) {
 			return;
 		}
-		// おかざり、�?�こ�?�こな�?
+		// おかざり、ぴこぴこなし
 		else if (checkEmotionNoOkazariPikopiko()) {
 			return;
 		}
-		// 興奮�?
+		// 興奮時
 		else if (isExciting()) {
 			setRelax(false);
 			return;
 		}
 
-		// 空腹�?
+		// 空腹時
 		if (isHungry() && SimYukkuri.RND.nextInt(50) == 0) {
 			if (isSoHungry())
 				setHappiness(Happiness.SAD);
@@ -1365,13 +1363,13 @@ public abstract class Body extends BodyAttributes {
 			stay();
 		}
 
-		// 通常�?
-		// �?んうん奴隷の場�?
+		// 通常時
+		// うんうん奴隷の場合
 		// 食事検索、トイレ検索時にもろもろのセリフを吐く
 		if (getPublicRank() == PublicRank.UnunSlave || isMelt()) {
 			setHappiness(Happiness.SAD);
 			excitingPeriod = 0;
-			// 強制発�?ではな�?場�?
+			// 強制発情ではない場合
 			if ((!isVeryRude() || getIntelligence() != Intelligence.FOOL) && isExciting() && !isbForceExciting()) {
 				setCalm();
 				setForceFace(ImageCode.TIRED.ordinal());
@@ -1383,9 +1381,9 @@ public abstract class Body extends BodyAttributes {
 			return;
 		}
 
-		// 汚れ時�?�反�?
+		// 汚れ時の反応
 		if (isNormalDirty() && !isSleeping()) {
-			// 大人と、善良子ゆは勝手にきれ�?にする
+			// 大人と、善良子ゆは勝手にきれいにする
 			if (isAdult() || (isChild() && isSmart())) {
 				if (SimYukkuri.RND.nextInt(600) == 0)
 					cleaningItself();
@@ -1403,7 +1401,7 @@ public abstract class Body extends BodyAttributes {
 			dirtyScreamPeriod = 0;
 		}
 
-		// �?っくりしてると�?
+		// ゆっくりしてるとき
 		if (noHungryPeriod > getRELAXPERIODorg() && noDamagePeriod > getRELAXPERIODorg()
 				&& !isSleeping() && !isShitting() && !isEating()
 				&& !isSad() && !isVerySad() && !isFeelPain()
@@ -1422,17 +1420,17 @@ public abstract class Body extends BodyAttributes {
 				} else if (!isSoHungry() && !wantToShit()) {
 					r = SimYukkuri.RND.nextInt(24 + adjust);
 				}
-				// すっきりーしに�?く条件判�?
+				// すっきりーしにいく条件判定
 				boolean bToExcite = false;
-				// ぺにぺにがな�?とダメ
+				// ぺにぺにがないとダメ
 				if (isbPenipeniCutted()) {
 					r = 1;
 				}
-				// 大人じゃな�?と�?らな�?(ドゲスの子ゆ除�?)
+				// 大人じゃないとやらない(ドゲスの子ゆ除く)
 				if (!isAdult() && !(isChild() && isVeryRude())) {
 					r = 1;
 				}
-				// 妊娠してるとしな�?
+				// 妊娠してるとしない
 				if (hasBabyOrStalk() && !isRaper()) {
 					r = 1;
 				}
@@ -1445,17 +1443,17 @@ public abstract class Body extends BodyAttributes {
 						setHappiness(Happiness.SAD);
 						setMessage(MessagePool.getMessage(this, MessagePool.Action.WantPartner));
 					}
-					// 他に�?っくりがい�?
+					// 他にゆっくりがいる
 					else {
-						// レイパ�?�
+						// レイパー
 						if (isRapist()) {
 							if (isRapist() && FamilyActionLogic.isRapeTarget()) {
 								bToExcite = true;
 							}
 						} else {
-							// 自�?の通常の子ゆリスト作�??
+							// 自分の通常の子ゆリスト作成
 							List<Body> childrenList = BodyLogic.createActiveChildList(this, true);
-							// パ�?�トナーがいる場�?
+							// パートナーがいる場合
 							Body pa = YukkuriUtil.getBodyInstance(getPartner());
 							if (pa != null) {
 								if (isVeryRude()) {
@@ -1467,26 +1465,26 @@ public abstract class Body extends BodyAttributes {
 									} else {
 										switch (getIntelligence()) {
 											case WISE:
-												// 賢�?のは3匹以下で子づくり
+												// 賢いのは3匹以下で子づくり
 												if (childrenList.size() <= 3) {
 													bToExcite = true;
 												}
 												break;
 											case AVERAGE:
-												// 普通�?�知能は10匹以下で子づくり
+												// 普通の知能は10匹以下で子づくり
 												if (childrenList.size() <= 10) {
 													bToExcite = true;
 												}
 												break;
 											case FOOL:
-												// 餡子脳は子�?�数を気にしな�?
+												// 餡子脳は子の数を気にしない
 												bToExcite = true;
 												break;
 										}
 									}
 								}
 							} else {
-								// 独身orバツイチ�?�、相手を探すために興奮する
+								// 独身orバツイチは、相手を探すために興奮する
 								bToExcite = true;
 							}
 						}
@@ -1520,7 +1518,7 @@ public abstract class Body extends BodyAttributes {
 					}
 					setRelax(false);
 				}
-				// 興奮して�?る場合、たまにつぶ�?�?
+				// 興奮している場合、たまにつぶやく
 				if (isExciting()) {
 					if (SimYukkuri.RND.nextInt(30) == 0) {
 						if (isRaper()) {
@@ -1535,8 +1533,8 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * �?っくりしてる時のアクション.
-	 * 個別の動作がある種ははこれをオーバ�?�ライドして�?る�?�で注�?.
+	 * ゆっくりしてる時のアクション.
+	 * 個別の動作がある種ははこれをオーバーライドしているので注意.
 	 */
 	public void killTime() {
 		if (getCurrentEvent() != null)
@@ -1544,7 +1542,7 @@ public abstract class Body extends BodyAttributes {
 		if (getPlaying() != null)
 			return;
 		int p = SimYukkuri.RND.nextInt(50);
-		// 6/50でキリ�?
+		// 6/50でキリッ
 		if (p <= 5) {
 			getInVain(true);
 		}
@@ -1556,7 +1554,7 @@ public abstract class Body extends BodyAttributes {
 			addStress(-50);
 			stay(40);
 		}
-		// 6/50でふり�?��?
+		// 6/50でふりふり
 		else if (p <= 17 && willingFurifuri()) {
 			// if yukkuri is rude, she will not do furifuri by discipline.
 			setMessage(MessagePool.getMessage(this, MessagePool.Action.FuriFuri), 40);
@@ -1564,13 +1562,13 @@ public abstract class Body extends BodyAttributes {
 			addStress(-70);
 			stay(30);
 		}
-		// 6/50で腹減っ�?
+		// 6/50で腹減った
 		else if ((p <= 23 && isHungry()) || isSoHungry()) {
-			// 空腹�?
+			// 空腹時
 			setMessage(MessagePool.getMessage(this, MessagePool.Action.Hungry), 30);
 			stay(30);
 		}
-		// 6/50でおもち�?で遊�?�
+		// 6/50でおもちゃで遊ぶ
 		else if (p <= 29) {
 			if (ToyLogic.checkToy(this)) {
 				setPlaying(PlayStyle.BALL);
@@ -1579,7 +1577,7 @@ public abstract class Body extends BodyAttributes {
 			} else
 				killTime();
 		}
-		// 6/50でトランポリンで遊�?�
+		// 6/50でトランポリンで遊ぶ
 		else if (p <= 35) {
 			if (ToyLogic.checkTrampoline(this)) {
 				setPlaying(PlayStyle.TRAMPOLINE);
@@ -1588,7 +1586,7 @@ public abstract class Body extends BodyAttributes {
 			} else
 				killTime();
 		}
-		// 6/50ですいーで遊�?�
+		// 6/50ですいーで遊ぶ
 		else if (p <= 41) {
 			if (ToyLogic.checkSui(this)) {
 				setPlaying(PlayStyle.SUI);
@@ -1597,7 +1595,7 @@ public abstract class Body extends BodyAttributes {
 			} else
 				killTime();
 		} else {
-			// おくるみありで汚れて�?な�?場�?
+			// おくるみありで汚れていない場合
 			if ((isHasPants()) && !isDirty() && (SimYukkuri.RND.nextInt(10) == 0)) {
 				setMessage(MessagePool.getMessage(this, MessagePool.Action.RelaxOkurumi));
 			} else {
@@ -1609,7 +1607,7 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * 遊�?�のをやめる.
+	 * 遊ぶのをやめる.
 	 */
 	public void stopPlaying() {
 		setPlaying(null);
@@ -1617,9 +1615,9 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * キリ�?とする
+	 * キリッとする
 	 * 
-	 * @param TF キリ�??��メ�?セージを�?�すかど�?�?
+	 * @param TF キリッ！メッセージを出すかどうか
 	 */
 	public void getInVain(boolean TF) {
 		if (TF)
@@ -1632,42 +1630,42 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * 非ゆっくり�?チェ�?クを行う�?
-	 * ・基�?
-	 * 足りな�?�?はほぼ非ゆっくり�?にならな�?
-	 * �?んうん奴隷は常に甘いも�?�?��うんうん）を食べて�?る�?�でほぼ非ゆっくり�?にならな�?
-	 * �?良?��ゲスで耐性高い
-	 * 赤�?、実ゆ?��子供＜大人で耐性高い
+	 * 非ゆっくり症チェックを行う。
+	 * ・基礎
+	 * 足りないゆはほぼ非ゆっくり症にならない
+	 * うんうん奴隷は常に甘いもの（うんうん）を食べているのでほぼ非ゆっくり症にならない
+	 * 善良＜ゲスで耐性高い
+	 * 赤ゆ、実ゆ＜子供＜大人で耐性高い
 	 * バッヂ級＜餡子脳で耐性高い
-	 * レイパ�?�は非ゆっくり�?にならな�?
-	 * ・環�?
-	 * 完�?�空腹の場合に耐性Down
-	 * 足焼き�?�度合いに応じて耐性Down
+	 * レイパーは非ゆっくり症にならない
+	 * ・環境
+	 * 完全空腹の場合に耐性Down
+	 * 足焼きの度合いに応じて耐性Down
 	 * カビが生えると耐性Down
-	 * お飾りがな�?と耐性Down
-	 * ぴこ�?�こがな�?と耐性Down
-	 * ぺにぺにがな�?と耐性�?Down
-	 * 汚れて�?ると耐性Down
-	 * 固定されて�?ると耐性Down
+	 * お飾りがないと耐性Down
+	 * ぴこぴこがないと耐性Down
+	 * ぺにぺにがないと耐性超Down
+	 * 汚れていると耐性Down
+	 * 固定されていると耐性Down
 	 * 盲目だと耐性Down
-	 * 口が�?�さがれてると耐性Down
+	 * 口がふさがれてると耐性Down
 	 * ケガしてると耐性Down
-	 * 生きて�?る子供�?�数だけ耐性Up
-	 * 死んで�?る子供�?�数だけ耐性Down
+	 * 生きている子供の数だけ耐性Up
+	 * 死んでいる子供の数だけ耐性Down
 	 * ・つらい思い出
 	 * 他ゆの死体を見ると耐性Down
 	 * 他ゆ食いで吐餡してたら耐性Down
-	 * 生ごみ、辛い餌、苦�?餌を食べると耐性Down
-	 * 出産失敗で耐性�?Down
-	 * ・�?�?思い出
+	 * 生ごみ、辛い餌、苦い餌を食べると耐性Down
+	 * 出産失敗で耐性超Down
+	 * ・いい思い出
 	 * すっきりすると耐性Up
 	 * 出産時に応援する、応援されると耐性Up
 	 * 出産成功で耐性Up
-	 * 茎を食べると耐性�?Up
-	 * あまあまを食べると耐性�?Up
+	 * 茎を食べると耐性超Up
+	 * あまあまを食べると耐性超Up
 	 * すりすりされると耐性Up
 	 * ぺろぺろされると耐性Up
-	 * �?んうん体操に参加すると耐性Up
+	 * うんうん体操に参加すると耐性Up
 	 * すぃーにのると耐性Up
 	 */
 	@Override
@@ -1777,12 +1775,12 @@ public abstract class Body extends BodyAttributes {
 				if (bChild == null || bChild.isAdult()) {
 					continue;
 				}
-				// 死んで�?
+				// 死んでる
 				if (bChild.isRemoved() || bChild.isDead()) {
 					nTolerance -= 10;
 					continue;
 				}
-				// 死にかけて�?
+				// 死にかけてる
 				if (bChild.isCrushed() || bChild.isDamaged() || bChild.isBurned() || findSick(bChild)
 						|| bChild.isTooHungry()) {
 					nTolerance -= 3;
@@ -1792,7 +1790,7 @@ public abstract class Body extends BodyAttributes {
 					nTolerance -= 5;
 					continue;
 				}
-				// 大丈夫っぽ�?
+				// 大丈夫っぽい
 				nTolerance += 10;
 			}
 		}
@@ -1803,12 +1801,12 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * 非ゆっくり�?チェ�?ク
+	 * 非ゆっくり症チェック
 	 * 
-	 * @return そ�?�後�?�処�?をキャンセルするかど�?�?
+	 * @return その後の処理をキャンセルするかどうか
 	 */
 	private boolean checkNonYukkuriDisease() {
-		// 非ゆっくり�?防止�?ィフューザー�?非ゆっくり�?防止アンプルの際�?�非ゆっくり�?にならな�?/治�?
+		// 非ゆっくり症防止ディフューザー、非ゆっくり症防止アンプルの際は非ゆっくり症にならない/治る
 		if (Terrarium.isAntiNonYukkuriDiseaseSteam() || getAttachmentSize(ANYDAmpoule.class) != 0) {
 			seteCoreAnkoState(CoreAnkoState.DEFAULT);
 			return false;
@@ -1816,7 +1814,7 @@ public abstract class Body extends BodyAttributes {
 
 		int nStressLimit = getSTRESSLIMITorg()[getBodyAgeState().ordinal()];
 		int nTolerance = checkNonYukkuriDiseaseTolerance();
-		// ストレス限界を�?えて�?る場�?
+		// ストレス限界を超えている場合
 		if (nStressLimit * nTolerance / 100 < getStress()) {
 			// 初回
 			if (isNotNYD()) {
@@ -1824,7 +1822,7 @@ public abstract class Body extends BodyAttributes {
 				nonYukkuriDiseasePeriod = 0;
 				speed = speed / 2;
 			}
-			// ストレス限界の2倍を�?えて�?る場�?
+			// ストレス限界の2倍を超えている場合
 			if (nStressLimit * nTolerance / 100 * 2 < getStress()) {
 				// 初回
 				if (geteCoreAnkoState() == CoreAnkoState.NonYukkuriDiseaseNear) {
@@ -1833,20 +1831,20 @@ public abstract class Body extends BodyAttributes {
 				}
 			}
 		} else {
-			// 復帰�?
+			// 復帰時
 			if (isNYD()) {
 				speed = speed * 2;
 			}
 			seteCoreAnkoState(CoreAnkoState.DEFAULT);
 		}
 
-		// 通常のままなら終�?
+		// 通常のままなら終了
 		if (isNotNYD()) {
 			nonYukkuriDiseasePeriod = 0;
 			return false;
 		}
 
-		// 生まれて�?な�?なら反応�?�示さな�?けど判定チェ�?クにひかか�?
+		// 生まれていないなら反応は示さないけど判定チェックにひかかる
 		if (isUnBirth()) {
 			return true;
 		}
@@ -1858,7 +1856,7 @@ public abstract class Body extends BodyAttributes {
 		if (isNYD() && isSleeping()) {
 			wakeup();
 		}
-		// 非ゆっくり�?初期
+		// 非ゆっくり症初期
 		if (geteCoreAnkoState() == CoreAnkoState.NonYukkuriDiseaseNear && SimYukkuri.RND.nextInt(nRnd) == 0) {
 			switch (nonYukkuriDiseasePeriod) {
 				case 0:
@@ -1911,12 +1909,12 @@ public abstract class Body extends BodyAttributes {
 					break;
 			}
 			addStress(100);
-			addMemories(-1);// 耐性が減って�?�?
+			addMemories(-1);// 耐性が減っていく
 			setHappiness(Happiness.VERY_SAD);
 			setNYDMessage(MessagePool.getMessage(this, MessagePool.Action.NonYukkuriDiseaseNear), false);
 		}
 		nRnd = 20;
-		// 非ゆっくり�?
+		// 非ゆっくり症
 		if (geteCoreAnkoState() == CoreAnkoState.NonYukkuriDisease && SimYukkuri.RND.nextInt(nRnd) == 0) {
 			switch (nonYukkuriDiseasePeriod) {
 				case 0:
@@ -1990,7 +1988,7 @@ public abstract class Body extends BodyAttributes {
 					break;
 			}
 			addStress(300);
-			addMemories(-5);// 耐性が減って�?�?
+			addMemories(-5);// 耐性が減っていく
 			setHappiness(Happiness.VERY_SAD);
 			setNYDMessage(MessagePool.getMessage(this, MessagePool.Action.NonYukkuriDisease), false);
 			if (SimYukkuri.RND.nextInt(nRnd) == 0)
@@ -2000,9 +1998,9 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * 盲目時�?�基本反�?.
+	 * 盲目時の基本反応.
 	 * 
-	 * @return そ�?�後�?�処�?をキャンセルするかど�?�?
+	 * @return その後の処理をキャンセルするかどうか
 	 */
 	public boolean checkEmotionBlind() {
 		if (isBlind()) {
@@ -2020,9 +2018,9 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * 口封じ時�?�基本反�?
+	 * 口封じ時の基本反応
 	 * 
-	 * @return そ�?�後�?�処�?をキャンセルするかど�?�?
+	 * @return その後の処理をキャンセルするかどうか
 	 */
 	public boolean checkEmotionCantSpeak() {
 		//
@@ -2039,23 +2037,23 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * 動けな�?時�?�基本反�?.
+	 * 動けない時の基本反応.
 	 * 
-	 * @return そ�?�後�?�処�?をキャンセルするかど�?�?
+	 * @return その後の処理をキャンセルするかどうか
 	 */
 	public boolean checkEmotionLockmove() {
-		// 動けるとき、すっきりしてる時、埋まってな�?時�?�リターン
+		// 動けるとき、すっきりしてる時、埋まってない時はリターン
 		if (!isLockmove() || isSukkiri() || (getFootBakeLevel() != FootBake.NONE
 				&& (getBaryState() == BaryInUGState.NONE || getBaryState() == BaryInUGState.HALF))) {
 			return false;
 		}
 
-		// 寝てる時と掴まれてる時�?
+		// 寝てる時と掴まれてる時も
 		if (isSleeping() || grabbed) {
 			setLockmovePeriod(0);
 			return false;
 		}
-		// イベント中�?
+		// イベント中も
 		if (getCurrentEvent() != null) {
 			setLockmovePeriod(0);
 			return false;
@@ -2065,12 +2063,12 @@ public abstract class Body extends BodyAttributes {
 		if (isTalking()) {
 			return false;
 		}
-		// 以下、し�?べってな�?�?
+		// 以下、しゃべってない時
 
 		if (lockmovePeriod < 400) {
 			if (SimYukkuri.RND.nextInt(15) == 0) {
 				clearActions();
-				// 土に埋まって�?る場合�?�苦し�?�
+				// 土に埋まっている場合は苦しむ
 				if (getBaryState() == BaryInUGState.ALL || getBaryState() == BaryInUGState.NEARLY_ALL) {
 					setHappiness(Happiness.VERY_SAD);
 					setMessage(MessagePool.getMessage(this, MessagePool.Action.BaryInUnderGround));
@@ -2085,13 +2083,13 @@ public abstract class Body extends BodyAttributes {
 				return true;
 			}
 			if (isHungry() && SimYukkuri.RND.nextInt(50) == 0) {
-				// 空腹�?
+				// 空腹時
 				setMessage(MessagePool.getMessage(this, MessagePool.Action.Hungry), 30);
 				setHappiness(Happiness.SAD);
 				stay(30);
 			} else if (SimYukkuri.RND.nextInt(15) == 0) {
 				clearActions();
-				// 土に埋まって�?る場合�?�苦し�?�
+				// 土に埋まっている場合は苦しむ
 				if (getBaryState() == BaryInUGState.ALL || getBaryState() == BaryInUGState.NEARLY_ALL) {
 					setHappiness(Happiness.VERY_SAD);
 					setMessage(MessagePool.getMessage(this, MessagePool.Action.BaryInUnderGround));
@@ -2111,16 +2109,16 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * 足焼き済みの基本反�?
+	 * 足焼き済みの基本反応
 	 * 
-	 * @return そ�?�後�?�処�?をキャンセルするかど�?�?
+	 * @return その後の処理をキャンセルするかどうか
 	 */
 	public boolean checkEmotionFootbake() {
-		// すっきり中と、足焼き無し�?�除�?
+		// すっきり中と、足焼き無しは除外
 		if (getFootBakeLevel() == FootBake.NONE || isSukkiri()) {
 			return false;
 		}
-		// 寝て�?るとき、掴まれて�?るときも除�?
+		// 寝ているとき、掴まれているときも除外
 		if (isSleeping() || grabbed) {
 			lockmovePeriod = 0;
 			return false;
@@ -2131,7 +2129,7 @@ public abstract class Body extends BodyAttributes {
 			return false;
 		}
 
-		// 足焼き（中?�?
+		// 足焼き（中）
 		if (getFootBakeLevel() == FootBake.MIDIUM) {
 			if (SimYukkuri.RND.nextInt(15) == 0) {
 				clearActions();
@@ -2141,13 +2139,13 @@ public abstract class Body extends BodyAttributes {
 				return true;
 			}
 			if (isHungry() && SimYukkuri.RND.nextInt(400) == 0) {
-				// 空腹�?
+				// 空腹時
 				setMessage(MessagePool.getMessage(this, MessagePool.Action.Hungry), 30);
 				setHappiness(Happiness.SAD);
 				return true;
 			}
 		}
-		// 足焼�?(完�?�)
+		// 足焼き(完全)
 		else if (getFootBakeLevel() == FootBake.CRITICAL) {
 			if (lockmovePeriod < 300) {
 				if (SimYukkuri.RND.nextInt(15) == 0) {
@@ -2162,7 +2160,7 @@ public abstract class Body extends BodyAttributes {
 					return true;
 				}
 				if (isHungry() && SimYukkuri.RND.nextInt(50) == 0) {
-					// 空腹�?
+					// 空腹時
 					setMessage(MessagePool.getMessage(this, MessagePool.Action.Hungry), 30);
 					setHappiness(Happiness.VERY_SAD);
 					stay();
@@ -2186,21 +2184,21 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * おかざり、�?�こ�?�こなし�?�とき�?�基本反�?
+	 * おかざり、ぴこぴこなしのときの基本反応
 	 * 
-	 * @return そ�?�後�?�処�?をキャンセルするかど�?�?
+	 * @return その後の処理をキャンセルするかどうか
 	 */
 	public boolean checkEmotionNoOkazariPikopiko() {
-		// おかざりとぴこ�?�こあり、また�?�すっきり中は除�?
+		// おかざりとぴこぴこあり、またはすっきり中は除外
 		if ((hasOkazari() && isHasBraid()) || isSukkiri()) {
 			return false;
 		}
-		// 寝て�?るとき、また�?�掴まれて�?るときも除�?
+		// 寝ているとき、または掴まれているときも除外
 		if (isSleeping() || grabbed) {
 			lockmovePeriod = 0;
 			return false;
 		}
-		// 喋って�?るときも除�?
+		// 喋っているときも除外
 		if (isTalking()) {
 			return false;
 		}
@@ -2217,10 +2215,10 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * �?か�?�に感染して�?る際の基本反�?
+	 * ゆかびに感染している際の基本反応
 	 */
 	public void checkSick() {
-		// ?��汚くてダメージを受けて�?る、また�?��?ィフューザーで湿度が高まって�?てダメージを受けて�?る）、かつ�?ィフューザーで�?か�?�禁止になって�?な�?と�?
+		// （汚くてダメージを受けている、またはディフューザーで湿度が高まっていてダメージを受けている）、かつディフューザーでゆかび禁止になっていないとき
 		if (((isDirty() && isDamaged()) || (Terrarium.isHumid() && damage > 0)) && !Terrarium.isAntifungalSteam()) {
 			if (Terrarium.isHumid()) {
 				dirtyPeriod += TICK * 4;
@@ -2298,9 +2296,9 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * ただのパニ�?ク汎用
+	 * ただのパニック汎用
 	 * 
-	 * @return 何もしな�?イベン�?
+	 * @return 何もしないイベント
 	 */
 	public Event checkFear() {
 		if (isNYD() || isUnBirth()) {
@@ -2332,10 +2330,10 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * 濡れて�?るとき�?�基本反�?.
+	 * 濡れているときの基本反応.
 	 */
 	public void checkWet() {
-		// 濡れても溶けてもな�?なら抜ける
+		// 濡れても溶けてもないなら抜ける
 		if (!isWet() && !isMelt())
 			return;
 
@@ -2345,7 +2343,7 @@ public abstract class Body extends BodyAttributes {
 			wetPeriod = 0;
 		}
 		if (!isLikeWater()) {
-			// 50%以上�?�ダメージ中か、皮がな�?時に濡れたら溶ける
+			// 50%以上のダメージ中か、皮がない時に濡れたら溶ける
 			if (isDamaged() || isPealed()) {
 				setMelt(true);
 			}
@@ -2358,8 +2356,8 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * ストレスチェ�?ク.
-	 * ストレスが�?�イナスな�?0にする.
+	 * ストレスチェック.
+	 * ストレスがマイナスなら0にする.
 	 */
 	public final void checkStress() {
 		if (stress < 0)
@@ -2367,7 +2365,7 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * バカ舌チェ�?ク.
+	 * バカ舌チェック.
 	 */
 	public final void checkTang() {
 		if (getTang() < 0)
@@ -2377,7 +2375,7 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * メ�?セージを�?�すかど�?�?.
+	 * メッセージを出すかどうか.
 	 */
 	public void checkMessage() {
 		--messageCount;
@@ -2399,7 +2397,7 @@ public abstract class Body extends BodyAttributes {
 			setYunnyaa(false);
 			setInOutTakeoutItem(false);
 		}
-		// しゃべれな�?or生まれて�?な�?or非ゆっくり�?
+		// しゃべれないor生まれていないor非ゆっくり症
 		if (isSilent() || isUnBirth() || isNYD()) {
 			return;
 		}
@@ -2432,27 +2430,27 @@ public abstract class Body extends BodyAttributes {
 				addMemories(10);
 			} else if (!isFlyingType() && getZ() > 15 && getPanicType() == null && !isLockmove()
 					&& getCriticalDamege() != CriticalDamegeType.CUT && !isPealed() && !isBlind()) {
-				// 持ち上げたと�?
-				// 妊娠限界を�?えて�?る場�?
+				// 持ち上げたとき
+				// 妊娠限界を超えている場合
 				if (isStressful() && isOverPregnantLimit() && SimYukkuri.RND.nextBoolean()) {
 					setPikoMessage(MessagePool.getMessage(this, MessagePool.Action.DontThrowMeAway), true);
 					setForceFace(ImageCode.CRYING.ordinal());
 					addStress(100);
-					// なつき度設�?
+					// なつき度設定
 					addLovePlayer(-10);
 				}
-				// おそらとんでるみたい?�?
+				// おそらとんでるみたい！
 				else {
 					setPikoMessage(MessagePool.getMessage(this, MessagePool.Action.Flying), true);
 					addStress(-10);
-					// なつき度設�?
+					// なつき度設定
 					addLovePlayer(10);
 				}
 			} else if (isStressful() && isOverPregnantLimit() && SimYukkuri.RND.nextBoolean() && grabbed) {
 				setPikoMessage(MessagePool.getMessage(this, MessagePool.Action.DontThrowMeAway), true);
 				setForceFace(ImageCode.CRYING.ordinal());
 				addStress(100);
-				// なつき度設�?
+				// なつき度設定
 				addLovePlayer(-10);
 			} else if (getBurstState() == Burst.NEAR) {
 				if (isSleeping())
@@ -2473,7 +2471,7 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * 動かなくす�?.
+	 * 動かなくする.
 	 */
 	public final void stay() {
 		setStaying(true);
@@ -2481,9 +2479,9 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * time�?だけ動かなくす�?.
+	 * time分だけ動かなくする.
 	 * 
-	 * @param time 動かなくする時�?
+	 * @param time 動かなくする時間
 	 */
 	public final void stay(int time) {
 		setStaying(true);
@@ -2491,9 +2489,9 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * timeだけ�?�る�?�るす�?.
+	 * timeだけぷるぷるする.
 	 * 
-	 * @param time ぷる�?�るする時�?
+	 * @param time ぷるぷるする時間
 	 */
 	public final void stayPurupuru(int time) {
 		setStaying(true);
@@ -2502,7 +2500,7 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * ぷる�?�るす�?.
+	 * ぷるぷるする.
 	 */
 	public final void doPurupuru() {
 		if (!isbPurupuru()) {
@@ -2515,10 +2513,10 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * ランダムに方向を決定す�?.
+	 * ランダムに方向を決定する.
 	 * 
-	 * @param curDir 現在の方向�?�数�?
-	 * @return 方向�?�数�?
+	 * @param curDir 現在の方向の数字
+	 * @return 方向の数字
 	 */
 	public final int randomDirection(int curDir) {
 		switch (curDir) {
@@ -2536,12 +2534,12 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * 行動�?囲と比べ、方向を決定す�?.
+	 * 行動範囲と比べ、方向を決定する.
 	 * 
 	 * @param curPos  現在の位置
-	 * @param destPos 目�?地の位置
-	 * @param range   �?囲
-	 * @return よいかど�?か�?�数値
+	 * @param destPos 目的地の位置
+	 * @param range   範囲
+	 * @return よいかどうかの数値
 	 */
 	public int decideDirection(int curPos, int destPos, int range) {
 		if (destPos - curPos > range) {
@@ -2553,7 +2551,7 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * 茎�?�位置等を更新する.
+	 * 茎の位置等を更新する.
 	 */
 	public void upDate() {
 		// Move Stalk
@@ -2561,7 +2559,7 @@ public abstract class Body extends BodyAttributes {
 			int direction = getDirection().ordinal();
 			int centerH = (getBodySpr()[getBodyAgeState().ordinal()].getImageH() + getExpandSizeW()
 					+ getExternalForceW());
-			// �?に�?機�?�
+			// うにょ機能
 			if (SimYukkuri.UNYO) {
 				centerH = (getBodySpr()[getBodyAgeState().ordinal()].getImageH() + getExpandSizeH()
 						+ getExternalForceW()
@@ -2584,7 +2582,7 @@ public abstract class Body extends BodyAttributes {
 					stalk.setMostDepth(getMostDepth());
 					stalk.setCalcX(getX() + ofsX);
 					stalk.setCalcY(getY());
-					// 完�?�に埋まって�?たら茎だけ地上に出�?
+					// 完全に埋まっていたら茎だけ地上に出す
 					if (getBaryState() == BaryInUGState.ALL) {
 						stalk.setCalcZ(0);
 					} else {
@@ -2598,9 +2596,9 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * �?っくりを動かす.
+	 * ゆっくりを動かす.
 	 * 
-	 * @param dontMove 動けな�?場�?
+	 * @param dontMove 動けない場合
 	 */
 	public void moveBody(boolean dontMove) {
 		if (grabbed || takeMappedObj(getLinkParent()) != null) {
@@ -2650,12 +2648,12 @@ public abstract class Body extends BodyAttributes {
 			}
 		}
 
-		// 空中なら落ちな�?
+		// 空中なら落ちない
 		if (0 < z) {
 			bFallingUnderGround = false;
 		}
 
-		// 飛行できる�?っくりはvzによる外力以外では高度を保つ
+		// 飛行できるゆっくりはvzによる外力以外では高度を保つ
 		if ((mz != 0 || (!canflyCheck() && getMostDepth() != z && getBindStalk() == null)) && !bFallingUnderGround) {
 			falldownDamage = (vz > 0 ? falldownDamage : 0);
 			// if falling down, it cannot move to x-y axis
@@ -2678,7 +2676,7 @@ public abstract class Body extends BodyAttributes {
 					if (checkOnBed()) {
 						damageCut = 4;
 					} else {
-						// ベッド�?�上以外で生まれた時にダメージを受けた場合、つらい思い出が残る(暫定で良�?思いしてな�?時に落下ダメージ受けたら?�?
+						// ベッドの上以外で生まれた時にダメージを受けた場合、つらい思い出が残る(暫定で良い思いしてない時に落下ダメージ受けたら）
 						if (isBFirstGround()) {
 							addMemories(-20);
 						}
@@ -2700,18 +2698,18 @@ public abstract class Body extends BodyAttributes {
 						falldownDamage = 0;
 					}
 
-					// 赤�?なら�?�ッド�?�上ではノ�?�ダメージ
+					// 赤ゆならベッドの上ではノーダメージ
 					if (!checkOnBed() || !isBaby()) {
 						strike(falldownDamage * 100 * 24 * 3 / 100 / damageCut);
 					}
 
-					// 生まれて最初�?�挨拶
+					// 生まれて最初の挨拶
 					if (isBFirstGround()) {
 						setMessage(MessagePool.getMessage(this, MessagePool.Action.TakeItEasy));
 						addStress(-400);
 						addMemories(20);
 					}
-					// 地面につ�?た�?�でフラグをリセ�?�?
+					// 地面についたのでフラグをリセット
 					setBFirstGround(false);
 
 					if (isPealed())
@@ -2742,7 +2740,7 @@ public abstract class Body extends BodyAttributes {
 			bz = 0;
 			return;
 		}
-		// 仮の処�? コンベア移動中は動けなくす�?
+		// 仮の処理 コンベア移動中は動けなくする
 		if ((getBx() + getBy() + bz) != 0) {
 			setBx(0);
 			setBy(0);
@@ -2764,7 +2762,7 @@ public abstract class Body extends BodyAttributes {
 			step /= 2;
 		}
 
-		// 家族でおでかけ中なら一番足が遅�?も�?�にあわせる
+		// 家族でおでかけ中なら一番足が遅いものにあわせる
 		if (getCurrentEvent() instanceof SuperEatingTimeEvent) {
 			step = ((SuperEatingTimeEvent) getCurrentEvent()).getLowestStep();
 		}
@@ -2823,7 +2821,7 @@ public abstract class Body extends BodyAttributes {
 					destZ = -1;
 				}
 			}
-			// 目標が無ければ高度を保つように移�?
+			// 目標が無ければ高度を保つように移動
 			if (takeMoveTarget() == null && getCurrentEvent() == null) {
 				destZ = Translate.getFlyHeightLimit();
 			}
@@ -2837,7 +2835,7 @@ public abstract class Body extends BodyAttributes {
 		int vecX = dirX * step * speed / 100;
 		int vecY = dirY * step * speed / 100;
 		int vecZ = dirZ * step * speed / 100;
-		// 実�? speedの�?り捨て部�?の反映
+		// 実験 speedの切り捨て部分の反映
 		if (speed % 100 > 0) {
 			if (SimYukkuri.RND.nextInt(100) < speed % 100) {
 				vecX += dirX;
@@ -2846,7 +2844,7 @@ public abstract class Body extends BodyAttributes {
 			}
 		}
 
-		// 明確な目�?地がある場合�?�行き過ぎをチェ�?ク
+		// 明確な目的地がある場合は行き過ぎをチェック
 		if (destX != -1) {
 			if (dirX < 0) {
 				if ((x + vecX) < destX) {
@@ -2899,12 +2897,12 @@ public abstract class Body extends BodyAttributes {
 			z += vecZ;
 		}
 
-		// 壁チェ�?ク
+		// 壁チェック
 		if (Barrier.onBarrier(x, y, getW() >> 2, getH() >> 3, Barrier.MAP_BODY[getBodyAgeState().ordinal()])) {
 			x -= vecX;
 			y -= vecY;
 			z -= vecZ;
-			// 壁にひっかかったら方向転�?
+			// 壁にひっかかったら方向転換
 			if ((destX >= 0) || (destY >= 0) || (destZ >= 0)) {
 				setBlockedCount(Math.min(getBlockedCount() + 1, getBLOCKEDLIMITorg() * 2));
 				if (getBlockedCount() > getBLOCKEDLIMITorg()) {
@@ -2915,7 +2913,7 @@ public abstract class Body extends BodyAttributes {
 					}
 					destX = -1;
 					destY = -1;
-					// イベント中の場合�?�イベントをクリアしな�?(壁衝突で�?ろうろし続ける問題�?�修正)
+					// イベント中の場合はイベントをクリアしない(壁衝突でうろうろし続ける問題の修正)
 					if (getCurrentEvent() != null) {
 						clearActionsForEvent();
 					} else {
@@ -2943,13 +2941,13 @@ public abstract class Body extends BodyAttributes {
 		} else {
 			setBlockedCount(Math.max(0, getBlockedCount() - 1));
 
-			// プ�?�ル外から�?��?�ル�?への移動チェ�?ク
+			// プール外からプール内への移動チェック
 			if ((Translate.getCurrentFieldMapNum(x, y) & FieldShapeBase.FIELD_POOL) != 0 &&
 					(Translate.getCurrentFieldMapNum(x - vecX, y - vecY) & FieldShapeBase.FIELD_POOL) == 0) {
-				// 水が嫌いなら近�?らな�?
+				// 水が嫌いなら近寄らない
 				if (!isLikeWater()) {
 					int nRandom = 1;
-					// 事故�?の設�?
+					// 事故率の設定
 					switch (getIntelligence()) {
 						case FOOL:
 							nRandom = 10;
@@ -3005,9 +3003,9 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * 標準�?�メ�?セージ表示
+	 * 標準のメッセージ表示
 	 * 
-	 * @param message メ�?セージ
+	 * @param message メッセージ
 	 */
 	public void setMessage(String message) {
 		if (message == null)
@@ -3026,121 +3024,121 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * ピコピコメ�?セージ表示
+	 * ピコピコメッセージ表示
 	 * 
-	 * @param message   メ�?セージ
-	 * @param interrupt 現在メ�?セージ中でも割り込むかど�?�?
+	 * @param message   メッセージ
+	 * @param interrupt 現在メッセージ中でも割り込むかどうか
 	 */
 	public void setPikoMessage(String message, boolean interrupt) {
 		setMessage(message, WindowType.NORMAL, Const.HOLDMESSAGE, interrupt, true, false);
 	}
 
 	/**
-	 * ピコピコメ�?セージ表示(時間�?�?)
+	 * ピコピコメッセージ表示(時間指定)
 	 * 
-	 * @param message   メ�?セージ
-	 * @param count     メ�?セージ時間
-	 * @param interrupt 現在メ�?セージ中でも割り込むかど�?�?
+	 * @param message   メッセージ
+	 * @param count     メッセージ時間
+	 * @param interrupt 現在メッセージ中でも割り込むかどうか
 	 */
 	public void setPikoMessage(String message, int count, boolean interrupt) {
 		setMessage(message, WindowType.NORMAL, count, interrupt, true, false);
 	}
 
 	/**
-	 * 時間�?定メ�?セージ表示
+	 * 時間指定メッセージ表示
 	 * 
-	 * @param message メ�?セージ
-	 * @param count   メ�?セージ時間
+	 * @param message メッセージ
+	 * @param count   メッセージ時間
 	 */
 	public void setMessage(String message, int count) {
 		setMessage(message, WindowType.NORMAL, count, false, false, false);
 	}
 
 	/**
-	 * 割り込み�?定メ�?セージ表示
+	 * 割り込み指定メッセージ表示
 	 * 
-	 * @param message   メ�?セージ
-	 * @param interrupt 現在メ�?セージ中でも割り込むかど�?�?
+	 * @param message   メッセージ
+	 * @param interrupt 現在メッセージ中でも割り込むかどうか
 	 */
 	public void setMessage(String message, boolean interrupt) {
 		setMessage(message, WindowType.NORMAL, Const.HOLDMESSAGE, interrupt, false, false);
 	}
 
 	/**
-	 * 全�?定メ�?セージ表示
+	 * 全指定メッセージ表示
 	 * 
-	 * @param message   メ�?セージ
-	 * @param count     メ�?セージ時間
-	 * @param interrupt 現在メ�?セージ中でも割り込むかど�?�?
-	 * @param piko      ピコピコするかど�?�?
+	 * @param message   メッセージ
+	 * @param count     メッセージ時間
+	 * @param interrupt 現在メッセージ中でも割り込むかどうか
+	 * @param piko      ピコピコするかどうか
 	 */
 	public void setMessage(String message, int count, boolean interrupt, boolean piko) {
 		setMessage(message, WindowType.NORMAL, count, interrupt, piko, false);
 	}
 
 	/**
-	 * ワールドイベント発生メ�?セージ
+	 * ワールドイベント発生メッセージ
 	 * 
-	 * @param message メ�?セージ
-	 * @param count   メ�?セージ時間
+	 * @param message メッセージ
+	 * @param count   メッセージ時間
 	 */
 	public void setWorldEventSendMessage(String message, int count) {
 		setMessage(message, WindowType.WORLD_SEND, count, true, false, false);
 	}
 
 	/**
-	 * ワールドイベント応答メ�?セージ
+	 * ワールドイベント応答メッセージ
 	 * 
-	 * @param message   メ�?セージ
-	 * @param count     メ�?セージ時間
-	 * @param interrupt 現在メ�?セージ中でも割り込むかど�?�?
-	 * @param piko      ピコピコするかど�?�?
+	 * @param message   メッセージ
+	 * @param count     メッセージ時間
+	 * @param interrupt 現在メッセージ中でも割り込むかどうか
+	 * @param piko      ピコピコするかどうか
 	 */
 	public void setWorldEventResMessage(String message, int count, boolean interrupt, boolean piko) {
 		setMessage(message, WindowType.WORLD_RES, count, interrupt, piko, false);
 	}
 
 	/**
-	 * 個体イベント発生メ�?セージ
+	 * 個体イベント発生メッセージ
 	 * 
-	 * @param message メ�?セージ
-	 * @param count   メ�?セージ時間
+	 * @param message メッセージ
+	 * @param count   メッセージ時間
 	 */
 	public void setBodyEventSendMessage(String message, int count) {
 		setMessage(message, WindowType.BODY_SEND, count, true, false, false);
 	}
 
 	/**
-	 * 個体イベント応答メ�?セージ
+	 * 個体イベント応答メッセージ
 	 * 
-	 * @param message   メ�?セージ
-	 * @param count     メ�?セージ時間
-	 * @param interrupt 現在メ�?セージ中でも割り込むかど�?�?
-	 * @param piko      ピコピコするかど�?�?
+	 * @param message   メッセージ
+	 * @param count     メッセージ時間
+	 * @param interrupt 現在メッセージ中でも割り込むかどうか
+	 * @param piko      ピコピコするかどうか
 	 */
 	public void setBodyEventResMessage(String message, int count, boolean interrupt, boolean piko) {
 		setMessage(message, WindowType.BODY_RES, count, interrupt, piko, false);
 	}
 
 	/**
-	 * 非ゆっくり�??�?口封じ用メ�?セージ
+	 * 非ゆっくり症＆口封じ用メッセージ
 	 * 
-	 * @param message メ�?セージ
-	 * @param piko    ピコピコするかど�?�?
+	 * @param message メッセージ
+	 * @param piko    ピコピコするかどうか
 	 */
 	public void setNYDMessage(String message, boolean piko) {
 		setMessage(message, WindowType.NORMAL, Const.HOLDMESSAGE, true, piko, true);
 	}
 
 	/**
-	 * メ�?セージの実行部
+	 * メッセージの実行部
 	 * 
-	 * @param message   メ�?セージ
-	 * @param type      ウィンドウのタイ�?
-	 * @param count     メ�?セージ時間
-	 * @param interrupt 現在メ�?セージ中でも割り込むかど�?�?
-	 * @param piko      ピコピコするかど�?�?
-	 * @param NYD       非ゆっくり�?
+	 * @param message   メッセージ
+	 * @param type      ウィンドウのタイプ
+	 * @param count     メッセージ時間
+	 * @param interrupt 現在メッセージ中でも割り込むかどうか
+	 * @param piko      ピコピコするかどうか
+	 * @param NYD       非ゆっくり症
 	 */
 	public void setMessage(String message, WindowType type, int count, boolean interrupt, boolean piko, boolean NYD) {
 		if (!NYD
@@ -3148,29 +3146,29 @@ public abstract class Body extends BodyAttributes {
 			return;
 		}
 
-		// 死亡�?
+		// 死亡時
 		if (isSilent())
 			return;
-		// 緊急時以外�?�自制時。静かにするよ�??��と言ってしま�?�?
+		// 緊急時以外の自制時。静かにするよ！！と言ってしまう。
 		if (!interrupt && SimYukkuri.RND.nextInt(messageDiscipline + 1) != 0
 				&& getIntelligence() != Intelligence.WISE) {
 			message = MessagePool.getMessage(this, MessagePool.Action.BeingQuiet);
 			return;
 		}
-		// そ�?�他�?�要因
+		// その他の要因
 		if (!isCanTalk()) {
 			messageCount = 0;
 			setMessageBuf(null);
 			return;
 		}
-		// メ�?セージ無効�?
+		// メッセージ無効時
 		if (message == null || message.length() == 0) {
 			messageCount = 0;
 			setMessageBuf(null);
 			return;
 		}
 
-		// interruptがtrueなら現在メ�?セージ表示中でも割り込む
+		// interruptがtrueなら現在メッセージ表示中でも割り込む
 		if (interrupt || messageCount == 0) {
 			messageCount = count;
 			setMessageBuf(message);
@@ -3225,21 +3223,21 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * ねぎぃメ�?セージを�?��?
+	 * ねぎぃメッセージを出す
 	 * 
-	 * @param message メ�?セージ
-	 * @param piko    ピコピコするかど�?�?
+	 * @param message メッセージ
+	 * @param piko    ピコピコするかどうか
 	 */
 	public void setNegiMessage(String message, boolean piko) {
 		setNegiMessage(message, Const.HOLDMESSAGE, piko);
 	}
 
 	/**
-	 * ねぎぃメ�?セージを�?��?
+	 * ねぎぃメッセージを出す
 	 * 
-	 * @param message メ�?セージ
-	 * @param count   メ�?セージ時間
-	 * @param piko    ピコピコするかど�?�?
+	 * @param message メッセージ
+	 * @param count   メッセージ時間
+	 * @param piko    ピコピコするかどうか
 	 */
 	public void setNegiMessage(String message, int count, boolean piko) {
 		if (!isCanTalk()) {
@@ -3271,7 +3269,7 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * 茎に触ったとき�?�反�?.
+	 * 茎に触ったときの反応.
 	 */
 	public final void touchStalk() {
 		setMessage(MessagePool.getMessage(this, MessagePool.Action.AbuseBaby));
@@ -3279,7 +3277,7 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * 未誕生フラグを設定す�?.
+	 * 未誕生フラグを設定する.
 	 */
 	public void setUnBirth(boolean flag) {
 		unBirth = flag;
@@ -3290,7 +3288,7 @@ public abstract class Body extends BodyAttributes {
 			setMessage(null);
 			forceToSleep();
 		} else {
-			// �?まれたての赤�?ならリセ�?�?
+			// うまれたての赤ゆならリセット
 			if (getBodyAgeState() == AgeState.BABY) {
 				setAge(0);
 			}
@@ -3299,9 +3297,9 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * 実ゆ?���?��??��が茎で生きて�?る親につながって�?るかを返却する.
+	 * 実ゆ（自分）が茎で生きている親につながっているかを返却する.
 	 * 
-	 * @return 実ゆ?���?��??��が茎で生きて�?る親につながって�?るか
+	 * @return 実ゆ（自分）が茎で生きている親につながっているか
 	 */
 	@Transient
 	public final boolean isPlantForUnbirthChild() {
@@ -3312,7 +3310,7 @@ public abstract class Body extends BodyAttributes {
 				Obj oBind = SimYukkuri.world.getCurrentMap().getBody().get(id);
 				if (oBind != null && oBind instanceof Body) {
 					Body bodyBind = (Body) oBind;
-					// 茎があって親が生きて�?
+					// 茎があって親が生きてる
 					if (bodyBind != null && !bodyBind.isDead() && !bodyBind.isRemoved()) {
 						return true;
 					}
@@ -3324,9 +3322,9 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * こ�?�個体�?�DNAを取得す�?.
+	 * この個体のDNAを取得する.
 	 * 
-	 * @return こ�?�個体�?�DNA
+	 * @return この個体のDNA
 	 */
 	@Transient
 	public Dna getDna() {
@@ -3336,10 +3334,10 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * �?んうん、�?�奮、�?�り�?�り、セリフ�?�抑制効果�?�減衰と確認をする.
+	 * うんうん、興奮、ふりふり、セリフの抑制効果の減衰と確認をする.
 	 */
 	public final void checkDiscipline() {
-		// ゲス餡子脳は自制しな�?
+		// ゲス餡子脳は自制しない
 		if (isRude() && getIntelligence() == Intelligence.FOOL) {
 			setShittingDiscipline(0);
 			setExcitingDiscipline(0);
@@ -3347,7 +3345,7 @@ public abstract class Body extends BodyAttributes {
 			setMessageDiscipline(0);
 			return;
 		}
-		// 基本ゲーム�?時間12�?に1�?
+		// 基本ゲーム内時間12分に1回
 		int period = getDECLINEPERIODorg();
 		// int period = (isRude() ? 1 : 2) * DECLINEPERIOD;
 		// 知性による補正
@@ -3392,9 +3390,9 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * �?んうん、�?�奮、�?�り�?�り、セリフ�?�抑制をす�?.
+	 * うんうん、興奮、ふりふり、セリフの抑制をする.
 	 * 
-	 * @param p 抑制ポイン�?
+	 * @param p 抑制ポイント
 	 */
 	public void disclipline(int p) {
 		if (isExciting() && !isRaper()) {
@@ -3417,12 +3415,12 @@ public abstract class Body extends BodyAttributes {
 	 * ゲス度によって、性格変更。ゲス落ちor更生をする.
 	 */
 	public final void checkAttitude() {
-		// 非ゆっくり�?、足りな�?�?は変化しな�?
+		// 非ゆっくり症、足りないゆは変化しない
 		if (isNYD() || isIdiot()) {
 			AttitudePoint = 0;
 			return;
 		}
-		// ドゲス、�?�?良は変化しな�?
+		// ドゲス、超善良は変化しない
 		if (getAttitude() == Attitude.VERY_NICE || getAttitude() == Attitude.SUPER_SHITHEAD) {
 			AttitudePoint = 0;
 			return;
@@ -3439,7 +3437,7 @@ public abstract class Body extends BodyAttributes {
 			default:
 				break;
 		}
-		// 性格変化実�?
+		// 性格変化実行
 		switch (getAttitude()) {
 			case NICE:
 				if (AttitudePoint >= getNiceLimit()[1] && getIntelligence() != Intelligence.FOOL) {
@@ -3477,20 +3475,20 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * 通常時�?�躾(お仕置き�?�功条件の判断後にゲス度をいじる)
+	 * 通常時の躾(お仕置き成功条件の判断後にゲス度をいじる)
 	 * 
-	 * @param p 抑制ポイン�?
+	 * @param p 抑制ポイント
 	 */
 	public final void teachManner(int p) {
 		disclipline(p * 5);
 		boolean flag = false;
-		// 通常、ゲス関係な�?
-		// ふり�?�りしてる時、すっきりしててかつれいぱーじゃな�?�?
+		// 通常、ゲス関係なく
+		// ふりふりしてる時、すっきりしててかつれいぱーじゃない時
 		if (isFurifuri() || (isSukkiri() && !isRaper())) {
 			flag = true;
 		}
 
-		// ゲスの�?
+		// ゲスの時
 		if (isRude()) {
 			// しゃべってる時
 			if (isTalking()) {
@@ -3504,7 +3502,7 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * 強制�?にゲス度をいじる?��加える?�?.
+	 * 強制的にゲス度をいじる（加える）.
 	 * 
 	 * @param p ゲス度
 	 */
@@ -3517,14 +3515,14 @@ public abstract class Body extends BodyAttributes {
 	/**
 	 * プレイヤーが好きか嫌いかを返却する.
 	 * 
-	 * @return プレイヤーが好きか嫌い�?
+	 * @return プレイヤーが好きか嫌いか
 	 */
 	public final LovePlayer checkLovePlayerState() {
 		// -50%以下なら嫌い
 		if (getnLovePlayer() < -1 * getLOVEPLAYERLIMITorg() / 2) {
 			return LovePlayer.BAD;
 		}
-		// 50%以上なら好�?
+		// 50%以上なら好き
 		if (getLOVEPLAYERLIMITorg() / 2 < getnLovePlayer()) {
 			return LovePlayer.GOOD;
 		}
@@ -3532,19 +3530,19 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * あまあましか受け付けな�?かど�?かを返却する.
+	 * あまあましか受け付けないかどうかを返却する.
 	 * 
-	 * @return あまあましか受け付けな�?かど�?�?
+	 * @return あまあましか受け付けないかどうか
 	 */
 	@Transient
 	public final boolean isOnlyAmaama() {
-		// 動けな�?
+		// 動けない
 		if (getFootBakeLevel() == FootBake.CRITICAL && !canflyCheck())
 			return false;
 		boolean frag = false;
-		// 肥えた舌状態�?�時�?�み
+		// 肥えた舌状態の時のみ
 		if (getTangType() == TangType.GOURMET && !isIdiot()) {
-			// 知性によって変わ�?
+			// 知性によって変わる
 			switch (getIntelligence()) {
 				case WISE:
 					if (isNoDamaged() && amaamaDiscipline >= 40)
@@ -3570,7 +3568,7 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * 妊娠、うんうん�?過食などによる横方向�?�体型のふくらみ取�?
+	 * 妊娠、うんうん、過食などによる横方向の体型のふくらみ取得
 	 */
 	@Override
 	@Transient
@@ -3589,7 +3587,7 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * 妊娠、うんうんなどによる縦方向�?�体型のふくらみ取�?
+	 * 妊娠、うんうんなどによる縦方向の体型のふくらみ取得
 	 */
 	@Override
 	@Transient
@@ -3600,14 +3598,14 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * ひっぱり、押しつぶしによる体型の変形を取得す�?.
+	 * ひっぱり、押しつぶしによる体型の変形を取得する.
 	 * 
 	 * @return ひっぱり、押しつぶしによる体型の変形
 	 */
 	@Transient
 	private int getExternalForceW() {
 		int ret = 0;
-		// +ひっぱ�? -押しつぶ�?
+		// +ひっぱり -押しつぶし
 		if (extForce < 0)
 			ret = -extForce;
 		return ret;
@@ -3616,7 +3614,7 @@ public abstract class Body extends BodyAttributes {
 	@Transient
 	private int getExternalForceH() {
 		int ret = 0;
-		// +ひっぱ�? -押しつぶ�?
+		// +ひっぱり -押しつぶし
 		if (extForce > 0) {
 			ret = extForce * 6;
 		} else if (extForce < 0) {
@@ -3626,7 +3624,7 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * スプライト画像�?�サイズ初期設定をする.
+	 * スプライト画像のサイズ初期設定をする.
 	 * 
 	 * @param body
 	 * @param braid
@@ -3646,7 +3644,7 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * スプライト画像サイズのア�?プデートをする.
+	 * スプライト画像サイズのアップデートをする.
 	 */
 	public final void updateSpriteSize() {
 		int forceW = getExternalForceW();
@@ -3681,10 +3679,10 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * 移動目標を取得す�?.
+	 * 移動目標を取得する.
 	 */
 	public final Obj takeMoveTarget() {
-		// 移動対象が床からなくなって�?た場合�?�初期�?
+		// 移動対象が床からなくなっていた場合は初期化
 		Obj o = takeMappedObj(moveTarget);
 		if (o != null && o.getWhere() != Where.ON_FLOOR) {
 			setMoveTarget(-1);
@@ -3694,10 +3692,10 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * 強制�?に表�?を変更する.
+	 * 強制的に表情を変更する.
 	 */
 	public final void setForceFace(int f) {
-		// 非ゆっくり�?個体、皮むき済み個体�?�顔変化な�?
+		// 非ゆっくり症個体、皮むき済み個体は顔変化なし
 		if (isPealed() || isNYD())
 			return;
 		else if (isRaperExcitingFace(f)) {
@@ -3707,22 +3705,22 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * れいぱーかつありすかつ興奮顔かど�?かを返却する.
+	 * れいぱーかつありすかつ興奮顔かどうかを返却する.
 	 * 
 	 * @param f ImageCodeのordinal
-	 * @returns れいぱーかつありすかつ興奮顔かど�?�?
+	 * @returns れいぱーかつありすかつ興奮顔かどうか
 	 */
 	protected boolean isRaperExcitingFace(int f) {
 		return false;
 	};
 
 	/**
-	 * 非ゆっくり�?の表�?を設定す�?.
+	 * 非ゆっくり症の表情を設定する.
 	 * 
-	 * @param f 表�?の数�?
+	 * @param f 表情の数字
 	 */
 	public final void setNYDForceFace(int f) {
-		// 非ゆっくり�?未発�?個体、皮むき済み個体�?�顔変化な�?
+		// 非ゆっくり症未発症個体、皮むき済み個体は顔変化なし
 		if (isPealed() || isNotNYD())
 			return;
 		else
@@ -3731,14 +3729,14 @@ public abstract class Body extends BodyAttributes {
 
 	// お持ち帰り関連
 	/**
-	 * アイ�?ムを持つ.
+	 * アイテムを持つ.
 	 * 
-	 * @param key アイ�?ムのタイ�?
-	 * @param val 持つアイ�?ムのオブジェク�?
+	 * @param key アイテムのタイプ
+	 * @param val 持つアイテムのオブジェクト
 	 */
 	public void setTakeoutItem(TakeoutItemType key, Obj val) {
 		getTakeoutItem().put(key, val.objId);
-		// 動作�?�表現と、フラグ管�?
+		// 動作の表現と、フラグ管理
 		setInOutTakeoutItem(true);
 		setToTakeout(false);
 		if (purposeOfMoving == PurposeOfMoving.TAKEOUT) {
@@ -3762,10 +3760,10 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * 持って�?たアイ�?ムを落と�?.
+	 * 持っていたアイテムを落とす.
 	 * 
-	 * @param key アイ�?ムのタイ�?
-	 * @return 持って�?たアイ�?ムのオブジェク�?
+	 * @param key アイテムのタイプ
+	 * @return 持っていたアイテムのオブジェクト
 	 */
 	public Obj dropTakeoutItem(TakeoutItemType key) {
 		Obj val = takeTakenOutItem(key);
@@ -3773,11 +3771,11 @@ public abstract class Body extends BodyAttributes {
 			getTakeoutItem().remove(key);
 			return null;
 		}
-		// 動作�?�表現
+		// 動作の表現
 		setInOutTakeoutItem(true);
 		setMessage(MessagePool.getMessage(this, MessagePool.Action.DropItem));
 
-		// 落としたも�?�?��うんうん）�?�処�?
+		// 落としたもの（うんうん）の処理
 		if (val instanceof Shit) {
 			Map<Integer, Shit> shits = SimYukkuri.world.getCurrentMap().getShit();
 			shits.put(val.objId, (Shit) val);
@@ -3792,7 +3790,7 @@ public abstract class Body extends BodyAttributes {
 			val.setWhere(Where.ON_FLOOR);
 			getTakeoutItem().remove(key);
 		}
-		// 落としたも�?�(�?)の処�?
+		// 落としたもの(餌)の処理
 		if (val instanceof Food) {
 			Map<Integer, Food> foods = SimYukkuri.world.getCurrentMap().getFood();
 			foods.put(val.objId, (Food) val);
@@ -3825,15 +3823,15 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * 全部落と�?.
+	 * 全部落とす.
 	 */
 	public void dropAllTakeoutItem() {
-		// 運んで�?るものがなかったらリターン
+		// 運んでいるものがなかったらリターン
 		if (getTakeoutItem() == null || getTakeoutItem().size() == 0) {
 			return;
 		}
 		Set<TakeoutItemType> keyset = getTakeoutItem().keySet();
-		// 運んで�?るものすべてに対して落とす�?��?をす�?
+		// 運んでいるものすべてに対して落とす処理をする
 		for (TakeoutItemType key : keyset) {
 			dropTakeoutItem(key);
 		}
@@ -3898,11 +3896,11 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * 汚れさせ�?.
+	 * 汚れさせる.
 	 */
 	public final void makeDirty(boolean flag) {
 		dirty = flag;
-		// 死んでる場合�?�スキ�?�?
+		// 死んでる場合はスキップ
 		if (isDead()) {
 			return;
 		}
@@ -3914,18 +3912,18 @@ public abstract class Body extends BodyAttributes {
 			setStubbornlyDirty(false);
 			setHappiness(Happiness.HAPPY);
 			addStress(-50);
-			// 起きてたらセリ�?
+			// 起きてたらセリフ
 			if (!isSleeping()) {
 				setMessage(MessagePool.getMessage(this, MessagePool.Action.Cleaned), 60);
 				stay(60);
 			}
-			// 実ゆの場合、親が反応す�?
+			// 実ゆの場合、親が反応する
 			checkReactionStalkMother(UnbirthBabyState.HAPPY);
 		}
 	}
 
 	/**
-	 * 無反応で汚れを設定す�?.
+	 * 無反応で汚れを設定する.
 	 * 
 	 * @param b 汚れ
 	 */
@@ -3934,7 +3932,7 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * 自主�?洗�?を行う.
+	 * 自主的洗浄を行う.
 	 */
 	public final void cleaningItself() {
 		stay();
@@ -3946,7 +3944,7 @@ public abstract class Body extends BodyAttributes {
 		if (canFurifuri())
 			setFurifuri(true);
 		makeDirty(false);
-		// 年齢イン�?�?クス: 0=赤�?, 1=子ゆ, 2=成ゆ
+		// 年齢インデックス: 0=赤ゆ, 1=子ゆ, 2=成ゆ
 		int ageIndex = isBaby() ? 0 : (isChild() ? 1 : 2);
 		int P = 1;
 		switch (getIntelligence()) {
@@ -3960,7 +3958,7 @@ public abstract class Body extends BodyAttributes {
 				P = getCleaningFailProbFool()[ageIndex];
 				break;
 		}
-		// P �? 0 以下�?�場合�?�失敗しな�??��安�?�対策�?
+		// P が 0 以下の場合は失敗しない（安全対策）
 		if (P <= 0) {
 			P = 1;
 		}
@@ -3974,14 +3972,14 @@ public abstract class Body extends BodyAttributes {
 	 * 親を呼んで泣きわめく.
 	 */
 	public final void callParent() {
-		// 死んでる、反応する余裕が無�?場合�?�スキ�?�?
+		// 死んでる、反応する余裕が無い場合はスキップ
 		if (!canAction()) {
 			dirtyScreamPeriod = 0;
 			setCallingParents(false);
 			return;
 		}
 
-		// ?��?��に食べられてる時
+		// ｱﾘに食べられてる時
 		if (getAttachmentSize(Ants.class) != 0) {
 			setHappiness(Happiness.VERY_SAD);
 			// setPikoMessage(MessagePool.getMessage(this,
@@ -3992,7 +3990,7 @@ public abstract class Body extends BodyAttributes {
 
 		// 汚れてる時
 		if (isDirty()) {
-			// 死んでる、反応する余裕が無�?場合�?�スキ�?�?
+			// 死んでる、反応する余裕が無い場合はスキップ
 			if (isVeryHungry() || isDamagedHeavily() || isGotBurnedHeavily()) {
 				dirtyScreamPeriod = 0;
 				setCallingParents(false);
@@ -4003,14 +4001,14 @@ public abstract class Body extends BodyAttributes {
 			int c = kusogaki ? 20 : 40;
 			if (getAge() % c != 0)
 				return;
-			// 自�?がゲス赤�?か、ドゲス子ゆなら、短�?スパンで泣き叫ぶ
+			// 自分がゲス赤ゆか、ドゲス子ゆなら、短いスパンで泣き叫ぶ
 			if (kusogaki) {
 				setHappiness(Happiness.VERY_SAD);
 				setPikoMessage(MessagePool.getMessage(this, MessagePool.Action.Dirty), false);
 				BodyLogic.checkNearParent(this);
 				setCallingParents(true);
 			}
-			// 他�?�長�?スパン
+			// 他は長いスパン
 			else {
 				setHappiness(Happiness.SAD);
 				setMessage(MessagePool.getMessage(this, MessagePool.Action.Dirty));
@@ -4018,7 +4016,7 @@ public abstract class Body extends BodyAttributes {
 				setCallingParents(true);
 			}
 			dirtyScreamPeriod--;
-			// 泣き疲れたら勝手にきれ�?にする
+			// 泣き疲れたら勝手にきれいにする
 			if (dirtyScreamPeriod <= 0) {
 				cleaningItself();
 			}
@@ -4026,14 +4024,14 @@ public abstract class Body extends BodyAttributes {
 
 	}
 
-	// �?んやー関連
+	// ゆんやー関連
 	/**
-	 * �?んやーする.
+	 * ゆんやーする.
 	 * 
-	 * @param TF メ�?セージの有無
+	 * @param TF メッセージの有無
 	 */
 	public final void doYunnyaa(boolean TF) {
-		// できな�?状態ならしな�?
+		// できない状態ならしない
 		if (!canAction())
 			return;
 		if (TF)
@@ -4043,29 +4041,29 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * 命乞いをす�?.
+	 * 命乞いをする.
 	 */
 	public void begForLife() {
 		begForLife(false);
 	}
 
 	/**
-	 * 命乞いをす�?.
+	 * 命乞いをする.
 	 * 
 	 * @param Ffrag 強制命乞いフラグ
 	 */
 	public void begForLife(boolean Ffrag) {
-		// 死体�?非ゆっくり�?を除�?
+		// 死体、非ゆっくり症を除外
 		if (!canAction())
 			return;
-		// ダメージ�?50%を�?えな�?と行われな�?
+		// ダメージが50%を超えないと行われない
 		if (!isDamaged() && !Ffrag)
 			return;
 
 		int NormalP = 2;
 		int RudeP = 3;
 		boolean frag = false;
-		// 性格によって頑固さが決ま�?
+		// 性格によって頑固さが決まる
 		switch (getAttitude()) {
 			case VERY_NICE:
 				if (SimYukkuri.RND.nextInt(NormalP) == 0)
@@ -4098,10 +4096,10 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * otherと何らか�?�家族関係にあるかを返却する.
+	 * otherと何らかの家族関係にあるかを返却する.
 	 * 
-	 * @param other チェ�?クした�?�?っくりのインスタンス
-	 * @return otherと何らか�?�家族関係にある�?
+	 * @param other チェックしたいゆっくりのインスタンス
+	 * @return otherと何らかの家族関係にあるか
 	 */
 	public final boolean isFamily(Body other) {
 		if (isParent(other))
@@ -4116,10 +4114,10 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * 自�?がotherの親�?
+	 * 自分がotherの親か
 	 * 
-	 * @param other 対象の�?っくりのインスタンス
-	 * @return 自�?がotherの親かど�?�?
+	 * @param other 対象のゆっくりのインスタンス
+	 * @return 自分がotherの親かどうか
 	 */
 	public final boolean isParent(Body other) {
 		if (other == null) {
@@ -4130,10 +4128,10 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * 自�?がotherの父親かど�?�?
+	 * 自分がotherの父親かどうか
 	 * 
-	 * @param other 対象の�?っくりのインスタンス
-	 * @return 自�?がotherの父親かど�?�?
+	 * @param other 対象のゆっくりのインスタンス
+	 * @return 自分がotherの父親かどうか
 	 */
 	public final boolean isFather(Body other) {
 		if (other == null) {
@@ -4143,10 +4141,10 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * 自�?がotherの母親かど�?�?
+	 * 自分がotherの母親かどうか
 	 * 
-	 * @param other 対象の�?っくりのインスタンス
-	 * @return 自�?がotherの母親かど�?�?
+	 * @param other 対象のゆっくりのインスタンス
+	 * @return 自分がotherの母親かどうか
 	 */
 	public final boolean isMother(Body other) {
 		if (other == null) {
@@ -4156,10 +4154,10 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * otherが�?��?の子か
+	 * otherが自分の子か
 	 * 
-	 * @param other 対象の�?っくりのインスタンス
-	 * @return otherが�?��?の子かど�?�?
+	 * @param other 対象のゆっくりのインスタンス
+	 * @return otherが自分の子かどうか
 	 */
 	public final boolean isChild(Body other) {
 		if (other == null) {
@@ -4169,10 +4167,10 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * otherが�?��?のつがい�?
+	 * otherが自分のつがいか
 	 * 
-	 * @param other 対象の�?っくりのインスタンス
-	 * @return otherがじぶん�?�つがいかど�?�?
+	 * @param other 対象のゆっくりのインスタンス
+	 * @return otherがじぶんのつがいかどうか
 	 */
 	public final boolean isPartner(Body other) {
 		if (other == null) {
@@ -4183,10 +4181,10 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * otherが�?��?の姉妹�?
+	 * otherが自分の姉妹か
 	 * 
-	 * @param other 対象の�?っくりのインスタンス
-	 * @return otherが�?��?の姉妹かど�?�?
+	 * @param other 対象のゆっくりのインスタンス
+	 * @return otherが自分の姉妹かどうか
 	 */
 	public final boolean isSister(Body other) {
 		if (YukkuriUtil.getBodyInstance(getParents()[Parent.MAMA.ordinal()]) != null) {
@@ -4199,10 +4197,10 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * otherが�?��?の妹�?
+	 * otherが自分の妹か
 	 * 
-	 * @param other 対象の�?っくりのインスタンス
-	 * @return otherが�?��?の妹�?
+	 * @param other 対象のゆっくりのインスタンス
+	 * @return otherが自分の妹か
 	 */
 	public final boolean isElderSister(Body other) {
 		return (isSister(other) && (getAge() >= other.getAge()));
@@ -4211,7 +4209,7 @@ public abstract class Body extends BodyAttributes {
 	/**
 	 * 先祖に加える
 	 * 
-	 * @param inAnc 加えた�?�?っくりのUniqueID
+	 * @param inAnc 加えたいゆっくりのUniqueID
 	 */
 	public final void addAncestorList(int inAnc) {
 		getAncestorList().add(inAnc);
@@ -4220,16 +4218,16 @@ public abstract class Body extends BodyAttributes {
 	/**
 	 * 先祖に加える
 	 * 
-	 * @param iAncList 先祖に加えた�?リス�?
+	 * @param iAncList 先祖に加えたいリスト
 	 */
 	public final void addAncestorList(List<Integer> iAncList) {
 		getAncestorList().addAll(iAncList);
 	}
 
 	/**
-	 * れいぱーかど�?�?
+	 * れいぱーかどうか
 	 * 
-	 * @return れいぱーかど�?�?
+	 * @return れいぱーかどうか
 	 */
 	@Transient
 	public final boolean isRaper() {
@@ -4240,9 +4238,9 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * れいぱーを設定す�?.
+	 * れいぱーを設定する.
 	 * 
-	 * @param b れいぱーかど�?�?
+	 * @param b れいぱーかどうか
 	 */
 	public final void setRaper(boolean b) {
 		if (isbPenipeniCutted()) {
@@ -4253,9 +4251,9 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * スーパ�?�れいぱーかど�?�?
+	 * スーパーれいぱーかどうか
 	 * 
-	 * @return スーパ�?�れいぱーかど�?�?
+	 * @return スーパーれいぱーかどうか
 	 */
 	@Transient
 	public final boolean isSuperRaper() {
@@ -4269,9 +4267,9 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * す�?�ぱーれいぱーを設定す�?.
+	 * すーぱーれいぱーを設定する.
 	 * 
-	 * @param b す�?�ぱーれいぱーかど�?�?
+	 * @param b すーぱーれいぱーかどうか
 	 */
 	public final void setSuperRaper(boolean b) {
 		if (isbPenipeniCutted()) {
@@ -4307,13 +4305,13 @@ public abstract class Body extends BodyAttributes {
 		return false;
 	}
 
-	// 飛行種かど�?�?
-	// 種族としてのフラグを返すので現在飛べるかはcanflyCheckでチェ�?ク
+	// 飛行種かどうか
+	// 種族としてのフラグを返すので現在飛べるかはcanflyCheckでチェック
 
 	/**
-	 * 現在飛行可能�?
+	 * 現在飛行可能か
 	 * 
-	 * @return 現在飛行可能�?
+	 * @return 現在飛行可能か
 	 */
 	public final boolean canflyCheck() {
 		return (isFlyingType() && isHasBraid() && !isDead() && !isSleeping() && !isbNeedled()
@@ -4322,22 +4320,22 @@ public abstract class Body extends BodyAttributes {
 
 	// 現在おさげ、羽、尻尾があるか
 	/**
-	 * 現在Braidがちぎられてな�?�?
+	 * 現在Braidがちぎられてないか
 	 * 
-	 * @return 現在Braidがちぎられてな�?�?
+	 * @return 現在Braidがちぎられてないか
 	 */
 	public final boolean hasBraidCheck() {
 		return isHasBraid();
 	}
 
 	/**
-	 * おさげを破壊す�?.
+	 * おさげを破壊する.
 	 */
 	public void takeBraid() {
 		if (isDead() || !isBraidType())
 			return;
 
-		// なつき度設�?
+		// なつき度設定
 		wakeup();
 		clearActions();
 		if (isHasBraid()) {
@@ -4347,7 +4345,7 @@ public abstract class Body extends BodyAttributes {
 			setForceFace(ImageCode.CRYING.ordinal());
 			setHappiness(Happiness.VERY_SAD);
 			setMessage(MessagePool.getMessage(this, MessagePool.Action.BraidCut), true);
-			// 実ゆの場合、親が反応す�?
+			// 実ゆの場合、親が反応する
 			checkReactionStalkMother(UnbirthBabyState.SAD);
 		} else {
 			addLovePlayer(200);
@@ -4359,7 +4357,7 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * 皮むきまた�?�皮修復?��トグル?�?
+	 * 皮むきまたは皮修復（トグル）
 	 */
 	public void peal() {
 		if (isDead())
@@ -4373,7 +4371,7 @@ public abstract class Body extends BodyAttributes {
 		}
 		if (isPacked())
 			pack();
-		// なつき度設�?
+		// なつき度設定
 		wakeup();
 		clearActions();
 		addLovePlayer(-300);
@@ -4382,7 +4380,7 @@ public abstract class Body extends BodyAttributes {
 		seteHairState(HairState.BALDHEAD);
 		setHappiness(Happiness.VERY_SAD);
 		setMessage(MessagePool.getMessage(this, MessagePool.Action.PEALING), true);
-		// 実ゆの場合、親が反応す�?
+		// 実ゆの場合、親が反応する
 		checkReactionStalkMother(UnbirthBabyState.SAD);
 	}
 
@@ -4395,7 +4393,7 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * 胎生去勢をす�?.
+	 * 胎生去勢をする.
 	 */
 	public final void invBodyCastration() {
 		boolean bodyCastration = !isBodyCastration();
@@ -4403,16 +4401,16 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * あに�?る閉鎖を設定す�?.
+	 * あにゃる閉鎖を設定する.
 	 * 
-	 * @param flag あに�?る閉鎖かど�?�?
+	 * @param flag あにゃる閉鎖かどうか
 	 */
 	public void setForceAnalClose(boolean flag) {
 		closeAnal(flag);
 	}
 
 	/**
-	 * �?頭化また�?�治す（トグル?�?
+	 * 饅頭化または治す（トグル）
 	 */
 	public void pack() {
 		if (isDead())
@@ -4426,7 +4424,7 @@ public abstract class Body extends BodyAttributes {
 			peal();
 			return;
 		}
-		// なつき度設�?
+		// なつき度設定
 		wakeup();
 		clearActions();
 		addLovePlayer(-300);
@@ -4442,12 +4440,12 @@ public abstract class Body extends BodyAttributes {
 			setHasBraid(false);
 		setPacked(true);
 		setHappiness(Happiness.VERY_SAD);
-		// 実ゆの場合、親が反応す�?
+		// 実ゆの場合、親が反応する
 		checkReactionStalkMother(UnbirthBabyState.KILLED);
 	}
 
 	/**
-	 * 目破壊また�?�修復?��トグル?�?
+	 * 目破壊または修復（トグル）
 	 */
 	public void breakeyes() {
 		if (isDead())
@@ -4458,7 +4456,7 @@ public abstract class Body extends BodyAttributes {
 			return;
 		}
 
-		// なつき度設�?
+		// なつき度設定
 		if (isSleeping())
 			wakeup();
 		clearActions();
@@ -4466,12 +4464,12 @@ public abstract class Body extends BodyAttributes {
 		setBlind(true);
 		setHappiness(Happiness.VERY_SAD);
 		setPikoMessage(MessagePool.getMessage(this, MessagePool.Action.BLINDING), true);
-		// 実ゆの場合、親が反応す�?
+		// 実ゆの場合、親が反応する
 		checkReactionStalkMother(UnbirthBabyState.SAD);
 	}
 
 	/**
-	 * 口ふさぎまた�?�修復?��トグル?�?
+	 * 口ふさぎまたは修復（トグル）
 	 */
 	public void ShutMouth() {
 		if (isDead())
@@ -4480,7 +4478,7 @@ public abstract class Body extends BodyAttributes {
 			setShutmouth(false);
 			return;
 		}
-		// なつき度設�?
+		// なつき度設定
 		wakeup();
 		clearActions();
 		addLovePlayer(-200);
@@ -4489,7 +4487,7 @@ public abstract class Body extends BodyAttributes {
 		// eating = false;
 		// eatingShit = false;
 		setHappiness(Happiness.VERY_SAD);
-		// 実ゆの場合、親が反応す�?
+		// 実ゆの場合、親が反応する
 		checkReactionStalkMother(UnbirthBabyState.SAD);
 	}
 
@@ -4531,14 +4529,14 @@ public abstract class Body extends BodyAttributes {
 
 		stayPurupuru(30);
 		setHappiness(Happiness.VERY_SAD);
-		// 実ゆの場合、親が反応す�?
+		// 実ゆの場合、親が反応する
 		checkReactionStalkMother(UnbirthBabyState.ATTAKED);
 	}
 
 	/**
-	 * 動けな�?かど�?かを返却する.
+	 * 動けないかどうかを返却する.
 	 * 
-	 * @return 動けな�?かど�?�?
+	 * @return 動けないかどうか
 	 */
 	@Transient
 	public final boolean isDontMove() {
@@ -4566,9 +4564,9 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * 大丈夫じゃな�?かど�?かを返却する.
+	 * 大丈夫じゃないかどうかを返却する.
 	 * 
-	 * @return 大丈夫じゃな�?かど�?�?
+	 * @return 大丈夫じゃないかどうか
 	 */
 	@Transient
 	public final boolean isNotAllright() {
@@ -4592,9 +4590,9 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * ピョンピョンできな�?かど�?かを返却する.
+	 * ピョンピョンできないかどうかを返却する.
 	 * 
-	 * @return ピョンピョンできな�?かど�?�?
+	 * @return ピョンピョンできないかどうか
 	 */
 	@Transient
 	public final boolean isDontJump() {
@@ -4625,9 +4623,9 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * �?んうんがした�?かど�?かを返却する.
+	 * うんうんがしたいかどうかを返却する.
 	 * 
-	 * @return �?んうんがした�?かど�?�?
+	 * @return うんうんがしたいかどうか
 	 */
 	public boolean wantToShit() {
 		int step = (!isHungry() ? TICK * 2 : TICK);
@@ -4639,9 +4637,9 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * 生まれそ�?かど�?かを返却する.
+	 * 生まれそうかどうかを返却する.
 	 * 
-	 * @return 生まれそ�?かど�?�?
+	 * @return 生まれそうかどうか
 	 */
 	public boolean nearToBirth() {
 		int step = (!isHungry() ? TICK * 2 : TICK);
@@ -4656,9 +4654,9 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * 茎を引っこ抜�?
+	 * 茎を引っこ抜く
 	 * 
-	 * @param s 茎�?�インスタンス
+	 * @param s 茎のインスタンス
 	 */
 	public final void removeStalk(Stalk s) {
 		if (!isDead() && !isSleeping()) {
@@ -4676,13 +4674,13 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * 茎をすべて�?除する.
-	 * 右クリの「取る」でも茎は取り除かれて�?っくりのみ取れる�?
-	 * 茎を「取る」ことはできな�?が、実ゆは個別に「取る」で取ることができる�?
+	 * 茎をすべて掃除する.
+	 * 右クリの「取る」でも茎は取り除かれてゆっくりのみ取れる。
+	 * 茎を「取る」ことはできないが、実ゆは個別に「取る」で取ることができる。
 	 */
 	public void removeAllStalks() {
 		setHasStalk(false);
-		// 残念ながら茎だけ残して�?除することはできな�?ので、茎も死んだ実ゆももろともに�?除される�?
+		// 残念ながら茎だけ残して掃除することはできないので、茎も死んだ実ゆももろともに掃除される。
 		if (getStalks() != null) {
 			Iterator<Stalk> itr = getStalks().iterator();
 			while (itr.hasNext()) {
@@ -4692,7 +4690,7 @@ public abstract class Body extends BodyAttributes {
 					while (chit.hasNext()) {
 						Body child = YukkuriUtil.getBodyInstance(chit.next());
 						if (child != null && (child.isDead() || child.isRemoved())) {
-							// まだ死んでな�?無�?実ゆだけ�?�茎から落ちる�?
+							// まだ死んでない無い実ゆだけは茎から落ちる。
 							child.remove();
 						}
 					}
@@ -4707,13 +4705,13 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * 実ゆの親が存在し、実ゆの状態に気が付けるならそのインスタンスを取得す�?
+	 * 実ゆの親が存在し、実ゆの状態に気が付けるならそのインスタンスを取得する
 	 * 
-	 * @return 気づ�?た実ゆの親インスタンス
+	 * @return 気づいた実ゆの親インスタンス
 	 */
 	@Transient
 	public final int getBindStalkMotherCanNotice() {
-		// 実ゆの場合、親が反応す�?
+		// 実ゆの場合、親が反応する
 		if (getBindStalk() != null) {
 			int id = getBindStalk().getPlantYukkuri();
 			Body bodyMother = SimYukkuri.world.getCurrentMap().getBody().get(id);
@@ -4727,9 +4725,9 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * 茎�?�ある�?っくりの基本反�?
+	 * 茎のあるゆっくりの基本反応
 	 * 
-	 * @param eState 実ゆの状�?
+	 * @param eState 実ゆの状態
 	 */
 	public void checkReactionStalkMother(UnbirthBabyState eState) {
 		Body bodyMother = SimYukkuri.world.getCurrentMap().getBody().get(getBindStalkMotherCanNotice());
@@ -4742,14 +4740,14 @@ public abstract class Body extends BodyAttributes {
 			return;
 		}
 
-		// 非ゆっくり�?の場�?
+		// 非ゆっくり症の場合
 		if (bodyMother.isNYD()) {
 			return;
 		}
 
 		switch (eState) {
-			case ATTAKED:// 実ゆが攻�?されて�?�?
-				// 攻�?されて生きて�?る場�?
+			case ATTAKED:// 実ゆが攻撃されている
+				// 攻撃されて生きている場合
 				if (!isDead()) {
 					bodyMother.setHappiness(Happiness.SAD);
 					bodyMother.setMessage(MessagePool.getMessage(bodyMother, MessagePool.Action.AbuseBaby));
@@ -4757,20 +4755,20 @@ public abstract class Body extends BodyAttributes {
 					bodyMother.stay();
 					break;
 				}
-				// 攻�?されて死んで�?る場合�?�Killed
-			case KILLED:// 実ゆが死んでる事に気がつ�?
+				// 攻撃されて死んでいる場合はKilled
+			case KILLED:// 実ゆが死んでる事に気がつく
 				bodyMother.setHappiness(Happiness.VERY_SAD);
 				bodyMother.setMessage(MessagePool.getMessage(bodyMother, MessagePool.Action.AbuseBabyKilled));
 				bodyMother.addStress(500);
 				bodyMother.stay();
 				break;
-			case SAD:// 実ゆが悲しんで�?る、苦しんで�?る�?�を�?配す�?
+			case SAD:// 実ゆが悲しんでいる、苦しんでいるのを心配する
 				bodyMother.setHappiness(Happiness.SAD);
 				bodyMother.setMessage(MessagePool.getMessage(bodyMother, MessagePool.Action.ConcernAboutChild));
 				bodyMother.addStress(20);
 				bodyMother.stay();
 				break;
-			case HAPPY:// 実ゆの状態を喜んで�?�?
+			case HAPPY:// 実ゆの状態を喜んでいる
 				bodyMother.setHappiness(Happiness.VERY_HAPPY);
 				bodyMother.setMessage(MessagePool.getMessage(bodyMother, MessagePool.Action.GladAboutChild));
 				bodyMother.addStress(-100);
@@ -4787,7 +4785,7 @@ public abstract class Body extends BodyAttributes {
 	/**
 	 * すっきりを行う
 	 * 
-	 * @param p すっきり相�?
+	 * @param p すっきり相手
 	 */
 	public void doSukkiri(Body p) {
 		if (isDead()) {
@@ -4828,7 +4826,7 @@ public abstract class Body extends BodyAttributes {
 		if (p.isNotNYD()) {
 			p.setStress(0);
 			p.addMemories(20);
-			// 相手�?�妊娠判�?
+			// 相手の妊娠判定
 			p.setMessage(MessagePool.getMessage(p, MessagePool.Action.Sukkiri), 60, true, false);
 			p.clearActions();
 			p.setSukkiri(true);
@@ -4838,9 +4836,9 @@ public abstract class Body extends BodyAttributes {
 		p.setCalm();
 		p.hungry -= (getHUNGRYLIMITorg()[AgeState.BABY.ordinal()] * 2);
 
-		// 妊娠タイプ�?�ランダムで決�?
+		// 妊娠タイプはランダムで決定
 		boolean stalkMode = SimYukkuri.RND.nextBoolean();
-		// 該当タイプが避妊されてたら妊娠失�?
+		// 該当タイプが避妊されてたら妊娠失敗
 		if ((stalkMode && p.isStalkCastration())
 				|| (!stalkMode && p.isBodyCastration())
 				|| (!stalkMode && p.getFootBakeLevel() == FootBake.CRITICAL)) {
@@ -4849,14 +4847,14 @@ public abstract class Body extends BodyAttributes {
 			p.addStress(1000);
 			return;
 		}
-		// 子供�?�生�??
+		// 子供の生成
 		if (stalkMode) {
 			p.setHasStalk(true);
 		} else {
 			p.setHasBaby(true);
 		}
 		/*
-		 * カ�?プルの設定�?�結婚イベントで�?る�?�で、ここではな�?
+		 * カップルの設定は結婚イベントでやるので、ここではなし
 		 * if (isAdult() && p.isAdult()){
 		 * partner = p;
 		 * p.partner = this;
@@ -4877,7 +4875,7 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * 早�?すっきり抑制を行う
+	 * 早いすっきり抑制を行う
 	 */
 	public void rapidExcitingDiscipline() {
 		if (excitingDiscipline > 0) {
@@ -4886,15 +4884,15 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * れいぽ�?する
+	 * れいぽぅする
 	 * 
-	 * @param p れいぽ�?相�?
+	 * @param p れいぽぅ相手
 	 */
 	public void doRape(Body p) {
 		if (isDead() || isSukkiri()) {
 			return;
 		}
-		// 相手がレイパ�?�なら何もしな�?
+		// 相手がレイパーなら何もしない
 		if (p.isRaper()) {
 			clearActions();
 			return;
@@ -4928,7 +4926,7 @@ public abstract class Body extends BodyAttributes {
 			}
 			return;
 		}
-		// �?か�?�持ちとすっきりすると1/2の確�?で伝染�?
+		// ゆかび持ちとすっきりすると1/2の確率で伝染る
 		if ((isSick() || p.isSick()) && SimYukkuri.RND.nextBoolean()) {
 			p.addSickPeriod(100);
 			addSickPeriod(100);
@@ -4937,14 +4935,14 @@ public abstract class Body extends BodyAttributes {
 			if (SimYukkuri.RND.nextInt(3) == 0) {
 				p.setCrushed(true);
 			}
-			// 死体とすっきりすると死体が�?か�?�持ちでなくと�?1/4の確�?で�?か�?�感染
+			// 死体とすっきりすると死体がゆかび持ちでなくとも1/4の確率でゆかび感染
 			if (SimYukkuri.RND.nextInt(4) == 0) {
 				addSickPeriod(100);
 			}
 			return;
 		}
 
-		// 相手�?�妊娠判�?
+		// 相手の妊娠判定
 		p.wakeup();
 		if (p.isNotNYD()) {
 			p.setMessage(MessagePool.getMessage(p, MessagePool.Action.RaperSukkiri), 60, true, false);
@@ -4956,12 +4954,12 @@ public abstract class Body extends BodyAttributes {
 		p.subtractPregnantLimit();
 		p.hungry -= getHUNGRYLIMITorg()[AgeState.BABY.ordinal()];
 
-		// 避妊されてたら妊娠失�?
+		// 避妊されてたら妊娠失敗
 		if (p.isStalkCastration()) {
 			return;
 		}
 
-		// 子供�?�生�??
+		// 子供の生成
 		p.setHasStalk(true);
 		Dna baby;
 		for (int i = 0; i < 5; i++) {
@@ -4970,11 +4968,11 @@ public abstract class Body extends BodyAttributes {
 			p.getStalkBabyTypes().add(baby);
 		}
 		if (isRaper()) {
-			// れいぱーは強制れいぽ�?
+			// れいぱーは強制れいぽぅ
 			forceToRaperExcite(true);
 			EventLogic.addWorldEvent(new RaperWakeupEvent(this, null, null, 1), null, null);
 		} else if (getAttitude() == Attitude.SUPER_SHITHEAD) {
-			// ドゲスは婚姻関係を保ちつつもれ�?ぽ�?
+			// ドゲスは婚姻関係を保ちつつもれいぽぅ
 			forceToRaperExcite(false);
 		}
 		p.subtractPregnantLimit();
@@ -4988,7 +4986,7 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * オナニー本体�?��?
+	 * オナニー本体処理
 	 * 
 	 * @param p 相手（死体など
 	 */
@@ -5006,12 +5004,12 @@ public abstract class Body extends BodyAttributes {
 		setHappiness(Happiness.HAPPY);
 		hungry -= getHUNGRYLIMITorg()[AgeState.BABY.ordinal()];
 		// hungryState = checkHungryState();
-		// パン�?は汚れ�?
+		// パンツは汚れる
 		if (isHasPants()) {
 			makeDirty(true);
 		}
 		if (p != null) {
-			// 性�?持ちと死姦はカビ�?�原因
+			// 性病持ちと死姦はカビの原因
 			if ((p.isDead() || p.isSick()) && SimYukkuri.RND.nextBoolean()) {
 				addSickPeriod(100);
 			}
@@ -5049,7 +5047,7 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * 精子餡滴�?
+	 * 精子餡滴下
 	 * 
 	 * @param dna DNA
 	 */
@@ -5071,34 +5069,34 @@ public abstract class Body extends BodyAttributes {
 
 	// 妊娠限界関連
 	/**
-	 * 妊娠限界のチェ�?ク
+	 * 妊娠限界のチェック
 	 * 
-	 * @return 妊娠限界かど�?�?
+	 * @return 妊娠限界かどうか
 	 */
 	@Transient
 	public boolean isOverPregnantLimit() {
 		// 20210327
-		// リアルな妊娠限界のと�?
+		// リアルな妊娠限界のとき
 		if (isRealPregnantLimit()) {
-			// 妊娠限界を�?えてたら
+			// 妊娠限界を超えてたら
 			if (getPregnantLimit() <= 0) {
-				// 1/20の確�?でまともな�?っくり
+				// 1/20の確率でまともなゆっくり
 				if (SimYukkuri.RND.nextInt(20) == 0) {
 					return false;
 				}
-				// 19/20で足りな�?�?
+				// 19/20で足りないゆ
 				return true;
 			}
-			// 妊娠限界に近づくにつれ、足りな�?�?確�?が高まる�?
-			// 妊娠限界�?100以上�?�場合�?��?1/100で足りな�?�?�?
+			// 妊娠限界に近づくにつれ、足りないゆ確率が高まる。
+			// 妊娠限界が100以上の場合は、1/100で足りないゆ。
 			int tarinaiFactor = getPregnantLimit() > 100 ? 100 : getPregnantLimit();
-			// 1/100 また�?� 1/妊娠限界 の確�?で足りな�?�?�?
+			// 1/100 または 1/妊娠限界 の確率で足りないゆ。
 			if (SimYukkuri.RND.nextInt(tarinaiFactor) == 0) {
 				return true;
 			}
 			return false;
 		}
-		// リアルでな�?妊娠限界のとき�?�、妊娠限界を�?えたら即足りな�?�?が生まれるのみ�?
+		// リアルでない妊娠限界のときは、妊娠限界を超えたら即足りないゆが生まれるのみ。
 		if (getPregnantLimit() <= 0) {
 			return true;
 		}
@@ -5107,7 +5105,7 @@ public abstract class Body extends BodyAttributes {
 
 	/**
 	 * 妊娠限界を一つ早める.
-	 * すでに妊娠限界の場合�?�何もしな�?.
+	 * すでに妊娠限界の場合は何もしない.
 	 */
 	public void subtractPregnantLimit() {
 		if (PregnantLimit > 0)
@@ -5117,7 +5115,7 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * 強制�?に発�?させ�?.
+	 * 強制的に発情させる.
 	 */
 	public void forceToExcite() {
 		if (isRaper() && !isDead()) {
@@ -5132,24 +5130,24 @@ public abstract class Body extends BodyAttributes {
 			return;
 		}
 
-		// 興奮中にさらにバイブしたら強制発�?
+		// 興奮中にさらにバイブしたら強制発情
 		if (isExciting()) {
 			setbForceExciting(true);
 		}
 
-		// 興奮できる状態ではな�?なら終�?
+		// 興奮できる状態ではないなら終了
 		if (!canAction()) {
 			return;
 		}
 
-		// ぺにぺにが�??断されて�?る場�?
+		// ぺにぺにが切断されている場合
 		if (isbPenipeniCutted()) {
 			setMessage(MessagePool.getMessage(this, MessagePool.Action.PenipeniCutted));
 			setHappiness(Happiness.VERY_SAD);
 			setForceFace(ImageCode.TIRED.ordinal());
 			stayPurupuru(20);
 			addStress(30);
-			// なつき度設�?
+			// なつき度設定
 			addLovePlayer(-50);
 			return;
 		}
@@ -5163,12 +5161,13 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * ぺにぺに�?断のトグル
+	 * ぺにぺに切断のトグル
 	 */
 	public void cutPenipeni() {
-		// ぺにぺにがな�?なら復活
+		// ぺにぺにがないなら復活
 		if (isbPenipeniCutted()) {
-			// Penipeni restoration happens immediately; consider event-based recovery if needed.
+			// Penipeni restoration happens immediately; consider event-based recovery if
+			// needed.
 			setbPenipeniCutted(false);
 			return;
 		}
@@ -5179,9 +5178,9 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * れいぱー発�?させ�?.
+	 * れいぱー発情させる.
 	 * 
-	 * @param raper れいぱーかど�?�?
+	 * @param raper れいぱーかどうか
 	 */
 	public void forceToRaperExcite(boolean raper) {
 		if (isDead() || isExciting() || isbPenipeniCutted()) {
@@ -5198,13 +5197,13 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * 強制�?に寝かせる.
+	 * 強制的に寝かせる.
 	 */
 	public void forceToSleep() {
 		if (isDead()) {
 			return;
 		}
-		// 矛盾が発生しそうな状況�?�ここでチェ�?ク
+		// 矛盾が発生しそうな状況はここでチェック
 		if (getPanicType() == PanicType.BURN || getCriticalDamegeType() == CriticalDamegeType.CUT) {
 			return;
 		}
@@ -5227,7 +5226,7 @@ public abstract class Body extends BodyAttributes {
 	/**
 	 * すりすりする.
 	 * 
-	 * @param p すりすり相�?
+	 * @param p すりすり相手
 	 */
 	public void doSurisuri(Body p) {
 		if (isDead() || p.isDead()) {
@@ -5242,12 +5241,12 @@ public abstract class Body extends BodyAttributes {
 		if (!canAction()) {
 			return;
 		}
-		// 自�?との関�?
+		// 自分との関係
 		EnumRelationMine eRelation = BodyLogic.checkMyRelation(this, p);
 		if (findSick(p) || p.isFeelHardPain() || p.isDamaged()) {
 			switch (eRelation) {
 				case FATHER: // 父
-				case MOTHER: // �?
+				case MOTHER: // 母
 					// 子供を治そうとする
 					setMessage(MessagePool.getMessage(this, MessagePool.Action.TreatChildBySurisuri));
 					break;
@@ -5255,15 +5254,15 @@ public abstract class Body extends BodyAttributes {
 					// つがいを治そうとする
 					setMessage(MessagePool.getMessage(this, MessagePool.Action.TreatPartnerBySurisuri));
 					break;
-				case CHILD_FATHER: // 父の子�?
+				case CHILD_FATHER: // 父の子供
 					// 父を治そうとする
 					setMessage(MessagePool.getMessage(this, MessagePool.Action.TreatFatherBySurisuri));
 					break;
-				case CHILD_MOTHER: // 母�?�子�?
+				case CHILD_MOTHER: // 母の子供
 					// 母を治そうとする
 					setMessage(MessagePool.getMessage(this, MessagePool.Action.TreatMotherBySurisuri));
 					break;
-				case ELDERSISTER: // �?
+				case ELDERSISTER: // 姉
 					// 妹を治そうとする
 					setMessage(MessagePool.getMessage(this, MessagePool.Action.TreatSisterBySurisuri));
 					break;
@@ -5278,11 +5277,11 @@ public abstract class Body extends BodyAttributes {
 			addStress(-50);
 			p.addStress(-50);
 		} else {
-			// 相手によってセリフを変えるよ�?にする処�?。現在はセリフ制作時に作�?の血管が�??れそ�?なのでオミッ�?
+			// 相手によってセリフを変えるようにする処理。現在はセリフ制作時に作者の血管が切れそうなのでオミット
 			/*
 			 * switch( eRelation ){
 			 * case FATHER: // 父
-			 * case MOTHER: // �?
+			 * case MOTHER: // 母
 			 * // 子供とすりすり
 			 * setMessage(MessagePool.getMessage(this,
 			 * MessagePool.Action.surisuriWithChild));
@@ -5292,17 +5291,17 @@ public abstract class Body extends BodyAttributes {
 			 * setMessage(MessagePool.getMessage(this,
 			 * MessagePool.Action.surisuriWithPartner));
 			 * break;
-			 * case CHILD_FATHER: // 父の子�?
+			 * case CHILD_FATHER: // 父の子供
 			 * // 父とすりすり
 			 * setMessage(MessagePool.getMessage(this,
 			 * MessagePool.Action.surisuriWithFather));
 			 * break;
-			 * case CHILD_MOTHER: // 母�?�子�?
+			 * case CHILD_MOTHER: // 母の子供
 			 * // 母とすりすり
 			 * setMessage(MessagePool.getMessage(this,
 			 * MessagePool.Action.surisuriWithMother));
 			 * break;
-			 * case ELDERSISTER: // �?
+			 * case ELDERSISTER: // 姉
 			 * // 妹とすりすり
 			 * setMessage(MessagePool.getMessage(this,
 			 * MessagePool.Action.surisuriWithElderSister));
@@ -5324,7 +5323,7 @@ public abstract class Body extends BodyAttributes {
 				p.setHappiness(Happiness.VERY_HAPPY);
 			}
 		}
-		// 確�?ですりすりしてる方にもアリ伝染�?
+		// 確率ですりすりしてる方にもアリ伝染る
 		if (p.getAttachmentSize(Ants.class) > 0 && SimYukkuri.RND.nextInt(200) == 0) {
 			if (getNumOfAnts() <= 0) {
 				setNumOfAnts(0);
@@ -5340,7 +5339,7 @@ public abstract class Body extends BodyAttributes {
 		p.stay(40);
 		if (getIntelligence() != Intelligence.WISE && getSurisuriAccidentProb() != 0
 				&& SimYukkuri.RND.nextInt(getSurisuriAccidentProb()) == 0) {
-			// すりすり事故、すっきりーにな�?
+			// すりすり事故、すっきりーになる
 			doSukkiri(p);
 		}
 		if (isSick() && SimYukkuri.RND.nextInt(5) == 0) {
@@ -5352,7 +5351,7 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * ぺろぺろす�?.
+	 * ぺろぺろする.
 	 * 
 	 * @param p ぺろぺろ対象
 	 */
@@ -5369,12 +5368,12 @@ public abstract class Body extends BodyAttributes {
 		if (isSleeping())
 			return;
 
-		// 自�?との関�?
+		// 自分との関係
 		EnumRelationMine eRelation = BodyLogic.checkMyRelation(this, p);
 		if (findSick(p) || p.isFeelHardPain() || p.isDamaged() || p.getAttachmentSize(Ants.class) != 0) {
 			switch (eRelation) {
 				case FATHER: // 父
-				case MOTHER: // �?
+				case MOTHER: // 母
 					// 子供を治そうとする
 					setMessage(MessagePool.getMessage(this, MessagePool.Action.TreatChildByPeropero));
 					break;
@@ -5382,15 +5381,15 @@ public abstract class Body extends BodyAttributes {
 					// つがいを治そうとする
 					setMessage(MessagePool.getMessage(this, MessagePool.Action.TreatPartnerByPeropero));
 					break;
-				case CHILD_FATHER: // 父の子�?
+				case CHILD_FATHER: // 父の子供
 					// 父を治そうとする
 					setMessage(MessagePool.getMessage(this, MessagePool.Action.TreatFatherBySurisuri));
 					break;
-				case CHILD_MOTHER: // 母�?�子�?
+				case CHILD_MOTHER: // 母の子供
 					// 母を治そうとする
 					setMessage(MessagePool.getMessage(this, MessagePool.Action.TreatMotherBySurisuri));
 					break;
-				case ELDERSISTER: // �?
+				case ELDERSISTER: // 姉
 					// 妹を治そうとする
 					setMessage(MessagePool.getMessage(this, MessagePool.Action.TreatSisterByPeropero));
 					break;
@@ -5405,32 +5404,32 @@ public abstract class Body extends BodyAttributes {
 			p.addMemories(1);
 			p.addStress(-75);
 		} else {
-			// 相手によってセリフを変えるよ�?にする処�?。現在はセリフ制作時に作�?の血管が�??れそ�?なのでオミッ�?
+			// 相手によってセリフを変えるようにする処理。現在はセリフ制作時に作者の血管が切れそうなのでオミット
 			/*
 			 * switch( eRelation ){
 			 * case FATHER: // 父
-			 * case MOTHER: // �?
-			 * // 子供とぺろぺ�?
+			 * case MOTHER: // 母
+			 * // 子供とぺろぺろ
 			 * setMessage(MessagePool.getMessage(this, MessagePool.Action.PeroPero));
 			 * break;
 			 * case PARTNAR: // つがい
-			 * // つがいとぺろぺ�?
+			 * // つがいとぺろぺろ
 			 * setMessage(MessagePool.getMessage(this, MessagePool.Action.PeroPero));
 			 * break;
-			 * case CHILD_FATHER: // 父の子�?
-			 * // 父とぺろぺ�?
+			 * case CHILD_FATHER: // 父の子供
+			 * // 父とぺろぺろ
 			 * setMessage(MessagePool.getMessage(this, MessagePool.Action.PeroperoFather));
 			 * break;
-			 * case CHILD_MOTHER: // 母�?�子�?
-			 * // 母とぺろぺ�?
+			 * case CHILD_MOTHER: // 母の子供
+			 * // 母とぺろぺろ
 			 * setMessage(MessagePool.getMessage(this, MessagePool.Action.PeroperoMother));
 			 * break;
-			 * case ELDERSISTER: // �?
-			 * // 妹とぺろぺ�?
+			 * case ELDERSISTER: // 姉
+			 * // 妹とぺろぺろ
 			 * setMessage(MessagePool.getMessage(this, MessagePool.Action.PeroPero));
 			 * break;
 			 * case YOUNGSISTER: // 妹
-			 * //�? とぺろぺ�?
+			 * //姉 とぺろぺろ
 			 * setMessage(MessagePool.getMessage(this, MessagePool.Action.PeroPero));
 			 * break;
 			 * default : // 他人
@@ -5445,7 +5444,7 @@ public abstract class Body extends BodyAttributes {
 			p.addMemories(1);
 			p.addStress(-200);
 		}
-		// アリ減�?
+		// アリ減少
 		int ant = p.getNumOfAnts();
 		ant -= 40;
 		if (ant <= 0) {
@@ -5453,7 +5452,7 @@ public abstract class Body extends BodyAttributes {
 			p.removeAnts();
 		}
 		p.setNumOfAnts(ant);
-		// しかし確�?でぺろぺろしてる方にもアリ伝染�?
+		// しかし確率でぺろぺろしてる方にもアリ伝染る
 		if (ant > 0 && SimYukkuri.RND.nextInt(200) == 0) {
 			if (getNumOfAnts() <= 0) {
 				addAttachment(new Ants(this));
@@ -5483,9 +5482,9 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * 母が子供�?�針をぐ�?�りぐーりす�?
+	 * 母が子供の針をぐーりぐーりする
 	 * 
-	 * @param p 子�?
+	 * @param p 子供
 	 */
 	public void doGuriguri(Body p) {
 		if (isDead() || p.isDead()) {
@@ -5496,7 +5495,7 @@ public abstract class Body extends BodyAttributes {
 			return;
 		}
 
-		// ぐ�?�りぐーり時のメ�?セージ
+		// ぐーりぐーり時のメッセージ
 		if (p.isAdult()) {
 			// つがいが対象
 			setMessage(MessagePool.getMessage(this, MessagePool.Action.ExtractingNeedlePartner));
@@ -5506,7 +5505,7 @@ public abstract class Body extends BodyAttributes {
 		}
 
 		if (p.isNotNYD()) {
-			// ぐ�?�りぐーりされた時�?�メ�?セージ
+			// ぐーりぐーりされた時のメッセージ
 			p.setMessage(MessagePool.getMessage(p, MessagePool.Action.NeedlePain), 60, true, false);
 			p.stayPurupuru(40);
 			p.setHappiness(Happiness.VERY_SAD);
@@ -5520,14 +5519,14 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * �?っくりの向きを制御する
+	 * ゆっくりの向きを制御する
 	 * 
-	 * @param b        相�?
+	 * @param b        相手
 	 * @param alignDir 向き
 	 */
 	public final void constraintDirection(Body b, boolean alignDir) {
 		if (alignDir) {
-			// 自�?と同じ方向を向かせる
+			// 自分と同じ方向を向かせる
 			setDirection(b.getDirection());
 		} else {
 			// 向き合うように変更
@@ -5542,21 +5541,21 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * �?定�?�座標まで動く
+	 * 指定の座標まで動く
 	 * 
-	 * @param toX X座�?
-	 * @param toY Y座�?
+	 * @param toX X座標
+	 * @param toY Y座標
 	 */
 	public final void moveTo(int toX, int toY) {
 		moveTo(toX, toY, 0);
 	}
 
 	/**
-	 * �?定�?�座標まで動く.
+	 * 指定の座標まで動く.
 	 * 
-	 * @param toX X座�?
-	 * @param toY Y座�?
-	 * @param toZ Z座�?
+	 * @param toX X座標
+	 * @param toY Y座標
+	 * @param toZ Z座標
 	 */
 	public final void moveTo(int toX, int toY, int toZ) {
 		if (isDead()) {
@@ -5571,9 +5570,9 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * �?定�?�座標まで動く
+	 * 指定の座標まで動く
 	 * 
-	 * @param toZ Z座�?
+	 * @param toZ Z座標
 	 */
 	public final void moveToZ(int toZ) {
 		if (isDead()) {
@@ -5588,25 +5587,25 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * ご�?�ん�?�方に動く
+	 * ごはんの方に動く
 	 * 
-	 * @param target ターゲ�?ト�?�メシ
-	 * @param type   メシの種�?
-	 * @param toX    X座�?
-	 * @param toY    Y座�?
+	 * @param target ターゲットのメシ
+	 * @param type   メシの種類
+	 * @param toX    X座標
+	 * @param toY    Y座標
 	 */
 	public final void moveToFood(Obj target, Food.FoodType type, int toX, int toY) {
 		moveToFood(target, type, toX, toY, 0);
 	}
 
 	/**
-	 * ご�?�ん�?�方に動く
+	 * ごはんの方に動く
 	 * 
-	 * @param target ターゲ�?ト�?�メシ
-	 * @param type   メシの種�?
-	 * @param toX    X座�?
-	 * @param toY    Y座�?
-	 * @param toZ    Z座�?
+	 * @param target ターゲットのメシ
+	 * @param type   メシの種類
+	 * @param toX    X座標
+	 * @param toY    Y座標
+	 * @param toZ    Z座標
 	 */
 	public final void moveToFood(Obj target, Food.FoodType type, int toX, int toY, int toZ) {
 		clearActions();
@@ -5619,9 +5618,9 @@ public abstract class Body extends BodyAttributes {
 	/**
 	 * すっきりのために動く
 	 * 
-	 * @param target ターゲ�?ト�?��?っくり
-	 * @param toX    X座�?
-	 * @param toY    Y座�?
+	 * @param target ターゲットのゆっくり
+	 * @param toX    X座標
+	 * @param toY    Y座標
 	 */
 	public final void moveToSukkiri(Obj target, int toX, int toY) {
 		moveToSukkiri(target, toX, toY, 0);
@@ -5630,10 +5629,10 @@ public abstract class Body extends BodyAttributes {
 	/**
 	 * すっきりのために動く
 	 * 
-	 * @param target ターゲ�?ト�?��?っくり
-	 * @param toX    X座�?
-	 * @param toY    Y座�?
-	 * @param toZ    Z座�?
+	 * @param target ターゲットのゆっくり
+	 * @param toX    X座標
+	 * @param toY    Y座標
+	 * @param toZ    Z座標
 	 */
 	public final void moveToSukkiri(Obj target, int toX, int toY, int toZ) {
 		clearActions();
@@ -5646,8 +5645,8 @@ public abstract class Body extends BodyAttributes {
 	 * トイレの方向に動く
 	 * 
 	 * @param target トイレ
-	 * @param toX    X座�?
-	 * @param toY    Y座�?
+	 * @param toX    X座標
+	 * @param toY    Y座標
 	 */
 	public final void moveToToilet(Obj target, int toX, int toY) {
 		moveToToilet(target, toX, toY, 0);
@@ -5657,9 +5656,9 @@ public abstract class Body extends BodyAttributes {
 	 * トイレの方向に動く
 	 * 
 	 * @param target トイレ
-	 * @param toX    X座�?
-	 * @param toY    Y座�?
-	 * @param toZ    Z座�?
+	 * @param toX    X座標
+	 * @param toY    Y座標
+	 * @param toZ    Z座標
 	 */
 	public final void moveToToilet(Obj target, int toX, int toY, int toZ) {
 		clearActions();
@@ -5669,23 +5668,23 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * ベッド�?�方に動く
+	 * ベッドの方に動く
 	 * 
-	 * @param target ベッ�?
-	 * @param toX    X座�?
-	 * @param toY    Y座�?
+	 * @param target ベッド
+	 * @param toX    X座標
+	 * @param toY    Y座標
 	 */
 	public final void moveToBed(Obj target, int toX, int toY) {
 		moveToBed(target, toX, toY, 0);
 	}
 
 	/**
-	 * ベッド�?�方に動く
+	 * ベッドの方に動く
 	 * 
-	 * @param target ベッ�?
-	 * @param toX    X座�?
-	 * @param toY    Y座�?
-	 * @param toZ    Z座�?
+	 * @param target ベッド
+	 * @param toX    X座標
+	 * @param toY    Y座標
+	 * @param toZ    Z座標
 	 */
 	public final void moveToBed(Obj target, int toX, int toY, int toZ) {
 		clearActions();
@@ -5697,9 +5696,9 @@ public abstract class Body extends BodyAttributes {
 	/**
 	 * なんかの方向に動く
 	 * 
-	 * @param target ターゲ�?ト�?�なんか
-	 * @param toX    X座�?
-	 * @param toY    Y座�?
+	 * @param target ターゲットのなんか
+	 * @param toX    X座標
+	 * @param toY    Y座標
 	 */
 	public final void moveToBody(Obj target, int toX, int toY) {
 		moveToBody(target, toX, toY, 0);
@@ -5708,10 +5707,10 @@ public abstract class Body extends BodyAttributes {
 	/**
 	 * なんかの方向に動く
 	 * 
-	 * @param target ターゲ�?ト�?�なんか
-	 * @param toX    X座�?
-	 * @param toY    Y座�?
-	 * @param toZ    Z座�?
+	 * @param target ターゲットのなんか
+	 * @param toX    X座標
+	 * @param toY    Y座標
+	 * @param toZ    Z座標
 	 */
 	public final void moveToBody(Obj target, int toX, int toY, int toZ) {
 		clearActions();
@@ -5721,23 +5720,23 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * イベント時の移�?(通常種用)
+	 * イベント時の移動(通常種用)
 	 * 
-	 * @param e   イベン�?
-	 * @param toX X座�?
-	 * @param toY Y座�?
+	 * @param e   イベント
+	 * @param toX X座標
+	 * @param toY Y座標
 	 */
 	public final void moveToEvent(EventPacket e, int toX, int toY) {
 		moveToEvent(e, toX, toY, 0);
 	}
 
 	/**
-	 * 同�?(飛行種用)
+	 * 同上(飛行種用)
 	 * 
-	 * @param e   イベン�?
-	 * @param toX X座�?
-	 * @param toY Y座�?
-	 * @param toZ Z座�?
+	 * @param e   イベント
+	 * @param toX X座標
+	 * @param toY Y座標
+	 * @param toZ Z座標
 	 */
 	public final void moveToEvent(EventPacket e, int toX, int toY, int toZ) {
 		if (isDead()) {
@@ -5752,10 +5751,10 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * �?定�?�方向を見る
+	 * 指定の方向を見る
 	 * 
-	 * @param toX X座�?
-	 * @param toY Y座�?
+	 * @param toX X座標
+	 * @param toY Y座標
 	 */
 	public final void lookTo(int toX, int toY) {
 		if (isDead() || isSleeping()) {
@@ -5772,7 +5771,7 @@ public abstract class Body extends BodyAttributes {
 	/**
 	 * メシを食う
 	 * 
-	 * @param amount メシの�?
+	 * @param amount メシの量
 	 */
 	public final void eatFood(int amount) {
 		hungry += amount;
@@ -5787,9 +5786,9 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * 食べられる�?��?
+	 * 食べられる処理
 	 * 
-	 * @param amount 食われる�?
+	 * @param amount 食われる量
 	 */
 	public void eatBody(int amount) {
 		setBodyAmount(getBodyAmount() - amount);
@@ -5803,7 +5802,7 @@ public abstract class Body extends BodyAttributes {
 				}
 			}
 		} else {
-			// 生きたまま食べられ�?
+			// 生きたまま食べられる
 			addHungry(-amount);
 			if (hungry <= 0) {
 				addDamage(amount);
@@ -5818,15 +5817,15 @@ public abstract class Body extends BodyAttributes {
 				}
 			}
 		}
-		// 実ゆの場合、親が反応す�?
+		// 実ゆの場合、親が反応する
 		checkReactionStalkMother(UnbirthBabyState.ATTAKED);
 	}
 
 	/**
-	 * 他�?��?っくりから食べられ�?
+	 * 他のゆっくりから食べられる
 	 * 
 	 * @param amount 食べられる量
-	 * @param eater  食べてくる�?っくり
+	 * @param eater  食べてくるゆっくり
 	 */
 	public void eatBody(int amount, Body eater) {
 		eatBody(amount);
@@ -5839,7 +5838,7 @@ public abstract class Body extends BodyAttributes {
 		if (isNotNYD()) {
 			if (isSmart() || getBodyAgeState().ordinal() < eater.getBodyAgeState().ordinal() || isLockmove()
 					|| isGotBurnedHeavily()) {
-				// �?良か動けな�?状態か自�?より大きい相手�?��?げる
+				// 善良か動けない状態か自分より大きい相手は逃げる
 				setMessage(MessagePool.getMessage(this, MessagePool.Action.EatenByBody));
 				setHappiness(Happiness.VERY_SAD);
 				runAway(getX(), getY());
@@ -5853,11 +5852,11 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * �?っくり以外から食べられる（現在はアリのみ?�?
+	 * ゆっくり以外から食べられる（現在はアリのみ）
 	 * 
-	 * @param amount 食われる�?
-	 * @param P      アリな�?0
-	 * @param AV     食べられた際に吐くかど�?�?
+	 * @param amount 食われる量
+	 * @param P      アリなら0
+	 * @param AV     食べられた際に吐くかどうか
 	 */
 	public void beEaten(int amount, int P, boolean AV) {
 		eatBody(amount);
@@ -5871,7 +5870,7 @@ public abstract class Body extends BodyAttributes {
 			v.crushVomit();
 		}
 		if (isNotNYD()) {
-			// アリの場合�?�反�?
+			// アリの場合の反応
 			if (P == 0) {
 				setHappiness(Happiness.VERY_SAD);
 				if (SimYukkuri.RND.nextInt(4) == 0) {
@@ -5885,7 +5884,7 @@ public abstract class Body extends BodyAttributes {
 						setMessage(MessagePool.getMessage(this, MessagePool.Action.EatenByAnts));
 					}
 					if (isDamaged() || isLockmove() || isGotBurnedHeavily()) {
-						// 動けな�?状�?
+						// 動けない状態
 						stayPurupuru(10);
 					} else {
 						// 反撃
@@ -5919,7 +5918,7 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * 強制給�?
+	 * 強制給餌
 	 */
 	public final void feed() {
 		if (hungry <= getHungryLimit()) {
@@ -5937,7 +5936,7 @@ public abstract class Body extends BodyAttributes {
 	/**
 	 * ダメージ追加
 	 * 
-	 * @param amount ダメージ�?
+	 * @param amount ダメージ量
 	 */
 	public final void addDamage(int amount) {
 		if (isDead()) {
@@ -5949,7 +5948,7 @@ public abstract class Body extends BodyAttributes {
 	/**
 	 * 打撃を受ける
 	 * 
-	 * @param amount ダメージ�?
+	 * @param amount ダメージ量
 	 */
 	public final void strike(int amount) {
 		if (isDead()) {
@@ -5962,14 +5961,14 @@ public abstract class Body extends BodyAttributes {
 		stay();
 		setDamageState(getDamageState());
 		wakeup();
-		// 背面固定でかつ針が刺さって�?な�?場�?
+		// 背面固定でかつ針が刺さっていない場合
 		if (isFixBack() && !isbNeedled()) {
 			setFurifuri(true);
 		}
 	}
 
 	/**
-	 * お仕置�?
+	 * お仕置き
 	 */
 	public void strikeByPunish() {
 		if (isDead()) {
@@ -5982,9 +5981,9 @@ public abstract class Body extends BodyAttributes {
 			return;
 		}
 
-		// なつき度設�?
+		// なつき度設定
 		addLovePlayer(-10);
-		// しつけ効�?
+		// しつけ効果
 		teachManner(1);
 		// disclipline(2);
 		strike(Const.NEEDLE);
@@ -5999,22 +5998,22 @@ public abstract class Body extends BodyAttributes {
 		clearActions();
 		setAngry();
 
-		// 持ち物を�?�部落と�?
+		// 持ち物を全部落とす
 		dropAllTakeoutItem();
 		// dropOkazari();
-		// 実ゆの場合、親が反応す�?
+		// 実ゆの場合、親が反応する
 		checkReactionStalkMother(UnbirthBabyState.ATTAKED);
 
 	}
 
 	/**
-	 * ハンマ�?�
+	 * ハンマー
 	 */
 	public void strikeByHammer() {
 		if (isDead()) {
 			return;
 		}
-		// なつき度設�?
+		// なつき度設定
 		addLovePlayer(-200);
 		strike(Const.HAMMER);
 		setPikoMessage(MessagePool.getMessage(this, MessagePool.Action.Scream), true);
@@ -6029,15 +6028,15 @@ public abstract class Body extends BodyAttributes {
 
 		begForLife();
 
-		// 持ち物を�?�部落と�?
+		// 持ち物を全部落とす
 		dropAllTakeoutItem();
 
-		// 実ゆの場合、親が反応す�?
+		// 実ゆの場合、親が反応する
 		checkReactionStalkMother(UnbirthBabyState.ATTAKED);
 	}
 
 	/**
-	 * 押さえつ�?
+	 * 押さえつけ
 	 */
 	public void strikeByPress() {
 		if (!isDead()) {
@@ -6053,14 +6052,14 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * パン�?
+	 * パンチ
 	 */
 	public void strikeByPunch() {
 		if (isDead()) {
 			return;
 		}
 
-		// なつき度設�?
+		// なつき度設定
 		addLovePlayer(-500);
 		strike(getDAMAGELIMITorg()[getBodyAgeState().ordinal()] / 5);
 		setCalm();
@@ -6073,24 +6072,24 @@ public abstract class Body extends BodyAttributes {
 		}
 
 		begForLife();
-		// 持ち物を�?�部落と�?
+		// 持ち物を全部落とす
 		dropAllTakeoutItem();
-		// 実ゆの場合、親が反応す�?
+		// 実ゆの場合、親が反応する
 		checkReactionStalkMother(UnbirthBabyState.ATTAKED);
 	}
 
 	/**
-	 * �?っくりから攻�?を受けた時�?�処�?
+	 * ゆっくりから攻撃を受けた時の処理
 	 * 
-	 * @param enemy      攻�?してきた�?っくり
-	 * @param e          イベン�?
-	 * @param bAllowance 手加減あり�?�場�?
+	 * @param enemy      攻撃してきたゆっくり
+	 * @param e          イベント
+	 * @param bAllowance 手加減ありの場合
 	 */
 	public void strikeByYukkuri(Body enemy, EventPacket e, boolean bAllowance) {
 		if (isDead()) {
 			return;
 		}
-		// 相手�?�ベ�?�ス攻�?力計�?
+		// 相手のベース攻撃力計算
 		int ap = enemy.getStrength();
 		// 状態によるダメージ変化
 		if (enemy.isDamaged()) {
@@ -6113,7 +6112,7 @@ public abstract class Body extends BodyAttributes {
 		if (!isPredatorType() && enemy.isPredatorType()) {
 			ap *= 2f;
 		}
-		// 吹っ飛�?�設�?
+		// 吹っ飛び設定
 		// 体重差
 		int kickX = (enemy.getWeight() - getWeight()) / 100;
 		int kickY = (enemy.getWeight() - getWeight()) / 500;
@@ -6133,10 +6132,10 @@ public abstract class Body extends BodyAttributes {
 			if (ap > 0)
 				ap = (int) (ap * 0.25f);
 		}
-		// 手加減あ�?
+		// 手加減あり
 		if (bAllowance) {
 			int nDamage = damage + ap;
-			// 次の一�?でダメージ�?75%を�?える場�?
+			// 次の一撃でダメージが75%を超える場合
 			if (getDAMAGELIMITorg()[getBodyAgeState().ordinal()] * 3 / 4 < nDamage) {
 				ap = getDAMAGELIMITorg()[getBodyAgeState().ordinal()] * 4 / 5 - damage;
 				if (ap < 0) {
@@ -6145,17 +6144,17 @@ public abstract class Body extends BodyAttributes {
 			}
 		}
 
-		// 実�?
-		// 持ち物を落と�?
+		// 実行
+		// 持ち物を落とす
 		dropAllTakeoutItem();
 		strike(ap);
-		// ぴこ�?�こ破�?
+		// ぴこぴこ破壊
 		if (!isBraidType() && isHasBraid() && 0 < getnBreakBraidRand()
 				&& SimYukkuri.RND.nextInt(getnBreakBraidRand()) == 0) {
 			setHasBraid(false);
 		}
 		setHappiness(Happiness.SAD);
-		// 土に埋まって�?な�?なら吹っ飛�?�
+		// 土に埋まっていないなら吹っ飛ぶ
 		if (getBaryState() == BaryInUGState.NONE) {
 			kick(kickX, kickY, -4);
 		}
@@ -6167,13 +6166,13 @@ public abstract class Body extends BodyAttributes {
 			setCrushed(true);
 		} else {
 			if (SimYukkuri.UNYO) {
-				// 0.25 多すぎる 0.01 少なすぎ�? 0.06 少なすぎ�?
+				// 0.25 多すぎる 0.01 少なすぎる 0.06 少なすぎる
 				changeUnyo((int) (ap * 0.11f), 0, 0);
 				enemy.changeUnyo(SimYukkuri.RND.nextInt(3), 0, 0);
 			}
 			if (isNotNYD() && !isUnBirth()) {
 				if (e instanceof HateNoOkazariEvent) {
-					// お飾り�?�迫害
+					// お飾りの迫害
 					setMessage(MessagePool.getMessage(this, MessagePool.Action.Scream), true);
 					if (getPublicRank() != PublicRank.UnunSlave
 							&& (isRude() || (getAttitude() == Attitude.AVERAGE && SimYukkuri.RND.nextBoolean()))) {
@@ -6181,11 +6180,11 @@ public abstract class Body extends BodyAttributes {
 						EventLogic.addBodyEvent(this, new RevengeAttackEvent(this, enemy, null, 1), null, null);
 					}
 				} else if (e instanceof PredatorsGameEvent) {
-					// 自�?が捕食種のおもち�?にされたと�?
-					// �?げる
+					// 自分が捕食種のおもちゃにされたとき
+					// 逃げる
 					runAway(enemy.getX(), enemy.getY());
 					setPikoMessage(MessagePool.getMessage(this, MessagePool.Action.DontPlayMe), true);
-					// おもち�?にされたとき、母が�?たら33%の確�?で「捕食種はあっち�?ってね?��」イベントが発生�?
+					// おもちゃにされたとき、母がいたら33%の確率で「捕食種はあっちいってね！」イベントが発生。
 					Body m = YukkuriUtil.getBodyInstance(getMother());
 					if (m != null) {
 						if (SimYukkuri.RND.nextInt(3) == 0 && m != null && !m.isDead() && !m.isRemoved()) {
@@ -6201,7 +6200,7 @@ public abstract class Body extends BodyAttributes {
 						bodyInjure();
 					}
 				} else if (e instanceof RaperReactionEvent) {
-					// 自�?がレイパ�?�で攻�?されたと�?
+					// 自分がレイパーで攻撃されたとき
 					// 相手をレイプ対象に
 					int colX = BodyLogic.calcCollisionX(this, enemy);
 					moveToSukkiri(enemy, enemy.getX() + colX, enemy.getY());
@@ -6209,7 +6208,7 @@ public abstract class Body extends BodyAttributes {
 						bodyInjure();
 					}
 				} else if (e instanceof AvoidMoldEvent) {
-					// 自�?がかびてる時
+					// 自分がかびてる時
 					setMessage(MessagePool.getMessage(this, MessagePool.Action.Scream), true);
 					if (!isBaby() && !isSmart() && getIntelligence() == Intelligence.FOOL) {
 						setAngry();
@@ -6227,9 +6226,9 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * 攻�?力�?�基�?
+	 * 攻撃力の基準
 	 * 
-	 * @return 攻�?�?
+	 * @return 攻撃力
 	 */
 	@Transient
 	public final int getStrength() {
@@ -6237,13 +6236,13 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * 何かで衝撃を加えられたと�?
+	 * 何かで衝撃を加えられたとき
 	 * 
-	 * @param ap         基本ダメージ�?
+	 * @param ap         基本ダメージ量
 	 * @param weight     体重
-	 * @param bAllowance 手加減あ�?
-	 * @param vecX       X方向�?�ベクトル
-	 * @param vecY       Y方向�?�ベクトル
+	 * @param bAllowance 手加減あり
+	 * @param vecX       X方向のベクトル
+	 * @param vecY       Y方向のベクトル
 	 */
 	public void strikeByObject(int ap, int weight, boolean bAllowance, int vecX, int vecY) {
 		if (isDead()) {
@@ -6258,17 +6257,17 @@ public abstract class Body extends BodyAttributes {
 		if (isHasPants()) {
 			ap *= 0.8;
 		}
-		// 吹っ飛�?�設�?
+		// 吹っ飛び設定
 		// 体重差
 		int kick = (weight - getWeight()) / 100;
 		if (kick < 1)
 			kick = 1;
 		vecX *= kick;
 		vecY *= kick;
-		// 手加減あ�?
+		// 手加減あり
 		if (bAllowance) {
 			int nDamage = damage + ap;
-			// 次の一�?でダメージ�?85%を�?える場�?
+			// 次の一撃でダメージが85%を超える場合
 			if (getDAMAGELIMITorg()[getBodyAgeState().ordinal()] * 85 / 100 < nDamage) {
 				ap = getDAMAGELIMITorg()[getBodyAgeState().ordinal()] * 85 / 100 - damage;
 				if (ap < 0) {
@@ -6277,7 +6276,7 @@ public abstract class Body extends BodyAttributes {
 			}
 		}
 		strike(ap);
-		// 土に埋まって�?な�?なら吹っ飛�?�
+		// 土に埋まっていないなら吹っ飛ぶ
 		if (getBaryState() == BaryInUGState.NONE) {
 			kick(vecX, vecY, -5);
 		}
@@ -6288,14 +6287,14 @@ public abstract class Body extends BodyAttributes {
 		} else {
 			setMessage(MessagePool.getMessage(this, MessagePool.Action.Scream), true);
 		}
-		// 持ち物を�?�部落と�?
+		// 持ち物を全部落とす
 		dropAllTakeoutItem();
-		// 実ゆの場合、親が反応す�?
+		// 実ゆの場合、親が反応する
 		checkReactionStalkMother(UnbirthBabyState.ATTAKED);
 	}
 
 	/**
-	 * 体�?��?発
+	 * 体の爆発
 	 */
 	public void bodyBurst() {
 		if (!isCrushed()) {
@@ -6315,7 +6314,7 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * 体�?��?断
+	 * 体の切断
 	 */
 	public void bodyCut() {
 		clearActions();
@@ -6327,12 +6326,12 @@ public abstract class Body extends BodyAttributes {
 						this, getShitType());
 			}
 		}
-		// 実ゆの場合、親が反応す�?
+		// 実ゆの場合、親が反応する
 		checkReactionStalkMother(UnbirthBabyState.ATTAKED);
 	}
 
 	/**
-	 * 体�?�ケガ
+	 * 体のケガ
 	 */
 	public void bodyInjure() {
 		clearActions();
@@ -6352,15 +6351,15 @@ public abstract class Body extends BodyAttributes {
 					getY() + 7 - SimYukkuri.RND.nextInt(14), 0, this,
 					getShitType());
 		}
-		// 実ゆの場合、親が反応す�?
+		// 実ゆの場合、親が反応する
 		checkReactionStalkMother(UnbirthBabyState.ATTAKED);
 	}
 
 	/**
-	 * キ�?クされ�?
+	 * キックされた
 	 */
 	public final void kick() {
-		// 土に埋まって�?な�?なら吹っ飛�?�
+		// 土に埋まっていないなら吹っ飛ぶ
 		if (getBaryState() == BaryInUGState.NONE) {
 			int blowLevel[] = { -4, -3, -2 };
 			kick(0, blowLevel[getBodyAgeState().ordinal()] * 2, blowLevel[getBodyAgeState().ordinal()]);
@@ -6370,7 +6369,7 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * お飾りが無�?ことを認�?
+	 * お飾りが無いことを認識
 	 */
 	public void noticeNoOkazari() {
 		if (isDead() || isRemoved() || isUnBirth()) {
@@ -6381,7 +6380,7 @@ public abstract class Body extends BodyAttributes {
 			return;
 		}
 
-		// 起きて�?
+		// 起きてる
 		if (!isSleeping()) {
 			setMessage(MessagePool.getMessage(this, MessagePool.Action.NoticeNoAccessory), true);
 			setHappiness(Happiness.VERY_SAD);
@@ -6393,7 +6392,7 @@ public abstract class Body extends BodyAttributes {
 	/**
 	 * お飾りを取られる
 	 * 
-	 * @param bByPlayer プレイヤーに取られたかど�?�?
+	 * @param bByPlayer プレイヤーに取られたかどうか
 	 */
 	public void takeOkazari(boolean bByPlayer) {
 		setOkazari(null);
@@ -6405,7 +6404,7 @@ public abstract class Body extends BodyAttributes {
 				setHappiness(Happiness.VERY_SAD);
 				addStress(1200);
 				if (bByPlayer) {
-					// なつき度設�?
+					// なつき度設定
 					addLovePlayer(-100);
 				}
 				setbNoticeNoOkazari(true);
@@ -6413,12 +6412,12 @@ public abstract class Body extends BodyAttributes {
 				setbNoticeNoOkazari(false);
 			}
 		}
-		// 実ゆの場合、親が反応す�?
+		// 実ゆの場合、親が反応する
 		checkReactionStalkMother(UnbirthBabyState.SAD);
 	}
 
 	/**
-	 * お飾りを落と�?(未使用)
+	 * お飾りを落とす(未使用)
 	 */
 	public void dropOkazari() {
 		if (getOkazari() != null) {
@@ -6431,10 +6430,10 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * お飾りをあげたとき�?�反応を記述する.
-	 * たりな�?�?は別なのでオーバ�?�ライドす�?.
+	 * お飾りをあげたときの反応を記述する.
+	 * たりないゆは別なのでオーバーライドする.
 	 * 
-	 * @param type お飾り�?�タイ�?
+	 * @param type お飾りのタイプ
 	 */
 	public void giveOkazari(OkazariType type) {
 		setOkazari(new Okazari(this, type));
@@ -6443,14 +6442,14 @@ public abstract class Body extends BodyAttributes {
 			if (getOkazari().getOkazariType() == OkazariType.DEFAULT) {
 				setHappiness(Happiness.VERY_HAPPY);
 				addStress(-1250);
-				// なつき度設�?
+				// なつき度設定
 				addLovePlayer(10);
-				// 実ゆの場合、親が反応す�?
+				// 実ゆの場合、親が反応する
 				checkReactionStalkMother(UnbirthBabyState.HAPPY);
 			} else {
 				setHappiness(Happiness.SAD);
 				addStress(-100);
-				// なつき度設�?
+				// なつき度設定
 				addLovePlayer(10);
 			}
 		}
@@ -6466,9 +6465,9 @@ public abstract class Body extends BodyAttributes {
 				setMessage(MessagePool.getMessage(this, MessagePool.Action.RelaxOkurumi), 30);
 				setHappiness(Happiness.HAPPY);
 				addStress(-250);
-				// なつき度設�?
+				// なつき度設定
 				addLovePlayer(100);
-				// 実ゆの場合、親が反応す�?
+				// 実ゆの場合、親が反応する
 				checkReactionStalkMother(UnbirthBabyState.HAPPY);
 			}
 		}
@@ -6505,13 +6504,13 @@ public abstract class Body extends BodyAttributes {
 		addMemories(20);
 		setForcePanicClear();
 		if (getCurrentEvent() instanceof BegForLifeEvent) {
-			// 空処�?
+			// 空処理
 		} else {
 			clearActions();
 		}
-		// なつき度設�?
+		// なつき度設定
 		addLovePlayer(200);
-		// 実ゆの場合、親が反応す�?
+		// 実ゆの場合、親が反応する
 		checkReactionStalkMother(UnbirthBabyState.HAPPY);
 	}
 
@@ -6522,7 +6521,7 @@ public abstract class Body extends BodyAttributes {
 		if (isDead()) {
 			return;
 		}
-		// 反�?
+		// 反応
 		if (isSleeping()) {
 			wakeup();
 		}
@@ -6543,9 +6542,9 @@ public abstract class Body extends BodyAttributes {
 		damage = 0;
 		setDamageState(getDamageState());
 		hungry = getHungryLimit();
-		// なつき度設�?
+		// なつき度設定
 		addLovePlayer(-50);
-		// 実ゆの場合、親が反応す�?
+		// 実ゆの場合、親が反応する
 		checkReactionStalkMother(UnbirthBabyState.ATTAKED);
 	}
 
@@ -6566,21 +6565,21 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * あに�?る閉鎖�?�トグル
+	 * あにゃる閉鎖のトグル
 	 */
 	public final void invAnalClose() {
 		closeAnal(!isAnalClose());
 	}
 
 	/**
-	 * あに�?る閉鎖す�?.
+	 * あにゃる閉鎖する.
 	 */
 	public final void closeAnal(boolean flag) {
 		if (isDead()) {
 			return;
 		}
 		analClose = flag;
-		// 寝て�?たらリアクションな�?
+		// 寝ていたらリアクションなし
 		if (!canAction()) {
 			return;
 		}
@@ -6598,16 +6597,16 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * あに�?る閉鎖を設定す�?.
+	 * あにゃる閉鎖を設定する.
 	 * 
-	 * @param flag あに�?る閉鎖するか否�?
+	 * @param flag あにゃる閉鎖するか否か
 	 */
 	public final void setAnalClose(boolean flag) {
 		this.analClose = flag;
 	}
 
 	/**
-	 * Shiftキー押下での動�?.
+	 * Shiftキー押下での動作.
 	 * 
 	 * @return 茎去勢有無
 	 */
@@ -6616,7 +6615,7 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * Shiftキー押下での動�?.
+	 * Shiftキー押下での動作.
 	 * 
 	 * @return 胎生去勢有無
 	 */
@@ -6625,14 +6624,14 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * 茎去勢を設定す�?.
+	 * 茎去勢を設定する.
 	 */
 	public void castrateStalk(boolean flag) {
 		if (isDead()) {
 			return;
 		}
 		stalkCastration = flag;
-		// 寝て�?たらリアクションな�?
+		// 寝ていたらリアクションなし
 		if (!canAction()) {
 			return;
 		}
@@ -6642,7 +6641,7 @@ public abstract class Body extends BodyAttributes {
 				setHappiness(Happiness.VERY_SAD);
 				addStress(1000);
 				setMessage(MessagePool.getMessage(this, MessagePool.Action.Alarm));
-				// なつき度設�?
+				// なつき度設定
 				addLovePlayer(-400);
 				if (SimYukkuri.RND.nextBoolean())
 					doYunnyaa(true);
@@ -6650,21 +6649,21 @@ public abstract class Body extends BodyAttributes {
 				// 開放
 				setHappiness(Happiness.AVERAGE);
 				setMessage(MessagePool.getMessage(this, MessagePool.Action.ToFreedom));
-				// なつき度設�?
+				// なつき度設定
 				addLovePlayer(400);
 			}
 		}
 	}
 
 	/**
-	 * 胎生去勢を設定す�?.
+	 * 胎生去勢を設定する.
 	 */
 	public void castrateBody(boolean flag) {
 		if (isDead()) {
 			return;
 		}
 		bodyCastration = flag;
-		// 寝て�?たらリアクションな�?
+		// 寝ていたらリアクションなし
 		if (!canAction()) {
 			return;
 		}
@@ -6673,7 +6672,7 @@ public abstract class Body extends BodyAttributes {
 				// 閉鎖
 				setHappiness(Happiness.VERY_SAD);
 				addStress(1000);
-				// なつき度設�?
+				// なつき度設定
 				addLovePlayer(-400);
 				setMessage(MessagePool.getMessage(this, MessagePool.Action.Alarm));
 				if (SimYukkuri.RND.nextBoolean())
@@ -6681,7 +6680,7 @@ public abstract class Body extends BodyAttributes {
 			} else {
 				// 開放
 				setHappiness(Happiness.AVERAGE);
-				// なつき度設�?
+				// なつき度設定
 				addLovePlayer(400);
 				setMessage(MessagePool.getMessage(this, MessagePool.Action.ToFreedom));
 			}
@@ -6723,9 +6722,9 @@ public abstract class Body extends BodyAttributes {
 			setYunnyaa(false);
 			setInOutTakeoutItem(false);
 			setHappiness(Happiness.VERY_SAD);
-			// なつき度設�?
+			// なつき度設定
 			addLovePlayer(-500);
-			// 実ゆの場合、親が反応す�?
+			// 実ゆの場合、親が反応する
 			checkReactionStalkMother(UnbirthBabyState.ATTAKED);
 		}
 
@@ -6745,24 +6744,24 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * 針に刺さって�?るかど�?かを取得�?Shiftキーでの針に対応�?.
+	 * 針に刺さっているかどうかを取得（Shiftキーでの針に対応）.
 	 * 
-	 * @return 針に刺さって�?るかど�?�?
+	 * @return 針に刺さっているかどうか
 	 */
 	public final boolean getNeedle() {
 		return isbNeedled();
 	}
 
 	/**
-	 * 針刺しを設定す�?.
+	 * 針刺しを設定する.
 	 * 
-	 * @param bOn 針刺�?
+	 * @param bOn 針刺し
 	 */
 	public void setNeedle(boolean bOn) {
 		if (getAttachmentSize(Needle.class) != 0) {
-			// 針が刺さって�?る場合�?�抜く
+			// 針が刺さっている場合は抜く
 			if (!bOn) {
-				// 生まれて�?なくてもし�?べれるようにする
+				// 生まれていなくてもしゃべれるようにする
 				if (isUnBirth()) {
 					setCanTalk(false);
 				}
@@ -6771,7 +6770,7 @@ public abstract class Body extends BodyAttributes {
 				setMessage(MessagePool.getMessage(this, MessagePool.Action.NeedleRemove));
 				removeAttachment(Needle.class);
 
-				// 粘着板で固定されて�?な�?なら背面固定解除
+				// 粘着板で固定されていないなら背面固定解除
 				Map<Integer, StickyPlate> stickyPlates = SimYukkuri.world.getCurrentMap().getStickyPlate();
 				boolean bReset = true;
 				for (Map.Entry<Integer, StickyPlate> entry : stickyPlates.entrySet()) {
@@ -6786,13 +6785,13 @@ public abstract class Body extends BodyAttributes {
 				}
 			}
 		} else {
-			// 針が刺さって�?な�?場合�?�刺�?
+			// 針が刺さっていない場合は刺す
 			if (bOn) {
 				getAttach().add(new Needle(this));
 
-				// 針を刺す際に判定する�?�で刺した後で初期化す�?
+				// 針を刺す際に判定するので刺した後で初期化する
 				if (!isDead()) {
-					// 生まれて�?なくてもし�?べれるようにする
+					// 生まれていなくてもしゃべれるようにする
 					if (isUnBirth()) {
 						setCanTalk(true);
 					}
@@ -6819,16 +6818,16 @@ public abstract class Body extends BodyAttributes {
 					setNobinobi(false);
 					setYunnyaa(false);
 					setInOutTakeoutItem(false);
-					// 飛行種なら墜落させ�?
+					// 飛行種なら墜落させる
 					if (canflyCheck()) {
 						moveToZ(0);
 					}
 					clearActions();
-					// なつき度設�?
+					// なつき度設定
 					addLovePlayer(-20);
 					setHappiness(Happiness.VERY_SAD);
 					setMessage(MessagePool.getMessage(this, MessagePool.Action.NeedleStick), true);
-					// 実ゆの場合、親が反応す�?
+					// 実ゆの場合、親が反応する
 					checkReactionStalkMother(UnbirthBabyState.ATTAKED);
 				}
 				setbNeedled(true);
@@ -6837,17 +6836,17 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * �?虐神拳を進捗させる?��お前�?�もう死んで�?る�?�ゆべら�??�?
+	 * ゆ虐神拳を進捗させる（お前はもう死んでいる→ゆべら！）
 	 */
 	public void plusGodHand() {
 		if (getAbFlagGodHand()[0]) {
 			if (getBurstState() != Burst.NEAR) {
-				// �?発直前まで膨らませる
+				// 爆発直前まで膨らませる
 				setGodHandHoldPoint(getGodHandHoldPoint() + 1);
 			}
 		}
 		if (getAbFlagGodHand()[1]) {
-			// 伸ば�?
+			// 伸ばす
 			if (getGodHandStretchPoint() < Const.EXT_FORCE_PULL_LIMIT[getBodyAgeState().ordinal()]) {
 				setGodHandStretchPoint(getGodHandStretchPoint() + 1);
 			}
@@ -6889,7 +6888,7 @@ public abstract class Body extends BodyAttributes {
 			setNobinobi(false);
 			setYunnyaa(false);
 			setInOutTakeoutItem(false);
-			// 水が平気なら幸福度ア�?�?
+			// 水が平気なら幸福度アップ
 			if (isLikeWater()) {
 				if (getPanicType() != PanicType.BURN) {
 					setHappiness(Happiness.HAPPY);
@@ -6899,11 +6898,11 @@ public abstract class Body extends BodyAttributes {
 				}
 			} else {
 				setHappiness(Happiness.VERY_SAD);
-				// なつき度設�?
+				// なつき度設定
 				addLovePlayer(-100);
 				if (getPanicType() != PanicType.BURN) {
 					setMessage(MessagePool.getMessage(this, MessagePool.Action.Wet), true);
-					// 実ゆの場合、親が反応す�?
+					// 実ゆの場合、親が反応する
 					checkReactionStalkMother(UnbirthBabyState.SAD);
 				}
 			}
@@ -6917,9 +6916,9 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * 水の中に�?�?
+	 * 水の中にいる
 	 * 
-	 * @param eDepth 深�?
+	 * @param eDepth 深さ
 	 */
 	public void inWater(Pool.DEPTH eDepth) {
 		if (!isDead() && !isUnBirth()) {
@@ -6947,7 +6946,7 @@ public abstract class Body extends BodyAttributes {
 			setYunnyaa(false);
 			setInOutTakeoutItem(false);
 
-			// 水が平気なら幸福度ア�?�?
+			// 水が平気なら幸福度アップ
 			if (isLikeWater()) {
 				if (getPanicType() != PanicType.BURN) {
 					setHappiness(Happiness.HAPPY);
@@ -6968,7 +6967,7 @@ public abstract class Body extends BodyAttributes {
 						default:
 							break;
 					}
-					// 実ゆの場合、親が反応す�?
+					// 実ゆの場合、親が反応する
 					checkReactionStalkMother(UnbirthBabyState.SAD);
 				}
 			}
@@ -6985,7 +6984,7 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * 土に埋め�?
+	 * 土に埋める
 	 */
 	public void baryInUnderGround() {
 		// 接地してるか
@@ -6993,7 +6992,7 @@ public abstract class Body extends BodyAttributes {
 			return;
 		}
 
-		// 畑に�?るか
+		// 畑にいるか
 		int nX = getX();
 		int nY = getY();
 		if ((Translate.getCurrentFieldMapNum(nX, nY) & FieldShapeBase.FIELD_FARM) == 0) {
@@ -7003,7 +7002,7 @@ public abstract class Body extends BodyAttributes {
 		int nH = getCollisionY();
 		setLockmove(true);
 
-		// 現在の深さチェ�?ク
+		// 現在の深さチェック
 		switch (getBaryState()) {
 			case NONE:
 				setBaryState(BaryInUGState.HALF);
@@ -7029,24 +7028,24 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * 環�?によるパニ�?ク状態�?�設�?
+	 * 環境によるパニック状態の設定
 	 * 
-	 * @param flag  すでにパニ�?ク状態か
-	 * @param pType パニ�?クのタイ�?
+	 * @param flag  すでにパニック状態か
+	 * @param pType パニックのタイプ
 	 */
 	public void setPanic(boolean flag, PanicType pType) {
 		if (isDead() || isSleeping() || isUnBirth())
 			return;
-		// 足りな�?�?は不動
+		// 足りないゆは不動
 		if (isIdiot())
 			return;
-		// 発�?レイパ�?�にはパニ�?ク無効 �?えよ�?がれみりゃがいようがれ�?ぷっぷする
+		// 発情レイパーにはパニック無効 燃えようがれみりゃがいようがれいぷっぷする
 		if (isRaper() && isExciting()) {
 			setForcePanicClear();
 			return;
 		}
 		if (flag) {
-			// 既にパニ�?ク状態�?�場合�?�カウンタのリセ�?ト�?�み
+			// 既にパニック状態の場合はカウンタのリセットのみ
 			if (getPanicType() != null) {
 				panicPeriod = 0;
 				return;
@@ -7089,7 +7088,7 @@ public abstract class Body extends BodyAttributes {
 	/**
 	 * 声掛け
 	 * 
-	 * @param type 声掛けタイプ�?0:�?っくりして�?ってね 1:�?っくりしな�?で死んでね 2:もるんもるんしてね?�?
+	 * @param type 声掛けタイプ（0:ゆっくりしていってね 1:ゆっくりしないで死んでね 2:もるんもるんしてね）
 	 */
 	public void voiceReaction(int type) {
 		if (getPanicType() != null || isDead()) {
@@ -7100,7 +7099,7 @@ public abstract class Body extends BodyAttributes {
 		}
 		switch (type) {
 			case 0: {
-				// �?っくりして�?ってね
+				// ゆっくりしていってね
 				clearActions();
 				setScare(false);
 				setAngry(false);
@@ -7115,18 +7114,18 @@ public abstract class Body extends BodyAttributes {
 				setMessage(MessagePool.getMessage(this, MessagePool.Action.TakeItEasy));
 				addStress(-100);
 				wakeup();
-				// なつき度設�?
+				// なつき度設定
 				addLovePlayer(100);
 				break;
 			}
 			case 1: {
-				// �?っくりしな�?でしんでね
+				// ゆっくりしないでしんでね
 				wakeup();
 				clearActions();
 				setAngry();
 				setMessage(MessagePool.getMessage(this, MessagePool.Action.Alarm));
 				addStress(150);
-				// なつき度設�?
+				// なつき度設定
 				addLovePlayer(-100);
 				if (SimYukkuri.RND.nextBoolean())
 					doYunnyaa(true);
@@ -7174,7 +7173,7 @@ public abstract class Body extends BodyAttributes {
 			setLockmove(false);
 			return;
 		}
-		// なつき度設�?
+		// なつき度設定
 		if (getZ() > 0)
 			setCalcZ(0);
 		Terrarium.setAlarm();
@@ -7182,14 +7181,14 @@ public abstract class Body extends BodyAttributes {
 		setLockmove(true);
 		setHappiness(Happiness.SAD);
 		setMessage(MessagePool.getMessage(this, MessagePool.Action.Press));
-		// 実ゆの場合、親が反応す�?
+		// 実ゆの場合、親が反応する
 		// checkReactionStalkMother(UnbirthBabyState.SAD);
 	}
 
 	/**
-	 * 押さえつ�?
+	 * 押さえつけ
 	 * 
-	 * @param force 強制かど�?�?
+	 * @param force 強制かどうか
 	 */
 	public void lockSetZ(int force) {
 		extForce = force;
@@ -7202,7 +7201,7 @@ public abstract class Body extends BodyAttributes {
 		clearActions();
 		setAngry();
 		if (extForce < 0) {
-			// つぶ�?
+			// つぶれ
 			if (extForce < Const.EXT_FORCE_PUSH_LIMIT[getBodyAgeState().ordinal()]) {
 				// 圧死
 				setLockmove(false);
@@ -7217,7 +7216,7 @@ public abstract class Body extends BodyAttributes {
 					addStress(25);
 				}
 				if (SimYukkuri.RND.nextInt(80) == 0) {
-					// あんこを吐き出�?
+					// あんこを吐き出す
 					int ofsX = Translate.invertX(getCollisionX() >> 1, y);
 					if (getDirection() == Direction.LEFT)
 						ofsX = -ofsX;
@@ -7232,7 +7231,7 @@ public abstract class Body extends BodyAttributes {
 				}
 			}
 		} else if (extForce > 0) {
-			// ひっぱ�?
+			// ひっぱり
 			if (extForce > Const.EXT_FORCE_PULL_LIMIT[getBodyAgeState().ordinal()]) {
 				// ちぎれ
 				extForce = 0;
@@ -7255,7 +7254,7 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * 押さえつけを放�?
+	 * 押さえつけを放す
 	 */
 	public void releaseLockNobinobi() {
 		if (extForce == 0)
@@ -7283,10 +7282,10 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * �?げる
+	 * 逃げる
 	 * 
-	 * @param fromX X座�?
-	 * @param fromY Y座�?
+	 * @param fromX X座標
+	 * @param fromY Y座標
 	 */
 	public void runAway(int fromX, int fromY) {
 		if (!canAction() || isExciting() || isAngry() || isUnBirth()) {
@@ -7372,7 +7371,7 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * 行動・イベント�?�取り消し
+	 * 行動・イベントの取り消し
 	 */
 	public void clearActions() {
 		setToSukkiri(false);
@@ -7420,16 +7419,16 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * �?んうんを素早く貯めさせる
+	 * うんうんを素早く貯めさせる
 	 */
 	public void rapidShit() {
 		shitBoost += TICK * 5;
 	}
 
 	/**
-	 * ?��死んだときとかに?��茎と�?っくりのバインドを解�?.
-	 * 茎をゲームから取り除くわけではなく、何らか�?�形で残したい場合に使用する.
-	 * 茎を完�?�に取り除きた�?場合�?�removeAllStalks()を使用する.
+	 * （死んだときとかに）茎とゆっくりのバインドを解く.
+	 * 茎をゲームから取り除くわけではなく、何らかの形で残したい場合に使用する.
+	 * 茎を完全に取り除きたい場合はremoveAllStalks()を使用する.
 	 */
 	public void disPlantStalks() {
 		if (getStalks() != null) {
@@ -7443,9 +7442,9 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * 胴体�?�ベ�?�スグラフィ�?クを返す
-	 * まりケ�?は特殊なためまりさ(とそれを継承して�?る、つむりまりさ?�?れいむまりさ)は�?クラスでオーバ�?�ライドして�?るため要確�?
-	 * れいむ(とそれを継承して�?る、わさ�?まりされいむ)もゆんやぁぁが特殊なため、同�?
+	 * 胴体のベースグラフィックを返す
+	 * まりケツは特殊なためまりさ(とそれを継承している、つむりまりさ＆れいむまりさ)は各クラスでオーバーライドしているため要確認
+	 * れいむ(とそれを継承している、わさ＆まりされいむ)もゆんやぁぁが特殊なため、同様
 	 * 
 	 * @param layer レイヤ
 	 * @return index
@@ -7454,17 +7453,17 @@ public abstract class Body extends BodyAttributes {
 		int direction = this.getDirection().ordinal();
 		int idx = 0;
 
-		// 正面かそ�?でな�?�?
+		// 正面かそうでないか
 		layer.getOption()[0] = 0;
 		//
 		layer.getOption()[1] = 0;
 		layer.getOption()[2] = 0;
 
 		if (isBurned() && isDead()) {
-			// 焼死�?
+			// 焼死体
 			idx += getImage(ImageCode.BURNED.ordinal(), Const.LEFT, layer, idx);
 		} else if (isCrushed()) {
-			// 潰れた死�?
+			// 潰れた死体
 			if (isBurned()) {
 				idx += getImage(ImageCode.BURNED2.ordinal(), Const.LEFT, layer, idx);
 			} else {
@@ -7485,7 +7484,7 @@ public abstract class Body extends BodyAttributes {
 				idx += getImage(ImageCode.PACKED2.ordinal(), Const.LEFT, layer, idx);
 			}
 		} else if (isShitting() || isBirth() && getBabyTypes().size() > 0 || (isFixBack() && !isFurifuri())) {
-			// 排�?、�?�産�?
+			// 排泄、出産時
 			idx += getImage(ImageCode.FRONT_SHIT.ordinal(), Const.LEFT, layer, idx);
 			if (geteHairState() == HairState.DEFAULT) {
 				idx += getImage(ImageCode.FRONT_HAIR.ordinal(), Const.LEFT, layer, idx);
@@ -7511,7 +7510,7 @@ public abstract class Body extends BodyAttributes {
 				idx += getImage(ImageCode.ROLL_ACCESSORY.ordinal(), Const.LEFT, layer, idx);
 			}
 		} else if (isFurifuri() && !isSleeping() && (!isLockmove() || isFixBack())) {
-			// ふり�?��?
+			// ふりふり
 			if (getAge() % 8 <= 3) {
 				idx += getImage(ImageCode.ROLL_LEFT_SHIT.ordinal(), Const.LEFT, layer, idx);
 				if (geteHairState() == HairState.DEFAULT) {
@@ -7567,7 +7566,7 @@ public abstract class Body extends BodyAttributes {
 			if (isPealed()) {
 				idx += getImage(ImageCode.PEALED.ordinal(), direction, layer, idx);
 			}
-			// 通常�?
+			// 通常時
 			else {
 				idx += getImage(ImageCode.BODY.ordinal(), direction, layer, idx);
 			}
@@ -7577,7 +7576,7 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * �?断等�?�通常ではな�?ボディイメージ
+	 * 切断等の通常ではないボディイメージ
 	 * 
 	 * @param layer レイヤ
 	 * @return index
@@ -7585,7 +7584,7 @@ public abstract class Body extends BodyAttributes {
 	public int getAbnormalBodyImage(BodyLayer layer) {
 		int direction = this.getDirection().ordinal();
 		int idx = 0;
-		// �?断
+		// 切断
 		if (getCriticalDamege() != null) {
 			if (getCriticalDamege() == CriticalDamegeType.CUT) {
 				idx += getImage(ImageCode.BODY_CUT.ordinal(), direction, layer, idx);
@@ -7605,10 +7604,10 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * おかざりグラフィ�?クを返す�?
+	 * おかざりグラフィックを返す。
 	 * 
 	 * @param layer レイヤ
-	 * @param type  0だと前方�?1だと後方の�?を返す
+	 * @param type  0だと前方、1だと後方の分を返す
 	 * @return index
 	 */
 	public int getOlazariImage(BodyLayer layer, int type) {
@@ -7622,7 +7621,7 @@ public abstract class Body extends BodyAttributes {
 				if (getOkazari().getOkazariType() == OkazariType.DEFAULT) {
 					idx += getImage(ImageCode.ACCESSORY.ordinal(), direction, layer, idx);
 				}
-				// ゴミおかざ�?
+				// ゴミおかざり
 				else {
 					layer.getImage()[idx] = Okazari.getOkazariImage(getOkazari().getOkazariType(), direction);
 					idx++;
@@ -7635,7 +7634,7 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * 汚れなどの体表エフェクトグラフィ�?クを返す
+	 * 汚れなどの体表エフェクトグラフィックを返す
 	 * 
 	 * @param layer レイヤ
 	 * @return index
@@ -7643,7 +7642,7 @@ public abstract class Body extends BodyAttributes {
 	public int getEffectImage(BodyLayer layer) {
 		int direction = this.getDirection().ordinal();
 		int idx = 0;
-		// layer.getOption()[0] = 0;
+		// layer.option[0] = 0;
 		// 死亡
 		if (isDead())
 			idx += getImage(ImageCode.DEAD_BODY.ordinal(), direction, layer, idx);
@@ -7657,14 +7656,14 @@ public abstract class Body extends BodyAttributes {
 			idx += getImage(ImageCode.HUNGRY0.ordinal(), direction, layer, idx);
 		}
 
-		// 足焼�?
+		// 足焼き
 		FootBake f = getFootBakeLevel();
 		if (f == FootBake.MIDIUM) {
 			idx += getImage(ImageCode.FOOT_BAKE0.ordinal(), direction, layer, idx);
 		} else if (f == FootBake.CRITICAL) {
 			idx += getImage(ImageCode.FOOT_BAKE1.ordinal(), direction, layer, idx);
 		}
-		// 体�?�焦�?
+		// 体の焦げ
 		BodyBake b = getBodyBakeLevel();
 		if (b == BodyBake.MIDIUM) {
 			idx += getImage(ImageCode.BODY_BAKE0.ordinal(), direction, layer, idx);
@@ -7683,7 +7682,7 @@ public abstract class Body extends BodyAttributes {
 		} else if (isOld()) {
 			idx += getImage(ImageCode.DAMAGED1.ordinal(), direction, layer, idx);
 		} else if (getBodyRank() == BodyRank.NORAYU || getBodyRank() == BodyRank.YASEIYU) {
-			// 野良�?&野生�?の場合ダメージ表示(暫定対�?)
+			// 野良ゆ&野生ゆの場合ダメージ表示(暫定対応)
 			idx += getImage(ImageCode.DAMAGED0.ordinal(), direction, layer, idx);
 		}
 
@@ -7698,7 +7697,7 @@ public abstract class Body extends BodyAttributes {
 		if (isStubbornlyDirty()) {
 			idx += getImage(ImageCode.STAIN2.ordinal(), direction, layer, idx);
 		}
-		// か�?�
+		// かび
 		if (sickPeriod > (INCUBATIONPERIODorg << 5)) {
 			idx += getImage(ImageCode.SICK3.ordinal(), direction, layer, idx);
 		} else if (sickPeriod > (INCUBATIONPERIODorg << 3)) {
@@ -7708,7 +7707,7 @@ public abstract class Body extends BodyAttributes {
 		} else if (isSick()) {
 			idx += getImage(ImageCode.SICK0.ordinal(), direction, layer, idx);
 		}
-		// 濡�?
+		// 濡れ
 		if (isWet()) {
 			idx += getImage(ImageCode.WET.ordinal(), direction, layer, idx);
 		}
@@ -7716,7 +7715,7 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * 顔グラフィ�?クを返す
+	 * 顔グラフィックを返す
 	 * 
 	 * @param layer レイヤ
 	 * @return index
@@ -7725,47 +7724,47 @@ public abstract class Body extends BodyAttributes {
 		int direction = this.getDirection().ordinal();
 		int idx = 0;
 
-		// 跳ねな�?
+		// 跳ねない
 		layer.getOption()[0] = 0;
-		// optionは移動関係�?�設�?
+		// optionは移動関係の設定
 		if (isFlyingType()) {
 			if (!isGrabbed() && !isSleeping() && !isPurupuru()) {
 				if (isExciting()) {
-					layer.getOption()[0] = 1; // 大ジャン�?
+					layer.getOption()[0] = 1; // 大ジャンプ
 				} else if (isSukkiri()) {
 					layer.getOption()[0] = 2; // すっきり
 				} else if (isNobinobi()) {
 					layer.getOption()[0] = 4; // のびのび
 				} else if (isYunnyaa() || isBeggingForLife()) {
-					layer.getOption()[0] = 5; // �?んや�?&命乞い
+					layer.getOption()[0] = 5; // ゆんやあ&命乞い
 				} else if (!isLockmove() && canflyCheck() && !isDontJump()) {
-					layer.getOption()[0] = 3; // 跳ねて移�?
+					layer.getOption()[0] = 3; // 跳ねて移動
 				}
 			}
 		} else {
 			if (!isGrabbed() && getZ() == 0 && !isSleeping() && !isPurupuru()) {
 				if (isExciting() && !isDontJump() && !isbNeedled()) {
-					layer.getOption()[0] = 1; // 大ジャン�?
+					layer.getOption()[0] = 1; // 大ジャンプ
 				} else if (isSukkiri()) {
 					layer.getOption()[0] = 2; // すっきり
 				} else if (isNobinobi()) {
 					layer.getOption()[0] = 4; // のびのび
 				} else if (isYunnyaa() || isBeggingForLife()) {
-					layer.getOption()[0] = 5; // �?んや�?&命乞い
+					layer.getOption()[0] = 5; // ゆんやあ&命乞い
 				} else if (!isLockmove() && !isDontJump()
 						&& takeMappedObj(getLinkParent()) == null && !isPeropero() && !(isEating() && !isPikopiko())) {
-					layer.getOption()[0] = 3; // 跳ねて移�?
+					layer.getOption()[0] = 3; // 跳ねて移動
 				}
 			}
 		}
 
-		// 非ゆっくり�?の場�?
+		// 非ゆっくり症の場合
 		if (isNYD()) {
-			// 跳ねな�?
+			// 跳ねない
 			layer.getOption()[0] = 0;
 		}
 
-		// 表�?固�?
+		// 表情固定
 		if (getForceFace() != -1) {
 			idx += getImage(getForceFace(), direction, layer, idx);
 			// 口封じグラの追加
@@ -7776,7 +7775,7 @@ public abstract class Body extends BodyAttributes {
 			if (isBlind()) {
 				idx += getImage(ImageCode.BLIND.ordinal(), direction, layer, idx);
 			}
-			// 舌�?�追加
+			// 舌の追加
 			if (isPeropero() || isInOutTakeoutItem()) {
 				if (getMessageBuf() != null) {
 					idx += getImage(ImageCode.LICK.ordinal(), direction, layer, idx);
@@ -7798,15 +7797,15 @@ public abstract class Body extends BodyAttributes {
 				idx += getImage(ImageCode.DEAD.ordinal(), direction, layer, idx);
 			}
 		}
-		// 皮む�?
+		// 皮むき
 		else if (isPealed()) {
 			idx += getImage(ImageCode.PEALEDFACE.ordinal(), direction, layer, idx);
 		}
-		// 非ゆっくり�?など
+		// 非ゆっくり症など
 		else if (isNYD()) {
-			// 死亡以外では表�?を変えな�?
+			// 死亡以外では表情を変えない
 			if (isUnBirth()) {
-				// 未�?
+				// 未ゆ
 				idx += getImage(ImageCode.NYD_FRONT_CRY2.ordinal(), direction, layer, idx);
 			} else {
 				idx += getImage(ImageCode.NYD_FRONT_WIDE.ordinal(), direction, layer, idx);
@@ -7826,7 +7825,7 @@ public abstract class Body extends BodyAttributes {
 		// 睡眠
 		else if (isSleeping() && (!isUnBirth() || (damage <= 0)) && !isNeedled()) {
 			if (SimYukkuri.UNYO) {
-				// �?に�?版まばたき機�?�
+				// うにょ版まばたき機能
 				if (getMabatakiType() != ImageCode.SLEEPING.ordinal()
 						&& getMabatakiType() != ImageCode.NIGHTMARE.ordinal()) {
 					setMabatakiCnt(0);
@@ -7854,11 +7853,11 @@ public abstract class Body extends BodyAttributes {
 					idx += getImage(ImageCode.SLEEPING.ordinal(), direction, layer, idx);
 			}
 		}
-		// �?んや�?&命乞い
+		// ゆんやあ&命乞い
 		else if (isTalking() && (isYunnyaa() || isBeggingForLife())) {
 			idx += getImage(ImageCode.CRYING.ordinal(), direction, layer, idx);
 		}
-		// ぺろぺろまた�?�食事、口から物を�?�し�?�れすると�?
+		// ぺろぺろまたは食事、口から物を出し入れするとき
 		else if (isPeropero() || isEating() || isInOutTakeoutItem()) {
 			if (isStrike() || isVerySad() || isFeelHardPain()) {
 				idx += getImage(ImageCode.CRYING.ordinal(), direction, layer, idx);
@@ -7908,7 +7907,7 @@ public abstract class Body extends BodyAttributes {
 				idx += getImage(ImageCode.CRYING.ordinal(), direction, layer, idx);
 			} else {
 				if (SimYukkuri.UNYO) {
-					// �?に�?版まばたき機�?�
+					// うにょ版まばたき機能
 					if (mabatakiNormalImageCheck()) {
 						if (getMabatakiType() != ImageCode.TIRED.ordinal()) {
 							setMabatakiCnt(0);
@@ -7938,7 +7937,7 @@ public abstract class Body extends BodyAttributes {
 				}
 			}
 		} else {
-			// パニ�?ク
+			// パニック
 			if (getPanicType() != null) {
 				idx += getImage(ImageCode.CRYING.ordinal(), direction, layer, idx);
 			} else if (isStrike() || isVerySad()) {
@@ -7947,7 +7946,7 @@ public abstract class Body extends BodyAttributes {
 				idx += getImage(ImageCode.PUFF.ordinal(), direction, layer, idx);
 			} else if (isSad() || isOld()) {
 				if (SimYukkuri.UNYO) {
-					// �?に�?版まばたき機�?�
+					// うにょ版まばたき機能
 					if (mabatakiNormalImageCheck()) {
 						if (getMabatakiType() != ImageCode.TIRED.ordinal()) {
 							setMabatakiCnt(0);
@@ -7981,7 +7980,7 @@ public abstract class Body extends BodyAttributes {
 				idx += getImage(ImageCode.SMILE.ordinal(), direction, layer, idx);
 			} else if (isTalking() && isRude()) {
 				if (SimYukkuri.UNYO) {
-					// �?に�?版まばたき機�?�
+					// うにょ版まばたき機能
 					if (mabatakiNormalImageCheck()) {
 						if (getMabatakiType() != ImageCode.RUDE.ordinal()) {
 							setMabatakiCnt(0);
@@ -8015,7 +8014,7 @@ public abstract class Body extends BodyAttributes {
 				}
 			} else if (isTalking() && !isRude()) {
 				if (SimYukkuri.UNYO) {
-					// �?に�?版まばたき機�?�
+					// うにょ版まばたき機能
 					if (mabatakiNormalImageCheck()) {
 						if (getMabatakiType() != ImageCode.CHEER.ordinal()) {
 							setMabatakiCnt(0);
@@ -8048,11 +8047,11 @@ public abstract class Body extends BodyAttributes {
 					idx += getImage(ImageCode.CHEER.ordinal(), direction, layer, idx);
 				}
 			}
-			// 空が飛べな�?、空中に�?る、移動不可ではな�?、す�?ーにのってな�?場合�?�茎に�?る実ゆの判定�?�よう
+			// 空が飛べない、空中にいる、移動不可ではない、すぃーにのってない場合→茎にいる実ゆの判定のよう
 			else if ((!canflyCheck() && getZ() != 0) && !isLockmove()
 					&& !(takeMappedObj(getLinkParent()) instanceof Sui)) {
 				if (SimYukkuri.UNYO) {
-					// �?に�?版まばたき機�?�
+					// うにょ版まばたき機能
 					if (mabatakiNormalImageCheck()) {
 						if (getMabatakiType() != ImageCode.CHEER.ordinal()) {
 							setMabatakiCnt(0);
@@ -8082,12 +8081,12 @@ public abstract class Body extends BodyAttributes {
 						idx += getImage(ImageCode.CHEER.ordinal(), direction, layer, idx);
 					}
 				} else {
-					// ここに入った時点で実ゆはダメージをくらって�?る�?�で嫌な顔をする
+					// ここに入った時点で実ゆはダメージをくらっているので嫌な顔をする
 					idx += getImage(ImageCode.TIRED.ordinal(), direction, layer, idx);
 				}
 			} else {
 				if (SimYukkuri.UNYO) {
-					// �?に�?版まばたき機�?�
+					// うにょ版まばたき機能
 					if (mabatakiNormalImageCheck()) {
 						if (getMabatakiType() != ImageCode.NORMAL.ordinal()) {
 							setMabatakiCnt(0);
@@ -8130,7 +8129,7 @@ public abstract class Body extends BodyAttributes {
 		if (isBlind()) {
 			idx += getImage(ImageCode.BLIND.ordinal(), direction, layer, idx);
 		}
-		// 舌�?�追加
+		// 舌の追加
 		if (isPeropero() || isInOutTakeoutItem()) {
 			if (getMessageBuf() != null) {
 				idx += getImage(ImageCode.LICK.ordinal(), direction, layer, idx);
@@ -8145,9 +8144,9 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * ありすかつれいぱーかど�?かを返却する.
+	 * ありすかつれいぱーかどうかを返却する.
 	 * 
-	 * @return ありすかつれいぱーかど�?�?
+	 * @return ありすかつれいぱーかどうか
 	 */
 	@Transient
 	protected boolean isAliceRaper() {
@@ -8155,14 +8154,14 @@ public abstract class Body extends BodyAttributes {
 	};
 
 	/**
-	 * まばたき画像が用意されて�?るかチェ�?ク、Trueで対応して�?�?
+	 * まばたき画像が用意されているかチェック、Trueで対応している
 	 * 
-	 * @return まばたき画像が用意されて�?るか
+	 * @return まばたき画像が用意されているか
 	 */
 	private boolean mabatakiNormalImageCheck() {
 		// normal2.png normal3.png
-		// ハイブリ�?ト以�?
-		// 画像を用意したゆっくりのみ対応、追加する時�?�ModLoaderの条件も変更する
+		// ハイブリット以外
+		// 画像を用意したゆっくりのみ対応、追加する時はModLoaderの条件も変更する
 		// int i = getType();
 		// if(i == 0 || i == 1 || i == 2 || i == 4 || i == 10001 || i == 1009 || i ==
 		// 1001 ||
@@ -8171,18 +8170,18 @@ public abstract class Body extends BodyAttributes {
 		// i == 1008 || i == 3 || i == 1002 || i == 5 || i == 1004 || i == 10000 ||
 		// i == 2006 || i == 2003 || i == 3001 || i == 1007 || i == 2005 ){return true;}
 		// return false;
-		// ハイブリ�?ド�?�みエラーが�?�る�?�で除�?
+		// ハイブリッドのみエラーが出るので除外
 		if (getType() == 20000) {
 			return false;
 		}
-		return true; // 画像をすべて用意した�?�でtrueで確�?
+		return true; // 画像をすべて用意したのでtrueで確定
 	}
 
 	/**
-	 * おさげ、羽、尻尾のグラフィ�?クを返す�?
+	 * おさげ、羽、尻尾のグラフィックを返す。
 	 * 
 	 * @param layer レイヤ
-	 * @param type  0だと手前側の�?�?1だと奥側の�?が返される
+	 * @param type  0だと手前側の分、1だと奥側の分が返される
 	 * @return index
 	 */
 	public int getBraidImage(BodyLayer layer, int type) {
@@ -8192,7 +8191,7 @@ public abstract class Body extends BodyAttributes {
 			if (hasBraidCheck()) {
 				// 通常
 				if (canflyCheck()) {
-					// 飛行状�?
+					// 飛行状態
 					idx += getImage((int) (ImageCode.BRAID_MV0.ordinal() + ((getAge() % 6) >> 1)), direction, layer,
 							idx);
 				} else {
@@ -8204,14 +8203,14 @@ public abstract class Body extends BodyAttributes {
 					}
 				}
 			} else {
-				// 破壊状�?
+				// 破壊状態
 				idx += getImage(ImageCode.BRAID_CUT.ordinal(), direction, layer, idx);
 			}
 		} else {
 			if (hasBraidCheck()) {
 				// 通常
 				if (canflyCheck()) {
-					// 飛行状�?
+					// 飛行状態
 					idx += getImage((int) (ImageCode.BRAID_BACK_MV0.ordinal() + ((getAge() % 6) >> 1)), direction,
 							layer,
 							idx);
@@ -8230,9 +8229,9 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * イベントに反応できる状態かチェ�?クする
-	 * イベント�?�重要度で寝て�?ても起きたりできるようにするため
-	 * ここでは動いたら見た目におかしくなる状況�?�みチェ�?ク
+	 * イベントに反応できる状態かチェックする
+	 * イベントの重要度で寝ていても起きたりできるようにするため
+	 * ここでは動いたら見た目におかしくなる状況のみチェック
 	 * 
 	 * @return
 	 */
@@ -8251,9 +8250,9 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * ぺにぺに�?断のみ、盲目状態でも起きて良�?
+	 * ぺにぺに切断のみ、盲目状態でも起きて良い
 	 * 
-	 * @return ぺにぺに�?断イベントが溜まってるかど�?�?
+	 * @return ぺにぺに切断イベントが溜まってるかどうか
 	 */
 	@Transient
 	protected boolean isCutPeni() {
@@ -8267,8 +8266,8 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * 行動できる状態かチェ�?クする
-	 * ここでは動いたら見た目におかしくなる状況�?�みチェ�?ク
+	 * 行動できる状態かチェックする
+	 * ここでは動いたら見た目におかしくなる状況のみチェック
 	 * 
 	 * @return
 	 */
@@ -8283,8 +8282,8 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * 行動できる状態かチェ�?クする
-	 * ここでは動いたら見た目におかしくなる状況�?�みチェ�?ク
+	 * 行動できる状態かチェックする
+	 * ここでは動いたら見た目におかしくなる状況のみチェック
 	 * 
 	 * @return
 	 */
@@ -8311,7 +8310,7 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * Tick処�?本�?
+	 * Tick処理本体
 	 */
 	@Override
 	public Event clockTick() {
@@ -8341,7 +8340,7 @@ public abstract class Body extends BodyAttributes {
 		// if partner and parents are removed, clean relationship.
 		clearRelation();
 
-		// 死亡処�? if dead, do nothing.
+		// 死亡処理 if dead, do nothing.
 		if (isDead()) {
 			dropAllTakeoutItem();
 			clearActions();
@@ -8352,14 +8351,14 @@ public abstract class Body extends BodyAttributes {
 			}
 			setSilent(true);
 			setDeadPeriod(getDeadPeriod() + 1);
-			// 死�?3日
+			// 死後3日
 			if (getROTTINGTIMEorg() < getDeadPeriod()) {
 				if (!isCrushed()) {
 					// 初回は潰れる
 					setCrushed(true);
 					setDeadPeriod(0);
 				} else {
-					// �?んうんと吐餡に変わって消え�?
+					// うんうんと吐餡に変わって消える
 					SimYukkuri.mypane.getTerrarium().addCrushedVomit(x, y, z, this, getShitType());
 					SimYukkuri.mypane.getTerrarium().addCrushedShit(x, y, z, this, getShitType());
 					remove();
@@ -8370,7 +8369,7 @@ public abstract class Body extends BodyAttributes {
 			return Event.DEAD;
 		}
 
-		// �?発処�?
+		// 爆発処理
 		if (isBurst()) {
 			toDead();
 			moveBody(true); // for falling the body
@@ -8405,7 +8404,7 @@ public abstract class Body extends BodyAttributes {
 		}
 
 		// check age
-		// ageが変化しな�?と状態が変化しな�?ロジ�?クになって�?る�?�でそっとしておく
+		// ageが変化しないと状態が変化しないロジックになっているのでそっとしておく
 		setAge(getAge() + TICK);
 
 		if (getAge() > getLIFELIMITorg()) {
@@ -8417,11 +8416,11 @@ public abstract class Body extends BodyAttributes {
 			}
 		}
 
-		// 年齢チェ�?ク
+		// 年齢チェック
 		AgeState curAge = getBodyAgeState();
 		FootBake foot = getFootBakeLevel();
 		if (curAge.ordinal() < getBodyAgeState().ordinal()) {
-			// 状態変更有かつ成長抑制されて�?る場合�?�強制�?に�?に戻す。�?�長�?進アンプルが刺さって�?たら成長する
+			// 状態変更有かつ成長抑制されている場合は強制的に元に戻す。成長促進アンプルが刺さっていたら成長する
 			if (((Terrarium.isAgeStopSteam()) || (bStopAmple)) && !bAccelAmple) {
 				setAgeState(curAge);
 				setAge(getAge() + TICK);
@@ -8429,7 +8428,7 @@ public abstract class Body extends BodyAttributes {
 				// 加齢
 				initAmount(getBodyAgeState());
 				resetAttachmentBoundary();
-				// DamageLimitを流用してるパラメータは状態を維持するためここで再計�?
+				// DamageLimitを流用してるパラメータは状態を維持するためここで再計算
 				switch (foot) {
 					case MIDIUM:
 						footBakePeriod = (getDAMAGELIMITorg()[getBodyAgeState().ordinal()] >> 1) + 1;
@@ -8442,7 +8441,7 @@ public abstract class Body extends BodyAttributes {
 				}
 			}
 		}
-		// �?虐神拳カウン�?
+		// ゆ虐神拳カウント
 		plusGodHand();
 
 		boolean dontMove = false;
@@ -8451,7 +8450,7 @@ public abstract class Body extends BodyAttributes {
 			dontMove = true;
 		}
 
-		// 無限もるんもる�?
+		// 無限もるんもるん
 		if (Terrarium.isEndlessFurifuriSteam()) {
 			clearActions();
 			checkMessage();
@@ -8498,7 +8497,7 @@ public abstract class Body extends BodyAttributes {
 			setForceFace(-1);
 			checkAttitude();
 		}
-		// 妊娠状況チェ�?ク
+		// 妊娠状況チェック
 		boolean oldHasBaby = hasBabyOrStalk();
 		if (checkChildbirth()) {
 			dontMove = true;
@@ -8507,7 +8506,7 @@ public abstract class Body extends BodyAttributes {
 			if (getStalks() != null && getStalks().size() <= 0 && isHasStalk()) {
 				setHasStalk(false);
 			}
-			// 出産に失敗するとfalseになる�?�でリセ�?�?
+			// 出産に失敗するとfalseになるのでリセット
 			if (getBabyTypes().size() != 0) {
 				setHasBaby(true);
 			}
@@ -8516,7 +8515,7 @@ public abstract class Body extends BodyAttributes {
 			}
 			return Event.BIRTHBABY;
 		}
-		// 出産に失敗するとfalseになる�?�でリセ�?�?
+		// 出産に失敗するとfalseになるのでリセット
 		if (getBabyTypes().size() != 0) {
 			setHasBaby(true);
 		}
@@ -8524,7 +8523,7 @@ public abstract class Body extends BodyAttributes {
 			setHasStalk(true);
 		}
 
-		// パニ�?ク時�?�ただ走�?
+		// パニック時はただ走る
 		if (getPanicType() != null && !isbNeedled() && isNotNYD()) {
 			retval = checkFear();
 			if (isLockmove())
@@ -8559,11 +8558,11 @@ public abstract class Body extends BodyAttributes {
 		// stop moving
 		if (checkShit())
 			dontMove = true;
-		// �?んうん�?��?
+		// うんうん処理
 		if (!isShitting() && oldShit != 0 && shit == 0) {
 			if (!isHasPants()) {
 				if (!isAnalClose() && !(isFixBack() && isbNeedled())) {
-					// 寝て�?るか粘着床につ�?て�?るか針が刺さって�?たら体勢をかえられずに漏ら�?
+					// 寝ているか粘着床についているか針が刺さっていたら体勢をかえられずに漏らす
 					if ((isLockmove() && isFixBack()) || isSleeping() || isbNeedled() ||
 							getBaryState() != BaryInUGState.NONE) {
 						retval = Event.DOCRUSHEDSHIT;
@@ -8571,24 +8570,24 @@ public abstract class Body extends BodyAttributes {
 						if (isNotNYD()) {
 							retval = Event.DOSHIT;
 						} else {
-							// 非ゆっくり�?
+							// 非ゆっくり症
 							retval = Event.DOCRUSHEDSHIT;
 						}
 					}
-					// 300%を肥えてたら�?んうん量を増や�?
+					// 300%を肥えてたらうんうん量を増やす
 					if (300 < 100 * oldShit / getShitLimit()) {
 						rapidShit();
 					}
 				}
 			}
-			// あんよが傷つ�?て�?た場合、一定確�?であんよが�?ぜる
+			// あんよが傷ついていた場合、一定確率であんよが爆ぜる
 			if (getCriticalDamegeType() == CriticalDamegeType.INJURED && getBreakBodyByShitProb() != 0
 					&& SimYukkuri.RND.nextInt(getBreakBodyByShitProb()) == 0) {
 				bodyCut();
 			}
 		}
 
-		// 以�?3�?目のまと�?
+		// 以下3項目のまとめ
 		if (checkSleep() || isLockmove() || isMelt() || isFurifuri() || isEating() || isUnBirth()) {
 			dontMove = true;
 		}
@@ -8607,30 +8606,30 @@ public abstract class Body extends BodyAttributes {
 			}
 		}
 
-		// イベントに反応できる状態かチェ�?ク
+		// イベントに反応できる状態かチェック
 		if (canEventResponse()) {
-			// 自身に向けられたイベント�?�チェ�?ク
+			// 自身に向けられたイベントのチェック
 			setCurrentEvent(EventLogic.checkBodyEvent(this));
 			if (getCurrentEvent() == null) {
-				// ワールドイベント�?�チェ�?ク
+				// ワールドイベントのチェック
 				setCurrentEvent(EventLogic.checkWorldEvent(this));
 			}
-			// イベント開�?
+			// イベント開始
 			if (getCurrentEvent() != null) {
 				getCurrentEvent().start(this);
 			}
 		} else {
-			// イベント応答できな�?場合でも例外でsimpleActionだけ呼ばれる
-			// 自身に向けられたイベント�?�チェ�?ク
+			// イベント応答できない場合でも例外でsimpleActionだけ呼ばれる
+			// 自身に向けられたイベントのチェック
 			EventLogic.checkSimpleBodyEvent(this);
-			// ワールドイベント�?�チェ�?ク
+			// ワールドイベントのチェック
 			EventLogic.checkSimpleWorldEvent(this);
 		}
 
 		// move to destination
 		// if there is no destination, walking randomly.
 		if (geteCoreAnkoState() == CoreAnkoState.NonYukkuriDiseaseNear) {
-			// 非ゆっくり�?初期の場合�?�あまり動かな�?
+			// 非ゆっくり症初期の場合はあまり動かない
 			if (SimYukkuri.RND.nextInt(5) == 0) {
 				moveBody(true);
 			} else {
@@ -8642,7 +8641,7 @@ public abstract class Body extends BodyAttributes {
 
 		checkMessage();
 
-		// イベントで処�?が設定された場合に実行す�?
+		// イベントで処理が設定された場合に実行する
 		if (getCurrentEvent() != null) {
 			if (retval == Event.DONOTHING || getCurrentEvent().getPriority() != EventPacket.EventPriority.LOW) {
 				retval = getEventResultAction();
@@ -8655,7 +8654,7 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * moveTargetが�?囲外�?�とき、�?囲�?に収め�?
+	 * moveTargetが範囲外のとき、範囲内に収める
 	 */
 	public void calcMoveTarget() {
 		Obj o = takeMoveTarget();
@@ -8679,7 +8678,7 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * Removeされたゆっくりが姉妹リスト、子リストに�?たら削除する
+	 * Removeされたゆっくりが姉妹リスト、子リストにいたら削除する
 	 */
 	private void checkRemovedFamilyList() {
 		Body[] sisters = getArrayOfBody(getSisterList());
@@ -8726,10 +8725,10 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * ユニ�?�クIDのlistから�?っくりのインスタンスの配�?�を返却する.
+	 * ユニークIDのlistからゆっくりのインスタンスの配列を返却する.
 	 * 
-	 * @param list ユニ�?�クIDのlist
-	 * @return �?っくりの配�??
+	 * @param list ユニークIDのlist
+	 * @return ゆっくりの配列
 	 */
 	public Body[] getArrayOfBody(List<Integer> list) {
 		List<Body> bodies = new LinkedList<Body>();
@@ -8752,11 +8751,11 @@ public abstract class Body extends BodyAttributes {
 	/**
 	 * コンストラクタ
 	 * 
-	 * @param initX        初期X座�?
-	 * @param initY        初期Y座�?
-	 * @param initZ        初期Z座�?
+	 * @param initX        初期X座標
+	 * @param initY        初期Y座標
+	 * @param initZ        初期Z座標
 	 * @param initAgeState 初期時代
-	 * @param mama         �?
+	 * @param mama         母
 	 * @param papa         父
 	 */
 	public Body(int initX, int initY, int initZ, AgeState initAgeState, Body mama, Body papa) {
@@ -8856,41 +8855,41 @@ public abstract class Body extends BodyAttributes {
 		dirY = randomDirection(dirY);
 		setMessageTextSize(12);
 		setUniqueID(Numbering.INSTANCE.numberingYukkuriID());
-		// 生い立ちの設�?
+		// 生い立ちの設定
 		BodyRank eBodyRank = BodyRank.KAIYU;
 		PublicRank ePublicRank = PublicRank.NONE;
 		if (mama != null) {
 			eBodyRank = mama.getBodyRank();
 			/*
-			 * // 141229時点で飼�?�?と野良�?しか機�?�して�?な�?ので他�?�選択肢はコメントアウ�?
+			 * // 141229時点で飼いゆと野良ゆしか機能していないので他の選択肢はコメントアウト
 			 * switch(eMotherBodyRank){
-			 * case KAIYU:// 飼�?�?
+			 * case KAIYU:// 飼いゆ
 			 * eBodyRank = Body.BodyRank.KAIYU;
 			 * break;
-			 * case SUTEYU:// 捨て�?
+			 * case SUTEYU:// 捨てゆ
 			 * eBodyRank = Body.BodyRank.NORAYU_CLEAN;
 			 * break;
-			 * case NORAYU_CLEAN:// きれ�?な野良�?
+			 * case NORAYU_CLEAN:// きれいな野良ゆ
 			 * eBodyRank = Body.BodyRank.NORAYU_CLEAN;
 			 * break;
-			 * case NORAYU:// 野良�?
+			 * case NORAYU:// 野良ゆ
 			 * eBodyRank = Body.BodyRank.NORAYU_CLEAN;
 			 * break;
-			 * case YASEIYU:// 野生�?
+			 * case YASEIYU:// 野生ゆ
 			 * eBodyRank = Body.BodyRank.YASEIYU
 			 * break;
 			 * default:
 			 * break;
 			 * }
 			 */
-			// 階級�?�設�?
+			// 階級の設定
 			PublicRank eMotherPubRank = mama.getPublicRank();
 			// 母親のランクに応じて変更
 			switch (eMotherPubRank) {
 				case NONE:
 					ePublicRank = PublicRank.NONE;
 					break;
-				case UnunSlave:// �?んうん奴隷
+				case UnunSlave:// うんうん奴隷
 					ePublicRank = PublicRank.UnunSlave;
 					break;
 				default:
@@ -8901,11 +8900,11 @@ public abstract class Body extends BodyAttributes {
 					|| SimYukkuri.world.getCurrentMap().getMapIndex() == 6)
 				eBodyRank = BodyRank.YASEIYU;
 		}
-		// 生い立ちを設�?
+		// 生い立ちを設定
 		setBodyRank(eBodyRank);
 		setPublicRank(ePublicRank);
 
-		// 先祖�?��?報を引き継ぐ
+		// 先祖の情報を引き継ぐ
 		if (mama != null) {
 			List<Integer> anTempList = mama.getAncestorList();
 			int nType = mama.getType();
@@ -8960,10 +8959,10 @@ public abstract class Body extends BodyAttributes {
 		dirY = randomDirection(dirY);
 		setMessageTextSize(12);
 		setUniqueID(Numbering.INSTANCE.numberingYukkuriID());
-		// 生い立ちの設�?
+		// 生い立ちの設定
 		BodyRank eBodyRank = BodyRank.KAIYU;
 		PublicRank ePublicRank = PublicRank.NONE;
-		// 生い立ちを設�?
+		// 生い立ちを設定
 		setBodyRank(eBodyRank);
 		setPublicRank(ePublicRank);
 
@@ -8989,16 +8988,16 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * �?つ
+	 * 待つ
 	 * 
-	 * @param nWaitTime �?ち時間
-	 * @return �?ち時間が過ぎたらtrue
+	 * @param nWaitTime 待ち時間
+	 * @return 待ち時間が過ぎたらtrue
 	 */
 	public final boolean checkWait(int nWaitTime) {
 		long lnNowTime = System.currentTimeMillis();
 		long lnLastActionTime = getInLastActionTime();
 		int speed = MyPane.getGameSpeed()[MainCommandUI.getSelectedGameSpeed()];
-		if (lnNowTime - lnLastActionTime < nWaitTime * speed / MyPane.getNormalSpeed()) {
+		if (lnNowTime - lnLastActionTime < nWaitTime * speed / MyPane.NORMAL) {
 			return false;
 		}
 		// setlnLastActionTime(lnNowTime);
@@ -9006,8 +9005,8 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * �?か�?�のトグル.
-	 * か�?�て�?れ�?�治療し、そ�?でなければか�?�させ�?.
+	 * ゆかびのトグル.
+	 * かびていれば治療し、そうでなければかびさせる.
 	 */
 	public void moldToggle() {
 		if (sickPeriod > 0) {
@@ -9020,14 +9019,14 @@ public abstract class Body extends BodyAttributes {
 
 	/**
 	 * れいぱーのトグル.
-	 * れいぱーであれば治療し、そ�?でなければれいぱー覚�?�させる.
+	 * れいぱーであれば治療し、そうでなければれいぱー覚醒させる.
 	 */
 	public void raperToggle() {
 		setRaper(!isRaper());
 	}
 
 	/**
-	 * イベント�?�ためのアクションのみのクリア
+	 * イベントのためのアクションのみのクリア
 	 */
 	public void clearActionsForEvent() {
 		setToSukkiri(false);

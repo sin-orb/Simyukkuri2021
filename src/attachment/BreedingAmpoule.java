@@ -142,4 +142,37 @@ public class BreedingAmpoule extends Attachment {
 	public String toString() {
 		return ResourceUtil.getInstance().read("item_breeding");
 	}
+
+	// テスト用静的アクセサ
+	public static BufferedImage[][] getImages() {
+		return images;
+	}
+
+	public static void setImages(BufferedImage[][] images) {
+		BreedingAmpoule.images = images;
+	}
+
+	public static void setImgW(int[] imgW) {
+		BreedingAmpoule.imgW = imgW;
+	}
+
+	public static void setImgH(int[] imgH) {
+		BreedingAmpoule.imgH = imgH;
+	}
+
+	public static void setPivX(int[] pivX) {
+		BreedingAmpoule.pivX = pivX;
+	}
+
+	public static void setPivY(int[] pivY) {
+		BreedingAmpoule.pivY = pivY;
+	}
+
+	public static String getPosKey() {
+		return POS_KEY;
+	}
+
+	public static int[] getProperty() {
+		return property;
+	}
 }
