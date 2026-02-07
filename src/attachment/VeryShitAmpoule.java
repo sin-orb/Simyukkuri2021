@@ -142,4 +142,37 @@ public class VeryShitAmpoule extends Attachment {
 	public String toString() {
 		return ResourceUtil.getInstance().read("item_veryshit");
 	}
+
+	// テスト用静的アクセサ
+	public static BufferedImage[][] getImages() {
+		return images;
+	}
+
+	public static void setImages(BufferedImage[][] images) {
+		VeryShitAmpoule.images = images;
+	}
+
+	public static void setImgW(int[] imgW) {
+		VeryShitAmpoule.imgW = imgW;
+	}
+
+	public static void setImgH(int[] imgH) {
+		VeryShitAmpoule.imgH = imgH;
+	}
+
+	public static void setPivX(int[] pivX) {
+		VeryShitAmpoule.pivX = pivX;
+	}
+
+	public static void setPivY(int[] pivY) {
+		VeryShitAmpoule.pivY = pivY;
+	}
+
+	public static String getPosKey() {
+		return POS_KEY;
+	}
+
+	public static int[] getProperty() {
+		return property;
+	}
 }

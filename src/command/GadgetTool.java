@@ -12,11 +12,11 @@ import src.yukkuri.Reimu;
 public class GadgetTool {
 
 	/**
-	 * �?虐神拳を実行す�?.
-	 * @param b �?っくりの実�?
+	 * ゆ虐神拳を実行する.
+	 * @param b ゆっくりの実体
 	 */
 	public static void doGodHand(Body b) {
-		// 死んでたら何もしな�?
+		// 死んでたら何もしない
 		if( b.isDead() ){
 			return;
 		}
@@ -29,55 +29,55 @@ public class GadgetTool {
 				b.kick();
 			}
 			else{
-				// 突然変異できな�?場合�?�レイパ�?�をToggle
+				// 突然変異できない場合はレイパーをToggle
 				b.setRapist(!b.isRapist());
 				b.kick();
 			}
-			// 持ち物を�?�部落と�?
+			// 持ち物を全部落とす
 			b.dropAllTakeoutItem();
 			break;
 
-		case 1:	// �?断
+		case 1:	// 切断
 			b.bodyCut();
-			// 持ち物を�?�部落と�?
+			// 持ち物を全部落とす
 			b.dropAllTakeoutItem();
 			b.kick();
 			break;
 
 		case 2:
-			// つぶして�?た�?�を引っ張る場�?
+			// つぶしていたのを引っ張る場合
 			if( b.getAbFlagGodHand()[2]  ){
 				b.setGodHandStretchPoint(b.getGodHandCompressPoint());
 			}
-			// 引っ張�?
+			// 引っ張る
 			b.getAbFlagGodHand()[1] = true;
 			b.getAbFlagGodHand()[2] = false;
-			// 実ゆの場合、親が反応す�?
+			// 実ゆの場合、親が反応する
 			b.checkReactionStalkMother(UnbirthBabyState.SAD);
 			break;
 
 		case 3:
-			// 伸ばして�?た�?�をつぶす場�?
+			// 伸ばしていたのをつぶす場合
 			if( b.getAbFlagGodHand()[1] ){
 				b.setGodHandCompressPoint(b.getGodHandStretchPoint());
 			}
-			// つぶ�?
+			// つぶす
 			b.getAbFlagGodHand()[1] = false;
 			b.getAbFlagGodHand()[2] = true;
-			// 実ゆの場合、親が反応す�?
+			// 実ゆの場合、親が反応する
 			b.checkReactionStalkMother(UnbirthBabyState.SAD);
 			break;
 
 		case 4:// 回復
 			// 痛めつけてから回復
-			// ダメージがある状態から復活した場合�?�セリフをしゃべ�?
+			// ダメージがある状態から復活した場合のセリフをしゃべる
 			b.setDamage(b.getDAMAGELIMITorg()[b.getBodyAgeState().ordinal()]/2);
-			// 実ゆの場合、親が反応す�?
+			// 実ゆの場合、親が反応する
 			b.checkReactionStalkMother(UnbirthBabyState.HAPPY);
 			b.giveJuice();
 			break;
-		case 5:// 言語破�?
-			// れいむの場�?
+		case 5:// 言語破壊
+			// れいむの場合
 			if( b.getType() == Reimu.type){
 				b.setMsgType(YukkuriType.TARINAIREIMU);
 			}
@@ -87,16 +87,16 @@ public class GadgetTool {
 			break;
 		default:
 			b.kick();
-			// 持ち物を�?�部落と�?
+			// 持ち物を全部落とす
 			b.dropAllTakeoutItem();
-			// 二回目なら�??発�?拡大
+			// 二回目なら爆発的拡大
 			if( b.getAbFlagGodHand()[0] ){
 				b.setShit(b.getSHITLIMITorg()[b.getBodyAgeState().ordinal()] * 10);
 				b.setAnalClose(true);
 			}
-			// 膨ら�?�
+			// 膨らむ
 			b.getAbFlagGodHand()[0] = true;
-			// 実ゆの場合、親が反応す�?
+			// 実ゆの場合、親が反応する
 			b.checkReactionStalkMother(UnbirthBabyState.SAD);
 			break;
 		}

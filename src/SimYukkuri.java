@@ -120,7 +120,7 @@ public class SimYukkuri extends JFrame {
 	/** 世界 */
 	public static World world = null;
 	/** ペイン */
-	public static MyPane mypane = new MyPane();
+	public static MyPane mypane = null;
 	/** スレッド */
 	static Thread mythread;
 	/** ドラッグ始点 */
@@ -146,6 +146,8 @@ public class SimYukkuri extends JFrame {
 	 */
 	public SimYukkuri() {
 		super(TITLE + "  " + VERSION);
+
+		mypane = new MyPane();
 
 		ClassLoader loader = this.getClass().getClassLoader();
 

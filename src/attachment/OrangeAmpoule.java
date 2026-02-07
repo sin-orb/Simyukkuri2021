@@ -138,4 +138,37 @@ public class OrangeAmpoule extends Attachment {
 	public String toString() {
 		return ResourceUtil.getInstance().read("item_orange");
 	}
+
+	// テスト用静的アクセサ
+	public static BufferedImage[][] getImages() {
+		return images;
+	}
+
+	public static void setImages(BufferedImage[][] images) {
+		OrangeAmpoule.images = images;
+	}
+
+	public static void setImgW(int[] imgW) {
+		OrangeAmpoule.imgW = imgW;
+	}
+
+	public static void setImgH(int[] imgH) {
+		OrangeAmpoule.imgH = imgH;
+	}
+
+	public static void setPivX(int[] pivX) {
+		OrangeAmpoule.pivX = pivX;
+	}
+
+	public static void setPivY(int[] pivY) {
+		OrangeAmpoule.pivY = pivY;
+	}
+
+	public static String getPosKey() {
+		return POS_KEY;
+	}
+
+	public static int[] getProperty() {
+		return property;
+	}
 }

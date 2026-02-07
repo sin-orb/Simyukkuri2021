@@ -158,4 +158,37 @@ public class PoisonAmpoule extends Attachment {
 	public String toString() {
 		return ResourceUtil.getInstance().read("item_poison");
 	}
+
+	// テスト用静的アクセサ
+	public static BufferedImage[][] getImages() {
+		return images;
+	}
+
+	public static void setImages(BufferedImage[][] images) {
+		PoisonAmpoule.images = images;
+	}
+
+	public static void setImgW(int[] imgW) {
+		PoisonAmpoule.imgW = imgW;
+	}
+
+	public static void setImgH(int[] imgH) {
+		PoisonAmpoule.imgH = imgH;
+	}
+
+	public static void setPivX(int[] pivX) {
+		PoisonAmpoule.pivX = pivX;
+	}
+
+	public static void setPivY(int[] pivY) {
+		PoisonAmpoule.pivY = pivY;
+	}
+
+	public static String getPosKey() {
+		return POS_KEY;
+	}
+
+	public static int[] getProperty() {
+		return property;
+	}
 }

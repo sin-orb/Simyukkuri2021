@@ -139,4 +139,37 @@ public class HungryAmpoule extends Attachment {
 	public String toString() {
 		return ResourceUtil.getInstance().read("item_hungry");
 	}
+
+	// テスト用静的アクセサ
+	public static BufferedImage[][] getImages() {
+		return images;
+	}
+
+	public static void setImages(BufferedImage[][] images) {
+		HungryAmpoule.images = images;
+	}
+
+	public static void setImgW(int[] imgW) {
+		HungryAmpoule.imgW = imgW;
+	}
+
+	public static void setImgH(int[] imgH) {
+		HungryAmpoule.imgH = imgH;
+	}
+
+	public static void setPivX(int[] pivX) {
+		HungryAmpoule.pivX = pivX;
+	}
+
+	public static void setPivY(int[] pivY) {
+		HungryAmpoule.pivY = pivY;
+	}
+
+	public static String getPosKey() {
+		return POS_KEY;
+	}
+
+	public static int[] getProperty() {
+		return property;
+	}
 }
