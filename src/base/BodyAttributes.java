@@ -5431,13 +5431,17 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public Burst getBurstState() {
-		if (getSize() * 4 / getOriginSize() >= 8) {
+		int origin = getOriginSize();
+		if (origin <= 0) {
+			return Burst.NONE;
+		}
+		if (getSize() * 4 / origin >= 8) {
 			return Burst.BURST;
-		} else if (getSize() * 4 / getOriginSize() >= 7) {
+		} else if (getSize() * 4 / origin >= 7) {
 			return Burst.NEAR;
-		} else if (getSize() * 4 / getOriginSize() >= 6) {
+		} else if (getSize() * 4 / origin >= 6) {
 			return Burst.HALF;
-		} else if (getSize() * 4 / getOriginSize() >= 5) {
+		} else if (getSize() * 4 / origin >= 5) {
 			return Burst.SAFE;
 		}
 		return Burst.NONE;
@@ -5450,10 +5454,17 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public int getSize() {
-		if (SimYukkuri.UNYO) {
-			return bodySpr[getBodyAgeState().ordinal()].getImageW() + getExpandSizeW() + unyoForceW;
+		if (bodySpr == null) {
+			return 0;
 		}
-		return bodySpr[getBodyAgeState().ordinal()].getImageW() + getExpandSizeW();
+		Sprite spr = bodySpr[getBodyAgeState().ordinal()];
+		if (spr == null) {
+			return 0;
+		}
+		if (SimYukkuri.UNYO) {
+			return spr.getImageW() + getExpandSizeW() + unyoForceW;
+		}
+		return spr.getImageW() + getExpandSizeW();
 	}
 
 	/**
@@ -5463,7 +5474,14 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public int getOriginSize() {
-		return bodySpr[getBodyAgeState().ordinal()].getImageW();
+		if (bodySpr == null) {
+			return 0;
+		}
+		Sprite spr = bodySpr[getBodyAgeState().ordinal()];
+		if (spr == null) {
+			return 0;
+		}
+		return spr.getImageW();
 	}
 
 	/**

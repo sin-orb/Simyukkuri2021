@@ -3630,16 +3630,26 @@ public abstract class Body extends BodyAttributes {
 	 * @param braid
 	 */
 	public void setBoundary(Dimension4y[] body, Dimension4y[] braid) {
-		for (int i = 0; i < body.length; i++) {
-			getBodySpr()[i] = new Sprite(body[i].getWidth(), body[i].getHeight(), Sprite.PIVOT_CENTER_BOTTOM);
-			getExpandSpr()[i] = new Sprite(body[i].getWidth(), body[i].getHeight(), Sprite.PIVOT_CENTER_BOTTOM);
-		}
-		for (int i = 0; i < braid.length; i++) {
-			if (braid[i] != null) {
-				getBraidSpr()[i] = new Sprite(braid[i].getWidth(), braid[i].getHeight(), Sprite.PIVOT_CENTER_BOTTOM);
-			} else {
-				getBraidSpr()[i] = new Sprite(0, 0, Sprite.PIVOT_CENTER_CENTER);
+		int bodyLen = getBodySpr().length;
+		for (int i = 0; i < bodyLen; i++) {
+			int w = 0;
+			int h = 0;
+			if (body != null && i < body.length && body[i] != null) {
+				w = body[i].getWidth();
+				h = body[i].getHeight();
 			}
+			getBodySpr()[i] = new Sprite(w, h, Sprite.PIVOT_CENTER_BOTTOM);
+			getExpandSpr()[i] = new Sprite(w, h, Sprite.PIVOT_CENTER_BOTTOM);
+		}
+		int braidLen = getBraidSpr().length;
+		for (int i = 0; i < braidLen; i++) {
+			int w = 0;
+			int h = 0;
+			if (braid != null && i < braid.length && braid[i] != null) {
+				w = braid[i].getWidth();
+				h = braid[i].getHeight();
+			}
+			getBraidSpr()[i] = new Sprite(w, h, Sprite.PIVOT_CENTER_BOTTOM);
 		}
 	}
 
@@ -6305,10 +6315,12 @@ public abstract class Body extends BodyAttributes {
 			setMessage(MessagePool.getMessage(this, MessagePool.Action.Dying), true);
 			stay();
 			setCrushed(true);
-			for (int i = 0; i < (SimYukkuri.RND.nextInt(5) + 5); i++) {
-				SimYukkuri.mypane.getTerrarium().addCrushedVomit(getX() + 7 - SimYukkuri.RND.nextInt(14),
-						getY() + 7 - SimYukkuri.RND.nextInt(14),
-						0, this, getShitType());
+			if (SimYukkuri.mypane != null && SimYukkuri.mypane.getTerrarium() != null) {
+				for (int i = 0; i < (SimYukkuri.RND.nextInt(5) + 5); i++) {
+					SimYukkuri.mypane.getTerrarium().addCrushedVomit(getX() + 7 - SimYukkuri.RND.nextInt(14),
+							getY() + 7 - SimYukkuri.RND.nextInt(14),
+							0, this, getShitType());
+				}
 			}
 		}
 	}

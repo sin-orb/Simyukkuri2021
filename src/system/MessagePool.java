@@ -806,6 +806,9 @@ public class MessagePool {
 	 * @return メッセージ
 	 */
 	public static final String getMessage(Body body, Action action) {
+		if (body == null || pool_j == null || body.getMsgType() == null) {
+			return null;
+		}
 		// メッセージ変更
 		// 皮むき時
 		if (body.isPealed() && action == MessagePool.Action.Scream) {
@@ -826,8 +829,17 @@ public class MessagePool {
 		String name = "";
 		String name2 = "";
 		String partnerName = "";
+		if (body.getBodyRank() == null) {
+			return null;
+		}
 		String suffix = RANK_SUFFIX[body.getBodyRank().getMessageIndex()];
+		if (pool_j.length <= body.getMsgType().ordinal()) {
+			return null;
+		}
 		map = pool_j[body.getMsgType().ordinal()];
+		if (map == null) {
+			return null;
+		}
 		// name = body.getMyNameJ;
 		if (body.isStressful() && body.isDamaged() && SimYukkuri.RND.nextBoolean()) {
 			name = body.getMyNameD();

@@ -82,19 +82,23 @@ public class ResourceUtil {
 		/* Read the Japanese strings from the JAR file. */
 		reader = this.getReader(loader, jaLocale.getLanguage());
 		strings.put(jaLocale.getLanguage(), this.readStrings(reader));
-		try {
-			reader.close();
-		} catch (Exception e) {
-			e.printStackTrace();
+		if (reader != null) {
+			try {
+				reader.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 
 		/* Read the English strings from the JAR file. */
 		reader = this.getReader(loader, enLocale.getLanguage());
 		strings.put(enLocale.getLanguage(), this.readStrings(reader));
-		try {
-			reader.close();
-		} catch (Exception e) {
-			e.printStackTrace();
+		if (reader != null) {
+			try {
+				reader.close();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 
 		/* Read the current locale's strings from the file system. */
@@ -137,6 +141,9 @@ public class ResourceUtil {
 		try {
 			String path = "resources/simyukkuri." + lang + ".properties";
 			InputStream input = loader.getResourceAsStream(path);
+			if (input == null) {
+				return null;
+			}
 			return new BufferedReader(new InputStreamReader(input, "UTF-8"));
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -169,6 +176,10 @@ public class ResourceUtil {
 	 */
 	private Map<String, String> readStrings(BufferedReader reader) {
 		Map<String, String> props = new HashMap<String, String>();
+
+		if (reader == null) {
+			return props;
+		}
 
 		try {
 			for (String line = reader.readLine(); null != line; line = reader.readLine()) {

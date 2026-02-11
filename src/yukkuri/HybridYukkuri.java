@@ -301,10 +301,18 @@ public class HybridYukkuri extends Body {
 
 	@Override
 	public void setBodyRank(BodyRank r) {
-		dorei.setBodyRank(r);
-		dorei2.setBodyRank(r);
-		dorei3.setBodyRank(r);
-		dorei4.setBodyRank(r);
+		if (dorei != null) {
+			dorei.setBodyRank(r);
+		}
+		if (dorei2 != null) {
+			dorei2.setBodyRank(r);
+		}
+		if (dorei3 != null) {
+			dorei3.setBodyRank(r);
+		}
+		if (dorei4 != null) {
+			dorei4.setBodyRank(r);
+		}
 		bodyRank = r;
 	}
 
@@ -443,10 +451,12 @@ public class HybridYukkuri extends Body {
 		STRENGTHorg[AgeState.CHILD.ordinal()] *= factor;
 		STRENGTHorg[AgeState.BABY.ordinal()] *= factor;
 		images = new Body[ImageCode.values().length];
-		try {
-			loadImages_Hyblid();
-		} catch (IOException e1) {
-			System.out.println("File I/O error");
+		if (dorei != null && dorei2 != null && dorei3 != null && dorei4 != null) {
+			try {
+				loadImages_Hyblid();
+			} catch (IOException e1) {
+				System.out.println("File I/O error");
+			}
 		}
 	}
 
