@@ -28,15 +28,18 @@ jobs:
         xcopy /s /e /i /y images bin\images
 
     - name: Compile Source Code
+      shell: cmd
       run: |
         dir /s /b src\*.java > sources.txt
         javac -d bin -cp "lib\*" -encoding UTF-8 @sources.txt
 
     - name: Compile Test Code
+      shell: cmd
       run: |
         dir /s /b test\*.java > test_sources.txt
         javac -d bin -cp "bin;lib\*" -encoding UTF-8 @test_sources.txt
 
     - name: Run Tests
+      shell: cmd
       run: |
         java -cp ".;lib\junit-platform-console-standalone-1.10.2.jar;bin;lib\*" org.junit.platform.console.ConsoleLauncher --scan-classpath=bin --reports-dir=test-results
