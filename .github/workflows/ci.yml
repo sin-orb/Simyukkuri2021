@@ -18,11 +18,14 @@ jobs:
       with:
         java-version: '8'
         distribution: 'temurin'
-        cache: 'gradle' # Warning: No gradle here, maybe remove or use 'maven' if we switch? 
-                        # Actually we have no standard build system, so no cache for now.
-
+        
     - name: Create output directory
       run: mkdir bin
+
+    - name: Copy Resources
+      run: |
+        xcopy /s /e /i /y data bin\data
+        xcopy /s /e /i /y images bin\images
 
     - name: Compile Source Code
       run: |
@@ -36,4 +39,4 @@ jobs:
 
     - name: Run Tests
       run: |
-        java -jar lib/junit-platform-console-standalone-1.10.2.jar --class-path "bin;lib/*" --scan-class-path --reports-dir=test-results
+        java -cp ".;lib\junit-platform-console-standalone-1.10.2.jar;bin;lib\*" org.junit.platform.console.ConsoleLauncher --scan-classpath=bin --reports-dir=test-results
