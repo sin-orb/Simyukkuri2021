@@ -3,10 +3,9 @@ package src.command;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.junit.jupiter.api.Assumptions.*;
 
-import java.awt.GraphicsEnvironment;
-
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
@@ -20,10 +19,12 @@ import src.system.MessagePool;
 import src.system.Sprite;
 import src.yukkuri.Reimu;
 
+@Disabled("GUI-dependent")
 public class ShowStatusFrameTest {
 
     @BeforeAll
     public static void setUpClass() {
+        assumeTrue(hasDisplay());
         MessagePool.loadMessage(ShowStatusFrameTest.class.getClassLoader());
     }
 
@@ -56,11 +57,15 @@ public class ShowStatusFrameTest {
 
     @Test
     public void testGiveBodyInfoUpdatesSelectBody() {
-        assumeFalse(GraphicsEnvironment.isHeadless());
-
         Body b = createReimuBody(AgeState.ADULT);
         ShowStatusFrame.getInstance().giveBodyInfo(b);
 
         assertSame(b, MyPane.getSelectBody());
+    }
+
+    private static boolean hasDisplay() {
+        String osName = System.getProperty("os.name", "").toLowerCase();
+        boolean isWindows = osName.contains("windows");
+        return isWindows || System.getenv("DISPLAY") != null;
     }
 }

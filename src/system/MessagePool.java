@@ -634,20 +634,24 @@ public class MessagePool {
 			// 汎用メッセージ
 			br = ModLoader.openMessageFile(loader, ModLoader.getDataMsgDir(), yk[i].getMessageFileName() + "_j.txt",
 					true);
-			try {
-				readMessageMap(br, pool_j[i], RANK_SUFFIX[BodyRank.KAIYU.getMessageIndex()]);
-				br.close();
-			} catch (IOException e) {
-				e.printStackTrace();
+			if (br != null) {
+				try {
+					readMessageMap(br, pool_j[i], RANK_SUFFIX[BodyRank.KAIYU.getMessageIndex()]);
+					br.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 			// イベントメッセージ
 			br = ModLoader.openMessageFile(loader, ModLoader.getDataMsgDir(), yk[i].getMessageFileName() + "_ev_j.txt",
 					true);
-			try {
-				readMessageMap(br, pool_j[i], RANK_SUFFIX[BodyRank.KAIYU.getMessageIndex()]);
-				br.close();
-			} catch (IOException e) {
-				e.printStackTrace();
+			if (br != null) {
+				try {
+					readMessageMap(br, pool_j[i], RANK_SUFFIX[BodyRank.KAIYU.getMessageIndex()]);
+					br.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 
 			// 野良ゆ

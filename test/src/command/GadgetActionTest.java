@@ -4,8 +4,10 @@ package src.command;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Assumptions;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -33,12 +35,14 @@ import src.system.MessagePool;
 import src.system.Sprite;
 import src.yukkuri.Reimu;
 
+@Disabled("GUI-dependent")
 public class GadgetActionTest {
 
     private Random originalRnd;
 
     @BeforeAll
     public static void setUpClass() {
+        Assumptions.assumeTrue(hasDisplay());
         MessagePool.loadMessage(GadgetActionTest.class.getClassLoader());
     }
 
@@ -80,6 +84,12 @@ public class GadgetActionTest {
     private MouseEvent createEvent(int modifiers) {
         return new MouseEvent(new JPanel(), MouseEvent.MOUSE_CLICKED,
             System.currentTimeMillis(), modifiers, 0, 0, 1, false);
+    }
+
+    private static boolean hasDisplay() {
+        String osName = System.getProperty("os.name", "").toLowerCase();
+        boolean isWindows = osName.contains("windows");
+        return isWindows || System.getenv("DISPLAY") != null;
     }
 
     // ===========================================

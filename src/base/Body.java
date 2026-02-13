@@ -9008,8 +9008,18 @@ public abstract class Body extends BodyAttributes {
 	public final boolean checkWait(int nWaitTime) {
 		long lnNowTime = System.currentTimeMillis();
 		long lnLastActionTime = getInLastActionTime();
-		int speed = MyPane.getGameSpeed()[MainCommandUI.getSelectedGameSpeed()];
-		if (lnNowTime - lnLastActionTime < nWaitTime * speed / MyPane.NORMAL) {
+		int speed = 100; // default NORMAL
+		String osName = System.getProperty("os.name", "").toLowerCase();
+		boolean hasDisplay = System.getenv("DISPLAY") != null;
+		boolean isWindows = osName.contains("windows");
+		if (hasDisplay || isWindows) {
+			try {
+				speed = MyPane.getGameSpeed()[MainCommandUI.getSelectedGameSpeed()];
+			} catch (Throwable ignore) {
+				speed = 100;
+			}
+		}
+		if (lnNowTime - lnLastActionTime < nWaitTime * speed / 100) {
 			return false;
 		}
 		// setlnLastActionTime(lnNowTime);

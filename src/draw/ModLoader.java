@@ -411,6 +411,9 @@ public class ModLoader {
 		if (jarTry) {
 			// ファイルが無かったらjarから読む
 			InputStream is = loader.getResourceAsStream(DEFAULT_DATA_DIR + path + "/" + name);
+			if (is == null) {
+				return null;
+			}
 			try {
 				br = new BufferedReader(new InputStreamReader(is, "UTF-8"));
 			} catch (Exception e1) {

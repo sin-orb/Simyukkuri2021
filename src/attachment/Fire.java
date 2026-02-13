@@ -160,6 +160,11 @@ public class Fire extends Attachment {
 	public void resetBoundary(){
 		Body pa = YukkuriUtil.getBodyInstance(parent);
 		if (pa == null) return;
+		if (pivX == null || pivY == null || imgW == null || imgH == null) return;
+		int idx = pa.getBodyAgeState().ordinal();
+		if (idx < 0 || idx >= pivX.length || idx >= pivY.length || idx >= imgW.length || idx >= imgH.length) {
+			return;
+		}
 		setBoundary(pivX[pa.getBodyAgeState().ordinal()],
 					pivY[pa.getBodyAgeState().ordinal()],
 					imgW[pa.getBodyAgeState().ordinal()],
@@ -174,11 +179,11 @@ public class Fire extends Attachment {
 		super(body);
 		setAttachProperty(property, POS_KEY);
 		Body pa = YukkuriUtil.getBodyInstance(parent);
-		if (pa != null) {
-		setBoundary(pivX[pa.getBodyAgeState().ordinal()],
-					pivY[pa.getBodyAgeState().ordinal()],
-					imgW[pa.getBodyAgeState().ordinal()],
-					imgH[pa.getBodyAgeState().ordinal()]);
+		if (pa != null && pivX != null && pivY != null && imgW != null && imgH != null) {
+			int idx = pa.getBodyAgeState().ordinal();
+			if (idx >= 0 && idx < pivX.length && idx < pivY.length && idx < imgW.length && idx < imgH.length) {
+				setBoundary(pivX[idx], pivY[idx], imgW[idx], imgH[idx]);
+			}
 		}
 		burnPeriod = 0;
 		value = 0;

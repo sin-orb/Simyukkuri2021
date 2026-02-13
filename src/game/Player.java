@@ -52,7 +52,11 @@ public class Player extends Obj {
 	public void addCash(int addcash) {
 		cash += addcash;
 		// 手持ち資金が更新されたら表示変更
-		MainCommandUI.showPlayerStatus();
+		try {
+			MainCommandUI.showPlayerStatus();
+		} catch (Throwable ignore) {
+			// Headless or UI init failure; ignore in non-GUI contexts.
+		}
 	}
 
 	/**

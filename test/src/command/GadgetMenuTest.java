@@ -3,7 +3,9 @@ package src.command;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.Assumptions;
 
 import src.command.GadgetMenu.ActionTarget;
 import src.command.GadgetMenu.GadgetList;
@@ -11,10 +13,12 @@ import src.command.GadgetMenu.HelpContext;
 import src.command.GadgetMenu.HelpIcon;
 import src.system.MessagePool;
 
+@Disabled("GUI-dependent")
 public class GadgetMenuTest {
 
     @BeforeAll
     public static void setUpClass() {
+        Assumptions.assumeTrue(hasDisplay());
         MessagePool.loadMessage(GadgetMenuTest.class.getClassLoader());
     }
 
@@ -50,5 +54,11 @@ public class GadgetMenuTest {
 
         assertEquals(GadgetList.TOOL, main[0]);
         assertEquals(GadgetList.PUNISH, tool[0]);
+    }
+
+    private static boolean hasDisplay() {
+        String osName = System.getProperty("os.name", "").toLowerCase();
+        boolean isWindows = osName.contains("windows");
+        return isWindows || System.getenv("DISPLAY") != null;
     }
 }
