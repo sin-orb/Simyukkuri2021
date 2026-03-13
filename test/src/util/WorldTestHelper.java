@@ -22,6 +22,7 @@ public class WorldTestHelper {
      * Reset static states in SimYukkuri to ensure test isolation
      */
     public static void resetStates() {
+        System.setProperty("java.awt.headless", "true");
         try {
             Field mypaneField = SimYukkuri.class.getDeclaredField("mypane");
             mypaneField.setAccessible(true);
@@ -65,6 +66,7 @@ public class WorldTestHelper {
             // Add at least one map if empty
             Field mapListField = World.class.getDeclaredField("mapList");
             mapListField.setAccessible(true);
+            @SuppressWarnings("unchecked")
             List<MapPlaceData> mapList = (List<MapPlaceData>) mapListField.get(world);
             if (mapList.isEmpty()) {
                 MapPlaceData map = new MapPlaceData(0);
@@ -172,6 +174,7 @@ public class WorldTestHelper {
         try {
             Field field = BodyAttributes.class.getDeclaredField("childrenList");
             field.setAccessible(true);
+            @SuppressWarnings("unchecked")
             List<Integer> children = (List<Integer>) field.get(body);
             children.add(childId);
         } catch (Exception e) {

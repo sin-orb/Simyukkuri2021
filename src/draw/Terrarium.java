@@ -295,25 +295,32 @@ public class Terrarium implements Serializable {
 			}
 		}
 		// 持ち物を復元
-		MainCommandUI.getItemWindow().getItemList().setModel(tmpWorld.getPlayer().getItemList());
+		if (MainCommandUI.getItemWindow() != null && MainCommandUI.getItemWindow().getItemList() != null) {
+			MainCommandUI.getItemWindow().getItemList().setModel(tmpWorld.getPlayer().getItemList());
+		}
 
 		// ウィンドウサイズを復元
 		tmpWorld.recalcMapSize();
 		SimYukkuri.world = tmpWorld;
 
-		if (SimYukkuri.world.getWindowType() != 2) {
-			SimYukkuri.simYukkuri.setWindowMode(SimYukkuri.world.getWindowType(),
-					SimYukkuri.world.getTerrariumSizeIndex());
-		} else {
-			SimYukkuri.simYukkuri.setFullScreenMode(SimYukkuri.world.getTerrariumSizeIndex());
+		if (SimYukkuri.simYukkuri != null) {
+			if (SimYukkuri.world.getWindowType() != 2) {
+				SimYukkuri.simYukkuri.setWindowMode(SimYukkuri.world.getWindowType(),
+						SimYukkuri.world.getTerrariumSizeIndex());
+			} else {
+				SimYukkuri.simYukkuri.setFullScreenMode(SimYukkuri.world.getTerrariumSizeIndex());
+			}
 		}
 
 		// マップの復元
 		SimYukkuri.world.setNextMap(SimYukkuri.world.getCurrentMap().getMapIndex());
-		SimYukkuri.mypane.loadTerrainFile();
+		if (SimYukkuri.mypane != null) {
+			SimYukkuri.mypane.loadTerrainFile();
+		}
 		SimYukkuri.world.changeMap();
-
-		SimYukkuri.mypane.createBackBuffer();
+		if (SimYukkuri.mypane != null) {
+			SimYukkuri.mypane.createBackBuffer();
+		}
 		Translate.createTransTable(TerrainField.isPers());
 
 		// 遅延読み込みの復元
@@ -668,142 +675,142 @@ public class Terrarium implements Serializable {
 
 		switch (type) {
 			case Marisa.type:
-				SimYukkuri.mypane.loadBodyImage(YukkuriType.MARISA);
+				loadBodyImageSafe(YukkuriType.MARISA);
 				b = new Marisa(x, y, z, age, mama, papa);
 				break;
 			case Reimu.type:
-				SimYukkuri.mypane.loadBodyImage(YukkuriType.REIMU);
+				loadBodyImageSafe(YukkuriType.REIMU);
 				b = new Reimu(x, y, z, age, mama, papa);
 				break;
 			case Alice.type:
-				SimYukkuri.mypane.loadBodyImage(YukkuriType.ALICE);
+				loadBodyImageSafe(YukkuriType.ALICE);
 				b = new Alice(x, y, z, age, mama, papa);
 				break;
 			case Patch.type:
-				SimYukkuri.mypane.loadBodyImage(YukkuriType.PATCH);
+				loadBodyImageSafe(YukkuriType.PATCH);
 				b = new Patch(x, y, z, age, mama, papa);
 				break;
 			case Chen.type:
-				SimYukkuri.mypane.loadBodyImage(YukkuriType.CHEN);
+				loadBodyImageSafe(YukkuriType.CHEN);
 				b = new Chen(x, y, z, age, mama, papa);
 				break;
 			case Myon.type:
-				SimYukkuri.mypane.loadBodyImage(YukkuriType.MYON);
+				loadBodyImageSafe(YukkuriType.MYON);
 				b = new Myon(x, y, z, age, mama, papa);
 				break;
 			case WasaReimu.type:
-				SimYukkuri.mypane.loadBodyImage(YukkuriType.REIMU);
-				SimYukkuri.mypane.loadBodyImage(YukkuriType.WASAREIMU);
+				loadBodyImageSafe(YukkuriType.REIMU);
+				loadBodyImageSafe(YukkuriType.WASAREIMU);
 				b = new WasaReimu(x, y, z, age, mama, papa);
 				break;
 			case MarisaTsumuri.type:
-				SimYukkuri.mypane.loadBodyImage(YukkuriType.MARISA);
-				SimYukkuri.mypane.loadBodyImage(YukkuriType.MARISATSUMURI);
+				loadBodyImageSafe(YukkuriType.MARISA);
+				loadBodyImageSafe(YukkuriType.MARISATSUMURI);
 				b = new MarisaTsumuri(x, y, z, age, mama, papa);
 				break;
 			case MarisaKotatsumuri.type:
-				SimYukkuri.mypane.loadBodyImage(YukkuriType.MARISAKOTATSUMURI);
+				loadBodyImageSafe(YukkuriType.MARISAKOTATSUMURI);
 				b = new MarisaKotatsumuri(x, y, z, age, mama, papa);
 				break;
 			case Deibu.type:
-				SimYukkuri.mypane.loadBodyImage(YukkuriType.REIMU);
-				SimYukkuri.mypane.loadBodyImage(YukkuriType.DEIBU);
+				loadBodyImageSafe(YukkuriType.REIMU);
+				loadBodyImageSafe(YukkuriType.DEIBU);
 				b = new Deibu(x, y, z, age, mama, papa);
 				break;
 			case DosMarisa.type:
 				if (SimYukkuri.world.getCurrentMap().makeOrKillDos(true)) {
-					SimYukkuri.mypane.loadBodyImage(YukkuriType.DOSMARISA);
+					loadBodyImageSafe(YukkuriType.DOSMARISA);
 					b = new DosMarisa(x, y, z, age, mama, papa);
 				} else {
-					SimYukkuri.mypane.loadBodyImage(YukkuriType.MARISA);
+					loadBodyImageSafe(YukkuriType.MARISA);
 					b = new Marisa(x, y, z, age, mama, papa);
 				}
 				break;
 			case Tarinai.type:
-				SimYukkuri.mypane.loadBodyImage(YukkuriType.TARINAI);
+				loadBodyImageSafe(YukkuriType.TARINAI);
 				b = new Tarinai(x, y, z, age, mama, papa);
 				break;
 			case TarinaiReimu.type:
-				SimYukkuri.mypane.loadBodyImage(YukkuriType.TARINAI);
-				SimYukkuri.mypane.loadBodyImage(YukkuriType.TARINAIREIMU);
+				loadBodyImageSafe(YukkuriType.TARINAI);
+				loadBodyImageSafe(YukkuriType.TARINAIREIMU);
 				b = new TarinaiReimu(x, y, z, age, mama, papa);
 				break;
 			case MarisaReimu.type:
-				SimYukkuri.mypane.loadBodyImage(YukkuriType.REIMU);
-				SimYukkuri.mypane.loadBodyImage(YukkuriType.MARISAREIMU);
+				loadBodyImageSafe(YukkuriType.REIMU);
+				loadBodyImageSafe(YukkuriType.MARISAREIMU);
 				b = new MarisaReimu(x, y, z, age, mama, papa);
 				break;
 			case ReimuMarisa.type:
-				SimYukkuri.mypane.loadBodyImage(YukkuriType.MARISA);
-				SimYukkuri.mypane.loadBodyImage(YukkuriType.REIMUMARISA);
+				loadBodyImageSafe(YukkuriType.MARISA);
+				loadBodyImageSafe(YukkuriType.REIMUMARISA);
 				b = new ReimuMarisa(x, y, z, age, mama, papa);
 				break;
 			case HybridYukkuri.type:
-				SimYukkuri.mypane.loadBodyImage(YukkuriType.HYBRIDYUKKURI);
+				loadBodyImageSafe(YukkuriType.HYBRIDYUKKURI);
 				b = new HybridYukkuri(x, y, z, age, mama, papa);
 				break;
 			case Remirya.type:
-				SimYukkuri.mypane.loadBodyImage(YukkuriType.REMIRYA);
+				loadBodyImageSafe(YukkuriType.REMIRYA);
 				b = new Remirya(x, y, z, age, mama, papa);
 				break;
 			case Fran.type:
-				SimYukkuri.mypane.loadBodyImage(YukkuriType.FRAN);
+				loadBodyImageSafe(YukkuriType.FRAN);
 				b = new Fran(x, y, z, age, mama, papa);
 				break;
 			case Ayaya.type:
-				SimYukkuri.mypane.loadBodyImage(YukkuriType.AYAYA);
+				loadBodyImageSafe(YukkuriType.AYAYA);
 				b = new Ayaya(x, y, z, age, mama, papa);
 				break;
 			case Chiruno.type:
-				SimYukkuri.mypane.loadBodyImage(YukkuriType.CHIRUNO);
+				loadBodyImageSafe(YukkuriType.CHIRUNO);
 				b = new Chiruno(x, y, z, age, mama, papa);
 				break;
 			case Eiki.type:
-				SimYukkuri.mypane.loadBodyImage(YukkuriType.EIKI);
+				loadBodyImageSafe(YukkuriType.EIKI);
 				b = new Eiki(x, y, z, age, mama, papa);
 				break;
 			case Kimeemaru.type:
-				SimYukkuri.mypane.loadBodyImage(YukkuriType.KIMEEMARU);
+				loadBodyImageSafe(YukkuriType.KIMEEMARU);
 				b = new Kimeemaru(x, y, z, age, mama, papa);
 				break;
 			case Meirin.type:
-				SimYukkuri.mypane.loadBodyImage(YukkuriType.MEIRIN);
+				loadBodyImageSafe(YukkuriType.MEIRIN);
 				b = new Meirin(x, y, z, age, mama, papa);
 				break;
 			case Nitori.type:
-				SimYukkuri.mypane.loadBodyImage(YukkuriType.NITORI);
+				loadBodyImageSafe(YukkuriType.NITORI);
 				b = new Nitori(x, y, z, age, mama, papa);
 				break;
 			case Ran.type:
-				SimYukkuri.mypane.loadBodyImage(YukkuriType.RAN);
+				loadBodyImageSafe(YukkuriType.RAN);
 				b = new Ran(x, y, z, age, mama, papa);
 				break;
 			case Suwako.type:
-				SimYukkuri.mypane.loadBodyImage(YukkuriType.SUWAKO);
+				loadBodyImageSafe(YukkuriType.SUWAKO);
 				b = new Suwako(x, y, z, age, mama, papa);
 				break;
 			case Tenko.type:
-				SimYukkuri.mypane.loadBodyImage(YukkuriType.TENKO);
+				loadBodyImageSafe(YukkuriType.TENKO);
 				b = new Tenko(x, y, z, age, mama, papa);
 				break;
 			case Udonge.type:
-				SimYukkuri.mypane.loadBodyImage(YukkuriType.UDONGE);
+				loadBodyImageSafe(YukkuriType.UDONGE);
 				b = new Udonge(x, y, z, age, mama, papa);
 				break;
 			case Yurusanae.type:
-				SimYukkuri.mypane.loadBodyImage(YukkuriType.YURUSANAE);
+				loadBodyImageSafe(YukkuriType.YURUSANAE);
 				b = new Yurusanae(x, y, z, age, mama, papa);
 				break;
 			case Yuyuko.type:
-				SimYukkuri.mypane.loadBodyImage(YukkuriType.YUYUKO);
+				loadBodyImageSafe(YukkuriType.YUYUKO);
 				b = new Yuyuko(x, y, z, age, mama, papa);
 				break;
 			case Yuuka.type:
-				SimYukkuri.mypane.loadBodyImage(YukkuriType.YUUKA);
+				loadBodyImageSafe(YukkuriType.YUUKA);
 				b = new Yuuka(x, y, z, age, mama, papa);
 				break;
 			case Sakuya.type:
-				SimYukkuri.mypane.loadBodyImage(YukkuriType.SAKUYA);
+				loadBodyImageSafe(YukkuriType.SAKUYA);
 				b = new Sakuya(x, y, z, age, mama, papa);
 				break;
 			default:
@@ -1664,6 +1671,12 @@ public class Terrarium implements Serializable {
 		if ((p != null) && (p != b)) {
 			// つがいにも子供をリストに追加
 			setNewFamily(p, null, bodyNewChild);
+		}
+	}
+
+	private void loadBodyImageSafe(YukkuriType type) {
+		if (SimYukkuri.mypane != null) {
+			SimYukkuri.mypane.loadBodyImage(type);
 		}
 	}
 }

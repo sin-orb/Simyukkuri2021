@@ -10,8 +10,6 @@ import src.base.Body;
 import src.enums.EnumRelationMine;
 import src.enums.Happiness;
 import src.enums.Attitude;
-import src.enums.Pain;
-import src.enums.Damage;
 import src.enums.CriticalDamegeType;
 import src.util.WorldTestHelper;
 import src.system.MapPlaceData;

@@ -47,4 +47,4 @@ jobs:
     - name: Run Tests
       shell: cmd
       run: |
-        java -cp ".;lib\junit-platform-console-standalone-1.10.2.jar;bin;lib\*" org.junit.platform.console.ConsoleLauncher --scan-classpath=bin --reports-dir=test-results
+        java -Djava.awt.headless=true -Xmx1024m -cp ".;lib\junit-platform-console-standalone-1.10.2.jar;bin;lib\*" org.junit.platform.console.ConsoleLauncher --scan-classpath=bin --reports-dir=test-results

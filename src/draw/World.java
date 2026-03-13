@@ -187,6 +187,9 @@ public class World implements Serializable {
 	 * 全マップのゆっくりリストをスキャンして遅延読み込みの復元
 	 */
 	public void loadInterBodyImage() {
+		if (SimYukkuri.mypane == null) {
+			return;
+		}
 		// 遅延読み込みの復元
 		for (MapPlaceData m : mapList) {
 			for (Map.Entry<Integer, Body> entry : m.getBody().entrySet()) {

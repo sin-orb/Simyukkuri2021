@@ -12,7 +12,6 @@ import src.enums.Attitude;
 import src.enums.BodyRank;
 import src.enums.Intelligence;
 import src.yukkuri.Reimu;
-import src.yukkuri.Tarinai;
 import src.base.Attachment;
 import java.util.List;
 

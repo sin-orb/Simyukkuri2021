@@ -27,10 +27,20 @@ public class MessagePoolTest {
     public void testPlaceholderReplacement_Name() {
         DummyBody body = new DummyBody();
         body.setMyNameCustom("ReimuTest");
-        // Relax usually contains %name
-        String msg = MessagePool.getMessage(body, MessagePool.Action.Relax);
-        assertNotNull(msg);
-        assertTrue(msg.contains("ReimuTest"), "Message should contain replaced name: " + msg);
+        // Relax contains some messages with %name and some without (flaky due to
+        // random)
+        // Try multiple times to find one with the name
+        boolean found = false;
+        String lastMsg = "";
+        for (int i = 0; i < 20; i++) {
+            String msg = MessagePool.getMessage(body, MessagePool.Action.Relax);
+            if (msg != null && msg.contains("ReimuTest")) {
+                found = true;
+                break;
+            }
+            lastMsg = msg;
+        }
+        assertTrue(found, "Message should contain replaced name in at least one attempt. Last tried: " + lastMsg);
     }
 
     @Test

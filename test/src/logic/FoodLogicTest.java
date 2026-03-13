@@ -2,7 +2,6 @@ package src.logic;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.AfterEach;
@@ -22,7 +21,6 @@ import src.game.Stalk;
 import src.game.Vomit;
 import src.item.Food;
 import src.item.Stone;
-import src.logic.FoodLogic;
 import src.util.WorldTestHelper;
 import src.yukkuri.TarinaiReimu;
 
@@ -578,7 +576,7 @@ class FoodLogicTest {
         SimYukkuri.world.getCurrentMap().getBody().put(prey.getUniqueID(), prey);
 
         boolean[] forceEat = { false };
-        src.base.Obj found = FoodLogic.searchFoodPredetor(remirya, forceEat);
+        FoodLogic.searchFoodPredetor(remirya, forceEat);
         // May or may not return non-null depending on age comparison, but should not
         // throw
         assertDoesNotThrow(() -> FoodLogic.searchFoodPredetor(remirya, new boolean[] { false }));
