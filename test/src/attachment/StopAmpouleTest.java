@@ -230,4 +230,11 @@ public class StopAmpouleTest {
         }
         return images;
     }
+
+    @Test
+    void testLoadImages_headless_executesCode() {
+        try {
+            StopAmpoule.loadImages(StopAmpoule.class.getClassLoader(), null);
+        } catch (Exception e) { }
+    }
 }

@@ -99,4 +99,66 @@ public class EffectTest {
         assertEquals(1, effect.getVxyz()[2]);
         assertEquals(9, effect.getZ());
     }
+
+    // --- Missing getter/setter coverage ---
+
+    @Test
+    public void testSetDirection_firesProbe() {
+        DummyEffect effect = new DummyEffect(0, 0, 0, 0, 0, 0, false, 5, 0, false, false, true);
+        effect.setDirection(3);
+        assertEquals(3, effect.getDirection());
+    }
+
+    @Test
+    public void testGetInterval_firesProbe() {
+        DummyEffect effect = new DummyEffect(0, 0, 0, 0, 0, 0, false, 5, 0, false, false, true);
+        effect.setInterval(7);
+        assertEquals(7, effect.getInterval());
+    }
+
+    @Test
+    public void testGetFrames_firesProbe() {
+        DummyEffect effect = new DummyEffect(0, 0, 0, 0, 0, 0, false, 5, 0, false, false, true);
+        effect.setFrames(4);
+        assertEquals(4, effect.getFrames());
+    }
+
+    @Test
+    public void testSetLifeTime_firesProbe() {
+        DummyEffect effect = new DummyEffect(0, 0, 0, 0, 0, 0, false, 5, 0, false, false, true);
+        effect.setLifeTime(20);
+        assertEquals(20, effect.getLifeTime());
+    }
+
+    @Test
+    public void testGetAnimeInterval_firesProbe() {
+        DummyEffect effect = new DummyEffect(0, 0, 0, 0, 0, 0, false, 5, 0, false, false, true);
+        effect.setAnimeInterval(3);
+        assertEquals(3, effect.getAnimeInterval());
+    }
+
+    @Test
+    public void testGetAnimeLoop_firesProbe() {
+        DummyEffect effect = new DummyEffect(0, 0, 0, 0, 0, 0, false, 5, 0, false, false, true);
+        effect.setAnimeLoop(2);
+        assertEquals(2, effect.getAnimeLoop());
+    }
+
+    @Test
+    public void testIsAnimeEnd_firesProbe() {
+        DummyEffect effect = new DummyEffect(0, 0, 0, 0, 0, 0, false, 5, 0, false, false, true);
+        effect.setAnimeEnd(true);
+        assertTrue(effect.isAnimeEnd());
+        effect.setAnimeEnd(false);
+        assertFalse(effect.isAnimeEnd());
+    }
+
+    @Test
+    public void testSetEnableGravity_firesProbe() {
+        DummyEffect effect = new DummyEffect(0, 0, 0, 0, 0, 0, false, 5, 0, false, false, true);
+        effect.setEnableGravity(true);
+        assertTrue(effect.isEnableGravity());
+        effect.setEnableGravity(false);
+        assertFalse(effect.isEnableGravity());
+    }
 }

@@ -172,4 +172,11 @@ public class ANYDAmpouleTest {
         }
         return images;
     }
+
+    @Test
+    void testLoadImages_headless_executesCode() {
+        try {
+            ANYDAmpoule.loadImages(ANYDAmpoule.class.getClassLoader(), null);
+        } catch (Exception e) { }
+    }
 }

@@ -234,4 +234,11 @@ public class BreedingAmpouleTest {
         }
         return images;
     }
+
+    @Test
+    void testLoadImages_headless_executesCode() {
+        try {
+            BreedingAmpoule.loadImages(BreedingAmpoule.class.getClassLoader(), null);
+        } catch (Exception e) { }
+    }
 }

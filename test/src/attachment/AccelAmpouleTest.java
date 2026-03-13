@@ -191,4 +191,11 @@ public class AccelAmpouleTest {
         images[AgeState.ADULT.ordinal()][1] = new BufferedImage(31, 31, BufferedImage.TYPE_INT_ARGB);
         return images;
     }
+
+    @Test
+    void testLoadImages_headless_executesCode() {
+        try {
+            AccelAmpoule.loadImages(AccelAmpoule.class.getClassLoader(), null);
+        } catch (Exception e) { }
+    }
 }

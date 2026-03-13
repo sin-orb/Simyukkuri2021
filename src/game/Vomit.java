@@ -115,10 +115,11 @@ public class Vomit extends Obj {
 
 	@Override
 	public String toString() {
-		StringBuilder ret = new StringBuilder(ResourceUtil.getInstance().read("game_toan"));
+		String base = ResourceUtil.getInstance().read("game_toan");
+		StringBuilder ret = new StringBuilder(base == null ? "" : base);
 		ret.append(sizeDisplayName[ageState.ordinal()]);
 		ret.append("(");
-		ret.append(ownerName);
+		ret.append(ownerName == null ? "Unknown" : ownerName);
 		ret.append(")");
 		return ret.toString();
 	}
@@ -193,7 +194,8 @@ public class Vomit extends Obj {
 	}
 
 	public Vomit() {
-
+		ageState = AgeState.ADULT;
+		ownerName = "Unknown";
 	}
 
 	/**

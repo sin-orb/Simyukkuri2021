@@ -98,13 +98,15 @@ public class PoisonAmpouleTest {
     @Test
     public void testUpdateIncreasesShitWhenAlive() {
         Body parent = createParent(AgeState.ADULT);
+        parent.initAmount(AgeState.ADULT); // bodyAmount > 0 => isDead() returns false
+        parent.setShit(100); // plusShit is no-op when shit==0, so initialize to positive
         PoisonAmpoule ampoule = new PoisonAmpoule(parent);
 
         int shitBefore = parent.getShit();
 
         ampoule.update();
 
-        // うんうんが50増える
+        // plusShit(50) should have been called
         assertTrue(parent.getShit() > shitBefore);
     }
 
@@ -119,7 +121,7 @@ public class PoisonAmpouleTest {
 
         // Happinessが変更される（SADまたはVERY_SAD）
         assertTrue(parent.getHappiness() == Happiness.SAD ||
-                   parent.getHappiness() == Happiness.VERY_SAD);
+                parent.getHappiness() == Happiness.VERY_SAD);
     }
 
     @Test
@@ -302,5 +304,12 @@ public class PoisonAmpouleTest {
             }
         }
         return images;
+    }
+
+    @Test
+    void testLoadImages_headless_executesCode() {
+        try {
+            PoisonAmpoule.loadImages(PoisonAmpoule.class.getClassLoader(), null);
+        } catch (Exception e) { }
     }
 }

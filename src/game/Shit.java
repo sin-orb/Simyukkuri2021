@@ -124,10 +124,11 @@ public class Shit extends Obj {
 
 	@Override
 	public String toString() {
-		StringBuilder ret = new StringBuilder(ResourceUtil.getInstance().read("system_unun"));
+		String base = ResourceUtil.getInstance().read("system_unun");
+		StringBuilder ret = new StringBuilder(base == null ? "" : base);
 		ret.append(shitSizeDisplayName[ageState.ordinal()]);
 		ret.append("(");
-		ret.append(ownerName);
+		ret.append(ownerName == null ? "Unknown" : ownerName);
 		ret.append(")");
 		return ret.toString();
 	}
@@ -183,7 +184,8 @@ public class Shit extends Obj {
 	}
 
 	public Shit() {
-
+		ageState = AgeState.ADULT;
+		ownerName = "Unknown";
 	}
 
 	/**

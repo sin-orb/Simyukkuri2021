@@ -1,13 +1,20 @@
 package src.logic;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import src.SimYukkuri;
 import src.attachment.Badge;
 import src.base.Body;
+import src.draw.Translate;
+import src.draw.World;
 import src.enums.Attitude;
 import src.enums.BodyRank;
 import src.enums.Intelligence;
 import src.yukkuri.Reimu;
+import src.yukkuri.Tarinai;
+import src.base.Attachment;
+import java.util.List;
 
 /**
  * Test class for BadgeLogic.
@@ -15,6 +22,14 @@ import src.yukkuri.Reimu;
  * testable!
  */
 public class BadgeLogicTest {
+
+    @BeforeEach
+    public void setUp() {
+        SimYukkuri.world = new World();
+        Translate.setMapSize(1000, 1000, 500);
+        Translate.setCanvasSize(800, 600, 100, 100, new float[] { 1.0f });
+        Translate.createTransTable(false);
+    }
 
     // ========== Null/Invalid Input Tests ==========
 
@@ -52,100 +67,80 @@ public class BadgeLogicTest {
     @Test
     public void testVeryNiceWiseGetsGold() {
         Reimu yukkuri = createKaiyuYukkuri(Attitude.VERY_NICE, Intelligence.WISE);
-
-        boolean result = BadgeLogic.badgeTest(yukkuri);
-
-        assertTrue(result, "badgeTest should succeed");
-        assertEquals(1, yukkuri.getAttachmentSize(Badge.class), "Should have badge attached");
-        // VERY_NICE + WISE = GOLD
+        assertTrue(BadgeLogic.badgeTest(yukkuri));
+        assertEquals(Badge.BadgeRank.GOLD, getBadgeRank(yukkuri));
     }
 
     @Test
     public void testVeryNiceAverageGetsSilver() {
         Reimu yukkuri = createKaiyuYukkuri(Attitude.VERY_NICE, Intelligence.AVERAGE);
-
-        boolean result = BadgeLogic.badgeTest(yukkuri);
-
-        assertTrue(result, "badgeTest should succeed");
-        assertEquals(1, yukkuri.getAttachmentSize(Badge.class), "Should have badge attached");
-        // VERY_NICE + AVERAGE = SILVER
+        assertTrue(BadgeLogic.badgeTest(yukkuri));
+        assertEquals(Badge.BadgeRank.SILVER, getBadgeRank(yukkuri));
     }
 
     @Test
     public void testVeryNiceFoolGetsBronze() {
         Reimu yukkuri = createKaiyuYukkuri(Attitude.VERY_NICE, Intelligence.FOOL);
-
-        boolean result = BadgeLogic.badgeTest(yukkuri);
-
-        assertTrue(result, "badgeTest should succeed");
-        assertEquals(1, yukkuri.getAttachmentSize(Badge.class), "Should have badge attached");
-        // VERY_NICE + FOOL = BRONZE
+        assertTrue(BadgeLogic.badgeTest(yukkuri));
+        assertEquals(Badge.BadgeRank.BRONZE, getBadgeRank(yukkuri));
     }
 
     @Test
     public void testNiceWiseGetsGold() {
         Reimu yukkuri = createKaiyuYukkuri(Attitude.NICE, Intelligence.WISE);
-
-        boolean result = BadgeLogic.badgeTest(yukkuri);
-
-        assertTrue(result, "badgeTest should succeed");
-        assertEquals(1, yukkuri.getAttachmentSize(Badge.class), "Should have badge attached");
-        // NICE + WISE = GOLD
+        assertTrue(BadgeLogic.badgeTest(yukkuri));
+        assertEquals(Badge.BadgeRank.GOLD, getBadgeRank(yukkuri));
     }
 
     @Test
     public void testNiceAverageGetsSilver() {
         Reimu yukkuri = createKaiyuYukkuri(Attitude.NICE, Intelligence.AVERAGE);
-
-        boolean result = BadgeLogic.badgeTest(yukkuri);
-
-        assertTrue(result, "badgeTest should succeed");
-        assertEquals(1, yukkuri.getAttachmentSize(Badge.class), "Should have badge attached");
-        // NICE + AVERAGE = SILVER
+        assertTrue(BadgeLogic.badgeTest(yukkuri));
+        assertEquals(Badge.BadgeRank.SILVER, getBadgeRank(yukkuri));
     }
 
     @Test
     public void testAverageWiseGetsSilver() {
         Reimu yukkuri = createKaiyuYukkuri(Attitude.AVERAGE, Intelligence.WISE);
-
-        boolean result = BadgeLogic.badgeTest(yukkuri);
-
-        assertTrue(result, "badgeTest should succeed");
-        assertEquals(1, yukkuri.getAttachmentSize(Badge.class), "Should have badge attached");
-        // AVERAGE + WISE = SILVER
+        assertTrue(BadgeLogic.badgeTest(yukkuri));
+        assertEquals(Badge.BadgeRank.SILVER, getBadgeRank(yukkuri));
     }
 
     @Test
     public void testAverageFoolGetsBronze() {
         Reimu yukkuri = createKaiyuYukkuri(Attitude.AVERAGE, Intelligence.FOOL);
-
-        boolean result = BadgeLogic.badgeTest(yukkuri);
-
-        assertTrue(result, "badgeTest should succeed");
-        assertEquals(1, yukkuri.getAttachmentSize(Badge.class), "Should have badge attached");
-        // AVERAGE + FOOL = BRONZE
+        assertTrue(BadgeLogic.badgeTest(yukkuri));
+        assertEquals(Badge.BadgeRank.BRONZE, getBadgeRank(yukkuri));
     }
 
     @Test
     public void testShitheadWiseGetsBronze() {
         Reimu yukkuri = createKaiyuYukkuri(Attitude.SHITHEAD, Intelligence.WISE);
-
-        boolean result = BadgeLogic.badgeTest(yukkuri);
-
-        assertTrue(result, "badgeTest should succeed");
-        assertEquals(1, yukkuri.getAttachmentSize(Badge.class), "Should have badge attached");
-        // SHITHEAD + WISE = BRONZE
+        assertTrue(BadgeLogic.badgeTest(yukkuri));
+        assertEquals(Badge.BadgeRank.BRONZE, getBadgeRank(yukkuri));
     }
 
     @Test
     public void testSuperShitheadFoolGetsFake() {
         Reimu yukkuri = createKaiyuYukkuri(Attitude.SUPER_SHITHEAD, Intelligence.FOOL);
+        assertTrue(BadgeLogic.badgeTest(yukkuri));
+        assertEquals(Badge.BadgeRank.FAKE, getBadgeRank(yukkuri));
+    }
 
-        boolean result = BadgeLogic.badgeTest(yukkuri);
+    @Test
+    public void testStrayFoolGetsFake() {
+        Reimu yukkuri = createKaiyuYukkuri(Attitude.AVERAGE, Intelligence.FOOL);
+        yukkuri.setBodyRank(BodyRank.NORAYU);
+        assertTrue(BadgeLogic.badgeTest(yukkuri));
+        assertEquals(Badge.BadgeRank.FAKE, getBadgeRank(yukkuri));
+    }
 
-        assertTrue(result, "badgeTest should succeed");
-        assertEquals(1, yukkuri.getAttachmentSize(Badge.class), "Should have badge attached");
-        // SUPER_SHITHEAD + FOOL = FAKE
+    @Test
+    public void testIdiotGetsFake() {
+        src.yukkuri.Tarinai yukkuri = new src.yukkuri.Tarinai();
+        yukkuri.setBodyRank(BodyRank.KAIYU);
+        assertTrue(BadgeLogic.badgeTest(yukkuri));
+        assertEquals(Badge.BadgeRank.FAKE, getBadgeRank(yukkuri));
     }
 
     // ========== Badge Attachment Tests ==========
@@ -176,6 +171,19 @@ public class BadgeLogicTest {
         Reimu yukkuri = new Reimu();
         yukkuri.setAttitude(attitude);
         yukkuri.setIntelligence(intelligence);
+        yukkuri.setBodyRank(BodyRank.KAIYU);
         return yukkuri;
+    }
+
+    private Badge.BadgeRank getBadgeRank(Body b) {
+        List<Attachment> list = b.getAttach();
+        if (list == null)
+            return null;
+        for (Attachment at : list) {
+            if (at instanceof Badge) {
+                return ((Badge) at).getBadgeRank();
+            }
+        }
+        return null;
     }
 }

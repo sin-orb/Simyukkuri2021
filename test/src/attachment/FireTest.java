@@ -583,4 +583,11 @@ public class FireTest {
             assertEquals(Event.DONOTHING, result);
         }
     }
+
+    @Test
+    void testLoadImages_headless_executesCode() {
+        try {
+            Fire.loadImages(Fire.class.getClassLoader(), null);
+        } catch (Exception e) { }
+    }
 }

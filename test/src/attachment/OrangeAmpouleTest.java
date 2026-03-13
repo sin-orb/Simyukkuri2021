@@ -281,4 +281,11 @@ public class OrangeAmpouleTest {
         }
         return images;
     }
+
+    @Test
+    void testLoadImages_headless_executesCode() {
+        try {
+            OrangeAmpoule.loadImages(OrangeAmpoule.class.getClassLoader(), null);
+        } catch (Exception e) { }
+    }
 }

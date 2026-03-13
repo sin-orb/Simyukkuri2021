@@ -67,4 +67,9 @@ public class IniFileUtilTest {
                     e.getMessage().contains("File"));
         }
     }
+
+    @Test
+    void testConstructor_doesNotThrow() {
+        org.junit.jupiter.api.Assertions.assertDoesNotThrow(() -> new src.util.IniFileUtil());
+    }
 }

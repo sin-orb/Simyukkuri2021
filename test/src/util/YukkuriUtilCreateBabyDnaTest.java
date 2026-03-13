@@ -63,4 +63,17 @@ public class YukkuriUtilCreateBabyDnaTest {
         assertNotNull(dna);
         assertNotEquals(HybridYukkuri.type, dna.getType());
     }
+
+    @Test
+    public void testCreateBabyDnaFailsWhenRandomZeroAndForceDisabled() {
+        SimYukkuri.RND = new SequenceRNG(100, 100, 100);
+
+        Reimu mother = new Reimu();
+        Reimu father = new Reimu();
+
+        Dna dna = YukkuriUtil.createBabyDna(mother, father, father.getType(), Attitude.AVERAGE,
+                Intelligence.AVERAGE, false, false, false);
+
+        assertNull(dna, "Force-disabled creation should return null when the random check fails");
+    }
 }

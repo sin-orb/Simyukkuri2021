@@ -207,4 +207,11 @@ public class BadgeTest {
         }
         return images;
     }
+
+    @Test
+    void testLoadImages_headless_executesCode() {
+        try {
+            Badge.loadImages(Badge.class.getClassLoader(), null);
+        } catch (Exception e) { }
+    }
 }

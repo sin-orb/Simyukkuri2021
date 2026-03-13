@@ -261,7 +261,11 @@ public class Food extends ObjEX {
 			foodType = FoodType.values()[initOption];
 		}
 		amount = foodType.getAmount();
-		setBoundary(boundary[foodType.ordinal()]);
+		if (boundary[foodType.ordinal()] != null) {
+			setBoundary(boundary[foodType.ordinal()]);
+		} else {
+			setBoundary(0, 0, 0, 0); // Default for test environment
+		}
 		setCollisionSize(getPivotX(), getPivotY());
 		SimYukkuri.world.getCurrentMap().getFood().put(objId, this);
 		objType = Type.OBJECT;

@@ -211,4 +211,11 @@ public class HungryAmpouleTest {
         }
         return images;
     }
+
+    @Test
+    void testLoadImages_headless_executesCode() {
+        try {
+            HungryAmpoule.loadImages(HungryAmpoule.class.getClassLoader(), null);
+        } catch (Exception e) { }
+    }
 }

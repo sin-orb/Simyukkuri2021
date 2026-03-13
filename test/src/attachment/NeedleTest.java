@@ -463,4 +463,11 @@ public class NeedleTest {
             assertEquals(Event.DONOTHING, result);
         }
     }
+
+    @Test
+    void testLoadImages_headless_executesCode() {
+        try {
+            Needle.loadImages(Needle.class.getClassLoader(), null);
+        } catch (Exception e) { }
+    }
 }

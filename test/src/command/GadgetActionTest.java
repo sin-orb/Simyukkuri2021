@@ -4,10 +4,8 @@ package src.command;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.Assumptions;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -19,30 +17,41 @@ import javax.swing.JPanel;
 import src.ConstState;
 import src.SimYukkuri;
 import src.attachment.Ants;
+import src.attachment.OrangeAmpoule;
+import src.attachment.PoisonAmpoule;
 import src.base.Body;
-import src.base.Obj;
-import src.base.Okazari;
 import src.command.GadgetMenu.GadgetList;
 import src.draw.World;
 import src.enums.AgeState;
 import src.enums.BodyRank;
-import src.enums.Happiness;
 import src.enums.Intelligence;
 import src.enums.YukkuriType;
 import src.game.Shit;
 import src.game.Vomit;
+import src.item.Food;
 import src.system.MessagePool;
 import src.system.Sprite;
 import src.yukkuri.Reimu;
 
-@Disabled("GUI-dependent")
 public class GadgetActionTest {
 
     private Random originalRnd;
 
     @BeforeAll
     public static void setUpClass() {
-        Assumptions.assumeTrue(hasDisplay());
+        System.setProperty("java.awt.headless", "true");
+        // Initialize dummy data for ampoules to avoid NPE in constructors
+        OrangeAmpoule.setPivX(new int[] { 0, 0, 0 });
+        OrangeAmpoule.setPivY(new int[] { 0, 0, 0 });
+        OrangeAmpoule.setImgW(new int[] { 1, 1, 1 });
+        OrangeAmpoule.setImgH(new int[] { 1, 1, 1 });
+
+        PoisonAmpoule.setPivX(new int[] { 0, 0, 0 });
+        PoisonAmpoule.setPivY(new int[] { 0, 0, 0 });
+        PoisonAmpoule.setImgW(new int[] { 1, 1, 1 });
+        PoisonAmpoule.setImgH(new int[] { 1, 1, 1 });
+
+        // Load messages for testing
         MessagePool.loadMessage(GadgetActionTest.class.getClassLoader());
     }
 
@@ -83,13 +92,7 @@ public class GadgetActionTest {
     /** MouseEvent生成ヘルパー */
     private MouseEvent createEvent(int modifiers) {
         return new MouseEvent(new JPanel(), MouseEvent.MOUSE_CLICKED,
-            System.currentTimeMillis(), modifiers, 0, 0, 1, false);
-    }
-
-    private static boolean hasDisplay() {
-        String osName = System.getProperty("os.name", "").toLowerCase();
-        boolean isWindows = osName.contains("windows");
-        return isWindows || System.getenv("DISPLAY") != null;
+                System.currentTimeMillis(), modifiers, 0, 0, 1, false);
     }
 
     // ===========================================
@@ -167,6 +170,103 @@ public class GadgetActionTest {
             assertFalse(alive.isRemoved(), "生きてるBodyは除去されないべき");
             assertTrue(dead.isRemoved(), "死亡Bodyは除去されるべき");
             assertTrue(shit.isRemoved(), "うんうんは除去されるべき");
+        }
+
+        @Test
+        public void testEtcRemovesEmptyFood() {
+            Food food = new Food();
+            food.setAmount(0); // empty
+            SimYukkuri.world.getCurrentMap().getFood().put(1, food);
+
+            GadgetAction.immediateEvaluate(GadgetList.ETC);
+
+            assertTrue(food.isRemoved(), "空の餌は除去されるべき");
+        }
+    }
+
+    // ===========================================
+    // evaluateTool テスト
+    // ===========================================
+
+    @Nested
+    class EvaluateToolTests {
+        @Test
+        public void testPunishStrikesBody() {
+            Body b = createReimuBody(AgeState.ADULT);
+            int damageBefore = b.getDamage();
+            MouseEvent ev = createEvent(0);
+
+            GadgetAction.evaluateTool(GadgetList.PUNISH, ev, b);
+
+            assertTrue(b.getDamage() > damageBefore, "制裁でダメージが増えるべき");
+        }
+
+        @Test
+        public void testSnappingKicksBody() {
+            Body b = createReimuBody(AgeState.ADULT);
+            MouseEvent ev = createEvent(0);
+
+            GadgetAction.evaluateTool(GadgetList.SNAPPING, ev, b);
+
+            // kick sets vx, vy, vz in Body.kick()
+            assertTrue(b.getVy() != 0 || b.getVx() != 0, "ケリで移動速度が設定されるべき");
+        }
+
+        @Test
+        public void testVibratorExcitesBody() {
+            Body b = createReimuBody(AgeState.ADULT);
+            assertFalse(b.isExciting());
+            MouseEvent ev = createEvent(0);
+
+            GadgetAction.evaluateTool(GadgetList.VIBRATOR, ev, b);
+
+            assertTrue(b.isExciting(), "バイブで発情するべき");
+        }
+    }
+
+    // ===========================================
+    // evaluateAmpoule テスト
+    // ===========================================
+
+    @Nested
+    class EvaluateAmpouleTests {
+        @Test
+        public void testOrangeAmpouleAddsAttachment() {
+            Body b = createReimuBody(AgeState.ADULT);
+            assertEquals(0, b.getAttachmentSize(src.attachment.OrangeAmpoule.class));
+            MouseEvent ev = createEvent(0);
+
+            GadgetAction.evaluateAmpoule(GadgetList.ORANGE_AMP, ev, b);
+
+            assertEquals(1, b.getAttachmentSize(src.attachment.OrangeAmpoule.class), "オレンジアンプルが追加されるべき");
+        }
+
+        @Test
+        public void testPoisonAmpouleAddsAttachment() {
+            Body b = createReimuBody(AgeState.ADULT);
+            assertEquals(0, b.getAttachmentSize(src.attachment.PoisonAmpoule.class));
+            MouseEvent ev = createEvent(0);
+
+            GadgetAction.evaluateAmpoule(GadgetList.POISON_AMP, ev, b);
+
+            assertEquals(1, b.getAttachmentSize(src.attachment.PoisonAmpoule.class), "毒アンプルが追加されるべき");
+        }
+    }
+
+    // ===========================================
+    // evaluateVoice テスト
+    // ===========================================
+
+    @Nested
+    class EvaluateVoiceTests {
+        @Test
+        public void testTakeItEasySetsMessage() {
+            Body b = createReimuBody(AgeState.ADULT);
+            MouseEvent ev = createEvent(0);
+
+            GadgetAction.evaluateCommunicate(GadgetList.YUKKURISITEITTENE, ev, b);
+
+            assertNotNull(b.getMessageBuf(), "ゆっくりしていってね！でメッセージが設定されるべき");
         }
     }
 

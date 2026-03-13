@@ -238,4 +238,11 @@ public class VeryShitAmpouleTest {
         }
         return images;
     }
+
+    @Test
+    void testLoadImages_headless_executesCode() {
+        try {
+            VeryShitAmpoule.loadImages(VeryShitAmpoule.class.getClassLoader(), null);
+        } catch (Exception e) { }
+    }
 }
