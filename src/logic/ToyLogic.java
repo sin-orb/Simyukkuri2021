@@ -37,7 +37,7 @@ public class ToyLogic {
 		}
 
 		List<Toy> list = new LinkedList<>(SimYukkuri.world.getCurrentMap().getToy().values());
-		if( list == null || list.size() == 0 ){
+		if( list.size() == 0 ){
 			return false;
 		}
 
@@ -148,7 +148,7 @@ public class ToyLogic {
 	 */
 	public static final boolean checkSui(Body b) {
 		List<Sui> list = new LinkedList<>(SimYukkuri.world.getCurrentMap().getSui().values());
-		if( list == null || list.size() == 0 ){
+		if( list.size() == 0 ){
 			return false;
 		}
 
@@ -158,9 +158,8 @@ public class ToyLogic {
 			return false;
 		}
 
-		int sui_num = list.size();
 		// すぃーがあるかつ1/150の確率でゆっくりする
-		if(SimYukkuri.RND.nextInt(150) == 0 && sui_num > 0) {
+		if(SimYukkuri.RND.nextInt(150) == 0) {
 			if(!b.isTalking()) {
 				b.setMessage(MessagePool.getMessage(b, MessagePool.Action.YukkuringSui), true);
 			}
@@ -247,7 +246,7 @@ public class ToyLogic {
 		}
 
 		List<Trampoline> trampolineList = new LinkedList<>(SimYukkuri.world.getCurrentMap().getTrampoline().values());
-		if( trampolineList == null || trampolineList.size() == 0 ){
+		if( trampolineList.size() == 0 ){
 			return false;
 		}
 
@@ -322,9 +321,6 @@ public class ToyLogic {
 			return false;
 		}
 		if (!b.canAction() || b.isDontMove() || b.isExciting() || b.isScare() || b.isDamaged() ){
-			return false;
-		}
-		if(b.getCurrentEvent() != null) {
 			return false;
 		}
 		if(!b.canEventResponse()){

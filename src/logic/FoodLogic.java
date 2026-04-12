@@ -196,22 +196,6 @@ public class FoodLogic {
 				}
 			}
 
-			// 非ゆっくり症初期の場合はあまあまだけ食べる(それ以外を受け付けない)
-			if (b.isNYD()) {
-				if (food instanceof Food) {
-					Food f = (Food) food;
-					if (f != null) {
-						if (f.getFoodType() != Food.FoodType.SWEETS1 && f.getFoodType() != Food.FoodType.SWEETS2 &&
-								f.getFoodType() != Food.FoodType.SWEETS_NORA1
-								&& f.getFoodType() != Food.FoodType.SWEETS_NORA2 &&
-								f.getFoodType() != Food.FoodType.SWEETS_YASEI1
-								&& f.getFoodType() != Food.FoodType.SWEETS_YASEI2) {
-							return false;
-						}
-					}
-				}
-			}
-
 			///B2.餌補足済みの時の一般行動
 			//自身がエサに到着しているとき
 			if ((b.getStepDist() + 2) >= Translate.distance(b.getX(), b.getY(), food.getX(), food.getY())) {
@@ -451,45 +435,26 @@ public class FoodLogic {
 
 		//C2.探索して補足した餌に対する反応
 		if (found != null) {
-			// 非ゆっくり症初期の場合はあまあま以外は除外
-			if (b.isNYD()) {
-				if (found instanceof Food) {
-					Food f = (Food) found;
-					if (f != null) {
+			//味覚破壊されてる時。
+			if (b.isOnlyAmaama() && b.getPublicRank() != PublicRank.UnunSlave) {
+				if (!b.isStarving()) {
+					if (found instanceof Food) {
+						Food f = (Food) found;
 						if (f.getFoodType() != Food.FoodType.SWEETS1 && f.getFoodType() != Food.FoodType.SWEETS2 &&
 								f.getFoodType() != Food.FoodType.SWEETS_NORA1
 								&& f.getFoodType() != Food.FoodType.SWEETS_NORA2 &&
 								f.getFoodType() != Food.FoodType.SWEETS_YASEI1
 								&& f.getFoodType() != Food.FoodType.SWEETS_YASEI2) {
-							return false;
-						}
-					}
-				} else {
-					return false;
-				}
-			}
-			//味覚破壊されてる時。
-			else if (b.isOnlyAmaama() && b.getPublicRank() != PublicRank.UnunSlave) {
-				if (!b.isStarving()) {
-					if (found instanceof Food) {
-						Food f = (Food) found;
-						if (f != null) {
-							if (f.getFoodType() != Food.FoodType.SWEETS1 && f.getFoodType() != Food.FoodType.SWEETS2 &&
-									f.getFoodType() != Food.FoodType.SWEETS_NORA1
-									&& f.getFoodType() != Food.FoodType.SWEETS_NORA2 &&
-									f.getFoodType() != Food.FoodType.SWEETS_YASEI1
-									&& f.getFoodType() != Food.FoodType.SWEETS_YASEI2) {
-								b.setToFood(false);
-								if (b.isTooHungry()) {
-									b.setMessage(MessagePool.getMessage(b, MessagePool.Action.WantAmaama));
-									b.setAngry();
-								} else if (SimYukkuri.RND.nextInt(150) == 0) {
-									b.setMessage(MessagePool.getMessage(b, MessagePool.Action.WantAmaama));
-									//b.stay();
-									b.setAngry();
-								}
-								return false;
+							b.setToFood(false);
+							if (b.isTooHungry()) {
+								b.setMessage(MessagePool.getMessage(b, MessagePool.Action.WantAmaama));
+								b.setAngry();
+							} else if (SimYukkuri.RND.nextInt(150) == 0) {
+								b.setMessage(MessagePool.getMessage(b, MessagePool.Action.WantAmaama));
+								//b.stay();
+								b.setAngry();
 							}
+							return false;
 						}
 					} else {
 						return false;

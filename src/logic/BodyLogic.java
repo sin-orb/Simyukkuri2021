@@ -1408,9 +1408,6 @@ public class BodyLogic {
 
 		for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().getBody().entrySet()) {
 			Body f = entry.getValue();
-			if (f == null) {
-				continue;
-			}
 			// 自身はスキップ
 			if (f == b) {
 				continue;
@@ -1816,9 +1813,6 @@ public class BodyLogic {
 
 		for (Body b : TargetList) {
 			if (b == null) {
-				continue;
-			}
-			if (bodyFound == null) {
 				continue;
 			}
 			if (b.isDead()) {

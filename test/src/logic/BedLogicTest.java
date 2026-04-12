@@ -250,4 +250,100 @@ class BedLogicTest {
         body.setACTIVEPERIODorg(0); // make isSleepy() return true
         assertDoesNotThrow(() -> BedLogic.checkBed(body));
     }
+
+    // --- checkBed: isToTakeout=true → false ---
+
+    @Test
+    void testCheckBed_isToTakeout_returnsFalse() {
+        body.setToTakeout(true); // line 38: isToTakeout() → return false
+        assertFalse(BedLogic.checkBed(body));
+    }
+
+    // --- checkBed: isIdiot=true → false ---
+
+    @Test
+    void testCheckBed_isIdiot_returnsFalse() {
+        // TarinaiReimu overrides isIdiot() to return true
+        src.yukkuri.TarinaiReimu tarinai = new src.yukkuri.TarinaiReimu();
+        tarinai.setX(100); tarinai.setY(100);
+        tarinai.setObjId(src.enums.Numbering.INSTANCE.numberingObjId());
+        tarinai.setUniqueID(src.enums.Numbering.INSTANCE.numberingYukkuriID());
+        SimYukkuri.world.getCurrentMap().getBody().put(tarinai.getObjId(), tarinai);
+        // line 43: isIdiot()=true → return false
+        assertFalse(BedLogic.checkBed(tarinai));
+    }
+
+    // --- checkBed: nearToBirth=true + HIGH priority event → false ---
+
+    @Test
+    void testCheckBed_nearToBirth_HighEvent_returnsFalse() {
+        body.setHasBaby(true);
+        body.setPregnantPeriod(body.getPREGPERIODorg()); // nearToBirth()=true
+        // Set HIGH priority event at lines 46-49: getPriority()==HIGH → return false
+        src.base.EventPacket highEvent = new src.base.EventPacket() {
+            private static final long serialVersionUID = 1L;
+            { this.priority = src.base.EventPacket.EventPriority.HIGH; }
+            @Override public boolean checkEventResponse(src.base.Body b) { return true; }
+            @Override public void start(src.base.Body b) {}
+            @Override public boolean execute(src.base.Body b) { return false; }
+        };
+        body.setCurrentEvent(highEvent);
+        assertFalse(BedLogic.checkBed(body));
+    }
+
+    // --- checkBed: !nearToBirth + MIDDLE priority event → false ---
+
+    @Test
+    void testCheckBed_notNearToBirth_MiddleEvent_returnsFalse() {
+        // MIDDLE priority event and !nearToBirth → line 52: priority!=LOW → return false
+        src.base.EventPacket middleEvent = new src.base.EventPacket() {
+            private static final long serialVersionUID = 1L;
+            { this.priority = src.base.EventPacket.EventPriority.MIDDLE; }
+            @Override public boolean checkEventResponse(src.base.Body b) { return true; }
+            @Override public void start(src.base.Body b) {}
+            @Override public boolean execute(src.base.Body b) { return false; }
+        };
+        body.setCurrentEvent(middleEvent);
+        assertFalse(BedLogic.checkBed(body));
+    }
+
+    // --- checkBed: isNYD=true → false ---
+
+    @Test
+    void testCheckBed_isNYD_returnsFalse() {
+        // NonYukkuriDiseaseNear makes isNYD()=true → line 58: return false
+        body.seteCoreAnkoState(src.enums.CoreAnkoState.NonYukkuriDiseaseNear);
+        assertFalse(BedLogic.checkBed(body));
+    }
+
+    // --- checkBed: isToBed + arrived + FOOD takeout → drop ---
+
+    @Test
+    void testCheckBed_isToBed_Arrived_HasFoodTakeout_DoesNotThrow() {
+        Bed bed = new Bed();
+        bed.setX(100); bed.setY(100); // same position as body → arrived
+        SimYukkuri.world.getCurrentMap().getBed().put(bed.getObjId(), bed);
+        body.setToBed(true);
+        body.setMoveTarget(bed.getObjId());
+        // Setup FOOD takeout at line 95: getTakeoutItem(FOOD) != null → dropTakeoutItem
+        src.item.Food food = new src.item.Food(100, 100, src.item.Food.FoodType.FOOD.ordinal());
+        food.setAmount(100);
+        SimYukkuri.world.getCurrentMap().getTakenOutFood().put(food.getObjId(), food);
+        body.getTakeoutItem().put(src.enums.TakeoutItemType.FOOD, food.getObjId());
+        assertDoesNotThrow(() -> BedLogic.checkBed(body));
+    }
+
+    // --- searchBed: canflyCheck=true → wallMode=ADULT ---
+
+    @Test
+    void testSearchBed_FlyingType_WallModeAdult_DoesNotThrow() {
+        // Remirya is a flying type with hasBraid=true → canflyCheck()=true
+        src.yukkuri.Remirya remirya = new src.yukkuri.Remirya();
+        remirya.setX(100); remirya.setY(100);
+        remirya.setObjId(src.enums.Numbering.INSTANCE.numberingObjId());
+        remirya.setUniqueID(src.enums.Numbering.INSTANCE.numberingYukkuriID());
+        SimYukkuri.world.getCurrentMap().getBody().put(remirya.getObjId(), remirya);
+        // line 168-170: canflyCheck()=true → wallMode=AgeState.ADULT.ordinal()
+        assertDoesNotThrow(() -> BedLogic.searchBed(remirya));
+    }
 }

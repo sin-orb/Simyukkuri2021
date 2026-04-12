@@ -254,6 +254,139 @@ public class EventLogicTest {
         assertNull(yukkuri.getCurrentEvent());
     }
 
+    // ========== 追加テスト ==========
+
+    @Test
+    public void testConstructor_doesNotThrow() {
+        assertDoesNotThrow(() -> new EventLogic());
+    }
+
+    // --- checkBodyEvent: countDown でイベント除去 ---
+
+    @Test
+    public void testCheckBodyEvent_countDownTrue_removesEvent() {
+        // simple=false, check=false → countDown=true → removed
+        Reimu yukkuri = new Reimu();
+        MockCountDownEvent event = new MockCountDownEvent();
+        yukkuri.getEventList().add(event);
+        assertNull(EventLogic.checkBodyEvent(yukkuri));
+        assertEquals(0, yukkuri.getEventList().size(), "countDown=true so event should be removed");
+    }
+
+    @Test
+    public void testCheckBodyEvent_retNotNull_secondEventCountsDown() {
+        // event1: check=true → ret set & removed
+        // event2: simple=false, ret!=null → if(ret==null) skipped → countDown=true → removed
+        Reimu yukkuri = new Reimu();
+        MockCheckResponseTruePacket event1 = new MockCheckResponseTruePacket();
+        MockCountDownEvent event2 = new MockCountDownEvent();
+        yukkuri.getEventList().add(event1);
+        yukkuri.getEventList().add(event2);
+        EventPacket result = EventLogic.checkBodyEvent(yukkuri);
+        assertNotNull(result);
+        assertEquals(0, yukkuri.getEventList().size(), "both events should be removed");
+    }
+
+    // --- checkSimpleWorldEvent: from == b → simpleEventAction スキップ ---
+
+    @Test
+    public void testCheckSimpleWorldEvent_FromEqualsBody_Skips() {
+        Reimu yukkuri = new Reimu();
+        yukkuri.setUniqueID(4001);
+        src.SimYukkuri.world.getCurrentMap().getBody().put(4001, yukkuri);
+
+        MockEventPacket event = new MockEventPacket(); // simpleEventAction → sets wasSimpleActionCalled
+        event.setFrom(yukkuri); // from = 4001
+        src.SimYukkuri.world.getCurrentMap().getEvent().add(event);
+
+        EventLogic.checkSimpleWorldEvent(yukkuri); // getBodyInstance(4001)==yukkuri → from==b → skip
+        assertFalse(event.wasSimpleActionCalled, "simpleEventAction should be skipped when from==b");
+
+        src.SimYukkuri.world.getCurrentMap().getEvent().clear();
+        src.SimYukkuri.world.getCurrentMap().getBody().remove(4001);
+    }
+
+    // --- checkSimpleBodyEvent: 完全未カバー (lines 154-162) ---
+
+    @Test
+    public void testCheckSimpleBodyEvent_simpleTrue_removed() {
+        Reimu yukkuri = new Reimu();
+        MockSimpleEventTruePacket event = new MockSimpleEventTruePacket();
+        yukkuri.getEventList().add(event);
+        EventLogic.checkSimpleBodyEvent(yukkuri);
+        assertEquals(0, yukkuri.getEventList().size(), "simpleEventAction=true → removed");
+    }
+
+    @Test
+    public void testCheckSimpleBodyEvent_simpleFalse_kept() {
+        Reimu yukkuri = new Reimu();
+        MockEventPacket event = new MockEventPacket(); // simpleEventAction returns false
+        yukkuri.getEventList().add(event);
+        EventLogic.checkSimpleBodyEvent(yukkuri);
+        assertEquals(1, yukkuri.getEventList().size(), "simpleEventAction=false → kept");
+    }
+
+    // --- eventUpdate: 未到達 (line 186 missed branches) ---
+
+    @Test
+    public void testEventUpdate_farFromTarget_executeNotCalled() {
+        // state=null, Z match but far → (stepDist+2) < distance → execute NOT called
+        Reimu yukkuri = new Reimu();
+        yukkuri.setX(0);
+        yukkuri.setY(0);
+        yukkuri.setZ(0);
+        MockEventPacket event = new MockEventPacket();
+        event.setToX(10000);
+        event.setToY(10000);
+        event.setToZ(0);
+        yukkuri.setCurrentEvent(event);
+        EventLogic.eventUpdate(yukkuri);
+        assertFalse(event.wasExecuteCalled, "execute should NOT be called when body is far from target");
+        assertNotNull(yukkuri.getCurrentEvent(), "event should remain");
+    }
+
+    @Test
+    public void testEventUpdate_ZMismatch_executeNotCalled() {
+        // state=null, Z mismatch → b.getZ() != ev.getToZ() → execute NOT called
+        Reimu yukkuri = new Reimu();
+        yukkuri.setX(100);
+        yukkuri.setY(100);
+        yukkuri.setZ(0);
+        MockEventPacket event = new MockEventPacket();
+        event.setToX(100);
+        event.setToY(100);
+        event.setToZ(5); // Z mismatch
+        yukkuri.setCurrentEvent(event);
+        EventLogic.eventUpdate(yukkuri);
+        assertFalse(event.wasExecuteCalled, "execute should NOT be called when Z doesn't match");
+        assertNotNull(yukkuri.getCurrentEvent(), "event should remain");
+    }
+
+    // --- clockWorldEvent: countDown=false → イベント残留 (line 72 false branch) ---
+
+    @Test
+    public void testClockWorldEvent_countDownFalse_keepsEvent() {
+        // MockEventPacket は countDown をオーバーライドしないので count=100→99, false を返す
+        MockEventPacket event = new MockEventPacket();
+        src.SimYukkuri.world.getCurrentMap().getEvent().add(event);
+        EventLogic.clockWorldEvent();
+        assertEquals(1, src.SimYukkuri.world.getCurrentMap().getEvent().size(),
+                "countDown=false なのでイベントは残るはず");
+        src.SimYukkuri.world.getCurrentMap().getEvent().clear();
+    }
+
+    // --- checkBodyEvent: countDown=false → イベント残留 (line 123 false branch) ---
+
+    @Test
+    public void testCheckBodyEvent_countDownFalse_keepsEvent() {
+        // simple=false, check=false, countDown=false → stays in list, returns null
+        Reimu yukkuri = new Reimu();
+        MockEventPacket event = new MockEventPacket(); // countDown not overridden → false
+        yukkuri.getEventList().add(event);
+        assertNull(EventLogic.checkBodyEvent(yukkuri));
+        assertEquals(1, yukkuri.getEventList().size(), "countDown=false なのでイベントは残るはず");
+    }
+
     // ========== Mock Event Packet for Testing ==========
 
     private static class MockEventPacket extends EventPacket {

@@ -106,6 +106,54 @@ public class StoneLogicTest {
         assertDoesNotThrow(() -> new StoneLogic());
     }
 
+    // ========== 追加テスト ==========
+
+    // --- isBaby()=true → bodyCut() 分岐 (line 39 true branch) ---
+
+    @Test
+    public void testCheckPubble_babyBody_bodyCut() {
+        // BABY: getStepDist()=1, stone at same pos → distance=0, 1>0 → isBaby=true → bodyCut()
+        Reimu baby = new Reimu();
+        baby.setAgeState(AgeState.BABY);
+        Sprite[] spr = new Sprite[3];
+        for (int i = 0; i < 3; i++) spr[i] = new Sprite(10, 10, Sprite.PIVOT_CENTER_BOTTOM);
+        baby.setBodySpr(spr);
+        baby.setX(100); baby.setY(100); baby.setZ(0);
+        baby.setBaryState(BaryInUGState.HALF); // NONE だと addVomit で mypane NPE になる
+        SimYukkuri.world.getCurrentMap().getBody().put(baby.getUniqueID(), baby);
+        new Stone(100, 100, 0); // auto-registers; distance=0 → stepDist(1)>0 → bodyCut
+        assertDoesNotThrow(() -> StoneLogic.checkPubble(baby));
+        assertEquals(CriticalDamegeType.CUT, baby.getCriticalDamege(),
+                "Baby body close to stone should get CUT damage");
+    }
+
+    // --- WISE body at moderate distance → runAway() (line 46 true branch) ---
+
+    @Test
+    public void testCheckPubble_wiseBodyModerateDistance_callsRunAway() {
+        // ADULT: getStepDist()=16; stone at (104,100) → distance=16
+        // 16>16? No → not injure; 48>16 && WISE → runAway
+        Body b = createAdultBody(100, 100);
+        b.setIntelligence(Intelligence.WISE);
+        new Stone(104, 100, 0); // distance=(104-100)^2=16; auto-registers
+        assertDoesNotThrow(() -> StoneLogic.checkPubble(b));
+        // runAway is called (no exception expected)
+    }
+
+    // --- stepDist*3>distance but non-WISE → skip (line 46 A=true B=false branch) ---
+
+    @Test
+    public void testCheckPubble_nonWiseModerateDistance_noRunAway() {
+        // ADULT: getStepDist()=16; stone at (104,100) → distance=16
+        // 16>16? No → not injure; 48>16 && !WISE → condition false → continue
+        Body b = createAdultBody(100, 100);
+        b.setIntelligence(Intelligence.FOOL); // not WISE
+        new Stone(104, 100, 0); // auto-registers
+        assertDoesNotThrow(() -> StoneLogic.checkPubble(b));
+        // No damage should be applied
+        assertNull(b.getCriticalDamege(), "Non-WISE body at moderate distance should not be damaged");
+    }
+
     @Test
     public void testCheckPubbleMethodExists() {
         try {

@@ -176,7 +176,7 @@ public class EmotionLogicTest {
         // Family in pain -> Worry + Fear
         mockRelation(me, you, EnumRelationMine.MOTHER);
         you.setHappiness(Happiness.VERY_SAD);
-        setPainStates(you, true, false, false);
+        setPainStates(you, false, false, true); // critical=true → getCriticalDamege()!=null → bIsPainOther=true
 
         boolean[] result = EmotionLogic.checkEmotionForOther(me, you);
         assertTrue(result[6], "Should worry about family in pain");
@@ -198,6 +198,70 @@ public class EmotionLogicTest {
         boolean[] result = EmotionLogic.checkEmotionForOther(me, you);
         assertTrue(result[1], "Sad rude yukkuri should feel Anger at happy other");
         assertTrue(result[5], "Sad rude yukkuri should feel Envy at happy other");
+    }
+
+    // --- constructor ---
+
+    @Test
+    public void testConstructor_doesNotThrow() {
+        // Line 10: コンストラクタ呼び出し (3 missed instructions)
+        assertDoesNotThrow(() -> new EmotionLogic());
+    }
+
+    // --- mine=SAD × target=HAPPY × FATHER relation → joy (lines 99,103-104) ---
+
+    @Test
+    public void testCheckEmotion_SadMeSeeHappyFather_Joy() throws Exception {
+        Body me = WorldTestHelper.createBody();
+        Body you = WorldTestHelper.createBody();
+        registerBodies(me, you);
+
+        // me=SAD, you=HAPPY, rel=FATHER (me is father of you)
+        me.setHappiness(Happiness.SAD);
+        you.setHappiness(Happiness.HAPPY);
+        mockRelation(me, you, EnumRelationMine.FATHER);
+
+        // target=HAPPY × mine=SAD × FATHER → abEmote[0]=true (喜)
+        boolean[] result = EmotionLogic.checkEmotionForOther(me, you);
+        assertTrue(result[0], "Sad father should feel Joy seeing happy child");
+    }
+
+    // --- mine=SAD × target=SAD × family → sad+worry (line 147 branch) ---
+
+    @Test
+    public void testCheckEmotion_SadMeSeesSadFamily_SadAndWorry() throws Exception {
+        Body me = WorldTestHelper.createBody();
+        Body you = WorldTestHelper.createBody();
+        registerBodies(me, you);
+
+        // me=SAD, you=SAD, rel=MOTHER (me is mother of you)
+        me.setHappiness(Happiness.SAD);
+        you.setHappiness(Happiness.SAD);
+        mockRelation(me, you, EnumRelationMine.MOTHER);
+
+        // target=SAD × mine=SAD × MOTHER family → abEmote[2]=true (哀), abEmote[6]=true (心配)
+        boolean[] result = EmotionLogic.checkEmotionForOther(me, you);
+        assertTrue(result[2], "Sad mother should feel Sadness seeing sad child");
+        assertTrue(result[6], "Sad mother should feel Worry seeing sad child");
+    }
+
+    // --- mine=VERY_SAD × target=SAD × OTHER (non-family) → sad only (line 147 + default branch) ---
+
+    @Test
+    public void testCheckEmotion_VerySadMeSeesSadOther_SadOnly() throws Exception {
+        Body me = WorldTestHelper.createBody();
+        Body you = WorldTestHelper.createBody();
+        registerBodies(me, you);
+
+        // me=VERY_SAD, you=SAD, rel=OTHER
+        me.setHappiness(Happiness.VERY_SAD);
+        you.setHappiness(Happiness.SAD);
+        mockRelation(me, you, EnumRelationMine.OTHER);
+
+        // target=SAD × mine=VERY_SAD × OTHER → abEmote[2]=true (哀)
+        boolean[] result = EmotionLogic.checkEmotionForOther(me, you);
+        assertTrue(result[2], "Very sad yukkuri should feel Sadness seeing sad stranger");
+        assertFalse(result[6], "No worry for strangers");
     }
 
     private void registerBodies(Body... bodies) {
