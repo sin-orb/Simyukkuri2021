@@ -11189,6 +11189,79 @@ class FoodLogicTest {
         assertDoesNotThrow(() -> FoodLogic.searchFoodPredetor(body, forceEat));
     }
 
+    // ===== L961 branch D2: Marisa predator + Sakuya prey → b.notRemirya(C2) + b.notFran(D2) → don't continue =====
+    @Test
+    void testSearchFoodPredetor_Marisa_SakuyaPrey_L961_D2() {
+        // b.getType()=Marisa != Remirya(C2) and != Fran(D2: IFEQ taken → overall false → don't skip)
+        body.setPredatorType(PredatorType.BITE);
+        body.setHungry(body.getHungryLimit());
+        Sakuya sakuya = new Sakuya() {
+            @Override public int getCollisionX() { return 10; }
+        };
+        sakuya.setX(body.getX() + 5); sakuya.setY(body.getY());
+        SimYukkuri.world.getCurrentMap().getBody().put(sakuya.getUniqueID(), sakuya);
+        boolean[] forceEat = {false};
+        assertDoesNotThrow(() -> FoodLogic.searchFoodPredetor(body, forceEat));
+    }
+
+    // ===== L961 branch D1: Fran predator + Sakuya prey → b.isFran=true → continue =====
+    @Test
+    void testSearchFoodPredetor_Fran_SakuyaPrey_L961_D1() {
+        // L960: d.isSakuya=true(A1) → L961: b.notRemirya(C2) → b.isFran(D1: IFEQ not-taken) → continue
+        Fran fran = new Fran() {
+            @Override public int getCollisionX() { return 10; }
+        };
+        fran.setX(100); fran.setY(100);
+        fran.setHungry(fran.getHungryLimit());
+        SimYukkuri.world.getCurrentMap().getBody().put(fran.getUniqueID(), fran);
+        Sakuya sakuya = new Sakuya() {
+            @Override public int getCollisionX() { return 10; }
+        };
+        sakuya.setX(110); sakuya.setY(100);
+        SimYukkuri.world.getCurrentMap().getBody().put(sakuya.getUniqueID(), sakuya);
+        boolean[] forceEat = {false};
+        assertDoesNotThrow(() -> FoodLogic.searchFoodPredetor(fran, forceEat));
+    }
+
+    // ===== L970 false branch: 2 CHILD prey, 2nd farther same size → both conditions false =====
+    @Test
+    void testSearchFoodPredetor_TwoSmallPrey_SecondFarther_L970_FalseBranch() {
+        // prey1(dist=25, CHILD): minDistance(16M)>25=true → found=prey1, minDistance=25, size=CHILD
+        // prey2(dist=2500, CHILD): minDistance(25)>2500=false AND CHILD<CHILD=false → false (L970 false)
+        body.setPredatorType(PredatorType.BITE);
+        body.setHungry(body.getHungryLimit());
+        body.setAgeState(AgeState.ADULT); // predator=ADULT, size=2
+        Body prey1 = WorldTestHelper.createBody();
+        prey1.setAgeState(AgeState.CHILD); // ordinal=1 < ADULT=2 → L968 true
+        prey1.setX(body.getX() + 5); prey1.setY(body.getY()); // dist^2=25
+        SimYukkuri.world.getCurrentMap().getBody().put(prey1.getUniqueID(), prey1);
+        Body prey2 = WorldTestHelper.createBody();
+        prey2.setAgeState(AgeState.CHILD); // same size → ordinal=1 >= size(1) after prey1 update
+        prey2.setX(body.getX() + 50); prey2.setY(body.getY()); // dist^2=2500: minDist(25)>2500=false
+        SimYukkuri.world.getCurrentMap().getBody().put(prey2.getUniqueID(), prey2);
+        boolean[] forceEat = {false};
+        assertDoesNotThrow(() -> FoodLogic.searchFoodPredetor(body, forceEat));
+    }
+
+    // ===== L1112: plant baryState=NEARLY_ALL + no okazari → overall false → stalk candidate =====
+    @Test
+    void testSearchFoodPredetor_StalkPlantNearlyAll_NoOkazari_L1112() {
+        // stalk.plantYukkuri=plantBody → p != null → L1111: NEARLY_ALL!=ALL=true
+        // L1112: !(NEARLY_ALL==NEARLY_ALL && !false)=!true=false → overall false → don't continue
+        SimYukkuri.RND = new ConstState(1);
+        body.setPredatorType(PredatorType.BITE);
+        body.setHungry(body.getHungryLimit() / 2); // not full → L1098 skip
+        Body plantBody = WorldTestHelper.createBody();
+        plantBody.setBaryState(BaryInUGState.NEARLY_ALL);
+        plantBody.setOkazari(null); // hasOkazari=false → inner cond true → !true=false → don't continue
+        plantBody.setX(body.getX() + 5); plantBody.setY(body.getY());
+        SimYukkuri.world.getCurrentMap().getBody().put(plantBody.getUniqueID(), plantBody);
+        Stalk stalk = new Stalk(body.getX() + 5, body.getY(), 0);
+        stalk.setPlantYukkuri(plantBody.getUniqueID()); // p=plantBody != null
+        boolean[] forceEat = {false};
+        assertDoesNotThrow(() -> FoodLogic.searchFoodPredetor(body, forceEat));
+    }
+
     // ===== L1067 branch D: WASTE food + not-tooHungry + not-POOR → flag=false =====
     @Test
     void testSearchFoodPredetor_WasteFood_NotTooHungry_NormalTang_L1067_D() {
@@ -11197,6 +11270,20 @@ class FoodLogicTest {
         body.setPredatorType(PredatorType.BITE);
         body.setHungry(body.getHungryLimit() / 2); // > 0 → isTooHungry=false
         body.setTang(400); // 300<=400<600 → TangType.NORMAL (not POOR)
+        // Food auto-added to getFood() map via constructor
+        new Food(body.getX() + 5, body.getY(), Food.FoodType.WASTE.ordinal());
+        boolean[] forceEat = {false};
+        assertDoesNotThrow(() -> FoodLogic.searchFoodPredetor(body, forceEat));
+    }
+
+    // ===== L1067 branch C: WASTE food + not-tooHungry + tangType==POOR → flag=true =====
+    @Test
+    void testSearchFoodPredetor_WasteFood_TangPoor_L1067_C() {
+        // FoodType.WASTE: isTooHungry=false(B) AND getTangType()==POOR(C: IFEQ not-taken) → flag=true
+        SimYukkuri.RND = new ConstState(1);
+        body.setPredatorType(PredatorType.BITE);
+        body.setHungry(body.getHungryLimit() / 2); // > 0 → isTooHungry=false (B: IFNE not-taken)
+        body.setTang(200); // < 300 → TangType.POOR (C: IFEQ not-taken → flag=true)
         // Food auto-added to getFood() map via constructor
         new Food(body.getX() + 5, body.getY(), Food.FoodType.WASTE.ordinal());
         boolean[] forceEat = {false};
