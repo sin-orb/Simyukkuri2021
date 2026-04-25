@@ -7,11 +7,14 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
 import src.base.Body;
 import src.base.ItemTestBase;
+import src.enums.Happiness;
+import src.enums.ImageCode;
 import src.util.WorldTestHelper;
 
 class HotPlateTest extends ItemTestBase {
@@ -189,6 +192,87 @@ class HotPlateTest extends ItemTestBase {
             item.objHitProcess(body);
         } catch (Exception e) {
             // mypane.getTerrarium().addEffect fails in headless
+        }
+    }
+
+    @Nested
+    class RegressionScenarios {
+
+        @Test
+        void testScenario_BoundBodyOnPlateAccumulatesDamageStressAndPainState() {
+            HotPlate item = new HotPlate();
+            item.setX(120);
+            item.setY(140);
+
+            Body body = WorldTestHelper.createBody();
+            body.setCalcX(item.getX());
+            body.setCalcY(item.getY());
+            body.setCalcZ(item.getZ());
+            body.setSleeping(true);
+            body.setHappiness(Happiness.AVERAGE);
+
+            item.setBindBody(body);
+
+            int damageBefore = body.getDamage();
+            int stressBefore = body.getStress();
+            int footBakeBefore = body.getFootBakePeriod();
+
+            item.upDate();
+
+            assertFalse(body.isSleeping());
+            assertEquals(damageBefore + 20, body.getDamage());
+            assertEquals(stressBefore + 20, body.getStress());
+            assertEquals(footBakeBefore + 50, body.getFootBakePeriod());
+            assertEquals(Happiness.VERY_SAD, body.getHappiness());
+            assertEquals(ImageCode.PAIN.ordinal(), body.getForceFace());
+            assertEquals(body, item.getBindBody());
+        }
+
+        @Test
+        void testScenario_CriticalBurnedBodyBecomesPullableWhileStillBound() {
+            HotPlate item = new HotPlate();
+            item.setX(160);
+            item.setY(180);
+
+            Body body = WorldTestHelper.createBody();
+            body.setCalcX(item.getX());
+            body.setCalcY(item.getY());
+            body.setCalcZ(item.getZ());
+            body.setFootBakePeriod(body.getDamageLimit() + 1);
+            body.setPullAndPush(false);
+
+            item.setBindBody(body);
+            item.upDate();
+
+            assertTrue(body.isPullAndPush());
+            assertEquals(body, item.getBindBody());
+        }
+
+        @Test
+        void testScenario_RemovingBoundBodyFromPlateRestoresMobilityAndShadow() {
+            HotPlate item = new HotPlate();
+            item.setX(200);
+            item.setY(220);
+
+            Body body = WorldTestHelper.createBody();
+            body.setCalcX(item.getX());
+            body.setCalcY(item.getY());
+            body.setCalcZ(item.getZ());
+            body.setLockmove(true);
+            body.setDropShadow(false);
+            body.setPullAndPush(true);
+            body.setForceFace(ImageCode.PAIN.ordinal());
+
+            item.setBindBody(body);
+            body.setCalcX(item.getX() + 1);
+
+            item.upDate();
+
+            assertNull(item.getBindBody());
+            assertFalse(body.isLockmove());
+            assertFalse(body.isPullAndPush());
+            assertTrue(body.isDropShadow());
+            assertEquals(-1, body.getForceFace());
         }
     }
 }

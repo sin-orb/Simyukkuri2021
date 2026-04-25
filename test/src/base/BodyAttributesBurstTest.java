@@ -1,8 +1,10 @@
 package src.base;
 
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+import src.enums.AgeState;
 import src.enums.Burst;
 import src.system.Sprite;
 
@@ -25,5 +27,52 @@ public class BodyAttributesBurstTest {
             body.bodySpr[i].setImageH(0);
         }
         assertEquals(Burst.NONE, body.getBurstState());
+    }
+
+    @Nested
+    class RegressionScenarios {
+        @Test
+        void testScenario_ExpandWidthAtFiveQuarterThresholdIsSafe() {
+            StubBodyAttributes body = createBodyWithOriginWidth(100);
+            body.setExpandSizeW(25);
+
+            assertEquals(125, body.getSize());
+            assertEquals(Burst.SAFE, body.getBurstState());
+        }
+
+        @Test
+        void testScenario_ExpandWidthAtSixQuarterThresholdIsHalf() {
+            StubBodyAttributes body = createBodyWithOriginWidth(100);
+            body.setExpandSizeW(50);
+
+            assertEquals(150, body.getSize());
+            assertEquals(Burst.HALF, body.getBurstState());
+        }
+
+        @Test
+        void testScenario_ExpandWidthAtSevenQuarterThresholdIsNear() {
+            StubBodyAttributes body = createBodyWithOriginWidth(100);
+            body.setExpandSizeW(75);
+
+            assertEquals(175, body.getSize());
+            assertEquals(Burst.NEAR, body.getBurstState());
+        }
+
+        @Test
+        void testScenario_ExpandWidthAtDoubleWidthThresholdIsBurst() {
+            StubBodyAttributes body = createBodyWithOriginWidth(100);
+            body.setExpandSizeW(100);
+
+            assertEquals(200, body.getSize());
+            assertEquals(Burst.BURST, body.getBurstState());
+        }
+    }
+
+    private static StubBodyAttributes createBodyWithOriginWidth(int width) {
+        StubBodyAttributes body = new StubBodyAttributes();
+        body.setAgeState(AgeState.ADULT);
+        body.bodySpr = new Sprite[3];
+        body.bodySpr[AgeState.ADULT.ordinal()] = new Sprite(width, 50, Sprite.PIVOT_CENTER_CENTER);
+        return body;
     }
 }

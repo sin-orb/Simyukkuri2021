@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
@@ -22,7 +23,6 @@ import src.item.Bed;
 import src.item.House;
 import src.item.Toilet;
 import src.base.Obj;
-import src.draw.Translate;
 
 class BedLogicTest {
 
@@ -32,9 +32,7 @@ class BedLogicTest {
     void setUp() {
         WorldTestHelper.resetWorld();
         WorldTestHelper.initializeMinimalWorld();
-        Translate.setMapSize(1000, 1000, 200);
-        Translate.setCanvasSize(800, 600, 100, 100, new float[]{1.0f});
-        Translate.createTransTable(false);
+        WorldTestHelper.initializeStandardTranslate200();
 
         body = WorldTestHelper.createBody();
         body.setX(100);
@@ -210,6 +208,27 @@ class BedLogicTest {
         body.setZ(0);
         // not arrived → moveTo and returns true
         assertTrue(BedLogic.checkBed(body));
+    }
+
+    @Nested
+    class RegressionScenarios {
+
+        @Test
+        void testScenario_ArrivalAtBedStoresFavoriteBed() {
+            Bed bed = new Bed();
+            bed.setX(100);
+            bed.setY(100);
+            SimYukkuri.world.getCurrentMap().getBed().put(bed.getObjId(), bed);
+
+            body.setToBed(true);
+            body.setMoveTarget(bed.getObjId());
+            body.setZ(0);
+            body.setFavItem(src.enums.FavItemType.BED, null);
+
+            assertTrue(BedLogic.checkBed(body));
+            assertNotNull(body.getFavItem(src.enums.FavItemType.BED));
+            assertEquals(bed.getObjId(), body.getFavItem(src.enums.FavItemType.BED).getObjId());
+        }
     }
 
     // --- searchBed: UnunSlave →  toilet ---

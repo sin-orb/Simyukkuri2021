@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import java.awt.image.BufferedImage;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
@@ -213,5 +214,32 @@ public class BadgeTest {
         try {
             Badge.loadImages(Badge.class.getClassLoader(), null);
         } catch (Exception e) { }
+    }
+
+    @Nested
+    class RegressionScenarios {
+
+        @Test
+        void testScenario_ChangingBadgeRankSwitchesRenderedImage() {
+            Body parent = createParent(AgeState.CHILD);
+            Badge badge = new Badge(parent, BadgeRank.FAKE);
+
+            badge.setEBadgeRank(BadgeRank.GOLD);
+
+            assertEquals(BadgeRank.GOLD, badge.getBadgeRank());
+            assertSame(Badge.getImages()[AgeState.CHILD.ordinal()][BadgeRank.GOLD.ordinal()], badge.getImage(parent));
+        }
+
+        @Test
+        void testScenario_AdultBadgeUsesAdultBoundaryAndSelectedRankImage() {
+            Body parent = createParent(AgeState.ADULT);
+            Badge badge = new Badge(parent, BadgeRank.SILVER);
+
+            assertEquals(3, badge.getPivotX());
+            assertEquals(6, badge.getPivotY());
+            assertEquals(30, badge.getW());
+            assertEquals(31, badge.getH());
+            assertSame(Badge.getImages()[AgeState.ADULT.ordinal()][BadgeRank.SILVER.ordinal()], badge.getImage(parent));
+        }
     }
 }

@@ -2,6 +2,7 @@ package src.event;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import src.SimYukkuri;
 import src.base.Body;
@@ -108,6 +109,23 @@ public class GetTrashOkazariEventTest extends EventTestBase {
         GetTrashOkazariEvent event = new GetTrashOkazariEvent(body, null, stone, 1);
         EventPacket.UpdateState state = event.update(body);
         assertEquals(EventPacket.UpdateState.ABORT, state);
+    }
+
+    @Nested
+    class RegressionScenarios {
+
+        @Test
+        void testScenario_BareBodyKeepsChasingTrashUntilExecution() {
+            Body body = createBody(1, 100, 100);
+            body.setOkazari(null);
+            Stone stone = new Stone(120, 120, 0);
+            SimYukkuri.world.getCurrentMap().getStone().put(stone.getObjId(), stone);
+
+            GetTrashOkazariEvent event = new GetTrashOkazariEvent(body, null, stone, 1);
+
+            assertFalse(body.hasOkazari());
+            assertNull(event.update(body));
+        }
     }
 
 }

@@ -8,9 +8,12 @@ import src.ConstState;
 import src.SimYukkuri;
 import src.enums.AgeState;
 import src.base.Body;
+import src.draw.MyPane;
 import src.system.BodyLayer;
 import src.system.ResourceUtil;
 import src.draw.Point4y;
+import src.game.Dna;
+import src.util.WorldTestHelper;
 
 public class MarisaTest {
 
@@ -106,13 +109,15 @@ public class MarisaTest {
 
     @Test
     public void testMarisaCheckTransform() {
-        Marisa marisa = new Marisa();
-        // checkTransform() checks if Marisa can transform to DosMarisa
-        // Requires: canTransform() == true, 10+ happy adults in world, 1/300 chance
-        // Without World setup, will return null (no happy adults in world)
-        Body result = marisa.checkTransform();
-        // Just verify the method executes without crashing
-        // Result will be null since World isn't initialized
+        WorldTestHelper.resetWorld();
+        try {
+            WorldTestHelper.initializeMinimalWorld();
+            Marisa marisa = new Marisa();
+            Body result = marisa.checkTransform();
+            assertNull(result);
+        } finally {
+            WorldTestHelper.resetWorld();
+        }
     }
 
     @Test
@@ -296,6 +301,156 @@ public class MarisaTest {
             assertDoesNotThrow(() -> marisa.execTransform());
         } finally {
             src.util.WorldTestHelper.resetWorld();
+        }
+    }
+
+    @Test
+    public void testExecTransform_ReplacesBodyAtSameUniqueId() {
+        WorldTestHelper.resetWorld();
+        try {
+            WorldTestHelper.initializeMinimalWorld();
+            SimYukkuri.mypane = new MyPane();
+
+            Marisa marisa = new Marisa();
+            marisa.setAge(100000);
+            WorldTestHelper.makeTransformationReady(marisa);
+            SimYukkuri.world.getCurrentMap().getBody().put(marisa.getUniqueID(), marisa);
+
+            int originalId = marisa.getUniqueID();
+
+            marisa.execTransform();
+
+            Body transformed = SimYukkuri.world.getCurrentMap().getBody().get(originalId);
+            assertNotNull(transformed);
+            assertInstanceOf(DosMarisa.class, transformed);
+            assertEquals(originalId, transformed.getUniqueID());
+            assertTrue(marisa.isRemoved());
+        } finally {
+            WorldTestHelper.resetWorld();
+        }
+    }
+
+    @Test
+    public void testExecTransform_PreservesPartnerAndChildRelations() {
+        WorldTestHelper.resetWorld();
+        try {
+            WorldTestHelper.initializeMinimalWorld();
+            SimYukkuri.mypane = new MyPane();
+
+            Marisa marisa = new Marisa();
+            marisa.setAge(100000);
+            WorldTestHelper.makeTransformationReady(marisa);
+
+            Reimu partner = new Reimu();
+            Reimu child = new Reimu();
+
+            marisa.setPartner(partner.getUniqueID());
+            partner.setPartner(marisa.getUniqueID());
+            child.setParents(new int[] { marisa.getUniqueID(), -1 });
+            marisa.getChildrenList().add(child.getUniqueID());
+
+            SimYukkuri.world.getCurrentMap().getBody().put(marisa.getUniqueID(), marisa);
+            SimYukkuri.world.getCurrentMap().getBody().put(partner.getUniqueID(), partner);
+            SimYukkuri.world.getCurrentMap().getBody().put(child.getUniqueID(), child);
+
+            int originalId = marisa.getUniqueID();
+            int partnerId = partner.getUniqueID();
+            int childId = child.getUniqueID();
+
+            marisa.execTransform();
+
+            Body transformed = SimYukkuri.world.getCurrentMap().getBody().get(originalId);
+            assertNotNull(transformed);
+            assertEquals(partnerId, transformed.getPartner());
+            assertTrue(transformed.getChildrenList().contains(childId));
+            assertEquals(originalId, partner.getPartner());
+            assertEquals(originalId, child.getParents()[0]);
+        } finally {
+            WorldTestHelper.resetWorld();
+        }
+    }
+
+    @Test
+    public void testExecTransform_PregnantBodyKeepsPregnancyAndFamilyRelations() {
+        WorldTestHelper.resetWorld();
+        try {
+            WorldTestHelper.initializeMinimalWorld();
+            SimYukkuri.mypane = new MyPane();
+
+            Marisa marisa = new Marisa();
+            marisa.setAge(100000);
+            WorldTestHelper.makeTransformationReady(marisa);
+            marisa.setHasBaby(true);
+            marisa.getBabyTypes().add(new Dna());
+
+            Reimu partner = new Reimu();
+            Reimu child = new Reimu();
+            marisa.setPartner(partner.getUniqueID());
+            partner.setPartner(marisa.getUniqueID());
+            child.setParents(new int[] { marisa.getUniqueID(), -1 });
+            marisa.getChildrenList().add(child.getUniqueID());
+
+            SimYukkuri.world.getCurrentMap().getBody().put(marisa.getUniqueID(), marisa);
+            SimYukkuri.world.getCurrentMap().getBody().put(partner.getUniqueID(), partner);
+            SimYukkuri.world.getCurrentMap().getBody().put(child.getUniqueID(), child);
+
+            int originalId = marisa.getUniqueID();
+            int childId = child.getUniqueID();
+
+            marisa.execTransform();
+
+            Body transformed = SimYukkuri.world.getCurrentMap().getBody().get(originalId);
+            assertNotNull(transformed);
+            assertTrue(transformed.isHasBaby());
+            assertEquals(1, transformed.getBabyTypes().size());
+            assertEquals(partner.getUniqueID(), transformed.getPartner());
+            assertTrue(transformed.getChildrenList().contains(childId));
+            assertEquals(originalId, partner.getPartner());
+            assertEquals(originalId, child.getParents()[0]);
+        } finally {
+            WorldTestHelper.resetWorld();
+        }
+    }
+
+    @Test
+    public void testExecTransform_StalkPregnantBodyKeepsStalkPregnancyAndFamilyRelations() {
+        WorldTestHelper.resetWorld();
+        try {
+            WorldTestHelper.initializeMinimalWorld();
+            SimYukkuri.mypane = new MyPane();
+
+            Marisa marisa = new Marisa();
+            marisa.setAge(100000);
+            WorldTestHelper.makeTransformationReady(marisa);
+            marisa.setHasStalk(true);
+            marisa.getStalkBabyTypes().add(new Dna());
+
+            Reimu partner = new Reimu();
+            Reimu child = new Reimu();
+            marisa.setPartner(partner.getUniqueID());
+            partner.setPartner(marisa.getUniqueID());
+            child.setParents(new int[] { marisa.getUniqueID(), -1 });
+            marisa.getChildrenList().add(child.getUniqueID());
+
+            SimYukkuri.world.getCurrentMap().getBody().put(marisa.getUniqueID(), marisa);
+            SimYukkuri.world.getCurrentMap().getBody().put(partner.getUniqueID(), partner);
+            SimYukkuri.world.getCurrentMap().getBody().put(child.getUniqueID(), child);
+
+            int originalId = marisa.getUniqueID();
+            int childId = child.getUniqueID();
+
+            marisa.execTransform();
+
+            Body transformed = SimYukkuri.world.getCurrentMap().getBody().get(originalId);
+            assertNotNull(transformed);
+            assertTrue(transformed.isHasStalk());
+            assertEquals(1, transformed.getStalkBabyTypes().size());
+            assertEquals(partner.getUniqueID(), transformed.getPartner());
+            assertTrue(transformed.getChildrenList().contains(childId));
+            assertEquals(originalId, partner.getPartner());
+            assertEquals(originalId, child.getParents()[0]);
+        } finally {
+            WorldTestHelper.resetWorld();
         }
     }
 

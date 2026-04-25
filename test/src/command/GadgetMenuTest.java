@@ -9,14 +9,14 @@ import src.command.GadgetMenu.ActionTarget;
 import src.command.GadgetMenu.GadgetList;
 import src.command.GadgetMenu.HelpContext;
 import src.command.GadgetMenu.HelpIcon;
-import src.system.MessagePool;
+import src.util.WorldTestHelper;
 
 public class GadgetMenuTest {
 
     @BeforeAll
     public static void setUpClass() {
         System.setProperty("java.awt.headless", "true");
-        MessagePool.loadMessage(GadgetMenuTest.class.getClassLoader());
+        WorldTestHelper.initializeLoadedMessagePool(GadgetMenuTest.class.getClassLoader());
     }
 
     @Test

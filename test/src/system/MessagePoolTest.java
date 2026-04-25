@@ -9,6 +9,7 @@ import src.draw.Point4y;
 import src.draw.World;
 import java.util.Random;
 import src.SimYukkuri;
+import src.util.WorldTestHelper;
 
 /**
  * MessagePool のテスト.
@@ -20,7 +21,7 @@ public class MessagePoolTest {
         System.setProperty("java.awt.headless", "true");
         SimYukkuri.RND = new Random();
         SimYukkuri.world = new World();
-        MessagePool.loadMessage(MessagePoolTest.class.getClassLoader());
+        WorldTestHelper.initializeLoadedMessagePool(MessagePoolTest.class.getClassLoader());
     }
 
     @Test

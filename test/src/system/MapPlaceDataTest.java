@@ -13,6 +13,7 @@ import java.util.Map;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
@@ -538,5 +539,45 @@ class MapPlaceDataTest {
         int[][] m = new int[10][10];
         data.setFieldMap(m);
         assertEquals(m, data.getFieldMap());
+    }
+
+    @Nested
+    class RegressionScenarios {
+
+        @Test
+        void testScenario_SetFiledFlagWritesToCurrentWorldFieldMapNotPassedArray() {
+            MapPlaceData mapData = SimYukkuri.world.getCurrentMap();
+            int[][] actualFieldMap = mapData.getFieldMap();
+            int[][] dummyMap = new int[actualFieldMap.length][actualFieldMap[0].length];
+            MapPlaceData.clearMap(actualFieldMap);
+            MapPlaceData.clearMap(dummyMap);
+
+            MapPlaceData.setFiledFlag(dummyMap, 10, 10, 2, 2, true, 4);
+
+            assertEquals(4, actualFieldMap[10][10]);
+            assertEquals(4, actualFieldMap[11][11]);
+            assertEquals(0, dummyMap[10][10]);
+        }
+
+        @Test
+        void testScenario_SetWallLineMarksPrimaryAndAdjacentCellsThenClearsThem() {
+            MapPlaceData mapData = SimYukkuri.world.getCurrentMap();
+            int[][] wallMap = mapData.getWallMap();
+            MapPlaceData.clearMap(wallMap);
+
+            MapPlaceData.setWallLine(wallMap, 10, 10, 10, 12, true, 2);
+
+            assertEquals(2, wallMap[10][10]);
+            assertEquals(2, wallMap[11][10]);
+            assertEquals(2, wallMap[10][11]);
+            assertEquals(2, wallMap[10][12]);
+
+            MapPlaceData.setWallLine(wallMap, 10, 10, 10, 12, false, 2);
+
+            assertEquals(0, wallMap[10][10]);
+            assertEquals(0, wallMap[11][10]);
+            assertEquals(0, wallMap[10][11]);
+            assertEquals(0, wallMap[10][12]);
+        }
     }
 }

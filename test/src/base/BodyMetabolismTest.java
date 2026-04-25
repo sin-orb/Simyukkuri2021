@@ -2,6 +2,7 @@ package src.base;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import static org.junit.jupiter.api.Assertions.*;
 
 import src.SimYukkuri;
@@ -12,6 +13,7 @@ import src.game.Vomit;
 import src.game.Stalk;
 import src.game.Dna;
 import src.system.MapPlaceData;
+import src.util.WorldTestHelper;
 import src.enums.*;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -24,14 +26,14 @@ public class BodyMetabolismTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        System.setProperty("java.awt.headless", "true");
+        WorldTestHelper.resetWorld();
         SimYukkuri.world = new World(0, 0);
         world = SimYukkuri.world;
         gameMap = world.getCurrentMap();
         SimYukkuri.mypane = new MyPane();
 
         setupVomitStatics();
-        resetTerrariumSteams();
+        WorldTestHelper.resetTerrariumState();
 
         body = new StubBody();
         body.setUniqueID(1);
@@ -46,15 +48,6 @@ public class BodyMetabolismTest {
         setStaticField(Vomit.class, "pivY", new int[types][3]);
         setStaticField(Vomit.class, "imgW", new int[types][3]);
         setStaticField(Vomit.class, "imgH", new int[types][3]);
-    }
-
-    private void resetTerrariumSteams() throws Exception {
-        setStaticField(Terrarium.class, "humid", false);
-        setStaticField(Terrarium.class, "antifungalSteam", false);
-        setStaticField(Terrarium.class, "orangeSteam", false);
-        setStaticField(Terrarium.class, "sugerSteam", false);
-        setStaticField(Terrarium.class, "poisonSteam", false);
-        setStaticField(Terrarium.class, "endlessFurifuriSteam", false);
     }
 
     private void setStaticField(Class<?> clazz, String fieldName, Object value) throws Exception {
@@ -137,7 +130,7 @@ public class BodyMetabolismTest {
         // -1 (Natural healing) - 50 (orangeSteam) = -51 -> 4949
         assertEquals(4949, body.getDamage());
 
-        resetTerrariumSteams();
+        WorldTestHelper.resetTerrariumState();
 
         // Poison Steam
         setStaticField(Terrarium.class, "poisonSteam", true);
@@ -146,5 +139,55 @@ public class BodyMetabolismTest {
         body.checkDamage();
         // -1 (Natural healing) + 100 (poisonSteam) = +99 -> 5099
         assertEquals(5099, body.getDamage());
+    }
+
+    @Nested
+    class RegressionScenarios {
+
+        @Test
+        void testScenario_UnbirthBodyWithStalkAndBabyStillLosesLargeHungryTick() {
+            body.setHungry(250);
+            body.setUnBirth(true);
+            body.setHasStalk(true);
+            ArrayList<Stalk> stalks = new ArrayList<>();
+            stalks.add(new Stalk());
+            body.setStalks(stalks);
+            body.setHasBaby(true);
+            body.getBabyTypes().add(new Dna());
+
+            body.checkHungry();
+
+            assertEquals(144, body.getHungry());
+        }
+
+        @Test
+        void testScenario_PoisonSteamTurnsNaturalHealingIntoNetDamageGain() throws Exception {
+            WorldTestHelper.resetTerrariumState();
+            setStaticField(Terrarium.class, "poisonSteam", true);
+            body.setDamage(5000);
+            body.setHungry(6000);
+            body.setCriticalDamege(null);
+
+            body.checkDamage();
+
+            assertEquals(5099, body.getDamage());
+        }
+
+        @Test
+        void testScenario_HumidWetDamagedBodyGetsDirtyThenTerminalSickAddsStress() throws Exception {
+            setStaticField(Terrarium.class, "humid", true);
+            body.setDamage(15000);
+            body.setWet(true);
+            body.setDirtyPeriod(0);
+            body.setSickPeriod(1200 * 33);
+            body.setStress(0);
+            body.setHappiness(Happiness.HAPPY);
+
+            body.checkSick();
+
+            assertTrue(body.getDirtyPeriod() >= 5);
+            assertTrue(body.getStress() > 0);
+            assertEquals(Happiness.VERY_SAD, body.getHappiness());
+        }
     }
 }

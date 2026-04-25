@@ -19,6 +19,7 @@ import src.enums.AgeState;
 import src.game.Shit;
 import src.game.Vomit;
 import src.system.ItemMenu.GetMenu;
+import src.util.WorldTestHelper;
 import src.yukkuri.Reimu;
 
 public class ItemListenerTest {
@@ -27,12 +28,10 @@ public class ItemListenerTest {
 
     @BeforeEach
     public void setUp() {
+        WorldTestHelper.resetWorld();
         SimYukkuri.world = new World();
         listener = new ItemListener();
-
-        // Initialize MainCommandUI static components
-        MainCommandUI.setGameSpeedCombo(new JComboBox<>(new String[] { "0", "1", "2" }));
-        MainCommandUI.setSelectedGameSpeed(1);
+        WorldTestHelper.initializeMainCommandUITestState();
     }
 
     @Test

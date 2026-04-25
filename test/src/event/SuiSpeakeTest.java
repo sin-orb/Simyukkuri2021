@@ -4,28 +4,29 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
 import src.base.Body;
 import src.base.EventPacket.EventPriority;
-import src.draw.Translate;
 import src.draw.World;
 import src.enums.AgeState;
 import src.system.Sprite;
+import src.util.WorldTestHelper;
 import src.yukkuri.Reimu;
 
 public class SuiSpeakeTest {
 
     @BeforeEach
     public void setUp() {
+        WorldTestHelper.resetWorld();
         SimYukkuri.world = new World();
-        Translate.setMapSize(1000, 1000, 500);
-        Translate.setCanvasSize(800, 600, 100, 100, new float[]{1.0f});
-        Translate.createTransTable(false);
+        WorldTestHelper.initializeStandardTranslate500();
     }
 
     // --- Default constructor ---
@@ -597,6 +598,60 @@ public class SuiSpeakeTest {
             assertDoesNotThrow(() -> event.simpleEventAction(b));
         } finally {
             SimYukkuri.RND = savedRND;
+        }
+    }
+
+    @Nested
+    class RegressionScenarios {
+
+        @Test
+        void testScenario_RudeBodyWithoutSuiQueuesWorldSpeakEventAndSetsWantingMessage() {
+            java.util.Random savedRND = SimYukkuri.RND;
+            try {
+                SimYukkuri.RND = new java.util.Random() {
+                    @Override public int nextInt(int bound) { return 0; }
+                    @Override public boolean nextBoolean() { return true; }
+                };
+                Body b = createBody();
+                b.setAttitude(src.enums.Attitude.SHITHEAD);
+                SuiSpeake event = new SuiSpeake((Body) null, null, null, 1);
+
+                assertTrue(event.simpleEventAction(b));
+
+                assertEquals(1, SimYukkuri.world.getCurrentMap().getEvent().size(),
+                        "wanting-sui branch should queue exactly one world event");
+                assertTrue(SimYukkuri.world.getCurrentMap().getEvent().get(0) instanceof SuiSpeake,
+                        "wanting-sui branch should queue another SuiSpeake world event");
+                assertEquals(b.getUniqueID(),
+                        SimYukkuri.world.getCurrentMap().getEvent().get(0).getFrom(),
+                        "queued world event should remember which body started talking about sui");
+            } finally {
+                SimYukkuri.RND = savedRND;
+            }
+        }
+
+        @Test
+        void testScenario_UnrelatedDriverQueuesFollowupBodySpeakEvent() {
+            java.util.Random savedRND = SimYukkuri.RND;
+            try {
+                SimYukkuri.RND = new java.util.Random() {
+                    @Override public int nextInt(int bound) { return 0; }
+                };
+                Body driver = createBody();
+                Body observer = createBody();
+                src.item.Sui sui = createSui(driver, 0, 0);
+                SuiSpeake event = new SuiSpeake((Body) null, null, sui, 1);
+
+                assertTrue(event.simpleEventAction(observer));
+
+                assertEquals(1, observer.getEventList().size(),
+                        "unrelated observer should receive exactly one follow-up body event");
+                assertTrue(observer.getEventList().get(0) instanceof SuiSpeake,
+                        "unrelated observer should queue a follow-up SuiSpeake body event");
+                assertNull(observer.getCurrentEvent(), "follow-up sui speak should only be queued at this stage");
+            } finally {
+                SimYukkuri.RND = savedRND;
+            }
         }
     }
 

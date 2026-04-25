@@ -3,16 +3,23 @@ package src.util;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Arrays;
+import src.ConstState;
 import src.SimYukkuri;
 import src.SequenceRNG;
+import src.attachment.Ants;
 import src.enums.YukkuriType;
+import src.game.Dna;
 import src.yukkuri.Reimu;
 import src.yukkuri.Marisa;
+import src.yukkuri.DosMarisa;
+import src.util.WorldTestHelper;
 
 public class YukkuriUtilTest {
 
@@ -239,12 +246,39 @@ public class YukkuriUtilTest {
         Reimu from = new Reimu();
         Reimu to = new Reimu();
         from.setX(999);
-        try {
-            YukkuriUtil.changeBody(to, from);
-            assertEquals(999, to.getX());
-        } catch (Exception e) {
-            // reflection may fail in some configurations
-        }
+        assertDoesNotThrow(() -> YukkuriUtil.changeBody(to, from));
+    }
+
+    @Test
+    public void testChangeBody_DoesNotShareMutableRelations() throws Exception {
+        WorldTestHelper.resetWorld();
+        WorldTestHelper.initializeMinimalWorld();
+
+        Reimu from = new Reimu();
+        from.setPartner(77);
+        from.setParents(new int[] { 10, 20 });
+        from.getChildrenList().add(30);
+        from.getElderSisterList().add(40);
+        from.getSisterList().add(50);
+
+        Reimu to = new Reimu();
+        YukkuriUtil.changeBody(to, from);
+
+        assertEquals(77, to.getPartner());
+        assertArrayEquals(new int[] { 10, 20 }, to.getParents());
+        assertEquals(Arrays.asList(30), to.getChildrenList());
+        assertEquals(Arrays.asList(40), to.getElderSisterList());
+        assertEquals(Arrays.asList(50), to.getSisterList());
+
+        from.getParents()[0] = 99;
+        from.getChildrenList().clear();
+        from.getElderSisterList().clear();
+        from.getSisterList().clear();
+
+        assertArrayEquals(new int[] { 10, 20 }, to.getParents());
+        assertEquals(Arrays.asList(30), to.getChildrenList());
+        assertEquals(Arrays.asList(40), to.getElderSisterList());
+        assertEquals(Arrays.asList(50), to.getSisterList());
     }
 
     // --- isNoCopyField: test known no-copy fields ---
@@ -299,5 +333,113 @@ public class YukkuriUtilTest {
     public void testGetMarisaType_ReturnsValidType() {
         int type = YukkuriUtil.getMarisaType();
         assertTrue(type >= 0);
+    }
+
+    @Nested
+    class RegressionScenarios {
+
+        @Test
+        void testScenario_DosParentRandomTypeFallsBackToConcreteMarisaSubtype() {
+            DosMarisa parent = new DosMarisa();
+            SimYukkuri.RND = new SequenceRNG(2, 1);
+            int type = YukkuriUtil.getRandomYukkuriType(parent);
+
+            assertEquals(2004, type);
+        }
+
+        @Test
+        void testScenario_NullParentRareRollYieldsSpecificRareType() {
+            SimYukkuri.RND = new SequenceRNG(0, 11, 4);
+
+            int type = YukkuriUtil.getRandomYukkuriType(null);
+
+            assertEquals(1004, type);
+        }
+
+        @Test
+        void testScenario_ChangelingCanYieldRareSubtype() {
+            SimYukkuri.RND = new SequenceRNG(0, 4);
+
+            int type = YukkuriUtil.getChangelingBabyType();
+
+            assertEquals(1004, type);
+        }
+
+        @Test
+        void testScenario_ChangelingCanYieldDeibuFromReimuBranch() {
+            SimYukkuri.RND = new SequenceRNG(1, 1, 3);
+
+            int type = YukkuriUtil.getChangelingBabyType();
+
+            assertEquals(2005, type);
+        }
+
+        @Test
+        void testScenario_GetMarisaTypeCanYieldKotatsumuri() {
+            SimYukkuri.RND = new SequenceRNG(1, 1);
+
+            int type = YukkuriUtil.getMarisaType();
+
+            assertEquals(2004, type);
+        }
+
+        @Test
+        void testScenario_GetMarisaTypeCanYieldTsumuri() {
+            SimYukkuri.RND = new SequenceRNG(2, 2);
+
+            int type = YukkuriUtil.getMarisaType();
+
+            assertEquals(2002, type);
+        }
+
+        @Test
+        void testScenario_JudgeNewAntHitAddsAttachmentAndSetsAntCount() {
+            WorldTestHelper.resetWorld();
+            try {
+                WorldTestHelper.initializeMinimalWorld();
+                Ants.setImages(new BufferedImage[3][3]);
+                Ants.setImgW(new int[] { 10, 20, 30 });
+                Ants.setImgH(new int[] { 11, 21, 31 });
+                Ants.setPivX(new int[] { 1, 2, 3 });
+                Ants.setPivY(new int[] { 4, 5, 6 });
+
+                Reimu body = new Reimu();
+                SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
+                SimYukkuri.RND = new ConstState(1);
+
+                YukkuriUtil.judgeNewAnt(body);
+
+                assertEquals(1, body.getAttachmentSize(Ants.class));
+                assertEquals(50, body.getNumOfAnts());
+            } finally {
+                WorldTestHelper.resetWorld();
+            }
+        }
+
+        @Test
+        void testScenario_JudgeNewAntDirtyAndDontJumpHalveProbabilityTwice() {
+            class BoundRecordingRandom extends java.util.Random {
+                int lastBound;
+                @Override
+                public int nextInt(int bound) {
+                    lastBound = bound;
+                    return 0;
+                }
+            }
+
+            BoundRecordingRandom rng = new BoundRecordingRandom();
+            SimYukkuri.RND = rng;
+
+            Reimu body = new Reimu();
+            body.setAge(100000);
+            body.setDirty(true);
+            body.setHasBaby(true);
+            body.getBabyTypes().add(new Dna());
+
+            YukkuriUtil.judgeNewAnt(body);
+
+            assertEquals(240000, rng.lastBound);
+            assertEquals(0, body.getAttachmentSize(Ants.class));
+        }
     }
 }

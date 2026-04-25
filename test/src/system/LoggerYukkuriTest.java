@@ -11,7 +11,6 @@ import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
 import src.base.Body;
-import src.draw.Translate;
 import src.draw.World;
 import src.enums.AgeState;
 import src.enums.PredatorType;
@@ -27,7 +26,7 @@ class LoggerYukkuriTest {
     void setUp() {
         WorldTestHelper.resetWorld();
         WorldTestHelper.initializeMinimalWorld();
-        Translate.setMapSize(1000, 1000, 500);
+        WorldTestHelper.initializeStandardTranslate500();
         // logPointerをリセットするためclearLog
         LoggerYukkuri.clearLog();
     }
@@ -396,7 +395,7 @@ class LoggerYukkuriTest {
     // --- displayLog (ResourceUtil returns null → NPE in drawString is expected) ---
 
     private Graphics2D createG2() {
-        Translate.setCanvasSize(800, 600, 100, 100, new float[]{1.0f});
+        WorldTestHelper.initializeStandardTranslate500();
         BufferedImage img = new BufferedImage(800, 600, BufferedImage.TYPE_INT_RGB);
         return img.createGraphics();
     }

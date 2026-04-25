@@ -2,11 +2,13 @@ package src.item;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
 import src.base.Body;
 import src.base.ItemTestBase;
+import src.enums.AgeState;
 import src.enums.Type;
 import src.game.Shit;
 import src.game.Vomit;
@@ -422,5 +424,56 @@ class FoodMakerTest extends ItemTestBase {
         item.setAge(0); // 0 % 4 == 0
         item.upDate();
         assertTrue(item.isProcessReady());
+    }
+
+    @Nested
+    class RegressionScenarios {
+        @Test
+        void testScenario_CrushedBabyBodyBecomesStockAndIsRemoved() {
+            FoodMaker item = new FoodMaker();
+            Body body = WorldTestHelper.createBody();
+            body.setObjType(Type.YUKKURI);
+            body.setCrushed(true);
+            body.setAgeState(AgeState.BABY);
+            SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
+
+            assertEquals(0, item.objHitProcess(body));
+            assertEquals(0, item.getStockFood());
+            assertEquals(1, item.getFoodAmount());
+            assertTrue(body.isRemoved());
+        }
+
+        @Test
+        void testScenario_StoredFoodProcessesInputIntoOutputFoodAndConsumesCash() {
+            FoodMaker item = new FoodMaker();
+            item.setStockFood(5);
+            item.setFoodAmount(4);
+            item.setCost(30);
+            item.setX(100);
+            item.setY(100);
+
+            Food bitterFood = new Food();
+            bitterFood.setObjType(Type.OBJECT);
+            bitterFood.setFoodType(FoodType.BITTER);
+            bitterFood.setObjId(300);
+            SimYukkuri.world.getCurrentMap().getFood().put(bitterFood.getObjId(), bitterFood);
+
+            long beforeCash = SimYukkuri.world.getPlayer().getCash();
+            int beforeFoodCount = SimYukkuri.world.getCurrentMap().getFood().size();
+
+            assertEquals(0, item.objHitProcess(bitterFood));
+
+            long outputFoodCount = SimYukkuri.world.getCurrentMap().getFood().values().stream()
+                    .filter(food -> food.getObjId() != bitterFood.getObjId())
+                    .filter(food -> food.getFoodType() == FoodType.FOOD)
+                    .count();
+
+            assertEquals(beforeCash - item.getCost(), SimYukkuri.world.getPlayer().getCash());
+            assertTrue(bitterFood.isRemoved());
+            assertEquals(beforeFoodCount + 2, SimYukkuri.world.getCurrentMap().getFood().size());
+            assertEquals(2, outputFoodCount);
+            assertEquals(-1, item.getStockFood());
+            assertEquals(0, item.getFoodAmount());
+        }
     }
 }

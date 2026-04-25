@@ -1,6 +1,7 @@
 package src.attachment;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -8,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.awt.image.BufferedImage;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
@@ -16,6 +18,7 @@ import src.draw.World;
 import src.enums.AgeState;
 import src.enums.Direction;
 import src.enums.Event;
+import src.game.Dna;
 import src.system.ResourceUtil;
 import src.yukkuri.Reimu;
 
@@ -240,5 +243,52 @@ public class BreedingAmpouleTest {
         try {
             BreedingAmpoule.loadImages(BreedingAmpoule.class.getClassLoader(), null);
         } catch (Exception e) { }
+    }
+
+    @Nested
+    class RegressionScenarios {
+
+        @Test
+        void testScenario_LiveBodyGetsFedHealedAndPregnantWithNewBabyDna() {
+            Body parent = createParent(AgeState.ADULT);
+            parent.setHungry(10);
+            parent.addDamage(300);
+            BreedingAmpoule ampoule = new BreedingAmpoule(parent);
+
+            int damageBefore = parent.getDamage();
+            int babiesBefore = parent.getBabyTypes().size();
+
+            Event result = ampoule.update();
+
+            assertEquals(Event.DONOTHING, result);
+            assertEquals(100, parent.getHungry());
+            assertTrue(parent.getDamage() < damageBefore);
+            assertTrue(parent.isHasBaby());
+            assertEquals(babiesBefore + 1, parent.getBabyTypes().size());
+            Dna baby = parent.getBabyTypes().get(parent.getBabyTypes().size() - 1);
+            assertEquals(false, baby.isRaperChild());
+            assertEquals(null, baby.getAttitude());
+            assertEquals(null, baby.getIntelligence());
+        }
+
+        @Test
+        void testScenario_BodyCastrationBlocksPregnancyAndHealingSideEffects() {
+            Body parent = createParent(AgeState.ADULT);
+            parent.setHungry(10);
+            parent.addDamage(300);
+            parent.setBodyCastration(true);
+            BreedingAmpoule ampoule = new BreedingAmpoule(parent);
+
+            int damageBefore = parent.getDamage();
+            int babiesBefore = parent.getBabyTypes().size();
+
+            Event result = ampoule.update();
+
+            assertEquals(Event.DONOTHING, result);
+            assertEquals(10, parent.getHungry());
+            assertEquals(damageBefore, parent.getDamage());
+            assertEquals(babiesBefore, parent.getBabyTypes().size());
+            assertFalse(parent.isHasBaby());
+        }
     }
 }

@@ -1,5 +1,6 @@
 package src.system;
 
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import java.io.File;
@@ -177,5 +178,63 @@ public class IniFileReaderTest {
         assertNotNull(result);
         assertEquals("ValidSect", result.get(IniFileReader.INI_SECTION));
         reader.close();
+    }
+
+    @Nested
+    class RegressionScenarios {
+        @Test
+        public void testScenario_ReadNextKeepsCurrentSectionAcrossMultipleKeys() throws IOException {
+            File tmp = File.createTempFile("test", ".ini");
+            tmp.deleteOnExit();
+            try (Writer fw = new OutputStreamWriter(new FileOutputStream(tmp), StandardCharsets.UTF_8)) {
+                fw.write("[Sect]\n");
+                fw.write("first=1\n");
+                fw.write("second=2\n");
+            }
+            IniFileReader reader = new IniFileReader(tmp, null);
+            reader.open(getClass().getClassLoader());
+
+            HashMap<String, String> first = reader.readNext();
+            HashMap<String, String> second = reader.readNext();
+
+            assertNotNull(first);
+            assertEquals("Sect", first.get(IniFileReader.INI_SECTION));
+            assertEquals("first", first.get(IniFileReader.INI_KEY));
+            assertEquals("1", first.get(IniFileReader.INI_VALUE));
+
+            assertNotNull(second);
+            assertEquals("Sect", second.get(IniFileReader.INI_SECTION));
+            assertEquals("second", second.get(IniFileReader.INI_KEY));
+            assertEquals("2", second.get(IniFileReader.INI_VALUE));
+            reader.close();
+        }
+
+        @Test
+        public void testScenario_ReadNextSwitchesToLaterSectionBeforeReturningNextKey() throws IOException {
+            File tmp = File.createTempFile("test", ".ini");
+            tmp.deleteOnExit();
+            try (Writer fw = new OutputStreamWriter(new FileOutputStream(tmp), StandardCharsets.UTF_8)) {
+                fw.write("[First]\n");
+                fw.write("a=10\n");
+                fw.write("[Second]\n");
+                fw.write("b=20\n");
+            }
+            IniFileReader reader = new IniFileReader(tmp, null);
+            reader.open(getClass().getClassLoader());
+
+            HashMap<String, String> first = reader.readNext();
+            HashMap<String, String> second = reader.readNext();
+
+            assertNotNull(first);
+            assertEquals("First", first.get(IniFileReader.INI_SECTION));
+            assertEquals("a", first.get(IniFileReader.INI_KEY));
+            assertEquals("10", first.get(IniFileReader.INI_VALUE));
+
+            assertNotNull(second);
+            assertEquals("Second", second.get(IniFileReader.INI_SECTION));
+            assertEquals("b", second.get(IniFileReader.INI_KEY));
+            assertEquals("20", second.get(IniFileReader.INI_VALUE));
+            reader.close();
+        }
     }
 }

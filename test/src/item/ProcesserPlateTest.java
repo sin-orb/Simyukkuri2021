@@ -5,14 +5,28 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
 import src.base.Body;
 import src.base.ItemTestBase;
+import src.enums.Numbering;
+import src.enums.HairState;
+import src.enums.Happiness;
+import src.enums.ImageCode;
 import src.util.WorldTestHelper;
+import src.yukkuri.Reimu;
 
 class ProcesserPlateTest extends ItemTestBase {
+
+    private static Body createReimuBody() {
+        Body body = new Reimu();
+        body.setObjId(Numbering.INSTANCE.numberingObjId());
+        body.setUniqueID(Numbering.INSTANCE.numberingYukkuriID());
+        SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
+        return body;
+    }
 
     @Test
     void testConstructor_Default() {
@@ -291,8 +305,7 @@ class ProcesserPlateTest extends ItemTestBase {
 
     @Test
     void testCheckHitObj_outsideRect_returnsFalse() {
-        src.draw.Translate.setCanvasSize(800, 600, 100, 100, new float[]{1.0f});
-        src.draw.Translate.createTransTable(false);
+        WorldTestHelper.initializeStandardTranslate200();
         ProcesserPlate item = new ProcesserPlate();
         item.setEnabled(true);
         item.setX(500); item.setY(500);
@@ -428,5 +441,80 @@ class ProcesserPlateTest extends ItemTestBase {
         item.getProcessedBodyEffectList().add(null);
         assertDoesNotThrow(() -> item.upDate());
         assertTrue(item.getProcessedBodyList().isEmpty());
+    }
+
+    @Nested
+    class RegressionScenarios {
+
+        @Test
+        void testScenario_PainModeWakesBodyAndAppliesPainState() {
+            ProcesserPlate item = new ProcesserPlate();
+            item.setEnabled(true);
+            item.setEnumProcessType(ProcesserPlate.ProcessType.PAIN);
+
+            Body body = WorldTestHelper.createBody();
+            body.setSleeping(true);
+            body.setDropShadow(true);
+            int damageBefore = body.getDamage();
+            int stressBefore = body.getStress();
+
+            item.getProcessedBodyList().add(body);
+            item.getProcessedBodyEffectList().add(null);
+
+            item.upDate();
+
+            assertFalse(body.isSleeping());
+            assertFalse(body.isDropShadow());
+            assertEquals(damageBefore + 5, body.getDamage());
+            assertEquals(stressBefore + 30, body.getStress());
+            assertEquals(Happiness.VERY_SAD, body.getHappiness());
+            assertEquals(ImageCode.PAIN.ordinal(), body.getForceFace());
+            assertTrue(item.getProcessedBodyList().contains(body));
+        }
+
+        @Test
+        void testScenario_PealingModePealsEligibleBody() {
+            ProcesserPlate item = new ProcesserPlate();
+            item.setEnabled(true);
+            item.setEnumProcessType(ProcesserPlate.ProcessType.PEALING);
+
+            Body body = createReimuBody();
+            body.setSleeping(true);
+            body.setOkazari(null);
+            body.setHasBraid(false);
+
+            item.getProcessedBodyList().add(body);
+            item.getProcessedBodyEffectList().add(null);
+
+            item.upDate();
+
+            assertFalse(body.isSleeping());
+            assertTrue(body.isPealed());
+            assertEquals(HairState.BALDHEAD, body.geteHairState());
+        }
+
+        @Test
+        void testScenario_PackingModePacksFullyProcessedBody() {
+            ProcesserPlate item = new ProcesserPlate();
+            item.setEnabled(true);
+            item.setEnumProcessType(ProcesserPlate.ProcessType.PACKING);
+
+            Body body = createReimuBody();
+            body.setOkazari(null);
+            body.setHasBraid(false);
+            body.setBlind(true);
+            body.setShutmouth(true);
+            body.seteHairState(HairState.BALDHEAD);
+
+            item.getProcessedBodyList().add(body);
+            item.getProcessedBodyEffectList().add(null);
+
+            item.upDate();
+
+            assertTrue(body.isPacked());
+            assertTrue(body.isBlind());
+            assertTrue(body.isShutmouth());
+            assertEquals(Happiness.VERY_SAD, body.getHappiness());
+        }
     }
 }

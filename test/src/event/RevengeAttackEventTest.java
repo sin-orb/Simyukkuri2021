@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
@@ -15,20 +16,19 @@ import src.base.Body;
 import src.base.EventPacket;
 import src.base.EventPacket.EventPriority;
 import src.base.EventPacket.UpdateState;
-import src.draw.Translate;
 import src.draw.World;
 import src.enums.AgeState;
 import src.system.Sprite;
+import src.util.WorldTestHelper;
 import src.yukkuri.Reimu;
 
 public class RevengeAttackEventTest {
 
     @BeforeEach
     public void setUp() {
+        WorldTestHelper.resetWorld();
         SimYukkuri.world = new World();
-        Translate.setMapSize(1000, 1000, 500);
-        Translate.setCanvasSize(800, 600, 100, 100, new float[]{1.0f});
-        Translate.createTransTable(false);
+        WorldTestHelper.initializeStandardTranslate500();
     }
 
     // --- Default constructor ---
@@ -178,6 +178,70 @@ public class RevengeAttackEventTest {
         Body to = createBody();   // x=0,y=0 → distance=0 < 2500
         RevengeAttackEvent event = new RevengeAttackEvent(from, to, null, 1);
         assertNull(event.update(from));
+    }
+
+    @Nested
+    class RegressionScenarios {
+
+        @Test
+        void testScenario_StartWakesSleeperClearsActionsAndTargetsVictim() {
+            Body attacker = createBody();
+            Body victim = createBody();
+            attacker.setX(100);
+            attacker.setY(100);
+            victim.setX(160);
+            victim.setY(100);
+            attacker.setAge(500);
+            attacker.setWakeUpTime(0);
+            attacker.setSleeping(true);
+            attacker.setToFood(true);
+            attacker.setToBed(true);
+            attacker.setToShit(true);
+            attacker.setToSteal(true);
+            attacker.setToSukkiri(true);
+            RevengeAttackEvent event = new RevengeAttackEvent(attacker, victim, null, 1);
+
+            event.start(attacker);
+
+            assertEquals(attacker.getAge(), attacker.getWakeUpTime(), "starting revenge should refresh wake-up time");
+            assertTrue(attacker.isSleeping(), "revenge start should not forcibly clear the sleeping flag by itself");
+            assertFalse(attacker.isToFood(), "revenge start should clear food movement");
+            assertFalse(attacker.isToBed(), "revenge start should clear bed movement");
+            assertFalse(attacker.isToShit(), "revenge start should clear toilet movement");
+            assertFalse(attacker.isToSteal(), "revenge start should clear steal movement");
+            assertFalse(attacker.isToSukkiri(), "revenge start should clear mating movement");
+            assertTrue(attacker.isToTakeout(), "revenge start should switch the attacker into event movement");
+            assertEquals(victim.getY(), attacker.getDestY(), "revenge start should target the victim Y position");
+        }
+
+        @Test
+        void testScenario_UpdateNearVictimForcesVictimToStay() {
+            Body attacker = createBody();
+            Body victim = createBody();
+            attacker.setX(100);
+            attacker.setY(100);
+            victim.setX(120);
+            victim.setY(120);
+            RevengeAttackEvent event = new RevengeAttackEvent(attacker, victim, null, 1);
+
+            assertNull(event.update(attacker));
+
+            assertTrue(victim.isStaying(), "nearby victim should be forced to stay during revenge pursuit");
+            assertEquals(victim.getY(), attacker.getDestY(), "attacker should keep chasing the victim position");
+        }
+
+        @Test
+        void testScenario_ExecuteDontMoveMakesAttackerSadAndLament() {
+            Body attacker = createBody();
+            attacker.setGrabbed(true);
+            attacker.setHappiness(src.enums.Happiness.HAPPY);
+            RevengeAttackEvent event = new RevengeAttackEvent(attacker, null, null, 1);
+
+            assertTrue(event.execute(attacker));
+
+            assertEquals(src.enums.Happiness.SAD, attacker.getHappiness(),
+                    "immobile attacker should become sad when giving up revenge");
+        }
     }
 
     // --- Helper ---

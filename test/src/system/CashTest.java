@@ -2,12 +2,15 @@ package src.system;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import src.yukkuri.Reimu;
 import src.yukkuri.Marisa;
 import src.base.Obj;
 import src.SimYukkuri;
+import src.enums.Attitude;
+import src.enums.Intelligence;
 
 /**
  * Test class for Cash.
@@ -155,6 +158,51 @@ public class CashTest {
         } catch (Exception e) {
             // Expected if World not properly initialized
             assertNotNull(e);
+        }
+    }
+
+    @Nested
+    class RegressionScenarios {
+
+        @Test
+        void testScenario_BuyYukkuriBabyChargesExactlyOneThirdOfBaseCost() {
+            Reimu baby = new Reimu();
+            baby.setAge(0);
+            long initialCash = SimYukkuri.world.getPlayer().getCash();
+            long expectedCost = baby.getYcost() / 3;
+
+            long cost = Cash.buyYukkuri(baby);
+
+            assertEquals(expectedCost, cost);
+            assertEquals(initialCash - expectedCost, SimYukkuri.world.getPlayer().getCash());
+        }
+
+        @Test
+        void testScenario_SellWorthlessYukkuriReturnsZeroAndLeavesCashUnchanged() {
+            Reimu damaged = new Reimu();
+            damaged.setAge(20000);
+            damaged.setDamage(10000);
+            long initialCash = SimYukkuri.world.getPlayer().getCash();
+
+            long value = Cash.sellYukkuri(damaged);
+
+            assertEquals(0, value);
+            assertEquals(initialCash, SimYukkuri.world.getPlayer().getCash());
+        }
+
+        @Test
+        void testScenario_SellHealthyChildPetAddsComputedPetValueToCash() {
+            Marisa pet = new Marisa();
+            pet.setAge(20000);
+            pet.setAttitude(Attitude.AVERAGE);
+            pet.setIntelligence(Intelligence.AVERAGE);
+            long initialCash = SimYukkuri.world.getPlayer().getCash();
+            long expectedValue = pet.getSellingPrice(0);
+
+            long value = Cash.sellYukkuri(pet);
+
+            assertEquals(expectedValue, value);
+            assertEquals(initialCash + expectedValue, SimYukkuri.world.getPlayer().getCash());
         }
     }
 }

@@ -4,12 +4,16 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import javax.swing.DefaultListModel;
 
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import src.SimYukkuri;
 import src.base.Obj;
+import src.util.WorldTestHelper;
 
 class PlayerTest {
 
@@ -61,5 +65,20 @@ class PlayerTest {
         newList.add(new Player());
         player.setItemForSave(newList);
         assertSame(newList, player.getItemForSave());
+    }
+
+    @Nested
+    class RegressionScenarios {
+        @Test
+        void testScenario_AddCashStillSucceedsWhenWorldExistsButPlayerStatusUiIsNotInitialized() {
+            WorldTestHelper.resetWorld();
+            WorldTestHelper.initializeMinimalWorld();
+            Player player = SimYukkuri.world.getPlayer();
+            long before = player.getCash();
+
+            assertDoesNotThrow(() -> player.addCash(321));
+
+            assertEquals(before + 321, player.getCash());
+        }
     }
 }

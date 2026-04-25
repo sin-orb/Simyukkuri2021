@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import java.awt.image.BufferedImage;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
@@ -197,5 +198,34 @@ public class AccelAmpouleTest {
         try {
             AccelAmpoule.loadImages(AccelAmpoule.class.getClassLoader(), null);
         } catch (Exception e) { }
+    }
+
+    @Nested
+    class RegressionScenarios {
+
+        @Test
+        void testScenario_ChildBodyGetsLargeAgeAccelerationButStaysAlive() {
+            Body parent = createParent(AgeState.CHILD);
+            parent.setAge(100);
+            AccelAmpoule ampoule = new AccelAmpoule(parent);
+
+            Event result = ampoule.update();
+
+            assertEquals(Event.DONOTHING, result);
+            assertEquals(100 + Obj.TICK * 10000, parent.getAge());
+            assertEquals(false, parent.isDead());
+        }
+
+        @Test
+        void testScenario_AdultBodyDoesNotAgeEvenWhenAmpouleUpdates() {
+            Body parent = createParent(AgeState.ADULT);
+            AccelAmpoule ampoule = new AccelAmpoule(parent);
+            long before = parent.getAge();
+
+            Event result = ampoule.update();
+
+            assertEquals(Event.DONOTHING, result);
+            assertEquals(before, parent.getAge());
+        }
     }
 }

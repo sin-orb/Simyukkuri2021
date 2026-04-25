@@ -2,9 +2,13 @@ package src.event;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+import src.SimYukkuri;
 import src.base.Body;
 import src.base.EventTestBase;
+import src.enums.FavItemType;
+import src.item.Bed;
 import src.util.WorldTestHelper;
 
 public class FavCopyEventTest extends EventTestBase {
@@ -122,5 +126,26 @@ public class FavCopyEventTest extends EventTestBase {
         from.setPartner(b.getUniqueID());
         FavCopyEvent event = new FavCopyEvent(from, null, null, 1);
         assertTrue(event.simpleEventAction(b));
+    }
+
+    @Nested
+    class RegressionScenarios {
+
+        @Test
+        void testScenario_FamilyCopiesFavoriteBedAcrossEvent() {
+            Body parent = createBody(1, 100, 100);
+            Body child = createBody(2, 120, 120);
+            child.setPartner(parent.getUniqueID());
+            parent.setPartner(child.getUniqueID());
+            Bed bed = new Bed();
+            SimYukkuri.world.getCurrentMap().getBed().put(bed.getObjId(), bed);
+            parent.setFavItem(FavItemType.BED, bed);
+            child.setFavItem(FavItemType.BED, null);
+
+            FavCopyEvent event = new FavCopyEvent(parent, child, null, 1);
+
+            assertTrue(event.simpleEventAction(child));
+            assertEquals(bed.getObjId(), child.getFavItem(FavItemType.BED).getObjId());
+        }
     }
 }

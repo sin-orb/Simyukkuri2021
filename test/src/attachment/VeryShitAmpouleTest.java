@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.awt.image.BufferedImage;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
@@ -244,5 +245,38 @@ public class VeryShitAmpouleTest {
         try {
             VeryShitAmpoule.loadImages(VeryShitAmpoule.class.getClassLoader(), null);
         } catch (Exception e) { }
+    }
+
+    @Nested
+    class RegressionScenarios {
+
+        @Test
+        void testScenario_LiveBodyWakesUpAndSetsShitNearLimit() {
+            Body parent = createParent(AgeState.ADULT);
+            VeryShitAmpoule ampoule = new VeryShitAmpoule(parent);
+            parent.setSleeping(true);
+            parent.setShit(0);
+
+            Event result = ampoule.update();
+
+            assertEquals(Event.DONOTHING, result);
+            assertEquals(false, parent.isSleeping());
+            assertEquals(parent.getShitLimit() - 50, parent.getShit());
+        }
+
+        @Test
+        void testScenario_CutBodyKeepsSleepingAndDoesNotRaiseShit() {
+            Body parent = createParent(AgeState.ADULT);
+            VeryShitAmpoule ampoule = new VeryShitAmpoule(parent);
+            parent.setSleeping(true);
+            parent.setShit(10);
+            parent.setCriticalDamegeType(CriticalDamegeType.CUT);
+
+            Event result = ampoule.update();
+
+            assertEquals(Event.DONOTHING, result);
+            assertTrue(parent.isSleeping());
+            assertEquals(10, parent.getShit());
+        }
     }
 }

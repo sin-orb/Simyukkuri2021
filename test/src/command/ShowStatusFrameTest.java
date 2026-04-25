@@ -15,8 +15,8 @@ import src.draw.World;
 import src.enums.AgeState;
 import src.enums.Intelligence;
 import src.enums.YukkuriType;
-import src.system.MessagePool;
 import src.system.Sprite;
+import src.util.WorldTestHelper;
 import src.yukkuri.Reimu;
 
 @Disabled("GUI-dependent")
@@ -25,7 +25,7 @@ public class ShowStatusFrameTest {
     @BeforeAll
     public static void setUpClass() {
         assumeTrue(hasDisplay());
-        MessagePool.loadMessage(ShowStatusFrameTest.class.getClassLoader());
+        WorldTestHelper.initializeLoadedMessagePool(ShowStatusFrameTest.class.getClassLoader());
     }
 
     @BeforeEach

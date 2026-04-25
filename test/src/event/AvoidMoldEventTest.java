@@ -3,6 +3,7 @@ package src.event;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
@@ -10,19 +11,19 @@ import src.base.Body;
 import src.base.EventPacket;
 import src.base.EventPacket.EventPriority;
 import src.base.EventPacket.UpdateState;
-import src.draw.Translate;
 import src.draw.World;
 import src.enums.AgeState;
+import src.enums.ImageCode;
 import src.enums.PublicRank;
+import src.util.WorldTestHelper;
 
 class AvoidMoldEventTest {
 
     @BeforeEach
     void setUp() {
+        WorldTestHelper.resetWorld();
         SimYukkuri.world = new World();
-        Translate.setMapSize(1000, 1000, 500);
-        Translate.setCanvasSize(800, 600, 100, 100, new float[]{1.0f});
-        Translate.createTransTable(false);
+        WorldTestHelper.initializeStandardTranslate500();
     }
 
     private static Body createBody() {
@@ -535,5 +536,22 @@ class AvoidMoldEventTest {
             }
         }
         return null;
+    }
+
+    @Nested
+    class RegressionScenarios {
+
+        @Test
+        void testScenario_VeryRudeFoolSanctionsMoldyTargetAndGetsPuffFace() {
+            Body from = createBody();
+            Body to = createBody();
+            from.setAttitude(src.enums.Attitude.SUPER_SHITHEAD);
+            from.setIntelligence(src.enums.Intelligence.FOOL);
+            int beforeSick = from.getSickPeriod();
+
+            assertTrue(event(from, to).execute(from));
+            assertEquals(ImageCode.PUFF.ordinal(), from.getForceFace());
+            assertEquals(beforeSick + 100, from.getSickPeriod());
+        }
     }
 }

@@ -1,11 +1,11 @@
 package src.logic;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import src.SimYukkuri;
 import src.base.Body;
-import src.draw.Translate;
 import src.draw.World;
 import src.enums.AgeState;
 import src.enums.BaryInUGState;
@@ -13,6 +13,7 @@ import src.enums.CriticalDamegeType;
 import src.enums.Intelligence;
 import src.item.Stone;
 import src.system.Sprite;
+import src.util.WorldTestHelper;
 import src.yukkuri.Reimu;
 
 /**
@@ -23,9 +24,7 @@ public class StoneLogicTest {
     @BeforeEach
     public void setUp() {
         SimYukkuri.world = new World();
-        Translate.setMapSize(1000, 1000, 500);
-        Translate.setCanvasSize(800, 600, 100, 100, new float[]{1.0f});
-        Translate.createTransTable(false);
+        WorldTestHelper.initializeStandardTranslate500();
     }
 
     private Body createAdultBody(int x, int y) {
@@ -161,6 +160,25 @@ public class StoneLogicTest {
             assertTrue(true, "checkPubble method exists");
         } catch (NoSuchMethodException e) {
             fail("checkPubble method should exist");
+        }
+    }
+
+    @Nested
+    class RegressionScenarios {
+
+        @Test
+        void testScenario_WiseBodyNearStoneSetsRunAwayDestinationAndScare() {
+            Body body = createAdultBody(100, 100);
+            body.setIntelligence(Intelligence.WISE);
+
+            new Stone(104, 100, 0);
+
+            StoneLogic.checkPubble(body);
+
+            assertNull(body.getCriticalDamege(), "run away branch should not injure the body");
+            assertTrue(body.isScare(), "run away branch should mark the body as scared");
+            assertEquals(0, body.getDestX(), "wise body should flee toward the left map edge");
+            assertEquals(0, body.getDestY(), "wise body should flee toward the top map edge");
         }
     }
 }

@@ -16,10 +16,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import java.lang.reflect.Field;
-import java.util.HashMap;
-
 import src.SimYukkuri;
+import src.SequenceRNG;
 import src.base.Body;
 import src.draw.World;
 import src.enums.AgeState;
@@ -27,11 +25,12 @@ import src.enums.CoreAnkoState;
 import src.enums.Direction;
 import src.enums.Event;
 import src.enums.Happiness;
+import src.enums.ImageCode;
 import src.enums.YukkuriType;
 import src.game.Stalk;
-import src.system.MessagePool;
 import src.system.ResourceUtil;
 import src.system.Sprite;
+import src.util.WorldTestHelper;
 import src.yukkuri.Reimu;
 
 public class NeedleTest {
@@ -47,18 +46,7 @@ public class NeedleTest {
         Needle.setImgH(new int[] { 11, 21, 31 });
         Needle.setPivX(new int[] { 1, 2, 3 });
         Needle.setPivY(new int[] { 4, 5, 6 });
-        initMessagePool();
-    }
-
-    private static void initMessagePool() throws Exception {
-        Field field = MessagePool.class.getDeclaredField("pool_j");
-        field.setAccessible(true);
-        int len = YukkuriType.values().length;
-        HashMap<String, ?>[] pool = new HashMap[len];
-        for (int i = 0; i < len; i++) {
-            pool[i] = new HashMap<>();
-        }
-        field.set(null, pool);
+        WorldTestHelper.initializeEmptyMessagePool();
     }
 
     @AfterEach
@@ -461,6 +449,62 @@ public class NeedleTest {
             // NPEなく正常完了
             Event result = needle.update();
             assertEquals(Event.DONOTHING, result);
+        }
+    }
+
+    @Nested
+    class RegressionScenarios {
+
+        @Test
+        void testScenario_FixBackNeedleUpdateWakesBodyFacesPainAndCanTriggerPurupuru() {
+            SimYukkuri.RND = new SequenceRNG(0, 1);
+            Body parent = createParent(AgeState.ADULT);
+            Needle needle = new Needle(parent);
+            parent.setDead(false);
+            parent.setFixBack(true);
+            parent.setSleeping(true);
+            parent.setDirection(Direction.RIGHT);
+            parent.seteCoreAnkoState(CoreAnkoState.DEFAULT);
+
+            int damageBefore = parent.getDamage();
+            int stressBefore = parent.getStress();
+
+            Event result = needle.update();
+
+            assertEquals(Event.DONOTHING, result);
+            assertFalse(parent.isSleeping());
+            assertEquals(Direction.LEFT, parent.getDirection());
+            assertEquals(Happiness.VERY_SAD, parent.getHappiness());
+            assertEquals(ImageCode.PAIN.ordinal(), parent.getForceFace());
+            assertTrue(parent.isPurupuru());
+            assertTrue(parent.getDamage() > damageBefore);
+            assertTrue(parent.getStress() > stressBefore);
+        }
+
+        @Test
+        void testScenario_UnbirthChildNeedleCanTriggerStalkMotherReaction() {
+            SimYukkuri.RND = new ConstState(0);
+            Body child = createParent(AgeState.BABY);
+            Body mother = createParent(AgeState.ADULT);
+            mother.setHappiness(Happiness.HAPPY);
+            mother.setMsgType(YukkuriType.REIMU);
+            child.setUnBirth(true);
+            child.seteCoreAnkoState(CoreAnkoState.DEFAULT);
+
+            Stalk stalk = new Stalk();
+            stalk.setPlantYukkuri(mother);
+            child.setBindStalk(stalk);
+
+            Needle needle = new Needle(child);
+            int motherStressBefore = mother.getStress();
+
+            Event result = needle.update();
+
+            assertEquals(Event.DONOTHING, result);
+            assertEquals(Happiness.VERY_SAD, child.getHappiness());
+            assertEquals(ImageCode.PAIN.ordinal(), child.getForceFace());
+            assertTrue(mother.getStress() > motherStressBefore);
+            assertEquals(Happiness.SAD, mother.getHappiness());
         }
     }
 

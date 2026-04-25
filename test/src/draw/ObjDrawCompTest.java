@@ -9,6 +9,7 @@ import src.SimYukkuri;
 import src.base.Body;
 import src.base.Obj;
 import src.enums.AgeState;
+import src.util.WorldTestHelper;
 import src.yukkuri.Reimu;
 
 class ObjDrawCompTest {
@@ -16,7 +17,7 @@ class ObjDrawCompTest {
     @BeforeEach
     void setUp() {
         SimYukkuri.world = new World();
-        Translate.setMapSize(1000, 1000, 500);
+        WorldTestHelper.initializeStandardTranslate500();
     }
 
     // --- getInstance ---

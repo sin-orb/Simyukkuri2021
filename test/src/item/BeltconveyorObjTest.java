@@ -6,7 +6,6 @@ import src.SimYukkuri;
 import src.base.Body;
 import src.base.ItemTestBase;
 import src.draw.Rectangle4y;
-import src.draw.Translate;
 import src.enums.YukkuriType;
 import src.game.Shit;
 import src.system.Sprite;
@@ -26,8 +25,7 @@ class BeltconveyorObjTest extends ItemTestBase {
     @Override
     public void setUp() {
         super.setUp();
-        Translate.setCanvasSize(800, 600, 100, 100, new float[]{1.0f});
-        Translate.createTransTable(false);
+        WorldTestHelper.initializeStandardTranslate200();
     }
 
     /** bodySprが設定されたBodyを生成する */

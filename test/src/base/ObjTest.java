@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
@@ -19,6 +20,7 @@ import src.enums.Type;
 import src.enums.Where;
 import src.system.ItemMenu.GetMenuTarget;
 import src.system.ItemMenu.UseMenuTarget;
+import src.util.WorldTestHelper;
 import java.awt.image.BufferedImage;
 
 public class ObjTest {
@@ -39,7 +41,7 @@ public class ObjTest {
     @BeforeEach
     public void setUp() {
         SimYukkuri.world = new World();
-        Translate.setMapSize(999, 999, 499); // mapW=1000, mapH=1000, mapZ=500
+        WorldTestHelper.initializeTranslate(999, 999, 499, 800, 600, 100, 100, new float[] { 1.0f });
         int[][] wallMap = new int[1001][1001];
         SimYukkuri.world.getCurrentMap().setWallMap(wallMap);
     }
@@ -804,5 +806,48 @@ public class ObjTest {
         SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
 
         assertEquals(body, obj.takeMappedObj(2222));
+    }
+
+    @Nested
+    class RegressionScenarios {
+
+        @Test
+        public void testScenario_ClockTickAppliesVelocityAndKnockbackThenResetsBVector() {
+            Obj obj = new Obj();
+            obj.setX(100);
+            obj.setY(100);
+            obj.setVx(5);
+            obj.setVy(7);
+            obj.setBxyz(3, 4, 0);
+
+            Event result = obj.clockTick();
+
+            assertEquals(Event.DONOTHING, result);
+            assertEquals(108, obj.getX());
+            assertEquals(111, obj.getY());
+            assertEquals(0, obj.getBx());
+            assertEquals(0, obj.getBy());
+            assertEquals(0, obj.getBz());
+        }
+
+        @Test
+        public void testScenario_FallingUnderGroundKeepsNegativeZButStillZeroesXYVelocity() {
+            Obj obj = new Obj();
+            obj.setX(500);
+            obj.setY(500);
+            obj.setZ(1);
+            obj.setVz(5);
+            obj.setVx(9);
+            obj.setVy(11);
+            obj.setnMostDepth(0);
+            obj.setbFallingUnderGround(true);
+
+            Event result = obj.clockTick();
+
+            assertEquals(Event.DONOTHING, result);
+            assertTrue(obj.getZ() < 0);
+            assertEquals(0, obj.getVx());
+            assertEquals(0, obj.getVy());
+        }
     }
 }

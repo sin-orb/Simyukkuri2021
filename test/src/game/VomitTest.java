@@ -3,6 +3,7 @@ package src.game;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
@@ -12,6 +13,7 @@ import src.enums.AgeState;
 import src.enums.Event;
 import src.system.ItemMenu.GetMenuTarget;
 import src.system.ItemMenu.UseMenuTarget;
+import src.util.WorldTestHelper;
 
 class VomitTest {
 
@@ -20,9 +22,7 @@ class VomitTest {
     @BeforeEach
     void setUp() {
         SimYukkuri.world = new World();
-        Translate.setMapSize(1000, 1000, 500);
-        Translate.setCanvasSize(800, 600, 100, 100, new float[]{1.0f});
-        Translate.createTransTable(false);
+        WorldTestHelper.initializeStandardTranslate500();
         vomit = new Vomit();
         vomit.setAgeState(AgeState.ADULT);
     }
@@ -312,5 +312,38 @@ class VomitTest {
             src.base.Body body = src.util.WorldTestHelper.createBody();
             src.game.Vomit v = new src.game.Vomit(100, 100, 0, body, src.enums.YukkuriType.REIMU);
         } catch (Exception e) { }
+    }
+
+    @Nested
+    class RegressionScenarios {
+        @Test
+        void testScenario_ClockTickAtRightEdgeBouncesAndClampsX() {
+            vomit.setRemoved(false);
+            vomit.setAge(0);
+            vomit.setX(999);
+            vomit.setVx(5);
+
+            Event result = vomit.clockTick();
+
+            assertEquals(Event.DONOTHING, result);
+            assertEquals(Translate.getMapW(), vomit.getX());
+            assertEquals(-5, vomit.getVx());
+        }
+
+        @Test
+        void testScenario_FallingImpactCrushesVomitAndResetsMotion() {
+            vomit.setRemoved(false);
+            vomit.setAge(0);
+            vomit.setZ(10);
+            vomit.setVz(15);
+
+            Event result = vomit.clockTick();
+
+            assertEquals(Event.DONOTHING, result);
+            assertEquals(9600, vomit.getAge());
+            assertEquals(0, vomit.getZ());
+            assertEquals(0, vomit.getVz());
+            assertEquals(0, vomit.getFalldownDamage());
+        }
     }
 }

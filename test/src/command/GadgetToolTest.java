@@ -18,8 +18,8 @@ import src.enums.BaryInUGState;
 import src.enums.CriticalDamegeType;
 import src.enums.Intelligence;
 import src.enums.YukkuriType;
-import src.system.MessagePool;
 import src.system.Sprite;
+import src.util.WorldTestHelper;
 import src.yukkuri.Reimu;
 
 import java.util.Random;
@@ -30,7 +30,7 @@ public class GadgetToolTest {
 
     @BeforeAll
     public static void setUpClass() {
-        MessagePool.loadMessage(GadgetToolTest.class.getClassLoader());
+        WorldTestHelper.initializeLoadedMessagePool(GadgetToolTest.class.getClassLoader());
     }
 
     @BeforeEach

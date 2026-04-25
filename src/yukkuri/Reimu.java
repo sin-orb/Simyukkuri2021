@@ -23,7 +23,6 @@ import src.enums.CriticalDamegeType;
 import src.enums.HairState;
 import src.enums.ImageCode;
 import src.enums.Intelligence;
-import src.enums.Numbering;
 import src.enums.PlayStyle;
 import src.enums.YukkuriType;
 import src.logic.ToyLogic;
@@ -183,6 +182,7 @@ public class Reimu extends Body {
 	public void execTransform() {
 		// でいぶ化
 		synchronized (SimYukkuri.lock) {
+			int originalId = getUniqueID();
 			SimYukkuri.world.getCurrentMap().getBody().remove(this.getUniqueID());
 			SimYukkuri.mypane.loadBodyImage(YukkuriType.DEIBU);
 			Body to = new Deibu(getX(), getY(), getZ(), getBodyAgeState(), null, null);
@@ -191,15 +191,15 @@ public class Reimu extends Body {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			to.setUniqueID(Numbering.INSTANCE.numberingYukkuriID());
+			to.setUniqueID(originalId);
 			SimYukkuri.world.getCurrentMap().getBody().put(to.getUniqueID(), to);
 			to.setBaseBodyFileName("deibu");
 			IniFileUtil.readYukkuriIniFile(to);
 			if (MyPane.getSelectBody() == this) {
 				MyPane.setSelectBody(to);
 			}
+			setRemoved(true);
 		}
-		this.remove();
 	}
 
 	/**

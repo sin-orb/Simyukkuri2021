@@ -2,10 +2,12 @@ package src.event;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import src.base.Body;
 import src.base.EventTestBase;
 import src.enums.Attitude;
+import src.enums.Happiness;
 
 public class EatBodyEventTest extends EventTestBase {
 
@@ -162,5 +164,24 @@ public class EatBodyEventTest extends EventTestBase {
         EatBodyEvent event = new EatBodyEvent(eater, eaten, null, 10);
         event.tick = 10;
         assertDoesNotThrow(() -> event.execute(eater));
+    }
+
+    @Nested
+    class RegressionScenarios {
+
+        @Test
+        void testScenario_AverageEaterFinishesVerySadWithStressPenalty() {
+            Body eater = createBody(1, 100, 100);
+            Body eaten = createBody(2, 120, 120);
+            eater.setAttitude(Attitude.AVERAGE);
+            int beforeStress = eater.getStress();
+
+            EatBodyEvent event = new EatBodyEvent(eater, eaten, null, 10);
+            event.tick = 120;
+
+            assertTrue(event.execute(eater));
+            assertEquals(beforeStress + 2000, eater.getStress());
+            assertEquals(Happiness.VERY_SAD, eater.getHappiness());
+        }
     }
 }

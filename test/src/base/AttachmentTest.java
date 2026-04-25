@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.awt.image.BufferedImage;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
@@ -462,5 +463,50 @@ public class AttachmentTest {
 		parent.setAgeState(ageState);
 		SimYukkuri.world.getCurrentMap().getBody().put(parent.getUniqueID(), parent);
 		return parent;
+	}
+
+	@Nested
+	class RegressionScenarios {
+
+		@Test
+		public void testScenario_UpdateAndAnimationAdvanceOnSameTick() {
+			Body parent = createParent(AgeState.BABY);
+			StubAttachment att = new StubAttachment(parent);
+			att.setProcessInterval(1);
+			att.setAnimate(true);
+			att.setAnimeFrame(0);
+			int[] prop = new int[AttachProperty.values().length];
+			prop[AttachProperty.ANIME_INTERVAL.ordinal()] = 0;
+			prop[AttachProperty.ANIME_FRAMES.ordinal()] = 4;
+			att.setAttachProperty(prop);
+			att.setAnimeLoop(0);
+
+			Event result = att.clockTick();
+
+			assertEquals(Event.DONOTHING, result);
+			assertEquals(1, att.getUpdateCallCount());
+			assertEquals(1, att.getAnimeFrame());
+		}
+
+		@Test
+		public void testScenario_FinalAnimationLoopStopsExactlyWhenFrameWraps() {
+			Body parent = createParent(AgeState.BABY);
+			StubAttachment att = new StubAttachment(parent);
+			att.setProcessInterval(9999);
+			att.setAnimate(true);
+			att.setAnimeFrame(3);
+			int[] prop = new int[AttachProperty.values().length];
+			prop[AttachProperty.ANIME_INTERVAL.ordinal()] = 0;
+			prop[AttachProperty.ANIME_FRAMES.ordinal()] = 4;
+			att.setAttachProperty(prop);
+			att.setAnimeLoop(1);
+
+			Event result = att.clockTick();
+
+			assertEquals(Event.DONOTHING, result);
+			assertEquals(0, att.getAnimeFrame());
+			assertEquals(0, att.getAnimeLoop());
+			assertFalse(att.isAnimate());
+		}
 	}
 }

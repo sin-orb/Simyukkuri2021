@@ -1,19 +1,19 @@
 package src.attachment;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.image.BufferedImage;
-import java.lang.reflect.Field;
-import java.util.HashMap;
 import java.util.Random;
 
 import org.junit.jupiter.api.AfterEach;
 
 import src.ConstState;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
@@ -24,10 +24,11 @@ import src.enums.Direction;
 import src.enums.CriticalDamegeType;
 import src.enums.Event;
 import src.enums.Happiness;
+import src.enums.ImageCode;
 import src.enums.YukkuriType;
-import src.system.MessagePool;
 import src.system.ResourceUtil;
 import src.system.Sprite;
+import src.util.WorldTestHelper;
 import src.yukkuri.Reimu;
 
 public class PoisonAmpouleTest {
@@ -38,7 +39,7 @@ public class PoisonAmpouleTest {
     public void setUp() throws Exception {
         SimYukkuri.world = new World();
         originalRnd = SimYukkuri.RND;
-        initMessagePool();
+        WorldTestHelper.initializeEmptyMessagePool();
         PoisonAmpoule.setImages(buildImages());
         PoisonAmpoule.setImgW(new int[] { 10, 20, 30 });
         PoisonAmpoule.setImgH(new int[] { 11, 21, 31 });
@@ -284,18 +285,6 @@ public class PoisonAmpouleTest {
         return parent;
     }
 
-    @SuppressWarnings("unchecked")
-    private static void initMessagePool() throws Exception {
-        Field field = MessagePool.class.getDeclaredField("pool_j");
-        field.setAccessible(true);
-        int len = YukkuriType.values().length;
-        HashMap<String, ?>[] pool = new HashMap[len];
-        for (int i = 0; i < len; i++) {
-            pool[i] = new HashMap<>();
-        }
-        field.set(null, pool);
-    }
-
     private static BufferedImage[][] buildImages() {
         BufferedImage[][] images = new BufferedImage[3][2];
         for (int age = 0; age < 3; age++) {
@@ -311,5 +300,50 @@ public class PoisonAmpouleTest {
         try {
             PoisonAmpoule.loadImages(PoisonAmpoule.class.getClassLoader(), null);
         } catch (Exception e) { }
+    }
+
+    @Nested
+    class RegressionScenarios {
+
+        @Test
+        void testScenario_LivePoisonAmpouleHitWakesBodyAddsShitAndAppliesPoisonDamage() {
+            SimYukkuri.RND = new ConstState(0);
+            Body parent = createParent(AgeState.ADULT);
+            parent.initAmount(AgeState.ADULT);
+            parent.setSleeping(true);
+            parent.setShit(100);
+            PoisonAmpoule ampoule = new PoisonAmpoule(parent);
+
+            int shitBefore = parent.getShit();
+            int damageBefore = parent.getDamage();
+
+            Event result = ampoule.update();
+
+            assertEquals(Event.DONOTHING, result);
+            assertFalse(parent.isSleeping());
+            assertTrue(parent.getShit() > shitBefore);
+            assertTrue(parent.getDamage() > damageBefore);
+            assertEquals(Happiness.VERY_SAD, parent.getHappiness());
+            assertEquals(ImageCode.PAIN.ordinal(), parent.getForceFace());
+        }
+
+        @Test
+        void testScenario_CutBodyDoesNotWakeOrGainShitWhenPoisonDoesNotProc() {
+            SimYukkuri.RND = new ConstState(1);
+            Body parent = createParent(AgeState.ADULT);
+            parent.setSleeping(true);
+            parent.setShit(100);
+            parent.setCriticalDamegeType(CriticalDamegeType.CUT);
+            PoisonAmpoule ampoule = new PoisonAmpoule(parent);
+
+            int shitBefore = parent.getShit();
+
+            Event result = ampoule.update();
+
+            assertEquals(Event.DONOTHING, result);
+            assertTrue(parent.isSleeping());
+            assertEquals(shitBefore, parent.getShit());
+            assertEquals(Happiness.SAD, parent.getHappiness());
+        }
     }
 }

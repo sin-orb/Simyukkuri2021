@@ -2,15 +2,17 @@ package src.base;
 
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Nested;
 import static org.junit.jupiter.api.Assertions.*;
 
 import src.SimYukkuri;
 import src.draw.World;
 import src.draw.MyPane;
 import src.draw.Terrarium;
-import src.system.MessagePool;
 import src.enums.*;
 import src.event.BegForLifeEvent;
+import src.util.WorldTestHelper;
 import java.security.SecureRandom;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -47,7 +49,7 @@ public class BodyBehaviorTest {
 
     @BeforeEach
     public void setUp() throws Exception {
-        System.setProperty("java.awt.headless", "true");
+        WorldTestHelper.resetWorld();
         SimYukkuri.world = new World(0, 0);
         world = SimYukkuri.world;
         SimYukkuri.mypane = new MyPane();
@@ -55,8 +57,7 @@ public class BodyBehaviorTest {
         testRnd = new PresetRandom();
         SimYukkuri.RND = testRnd;
 
-        // Initialize MessagePool
-        MessagePool.loadMessage(getClass().getClassLoader());
+        WorldTestHelper.initializeLoadedMessagePool(getClass().getClassLoader());
 
         body = new StubBody();
         body.setUniqueID(1);
@@ -64,6 +65,11 @@ public class BodyBehaviorTest {
         body.setBodyRank(BodyRank.KAIYU);
         body.setMsgType(YukkuriType.REIMU);
         world.getCurrentMap().getBody().put(1, body);
+    }
+
+    @AfterEach
+    public void tearDown() {
+        WorldTestHelper.resetWorld();
     }
 
     @Test
@@ -149,5 +155,56 @@ public class BodyBehaviorTest {
         m.invoke(SimYukkuri.mypane.getTerrarium(), body);
 
         assertTrue(neighbor.getAttachmentSize(src.attachment.Fire.class) > 0);
+    }
+
+    @Nested
+    class RegressionScenarios {
+
+        @Test
+        void testScenario_ForcedBegForLifeStartsEventEvenWithoutRandomHit() {
+            body.setAttitude(Attitude.VERY_NICE);
+            body.setDamage(9000);
+            testRnd.setNextInt(1);
+
+            body.begForLife(true);
+
+            assertFalse(body.getEventList().isEmpty());
+            assertTrue(body.getEventList().get(0) instanceof BegForLifeEvent);
+        }
+
+        @Test
+        void testScenario_PanicDoesNotPropagateToRaperBody() throws Exception {
+            body.setPanic(true, PanicType.BURN);
+
+            StubBody raper = new StubBody();
+            raper.setUniqueID(2);
+            raper.setX(body.getX() + 10);
+            raper.setY(body.getY());
+            raper.setRaper(true);
+            world.getCurrentMap().getBody().put(2, raper);
+
+            Method m = Terrarium.class.getDeclaredMethod("checkPanic", Body.class);
+            m.setAccessible(true);
+            m.invoke(SimYukkuri.mypane.getTerrarium(), body);
+
+            assertNull(raper.getPanicType());
+        }
+
+        @Test
+        void testScenario_FireDoesNotPropagateToDistantBody() throws Exception {
+            body.giveFire();
+
+            StubBody distant = new StubBody();
+            distant.setUniqueID(2);
+            distant.setX(body.getX() + 1000);
+            distant.setY(body.getY() + 1000);
+            world.getCurrentMap().getBody().put(2, distant);
+
+            Method m = Terrarium.class.getDeclaredMethod("checkFire", Body.class);
+            m.setAccessible(true);
+            m.invoke(SimYukkuri.mypane.getTerrarium(), body);
+
+            assertEquals(0, distant.getAttachmentSize(src.attachment.Fire.class));
+        }
     }
 }

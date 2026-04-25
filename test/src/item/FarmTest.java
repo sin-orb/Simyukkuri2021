@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
@@ -18,10 +19,9 @@ class FarmTest {
 
     @BeforeEach
     public void setUp() {
+        WorldTestHelper.resetWorld();
         src.SimYukkuri.world = new src.draw.World();
-        src.draw.Translate.setMapSize(1000, 1000, 200);
-        src.draw.Translate.setCanvasSize(800, 600, 100, 100, new float[]{1.0f});
-        src.draw.Translate.createTransTable(false);
+        WorldTestHelper.initializeStandardTranslate200();
     }
 
     @AfterEach
@@ -351,8 +351,7 @@ class FarmTest {
 
     @Test
     void testDrawPreview_doesNotThrow() {
-        src.draw.Translate.setCanvasSize(800, 600, 100, 100, new float[]{1.0f});
-        src.draw.Translate.createTransTable(false);
+        WorldTestHelper.initializeStandardTranslate200();
         java.awt.image.BufferedImage img = new java.awt.image.BufferedImage(800, 600, java.awt.image.BufferedImage.TYPE_INT_RGB);
         java.awt.Graphics2D g2 = img.createGraphics();
         assertDoesNotThrow(() -> Farm.drawPreview(g2, 10, 10, 100, 100));
@@ -363,8 +362,7 @@ class FarmTest {
 
     @Test
     void testDrawShape_doesNotThrow() {
-        src.draw.Translate.setCanvasSize(800, 600, 100, 100, new float[]{1.0f});
-        src.draw.Translate.createTransTable(false);
+        WorldTestHelper.initializeStandardTranslate200();
         Farm item = new Farm();
         item.setMapPos(100, 100, 300, 300);
         java.awt.image.BufferedImage img = new java.awt.image.BufferedImage(800, 600, java.awt.image.BufferedImage.TYPE_INT_RGB);
@@ -384,8 +382,7 @@ class FarmTest {
 
     @Test
     void testCheckContain_fieldCoord() {
-        src.draw.Translate.setCanvasSize(800, 600, 100, 100, new float[]{1.0f});
-        src.draw.Translate.createTransTable(false);
+        WorldTestHelper.initializeStandardTranslate200();
         Farm item = new Farm();
         item.setMapPos(100, 100, 300, 300);
         assertDoesNotThrow(() -> item.checkContain(50, 50, true));
@@ -477,6 +474,26 @@ class FarmTest {
             assertNotNull(item);
         } catch (Exception e) {
             // Expected in headless environment
+        }
+    }
+
+    @Nested
+    class RegressionScenarios {
+
+        @Test
+        void testScenario_ShitIsConvertedIntoFertilizer() {
+            Farm item = new Farm();
+            item.setAmount(0);
+
+            Shit shit = new Shit();
+            shit.setAgeState(src.enums.AgeState.ADULT);
+            shit.setAmount(250);
+            shit.setZ(0);
+
+            item.getAmount(shit);
+
+            assertEquals(100, item.getAmount());
+            assertEquals(150, shit.getAmount());
         }
     }
 }

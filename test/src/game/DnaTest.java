@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.enums.Attitude;
@@ -57,5 +58,29 @@ class DnaTest {
 
         dna.setMother(20);
         assertEquals(20, dna.getMother());
+    }
+
+    @Nested
+    class RegressionScenarios {
+        @Test
+        void testScenario_DefaultConstructorLeavesParentIdsUnset() {
+            Dna dna = new Dna();
+
+            assertEquals(0, dna.getFather());
+            assertEquals(0, dna.getMother());
+            assertFalse(dna.isRaperChild());
+        }
+
+        @Test
+        void testScenario_ParameterizedConstructorDoesNotImplyAnyParentIds() {
+            Dna dna = new Dna(2006, Attitude.SHITHEAD, Intelligence.WISE, true);
+
+            assertEquals(2006, dna.getType());
+            assertEquals(Attitude.SHITHEAD, dna.getAttitude());
+            assertEquals(Intelligence.WISE, dna.getIntelligence());
+            assertTrue(dna.isRaperChild());
+            assertEquals(0, dna.getFather());
+            assertEquals(0, dna.getMother());
+        }
     }
 }

@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
@@ -14,6 +15,7 @@ import src.base.Body;
 import src.base.EventPacket.EventPriority;
 import src.base.EventPacket.UpdateState;
 import src.enums.FavItemType;
+import src.enums.Happiness;
 import src.enums.PublicRank;
 import src.item.Sui;
 import src.base.EventTestBase;
@@ -542,5 +544,42 @@ public class SuiRideEventTest extends EventTestBase {
         // from.getCurrentEvent() != this AND condition != 1 => no rideOff, returns null
         UpdateState state = event.update(b);
         assertNull(state);
+    }
+
+    @Nested
+    class RegressionScenarios {
+
+        @Test
+        void testScenario_UnunSlaveFamilyMemberBecomesVerySadAndDoesNotJoinRideEvent() {
+            Body owner = createBody(1, 100, 100);
+            Body partner = createBody(2, 120, 100);
+            Sui sui = createSui(999);
+            SuiRideEvent event = new SuiRideEvent(owner, null, sui, 100);
+            owner.setCurrentEvent(event);
+            owner.setPartner(partner.getUniqueID());
+            partner.setPartner(owner.getUniqueID());
+            partner.setPublicRank(PublicRank.UnunSlave);
+
+            assertFalse(event.checkEventResponse(partner));
+
+            assertEquals(Happiness.VERY_SAD, partner.getHappiness(),
+                    "unun slave family member should become very sad instead of joining the ride");
+            assertTrue(partner.isStaying(), "unun slave family member should stay after refusing the ride event");
+            assertNull(partner.getCurrentEvent(), "unun slave refusal should not start a body event");
+        }
+
+        @Test
+        void testScenario_ExecuteMakesFirstRiderOwnerAndRegistersSuiFavorite() {
+            Body rider = createBody(1, 100, 100);
+            Sui sui = createSui(999);
+            SuiRideEvent event = new SuiRideEvent(rider, null, sui, 100);
+
+            assertFalse(event.execute(rider));
+
+            assertTrue(sui.isriding(rider), "execute should actually place the rider onto the waiting sui");
+            assertEquals(sui.getObjId(), rider.getLinkParent(), "rider should link to the sui after boarding");
+            assertEquals(sui, rider.getFavItem(FavItemType.SUI), "first rider should become the owner of the sui");
+            assertFalse(rider.isDropShadow(), "boarded rider should hide its drop shadow");
+        }
     }
 }

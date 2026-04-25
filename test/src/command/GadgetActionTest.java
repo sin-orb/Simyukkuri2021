@@ -29,8 +29,8 @@ import src.enums.YukkuriType;
 import src.game.Shit;
 import src.game.Vomit;
 import src.item.Food;
-import src.system.MessagePool;
 import src.system.Sprite;
+import src.util.WorldTestHelper;
 import src.yukkuri.Reimu;
 
 public class GadgetActionTest {
@@ -51,8 +51,7 @@ public class GadgetActionTest {
         PoisonAmpoule.setImgW(new int[] { 1, 1, 1 });
         PoisonAmpoule.setImgH(new int[] { 1, 1, 1 });
 
-        // Load messages for testing
-        MessagePool.loadMessage(GadgetActionTest.class.getClassLoader());
+        WorldTestHelper.initializeLoadedMessagePool(GadgetActionTest.class.getClassLoader());
     }
 
     @BeforeEach

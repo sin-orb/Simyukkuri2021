@@ -3,25 +3,25 @@ package src.event;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
 import src.base.Body;
 import src.base.EventPacket.EventPriority;
 import src.base.EventPacket.UpdateState;
-import src.draw.Translate;
 import src.draw.World;
 import src.enums.AgeState;
 import src.enums.PublicRank;
+import src.util.WorldTestHelper;
 
 class HateNoOkazariEventTest {
 
     @BeforeEach
     void setUp() {
+        WorldTestHelper.resetWorld();
         SimYukkuri.world = new World();
-        Translate.setMapSize(1000, 1000, 500);
-        Translate.setCanvasSize(800, 600, 100, 100, new float[]{1.0f});
-        Translate.createTransTable(false);
+        WorldTestHelper.initializeStandardTranslate500();
     }
 
     private static Body createBody() {
@@ -225,6 +225,25 @@ class HateNoOkazariEventTest {
         // isVeryRude=true → ret=true, barrier check same pos → passes
         // Note: may still return false if to is non-adult or other condition, so just assertDoesNotThrow
         assertDoesNotThrow(() -> event.checkEventResponse(responder));
+    }
+
+    @Nested
+    class RegressionScenarios {
+
+        @Test
+        void testScenario_VeryRudeHealthyOkazariBodyActuallyJoinsAttack() {
+            Body from = createBody();
+            Body to = createBody();
+            Body responder = createBody();
+            responder.setAttitude(src.enums.Attitude.SUPER_SHITHEAD);
+            responder.setX(to.getX());
+            responder.setY(to.getY());
+
+            HateNoOkazariEvent event = new HateNoOkazariEvent(from, to, null, 10);
+
+            assertTrue(event.checkEventResponse(responder));
+            assertEquals(EventPriority.MIDDLE, event.getPriority());
+        }
     }
 
     // --- checkEventResponse: WISE intelligence, to is parent of b → false ---

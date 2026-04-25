@@ -2,11 +2,14 @@ package src.event;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import src.SimYukkuri;
 import src.base.Body;
 import src.base.EventPacket.UpdateState;
 import src.base.EventTestBase;
+import src.enums.Happiness;
+import src.enums.ImageCode;
 
 public class CutPenipeniEventTest extends EventTestBase {
 
@@ -177,6 +180,28 @@ public class CutPenipeniEventTest extends EventTestBase {
             assertEquals(UpdateState.FORCE_EXEC, event.update(victim));
         } finally {
             SimYukkuri.RND = new java.util.Random();
+        }
+    }
+
+    @Nested
+    class RegressionScenarios {
+
+        @Test
+        void testScenario_UnBirthVictimBecomesVerySadNonRaperAfterCut() {
+            Body attacker = createBody(1, 100, 100);
+            Body victim = createBody(2, 120, 120);
+            victim.setUnBirth(true);
+            victim.setRapist(true);
+            int beforeDamage = victim.getDamage();
+
+            CutPenipeniEvent event = new CutPenipeniEvent(attacker, victim, null, 10);
+
+            assertEquals(UpdateState.FORCE_EXEC, event.update(victim));
+            assertTrue(victim.isbPenipeniCutted());
+            assertFalse(victim.isRaper());
+            assertEquals(beforeDamage + 50, victim.getDamage());
+            assertEquals(Happiness.VERY_SAD, victim.getHappiness());
+            assertEquals(ImageCode.CUTPENIPENI.ordinal(), victim.getForceFace());
         }
     }
 }

@@ -4,15 +4,16 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.awt.image.BufferedImage;
 import java.awt.Graphics2D;
+import java.lang.reflect.Field;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
 import src.base.Body;
 import src.base.Obj;
-import src.draw.Translate;
 import src.enums.AgeState;
 import src.enums.Type;
 import src.game.Shit;
@@ -29,9 +30,7 @@ class BeltconveyorTest {
     public void setUp() {
         WorldTestHelper.resetWorld();
         WorldTestHelper.initializeMinimalWorld();
-        Translate.setMapSize(1000, 1000, 200);
-        Translate.setCanvasSize(800, 600, 100, 100, new float[]{1.0f});
-        Translate.createTransTable(false);
+        WorldTestHelper.initializeStandardTranslate200();
     }
 
     @Test
@@ -376,6 +375,73 @@ class BeltconveyorTest {
             // texture[0] may be null → NullPointerException from g2.setPaint(null)
         } finally {
             g2.dispose();
+        }
+    }
+
+    @Nested
+    class RegressionScenarios {
+
+        @Test
+        void testScenario_NormalAdultSettingAcceptsAdultBody() {
+            Beltconveyor item = new Beltconveyor();
+            item.getSetting()[setupMenuOrdinal("NORMAL_BABY")][AgeState.ADULT.ordinal()] = true;
+
+            Body body = WorldTestHelper.createBody();
+            body.setAgeState(AgeState.ADULT);
+            body.setObjType(Type.YUKKURI);
+
+            assertTrue(item.checkHitObj(body));
+        }
+
+        @Test
+        void testScenario_FoodSettingAcceptsFoodObjects() {
+            Beltconveyor item = new Beltconveyor();
+            item.getSetting()[setupMenuOrdinal("FOOD")][0] = true;
+
+            Food food = new Food(100, 100, Food.FoodType.FOOD.ordinal());
+            food.setObjType(Type.OBJECT);
+
+            assertTrue(item.checkHitObj(food));
+        }
+
+        @Test
+        void testScenario_RightMiddleBeltAddsPositiveXVelocity() {
+            Beltconveyor item = new Beltconveyor();
+            setPrivateEnumField(item, "direction", "DirectCombo", "RIGHT");
+            setPrivateEnumField(item, "beltSpeed", "SpeedCombo", "MIDDLE");
+
+            Body body = WorldTestHelper.createBody();
+            assertEquals(0, body.getBx());
+            assertEquals(0, body.getBy());
+
+            item.processHitObj(body);
+
+            assertEquals(2, body.getBx());
+            assertEquals(0, body.getBy());
+        }
+    }
+
+    private static int setupMenuOrdinal(String constantName) {
+        try {
+            Class<?> enumClass = Class.forName("src.item.Beltconveyor$SetupMenu");
+            @SuppressWarnings({ "rawtypes", "unchecked" })
+            Enum<?> constant = Enum.valueOf((Class) enumClass, constantName);
+            return constant.ordinal();
+        } catch (Exception e) {
+            throw new AssertionError("Failed to resolve SetupMenu constant: " + constantName, e);
+        }
+    }
+
+    private static void setPrivateEnumField(Beltconveyor item, String fieldName, String enumSimpleName, String constantName) {
+        try {
+            Class<?> enumClass = Class.forName("src.item.Beltconveyor$" + enumSimpleName);
+            @SuppressWarnings({ "rawtypes", "unchecked" })
+            Enum<?> constant = Enum.valueOf((Class) enumClass, constantName);
+            Field field = Beltconveyor.class.getDeclaredField(fieldName);
+            field.setAccessible(true);
+            field.set(item, constant);
+        } catch (Exception e) {
+            throw new AssertionError("Failed to set Beltconveyor field: " + fieldName, e);
         }
     }
 }

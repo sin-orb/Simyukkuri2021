@@ -8,26 +8,27 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
 import src.base.Body;
 import src.base.EventPacket.EventPriority;
-import src.draw.Translate;
 import src.draw.World;
 import src.enums.AgeState;
+import src.enums.Happiness;
 import src.item.Food;
 import src.system.Sprite;
+import src.util.WorldTestHelper;
 import src.yukkuri.Reimu;
 
 public class SuperEatingTimeEventTest {
 
     @BeforeEach
     public void setUp() {
+        WorldTestHelper.resetWorld();
         SimYukkuri.world = new World();
-        Translate.setMapSize(1000, 1000, 500);
-        Translate.setCanvasSize(800, 600, 100, 100, new float[] { 1.0f });
-        Translate.createTransTable(false);
+        WorldTestHelper.initializeStandardTranslate500();
     }
 
     // --- Default constructor ---
@@ -522,5 +523,24 @@ public class SuperEatingTimeEventTest {
         Food food = new Food(100, 100, Food.FoodType.SWEETS1.ordinal());
         SimYukkuri.world.getCurrentMap().getFood().put(food.getObjId(), food);
         return food;
+    }
+
+    @Nested
+    class RegressionScenarios {
+
+        @Test
+        void testScenario_RemovedTargetMakesParentVerySadAndAborts() {
+            Body from = createBody();
+            Body child = createBody();
+            Food food = createFood();
+            food.remove();
+            from.setHappiness(Happiness.HAPPY);
+
+            SuperEatingTimeEvent event = new SuperEatingTimeEvent(from, null, food, 10);
+            from.setCurrentEvent(event);
+
+            assertEquals(src.base.EventPacket.UpdateState.ABORT, event.update(child));
+            assertEquals(Happiness.VERY_SAD, from.getHappiness());
+        }
     }
 }

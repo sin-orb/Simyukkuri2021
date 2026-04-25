@@ -2,10 +2,12 @@ package src.event;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import src.base.Body;
 import src.base.EventPacket.UpdateState;
 import src.base.EventTestBase;
+import src.enums.Happiness;
 import src.util.WorldTestHelper;
 
 public class BreedEventTest extends EventTestBase {
@@ -259,5 +261,25 @@ public class BreedEventTest extends EventTestBase {
         from.setHasBaby(true); // still pregnant → else branch → return false
         BreedEvent event = new BreedEvent(from, null, null, 10);
         assertFalse(event.execute(b));
+    }
+
+    @Nested
+    class RegressionScenarios {
+
+        @Test
+        void testScenario_BirthSuccessMakesResponderVeryHappyAndAddsGoodMemories() {
+            Body from = createBody(1, 100, 100);
+            Body b = createBody(2, 120, 120);
+            b.setStress(100);
+            int beforeStress = b.getStress();
+            int beforeMemories = b.getMemories();
+
+            BreedEvent event = new BreedEvent(from, null, null, 10);
+
+            assertTrue(event.execute(b));
+            assertEquals(Happiness.VERY_HAPPY, b.getHappiness());
+            assertEquals(beforeStress - 30, b.getStress());
+            assertTrue(b.getMemories() > beforeMemories);
+        }
     }
 }

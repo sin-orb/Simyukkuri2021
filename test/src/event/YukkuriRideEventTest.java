@@ -4,18 +4,20 @@ import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
 import src.base.Body;
 import src.base.EventPacket.EventPriority;
-import src.draw.Translate;
 import src.draw.World;
 import src.enums.AgeState;
 import src.system.Sprite;
+import src.util.WorldTestHelper;
 import src.util.YukkuriUtil;
 import src.yukkuri.Reimu;
 
@@ -23,10 +25,9 @@ public class YukkuriRideEventTest {
 
     @BeforeEach
     public void setUp() {
+        WorldTestHelper.resetWorld();
         SimYukkuri.world = new World();
-        Translate.setMapSize(1000, 1000, 500);
-        Translate.setCanvasSize(800, 600, 100, 100, new float[]{1.0f});
-        Translate.createTransTable(false);
+        WorldTestHelper.initializeStandardTranslate500();
     }
 
     // --- Default constructor ---
@@ -283,6 +284,31 @@ public class YukkuriRideEventTest {
         from.setCurrentEvent(event);
         to.setCurrentEvent(event);
         assertDoesNotThrow(() -> event.update(to));
+    }
+
+    @Nested
+    class RegressionScenarios {
+
+        @Test
+        public void testScenario_CloseChildGetsLinkedOntoParent() throws Exception {
+            Body from = createBody();
+            Body to = createBody();
+            from.setX(100);
+            from.setY(100);
+            to.setX(101);
+            to.setY(100);
+            to.setLinkParent(-1);
+
+            YukkuriRideEvent event = new YukkuriRideEvent(from, to, null, 100);
+            from.setCurrentEvent(event);
+
+            java.lang.reflect.Field f = YukkuriRideEvent.class.getDeclaredField("tick");
+            f.setAccessible(true);
+            f.setInt(event, -1); // update後に0になり、親ロジックに入る
+
+            assertNull(event.update(from));
+            assertEquals(from.objId, to.getLinkParent());
+        }
     }
 
     // --- Helper ---

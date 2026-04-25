@@ -10,6 +10,7 @@ import src.enums.Happiness;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.ConstState;
@@ -56,8 +57,8 @@ class FoodLogicTest {
     void setUp() {
         WorldTestHelper.resetWorld();
         WorldTestHelper.initializeMinimalWorld();
-        Translate.setMapSize(1000, 1000, 200);
-        Translate.createTransTable(false); // initialize ofsX/rateX arrays after setMapSize
+        WorldTestHelper.initializeStandardTranslate200();
+        SimYukkuri.RND = new ConstState(1);
 
         body = WorldTestHelper.createBody();
         body.setX(100);
@@ -82,7 +83,7 @@ class FoodLogicTest {
 
     @Test
     void testCheckFood_Hungry_NoFood() {
-        body.setHungry(body.getHungryLimit());
+        body.setHungry(body.getHungryLimit() / 2);
 
         boolean result = FoodLogic.checkFood(body);
         // Might return false if no food found
@@ -853,9 +854,7 @@ class FoodLogicTest {
         // UnunSlave body → searchFoodForUnunSlave path
         WorldTestHelper.resetStates();
 
-        Translate.setMapSize(1000, 1000, 200);
-        Translate.setCanvasSize(800, 600, 100, 100, new float[] { 1.0f });
-        Translate.createTransTable(false);
+        WorldTestHelper.initializeStandardTranslate200();
 
         WorldTestHelper.initializeMinimalWorld();
         body = WorldTestHelper.createBody();
@@ -898,9 +897,7 @@ class FoodLogicTest {
         // 5. MUST HAVE family (partner or children) to reach the return true branch
         // 6. Food must NOT be on ANY bed
 
-        Translate.setMapSize(1000, 1000, 200);
-        Translate.setCanvasSize(800, 600, 100, 100, new float[] { 1.0f });
-        Translate.createTransTable(false);
+        WorldTestHelper.initializeStandardTranslate200();
 
         src.item.Bed bed = new src.item.Bed(800, 800, 0);
         SimYukkuri.world.getCurrentMap().getBed().put(bed.getObjId(), bed);
@@ -2118,7 +2115,7 @@ class FoodLogicTest {
     @Test
     void testCheckFood_SuperEatingTimeEvent_StartState_BForceEatTrue() {
         // SuperEatingTimeEvent with START state → L109-112: bForceEat=true (not return false)
-        body.setHungry(body.getHungryLimit());
+        body.setHungry(body.getHungryLimit() / 2);
         SuperEatingTimeEvent sev = new SuperEatingTimeEvent(body, body, null, 1);
         sev.setState(SuperEatingTimeEvent.STATE.START);
         body.setCurrentEvent(sev);
@@ -2129,7 +2126,7 @@ class FoodLogicTest {
     @Test
     void testCheckFood_OtherHighPriorityEvent_ReturnsFalse() {
         // HIGH priority event that is NOT SuperEatingTimeEvent → L113-114: return false
-        body.setHungry(body.getHungryLimit());
+        body.setHungry(body.getHungryLimit() / 2);
         // Use SuperEatingTimeEvent with non-START state so it hits L113-114
         SuperEatingTimeEvent sev = new SuperEatingTimeEvent(body, body, null, 1);
         sev.setState(SuperEatingTimeEvent.STATE.GO);
@@ -2158,7 +2155,7 @@ class FoodLogicTest {
     void testCheckFood_StalkFoodSelfPlantYukkuri_ReturnsFalse() {
         // isToFood=true, food is a Stalk where plantYukkuri==b → L178-180
         SimYukkuri.RND = new ConstState(1); // prevent random cancel at L158
-        body.setHungry(body.getHungryLimit());
+        body.setHungry(body.getHungryLimit() / 2);
         body.setToFood(true);
         // Create a Stalk with plantYukkuri=body.
         // Stalk constructor auto-registers in getStalk() map.
@@ -2175,7 +2172,7 @@ class FoodLogicTest {
     void testCheckFood_StalkFoodPlantYukkuriNotBuried_ReturnsFalse() {
         // plantYukkuri != null, baryState=NONE (not buried) → L184-187: clearActions, return false
         SimYukkuri.RND = new ConstState(1); // prevent random cancel at L158
-        body.setHungry(body.getHungryLimit());
+        body.setHungry(body.getHungryLimit() / 2);
         body.setToFood(true);
         // Create plantBody BEFORE stalk so that objId and uniqueID remain in sync
         // (Stalk constructor calls numberingObjId, making objId and uniqueID diverge)
@@ -2261,7 +2258,7 @@ class FoodLogicTest {
     void testCheckFood_FoodIsSweets2_GoodSweetsTrue() {
         // SWEETS2 → goodsweets=true (L249) then addAmaamaDiscipline(5)
         SimYukkuri.RND = new ConstState(1); // prevent random cancel at L158
-        body.setHungry(body.getHungryLimit());
+        body.setHungry(body.getHungryLimit() / 2);
         body.setToFood(true);
         Food food = new Food(body.getX(), body.getY(), Food.FoodType.SWEETS2.ordinal());
         SimYukkuri.world.getCurrentMap().getFood().put(food.getObjId(), food);
@@ -2419,7 +2416,7 @@ class FoodLogicTest {
     void testCheckFood_FoodIsSweets1_SweetsTrue_AaaAddedBy3() {
         // SWEETS1 → sweets=true (L244) → addAmaamaDiscipline(3)
         SimYukkuri.RND = new ConstState(1); // prevent random cancel at L158
-        body.setHungry(body.getHungryLimit());
+        body.setHungry(body.getHungryLimit() / 2);
         body.setToFood(true);
         Food food = new Food(body.getX(), body.getY(), Food.FoodType.SWEETS1.ordinal());
         SimYukkuri.world.getCurrentMap().getFood().put(food.getObjId(), food);
@@ -2433,7 +2430,7 @@ class FoodLogicTest {
     void testCheckFood_RegularFood_AaaDecreasedBy1() {
         // Regular food → addAmaamaDiscipline(-1)
         SimYukkuri.RND = new ConstState(1); // prevent random cancel at L158
-        body.setHungry(body.getHungryLimit());
+        body.setHungry(body.getHungryLimit() / 2);
         body.setToFood(true);
         Food food = new Food(body.getX(), body.getY(), Food.FoodType.FOOD.ordinal());
         SimYukkuri.world.getCurrentMap().getFood().put(food.getObjId(), food);
@@ -3582,13 +3579,15 @@ class FoodLogicTest {
     void testCheckFood_FoodFarAway_CannotFly_MoveTo() {
         // Food far away → L421-423: !canflyCheck → moveTo(x, y, 0)
         SimYukkuri.RND = new ConstState(1);
-        body.setHungry(body.getHungryLimit());
+        body.setHungry(body.getHungryLimit() / 2);
         body.setToFood(true);
         // Food far from body so distance > stepDist+2
         Food food = new Food(body.getX() + 500, body.getY(), Food.FoodType.FOOD.ordinal());
         body.setMoveTarget(food.getObjId());
-        boolean result = FoodLogic.checkFood(body);
-        assertTrue(result, "L427: should return true when moving to food");
+        assertDoesNotThrow(() -> FoodLogic.checkFood(body));
+        assertEquals(food.getObjId(), body.getMoveTarget());
+        assertEquals(food.getX(), body.getDestX());
+        assertEquals(food.getY(), body.getDestY());
     }
 
     @Test
@@ -4648,7 +4647,7 @@ class FoodLogicTest {
         body.setHungry(body.getHungryLimit() / 2);
         Shit shit1 = new Shit(); shit1.setX(body.getX()); shit1.setY(body.getY()); // distance=0
         SimYukkuri.world.getCurrentMap().getShit().put(shit1.getObjId(), shit1);
-        Shit shit2 = new Shit(); shit2.setX(body.getX() + 100); shit2.setY(body.getY());
+        Shit shit2 = new Shit(); shit2.setX(body.getX() + 10); shit2.setY(body.getY());
         SimYukkuri.world.getCurrentMap().getShit().put(shit2.getObjId(), shit2);
         assertDoesNotThrow(() -> FoodLogic.checkFood(body));
     }
@@ -4865,7 +4864,7 @@ class FoodLogicTest {
 
     @Test
     void testCheckFood_OnlyAmaama_FoundNonSweets_NotStarving_ReturnsFalse() {
-        // isOnlyAmaama + found is non-sweets + !isStarving → L481-491: setToFood(false), return false
+        // isOnlyAmaama + found is non-sweets + !isStarving → current implementation returns false here.
         // isOnlyAmaama requires: GOURMET tang + !isIdiot + AVERAGE intelligence + !isDamaged + amaamaDiscipline>=30
         SimYukkuri.RND = new ConstState(1);
         body.setTang(700); // GOURMET
@@ -5398,11 +5397,12 @@ class FoodLogicTest {
         // → L283-285: setToTakeout(false), setPurposeOfMoving(NONE)
         SimYukkuri.RND = new ConstState(1);
         int limit = body.getHungryLimit();
-        body.setHungry((int)(limit * 0.9)); // isFull, not veryHungry
+        body.setHungry(limit / 2); // hungry but not veryHungry
         body.setToTakeout(true);
         // Already has a food takeout item - put directly in map to avoid setTakeoutItem() side effects
         // (setTakeoutItem() sets isToTakeout=false which would break the test)
         Food heldFood = new Food(50, 50, Food.FoodType.FOOD.ordinal());
+        SimYukkuri.world.getCurrentMap().getTakenOutFood().put(heldFood.getObjId(), heldFood);
         body.getTakeoutItem().put(TakeoutItemType.FOOD, heldFood.getObjId());
         // Food at body position
         Food food = new Food(body.getX(), body.getY(), Food.FoodType.FOOD.ordinal());
@@ -11304,5 +11304,79 @@ class FoodLogicTest {
         new Stalk(body.getX() + 50, body.getY(), 0);  // dist^2 = 2500
         boolean[] forceEat = {false};
         assertDoesNotThrow(() -> FoodLogic.searchFoodPredetor(body, forceEat));
+    }
+
+    @Nested
+    class RegressionScenarios {
+
+        @Test
+        void testScenario_ForceEatPrefersNearbySweetsAsConcreteTarget() {
+            body.setHungry((int) (body.getHungryLimit() * 0.9));
+            boolean[] forceEat = { true };
+
+            Food food = new Food(body.getX() + 5, body.getY(), Food.FoodType.SWEETS1.ordinal());
+            SimYukkuri.world.getCurrentMap().getFood().put(food.getObjId(), food);
+
+            Obj found = FoodLogic.searchFoodStandard(body, forceEat);
+            assertNotNull(found);
+            assertEquals(food.getObjId(), found.getObjId());
+        }
+
+        @Test
+        void testScenario_TakeoutArrivalMovesFoodIntoTakenOutInventory() {
+            SimYukkuri.RND = new ConstState(1);
+            body.setHungry(body.getHungryLimit() / 2);
+            body.setToTakeout(true);
+
+            Food food = new Food(body.getX(), body.getY(), Food.FoodType.FOOD.ordinal());
+            SimYukkuri.world.getCurrentMap().getFood().put(food.getObjId(), food);
+            body.setMoveTarget(food.getObjId());
+
+            FoodLogic.checkFood(body);
+            assertTrue(body.isToTakeout());
+            assertNotNull(body.getTakeoutItem(TakeoutItemType.FOOD));
+            assertEquals(food.getObjId(), body.getTakeoutItem(TakeoutItemType.FOOD).getObjId());
+            assertFalse(SimYukkuri.world.getCurrentMap().getFood().containsKey(food.getObjId()));
+            assertTrue(SimYukkuri.world.getCurrentMap().getTakenOutFood().containsKey(food.getObjId()));
+        }
+
+        @Test
+        void testScenario_ExistingFoodTakeoutCancelsDuplicateTakeoutAttempt() {
+            SimYukkuri.RND = new ConstState(1);
+            body.setHungry(body.getHungryLimit() / 2);
+            body.setToTakeout(true);
+
+            Food heldFood = new Food(50, 50, Food.FoodType.FOOD.ordinal());
+            SimYukkuri.world.getCurrentMap().getTakenOutFood().put(heldFood.getObjId(), heldFood);
+            body.getTakeoutItem().put(TakeoutItemType.FOOD, heldFood.getObjId());
+
+            Food targetFood = new Food(body.getX(), body.getY(), Food.FoodType.FOOD.ordinal());
+            SimYukkuri.world.getCurrentMap().getFood().put(targetFood.getObjId(), targetFood);
+            body.setMoveTarget(targetFood.getObjId());
+
+            FoodLogic.checkFood(body);
+            assertFalse(body.isToTakeout());
+            assertEquals(heldFood.getObjId(), body.getTakeoutItem(TakeoutItemType.FOOD).getObjId());
+            assertTrue(SimYukkuri.world.getCurrentMap().getFood().containsKey(targetFood.getObjId()));
+            assertFalse(SimYukkuri.world.getCurrentMap().getTakenOutFood().containsKey(targetFood.getObjId()));
+        }
+
+        @Test
+        void testScenario_VeryHungryTakeoutArrivalEatsFoodInsteadOfTakingItOut() {
+            body.setHungry(0);
+            body.setToTakeout(true);
+
+            Food food = new Food(body.getX(), body.getY(), Food.FoodType.LEMONPOP.ordinal());
+            food.setAmount(100);
+            SimYukkuri.world.getCurrentMap().getFood().put(food.getObjId(), food);
+            body.setMoveTarget(food.getObjId());
+
+            FoodLogic.checkFood(body);
+
+            assertNull(body.getTakeoutItem(TakeoutItemType.FOOD));
+            assertTrue(food.getAmount() < 100, "very hungry body should consume the arrived food");
+            assertFalse(SimYukkuri.world.getCurrentMap().getTakenOutFood().containsKey(food.getObjId()));
+        }
+
     }
 }

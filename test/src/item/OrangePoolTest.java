@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
@@ -184,5 +185,63 @@ class OrangePoolTest extends ItemTestBase {
             OrangePool o = new OrangePool(100, 100, 0);
             org.junit.jupiter.api.Assertions.assertNotNull(o);
         } catch (Exception e) { }
+    }
+
+    @Nested
+    class RegressionScenarios {
+        @Test
+        void testScenario_NormalPoolCleansDirtyBodyAndChargesCost() {
+            OrangePool item = new OrangePool();
+            item.setEnabled(true);
+            item.setItemRank(ObjEX.ItemRank.HOUSE);
+            item.setRescue(false);
+
+            Reimu body = new Reimu();
+            body.setAgeState(AgeState.ADULT);
+            Sprite[] spr = new Sprite[3];
+            for (int i = 0; i < 3; i++) {
+                spr[i] = new Sprite(10, 10, Sprite.PIVOT_CENTER_BOTTOM);
+            }
+            body.setBodySpr(spr);
+            body.setDirtyFlag(true);
+            body.setDamage(100);
+
+            long beforeCash = SimYukkuri.world.getPlayer().getCash();
+
+            assertEquals(0, item.objHitProcess(body));
+
+            assertFalse(body.isDirty());
+            assertEquals(0, body.getDamage());
+            assertEquals(beforeCash - item.getCost(), SimYukkuri.world.getPlayer().getCash());
+        }
+
+        @Test
+        void testScenario_RescuePoolRevivesDeadBodyAndResetsFootBake() {
+            OrangePool item = new OrangePool();
+            item.setEnabled(true);
+            item.setItemRank(ObjEX.ItemRank.HOUSE);
+            item.setRescue(true);
+
+            Reimu body = new Reimu();
+            body.setAgeState(AgeState.ADULT);
+            Sprite[] spr = new Sprite[3];
+            for (int i = 0; i < 3; i++) {
+                spr[i] = new Sprite(10, 10, Sprite.PIVOT_CENTER_BOTTOM);
+            }
+            body.setBodySpr(spr);
+            body.setDead(true);
+            body.setCrushed(false);
+            body.setBurned(false);
+            body.setFootBakePeriod(100);
+
+            long beforeCash = SimYukkuri.world.getPlayer().getCash();
+
+            assertEquals(0, item.objHitProcess(body));
+
+            assertFalse(body.isDead());
+            assertEquals(0, body.getFootBakePeriod());
+            assertTrue(body.getCantDiePeriod() > 0);
+            assertEquals(beforeCash - item.getCost(), SimYukkuri.world.getPlayer().getCash());
+        }
     }
 }

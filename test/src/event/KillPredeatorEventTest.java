@@ -10,20 +10,19 @@ import src.base.Body;
 import src.base.EventPacket;
 import src.base.EventPacket.EventPriority;
 import src.base.EventPacket.UpdateState;
-import src.draw.Translate;
 import src.draw.World;
 import src.enums.AgeState;
 import src.enums.CoreAnkoState;
 import src.enums.PredatorType;
+import src.util.WorldTestHelper;
 
 class KillPredeatorEventTest {
 
     @BeforeEach
     void setUp() {
+        WorldTestHelper.resetWorld();
         SimYukkuri.world = new World();
-        Translate.setMapSize(1000, 1000, 500);
-        Translate.setCanvasSize(800, 600, 100, 100, new float[]{1.0f});
-        Translate.createTransTable(false);
+        WorldTestHelper.initializeStandardTranslate500();
     }
 
     private static Body createBody() {

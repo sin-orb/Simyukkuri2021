@@ -30,6 +30,7 @@ import src.event.FavCopyEvent;
 import src.event.GetTrashOkazariEvent;
 import src.event.ProposeEvent;
 import src.event.RevengeAttackEvent;
+import src.util.WorldTestHelper;
 
 public class EventPacketTest {
 
@@ -62,7 +63,7 @@ public class EventPacketTest {
     @BeforeEach
     public void setUp() {
         SimYukkuri.world = new World();
-        Translate.setMapSize(1000, 1000, 500);
+        WorldTestHelper.initializeStandardTranslate500();
     }
 
     // --- コンストラクタ ---

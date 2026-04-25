@@ -10,26 +10,27 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import src.base.EventPacket;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
 import src.base.Body;
 import src.base.EventPacket.EventPriority;
-import src.draw.Translate;
 import src.draw.World;
 import src.enums.AgeState;
+import src.enums.Happiness;
 import src.enums.PublicRank;
 import src.system.Sprite;
+import src.util.WorldTestHelper;
 import src.yukkuri.Reimu;
 
 public class ShitExercisesEventTest {
 
     @BeforeEach
     public void setUp() {
+        WorldTestHelper.resetWorld();
         SimYukkuri.world = new World();
-        Translate.setMapSize(1000, 1000, 500);
-        Translate.setCanvasSize(800, 600, 100, 100, new float[] { 1.0f });
-        Translate.createTransTable(false);
+        WorldTestHelper.initializeStandardTranslate500();
     }
 
     // --- Default constructor ---
@@ -563,5 +564,23 @@ public class ShitExercisesEventTest {
         b.setBodySpr(spr);
         SimYukkuri.world.getCurrentMap().getBody().put(b.getUniqueID(), b);
         return b;
+    }
+
+    @Nested
+    class RegressionScenarios {
+
+        @Test
+        void testScenario_BabyParticipantBecomesVeryHappy() {
+            Body from = createBody();
+            Body baby = createBody();
+            baby.setParents(new int[] { from.getUniqueID(), -1 });
+            baby.setAgeState(AgeState.BABY);
+            baby.setHappiness(Happiness.SAD);
+
+            ShitExercisesEvent event = new ShitExercisesEvent(from, null, null, 10);
+
+            assertTrue(event.checkEventResponse(baby));
+            assertEquals(Happiness.VERY_HAPPY, baby.getHappiness());
+        }
     }
 }

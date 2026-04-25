@@ -4,8 +4,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.awt.image.BufferedImage;
 
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import src.ConstState;
 import src.SimYukkuri;
 import src.base.Body;
 import src.base.ItemTestBase;
@@ -285,5 +287,54 @@ class BreedingPoolTest extends ItemTestBase {
         try {
             BreedingPool.loadImages(BreedingPool.class.getClassLoader(), null);
         } catch (Exception e) { }
+    }
+
+    @Nested
+    class RegressionScenarios {
+        @Test
+        void testScenario_NormalPoolAddsSingleBabyAndChargesCost() {
+            BreedingPool item = new BreedingPool();
+            item.setEnabled(true);
+            item.setHighQuality(false);
+            item.setStalkPool(false);
+            item.setOption(0);
+            item.setAge(0);
+
+            Body body = WorldTestHelper.createBody();
+            int beforeBabyTypes = body.getBabyTypes().size();
+            int beforePregnantLimit = body.getPregnantLimit();
+            long beforeCash = SimYukkuri.world.getPlayer().getCash();
+            SimYukkuri.RND = new ConstState(1);
+
+            assertEquals(0, item.objHitProcess(body));
+
+            assertTrue(body.isHasBaby());
+            assertEquals(beforeBabyTypes + 1, body.getBabyTypes().size());
+            assertEquals(beforePregnantLimit - 1, body.getPregnantLimit());
+            assertEquals(beforeCash - item.getCost(), SimYukkuri.world.getPlayer().getCash());
+        }
+
+        @Test
+        void testScenario_StalkPoolAddsFiveStalkBabiesAndChargesCost() {
+            BreedingPool item = new BreedingPool();
+            item.setEnabled(true);
+            item.setHighQuality(false);
+            item.setStalkPool(true);
+            item.setOption(4);
+            item.setAge(0);
+
+            Body body = WorldTestHelper.createBody();
+            int beforeStalkBabyTypes = body.getStalkBabyTypes().size();
+            int beforePregnantLimit = body.getPregnantLimit();
+            long beforeCash = SimYukkuri.world.getPlayer().getCash();
+            SimYukkuri.RND = new ConstState(1);
+
+            assertEquals(0, item.objHitProcess(body));
+
+            assertTrue(body.isHasStalk());
+            assertEquals(beforeStalkBabyTypes + 5, body.getStalkBabyTypes().size());
+            assertEquals(beforePregnantLimit - 1, body.getPregnantLimit());
+            assertEquals(beforeCash - item.getCost(), SimYukkuri.world.getPlayer().getCash());
+        }
     }
 }

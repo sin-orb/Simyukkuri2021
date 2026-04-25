@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
@@ -17,6 +18,7 @@ import src.enums.AgeState;
 import src.enums.Event;
 import src.system.ItemMenu.GetMenuTarget;
 import src.system.ItemMenu.UseMenuTarget;
+import src.util.WorldTestHelper;
 
 class ShitTest {
 
@@ -25,7 +27,7 @@ class ShitTest {
     @BeforeEach
     void setUp() {
         SimYukkuri.world = new World();
-        Translate.setMapSize(1000, 1000, 200);
+        WorldTestHelper.initializeStandardTranslate200();
         shit = new Shit();
         shit.setAgeState(AgeState.ADULT);
     }
@@ -349,5 +351,38 @@ class ShitTest {
             src.base.Body body = src.util.WorldTestHelper.createBody();
             src.game.Shit s = new src.game.Shit(100, 100, 0, body, src.enums.YukkuriType.REIMU);
         } catch (Exception e) { }
+    }
+
+    @Nested
+    class RegressionScenarios {
+        @Test
+        void testScenario_ClockTickAtRightEdgeBouncesAndClampsX() {
+            shit.setRemoved(false);
+            shit.setAge(0);
+            shit.setX(999);
+            shit.kick(5, 0, 0);
+
+            Event result = shit.clockTick();
+
+            assertEquals(Event.DONOTHING, result);
+            assertEquals(Translate.getMapW(), shit.getX());
+            assertEquals(-5, shit.getVx());
+        }
+
+        @Test
+        void testScenario_FallingImpactCrushesShitAndResetsMotion() {
+            shit.setRemoved(false);
+            shit.setAge(0);
+            shit.setZ(10);
+            shit.setVz(15);
+
+            Event result = shit.clockTick();
+
+            assertEquals(Event.DONOTHING, result);
+            assertEquals(9600, shit.getAge());
+            assertEquals(0, shit.getZ());
+            assertEquals(0, shit.getVz());
+            assertEquals(0, shit.getFalldownDamage());
+        }
     }
 }

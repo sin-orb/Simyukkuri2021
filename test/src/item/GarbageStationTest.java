@@ -2,6 +2,9 @@ package src.item;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.lang.reflect.Field;
+
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.ConstState;
@@ -334,5 +337,60 @@ class GarbageStationTest extends ItemTestBase {
         GarbageStation item = new GarbageStation();
         item.setEnabled(false);
         assertDoesNotThrow(() -> item.upDate());
+    }
+
+    @Nested
+    class RegressionScenarios {
+        @Test
+        void testScenario_UpdateAtThrowingTimeCreatesTwoWasteFoods() throws Exception {
+            GarbageStation item = new GarbageStation();
+            item.setEnabled(true);
+            item.setThrowingTime(0);
+            item.setGettingP(1);
+            item.setEnable(new boolean[GomiType.values().length]);
+            item.setFood(new Obj[2]);
+            item.getEnable()[GomiType.WASTE.ordinal()] = true;
+
+            Field operationTimeField = src.draw.Terrarium.class.getDeclaredField("operationTime");
+            operationTimeField.setAccessible(true);
+            operationTimeField.setInt(null, 0);
+            SimYukkuri.RND = new ConstState(0);
+
+            assertDoesNotThrow(() -> item.upDate());
+
+            assertNotNull(item.getFood()[0]);
+            assertNotNull(item.getFood()[1]);
+            assertEquals(2, SimYukkuri.world.getCurrentMap().getFood().size());
+            assertEquals(FoodType.WASTE_NORA, ((Food) item.getFood()[0]).getFoodType());
+            assertEquals(FoodType.WASTE_NORA, ((Food) item.getFood()[1]).getFoodType());
+        }
+
+        @Test
+        void testScenario_EmptyFoodSlotIsRemovedAndReplacedOnUpdate() throws Exception {
+            GarbageStation item = new GarbageStation();
+            item.setEnabled(true);
+            item.setThrowingTime(0);
+            item.setGettingP(1);
+            item.setEnable(new boolean[GomiType.values().length]);
+            item.setFood(new Obj[2]);
+            item.getEnable()[GomiType.WASTE.ordinal()] = true;
+
+            Food emptyFood = new Food(100, 100, FoodType.WASTE_NORA.ordinal());
+            emptyFood.setAmount(0);
+            item.getFood()[0] = emptyFood;
+
+            Field operationTimeField = src.draw.Terrarium.class.getDeclaredField("operationTime");
+            operationTimeField.setAccessible(true);
+            operationTimeField.setInt(null, 0);
+            SimYukkuri.RND = new ConstState(0);
+
+            assertDoesNotThrow(() -> item.upDate());
+
+            assertTrue(emptyFood.isRemoved());
+            assertNotNull(item.getFood()[0]);
+            assertNotSame(emptyFood, item.getFood()[0]);
+            assertNotNull(item.getFood()[1]);
+            assertEquals(FoodType.WASTE_NORA, ((Food) item.getFood()[0]).getFoodType());
+        }
     }
 }

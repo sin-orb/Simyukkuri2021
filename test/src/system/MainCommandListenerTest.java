@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import src.SimYukkuri;
 import src.command.GadgetMenu;
 import src.draw.World;
+import src.util.WorldTestHelper;
 
 public class MainCommandListenerTest {
 
@@ -19,20 +20,10 @@ public class MainCommandListenerTest {
 
     @BeforeEach
     public void setUp() {
-        // Enforce headless just in case
-        System.setProperty("java.awt.headless", "true");
+        WorldTestHelper.resetWorld();
         SimYukkuri.world = new World();
         listener = new MainCommandListener();
-
-        // Initialize MainCommandUI static components
-        JComboBox<String> gameSpeedCombo = new JComboBox<>(new String[] { "0", "1", "2" });
-        MainCommandUI.setGameSpeedCombo(gameSpeedCombo);
-
-        JComboBox<GadgetMenu.GadgetList> mainItemCombo = new JComboBox<>(GadgetMenu.getMainCategory());
-        MainCommandUI.setMainItemCombo(mainItemCombo);
-
-        JComboBox<GadgetMenu.GadgetList> subItemCombo = new JComboBox<>();
-        MainCommandUI.setSubItemCombo(subItemCombo);
+        WorldTestHelper.initializeMainCommandUITestState();
     }
 
     @Test

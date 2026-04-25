@@ -2,12 +2,14 @@ package src.attachment;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.image.BufferedImage;
 import java.security.SecureRandom;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
@@ -18,6 +20,7 @@ import src.enums.AgeState;
 import src.enums.CoreAnkoState;
 import src.enums.Event;
 import src.enums.Happiness;
+import src.enums.ImageCode;
 import src.enums.YukkuriType;
 import src.game.Vomit;
 import src.system.ResourceUtil;
@@ -253,5 +256,49 @@ public class AntsTest {
         try {
             Ants.loadImages(Ants.class.getClassLoader(), null);
         } catch (Exception e) { }
+    }
+
+    @Nested
+    class RegressionScenarios {
+        @Test
+        void testScenario_UpdateConsumesExactlyNumOfAntsDividedByThreeFromBodyAndHungry() {
+            Body parent = createParent(AgeState.ADULT);
+            parent.initAmount(AgeState.ADULT);
+            parent.setNumOfAnts(9);
+            parent.setHungry(100);
+            int bodyAmountBefore = parent.getBodyAmount();
+            int hungryBefore = parent.getHungry();
+
+            Ants ants = new Ants(parent);
+            parent.setNumOfAnts(9);
+            testRnd.setNextInt(1);
+
+            ants.update();
+
+            assertEquals(bodyAmountBefore - 3, parent.getBodyAmount());
+            assertEquals(hungryBefore - 3, parent.getHungry());
+            assertTrue(parent.isDirty());
+            assertFalse(parent.isPurupuru());
+        }
+
+        @Test
+        void testScenario_LockmoveBodyHitByAntsEntersPainPurupuruBranchWithoutReducingAntCount() {
+            Body parent = createParent(AgeState.ADULT);
+            parent.initAmount(AgeState.ADULT);
+            parent.setNumOfAnts(12);
+            parent.setLockmove(true);
+            parent.setHappiness(Happiness.HAPPY);
+
+            Ants ants = new Ants(parent);
+            parent.setNumOfAnts(12);
+            testRnd.setNextInt(0);
+
+            ants.update();
+
+            assertEquals(Happiness.VERY_SAD, parent.getHappiness());
+            assertEquals(ImageCode.PAIN.ordinal(), parent.getForceFace());
+            assertTrue(parent.isPurupuru());
+            assertEquals(12, parent.getNumOfAnts());
+        }
     }
 }

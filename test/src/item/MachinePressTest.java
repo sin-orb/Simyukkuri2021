@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import src.SimYukkuri;
 import src.base.Body;
@@ -102,5 +103,34 @@ class MachinePressTest extends ItemTestBase {
     @Test
     void testGetBounding_doesNotThrow() {
         org.junit.jupiter.api.Assertions.assertDoesNotThrow(() -> MachinePress.getBounding());
+    }
+
+    @Nested
+    class RegressionScenarios {
+
+        @Test
+        void testScenario_PressCycleSilencesAndDamagesHealthyBody() {
+            MachinePress machine = new MachinePress(50, 50, 0);
+            Body body = WorldTestHelper.createBody();
+            body.setSilent(false);
+            int beforeDamage = body.getDamage();
+
+            assertEquals(0, machine.objHitProcess(body));
+
+            assertTrue(body.isSilent(), "machine press should silence a body on the crushing frame");
+            assertTrue(body.getDamage() > beforeDamage, "machine press should increase damage through strikeByPress");
+        }
+
+        @Test
+        void testScenario_UpdateAtBillingTickConsumesCashWhenEnabled() {
+            MachinePress machine = new MachinePress(50, 50, 0);
+            machine.setAge(2400);
+            long beforeCash = SimYukkuri.world.getPlayer().getCash();
+
+            machine.upDate();
+
+            assertEquals(beforeCash - machine.getCost(), SimYukkuri.world.getPlayer().getCash(),
+                    "enabled machine press should charge its running cost every 2400 ticks");
+        }
     }
 }

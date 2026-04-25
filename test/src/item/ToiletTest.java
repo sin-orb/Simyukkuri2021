@@ -1,10 +1,12 @@
 package src.item;
 
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import src.SimYukkuri;
 import src.base.Body;
 import src.base.ItemTestBase;
 import src.base.ObjEX;
+import src.game.Shit;
 import src.util.WorldTestHelper;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -212,6 +214,50 @@ class ToiletTest extends ItemTestBase {
             Toilet t = new Toilet(100, 100, 0);
             org.junit.jupiter.api.Assertions.assertNotNull(t);
         } catch (Exception e) {
+        }
+    }
+
+    @Nested
+    class RegressionScenarios {
+
+        @Test
+        void testScenario_AutoCleanHitRemovesShitInsideCollision() {
+            Toilet toilet = new Toilet();
+            toilet.setAutoClean(true);
+            toilet.setX(100);
+            toilet.setY(100);
+            toilet.setColW(20);
+            toilet.setColH(20);
+            src.draw.Point4y pivot = new src.draw.Point4y();
+            src.draw.Translate.translate(100, 100, pivot);
+            toilet.setScreenPivot(pivot);
+
+            Shit shit = new Shit();
+            shit.setX(100);
+            shit.setY(100);
+
+            assertTrue(toilet.checkHitObj(new java.awt.Rectangle(0, 0, 500, 500), shit));
+            assertTrue(shit.isRemoved());
+        }
+
+        @Test
+        void testScenario_AutoCleanMissDoesNotRemoveShitOutsideCollision() {
+            Toilet toilet = new Toilet();
+            toilet.setAutoClean(true);
+            toilet.setX(100);
+            toilet.setY(100);
+            toilet.setColW(20);
+            toilet.setColH(20);
+            src.draw.Point4y pivot = new src.draw.Point4y();
+            src.draw.Translate.translate(100, 100, pivot);
+            toilet.setScreenPivot(pivot);
+
+            Shit shit = new Shit();
+            shit.setX(400);
+            shit.setY(400);
+
+            assertFalse(toilet.checkHitObj(new java.awt.Rectangle(0, 0, 500, 500), shit));
+            assertFalse(shit.isRemoved());
         }
     }
 }

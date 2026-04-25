@@ -23,6 +23,7 @@ import src.enums.Damage;
 import src.enums.Event;
 import src.enums.FootBake;
 import src.enums.Happiness;
+import src.util.WorldTestHelper;
 import src.enums.Intelligence;
 import src.enums.LovePlayer;
 import src.enums.Parent;
@@ -46,7 +47,6 @@ import src.event.HateNoOkazariEvent;
 import src.event.PredatorsGameEvent;
 import src.event.RaperReactionEvent;
 import src.item.Food;
-import src.system.MessagePool;
 import src.system.ItemMenu.GetMenuTarget;
 import src.system.ItemMenu.UseMenuTarget;
 import src.system.Sprite;
@@ -97,12 +97,13 @@ public class BodyTest {
 
     @BeforeAll
     public static void setUpClass() {
-        // MessagePoolを初期化（strikeByPunishなどで使用）
-        MessagePool.loadMessage(BodyTest.class.getClassLoader());
+        WorldTestHelper.initializeLoadedMessagePool(BodyTest.class.getClassLoader());
     }
 
     @BeforeEach
     public void setUp() {
+        WorldTestHelper.resetStates();
+        SimYukkuri.RND = new Random();
         originalRnd = SimYukkuri.RND;
         SimYukkuri.world = new World();
         body = createBody(AgeState.ADULT);
@@ -288,9 +289,7 @@ public class BodyTest {
         if (translateInited) {
             return;
         }
-        Translate.setMapSize(999, 999, 499);
-        Translate.setCanvasSize(800, 600, 100, 100, new float[] { 1.0f });
-        Translate.createTransTable(false);
+        WorldTestHelper.initializeTranslate(999, 999, 499, 800, 600, 100, 100, new float[] { 1.0f });
         translateInited = true;
     }
 
@@ -16828,6 +16827,47 @@ public class BodyTest {
 
             assertEquals(Happiness.VERY_SAD, body.getHappiness());
             assertNotNull(result);
+        }
+    }
+
+    @Nested
+    class LifecycleRegressionScenarios {
+
+        @Test
+        public void testSuperEatingRecoveryChainKeepsBodyFedAndHealsDamage() {
+            body.setHungry(body.getHungryLimit() / 2);
+            body.setDamage(10);
+            body.setNoHungrybySupereatingTimePeriod(3);
+
+            int hungryBefore = body.getHungry();
+            int damageBefore = body.getDamage();
+
+            body.checkHungry();
+            body.checkDamage();
+
+            assertTrue(body.getHungry() > hungryBefore);
+            assertTrue(body.getDamage() < damageBefore);
+            assertFalse(body.isHungry());
+        }
+
+        @Test
+        public void testTerminalSickChainWakesBodyClearsLowPriorityEventAndMakesVerySad() {
+            body.setSleeping(true);
+            body.setMessageCount(0);
+            body.setDirty(true);
+            body.setDamage(body.getDamageLimit() * 9 / 10);
+            body.setSickPeriod(body.INCUBATIONPERIODorg * 32 + 1);
+            body.setCurrentEvent(new TestEventPacket(EventPacket.EventPriority.LOW));
+            SimYukkuri.RND = new ConstState(1);
+
+            body.checkSick();
+
+            assertFalse(body.isSleeping());
+            assertNull(body.getCurrentEvent());
+            assertEquals(Happiness.VERY_SAD, body.getHappiness());
+            assertTrue(body.getStress() >= 100);
+            assertTrue(body.getMessageCount() > 0);
+            assertNotNull(body.getMessageBuf());
         }
     }
 }

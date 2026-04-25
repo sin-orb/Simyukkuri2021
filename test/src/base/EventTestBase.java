@@ -4,7 +4,6 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import src.SimYukkuri;
 import src.base.Body;
-import src.draw.Translate;
 import src.util.WorldTestHelper;
 
 public class EventTestBase {
@@ -13,9 +12,7 @@ public class EventTestBase {
     public void setUp() {
         WorldTestHelper.resetWorld();
         WorldTestHelper.initializeMinimalWorld();
-        Translate.setMapSize(1000, 1000, 200);
-        Translate.setCanvasSize(800, 600, 100, 100, new float[]{1.0f});
-        Translate.createTransTable(false);
+        WorldTestHelper.initializeStandardTranslate200();
     }
 
     @AfterEach

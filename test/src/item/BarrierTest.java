@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.awt.image.BufferedImage;
 import java.awt.Graphics2D;
 
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
@@ -108,5 +109,48 @@ public class BarrierTest extends ItemTestBase {
     void testAcrossBarrier_noWalls_returnsFalse() {
         boolean result = Barrier.acrossBarrier(0, 0, 100, 100, FieldShapeBase.BARRIER_WALL);
         assertFalse(result);
+    }
+
+    @Nested
+    class RegressionScenarios {
+        @Test
+        void testScenario_ConstructedWallMarksWallMapAndMakesOnBarrierTrue() {
+            Barrier barrier = new Barrier(10, 10, 30, 10, FieldShapeBase.BARRIER_WALL);
+            int midX = (barrier.getMapSX() + barrier.getMapEX()) / 2;
+            int midY = (barrier.getMapSY() + barrier.getMapEY()) / 2;
+
+            assertTrue(SimYukkuri.world.getCurrentMap().getBarrier().contains(barrier));
+            assertTrue(Barrier.onBarrier(midX, midY, 4, 4, FieldShapeBase.BARRIER_WALL));
+            assertTrue(Barrier.acrossBarrier(barrier.getMapSX(), barrier.getMapSY(), barrier.getMapEX(), barrier.getMapEY(),
+                    FieldShapeBase.BARRIER_WALL));
+        }
+
+        @Test
+        void testScenario_GetBarrierFindsExactBarrierOnItsLine() {
+            Barrier barrier = new Barrier(15, 12, 35, 12, FieldShapeBase.BARRIER_WALL);
+            int midX = (barrier.getMapSX() + barrier.getMapEX()) / 2;
+            int midY = (barrier.getMapSY() + barrier.getMapEY()) / 2;
+
+            Barrier found = Barrier.getBarrier(midX, midY, 2);
+
+            assertSame(barrier, found);
+        }
+
+        @Test
+        void testScenario_ClearBarrierRemovesWallMapPresenceAndLineBlocking() {
+            Barrier barrier = new Barrier(12, 16, 32, 16, FieldShapeBase.BARRIER_WALL);
+            int midX = (barrier.getMapSX() + barrier.getMapEX()) / 2;
+            int midY = (barrier.getMapSY() + barrier.getMapEY()) / 2;
+            assertTrue(Barrier.onBarrier(midX, midY, 4, 4, FieldShapeBase.BARRIER_WALL));
+            assertTrue(Barrier.acrossBarrier(barrier.getMapSX(), barrier.getMapSY(), barrier.getMapEX(), barrier.getMapEY(),
+                    FieldShapeBase.BARRIER_WALL));
+
+            Barrier.clearBarrier(barrier);
+
+            assertFalse(SimYukkuri.world.getCurrentMap().getBarrier().contains(barrier));
+            assertFalse(Barrier.onBarrier(midX, midY, 4, 4, FieldShapeBase.BARRIER_WALL));
+            assertFalse(Barrier.acrossBarrier(barrier.getMapSX(), barrier.getMapSY(), barrier.getMapEX(), barrier.getMapEY(),
+                    FieldShapeBase.BARRIER_WALL));
+        }
     }
 }

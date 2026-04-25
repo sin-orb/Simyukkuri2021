@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.awt.image.BufferedImage;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
@@ -236,5 +237,33 @@ public class StopAmpouleTest {
         try {
             StopAmpoule.loadImages(StopAmpoule.class.getClassLoader(), null);
         } catch (Exception e) { }
+    }
+
+    @Nested
+    class RegressionScenarios {
+
+        @Test
+        void testScenario_ChildBodyLosesExactlyOneStopTickOfAge() {
+            Body parent = createParent(AgeState.CHILD);
+            parent.setAge(20000);
+            StopAmpoule ampoule = new StopAmpoule(parent);
+
+            Event result = ampoule.update();
+
+            assertEquals(Event.DONOTHING, result);
+            assertEquals(19900, parent.getAge());
+        }
+
+        @Test
+        void testScenario_AdultBodyAgeRemainsStable() {
+            Body parent = createParent(AgeState.ADULT);
+            StopAmpoule ampoule = new StopAmpoule(parent);
+            long before = parent.getAge();
+
+            Event result = ampoule.update();
+
+            assertEquals(Event.DONOTHING, result);
+            assertEquals(before, parent.getAge());
+        }
     }
 }

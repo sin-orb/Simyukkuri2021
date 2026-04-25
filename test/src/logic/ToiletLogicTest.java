@@ -8,12 +8,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import src.SimYukkuri;
 import src.base.Body;
 import src.base.EventPacket;
 import src.base.Obj;
-import src.draw.Translate;
 import src.enums.AgeState;
 import src.enums.Attitude;
 import src.enums.CoreAnkoState;
@@ -32,9 +32,7 @@ class ToiletLogicTest {
     void setUp() {
         WorldTestHelper.resetWorld();
         WorldTestHelper.initializeMinimalWorld();
-        Translate.setMapSize(1000, 1000, 200);
-        Translate.setCanvasSize(800, 600, 100, 100, new float[]{1.0f});
-        Translate.createTransTable(false);
+        WorldTestHelper.initializeStandardTranslate200();
 
         ToiletLogic.setBodyUnunSlave(null);
 
@@ -1109,5 +1107,28 @@ class ToiletLogicTest {
         @Override public boolean checkEventResponse(Body b) { return true; }
         @Override public void start(Body b) {}
         @Override public boolean execute(Body b) { return true; }
+    }
+
+    @Nested
+    class RegressionScenarios {
+
+        @Test
+        void testScenario_ArrivalWithCarriedShitDropsItAndRelaxes() {
+            Shit carried = new Shit();
+            SimYukkuri.world.getCurrentMap().getTakenOutShit().put(carried.getObjId(), carried);
+            body.getTakeoutItem().put(TakeoutItemType.SHIT, carried.getObjId());
+            body.addStress(30);
+
+            Toilet toilet = new Toilet();
+            toilet.setX(100);
+            toilet.setY(100);
+            SimYukkuri.world.getCurrentMap().getToilet().put(toilet.getObjId(), toilet);
+            body.setMoveTarget(toilet.getObjId());
+
+            assertTrue(ToiletLogic.checkToilet(body));
+            assertNull(body.getTakeoutItem(TakeoutItemType.SHIT));
+            assertFalse(body.isToShit());
+            assertTrue(body.getStress() < 30, "dropping the carried shit at arrival should reduce stress");
+        }
     }
 }

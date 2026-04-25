@@ -7,10 +7,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.image.BufferedImage;
-import java.lang.reflect.Field;
-import java.util.HashMap;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
@@ -20,9 +19,9 @@ import src.enums.AgeState;
 import src.enums.Direction;
 import src.enums.Event;
 import src.enums.YukkuriType;
-import src.system.MessagePool;
 import src.system.ResourceUtil;
 import src.system.Sprite;
+import src.util.WorldTestHelper;
 import src.yukkuri.Reimu;
 
 public class OrangeAmpouleTest {
@@ -30,7 +29,7 @@ public class OrangeAmpouleTest {
     @BeforeEach
     public void setUp() throws Exception {
         SimYukkuri.world = new World();
-        initMessagePool();
+        WorldTestHelper.initializeEmptyMessagePool();
         OrangeAmpoule.setImages(buildImages());
         OrangeAmpoule.setImgW(new int[] { 10, 20, 30 });
         OrangeAmpoule.setImgH(new int[] { 11, 21, 31 });
@@ -260,18 +259,6 @@ public class OrangeAmpouleTest {
         return parent;
     }
 
-    @SuppressWarnings("unchecked")
-    private static void initMessagePool() throws Exception {
-        Field field = MessagePool.class.getDeclaredField("pool_j");
-        field.setAccessible(true);
-        int len = YukkuriType.values().length;
-        HashMap<String, ?>[] pool = new HashMap[len];
-        for (int i = 0; i < len; i++) {
-            pool[i] = new HashMap<>();
-        }
-        field.set(null, pool);
-    }
-
     private static BufferedImage[][] buildImages() {
         BufferedImage[][] images = new BufferedImage[3][2];
         for (int age = 0; age < 3; age++) {
@@ -287,5 +274,45 @@ public class OrangeAmpouleTest {
         try {
             OrangeAmpoule.loadImages(OrangeAmpoule.class.getClassLoader(), null);
         } catch (Exception e) { }
+    }
+
+    @Nested
+    class RegressionScenarios {
+
+        @Test
+        void testScenario_DeadNonBurnedBodyRevivesAndRecoversDamage() {
+            Body parent = createParent(AgeState.ADULT);
+            OrangeAmpoule ampoule = new OrangeAmpoule(parent);
+            parent.addDamage(parent.getDamageLimit() + 500);
+            parent.setDead(true);
+            parent.setCrushed(false);
+            parent.setBurned(false);
+
+            int damageBefore = parent.getDamage();
+
+            Event result = ampoule.update();
+
+            assertEquals(Event.DONOTHING, result);
+            assertFalse(parent.isDead());
+            assertTrue(parent.getDamage() < damageBefore);
+        }
+
+        @Test
+        void testScenario_BurnedCorpseDoesNotReviveOrRecoverDamage() {
+            Body parent = createParent(AgeState.ADULT);
+            OrangeAmpoule ampoule = new OrangeAmpoule(parent);
+            parent.addDamage(1000);
+            parent.setDead(true);
+            parent.setBurned(true);
+            parent.setCrushed(false);
+
+            int damageBefore = parent.getDamage();
+
+            Event result = ampoule.update();
+
+            assertEquals(Event.DONOTHING, result);
+            assertTrue(parent.isDead());
+            assertEquals(damageBefore, parent.getDamage());
+        }
     }
 }

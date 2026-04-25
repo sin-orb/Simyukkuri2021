@@ -2,6 +2,7 @@ package src.item;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
@@ -360,5 +361,95 @@ class AutoFeederTest extends ItemTestBase {
         } catch (Exception e) {
             // Reflection failed or method not accessible - skip
         }
+    }
+
+    @Nested
+    class RegressionScenarios {
+
+        @Test
+        void testScenario_NormalModeCreatesConcreteFoodAndRegistersItInWorld() {
+            AutoFeeder item = new AutoFeeder();
+            item.setEnabled(true);
+            item.setAge(0);
+            item.setMode(AutoFeeder.FeedMode.NORMAL_MODE.ordinal());
+            item.setType(AutoFeeder.FeedType.NORMAL.ordinal());
+            item.setX(140);
+            item.setY(220);
+
+            item.upDate();
+
+            assertNotNull(item.getFood());
+            assertInstanceOf(Food.class, item.getFood());
+
+            Food created = (Food) item.getFood();
+            assertEquals(140, created.getX());
+            assertEquals(220, created.getY());
+            assertSame(created, SimYukkuri.world.getCurrentMap().getFood().get(created.getObjId()));
+        }
+
+        @Test
+        void testScenario_ValidWorldFoodRemainsAttachedToFeeder() {
+            AutoFeeder item = new AutoFeeder();
+            item.setEnabled(true);
+            item.setAge(0);
+            item.setType(AutoFeeder.FeedType.NORMAL.ordinal());
+
+            Food existing = new Food(120, 160, Food.FoodType.SWEETS1.ordinal());
+            existing.setAmount(500);
+            SimYukkuri.world.getCurrentMap().getFood().put(existing.getObjId(), existing);
+            item.setFood(existing);
+
+            item.upDate();
+
+            assertSame(existing, item.getFood());
+            assertSame(existing, SimYukkuri.world.getCurrentMap().getFood().get(existing.getObjId()));
+        }
+
+        @Test
+        void testScenario_RemovedFoodClearsFeederReference() {
+            AutoFeeder item = new AutoFeeder();
+            item.setEnabled(true);
+            item.setAge(0);
+            item.setType(AutoFeeder.FeedType.NORMAL.ordinal());
+
+            Food removed = new Food(100, 100, Food.FoodType.FOOD.ordinal());
+            removed.setRemoved(true);
+            SimYukkuri.world.getCurrentMap().getFood().put(removed.getObjId(), removed);
+            item.setFood(removed);
+
+            item.upDate();
+
+            assertNull(item.getFood());
+            assertSame(removed, SimYukkuri.world.getCurrentMap().getFood().get(removed.getObjId()));
+        }
+
+        @Test
+        void testScenario_RegularModeCreatesConfiguredFoodAndConsumesCash() {
+            AutoFeeder item = new AutoFeeder();
+            item.setEnabled(true);
+            item.setAge(20);
+            item.setMode(AutoFeeder.FeedMode.REGULAR_MODE.ordinal());
+            item.setType(AutoFeeder.FeedType.HOT.ordinal());
+            item.setFeedingInterval(20);
+            item.setFeedingP(1);
+            item.setX(180);
+            item.setY(260);
+
+            long beforeCash = SimYukkuri.world.getPlayer().getCash();
+
+            item.upDate();
+
+            assertNotNull(item.getFood());
+            assertInstanceOf(Food.class, item.getFood());
+
+            Food created = (Food) item.getFood();
+            assertEquals(Food.FoodType.HOT, created.getFoodType());
+            assertEquals(180, created.getX());
+            assertEquals(260, created.getY());
+            assertSame(created, SimYukkuri.world.getCurrentMap().getFood().get(created.getObjId()));
+            assertEquals(beforeCash - created.getValue() - item.getCost(),
+                    SimYukkuri.world.getPlayer().getCash());
+        }
+
     }
 }

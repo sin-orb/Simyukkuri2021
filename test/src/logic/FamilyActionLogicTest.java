@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import src.util.WorldTestHelper;
 import src.base.Body;
@@ -293,6 +294,71 @@ class FamilyActionLogicTest {
 
         boolean result = FamilyActionLogic.checkFamilyAction(parent);
         assertTrue(result, "Should initiate proud child or ride");
+    }
+
+    @Test
+    void testCheckFamilyAction_HungryChildStartsSuperEatingTimeEvent() {
+        setReady(parent);
+
+        child.setHungry(0);
+        child.setShit(0);
+
+        Food food = new Food(150, 150, Food.FoodType.SWEETS1.ordinal());
+        SimYukkuri.world.getCurrentMap().getFood().put(food.getObjId(), food);
+
+        boolean result = FamilyActionLogic.checkFamilyAction(parent);
+
+        assertTrue(result);
+        assertEquals(1, SimYukkuri.world.getCurrentMap().getEvent().size());
+        assertTrue(SimYukkuri.world.getCurrentMap().getEvent().get(0) instanceof SuperEatingTimeEvent);
+        assertTrue(parent.getCurrentEvent() instanceof SuperEatingTimeEvent);
+    }
+
+    @Test
+    void testCheckFamilyAction_BabyNeedsToShitStartsShitExercisesEvent() {
+        setReady(parent);
+
+        child.setHungry(child.getHungryLimit());
+        child.setShit((int) (child.getShitLimit() * 0.8));
+
+        Toilet toilet = new Toilet();
+        toilet.setX(150);
+        toilet.setY(150);
+        SimYukkuri.world.getCurrentMap().getToilet().put(toilet.getObjId(), toilet);
+
+        boolean result = FamilyActionLogic.checkFamilyAction(parent);
+
+        assertTrue(result);
+        assertEquals(1, SimYukkuri.world.getCurrentMap().getEvent().size());
+        assertTrue(SimYukkuri.world.getCurrentMap().getEvent().get(0) instanceof ShitExercisesEvent);
+        assertTrue(parent.getCurrentEvent() instanceof ShitExercisesEvent);
+    }
+
+    @Test
+    void testCheckFamilyAction_NoEatNoShitStartsProudChildEvent() {
+        setReady(parent);
+
+        child.setHungry(child.getHungryLimit());
+        child.setShit(0);
+
+        SimYukkuri.RND = new java.util.Random() {
+            @Override
+            public int nextInt(int bound) {
+                return 0;
+            }
+
+            @Override
+            public boolean nextBoolean() {
+                return true;
+            }
+        };
+
+        boolean result = FamilyActionLogic.checkFamilyAction(parent);
+
+        assertTrue(result);
+        assertEquals(1, SimYukkuri.world.getCurrentMap().getEvent().size());
+        assertTrue(SimYukkuri.world.getCurrentMap().getEvent().get(0) instanceof ProudChildEvent);
+        assertTrue(parent.getCurrentEvent() instanceof ProudChildEvent);
     }
 
     @Test
@@ -1248,6 +1314,61 @@ class FamilyActionLogicTest {
             parent.getDAMAGELIMITorg()[src.enums.AgeState.ADULT.ordinal()] / 2 + 1);
         Obj found = FamilyActionLogic.searchFood(parent);
         assertNotNull(found);
+    }
+
+    @Nested
+    class RegressionScenarios {
+
+        @Test
+        void testScenario_RideOnParentPrefersFoodTargetOverToilet() {
+            setReady(parent);
+
+            child.setHungry(0);
+            child.setShit((int) (child.getShitLimit() * 0.8));
+            child.setSleeping(false);
+
+            Food food = new Food(120, 120, Food.FoodType.SWEETS1.ordinal());
+            SimYukkuri.world.getCurrentMap().getFood().put(food.getObjId(), food);
+
+            Toilet toilet = new Toilet();
+            toilet.setX(130);
+            toilet.setY(130);
+            SimYukkuri.world.getCurrentMap().getToilet().put(toilet.getObjId(), toilet);
+
+            java.util.List<Body> list = new java.util.ArrayList<>();
+            list.add(child);
+
+            assertTrue(FamilyActionLogic.rideOnParent(parent, list));
+            assertTrue(parent.getCurrentEvent() instanceof YukkuriRideEvent);
+            assertEquals(food.getObjId(), parent.getCurrentEvent().getTarget());
+        }
+
+        @Test
+        void testScenario_CheckFamilyActionStartsRideEventForSleepyBaby() {
+            setReady(parent);
+
+            child.setHungry((int) (child.getHungryLimit() * 0.9));
+            child.setShit(0);
+            child.setWakeUpTime(Long.MIN_VALUE / 2);
+
+            src.item.Bed bed = new src.item.Bed();
+            bed.setX(300);
+            bed.setY(300);
+            SimYukkuri.world.getCurrentMap().getBed().put(bed.getObjId(), bed);
+
+            SimYukkuri.RND = new ConstState(0) {
+                @Override
+                public boolean nextBoolean() {
+                    return false;
+                }
+            };
+
+            assertTrue(FamilyActionLogic.checkFamilyAction(parent));
+            assertTrue(parent.getCurrentEvent() instanceof YukkuriRideEvent);
+            assertEquals(bed.getObjId(), parent.getCurrentEvent().getTarget());
+            assertEquals(1, SimYukkuri.world.getCurrentMap().getEvent().size());
+            assertTrue(SimYukkuri.world.getCurrentMap().getEvent().get(0) instanceof YukkuriRideEvent);
+        }
     }
 
 }

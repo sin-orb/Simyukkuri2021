@@ -10,11 +10,12 @@ import java.util.UUID;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
 import src.base.Body;
-import src.draw.Translate;
+import src.enums.Direction;
 import src.enums.Event;
 import src.enums.ObjEXType;
 import src.enums.Type;
@@ -28,7 +29,7 @@ class StalkTest {
     void setUp() {
         WorldTestHelper.resetWorld();
         WorldTestHelper.initializeMinimalWorld();
-        Translate.setMapSize(1000, 1000, 200);
+        WorldTestHelper.initializeStandardTranslate200();
         stalk = new Stalk();
     }
 
@@ -276,6 +277,96 @@ class StalkTest {
         try {
             src.game.Stalk.loadImages(src.game.Stalk.class.getClassLoader(), null);
         } catch (Exception e) {
+        }
+    }
+
+    @Nested
+    class RegressionScenarios {
+
+        @Test
+        void testScenario_UpdateLinksUnbornBabyToParentAndAppliesRightFacingOffsets() {
+            Body parent = WorldTestHelper.createBody();
+            Body baby = WorldTestHelper.createBody();
+            SimYukkuri.world.getCurrentMap().getBody().put(parent.getUniqueID(), parent);
+            SimYukkuri.world.getCurrentMap().getBody().put(baby.getUniqueID(), baby);
+            baby.setUnBirth(true);
+
+            Stalk planted = new Stalk(100, 120, 0);
+            planted.setZ(5);
+            planted.setPlantYukkuri(parent);
+            planted.setDirection(0);
+            planted.setBindBaby(baby);
+
+            planted.upDate();
+
+            assertEquals(parent.getUniqueID(), baby.getLinkParent());
+            assertEquals(planted, baby.getBindStalk());
+            assertEquals(Direction.RIGHT, baby.getDirection());
+            assertEquals(114, baby.getX());
+            assertEquals(121, baby.getY());
+            assertEquals(19, baby.getZ());
+        }
+
+        @Test
+        void testScenario_UpdateWithLeftFacingStalkMirrorsBabyPlacement() {
+            Body parent = WorldTestHelper.createBody();
+            Body baby = WorldTestHelper.createBody();
+            SimYukkuri.world.getCurrentMap().getBody().put(parent.getUniqueID(), parent);
+            SimYukkuri.world.getCurrentMap().getBody().put(baby.getUniqueID(), baby);
+            baby.setUnBirth(true);
+
+            Stalk planted = new Stalk(100, 120, 0);
+            planted.setZ(5);
+            planted.setPlantYukkuri(parent);
+            planted.setDirection(1);
+            planted.setBindBaby(baby);
+
+            planted.upDate();
+
+            assertEquals(Direction.LEFT, baby.getDirection());
+            assertEquals(86, baby.getX());
+            assertEquals(121, baby.getY());
+            assertEquals(19, baby.getZ());
+        }
+
+        @Test
+        void testScenario_EatStalkToZeroUnbindsBabyAndRemovesStalkFromWorld() {
+            Body baby = WorldTestHelper.createBody();
+            SimYukkuri.world.getCurrentMap().getBody().put(baby.getUniqueID(), baby);
+
+            Stalk planted = new Stalk(60, 70, 0);
+            planted.setBindBaby(baby);
+            baby.setBindStalk(planted);
+            baby.setBindObj(planted.getObjId());
+            planted.setAmount(10);
+
+            planted.eatStalk(10);
+
+            assertEquals(0, planted.getAmount());
+            assertTrue(planted.isRemoved());
+            assertFalse(SimYukkuri.world.getCurrentMap().getStalk().containsKey(planted.getObjId()));
+            assertNull(baby.getBindStalk());
+            assertEquals(-1, baby.getBindObj());
+            assertTrue(planted.getBindBabies().isEmpty());
+        }
+
+        @Test
+        void testScenario_GrabDetachesFromParentStalkListAndClearsPlantOwner() {
+            Body parent = WorldTestHelper.createBody();
+            SimYukkuri.world.getCurrentMap().getBody().put(parent.getUniqueID(), parent);
+            parent.setHasStalk(true);
+            parent.setStalks(new java.util.LinkedList<>());
+
+            Stalk planted = new Stalk(40, 40, 0);
+            planted.setPlantYukkuri(parent);
+            parent.getStalks().add(planted);
+
+            planted.grab();
+
+            assertTrue(planted.isGrabbed());
+            assertEquals(-1, planted.getPlantYukkuri());
+            assertTrue(parent.getStalks().isEmpty());
+            assertFalse(parent.isHasStalk());
         }
     }
 }

@@ -4,25 +4,25 @@ import static org.junit.jupiter.api.Assertions.*;
 
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
 import src.base.Body;
 import src.base.EventPacket.EventPriority;
-import src.draw.Translate;
 import src.draw.World;
 import src.enums.AgeState;
 import src.system.Sprite;
+import src.util.WorldTestHelper;
 import src.yukkuri.Reimu;
 
 public class RaperWakeupEventTest {
 
     @BeforeEach
     public void setUp() {
+        WorldTestHelper.resetWorld();
         SimYukkuri.world = new World();
-        Translate.setMapSize(1000, 1000, 500);
-        Translate.setCanvasSize(800, 600, 100, 100, new float[]{1.0f});
-        Translate.createTransTable(false);
+        WorldTestHelper.initializeStandardTranslate500();
     }
 
     // --- Default constructor ---
@@ -145,6 +145,45 @@ public class RaperWakeupEventTest {
         Body b = createBody(); // normal body, no raper
         RaperWakeupEvent event = new RaperWakeupEvent(from, null, null, 1);
         assertTrue(event.simpleEventAction(b));
+    }
+
+    @Nested
+    class RegressionScenarios {
+
+        @Test
+        void testScenario_NormalBodyQueuesSingleRaperReactionEvent() {
+            Body raper = createBody();
+            Body bystander = createBody();
+            RaperWakeupEvent event = new RaperWakeupEvent(raper, null, null, 1);
+
+            assertTrue(event.simpleEventAction(bystander));
+
+            assertEquals(1, bystander.getEventList().size(),
+                    "normal bystander should receive exactly one follow-up body event");
+            assertTrue(bystander.getEventList().get(0) instanceof RaperReactionEvent,
+                    "normal bystander should queue a RaperReactionEvent");
+            RaperReactionEvent queued = (RaperReactionEvent) bystander.getEventList().get(0);
+            assertEquals(raper.getUniqueID(), queued.getFrom(), "queued reaction should point back to the waking raper");
+            assertNull(bystander.getCurrentEvent(), "wake-up notice should only queue the reaction at this stage");
+        }
+
+        @Test
+        void testScenario_RaperBodyGetsForcedExcitedAndDropsPartner() {
+            Body sourceRaper = createBody();
+            Body chainedRaper = createBody();
+            chainedRaper.setRapist(true);
+            chainedRaper.setPartner(sourceRaper.getUniqueID());
+            chainedRaper.setExciting(false);
+            chainedRaper.setbForceExciting(false);
+            RaperWakeupEvent event = new RaperWakeupEvent(sourceRaper, null, null, 1);
+
+            assertTrue(event.simpleEventAction(chainedRaper));
+
+            assertTrue(chainedRaper.isExciting(), "raper target should become exciting from wake-up chaining");
+            assertTrue(chainedRaper.isForceExciting(), "raper target should be marked as force-excited");
+            assertEquals(-1, chainedRaper.getPartner(), "forced raper excitation should clear the previous partner");
+            assertTrue(chainedRaper.isStaying(), "forced raper excitation should leave the chained raper staying");
+        }
     }
 
     // --- Helper ---

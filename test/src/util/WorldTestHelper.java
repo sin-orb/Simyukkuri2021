@@ -4,11 +4,18 @@ import src.SimYukkuri;
 import src.draw.World;
 import src.base.Body;
 import src.base.BodyAttributes;
+import src.draw.Terrarium;
 import java.util.Random;
 import java.lang.reflect.Field;
+import java.util.HashMap;
+import javax.swing.JComboBox;
 import src.system.MapPlaceData;
+import src.system.MainCommandUI;
+import src.system.MessagePool;
+import src.system.LoggerYukkuri;
 import src.draw.Translate;
 import java.util.List;
+import src.enums.YukkuriType;
 
 /**
  * Test helper to initialize minimal World infrastructure for testing
@@ -32,10 +39,17 @@ public class WorldTestHelper {
             worldField.setAccessible(true);
             worldField.set(null, null);
 
+            Field rndField = SimYukkuri.class.getDeclaredField("RND");
+            rndField.setAccessible(true);
+            rndField.set(null, new Random());
+
             initialized = false;
 
             src.enums.Numbering.INSTANCE.setYukkuriID(0);
             src.enums.Numbering.INSTANCE.setObjId(0);
+            resetTerrariumState();
+            resetMainCommandUIState();
+            resetLoggerYukkuriState();
         } catch (Exception e) {
             System.err.println("Failed to reset states: " + e.getMessage());
         }
@@ -200,6 +214,116 @@ public class WorldTestHelper {
     }
 
     /**
+     * Reset Terrarium static environment flags used by metabolism/event tests.
+     */
+    public static void resetTerrariumState() {
+        try {
+            setStaticField(Terrarium.class, "operationTime", 0);
+            setStaticField(Terrarium.class, "intervalCount", 0);
+            setStaticField(Terrarium.class, "humid", false);
+            setStaticField(Terrarium.class, "antifungalSteam", false);
+            setStaticField(Terrarium.class, "orangeSteam", false);
+            setStaticField(Terrarium.class, "ageBoostSteam", false);
+            setStaticField(Terrarium.class, "ageStopSteam", false);
+            setStaticField(Terrarium.class, "antidosSteam", false);
+            setStaticField(Terrarium.class, "poisonSteam", false);
+            setStaticField(Terrarium.class, "predatorSteam", false);
+            setStaticField(Terrarium.class, "sugerSteam", false);
+            setStaticField(Terrarium.class, "noSleepSteam", false);
+            setStaticField(Terrarium.class, "hybridSteam", false);
+            setStaticField(Terrarium.class, "rapidPregnantSteam", false);
+            setStaticField(Terrarium.class, "antiNonYukkuriDiseaseSteam", false);
+            setStaticField(Terrarium.class, "endlessFurifuriSteam", false);
+            clearStaticCollection(Terrarium.class, "babyList");
+        } catch (Exception e) {
+            System.err.println("Failed to reset Terrarium state: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Initialize Translate to a common non-perspective test configuration.
+     */
+    public static void initializeTranslate(int mapX, int mapY, int mapZ, int canvasW, int canvasH,
+            int fieldSize, int bufferSize, float[] zoomRates) {
+        Translate.setMapSize(mapX, mapY, mapZ);
+        Translate.setCanvasSize(canvasW, canvasH, fieldSize, bufferSize, zoomRates);
+        Translate.createTransTable(false);
+    }
+
+    public static void initializeStandardTranslate200() {
+        initializeTranslate(1000, 1000, 200, 800, 600, 100, 100, new float[] { 1.0f });
+    }
+
+    public static void initializeStandardTranslate500() {
+        initializeTranslate(1000, 1000, 500, 800, 600, 100, 100, new float[] { 1.0f });
+    }
+
+    /**
+     * Reset MainCommandUI static state to a minimal headless-safe baseline.
+     */
+    public static void resetMainCommandUIState() {
+        MainCommandUI.setSelectedGameSpeed(1);
+        MainCommandUI.setSelectedZoomScale(0);
+        MainCommandUI.setGameSpeedCombo(null);
+        MainCommandUI.setMainItemCombo(null);
+        MainCommandUI.setSubItemCombo(null);
+        MainCommandUI.setYuStatusLabel(new javax.swing.JLabel[12]);
+        MainCommandUI.setStatIconLabel(new javax.swing.JLabel[8]);
+        MainCommandUI.setItemIconLabel(new javax.swing.JLabel[1]);
+        MainCommandUI.setSystemButton(new javax.swing.JButton[7]);
+        MainCommandUI.setScriptButton(null);
+        MainCommandUI.setTargetButton(null);
+        MainCommandUI.setPinButton(null);
+        MainCommandUI.setHelpButton(null);
+        MainCommandUI.setOptionButton(null);
+        MainCommandUI.setPlayerButton(new javax.swing.JToggleButton[2]);
+        MainCommandUI.setOptionPopup(new javax.swing.JPopupMenu());
+        MainCommandUI.setMapWindow(null);
+        MainCommandUI.setItemWindow(null);
+    }
+
+    /**
+     * Initialize the minimal MainCommandUI state needed by headless listener tests.
+     */
+    @SuppressWarnings({ "rawtypes", "unchecked" })
+    public static void initializeMainCommandUITestState() {
+        resetMainCommandUIState();
+        MainCommandUI.setGameSpeedCombo(new JComboBox(new String[] { "0", "1", "2" }));
+        MainCommandUI.setMainItemCombo(new JComboBox(src.command.GadgetMenu.getMainCategory()));
+        MainCommandUI.setSubItemCombo(new JComboBox());
+    }
+
+    /**
+     * Initialize MessagePool with empty maps for tests that only need lookup safety.
+     */
+    public static void initializeEmptyMessagePool() {
+        try {
+            Field field = MessagePool.class.getDeclaredField("pool_j");
+            field.setAccessible(true);
+            int len = YukkuriType.values().length;
+            @SuppressWarnings("unchecked")
+            HashMap<String, ?>[] pool = new HashMap[len];
+            for (int i = 0; i < len; i++) {
+                pool[i] = new HashMap<>();
+            }
+            field.set(null, pool);
+        } catch (Exception e) {
+            System.err.println("Failed to initialize MessagePool: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Load the real message pool for tests that exercise production messaging.
+     */
+    public static void initializeLoadedMessagePool(ClassLoader loader) {
+        try {
+            MessagePool.loadMessage(loader);
+        } catch (Exception e) {
+            System.err.println("Failed to load MessagePool: " + e.getMessage());
+        }
+    }
+
+    /**
      * Set a deterministic RNG seed for testing
      */
     public static void setDeterministicRNG(long seed) {
@@ -209,6 +333,43 @@ public class WorldTestHelper {
             rndField.set(null, new Random(seed));
         } catch (Exception e) {
             System.err.println("Failed to set deterministic RNG: " + e.getMessage());
+        }
+    }
+
+    /**
+     * Reset LoggerYukkuri static state so tests do not leak log pages or samples.
+     */
+    public static void resetLoggerYukkuriState() {
+        try {
+            setStaticField(LoggerYukkuri.class, "show", false);
+            setStaticField(LoggerYukkuri.class, "clearLogTime", 0);
+            setStaticField(LoggerYukkuri.class, "logPointer", 0);
+            setStaticField(LoggerYukkuri.class, "overwrapped", false);
+            setStaticField(LoggerYukkuri.class, "logPage", 0);
+            setStaticField(LoggerYukkuri.class, "prevLogData", new long[LoggerYukkuri.NUM_OF_LOGDATA_TYPE]);
+            setStaticField(LoggerYukkuri.class, "logDataSum", new long[LoggerYukkuri.NUM_OF_LOGDATA_TYPE]);
+            setStaticField(LoggerYukkuri.class, "logList", new long[120][LoggerYukkuri.NUM_OF_LOGDATA_TYPE]);
+            setStaticField(LoggerYukkuri.class, "backColor", null);
+            setStaticField(LoggerYukkuri.class, "textColor1", null);
+            setStaticField(LoggerYukkuri.class, "textFontTitle", null);
+            setStaticField(LoggerYukkuri.class, "textFonttext", null);
+        } catch (Exception e) {
+            System.err.println("Failed to reset LoggerYukkuri state: " + e.getMessage());
+        }
+    }
+
+    private static void setStaticField(Class<?> clazz, String fieldName, Object value) throws Exception {
+        Field field = clazz.getDeclaredField(fieldName);
+        field.setAccessible(true);
+        field.set(null, value);
+    }
+
+    private static void clearStaticCollection(Class<?> clazz, String fieldName) throws Exception {
+        Field field = clazz.getDeclaredField(fieldName);
+        field.setAccessible(true);
+        Object value = field.get(null);
+        if (value instanceof List<?>) {
+            ((List<?>) value).clear();
         }
     }
 }

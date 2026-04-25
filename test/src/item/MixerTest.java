@@ -2,11 +2,19 @@ package src.item;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.awt.image.BufferedImage;
+
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import src.ConstState;
 import src.SimYukkuri;
 import src.base.Body;
+import src.base.Effect;
 import src.base.ItemTestBase;
+import src.enums.CriticalDamegeType;
+import src.enums.Happiness;
+import src.enums.ImageCode;
 import src.util.WorldTestHelper;
 
 class MixerTest extends ItemTestBase {
@@ -206,5 +214,92 @@ class MixerTest extends ItemTestBase {
     @Test
     void testConstructorWithArgs_doesNotThrow() {
         org.junit.jupiter.api.Assertions.assertDoesNotThrow(() -> new Mixer(100, 100, 0));
+    }
+
+    private static final class DummyEffect extends Effect {
+        @Override
+        public BufferedImage getImage() {
+            return null;
+        }
+    }
+
+    @Nested
+    class RegressionScenarios {
+        @Test
+        void testScenario_UpdateAfterStartDamagesBoundBodyAndAccumulatesMaterial() {
+            Mixer item = new Mixer();
+            item.setEnabled(true);
+            item.setX(100);
+            item.setY(100);
+            item.setZ(0);
+            item.setCounter(60);
+            item.setMix(new DummyEffect());
+
+            Body body = WorldTestHelper.createBody();
+            body.setX(100);
+            body.setY(100);
+            body.setZ(0);
+            body.setLockmove(true);
+            body.setBodyAmount(1000);
+            int beforeDamage = body.getDamage();
+            SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
+            item.setBind(body.getUniqueID());
+            SimYukkuri.RND = new ConstState(1);
+
+            item.upDate();
+
+            assertEquals(61, item.getCounter());
+            assertEquals(100, item.getAmount());
+            assertEquals(body.getStress(), item.getSweet());
+            assertEquals(beforeDamage + 100, body.getDamage());
+            assertEquals(Happiness.VERY_SAD, body.getHappiness());
+            assertEquals(ImageCode.PAIN.ordinal(), body.getForceFace());
+            assertFalse(body.isDropShadow());
+            assertEquals(body.getUniqueID(), item.getBind());
+        }
+
+        @Test
+        void testScenario_MovedAwayBodyAfterGrindingIsReleasedWithCutDamage() {
+            Mixer item = new Mixer();
+            item.setEnabled(true);
+            item.setX(100);
+            item.setY(100);
+            item.setZ(0);
+            item.setCounter(61);
+
+            Body body = WorldTestHelper.createBody();
+            body.setX(140);
+            body.setY(100);
+            body.setZ(0);
+            body.setLockmove(true);
+            body.setDropShadow(false);
+            body.setForceFace(ImageCode.PAIN.ordinal());
+            SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
+            item.setBind(body.getUniqueID());
+
+            item.upDate();
+
+            assertEquals(-1, item.getBind());
+            assertEquals(CriticalDamegeType.CUT, body.getCriticalDamegeType());
+            assertEquals(-1, body.getForceFace());
+            assertFalse(body.isLockmove());
+            assertTrue(body.isDropShadow());
+        }
+
+        @Test
+        void testScenario_RemoveListDataAlsoRemovesActiveMixEffect() {
+            Mixer item = new Mixer();
+            item.setObjId(1234);
+            SimYukkuri.world.getCurrentMap().getMixer().put(item.getObjId(), item);
+
+            DummyEffect effect = new DummyEffect();
+            item.setMix(effect);
+
+            item.removeListData();
+
+            assertTrue(effect.isRemoved());
+            assertNull(item.getMix());
+            assertFalse(SimYukkuri.world.getCurrentMap().getMixer().containsKey(item.getObjId()));
+        }
     }
 }

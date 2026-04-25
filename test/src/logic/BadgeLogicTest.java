@@ -1,16 +1,17 @@
 package src.logic;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import src.SimYukkuri;
 import src.attachment.Badge;
 import src.base.Body;
-import src.draw.Translate;
 import src.draw.World;
 import src.enums.Attitude;
 import src.enums.BodyRank;
 import src.enums.Intelligence;
+import src.util.WorldTestHelper;
 import src.yukkuri.Reimu;
 import src.base.Attachment;
 import java.util.List;
@@ -24,10 +25,9 @@ public class BadgeLogicTest {
 
     @BeforeEach
     public void setUp() {
+        WorldTestHelper.resetWorld();
         SimYukkuri.world = new World();
-        Translate.setMapSize(1000, 1000, 500);
-        Translate.setCanvasSize(800, 600, 100, 100, new float[] { 1.0f });
-        Translate.createTransTable(false);
+        WorldTestHelper.initializeStandardTranslate500();
     }
 
     // ========== Null/Invalid Input Tests ==========
@@ -184,5 +184,21 @@ public class BadgeLogicTest {
             }
         }
         return null;
+    }
+
+    @Nested
+    class RegressionScenarios {
+
+        @Test
+        void testScenario_NewGoldBadgeMakesBodyBeVainAndReducesStress() {
+            Reimu yukkuri = createKaiyuYukkuri(Attitude.VERY_NICE, Intelligence.WISE);
+            yukkuri.addStress(120);
+
+            assertTrue(BadgeLogic.badgeTest(yukkuri));
+
+            assertEquals(Badge.BadgeRank.GOLD, getBadgeRank(yukkuri));
+            assertTrue(yukkuri.isBeVain(), "new badge grant should trigger getInVain");
+            assertTrue(yukkuri.getStress() < 120, "getInVain should reduce stress");
+        }
     }
 }

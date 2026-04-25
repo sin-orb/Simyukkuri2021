@@ -8,13 +8,19 @@ import javax.swing.JLabel;
 import javax.swing.JPopupMenu;
 import javax.swing.JToggleButton;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
-import src.draw.Translate;
 import src.draw.World;
+import src.util.WorldTestHelper;
 
 public class MainCommandUITest {
+
+    @BeforeEach
+    public void setUp() {
+        WorldTestHelper.resetMainCommandUIState();
+    }
 
     // --- MENU_PANE_X constant ---
 
@@ -203,7 +209,7 @@ public class MainCommandUITest {
     @Test
     public void testClearStatus_headless_executesCode() {
         SimYukkuri.world = new World();
-        Translate.setMapSize(1000, 1000, 500);
+        WorldTestHelper.initializeStandardTranslate500();
         try {
             MainCommandUI.clearStatus();
         } catch (NullPointerException e) {
@@ -216,7 +222,7 @@ public class MainCommandUITest {
     @Test
     public void testShowStatus_nullBody_headless_executesCode() {
         SimYukkuri.world = new World();
-        Translate.setMapSize(1000, 1000, 500);
+        WorldTestHelper.initializeStandardTranslate500();
         try {
             MainCommandUI.showStatus(null);
         } catch (Exception e) {
@@ -229,7 +235,7 @@ public class MainCommandUITest {
     @Test
     public void testShowPlayerStatus_headless_executesCode() {
         SimYukkuri.world = new World();
-        Translate.setMapSize(1000, 1000, 500);
+        WorldTestHelper.initializeStandardTranslate500();
         try {
             MainCommandUI.showPlayerStatus();
         } catch (Exception e) {

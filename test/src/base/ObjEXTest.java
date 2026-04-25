@@ -8,6 +8,7 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
@@ -16,6 +17,7 @@ import src.draw.World;
 import src.enums.Event;
 import src.enums.Type;
 import src.draw.Point4y;
+import src.util.WorldTestHelper;
 
 public class ObjEXTest {
 
@@ -23,6 +25,7 @@ public class ObjEXTest {
     static class StubObjEX extends ObjEX {
         boolean removeListDataCalled = false;
         boolean objHitProcessed = false;
+        boolean upDateCalled = false;
 
         public StubObjEX(int initX, int initY, int initOption) {
             super(initX, initY, initOption);
@@ -52,14 +55,17 @@ public class ObjEXTest {
             objHitProcessed = true;
             return 0;
         }
+
+        @Override
+        public void upDate() {
+            upDateCalled = true;
+        }
     }
 
     @BeforeEach
     public void setUp() {
         SimYukkuri.world = new World();
-        Translate.setMapSize(999, 999, 499); // mapW=1000, mapH=1000
-        Translate.setCanvasSize(800, 600, 100, 100, new float[] {1.0f});
-        Translate.createTransTable(false);
+        WorldTestHelper.initializeTranslate(999, 999, 499, 800, 600, 100, 100, new float[] { 1.0f });
         // wallMapを初期化（Barrier.onBarrierで参照される）
         int[][] wallMap = new int[1001][1001];
         SimYukkuri.world.getCurrentMap().setWallMap(wallMap);
@@ -567,5 +573,39 @@ public class ObjEXTest {
         assertEquals(128, ObjEX.OBJECT);
         assertEquals(256, ObjEX.VOMIT);
         assertEquals(512, ObjEX.STALK);
+    }
+
+    @Nested
+    class RegressionScenarios {
+
+        @Test
+        public void testScenario_ClockTickAppliesVelocityAndKnockbackThenResetsBVector() {
+            StubObjEX obj = new StubObjEX(100, 100, 0);
+            obj.setVx(5);
+            obj.setVy(7);
+            obj.setBxyz(3, 4, 0);
+
+            Event result = obj.clockTick();
+
+            assertEquals(Event.DONOTHING, result);
+            assertEquals(108, obj.getX());
+            assertEquals(111, obj.getY());
+            assertEquals(0, obj.getBx());
+            assertEquals(0, obj.getBy());
+            assertEquals(0, obj.getBz());
+            assertTrue(obj.upDateCalled);
+        }
+
+        @Test
+        public void testScenario_RemovedObjReturnsRemovedWithoutRunningUpdate() {
+            StubObjEX obj = new StubObjEX(100, 100, 0);
+            obj.setRemoved(true);
+
+            Event result = obj.clockTick();
+
+            assertEquals(Event.REMOVED, result);
+            assertTrue(obj.removeListDataCalled);
+            assertFalse(obj.upDateCalled);
+        }
     }
 }

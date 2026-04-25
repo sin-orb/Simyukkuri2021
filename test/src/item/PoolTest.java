@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
@@ -23,7 +24,7 @@ class PoolTest {
     public void setUp() {
         WorldTestHelper.resetWorld();
         WorldTestHelper.initializeMinimalWorld();
-        src.draw.Translate.setMapSize(1000, 1000, 200);
+        WorldTestHelper.initializeStandardTranslate200();
     }
 
     @AfterEach
@@ -369,8 +370,7 @@ class PoolTest {
 
     @Test
     void testDrawPreview_doesNotThrow() {
-        src.draw.Translate.setCanvasSize(800, 600, 100, 100, new float[]{1.0f});
-        src.draw.Translate.createTransTable(false);
+        WorldTestHelper.initializeStandardTranslate200();
         java.awt.image.BufferedImage img = new java.awt.image.BufferedImage(800, 600, java.awt.image.BufferedImage.TYPE_INT_RGB);
         java.awt.Graphics2D g2 = img.createGraphics();
         assertDoesNotThrow(() -> Pool.drawPreview(g2, 10, 10, 100, 100));
@@ -381,8 +381,7 @@ class PoolTest {
 
     @Test
     void testDrawShape_doesNotThrow() {
-        src.draw.Translate.setCanvasSize(800, 600, 100, 100, new float[]{1.0f});
-        src.draw.Translate.createTransTable(false);
+        WorldTestHelper.initializeStandardTranslate200();
         Pool item = new Pool();
         item.setMapPos(100, 100, 300, 300);
         java.awt.image.BufferedImage img = new java.awt.image.BufferedImage(800, 600, java.awt.image.BufferedImage.TYPE_INT_RGB);
@@ -403,8 +402,7 @@ class PoolTest {
 
     @Test
     void testCheckContain_fieldCoord_outsidePool() {
-        src.draw.Translate.setCanvasSize(800, 600, 100, 100, new float[]{1.0f});
-        src.draw.Translate.createTransTable(false);
+        WorldTestHelper.initializeStandardTranslate200();
         Pool item = new Pool();
         item.setMapPos(100, 100, 300, 300);
         // true = field coord check
@@ -430,14 +428,45 @@ class PoolTest {
 
     @Test
     void testConstructor_WithCoords_executesCode() {
-        src.draw.Translate.setCanvasSize(800, 600, 100, 100, new float[]{1.0f});
-        src.draw.Translate.createTransTable(false);
+        WorldTestHelper.initializeStandardTranslate200();
         try {
             Pool item = new Pool(100, 100, 300, 300);
             assertNotNull(item);
             assertTrue(SimYukkuri.world.getCurrentMap().getPool().contains(item));
         } catch (Exception e) {
             // May fail in headless if Translate not fully initialized
+        }
+    }
+
+    @Nested
+    class RegressionScenarios {
+
+        @Test
+        void testScenario_EdgeObjectIsLiftedBackToSurface() {
+            Pool item = new Pool();
+            item.setMapPos(100, 100, 300, 300);
+
+            Food food = new Food(105, 200, Food.FoodType.FOOD.ordinal());
+            food.setZ(-1);
+
+            assertEquals(0, item.objHitProcess(food));
+            assertTrue(food.getInPool());
+            assertEquals(0, food.getMostDepth());
+            assertEquals(0, food.getZ());
+        }
+
+        @Test
+        void testScenario_ShallowObjectSinksOneLevelIntoWater() {
+            Pool item = new Pool();
+            item.setMapPos(100, 100, 300, 300);
+
+            Food food = new Food(115, 200, Food.FoodType.FOOD.ordinal());
+            food.setZ(0);
+
+            assertEquals(0, item.objHitProcess(food));
+            assertTrue(food.getInPool());
+            assertEquals(-1, food.getMostDepth());
+            assertEquals(-1, food.getZ());
         }
     }
 }

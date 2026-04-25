@@ -377,7 +377,11 @@ public class YukkuriUtil {
 			"anChildNameD",
 			"anAdultNameD",
 			"anMyNameD",
-			"baseBodyFileName"
+			"baseBodyFileName",
+			"parents",
+			"childrenList",
+			"elderSisterList",
+			"sisterList"
 	};
 
 	/**
@@ -406,7 +410,10 @@ public class YukkuriUtil {
 			if (isNoCopyField(fromField[i].getName())) {
 				continue;
 			}
-			toField = toClass.getDeclaredField(fromField[i].getName());
+			toField = findField(toClass, fromField[i].getName());
+			if (toField == null) {
+				continue;
+			}
 			toField.setAccessible(true);
 			fromField[i].setAccessible(true);
 			toField.set(to, fromField[i].get(from));
@@ -427,7 +434,10 @@ public class YukkuriUtil {
 			if (isNoCopyField(fromField[i].getName())) {
 				continue;
 			}
-			toField = toClass.getDeclaredField(fromField[i].getName());
+			toField = findField(toClass, fromField[i].getName());
+			if (toField == null) {
+				continue;
+			}
 			toField.setAccessible(true);
 			fromField[i].setAccessible(true);
 			toField.set(to, fromField[i].get(from));
@@ -448,7 +458,10 @@ public class YukkuriUtil {
 			if (isNoCopyField(fromField[i].getName())) {
 				continue;
 			}
-			toField = toClass.getDeclaredField(fromField[i].getName());
+			toField = findField(toClass, fromField[i].getName());
+			if (toField == null) {
+				continue;
+			}
 			toField.setAccessible(true);
 			fromField[i].setAccessible(true);
 			toField.set(to, fromField[i].get(from));
@@ -456,24 +469,16 @@ public class YukkuriUtil {
 		}
 		//まりさ、れいむクラスのコピーはしない（意味がない）
 
-		//--------------------------------------------------
-		// 家族関係の再設定
-		Body partner = getBodyInstance(from.getPartner());
-		if (partner != null && getBodyInstance(partner.getPartner()) == from) {
-			partner.setPartner(to.getUniqueID());
-		}
-
-		if (from.getChildrenList() != null) {
-			for (int c : from.getChildrenList()) {
-				Body child = getBodyInstance(c);
-				if (child.getParents()[0] == from.getUniqueID()) {
-					child.getParents()[0] = to.getUniqueID();
-				}
-				if (child.getParents()[1] == from.getUniqueID()) {
-					child.getParents()[1] = to.getUniqueID();
-				}
-			}
-		}
+		// 可変な関係情報は共有しない
+		to.setPartner(from.getPartner());
+		int[] parents = from.getParents();
+		to.setParents(parents == null ? null : parents.clone());
+		List<Integer> children = from.getChildrenList();
+		to.setChildrenList(children == null ? null : new LinkedList<Integer>(children));
+		List<Integer> elderSisters = from.getElderSisterList();
+		to.setElderSisterList(elderSisters == null ? null : new LinkedList<Integer>(elderSisters));
+		List<Integer> sisters = from.getSisterList();
+		to.setSisterList(sisters == null ? null : new LinkedList<Integer>(sisters));
 
 		//--------------------------------------------------
 		// 身分の補正
@@ -501,6 +506,18 @@ public class YukkuriUtil {
 			}
 		}
 		return false;
+	}
+
+	private static Field findField(Class<?> clazz, String name) {
+		Class<?> current = clazz;
+		while (current != null) {
+			try {
+				return current.getDeclaredField(name);
+			} catch (NoSuchFieldException e) {
+				current = current.getSuperclass();
+			}
+		}
+		return null;
 	}
 
 	/**

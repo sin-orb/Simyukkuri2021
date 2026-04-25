@@ -264,6 +264,71 @@ public class EmotionLogicTest {
         assertFalse(result[6], "No worry for strangers");
     }
 
+    @Test
+    public void testScenario_HappyParentSeesSadInjuredChild_SadWorryFearOnly() throws Exception {
+        Body me = WorldTestHelper.createBody();
+        Body you = WorldTestHelper.createBody();
+        registerBodies(me, you);
+
+        me.setHappiness(Happiness.HAPPY);
+        you.setHappiness(Happiness.SAD);
+        mockRelation(me, you, EnumRelationMine.MOTHER);
+        setPainStates(you, false, false, true);
+
+        boolean[] result = EmotionLogic.checkEmotionForOther(me, you);
+
+        assertArrayEquals(new boolean[] { false, false, true, false, true, false, true }, result);
+    }
+
+    @Test
+    public void testScenario_AverageNonRudeSeesSadInjuredStranger_FearOnly() throws Exception {
+        Body me = WorldTestHelper.createBody();
+        Body you = WorldTestHelper.createBody();
+        registerBodies(me, you);
+
+        me.setAttitude(Attitude.AVERAGE);
+        me.setHappiness(Happiness.AVERAGE);
+        you.setHappiness(Happiness.SAD);
+        mockRelation(me, you, EnumRelationMine.OTHER);
+        setPainStates(you, false, false, true);
+
+        boolean[] result = EmotionLogic.checkEmotionForOther(me, you);
+
+        assertArrayEquals(new boolean[] { false, false, false, false, true, false, false }, result);
+    }
+
+    @Test
+    public void testScenario_VerySadRudeSeesHappyStranger_AngerAndEnvyOnly() throws Exception {
+        Body me = WorldTestHelper.createBody();
+        Body you = WorldTestHelper.createBody();
+        registerBodies(me, you);
+
+        me.setAttitude(Attitude.SHITHEAD);
+        me.setHappiness(Happiness.VERY_SAD);
+        you.setHappiness(Happiness.HAPPY);
+        mockRelation(me, you, EnumRelationMine.OTHER);
+
+        boolean[] result = EmotionLogic.checkEmotionForOther(me, you);
+
+        assertArrayEquals(new boolean[] { false, true, false, false, false, true, false }, result);
+    }
+
+    @Test
+    public void testScenario_HappyNonRudeSeesHappyStranger_PleasureOnly() throws Exception {
+        Body me = WorldTestHelper.createBody();
+        Body you = WorldTestHelper.createBody();
+        registerBodies(me, you);
+
+        me.setAttitude(Attitude.AVERAGE);
+        me.setHappiness(Happiness.HAPPY);
+        you.setHappiness(Happiness.HAPPY);
+        mockRelation(me, you, EnumRelationMine.OTHER);
+
+        boolean[] result = EmotionLogic.checkEmotionForOther(me, you);
+
+        assertArrayEquals(new boolean[] { false, false, false, true, false, false, false }, result);
+    }
+
     private void registerBodies(Body... bodies) {
         for (Body b : bodies) {
             src.SimYukkuri.world.getCurrentMap().getBody().put(b.getUniqueID(), b);

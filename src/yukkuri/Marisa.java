@@ -23,7 +23,6 @@ import src.enums.BodyRank;
 import src.enums.CriticalDamegeType;
 import src.enums.HairState;
 import src.enums.ImageCode;
-import src.enums.Numbering;
 import src.enums.YukkuriType;
 import src.system.BodyLayer;
 import src.system.ResourceUtil;
@@ -189,6 +188,7 @@ public class Marisa extends Body {
 		if (isRude())
 			return;// ゲスもだめ
 		synchronized (SimYukkuri.lock) {
+			int originalId = getUniqueID();
 			// ドス化
 			// ドスはフィールドに一体だけ
 			if (!SimYukkuri.world.getCurrentMap().makeOrKillDos(true)) {
@@ -202,7 +202,7 @@ public class Marisa extends Body {
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			to.setUniqueID(Numbering.INSTANCE.numberingYukkuriID());
+			to.setUniqueID(originalId);
 			SimYukkuri.world.getCurrentMap().getBody().put(to.getUniqueID(), to);
 			// iniファイル再設定
 			to.setBaseBodyFileName("dosmarisa");
@@ -210,7 +210,7 @@ public class Marisa extends Body {
 			if (MyPane.getSelectBody() == this) {
 				MyPane.setSelectBody(to);
 			}
-			remove();
+			setRemoved(true);
 		}
 	}
 

@@ -1,5 +1,6 @@
 package src.system;
 
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import src.draw.Point4y;
@@ -189,5 +190,42 @@ public class SpriteTest {
         // Image size should change
         assertEquals(200, sprite.getImageW());
         assertEquals(100, sprite.getImageH());
+    }
+
+    @Nested
+    class RegressionScenarios {
+        @Test
+        public void testScenario_SetPivotTypeAloneDoesNotRecalculatePivotUntilSizeChanges() {
+            Sprite sprite = new Sprite(100, 50, Sprite.PIVOT_CENTER_CENTER);
+
+            sprite.setPivotType(Sprite.PIVOT_CENTER_BOTTOM);
+
+            assertEquals(Sprite.PIVOT_CENTER_BOTTOM, sprite.getPivotType());
+            assertEquals(50, sprite.getPivotX());
+            assertEquals(25, sprite.getPivotY());
+
+            sprite.setSpriteSize(120, 60);
+
+            assertEquals(60, sprite.getPivotX());
+            assertEquals(59, sprite.getPivotY());
+        }
+
+        @Test
+        public void testScenario_AddSpriteSizeAlwaysUsesOriginalSizeRatherThanAccumulating() {
+            Sprite sprite = new Sprite(100, 50, Sprite.PIVOT_CENTER_CENTER);
+
+            sprite.addSpriteSize(20, 10);
+            assertEquals(120, sprite.getImageW());
+            assertEquals(60, sprite.getImageH());
+            assertEquals(60, sprite.getPivotX());
+            assertEquals(30, sprite.getPivotY());
+
+            sprite.addSpriteSize(5, 5);
+
+            assertEquals(105, sprite.getImageW());
+            assertEquals(55, sprite.getImageH());
+            assertEquals(52, sprite.getPivotX());
+            assertEquals(27, sprite.getPivotY());
+        }
     }
 }

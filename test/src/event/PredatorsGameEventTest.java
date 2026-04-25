@@ -3,23 +3,25 @@ package src.event;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
 import src.base.Body;
 import src.base.EventPacket.EventPriority;
-import src.draw.Translate;
 import src.draw.World;
 import src.enums.AgeState;
+import src.enums.Happiness;
+import src.enums.ImageCode;
+import src.util.WorldTestHelper;
 
 class PredatorsGameEventTest {
 
     @BeforeEach
     void setUp() {
+        WorldTestHelper.resetWorld();
         SimYukkuri.world = new World();
-        Translate.setMapSize(1000, 1000, 500);
-        Translate.setCanvasSize(800, 600, 100, 100, new float[]{1.0f});
-        Translate.createTransTable(false);
+        WorldTestHelper.initializeStandardTranslate500();
     }
 
     private static Body createBody() {
@@ -305,6 +307,22 @@ class PredatorsGameEventTest {
             assertFalse(f.getBoolean(event));
         } catch (Exception e) {
             fail("Could not read grabbing via reflection: " + e.getMessage());
+        }
+    }
+
+    @Nested
+    class RegressionScenarios {
+
+        @Test
+        void testScenario_DeadToyMakesPredatorPuffAndAbort() {
+            Body from = createBody();
+            Body toy = createBody();
+            toy.setDead(true);
+            PredatorsGameEvent event = new PredatorsGameEvent(from, null, null, 1);
+            event.toy = toy.getUniqueID();
+
+            assertEquals(src.base.EventPacket.UpdateState.ABORT, event.update(from));
+            assertEquals(ImageCode.PUFF.ordinal(), from.getForceFace());
         }
     }
 }

@@ -16,9 +16,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import java.lang.reflect.Field;
-import java.util.HashMap;
-
 import src.SimYukkuri;
 import src.base.Body;
 import src.base.Okazari;
@@ -30,9 +27,9 @@ import src.enums.Happiness;
 import src.enums.HairState;
 import src.enums.YukkuriType;
 import src.game.Stalk;
-import src.system.MessagePool;
 import src.system.ResourceUtil;
 import src.system.Sprite;
+import src.util.WorldTestHelper;
 import src.yukkuri.Reimu;
 
 public class FireTest {
@@ -49,18 +46,7 @@ public class FireTest {
         Fire.setImgH(new int[] { 11, 21, 31 });
         Fire.setPivX(new int[] { 1, 2, 3 });
         Fire.setPivY(new int[] { 4, 5, 6 });
-        initMessagePool();
-    }
-
-    private static void initMessagePool() throws Exception {
-        Field field = MessagePool.class.getDeclaredField("pool_j");
-        field.setAccessible(true);
-        int len = YukkuriType.values().length;
-        HashMap<String, ?>[] pool = new HashMap[len];
-        for (int i = 0; i < len; i++) {
-            pool[i] = new HashMap<>();
-        }
-        field.set(null, pool);
+        WorldTestHelper.initializeEmptyMessagePool();
     }
 
     @AfterEach
@@ -581,6 +567,49 @@ public class FireTest {
             // NPEなく正常完了
             Event result = fire.update();
             assertEquals(Event.DONOTHING, result);
+        }
+    }
+
+    @Nested
+    class RegressionScenarios {
+
+        @Test
+        void testScenario_LiveBodyWithOkazariBurnsDamageStressAndLosesDecoration() {
+            SimYukkuri.RND = new ConstState(1);
+            Body parent = createParent(AgeState.ADULT);
+            Fire fire = new Fire(parent);
+            parent.setDead(false);
+            parent.seteCoreAnkoState(CoreAnkoState.DEFAULT);
+            parent.setOkazari(new Okazari());
+
+            int damageBefore = parent.getDamage();
+            int stressBefore = parent.getStress();
+            fire.setBurnPeriod(parent.getDamageLimit() / 3 + 1);
+
+            Event result = fire.update();
+
+            assertEquals(Event.DONOTHING, result);
+            assertTrue(parent.getDamage() > damageBefore);
+            assertTrue(parent.getStress() > stressBefore);
+            assertFalse(parent.hasOkazari());
+            assertTrue(fire.getBurnPeriod() > parent.getDamageLimit() / 3 + 1);
+        }
+
+        @Test
+        void testScenario_DeadBaldBodyCrossesFinalBurnThresholdAndIsRemoved() {
+            SimYukkuri.RND = new ConstState(1);
+            Body parent = createParent(AgeState.ADULT);
+            Fire fire = new Fire(parent);
+            parent.setDead(true);
+            parent.setBurned(false);
+            parent.setOkazari(null);
+            parent.seteHairState(HairState.BALDHEAD);
+            fire.setBurnPeriod(parent.getDamageLimit() + 1);
+
+            Event result = fire.update();
+
+            assertEquals(Event.REMOVED, result);
+            assertTrue(parent.isBurned());
         }
     }
 

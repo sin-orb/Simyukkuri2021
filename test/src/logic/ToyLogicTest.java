@@ -1,17 +1,19 @@
 package src.logic;
 
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
 import src.base.Body;
 import src.base.Obj;
-import src.draw.Translate;
 import src.enums.Attitude;
 import src.enums.CoreAnkoState;
 import src.enums.FavItemType;
@@ -32,7 +34,7 @@ class ToyLogicTest {
     void setUp() {
         WorldTestHelper.resetWorld();
         WorldTestHelper.initializeMinimalWorld();
-        Translate.setMapSize(1000, 1000, 200);
+        WorldTestHelper.initializeStandardTranslate200();
 
         body = WorldTestHelper.createBody();
         body.setX(100);
@@ -973,5 +975,24 @@ class ToyLogicTest {
         body.setIntelligence(Intelligence.FOOL);
         SimYukkuri.RND = new src.ConstState(0);
         assertDoesNotThrow(() -> ToyLogic.checkTrampoline(body));
+    }
+
+    @Nested
+    class RegressionScenarios {
+
+        @Test
+        void testScenario_FindingNearbyToyMakesItFavoriteAndOwned() {
+            Toy toy = new Toy();
+            toy.setX(body.getX());
+            toy.setY(body.getY());
+            toy.setObjId(3001);
+            SimYukkuri.world.getCurrentMap().getToy().put(toy.getObjId(), toy);
+
+            assertTrue(ToyLogic.checkToy(body));
+            assertNotNull(body.getFavItem(FavItemType.BALL));
+            assertEquals(toy.getObjId(), body.getFavItem(FavItemType.BALL).getObjId());
+            assertTrue(toy.isOwned(body));
+            assertEquals(Happiness.HAPPY, body.getHappiness());
+        }
     }
 }

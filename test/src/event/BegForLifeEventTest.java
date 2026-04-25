@@ -3,23 +3,26 @@ package src.event;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
 import src.base.Body;
 import src.base.EventPacket.EventPriority;
-import src.draw.Translate;
 import src.draw.World;
 import src.enums.AgeState;
+import src.enums.Attitude;
+import src.enums.Happiness;
+import src.enums.ImageCode;
+import src.util.WorldTestHelper;
 
 class BegForLifeEventTest {
 
     @BeforeEach
     void setUp() {
+        WorldTestHelper.resetWorld();
         SimYukkuri.world = new World();
-        Translate.setMapSize(1000, 1000, 500);
-        Translate.setCanvasSize(800, 600, 100, 100, new float[]{1.0f});
-        Translate.createTransTable(false);
+        WorldTestHelper.initializeStandardTranslate500();
     }
 
     private static Body createBody() {
@@ -228,5 +231,29 @@ class BegForLifeEventTest {
             }
         }
         return null;
+    }
+
+    @Nested
+    class RegressionScenarios {
+
+        @Test
+        void testScenario_NotDamagedAverageBodyEndsBeggingVeryHappyAndSmiling() throws Exception {
+            Body b = createBody();
+            b.setAttitude(Attitude.AVERAGE);
+            b.setBegging(true);
+            WorldTestHelper.setDamage(b, 0);
+
+            BegForLifeEvent event = new BegForLifeEvent(b, null, null, 10);
+            setField(event, "roop", 0);
+            setField(event, "roop2", 0);
+            setField(event, "roop3", 1);
+            setField(event, "tick", 8);
+            setField(event, "wait", 50);
+
+            assertNull(event.update(b));
+            assertFalse(b.isBegging());
+            assertEquals(Happiness.VERY_HAPPY, b.getHappiness());
+            assertEquals(ImageCode.SMILE.ordinal(), b.getForceFace());
+        }
     }
 }

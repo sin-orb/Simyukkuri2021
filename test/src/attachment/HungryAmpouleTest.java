@@ -7,6 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertSame;
 import java.awt.image.BufferedImage;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
@@ -217,5 +218,35 @@ public class HungryAmpouleTest {
         try {
             HungryAmpoule.loadImages(HungryAmpoule.class.getClassLoader(), null);
         } catch (Exception e) { }
+    }
+
+    @Nested
+    class RegressionScenarios {
+
+        @Test
+        void testScenario_NonEatingBodyLosesExactlyOneTickOfHungry() {
+            Body parent = createParent(AgeState.ADULT);
+            HungryAmpoule ampoule = new HungryAmpoule(parent);
+            parent.setHungry(4321);
+            parent.setEating(false);
+
+            Event result = ampoule.update();
+
+            assertEquals(Event.DONOTHING, result);
+            assertEquals(3321, parent.getHungry());
+        }
+
+        @Test
+        void testScenario_EatingBodyPreservesHungryEvenNearClampBoundary() {
+            Body parent = createParent(AgeState.ADULT);
+            HungryAmpoule ampoule = new HungryAmpoule(parent);
+            parent.setHungry(200);
+            parent.setEating(true);
+
+            Event result = ampoule.update();
+
+            assertEquals(Event.DONOTHING, result);
+            assertEquals(200, parent.getHungry());
+        }
     }
 }

@@ -5,11 +5,14 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import src.SimYukkuri;
+import src.base.Body;
 import src.base.ItemTestBase;
 import src.enums.ObjEXType;
 import src.enums.Type;
+import src.util.WorldTestHelper;
 
 class ProductChuteTest extends ItemTestBase {
     @Test
@@ -83,5 +86,50 @@ class ProductChuteTest extends ItemTestBase {
     @Test
     void testGetBounding_doesNotThrow() {
         org.junit.jupiter.api.Assertions.assertDoesNotThrow(() -> ProductChute.getBounding());
+    }
+
+    @Nested
+    class RegressionScenarios {
+
+        @Test
+        void testScenario_DiffuserIsIgnoredWithoutRemovalOrCashChange() {
+            ProductChute chute = new ProductChute(50, 50, 0);
+            Diffuser diffuser = new Diffuser();
+            long beforeCash = SimYukkuri.world.getPlayer().getCash();
+
+            assertEquals(0, chute.objHitProcess(diffuser));
+
+            assertFalse(diffuser.isRemoved(), "diffuser should not be removed by the product chute");
+            assertEquals(beforeCash, SimYukkuri.world.getPlayer().getCash(),
+                    "ignoring a diffuser should not change player cash");
+        }
+
+        @Test
+        void testScenario_YunbaIsIgnoredWithoutRemovalOrCashChange() {
+            ProductChute chute = new ProductChute(50, 50, 0);
+            Yunba yunba = new Yunba();
+            long beforeCash = SimYukkuri.world.getPlayer().getCash();
+
+            assertEquals(0, chute.objHitProcess(yunba));
+
+            assertFalse(yunba.isRemoved(), "yunba should not be removed by the product chute");
+            assertEquals(beforeCash, SimYukkuri.world.getPlayer().getCash(),
+                    "ignoring a yunba should not change player cash");
+        }
+
+        @Test
+        void testScenario_PackedBodyIsSoldAndRemovedWithNetCashGain() {
+            ProductChute chute = new ProductChute(50, 50, 0);
+            Body body = WorldTestHelper.createBody();
+            body.setPacked(true);
+            body.setAgeState(src.enums.AgeState.ADULT);
+            long beforeCash = SimYukkuri.world.getPlayer().getCash();
+
+            assertEquals(0, chute.objHitProcess(body));
+
+            assertTrue(body.isRemoved(), "processed body should be removed after being sold through the chute");
+            assertTrue(SimYukkuri.world.getPlayer().getCash() != beforeCash,
+                    "selling a packed body should still change player cash through the sale and chute cost");
+        }
     }
 }

@@ -1,6 +1,7 @@
 package src.logic;
 
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import src.base.Body;
@@ -58,6 +59,19 @@ public class EventLogicTest {
     }
 
     @Test
+    public void testAddWorldEventRegistersEventAndSpeakerMessage() {
+        Reimu speaker = new Reimu();
+        MockEventPacket event = new MockEventPacket();
+
+        EventLogic.addWorldEvent(event, speaker, "world-message", 42);
+
+        assertEquals(1, src.SimYukkuri.world.getCurrentMap().getEvent().size());
+        assertSame(event, src.SimYukkuri.world.getCurrentMap().getEvent().get(0));
+        assertEquals("world-message", speaker.getMessageBuf());
+        assertEquals(42, speaker.getMessageCount());
+    }
+
+    @Test
     public void testAddWorldEventNullMessage() {
         try {
             MockEventPacket event = new MockEventPacket();
@@ -98,6 +112,20 @@ public class EventLogicTest {
 
         // Event should be added to target's event list
         assertEquals(1, target.getEventList().size(), "Event should be added to body");
+    }
+
+    @Test
+    public void testAddBodyEventRegistersEventAndSpeakerMessage() {
+        Reimu target = new Reimu();
+        Reimu speaker = new Reimu();
+        MockEventPacket event = new MockEventPacket();
+
+        EventLogic.addBodyEvent(target, event, speaker, "body-message", 24);
+
+        assertEquals(1, target.getEventList().size());
+        assertSame(event, target.getEventList().get(0));
+        assertEquals("body-message", speaker.getMessageBuf());
+        assertEquals(24, speaker.getMessageCount());
     }
 
     @Test
@@ -213,6 +241,7 @@ public class EventLogicTest {
         src.SimYukkuri.world.getCurrentMap().getEvent().add(event);
         EventPacket result = EventLogic.checkWorldEvent(yukkuri);
         assertNotNull(result);
+        assertEquals(1, src.SimYukkuri.world.getCurrentMap().getEvent().size(), "world event should remain registered");
         src.SimYukkuri.world.getCurrentMap().getEvent().clear();
     }
 
@@ -476,6 +505,57 @@ public class EventLogicTest {
         @Override
         public boolean checkEventResponse(Body b) {
             return true;
+        }
+    }
+
+    @Nested
+    class RegressionScenarios {
+
+        @Test
+        void testScenario_SelectedBodyEventRemovesOnlyChosenEventAndKeepsTrailingEvent() {
+            Reimu yukkuri = new Reimu();
+            MockCheckResponseTruePacket selected = new MockCheckResponseTruePacket();
+            MockEventPacket trailing = new MockEventPacket();
+
+            yukkuri.getEventList().add(selected);
+            yukkuri.getEventList().add(trailing);
+
+            EventPacket result = EventLogic.checkBodyEvent(yukkuri);
+
+            assertSame(selected, result);
+            assertEquals(1, yukkuri.getEventList().size());
+            assertSame(trailing, yukkuri.getEventList().get(0));
+        }
+
+        @Test
+        void testScenario_SimpleBodyEventRemovalDoesNotTouchLaterNormalEvent() {
+            Reimu yukkuri = new Reimu();
+            MockSimpleEventTruePacket simple = new MockSimpleEventTruePacket();
+            MockEventPacket trailing = new MockEventPacket();
+
+            yukkuri.getEventList().add(simple);
+            yukkuri.getEventList().add(trailing);
+
+            EventLogic.checkSimpleBodyEvent(yukkuri);
+
+            assertEquals(1, yukkuri.getEventList().size());
+            assertSame(trailing, yukkuri.getEventList().get(0));
+        }
+
+        @Test
+        void testScenario_SimpleWorldEventDoesNotRemoveItselfOrLaterNormalEvent() {
+            Reimu yukkuri = new Reimu();
+            MockSimpleEventTruePacket simple = new MockSimpleEventTruePacket();
+            MockEventPacket trailing = new MockEventPacket();
+
+            src.SimYukkuri.world.getCurrentMap().getEvent().add(simple);
+            src.SimYukkuri.world.getCurrentMap().getEvent().add(trailing);
+
+            EventLogic.checkSimpleWorldEvent(yukkuri);
+
+            assertEquals(2, src.SimYukkuri.world.getCurrentMap().getEvent().size());
+            assertSame(simple, src.SimYukkuri.world.getCurrentMap().getEvent().get(0));
+            assertSame(trailing, src.SimYukkuri.world.getCurrentMap().getEvent().get(1));
         }
     }
 }

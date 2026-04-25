@@ -7,9 +7,12 @@ import static org.junit.jupiter.api.Assertions.*;
 import src.ConstState;
 import src.SimYukkuri;
 import src.base.Body;
+import src.draw.MyPane;
 import src.draw.Point4y;
 import src.enums.AgeState;
+import src.game.Dna;
 import src.system.BodyLayer;
+import src.util.WorldTestHelper;
 
 public class ReimuTest {
 
@@ -286,6 +289,156 @@ public class ReimuTest {
             // Other exceptions expected
         } finally {
             src.util.WorldTestHelper.resetWorld();
+        }
+    }
+
+    @Test
+    public void testExecTransform_ReplacesBodyAtSameUniqueId() {
+        WorldTestHelper.resetWorld();
+        try {
+            WorldTestHelper.initializeMinimalWorld();
+            SimYukkuri.mypane = new MyPane();
+
+            Reimu reimu = new Reimu();
+            reimu.setAge(100000);
+            WorldTestHelper.makeTransformationReady(reimu);
+            SimYukkuri.world.getCurrentMap().getBody().put(reimu.getUniqueID(), reimu);
+
+            int originalId = reimu.getUniqueID();
+
+            reimu.execTransform();
+
+            Body transformed = SimYukkuri.world.getCurrentMap().getBody().get(originalId);
+            assertNotNull(transformed);
+            assertInstanceOf(Deibu.class, transformed);
+            assertEquals(originalId, transformed.getUniqueID());
+            assertTrue(reimu.isRemoved());
+        } finally {
+            WorldTestHelper.resetWorld();
+        }
+    }
+
+    @Test
+    public void testExecTransform_PreservesPartnerAndChildRelations() {
+        WorldTestHelper.resetWorld();
+        try {
+            WorldTestHelper.initializeMinimalWorld();
+            SimYukkuri.mypane = new MyPane();
+
+            Reimu reimu = new Reimu();
+            reimu.setAge(100000);
+            WorldTestHelper.makeTransformationReady(reimu);
+
+            Reimu partner = new Reimu();
+            Reimu child = new Reimu();
+
+            reimu.setPartner(partner.getUniqueID());
+            partner.setPartner(reimu.getUniqueID());
+            child.setParents(new int[] { reimu.getUniqueID(), -1 });
+            reimu.getChildrenList().add(child.getUniqueID());
+
+            SimYukkuri.world.getCurrentMap().getBody().put(reimu.getUniqueID(), reimu);
+            SimYukkuri.world.getCurrentMap().getBody().put(partner.getUniqueID(), partner);
+            SimYukkuri.world.getCurrentMap().getBody().put(child.getUniqueID(), child);
+
+            int originalId = reimu.getUniqueID();
+            int partnerId = partner.getUniqueID();
+            int childId = child.getUniqueID();
+
+            reimu.execTransform();
+
+            Body transformed = SimYukkuri.world.getCurrentMap().getBody().get(originalId);
+            assertNotNull(transformed);
+            assertEquals(partnerId, transformed.getPartner());
+            assertTrue(transformed.getChildrenList().contains(childId));
+            assertEquals(originalId, partner.getPartner());
+            assertEquals(originalId, child.getParents()[0]);
+        } finally {
+            WorldTestHelper.resetWorld();
+        }
+    }
+
+    @Test
+    public void testExecTransform_PregnantBodyKeepsPregnancyAndFamilyRelations() {
+        WorldTestHelper.resetWorld();
+        try {
+            WorldTestHelper.initializeMinimalWorld();
+            SimYukkuri.mypane = new MyPane();
+
+            Reimu reimu = new Reimu();
+            reimu.setAge(100000);
+            WorldTestHelper.makeTransformationReady(reimu);
+            reimu.setHasBaby(true);
+            reimu.getBabyTypes().add(new Dna());
+
+            Reimu partner = new Reimu();
+            Reimu child = new Reimu();
+            reimu.setPartner(partner.getUniqueID());
+            partner.setPartner(reimu.getUniqueID());
+            child.setParents(new int[] { reimu.getUniqueID(), -1 });
+            reimu.getChildrenList().add(child.getUniqueID());
+
+            SimYukkuri.world.getCurrentMap().getBody().put(reimu.getUniqueID(), reimu);
+            SimYukkuri.world.getCurrentMap().getBody().put(partner.getUniqueID(), partner);
+            SimYukkuri.world.getCurrentMap().getBody().put(child.getUniqueID(), child);
+
+            int originalId = reimu.getUniqueID();
+            int childId = child.getUniqueID();
+
+            reimu.execTransform();
+
+            Body transformed = SimYukkuri.world.getCurrentMap().getBody().get(originalId);
+            assertNotNull(transformed);
+            assertTrue(transformed.isHasBaby());
+            assertEquals(1, transformed.getBabyTypes().size());
+            assertEquals(partner.getUniqueID(), transformed.getPartner());
+            assertTrue(transformed.getChildrenList().contains(childId));
+            assertEquals(originalId, partner.getPartner());
+            assertEquals(originalId, child.getParents()[0]);
+        } finally {
+            WorldTestHelper.resetWorld();
+        }
+    }
+
+    @Test
+    public void testExecTransform_StalkPregnantBodyKeepsStalkPregnancyAndFamilyRelations() {
+        WorldTestHelper.resetWorld();
+        try {
+            WorldTestHelper.initializeMinimalWorld();
+            SimYukkuri.mypane = new MyPane();
+
+            Reimu reimu = new Reimu();
+            reimu.setAge(100000);
+            WorldTestHelper.makeTransformationReady(reimu);
+            reimu.setHasStalk(true);
+            reimu.getStalkBabyTypes().add(new Dna());
+
+            Reimu partner = new Reimu();
+            Reimu child = new Reimu();
+            reimu.setPartner(partner.getUniqueID());
+            partner.setPartner(reimu.getUniqueID());
+            child.setParents(new int[] { reimu.getUniqueID(), -1 });
+            reimu.getChildrenList().add(child.getUniqueID());
+
+            SimYukkuri.world.getCurrentMap().getBody().put(reimu.getUniqueID(), reimu);
+            SimYukkuri.world.getCurrentMap().getBody().put(partner.getUniqueID(), partner);
+            SimYukkuri.world.getCurrentMap().getBody().put(child.getUniqueID(), child);
+
+            int originalId = reimu.getUniqueID();
+            int childId = child.getUniqueID();
+
+            reimu.execTransform();
+
+            Body transformed = SimYukkuri.world.getCurrentMap().getBody().get(originalId);
+            assertNotNull(transformed);
+            assertTrue(transformed.isHasStalk());
+            assertEquals(1, transformed.getStalkBabyTypes().size());
+            assertEquals(partner.getUniqueID(), transformed.getPartner());
+            assertTrue(transformed.getChildrenList().contains(childId));
+            assertEquals(originalId, partner.getPartner());
+            assertEquals(originalId, child.getParents()[0]);
+        } finally {
+            WorldTestHelper.resetWorld();
         }
     }
 

@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
@@ -13,6 +14,7 @@ import src.base.ItemTestBase;
 import src.base.ObjEX.ItemRank;
 import src.draw.Translate;
 import src.enums.AgeState;
+import src.enums.Happiness;
 import src.enums.ObjEXType;
 import src.system.Sprite;
 import src.yukkuri.Reimu;
@@ -244,5 +246,36 @@ class GarbageChuteTest extends ItemTestBase {
         GarbageChute item = new GarbageChute(100, 100, 1);
         java.awt.image.BufferedImage[] layer = new java.awt.image.BufferedImage[1];
         assertDoesNotThrow(() -> item.getImageLayer(layer));
+    }
+
+    @Nested
+    class RegressionScenarios {
+        @Test
+        void testScenario_LiveBodyStartsFallingAndCostsCash() {
+            GarbageChute item = new GarbageChute(100, 100, 0);
+            Body body = createBody();
+            long beforeCash = SimYukkuri.world.getPlayer().getCash();
+
+            assertEquals(0, item.objHitProcess(body));
+
+            assertSame(body, item.getBindBody());
+            assertTrue(item.getBindObjList().contains(body));
+            assertEquals(Happiness.VERY_SAD, body.getHappiness());
+            assertTrue(body.getFallingUnderGround());
+            assertEquals(beforeCash - item.getCost(), SimYukkuri.world.getPlayer().getCash());
+        }
+
+        @Test
+        void testScenario_DeepFallingBodyIsRemovedFromChuteOnUpdate() {
+            GarbageChute item = new GarbageChute(100, 100, 0);
+            Body body = createBody();
+            body.setZ(-1000);
+            item.getBindObjList().add(body);
+
+            item.upDate();
+
+            assertTrue(body.isRemoved());
+            assertFalse(item.getBindObjList().contains(body));
+        }
     }
 }

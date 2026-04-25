@@ -29,8 +29,7 @@ public class TerrainFieldTest {
     public void setUp() throws Exception {
         WorldTestHelper.resetStates();
         System.setProperty("java.awt.headless", "true");
-        // Initialize Translate with reasonable values
-        Translate.setCanvasSize(900, 700, 100, 100, new float[] { 1.0f });
+        WorldTestHelper.initializeTranslate(1000, 1000, 500, 900, 700, 100, 100, new float[] { 1.0f });
 
         // Save original static fields if not already saved
         if (originalJarPath == null) {
