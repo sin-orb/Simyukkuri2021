@@ -206,5 +206,30 @@ public class BodyBehaviorTest {
 
             assertEquals(0, distant.getAttachmentSize(src.attachment.Fire.class));
         }
+
+        @Test
+        void testScenario_AverageBodyDoesNotBegForLifeWithoutStressEvenWhenDamaged() {
+            body.setAttitude(Attitude.AVERAGE);
+            body.setDamage(9000);
+            body.setStress(0);
+            testRnd.setNextInt(0);
+
+            body.begForLife();
+
+            assertTrue(body.getEventList().isEmpty());
+        }
+
+        @Test
+        void testScenario_FoolShitheadDoesNotBegForLifeWithoutStressTrigger() {
+            body.setAttitude(Attitude.SHITHEAD);
+            body.setIntelligence(Intelligence.FOOL);
+            body.setDamage(9000);
+            body.setStress(0);
+            testRnd.setNextInt(0);
+
+            body.begForLife();
+
+            assertTrue(body.getEventList().isEmpty());
+        }
     }
 }
