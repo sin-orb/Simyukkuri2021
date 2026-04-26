@@ -175,7 +175,7 @@ class HouseTest extends ItemTestBase {
             assertSame(images[0][0], layer[0]);
         }
 
-        private static BufferedImage[][] installHouseStatics() throws Exception {
+        private BufferedImage[][] installHouseStatics() throws Exception {
             BufferedImage[][] images = new BufferedImage[House.HouseTable.values().length][4];
             Rectangle4y[] boundary = new Rectangle4y[House.HouseTable.values().length];
             for (int i = 0; i < House.HouseTable.values().length; i++) {

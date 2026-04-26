@@ -69,6 +69,52 @@ public class BodyAttributesTest {
         }
     }
 
+    @Nested
+    class RegressionScenarios {
+        @Test
+        void testScenario_AddStressAtBurstHalfDoesNotIncreaseShitButStillRaisesStress() {
+            body.setDead(false);
+            body.seteCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setAgeState(AgeState.ADULT);
+            body.bodySpr[AgeState.ADULT.ordinal()].setImageW(100);
+            body.setExpandSizeW(50); // ratio 6 -> Burst.HALF
+            body.shit = 10;
+            int shitBefore = body.getShit();
+            int stressBefore = body.stress;
+
+            body.addStress(100);
+
+            assertEquals(Burst.HALF, body.getBurstState());
+            assertEquals(shitBefore, body.getShit(),
+                    "Burst.HALF should suppress the stress-driven plusShit side effect");
+            assertTrue(body.stress > stressBefore, "stress itself should still increase");
+        }
+
+        @Test
+        void testScenario_BabyTypesDequeuePreservesInsertionOrderAcrossMultipleEntries() {
+            src.game.Dna first = new src.game.Dna(1, Attitude.NICE, Intelligence.AVERAGE, false);
+            src.game.Dna second = new src.game.Dna(2, Attitude.SHITHEAD, Intelligence.WISE, true);
+            body.getBabyTypes().add(first);
+            body.getBabyTypes().add(second);
+
+            assertSame(first, body.getBabyTypesDequeue());
+            assertSame(second, body.getBabyTypesDequeue());
+            assertNull(body.getBabyTypesDequeue());
+        }
+
+        @Test
+        void testScenario_HasBabyOrStalkReflectsEitherPregnancyState() {
+            assertFalse(body.hasBabyOrStalk());
+
+            body.setHasBaby(true);
+            assertTrue(body.hasBabyOrStalk());
+
+            body.setHasBaby(false);
+            body.setHasStalk(true);
+            assertTrue(body.hasBabyOrStalk());
+        }
+    }
+
     // ===========================================
     // 初期値・基本 getter/setter
     // ===========================================
