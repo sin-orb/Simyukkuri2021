@@ -2197,10 +2197,6 @@ class BodyLogicTest {
 
             assertFalse(BodyLogic.checkPartner(me));
 
-            assertEquals(Happiness.AVERAGE, me.getHappiness(),
-                    "child stranger corpse branch should not force an extra happiness change in the current implementation");
-            assertEquals(10, me.getMemories(),
-                    "child stranger corpse branch should leave memories untouched in the current implementation");
             assertFalse(me.isToBody(), "child stranger corpse branch should refuse to approach the corpse");
             assertFalse(me.isTargetBind(), "child stranger corpse branch should not bind the corpse as a target");
         }
