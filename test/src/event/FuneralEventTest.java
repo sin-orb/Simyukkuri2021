@@ -13,6 +13,7 @@ import src.draw.World;
 import src.enums.AgeState;
 import src.enums.Attitude;
 import src.enums.Happiness;
+import src.enums.ImageCode;
 import src.util.WorldTestHelper;
 
 class FuneralEventTest {
@@ -417,6 +418,84 @@ class FuneralEventTest {
             assertTrue(event.checkEventResponse(child));
             assertEquals(Happiness.HAPPY, child.getHappiness());
             assertFalse(child.isToFood());
+        }
+
+        @Test
+        void testScenario_ChildFindForElderSisterSetsVerySadAndCryingFace() {
+            Body from = createBody();
+            Body elderSister = createBody();
+            Body child = createBody();
+            elderSister.setParents(new int[] { from.getUniqueID(), -1 });
+            child.setParents(new int[] { from.getUniqueID(), -1 });
+            elderSister.setAge(200);
+            child.setAge(100);
+
+            FuneralEvent event = new FuneralEvent(from, elderSister, null, 10);
+            from.setCurrentEvent(event);
+            child.setCurrentEvent(event);
+            event.setState(FuneralEvent.STATE.FIND);
+            child.setInLastActionTime(0);
+            int memoriesBefore = child.getMemories();
+
+            assertNull(event.update(child));
+            assertEquals(Happiness.VERY_SAD, child.getHappiness());
+            assertEquals(ImageCode.CRYING.ordinal(), child.getForceFace());
+            assertEquals(memoriesBefore + 10, child.getMemories());
+        }
+
+        @Test
+        void testScenario_FromGoodbyeRemovesDeceasedOkazariAndAddsMemories() {
+            Body from = createBody();
+            Body deceased = createBody();
+            Body child = createBody();
+            child.setParents(new int[] { from.getUniqueID(), -1 });
+            child.setAgeState(AgeState.BABY);
+            from.getChildrenList().add(child.getUniqueID());
+
+            FuneralEvent event = new FuneralEvent(from, deceased, null, 10);
+            from.setCurrentEvent(event);
+            child.setCurrentEvent(event);
+            event.setState(FuneralEvent.STATE.GOODBYE);
+            event.bActionFlag = false;
+            from.setInLastActionTime(0);
+            int memoriesBefore = from.getMemories();
+
+            assertTrue(deceased.hasOkazari());
+            assertNull(event.update(from));
+            assertFalse(deceased.hasOkazari());
+            assertTrue(event.bActionFlag);
+            assertEquals(memoriesBefore + 20, from.getMemories());
+        }
+
+        @Test
+        void testScenario_RudeChildGoodbyeCanEnterFurifuriPath() {
+            Body from = createBody();
+            Body child = createBody();
+            child.setAttitude(Attitude.SUPER_SHITHEAD);
+
+            FuneralEvent event = new FuneralEvent(from, null, null, 10);
+            from.setCurrentEvent(event);
+            child.setCurrentEvent(event);
+            event.setState(FuneralEvent.STATE.GOODBYE);
+            event.bActionFlag = true;
+            child.setInLastActionTime(0);
+            int memoriesBefore = child.getMemories();
+
+            java.util.Random original = SimYukkuri.RND;
+            SimYukkuri.RND = new java.util.Random() {
+                @Override
+                public boolean nextBoolean() {
+                    return true;
+                }
+            };
+            try {
+                assertNull(event.update(child));
+            } finally {
+                SimYukkuri.RND = original;
+            }
+
+            assertTrue(child.isFurifuri());
+            assertEquals(memoriesBefore + 20, child.getMemories());
         }
     }
 

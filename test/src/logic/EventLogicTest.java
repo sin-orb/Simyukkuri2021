@@ -473,6 +473,7 @@ public class EventLogicTest {
 
     private static class MockForceExecEvent extends MockEventPacket {
         private final boolean execResult;
+        public boolean wasExecuteCalled = false;
 
         MockForceExecEvent(boolean r) {
             execResult = r;
@@ -485,6 +486,7 @@ public class EventLogicTest {
 
         @Override
         public boolean execute(Body b) {
+            wasExecuteCalled = true;
             return execResult;
         }
     }
@@ -556,6 +558,47 @@ public class EventLogicTest {
             assertEquals(2, src.SimYukkuri.world.getCurrentMap().getEvent().size());
             assertSame(simple, src.SimYukkuri.world.getCurrentMap().getEvent().get(0));
             assertSame(trailing, src.SimYukkuri.world.getCurrentMap().getEvent().get(1));
+        }
+
+        @Test
+        void testScenario_EventUpdateNearTargetExecutesAndClearsWhenExecuteReturnsTrueWithoutForceExec() {
+            Reimu yukkuri = new Reimu();
+            yukkuri.setX(100);
+            yukkuri.setY(100);
+            yukkuri.setZ(0);
+            MockEventPacket event = new MockEventPacket();
+            event.setToX(101);
+            event.setToY(100);
+            event.setToZ(0);
+            yukkuri.setCurrentEvent(event);
+
+            EventLogic.eventUpdate(yukkuri);
+
+            assertTrue(event.wasExecuteCalled);
+            assertNull(yukkuri.getCurrentEvent());
+        }
+
+        @Test
+        void testScenario_EventUpdateNearTargetExecutesButKeepsEventWhenExecuteReturnsFalseWithoutForceExec() {
+            Reimu yukkuri = new Reimu();
+            yukkuri.setX(100);
+            yukkuri.setY(100);
+            yukkuri.setZ(0);
+            MockForceExecEvent event = new MockForceExecEvent(false) {
+                @Override
+                public UpdateState update(Body b) {
+                    return null;
+                }
+            };
+            event.setToX(101);
+            event.setToY(100);
+            event.setToZ(0);
+            yukkuri.setCurrentEvent(event);
+
+            EventLogic.eventUpdate(yukkuri);
+
+            assertTrue(event.wasExecuteCalled);
+            assertNotNull(yukkuri.getCurrentEvent());
         }
     }
 }

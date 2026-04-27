@@ -542,5 +542,48 @@ public class SuperEatingTimeEventTest {
             assertEquals(src.base.EventPacket.UpdateState.ABORT, event.update(child));
             assertEquals(Happiness.VERY_SAD, from.getHappiness());
         }
+
+        @Test
+        void testScenario_ParentStartWithSatiatedChildTargetsFoodAndGetsNoHungryPeriod() {
+            Body from = createBody();
+            Body child = createBody();
+            child.setAgeState(AgeState.BABY);
+            child.setHungry(child.getHungryLimit());
+            from.addChildrenList(child);
+            SimYukkuri.world.getCurrentMap().getBody().put(child.getUniqueID(), child);
+            Food food = createFood();
+
+            SuperEatingTimeEvent event = new SuperEatingTimeEvent(from, null, food, 10);
+            event.setState(SuperEatingTimeEvent.STATE.START);
+            from.setCurrentEvent(event);
+
+            assertNull(event.update(from));
+            assertTrue(from.isToFood());
+            assertEquals(food.getObjId(), from.getMoveTarget());
+            assertEquals(500, from.getNoHungrybySupereatingTimePeriod());
+        }
+
+        @Test
+        void testScenario_ChildStartNearFoodActuallyEatsAndClearsActions() {
+            Body from = createBody();
+            Body child = createBody();
+            child.setAgeState(AgeState.BABY);
+            Food food = createFood();
+            child.setX(food.getX());
+            child.setY(food.getY());
+            int foodBefore = food.getAmount();
+            int memoriesBefore = child.getMemories();
+
+            SuperEatingTimeEvent event = new SuperEatingTimeEvent(from, null, food, 10);
+            event.setState(SuperEatingTimeEvent.STATE.START);
+            from.setCurrentEvent(event);
+            child.setCurrentEvent(event);
+
+            assertNull(event.update(child));
+            assertTrue(food.getAmount() < foodBefore);
+            assertTrue(child.getMemories() > memoriesBefore);
+            assertFalse(child.isToFood());
+            assertEquals(-1, child.getMoveTarget());
+        }
     }
 }

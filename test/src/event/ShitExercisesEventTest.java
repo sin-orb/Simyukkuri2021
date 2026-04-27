@@ -582,5 +582,79 @@ public class ShitExercisesEventTest {
             assertTrue(event.checkEventResponse(baby));
             assertEquals(Happiness.VERY_HAPPY, baby.getHappiness());
         }
+
+        @Test
+        void testScenario_ChildPokapokaSetsFurifuriAndClearsUnunActionFlag() {
+            Body from = createBody();
+            Body child = createBody();
+            child.setAgeState(AgeState.BABY);
+
+            ShitExercisesEvent event = new ShitExercisesEvent(from, null, null, 10);
+            event.setState(ShitExercisesEvent.STATE.POKAPOKA);
+            event.bActionFlag = true;
+            from.setCurrentEvent(event);
+            child.setCurrentEvent(event);
+            child.setInLastActionTime(0);
+
+            assertNull(event.update(child));
+            assertTrue(child.isFurifuri());
+            assertFalse(event.bUnunActionFlag);
+        }
+
+        @Test
+        void testScenario_ChildUnunSuccessSetsDoShitAndClearsShitGauge() {
+            Body from = createBody();
+            Body child = createBody();
+            child.setAgeState(AgeState.BABY);
+            child.setShit(80);
+
+            ShitExercisesEvent event = new ShitExercisesEvent(from, null, null, 10);
+            event.setState(ShitExercisesEvent.STATE.UNUN);
+            event.bActionFlag = true;
+            from.setCurrentEvent(event);
+            child.setCurrentEvent(event);
+            child.setInLastActionTime(0);
+            int memoriesBefore = child.getMemories();
+
+            java.util.Random original = SimYukkuri.RND;
+            SimYukkuri.RND = new java.util.Random() {
+                @Override
+                public int nextInt(int bound) {
+                    return 1;
+                }
+            };
+            try {
+                assertNull(event.update(child));
+            } finally {
+                SimYukkuri.RND = original;
+            }
+
+            assertEquals(0, child.getShit());
+            assertEquals(src.enums.Event.DOSHIT, child.getEventResultAction());
+            assertTrue(child.isFurifuri());
+            assertTrue(child.getMemories() > memoriesBefore);
+        }
+
+        @Test
+        void testScenario_ChildUnunWithAnalCloseAddsShitInsteadOfDoShit() {
+            Body from = createBody();
+            Body child = createBody();
+            child.setAgeState(AgeState.BABY);
+            child.setAnalClose(true);
+            child.setShit(20);
+
+            ShitExercisesEvent event = new ShitExercisesEvent(from, null, null, 10);
+            event.setState(ShitExercisesEvent.STATE.UNUN);
+            event.bActionFlag = true;
+            from.setCurrentEvent(event);
+            child.setCurrentEvent(event);
+            child.setInLastActionTime(0);
+            int shitBefore = child.getShit();
+
+            assertNull(event.update(child));
+            assertTrue(child.getShit() > shitBefore);
+            assertEquals(src.enums.Event.DONOTHING, child.getEventResultAction());
+            assertTrue(child.isFurifuri());
+        }
     }
 }

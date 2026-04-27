@@ -276,5 +276,68 @@ public class YukkuriUtilCreateBabyDnaTest {
             assertNotNull(dna);
             assertEquals(MarisaTsumuri.type, dna.getType());
         }
+
+        @Test
+        void testScenario_MotherAncestorAtavismCanOverrideBabyType() {
+            Reimu mother = new Reimu();
+            mother.getAncestorList().add(Marisa.type);
+            Reimu father = new Reimu();
+            SimYukkuri.RND = new SequenceBooleanRng(
+                    new int[] { 0, 0, 1, 1, 1, 1, 1, 1, 1 }, false);
+
+            Dna dna = YukkuriUtil.createBabyDna(mother, father, father.getType(), Attitude.AVERAGE,
+                    Intelligence.AVERAGE, false, false, true);
+
+            assertNotNull(dna);
+            assertEquals(Marisa.type, dna.getType());
+        }
+
+        @Test
+        void testScenario_AttitudeBaseZeroRareRollCanProduceShithead() {
+            class BoundCheckedRandom extends java.util.Random {
+                private final int[] expectedBounds = { 2, 100, 20, 100, 20, 2, 10, 3 };
+                private final int[] values = { 1, 1, 1, 1, 0, 1, 1, 1 };
+                private int index = 0;
+
+                @Override
+                public int nextInt(int bound) {
+                    assertTrue(index < expectedBounds.length, "Unexpected nextInt call");
+                    assertEquals(expectedBounds[index], bound, "Unexpected bound order");
+                    return values[index++];
+                }
+
+                @Override
+                public boolean nextBoolean() {
+                    return true;
+                }
+            }
+
+            Reimu mother = new Reimu();
+            Reimu father = new Reimu();
+            mother.setAttitude(Attitude.VERY_NICE);
+            SimYukkuri.RND = new BoundCheckedRandom();
+
+            Dna dna = YukkuriUtil.createBabyDna(mother, father, Reimu.type, Attitude.VERY_NICE,
+                    Intelligence.AVERAGE, false, false, true);
+
+            assertNotNull(dna);
+            assertEquals(Attitude.SHITHEAD, dna.getAttitude());
+        }
+
+        @Test
+        void testScenario_IntelligenceBaseFourRareRollCanProduceWise() {
+            Reimu mother = new Reimu();
+            Reimu father = new Reimu();
+            mother.setAttitude(Attitude.VERY_NICE);
+            mother.setIntelligence(Intelligence.FOOL);
+            SimYukkuri.RND = new SequenceBooleanRng(
+                    new int[] { 1, 1, 1, 1, 2, 0, 0 }, true);
+
+            Dna dna = YukkuriUtil.createBabyDna(mother, father, Reimu.type, Attitude.VERY_NICE,
+                    Intelligence.FOOL, false, false, true);
+
+            assertNotNull(dna);
+            assertEquals(Intelligence.WISE, dna.getIntelligence());
+        }
     }
 }

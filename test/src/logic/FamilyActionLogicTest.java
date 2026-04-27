@@ -1369,6 +1369,55 @@ class FamilyActionLogicTest {
             assertEquals(1, SimYukkuri.world.getCurrentMap().getEvent().size());
             assertTrue(SimYukkuri.world.getCurrentMap().getEvent().get(0) instanceof YukkuriRideEvent);
         }
+
+        @Test
+        void testScenario_GoToEatDropsTakenOutFoodAndCanImmediatelyRetargetDroppedFood() {
+            setReady(parent);
+
+            Food takenFood = new Food(50, 50, Food.FoodType.SWEETS1.ordinal());
+            SimYukkuri.world.getCurrentMap().getTakenOutFood().put(takenFood.getObjId(), takenFood);
+            parent.setTakeoutItem(src.enums.TakeoutItemType.FOOD, takenFood);
+
+            Food fieldFood = new Food(140, 140, Food.FoodType.SWEETS2.ordinal());
+            SimYukkuri.world.getCurrentMap().getFood().put(fieldFood.getObjId(), fieldFood);
+
+            java.util.List<Body> list = new java.util.ArrayList<>();
+            list.add(child);
+
+            assertTrue(FamilyActionLogic.goToEat(parent, list));
+            assertTrue(parent.getCurrentEvent() instanceof SuperEatingTimeEvent);
+            assertEquals(takenFood.getObjId(), parent.getCurrentEvent().getTarget());
+            assertEquals(1, SimYukkuri.world.getCurrentMap().getEvent().size());
+            assertTrue(SimYukkuri.world.getCurrentMap().getEvent().get(0) instanceof SuperEatingTimeEvent);
+            assertTrue(parent.getTakeoutItem(src.enums.TakeoutItemType.FOOD) == null);
+        }
+
+        @Test
+        void testScenario_ProudChildDirectlyStartsEventAndQueuesWorldEvent() {
+            setReady(parent);
+
+            java.util.List<Body> list = new java.util.ArrayList<>();
+            list.add(child);
+
+            assertTrue(FamilyActionLogic.proudChild(parent, list));
+            assertTrue(parent.getCurrentEvent() instanceof ProudChildEvent);
+            assertEquals(1, SimYukkuri.world.getCurrentMap().getEvent().size());
+            assertTrue(SimYukkuri.world.getCurrentMap().getEvent().get(0) instanceof ProudChildEvent);
+        }
+
+        @Test
+        void testScenario_CheckRaperFamilyClearsExcitingOnExistingRapersWhenNoTargetsRemain() {
+            Body raper = WorldTestHelper.createBody();
+            raper.setRaper(true);
+            raper.setExciting(true);
+            SimYukkuri.world.getCurrentMap().getBody().put(raper.getUniqueID(), raper);
+
+            parent.setUnBirth(true);
+            child.setUnBirth(true);
+
+            assertTrue(FamilyActionLogic.checkRaperFamily());
+            assertFalse(raper.isExciting());
+        }
     }
 
 }

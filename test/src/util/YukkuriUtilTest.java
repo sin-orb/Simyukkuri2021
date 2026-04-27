@@ -357,6 +357,43 @@ public class YukkuriUtilTest {
         }
 
         @Test
+        void testScenario_NonDosParentKeepsItsOwnTypeOnParentBranch() {
+            Reimu parent = new Reimu();
+            SimYukkuri.RND = new SequenceRNG(2);
+
+            int type = YukkuriUtil.getRandomYukkuriType(parent);
+
+            assertEquals(parent.getType(), type);
+        }
+
+        @Test
+        void testScenario_NullParentParentBranchCanYieldPlainMyon() {
+            SimYukkuri.RND = new SequenceRNG(4, 5);
+
+            int type = YukkuriUtil.getRandomYukkuriType(null);
+
+            assertEquals(5, type);
+        }
+
+        @Test
+        void testScenario_RandomBranchMapsAliceSlotToArisu() {
+            SimYukkuri.RND = new SequenceRNG(0, 3);
+
+            int type = YukkuriUtil.getRandomYukkuriType(null);
+
+            assertEquals(2, type);
+        }
+
+        @Test
+        void testScenario_RandomBranchCanYieldSpecificRareType() {
+            SimYukkuri.RND = new SequenceRNG(1, 11, 7);
+
+            int type = YukkuriUtil.getRandomYukkuriType(null);
+
+            assertEquals(1007, type);
+        }
+
+        @Test
         void testScenario_ChangelingCanYieldRareSubtype() {
             SimYukkuri.RND = new SequenceRNG(0, 4);
 

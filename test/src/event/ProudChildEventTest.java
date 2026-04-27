@@ -402,6 +402,86 @@ public class ProudChildEventTest {
             assertTrue(event.checkEventResponse(child));
             assertEquals(Happiness.HAPPY, child.getHappiness());
         }
+
+        @Test
+        void testScenario_ChildGoRandomHitMakesVeryHappyAndAddsMemory() {
+            Body from = createBody();
+            Body child = createBody();
+            ProudChildEvent event = new ProudChildEvent(from, null, null, 10);
+            from.setCurrentEvent(event);
+            child.setCurrentEvent(event);
+            int memoriesBefore = child.getMemories();
+
+            java.util.Random original = SimYukkuri.RND;
+            SimYukkuri.RND = new java.util.Random() {
+                @Override
+                public int nextInt(int bound) {
+                    return 0;
+                }
+            };
+            try {
+                assertNull(event.update(child));
+            } finally {
+                SimYukkuri.RND = original;
+            }
+
+            assertEquals(Happiness.VERY_HAPPY, child.getHappiness());
+            assertEquals(memoriesBefore + 10, child.getMemories());
+        }
+
+        @Test
+        void testScenario_FromProudStateBecomesVeryHappyAndAddsMemories() {
+            Body from = createBody();
+            Body child = createBody();
+            child.setParents(new int[] { from.getUniqueID(), -1 });
+            child.setAgeState(AgeState.BABY);
+            from.getChildrenList().add(child.getUniqueID());
+
+            ProudChildEvent event = new ProudChildEvent(from, null, null, 10);
+            from.setCurrentEvent(event);
+            child.setCurrentEvent(event);
+            event.setState(ProudChildEvent.STATE.PROUD);
+            event.bActionFlag = false;
+            from.setInLastActionTime(0);
+            int memoriesBefore = from.getMemories();
+
+            assertNull(event.update(from));
+            assertTrue(event.bActionFlag);
+            assertEquals(Happiness.VERY_HAPPY, from.getHappiness());
+            assertEquals(memoriesBefore + 20, from.getMemories());
+        }
+
+        @Test
+        void testScenario_RudeChildProudCanEnterFurifuriPath() {
+            Body from = createBody();
+            Body child = createBody();
+            child.setAgeState(AgeState.BABY);
+            child.setAttitude(src.enums.Attitude.SUPER_SHITHEAD);
+
+            ProudChildEvent event = new ProudChildEvent(from, null, null, 10);
+            from.setCurrentEvent(event);
+            child.setCurrentEvent(event);
+            event.setState(ProudChildEvent.STATE.PROUD);
+            event.bActionFlag = true;
+            child.setInLastActionTime(0);
+            int memoriesBefore = child.getMemories();
+
+            java.util.Random original = SimYukkuri.RND;
+            SimYukkuri.RND = new java.util.Random() {
+                @Override
+                public boolean nextBoolean() {
+                    return true;
+                }
+            };
+            try {
+                assertNull(event.update(child));
+            } finally {
+                SimYukkuri.RND = original;
+            }
+
+            assertTrue(child.isFurifuri());
+            assertEquals(memoriesBefore + 20, child.getMemories());
+        }
     }
 
     // --- Helper ---

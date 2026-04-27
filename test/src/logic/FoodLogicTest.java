@@ -11378,5 +11378,47 @@ class FoodLogicTest {
             assertFalse(SimYukkuri.world.getCurrentMap().getTakenOutFood().containsKey(food.getObjId()));
         }
 
+        @Test
+        void testScenario_OnlyAmaamaRejectsNonSweetFoodAndClearsToFood() {
+            body.setTang(700);
+            body.setAmaamaDiscipline(70);
+            body.setHungry((int) (body.getHungryLimit() * 0.2));
+            body.setToFood(true);
+
+            Food food = new Food(body.getX() + 20, body.getY(), Food.FoodType.FOOD.ordinal());
+            SimYukkuri.world.getCurrentMap().getFood().put(food.getObjId(), food);
+
+            SimYukkuri.RND = new ConstState(1);
+
+            assertFalse(FoodLogic.checkFood(body));
+            assertFalse(body.isToFood());
+        }
+
+        @Test
+        void testScenario_ExcitingNonRaperSoHungryCalmsDownInsteadOfStayingExcited() {
+            body.setHungry(1);
+            body.setExciting(true);
+            body.setRaper(false);
+
+            SimYukkuri.RND = new ConstState(1);
+
+            FoodLogic.checkFood(body);
+
+            assertFalse(body.isExciting());
+        }
+
+        @Test
+        void testScenario_StarvingBodyWithShitNeedDoesNotClearActionsForToiletPriority() {
+            body.setHungry(1);
+            body.setShit(body.getShitLimit());
+            body.setToFood(true);
+
+            SimYukkuri.RND = new ConstState(1);
+
+            FoodLogic.checkFood(body);
+
+            assertTrue(body.isToFood());
+        }
+
     }
 }

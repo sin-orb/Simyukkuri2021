@@ -329,6 +329,55 @@ public class EmotionLogicTest {
         assertArrayEquals(new boolean[] { false, false, false, true, false, false, false }, result);
     }
 
+    @Test
+    public void testScenario_AverageSeesHappyPartner_EnvyOnly() throws Exception {
+        Body me = WorldTestHelper.createBody();
+        Body you = WorldTestHelper.createBody();
+        registerBodies(me, you);
+
+        me.setAttitude(Attitude.AVERAGE);
+        me.setHappiness(Happiness.AVERAGE);
+        you.setHappiness(Happiness.HAPPY);
+        mockRelation(me, you, EnumRelationMine.PARTNAR);
+
+        boolean[] result = EmotionLogic.checkEmotionForOther(me, you);
+
+        assertArrayEquals(new boolean[] { false, false, false, false, false, true, false }, result);
+    }
+
+    @Test
+    public void testScenario_SadSeesHappyStranger_SadAndEnvyOnly() throws Exception {
+        Body me = WorldTestHelper.createBody();
+        Body you = WorldTestHelper.createBody();
+        registerBodies(me, you);
+
+        me.setAttitude(Attitude.AVERAGE);
+        me.setHappiness(Happiness.SAD);
+        you.setHappiness(Happiness.HAPPY);
+        mockRelation(me, you, EnumRelationMine.OTHER);
+
+        boolean[] result = EmotionLogic.checkEmotionForOther(me, you);
+
+        assertArrayEquals(new boolean[] { false, false, true, false, false, true, false }, result);
+    }
+
+    @Test
+    public void testScenario_AverageRudeSeesSadStranger_JoyAndPleasureOnly() throws Exception {
+        Body me = WorldTestHelper.createBody();
+        Body you = WorldTestHelper.createBody();
+        registerBodies(me, you);
+
+        me.setAttitude(Attitude.SHITHEAD);
+        me.setHappiness(Happiness.AVERAGE);
+        you.setHappiness(Happiness.VERY_SAD);
+        mockRelation(me, you, EnumRelationMine.OTHER);
+        setPainStates(you, false, false, true);
+
+        boolean[] result = EmotionLogic.checkEmotionForOther(me, you);
+
+        assertArrayEquals(new boolean[] { true, false, false, true, false, false, false }, result);
+    }
+
     private void registerBodies(Body... bodies) {
         for (Body b : bodies) {
             src.SimYukkuri.world.getCurrentMap().getBody().put(b.getUniqueID(), b);
