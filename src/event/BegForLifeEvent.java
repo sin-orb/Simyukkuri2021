@@ -41,6 +41,46 @@ public class BegForLifeEvent extends EventPacket {
 
 	}
 
+	public int getRoop() {
+		return roop;
+	}
+
+	public void setRoop(int roop) {
+		this.roop = roop;
+	}
+
+	public int getRoop2() {
+		return roop2;
+	}
+
+	public void setRoop2(int roop2) {
+		this.roop2 = roop2;
+	}
+
+	public int getRoop3() {
+		return roop3;
+	}
+
+	public void setRoop3(int roop3) {
+		this.roop3 = roop3;
+	}
+
+	public int getTick() {
+		return tick;
+	}
+
+	public void setTick(int tick) {
+		this.tick = tick;
+	}
+
+	public int getWait() {
+		return wait;
+	}
+
+	public void setWait(int wait) {
+		this.wait = wait;
+	}
+
 	/**
 	 * 参加チェック
 	 * ここで各種チェックを行い、イベントへ参加するかを返す

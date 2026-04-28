@@ -15,6 +15,8 @@ import java.util.TreeSet;
 
 import javax.imageio.ImageIO;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
@@ -3279,6 +3281,7 @@ public abstract class Body extends BodyAttributes {
 	/**
 	 * 未誕生フラグを設定する.
 	 */
+	@JsonIgnore
 	public void setUnBirth(boolean flag) {
 		unBirth = flag;
 		enableWall = !flag;
@@ -3294,6 +3297,14 @@ public abstract class Body extends BodyAttributes {
 			}
 			wakeup();
 		}
+	}
+
+	@JsonProperty("unBirth")
+	public void setUnBirthForLoad(boolean flag) {
+		super.setUnBirth(flag);
+		enableWall = !flag;
+		setCanTalk(!flag);
+		setBFirstGround(true);
 	}
 
 	/**

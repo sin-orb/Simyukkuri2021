@@ -33,6 +33,14 @@ public class CutPenipeniEvent extends EventPacket {
 
 	}
 
+	public int getTick() {
+		return tick;
+	}
+
+	public void setTick(int tick) {
+		this.tick = tick;
+	}
+
 	// 参加チェック
 	// ここで各種チェックを行い、イベントへ参加するかを返す
 	// また、イベント優先度も必要に応じて設定できる

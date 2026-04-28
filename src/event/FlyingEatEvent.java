@@ -38,6 +38,14 @@ public class FlyingEatEvent extends EventPacket {
 
 	}
 
+	public int getTick() {
+		return tick;
+	}
+
+	public void setTick(int tick) {
+		this.tick = tick;
+	}
+
 	// 参加チェック
 	@Override
 	public boolean checkEventResponse(Body b) {

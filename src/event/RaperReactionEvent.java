@@ -50,6 +50,14 @@ public class RaperReactionEvent extends EventPacket {
 
 	}
 
+	public int getAge() {
+		return age;
+	}
+
+	public void setAge(int age) {
+		this.age = age;
+	}
+
 	// 参加チェック
 	@Override
 	public boolean checkEventResponse(Body b) {

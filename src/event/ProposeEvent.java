@@ -37,6 +37,22 @@ public class ProposeEvent extends EventPacket {
 
 	}
 
+	public int getTick() {
+		return tick;
+	}
+
+	public void setTick(int tick) {
+		this.tick = tick;
+	}
+
+	public boolean isStarted() {
+		return started;
+	}
+
+	public void setStarted(boolean started) {
+		this.started = started;
+	}
+
 	// 参加チェック
 	@Override
 	public boolean checkEventResponse(Body b) {

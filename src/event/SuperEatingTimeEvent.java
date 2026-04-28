@@ -58,6 +58,22 @@ public class SuperEatingTimeEvent extends EventPacket {
 
 	}
 
+	public int getTick() {
+		return tick;
+	}
+
+	public void setTick(int tick) {
+		this.tick = tick;
+	}
+
+	public int getFromWaitCount() {
+		return nFromWaitCount;
+	}
+
+	public void setFromWaitCount(int fromWaitCount) {
+		this.nFromWaitCount = fromWaitCount;
+	}
+
 	@Override
 	public boolean simpleEventAction(Body b) {
 		Body from = YukkuriUtil.getBodyInstance(getFrom());
@@ -122,6 +138,10 @@ public class SuperEatingTimeEvent extends EventPacket {
 
 	public int getLowestStep() {
 		return nLowestStep;
+	}
+
+	public void setLowestStep(int lowestStep) {
+		this.nLowestStep = lowestStep;
 	}
 
 	public STATE getState() {

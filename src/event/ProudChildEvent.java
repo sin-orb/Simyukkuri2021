@@ -61,6 +61,38 @@ public class ProudChildEvent extends EventPacket {
 
 	}
 
+	public int getTick() {
+		return tick;
+	}
+
+	public void setTick(int tick) {
+		this.tick = tick;
+	}
+
+	public boolean isActionFlag() {
+		return bActionFlag;
+	}
+
+	public void setActionFlag(boolean actionFlag) {
+		this.bActionFlag = actionFlag;
+	}
+
+	public boolean isUnunActionFlag() {
+		return bUnunActionFlag;
+	}
+
+	public void setUnunActionFlag(boolean ununActionFlag) {
+		this.bUnunActionFlag = ununActionFlag;
+	}
+
+	public int getFromWaitCount() {
+		return nFromWaitCount;
+	}
+
+	public void setFromWaitCount(int fromWaitCount) {
+		this.nFromWaitCount = fromWaitCount;
+	}
+
 	@Override
 	public boolean simpleEventAction(Body b) {
 		Body from = YukkuriUtil.getBodyInstance(getFrom());

@@ -334,6 +334,7 @@ public abstract class BodyAttributes extends Obj {
 	/** ゆっくりしてるかどうか */
 	private boolean relax = false;
 	/** 睡眠中かどうか */
+	@JsonProperty
 	private boolean sleeping = false;
 	/** 悪夢を見るかどうか */
 	private boolean nightmare = false;
@@ -440,6 +441,7 @@ public abstract class BodyAttributes extends Obj {
 	/** 発情期間 */
 	protected int excitingPeriod = 0;
 	/** 睡眠期間 */
+	@JsonProperty
 	protected int sleepingPeriod = 0;
 	/** 汚れている期間 */
 	protected int dirtyPeriod = 0;
@@ -2586,6 +2588,7 @@ public abstract class BodyAttributes extends Obj {
 	 * 
 	 * @param sleeping 睡眠中かどうか
 	 */
+	@JsonProperty
 	public void setSleeping(boolean sleeping) {
 		this.sleeping = sleeping;
 	}
@@ -5881,6 +5884,7 @@ public abstract class BodyAttributes extends Obj {
 	 * 
 	 * @return 睡眠中かどうか
 	 */
+	@JsonProperty
 	public boolean isSleeping() {
 		return (!dead && sleeping);
 	}

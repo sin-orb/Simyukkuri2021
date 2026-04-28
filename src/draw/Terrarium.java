@@ -54,13 +54,21 @@ import src.game.Shit;
 import src.game.Stalk;
 import src.game.Vomit;
 import src.item.Barrier;
+import src.item.AutoFeeder;
 import src.item.Beltconveyor;
 import src.item.Diffuser;
 import src.item.Farm;
 import src.item.Food;
+import src.item.GarbageChute;
+import src.item.GarbageStation;
+import src.item.HotPlate;
+import src.item.Mixer;
 import src.item.Pool;
+import src.item.StickyPlate;
+import src.item.Sui;
 import src.item.Toilet;
 import src.item.Toy;
+import src.item.Yunba;
 import src.logic.BedLogic;
 import src.logic.BodyLogic;
 import src.logic.EventLogic;
@@ -353,6 +361,205 @@ public class Terrarium implements Serializable {
 						baby.setZ(actualZ);
 						baby.setCalcZ(actualZ);
 					}
+				}
+			}
+		}
+
+		// すぃーと乗客の参照を復元
+		for (MapPlaceData mpd : SimYukkuri.world.getMapList()) {
+			for (Sui sui : mpd.getSui().values()) {
+				Body[] previousBindBodies = sui.getBindBody();
+				Body[] restoredBindBodies = new Body[previousBindBodies == null ? 3 : previousBindBodies.length];
+				Body restoredOwner = null;
+				int restoredBindCount = 0;
+
+				if (sui.getBindobj() instanceof Body && ((Body) sui.getBindobj()).getLinkParent() == sui.getObjId()) {
+					restoredOwner = (Body) sui.getBindobj();
+				}
+
+				for (Body b : mpd.getBody().values()) {
+					if (b.getLinkParent() != sui.getObjId()) {
+						continue;
+					}
+					if (restoredBindCount >= restoredBindBodies.length) {
+						break;
+					}
+					restoredBindBodies[restoredBindCount++] = b;
+					b.setDropShadow(false);
+					if (restoredOwner == null) {
+						restoredOwner = b;
+					}
+				}
+
+				sui.setBindBody(restoredBindBodies);
+				sui.setCurrent_bindbody_num(restoredBindCount);
+				sui.setBindobj(restoredOwner);
+				sui.upDate();
+			}
+		}
+
+		// 自動えさやり機の生成物参照を復元
+		for (MapPlaceData mpd : SimYukkuri.world.getMapList()) {
+			for (AutoFeeder feeder : mpd.getAutofeeder().values()) {
+				Obj food = feeder.getFood();
+				if (food == null) {
+					continue;
+				}
+
+				Obj restoredFood = null;
+				if (food instanceof Body) {
+					restoredFood = mpd.getBody().values().stream()
+							.filter(b -> b.getObjId() == food.getObjId())
+							.findFirst()
+							.orElse(null);
+				} else if (food instanceof Food) {
+					restoredFood = mpd.getFood().get(food.getObjId());
+				}
+
+				if (restoredFood != null) {
+					feeder.setFood(restoredFood);
+				}
+			}
+		}
+
+		// ホットプレートの拘束中個体と煙参照を復元
+		for (MapPlaceData mpd : SimYukkuri.world.getMapList()) {
+			for (HotPlate hotPlate : mpd.getHotPlate().values()) {
+				Body bindBody = hotPlate.getBindBody();
+				if (bindBody != null) {
+					Body restoredBody = mpd.getBody().values().stream()
+							.filter(b -> b.getObjId() == bindBody.getObjId())
+							.findFirst()
+							.orElse(null);
+					hotPlate.setBindBody(restoredBody);
+				}
+
+				Effect smoke = hotPlate.getSmoke();
+				if (smoke != null) {
+					Effect restoredSmoke = mpd.getSortEffect().get(smoke.getObjId());
+					if (restoredSmoke == null) {
+						restoredSmoke = mpd.getFrontEffect().get(smoke.getObjId());
+					}
+					hotPlate.setSmoke(restoredSmoke);
+				}
+			}
+		}
+
+		// 粘着板の拘束中個体を復元
+		for (MapPlaceData mpd : SimYukkuri.world.getMapList()) {
+			for (StickyPlate stickyPlate : mpd.getStickyPlate().values()) {
+				Body bindBody = stickyPlate.getBindBody();
+				if (bindBody != null) {
+					Body restoredBody = mpd.getBody().values().stream()
+							.filter(b -> b.getObjId() == bindBody.getObjId())
+							.findFirst()
+							.orElse(null);
+					stickyPlate.setBindBody(restoredBody);
+				}
+			}
+		}
+
+		// ミキサーの攪拌中個体とエフェクトを復元
+		for (MapPlaceData mpd : SimYukkuri.world.getMapList()) {
+			for (Mixer mixer : mpd.getMixer().values()) {
+				Effect mix = mixer.getMix();
+				if (mix != null) {
+					Effect restoredMix = mpd.getSortEffect().get(mix.getObjId());
+					if (restoredMix == null) {
+						restoredMix = mpd.getFrontEffect().get(mix.getObjId());
+					}
+					mixer.setMix(restoredMix);
+				}
+			}
+		}
+
+		// ダストシュートの拘束中オブジェクト参照を復元
+		for (MapPlaceData mpd : SimYukkuri.world.getMapList()) {
+			for (GarbageChute garbageChute : mpd.getGarbagechute().values()) {
+				List<Obj> restoredBindObjList = new ArrayList<>();
+				if (garbageChute.getBindObjList() != null) {
+					for (Obj bindObj : garbageChute.getBindObjList()) {
+						if (bindObj == null) {
+							continue;
+						}
+						Obj restoredObj = null;
+						if (bindObj instanceof Body) {
+							restoredObj = mpd.getBody().values().stream()
+									.filter(b -> b.getObjId() == bindObj.getObjId())
+									.findFirst()
+									.orElse(null);
+						} else if (bindObj instanceof Food) {
+							restoredObj = mpd.getFood().get(bindObj.getObjId());
+						} else if (bindObj instanceof Shit) {
+							restoredObj = mpd.getShit().get(bindObj.getObjId());
+						} else if (bindObj instanceof Vomit) {
+							restoredObj = mpd.getVomit().get(bindObj.getObjId());
+						} else if (bindObj instanceof Stalk) {
+							restoredObj = mpd.getStalk().get(bindObj.getObjId());
+						}
+						if (restoredObj != null) {
+							restoredBindObjList.add(restoredObj);
+						}
+					}
+				}
+				garbageChute.setBindObjList(restoredBindObjList);
+
+				Body bindBody = garbageChute.getBindBody();
+				if (bindBody != null) {
+					Body restoredBody = mpd.getBody().values().stream()
+							.filter(b -> b.getObjId() == bindBody.getObjId())
+							.findFirst()
+							.orElse(null);
+					garbageChute.setBindBody(restoredBody);
+				}
+			}
+		}
+
+		// ゴミ捨て場の中身参照を復元
+		for (MapPlaceData mpd : SimYukkuri.world.getMapList()) {
+			for (GarbageStation garbageStation : mpd.getGarbageStation().values()) {
+				Obj[] foods = garbageStation.getFood();
+				if (foods == null) {
+					continue;
+				}
+				Obj[] restoredFoods = new Obj[foods.length];
+				for (int i = 0; i < foods.length; i++) {
+					Obj food = foods[i];
+					if (food == null) {
+						continue;
+					}
+					restoredFoods[i] = mpd.getFood().get(food.getObjId());
+				}
+				garbageStation.setFood(restoredFoods);
+			}
+		}
+
+		// ゆんばの作業対象参照を復元
+		for (MapPlaceData mpd : SimYukkuri.world.getMapList()) {
+			for (Yunba yunba : mpd.getYunba().values()) {
+				Obj target = yunba.getTarget();
+				if (target == null) {
+					continue;
+				}
+
+				Obj restoredTarget = null;
+				if (target instanceof Body) {
+					restoredTarget = mpd.getBody().values().stream()
+							.filter(b -> b.getObjId() == target.getObjId())
+							.findFirst()
+							.orElse(null);
+				} else if (target instanceof Food) {
+					restoredTarget = mpd.getFood().get(target.getObjId());
+				} else if (target instanceof Shit) {
+					restoredTarget = mpd.getShit().get(target.getObjId());
+				} else if (target instanceof Vomit) {
+					restoredTarget = mpd.getVomit().get(target.getObjId());
+				} else if (target instanceof Stalk) {
+					restoredTarget = mpd.getStalk().get(target.getObjId());
+				}
+
+				if (restoredTarget != null) {
+					yunba.setTarget(restoredTarget);
 				}
 			}
 		}

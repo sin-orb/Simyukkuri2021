@@ -54,6 +54,54 @@ public class PredatorsGameEvent extends EventPacket {
 
 	}
 
+	public int getTick() {
+		return tick;
+	}
+
+	public void setTick(int tick) {
+		this.tick = tick;
+	}
+
+	public int getTick2() {
+		return tick2;
+	}
+
+	public void setTick2(int tick2) {
+		this.tick2 = tick2;
+	}
+
+	public int getToy() {
+		return toy;
+	}
+
+	public void setToy(int toy) {
+		this.toy = toy;
+	}
+
+	public boolean isFlyGame() {
+		return FlyGame;
+	}
+
+	public void setFlyGame(boolean flyGame) {
+		this.FlyGame = flyGame;
+	}
+
+	public boolean isGrabbing() {
+		return grabbing;
+	}
+
+	public void setGrabbing(boolean grabbing) {
+		this.grabbing = grabbing;
+	}
+
+	public boolean isSnack() {
+		return snack;
+	}
+
+	public void setSnack(boolean snack) {
+		this.snack = snack;
+	}
+
 	// 参加チェック
 	// このイベントがスタートできるのはれみりゃ、ふらんのみ
 	@Override
