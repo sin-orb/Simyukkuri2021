@@ -1,4 +1,5 @@
 package src.logic;
+import src.util.GameView;
 import src.util.GameEnvironment;
 import src.util.GameMessages;
 
@@ -1340,7 +1341,7 @@ public class FoodLogic {
 			default:
 				b.setMessage(GameMessages.getMessage(b, MessagePool.Action.SpitFood));
 				b.setHappiness(Happiness.VERY_SAD);
-				SimYukkuri.mypane.getTerrarium().addVomit(b.getX() + 7 - GameRandom.nextInt(14),
+				GameView.addVomit(b.getX() + 7 - GameRandom.nextInt(14),
 						b.getY() + 7 - GameRandom.nextInt(14), 0,
 						b, b.getShitType());
 				return;

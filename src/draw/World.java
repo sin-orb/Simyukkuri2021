@@ -1,4 +1,5 @@
 package src.draw;
+import src.util.GameView;
 
 import java.beans.Transient;
 import java.io.Serializable;
@@ -187,7 +188,7 @@ public class World implements Serializable {
 	 * 全マップのゆっくりリストをスキャンして遅延読み込みの復元
 	 */
 	public void loadInterBodyImage() {
-		if (SimYukkuri.mypane == null) {
+		if (GameView.getPane() == null) {
 			return;
 		}
 		// 遅延読み込みの復元
@@ -196,16 +197,12 @@ public class World implements Serializable {
 				Body b = entry.getValue();
 				if (b.getType() == HybridYukkuri.type) {
 					HybridYukkuri hb = (HybridYukkuri) b;
-					SimYukkuri.mypane
-							.loadBodyImage(YukkuriUtil.getYukkuriType(hb.getBaseBody(0).getClass().getSimpleName()));
-					SimYukkuri.mypane
-							.loadBodyImage(YukkuriUtil.getYukkuriType(hb.getBaseBody(1).getClass().getSimpleName()));
-					SimYukkuri.mypane
-							.loadBodyImage(YukkuriUtil.getYukkuriType(hb.getBaseBody(2).getClass().getSimpleName()));
-					SimYukkuri.mypane
-							.loadBodyImage(YukkuriUtil.getYukkuriType(hb.getBaseBody(3).getClass().getSimpleName()));
+					GameView.loadBodyImage(YukkuriUtil.getYukkuriType(hb.getBaseBody(0).getClass().getSimpleName()));
+					GameView.loadBodyImage(YukkuriUtil.getYukkuriType(hb.getBaseBody(1).getClass().getSimpleName()));
+					GameView.loadBodyImage(YukkuriUtil.getYukkuriType(hb.getBaseBody(2).getClass().getSimpleName()));
+					GameView.loadBodyImage(YukkuriUtil.getYukkuriType(hb.getBaseBody(3).getClass().getSimpleName()));
 				} else {
-					SimYukkuri.mypane.loadBodyImage(YukkuriUtil.getYukkuriType(b.getClass().getSimpleName()));
+					GameView.loadBodyImage(YukkuriUtil.getYukkuriType(b.getClass().getSimpleName()));
 				}
 			}
 		}

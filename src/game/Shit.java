@@ -1,4 +1,5 @@
 package src.game;
+import src.util.GameLocale;
 import src.util.GameText;
 
 //import java.awt.Point;
@@ -172,7 +173,7 @@ public class Shit extends Obj {
 		objId = Numbering.INSTANCE.numberingObjId();
 		objType = Type.SHIT;
 		shitType = type.ordinal();
-		ownerName = ResourceUtil.IS_JP ? b.getNameJ() : b.getNameE();
+		ownerName = GameLocale.isJapanese() ? b.getNameJ() : b.getNameE();
 		ownerId = b.getUniqueID();
 		x = initX;
 		y = initY;

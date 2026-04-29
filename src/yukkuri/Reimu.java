@@ -1,4 +1,5 @@
 package src.yukkuri;
+import src.util.GameView;
 import src.util.GameEnvironment;
 import src.util.GameMessages;
 
@@ -188,7 +189,7 @@ public class Reimu extends Body {
 		synchronized (SimYukkuri.lock) {
 			int originalId = getUniqueID();
 			GameWorld.get().getCurrentMap().getBody().remove(this.getUniqueID());
-			SimYukkuri.mypane.loadBodyImage(YukkuriType.DEIBU);
+			GameView.loadBodyImage(YukkuriType.DEIBU);
 			Body to = new Deibu(getX(), getY(), getZ(), getBodyAgeState(), null, null);
 			try {
 				YukkuriUtil.changeBody(to, this);

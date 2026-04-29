@@ -1,4 +1,5 @@
 package src.item;
+import src.util.GameView;
 import src.util.GameMessages;
 import src.util.GameText;
 
@@ -192,7 +193,7 @@ public class ProcesserPlate extends ObjEX {
 				Effect effect;
 				switch (enumProcessType.eMode) {
 					case HOTPLATE:
-						effect = SimYukkuri.mypane.getTerrarium().addEffect(EffectType.BAKE, bTarget.getX(),
+						effect = GameView.addEffect(EffectType.BAKE, bTarget.getX(),
 								bTarget.getY() + 1,
 								-2, 0, 0, 0, false, -1, -1, false, false, false);
 						break;
@@ -489,7 +490,7 @@ public class ProcesserPlate extends ObjEX {
 
 		but[0].setSelected(true);
 
-		int dlgRet = JOptionPane.showConfirmDialog(SimYukkuri.mypane, mainPanel, "加工設定", JOptionPane.OK_CANCEL_OPTION,
+		int dlgRet = JOptionPane.showConfirmDialog(GameView.getDialogParent(), mainPanel, "加工設定", JOptionPane.OK_CANCEL_OPTION,
 				JOptionPane.PLAIN_MESSAGE);
 
 		if (dlgRet == JOptionPane.OK_OPTION) {

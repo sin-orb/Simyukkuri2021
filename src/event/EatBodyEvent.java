@@ -1,4 +1,5 @@
 package src.event;
+import src.util.GameView;
 import src.util.GameMessages;
 import src.util.GameText;
 
@@ -98,7 +99,7 @@ public class EatBodyEvent extends EventPacket {
 			int ofsX = Translate.invertX(b.getCollisionX() >> 1, b.getY());
 			if (b.getDirection() == Direction.LEFT)
 				ofsX = -ofsX;
-			SimYukkuri.mypane.getTerrarium().addVomit(b.getX() + ofsX, b.getY(), b.getZ(), b, b.getShitType());
+			GameView.addVomit(b.getX() + ofsX, b.getY(), b.getZ(), b, b.getShitType());
 			b.stay();
 		} else if (tick == 120) {
 			// 善良ほどストレスを受ける

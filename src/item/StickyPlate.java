@@ -1,4 +1,5 @@
 package src.item;
+import src.util.GameView;
 import src.util.GameText;
 
 import java.awt.Dimension;
@@ -250,7 +251,7 @@ public class StickyPlate extends ObjEX {
 
 		but[0].setSelected(true);
 
-		int dlgRet = JOptionPane.showConfirmDialog(SimYukkuri.mypane, mainPanel,
+		int dlgRet = JOptionPane.showConfirmDialog(GameView.getDialogParent(), mainPanel,
 				GameText.read("item_stickysettings"),
 				JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 

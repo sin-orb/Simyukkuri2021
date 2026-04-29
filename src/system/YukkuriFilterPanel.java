@@ -1,4 +1,5 @@
 package src.system;
+import src.util.GameView;
 import src.util.GameText;
 
 import java.awt.Color;
@@ -210,7 +211,7 @@ public class YukkuriFilterPanel {
 			buttonPanel.add(but);
 		}
 
-		int dlgRet = JOptionPane.showConfirmDialog(SimYukkuri.mypane, mainPanel, strHead, 2, -1);
+		int dlgRet = JOptionPane.showConfirmDialog(GameView.getDialogParent(), mainPanel, strHead, 2, -1);
 		if (dlgRet == 0) {
 			for (int i = 0; i < nListSize; i++) {
 				if (checkBox[i].isSelected()) {

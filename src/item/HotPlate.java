@@ -1,4 +1,5 @@
 package src.item;
+import src.util.GameView;
 import src.util.GameMessages;
 
 import java.awt.image.BufferedImage;
@@ -115,7 +116,7 @@ public class HotPlate extends ObjEX {
 		bindBody.setCalcY(y);
 		bindBody.setLockmove(true);
 		if (smoke == null) {
-			smoke = SimYukkuri.mypane.getTerrarium().addEffect(EffectType.BAKE, bindBody.getX(), bindBody.getY() + 1,
+			smoke = GameView.addEffect(EffectType.BAKE, bindBody.getX(), bindBody.getY() + 1,
 					-2, 0, 0, 0, false, -1, -1, false, false, false);
 		}
 		return 1;

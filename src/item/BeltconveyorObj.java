@@ -4,6 +4,7 @@
 // Source File Name:   Beltconveyor.java
 
 package src.item;
+import src.util.GameView;
 import src.util.GameText;
 
 import java.awt.Graphics2D;
@@ -521,7 +522,7 @@ public class BeltconveyorObj extends ObjEX {
 			speed_Box.setSelectedIndex(belt.speed_before);
 		}
 
-		int dlgRet = JOptionPane.showConfirmDialog(SimYukkuri.mypane, mainPanel,
+		int dlgRet = JOptionPane.showConfirmDialog(GameView.getDialogParent(), mainPanel,
 				GameText.read("item_belconsettings"), 2, -1);
 		if (dlgRet != 0) {
 			return false;

@@ -1,4 +1,6 @@
 package src.base;
+import src.util.GameView;
+import src.util.GameLocale;
 import src.util.GameEnvironment;
 import src.util.GameImages;
 import src.util.GameMessages;
@@ -176,7 +178,7 @@ public abstract class Body extends BodyAttributes {
 
 	@Override
 	public String toString() {
-		String name = ResourceUtil.IS_JP ? getNameJ() : getNameE();
+		String name = GameLocale.isJapanese() ? getNameJ() : getNameE();
 		StringBuilder ret = new StringBuilder(name);
 		if (isUnBirth()) {
 			ret.append("(" + GameText.read("base_fruit") + ")");
@@ -315,7 +317,7 @@ public abstract class Body extends BodyAttributes {
 			else if (getCriticalDamege() == CriticalDamegeType.INJURED && !isSleeping()) {
 				// 1/300の確率で餡子を漏らす
 				if (GameRandom.nextInt(300) == 0) {
-					SimYukkuri.mypane.getTerrarium().addCrushedVomit(getX() + 3 - GameRandom.nextInt(6), getY() - 2,
+					GameView.addCrushedVomit(getX() + 3 - GameRandom.nextInt(6), getY() - 2,
 							0,
 							this,
 							getShitType());
@@ -704,7 +706,7 @@ public abstract class Body extends BodyAttributes {
 		// ちぎれ状態の場合は餡子を漏らす
 		if ((getCriticalDamege() == CriticalDamegeType.CUT || isPealed()) && getBaryState() == BaryInUGState.NONE) {
 			if (shit > getSHITLIMITorg()[getBodyAgeState().ordinal()] - TICK * Const.SHITSTAY * 2) {
-				SimYukkuri.mypane.getTerrarium().addCrushedVomit(getX() + 3 - GameRandom.nextInt(6), getY() - 2, 0,
+				GameView.addCrushedVomit(getX() + 3 - GameRandom.nextInt(6), getY() - 2, 0,
 						this,
 						getShitType());
 				addDamage(Const.NEEDLE * 2);
@@ -5860,7 +5862,7 @@ public abstract class Body extends BodyAttributes {
 			return;
 		if (isUnBirth())
 			return;
-		Vomit v = SimYukkuri.mypane.getTerrarium().addVomit(getX(), getY(), getZ(), this, getShitType());
+		Vomit v = GameView.addVomit(getX(), getY(), getZ(), this, getShitType());
 		v.crushVomit();
 		if (isNotNYD()) {
 			if (isSmart() || getBodyAgeState().ordinal() < eater.getBodyAgeState().ordinal() || isLockmove()
@@ -5893,7 +5895,7 @@ public abstract class Body extends BodyAttributes {
 		if (isUnBirth())
 			return;
 		if (AV) {
-			Vomit v = SimYukkuri.mypane.getTerrarium().addVomit(getX(), getY(), getZ(), this, getShitType());
+			Vomit v = GameView.addVomit(getX(), getY(), getZ(), this, getShitType());
 			v.crushVomit();
 		}
 		if (isNotNYD()) {
@@ -6332,9 +6334,9 @@ public abstract class Body extends BodyAttributes {
 			setMessage(GameMessages.getMessage(this, MessagePool.Action.Dying), true);
 			stay();
 			setCrushed(true);
-			if (SimYukkuri.mypane != null && SimYukkuri.mypane.getTerrarium() != null) {
+			if (GameView.getTerrarium() != null) {
 				for (int i = 0; i < (GameRandom.nextInt(5) + 5); i++) {
-					SimYukkuri.mypane.getTerrarium().addCrushedVomit(getX() + 7 - GameRandom.nextInt(14),
+					GameView.addCrushedVomit(getX() + 7 - GameRandom.nextInt(14),
 							getY() + 7 - GameRandom.nextInt(14),
 							0, this, getShitType());
 				}
@@ -6350,7 +6352,7 @@ public abstract class Body extends BodyAttributes {
 		setCriticalDamege(CriticalDamegeType.CUT);
 		if (getBaryState() == BaryInUGState.NONE) {
 			for (int i = 0; i < 5; i++) {
-				SimYukkuri.mypane.getTerrarium().addVomit(getX() + 7 - GameRandom.nextInt(14),
+				GameView.addVomit(getX() + 7 - GameRandom.nextInt(14),
 						getY() + 7 - GameRandom.nextInt(14), 0,
 						this, getShitType());
 			}
@@ -6376,7 +6378,7 @@ public abstract class Body extends BodyAttributes {
 		setMessage(GameMessages.getMessage(this, MessagePool.Action.Scream), 40, true, true);
 		setCriticalDamege(CriticalDamegeType.INJURED);
 		if (getBaryState() == BaryInUGState.NONE) {
-			SimYukkuri.mypane.getTerrarium().addVomit(getX() + 7 - GameRandom.nextInt(14),
+			GameView.addVomit(getX() + 7 - GameRandom.nextInt(14),
 					getY() + 7 - GameRandom.nextInt(14), 0, this,
 					getShitType());
 		}
@@ -7249,7 +7251,7 @@ public abstract class Body extends BodyAttributes {
 					int ofsX = Translate.invertX(getCollisionX() >> 1, y);
 					if (getDirection() == Direction.LEFT)
 						ofsX = -ofsX;
-					SimYukkuri.mypane.getTerrarium().addVomit(getX() + ofsX, getY() + 2, getZ(), this, getShitType());
+					GameView.addVomit(getX() + ofsX, getY() + 2, getZ(), this, getShitType());
 					damage += Const.HAMMER / 2;
 					setMessage(GameMessages.getMessage(this, MessagePool.Action.Vomit), 30);
 				}
@@ -8388,8 +8390,8 @@ public abstract class Body extends BodyAttributes {
 					setDeadPeriod(0);
 				} else {
 					// うんうんと吐餡に変わって消える
-					SimYukkuri.mypane.getTerrarium().addCrushedVomit(x, y, z, this, getShitType());
-					SimYukkuri.mypane.getTerrarium().addCrushedShit(x, y, z, this, getShitType());
+					GameView.addCrushedVomit(x, y, z, this, getShitType());
+					GameView.addCrushedShit(x, y, z, this, getShitType());
 					remove();
 					disPlantStalks();
 					return Event.REMOVED;

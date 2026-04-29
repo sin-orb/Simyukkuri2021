@@ -1,4 +1,5 @@
 package src.item;
+import src.util.GameView;
 import src.util.GameText;
 
 import java.awt.Dimension;
@@ -238,7 +239,7 @@ public class OrangePool extends ObjEX {
 			}
 		}
 
-		int dlgRet = JOptionPane.showConfirmDialog(SimYukkuri.mypane, mainPanel, "オレンジプール設定",
+		int dlgRet = JOptionPane.showConfirmDialog(GameView.getDialogParent(), mainPanel, "オレンジプール設定",
 				JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
 		if (dlgRet == JOptionPane.OK_OPTION) {

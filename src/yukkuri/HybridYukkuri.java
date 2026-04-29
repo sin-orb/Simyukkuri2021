@@ -1,4 +1,5 @@
 package src.yukkuri;
+import src.util.GameView;
 
 import java.awt.image.ImageObserver;
 import java.beans.Transient;
@@ -78,7 +79,7 @@ public class HybridYukkuri extends Body {
 					parentTmp = (HybridYukkuri) mama;
 					doreiTmp = parentTmp.dorei;
 				} else {
-					doreiTmp = SimYukkuri.mypane.getTerrarium().makeBody(0, 0, 0,
+					doreiTmp = GameView.makeBody(0, 0, 0,
 							mama.getType(), null, AgeState.BABY, mama, papa, false);
 				}
 			} else {
@@ -86,7 +87,7 @@ public class HybridYukkuri extends Body {
 					parentTmp = (HybridYukkuri) papa;
 					doreiTmp = parentTmp.dorei;
 				} else {
-					doreiTmp = SimYukkuri.mypane.getTerrarium().makeBody(0, 0, 0, papa.getType(),
+					doreiTmp = GameView.makeBody(0, 0, 0, papa.getType(),
 							null, AgeState.BABY, mama, papa, false);
 				}
 			}
@@ -96,7 +97,7 @@ public class HybridYukkuri extends Body {
 					parentTmp2 = (HybridYukkuri) papa;
 					doreiTmp2 = parentTmp2.dorei;
 				} else {
-					doreiTmp2 = SimYukkuri.mypane.getTerrarium().makeBody(0, 0, 0, papa.getType(),
+					doreiTmp2 = GameView.makeBody(0, 0, 0, papa.getType(),
 							null, AgeState.BABY, mama, papa, false);
 				}
 			} else {

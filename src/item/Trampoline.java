@@ -1,4 +1,5 @@
 package src.item;
+import src.util.GameView;
 import src.util.GameText;
 
 import java.awt.Dimension;
@@ -193,7 +194,7 @@ public class Trampoline extends ObjEX {
 		mainPanel.add(accident1Box);
 		mainPanel.add(new JLabel(GameText.read("item_trampolineaccianko")));
 		mainPanel.add(accident2Box);
-		int dlgRet = JOptionPane.showConfirmDialog(SimYukkuri.mypane, mainPanel,
+		int dlgRet = JOptionPane.showConfirmDialog(GameView.getDialogParent(), mainPanel,
 				GameText.read("item_trampolinesettings"), 2, -1);
 		if (dlgRet == 0) {
 			if (but[0].isSelected())

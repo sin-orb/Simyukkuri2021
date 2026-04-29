@@ -1,4 +1,5 @@
 package src;
+import src.util.GameLocale;
 import src.util.GameMessages;
 import src.util.GameText;
 
@@ -229,7 +230,7 @@ public class SimYukkuri extends JFrame {
 			return;
 		}
 		final File file = fc.getSelectedFile();
-		String msg = ResourceUtil.IS_JP ? "読み込み中..." : "Loading...";
+		String msg = GameLocale.isJapanese() ? "読み込み中..." : "Loading...";
 		runWithLoadingDialog(msg, () -> {
 			synchronized (lock) {
 				try {

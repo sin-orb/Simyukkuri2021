@@ -1,4 +1,5 @@
 package src.item;
+import src.util.GameView;
 import src.util.GameEnvironment;
 import src.util.GameText;
 
@@ -234,7 +235,7 @@ public class GarbageStation extends ObjEX {
 			panel.add(checkBox[i]);
 			mainPanel.add(panel);
 		}
-		int dlgRet = JOptionPane.showConfirmDialog(SimYukkuri.mypane, mainPanel, "ゴミ捨て場設定",
+		int dlgRet = JOptionPane.showConfirmDialog(GameView.getDialogParent(), mainPanel, "ゴミ捨て場設定",
 				JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 		if (dlgRet == JOptionPane.OK_OPTION) {
 			for (int i = 0; i < checkBox.length; i++) {

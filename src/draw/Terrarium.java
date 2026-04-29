@@ -1,4 +1,5 @@
 package src.draw;
+import src.util.GameView;
 
 import java.awt.Rectangle;
 import java.io.ByteArrayInputStream;
@@ -324,12 +325,12 @@ public class Terrarium implements Serializable {
 
 		// マップの復元
 		GameWorld.get().setNextMap(GameWorld.get().getCurrentMap().getMapIndex());
-		if (SimYukkuri.mypane != null) {
-			SimYukkuri.mypane.loadTerrainFile();
+		if (GameView.getPane() != null) {
+			GameView.loadTerrainFile();
 		}
 		GameWorld.get().changeMap();
-		if (SimYukkuri.mypane != null) {
-			SimYukkuri.mypane.createBackBuffer();
+		if (GameView.getPane() != null) {
+			GameView.createBackBuffer();
 		}
 		Translate.createTransTable(TerrainField.isPers());
 
@@ -1884,8 +1885,8 @@ public class Terrarium implements Serializable {
 	}
 
 	private void loadBodyImageSafe(YukkuriType type) {
-		if (SimYukkuri.mypane != null) {
-			SimYukkuri.mypane.loadBodyImage(type);
+		if (GameView.getPane() != null) {
+			GameView.loadBodyImage(type);
 		}
 	}
 }

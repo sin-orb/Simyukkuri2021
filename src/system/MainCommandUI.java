@@ -1,4 +1,5 @@
 package src.system;
+import src.util.GameLocale;
 import src.util.GameText;
 
 import java.awt.Dimension;
@@ -431,17 +432,17 @@ public class MainCommandUI {
 		int nLovePlayer = 100 * b.getnLovePlayer() / b.getLOVEPLAYERLIMITorg();
 
 		yuStatusLabel[StatusLabel.MONEY.ordinal()].setText(StatusLabel.MONEY.getLabel() + GameWorld.get().getPlayer().getCash());
-		yuStatusLabel[StatusLabel.NAME.ordinal()].setText(" " + (ResourceUtil.IS_JP ? b.getNameJ() : b.getNameE()));
+		yuStatusLabel[StatusLabel.NAME.ordinal()].setText(" " + (GameLocale.isJapanese() ? b.getNameJ() : b.getNameE()));
 		yuStatusLabel[StatusLabel.RANK.ordinal()].setText(StatusLabel.RANK.getLabel() + BodyRank.values()[b.getBodyRank().ordinal()].getDisplayName());
 		yuStatusLabel[StatusLabel.PERSONALITY.ordinal()].setText(StatusLabel.PERSONALITY.getLabel() +
-				(ResourceUtil.IS_JP ? ATTITUDE_LEVEL_J[b.getAttitude().ordinal()] : ATTITUDE_LEVEL_E[b.getAttitude().ordinal()]));
+				(GameLocale.isJapanese() ? ATTITUDE_LEVEL_J[b.getAttitude().ordinal()] : ATTITUDE_LEVEL_E[b.getAttitude().ordinal()]));
 		yuStatusLabel[StatusLabel.INTEL.ordinal()].setText(StatusLabel.INTEL.getLabel() + 
-				(ResourceUtil.IS_JP ? INTEL_LEVEL_J[b.getIntelligence().ordinal()] : INTEL_LEVEL_E[b.getIntelligence().ordinal()] ));
+				(GameLocale.isJapanese() ? INTEL_LEVEL_J[b.getIntelligence().ordinal()] : INTEL_LEVEL_E[b.getIntelligence().ordinal()] ));
 		yuStatusLabel[StatusLabel.DAMAGE.ordinal()].setText(StatusLabel.DAMAGE.getLabel() + damage + "%");
 		yuStatusLabel[StatusLabel.STRESS.ordinal()].setText(StatusLabel.STRESS.getLabel() + stress + "%");
 		yuStatusLabel[StatusLabel.HUNGER.ordinal()].setText(StatusLabel.HUNGER.getLabel() + hungry + "%");
 		yuStatusLabel[StatusLabel.TANG.ordinal()].setText(StatusLabel.TANG.getLabel() + 
-				(ResourceUtil.IS_JP ? TANG_LEVEL_J[b.getTangType().ordinal()] : TANG_LEVEL_E[b.getTangType().ordinal()]));
+				(GameLocale.isJapanese() ? TANG_LEVEL_J[b.getTangType().ordinal()] : TANG_LEVEL_E[b.getTangType().ordinal()]));
 		yuStatusLabel[StatusLabel.SHIT.ordinal()].setText(StatusLabel.SHIT.getLabel() + shit + "%");
 		yuStatusLabel[StatusLabel.LOVEPLAYER.ordinal()].setText(StatusLabel.LOVEPLAYER.getLabel() + nLovePlayer + "%");
 

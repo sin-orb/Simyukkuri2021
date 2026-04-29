@@ -1,4 +1,6 @@
 package src.yukkuri;
+import src.util.GameView;
+import src.util.GameLocale;
 import src.util.GameEnvironment;
 
 import java.awt.image.BufferedImage;
@@ -198,7 +200,7 @@ public class Marisa extends Body {
 				return;
 			}
 			GameWorld.get().getCurrentMap().getBody().remove(this.getUniqueID());
-			SimYukkuri.mypane.loadBodyImage(YukkuriType.DOSMARISA);
+			GameView.loadBodyImage(YukkuriType.DOSMARISA);
 			Body to = new DosMarisa(getX(), getY(), getZ(), getBodyAgeState(), null, null);
 			try {
 				YukkuriUtil.changeBody(to, this);
@@ -284,7 +286,7 @@ public class Marisa extends Body {
 		if (anMyName[getBodyAgeState().ordinal()] != null) {
 			return anMyName[getBodyAgeState().ordinal()];
 		}
-		if (ResourceUtil.IS_JP) {
+		if (GameLocale.isJapanese()) {
 			return nameJ;
 		} else {
 			return nameE;

@@ -1,4 +1,5 @@
 package src.command;
+import src.util.GameView;
 import src.util.GameEnvironment;
 import src.util.GameMessages;
 
@@ -589,7 +590,7 @@ public class GadgetAction {
 							if (b.getDirection() == Direction.LEFT)
 								ofsX = -ofsX;
 							if (!b.isPacked() && !b.isShutmouth())
-								SimYukkuri.mypane.getTerrarium().addVomit(b.getX() + ofsX, b.getY(), b.getZ(), b,
+								GameView.addVomit(b.getX() + ofsX, b.getY(), b.getZ(), b,
 										b.getShitType());
 							b.stay();
 						}
@@ -605,7 +606,7 @@ public class GadgetAction {
 							if (b.getDirection() == Direction.LEFT)
 								ofsX = -ofsX;
 							if (!b.isPacked() && !b.isShutmouth())
-								SimYukkuri.mypane.getTerrarium().addVomit(b.getX() + ofsX, b.getY(), b.getZ(), b,
+								GameView.addVomit(b.getX() + ofsX, b.getY(), b.getZ(), b,
 										b.getShitType());
 							b.stay();
 						}
@@ -654,7 +655,7 @@ public class GadgetAction {
 							if (b.getDirection() == Direction.LEFT)
 								ofsX = -ofsX;
 							if (!b.isPacked() && !b.isShutmouth())
-								SimYukkuri.mypane.getTerrarium().addVomit(b.getX() + ofsX, b.getY(), b.getZ(), b,
+								GameView.addVomit(b.getX() + ofsX, b.getY(), b.getZ(), b,
 										b.getShitType());
 							b.stay();
 						}
@@ -670,7 +671,7 @@ public class GadgetAction {
 							if (b.getDirection() == Direction.LEFT)
 								ofsX = -ofsX;
 							if (!b.isPacked() && !b.isShutmouth())
-								SimYukkuri.mypane.getTerrarium().addVomit(b.getX() + ofsX, b.getY(), b.getZ(), b,
+								GameView.addVomit(b.getX() + ofsX, b.getY(), b.getZ(), b,
 										b.getShitType());
 							b.stay();
 						}

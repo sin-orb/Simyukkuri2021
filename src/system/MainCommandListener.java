@@ -1,4 +1,5 @@
 package src.system;
+import src.util.GameView;
 import src.util.GameEnvironment;
 
 import java.awt.event.ActionEvent;
@@ -145,7 +146,7 @@ public class MainCommandListener {
 				SimYukkuri.simYukkuri.doLoad();
 			}
 			else if(source.equals(items[SystemButtonLabel.ADDBODY.ordinal()])) {
-				SimYukkuri.mypane.initBodies();
+				GameView.initBodies();
 			}
 			else if(source.equals(items[SystemButtonLabel.PREV.ordinal()])) {
 				LoggerYukkuri.addLogPage(-1);
@@ -212,7 +213,7 @@ public class MainCommandListener {
 			OptionPopup sel = OptionPopup.valueOf(command);
 			switch(sel) {
 				case INI_RELOAD:
-					SimYukkuri.mypane.loadImage(false, false, false, false, false, true);
+					GameView.loadImage(false, false, false, false, false, true);
 					for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
 						Body b = entry.getValue();
 						{

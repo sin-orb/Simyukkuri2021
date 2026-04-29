@@ -1,4 +1,5 @@
 package src.item;
+import src.util.GameView;
 import src.util.GameText;
 
 import java.awt.BasicStroke;
@@ -571,7 +572,7 @@ public class Beltconveyor extends FieldShapeBase {
 		mainPanel.add(BorderLayout.CENTER, centerPanel);
 		mainPanel.add(BorderLayout.SOUTH, southPanel);
 
-		int dlgRet = JOptionPane.showConfirmDialog(SimYukkuri.mypane, mainPanel,
+		int dlgRet = JOptionPane.showConfirmDialog(GameView.getDialogParent(), mainPanel,
 				GameText.read("item_coveyersettings"), JOptionPane.OK_CANCEL_OPTION,
 				JOptionPane.PLAIN_MESSAGE);
 

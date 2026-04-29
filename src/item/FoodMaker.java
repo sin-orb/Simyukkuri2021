@@ -1,4 +1,5 @@
 package src.item;
+import src.util.GameView;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
@@ -283,7 +284,7 @@ public class FoodMaker extends ObjEX {
 			if (x + 40 >= Translate.getMapW())
 				dir = -1;
 			if (foodType == FoodType.SHIT) {
-				SimYukkuri.mypane.getTerrarium().addVomit(x + (40 * dir), y, 0, null, YukkuriType.REIMU);
+				GameView.addVomit(x + (40 * dir), y, 0, null, YukkuriType.REIMU);
 			} else {
 				for (int i = 0; i < (foodAmount >> 1); i++) {
 					Food f = (Food) GadgetAction.putObjEX(Food.class, x + (40 * dir), y, foodType.ordinal());

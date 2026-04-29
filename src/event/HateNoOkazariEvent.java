@@ -1,4 +1,5 @@
 package src.event;
+import src.util.GameView;
 import src.util.GameMessages;
 import src.util.GameText;
 
@@ -176,10 +177,10 @@ public class HateNoOkazariEvent extends EventPacket {
 			}
 
 			if (b.getDirection() == Direction.LEFT) {
-				SimYukkuri.mypane.getTerrarium().addEffect(EffectType.HIT, b.getX() - 10, b.getY(), 0,
+				GameView.addEffect(EffectType.HIT, b.getX() - 10, b.getY(), 0,
 						0, 0, 0, false, 500, 1, true, false, true);
 			} else {
-				SimYukkuri.mypane.getTerrarium().addEffect(EffectType.HIT, b.getX() + 10, b.getY(), 0, 0, 0, 0, true,
+				GameView.addEffect(EffectType.HIT, b.getX() + 10, b.getY(), 0, 0, 0, 0, true,
 						500, 1, true, false, true);
 			}
 

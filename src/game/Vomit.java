@@ -1,4 +1,5 @@
 package src.game;
+import src.util.GameLocale;
 import src.util.GameText;
 
 import java.awt.image.BufferedImage;
@@ -174,7 +175,7 @@ public class Vomit extends Obj {
 		if (b == null) {
 			ageState = AgeState.ADULT;
 		} else {
-			ownerName = ResourceUtil.IS_JP ? b.getNameJ() : b.getNameE();
+			ownerName = GameLocale.isJapanese() ? b.getNameJ() : b.getNameE();
 			ageState = b.getBodyAgeState();
 		}
 		switch (ageState) {

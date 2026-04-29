@@ -1,4 +1,5 @@
 package src.system;
+import src.util.GameView;
 import src.util.GameText;
 
 import java.awt.Container;
@@ -109,7 +110,7 @@ public class MapWindow extends JDialog implements ActionListener, WindowListener
 		// 描画スレッドにロックをかける
 		GameWorld.get().setNextMap(idx);
 		// 行き先設定
-		SimYukkuri.mypane.loadTerrainFile();
+		GameView.loadTerrainFile();
 		Translate.createTransTable(TerrainField.isPers());
 		GameWorld.get().changeMap();
 		MyPane.setSelectBody(null);

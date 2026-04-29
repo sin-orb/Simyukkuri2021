@@ -1,4 +1,5 @@
 package src.draw;
+import src.util.GameLocale;
 import src.util.GameEnvironment;
 import src.util.GameText;
 
@@ -555,7 +556,7 @@ public class MyPane extends JPanel implements Runnable {
 	public class MyAddYukkuriListener implements ItemListener, ActionListener {
 		@SuppressWarnings({ "unchecked", "rawtypes" })
 		public void itemStateChanged(ItemEvent e) {
-			boolean isJp = ResourceUtil.IS_JP;
+			boolean isJp = GameLocale.isJapanese();
 			if (e.getStateChange() == ItemEvent.SELECTED) {
 				if (e.getSource() == cb3) {
 					if (cb3.getSelectedIndex() == 0) {
@@ -647,9 +648,9 @@ public class MyPane extends JPanel implements Runnable {
 			cb3.addItemListener(mayl);
 			cb1 = new JComboBox();
 			if (cb3.getSelectedIndex() == 0) {
-				cb1.setModel(new DefaultComboBoxModel(ResourceUtil.IS_JP ? namesCommonJ : namesCommonE));
+				cb1.setModel(new DefaultComboBoxModel(GameLocale.isJapanese() ? namesCommonJ : namesCommonE));
 			} else {
-				cb1.setModel(new DefaultComboBoxModel(ResourceUtil.IS_JP ? namesRareJ : namesRareE));
+				cb1.setModel(new DefaultComboBoxModel(GameLocale.isJapanese() ? namesRareJ : namesRareE));
 			}
 			cb1.setMaximumRowCount(8);
 			cb1.setSelectedIndex(0);
@@ -698,7 +699,7 @@ public class MyPane extends JPanel implements Runnable {
 			final int fRareType = cb3.getSelectedIndex();
 			final int fAgeType = cb2.getSelectedIndex();
 			final boolean fRaper = cb6.isSelected();
-			final String loadingMsg = ResourceUtil.IS_JP ? "読み込み中..." : "Loading...";
+			final String loadingMsg = GameLocale.isJapanese() ? "読み込み中..." : "Loading...";
 			SimYukkuri.simYukkuri.runWithLoadingDialog(loadingMsg, () -> {
 				for (int i = 0; i < fMaxNum; i++) {
 					int selectType;

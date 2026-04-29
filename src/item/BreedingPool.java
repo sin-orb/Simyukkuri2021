@@ -1,4 +1,5 @@
 package src.item;
+import src.util.GameView;
 import src.util.GameMessages;
 import src.util.GameText;
 
@@ -327,7 +328,7 @@ public class BreedingPool extends ObjEX {
 		} else {
 			but[o.lastSelected].setSelected(true);
 		}
-		int dlgRet = JOptionPane.showConfirmDialog(SimYukkuri.mypane, mainPanel,
+		int dlgRet = JOptionPane.showConfirmDialog(GameView.getDialogParent(), mainPanel,
 				GameText.read("item_poolsettings"),
 				JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 

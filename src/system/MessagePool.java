@@ -1,4 +1,5 @@
 package src.system;
+import src.util.GameLocale;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -852,13 +853,13 @@ public class MessagePool {
 			name = body.getMyName();
 		}
 		if (name.isEmpty()) {
-			name = ResourceUtil.IS_JP ? body.getNameJ() : body.getNameE();
+			name = GameLocale.isJapanese() ? body.getNameJ() : body.getNameE();
 			// name =YukkuriUtil.getYukkuriClassName(body.getType());
 		}
-		name2 = ResourceUtil.IS_JP ? body.getNameJ2() : body.getNameE2();
+		name2 = GameLocale.isJapanese() ? body.getNameJ2() : body.getNameE2();
 		Body pa = YukkuriUtil.getBodyInstance(body.getPartner());
 		if (pa != null)
-			partnerName = ResourceUtil.IS_JP ? pa.getNameJ() : pa.getNameE();
+			partnerName = GameLocale.isJapanese() ? pa.getNameJ() : pa.getNameE();
 
 		if (map == null)
 			return "NO MESSAGE FILE";

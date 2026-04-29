@@ -1,4 +1,5 @@
 package src.item;
+import src.util.GameView;
 import src.util.GameText;
 
 import java.awt.Dimension;
@@ -253,7 +254,7 @@ public class Toilet extends ObjEX {
 
 		but[0].setSelected(true);
 
-		int dlgRet = JOptionPane.showConfirmDialog(SimYukkuri.mypane, mainPanel, "トイレ設定", JOptionPane.OK_CANCEL_OPTION,
+		int dlgRet = JOptionPane.showConfirmDialog(GameView.getDialogParent(), mainPanel, "トイレ設定", JOptionPane.OK_CANCEL_OPTION,
 				JOptionPane.PLAIN_MESSAGE);
 
 		if (dlgRet == JOptionPane.OK_OPTION) {

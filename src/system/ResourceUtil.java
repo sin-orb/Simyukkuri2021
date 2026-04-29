@@ -19,6 +19,12 @@ public class ResourceUtil {
 	private static Locale thisLocale = Locale.getDefault();
 	private static Locale enLocale = new Locale("en");
 	private static Locale jaLocale = new Locale("ja");
+	public static final Locale JAPANESE = jaLocale;
+	/**
+	 * @deprecated Use {@code GameLocale.getLocale()} or the migration helper
+	 *             {@code GameLocale.isJapanese()} instead.
+	 */
+	@Deprecated
 	public static final boolean IS_JP = thisLocale.getLanguage().equals(jaLocale.getLanguage());
 	private static ResourceUtil instance;
 	private static Map<String, Map<String, String>> strings = new HashMap<String, Map<String, String>>();

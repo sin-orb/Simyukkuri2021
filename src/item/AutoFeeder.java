@@ -1,4 +1,5 @@
 package src.item;
+import src.util.GameView;
 import src.util.GameText;
 
 import java.awt.Dimension;
@@ -190,7 +191,7 @@ public class AutoFeeder extends ObjEX {
 			if (type == FeedType.PROCESSED_BODY.ordinal()) {
 				// オートフィーダで出るゆっくりのタイプを決める。
 				int type = makeRandomType();
-				food = SimYukkuri.mypane.getTerrarium().addBody(getX(), getY(), 0, type, AgeState.BABY, null, null);
+				food = GameView.addBody(getX(), getY(), 0, type, AgeState.BABY, null, null);
 				Cash.buyYukkuri((Body) food);
 				Cash.addCash(-getCost());
 				// レイパーは生まれないようにする
@@ -202,7 +203,7 @@ public class AutoFeeder extends ObjEX {
 			} else if (type == FeedType.BODY.ordinal()) {
 				// オートフィーダで出るゆっくりのタイプを決める。
 				int type = makeRandomType();
-				food = SimYukkuri.mypane.getTerrarium().addBody(getX(), getY(), 0, type, AgeState.BABY, null, null);
+				food = GameView.addBody(getX(), getY(), 0, type, AgeState.BABY, null, null);
 				Cash.buyYukkuri((Body) food);
 				Cash.addCash(-getCost() + 5);
 			} else {
@@ -312,7 +313,7 @@ public class AutoFeeder extends ObjEX {
 			mainPanel.add(but[i]);
 		}
 		but[0].setSelected(true);
-		int dlgRet = JOptionPane.showConfirmDialog(SimYukkuri.mypane, mainPanel,
+		int dlgRet = JOptionPane.showConfirmDialog(GameView.getDialogParent(), mainPanel,
 				GameText.read("item_autosetting"), JOptionPane.OK_CANCEL_OPTION,
 				JOptionPane.PLAIN_MESSAGE);
 
@@ -352,7 +353,7 @@ public class AutoFeeder extends ObjEX {
 			mainPanel.add(but[i]);
 		}
 		but[0].setSelected(true);
-		int dlgRet = JOptionPane.showConfirmDialog(SimYukkuri.mypane, mainPanel,
+		int dlgRet = JOptionPane.showConfirmDialog(GameView.getDialogParent(), mainPanel,
 				GameText.read("item_movetypesettings"),
 				JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 

@@ -1,4 +1,5 @@
 package src.item;
+import src.util.GameView;
 import src.util.GameMessages;
 
 import java.awt.image.BufferedImage;
@@ -148,7 +149,7 @@ public class Mixer extends ObjEX {
 			// ミキサー駆動開始
 			if (counter > 60) {
 				if (mix == null) {
-					mix = SimYukkuri.mypane.getTerrarium().addEffect(EffectType.MIX, bindBody.getX(),
+					mix = GameView.addEffect(EffectType.MIX, bindBody.getX(),
 							bindBody.getY() + 1,
 							-2, 0, 0, 0, false, -1, -1, false, false, false);
 				}

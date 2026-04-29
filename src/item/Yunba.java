@@ -1,4 +1,6 @@
 package src.item;
+import src.util.GameView;
+import src.util.GameLocale;
 import src.util.GameText;
 
 import java.awt.BorderLayout;
@@ -78,7 +80,7 @@ public class Yunba extends ObjEX {
 		private String name;
 
 		Action(String nameJ, String nameE) {
-			this.name = ResourceUtil.IS_JP ? nameJ : nameE;
+			this.name = GameLocale.isJapanese() ? nameJ : nameE;
 		}
 
 		public String toString() {
@@ -1031,7 +1033,7 @@ public class Yunba extends ObjEX {
 		mainPanel.add(BorderLayout.LINE_START, topPanel2);
 		mainPanel.add(BorderLayout.SOUTH, southPanel);
 
-		int dlgRet = JOptionPane.showConfirmDialog(SimYukkuri.mypane, mainPanel,
+		int dlgRet = JOptionPane.showConfirmDialog(GameView.getDialogParent(), mainPanel,
 				GameText.read("item_yunbasettings"), JOptionPane.OK_CANCEL_OPTION,
 				JOptionPane.PLAIN_MESSAGE);
 

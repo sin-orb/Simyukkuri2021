@@ -1,4 +1,5 @@
 package src.item;
+import src.util.GameView;
 import src.util.GameText;
 
 import java.awt.Dimension;
@@ -116,7 +117,7 @@ public class Diffuser extends ObjEX {
 
 		if (getAge() % 40 == 0) {
 			if (steamType[steamNum]) {
-				Effect e = SimYukkuri.mypane.getTerrarium().addEffect(EffectType.STEAM, x, y, z + getH() >> 3,
+				Effect e = GameView.addEffect(EffectType.STEAM, x, y, z + getH() >> 3,
 						0, 0, -1, false, 30, 0, false, false, false);
 
 				e.setAnimeFrame(SteamType.values()[steamNum].getColor());
@@ -189,7 +190,7 @@ public class Diffuser extends ObjEX {
 			mainPanel.add(panel);
 		}
 
-		int dlgRet = JOptionPane.showConfirmDialog(SimYukkuri.mypane, mainPanel,
+		int dlgRet = JOptionPane.showConfirmDialog(GameView.getDialogParent(), mainPanel,
 				GameText.read("item_diffusersettings"),
 				JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 

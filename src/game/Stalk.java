@@ -1,4 +1,5 @@
 package src.game;
+import src.util.GameLocale;
 import src.util.GameImages;
 import src.util.GameText;
 
@@ -463,7 +464,7 @@ public class Stalk extends ObjEX {
 	// if (p != null) {
 	// ret += (plantYukkuri == -1 ?
 	// GameText.read("command_status_nothing") :
-	// ResourceUtil.IS_JP ?
+	// GameLocale.isJapanese() ?
 	// p.getNameJ() : p.getNameE());
 	// }
 	// ret += GameText.read("game_stalk2");
@@ -479,7 +480,7 @@ public class Stalk extends ObjEX {
 	// if (baby == null) {
 	// ret += GameText.read("game_empty");
 	// } else {
-	// ret += ResourceUtil.IS_JP ? baby.getNameJ() : baby.getNameE();
+	// ret += GameLocale.isJapanese() ? baby.getNameJ() : baby.getNameE();
 	// }
 	// ret += ",";
 	// }
