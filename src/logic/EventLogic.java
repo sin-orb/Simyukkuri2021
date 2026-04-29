@@ -6,7 +6,6 @@ import src.SimYukkuri;
 import src.util.GameWorld;
 import src.base.Body;
 import src.base.EventPacket;
-import src.draw.Translate;
 import src.util.YukkuriUtil;
 
 /***************************************************
@@ -167,29 +166,7 @@ public class EventLogic {
 	 * @param b ゆっくり
 	 */
 	public static final void eventUpdate(Body b) {
-		EventPacket.UpdateState state = null;
-		EventPacket ev = b.getCurrentEvent();
-		if( ev == null ){
-			return;
-		}
-		// フレーム更新
-		state = ev.update(b);
-		// ABORTが返されたらイベント中断
-		if(EventPacket.UpdateState.ABORT == state) {
-			ev.end(b);
-			b.clearActions();
-			return;
-		}
-
-		// 移動先に到達またはupdateがFORCE_EXECを返したらexecute呼び出し
-		// 相手の消滅、死亡などのチェックはexecuteで行う
-		if (EventPacket.UpdateState.FORCE_EXEC == state ||
-				b.getZ() == ev.getToZ() && (b.getStepDist() + 2) >= Translate.distance(b.getX(), b.getY(), ev.getToX(), ev.getToY())) {
-			if(ev.execute(b)) {
-				ev.end(b);
-				b.clearActions();
-			}
-		}
+		BodyEventState.updateCurrentEvent(b);
 	}
 }
 

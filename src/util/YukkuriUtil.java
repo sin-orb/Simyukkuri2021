@@ -443,6 +443,9 @@ public class YukkuriUtil {
 			fromField[i].setAccessible(true);
 			toField.set(to, fromField[i].get(from));
 		}
+		to.copyBodyStatSetFrom(from);
+		to.copyBodyTimingSetFrom(from);
+		to.copyBodyBehaviorSetFrom(from);
 
 		// Bodyクラスのコピー
 		fromField = from.getClass().getSuperclass().getDeclaredFields();
@@ -468,6 +471,8 @@ public class YukkuriUtil {
 			toField.set(to, fromField[i].get(from));
 
 		}
+		to.copyBodyNameSetFrom(from);
+		to.copyBodySpriteSetFrom(from);
 		//まりさ、れいむクラスのコピーはしない（意味がない）
 
 		// 可変な関係情報は共有しない

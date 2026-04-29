@@ -185,9 +185,9 @@ public class Suwako extends Body {
 		PREGPERIODorg *= factor;
 		SLEEPPERIODorg *= factor;
 		ACTIVEPERIODorg *= factor;
-		sameDest = GameRandom.nextInt(10) + 10;
+		setSameDest(GameRandom.nextInt(10) + 10);
 		DECLINEPERIODorg *= (Math.random() + 0.5);
-		ROBUSTNESS = GameRandom.nextInt(20) + 1;
+		setROBUSTNESS(GameRandom.nextInt(20) + 1);
 		// EYESIGHT /= 1;
 		factor = Math.random() + 1;
 		STRENGTHorg[AgeState.ADULT.ordinal()] *= factor;

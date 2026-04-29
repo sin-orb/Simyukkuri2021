@@ -100,6 +100,10 @@ import src.item.Sui;
 import src.item.Toilet;
 import src.item.Trampoline;
 import src.logic.BodyLogic;
+import src.logic.BodyMovement;
+import src.logic.BodyEventState;
+import src.logic.BodyRelations;
+import src.logic.BodyRenderState;
 import src.logic.EventLogic;
 import src.logic.FamilyActionLogic;
 import src.logic.ToyLogic;
@@ -2620,120 +2624,7 @@ public abstract class Body extends BodyAttributes {
 			bz = 0;
 			return;
 		}
-		int mx = vx + getBx();
-		int my = vy + getBy();
-		int mz = vz + bz;
-
-		if (mx != 0) {
-			x += mx;
-			if (Barrier.onBarrier(x, y, getW() >> 2, getH() >> 3, Barrier.MAP_BODY[getBodyAgeState().ordinal()])) {
-				x -= mx;
-				vx = 0;
-			} else if (x < 0) {
-				falldownDamage += Math.abs(vx);
-				x = 0;
-				vx = 0;
-			} else if (x > Translate.getMapW()) {
-				falldownDamage += Math.abs(vx);
-				x = Translate.getMapW();
-				vx = 0;
-			}
-		}
-
-		if (my != 0) {
-			y += my;
-			if (Barrier.onBarrier(x, y, getW() >> 2, getH() >> 3, Barrier.MAP_BODY[getBodyAgeState().ordinal()])) {
-				y -= my;
-				vy = 0;
-			} else if (y < 0) {
-				falldownDamage += Math.abs(vy);
-				y = 0;
-				vy = 0;
-				dirY = 1;
-			} else if (y > Translate.getMapH()) {
-				falldownDamage += Math.abs(vy);
-				y = Translate.getMapH();
-				vy = 0;
-				dirY = -1;
-			}
-		}
-
-		// 空中なら落ちない
-		if (0 < z) {
-			bFallingUnderGround = false;
-		}
-
-		// 飛行できるゆっくりはvzによる外力以外では高度を保つ
-		if ((mz != 0 || (!canflyCheck() && getMostDepth() != z && getBindStalk() == null)) && !bFallingUnderGround) {
-			falldownDamage = (vz > 0 ? falldownDamage : 0);
-			// if falling down, it cannot move to x-y axis
-			mz += 1;
-			vz += 1;
-			z -= mz;
-			falldownDamage += (vz > 0 ? vz : 0);
-			if (z <= nMostDepth) {
-				if (SimYukkuri.UNYO) {
-					changeUnyo(0, 0, (int) (falldownDamage * 0.4 + 1));
-				}
-				falldownDamage += Math.abs(vy);
-				z = nMostDepth;
-				vz = 0;
-				vy = 0;
-				vx = 0;
-				int jumpLevel[] = { 2, 2, 1 };
-				int damageCut = 1;
-				if (falldownDamage >= 8 / jumpLevel[getBodyAgeState().ordinal()]) {
-					if (checkOnBed()) {
-						damageCut = 4;
-					} else {
-						// ベッドの上以外で生まれた時にダメージを受けた場合、つらい思い出が残る(暫定で良い思いしてない時に落下ダメージ受けたら）
-						if (isBFirstGround()) {
-							addMemories(-20);
-						}
-					}
-
-					if (damageCut != 4) {
-						for (Map.Entry<Integer, Trampoline> entry : GameWorld.get().getCurrentMap().getTrampoline()
-								.entrySet()) {
-							Trampoline t = entry.getValue();
-							if (t.checkHitObj(this)) {
-								damageCut = 100;
-								break;
-							}
-						}
-					}
-
-					if (isbNoDamageNextFall() && falldownDamage != 0) {
-						setbNoDamageNextFall(false);
-						falldownDamage = 0;
-					}
-
-					// 赤ゆならベッドの上ではノーダメージ
-					if (!checkOnBed() || !isBaby()) {
-						strike(falldownDamage * 100 * 24 * 3 / 100 / damageCut);
-					}
-
-					// 生まれて最初の挨拶
-					if (isBFirstGround()) {
-						setMessage(GameMessages.getMessage(this, MessagePool.Action.TakeItEasy));
-						addStress(-400);
-						addMemories(20);
-					}
-					// 地面についたのでフラグをリセット
-					setBFirstGround(false);
-
-					if (isPealed())
-						toDead();
-					if (isDead()) {
-						setMessage(GameMessages.getMessage(this, MessagePool.Action.Dying));
-						stay();
-						setCrushed(true);
-					}
-				}
-			}
-			setBx(0);
-			setBy(0);
-			bz = 0;
+		if (BodyMovement.applyExternalMotion(this)) {
 			return;
 		}
 
@@ -2759,29 +2650,8 @@ public abstract class Body extends BodyAttributes {
 		}
 
 		// moving
-		int step = getSTEPorg()[getBodyAgeState().ordinal()];
-		if (hasBabyOrStalk() || (isSoHungry() && !isPredatorType()) || getDamageState() != Damage.NONE
-				|| isSick() || isFeelPain() || (isFlyingType() && !canflyCheck())
-				|| (isGotBurnedHeavily() && !canflyCheck())) {
-			step /= 2;
-		}
-		if (getAttachmentSize(Ants.class) != 0) {
-			step /= 2;
-		}
-		if (isBlind()) {
-			step /= 2;
-		}
-
-		// 家族でおでかけ中なら一番足が遅いものにあわせる
-		if (getCurrentEvent() instanceof SuperEatingTimeEvent) {
-			step = ((SuperEatingTimeEvent) getCurrentEvent()).getLowestStep();
-		}
-
-		if (step == 0) {
-			step = 1;
-		}
-
-		int freq = getSTEPorg()[AgeState.ADULT.ordinal()] / step;
+		int step = BodyMovement.calculateMovementStep(this);
+		int freq = BodyMovement.calculateMovementFrequency(this, step);
 		if (getAge() % freq != 0) {
 			setBx(0);
 			setBy(0);
@@ -2791,225 +2661,27 @@ public abstract class Body extends BodyAttributes {
 
 		// calculate x direction
 		if (destX >= 0) {
-			dirX = decideDirection(x, destX, 0);
-			if (dirX == 0) {
-				destX = -1;
-			}
+			BodyMovement.updateDestinationDirectionX(this);
 		} else {
-			if (countX++ >= getSameDest() * getSTEPorg()[getBodyAgeState().ordinal()]) {
-				countX = 0;
-				dirX = randomDirection(dirX);
-				if (!hasOkazari() && (isSad() || isVerySad())) {
-					if (GameRandom.nextInt(10) == 0) {
-						setMessage(GameMessages.getMessage(this, MessagePool.Action.NoAccessory));
-					}
-				}
-			}
+			BodyMovement.updateRandomDirectionX(this);
 		}
 		// calculate y direction
 		if (destY >= 0) {
-			dirY = decideDirection(y, destY, 0);
-			if (dirY == 0) {
-				destY = -1;
-			}
+			BodyMovement.updateDestinationDirectionY(this);
 		} else {
-			if (countY++ >= getSameDest() * getSTEPorg()[getBodyAgeState().ordinal()]) {
-				countY = 0;
-				dirY = randomDirection(dirY);
-				if (!hasOkazari() && (isSad() || isVerySad())) {
-					if (GameRandom.nextInt(10) == 0) {
-						setMessage(GameMessages.getMessage(this, MessagePool.Action.NoAccessory));
-					}
-				}
-			}
+			BodyMovement.updateRandomDirectionY(this);
 		}
 		// calculate z direction
-		if (canflyCheck()) {
-			if (destZ >= 0) {
-				dirZ = decideDirection(z, destZ, 0);
-				if (dirZ == 0) {
-					destZ = -1;
-				}
-			}
-			// 目標が無ければ高度を保つように移動
-			if (takeMoveTarget() == null && getCurrentEvent() == null) {
-				destZ = Translate.getFlyHeightLimit();
-			}
-		}
+		BodyMovement.updateFlightDestination(this);
 
-		// move to the direction
-		step = 1;
-		if (isRaper() && isExciting())
-			step = 2;
-
-		int vecX = dirX * step * speed / 100;
-		int vecY = dirY * step * speed / 100;
-		int vecZ = dirZ * step * speed / 100;
-		// 実験 speedの切り捨て部分の反映
-		if (speed % 100 > 0) {
-			if (GameRandom.nextInt(100) < speed % 100) {
-				vecX += dirX;
-				vecY += dirY;
-				vecZ += dirZ;
-			}
-		}
-
-		// 明確な目的地がある場合は行き過ぎをチェック
-		if (destX != -1) {
-			if (dirX < 0) {
-				if ((x + vecX) < destX) {
-					x = destX;
-				} else {
-					x += vecX;
-				}
-			} else if (dirX > 0) {
-				if ((x + vecX) > destX) {
-					x = destX;
-				} else {
-					x += vecX;
-				}
-			}
-		} else {
-			x += vecX;
-		}
-		if (destY != -1) {
-			if (dirY < 0) {
-				if ((y + vecY) < destY) {
-					y = destY;
-				} else {
-					y += vecY;
-				}
-			} else if (dirY > 0) {
-				if ((y + vecY) > destY) {
-					y = destY;
-				} else {
-					y += vecY;
-				}
-			}
-		} else {
-			y += vecY;
-		}
-		if (canflyCheck() && destZ != -1) {
-			if (dirZ < 0) {
-				if ((z + vecZ) < destZ) {
-					z = destZ;
-				} else {
-					z += vecZ;
-				}
-			} else if (dirZ > 0) {
-				if ((z + vecZ) > destZ) {
-					z = destZ;
-				} else {
-					z += vecZ;
-				}
-			}
-		} else {
-			z += vecZ;
-		}
-
-		// 壁チェック
-		if (Barrier.onBarrier(x, y, getW() >> 2, getH() >> 3, Barrier.MAP_BODY[getBodyAgeState().ordinal()])) {
-			x -= vecX;
-			y -= vecY;
-			z -= vecZ;
-			// 壁にひっかかったら方向転換
-			if ((destX >= 0) || (destY >= 0) || (destZ >= 0)) {
-				setBlockedCount(Math.min(getBlockedCount() + 1, getBLOCKEDLIMITorg() * 2));
-				if (getBlockedCount() > getBLOCKEDLIMITorg()) {
-					if (GameRandom.nextBoolean()) {
-						dirX = randomDirection(dirX);
-					} else {
-						dirY = randomDirection(dirY);
-					}
-					destX = -1;
-					destY = -1;
-					// イベント中の場合はイベントをクリアしない(壁衝突でうろうろし続ける問題の修正)
-					if (getCurrentEvent() != null) {
-						clearActionsForEvent();
-					} else {
-						clearActions();
-					}
-					if (getIntelligence() == Intelligence.FOOL && getPanicType() != null) {
-						setHappiness(Happiness.VERY_SAD);
-					}
-				} else if (getBlockedCount() > getBLOCKEDLIMITorg() / 2 && getIntelligence() == Intelligence.FOOL
-						&& getPanicType() != null) {
-					if (isRude()) {
-						setAngry();
-					} else {
-						setCalm();
-						setHappiness(Happiness.SAD);
-					}
-				}
-				if (getIntelligence() == Intelligence.FOOL && getPanicType() != null) {
-					setMessage(GameMessages.getMessage(this, MessagePool.Action.BlockedByWall));
-				}
-			} else {
-				dirX = randomDirection(dirX);
-				dirY = randomDirection(dirY);
-			}
-		} else {
-			setBlockedCount(Math.max(0, getBlockedCount() - 1));
-
-			// プール外からプール内への移動チェック
-			if ((Translate.getCurrentFieldMapNum(x, y) & FieldShapeBase.FIELD_POOL) != 0 &&
-					(Translate.getCurrentFieldMapNum(x - vecX, y - vecY) & FieldShapeBase.FIELD_POOL) == 0) {
-				// 水が嫌いなら近寄らない
-				if (!isLikeWater()) {
-					int nRandom = 1;
-					// 事故率の設定
-					switch (getIntelligence()) {
-						case FOOL:
-							nRandom = 10;
-							break;
-						case AVERAGE:
-							nRandom = 30;
-							break;
-						case WISE:
-							nRandom = 100;
-							break;
-					}
-
-					if (GameRandom.nextInt(nRandom) != 0) {
-						x -= vecX;
-						y -= vecY;
-						z -= vecZ;
-
-						dirX = randomDirection(dirX);
-						dirY = randomDirection(dirY);
-					}
-				}
-			}
-		}
-
-		if (x < 0) {
-			x = 0;
-			dirX = 1;
-		} else if (x > Translate.getMapW()) {
-			x = Translate.getMapW();
-			dirX = -1;
-		}
-		if (y < 0) {
-			y = 0;
-			dirY = 1;
-		} else if (y > Translate.getMapH()) {
-			y = Translate.getMapH();
-			dirY = -1;
-		}
-		if (z < 0) {
-			// z = 0;
-		} else if (z > Translate.getMapZ()) {
-			z = Translate.getMapZ();
-		}
-		// update direction of the face
-		if (dirX == -1) {
-			setDirection(Direction.LEFT);
-		} else if (dirX == 1) {
-			setDirection(Direction.RIGHT);
-		}
-		setBx(0);
-		setBy(0);
-		bz = 0;
+			// move to the direction
+			step = BodyMovement.calculateDirectionalStep(this);
+			BodyMovement.MovementVector vector = BodyMovement.calculateMovementVector(this, step);
+			BodyMovement.applyDirectedMovement(this, vector);
+			BodyMovement.resolveDirectedMovement(this, vector);
+			setBx(0);
+			setBy(0);
+			bz = 0;
 	}
 
 	/**
@@ -3018,19 +2690,7 @@ public abstract class Body extends BodyAttributes {
 	 * @param message メッセージ
 	 */
 	public void setMessage(String message) {
-		if (message == null)
-			return;
-
-		if (message.length() == 0)
-			return;
-
-		// messageの長さで自動的に調整する
-		int nSize = message.length();
-		if (20 < nSize) {
-			setMessage(message, WindowType.NORMAL, nSize, false, false, false);
-		} else {
-			setMessage(message, WindowType.NORMAL, Const.HOLDMESSAGE, false, false, false);
-		}
+		BodyEventState.setMessage(this, message);
 	}
 
 	/**
@@ -3040,7 +2700,7 @@ public abstract class Body extends BodyAttributes {
 	 * @param interrupt 現在メッセージ中でも割り込むかどうか
 	 */
 	public void setPikoMessage(String message, boolean interrupt) {
-		setMessage(message, WindowType.NORMAL, Const.HOLDMESSAGE, interrupt, true, false);
+		BodyEventState.setPikoMessage(this, message, interrupt);
 	}
 
 	/**
@@ -3051,7 +2711,7 @@ public abstract class Body extends BodyAttributes {
 	 * @param interrupt 現在メッセージ中でも割り込むかどうか
 	 */
 	public void setPikoMessage(String message, int count, boolean interrupt) {
-		setMessage(message, WindowType.NORMAL, count, interrupt, true, false);
+		BodyEventState.setPikoMessage(this, message, count, interrupt);
 	}
 
 	/**
@@ -3061,7 +2721,7 @@ public abstract class Body extends BodyAttributes {
 	 * @param count   メッセージ時間
 	 */
 	public void setMessage(String message, int count) {
-		setMessage(message, WindowType.NORMAL, count, false, false, false);
+		BodyEventState.setMessage(this, message, count);
 	}
 
 	/**
@@ -3071,7 +2731,7 @@ public abstract class Body extends BodyAttributes {
 	 * @param interrupt 現在メッセージ中でも割り込むかどうか
 	 */
 	public void setMessage(String message, boolean interrupt) {
-		setMessage(message, WindowType.NORMAL, Const.HOLDMESSAGE, interrupt, false, false);
+		BodyEventState.setMessage(this, message, interrupt);
 	}
 
 	/**
@@ -3083,7 +2743,7 @@ public abstract class Body extends BodyAttributes {
 	 * @param piko      ピコピコするかどうか
 	 */
 	public void setMessage(String message, int count, boolean interrupt, boolean piko) {
-		setMessage(message, WindowType.NORMAL, count, interrupt, piko, false);
+		BodyEventState.setMessage(this, message, count, interrupt, piko);
 	}
 
 	/**
@@ -3093,7 +2753,7 @@ public abstract class Body extends BodyAttributes {
 	 * @param count   メッセージ時間
 	 */
 	public void setWorldEventSendMessage(String message, int count) {
-		setMessage(message, WindowType.WORLD_SEND, count, true, false, false);
+		BodyEventState.setWorldEventSendMessage(this, message, count);
 	}
 
 	/**
@@ -3105,7 +2765,7 @@ public abstract class Body extends BodyAttributes {
 	 * @param piko      ピコピコするかどうか
 	 */
 	public void setWorldEventResMessage(String message, int count, boolean interrupt, boolean piko) {
-		setMessage(message, WindowType.WORLD_RES, count, interrupt, piko, false);
+		BodyEventState.setWorldEventResMessage(this, message, count, interrupt, piko);
 	}
 
 	/**
@@ -3115,7 +2775,7 @@ public abstract class Body extends BodyAttributes {
 	 * @param count   メッセージ時間
 	 */
 	public void setBodyEventSendMessage(String message, int count) {
-		setMessage(message, WindowType.BODY_SEND, count, true, false, false);
+		BodyEventState.setBodyEventSendMessage(this, message, count);
 	}
 
 	/**
@@ -3127,7 +2787,7 @@ public abstract class Body extends BodyAttributes {
 	 * @param piko      ピコピコするかどうか
 	 */
 	public void setBodyEventResMessage(String message, int count, boolean interrupt, boolean piko) {
-		setMessage(message, WindowType.BODY_RES, count, interrupt, piko, false);
+		BodyEventState.setBodyEventResMessage(this, message, count, interrupt, piko);
 	}
 
 	/**
@@ -3137,7 +2797,7 @@ public abstract class Body extends BodyAttributes {
 	 * @param piko    ピコピコするかどうか
 	 */
 	public void setNYDMessage(String message, boolean piko) {
-		setMessage(message, WindowType.NORMAL, Const.HOLDMESSAGE, true, piko, true);
+		BodyEventState.setNYDMessage(this, message, piko);
 	}
 
 	/**
@@ -3151,85 +2811,7 @@ public abstract class Body extends BodyAttributes {
 	 * @param NYD       非ゆっくり症
 	 */
 	public void setMessage(String message, WindowType type, int count, boolean interrupt, boolean piko, boolean NYD) {
-		if (!NYD
-				&& (isNYD() /* || shutmouth */ || isSleeping())) {
-			return;
-		}
-
-		// 死亡時
-		if (isSilent())
-			return;
-		// 緊急時以外の自制時。静かにするよ！！と言ってしまう。
-		if (!interrupt && GameRandom.nextInt(messageDiscipline + 1) != 0
-				&& getIntelligence() != Intelligence.WISE) {
-			message = GameMessages.getMessage(this, MessagePool.Action.BeingQuiet);
-			return;
-		}
-		// その他の要因
-		if (!isCanTalk()) {
-			messageCount = 0;
-			setMessageBuf(null);
-			return;
-		}
-		// メッセージ無効時
-		if (message == null || message.length() == 0) {
-			messageCount = 0;
-			setMessageBuf(null);
-			return;
-		}
-
-		// interruptがtrueなら現在メッセージ表示中でも割り込む
-		if (interrupt || messageCount == 0) {
-			messageCount = count;
-			setMessageBuf(message);
-			// reset actions.
-			if (!isFixBack()) {
-				setFurifuri(false);
-			}
-			setSukkiri(false);
-			setBeVain(false);
-			setNobinobi(false);
-			setYunnyaa(false);
-			setPikopiko(piko);
-			setOrigMessageLineColor(Const.WINDOW_COLOR[type.ordinal()][0]);
-			setOrigMessageBoxColor(Const.WINDOW_COLOR[type.ordinal()][1]);
-			setOrigMessageTextColor(Const.WINDOW_COLOR[type.ordinal()][2]);
-			setMessageWindowStroke(Const.WINDOW_STROKE[type.ordinal()]);
-			switch (getBaryState()) {
-				case NONE:
-					setMessageTextSize(12);
-					break;
-				case HALF:
-					setMessageTextSize(12);
-					setFurifuri(false);
-					break;
-				case NEARLY_ALL:
-					setMessageTextSize(8);
-					setPikopiko(false);
-					setFurifuri(false);
-					setBeVain(false);
-					setNobinobi(false);
-					setPeropero(false);
-					setYunnyaa(false);
-					setBegging(false);
-					setOrigMessageBoxColor(new Color(217, 128, 0, 200));
-					break;
-				case ALL:
-					setMessageTextSize(7);
-					setPikopiko(false);
-					setFurifuri(false);
-					setBeVain(false);
-					setNobinobi(false);
-					setPeropero(false);
-					setYunnyaa(false);
-					setBegging(false);
-					setOrigMessageBoxColor(new Color(128, 54, 0, 200));
-					break;
-				default:
-					setMessageTextSize(12);
-					break;
-			}
-		}
+		BodyEventState.setMessage(this, message, type, count, interrupt, piko, NYD);
 	}
 
 	/**
@@ -3239,7 +2821,7 @@ public abstract class Body extends BodyAttributes {
 	 * @param piko    ピコピコするかどうか
 	 */
 	public void setNegiMessage(String message, boolean piko) {
-		setNegiMessage(message, Const.HOLDMESSAGE, piko);
+		BodyEventState.setNegiMessage(this, message, piko);
 	}
 
 	/**
@@ -3250,32 +2832,7 @@ public abstract class Body extends BodyAttributes {
 	 * @param piko    ピコピコするかどうか
 	 */
 	public void setNegiMessage(String message, int count, boolean piko) {
-		if (!isCanTalk()) {
-			messageCount = 0;
-			setMessageBuf(null);
-			return;
-		}
-		messageCount = count;
-		setMessageBuf(message);
-		setPikopiko(piko);
-		// reset actions.
-		if (!isFixBack()) {
-			setFurifuri(false);
-		}
-		setStrike(false);
-		setEating(false);
-		setEatingShit(false);
-		setPeropero(false);
-		setSukkiri(false);
-		setNobinobi(false);
-		setBeVain(false);
-		setYunnyaa(false);
-		setInOutTakeoutItem(false);
-		setOrigMessageLineColor(Const.NEGI_WINDOW_COLOR[0]);
-		setOrigMessageBoxColor(Const.NEGI_WINDOW_COLOR[1]);
-		setOrigMessageTextColor(Const.NEGI_WINDOW_COLOR[2]);
-		setMessageWindowStroke(Const.WINDOW_STROKE[0]);
-		setMessageTextSize(12);
+		BodyEventState.setNegiMessage(this, message, count, piko);
 	}
 
 	/**
@@ -4131,15 +3688,7 @@ public abstract class Body extends BodyAttributes {
 	 * @return otherと何らかの家族関係にあるか
 	 */
 	public final boolean isFamily(Body other) {
-		if (isParent(other))
-			return true;
-		if (other.isParent(this))
-			return true;
-		if (isPartner(other))
-			return true;
-		if (isSister(other))
-			return true;
-		return false;
+		return BodyRelations.isFamily(this, other);
 	}
 
 	/**
@@ -4149,11 +3698,7 @@ public abstract class Body extends BodyAttributes {
 	 * @return 自分がotherの親かどうか
 	 */
 	public final boolean isParent(Body other) {
-		if (other == null) {
-			return false;
-		}
-		return (YukkuriUtil.getBodyInstance(other.getParents()[Parent.PAPA.ordinal()]) == this ||
-				YukkuriUtil.getBodyInstance(other.getParents()[Parent.MAMA.ordinal()]) == this);
+		return BodyRelations.isParent(this, other);
 	}
 
 	/**
@@ -4163,10 +3708,7 @@ public abstract class Body extends BodyAttributes {
 	 * @return 自分がotherの父親かどうか
 	 */
 	public final boolean isFather(Body other) {
-		if (other == null) {
-			return false;
-		}
-		return (YukkuriUtil.getBodyInstance(other.getParents()[Parent.PAPA.ordinal()]) == this);
+		return BodyRelations.isFather(this, other);
 	}
 
 	/**
@@ -4176,10 +3718,7 @@ public abstract class Body extends BodyAttributes {
 	 * @return 自分がotherの母親かどうか
 	 */
 	public final boolean isMother(Body other) {
-		if (other == null) {
-			return false;
-		}
-		return (YukkuriUtil.getBodyInstance(other.getParents()[Parent.MAMA.ordinal()]) == this);
+		return BodyRelations.isMother(this, other);
 	}
 
 	/**
@@ -4189,10 +3728,7 @@ public abstract class Body extends BodyAttributes {
 	 * @return otherが自分の子かどうか
 	 */
 	public final boolean isChild(Body other) {
-		if (other == null) {
-			return false;
-		}
-		return other.isParent(this);
+		return BodyRelations.isChild(this, other);
 	}
 
 	/**
@@ -4202,11 +3738,7 @@ public abstract class Body extends BodyAttributes {
 	 * @return otherがじぶんのつがいかどうか
 	 */
 	public final boolean isPartner(Body other) {
-		if (other == null) {
-			return false;
-		}
-		Body pa = YukkuriUtil.getBodyInstance(getPartner());
-		return (pa != null && pa == other);
+		return BodyRelations.isPartner(this, other);
 	}
 
 	/**
@@ -4216,13 +3748,7 @@ public abstract class Body extends BodyAttributes {
 	 * @return otherが自分の姉妹かどうか
 	 */
 	public final boolean isSister(Body other) {
-		if (YukkuriUtil.getBodyInstance(getParents()[Parent.MAMA.ordinal()]) != null) {
-			return (getParents()[Parent.MAMA.ordinal()] == other.getParents()[Parent.MAMA.ordinal()]);
-		}
-		if (YukkuriUtil.getBodyInstance(getParents()[Parent.PAPA.ordinal()]) != null) {
-			return (getParents()[Parent.PAPA.ordinal()] == other.getParents()[Parent.PAPA.ordinal()]);
-		}
-		return false;
+		return BodyRelations.isSister(this, other);
 	}
 
 	/**
@@ -4232,7 +3758,7 @@ public abstract class Body extends BodyAttributes {
 	 * @return otherが自分の妹か
 	 */
 	public final boolean isElderSister(Body other) {
-		return (isSister(other) && (getAge() >= other.getAge()));
+		return BodyRelations.isElderSister(this, other);
 	}
 
 	/**
@@ -5587,15 +5113,7 @@ public abstract class Body extends BodyAttributes {
 	 * @param toZ Z座標
 	 */
 	public final void moveTo(int toX, int toY, int toZ) {
-		if (isDead()) {
-			return;
-		}
-		if (getBlockedCount() != 0) {
-			return;
-		}
-		destX = Math.max(0, Math.min(toX, Translate.getMapW()));
-		destY = Math.max(0, Math.min(toY, Translate.getMapH()));
-		destZ = Math.max(0, Math.min(toZ, Translate.getMapZ()));
+		BodyMovement.moveTo(this, toX, toY, toZ);
 	}
 
 	/**
@@ -5742,10 +5260,7 @@ public abstract class Body extends BodyAttributes {
 	 * @param toZ    Z座標
 	 */
 	public final void moveToBody(Obj target, int toX, int toY, int toZ) {
-		clearActions();
-		setToBody(true);
-		setMoveTarget(target.objId);
-		moveTo(toX, toY, toZ);
+		BodyMovement.moveToBody(this, target, toX, toY, toZ);
 	}
 
 	/**
@@ -7319,23 +6834,7 @@ public abstract class Body extends BodyAttributes {
 	 * @param fromY Y座標
 	 */
 	public void runAway(int fromX, int fromY) {
-		if (!canAction() || isExciting() || isAngry() || isUnBirth()) {
-			return;
-		}
-		int toX, toY;
-		if (x > fromX) {
-			toX = Translate.getMapW();
-		} else {
-			toX = 0;
-		}
-		if (y > fromY) {
-			toY = Translate.getMapH();
-		} else {
-			toY = 0;
-		}
-		moveTo(toX, toY);
-		clearActions();
-		setScare(true);
+		BodyMovement.runAway(this, fromX, fromY);
 	}
 	// ------------------------------------------
 
@@ -7405,39 +6904,14 @@ public abstract class Body extends BodyAttributes {
 	 * 行動・イベントの取り消し
 	 */
 	public void clearActions() {
-		setToSukkiri(false);
-		setToBed(false);
-		setToFood(false);
-		setToShit(false);
-		setToBody(false);
-		setToSteal(false);
-		if (getCurrentEvent() != null) {
-			getCurrentEvent().end(this);
-		}
-		setCurrentEvent(null);
-
-		setMoveTarget(-1);
-		setForceFace(-1);
-		setDropShadow(true);
-		setTargetPosOfsX(0);
-		setTargetPosOfsY(0);
-		setTargetBind(false);
-		stopPlaying();
-		setOfsXY(0, 0);
-
+		BodyEventState.clearActions(this);
 	}
 
 	/**
 	 * イベントをクリアする.
 	 */
 	public void clearEvent() {
-		if (getCurrentEvent() != null) {
-			getCurrentEvent().end(this);
-		}
-		setCurrentEvent(null);
-		setForceFace(-1);
-		setDropShadow(true);
-		stopPlaying();
+		BodyEventState.clearEvent(this);
 	}
 
 	/**
@@ -7481,129 +6955,7 @@ public abstract class Body extends BodyAttributes {
 	 * @return index
 	 */
 	public int getBodyBaseImage(BodyLayer layer) {
-		int direction = this.getDirection().ordinal();
-		int idx = 0;
-
-		// 正面かそうでないか
-		layer.getOption()[0] = 0;
-		//
-		layer.getOption()[1] = 0;
-		layer.getOption()[2] = 0;
-
-		if (isBurned() && isDead()) {
-			// 焼死体
-			idx += getImage(ImageCode.BURNED.ordinal(), Const.LEFT, layer, idx);
-		} else if (isCrushed()) {
-			// 潰れた死体
-			if (isBurned()) {
-				idx += getImage(ImageCode.BURNED2.ordinal(), Const.LEFT, layer, idx);
-			} else {
-				if (isPealed()) {
-					idx += getImage(ImageCode.CRUSHED3.ordinal(), Const.LEFT, layer, idx);
-				} else if (getOkazari() != null && getOkazari().getOkazariType() == OkazariType.DEFAULT) {
-					idx += getImage(ImageCode.CRUSHED.ordinal(), Const.LEFT, layer, idx);
-				} else {
-					idx += getImage(ImageCode.CRUSHED2.ordinal(), Const.LEFT, layer, idx);
-				}
-			}
-		} else if (isPacked()) {
-			if (isDead()) {
-				idx += getImage(ImageCode.PACKED_DEAD.ordinal(), Const.LEFT, layer, idx);
-			} else if (getAge() % 6 <= 2) {
-				idx += getImage(ImageCode.PACKED1.ordinal(), Const.LEFT, layer, idx);
-			} else {
-				idx += getImage(ImageCode.PACKED2.ordinal(), Const.LEFT, layer, idx);
-			}
-		} else if (isShitting() || isBirth() && getBabyTypes().size() > 0 || (isFixBack() && !isFurifuri())) {
-			// 排泄、出産時
-			idx += getImage(ImageCode.FRONT_SHIT.ordinal(), Const.LEFT, layer, idx);
-			if (geteHairState() == HairState.DEFAULT) {
-				idx += getImage(ImageCode.FRONT_HAIR.ordinal(), Const.LEFT, layer, idx);
-			} else if (geteHairState() == HairState.BRINDLED1 || geteHairState() == HairState.BRINDLED2) {
-				idx += getImage(ImageCode.FRONT_HAIR2.ordinal(), Const.LEFT, layer, idx);
-			}
-			if (isAnalClose()) {
-				idx += getImage(ImageCode.FRONT_SEALED.ordinal(), Const.LEFT, layer, idx);
-			}
-			if (getCriticalDamege() == CriticalDamegeType.INJURED) {
-				idx += getImage(ImageCode.FRONT_INJURED.ordinal(), Const.LEFT, layer, idx);
-			}
-			if (isBlind()) {
-				idx += getImage(ImageCode.FRONT_BLIND.ordinal(), Const.LEFT, layer, idx);
-			}
-			if (isHasPants()) {
-				idx += getImage(ImageCode.FRONT_PANTS.ordinal(), Const.LEFT, layer, idx);
-			}
-			if (isHasBraid()) {
-				idx += getImage(ImageCode.FRONT_BRAID.ordinal(), Const.LEFT, layer, idx);
-			}
-			if (getOkazari() != null && getOkazari().getOkazariType() == OkazariType.DEFAULT) {
-				idx += getImage(ImageCode.ROLL_ACCESSORY.ordinal(), Const.LEFT, layer, idx);
-			}
-		} else if (isFurifuri() && !isSleeping() && (!isLockmove() || isFixBack())) {
-			// ふりふり
-			if (getAge() % 8 <= 3) {
-				idx += getImage(ImageCode.ROLL_LEFT_SHIT.ordinal(), Const.LEFT, layer, idx);
-				if (geteHairState() == HairState.DEFAULT) {
-					idx += getImage(ImageCode.ROLL_LEFT_HAIR.ordinal(), Const.LEFT, layer, idx);
-				} else if (geteHairState() == HairState.BRINDLED1 || geteHairState() == HairState.BRINDLED2) {
-					idx += getImage(ImageCode.FRONT_HAIR2.ordinal(), Const.LEFT, layer, idx);
-				}
-				if (isAnalClose()) {
-					idx += getImage(ImageCode.ROLL_LEFT_SEALED.ordinal(), Const.LEFT, layer, idx);
-				}
-				if (getCriticalDamege() == CriticalDamegeType.INJURED) {
-					idx += getImage(ImageCode.ROLL_LEFT_INJURED.ordinal(), Const.LEFT, layer, idx);
-				}
-				if (isBlind()) {
-					idx += getImage(ImageCode.ROLL_LEFT_BLIND.ordinal(), Const.LEFT, layer, idx);
-				}
-				if (isHasPants()) {
-					idx += getImage(ImageCode.ROLL_LEFT_PANTS.ordinal(), Const.LEFT, layer, idx);
-				}
-				if (isHasBraid()) {
-					idx += getImage(ImageCode.ROLL_LEFT_BRAID.ordinal(), Const.LEFT, layer, idx);
-				}
-			} else if (getAge() % 8 <= 7) {
-				idx += getImage(ImageCode.ROLL_RIGHT_SHIT.ordinal(), Const.LEFT, layer, idx);
-				if (geteHairState() == HairState.DEFAULT) {
-					idx += getImage(ImageCode.ROLL_RIGHT_HAIR.ordinal(), Const.LEFT, layer, idx);
-				} else if (geteHairState() == HairState.BRINDLED1 || geteHairState() == HairState.BRINDLED2) {
-					idx += getImage(ImageCode.FRONT_HAIR2.ordinal(), Const.LEFT, layer, idx);
-				}
-				if (isAnalClose()) {
-					idx += getImage(ImageCode.ROLL_RIGHT_SEALED.ordinal(), Const.LEFT, layer, idx);
-				}
-				if (getCriticalDamege() == CriticalDamegeType.INJURED) {
-					idx += getImage(ImageCode.ROLL_RIGHT_INJURED.ordinal(), Const.LEFT, layer, idx);
-				}
-				if (isBlind()) {
-					idx += getImage(ImageCode.ROLL_RIGHT_BLIND.ordinal(), Const.LEFT, layer, idx);
-				}
-				if (isHasPants()) {
-					idx += getImage(ImageCode.ROLL_RIGHT_PANTS.ordinal(), Const.LEFT, layer, idx);
-				}
-				if (isHasBraid()) {
-					idx += getImage(ImageCode.ROLL_RIGHT_BRAID.ordinal(), Const.LEFT, layer, idx);
-				}
-			}
-			if (getOkazari() != null && getOkazari().getOkazariType() == OkazariType.DEFAULT) {
-				idx += getImage(ImageCode.ROLL_ACCESSORY.ordinal(), Const.LEFT, layer, idx);
-			}
-		}
-
-		else {
-			// 皮むき時
-			if (isPealed()) {
-				idx += getImage(ImageCode.PEALED.ordinal(), direction, layer, idx);
-			}
-			// 通常時
-			else {
-				idx += getImage(ImageCode.BODY.ordinal(), direction, layer, idx);
-			}
-			layer.getOption()[0] = 1;
-		}
-		return idx;
+		return BodyRenderState.getBodyBaseImage(this, layer);
 	}
 
 	/**
@@ -7613,25 +6965,7 @@ public abstract class Body extends BodyAttributes {
 	 * @return index
 	 */
 	public int getAbnormalBodyImage(BodyLayer layer) {
-		int direction = this.getDirection().ordinal();
-		int idx = 0;
-		// 切断
-		if (getCriticalDamege() != null) {
-			if (getCriticalDamege() == CriticalDamegeType.CUT) {
-				idx += getImage(ImageCode.BODY_CUT.ordinal(), direction, layer, idx);
-			} else
-				idx += getImage(ImageCode.BODY_INJURED.ordinal(), direction, layer, idx);
-		}
-		// 溶解
-		if (isMelt()) {
-
-			if (isPealed()) {
-				idx += getImage(ImageCode.MELT_PEALED.ordinal(), direction, layer, idx);
-			} else {
-				idx += getImage(ImageCode.MELT.ordinal(), direction, layer, idx);
-			}
-		}
-		return idx;
+		return BodyRenderState.getAbnormalBodyImage(this, layer);
 	}
 
 	/**
@@ -7642,26 +6976,7 @@ public abstract class Body extends BodyAttributes {
 	 * @return index
 	 */
 	public int getOlazariImage(BodyLayer layer, int type) {
-		int direction = this.getDirection().ordinal();
-		int idx = 0;
-		if (getOkazari() == null) {
-			layer.getImage()[idx] = null;
-			idx++;
-		} else {
-			if (type == 0) {
-				if (getOkazari().getOkazariType() == OkazariType.DEFAULT) {
-					idx += getImage(ImageCode.ACCESSORY.ordinal(), direction, layer, idx);
-				}
-				// ゴミおかざり
-				else {
-					layer.getImage()[idx] = Okazari.getOkazariImage(getOkazari().getOkazariType(), direction);
-					idx++;
-				}
-			} else {
-				idx += getImage(ImageCode.ACCESSORY_BACK.ordinal(), direction, layer, idx);
-			}
-		}
-		return idx;
+		return BodyRenderState.getOlazariImage(this, layer, type);
 	}
 
 	/**
@@ -7671,78 +6986,7 @@ public abstract class Body extends BodyAttributes {
 	 * @return index
 	 */
 	public int getEffectImage(BodyLayer layer) {
-		int direction = this.getDirection().ordinal();
-		int idx = 0;
-		// layer.option[0] = 0;
-		// 死亡
-		if (isDead())
-			idx += getImage(ImageCode.DEAD_BODY.ordinal(), direction, layer, idx);
-
-		// 空腹
-		if (isTooHungry()) {
-			idx += getImage(ImageCode.HUNGRY2.ordinal(), direction, layer, idx);
-		} else if (isVeryHungry()) {
-			idx += getImage(ImageCode.HUNGRY1.ordinal(), direction, layer, idx);
-		} else if (isSoHungry()) {
-			idx += getImage(ImageCode.HUNGRY0.ordinal(), direction, layer, idx);
-		}
-
-		// 足焼き
-		FootBake f = getFootBakeLevel();
-		if (f == FootBake.MIDIUM) {
-			idx += getImage(ImageCode.FOOT_BAKE0.ordinal(), direction, layer, idx);
-		} else if (f == FootBake.CRITICAL) {
-			idx += getImage(ImageCode.FOOT_BAKE1.ordinal(), direction, layer, idx);
-		}
-		// 体の焦げ
-		BodyBake b = getBodyBakeLevel();
-		if (b == BodyBake.MIDIUM) {
-			idx += getImage(ImageCode.BODY_BAKE0.ordinal(), direction, layer, idx);
-		} else if (b == BodyBake.CRITICAL) {
-			idx += getImage(ImageCode.BODY_BAKE1.ordinal(), direction, layer, idx);
-		}
-		// ダメージ
-		if (isPealed())
-			;
-		else if (isDamagedHeavily()) {
-			idx += getImage(ImageCode.DAMAGED2.ordinal(), direction, layer, idx);
-		} else if (isDamaged()) {
-			idx += getImage(ImageCode.DAMAGED1.ordinal(), direction, layer, idx);
-		} else if (isDamagedLightly()) {
-			idx += getImage(ImageCode.DAMAGED0.ordinal(), direction, layer, idx);
-		} else if (isOld()) {
-			idx += getImage(ImageCode.DAMAGED1.ordinal(), direction, layer, idx);
-		} else if (getBodyRank() == BodyRank.NORAYU || getBodyRank() == BodyRank.YASEIYU) {
-			// 野良ゆ&野生ゆの場合ダメージ表示(暫定対応)
-			idx += getImage(ImageCode.DAMAGED0.ordinal(), direction, layer, idx);
-		}
-
-		// おくるみ
-		if (isHasPants()) {
-			idx += getImage(ImageCode.PANTS.ordinal(), direction, layer, idx);
-		}
-		// 足汚れ
-		if (isNormalDirty()) {
-			idx += getImage(ImageCode.STAIN.ordinal(), direction, layer, idx);
-		}
-		if (isStubbornlyDirty()) {
-			idx += getImage(ImageCode.STAIN2.ordinal(), direction, layer, idx);
-		}
-		// かび
-		if (sickPeriod > (INCUBATIONPERIODorg << 5)) {
-			idx += getImage(ImageCode.SICK3.ordinal(), direction, layer, idx);
-		} else if (sickPeriod > (INCUBATIONPERIODorg << 3)) {
-			idx += getImage(ImageCode.SICK2.ordinal(), direction, layer, idx);
-		} else if (sickPeriod > INCUBATIONPERIODorg) {
-			idx += getImage(ImageCode.SICK1.ordinal(), direction, layer, idx);
-		} else if (isSick()) {
-			idx += getImage(ImageCode.SICK0.ordinal(), direction, layer, idx);
-		}
-		// 濡れ
-		if (isWet()) {
-			idx += getImage(ImageCode.WET.ordinal(), direction, layer, idx);
-		}
-		return idx;
+		return BodyRenderState.getEffectImage(this, layer);
 	}
 
 	/**
@@ -7752,426 +6996,17 @@ public abstract class Body extends BodyAttributes {
 	 * @return index
 	 */
 	public int getFaceImage(BodyLayer layer) {
-		int direction = this.getDirection().ordinal();
-		int idx = 0;
+		return BodyRenderState.getFaceImage(this, layer);
+	}
 
-		// 跳ねない
-		layer.getOption()[0] = 0;
-		// optionは移動関係の設定
-		if (isFlyingType()) {
-			if (!isGrabbed() && !isSleeping() && !isPurupuru()) {
-				if (isExciting()) {
-					layer.getOption()[0] = 1; // 大ジャンプ
-				} else if (isSukkiri()) {
-					layer.getOption()[0] = 2; // すっきり
-				} else if (isNobinobi()) {
-					layer.getOption()[0] = 4; // のびのび
-				} else if (isYunnyaa() || isBeggingForLife()) {
-					layer.getOption()[0] = 5; // ゆんやあ&命乞い
-				} else if (!isLockmove() && canflyCheck() && !isDontJump()) {
-					layer.getOption()[0] = 3; // 跳ねて移動
-				}
-			}
-		} else {
-			if (!isGrabbed() && getZ() == 0 && !isSleeping() && !isPurupuru()) {
-				if (isExciting() && !isDontJump() && !isbNeedled()) {
-					layer.getOption()[0] = 1; // 大ジャンプ
-				} else if (isSukkiri()) {
-					layer.getOption()[0] = 2; // すっきり
-				} else if (isNobinobi()) {
-					layer.getOption()[0] = 4; // のびのび
-				} else if (isYunnyaa() || isBeggingForLife()) {
-					layer.getOption()[0] = 5; // ゆんやあ&命乞い
-				} else if (!isLockmove() && !isDontJump()
-						&& takeMappedObj(getLinkParent()) == null && !isPeropero() && !(isEating() && !isPikopiko())) {
-					layer.getOption()[0] = 3; // 跳ねて移動
-				}
-			}
-		}
-
-		// 非ゆっくり症の場合
-		if (isNYD()) {
-			// 跳ねない
-			layer.getOption()[0] = 0;
-		}
-
-		// 表情固定
-		if (getForceFace() != -1) {
-			idx += getImage(getForceFace(), direction, layer, idx);
-			// 口封じグラの追加
-			if (isShutmouth()) {
-				idx += getImage(ImageCode.SHUTMOUTH.ordinal(), direction, layer, idx);
-			}
-			// 盲目グラの追加
-			if (isBlind()) {
-				idx += getImage(ImageCode.BLIND.ordinal(), direction, layer, idx);
-			}
-			// 舌の追加
-			if (isPeropero() || isInOutTakeoutItem()) {
-				if (getMessageBuf() != null) {
-					idx += getImage(ImageCode.LICK.ordinal(), direction, layer, idx);
-				}
-			} else if (isEating() || isEatingShit()) {
-				if (getMessageBuf() != null) {
-					idx += getImage(ImageCode.NOMNOM.ordinal(), direction, layer, idx);
-				}
-			}
-			return idx;
-		}
-
-		// 死亡
-		if (isDead()) {
-			// 皮むき時
-			if (isPealed()) {
-				idx += getImage(ImageCode.PEALEDDEADFACE.ordinal(), direction, layer, idx);
-			} else {
-				idx += getImage(ImageCode.DEAD.ordinal(), direction, layer, idx);
-			}
-		}
-		// 皮むき
-		else if (isPealed()) {
-			idx += getImage(ImageCode.PEALEDFACE.ordinal(), direction, layer, idx);
-		}
-		// 非ゆっくり症など
-		else if (isNYD()) {
-			// 死亡以外では表情を変えない
-			if (isUnBirth()) {
-				// 未ゆ
-				idx += getImage(ImageCode.NYD_FRONT_CRY2.ordinal(), direction, layer, idx);
-			} else {
-				idx += getImage(ImageCode.NYD_FRONT_WIDE.ordinal(), direction, layer, idx);
-			}
-		}
-		// 致命傷
-		else if (getCriticalDamege() == CriticalDamegeType.CUT) {
-			idx += getImage(ImageCode.PAIN.ordinal(), direction, layer, idx);
-		}
-		// 興奮
-		else if (isExciting()) {
-			if (isAliceRaper())
-				idx += getImage(ImageCode.EXCITING_raper.ordinal(), direction, layer, idx);
-			else
-				idx += getImage(ImageCode.EXCITING.ordinal(), direction, layer, idx);
-		}
-		// 睡眠
-		else if (isSleeping() && (!isUnBirth() || (damage <= 0)) && !isNeedled()) {
-			if (SimYukkuri.UNYO) {
-				// うにょ版まばたき機能
-				if (getMabatakiType() != ImageCode.SLEEPING.ordinal()
-						&& getMabatakiType() != ImageCode.NIGHTMARE.ordinal()) {
-					setMabatakiCnt(0);
-				}
-				if (getMabatakiCnt() >= 0 && getMabatakiCnt() <= 2) {
-					idx += getImage(ImageCode.NORMAL0.ordinal(), direction, layer, idx);
-					idx += getImage(ImageCode.EYE2.ordinal(), direction, layer, idx);
-				} else if (getMabatakiCnt() >= 3 && getMabatakiCnt() <= 5) {
-					idx += getImage(ImageCode.NORMAL0.ordinal(), direction, layer, idx);
-					idx += getImage(ImageCode.EYE3.ordinal(), direction, layer, idx);
-				} else {
-					if (isNightmare())
-						idx += getImage(ImageCode.NIGHTMARE.ordinal(), direction, layer, idx);
-					else
-						idx += getImage(ImageCode.SLEEPING.ordinal(), direction, layer, idx);
-				}
-				setMabatakiType(ImageCode.SLEEPING.ordinal());
-				if (MainCommandUI.getSelectedGameSpeed() != 0 /* && mabatakiType < 100 */) {
-					setMabatakiCnt(getMabatakiCnt() + 1);
-				}
-			} else {
-				if (isNightmare())
-					idx += getImage(ImageCode.NIGHTMARE.ordinal(), direction, layer, idx);
-				else
-					idx += getImage(ImageCode.SLEEPING.ordinal(), direction, layer, idx);
-			}
-		}
-		// ゆんやあ&命乞い
-		else if (isTalking() && (isYunnyaa() || isBeggingForLife())) {
-			idx += getImage(ImageCode.CRYING.ordinal(), direction, layer, idx);
-		}
-		// ぺろぺろまたは食事、口から物を出し入れするとき
-		else if (isPeropero() || isEating() || isInOutTakeoutItem()) {
-			if (isStrike() || isVerySad() || isFeelHardPain()) {
-				idx += getImage(ImageCode.CRYING.ordinal(), direction, layer, idx);
-			} else if (isSad() || isEatingShit() || isFeelPain()) {
-				if (SimYukkuri.UNYO) {
-					if (mabatakiNormalImageCheck()) {
-						if (getMabatakiType() != ImageCode.TIRED.ordinal()) {
-							setMabatakiCnt(0);
-						}
-						if (getMabatakiCnt() >= 95 && getMabatakiCnt() <= 96) {
-							idx += getImage(ImageCode.TIRED0.ordinal(), direction, layer, idx);
-							idx += getImage(ImageCode.EYE3.ordinal(), direction, layer, idx);
-						} else {
-							idx += getImage(ImageCode.TIRED.ordinal(), direction, layer, idx);
-						}
-						setMabatakiType(ImageCode.TIRED.ordinal());
-						if (MainCommandUI.getSelectedGameSpeed() != 0) {
-							setMabatakiCnt(getMabatakiCnt() + 1);
-						}
-						if (getMabatakiType() == ImageCode.TIRED.ordinal() && getMabatakiCnt() > 100) {
-							if (GameRandom.nextInt(30) != 0) {
-								setMabatakiCnt(GameRandom.nextInt(30));
-							} else {
-								setMabatakiCnt(85);
-							}
-						}
-					} else {
-						idx += getImage(ImageCode.TIRED.ordinal(), direction, layer, idx);
-					}
-				} else {
-					idx += getImage(ImageCode.TIRED.ordinal(), direction, layer, idx);
-				}
-			} else {
-				idx += getImage(ImageCode.SMILE.ordinal(), direction, layer, idx);
-			}
-		}
-		// すっきり
-		else if (isSukkiri()) {
-			idx += getImage(ImageCode.REFRESHED.ordinal(), direction, layer, idx);
-		}
-		// ダメージ、痛み
-		else if (isDamaged() || isSick() || isFeelPain()) {
-			if (isFeelPain() && getAge() % 50 == 0 && GameRandom.nextInt(50) == 0) {
-				setForceFace(ImageCode.PAIN.ordinal());
-			}
-			if (isStrike() || isVerySad() || isFeelHardPain()) {
-				idx += getImage(ImageCode.CRYING.ordinal(), direction, layer, idx);
-			} else {
-				if (SimYukkuri.UNYO) {
-					// うにょ版まばたき機能
-					if (mabatakiNormalImageCheck()) {
-						if (getMabatakiType() != ImageCode.TIRED.ordinal()) {
-							setMabatakiCnt(0);
-						}
-						if (getMabatakiCnt() >= 95 && getMabatakiCnt() <= 96) {
-							idx += getImage(ImageCode.TIRED0.ordinal(), direction, layer, idx);
-							idx += getImage(ImageCode.EYE3.ordinal(), direction, layer, idx);
-						} else {
-							idx += getImage(ImageCode.TIRED.ordinal(), direction, layer, idx);
-						}
-						setMabatakiType(ImageCode.TIRED.ordinal());
-						if (MainCommandUI.getSelectedGameSpeed() != 0) {
-							setMabatakiCnt(getMabatakiCnt() + 1);
-						}
-						if (getMabatakiType() == ImageCode.TIRED.ordinal() && getMabatakiCnt() > 100) {
-							if (GameRandom.nextInt(30) != 0) {
-								setMabatakiCnt(GameRandom.nextInt(30));
-							} else {
-								setMabatakiCnt(85);
-							}
-						}
-					} else {
-						idx += getImage(ImageCode.TIRED.ordinal(), direction, layer, idx);
-					}
-				} else {
-					idx += getImage(ImageCode.TIRED.ordinal(), direction, layer, idx);
-				}
-			}
-		} else {
-			// パニック
-			if (getPanicType() != null) {
-				idx += getImage(ImageCode.CRYING.ordinal(), direction, layer, idx);
-			} else if (isStrike() || isVerySad()) {
-				idx += getImage(ImageCode.CRYING.ordinal(), direction, layer, idx);
-			} else if (isAngry()) {
-				idx += getImage(ImageCode.PUFF.ordinal(), direction, layer, idx);
-			} else if (isSad() || isOld()) {
-				if (SimYukkuri.UNYO) {
-					// うにょ版まばたき機能
-					if (mabatakiNormalImageCheck()) {
-						if (getMabatakiType() != ImageCode.TIRED.ordinal()) {
-							setMabatakiCnt(0);
-						}
-						if (getMabatakiCnt() >= 95 && getMabatakiCnt() <= 96) {
-							idx += getImage(ImageCode.TIRED0.ordinal(), direction, layer, idx);
-							idx += getImage(ImageCode.EYE3.ordinal(), direction, layer, idx);
-						} else {
-							idx += getImage(ImageCode.TIRED.ordinal(), direction, layer, idx);
-						}
-						setMabatakiType(ImageCode.TIRED.ordinal());
-						if (MainCommandUI.getSelectedGameSpeed() != 0) {
-							setMabatakiCnt(getMabatakiCnt() + 1);
-						}
-						if (getMabatakiType() == ImageCode.TIRED.ordinal() && getMabatakiCnt() > 100) {
-							if (GameRandom.nextInt(30) != 0) {
-								setMabatakiCnt(GameRandom.nextInt(30));
-							} else {
-								setMabatakiCnt(85);
-							}
-						}
-					} else {
-						idx += getImage(ImageCode.TIRED.ordinal(), direction, layer, idx);
-					}
-				} else {
-					idx += getImage(ImageCode.TIRED.ordinal(), direction, layer, idx);
-				}
-			} else if (isVain()) {
-				idx += getImage(ImageCode.VAIN.ordinal(), direction, layer, idx);
-			} else if (isHappy() || isNobinobi()) {
-				idx += getImage(ImageCode.SMILE.ordinal(), direction, layer, idx);
-			} else if (isTalking() && isRude()) {
-				if (SimYukkuri.UNYO) {
-					// うにょ版まばたき機能
-					if (mabatakiNormalImageCheck()) {
-						if (getMabatakiType() != ImageCode.RUDE.ordinal()) {
-							setMabatakiCnt(0);
-						}
-						if ((getMabatakiCnt() >= 91 && getMabatakiCnt() <= 94) ||
-								(getMabatakiCnt() >= 97 && getMabatakiCnt() <= 100)) {
-							idx += getImage(ImageCode.RUDE0.ordinal(), direction, layer, idx);
-							idx += getImage(ImageCode.EYE2.ordinal(), direction, layer, idx);
-						} else if (getMabatakiCnt() >= 95 && getMabatakiCnt() <= 96) {
-							idx += getImage(ImageCode.RUDE0.ordinal(), direction, layer, idx);
-							idx += getImage(ImageCode.EYE3.ordinal(), direction, layer, idx);
-						} else {
-							idx += getImage(ImageCode.RUDE.ordinal(), direction, layer, idx);
-						}
-						setMabatakiType(ImageCode.RUDE.ordinal());
-						if (MainCommandUI.getSelectedGameSpeed() != 0) {
-							setMabatakiCnt(getMabatakiCnt() + 1);
-						}
-						if (getMabatakiType() == ImageCode.RUDE.ordinal() && getMabatakiCnt() > 100) {
-							if (GameRandom.nextInt(30) != 0) {
-								setMabatakiCnt(GameRandom.nextInt(30));
-							} else {
-								setMabatakiCnt(85);
-							}
-						}
-					} else {
-						idx += getImage(ImageCode.RUDE.ordinal(), direction, layer, idx);
-					}
-				} else {
-					idx += getImage(ImageCode.RUDE.ordinal(), direction, layer, idx);
-				}
-			} else if (isTalking() && !isRude()) {
-				if (SimYukkuri.UNYO) {
-					// うにょ版まばたき機能
-					if (mabatakiNormalImageCheck()) {
-						if (getMabatakiType() != ImageCode.CHEER.ordinal()) {
-							setMabatakiCnt(0);
-						}
-						if ((getMabatakiCnt() >= 91 && getMabatakiCnt() <= 94) ||
-								(getMabatakiCnt() >= 97 && getMabatakiCnt() <= 100)) {
-							idx += getImage(ImageCode.CHEER0.ordinal(), direction, layer, idx);
-							idx += getImage(ImageCode.EYE2.ordinal(), direction, layer, idx);
-						} else if (getMabatakiCnt() >= 95 && getMabatakiCnt() <= 96) {
-							idx += getImage(ImageCode.CHEER0.ordinal(), direction, layer, idx);
-							idx += getImage(ImageCode.EYE3.ordinal(), direction, layer, idx);
-						} else {
-							idx += getImage(ImageCode.CHEER.ordinal(), direction, layer, idx);
-						}
-						setMabatakiType(ImageCode.CHEER.ordinal());
-						if (MainCommandUI.getSelectedGameSpeed() != 0) {
-							setMabatakiCnt(getMabatakiCnt() + 1);
-						}
-						if (getMabatakiType() == ImageCode.CHEER.ordinal() && getMabatakiCnt() > 100) {
-							if (GameRandom.nextInt(30) != 0) {
-								setMabatakiCnt(GameRandom.nextInt(30));
-							} else {
-								setMabatakiCnt(85);
-							}
-						}
-					} else {
-						idx += getImage(ImageCode.CHEER.ordinal(), direction, layer, idx);
-					}
-				} else {
-					idx += getImage(ImageCode.CHEER.ordinal(), direction, layer, idx);
-				}
-			}
-			// 空が飛べない、空中にいる、移動不可ではない、すぃーにのってない場合→茎にいる実ゆの判定のよう
-			else if ((!canflyCheck() && getZ() != 0) && !isLockmove()
-					&& !(takeMappedObj(getLinkParent()) instanceof Sui)) {
-				if (SimYukkuri.UNYO) {
-					// うにょ版まばたき機能
-					if (mabatakiNormalImageCheck()) {
-						if (getMabatakiType() != ImageCode.CHEER.ordinal()) {
-							setMabatakiCnt(0);
-						}
-						if ((getMabatakiCnt() >= 91 && getMabatakiCnt() <= 94) ||
-								(getMabatakiCnt() >= 97 && getMabatakiCnt() <= 100)) {
-							idx += getImage(ImageCode.CHEER0.ordinal(), direction, layer, idx);
-							idx += getImage(ImageCode.EYE2.ordinal(), direction, layer, idx);
-						} else if (getMabatakiCnt() >= 95 && getMabatakiCnt() <= 96) {
-							idx += getImage(ImageCode.CHEER0.ordinal(), direction, layer, idx);
-							idx += getImage(ImageCode.EYE3.ordinal(), direction, layer, idx);
-						} else {
-							idx += getImage(ImageCode.CHEER.ordinal(), direction, layer, idx);
-						}
-						setMabatakiType(ImageCode.CHEER.ordinal());
-						if (MainCommandUI.getSelectedGameSpeed() != 0) {
-							setMabatakiCnt(getMabatakiCnt() + 1);
-						}
-						if (getMabatakiType() == ImageCode.CHEER.ordinal() && getMabatakiCnt() > 100) {
-							if (GameRandom.nextInt(30) != 0) {
-								setMabatakiCnt(GameRandom.nextInt(30));
-							} else {
-								setMabatakiCnt(85);
-							}
-						}
-					} else {
-						idx += getImage(ImageCode.CHEER.ordinal(), direction, layer, idx);
-					}
-				} else {
-					// ここに入った時点で実ゆはダメージをくらっているので嫌な顔をする
-					idx += getImage(ImageCode.TIRED.ordinal(), direction, layer, idx);
-				}
-			} else {
-				if (SimYukkuri.UNYO) {
-					// うにょ版まばたき機能
-					if (mabatakiNormalImageCheck()) {
-						if (getMabatakiType() != ImageCode.NORMAL.ordinal()) {
-							setMabatakiCnt(0);
-						}
-						if ((getMabatakiCnt() >= 91 && getMabatakiCnt() <= 94) ||
-								(getMabatakiCnt() >= 97 && getMabatakiCnt() <= 100)) {
-							idx += getImage(ImageCode.NORMAL0.ordinal(), direction, layer, idx);
-							idx += getImage(ImageCode.EYE2.ordinal(), direction, layer, idx);
-						} else if (getMabatakiCnt() >= 95 && getMabatakiCnt() <= 96) {
-							idx += getImage(ImageCode.NORMAL0.ordinal(), direction, layer, idx);
-							idx += getImage(ImageCode.EYE3.ordinal(), direction, layer, idx);
-						} else {
-							idx += getImage(ImageCode.NORMAL.ordinal(), direction, layer, idx);
-						}
-						setMabatakiType(ImageCode.NORMAL.ordinal());
-						if (MainCommandUI.getSelectedGameSpeed() != 0) {
-							setMabatakiCnt(getMabatakiCnt() + 1);
-						}
-						if (getMabatakiType() == ImageCode.NORMAL.ordinal() && getMabatakiCnt() > 100) {
-							if (GameRandom.nextInt(30) != 0) {
-								setMabatakiCnt(GameRandom.nextInt(30));
-							} else {
-								setMabatakiCnt(85);
-							}
-						}
-					} else {
-						idx += getImage(ImageCode.NORMAL.ordinal(), direction, layer, idx);
-					}
-				} else {
-					idx += getImage(ImageCode.NORMAL.ordinal(), direction, layer, idx);
-				}
-			}
-		}
-
-		// 口封じグラの追加
-		if (isShutmouth()) {
-			idx += getImage(ImageCode.SHUTMOUTH.ordinal(), direction, layer, idx);
-		}
-		// 盲目グラの追加
-		if (isBlind()) {
-			idx += getImage(ImageCode.BLIND.ordinal(), direction, layer, idx);
-		}
-		// 舌の追加
-		if (isPeropero() || isInOutTakeoutItem()) {
-			if (getMessageBuf() != null) {
-				idx += getImage(ImageCode.LICK.ordinal(), direction, layer, idx);
-			}
-		} else if (isEating() || isEatingShit()) {
-			if (getMessageBuf() != null) {
-				idx += getImage(ImageCode.NOMNOM.ordinal(), direction, layer, idx);
-			}
-		}
-
-		return idx;
+	/**
+	 * 描画補助から Alice 判定を参照するための bridge.
+	 *
+	 * @return Alice れいぱーかどうか
+	 */
+	@JsonIgnore
+	public final boolean isAliceRaperForRender() {
+		return isAliceRaper();
 	}
 
 	/**
@@ -8216,47 +7051,7 @@ public abstract class Body extends BodyAttributes {
 	 * @return index
 	 */
 	public int getBraidImage(BodyLayer layer, int type) {
-		int direction = this.getDirection().ordinal();
-		int idx = 0;
-		if (type == 0) {
-			if (hasBraidCheck()) {
-				// 通常
-				if (canflyCheck()) {
-					// 飛行状態
-					idx += getImage((int) (ImageCode.BRAID_MV0.ordinal() + ((getAge() % 6) >> 1)), direction, layer,
-							idx);
-				} else {
-					if (isPikopiko()) {
-						idx += getImage((int) (ImageCode.BRAID_MV0.ordinal() + ((getAge() % 6) >> 1)), direction, layer,
-								idx);
-					} else {
-						idx += getImage(ImageCode.BRAID.ordinal(), direction, layer, idx);
-					}
-				}
-			} else {
-				// 破壊状態
-				idx += getImage(ImageCode.BRAID_CUT.ordinal(), direction, layer, idx);
-			}
-		} else {
-			if (hasBraidCheck()) {
-				// 通常
-				if (canflyCheck()) {
-					// 飛行状態
-					idx += getImage((int) (ImageCode.BRAID_BACK_MV0.ordinal() + ((getAge() % 6) >> 1)), direction,
-							layer,
-							idx);
-				} else {
-					if (isPikopiko()) {
-						idx += getImage((int) (ImageCode.BRAID_BACK_MV0.ordinal() + ((getAge() % 6) >> 1)), direction,
-								layer,
-								idx);
-					} else {
-						idx += getImage(ImageCode.BRAID_BACK.ordinal(), direction, layer, idx);
-					}
-				}
-			}
-		}
-		return idx;
+		return BodyRenderState.getBraidImage(this, layer, type);
 	}
 
 	/**
@@ -8638,24 +7433,7 @@ public abstract class Body extends BodyAttributes {
 		}
 
 		// イベントに反応できる状態かチェック
-		if (canEventResponse()) {
-			// 自身に向けられたイベントのチェック
-			setCurrentEvent(EventLogic.checkBodyEvent(this));
-			if (getCurrentEvent() == null) {
-				// ワールドイベントのチェック
-				setCurrentEvent(EventLogic.checkWorldEvent(this));
-			}
-			// イベント開始
-			if (getCurrentEvent() != null) {
-				getCurrentEvent().start(this);
-			}
-		} else {
-			// イベント応答できない場合でも例外でsimpleActionだけ呼ばれる
-			// 自身に向けられたイベントのチェック
-			EventLogic.checkSimpleBodyEvent(this);
-			// ワールドイベントのチェック
-			EventLogic.checkSimpleWorldEvent(this);
-		}
+		BodyEventState.processPendingEvents(this);
 
 		// move to destination
 		// if there is no destination, walking randomly.
@@ -8673,12 +7451,7 @@ public abstract class Body extends BodyAttributes {
 		checkMessage();
 
 		// イベントで処理が設定された場合に実行する
-		if (getCurrentEvent() != null) {
-			if (retval == Event.DONOTHING || getCurrentEvent().getPriority() != EventPacket.EventPriority.LOW) {
-				retval = getEventResultAction();
-				setEventResultAction(Event.DONOTHING);
-			}
-		}
+		retval = BodyEventState.resolveEventResultAction(this, retval);
 		calcPos();
 		calcMoveTarget();
 		return retval;
@@ -9070,11 +7843,6 @@ public abstract class Body extends BodyAttributes {
 	 * イベントのためのアクションのみのクリア
 	 */
 	public void clearActionsForEvent() {
-		setToSukkiri(false);
-		setToBed(false);
-		setToFood(false);
-		setToShit(false);
-		setToBody(false);
-		setToSteal(false);
+		BodyEventState.clearActionsForEvent(this);
 	}
 }

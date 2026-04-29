@@ -1,0 +1,242 @@
+package src.logic;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+
+import src.base.Body;
+import src.base.EventPacket;
+import src.enums.Event;
+import src.util.WorldTestHelper;
+
+class BodyEventStateTest {
+
+	private Body body;
+
+	@BeforeEach
+	void setUp() {
+		WorldTestHelper.resetWorld();
+		WorldTestHelper.initializeMinimalWorld();
+		body = WorldTestHelper.createBody();
+	}
+
+	@Test
+	void clearActionsResetsMoveFlagsAndMoveTarget() {
+		body.setToSukkiri(true);
+		body.setToBed(true);
+		body.setToFood(true);
+		body.setToShit(true);
+		body.setToBody(true);
+		body.setToSteal(true);
+		body.setMoveTarget(42);
+
+		BodyEventState.clearActions(body);
+
+		assertFalse(body.isToSukkiri());
+		assertFalse(body.isToBed());
+		assertFalse(body.isToFood());
+		assertFalse(body.isToShit());
+		assertFalse(body.isToBody());
+		assertFalse(body.isToSteal());
+		assertEquals(-1, body.getMoveTarget());
+	}
+
+	@Test
+	void clearEventResetsCurrentEventAndForceFace() {
+		body.setForceFace(5);
+		body.setCurrentEvent(null);
+
+		BodyEventState.clearEvent(body);
+
+		assertNull(body.getCurrentEvent());
+		assertEquals(-1, body.getForceFace());
+	}
+
+	@Test
+	void setMessageIgnoresEmptyString() {
+		body.setMessageCount(0);
+
+		BodyEventState.setMessage(body, "");
+
+		assertEquals(0, body.getMessageCount());
+	}
+
+	@Test
+	void setPikoMessageWithCountUpdatesMessageCount() {
+		body.setMessageCount(0);
+
+		BodyEventState.setPikoMessage(body, "hi", 3, true);
+
+		assertEquals(3, body.getMessageCount());
+	}
+
+	@Test
+	void processPendingEventsStartsBodyEventBeforeWorldEvent() {
+		TrackingEventPacket worldEvent = new TrackingEventPacket();
+		TrackingEventPacket bodyEvent = new TrackingEventPacket();
+		src.SimYukkuri.world.getCurrentMap().getEvent().add(worldEvent);
+		body.getEventList().add(bodyEvent);
+
+		BodyEventState.processPendingEvents(body);
+
+		assertSame(bodyEvent, body.getCurrentEvent());
+		assertTrue(bodyEvent.started);
+		assertFalse(worldEvent.started);
+		assertEquals(0, body.getEventList().size());
+	}
+
+	@Test
+	void processPendingEventsConsumesSimpleEventsWhenResponseDisabled() {
+		TrackingEventPacket bodyEvent = new TrackingEventPacket();
+		TrackingEventPacket worldEvent = new TrackingEventPacket();
+		bodyEvent.simpleAction = true;
+		worldEvent.simpleAction = true;
+		body.setSleeping(true);
+		body.getEventList().add(bodyEvent);
+		src.SimYukkuri.world.getCurrentMap().getEvent().add(worldEvent);
+
+		BodyEventState.processPendingEvents(body);
+
+		assertNull(body.getCurrentEvent());
+		assertTrue(bodyEvent.simpleActionCalled);
+		assertTrue(worldEvent.simpleActionCalled);
+		assertEquals(0, body.getEventList().size());
+	}
+
+	@Test
+	void resolveEventResultActionOverridesDoNothingWithLowPriorityEvent() {
+		body.setCurrentEvent(new TrackingEventPacket(EventPacket.EventPriority.LOW));
+		body.setEventResultAction(Event.DOSHIT);
+
+		Event result = BodyEventState.resolveEventResultAction(body, Event.DONOTHING);
+
+		assertEquals(Event.DOSHIT, result);
+		assertEquals(Event.DONOTHING, body.getEventResultAction());
+	}
+
+	@Test
+	void resolveEventResultActionKeepsExistingActionForLowPriorityEvent() {
+		body.setCurrentEvent(new TrackingEventPacket(EventPacket.EventPriority.LOW));
+		body.setEventResultAction(Event.DOSHIT);
+
+		Event result = BodyEventState.resolveEventResultAction(body, Event.BIRTHBABY);
+
+		assertEquals(Event.BIRTHBABY, result);
+		assertEquals(Event.DOSHIT, body.getEventResultAction());
+	}
+
+	@Test
+	void resolveEventResultActionOverridesExistingActionForHighPriorityEvent() {
+		body.setCurrentEvent(new TrackingEventPacket(EventPacket.EventPriority.HIGH));
+		body.setEventResultAction(Event.DOSHIT);
+
+		Event result = BodyEventState.resolveEventResultAction(body, Event.BIRTHBABY);
+
+		assertEquals(Event.DOSHIT, result);
+		assertEquals(Event.DONOTHING, body.getEventResultAction());
+	}
+
+	@Test
+	void updateCurrentEventClearsCurrentEventWhenAbortReturned() {
+		TrackingEventPacket event = new TrackingEventPacket();
+		event.updateState = EventPacket.UpdateState.ABORT;
+		body.setCurrentEvent(event);
+
+		BodyEventState.updateCurrentEvent(body);
+
+		assertTrue(event.ended);
+		assertNull(body.getCurrentEvent());
+	}
+
+	@Test
+	void updateCurrentEventExecutesWhenBodyReachedTarget() {
+		TrackingEventPacket event = new TrackingEventPacket();
+		body.setX(100);
+		body.setY(100);
+		body.setZ(0);
+		event.setToX(101);
+		event.setToY(100);
+		event.setToZ(0);
+		body.setCurrentEvent(event);
+
+		BodyEventState.updateCurrentEvent(body);
+
+		assertTrue(event.executed);
+		assertTrue(event.ended);
+		assertNull(body.getCurrentEvent());
+	}
+
+	@Test
+	void updateCurrentEventKeepsCurrentEventWhenTargetIsFar() {
+		TrackingEventPacket event = new TrackingEventPacket();
+		body.setX(0);
+		body.setY(0);
+		body.setZ(0);
+		event.setToX(10000);
+		event.setToY(10000);
+		event.setToZ(0);
+		body.setCurrentEvent(event);
+
+		BodyEventState.updateCurrentEvent(body);
+
+		assertFalse(event.executed);
+		assertSame(event, body.getCurrentEvent());
+	}
+
+	private static final class TrackingEventPacket extends EventPacket {
+		private static final long serialVersionUID = 1L;
+
+		private boolean simpleAction;
+		private boolean simpleActionCalled;
+		private boolean started;
+		private boolean executed;
+		private boolean ended;
+		private UpdateState updateState;
+
+		private TrackingEventPacket() {
+			this(EventPriority.LOW);
+		}
+
+		private TrackingEventPacket(EventPriority priority) {
+			setPriority(priority);
+		}
+
+		@Override
+		public boolean simpleEventAction(Body b) {
+			simpleActionCalled = true;
+			return simpleAction;
+		}
+
+		@Override
+		public boolean checkEventResponse(Body b) {
+			return true;
+		}
+
+		@Override
+		public void start(Body b) {
+			started = true;
+			b.setCurrentEvent(this);
+		}
+
+		@Override
+		public UpdateState update(Body b) {
+			return updateState;
+		}
+
+		@Override
+		public boolean execute(Body b) {
+			executed = true;
+			return true;
+		}
+
+		@Override
+		public void end(Body b) {
+			ended = true;
+		}
+	}
+}

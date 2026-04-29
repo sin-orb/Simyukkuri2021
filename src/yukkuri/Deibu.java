@@ -223,9 +223,9 @@ public class Deibu extends Reimu {
 		PREGPERIODorg *= factor;
 		SLEEPPERIODorg *= factor;
 		ACTIVEPERIODorg *= factor;
-		sameDest = GameRandom.nextInt(20) + 20;
+		setSameDest(GameRandom.nextInt(20) + 20);
 		DECLINEPERIODorg *= (Math.random() + 0.5);
-		ROBUSTNESS = GameRandom.nextInt(5) + 1;
+		setROBUSTNESS(GameRandom.nextInt(5) + 1);
 		// EYESIGHT /= 4;
 		factor = Math.random() + 0.5;
 		STRENGTHorg[AgeState.ADULT.ordinal()] *= factor;

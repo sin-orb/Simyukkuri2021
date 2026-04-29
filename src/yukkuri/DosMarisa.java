@@ -215,9 +215,9 @@ public class DosMarisa extends Marisa {
 		PREGPERIODorg *= factor;
 		SLEEPPERIODorg *= factor;
 		ACTIVEPERIODorg *= factor;
-		sameDest = GameRandom.nextInt(10) + 10;
+		setSameDest(GameRandom.nextInt(10) + 10);
 		DECLINEPERIODorg *= (Math.random() + 0.5);
-		ROBUSTNESS = GameRandom.nextInt(25) + 1;
+		setROBUSTNESS(GameRandom.nextInt(25) + 1);
 		// EYESIGHT /= 1;
 		factor = Math.random() + 6.0;
 		STRENGTHorg[AgeState.ADULT.ordinal()] *= factor;

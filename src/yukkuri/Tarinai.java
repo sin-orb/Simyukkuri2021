@@ -228,9 +228,9 @@ public class Tarinai extends Body {
 		PREGPERIODorg *= factor;
 		SLEEPPERIODorg *= factor;
 		ACTIVEPERIODorg *= factor;
-		sameDest = GameRandom.nextInt(20) + 20;
+		setSameDest(GameRandom.nextInt(20) + 20);
 		DECLINEPERIODorg *= (Math.random() + 0.5);
-		ROBUSTNESS = GameRandom.nextInt(5) + 1;
+		setROBUSTNESS(GameRandom.nextInt(5) + 1);
 		EYESIGHTorg /= 8;
 		factor = Math.random() + 1;
 		STRENGTHorg[AgeState.ADULT.ordinal()] *= factor;

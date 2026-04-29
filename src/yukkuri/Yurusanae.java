@@ -194,9 +194,9 @@ public class Yurusanae extends Body {
 		PREGPERIODorg *= factor;
 		SLEEPPERIODorg *= factor;
 		ACTIVEPERIODorg *= factor;
-		sameDest = GameRandom.nextInt(15) + 15;
+		setSameDest(GameRandom.nextInt(15) + 15);
 		DECLINEPERIODorg *= (Math.random() + 0.5);
-		ROBUSTNESS = GameRandom.nextInt(10) + 1;
+		setROBUSTNESS(GameRandom.nextInt(10) + 1);
 		// EYESIGHT /= 2;
 		factor = Math.random() + 0.5;
 		STRENGTHorg[AgeState.ADULT.ordinal()] *= factor;

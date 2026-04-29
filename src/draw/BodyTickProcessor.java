@@ -1,0 +1,325 @@
+package src.draw;
+
+import java.util.List;
+import java.util.Map;
+
+import src.attachment.Fire;
+import src.base.Body;
+import src.command.GadgetAction;
+import src.enums.AgeState;
+import src.enums.Event;
+import src.enums.PanicType;
+import src.game.Dna;
+import src.game.Stalk;
+import src.item.Barrier;
+import src.system.MapPlaceData;
+import src.draw.Translate;
+import src.util.GameRandom;
+import src.util.GameWorld;
+import src.util.YukkuriUtil;
+import src.logic.BodyLogic;
+import src.logic.BedLogic;
+import src.logic.EventLogic;
+import src.logic.FamilyActionLogic;
+import src.logic.FoodLogic;
+import src.logic.StoneLogic;
+import src.logic.ToiletLogic;
+
+/**
+ * Terrarium の 1 体分の更新処理を担当する。
+ */
+public final class BodyTickProcessor {
+
+	private BodyTickProcessor() {
+	}
+
+	/**
+	 * 1 体分の更新を実行する。
+	 *
+	 * @param terrarium 生成補助を提供する Terrarium
+	 * @param curMap 現在のマップ
+	 * @param b 更新対象
+	 * @param babyList 生成待ちの赤ゆリスト
+	 * @param transCheck 突然変異チェックを行うか
+	 * @return 突然変異候補。なければ null
+	 */
+	public static Body processBody(Terrarium terrarium, MapPlaceData curMap, Body b, List<Body> babyList,
+			boolean transCheck) {
+		Event ret = b.clockTick();
+		switch (ret) {
+			case DEAD:
+				handleDead(terrarium, curMap, b, babyList);
+				b.upDate();
+				return null;
+			case BIRTHBABY:
+				handleBirthBaby(terrarium, b, babyList);
+				break;
+			case DOSHIT:
+				int objId = terrarium.addShit(b.getX(), b.getY(), b.getZ() + b.getSize() / 15, b, b.getShitType());
+				curMap.getShit().get(objId).kick(0, 1, 1);
+				break;
+			case DOCRUSHEDSHIT:
+				terrarium.addCrushedShit(b.getX(), b.getY(), b.getZ(), b, b.getShitType());
+				break;
+			case DOVOMIT:
+				terrarium.addVomit(b.getX(), b.getY(), b.getZ(), b, b.getShitType());
+				break;
+			case REMOVED:
+				b.upDate();
+				b.remove();
+				return null;
+			default:
+				break;
+		}
+
+		checkFire(b);
+		StoneLogic.checkPubble(b);
+
+		if (b.getPanicType() != null && !b.isUnBirth() && !b.isDamagedHeavily()) {
+			checkPanic(b);
+		} else {
+			if (b.getCurrentEvent() != null) {
+				EventLogic.eventUpdate(b);
+			}
+
+			boolean bHasChildren = false;
+			List<Body> childrenList = BodyLogic.createActiveChildList(b, true);
+			if (childrenList != null && !childrenList.isEmpty()) {
+				bHasChildren = true;
+			}
+
+			boolean bCheck = b.getBlockedCount() == 0;
+			if (bHasChildren) {
+				if (bCheck) {
+					if (FamilyActionLogic.checkFamilyAction(b)) {
+						bCheck = false;
+					} else {
+						bCheck = true;
+					}
+				}
+			}
+
+			if (bCheck) {
+				if (FoodLogic.checkFood(b)) {
+					bCheck = false;
+				} else {
+					bCheck = true;
+				}
+			}
+
+			if (bCheck) {
+				if (BodyLogic.checkPartner(b)) {
+					bCheck = false;
+				} else {
+					bCheck = true;
+				}
+			}
+
+			if (bCheck) {
+				if (ToiletLogic.checkShit(b)) {
+					bCheck = false;
+				} else {
+					bCheck = true;
+				}
+			}
+
+			if (bCheck) {
+				if (ToiletLogic.checkToilet(b)) {
+					bCheck = false;
+				} else {
+					bCheck = true;
+				}
+			}
+
+			if (bCheck) {
+				if (BedLogic.checkBed(b)) {
+					bCheck = false;
+				} else {
+					bCheck = true;
+				}
+			}
+
+			if (!bHasChildren) {
+				if (bCheck) {
+					if (!FamilyActionLogic.checkFamilyAction(b)) {
+						bCheck = true;
+					} else {
+						bCheck = false;
+					}
+				}
+			}
+		}
+
+		if (b.getStalkBabyTypes().size() > 0) {
+			int j = 0;
+			Stalk s = null;
+			for (Dna babyTypes : b.getStalkBabyTypes()) {
+				if (j % 5 == 0) {
+					s = (Stalk) GadgetAction.putObjEX(Stalk.class, b.getX(), b.getY(), b.getDirection().ordinal());
+					b.getStalks().add(s);
+					s.setPlantYukkuri(b);
+				}
+				if (babyTypes != null) {
+					Body baby = terrarium.makeBody(b.getX(), b.getY(), 0, babyTypes, AgeState.BABY, b,
+							YukkuriUtil.getBodyInstance(b.getPartner()));
+					babyList.add(baby);
+					baby.setBindStalk(s);
+					s.setBindBaby(baby);
+				} else {
+					s.setBindBaby(null);
+				}
+				j++;
+			}
+			b.getStalkBabyTypes().clear();
+		}
+		b.upDate();
+
+		if (transCheck) {
+			return b.checkTransform();
+		}
+		return null;
+	}
+
+	private static void handleDead(Terrarium terrarium, MapPlaceData curMap, Body b, List<Body> babyList) {
+		if (b.isInfration()) {
+			int burstPower = (b.getSize() - b.getOriginSize()) * 3 / 4;
+			for (Dna babyTypes : b.getBabyTypes()) {
+				Body baby = terrarium.makeBody(b.getX(), b.getY(), b.getZ() + b.getSize() / 20, babyTypes,
+						AgeState.BABY, b, YukkuriUtil.getBodyInstance(b.getPartner()));
+				baby.kick(GameRandom.nextInt(burstPower / 4 + 1) - burstPower / 8,
+						GameRandom.nextInt(burstPower / 4 + 1) - burstPower / 8,
+						GameRandom.nextInt(burstPower / 5 + 1) - burstPower / 10 - 1);
+				babyList.add(baby);
+			}
+			b.getBabyTypes().clear();
+			if (b.getStalks() != null) {
+				for (Stalk s : b.getStalks()) {
+					if (s != null) {
+						s.kick(GameRandom.nextInt(burstPower / 4 + 1) - burstPower / 8,
+								GameRandom.nextInt(burstPower / 4 + 1) - burstPower / 8,
+								GameRandom.nextInt(burstPower / 5 + 1) - burstPower / 10 - 1);
+					}
+				}
+			}
+			b.disPlantStalks();
+			if (b.getShit() > b.getSHITLIMITorg()[b.getBodyAgeState().ordinal()]) {
+				for (int j = 0; b.getShit() / b.getSHITLIMITorg()[b.getBodyAgeState().ordinal()] > j; j++) {
+					int i = terrarium.addShit(b.getX(), b.getY(), b.getZ() + b.getSize() / 15, b, b.getShitType());
+					curMap.getShit().get(i).kick(GameRandom.nextInt(burstPower / 4 + 1) - burstPower / 8,
+							GameRandom.nextInt(burstPower / 4 + 1) - burstPower / 8,
+							GameRandom.nextInt(burstPower / 5 + 1) - burstPower / 10 - 1);
+				}
+			}
+			b.setShit(0);
+			if (!b.isCrushed()) {
+				b.strikeByPress();
+			}
+		} else if (b.isCrushed()) {
+			b.disPlantStalks();
+		}
+	}
+
+	private static void handleBirthBaby(Terrarium terrarium, Body b, List<Body> babyList) {
+		if (b.getAge() % 10 == 0 && !b.isHasPants()) {
+			Dna babyType = b.getBabyTypesDequeue();
+			if (babyType != null) {
+				Body baby = terrarium.makeBody(b.getX(), b.getY(), b.getZ() + b.getSize() / 15, babyType,
+						AgeState.BABY, b, YukkuriUtil.getBodyInstance(b.getPartner()));
+				baby.kick(0, 5, -2);
+				babyList.add(baby);
+			}
+		}
+		if (b.getStalks() != null) {
+			for (Stalk s : b.getStalks()) {
+				if (s != null) {
+					for (Integer bab : s.getBindBabies()) {
+						if (bab == null) {
+							continue;
+						}
+						Body ba = YukkuriUtil.getBodyInstance(bab);
+						if (ba != null) {
+							ba.setUnBirth(false);
+							ba.setDropShadow(true);
+							ba.setBindStalk(null);
+							ba.setLinkParent(-1);
+							if (ba.isBaby()) {
+								ba.setAgeState(AgeState.BABY);
+							}
+							ba.kick(0, 0, 0);
+						}
+					}
+					s.getBindBabies().clear();
+					s.setPlantYukkuri(null);
+					int fx;
+					int fy;
+					for (int f = 0; f < 5; f++) {
+						fx = s.getX() - 6 + (f * 7);
+						fy = s.getY() - 5 + GameRandom.nextInt(10);
+						fx = Math.max(0, fx);
+						fx = Math.min(fx, Translate.getMapW());
+						fy = Math.max(0, fy);
+						fy = Math.min(fy, Translate.getMapH());
+						src.item.Food food = (src.item.Food) GadgetAction.putObjEX(src.item.Food.class, fx, fy,
+								src.item.Food.FoodType.STALK.ordinal());
+						GameWorld.get().getCurrentMap().getFood().put(food.objId, food);
+					}
+					s.remove();
+				}
+			}
+			b.removeAllStalks();
+		}
+		if (b.getBabyTypes().size() == 0) {
+			b.setHasBaby(false);
+		}
+		if (b.getStalks() == null || b.getStalks().size() == 0) {
+			b.setHasStalk(false);
+		}
+	}
+
+	private static void checkPanic(Body b) {
+		if (b.isDead() || b.isPealed()) {
+			return;
+		}
+		int minDistance;
+		for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
+			Body p = entry.getValue();
+			if (p == b) {
+				continue;
+			}
+			if (Barrier.acrossBarrier(b.getX(), b.getY(), p.getX(), p.getY(),
+					Barrier.MAP_BODY[b.getBodyAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
+				continue;
+			}
+			minDistance = Translate.distance(b.getX(), b.getY(), p.getX(), p.getY());
+			if (minDistance <= p.getEYESIGHTorg()) {
+				if (b.getPanicType() == PanicType.BURN && !p.isRaper()) {
+					p.setPanic(true, PanicType.FEAR);
+				}
+			}
+		}
+	}
+
+	private static void checkFire(Body b) {
+		int minDistance;
+		if (b.getAttachmentSize(Fire.class) == 0) {
+			return;
+		}
+		for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
+			Body p = entry.getValue();
+			if (p == b) {
+				continue;
+			}
+			if (b.isRemoved()) {
+				continue;
+			}
+			if (Barrier.acrossBarrier(b.getX(), b.getY(), p.getX(), p.getY(),
+					Barrier.MAP_BODY[b.getBodyAgeState().ordinal()])) {
+				continue;
+			}
+			minDistance = Translate.distance(b.getX(), b.getY(), p.getX(), p.getY());
+			if (minDistance <= Translate.distance(0, 0, b.getStep() * 2, b.getStep() * 2)) {
+				p.giveFire();
+			}
+		}
+	}
+}
