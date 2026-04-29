@@ -4,6 +4,7 @@ package src.logic;
 import java.util.Map;
 
 import src.SimYukkuri;
+import src.util.GameWorld;
 import src.base.Body;
 import src.base.Obj;
 import src.draw.Translate;
@@ -50,7 +51,7 @@ public class TrashLogic {
 			wallMode = AgeState.ADULT.ordinal();
 		}
 
-		for (Map.Entry<Integer, Trash> entry : SimYukkuri.world.getCurrentMap().getTrash().entrySet()) {
+		for (Map.Entry<Integer, Trash> entry : GameWorld.get().getCurrentMap().getTrash().entrySet()) {
 			Trash t = entry.getValue();
 			// 最小距離のものが見つかっていたら
 			if( minDistance < 1 )

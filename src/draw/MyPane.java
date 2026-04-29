@@ -1,4 +1,6 @@
 package src.draw;
+import src.util.GameEnvironment;
+import src.util.GameText;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -39,6 +41,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import src.SimYukkuri;
+import src.util.GameRandom;
+import src.util.GameWorld;
 import src.attachment.ANYDAmpoule;
 import src.attachment.AccelAmpoule;
 import src.attachment.Ants;
@@ -308,7 +312,7 @@ public class MyPane extends JPanel implements Runnable {
 			// 背景
 			if (isBg) {
 				win.addLine("Load Terrain");
-				TerrainField.loadTerrain(SimYukkuri.world.getCurrentMap().getMapIndex(), loader, this);
+				TerrainField.loadTerrain(GameWorld.get().getCurrentMap().getMapIndex(), loader, this);
 			}
 
 			// 道具
@@ -463,7 +467,7 @@ public class MyPane extends JPanel implements Runnable {
 			} catch (InvocationTargetException e) {
 				e.printStackTrace();
 			} catch (OutOfMemoryError e) {
-				JOptionPane.showMessageDialog(null, ResourceUtil.getInstance().read("out_of_memory"));
+				JOptionPane.showMessageDialog(null, GameText.read("out_of_memory"));
 			}
 		}
 	}
@@ -471,7 +475,7 @@ public class MyPane extends JPanel implements Runnable {
 	/** 背景ファイルリロード */
 	public void loadTerrainFile() {
 		ClassLoader loader = this.getClass().getClassLoader();
-		TerrainField.loadTerrain(SimYukkuri.world.getNextMap(), loader, this);
+		TerrainField.loadTerrain(GameWorld.get().getNextMap(), loader, this);
 		System.gc();
 	}
 
@@ -509,7 +513,7 @@ public class MyPane extends JPanel implements Runnable {
 			synchronized (SimYukkuri.lock) {
 
 				// マップ切り替え準備中は画面の書き換えを行わない
-				if (SimYukkuri.world.getNextMap() != -1) {
+				if (GameWorld.get().getNextMap() != -1) {
 					continue;
 				}
 
@@ -524,7 +528,7 @@ public class MyPane extends JPanel implements Runnable {
 				}
 
 				if (nLogOutput != 0) {
-					if (Terrarium.getOperationTime() % 10 == 0) {
+					if (GameEnvironment.getOperationTime() % 10 == 0) {
 						LoggerYukkuri.run();
 					}
 				}
@@ -609,24 +613,24 @@ public class MyPane extends JPanel implements Runnable {
 		final int BABY = 0, CHILD = 1, ADULT = 2;
 		MyAddYukkuriListener mayl = new MyAddYukkuriListener();
 
-		String[] tempAges = { ResourceUtil.getInstance().read("draw_baby"),
-				ResourceUtil.getInstance().read("draw_child"), ResourceUtil.getInstance().read("draw_adult") };
+		String[] tempAges = { GameText.read("draw_baby"),
+				GameText.read("draw_child"), GameText.read("draw_adult") };
 		ages = tempAges;
-		String[] tempRare = { ResourceUtil.getInstance().read("draw_normalsp"),
-				ResourceUtil.getInstance().read("draw_raresp"), ResourceUtil.getInstance().read("draw_predsp") };
+		String[] tempRare = { GameText.read("draw_normalsp"),
+				GameText.read("draw_raresp"), GameText.read("draw_predsp") };
 		rare = tempRare;
-		String[] tempo = { ResourceUtil.getInstance().read("yes"), ResourceUtil.getInstance().read("no") };
+		String[] tempo = { GameText.read("yes"), GameText.read("no") };
 		options = tempo;
-		String[] tempmode = { ResourceUtil.getInstance().read("off"), ResourceUtil.getInstance().read("draw_normalsp"),
-				ResourceUtil.getInstance().read("draw_raresp"), ResourceUtil.getInstance().read("draw_normraresp") };
+		String[] tempmode = { GameText.read("off"), GameText.read("draw_normalsp"),
+				GameText.read("draw_raresp"), GameText.read("draw_normraresp") };
 		mode = tempmode;
 		String[] tempnum = { "1", "2", "3", "4", "5", "10", "50", "100" };
 		num = tempnum;
-		mess1 = ResourceUtil.getInstance().read("draw_addmes");
-		mess2 = ResourceUtil.getInstance().read("draw_addmore");
-		mess3 = ResourceUtil.getInstance().read("draw_randommode");
-		mess4 = ResourceUtil.getInstance().read("draw_addnum");
-		mess5 = ResourceUtil.getInstance().read("draw_raperize");
+		mess1 = GameText.read("draw_addmes");
+		mess2 = GameText.read("draw_addmore");
+		mess3 = GameText.read("draw_randommode");
+		mess4 = GameText.read("draw_addnum");
+		mess5 = GameText.read("draw_raperize");
 
 		for (int choice = 0; choice == 0;) {
 			JPanel panel = new JPanel();
@@ -711,38 +715,38 @@ public class MyPane extends JPanel implements Runnable {
 							selectAge = fAgeType;
 							break;
 						case 1:
-							selectType = SimYukkuri.RND.nextInt(namesCommonJ.length);
-							selectAge = SimYukkuri.RND.nextInt(3);
+							selectType = GameRandom.nextInt(namesCommonJ.length);
+							selectAge = GameRandom.nextInt(3);
 							break;
 						case 2:
-							selectType = SimYukkuri.RND.nextInt(namesRareJ.length) + 1000;
-							selectAge = SimYukkuri.RND.nextInt(3);
+							selectType = GameRandom.nextInt(namesRareJ.length) + 1000;
+							selectAge = GameRandom.nextInt(3);
 							break;
 						case 3:
-							int selectRare = SimYukkuri.RND.nextInt(2);
+							int selectRare = GameRandom.nextInt(2);
 							switch (selectRare) {
 								case 0:
 								default:
-									selectType = SimYukkuri.RND.nextInt(namesCommonJ.length);
+									selectType = GameRandom.nextInt(namesCommonJ.length);
 									break;
 								case 1:
-									selectType = SimYukkuri.RND.nextInt(namesRareJ.length) + 1000;
+									selectType = GameRandom.nextInt(namesRareJ.length) + 1000;
 									break;
 							}
-							selectAge = SimYukkuri.RND.nextInt(3);
+							selectAge = GameRandom.nextInt(3);
 							break;
 					}
 
 					boolean bImageNagasiMode = false;
-					if (selectType == Reimu.type && SimYukkuri.RND.nextInt(20) == 0)
+					if (selectType == Reimu.type && GameRandom.nextInt(20) == 0)
 						selectType = WasaReimu.type;
-					if (selectType == Reimu.type && SimYukkuri.RND.nextInt(15) == 0)
+					if (selectType == Reimu.type && GameRandom.nextInt(15) == 0)
 						selectType = Deibu.type;
-					if (selectType == Marisa.type && SimYukkuri.RND.nextInt(50) == 0)
+					if (selectType == Marisa.type && GameRandom.nextInt(50) == 0)
 						selectType = MarisaTsumuri.type;
-					if (selectType == Marisa.type && SimYukkuri.RND.nextInt(50) == 0)
+					if (selectType == Marisa.type && GameRandom.nextInt(50) == 0)
 						selectType = MarisaKotatsumuri.type;
-					if (selectType == Ayaya.type && SimYukkuri.RND.nextInt(20) == 0)
+					if (selectType == Ayaya.type && GameRandom.nextInt(20) == 0)
 						selectType = Kimeemaru.type;
 
 					// if(selectType == Reimu.type || selectType == Marisa.type)
@@ -751,7 +755,7 @@ public class MyPane extends JPanel implements Runnable {
 							bImageNagasiMode = true;
 						}
 						if (SimYukkuri.NAGASI_MODE == 2) {
-							if (SimYukkuri.RND.nextInt(20) == 0) {
+							if (GameRandom.nextInt(20) == 0) {
 								bImageNagasiMode = true;
 							}
 						}
@@ -772,8 +776,8 @@ public class MyPane extends JPanel implements Runnable {
 					}
 					Body b;
 					synchronized (SimYukkuri.lock) {
-						b = terrarium.makeBody(SimYukkuri.RND.nextInt(Translate.getMapW()),
-								SimYukkuri.RND.nextInt(Translate.getMapH()), 0, selectType,
+						b = terrarium.makeBody(GameRandom.nextInt(Translate.getMapW()),
+								GameRandom.nextInt(Translate.getMapH()), 0, selectType,
 								null, age, null, null, true);
 					}
 					b.addAge(256);
@@ -844,15 +848,15 @@ public class MyPane extends JPanel implements Runnable {
 	public void paint(Graphics g) {
 		synchronized (SimYukkuri.lock) {
 
-			MapPlaceData curMap = SimYukkuri.world.getCurrentMap();
+			MapPlaceData curMap = GameWorld.get().getCurrentMap();
 
 			// fps.count();
 
 			list4sort.clear();
-			list4sort.addAll(SimYukkuri.world.getYukkuriList());
-			list4sort.addAll(SimYukkuri.world.getFixObjList());
-			list4sort.addAll(SimYukkuri.world.getObjectList());
-			list4sort.addAll(SimYukkuri.world.getSortEffectList());
+			list4sort.addAll(GameWorld.get().getYukkuriList());
+			list4sort.addAll(GameWorld.get().getFixObjList());
+			list4sort.addAll(GameWorld.get().getObjectList());
+			list4sort.addAll(GameWorld.get().getSortEffectList());
 			list4sort.addAll(TerrainField.getStructList());
 			Collections.sort(list4sort, ObjDrawComp.getInstance());
 
@@ -899,7 +903,7 @@ public class MyPane extends JPanel implements Runnable {
 			}
 
 			// 床置きオブジェクト描画
-			List<ObjEX> platformList = SimYukkuri.world.getPlatformList();
+			List<ObjEX> platformList = GameWorld.get().getPlatformList();
 			for (Iterator<ObjEX> i = platformList.iterator(); i.hasNext();) {
 				ObjEX oex = i.next();
 				calcDrawPosition(oex, tmpRect);
@@ -1087,7 +1091,7 @@ public class MyPane extends JPanel implements Runnable {
 
 			// 最前面エフェクト描画
 			Effect ef;
-			for (Obj o : SimYukkuri.world.getFrontEffectList()) {
+			for (Obj o : GameWorld.get().getFrontEffectList()) {
 				ef = (Effect) o;
 				calcDrawPosition(ef, tmpRect);
 				tmpRect.setY(tmpRect.getY() - Translate.translateZ(ef.getZ()));
@@ -1125,7 +1129,7 @@ public class MyPane extends JPanel implements Runnable {
 				backBufferG2.drawImage(select[st + (int) (selectBody.getAge() % 4)], x, y, this);
 			}
 
-			if (SimYukkuri.world.getPlayer().getHoldItem() != null && mousePos != null) {
+			if (GameWorld.get().getPlayer().getHoldItem() != null && mousePos != null) {
 				backBufferG2.translate(mousePos.x, mousePos.y);
 				backBufferG2.setStroke(ITEM_CUR_STROKE);
 				backBufferG2.setColor(ITEM_CUR_COLOR);
@@ -1188,7 +1192,7 @@ public class MyPane extends JPanel implements Runnable {
 					dispArea.getY() + dispArea.getHeight(), this);
 
 			// 時間帯グラデ
-			LinearGradientPaint sky = TerrainField.getSkyGrad(Terrarium.getDayState().ordinal());
+			LinearGradientPaint sky = TerrainField.getSkyGrad(GameEnvironment.getDayState().ordinal());
 			if (sky != null) {
 				g2.setPaint(sky);
 				g2.fillRect(0, 0, Translate.getFieldW() * 100 / Translate.getMapScale(),

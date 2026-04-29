@@ -1,4 +1,5 @@
 package src.system;
+import src.util.GameEnvironment;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -11,6 +12,7 @@ import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
 import src.SimYukkuri;
+import src.util.GameWorld;
 import src.base.Body;
 import src.command.GadgetMenu;
 import src.command.GadgetMenu.GadgetList;
@@ -156,7 +158,7 @@ public class MainCommandListener {
 			}
 			else if(source.equals(items[SystemButtonLabel.LOGCLEAR.ordinal()])) {
 				LoggerYukkuri.clearLog();
-				LoggerYukkuri.setClearLogTime(Terrarium.getOperationTime());
+				LoggerYukkuri.setClearLogTime(GameEnvironment.getOperationTime());
 			}
 			else if(source.equals(MainCommandUI.getPlayerButton()[ToolButtonLabel.MOVE.ordinal()])) {
 				if(MainCommandUI.getPlayerButton()[ToolButtonLabel.MOVE.ordinal()].isSelected()) {
@@ -170,7 +172,7 @@ public class MainCommandListener {
 					MainCommandUI.getItemWindow().setVisible(true);
 				} else {
 					MainCommandUI.getItemWindow().setVisible(false);
-					SimYukkuri.world.getPlayer().setHoldItem(null);
+					GameWorld.get().getPlayer().setHoldItem(null);
 				}
 			}
 			else if(source.equals(MainCommandUI.getScriptButton())) {
@@ -211,7 +213,7 @@ public class MainCommandListener {
 			switch(sel) {
 				case INI_RELOAD:
 					SimYukkuri.mypane.loadImage(false, false, false, false, false, true);
-					for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().getBody().entrySet()) {
+					for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
 						Body b = entry.getValue();
 						{
 							IniFileUtil.readIniFile(b, true);

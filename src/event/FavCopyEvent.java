@@ -1,4 +1,5 @@
 package src.event;
+import src.util.GameText;
 
 import src.base.Body;
 import src.base.EventPacket;
@@ -68,6 +69,6 @@ public class FavCopyEvent extends EventPacket {
 
 	@Override
 	public String toString() {
-		return ResourceUtil.getInstance().read("event_favcopy");
+		return GameText.read("event_favcopy");
 	}
 }

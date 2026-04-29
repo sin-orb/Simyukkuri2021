@@ -14,6 +14,8 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
 import src.Const;
 import src.SimYukkuri;
+import src.util.GameRandom;
+import src.util.GameWorld;
 import src.attachment.Ants;
 import src.draw.Color4y;
 import src.draw.Point4y;
@@ -5204,7 +5206,7 @@ public abstract class BodyAttributes extends Obj {
 			P /= 2;
 		if (P < 1)
 			P = 1;
-		return (SimYukkuri.RND.nextInt(P) == 0);
+		return (GameRandom.nextInt(P) == 0);
 	}
 
 	/**
@@ -6027,7 +6029,7 @@ public abstract class BodyAttributes extends Obj {
 		if (takeoutItem.get(key) == null) {
 			return null;
 		}
-		MapPlaceData m = SimYukkuri.world.getCurrentMap();
+		MapPlaceData m = GameWorld.get().getCurrentMap();
 		if (m.getTakenOutFood().containsKey(takeoutItem.get(key))) {
 			return m.getTakenOutFood().get(takeoutItem.get(key));
 		}
@@ -6398,7 +6400,7 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 自主的にふりふりするかどうか
 	 */
 	public boolean willingFurifuri() {
-		if (isRude() && SimYukkuri.RND.nextInt(furifuriDiscipline + 1) == 0 && canFurifuri()) {
+		if (isRude() && GameRandom.nextInt(furifuriDiscipline + 1) == 0 && canFurifuri()) {
 			return true;
 		}
 		return false;
@@ -6833,7 +6835,7 @@ public abstract class BodyAttributes extends Obj {
 		}
 		if (isNYD()) {
 			happiness = Happiness.VERY_SAD;
-			sadPeriod = 1200 + SimYukkuri.RND.nextInt(400) - 200;
+			sadPeriod = 1200 + GameRandom.nextInt(400) - 200;
 			return;
 		}
 		if (happy == Happiness.SAD) {
@@ -6848,7 +6850,7 @@ public abstract class BodyAttributes extends Obj {
 			}
 		} else {
 			if (happy == Happiness.VERY_SAD) {
-				sadPeriod = 1200 + SimYukkuri.RND.nextInt(400) - 200;
+				sadPeriod = 1200 + GameRandom.nextInt(400) - 200;
 			} else {
 				sadPeriod = 0;
 			}

@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import src.SimYukkuri;
+import src.util.GameRandom;
 import src.base.Body;
 import src.draw.Dimension4y;
 import src.draw.ModLoader;
@@ -171,9 +172,9 @@ public class TarinaiReimu extends Tarinai {
 		PREGPERIODorg *= factor;
 		SLEEPPERIODorg *= factor;
 		ACTIVEPERIODorg *= factor;
-		sameDest = SimYukkuri.RND.nextInt(20) + 20;
+		sameDest = GameRandom.nextInt(20) + 20;
 		DECLINEPERIODorg *= (Math.random() + 0.5);
-		ROBUSTNESS = SimYukkuri.RND.nextInt(5) + 1;
+		ROBUSTNESS = GameRandom.nextInt(5) + 1;
 		EYESIGHTorg /= 8;
 		factor = Math.random() + 1;
 		STRENGTHorg[AgeState.ADULT.ordinal()] *= factor;

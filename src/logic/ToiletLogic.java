@@ -1,10 +1,13 @@
 package src.logic;
+import src.util.GameMessages;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import src.SimYukkuri;
+import src.util.GameRandom;
+import src.util.GameWorld;
 import src.base.Body;
 import src.base.EventPacket;
 import src.base.Obj;
@@ -62,8 +65,8 @@ public class ToiletLogic {
 			bHasShit = true;
 		}
 
-		List<Toilet> toiletList = new LinkedList<>(SimYukkuri.world.getCurrentMap().getToilet().values());
-		List<Shit> shitList = new LinkedList<>(SimYukkuri.world.getCurrentMap().getShit().values());
+		List<Toilet> toiletList = new LinkedList<>(GameWorld.get().getCurrentMap().getToilet().values());
+		List<Shit> shitList = new LinkedList<>(GameWorld.get().getCurrentMap().getShit().values());
 		if( shitList == null || shitList.size() == 0 ){
 			return false;
 		}
@@ -86,7 +89,7 @@ public class ToiletLogic {
 		}
 		// うんうん奴隷がいれば運ばない
 		if( bCanTransport  ){
-			for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().getBody().entrySet()) {
+			for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
 				Body bodyOther = entry.getValue();
 				if(bodyOther == b || bodyOther.isDead() || bodyOther.isRemoved() ){
 					continue;
@@ -151,7 +154,7 @@ public class ToiletLogic {
 			if( bCanTransport  && nDistance < colX && !bHasShit && !bFoundMyShitOutOfToilet && bFoundMyToilet  ){
 				int bodyOwnerId = s.getOwnerId();
 				Body owner = null;
-				for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().getBody().entrySet()) {
+				for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
 					Body body = entry.getValue();
 					if (body.getUniqueID() == bodyOwnerId) {
 						owner = body;
@@ -174,7 +177,7 @@ public class ToiletLogic {
 						if (nDistance < b.getStepDist()){
 							// おもちかえりする
 							b.setTakeoutItem(TakeoutItemType.SHIT, s);
-							b.setMessage(MessagePool.getMessage(b, MessagePool.Action.TransportShit));
+							b.setMessage(GameMessages.getMessage(b, MessagePool.Action.TransportShit));
 							b.stay();
 							b.clearActions();
 						}
@@ -190,16 +193,16 @@ public class ToiletLogic {
 				// 嫌がる
 				if (!b.isTalking() && !b.isToShit()) {
 					//うんうん奴隷じゃない、餡子脳の赤、子ゆはランダムで威嚇。
-					if(!b.isAdult() && b.getPublicRank() == PublicRank.NONE &&  b.getIntelligence() == Intelligence.FOOL && SimYukkuri.RND.nextBoolean()){
+					if(!b.isAdult() && b.getPublicRank() == PublicRank.NONE &&  b.getIntelligence() == Intelligence.FOOL && GameRandom.nextBoolean()){
 						b.setForceFace(ImageCode.PUFF.ordinal());
-						b.setMessage(MessagePool.getMessage(b, MessagePool.Action.ShitIntimidation), false);
+						b.setMessage(GameMessages.getMessage(b, MessagePool.Action.ShitIntimidation), false);
 					}
 					//ついでに足りないゆも
-					else if(b.isIdiot() && SimYukkuri.RND.nextBoolean()){
+					else if(b.isIdiot() && GameRandom.nextBoolean()){
 						b.setForceFace(ImageCode.PUFF.ordinal());
-						b.setMessage(MessagePool.getMessage(b, MessagePool.Action.ShitIntimidation), false);
+						b.setMessage(GameMessages.getMessage(b, MessagePool.Action.ShitIntimidation), false);
 					}
-					else b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateShit), false);
+					else b.setMessage(GameMessages.getMessage(b, MessagePool.Action.HateShit), false);
 					b.addStress(5);
 					ret = true;
 					break;
@@ -251,14 +254,14 @@ public class ToiletLogic {
 			if(b.isToSteal()&& !b.wantToShit() ){
 					return false;
 			}
-			for (Map.Entry<Integer, Toilet> entry : SimYukkuri.world.getCurrentMap().getToilet().entrySet()) {
+			for (Map.Entry<Integer, Toilet> entry : GameWorld.get().getCurrentMap().getToilet().entrySet()) {
 				Toilet t = entry.getValue();
 				// うんうん奴隷用トイレのどれかにいれば終了＝トイレに向かわない
 				if( t.isForSlave()  && t.checkHitObj(null, b)){
 					// うんうんを持ち歩いている場合
 					if(bHasShit ){
 						b.dropTakeoutItem(TakeoutItemType.SHIT);
-						b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateShit));
+						b.setMessage(GameMessages.getMessage(b, MessagePool.Action.HateShit));
 						b.addStress(10);
 					}
 					// うんうんを持ち歩いていない場合
@@ -271,12 +274,12 @@ public class ToiletLogic {
 		else{
 			// うんうん奴隷ではない場合、用がない、かつうんうんを持ってないなら終了
 			if ( !b.wantToShit() && !bHasShit ) {
-				for (Map.Entry<Integer, Toilet> entry : SimYukkuri.world.getCurrentMap().getToilet().entrySet()) {
+				for (Map.Entry<Integer, Toilet> entry : GameWorld.get().getCurrentMap().getToilet().entrySet()) {
 					Toilet t = entry.getValue();
 					// 自動清掃でないトイレに入った時の反応
 					if(!t.getAutoClean() && t.checkHitObj(null, b) &&!b.isTalking()){
 						if(b.isSleeping()) b.wakeup();
-						b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateShit));
+						b.setMessage(GameMessages.getMessage(b, MessagePool.Action.HateShit));
 						b.runAway(t.getX(), t.getY());
 						break;
 					}
@@ -309,7 +312,7 @@ public class ToiletLogic {
 						if( b.getTakeoutItem(TakeoutItemType.SHIT) != null){
 						// うんうん奴隷がうんうんを持っていれば落とす
 							b.dropTakeoutItem(TakeoutItemType.SHIT);
-							b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateShit));
+							b.setMessage(GameMessages.getMessage(b, MessagePool.Action.HateShit));
 							b.addStress(10);
 							b.stay();
 						}
@@ -318,7 +321,7 @@ public class ToiletLogic {
 						// うんうんを持っていれば落とす
 						if( b.getTakeoutItem(TakeoutItemType.SHIT) != null){
 							b.dropTakeoutItem(TakeoutItemType.SHIT);
-							b.setMessage(MessagePool.getMessage(b, MessagePool.Action.Relax));
+							b.setMessage(GameMessages.getMessage(b, MessagePool.Action.Relax));
 							b.addStress(-15);
 							b.stay();
 						}
@@ -346,7 +349,7 @@ public class ToiletLogic {
 			wallMode = AgeState.ADULT.ordinal();
 		}
 
-		for (Map.Entry<Integer, Toilet> entry : SimYukkuri.world.getCurrentMap().getToilet().entrySet()) {
+		for (Map.Entry<Integer, Toilet> entry : GameWorld.get().getCurrentMap().getToilet().entrySet()) {
 			Toilet t = entry.getValue();
 			int distance = Translate.distance(b.getX(), b.getY(), t.getX(), t.getY() - t.getH()/6);
 			if (minDistance > distance) {

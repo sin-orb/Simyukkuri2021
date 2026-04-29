@@ -1,6 +1,9 @@
 package src.event;
+import src.util.GameMessages;
+import src.util.GameText;
 
 import src.SimYukkuri;
+import src.util.GameRandom;
 import src.attachment.Fire;
 import src.base.Body;
 import src.base.EventPacket;
@@ -110,7 +113,7 @@ public class BegForLifeEvent extends EventPacket {
 	@Override
 	public UpdateState update(Body b) {
 		if (b.isTalking()) {
-			// b.setBodyEventResMessage(MessagePool.getMessage(b,
+			// b.setBodyEventResMessage(GameMessages.getMessage(b,
 			// MessagePool.Action.ApologyToHuman), 20, false, true);
 			return null;
 		}
@@ -124,23 +127,23 @@ public class BegForLifeEvent extends EventPacket {
 			b.setCalm();
 			b.stayPurupuru(5);
 			b.setForceFace(ImageCode.VAIN.ordinal());
-			roop = SimYukkuri.RND.nextInt(5) + 5;
-			roop2 = SimYukkuri.RND.nextInt(10) + 8;
-			roop3 = SimYukkuri.RND.nextInt(3) + 1;
+			roop = GameRandom.nextInt(5) + 5;
+			roop2 = GameRandom.nextInt(10) + 8;
+			roop3 = GameRandom.nextInt(3) + 1;
 		} else if (tick >= 7 && roop != 0 && roop2 != 0 && roop3 != 0) {
 			b.stay(30);
 			b.setForceFace(ImageCode.CRYING.ordinal());
 			b.setBegging(true);
-			b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.ApologyToHuman), 20, false,
-					SimYukkuri.RND.nextBoolean());
+			b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.ApologyToHuman), 20, false,
+					GameRandom.nextBoolean());
 			roop--;
 		}
 
 		else if (roop == 0 && roop2 != 0 && roop3 != 0) {
 			// 反応する
 			b.stay(80);
-			b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.BegForLife), 20, false,
-					SimYukkuri.RND.nextBoolean());
+			b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.BegForLife), 20, false,
+					GameRandom.nextBoolean());
 			b.setHappiness(Happiness.VERY_SAD);
 			b.setForceFace(ImageCode.CRYING.ordinal());
 			// なつき度設定
@@ -151,14 +154,14 @@ public class BegForLifeEvent extends EventPacket {
 			b.setBegging(false);
 			// 着火状態か足が破れてる状態で見逃してもらう
 			if (b.getAttachmentSize(Fire.class) != 0 || b.getCriticalDamegeType() == CriticalDamegeType.CUT) {
-				b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.ThanksHuman2), 25, true, false);
+				b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.ThanksHuman2), 25, true, false);
 				b.setHappiness(Happiness.VERY_SAD);
 				b.setForceFace(ImageCode.CRYING.ordinal());
 				return UpdateState.ABORT;
 			}
 			// ダメージ状態で見逃してもらう
 			if (b.isDamaged()) {
-				b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.ThanksHuman2), 25, true, false);
+				b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.ThanksHuman2), 25, true, false);
 				b.setHappiness(Happiness.SAD);
 				b.setForceFace(ImageCode.TIRED.ordinal());
 				// 増長
@@ -192,11 +195,11 @@ public class BegForLifeEvent extends EventPacket {
 			else {
 				// 賢くないゲス
 				if (b.isRude() && b.getIntelligence() != Intelligence.WISE) {
-					b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.ThanksHuman), 25, true, true);
+					b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.ThanksHuman), 25, true, true);
 					b.setHappiness(Happiness.VERY_HAPPY);
 					b.setForceFace(ImageCode.RUDE.ordinal());
 				} else {
-					b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.ThanksHuman), 25, true, true);
+					b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.ThanksHuman), 25, true, true);
 					b.setHappiness(Happiness.VERY_HAPPY);
 					b.setForceFace(ImageCode.SMILE.ordinal());
 				}
@@ -228,7 +231,7 @@ public class BegForLifeEvent extends EventPacket {
 			wait = 0;
 		} else if (wait == 30 && roop == 0 && roop2 == 0 && roop3 == 0) {
 			// 独り言ちる
-			b.setMessage(MessagePool.getMessage(b, MessagePool.Action.Monologue), true);
+			b.setMessage(GameMessages.getMessage(b, MessagePool.Action.Monologue), true);
 			return UpdateState.ABORT;
 		}
 		tick++;
@@ -256,6 +259,6 @@ public class BegForLifeEvent extends EventPacket {
 
 	@Override
 	public String toString() {
-		return ResourceUtil.getInstance().read("event_beg");
+		return GameText.read("event_beg");
 	}
 }

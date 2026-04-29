@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 
 import src.SimYukkuri;
+import src.util.GameWorld;
 import src.base.ObjEX;
 import src.draw.ModLoader;
 import src.draw.Rectangle4y;
@@ -105,7 +106,7 @@ public class House extends ObjEX {
 
 	@Override
 	public void removeListData() {
-		SimYukkuri.world.getCurrentMap().getHouse().remove(objId);
+		GameWorld.get().getCurrentMap().getHouse().remove(objId);
 	}
 
 	@Override
@@ -125,7 +126,7 @@ public class House extends ObjEX {
 		houseType = HouseTable.values()[initOption];
 		setBoundary(boundary[houseType.ordinal()]);
 		setCollisionSize(getPivotX(), getPivotY());
-		SimYukkuri.world.getCurrentMap().getHouse().put(objId, this);
+		GameWorld.get().getCurrentMap().getHouse().put(objId, this);
 		objType = Type.PLATFORM;
 		objEXType = ObjEXType.HOUSE;
 		itemRank = ItemRank.values()[houseType.getRank()];

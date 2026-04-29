@@ -6,6 +6,7 @@ import java.io.File;
 import java.io.IOException;
 
 import src.SimYukkuri;
+import src.util.GameRandom;
 import src.draw.ModLoader;
 import src.draw.Point4y;
 import src.draw.Rectangle4y;
@@ -79,7 +80,7 @@ public class Okazari extends Obj {
 	 * @return おかざりのタイプ
 	 */
 	public static final OkazariType getRandomOkazari(AgeState ageState) {
-		int num = OKAZARI_START[ageState.ordinal()] + SimYukkuri.RND.nextInt(OKAZARI_NUM[ageState.ordinal()]);
+		int num = OKAZARI_START[ageState.ordinal()] + GameRandom.nextInt(OKAZARI_NUM[ageState.ordinal()]);
 		return OkazariType.values()[num];
 	}
 

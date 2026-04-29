@@ -1,4 +1,6 @@
 package src.yukkuri;
+import src.util.GameEnvironment;
+import src.util.GameMessages;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
@@ -9,6 +11,8 @@ import java.util.Map;
 
 import src.Const;
 import src.SimYukkuri;
+import src.util.GameRandom;
+import src.util.GameWorld;
 import src.base.Body;
 import src.base.Okazari.OkazariType;
 import src.draw.Dimension4y;
@@ -119,7 +123,7 @@ public class Reimu extends Body {
 			layer.getDir()[index] = direction * directionOffset[type][1];
 		} else {
 			// インターバル毎に初期化する
-			if (Terrarium.getInterval() == 0 && !isDead()) {
+			if (GameEnvironment.getInterval() == 0 && !isDead()) {
 				for (int i = 0; i < ImageCode.values().length; i++) {
 					anImageVerStateCtrlNagasi[i][1] = 0;
 				}
@@ -142,7 +146,7 @@ public class Reimu extends Body {
 				}
 
 				if (nOtherVerCount != 0) {
-					int nRndIndex = SimYukkuri.RND.nextInt(nOtherVerCount + 1);
+					int nRndIndex = GameRandom.nextInt(nOtherVerCount + 1);
 					anImageVerStateCtrlNagasi[type][0] = nRndIndex;
 					layer.getImage()[index] = imagesNagasi[type][direction
 							* directionOffsetNagasi[type][0]][getBodyAgeState().ordinal()][nRndIndex];
@@ -183,7 +187,7 @@ public class Reimu extends Body {
 		// でいぶ化
 		synchronized (SimYukkuri.lock) {
 			int originalId = getUniqueID();
-			SimYukkuri.world.getCurrentMap().getBody().remove(this.getUniqueID());
+			GameWorld.get().getCurrentMap().getBody().remove(this.getUniqueID());
 			SimYukkuri.mypane.loadBodyImage(YukkuriType.DEIBU);
 			Body to = new Deibu(getX(), getY(), getZ(), getBodyAgeState(), null, null);
 			try {
@@ -192,7 +196,7 @@ public class Reimu extends Body {
 				e.printStackTrace();
 			}
 			to.setUniqueID(originalId);
-			SimYukkuri.world.getCurrentMap().getBody().put(to.getUniqueID(), to);
+			GameWorld.get().getCurrentMap().getBody().put(to.getUniqueID(), to);
 			to.setBaseBodyFileName("deibu");
 			IniFileUtil.readYukkuriIniFile(to);
 			if (MyPane.getSelectBody() == this) {
@@ -216,7 +220,7 @@ public class Reimu extends Body {
 		// 大人であり、夫がいて夫がゲスではなく、自身がゲス
 		Body partner = YukkuriUtil.getBodyInstance(getPartner());
 		if (isAdult() && partner != null && !partner.isRude() && isRude()) {
-			if (SimYukkuri.RND.nextInt(1000) == 0) {
+			if (GameRandom.nextInt(1000) == 0) {
 				return this;
 			}
 		}
@@ -228,7 +232,7 @@ public class Reimu extends Body {
 				return this;
 			}
 			// あとは1/2。
-			else if (SimYukkuri.RND.nextBoolean()) {
+			else if (GameRandom.nextBoolean()) {
 				return this;
 			}
 		}
@@ -535,7 +539,7 @@ public class Reimu extends Body {
 			return;
 		if (getPlaying() != null)
 			return;
-		int p = SimYukkuri.RND.nextInt(50);
+		int p = GameRandom.nextInt(50);
 		// 7/50でキリッ
 		if (p <= 6) {
 			getInVain(true);
@@ -543,14 +547,14 @@ public class Reimu extends Body {
 		// 7/50でのびのび
 		else if (p <= 14) {
 			// if yukkuri is not rude, she goes into her shell by discipline.
-			setMessage(MessagePool.getMessage(this, MessagePool.Action.Nobinobi), 40);
+			setMessage(GameMessages.getMessage(this, MessagePool.Action.Nobinobi), 40);
 			setNobinobi(true);
 			addStress(-30);
 			stay(40);
 		}
 		// 7/50でおうた
 		else if (p <= 21) {
-			setMessage(MessagePool.getMessage(this, MessagePool.Action.ProudChildsSING), 40);
+			setMessage(GameMessages.getMessage(this, MessagePool.Action.ProudChildsSING), 40);
 			setNobinobi(true);
 			addStress(-30);
 			stay(40);
@@ -558,7 +562,7 @@ public class Reimu extends Body {
 		// 7/50でふりふり
 		else if (p <= 28 && willingFurifuri()) {
 			// if yukkuri is rude, she will not do furifuri by discipline.
-			setMessage(MessagePool.getMessage(this, MessagePool.Action.FuriFuri), 30);
+			setMessage(GameMessages.getMessage(this, MessagePool.Action.FuriFuri), 30);
 			setFurifuri(true);
 			addStress(-50);
 			stay(30);
@@ -566,14 +570,14 @@ public class Reimu extends Body {
 		// 7/50でふりふりで腹減った
 		else if ((p <= 35 && isHungry()) || isSoHungry()) {
 			// 空腹時
-			setMessage(MessagePool.getMessage(this, MessagePool.Action.Hungry), 30);
+			setMessage(GameMessages.getMessage(this, MessagePool.Action.Hungry), 30);
 			stay(30);
 		}
 		// 4/50でおもちゃで遊ぶ
 		else if (p <= 39) {
 			if (ToyLogic.checkToy(this)) {
 				setPlaying(PlayStyle.BALL);
-				playingLimit = 150 + SimYukkuri.RND.nextInt(100) - 49;
+				playingLimit = 150 + GameRandom.nextInt(100) - 49;
 				return;
 			} else
 				killTime();
@@ -582,7 +586,7 @@ public class Reimu extends Body {
 		else if (p <= 42) {
 			if (ToyLogic.checkTrampoline(this)) {
 				setPlaying(PlayStyle.TRAMPOLINE);
-				playingLimit = 150 + SimYukkuri.RND.nextInt(100) - 49;
+				playingLimit = 150 + GameRandom.nextInt(100) - 49;
 				return;
 			} else
 				killTime();
@@ -591,16 +595,16 @@ public class Reimu extends Body {
 		else if (p <= 43) {
 			if (ToyLogic.checkSui(this)) {
 				setPlaying(PlayStyle.SUI);
-				playingLimit = 150 + SimYukkuri.RND.nextInt(100) - 49;
+				playingLimit = 150 + GameRandom.nextInt(100) - 49;
 				return;
 			} else
 				killTime();
 		} else {
 			// おくるみありで汚れていない場合
-			if (isHasPants() && !isDirty() && SimYukkuri.RND.nextInt(5) == 0) {
-				setMessage(MessagePool.getMessage(this, MessagePool.Action.RelaxOkurumi));
+			if (isHasPants() && !isDirty() && GameRandom.nextInt(5) == 0) {
+				setMessage(GameMessages.getMessage(this, MessagePool.Action.RelaxOkurumi));
 			} else {
-				setMessage(MessagePool.getMessage(this, MessagePool.Action.Relax));
+				setMessage(GameMessages.getMessage(this, MessagePool.Action.Relax));
 			}
 			addStress(-50);
 			stay(30);
@@ -624,7 +628,7 @@ public class Reimu extends Body {
 	@Override
 	public void tuneParameters() {
 		/*
-		 * if (SimYukkuri.RND.nextBoolean()) {
+		 * if (GameRandom.nextBoolean()) {
 		 * motherhood = true;
 		 * }
 		 */
@@ -650,9 +654,9 @@ public class Reimu extends Body {
 		PREGPERIODorg *= factor;
 		SLEEPPERIODorg *= factor;
 		ACTIVEPERIODorg *= factor;
-		sameDest = SimYukkuri.RND.nextInt(20) + 20;
+		sameDest = GameRandom.nextInt(20) + 20;
 		DECLINEPERIODorg *= (Math.random() + 0.5);
-		ROBUSTNESS = SimYukkuri.RND.nextInt(10) + 1;
+		ROBUSTNESS = GameRandom.nextInt(10) + 1;
 		// EYESIGHT /= 4;
 		factor = Math.random() + 0.5;
 		STRENGTHorg[AgeState.ADULT.ordinal()] *= factor;

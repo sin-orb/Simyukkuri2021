@@ -1,4 +1,6 @@
 package src.attachment;
+import src.util.GameMessages;
+import src.util.GameText;
 
 
 import java.awt.image.BufferedImage;
@@ -7,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 
 import src.SimYukkuri;
+import src.util.GameRandom;
 import src.base.Attachment;
 import src.base.Body;
 import src.draw.ModLoader;
@@ -102,20 +105,20 @@ public class Fire extends Attachment {
 			pa.clearActions();
 			if( pa.isNotNYD() ){
 				if(!pa.isTalking()) {
-					pa.setMessage(MessagePool.getMessage(pa, MessagePool.Action.Burning), 20, true, true);
+					pa.setMessage(GameMessages.getMessage(pa, MessagePool.Action.Burning), 20, true, true);
 				}
 			}
 			pa.addDamage(TICK * 90);
 			pa.addStress(50);
 			// 背面固定で針が刺さってないなら尻を振る
 			if( pa.isFixBack()  && !pa.isNeedled()){
-				if( SimYukkuri.RND.nextInt(10) == 0){
+				if( GameRandom.nextInt(10) == 0){
 					pa.setFurifuri(true);
 				}
 			}
 			else{
 				if(pa.isLockmove() ){
-					if( SimYukkuri.RND.nextInt(3) == 0){
+					if( GameRandom.nextInt(3) == 0){
 						pa.setNobinobi(true);
 					}
 				}
@@ -143,12 +146,12 @@ public class Fire extends Attachment {
 		}
 
 		// 実ゆの場合、親が反応する
-		if(SimYukkuri.RND.nextInt(3) == 0){
+		if(GameRandom.nextInt(3) == 0){
 			Body bodyMother = YukkuriUtil.getBodyInstance(pa.getBindStalkMotherCanNotice());
 			if ( bodyMother != null ) {
 				if( bodyMother.isNotNYD() ){
 					bodyMother.setHappiness(Happiness.VERY_SAD);
-					bodyMother.setMessage(MessagePool.getMessage(bodyMother, MessagePool.Action.AbuseBaby));
+					bodyMother.setMessage(GameMessages.getMessage(bodyMother, MessagePool.Action.AbuseBaby));
 					bodyMother.addStress(15);
 				}
 			}
@@ -207,7 +210,7 @@ public class Fire extends Attachment {
 
 	@Override
 	public String toString() {
-		return ResourceUtil.getInstance().read("item_fire");
+		return GameText.read("item_fire");
 	}
 
 	// テスト用静的アクセサ

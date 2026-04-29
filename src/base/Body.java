@@ -1,4 +1,8 @@
 package src.base;
+import src.util.GameEnvironment;
+import src.util.GameImages;
+import src.util.GameMessages;
+import src.util.GameText;
 
 import java.awt.Color;
 import java.awt.Rectangle;
@@ -107,6 +111,8 @@ import src.system.MapPlaceData;
 import src.system.MessagePool;
 import src.system.ResourceUtil;
 import src.system.Sprite;
+import src.util.GameRandom;
+import src.util.GameWorld;
 import src.util.IniFileUtil;
 import src.util.YukkuriUtil;
 
@@ -173,7 +179,7 @@ public abstract class Body extends BodyAttributes {
 		String name = ResourceUtil.IS_JP ? getNameJ() : getNameE();
 		StringBuilder ret = new StringBuilder(name);
 		if (isUnBirth()) {
-			ret.append("(" + ResourceUtil.getInstance().read("base_fruit") + ")");
+			ret.append("(" + GameText.read("base_fruit") + ")");
 		} else {
 			ret.append(" (" + getBodyAgeState().getName() + ")");
 		}
@@ -259,7 +265,7 @@ public abstract class Body extends BodyAttributes {
 			// かびている期間が潜伏期間の32倍を超え、かつダメージをヘビーに受けている場合
 			if (getSickPeriod() > (INCUBATIONPERIODorg * 32) && isDamagedHeavily()) {
 				// 追加ダメージは1/3の確率で1
-				if (SimYukkuri.RND.nextInt(3) == 0)
+				if (GameRandom.nextInt(3) == 0)
 					damage += TICK;
 			}
 			// かびている期間が潜伏期間の32倍を超えていて、ダメージがヘビーでない場合
@@ -296,35 +302,35 @@ public abstract class Body extends BodyAttributes {
 				addStress(50);
 				if (isSleeping())
 					wakeup();
-				Terrarium.setAlarm();
+				GameEnvironment.setAlarm();
 				// 1/50の確率でしゃべる
-				if (SimYukkuri.RND.nextInt(50) == 0) {
+				if (GameRandom.nextInt(50) == 0) {
 					if (geteCoreAnkoState() != CoreAnkoState.NonYukkuriDiseaseNear)
-						setNYDMessage(MessagePool.getMessage(this, MessagePool.Action.Dying2), false);
+						setNYDMessage(GameMessages.getMessage(this, MessagePool.Action.Dying2), false);
 					else
-						setMessage(MessagePool.getMessage(this, MessagePool.Action.Dying2));
+						setMessage(GameMessages.getMessage(this, MessagePool.Action.Dying2));
 				}
 			}
 			// 傷を負っているとき
 			else if (getCriticalDamege() == CriticalDamegeType.INJURED && !isSleeping()) {
 				// 1/300の確率で餡子を漏らす
-				if (SimYukkuri.RND.nextInt(300) == 0) {
-					SimYukkuri.mypane.getTerrarium().addCrushedVomit(getX() + 3 - SimYukkuri.RND.nextInt(6), getY() - 2,
+				if (GameRandom.nextInt(300) == 0) {
+					SimYukkuri.mypane.getTerrarium().addCrushedVomit(getX() + 3 - GameRandom.nextInt(6), getY() - 2,
 							0,
 							this,
 							getShitType());
-					setMessage(MessagePool.getMessage(this, MessagePool.Action.Scream));
+					setMessage(GameMessages.getMessage(this, MessagePool.Action.Scream));
 					setForceFace(ImageCode.PAIN.ordinal());
 					makeDirty(true);
 					addStress(5);
 					addDamage(50);
 				}
 				// お腹が一杯で、ダメージがないときに1/4800の確率で傷が治る
-				if (isFull() && isNoDamaged() && SimYukkuri.RND.nextInt(4800) == 0) {
+				if (isFull() && isNoDamaged() && GameRandom.nextInt(4800) == 0) {
 					setCriticalDamege(null);
 				}
 				// ダメージがヘビーでない場合は1/33600の確率で傷が治る
-				else if (!isDamagedHeavily() && SimYukkuri.RND.nextInt(33600) == 0) {
+				else if (!isDamagedHeavily() && GameRandom.nextInt(33600) == 0) {
 					setCriticalDamege(null);
 				}
 			}
@@ -335,40 +341,40 @@ public abstract class Body extends BodyAttributes {
 				wakeup();
 			damage += TICK * 50;
 			setSickPeriod(0);
-			Terrarium.setAlarm();
+			GameEnvironment.setAlarm();
 			setPeropero(false);
 			addStress(200);
 			addMemories(-5);
 			if (geteCoreAnkoState() == CoreAnkoState.NonYukkuriDiseaseNear) {
-				setNYDMessage(MessagePool.getMessage(this, MessagePool.Action.Dying2), false);
+				setNYDMessage(GameMessages.getMessage(this, MessagePool.Action.Dying2), false);
 			}
-			setMessage(MessagePool.getMessage(this, MessagePool.Action.Dying2));
+			setMessage(GameMessages.getMessage(this, MessagePool.Action.Dying2));
 		}
 		// 饅頭化されたときの基本反応
 		if (isPacked()) {
-			Terrarium.setAlarm();
+			GameEnvironment.setAlarm();
 			setPeropero(false);
 			addStress(50);
 			addMemories(-2);
 			setCanTalk(false);
-			if (SimYukkuri.RND.nextInt(200) == 0)
+			if (GameRandom.nextInt(200) == 0)
 				stayPurupuru(20);
 		}
 
 		// 路上だと、善良なバッジ付き以外は、一定確率で踏み潰される
-		if (SimYukkuri.world.getCurrentMap().getMapIndex() == 2 && !(isSmart() && getAttachmentSize(Badge.class) != 0)
-				&& getCarAccidentProb() != 0 && SimYukkuri.RND.nextInt(getCarAccidentProb()) == 0) {
+		if (GameWorld.get().getCurrentMap().getMapIndex() == 2 && !(isSmart() && getAttachmentSize(Badge.class) != 0)
+				&& getCarAccidentProb() != 0 && GameRandom.nextInt(getCarAccidentProb()) == 0) {
 			strikeByPress();
 		}
 
 		// ディヒューザーオレンジ
-		if (Terrarium.isOrangeSteam()) {
+		if (GameEnvironment.isOrangeSteam()) {
 			if (bHealFlag) {
 				damage -= TICK * 50;
 			}
 		}
 		// ディヒューザー砂糖水
-		if (Terrarium.isSugerSteam()) {
+		if (GameEnvironment.isSugerSteam()) {
 			// ダメージ限界の8割以上の場合
 			if (damage >= getDAMAGELIMITorg()[getBodyAgeState().ordinal()] * 80 / 100) {
 				if (bHealFlag) {
@@ -377,7 +383,7 @@ public abstract class Body extends BodyAttributes {
 			}
 		}
 		// ディヒューザー駆除剤
-		if (Terrarium.isPoisonSteam()) {
+		if (GameEnvironment.isPoisonSteam()) {
 			damage += TICK * 100;
 			clearActions();
 			setExciting(false);
@@ -387,9 +393,9 @@ public abstract class Body extends BodyAttributes {
 			if (isNotNYD()) {
 				setHappiness(Happiness.VERY_SAD);
 				if (getDamageState() != Damage.NONE) {
-					setNegiMessage(MessagePool.getMessage(this, MessagePool.Action.PoisonDamage), true);
+					setNegiMessage(GameMessages.getMessage(this, MessagePool.Action.PoisonDamage), true);
 				} else {
-					setMessage(MessagePool.getMessage(this, MessagePool.Action.PoisonDamage), Const.HOLDMESSAGE, false,
+					setMessage(GameMessages.getMessage(this, MessagePool.Action.PoisonDamage), Const.HOLDMESSAGE, false,
 							true);
 				}
 			}
@@ -449,7 +455,7 @@ public abstract class Body extends BodyAttributes {
 	 */
 	public void checkAnts() {
 		// すでに潰れてるかアリの数が0かディフューザー無限もるんもるんの場合、アリ解除
-		if (isCrushed() || Terrarium.isEndlessFurifuriSteam()) {
+		if (isCrushed() || GameEnvironment.isEndlessFurifuriSteam()) {
 			removeAnts();
 			return;
 		}
@@ -461,7 +467,7 @@ public abstract class Body extends BodyAttributes {
 			return;
 		}
 		// マップが部屋のとき、もしくは飛んでいるやつにアリはたからない
-		if (SimYukkuri.world.getCurrentMap().getMapIndex() == 0 || getZ() != 0) {
+		if (GameWorld.get().getCurrentMap().getMapIndex() == 0 || getZ() != 0) {
 			return;
 		}
 		// 新規でアリたかる？
@@ -487,7 +493,7 @@ public abstract class Body extends BodyAttributes {
 										&& takeMappedObj(getLinkParent()) == null
 										&& !isPeropero() && !(isEating() && !isPikopiko())) {
 									changeUnyo(0, 0,
-											(int) (SimYukkuri.RND
+											(int) (GameRandom
 													.nextInt(((int) UNYOSTRENGTH[getBodyAgeState().ordinal()] / 3)))
 													+ UNYOSTRENGTH[getBodyAgeState().ordinal()]);
 								}
@@ -497,7 +503,7 @@ public abstract class Body extends BodyAttributes {
 										&& takeMappedObj(getLinkParent()) == null
 										&& !isPeropero() && !(isEating() && !isPikopiko())) {
 									changeUnyo(0, 0,
-											(int) (SimYukkuri.RND
+											(int) (GameRandom
 													.nextInt(((int) UNYOSTRENGTH[getBodyAgeState().ordinal()] / 3)))
 													+ UNYOSTRENGTH[getBodyAgeState().ordinal()]);
 								}
@@ -507,11 +513,11 @@ public abstract class Body extends BodyAttributes {
 				}
 			}
 			// 常時ランダムで動く
-			if (SimYukkuri.RND.nextInt(30) == 0 && (isSleeping() ? SimYukkuri.RND.nextBoolean() : true)) {
-				changeUnyo((int) (SimYukkuri.RND.nextInt(2)), (int) (SimYukkuri.RND.nextInt(2)),
-						(int) (SimYukkuri.RND.nextInt(2)));
+			if (GameRandom.nextInt(30) == 0 && (isSleeping() ? GameRandom.nextBoolean() : true)) {
+				changeUnyo((int) (GameRandom.nextInt(2)), (int) (GameRandom.nextInt(2)),
+						(int) (GameRandom.nextInt(2)));
 			}
-			if (isDamaged() ? (SimYukkuri.RND.nextInt(5) == 0) : true) {
+			if (isDamaged() ? (GameRandom.nextInt(5) == 0) : true) {
 				changeReUnyo();
 			}
 		}
@@ -570,22 +576,22 @@ public abstract class Body extends BodyAttributes {
 	public void changeReUnyo() {
 		if (unyoForceH == 0) {
 		} else if (unyoForceH < Const.EXT_FORCE_PUSH_LIMIT[getBodyAgeState().ordinal()] * 0.6)
-			unyoForceH += SimYukkuri.RND.nextInt(3) + 5;
+			unyoForceH += GameRandom.nextInt(3) + 5;
 		else if (unyoForceH < 0)
-			unyoForceH += SimYukkuri.RND.nextInt(3) + 2;
+			unyoForceH += GameRandom.nextInt(3) + 2;
 		else if (unyoForceH > Const.EXT_FORCE_PULL_LIMIT[getBodyAgeState().ordinal()] * 0.6)
-			unyoForceH -= SimYukkuri.RND.nextInt(3) + 5;
+			unyoForceH -= GameRandom.nextInt(3) + 5;
 		else if (unyoForceH > 0)
-			unyoForceH -= SimYukkuri.RND.nextInt(3) + 2;
+			unyoForceH -= GameRandom.nextInt(3) + 2;
 		if (unyoForceW == 0) {
 		} else if (unyoForceW < Const.EXT_FORCE_PUSH_LIMIT[getBodyAgeState().ordinal()] * 0.6)
-			unyoForceW += SimYukkuri.RND.nextInt(3) + 5;
+			unyoForceW += GameRandom.nextInt(3) + 5;
 		else if (unyoForceW < 0)
-			unyoForceW += SimYukkuri.RND.nextInt(3) + 2;
+			unyoForceW += GameRandom.nextInt(3) + 2;
 		else if (unyoForceW > Const.EXT_FORCE_PULL_LIMIT[getBodyAgeState().ordinal()] * 0.6)
-			unyoForceW -= SimYukkuri.RND.nextInt(3) + 5;
+			unyoForceW -= GameRandom.nextInt(3) + 5;
 		else if (unyoForceW > 0)
-			unyoForceW -= SimYukkuri.RND.nextInt(3) + 2;
+			unyoForceW -= GameRandom.nextInt(3) + 2;
 	}
 
 	/**
@@ -640,7 +646,7 @@ public abstract class Body extends BodyAttributes {
 					setShitting(false);
 					addStress(100);
 					// 実ゆの場合、親が反応する
-					if (SimYukkuri.RND.nextInt(20) == 0) {
+					if (GameRandom.nextInt(20) == 0) {
 						checkReactionStalkMother(UnbirthBabyState.SAD);
 					}
 				} else {
@@ -687,7 +693,7 @@ public abstract class Body extends BodyAttributes {
 
 		boolean cantMove = false;
 		// 蓄積実行
-		if (SimYukkuri.RND.nextInt(nDown) == 0) {
+		if (GameRandom.nextInt(nDown) == 0) {
 			if (isFull()) {
 				shit += TICK * 2 + (shitBoost * 20);
 			} else {
@@ -698,7 +704,7 @@ public abstract class Body extends BodyAttributes {
 		// ちぎれ状態の場合は餡子を漏らす
 		if ((getCriticalDamege() == CriticalDamegeType.CUT || isPealed()) && getBaryState() == BaryInUGState.NONE) {
 			if (shit > getSHITLIMITorg()[getBodyAgeState().ordinal()] - TICK * Const.SHITSTAY * 2) {
-				SimYukkuri.mypane.getTerrarium().addCrushedVomit(getX() + 3 - SimYukkuri.RND.nextInt(6), getY() - 2, 0,
+				SimYukkuri.mypane.getTerrarium().addCrushedVomit(getX() + 3 - GameRandom.nextInt(6), getY() - 2, 0,
 						this,
 						getShitType());
 				addDamage(Const.NEEDLE * 2);
@@ -789,7 +795,7 @@ public abstract class Body extends BodyAttributes {
 				if (!isAnalClose() && !(isFixBack() && isbNeedled())) {
 					if (getAge() % 100 == 0) {
 						if (!isShitting()) {
-							setMessage(MessagePool.getMessage(this, MessagePool.Action.Shit), TICK * Const.SHITSTAY);
+							setMessage(GameMessages.getMessage(this, MessagePool.Action.Shit), TICK * Const.SHITSTAY);
 							stay();
 							wakeup();
 							setShitting(true);
@@ -829,7 +835,7 @@ public abstract class Body extends BodyAttributes {
 				}
 
 				if (isNotNYD()) {
-					setMessage(MessagePool.getMessage(this, MessagePool.Action.Shit2));
+					setMessage(GameMessages.getMessage(this, MessagePool.Action.Shit2));
 					stay();
 					if (!isHasPants()) {
 						if (willingFurifuri()) {
@@ -851,20 +857,20 @@ public abstract class Body extends BodyAttributes {
 				wakeup();
 				if (isNotNYD()) {
 					if (getBurstState() == Burst.NEAR) {
-						if (SimYukkuri.RND.nextInt(10) == 0) {
-							setMessage(MessagePool.getMessage(this, MessagePool.Action.Inflation));
+						if (GameRandom.nextInt(10) == 0) {
+							setMessage(GameMessages.getMessage(this, MessagePool.Action.Inflation));
 							stay();
 						}
 					} else {
-						if (SimYukkuri.RND.nextInt(10) == 0) {
-							setMessage(MessagePool.getMessage(this, MessagePool.Action.CantShit), true);
+						if (GameRandom.nextInt(10) == 0) {
+							setMessage(GameMessages.getMessage(this, MessagePool.Action.CantShit), true);
 							stay();
 						}
 					}
 				}
 
 				setHappiness(Happiness.SAD);
-				// if(SimYukkuri.RND.nextInt(4) == 0){
+				// if(GameRandom.nextInt(4) == 0){
 				shit += TICK + (shitBoost * 10);
 				// }
 
@@ -890,7 +896,7 @@ public abstract class Body extends BodyAttributes {
 			// 出産直前
 			if (pregnantPeriod > getPREGPERIODorg() - TICK * 100) {
 				if (!isBirth() && hasBabyOrStalk()) {
-					setMessage(MessagePool.getMessage(this, MessagePool.Action.Breed), true);
+					setMessage(GameMessages.getMessage(this, MessagePool.Action.Breed), true);
 					wakeup();
 				}
 				cantMove = true;
@@ -912,7 +918,7 @@ public abstract class Body extends BodyAttributes {
 					setBirth(false);
 					pregnantPeriod = 0;
 					if (isNotNYD()) {
-						setMessage(MessagePool.getMessage(this, MessagePool.Action.Breed2), true);
+						setMessage(GameMessages.getMessage(this, MessagePool.Action.Breed2), true);
 						if (!isHasPants()) {
 							if (willingFurifuri()) {
 								setFurifuri(true);
@@ -946,10 +952,10 @@ public abstract class Body extends BodyAttributes {
 					if (isNotNYD()) {
 						if (isLockmove() && !isHasPants()) {
 							setHasPants(true);
-							setMessage(MessagePool.getMessage(this, MessagePool.Action.Breed2), true);
+							setMessage(GameMessages.getMessage(this, MessagePool.Action.Breed2), true);
 							setHasPants(false);
 						} else {
-							setMessage(MessagePool.getMessage(this, MessagePool.Action.Breed2), true);
+							setMessage(GameMessages.getMessage(this, MessagePool.Action.Breed2), true);
 						}
 					}
 					setHappiness(Happiness.VERY_SAD);
@@ -966,7 +972,7 @@ public abstract class Body extends BodyAttributes {
 	 */
 	public boolean checkSleep() {
 		// ディフューザーで睡眠妨害されている場合、眠気をなくす
-		if (Terrarium.isNoSleepSteam()) {
+		if (GameEnvironment.isNoSleepSteam()) {
 			// 正常な実ゆ以外なら
 			if (!isUnBirth() || !isPlantForUnbirthChild()) {
 				setSleepingPeriod(0);
@@ -987,11 +993,11 @@ public abstract class Body extends BodyAttributes {
 		if (isSleeping()) {
 			// ストレスフルだと悪夢
 			if (!isNightmare()
-					&& ((isStressful() && SimYukkuri.RND.nextInt(75) == 0)
-							|| (isVeryStressful() && SimYukkuri.RND.nextInt(25) == 0))) {
+					&& ((isStressful() && GameRandom.nextInt(75) == 0)
+							|| (isVeryStressful() && GameRandom.nextInt(25) == 0))) {
 				setNightmare(true);
 				setForceFace(ImageCode.NIGHTMARE.ordinal());
-			} else if (!isStressful() || SimYukkuri.RND.nextInt(100) == 0) {
+			} else if (!isStressful() || GameRandom.nextInt(100) == 0) {
 				setNightmare(false);
 				setForceFace(ImageCode.SLEEPING.ordinal());
 			}
@@ -999,7 +1005,7 @@ public abstract class Body extends BodyAttributes {
 
 		// 飢餓状態の時は起きる
 		if (isSleeping() && isStarving()) {
-			setMessage(MessagePool.getMessage(this, MessagePool.Action.Hungry));
+			setMessage(GameMessages.getMessage(this, MessagePool.Action.Hungry));
 			setHappiness(Happiness.SAD);
 			stay();
 			wakeup();
@@ -1019,15 +1025,15 @@ public abstract class Body extends BodyAttributes {
 			} else {
 				return isSleeping();
 			}
-			if (Terrarium.getDayState() == Terrarium.DayState.NIGHT) {
-				if ((getAge() % (Terrarium.getNightTime() / getSLEEPPERIODorg() + 1)) == 0) {
+			if (GameEnvironment.getDayState() == Terrarium.DayState.NIGHT) {
+				if ((getAge() % (GameEnvironment.getNightTime() / getSLEEPPERIODorg() + 1)) == 0) {
 					sleepingPeriod += TICK;
 				}
 			} else {
 				sleepingPeriod += TICK;
 			}
 			if (sleepingPeriod > getSLEEPPERIODorg()) {
-				setMessage(MessagePool.getMessage(this, MessagePool.Action.Wakeup), true);
+				setMessage(GameMessages.getMessage(this, MessagePool.Action.Wakeup), true);
 				stay();
 				wakeup();
 			}
@@ -1038,7 +1044,7 @@ public abstract class Body extends BodyAttributes {
 			sleepingPeriod = 0;
 			setSleeping(false);
 			setNightmare(false);
-			if (Terrarium.getDayState() == Terrarium.DayState.NIGHT) {
+			if (GameEnvironment.getDayState() == Terrarium.DayState.NIGHT) {
 				wakeUpTime -= TICK * 3;
 			}
 		}
@@ -1053,7 +1059,7 @@ public abstract class Body extends BodyAttributes {
 	 */
 	public boolean checkOnBed() {
 		Rectangle r = takeScreenRect();
-		for (Map.Entry<Integer, Bed> entry : SimYukkuri.world.getCurrentMap().getBed().entrySet()) {
+		for (Map.Entry<Integer, Bed> entry : GameWorld.get().getCurrentMap().getBed().entrySet()) {
 			Bed bd = entry.getValue();
 			if (takeScreenRect(bd.getScreenRect()).intersects(r))
 				return true;
@@ -1143,8 +1149,8 @@ public abstract class Body extends BodyAttributes {
 		// 興奮時
 		if (isExciting()) {
 			// すっきりー
-			if (SimYukkuri.RND.nextInt(5) == 0) {
-				setMessage(MessagePool.getMessage(this, MessagePool.Action.Sukkiri), 60, true, false);
+			if (GameRandom.nextInt(5) == 0) {
+				setMessage(GameMessages.getMessage(this, MessagePool.Action.Sukkiri), 60, true, false);
 				setStress(0);
 				stayPurupuru(60);
 				setSukkiri(true);
@@ -1163,9 +1169,9 @@ public abstract class Body extends BodyAttributes {
 				// なつき度設定
 				addLovePlayer(10);
 				if (isRaper()) {
-					setMessage(MessagePool.getMessage(this, MessagePool.Action.ExciteForRaper));
+					setMessage(GameMessages.getMessage(this, MessagePool.Action.ExciteForRaper));
 				} else {
-					setMessage(MessagePool.getMessage(this, MessagePool.Action.Excite));
+					setMessage(GameMessages.getMessage(this, MessagePool.Action.Excite));
 				}
 			}
 			addMemories(1);
@@ -1186,10 +1192,10 @@ public abstract class Body extends BodyAttributes {
 			setForceFace(ImageCode.PAIN.ordinal());
 			clearActions();
 
-			if (SimYukkuri.RND.nextInt(2) == 0) {
-				setMessage(MessagePool.getMessage(this, MessagePool.Action.Dying2), 30, true, false);
+			if (GameRandom.nextInt(2) == 0) {
+				setMessage(GameMessages.getMessage(this, MessagePool.Action.Dying2), 30, true, false);
 			} else {
-				setMessage(MessagePool.getMessage(this, MessagePool.Action.Dying), 30, true, false);
+				setMessage(GameMessages.getMessage(this, MessagePool.Action.Dying), 30, true, false);
 			}
 			return true;
 		}
@@ -1203,10 +1209,10 @@ public abstract class Body extends BodyAttributes {
 			addLovePlayer(-20);
 			setForceFace(ImageCode.PAIN.ordinal());
 			// ぐーりぐーりされた時のメッセージ
-			if (SimYukkuri.RND.nextBoolean())
-				setMessage(MessagePool.getMessage(this, MessagePool.Action.NeedlePain), 60, true, false);
+			if (GameRandom.nextBoolean())
+				setMessage(GameMessages.getMessage(this, MessagePool.Action.NeedlePain), 60, true, false);
 			else
-				setMessage(MessagePool.getMessage(this, MessagePool.Action.NeedlePain), 60, true, true);
+				setMessage(GameMessages.getMessage(this, MessagePool.Action.NeedlePain), 60, true, true);
 			clearActions();
 			return true;
 		}
@@ -1218,11 +1224,11 @@ public abstract class Body extends BodyAttributes {
 		addLovePlayer(10);
 		setHappiness(Happiness.VERY_HAPPY);
 		setForceFace(ImageCode.CHEER.ordinal());
-		setMessage(MessagePool.getMessage(this, MessagePool.Action.SuriSuriByPlayer), true);
+		setMessage(GameMessages.getMessage(this, MessagePool.Action.SuriSuriByPlayer), true);
 		setNobinobi(true);
 		addMemories(1);
 
-		int nRnd = SimYukkuri.RND.nextInt(5);
+		int nRnd = GameRandom.nextInt(5);
 		if (nRnd == 0) {
 			setForceFace(ImageCode.SMILE.ordinal());
 		} else if (0 < nRnd && nRnd < 3) {
@@ -1233,7 +1239,7 @@ public abstract class Body extends BodyAttributes {
 
 		clearActions();
 		// 低確率で寝る
-		if (SimYukkuri.RND.nextInt(20) == 0) {
+		if (GameRandom.nextInt(20) == 0) {
 			forceToSleep();
 		}
 		return true;
@@ -1305,7 +1311,7 @@ public abstract class Body extends BodyAttributes {
 
 		// ゆんやー
 		if (isYunnyaa() && !isSleeping()) {
-			setMessage(MessagePool.getMessage(this, MessagePool.Action.Yunnyaa), 30, false, true);
+			setMessage(GameMessages.getMessage(this, MessagePool.Action.Yunnyaa), 30, false, true);
 			setYunnyaa(true);
 			stay(40);
 			setHappiness(Happiness.VERY_SAD);
@@ -1313,13 +1319,13 @@ public abstract class Body extends BodyAttributes {
 		}
 		// 加工中を想定した反応
 		else if ((isDamaged() || hasDisorder()) && isbOnDontMoveBeltconveyor() && !hasBabyOrStalk() && !isPealed()) {
-			if (SimYukkuri.RND.nextInt(80) == 0) {
+			if (GameRandom.nextInt(80) == 0) {
 				begForLife();
-			} else if (SimYukkuri.RND.nextInt(40) == 0) {
+			} else if (GameRandom.nextInt(40) == 0) {
 				doYunnyaa(true);
-			} else if (SimYukkuri.RND.nextInt(3) == 0) {
-				setMessage(MessagePool.getMessage(this, MessagePool.Action.KilledInFactory), WindowType.NORMAL,
-						Const.HOLDMESSAGE, true, SimYukkuri.RND.nextBoolean(), false);
+			} else if (GameRandom.nextInt(3) == 0) {
+				setMessage(GameMessages.getMessage(this, MessagePool.Action.KilledInFactory), WindowType.NORMAL,
+						Const.HOLDMESSAGE, true, GameRandom.nextBoolean(), false);
 			}
 		}
 		// 状態異常時
@@ -1358,10 +1364,10 @@ public abstract class Body extends BodyAttributes {
 		}
 
 		// 空腹時
-		if (isHungry() && SimYukkuri.RND.nextInt(50) == 0) {
+		if (isHungry() && GameRandom.nextInt(50) == 0) {
 			if (isSoHungry())
 				setHappiness(Happiness.SAD);
-			setMessage(MessagePool.getMessage(this, MessagePool.Action.Hungry), 30);
+			setMessage(GameMessages.getMessage(this, MessagePool.Action.Hungry), 30);
 			stay();
 		}
 
@@ -1375,7 +1381,7 @@ public abstract class Body extends BodyAttributes {
 			if ((!isVeryRude() || getIntelligence() != Intelligence.FOOL) && isExciting() && !isbForceExciting()) {
 				setCalm();
 				setForceFace(ImageCode.TIRED.ordinal());
-				setMessage(MessagePool.getMessage(this, MessagePool.Action.CantUsePenipeni));
+				setMessage(GameMessages.getMessage(this, MessagePool.Action.CantUsePenipeni));
 			}
 			setRelax(false);
 			setAngry(false);
@@ -1387,14 +1393,14 @@ public abstract class Body extends BodyAttributes {
 		if (isNormalDirty() && !isSleeping()) {
 			// 大人と、善良子ゆは勝手にきれいにする
 			if (isAdult() || (isChild() && isSmart())) {
-				if (SimYukkuri.RND.nextInt(600) == 0)
+				if (GameRandom.nextInt(600) == 0)
 					cleaningItself();
 			} else {
 				if (dirtyScreamPeriod == 0) {
 					if (isRude())
-						dirtyScreamPeriod = 10 + SimYukkuri.RND.nextInt(15);
+						dirtyScreamPeriod = 10 + GameRandom.nextInt(15);
 					else
-						dirtyScreamPeriod = 5 + SimYukkuri.RND.nextInt(10);
+						dirtyScreamPeriod = 5 + GameRandom.nextInt(10);
 				} else
 					callParent();
 			}
@@ -1410,17 +1416,17 @@ public abstract class Body extends BodyAttributes {
 				&& getAttachmentSize(PoisonAmpoule.class) == 0) {
 			// && moveTarget == null) {
 			// すっきり発動条件
-			if (!isExciting() && SimYukkuri.RND.nextInt(getExciteProb()) == 0) {
+			if (!isExciting() && GameRandom.nextInt(getExciteProb()) == 0) {
 				int r = 1;
 				int adjust = excitingDiscipline * (isRude() ? 1 : 2);
 				if (isSuperRapist()) {
-					r = SimYukkuri.RND.nextInt(1 + adjust);
+					r = GameRandom.nextInt(1 + adjust);
 				} else if (isRapist() && isRude()) {
-					r = SimYukkuri.RND.nextInt(6 + adjust);
+					r = GameRandom.nextInt(6 + adjust);
 				} else if (isRapist() || isRude()) {
-					r = SimYukkuri.RND.nextInt(12 + adjust);
+					r = GameRandom.nextInt(12 + adjust);
 				} else if (!isSoHungry() && !wantToShit()) {
-					r = SimYukkuri.RND.nextInt(24 + adjust);
+					r = GameRandom.nextInt(24 + adjust);
 				}
 				// すっきりーしにいく条件判定
 				boolean bToExcite = false;
@@ -1443,7 +1449,7 @@ public abstract class Body extends BodyAttributes {
 					List<Body> fianceList = BodyLogic.createActiveFianceeList(this, getBodyAgeState().ordinal());
 					if (fianceList == null || fianceList.size() < 1) {
 						setHappiness(Happiness.SAD);
-						setMessage(MessagePool.getMessage(this, MessagePool.Action.WantPartner));
+						setMessage(GameMessages.getMessage(this, MessagePool.Action.WantPartner));
 					}
 					// 他にゆっくりがいる
 					else {
@@ -1499,14 +1505,14 @@ public abstract class Body extends BodyAttributes {
 					excitingPeriod = 0;
 					if (isRaper()) {
 						EventLogic.addWorldEvent(new RaperWakeupEvent(this, null, null, 1), this,
-								MessagePool.getMessage(this, MessagePool.Action.ExciteForRaper));
+								GameMessages.getMessage(this, MessagePool.Action.ExciteForRaper));
 					} else {
-						setMessage(MessagePool.getMessage(this, MessagePool.Action.Excite));
+						setMessage(GameMessages.getMessage(this, MessagePool.Action.Excite));
 					}
 				} else {
 					setRelax(true);
 					excitingPeriod = 0;
-					if (SimYukkuri.RND.nextInt(75) == 0)
+					if (GameRandom.nextInt(75) == 0)
 						killTime();
 				}
 				setAngry(false);
@@ -1522,11 +1528,11 @@ public abstract class Body extends BodyAttributes {
 				}
 				// 興奮している場合、たまにつぶやく
 				if (isExciting()) {
-					if (SimYukkuri.RND.nextInt(30) == 0) {
+					if (GameRandom.nextInt(30) == 0) {
 						if (isRaper()) {
-							setMessage(MessagePool.getMessage(this, MessagePool.Action.ExciteForRaper));
+							setMessage(GameMessages.getMessage(this, MessagePool.Action.ExciteForRaper));
 						} else {
-							setMessage(MessagePool.getMessage(this, MessagePool.Action.Excite));
+							setMessage(GameMessages.getMessage(this, MessagePool.Action.Excite));
 						}
 					}
 				}
@@ -1543,7 +1549,7 @@ public abstract class Body extends BodyAttributes {
 			return;
 		if (getPlaying() != null)
 			return;
-		int p = SimYukkuri.RND.nextInt(50);
+		int p = GameRandom.nextInt(50);
 		// 6/50でキリッ
 		if (p <= 5) {
 			getInVain(true);
@@ -1551,7 +1557,7 @@ public abstract class Body extends BodyAttributes {
 		// 6/50でのびのび
 		else if (p <= 11) {
 			// if yukkuri is not rude, she goes into her shell by discipline.
-			setMessage(MessagePool.getMessage(this, MessagePool.Action.Nobinobi), 40);
+			setMessage(GameMessages.getMessage(this, MessagePool.Action.Nobinobi), 40);
 			setNobinobi(true);
 			addStress(-50);
 			stay(40);
@@ -1559,7 +1565,7 @@ public abstract class Body extends BodyAttributes {
 		// 6/50でふりふり
 		else if (p <= 17 && willingFurifuri()) {
 			// if yukkuri is rude, she will not do furifuri by discipline.
-			setMessage(MessagePool.getMessage(this, MessagePool.Action.FuriFuri), 40);
+			setMessage(GameMessages.getMessage(this, MessagePool.Action.FuriFuri), 40);
 			setFurifuri(true);
 			addStress(-70);
 			stay(30);
@@ -1567,14 +1573,14 @@ public abstract class Body extends BodyAttributes {
 		// 6/50で腹減った
 		else if ((p <= 23 && isHungry()) || isSoHungry()) {
 			// 空腹時
-			setMessage(MessagePool.getMessage(this, MessagePool.Action.Hungry), 30);
+			setMessage(GameMessages.getMessage(this, MessagePool.Action.Hungry), 30);
 			stay(30);
 		}
 		// 6/50でおもちゃで遊ぶ
 		else if (p <= 29) {
 			if (ToyLogic.checkToy(this)) {
 				setPlaying(PlayStyle.BALL);
-				playingLimit = 150 + SimYukkuri.RND.nextInt(100) - 49;
+				playingLimit = 150 + GameRandom.nextInt(100) - 49;
 				return;
 			} else
 				killTime();
@@ -1583,7 +1589,7 @@ public abstract class Body extends BodyAttributes {
 		else if (p <= 35) {
 			if (ToyLogic.checkTrampoline(this)) {
 				setPlaying(PlayStyle.TRAMPOLINE);
-				playingLimit = 150 + SimYukkuri.RND.nextInt(100) - 49;
+				playingLimit = 150 + GameRandom.nextInt(100) - 49;
 				return;
 			} else
 				killTime();
@@ -1592,16 +1598,16 @@ public abstract class Body extends BodyAttributes {
 		else if (p <= 41) {
 			if (ToyLogic.checkSui(this)) {
 				setPlaying(PlayStyle.SUI);
-				playingLimit = 150 + SimYukkuri.RND.nextInt(100) - 49;
+				playingLimit = 150 + GameRandom.nextInt(100) - 49;
 				return;
 			} else
 				killTime();
 		} else {
 			// おくるみありで汚れていない場合
-			if ((isHasPants()) && !isDirty() && (SimYukkuri.RND.nextInt(10) == 0)) {
-				setMessage(MessagePool.getMessage(this, MessagePool.Action.RelaxOkurumi));
+			if ((isHasPants()) && !isDirty() && (GameRandom.nextInt(10) == 0)) {
+				setMessage(GameMessages.getMessage(this, MessagePool.Action.RelaxOkurumi));
 			} else {
-				setMessage(MessagePool.getMessage(this, MessagePool.Action.Relax));
+				setMessage(GameMessages.getMessage(this, MessagePool.Action.Relax));
 			}
 			addStress(-60);
 			stay(30);
@@ -1623,8 +1629,8 @@ public abstract class Body extends BodyAttributes {
 	 */
 	public void getInVain(boolean TF) {
 		if (TF)
-			setMessage(MessagePool.getMessage(this, MessagePool.Action.BeVain), 30);
-		if (isRude() && SimYukkuri.RND.nextBoolean())
+			setMessage(GameMessages.getMessage(this, MessagePool.Action.BeVain), 30);
+		if (isRude() && GameRandom.nextBoolean())
 			setForceFace(ImageCode.RUDE.ordinal());
 		setBeVain(true);
 		addStress(-90);
@@ -1809,7 +1815,7 @@ public abstract class Body extends BodyAttributes {
 	 */
 	private boolean checkNonYukkuriDisease() {
 		// 非ゆっくり症防止ディフューザー、非ゆっくり症防止アンプルの際は非ゆっくり症にならない/治る
-		if (Terrarium.isAntiNonYukkuriDiseaseSteam() || getAttachmentSize(ANYDAmpoule.class) != 0) {
+		if (GameEnvironment.isAntiNonYukkuriDiseaseSteam() || getAttachmentSize(ANYDAmpoule.class) != 0) {
 			seteCoreAnkoState(CoreAnkoState.DEFAULT);
 			return false;
 		}
@@ -1859,10 +1865,10 @@ public abstract class Body extends BodyAttributes {
 			wakeup();
 		}
 		// 非ゆっくり症初期
-		if (geteCoreAnkoState() == CoreAnkoState.NonYukkuriDiseaseNear && SimYukkuri.RND.nextInt(nRnd) == 0) {
+		if (geteCoreAnkoState() == CoreAnkoState.NonYukkuriDiseaseNear && GameRandom.nextInt(nRnd) == 0) {
 			switch (nonYukkuriDiseasePeriod) {
 				case 0:
-					if (SimYukkuri.RND.nextBoolean()) {
+					if (GameRandom.nextBoolean()) {
 						nonYukkuriDiseasePeriod = 1;
 					} else {
 						nonYukkuriDiseasePeriod = 3;
@@ -1913,14 +1919,14 @@ public abstract class Body extends BodyAttributes {
 			addStress(100);
 			addMemories(-1);// 耐性が減っていく
 			setHappiness(Happiness.VERY_SAD);
-			setNYDMessage(MessagePool.getMessage(this, MessagePool.Action.NonYukkuriDiseaseNear), false);
+			setNYDMessage(GameMessages.getMessage(this, MessagePool.Action.NonYukkuriDiseaseNear), false);
 		}
 		nRnd = 20;
 		// 非ゆっくり症
-		if (geteCoreAnkoState() == CoreAnkoState.NonYukkuriDisease && SimYukkuri.RND.nextInt(nRnd) == 0) {
+		if (geteCoreAnkoState() == CoreAnkoState.NonYukkuriDisease && GameRandom.nextInt(nRnd) == 0) {
 			switch (nonYukkuriDiseasePeriod) {
 				case 0:
-					if (SimYukkuri.RND.nextBoolean()) {
+					if (GameRandom.nextBoolean()) {
 						nonYukkuriDiseasePeriod = 1;
 						if (!isFixBack()) {
 							clearActions();
@@ -1935,7 +1941,7 @@ public abstract class Body extends BodyAttributes {
 					}
 					break;
 				case 1:
-					if (SimYukkuri.RND.nextBoolean()) {
+					if (GameRandom.nextBoolean()) {
 						nonYukkuriDiseasePeriod = 2;
 					}
 					if (!isFixBack()) {
@@ -1944,7 +1950,7 @@ public abstract class Body extends BodyAttributes {
 					}
 					break;
 				case 2:
-					if (SimYukkuri.RND.nextBoolean()) {
+					if (GameRandom.nextBoolean()) {
 						nonYukkuriDiseasePeriod = 3;
 					}
 					if (!isFixBack()) {
@@ -1961,7 +1967,7 @@ public abstract class Body extends BodyAttributes {
 					stayPurupuru(20);
 					break;
 				case 4:
-					if (SimYukkuri.RND.nextBoolean()) {
+					if (GameRandom.nextBoolean()) {
 						nonYukkuriDiseasePeriod = 5;
 					}
 					if (!isFixBack()) {
@@ -1970,7 +1976,7 @@ public abstract class Body extends BodyAttributes {
 					}
 					break;
 				case 5:
-					if (SimYukkuri.RND.nextBoolean()) {
+					if (GameRandom.nextBoolean()) {
 						nonYukkuriDiseasePeriod = 6;
 					}
 					if (!isFixBack()) {
@@ -1992,8 +1998,8 @@ public abstract class Body extends BodyAttributes {
 			addStress(300);
 			addMemories(-5);// 耐性が減っていく
 			setHappiness(Happiness.VERY_SAD);
-			setNYDMessage(MessagePool.getMessage(this, MessagePool.Action.NonYukkuriDisease), false);
-			if (SimYukkuri.RND.nextInt(nRnd) == 0)
+			setNYDMessage(GameMessages.getMessage(this, MessagePool.Action.NonYukkuriDisease), false);
+			if (GameRandom.nextInt(nRnd) == 0)
 				nonYukkuriDiseasePeriod = 0;
 		}
 		return true;
@@ -2009,10 +2015,10 @@ public abstract class Body extends BodyAttributes {
 			EYESIGHTorg = 5 * 5;
 			addStress(5);
 			setHappiness(Happiness.SAD);
-			if (SimYukkuri.RND.nextInt(40) <= 5) {
-				setMessage(MessagePool.getMessage(this, MessagePool.Action.CANTSEE));
-			} else if (SimYukkuri.RND.nextInt(40) == 20) {
-				setMessage(MessagePool.getMessage(this, MessagePool.Action.LamentNoYukkuri));
+			if (GameRandom.nextInt(40) <= 5) {
+				setMessage(GameMessages.getMessage(this, MessagePool.Action.CANTSEE));
+			} else if (GameRandom.nextInt(40) == 20) {
+				setMessage(GameMessages.getMessage(this, MessagePool.Action.LamentNoYukkuri));
 			}
 			return true;
 		}
@@ -2030,8 +2036,8 @@ public abstract class Body extends BodyAttributes {
 			addStress(2);
 			setHappiness(Happiness.SAD);
 			setPeropero(false);
-			if (SimYukkuri.RND.nextInt(80) == 0 && !isSleeping()) {
-				setMessage(MessagePool.getMessage(this, MessagePool.Action.CantTalk));
+			if (GameRandom.nextInt(80) == 0 && !isSleeping()) {
+				setMessage(GameMessages.getMessage(this, MessagePool.Action.CantTalk));
 			}
 			return true;
 		}
@@ -2068,39 +2074,39 @@ public abstract class Body extends BodyAttributes {
 		// 以下、しゃべってない時
 
 		if (lockmovePeriod < 400) {
-			if (SimYukkuri.RND.nextInt(15) == 0) {
+			if (GameRandom.nextInt(15) == 0) {
 				clearActions();
 				// 土に埋まっている場合は苦しむ
 				if (getBaryState() == BaryInUGState.ALL || getBaryState() == BaryInUGState.NEARLY_ALL) {
 					setHappiness(Happiness.VERY_SAD);
-					setMessage(MessagePool.getMessage(this, MessagePool.Action.BaryInUnderGround));
+					setMessage(GameMessages.getMessage(this, MessagePool.Action.BaryInUnderGround));
 					stay();
 				} else {
-					setMessage(MessagePool.getMessage(this, MessagePool.Action.CantMove));
+					setMessage(GameMessages.getMessage(this, MessagePool.Action.CantMove));
 					setAngry();
-					if (SimYukkuri.RND.nextInt(10) == 0) {
+					if (GameRandom.nextInt(10) == 0) {
 						setNobinobi(true);
 					}
 				}
 				return true;
 			}
-			if (isHungry() && SimYukkuri.RND.nextInt(50) == 0) {
+			if (isHungry() && GameRandom.nextInt(50) == 0) {
 				// 空腹時
-				setMessage(MessagePool.getMessage(this, MessagePool.Action.Hungry), 30);
+				setMessage(GameMessages.getMessage(this, MessagePool.Action.Hungry), 30);
 				setHappiness(Happiness.SAD);
 				stay(30);
-			} else if (SimYukkuri.RND.nextInt(15) == 0) {
+			} else if (GameRandom.nextInt(15) == 0) {
 				clearActions();
 				// 土に埋まっている場合は苦しむ
 				if (getBaryState() == BaryInUGState.ALL || getBaryState() == BaryInUGState.NEARLY_ALL) {
 					setHappiness(Happiness.VERY_SAD);
-					setMessage(MessagePool.getMessage(this, MessagePool.Action.BaryInUnderGround));
+					setMessage(GameMessages.getMessage(this, MessagePool.Action.BaryInUnderGround));
 					stay();
 				} else {
 					setAngry();
 					setHappiness(Happiness.VERY_SAD);
-					setMessage(MessagePool.getMessage(this, MessagePool.Action.CantMove2));
-					if (SimYukkuri.RND.nextInt(10) == 0) {
+					setMessage(GameMessages.getMessage(this, MessagePool.Action.CantMove2));
+					if (GameRandom.nextInt(10) == 0) {
 						setNobinobi(true);
 					}
 				}
@@ -2133,16 +2139,16 @@ public abstract class Body extends BodyAttributes {
 
 		// 足焼き（中）
 		if (getFootBakeLevel() == FootBake.MIDIUM) {
-			if (SimYukkuri.RND.nextInt(15) == 0) {
+			if (GameRandom.nextInt(15) == 0) {
 				clearActions();
 				setAngry();
 				setHappiness(Happiness.SAD);
-				setMessage(MessagePool.getMessage(this, MessagePool.Action.LamentLowYukkuri));
+				setMessage(GameMessages.getMessage(this, MessagePool.Action.LamentLowYukkuri));
 				return true;
 			}
-			if (isHungry() && SimYukkuri.RND.nextInt(400) == 0) {
+			if (isHungry() && GameRandom.nextInt(400) == 0) {
 				// 空腹時
-				setMessage(MessagePool.getMessage(this, MessagePool.Action.Hungry), 30);
+				setMessage(GameMessages.getMessage(this, MessagePool.Action.Hungry), 30);
 				setHappiness(Happiness.SAD);
 				return true;
 			}
@@ -2150,33 +2156,33 @@ public abstract class Body extends BodyAttributes {
 		// 足焼き(完全)
 		else if (getFootBakeLevel() == FootBake.CRITICAL) {
 			if (lockmovePeriod < 300) {
-				if (SimYukkuri.RND.nextInt(15) == 0) {
+				if (GameRandom.nextInt(15) == 0) {
 					clearActions();
 					setAngry();
 					setHappiness(Happiness.SAD);
-					if (SimYukkuri.RND.nextInt(5) == 0) {
-						setMessage(MessagePool.getMessage(this, MessagePool.Action.LamentLowYukkuri));
+					if (GameRandom.nextInt(5) == 0) {
+						setMessage(GameMessages.getMessage(this, MessagePool.Action.LamentLowYukkuri));
 					} else {
-						setMessage(MessagePool.getMessage(this, MessagePool.Action.CantMove));
+						setMessage(GameMessages.getMessage(this, MessagePool.Action.CantMove));
 					}
 					return true;
 				}
-				if (isHungry() && SimYukkuri.RND.nextInt(50) == 0) {
+				if (isHungry() && GameRandom.nextInt(50) == 0) {
 					// 空腹時
-					setMessage(MessagePool.getMessage(this, MessagePool.Action.Hungry), 30);
+					setMessage(GameMessages.getMessage(this, MessagePool.Action.Hungry), 30);
 					setHappiness(Happiness.VERY_SAD);
 					stay();
 					return true;
 				}
 			} else {
-				if (SimYukkuri.RND.nextInt(15) == 0) {
+				if (GameRandom.nextInt(15) == 0) {
 					clearActions();
 					setAngry();
 					setHappiness(Happiness.VERY_SAD);
-					if (SimYukkuri.RND.nextInt(5) != 0) {
-						setMessage(MessagePool.getMessage(this, MessagePool.Action.CantMove2));
+					if (GameRandom.nextInt(5) != 0) {
+						setMessage(GameMessages.getMessage(this, MessagePool.Action.CantMove2));
 					} else {
-						setMessage(MessagePool.getMessage(this, MessagePool.Action.LamentNoYukkuri));
+						setMessage(GameMessages.getMessage(this, MessagePool.Action.LamentNoYukkuri));
 					}
 					return true;
 				}
@@ -2204,12 +2210,12 @@ public abstract class Body extends BodyAttributes {
 		if (isTalking()) {
 			return false;
 		}
-		if (SimYukkuri.RND.nextInt(50) == 0) {
+		if (GameRandom.nextInt(50) == 0) {
 			clearActions();
 			setAngry();
 			setHappiness(Happiness.SAD);
 			setForceFace(ImageCode.TIRED.ordinal());
-			setMessage(MessagePool.getMessage(this, MessagePool.Action.LamentLowYukkuri));
+			setMessage(GameMessages.getMessage(this, MessagePool.Action.LamentLowYukkuri));
 			stay();
 			return true;
 		}
@@ -2221,8 +2227,8 @@ public abstract class Body extends BodyAttributes {
 	 */
 	public void checkSick() {
 		// （汚くてダメージを受けている、またはディフューザーで湿度が高まっていてダメージを受けている）、かつディフューザーでゆかび禁止になっていないとき
-		if (((isDirty() && isDamaged()) || (Terrarium.isHumid() && damage > 0)) && !Terrarium.isAntifungalSteam()) {
-			if (Terrarium.isHumid()) {
+		if (((isDirty() && isDamaged()) || (GameEnvironment.isHumid() && damage > 0)) && !GameEnvironment.isAntifungalSteam()) {
+			if (GameEnvironment.isHumid()) {
 				dirtyPeriod += TICK * 4;
 			} else {
 				dirtyPeriod += TICK;
@@ -2241,7 +2247,7 @@ public abstract class Body extends BodyAttributes {
 			dirtyPeriod = 0;
 		}
 		if (isSick()) {
-			if (Terrarium.isHumid()) {
+			if (GameEnvironment.isHumid()) {
 				sickPeriod += 4;
 			} else {
 				sickPeriod++;
@@ -2251,14 +2257,14 @@ public abstract class Body extends BodyAttributes {
 				if (isSleeping())
 					wakeup();
 				// 末期症状
-				setPikoMessage(MessagePool.getMessage(this, MessagePool.Action.MoldySeriousry), 40, true);
+				setPikoMessage(GameMessages.getMessage(this, MessagePool.Action.MoldySeriousry), 40, true);
 				addStress(TICK * 100);
 				addMemories(-5);
-				if (SimYukkuri.RND.nextInt(60) == 0) {
+				if (GameRandom.nextInt(60) == 0) {
 					setForceFace(ImageCode.PAIN.ordinal());
 				}
-				if (SimYukkuri.RND.nextInt(10) == 0) {
-					if (SimYukkuri.RND.nextBoolean())
+				if (GameRandom.nextInt(10) == 0) {
+					if (GameRandom.nextBoolean())
 						doYunnyaa(false);
 					else
 						setNobinobi(true);
@@ -2269,15 +2275,15 @@ public abstract class Body extends BodyAttributes {
 				}
 				return;
 			}
-			if (isSickHeavily() && SimYukkuri.RND.nextInt(600) == 0) {
+			if (isSickHeavily() && GameRandom.nextInt(600) == 0) {
 				if (isSickTooHeavily())
-					setPikoMessage(MessagePool.getMessage(this, MessagePool.Action.Scream2), true);
+					setPikoMessage(GameMessages.getMessage(this, MessagePool.Action.Scream2), true);
 				else
-					setPikoMessage(MessagePool.getMessage(this, MessagePool.Action.Scream), true);
+					setPikoMessage(GameMessages.getMessage(this, MessagePool.Action.Scream), true);
 				setForceFace(ImageCode.PAIN.ordinal());
 			}
-			if (isSick() && SimYukkuri.RND.nextInt(50) == 0) {
-				setMessage(MessagePool.getMessage(this, MessagePool.Action.Moldy));
+			if (isSick() && GameRandom.nextInt(50) == 0) {
+				setMessage(GameMessages.getMessage(this, MessagePool.Action.Moldy));
 			}
 			setHappiness(Happiness.SAD);
 			addStress(TICK);
@@ -2312,10 +2318,10 @@ public abstract class Body extends BodyAttributes {
 			if (messageCount <= 0) {
 				switch (getPanicType()) {
 					case FEAR:
-						setMessage(MessagePool.getMessage(this, MessagePool.Action.Fear));
+						setMessage(GameMessages.getMessage(this, MessagePool.Action.Fear));
 						break;
 					case REMIRYA:
-						setMessage(MessagePool.getMessage(this, MessagePool.Action.EscapeFromRemirya));
+						setMessage(GameMessages.getMessage(this, MessagePool.Action.EscapeFromRemirya));
 						break;
 					default:
 						break;
@@ -2406,7 +2412,7 @@ public abstract class Body extends BodyAttributes {
 
 		if (isDead()) {
 			if (!isSilent()) {
-				String messages = MessagePool.getMessage(this, MessagePool.Action.Dead);
+				String messages = GameMessages.getMessage(this, MessagePool.Action.Dead);
 				setMessage(messages);
 				setForceBirthMessage(false);
 				if (getMessageBuf() == messages) {
@@ -2417,25 +2423,25 @@ public abstract class Body extends BodyAttributes {
 			return;
 		} else if (getMessageBuf() == null) {
 			if (isSleeping()) {
-				if (SimYukkuri.RND.nextInt(10) == 0) {
+				if (GameRandom.nextInt(10) == 0) {
 					if (isNightmare()) {
-						setNYDMessage(MessagePool.getMessage(this, MessagePool.Action.Nightmare), false);
+						setNYDMessage(GameMessages.getMessage(this, MessagePool.Action.Nightmare), false);
 						addStress(20);
 					} else {
-						setNYDMessage(MessagePool.getMessage(this, MessagePool.Action.Sleep), false);
+						setNYDMessage(GameMessages.getMessage(this, MessagePool.Action.Sleep), false);
 						addStress(-20);
 					}
 				}
 			} else if (!isUnBirth() && isForceBirthMessage()) {
 				setForceBirthMessage(false);
-				setPikoMessage(MessagePool.getMessage(this, MessagePool.Action.Birth), true);
+				setPikoMessage(GameMessages.getMessage(this, MessagePool.Action.Birth), true);
 				addMemories(10);
 			} else if (!isFlyingType() && getZ() > 15 && getPanicType() == null && !isLockmove()
 					&& getCriticalDamege() != CriticalDamegeType.CUT && !isPealed() && !isBlind()) {
 				// 持ち上げたとき
 				// 妊娠限界を超えている場合
-				if (isStressful() && isOverPregnantLimit() && SimYukkuri.RND.nextBoolean()) {
-					setPikoMessage(MessagePool.getMessage(this, MessagePool.Action.DontThrowMeAway), true);
+				if (isStressful() && isOverPregnantLimit() && GameRandom.nextBoolean()) {
+					setPikoMessage(GameMessages.getMessage(this, MessagePool.Action.DontThrowMeAway), true);
 					setForceFace(ImageCode.CRYING.ordinal());
 					addStress(100);
 					// なつき度設定
@@ -2443,13 +2449,13 @@ public abstract class Body extends BodyAttributes {
 				}
 				// おそらとんでるみたい！
 				else {
-					setPikoMessage(MessagePool.getMessage(this, MessagePool.Action.Flying), true);
+					setPikoMessage(GameMessages.getMessage(this, MessagePool.Action.Flying), true);
 					addStress(-10);
 					// なつき度設定
 					addLovePlayer(10);
 				}
-			} else if (isStressful() && isOverPregnantLimit() && SimYukkuri.RND.nextBoolean() && grabbed) {
-				setPikoMessage(MessagePool.getMessage(this, MessagePool.Action.DontThrowMeAway), true);
+			} else if (isStressful() && isOverPregnantLimit() && GameRandom.nextBoolean() && grabbed) {
+				setPikoMessage(GameMessages.getMessage(this, MessagePool.Action.DontThrowMeAway), true);
 				setForceFace(ImageCode.CRYING.ordinal());
 				addStress(100);
 				// なつき度設定
@@ -2457,14 +2463,14 @@ public abstract class Body extends BodyAttributes {
 			} else if (getBurstState() == Burst.NEAR) {
 				if (isSleeping())
 					wakeup();
-				if (SimYukkuri.RND.nextInt(8) == 0) {
-					setPikoMessage(MessagePool.getMessage(this, MessagePool.Action.Inflation),
-							SimYukkuri.RND.nextBoolean());
+				if (GameRandom.nextInt(8) == 0) {
+					setPikoMessage(GameMessages.getMessage(this, MessagePool.Action.Inflation),
+							GameRandom.nextBoolean());
 				}
 			} else if (nearToBirth() && !isBirth()) {
 				// if( baryState == Body.BaryInUGState.NONE ){
-				if (!isTalking() && getBaryState() == BaryInUGState.NONE && SimYukkuri.RND.nextInt(8) == 0) {
-					setMessage(MessagePool.getMessage(this, MessagePool.Action.NearToBirth));
+				if (!isTalking() && getBaryState() == BaryInUGState.NONE && GameRandom.nextInt(8) == 0) {
+					setMessage(GameMessages.getMessage(this, MessagePool.Action.NearToBirth));
 					EventLogic.addWorldEvent(new BreedEvent(this, null, null, 2), null, null);
 				}
 				// }
@@ -2523,13 +2529,13 @@ public abstract class Body extends BodyAttributes {
 	public final int randomDirection(int curDir) {
 		switch (curDir) {
 			case 0:
-				curDir = (SimYukkuri.RND.nextBoolean() ? 1 : -1);
+				curDir = (GameRandom.nextBoolean() ? 1 : -1);
 				break;
 			case 1:
-				curDir = (SimYukkuri.RND.nextBoolean() ? 0 : curDir);
+				curDir = (GameRandom.nextBoolean() ? 0 : curDir);
 				break;
 			case -1:
-				curDir = (SimYukkuri.RND.nextBoolean() ? 0 : curDir);
+				curDir = (GameRandom.nextBoolean() ? 0 : curDir);
 				break;
 		}
 		return curDir;
@@ -2685,7 +2691,7 @@ public abstract class Body extends BodyAttributes {
 					}
 
 					if (damageCut != 4) {
-						for (Map.Entry<Integer, Trampoline> entry : SimYukkuri.world.getCurrentMap().getTrampoline()
+						for (Map.Entry<Integer, Trampoline> entry : GameWorld.get().getCurrentMap().getTrampoline()
 								.entrySet()) {
 							Trampoline t = entry.getValue();
 							if (t.checkHitObj(this)) {
@@ -2707,7 +2713,7 @@ public abstract class Body extends BodyAttributes {
 
 					// 生まれて最初の挨拶
 					if (isBFirstGround()) {
-						setMessage(MessagePool.getMessage(this, MessagePool.Action.TakeItEasy));
+						setMessage(GameMessages.getMessage(this, MessagePool.Action.TakeItEasy));
 						addStress(-400);
 						addMemories(20);
 					}
@@ -2717,7 +2723,7 @@ public abstract class Body extends BodyAttributes {
 					if (isPealed())
 						toDead();
 					if (isDead()) {
-						setMessage(MessagePool.getMessage(this, MessagePool.Action.Dying));
+						setMessage(GameMessages.getMessage(this, MessagePool.Action.Dying));
 						stay();
 						setCrushed(true);
 					}
@@ -2792,8 +2798,8 @@ public abstract class Body extends BodyAttributes {
 				countX = 0;
 				dirX = randomDirection(dirX);
 				if (!hasOkazari() && (isSad() || isVerySad())) {
-					if (SimYukkuri.RND.nextInt(10) == 0) {
-						setMessage(MessagePool.getMessage(this, MessagePool.Action.NoAccessory));
+					if (GameRandom.nextInt(10) == 0) {
+						setMessage(GameMessages.getMessage(this, MessagePool.Action.NoAccessory));
 					}
 				}
 			}
@@ -2809,8 +2815,8 @@ public abstract class Body extends BodyAttributes {
 				countY = 0;
 				dirY = randomDirection(dirY);
 				if (!hasOkazari() && (isSad() || isVerySad())) {
-					if (SimYukkuri.RND.nextInt(10) == 0) {
-						setMessage(MessagePool.getMessage(this, MessagePool.Action.NoAccessory));
+					if (GameRandom.nextInt(10) == 0) {
+						setMessage(GameMessages.getMessage(this, MessagePool.Action.NoAccessory));
 					}
 				}
 			}
@@ -2839,7 +2845,7 @@ public abstract class Body extends BodyAttributes {
 		int vecZ = dirZ * step * speed / 100;
 		// 実験 speedの切り捨て部分の反映
 		if (speed % 100 > 0) {
-			if (SimYukkuri.RND.nextInt(100) < speed % 100) {
+			if (GameRandom.nextInt(100) < speed % 100) {
 				vecX += dirX;
 				vecY += dirY;
 				vecZ += dirZ;
@@ -2908,7 +2914,7 @@ public abstract class Body extends BodyAttributes {
 			if ((destX >= 0) || (destY >= 0) || (destZ >= 0)) {
 				setBlockedCount(Math.min(getBlockedCount() + 1, getBLOCKEDLIMITorg() * 2));
 				if (getBlockedCount() > getBLOCKEDLIMITorg()) {
-					if (SimYukkuri.RND.nextBoolean()) {
+					if (GameRandom.nextBoolean()) {
 						dirX = randomDirection(dirX);
 					} else {
 						dirY = randomDirection(dirY);
@@ -2934,7 +2940,7 @@ public abstract class Body extends BodyAttributes {
 					}
 				}
 				if (getIntelligence() == Intelligence.FOOL && getPanicType() != null) {
-					setMessage(MessagePool.getMessage(this, MessagePool.Action.BlockedByWall));
+					setMessage(GameMessages.getMessage(this, MessagePool.Action.BlockedByWall));
 				}
 			} else {
 				dirX = randomDirection(dirX);
@@ -2962,7 +2968,7 @@ public abstract class Body extends BodyAttributes {
 							break;
 					}
 
-					if (SimYukkuri.RND.nextInt(nRandom) != 0) {
+					if (GameRandom.nextInt(nRandom) != 0) {
 						x -= vecX;
 						y -= vecY;
 						z -= vecZ;
@@ -3152,9 +3158,9 @@ public abstract class Body extends BodyAttributes {
 		if (isSilent())
 			return;
 		// 緊急時以外の自制時。静かにするよ！！と言ってしまう。
-		if (!interrupt && SimYukkuri.RND.nextInt(messageDiscipline + 1) != 0
+		if (!interrupt && GameRandom.nextInt(messageDiscipline + 1) != 0
 				&& getIntelligence() != Intelligence.WISE) {
-			message = MessagePool.getMessage(this, MessagePool.Action.BeingQuiet);
+			message = GameMessages.getMessage(this, MessagePool.Action.BeingQuiet);
 			return;
 		}
 		// その他の要因
@@ -3274,7 +3280,7 @@ public abstract class Body extends BodyAttributes {
 	 * 茎に触ったときの反応.
 	 */
 	public final void touchStalk() {
-		setMessage(MessagePool.getMessage(this, MessagePool.Action.AbuseBaby));
+		setMessage(GameMessages.getMessage(this, MessagePool.Action.AbuseBaby));
 		setHappiness(Happiness.SAD);
 	}
 
@@ -3318,7 +3324,7 @@ public abstract class Body extends BodyAttributes {
 			// 茎がある
 			if (getBindStalk() != null) {
 				int id = getBindStalk().getPlantYukkuri();
-				Obj oBind = SimYukkuri.world.getCurrentMap().getBody().get(id);
+				Obj oBind = GameWorld.get().getCurrentMap().getBody().get(id);
 				if (oBind != null && oBind instanceof Body) {
 					Body bodyBind = (Body) oBind;
 					// 茎があって親が生きてる
@@ -3766,16 +3772,16 @@ public abstract class Body extends BodyAttributes {
 
 		// val.remove();
 		if (val instanceof Shit) {
-			Map<Integer, Shit> shits = SimYukkuri.world.getCurrentMap().getShit();
+			Map<Integer, Shit> shits = GameWorld.get().getCurrentMap().getShit();
 			shits.remove(val.objId);
-			SimYukkuri.world.getCurrentMap().getTakenOutShit().put(val.objId, (Shit) val);
+			GameWorld.get().getCurrentMap().getTakenOutShit().put(val.objId, (Shit) val);
 			val.setWhere(Where.IN_YUKKURI);
 		}
 
 		if (val instanceof Food) {
-			Map<Integer, Food> foods = SimYukkuri.world.getCurrentMap().getFood();
+			Map<Integer, Food> foods = GameWorld.get().getCurrentMap().getFood();
 			foods.remove(val.objId);
-			SimYukkuri.world.getCurrentMap().getTakenOutFood().put(val.objId, (Food) val);
+			GameWorld.get().getCurrentMap().getTakenOutFood().put(val.objId, (Food) val);
 			val.setWhere(Where.IN_YUKKURI);
 		}
 	}
@@ -3794,13 +3800,13 @@ public abstract class Body extends BodyAttributes {
 		}
 		// 動作の表現
 		setInOutTakeoutItem(true);
-		setMessage(MessagePool.getMessage(this, MessagePool.Action.DropItem));
+		setMessage(GameMessages.getMessage(this, MessagePool.Action.DropItem));
 
 		// 落としたもの（うんうん）の処理
 		if (val instanceof Shit) {
-			Map<Integer, Shit> shits = SimYukkuri.world.getCurrentMap().getShit();
+			Map<Integer, Shit> shits = GameWorld.get().getCurrentMap().getShit();
 			shits.put(val.objId, (Shit) val);
-			SimYukkuri.world.getCurrentMap().getTakenOutShit().remove(val.objId);
+			GameWorld.get().getCurrentMap().getTakenOutShit().remove(val.objId);
 			val.setCalcX(x);
 			if (y + 3 <= Translate.getMapH()) {
 				val.setCalcY(y);
@@ -3813,9 +3819,9 @@ public abstract class Body extends BodyAttributes {
 		}
 		// 落としたもの(餌)の処理
 		if (val instanceof Food) {
-			Map<Integer, Food> foods = SimYukkuri.world.getCurrentMap().getFood();
+			Map<Integer, Food> foods = GameWorld.get().getCurrentMap().getFood();
 			foods.put(val.objId, (Food) val);
-			SimYukkuri.world.getCurrentMap().getTakenOutFood().remove(val.objId);
+			GameWorld.get().getCurrentMap().getTakenOutFood().remove(val.objId);
 			val.setCalcX(x);
 			if (y + 3 <= Translate.getMapH()) {
 				val.setCalcY(y + 3);
@@ -3833,7 +3839,7 @@ public abstract class Body extends BodyAttributes {
 		Integer i = getTakeoutItem().get(key);
 		if (i == null)
 			return null;
-		MapPlaceData m = SimYukkuri.world.getCurrentMap();
+		MapPlaceData m = GameWorld.get().getCurrentMap();
 		if (m.getTakenOutFood().containsKey(i.intValue())) {
 			return m.getTakenOutFood().get(i.intValue());
 		}
@@ -3869,7 +3875,7 @@ public abstract class Body extends BodyAttributes {
 		final String path = "images/";
 		int sx, sy;
 
-		getShadowImages()[Const.ADULT_INDEX] = ImageIO.read(loader.getResourceAsStream(path + "shadow.png"));
+		getShadowImages()[Const.ADULT_INDEX] = GameImages.read(loader.getResourceAsStream(path + "shadow.png"));
 
 		sx = (int) ((float) getShadowImages()[Const.ADULT_INDEX].getWidth(io) * Const.BODY_SIZE[1]);
 		sy = (int) ((float) getShadowImages()[Const.ADULT_INDEX].getHeight(io) * Const.BODY_SIZE[1]);
@@ -3935,7 +3941,7 @@ public abstract class Body extends BodyAttributes {
 			addStress(-50);
 			// 起きてたらセリフ
 			if (!isSleeping()) {
-				setMessage(MessagePool.getMessage(this, MessagePool.Action.Cleaned), 60);
+				setMessage(GameMessages.getMessage(this, MessagePool.Action.Cleaned), 60);
 				stay(60);
 			}
 			// 実ゆの場合、親が反応する
@@ -3957,7 +3963,7 @@ public abstract class Body extends BodyAttributes {
 	 */
 	public final void cleaningItself() {
 		stay();
-		setMessage(MessagePool.getMessage(this, MessagePool.Action.CleanItself));
+		setMessage(GameMessages.getMessage(this, MessagePool.Action.CleanItself));
 		if (!isAdult()) {
 			setHappiness(Happiness.SAD);
 			setForceFace(ImageCode.TIRED.ordinal());
@@ -3984,7 +3990,7 @@ public abstract class Body extends BodyAttributes {
 			P = 1;
 		}
 		// 汚れが残る
-		if (SimYukkuri.RND.nextInt(P) != 0) {
+		if (GameRandom.nextInt(P) != 0) {
 			setStubbornlyDirty(true);
 		}
 	}
@@ -4003,7 +4009,7 @@ public abstract class Body extends BodyAttributes {
 		// ｱﾘに食べられてる時
 		if (getAttachmentSize(Ants.class) != 0) {
 			setHappiness(Happiness.VERY_SAD);
-			// setPikoMessage(MessagePool.getMessage(this,
+			// setPikoMessage(GameMessages.getMessage(this,
 			// MessagePool.Action.HelpMe),false);
 			BodyLogic.checkNearParent(this);
 			setCallingParents(true);
@@ -4025,14 +4031,14 @@ public abstract class Body extends BodyAttributes {
 			// 自分がゲス赤ゆか、ドゲス子ゆなら、短いスパンで泣き叫ぶ
 			if (kusogaki) {
 				setHappiness(Happiness.VERY_SAD);
-				setPikoMessage(MessagePool.getMessage(this, MessagePool.Action.Dirty), false);
+				setPikoMessage(GameMessages.getMessage(this, MessagePool.Action.Dirty), false);
 				BodyLogic.checkNearParent(this);
 				setCallingParents(true);
 			}
 			// 他は長いスパン
 			else {
 				setHappiness(Happiness.SAD);
-				setMessage(MessagePool.getMessage(this, MessagePool.Action.Dirty));
+				setMessage(GameMessages.getMessage(this, MessagePool.Action.Dirty));
 				BodyLogic.checkNearParent(this);
 				setCallingParents(true);
 			}
@@ -4056,7 +4062,7 @@ public abstract class Body extends BodyAttributes {
 		if (!canAction())
 			return;
 		if (TF)
-			setMessage(MessagePool.getMessage(this, MessagePool.Action.Yunnyaa), 50, true, true);
+			setMessage(GameMessages.getMessage(this, MessagePool.Action.Yunnyaa), 50, true, true);
 		setYunnyaa(true);
 		stay(40);
 	}
@@ -4087,25 +4093,25 @@ public abstract class Body extends BodyAttributes {
 		// 性格によって頑固さが決まる
 		switch (getAttitude()) {
 			case VERY_NICE:
-				if (SimYukkuri.RND.nextInt(NormalP) == 0)
+				if (GameRandom.nextInt(NormalP) == 0)
 					frag = true;
 				break;
 			case NICE:
 			case AVERAGE:
-				if (isStressful() && SimYukkuri.RND.nextInt(NormalP) == 0)
+				if (isStressful() && GameRandom.nextInt(NormalP) == 0)
 					frag = true;
 				break;
 			case SHITHEAD:
-				if (isStressful() && getIntelligence() != Intelligence.FOOL && SimYukkuri.RND.nextInt(NormalP) == 0) {
+				if (isStressful() && getIntelligence() != Intelligence.FOOL && GameRandom.nextInt(NormalP) == 0) {
 					frag = true;
-				} else if (isVeryStressful() && SimYukkuri.RND.nextInt(RudeP) == 0) {
+				} else if (isVeryStressful() && GameRandom.nextInt(RudeP) == 0) {
 					frag = true;
 				}
 				break;
 			case SUPER_SHITHEAD:
-				if (isStressful() && getIntelligence() != Intelligence.FOOL && SimYukkuri.RND.nextInt(RudeP) == 0) {
+				if (isStressful() && getIntelligence() != Intelligence.FOOL && GameRandom.nextInt(RudeP) == 0) {
 					frag = true;
-				} else if (isVeryStressful() && isDamagedHeavily() && SimYukkuri.RND.nextInt(RudeP) == 0) {
+				} else if (isVeryStressful() && isDamagedHeavily() && GameRandom.nextInt(RudeP) == 0) {
 					frag = true;
 				}
 				break;
@@ -4365,7 +4371,7 @@ public abstract class Body extends BodyAttributes {
 			setHasBraid(false);
 			setForceFace(ImageCode.CRYING.ordinal());
 			setHappiness(Happiness.VERY_SAD);
-			setMessage(MessagePool.getMessage(this, MessagePool.Action.BraidCut), true);
+			setMessage(GameMessages.getMessage(this, MessagePool.Action.BraidCut), true);
 			// 実ゆの場合、親が反応する
 			checkReactionStalkMother(UnbirthBabyState.SAD);
 		} else {
@@ -4400,7 +4406,7 @@ public abstract class Body extends BodyAttributes {
 		setShutmouth(false);
 		seteHairState(HairState.BALDHEAD);
 		setHappiness(Happiness.VERY_SAD);
-		setMessage(MessagePool.getMessage(this, MessagePool.Action.PEALING), true);
+		setMessage(GameMessages.getMessage(this, MessagePool.Action.PEALING), true);
 		// 実ゆの場合、親が反応する
 		checkReactionStalkMother(UnbirthBabyState.SAD);
 	}
@@ -4484,7 +4490,7 @@ public abstract class Body extends BodyAttributes {
 		addLovePlayer(-200);
 		setBlind(true);
 		setHappiness(Happiness.VERY_SAD);
-		setPikoMessage(MessagePool.getMessage(this, MessagePool.Action.BLINDING), true);
+		setPikoMessage(GameMessages.getMessage(this, MessagePool.Action.BLINDING), true);
 		// 実ゆの場合、親が反応する
 		checkReactionStalkMother(UnbirthBabyState.SAD);
 	}
@@ -4504,7 +4510,7 @@ public abstract class Body extends BodyAttributes {
 		clearActions();
 		addLovePlayer(-200);
 		setShutmouth(true);
-		setPikoMessage(MessagePool.getMessage(this, MessagePool.Action.CantTalk), true);
+		setPikoMessage(GameMessages.getMessage(this, MessagePool.Action.CantTalk), true);
 		// eating = false;
 		// eatingShit = false;
 		setHappiness(Happiness.VERY_SAD);
@@ -4540,11 +4546,11 @@ public abstract class Body extends BodyAttributes {
 		clearActions();
 		addLovePlayer(-200);
 		addStress(500);
-		if (SimYukkuri.RND.nextInt(3) == 0) {
-			setMessage(MessagePool.getMessage(this, MessagePool.Action.Scream), true);
+		if (GameRandom.nextInt(3) == 0) {
+			setMessage(GameMessages.getMessage(this, MessagePool.Action.Scream), true);
 			setForceFace(ImageCode.PAIN.ordinal());
 		} else {
-			setMessage(MessagePool.getMessage(this, MessagePool.Action.PLUNCKING), true);
+			setMessage(GameMessages.getMessage(this, MessagePool.Action.PLUNCKING), true);
 			setForceFace(ImageCode.CRYING.ordinal());
 		}
 
@@ -4684,7 +4690,7 @@ public abstract class Body extends BodyAttributes {
 			if (isNotNYD()) {
 				setHappiness(Happiness.VERY_SAD);
 				addStress(700);
-				setMessage(MessagePool.getMessage(this, MessagePool.Action.AbuseBaby));
+				setMessage(GameMessages.getMessage(this, MessagePool.Action.AbuseBaby));
 			}
 		}
 		if (getStalks() != null) {
@@ -4735,7 +4741,7 @@ public abstract class Body extends BodyAttributes {
 		// 実ゆの場合、親が反応する
 		if (getBindStalk() != null) {
 			int id = getBindStalk().getPlantYukkuri();
-			Body bodyMother = SimYukkuri.world.getCurrentMap().getBody().get(id);
+			Body bodyMother = GameWorld.get().getCurrentMap().getBody().get(id);
 			if (bodyMother != null) {
 				if (!bodyMother.isDead() || bodyMother.isSleeping()) {
 					return bodyMother.getUniqueID();
@@ -4751,7 +4757,7 @@ public abstract class Body extends BodyAttributes {
 	 * @param eState 実ゆの状態
 	 */
 	public void checkReactionStalkMother(UnbirthBabyState eState) {
-		Body bodyMother = SimYukkuri.world.getCurrentMap().getBody().get(getBindStalkMotherCanNotice());
+		Body bodyMother = GameWorld.get().getCurrentMap().getBody().get(getBindStalkMotherCanNotice());
 		if (bodyMother == null) {
 			return;
 		}
@@ -4771,7 +4777,7 @@ public abstract class Body extends BodyAttributes {
 				// 攻撃されて生きている場合
 				if (!isDead()) {
 					bodyMother.setHappiness(Happiness.SAD);
-					bodyMother.setMessage(MessagePool.getMessage(bodyMother, MessagePool.Action.AbuseBaby));
+					bodyMother.setMessage(GameMessages.getMessage(bodyMother, MessagePool.Action.AbuseBaby));
 					bodyMother.addStress(30);
 					bodyMother.stay();
 					break;
@@ -4779,19 +4785,19 @@ public abstract class Body extends BodyAttributes {
 				// 攻撃されて死んでいる場合はKilled
 			case KILLED:// 実ゆが死んでる事に気がつく
 				bodyMother.setHappiness(Happiness.VERY_SAD);
-				bodyMother.setMessage(MessagePool.getMessage(bodyMother, MessagePool.Action.AbuseBabyKilled));
+				bodyMother.setMessage(GameMessages.getMessage(bodyMother, MessagePool.Action.AbuseBabyKilled));
 				bodyMother.addStress(500);
 				bodyMother.stay();
 				break;
 			case SAD:// 実ゆが悲しんでいる、苦しんでいるのを心配する
 				bodyMother.setHappiness(Happiness.SAD);
-				bodyMother.setMessage(MessagePool.getMessage(bodyMother, MessagePool.Action.ConcernAboutChild));
+				bodyMother.setMessage(GameMessages.getMessage(bodyMother, MessagePool.Action.ConcernAboutChild));
 				bodyMother.addStress(20);
 				bodyMother.stay();
 				break;
 			case HAPPY:// 実ゆの状態を喜んでいる
 				bodyMother.setHappiness(Happiness.VERY_HAPPY);
-				bodyMother.setMessage(MessagePool.getMessage(bodyMother, MessagePool.Action.GladAboutChild));
+				bodyMother.setMessage(GameMessages.getMessage(bodyMother, MessagePool.Action.GladAboutChild));
 				bodyMother.addStress(-100);
 				bodyMother.stay();
 				break;
@@ -4816,7 +4822,7 @@ public abstract class Body extends BodyAttributes {
 			return;
 		}
 		// change own state
-		setMessage(MessagePool.getMessage(this, MessagePool.Action.Sukkiri), 60, true, false);
+		setMessage(GameMessages.getMessage(this, MessagePool.Action.Sukkiri), 60, true, false);
 		setStress(0);
 		addMemories(20);
 		stay(60);
@@ -4835,10 +4841,10 @@ public abstract class Body extends BodyAttributes {
 			}
 			return;
 		}
-		if (isSick() && SimYukkuri.RND.nextBoolean()) {
+		if (isSick() && GameRandom.nextBoolean()) {
 			p.addSickPeriod(100);
 		}
-		if (p.isSick() && SimYukkuri.RND.nextBoolean()) {
+		if (p.isSick() && GameRandom.nextBoolean()) {
 			addSickPeriod(100);
 		}
 		if (p.isDead()) {
@@ -4848,7 +4854,7 @@ public abstract class Body extends BodyAttributes {
 			p.setStress(0);
 			p.addMemories(20);
 			// 相手の妊娠判定
-			p.setMessage(MessagePool.getMessage(p, MessagePool.Action.Sukkiri), 60, true, false);
+			p.setMessage(GameMessages.getMessage(p, MessagePool.Action.Sukkiri), 60, true, false);
 			p.clearActions();
 			p.setSukkiri(true);
 			p.setHappiness(Happiness.HAPPY);
@@ -4858,13 +4864,13 @@ public abstract class Body extends BodyAttributes {
 		p.hungry -= (getHUNGRYLIMITorg()[AgeState.BABY.ordinal()] * 2);
 
 		// 妊娠タイプはランダムで決定
-		boolean stalkMode = SimYukkuri.RND.nextBoolean();
+		boolean stalkMode = GameRandom.nextBoolean();
 		// 該当タイプが避妊されてたら妊娠失敗
 		if ((stalkMode && p.isStalkCastration())
 				|| (!stalkMode && p.isBodyCastration())
 				|| (!stalkMode && p.getFootBakeLevel() == FootBake.CRITICAL)) {
 			p.setHappiness(Happiness.VERY_SAD);
-			p.setMessage(MessagePool.getMessage(p, MessagePool.Action.NoPregnancy));
+			p.setMessage(GameMessages.getMessage(p, MessagePool.Action.NoPregnancy));
 			p.addStress(1000);
 			return;
 		}
@@ -4920,7 +4926,7 @@ public abstract class Body extends BodyAttributes {
 		}
 
 		// change own state
-		setMessage(MessagePool.getMessage(this, MessagePool.Action.SukkiriForRaper), 60, true, false);
+		setMessage(GameMessages.getMessage(this, MessagePool.Action.SukkiriForRaper), 60, true, false);
 		setStress(0);
 		stay(65);
 		addMemories(100);
@@ -4938,7 +4944,7 @@ public abstract class Body extends BodyAttributes {
 		// hungryState = checkHungryState();
 		// if it has pants, cannot get pregnant
 		if (isHasPants() || p.isHasPants()) {
-			p.setMessage(MessagePool.getMessage(p, MessagePool.Action.ScareRapist));
+			p.setMessage(GameMessages.getMessage(p, MessagePool.Action.ScareRapist));
 			p.setHappiness(Happiness.SAD);
 			if (isHasPants()) {
 				makeDirty(true);
@@ -4948,16 +4954,16 @@ public abstract class Body extends BodyAttributes {
 			return;
 		}
 		// ゆかび持ちとすっきりすると1/2の確率で伝染る
-		if ((isSick() || p.isSick()) && SimYukkuri.RND.nextBoolean()) {
+		if ((isSick() || p.isSick()) && GameRandom.nextBoolean()) {
 			p.addSickPeriod(100);
 			addSickPeriod(100);
 		}
 		if (p.isDead()) {
-			if (SimYukkuri.RND.nextInt(3) == 0) {
+			if (GameRandom.nextInt(3) == 0) {
 				p.setCrushed(true);
 			}
 			// 死体とすっきりすると死体がゆかび持ちでなくとも1/4の確率でゆかび感染
-			if (SimYukkuri.RND.nextInt(4) == 0) {
+			if (GameRandom.nextInt(4) == 0) {
 				addSickPeriod(100);
 			}
 			return;
@@ -4966,7 +4972,7 @@ public abstract class Body extends BodyAttributes {
 		// 相手の妊娠判定
 		p.wakeup();
 		if (p.isNotNYD()) {
-			p.setMessage(MessagePool.getMessage(p, MessagePool.Action.RaperSukkiri), 60, true, false);
+			p.setMessage(GameMessages.getMessage(p, MessagePool.Action.RaperSukkiri), 60, true, false);
 			p.setSukkiri(true);
 			setCalm();
 			p.setHappiness(Happiness.VERY_SAD);
@@ -5016,7 +5022,7 @@ public abstract class Body extends BodyAttributes {
 			return;
 		}
 		// change own state
-		setMessage(MessagePool.getMessage(this, MessagePool.Action.Sukkiri), 60, true, false);
+		setMessage(GameMessages.getMessage(this, MessagePool.Action.Sukkiri), 60, true, false);
 		addStress(-50);
 		addMemories(5);
 		stay(60);
@@ -5031,13 +5037,13 @@ public abstract class Body extends BodyAttributes {
 		}
 		if (p != null) {
 			// 性病持ちと死姦はカビの原因
-			if ((p.isDead() || p.isSick()) && SimYukkuri.RND.nextBoolean()) {
+			if ((p.isDead() || p.isSick()) && GameRandom.nextBoolean()) {
 				addSickPeriod(100);
 			}
 			if (p.canAction()) {
 				p.addStress(50);
 				p.addMemories(-5);
-				p.setMessage(MessagePool.getMessage(p, MessagePool.Action.Surprise), 60, true, false);
+				p.setMessage(GameMessages.getMessage(p, MessagePool.Action.Surprise), 60, true, false);
 				p.clearActions();
 				p.setHappiness(Happiness.SAD);
 			}
@@ -5056,7 +5062,7 @@ public abstract class Body extends BodyAttributes {
 			return;
 		}
 		strikeByPunish();
-		Terrarium.setAlarm();
+		GameEnvironment.setAlarm();
 		if (dna == null || isBodyCastration()) {
 			return;
 		}
@@ -5082,7 +5088,7 @@ public abstract class Body extends BodyAttributes {
 		for (int i = 0; i < 5; i++) {
 			Dna baby = YukkuriUtil.createBabyDna(this, YukkuriUtil.getBodyInstance(dna.getFather()),
 					dna.getType(), dna.getAttitude(), dna.getIntelligence(), false, false, true);
-			getStalkBabyTypes().add((SimYukkuri.RND.nextBoolean() ? baby : null));
+			getStalkBabyTypes().add((GameRandom.nextBoolean() ? baby : null));
 		}
 		setHasStalk(true);
 		subtractPregnantLimit();
@@ -5102,7 +5108,7 @@ public abstract class Body extends BodyAttributes {
 			// 妊娠限界を超えてたら
 			if (getPregnantLimit() <= 0) {
 				// 1/20の確率でまともなゆっくり
-				if (SimYukkuri.RND.nextInt(20) == 0) {
+				if (GameRandom.nextInt(20) == 0) {
 					return false;
 				}
 				// 19/20で足りないゆ
@@ -5112,7 +5118,7 @@ public abstract class Body extends BodyAttributes {
 			// 妊娠限界が100以上の場合は、1/100で足りないゆ。
 			int tarinaiFactor = getPregnantLimit() > 100 ? 100 : getPregnantLimit();
 			// 1/100 または 1/妊娠限界 の確率で足りないゆ。
-			if (SimYukkuri.RND.nextInt(tarinaiFactor) == 0) {
+			if (GameRandom.nextInt(tarinaiFactor) == 0) {
 				return true;
 			}
 			return false;
@@ -5142,7 +5148,7 @@ public abstract class Body extends BodyAttributes {
 		if (isRaper() && !isDead()) {
 			forceToRaperExcite(true);
 			EventLogic.addWorldEvent(new RaperWakeupEvent(this, null, null, 1), this,
-					MessagePool.getMessage(this, MessagePool.Action.ExciteForRaper));
+					GameMessages.getMessage(this, MessagePool.Action.ExciteForRaper));
 			return;
 		}
 
@@ -5163,7 +5169,7 @@ public abstract class Body extends BodyAttributes {
 
 		// ぺにぺにが切断されている場合
 		if (isbPenipeniCutted()) {
-			setMessage(MessagePool.getMessage(this, MessagePool.Action.PenipeniCutted));
+			setMessage(GameMessages.getMessage(this, MessagePool.Action.PenipeniCutted));
 			setHappiness(Happiness.VERY_SAD);
 			setForceFace(ImageCode.TIRED.ordinal());
 			stayPurupuru(20);
@@ -5175,7 +5181,7 @@ public abstract class Body extends BodyAttributes {
 		clearActionsForEvent();
 		setToSukkiri(true);
 		wakeup();
-		setMessage(MessagePool.getMessage(this, MessagePool.Action.Excite));
+		setMessage(GameMessages.getMessage(this, MessagePool.Action.Excite));
 		setForceFace(ImageCode.EXCITING.ordinal());
 		setExciting(true);
 		stayPurupuru(Const.STAYLIMIT);
@@ -5269,27 +5275,27 @@ public abstract class Body extends BodyAttributes {
 				case FATHER: // 父
 				case MOTHER: // 母
 					// 子供を治そうとする
-					setMessage(MessagePool.getMessage(this, MessagePool.Action.TreatChildBySurisuri));
+					setMessage(GameMessages.getMessage(this, MessagePool.Action.TreatChildBySurisuri));
 					break;
 				case PARTNAR: // つがい
 					// つがいを治そうとする
-					setMessage(MessagePool.getMessage(this, MessagePool.Action.TreatPartnerBySurisuri));
+					setMessage(GameMessages.getMessage(this, MessagePool.Action.TreatPartnerBySurisuri));
 					break;
 				case CHILD_FATHER: // 父の子供
 					// 父を治そうとする
-					setMessage(MessagePool.getMessage(this, MessagePool.Action.TreatFatherBySurisuri));
+					setMessage(GameMessages.getMessage(this, MessagePool.Action.TreatFatherBySurisuri));
 					break;
 				case CHILD_MOTHER: // 母の子供
 					// 母を治そうとする
-					setMessage(MessagePool.getMessage(this, MessagePool.Action.TreatMotherBySurisuri));
+					setMessage(GameMessages.getMessage(this, MessagePool.Action.TreatMotherBySurisuri));
 					break;
 				case ELDERSISTER: // 姉
 					// 妹を治そうとする
-					setMessage(MessagePool.getMessage(this, MessagePool.Action.TreatSisterBySurisuri));
+					setMessage(GameMessages.getMessage(this, MessagePool.Action.TreatSisterBySurisuri));
 					break;
 				case YOUNGSISTER: // 妹
 					// 姉を治そうとする
-					setMessage(MessagePool.getMessage(this, MessagePool.Action.TreatElderSisterBySurisuri));
+					setMessage(GameMessages.getMessage(this, MessagePool.Action.TreatElderSisterBySurisuri));
 					break;
 				default: // 他人
 					break;
@@ -5304,39 +5310,39 @@ public abstract class Body extends BodyAttributes {
 			 * case FATHER: // 父
 			 * case MOTHER: // 母
 			 * // 子供とすりすり
-			 * setMessage(MessagePool.getMessage(this,
+			 * setMessage(GameMessages.getMessage(this,
 			 * MessagePool.Action.surisuriWithChild));
 			 * break;
 			 * case PARTNAR: // つがい
 			 * // つがいとすりすり
-			 * setMessage(MessagePool.getMessage(this,
+			 * setMessage(GameMessages.getMessage(this,
 			 * MessagePool.Action.surisuriWithPartner));
 			 * break;
 			 * case CHILD_FATHER: // 父の子供
 			 * // 父とすりすり
-			 * setMessage(MessagePool.getMessage(this,
+			 * setMessage(GameMessages.getMessage(this,
 			 * MessagePool.Action.surisuriWithFather));
 			 * break;
 			 * case CHILD_MOTHER: // 母の子供
 			 * // 母とすりすり
-			 * setMessage(MessagePool.getMessage(this,
+			 * setMessage(GameMessages.getMessage(this,
 			 * MessagePool.Action.surisuriWithMother));
 			 * break;
 			 * case ELDERSISTER: // 姉
 			 * // 妹とすりすり
-			 * setMessage(MessagePool.getMessage(this,
+			 * setMessage(GameMessages.getMessage(this,
 			 * MessagePool.Action.surisuriWithElderSister));
 			 * break;
 			 * case YOUNGSISTER: // 妹
 			 * // 姉とすりすり
-			 * setMessage(MessagePool.getMessage(this,
+			 * setMessage(GameMessages.getMessage(this,
 			 * MessagePool.Action.surisuriWithSister));
 			 * break;
 			 * default : // 他人
 			 * break;
 			 * }
 			 */
-			setMessage(MessagePool.getMessage(this, MessagePool.Action.SuriSuri));
+			setMessage(GameMessages.getMessage(this, MessagePool.Action.SuriSuri));
 			addStress(-100);
 			p.addStress(-100);
 			setHappiness(Happiness.VERY_HAPPY);
@@ -5345,7 +5351,7 @@ public abstract class Body extends BodyAttributes {
 			}
 		}
 		// 確率ですりすりしてる方にもアリ伝染る
-		if (p.getAttachmentSize(Ants.class) > 0 && SimYukkuri.RND.nextInt(200) == 0) {
+		if (p.getAttachmentSize(Ants.class) > 0 && GameRandom.nextInt(200) == 0) {
 			if (getNumOfAnts() <= 0) {
 				setNumOfAnts(0);
 				addAttachment(new Ants(this));
@@ -5359,14 +5365,14 @@ public abstract class Body extends BodyAttributes {
 		stay(40);
 		p.stay(40);
 		if (getIntelligence() != Intelligence.WISE && getSurisuriAccidentProb() != 0
-				&& SimYukkuri.RND.nextInt(getSurisuriAccidentProb()) == 0) {
+				&& GameRandom.nextInt(getSurisuriAccidentProb()) == 0) {
 			// すりすり事故、すっきりーになる
 			doSukkiri(p);
 		}
-		if (isSick() && SimYukkuri.RND.nextInt(5) == 0) {
+		if (isSick() && GameRandom.nextInt(5) == 0) {
 			p.addSickPeriod(100);
 		}
-		if (p.isSick() && SimYukkuri.RND.nextInt(5) == 0) {
+		if (p.isSick() && GameRandom.nextInt(5) == 0) {
 			addSickPeriod(100);
 		}
 	}
@@ -5396,27 +5402,27 @@ public abstract class Body extends BodyAttributes {
 				case FATHER: // 父
 				case MOTHER: // 母
 					// 子供を治そうとする
-					setMessage(MessagePool.getMessage(this, MessagePool.Action.TreatChildByPeropero));
+					setMessage(GameMessages.getMessage(this, MessagePool.Action.TreatChildByPeropero));
 					break;
 				case PARTNAR: // つがい
 					// つがいを治そうとする
-					setMessage(MessagePool.getMessage(this, MessagePool.Action.TreatPartnerByPeropero));
+					setMessage(GameMessages.getMessage(this, MessagePool.Action.TreatPartnerByPeropero));
 					break;
 				case CHILD_FATHER: // 父の子供
 					// 父を治そうとする
-					setMessage(MessagePool.getMessage(this, MessagePool.Action.TreatFatherBySurisuri));
+					setMessage(GameMessages.getMessage(this, MessagePool.Action.TreatFatherBySurisuri));
 					break;
 				case CHILD_MOTHER: // 母の子供
 					// 母を治そうとする
-					setMessage(MessagePool.getMessage(this, MessagePool.Action.TreatMotherBySurisuri));
+					setMessage(GameMessages.getMessage(this, MessagePool.Action.TreatMotherBySurisuri));
 					break;
 				case ELDERSISTER: // 姉
 					// 妹を治そうとする
-					setMessage(MessagePool.getMessage(this, MessagePool.Action.TreatSisterByPeropero));
+					setMessage(GameMessages.getMessage(this, MessagePool.Action.TreatSisterByPeropero));
 					break;
 				case YOUNGSISTER: // 妹
 					// 姉を治そうとする
-					setMessage(MessagePool.getMessage(this, MessagePool.Action.TreatElderSisterByPeropero));
+					setMessage(GameMessages.getMessage(this, MessagePool.Action.TreatElderSisterByPeropero));
 					break;
 				default: // 他人
 					break;
@@ -5431,33 +5437,33 @@ public abstract class Body extends BodyAttributes {
 			 * case FATHER: // 父
 			 * case MOTHER: // 母
 			 * // 子供とぺろぺろ
-			 * setMessage(MessagePool.getMessage(this, MessagePool.Action.PeroPero));
+			 * setMessage(GameMessages.getMessage(this, MessagePool.Action.PeroPero));
 			 * break;
 			 * case PARTNAR: // つがい
 			 * // つがいとぺろぺろ
-			 * setMessage(MessagePool.getMessage(this, MessagePool.Action.PeroPero));
+			 * setMessage(GameMessages.getMessage(this, MessagePool.Action.PeroPero));
 			 * break;
 			 * case CHILD_FATHER: // 父の子供
 			 * // 父とぺろぺろ
-			 * setMessage(MessagePool.getMessage(this, MessagePool.Action.PeroperoFather));
+			 * setMessage(GameMessages.getMessage(this, MessagePool.Action.PeroperoFather));
 			 * break;
 			 * case CHILD_MOTHER: // 母の子供
 			 * // 母とぺろぺろ
-			 * setMessage(MessagePool.getMessage(this, MessagePool.Action.PeroperoMother));
+			 * setMessage(GameMessages.getMessage(this, MessagePool.Action.PeroperoMother));
 			 * break;
 			 * case ELDERSISTER: // 姉
 			 * // 妹とぺろぺろ
-			 * setMessage(MessagePool.getMessage(this, MessagePool.Action.PeroPero));
+			 * setMessage(GameMessages.getMessage(this, MessagePool.Action.PeroPero));
 			 * break;
 			 * case YOUNGSISTER: // 妹
 			 * //姉 とぺろぺろ
-			 * setMessage(MessagePool.getMessage(this, MessagePool.Action.PeroPero));
+			 * setMessage(GameMessages.getMessage(this, MessagePool.Action.PeroPero));
 			 * break;
 			 * default : // 他人
 			 * break;
 			 * }
 			 */
-			setMessage(MessagePool.getMessage(this, MessagePool.Action.PeroPero));
+			setMessage(GameMessages.getMessage(this, MessagePool.Action.PeroPero));
 
 			setHappiness(Happiness.VERY_HAPPY);
 			addStress(-50);
@@ -5474,7 +5480,7 @@ public abstract class Body extends BodyAttributes {
 		}
 		p.setNumOfAnts(ant);
 		// しかし確率でぺろぺろしてる方にもアリ伝染る
-		if (ant > 0 && SimYukkuri.RND.nextInt(200) == 0) {
+		if (ant > 0 && GameRandom.nextInt(200) == 0) {
 			if (getNumOfAnts() <= 0) {
 				addAttachment(new Ants(this));
 				addStress(50);
@@ -5494,10 +5500,10 @@ public abstract class Body extends BodyAttributes {
 		if (!p.isHasPants()) {
 			p.makeDirty(false);
 		}
-		if (isSick() && SimYukkuri.RND.nextBoolean()) {
+		if (isSick() && GameRandom.nextBoolean()) {
 			p.addSickPeriod(100);
 		}
-		if (p.isSick() && SimYukkuri.RND.nextBoolean()) {
+		if (p.isSick() && GameRandom.nextBoolean()) {
 			addSickPeriod(100);
 		}
 	}
@@ -5519,15 +5525,15 @@ public abstract class Body extends BodyAttributes {
 		// ぐーりぐーり時のメッセージ
 		if (p.isAdult()) {
 			// つがいが対象
-			setMessage(MessagePool.getMessage(this, MessagePool.Action.ExtractingNeedlePartner));
+			setMessage(GameMessages.getMessage(this, MessagePool.Action.ExtractingNeedlePartner));
 		} else {
 			// 子供が対象
-			setMessage(MessagePool.getMessage(this, MessagePool.Action.ExtractingNeedleChild));
+			setMessage(GameMessages.getMessage(this, MessagePool.Action.ExtractingNeedleChild));
 		}
 
 		if (p.isNotNYD()) {
 			// ぐーりぐーりされた時のメッセージ
-			p.setMessage(MessagePool.getMessage(p, MessagePool.Action.NeedlePain), 60, true, false);
+			p.setMessage(GameMessages.getMessage(p, MessagePool.Action.NeedlePain), 60, true, false);
 			p.stayPurupuru(40);
 			p.setHappiness(Happiness.VERY_SAD);
 			p.setForceFace(ImageCode.PAIN.ordinal());
@@ -5860,13 +5866,13 @@ public abstract class Body extends BodyAttributes {
 			if (isSmart() || getBodyAgeState().ordinal() < eater.getBodyAgeState().ordinal() || isLockmove()
 					|| isGotBurnedHeavily()) {
 				// 善良か動けない状態か自分より大きい相手は逃げる
-				setMessage(MessagePool.getMessage(this, MessagePool.Action.EatenByBody));
+				setMessage(GameMessages.getMessage(this, MessagePool.Action.EatenByBody));
 				setHappiness(Happiness.VERY_SAD);
 				runAway(getX(), getY());
 			} else {
 				// 反撃
 				setAngry();
-				setMessage(MessagePool.getMessage(this, MessagePool.Action.EatenByBody));
+				setMessage(GameMessages.getMessage(this, MessagePool.Action.EatenByBody));
 				EventLogic.addBodyEvent(this, new RevengeAttackEvent(this, eater, null, 1), null, null);
 			}
 		}
@@ -5894,23 +5900,23 @@ public abstract class Body extends BodyAttributes {
 			// アリの場合の反応
 			if (P == 0) {
 				setHappiness(Happiness.VERY_SAD);
-				if (SimYukkuri.RND.nextInt(4) == 0) {
-					if (!isAdult() && SimYukkuri.RND.nextInt(4) == 0) {
+				if (GameRandom.nextInt(4) == 0) {
+					if (!isAdult() && GameRandom.nextInt(4) == 0) {
 						callParent();
 					}
-					if (SimYukkuri.RND.nextInt(3) == 0) {
-						setMessage(MessagePool.getMessage(this, MessagePool.Action.Scream));
+					if (GameRandom.nextInt(3) == 0) {
+						setMessage(GameMessages.getMessage(this, MessagePool.Action.Scream));
 						setForceFace(ImageCode.PAIN.ordinal());
 					} else {
-						setMessage(MessagePool.getMessage(this, MessagePool.Action.EatenByAnts));
+						setMessage(GameMessages.getMessage(this, MessagePool.Action.EatenByAnts));
 					}
 					if (isDamaged() || isLockmove() || isGotBurnedHeavily()) {
 						// 動けない状態
 						stayPurupuru(10);
 					} else {
 						// 反撃
-						if (SimYukkuri.RND.nextInt(3) == 0) {
-							switch (SimYukkuri.RND.nextInt(3)) {
+						if (GameRandom.nextInt(3) == 0) {
+							switch (GameRandom.nextInt(3)) {
 								case 0:
 									if (!isShutmouth()) {
 										setPeropero(true);
@@ -5930,7 +5936,7 @@ public abstract class Body extends BodyAttributes {
 									// NOP.
 							}
 							stay();
-							setPikoMessage(MessagePool.getMessage(this, MessagePool.Action.RevengeAnts), true);
+							setPikoMessage(GameMessages.getMessage(this, MessagePool.Action.RevengeAnts), true);
 						}
 					}
 				}
@@ -5943,11 +5949,11 @@ public abstract class Body extends BodyAttributes {
 	 */
 	public final void feed() {
 		if (hungry <= getHungryLimit()) {
-			setPikoMessage(MessagePool.getMessage(this, MessagePool.Action.Eating), true);
+			setPikoMessage(GameMessages.getMessage(this, MessagePool.Action.Eating), true);
 			setHappiness(Happiness.HAPPY);
 			addLovePlayer(30);
 		} else {
-			setPikoMessage(MessagePool.getMessage(this, MessagePool.Action.Inflation), true);
+			setPikoMessage(GameMessages.getMessage(this, MessagePool.Action.Inflation), true);
 			setHappiness(Happiness.VERY_SAD);
 			addLovePlayer(-40);
 		}
@@ -5997,7 +6003,7 @@ public abstract class Body extends BodyAttributes {
 		}
 		if (isIdiot()) {
 			strike(Const.NEEDLE);
-			setMessage(MessagePool.getMessage(this, MessagePool.Action.Scream), true);
+			setMessage(GameMessages.getMessage(this, MessagePool.Action.Scream), true);
 			setAngry();
 			return;
 		}
@@ -6011,11 +6017,11 @@ public abstract class Body extends BodyAttributes {
 		if (getCurrentEvent() instanceof ProposeEvent) {
 			setForceFace(ImageCode.CRYING.ordinal());
 			if (isDamaged())
-				setMessage(MessagePool.getMessage(this, MessagePool.Action.Scream), true);
+				setMessage(GameMessages.getMessage(this, MessagePool.Action.Scream), true);
 			else
-				setMessage(MessagePool.getMessage(this, MessagePool.Action.Surprise), true);
+				setMessage(GameMessages.getMessage(this, MessagePool.Action.Surprise), true);
 		} else
-			setMessage(MessagePool.getMessage(this, MessagePool.Action.Scream), true);
+			setMessage(GameMessages.getMessage(this, MessagePool.Action.Scream), true);
 		clearActions();
 		setAngry();
 
@@ -6037,10 +6043,10 @@ public abstract class Body extends BodyAttributes {
 		// なつき度設定
 		addLovePlayer(-200);
 		strike(Const.HAMMER);
-		setPikoMessage(MessagePool.getMessage(this, MessagePool.Action.Scream), true);
+		setPikoMessage(GameMessages.getMessage(this, MessagePool.Action.Scream), true);
 		setAngry();
 		if (isDead()) {
-			setMessage(MessagePool.getMessage(this, MessagePool.Action.Dying), true);
+			setMessage(GameMessages.getMessage(this, MessagePool.Action.Dying), true);
 			stay();
 			if (getBodyAgeState() != AgeState.ADULT) {
 				setCrushed(true);
@@ -6062,11 +6068,11 @@ public abstract class Body extends BodyAttributes {
 	public void strikeByPress() {
 		if (!isDead()) {
 			strike(Const.HAMMER * 10);
-			setPikoMessage(MessagePool.getMessage(this, MessagePool.Action.Scream), true);
+			setPikoMessage(GameMessages.getMessage(this, MessagePool.Action.Scream), true);
 			setAngry();
 		}
 		if (isDead()) {
-			setMessage(MessagePool.getMessage(this, MessagePool.Action.Dying), 40, true, true);
+			setMessage(GameMessages.getMessage(this, MessagePool.Action.Dying), 40, true, true);
 			stay();
 			setCrushed(true);
 		}
@@ -6085,10 +6091,10 @@ public abstract class Body extends BodyAttributes {
 		strike(getDAMAGELIMITorg()[getBodyAgeState().ordinal()] / 5);
 		setCalm();
 
-		setPikoMessage(MessagePool.getMessage(this, MessagePool.Action.Scream), true);
+		setPikoMessage(GameMessages.getMessage(this, MessagePool.Action.Scream), true);
 		setAngry();
 		if (isDead()) {
-			setMessage(MessagePool.getMessage(this, MessagePool.Action.Dying), true);
+			setMessage(GameMessages.getMessage(this, MessagePool.Action.Dying), true);
 			stay();
 		}
 
@@ -6171,7 +6177,7 @@ public abstract class Body extends BodyAttributes {
 		strike(ap);
 		// ぴこぴこ破壊
 		if (!isBraidType() && isHasBraid() && 0 < getnBreakBraidRand()
-				&& SimYukkuri.RND.nextInt(getnBreakBraidRand()) == 0) {
+				&& GameRandom.nextInt(getnBreakBraidRand()) == 0) {
 			setHasBraid(false);
 		}
 		setHappiness(Happiness.SAD);
@@ -6182,21 +6188,21 @@ public abstract class Body extends BodyAttributes {
 
 		// リアクション
 		if (isDead()) {
-			setMessage(MessagePool.getMessage(this, MessagePool.Action.Dying), true);
+			setMessage(GameMessages.getMessage(this, MessagePool.Action.Dying), true);
 			stay();
 			setCrushed(true);
 		} else {
 			if (SimYukkuri.UNYO) {
 				// 0.25 多すぎる 0.01 少なすぎる 0.06 少なすぎる
 				changeUnyo((int) (ap * 0.11f), 0, 0);
-				enemy.changeUnyo(SimYukkuri.RND.nextInt(3), 0, 0);
+				enemy.changeUnyo(GameRandom.nextInt(3), 0, 0);
 			}
 			if (isNotNYD() && !isUnBirth()) {
 				if (e instanceof HateNoOkazariEvent) {
 					// お飾りの迫害
-					setMessage(MessagePool.getMessage(this, MessagePool.Action.Scream), true);
+					setMessage(GameMessages.getMessage(this, MessagePool.Action.Scream), true);
 					if (getPublicRank() != PublicRank.UnunSlave
-							&& (isRude() || (getAttitude() == Attitude.AVERAGE && SimYukkuri.RND.nextBoolean()))) {
+							&& (isRude() || (getAttitude() == Attitude.AVERAGE && GameRandom.nextBoolean()))) {
 						setAngry();
 						EventLogic.addBodyEvent(this, new RevengeAttackEvent(this, enemy, null, 1), null, null);
 					}
@@ -6204,11 +6210,11 @@ public abstract class Body extends BodyAttributes {
 					// 自分が捕食種のおもちゃにされたとき
 					// 逃げる
 					runAway(enemy.getX(), enemy.getY());
-					setPikoMessage(MessagePool.getMessage(this, MessagePool.Action.DontPlayMe), true);
+					setPikoMessage(GameMessages.getMessage(this, MessagePool.Action.DontPlayMe), true);
 					// おもちゃにされたとき、母がいたら33%の確率で「捕食種はあっちいってね！」イベントが発生。
 					Body m = YukkuriUtil.getBodyInstance(getMother());
 					if (m != null) {
-						if (SimYukkuri.RND.nextInt(3) == 0 && m != null && !m.isDead() && !m.isRemoved()) {
+						if (GameRandom.nextInt(3) == 0 && m != null && !m.isDead() && !m.isRemoved()) {
 							m.clearEvent();
 							m.setAngry();
 							m.setPanic(false, null);
@@ -6217,7 +6223,7 @@ public abstract class Body extends BodyAttributes {
 									null, null);
 						}
 					}
-					if (SimYukkuri.RND.nextInt(10) == 0) {
+					if (GameRandom.nextInt(10) == 0) {
 						bodyInjure();
 					}
 				} else if (e instanceof RaperReactionEvent) {
@@ -6225,18 +6231,18 @@ public abstract class Body extends BodyAttributes {
 					// 相手をレイプ対象に
 					int colX = BodyLogic.calcCollisionX(this, enemy);
 					moveToSukkiri(enemy, enemy.getX() + colX, enemy.getY());
-					if (SimYukkuri.RND.nextInt(200) == 0) {
+					if (GameRandom.nextInt(200) == 0) {
 						bodyInjure();
 					}
 				} else if (e instanceof AvoidMoldEvent) {
 					// 自分がかびてる時
-					setMessage(MessagePool.getMessage(this, MessagePool.Action.Scream), true);
+					setMessage(GameMessages.getMessage(this, MessagePool.Action.Scream), true);
 					if (!isBaby() && !isSmart() && getIntelligence() == Intelligence.FOOL) {
 						setAngry();
 						EventLogic.addBodyEvent(this, new RevengeAttackEvent(this, enemy, null, 1), null, null);
 					}
 				} else {
-					setMessage(MessagePool.getMessage(this, MessagePool.Action.Scream), true);
+					setMessage(GameMessages.getMessage(this, MessagePool.Action.Scream), true);
 					if (getAttitude() != Attitude.VERY_NICE) {
 						setAngry();
 						EventLogic.addBodyEvent(this, new RevengeAttackEvent(this, enemy, null, 1), null, null);
@@ -6302,11 +6308,11 @@ public abstract class Body extends BodyAttributes {
 			kick(vecX, vecY, -5);
 		}
 		if (isDead()) {
-			setMessage(MessagePool.getMessage(this, MessagePool.Action.Dying), true);
+			setMessage(GameMessages.getMessage(this, MessagePool.Action.Dying), true);
 			stay();
 			setCrushed(true);
 		} else {
-			setMessage(MessagePool.getMessage(this, MessagePool.Action.Scream), true);
+			setMessage(GameMessages.getMessage(this, MessagePool.Action.Scream), true);
 		}
 		// 持ち物を全部落とす
 		dropAllTakeoutItem();
@@ -6323,13 +6329,13 @@ public abstract class Body extends BodyAttributes {
 			toDead();
 		}
 		if (isDead() && getBaryState() != BaryInUGState.ALL) {
-			setMessage(MessagePool.getMessage(this, MessagePool.Action.Dying), true);
+			setMessage(GameMessages.getMessage(this, MessagePool.Action.Dying), true);
 			stay();
 			setCrushed(true);
 			if (SimYukkuri.mypane != null && SimYukkuri.mypane.getTerrarium() != null) {
-				for (int i = 0; i < (SimYukkuri.RND.nextInt(5) + 5); i++) {
-					SimYukkuri.mypane.getTerrarium().addCrushedVomit(getX() + 7 - SimYukkuri.RND.nextInt(14),
-							getY() + 7 - SimYukkuri.RND.nextInt(14),
+				for (int i = 0; i < (GameRandom.nextInt(5) + 5); i++) {
+					SimYukkuri.mypane.getTerrarium().addCrushedVomit(getX() + 7 - GameRandom.nextInt(14),
+							getY() + 7 - GameRandom.nextInt(14),
 							0, this, getShitType());
 				}
 			}
@@ -6344,8 +6350,8 @@ public abstract class Body extends BodyAttributes {
 		setCriticalDamege(CriticalDamegeType.CUT);
 		if (getBaryState() == BaryInUGState.NONE) {
 			for (int i = 0; i < 5; i++) {
-				SimYukkuri.mypane.getTerrarium().addVomit(getX() + 7 - SimYukkuri.RND.nextInt(14),
-						getY() + 7 - SimYukkuri.RND.nextInt(14), 0,
+				SimYukkuri.mypane.getTerrarium().addVomit(getX() + 7 - GameRandom.nextInt(14),
+						getY() + 7 - GameRandom.nextInt(14), 0,
 						this, getShitType());
 			}
 		}
@@ -6360,18 +6366,18 @@ public abstract class Body extends BodyAttributes {
 		clearActions();
 		if (getCriticalDamege() == CriticalDamegeType.CUT)
 			return;
-		if (getCriticalDamege() == CriticalDamegeType.INJURED && SimYukkuri.RND.nextInt(50) == 0) {
+		if (getCriticalDamege() == CriticalDamegeType.INJURED && GameRandom.nextInt(50) == 0) {
 			bodyCut();
 			return;
 		}
 		setCalm();
 		setForceFace(ImageCode.PAIN.ordinal());
 		setHappiness(Happiness.VERY_SAD);
-		setMessage(MessagePool.getMessage(this, MessagePool.Action.Scream), 40, true, true);
+		setMessage(GameMessages.getMessage(this, MessagePool.Action.Scream), 40, true, true);
 		setCriticalDamege(CriticalDamegeType.INJURED);
 		if (getBaryState() == BaryInUGState.NONE) {
-			SimYukkuri.mypane.getTerrarium().addVomit(getX() + 7 - SimYukkuri.RND.nextInt(14),
-					getY() + 7 - SimYukkuri.RND.nextInt(14), 0, this,
+			SimYukkuri.mypane.getTerrarium().addVomit(getX() + 7 - GameRandom.nextInt(14),
+					getY() + 7 - GameRandom.nextInt(14), 0, this,
 					getShitType());
 		}
 		// 実ゆの場合、親が反応する
@@ -6405,7 +6411,7 @@ public abstract class Body extends BodyAttributes {
 
 		// 起きてる
 		if (!isSleeping()) {
-			setMessage(MessagePool.getMessage(this, MessagePool.Action.NoticeNoAccessory), true);
+			setMessage(GameMessages.getMessage(this, MessagePool.Action.NoticeNoAccessory), true);
 			setHappiness(Happiness.VERY_SAD);
 			addStress(1200);
 			setbNoticeNoOkazari(true);
@@ -6423,7 +6429,7 @@ public abstract class Body extends BodyAttributes {
 			return;
 		if (!isDead()) {
 			if (!isSleeping()) {
-				setMessage(MessagePool.getMessage(this, MessagePool.Action.NoAccessory), true);
+				setMessage(GameMessages.getMessage(this, MessagePool.Action.NoAccessory), true);
 				setHappiness(Happiness.VERY_SAD);
 				addStress(1200);
 				if (bByPlayer) {
@@ -6447,7 +6453,7 @@ public abstract class Body extends BodyAttributes {
 			getOkazari().setCalcX(x);
 			getOkazari().setCalcY(y);
 			getOkazari().setCalcZ(z + 10);
-			SimYukkuri.world.getCurrentMap().getOkazari().put(getOkazari().objId, getOkazari());
+			GameWorld.get().getCurrentMap().getOkazari().put(getOkazari().objId, getOkazari());
 			setOkazari(null);
 		}
 	}
@@ -6485,7 +6491,7 @@ public abstract class Body extends BodyAttributes {
 		setHasPants(true);
 		if (canAction()) {
 			if (!isDirty() && hasOkazari()) {
-				setMessage(MessagePool.getMessage(this, MessagePool.Action.RelaxOkurumi), 30);
+				setMessage(GameMessages.getMessage(this, MessagePool.Action.RelaxOkurumi), 30);
 				setHappiness(Happiness.HAPPY);
 				addStress(-250);
 				// なつき度設定
@@ -6504,7 +6510,7 @@ public abstract class Body extends BodyAttributes {
 			return;
 		}
 		if (!isCantDie() /* && !isTalking() */) {
-			setMessage(MessagePool.getMessage(this, MessagePool.Action.Healing), Const.HOLDMESSAGE, true, true);
+			setMessage(GameMessages.getMessage(this, MessagePool.Action.Healing), Const.HOLDMESSAGE, true, true);
 			// stay();
 		}
 		if (getCriticalDamegeType() == CriticalDamegeType.INJURED) {
@@ -6552,7 +6558,7 @@ public abstract class Body extends BodyAttributes {
 			clearActions();
 		}
 		setForceFace(ImageCode.PAIN.ordinal());
-		setMessage(MessagePool.getMessage(this, MessagePool.Action.Scream), Const.HOLDMESSAGE, true, true);
+		setMessage(GameMessages.getMessage(this, MessagePool.Action.Scream), Const.HOLDMESSAGE, true, true);
 		setHappiness(Happiness.VERY_SAD);
 		setCalm();
 		addStress(50);
@@ -6610,11 +6616,11 @@ public abstract class Body extends BodyAttributes {
 		if (isAnalClose()) {
 			// 閉鎖
 			setHappiness(Happiness.HAPPY);
-			setMessage(MessagePool.getMessage(this, MessagePool.Action.AnalSealed));
+			setMessage(GameMessages.getMessage(this, MessagePool.Action.AnalSealed));
 		} else {
 			// 開放
 			setHappiness(Happiness.AVERAGE);
-			setMessage(MessagePool.getMessage(this, MessagePool.Action.ToFreedom));
+			setMessage(GameMessages.getMessage(this, MessagePool.Action.ToFreedom));
 			stay();
 		}
 	}
@@ -6663,15 +6669,15 @@ public abstract class Body extends BodyAttributes {
 				// 閉鎖
 				setHappiness(Happiness.VERY_SAD);
 				addStress(1000);
-				setMessage(MessagePool.getMessage(this, MessagePool.Action.Alarm));
+				setMessage(GameMessages.getMessage(this, MessagePool.Action.Alarm));
 				// なつき度設定
 				addLovePlayer(-400);
-				if (SimYukkuri.RND.nextBoolean())
+				if (GameRandom.nextBoolean())
 					doYunnyaa(true);
 			} else {
 				// 開放
 				setHappiness(Happiness.AVERAGE);
-				setMessage(MessagePool.getMessage(this, MessagePool.Action.ToFreedom));
+				setMessage(GameMessages.getMessage(this, MessagePool.Action.ToFreedom));
 				// なつき度設定
 				addLovePlayer(400);
 			}
@@ -6697,15 +6703,15 @@ public abstract class Body extends BodyAttributes {
 				addStress(1000);
 				// なつき度設定
 				addLovePlayer(-400);
-				setMessage(MessagePool.getMessage(this, MessagePool.Action.Alarm));
-				if (SimYukkuri.RND.nextBoolean())
+				setMessage(GameMessages.getMessage(this, MessagePool.Action.Alarm));
+				if (GameRandom.nextBoolean())
 					doYunnyaa(true);
 			} else {
 				// 開放
 				setHappiness(Happiness.AVERAGE);
 				// なつき度設定
 				addLovePlayer(400);
-				setMessage(MessagePool.getMessage(this, MessagePool.Action.ToFreedom));
+				setMessage(GameMessages.getMessage(this, MessagePool.Action.ToFreedom));
 			}
 		}
 	}
@@ -6790,11 +6796,11 @@ public abstract class Body extends BodyAttributes {
 				}
 
 				setbNeedled(false);
-				setMessage(MessagePool.getMessage(this, MessagePool.Action.NeedleRemove));
+				setMessage(GameMessages.getMessage(this, MessagePool.Action.NeedleRemove));
 				removeAttachment(Needle.class);
 
 				// 粘着板で固定されていないなら背面固定解除
-				Map<Integer, StickyPlate> stickyPlates = SimYukkuri.world.getCurrentMap().getStickyPlate();
+				Map<Integer, StickyPlate> stickyPlates = GameWorld.get().getCurrentMap().getStickyPlate();
 				boolean bReset = true;
 				for (Map.Entry<Integer, StickyPlate> entry : stickyPlates.entrySet()) {
 					StickyPlate s = entry.getValue();
@@ -6849,7 +6855,7 @@ public abstract class Body extends BodyAttributes {
 					// なつき度設定
 					addLovePlayer(-20);
 					setHappiness(Happiness.VERY_SAD);
-					setMessage(MessagePool.getMessage(this, MessagePool.Action.NeedleStick), true);
+					setMessage(GameMessages.getMessage(this, MessagePool.Action.NeedleStick), true);
 					// 実ゆの場合、親が反応する
 					checkReactionStalkMother(UnbirthBabyState.ATTAKED);
 				}
@@ -6915,7 +6921,7 @@ public abstract class Body extends BodyAttributes {
 			if (isLikeWater()) {
 				if (getPanicType() != PanicType.BURN) {
 					setHappiness(Happiness.HAPPY);
-					setMessage(MessagePool.getMessage(this, MessagePool.Action.Cleaned));
+					setMessage(GameMessages.getMessage(this, MessagePool.Action.Cleaned));
 				} else {
 					setHappiness(Happiness.VERY_SAD);
 				}
@@ -6924,7 +6930,7 @@ public abstract class Body extends BodyAttributes {
 				// なつき度設定
 				addLovePlayer(-100);
 				if (getPanicType() != PanicType.BURN) {
-					setMessage(MessagePool.getMessage(this, MessagePool.Action.Wet), true);
+					setMessage(GameMessages.getMessage(this, MessagePool.Action.Wet), true);
 					// 実ゆの場合、親が反応する
 					checkReactionStalkMother(UnbirthBabyState.SAD);
 				}
@@ -6973,7 +6979,7 @@ public abstract class Body extends BodyAttributes {
 			if (isLikeWater()) {
 				if (getPanicType() != PanicType.BURN) {
 					setHappiness(Happiness.HAPPY);
-					setMessage(MessagePool.getMessage(this, MessagePool.Action.Cleaned));
+					setMessage(GameMessages.getMessage(this, MessagePool.Action.Cleaned));
 				} else {
 					setHappiness(Happiness.VERY_SAD);
 				}
@@ -6982,10 +6988,10 @@ public abstract class Body extends BodyAttributes {
 				if (getPanicType() != PanicType.BURN) {
 					switch (eDepth) {
 						case SHALLOW:
-							setMessage(MessagePool.getMessage(this, MessagePool.Action.WetInShallowWater), true);
+							setMessage(GameMessages.getMessage(this, MessagePool.Action.WetInShallowWater), true);
 							break;
 						case DEEP:
-							setMessage(MessagePool.getMessage(this, MessagePool.Action.WetInDeepwWater), true);
+							setMessage(GameMessages.getMessage(this, MessagePool.Action.WetInDeepwWater), true);
 							break;
 						default:
 							break;
@@ -7087,7 +7093,7 @@ public abstract class Body extends BodyAttributes {
 			if (!isFixBack()) {
 				setFurifuri(false);
 			} else {
-				if (!isSleeping() && isbNeedled() && SimYukkuri.RND.nextInt(10) == 0) {
+				if (!isSleeping() && isbNeedled() && GameRandom.nextInt(10) == 0) {
 					setFurifuri(true);
 				}
 			}
@@ -7134,7 +7140,7 @@ public abstract class Body extends BodyAttributes {
 				setYunnyaa(false);
 				excitingPeriod = 0;
 				setRelax(true);
-				setMessage(MessagePool.getMessage(this, MessagePool.Action.TakeItEasy));
+				setMessage(GameMessages.getMessage(this, MessagePool.Action.TakeItEasy));
 				addStress(-100);
 				wakeup();
 				// なつき度設定
@@ -7146,11 +7152,11 @@ public abstract class Body extends BodyAttributes {
 				wakeup();
 				clearActions();
 				setAngry();
-				setMessage(MessagePool.getMessage(this, MessagePool.Action.Alarm));
+				setMessage(GameMessages.getMessage(this, MessagePool.Action.Alarm));
 				addStress(150);
 				// なつき度設定
 				addLovePlayer(-100);
-				if (SimYukkuri.RND.nextBoolean())
+				if (GameRandom.nextBoolean())
 					doYunnyaa(true);
 				break;
 			}
@@ -7160,20 +7166,20 @@ public abstract class Body extends BodyAttributes {
 				clearActions();
 				if (isNeedled() || (isGotBurnedHeavily()) && getFootBakeLevel() != FootBake.CRITICAL) {
 					if (isDamaged())
-						setMessage(MessagePool.getMessage(this, MessagePool.Action.Scream2), 30);
+						setMessage(GameMessages.getMessage(this, MessagePool.Action.Scream2), 30);
 					else
-						setMessage(MessagePool.getMessage(this, MessagePool.Action.Scream), 30);
+						setMessage(GameMessages.getMessage(this, MessagePool.Action.Scream), 30);
 					setHappiness(Happiness.VERY_SAD);
 					setForceFace(ImageCode.PAIN.ordinal());
 					setFurifuri(false);
 					addStress(50);
 				} else if (getFootBakeLevel() == FootBake.CRITICAL) {
-					setMessage(MessagePool.getMessage(this, MessagePool.Action.CantMove), 30);
+					setMessage(GameMessages.getMessage(this, MessagePool.Action.CantMove), 30);
 					setHappiness(Happiness.VERY_SAD);
 					setFurifuri(false);
 					addStress(50);
 				} else {
-					setMessage(MessagePool.getMessage(this, MessagePool.Action.FuriFuri), 30);
+					setMessage(GameMessages.getMessage(this, MessagePool.Action.FuriFuri), 30);
 					setFurifuri(true);
 					addStress(-50);
 				}
@@ -7199,11 +7205,11 @@ public abstract class Body extends BodyAttributes {
 		// なつき度設定
 		if (getZ() > 0)
 			setCalcZ(0);
-		Terrarium.setAlarm();
+		GameEnvironment.setAlarm();
 		setPullAndPush(true);
 		setLockmove(true);
 		setHappiness(Happiness.SAD);
-		setMessage(MessagePool.getMessage(this, MessagePool.Action.Press));
+		setMessage(GameMessages.getMessage(this, MessagePool.Action.Press));
 		// 実ゆの場合、親が反応する
 		// checkReactionStalkMother(UnbirthBabyState.SAD);
 	}
@@ -7233,24 +7239,24 @@ public abstract class Body extends BodyAttributes {
 				bodyBurst();
 			} else if (extForce < (Const.EXT_FORCE_PUSH_LIMIT[getBodyAgeState().ordinal()] >> 1)) {
 				// 限界
-				if (SimYukkuri.RND.nextInt(10) == 0) {
+				if (GameRandom.nextInt(10) == 0) {
 					setHappiness(Happiness.VERY_SAD);
-					setMessage(MessagePool.getMessage(this, MessagePool.Action.Press2), Const.HOLDMESSAGE, true, true);
+					setMessage(GameMessages.getMessage(this, MessagePool.Action.Press2), Const.HOLDMESSAGE, true, true);
 					addStress(25);
 				}
-				if (SimYukkuri.RND.nextInt(80) == 0) {
+				if (GameRandom.nextInt(80) == 0) {
 					// あんこを吐き出す
 					int ofsX = Translate.invertX(getCollisionX() >> 1, y);
 					if (getDirection() == Direction.LEFT)
 						ofsX = -ofsX;
 					SimYukkuri.mypane.getTerrarium().addVomit(getX() + ofsX, getY() + 2, getZ(), this, getShitType());
 					damage += Const.HAMMER / 2;
-					setMessage(MessagePool.getMessage(this, MessagePool.Action.Vomit), 30);
+					setMessage(GameMessages.getMessage(this, MessagePool.Action.Vomit), 30);
 				}
 			} else {
-				if (SimYukkuri.RND.nextInt(10) == 0) {
+				if (GameRandom.nextInt(10) == 0) {
 					setHappiness(Happiness.AVERAGE);
-					setMessage(MessagePool.getMessage(this, MessagePool.Action.Press));
+					setMessage(GameMessages.getMessage(this, MessagePool.Action.Press));
 				}
 			}
 		} else if (extForce > 0) {
@@ -7262,15 +7268,15 @@ public abstract class Body extends BodyAttributes {
 				bodyCut();
 			} else if (extForce > Const.EXT_FORCE_PULL_LIMIT[getBodyAgeState().ordinal()] >> 1) {
 				// 限界
-				if (SimYukkuri.RND.nextInt(10) == 0) {
+				if (GameRandom.nextInt(10) == 0) {
 					setHappiness(Happiness.VERY_SAD);
-					setMessage(MessagePool.getMessage(this, MessagePool.Action.Pull2), Const.HOLDMESSAGE, true, true);
+					setMessage(GameMessages.getMessage(this, MessagePool.Action.Pull2), Const.HOLDMESSAGE, true, true);
 					addStress(20);
 				}
 			} else {
-				if (SimYukkuri.RND.nextInt(10) == 0) {
+				if (GameRandom.nextInt(10) == 0) {
 					setHappiness(Happiness.AVERAGE);
-					setMessage(MessagePool.getMessage(this, MessagePool.Action.Pull));
+					setMessage(GameMessages.getMessage(this, MessagePool.Action.Pull));
 				}
 			}
 		}
@@ -7344,13 +7350,13 @@ public abstract class Body extends BodyAttributes {
 			setPartner(-1);
 			removeAllStalks();
 			setStalks(null);
-			if (SimYukkuri.world.getCurrentMap().getBody().containsKey(this.getUniqueID())) {
-				SimYukkuri.world.getCurrentMap().getBody().remove(this.getUniqueID());
+			if (GameWorld.get().getCurrentMap().getBody().containsKey(this.getUniqueID())) {
+				GameWorld.get().getCurrentMap().getBody().remove(this.getUniqueID());
 			}
 			getChildrenList().clear();
 			getElderSisterList().clear();
 			getSisterList().clear();
-			List<Body> bodies = new LinkedList<Body>(SimYukkuri.world.getCurrentMap().getBody().values());
+			List<Body> bodies = new LinkedList<Body>(GameWorld.get().getCurrentMap().getBody().values());
 			for (Body b : bodies) {
 				if (b.getChildrenList() != null) {
 					YukkuriUtil.removeContent(b.getChildrenList(), getUniqueID());
@@ -7901,8 +7907,8 @@ public abstract class Body extends BodyAttributes {
 							setMabatakiCnt(getMabatakiCnt() + 1);
 						}
 						if (getMabatakiType() == ImageCode.TIRED.ordinal() && getMabatakiCnt() > 100) {
-							if (SimYukkuri.RND.nextInt(30) != 0) {
-								setMabatakiCnt(SimYukkuri.RND.nextInt(30));
+							if (GameRandom.nextInt(30) != 0) {
+								setMabatakiCnt(GameRandom.nextInt(30));
 							} else {
 								setMabatakiCnt(85);
 							}
@@ -7923,7 +7929,7 @@ public abstract class Body extends BodyAttributes {
 		}
 		// ダメージ、痛み
 		else if (isDamaged() || isSick() || isFeelPain()) {
-			if (isFeelPain() && getAge() % 50 == 0 && SimYukkuri.RND.nextInt(50) == 0) {
+			if (isFeelPain() && getAge() % 50 == 0 && GameRandom.nextInt(50) == 0) {
 				setForceFace(ImageCode.PAIN.ordinal());
 			}
 			if (isStrike() || isVerySad() || isFeelHardPain()) {
@@ -7946,8 +7952,8 @@ public abstract class Body extends BodyAttributes {
 							setMabatakiCnt(getMabatakiCnt() + 1);
 						}
 						if (getMabatakiType() == ImageCode.TIRED.ordinal() && getMabatakiCnt() > 100) {
-							if (SimYukkuri.RND.nextInt(30) != 0) {
-								setMabatakiCnt(SimYukkuri.RND.nextInt(30));
+							if (GameRandom.nextInt(30) != 0) {
+								setMabatakiCnt(GameRandom.nextInt(30));
 							} else {
 								setMabatakiCnt(85);
 							}
@@ -7985,8 +7991,8 @@ public abstract class Body extends BodyAttributes {
 							setMabatakiCnt(getMabatakiCnt() + 1);
 						}
 						if (getMabatakiType() == ImageCode.TIRED.ordinal() && getMabatakiCnt() > 100) {
-							if (SimYukkuri.RND.nextInt(30) != 0) {
-								setMabatakiCnt(SimYukkuri.RND.nextInt(30));
+							if (GameRandom.nextInt(30) != 0) {
+								setMabatakiCnt(GameRandom.nextInt(30));
 							} else {
 								setMabatakiCnt(85);
 							}
@@ -8023,8 +8029,8 @@ public abstract class Body extends BodyAttributes {
 							setMabatakiCnt(getMabatakiCnt() + 1);
 						}
 						if (getMabatakiType() == ImageCode.RUDE.ordinal() && getMabatakiCnt() > 100) {
-							if (SimYukkuri.RND.nextInt(30) != 0) {
-								setMabatakiCnt(SimYukkuri.RND.nextInt(30));
+							if (GameRandom.nextInt(30) != 0) {
+								setMabatakiCnt(GameRandom.nextInt(30));
 							} else {
 								setMabatakiCnt(85);
 							}
@@ -8057,8 +8063,8 @@ public abstract class Body extends BodyAttributes {
 							setMabatakiCnt(getMabatakiCnt() + 1);
 						}
 						if (getMabatakiType() == ImageCode.CHEER.ordinal() && getMabatakiCnt() > 100) {
-							if (SimYukkuri.RND.nextInt(30) != 0) {
-								setMabatakiCnt(SimYukkuri.RND.nextInt(30));
+							if (GameRandom.nextInt(30) != 0) {
+								setMabatakiCnt(GameRandom.nextInt(30));
 							} else {
 								setMabatakiCnt(85);
 							}
@@ -8094,8 +8100,8 @@ public abstract class Body extends BodyAttributes {
 							setMabatakiCnt(getMabatakiCnt() + 1);
 						}
 						if (getMabatakiType() == ImageCode.CHEER.ordinal() && getMabatakiCnt() > 100) {
-							if (SimYukkuri.RND.nextInt(30) != 0) {
-								setMabatakiCnt(SimYukkuri.RND.nextInt(30));
+							if (GameRandom.nextInt(30) != 0) {
+								setMabatakiCnt(GameRandom.nextInt(30));
 							} else {
 								setMabatakiCnt(85);
 							}
@@ -8129,8 +8135,8 @@ public abstract class Body extends BodyAttributes {
 							setMabatakiCnt(getMabatakiCnt() + 1);
 						}
 						if (getMabatakiType() == ImageCode.NORMAL.ordinal() && getMabatakiCnt() > 100) {
-							if (SimYukkuri.RND.nextInt(30) != 0) {
-								setMabatakiCnt(SimYukkuri.RND.nextInt(30));
+							if (GameRandom.nextInt(30) != 0) {
+								setMabatakiCnt(GameRandom.nextInt(30));
 							} else {
 								setMabatakiCnt(85);
 							}
@@ -8337,7 +8343,7 @@ public abstract class Body extends BodyAttributes {
 	 */
 	@Override
 	public Event clockTick() {
-		if (Terrarium.getOperationTime() % 100 == 0) {
+		if (GameEnvironment.getOperationTime() % 100 == 0) {
 			checkRemovedFamilyList();
 		}
 		// if removed, remove body
@@ -8414,15 +8420,15 @@ public abstract class Body extends BodyAttributes {
 			bAccelAmple = true;
 		}
 
-		if (Terrarium.getInterval() == 0) {
-			if (Terrarium.isAgeBoostSteam() && getBodyAgeState() != AgeState.ADULT)
+		if (GameEnvironment.getInterval() == 0) {
+			if (GameEnvironment.isAgeBoostSteam() && getBodyAgeState() != AgeState.ADULT)
 				addAge(10000);
-			if (Terrarium.isAgeStopSteam() && !bAccelAmple)
+			if (GameEnvironment.isAgeStopSteam() && !bAccelAmple)
 				addAge(-256);
 		}
 
 		if (getBaryState() == BaryInUGState.NONE || getBaryState() == BaryInUGState.HALF) {
-			if (Terrarium.isRapidPregnantSteam())
+			if (GameEnvironment.isRapidPregnantSteam())
 				rapidPregnantPeriod();
 		}
 
@@ -8444,7 +8450,7 @@ public abstract class Body extends BodyAttributes {
 		FootBake foot = getFootBakeLevel();
 		if (curAge.ordinal() < getBodyAgeState().ordinal()) {
 			// 状態変更有かつ成長抑制されている場合は強制的に元に戻す。成長促進アンプルが刺さっていたら成長する
-			if (((Terrarium.isAgeStopSteam()) || (bStopAmple)) && !bAccelAmple) {
+			if (((GameEnvironment.isAgeStopSteam()) || (bStopAmple)) && !bAccelAmple) {
 				setAgeState(curAge);
 				setAge(getAge() + TICK);
 			} else {
@@ -8474,17 +8480,17 @@ public abstract class Body extends BodyAttributes {
 		}
 
 		// 無限もるんもるん
-		if (Terrarium.isEndlessFurifuriSteam()) {
+		if (GameEnvironment.isEndlessFurifuriSteam()) {
 			clearActions();
 			checkMessage();
 			if (canFurifuri()) {
-				setMessage(MessagePool.getMessage(this, MessagePool.Action.FuriFuri), 30);
+				setMessage(GameMessages.getMessage(this, MessagePool.Action.FuriFuri), 30);
 				setFurifuri(true);
 			} else if (isNotNYD()) {
-				setMessage(MessagePool.getMessage(this, MessagePool.Action.CantMove), 30);
+				setMessage(GameMessages.getMessage(this, MessagePool.Action.CantMove), 30);
 				setHappiness(Happiness.VERY_SAD);
 			} else {
-				setNYDMessage(MessagePool.getMessage(this, MessagePool.Action.NonYukkuriDisease), false);
+				setNYDMessage(GameMessages.getMessage(this, MessagePool.Action.NonYukkuriDisease), false);
 			}
 			shit = 0;
 			hungry = getHungryLimit();
@@ -8516,7 +8522,7 @@ public abstract class Body extends BodyAttributes {
 		// check wet
 		checkWet();
 		// 8秒に一回顔を
-		if (SimYukkuri.RND.nextInt(80) == 0) {
+		if (GameRandom.nextInt(80) == 0) {
 			setForceFace(-1);
 			checkAttitude();
 		}
@@ -8605,7 +8611,7 @@ public abstract class Body extends BodyAttributes {
 			}
 			// あんよが傷ついていた場合、一定確率であんよが爆ぜる
 			if (getCriticalDamegeType() == CriticalDamegeType.INJURED && getBreakBodyByShitProb() != 0
-					&& SimYukkuri.RND.nextInt(getBreakBodyByShitProb()) == 0) {
+					&& GameRandom.nextInt(getBreakBodyByShitProb()) == 0) {
 				bodyCut();
 			}
 		}
@@ -8653,7 +8659,7 @@ public abstract class Body extends BodyAttributes {
 		// if there is no destination, walking randomly.
 		if (geteCoreAnkoState() == CoreAnkoState.NonYukkuriDiseaseNear) {
 			// 非ゆっくり症初期の場合はあまり動かない
-			if (SimYukkuri.RND.nextInt(5) == 0) {
+			if (GameRandom.nextInt(5) == 0) {
 				moveBody(true);
 			} else {
 				moveBody(dontMove);
@@ -8795,7 +8801,7 @@ public abstract class Body extends BodyAttributes {
 		getParents()[Parent.PAPA.ordinal()] = papa == null ? -1 : papa.getUniqueID();
 		getParents()[Parent.MAMA.ordinal()] = mama == null ? -1 : mama.getUniqueID();
 		setRemoved(false);
-		if (SimYukkuri.RND.nextBoolean()) {
+		if (GameRandom.nextBoolean()) {
 			setAttitude((papa != null ? papa.getAttitude() : null));
 		} else {
 			setAttitude((mama != null ? mama.getAttitude() : null));
@@ -8803,7 +8809,7 @@ public abstract class Body extends BodyAttributes {
 		if (getAttitude() == null) {
 			setAttitude(getRandomAttitude());
 		}
-		switch (SimYukkuri.RND.nextInt(6)) {
+		switch (GameRandom.nextInt(6)) {
 			case 0:
 			case 1:
 				setIntelligence(Intelligence.FOOL);
@@ -8818,10 +8824,10 @@ public abstract class Body extends BodyAttributes {
 
 		if (papa != null && mama != null) {
 			if (papa.getIntelligence() == Intelligence.FOOL && mama.getIntelligence() == Intelligence.FOOL
-					&& SimYukkuri.RND.nextBoolean()) {
+					&& GameRandom.nextBoolean()) {
 				setIntelligence(Intelligence.FOOL);
 			} else if (papa.getIntelligence() == Intelligence.WISE && mama.getIntelligence() == Intelligence.WISE
-					&& SimYukkuri.RND.nextInt(5) <= 1) {
+					&& GameRandom.nextInt(5) <= 1) {
 				setIntelligence(Intelligence.FOOL);
 			}
 		}
@@ -8850,16 +8856,16 @@ public abstract class Body extends BodyAttributes {
 				setAge(getCHILDLIMITorg());
 				break;
 		}
-		setAge(getAge() + SimYukkuri.RND.nextInt(100));
+		setAge(getAge() + GameRandom.nextInt(100));
 		getBodyAgeState();
 		getMindAgeState();
 		initAmount(initAgeState);
 		wakeUpTime = getAge();
-		shit = SimYukkuri.RND.nextInt(getSHITLIMITorg()[getBodyAgeState().ordinal()] / 2);
+		shit = GameRandom.nextInt(getSHITLIMITorg()[getBodyAgeState().ordinal()] / 2);
 		if (getBodyAgeState() == AgeState.BABY) {
 			if (mama != null) {
 				if (mama.isDamaged()) {
-					damage = SimYukkuri.RND.nextInt(mama.damage) * getDAMAGELIMITorg()[Const.BABY_INDEX]
+					damage = GameRandom.nextInt(mama.damage) * getDAMAGELIMITorg()[Const.BABY_INDEX]
 							/ mama.getDamageLimit();
 					getBodyAgeState();
 					getDamageState();
@@ -8869,7 +8875,7 @@ public abstract class Body extends BodyAttributes {
 				}
 				if (mama.isDead()) {
 					damage += getDAMAGELIMITorg()[Const.BABY_INDEX] / 4 * 3
-							+ SimYukkuri.RND.nextInt(getDAMAGELIMITorg()[Const.BABY_INDEX]);
+							+ GameRandom.nextInt(getDAMAGELIMITorg()[Const.BABY_INDEX]);
 				}
 				setForceBirthMessage(true);
 			}
@@ -8919,8 +8925,8 @@ public abstract class Body extends BodyAttributes {
 					break;
 			}
 		} else {
-			if (SimYukkuri.world.getCurrentMap().getMapIndex() == 5
-					|| SimYukkuri.world.getCurrentMap().getMapIndex() == 6)
+			if (GameWorld.get().getCurrentMap().getMapIndex() == 5
+					|| GameWorld.get().getCurrentMap().getMapIndex() == 6)
 				eBodyRank = BodyRank.YASEIYU;
 		}
 		// 生い立ちを設定
@@ -8956,7 +8962,7 @@ public abstract class Body extends BodyAttributes {
 		if (getAttitude() == null) {
 			setAttitude(getRandomAttitude());
 		}
-		switch (SimYukkuri.RND.nextInt(6)) {
+		switch (GameRandom.nextInt(6)) {
 			case 0:
 			case 1:
 				setIntelligence(Intelligence.FOOL);
@@ -8973,11 +8979,11 @@ public abstract class Body extends BodyAttributes {
 
 		IniFileUtil.readIniFile(this, false); // iniファイル読み込み
 
-		setAge(getAge() + SimYukkuri.RND.nextInt(100));
+		setAge(getAge() + GameRandom.nextInt(100));
 		getBodyAgeState();
 		getMindAgeState();
 		wakeUpTime = getAge();
-		shit = SimYukkuri.RND.nextInt(getSHITLIMITorg()[getBodyAgeState().ordinal()] / 2);
+		shit = GameRandom.nextInt(getSHITLIMITorg()[getBodyAgeState().ordinal()] / 2);
 		dirX = randomDirection(dirX);
 		dirY = randomDirection(dirY);
 		setMessageTextSize(12);
@@ -8994,7 +9000,7 @@ public abstract class Body extends BodyAttributes {
 
 	@Transient
 	private Attitude getRandomAttitude() {
-		switch (SimYukkuri.RND.nextInt(9)) {
+		switch (GameRandom.nextInt(9)) {
 			case 0:
 				return Attitude.VERY_NICE;
 			case 1:
@@ -9045,7 +9051,7 @@ public abstract class Body extends BodyAttributes {
 		if (sickPeriod > 0) {
 			sickPeriod = 0;
 		} else {
-			setMessage(MessagePool.getMessage(this, MessagePool.Action.Moldy));
+			setMessage(GameMessages.getMessage(this, MessagePool.Action.Moldy));
 			forceSetSick();
 		}
 	}

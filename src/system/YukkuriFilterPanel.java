@@ -1,4 +1,5 @@
 package src.system;
+import src.util.GameText;
 
 import java.awt.Color;
 import java.awt.GridBagConstraints;
@@ -63,8 +64,8 @@ public class YukkuriFilterPanel {
 
 	/** 選択アクション */
 	public static enum Action {
-		SELECT_ALL(ResourceUtil.getInstance().read("system_allselect"), ""),
-		DSELECT_ALL(ResourceUtil.getInstance().read("system_allselectoff"), ""),
+		SELECT_ALL(GameText.read("system_allselect"), ""),
+		DSELECT_ALL(GameText.read("system_allselectoff"), ""),
 		;
 
 		private String name;

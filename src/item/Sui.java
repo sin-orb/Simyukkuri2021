@@ -1,4 +1,5 @@
 package src.item;
+import src.util.GameMessages;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
@@ -7,6 +8,8 @@ import java.io.File;
 import java.io.IOException;
 
 import src.SimYukkuri;
+import src.util.GameRandom;
+import src.util.GameWorld;
 import src.base.Body;
 import src.base.Obj;
 import src.base.ObjEX;
@@ -158,10 +161,10 @@ public class Sui extends ObjEX {
 				// すいーの所有者がいないなら所有者になる
 				if (bindobj == null) {
 					bindobj = b;
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.GetSui), true);
+					b.setMessage(GameMessages.getMessage(b, MessagePool.Action.GetSui), true);
 					b.setFavItem(FavItemType.SUI, this);
 				} else {
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.RideSui), true);
+					b.setMessage(GameMessages.getMessage(b, MessagePool.Action.RideSui), true);
 				}
 				break;
 			}
@@ -312,7 +315,7 @@ public class Sui extends ObjEX {
 
 	@Override
 	public void removeListData() {
-		SimYukkuri.world.getCurrentMap().getSui().remove(objId);
+		GameWorld.get().getCurrentMap().getSui().remove(objId);
 	}
 
 	@Override
@@ -363,10 +366,10 @@ public class Sui extends ObjEX {
 						by = y;
 					}
 					if (b.isIdiot()) {
-						bx = SimYukkuri.RND.nextInt(Translate.getMapW());
-						by = SimYukkuri.RND.nextInt(Translate.getMapH() - boundary.getHeight() / 2);
+						bx = GameRandom.nextInt(Translate.getMapW());
+						by = GameRandom.nextInt(Translate.getMapH() - boundary.getHeight() / 2);
 					}
-					if (SimYukkuri.RND.nextInt(100) == 0 && b.getIntelligence() == Intelligence.FOOL) {
+					if (GameRandom.nextInt(100) == 0 && b.getIntelligence() == Intelligence.FOOL) {
 						speed = 1000;
 					}
 					moveTo(bx, by);
@@ -481,7 +484,7 @@ public class Sui extends ObjEX {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		SimYukkuri.world.getCurrentMap().getSui().put(objId, this);
+		GameWorld.get().getCurrentMap().getSui().put(objId, this);
 		objType = Type.OBJECT;
 		objEXType = ObjEXType.SUI;
 

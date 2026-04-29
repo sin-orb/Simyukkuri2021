@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
 import src.SimYukkuri;
+import src.util.GameWorld;
 import src.draw.Point4y;
 import src.draw.Rectangle4y;
 import src.draw.Translate;
@@ -620,7 +621,7 @@ public class Obj implements java.io.Serializable, Comparable {
 	 * @return Obj
 	 */
 	public Obj takeMappedObj(int i) {
-		MapPlaceData m = SimYukkuri.world.getCurrentMap();
+		MapPlaceData m = GameWorld.get().getCurrentMap();
 		if (m.getAutofeeder().containsKey(i)) {
 			return m.getAutofeeder().get(i);
 		}

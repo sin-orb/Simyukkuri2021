@@ -10,6 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -30,6 +31,7 @@ import src.enums.PanicType;
 import src.enums.PublicRank;
 import src.logic.BodyLogic.eActionGo;
 import src.util.WorldTestHelper;
+import src.util.GameRandom;
 import src.event.KillPredeatorEvent;
 import src.event.ProposeEvent;
 import src.event.FuneralEvent;
@@ -53,9 +55,12 @@ class BodyLogicTest {
 
     private Body me;
     private Body you;
+    private Random originalRnd;
 
     @BeforeEach
     void setUp() {
+        originalRnd = SimYukkuri.RND;
+        SimYukkuri.RND = new Random(0);
         WorldTestHelper.initializeMinimalWorld();
         WorldTestHelper.initializeStandardTranslate200();
 
@@ -74,6 +79,8 @@ class BodyLogicTest {
 
     @AfterEach
     void tearDown() {
+        GameRandom.clearOverride();
+        SimYukkuri.RND = originalRnd;
         WorldTestHelper.resetWorld();
     }
 

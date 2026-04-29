@@ -1,4 +1,5 @@
 package src.item;
+import src.util.GameText;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
@@ -24,6 +25,8 @@ import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
 import src.SimYukkuri;
+import src.util.GameRandom;
+import src.util.GameWorld;
 import src.base.Body;
 import src.base.Obj;
 import src.base.ObjEX;
@@ -52,24 +55,24 @@ public class Yunba extends ObjEX {
 
 	/** アクションのテーブル */
 	public static enum Action {
-		CLEAN(ResourceUtil.getInstance().read("command_clean"), ""),
-		HEAL(ResourceUtil.getInstance().read("item_yunbarecovery"), ""),
-		KABI(ResourceUtil.getInstance().read("item_yunbakillmold"), ""),
-		RUDE(ResourceUtil.getInstance().read("item_yunbacorrection"), ""),
-		OKAZARI(ResourceUtil.getInstance().read("item_yunbaaccessory"), ""),
-		DESTROY(ResourceUtil.getInstance().read("item_yunbaindiscriminate"), ""),
-		BODY_REMOVE(ResourceUtil.getInstance().read("item_yunbacleandead"), ""),
-		BODY_OKAZARI(ResourceUtil.getInstance().read("item_yunbaconfiscation"), ""),
-		SHIT(ResourceUtil.getInstance().read("item_yunbacleanunun"), ""),
-		STALK(ResourceUtil.getInstance().read("item_yunbacleanstalk"), ""), // 追加
-		WALLTHROUGH(ResourceUtil.getInstance().read("item_yunbathroughwall"), ""),
-		NORND(ResourceUtil.getInstance().read("item_yunbasaveenergy"), ""),
-		KILL(ResourceUtil.getInstance().read("item_yunbaattackup"), ""),
-		MINEUTI(ResourceUtil.getInstance().read("item_yunbaallowance"), ""),
-		NODAMAGE_FALL(ResourceUtil.getInstance().read("item_yunbanofalldamage"), ""),
-		EMPFOOD(ResourceUtil.getInstance().read("item_yunbadish"), ""),
-		ANTIRAPER(ResourceUtil.getInstance().read("item_yunbakillraper"), ""),
-		WITHOUT_AND(ResourceUtil.getInstance().read("item_yunbacondition"), ""),
+		CLEAN(GameText.read("command_clean"), ""),
+		HEAL(GameText.read("item_yunbarecovery"), ""),
+		KABI(GameText.read("item_yunbakillmold"), ""),
+		RUDE(GameText.read("item_yunbacorrection"), ""),
+		OKAZARI(GameText.read("item_yunbaaccessory"), ""),
+		DESTROY(GameText.read("item_yunbaindiscriminate"), ""),
+		BODY_REMOVE(GameText.read("item_yunbacleandead"), ""),
+		BODY_OKAZARI(GameText.read("item_yunbaconfiscation"), ""),
+		SHIT(GameText.read("item_yunbacleanunun"), ""),
+		STALK(GameText.read("item_yunbacleanstalk"), ""), // 追加
+		WALLTHROUGH(GameText.read("item_yunbathroughwall"), ""),
+		NORND(GameText.read("item_yunbasaveenergy"), ""),
+		KILL(GameText.read("item_yunbaattackup"), ""),
+		MINEUTI(GameText.read("item_yunbaallowance"), ""),
+		NODAMAGE_FALL(GameText.read("item_yunbanofalldamage"), ""),
+		EMPFOOD(GameText.read("item_yunbadish"), ""),
+		ANTIRAPER(GameText.read("item_yunbakillraper"), ""),
+		WITHOUT_AND(GameText.read("item_yunbacondition"), ""),
 		;
 
 		private String name;
@@ -85,15 +88,15 @@ public class Yunba extends ObjEX {
 
 	/** 色のテーブル */
 	private static final String[] COL_LIST = {
-			ResourceUtil.getInstance().read("yellow"),
-			ResourceUtil.getInstance().read("white"),
-			ResourceUtil.getInstance().read("red"),
-			ResourceUtil.getInstance().read("pink"),
-			ResourceUtil.getInstance().read("purple"),
-			ResourceUtil.getInstance().read("green"),
-			ResourceUtil.getInstance().read("gray"),
-			ResourceUtil.getInstance().read("blue"),
-			ResourceUtil.getInstance().read("black"),
+			GameText.read("yellow"),
+			GameText.read("white"),
+			GameText.read("red"),
+			GameText.read("pink"),
+			GameText.read("purple"),
+			GameText.read("green"),
+			GameText.read("gray"),
+			GameText.read("blue"),
+			GameText.read("black"),
 	};
 
 	public static final int hitCheckObjType = 0;
@@ -234,7 +237,7 @@ public class Yunba extends ObjEX {
 
 	@Override
 	public void removeListData() {
-		SimYukkuri.world.getCurrentMap().getYunba().remove(objId);
+		GameWorld.get().getCurrentMap().getYunba().remove(objId);
 	}
 
 	@Override
@@ -263,13 +266,13 @@ public class Yunba extends ObjEX {
 		}
 
 		if (action == null && (getAge() > 10 || norndCheck)) { // 追加
-			MapPlaceData curMap = SimYukkuri.world.getCurrentMap();
+			MapPlaceData curMap = GameWorld.get().getCurrentMap();
 			setAge(0);
 
 			if (shitCheck) {
 				for (Map.Entry<Integer, Shit> entry : curMap.getShit().entrySet()) {
 					Shit o = entry.getValue();
-					if (SimYukkuri.RND.nextBoolean())
+					if (GameRandom.nextBoolean())
 						continue;
 					// 追加
 					if (!actionFlags[Action.WALLTHROUGH.ordinal()][0]
@@ -284,7 +287,7 @@ public class Yunba extends ObjEX {
 
 					boolean bIsShitOnToilet = false;
 					// トイレの上のうんうんは無視。空中もチェック
-					List<Toilet> toiletList = new LinkedList<>(SimYukkuri.world.getCurrentMap().getToilet().values());
+					List<Toilet> toiletList = new LinkedList<>(GameWorld.get().getCurrentMap().getToilet().values());
 					for (Toilet t : toiletList) {
 						// Hitするなら終了
 						if (t.checkHitObj(o, true)) {
@@ -309,7 +312,7 @@ public class Yunba extends ObjEX {
 				}
 				for (Map.Entry<Integer, Vomit> entry : curMap.getVomit().entrySet()) {
 					Vomit o = entry.getValue();
-					if (SimYukkuri.RND.nextBoolean())
+					if (GameRandom.nextBoolean())
 						continue;
 					// 追加
 					if (!actionFlags[Action.WALLTHROUGH.ordinal()][0]
@@ -337,10 +340,10 @@ public class Yunba extends ObjEX {
 				if (curMap.getStalk() != null) {
 					for (Map.Entry<Integer, Stalk> entry : curMap.getStalk().entrySet()) {
 						Stalk s = entry.getValue();
-						if (norndCheck == false && SimYukkuri.RND.nextBoolean())
+						if (norndCheck == false && GameRandom.nextBoolean())
 							continue;
 						int id = s.getPlantYukkuri();
-						if (SimYukkuri.world.getCurrentMap().getBody().get(id) != null)
+						if (GameWorld.get().getCurrentMap().getBody().get(id) != null)
 							continue;
 						if (!actionFlags[Action.WALLTHROUGH.ordinal()][0]
 								&& Barrier.acrossBarrier(getX(), getY(), s.getX(), s.getY(), Barrier.MAP_ITEM)) {
@@ -368,7 +371,7 @@ public class Yunba extends ObjEX {
 						Food f = entry.getValue();
 						if (f.getFoodType() != Food.FoodType.STALK)
 							continue;
-						if (SimYukkuri.RND.nextBoolean())
+						if (GameRandom.nextBoolean())
 							continue;
 						if (!actionFlags[Action.WALLTHROUGH.ordinal()][0]
 								&& Barrier.acrossBarrier(getX(), getY(), f.getX(), f.getY(), Barrier.MAP_ITEM)) {
@@ -392,9 +395,9 @@ public class Yunba extends ObjEX {
 			}
 
 			if (bodyCheck && action == null) {
-				for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().getBody().entrySet()) {
+				for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
 					Body b = entry.getValue();
-					if (norndCheck == false && SimYukkuri.RND.nextBoolean())
+					if (norndCheck == false && GameRandom.nextBoolean())
 						continue;
 					// 茎にぶら下がってる固体はスルー
 					if (b.isbindStalk() || b.getZ() > 0)
@@ -549,7 +552,7 @@ public class Yunba extends ObjEX {
 							action = Action.OKAZARI;
 							target = b;
 							break;
-						} else if (SimYukkuri.RND.nextBoolean()
+						} else if (GameRandom.nextBoolean()
 								&& actionFlags[Action.DESTROY.ordinal()][b.getBodyAgeState().ordinal()]) {
 
 							// 他のゆんばのターゲットならスキップ
@@ -581,7 +584,7 @@ public class Yunba extends ObjEX {
 			if (foodCheck && action == null) {
 				for (Map.Entry<Integer, Food> entry : curMap.getFood().entrySet()) {
 					Food f = entry.getValue();
-					if (SimYukkuri.RND.nextBoolean())
+					if (GameRandom.nextBoolean())
 						continue;
 					if (!f.isEmpty())
 						continue;
@@ -608,8 +611,8 @@ public class Yunba extends ObjEX {
 			if (action == null) {
 				if (destX == -1 && destY == -1) {
 					moveTo(defaultX, defaultY);
-					// moveTo(SimYukkuri.RND.nextInt(Translate.getMapW()),
-					// SimYukkuri.RND.nextInt(Translate.getMapH()));
+					// moveTo(GameRandom.nextInt(Translate.getMapW()),
+					// GameRandom.nextInt(Translate.getMapH()));
 					speed = 400;
 				}
 			} else {
@@ -831,7 +834,7 @@ public class Yunba extends ObjEX {
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
 
-		SimYukkuri.world.getCurrentMap().getYunba().put(objId, this);
+		GameWorld.get().getCurrentMap().getYunba().put(objId, this);
 		objType = Type.OBJECT;
 		objEXType = ObjEXType.YUNBA;
 		interval = 5;
@@ -844,17 +847,17 @@ public class Yunba extends ObjEX {
 
 		boolean ret = setupYunba(this, false);
 		if (ret) {
-			moveTo(SimYukkuri.RND.nextInt(Translate.getMapW()), SimYukkuri.RND.nextInt(Translate.getMapH()));
+			moveTo(GameRandom.nextInt(Translate.getMapW()), GameRandom.nextInt(Translate.getMapH()));
 			itemRank = ItemRank.values()[initOption];
 			// 森なら野生に変更
-			if (SimYukkuri.world.getCurrentMap().getMapIndex() == 5
-					|| SimYukkuri.world.getCurrentMap().getMapIndex() == 6) {
+			if (GameWorld.get().getCurrentMap().getMapIndex() == 5
+					|| GameWorld.get().getCurrentMap().getMapIndex() == 6) {
 				if (itemRank == ItemRank.HOUSE) {
 					itemRank = ItemRank.YASEI;
 				}
 			}
 		} else {
-			SimYukkuri.world.getCurrentMap().getYunba().remove(objId);
+			GameWorld.get().getCurrentMap().getYunba().remove(objId);
 		}
 	}
 
@@ -884,11 +887,11 @@ public class Yunba extends ObjEX {
 
 		JLabel l1 = new JLabel("");
 		westPanel.add(l1);
-		JLabel l2 = new JLabel(ResourceUtil.getInstance().read("enums_babyyu"));
+		JLabel l2 = new JLabel(GameText.read("enums_babyyu"));
 		centerPanel.add(l2);
-		JLabel l3 = new JLabel(ResourceUtil.getInstance().read("enums_childyu"));
+		JLabel l3 = new JLabel(GameText.read("enums_childyu"));
 		centerPanel.add(l3);
-		JLabel l4 = new JLabel(ResourceUtil.getInstance().read("enums_adultyu"));
+		JLabel l4 = new JLabel(GameText.read("enums_adultyu"));
 		centerPanel.add(l4);
 
 		ButtonListener buttonListener = new ButtonListener();
@@ -919,18 +922,18 @@ public class Yunba extends ObjEX {
 
 		JLabel lw2_1 = new JLabel("");
 		westPanel2.add(lw2_1);
-		JLabel lw2_2 = new JLabel(ResourceUtil.getInstance().read("item_noprocesstarget"));
+		JLabel lw2_2 = new JLabel(GameText.read("item_noprocesstarget"));
 		westPanel2.add(lw2_2);
 
-		JLabel lc2_1 = new JLabel(ResourceUtil.getInstance().read("attitude_verynice"));
+		JLabel lc2_1 = new JLabel(GameText.read("attitude_verynice"));
 		centerPanel2.add(lc2_1);
-		JLabel lc2_2 = new JLabel(ResourceUtil.getInstance().read("attitude_nice"));
+		JLabel lc2_2 = new JLabel(GameText.read("attitude_nice"));
 		centerPanel2.add(lc2_2);
-		JLabel lc2_3 = new JLabel(ResourceUtil.getInstance().read("attitude_normal"));
+		JLabel lc2_3 = new JLabel(GameText.read("attitude_normal"));
 		centerPanel2.add(lc2_3);
-		JLabel lc2_4 = new JLabel(ResourceUtil.getInstance().read("attitude_shithead"));
+		JLabel lc2_4 = new JLabel(GameText.read("attitude_shithead"));
 		centerPanel2.add(lc2_4);
-		JLabel lc2_5 = new JLabel(ResourceUtil.getInstance().read("attitude_supershithead"));
+		JLabel lc2_5 = new JLabel(GameText.read("attitude_supershithead"));
 		centerPanel2.add(lc2_5);
 		for (int i = 0; i < 1; i++) {
 			for (int j = 0; j < 5; j++) {
@@ -953,14 +956,14 @@ public class Yunba extends ObjEX {
 
 		JLabel lw3_1 = new JLabel("");
 		westPanel3.add(lw3_1);
-		JLabel lw3_2 = new JLabel(ResourceUtil.getInstance().read("item_noprocesstarget"));
+		JLabel lw3_2 = new JLabel(GameText.read("item_noprocesstarget"));
 		westPanel3.add(lw3_2);
 
-		JLabel lc3_1 = new JLabel(ResourceUtil.getInstance().read("intel_badge"));
+		JLabel lc3_1 = new JLabel(GameText.read("intel_badge"));
 		centerPanel3.add(lc3_1);
-		JLabel lc3_2 = new JLabel(ResourceUtil.getInstance().read("intel_normal"));
+		JLabel lc3_2 = new JLabel(GameText.read("intel_normal"));
 		centerPanel3.add(lc3_2);
-		JLabel lc3_3 = new JLabel(ResourceUtil.getInstance().read("intel_fool"));
+		JLabel lc3_3 = new JLabel(GameText.read("intel_fool"));
 		centerPanel3.add(lc3_3);
 
 		for (int i = 0; i < 1; i++) {
@@ -1029,7 +1032,7 @@ public class Yunba extends ObjEX {
 		mainPanel.add(BorderLayout.SOUTH, southPanel);
 
 		int dlgRet = JOptionPane.showConfirmDialog(SimYukkuri.mypane, mainPanel,
-				ResourceUtil.getInstance().read("item_yunbasettings"), JOptionPane.OK_CANCEL_OPTION,
+				GameText.read("item_yunbasettings"), JOptionPane.OK_CANCEL_OPTION,
 				JOptionPane.PLAIN_MESSAGE);
 
 		if (dlgRet == JOptionPane.OK_OPTION) {
@@ -1194,7 +1197,7 @@ public class Yunba extends ObjEX {
 
 	// 他のゆんばのターゲットになっているか
 	public boolean cheackOtherYunbaTarget(Obj o) {
-		for (Map.Entry<Integer, Yunba> entry : SimYukkuri.world.getCurrentMap().getYunba().entrySet()) {
+		for (Map.Entry<Integer, Yunba> entry : GameWorld.get().getCurrentMap().getYunba().entrySet()) {
 			Yunba yunba = entry.getValue();
 			if (yunba == this) {
 				continue;

@@ -1,4 +1,6 @@
 package src.game;
+import src.util.GameImages;
+import src.util.GameText;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
@@ -11,6 +13,7 @@ import java.util.UUID;
 import javax.imageio.ImageIO;
 
 import src.SimYukkuri;
+import src.util.GameWorld;
 import src.base.Body;
 import src.base.Obj;
 import src.base.ObjEX;
@@ -73,7 +76,7 @@ public class Stalk extends ObjEX {
 					.read(loader.getResourceAsStream(path + "stalk" + String.format("%03d", i + 1) + ".png"));
 			images[i * 2 + 1] = ModLoader.flipImage(images[i * 2]);
 		}
-		images[images_num * 2] = ImageIO.read(loader.getResourceAsStream(path + "stalk_shadow.png"));
+		images[images_num * 2] = GameImages.read(loader.getResourceAsStream(path + "stalk_shadow.png"));
 		boundary.setWidth(images[0].getWidth(io));
 		boundary.setHeight(images[0].getHeight(io));
 		boundary.setX(boundary.getWidth() >> 1);
@@ -153,7 +156,7 @@ public class Stalk extends ObjEX {
 	@Override
 	public void removeListData() {
 		remove();
-		SimYukkuri.world.getCurrentMap().getStalk().remove(objId);
+		GameWorld.get().getCurrentMap().getStalk().remove(objId);
 	}
 
 	/**
@@ -322,7 +325,7 @@ public class Stalk extends ObjEX {
 				}
 			}
 			remove();
-			SimYukkuri.world.getCurrentMap().getStalk().remove(objId);
+			GameWorld.get().getCurrentMap().getStalk().remove(objId);
 		}
 	}
 
@@ -341,7 +344,7 @@ public class Stalk extends ObjEX {
 	 * @return 生えているゆっくり
 	 */
 	public Body takePlantYukkuri() {
-		return SimYukkuri.world.getCurrentMap().getBody().get(plantYukkuri);
+		return GameWorld.get().getCurrentMap().getBody().get(plantYukkuri);
 	}
 
 	@Override
@@ -410,7 +413,7 @@ public class Stalk extends ObjEX {
 		objType = Type.OBJECT;
 		objEXType = ObjEXType.STALK;
 		amount = 100 * 24 * 5;
-		SimYukkuri.world.getCurrentMap().getStalk().put(objId, this);
+		GameWorld.get().getCurrentMap().getStalk().put(objId, this);
 		calcPos();
 	}
 
@@ -419,7 +422,7 @@ public class Stalk extends ObjEX {
 		objType = Type.OBJECT;
 		objEXType = ObjEXType.STALK;
 		amount = 100 * 24 * 5;
-		SimYukkuri.world.getCurrentMap().getStalk().put(objId, this);
+		GameWorld.get().getCurrentMap().getStalk().put(objId, this);
 		calcPos();
 	}
 
@@ -448,7 +451,7 @@ public class Stalk extends ObjEX {
 			}
 		}
 		bindBabies.clear();
-		// SimYukkuri.world.getCurrentMap().getStalk().remove(this);
+		// GameWorld.get().getCurrentMap().getStalk().remove(this);
 		super.remove();
 	}
 
@@ -456,16 +459,16 @@ public class Stalk extends ObjEX {
 	// public String toString() {
 	// Body p = YukkuriUtil.getBodyInstance(plantYukkuri);
 	// String ret = "";
-	// ret += ResourceUtil.getInstance().read("game_stalk1");
+	// ret += GameText.read("game_stalk1");
 	// if (p != null) {
 	// ret += (plantYukkuri == -1 ?
-	// ResourceUtil.getInstance().read("command_status_nothing") :
+	// GameText.read("command_status_nothing") :
 	// ResourceUtil.IS_JP ?
 	// p.getNameJ() : p.getNameE());
 	// }
-	// ret += ResourceUtil.getInstance().read("game_stalk2");
+	// ret += GameText.read("game_stalk2");
 	// if (bindBabies == null || bindBabies.size() == 0) {
-	// ret += ResourceUtil.getInstance().read("command_status_nothing");
+	// ret += GameText.read("command_status_nothing");
 	// } else {
 	// for (Object o : bindBabies) {
 	// if (o == null) {
@@ -474,7 +477,7 @@ public class Stalk extends ObjEX {
 	// Integer b = (Integer)o;
 	// Body baby = YukkuriUtil.getBodyInstance(b);
 	// if (baby == null) {
-	// ret += ResourceUtil.getInstance().read("game_empty");
+	// ret += GameText.read("game_empty");
 	// } else {
 	// ret += ResourceUtil.IS_JP ? baby.getNameJ() : baby.getNameE();
 	// }

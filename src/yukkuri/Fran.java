@@ -1,4 +1,5 @@
 package src.yukkuri;
+import src.util.GameMessages;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
@@ -8,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import src.SimYukkuri;
+import src.util.GameRandom;
 import src.base.Body;
 import src.draw.Dimension4y;
 import src.draw.ModLoader;
@@ -170,7 +172,7 @@ public class Fran extends Body {
 			return;
 		if (getPlaying() != null)
 			return;
-		int p = SimYukkuri.RND.nextInt(50);
+		int p = GameRandom.nextInt(50);
 		// 8/50でキリッ
 		if (p <= 7) {
 			getInVain(true);
@@ -178,7 +180,7 @@ public class Fran extends Body {
 		// 8/50でのびのび
 		else if (p <= 15) {
 			// if yukkuri is not rude, she goes into her shell by discipline.
-			setMessage(MessagePool.getMessage(this, MessagePool.Action.Nobinobi), 40);
+			setMessage(GameMessages.getMessage(this, MessagePool.Action.Nobinobi), 40);
 			setNobinobi(true);
 			addStress(-30);
 			stay(40);
@@ -186,7 +188,7 @@ public class Fran extends Body {
 		// 8/50でふりふり
 		else if (p <= 23 && willingFurifuri()) {
 			// if yukkuri is rude, she will not do furifuri by discipline.
-			setMessage(MessagePool.getMessage(this, MessagePool.Action.FuriFuri), 30);
+			setMessage(GameMessages.getMessage(this, MessagePool.Action.FuriFuri), 30);
 			setFurifuri(true);
 			addStress(-50);
 			stay(30);
@@ -194,20 +196,20 @@ public class Fran extends Body {
 		// 8/50で腹減った
 		else if ((p <= 31 && isHungry()) || isSoHungry()) {
 			// 空腹時
-			setMessage(MessagePool.getMessage(this, MessagePool.Action.Hungry), 30);
+			setMessage(GameMessages.getMessage(this, MessagePool.Action.Hungry), 30);
 			stay(30);
 		}
 		// 5/50でおもちゃで遊ぶ
 		else if (p <= 36) {
 			EventLogic.addWorldEvent(new PredatorsGameEvent(this, null, null, 1), this,
-					MessagePool.getMessage(this, MessagePool.Action.GameStart));
+					GameMessages.getMessage(this, MessagePool.Action.GameStart));
 			return;
 		}
 		// 3/50でトランポリンで遊ぶ
 		else if (p <= 39) {
 			if (ToyLogic.checkTrampoline(this)) {
 				setPlaying(PlayStyle.TRAMPOLINE);
-				playingLimit = 150 + SimYukkuri.RND.nextInt(100) - 49;
+				playingLimit = 150 + GameRandom.nextInt(100) - 49;
 				return;
 			} else
 				killTime();
@@ -216,16 +218,16 @@ public class Fran extends Body {
 		else if (p <= 41) {
 			if (ToyLogic.checkSui(this)) {
 				setPlaying(PlayStyle.SUI);
-				playingLimit = 150 + SimYukkuri.RND.nextInt(100) - 49;
+				playingLimit = 150 + GameRandom.nextInt(100) - 49;
 				return;
 			} else
 				killTime();
 		} else {
 			// おくるみありで汚れていない場合
-			if (isHasPants() && !isDirty() && SimYukkuri.RND.nextInt(10) == 0) {
-				setMessage(MessagePool.getMessage(this, MessagePool.Action.RelaxOkurumi));
+			if (isHasPants() && !isDirty() && GameRandom.nextInt(10) == 0) {
+				setMessage(GameMessages.getMessage(this, MessagePool.Action.RelaxOkurumi));
 			} else {
-				setMessage(MessagePool.getMessage(this, MessagePool.Action.Relax));
+				setMessage(GameMessages.getMessage(this, MessagePool.Action.Relax));
 			}
 			addStress(-50);
 			stay(30);
@@ -275,9 +277,9 @@ public class Fran extends Body {
 		PREGPERIODorg *= factor;
 		SLEEPPERIODorg *= factor;
 		ACTIVEPERIODorg *= factor;
-		sameDest = SimYukkuri.RND.nextInt(20) + 20;
+		sameDest = GameRandom.nextInt(20) + 20;
 		DECLINEPERIODorg *= (Math.random() + 0.5);
-		ROBUSTNESS = SimYukkuri.RND.nextInt(15) + 1;
+		ROBUSTNESS = GameRandom.nextInt(15) + 1;
 		// EYESIGHT /= 4;
 		factor = Math.random() + 0.5;
 		STRENGTHorg[AgeState.ADULT.ordinal()] *= factor;

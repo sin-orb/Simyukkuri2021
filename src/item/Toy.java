@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 
 import src.SimYukkuri;
+import src.util.GameWorld;
 import src.base.Body;
 import src.base.ObjEX;
 import src.draw.ModLoader;
@@ -67,7 +68,7 @@ public class Toy extends ObjEX {
 
 	@Override
 	public void removeListData() {
-		SimYukkuri.world.getCurrentMap().getToy().remove(objId);
+		GameWorld.get().getCurrentMap().getToy().remove(objId);
 	}
 
 	@Override
@@ -121,7 +122,7 @@ public class Toy extends ObjEX {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		SimYukkuri.world.getCurrentMap().getToy().put(objId, this);
+		GameWorld.get().getCurrentMap().getToy().put(objId, this);
 		objType = Type.OBJECT;
 		objEXType = ObjEXType.TOY;
 

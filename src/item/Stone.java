@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 
 import src.SimYukkuri;
+import src.util.GameWorld;
 import src.base.Body;
 import src.base.Obj;
 import src.base.ObjEX;
@@ -88,7 +89,7 @@ public class Stone extends ObjEX {
 
 	@Override
 	public void removeListData() {
-		SimYukkuri.world.getCurrentMap().getStone().remove(objId);
+		GameWorld.get().getCurrentMap().getStone().remove(objId);
 	}
 
 	@Override
@@ -112,17 +113,17 @@ public class Stone extends ObjEX {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		SimYukkuri.world.getCurrentMap().getStone().put(objId, this);
+		GameWorld.get().getCurrentMap().getStone().put(objId, this);
 		objType = Type.OBJECT;
 		objEXType = ObjEXType.STONE;
 		interval = 5;
 		itemRank = ItemRank.values()[initOption];
-		if (SimYukkuri.world.getCurrentMap().getMapIndex() == 2 || SimYukkuri.world.getCurrentMap().getMapIndex() == 3
-				|| SimYukkuri.world.getCurrentMap().getMapIndex() == 4) {
+		if (GameWorld.get().getCurrentMap().getMapIndex() == 2 || GameWorld.get().getCurrentMap().getMapIndex() == 3
+				|| GameWorld.get().getCurrentMap().getMapIndex() == 4) {
 			itemRank = ItemRank.NORA;
 		}
-		if (SimYukkuri.world.getCurrentMap().getMapIndex() == 5
-				|| SimYukkuri.world.getCurrentMap().getMapIndex() == 6) {
+		if (GameWorld.get().getCurrentMap().getMapIndex() == 5
+				|| GameWorld.get().getCurrentMap().getMapIndex() == 6) {
 			itemRank = ItemRank.YASEI;
 		}
 		if (itemRank == ItemRank.HOUSE) {

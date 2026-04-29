@@ -1,4 +1,5 @@
 package src.item;
+import src.util.GameText;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -15,6 +16,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 import src.SimYukkuri;
+import src.util.GameWorld;
 import src.base.Obj;
 import src.base.ObjEX;
 import src.draw.ModLoader;
@@ -33,9 +35,9 @@ public class Toilet extends ObjEX {
 
 	/** トイレのタイプ */
 	public static enum ToiletType {
-		NORMAL(ResourceUtil.getInstance().read("item_toiletcheap")),
-		CLEAN(ResourceUtil.getInstance().read("item_toiletautoclean")),
-		SLAVE(ResourceUtil.getInstance().read("item_toiletununsalve")),
+		NORMAL(GameText.read("item_toiletcheap")),
+		CLEAN(GameText.read("item_toiletautoclean")),
+		SLAVE(GameText.read("item_toiletununsalve")),
 		;
 
 		private String name;
@@ -155,7 +157,7 @@ public class Toilet extends ObjEX {
 
 	@Override
 	public void removeListData() {
-		SimYukkuri.world.getCurrentMap().getToilet().remove(objId);
+		GameWorld.get().getCurrentMap().getToilet().remove(objId);
 	}
 
 	/**
@@ -188,7 +190,7 @@ public class Toilet extends ObjEX {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		SimYukkuri.world.getCurrentMap().getToilet().put(objId, this);
+		GameWorld.get().getCurrentMap().getToilet().put(objId, this);
 		objType = Type.PLATFORM;
 		objEXType = ObjEXType.TOILET;
 		interval = 30;
@@ -197,8 +199,8 @@ public class Toilet extends ObjEX {
 		if (ret) {
 			itemRank = ItemRank.values()[initOption];
 			// 森なら野生に変更
-			if (SimYukkuri.world.getCurrentMap().getMapIndex() == 5
-					|| SimYukkuri.world.getCurrentMap().getMapIndex() == 6) {
+			if (GameWorld.get().getCurrentMap().getMapIndex() == 5
+					|| GameWorld.get().getCurrentMap().getMapIndex() == 6) {
 				if (itemRank == ItemRank.HOUSE) {
 					itemRank = ItemRank.YASEI;
 				}
@@ -217,7 +219,7 @@ public class Toilet extends ObjEX {
 				cost = 0;
 			}
 		} else {
-			SimYukkuri.world.getCurrentMap().getToilet().remove(objId);
+			GameWorld.get().getCurrentMap().getToilet().remove(objId);
 		}
 	}
 

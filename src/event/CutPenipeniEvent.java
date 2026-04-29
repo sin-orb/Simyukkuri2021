@@ -1,6 +1,9 @@
 package src.event;
+import src.util.GameMessages;
+import src.util.GameText;
 
 import src.SimYukkuri;
+import src.util.GameRandom;
 import src.base.Body;
 import src.base.EventPacket;
 import src.base.Obj;
@@ -76,7 +79,7 @@ public class CutPenipeniEvent extends EventPacket {
 			b.setForceFace(ImageCode.CUTPENIPENI.ordinal());
 			b.setHappiness(Happiness.VERY_SAD);
 			b.setCanTalk(true);
-			b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.Scream2), 50, true, true);
+			b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.Scream2), 50, true, true);
 			b.setCanTalk(false);
 			return UpdateState.FORCE_EXEC;
 		}
@@ -100,15 +103,15 @@ public class CutPenipeniEvent extends EventPacket {
 			b.setLockmove(false);
 			if (b.isNotNYD()) {
 				b.setForceFace(ImageCode.SURPRISE.ordinal());
-				if (SimYukkuri.RND.nextInt(2) == 0)
-					b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.Scream2), 30, true, false);
+				if (GameRandom.nextInt(2) == 0)
+					b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.Scream2), 30, true, false);
 				else
-					b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.Surprise), 30, true, false);
+					b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.Surprise), 30, true, false);
 			}
 		} else if (tick == 40) {
 			// 反応する
 			if (b.isNotNYD()) {
-				b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.PenipeniCutting), 50, true, true);
+				b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.PenipeniCutting), 50, true, true);
 				b.setHappiness(Happiness.VERY_SAD);
 				b.setForceFace(ImageCode.CRYING.ordinal());
 				b.stay(30);
@@ -135,7 +138,7 @@ public class CutPenipeniEvent extends EventPacket {
 					break;
 			}
 		} else if (tick == 70) {
-			if (SimYukkuri.RND.nextBoolean())
+			if (GameRandom.nextBoolean())
 				b.doYunnyaa(true);
 			return UpdateState.FORCE_EXEC;
 		}
@@ -161,6 +164,6 @@ public class CutPenipeniEvent extends EventPacket {
 
 	@Override
 	public String toString() {
-		return ResourceUtil.getInstance().read("event_cutpeni");
+		return GameText.read("event_cutpeni");
 	}
 }

@@ -31,6 +31,8 @@ import javax.crypto.spec.SecretKeySpec;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import src.SimYukkuri;
+import src.util.GameRandom;
+import src.util.GameWorld;
 import src.attachment.Fire;
 import src.base.Body;
 import src.base.Effect;
@@ -263,13 +265,13 @@ public class Terrarium implements Serializable {
 	 */
 	public static void saveState(File file) throws IOException {
 		ObjectMapper mapper = new ObjectMapper();
-		SimYukkuri.world.setMaxUniqueId(Numbering.INSTANCE.getYukkuriID());
-		SimYukkuri.world.setMaxObjId(Numbering.INSTANCE.getObjId());
-		Enumeration<Obj> enu = SimYukkuri.world.getPlayer().getItemList().elements();
+		GameWorld.get().setMaxUniqueId(Numbering.INSTANCE.getYukkuriID());
+		GameWorld.get().setMaxObjId(Numbering.INSTANCE.getObjId());
+		Enumeration<Obj> enu = GameWorld.get().getPlayer().getItemList().elements();
 		while (enu.hasMoreElements()) {
-			SimYukkuri.world.getPlayer().getItemForSave().add(enu.nextElement());
+			GameWorld.get().getPlayer().getItemForSave().add(enu.nextElement());
 		}
-		String json = mapper.writeValueAsString(SimYukkuri.world);
+		String json = mapper.writeValueAsString(GameWorld.get());
 		byte[] gzBytes = compressStringToGzipBytes(json);
 		byte[] encrypted = encryptSaveBytes(gzBytes);
 		Files.write(file.toPath(), encrypted);
@@ -309,33 +311,33 @@ public class Terrarium implements Serializable {
 
 		// ウィンドウサイズを復元
 		tmpWorld.recalcMapSize();
-		SimYukkuri.world = tmpWorld;
+		GameWorld.set(tmpWorld);
 
 		if (SimYukkuri.simYukkuri != null) {
-			if (SimYukkuri.world.getWindowType() != 2) {
-				SimYukkuri.simYukkuri.setWindowMode(SimYukkuri.world.getWindowType(),
-						SimYukkuri.world.getTerrariumSizeIndex());
+			if (GameWorld.get().getWindowType() != 2) {
+				SimYukkuri.simYukkuri.setWindowMode(GameWorld.get().getWindowType(),
+						GameWorld.get().getTerrariumSizeIndex());
 			} else {
-				SimYukkuri.simYukkuri.setFullScreenMode(SimYukkuri.world.getTerrariumSizeIndex());
+				SimYukkuri.simYukkuri.setFullScreenMode(GameWorld.get().getTerrariumSizeIndex());
 			}
 		}
 
 		// マップの復元
-		SimYukkuri.world.setNextMap(SimYukkuri.world.getCurrentMap().getMapIndex());
+		GameWorld.get().setNextMap(GameWorld.get().getCurrentMap().getMapIndex());
 		if (SimYukkuri.mypane != null) {
 			SimYukkuri.mypane.loadTerrainFile();
 		}
-		SimYukkuri.world.changeMap();
+		GameWorld.get().changeMap();
 		if (SimYukkuri.mypane != null) {
 			SimYukkuri.mypane.createBackBuffer();
 		}
 		Translate.createTransTable(TerrainField.isPers());
 
 		// 遅延読み込みの復元
-		SimYukkuri.world.loadInterBodyImage();
+		GameWorld.get().loadInterBodyImage();
 
 		// 茎と実ゆの参照を復元
-		for (MapPlaceData mpd : SimYukkuri.world.getMapList()) {
+		for (MapPlaceData mpd : GameWorld.get().getMapList()) {
 			for (Stalk s : mpd.getStalk().values()) {
 				Body b = YukkuriUtil.getBodyInstance(s.getPlantYukkuri());
 				if (b != null) {
@@ -366,7 +368,7 @@ public class Terrarium implements Serializable {
 		}
 
 		// すぃーと乗客の参照を復元
-		for (MapPlaceData mpd : SimYukkuri.world.getMapList()) {
+		for (MapPlaceData mpd : GameWorld.get().getMapList()) {
 			for (Sui sui : mpd.getSui().values()) {
 				Body[] previousBindBodies = sui.getBindBody();
 				Body[] restoredBindBodies = new Body[previousBindBodies == null ? 3 : previousBindBodies.length];
@@ -399,7 +401,7 @@ public class Terrarium implements Serializable {
 		}
 
 		// 自動えさやり機の生成物参照を復元
-		for (MapPlaceData mpd : SimYukkuri.world.getMapList()) {
+		for (MapPlaceData mpd : GameWorld.get().getMapList()) {
 			for (AutoFeeder feeder : mpd.getAutofeeder().values()) {
 				Obj food = feeder.getFood();
 				if (food == null) {
@@ -423,7 +425,7 @@ public class Terrarium implements Serializable {
 		}
 
 		// ホットプレートの拘束中個体と煙参照を復元
-		for (MapPlaceData mpd : SimYukkuri.world.getMapList()) {
+		for (MapPlaceData mpd : GameWorld.get().getMapList()) {
 			for (HotPlate hotPlate : mpd.getHotPlate().values()) {
 				Body bindBody = hotPlate.getBindBody();
 				if (bindBody != null) {
@@ -446,7 +448,7 @@ public class Terrarium implements Serializable {
 		}
 
 		// 粘着板の拘束中個体を復元
-		for (MapPlaceData mpd : SimYukkuri.world.getMapList()) {
+		for (MapPlaceData mpd : GameWorld.get().getMapList()) {
 			for (StickyPlate stickyPlate : mpd.getStickyPlate().values()) {
 				Body bindBody = stickyPlate.getBindBody();
 				if (bindBody != null) {
@@ -460,7 +462,7 @@ public class Terrarium implements Serializable {
 		}
 
 		// ミキサーの攪拌中個体とエフェクトを復元
-		for (MapPlaceData mpd : SimYukkuri.world.getMapList()) {
+		for (MapPlaceData mpd : GameWorld.get().getMapList()) {
 			for (Mixer mixer : mpd.getMixer().values()) {
 				Effect mix = mixer.getMix();
 				if (mix != null) {
@@ -474,7 +476,7 @@ public class Terrarium implements Serializable {
 		}
 
 		// ダストシュートの拘束中オブジェクト参照を復元
-		for (MapPlaceData mpd : SimYukkuri.world.getMapList()) {
+		for (MapPlaceData mpd : GameWorld.get().getMapList()) {
 			for (GarbageChute garbageChute : mpd.getGarbagechute().values()) {
 				List<Obj> restoredBindObjList = new ArrayList<>();
 				if (garbageChute.getBindObjList() != null) {
@@ -516,7 +518,7 @@ public class Terrarium implements Serializable {
 		}
 
 		// ゴミ捨て場の中身参照を復元
-		for (MapPlaceData mpd : SimYukkuri.world.getMapList()) {
+		for (MapPlaceData mpd : GameWorld.get().getMapList()) {
 			for (GarbageStation garbageStation : mpd.getGarbageStation().values()) {
 				Obj[] foods = garbageStation.getFood();
 				if (foods == null) {
@@ -535,7 +537,7 @@ public class Terrarium implements Serializable {
 		}
 
 		// ゆんばの作業対象参照を復元
-		for (MapPlaceData mpd : SimYukkuri.world.getMapList()) {
+		for (MapPlaceData mpd : GameWorld.get().getMapList()) {
 			for (Yunba yunba : mpd.getYunba().values()) {
 				Obj target = yunba.getTarget();
 				if (target == null) {
@@ -720,7 +722,7 @@ public class Terrarium implements Serializable {
 		int minDistance;
 
 		// 全ゆっくりに対してチェック
-		for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().getBody().entrySet()) {
+		for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
 			Body p = entry.getValue();
 			// 自分同士のチェックは無意味なのでスキップ
 			if (p == b) {
@@ -762,7 +764,7 @@ public class Terrarium implements Serializable {
 			return;
 		}
 		// 全ゆっくりに対してチェック
-		for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().getBody().entrySet()) {
+		for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
 			Body p = entry.getValue();
 			// 自分同士のチェックは無意味なのでスキップ
 			if (p == b) {
@@ -925,7 +927,7 @@ public class Terrarium implements Serializable {
 				b = new Deibu(x, y, z, age, mama, papa);
 				break;
 			case DosMarisa.type:
-				if (SimYukkuri.world.getCurrentMap().makeOrKillDos(true)) {
+				if (GameWorld.get().getCurrentMap().makeOrKillDos(true)) {
 					loadBodyImageSafe(YukkuriType.DOSMARISA);
 					b = new DosMarisa(x, y, z, age, mama, papa);
 				} else {
@@ -1046,16 +1048,16 @@ public class Terrarium implements Serializable {
 				}
 			}
 			if (nCount == 0) {
-				if (SimYukkuri.RND.nextInt(20) == 0) {
+				if (GameRandom.nextInt(20) == 0) {
 					b.setbImageNagasiMode(true);
 				}
 			} else if (nCount == 1) {
 				// 片親がまりちゃ流しなら1/2
-				if (SimYukkuri.RND.nextBoolean()) {
+				if (GameRandom.nextBoolean()) {
 					b.setbImageNagasiMode(true);
 				}
 			} else {
-				if (SimYukkuri.RND.nextInt(20) != 0) {
+				if (GameRandom.nextInt(20) != 0) {
 					b.setbImageNagasiMode(true);
 				}
 			}
@@ -1086,13 +1088,13 @@ public class Terrarium implements Serializable {
 	 */
 	public Body addBody(int x, int y, int z, int type, AgeState age, Body p1, Body p2) {
 		Body ret = makeBody(x, y, z, type, null, age, p1, p2, true);
-		SimYukkuri.world.getCurrentMap().getBody().put(ret.getUniqueID(), ret);
+		GameWorld.get().getCurrentMap().getBody().put(ret.getUniqueID(), ret);
 		return ret;
 	}
 
 	/** ゆっくりをリストに登録 */
 	public void addBody(Body b) {
-		SimYukkuri.world.getCurrentMap().getBody().put(b.getUniqueID(), b);
+		GameWorld.get().getCurrentMap().getBody().put(b.getUniqueID(), b);
 	}
 
 	/**
@@ -1106,7 +1108,7 @@ public class Terrarium implements Serializable {
 	 */
 	public int addShit(int x, int y, int z, Body b, YukkuriType type) {
 		Shit shit = new Shit(x, y, z, b, type);
-		SimYukkuri.world.getCurrentMap().getShit().put(shit.objId, shit);
+		GameWorld.get().getCurrentMap().getShit().put(shit.objId, shit);
 		return shit.objId;
 	}
 
@@ -1126,7 +1128,7 @@ public class Terrarium implements Serializable {
 			s.setMostDepth(b.getMostDepth());
 			s.setMostDepth(b.getZ());
 		}
-		SimYukkuri.world.getCurrentMap().getShit().put(s.objId, s);
+		GameWorld.get().getCurrentMap().getShit().put(s.objId, s);
 	}
 
 	/**
@@ -1141,7 +1143,7 @@ public class Terrarium implements Serializable {
 	 */
 	public Vomit addVomit(int x, int y, int z, Body body, YukkuriType type) {
 		Vomit v = new Vomit(x, y, z, body, type);
-		SimYukkuri.world.getCurrentMap().getVomit().put(v.objId, v);
+		GameWorld.get().getCurrentMap().getVomit().put(v.objId, v);
 		if (body != null && body.getMostDepth() < 0) {
 			v.setMostDepth(body.getMostDepth());
 			v.setMostDepth(body.getZ());
@@ -1165,7 +1167,7 @@ public class Terrarium implements Serializable {
 			v.setMostDepth(body.getMostDepth());
 			v.setMostDepth(body.getZ());
 		}
-		SimYukkuri.world.getCurrentMap().getVomit().put(v.objId, v);
+		GameWorld.get().getCurrentMap().getVomit().put(v.objId, v);
 	}
 
 	/**
@@ -1208,13 +1210,13 @@ public class Terrarium implements Serializable {
 
 	/** マップ全体を危険と認知させる */
 	public static void setAlarm() {
-		SimYukkuri.world.getCurrentMap().setAlarm(true);
-		SimYukkuri.world.getCurrentMap().setAlarmPeriod(ALARM_PERIOD);
+		GameWorld.get().getCurrentMap().setAlarm(true);
+		GameWorld.get().getCurrentMap().setAlarmPeriod(ALARM_PERIOD);
 	}
 
 	/** マップ全体で危険か否かを取得する. */
 	public static boolean getAlarm() {
-		return SimYukkuri.world.getCurrentMap().isAlarm();
+		return GameWorld.get().getCurrentMap().isAlarm();
 	}
 
 	/**
@@ -1262,7 +1264,7 @@ public class Terrarium implements Serializable {
 	/** 全オブジェクトの更新 スレッドと紛らわしいので名前変更 */
 	public void stepRun() {
 		// マップ状況を取得
-		MapPlaceData curMap = SimYukkuri.world.getCurrentMap();
+		MapPlaceData curMap = GameWorld.get().getCurrentMap();
 		intervalCount = (++intervalCount) & 255;
 		// マップ上での緊張状態の経過
 		if (curMap.getAlarmPeriod() >= 0) {
@@ -1287,9 +1289,9 @@ public class Terrarium implements Serializable {
 		// 床置きの判定
 		Event ret = Event.DONOTHING;
 		// このリストに登録してないと接触物に対し処理がなされないので注意
-		List<ObjEX> platformList = SimYukkuri.world.getHitBaseList();
+		List<ObjEX> platformList = GameWorld.get().getHitBaseList();
 		// このリストに登録してないと処理がなされないので注意
-		List<Obj> objList = SimYukkuri.world.getHitTargetList();
+		List<Obj> objList = GameWorld.get().getHitTargetList();
 
 		for (Iterator<ObjEX> i = platformList.iterator(); i.hasNext();) {
 			ObjEX platform = i.next();
@@ -1361,7 +1363,7 @@ public class Terrarium implements Serializable {
 		// コンベアの判定
 		// 最前面のひとつだけに反応するのでターゲットを外ループに
 		List<Beltconveyor> beltList = curMap.getBeltconveyor();
-		objList = SimYukkuri.world.getHitTargetList();
+		objList = GameWorld.get().getHitTargetList();
 		for (Obj o : objList) {
 			if (beltList == null || beltList.size() == 0)
 				break;
@@ -1398,7 +1400,7 @@ public class Terrarium implements Serializable {
 				}
 			}
 		}
-		objList = SimYukkuri.world.getHitTargetList();
+		objList = GameWorld.get().getHitTargetList();
 		for (Obj o : objList) {
 			if (poolList == null || poolList.size() == 0) {
 				// プール内から外に移動していた場合
@@ -1455,7 +1457,7 @@ public class Terrarium implements Serializable {
 				}
 			}
 		}
-		objList = SimYukkuri.world.getHitTargetList();
+		objList = GameWorld.get().getHitTargetList();
 
 		for (Obj o : objList) {
 			if (farmList == null || farmList.size() == 0) {
@@ -1476,7 +1478,7 @@ public class Terrarium implements Serializable {
 			}
 		}
 		// オブジェクト更新
-		List<ObjEX> objectList = SimYukkuri.world.getObjectList();
+		List<ObjEX> objectList = GameWorld.get().getObjectList();
 		resetTerrariumEnvironment();
 		for (Iterator<ObjEX> i = objectList.iterator(); i.hasNext();) {
 			ObjEX oex = i.next();
@@ -1574,18 +1576,18 @@ public class Terrarium implements Serializable {
 						int burstPower = (b.getSize() - b.getOriginSize()) * 3 / 4;
 						for (Dna babyTypes : b.getBabyTypes()) {
 							addBaby(b.getX(), b.getY(), b.getZ() + b.getSize() / 20,
-									SimYukkuri.RND.nextInt(burstPower / 4 + 1) - burstPower / 8,
-									SimYukkuri.RND.nextInt(burstPower / 4 + 1) - burstPower / 8,
-									SimYukkuri.RND.nextInt(burstPower / 5 + 1) - burstPower / 10 - 1, babyTypes, b,
+									GameRandom.nextInt(burstPower / 4 + 1) - burstPower / 8,
+									GameRandom.nextInt(burstPower / 4 + 1) - burstPower / 8,
+									GameRandom.nextInt(burstPower / 5 + 1) - burstPower / 10 - 1, babyTypes, b,
 									YukkuriUtil.getBodyInstance(b.getPartner()));
 						}
 						b.getBabyTypes().clear();
 						if (b.getStalks() != null) {
 							for (Stalk s : b.getStalks()) {
 								if (s != null) {
-									s.kick(SimYukkuri.RND.nextInt(burstPower / 4 + 1) - burstPower / 8,
-											SimYukkuri.RND.nextInt(burstPower / 4 + 1) - burstPower / 8,
-											SimYukkuri.RND.nextInt(burstPower / 5 + 1) - burstPower / 10 - 1);
+									s.kick(GameRandom.nextInt(burstPower / 4 + 1) - burstPower / 8,
+											GameRandom.nextInt(burstPower / 4 + 1) - burstPower / 8,
+											GameRandom.nextInt(burstPower / 5 + 1) - burstPower / 10 - 1);
 								}
 							}
 						}
@@ -1594,9 +1596,9 @@ public class Terrarium implements Serializable {
 							for (int j = 0; b.getShit() / b.getSHITLIMITorg()[b.getBodyAgeState().ordinal()] > j; j++) {
 								int i = addShit(b.getX(), b.getY(), b.getZ() + b.getSize() / 15, b, b.getShitType());
 								curMap.getShit().get(i).kick(
-										SimYukkuri.RND.nextInt(burstPower / 4 + 1) - burstPower / 8,
-										SimYukkuri.RND.nextInt(burstPower / 4 + 1) - burstPower / 8,
-										SimYukkuri.RND.nextInt(burstPower / 5 + 1) - burstPower / 10 - 1);
+										GameRandom.nextInt(burstPower / 4 + 1) - burstPower / 8,
+										GameRandom.nextInt(burstPower / 4 + 1) - burstPower / 8,
+										GameRandom.nextInt(burstPower / 5 + 1) - burstPower / 10 - 1);
 							}
 						}
 						b.setShit(0);
@@ -1644,14 +1646,14 @@ public class Terrarium implements Serializable {
 								int fx, fy;
 								for (int f = 0; f < 5; f++) {
 									fx = s.getX() - 6 + (f * 7);
-									fy = s.getY() - 5 + SimYukkuri.RND.nextInt(10);
+									fy = s.getY() - 5 + GameRandom.nextInt(10);
 									fx = Math.max(0, fx);
 									fx = Math.min(fx, Translate.getMapW());
 									fy = Math.max(0, fy);
 									fy = Math.min(fy, Translate.getMapH());
 									Food food = (Food) GadgetAction.putObjEX(Food.class, fx, fy,
 											Food.FoodType.STALK.ordinal());
-									SimYukkuri.world.getCurrentMap().getFood().put(food.objId, food);
+									GameWorld.get().getCurrentMap().getFood().put(food.objId, food);
 								}
 								s.remove();
 							}

@@ -4,6 +4,7 @@ import java.awt.Polygon;
 import java.awt.Rectangle;
 
 import src.SimYukkuri;
+import src.util.GameWorld;
 
 /***************************************************
  * 座標変換クラス
@@ -881,7 +882,7 @@ public class Translate {
 		int mSX = Math.max(0, Math.min(x, Translate.mapW));
 		int mSY = Math.max(0, Math.min(y, Translate.mapH));
 
-		return SimYukkuri.world.getCurrentMap().getWallMap()[mSX][mSY];
+		return GameWorld.get().getCurrentMap().getWallMap()[mSX][mSY];
 	}
 
 	/**
@@ -895,7 +896,7 @@ public class Translate {
 		int mSX = Math.max(0, Math.min(x, Translate.mapW));
 		int mSY = Math.max(0, Math.min(y, Translate.mapH));
 
-		SimYukkuri.world.getCurrentMap().getWallMap()[mSX][mSY] = num;
+		GameWorld.get().getCurrentMap().getWallMap()[mSX][mSY] = num;
 	}
 
 	/**
@@ -909,7 +910,7 @@ public class Translate {
 		int mSX = Math.max(0, Math.min(x, Translate.mapW));
 		int mSY = Math.max(0, Math.min(y, Translate.mapH));
 
-		return SimYukkuri.world.getCurrentMap().getFieldMap()[mSX][mSY];
+		return GameWorld.get().getCurrentMap().getFieldMap()[mSX][mSY];
 	}
 
 	/**
@@ -923,7 +924,7 @@ public class Translate {
 		int mSX = Math.max(0, Math.min(x, Translate.mapW));
 		int mSY = Math.max(0, Math.min(y, Translate.mapH));
 
-		SimYukkuri.world.getCurrentMap().getFieldMap()[mSX][mSY] = num;
+		GameWorld.get().getCurrentMap().getFieldMap()[mSX][mSY] = num;
 	}
 }
 

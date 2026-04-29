@@ -1,9 +1,13 @@
 package src.event;
+import src.util.GameMessages;
+import src.util.GameText;
 
 import java.util.Map;
 
 import src.Const;
 import src.SimYukkuri;
+import src.util.GameRandom;
+import src.util.GameWorld;
 import src.base.Body;
 import src.base.EventPacket;
 import src.base.Obj;
@@ -70,7 +74,7 @@ public class RaperReactionEvent extends EventPacket {
 			boolean bIsNearRaper = false;
 
 			// 全ゆっくりに対してチェック
-			for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().getBody().entrySet()) {
+			for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
 				Body p = entry.getValue();
 				// 自分同士のチェックは無意味なのでスキップ
 				if (p == b) {
@@ -156,7 +160,7 @@ public class RaperReactionEvent extends EventPacket {
 				return UpdateState.ABORT;
 		}
 
-		if (SimYukkuri.RND.nextInt(500) == 0) {
+		if (GameRandom.nextInt(500) == 0) {
 			if (!FamilyActionLogic.isRapeTarget()) {
 				return UpdateState.ABORT;
 			}
@@ -170,8 +174,8 @@ public class RaperReactionEvent extends EventPacket {
 				// 攻撃は敵に向かう。ドスは妊娠させられようが何しようが駆除に向かう。
 				b.setForceFace(ImageCode.PUFF.ordinal());
 				moveTarget(b);
-				if (SimYukkuri.RND.nextInt(20) == 0) {
-					b.setWorldEventResMessage(MessagePool.getMessage(b, MessagePool.Action.AttackRapist),
+				if (GameRandom.nextInt(20) == 0) {
+					b.setWorldEventResMessage(GameMessages.getMessage(b, MessagePool.Action.AttackRapist),
 							Const.HOLDMESSAGE, true, false);
 				}
 			}
@@ -194,7 +198,7 @@ public class RaperReactionEvent extends EventPacket {
 					if (target != null) {
 						int num = 0;
 						// 反撃対象が見つかったら同イベント実行中の固体イベントを書き換え
-						for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().getBody().entrySet()) {
+						for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
 							Body body = entry.getValue();
 							if (body.getCurrentEvent() instanceof RaperReactionEvent) {
 								// うんうん奴隷は不参加
@@ -207,9 +211,9 @@ public class RaperReactionEvent extends EventPacket {
 								if (body.getAttitude() == Attitude.SUPER_SHITHEAD)
 									num = 1;
 								else if (body.getAttitude() == Attitude.SHITHEAD)
-									num = SimYukkuri.RND.nextInt(3);
+									num = GameRandom.nextInt(3);
 								else if (body.getAttitude() == Attitude.AVERAGE)
-									num = SimYukkuri.RND.nextInt(2);
+									num = GameRandom.nextInt(2);
 								else
 									num = 0;
 								// ドスは常に参加。ドスはとにかく群れをゆっくりさせるため、れいぱー駆除に命をかける
@@ -235,7 +239,7 @@ public class RaperReactionEvent extends EventPacket {
 				if ((age % 10) == 0) {
 					escapeTarget(b);
 				}
-				if (SimYukkuri.RND.nextInt(20) == 0) {
+				if (GameRandom.nextInt(20) == 0) {
 					setScareWorldEventMessage(b);
 				}
 			}
@@ -250,7 +254,7 @@ public class RaperReactionEvent extends EventPacket {
 	 * @param b 逃げる個体
 	 */
 	public void setScareWorldEventMessage(Body b) {
-		b.setWorldEventResMessage(MessagePool.getMessage(b, MessagePool.Action.ScareRapist), Const.HOLDMESSAGE, true,
+		b.setWorldEventResMessage(GameMessages.getMessage(b, MessagePool.Action.ScareRapist), Const.HOLDMESSAGE, true,
 				false);
 	}
 
@@ -260,7 +264,7 @@ public class RaperReactionEvent extends EventPacket {
 	 * @param b 反撃する個体
 	 */
 	public void setCounterWorldEventMessage(Body b) {
-		b.setWorldEventResMessage(MessagePool.getMessage(b, MessagePool.Action.CounterRapist), Const.HOLDMESSAGE, true,
+		b.setWorldEventResMessage(GameMessages.getMessage(b, MessagePool.Action.CounterRapist), Const.HOLDMESSAGE, true,
 				false);
 	}
 
@@ -297,7 +301,7 @@ public class RaperReactionEvent extends EventPacket {
 		if (state == ActionState.ATTACK && !b.isDontMove()) {
 			// 攻撃
 			if (from.getZ() < 5) {
-				b.setWorldEventResMessage(MessagePool.getMessage(b, MessagePool.Action.RevengeAttack),
+				b.setWorldEventResMessage(GameMessages.getMessage(b, MessagePool.Action.RevengeAttack),
 						Const.HOLDMESSAGE, true, false);
 				if (b.getDirection() == Direction.LEFT) {
 					SimYukkuri.mypane.getTerrarium().addEffect(EffectType.HIT, b.getX() - 10, b.getY(), 0,
@@ -313,7 +317,7 @@ public class RaperReactionEvent extends EventPacket {
 		} else {
 			// 逃げ
 			escapeTarget(b);
-			if (SimYukkuri.RND.nextInt(20) == 0) {
+			if (GameRandom.nextInt(20) == 0) {
 				setScareWorldEventMessage(b);
 			}
 		}
@@ -328,7 +332,7 @@ public class RaperReactionEvent extends EventPacket {
 	 */
 	public Body searchNextTarget() {
 		Body ret = null;
-		for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().getBody().entrySet()) {
+		for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
 			Body b = entry.getValue();
 			if (b.isRaper() && b.isExciting() && !b.isDead()) {
 				ret = b;
@@ -346,7 +350,7 @@ public class RaperReactionEvent extends EventPacket {
 	 */
 	public Body searchAttackTarget() {
 		Body ret = null;
-		for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().getBody().entrySet()) {
+		for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
 			Body b = entry.getValue();
 			if (!b.isDead() && b.isExciting() && b.isRaper() && b.isSukkiri()) {
 				ret = b;
@@ -409,6 +413,6 @@ public class RaperReactionEvent extends EventPacket {
 
 	@Override
 	public String toString() {
-		return ResourceUtil.getInstance().read("event_raperreaction");
+		return GameText.read("event_raperreaction");
 	}
 }

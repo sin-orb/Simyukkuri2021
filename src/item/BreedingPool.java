@@ -1,4 +1,6 @@
 package src.item;
+import src.util.GameMessages;
+import src.util.GameText;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -14,6 +16,8 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 import src.SimYukkuri;
+import src.util.GameRandom;
+import src.util.GameWorld;
 import src.base.Body;
 import src.base.Obj;
 import src.base.ObjEX;
@@ -47,14 +51,14 @@ public class BreedingPool extends ObjEX {
 
 	/** 稼働タイプ */
 	public static enum PoolType {
-		LOW(ResourceUtil.getInstance().read("item_cheap")),
-		RAPID(ResourceUtil.getInstance().read("item_normalbreed")),
-		PRO(ResourceUtil.getInstance().read("item_forpro")),
-		INDUSTRY(ResourceUtil.getInstance().read("item_indust")),
-		LOWS(ResourceUtil.getInstance().read("item_cheapstalk")),
-		RAPIDS(ResourceUtil.getInstance().read("item_normalstalk")),
-		PROS(ResourceUtil.getInstance().read("item_forprostalk")),
-		INDUSTRYS(ResourceUtil.getInstance().read("item_induststalk")),
+		LOW(GameText.read("item_cheap")),
+		RAPID(GameText.read("item_normalbreed")),
+		PRO(GameText.read("item_forpro")),
+		INDUSTRY(GameText.read("item_indust")),
+		LOWS(GameText.read("item_cheapstalk")),
+		RAPIDS(GameText.read("item_normalstalk")),
+		PROS(GameText.read("item_forprostalk")),
+		INDUSTRYS(GameText.read("item_induststalk")),
 		;
 
 		private String name;
@@ -172,9 +176,9 @@ public class BreedingPool extends ObjEX {
 					int babyType;
 					if (liquidYukkuriType == -1) {
 						babyType = p.getType();
-					} else if (!p.isHybrid() && liquidYukkuriType < 10000 && (SimYukkuri.RND.nextInt(50) == 0)) {
+					} else if (!p.isHybrid() && liquidYukkuriType < 10000 && (GameRandom.nextInt(50) == 0)) {
 						babyType = p.getHybridType(liquidYukkuriType);
-					} else if (SimYukkuri.RND.nextBoolean()) {
+					} else if (GameRandom.nextBoolean()) {
 						babyType = liquidYukkuriType;
 					} else {
 						babyType = p.getType();
@@ -187,27 +191,27 @@ public class BreedingPool extends ObjEX {
 						babyType = Reimu.type;
 					}
 					// 突然変異
-					if ((babyType == Reimu.type) && SimYukkuri.RND.nextInt(20) == 0) {
+					if ((babyType == Reimu.type) && GameRandom.nextInt(20) == 0) {
 						babyType = WasaReimu.type;
-					} else if ((babyType == WasaReimu.type) && SimYukkuri.RND.nextInt(20) != 0) {
+					} else if ((babyType == WasaReimu.type) && GameRandom.nextInt(20) != 0) {
 						babyType = Reimu.type;
 					} else if ((babyType == Marisa.type || babyType == MarisaKotatsumuri.type)
-							&& SimYukkuri.RND.nextInt(20) == 0) {
+							&& GameRandom.nextInt(20) == 0) {
 						babyType = MarisaTsumuri.type;
 					} else if ((babyType == Marisa.type || babyType == MarisaTsumuri.type)
-							&& SimYukkuri.RND.nextInt(20) == 0) {
+							&& GameRandom.nextInt(20) == 0) {
 						babyType = MarisaKotatsumuri.type;
 					} else if ((babyType == MarisaTsumuri.type || babyType == MarisaKotatsumuri.type)
-							&& SimYukkuri.RND.nextInt(20) != 0) {
+							&& GameRandom.nextInt(20) != 0) {
 						babyType = Marisa.type;
-					} else if ((babyType == Kimeemaru.type) && SimYukkuri.RND.nextInt(20) != 0) {
+					} else if ((babyType == Kimeemaru.type) && GameRandom.nextInt(20) != 0) {
 						babyType = Ayaya.type;
-					} else if ((babyType == Ayaya.type) && SimYukkuri.RND.nextInt(20) == 0) {
+					} else if ((babyType == Ayaya.type) && GameRandom.nextInt(20) == 0) {
 						babyType = Kimeemaru.type;
 					}
 					if (p.isSick() || p.isDamaged() || p.isOverPregnantLimit()
-							|| (!highQuality && SimYukkuri.RND.nextInt(500) == 0)) {
-						if (SimYukkuri.RND.nextBoolean() && (babyType == Reimu.type || babyType == WasaReimu.type)) {
+							|| (!highQuality && GameRandom.nextInt(500) == 0)) {
+						if (GameRandom.nextBoolean() && (babyType == Reimu.type || babyType == WasaReimu.type)) {
 							babyType = TarinaiReimu.type;
 						} else {
 							babyType = Tarinai.type;
@@ -220,7 +224,7 @@ public class BreedingPool extends ObjEX {
 						p.addStress(50);
 						// p.addMemories(-10);
 						p.getStalkBabyTypes()
-								.add((SimYukkuri.RND.nextBoolean() ? new Dna(babyType, null, null, false) : null));
+								.add((GameRandom.nextBoolean() ? new Dna(babyType, null, null, false) : null));
 						p.setHasStalk(true);
 					} else {
 						cry(p);
@@ -261,18 +265,18 @@ public class BreedingPool extends ObjEX {
 
 	@Override
 	public void removeListData() {
-		SimYukkuri.world.getCurrentMap().getBreedingPool().remove(objId);
+		GameWorld.get().getCurrentMap().getBreedingPool().remove(objId);
 	}
 
 	/** プール上のゆっくりを泣かせる処理 */
 	public void cry(Body p) {
 		if (p.hasBabyOrStalk()) {
 			if (p.isNYD()) {
-				p.setNYDMessage(MessagePool.getMessage(p, MessagePool.Action.NonYukkuriDisease), false);
-			} else if (SimYukkuri.RND.nextInt(40) == 0) {
-				p.setPikoMessage(MessagePool.getMessage(p, MessagePool.Action.PoolSukkiri), true);
+				p.setNYDMessage(GameMessages.getMessage(p, MessagePool.Action.NonYukkuriDisease), false);
+			} else if (GameRandom.nextInt(40) == 0) {
+				p.setPikoMessage(GameMessages.getMessage(p, MessagePool.Action.PoolSukkiri), true);
 			} else {
-				p.setMessage(MessagePool.getMessage(p, MessagePool.Action.PoolSukkiri));
+				p.setMessage(GameMessages.getMessage(p, MessagePool.Action.PoolSukkiri));
 			}
 		}
 	}
@@ -283,7 +287,7 @@ public class BreedingPool extends ObjEX {
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
 
-		SimYukkuri.world.getCurrentMap().getBreedingPool().put(objId, this);
+		GameWorld.get().getCurrentMap().getBreedingPool().put(objId, this);
 
 		objType = Type.PLATFORM;
 		objEXType = ObjEXType.BREEDINGPOOL;
@@ -292,7 +296,7 @@ public class BreedingPool extends ObjEX {
 
 		boolean ret = setupPool(this, false);
 		if (!ret) {
-			SimYukkuri.world.getCurrentMap().getBreedingPool().remove(objId);
+			GameWorld.get().getCurrentMap().getBreedingPool().remove(objId);
 		}
 	}
 
@@ -324,7 +328,7 @@ public class BreedingPool extends ObjEX {
 			but[o.lastSelected].setSelected(true);
 		}
 		int dlgRet = JOptionPane.showConfirmDialog(SimYukkuri.mypane, mainPanel,
-				ResourceUtil.getInstance().read("item_poolsettings"),
+				GameText.read("item_poolsettings"),
 				JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
 		if (dlgRet == JOptionPane.OK_OPTION) {

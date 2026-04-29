@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 
 import src.SimYukkuri;
+import src.util.GameWorld;
 import src.base.ObjEX;
 import src.draw.ModLoader;
 import src.draw.Rectangle4y;
@@ -53,7 +54,7 @@ public class Trash extends ObjEX {
 
 	@Override
 	public void removeListData() {
-		SimYukkuri.world.getCurrentMap().getTrash().remove(objId);
+		GameWorld.get().getCurrentMap().getTrash().remove(objId);
 	}
 
 	@Override
@@ -72,7 +73,7 @@ public class Trash extends ObjEX {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		SimYukkuri.world.getCurrentMap().getTrash().put(objId, this);
+		GameWorld.get().getCurrentMap().getTrash().put(objId, this);
 		objType = Type.OBJECT;
 		objEXType = ObjEXType.TRASH;
 

@@ -1,9 +1,13 @@
 package src.event;
+import src.util.GameMessages;
+import src.util.GameText;
 
 import java.util.Map;
 
 import src.Const;
 import src.SimYukkuri;
+import src.util.GameRandom;
+import src.util.GameWorld;
 import src.base.Body;
 import src.base.Obj;
 import src.enums.Direction;
@@ -55,7 +59,7 @@ public class KillPredeatorEvent extends RevengeAttackEvent {
 			return false;
 		boolean bIsNearPreadeator = false;
 		// 全ゆっくりに対してチェック
-		for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().getBody().entrySet()) {
+		for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
 			Body p = entry.getValue();
 			// 自分同士のチェックは無意味なのでスキップ
 			if (p == b) {
@@ -88,7 +92,7 @@ public class KillPredeatorEvent extends RevengeAttackEvent {
 	 */
 	public Body searchNextTarget() {
 		Body ret = null;
-		for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().getBody().entrySet()) {
+		for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
 			Body b = entry.getValue();
 			if (b.isPredatorType()) {
 				ret = b;
@@ -101,7 +105,7 @@ public class KillPredeatorEvent extends RevengeAttackEvent {
 	@Override
 	public UpdateState update(Body b) {
 		// ランダムで復讐を諦める
-		if (SimYukkuri.RND.nextInt(1000) == 0) {
+		if (GameRandom.nextInt(1000) == 0) {
 			return UpdateState.ABORT;
 		}
 		Body from = YukkuriUtil.getBodyInstance(getFrom());
@@ -120,7 +124,7 @@ public class KillPredeatorEvent extends RevengeAttackEvent {
 				(b.isAdult() && b.getPublicRank() != PublicRank.UnunSlave)) {
 			Body target = searchNextTarget();
 			setFrom(target);
-			b.setWorldEventResMessage(MessagePool.getMessage(b, MessagePool.Action.RevengeForChild),
+			b.setWorldEventResMessage(GameMessages.getMessage(b, MessagePool.Action.RevengeForChild),
 					Const.HOLDMESSAGE, true, false);
 		}
 		return null;
@@ -150,7 +154,7 @@ public class KillPredeatorEvent extends RevengeAttackEvent {
 			return false;
 		}
 		if (from.getZ() < 5) {
-			b.setWorldEventResMessage(MessagePool.getMessage(b, MessagePool.Action.RevengeForChild), Const.HOLDMESSAGE,
+			b.setWorldEventResMessage(GameMessages.getMessage(b, MessagePool.Action.RevengeForChild), Const.HOLDMESSAGE,
 					true, false);
 			if (b.getDirection() == Direction.LEFT) {
 				SimYukkuri.mypane.getTerrarium().addEffect(EffectType.HIT, b.getX() - 10, b.getY(), 0,
@@ -168,6 +172,6 @@ public class KillPredeatorEvent extends RevengeAttackEvent {
 
 	@Override
 	public String toString() {
-		return ResourceUtil.getInstance().read("event_killremi");
+		return GameText.read("event_killremi");
 	}
 }

@@ -1,4 +1,6 @@
 package src.event;
+import src.util.GameMessages;
+import src.util.GameText;
 
 import src.attachment.Ants;
 import src.base.Body;
@@ -152,7 +154,7 @@ public class BreedEvent extends EventPacket {
 		if (from.isBirth()) {
 			b.setHappiness(Happiness.AVERAGE);
 			b.lookTo(from.getX(), from.getY());
-			b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.RootForPartner), 40, false, false);
+			b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.RootForPartner), 40, false, false);
 			from.addMemories(1);
 			b.addMemories(1);
 			return false;
@@ -162,12 +164,12 @@ public class BreedEvent extends EventPacket {
 				b.lookTo(from.getX(), from.getY());
 				if (from.isHasPants()) {
 					b.setHappiness(Happiness.VERY_SAD);
-					b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.Surprise), 40, true, true);
+					b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.Surprise), 40, true, true);
 					b.addStress(1800);
 					b.addMemories(-30);
 				} else {
 					b.setHappiness(Happiness.VERY_HAPPY);
-					b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.FirstGreeting), 40, true,
+					b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.FirstGreeting), 40, true,
 							false);
 					b.addStress(-30);
 					b.addMemories(20);
@@ -183,6 +185,6 @@ public class BreedEvent extends EventPacket {
 
 	@Override
 	public String toString() {
-		return ResourceUtil.getInstance().read("event_welcomechild");
+		return GameText.read("event_welcomechild");
 	}
 }

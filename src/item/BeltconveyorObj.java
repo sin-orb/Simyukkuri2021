@@ -4,6 +4,7 @@
 // Source File Name:   Beltconveyor.java
 
 package src.item;
+import src.util.GameText;
 
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
@@ -27,6 +28,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import src.SimYukkuri;
+import src.util.GameWorld;
 import src.base.Body;
 import src.base.Obj;
 import src.base.ObjEX;
@@ -92,7 +94,7 @@ public class BeltconveyorObj extends ObjEX {
 	protected int[] anPointY = new int[4];
 
 	public static enum Action {
-		YUKKURI_FILTER(ResourceUtil.getInstance().read("item_filtersettings"), ""),
+		YUKKURI_FILTER(GameText.read("item_filtersettings"), ""),
 		;
 
 		private String name;
@@ -120,15 +122,15 @@ public class BeltconveyorObj extends ObjEX {
 		boundary.setY(boundary.getHeight() >> 1);
 
 		// オプション
-		istrOptionList.add(ResourceUtil.getInstance().read("attitude_verynice"));
-		istrOptionList.add(ResourceUtil.getInstance().read("attitude_nice"));
-		istrOptionList.add(ResourceUtil.getInstance().read("attitude_normal"));
-		istrOptionList.add(ResourceUtil.getInstance().read("attitude_shithead"));
-		istrOptionList.add(ResourceUtil.getInstance().read("attitude_supershithead"));
-		istrOptionList.add(ResourceUtil.getInstance().read("intel_badge"));
-		istrOptionList.add(ResourceUtil.getInstance().read("intel_normal"));
-		istrOptionList.add(ResourceUtil.getInstance().read("intel_fool"));
-		istrOptionList.add(ResourceUtil.getInstance().read("item_onlydeadbody"));
+		istrOptionList.add(GameText.read("attitude_verynice"));
+		istrOptionList.add(GameText.read("attitude_nice"));
+		istrOptionList.add(GameText.read("attitude_normal"));
+		istrOptionList.add(GameText.read("attitude_shithead"));
+		istrOptionList.add(GameText.read("attitude_supershithead"));
+		istrOptionList.add(GameText.read("intel_badge"));
+		istrOptionList.add(GameText.read("intel_normal"));
+		istrOptionList.add(GameText.read("intel_fool"));
+		istrOptionList.add(GameText.read("item_onlydeadbody"));
 	}
 
 	@Override
@@ -412,7 +414,7 @@ public class BeltconveyorObj extends ObjEX {
 			bindObjList.clear();
 		}
 
-		SimYukkuri.world.getCurrentMap().getBeltconveyorObj().remove(objId);
+		GameWorld.get().getCurrentMap().getBeltconveyorObj().remove(objId);
 	}
 
 	public boolean checkInterval(int cnt) {
@@ -446,7 +448,7 @@ public class BeltconveyorObj extends ObjEX {
 		firstY = y;
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		SimYukkuri.world.getCurrentMap().getBeltconveyorObj().put(objId, this);
+		GameWorld.get().getCurrentMap().getBeltconveyorObj().put(objId, this);
 		objType = Type.PLATFORM;
 		objEXType = ObjEXType.BELTCONVEYOR;
 		value = 3000;
@@ -460,23 +462,23 @@ public class BeltconveyorObj extends ObjEX {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static boolean setBeltconveyor(BeltconveyorObj belt, boolean init) {
 		String HOU_LIST[] = {
-				ResourceUtil.getInstance().read("inside"),
-				ResourceUtil.getInstance().read("outside"),
-				ResourceUtil.getInstance().read("right"),
-				ResourceUtil.getInstance().read("left")
+				GameText.read("inside"),
+				GameText.read("outside"),
+				GameText.read("right"),
+				GameText.read("left")
 		};
 		String OBJ_LIST[] = {
-				ResourceUtil.getInstance().read("all"),
-				ResourceUtil.getInstance().read("item_onlyyu"),
-				ResourceUtil.getInstance().read("item_onlyanko"),
-				ResourceUtil.getInstance().read("item_onlyfood"),
-				ResourceUtil.getInstance().read("item_onlystalk"),
-				ResourceUtil.getInstance().read("item_exceptyu")
+				GameText.read("all"),
+				GameText.read("item_onlyyu"),
+				GameText.read("item_onlyanko"),
+				GameText.read("item_onlyfood"),
+				GameText.read("item_onlystalk"),
+				GameText.read("item_exceptyu")
 		};
 		String MOVE_LIST[] = {
-				ResourceUtil.getInstance().read("item_movable"),
-				ResourceUtil.getInstance().read("item_immovable"),
-				ResourceUtil.getInstance().read("item_immovableonlyone")
+				GameText.read("item_movable"),
+				GameText.read("item_immovable"),
+				GameText.read("item_immovableonlyone")
 		};
 		String SPEED_LIST[] = {
 				"x1.00", "x2.00", "x3.00", "x4.00"
@@ -486,19 +488,19 @@ public class BeltconveyorObj extends ObjEX {
 		mainPanel.setLayout(new GridLayout(5, 2));
 		JComboBox hou_Box = new JComboBox(HOU_LIST);
 		hou_Box.setSelectedIndex(hou_default);
-		mainPanel.add(new JLabel(ResourceUtil.getInstance().read("item_direction")));
+		mainPanel.add(new JLabel(GameText.read("item_direction")));
 		mainPanel.add(hou_Box);
 		JComboBox obj_Box = new JComboBox(OBJ_LIST);
 		obj_Box.setSelectedIndex(obj_default);
-		mainPanel.add(new JLabel(ResourceUtil.getInstance().read("item_target")));
+		mainPanel.add(new JLabel(GameText.read("item_target")));
 		mainPanel.add(obj_Box);
 		JComboBox move_Box = new JComboBox(MOVE_LIST);
 		move_Box.setSelectedIndex(move_default);
-		mainPanel.add(new JLabel(ResourceUtil.getInstance().read("item_moveornot")));
+		mainPanel.add(new JLabel(GameText.read("item_moveornot")));
 		mainPanel.add(move_Box);
 		JComboBox speed_Box = new JComboBox(SPEED_LIST);
 		speed_Box.setSelectedIndex(speed_default);
-		mainPanel.add(new JLabel(ResourceUtil.getInstance().read("item_speed")));
+		mainPanel.add(new JLabel(GameText.read("item_speed")));
 		mainPanel.add(speed_Box);
 
 		ButtonListener buttonListener = new ButtonListener();
@@ -520,7 +522,7 @@ public class BeltconveyorObj extends ObjEX {
 		}
 
 		int dlgRet = JOptionPane.showConfirmDialog(SimYukkuri.mypane, mainPanel,
-				ResourceUtil.getInstance().read("item_belconsettings"), 2, -1);
+				GameText.read("item_belconsettings"), 2, -1);
 		if (dlgRet != 0) {
 			return false;
 		}
@@ -814,8 +816,8 @@ public class BeltconveyorObj extends ObjEX {
 					List<Boolean> obOptionSelectionList = master.getOptionResultFilter();
 					List<YukkuriType> arrayTemp = master.getYukkuriFilter();
 					boolean bFilter = YukkuriFilterPanel.openFilterPanel(
-							ResourceUtil.getInstance().read("item_targetsettings"),
-							ResourceUtil.getInstance().read("item_explanation"),
+							GameText.read("item_targetsettings"),
+							GameText.read("item_explanation"),
 							istrOptionList, arrayTemp, obOptionSelectionList);
 					if (bFilter) {
 						master.setFilter(bFilter);

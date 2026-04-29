@@ -1,4 +1,6 @@
 package src.system;
+import src.util.GameImages;
+import src.util.GameText;
 
 import java.awt.Image;
 import java.awt.MediaTracker;
@@ -56,15 +58,15 @@ public class IconPool {
 
 	/** ステータスアイコン */
 	public enum StatusIcon {
-		PREDATOR("predator.png", ResourceUtil.getInstance().read("system_predator")),
-		RAPER("raper.png", ResourceUtil.getInstance().read("system_raper")),
-		PENIPENICUT("penipenicut.png", ResourceUtil.getInstance().read("system_penicas")),
-		SPERM("sperm.png", ResourceUtil.getInstance().read("system_sperm")),
-		UNBABY("unbaby.png", ResourceUtil.getInstance().read("system_babycas")),
-		UNSHIT("unshit.png", ResourceUtil.getInstance().read("system_analclose")),
-		UNSTALK("unstalk.png", ResourceUtil.getInstance().read("system_stalkcas")),
-		PHEROMONE("pheromone.png", ResourceUtil.getInstance().read("system_pheromone")),
-		UNUNSLAVE("ununslave.png", ResourceUtil.getInstance().read("system_ununslave"))
+		PREDATOR("predator.png", GameText.read("system_predator")),
+		RAPER("raper.png", GameText.read("system_raper")),
+		PENIPENICUT("penipenicut.png", GameText.read("system_penicas")),
+		SPERM("sperm.png", GameText.read("system_sperm")),
+		UNBABY("unbaby.png", GameText.read("system_babycas")),
+		UNSHIT("unshit.png", GameText.read("system_analclose")),
+		UNSTALK("unstalk.png", GameText.read("system_stalkcas")),
+		PHEROMONE("pheromone.png", GameText.read("system_pheromone")),
+		UNUNSLAVE("ununslave.png", GameText.read("system_ununslave"))
 		;
 		private final String fileName;
 		private final String help;
@@ -136,24 +138,24 @@ public class IconPool {
 		MediaTracker mt = new MediaTracker((MyPane)io);
 
 		for(UISkin i :UISkin.values()) {
-			uiSkinImage[i.ordinal()] = ImageIO.read(loader.getResourceAsStream(IMAGE_PATH + i.getFileName()));
+			uiSkinImage[i.ordinal()] = GameImages.read(loader.getResourceAsStream(IMAGE_PATH + i.getFileName()));
 			mt.addImage(uiSkinImage[i.ordinal()], 0);
 		}
 		for(ButtonIcon i :ButtonIcon.values()) {
-			buttonIconImage[i.ordinal()] = ImageIO.read(loader.getResourceAsStream(IMAGE_PATH + i.getFileName()));
+			buttonIconImage[i.ordinal()] = GameImages.read(loader.getResourceAsStream(IMAGE_PATH + i.getFileName()));
 			mt.addImage(buttonIconImage[i.ordinal()], 0);
 		}
 		for(StatusIcon i :StatusIcon.values()) {
-			Image img = ImageIO.read(loader.getResourceAsStream(IMAGE_PATH + i.getFileName()));
+			Image img = GameImages.read(loader.getResourceAsStream(IMAGE_PATH + i.getFileName()));
 			statusIconImage[i.ordinal()] = new ImageIcon(img);
 			mt.addImage(img, 0);
 		}
 		for(CursorIcon i :CursorIcon.values()) {
-			cursorIconImage[i.ordinal()] = ImageIO.read(loader.getResourceAsStream(IMAGE_PATH + i.getFileName()));
+			cursorIconImage[i.ordinal()] = GameImages.read(loader.getResourceAsStream(IMAGE_PATH + i.getFileName()));
 			mt.addImage(cursorIconImage[i.ordinal()], 0);
 		}
 		for(HelpIcon i :HelpIcon.values()) {
-			helpIconImage[i.ordinal()] = ImageIO.read(loader.getResourceAsStream(IMAGE_PATH + i.getFileName()));
+			helpIconImage[i.ordinal()] = GameImages.read(loader.getResourceAsStream(IMAGE_PATH + i.getFileName()));
 			mt.addImage(helpIconImage[i.ordinal()], 0);
 		}
 

@@ -1,4 +1,5 @@
 package src.item;
+import src.util.GameText;
 
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
@@ -27,6 +28,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import src.SimYukkuri;
+import src.util.GameWorld;
 import src.base.Body;
 import src.base.Obj;
 import src.draw.ModLoader;
@@ -51,8 +53,8 @@ public class Beltconveyor extends FieldShapeBase {
 
 	/** セットアップメニューの項目 */
 	private static enum SetupMenu {
-		DIRECT(ResourceUtil.getInstance().read("item_direction")),
-		SPEED(ResourceUtil.getInstance().read("item_speed")),
+		DIRECT(GameText.read("item_direction")),
+		SPEED(GameText.read("item_speed")),
 
 		NORMAL_BABY(""), NORMAL_CHILD(""), NORMAL_ADULT(""),
 
@@ -64,11 +66,11 @@ public class Beltconveyor extends FieldShapeBase {
 
 		HYBRID_BABY(""), HYBRID_CHILD(""), HYBRID_ADULT(""),
 
-		SHIT(ResourceUtil.getInstance().read("command_status_unun")),
-		VOMIT(ResourceUtil.getInstance().read("game_toan")),
+		SHIT(GameText.read("command_status_unun")),
+		VOMIT(GameText.read("game_toan")),
 
-		FOOD(ResourceUtil.getInstance().read("command_status_food")),
-		STALK(ResourceUtil.getInstance().read("item_stalk")),
+		FOOD(GameText.read("command_status_food")),
+		STALK(GameText.read("item_stalk")),
 		;
 
 		private final String caption;
@@ -90,15 +92,15 @@ public class Beltconveyor extends FieldShapeBase {
 
 	/** セットアップメニューのボタンの列挙 */
 	private static enum SetupButton {
-		NORMAL(ResourceUtil.getInstance().read("draw_normalsp"), SetupMenu.NORMAL_BABY, SetupMenu.NORMAL_CHILD,
+		NORMAL(GameText.read("draw_normalsp"), SetupMenu.NORMAL_BABY, SetupMenu.NORMAL_CHILD,
 				SetupMenu.NORMAL_ADULT),
-		PREDATOR(ResourceUtil.getInstance().read("draw_predsp"), SetupMenu.PREDATOR_BABY, SetupMenu.PREDATOR_CHILD,
+		PREDATOR(GameText.read("draw_predsp"), SetupMenu.PREDATOR_BABY, SetupMenu.PREDATOR_CHILD,
 				SetupMenu.PREDATOR_ADULT),
-		RARE(ResourceUtil.getInstance().read("draw_raresp"), SetupMenu.RARE_BABY, SetupMenu.RARE_CHILD,
+		RARE(GameText.read("draw_raresp"), SetupMenu.RARE_BABY, SetupMenu.RARE_CHILD,
 				SetupMenu.RARE_ADULT),
-		IDIOT(ResourceUtil.getInstance().read("item_tarinai"), SetupMenu.IDIOT_BABY, SetupMenu.IDIOT_CHILD,
+		IDIOT(GameText.read("item_tarinai"), SetupMenu.IDIOT_BABY, SetupMenu.IDIOT_CHILD,
 				SetupMenu.IDIOT_ADULT),
-		HYBRID(ResourceUtil.getInstance().read("enums_hybrid"), SetupMenu.HYBRID_BABY, SetupMenu.HYBRID_CHILD,
+		HYBRID(GameText.read("enums_hybrid"), SetupMenu.HYBRID_BABY, SetupMenu.HYBRID_CHILD,
 				SetupMenu.HYBRID_ADULT),
 				;
 
@@ -132,10 +134,10 @@ public class Beltconveyor extends FieldShapeBase {
 
 	/** 方向のコンボボックスの定義 */
 	private static enum DirectCombo {
-		RIGHT(ResourceUtil.getInstance().read("right"), 0),
-		UP(ResourceUtil.getInstance().read("inside"), 1),
-		LEFT(ResourceUtil.getInstance().read("left"), 2),
-		BOTTOM(ResourceUtil.getInstance().read("outside"), 3),
+		RIGHT(GameText.read("right"), 0),
+		UP(GameText.read("inside"), 1),
+		LEFT(GameText.read("left"), 2),
+		BOTTOM(GameText.read("outside"), 3),
 		;
 
 		private final String caption;
@@ -163,9 +165,9 @@ public class Beltconveyor extends FieldShapeBase {
 
 	/** スピードのコンボボックスの定義 */
 	private static enum SpeedCombo {
-		SLOW(ResourceUtil.getInstance().read("item_speedslow"), 1),
-		MIDDLE(ResourceUtil.getInstance().read("item_speednorm"), 2),
-		HIGH(ResourceUtil.getInstance().read("item_speedfast"), 4),
+		SLOW(GameText.read("item_speedslow"), 1),
+		MIDDLE(GameText.read("item_speednorm"), 2),
+		HIGH(GameText.read("item_speedfast"), 4),
 		;
 
 		private final String caption;
@@ -233,7 +235,7 @@ public class Beltconveyor extends FieldShapeBase {
 	@Override
 	public void executeShapePopup(ShapeMenu menu) {
 
-		List<Beltconveyor> list = SimYukkuri.world.getCurrentMap().getBeltconveyor();
+		List<Beltconveyor> list = GameWorld.get().getCurrentMap().getBeltconveyor();
 		int pos;
 
 		switch (menu) {
@@ -366,8 +368,8 @@ public class Beltconveyor extends FieldShapeBase {
 
 		boolean ret = setupBelt(this);
 		if (ret) {
-			SimYukkuri.world.getCurrentMap().getBeltconveyor().add(this);
-			MapPlaceData.setFiledFlag(SimYukkuri.world.getCurrentMap().getFieldMap(), mapSX, mapSY, mapW, mapH, true,
+			GameWorld.get().getCurrentMap().getBeltconveyor().add(this);
+			MapPlaceData.setFiledFlag(GameWorld.get().getCurrentMap().getFieldMap(), mapSX, mapSY, mapW, mapH, true,
 					FIELD_BELT);
 		}
 	}
@@ -452,7 +454,7 @@ public class Beltconveyor extends FieldShapeBase {
 	/** フィールド座標にあるシェイプ取得 */
 	public static Beltconveyor getBeltconveyor(int fx, int fy) {
 
-		for (Beltconveyor bc : SimYukkuri.world.getCurrentMap().getBeltconveyor()) {
+		for (Beltconveyor bc : GameWorld.get().getCurrentMap().getBeltconveyor()) {
 			if (bc.fieldSX <= fx && fx <= bc.fieldEX
 					&& bc.fieldSY <= fy && fy <= bc.fieldEY) {
 				return bc;
@@ -463,13 +465,13 @@ public class Beltconveyor extends FieldShapeBase {
 
 	/** 削除 */
 	public static void deleteBelt(Beltconveyor b) {
-		MapPlaceData.setFiledFlag(SimYukkuri.world.getCurrentMap().getFieldMap(), b.mapSX, b.mapSY, b.mapW, b.mapH,
+		MapPlaceData.setFiledFlag(GameWorld.get().getCurrentMap().getFieldMap(), b.mapSX, b.mapSY, b.mapW, b.mapH,
 				false,
 				FIELD_BELT);
-		SimYukkuri.world.getCurrentMap().getBeltconveyor().remove(b);
+		GameWorld.get().getCurrentMap().getBeltconveyor().remove(b);
 		// 重なってた部分の復元
-		for (Beltconveyor bc : SimYukkuri.world.getCurrentMap().getBeltconveyor()) {
-			MapPlaceData.setFiledFlag(SimYukkuri.world.getCurrentMap().getFieldMap(), bc.mapSX, bc.mapSY, bc.mapW,
+		for (Beltconveyor bc : GameWorld.get().getCurrentMap().getBeltconveyor()) {
+			MapPlaceData.setFiledFlag(GameWorld.get().getCurrentMap().getFieldMap(), bc.mapSX, bc.mapSY, bc.mapW,
 					bc.mapH,
 					true,
 					FIELD_BELT);
@@ -570,7 +572,7 @@ public class Beltconveyor extends FieldShapeBase {
 		mainPanel.add(BorderLayout.SOUTH, southPanel);
 
 		int dlgRet = JOptionPane.showConfirmDialog(SimYukkuri.mypane, mainPanel,
-				ResourceUtil.getInstance().read("item_coveyersettings"), JOptionPane.OK_CANCEL_OPTION,
+				GameText.read("item_coveyersettings"), JOptionPane.OK_CANCEL_OPTION,
 				JOptionPane.PLAIN_MESSAGE);
 
 		if (dlgRet == JOptionPane.OK_OPTION) {

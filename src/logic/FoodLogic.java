@@ -1,9 +1,13 @@
 package src.logic;
+import src.util.GameEnvironment;
+import src.util.GameMessages;
 
 import java.util.List;
 import java.util.Map;
 
 import src.SimYukkuri;
+import src.util.GameRandom;
+import src.util.GameWorld;
 import src.base.Body;
 import src.base.EventPacket;
 import src.base.Obj;
@@ -151,11 +155,11 @@ public class FoodLogic {
 		}
 
 		//怖がっていたり、激しい痛みを感じている場合は50%の確率でキャンセル。
-		if ((b.isScare() || b.isFeelHardPain()) && SimYukkuri.RND.nextBoolean()) {
+		if ((b.isScare() || b.isFeelHardPain()) && GameRandom.nextBoolean()) {
 			return false;
 		}
 		// ランダムで餌の再検索
-		if (SimYukkuri.RND.nextInt(300) == 0 && !b.isEating() && !bForceEat) {
+		if (GameRandom.nextInt(300) == 0 && !b.isEating() && !bForceEat) {
 			b.clearActions();
 			return false;
 		}
@@ -173,7 +177,7 @@ public class FoodLogic {
 			}
 			//茎の場合の探索
 			if (food instanceof Stalk) {
-				Body p = SimYukkuri.world.getCurrentMap().getBody().get(((Stalk) food).getPlantYukkuri());
+				Body p = GameWorld.get().getCurrentMap().getBody().get(((Stalk) food).getPlantYukkuri());
 				// 自分の茎は無視
 				if (p == b) {
 					b.clearActions();
@@ -261,7 +265,7 @@ public class FoodLogic {
 								b.setTakeoutItem(TakeoutItemType.FOOD, f);
 								b.setToTakeout(true);
 								// 仮メッセージ
-								b.setMessage(MessagePool.getMessage(b, MessagePool.Action.TransportFood));
+								b.setMessage(GameMessages.getMessage(b, MessagePool.Action.TransportFood));
 								b.addStress(10);
 								b.stay();
 							} else {
@@ -283,7 +287,7 @@ public class FoodLogic {
 							b.setToTakeout(true);
 							// うんうん奴隷の場合
 							if (b.getPublicRank() == PublicRank.UnunSlave) {
-								b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateShit));
+								b.setMessage(GameMessages.getMessage(b, MessagePool.Action.HateShit));
 								b.addStress(20);
 								b.stay();
 							}
@@ -295,7 +299,7 @@ public class FoodLogic {
 						//生餌
 						if (!f.isDead()) {
 							//捕食種の場合
-							if (b.isPredatorType() && !Terrarium.isPredatorSteam()) {
+							if (b.isPredatorType() && !GameEnvironment.isPredatorSteam()) {
 								// 捕食行動
 								f.bodyInjure();
 								if (b.canflyCheck()) {// && b.getBodyAgeState().ordinal() > f.getBodyAgeState().ordinal()) {
@@ -310,7 +314,7 @@ public class FoodLogic {
 								}
 								// 母のいるゆっくりを食べると33%の確率で母による「捕食種はあっちいってね！」イベントが発生
 								Body m = YukkuriUtil.getBodyInstance(f.getMother());
-								if (SimYukkuri.RND.nextInt(3) == 0 && m != null && !m.isDead() && !m.isRemoved()) {
+								if (GameRandom.nextInt(3) == 0 && m != null && !m.isDead() && !m.isRemoved()) {
 									m.clearEvent();
 									m.setPanic(false, null);
 									m.setPeropero(false);
@@ -341,14 +345,14 @@ public class FoodLogic {
 								b.clearActions();
 								EventLogic.addBodyEvent(b, new EatBodyEvent(b, f, null, 30), null, null);
 							}
-							if (f.isSick() && SimYukkuri.RND.nextBoolean())
+							if (f.isSick() && GameRandom.nextBoolean())
 								b.forceSetSick();
 						}
 					}
 					//茎食べ
 					else if (food instanceof Stalk) {
 						Stalk s = (Stalk) food;
-						Body p = SimYukkuri.world.getCurrentMap().getBody().get(s.getPlantYukkuri());
+						Body p = GameWorld.get().getCurrentMap().getBody().get(s.getPlantYukkuri());
 						if (s.getZ() == 0 && p == null) {
 							eatFood(b, FoodType.STALK, Math.min(b.getEatAmount(), s.getAmount()));
 							s.eatStalk(Math.min(b.getEatAmount(), s.getAmount()));
@@ -359,7 +363,7 @@ public class FoodLogic {
 								// 地中に埋まっているなら引っこ抜いて食べる
 								if (p.getBaryState() == BaryInUGState.ALL ||
 										(p.getBaryState() == BaryInUGState.NEARLY_ALL && !p.hasOkazari())) {
-									b.setMessage(MessagePool.getMessage(b, MessagePool.Action.FindVegetable),
+									b.setMessage(GameMessages.getMessage(b, MessagePool.Action.FindVegetable),
 											fullmessage);
 									b.setHappiness(Happiness.VERY_HAPPY);
 								}
@@ -386,11 +390,11 @@ public class FoodLogic {
 					if (b.isFull()) {
 						if (b.isNotNYD()) {
 							if (sweets) {
-								b.setMessage(MessagePool.getMessage(b, MessagePool.Action.EatingAmaama), false);
+								b.setMessage(GameMessages.getMessage(b, MessagePool.Action.EatingAmaama), false);
 								b.setEating(true);
 								b.stay();
 							} else {
-								b.setMessage(MessagePool.getMessage(b, MessagePool.Action.Full), fullmessage);
+								b.setMessage(GameMessages.getMessage(b, MessagePool.Action.Full), fullmessage);
 								b.stay();
 								b.clearActions();
 							}
@@ -423,7 +427,7 @@ public class FoodLogic {
 				// 足りないゆ、完全足焼き用
 				found = searchFoodNearlest(b, forceEat);
 			} else {
-				if (b.isPredatorType() && !Terrarium.isPredatorSteam()) {
+				if (b.isPredatorType() && !GameEnvironment.isPredatorSteam()) {
 					// 捕食種用
 					found = searchFoodPredetor(b, forceEat);
 				} else {
@@ -447,10 +451,10 @@ public class FoodLogic {
 								&& f.getFoodType() != Food.FoodType.SWEETS_YASEI2) {
 							b.setToFood(false);
 							if (b.isTooHungry()) {
-								b.setMessage(MessagePool.getMessage(b, MessagePool.Action.WantAmaama));
+								b.setMessage(GameMessages.getMessage(b, MessagePool.Action.WantAmaama));
 								b.setAngry();
-							} else if (SimYukkuri.RND.nextInt(150) == 0) {
-								b.setMessage(MessagePool.getMessage(b, MessagePool.Action.WantAmaama));
+							} else if (GameRandom.nextInt(150) == 0) {
+								b.setMessage(GameMessages.getMessage(b, MessagePool.Action.WantAmaama));
 								//b.stay();
 								b.setAngry();
 							}
@@ -478,11 +482,11 @@ public class FoodLogic {
 									|| ((Food) found).getFoodType() == FoodType.SWEETS_NORA2 ||
 									((Food) found).getFoodType() == FoodType.SWEETS_YASEI1
 									|| ((Food) found).getFoodType() == FoodType.SWEETS_YASEI2) {
-								b.setMessage(MessagePool.getMessage(b, MessagePool.Action.FindAmaama));
+								b.setMessage(GameMessages.getMessage(b, MessagePool.Action.FindAmaama));
 							} else if (b.isOnlyAmaama()) {
-								b.setMessage(MessagePool.getMessage(b, MessagePool.Action.WantAmaama));
+								b.setMessage(GameMessages.getMessage(b, MessagePool.Action.WantAmaama));
 							} else {
-								b.setMessage(MessagePool.getMessage(b, MessagePool.Action.WantFood));
+								b.setMessage(GameMessages.getMessage(b, MessagePool.Action.WantFood));
 							}
 						}
 						boolean takeOut = false;
@@ -497,11 +501,11 @@ public class FoodLogic {
 						// うんうん奴隷が持って帰る場合
 						boolean takeOut = false;
 						if (b.getPublicRank() == PublicRank.UnunSlave && b.isToTakeout()) {
-							b.setMessage(MessagePool.getMessage(b, MessagePool.Action.TransportShit), false);
+							b.setMessage(GameMessages.getMessage(b, MessagePool.Action.TransportShit), false);
 							takeOut = true;
 						} else {
 							//　食べる場合
-							b.setMessage(MessagePool.getMessage(b, MessagePool.Action.NoFood), false);
+							b.setMessage(GameMessages.getMessage(b, MessagePool.Action.NoFood), false);
 						}
 						b.moveToFood(found, FoodType.SHIT, found.getX(), found.getY(), mz);
 						if (takeOut)
@@ -517,7 +521,7 @@ public class FoodLogic {
 					}
 					//見つけたエサがゲロの時
 					else if (found instanceof Vomit) {
-						b.setMessage(MessagePool.getMessage(b, MessagePool.Action.NoFood), false);
+						b.setMessage(GameMessages.getMessage(b, MessagePool.Action.NoFood), false);
 						b.moveToFood(found, FoodType.VOMIT, found.getX(), found.getY(), mz);
 					}
 			//}
@@ -529,8 +533,8 @@ public class FoodLogic {
 			if (b.isNotNYD()) {
 				if (b.isSoHungry() && b.isLockmove()) {
 					b.setToFood(false);
-					if (!b.isTalking() && (SimYukkuri.RND.nextInt(20) == 0)) {
-						b.setMessage(MessagePool.getMessage(b, MessagePool.Action.NoFood), false);
+					if (!b.isTalking() && (GameRandom.nextInt(20) == 0)) {
+						b.setMessage(GameMessages.getMessage(b, MessagePool.Action.NoFood), false);
 						b.stay();
 					}
 					b.setHappiness(Happiness.SAD);
@@ -556,7 +560,7 @@ public class FoodLogic {
 		}
 
 		// フィールドの餌検索
-		for (Map.Entry<Integer, Food> entry : SimYukkuri.world.getCurrentMap().getFood().entrySet()) {
+		for (Map.Entry<Integer, Food> entry : GameWorld.get().getCurrentMap().getFood().entrySet()) {
 			Food f = entry.getValue();
 			if (f.isEmpty()) {
 				continue;
@@ -575,9 +579,9 @@ public class FoodLogic {
 				minDistance = distance;
 			}
 		}
-		for (Map.Entry<Integer, Stalk> entry : SimYukkuri.world.getCurrentMap().getStalk().entrySet()) {
+		for (Map.Entry<Integer, Stalk> entry : GameWorld.get().getCurrentMap().getStalk().entrySet()) {
 			Stalk s = entry.getValue();
-			Body p = SimYukkuri.world.getCurrentMap().getBody().get(s.getPlantYukkuri());
+			Body p = GameWorld.get().getCurrentMap().getBody().get(s.getPlantYukkuri());
 			if (p != null) {
 				if (p == b) {
 					continue;
@@ -615,7 +619,7 @@ public class FoodLogic {
 				minDistance = distance;
 			}
 		}
-		for (Map.Entry<Integer, Vomit> entry : SimYukkuri.world.getCurrentMap().getVomit().entrySet()) {
+		for (Map.Entry<Integer, Vomit> entry : GameWorld.get().getCurrentMap().getVomit().entrySet()) {
 			Vomit v = entry.getValue();
 			int distance = Translate.distance(b.getX(), b.getY(), v.getX(), v.getY());
 			if (minDistance > distance) {
@@ -627,7 +631,7 @@ public class FoodLogic {
 				minDistance = distance;
 			}
 		}
-		for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().getBody().entrySet()) {
+		for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
 			Body d = entry.getValue();
 			if (b == d)
 				continue;
@@ -643,7 +647,7 @@ public class FoodLogic {
 				minDistance = distance;
 			}
 		}
-		for (Map.Entry<Integer, Shit> entry : SimYukkuri.world.getCurrentMap().getShit().entrySet()) {
+		for (Map.Entry<Integer, Shit> entry : GameWorld.get().getCurrentMap().getShit().entrySet()) {
 			Shit s = entry.getValue();
 			int distance = Translate.distance(b.getX(), b.getY(), s.getX(), s.getY());
 			if (minDistance > distance) {
@@ -682,7 +686,7 @@ public class FoodLogic {
 		}
 
 		// フィールドの餌検索
-		for (Map.Entry<Integer, Food> entry : SimYukkuri.world.getCurrentMap().getFood().entrySet()) {
+		for (Map.Entry<Integer, Food> entry : GameWorld.get().getCurrentMap().getFood().entrySet()) {
 			Food f = entry.getValue();
 			if (f.isEmpty()) {
 				continue;
@@ -805,9 +809,9 @@ public class FoodLogic {
 
 		// 非常食検索
 		//第一候補：茎
-		for (Map.Entry<Integer, Stalk> entry : SimYukkuri.world.getCurrentMap().getStalk().entrySet()) {
+		for (Map.Entry<Integer, Stalk> entry : GameWorld.get().getCurrentMap().getStalk().entrySet()) {
 			Stalk s = entry.getValue();
-			Body p = SimYukkuri.world.getCurrentMap().getBody().get(s.getPlantYukkuri());
+			Body p = GameWorld.get().getCurrentMap().getBody().get(s.getPlantYukkuri());
 			if (p != null) {
 				if (p == b) {
 					continue;
@@ -847,7 +851,7 @@ public class FoodLogic {
 
 		//第二候補：吐餡
 		if (found == null) {
-			for (Map.Entry<Integer, Vomit> entry : SimYukkuri.world.getCurrentMap().getVomit().entrySet()) {
+			for (Map.Entry<Integer, Vomit> entry : GameWorld.get().getCurrentMap().getVomit().entrySet()) {
 				Vomit v = entry.getValue();
 				int distance = Translate.distance(b.getX(), b.getY(), v.getX(), v.getY());
 				if (minDistance > distance) {
@@ -862,7 +866,7 @@ public class FoodLogic {
 		}
 		//第三候補：死体
 		if (found == null) {
-			for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().getBody().entrySet()) {
+			for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
 				Body d = entry.getValue();
 				if (d == null || d.isRemoved()) {
 					continue;
@@ -895,7 +899,7 @@ public class FoodLogic {
 		}
 		//第四候補:うんうん
 		if (found == null) {
-			for (Map.Entry<Integer, Shit> entry : SimYukkuri.world.getCurrentMap().getShit().entrySet()) {
+			for (Map.Entry<Integer, Shit> entry : GameWorld.get().getCurrentMap().getShit().entrySet()) {
 				Shit s = entry.getValue();
 				if (!b.isTooHungry()) {
 					break;
@@ -938,7 +942,7 @@ public class FoodLogic {
 		}
 
 		// ゆっくりから検索
-		for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().getBody().entrySet()) {
+		for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
 			Body d = entry.getValue();
 			if (b == d)
 				continue;
@@ -1008,7 +1012,7 @@ public class FoodLogic {
 			found = found2;
 
 		// フィールドの餌検索
-		for (Map.Entry<Integer, Food> entry : SimYukkuri.world.getCurrentMap().getFood().entrySet()) {
+		for (Map.Entry<Integer, Food> entry : GameWorld.get().getCurrentMap().getFood().entrySet()) {
 			Food f = entry.getValue();
 			if (f.isEmpty()) {
 				continue;
@@ -1100,9 +1104,9 @@ public class FoodLogic {
 		}
 
 		// 非常食検索
-		for (Map.Entry<Integer, Stalk> entry : SimYukkuri.world.getCurrentMap().getStalk().entrySet()) {
+		for (Map.Entry<Integer, Stalk> entry : GameWorld.get().getCurrentMap().getStalk().entrySet()) {
 			Stalk s = entry.getValue();
-			Body p = SimYukkuri.world.getCurrentMap().getBody().get(s.getPlantYukkuri());
+			Body p = GameWorld.get().getCurrentMap().getBody().get(s.getPlantYukkuri());
 			if (p != null) {
 				if (p == b) {
 					continue;
@@ -1146,7 +1150,7 @@ public class FoodLogic {
 			found = found3;
 
 		if (found == null) {
-			for (Map.Entry<Integer, Vomit> entry : SimYukkuri.world.getCurrentMap().getVomit().entrySet()) {
+			for (Map.Entry<Integer, Vomit> entry : GameWorld.get().getCurrentMap().getVomit().entrySet()) {
 				Vomit v = entry.getValue();
 				int distance = Translate.distance(b.getX(), b.getY(), v.getX(), v.getY());
 				if (minDistance > distance) {
@@ -1160,7 +1164,7 @@ public class FoodLogic {
 			}
 		}
 		if (found == null) {
-			for (Map.Entry<Integer, Shit> entry : SimYukkuri.world.getCurrentMap().getShit().entrySet()) {
+			for (Map.Entry<Integer, Shit> entry : GameWorld.get().getCurrentMap().getShit().entrySet()) {
 				Shit s = entry.getValue();
 				if (!b.isTooHungry()) {
 					break;
@@ -1204,7 +1208,7 @@ public class FoodLogic {
 		}
 
 		if (found == null) {
-			for (Map.Entry<Integer, Shit> entry : SimYukkuri.world.getCurrentMap().getShit().entrySet()) {
+			for (Map.Entry<Integer, Shit> entry : GameWorld.get().getCurrentMap().getShit().entrySet()) {
 				Shit s = entry.getValue();
 				// 最小距離のものが見つかっていたら
 				if (minDistance < 1) {
@@ -1218,7 +1222,7 @@ public class FoodLogic {
 					}
 					if (checkTakeout(b, s)) {
 						boolean bOtherTarget = false;
-						for (Map.Entry<Integer, Body> entry2 : SimYukkuri.world.getCurrentMap().getBody().entrySet()) {
+						for (Map.Entry<Integer, Body> entry2 : GameWorld.get().getCurrentMap().getBody().entrySet()) {
 							Body bodyOther = entry2.getValue();
 							if (b == bodyOther || bodyOther == null || bodyOther.isDead() || bodyOther.isRemoved()) {
 								continue;
@@ -1246,7 +1250,7 @@ public class FoodLogic {
 		}
 
 		if (found == null) {
-			for (Map.Entry<Integer, Vomit> entry : SimYukkuri.world.getCurrentMap().getVomit().entrySet()) {
+			for (Map.Entry<Integer, Vomit> entry : GameWorld.get().getCurrentMap().getVomit().entrySet()) {
 				Vomit v = entry.getValue();
 				int distance = Translate.distance(b.getX(), b.getY(), v.getX(), v.getY());
 				if (minDistance > distance) {
@@ -1261,7 +1265,7 @@ public class FoodLogic {
 		}
 
 		if (found == null) {
-			for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().getBody().entrySet()) {
+			for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
 				Body d = entry.getValue();
 				if (b == d)
 					continue;
@@ -1284,7 +1288,7 @@ public class FoodLogic {
 		}
 
 		if (found == null) {
-			for (Map.Entry<Integer, Food> entry : SimYukkuri.world.getCurrentMap().getFood().entrySet()) {
+			for (Map.Entry<Integer, Food> entry : GameWorld.get().getCurrentMap().getFood().entrySet()) {
 				Food f = entry.getValue();
 				if (f.isEmpty()) {
 					continue;
@@ -1334,10 +1338,10 @@ public class FoodLogic {
 				break;
 			//あまあま以外だと吐く
 			default:
-				b.setMessage(MessagePool.getMessage(b, MessagePool.Action.SpitFood));
+				b.setMessage(GameMessages.getMessage(b, MessagePool.Action.SpitFood));
 				b.setHappiness(Happiness.VERY_SAD);
-				SimYukkuri.mypane.getTerrarium().addVomit(b.getX() + 7 - SimYukkuri.RND.nextInt(14),
-						b.getY() + 7 - SimYukkuri.RND.nextInt(14), 0,
+				SimYukkuri.mypane.getTerrarium().addVomit(b.getX() + 7 - GameRandom.nextInt(14),
+						b.getY() + 7 - GameRandom.nextInt(14), 0,
 						b, b.getShitType());
 				return;
 			}
@@ -1389,7 +1393,7 @@ public class FoodLogic {
 		switch (type) {
 		case SHIT:// うんうん
 			b.setHappiness(Happiness.SAD);
-			b.setMessage(MessagePool.getMessage(b, MessagePool.Action.EatingShit));
+			b.setMessage(GameMessages.getMessage(b, MessagePool.Action.EatingShit));
 			b.setEatingShit(true);
 			b.addStress(100);
 			b.addTang(-10);
@@ -1404,7 +1408,7 @@ public class FoodLogic {
 		case BITTER_YASEI:
 			if (b.isLikeBitterFood()) {
 				b.setHappiness(Happiness.VERY_HAPPY);
-				b.setMessage(MessagePool.getMessage(b, MessagePool.Action.Eating));
+				b.setMessage(GameMessages.getMessage(b, MessagePool.Action.Eating));
 				b.addStress(-500);
 				b.addTang(200);
 				// なつき度設定
@@ -1412,7 +1416,7 @@ public class FoodLogic {
 			} else {
 				b.strike(NEEDLE * 2);
 				b.setHappiness(Happiness.SAD);
-				b.setMessage(MessagePool.getMessage(b, MessagePool.Action.EatingBitter));
+				b.setMessage(GameMessages.getMessage(b, MessagePool.Action.EatingBitter));
 				b.setStrike(true);
 				if (b.getDiarrhea())
 					b.rapidShit();
@@ -1426,7 +1430,7 @@ public class FoodLogic {
 		case LEMONPOP_NORA:
 		case LEMONPOP_YASEI:
 			b.setHappiness(Happiness.VERY_HAPPY);
-			b.setMessage(MessagePool.getMessage(b, MessagePool.Action.Eating));
+			b.setMessage(GameMessages.getMessage(b, MessagePool.Action.Eating));
 			b.forceToSleep();
 			b.addStress(-500);
 			b.addTang(50);
@@ -1438,7 +1442,7 @@ public class FoodLogic {
 		case HOT_YASEI:
 			if (b.isLikeHotFood()) {
 				b.setHappiness(Happiness.VERY_HAPPY);
-				b.setMessage(MessagePool.getMessage(b, MessagePool.Action.Eating));
+				b.setMessage(GameMessages.getMessage(b, MessagePool.Action.Eating));
 				b.addStress(-500);
 				b.addTang(200);
 				// なつき度設定
@@ -1446,7 +1450,7 @@ public class FoodLogic {
 			} else {
 				b.strike(HAMMER >> 1);
 				b.setHappiness(Happiness.SAD);
-				b.setMessage(MessagePool.getMessage(b, MessagePool.Action.EatingBitter));
+				b.setMessage(GameMessages.getMessage(b, MessagePool.Action.EatingBitter));
 				b.setStrike(true);
 				b.addStress(500);
 				b.addMemories(-10);
@@ -1458,9 +1462,9 @@ public class FoodLogic {
 		case VIYUGRA_NORA:
 		case VIYUGRA_YASEI:
 			b.setHappiness(Happiness.VERY_HAPPY);
-			b.setMessage(MessagePool.getMessage(b, MessagePool.Action.Eating));
+			b.setMessage(GameMessages.getMessage(b, MessagePool.Action.Eating));
 			b.rapidExcitingDiscipline();
-			if (!b.isSuperRaper() && SimYukkuri.RND.nextInt(10) == 0) {
+			if (!b.isSuperRaper() && GameRandom.nextInt(10) == 0) {
 				b.setSuperRaper(true);
 				b.setRaper(true);
 			}
@@ -1468,7 +1472,7 @@ public class FoodLogic {
 			break;
 		case BODY:// 生け餌
 			b.setHappiness(Happiness.VERY_HAPPY);
-			b.setMessage(MessagePool.getMessage(b, MessagePool.Action.EatingAmaama), HOLDMESSAGE, true, true);
+			b.setMessage(GameMessages.getMessage(b, MessagePool.Action.EatingAmaama), HOLDMESSAGE, true, true);
 			b.addStress(-500);
 			b.addTang(50);
 			b.addMemories(5);
@@ -1480,7 +1484,7 @@ public class FoodLogic {
 			break;
 		case STALK:
 			b.setHappiness(Happiness.VERY_HAPPY);
-			b.setMessage(MessagePool.getMessage(b, MessagePool.Action.Eating));
+			b.setMessage(GameMessages.getMessage(b, MessagePool.Action.Eating));
 			b.addStress(-500);
 			b.addDamage(-500);
 			b.addMemories(20);
@@ -1494,7 +1498,7 @@ public class FoodLogic {
 		case SWEETS_NORA1:
 		case SWEETS_YASEI1:
 			b.setHappiness(Happiness.VERY_HAPPY);
-			b.setMessage(MessagePool.getMessage(b, MessagePool.Action.EatingAmaama), HOLDMESSAGE, true, true);
+			b.setMessage(GameMessages.getMessage(b, MessagePool.Action.EatingAmaama), HOLDMESSAGE, true, true);
 			b.setStress(0);
 			b.addTang(200);
 			b.addMemories(30);
@@ -1505,7 +1509,7 @@ public class FoodLogic {
 		case SWEETS_NORA2:
 		case SWEETS_YASEI2:
 			b.setHappiness(Happiness.VERY_HAPPY);
-			b.setMessage(MessagePool.getMessage(b, MessagePool.Action.EatingAmaama), HOLDMESSAGE, true, true);
+			b.setMessage(GameMessages.getMessage(b, MessagePool.Action.EatingAmaama), HOLDMESSAGE, true, true);
 			b.setStress(0);
 			b.addTang(1000);
 			b.addMemories(50);
@@ -1516,7 +1520,7 @@ public class FoodLogic {
 		case WASTE_NORA:
 		case WASTE_YASEI:
 			b.setHappiness(Happiness.AVERAGE);
-			b.setMessage(MessagePool.getMessage(b, MessagePool.Action.Eating));
+			b.setMessage(GameMessages.getMessage(b, MessagePool.Action.Eating));
 			b.addDirtyPeriod(Body.TICK * 4);
 			b.addStress(-100);
 			b.addTang(-30);
@@ -1529,7 +1533,7 @@ public class FoodLogic {
 			break;
 		case VOMIT:
 			b.setHappiness(Happiness.VERY_HAPPY);
-			b.setMessage(MessagePool.getMessage(b, MessagePool.Action.EatingAmaama), HOLDMESSAGE, true, true);
+			b.setMessage(GameMessages.getMessage(b, MessagePool.Action.EatingAmaama), HOLDMESSAGE, true, true);
 			b.setStress(0);
 			b.addTang(100);
 			// なつき度設定
@@ -1537,7 +1541,7 @@ public class FoodLogic {
 			break;
 		default:
 			b.setHappiness(Happiness.VERY_HAPPY);
-			b.setMessage(MessagePool.getMessage(b, MessagePool.Action.EatingAmaama), HOLDMESSAGE, true, true);
+			b.setMessage(GameMessages.getMessage(b, MessagePool.Action.EatingAmaama), HOLDMESSAGE, true, true);
 			b.addStress(-300);
 			b.addTang(100);
 			b.addMemories(1);
@@ -1550,7 +1554,7 @@ public class FoodLogic {
 		switch (type) {
 		case SHIT:
 			b.setHappiness(Happiness.SAD);
-			b.setMessage(MessagePool.getMessage(b, MessagePool.Action.EatingShit));
+			b.setMessage(GameMessages.getMessage(b, MessagePool.Action.EatingShit));
 			b.setEatingShit(true);
 			b.addStress(200);
 			b.addTang(-10);
@@ -1565,7 +1569,7 @@ public class FoodLogic {
 		case BITTER_YASEI:
 			if (b.isLikeBitterFood()) {
 				b.setHappiness(Happiness.HAPPY);
-				b.setMessage(MessagePool.getMessage(b, MessagePool.Action.Eating));
+				b.setMessage(GameMessages.getMessage(b, MessagePool.Action.Eating));
 				b.addStress(-200);
 				b.addTang(20);
 				// なつき度設定
@@ -1573,7 +1577,7 @@ public class FoodLogic {
 			} else {
 				b.strike(NEEDLE * 4);
 				b.setHappiness(Happiness.SAD);
-				b.setMessage(MessagePool.getMessage(b, MessagePool.Action.EatingBitter));
+				b.setMessage(GameMessages.getMessage(b, MessagePool.Action.EatingBitter));
 				b.setStrike(true);
 				if (b.getDiarrhea())
 					b.rapidShit();
@@ -1587,7 +1591,7 @@ public class FoodLogic {
 		case LEMONPOP_NORA:
 		case LEMONPOP_YASEI:
 			b.setHappiness(Happiness.AVERAGE);
-			b.setMessage(MessagePool.getMessage(b, MessagePool.Action.Eating));
+			b.setMessage(GameMessages.getMessage(b, MessagePool.Action.Eating));
 			b.forceToSleep();
 			b.addStress(-200);
 			b.addTang(20);
@@ -1600,7 +1604,7 @@ public class FoodLogic {
 			if (!b.isLikeHotFood()) {
 				b.strike(HAMMER);
 				b.setHappiness(Happiness.VERY_SAD);
-				b.setMessage(MessagePool.getMessage(b, MessagePool.Action.EatingBitter));
+				b.setMessage(GameMessages.getMessage(b, MessagePool.Action.EatingBitter));
 				b.setStrike(true);
 				b.addStress(800);
 				b.addMemories(-10);
@@ -1608,7 +1612,7 @@ public class FoodLogic {
 				b.addLovePlayer(anLovePoint[3][1]);
 			} else {
 				b.setHappiness(Happiness.HAPPY);
-				b.setMessage(MessagePool.getMessage(b, MessagePool.Action.Eating));
+				b.setMessage(GameMessages.getMessage(b, MessagePool.Action.Eating));
 				b.addStress(-200);
 				b.addTang(20);
 				// なつき度設定
@@ -1619,9 +1623,9 @@ public class FoodLogic {
 		case VIYUGRA_NORA:
 		case VIYUGRA_YASEI:
 			b.setHappiness(Happiness.HAPPY);
-			b.setMessage(MessagePool.getMessage(b, MessagePool.Action.Eating));
+			b.setMessage(GameMessages.getMessage(b, MessagePool.Action.Eating));
 			b.rapidExcitingDiscipline();
-			if (!b.isSuperRaper() && SimYukkuri.RND.nextInt(10) == 0) {
+			if (!b.isSuperRaper() && GameRandom.nextInt(10) == 0) {
 				b.setSuperRaper(true);
 				b.setRaper(true);
 			}
@@ -1629,7 +1633,7 @@ public class FoodLogic {
 			break;
 		case BODY:
 			b.setHappiness(Happiness.AVERAGE);
-			b.setMessage(MessagePool.getMessage(b, MessagePool.Action.Eating));
+			b.setMessage(GameMessages.getMessage(b, MessagePool.Action.Eating));
 			b.addStress(-100);
 			b.addMemories(1);
 			if (!b.isPredatorType()) {
@@ -1643,7 +1647,7 @@ public class FoodLogic {
 			break;
 		case STALK:
 			b.setHappiness(Happiness.HAPPY);
-			b.setMessage(MessagePool.getMessage(b, MessagePool.Action.Eating));
+			b.setMessage(GameMessages.getMessage(b, MessagePool.Action.Eating));
 			b.addStress(-200);
 			b.addDamage(-500);
 			b.addMemories(20);
@@ -1657,7 +1661,7 @@ public class FoodLogic {
 		case SWEETS_NORA1:
 		case SWEETS_YASEI1:
 			b.setHappiness(Happiness.VERY_HAPPY);
-			b.setMessage(MessagePool.getMessage(b, MessagePool.Action.EatingAmaama), HOLDMESSAGE, true, true);
+			b.setMessage(GameMessages.getMessage(b, MessagePool.Action.EatingAmaama), HOLDMESSAGE, true, true);
 			b.setStress(0);
 			b.addTang(100);
 			b.addMemories(30);
@@ -1668,7 +1672,7 @@ public class FoodLogic {
 		case SWEETS_NORA2:
 		case SWEETS_YASEI2:
 			b.setHappiness(Happiness.VERY_HAPPY);
-			b.setMessage(MessagePool.getMessage(b, MessagePool.Action.EatingAmaama), HOLDMESSAGE, true, true);
+			b.setMessage(GameMessages.getMessage(b, MessagePool.Action.EatingAmaama), HOLDMESSAGE, true, true);
 			b.setStress(0);
 			b.addTang(1000);
 			b.addMemories(50);
@@ -1679,7 +1683,7 @@ public class FoodLogic {
 		case WASTE_NORA:
 		case WASTE_YASEI:
 			b.setHappiness(Happiness.SAD);
-			b.setMessage(MessagePool.getMessage(b, MessagePool.Action.EatingBadtasting));
+			b.setMessage(GameMessages.getMessage(b, MessagePool.Action.EatingBadtasting));
 			b.setStrike(true);
 			b.addDirtyPeriod(Body.TICK * 4);
 			b.addStress(100);
@@ -1693,7 +1697,7 @@ public class FoodLogic {
 			break;
 		case VOMIT:
 			b.setHappiness(Happiness.HAPPY);
-			b.setMessage(MessagePool.getMessage(b, MessagePool.Action.Eating));
+			b.setMessage(GameMessages.getMessage(b, MessagePool.Action.Eating));
 			b.addStress(-100);
 			if (!b.isPredatorType()) {
 				b.addTang(50);
@@ -1703,7 +1707,7 @@ public class FoodLogic {
 			break;
 		default:
 			b.setHappiness(Happiness.HAPPY);
-			b.setMessage(MessagePool.getMessage(b, MessagePool.Action.Eating));
+			b.setMessage(GameMessages.getMessage(b, MessagePool.Action.Eating));
 			b.addStress(-100);
 			b.addMemories(1);
 			break;
@@ -1715,7 +1719,7 @@ public class FoodLogic {
 		switch (type) {
 		case SHIT:
 			b.setHappiness(Happiness.VERY_SAD);
-			b.setMessage(MessagePool.getMessage(b, MessagePool.Action.EatingShit));
+			b.setMessage(GameMessages.getMessage(b, MessagePool.Action.EatingShit));
 			b.setEatingShit(true);
 			b.addStress(500);
 			b.addTang(-20);
@@ -1730,7 +1734,7 @@ public class FoodLogic {
 		case BITTER_YASEI:
 			if (b.isLikeBitterFood()) {
 				b.setHappiness(Happiness.AVERAGE);
-				b.setMessage(MessagePool.getMessage(b, MessagePool.Action.Eating));
+				b.setMessage(GameMessages.getMessage(b, MessagePool.Action.Eating));
 				b.addStress(-100);
 				b.addTang(-20);
 				// なつき度設定
@@ -1738,7 +1742,7 @@ public class FoodLogic {
 			} else {
 				b.strike(NEEDLE * 6);
 				b.setHappiness(Happiness.VERY_SAD);
-				b.setMessage(MessagePool.getMessage(b, MessagePool.Action.EatingBitter));
+				b.setMessage(GameMessages.getMessage(b, MessagePool.Action.EatingBitter));
 				if (b.getDiarrhea())
 					b.rapidShit();
 				b.addStress(300);
@@ -1754,7 +1758,7 @@ public class FoodLogic {
 				b.setHappiness(Happiness.VERY_SAD);
 			else
 				b.setHappiness(Happiness.SAD);
-			b.setMessage(MessagePool.getMessage(b, MessagePool.Action.EatingBadtasting));
+			b.setMessage(GameMessages.getMessage(b, MessagePool.Action.EatingBadtasting));
 			b.forceToSleep();
 			b.addStress(10);
 			b.addTang(-20);
@@ -1766,7 +1770,7 @@ public class FoodLogic {
 		case HOT_YASEI:
 			if (b.isLikeHotFood()) {
 				b.setHappiness(Happiness.AVERAGE);
-				b.setMessage(MessagePool.getMessage(b, MessagePool.Action.Eating));
+				b.setMessage(GameMessages.getMessage(b, MessagePool.Action.Eating));
 				b.addStress(-100);
 				b.addTang(-20);
 				// なつき度設定
@@ -1774,7 +1778,7 @@ public class FoodLogic {
 			} else {
 				b.strike(HAMMER * 2);
 				b.setHappiness(Happiness.VERY_SAD);
-				b.setMessage(MessagePool.getMessage(b, MessagePool.Action.EatingBitter));
+				b.setMessage(GameMessages.getMessage(b, MessagePool.Action.EatingBitter));
 				b.setStrike(true);
 				b.addStress(1200);
 				b.addMemories(-10);
@@ -1789,9 +1793,9 @@ public class FoodLogic {
 				b.setHappiness(Happiness.VERY_SAD);
 			else
 				b.setHappiness(Happiness.SAD);
-			b.setMessage(MessagePool.getMessage(b, MessagePool.Action.EatingBadtasting));
+			b.setMessage(GameMessages.getMessage(b, MessagePool.Action.EatingBadtasting));
 			b.rapidExcitingDiscipline();
-			if (!b.isSuperRaper() && SimYukkuri.RND.nextInt(10) == 0) {
+			if (!b.isSuperRaper() && GameRandom.nextInt(10) == 0) {
 				b.setSuperRaper(true);
 				b.setRaper(true);
 			}
@@ -1799,7 +1803,7 @@ public class FoodLogic {
 			break;
 		case BODY:
 			b.setHappiness(Happiness.SAD);
-			b.setMessage(MessagePool.getMessage(b, MessagePool.Action.EatingBadtasting));
+			b.setMessage(GameMessages.getMessage(b, MessagePool.Action.EatingBadtasting));
 			b.addStress(100);
 			b.addTang(10);
 			b.addMemories(1);
@@ -1811,7 +1815,7 @@ public class FoodLogic {
 			break;
 		case STALK:
 			b.setHappiness(Happiness.AVERAGE);
-			b.setMessage(MessagePool.getMessage(b, MessagePool.Action.Eating));
+			b.setMessage(GameMessages.getMessage(b, MessagePool.Action.Eating));
 			b.addStress(10);
 			b.addDamage(-500);
 			b.addMemories(20);
@@ -1825,7 +1829,7 @@ public class FoodLogic {
 		case SWEETS_NORA1:
 		case SWEETS_YASEI1:
 			b.setHappiness(Happiness.HAPPY);
-			b.setMessage(MessagePool.getMessage(b, MessagePool.Action.EatingAmaama));
+			b.setMessage(GameMessages.getMessage(b, MessagePool.Action.EatingAmaama));
 			b.setStress(0);
 			b.addTang(100);
 			b.addMemories(30);
@@ -1836,7 +1840,7 @@ public class FoodLogic {
 		case SWEETS_NORA2:
 		case SWEETS_YASEI2:
 			b.setHappiness(Happiness.HAPPY);
-			b.setMessage(MessagePool.getMessage(b, MessagePool.Action.EatingAmaama), HOLDMESSAGE, true, true);
+			b.setMessage(GameMessages.getMessage(b, MessagePool.Action.EatingAmaama), HOLDMESSAGE, true, true);
 			b.setStress(0);
 			b.addTang(1000);
 			b.addMemories(50);
@@ -1847,7 +1851,7 @@ public class FoodLogic {
 		case WASTE_NORA:
 		case WASTE_YASEI:
 			b.setHappiness(Happiness.VERY_SAD);
-			b.setMessage(MessagePool.getMessage(b, MessagePool.Action.EatingBitter));
+			b.setMessage(GameMessages.getMessage(b, MessagePool.Action.EatingBitter));
 			b.setStrike(true);
 			b.addDirtyPeriod(Body.TICK * 4);
 			b.addStress(100);
@@ -1861,7 +1865,7 @@ public class FoodLogic {
 			break;
 		case VOMIT:
 			b.setHappiness(Happiness.AVERAGE);
-			b.setMessage(MessagePool.getMessage(b, MessagePool.Action.EatingBadtasting));
+			b.setMessage(GameMessages.getMessage(b, MessagePool.Action.EatingBadtasting));
 			b.addStress(20);
 			if (!b.isPredatorType()) {
 				b.addTang(50);
@@ -1874,7 +1878,7 @@ public class FoodLogic {
 				b.setHappiness(Happiness.VERY_SAD);
 			else
 				b.setHappiness(Happiness.SAD);
-			b.setMessage(MessagePool.getMessage(b, MessagePool.Action.EatingBadtasting));
+			b.setMessage(GameMessages.getMessage(b, MessagePool.Action.EatingBadtasting));
 			b.addStress(50);
 			b.addTang(-10);
 			b.addMemories(1);
@@ -1906,7 +1910,7 @@ public class FoodLogic {
 				Shit s = (Shit) o;
 				boolean bIsInToiletForSlave = false;
 				boolean bIsToiletForSlave = false;
-				for (Map.Entry<Integer, Toilet> entry : SimYukkuri.world.getCurrentMap().getToilet().entrySet()) {
+				for (Map.Entry<Integer, Toilet> entry : GameWorld.get().getCurrentMap().getToilet().entrySet()) {
 					Toilet t = entry.getValue();
 					// うんうん奴隷用トイレのどれかにあれば終了
 					if (t.isForSlave()) {
@@ -1947,7 +1951,7 @@ public class FoodLogic {
 				ObjEX oExFav = (ObjEX) oFav;
 				// 家族がいる
 				if (YukkuriUtil.getBodyInstance(b.getPartner()) != null || b.getChildrenListSize() != 0) {
-					for (Map.Entry<Integer, Food> entry : SimYukkuri.world.getCurrentMap().getFood().entrySet()) {
+					for (Map.Entry<Integer, Food> entry : GameWorld.get().getCurrentMap().getFood().entrySet()) {
 						Food foodOnMyBed = entry.getValue();
 						// 空なら無視
 						if (foodOnMyBed.isEmpty()) {
@@ -1961,7 +1965,7 @@ public class FoodLogic {
 
 					// ベッドの上にない餌を対象にする
 					boolean bIsOnbed = false;
-					for (Map.Entry<Integer, Bed> entry : SimYukkuri.world.getCurrentMap().getBed().entrySet()) {
+					for (Map.Entry<Integer, Bed> entry : GameWorld.get().getCurrentMap().getBed().entrySet()) {
 						Bed bed = entry.getValue();
 						if (bed.checkHitObj(o, false)) {
 							bIsOnbed = true;

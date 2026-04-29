@@ -1,4 +1,6 @@
 package src.command;
+import src.util.GameEnvironment;
+import src.util.GameMessages;
 
 import java.awt.event.MouseEvent;
 import java.lang.reflect.Constructor;
@@ -9,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import src.SimYukkuri;
+import src.util.GameWorld;
 import src.attachment.ANYDAmpoule;
 import src.attachment.AccelAmpoule;
 import src.attachment.Ants;
@@ -108,12 +111,12 @@ public class GadgetAction {
 				break;
 		}
 
-		List<Body> bodyList = new LinkedList<Body>(SimYukkuri.world.getCurrentMap().getBody().values());
-		List<Shit> shitList = new LinkedList<Shit>(SimYukkuri.world.getCurrentMap().getShit().values());
-		List<Vomit> vomitList = new LinkedList<Vomit>(SimYukkuri.world.getCurrentMap().getVomit().values());
-		List<Food> foodList = new LinkedList<Food>(SimYukkuri.world.getCurrentMap().getFood().values());
-		List<Stalk> stalkList = new LinkedList<Stalk>(SimYukkuri.world.getCurrentMap().getStalk().values());
-		List<Barrier> wallList = SimYukkuri.world.getCurrentMap().getBarrier();
+		List<Body> bodyList = new LinkedList<Body>(GameWorld.get().getCurrentMap().getBody().values());
+		List<Shit> shitList = new LinkedList<Shit>(GameWorld.get().getCurrentMap().getShit().values());
+		List<Vomit> vomitList = new LinkedList<Vomit>(GameWorld.get().getCurrentMap().getVomit().values());
+		List<Food> foodList = new LinkedList<Food>(GameWorld.get().getCurrentMap().getFood().values());
+		List<Stalk> stalkList = new LinkedList<Stalk>(GameWorld.get().getCurrentMap().getStalk().values());
+		List<Barrier> wallList = GameWorld.get().getCurrentMap().getBarrier();
 		if (isBody) {
 			for (Body b : bodyList) {
 				if (!b.isDead())
@@ -143,7 +146,7 @@ public class GadgetAction {
 			Stalk[] stalks = stalkList.toArray(new Stalk[0]);
 			for (Stalk s : stalks) {
 				int id = s.getPlantYukkuri();
-				if (SimYukkuri.world.getCurrentMap().getBody().get(id) == null) {
+				if (GameWorld.get().getCurrentMap().getBody().get(id) == null) {
 					s.remove();
 				} else if (checkNoBabyStalk(s)) {
 					s.remove();
@@ -152,7 +155,7 @@ public class GadgetAction {
 		}
 		if (isWall) {
 			wallList.clear();
-			MapPlaceData.clearMap(SimYukkuri.world.getCurrentMap().getWallMap());
+			MapPlaceData.clearMap(GameWorld.get().getCurrentMap().getWallMap());
 		}
 		if (isRemoveAll) {
 			for (Body bodyTarget : bodyList) {
@@ -161,11 +164,11 @@ public class GadgetAction {
 			for (Shit s : shitList) {
 				s.remove();
 			}
-			SimYukkuri.world.getCurrentMap().getShit().clear();
+			GameWorld.get().getCurrentMap().getShit().clear();
 			for (Vomit v : vomitList) {
 				v.remove();
 			}
-			SimYukkuri.world.getCurrentMap().getVomit().clear();
+			GameWorld.get().getCurrentMap().getVomit().clear();
 			for (Food f : foodList) {
 				if (f.isEmpty())
 					f.remove();
@@ -175,11 +178,11 @@ public class GadgetAction {
 
 			for (Stalk s : stalkList) {
 				int id = s.getPlantYukkuri();
-				if (SimYukkuri.world.getCurrentMap().getBody().get(id) == null) {
+				if (GameWorld.get().getCurrentMap().getBody().get(id) == null) {
 					s.remove();
 				}
 			}
-			MapPlaceData.clearMap(SimYukkuri.world.getCurrentMap().getWallMap());
+			MapPlaceData.clearMap(GameWorld.get().getCurrentMap().getWallMap());
 		}
 	}
 
@@ -543,14 +546,14 @@ public class GadgetAction {
 				break;
 			case SNAPPING:
 				if (ev.isShiftDown()) {
-					for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().getBody().entrySet()) {
+					for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
 						entry.getValue().kick();
 					}
-					Map<Integer, Shit> shits = SimYukkuri.world.getCurrentMap().getShit();
+					Map<Integer, Shit> shits = GameWorld.get().getCurrentMap().getShit();
 					for (Map.Entry<Integer, Shit> entry : shits.entrySet()) {
 						entry.getValue().kick();
 					}
-					Map<Integer, Vomit> vomits = SimYukkuri.world.getCurrentMap().getVomit();
+					Map<Integer, Vomit> vomits = GameWorld.get().getCurrentMap().getVomit();
 					for (Map.Entry<Integer, Vomit> entry : vomits.entrySet()) {
 						entry.getValue().kick();
 					}
@@ -578,7 +581,7 @@ public class GadgetAction {
 				break;
 			case HAMMER:
 				if (ev.isShiftDown()) {
-					for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().getBody().entrySet()) {
+					for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
 						Body b = entry.getValue();
 						b.strikeByHammer();
 						if (!b.isHasPants() && !b.isDead() && !b.isShutmouth()) {
@@ -592,7 +595,7 @@ public class GadgetAction {
 						}
 						b.makeDirty(true);
 					}
-					Terrarium.setAlarm();
+					GameEnvironment.setAlarm();
 				} else {
 					if (found instanceof Body) {
 						Body b = (Body) found;
@@ -607,7 +610,7 @@ public class GadgetAction {
 							b.stay();
 						}
 						b.makeDirty(true);
-						Terrarium.setAlarm();
+						GameEnvironment.setAlarm();
 					}
 				}
 				break;
@@ -630,7 +633,7 @@ public class GadgetAction {
 					if (SimYukkuri.sperm == null) {
 						SimYukkuri.sperm = ((Body) found).getDna();
 						((Body) found).strikeByPunish();
-						Terrarium.setAlarm();
+						GameEnvironment.setAlarm();
 					} else {
 						((Body) found).dripSperm(SimYukkuri.sperm);
 						SimYukkuri.sperm = null;
@@ -643,7 +646,7 @@ public class GadgetAction {
 				break;
 			case PUNCH:
 				if (ev.isShiftDown()) {
-					for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().getBody().entrySet()) {
+					for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
 						Body b = entry.getValue();
 						b.strikeByPunch();
 						if (!b.isHasPants() && !b.isDead() && !b.isShutmouth()) {
@@ -657,7 +660,7 @@ public class GadgetAction {
 						}
 						b.makeDirty(true);
 					}
-					Terrarium.setAlarm();
+					GameEnvironment.setAlarm();
 				} else {
 					if (found instanceof Body) {
 						Body b = (Body) found;
@@ -672,13 +675,13 @@ public class GadgetAction {
 							b.stay();
 						}
 						b.makeDirty(true);
-						Terrarium.setAlarm();
+						GameEnvironment.setAlarm();
 					}
 				}
 				break;
 			case GODHAND:
 				if (ev.isShiftDown()) {
-					List<Body> bodyList = new LinkedList<Body>(SimYukkuri.world.getCurrentMap().getBody().values());
+					List<Body> bodyList = new LinkedList<Body>(GameWorld.get().getCurrentMap().getBody().values());
 					int nSize = bodyList.size();
 					for (int i = nSize - 1; -1 < i; i--) {
 						Body b = bodyList.get(i);
@@ -694,7 +697,7 @@ public class GadgetAction {
 				}
 				break;
 			case PEAL:
-				List<Body> bodyListP = new LinkedList<Body>(SimYukkuri.world.getCurrentMap().getBody().values());
+				List<Body> bodyListP = new LinkedList<Body>(GameWorld.get().getCurrentMap().getBody().values());
 				if (ev.isShiftDown() || ev.isControlDown()) {
 					for (Body b : bodyListP) {
 						b.peal();
@@ -709,7 +712,7 @@ public class GadgetAction {
 				break;
 
 			case Blind:
-				List<Body> bodyListB = new LinkedList<Body>(SimYukkuri.world.getCurrentMap().getBody().values());
+				List<Body> bodyListB = new LinkedList<Body>(GameWorld.get().getCurrentMap().getBody().values());
 				if (ev.isShiftDown()) {
 					boolean flag = true;
 					if (found instanceof Body) {
@@ -738,7 +741,7 @@ public class GadgetAction {
 				}
 				break;
 			case SHUTMOUTH:
-				List<Body> bodyListS = new LinkedList<Body>(SimYukkuri.world.getCurrentMap().getBody().values());
+				List<Body> bodyListS = new LinkedList<Body>(GameWorld.get().getCurrentMap().getBody().values());
 				if (ev.isShiftDown()) {
 					boolean flag = true;
 					if (found instanceof Body) {
@@ -773,7 +776,7 @@ public class GadgetAction {
 				GadgetMenu.executeBodyMethod(ev, found, "pickHair");
 				break;
 			case PACK:
-				List<Body> bodyListPa = new LinkedList<Body>(SimYukkuri.world.getCurrentMap().getBody().values());
+				List<Body> bodyListPa = new LinkedList<Body>(GameWorld.get().getCurrentMap().getBody().values());
 				if (ev.isShiftDown()) {
 					boolean flag = true;
 					if (found instanceof Body) {
@@ -837,9 +840,9 @@ public class GadgetAction {
 				if (found instanceof Stalk) {
 					Stalk s = ((Stalk) found);
 					int id = s.getPlantYukkuri();
-					if (SimYukkuri.world.getCurrentMap().getBody().get(id) == null) {
+					if (GameWorld.get().getCurrentMap().getBody().get(id) == null) {
 						int id2 = s.getPlantYukkuri();
-						SimYukkuri.world.getCurrentMap().getBody().get(id2).touchStalk();
+						GameWorld.get().getCurrentMap().getBody().get(id2).touchStalk();
 					}
 				}
 				break;
@@ -879,7 +882,7 @@ public class GadgetAction {
 	 * @param found 対象オブジェクト
 	 */
 	public static void evaluateAmpoule(GadgetList item, MouseEvent ev, Obj found) {
-		List<Body> bodyList = new LinkedList<Body>(SimYukkuri.world.getCurrentMap().getBody().values());
+		List<Body> bodyList = new LinkedList<Body>(GameWorld.get().getCurrentMap().getBody().values());
 		switch (item) {
 			case ORANGE_AMP:
 				if (ev.isShiftDown()) {
@@ -1196,7 +1199,7 @@ public class GadgetAction {
 	 * @param found 対象オブジェクト
 	 */
 	public static void evaluateAccessory(GadgetList item, MouseEvent ev, Obj found) {
-		List<Body> bodyList = new LinkedList<Body>(SimYukkuri.world.getCurrentMap().getBody().values());
+		List<Body> bodyList = new LinkedList<Body>(GameWorld.get().getCurrentMap().getBody().values());
 		if (ev.isShiftDown()) {
 			boolean flag = true;
 			if (found instanceof Body) {
@@ -1239,7 +1242,7 @@ public class GadgetAction {
 	 * @param found 対象オブジェクト
 	 */
 	public static void evaluatePants(GadgetList item, MouseEvent ev, Obj found) {
-		List<Body> bodyList = new LinkedList<Body>(SimYukkuri.world.getCurrentMap().getBody().values());
+		List<Body> bodyList = new LinkedList<Body>(GameWorld.get().getCurrentMap().getBody().values());
 		if (ev.isShiftDown()) {
 			boolean flag = true;
 			if (found instanceof Body) {
@@ -1472,7 +1475,7 @@ public class GadgetAction {
 					Body b = (Body) found;
 					if (b.isPredatorType())
 						EventLogic.addWorldEvent(new PredatorsGameEvent(b, null, null, 1), b,
-								MessagePool.getMessage(b, MessagePool.Action.GameStart));
+								GameMessages.getMessage(b, MessagePool.Action.GameStart));
 				}
 				break;
 			case INVITEANTS:

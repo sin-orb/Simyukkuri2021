@@ -1,4 +1,5 @@
 package src.enums;
+import src.util.GameText;
 
 import src.system.ResourceUtil;
 import src.yukkuri.Alice;
@@ -39,16 +40,16 @@ public enum YukkuriType {
 	AYAYA("Ayaya", "ayaya", "ayaya", ResourceUtil.IS_JP ? Ayaya.nameJ : Ayaya.nameE, Ayaya.type),
 	CHEN("Chen", "chen", "chen", ResourceUtil.IS_JP ? Chen.nameJ : Chen.nameE, Chen.type),
 	CHIRUNO("Chiruno", "chiruno", "chiruno", ResourceUtil.IS_JP ? Chiruno.nameJ : Chiruno.nameE, Chiruno.type),
-	DEIBU("Deibu", "deibu", "deibu", ResourceUtil.getInstance().read("enums_deibu"), Deibu.type),
-	DOSMARISA("DosMarisa", "dosmarisa", "dosmarisa", ResourceUtil.getInstance().read("enums_dosu"), DosMarisa.type),
+	DEIBU("Deibu", "deibu", "deibu", GameText.read("enums_deibu"), Deibu.type),
+	DOSMARISA("DosMarisa", "dosmarisa", "dosmarisa", GameText.read("enums_dosu"), DosMarisa.type),
 	EIKI("Eiki", "eiki", "eiki", ResourceUtil.IS_JP ? Eiki.nameJ : Eiki.nameE, Eiki.type),
 	FRAN("Fran", "fran", "fran", ResourceUtil.IS_JP ? Fran.nameJ : Fran.nameE, Fran.type),
-	HYBRIDYUKKURI("HybridYukkuri", "hybridyukkuri", "", ResourceUtil.getInstance().read("enums_hybrid"), HybridYukkuri.type),
+	HYBRIDYUKKURI("HybridYukkuri", "hybridyukkuri", "", GameText.read("enums_hybrid"), HybridYukkuri.type),
 	KIMEEMARU("Kimeemaru", "kimeemaru", "kimeemaru", ResourceUtil.IS_JP ? Kimeemaru.nameJ : Kimeemaru.nameE, Kimeemaru.type),
 	MARISA("Marisa", "marisa", "marisa", ResourceUtil.IS_JP ? Marisa.nameJ : Marisa.nameE, Marisa.type),
-	MARISAKOTATSUMURI("MarisaKotatsumuri", "marisakotatsumuri", "marisa_kotatumuri", ResourceUtil.getInstance().read("enums_kotatsu"), MarisaKotatsumuri.type),
+	MARISAKOTATSUMURI("MarisaKotatsumuri", "marisakotatsumuri", "marisa_kotatumuri", GameText.read("enums_kotatsu"), MarisaKotatsumuri.type),
 	MARISAREIMU("MarisaReimu", "marisareimu", "marisa_reimu", ResourceUtil.IS_JP ? MarisaReimu.nameJ : MarisaReimu.nameE, MarisaReimu.type),
-	MARISATSUMURI("MarisaTsumuri", "marisatsumuri", "marisa_tumuri", ResourceUtil.getInstance().read("enums_tsumuri"), MarisaTsumuri.type),
+	MARISATSUMURI("MarisaTsumuri", "marisatsumuri", "marisa_tumuri", GameText.read("enums_tsumuri"), MarisaTsumuri.type),
 	MEIRIN("Meirin", "meirin", "merin", ResourceUtil.IS_JP ? Meirin.nameJ : Meirin.nameE, Meirin.type),
 	MYON("Myon", "myon", "myon", ResourceUtil.IS_JP ? Myon.nameJ : Myon.nameE, Myon.type),
 	NITORI("Nitori", "nitori", "nitori", ResourceUtil.IS_JP ? Nitori.nameJ : Nitori.nameE, Nitori.type),
@@ -63,7 +64,7 @@ public enum YukkuriType {
 	TARINAIREIMU("TarinaiReimu", "tarinai_reimu", "tarinai_reimu", ResourceUtil.IS_JP ? TarinaiReimu.nameJ : TarinaiReimu.nameE, TarinaiReimu.type),
 	TENKO("Tenko", "tenko", "tenko", ResourceUtil.IS_JP ? Tenko.nameJ : Tenko.nameE, Tenko.type),
 	UDONGE("Udonge", "udonge", "udonge", ResourceUtil.IS_JP ? Udonge.nameJ : Udonge.nameE, Udonge.type),
-	WASAREIMU("WasaReimu", "reimu", "wasa", ResourceUtil.getInstance().read("enums_wasa"), WasaReimu.type),
+	WASAREIMU("WasaReimu", "reimu", "wasa", GameText.read("enums_wasa"), WasaReimu.type),
 	YURUSANAE("Yurusanae", "yurusanae", "yurusanae", ResourceUtil.IS_JP ? Yurusanae.nameJ : Yurusanae.nameE, Yurusanae.type),
 	YUUKA("Yuuka", "yuuka", "yuuka", ResourceUtil.IS_JP ? Yuuka.nameJ : Yuuka.nameE, Yuuka.type),
 	YUYUKO("Yuyuko", "yuyuko", "yuyuko", ResourceUtil.IS_JP ? Yuyuko.nameJ : Yuyuko.nameE, Yuyuko.type),

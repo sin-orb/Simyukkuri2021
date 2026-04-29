@@ -11,6 +11,8 @@ import java.io.IOException;
 import java.util.List;
 
 import src.SimYukkuri;
+import src.util.GameRandom;
+import src.util.GameWorld;
 import src.base.Body;
 import src.base.Obj;
 import src.command.GadgetAction;
@@ -57,7 +59,7 @@ public class Farm extends FieldShapeBase {
 	@Override
 	public void executeShapePopup(ShapeMenu menu) {
 
-		List<Farm> list = SimYukkuri.world.getCurrentMap().getFarm();
+		List<Farm> list = GameWorld.get().getCurrentMap().getFarm();
 		int pos;
 
 		switch (menu) {
@@ -174,8 +176,8 @@ public class Farm extends FieldShapeBase {
 		mapW = mapEX - mapSX + 1;
 		mapH = mapEY - mapSY + 1;
 
-		SimYukkuri.world.getCurrentMap().getFarm().add(this);
-		MapPlaceData.setFiledFlag(SimYukkuri.world.getCurrentMap().getFieldMap(), mapSX, mapSY, mapW, mapH, true,
+		GameWorld.get().getCurrentMap().getFarm().add(this);
+		MapPlaceData.setFiledFlag(GameWorld.get().getCurrentMap().getFieldMap(), mapSX, mapSY, mapW, mapH, true,
 				FIELD_FARM);
 	}
 
@@ -186,7 +188,7 @@ public class Farm extends FieldShapeBase {
 	/** フィールド座標にあるシェイプ取得 */
 	public static Farm getFarm(int fx, int fy) {
 
-		for (Farm bc : SimYukkuri.world.getCurrentMap().getFarm()) {
+		for (Farm bc : GameWorld.get().getCurrentMap().getFarm()) {
 			if (bc.fieldSX <= fx && fx <= bc.fieldEX
 					&& bc.fieldSY <= fy && fy <= bc.fieldEY) {
 				return bc;
@@ -197,13 +199,13 @@ public class Farm extends FieldShapeBase {
 
 	/** 削除 */
 	public static void deleteFarm(Farm b) {
-		MapPlaceData.setFiledFlag(SimYukkuri.world.getCurrentMap().getFieldMap(), b.mapSX, b.mapSY, b.mapW, b.mapH,
+		MapPlaceData.setFiledFlag(GameWorld.get().getCurrentMap().getFieldMap(), b.mapSX, b.mapSY, b.mapW, b.mapH,
 				false,
 				FIELD_FARM);
-		SimYukkuri.world.getCurrentMap().getFarm().remove(b);
+		GameWorld.get().getCurrentMap().getFarm().remove(b);
 		// 重なってた部分の復元
-		for (Farm bc : SimYukkuri.world.getCurrentMap().getFarm()) {
-			MapPlaceData.setFiledFlag(SimYukkuri.world.getCurrentMap().getFieldMap(), bc.mapSX, bc.mapSY, bc.mapW,
+		for (Farm bc : GameWorld.get().getCurrentMap().getFarm()) {
+			MapPlaceData.setFiledFlag(GameWorld.get().getCurrentMap().getFieldMap(), bc.mapSX, bc.mapSY, bc.mapW,
 					bc.mapH,
 					true,
 					FIELD_FARM);
@@ -286,7 +288,7 @@ public class Farm extends FieldShapeBase {
 			return 1;
 		}
 
-		if (SimYukkuri.RND.nextInt(20) != 0) {
+		if (GameRandom.nextInt(20) != 0) {
 			return 1;
 		}
 		// 肥料取得
@@ -372,7 +374,7 @@ public class Farm extends FieldShapeBase {
 				if (!b.isHasStalk() && 1000 < amount) {
 					Stalk s = (Stalk) GadgetAction.putObjEX(Stalk.class, b.getX(), b.getY(),
 							b.getDirection().ordinal());
-					SimYukkuri.world.getCurrentMap().getStalk().put(s.objId, s);
+					GameWorld.get().getCurrentMap().getStalk().put(s.objId, s);
 					if (b.getStalks() != null) {
 						b.getStalks().add(s);
 						s.setPlantYukkuri(b);
@@ -382,10 +384,10 @@ public class Farm extends FieldShapeBase {
 				} else {
 					// 余裕がありそうならランダムで茎を生やす
 					if (3000 < amount && !b.isDamaged()) {
-						if (SimYukkuri.RND.nextInt(100) == 0) {
+						if (GameRandom.nextInt(100) == 0) {
 							Stalk s = (Stalk) GadgetAction.putObjEX(Stalk.class, b.getX(), b.getY(),
 									b.getDirection().ordinal());
-							SimYukkuri.world.getCurrentMap().getStalk().put(s.objId, s);
+							GameWorld.get().getCurrentMap().getStalk().put(s.objId, s);
 							if (b.getStalks() != null) {
 								b.getStalks().add(s);
 								s.setPlantYukkuri(b);

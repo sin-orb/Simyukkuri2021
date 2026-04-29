@@ -1,9 +1,12 @@
 package src.event;
+import src.util.GameMessages;
+import src.util.GameText;
 
 import java.util.List;
 
 import src.Const;
 import src.SimYukkuri;
+import src.util.GameRandom;
 import src.base.Body;
 import src.base.EventPacket;
 import src.base.Obj;
@@ -135,7 +138,7 @@ public class ProudChildEvent extends EventPacket {
 		if (b.isAdult())
 			return false;
 
-		b.setWorldEventResMessage(MessagePool.getMessage(b, MessagePool.Action.ProudChildsGO), Const.HOLDMESSAGE, true,
+		b.setWorldEventResMessage(GameMessages.getMessage(b, MessagePool.Action.ProudChildsGO), Const.HOLDMESSAGE, true,
 				false);
 		b.setHappiness(Happiness.HAPPY);
 		b.wakeup();
@@ -195,15 +198,15 @@ public class ProudChildEvent extends EventPacket {
 		}
 		// 親を持ち上げたときの反応
 		if (!from.canflyCheck() && from.getZ() >= 2) {
-			if (SimYukkuri.RND.nextInt(50) == 0)
+			if (GameRandom.nextInt(50) == 0)
 				return UpdateState.ABORT;
 			else if (b == from) {
 				// 空処理
 			} else {
 				if (b.isSad())
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.LookForParents), false);
+					b.setMessage(GameMessages.getMessage(b, MessagePool.Action.LookForParents), false);
 				else
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.LookForParents), true);
+					b.setMessage(GameMessages.getMessage(b, MessagePool.Action.LookForParents), true);
 				b.setHappiness(Happiness.SAD);
 				return null;
 			}
@@ -219,8 +222,8 @@ public class ProudChildEvent extends EventPacket {
 
 		// つがいは別処理
 		if (b.isPartner(from)) {
-			if (SimYukkuri.RND.nextInt(50) == 0) {
-				b.setMessage(MessagePool.getMessage(b, MessagePool.Action.GladAboutChild), true);
+			if (GameRandom.nextInt(50) == 0) {
+				b.setMessage(GameMessages.getMessage(b, MessagePool.Action.GladAboutChild), true);
 			}
 			// 集まるとき以外は留まる
 			if (state != STATE.GO) {
@@ -265,11 +268,11 @@ public class ProudChildEvent extends EventPacket {
 
 			switch (state) {
 				case GO:
-					if (SimYukkuri.RND.nextInt(40) == 0) {
-						b.setMessage(MessagePool.getMessage(b, MessagePool.Action.ProudChildsGOFrom), true);
+					if (GameRandom.nextInt(40) == 0) {
+						b.setMessage(GameMessages.getMessage(b, MessagePool.Action.ProudChildsGOFrom), true);
 					}
 					b.setHappiness(Happiness.HAPPY);
-					// b.setBodyEventResMessage(MessagePool.getMessage(b,
+					// b.setBodyEventResMessage(GameMessages.getMessage(b,
 					// MessagePool.Action.ShitExercisesWAITFrom), 52, true, false);
 					boolean bResult = BodyLogic.gatheringYukkuriFront(from, childrenList, this);
 					if (bResult) {
@@ -282,7 +285,7 @@ public class ProudChildEvent extends EventPacket {
 				 * case WAIT:
 				 * if( checkWait(b,nWait) )
 				 * {
-				 * b.setBodyEventResMessage(MessagePool.getMessage(b,
+				 * b.setBodyEventResMessage(GameMessages.getMessage(b,
 				 * MessagePool.Action.ProudChildsWAITFrom), 52, true, false);
 				 * state = STATE.START;
 				 * bActionFlag = false;
@@ -293,7 +296,7 @@ public class ProudChildEvent extends EventPacket {
 				case START:
 					if (checkWait(b, nWait)) {
 						if (!bActionFlag) {
-							b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.ProudChildsSTARTFrom),
+							b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.ProudChildsSTARTFrom),
 									52,
 									true, false);
 							bActionFlag = true;
@@ -308,9 +311,9 @@ public class ProudChildEvent extends EventPacket {
 				case SING:
 					if (checkWait(b, nWait)) {
 						if (!bActionFlag) {
-							b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.ProudChildsSING), 52,
+							b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.ProudChildsSING), 52,
 									true, false);
-							if (SimYukkuri.RND.nextBoolean())
+							if (GameRandom.nextBoolean())
 								bActionFlag = true;
 							b.setNobinobi(true);
 							b.stay(nWait2);
@@ -325,7 +328,7 @@ public class ProudChildEvent extends EventPacket {
 				case PROUD:
 					if (checkWait(b, nWait)) {
 						if (!bActionFlag) {
-							b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.ProudChildsPROUDFrom),
+							b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.ProudChildsPROUDFrom),
 									52,
 									true, false);
 							b.getInVain(false);
@@ -342,7 +345,7 @@ public class ProudChildEvent extends EventPacket {
 				case END:
 					if (checkWait(b, nWait)) {
 						if (!bActionFlag) {
-							b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.ProudChildsENDFrom),
+							b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.ProudChildsENDFrom),
 									52,
 									true, false);
 							bActionFlag = true;
@@ -369,8 +372,8 @@ public class ProudChildEvent extends EventPacket {
 						return UpdateState.ABORT;
 					}
 
-					if (SimYukkuri.RND.nextInt(30) == 0) {
-						b.setMessage(MessagePool.getMessage(b, MessagePool.Action.ProudChildsGO), true);
+					if (GameRandom.nextInt(30) == 0) {
+						b.setMessage(GameMessages.getMessage(b, MessagePool.Action.ProudChildsGO), true);
 						b.setHappiness(Happiness.VERY_HAPPY);
 						b.addMemories(5);
 					}
@@ -379,7 +382,7 @@ public class ProudChildEvent extends EventPacket {
 				/*
 				 * case WAIT:
 				 * if( checkWait(b,nWait)){
-				 * b.setBodyEventResMessage(MessagePool.getMessage(b,
+				 * b.setBodyEventResMessage(GameMessages.getMessage(b,
 				 * MessagePool.Action.ProudChildsWAIT), 52, true, false);
 				 * b.addMemories(5);
 				 * }
@@ -389,7 +392,7 @@ public class ProudChildEvent extends EventPacket {
 				case START:
 					if (bActionFlag) {
 						if (checkWait(b, nWait)) {
-							b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.ProudChildsSTART), 52,
+							b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.ProudChildsSTART), 52,
 									true, false);
 							b.stay(nWait2);
 							b.addMemories(10);
@@ -399,7 +402,7 @@ public class ProudChildEvent extends EventPacket {
 				case SING:
 					if (!bActionFlag) {
 						if (checkWait(b, nWait)) {
-							b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.ProudChildsSING), 52,
+							b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.ProudChildsSING), 52,
 									true, false);
 							b.setNobinobi(true);
 							b.stay(nWait2);
@@ -410,9 +413,9 @@ public class ProudChildEvent extends EventPacket {
 				case PROUD:
 					if (bActionFlag) {
 						if (checkWait(b, nWait)) {
-							b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.ProudChildsPROUD), 52,
+							b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.ProudChildsPROUD), 52,
 									true, false);
-							if (b.isRude() && SimYukkuri.RND.nextBoolean()) {
+							if (b.isRude() && GameRandom.nextBoolean()) {
 								b.setFurifuri(true);
 							} else
 								b.getInVain(false);
@@ -423,7 +426,7 @@ public class ProudChildEvent extends EventPacket {
 					break;
 				case END:
 					if (b.isRude())
-						b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.ProudChildsEND), 52, true,
+						b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.ProudChildsEND), 52, true,
 								false);
 					b.stay(52);
 				default:
@@ -450,6 +453,6 @@ public class ProudChildEvent extends EventPacket {
 
 	@Override
 	public String toString() {
-		return ResourceUtil.getInstance().read("event_proudchild");
+		return GameText.read("event_proudchild");
 	}
 }

@@ -7,6 +7,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import src.SimYukkuri;
+import src.util.GameRandom;
 import src.base.Body;
 import src.draw.ModLoader;
 import src.enums.AgeState;
@@ -845,7 +846,7 @@ public class MessagePool {
 			return null;
 		}
 		// name = body.getMyNameJ;
-		if (body.isStressful() && body.isDamaged() && SimYukkuri.RND.nextBoolean()) {
+		if (body.isStressful() && body.isDamaged() && GameRandom.nextBoolean()) {
 			name = body.getMyNameD();
 		} else {
 			name = body.getMyName();
@@ -999,7 +1000,7 @@ public class MessagePool {
 		if (msg == null)
 			return "NO TAG <" + key.toString() + ">";
 
-		StringBuilder ret = new StringBuilder(msg[SimYukkuri.RND.nextInt(msg.length)]);
+		StringBuilder ret = new StringBuilder(msg[GameRandom.nextInt(msg.length)]);
 		// 埋め込み文字の置き換え
 		if (ret.indexOf("%") != -1) {
 			if (ret.indexOf("%" + Replace.dummy.name()) != -1)

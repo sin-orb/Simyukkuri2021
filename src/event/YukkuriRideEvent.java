@@ -1,6 +1,10 @@
 package src.event;
+import src.util.GameEnvironment;
+import src.util.GameMessages;
+import src.util.GameText;
 
 import src.SimYukkuri;
+import src.util.GameRandom;
 import src.base.Body;
 import src.base.EventPacket;
 import src.base.Obj;
@@ -109,7 +113,7 @@ public class YukkuriRideEvent extends EventPacket {
 		}
 
 		if (!from.isIdiot() && from.getIntelligence() != Intelligence.FOOL && from.findSick(to)) {
-			from.setMessage(MessagePool.getMessage(to, MessagePool.Action.Surprise), 30);
+			from.setMessage(GameMessages.getMessage(to, MessagePool.Action.Surprise), 30);
 			from.setHappiness(Happiness.VERY_SAD);
 			from.setForceFace(ImageCode.CRYING.ordinal());
 			return UpdateState.ABORT;
@@ -186,7 +190,7 @@ public class YukkuriRideEvent extends EventPacket {
 					// ベッド
 					if (target == null) {
 						if (to.isSleepy()
-								|| Terrarium.getDayState().ordinal() >= Terrarium.DayState.EVENING.ordinal()) {
+								|| GameEnvironment.getDayState().ordinal() >= Terrarium.DayState.EVENING.ordinal()) {
 							Obj found = BedLogic.searchBed(b);
 							if (found != null) {
 								target = found;
@@ -232,14 +236,14 @@ public class YukkuriRideEvent extends EventPacket {
 			} else {
 				if (!to.isDamaged() && !to.isNeedled()) {
 					// 親の頭の上で待機
-					if (SimYukkuri.RND.nextInt(30) == 0) {
+					if (GameRandom.nextInt(30) == 0) {
 						to.addMemories(10);
 						to.addStress(-150);
 						if (!to.isSleeping() && !to.isDead()) {
-							if (SimYukkuri.RND.nextInt(10) == 0) {
-								to.setMessage(MessagePool.getMessage(to, MessagePool.Action.Flying), 30);
+							if (GameRandom.nextInt(10) == 0) {
+								to.setMessage(GameMessages.getMessage(to, MessagePool.Action.Flying), 30);
 							} else {
-								to.setMessage(MessagePool.getMessage(to, MessagePool.Action.Relax), 30);
+								to.setMessage(GameMessages.getMessage(to, MessagePool.Action.Relax), 30);
 							}
 						}
 					}
@@ -268,6 +272,6 @@ public class YukkuriRideEvent extends EventPacket {
 
 	@Override
 	public String toString() {
-		return ResourceUtil.getInstance().read("event_ride");
+		return GameText.read("event_ride");
 	}
 }

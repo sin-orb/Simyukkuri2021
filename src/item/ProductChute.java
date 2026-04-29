@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 
 import src.SimYukkuri;
+import src.util.GameWorld;
 import src.base.Body;
 import src.base.Obj;
 import src.base.ObjEX;
@@ -83,7 +84,7 @@ public class ProductChute extends ObjEX {
 
 	@Override
 	public void removeListData() {
-		SimYukkuri.world.getCurrentMap().getProductchute().remove(objId);
+		GameWorld.get().getCurrentMap().getProductchute().remove(objId);
 	}
 
 	/**
@@ -93,7 +94,7 @@ public class ProductChute extends ObjEX {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		SimYukkuri.world.getCurrentMap().getProductchute().put(objId, this);
+		GameWorld.get().getCurrentMap().getProductchute().put(objId, this);
 		objType = Type.PLATFORM;
 		objEXType = ObjEXType.PRODUCTCHUTE;
 		interval = 10;

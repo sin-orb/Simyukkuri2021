@@ -1,4 +1,5 @@
 package src.yukkuri;
+import src.util.GameEnvironment;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
@@ -8,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import src.SimYukkuri;
+import src.util.GameRandom;
 import src.base.Body;
 import src.draw.Dimension4y;
 import src.draw.ModLoader;
@@ -96,7 +98,7 @@ public class WasaReimu extends Reimu {
 			layer.getDir()[index] = direction * directionOffset[type][1];
 		}else{
 			// インターバル毎に初期化する
-			if( Terrarium.getInterval() == 0 && !isDead() )
+			if( GameEnvironment.getInterval() == 0 && !isDead() )
 			{
 				for( int i=0; i<ImageCode.values().length; i++ )
 				{
@@ -122,7 +124,7 @@ public class WasaReimu extends Reimu {
 
 				if( nOtherVerCount != 0 )
 				{
-					int nRndIndex = SimYukkuri.RND.nextInt(nOtherVerCount+1);
+					int nRndIndex = GameRandom.nextInt(nOtherVerCount+1);
 					anImageVerStateCtrlNagasi[type][0] = nRndIndex;
 					layer.getImage()[index] = imagesNagasi[type][direction * directionOffsetNagasi[type][0]][getBodyAgeState().ordinal()][nRndIndex];
 				}else{

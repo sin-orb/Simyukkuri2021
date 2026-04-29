@@ -1,4 +1,5 @@
 package src.attachment;
+import src.util.GameText;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
@@ -125,7 +126,7 @@ public class AccelAmpoule extends Attachment {
 	
 	@Override
 	public String toString() {
-		return ResourceUtil.getInstance().read("item_accell_ampoule");
+		return GameText.read("item_accell_ampoule");
 	}
 
 	public static BufferedImage[][] getImages() {

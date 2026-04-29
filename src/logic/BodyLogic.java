@@ -1,10 +1,14 @@
 package src.logic;
+import src.util.GameEnvironment;
+import src.util.GameMessages;
 
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
 import src.SimYukkuri;
+import src.util.GameRandom;
+import src.util.GameWorld;
 import src.attachment.Ants;
 import src.attachment.Fire;
 import src.base.Body;
@@ -191,7 +195,7 @@ public class BodyLogic {
 			return false;
 		} else {
 			// 全ゆっくりに対してチェック
-			for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().getBody().entrySet()) {
+			for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
 				Body p = entry.getValue();
 				// 自分同士のチェックは無意味なのでスキップ
 				if (p == b)
@@ -216,7 +220,7 @@ public class BodyLogic {
 				else if (p.isFamily(b)) {
 				}
 				// 捕食防止
-				else if (Terrarium.isPredatorSteam()) {
+				else if (GameEnvironment.isPredatorSteam()) {
 				} else {
 					// 捕食種はあっちいってね！イベントで攻撃のときはその個体は怯えない
 					if (b.getCurrentEvent() != null && b.getCurrentEvent().getClass().equals(KillPredeatorEvent.class)
@@ -318,7 +322,7 @@ public class BodyLogic {
 				} else if (minDistance <= dist && dist < secondMinDistance) {
 					// 二番目に近い相手だと、ランダムでそっちに確定
 					secondMinDistance = dist;
-					if (SimYukkuri.RND.nextBoolean())
+					if (GameRandom.nextBoolean())
 						found = p;
 				}
 				// 自分のおかざりがなくて、相手にお飾りがある。うんうん奴隷のものは奪わない
@@ -349,7 +353,7 @@ public class BodyLogic {
 		// 目標が定まっていないなら終了
 		if (found == null) {
 			// 興奮してたらオナニー
-			if (b.isExciting() && SimYukkuri.RND.nextInt(60) == 0) {
+			if (b.isExciting() && GameRandom.nextInt(60) == 0) {
 				b.doOnanism();
 				return true;
 			}
@@ -382,7 +386,7 @@ public class BodyLogic {
 			// 自分が発情していればすっきりに向かう
 			if (b.isExciting()) {
 				// 自分がれいぱー/既婚/（ドゲスで1/10の確率）の場合はすっきりしに行く
-				if (b.isRaper() || (b.isVeryRude() && SimYukkuri.RND.nextInt(10) == 0) || b.isPartner(found)
+				if (b.isRaper() || (b.isVeryRude() && GameRandom.nextInt(10) == 0) || b.isPartner(found)
 						|| found.isPartner(b)) {
 					b.moveToSukkiri(found, found.getX() + colX, found.getY(), mz);
 					b.setTargetBind(true);
@@ -396,7 +400,7 @@ public class BodyLogic {
 					}
 					// ドゲスの場合は50%の確率でプロポーズをする
 					if (b.getAttitude() != Attitude.SUPER_SHITHEAD
-							|| (b.getAttitude() == Attitude.SUPER_SHITHEAD && SimYukkuri.RND.nextBoolean())) {
+							|| (b.getAttitude() == Attitude.SUPER_SHITHEAD && GameRandom.nextBoolean())) {
 						EventLogic.addBodyEvent(b, new ProposeEvent(b, found, null, 1), null, null);
 						return true;
 					} else if (b.getAttitude() == Attitude.SUPER_SHITHEAD) {
@@ -413,14 +417,14 @@ public class BodyLogic {
 				if (b.isPredatorType() || !found.isPredatorType()) {
 					// 相手がおかざりのないゆっくりなら制裁を呼びかける
 					if (b.isVeryRude() || !found.isDamaged()) {
-						if (SimYukkuri.RND.nextInt(20) == 0) {
+						if (GameRandom.nextInt(20) == 0) {
 							if (!b.isTalking()) {
 								// 自分がうんうん奴隷ではない場合
 								if (b.getPublicRank() != PublicRank.UnunSlave) {
 									// 非ゆっくり症は参加しない
 									if (b.isNotNYD() && found.isNotNYD()) {
 										EventLogic.addWorldEvent(new HateNoOkazariEvent(b, found, null, 10), b,
-												MessagePool.getMessage(b, MessagePool.Action.HateYukkuri));
+												GameMessages.getMessage(b, MessagePool.Action.HateYukkuri));
 									}
 								}
 							}
@@ -449,7 +453,7 @@ public class BodyLogic {
 			if (bodyHasOkazari != null) {
 				b.setToSteal(false);
 				// 視界内に起きているゆっくりがいない
-				if (!BodyLogic.checkWakeupOtherYukkuri(b) || SimYukkuri.RND.nextInt(20) == 0) {
+				if (!BodyLogic.checkWakeupOtherYukkuri(b) || GameRandom.nextInt(20) == 0) {
 					b.moveToBody(bodyHasOkazari, bodyHasOkazari.getX() + colX, bodyHasOkazari.getY(), mz);
 					b.setTargetBind(false);
 					b.setToSteal(true);
@@ -463,7 +467,7 @@ public class BodyLogic {
 			// 相手に針が刺さっている場合
 			if (found.isNeedled()) {
 				// ランダムで向かう
-				if (SimYukkuri.RND.nextInt(50) == 0) {
+				if (GameRandom.nextInt(50) == 0) {
 					if (b.isAdult() && !found.isAdult() && (found.isChild(b) || b.isMother(found))) {
 						// 自分が母親で相手が針の刺さった子供ならぐーりぐーりしにいく
 						b.moveToBody(found, found.getX() + colX, found.getY(), mz);
@@ -479,7 +483,7 @@ public class BodyLogic {
 
 			// 以下相手に針が刺さっていない場合
 
-			if (SimYukkuri.RND.nextBoolean()) {
+			if (GameRandom.nextBoolean()) {
 				if (b.isAdult() && !found.isAdult() && (found.isChild(b) || b.isMother(found))
 						&& (b.getIntelligence() == Intelligence.FOOL && !b.hasOkazari())) {
 					// 相手が子供でも、子供にお飾りがなくてかつ親がバカならよらない
@@ -507,7 +511,7 @@ public class BodyLogic {
 
 			// ランダムでつがいのところへ向かう
 			if (found.isPartner(b)) {
-				if (SimYukkuri.RND.nextInt(150) == 0) {
+				if (GameRandom.nextInt(150) == 0) {
 					b.moveToBody(found, found.getX() + colX, found.getY(), mz);
 					b.setTargetBind(false);
 					return true;
@@ -516,7 +520,7 @@ public class BodyLogic {
 
 			// ランダムで親のところへ向かう
 			if (!b.isAdult() && b.isChild(found)) {
-				if (SimYukkuri.RND.nextInt(100) == 0) {
+				if (GameRandom.nextInt(100) == 0) {
 					b.moveToBody(found, found.getX() + colX, found.getY(), mz);
 					b.setTargetBind(false);
 					return true;
@@ -525,7 +529,7 @@ public class BodyLogic {
 
 			// ランダムで姉妹のところへ向かう
 			if (!b.isAdult() && b.isSister(found)) {
-				if (SimYukkuri.RND.nextInt(150) == 0) {
+				if (GameRandom.nextInt(150) == 0) {
 					b.moveToBody(found, found.getX() + colX, found.getY(), mz);
 					b.setTargetBind(false);
 					return true;
@@ -534,7 +538,7 @@ public class BodyLogic {
 
 			// ランダムで家族のところへ向かう
 			if (b.isAdult() && !found.isAdult() && b.isFamily(found)) {
-				if (SimYukkuri.RND.nextInt(150) == 0) {
+				if (GameRandom.nextInt(150) == 0) {
 					b.moveToBody(found, found.getX() + colX, found.getY(), mz);
 					b.setTargetBind(false);
 					return true;
@@ -556,7 +560,7 @@ public class BodyLogic {
 				b.setTargetBind(false);
 				return true;
 			}
-			if (SimYukkuri.RND.nextInt(10) != 0) {
+			if (GameRandom.nextInt(10) != 0) {
 				return ret;
 			}
 			// 片方だけがうんうん奴隷の場合はなにもしない
@@ -571,7 +575,7 @@ public class BodyLogic {
 							ret = true;
 						} else {
 							if ((b.isPredatorType() && found.isPredatorType() || !b.isPredatorType())
-									&& !Terrarium.isPredatorSteam()) {
+									&& !GameEnvironment.isPredatorSteam()) {
 								b.lookTo(found.getX() + colX, found.getY());
 							}
 						}
@@ -584,7 +588,7 @@ public class BodyLogic {
 						} else {
 							// 自身も対象死体も捕食種、または自身が通常種の場合、死体から逃げる
 							if ((b.isPredatorType() && found.isPredatorType() || !b.isPredatorType())
-									&& !Terrarium.isPredatorSteam()) {
+									&& !GameEnvironment.isPredatorSteam()) {
 								b.runAway(found.getX() + colX, found.getY());
 							}
 						}
@@ -594,11 +598,11 @@ public class BodyLogic {
 
 			// フィールドの死体に怯える
 			if (!b.isTalking()) {
-				if ((b.isPredatorType() && found.isPredatorType() || !b.isPredatorType()) && !Terrarium.isPredatorSteam()) {
+				if ((b.isPredatorType() && found.isPredatorType() || !b.isPredatorType()) && !GameEnvironment.isPredatorSteam()) {
 					if (b.isNotNYD()) {
 						// レイパー,捕食種じゃないなら気にする
 						if (!b.isRaper() && !b.isPredatorType()) {
-							b.setMessage(MessagePool.getMessage(b, MessagePool.Action.Scare));
+							b.setMessage(GameMessages.getMessage(b, MessagePool.Action.Scare));
 							b.setHappiness(Happiness.SAD);
 							b.addMemories(-1);
 						}
@@ -675,15 +679,15 @@ public class BodyLogic {
 					// 自分が成体で相手が家族なら嘆く
 					if (!b.isTalking()) {
 						if (b.isParent(p)) {
-							b.setMessage(MessagePool.getMessage(b, MessagePool.Action.SadnessForChild));
-							// if(SimYukkuri.RND.nextInt(10)==0 ){
+							b.setMessage(GameMessages.getMessage(b, MessagePool.Action.SadnessForChild));
+							// if(GameRandom.nextInt(10)==0 ){
 							if (b.checkWait(2000)) {
 								b.setLastActionTime();
 								EventLogic.addWorldEvent(new FuneralEvent(b, p, null, 10), b, null);
 							}
 							// }
 						} else if (b.isPartner(p)) {
-							b.setMessage(MessagePool.getMessage(b, MessagePool.Action.SadnessForPartner));
+							b.setMessage(GameMessages.getMessage(b, MessagePool.Action.SadnessForPartner));
 						}
 						b.setHappiness(Happiness.VERY_SAD);
 						b.addMemories(-2);
@@ -696,7 +700,7 @@ public class BodyLogic {
 				if (p.isParent(b)) {
 					// 相手が親なら嘆く
 					if (!b.isTalking()) {
-						b.setMessage(MessagePool.getMessage(b, MessagePool.Action.SadnessForParent));
+						b.setMessage(GameMessages.getMessage(b, MessagePool.Action.SadnessForParent));
 					}
 					b.setHappiness(Happiness.VERY_SAD);
 					b.setForceFace(ImageCode.SURPRISE.ordinal());
@@ -709,9 +713,9 @@ public class BodyLogic {
 					// 相手が姉妹なら嘆く
 					if (!b.isTalking()) {
 						if (b.getAge() < p.getAge()) {
-							b.setMessage(MessagePool.getMessage(b, MessagePool.Action.SadnessForEldersister));
+							b.setMessage(GameMessages.getMessage(b, MessagePool.Action.SadnessForEldersister));
 						} else {
-							b.setMessage(MessagePool.getMessage(b, MessagePool.Action.SadnessForSister));
+							b.setMessage(GameMessages.getMessage(b, MessagePool.Action.SadnessForSister));
 						}
 						b.setHappiness(Happiness.VERY_SAD);
 						b.addStress(100);
@@ -744,7 +748,7 @@ public class BodyLogic {
 							p.takeOkazari(false);
 							b.giveOkazari(OkazariType.DEFAULT);
 							b.setHappiness(Happiness.HAPPY);
-							b.setMessage(MessagePool.getMessage(b, MessagePool.Action.GetOtherAccessoryStealthily));
+							b.setMessage(GameMessages.getMessage(b, MessagePool.Action.GetOtherAccessoryStealthily));
 							b.addMemories(100);
 							b.addStress(-b.getStressLimit() / 2);
 							b.clearActions();
@@ -804,7 +808,7 @@ public class BodyLogic {
 					// つがいで相手が針の刺さっているならぐーりぐーり
 					b.constraintDirection(p, false);
 					b.doGuriguri(p);
-				} else if (!b.isAdult() && b.isSister(p) && SimYukkuri.RND.nextInt(1) == 0) {
+				} else if (!b.isAdult() && b.isSister(p) && GameRandom.nextInt(1) == 0) {
 					// 姉妹で相手が針の刺さっているならぐーりぐーり
 					b.constraintDirection(p, false);
 					b.doGuriguri(p);
@@ -826,10 +830,10 @@ public class BodyLogic {
 			// 相手が子供でも、子供にお飾りがなくてかつ親がバカならなら制裁する
 			if (b.isAdult() && !p.isAdult() && (p.isChild(b) || b.isMother(p))
 					&& (b.getIntelligence() == Intelligence.FOOL && !p.hasOkazari())) {
-				if (b.getCurrentEvent() == null && p.isNYD() && SimYukkuri.RND.nextBoolean()) {
+				if (b.getCurrentEvent() == null && p.isNYD() && GameRandom.nextBoolean()) {
 					b.clearActions();
 					EventLogic.addWorldEvent(new HateNoOkazariEvent(b, p, null, 10), b,
-							MessagePool.getMessage(b, MessagePool.Action.HateYukkuri));
+							GameMessages.getMessage(b, MessagePool.Action.HateYukkuri));
 				}
 				return true;
 			}
@@ -844,7 +848,7 @@ public class BodyLogic {
 			// 餌を保持している
 			if (b.isParent(p) && p.isVeryHungry() && !p.isAdult() && b.getTakeoutItem(TakeoutItemType.FOOD) != null) {
 				// 吐き出す
-				b.setMessage(MessagePool.getMessage(b, MessagePool.Action.GiveFood), false);
+				b.setMessage(GameMessages.getMessage(b, MessagePool.Action.GiveFood), false);
 				b.dropTakeoutItem(TakeoutItemType.FOOD);
 				return true;
 			}
@@ -853,17 +857,17 @@ public class BodyLogic {
 				// 自分が親で相手が子供の時のスキンシップ
 				b.constraintDirection(p, false);
 				// 相手が汚れていてかつ自分が母親の時か、ランダムでぺろぺろ
-				if ((p.isDirty() && b.isMother(p)) || SimYukkuri.RND.nextBoolean()) {
+				if ((p.isDirty() && b.isMother(p)) || GameRandom.nextBoolean()) {
 					b.doPeropero(p);
 				}
 				// 他はすりすり
-				else if (SimYukkuri.RND.nextBoolean()) {
+				else if (GameRandom.nextBoolean()) {
 					b.doSurisuri(p);
 				}
 				b.clearActions();
 				return true;
 			}
-			if (p.isPartner(b) && SimYukkuri.RND.nextBoolean()) {
+			if (p.isPartner(b) && GameRandom.nextBoolean()) {
 				// 相手が自分の番ならすりすり
 				b.constraintDirection(p, false);
 				b.doSurisuri(p);
@@ -878,35 +882,35 @@ public class BodyLogic {
 					p.doPeropero(b);
 				}
 				// 親がダメージ食らってたらランダムでぺろぺろ
-				if (p.isDamaged() && SimYukkuri.RND.nextBoolean()) {
+				if (p.isDamaged() && GameRandom.nextBoolean()) {
 					b.doPeropero(p);
 				}
 				// 他はすりすり
-				else if (SimYukkuri.RND.nextBoolean()) {
+				else if (GameRandom.nextBoolean()) {
 					b.doSurisuri(p);
 				}
 				b.clearActions();
 				return true;
 			}
-			if (!b.isAdult() && b.isSister(p) && SimYukkuri.RND.nextBoolean()) {
+			if (!b.isAdult() && b.isSister(p) && GameRandom.nextBoolean()) {
 				// 姉妹の場合のスキンシップ
 				// 善良で、赤ゆでなく、相手が汚れていたら無条件でぺろぺろ
 				b.constraintDirection(p, false);
 				if (b.isSmart() && !b.isBaby() && p.isDirty()) {
 					b.doPeropero(p);
 				} else {
-					if (p.isDamaged() && SimYukkuri.RND.nextBoolean()) {
+					if (p.isDamaged() && GameRandom.nextBoolean()) {
 						if (b.isElderSister(p)) {
-							b.setMessage(MessagePool.getMessage(b, MessagePool.Action.ConcernAboutEldersister));
+							b.setMessage(GameMessages.getMessage(b, MessagePool.Action.ConcernAboutEldersister));
 						} else {
-							b.setMessage(MessagePool.getMessage(b, MessagePool.Action.ConcernAboutSister));
+							b.setMessage(GameMessages.getMessage(b, MessagePool.Action.ConcernAboutSister));
 						}
 						b.setHappiness(Happiness.SAD);
 						b.stay();
 						p.stay();
-					} else if (p.isDamaged() && SimYukkuri.RND.nextBoolean()) {
+					} else if (p.isDamaged() && GameRandom.nextBoolean()) {
 						b.doPeropero(p);
-					} else if (SimYukkuri.RND.nextBoolean()) {
+					} else if (GameRandom.nextBoolean()) {
 						b.doSurisuri(p);
 					}
 				}
@@ -929,7 +933,7 @@ public class BodyLogic {
 			}
 			// 相手に追いつけないケースがあるため、一定距離まで近づいたら相手を呼び止める
 			if (Translate.distance(b.getX(), b.getY(), p.getX(), p.getY()) < 2500) {
-				if (SimYukkuri.RND.nextInt(3) == 0) {
+				if (GameRandom.nextInt(3) == 0) {
 					if (b.isTargetBind())
 						p.stay();
 				}
@@ -979,7 +983,7 @@ public class BodyLogic {
 		}
 
 		// 一定確率以上は終了
-		if (SimYukkuri.RND.nextInt(10) != 0) {
+		if (GameRandom.nextInt(10) != 0) {
 			return eActionGo.NONE;
 		}
 
@@ -1003,42 +1007,42 @@ public class BodyLogic {
 				case FATHER: // 父
 				case MOTHER: // 母
 					// 子供の状態を喜ぶ
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.GladAboutChild));
+					b.setMessage(GameMessages.getMessage(b, MessagePool.Action.GladAboutChild));
 					b.setHappiness(Happiness.HAPPY);
 					b.stay();
 					eAct = eActionGo.GO;
 					break;
 				case PARTNAR: // つがい
 					// つがいの状態を喜ぶ
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.GladAboutPartner));
+					b.setMessage(GameMessages.getMessage(b, MessagePool.Action.GladAboutPartner));
 					b.setHappiness(Happiness.HAPPY);
 					b.stay();
 					eAct = eActionGo.GO;
 					break;
 				case CHILD_FATHER: // 父の子供
 					// 父の状態を喜ぶ
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.GladAboutFather));
+					b.setMessage(GameMessages.getMessage(b, MessagePool.Action.GladAboutFather));
 					b.setHappiness(Happiness.HAPPY);
 					b.stay();
 					eAct = eActionGo.GO;
 					break;
 				case CHILD_MOTHER: // 母の子供
 					// 母の状態を喜ぶ
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.GladAboutMother));
+					b.setMessage(GameMessages.getMessage(b, MessagePool.Action.GladAboutMother));
 					b.setHappiness(Happiness.HAPPY);
 					b.stay();
 					eAct = eActionGo.GO;
 					break;
 				case ELDERSISTER: // 姉
 					// 妹の状態を喜ぶ
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.GladAboutSister));
+					b.setMessage(GameMessages.getMessage(b, MessagePool.Action.GladAboutSister));
 					b.setHappiness(Happiness.HAPPY);
 					b.stay();
 					eAct = eActionGo.GO;
 					break;
 				case YOUNGSISTER: // 妹
 					// 姉の状態を喜ぶ
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.GladAboutElderSister));
+					b.setMessage(GameMessages.getMessage(b, MessagePool.Action.GladAboutElderSister));
 					b.setHappiness(Happiness.HAPPY);
 					b.stay();
 					eAct = eActionGo.GO;
@@ -1064,21 +1068,21 @@ public class BodyLogic {
 				case CHILD_MOTHER: // 母の子供
 				case ELDERSISTER: // 姉
 					// 妹の状態をうらやましがって泣く
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.EnvyCryAboutSisterInSurisuri));
+					b.setMessage(GameMessages.getMessage(b, MessagePool.Action.EnvyCryAboutSisterInSurisuri));
 					b.setHappiness(Happiness.VERY_SAD);
 					b.stay();
 					eAct = eActionGo.GO;
 					break;
 				case YOUNGSISTER: // 妹
 					// 姉の状態をうらやましがって泣く
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.EnvyCryAboutElderSisterInSurisuri));
+					b.setMessage(GameMessages.getMessage(b, MessagePool.Action.EnvyCryAboutElderSisterInSurisuri));
 					b.setHappiness(Happiness.VERY_SAD);
 					b.stay();
 					eAct = eActionGo.GO;
 					break;
 				default: // 他人
 					// 他人をうらやましがって泣く
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.EnvyCryAboutOther));
+					b.setMessage(GameMessages.getMessage(b, MessagePool.Action.EnvyCryAboutOther));
 					b.setHappiness(Happiness.SAD);
 					b.stay();
 					eAct = eActionGo.WAIT;
@@ -1102,21 +1106,21 @@ public class BodyLogic {
 					break;
 				case ELDERSISTER: // 姉
 					// 姉の状態をうらやましがる
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.EnvyAboutSisterInSurisuri));
+					b.setMessage(GameMessages.getMessage(b, MessagePool.Action.EnvyAboutSisterInSurisuri));
 					b.setHappiness(Happiness.SAD);
 					b.stay();
 					eAct = eActionGo.GO;
 					break;
 				case YOUNGSISTER: // 妹
 					// 姉の状態をうらやましがる
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.EnvyAboutSisterInSurisuri));
+					b.setMessage(GameMessages.getMessage(b, MessagePool.Action.EnvyAboutSisterInSurisuri));
 					b.setHappiness(Happiness.SAD);
 					b.stay();
 					eAct = eActionGo.GO;
 					break;
 				default: // 他人
 					// 他人をうらやましがる
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.EnvyAboutOther));
+					b.setMessage(GameMessages.getMessage(b, MessagePool.Action.EnvyAboutOther));
 					b.setHappiness(Happiness.SAD);
 					b.stay();
 					eAct = eActionGo.WAIT;
@@ -1137,49 +1141,49 @@ public class BodyLogic {
 				case FATHER: // 父
 				case MOTHER: // 母
 					// 子供の状態を憎む
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateWithEnvyAboutChild));
+					b.setMessage(GameMessages.getMessage(b, MessagePool.Action.HateWithEnvyAboutChild));
 					b.setHappiness(Happiness.VERY_SAD);
 					b.stay();
 					eAct = eActionGo.WAIT;
 					break;
 				case PARTNAR: // つがい
 					// 子供の状態を憎む
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateWithEnvyAboutPartner));
+					b.setMessage(GameMessages.getMessage(b, MessagePool.Action.HateWithEnvyAboutPartner));
 					b.setHappiness(Happiness.VERY_SAD);
 					b.stay();
 					eAct = eActionGo.WAIT;
 					break;
 				case CHILD_FATHER: // 父の子供
 					// 父の状態を憎む
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateWithEnvyAboutFather));
+					b.setMessage(GameMessages.getMessage(b, MessagePool.Action.HateWithEnvyAboutFather));
 					b.setHappiness(Happiness.VERY_SAD);
 					b.stay();
 					eAct = eActionGo.WAIT;
 					break;
 				case CHILD_MOTHER: // 母の子供
 					// 母の状態を憎む
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateWithEnvyAboutMother));
+					b.setMessage(GameMessages.getMessage(b, MessagePool.Action.HateWithEnvyAboutMother));
 					b.setHappiness(Happiness.VERY_SAD);
 					b.stay();
 					eAct = eActionGo.WAIT;
 					break;
 				case ELDERSISTER: // 姉
 					// 妹の状態を憎む
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateWithEnvyAboutSister));
+					b.setMessage(GameMessages.getMessage(b, MessagePool.Action.HateWithEnvyAboutSister));
 					b.setHappiness(Happiness.VERY_SAD);
 					b.stay();
 					eAct = eActionGo.WAIT;
 					break;
 				case YOUNGSISTER: // 妹
 					// 姉の状態を憎む
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateWithEnvyAboutElderSister));
+					b.setMessage(GameMessages.getMessage(b, MessagePool.Action.HateWithEnvyAboutElderSister));
 					b.setHappiness(Happiness.VERY_SAD);
 					b.stay();
 					eAct = eActionGo.WAIT;
 					break;
 				default: // 他人
 					// 他人の状態を憎む
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateWithEnvyAboutOther));
+					b.setMessage(GameMessages.getMessage(b, MessagePool.Action.HateWithEnvyAboutOther));
 					b.setHappiness(Happiness.VERY_SAD);
 					b.stay();
 					eAct = eActionGo.WAIT;
@@ -1205,7 +1209,7 @@ public class BodyLogic {
 				case YOUNGSISTER: // 妹
 				default: // 他人
 					eAct = eActionGo.WAIT;
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.Scare));
+					b.setMessage(GameMessages.getMessage(b, MessagePool.Action.Scare));
 					b.setHappiness(Happiness.SAD);
 					b.stay();
 					break;
@@ -1225,41 +1229,41 @@ public class BodyLogic {
 				case MOTHER: // 母
 					// 子供を励ます
 					eAct = eActionGo.GO;
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.ConcernAboutChild));
+					b.setMessage(GameMessages.getMessage(b, MessagePool.Action.ConcernAboutChild));
 					b.setHappiness(Happiness.VERY_SAD);
 					b.stay();
 					break;
 				case PARTNAR: // つがい
 					// つがいを励ます
 					eAct = eActionGo.GO;
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.ConcernAboutPartner));
+					b.setMessage(GameMessages.getMessage(b, MessagePool.Action.ConcernAboutPartner));
 					b.setHappiness(Happiness.VERY_SAD);
 					b.stay();
 					break;
 				case CHILD_FATHER: // 父の子供
 					// 父を励ます
 					eAct = eActionGo.GO;
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.ConcernAboutFather));
+					b.setMessage(GameMessages.getMessage(b, MessagePool.Action.ConcernAboutFather));
 					b.setHappiness(Happiness.VERY_SAD);
 					b.stay();
 					break;
 				case CHILD_MOTHER: // 母の子供
 					// 母を励ます
 					eAct = eActionGo.GO;
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.ConcernAboutMother));
+					b.setMessage(GameMessages.getMessage(b, MessagePool.Action.ConcernAboutMother));
 					b.setHappiness(Happiness.VERY_SAD);
 					b.stay();
 					break;
 				case ELDERSISTER: // 姉
 					// 姉を励ます
 					eAct = eActionGo.GO;
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.ConcernAboutEldersister));
+					b.setMessage(GameMessages.getMessage(b, MessagePool.Action.ConcernAboutEldersister));
 					b.setHappiness(Happiness.VERY_SAD);
 					b.stay();
 					break;
 				case YOUNGSISTER: // 妹
 					// 妹を励ます
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.ConcernAboutEldersister));
+					b.setMessage(GameMessages.getMessage(b, MessagePool.Action.ConcernAboutEldersister));
 					b.setHappiness(Happiness.VERY_SAD);
 					b.stay();
 					eAct = eActionGo.GO;
@@ -1282,41 +1286,41 @@ public class BodyLogic {
 				case MOTHER: // 母
 					// 子供を励ます
 					eAct = eActionGo.GO;
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.ConcernAboutChild));
+					b.setMessage(GameMessages.getMessage(b, MessagePool.Action.ConcernAboutChild));
 					b.setHappiness(Happiness.SAD);
 					b.stay();
 					break;
 				case PARTNAR: // つがい
 					// つがいを励ます
 					eAct = eActionGo.GO;
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.ConcernAboutPartner));
+					b.setMessage(GameMessages.getMessage(b, MessagePool.Action.ConcernAboutPartner));
 					b.setHappiness(Happiness.SAD);
 					b.stay();
 					break;
 				case CHILD_FATHER: // 父の子供
 					// 父を励ます
 					eAct = eActionGo.GO;
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.ConcernAboutFather));
+					b.setMessage(GameMessages.getMessage(b, MessagePool.Action.ConcernAboutFather));
 					b.setHappiness(Happiness.SAD);
 					b.stay();
 					break;
 				case CHILD_MOTHER: // 母の子供
 					// 母を励ます
 					eAct = eActionGo.GO;
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.ConcernAboutMother));
+					b.setMessage(GameMessages.getMessage(b, MessagePool.Action.ConcernAboutMother));
 					b.setHappiness(Happiness.SAD);
 					b.stay();
 					break;
 				case ELDERSISTER: // 姉
 					// 姉を励ます
 					eAct = eActionGo.GO;
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.ConcernAboutEldersister));
+					b.setMessage(GameMessages.getMessage(b, MessagePool.Action.ConcernAboutEldersister));
 					b.setHappiness(Happiness.SAD);
 					b.stay();
 					break;
 				case YOUNGSISTER: // 妹
 					// 妹を励ます
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.ConcernAboutEldersister));
+					b.setMessage(GameMessages.getMessage(b, MessagePool.Action.ConcernAboutEldersister));
 					b.setHappiness(Happiness.SAD);
 					b.stay();
 					eAct = eActionGo.GO;
@@ -1344,7 +1348,7 @@ public class BodyLogic {
 				case YOUNGSISTER: // 妹
 					break;
 				default: // 他人
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.MercyAboutOther));
+					b.setMessage(GameMessages.getMessage(b, MessagePool.Action.MercyAboutOther));
 					b.setHappiness(Happiness.SAD);
 					b.stay();
 					eAct = eActionGo.GO;
@@ -1372,7 +1376,7 @@ public class BodyLogic {
 				default: // 他人
 					// 見下して喜ぶ
 					eAct = eActionGo.WAIT;
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateYukkuri));
+					b.setMessage(GameMessages.getMessage(b, MessagePool.Action.HateYukkuri));
 					break;
 			}
 		}
@@ -1393,7 +1397,7 @@ public class BodyLogic {
 	 */
 	public static final List<Body> createActiveFianceeList(Body b, int age) {
 		// ほかにいないならスキップ
-		if (SimYukkuri.world.getCurrentMap().getBody().size() <= 1) {
+		if (GameWorld.get().getCurrentMap().getBody().size() <= 1) {
 			return null;
 		}
 
@@ -1406,7 +1410,7 @@ public class BodyLogic {
 			return activeFianceeList;
 		}
 
-		for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().getBody().entrySet()) {
+		for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
 			Body f = entry.getValue();
 			// 自身はスキップ
 			if (f == b) {
@@ -1446,7 +1450,7 @@ public class BodyLogic {
 			}
 			// お相手がすでにいるのは50%の確率でスキップ
 			if (YukkuriUtil.getBodyInstance(f.getPartner()) != null) {
-				if (SimYukkuri.RND.nextBoolean()) {
+				if (GameRandom.nextBoolean()) {
 					continue;
 				}
 			}
@@ -1524,7 +1528,7 @@ public class BodyLogic {
 		Body[] bodyList = YukkuriUtil.getBodyInstances();
 		if (bodyList.length != 0) {
 			Toilet t = null;
-			for (Map.Entry<Integer, Toilet> entry : SimYukkuri.world.getCurrentMap().getToilet().entrySet()) {
+			for (Map.Entry<Integer, Toilet> entry : GameWorld.get().getCurrentMap().getToilet().entrySet()) {
 				t = entry.getValue();
 				break;
 			}
@@ -1876,7 +1880,7 @@ public class BodyLogic {
 		}
 
 		// 一定確率以上は終了
-		if (SimYukkuri.RND.nextInt(50) != 0) {
+		if (GameRandom.nextInt(50) != 0) {
 			return false;
 		}
 
@@ -1902,25 +1906,25 @@ public class BodyLogic {
 				switch (eRelation) {
 					case FATHER: // 父
 					case MOTHER: // 母
-						b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateWithEnvyAboutChild));
+						b.setMessage(GameMessages.getMessage(b, MessagePool.Action.HateWithEnvyAboutChild));
 						break;
 					case PARTNAR: // つがい
-						b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateWithEnvyAboutPartner));
+						b.setMessage(GameMessages.getMessage(b, MessagePool.Action.HateWithEnvyAboutPartner));
 						break;
 					case CHILD_FATHER: // 父の子供
-						b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateWithEnvyAboutFather));
+						b.setMessage(GameMessages.getMessage(b, MessagePool.Action.HateWithEnvyAboutFather));
 						break;
 					case CHILD_MOTHER: // 母の子供
-						b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateWithEnvyAboutMother));
+						b.setMessage(GameMessages.getMessage(b, MessagePool.Action.HateWithEnvyAboutMother));
 						break;
 					case ELDERSISTER: // 姉
-						b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateWithEnvyAboutElderSister));
+						b.setMessage(GameMessages.getMessage(b, MessagePool.Action.HateWithEnvyAboutElderSister));
 						break;
 					case YOUNGSISTER: // 妹
-						b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateWithEnvyAboutSister));
+						b.setMessage(GameMessages.getMessage(b, MessagePool.Action.HateWithEnvyAboutSister));
 						break;
 					default: // 他人
-						b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateWithEnvyAboutOther));
+						b.setMessage(GameMessages.getMessage(b, MessagePool.Action.HateWithEnvyAboutOther));
 						break;
 				}
 				b.setHappiness(Happiness.VERY_SAD);
@@ -2008,7 +2012,7 @@ public class BodyLogic {
 	public static boolean checkWakeupOtherYukkuri(Body b) {
 		boolean bIsWakeup = false;
 		int minDistance = b.getEYESIGHTorg();
-		for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().getBody().entrySet()) {
+		for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
 			Body p = entry.getValue();
 			// 自分同士のチェックは無意味なのでスキップ
 			if (p == b)

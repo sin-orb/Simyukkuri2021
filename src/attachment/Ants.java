@@ -1,4 +1,5 @@
 package src.attachment;
+import src.util.GameText;
 
 
 import java.awt.image.BufferedImage;
@@ -129,7 +130,7 @@ public class Ants extends Attachment {
 	}
 	@Override
 	public String toString() {
-		return ResourceUtil.getInstance().read("item_ants");
+		return GameText.read("item_ants");
 	}
 
 	// テスト用静的アクセサ

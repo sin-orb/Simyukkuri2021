@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 
 import src.SimYukkuri;
+import src.util.GameWorld;
 import src.base.Body;
 import src.base.Obj;
 import src.base.ObjEX;
@@ -286,7 +287,7 @@ public class FoodMaker extends ObjEX {
 			} else {
 				for (int i = 0; i < (foodAmount >> 1); i++) {
 					Food f = (Food) GadgetAction.putObjEX(Food.class, x + (40 * dir), y, foodType.ordinal());
-					SimYukkuri.world.getCurrentMap().getFood().put(f.objId, f);
+					GameWorld.get().getCurrentMap().getFood().put(f.objId, f);
 				}
 				foodAmount = 0;
 
@@ -305,7 +306,7 @@ public class FoodMaker extends ObjEX {
 
 	@Override
 	public void removeListData() {
-		SimYukkuri.world.getCurrentMap().getFoodmaker().remove(objId);
+		GameWorld.get().getCurrentMap().getFoodmaker().remove(objId);
 	}
 
 	/** コンストラクタ */
@@ -313,7 +314,7 @@ public class FoodMaker extends ObjEX {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		SimYukkuri.world.getCurrentMap().getFoodmaker().put(objId, this);
+		GameWorld.get().getCurrentMap().getFoodmaker().put(objId, this);
 		objType = Type.PLATFORM;
 		objEXType = ObjEXType.FOODMAKER;
 

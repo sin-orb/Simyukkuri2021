@@ -1,4 +1,5 @@
 package src.item;
+import src.util.GameText;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -16,6 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 import src.SimYukkuri;
+import src.util.GameWorld;
 import src.base.Obj;
 import src.base.ObjEX;
 import src.draw.ModLoader;
@@ -42,8 +44,8 @@ public class Trampoline extends ObjEX {
 
 	/** タイプ */
 	public static enum TrampolineType {
-		NORMAL(ResourceUtil.getInstance().read("item_trampolinenorm")),
-		EX(ResourceUtil.getInstance().read("item_trampolinedirection")),
+		NORMAL(GameText.read("item_trampolinenorm")),
+		EX(GameText.read("item_trampolinedirection")),
 		;
 
 		private String name;
@@ -87,7 +89,7 @@ public class Trampoline extends ObjEX {
 
 	@Override
 	public void removeListData() {
-		SimYukkuri.world.getCurrentMap().getTrampoline().remove(objId);
+		GameWorld.get().getCurrentMap().getTrampoline().remove(objId);
 	}
 
 	@Override
@@ -144,12 +146,12 @@ public class Trampoline extends ObjEX {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		SimYukkuri.world.getCurrentMap().getTrampoline().put(objId, this);
+		GameWorld.get().getCurrentMap().getTrampoline().put(objId, this);
 		objType = Type.OBJECT;
 		objEXType = ObjEXType.TOY;
 		boolean bRet = setupTrampoline(this);
 		if (!bRet) {
-			SimYukkuri.world.getCurrentMap().getTrampoline().remove(objId);
+			GameWorld.get().getCurrentMap().getTrampoline().remove(objId);
 			return;
 		}
 		value = 500;
@@ -187,12 +189,12 @@ public class Trampoline extends ObjEX {
 		JComboBox accident2Box = new JComboBox(jogenmess);
 		accident1Box.setEditable(true);
 		accident2Box.setEditable(true);
-		mainPanel.add(new JLabel(ResourceUtil.getInstance().read("item_trampolineacciaccurate")));
+		mainPanel.add(new JLabel(GameText.read("item_trampolineacciaccurate")));
 		mainPanel.add(accident1Box);
-		mainPanel.add(new JLabel(ResourceUtil.getInstance().read("item_trampolineaccianko")));
+		mainPanel.add(new JLabel(GameText.read("item_trampolineaccianko")));
 		mainPanel.add(accident2Box);
 		int dlgRet = JOptionPane.showConfirmDialog(SimYukkuri.mypane, mainPanel,
-				ResourceUtil.getInstance().read("item_trampolinesettings"), 2, -1);
+				GameText.read("item_trampolinesettings"), 2, -1);
 		if (dlgRet == 0) {
 			if (but[0].isSelected())
 				t.option = 0;

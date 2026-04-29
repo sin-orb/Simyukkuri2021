@@ -1,6 +1,7 @@
 package src.system;
 
 import src.SimYukkuri;
+import src.util.GameWorld;
 import src.base.Body;
 import src.base.Obj;
 /**
@@ -12,7 +13,7 @@ public class Cash {
 	 * @param val 加えたい金額
 	 */
 	public static void addCash(int val) {
-		SimYukkuri.world.getPlayer().addCash(val);
+		GameWorld.get().getPlayer().addCash(val);
 	}
 	/**
 	 * アイテムを購入し所持金を減らす.

@@ -1,7 +1,10 @@
 package src.event;
+import src.util.GameMessages;
+import src.util.GameText;
 
 import src.Const;
 import src.SimYukkuri;
+import src.util.GameRandom;
 import src.base.Body;
 import src.base.EventPacket;
 import src.base.Obj;
@@ -88,22 +91,22 @@ public class SuiRideEvent extends EventPacket {
 					switch (eRelation) {
 						case FATHER: // 父
 						case MOTHER: // 母
-							b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateWithEnvyAboutMother));
+							b.setMessage(GameMessages.getMessage(b, MessagePool.Action.HateWithEnvyAboutMother));
 							break;
 						case PARTNAR: // つがい
-							b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateWithEnvyAboutPartner));
+							b.setMessage(GameMessages.getMessage(b, MessagePool.Action.HateWithEnvyAboutPartner));
 							break;
 						case CHILD_FATHER: // 父の子供
-							b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateWithEnvyAboutFather));
+							b.setMessage(GameMessages.getMessage(b, MessagePool.Action.HateWithEnvyAboutFather));
 							break;
 						case CHILD_MOTHER: // 母の子供
-							b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateWithEnvyAboutMother));
+							b.setMessage(GameMessages.getMessage(b, MessagePool.Action.HateWithEnvyAboutMother));
 							break;
 						case ELDERSISTER: // 姉
-							b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateWithEnvyAboutSister));
+							b.setMessage(GameMessages.getMessage(b, MessagePool.Action.HateWithEnvyAboutSister));
 							break;
 						case YOUNGSISTER: // 妹
-							b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HateWithEnvyAboutElderSister));
+							b.setMessage(GameMessages.getMessage(b, MessagePool.Action.HateWithEnvyAboutElderSister));
 							break;
 						default: // 他人
 							break;
@@ -114,7 +117,7 @@ public class SuiRideEvent extends EventPacket {
 					return false;
 				}
 
-				b.setWorldEventResMessage(MessagePool.getMessage(b, MessagePool.Action.FindGetSuiOtner),
+				b.setWorldEventResMessage(GameMessages.getMessage(b, MessagePool.Action.FindGetSuiOtner),
 						Const.HOLDMESSAGE, true, false);
 				return true;
 			}
@@ -161,14 +164,14 @@ public class SuiRideEvent extends EventPacket {
 						// 乗ろうとしているゆっくりがいない、またはカウントが50の倍数の場合ランダムに移動する
 						// ※移動中はすぃーの状態を変えるなりなんなりした方がいいのでは
 						if (!memberride || tick % 50 == 0) {
-							b.moveTo(SimYukkuri.RND.nextInt(Translate.getMapW()),
-									SimYukkuri.RND.nextInt(Translate.getMapH() - Sui.getBounding().getHeight() / 2));
+							b.moveTo(GameRandom.nextInt(Translate.getMapW()),
+									GameRandom.nextInt(Translate.getMapH() - Sui.getBounding().getHeight() / 2));
 						}
 						// カウントが500を超える場合
 						if (tick > 500) {
 							// しゃべってないなら降りる宣言
 							if (!b.isTalking()) {
-								b.setMessage(MessagePool.getMessage(b, MessagePool.Action.RideOffSui), true);
+								b.setMessage(GameMessages.getMessage(b, MessagePool.Action.RideOffSui), true);
 							}
 
 							// すぃーから降りる
@@ -177,15 +180,15 @@ public class SuiRideEvent extends EventPacket {
 						}
 					} else {
 						if (!b.isTalking()) {
-							if (SimYukkuri.RND.nextBoolean()) {
-								b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.RidingSui),
+							if (GameRandom.nextBoolean()) {
+								b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.RidingSui),
 										Const.HOLDMESSAGE, true, false);
 							} else {
-								b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.DrivingSui),
+								b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.DrivingSui),
 										Const.HOLDMESSAGE, true, false);
 							}
 						}
-						if (SimYukkuri.RND.nextInt(100) == 0) {
+						if (GameRandom.nextInt(100) == 0) {
 							EventLogic.addWorldEvent(new SuiSpeake(null, null, target, 1), null, null);
 						}
 					}
@@ -196,7 +199,7 @@ public class SuiRideEvent extends EventPacket {
 				// しゃべっていないかつ、すぃーが待機中ではない場合
 				if (!b.isTalking() && s.getCurrent_condition() != 1) {
 					// すぃーに乗っている時のセリフ
-					b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.RidingSui), Const.HOLDMESSAGE,
+					b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.RidingSui), Const.HOLDMESSAGE,
 							true, false);
 				}
 
@@ -204,7 +207,7 @@ public class SuiRideEvent extends EventPacket {
 				if (from.getCurrentEvent() != this && s.getCurrent_condition() == 1) {
 					// すぃーからおりる
 					if (!b.isTalking()) {
-						b.setMessage(MessagePool.getMessage(b, MessagePool.Action.RideOffSui), true);
+						b.setMessage(GameMessages.getMessage(b, MessagePool.Action.RideOffSui), true);
 					}
 					s.rideOff(b);
 					return UpdateState.ABORT;
@@ -235,10 +238,10 @@ public class SuiRideEvent extends EventPacket {
 				return UpdateState.ABORT;
 			}
 			if (from != b && from.getFavItem(FavItemType.SUI) != null
-					&& b.getFavItem(FavItemType.SUI) == null && memberride == false && SimYukkuri.RND.nextBoolean()) {
+					&& b.getFavItem(FavItemType.SUI) == null && memberride == false && GameRandom.nextBoolean()) {
 				if (!b.isTalking()) {
 					// 他人のすぃーに乗りたがる
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.WantRideSuiOtner), true);
+					b.setMessage(GameMessages.getMessage(b, MessagePool.Action.WantRideSuiOtner), true);
 				}
 				from.moveTo(b.getX(), b.getY());
 				memberride = true;
@@ -281,6 +284,6 @@ public class SuiRideEvent extends EventPacket {
 
 	@Override
 	public String toString() {
-		return ResourceUtil.getInstance().read("event_ridesui");
+		return GameText.read("event_ridesui");
 	}
 }

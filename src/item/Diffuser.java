@@ -1,4 +1,5 @@
 package src.item;
+import src.util.GameText;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -14,6 +15,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import src.SimYukkuri;
+import src.util.GameWorld;
 import src.base.Effect;
 import src.base.ObjEX;
 import src.draw.ModLoader;
@@ -32,20 +34,20 @@ public class Diffuser extends ObjEX {
 	private static final long serialVersionUID = -1780241956081220439L;
 
 	public static enum SteamType {
-		ANTI_FUNGAL(ResourceUtil.getInstance().read("item_preventionmold"), 0),
-		STEAM(ResourceUtil.getInstance().read("item_water"), 1),
-		ORANGE(ResourceUtil.getInstance().read("item_orange"), 2),
-		AGE_BOOST(ResourceUtil.getInstance().read("item_accel"), 3),
-		AGE_STOP(ResourceUtil.getInstance().read("item_stop"), 4),
-		ANTI_DOS(ResourceUtil.getInstance().read("item_preventiondos"), 5),
-		ANTI_YU(ResourceUtil.getInstance().read("item_extermonation"), 6),
-		PREDATOR(ResourceUtil.getInstance().read("item_preventionpredation"), 7),
-		SUGER(ResourceUtil.getInstance().read("item_sugarwater"), 8),
-		NOSLEEP(ResourceUtil.getInstance().read("item_preventionsleep"), 9),
-		HYBRID(ResourceUtil.getInstance().read("item_hybridize"), 9),
-		RAPIDPREGNANT(ResourceUtil.getInstance().read("item_prophylactic"), 9),
-		ANTI_NONYUKKURI(ResourceUtil.getInstance().read("item_antinyd"), 9),
-		ENDLESS_FURIFURI(ResourceUtil.getInstance().read("item_infimorun"), 9),
+		ANTI_FUNGAL(GameText.read("item_preventionmold"), 0),
+		STEAM(GameText.read("item_water"), 1),
+		ORANGE(GameText.read("item_orange"), 2),
+		AGE_BOOST(GameText.read("item_accel"), 3),
+		AGE_STOP(GameText.read("item_stop"), 4),
+		ANTI_DOS(GameText.read("item_preventiondos"), 5),
+		ANTI_YU(GameText.read("item_extermonation"), 6),
+		PREDATOR(GameText.read("item_preventionpredation"), 7),
+		SUGER(GameText.read("item_sugarwater"), 8),
+		NOSLEEP(GameText.read("item_preventionsleep"), 9),
+		HYBRID(GameText.read("item_hybridize"), 9),
+		RAPIDPREGNANT(GameText.read("item_prophylactic"), 9),
+		ANTI_NONYUKKURI(GameText.read("item_antinyd"), 9),
+		ENDLESS_FURIFURI(GameText.read("item_infimorun"), 9),
 		;
 
 		private String name;
@@ -131,7 +133,7 @@ public class Diffuser extends ObjEX {
 
 	@Override
 	public void removeListData() {
-		SimYukkuri.world.getCurrentMap().getDiffuser().remove(objId);
+		GameWorld.get().getCurrentMap().getDiffuser().remove(objId);
 	}
 
 	/**
@@ -149,7 +151,7 @@ public class Diffuser extends ObjEX {
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), 8);
 
-		SimYukkuri.world.getCurrentMap().getDiffuser().put(objId, this);
+		GameWorld.get().getCurrentMap().getDiffuser().put(objId, this);
 		objType = Type.OBJECT;
 		objEXType = ObjEXType.DIFFUSER;
 		value = 15000;
@@ -157,7 +159,7 @@ public class Diffuser extends ObjEX {
 
 		boolean ret = setupDiffuser(this, false);
 		if (!ret) {
-			SimYukkuri.world.getCurrentMap().getDiffuser().remove(objId);
+			GameWorld.get().getCurrentMap().getDiffuser().remove(objId);
 		}
 	}
 
@@ -188,7 +190,7 @@ public class Diffuser extends ObjEX {
 		}
 
 		int dlgRet = JOptionPane.showConfirmDialog(SimYukkuri.mypane, mainPanel,
-				ResourceUtil.getInstance().read("item_diffusersettings"),
+				GameText.read("item_diffusersettings"),
 				JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
 		if (dlgRet == JOptionPane.OK_OPTION) {

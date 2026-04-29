@@ -1,6 +1,9 @@
 package src.event;
+import src.util.GameMessages;
+import src.util.GameText;
 
 import src.SimYukkuri;
+import src.util.GameRandom;
 import src.base.Body;
 import src.base.EventPacket;
 import src.base.Obj;
@@ -93,15 +96,15 @@ public class ProposeEvent extends EventPacket {
 		// 相手が死んだか 相手が消えてしまったか非ゆっくり症発症したか取られたらイベント中断
 		if (to.isDead() || to.isRemoved() || to.isNYD() || to.isTaken()) {
 			from.setCalm();
-			from.setBodyEventResMessage(MessagePool.getMessage(from, MessagePool.Action.Surprise), 30, true,
+			from.setBodyEventResMessage(GameMessages.getMessage(from, MessagePool.Action.Surprise), 30, true,
 					false);
 			from.setHappiness(Happiness.VERY_SAD);
 			from.addStress(from.getStressLimit() / 10);
-			if (SimYukkuri.RND.nextBoolean()) {
+			if (GameRandom.nextBoolean()) {
 				from.setForceFace(ImageCode.TIRED.ordinal());
 			} else {
 				from.setForceFace(ImageCode.CRYING.ordinal());
-				if (SimYukkuri.RND.nextInt(3) == 0)
+				if (GameRandom.nextInt(3) == 0)
 					from.doYunnyaa(true);
 			}
 			return UpdateState.ABORT;
@@ -110,8 +113,8 @@ public class ProposeEvent extends EventPacket {
 		int colX = BodyLogic.calcCollisionX(b, to);
 		// 相手がつかまれているとき
 		if (to.isGrabbed()) {
-			from.setBodyEventResMessage(MessagePool.getMessage(from, MessagePool.Action.DontPreventUs), 30,
-					false, SimYukkuri.RND.nextBoolean());
+			from.setBodyEventResMessage(GameMessages.getMessage(from, MessagePool.Action.DontPreventUs), 30,
+					false, GameRandom.nextBoolean());
 			from.setForceFace(ImageCode.PUFF.ordinal());
 			from.setAngry();
 			started = false;
@@ -122,15 +125,15 @@ public class ProposeEvent extends EventPacket {
 			else
 				from.moveToEvent(this, to.getX() + colX, to.getY());
 			// ランダムであきらめる
-			if (from.getIntelligence() != Intelligence.FOOL && SimYukkuri.RND.nextInt(1500) == 0) {
-				if (SimYukkuri.RND.nextBoolean()) {
+			if (from.getIntelligence() != Intelligence.FOOL && GameRandom.nextInt(1500) == 0) {
+				if (GameRandom.nextBoolean()) {
 					from.setBodyEventResMessage(
-							MessagePool.getMessage(from, MessagePool.Action.LamentNoYukkuri), 30, true, true);
+							GameMessages.getMessage(from, MessagePool.Action.LamentNoYukkuri), 30, true, true);
 					from.setHappiness(Happiness.VERY_SAD);
 					from.setForceFace(ImageCode.CRYING.ordinal());
 				} else {
 					from.setBodyEventResMessage(
-							MessagePool.getMessage(from, MessagePool.Action.LamentLowYukkuri), 30, true, true);
+							GameMessages.getMessage(from, MessagePool.Action.LamentLowYukkuri), 30, true, true);
 					from.setHappiness(Happiness.SAD);
 					from.setForceFace(ImageCode.TIRED.ordinal());
 				}
@@ -160,12 +163,12 @@ public class ProposeEvent extends EventPacket {
 			to.clearEvent();
 		}
 		to.stay();
-		if (SimYukkuri.RND.nextInt(20) == 0) {
-			if (SimYukkuri.RND.nextBoolean())
-				from.setBodyEventResMessage(MessagePool.getMessage(from, MessagePool.Action.PleaseWait), 30,
+		if (GameRandom.nextInt(20) == 0) {
+			if (GameRandom.nextBoolean())
+				from.setBodyEventResMessage(GameMessages.getMessage(from, MessagePool.Action.PleaseWait), 30,
 						true, false);
 			else
-				from.setBodyEventResMessage(MessagePool.getMessage(from, MessagePool.Action.Excite), 30, true,
+				from.setBodyEventResMessage(GameMessages.getMessage(from, MessagePool.Action.Excite), 30, true,
 						false);
 		}
 		return null;
@@ -185,15 +188,15 @@ public class ProposeEvent extends EventPacket {
 		// 相手がかびてるor食われてる時の挙動
 		if (from.findSick(to) || to.isEatenByAnimals() || to.hasDisorder()) {
 			from.setCalm();
-			from.setBodyEventResMessage(MessagePool.getMessage(from, MessagePool.Action.Surprise), 30, true,
+			from.setBodyEventResMessage(GameMessages.getMessage(from, MessagePool.Action.Surprise), 30, true,
 					false);
 			from.setHappiness(Happiness.VERY_SAD);
 			from.addStress(from.getStressLimit() / 10);
-			if (SimYukkuri.RND.nextBoolean()) {
+			if (GameRandom.nextBoolean()) {
 				from.setForceFace(ImageCode.TIRED.ordinal());
 			} else {
 				from.setForceFace(ImageCode.CRYING.ordinal());
-				if (SimYukkuri.RND.nextInt(3) == 0)
+				if (GameRandom.nextInt(3) == 0)
 					from.doYunnyaa(true);
 			}
 			// 夫婦関係の解消
@@ -213,7 +216,7 @@ public class ProposeEvent extends EventPacket {
 				from.setForceFace(ImageCode.VAIN.ordinal());
 			else
 				from.setForceFace(ImageCode.EMBARRASSED.ordinal());
-			from.setBodyEventResMessage(MessagePool.getMessage(from, MessagePool.Action.PleaseWait), 30, true,
+			from.setBodyEventResMessage(GameMessages.getMessage(from, MessagePool.Action.PleaseWait), 30, true,
 					false);
 			started = true;
 		} else if (tick == 5) {
@@ -224,14 +227,14 @@ public class ProposeEvent extends EventPacket {
 			to.setLockmove(true);
 		} else if (tick == 20) {
 			// 告白
-			if (from.isRude() || SimYukkuri.RND.nextInt(20) == 0)
+			if (from.isRude() || GameRandom.nextInt(20) == 0)
 				from.setForceFace(ImageCode.VAIN.ordinal());
 			else
 				from.setForceFace(ImageCode.EMBARRASSED.ordinal());
 			// カップルの設定(ただし、ここではやる側のみ)
 			from.setPartner(to.getUniqueID());
 			// 告白セリフ
-			from.setBodyEventResMessage(MessagePool.getMessage(from, MessagePool.Action.Propose), 30, true,
+			from.setBodyEventResMessage(GameMessages.getMessage(from, MessagePool.Action.Propose), 30, true,
 					false);
 			from.stayPurupuru(50);
 			to.setForceFace(ImageCode.EMBARRASSED.ordinal());
@@ -244,7 +247,7 @@ public class ProposeEvent extends EventPacket {
 			if (sayOK) {
 				to.setForceFace(ImageCode.SMILE.ordinal());
 				to.setPartner(from.getUniqueID());
-				to.setBodyEventResMessage(MessagePool.getMessage(to, MessagePool.Action.ProposeYes), 30, true,
+				to.setBodyEventResMessage(GameMessages.getMessage(to, MessagePool.Action.ProposeYes), 30, true,
 						false);
 				// ゲスほど幸福度は低い
 				switch (from.getAttitude()) {
@@ -289,11 +292,11 @@ public class ProposeEvent extends EventPacket {
 			// 失敗
 			else {
 				if (to.findSick(from)) {
-					to.setBodyEventResMessage(MessagePool.getMessage(to, MessagePool.Action.HateMoldyYukkuri),
+					to.setBodyEventResMessage(GameMessages.getMessage(to, MessagePool.Action.HateMoldyYukkuri),
 							30, true, false);
 					to.setForceFace(ImageCode.PUFF.ordinal());
 				} else {
-					to.setBodyEventResMessage(MessagePool.getMessage(to, MessagePool.Action.ProposeNo), 30,
+					to.setBodyEventResMessage(GameMessages.getMessage(to, MessagePool.Action.ProposeNo), 30,
 							true, false);
 					if (to.isRude()) {
 						to.setForceFace(ImageCode.RUDE.ordinal());
@@ -345,16 +348,16 @@ public class ProposeEvent extends EventPacket {
 				from.clearActionsForEvent();
 				from.setExciting(true);
 				from.setForceFace(ImageCode.EXCITING.ordinal());
-				from.setBodyEventResMessage(MessagePool.getMessage(from, MessagePool.Action.LetsPlay), 30,
+				from.setBodyEventResMessage(GameMessages.getMessage(from, MessagePool.Action.LetsPlay), 30,
 						true, false);
-				to.setBodyEventResMessage(MessagePool.getMessage(to, MessagePool.Action.OKcome), 30, true,
+				to.setBodyEventResMessage(GameMessages.getMessage(to, MessagePool.Action.OKcome), 30, true,
 						false);
 			}
 			// 失敗時は泣いて逃げる
 			else {
 				from.setHappiness(Happiness.VERY_SAD);
 				from.setForceFace(ImageCode.CRYING.ordinal());
-				from.setBodyEventResMessage(MessagePool.getMessage(from, MessagePool.Action.Heartbreak), 30,
+				from.setBodyEventResMessage(GameMessages.getMessage(from, MessagePool.Action.Heartbreak), 30,
 						true, false);
 				from.runAway(to.getX(), to.getY());
 				return true;
@@ -410,6 +413,6 @@ public class ProposeEvent extends EventPacket {
 
 	@Override
 	public String toString() {
-		return ResourceUtil.getInstance().read("event_proposal");
+		return GameText.read("event_proposal");
 	}
 }

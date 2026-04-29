@@ -1,7 +1,10 @@
 package src.event;
+import src.util.GameMessages;
+import src.util.GameText;
 
 import src.Const;
 import src.SimYukkuri;
+import src.util.GameRandom;
 import src.base.Body;
 import src.base.EventPacket;
 import src.base.Obj;
@@ -36,7 +39,7 @@ public class SuiSpeake extends EventPacket {
 
 	@Override
 	public boolean simpleEventAction(Body b) {
-		if (b.getCurrentEvent() != null || b.isTalking() || SimYukkuri.RND.nextInt(20) != 0)
+		if (b.getCurrentEvent() != null || b.isTalking() || GameRandom.nextInt(20) != 0)
 			return true;
 		if (!b.canEventResponse()) {
 			return false;
@@ -45,12 +48,12 @@ public class SuiSpeake extends EventPacket {
 		Body from = YukkuriUtil.getBodyInstance(getFrom());
 		if (from == null) {
 			if (target == null) {
-				if (b.isRude() || SimYukkuri.RND.nextBoolean()) {
-					b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.WantingSui),
+				if (b.isRude() || GameRandom.nextBoolean()) {
+					b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.WantingSui),
 							Const.HOLDMESSAGE, true, false);
 					EventLogic.addWorldEvent(new SuiSpeake(b, null, null, 10), null, null);
 				} else {
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.YukkuringSui), true);
+					b.setMessage(GameMessages.getMessage(b, MessagePool.Action.YukkuringSui), true);
 				}
 			} else {
 				if (Translate.distance(b.getX(), b.getY(), target.getX(), target.getY()) < 200000) {
@@ -59,20 +62,20 @@ public class SuiSpeake extends EventPacket {
 						return false;
 					if (db.isParent(b)) {
 						if (db.isFather(b)) {
-							b.setMessage(MessagePool.getMessage(b, MessagePool.Action.DrivingSuiPAPA), true);
+							b.setMessage(GameMessages.getMessage(b, MessagePool.Action.DrivingSuiPAPA), true);
 						} else {
-							b.setMessage(MessagePool.getMessage(b, MessagePool.Action.DrivingSuiMAMA), true);
+							b.setMessage(GameMessages.getMessage(b, MessagePool.Action.DrivingSuiMAMA), true);
 						}
 
 					} else if (b.isPartner(db)) {
-						b.setMessage(MessagePool.getMessage(b, MessagePool.Action.DrivingSuiPartner), true);
+						b.setMessage(GameMessages.getMessage(b, MessagePool.Action.DrivingSuiPartner), true);
 					} else if (b.isParent(db)) {
-						b.setMessage(MessagePool.getMessage(b, MessagePool.Action.DrivingSuiChild), true);
+						b.setMessage(GameMessages.getMessage(b, MessagePool.Action.DrivingSuiChild), true);
 					} else if (db.isSister(b)) {
 						if (db.isElderSister(b)) {
-							b.setMessage(MessagePool.getMessage(b, MessagePool.Action.DrivingSuiOldSister), true);
+							b.setMessage(GameMessages.getMessage(b, MessagePool.Action.DrivingSuiOldSister), true);
 						} else {
-							b.setMessage(MessagePool.getMessage(b, MessagePool.Action.DrivingSuiYoungSister), true);
+							b.setMessage(GameMessages.getMessage(b, MessagePool.Action.DrivingSuiYoungSister), true);
 						}
 
 					} else {
@@ -86,32 +89,32 @@ public class SuiSpeake extends EventPacket {
 			if (target == null) {
 				if (Translate.distance(b.getX(), b.getY(), from.getX(), from.getY()) < 200000) {
 					if (b.isParent(from)) {
-						b.setMessage(MessagePool.getMessage(b, MessagePool.Action.WantingSuiParent), true);
+						b.setMessage(GameMessages.getMessage(b, MessagePool.Action.WantingSuiParent), true);
 					} else if (b.isPartner(from)) {
-						b.setMessage(MessagePool.getMessage(b, MessagePool.Action.WantingSuiPartner), true);
+						b.setMessage(GameMessages.getMessage(b, MessagePool.Action.WantingSuiPartner), true);
 					}
 				}
 			} else {
 				if (Translate.distance(b.getX(), b.getY(), target.getX(), target.getY()) < 200000) {
 					if (from.isParent(b)) {
 						if (from.isMother(b)) {
-							b.setMessage(MessagePool.getMessage(b, MessagePool.Action.hasSuiPAPAChild), true);
+							b.setMessage(GameMessages.getMessage(b, MessagePool.Action.hasSuiPAPAChild), true);
 						} else {
-							b.setMessage(MessagePool.getMessage(b, MessagePool.Action.hasSuiMAMAChild), true);
+							b.setMessage(GameMessages.getMessage(b, MessagePool.Action.hasSuiMAMAChild), true);
 						}
 					} else if (b.isPartner(from)) {
-						b.setMessage(MessagePool.getMessage(b, MessagePool.Action.hasSuiPartner), true);
+						b.setMessage(GameMessages.getMessage(b, MessagePool.Action.hasSuiPartner), true);
 					} else if (b.isParent(from)) {
-						b.setMessage(MessagePool.getMessage(b, MessagePool.Action.hasSuiChild), true);
+						b.setMessage(GameMessages.getMessage(b, MessagePool.Action.hasSuiChild), true);
 					} else if (from.isSister(b)) {
 						if (from.isElderSister(b)) {
-							b.setMessage(MessagePool.getMessage(b, MessagePool.Action.hasSuiOldSister), true);
+							b.setMessage(GameMessages.getMessage(b, MessagePool.Action.hasSuiOldSister), true);
 						} else {
-							b.setMessage(MessagePool.getMessage(b, MessagePool.Action.hasSuiYoungSister), true);
+							b.setMessage(GameMessages.getMessage(b, MessagePool.Action.hasSuiYoungSister), true);
 						}
 
 					} else {
-						b.setMessage(MessagePool.getMessage(b, MessagePool.Action.YukkuringSui), true);
+						b.setMessage(GameMessages.getMessage(b, MessagePool.Action.YukkuringSui), true);
 					}
 				}
 			}
@@ -135,6 +138,6 @@ public class SuiSpeake extends EventPacket {
 
 	@Override
 	public String toString() {
-		return ResourceUtil.getInstance().read("event_suispeak");
+		return GameText.read("event_suispeak");
 	}
 }

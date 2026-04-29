@@ -66,10 +66,10 @@ public class IniFileUtil {
 			b.getImmunity()[2] = (int) conf.get("Immunity.2");
 			b.getImmunity()[3] = (int) conf.get("Immunity.3");
 			b.setNotChangeCharacter((int) conf.get("NotChangeCharacter") == 0);
-			b.getNiceLimit()[0] = (int) conf.get("NiceLimit") + SimYukkuri.RND.nextInt(20) - 10;
-			b.getNiceLimit()[1] = (int) conf.get("VeryNiceLimit") + SimYukkuri.RND.nextInt(20) - 10;
-			b.getRudeLimit()[0] = (int) conf.get("RudeLimit") + SimYukkuri.RND.nextInt(20) - 10;
-			b.getRudeLimit()[1] = (int) conf.get("VeryRudeLimit") + SimYukkuri.RND.nextInt(20) - 10;
+			b.getNiceLimit()[0] = (int) conf.get("NiceLimit") + GameRandom.nextInt(20) - 10;
+			b.getNiceLimit()[1] = (int) conf.get("VeryNiceLimit") + GameRandom.nextInt(20) - 10;
+			b.getRudeLimit()[0] = (int) conf.get("RudeLimit") + GameRandom.nextInt(20) - 10;
+			b.getRudeLimit()[1] = (int) conf.get("VeryRudeLimit") + GameRandom.nextInt(20) - 10;
 			b.setRealPregnantLimit((int) conf.get("RealPregnantLimit") == 1);
 			// 自主洗浄失敗確率
 			b.getCleaningFailProbWise()[0] = (int) conf.get("CleaningFailProb.Wise.baby");
@@ -266,19 +266,19 @@ public class IniFileUtil {
 			conf.put("NotChangeCharacter", nTemp);
 			//超善良限界
 			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "VeryNiceLimit");
-			b.getNiceLimit()[1] = nTemp + SimYukkuri.RND.nextInt(20) - 10;
+			b.getNiceLimit()[1] = nTemp + GameRandom.nextInt(20) - 10;
 			conf.put("VeryNiceLimit", nTemp);
 			//善良限界
 			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "NiceLimit");
-			b.getNiceLimit()[0] = nTemp + SimYukkuri.RND.nextInt(20) - 10;
+			b.getNiceLimit()[0] = nTemp + GameRandom.nextInt(20) - 10;
 			conf.put("NiceLimit", nTemp);
 			//ゲス限界
 			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "RudeLimit");
-			b.getRudeLimit()[0] = -nTemp + SimYukkuri.RND.nextInt(20) - 10;
+			b.getRudeLimit()[0] = -nTemp + GameRandom.nextInt(20) - 10;
 			conf.put("RudeLimit", -nTemp);
 			//ドゲス限界
 			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "SuperRudeLimit");
-			b.getRudeLimit()[1] = -nTemp + SimYukkuri.RND.nextInt(20) - 10;
+			b.getRudeLimit()[1] = -nTemp + GameRandom.nextInt(20) - 10;
 			conf.put("VeryRudeLimit", -nTemp);
 			//リアルな妊娠限界の入り切り
 			nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "RealPregnantLimit");
@@ -405,8 +405,8 @@ public class IniFileUtil {
 			b.setcost((int)conf.get("cost"));
 			b.setOkazariPosition((int)conf.get("OkazariPosition"));
 			b.setSaleValue((int[])conf.get("saleValue"));
-			b.setPregnantLimit((int)conf.get("pregnantLimit")+ SimYukkuri.RND.nextInt(100));
-			b.setDiarrheaProb((int)conf.get("GetDiarrheaProbability")+ SimYukkuri.RND.nextInt(2));
+			b.setPregnantLimit((int)conf.get("pregnantLimit")+ GameRandom.nextInt(100));
+			b.setDiarrheaProb((int)conf.get("GetDiarrheaProbability")+ GameRandom.nextInt(2));
 			
 		} else {
 			Map<String, Object> conf = new HashMap<String, Object>();
@@ -468,12 +468,12 @@ public class IniFileUtil {
 			//妊娠限界取得
 			NTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataIniDir(), b.getBaseBodyFileName(),
 					"pregnantLimit");
-			b.setPregnantLimit(NTemp + SimYukkuri.RND.nextInt(100));
+			b.setPregnantLimit(NTemp + GameRandom.nextInt(100));
 			conf.put("pregnantLimit", NTemp);
 			//下痢になる確率取得
 			NTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataIniDir(), b.getBaseBodyFileName(),
 					"GetDiarrheaProbability");
-			b.setDiarrheaProb(NTemp + SimYukkuri.RND.nextInt(2));
+			b.setDiarrheaProb(NTemp + GameRandom.nextInt(2));
 			conf.put("GetDiarrheaProbability", NTemp);
 			//お飾りの位置設定
 			NTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataIniDir(), b.getBaseBodyFileName(),
@@ -489,13 +489,13 @@ public class IniFileUtil {
 		//一人称設定
 		if (b.getAnBabyName() != null && 0 < b.getAnBabyName().length) {
 			int nSize = b.getAnBabyName().length;
-			int nIndex = SimYukkuri.RND.nextInt(nSize);
+			int nIndex = GameRandom.nextInt(nSize);
 			b.getAnMyName()[0] = b.getAnBabyName()[nIndex];
 			nBeforeNameIndex = nIndex;
 		}
 		if (b.getAnChildName() != null && 0 < b.getAnChildName().length) {
 			int nSize = b.getAnChildName().length;
-			int nIndex = SimYukkuri.RND.nextInt(nSize);
+			int nIndex = GameRandom.nextInt(nSize);
 			// 名前リストで同じ並びの物があれば先のものを優先する
 			if (nBeforeNameIndex < nSize) {
 				nIndex = nBeforeNameIndex;
@@ -505,7 +505,7 @@ public class IniFileUtil {
 		}
 		if (b.getAnAdultName() != null && 0 < b.getAnAdultName().length) {
 			int nSize = b.getAnAdultName().length;
-			int nIndex = SimYukkuri.RND.nextInt(nSize);
+			int nIndex = GameRandom.nextInt(nSize);
 			// 名前リストで同じ並びの物があれば先のものを優先する
 			if (nBeforeNameIndex < nSize) {
 				nIndex = nBeforeNameIndex;
@@ -517,13 +517,13 @@ public class IniFileUtil {
 		//ダメージ時一人称設定
 		if (b.getAnBabyNameD() != null && 0 < b.getAnBabyNameD().length) {
 			int nSize = b.getAnBabyNameD().length;
-			int nIndex = SimYukkuri.RND.nextInt(nSize);
+			int nIndex = GameRandom.nextInt(nSize);
 			b.getAnMyNameD()[0] = b.getAnBabyNameD()[nIndex];
 			nBeforeNameDIndex = nIndex;
 		}
 		if (b.getAnChildNameD() != null && 0 < b.getAnChildNameD().length) {
 			int nSize = b.getAnChildNameD().length;
-			int nIndex = SimYukkuri.RND.nextInt(nSize);
+			int nIndex = GameRandom.nextInt(nSize);
 			// 名前リストで同じ並びの物があればを優先する
 			if (nBeforeNameIndex < nSize) {
 				nIndex = nBeforeNameDIndex;
@@ -533,7 +533,7 @@ public class IniFileUtil {
 		}
 		if (b.getAnAdultNameD() != null && 0 < b.getAnAdultNameD().length) {
 			int nSize = b.getAnAdultNameD().length;
-			int nIndex = SimYukkuri.RND.nextInt(nSize);
+			int nIndex = GameRandom.nextInt(nSize);
 			// 名前リストで同じ並びの物があればを優先する
 			if (nBeforeNameDIndex < nSize) {
 				nIndex = nBeforeNameDIndex;

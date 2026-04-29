@@ -1,7 +1,10 @@
 package src.event;
+import src.util.GameMessages;
+import src.util.GameText;
 
 import src.Const;
 import src.SimYukkuri;
+import src.util.GameRandom;
 import src.base.Body;
 import src.base.EventPacket;
 import src.base.Obj;
@@ -85,15 +88,15 @@ public class RevengeAttackEvent extends EventPacket {
 	@Override
 	public boolean execute(Body b) {
 		// 動けない場合と、ランダムであきらめる
-		if (b.isDontMove() || SimYukkuri.RND.nextInt(50) == 0) {
-			b.setMessage(MessagePool.getMessage(b, MessagePool.Action.LamentNoYukkuri), 40, true, true);
+		if (b.isDontMove() || GameRandom.nextInt(50) == 0) {
+			b.setMessage(GameMessages.getMessage(b, MessagePool.Action.LamentNoYukkuri), 40, true, true);
 			b.setHappiness(Happiness.SAD);
 			return true;
 		}
 		Body to = YukkuriUtil.getBodyInstance(getTo());
 		// 相手が残っていたら攻撃
 		if (to != null && !to.isRemoved() && to.getZ() < 5) {
-			b.setWorldEventResMessage(MessagePool.getMessage(b, MessagePool.Action.RevengeAttack), Const.HOLDMESSAGE,
+			b.setWorldEventResMessage(GameMessages.getMessage(b, MessagePool.Action.RevengeAttack), Const.HOLDMESSAGE,
 					true, false);
 			if (b.getDirection() == Direction.LEFT) {
 				SimYukkuri.mypane.getTerrarium().addEffect(EffectType.HIT, b.getX() - 10, b.getY(), 0,
@@ -111,6 +114,6 @@ public class RevengeAttackEvent extends EventPacket {
 
 	@Override
 	public String toString() {
-		return ResourceUtil.getInstance().read("event_revenge");
+		return GameText.read("event_revenge");
 	}
 }

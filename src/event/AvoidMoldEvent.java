@@ -1,7 +1,10 @@
 package src.event;
+import src.util.GameMessages;
+import src.util.GameText;
 
 import src.Const;
 import src.SimYukkuri;
+import src.util.GameRandom;
 import src.base.Body;
 import src.base.EventPacket;
 import src.base.Obj;
@@ -107,7 +110,7 @@ public class AvoidMoldEvent extends EventPacket {
 		}
 		// ドゲスの場合、楽しんで制裁
 		if (from.isVeryRude()) {
-			from.setBodyEventResMessage(MessagePool.getMessage(from, MessagePool.Action.HateMoldyYukkuri),
+			from.setBodyEventResMessage(GameMessages.getMessage(from, MessagePool.Action.HateMoldyYukkuri),
 					Const.HOLDMESSAGE, true, false);
 			to.strikeByYukkuri(from, this, false);
 			from.setForceFace(ImageCode.PUFF.ordinal());
@@ -128,7 +131,7 @@ public class AvoidMoldEvent extends EventPacket {
 				if (from.isParent(to) || from.isPartner(to)) {
 					switch (from.getIntelligence()) {
 						case FOOL:
-							if (SimYukkuri.RND.nextInt(5) == 0) {
+							if (GameRandom.nextInt(5) == 0) {
 								from.doPeropero(to);
 								return true;
 							} else {
@@ -136,13 +139,13 @@ public class AvoidMoldEvent extends EventPacket {
 								return false;
 							}
 						case WISE:
-							if (SimYukkuri.RND.nextInt(5) == 0) {
+							if (GameRandom.nextInt(5) == 0) {
 								sayApologyMessage(from, to);
 								to.strikeByYukkuri(from, this, false);
 							}
 							return false;
 						default:
-							if (SimYukkuri.RND.nextInt(5) == 0) {
+							if (GameRandom.nextInt(5) == 0) {
 								sayApologyMessage(from, to);
 								to.strikeByYukkuri(from, this, false);
 								return true;
@@ -156,20 +159,20 @@ public class AvoidMoldEvent extends EventPacket {
 				else if (from.isFamily(to)) {
 					switch (from.getIntelligence()) {
 						case FOOL:
-							if (SimYukkuri.RND.nextInt(5) == 0) {
+							if (GameRandom.nextInt(5) == 0) {
 								from.doPeropero(to);
 							} else {
 								saySadMessage(from, to);
 							}
 							return true;
 						case WISE:
-							if (SimYukkuri.RND.nextInt(5) == 0) {
+							if (GameRandom.nextInt(5) == 0) {
 								sayApologyMessage(from, to);
 								to.runAway(to.getX(), to.getY());
 							}
 							return true;
 						default:
-							if (SimYukkuri.RND.nextInt(5) == 0) {
+							if (GameRandom.nextInt(5) == 0) {
 								sayApologyMessage(from, to);
 								to.runAway(to.getX(), to.getY());
 								return true;
@@ -181,7 +184,7 @@ public class AvoidMoldEvent extends EventPacket {
 				}
 				// 家族でない場合
 				else {
-					from.setBodyEventResMessage(MessagePool.getMessage(from, MessagePool.Action.HateMoldyYukkuri),
+					from.setBodyEventResMessage(GameMessages.getMessage(from, MessagePool.Action.HateMoldyYukkuri),
 							Const.HOLDMESSAGE, true, false);
 					to.strikeByYukkuri(from, this, false);
 					from.setForceFace(ImageCode.PUFF.ordinal());
@@ -203,7 +206,7 @@ public class AvoidMoldEvent extends EventPacket {
 				b.addStress(70);
 				switch (from.getIntelligence()) {
 					case FOOL:
-						if (SimYukkuri.RND.nextInt(5) == 0) {
+						if (GameRandom.nextInt(5) == 0) {
 							from.doPeropero(to);
 							return false;
 						} else {
@@ -211,7 +214,7 @@ public class AvoidMoldEvent extends EventPacket {
 							return false;
 						}
 					case WISE:
-						if (SimYukkuri.RND.nextInt(5) == 0) {
+						if (GameRandom.nextInt(5) == 0) {
 							sayApologyMessage(from, to);
 							to.runAway(to.getX(), to.getY());
 							return true;
@@ -220,11 +223,11 @@ public class AvoidMoldEvent extends EventPacket {
 							return false;
 						}
 					default:
-						if (SimYukkuri.RND.nextInt(25) == 0) {
+						if (GameRandom.nextInt(25) == 0) {
 							sayApologyMessage(from, to);
 							to.runAway(to.getX(), to.getY());
 							return true;
-						} else if (SimYukkuri.RND.nextInt(5) == 0) {
+						} else if (GameRandom.nextInt(5) == 0) {
 							from.doPeropero(to);
 							return false;
 						} else {
@@ -237,7 +240,7 @@ public class AvoidMoldEvent extends EventPacket {
 			else if (to.isFamily(from)) {
 				switch (from.getIntelligence()) {
 					case FOOL:
-						if (SimYukkuri.RND.nextInt(5) == 0) {
+						if (GameRandom.nextInt(5) == 0) {
 							from.doPeropero(to);
 							return false;
 						} else {
@@ -245,7 +248,7 @@ public class AvoidMoldEvent extends EventPacket {
 							return false;
 						}
 					case WISE:
-						if (SimYukkuri.RND.nextInt(5) == 0) {
+						if (GameRandom.nextInt(5) == 0) {
 							sayApologyMessage(from, to);
 							to.runAway(to.getX(), to.getY());
 							return true;
@@ -254,7 +257,7 @@ public class AvoidMoldEvent extends EventPacket {
 							return false;
 						}
 					default:
-						if (SimYukkuri.RND.nextInt(10) == 0) {
+						if (GameRandom.nextInt(10) == 0) {
 							sayApologyMessage(from, to);
 							to.runAway(to.getX(), to.getY());
 							return true;
@@ -266,7 +269,7 @@ public class AvoidMoldEvent extends EventPacket {
 			}
 			// 家族でない場合
 			else {
-				from.setBodyEventResMessage(MessagePool.getMessage(from, MessagePool.Action.HateMoldyYukkuri),
+				from.setBodyEventResMessage(GameMessages.getMessage(from, MessagePool.Action.HateMoldyYukkuri),
 						Const.HOLDMESSAGE, true, false);
 				from.runAway(to.getX(), to.getY());
 				from.setForceFace(ImageCode.PUFF.ordinal());
@@ -290,21 +293,21 @@ public class AvoidMoldEvent extends EventPacket {
 			return;
 		String message = null;
 		if (From.isParent(To)) {
-			message = MessagePool.getMessage(from, MessagePool.Action.SadnessForMoldyChild);
+			message = GameMessages.getMessage(from, MessagePool.Action.SadnessForMoldyChild);
 		} else if (From.isPartner(To)) {
-			message = MessagePool.getMessage(from, MessagePool.Action.SadnessForMoldyPartner);
+			message = GameMessages.getMessage(from, MessagePool.Action.SadnessForMoldyPartner);
 		} else if (To.isParent(From)) {
 			if (To.isFather(From))
-				message = MessagePool.getMessage(from, MessagePool.Action.SadnessForMoldyFather);
+				message = GameMessages.getMessage(from, MessagePool.Action.SadnessForMoldyFather);
 			else
-				message = MessagePool.getMessage(from, MessagePool.Action.SadnessForMoldyMother);
+				message = GameMessages.getMessage(from, MessagePool.Action.SadnessForMoldyMother);
 		} else if (To.isSister(From)) {
 			if (To.getAge() >= From.getAge())
-				message = MessagePool.getMessage(from, MessagePool.Action.SadnessForEldersister);
+				message = GameMessages.getMessage(from, MessagePool.Action.SadnessForEldersister);
 			else
-				message = MessagePool.getMessage(from, MessagePool.Action.SadnessForMoldySister);
+				message = GameMessages.getMessage(from, MessagePool.Action.SadnessForMoldySister);
 		}
-		From.setBodyEventResMessage(message, Const.HOLDMESSAGE, true, SimYukkuri.RND.nextBoolean());
+		From.setBodyEventResMessage(message, Const.HOLDMESSAGE, true, GameRandom.nextBoolean());
 	}
 
 	/**
@@ -319,15 +322,15 @@ public class AvoidMoldEvent extends EventPacket {
 			return;
 		String message = null;
 		if (From.isParent(To)) {
-			message = MessagePool.getMessage(from, MessagePool.Action.ApologyToChild);
+			message = GameMessages.getMessage(from, MessagePool.Action.ApologyToChild);
 		} else if (To.isFamily(From)) {
-			message = MessagePool.getMessage(from, MessagePool.Action.ApologyToFamily);
+			message = GameMessages.getMessage(from, MessagePool.Action.ApologyToFamily);
 		}
-		From.setBodyEventResMessage(message, Const.HOLDMESSAGE, true, SimYukkuri.RND.nextBoolean());
+		From.setBodyEventResMessage(message, Const.HOLDMESSAGE, true, GameRandom.nextBoolean());
 	}
 
 	@Override
 	public String toString() {
-		return ResourceUtil.getInstance().read("event_mold");
+		return GameText.read("event_mold");
 	}
 }

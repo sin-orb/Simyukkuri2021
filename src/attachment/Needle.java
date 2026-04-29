@@ -1,10 +1,13 @@
 package src.attachment;
+import src.util.GameMessages;
+import src.util.GameText;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.IOException;
 
 import src.SimYukkuri;
+import src.util.GameRandom;
 import src.base.Attachment;
 import src.base.Body;
 import src.draw.ModLoader;
@@ -99,19 +102,19 @@ public class Needle extends Attachment {
 			if (pa.isNotNYD()) {
 				if (pa.isFixBack()) {
 					if (!pa.isTalking()) {
-						pa.setMessage(MessagePool.getMessage(pa, MessagePool.Action.NeedleScreamInAnal), 20,
+						pa.setMessage(GameMessages.getMessage(pa, MessagePool.Action.NeedleScreamInAnal), 20,
 								true, true);
 					}
 				} else {
 					if (!pa.isTalking()) {
-						pa.setMessage(MessagePool.getMessage(pa, MessagePool.Action.NeedleScream), 20, true,
+						pa.setMessage(GameMessages.getMessage(pa, MessagePool.Action.NeedleScream), 20, true,
 								true);
 					}
 				}
 				pa.setHappiness(Happiness.VERY_SAD);
 				pa.setForceFace(ImageCode.PAIN.ordinal());
 			}
-			if (SimYukkuri.RND.nextInt(50) == 0) {
+			if (GameRandom.nextInt(50) == 0) {
 				pa.stayPurupuru(20);
 			}
 
@@ -119,7 +122,7 @@ public class Needle extends Attachment {
 			pa.addStress(15);
 
 			// 実ゆの場合、親が反応する
-			if (SimYukkuri.RND.nextInt(50) == 0) {
+			if (GameRandom.nextInt(50) == 0) {
 				pa.checkReactionStalkMother(UnbirthBabyState.ATTAKED);
 			}
 		} else {
@@ -183,7 +186,7 @@ public class Needle extends Attachment {
 
 	@Override
 	public String toString() {
-		return ResourceUtil.getInstance().read("item_needle");
+		return GameText.read("item_needle");
 	}
 
 	// テスト用静的アクセサ

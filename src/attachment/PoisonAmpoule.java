@@ -1,4 +1,6 @@
 package src.attachment;
+import src.util.GameMessages;
+import src.util.GameText;
 
 
 import java.awt.image.BufferedImage;
@@ -7,6 +9,7 @@ import java.io.File;
 import java.io.IOException;
 
 import src.SimYukkuri;
+import src.util.GameRandom;
 import src.base.Attachment;
 import src.base.Body;
 import src.draw.ModLoader;
@@ -99,13 +102,13 @@ public class PoisonAmpoule extends Attachment {
 			pa.wakeup();
 		}
 		pa.setHappiness(Happiness.SAD);
-		if(SimYukkuri.RND.nextInt(1000) == 0){
+		if(GameRandom.nextInt(1000) == 0){
 			pa.clearActions();
 			pa.setCalm();
 			pa.setHappiness(Happiness.VERY_SAD);
 			pa.addDamage(200);
 			pa.setForceFace(ImageCode.PAIN.ordinal());
-			pa.setMessage(MessagePool.getMessage(pa, MessagePool.Action.PoisonDamage), 20, true, true);
+			pa.setMessage(GameMessages.getMessage(pa, MessagePool.Action.PoisonDamage), 20, true, true);
 		}
 		return Event.DONOTHING;
 	}
@@ -156,7 +159,7 @@ public class PoisonAmpoule extends Attachment {
 	
 	@Override
 	public String toString() {
-		return ResourceUtil.getInstance().read("item_poison");
+		return GameText.read("item_poison");
 	}
 
 	// テスト用静的アクセサ

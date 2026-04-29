@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import src.SimYukkuri;
+import src.util.GameRandom;
 import src.base.Body;
 import src.draw.Dimension4y;
 import src.draw.ModLoader;
@@ -192,9 +193,9 @@ public class Eiki extends Body {
 		PREGPERIODorg *= factor;
 		SLEEPPERIODorg *= factor;
 		ACTIVEPERIODorg *= factor;
-		sameDest = SimYukkuri.RND.nextInt(20) + 20;
+		sameDest = GameRandom.nextInt(20) + 20;
 		DECLINEPERIODorg *= (Math.random() + 0.5);
-		ROBUSTNESS = SimYukkuri.RND.nextInt(10) + 1;
+		ROBUSTNESS = GameRandom.nextInt(10) + 1;
 		// EYESIGHT /= 4;
 		factor = Math.random() + 0.5;
 		STRENGTHorg[AgeState.ADULT.ordinal()] *= factor;

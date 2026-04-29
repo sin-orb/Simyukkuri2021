@@ -1,8 +1,13 @@
 package src.event;
+import src.util.GameEnvironment;
+import src.util.GameMessages;
+import src.util.GameText;
 
 import java.util.Map;
 
 import src.SimYukkuri;
+import src.util.GameRandom;
+import src.util.GameWorld;
 import src.base.Body;
 import src.base.EventPacket;
 import src.base.Obj;
@@ -113,7 +118,7 @@ public class PredatorsGameEvent extends EventPacket {
 		Body from = YukkuriUtil.getBodyInstance(getFrom());
 		if (b.isPredatorType() && b == from) {
 			// 遊び相手の決定
-			for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().getBody().entrySet()) {
+			for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
 				Body d = entry.getValue();
 				int minDistance = b.getEYESIGHTorg();
 				int wallMode = b.getBodyAgeState().ordinal();
@@ -169,7 +174,7 @@ public class PredatorsGameEvent extends EventPacket {
 	// イベント開始動作
 	@Override
 	public void start(Body b) {
-		b.setMessage(MessagePool.getMessage(b, MessagePool.Action.GameStart), true);
+		b.setMessage(GameMessages.getMessage(b, MessagePool.Action.GameStart), true);
 	}
 
 	// 毎フレーム処理
@@ -179,10 +184,10 @@ public class PredatorsGameEvent extends EventPacket {
 		Body from = YukkuriUtil.getBodyInstance(getFrom());
 		Body toy = YukkuriUtil.getBodyInstance(this.toy);
 		// 対象が決定できなかったり、捕食防止ディフューザー環境だったりしたら中止。ボール遊びを試す
-		if (from == null || toy == null || Terrarium.isPredatorSteam()) {
+		if (from == null || toy == null || GameEnvironment.isPredatorSteam()) {
 			if (ToyLogic.checkToy(from)) {
 				from.setPlaying(PlayStyle.BALL);
-				from.setPlayingLimit(150 + SimYukkuri.RND.nextInt(100) - 49);
+				from.setPlayingLimit(150 + GameRandom.nextInt(100) - 49);
 			}
 			return UpdateState.ABORT;
 		}
@@ -193,7 +198,7 @@ public class PredatorsGameEvent extends EventPacket {
 		}
 		// 相手が死んだらイベント中断
 		if (toy.isDead()) {
-			from.setMessage(MessagePool.getMessage(b, MessagePool.Action.ComplainAboutFragleness), true);
+			from.setMessage(GameMessages.getMessage(b, MessagePool.Action.ComplainAboutFragleness), true);
 			from.setForceFace(ImageCode.PUFF.ordinal());
 			toy.setLinkParent(-1);
 			return UpdateState.ABORT;
@@ -207,15 +212,15 @@ public class PredatorsGameEvent extends EventPacket {
 			return UpdateState.FORCE_EXEC;
 		}
 		// 満足したら辞める
-		if (from.isVeryHungry() || from.isSleepy() || SimYukkuri.RND.nextInt(1000) == 0) {
-			// b.setMessage(MessagePool.getMessage(b, MessagePool.Action.GameEnd));
+		if (from.isVeryHungry() || from.isSleepy() || GameRandom.nextInt(1000) == 0) {
+			// b.setMessage(GameMessages.getMessage(b, MessagePool.Action.GameEnd));
 			toy.setLinkParent(-1);
 			return UpdateState.ABORT;
 		}
 
 		// 待機時間
 		if (tick >= 0) {
-			if (b.canflyCheck() && SimYukkuri.RND.nextBoolean()) {
+			if (b.canflyCheck() && GameRandom.nextBoolean()) {
 				FlyGame = true;
 			} else {
 				FlyGame = false;
@@ -229,12 +234,12 @@ public class PredatorsGameEvent extends EventPacket {
 		// おもちゃをつかんでるとき
 		if (grabbing) {
 			// おもちゃのセリフ
-			if (SimYukkuri.RND.nextInt(8) == 0) {
+			if (GameRandom.nextInt(8) == 0) {
 				toy.setForceFace(ImageCode.CRYING.ordinal());
-				if (SimYukkuri.RND.nextBoolean() && toy.getZ() > 0)
-					toy.setPikoMessage(MessagePool.getMessage(toy, MessagePool.Action.Flying), true);
+				if (GameRandom.nextBoolean() && toy.getZ() > 0)
+					toy.setPikoMessage(GameMessages.getMessage(toy, MessagePool.Action.Flying), true);
 				else
-					toy.setPikoMessage(MessagePool.getMessage(toy, MessagePool.Action.DontPlayMe), true);
+					toy.setPikoMessage(GameMessages.getMessage(toy, MessagePool.Action.DontPlayMe), true);
 			}
 			// 高度に達してたら落とす
 			if (Math.abs(b.getZ() - Translate.getFlyHeightLimit()) < 3) {
@@ -245,10 +250,10 @@ public class PredatorsGameEvent extends EventPacket {
 					return UpdateState.FORCE_EXEC;
 				}
 				// ランダムで落とす
-				if (SimYukkuri.RND.nextInt(20) == 0) {
+				if (GameRandom.nextInt(20) == 0) {
 					grabbing = false;
 					b.setForceFace(ImageCode.SMILE.ordinal());
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.DropYukkuri));
+					b.setMessage(GameMessages.getMessage(b, MessagePool.Action.DropYukkuri));
 					b.addStress(-100);
 					toy.setLinkParent(-1);
 					toy.strikeByYukkuri(b, this, false);
@@ -259,14 +264,14 @@ public class PredatorsGameEvent extends EventPacket {
 				// それ以外は空中でいじめてダメージ
 				else {
 					b.moveTo(b.getX(), b.getY(), Translate.getFlyHeightLimit());
-					if (SimYukkuri.RND.nextInt(12) == 0) {
-						if (b.isRude() && SimYukkuri.RND.nextBoolean())
+					if (GameRandom.nextInt(12) == 0) {
+						if (b.isRude() && GameRandom.nextBoolean())
 							b.setForceFace(ImageCode.RUDE.ordinal());
 						else
 							b.setForceFace(ImageCode.SMILE.ordinal());
 						toy.setForceFace(ImageCode.PAIN.ordinal());
-						toy.setPikoMessage(MessagePool.getMessage(toy, MessagePool.Action.Scream), true);
-						if (SimYukkuri.RND.nextInt(100) == 0)
+						toy.setPikoMessage(GameMessages.getMessage(toy, MessagePool.Action.Scream), true);
+						if (GameRandom.nextInt(100) == 0)
 							toy.bodyInjure();
 						toy.addDamage(15);
 					}
@@ -299,19 +304,19 @@ public class PredatorsGameEvent extends EventPacket {
 		if ((b.getStepDist() + 2) >= Translate.distance(b.getX(), b.getY(), toy.getX(), toy.getY())) {
 			// 空中で遊ぶ場合はつかむ
 			if (FlyGame) {
-				if (b.isRude() && SimYukkuri.RND.nextBoolean())
+				if (b.isRude() && GameRandom.nextBoolean())
 					b.setForceFace(ImageCode.RUDE.ordinal());
 				else
 					b.setForceFace(ImageCode.SMILE.ordinal());
-				b.setMessage(MessagePool.getMessage(b, MessagePool.Action.CaughtYou), true);
+				b.setMessage(GameMessages.getMessage(b, MessagePool.Action.CaughtYou), true);
 				toy.setLinkParent(b.objId);
 				grabbing = true;
 				b.moveTo(b.getX(), b.getY(), 5);
 			}
 			// 体当たりで遊ぶ
 			else {
-				// b.setMessage(MessagePool.getMessage(b, MessagePool.Action.PlayTreasure));
-				if (SimYukkuri.RND.nextBoolean())
+				// b.setMessage(GameMessages.getMessage(b, MessagePool.Action.PlayTreasure));
+				if (GameRandom.nextBoolean())
 					b.setForceFace(ImageCode.RUDE.ordinal());
 				else
 					b.setForceFace(ImageCode.SMILE.ordinal());
@@ -325,14 +330,14 @@ public class PredatorsGameEvent extends EventPacket {
 		// 非接触状態なら向かう
 		else {
 			b.moveTo(toy.getX(), toy.getY(), toy.getZ() /* Translate.getFlyHeightLimit() */);
-			if (SimYukkuri.RND.nextInt(10) == 0) {
-				if (b.isRude() && SimYukkuri.RND.nextBoolean())
+			if (GameRandom.nextInt(10) == 0) {
+				if (b.isRude() && GameRandom.nextBoolean())
 					b.setForceFace(ImageCode.RUDE.ordinal());
 				else
 					b.setForceFace(ImageCode.SMILE.ordinal());
 			}
-			if (SimYukkuri.RND.nextInt(15) == 0)
-				b.setMessage(MessagePool.getMessage(b, MessagePool.Action.HeyYouWait));
+			if (GameRandom.nextInt(15) == 0)
+				b.setMessage(GameMessages.getMessage(b, MessagePool.Action.HeyYouWait));
 			toy.stay();
 		}
 
@@ -374,15 +379,15 @@ public class PredatorsGameEvent extends EventPacket {
 			tick2 = 0;
 			FoodLogic.eatFood(b, Food.FoodType.BODY, Math.min(b.getEatAmount(), toy.getBodyAmount()));
 			toy.eatBody(Math.min(b.getEatAmount(), toy.getBodyAmount()));
-			if (toy.isSick() && SimYukkuri.RND.nextBoolean())
+			if (toy.isSick() && GameRandom.nextBoolean())
 				b.addSickPeriod(100);
 			if (toy.isDead()) {
-				toy.setMessage(MessagePool.getMessage(toy, MessagePool.Action.Dead));
+				toy.setMessage(GameMessages.getMessage(toy, MessagePool.Action.Dead));
 				toy.setLinkParent(-1);
 				return true;
 			} else {
 				if (toy.isNotNYD()) {
-					toy.setMessage(MessagePool.getMessage(toy, MessagePool.Action.EatenByBody2));
+					toy.setMessage(GameMessages.getMessage(toy, MessagePool.Action.EatenByBody2));
 					toy.setHappiness(Happiness.VERY_SAD);
 					toy.setForceFace(ImageCode.PAIN.ordinal());
 				}
@@ -394,7 +399,7 @@ public class PredatorsGameEvent extends EventPacket {
 	// イベント終了処理
 	@Override
 	public void end(Body b) {
-		b.setMessage(MessagePool.getMessage(b, MessagePool.Action.GameEnd));
+		b.setMessage(GameMessages.getMessage(b, MessagePool.Action.GameEnd));
 		grabbing = false;
 		Body toy = YukkuriUtil.getBodyInstance(this.toy);
 		if (toy != null) {
@@ -405,6 +410,6 @@ public class PredatorsGameEvent extends EventPacket {
 
 	@Override
 	public String toString() {
-		return ResourceUtil.getInstance().read("event_pgame");
+		return GameText.read("event_pgame");
 	}
 }

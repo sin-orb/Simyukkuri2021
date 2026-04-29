@@ -8,6 +8,7 @@ import java.beans.Transient;
 import java.util.List;
 
 import src.SimYukkuri;
+import src.util.GameWorld;
 import src.draw.Color4y;
 import src.draw.Point4y;
 import src.draw.Translate;
@@ -115,9 +116,9 @@ public class Barrier extends FieldShapeBase {
 				break;
 		}
 
-		MapPlaceData.setWallLine(SimYukkuri.world.getCurrentMap().getWallMap(), mapSX, mapSY, mapEX, mapEY, true,
+		MapPlaceData.setWallLine(GameWorld.get().getCurrentMap().getWallMap(), mapSX, mapSY, mapEX, mapEY, true,
 				attribute);
-		SimYukkuri.world.getCurrentMap().getBarrier().add(this);
+		GameWorld.get().getCurrentMap().getBarrier().add(this);
 	}
 
 	public Barrier() {
@@ -141,14 +142,14 @@ public class Barrier extends FieldShapeBase {
 		int y1 = b.getMapSY();
 		int x2 = b.getMapEX();
 		int y2 = b.getMapEY();
-		if (SimYukkuri.world.getCurrentMap().getBarrier().remove(b)) {
-			MapPlaceData.setWallLine(SimYukkuri.world.getCurrentMap().getWallMap(), x1, y1, x2, y2, false, b.attribute);
+		if (GameWorld.get().getCurrentMap().getBarrier().remove(b)) {
+			MapPlaceData.setWallLine(GameWorld.get().getCurrentMap().getWallMap(), x1, y1, x2, y2, false, b.attribute);
 		}
 	}
 
 	/** 壁に引っかかるかのチェック */
 	public static boolean onBarrier(int cx, int cy, int thx, int thy, int attr) {
-		MapPlaceData tmp = SimYukkuri.world.getCurrentMap();
+		MapPlaceData tmp = GameWorld.get().getCurrentMap();
 		int sx = Math.max(0, cx - thx / 2);
 		int sy = Math.max(0, cy - thy / 2);
 		int ex = Math.min(cx + thx / 2, Translate.getMapW());
@@ -172,7 +173,7 @@ public class Barrier extends FieldShapeBase {
 	 * @return ある点が壁の上か
 	 */
 	public static Barrier getBarrier(int cx, int cy, int thickness) {
-		List<Barrier> barrierList = SimYukkuri.world.getCurrentMap().getBarrier();
+		List<Barrier> barrierList = GameWorld.get().getCurrentMap().getBarrier();
 
 		for (Barrier b : barrierList) {
 			int x1 = b.getMapSX();
@@ -206,7 +207,7 @@ public class Barrier extends FieldShapeBase {
 	 * @return 壁が動線(視線)上にあるかどうか
 	 */
 	public static boolean acrossBarrier(int x1, int y1, int x2, int y2, int attr) {
-		MapPlaceData tmp = SimYukkuri.world.getCurrentMap();
+		MapPlaceData tmp = GameWorld.get().getCurrentMap();
 
 		x1 = Math.max(0, Math.min(x1, Translate.getMapW()));
 		x2 = Math.max(0, Math.min(x2, Translate.getMapW()));

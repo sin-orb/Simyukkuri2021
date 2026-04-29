@@ -1,9 +1,12 @@
 package src.event;
+import src.util.GameMessages;
+import src.util.GameText;
 
 import java.util.List;
 
 import src.Const;
 import src.SimYukkuri;
+import src.util.GameRandom;
 import src.base.Body;
 import src.base.EventPacket;
 import src.base.Obj;
@@ -139,7 +142,7 @@ public class ShitExercisesEvent extends EventPacket {
 		if (!b.isBaby())
 			return false;
 
-		b.setWorldEventResMessage(MessagePool.getMessage(b, MessagePool.Action.ShitExercisesGO), Const.HOLDMESSAGE,
+		b.setWorldEventResMessage(GameMessages.getMessage(b, MessagePool.Action.ShitExercisesGO), Const.HOLDMESSAGE,
 				true, false);
 		b.setHappiness(Happiness.VERY_HAPPY);
 		b.wakeup();
@@ -189,15 +192,15 @@ public class ShitExercisesEvent extends EventPacket {
 		}
 		// 親を持ち上げたときの反応
 		if (!from.canflyCheck() && from.getZ() >= 2) {
-			if (SimYukkuri.RND.nextInt(50) == 0)
+			if (GameRandom.nextInt(50) == 0)
 				return UpdateState.ABORT;
 			else if (b == from) {
 				// 空処理
 			} else {
 				if (b.isSad())
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.LookForParents), false);
+					b.setMessage(GameMessages.getMessage(b, MessagePool.Action.LookForParents), false);
 				else
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.LookForParents), true);
+					b.setMessage(GameMessages.getMessage(b, MessagePool.Action.LookForParents), true);
 				b.setHappiness(Happiness.SAD);
 				return null;
 			}
@@ -218,8 +221,8 @@ public class ShitExercisesEvent extends EventPacket {
 
 		// つがいはスキップ
 		if (b.isPartner(from)) {
-			if (SimYukkuri.RND.nextInt(100) == 0) {
-				b.setMessage(MessagePool.getMessage(b, MessagePool.Action.GladAboutChild), true);
+			if (GameRandom.nextInt(100) == 0) {
+				b.setMessage(GameMessages.getMessage(b, MessagePool.Action.GladAboutChild), true);
 			}
 
 			if (state != STATE.GO) {
@@ -262,10 +265,10 @@ public class ShitExercisesEvent extends EventPacket {
 
 			switch (state) {
 				case GO:
-					if (SimYukkuri.RND.nextInt(30) == 0) {
-						b.setMessage(MessagePool.getMessage(b, MessagePool.Action.ShitExercisesGOFrom), true);
+					if (GameRandom.nextInt(30) == 0) {
+						b.setMessage(GameMessages.getMessage(b, MessagePool.Action.ShitExercisesGOFrom), true);
 					}
-					// b.setBodyEventResMessage(MessagePool.getMessage(b,
+					// b.setBodyEventResMessage(GameMessages.getMessage(b,
 					// MessagePool.Action.ShitExercisesWAITFrom), 52, true, false);
 					boolean bResult = BodyLogic.gatheringYukkuriFront(from, childrenList, this);
 
@@ -292,7 +295,7 @@ public class ShitExercisesEvent extends EventPacket {
 					break;
 				case WAIT:
 					if (checkWait(b, nWait)) {
-						b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.ShitExercisesWAITFrom),
+						b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.ShitExercisesWAITFrom),
 								52,
 								true, false);
 						state = STATE.START;
@@ -304,7 +307,7 @@ public class ShitExercisesEvent extends EventPacket {
 					if (checkWait(b, nWait)) {
 						if (!bActionFlag) {
 							b.setBodyEventResMessage(
-									MessagePool.getMessage(b, MessagePool.Action.ShitExercisesSTARTFrom),
+									GameMessages.getMessage(b, MessagePool.Action.ShitExercisesSTARTFrom),
 									52, true, false);
 							bActionFlag = true;
 							b.stay(nWait2);
@@ -319,7 +322,7 @@ public class ShitExercisesEvent extends EventPacket {
 					if (checkWait(b, nWait)) {
 						if (!bActionFlag) {
 							b.setBodyEventResMessage(
-									MessagePool.getMessage(b, MessagePool.Action.ShitExercisesYURAYURAFrom), 52, true,
+									GameMessages.getMessage(b, MessagePool.Action.ShitExercisesYURAYURAFrom), 52, true,
 									false);
 							bActionFlag = true;
 							b.stay(nWait2);
@@ -334,7 +337,7 @@ public class ShitExercisesEvent extends EventPacket {
 					if (checkWait(b, nWait)) {
 						if (!bActionFlag) {
 							b.setBodyEventResMessage(
-									MessagePool.getMessage(b, MessagePool.Action.ShitExercisesNOBINOBIFrom), 52, true,
+									GameMessages.getMessage(b, MessagePool.Action.ShitExercisesNOBINOBIFrom), 52, true,
 									false);
 							bActionFlag = true;
 							b.stay(nWait2);
@@ -349,7 +352,7 @@ public class ShitExercisesEvent extends EventPacket {
 					if (checkWait(b, nWait)) {
 						if (!bActionFlag) {
 							b.setBodyEventResMessage(
-									MessagePool.getMessage(b, MessagePool.Action.ShitExercisesPOKAPOKAFrom), 52, true,
+									GameMessages.getMessage(b, MessagePool.Action.ShitExercisesPOKAPOKAFrom), 52, true,
 									false);
 							bActionFlag = true;
 							b.stay(nWait2);
@@ -364,7 +367,7 @@ public class ShitExercisesEvent extends EventPacket {
 					if (checkWait(b, nWait)) {
 						if (!bActionFlag) {
 							b.setBodyEventResMessage(
-									MessagePool.getMessage(b, MessagePool.Action.ShitExercisesUNUNFrom),
+									GameMessages.getMessage(b, MessagePool.Action.ShitExercisesUNUNFrom),
 									52, true, false);
 							bActionFlag = true;
 							b.stay(nWait2);
@@ -378,7 +381,7 @@ public class ShitExercisesEvent extends EventPacket {
 				case END:
 					if (checkWait(b, nWait)) {
 						if (!bActionFlag) {
-							b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.ShitExercisesENDFrom),
+							b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.ShitExercisesENDFrom),
 									52,
 									true, false);
 							bActionFlag = true;
@@ -405,15 +408,15 @@ public class ShitExercisesEvent extends EventPacket {
 						return UpdateState.ABORT;
 					}
 
-					if (SimYukkuri.RND.nextInt(30) == 0) {
-						b.setMessage(MessagePool.getMessage(b, MessagePool.Action.ShitExercisesGO), true);
+					if (GameRandom.nextInt(30) == 0) {
+						b.setMessage(GameMessages.getMessage(b, MessagePool.Action.ShitExercisesGO), true);
 						b.addMemories(5);
 					}
 
 					break;
 				case WAIT:
 					if (checkWait(b, nWait)) {
-						b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.ShitExercisesWAIT), 52,
+						b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.ShitExercisesWAIT), 52,
 								true,
 								false);
 						b.addMemories(5);
@@ -423,7 +426,7 @@ public class ShitExercisesEvent extends EventPacket {
 				case START:
 					if (bActionFlag) {
 						if (checkWait(b, nWait)) {
-							b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.ShitExercisesSTART),
+							b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.ShitExercisesSTART),
 									52,
 									true, false);
 							b.stay(nWait2);
@@ -435,7 +438,7 @@ public class ShitExercisesEvent extends EventPacket {
 					if (bActionFlag) {
 						if (checkWait(b, nWait)) {
 							b.setBodyEventResMessage(
-									MessagePool.getMessage(b, MessagePool.Action.ShitExercisesYURAYURA),
+									GameMessages.getMessage(b, MessagePool.Action.ShitExercisesYURAYURA),
 									52, true, false);
 							b.stay(nWait2);
 							b.addMemories(10);
@@ -446,7 +449,7 @@ public class ShitExercisesEvent extends EventPacket {
 					if (bActionFlag) {
 						if (checkWait(b, nWait)) {
 							b.setBodyEventResMessage(
-									MessagePool.getMessage(b, MessagePool.Action.ShitExercisesNOBINOBI),
+									GameMessages.getMessage(b, MessagePool.Action.ShitExercisesNOBINOBI),
 									52, true, false);
 							b.setNobinobi(true);
 							b.stay(nWait2);
@@ -458,7 +461,7 @@ public class ShitExercisesEvent extends EventPacket {
 					if (bActionFlag) {
 						if (checkWait(b, nWait)) {
 							b.setBodyEventResMessage(
-									MessagePool.getMessage(b, MessagePool.Action.ShitExercisesPOKAPOKA),
+									GameMessages.getMessage(b, MessagePool.Action.ShitExercisesPOKAPOKA),
 									52, true, false);
 							b.setFurifuri(true);
 							bUnunActionFlag = false;
@@ -470,7 +473,7 @@ public class ShitExercisesEvent extends EventPacket {
 				case UNUN:
 					if (bActionFlag) {
 						if (checkWait(b, nWait)) {
-							b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.ShitExercisesUNUN),
+							b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.ShitExercisesUNUN),
 									52,
 									true, false);
 							b.setFurifuri(true);
@@ -480,7 +483,7 @@ public class ShitExercisesEvent extends EventPacket {
 									b.setHappiness(Happiness.VERY_HAPPY);
 									b.addStress(250);
 									// お尻が汚れる
-									if (SimYukkuri.RND.nextInt(4) == 0) {
+									if (GameRandom.nextInt(4) == 0) {
 										b.makeDirty(true);
 										// 汚れた場合、親の元に移動
 										// ゆっくり同士が重ならないように目標地点は体のサイズを考慮
@@ -533,6 +536,6 @@ public class ShitExercisesEvent extends EventPacket {
 
 	@Override
 	public String toString() {
-		return ResourceUtil.getInstance().read("event_unun");
+		return GameText.read("event_unun");
 	}
 }

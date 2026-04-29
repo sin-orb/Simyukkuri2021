@@ -1,4 +1,5 @@
 package src.game;
+import src.util.GameText;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
@@ -45,9 +46,9 @@ public class Vomit extends Obj {
 	private int amount = 0;
 	private int vomitType = 0;
 	private static final float[] imageSize = { 0.25f, 0.5f, 1.0f };
-	private static final String[] sizeDisplayName = { ResourceUtil.getInstance().read("game_little"),
-			ResourceUtil.getInstance().read("game_middle"),
-			ResourceUtil.getInstance().read("game_big") };
+	private static final String[] sizeDisplayName = { GameText.read("game_little"),
+			GameText.read("game_middle"),
+			GameText.read("game_big") };
 	private static final int value[] = { 50, 100, 300 };
 
 	private static BufferedImage[][][] images = null;
@@ -115,7 +116,7 @@ public class Vomit extends Obj {
 
 	@Override
 	public String toString() {
-		String base = ResourceUtil.getInstance().read("game_toan");
+		String base = GameText.read("game_toan");
 		StringBuilder ret = new StringBuilder(base == null ? "" : base);
 		ret.append(sizeDisplayName[ageState.ordinal()]);
 		ret.append("(");

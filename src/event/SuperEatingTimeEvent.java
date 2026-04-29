@@ -1,8 +1,11 @@
 package src.event;
+import src.util.GameMessages;
+import src.util.GameText;
 
 import java.util.List;
 
 import src.SimYukkuri;
+import src.util.GameRandom;
 import src.base.Body;
 import src.base.EventPacket;
 import src.base.Obj;
@@ -172,7 +175,7 @@ public class SuperEatingTimeEvent extends EventPacket {
 		// ターゲットが消えてしまったらイベント中断
 		Obj target = b.takeMappedObj(this.target);
 		if (target == null || target.isRemoved()) {
-			from.setMessage(MessagePool.getMessage(from, MessagePool.Action.NoFood));
+			from.setMessage(GameMessages.getMessage(from, MessagePool.Action.NoFood));
 			from.setHappiness(Happiness.VERY_SAD);
 			from.stay();
 			return UpdateState.ABORT;
@@ -250,8 +253,8 @@ public class SuperEatingTimeEvent extends EventPacket {
 							bChild.wakeup();
 						}
 					}
-					if (SimYukkuri.RND.nextInt(100) == 0) {
-						b.setMessage(MessagePool.getMessage(b, MessagePool.Action.FamilyEatingTimeWait), true);
+					if (GameRandom.nextInt(100) == 0) {
+						b.setMessage(GameMessages.getMessage(b, MessagePool.Action.FamilyEatingTimeWait), true);
 					}
 					b.setHappiness(Happiness.HAPPY);
 					// 番の処理
@@ -296,8 +299,8 @@ public class SuperEatingTimeEvent extends EventPacket {
 						partner.setHappiness(Happiness.HAPPY);
 						// 他に用事があれば除外
 						partner.setMoveTarget(-1);
-						if (SimYukkuri.RND.nextInt(50) == 0) {
-							partner.setMessage(MessagePool.getMessage(partner, MessagePool.Action.WantFood));
+						if (GameRandom.nextInt(50) == 0) {
+							partner.setMessage(GameMessages.getMessage(partner, MessagePool.Action.WantFood));
 						}
 					}
 
@@ -315,8 +318,8 @@ public class SuperEatingTimeEvent extends EventPacket {
 					// 餌に近づく
 					else {
 						b.moveToEvent(this, target.getX(), target.getY() - 20);
-						if (SimYukkuri.RND.nextInt(50) == 0) {
-							b.setMessage(MessagePool.getMessage(b, MessagePool.Action.WantFood));
+						if (GameRandom.nextInt(50) == 0) {
+							b.setMessage(GameMessages.getMessage(b, MessagePool.Action.WantFood));
 						}
 					}
 					break;
@@ -332,19 +335,19 @@ public class SuperEatingTimeEvent extends EventPacket {
 
 					// 配置済みの場合
 					if (bResult) {
-						b.setMessage(MessagePool.getMessage(b, MessagePool.Action.SuperEatingTime));
+						b.setMessage(GameMessages.getMessage(b, MessagePool.Action.SuperEatingTime));
 						b.setHappiness(Happiness.VERY_HAPPY);
 						b.addMemories(1);
 						// 番の処理
 						if (partner != null) {
-							partner.setMessage(MessagePool.getMessage(partner, MessagePool.Action.SuperEatingTime));
+							partner.setMessage(GameMessages.getMessage(partner, MessagePool.Action.SuperEatingTime));
 							partner.setHappiness(Happiness.VERY_HAPPY);
 							partner.addMemories(1);
 						}
 						// 子ゆの処理
 						for (Body bChild : childrenList) {
 							if (bChild != null) {
-								bChild.setMessage(MessagePool.getMessage(b, MessagePool.Action.SuperEatingTime));
+								bChild.setMessage(GameMessages.getMessage(b, MessagePool.Action.SuperEatingTime));
 								bChild.setHappiness(Happiness.VERY_HAPPY);
 								bChild.stay();
 								bChild.addMemories(1);
@@ -370,7 +373,7 @@ public class SuperEatingTimeEvent extends EventPacket {
 					if (target instanceof Food) {
 						Food food = (Food) target;
 						if (food.isEmpty()) {
-							b.setMessage(MessagePool.getMessage(b, MessagePool.Action.NoFood));
+							b.setMessage(GameMessages.getMessage(b, MessagePool.Action.NoFood));
 							b.setHappiness(Happiness.VERY_SAD);
 							b.stay();
 							return UpdateState.ABORT;
@@ -422,9 +425,9 @@ public class SuperEatingTimeEvent extends EventPacket {
 						} else {
 							b.setMoveTarget(-1);
 							b.stay(100);
-							if (SimYukkuri.RND.nextInt(30) == 0) {
+							if (GameRandom.nextInt(30) == 0) {
 								// 余裕なら子供の状態を喜ぶ
-								b.setMessage(MessagePool.getMessage(b, MessagePool.Action.GladAboutChild), false);
+								b.setMessage(GameMessages.getMessage(b, MessagePool.Action.GladAboutChild), false);
 								b.setHappiness(Happiness.VERY_HAPPY);
 							}
 						}
@@ -437,9 +440,9 @@ public class SuperEatingTimeEvent extends EventPacket {
 							} else {
 								partner.setMoveTarget(-1);
 								partner.stay(100);
-								if (SimYukkuri.RND.nextInt(30) == 0) {
+								if (GameRandom.nextInt(30) == 0) {
 									// 余裕なら子供の状態を喜ぶ
-									partner.setMessage(MessagePool.getMessage(b, MessagePool.Action.GladAboutChild),
+									partner.setMessage(GameMessages.getMessage(b, MessagePool.Action.GladAboutChild),
 											false);
 									partner.setHappiness(Happiness.VERY_HAPPY);
 								}
@@ -474,8 +477,8 @@ public class SuperEatingTimeEvent extends EventPacket {
 						return null;
 					}
 					b.setHappiness(Happiness.HAPPY);
-					if (SimYukkuri.RND.nextInt(50) == 0) {
-						b.setMessage(MessagePool.getMessage(b, MessagePool.Action.WantFood));
+					if (GameRandom.nextInt(50) == 0) {
+						b.setMessage(GameMessages.getMessage(b, MessagePool.Action.WantFood));
 					}
 					break;
 				case START:
@@ -511,7 +514,7 @@ public class SuperEatingTimeEvent extends EventPacket {
 
 	@Override
 	public String toString() {
-		return ResourceUtil.getInstance().read("event_super");
+		return GameText.read("event_super");
 	}
 
 }

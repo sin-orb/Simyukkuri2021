@@ -1,4 +1,5 @@
 package src.item;
+import src.util.GameMessages;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
@@ -7,6 +8,8 @@ import java.io.File;
 import java.io.IOException;
 
 import src.SimYukkuri;
+import src.util.GameRandom;
+import src.util.GameWorld;
 import src.base.Body;
 import src.base.Effect;
 import src.base.Obj;
@@ -156,11 +159,11 @@ public class Mixer extends ObjEX {
 					bindBody.addStress(100);
 					bindBody.setHappiness(Happiness.VERY_SAD);
 					bindBody.setForceFace(ImageCode.PAIN.ordinal());
-					if (SimYukkuri.RND.nextInt(10) == 0) {
+					if (GameRandom.nextInt(10) == 0) {
 						if (bindBody.getCriticalDamegeType() == CriticalDamegeType.CUT)
-							bindBody.setMessage(MessagePool.getMessage(bindBody, MessagePool.Action.Scream2), true);
+							bindBody.setMessage(GameMessages.getMessage(bindBody, MessagePool.Action.Scream2), true);
 						else
-							bindBody.setMessage(MessagePool.getMessage(bindBody, MessagePool.Action.Scream), true);
+							bindBody.setMessage(GameMessages.getMessage(bindBody, MessagePool.Action.Scream), true);
 					}
 				}
 				// 材料採取
@@ -188,7 +191,7 @@ public class Mixer extends ObjEX {
 							oex = GadgetAction.putObjEX(Food.class, getX(), getY(), Food.FoodType.FOOD.ordinal());
 					}
 					oex.kick(0, 6, -4);
-					SimYukkuri.world.getCurrentMap().getFood().put(oex.objId, (Food) oex);
+					GameWorld.get().getCurrentMap().getFood().put(oex.objId, (Food) oex);
 					amount -= 8400;
 					sweet = 0;
 					sick = false;
@@ -214,7 +217,7 @@ public class Mixer extends ObjEX {
 			mix.remove();
 			mix = null;
 		}
-		SimYukkuri.world.getCurrentMap().getMixer().remove(objId);
+		GameWorld.get().getCurrentMap().getMixer().remove(objId);
 	}
 
 	/** コンストラクタ */
@@ -222,7 +225,7 @@ public class Mixer extends ObjEX {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		SimYukkuri.world.getCurrentMap().getMixer().put(objId, this);
+		GameWorld.get().getCurrentMap().getMixer().put(objId, this);
 		objType = Type.PLATFORM;
 		objEXType = ObjEXType.MIXER;
 

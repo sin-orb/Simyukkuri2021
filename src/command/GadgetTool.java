@@ -1,6 +1,7 @@
 package src.command;
 
 import src.SimYukkuri;
+import src.util.GameRandom;
 import src.base.Body;
 import src.enums.UnbirthBabyState;
 import src.enums.YukkuriType;
@@ -21,7 +22,7 @@ public class GadgetTool {
 			return;
 		}
 
-		switch( SimYukkuri.RND.nextInt(8) ){
+		switch( GameRandom.nextInt(8) ){
 		case 0:
 			if( b.judgeCanTransForGodHand() ){
 				// 突然変異

@@ -1,4 +1,6 @@
 package src.item;
+import src.util.GameMessages;
+import src.util.GameText;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -17,6 +19,8 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 import src.SimYukkuri;
+import src.util.GameRandom;
+import src.util.GameWorld;
 import src.attachment.Fire;
 import src.base.Body;
 import src.base.Effect;
@@ -70,19 +74,19 @@ public class ProcesserPlate extends ObjEX {
 
 	/** 加工モード(詳細) */
 	public static enum ProcessType {
-		HOTPLATE_MIN(ResourceUtil.getInstance().read("item_hotplatemin"), ProcessMode.HOTPLATE, 50),
-		HOTPLATE_LOW(ResourceUtil.getInstance().read("item_hotplatelow"), ProcessMode.HOTPLATE, 500),
-		HOTPLATE_MIDDLE(ResourceUtil.getInstance().read("item_hotplatemiddle"), ProcessMode.HOTPLATE, 1000),
-		HOTPLATE_HIGH(ResourceUtil.getInstance().read("item_hotplatehigh"), ProcessMode.HOTPLATE, 5000),
-		HOTPLATE_MAX(ResourceUtil.getInstance().read("item_hotplatemax"), ProcessMode.HOTPLATE, 20000),
-		PAIN(ResourceUtil.getInstance().read("item_hotplatepain"), ProcessMode.PAIN, 1),
-		BAIBAI_OKAZARI_WITH_FIRE(ResourceUtil.getInstance().read("item_autoremoval"), ProcessMode.BAIBAI_OKAZARI, 1),
-		PEALING(ResourceUtil.getInstance().read("command_peal"), ProcessMode.PEALING, 1),
-		BLINDING(ResourceUtil.getInstance().read("command_eyeball"), ProcessMode.BLINDING, 1),
-		ACCELERATE(ResourceUtil.getInstance().read("item_hotplateaccel"), ProcessMode.ACCELERATE, 1),
-		SHUTMOUTH(ResourceUtil.getInstance().read("command_mouthshut"), ProcessMode.SHUTMOUTH, 1),
-		PLUCKING(ResourceUtil.getInstance().read("command_manju"), ProcessMode.PLUCKING, 1),
-		PACKING(ResourceUtil.getInstance().read("item_hotplatepack"), ProcessMode.PACKING, 1);
+		HOTPLATE_MIN(GameText.read("item_hotplatemin"), ProcessMode.HOTPLATE, 50),
+		HOTPLATE_LOW(GameText.read("item_hotplatelow"), ProcessMode.HOTPLATE, 500),
+		HOTPLATE_MIDDLE(GameText.read("item_hotplatemiddle"), ProcessMode.HOTPLATE, 1000),
+		HOTPLATE_HIGH(GameText.read("item_hotplatehigh"), ProcessMode.HOTPLATE, 5000),
+		HOTPLATE_MAX(GameText.read("item_hotplatemax"), ProcessMode.HOTPLATE, 20000),
+		PAIN(GameText.read("item_hotplatepain"), ProcessMode.PAIN, 1),
+		BAIBAI_OKAZARI_WITH_FIRE(GameText.read("item_autoremoval"), ProcessMode.BAIBAI_OKAZARI, 1),
+		PEALING(GameText.read("command_peal"), ProcessMode.PEALING, 1),
+		BLINDING(GameText.read("command_eyeball"), ProcessMode.BLINDING, 1),
+		ACCELERATE(GameText.read("item_hotplateaccel"), ProcessMode.ACCELERATE, 1),
+		SHUTMOUTH(GameText.read("command_mouthshut"), ProcessMode.SHUTMOUTH, 1),
+		PLUCKING(GameText.read("command_manju"), ProcessMode.PLUCKING, 1),
+		PACKING(GameText.read("item_hotplatepack"), ProcessMode.PACKING, 1);
 
 		private String name;
 		private ProcessMode eMode;
@@ -269,8 +273,8 @@ public class ProcesserPlate extends ObjEX {
 						if (bTarget.isNotNYD()) {
 							bTarget.setHappiness(Happiness.VERY_SAD);
 							bTarget.setForceFace(ImageCode.PAIN.ordinal());
-							if (SimYukkuri.RND.nextInt(10) == 0) {
-								bTarget.setMessage(MessagePool.getMessage(bTarget, MessagePool.Action.Burning), 40,
+							if (GameRandom.nextInt(10) == 0) {
+								bTarget.setMessage(GameMessages.getMessage(bTarget, MessagePool.Action.Burning), 40,
 										true, true);
 							}
 						}
@@ -288,8 +292,8 @@ public class ProcesserPlate extends ObjEX {
 						if (bTarget.isNotNYD()) {
 							bTarget.setHappiness(Happiness.VERY_SAD);
 							bTarget.setForceFace(ImageCode.PAIN.ordinal());
-							if (SimYukkuri.RND.nextInt(15) == 0) {
-								bTarget.setMessage(MessagePool.getMessage(bTarget, MessagePool.Action.Scream), 40, true,
+							if (GameRandom.nextInt(15) == 0) {
+								bTarget.setMessage(GameMessages.getMessage(bTarget, MessagePool.Action.Scream), 40, true,
 										true);
 							}
 						}
@@ -367,7 +371,7 @@ public class ProcesserPlate extends ObjEX {
 						bTarget.setHappiness(Happiness.VERY_SAD);
 						bTarget.setForceFace(ImageCode.PAIN.ordinal());
 						bTarget.addAge(TICK * 1000);
-						bTarget.setMessage(MessagePool.getMessage(bTarget, MessagePool.Action.Inflation), 40, false,
+						bTarget.setMessage(GameMessages.getMessage(bTarget, MessagePool.Action.Inflation), 40, false,
 								true);
 					}
 					break;
@@ -378,7 +382,7 @@ public class ProcesserPlate extends ObjEX {
 					if (!bTarget.isShutmouth()) {
 						if (bTarget.isSleeping())
 							bTarget.wakeup();
-						bTarget.setMessage(MessagePool.getMessage(bTarget, MessagePool.Action.CantTalk), 40, true,
+						bTarget.setMessage(GameMessages.getMessage(bTarget, MessagePool.Action.CantTalk), 40, true,
 								true);
 						bTarget.setHappiness(Happiness.SAD);
 						bTarget.setShutmouth(true);
@@ -400,10 +404,10 @@ public class ProcesserPlate extends ObjEX {
 					}
 					bTarget.setHappiness(Happiness.VERY_SAD);
 					bTarget.setForceFace(ImageCode.PAIN.ordinal());
-					if (SimYukkuri.RND.nextInt(3) == 0) {
-						bTarget.setMessage(MessagePool.getMessage(bTarget, MessagePool.Action.Scream), 40, true, true);
+					if (GameRandom.nextInt(3) == 0) {
+						bTarget.setMessage(GameMessages.getMessage(bTarget, MessagePool.Action.Scream), 40, true, true);
 					} else {
-						bTarget.setMessage(MessagePool.getMessage(bTarget, MessagePool.Action.PLUNCKING), 40, true,
+						bTarget.setMessage(GameMessages.getMessage(bTarget, MessagePool.Action.PLUNCKING), 40, true,
 								true);
 					}
 					bTarget.cutHair();
@@ -462,7 +466,7 @@ public class ProcesserPlate extends ObjEX {
 			processedBodyList.clear();
 			processedBodyEffectList.clear();
 		}
-		SimYukkuri.world.getCurrentMap().getProcesserPlate().remove(objId);
+		GameWorld.get().getCurrentMap().getProcesserPlate().remove(objId);
 	}
 
 	/** 設定メニュー */
@@ -531,7 +535,7 @@ public class ProcesserPlate extends ObjEX {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		SimYukkuri.world.getCurrentMap().getProcesserPlate().put(objId, this);
+		GameWorld.get().getCurrentMap().getProcesserPlate().put(objId, this);
 		// objType = Type.PLATFORM;
 		objEXType = ObjEXType.PROCESSERPLATE;
 		interval = 5;
@@ -539,7 +543,7 @@ public class ProcesserPlate extends ObjEX {
 		readIniFile();
 		boolean ret = setupProcesserPlate(this);
 		if (!ret) {
-			SimYukkuri.world.getCurrentMap().getProcesserPlate().remove(objId);
+			GameWorld.get().getCurrentMap().getProcesserPlate().remove(objId);
 		}
 	}
 

@@ -1,4 +1,5 @@
 package src.item;
+import src.util.GameText;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -14,6 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 import src.SimYukkuri;
+import src.util.GameWorld;
 import src.base.Body;
 import src.base.Obj;
 import src.base.ObjEX;
@@ -33,8 +35,8 @@ public class OrangePool extends ObjEX {
 
 	/** タイプ */
 	public static enum OrangeType {
-		NORMAL(ResourceUtil.getInstance().read("item_coolwater")),
-		RESCUE(ResourceUtil.getInstance().read("item_lifesaving")),
+		NORMAL(GameText.read("item_coolwater")),
+		RESCUE(GameText.read("item_lifesaving")),
 		;
 
 		private String name;
@@ -169,7 +171,7 @@ public class OrangePool extends ObjEX {
 
 	@Override
 	public void removeListData() {
-		SimYukkuri.world.getCurrentMap().getOrangePool().remove(objId);
+		GameWorld.get().getCurrentMap().getOrangePool().remove(objId);
 	}
 
 	/**
@@ -184,7 +186,7 @@ public class OrangePool extends ObjEX {
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
 
-		SimYukkuri.world.getCurrentMap().getOrangePool().put(objId, this);
+		GameWorld.get().getCurrentMap().getOrangePool().put(objId, this);
 
 		objType = Type.PLATFORM;
 		objEXType = ObjEXType.ORANGEPOOL;
@@ -194,14 +196,14 @@ public class OrangePool extends ObjEX {
 		if (ret) {
 			itemRank = ItemRank.values()[initOption];
 			// 森なら野生に変更
-			if (SimYukkuri.world.getCurrentMap().getMapIndex() == 5
-					|| SimYukkuri.world.getCurrentMap().getMapIndex() == 6) {
+			if (GameWorld.get().getCurrentMap().getMapIndex() == 5
+					|| GameWorld.get().getCurrentMap().getMapIndex() == 6) {
 				if (itemRank == ItemRank.HOUSE) {
 					itemRank = ItemRank.YASEI;
 				}
 			}
 		} else {
-			SimYukkuri.world.getCurrentMap().getOrangePool().remove(objId);
+			GameWorld.get().getCurrentMap().getOrangePool().remove(objId);
 		}
 	}
 

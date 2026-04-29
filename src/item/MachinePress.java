@@ -1,4 +1,5 @@
 package src.item;
+import src.util.GameMessages;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
@@ -7,6 +8,8 @@ import java.io.File;
 import java.io.IOException;
 
 import src.SimYukkuri;
+import src.util.GameRandom;
+import src.util.GameWorld;
 import src.base.Body;
 import src.base.Obj;
 import src.base.ObjEX;
@@ -75,10 +78,10 @@ public class MachinePress extends ObjEX {
 	public int objHitProcess(Obj o) {
 		if (o.getObjType() == Type.YUKKURI) {
 			Body p = (Body) o;
-			if (!p.isDead() && p.isNotNYD() && SimYukkuri.RND.nextInt(5) == 0) {
+			if (!p.isDead() && p.isNotNYD() && GameRandom.nextInt(5) == 0) {
 				p.setHappiness(Happiness.VERY_SAD);
 				p.setForceFace(ImageCode.CRYING.ordinal());
-				p.setMessage(MessagePool.getMessage(p, MessagePool.Action.KilledInFactory), 40, true, true);
+				p.setMessage(GameMessages.getMessage(p, MessagePool.Action.KilledInFactory), 40, true, true);
 			}
 			if ((int) getAge() / 2 % AnimeImagesNum[0] == 0) {
 				p.setSilent(true);
@@ -98,7 +101,7 @@ public class MachinePress extends ObjEX {
 
 	@Override
 	public void removeListData() {
-		SimYukkuri.world.getCurrentMap().getMachinePress().remove(objId);
+		GameWorld.get().getCurrentMap().getMachinePress().remove(objId);
 	}
 
 	/** コンストラクタ */
@@ -106,7 +109,7 @@ public class MachinePress extends ObjEX {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), 8);
-		SimYukkuri.world.getCurrentMap().getMachinePress().put(objId, this);
+		GameWorld.get().getCurrentMap().getMachinePress().put(objId, this);
 		objType = Type.FIX_OBJECT;
 		objEXType = ObjEXType.MACHINEPRESS;
 

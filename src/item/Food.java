@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.IOException;
 
 import src.SimYukkuri;
+import src.util.GameWorld;
 import src.base.ObjEX;
 import src.draw.ModLoader;
 import src.draw.Rectangle4y;
@@ -199,7 +200,7 @@ public class Food extends ObjEX {
 
 	@Override
 	public void removeListData() {
-		SimYukkuri.world.getCurrentMap().getFood().remove(objId);
+		GameWorld.get().getCurrentMap().getFood().remove(objId);
 	}
 
 	@Override
@@ -224,8 +225,8 @@ public class Food extends ObjEX {
 	public Food(int initX, int initY, int initOption) {
 		super(initX, initY, initOption);
 		// 森なら野生に変更
-		if (SimYukkuri.world.getCurrentMap().getMapIndex() == 5
-				|| SimYukkuri.world.getCurrentMap().getMapIndex() == 6) {
+		if (GameWorld.get().getCurrentMap().getMapIndex() == 5
+				|| GameWorld.get().getCurrentMap().getMapIndex() == 6) {
 			foodType = FoodType.values()[initOption];
 			switch (foodType) {
 				case SWEETS1:
@@ -267,7 +268,7 @@ public class Food extends ObjEX {
 			setBoundary(0, 0, 0, 0); // Default for test environment
 		}
 		setCollisionSize(getPivotX(), getPivotY());
-		SimYukkuri.world.getCurrentMap().getFood().put(objId, this);
+		GameWorld.get().getCurrentMap().getFood().put(objId, this);
 		objType = Type.OBJECT;
 		objEXType = ObjEXType.FOOD;
 		setRemoved(false);

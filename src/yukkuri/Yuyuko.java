@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import src.SimYukkuri;
+import src.util.GameRandom;
 import src.base.Body;
 import src.draw.Dimension4y;
 import src.draw.ModLoader;
@@ -194,9 +195,9 @@ public class Yuyuko extends Body {
 		PREGPERIODorg *= factor;
 		SLEEPPERIODorg *= factor;
 		ACTIVEPERIODorg *= factor;
-		sameDest = SimYukkuri.RND.nextInt(10) + 10;
+		sameDest = GameRandom.nextInt(10) + 10;
 		DECLINEPERIODorg *= (Math.random() + 0.5);
-		ROBUSTNESS = SimYukkuri.RND.nextInt(15) + 1;
+		ROBUSTNESS = GameRandom.nextInt(15) + 1;
 		// EYESIGHT /= 1;
 		factor = Math.random() + 1;
 		STRENGTHorg[AgeState.ADULT.ordinal()] *= factor;

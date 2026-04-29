@@ -1,4 +1,5 @@
 package src.event;
+import src.util.GameText;
 
 import src.base.Body;
 import src.base.EventPacket;
@@ -70,6 +71,6 @@ public class GetTrashOkazariEvent extends EventPacket {
 
 	@Override
 	public String toString() {
-		return ResourceUtil.getInstance().read("event_trashokazari");
+		return GameText.read("event_trashokazari");
 	}
 }

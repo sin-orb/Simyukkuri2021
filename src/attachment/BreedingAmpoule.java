@@ -1,4 +1,5 @@
 package src.attachment;
+import src.util.GameText;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
@@ -140,7 +141,7 @@ public class BreedingAmpoule extends Attachment {
 	
 	@Override
 	public String toString() {
-		return ResourceUtil.getInstance().read("item_breeding");
+		return GameText.read("item_breeding");
 	}
 
 	// テスト用静的アクセサ

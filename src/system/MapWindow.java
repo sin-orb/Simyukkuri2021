@@ -1,4 +1,5 @@
 package src.system;
+import src.util.GameText;
 
 import java.awt.Container;
 import java.awt.Dialog;
@@ -17,6 +18,7 @@ import javax.swing.JPanel;
 import javax.swing.JToggleButton;
 
 import src.SimYukkuri;
+import src.util.GameWorld;
 import src.draw.MyPane;
 import src.draw.TerrainField;
 import src.draw.Translate;
@@ -28,20 +30,20 @@ import src.system.MainCommandUI.ToolButtonLabel;
 public class MapWindow extends JDialog implements ActionListener, WindowListener {
 
 	private static final long serialVersionUID = -742083190961529494L;
-	private static final String TITLE = ResourceUtil.getInstance().read("system_movemap");
+	private static final String TITLE = GameText.read("system_movemap");
 
 	/** 現在のマップリスト */
 	public static enum MAP {
-		MYROOM(ResourceUtil.getInstance().read("system_myroom"), "myroom"),
-		GARDEN(ResourceUtil.getInstance().read("system_yard"), "garden"),
-		STREET(ResourceUtil.getInstance().read("system_road"), "street"),
-		PARK1(ResourceUtil.getInstance().read("system_park1"), "park1"),
-		PARK2(ResourceUtil.getInstance().read("system_park2"), "park2"),
-		FOREST1(ResourceUtil.getInstance().read("system_forest1"), "forest1"),
-		FOREST2(ResourceUtil.getInstance().read("system_forest2"), "forest2"),
-		PLANT1(ResourceUtil.getInstance().read("system_plant1"), "plant1"),
-		PLANT2(ResourceUtil.getInstance().read("system_plant2"), "plant2"),
-		DISPOSER(ResourceUtil.getInstance().read("system_disposer"), "disposer"),
+		MYROOM(GameText.read("system_myroom"), "myroom"),
+		GARDEN(GameText.read("system_yard"), "garden"),
+		STREET(GameText.read("system_road"), "street"),
+		PARK1(GameText.read("system_park1"), "park1"),
+		PARK2(GameText.read("system_park2"), "park2"),
+		FOREST1(GameText.read("system_forest1"), "forest1"),
+		FOREST2(GameText.read("system_forest2"), "forest2"),
+		PLANT1(GameText.read("system_plant1"), "plant1"),
+		PLANT2(GameText.read("system_plant2"), "plant2"),
+		DISPOSER(GameText.read("system_disposer"), "disposer"),
 		;
 		private final String displayName;
 		private final String filePath;
@@ -105,11 +107,11 @@ public class MapWindow extends JDialog implements ActionListener, WindowListener
 		}
 		
 		// 描画スレッドにロックをかける
-		SimYukkuri.world.setNextMap(idx);
+		GameWorld.get().setNextMap(idx);
 		// 行き先設定
 		SimYukkuri.mypane.loadTerrainFile();
 		Translate.createTransTable(TerrainField.isPers());
-		SimYukkuri.world.changeMap();
+		GameWorld.get().changeMap();
 		MyPane.setSelectBody(null);
 	}
 
@@ -117,7 +119,7 @@ public class MapWindow extends JDialog implements ActionListener, WindowListener
 	public void windowOpened(WindowEvent e) {
 		Point pos = SimYukkuri.simYukkuri.getLocation();
 		setLocation(pos.x + Translate.getCanvasW() - 200, pos.y + 400);
-		butList[SimYukkuri.world.getCurrentMap().getMapIndex()].setSelected(true);
+		butList[GameWorld.get().getCurrentMap().getMapIndex()].setSelected(true);
 	}
 
 	@Override

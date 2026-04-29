@@ -1,4 +1,6 @@
 package src;
+import src.util.GameMessages;
+import src.util.GameText;
 
 import java.awt.BorderLayout;
 import java.awt.Cursor;
@@ -69,6 +71,7 @@ import src.system.MainCommandUI;
 import src.system.MapPlaceData;
 import src.system.MessagePool;
 import src.system.ResourceUtil;
+import src.util.GameWorld;
 
 /**
  * しむゆっくりメイン
@@ -76,9 +79,9 @@ import src.system.ResourceUtil;
 public class SimYukkuri extends JFrame {
 	static final long serialVersionUID = 1L;
 	/** アプリ名 */
-	public static final String TITLE = ResourceUtil.getInstance().read("title");
+	public static final String TITLE = GameText.read("title");
 	/** バージョン */
-	public static final String VERSION = ResourceUtil.getInstance().read("version");
+	public static final String VERSION = GameText.read("version");
 	/** うにょフラグ */
 	public static boolean UNYO = true;
 	/** 流しモード（0:いつもの 1:まりちゃ流しOnly 2：共存環境） */
@@ -183,7 +186,7 @@ public class SimYukkuri extends JFrame {
 		// setup my frame
 		initTerrariumSize();
 		world = new World(windowType, scaleIndex);
-		MessagePool.loadMessage(loader);
+		GameMessages.loadMessage(loader);
 		mypane.loadImage(true, true, true, true, true, true);
 		mypane.createBackBuffer();
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -304,7 +307,7 @@ public class SimYukkuri extends JFrame {
 			mythread = new Thread(mypane);
 			mythread.start();
 		} catch (OutOfMemoryError e) {
-			JOptionPane.showMessageDialog(null, ResourceUtil.getInstance().read("outofmemory"));
+			JOptionPane.showMessageDialog(null, GameText.read("outofmemory"));
 			System.exit(0);
 		}
 	}
@@ -453,7 +456,7 @@ public class SimYukkuri extends JFrame {
 				} else if (!stalkMode && o instanceof Stalk) {
 					// 茎ひっこぬき無効の場合は茎にヒットしても元のゆっくりを取得
 					stalk = (Stalk) o;
-					Body b = SimYukkuri.world.getCurrentMap().getBody().get(stalk.getPlantYukkuri());
+					Body b = GameWorld.get().getCurrentMap().getBody().get(stalk.getPlantYukkuri());
 					if (b != null) {
 						parent = b;
 					} else {
@@ -511,7 +514,7 @@ public class SimYukkuri extends JFrame {
 			if (pos == null)
 				return null;
 			// フラグマップから大まかな判定取得
-			MapPlaceData curMap = SimYukkuri.world.getCurrentMap();
+			MapPlaceData curMap = GameWorld.get().getCurrentMap();
 			int flags = Translate.getCurrentFieldMapNum(pos.getX(), pos.getY());
 			// コンベア
 			if ((flags & FieldShapeBase.FIELD_BELT) != 0) {
@@ -586,7 +589,7 @@ public class SimYukkuri extends JFrame {
 							}
 						} else {
 							// オブジェクトを右クリック
-							if (SimYukkuri.world.getPlayer().getHoldItem() == null) {
+							if (GameWorld.get().getPlayer().getHoldItem() == null) {
 								// 手にアイテムを持っていない場合
 								if (found.hasGetPopup() != ItemMenu.GetMenuTarget.NONE) {
 									// アイテム取得メニュー表示
@@ -616,7 +619,7 @@ public class SimYukkuri extends JFrame {
 				ItemMenu.itemModeCancel(false);
 
 				// 左クリック処理
-				if (SimYukkuri.world.getPlayer().getHoldItem() != null) {
+				if (GameWorld.get().getPlayer().getHoldItem() != null) {
 					// 手にアイテムを持っている場合は置く
 					ItemMenu.dropItem(e);
 					return;
@@ -1042,14 +1045,14 @@ public class SimYukkuri extends JFrame {
 		JRadioButton draw2;
 		ButtonGroup drawGrp;
 
-		mess1 = ResourceUtil.getInstance().read("terrarium_size");
-		screen = new String[] { ResourceUtil.getInstance().read("window_900_700"),
-				ResourceUtil.getInstance().read("window_1260_980"),
-				ResourceUtil.getInstance().read("full_screen") };
+		mess1 = GameText.read("terrarium_size");
+		screen = new String[] { GameText.read("window_900_700"),
+				GameText.read("window_1260_980"),
+				GameText.read("full_screen") };
 
-		mess2 = ResourceUtil.getInstance().read("background_theme");
-		mess3 = ResourceUtil.getInstance().read("item_theme");
-		mess4 = ResourceUtil.getInstance().read("yukkuri_theme");
+		mess2 = GameText.read("background_theme");
+		mess3 = GameText.read("item_theme");
+		mess4 = GameText.read("yukkuri_theme");
 
 		JPanel mainPanel = new JPanel();
 		mainPanel.setLayout(new GridLayout(2, 1, 0, 0));
@@ -1070,16 +1073,16 @@ public class SimYukkuri extends JFrame {
 		winPanel.add(fieldScaleCombo);
 
 		drawGrp = new ButtonGroup();
-		draw1 = new JRadioButton(ResourceUtil.getInstance().read("priority_speed"));
+		draw1 = new JRadioButton(GameText.read("priority_speed"));
 		draw1.setSelected(true);
 		drawGrp.add(draw1);
 		grpPanel.add(draw1);
-		draw2 = new JRadioButton(ResourceUtil.getInstance().read("priority_quality"));
+		draw2 = new JRadioButton(GameText.read("priority_quality"));
 		drawGrp.add(draw2);
 		grpPanel.add(draw2);
 
 		// --> うにょ版試験マージ
-		JCheckBox checkboxDebug = new JCheckBox(ResourceUtil.getInstance().read("unyo_on"));
+		JCheckBox checkboxDebug = new JCheckBox(GameText.read("unyo_on"));
 		grpPanel.add(checkboxDebug);
 		// <-- うにょ版試験マージ
 		winPanel.add(grpPanel);

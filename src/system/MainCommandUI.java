@@ -1,4 +1,5 @@
 package src.system;
+import src.util.GameText;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -18,6 +19,7 @@ import javax.swing.JToggleButton;
 import javax.swing.border.EmptyBorder;
 
 import src.SimYukkuri;
+import src.util.GameWorld;
 import src.base.Body;
 import src.command.GadgetMenu;
 import src.enums.BodyRank;
@@ -36,13 +38,13 @@ public class MainCommandUI {
 
 	/** システムボタンテキスト */
 	static enum SystemButtonLabel {
-		ADDBODY(ResourceUtil.getInstance().read("system_addyukkuri")),
-		SAVE(ResourceUtil.getInstance().read("save")),
-		LOAD(ResourceUtil.getInstance().read("load")),
+		ADDBODY(GameText.read("system_addyukkuri")),
+		SAVE(GameText.read("save")),
+		LOAD(GameText.read("load")),
 		PREV("<<"),
-		LOG(ResourceUtil.getInstance().read("log")),
+		LOG(GameText.read("log")),
 		NEXT(">>"),
-		LOGCLEAR(ResourceUtil.getInstance().read("logclear")),
+		LOGCLEAR(GameText.read("logclear")),
 		;
         private final String label;
         SystemButtonLabel(String str) { this.label = str; }
@@ -54,8 +56,8 @@ public class MainCommandUI {
 
 	/** ツールボタン */
 	static enum ToolButtonLabel {
-		MOVE(ResourceUtil.getInstance().read("system_move")),
-		BAG(ResourceUtil.getInstance().read("system_belongings")),
+		MOVE(GameText.read("system_move")),
+		BAG(GameText.read("system_belongings")),
 		;
         private final String label;
         ToolButtonLabel(String str) { this.label = str; }
@@ -67,18 +69,18 @@ public class MainCommandUI {
 
 	/** ステータスのラベル */
 	static enum StatusLabel {
-		MONEY(ResourceUtil.getInstance().read("system_money")),
-		LABEL(ResourceUtil.getInstance().read("system_statusofyukkuri")),
+		MONEY(GameText.read("system_money")),
+		LABEL(GameText.read("system_statusofyukkuri")),
 		NAME(""),
-		RANK(ResourceUtil.getInstance().read("system_rank")),
-		PERSONALITY(ResourceUtil.getInstance().read("system_attitude")),
-		INTEL(ResourceUtil.getInstance().read("system_intelligence")),
-		DAMAGE(ResourceUtil.getInstance().read("system_damage")),
-		STRESS(ResourceUtil.getInstance().read("system_stress")),
-		HUNGER(ResourceUtil.getInstance().read("system_satis")),
-		TANG(ResourceUtil.getInstance().read("system_taste")),
-		SHIT(ResourceUtil.getInstance().read("system_unun")),
-		LOVEPLAYER(ResourceUtil.getInstance().read("system_familiality")),
+		RANK(GameText.read("system_rank")),
+		PERSONALITY(GameText.read("system_attitude")),
+		INTEL(GameText.read("system_intelligence")),
+		DAMAGE(GameText.read("system_damage")),
+		STRESS(GameText.read("system_stress")),
+		HUNGER(GameText.read("system_satis")),
+		TANG(GameText.read("system_taste")),
+		SHIT(GameText.read("system_unun")),
+		LOVEPLAYER(GameText.read("system_familiality")),
 		;
         private final String label;
         StatusLabel(String str) { this.label = str; }
@@ -90,7 +92,7 @@ public class MainCommandUI {
 
 	/** オプションポップアップ */
 	static enum OptionPopup {
-		INI_RELOAD(ResourceUtil.getInstance().read("system_inireload"))
+		INI_RELOAD(GameText.read("system_inireload"))
 		;
 		private final String label;
 		OptionPopup(String str) { this.label = str; }
@@ -370,7 +372,7 @@ public class MainCommandUI {
 	 * ステータスをクリアする.
 	 */
 	public static void clearStatus() {
-		yuStatusLabel[StatusLabel.MONEY.ordinal()].setText(StatusLabel.MONEY.getLabel() + SimYukkuri.world.getPlayer().getCash());
+		yuStatusLabel[StatusLabel.MONEY.ordinal()].setText(StatusLabel.MONEY.getLabel() + GameWorld.get().getPlayer().getCash());
 		yuStatusLabel[StatusLabel.NAME.ordinal()].setText("");
 		yuStatusLabel[StatusLabel.RANK.ordinal()].setText(StatusLabel.RANK.getLabel());
 		yuStatusLabel[StatusLabel.PERSONALITY.ordinal()].setText(StatusLabel.PERSONALITY.getLabel());
@@ -398,12 +400,12 @@ public class MainCommandUI {
 	 * プレイヤーのステータスを表示する.
 	 */
 	public static void showPlayerStatus() {
-		if( SimYukkuri.world == null )
+		if( GameWorld.get() == null )
 		{
 			return;
 		}
 		// 現金更新
-		yuStatusLabel[StatusLabel.MONEY.ordinal()].setText(StatusLabel.MONEY.getLabel() + SimYukkuri.world.getPlayer().getCash());
+		yuStatusLabel[StatusLabel.MONEY.ordinal()].setText(StatusLabel.MONEY.getLabel() + GameWorld.get().getPlayer().getCash());
 
 		IconPool.StatusIcon[] stat = IconPool.StatusIcon.values();
 		ImageIcon[] img = IconPool.getStatusIconImageArray();
@@ -428,7 +430,7 @@ public class MainCommandUI {
 		int stress = 100 * b.getStress() / b.getStressLimit();
 		int nLovePlayer = 100 * b.getnLovePlayer() / b.getLOVEPLAYERLIMITorg();
 
-		yuStatusLabel[StatusLabel.MONEY.ordinal()].setText(StatusLabel.MONEY.getLabel() + SimYukkuri.world.getPlayer().getCash());
+		yuStatusLabel[StatusLabel.MONEY.ordinal()].setText(StatusLabel.MONEY.getLabel() + GameWorld.get().getPlayer().getCash());
 		yuStatusLabel[StatusLabel.NAME.ordinal()].setText(" " + (ResourceUtil.IS_JP ? b.getNameJ() : b.getNameE()));
 		yuStatusLabel[StatusLabel.RANK.ordinal()].setText(StatusLabel.RANK.getLabel() + BodyRank.values()[b.getBodyRank().ordinal()].getDisplayName());
 		yuStatusLabel[StatusLabel.PERSONALITY.ordinal()].setText(StatusLabel.PERSONALITY.getLabel() +

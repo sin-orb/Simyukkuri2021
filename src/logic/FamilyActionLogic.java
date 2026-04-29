@@ -1,4 +1,6 @@
 package src.logic;
+import src.util.GameEnvironment;
+import src.util.GameMessages;
 
 import java.util.Collections;
 import java.util.LinkedList;
@@ -6,6 +8,8 @@ import java.util.List;
 import java.util.Map;
 
 import src.SimYukkuri;
+import src.util.GameRandom;
+import src.util.GameWorld;
 import src.base.Body;
 import src.base.EventPacket;
 import src.base.Obj;
@@ -42,7 +46,7 @@ public class FamilyActionLogic {
 			return false;
 		}
 
-		if (SimYukkuri.RND.nextInt(300) != 0) {
+		if (GameRandom.nextInt(300) != 0) {
 			return false;
 		}
 
@@ -266,7 +270,7 @@ public class FamilyActionLogic {
 		}
 
 		//おちび自慢
-		if (SimYukkuri.RND.nextBoolean()) {
+		if (GameRandom.nextBoolean()) {
 			if (proudChild(b, childrenList)) {
 				return true;
 			}
@@ -294,7 +298,7 @@ public class FamilyActionLogic {
 		b.setLastActionTime();
 		// うんうん体操実施
 		ShitExercisesEvent ev = new ShitExercisesEvent(b, null, found, 10);
-		EventLogic.addWorldEvent(ev, b, MessagePool.getMessage(b, MessagePool.Action.ShitExercisesGOFrom));
+		EventLogic.addWorldEvent(ev, b, GameMessages.getMessage(b, MessagePool.Action.ShitExercisesGOFrom));
 		// イベント開始
 		//b.currentEvent = ev);
 		ev.start(b);
@@ -309,7 +313,7 @@ public class FamilyActionLogic {
 	public static Obj searchToilet(Body b) {
 		Obj found = null;
 		int minDistance = b.getEYESIGHTorg();
-		for (Map.Entry<Integer, Toilet> entry : SimYukkuri.world.getCurrentMap().getToilet().entrySet()) {
+		for (Map.Entry<Integer, Toilet> entry : GameWorld.get().getCurrentMap().getToilet().entrySet()) {
 			Toilet t = entry.getValue();
 			// 最小距離のものが見つかっていたら
 			if (minDistance < 1) {
@@ -348,7 +352,7 @@ public class FamilyActionLogic {
 		}
 		b.setLastActionTime();
 		SuperEatingTimeEvent ev = new SuperEatingTimeEvent(b, null, found, 10);
-		EventLogic.addWorldEvent(ev, b, MessagePool.getMessage(b, MessagePool.Action.FamilyEatingTimeWait));
+		EventLogic.addWorldEvent(ev, b, GameMessages.getMessage(b, MessagePool.Action.FamilyEatingTimeWait));
 		// イベント開始
 		//b.currentEvent = ev);
 		ev.start(b);
@@ -366,7 +370,7 @@ public class FamilyActionLogic {
 		int looks = -1000;
 
 		// フィールドの餌検索
-		for (Map.Entry<Integer, Food> entry : SimYukkuri.world.getCurrentMap().getFood().entrySet()) {
+		for (Map.Entry<Integer, Food> entry : GameWorld.get().getCurrentMap().getFood().entrySet()) {
 			Food f = entry.getValue();
 			if (f.isEmpty()) {
 				continue;
@@ -427,7 +431,7 @@ public class FamilyActionLogic {
 		boolean bIsNotRaperTarget = isRapeTarget();
 		// レイプ対象がいない
 		if (!bIsNotRaperTarget) {
-			for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().getBody().entrySet()) {
+			for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
 				Body b = entry.getValue();
 				if (b.isRaper()) {
 					b.setExciting(false);
@@ -443,7 +447,7 @@ public class FamilyActionLogic {
 	 * @return れいぱーのターゲットかどうか
 	 */
 	public static final boolean isRapeTarget() {
-		for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().getBody().entrySet()) {
+		for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
 			Body b = entry.getValue();
 			// レイプの対象がいる
 			if (!b.isUnBirth() && !b.isDead() && !b.isRemoved() && !b.isRaper()) {
@@ -496,7 +500,7 @@ public class FamilyActionLogic {
 
 				// ベッド
 				if (target == null) {
-					if (child.isSleepy() || Terrarium.getDayState().ordinal() >= Terrarium.DayState.EVENING.ordinal()) {
+					if (child.isSleepy() || GameEnvironment.getDayState().ordinal() >= Terrarium.DayState.EVENING.ordinal()) {
 						Obj found = BedLogic.searchBed(b);
 						if (found != null) {
 							target = found;
@@ -514,7 +518,7 @@ public class FamilyActionLogic {
 					} else {
 						// おちびちゃん運び実施
 						YukkuriRideEvent ev = new YukkuriRideEvent(b, childrenList.get(0), target, 10);
-						EventLogic.addWorldEvent(ev, b, MessagePool.getMessage(b, MessagePool.Action.RideOnMe));
+						EventLogic.addWorldEvent(ev, b, GameMessages.getMessage(b, MessagePool.Action.RideOnMe));
 						// イベント開始
 						//b.currentEvent = ev);
 						ev.start(b);
@@ -540,7 +544,7 @@ public class FamilyActionLogic {
 
 		// 実施
 		ProudChildEvent ev = new ProudChildEvent(b, null, null, 10);
-		EventLogic.addWorldEvent(ev, b, MessagePool.getMessage(b, MessagePool.Action.ProudChildsGOFrom));
+		EventLogic.addWorldEvent(ev, b, GameMessages.getMessage(b, MessagePool.Action.ProudChildsGOFrom));
 		// イベント開始
 		//b.currentEvent = ev);
 		ev.start(b);

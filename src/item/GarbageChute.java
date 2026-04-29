@@ -1,4 +1,5 @@
 package src.item;
+import src.util.GameMessages;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
@@ -9,6 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import src.SimYukkuri;
+import src.util.GameWorld;
 import src.base.Body;
 import src.base.Obj;
 import src.base.ObjEX;
@@ -100,10 +102,10 @@ public class GarbageChute extends ObjEX {
 			if (!bindBody.isDead()) {
 				bindBody.setHappiness(Happiness.VERY_SAD);
 				if (bindBody.isOverPregnantLimit()) {
-					bindBody.setPikoMessage(MessagePool.getMessage(bindBody, MessagePool.Action.DontThrowMeAway), 60,
+					bindBody.setPikoMessage(GameMessages.getMessage(bindBody, MessagePool.Action.DontThrowMeAway), 60,
 							true);
 				} else
-					bindBody.setMessage(MessagePool.getMessage(bindBody, MessagePool.Action.Surprise), 60, true, true);
+					bindBody.setMessage(GameMessages.getMessage(bindBody, MessagePool.Action.Surprise), 60, true, true);
 			}
 			o.setFallingUnderGround(true);
 		} else {
@@ -141,7 +143,7 @@ public class GarbageChute extends ObjEX {
 
 	@Override
 	public void removeListData() {
-		SimYukkuri.world.getCurrentMap().getGarbagechute().remove(objId);
+		GameWorld.get().getCurrentMap().getGarbagechute().remove(objId);
 	}
 
 	/**
@@ -155,7 +157,7 @@ public class GarbageChute extends ObjEX {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		SimYukkuri.world.getCurrentMap().getGarbagechute().put(objId, this);
+		GameWorld.get().getCurrentMap().getGarbagechute().put(objId, this);
 		objType = Type.PLATFORM;
 		objEXType = ObjEXType.GARBAGECHUTE;
 

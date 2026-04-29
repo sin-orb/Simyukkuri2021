@@ -1,4 +1,6 @@
 package src.event;
+import src.util.GameMessages;
+import src.util.GameText;
 
 import src.SimYukkuri;
 import src.base.Body;
@@ -85,14 +87,14 @@ public class EatBodyEvent extends EventPacket {
 				b.lookTo(to.getX(), to.getY());
 			b.setLockmove(false);
 			b.setForceFace(ImageCode.SURPRISE.ordinal());
-			b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.Surprise), 52, true, false);
+			b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.Surprise), 52, true, false);
 			b.stay();
 		} else if (tick == 70) {
 			// 吐く
 			if (to != null)
 				b.lookTo(to.getX(), to.getY());
 			b.setForceFace(ImageCode.CRYING.ordinal());
-			b.setBodyEventResMessage(MessagePool.getMessage(b, MessagePool.Action.Vomit), 62, true, false);
+			b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.Vomit), 62, true, false);
 			int ofsX = Translate.invertX(b.getCollisionX() >> 1, b.getY());
 			if (b.getDirection() == Direction.LEFT)
 				ofsX = -ofsX;
@@ -138,6 +140,6 @@ public class EatBodyEvent extends EventPacket {
 
 	@Override
 	public String toString() {
-		return ResourceUtil.getInstance().read("event_eaten");
+		return GameText.read("event_eaten");
 	}
 }

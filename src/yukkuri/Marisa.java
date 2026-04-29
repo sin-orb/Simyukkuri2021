@@ -1,4 +1,5 @@
 package src.yukkuri;
+import src.util.GameEnvironment;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
@@ -11,6 +12,8 @@ import java.util.Map;
 
 import src.Const;
 import src.SimYukkuri;
+import src.util.GameRandom;
+import src.util.GameWorld;
 import src.base.Body;
 import src.base.Okazari.OkazariType;
 import src.draw.Dimension4y;
@@ -124,7 +127,7 @@ public class Marisa extends Body {
 		// 流し絵の場合
 		else {
 			// インターバル毎に初期化する
-			if (Terrarium.getInterval() == 0 && !isDead()) {
+			if (GameEnvironment.getInterval() == 0 && !isDead()) {
 				for (int i = 0; i < ImageCode.values().length; i++) {
 					anImageVerStateCtrlNagasi[i][1] = 0;
 				}
@@ -144,7 +147,7 @@ public class Marisa extends Body {
 					}
 				}
 				if (nOtherVerCount != 0) {
-					int nRndIndex = SimYukkuri.RND.nextInt(nOtherVerCount + 1);
+					int nRndIndex = GameRandom.nextInt(nOtherVerCount + 1);
 					anImageVerStateCtrlNagasi[type][0] = nRndIndex;
 					layer.getImage()[index] = imagesNagasi[type][direction
 							* directionOffsetNagasi[type][0]][getBodyAgeState().ordinal()][nRndIndex];
@@ -191,10 +194,10 @@ public class Marisa extends Body {
 			int originalId = getUniqueID();
 			// ドス化
 			// ドスはフィールドに一体だけ
-			if (!SimYukkuri.world.getCurrentMap().makeOrKillDos(true)) {
+			if (!GameWorld.get().getCurrentMap().makeOrKillDos(true)) {
 				return;
 			}
-			SimYukkuri.world.getCurrentMap().getBody().remove(this.getUniqueID());
+			GameWorld.get().getCurrentMap().getBody().remove(this.getUniqueID());
 			SimYukkuri.mypane.loadBodyImage(YukkuriType.DOSMARISA);
 			Body to = new DosMarisa(getX(), getY(), getZ(), getBodyAgeState(), null, null);
 			try {
@@ -203,7 +206,7 @@ public class Marisa extends Body {
 				e.printStackTrace();
 			}
 			to.setUniqueID(originalId);
-			SimYukkuri.world.getCurrentMap().getBody().put(to.getUniqueID(), to);
+			GameWorld.get().getCurrentMap().getBody().put(to.getUniqueID(), to);
 			// iniファイル再設定
 			to.setBaseBodyFileName("dosmarisa");
 			IniFileUtil.readYukkuriIniFile(to);
@@ -228,7 +231,7 @@ public class Marisa extends Body {
 
 		// 自分以外に幸せを感じている大人のゆっくりが10体以上いる
 		int nCount = 0;
-		List<Body> bodyList = new LinkedList<Body>(SimYukkuri.world.getCurrentMap().getBody().values());
+		List<Body> bodyList = new LinkedList<Body>(GameWorld.get().getCurrentMap().getBody().values());
 		for (Body bOther : bodyList) {
 			if (bOther == this) {
 				continue;
@@ -242,7 +245,7 @@ public class Marisa extends Body {
 		}
 
 		// その上で、1/300の確率で突然変異
-		if (SimYukkuri.RND.nextInt(300) == 0) {
+		if (GameRandom.nextInt(300) == 0) {
 			return this;
 		}
 		return null;
@@ -666,9 +669,9 @@ public class Marisa extends Body {
 		PREGPERIODorg *= factor;
 		SLEEPPERIODorg *= factor;
 		ACTIVEPERIODorg *= factor;
-		sameDest = SimYukkuri.RND.nextInt(10) + 10;
+		sameDest = GameRandom.nextInt(10) + 10;
 		DECLINEPERIODorg *= (Math.random() + 0.5);
-		ROBUSTNESS = SimYukkuri.RND.nextInt(10) + 1;
+		ROBUSTNESS = GameRandom.nextInt(10) + 1;
 		// EYESIGHT /= 1;
 		factor = Math.random() + 1;
 		STRENGTHorg[AgeState.ADULT.ordinal()] *= factor;

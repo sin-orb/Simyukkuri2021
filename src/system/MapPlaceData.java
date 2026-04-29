@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import src.SimYukkuri;
+import src.util.GameWorld;
 import src.base.Body;
 import src.base.Effect;
 import src.base.EventPacket;
@@ -280,7 +281,7 @@ public class MapPlaceData implements Serializable {
 	 * @param attribute 属性
 	 */
 	public static void setFiledFlag(int[][] map, int x, int y, int w, int h, boolean setFlag, int attribute) {
-		MapPlaceData tmp = SimYukkuri.world.getCurrentMap();
+		MapPlaceData tmp = GameWorld.get().getCurrentMap();
 		int sx = Math.max(0, Math.min(x, Translate.getMapW()));
 		int sy = Math.max(0, Math.min(y, Translate.getMapH()));
 		if (setFlag) {

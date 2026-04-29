@@ -1,4 +1,5 @@
 package src.attachment;
+import src.util.GameText;
 
 
 import java.awt.image.BufferedImage;
@@ -137,7 +138,7 @@ public class HungryAmpoule extends Attachment {
 	
 	@Override
 	public String toString() {
-		return ResourceUtil.getInstance().read("item_hungry");
+		return GameText.read("item_hungry");
 	}
 
 	// テスト用静的アクセサ

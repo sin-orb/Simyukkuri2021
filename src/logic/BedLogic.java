@@ -1,8 +1,11 @@
 package src.logic;
+import src.util.GameEnvironment;
 
 import java.util.Map;
 
 import src.SimYukkuri;
+import src.util.GameRandom;
+import src.util.GameWorld;
 import src.base.Body;
 import src.base.EventPacket;
 import src.base.Obj;
@@ -108,7 +111,7 @@ public class BedLogic {
 		// ベッドに向かう条件
 		boolean flag = false;
 		if ((b.isSleepy()	//	眠い
-			|| Terrarium.getDayState().ordinal() >= Terrarium.DayState.EVENING.ordinal()	// 夜になった
+			|| GameEnvironment.getDayState().ordinal() >= Terrarium.DayState.EVENING.ordinal()	// 夜になった
 			|| b.nearToBirth()) // 出産間近
 			&& b.getCurrentEvent() == null) {// イベントがない <- イベントありのままだと不眠ディフューザーとかでおかしくなる
 			flag = true;
@@ -140,9 +143,9 @@ public class BedLogic {
 			}
 			else {
 				ofsX = Translate.invertX(found.getW(), found.getY() - 4);
-				ofsX = -(ofsX >> 1) + SimYukkuri.RND.nextInt(ofsX);
+				ofsX = -(ofsX >> 1) + GameRandom.nextInt(ofsX);
 				ofsY = Translate.invertY(found.getH() - 4);
-				ofsY = -(ofsY >> 1) + SimYukkuri.RND.nextInt(ofsY);
+				ofsY = -(ofsY >> 1) + GameRandom.nextInt(ofsY);
 			}
 			b.moveToBed(found, found.getX() + ofsX, found.getY() + ofsY, 0);
 			b.setTargetMoveOffset(ofsX, ofsY);
@@ -179,7 +182,7 @@ public class BedLogic {
 		// うんうん奴隷ではない場合
 		if( b.getPublicRank() != PublicRank.UnunSlave){
 			if(found == null) {
-				for (Map.Entry<Integer, Bed> entry : SimYukkuri.world.getCurrentMap().getBed().entrySet()) {
+				for (Map.Entry<Integer, Bed> entry : GameWorld.get().getCurrentMap().getBed().entrySet()) {
 					ObjEX t = entry.getValue();
 					int distance = Translate.distance(b.getX(), b.getY(), t.getX(), t.getY());
 					if (minDistance > distance) {
@@ -193,7 +196,7 @@ public class BedLogic {
 			}
 	//// 仮 おうち検索
 			if(found == null) {
-				for (Map.Entry<Integer, House> entry : SimYukkuri.world.getCurrentMap().getHouse().entrySet()) {
+				for (Map.Entry<Integer, House> entry : GameWorld.get().getCurrentMap().getHouse().entrySet()) {
 					ObjEX t = entry.getValue();
 					int distance = Translate.distance(b.getX(), b.getY(), t.getX(), t.getY());
 					if (minDistance > distance) {
@@ -209,7 +212,7 @@ public class BedLogic {
 		else{
 			// うんうん奴隷の場合、トイレを探す
 			if(found == null) {
-				for (Map.Entry<Integer, Toilet> entry : SimYukkuri.world.getCurrentMap().getToilet().entrySet()) {
+				for (Map.Entry<Integer, Toilet> entry : GameWorld.get().getCurrentMap().getToilet().entrySet()) {
 					ObjEX t = entry.getValue();
 					int distance = Translate.distance(b.getX(), b.getY(), t.getX(), t.getY());
 					if (minDistance > distance) {

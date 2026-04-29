@@ -5,6 +5,7 @@ import java.beans.Transient;
 import java.io.IOException;
 
 import src.SimYukkuri;
+import src.util.GameRandom;
 import src.base.Body;
 import src.draw.Dimension4y;
 import src.draw.Point4y;
@@ -103,7 +104,7 @@ public class HybridYukkuri extends Body {
 			}
 		}
 
-		if (SimYukkuri.RND.nextBoolean()) {
+		if (GameRandom.nextBoolean()) {
 			dorei = doreiTmp;
 			dorei2 = doreiTmp2;
 		} else {
@@ -111,13 +112,13 @@ public class HybridYukkuri extends Body {
 			dorei2 = doreiTmp;
 		}
 
-		if (SimYukkuri.RND.nextBoolean()) {
+		if (GameRandom.nextBoolean()) {
 			dorei3 = doreiTmp;
 		} else {
 			dorei3 = doreiTmp2;
 		}
 
-		if (SimYukkuri.RND.nextBoolean()) {
+		if (GameRandom.nextBoolean()) {
 			dorei4 = doreiTmp;
 		} else {
 			dorei4 = doreiTmp2;
@@ -442,9 +443,9 @@ public class HybridYukkuri extends Body {
 		PREGPERIODorg *= factor;
 		SLEEPPERIODorg *= factor;
 		ACTIVEPERIODorg *= factor;
-		sameDest = SimYukkuri.RND.nextInt(20) + 20;
+		sameDest = GameRandom.nextInt(20) + 20;
 		DECLINEPERIODorg *= (Math.random() + 0.5);
-		ROBUSTNESS = SimYukkuri.RND.nextInt(10) + 1;
+		ROBUSTNESS = GameRandom.nextInt(10) + 1;
 		// EYESIGHT /= 4;
 		factor = Math.random() + 0.5;
 		STRENGTHorg[AgeState.ADULT.ordinal()] *= factor;

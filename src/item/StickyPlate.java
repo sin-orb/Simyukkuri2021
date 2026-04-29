@@ -1,4 +1,5 @@
 package src.item;
+import src.util.GameText;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -14,6 +15,8 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 import src.SimYukkuri;
+import src.util.GameRandom;
+import src.util.GameWorld;
 import src.base.Body;
 import src.base.Obj;
 import src.base.ObjEX;
@@ -33,8 +36,8 @@ public class StickyPlate extends ObjEX {
 
 	/** どこをくっつけるか */
 	public static enum StickyType {
-		UNDER(ResourceUtil.getInstance().read("item_footsticky")),
-		BACK(ResourceUtil.getInstance().read("item_backsticky")),
+		UNDER(GameText.read("item_footsticky")),
+		BACK(GameText.read("item_backsticky")),
 		;
 
 		private String name;
@@ -158,7 +161,7 @@ public class StickyPlate extends ObjEX {
 			if (bFixBack) {
 				// 針が刺さっていない
 				if (!bindBody.isNeedled() && !bindBody.isSleeping()) {
-					if (SimYukkuri.RND.nextInt(10) == 0) {
+					if (GameRandom.nextInt(10) == 0) {
 						bindBody.setFurifuri(true);
 					}
 				}
@@ -191,7 +194,7 @@ public class StickyPlate extends ObjEX {
 			bindBody.setPullAndPush(false);
 			bindBody = null;
 		}
-		SimYukkuri.world.getCurrentMap().getStickyPlate().remove(objId);
+		GameWorld.get().getCurrentMap().getStickyPlate().remove(objId);
 	}
 
 	/**
@@ -205,12 +208,12 @@ public class StickyPlate extends ObjEX {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		SimYukkuri.world.getCurrentMap().getStickyPlate().put(objId, this);
+		GameWorld.get().getCurrentMap().getStickyPlate().put(objId, this);
 		objType = Type.PLATFORM;
 		objEXType = ObjEXType.STICKYPLATE;
 		interval = 5;
 		if (!setupStickyPlate(this)) {
-			SimYukkuri.world.getCurrentMap().getStickyPlate().remove(objId);
+			GameWorld.get().getCurrentMap().getStickyPlate().remove(objId);
 			return;
 		}
 		itemRank = ItemRank.values()[initOption];
@@ -248,7 +251,7 @@ public class StickyPlate extends ObjEX {
 		but[0].setSelected(true);
 
 		int dlgRet = JOptionPane.showConfirmDialog(SimYukkuri.mypane, mainPanel,
-				ResourceUtil.getInstance().read("item_stickysettings"),
+				GameText.read("item_stickysettings"),
 				JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
 		if (dlgRet == JOptionPane.OK_OPTION) {

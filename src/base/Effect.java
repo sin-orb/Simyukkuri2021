@@ -8,6 +8,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
 import src.SimYukkuri;
+import src.util.GameWorld;
 import src.enums.Event;
 import src.enums.Type;
 
@@ -66,10 +67,10 @@ public abstract class Effect extends Obj {
 						int life, int loop, boolean end, boolean grav, boolean front) {
 
 		if(front) {
-			SimYukkuri.world.getCurrentMap().getFrontEffect().put(objId, this);
+			GameWorld.get().getCurrentMap().getFrontEffect().put(objId, this);
 		}
 		else {
-			SimYukkuri.world.getCurrentMap().getSortEffect().put(objId, this);
+			GameWorld.get().getCurrentMap().getSortEffect().put(objId, this);
 		}
 		objType = Type.LIGHT_EFFECT;
 		x = sX;

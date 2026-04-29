@@ -122,7 +122,7 @@ public class Generator extends ObjEX {
 	//
 	@Override
 	public void removeListData() {
-		// SimYukkuri.world.currentMap.generator.remove(this);
+		// GameWorld.get().currentMap.generator.remove(this);
 	}
 
 	//
@@ -131,7 +131,7 @@ public class Generator extends ObjEX {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		// SimYukkuri.world.currentMap.generator.add(this);
+		// GameWorld.get().currentMap.generator.add(this);
 		objType = Type.PLATFORM;
 		objEXType = ObjEXType.GENERATOR;
 		interval = 4;

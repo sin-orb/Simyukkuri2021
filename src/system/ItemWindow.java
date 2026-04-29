@@ -1,4 +1,5 @@
 package src.system;
+import src.util.GameText;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -25,6 +26,7 @@ import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 
 import src.SimYukkuri;
+import src.util.GameWorld;
 import src.base.Obj;
 import src.draw.Translate;
 import src.system.MainCommandUI.ToolButtonLabel;
@@ -63,7 +65,7 @@ public class ItemWindow extends JDialog implements WindowListener, MouseListener
 		JPanel bp = new JPanel();
 		bp.setLayout(new BoxLayout(bp, BoxLayout.X_AXIS));
 
-		delButton = new JButton(ResourceUtil.getInstance().read("system_throwaway"));
+		delButton = new JButton(GameText.read("system_throwaway"));
 //		delButton.setPreferredSize(new Dimension(80, 30));
 		delButton.addActionListener(this);
 		bp.add(delButton);
@@ -79,7 +81,7 @@ public class ItemWindow extends JDialog implements WindowListener, MouseListener
 	@SuppressWarnings("unchecked")
 	@Override
 	public void windowOpened(WindowEvent e) {
-		itemList.setModel(SimYukkuri.world.getPlayer().getItemList());
+		itemList.setModel(GameWorld.get().getPlayer().getItemList());
 		itemList.setSelectedIndex(-1);
 		Point pos = SimYukkuri.simYukkuri.getLocation();
 		setLocation(pos.x + Translate.getCanvasW() - 200, pos.y + 100);
@@ -88,7 +90,7 @@ public class ItemWindow extends JDialog implements WindowListener, MouseListener
 	@Override
 	public void windowClosing(WindowEvent e) {
 		MainCommandUI.getPlayerButton()[ToolButtonLabel.BAG.ordinal()].setSelected(false);
-		SimYukkuri.world.getPlayer().setHoldItem(null);
+		GameWorld.get().getPlayer().setHoldItem(null);
 	}
 
 	@Override
@@ -116,9 +118,9 @@ public class ItemWindow extends JDialog implements WindowListener, MouseListener
 	public void mouseClicked(MouseEvent e) {
 		if(itemList.getSelectedIndices().length == 1) {
 			int index = itemList.locationToIndex(e.getPoint());
-			SimYukkuri.world.getPlayer().setHoldItem(SimYukkuri.world.getPlayer().getItemList().get(index));
+			GameWorld.get().getPlayer().setHoldItem(GameWorld.get().getPlayer().getItemList().get(index));
 		} else {
-			SimYukkuri.world.getPlayer().setHoldItem(null);
+			GameWorld.get().getPlayer().setHoldItem(null);
 		}
 	}
 	@Override
@@ -147,14 +149,14 @@ public class ItemWindow extends JDialog implements WindowListener, MouseListener
 		int[] idx = itemList.getSelectedIndices();
 		Obj[] obj = new Obj[idx.length];
 		for(int i = 0; i < idx.length; i++) {
-			obj[i] = SimYukkuri.world.getPlayer().getItemList().get(idx[i]);
+			obj[i] = GameWorld.get().getPlayer().getItemList().get(idx[i]);
 			if(obj[i] != null) obj[i].remove();
 		}
 		for(int i = 0; i < obj.length; i++) {
-			SimYukkuri.world.getPlayer().getItemList().removeElement(obj[i]);
+			GameWorld.get().getPlayer().getItemList().removeElement(obj[i]);
 		}
 		itemList.setSelectedIndex(-1);
-		SimYukkuri.world.getPlayer().setHoldItem(null);
+		GameWorld.get().getPlayer().setHoldItem(null);
 	}
 
 	@Override

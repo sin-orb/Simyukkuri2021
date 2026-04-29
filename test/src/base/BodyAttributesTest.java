@@ -35,11 +35,28 @@ public class BodyAttributesTest {
     /** テスト用の簡易Attachment */
     private static class TestAttachment extends Attachment {
         private static final long serialVersionUID = 1L;
-        public TestAttachment(Body b) { super(b); }
-        public TestAttachment() { super(); }
-        @Override protected Event update() { return Event.DONOTHING; }
-        @Override public void resetBoundary() {}
-        @Override public BufferedImage getImage(Body b) { return null; }
+
+        public TestAttachment(Body b) {
+            super(b);
+        }
+
+        public TestAttachment() {
+            super();
+        }
+
+        @Override
+        protected Event update() {
+            return Event.DONOTHING;
+        }
+
+        @Override
+        public void resetBoundary() {
+        }
+
+        @Override
+        public BufferedImage getImage(Body b) {
+            return null;
+        }
     }
 
     private StubBodyAttributes body;
@@ -2825,7 +2842,8 @@ public class BodyAttributesTest {
             body.setTakeoutItem(map);
 
             // Neither takenOutFood nor takenOutShit has this ID
-            // So it falls through to YukkuriUtil.getBodyInstanceFromObjId which returns null
+            // So it falls through to YukkuriUtil.getBodyInstanceFromObjId which returns
+            // null
             Obj result = body.getTakeoutItem(src.enums.TakeoutItemType.YUKKURI);
             assertNull(result);
         }

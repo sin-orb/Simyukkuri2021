@@ -1,4 +1,5 @@
 package src.attachment;
+import src.util.GameText;
 
 
 import java.awt.image.BufferedImage;
@@ -134,7 +135,7 @@ public class StopAmpoule extends Attachment {
 	
 	@Override
 	public String toString() {
-		return ResourceUtil.getInstance().read("item_stop");
+		return GameText.read("item_stop");
 	}
 
 	// テスト用静的アクセサ

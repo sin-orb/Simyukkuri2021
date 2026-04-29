@@ -7,6 +7,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.util.Random;
+
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -18,20 +21,34 @@ import src.base.EventPacket.EventPriority;
 import src.draw.World;
 import src.enums.AgeState;
 import src.enums.Happiness;
+import src.enums.Intelligence;
 import src.enums.PanicType;
 import src.enums.Parent;
 import src.enums.PublicRank;
 import src.system.Sprite;
+import src.util.GameRandom;
+import src.util.RandomSource;
 import src.util.WorldTestHelper;
 import src.yukkuri.Reimu;
 
 public class ProudChildEventTest {
 
+    private Random originalRnd;
+
     @BeforeEach
     public void setUp() {
+        originalRnd = SimYukkuri.RND;
+        SimYukkuri.RND = new Random(0);
         WorldTestHelper.resetWorld();
         SimYukkuri.world = new World();
         WorldTestHelper.initializeStandardTranslate500();
+    }
+
+    @AfterEach
+    public void tearDown() {
+        GameRandom.clearOverride();
+        SimYukkuri.RND = originalRnd;
+        WorldTestHelper.resetWorld();
     }
 
     // --- Default constructor ---
@@ -407,23 +424,25 @@ public class ProudChildEventTest {
         void testScenario_ChildGoRandomHitMakesVeryHappyAndAddsMemory() {
             Body from = createBody();
             Body child = createBody();
+            child.setIntelligence(Intelligence.FOOL);
             ProudChildEvent event = new ProudChildEvent(from, null, null, 10);
             from.setCurrentEvent(event);
             child.setCurrentEvent(event);
             int memoriesBefore = child.getMemories();
 
-            java.util.Random original = SimYukkuri.RND;
-            SimYukkuri.RND = new java.util.Random() {
+            GameRandom.setOverride(new RandomSource() {
                 @Override
                 public int nextInt(int bound) {
                     return 0;
                 }
-            };
-            try {
-                assertNull(event.update(child));
-            } finally {
-                SimYukkuri.RND = original;
-            }
+
+                @Override
+                public boolean nextBoolean() {
+                    return false;
+                }
+            });
+
+            assertNull(event.update(child));
 
             assertEquals(Happiness.VERY_HAPPY, child.getHappiness());
             assertEquals(memoriesBefore + 10, child.getMemories());
@@ -435,6 +454,7 @@ public class ProudChildEventTest {
             Body child = createBody();
             child.setParents(new int[] { from.getUniqueID(), -1 });
             child.setAgeState(AgeState.BABY);
+            from.setIntelligence(Intelligence.FOOL);
             from.getChildrenList().add(child.getUniqueID());
 
             ProudChildEvent event = new ProudChildEvent(from, null, null, 10);
@@ -456,6 +476,7 @@ public class ProudChildEventTest {
             Body from = createBody();
             Body child = createBody();
             child.setAgeState(AgeState.BABY);
+            child.setIntelligence(Intelligence.FOOL);
             child.setAttitude(src.enums.Attitude.SUPER_SHITHEAD);
 
             ProudChildEvent event = new ProudChildEvent(from, null, null, 10);
@@ -466,18 +487,19 @@ public class ProudChildEventTest {
             child.setInLastActionTime(0);
             int memoriesBefore = child.getMemories();
 
-            java.util.Random original = SimYukkuri.RND;
-            SimYukkuri.RND = new java.util.Random() {
+            GameRandom.setOverride(new RandomSource() {
+                @Override
+                public int nextInt(int bound) {
+                    return 0;
+                }
+
                 @Override
                 public boolean nextBoolean() {
                     return true;
                 }
-            };
-            try {
-                assertNull(event.update(child));
-            } finally {
-                SimYukkuri.RND = original;
-            }
+            });
+
+            assertNull(event.update(child));
 
             assertTrue(child.isFurifuri());
             assertEquals(memoriesBefore + 20, child.getMemories());

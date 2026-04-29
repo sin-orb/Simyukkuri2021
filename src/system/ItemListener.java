@@ -7,6 +7,7 @@ import javax.swing.event.PopupMenuEvent;
 import javax.swing.event.PopupMenuListener;
 
 import src.SimYukkuri;
+import src.util.GameWorld;
 import src.base.Body;
 import src.base.Obj;
 import src.command.DebugFrame;
@@ -100,12 +101,12 @@ public class ItemListener {
 			if (m == null)
 				return;
 
-			MapPlaceData curMap = SimYukkuri.world.getCurrentMap();
+			MapPlaceData curMap = GameWorld.get().getCurrentMap();
 
 			switch (m) {
 			case PICKUP:
 				synchronized (SimYukkuri.lock) {
-					SimYukkuri.world.getPlayer().getItemList().addElement(ItemMenu.getGetTarget());
+					GameWorld.get().getPlayer().getItemList().addElement(ItemMenu.getGetTarget());
 					if (ItemMenu.getGetTarget() instanceof Body) {
 						Body b = (Body) ItemMenu.getGetTarget();
 						b.removeAllStalks();

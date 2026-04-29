@@ -1,4 +1,5 @@
 package src.game;
+import src.util.GameText;
 
 //import java.awt.Point;
 import java.awt.image.BufferedImage;
@@ -54,9 +55,9 @@ public class Shit extends Obj {
 	private int shitType = 0;
 
 	private static final float[] shitSize = { 0.4f, 0.7f, 1.0f };
-	private static final String[] shitSizeDisplayName = { ResourceUtil.getInstance().read("game_little"),
-			ResourceUtil.getInstance().read("game_middle"),
-			ResourceUtil.getInstance().read("game_big") };
+	private static final String[] shitSizeDisplayName = { GameText.read("game_little"),
+			GameText.read("game_middle"),
+			GameText.read("game_big") };
 
 	private static final int value[] = { 50, 100, 300 };
 
@@ -124,7 +125,7 @@ public class Shit extends Obj {
 
 	@Override
 	public String toString() {
-		String base = ResourceUtil.getInstance().read("system_unun");
+		String base = GameText.read("system_unun");
 		StringBuilder ret = new StringBuilder(base == null ? "" : base);
 		ret.append(shitSizeDisplayName[ageState.ordinal()]);
 		ret.append("(");

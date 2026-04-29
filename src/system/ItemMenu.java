@@ -7,6 +7,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import src.SimYukkuri;
+import src.util.GameWorld;
 import src.base.Body;
 import src.base.Obj;
 import src.draw.Point4y;
@@ -247,7 +248,7 @@ public class ItemMenu {
 		usePopup.setVisible(false);
 		shapePopup.setVisible(false);
 		if(isholdCancel) {
-			SimYukkuri.world.getPlayer().setHoldItem(null);
+			GameWorld.get().getPlayer().setHoldItem(null);
 		}
 	}
 	
@@ -305,8 +306,8 @@ public class ItemMenu {
 	 */
 	public static void dropItem(MouseEvent e) {
 		Point4y pos = Translate.invertLimit(e.getX(), e.getY());
-		Obj item = SimYukkuri.world.getPlayer().getHoldItem();
-		MapPlaceData curMap = SimYukkuri.world.getCurrentMap();
+		Obj item = GameWorld.get().getPlayer().getHoldItem();
+		MapPlaceData curMap = GameWorld.get().getCurrentMap();
 
 		if(item instanceof Body) {
 			Body b = (Body)item;
@@ -320,8 +321,8 @@ public class ItemMenu {
 		item.setCalcX(pos.getX());
 		item.setCalcY(pos.getY());
 		item.setCalcZ(0);
-		SimYukkuri.world.getPlayer().getItemList().removeElement(item);
-		SimYukkuri.world.getPlayer().setHoldItem(null);
+		GameWorld.get().getPlayer().getItemList().removeElement(item);
+		GameWorld.get().getPlayer().setHoldItem(null);
 	}
 }
 

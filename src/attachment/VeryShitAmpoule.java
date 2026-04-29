@@ -1,4 +1,5 @@
 package src.attachment;
+import src.util.GameText;
 
 
 import java.awt.image.BufferedImage;
@@ -140,7 +141,7 @@ public class VeryShitAmpoule extends Attachment {
 	
 	@Override
 	public String toString() {
-		return ResourceUtil.getInstance().read("item_veryshit");
+		return GameText.read("item_veryshit");
 	}
 
 	// テスト用静的アクセサ

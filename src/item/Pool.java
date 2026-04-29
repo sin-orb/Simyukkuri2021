@@ -13,6 +13,8 @@ import java.util.LinkedList;
 import java.util.List;
 
 import src.SimYukkuri;
+import src.util.GameRandom;
+import src.util.GameWorld;
 import src.base.Body;
 import src.base.Obj;
 import src.draw.ModLoader;
@@ -64,7 +66,7 @@ public class Pool extends FieldShapeBase {
 	@Override
 	public void executeShapePopup(ShapeMenu menu) {
 
-		List<Pool> list = SimYukkuri.world.getCurrentMap().getPool();
+		List<Pool> list = GameWorld.get().getCurrentMap().getPool();
 		int pos;
 
 		switch (menu) {
@@ -188,8 +190,8 @@ public class Pool extends FieldShapeBase {
 		mapW = mapEX - mapSX + 1;
 		mapH = mapEY - mapSY + 1;
 
-		SimYukkuri.world.getCurrentMap().getPool().add(this);
-		MapPlaceData.setFiledFlag(SimYukkuri.world.getCurrentMap().getFieldMap(), mapSX, mapSY, mapW, mapH, true,
+		GameWorld.get().getCurrentMap().getPool().add(this);
+		MapPlaceData.setFiledFlag(GameWorld.get().getCurrentMap().getFieldMap(), mapSX, mapSY, mapW, mapH, true,
 				FIELD_POOL);
 	}
 
@@ -200,7 +202,7 @@ public class Pool extends FieldShapeBase {
 	/** フィールド座標にあるシェイプ取得 */
 	public static Pool getPool(int fx, int fy) {
 
-		for (Pool bc : SimYukkuri.world.getCurrentMap().getPool()) {
+		for (Pool bc : GameWorld.get().getCurrentMap().getPool()) {
 			if (bc.fieldSX <= fx && fx <= bc.fieldEX
 					&& bc.fieldSY <= fy && fy <= bc.fieldEY) {
 				return bc;
@@ -211,12 +213,12 @@ public class Pool extends FieldShapeBase {
 
 	/** 削除 */
 	public static void deletePool(Pool b) {
-		MapPlaceData.setFiledFlag(SimYukkuri.world.getCurrentMap().getFieldMap(), b.mapSX, b.mapSY, b.mapW, b.mapH,
+		MapPlaceData.setFiledFlag(GameWorld.get().getCurrentMap().getFieldMap(), b.mapSX, b.mapSY, b.mapW, b.mapH,
 				false, FIELD_POOL);
-		SimYukkuri.world.getCurrentMap().getPool().remove(b);
+		GameWorld.get().getCurrentMap().getPool().remove(b);
 		// 重なってた部分の復元
-		for (Pool bc : SimYukkuri.world.getCurrentMap().getPool()) {
-			MapPlaceData.setFiledFlag(SimYukkuri.world.getCurrentMap().getFieldMap(), bc.mapSX, bc.mapSY, bc.mapW,
+		for (Pool bc : GameWorld.get().getCurrentMap().getPool()) {
+			MapPlaceData.setFiledFlag(GameWorld.get().getCurrentMap().getFieldMap(), bc.mapSX, bc.mapSY, bc.mapW,
 					bc.mapH, true, FIELD_POOL);
 		}
 	}
@@ -262,7 +264,7 @@ public class Pool extends FieldShapeBase {
 		}
 
 		List<BeltconveyorObj> beltList = new LinkedList<>(
-				SimYukkuri.world.getCurrentMap().getBeltconveyorObj().values());
+				GameWorld.get().getCurrentMap().getBeltconveyorObj().values());
 		if (beltList != null && beltList.size() != 0) {
 			for (BeltconveyorObj belt : beltList) {
 				// ベルトコンベア上なら池にまだ入ってない
@@ -342,13 +344,13 @@ public class Pool extends FieldShapeBase {
 			switch (eDepth) {
 				case SHALLOW:
 					bIsInWater = true;
-					if (SimYukkuri.RND.nextInt(70) == 0 || !bodyTarget.isWet()) {
+					if (GameRandom.nextInt(70) == 0 || !bodyTarget.isWet()) {
 						bodyTarget.inWater(eDepth);
 					}
 					break;
 				case DEEP:
 					bIsInWater = true;
-					if (SimYukkuri.RND.nextInt(40) == 0 || !bodyTarget.isWet()) {
+					if (GameRandom.nextInt(40) == 0 || !bodyTarget.isWet()) {
 						bodyTarget.inWater(eDepth);
 					}
 					break;
@@ -362,7 +364,7 @@ public class Pool extends FieldShapeBase {
 
 				if (!bLikeWater) {
 					// ある程度沈むと大ダメージ
-					if (tz < -nH / 3 && SimYukkuri.RND.nextInt(10 + nLimit * 5) == 0) {
+					if (tz < -nH / 3 && GameRandom.nextInt(10 + nLimit * 5) == 0) {
 						bodyTarget.addDamage(bodyTarget.getDamageLimit() / 4);
 					}
 
@@ -382,7 +384,7 @@ public class Pool extends FieldShapeBase {
 						nRndDeepInWater = nRndDeepInWater / 2;
 					}
 
-					if (SimYukkuri.RND.nextInt(nRndDeepInWater) == 0) {
+					if (GameRandom.nextInt(nRndDeepInWater) == 0) {
 						bodyTarget.setFallingUnderGround(true);
 						o.setMostDepth(nZ - 1);
 						o.setCalcZ(nZ - 1);

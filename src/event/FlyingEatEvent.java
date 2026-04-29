@@ -1,6 +1,9 @@
 package src.event;
+import src.util.GameMessages;
+import src.util.GameText;
 
 import src.SimYukkuri;
+import src.util.GameRandom;
 import src.base.Body;
 import src.base.EventPacket;
 import src.base.Obj;
@@ -126,13 +129,13 @@ public class FlyingEatEvent extends EventPacket {
 			tick = 0;
 			FoodLogic.eatFood(b, Food.FoodType.BODY, Math.min(b.getEatAmount(), to.getBodyAmount()));
 			to.eatBody(Math.min(b.getEatAmount(), to.getBodyAmount()));
-			if (to != null && to.isSick() && SimYukkuri.RND.nextBoolean())
+			if (to != null && to.isSick() && GameRandom.nextBoolean())
 				b.addSickPeriod(100);
 			if (to != null && to.isCrushed()) {
 				// to.setLinkParent(null);
 				return true;
 			} else if (to != null && to.isDead()) {
-				to.setMessage(MessagePool.getMessage(to, MessagePool.Action.Dead));
+				to.setMessage(GameMessages.getMessage(to, MessagePool.Action.Dead));
 				if (b.getBodyRank() != BodyRank.KAIYU || b.isRude()) {
 					// to.setLinkParent(null);
 					return true;
@@ -140,12 +143,12 @@ public class FlyingEatEvent extends EventPacket {
 			} else {
 				if (b.isFull()) {
 					// うー。おなかいっぱいだからもういらないんだどー。ぽいするどー。
-					b.setMessage(MessagePool.getMessage(b, MessagePool.Action.POI));
+					b.setMessage(GameMessages.getMessage(b, MessagePool.Action.POI));
 					// to.setLinkParent(null);
 					return true;
 				}
 				if (to != null && to.isNotNYD()) {
-					to.setMessage(MessagePool.getMessage(to, MessagePool.Action.EatenByBody2));
+					to.setMessage(GameMessages.getMessage(to, MessagePool.Action.EatenByBody2));
 					to.setHappiness(Happiness.VERY_SAD);
 					to.setForceFace(ImageCode.PAIN.ordinal());
 				}
@@ -164,6 +167,6 @@ public class FlyingEatEvent extends EventPacket {
 
 	@Override
 	public String toString() {
-		return ResourceUtil.getInstance().read("event_eatinair");
+		return GameText.read("event_eatinair");
 	}
 }

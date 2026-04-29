@@ -3,6 +3,7 @@ package src.logic;
 import java.util.Map;
 
 import src.SimYukkuri;
+import src.util.GameWorld;
 import src.base.Body;
 import src.draw.Translate;
 import src.enums.CriticalDamegeType;
@@ -28,7 +29,7 @@ public class StoneLogic {
 		if( b.getCriticalDamegeType()  == CriticalDamegeType.CUT){
 			return;
 		}
-		for (Map.Entry<Integer, Stone> entry : SimYukkuri.world.getCurrentMap().getStone().entrySet()) {
+		for (Map.Entry<Integer, Stone> entry : GameWorld.get().getCurrentMap().getStone().entrySet()) {
 			Stone t = entry.getValue();
 
 			int distance = Translate.distance(b.getX(), b.getY(), t.getX(), t.getY());

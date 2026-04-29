@@ -1,4 +1,6 @@
 package src.system;
+import src.util.GameEnvironment;
+import src.util.GameText;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -16,6 +18,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import src.SimYukkuri;
+import src.util.GameWorld;
 import src.base.Body;
 import src.draw.Terrarium;
 import src.draw.Translate;
@@ -143,7 +146,7 @@ public class LoggerYukkuri {
 
 		long logData[] = new long[NUM_OF_LOGDATA_TYPE];
 		try {
-			for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().getBody().entrySet()) {
+			for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
 				Body b = entry.getValue();
 				if (!b.isDead()) {
 					if (b.isPredatorType()) {
@@ -187,9 +190,9 @@ public class LoggerYukkuri {
 			// list変更等の際は握りつぶしてしまう
 		}
 
-		logData[NUM_OF_SHIT] = SimYukkuri.world.getCurrentMap().getShit().size();
+		logData[NUM_OF_SHIT] = GameWorld.get().getCurrentMap().getShit().size();
 
-		logData[NUM_OF_CASH] = SimYukkuri.world.getPlayer().getCash();
+		logData[NUM_OF_CASH] = GameWorld.get().getPlayer().getCash();
 
 		synchronized (lock) {
 			for (int i = 0; i < NUM_OF_LOGDATA_TYPE; i++) {
@@ -274,8 +277,8 @@ public class LoggerYukkuri {
 		long max = Runtime.getRuntime().maxMemory() / 1024;
 		long used = total - free;
 		double ratio = (used * 100 / (double) total);
-		String info = ResourceUtil.getInstance().read("system_memoryusing") + f1.format(used) +
-				" (" + f2.format(ratio) + "%)、" + ResourceUtil.getInstance().read("system_maxmemory") + f1.format(max);
+		String info = GameText.read("system_memoryusing") + f1.format(used) +
+				" (" + f2.format(ratio) + "%)、" + GameText.read("system_maxmemory") + f1.format(max);
 		g2.drawString(info, 20, 40);
 
 		g2.setColor(textColor1);
@@ -335,32 +338,32 @@ public class LoggerYukkuri {
 
 		switch (logPage) {
 			case 0:
-				g2.drawString(ResourceUtil.getInstance().read("system_logcurrent"), 100, 100);
+				g2.drawString(GameText.read("system_logcurrent"), 100, 100);
 				g2.setFont(textFonttext);
 				for (int i = 0; i < NUM_OF_HYBRID + 1; i++) {
 					g2.setColor(Color.WHITE);
 					g2.drawString(Long.toString(numOfObjNowLog[i]), LEGEND_OFFSETX + 130, 30 * i + 140);
 					switch (i) {
 						case NUM_OF_NORMAL:
-							g2.drawString(ResourceUtil.getInstance().read("draw_normalsp"), LEGEND_OFFSETX,
+							g2.drawString(GameText.read("draw_normalsp"), LEGEND_OFFSETX,
 									30 * i + 140);
 							g2.setColor(Color.LIGHT_GRAY);
 							break;
 						case NUM_OF_PREDATOR:
-							g2.drawString(ResourceUtil.getInstance().read("draw_predsp"), LEGEND_OFFSETX, 30 * i + 140);
+							g2.drawString(GameText.read("draw_predsp"), LEGEND_OFFSETX, 30 * i + 140);
 							g2.setColor(Color.RED);
 							break;
 						case NUM_OF_RARE:
-							g2.drawString(ResourceUtil.getInstance().read("draw_raresp"), LEGEND_OFFSETX, 30 * i + 140);
+							g2.drawString(GameText.read("draw_raresp"), LEGEND_OFFSETX, 30 * i + 140);
 							g2.setColor(Color.YELLOW);
 							break;
 						case NUM_OF_TARINAI:
-							g2.drawString(ResourceUtil.getInstance().read("item_tarinai"), LEGEND_OFFSETX,
+							g2.drawString(GameText.read("item_tarinai"), LEGEND_OFFSETX,
 									30 * i + 140);
 							g2.setColor(Color.ORANGE);
 							break;
 						case NUM_OF_HYBRID:
-							g2.drawString(ResourceUtil.getInstance().read("enums_hybrid"), LEGEND_OFFSETX,
+							g2.drawString(GameText.read("enums_hybrid"), LEGEND_OFFSETX,
 									30 * i + 140);
 							g2.setColor(Color.MAGENTA);
 							break;
@@ -389,24 +392,24 @@ public class LoggerYukkuri {
 				break;
 
 			case 1:
-				g2.drawString(ResourceUtil.getInstance().read("system_logkotaisuu"), 100, 100);
+				g2.drawString(GameText.read("system_logkotaisuu"), 100, 100);
 				g2.setFont(textFonttext);
 				for (int i = 0; i < 3; i++) {
 					g2.setColor(Color.WHITE);
 					g2.drawString(Long.toString(numOfObjNowLog[i + NUM_OF_BABY]), LEGEND_OFFSETX + 130, 30 * i + 140);
 					switch (i) {
 						case 0:
-							g2.drawString(ResourceUtil.getInstance().read("enums_babyyu"), LEGEND_OFFSETX,
+							g2.drawString(GameText.read("enums_babyyu"), LEGEND_OFFSETX,
 									30 * i + 140);
 							g2.setColor(Color.ORANGE);
 							break;
 						case 1:
-							g2.drawString(ResourceUtil.getInstance().read("enums_childyu"), LEGEND_OFFSETX,
+							g2.drawString(GameText.read("enums_childyu"), LEGEND_OFFSETX,
 									30 * i + 140);
 							g2.setColor(Color.YELLOW);
 							break;
 						case 2:
-							g2.drawString(ResourceUtil.getInstance().read("enums_adultyu"), LEGEND_OFFSETX,
+							g2.drawString(GameText.read("enums_adultyu"), LEGEND_OFFSETX,
 									30 * i + 140);
 							g2.setColor(Color.GREEN);
 							break;
@@ -437,7 +440,7 @@ public class LoggerYukkuri {
 				break;
 
 			case 2:
-				g2.drawString(ResourceUtil.getInstance().read("system_yukabi"), 100, 100);
+				g2.drawString(GameText.read("system_yukabi"), 100, 100);
 				g2.setFont(textFonttext);
 				for (int i = 0; i < 2; i++) {
 					g2.setColor(Color.WHITE);
@@ -445,7 +448,7 @@ public class LoggerYukkuri {
 						case 0:
 							g2.drawString(Long.toString(numOfObjNowLog[NUM_OF_SICK]), LEGEND_OFFSETX + 130,
 									30 * i + 140);
-							g2.drawString(ResourceUtil.getInstance().read("system_kansen"), LEGEND_OFFSETX,
+							g2.drawString(GameText.read("system_kansen"), LEGEND_OFFSETX,
 									30 * i + 140);
 							g2.setColor(Color.GREEN);
 							break;
@@ -453,7 +456,7 @@ public class LoggerYukkuri {
 							g2.drawString(Long.toString(numOfSumYukkuri - numOfObjNowLog[NUM_OF_SICK]),
 									LEGEND_OFFSETX + 130,
 									30 * i + 140);
-							g2.drawString(ResourceUtil.getInstance().read("system_mikansen"), LEGEND_OFFSETX,
+							g2.drawString(GameText.read("system_mikansen"), LEGEND_OFFSETX,
 									30 * i + 140);
 							g2.setColor(Color.LIGHT_GRAY);
 							break;
@@ -498,9 +501,9 @@ public class LoggerYukkuri {
 				break;
 
 			case 3:
-				g2.drawString(ResourceUtil.getInstance().read("system_numberofunun"), 100, 100);
+				g2.drawString(GameText.read("system_numberofunun"), 100, 100);
 				g2.setFont(textFonttext);
-				g2.drawString(ResourceUtil.getInstance().read("command_clean_shit"), LEGEND_OFFSETX, 140);
+				g2.drawString(GameText.read("command_clean_shit"), LEGEND_OFFSETX, 140);
 				g2.drawString(Long.toString(numOfObjNowLog[NUM_OF_SHIT]), LEGEND_OFFSETX + 130, 140);
 				g2.setColor(Color.GRAY);
 				for (int k = 0; k < NUM_OF_GRAPH_DATA; k++) {
@@ -529,7 +532,7 @@ public class LoggerYukkuri {
 				break;
 		}
 
-		int operationTime = Terrarium.getOperationTime() / 10;
+		int operationTime = GameEnvironment.getOperationTime() / 10;
 		int opetmp = operationTime % NUM_OF_GRAPH_DATA;
 		for (int i = 0; i < NUM_OF_GRAPH_DATA / 30 + 1; i++) {
 			int graphx = GRAPH_WIDTH - (((GRAPH_WIDTH) * 30 * i) / NUM_OF_GRAPH_DATA)
@@ -545,8 +548,8 @@ public class LoggerYukkuri {
 						graphx - offsetX, GRAPH_OFFSETY + GRAPH_HEIGHT + 18);
 				int day = (operationTime + 60 - 30 * i) / 240;
 				int hour = (time / 30 * 3 + 6) % 24;
-				g2.drawString(("(" + (Integer.toString(day)) + ResourceUtil.getInstance().read("system_nichime") +
-						(Integer.toString(hour)) + ResourceUtil.getInstance().read("system_time")),
+				g2.drawString(("(" + (Integer.toString(day)) + GameText.read("system_nichime") +
+						(Integer.toString(hour)) + GameText.read("system_time")),
 						graphx - offsetX, GRAPH_OFFSETY + GRAPH_HEIGHT + 36);
 			}
 		}

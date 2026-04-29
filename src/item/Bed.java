@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.IOException;
 
 import src.SimYukkuri;
+import src.util.GameWorld;
 import src.base.ObjEX;
 import src.draw.ModLoader;
 import src.draw.Rectangle4y;
@@ -61,7 +62,7 @@ public class Bed extends ObjEX {
 
 	@Override
 	public void removeListData() {
-		SimYukkuri.world.getCurrentMap().getBed().remove(objId);
+		GameWorld.get().getCurrentMap().getBed().remove(objId);
 	}
 
 	@Override
@@ -89,13 +90,13 @@ public class Bed extends ObjEX {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		SimYukkuri.world.getCurrentMap().getBed().put(objId, this);
+		GameWorld.get().getCurrentMap().getBed().put(objId, this);
 		objType = Type.PLATFORM;
 		objEXType = ObjEXType.BED;
 		itemRank = ItemRank.values()[initOption];
 		// 森なら野生に変更
-		if (SimYukkuri.world.getCurrentMap().getMapIndex() == 5
-				|| SimYukkuri.world.getCurrentMap().getMapIndex() == 6) {
+		if (GameWorld.get().getCurrentMap().getMapIndex() == 5
+				|| GameWorld.get().getCurrentMap().getMapIndex() == 6) {
 			if (itemRank == ItemRank.HOUSE) {
 				itemRank = ItemRank.YASEI;
 			}

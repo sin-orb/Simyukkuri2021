@@ -1,4 +1,5 @@
 package src.yukkuri;
+import src.util.GameMessages;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
@@ -8,6 +9,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import src.SimYukkuri;
+import src.util.GameRandom;
+import src.util.GameWorld;
 import src.base.Body;
 import src.command.GadgetAction;
 import src.draw.Dimension4y;
@@ -191,7 +194,7 @@ public class Alice extends Body {
 			return;
 		if (getPlaying() != null)
 			return;
-		int p = SimYukkuri.RND.nextInt(50);
+		int p = GameRandom.nextInt(50);
 		// 7/50でキリッ
 		if (p <= 6) {
 			getInVain(true);
@@ -199,7 +202,7 @@ public class Alice extends Body {
 		// 7/50でのびのび
 		else if (p <= 14) {
 			// if yukkuri is not rude, she goes into her shell by discipline.
-			setMessage(MessagePool.getMessage(this, MessagePool.Action.Nobinobi), 40);
+			setMessage(GameMessages.getMessage(this, MessagePool.Action.Nobinobi), 40);
 			setNobinobi(true);
 			addStress(-30);
 			stay(40);
@@ -213,7 +216,7 @@ public class Alice extends Body {
 		// 7/50でふりふり
 		else if (p <= 28 && willingFurifuri()) {
 			// if yukkuri is rude, she will not do furifuri by discipline.
-			setMessage(MessagePool.getMessage(this, MessagePool.Action.FuriFuri), 30);
+			setMessage(GameMessages.getMessage(this, MessagePool.Action.FuriFuri), 30);
 			setFurifuri(true);
 			addStress(-50);
 			stay(30);
@@ -221,14 +224,14 @@ public class Alice extends Body {
 		// 7/50でふりふりで腹減った
 		else if ((p <= 35 && isHungry()) || isSoHungry()) {
 			// 空腹時
-			setMessage(MessagePool.getMessage(this, MessagePool.Action.Hungry), 30);
+			setMessage(GameMessages.getMessage(this, MessagePool.Action.Hungry), 30);
 			stay(30);
 		}
 		// 4/50でおもちゃで遊ぶ
 		else if (p <= 39) {
 			if (ToyLogic.checkToy(this)) {
 				setPlaying(PlayStyle.BALL);
-				playingLimit = 150 + SimYukkuri.RND.nextInt(100) - 49;
+				playingLimit = 150 + GameRandom.nextInt(100) - 49;
 				return;
 			} else
 				killTime();
@@ -237,7 +240,7 @@ public class Alice extends Body {
 		else if (p <= 42) {
 			if (ToyLogic.checkTrampoline(this)) {
 				setPlaying(PlayStyle.TRAMPOLINE);
-				playingLimit = 150 + SimYukkuri.RND.nextInt(100) - 49;
+				playingLimit = 150 + GameRandom.nextInt(100) - 49;
 				return;
 			} else
 				killTime();
@@ -246,16 +249,16 @@ public class Alice extends Body {
 		else if (p <= 43) {
 			if (ToyLogic.checkSui(this)) {
 				setPlaying(PlayStyle.SUI);
-				playingLimit = 150 + SimYukkuri.RND.nextInt(100) - 49;
+				playingLimit = 150 + GameRandom.nextInt(100) - 49;
 				return;
 			} else
 				killTime();
 		} else {
 			// おくるみありで汚れていない場合
-			if (isHasPants() && !isDirty() && SimYukkuri.RND.nextInt(5) == 0) {
-				setMessage(MessagePool.getMessage(this, MessagePool.Action.RelaxOkurumi));
+			if (isHasPants() && !isDirty() && GameRandom.nextInt(5) == 0) {
+				setMessage(GameMessages.getMessage(this, MessagePool.Action.RelaxOkurumi));
 			} else {
-				setMessage(MessagePool.getMessage(this, MessagePool.Action.Relax));
+				setMessage(GameMessages.getMessage(this, MessagePool.Action.Relax));
 			}
 			addStress(-50);
 			stay(30);
@@ -266,7 +269,7 @@ public class Alice extends Body {
 	 * こーでぃねーとをする.
 	 */
 	public void coordinate() {
-		if (SimYukkuri.world.getCurrentMap().getBed().size() == 0) {
+		if (GameWorld.get().getCurrentMap().getBed().size() == 0) {
 			int i = 0;
 			if (getBodyRank() == BodyRank.NORAYU || getBodyRank() == BodyRank.NORAYU_CLEAN
 					|| getBodyRank() == BodyRank.SUTEYU) {
@@ -274,7 +277,7 @@ public class Alice extends Body {
 			}
 			getInVain(true);
 			Bed bed = (Bed) GadgetAction.putObjEX(Bed.class, getX(), getY(), i);
-			SimYukkuri.world.getCurrentMap().getBed().put(bed.objId, bed);
+			GameWorld.get().getCurrentMap().getBed().put(bed.objId, bed);
 			return;
 		}
 	}
@@ -298,11 +301,11 @@ public class Alice extends Body {
 	@Override
 	public void tuneParameters() {
 		/*
-		 * if (SimYukkuri.RND.nextBoolean()) {
+		 * if (GameRandom.nextBoolean()) {
 		 * motherhood = true;
 		 * }
 		 */
-		if (SimYukkuri.RND.nextInt(4) == 0) {
+		if (GameRandom.nextInt(4) == 0) {
 			setRapist(true);
 		}
 		double factor = Math.random() + 1;
@@ -327,9 +330,9 @@ public class Alice extends Body {
 		PREGPERIODorg *= factor;
 		SLEEPPERIODorg *= factor;
 		ACTIVEPERIODorg *= factor;
-		sameDest = SimYukkuri.RND.nextInt(15) + 15;
+		sameDest = GameRandom.nextInt(15) + 15;
 		DECLINEPERIODorg *= (Math.random() + 0.5);
-		ROBUSTNESS = SimYukkuri.RND.nextInt(10) + 1;
+		ROBUSTNESS = GameRandom.nextInt(10) + 1;
 		// EYESIGHT /= 2;
 		factor = Math.random() + 0.5;
 		STRENGTHorg[AgeState.ADULT.ordinal()] *= factor;

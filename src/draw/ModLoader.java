@@ -1,4 +1,6 @@
 package src.draw;
+import src.util.GameImages;
+import src.util.GameText;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -165,7 +167,7 @@ public class ModLoader {
 
 	private static Vector<String> createThemeList(String root) {
 		Vector<String> list = new Vector<String>();
-		list.add(ResourceUtil.getInstance().read("draw_dropdown_default"));
+		list.add(GameText.read("draw_dropdown_default"));
 
 		// フォルダ一覧取得
 		File dir = new File(root);
@@ -370,7 +372,7 @@ public class ModLoader {
 	 */
 	private static BufferedImage loadModImage(String root, String fileName) throws IOException {
 		File file = new File(root + fileName);
-		return ImageIO.read(file);
+		return GameImages.read(file);
 	}
 
 	/**
@@ -382,7 +384,7 @@ public class ModLoader {
 	 * @throws IOException IO例外
 	 */
 	private static BufferedImage loadJarImage(ClassLoader loader, String fileName) throws IOException {
-		return ImageIO.read(loader.getResourceAsStream(DEFAULT_IMG_ROOT_DIR + fileName));
+		return GameImages.read(loader.getResourceAsStream(DEFAULT_IMG_ROOT_DIR + fileName));
 	}
 
 	/**
@@ -868,7 +870,7 @@ public class ModLoader {
 						}
 					} else {
 						try {
-							ret.getImg()[i] = ImageIO.read(file);
+							ret.getImg()[i] = GameImages.read(file);
 							ret.getIsDummy()[i] = false;
 							ret.setFlip(false);
 						} catch (IOException ioe) {
@@ -915,7 +917,7 @@ public class ModLoader {
 						}
 					} else {
 						try {
-							ret.getImg()[i] = ImageIO.read(loader.getResourceAsStream(path));
+							ret.getImg()[i] = GameImages.read(loader.getResourceAsStream(path));
 							ret.getIsDummy()[i] = false;
 							ret.setFlip(false);
 						} catch (IOException ioe) {
@@ -937,7 +939,7 @@ public class ModLoader {
 							}
 
 							try {
-								ret.getImgOtherVer()[i][j] = ImageIO.read(loader.getResourceAsStream(strTempPath));
+								ret.getImgOtherVer()[i][j] = GameImages.read(loader.getResourceAsStream(strTempPath));
 							} catch (IOException e) {
 								e.printStackTrace();
 								break;

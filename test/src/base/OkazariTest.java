@@ -3,6 +3,7 @@ package src.base;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
 
 import java.awt.image.BufferedImage;
 import org.junit.jupiter.api.AfterEach;
@@ -17,6 +18,8 @@ import src.draw.World;
 import src.enums.AgeState;
 import src.enums.Type;
 import src.system.Sprite;
+import src.util.GameRandom;
+import src.util.RandomSource;
 import src.yukkuri.Reimu;
 
 public class OkazariTest {
@@ -33,6 +36,7 @@ public class OkazariTest {
 
     @AfterEach
     public void tearDown() {
+        GameRandom.clearOverride();
         SimYukkuri.RND = originalRnd;
     }
 
@@ -172,6 +176,27 @@ public class OkazariTest {
         Okazari.OkazariType type = Okazari.getRandomOkazari(AgeState.ADULT);
         // ADULT: start=ADULT1.ordinal()=5, num=3, RND=1 → index=6 → ADULT2
         assertEquals(Okazari.OkazariType.ADULT2, type);
+    }
+
+    @Test
+    public void testGetRandomOkazariUsesInjectedRandomSource() {
+        java.util.Random untouched = SimYukkuri.RND;
+        GameRandom.setOverride(new RandomSource() {
+            @Override
+            public int nextInt(int bound) {
+                return 2;
+            }
+
+            @Override
+            public boolean nextBoolean() {
+                return false;
+            }
+        });
+
+        Okazari.OkazariType type = Okazari.getRandomOkazari(AgeState.ADULT);
+
+        assertEquals(Okazari.OkazariType.ADULT3, type);
+        assertSame(untouched, SimYukkuri.RND);
     }
 
     // --- getOkazariImage ---

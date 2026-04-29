@@ -1,4 +1,5 @@
 package src.item;
+import src.util.GameText;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -15,6 +16,8 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 import src.SimYukkuri;
+import src.util.GameRandom;
+import src.util.GameWorld;
 import src.base.Body;
 import src.base.Obj;
 import src.base.ObjEX;
@@ -39,16 +42,16 @@ public class AutoFeeder extends ObjEX {
 
 	/** 出てくるエサタイプ */
 	public static enum FeedType {
-		NORMAL(ResourceUtil.getInstance().read("command_food_normal")),
-		BITTER(ResourceUtil.getInstance().read("command_food_bitter")),
-		LEMON_POP(ResourceUtil.getInstance().read("command_food_ramune")),
-		HOT(ResourceUtil.getInstance().read("command_food_hot")),
-		VIYUGRA(ResourceUtil.getInstance().read("command_food_viagra")),
-		SWEETS2(ResourceUtil.getInstance().read("command_food_sweet1")),
-		SWEETS1(ResourceUtil.getInstance().read("command_food_sweet2")),
-		WASTE(ResourceUtil.getInstance().read("command_food_garbage")),
-		BODY(ResourceUtil.getInstance().read("item_noprocess")),
-		PROCESSED_BODY(ResourceUtil.getInstance().read("item_processed")),
+		NORMAL(GameText.read("command_food_normal")),
+		BITTER(GameText.read("command_food_bitter")),
+		LEMON_POP(GameText.read("command_food_ramune")),
+		HOT(GameText.read("command_food_hot")),
+		VIYUGRA(GameText.read("command_food_viagra")),
+		SWEETS2(GameText.read("command_food_sweet1")),
+		SWEETS1(GameText.read("command_food_sweet2")),
+		WASTE(GameText.read("command_food_garbage")),
+		BODY(GameText.read("item_noprocess")),
+		PROCESSED_BODY(GameText.read("item_processed")),
 		;
 
 		private String name;
@@ -64,8 +67,8 @@ public class AutoFeeder extends ObjEX {
 
 	/** 給餌モード */
 	public static enum FeedMode {
-		NORMAL_MODE(ResourceUtil.getInstance().read("command_food_auto")),
-		REGULAR_MODE(ResourceUtil.getInstance().read("item_fixedterm")),
+		NORMAL_MODE(GameText.read("command_food_auto")),
+		REGULAR_MODE(GameText.read("item_fixedterm")),
 		;
 
 		private String name;
@@ -149,7 +152,7 @@ public class AutoFeeder extends ObjEX {
 
 	@Override
 	public void removeListData() {
-		SimYukkuri.world.getCurrentMap().getAutofeeder().remove(objId);
+		GameWorld.get().getCurrentMap().getAutofeeder().remove(objId);
 	}
 
 	@Override
@@ -161,7 +164,7 @@ public class AutoFeeder extends ObjEX {
 			return;
 
 		// お持ち帰りされていたりしたら初期化
-		if (food != null && !SimYukkuri.world.getCurrentMap().getFood().containsValue(food) &&
+		if (food != null && !GameWorld.get().getCurrentMap().getFood().containsValue(food) &&
 				isTakenOut()) {
 			food = null;
 		}
@@ -183,7 +186,7 @@ public class AutoFeeder extends ObjEX {
 					f.remove();
 				}
 			}
-		} else if (mode == 0 || (getAge() % feedingInterval) == 0 && SimYukkuri.RND.nextInt(feedingP) == 0) {
+		} else if (mode == 0 || (getAge() % feedingInterval) == 0 && GameRandom.nextInt(feedingP) == 0) {
 			if (type == FeedType.PROCESSED_BODY.ordinal()) {
 				// オートフィーダで出るゆっくりのタイプを決める。
 				int type = makeRandomType();
@@ -231,7 +234,7 @@ public class AutoFeeder extends ObjEX {
 						break;
 				}
 				food = GadgetAction.putObjEX(Food.class, getX(), getY(), f.ordinal());
-				SimYukkuri.world.getCurrentMap().getFood().put(food.objId, (Food) food);
+				GameWorld.get().getCurrentMap().getFood().put(food.objId, (Food) food);
 				Cash.buyItem(food);
 				Cash.addCash(-getCost());
 			}
@@ -239,7 +242,7 @@ public class AutoFeeder extends ObjEX {
 	}
 
 	private boolean isTakenOut() {
-		for (Map.Entry<Integer, Body> entry : SimYukkuri.world.getCurrentMap().getBody().entrySet()) {
+		for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
 			Body b = entry.getValue();
 			Integer i = b.getTakeoutItem().get(TakeoutItemType.FOOD);
 			if (i == null) {
@@ -263,7 +266,7 @@ public class AutoFeeder extends ObjEX {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		SimYukkuri.world.getCurrentMap().getAutofeeder().put(objId, this);
+		GameWorld.get().getCurrentMap().getAutofeeder().put(objId, this);
 
 		objType = Type.PLATFORM;
 		objEXType = ObjEXType.AUTOFEEDER;
@@ -275,7 +278,7 @@ public class AutoFeeder extends ObjEX {
 		} else
 			ret = false;
 		if (!ret) {
-			SimYukkuri.world.getCurrentMap().getAutofeeder().remove(objId);
+			GameWorld.get().getCurrentMap().getAutofeeder().remove(objId);
 		}
 		value = 10000;
 		cost = 30;
@@ -310,7 +313,7 @@ public class AutoFeeder extends ObjEX {
 		}
 		but[0].setSelected(true);
 		int dlgRet = JOptionPane.showConfirmDialog(SimYukkuri.mypane, mainPanel,
-				ResourceUtil.getInstance().read("item_autosetting"), JOptionPane.OK_CANCEL_OPTION,
+				GameText.read("item_autosetting"), JOptionPane.OK_CANCEL_OPTION,
 				JOptionPane.PLAIN_MESSAGE);
 
 		if (dlgRet == JOptionPane.OK_OPTION) {
@@ -350,7 +353,7 @@ public class AutoFeeder extends ObjEX {
 		}
 		but[0].setSelected(true);
 		int dlgRet = JOptionPane.showConfirmDialog(SimYukkuri.mypane, mainPanel,
-				ResourceUtil.getInstance().read("item_movetypesettings"),
+				GameText.read("item_movetypesettings"),
 				JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
 		if (dlgRet == JOptionPane.OK_OPTION) {

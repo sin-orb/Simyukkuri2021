@@ -1,4 +1,5 @@
 package src.command;
+import src.util.GameText;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -28,8 +29,8 @@ import src.util.YukkuriUtil;
 
 public class DebugFrame extends JFrame implements ActionListener, WindowListener {
 	private static final long serialVersionUID = -8472477224379296555L;
-	private static final String[] COLUMN_NAMES = { ResourceUtil.getInstance().read("command_debug_property_name"),
-			ResourceUtil.getInstance().read("command_debug_value") };
+	private static final String[] COLUMN_NAMES = { GameText.read("command_debug_property_name"),
+			GameText.read("command_debug_value") };
 	private JPanel contentPane;
 	private JTextField textField;
 	private JScrollPane scrollPane;
@@ -45,14 +46,14 @@ public class DebugFrame extends JFrame implements ActionListener, WindowListener
 	 * Create the frame.
 	 */
 	public DebugFrame() {
-		setTitle(ResourceUtil.getInstance().read("command_debug_title"));
+		setTitle(GameText.read("command_debug_title"));
 		setBounds(100, 100, 788, 464);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
-		JLabel lblNewLabel = new JLabel(ResourceUtil.getInstance().read("command_debug_class"));
+		JLabel lblNewLabel = new JLabel(GameText.read("command_debug_class"));
 		lblNewLabel.setBounds(12, 10, 128, 20);
 		contentPane.add(lblNewLabel);
 

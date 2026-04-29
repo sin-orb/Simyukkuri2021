@@ -1,4 +1,5 @@
 package src.yukkuri;
+import src.util.GameEnvironment;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
@@ -8,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import src.SimYukkuri;
+import src.util.GameRandom;
 import src.base.Body;
 import src.draw.Dimension4y;
 import src.draw.ModLoader;
@@ -99,7 +101,7 @@ public class MarisaReimu extends Reimu {
 					* directionOffset[type][0]][getBodyAgeState().ordinal()];
 			layer.getDir()[index] = direction * directionOffset[type][1];
 		} else {
-			if (Terrarium.getInterval() == 0 && !isDead()) {
+			if (GameEnvironment.getInterval() == 0 && !isDead()) {
 				for (int i = 0; i < ImageCode.values().length; i++) {
 					anImageVerStateCtrlNagasi[i][1] = 0;
 				}
@@ -120,7 +122,7 @@ public class MarisaReimu extends Reimu {
 				}
 
 				if (nOtherVerCount != 0) {
-					int nRndIndex = SimYukkuri.RND.nextInt(nOtherVerCount + 1);
+					int nRndIndex = GameRandom.nextInt(nOtherVerCount + 1);
 					anImageVerStateCtrlNagasi[type][0] = nRndIndex;
 					layer.getImage()[index] = imagesNagasi[type][direction
 							* directionOffsetNagasi[type][0]][getBodyAgeState().ordinal()][nRndIndex];
@@ -229,9 +231,9 @@ public class MarisaReimu extends Reimu {
 		PREGPERIODorg *= factor;
 		SLEEPPERIODorg *= factor;
 		ACTIVEPERIODorg *= factor;
-		sameDest = SimYukkuri.RND.nextInt(10) + 10;
+		sameDest = GameRandom.nextInt(10) + 10;
 		DECLINEPERIODorg *= (Math.random() + 0.5);
-		ROBUSTNESS = SimYukkuri.RND.nextInt(10) + 1;
+		ROBUSTNESS = GameRandom.nextInt(10) + 1;
 		// EYESIGHT /= 4;
 		factor = Math.random() + 0.5;
 		STRENGTHorg[AgeState.ADULT.ordinal()] *= factor;

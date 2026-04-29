@@ -1,4 +1,6 @@
 package src.item;
+import src.util.GameEnvironment;
+import src.util.GameText;
 
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -14,6 +16,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import src.SimYukkuri;
+import src.util.GameRandom;
+import src.util.GameWorld;
 import src.base.Obj;
 import src.base.ObjEX;
 import src.command.GadgetAction;
@@ -34,14 +38,14 @@ public class GarbageStation extends ObjEX {
 
 	/** 出す餌の種類テーブル */
 	public static enum GomiType {
-		WASTE(ResourceUtil.getInstance().read("command_food_garbage"), FoodType.WASTE_NORA),
-		BITTER(ResourceUtil.getInstance().read("command_food_bitter"), FoodType.BITTER_NORA),
-		HOT(ResourceUtil.getInstance().read("command_food_hot"), FoodType.HOT_NORA),
-		LEMON_POP(ResourceUtil.getInstance().read("command_food_ramune"), FoodType.LEMONPOP_NORA),
-		VIYUGRA(ResourceUtil.getInstance().read("command_food_viagra"), FoodType.VIYUGRA_NORA),
-		NORMAL(ResourceUtil.getInstance().read("command_food_normal"), FoodType.FOOD_NORA),
-		SWEETS1(ResourceUtil.getInstance().read("command_food_sweet1"), FoodType.SWEETS_NORA1),
-		SWEETS2(ResourceUtil.getInstance().read("command_food_sweet2"), FoodType.SWEETS_NORA2),
+		WASTE(GameText.read("command_food_garbage"), FoodType.WASTE_NORA),
+		BITTER(GameText.read("command_food_bitter"), FoodType.BITTER_NORA),
+		HOT(GameText.read("command_food_hot"), FoodType.HOT_NORA),
+		LEMON_POP(GameText.read("command_food_ramune"), FoodType.LEMONPOP_NORA),
+		VIYUGRA(GameText.read("command_food_viagra"), FoodType.VIYUGRA_NORA),
+		NORMAL(GameText.read("command_food_normal"), FoodType.FOOD_NORA),
+		SWEETS1(GameText.read("command_food_sweet1"), FoodType.SWEETS_NORA1),
+		SWEETS2(GameText.read("command_food_sweet2"), FoodType.SWEETS_NORA2),
 		;
 
 		private final String name;
@@ -145,9 +149,9 @@ public class GarbageStation extends ObjEX {
 	public void upDate() {
 		if (!enabled)
 			return;
-		if ((Terrarium.getOperationTime() - throwingTime) % 2400 == 0) {
+		if ((GameEnvironment.getOperationTime() - throwingTime) % 2400 == 0) {
 			for (int i = 0; i < 2; i++) {
-				if (SimYukkuri.RND.nextInt(gettingP) == 0) {
+				if (GameRandom.nextInt(gettingP) == 0) {
 					feedAction(i);
 				}
 			}
@@ -168,7 +172,7 @@ public class GarbageStation extends ObjEX {
 		} else {
 			int type = 0;
 			do {
-				type = SimYukkuri.RND.nextInt(rndTable.length);
+				type = GameRandom.nextInt(rndTable.length);
 				if (!enable[rndTable[type].ordinal()]) {
 					type = -1;
 				}
@@ -176,13 +180,13 @@ public class GarbageStation extends ObjEX {
 			FoodType f = rndTable[type].getFoodType();
 			int px = (idx == 0 ? -20 : 20);
 			food[idx] = GadgetAction.putObjEX(Food.class, getX() + px, getY(), f.ordinal());
-			SimYukkuri.world.getCurrentMap().getFood().put(food[idx].objId, (Food) food[idx]);
+			GameWorld.get().getCurrentMap().getFood().put(food[idx].objId, (Food) food[idx]);
 		}
 	}
 
 	@Override
 	public void removeListData() {
-		SimYukkuri.world.getCurrentMap().getGarbageStation().remove(objId);
+		GameWorld.get().getCurrentMap().getGarbageStation().remove(objId);
 	}
 
 	/** コンストラクタ */
@@ -191,7 +195,7 @@ public class GarbageStation extends ObjEX {
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), 8);
 
-		SimYukkuri.world.getCurrentMap().getGarbageStation().put(objId, this);
+		GameWorld.get().getCurrentMap().getGarbageStation().put(objId, this);
 		objType = Type.OBJECT;
 		objEXType = ObjEXType.GARBAGESTATION;
 		enable = new boolean[rndTable.length];
@@ -202,7 +206,7 @@ public class GarbageStation extends ObjEX {
 		boolean ret = setupGarbageSt(this);
 		readIniFile();
 		if (!ret) {
-			SimYukkuri.world.getCurrentMap().getGarbageStation().remove(objId);
+			GameWorld.get().getCurrentMap().getGarbageStation().remove(objId);
 		}
 	}
 

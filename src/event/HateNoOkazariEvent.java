@@ -1,9 +1,13 @@
 package src.event;
+import src.util.GameMessages;
+import src.util.GameText;
 
 import java.util.Map;
 
 import src.Const;
 import src.SimYukkuri;
+import src.util.GameRandom;
+import src.util.GameWorld;
 import src.base.Body;
 import src.base.EventPacket;
 import src.base.Obj;
@@ -85,7 +89,7 @@ public class HateNoOkazariEvent extends EventPacket {
 			else {
 				// ゲス、普通は相手が瀕死じゃなければ参加
 				if (!to.isDamaged()) {
-					if (b.isRude() || SimYukkuri.RND.nextBoolean())
+					if (b.isRude() || GameRandom.nextBoolean())
 						ret = true;
 				}
 			}
@@ -99,7 +103,7 @@ public class HateNoOkazariEvent extends EventPacket {
 		if (ret) {
 			Body from = YukkuriUtil.getBodyInstance(getFrom());
 			if (from != b) {
-				b.setWorldEventResMessage(MessagePool.getMessage(b, MessagePool.Action.HateYukkuri), Const.HOLDMESSAGE,
+				b.setWorldEventResMessage(GameMessages.getMessage(b, MessagePool.Action.HateYukkuri), Const.HOLDMESSAGE,
 						true, false);
 			}
 		}
@@ -143,7 +147,7 @@ public class HateNoOkazariEvent extends EventPacket {
 			// うんうん奴隷ではない場合
 			if (to.getPublicRank() != PublicRank.UnunSlave) {
 				boolean bIsInToiletForSlave = false;
-				for (Map.Entry<Integer, Toilet> entry : SimYukkuri.world.getCurrentMap().getToilet().entrySet()) {
+				for (Map.Entry<Integer, Toilet> entry : GameWorld.get().getCurrentMap().getToilet().entrySet()) {
 					// うんうん奴隷用トイレがあるか
 					if (entry.getValue().isForSlave()) {
 						bIsInToiletForSlave = true;
@@ -160,14 +164,14 @@ public class HateNoOkazariEvent extends EventPacket {
 						b.setPartner(-1);
 						p.setPartner(-1);
 					}
-					b.setWorldEventResMessage(MessagePool.getMessage(b, MessagePool.Action.EngageUnunSlave),
+					b.setWorldEventResMessage(GameMessages.getMessage(b, MessagePool.Action.EngageUnunSlave),
 							Const.HOLDMESSAGE, true, false);
 				} else {
-					b.setWorldEventResMessage(MessagePool.getMessage(b, MessagePool.Action.HateYukkuri),
+					b.setWorldEventResMessage(GameMessages.getMessage(b, MessagePool.Action.HateYukkuri),
 							Const.HOLDMESSAGE, true, false);
 				}
 			} else {
-				b.setWorldEventResMessage(MessagePool.getMessage(b, MessagePool.Action.HateYukkuri), Const.HOLDMESSAGE,
+				b.setWorldEventResMessage(GameMessages.getMessage(b, MessagePool.Action.HateYukkuri), Const.HOLDMESSAGE,
 						true, false);
 			}
 
@@ -191,6 +195,6 @@ public class HateNoOkazariEvent extends EventPacket {
 
 	@Override
 	public String toString() {
-		return ResourceUtil.getInstance().read("event_noacc");
+		return GameText.read("event_noacc");
 	}
 }

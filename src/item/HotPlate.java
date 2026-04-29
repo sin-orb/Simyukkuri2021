@@ -1,4 +1,5 @@
 package src.item;
+import src.util.GameMessages;
 
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
@@ -7,6 +8,8 @@ import java.io.File;
 import java.io.IOException;
 
 import src.SimYukkuri;
+import src.util.GameRandom;
+import src.util.GameWorld;
 import src.base.Body;
 import src.base.Effect;
 import src.base.Obj;
@@ -152,8 +155,8 @@ public class HotPlate extends ObjEX {
 						bindBody.setHappiness(Happiness.VERY_SAD);
 						bindBody.setForceFace(ImageCode.PAIN.ordinal());
 					}
-					if (SimYukkuri.RND.nextInt(10) == 0) {
-						bindBody.setMessage(MessagePool.getMessage(bindBody, MessagePool.Action.Burning), 40, true,
+					if (GameRandom.nextInt(10) == 0) {
+						bindBody.setMessage(GameMessages.getMessage(bindBody, MessagePool.Action.Burning), 40, true,
 								true);
 					}
 				}
@@ -177,7 +180,7 @@ public class HotPlate extends ObjEX {
 			smoke.remove();
 			smoke = null;
 		}
-		SimYukkuri.world.getCurrentMap().getHotPlate().remove(objId);
+		GameWorld.get().getCurrentMap().getHotPlate().remove(objId);
 	}
 
 	/** コンストラクタ */
@@ -185,7 +188,7 @@ public class HotPlate extends ObjEX {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		SimYukkuri.world.getCurrentMap().getHotPlate().put(objId, this);
+		GameWorld.get().getCurrentMap().getHotPlate().put(objId, this);
 		objType = Type.PLATFORM;
 		objEXType = ObjEXType.HOTPLATE;
 

@@ -1,4 +1,5 @@
 package src.attachment;
+import src.util.GameText;
 
 
 import java.awt.image.BufferedImage;
@@ -148,7 +149,7 @@ public class Badge extends Attachment {
 	
 	@Override
 	public String toString() {
-		return ResourceUtil.getInstance().read("item_badge");
+		return GameText.read("item_badge");
 	}
 
 	public BadgeRank getEBadgeRank() {
