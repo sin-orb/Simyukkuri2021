@@ -323,7 +323,6 @@ public class GadgetMenu {
 		INVITEANTS(MainCategoryName.TEST,GameText.read("command_test_ants"),null,0,ActionTarget.BODY,ActionControl.LEFT_CLICK,null,null),
 		FEED(MainCategoryName.TEST,GameText.read("command_test_forcefeed"),null,0,ActionTarget.BODY,ActionControl.LEFT_CLICK,null,null),
 		BADGE(MainCategoryName.TEST,GameText.read("item_badge"),null,0,ActionTarget.BODY,ActionControl.LEFT_CLICK,	null,null),
-		DEBUG2(MainCategoryName.TEST,GameText.read("command_test_pastime"),null,0,ActionTarget.BODY,ActionControl.LEFT_CLICK,null,null),
 		;
 
 		private MainCategoryName group;
@@ -598,8 +597,7 @@ public class GadgetMenu {
 			GadgetList.PREDATORSGAME,
 			GadgetList.INVITEANTS,
 			GadgetList.FEED,
-			GadgetList.BADGE,
-			GadgetList.DEBUG2
+			GadgetList.BADGE
 	};
 	/**テストカテゴリ用コンボボックス定義*/
 	private static final DefaultComboBoxModel<GadgetList> testModel = new DefaultComboBoxModel<GadgetList>(TestCategory);

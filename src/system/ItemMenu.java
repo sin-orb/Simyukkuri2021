@@ -95,8 +95,7 @@ public class ItemMenu {
 	/** 素手のとき */
 	public static enum GetMenu {
 		PICKUP(Locale.getDefault().getLanguage().equals(new Locale("ja").getLanguage())? "持つ": "Take"),
-		STATUS(Locale.getDefault().getLanguage().equals(new Locale("ja").getLanguage())? "ステータス": "Status"),
-		DEBUG(Locale.getDefault().getLanguage().equals(new Locale("ja").getLanguage())? "デバッグ": "Debug")
+		STATUS(Locale.getDefault().getLanguage().equals(new Locale("ja").getLanguage())? "ステータス": "Status")
 		;
 		private final String name;
 		private GetMenu(String str) {
@@ -225,7 +224,6 @@ public class ItemMenu {
 		getTarget = obj;
 		getMenu[0].setEnabled(obj.hasGetPopup().canPickup());
 		getMenu[1].setEnabled(obj.hasGetPopup().canStatus());
-		getMenu[2].setEnabled(obj.hasGetPopup().canDebug());
 	}
 
 	/**

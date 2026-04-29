@@ -10,7 +10,6 @@ import src.SimYukkuri;
 import src.util.GameWorld;
 import src.base.Body;
 import src.base.Obj;
-import src.command.DebugFrame;
 import src.command.ShowStatusFrame;
 import src.game.Shit;
 import src.game.Vomit;
@@ -127,14 +126,6 @@ public class ItemListener {
 				ShowStatusFrame instance = ShowStatusFrame.getInstance();
 				instance.giveBodyInfo(b);
 				instance.setVisible(true);
-				break;
-			case DEBUG:
-				if (ItemMenu.getGetTarget() == null)
-					return;
-				Obj o = ItemMenu.getGetTarget();
-				DebugFrame df = new DebugFrame();
-				df.setObjAndDisplay(o);
-				df.setVisible(true);
 				break;
 			}
 		}
