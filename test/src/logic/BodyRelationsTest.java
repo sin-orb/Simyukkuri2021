@@ -1,6 +1,7 @@
 package src.logic;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -10,6 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
 import src.base.Body;
+import src.enums.EnumRelationMine;
 import src.util.WorldTestHelper;
 
 class BodyRelationsTest {
@@ -68,6 +70,18 @@ class BodyRelationsTest {
 		assertTrue(BodyRelations.isSister(child, sibling));
 		assertTrue(BodyRelations.isElderSister(child, sibling));
 		assertTrue(BodyRelations.isFamily(child, sibling));
+	}
+
+	@Test
+	void detectsRelationMineClassification() {
+		WorldTestHelper.setParents(child, parent.getUniqueID(), -1);
+		parent.setPartner(partner.getUniqueID());
+		child.setAge(10);
+
+		assertEquals(EnumRelationMine.FATHER, BodyRelations.checkMyRelation(parent, child));
+		assertEquals(EnumRelationMine.CHILD_FATHER, BodyRelations.checkMyRelation(child, parent));
+		assertEquals(EnumRelationMine.PARTNAR, BodyRelations.checkMyRelation(parent, partner));
+		assertEquals(EnumRelationMine.OTHER, BodyRelations.checkMyRelation(sibling, child));
 	}
 
 	@Test

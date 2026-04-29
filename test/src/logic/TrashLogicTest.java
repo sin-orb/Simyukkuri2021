@@ -14,8 +14,6 @@ import src.item.Trash;
 import src.util.WorldTestHelper;
 import src.yukkuri.Marisa;
 
-import java.lang.reflect.Field;
-
 /**
  * Test class for TrashLogic.
  *
@@ -317,24 +315,9 @@ public class TrashLogicTest {
     // ---------------------------------------------------------------
     private void setEYESIGHTorg(Body body, int value) {
         try {
-            Field field = findField(body.getClass(), "EYESIGHTorg");
-            if (field != null) {
-                field.setAccessible(true);
-                field.setInt(body, value);
-            }
+            body.setEYESIGHTorg(value);
         } catch (Exception e) {
             fail("EYESIGHTorg の設定に失敗: " + e.getMessage());
         }
-    }
-
-    private Field findField(Class<?> clazz, String name) {
-        while (clazz != null) {
-            try {
-                return clazz.getDeclaredField(name);
-            } catch (NoSuchFieldException e) {
-                clazz = clazz.getSuperclass();
-            }
-        }
-        return null;
     }
 }

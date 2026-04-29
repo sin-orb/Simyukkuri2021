@@ -2,6 +2,7 @@ package src.logic;
 
 import src.base.Body;
 import src.enums.Parent;
+import src.enums.EnumRelationMine;
 import src.util.YukkuriUtil;
 
 /**
@@ -14,6 +15,38 @@ import src.util.YukkuriUtil;
  */
 public final class BodyRelations {
 	private BodyRelations() {
+	}
+
+	/**
+	 * {@code self}が{@code other}にとって何にあたるかを判定する。
+	 *
+	 * @param self 自分側のゆっくり
+	 * @param other 相手側のゆっくり
+	 * @return 関係性
+	 */
+	public static EnumRelationMine checkMyRelation(Body self, Body other) {
+		if (self.isFather(other)) {
+			return EnumRelationMine.FATHER;
+		}
+		if (self.isMother(other)) {
+			return EnumRelationMine.MOTHER;
+		}
+		if (self.isPartner(other)) {
+			return EnumRelationMine.PARTNAR;
+		}
+		if (other.isFather(self)) {
+			return EnumRelationMine.CHILD_FATHER;
+		}
+		if (other.isMother(self)) {
+			return EnumRelationMine.CHILD_MOTHER;
+		}
+		if (self.isElderSister(other)) {
+			return EnumRelationMine.ELDERSISTER;
+		}
+		if (!self.isElderSister(other) && self.isSister(other)) {
+			return EnumRelationMine.YOUNGSISTER;
+		}
+		return EnumRelationMine.OTHER;
 	}
 
 	/**

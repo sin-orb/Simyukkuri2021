@@ -164,132 +164,15 @@ public abstract class BodyAttributes extends Obj {
 	protected Sprite[] braidSpr = bodySpriteSet.getBraidSpr();
 
 	// .INIファイルで変更可能な各ゆっくりのパラメータ.
-	/** 一回の食事量 */
-	protected int EATAMOUNTorg[] = { 100 * 6, 100 * 12, 100 * 24 };
-	/** 体重 */
-	protected int WEIGHTorg[] = { 100, 300, 600 };
-	/** 空腹限界 */
-	protected int HUNGRYLIMITorg[] = { 100 * 24, 100 * 24 * 2, 100 * 24 * 4 };
-	/** うんうん限界 */
-	protected int SHITLIMITorg[] = { 100 * 12, 100 * 24, 100 * 24 };
-	/** ダメージ限界 */
-	protected int DAMAGELIMITorg[] = { 100 * 24, 100 * 24 * 3, 100 * 24 * 7 };
 	/** 統計/調整パラメータ群 */
 	@JsonIgnore
 	private final BodyStatProfile bodyStatProfile = new BodyStatProfile();
-	/** ストレス限界 */
-	@JsonIgnore
-	private int STRESSLIMITorg[] = bodyStatProfile.getSTRESSLIMITorg();
-	/** 味覚レベル */
-	@JsonIgnore
-	private int TANGLEVELorg[] = bodyStatProfile.getTANGLEVELorg();
 	/** 行動・性格・繁殖寄りの調整値をまとめた値オブジェクト */
 	@JsonIgnore
 	private final BodyBehaviorProfile bodyBehaviorProfile = new BodyBehaviorProfile();
-	/** なつき度限界 */
-	private int LOVEPLAYERLIMITorg = bodyBehaviorProfile.getLOVEPLAYERLIMITorg();
-	/** 同一方向に動き続ける */
-	protected int sameDest = bodyBehaviorProfile.getSameDest();
-	/** 固有の免疫力（個体値。これは仮） */
-	@JsonIgnore
-	protected int ROBUSTNESS = bodyBehaviorProfile.getROBUSTNESS();
 	/** 時刻・閾値の統計データをまとめた値オブジェクト */
 	@JsonIgnore
 	private final BodyTimingProfile bodyTimingProfile = new BodyTimingProfile();
-	/** 赤ゆ期間 */
-	@JsonIgnore
-	protected int BABYLIMITorg = bodyTimingProfile.getBABYLIMITorg();
-	/** 子ゆ期間 */
-	@JsonIgnore
-	protected int CHILDLIMITorg = bodyTimingProfile.getCHILDLIMITorg();
-	/** 寿命 */
-	@JsonIgnore
-	protected int LIFELIMITorg = bodyTimingProfile.getLIFELIMITorg();
-	/** 腐敗日数 */
-	@JsonIgnore
-	private int ROTTINGTIMEorg = bodyTimingProfile.getROTTINGTIMEorg();
-	/** 足の速さ */
-	@JsonIgnore
-	private int STEPorg[] = bodyStatProfile.getSTEPorg();
-	/** リラックス状態の期間 */
-	@JsonIgnore
-	protected int RELAXPERIODorg = bodyTimingProfile.getRELAXPERIODorg();
-	/** 発情状態の期間 */
-	@JsonIgnore
-	protected int EXCITEPERIODorg = bodyTimingProfile.getEXCITEPERIODorg();
-	/** 妊娠期間 */
-	@JsonIgnore
-	protected int PREGPERIODorg = bodyTimingProfile.getPREGPERIODorg();
-	/** 睡眠時間 */
-	@JsonIgnore
-	protected int SLEEPPERIODorg = bodyTimingProfile.getSLEEPPERIODorg();
-	/** アクティブな期間 */
-	@JsonIgnore
-	protected int ACTIVEPERIODorg = bodyTimingProfile.getACTIVEPERIODorg();
-	/** 怒り期間 */
-	@JsonIgnore
-	private int ANGRYPERIODorg = bodyTimingProfile.getANGRYPERIODorg();
-	/** 恐怖期間 */
-	@JsonIgnore
-	private int SCAREPERIODorg = bodyTimingProfile.getSCAREPERIODorg();
-	/** ゲーム内12分、衝動の抑制のための変数 */
-	@JsonIgnore
-	protected int DECLINEPERIODorg = bodyTimingProfile.getDECLINEPERIODorg();
-	/** 壁等にブロックされた回数の限界（怒りだす等） */
-	@JsonIgnore
-	private int BLOCKEDLIMITorg = bodyTimingProfile.getBLOCKEDLIMITorg();
-	/** 汚れ限界（超えるとゆかび状態） */
-	@JsonIgnore
-	private int DIRTYPERIODorg = bodyTimingProfile.getDIRTYPERIODorg();
-	/** 視界の広さ */
-	@JsonIgnore
-	protected int EYESIGHTorg = bodyTimingProfile.getEYESIGHTorg();
-	/** 赤ゆ、子ゆ、成ゆの攻撃力 */
-	@JsonIgnore
-	protected int STRENGTHorg[] = bodyStatProfile.getSTRENGTHorg();
-	/** ゆかびの潜伏期間 */
-	@JsonIgnore
-	protected int INCUBATIONPERIODorg = bodyTimingProfile.getINCUBATIONPERIODorg();
-	/** 攻撃された際のぴこぴこ破壊確率。0だと破壊されない */
-	private int nBreakBraidRand = bodyBehaviorProfile.getnBreakBraidRand();
-	/** 何回のうち1回の確率ですりすり事故で妊娠するかの値 */
-	private int SurisuriAccidentProb = bodyBehaviorProfile.getSurisuriAccidentProb();
-	/** 何回のうち1回の確率で路上で車に轢かれるかの値 */
-	private int CarAccidentProb = bodyBehaviorProfile.getCarAccidentProb();
-	/** 何回のうち1回の確率であんよが傷ついているとあんよが破壊されるかの確率 */
-	private int BreakBodyByShitProb = bodyBehaviorProfile.getBreakBodyByShitProb();
-	/** 何回のうち1回の確率で苦いフードを食べた際にゆ下痢になるかの確率 */
-	private int diarrheaProb = bodyBehaviorProfile.getDiarrheaProb();
-	/** 何回のうち１回の確率で発情するかの確率 */
-	private int exciteProb = bodyBehaviorProfile.getExciteProb();
-	/** 免疫力(左から順に赤ゆ、子ゆ、成ゆ、老ゆ) */
-	@JsonIgnore
-	private int immunity[] = bodyStatProfile.getImmunity();
-	/** 性格変化の切り替え */
-	private boolean notChangeCharacter = bodyBehaviorProfile.isNotChangeCharacter();
-	/** ゲスポイント */
-	protected int AttitudePoint = bodyBehaviorProfile.getAttitudePoint();
-	/** ゲス限界 */
-	@JsonIgnore
-	private int RudeLimit[] = bodyStatProfile.getRudeLimit();
-	/** 善良限界 */
-	@JsonIgnore
-	private int NiceLimit[] = bodyStatProfile.getNiceLimit();
-	/** 妊娠限界 */
-	protected int PregnantLimit = bodyBehaviorProfile.getPregnantLimit();
-	/** よりリアルな妊娠限界 */
-	private boolean realPregnantLimit = bodyBehaviorProfile.isRealPregnantLimit();
-
-	/** 自主洗浄失敗確率 - 賢い [0]:赤ゆ [1]:子ゆ [2]:成ゆ */
-	@JsonIgnore
-	private int[] cleaningFailProbWise = bodyStatProfile.getCleaningFailProbWise();
-	/** 自主洗浄失敗確率 - 普通 [0]:赤ゆ [1]:子ゆ [2]:成ゆ */
-	@JsonIgnore
-	private int[] cleaningFailProbAverage = bodyStatProfile.getCleaningFailProbAverage();
-	/** 自主洗浄失敗確率 - 餡子脳 [0]:赤ゆ [1]:子ゆ [2]:成ゆ */
-	@JsonIgnore
-	private int[] cleaningFailProbFool = bodyStatProfile.getCleaningFailProbFool();
-
 	// individual state variables for each Yukkuri.
 	/** 画像がまりちゃ流しか */
 	private boolean bImageNagasiMode = false;
@@ -1036,51 +919,7 @@ public abstract class BodyAttributes extends Obj {
 		if (from == null) {
 			return;
 		}
-		from.syncStatAliasesFromFields();
 		bodyStatProfile.copyFrom(from.bodyStatProfile);
-		syncStatAliases();
-	}
-
-	/**
-	 * 配列型の統計データ用の helper を互換フィールドの値へ揃える.
-	 */
-	private void syncStatAliasesFromFields() {
-		bodyStatProfile.setEATAMOUNTorg(EATAMOUNTorg);
-		bodyStatProfile.setWEIGHTorg(WEIGHTorg);
-		bodyStatProfile.setHUNGRYLIMITorg(HUNGRYLIMITorg);
-		bodyStatProfile.setSHITLIMITorg(SHITLIMITorg);
-		bodyStatProfile.setDAMAGELIMITorg(DAMAGELIMITorg);
-		bodyStatProfile.setSTRESSLIMITorg(STRESSLIMITorg);
-		bodyStatProfile.setTANGLEVELorg(TANGLEVELorg);
-		bodyStatProfile.setSTEPorg(STEPorg);
-		bodyStatProfile.setSTRENGTHorg(STRENGTHorg);
-		bodyStatProfile.setImmunity(immunity);
-		bodyStatProfile.setRudeLimit(RudeLimit);
-		bodyStatProfile.setNiceLimit(NiceLimit);
-		bodyStatProfile.setCleaningFailProbWise(cleaningFailProbWise);
-		bodyStatProfile.setCleaningFailProbAverage(cleaningFailProbAverage);
-		bodyStatProfile.setCleaningFailProbFool(cleaningFailProbFool);
-	}
-
-	/**
-	 * 配列型の統計データ用の互換フィールドを helper の参照へ揃える.
-	 */
-	private void syncStatAliases() {
-		EATAMOUNTorg = bodyStatProfile.getEATAMOUNTorg();
-		WEIGHTorg = bodyStatProfile.getWEIGHTorg();
-		HUNGRYLIMITorg = bodyStatProfile.getHUNGRYLIMITorg();
-		SHITLIMITorg = bodyStatProfile.getSHITLIMITorg();
-		DAMAGELIMITorg = bodyStatProfile.getDAMAGELIMITorg();
-		STRESSLIMITorg = bodyStatProfile.getSTRESSLIMITorg();
-		TANGLEVELorg = bodyStatProfile.getTANGLEVELorg();
-		STEPorg = bodyStatProfile.getSTEPorg();
-		STRENGTHorg = bodyStatProfile.getSTRENGTHorg();
-		immunity = bodyStatProfile.getImmunity();
-		RudeLimit = bodyStatProfile.getRudeLimit();
-		NiceLimit = bodyStatProfile.getNiceLimit();
-		cleaningFailProbWise = bodyStatProfile.getCleaningFailProbWise();
-		cleaningFailProbAverage = bodyStatProfile.getCleaningFailProbAverage();
-		cleaningFailProbFool = bodyStatProfile.getCleaningFailProbFool();
 	}
 
 	/**
@@ -1092,53 +931,7 @@ public abstract class BodyAttributes extends Obj {
 		if (from == null) {
 			return;
 		}
-		from.syncTimingAliasesFromFields();
 		bodyTimingProfile.copyFrom(from.bodyTimingProfile);
-		syncTimingAliases();
-	}
-
-	/**
-	 * 時刻・閾値系データ用の helper を互換フィールドの値へ揃える.
-	 */
-	private void syncTimingAliasesFromFields() {
-		bodyTimingProfile.setBABYLIMITorg(BABYLIMITorg);
-		bodyTimingProfile.setCHILDLIMITorg(CHILDLIMITorg);
-		bodyTimingProfile.setLIFELIMITorg(LIFELIMITorg);
-		bodyTimingProfile.setROTTINGTIMEorg(ROTTINGTIMEorg);
-		bodyTimingProfile.setRELAXPERIODorg(RELAXPERIODorg);
-		bodyTimingProfile.setEXCITEPERIODorg(EXCITEPERIODorg);
-		bodyTimingProfile.setPREGPERIODorg(PREGPERIODorg);
-		bodyTimingProfile.setSLEEPPERIODorg(SLEEPPERIODorg);
-		bodyTimingProfile.setACTIVEPERIODorg(ACTIVEPERIODorg);
-		bodyTimingProfile.setANGRYPERIODorg(ANGRYPERIODorg);
-		bodyTimingProfile.setSCAREPERIODorg(SCAREPERIODorg);
-		bodyTimingProfile.setDECLINEPERIODorg(DECLINEPERIODorg);
-		bodyTimingProfile.setBLOCKEDLIMITorg(BLOCKEDLIMITorg);
-		bodyTimingProfile.setDIRTYPERIODorg(DIRTYPERIODorg);
-		bodyTimingProfile.setEYESIGHTorg(EYESIGHTorg);
-		bodyTimingProfile.setINCUBATIONPERIODorg(INCUBATIONPERIODorg);
-	}
-
-	/**
-	 * 時刻・閾値系データ用の互換フィールドを helper の参照へ揃える.
-	 */
-	private void syncTimingAliases() {
-		BABYLIMITorg = bodyTimingProfile.getBABYLIMITorg();
-		CHILDLIMITorg = bodyTimingProfile.getCHILDLIMITorg();
-		LIFELIMITorg = bodyTimingProfile.getLIFELIMITorg();
-		ROTTINGTIMEorg = bodyTimingProfile.getROTTINGTIMEorg();
-		RELAXPERIODorg = bodyTimingProfile.getRELAXPERIODorg();
-		EXCITEPERIODorg = bodyTimingProfile.getEXCITEPERIODorg();
-		PREGPERIODorg = bodyTimingProfile.getPREGPERIODorg();
-		SLEEPPERIODorg = bodyTimingProfile.getSLEEPPERIODorg();
-		ACTIVEPERIODorg = bodyTimingProfile.getACTIVEPERIODorg();
-		ANGRYPERIODorg = bodyTimingProfile.getANGRYPERIODorg();
-		SCAREPERIODorg = bodyTimingProfile.getSCAREPERIODorg();
-		DECLINEPERIODorg = bodyTimingProfile.getDECLINEPERIODorg();
-		BLOCKEDLIMITorg = bodyTimingProfile.getBLOCKEDLIMITorg();
-		DIRTYPERIODorg = bodyTimingProfile.getDIRTYPERIODorg();
-		EYESIGHTorg = bodyTimingProfile.getEYESIGHTorg();
-		INCUBATIONPERIODorg = bodyTimingProfile.getINCUBATIONPERIODorg();
 	}
 
 	/**
@@ -1150,47 +943,7 @@ public abstract class BodyAttributes extends Obj {
 		if (from == null) {
 			return;
 		}
-		from.syncBehaviorAliasesFromFields();
 		bodyBehaviorProfile.copyFrom(from.bodyBehaviorProfile);
-		syncBehaviorAliases();
-	}
-
-	/**
-	 * 行動・性格・繁殖寄りのデータ用の helper を互換フィールドの値へ揃える.
-	 */
-	private void syncBehaviorAliasesFromFields() {
-		bodyBehaviorProfile.setLOVEPLAYERLIMITorg(LOVEPLAYERLIMITorg);
-		bodyBehaviorProfile.setSameDest(sameDest);
-		bodyBehaviorProfile.setROBUSTNESS(ROBUSTNESS);
-		bodyBehaviorProfile.setnBreakBraidRand(nBreakBraidRand);
-		bodyBehaviorProfile.setSurisuriAccidentProb(SurisuriAccidentProb);
-		bodyBehaviorProfile.setCarAccidentProb(CarAccidentProb);
-		bodyBehaviorProfile.setBreakBodyByShitProb(BreakBodyByShitProb);
-		bodyBehaviorProfile.setDiarrheaProb(diarrheaProb);
-		bodyBehaviorProfile.setExciteProb(exciteProb);
-		bodyBehaviorProfile.setNotChangeCharacter(notChangeCharacter);
-		bodyBehaviorProfile.setAttitudePoint(AttitudePoint);
-		bodyBehaviorProfile.setPregnantLimit(PregnantLimit);
-		bodyBehaviorProfile.setRealPregnantLimit(realPregnantLimit);
-	}
-
-	/**
-	 * 行動・性格・繁殖寄りの互換フィールドを helper の参照へ揃える.
-	 */
-	private void syncBehaviorAliases() {
-		LOVEPLAYERLIMITorg = bodyBehaviorProfile.getLOVEPLAYERLIMITorg();
-		sameDest = bodyBehaviorProfile.getSameDest();
-		ROBUSTNESS = bodyBehaviorProfile.getROBUSTNESS();
-		nBreakBraidRand = bodyBehaviorProfile.getnBreakBraidRand();
-		SurisuriAccidentProb = bodyBehaviorProfile.getSurisuriAccidentProb();
-		CarAccidentProb = bodyBehaviorProfile.getCarAccidentProb();
-		BreakBodyByShitProb = bodyBehaviorProfile.getBreakBodyByShitProb();
-		diarrheaProb = bodyBehaviorProfile.getDiarrheaProb();
-		exciteProb = bodyBehaviorProfile.getExciteProb();
-		notChangeCharacter = bodyBehaviorProfile.isNotChangeCharacter();
-		AttitudePoint = bodyBehaviorProfile.getAttitudePoint();
-		PregnantLimit = bodyBehaviorProfile.getPregnantLimit();
-		realPregnantLimit = bodyBehaviorProfile.isRealPregnantLimit();
 	}
 
 	/**
@@ -1211,7 +964,6 @@ public abstract class BodyAttributes extends Obj {
 	@JsonProperty
 	public void setEATAMOUNTorg(int[] eATAMOUNT) {
 		bodyStatProfile.setEATAMOUNTorg(eATAMOUNT);
-		syncStatAliases();
 	}
 
 	/**
@@ -1232,7 +984,6 @@ public abstract class BodyAttributes extends Obj {
 	@JsonProperty
 	public void setWEIGHTorg(int[] wEIGHT) {
 		bodyStatProfile.setWEIGHTorg(wEIGHT);
-		syncStatAliases();
 	}
 
 	/**
@@ -1253,7 +1004,6 @@ public abstract class BodyAttributes extends Obj {
 	@JsonProperty
 	public void setHUNGRYLIMITorg(int[] hUNGRYLIMIT) {
 		bodyStatProfile.setHUNGRYLIMITorg(hUNGRYLIMIT);
-		syncStatAliases();
 	}
 
 	/**
@@ -1274,7 +1024,6 @@ public abstract class BodyAttributes extends Obj {
 	@JsonProperty
 	public void setSHITLIMITorg(int[] sHITLIMIT) {
 		bodyStatProfile.setSHITLIMITorg(sHITLIMIT);
-		syncStatAliases();
 	}
 
 	/**
@@ -1295,7 +1044,6 @@ public abstract class BodyAttributes extends Obj {
 	@JsonProperty
 	public void setDAMAGELIMITorg(int[] dAMAGELIMIT) {
 		bodyStatProfile.setDAMAGELIMITorg(dAMAGELIMIT);
-		syncStatAliases();
 	}
 
 	/**
@@ -1316,7 +1064,6 @@ public abstract class BodyAttributes extends Obj {
 	@JsonProperty
 	public void setSTRESSLIMITorg(int[] sTRESSLIMIT) {
 		bodyStatProfile.setSTRESSLIMITorg(sTRESSLIMIT);
-		syncStatAliases();
 	}
 
 	/**
@@ -1326,7 +1073,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@JsonProperty
 	public int getLOVEPLAYERLIMITorg() {
-		return LOVEPLAYERLIMITorg;
+		return bodyBehaviorProfile.getLOVEPLAYERLIMITorg();
 	}
 
 	/**
@@ -1336,7 +1083,6 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@JsonProperty
 	public void setLOVEPLAYERLIMITorg(int lOVEPLAYERLIMIT) {
-		LOVEPLAYERLIMITorg = lOVEPLAYERLIMIT;
 		bodyBehaviorProfile.setLOVEPLAYERLIMITorg(lOVEPLAYERLIMIT);
 	}
 
@@ -1358,7 +1104,6 @@ public abstract class BodyAttributes extends Obj {
 	@JsonProperty
 	public void setTANGLEVELorg(int[] tANGLEVEL) {
 		bodyStatProfile.setTANGLEVELorg(tANGLEVEL);
-		syncStatAliases();
 	}
 
 	/**
@@ -1368,7 +1113,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@JsonProperty
 	public int getBABYLIMITorg() {
-		return BABYLIMITorg;
+		return bodyTimingProfile.getBABYLIMITorg();
 	}
 
 	/**
@@ -1379,7 +1124,6 @@ public abstract class BodyAttributes extends Obj {
 	@JsonProperty
 	public void setBABYLIMITorg(int bABYLIMIT) {
 		bodyTimingProfile.setBABYLIMITorg(bABYLIMIT);
-		syncTimingAliases();
 	}
 
 	/**
@@ -1389,7 +1133,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@JsonProperty
 	public int getCHILDLIMITorg() {
-		return CHILDLIMITorg;
+		return bodyTimingProfile.getCHILDLIMITorg();
 	}
 
 	/**
@@ -1400,7 +1144,6 @@ public abstract class BodyAttributes extends Obj {
 	@JsonProperty
 	public void setCHILDLIMITorg(int cHILDLIMIT) {
 		bodyTimingProfile.setCHILDLIMITorg(cHILDLIMIT);
-		syncTimingAliases();
 	}
 
 	/**
@@ -1410,7 +1153,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@JsonProperty
 	public int getLIFELIMITorg() {
-		return LIFELIMITorg;
+		return bodyTimingProfile.getLIFELIMITorg();
 	}
 
 	/**
@@ -1421,7 +1164,6 @@ public abstract class BodyAttributes extends Obj {
 	@JsonProperty
 	public void setLIFELIMITorg(int lIFELIMIT) {
 		bodyTimingProfile.setLIFELIMITorg(lIFELIMIT);
-		syncTimingAliases();
 	}
 
 	/**
@@ -1431,7 +1173,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@JsonProperty
 	public int getROTTINGTIMEorg() {
-		return ROTTINGTIMEorg;
+		return bodyTimingProfile.getROTTINGTIMEorg();
 	}
 
 	/**
@@ -1442,7 +1184,6 @@ public abstract class BodyAttributes extends Obj {
 	@JsonProperty
 	public void setROTTINGTIMEorg(int rOTTINGTIME) {
 		bodyTimingProfile.setROTTINGTIMEorg(rOTTINGTIME);
-		syncTimingAliases();
 	}
 
 	/**
@@ -1463,7 +1204,6 @@ public abstract class BodyAttributes extends Obj {
 	@JsonProperty
 	public void setSTEPorg(int[] sTEP) {
 		bodyStatProfile.setSTEPorg(sTEP);
-		syncStatAliases();
 	}
 
 	/**
@@ -1473,7 +1213,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@JsonProperty
 	public int getRELAXPERIODorg() {
-		return RELAXPERIODorg;
+		return bodyTimingProfile.getRELAXPERIODorg();
 	}
 
 	/**
@@ -1484,7 +1224,6 @@ public abstract class BodyAttributes extends Obj {
 	@JsonProperty
 	public void setRELAXPERIODorg(int rELAXPERIOD) {
 		bodyTimingProfile.setRELAXPERIODorg(rELAXPERIOD);
-		syncTimingAliases();
 	}
 
 	/**
@@ -1494,7 +1233,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@JsonProperty
 	public int getEXCITEPERIODorg() {
-		return EXCITEPERIODorg;
+		return bodyTimingProfile.getEXCITEPERIODorg();
 	}
 
 	/**
@@ -1505,7 +1244,6 @@ public abstract class BodyAttributes extends Obj {
 	@JsonProperty
 	public void setEXCITEPERIODorg(int eXCITEPERIOD) {
 		bodyTimingProfile.setEXCITEPERIODorg(eXCITEPERIOD);
-		syncTimingAliases();
 	}
 
 	/**
@@ -1515,7 +1253,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@JsonProperty
 	public int getPREGPERIODorg() {
-		return PREGPERIODorg;
+		return bodyTimingProfile.getPREGPERIODorg();
 	}
 
 	/**
@@ -1526,7 +1264,6 @@ public abstract class BodyAttributes extends Obj {
 	@JsonProperty
 	public void setPREGPERIODorg(int pREGPERIOD) {
 		bodyTimingProfile.setPREGPERIODorg(pREGPERIOD);
-		syncTimingAliases();
 	}
 
 	/**
@@ -1536,7 +1273,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@JsonProperty
 	public int getSLEEPPERIODorg() {
-		return SLEEPPERIODorg;
+		return bodyTimingProfile.getSLEEPPERIODorg();
 	}
 
 	/**
@@ -1547,7 +1284,6 @@ public abstract class BodyAttributes extends Obj {
 	@JsonProperty
 	public void setSLEEPPERIODorg(int sLEEPPERIOD) {
 		bodyTimingProfile.setSLEEPPERIODorg(sLEEPPERIOD);
-		syncTimingAliases();
 	}
 
 	/**
@@ -1557,7 +1293,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@JsonProperty
 	public int getACTIVEPERIODorg() {
-		return ACTIVEPERIODorg;
+		return bodyTimingProfile.getACTIVEPERIODorg();
 	}
 
 	/**
@@ -1568,7 +1304,6 @@ public abstract class BodyAttributes extends Obj {
 	@JsonProperty
 	public void setACTIVEPERIODorg(int aCTIVEPERIOD) {
 		bodyTimingProfile.setACTIVEPERIODorg(aCTIVEPERIOD);
-		syncTimingAliases();
 	}
 
 	/**
@@ -1578,7 +1313,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@JsonProperty
 	public int getANGRYPERIODorg() {
-		return ANGRYPERIODorg;
+		return bodyTimingProfile.getANGRYPERIODorg();
 	}
 
 	/**
@@ -1589,7 +1324,6 @@ public abstract class BodyAttributes extends Obj {
 	@JsonProperty
 	public void setANGRYPERIODorg(int aNGRYPERIOD) {
 		bodyTimingProfile.setANGRYPERIODorg(aNGRYPERIOD);
-		syncTimingAliases();
 	}
 
 	/**
@@ -1599,7 +1333,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@JsonProperty
 	public int getSCAREPERIODorg() {
-		return SCAREPERIODorg;
+		return bodyTimingProfile.getSCAREPERIODorg();
 	}
 
 	/**
@@ -1610,7 +1344,6 @@ public abstract class BodyAttributes extends Obj {
 	@JsonProperty
 	public void setSCAREPERIODorg(int sCAREPERIOD) {
 		bodyTimingProfile.setSCAREPERIODorg(sCAREPERIOD);
-		syncTimingAliases();
 	}
 
 	/**
@@ -1620,7 +1353,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@JsonProperty
 	public int getSameDest() {
-		return sameDest;
+		return bodyBehaviorProfile.getSameDest();
 	}
 
 	/**
@@ -1630,7 +1363,6 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@JsonProperty
 	public void setSameDest(int sameDest) {
-		this.sameDest = sameDest;
 		bodyBehaviorProfile.setSameDest(sameDest);
 	}
 
@@ -1641,7 +1373,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@JsonProperty
 	public int getDECLINEPERIODorg() {
-		return DECLINEPERIODorg;
+		return bodyTimingProfile.getDECLINEPERIODorg();
 	}
 
 	/**
@@ -1652,7 +1384,6 @@ public abstract class BodyAttributes extends Obj {
 	@JsonProperty
 	public void setDECLINEPERIODorg(int dECLINEPERIOD) {
 		bodyTimingProfile.setDECLINEPERIODorg(dECLINEPERIOD);
-		syncTimingAliases();
 	}
 
 	/**
@@ -1662,7 +1393,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@JsonProperty
 	public int getBLOCKEDLIMITorg() {
-		return BLOCKEDLIMITorg;
+		return bodyTimingProfile.getBLOCKEDLIMITorg();
 	}
 
 	/**
@@ -1673,7 +1404,6 @@ public abstract class BodyAttributes extends Obj {
 	@JsonProperty
 	public void setBLOCKEDLIMITorg(int bLOCKEDLIMIT) {
 		bodyTimingProfile.setBLOCKEDLIMITorg(bLOCKEDLIMIT);
-		syncTimingAliases();
 	}
 
 	/**
@@ -1683,7 +1413,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@JsonProperty
 	public int getDIRTYPERIODorg() {
-		return DIRTYPERIODorg;
+		return bodyTimingProfile.getDIRTYPERIODorg();
 	}
 
 	/**
@@ -1694,7 +1424,6 @@ public abstract class BodyAttributes extends Obj {
 	@JsonProperty
 	public void setDIRTYPERIODorg(int dIRTYPERIOD) {
 		bodyTimingProfile.setDIRTYPERIODorg(dIRTYPERIOD);
-		syncTimingAliases();
 	}
 
 	/**
@@ -1704,7 +1433,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@JsonProperty
 	public int getEYESIGHTorg() {
-		return EYESIGHTorg;
+		return bodyTimingProfile.getEYESIGHTorg();
 	}
 
 	/**
@@ -1715,7 +1444,6 @@ public abstract class BodyAttributes extends Obj {
 	@JsonProperty
 	public void setEYESIGHTorg(int eYESIGHT) {
 		bodyTimingProfile.setEYESIGHTorg(eYESIGHT);
-		syncTimingAliases();
 	}
 
 	/**
@@ -1736,7 +1464,6 @@ public abstract class BodyAttributes extends Obj {
 	@JsonProperty
 	public void setSTRENGTHorg(int[] sTRENGTH) {
 		bodyStatProfile.setSTRENGTHorg(sTRENGTH);
-		syncStatAliases();
 	}
 
 	/**
@@ -1746,7 +1473,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@JsonProperty
 	public int getINCUBATIONPERIODorg() {
-		return INCUBATIONPERIODorg;
+		return bodyTimingProfile.getINCUBATIONPERIODorg();
 	}
 
 	/**
@@ -1757,7 +1484,6 @@ public abstract class BodyAttributes extends Obj {
 	@JsonProperty
 	public void setINCUBATIONPERIODorg(int iNCUBATIONPERIOD) {
 		bodyTimingProfile.setINCUBATIONPERIODorg(iNCUBATIONPERIOD);
-		syncTimingAliases();
 	}
 
 	/**
@@ -1766,7 +1492,7 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 攻撃された際のぴこぴこ破壊確率。0だと破壊されない
 	 */
 	public int getnBreakBraidRand() {
-		return nBreakBraidRand;
+		return bodyBehaviorProfile.getnBreakBraidRand();
 	}
 
 	/**
@@ -1775,7 +1501,6 @@ public abstract class BodyAttributes extends Obj {
 	 * @param nBreakBraidRand 攻撃された際のぴこぴこ破壊確率。0だと破壊されない
 	 */
 	public void setnBreakBraidRand(int nBreakBraidRand) {
-		this.nBreakBraidRand = nBreakBraidRand;
 		bodyBehaviorProfile.setnBreakBraidRand(nBreakBraidRand);
 	}
 
@@ -1785,7 +1510,7 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 何回のうち1回の確率ですりすり事故で妊娠するかの値
 	 */
 	public int getSurisuriAccidentProb() {
-		return SurisuriAccidentProb;
+		return bodyBehaviorProfile.getSurisuriAccidentProb();
 	}
 
 	/**
@@ -1794,7 +1519,6 @@ public abstract class BodyAttributes extends Obj {
 	 * @param surisuriAccidentProb 何回のうち1回の確率ですりすり事故で妊娠するかの値
 	 */
 	public void setSurisuriAccidentProb(int surisuriAccidentProb) {
-		SurisuriAccidentProb = surisuriAccidentProb;
 		bodyBehaviorProfile.setSurisuriAccidentProb(surisuriAccidentProb);
 	}
 
@@ -1804,7 +1528,7 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 何回のうち1回の確率で路上で車に轢かれるかの値
 	 */
 	public int getCarAccidentProb() {
-		return CarAccidentProb;
+		return bodyBehaviorProfile.getCarAccidentProb();
 	}
 
 	/**
@@ -1813,7 +1537,6 @@ public abstract class BodyAttributes extends Obj {
 	 * @param carAccidentProb 何回のうち1回の確率で路上で車に轢かれるかの値
 	 */
 	public void setCarAccidentProb(int carAccidentProb) {
-		CarAccidentProb = carAccidentProb;
 		bodyBehaviorProfile.setCarAccidentProb(carAccidentProb);
 	}
 
@@ -1823,7 +1546,7 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 何回のうち1回の確率であんよが傷ついているとあんよが破壊されるかの確率
 	 */
 	public int getBreakBodyByShitProb() {
-		return BreakBodyByShitProb;
+		return bodyBehaviorProfile.getBreakBodyByShitProb();
 	}
 
 	/**
@@ -1832,7 +1555,6 @@ public abstract class BodyAttributes extends Obj {
 	 * @param breakBodyByShitProb 何回のうち1回の確率であんよが傷ついているとあんよが破壊されるかの確率
 	 */
 	public void setBreakBodyByShitProb(int breakBodyByShitProb) {
-		BreakBodyByShitProb = breakBodyByShitProb;
 		bodyBehaviorProfile.setBreakBodyByShitProb(breakBodyByShitProb);
 	}
 
@@ -1842,7 +1564,7 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 何回のうち1回の確率で苦いフードを食べた際にゆ下痢になるかの確率
 	 */
 	public int getDiarrheaProb() {
-		return diarrheaProb;
+		return bodyBehaviorProfile.getDiarrheaProb();
 	}
 
 	/**
@@ -1851,7 +1573,6 @@ public abstract class BodyAttributes extends Obj {
 	 * @param diarrheaProb 何回のうち1回の確率で苦いフードを食べた際にゆ下痢になるかの確率
 	 */
 	public void setDiarrheaProb(int diarrheaProb) {
-		this.diarrheaProb = diarrheaProb;
 		bodyBehaviorProfile.setDiarrheaProb(diarrheaProb);
 	}
 
@@ -1871,7 +1592,6 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	public void setCleaningFailProbWise(int[] cleaningFailProbWise) {
 		bodyStatProfile.setCleaningFailProbWise(cleaningFailProbWise);
-		syncStatAliases();
 	}
 
 	/**
@@ -1890,7 +1610,6 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	public void setCleaningFailProbAverage(int[] cleaningFailProbAverage) {
 		bodyStatProfile.setCleaningFailProbAverage(cleaningFailProbAverage);
-		syncStatAliases();
 	}
 
 	/**
@@ -1909,7 +1628,6 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	public void setCleaningFailProbFool(int[] cleaningFailProbFool) {
 		bodyStatProfile.setCleaningFailProbFool(cleaningFailProbFool);
-		syncStatAliases();
 	}
 
 	/**
@@ -1918,7 +1636,7 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 何回のうち１回の確率で発情するかの確率
 	 */
 	public int getExciteProb() {
-		return exciteProb;
+		return bodyBehaviorProfile.getExciteProb();
 	}
 
 	/**
@@ -1927,7 +1645,6 @@ public abstract class BodyAttributes extends Obj {
 	 * @param exciteProb 何回のうち１回の確率で発情するかの確率
 	 */
 	public void setExciteProb(int exciteProb) {
-		this.exciteProb = exciteProb;
 		bodyBehaviorProfile.setExciteProb(exciteProb);
 	}
 
@@ -1937,7 +1654,7 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 固有の免疫力（個体値。これは仮）
 	 */
 	public int getROBUSTNESS() {
-		return ROBUSTNESS;
+		return bodyBehaviorProfile.getROBUSTNESS();
 	}
 
 	/**
@@ -1946,7 +1663,6 @@ public abstract class BodyAttributes extends Obj {
 	 * @param rOBUSTNESS 固有の免疫力（個体値。これは仮）
 	 */
 	public void setROBUSTNESS(int rOBUSTNESS) {
-		ROBUSTNESS = rOBUSTNESS;
 		bodyBehaviorProfile.setROBUSTNESS(rOBUSTNESS);
 	}
 
@@ -1968,7 +1684,6 @@ public abstract class BodyAttributes extends Obj {
 	@JsonProperty
 	public void setImmunity(int[] immunity) {
 		bodyStatProfile.setImmunity(immunity);
-		syncStatAliases();
 	}
 
 	/**
@@ -1977,7 +1692,7 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 性格変化の切り替え
 	 */
 	public boolean isNotChangeCharacter() {
-		return notChangeCharacter;
+		return bodyBehaviorProfile.isNotChangeCharacter();
 	}
 
 	/**
@@ -1986,7 +1701,6 @@ public abstract class BodyAttributes extends Obj {
 	 * @param notChangeCharacter 性格変化の切り替え
 	 */
 	public void setNotChangeCharacter(boolean notChangeCharacter) {
-		this.notChangeCharacter = notChangeCharacter;
 		bodyBehaviorProfile.setNotChangeCharacter(notChangeCharacter);
 	}
 
@@ -1996,7 +1710,7 @@ public abstract class BodyAttributes extends Obj {
 	 * @return ゲスポイント
 	 */
 	public int getAttitudePoint() {
-		return AttitudePoint;
+		return bodyBehaviorProfile.getAttitudePoint();
 	}
 
 	/**
@@ -2005,7 +1719,6 @@ public abstract class BodyAttributes extends Obj {
 	 * @param attitudePoint ゲスポイント
 	 */
 	public void setAttitudePoint(int attitudePoint) {
-		AttitudePoint = attitudePoint;
 		bodyBehaviorProfile.setAttitudePoint(attitudePoint);
 	}
 
@@ -2027,7 +1740,6 @@ public abstract class BodyAttributes extends Obj {
 	@JsonProperty
 	public void setRudeLimit(int[] rudeLimit) {
 		bodyStatProfile.setRudeLimit(rudeLimit);
-		syncStatAliases();
 	}
 
 	/**
@@ -2048,7 +1760,6 @@ public abstract class BodyAttributes extends Obj {
 	@JsonProperty
 	public void setNiceLimit(int[] niceLimit) {
 		bodyStatProfile.setNiceLimit(niceLimit);
-		syncStatAliases();
 	}
 
 	/**
@@ -2057,7 +1768,7 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 妊娠限界
 	 */
 	public int getPregnantLimit() {
-		return PregnantLimit;
+		return bodyBehaviorProfile.getPregnantLimit();
 	}
 
 	/**
@@ -2066,7 +1777,6 @@ public abstract class BodyAttributes extends Obj {
 	 * @param pregnantLimit 妊娠限界
 	 */
 	public void setPregnantLimit(int pregnantLimit) {
-		PregnantLimit = pregnantLimit;
 		bodyBehaviorProfile.setPregnantLimit(pregnantLimit);
 	}
 
@@ -2076,7 +1786,7 @@ public abstract class BodyAttributes extends Obj {
 	 * @return よりリアルな妊娠限界かどうか
 	 */
 	public boolean isRealPregnantLimit() {
-		return realPregnantLimit;
+		return bodyBehaviorProfile.isRealPregnantLimit();
 	}
 
 	/**
@@ -2085,7 +1795,6 @@ public abstract class BodyAttributes extends Obj {
 	 * @param realPregnantLimit よりリアルな妊娠限界かどうか
 	 */
 	public void setRealPregnantLimit(boolean realPregnantLimit) {
-		this.realPregnantLimit = realPregnantLimit;
 		bodyBehaviorProfile.setRealPregnantLimit(realPregnantLimit);
 	}
 
@@ -5545,9 +5254,9 @@ public abstract class BodyAttributes extends Obj {
 		if (setAgeState == AgeState.BABY) {
 			setAge(0);
 		} else if (setAgeState == AgeState.CHILD) {
-			setAge(BABYLIMITorg);
+			setAge(getBABYLIMITorg());
 		} else if (setAgeState == AgeState.ADULT) {
-			setAge(CHILDLIMITorg);
+			setAge(getCHILDLIMITorg());
 		}
 	}
 
@@ -5561,7 +5270,7 @@ public abstract class BodyAttributes extends Obj {
 		// 飼いゆだったら無条件で下す
 		if (getBodyRank() == BodyRank.KAIYU)
 			return true;
-		int P = diarrheaProb;
+		int P = bodyBehaviorProfile.getDiarrheaProb();
 		// かび、ダメージ有なら確率2倍
 		if (isSick() || isDamaged())
 			P /= 2;
@@ -5876,9 +5585,9 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public AgeState getBodyAgeState() {
-		if (getAge() < BABYLIMITorg) {
+		if (getAge() < getBABYLIMITorg()) {
 			return AgeState.BABY;
-		} else if (getAge() < CHILDLIMITorg) {
+		} else if (getAge() < getCHILDLIMITorg()) {
 			return AgeState.CHILD;
 		}
 		return AgeState.ADULT;
@@ -5901,14 +5610,14 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public Damage getDamageState() {
-		if (damage > DAMAGELIMITorg[getBodyAgeState().ordinal()]) {
+		if (damage > getDAMAGELIMITorg()[getBodyAgeState().ordinal()]) {
 			toDead();
 			return Damage.TOOMUCH;
 		}
-		if (damage >= DAMAGELIMITorg[getBodyAgeState().ordinal()] * 3 / 4) {
+		if (damage >= getDAMAGELIMITorg()[getBodyAgeState().ordinal()] * 3 / 4) {
 			return Damage.TOOMUCH;
 		}
-		if (damage >= DAMAGELIMITorg[getBodyAgeState().ordinal()] / 2) {
+		if (damage >= getDAMAGELIMITorg()[getBodyAgeState().ordinal()] / 2) {
 			return Damage.VERY;
 		}
 		return Damage.NONE;
@@ -6075,7 +5784,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public boolean isOverEating() {
-		return (!dead && (hungry >= HUNGRYLIMITorg[getBodyAgeState().ordinal()] * 1.3f));
+		return (!dead && (hungry >= getHUNGRYLIMITorg()[getBodyAgeState().ordinal()] * 1.3f));
 	}
 
 	/**
@@ -6086,7 +5795,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public boolean isTooFull() {
-		return (!dead && hungry >= HUNGRYLIMITorg[getBodyAgeState().ordinal()]);
+		return (!dead && hungry >= getHUNGRYLIMITorg()[getBodyAgeState().ordinal()]);
 	}
 
 	/**
@@ -6207,7 +5916,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public int getHungryLimit() {
-		return HUNGRYLIMITorg[getBodyAgeState().ordinal()];
+		return getHUNGRYLIMITorg()[getBodyAgeState().ordinal()];
 	}
 
 	/**
@@ -6259,7 +5968,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public boolean isSleepy() {
-		if (!sleeping && wakeUpTime + ACTIVEPERIODorg < getAge()) {
+		if (!sleeping && wakeUpTime + getACTIVEPERIODorg() < getAge()) {
 			return true;
 		}
 		return false;
@@ -6592,7 +6301,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public int getShitLimit() {
-		return SHITLIMITorg[getBodyAgeState().ordinal()];
+		return getSHITLIMITorg()[getBodyAgeState().ordinal()];
 	}
 
 	/**
@@ -6617,8 +6326,8 @@ public abstract class BodyAttributes extends Obj {
 		if (shitting)
 			return;
 		if (ibVeryShit) {
-			if (shit < SHITLIMITorg[getBodyAgeState().ordinal()]) {
-				shit = SHITLIMITorg[getBodyAgeState().ordinal()] - inShit;
+			if (shit < getSHITLIMITorg()[getBodyAgeState().ordinal()]) {
+				shit = getSHITLIMITorg()[getBodyAgeState().ordinal()] - inShit;
 			}
 		} else {
 			shit = inShit;
@@ -6702,7 +6411,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public int getStressLimit() {
-		return STRESSLIMITorg[getBodyAgeState().ordinal()];
+		return getSTRESSLIMITorg()[getBodyAgeState().ordinal()];
 	}
 
 	/**
@@ -6713,7 +6422,7 @@ public abstract class BodyAttributes extends Obj {
 	@Transient
 	public boolean isStressful() {
 		// ストレス限界の40%を超えている場合
-		if (STRESSLIMITorg[getBodyAgeState().ordinal()] * checkNonYukkuriDiseaseTolerance() / 100 * 2 / 5 < stress) {
+		if (getSTRESSLIMITorg()[getBodyAgeState().ordinal()] * checkNonYukkuriDiseaseTolerance() / 100 * 2 / 5 < stress) {
 			return true;
 		}
 		return false;
@@ -6727,7 +6436,7 @@ public abstract class BodyAttributes extends Obj {
 	@Transient
 	public boolean isVeryStressful() {
 		// ストレス限界の60%を超えている場合
-		if (STRESSLIMITorg[getBodyAgeState().ordinal()] * checkNonYukkuriDiseaseTolerance() / 100 * 3 / 5 < stress) {
+		if (getSTRESSLIMITorg()[getBodyAgeState().ordinal()] * checkNonYukkuriDiseaseTolerance() / 100 * 3 / 5 < stress) {
 			return true;
 		}
 		return false;
@@ -6825,9 +6534,9 @@ public abstract class BodyAttributes extends Obj {
 		if (footBakePeriod < 0) {
 			footBakePeriod = 0;
 		}
-		if (footBakePeriod > DAMAGELIMITorg[getBodyAgeState().ordinal()]) {
+		if (footBakePeriod > getDAMAGELIMITorg()[getBodyAgeState().ordinal()]) {
 			ret = FootBake.CRITICAL;
-		} else if (footBakePeriod > (DAMAGELIMITorg[getBodyAgeState().ordinal()] >> 1)) {
+		} else if (footBakePeriod > (getDAMAGELIMITorg()[getBodyAgeState().ordinal()] >> 1)) {
 			ret = FootBake.MIDIUM;
 		}
 		return ret;
@@ -6864,7 +6573,7 @@ public abstract class BodyAttributes extends Obj {
 	 * @param val 成長段階
 	 */
 	public void initAmount(AgeState val) {
-		bodyAmount = DAMAGELIMITorg[val.ordinal()];
+		bodyAmount = getDAMAGELIMITorg()[val.ordinal()];
 	}
 
 	@Transient
@@ -6884,12 +6593,12 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public int getStep() {
-		return (STEPorg[getBodyAgeState().ordinal()]);
+		return (getSTEPorg()[getBodyAgeState().ordinal()]);
 	}
 
 	@Transient
 	public int getStepDist() {
-		int p = (STEPorg[getBodyAgeState().ordinal()]) * (STEPorg[getBodyAgeState().ordinal()]);
+		int p = (getSTEPorg()[getBodyAgeState().ordinal()]) * (getSTEPorg()[getBodyAgeState().ordinal()]);
 		return p;
 	}
 
@@ -6961,7 +6670,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public int getWeight() {
-		return (WEIGHTorg[getBodyAgeState().ordinal()] + (babyTypes.size() + stalkBabyTypes.size()) * 50);
+		return (getWEIGHTorg()[getBodyAgeState().ordinal()] + (babyTypes.size() + stalkBabyTypes.size()) * 50);
 	}
 
 	/**
@@ -7151,7 +6860,7 @@ public abstract class BodyAttributes extends Obj {
 	 * 強制的にゆかびにする.
 	 */
 	public final void forceSetSick() {
-		sickPeriod = (INCUBATIONPERIODorg * 32) + 2;
+		sickPeriod = (getINCUBATIONPERIODorg() * 32) + 2;
 	}
 
 	/**

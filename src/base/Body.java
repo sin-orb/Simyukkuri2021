@@ -269,23 +269,23 @@ public abstract class Body extends BodyAttributes {
 		// かびてる時のダメージ加算
 		if (isSick()) {
 			// かびている期間が潜伏期間の32倍を超え、かつダメージをヘビーに受けている場合
-			if (getSickPeriod() > (INCUBATIONPERIODorg * 32) && isDamagedHeavily()) {
+			if (getSickPeriod() > (getINCUBATIONPERIODorg() * 32) && isDamagedHeavily()) {
 				// 追加ダメージは1/3の確率で1
 				if (GameRandom.nextInt(3) == 0)
 					damage += TICK;
 			}
 			// かびている期間が潜伏期間の32倍を超えていて、ダメージがヘビーでない場合
-			else if (getSickPeriod() > (INCUBATIONPERIODorg * 32)) {
+			else if (getSickPeriod() > (getINCUBATIONPERIODorg() * 32)) {
 				// 通常の3倍ダメージ
 				damage += TICK * 3;
 			}
 			// かびている期間が潜伏期間の8倍を超えている場合
-			else if (getSickPeriod() > (INCUBATIONPERIODorg * 8)) {
+			else if (getSickPeriod() > (getINCUBATIONPERIODorg() * 8)) {
 				// 通常の2倍のダメージ
 				damage += TICK * 2;
 			}
 			// かびている期間が潜伏期間と同じ
-			else if (getSickPeriod() > INCUBATIONPERIODorg) {
+			else if (getSickPeriod() > getINCUBATIONPERIODorg()) {
 				// 通常ダメージ
 				damage += TICK;
 			}
@@ -2018,7 +2018,7 @@ public abstract class Body extends BodyAttributes {
 	 */
 	public boolean checkEmotionBlind() {
 		if (isBlind()) {
-			EYESIGHTorg = 5 * 5;
+			setEYESIGHTorg(5 * 5);
 			addStress(5);
 			setHappiness(Happiness.SAD);
 			if (GameRandom.nextInt(40) <= 5) {
@@ -2258,7 +2258,7 @@ public abstract class Body extends BodyAttributes {
 			} else {
 				sickPeriod++;
 			}
-			if (sickPeriod > INCUBATIONPERIODorg * 32
+			if (sickPeriod > getINCUBATIONPERIODorg() * 32
 					&& (damage >= getDAMAGELIMITorg()[getBodyAgeState().ordinal()] * 85 / 100) && !isTalking()) {
 				if (isSleeping())
 					wakeup();
@@ -2993,12 +2993,12 @@ public abstract class Body extends BodyAttributes {
 	public final void checkAttitude() {
 		// 非ゆっくり症、足りないゆは変化しない
 		if (isNYD() || isIdiot()) {
-			AttitudePoint = 0;
+			setAttitudePoint(0);
 			return;
 		}
 		// ドゲス、超善良は変化しない
 		if (getAttitude() == Attitude.VERY_NICE || getAttitude() == Attitude.SUPER_SHITHEAD) {
-			AttitudePoint = 0;
+			setAttitudePoint(0);
 			return;
 		}
 		double Correction = 1;
@@ -3016,33 +3016,33 @@ public abstract class Body extends BodyAttributes {
 		// 性格変化実行
 		switch (getAttitude()) {
 			case NICE:
-				if (AttitudePoint >= getNiceLimit()[1] && getIntelligence() != Intelligence.FOOL) {
+				if (getAttitudePoint() >= getNiceLimit()[1] && getIntelligence() != Intelligence.FOOL) {
 					setAttitude(Attitude.VERY_NICE);
-					AttitudePoint = 0;
+					setAttitudePoint(0);
 				}
-				if (AttitudePoint <= getRudeLimit()[0] * Correction) {
+				if (getAttitudePoint() <= getRudeLimit()[0] * Correction) {
 					setAttitude(Attitude.AVERAGE);
-					AttitudePoint = 0;
+					setAttitudePoint(0);
 				}
 				break;
 			case AVERAGE:
-				if (AttitudePoint <= getRudeLimit()[0] * Correction) {
+				if (getAttitudePoint() <= getRudeLimit()[0] * Correction) {
 					setAttitude(Attitude.SHITHEAD);
-					AttitudePoint = 0;
+					setAttitudePoint(0);
 				}
-				if (AttitudePoint >= getNiceLimit()[0]) {
+				if (getAttitudePoint() >= getNiceLimit()[0]) {
 					setAttitude(Attitude.NICE);
-					AttitudePoint = 0;
+					setAttitudePoint(0);
 				}
 				break;
 			case SHITHEAD:
-				if (AttitudePoint <= getRudeLimit()[1] * Correction) {
+				if (getAttitudePoint() <= getRudeLimit()[1] * Correction) {
 					setAttitude(Attitude.SUPER_SHITHEAD);
-					AttitudePoint = 0;
+					setAttitudePoint(0);
 				}
-				if (AttitudePoint >= getNiceLimit()[0]) {
+				if (getAttitudePoint() >= getNiceLimit()[0]) {
 					setAttitude(Attitude.AVERAGE);
-					AttitudePoint = 0;
+					setAttitudePoint(0);
 				}
 				break;
 			default:
@@ -3085,7 +3085,7 @@ public abstract class Body extends BodyAttributes {
 	public final void plusAttitude(int p) {
 		if (isNotChangeCharacter())
 			return;
-		AttitudePoint += p;
+		setAttitudePoint(getAttitudePoint() + p);
 	}
 
 	/**
@@ -4007,7 +4007,7 @@ public abstract class Body extends BodyAttributes {
 			return;
 		if (isBlind()) {
 			setBlind(false);
-			EYESIGHTorg = 400 * 400;
+			setEYESIGHTorg(400 * 400);
 			return;
 		}
 
@@ -4663,10 +4663,10 @@ public abstract class Body extends BodyAttributes {
 	 * すでに妊娠限界の場合は何もしない.
 	 */
 	public void subtractPregnantLimit() {
-		if (PregnantLimit > 0)
-			PregnantLimit--;
+		if (getPregnantLimit() > 0)
+			setPregnantLimit(getPregnantLimit() - 1);
 		else
-			PregnantLimit = 0;
+			setPregnantLimit(0);
 	}
 
 	/**

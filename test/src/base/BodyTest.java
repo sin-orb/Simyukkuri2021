@@ -828,7 +828,7 @@ public class BodyTest {
         @Test
         public void testIsDontMoveTrueWhenCriticalFootBake() {
             body.setDead(false);
-            int limit = body.DAMAGELIMITorg[AgeState.ADULT.ordinal()];
+            int limit = body.getDAMAGELIMITorg()[AgeState.ADULT.ordinal()];
             body.footBakePeriod = limit + 1;
             assertTrue(body.isDontMove());
         }
@@ -1200,7 +1200,7 @@ public class BodyTest {
         public void testScenarioSickProgressAddsExtraDamageWithRnd() {
             body.setDead(false);
             body.setAgeState(AgeState.ADULT);
-            body.setSickPeriod(body.INCUBATIONPERIODorg * 32 + 1);
+            body.setSickPeriod(body.getINCUBATIONPERIODorg() * 32 + 1);
             body.setHungry(body.getHungryLimit() / 2);
             body.setDamage(0);
             int damageBefore = body.getDamage();
@@ -1375,7 +1375,7 @@ public class BodyTest {
 
         @Test
         public void testWantToShitTrueWhenCloseToLimit() {
-            int limit = body.SHITLIMITorg[AgeState.ADULT.ordinal()];
+            int limit = body.getSHITLIMITorg()[AgeState.ADULT.ordinal()];
             body.shit = limit; // 限界値
             assertTrue(body.wantToShit());
         }
@@ -1445,7 +1445,7 @@ public class BodyTest {
             body.setWet(true);
             body.setLikeWater(false);
             // damage > 50% of limit → isDamaged() = true
-            int limit = body.DAMAGELIMITorg[AgeState.ADULT.ordinal()];
+            int limit = body.getDAMAGELIMITorg()[AgeState.ADULT.ordinal()];
             body.damage = limit / 2;
             body.wetPeriod = 0;
             body.checkWet();
@@ -1560,25 +1560,25 @@ public class BodyTest {
         @Test
         public void testPlusAttitudeIncreases() {
             body.setNotChangeCharacter(false);
-            int before = body.AttitudePoint;
+            int before = body.getAttitudePoint();
             body.plusAttitude(10);
-            assertEquals(before + 10, body.AttitudePoint);
+            assertEquals(before + 10, body.getAttitudePoint());
         }
 
         @Test
         public void testPlusAttitudeDecreases() {
             body.setNotChangeCharacter(false);
-            body.AttitudePoint = 50;
+            body.setAttitudePoint(50);
             body.plusAttitude(-20);
-            assertEquals(30, body.AttitudePoint);
+            assertEquals(30, body.getAttitudePoint());
         }
 
         @Test
         public void testPlusAttitudeIgnoredWhenLocked() {
             body.setNotChangeCharacter(true);
-            body.AttitudePoint = 50;
+            body.setAttitudePoint(50);
             body.plusAttitude(10);
-            assertEquals(50, body.AttitudePoint);
+            assertEquals(50, body.getAttitudePoint());
         }
     }
 
@@ -2364,7 +2364,7 @@ public class BodyTest {
             body.setDead(false);
             body.stress = 0;
             body.setTang(500); // not POOR
-            int limit = body.DAMAGELIMITorg[AgeState.ADULT.ordinal()];
+            int limit = body.getDAMAGELIMITorg()[AgeState.ADULT.ordinal()];
             body.damage = limit / 2; // isDamaged = true
             assertFalse(body.canTransform());
         }
@@ -4692,7 +4692,7 @@ public class BodyTest {
 
         @Test
         public void testIsDamagedWhenHeavy() {
-            int limit = body.DAMAGELIMITorg[AgeState.ADULT.ordinal()];
+            int limit = body.getDAMAGELIMITorg()[AgeState.ADULT.ordinal()];
             body.damage = limit / 2;
             assertTrue(body.isDamaged());
         }
@@ -5035,10 +5035,10 @@ public class BodyTest {
             body.setSukkiri(true);
             body.setRaper(false);
             body.setNotChangeCharacter(false);
-            int before = body.AttitudePoint;
+            int before = body.getAttitudePoint();
             body.teachManner(3);
             // plusAttitude(3) is called
-            assertEquals(before + 3, body.AttitudePoint);
+            assertEquals(before + 3, body.getAttitudePoint());
         }
     }
 
@@ -5051,9 +5051,9 @@ public class BodyTest {
         @Test
         public void testCheckAttitudeNYDIgnored() {
             body.seteCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
-            body.AttitudePoint = 100;
+            body.setAttitudePoint(100);
             body.checkAttitude();
-            assertEquals(0, body.AttitudePoint);
+            assertEquals(0, body.getAttitudePoint());
         }
 
         @Test
@@ -5065,9 +5065,9 @@ public class BodyTest {
             body.setAttitude(Attitude.AVERAGE);
             // Ensure NiceLimit is reasonable
             body.setNiceLimit(new int[] { 100, 500 });
-            body.AttitudePoint = 200;
+            body.setAttitudePoint(200);
             body.checkAttitude();
-            assertEquals(0, body.AttitudePoint);
+            assertEquals(0, body.getAttitudePoint());
             assertEquals(Attitude.NICE, body.getAttitude());
         }
 
@@ -5078,10 +5078,10 @@ public class BodyTest {
             body.setAttitude(Attitude.SHITHEAD);
             body.setNotChangeCharacter(false);
             // Set enough points to trigger attitude change
-            body.AttitudePoint = 50001;
+            body.setAttitudePoint(50001);
             body.checkAttitude();
             // Attitude should improve or points reset
-            assertTrue(body.AttitudePoint < 50001 || body.getAttitude() != Attitude.SHITHEAD);
+            assertTrue(body.getAttitudePoint() < 50001 || body.getAttitude() != Attitude.SHITHEAD);
         }
 
         @Test
@@ -5091,9 +5091,9 @@ public class BodyTest {
             body.setAttitude(Attitude.NICE);
             body.setNotChangeCharacter(false);
             // Set negative points
-            body.AttitudePoint = -50001;
+            body.setAttitudePoint(-50001);
             body.checkAttitude();
-            assertTrue(body.AttitudePoint > -50001 || body.getAttitude() != Attitude.NICE);
+            assertTrue(body.getAttitudePoint() > -50001 || body.getAttitude() != Attitude.NICE);
         }
     }
 
@@ -5480,7 +5480,7 @@ public class BodyTest {
         @Test
         public void testCheckDamageAliveWithHighDamageSetsTooMuch() {
             body.setDead(false);
-            int limit = body.DAMAGELIMITorg[AgeState.ADULT.ordinal()];
+            int limit = body.getDAMAGELIMITorg()[AgeState.ADULT.ordinal()];
             body.damage = limit + 100;
             body.checkDamage();
             assertEquals(Damage.TOOMUCH, body.getDamageState());
@@ -5498,7 +5498,7 @@ public class BodyTest {
         @Test
         public void testCheckDamageCantDieProtects() {
             body.setDead(false);
-            int limit = body.DAMAGELIMITorg[AgeState.ADULT.ordinal()];
+            int limit = body.getDAMAGELIMITorg()[AgeState.ADULT.ordinal()];
             body.damage = limit + 100;
             body.cantDiePeriod = 10;
             body.checkDamage();
@@ -9932,7 +9932,7 @@ public class BodyTest {
 
         @Test
         public void testReturnsFalseWhenFootBakeCritical() {
-            // footBakePeriod > DAMAGELIMITorg[ADULT] → CRITICAL
+            // footBakePeriod > getDAMAGELIMITorg()[ADULT] → CRITICAL
             body.setFootBakePeriod(body.getDAMAGELIMITorg()[AgeState.ADULT.ordinal()] + 1);
             // pealed=false (default)
             assertEquals(FootBake.CRITICAL, body.getFootBakeLevel());
@@ -10008,7 +10008,7 @@ public class BodyTest {
             ConstState rnd = new ConstState(0);
             SimYukkuri.RND = rnd;
             body.setShit(0);
-            // isFull() = hungry >= HUNGRYLIMITorg[ADULT] * 0.8
+            // isFull() = hungry >= getHUNGRYLIMITorg()[ADULT] * 0.8
             body.setHungry(body.getHUNGRYLIMITorg()[AgeState.ADULT.ordinal()]);
             assertTrue(body.isFull());
             body.checkShit();
@@ -16856,7 +16856,7 @@ public class BodyTest {
             body.setMessageCount(0);
             body.setDirty(true);
             body.setDamage(body.getDamageLimit() * 9 / 10);
-            body.setSickPeriod(body.INCUBATIONPERIODorg * 32 + 1);
+            body.setSickPeriod(body.getINCUBATIONPERIODorg() * 32 + 1);
             body.setCurrentEvent(new TestEventPacket(EventPacket.EventPriority.LOW));
             SimYukkuri.RND = new ConstState(1);
 

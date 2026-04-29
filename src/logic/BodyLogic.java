@@ -63,41 +63,7 @@ public class BodyLogic {
 	 * @return 関係性
 	 */
 	public static final EnumRelationMine checkMyRelation(Body me, Body you) {
-		// 父
-		if (me.isFather(you)) {
-			return EnumRelationMine.FATHER;
-		}
-
-		// 母
-		if (me.isMother(you)) {
-			return EnumRelationMine.MOTHER;
-		}
-
-		// つがい
-		if (me.isPartner(you)) {
-			return EnumRelationMine.PARTNAR;
-		}
-
-		// 父の子供
-		if (you.isFather(me)) {
-			return EnumRelationMine.CHILD_FATHER;
-		}
-
-		// 母の子供
-		if (you.isMother(me)) {
-			return EnumRelationMine.CHILD_MOTHER;
-		}
-
-		// 姉
-		if ((me.isElderSister(you))) {
-			return EnumRelationMine.ELDERSISTER;
-		}
-
-		// 妹
-		if ((!me.isElderSister(you)) && me.isSister(you)) {
-			return EnumRelationMine.YOUNGSISTER;
-		}
-		return EnumRelationMine.OTHER;
+		return BodyRelations.checkMyRelation(me, you);
 	}
 
 	/**

@@ -411,9 +411,7 @@ class TerrariumTest {
             Body far = WorldTestHelper.createBody();
             far.setX(1000);
             far.setY(1000);
-            java.lang.reflect.Field eyesightField = src.base.BodyAttributes.class.getDeclaredField("EYESIGHTorg");
-            eyesightField.setAccessible(true);
-            eyesightField.setInt(far, 10);
+            far.setEYESIGHTorg(10);
 
             SimYukkuri.world.getCurrentMap().getBody().put(source.getUniqueID(), source);
             SimYukkuri.world.getCurrentMap().getBody().put(nearby.getUniqueID(), nearby);

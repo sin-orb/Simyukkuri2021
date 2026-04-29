@@ -172,35 +172,35 @@ public class Patch extends Body {
 		 * }
 		 */
 		double factor = Math.random() * 2 + 1;
-		HUNGRYLIMITorg[AgeState.ADULT.ordinal()] *= factor;
-		HUNGRYLIMITorg[AgeState.CHILD.ordinal()] *= factor;
-		HUNGRYLIMITorg[AgeState.BABY.ordinal()] *= factor;
+		getHUNGRYLIMITorg()[AgeState.ADULT.ordinal()] *= factor;
+		getHUNGRYLIMITorg()[AgeState.CHILD.ordinal()] *= factor;
+		getHUNGRYLIMITorg()[AgeState.BABY.ordinal()] *= factor;
 		factor = Math.random() * 2 + 1;
-		SHITLIMITorg[AgeState.ADULT.ordinal()] *= factor;
-		SHITLIMITorg[AgeState.CHILD.ordinal()] *= factor;
-		SHITLIMITorg[AgeState.BABY.ordinal()] *= factor;
+		getSHITLIMITorg()[AgeState.ADULT.ordinal()] *= factor;
+		getSHITLIMITorg()[AgeState.CHILD.ordinal()] *= factor;
+		getSHITLIMITorg()[AgeState.BABY.ordinal()] *= factor;
 		factor = Math.random() + 0.2;
-		DAMAGELIMITorg[AgeState.ADULT.ordinal()] *= factor;
-		DAMAGELIMITorg[AgeState.CHILD.ordinal()] *= factor;
-		DAMAGELIMITorg[AgeState.BABY.ordinal()] *= factor;
+		getDAMAGELIMITorg()[AgeState.ADULT.ordinal()] *= factor;
+		getDAMAGELIMITorg()[AgeState.CHILD.ordinal()] *= factor;
+		getDAMAGELIMITorg()[AgeState.BABY.ordinal()] *= factor;
 		factor = Math.random() + 0.5;
-		BABYLIMITorg *= factor;
-		CHILDLIMITorg *= factor;
-		LIFELIMITorg *= factor;
+		setBABYLIMITorg((int) (getBABYLIMITorg() * factor));
+		setCHILDLIMITorg((int) (getCHILDLIMITorg() * factor));
+		setLIFELIMITorg((int) (getLIFELIMITorg() * factor));
 		factor = Math.random() + 1;
-		RELAXPERIODorg *= factor;
-		EXCITEPERIODorg *= factor;
-		PREGPERIODorg *= factor;
-		SLEEPPERIODorg *= factor;
-		ACTIVEPERIODorg *= factor;
+		setRELAXPERIODorg((int) (getRELAXPERIODorg() * factor));
+		setEXCITEPERIODorg((int) (getEXCITEPERIODorg() * factor));
+		setPREGPERIODorg((int) (getPREGPERIODorg() * factor));
+		setSLEEPPERIODorg((int) (getSLEEPPERIODorg() * factor));
+		setACTIVEPERIODorg((int) (getACTIVEPERIODorg() * factor));
 		setSameDest(GameRandom.nextInt(20) + 20);
-		DECLINEPERIODorg *= (Math.random() + 0.5);
+		setDECLINEPERIODorg((int) (getDECLINEPERIODorg() * (Math.random() + 0.5)));
 		setROBUSTNESS(GameRandom.nextInt(5) + 1);
 		// EYESIGHT /= 4;
 		factor = Math.random() + 0.5;
-		STRENGTHorg[AgeState.ADULT.ordinal()] *= factor;
-		STRENGTHorg[AgeState.CHILD.ordinal()] *= factor;
-		STRENGTHorg[AgeState.BABY.ordinal()] *= factor;
+		getSTRENGTHorg()[AgeState.ADULT.ordinal()] *= factor;
+		getSTRENGTHorg()[AgeState.CHILD.ordinal()] *= factor;
+		getSTRENGTHorg()[AgeState.BABY.ordinal()] *= factor;
 
 		speed = baseSpeed;
 	}

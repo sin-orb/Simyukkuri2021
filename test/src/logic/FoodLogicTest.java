@@ -861,9 +861,7 @@ class FoodLogicTest {
         body.setHungry(body.getHungryLimit() / 4);
         body.setPublicRank(PublicRank.UnunSlave);
 
-        java.lang.reflect.Field eyesightField = src.base.BodyAttributes.class.getDeclaredField("EYESIGHTorg");
-        eyesightField.setAccessible(true);
-        eyesightField.set(body, 1000000);
+        body.setEYESIGHTorg(1000000);
 
         src.game.Shit shit = new src.game.Shit();
         shit.setX(100);
@@ -7219,11 +7217,7 @@ class FoodLogicTest {
         body.setPublicRank(PublicRank.UnunSlave);
         body.setHungry(body.getHungryLimit() / 4); // not veryHungry
         // Set eyesight very small so minDistance<1 quickly
-        try {
-            java.lang.reflect.Field f = src.base.BodyAttributes.class.getDeclaredField("EYESIGHTorg");
-            f.setAccessible(true);
-            f.set(body, 0); // eyesight=0 → minDistance=0 < 1 → break immediately
-        } catch (Exception e) { /* ignore */ }
+        body.setEYESIGHTorg(0); // eyesight=0 → minDistance=0 < 1 → break immediately
         Shit shit = new Shit();
         shit.setX(body.getX() + 5);
         shit.setY(body.getY());
