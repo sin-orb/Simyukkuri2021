@@ -7,7 +7,7 @@ md classes_lib 2> NUL
 set CP=..\lib\jackson-annotations-2.9.9.jar;..\lib\jackson-core-2.9.9.jar;..\lib\jackson-databind-2.9.9.jar
 set CLASSPATH=%CLASSPATH%;%CP%
 echo Start compiling...
-javac -encoding UTF-8 -sourcepath .. -d classes ..\src\SimYukkuri.java
+javac -source 8 -target 8 -encoding UTF-8 -sourcepath .. -d classes ..\src\SimYukkuri.java
 echo Extracting libraries...
 pushd classes_lib
 for %%J in ("%~dp0..\lib\jackson-annotations-2.9.9.jar" "%~dp0..\lib\jackson-core-2.9.9.jar" "%~dp0..\lib\jackson-databind-2.9.9.jar") do jar xf "%%~fJ"

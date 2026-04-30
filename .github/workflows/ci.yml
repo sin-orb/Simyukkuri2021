@@ -36,13 +36,13 @@ jobs:
       shell: cmd
       run: |
         dir /s /b src\*.java > sources.txt
-        javac -d bin -cp "lib\*" -encoding UTF-8 @sources.txt
+        javac -source 8 -target 8 -d bin -cp "lib\*" -encoding UTF-8 @sources.txt
 
     - name: Compile Test Code
       shell: cmd
       run: |
         dir /s /b test\*.java > test_sources.txt
-        javac -d bin -cp "bin;lib\*" -encoding UTF-8 @test_sources.txt
+        javac -source 8 -target 8 -d bin -cp "bin;lib\*" -encoding UTF-8 @test_sources.txt
 
     - name: Run Tests
       shell: cmd
