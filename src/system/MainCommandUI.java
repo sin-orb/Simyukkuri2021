@@ -25,12 +25,6 @@ import src.base.Body;
 import src.command.GadgetMenu;
 import src.enums.BodyRank;
 import src.enums.PublicRank;
-import src.system.MainCommandListener.ButtonListener;
-import src.system.MainCommandListener.GameSpeedComboBoxListener;
-import src.system.MainCommandListener.MainItemComboBoxListener;
-import src.system.MainCommandListener.OptionMenuListener;
-import src.system.MainCommandListener.OptionPopupListener;
-import src.system.MainCommandListener.SubItemComboBoxListener;
 
 /**
  * メインコマンドUI（右ペイン）
@@ -158,10 +152,8 @@ public class MainCommandUI {
 		retpanel.setPreferredSize(new Dimension(MENU_PANE_X, windowHeight));
 		retpanel.setMinimumSize(new Dimension(MENU_PANE_X, windowHeight));
 
-		MainCommandListener listenerPack = new MainCommandListener();
-
 		// コンボボックス
-		GameSpeedComboBoxListener gsl = listenerPack.new GameSpeedComboBoxListener();
+		GameSpeedComboBoxListener gsl = new GameSpeedComboBoxListener();
 		gameSpeedCombo = new JComboBox();
 		gameSpeedCombo.setFocusable(false);
 		gameSpeedCombo.addItemListener(gsl);
@@ -169,21 +161,21 @@ public class MainCommandUI {
 		gameSpeedCombo.setSelectedIndex(1);
 		retpanel.add(gameSpeedCombo);
 		// 選択コマンド
-		MainItemComboBoxListener mil = listenerPack.new MainItemComboBoxListener();
+		MainItemComboBoxListener mil = new MainItemComboBoxListener();
 		mainItemCombo = new JComboBox();
 		mainItemCombo.setFocusable(false);
 		mainItemCombo.addItemListener(mil);
 		mainItemCombo.setModel(GadgetMenu.getMainModel());
 		retpanel.add(mainItemCombo);
 
-		SubItemComboBoxListener sil = listenerPack.new SubItemComboBoxListener();
+		SubItemComboBoxListener sil = new SubItemComboBoxListener();
 		subItemCombo = new JComboBox();
 		subItemCombo.setFocusable(false);
 		subItemCombo.addItemListener(sil);
 		subItemCombo.setModel(GadgetMenu.getToolModel());
 		retpanel.add(subItemCombo);
 
-		ButtonListener buttonListener = listenerPack.new ButtonListener();
+		ButtonListener buttonListener = new ButtonListener();
 		int butID;
 
 		// ゆっくり追加ボタン
@@ -276,8 +268,8 @@ public class MainCommandUI {
 		retpanel.add(buttonPane);
 
 		// オプションポップアップ
-		OptionMenuListener oml = listenerPack.new OptionMenuListener();
-		OptionPopupListener opl = listenerPack.new OptionPopupListener();
+		OptionMenuListener oml = new OptionMenuListener();
+		OptionPopupListener opl = new OptionPopupListener();
 		optionPopup.addPopupMenuListener(opl);
 		int size = OptionPopup.values().length;
 		for(int i = 0; i < size; i++) {

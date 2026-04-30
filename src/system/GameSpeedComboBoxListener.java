@@ -1,0 +1,22 @@
+package src.system;
+
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
+
+import src.SimYukkuri;
+
+/**
+ * ゲームスピードの選択反映.
+ */
+public final class GameSpeedComboBoxListener implements ItemListener {
+	@Override
+	public void itemStateChanged(ItemEvent e) {
+		synchronized (SimYukkuri.lock) {
+			if (e.getStateChange() == ItemEvent.SELECTED) {
+				if (e.getSource() == MainCommandUI.getGameSpeedCombo()) {
+					MainCommandUI.setSelectedGameSpeed(MainCommandUI.getGameSpeedCombo().getSelectedIndex());
+				}
+			}
+		}
+	}
+}

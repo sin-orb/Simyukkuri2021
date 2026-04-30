@@ -14,12 +14,6 @@ import src.draw.Point4y;
 import src.draw.Translate;
 import src.game.Shit;
 import src.game.Vomit;
-import src.system.ItemListener.GetMenuAction;
-import src.system.ItemListener.GetPopupAction;
-import src.system.ItemListener.ShapeMenuAction;
-import src.system.ItemListener.ShapePopupAction;
-import src.system.ItemListener.UseMenuAction;
-import src.system.ItemListener.UsePopupAction;
 
 
 /**********************************************
@@ -174,10 +168,8 @@ public class ItemMenu {
 	 */
 	public static final void createPopupMenu() {
 		
-		ItemListener pack = new ItemListener();
-
-		GetMenuAction getact = pack.new GetMenuAction();
-		GetPopupAction getpop = pack.new GetPopupAction();
+		ItemGetMenuAction getact = new ItemGetMenuAction();
+		ItemPopupSpeedAction getpop = new ItemPopupSpeedAction();
 		getPopup = new JPopupMenu();
 		getPopup.addPopupMenuListener(getpop);
 		getMenu = new JMenuItem[GetMenu.values().length];
@@ -189,8 +181,8 @@ public class ItemMenu {
 		}
 		getTarget = null;
 		
-		UseMenuAction useact = pack.new UseMenuAction();
-		UsePopupAction usepop = pack.new UsePopupAction();
+		ItemUseMenuAction useact = new ItemUseMenuAction();
+		ItemPopupSpeedAction usepop = new ItemPopupSpeedAction();
 		usePopup = new JPopupMenu();
 		usePopup.addPopupMenuListener(usepop);
 		useMenu = new JMenuItem[UseMenu.values().length];
@@ -202,8 +194,8 @@ public class ItemMenu {
 		}
 		useTarget = null;
 
-		ShapeMenuAction shpact = pack.new ShapeMenuAction();
-		ShapePopupAction shppop = pack.new ShapePopupAction();
+		ItemShapeMenuAction shpact = new ItemShapeMenuAction();
+		ItemPopupNoopAction shppop = new ItemPopupNoopAction();
 		shapePopup = new JPopupMenu();
 		shapePopup.addPopupMenuListener(shppop);
 		shapeMenu = new JMenuItem[ShapeMenu.values().length];

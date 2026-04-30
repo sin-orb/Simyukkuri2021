@@ -16,19 +16,16 @@ import src.util.WorldTestHelper;
 
 public class MainCommandListenerTest {
 
-    private MainCommandListener listener;
-
     @BeforeEach
     public void setUp() {
         WorldTestHelper.resetWorld();
         SimYukkuri.world = new World();
-        listener = new MainCommandListener();
         WorldTestHelper.initializeMainCommandUITestState();
     }
 
     @Test
     public void testGameSpeedComboBoxListener_updatesSelectedSpeed() {
-        MainCommandListener.GameSpeedComboBoxListener speedListener = listener.new GameSpeedComboBoxListener();
+        GameSpeedComboBoxListener speedListener = new GameSpeedComboBoxListener();
 
         @SuppressWarnings("unchecked")
         JComboBox<String> combo = MainCommandUI.getGameSpeedCombo();
@@ -42,7 +39,7 @@ public class MainCommandListenerTest {
 
     @Test
     public void testMainItemComboBoxListener_updatesGadgetMenu() {
-        MainCommandListener.MainItemComboBoxListener itemListener = listener.new MainItemComboBoxListener();
+        MainItemComboBoxListener itemListener = new MainItemComboBoxListener();
 
         @SuppressWarnings("unchecked")
         JComboBox<GadgetMenu.GadgetList> combo = MainCommandUI.getMainItemCombo();
@@ -56,7 +53,7 @@ public class MainCommandListenerTest {
 
     @Test
     public void testSubItemComboBoxListener_updatesGadgetMenu() {
-        MainCommandListener.SubItemComboBoxListener subListener = listener.new SubItemComboBoxListener();
+        SubItemComboBoxListener subListener = new SubItemComboBoxListener();
 
         // Need to set select main first
         GadgetMenu.setSelectMain(GadgetMenu.GadgetList.FOODS);

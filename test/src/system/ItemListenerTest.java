@@ -24,19 +24,16 @@ import src.yukkuri.Reimu;
 
 public class ItemListenerTest {
 
-    private ItemListener listener;
-
     @BeforeEach
     public void setUp() {
         WorldTestHelper.resetWorld();
         SimYukkuri.world = new World();
-        listener = new ItemListener();
         WorldTestHelper.initializeMainCommandUITestState();
     }
 
     @Test
     public void testGetPopupAction_pausesAndResumesSpeed() {
-        ItemListener.GetPopupAction action = listener.new GetPopupAction();
+        ItemPopupSpeedAction action = new ItemPopupSpeedAction();
 
         // Initial speed
         MainCommandUI.setSelectedGameSpeed(2);
@@ -54,7 +51,7 @@ public class ItemListenerTest {
 
     @Test
     public void testUsePopupAction_pausesAndResumesSpeed() {
-        ItemListener.UsePopupAction action = listener.new UsePopupAction();
+        ItemPopupSpeedAction action = new ItemPopupSpeedAction();
 
         MainCommandUI.setSelectedGameSpeed(1);
         MainCommandUI.getGameSpeedCombo().setSelectedIndex(1);
@@ -73,7 +70,7 @@ public class ItemListenerTest {
         SimYukkuri.world.getCurrentMap().getBody().put(b.getUniqueID(), b);
         ItemMenu.setGetTarget(b);
 
-        ItemListener.GetMenuAction action = listener.new GetMenuAction();
+        ItemGetMenuAction action = new ItemGetMenuAction();
         ActionEvent e = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, GetMenu.PICKUP.name());
 
         action.actionPerformed(e);
@@ -91,7 +88,7 @@ public class ItemListenerTest {
         SimYukkuri.world.getCurrentMap().getShit().put(s.objId, s);
         ItemMenu.setGetTarget(s);
 
-        ItemListener.GetMenuAction action = listener.new GetMenuAction();
+        ItemGetMenuAction action = new ItemGetMenuAction();
         ActionEvent e = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, GetMenu.PICKUP.name());
 
         action.actionPerformed(e);
@@ -108,7 +105,7 @@ public class ItemListenerTest {
         SimYukkuri.world.getCurrentMap().getVomit().put(v.objId, v);
         ItemMenu.setGetTarget(v);
 
-        ItemListener.GetMenuAction action = listener.new GetMenuAction();
+        ItemGetMenuAction action = new ItemGetMenuAction();
         ActionEvent e = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, GetMenu.PICKUP.name());
 
         action.actionPerformed(e);
