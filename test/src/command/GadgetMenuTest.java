@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import javax.swing.JMenu;
+
 import src.command.GadgetMenu.ActionTarget;
 import src.command.GadgetMenu.GadgetList;
 import src.command.GadgetMenu.HelpContext;
@@ -51,6 +53,20 @@ public class GadgetMenuTest {
 
         assertEquals(GadgetList.TOOL, main[0]);
         assertEquals(GadgetList.PUNISH, tool[0]);
+    }
+
+    @Test
+    public void testPopupMenuBuildsCategories() {
+        GadgetMenu.getPopup().removeAll();
+        GadgetMenu.createPopupMenu();
+
+        assertEquals(GadgetMenu.getMainCategory().length, GadgetMenu.getPopup().getComponentCount());
+        // displayName は headless 環境での static 初期化順序により null の場合がある
+        String displayName = GadgetMenu.getMainCategory()[0].getDisplayName();
+        String menuText = ((JMenu) GadgetMenu.getPopup().getComponent(0)).getText();
+        if (displayName != null) {
+            assertEquals(displayName, menuText);
+        }
     }
 
 }

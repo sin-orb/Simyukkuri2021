@@ -2,26 +2,14 @@ package src.command;
 import src.util.GameText;
 
 import java.awt.Image;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferedImage;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-import java.util.LinkedList;
-import java.util.List;
 
 import javax.swing.DefaultComboBoxModel;
-import javax.swing.JMenu;
-import javax.swing.JMenuItem;
 import javax.swing.JPopupMenu;
 
 import src.SimYukkuri;
-import src.util.GameWorld;
-import src.base.Body;
 import src.base.Obj;
-import src.command.GadgetMenu.ActionTarget;
-import src.command.GadgetMenu.GadgetList;
 import src.item.AutoFeeder;
 import src.item.Bed;
 import src.item.BreedingPool;
@@ -647,7 +635,7 @@ public class GadgetMenu {
 	/**アイコンの画像の入れ物*/
 	private static BufferedImage[] icon;
 	/**ポップアップのインスタンス(?)*/
-	private static PopupAction action = new PopupAction();
+	private static GadgetMenuPopupAction action = new GadgetMenuPopupAction();
 	/** ヘルプ */
 	private static HelpContext[] currentHelp = new HelpContext[4];
 
@@ -843,35 +831,7 @@ public class GadgetMenu {
 	/**カテゴリーのポップアップを作る*/
 	public static final void createPopupMenu() {
 		icon = IconPool.getHelpIconImageArray();
-		popup.add(createSubGroup(MainCategory[0], ToolCategory));
-		popup.add(createSubGroup(MainCategory[1], ToolCategory2));
-		popup.add(createSubGroup(MainCategory[2], AmpouleCategory));
-		popup.add(createSubGroup(MainCategory[3], FoodCategory));
-		popup.add(createSubGroup(MainCategory[4], CleanCategory));
-		popup.add(createSubGroup(MainCategory[5], OkazariCategory));
-		popup.add(createSubGroup(MainCategory[6], PantsCategory));
-		popup.add(createSubGroup(MainCategory[7], FloorCategory));
-		popup.add(createSubGroup(MainCategory[8], BarrierCategory));
-		popup.add(createSubGroup(MainCategory[9], ToysCategory));
-		popup.add(createSubGroup(MainCategory[10], ConveyorCategory));
-		popup.add(createSubGroup(MainCategory[11], VoiceCategory));
-		popup.add(createSubGroup(MainCategory[12], TestCategory));
-	}
-
-	/**個別動作のポップアップを作る*/
-	private static final JMenu createSubGroup(GadgetList root, GadgetList[] group) {
-		JMenu ret;
-		JMenuItem subMenu;
-
-		ret = new JMenu(root.getDisplayName());
-		int size = group.length;
-		for (int i = 0; i < size; i++) {
-			subMenu = new JMenuItem(group[i].getDisplayName());
-			subMenu.addActionListener(action);
-			subMenu.setActionCommand(group[i].name());
-			ret.add(subMenu);
-		}
-		return ret;
+		GadgetMenuPopup.createPopupMenu(popup, action);
 	}
 
 	/**
@@ -997,31 +957,7 @@ public class GadgetMenu {
 	 * @param method 実行したいメソッド名
 	 */
 	public static final void executeBodyMethod(MouseEvent e, Obj found, String method) {
-		try {
-			Method m;
-			List<Body> bodyList = new LinkedList<Body>(GameWorld.get().getCurrentMap().getBody().values());
-			if (e.isShiftDown()) {
-				for (Body b : bodyList) {
-					m = b.getClass().getMethod(method, (Class<?>[]) null);
-					m.invoke(b, (Object[]) null);
-				}
-			} else {
-				if (found instanceof Body) {
-					m = ((Body) found).getClass().getMethod(method, (Class<?>[]) null);
-					m.invoke(((Body) found), (Object[]) null);
-				}
-			}
-		} catch (SecurityException e1) {
-			e1.printStackTrace();
-		} catch (NoSuchMethodException e1) {
-			e1.printStackTrace();
-		} catch (IllegalArgumentException e1) {
-			e1.printStackTrace();
-		} catch (IllegalAccessException e1) {
-			e1.printStackTrace();
-		} catch (InvocationTargetException e1) {
-			e1.printStackTrace();
-		}
+		BodyMethodDispatcher.execute(e, found, method);
 	}
 
 	/** ゆっくりにメソッド実行
@@ -1032,179 +968,20 @@ public class GadgetMenu {
 	 * @param prm 指定パラメータ
 	 */
 	public static final void executeBodyMethod(MouseEvent e, Obj found, String method, int prm) {
-		try {
-			Method m;
-			List<Body> bodyList = new LinkedList<Body>(GameWorld.get().getCurrentMap().getBody().values());
-
-			if (e.isShiftDown()) {
-				for (Body b : bodyList) {
-					m = b.getClass().getMethod(method, int.class);
-					m.invoke(b, prm);
-				}
-			} else {
-				if (found instanceof Body) {
-					m = ((Body) found).getClass().getMethod(method, int.class);
-					m.invoke(((Body) found), prm);
-				}
-			}
-		} catch (SecurityException e1) {
-			e1.printStackTrace();
-		} catch (NoSuchMethodException e1) {
-			e1.printStackTrace();
-		} catch (IllegalArgumentException e1) {
-			e1.printStackTrace();
-		} catch (IllegalAccessException e1) {
-			e1.printStackTrace();
-		} catch (InvocationTargetException e1) {
-			e1.printStackTrace();
-		}
+		BodyMethodDispatcher.execute(e, found, method, prm);
 	}
 
 	/** ゆっくりにメソッド実行
 	 * <br> パラメータboolean、SHIFTで全体、CTRLで反転実行系のコマンド用
-	 * 
+	 *
 	 * @param e 入力されたマウスの動作
 	 * @param found 対象オブジェクト(主にゆっくり)
 	 * @param getMethod 実行したいメソッド名(ゆっくり用)
 	 * @param setMethod 実行したいメソッド名(その他用)
 	 * @param invMethod 反転実行系コマンド実行
 	 */
-	public static final void executeBodyMethod(MouseEvent e, Obj found, String getMethod, String setMethod,String invMethod) {
-		try {
-			Method m;
-			List<Body> bodyList = new LinkedList<Body>(GameWorld.get().getCurrentMap().getBody().values());
-
-			if (e.isShiftDown()) {
-				boolean flag = true;
-				if (found instanceof Body) {
-					m = ((Body) found).getClass().getMethod(getMethod, (Class<?>[]) null);
-					flag = !((Boolean) m.invoke(((Body) found), (Object[]) null)).booleanValue();
-				}
-				for (Body b : bodyList) {
-					m = b.getClass().getMethod(setMethod, boolean.class);
-					m.invoke(b, flag);
-				}
-			} else if (e.isControlDown()) {
-				for (Body b : bodyList) {
-					m = b.getClass().getMethod(invMethod, (Class<?>[]) null);
-					m.invoke(b, (Object[]) null);
-				}
-			} else {
-				if (found instanceof Body) {
-					m = ((Body) found).getClass().getMethod(invMethod, (Class<?>[]) null);
-					m.invoke(((Body) found), (Object[]) null);
-				}
-			}
-		} catch (SecurityException e1) {
-			e1.printStackTrace();
-		} catch (NoSuchMethodException e1) {
-			e1.printStackTrace();
-		} catch (IllegalArgumentException e1) {
-			e1.printStackTrace();
-		} catch (IllegalAccessException e1) {
-			e1.printStackTrace();
-		} catch (InvocationTargetException e1) {
-			e1.printStackTrace();
-		}
-	}
-}
-
-/************
- * ポップアップの選択をUIへ反映
- *
- */
-class PopupAction implements ActionListener {
-	@Override
-	public final void actionPerformed(ActionEvent e) {
-
-		String command = e.getActionCommand();
-
-		GadgetList sel = GadgetList.valueOf(command);
-		MainCommandUI.getMainItemCombo().setSelectedIndex(sel.getGroup().ordinal() - 1);
-		GadgetMenu.setSelectMain(GadgetList.values()[sel.getGroup().ordinal() - 1]);
-		GadgetMenu.setSelectSub(sel);
-		GadgetMenu.setActionHelp(sel);
-		int idx = getIndex(sel);
-		MainCommandUI.getSubItemCombo().setSelectedIndex(idx);
-
-		// 即時実行コマンドはここで実行
-		if (sel.getActionTarget() == ActionTarget.IMMEDIATE) {
-			GadgetAction.immediateEvaluate(sel);
-		}
-
-		GadgetMenu.setPopupDisplay(false);
-	}
-
-	/**いくつのコンボをつなげるかを返す*/
-	private final int getIndex(GadgetList item) {
-
-		int num;
-		num = GadgetMenu.getToolCategory().length;
-		for (int i = 0; i < num; i++) {
-			if (item == GadgetMenu.getToolCategory()[i])
-				return i;
-		}
-		num = GadgetMenu.getToolCategory2().length;
-		for (int i = 0; i < num; i++) {
-			if (item == GadgetMenu.getToolCategory2()[i])
-				return i;
-		}
-		num = GadgetMenu.getAmpouleCategory().length;
-		for (int i = 0; i < num; i++) {
-			if (item == GadgetMenu.getAmpouleCategory()[i])
-				return i;
-		}
-		num = GadgetMenu.getFoodCategory().length;
-		for (int i = 0; i < num; i++) {
-			if (item == GadgetMenu.getFoodCategory()[i])
-				return i;
-		}
-		num = GadgetMenu.getCleanCategory().length;
-		for (int i = 0; i < num; i++) {
-			if (item == GadgetMenu.getCleanCategory()[i])
-				return i;
-		}
-		num = GadgetMenu.getOkazariCategory().length;
-		for (int i = 0; i < num; i++) {
-			if (item == GadgetMenu.getOkazariCategory()[i])
-				return i;
-		}
-		num = GadgetMenu.getPantsCategory().length;
-		for (int i = 0; i < num; i++) {
-			if (item == GadgetMenu.getPantsCategory()[i])
-				return i;
-		}
-		num = GadgetMenu.getFloorCategory().length;
-		for (int i = 0; i < num; i++) {
-			if (item == GadgetMenu.getFloorCategory()[i])
-				return i;
-		}
-		num = GadgetMenu.getBarrierCategory().length;
-		for (int i = 0; i < num; i++) {
-			if (item == GadgetMenu.getBarrierCategory()[i])
-				return i;
-		}
-		num = GadgetMenu.getToysCategory().length;
-		for (int i = 0; i < num; i++) {
-			if (item == GadgetMenu.getToysCategory()[i])
-				return i;
-		}
-		num = GadgetMenu.getConveyorCategory().length;
-		for (int i = 0; i < num; i++) {
-			if (item == GadgetMenu.getConveyorCategory()[i])
-				return i;
-		}
-		num = GadgetMenu.getVoiceCategory().length;
-		for (int i = 0; i < num; i++) {
-			if (item == GadgetMenu.getVoiceCategory()[i])
-				return i;
-		}
-		num = GadgetMenu.getTestCategory().length;
-		for (int i = 0; i < num; i++) {
-			if (item == GadgetMenu.getTestCategory()[i])
-				return i;
-		}
-		return 0;
+	public static final void executeBodyMethod(MouseEvent e, Obj found, String getMethod, String setMethod, String invMethod) {
+		BodyMethodDispatcher.execute(e, found, getMethod, setMethod, invMethod);
 	}
 }
 
