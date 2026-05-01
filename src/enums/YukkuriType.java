@@ -1,85 +1,53 @@
 package src.enums;
 import src.util.GameLocale;
-import src.util.GameText;
 
-import src.system.ResourceUtil;
-import src.yukkuri.Alice;
-import src.yukkuri.Ayaya;
-import src.yukkuri.Chen;
-import src.yukkuri.Chiruno;
-import src.yukkuri.Deibu;
-import src.yukkuri.DosMarisa;
-import src.yukkuri.Eiki;
-import src.yukkuri.Fran;
-import src.yukkuri.HybridYukkuri;
-import src.yukkuri.Kimeemaru;
-import src.yukkuri.Marisa;
-import src.yukkuri.MarisaKotatsumuri;
-import src.yukkuri.MarisaReimu;
-import src.yukkuri.MarisaTsumuri;
-import src.yukkuri.Meirin;
-import src.yukkuri.Myon;
-import src.yukkuri.Nitori;
-import src.yukkuri.Patch;
-import src.yukkuri.Ran;
-import src.yukkuri.Reimu;
-import src.yukkuri.ReimuMarisa;
-import src.yukkuri.Remirya;
-import src.yukkuri.Sakuya;
-import src.yukkuri.Suwako;
-import src.yukkuri.Tarinai;
-import src.yukkuri.TarinaiReimu;
-import src.yukkuri.Tenko;
-import src.yukkuri.Udonge;
-import src.yukkuri.WasaReimu;
-import src.yukkuri.Yurusanae;
-import src.yukkuri.Yuuka;
-import src.yukkuri.Yuyuko;
 /** ゆっくりのタイプ */
 public enum YukkuriType {
-	ALICE("Alice", "alice", "alice", GameLocale.isJapanese() ? Alice.nameJ : Alice.nameE, Alice.type),
-	AYAYA("Ayaya", "ayaya", "ayaya", GameLocale.isJapanese() ? Ayaya.nameJ : Ayaya.nameE, Ayaya.type),
-	CHEN("Chen", "chen", "chen", GameLocale.isJapanese() ? Chen.nameJ : Chen.nameE, Chen.type),
-	CHIRUNO("Chiruno", "chiruno", "chiruno", GameLocale.isJapanese() ? Chiruno.nameJ : Chiruno.nameE, Chiruno.type),
-	DEIBU("Deibu", "deibu", "deibu", GameText.read("enums_deibu"), Deibu.type),
-	DOSMARISA("DosMarisa", "dosmarisa", "dosmarisa", GameText.read("enums_dosu"), DosMarisa.type),
-	EIKI("Eiki", "eiki", "eiki", GameLocale.isJapanese() ? Eiki.nameJ : Eiki.nameE, Eiki.type),
-	FRAN("Fran", "fran", "fran", GameLocale.isJapanese() ? Fran.nameJ : Fran.nameE, Fran.type),
-	HYBRIDYUKKURI("HybridYukkuri", "hybridyukkuri", "", GameText.read("enums_hybrid"), HybridYukkuri.type),
-	KIMEEMARU("Kimeemaru", "kimeemaru", "kimeemaru", GameLocale.isJapanese() ? Kimeemaru.nameJ : Kimeemaru.nameE, Kimeemaru.type),
-	MARISA("Marisa", "marisa", "marisa", GameLocale.isJapanese() ? Marisa.nameJ : Marisa.nameE, Marisa.type),
-	MARISAKOTATSUMURI("MarisaKotatsumuri", "marisakotatsumuri", "marisa_kotatumuri", GameText.read("enums_kotatsu"), MarisaKotatsumuri.type),
-	MARISAREIMU("MarisaReimu", "marisareimu", "marisa_reimu", GameLocale.isJapanese() ? MarisaReimu.nameJ : MarisaReimu.nameE, MarisaReimu.type),
-	MARISATSUMURI("MarisaTsumuri", "marisatsumuri", "marisa_tumuri", GameText.read("enums_tsumuri"), MarisaTsumuri.type),
-	MEIRIN("Meirin", "meirin", "merin", GameLocale.isJapanese() ? Meirin.nameJ : Meirin.nameE, Meirin.type),
-	MYON("Myon", "myon", "myon", GameLocale.isJapanese() ? Myon.nameJ : Myon.nameE, Myon.type),
-	NITORI("Nitori", "nitori", "nitori", GameLocale.isJapanese() ? Nitori.nameJ : Nitori.nameE, Nitori.type),
-	PATCH("Patch", "patch", "patch", GameLocale.isJapanese() ? Patch.nameJ : Patch.nameE, Patch.type),
-	RAN("Ran", "ran", "ran", GameLocale.isJapanese() ? Ran.nameJ : Ran.nameE, Ran.type),
-	REIMU("Reimu", "reimu", "reimu", GameLocale.isJapanese() ? Reimu.nameJ : Reimu.nameE, Reimu.type),
-	REIMUMARISA("ReimuMarisa", "reimumarisa", "reimu_marisa", GameLocale.isJapanese() ? ReimuMarisa.nameJ : ReimuMarisa.nameE, ReimuMarisa.type),
-	REMIRYA("Remirya", "remirya", "remirya", GameLocale.isJapanese() ? Remirya.nameJ : Remirya.nameE, Remirya.type),
-	SAKUYA("Sakuya", "sakuya", "sakuya", GameLocale.isJapanese() ? Sakuya.nameJ : Sakuya.nameE, Sakuya.type),
-	SUWAKO("Suwako", "suwako", "suwako", GameLocale.isJapanese() ? Suwako.nameJ : Suwako.nameE, Suwako.type),
-	TARINAI("Tarinai", "tarinai", "tarinai", GameLocale.isJapanese() ? Tarinai.nameJ : Tarinai.nameE, Tarinai.type),
-	TARINAIREIMU("TarinaiReimu", "tarinai_reimu", "tarinai_reimu", GameLocale.isJapanese() ? TarinaiReimu.nameJ : TarinaiReimu.nameE, TarinaiReimu.type),
-	TENKO("Tenko", "tenko", "tenko", GameLocale.isJapanese() ? Tenko.nameJ : Tenko.nameE, Tenko.type),
-	UDONGE("Udonge", "udonge", "udonge", GameLocale.isJapanese() ? Udonge.nameJ : Udonge.nameE, Udonge.type),
-	WASAREIMU("WasaReimu", "reimu", "wasa", GameText.read("enums_wasa"), WasaReimu.type),
-	YURUSANAE("Yurusanae", "yurusanae", "yurusanae", GameLocale.isJapanese() ? Yurusanae.nameJ : Yurusanae.nameE, Yurusanae.type),
-	YUUKA("Yuuka", "yuuka", "yuuka", GameLocale.isJapanese() ? Yuuka.nameJ : Yuuka.nameE, Yuuka.type),
-	YUYUKO("Yuyuko", "yuyuko", "yuyuko", GameLocale.isJapanese() ? Yuyuko.nameJ : Yuyuko.nameE, Yuyuko.type),
+	ALICE("Alice", "alice", "alice", "ありす", "Alice", 2),
+	AYAYA("Ayaya", "ayaya", "ayaya", "あや", "Ayaya", 1001),
+	CHEN("Chen", "chen", "chen", "ちぇん", "Chen", 4),
+	CHIRUNO("Chiruno", "chiruno", "chiruno", "ちるの", "Chiruno", 1006),
+	DEIBU("Deibu", "deibu", "deibu", "でいぶ", "Deibu", 2005),
+	DOSMARISA("DosMarisa", "dosmarisa", "dosmarisa", "どす", "Dosu", 2006),
+	EIKI("Eiki", "eiki", "eiki", "えーき", "Eiki", 1007),
+	FRAN("Fran", "fran", "fran", "ふらん", "Fran", 3001),
+	HYBRIDYUKKURI("HybridYukkuri", "hybridyukkuri", "", "ハイブリッド", "Hybrid", 20000),
+	KIMEEMARU("Kimeemaru", "kimeemaru", "kimeemaru", "きめぇまる", "kimeemaru", 2003),
+	MARISA("Marisa", "marisa", "marisa", "まりさ", "Marisa", 0),
+	MARISAKOTATSUMURI("MarisaKotatsumuri", "marisakotatsumuri", "marisa_kotatumuri", "こたつむり", "Kotatsu", 2004),
+	MARISAREIMU("MarisaReimu", "marisareimu", "marisa_reimu", "まりされいむ", "MarisaReimu", 10000),
+	MARISATSUMURI("MarisaTsumuri", "marisatsumuri", "marisa_tumuri", "つむり", "Shell", 2002),
+	MEIRIN("Meirin", "meirin", "merin", "めーりん", "Merin", 1004),
+	MYON("Myon", "myon", "myon", "みょん", "Myon", 5),
+	NITORI("Nitori", "nitori", "nitori", "にとり", "Nitori", 1009),
+	PATCH("Patch", "patch", "patch", "ぱちゅりー", "Patch", 3),
+	RAN("Ran", "ran", "ran", "らん", "Ran", 1008),
+	REIMU("Reimu", "reimu", "reimu", "れいむ", "Reimu", 1),
+	REIMUMARISA("ReimuMarisa", "reimumarisa", "reimu_marisa", "れいむまりさ", "ReimuMarisa", 10001),
+	REMIRYA("Remirya", "remirya", "remirya", "れみりゃ", "Remirya", 3000),
+	SAKUYA("Sakuya", "sakuya", "sakuya", "さくや", "Sakuya", 1011),
+	SUWAKO("Suwako", "suwako", "suwako", "すわこ", "Suwako", 1005),
+	TARINAI("Tarinai", "tarinai", "tarinai", "たりないゆ", "Tarinaiyu", 2000),
+	TARINAIREIMU("TarinaiReimu", "tarinai_reimu", "tarinai_reimu", "たりないれいむ", "TarinaiReimu", 2007),
+	TENKO("Tenko", "tenko", "tenko", "てんこ", "Tenko", 1002),
+	UDONGE("Udonge", "udonge", "udonge", "うどんげ", "Udonge", 1003),
+	WASAREIMU("WasaReimu", "reimu", "wasa", "わされいむ", "Wasa", 2001),
+	YURUSANAE("Yurusanae", "yurusanae", "yurusanae", "さなえ", "Yurusanae", 1000),
+	YUUKA("Yuuka", "yuuka", "yuuka", "ゆうか", "Yuuka", 1010),
+	YUYUKO("Yuyuko", "yuyuko", "yuyuko", "ゆゆこ", "Yuyuko", 3002),
 	;
 	private final String className;
 	private final String messageFileName;
 	private final String imageDirName;
 	private final String nameJ;
+	private final String nameE;
 	private final int typeID;
-	YukkuriType(String clsName, String msgFile, String imgDir, String nameJ, int id) {
+	YukkuriType(String clsName, String msgFile, String imgDir, String nameJ, String nameE, int id) {
 		this.className = clsName;
 		this.messageFileName = msgFile;
 		this.imageDirName = imgDir;
 		this.nameJ = nameJ;
+		this.nameE = nameE;
 		this.typeID = id;
 	}
 
@@ -95,8 +63,19 @@ public enum YukkuriType {
 		return imageDirName;
 	}
 
+	/** ロケールに応じた表示名を返す（旧 getNameJ() と同じ挙動）. */
 	public String getNameJ() {
+		return GameLocale.isJapanese() ? nameJ : nameE;
+	}
+
+	/** 日本語名を返す. */
+	public String getJapaneseName() {
 		return nameJ;
+	}
+
+	/** 英語名を返す. */
+	public String getEnglishName() {
+		return nameE;
 	}
 
 	public int getTypeID() {
