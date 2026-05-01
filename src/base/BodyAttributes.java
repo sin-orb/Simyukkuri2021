@@ -5458,7 +5458,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public int getSize() {
-		if (bodySpr == null) {
+		if (bodySpriteSet.getBodySpr() == null) {
 			return 0;
 		}
 		Sprite spr = bodySpriteSet.getBodySpr()[getBodyAgeState().ordinal()];
@@ -5478,7 +5478,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public int getOriginSize() {
-		if (bodySpr == null) {
+		if (bodySpriteSet.getBodySpr() == null) {
 			return 0;
 		}
 		Sprite spr = bodySpriteSet.getBodySpr()[getBodyAgeState().ordinal()];
