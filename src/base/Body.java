@@ -2415,6 +2415,10 @@ public abstract class Body extends BodyAttributes {
 		}
 		// しゃべれないor生まれていないor非ゆっくり症
 		if (isSilent() || isUnBirth() || isNYD()) {
+			if (isUnBirth()) {
+				setMessageCount(0);
+				setMessageBuf(null);
+			}
 			return;
 		}
 
@@ -7173,6 +7177,10 @@ public abstract class Body extends BodyAttributes {
 			dropAllTakeoutItem();
 			clearActions();
 			moveBody(true); // for falling the body
+			if (isUnBirth()) {
+				setMessageCount(0);
+				setMessageBuf(null);
+			}
 			checkMessage();
 			if (SimYukkuri.UNYO) {
 				resetUnyo();

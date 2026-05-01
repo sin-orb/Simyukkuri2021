@@ -175,7 +175,9 @@ public final class BodyEventState {
 		if (!nyd && (body.isNYD() || body.isSleeping())) {
 			return;
 		}
-		if (body.isSilent()) {
+		if (body.isSilent() || body.isUnBirth()) {
+			body.setMessageCount(0);
+			body.setMessageBuf(null);
 			return;
 		}
 		if (!interrupt && GameRandom.nextInt(body.getMessageDiscipline() + 1) != 0
@@ -225,7 +227,7 @@ public final class BodyEventState {
 	 * @param piko    ピコピコ有無
 	 */
 	public static void setNegiMessage(Body body, String message, int count, boolean piko) {
-		if (!body.isCanTalk()) {
+		if (!body.isCanTalk() || body.isUnBirth()) {
 			body.setMessageCount(0);
 			body.setMessageBuf(null);
 			return;

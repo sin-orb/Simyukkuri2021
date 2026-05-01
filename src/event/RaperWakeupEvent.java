@@ -33,9 +33,9 @@ public class RaperWakeupEvent extends EventPacket {
 
 	@Override
 	public boolean simpleEventAction(Body b) {
-		// 自分自身はスキップ
+		// 自分自身はスキップ、またはレイパーが既に消えていればスキップ
 		Body from = YukkuriUtil.getBodyInstance(getFrom());
-		if (b == from)
+		if (from == null || b == from)
 			return false;
 		// 死体、睡眠、皮なし、目無しはスキップ
 		if (!b.canEventResponse())

@@ -86,6 +86,11 @@ public class EventLogic {
 		//リストに登録されているイベントすべてをチェック
 		for (Iterator<EventPacket> i = GameWorld.get().getCurrentMap().getEvent().iterator(); i.hasNext();) {
 			e = i.next();
+			// from が設定されていてかつ実体が消えていればイベントを除去
+			if (e.getFrom() != -1 && YukkuriUtil.getBodyInstance(e.getFrom()) == null) {
+				i.remove();
+				continue;
+			}
 //			if(e.from == b) continue;
 			if(e.simpleEventAction(b)) {
 				continue;

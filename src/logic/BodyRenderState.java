@@ -45,6 +45,11 @@ public final class BodyRenderState {
 			layer.getOption()[0] = 0;
 		}
 
+		if (body.isUnBirth()) {
+			idx += appendFace(body, ImageCode.SLEEPING.ordinal(), direction, layer, idx);
+			return appendFaceOverlays(body, direction, layer, idx);
+		}
+
 		if (body.getForceFace() != -1) {
 			idx += appendFace(body, body.getForceFace(), direction, layer, idx);
 			return appendFaceOverlays(body, direction, layer, idx);
@@ -106,7 +111,7 @@ public final class BodyRenderState {
 		} else if (body.isShitting() || body.isBirth() && body.getBabyTypes().size() > 0
 				|| (body.isFixBack() && !body.isFurifuri())) {
 			idx += appendFrontBody(body, layer, idx);
-		} else if (body.isFurifuri() && !body.isSleeping() && (!body.isLockmove() || body.isFixBack())) {
+		} else if (body.isFurifuri() && !body.isUnBirth() && !body.isSleeping() && (!body.isLockmove() || body.isFixBack())) {
 			idx += appendRollingBody(body, layer, idx);
 		} else {
 			idx += appendNormalBody(body, direction, layer, idx);
@@ -540,41 +545,41 @@ public final class BodyRenderState {
 
 	private static int appendDamageEffect(Body body, int direction, BodyLayer layer, int idx) {
 		if (body.isPealed()) {
-			return idx;
+			return 0;
 		}
 		if (body.isDamagedHeavily()) {
-			return idx + appendFace(body, ImageCode.DAMAGED2.ordinal(), direction, layer, idx);
+			return appendFace(body, ImageCode.DAMAGED2.ordinal(), direction, layer, idx);
 		}
 		if (body.isDamaged()) {
-			return idx + appendFace(body, ImageCode.DAMAGED1.ordinal(), direction, layer, idx);
+			return appendFace(body, ImageCode.DAMAGED1.ordinal(), direction, layer, idx);
 		}
 		if (body.isDamagedLightly()) {
-			return idx + appendFace(body, ImageCode.DAMAGED0.ordinal(), direction, layer, idx);
+			return appendFace(body, ImageCode.DAMAGED0.ordinal(), direction, layer, idx);
 		}
 		if (body.isOld()) {
-			return idx + appendFace(body, ImageCode.DAMAGED1.ordinal(), direction, layer, idx);
+			return appendFace(body, ImageCode.DAMAGED1.ordinal(), direction, layer, idx);
 		}
 		if (body.getBodyRank() == BodyRank.NORAYU || body.getBodyRank() == BodyRank.YASEIYU) {
-			return idx + appendFace(body, ImageCode.DAMAGED0.ordinal(), direction, layer, idx);
+			return appendFace(body, ImageCode.DAMAGED0.ordinal(), direction, layer, idx);
 		}
-		return idx;
+		return 0;
 	}
 
 	private static int appendSickEffect(Body body, int direction, BodyLayer layer, int idx) {
 		int sickPeriod = body.getSickPeriod();
 		int incubation = body.getINCUBATIONPERIODorg();
 		if (sickPeriod > (incubation << 5)) {
-			return idx + appendFace(body, ImageCode.SICK3.ordinal(), direction, layer, idx);
+			return appendFace(body, ImageCode.SICK3.ordinal(), direction, layer, idx);
 		}
 		if (sickPeriod > (incubation << 3)) {
-			return idx + appendFace(body, ImageCode.SICK2.ordinal(), direction, layer, idx);
+			return appendFace(body, ImageCode.SICK2.ordinal(), direction, layer, idx);
 		}
 		if (sickPeriod > incubation) {
-			return idx + appendFace(body, ImageCode.SICK1.ordinal(), direction, layer, idx);
+			return appendFace(body, ImageCode.SICK1.ordinal(), direction, layer, idx);
 		}
 		if (body.isSick()) {
-			return idx + appendFace(body, ImageCode.SICK0.ordinal(), direction, layer, idx);
+			return appendFace(body, ImageCode.SICK0.ordinal(), direction, layer, idx);
 		}
-		return idx;
+		return 0;
 	}
 }

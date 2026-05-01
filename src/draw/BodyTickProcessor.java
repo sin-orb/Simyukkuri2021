@@ -72,6 +72,11 @@ public final class BodyTickProcessor {
 				break;
 		}
 
+		if (b.isUnBirth()) {
+			b.upDate();
+			return null;
+		}
+
 		checkFire(b);
 		StoneLogic.checkPubble(b);
 
@@ -165,6 +170,8 @@ public final class BodyTickProcessor {
 					babyList.add(baby);
 					baby.setBindStalk(s);
 					s.setBindBaby(baby);
+					baby.setUnBirth(true);
+					baby.setDropShadow(false);
 				} else {
 					s.setBindBaby(null);
 				}
