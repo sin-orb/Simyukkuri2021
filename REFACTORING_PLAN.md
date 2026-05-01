@@ -331,6 +331,11 @@
 - `HybridYukkuri` の名前配列の直接代入を setter 経由へ寄せた
 - `BodyAttributes` の移行済みプロパティに `@JsonProperty` を付け、保存/読込で getter/setter を明示した
 - 検証: production compile、test compile、`YukkuriUtilTest` の behavior profile deep copy が成功
+- **Phase 3 Step 1 完了**: `BodyNameSet` getter 不整合を修正。alias フィールド 8本を削除し、getter を `bodyNameSet` 直接委譲に変更。29の yukkuri サブクラスで `anMyName[]/anMyNameD[]` 直接参照を `getAnMyName()[]/getAnMyNameD()[]` 経由に変更。`syncNameAliases()` を削除。
+- **Phase 3 Step 2 完了**: `BodySpriteSet` alias を正式委譲に変更。`bodySpr/expandSpr/braidSpr` の alias フィールド 3本を削除し、getter・内部参照を `bodySpriteSet` 委譲に変更。`syncSpriteAliases()` を削除。
+- 検証: production compile 成功。全テスト 6,848 successful / 48 failed (失敗 48 は Phase 3 作業前から存在する Jackson save/load 系の既存問題のみ)。`BodyAttributes.java` が 7,170 → 7,100 行 (-70行)。
+
+**Phase 3 完了**: 定義された全 helper の統合・不整合解消が完了。4,000 行目標は Phase 3-5 横断の中期目標として継続。
 
 ### Phase 4: Simulation Core の分離
 

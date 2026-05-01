@@ -169,8 +169,8 @@ public class MarisaKotatsumuri extends Body {
 	@Override
 	@Transient
 	public String getMyName() {
-		if (anMyName[getBodyAgeState().ordinal()] != null) {
-			return anMyName[getBodyAgeState().ordinal()];
+		if (getAnMyName()[getBodyAgeState().ordinal()] != null) {
+			return getAnMyName()[getBodyAgeState().ordinal()];
 		}
 		return nameJ;
 	}
@@ -178,8 +178,8 @@ public class MarisaKotatsumuri extends Body {
 	@Override
 	@Transient
 	public String getMyNameD() {
-		if (anMyNameD[getBodyAgeState().ordinal()] != null) {
-			return anMyNameD[getBodyAgeState().ordinal()];
+		if (getAnMyNameD()[getBodyAgeState().ordinal()] != null) {
+			return getAnMyNameD()[getBodyAgeState().ordinal()];
 		}
 		return getMyName();
 	}

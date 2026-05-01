@@ -116,30 +116,6 @@ public abstract class BodyAttributes extends Obj {
 	/** 名前関連データをまとめた値オブジェクト */
 	@JsonIgnore
 	private final BodyNameSet bodyNameSet = new BodyNameSet();
-	/** 赤ゆの一人称 */
-	@JsonIgnore
-	protected String[] anBabyName = bodyNameSet.getAnBabyName();
-	/** 子ゆの一人称 */
-	@JsonIgnore
-	protected String[] anChildName = bodyNameSet.getAnChildName();
-	/** 大人ゆの一人称 */
-	@JsonIgnore
-	protected String[] anAdultName = bodyNameSet.getAnAdultName();
-	/** [0]:赤ゆの一人称 [1]:子ゆの一人称 [2]:大人ゆの一人称 */
-	@JsonIgnore
-	protected String[] anMyName = bodyNameSet.getAnMyName();
-	/** 赤ゆの一人称（ダメージ時） */
-	@JsonIgnore
-	protected String[] anBabyNameD = bodyNameSet.getAnBabyNameD();
-	/** 子ゆの一人称（ダメージ時） */
-	@JsonIgnore
-	protected String[] anChildNameD = bodyNameSet.getAnChildNameD();
-	/** 大人ゆの一人称（ダメージ時） */
-	@JsonIgnore
-	protected String[] anAdultNameD = bodyNameSet.getAnAdultNameD();
-	/** ダメージ時の、[0]:赤ゆの一人称 [1]:子ゆの一人称 [2]:大人ゆの一人称 */
-	@JsonIgnore
-	protected String[] anMyNameD = bodyNameSet.getAnMyNameD();
 	/** スプライト関連データをまとめた値オブジェクト */
 	@JsonIgnore
 	private final BodySpriteSet bodySpriteSet = new BodySpriteSet();
@@ -153,16 +129,6 @@ public abstract class BodyAttributes extends Obj {
 	protected static int[] shadowImgW = new int[3], shadowImgH = new int[3];
 	/** 影画像の中心定義 */
 	protected static int[] shadowPivX = new int[3], shadowPivY = new int[3];
-	/** 本体のスプライト定義 */
-	@JsonIgnore
-	protected Sprite[] bodySpr = bodySpriteSet.getBodySpr();
-	/** 拡幅分のスプライト定義 */
-	@JsonIgnore
-	protected Sprite[] expandSpr = bodySpriteSet.getExpandSpr();
-	/** おさげのスプライト定義 */
-	@JsonIgnore
-	protected Sprite[] braidSpr = bodySpriteSet.getBraidSpr();
-
 	// .INIファイルで変更可能な各ゆっくりのパラメータ.
 	/** 統計/調整パラメータ群 */
 	@JsonIgnore
@@ -577,7 +543,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@JsonProperty
 	public String[] getAnBabyName() {
-		return anBabyName;
+		return bodyNameSet.getAnBabyName();
 	}
 
 	/**
@@ -588,7 +554,6 @@ public abstract class BodyAttributes extends Obj {
 	@JsonProperty
 	public void setAnBabyName(String[] anBabyName) {
 		bodyNameSet.setAnBabyName(anBabyName);
-		syncNameAliases();
 	}
 
 	/**
@@ -598,7 +563,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@JsonProperty
 	public String[] getAnChildName() {
-		return anChildName;
+		return bodyNameSet.getAnChildName();
 	}
 
 	/**
@@ -609,7 +574,6 @@ public abstract class BodyAttributes extends Obj {
 	@JsonProperty
 	public void setAnChildName(String[] anChildName) {
 		bodyNameSet.setAnChildName(anChildName);
-		syncNameAliases();
 	}
 
 	/**
@@ -619,7 +583,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@JsonProperty
 	public String[] getAnAdultName() {
-		return anAdultName;
+		return bodyNameSet.getAnAdultName();
 	}
 
 	/**
@@ -630,7 +594,6 @@ public abstract class BodyAttributes extends Obj {
 	@JsonProperty
 	public void setAnAdultName(String[] anAdultName) {
 		bodyNameSet.setAnAdultName(anAdultName);
-		syncNameAliases();
 	}
 
 	/**
@@ -640,7 +603,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@JsonProperty
 	public String[] getAnMyName() {
-		return anMyName;
+		return bodyNameSet.getAnMyName();
 	}
 
 	/**
@@ -651,7 +614,6 @@ public abstract class BodyAttributes extends Obj {
 	@JsonProperty
 	public void setAnMyName(String[] anMyName) {
 		bodyNameSet.setAnMyName(anMyName);
-		syncNameAliases();
 	}
 
 	/**
@@ -661,7 +623,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@JsonProperty
 	public String[] getAnBabyNameD() {
-		return anBabyNameD;
+		return bodyNameSet.getAnBabyNameD();
 	}
 
 	/**
@@ -672,7 +634,6 @@ public abstract class BodyAttributes extends Obj {
 	@JsonProperty
 	public void setAnBabyNameD(String[] anBabyNameD) {
 		bodyNameSet.setAnBabyNameD(anBabyNameD);
-		syncNameAliases();
 	}
 
 	/**
@@ -682,7 +643,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@JsonProperty
 	public String[] getAnChildNameD() {
-		return anChildNameD;
+		return bodyNameSet.getAnChildNameD();
 	}
 
 	/**
@@ -693,7 +654,6 @@ public abstract class BodyAttributes extends Obj {
 	@JsonProperty
 	public void setAnChildNameD(String[] anChildNameD) {
 		bodyNameSet.setAnChildNameD(anChildNameD);
-		syncNameAliases();
 	}
 
 	/**
@@ -703,7 +663,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@JsonProperty
 	public String[] getAnAdultNameD() {
-		return anAdultNameD;
+		return bodyNameSet.getAnAdultNameD();
 	}
 
 	/**
@@ -714,7 +674,6 @@ public abstract class BodyAttributes extends Obj {
 	@JsonProperty
 	public void setAnAdultNameD(String[] anAdultNameD) {
 		bodyNameSet.setAnAdultNameD(anAdultNameD);
-		syncNameAliases();
 	}
 
 	/**
@@ -724,7 +683,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@JsonProperty
 	public String[] getAnMyNameD() {
-		return anMyNameD;
+		return bodyNameSet.getAnMyNameD();
 	}
 
 	/**
@@ -735,7 +694,6 @@ public abstract class BodyAttributes extends Obj {
 	@JsonProperty
 	public void setAnMyNameD(String[] anMyNameD) {
 		bodyNameSet.setAnMyNameD(anMyNameD);
-		syncNameAliases();
 	}
 
 	/**
@@ -748,21 +706,6 @@ public abstract class BodyAttributes extends Obj {
 			return;
 		}
 		bodyNameSet.copyFrom(from.bodyNameSet);
-		syncNameAliases();
-	}
-
-	/**
-	 * 名前関連の互換フィールドを helper の参照へ揃える.
-	 */
-	private void syncNameAliases() {
-		anBabyName = bodyNameSet.getAnBabyName();
-		anChildName = bodyNameSet.getAnChildName();
-		anAdultName = bodyNameSet.getAnAdultName();
-		anMyName = bodyNameSet.getAnMyName();
-		anBabyNameD = bodyNameSet.getAnBabyNameD();
-		anChildNameD = bodyNameSet.getAnChildNameD();
-		anAdultNameD = bodyNameSet.getAnAdultNameD();
-		anMyNameD = bodyNameSet.getAnMyNameD();
 	}
 
 	public static BufferedImage[] getShadowImages() {
@@ -832,7 +775,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@JsonProperty
 	public Sprite[] getBodySpr() {
-		return bodySpr;
+		return bodySpriteSet.getBodySpr();
 	}
 
 	/**
@@ -843,7 +786,6 @@ public abstract class BodyAttributes extends Obj {
 	@JsonProperty
 	public void setBodySpr(Sprite[] bodySpr) {
 		bodySpriteSet.setBodySpr(bodySpr);
-		syncSpriteAliases();
 	}
 
 	/**
@@ -853,7 +795,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@JsonProperty
 	public Sprite[] getExpandSpr() {
-		return expandSpr;
+		return bodySpriteSet.getExpandSpr();
 	}
 
 	/**
@@ -864,7 +806,6 @@ public abstract class BodyAttributes extends Obj {
 	@JsonProperty
 	public void setExpandSpr(Sprite[] expandSpr) {
 		bodySpriteSet.setExpandSpr(expandSpr);
-		syncSpriteAliases();
 	}
 
 	/**
@@ -874,7 +815,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@JsonProperty
 	public Sprite[] getBraidSpr() {
-		return braidSpr;
+		return bodySpriteSet.getBraidSpr();
 	}
 
 	/**
@@ -885,7 +826,6 @@ public abstract class BodyAttributes extends Obj {
 	@JsonProperty
 	public void setBraidSpr(Sprite[] braidSpr) {
 		bodySpriteSet.setBraidSpr(braidSpr);
-		syncSpriteAliases();
 	}
 
 	/**
@@ -898,16 +838,6 @@ public abstract class BodyAttributes extends Obj {
 			return;
 		}
 		bodySpriteSet.copyFrom(from.bodySpriteSet);
-		syncSpriteAliases();
-	}
-
-	/**
-	 * スプライト関連の互換フィールドを helper の参照へ揃える.
-	 */
-	private void syncSpriteAliases() {
-		bodySpr = bodySpriteSet.getBodySpr();
-		expandSpr = bodySpriteSet.getExpandSpr();
-		braidSpr = bodySpriteSet.getBraidSpr();
 	}
 
 	/**
@@ -5531,7 +5461,7 @@ public abstract class BodyAttributes extends Obj {
 		if (bodySpr == null) {
 			return 0;
 		}
-		Sprite spr = bodySpr[getBodyAgeState().ordinal()];
+		Sprite spr = bodySpriteSet.getBodySpr()[getBodyAgeState().ordinal()];
 		if (spr == null) {
 			return 0;
 		}
@@ -5551,7 +5481,7 @@ public abstract class BodyAttributes extends Obj {
 		if (bodySpr == null) {
 			return 0;
 		}
-		Sprite spr = bodySpr[getBodyAgeState().ordinal()];
+		Sprite spr = bodySpriteSet.getBodySpr()[getBodyAgeState().ordinal()];
 		if (spr == null) {
 			return 0;
 		}
@@ -6578,12 +6508,12 @@ public abstract class BodyAttributes extends Obj {
 
 	@Transient
 	public int getCollisionX() {
-		return (bodySpr[getBodyAgeState().ordinal()].getImageW() + getExpandSizeW()) >> 1;
+		return (bodySpriteSet.getBodySpr()[getBodyAgeState().ordinal()].getImageW() + getExpandSizeW()) >> 1;
 	}
 
 	@Transient
 	public int getCollisionY() {
-		return (bodySpr[getBodyAgeState().ordinal()].getImageH() + getExpandSizeH()) >> 1;
+		return (bodySpriteSet.getBodySpr()[getBodyAgeState().ordinal()].getImageH() + getExpandSizeH()) >> 1;
 	}
 
 	/**
@@ -6604,17 +6534,17 @@ public abstract class BodyAttributes extends Obj {
 
 	@Transient
 	public Sprite getBodyBaseSpr() {
-		return bodySpr[getBodyAgeState().ordinal()];
+		return bodySpriteSet.getBodySpr()[getBodyAgeState().ordinal()];
 	}
 
 	@Transient
 	public Sprite getBodyExpandSpr() {
-		return expandSpr[getBodyAgeState().ordinal()];
+		return bodySpriteSet.getExpandSpr()[getBodyAgeState().ordinal()];
 	}
 
 	@Transient
 	public Sprite getBraidSprite() {
-		return braidSpr[getBodyAgeState().ordinal()];
+		return bodySpriteSet.getBraidSpr()[getBodyAgeState().ordinal()];
 	}
 
 	@Transient
@@ -6629,32 +6559,32 @@ public abstract class BodyAttributes extends Obj {
 
 	@Transient
 	public int getW() {
-		return bodySpr[getBodyAgeState().ordinal()].getImageW();
+		return bodySpriteSet.getBodySpr()[getBodyAgeState().ordinal()].getImageW();
 	}
 
 	@Transient
 	public int getH() {
-		return bodySpr[getBodyAgeState().ordinal()].getImageH();
+		return bodySpriteSet.getBodySpr()[getBodyAgeState().ordinal()].getImageH();
 	}
 
 	@Transient
 	public int getPivotX() {
-		return bodySpr[getBodyAgeState().ordinal()].getPivotX();
+		return bodySpriteSet.getBodySpr()[getBodyAgeState().ordinal()].getPivotX();
 	}
 
 	@Transient
 	public int getPivotY() {
-		return bodySpr[getBodyAgeState().ordinal()].getPivotY();
+		return bodySpriteSet.getBodySpr()[getBodyAgeState().ordinal()].getPivotY();
 	}
 
 	@Transient
 	public int getBraidW() {
-		return braidSpr[getBodyAgeState().ordinal()].getImageW();
+		return bodySpriteSet.getBraidSpr()[getBodyAgeState().ordinal()].getImageW();
 	}
 
 	@Transient
 	public int getBraidH() {
-		return braidSpr[getBodyAgeState().ordinal()].getImageH();
+		return bodySpriteSet.getBraidSpr()[getBodyAgeState().ordinal()].getImageH();
 	}
 
 	@Transient
