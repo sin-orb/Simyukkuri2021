@@ -293,4 +293,7 @@ public class Fran extends Body {
 		z = (int) (Translate.getMapZ() * Translate.getFlyLimit());
 		speed = baseSpeed;
 	}
+
+	@Override
+	public boolean isPredator() { return true; }
 }

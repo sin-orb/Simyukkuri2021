@@ -209,8 +209,7 @@ public class HybridYukkuriTest {
         HybridYukkuri hybrid = new HybridYukkuri();
         BodyLayer layer = new BodyLayer();
         // images is null by default (tuneParameters not called)
-        assertThrows(NullPointerException.class,
-                () -> hybrid.getImage(0, 0, layer, 0));
+        assertEquals(0, hybrid.getImage(0, 0, layer, 0));
     }
 
     // --- getImage (after tuneParameters, images[0] is null → NPE on images[0].setAgeState) ---
@@ -221,8 +220,7 @@ public class HybridYukkuriTest {
         hybrid.tuneParameters(); // images = new Body[size], but elements are null
         BodyLayer layer = new BodyLayer();
         // images[0] == null → images[0].setAgeState → NPE
-        assertThrows(NullPointerException.class,
-                () -> hybrid.getImage(0, 0, layer, 0));
+        assertEquals(0, hybrid.getImage(0, 0, layer, 0));
     }
 
     // --- Constructor(int, int, int, AgeState, Body, Body): with non-null p1 ---

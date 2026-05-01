@@ -2,6 +2,7 @@ package src.yukkuri;
 import src.util.GameView;
 
 import java.awt.image.ImageObserver;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import java.beans.Transient;
 import java.io.IOException;
 
@@ -72,7 +73,7 @@ public class HybridYukkuri extends Body {
 
 		if (mama == null && papa == null) {
 			doreiTmp = new Reimu(100, 100, 0, AgeState.BABY, null, null);
-			doreiTmp2 = dorei;
+			doreiTmp2 = doreiTmp;
 		} else {
 			if (mama != null) {
 				if (mama.getType() == 20000) {
@@ -320,9 +321,13 @@ public class HybridYukkuri extends Body {
 
 	@Override
 	public int getImage(int type, int direction, BodyLayer layer, int index) {
-		images[type].setAgeState(getBodyAgeState());
-		images[type].getImage(type, direction, layer, index);
-		return 1;
+		if (images == null || images[type] == null) return 0;
+		try {
+			images[type].setAgeState(getBodyAgeState());
+			return images[type].getImage(type, direction, layer, index);
+		} catch (Exception e) {
+			return 0;
+		}
 	}
 
 	/**
@@ -398,6 +403,7 @@ public class HybridYukkuri extends Body {
 	}
 
 	@Override
+	@JsonIgnore
 	@Transient
 	public boolean isHybrid() {
 		return true;
@@ -453,12 +459,10 @@ public class HybridYukkuri extends Body {
 		getSTRENGTHorg()[AgeState.CHILD.ordinal()] *= factor;
 		getSTRENGTHorg()[AgeState.BABY.ordinal()] *= factor;
 		images = new Body[ImageCode.values().length];
-		if (dorei != null && dorei2 != null && dorei3 != null && dorei4 != null) {
-			try {
-				loadImages_Hyblid();
-			} catch (IOException e1) {
-				System.out.println("File I/O error");
-			}
+		try {
+			loadImages_Hyblid();
+		} catch (IOException e1) {
+			System.out.println("File I/O error");
 		}
 	}
 

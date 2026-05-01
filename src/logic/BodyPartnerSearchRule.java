@@ -16,11 +16,6 @@ import src.item.Barrier;
 import src.util.GameEnvironment;
 import src.util.GameRandom;
 import src.util.GameWorld;
-import src.yukkuri.Fran;
-import src.yukkuri.HybridYukkuri;
-import src.yukkuri.Meirin;
-import src.yukkuri.Remirya;
-import src.yukkuri.Sakuya;
 
 /**
  * Candidate search for {@link BodyLogic#checkPartner(Body)}.
@@ -84,8 +79,7 @@ public final class BodyPartnerSearchRule {
 			}
 
 			if (p.isPacked()) {
-			} else if ((b.getType() == Sakuya.type || b.getType() == Meirin.type)
-					&& (p.getType() == Remirya.type || p.getType() == Fran.type)) {
+			} else if (b.isServant() && p.isPredator()) {
 			} else if (p.isFamily(b)) {
 			} else if (GameEnvironment.isPredatorSteam()) {
 			} else {
@@ -169,7 +163,7 @@ public final class BodyPartnerSearchRule {
 				}
 			}
 			if (!b.hasOkazari() && p.hasOkazari() && b.getBodyAgeState() == p.getBodyAgeState()
-					&& b.getType() == p.getType() && b.getType() != HybridYukkuri.type
+					&& b.getType() == p.getType() && !b.isHybrid()
 					&& p.getOkazari().getOkazariType() == OkazariType.DEFAULT
 					&& (p.getPublicRank() == PublicRank.NONE || b.getPublicRank() == PublicRank.UnunSlave)
 					&& !b.isLockmove()) {

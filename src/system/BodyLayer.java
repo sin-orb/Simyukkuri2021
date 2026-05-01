@@ -45,6 +45,14 @@ public class BodyLayer {
 	public void setOption(int[] option) {
 		this.option = option;
 	}
+
+	public void clear() {
+		for (int i = 0; i < image.length; i++) {
+			image[i] = null;
+			dir[i] = 0;
+			option[i] = 0;
+		}
+	}
 }
 
 

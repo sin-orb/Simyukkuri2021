@@ -852,7 +852,7 @@ public class MessagePool {
 		} else {
 			name = body.getMyName();
 		}
-		if (name.isEmpty()) {
+		if (name == null || name.isEmpty()) {
 			name = GameLocale.isJapanese() ? body.getNameJ() : body.getNameE();
 			// name =YukkuriUtil.getYukkuriClassName(body.getType());
 		}

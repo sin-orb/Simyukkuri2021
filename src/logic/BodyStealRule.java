@@ -4,7 +4,6 @@ import src.base.Body;
 import src.base.Okazari.OkazariType;
 import src.enums.Happiness;
 import src.enums.PublicRank;
-import src.yukkuri.HybridYukkuri;
 import src.system.MessagePool;
 import src.util.GameMessages;
 
@@ -25,7 +24,7 @@ public final class BodyStealRule {
 	 */
 	public static boolean handleOkazariSteal(Body p, Body b) {
 		if (!b.hasOkazari() && p.hasOkazari() && b.getBodyAgeState() == p.getBodyAgeState()
-				&& b.getType() == p.getType() && b.getType() != HybridYukkuri.type
+				&& b.getType() == p.getType() && !b.isHybrid()
 				&& p.getOkazari().getOkazariType() == OkazariType.DEFAULT
 				&& (p.getPublicRank() == PublicRank.NONE || b.getPublicRank() == PublicRank.UnunSlave)
 				&& !b.isLockmove()) {

@@ -208,4 +208,7 @@ public class Meirin extends Body {
 		setLikeHotFood(true);
 		speed = baseSpeed;
 	}
+
+	@Override
+	public boolean isServant() { return true; }
 }

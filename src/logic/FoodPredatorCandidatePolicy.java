@@ -6,10 +6,6 @@ import src.draw.Translate;
 import src.enums.Intelligence;
 import src.enums.PredatorType;
 import src.item.Barrier;
-import src.yukkuri.Fran;
-import src.yukkuri.Meirin;
-import src.yukkuri.Remirya;
-import src.yukkuri.Sakuya;
 import src.util.GameRandom;
 
 /**
@@ -37,8 +33,7 @@ public final class FoodPredatorCandidatePolicy {
 		if (!b.canflyCheck() && d.getZ() != 0) {
 			return new BodyCandidateResult(found, found2, minDistance, minDistance2, size);
 		}
-		if ((d.getType() == Sakuya.type || d.getType() == Meirin.type)
-				&& (b.getType() == Remirya.type || b.getType() == Fran.type)) {
+		if (d.isServant() && b.isPredator()) {
 			return new BodyCandidateResult(found, found2, minDistance, minDistance2, size);
 		}
 

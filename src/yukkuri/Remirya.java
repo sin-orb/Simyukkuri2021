@@ -346,4 +346,7 @@ public class Remirya extends Body {
 		this.anImageVerStateCtrlNagasi = anImageVerStateCtrlNagasi;
 	}
 
+	@Override
+	public boolean isPredator() { return true; }
+
 }

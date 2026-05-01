@@ -1422,7 +1422,7 @@ public abstract class Body extends BodyAttributes {
 				&& getAttachmentSize(PoisonAmpoule.class) == 0) {
 			// && moveTarget == null) {
 			// すっきり発動条件
-			if (!isExciting() && GameRandom.nextInt(getExciteProb()) == 0) {
+			if (!isExciting() && isNotNYD() && GameRandom.nextInt(getExciteProb()) == 0) {
 				int r = 1;
 				int adjust = excitingDiscipline * (isRude() ? 1 : 2);
 				if (isSuperRapist()) {
@@ -1832,6 +1832,7 @@ public abstract class Body extends BodyAttributes {
 		if (nStressLimit * nTolerance / 100 < getStress()) {
 			// 初回
 			if (isNotNYD()) {
+				setCalm();
 				seteCoreAnkoState(CoreAnkoState.NonYukkuriDiseaseNear);
 				nonYukkuriDiseasePeriod = 0;
 				speed = speed / 2;
@@ -1840,6 +1841,7 @@ public abstract class Body extends BodyAttributes {
 			if (nStressLimit * nTolerance / 100 * 2 < getStress()) {
 				// 初回
 				if (geteCoreAnkoState() == CoreAnkoState.NonYukkuriDiseaseNear) {
+					setCalm();
 					seteCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
 					nonYukkuriDiseasePeriod = 0;
 				}
@@ -7699,7 +7701,7 @@ public abstract class Body extends BodyAttributes {
 				default:
 					break;
 			}
-		} else {
+		} else if (GameWorld.get() != null) {
 			if (GameWorld.get().getCurrentMap().getMapIndex() == 5
 					|| GameWorld.get().getCurrentMap().getMapIndex() == 6)
 				eBodyRank = BodyRank.YASEIYU;
@@ -7845,4 +7847,16 @@ public abstract class Body extends BodyAttributes {
 	public void clearActionsForEvent() {
 		BodyEventState.clearActionsForEvent(this);
 	}
+
+	/** 捕食種（れみりゃ・ふらん）であれば {@code true}. */
+	@JsonIgnore
+	public boolean isPredator() { return false; }
+
+	/** ハイブリッドゆっくりであれば {@code true}. */
+	@JsonIgnore
+	public boolean isHybrid() { return false; }
+
+	/** 捕食種に仕える従者種（咲夜・美鈴）であれば {@code true}. */
+	@JsonIgnore
+	public boolean isServant() { return false; }
 }

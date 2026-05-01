@@ -208,4 +208,7 @@ public class Sakuya extends Body {
 		speed = baseSpeed;
 	}
 
+	@Override
+	public boolean isServant() { return true; }
+
 }

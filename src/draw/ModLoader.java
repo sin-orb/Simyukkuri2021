@@ -610,6 +610,16 @@ public class ModLoader {
 	 */
 	public static boolean loadBodyImagePack(ClassLoader loader, BufferedImage[][][] images, int[][] dirOfs,
 			String suffix, String bodyName, ImageObserver io) {
+		// 既存のデータをクリア
+		for (BufferedImage[][] a2 : images) {
+			for (BufferedImage[] a1 : a2) {
+				for (int j = 0; j < a1.length; j++) a1[j] = null;
+			}
+		}
+		for (int i = 0; i < dirOfs.length; i++) {
+			dirOfs[i][0] = 0;
+			dirOfs[i][1] = 0;
+		}
 		int babyIndex = Const.BABY_INDEX;
 		int childIndex = Const.CHILD_INDEX;
 		int adultIndex = Const.ADULT_INDEX;
@@ -659,6 +669,8 @@ public class ModLoader {
 		for (BufferedImage[][] array2d : images) {
 			for (BufferedImage[] array : array2d) {
 				if (array[adultIndex] == null) {
+					array[childIndex] = null;
+					array[babyIndex] = null;
 					continue;
 				}
 				sx = (int) ((float) array[adultIndex].getWidth(io) * Const.BODY_SIZE[1]);
@@ -691,6 +703,18 @@ public class ModLoader {
 	 */
 	public static boolean loadBodyImagePack(ClassLoader loader, BufferedImage[][][][] images, int[][] dirOfs,
 			String suffix, String bodyName, ImageObserver io) {
+		// 既存のデータをクリア
+		for (BufferedImage[][][] a3 : images) {
+			for (BufferedImage[][] a2 : a3) {
+				for (BufferedImage[] a1 : a2) {
+					for (int j = 0; j < a1.length; j++) a1[j] = null;
+				}
+			}
+		}
+		for (int i = 0; i < dirOfs.length; i++) {
+			dirOfs[i][0] = 0;
+			dirOfs[i][1] = 0;
+		}
 		int babyIndex = Const.BABY_INDEX;
 		int childIndex = Const.CHILD_INDEX;
 		int adultIndex = Const.ADULT_INDEX;
@@ -751,6 +775,8 @@ public class ModLoader {
 			for (BufferedImage[][] array2d : array3d) {
 				for (int i = 0; i < nMaxImgOtherVer + 1; i++) {
 					if (array2d[adultIndex][i] == null) {
+						array2d[childIndex][i] = null;
+						array2d[babyIndex][i] = null;
 						continue;
 					}
 					sx = (int) ((float) array2d[adultIndex][i].getWidth(io) * Const.BODY_SIZE[1]);

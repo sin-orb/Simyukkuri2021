@@ -91,7 +91,7 @@ public class ProposeEvent extends EventPacket {
 	public UpdateState update(Body b) {
 		Body to = YukkuriUtil.getBodyInstance(getTo());
 		Body from = YukkuriUtil.getBodyInstance(getFrom());
-		if (from == null || to == null || from.isDead() || from.isRemoved())
+		if (from == null || to == null || from.isDead() || from.isRemoved() || from.isNYD())
 			return UpdateState.ABORT;
 		// 相手が死んだか 相手が消えてしまったか非ゆっくり症発症したか取られたらイベント中断
 		if (to.isDead() || to.isRemoved() || to.isNYD() || to.isTaken()) {

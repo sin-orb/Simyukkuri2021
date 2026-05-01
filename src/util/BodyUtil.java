@@ -46,6 +46,9 @@ public class BodyUtil {
 	 * @param b  ゆっくり
 	 */
 	public static void drawBody(Graphics2D g2, ImageObserver io, Body b) {
+		layer.clear();
+		layer2.clear();
+		layer3.clear();
 
 		int direction = b.getDirection().ordinal();
 		int ageIndex = b.getBodyAgeState().ordinal();
@@ -392,6 +395,7 @@ public class BodyUtil {
 		int dy2 = dy1 + expandHeight + tz;
 		int sx1 = 0;
 		int sy1 = 0;
+		if (img == null) return;
 		int nWidth = img.getWidth();
 		int nHeight = img.getHeight();
 		int sx2 = nWidth;
