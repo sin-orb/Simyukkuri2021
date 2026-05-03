@@ -228,14 +228,14 @@ public final class BodyTickProcessor {
 
 	private static void handleBirthBaby(Terrarium terrarium, Body b, List<Body> babyList) {
 		if (b.getAge() % 10 == 0 && !b.isHasPants()) {
-			Dna babyType = b.getBabyTypesDequeue();
-			if (babyType != null) {
-				Body baby = terrarium.makeBody(b.getX(), b.getY(), b.getZ() + b.getSize() / 15, babyType,
-						AgeState.BABY, b, YukkuriUtil.getBodyInstance(b.getPartner()));
-				baby.kick(0, 5, -2);
-				babyList.add(baby);
+				Dna babyType = b.getBabyTypesDequeue();
+				if (babyType != null) {
+					Body baby = terrarium.makeBody(b.getX(), b.getY(), b.getZ() + b.getSize() / 15, babyType,
+							AgeState.BABY, b, YukkuriUtil.getBodyInstance(b.getPartner()));
+					baby.kick(0, 5, -2);
+					babyList.add(baby);
+				}
 			}
-		}
 		if (b.getStalks() != null) {
 			for (Stalk s : b.getStalks()) {
 				if (s != null) {

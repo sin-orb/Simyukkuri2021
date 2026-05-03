@@ -120,6 +120,32 @@ public class ProudChildEventTest {
         assertFalse(event.checkEventResponse(b));
     }
 
+    @Test
+    public void testCheckEventResponse_returnsFalseForNewbornBaby() {
+        Body from = createBody();
+        Body baby = createBody();
+        WorldTestHelper.setParents(baby, -1, from.getUniqueID());
+        baby.setAgeState(AgeState.BABY);
+        baby.setBirthAge(baby.getAge());
+        baby.setBFirstGround(false);
+        ProudChildEvent event = new ProudChildEvent(from, null, null, 10);
+        assertFalse(event.checkEventResponse(baby));
+    }
+
+    @Test
+    public void testCheckEventResponse_returnsFalseWhileFalling() {
+        Body from = createBody();
+        Body baby = createBody();
+        WorldTestHelper.setParents(baby, -1, from.getUniqueID());
+        baby.setAgeState(AgeState.BABY);
+        baby.setBirthAge(0);
+        baby.setBFirstGround(false);
+        baby.setZ(10);
+        baby.setnMostDepth(0);
+        ProudChildEvent event = new ProudChildEvent(from, null, null, 10);
+        assertFalse(event.checkEventResponse(baby));
+    }
+
     // --- execute ---
 
     @Test
@@ -200,6 +226,19 @@ public class ProudChildEventTest {
         ProudChildEvent event = new ProudChildEvent(from, null, null, 10);
         from.setCurrentEvent(event);
         assertEquals(EventPacket.UpdateState.ABORT, event.update(b));
+    }
+
+    @Test
+    public void testUpdate_newbornBaby_returnsAbort() {
+        Body from = createBody();
+        Body baby = createBody();
+        WorldTestHelper.setParents(baby, -1, from.getUniqueID());
+        baby.setAgeState(AgeState.BABY);
+        baby.setBirthAge(baby.getAge());
+        baby.setBFirstGround(false);
+        ProudChildEvent event = new ProudChildEvent(from, null, null, 10);
+        from.setCurrentEvent(event);
+        assertEquals(EventPacket.UpdateState.ABORT, event.update(baby));
     }
 
     @Test
@@ -350,6 +389,21 @@ public class ProudChildEventTest {
         from.setCurrentEvent(event);
         b.setCurrentEvent(event);
         assertEquals(EventPacket.UpdateState.ABORT, event.update(b));
+    }
+
+    @Test
+    public void testUpdate_childDamaged_returnsAbort() {
+        Body from = createBody();
+        Body baby = createBody();
+        WorldTestHelper.setParents(baby, -1, from.getUniqueID());
+        baby.setAgeState(AgeState.BABY);
+        baby.setBirthAge(0);
+        baby.setBFirstGround(false);
+        baby.setDamage(baby.getDamageLimit() / 2 + 1);
+        ProudChildEvent event = new ProudChildEvent(from, null, null, 10);
+        from.setCurrentEvent(event);
+        baby.setCurrentEvent(event);
+        assertEquals(EventPacket.UpdateState.ABORT, event.update(baby));
     }
 
     // --- update: tick % 30 != 0 → returns null ---

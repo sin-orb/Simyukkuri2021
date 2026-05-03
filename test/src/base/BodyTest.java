@@ -134,11 +134,11 @@ public class BodyTest {
     private StubBody createBody(AgeState age) {
         StubBody b = new StubBody();
         for (int i = 0; i < 3; i++) {
-            b.bodySpr[i] = new Sprite();
-            b.bodySpr[i].setImageW(100);
-            b.bodySpr[i].setImageH(100);
-            b.expandSpr[i] = new Sprite();
-            b.braidSpr[i] = new Sprite();
+            b.getBodySpr()[i] = new Sprite();
+            b.getBodySpr()[i].setImageW(100);
+            b.getBodySpr()[i].setImageH(100);
+            b.getExpandSpr()[i] = new Sprite();
+            b.getBraidSpr()[i] = new Sprite();
         }
         b.setAgeState(age);
         b.setMsgType(YukkuriType.REIMU); // MessagePoolで使用
@@ -149,11 +149,11 @@ public class BodyTest {
     private FixedToleranceBody createFixedBody(AgeState age) {
         FixedToleranceBody b = new FixedToleranceBody();
         for (int i = 0; i < 3; i++) {
-            b.bodySpr[i] = new Sprite();
-            b.bodySpr[i].setImageW(100);
-            b.bodySpr[i].setImageH(100);
-            b.expandSpr[i] = new Sprite();
-            b.braidSpr[i] = new Sprite();
+            b.getBodySpr()[i] = new Sprite();
+            b.getBodySpr()[i].setImageW(100);
+            b.getBodySpr()[i].setImageH(100);
+            b.getExpandSpr()[i] = new Sprite();
+            b.getBraidSpr()[i] = new Sprite();
         }
         b.setAgeState(age);
         b.setMsgType(YukkuriType.REIMU);
@@ -1214,7 +1214,7 @@ public class BodyTest {
         @Test
         public void testScenarioBurstStateChangesByExpandSize() {
             body.setAgeState(AgeState.ADULT);
-            body.bodySpr[AgeState.ADULT.ordinal()].setImageW(100);
+            body.getBodySpr()[AgeState.ADULT.ordinal()].setImageW(100);
             body.hungry = body.getHungryLimit();
             body.shit = 0;
             body.setUnyoForceW(0);
@@ -12086,11 +12086,11 @@ public class BodyTest {
                 }
             };
             for (int i = 0; i < 3; i++) {
-                onBed.bodySpr[i] = new Sprite();
-                onBed.bodySpr[i].setImageW(100);
-                onBed.bodySpr[i].setImageH(100);
-                onBed.expandSpr[i] = new Sprite();
-                onBed.braidSpr[i] = new Sprite();
+                onBed.getBodySpr()[i] = new Sprite();
+                onBed.getBodySpr()[i].setImageW(100);
+                onBed.getBodySpr()[i].setImageH(100);
+                onBed.getExpandSpr()[i] = new Sprite();
+                onBed.getBraidSpr()[i] = new Sprite();
             }
             onBed.setAgeState(AgeState.BABY);
             onBed.setMsgType(YukkuriType.REIMU);
@@ -12233,11 +12233,11 @@ public class BodyTest {
         public void testFallOnTrampolineCutsDamage() {
             StubBody falling = new StubBody();
             for (int i = 0; i < 3; i++) {
-                falling.bodySpr[i] = new Sprite();
-                falling.bodySpr[i].setImageW(100);
-                falling.bodySpr[i].setImageH(100);
-                falling.expandSpr[i] = new Sprite();
-                falling.braidSpr[i] = new Sprite();
+                falling.getBodySpr()[i] = new Sprite();
+                falling.getBodySpr()[i].setImageW(100);
+                falling.getBodySpr()[i].setImageH(100);
+                falling.getExpandSpr()[i] = new Sprite();
+                falling.getBraidSpr()[i] = new Sprite();
             }
             falling.setAgeState(AgeState.ADULT);
             falling.setMsgType(YukkuriType.REIMU);
@@ -13157,11 +13157,11 @@ public class BodyTest {
                     }
                 };
                 for (int i = 0; i < 3; i++) {
-                    falling.bodySpr[i] = new Sprite();
-                    falling.bodySpr[i].setImageW(100);
-                    falling.bodySpr[i].setImageH(100);
-                    falling.expandSpr[i] = new Sprite();
-                    falling.braidSpr[i] = new Sprite();
+                    falling.getBodySpr()[i] = new Sprite();
+                    falling.getBodySpr()[i].setImageW(100);
+                    falling.getBodySpr()[i].setImageH(100);
+                    falling.getExpandSpr()[i] = new Sprite();
+                    falling.getBraidSpr()[i] = new Sprite();
                 }
                 falling.setAgeState(AgeState.ADULT);
                 falling.setMsgType(YukkuriType.REIMU);
@@ -13207,11 +13207,11 @@ public class BodyTest {
                     }
                 };
                 for (int i = 0; i < 3; i++) {
-                    falling.bodySpr[i] = new Sprite();
-                    falling.bodySpr[i].setImageW(100);
-                    falling.bodySpr[i].setImageH(100);
-                    falling.expandSpr[i] = new Sprite();
-                    falling.braidSpr[i] = new Sprite();
+                    falling.getBodySpr()[i] = new Sprite();
+                    falling.getBodySpr()[i].setImageW(100);
+                    falling.getBodySpr()[i].setImageH(100);
+                    falling.getExpandSpr()[i] = new Sprite();
+                    falling.getBraidSpr()[i] = new Sprite();
                 }
                 falling.setAgeState(AgeState.ADULT);
                 falling.setMsgType(YukkuriType.REIMU);
@@ -13396,11 +13396,11 @@ public class BodyTest {
                     }
                 };
                 for (int i = 0; i < 3; i++) {
-                    falling.bodySpr[i] = new Sprite();
-                    falling.bodySpr[i].setImageW(100);
-                    falling.bodySpr[i].setImageH(100);
-                    falling.expandSpr[i] = new Sprite();
-                    falling.braidSpr[i] = new Sprite();
+                    falling.getBodySpr()[i] = new Sprite();
+                    falling.getBodySpr()[i].setImageW(100);
+                    falling.getBodySpr()[i].setImageH(100);
+                    falling.getExpandSpr()[i] = new Sprite();
+                    falling.getBraidSpr()[i] = new Sprite();
                 }
                 falling.setAgeState(AgeState.ADULT);
                 falling.setMsgType(YukkuriType.REIMU);
@@ -13663,11 +13663,11 @@ public class BodyTest {
                     }
                 };
                 for (int i = 0; i < 3; i++) {
-                    falling.bodySpr[i] = new Sprite();
-                    falling.bodySpr[i].setImageW(100);
-                    falling.bodySpr[i].setImageH(100);
-                    falling.expandSpr[i] = new Sprite();
-                    falling.braidSpr[i] = new Sprite();
+                    falling.getBodySpr()[i] = new Sprite();
+                    falling.getBodySpr()[i].setImageW(100);
+                    falling.getBodySpr()[i].setImageH(100);
+                    falling.getExpandSpr()[i] = new Sprite();
+                    falling.getBraidSpr()[i] = new Sprite();
                 }
                 falling.setAgeState(AgeState.BABY);
                 falling.setMsgType(YukkuriType.REIMU);
@@ -14014,11 +14014,11 @@ public class BodyTest {
                 }
             };
             for (int i = 0; i < 3; i++) {
-                faller.bodySpr[i] = new Sprite();
-                faller.bodySpr[i].setImageW(100);
-                faller.bodySpr[i].setImageH(100);
-                faller.expandSpr[i] = new Sprite();
-                faller.braidSpr[i] = new Sprite();
+                faller.getBodySpr()[i] = new Sprite();
+                faller.getBodySpr()[i].setImageW(100);
+                faller.getBodySpr()[i].setImageH(100);
+                faller.getExpandSpr()[i] = new Sprite();
+                faller.getBraidSpr()[i] = new Sprite();
             }
             faller.setAgeState(AgeState.ADULT);
             faller.setMsgType(YukkuriType.REIMU);
@@ -14569,11 +14569,11 @@ public class BodyTest {
                 }
             };
             for (int i = 0; i < 3; i++) {
-                onBed.bodySpr[i] = new Sprite();
-                onBed.bodySpr[i].setImageW(100);
-                onBed.bodySpr[i].setImageH(100);
-                onBed.expandSpr[i] = new Sprite();
-                onBed.braidSpr[i] = new Sprite();
+                onBed.getBodySpr()[i] = new Sprite();
+                onBed.getBodySpr()[i].setImageW(100);
+                onBed.getBodySpr()[i].setImageH(100);
+                onBed.getExpandSpr()[i] = new Sprite();
+                onBed.getBraidSpr()[i] = new Sprite();
             }
             onBed.setAgeState(AgeState.BABY);
             onBed.setMsgType(YukkuriType.REIMU);
@@ -14762,11 +14762,11 @@ public class BodyTest {
                 }
             };
             for (int i = 0; i < 3; i++) {
-                onBed.bodySpr[i] = new Sprite();
-                onBed.bodySpr[i].setImageW(100);
-                onBed.bodySpr[i].setImageH(100);
-                onBed.expandSpr[i] = new Sprite();
-                onBed.braidSpr[i] = new Sprite();
+                onBed.getBodySpr()[i] = new Sprite();
+                onBed.getBodySpr()[i].setImageW(100);
+                onBed.getBodySpr()[i].setImageH(100);
+                onBed.getExpandSpr()[i] = new Sprite();
+                onBed.getBraidSpr()[i] = new Sprite();
             }
             onBed.setAgeState(AgeState.ADULT);
             onBed.setMsgType(YukkuriType.REIMU);

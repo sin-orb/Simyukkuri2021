@@ -61,22 +61,14 @@ public class BodyUtilTest {
         return s;
     }
 
-    private void mockSprites(Body body) throws Exception {
-        java.lang.reflect.Field f1 = src.base.BodyAttributes.class.getDeclaredField("bodySpr");
-        f1.setAccessible(true);
-        f1.set(body, new Sprite[] { createMockSprite(), createMockSprite(), createMockSprite() });
-
-        java.lang.reflect.Field f2 = src.base.BodyAttributes.class.getDeclaredField("expandSpr");
-        f2.setAccessible(true);
-        f2.set(body, new Sprite[] { createMockSprite(), createMockSprite(), createMockSprite() });
-
-        java.lang.reflect.Field f3 = src.base.BodyAttributes.class.getDeclaredField("braidSpr");
-        f3.setAccessible(true);
-        f3.set(body, new Sprite[] { createMockSprite(), createMockSprite(), createMockSprite() });
+    private void mockSprites(Body body) {
+        body.setBodySpr(new Sprite[] { createMockSprite(), createMockSprite(), createMockSprite() });
+        body.setExpandSpr(new Sprite[] { createMockSprite(), createMockSprite(), createMockSprite() });
+        body.setBraidSpr(new Sprite[] { createMockSprite(), createMockSprite(), createMockSprite() });
     }
 
     @Test
-    public void testDrawBodyBasic() throws Exception {
+    public void testDrawBodyBasic() {
         Body body = WorldTestHelper.createBody();
         mockSprites(body);
         BodyUtil.drawBody(g2, null, body);
@@ -84,7 +76,7 @@ public class BodyUtilTest {
 
     @Test
     @SuppressWarnings("unchecked")
-    public void testDrawBodyFullCoverage() throws Exception {
+    public void testDrawBodyFullCoverage() {
         Body body = WorldTestHelper.createBody();
         mockSprites(body);
 

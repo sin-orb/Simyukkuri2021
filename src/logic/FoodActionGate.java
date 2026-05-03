@@ -49,7 +49,7 @@ public final class FoodActionGate {
 			if (ev instanceof SuperEatingTimeEvent
 					&& ((SuperEatingTimeEvent) ev).getState() == SuperEatingTimeEvent.STATE.START) {
 				forceEat[0] = true;
-			} else {
+			} else if (!b.isVeryHungry()) {
 				return true;
 			}
 		}
@@ -75,8 +75,21 @@ public final class FoodActionGate {
 		if (b.isExciting() && !b.isRaper() && b.isSoHungry()) {
 			b.setCalm();
 		}
-		if (b.isSleeping() || !b.canAction() || b.nearToBirth() || b.isUnBirth() || b.isShutmouth()) {
+		if (b.isSleeping() || b.nearToBirth() || b.isUnBirth() || b.isShutmouth()) {
 			return true;
+		}
+		if (!b.canAction()) {
+			// isVeryHungry かつ currentEvent のみが canAction=false の原因なら食事を許可する
+			if (b.isVeryHungry() && b.getCurrentEvent() != null
+					&& !b.isDead()
+					&& b.getCriticalDamegeType() == null
+					&& !b.isPealed() && !b.isPacked() && !b.isShitting()
+					&& !b.isBirth() && !b.isSukkiri() && !b.isbNeedled()
+					&& !b.isNYD() && b.getBaryState() == src.enums.BaryInUGState.NONE) {
+				// currentEvent のみが阻害要因 → 食事を許可（スキップしない）
+			} else {
+				return true;
+			}
 		}
 		if ((b.isScare() || b.isFeelHardPain()) && GameRandom.nextBoolean()) {
 			return true;

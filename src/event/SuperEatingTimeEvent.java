@@ -168,6 +168,9 @@ public class SuperEatingTimeEvent extends EventPacket {
 		if (b.isNYD()) {
 			return UpdateState.ABORT;
 		}
+		if (b.isDead() || b.isRemoved()) {
+			return UpdateState.ABORT;
+		}
 
 		// 親が消えてしまったらイベント中断
 		if (from.isRemoved())
@@ -194,9 +197,9 @@ public class SuperEatingTimeEvent extends EventPacket {
 			return null;
 		}
 
-		// 満腹度が2%以下なら2%にする(強制イベント救済措置)
-		if (2 > 100 * b.getHungry() / b.getHungryLimit()) {
-			b.setHungry(2 * b.getHungryLimit() / 100);
+		// 空腹状態なら60%にする(強制イベント救済措置)
+		if (b.isHungry()) {
+			b.setHungry(b.getHungryLimit() * 6 / 10);
 		}
 
 		b.wakeup();
@@ -502,6 +505,7 @@ public class SuperEatingTimeEvent extends EventPacket {
 			}
 		}
 
+		tick++;
 		return null;
 	}
 

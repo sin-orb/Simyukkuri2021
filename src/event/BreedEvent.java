@@ -56,6 +56,11 @@ public class BreedEvent extends EventPacket {
 			return false;
 		if (b.isUnBirth())
 			return false;
+		// 生まれたての赤ゆは親の出産応援イベントに参加させない。
+		// 既に生まれていて見に来る赤ゆは参加してよいので、出生直後の一時フラグだけを見る。
+		if (from.isParent(b) && b.isForceBirthMessage()) {
+			return false;
+		}
 		if (from == b)
 			return false;
 		if (!b.canEventResponse())
@@ -110,6 +115,9 @@ public class BreedEvent extends EventPacket {
 		Body from = YukkuriUtil.getBodyInstance(getFrom());
 		if (from == null)
 			return UpdateState.ABORT;
+		if (from.isParent(b) && b.isForceBirthMessage()) {
+			return UpdateState.ABORT;
+		}
 		if (b.nearToBirth())
 			return UpdateState.FORCE_EXEC;
 		// 相手の一定距離まで近づいたら移動終了

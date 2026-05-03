@@ -178,6 +178,9 @@ public class ShitExercisesEvent extends EventPacket {
 		if (b.isNYD()) {
 			return UpdateState.ABORT;
 		}
+		if (b.isDead() || b.isRemoved()) {
+			return UpdateState.ABORT;
+		}
 		// 相手が消えてしまったら
 		if (from.isRemoved()) {
 			b.setHappiness(Happiness.VERY_HAPPY);
@@ -206,17 +209,19 @@ public class ShitExercisesEvent extends EventPacket {
 			}
 		}
 
-		// 間隔をあけてチェック
-		if (tick % 20 != 0) {
-			return null;
+		// 間隔をあけてチェック（FROMのみ tick を進め、参加者数に依らず20フレーム周期を保つ）
+		if (b == from) {
+			if (tick++ % 20 != 0) return null;
+		} else {
+			if (tick % 20 != 0) return null;
 		}
 
 		// 体操中は寝ない
 		b.wakeup();
 
-		// 満腹度が2%以下なら2%にする(強制イベント救済措置)
-		if (2 > 100 * b.getHungry() / b.getHungryLimit()) {
-			b.setHungry(2 * b.getHungryLimit() / 100);
+		// 空腹状態なら60%にする(強制イベント救済措置)
+		if (b.isHungry()) {
+			b.setHungry(b.getHungryLimit() * 6 / 10);
 		}
 
 		// つがいはスキップ

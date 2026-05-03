@@ -269,8 +269,8 @@ public class FamilyActionLogic {
 			}
 		}
 
-		//おちび自慢
-		if (GameRandom.nextBoolean()) {
+		//おちび自慢（赤ゆがいる場合のみ）
+		if (bIsBaby && GameRandom.nextBoolean()) {
 			if (proudChild(b, childrenList)) {
 				return true;
 			}

@@ -750,6 +750,24 @@ class FamilyActionLogicTest {
         assertFalse(FamilyActionLogic.checkFamilyAction(parent));
     }
 
+    @Test
+    void testCheckFamilyAction_ChildAgeOnly_NoProudChild() {
+        // 赤ゆがいない（子ゆのみ）の場合 proudChild が発火しないことを確認するテスト
+        // 修正前は bIsBaby=false でも proudChild が呼ばれバグの原因だった
+        setReady(parent);
+        // 子を子ゆ年齢（CHILD）に設定（BABY ではないが ADULT でもない）
+        child.setAge(child.getBABYLIMITorg() + 1); // CHILD age
+        child.setHungry((int)(child.getHungryLimit() * 0.9)); // >=80% → bWantToEat=false
+        child.setShit(0);
+        SimYukkuri.RND = new ConstState(0) {
+            @Override
+            public boolean nextBoolean() { return true; } // bIsBaby=true なら proudChild に入る
+        };
+        // bIsBaby=false (子ゆのみ) → proudChild スキップ → rideOnParent も空 → false
+        assertFalse(FamilyActionLogic.checkFamilyAction(parent));
+        assertEquals(0, SimYukkuri.world.getCurrentMap().getEvent().size());
+    }
+
     // =========================================================
     // Group 13: goToShit direct tests
     // =========================================================

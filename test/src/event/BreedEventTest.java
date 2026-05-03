@@ -16,6 +16,7 @@ public class BreedEventTest extends EventTestBase {
     void testCheckEventResponse_ParentParticipates() {
         Body parent = createBody(1, 100, 100);
         Body child = createBody(2, 120, 120);
+        child.setAgeState(src.enums.AgeState.CHILD);
 
         // Set parent/child relationship
         WorldTestHelper.setParents(child, -1, parent.getUniqueID());
@@ -25,6 +26,32 @@ public class BreedEventTest extends EventTestBase {
         // Child should respond to parent's breed event
         // Note: Logic allows response if child is related to 'from'
         assertTrue(event.checkEventResponse(child));
+    }
+
+    @Test
+    void testCheckEventResponse_BabyChildOfFromDoesNotParticipate() {
+        Body parent = createBody(1, 100, 100);
+        Body baby = createBody(2, 120, 120);
+        WorldTestHelper.setParents(baby, -1, parent.getUniqueID());
+        baby.setAgeState(src.enums.AgeState.BABY);
+        baby.setForceBirthMessage(true);
+
+        BreedEvent event = new BreedEvent(parent, baby, null, 10);
+
+        assertFalse(event.checkEventResponse(baby));
+    }
+
+    @Test
+    void testCheckEventResponse_BabyChildOfFrom_withoutBirthMessage_participates() {
+        Body parent = createBody(1, 100, 100);
+        Body baby = createBody(2, 120, 120);
+        WorldTestHelper.setParents(baby, -1, parent.getUniqueID());
+        baby.setAgeState(src.enums.AgeState.BABY);
+        baby.setForceBirthMessage(false);
+
+        BreedEvent event = new BreedEvent(parent, baby, null, 10);
+
+        assertTrue(event.checkEventResponse(baby));
     }
 
     @Test
@@ -204,6 +231,20 @@ public class BreedEventTest extends EventTestBase {
         from.setPregnantPeriod(Integer.MAX_VALUE / 2);
         BreedEvent event = new BreedEvent(from, null, null, 10);
         assertEquals(src.base.EventPacket.UpdateState.FORCE_EXEC, event.update(b));
+    }
+
+    @Test
+    void testUpdate_BabyChildOfFrom_returnsAbort() {
+        Body from = createBody(1, 100, 100);
+        Body b = createBody(2, 105, 105);
+        WorldTestHelper.setParents(b, -1, from.getUniqueID());
+        b.setAgeState(src.enums.AgeState.BABY);
+        b.setForceBirthMessage(true);
+        from.setBirth(true);
+
+        BreedEvent event = new BreedEvent(from, null, null, 10);
+
+        assertEquals(src.base.EventPacket.UpdateState.ABORT, event.update(b));
     }
 
     @Test

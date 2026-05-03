@@ -129,6 +129,10 @@ public class BodySelectionRule {
 			if (bodyChild.getPublicRank() == PublicRank.UnunSlave) {
 				continue;
 			}
+			// 生まれた直後や落下中の赤ゆは、家族イベントの対象にしない。
+			if (bodyChild.isBFirstGround() || bodyChild.isNewborn() || bodyChild.getZ() > bodyChild.getnMostDepth()) {
+				continue;
+			}
 			if (bodyChild.isNYD() || bodyChild.isNotAllright()) {
 				continue;
 			}

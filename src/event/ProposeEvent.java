@@ -182,6 +182,9 @@ public class ProposeEvent extends EventPacket {
 		Body from = YukkuriUtil.getBodyInstance(getFrom());
 		if (to == null || from == null)
 			return true;
+		// to から呼ばれた場合は tick を進めない（2倍速防止）
+		if (b != from)
+			return false;
 		if (to.isGrabbed()) {
 			return false;
 		}
@@ -400,15 +403,15 @@ public class ProposeEvent extends EventPacket {
 	public void end(Body b) {
 		Body to = YukkuriUtil.getBodyInstance(getTo());
 		Body from = YukkuriUtil.getBodyInstance(getFrom());
-		if (from == null || to == null)
-			return;
-		from.setCalm();
-		from.setCurrentEvent(null);
+		if (from != null) {
+			from.setCalm();
+			from.setCurrentEvent(null);
+			from.setLockmove(false);
+		}
 		if (to != null) {
 			to.setCurrentEvent(null);
 			to.setLockmove(false);
 		}
-		from.setLockmove(false);
 	}
 
 	@Override

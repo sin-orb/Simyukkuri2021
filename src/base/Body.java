@@ -2483,7 +2483,17 @@ public abstract class Body extends BodyAttributes {
 				// if( baryState == Body.BaryInUGState.NONE ){
 				if (!isTalking() && getBaryState() == BaryInUGState.NONE && GameRandom.nextInt(8) == 0) {
 					setMessage(GameMessages.getMessage(this, MessagePool.Action.NearToBirth));
-					EventLogic.addWorldEvent(new BreedEvent(this, null, null, 2), null, null);
+					// BreedEventの重複作成を防ぐ（同じfromのイベントが既にあれば追加しない）
+					boolean hasBreedEvent = false;
+					for (EventPacket ep : GameWorld.get().getCurrentMap().getEvent()) {
+						if (ep instanceof BreedEvent && YukkuriUtil.getBodyInstance(ep.getFrom()) == this) {
+							hasBreedEvent = true;
+							break;
+						}
+					}
+					if (!hasBreedEvent) {
+						EventLogic.addWorldEvent(new BreedEvent(this, null, null, 2), null, null);
+					}
 				}
 				// }
 			}
@@ -2861,10 +2871,12 @@ public abstract class Body extends BodyAttributes {
 		if (flag) {
 			setMessage(null);
 			forceToSleep();
+			setBirthAge(-1);
 		} else {
 			// うまれたての赤ゆならリセット
 			if (getBodyAgeState() == AgeState.BABY) {
 				setAge(0);
+				setBirthAge(getAge());
 			}
 			wakeup();
 		}
@@ -7664,6 +7676,7 @@ public abstract class Body extends BodyAttributes {
 				}
 				setForceBirthMessage(true);
 			}
+			setBirthAge(getAge());
 		}
 		dirX = randomDirection(dirX);
 		dirY = randomDirection(dirY);

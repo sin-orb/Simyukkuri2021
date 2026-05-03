@@ -397,6 +397,8 @@ public abstract class BodyAttributes extends Obj {
 	private boolean shitting = false;
 	/** 誕生済みか否か */
 	private boolean birth = false;
+	/** 生まれてからの基準年齢 */
+	private long birthAge = -1;
 	/** 怒っているか否か */
 	private boolean angry = false;
 	/** ふりふりアクション中 */
@@ -5309,6 +5311,34 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	public boolean isBirth() {
 		return (!dead && birth);
+	}
+
+	/**
+	 * 生まれてからの基準年齢を取得する.
+	 *
+	 * @return 生まれてからの基準年齢
+	 */
+	public long getBirthAge() {
+		return birthAge;
+	}
+
+	/**
+	 * 生まれてからの基準年齢を設定する.
+	 *
+	 * @param birthAge 生まれてからの基準年齢
+	 */
+	public void setBirthAge(long birthAge) {
+		this.birthAge = birthAge;
+	}
+
+	/**
+	 * 出生からしばらく経っていないかどうかを返却する.
+	 *
+	 * @return 出生直後ならtrue
+	 */
+	@Transient
+	public boolean isNewborn() {
+		return birthAge >= 0 && (getAge() - birthAge) < 300;
 	}
 
 	/**

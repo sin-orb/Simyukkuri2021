@@ -131,7 +131,29 @@ final class GadgetToolAction {
 					GameEnvironment.setAlarm();
 				}
 				break;
-			case PUNCH:
+			case GATHERINJECTINTO:
+			if (found instanceof Body) {
+				Body b = (Body) found;
+				if (SimYukkuri.sperm == null) {
+					SimYukkuri.sperm = b.getDna();
+				} else {
+					b.injectInto(SimYukkuri.sperm);
+					SimYukkuri.sperm = null;
+				}
+			}
+			break;
+		case DRIPSPERM:
+			if (found instanceof Body) {
+				Body b = (Body) found;
+				if (SimYukkuri.sperm == null) {
+					SimYukkuri.sperm = b.getDna();
+				} else {
+					b.dripSperm(SimYukkuri.sperm);
+					SimYukkuri.sperm = null;
+				}
+			}
+			break;
+		case PUNCH:
 				if (ev.isShiftDown()) {
 					for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
 						Body b = entry.getValue();

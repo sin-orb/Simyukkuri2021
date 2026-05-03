@@ -33,11 +33,11 @@ public class NonYukkuriDiseaseEstrusTest {
     private StubBody createBody(AgeState age) {
         StubBody b = new StubBody();
         for (int i = 0; i < 3; i++) {
-            b.bodySpr[i] = new Sprite();
-            b.bodySpr[i].setImageW(100);
-            b.bodySpr[i].setImageH(100);
-            b.expandSpr[i] = new Sprite();
-            b.braidSpr[i] = new Sprite();
+            b.getBodySpr()[i] = new Sprite();
+            b.getBodySpr()[i].setImageW(100);
+            b.getBodySpr()[i].setImageH(100);
+            b.getExpandSpr()[i] = new Sprite();
+            b.getBraidSpr()[i] = new Sprite();
         }
         b.setAgeState(age);
         b.setMsgType(YukkuriType.REIMU);

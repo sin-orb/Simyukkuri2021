@@ -628,9 +628,11 @@ public final class BodyMovement {
 			}
 
 			if (body.isBFirstGround()) {
-				body.setMessage(GameMessages.getMessage(body, MessagePool.Action.TakeItEasy));
-				body.addStress(-400);
-				body.addMemories(20);
+				if (!body.isNYD()) {
+					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.TakeItEasy));
+					body.addStress(-400);
+					body.addMemories(20);
+				}
 			}
 			body.setBFirstGround(false);
 

@@ -38,9 +38,9 @@ public class BodyRenderingTest {
         body = new RenderingStubBody();
         layer = new BodyLayer();
         for (int i = 0; i < 3; i++) {
-            body.bodySpr[i] = new src.system.Sprite();
-            body.expandSpr[i] = new src.system.Sprite();
-            body.braidSpr[i] = new src.system.Sprite();
+            body.getBodySpr()[i] = new src.system.Sprite();
+            body.getExpandSpr()[i] = new src.system.Sprite();
+            body.getBraidSpr()[i] = new src.system.Sprite();
         }
     }
 
