@@ -24,7 +24,7 @@ import src.base.ObjEX;
 import src.draw.ModLoader;
 import src.draw.Rectangle4y;
 import src.enums.CriticalDamegeType;
-import src.enums.ObjEXType;
+import src.enums.WorldEntityKind;
 import src.enums.Type;
 import src.system.ResourceUtil;
 
@@ -211,7 +211,7 @@ public class StickyPlate extends ObjEX {
 		setCollisionSize(getPivotX(), getPivotY());
 		GameWorld.get().getCurrentMap().getStickyPlate().put(objId, this);
 		objType = Type.PLATFORM;
-		objEXType = ObjEXType.STICKYPLATE;
+		objEXType = WorldEntityKind.STICKYPLATE;
 		interval = 5;
 		if (!setupStickyPlate(this)) {
 			GameWorld.get().getCurrentMap().getStickyPlate().remove(objId);

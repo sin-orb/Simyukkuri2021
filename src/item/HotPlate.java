@@ -12,7 +12,7 @@ import src.SimYukkuri;
 import src.util.GameRandom;
 import src.util.GameWorld;
 import src.base.Body;
-import src.base.Effect;
+import src.effect.Effect;
 import src.base.Obj;
 import src.base.ObjEX;
 import src.draw.ModLoader;
@@ -22,7 +22,7 @@ import src.enums.EffectType;
 import src.enums.FootBake;
 import src.enums.Happiness;
 import src.enums.ImageCode;
-import src.enums.ObjEXType;
+import src.enums.WorldEntityKind;
 import src.enums.Type;
 import src.system.Cash;
 import src.system.MessagePool;
@@ -191,7 +191,7 @@ public class HotPlate extends ObjEX {
 		setCollisionSize(getPivotX(), getPivotY());
 		GameWorld.get().getCurrentMap().getHotPlate().put(objId, this);
 		objType = Type.PLATFORM;
-		objEXType = ObjEXType.HOTPLATE;
+		objEXType = WorldEntityKind.HOTPLATE;
 
 		interval = 5;
 		value = 5000;

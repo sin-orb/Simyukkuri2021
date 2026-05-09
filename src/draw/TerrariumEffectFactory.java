@@ -1,6 +1,6 @@
 package src.draw;
 
-import src.base.Effect;
+import src.effect.Effect;
 import src.effect.BakeSmoke;
 import src.effect.Hit;
 import src.effect.Mix;

@@ -1,4 +1,4 @@
-package src.system;
+package src.field;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -18,7 +18,7 @@ import src.system.ItemMenu.ShapeMenuTarget;
  *	フィールドに配置される図形型アイテムの抽象クラス
  *<br>継承先：壁、ベルコン、畑、池
  */
-public abstract class FieldShapeBase implements Serializable {
+public abstract class FieldShape implements Serializable {
 	private static final long serialVersionUID = 7126507907121745508L;
 	/**時定数*/
 	public static final int TICK = SimYukkuri.TICK;

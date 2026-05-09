@@ -13,7 +13,8 @@ import org.junit.jupiter.api.Test;
 import src.SimYukkuri;
 import src.base.Obj;
 import src.enums.Event;
-import src.item.Pool.DEPTH;
+import src.field.impl.Pool;
+import src.field.impl.Pool.DEPTH;
 import src.system.ItemMenu.ShapeMenu;
 import src.system.ItemMenu.ShapeMenuTarget;
 import src.util.WorldTestHelper;
@@ -59,7 +60,7 @@ class PoolTest {
         assertEquals(DEPTH.DEEP, DEPTH.valueOf("DEEP"));
     }
 
-    // --- Inherited FieldShapeBase methods ---
+    // --- Inherited FieldShape methods ---
 
     @Test
     void testGetAttribute() {

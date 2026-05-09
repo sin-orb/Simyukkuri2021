@@ -12,9 +12,9 @@ import src.draw.Rectangle4y;
 import src.draw.Translate;
 import src.enums.Event;
 import src.enums.Numbering;
-import src.enums.ObjEXType;
+import src.enums.WorldEntityKind;
 import src.enums.Type;
-import src.item.Barrier;
+import src.field.impl.Barrier;
 
 /*********************************************************
  * ゆっくり以外のゲーム内オブジェクトの元となるクラス
@@ -22,7 +22,7 @@ import src.item.Barrier;
 @JsonTypeInfo(use = Id.CLASS)
 public abstract class ObjEX extends Obj {
 	/** オブジェクトタイプ */
-	protected ObjEXType objEXType;
+	protected WorldEntityKind objEXType;
 	/** 追加情報用の汎用定数 */
 	protected int option;
 
@@ -80,7 +80,7 @@ public abstract class ObjEX extends Obj {
 	abstract public void removeListData();
 
 	/** オブジェクトのタイプのゲッター */
-	public ObjEXType getObjEXType() {
+	public WorldEntityKind getObjEXType() {
 		return objEXType;
 	}
 
@@ -337,7 +337,7 @@ public abstract class ObjEX extends Obj {
 		this.tmpPos = tmpPos;
 	}
 
-	public void setObjEXType(ObjEXType objEXType) {
+	public void setObjEXType(WorldEntityKind objEXType) {
 		this.objEXType = objEXType;
 	}
 

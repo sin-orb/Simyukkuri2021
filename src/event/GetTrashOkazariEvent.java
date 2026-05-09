@@ -2,9 +2,9 @@ package src.event;
 import src.util.GameText;
 
 import src.base.Body;
-import src.base.EventPacket;
+import src.event.EventPacket;
 import src.base.Obj;
-import src.base.Okazari;
+import src.entity.world.bodylinked.Okazari;
 import src.system.ResourceUtil;
 
 /***************************************************

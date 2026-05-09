@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
 import src.base.Body;
-import src.base.EventPacket.EventPriority;
+import src.event.EventPacket.EventPriority;
 import src.draw.World;
 import src.enums.AgeState;
 import src.enums.Attitude;
@@ -182,7 +182,7 @@ class BegForLifeEventTest {
         setField(event, "roop3", 0);
         setField(event, "tick", 8);
         setField(event, "wait", 30);
-        assertEquals(src.base.EventPacket.UpdateState.ABORT, event.update(b));
+        assertEquals(src.event.EventPacket.UpdateState.ABORT, event.update(b));
     }
 
     // --- update: wait == 50, roop=0, roop2=0, roop3 != 0, isDamaged ---

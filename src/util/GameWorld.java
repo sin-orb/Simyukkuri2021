@@ -2,7 +2,7 @@ package src.util;
 
 import src.SimYukkuri;
 import src.draw.World;
-import src.game.Player;
+import src.meta.Player;
 import src.system.MapPlaceData;
 
 public final class GameWorld {

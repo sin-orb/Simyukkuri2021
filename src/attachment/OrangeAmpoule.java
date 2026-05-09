@@ -7,7 +7,7 @@ import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
 
-import src.base.Attachment;
+import src.attachment.Attachment;
 import src.base.Body;
 import src.draw.ModLoader;
 import src.enums.AgeState;

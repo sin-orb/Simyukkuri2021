@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import src.SimYukkuri;
 import src.base.Obj;
 import src.util.WorldTestHelper;
+import src.meta.Player;
 
 class PlayerTest {
 

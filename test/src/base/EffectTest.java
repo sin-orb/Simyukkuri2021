@@ -7,6 +7,7 @@ import java.awt.image.BufferedImage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import src.effect.Effect;
 import src.SimYukkuri;
 import src.draw.World;
 import src.enums.Event;

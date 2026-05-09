@@ -6,7 +6,7 @@ import java.util.List;
 
 import src.base.Body;
 import src.base.Obj;
-import src.base.Okazari;
+import src.entity.world.bodylinked.Okazari;
 import src.command.GadgetMenu.GadgetList;
 import src.util.GameWorld;
 

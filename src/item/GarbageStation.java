@@ -25,7 +25,7 @@ import src.command.GadgetAction;
 import src.draw.ModLoader;
 import src.draw.Rectangle4y;
 import src.draw.Terrarium;
-import src.enums.ObjEXType;
+import src.enums.WorldEntityKind;
 import src.enums.Type;
 import src.item.Food.FoodType;
 import src.system.ResourceUtil;
@@ -198,7 +198,7 @@ public class GarbageStation extends ObjEX {
 
 		GameWorld.get().getCurrentMap().getGarbageStation().put(objId, this);
 		objType = Type.OBJECT;
-		objEXType = ObjEXType.GARBAGESTATION;
+		objEXType = WorldEntityKind.GARBAGESTATION;
 		enable = new boolean[rndTable.length];
 		food = new Obj[2];
 		value = 0;

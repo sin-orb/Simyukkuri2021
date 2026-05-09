@@ -25,7 +25,7 @@ import src.base.ObjEX;
 import src.draw.ModLoader;
 import src.draw.Rectangle4y;
 import src.enums.Happiness;
-import src.enums.ObjEXType;
+import src.enums.WorldEntityKind;
 import src.enums.Type;
 import src.game.Dna;
 import src.system.Cash;
@@ -291,7 +291,7 @@ public class BreedingPool extends ObjEX {
 		GameWorld.get().getCurrentMap().getBreedingPool().put(objId, this);
 
 		objType = Type.PLATFORM;
-		objEXType = ObjEXType.BREEDINGPOOL;
+		objEXType = WorldEntityKind.BREEDINGPOOL;
 
 		interval = 1;
 

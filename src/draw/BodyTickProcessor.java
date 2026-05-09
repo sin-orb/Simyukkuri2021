@@ -11,7 +11,7 @@ import src.enums.Event;
 import src.enums.PanicType;
 import src.game.Dna;
 import src.game.Stalk;
-import src.item.Barrier;
+import src.field.impl.Barrier;
 import src.system.MapPlaceData;
 import src.draw.Translate;
 import src.util.GameRandom;

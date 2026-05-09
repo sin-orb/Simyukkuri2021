@@ -12,9 +12,9 @@ import src.enums.Direction;
 import src.enums.Happiness;
 import src.enums.Intelligence;
 import src.event.SuperEatingTimeEvent;
-import src.item.Barrier;
+import src.field.impl.Barrier;
 import src.item.Trampoline;
-import src.system.FieldShapeBase;
+import src.field.FieldShape;
 import src.system.MessagePool;
 import src.util.GameMessages;
 import src.util.GameRandom;
@@ -517,11 +517,11 @@ public final class BodyMovement {
 	}
 
 	private static void handlePoolEntry(Body body, MovementVector vector) {
-		if ((Translate.getCurrentFieldMapNum(body.getX(), body.getY()) & FieldShapeBase.FIELD_POOL) == 0) {
+		if ((Translate.getCurrentFieldMapNum(body.getX(), body.getY()) & FieldShape.FIELD_POOL) == 0) {
 			return;
 		}
 		if ((Translate.getCurrentFieldMapNum(body.getX() - vector.getX(), body.getY() - vector.getY())
-				& FieldShapeBase.FIELD_POOL) != 0) {
+				& FieldShape.FIELD_POOL) != 0) {
 			return;
 		}
 		if (body.isLikeWater()) {

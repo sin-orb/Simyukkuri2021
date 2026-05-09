@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import src.attachment.Attachment;
 import src.SimYukkuri;
 import src.draw.Point4y;
 import src.draw.World;

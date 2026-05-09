@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
 import src.base.Body;
-import src.base.EventPacket.EventPriority;
+import src.event.EventPacket.EventPriority;
 import src.draw.World;
 import src.enums.AgeState;
 import src.enums.Happiness;
@@ -173,7 +173,7 @@ public class SuperEatingTimeEventTest {
     public void testUpdate_fromNull_returnsAbort() {
         Body b = createBody();
         SuperEatingTimeEvent event = new SuperEatingTimeEvent();
-        assertEquals(src.base.EventPacket.UpdateState.ABORT, event.update(b));
+        assertEquals(src.event.EventPacket.UpdateState.ABORT, event.update(b));
     }
 
     @Test
@@ -182,7 +182,7 @@ public class SuperEatingTimeEventTest {
         Body b = createBody();
         b.setCoreAnkoState(src.enums.CoreAnkoState.NonYukkuriDisease);
         SuperEatingTimeEvent event = new SuperEatingTimeEvent(from, null, null, 10);
-        assertEquals(src.base.EventPacket.UpdateState.ABORT, event.update(b));
+        assertEquals(src.event.EventPacket.UpdateState.ABORT, event.update(b));
     }
 
     @Test
@@ -191,7 +191,7 @@ public class SuperEatingTimeEventTest {
         Body b = createBody();
         from.setRemoved(true);
         SuperEatingTimeEvent event = new SuperEatingTimeEvent(from, null, null, 10);
-        assertEquals(src.base.EventPacket.UpdateState.ABORT, event.update(b));
+        assertEquals(src.event.EventPacket.UpdateState.ABORT, event.update(b));
     }
 
     @Test
@@ -201,7 +201,7 @@ public class SuperEatingTimeEventTest {
         // target=-1 → takeMappedObj returns null → ABORT
         SuperEatingTimeEvent event = new SuperEatingTimeEvent(from, null, null, 10);
         from.setCurrentEvent(event);
-        assertEquals(src.base.EventPacket.UpdateState.ABORT, event.update(b));
+        assertEquals(src.event.EventPacket.UpdateState.ABORT, event.update(b));
     }
 
     // --- toString ---
@@ -232,7 +232,7 @@ public class SuperEatingTimeEventTest {
         SuperEatingTimeEvent event = new SuperEatingTimeEvent(from, null, food, 10);
         from.setCurrentEvent(event);
         // b == from → parent branch, no children → ABORT
-        assertEquals(src.base.EventPacket.UpdateState.ABORT, event.update(from));
+        assertEquals(src.event.EventPacket.UpdateState.ABORT, event.update(from));
     }
 
     @Test
@@ -279,7 +279,7 @@ public class SuperEatingTimeEventTest {
         SuperEatingTimeEvent event = new SuperEatingTimeEvent(from, null, food, 10);
         // from.getCurrentEvent() == null (not set), waitTicks=11 → line 166 ABORT
         event.waitTicks = 11;
-        assertEquals(src.base.EventPacket.UpdateState.ABORT, event.update(b));
+        assertEquals(src.event.EventPacket.UpdateState.ABORT, event.update(b));
     }
 
     @Test
@@ -291,7 +291,7 @@ public class SuperEatingTimeEventTest {
         SuperEatingTimeEvent event = new SuperEatingTimeEvent(from, null, food, 10);
         from.setCurrentEvent(event);
         // child is ADULT → createActiveChildList returns empty list → ABORT
-        assertEquals(src.base.EventPacket.UpdateState.ABORT, event.update(from));
+        assertEquals(src.event.EventPacket.UpdateState.ABORT, event.update(from));
     }
 
     @Test
@@ -433,7 +433,7 @@ public class SuperEatingTimeEventTest {
         SuperEatingTimeEvent event = new SuperEatingTimeEvent(from, null, food, 10);
         from.setCurrentEvent(event);
         event.waitTicks = 5001;
-        assertEquals(src.base.EventPacket.UpdateState.ABORT, event.update(from));
+        assertEquals(src.event.EventPacket.UpdateState.ABORT, event.update(from));
     }
 
     // --- simpleEventAction: from.isShutmouth() → true ---
@@ -501,7 +501,7 @@ public class SuperEatingTimeEventTest {
         child.setCurrentEvent(event);
 
         // food.isEmpty() check in update is only in parent branch (b == from)
-        assertEquals(src.base.EventPacket.UpdateState.ABORT, event.update(from));
+        assertEquals(src.event.EventPacket.UpdateState.ABORT, event.update(from));
         assertEquals(src.enums.Happiness.VERY_SAD, from.getHappiness());
     }
 
@@ -539,7 +539,7 @@ public class SuperEatingTimeEventTest {
             SuperEatingTimeEvent event = new SuperEatingTimeEvent(from, null, food, 10);
             from.setCurrentEvent(event);
 
-            assertEquals(src.base.EventPacket.UpdateState.ABORT, event.update(child));
+            assertEquals(src.event.EventPacket.UpdateState.ABORT, event.update(child));
             assertEquals(Happiness.VERY_SAD, from.getHappiness());
         }
 

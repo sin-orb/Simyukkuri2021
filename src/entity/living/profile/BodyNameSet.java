@@ -1,4 +1,4 @@
-package src.base;
+package src.entity.living.profile;
 
 /**
  * BodyAttributes の名前関連データをまとめた値オブジェクト.

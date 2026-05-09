@@ -20,7 +20,7 @@ import src.enums.Event;
 import src.enums.Numbering;
 import src.enums.Type;
 import src.enums.YukkuriType;
-import src.item.Barrier;
+import src.field.impl.Barrier;
 import src.system.ItemMenu.GetMenuTarget;
 import src.system.ItemMenu.UseMenuTarget;
 import src.system.ResourceUtil;

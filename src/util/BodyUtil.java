@@ -4,11 +4,11 @@ import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 
-import src.base.Attachment;
+import src.attachment.Attachment;
 import src.base.Body;
 import src.base.Obj;
-import src.base.Okazari;
-import src.base.Okazari.OkazariType;
+import src.entity.world.bodylinked.Okazari;
+import src.entity.world.bodylinked.Okazari.OkazariType;
 import src.draw.Point4y;
 import src.draw.Rectangle4y;
 import src.draw.Translate;

@@ -4,7 +4,7 @@ import src.attachment.Ants;
 import src.base.Body;
 import src.draw.Point4y;
 import src.draw.Translate;
-import src.item.Barrier;
+import src.field.impl.Barrier;
 
 /**
  * Parent-nearness handling used by BodyLogic.

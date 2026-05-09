@@ -7,7 +7,7 @@ import src.enums.BurialState;
 import src.enums.PublicRank;
 import src.util.GameWorld;
 import src.draw.Translate;
-import src.item.Barrier;
+import src.field.impl.Barrier;
 
 /**
  * Other-body wakeup checks used by BodyLogic.

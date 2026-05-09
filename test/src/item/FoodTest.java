@@ -3,7 +3,7 @@ package src.item;
 import org.junit.jupiter.api.Test;
 import src.base.ItemTestBase;
 import src.SimYukkuri;
-import src.enums.ObjEXType;
+import src.enums.WorldEntityKind;
 import src.item.Food.FoodType;
 import src.item.Food.EmptyImage;
 
@@ -39,7 +39,7 @@ class FoodTest extends ItemTestBase {
     @Test
     void testConstructor_SetsObjEXTypeToFood() {
         Food food = new Food(0, 0, FoodType.FOOD.ordinal());
-        assertEquals(ObjEXType.FOOD, food.getObjEXType());
+        assertEquals(WorldEntityKind.FOOD, food.getObjEXType());
     }
 
     @Test
@@ -803,7 +803,7 @@ class FoodTest extends ItemTestBase {
     @Test
     void testGetObjEXType_IsFood() {
         Food food = new Food(0, 0, FoodType.FOOD.ordinal());
-        assertEquals(ObjEXType.FOOD, food.getObjEXType());
+        assertEquals(WorldEntityKind.FOOD, food.getObjEXType());
     }
 
     // verifyCommonProperties

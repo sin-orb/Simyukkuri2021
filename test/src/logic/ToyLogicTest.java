@@ -19,7 +19,7 @@ import src.enums.CoreAnkoState;
 import src.enums.FavItemType;
 import src.enums.Happiness;
 import src.enums.Intelligence;
-import src.enums.ObjEXType;
+import src.enums.WorldEntityKind;
 import src.item.Sui;
 import src.item.Toy;
 import src.item.Trampoline;
@@ -191,7 +191,7 @@ class ToyLogicTest {
 
     @Test
     void testCanPlay_HasCurrentEventReturnsFalse() {
-        body.setCurrentEvent(new src.base.EventPacket(){
+        body.setCurrentEvent(new src.event.EventPacket(){
             public boolean checkEventResponse(src.base.Body b){ return false; }
             public void start(src.base.Body b){}
             public UpdateState update(src.base.Body b){ return null; }

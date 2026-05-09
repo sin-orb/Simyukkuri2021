@@ -1,4 +1,4 @@
-package src.item;
+package src.field.impl;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -12,7 +12,7 @@ import src.util.GameWorld;
 import src.draw.Color4y;
 import src.draw.Point4y;
 import src.draw.Translate;
-import src.system.FieldShapeBase;
+import src.field.FieldShape;
 import src.system.MapPlaceData;
 
 /* 
@@ -36,7 +36,7 @@ import src.system.MapPlaceData;
  * <br>
  * これはほかのアイテムと違い、ObjEXを継承していないので注意。
  */
-public class Barrier extends FieldShapeBase {
+public class Barrier extends FieldShape {
 	private static final long serialVersionUID = -1750205300136035405L;
 	/** 壁の線のデザイン */
 	public static final Stroke WALL_STROKE = new BasicStroke(3.0f);

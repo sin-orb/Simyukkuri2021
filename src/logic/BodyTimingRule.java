@@ -1,7 +1,7 @@
 package src.logic;
 
 import src.base.BodyAttributes;
-import src.base.BodyTimingProfile;
+import src.entity.living.profile.BodyTimingProfile;
 
 /**
  * BodyAttributes の時刻・閾値系パラメータをまとめたルール.

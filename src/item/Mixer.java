@@ -12,7 +12,7 @@ import src.SimYukkuri;
 import src.util.GameRandom;
 import src.util.GameWorld;
 import src.base.Body;
-import src.base.Effect;
+import src.effect.Effect;
 import src.base.Obj;
 import src.base.ObjEX;
 import src.command.GadgetAction;
@@ -22,7 +22,7 @@ import src.enums.CriticalDamegeType;
 import src.enums.EffectType;
 import src.enums.Happiness;
 import src.enums.ImageCode;
-import src.enums.ObjEXType;
+import src.enums.WorldEntityKind;
 import src.enums.Type;
 import src.system.Cash;
 import src.system.MessagePool;
@@ -227,7 +227,7 @@ public class Mixer extends ObjEX {
 		setCollisionSize(getPivotX(), getPivotY());
 		GameWorld.get().getCurrentMap().getMixer().put(objId, this);
 		objType = Type.PLATFORM;
-		objEXType = ObjEXType.MIXER;
+		objEXType = WorldEntityKind.MIXER;
 
 		interval = 5;
 		value = 3000;

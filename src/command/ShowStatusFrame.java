@@ -23,7 +23,7 @@ import javax.swing.border.EmptyBorder;
 import src.SimYukkuri;
 import src.util.GameRandom;
 import src.util.GameWorld;
-import src.base.Attachment;
+import src.attachment.Attachment;
 import src.base.Body;
 import src.base.Obj;
 import src.draw.MyPane;

@@ -1,8 +1,8 @@
 package src.logic;
 
 import src.base.BodyAttributes;
-import src.base.BodyBehaviorProfile;
-import src.base.BodyStatProfile;
+import src.entity.living.profile.BodyBehaviorProfile;
+import src.entity.living.profile.BodyStatProfile;
 
 /**
  * Bodyの好み・設定系の値を集約する.

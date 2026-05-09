@@ -19,9 +19,10 @@ import src.draw.Translate;
 import src.enums.Event;
 import src.enums.FavItemType;
 import src.enums.Intelligence;
-import src.enums.ObjEXType;
+import src.enums.WorldEntityKind;
 import src.enums.Type;
 import src.system.MessagePool;
+import src.field.impl.Barrier;
 
 /***************************************************
  * すぃー
@@ -486,7 +487,7 @@ public class Sui extends ObjEX {
 		setCollisionSize(getPivotX(), getPivotY());
 		GameWorld.get().getCurrentMap().getSui().put(objId, this);
 		objType = Type.OBJECT;
-		objEXType = ObjEXType.SUI;
+		objEXType = WorldEntityKind.SUI;
 
 		moveTo(x, y);
 

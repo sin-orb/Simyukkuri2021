@@ -8,7 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import src.base.Body;
-import src.base.Okazari;
+import src.entity.world.bodylinked.Okazari;
 import src.enums.PredatorType;
 import src.util.WorldTestHelper;
 

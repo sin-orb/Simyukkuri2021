@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import src.SimYukkuri;
 import src.ConstState;
 import src.base.Body;
-import src.base.EventPacket;
+import src.event.EventPacket;
 import src.base.EventTestBase;
 import src.system.Sprite;
 import src.yukkuri.Reimu;

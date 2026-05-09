@@ -11,7 +11,7 @@ import src.ConstState;
 import src.SimYukkuri;
 import src.base.ItemTestBase;
 import src.base.Obj;
-import src.enums.ObjEXType;
+import src.enums.WorldEntityKind;
 import src.item.Food.FoodType;
 import src.item.GarbageStation.GomiType;
 
@@ -206,13 +206,13 @@ class GarbageStationTest extends ItemTestBase {
         assertDoesNotThrow(() -> item.readIniFile());
     }
 
-    // --- ObjEXType ---
+    // --- WorldEntityKind ---
 
     @Test
     void testObjEXType_afterManualSet() {
         GarbageStation item = new GarbageStation();
-        item.setObjEXType(ObjEXType.GARBAGESTATION);
-        assertEquals(ObjEXType.GARBAGESTATION, item.getObjEXType());
+        item.setObjEXType(WorldEntityKind.GARBAGESTATION);
+        assertEquals(WorldEntityKind.GARBAGESTATION, item.getObjEXType());
     }
 
     // --- enabled flag ---

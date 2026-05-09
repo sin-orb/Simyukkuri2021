@@ -1,7 +1,7 @@
 package src.logic;
 
 import src.base.Body;
-import src.base.Okazari.OkazariType;
+import src.entity.world.bodylinked.Okazari.OkazariType;
 import src.enums.Happiness;
 import src.enums.PublicRank;
 import src.system.MessagePool;

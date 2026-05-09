@@ -5,7 +5,7 @@ import src.Const;
 import src.SimYukkuri;
 import src.util.GameWorld;
 import src.base.Body;
-import src.base.EventPacket;
+import src.event.EventPacket;
 
 /***************************************************
 	イベントの処理ロジック

@@ -11,7 +11,7 @@ import src.util.GameWorld;
 import src.base.ObjEX;
 import src.draw.ModLoader;
 import src.draw.Rectangle4y;
-import src.enums.ObjEXType;
+import src.enums.WorldEntityKind;
 import src.enums.Type;
 
 /***************************************************
@@ -75,7 +75,7 @@ public class Trash extends ObjEX {
 		setCollisionSize(getPivotX(), getPivotY());
 		GameWorld.get().getCurrentMap().getTrash().put(objId, this);
 		objType = Type.OBJECT;
-		objEXType = ObjEXType.TRASH;
+		objEXType = WorldEntityKind.TRASH;
 
 		value = 0;
 		cost = 0;

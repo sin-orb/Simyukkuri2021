@@ -1,4 +1,4 @@
-package src.base;
+package src.entity.living.profile;
 
 /**
  * BodyAttributes の行動・性格・繁殖寄りの調整値をまとめた値オブジェクト.

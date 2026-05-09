@@ -13,7 +13,7 @@ import src.base.Obj;
 import src.base.ObjEX;
 import src.draw.ModLoader;
 import src.draw.Rectangle4y;
-import src.enums.ObjEXType;
+import src.enums.WorldEntityKind;
 import src.enums.Type;
 import src.system.Cash;
 
@@ -96,7 +96,7 @@ public class ProductChute extends ObjEX {
 		setCollisionSize(getPivotX(), getPivotY());
 		GameWorld.get().getCurrentMap().getProductchute().put(objId, this);
 		objType = Type.PLATFORM;
-		objEXType = ObjEXType.PRODUCTCHUTE;
+		objEXType = WorldEntityKind.PRODUCTCHUTE;
 		interval = 10;
 		value = 5000;
 		cost = 50;

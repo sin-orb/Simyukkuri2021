@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+import src.attachment.Attachment;
 import src.ConstState;
 import src.SimYukkuri;
 import src.draw.World;

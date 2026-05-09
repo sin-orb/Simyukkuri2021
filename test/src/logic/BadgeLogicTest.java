@@ -13,7 +13,7 @@ import src.enums.BodyRank;
 import src.enums.Intelligence;
 import src.util.WorldTestHelper;
 import src.yukkuri.Reimu;
-import src.base.Attachment;
+import src.attachment.Attachment;
 import java.util.List;
 
 /**

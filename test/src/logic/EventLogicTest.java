@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import src.base.Body;
-import src.base.EventPacket;
+import src.event.EventPacket;
 import src.yukkuri.Reimu;
 
 /**

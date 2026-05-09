@@ -11,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import src.ConstState;
 import src.Const;
 import src.SimYukkuri;
+import src.attachment.Attachment;
 import src.attachment.Fire;
 import src.draw.World;
 import src.enums.AgeState;
@@ -36,7 +37,7 @@ import src.enums.PurposeOfMoving;
 import src.enums.Trauma;
 import src.enums.YukkuriType;
 import src.enums.PredatorType;
-import src.item.Barrier;
+import src.field.impl.Barrier;
 import src.item.Trampoline;
 import src.draw.Translate;
 import src.game.Dna;
@@ -51,15 +52,15 @@ import src.system.ItemMenu.GetMenuTarget;
 import src.system.ItemMenu.UseMenuTarget;
 import src.system.Sprite;
 import src.system.BasicStrokeEX;
-import src.base.EventPacket;
+import src.event.EventPacket;
 import src.enums.Direction;
 import src.enums.FavItemType;
 import src.enums.TakeoutItemType;
 import src.enums.PublicRank;
 import src.enums.Burst;
 import src.enums.PlayStyle;
-import src.base.Okazari;
-import src.system.FieldShapeBase;
+import src.entity.world.bodylinked.Okazari;
+import src.field.FieldShape;
 import src.game.Stalk;
 import src.draw.Rectangle4y;
 import src.draw.Dimension4y;
@@ -5434,7 +5435,7 @@ public class BodyTest {
             // isSleeping() returns (!dead && sleeping), so always false when dead
             body.setDead(true);
             body.setSleeping(true);
-            body.inWater(src.item.Pool.DEPTH.SHALLOW);
+            body.inWater(src.field.impl.Pool.DEPTH.SHALLOW);
             assertFalse(body.isSleeping());
         }
 
@@ -5443,7 +5444,7 @@ public class BodyTest {
             body.setDead(false);
             body.setUnBirth(false);
             body.setSleeping(true);
-            body.inWater(src.item.Pool.DEPTH.SHALLOW);
+            body.inWater(src.field.impl.Pool.DEPTH.SHALLOW);
             assertFalse(body.isSleeping());
         }
 
@@ -5454,7 +5455,7 @@ public class BodyTest {
             body.setLikeWater(true);
             body.setSleeping(false);
             body.setExciting(false);
-            body.inWater(src.item.Pool.DEPTH.SHALLOW);
+            body.inWater(src.field.impl.Pool.DEPTH.SHALLOW);
             assertEquals(Happiness.HAPPY, body.getHappiness());
         }
 
@@ -5465,7 +5466,7 @@ public class BodyTest {
             body.setUnBirth(false);
             body.setLikeWater(false);
             body.setSleeping(false);
-            body.inWater(src.item.Pool.DEPTH.SHALLOW);
+            body.inWater(src.field.impl.Pool.DEPTH.SHALLOW);
             assertEquals(Happiness.VERY_SAD, body.getHappiness());
         }
     }
@@ -5853,7 +5854,7 @@ public class BodyTest {
             // reaction
             body.setDead(true);
             body.setOkazari(null);
-            body.giveOkazari(src.base.Okazari.OkazariType.DEFAULT);
+            body.giveOkazari(src.entity.world.bodylinked.Okazari.OkazariType.DEFAULT);
             assertNotNull(body.getOkazari());
         }
 
@@ -5863,7 +5864,7 @@ public class BodyTest {
             body.setOkazari(null);
             body.setSleeping(false);
             body.setCoreAnkoState(CoreAnkoState.DEFAULT);
-            body.giveOkazari(src.base.Okazari.OkazariType.DEFAULT);
+            body.giveOkazari(src.entity.world.bodylinked.Okazari.OkazariType.DEFAULT);
             assertNotNull(body.getOkazari());
             assertEquals(Happiness.VERY_HAPPY, body.getHappiness());
         }
@@ -8419,7 +8420,7 @@ public class BodyTest {
         public void testNoticeNoOkazariWithOkazariDoesNothing() {
             body.setDead(false);
             body.setSleeping(false);
-            body.setOkazari(new src.base.Okazari());
+            body.setOkazari(new src.entity.world.bodylinked.Okazari());
             body.stress = 0;
             body.noticeNoOkazari();
             assertEquals(0, body.stress);
@@ -11273,7 +11274,7 @@ public class BodyTest {
             body.setLikeWater(false);
             body.setIntelligence(Intelligence.AVERAGE); // nRandom=30
             SimYukkuri.RND = new ConstState(1); // nextInt(30)=1 !=0 -> avoid
-            Translate.setCurrentFieldMapNum(31, 30, FieldShapeBase.FIELD_POOL);
+            Translate.setCurrentFieldMapNum(31, 30, FieldShape.FIELD_POOL);
             Translate.setCurrentFieldMapNum(30, 30, 0);
             int xBefore = body.getX();
             int yBefore = body.getY();
@@ -11532,7 +11533,7 @@ public class BodyTest {
             body.setDestX(61);
             body.setDestY(60);
             SimYukkuri.RND = new ConstState(0); // nextInt(30)=0 -> do not avoid
-            Translate.setCurrentFieldMapNum(61, 60, FieldShapeBase.FIELD_POOL);
+            Translate.setCurrentFieldMapNum(61, 60, FieldShape.FIELD_POOL);
             Translate.setCurrentFieldMapNum(60, 60, 0);
 
             body.moveBody(false);
@@ -11767,7 +11768,7 @@ public class BodyTest {
             body.setLikeWater(false);
             body.setIntelligence(Intelligence.FOOL); // nRandom=10
             SimYukkuri.RND = new ConstState(0); // nextInt(10)=0 -> allow entry
-            Translate.setCurrentFieldMapNum(51, 50, FieldShapeBase.FIELD_POOL);
+            Translate.setCurrentFieldMapNum(51, 50, FieldShape.FIELD_POOL);
             Translate.setCurrentFieldMapNum(50, 50, 0);
             int xBefore = body.getX();
 
@@ -12397,7 +12398,7 @@ public class BodyTest {
             body.setLikeWater(false);
             body.setIntelligence(Intelligence.WISE); // nRandom=100
             SimYukkuri.RND = new ConstState(1); // nextInt(100)=1 !=0 -> avoid
-            Translate.setCurrentFieldMapNum(141, 140, FieldShapeBase.FIELD_POOL);
+            Translate.setCurrentFieldMapNum(141, 140, FieldShape.FIELD_POOL);
             Translate.setCurrentFieldMapNum(140, 140, 0);
             int xBefore = body.getX();
 
@@ -12423,7 +12424,7 @@ public class BodyTest {
             body.setLikeWater(false);
             body.setIntelligence(Intelligence.FOOL); // nRandom=10
             SimYukkuri.RND = new ConstState(1); // nextInt(10)=1 !=0 -> avoid
-            Translate.setCurrentFieldMapNum(61, 60, FieldShapeBase.FIELD_POOL);
+            Translate.setCurrentFieldMapNum(61, 60, FieldShape.FIELD_POOL);
             Translate.setCurrentFieldMapNum(60, 60, 0);
             int xBefore = body.getX();
 
@@ -12700,7 +12701,7 @@ public class BodyTest {
             body.setDestX(101);
             body.setDestY(100);
             body.setLikeWater(true);
-            Translate.setCurrentFieldMapNum(101, 100, FieldShapeBase.FIELD_POOL);
+            Translate.setCurrentFieldMapNum(101, 100, FieldShape.FIELD_POOL);
             Translate.setCurrentFieldMapNum(100, 100, 0);
             int xBefore = body.getX();
 
@@ -12725,8 +12726,8 @@ public class BodyTest {
             body.setDestY(200);
             body.setLikeWater(false);
             body.setIntelligence(Intelligence.AVERAGE);
-            Translate.setCurrentFieldMapNum(201, 200, FieldShapeBase.FIELD_POOL);
-            Translate.setCurrentFieldMapNum(200, 200, FieldShapeBase.FIELD_POOL);
+            Translate.setCurrentFieldMapNum(201, 200, FieldShape.FIELD_POOL);
+            Translate.setCurrentFieldMapNum(200, 200, FieldShape.FIELD_POOL);
             int xBefore = body.getX();
 
             body.moveBody(false);
@@ -14010,12 +14011,12 @@ public class BodyTest {
             body.setLikeWater(false);
             body.setIntelligence(Intelligence.AVERAGE); // nRandom=30
             SimYukkuri.RND = new ConstState(1); // nextInt(30)=1 !=0 -> avoid
-            Translate.setCurrentFieldMapNum(181, 180, FieldShapeBase.FIELD_POOL);
+            Translate.setCurrentFieldMapNum(181, 180, FieldShape.FIELD_POOL);
             Translate.setCurrentFieldMapNum(180, 180, 0);
 
             body.moveBody(false);
 
-            assertEquals(0, Translate.getCurrentFieldMapNum(body.getX(), body.getY()) & FieldShapeBase.FIELD_POOL);
+            assertEquals(0, Translate.getCurrentFieldMapNum(body.getX(), body.getY()) & FieldShape.FIELD_POOL);
         }
 
         @Test

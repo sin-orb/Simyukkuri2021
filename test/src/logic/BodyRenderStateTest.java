@@ -11,13 +11,13 @@ import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
 import src.base.Body;
-import src.base.Okazari;
+import src.entity.world.bodylinked.Okazari;
 import src.base.StubBody;
 import src.draw.World;
 import src.enums.CoreAnkoState;
 import src.enums.CriticalDamegeType;
 import src.enums.ImageCode;
-import src.base.Okazari.OkazariType;
+import src.entity.world.bodylinked.Okazari.OkazariType;
 import src.system.BodyLayer;
 
 class BodyRenderStateTest {

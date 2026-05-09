@@ -1,4 +1,4 @@
-package src.game;
+package src.meta;
 
 import java.beans.Transient;
 import java.util.LinkedList;

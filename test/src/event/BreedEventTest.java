@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import src.base.Body;
-import src.base.EventPacket.UpdateState;
+import src.event.EventPacket.UpdateState;
 import src.base.EventTestBase;
 import src.enums.Happiness;
 import src.util.WorldTestHelper;
@@ -220,7 +220,7 @@ public class BreedEventTest extends EventTestBase {
         b.setHasBaby(true);
         b.setPregnantPeriod(Integer.MAX_VALUE / 2);
         BreedEvent event = new BreedEvent(from, null, null, 10);
-        assertEquals(src.base.EventPacket.UpdateState.FORCE_EXEC, event.update(b));
+        assertEquals(src.event.EventPacket.UpdateState.FORCE_EXEC, event.update(b));
     }
 
     @Test
@@ -230,7 +230,7 @@ public class BreedEventTest extends EventTestBase {
         from.setHasBaby(true); // nearToBirth needs this
         from.setPregnantPeriod(Integer.MAX_VALUE / 2);
         BreedEvent event = new BreedEvent(from, null, null, 10);
-        assertEquals(src.base.EventPacket.UpdateState.FORCE_EXEC, event.update(b));
+        assertEquals(src.event.EventPacket.UpdateState.FORCE_EXEC, event.update(b));
     }
 
     @Test
@@ -244,7 +244,7 @@ public class BreedEventTest extends EventTestBase {
 
         BreedEvent event = new BreedEvent(from, null, null, 10);
 
-        assertEquals(src.base.EventPacket.UpdateState.ABORT, event.update(b));
+        assertEquals(src.event.EventPacket.UpdateState.ABORT, event.update(b));
     }
 
     @Test
@@ -253,7 +253,7 @@ public class BreedEventTest extends EventTestBase {
         Body b = createBody(2, 500, 500); // far
         from.setDead(true);
         BreedEvent event = new BreedEvent(from, null, null, 10);
-        assertEquals(src.base.EventPacket.UpdateState.ABORT, event.update(b));
+        assertEquals(src.event.EventPacket.UpdateState.ABORT, event.update(b));
     }
 
     // --- execute extra paths ---

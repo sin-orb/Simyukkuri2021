@@ -16,7 +16,7 @@ import src.enums.Happiness;
 import src.enums.Intelligence;
 import src.event.SuiRideEvent;
 import src.event.SuiSpeake;
-import src.item.Barrier;
+import src.field.impl.Barrier;
 import src.item.Sui;
 import src.item.Toy;
 import src.item.Trampoline;

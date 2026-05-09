@@ -17,6 +17,7 @@ import java.util.Map;
 import src.base.Obj;
 import src.system.IniFileReader;
 import src.system.MapWindow;
+import src.visual.TerrainBillboard;
 
 /***********************************************************
 

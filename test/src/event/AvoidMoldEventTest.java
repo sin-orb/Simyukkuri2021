@@ -8,9 +8,9 @@ import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
 import src.base.Body;
-import src.base.EventPacket;
-import src.base.EventPacket.EventPriority;
-import src.base.EventPacket.UpdateState;
+import src.event.EventPacket;
+import src.event.EventPacket.EventPriority;
+import src.event.EventPacket.UpdateState;
 import src.draw.World;
 import src.enums.AgeState;
 import src.enums.ImageCode;
@@ -311,7 +311,7 @@ class AvoidMoldEventTest {
         Body to = createBody();
         to.setDead(true);
         AvoidMoldEvent event = new AvoidMoldEvent(from, to, null, 10);
-        assertEquals(src.base.EventPacket.UpdateState.ABORT, event.update(from));
+        assertEquals(src.event.EventPacket.UpdateState.ABORT, event.update(from));
     }
 
     // --- execute: adult, isTalking → return true ---

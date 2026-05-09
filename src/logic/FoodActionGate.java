@@ -1,7 +1,7 @@
 package src.logic;
 
 import src.base.Body;
-import src.base.EventPacket;
+import src.event.EventPacket;
 import src.enums.BodyRank;
 import src.enums.CoreAnkoState;
 import src.enums.PublicRank;

@@ -4,7 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import src.base.Body;
-import src.base.EventPacket;
+import src.event.EventPacket;
 import src.base.Obj;
 import src.draw.Translate;
 import src.enums.EnumRelationMine;

@@ -10,7 +10,8 @@ import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
 import src.base.ItemTestBase;
-import src.system.FieldShapeBase;
+import src.field.FieldShape;
+import src.field.impl.Barrier;
 
 public class BarrierTest extends ItemTestBase {
     // setUp is inherited from ItemTestBase (calls Translate.setMapSize(1000,1000,200))
@@ -44,17 +45,17 @@ public class BarrierTest extends ItemTestBase {
     @Test
     void testConstructorWithArgs_BARRIER_WALL_doesNotThrow() {
         assertDoesNotThrow(() -> {
-            Barrier b = new Barrier(0, 0, 100, 100, FieldShapeBase.BARRIER_WALL);
+            Barrier b = new Barrier(0, 0, 100, 100, FieldShape.BARRIER_WALL);
             assertNotNull(b);
             assertNotNull(b.getColor());
-            assertEquals(FieldShapeBase.BARRIER_WALL, b.getAttribute());
+            assertEquals(FieldShape.BARRIER_WALL, b.getAttribute());
         });
     }
 
     @Test
     void testConstructorWithArgs_BARRIER_GAP_MINI_doesNotThrow() {
         assertDoesNotThrow(() -> {
-            Barrier b = new Barrier(0, 0, 50, 50, FieldShapeBase.BARRIER_GAP_MINI);
+            Barrier b = new Barrier(0, 0, 50, 50, FieldShape.BARRIER_GAP_MINI);
             assertNotNull(b);
         });
     }
@@ -69,7 +70,7 @@ public class BarrierTest extends ItemTestBase {
 
     @Test
     void testDrawShape_doesNotThrow() {
-        Barrier item = new Barrier(0, 0, 100, 100, FieldShapeBase.BARRIER_WALL);
+        Barrier item = new Barrier(0, 0, 100, 100, FieldShape.BARRIER_WALL);
         BufferedImage img = new BufferedImage(800, 600, BufferedImage.TYPE_INT_RGB);
         Graphics2D g2 = img.createGraphics();
         assertDoesNotThrow(() -> item.drawShape(g2));
@@ -78,7 +79,7 @@ public class BarrierTest extends ItemTestBase {
 
     @Test
     void testClearBarrier_doesNotThrow() {
-        Barrier item = new Barrier(0, 0, 50, 50, FieldShapeBase.BARRIER_WALL);
+        Barrier item = new Barrier(0, 0, 50, 50, FieldShape.BARRIER_WALL);
         assertTrue(SimYukkuri.world.getCurrentMap().getBarrier().contains(item));
         assertDoesNotThrow(() -> Barrier.clearBarrier(item));
         assertFalse(SimYukkuri.world.getCurrentMap().getBarrier().contains(item));
@@ -87,7 +88,7 @@ public class BarrierTest extends ItemTestBase {
     @Test
     void testOnBarrier_noWalls_returnsFalse() {
         // wallMap is zeroed, so no walls → false
-        boolean result = Barrier.onBarrier(100, 100, 10, 10, FieldShapeBase.BARRIER_WALL);
+        boolean result = Barrier.onBarrier(100, 100, 10, 10, FieldShape.BARRIER_WALL);
         assertFalse(result);
     }
 
@@ -99,7 +100,7 @@ public class BarrierTest extends ItemTestBase {
 
     @Test
     void testGetBarrier_withBarrier_returnsBarrier() {
-        Barrier b = new Barrier(50, 50, 100, 50, FieldShapeBase.BARRIER_WALL);
+        Barrier b = new Barrier(50, 50, 100, 50, FieldShape.BARRIER_WALL);
         // getBarrier checks map coordinates, may or may not find based on coord mapping
         // Just verify it doesn't throw
         assertDoesNotThrow(() -> Barrier.getBarrier(50, 50, 5));
@@ -107,7 +108,7 @@ public class BarrierTest extends ItemTestBase {
 
     @Test
     void testAcrossBarrier_noWalls_returnsFalse() {
-        boolean result = Barrier.acrossBarrier(0, 0, 100, 100, FieldShapeBase.BARRIER_WALL);
+        boolean result = Barrier.acrossBarrier(0, 0, 100, 100, FieldShape.BARRIER_WALL);
         assertFalse(result);
     }
 
@@ -115,19 +116,19 @@ public class BarrierTest extends ItemTestBase {
     class RegressionScenarios {
         @Test
         void testScenario_ConstructedWallMarksWallMapAndMakesOnBarrierTrue() {
-            Barrier barrier = new Barrier(10, 10, 30, 10, FieldShapeBase.BARRIER_WALL);
+            Barrier barrier = new Barrier(10, 10, 30, 10, FieldShape.BARRIER_WALL);
             int midX = (barrier.getMapSX() + barrier.getMapEX()) / 2;
             int midY = (barrier.getMapSY() + barrier.getMapEY()) / 2;
 
             assertTrue(SimYukkuri.world.getCurrentMap().getBarrier().contains(barrier));
-            assertTrue(Barrier.onBarrier(midX, midY, 4, 4, FieldShapeBase.BARRIER_WALL));
+            assertTrue(Barrier.onBarrier(midX, midY, 4, 4, FieldShape.BARRIER_WALL));
             assertTrue(Barrier.acrossBarrier(barrier.getMapSX(), barrier.getMapSY(), barrier.getMapEX(), barrier.getMapEY(),
-                    FieldShapeBase.BARRIER_WALL));
+                    FieldShape.BARRIER_WALL));
         }
 
         @Test
         void testScenario_GetBarrierFindsExactBarrierOnItsLine() {
-            Barrier barrier = new Barrier(15, 12, 35, 12, FieldShapeBase.BARRIER_WALL);
+            Barrier barrier = new Barrier(15, 12, 35, 12, FieldShape.BARRIER_WALL);
             int midX = (barrier.getMapSX() + barrier.getMapEX()) / 2;
             int midY = (barrier.getMapSY() + barrier.getMapEY()) / 2;
 
@@ -138,19 +139,19 @@ public class BarrierTest extends ItemTestBase {
 
         @Test
         void testScenario_ClearBarrierRemovesWallMapPresenceAndLineBlocking() {
-            Barrier barrier = new Barrier(12, 16, 32, 16, FieldShapeBase.BARRIER_WALL);
+            Barrier barrier = new Barrier(12, 16, 32, 16, FieldShape.BARRIER_WALL);
             int midX = (barrier.getMapSX() + barrier.getMapEX()) / 2;
             int midY = (barrier.getMapSY() + barrier.getMapEY()) / 2;
-            assertTrue(Barrier.onBarrier(midX, midY, 4, 4, FieldShapeBase.BARRIER_WALL));
+            assertTrue(Barrier.onBarrier(midX, midY, 4, 4, FieldShape.BARRIER_WALL));
             assertTrue(Barrier.acrossBarrier(barrier.getMapSX(), barrier.getMapSY(), barrier.getMapEX(), barrier.getMapEY(),
-                    FieldShapeBase.BARRIER_WALL));
+                    FieldShape.BARRIER_WALL));
 
             Barrier.clearBarrier(barrier);
 
             assertFalse(SimYukkuri.world.getCurrentMap().getBarrier().contains(barrier));
-            assertFalse(Barrier.onBarrier(midX, midY, 4, 4, FieldShapeBase.BARRIER_WALL));
+            assertFalse(Barrier.onBarrier(midX, midY, 4, 4, FieldShape.BARRIER_WALL));
             assertFalse(Barrier.acrossBarrier(barrier.getMapSX(), barrier.getMapSY(), barrier.getMapEX(), barrier.getMapEY(),
-                    FieldShapeBase.BARRIER_WALL));
+                    FieldShape.BARRIER_WALL));
         }
     }
 }

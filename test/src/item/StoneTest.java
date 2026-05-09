@@ -8,7 +8,7 @@ import src.base.ObjEX;
 import src.base.ObjEX.ItemRank;
 import src.SimYukkuri;
 import src.draw.Translate;
-import src.enums.ObjEXType;
+import src.enums.WorldEntityKind;
 import src.enums.Type;
 import src.enums.CriticalDamegeType;
 import src.base.Body;
@@ -36,7 +36,7 @@ class StoneTest extends ItemTestBase {
         Stone stone = new Stone(100, 200, 0);
         assertNotNull(stone);
         assertEquals(ItemRank.HOUSE, stone.getItemRank());
-        assertEquals(ObjEXType.STONE, stone.getObjEXType());
+        assertEquals(WorldEntityKind.STONE, stone.getObjEXType());
         assertEquals(Type.OBJECT, stone.getObjType());
         assertEquals(0, stone.getValue());
         assertEquals(0, stone.getCost());
@@ -466,14 +466,14 @@ class StoneTest extends ItemTestBase {
     @Test
     void testGetObjEXType() {
         Stone stone = new Stone(100, 100, 0);
-        assertEquals(ObjEXType.STONE, stone.getObjEXType());
+        assertEquals(WorldEntityKind.STONE, stone.getObjEXType());
     }
 
     @Test
     void testSetObjEXType() {
         Stone stone = new Stone();
-        stone.setObjEXType(ObjEXType.TRASH);
-        assertEquals(ObjEXType.TRASH, stone.getObjEXType());
+        stone.setObjEXType(WorldEntityKind.TRASH);
+        assertEquals(WorldEntityKind.TRASH, stone.getObjEXType());
     }
 
     @Test

@@ -17,7 +17,7 @@ import src.SimYukkuri;
 import src.base.Body;
 import src.enums.Direction;
 import src.enums.Event;
-import src.enums.ObjEXType;
+import src.enums.WorldEntityKind;
 import src.enums.Type;
 import src.util.WorldTestHelper;
 
@@ -79,7 +79,7 @@ class StalkTest {
         assertEquals(100, s.getX());
         assertEquals(200, s.getY());
         assertEquals(Type.OBJECT, s.getObjType());
-        assertEquals(ObjEXType.STALK, s.getObjEXType());
+        assertEquals(WorldEntityKind.STALK, s.getObjEXType());
         assertEquals(100 * 24 * 5, s.getAmount());
         assertTrue(SimYukkuri.world.getCurrentMap().getStalk().containsKey(s.getObjId()));
     }

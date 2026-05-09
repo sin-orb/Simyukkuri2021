@@ -5,7 +5,7 @@ import src.base.Obj;
 import src.draw.Translate;
 import src.enums.Intelligence;
 import src.enums.PredatorType;
-import src.item.Barrier;
+import src.field.impl.Barrier;
 import src.util.GameRandom;
 
 /**

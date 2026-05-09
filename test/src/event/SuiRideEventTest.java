@@ -12,8 +12,8 @@ import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
 import src.base.Body;
-import src.base.EventPacket.EventPriority;
-import src.base.EventPacket.UpdateState;
+import src.event.EventPacket.EventPriority;
+import src.event.EventPacket.UpdateState;
 import src.enums.FavItemType;
 import src.enums.Happiness;
 import src.enums.PublicRank;

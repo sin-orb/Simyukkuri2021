@@ -5,7 +5,7 @@ import java.util.List;
 
 import src.base.ObjEX;
 import src.enums.Event;
-import src.enums.ObjEXType;
+import src.enums.WorldEntityKind;
 import src.item.Diffuser;
 import src.system.MapPlaceData;
 import src.util.GameWorld;
@@ -34,7 +34,7 @@ public final class TerrariumTickProcessor {
 			if (ret == Event.REMOVED) {
 				i.remove();
 			}
-			if (oex.getObjEXType() == ObjEXType.DIFFUSER && oex.getEnabled()) {
+			if (oex.getObjEXType() == WorldEntityKind.DIFFUSER && oex.getEnabled()) {
 				boolean[] flags = ((Diffuser) oex).getSteamType();
 				Terrarium.applyDiffuserSteamFlags(flags);
 			}

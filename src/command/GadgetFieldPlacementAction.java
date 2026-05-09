@@ -5,11 +5,11 @@ import src.base.ObjEX;
 import src.command.GadgetMenu.ActionTarget;
 import src.command.GadgetMenu.GadgetList;
 import src.command.GadgetMenu.MainCategoryName;
-import src.item.Barrier;
-import src.item.Beltconveyor;
+import src.field.impl.Barrier;
+import src.field.impl.Beltconveyor;
 import src.item.BeltconveyorObj;
-import src.item.Farm;
-import src.item.Pool;
+import src.field.impl.Farm;
+import src.field.impl.Pool;
 import src.draw.Translate;
 
 /**

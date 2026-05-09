@@ -10,10 +10,11 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import src.enums.Event;
+import src.field.FieldShape;
 
 class FieldShapeBaseTest {
 
-    static class ConcreteFieldShape extends FieldShapeBase {
+    static class ConcreteFieldShape extends FieldShape {
         private static final long serialVersionUID = 1L;
 
         @Override
@@ -124,7 +125,7 @@ class FieldShapeBaseTest {
 
     @Test
     void testHasShapePopup_defaultReturnsNONE() {
-        // Default FieldShapeBase.hasShapePopup() returns ShapeMenuTarget.NONE (not null)
+        // Default FieldShape.hasShapePopup() returns ShapeMenuTarget.NONE (not null)
         org.junit.jupiter.api.Assertions.assertDoesNotThrow(() -> shape.hasShapePopup());
         org.junit.jupiter.api.Assertions.assertNotNull(shape.hasShapePopup());
     }

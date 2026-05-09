@@ -14,7 +14,7 @@ import src.draw.Translate;
 import src.enums.Event;
 import src.enums.Type;
 import src.enums.Where;
-import src.item.Barrier;
+import src.field.impl.Barrier;
 import src.system.ItemMenu.GetMenuTarget;
 import src.system.ItemMenu.UseMenuTarget;
 import src.system.MapPlaceData;

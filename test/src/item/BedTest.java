@@ -5,7 +5,7 @@ import src.base.ItemTestBase;
 import src.base.ObjEX.ItemRank;
 import src.SimYukkuri;
 import src.draw.Translate;
-import src.enums.ObjEXType;
+import src.enums.WorldEntityKind;
 import src.enums.Type;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -30,7 +30,7 @@ class BedTest extends ItemTestBase {
         Bed bed = new Bed(100, 200, 0);
         assertNotNull(bed);
         assertEquals(ItemRank.HOUSE, bed.getItemRank());
-        assertEquals(ObjEXType.BED, bed.getObjEXType());
+        assertEquals(WorldEntityKind.BED, bed.getObjEXType());
         assertEquals(Type.PLATFORM, bed.getObjType());
         assertEquals(3000, bed.getValue());
         assertEquals(0, bed.getCost());
@@ -209,7 +209,7 @@ class BedTest extends ItemTestBase {
     @Test
     void testGetObjEXType() {
         Bed bed = new Bed(100, 100, 0);
-        assertEquals(ObjEXType.BED, bed.getObjEXType());
+        assertEquals(WorldEntityKind.BED, bed.getObjEXType());
     }
 
     @Test
@@ -659,8 +659,8 @@ class BedTest extends ItemTestBase {
     @Test
     void testSetObjEXType() {
         Bed bed = new Bed();
-        bed.setObjEXType(ObjEXType.BED);
-        assertEquals(ObjEXType.BED, bed.getObjEXType());
+        bed.setObjEXType(WorldEntityKind.BED);
+        assertEquals(WorldEntityKind.BED, bed.getObjEXType());
     }
 
     @Test

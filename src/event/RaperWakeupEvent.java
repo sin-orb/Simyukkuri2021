@@ -2,9 +2,9 @@ package src.event;
 import src.util.GameText;
 
 import src.base.Body;
-import src.base.EventPacket;
+import src.event.EventPacket;
 import src.base.Obj;
-import src.item.Barrier;
+import src.field.impl.Barrier;
 import src.logic.EventLogic;
 import src.system.ResourceUtil;
 

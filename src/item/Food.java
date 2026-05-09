@@ -11,7 +11,7 @@ import src.util.GameWorld;
 import src.base.ObjEX;
 import src.draw.ModLoader;
 import src.draw.Rectangle4y;
-import src.enums.ObjEXType;
+import src.enums.WorldEntityKind;
 import src.enums.Type;
 
 /***************************************************
@@ -270,7 +270,7 @@ public class Food extends ObjEX {
 		setCollisionSize(getPivotX(), getPivotY());
 		GameWorld.get().getCurrentMap().getFood().put(objId, this);
 		objType = Type.OBJECT;
-		objEXType = ObjEXType.FOOD;
+		objEXType = WorldEntityKind.FOOD;
 		setRemoved(false);
 	}
 

@@ -1,4 +1,4 @@
-package src.item;
+package src.field.impl;
 import src.util.GameView;
 import src.util.GameText;
 
@@ -37,10 +37,11 @@ import src.draw.Point4y;
 import src.draw.Translate;
 import src.enums.Numbering;
 import src.game.Stalk;
-import src.system.FieldShapeBase;
+import src.field.FieldShape;
 import src.system.ItemMenu.ShapeMenu;
 import src.system.ItemMenu.ShapeMenuTarget;
 import src.system.MapPlaceData;
+import src.item.Food;
 import src.system.ResourceUtil;
 
 /***************************************************
@@ -48,7 +49,7 @@ import src.system.ResourceUtil;
  * <br>
  * これはほかのアイテムと違い、ObjEXを継承していないので注意。
  */
-public class Beltconveyor extends FieldShapeBase {
+public class Beltconveyor extends FieldShape {
 
 	private static final long serialVersionUID = -4483279905064301375L;
 

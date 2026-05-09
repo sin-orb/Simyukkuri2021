@@ -12,7 +12,7 @@ import java.util.List;
 
 import src.SimYukkuri;
 import src.base.Body;
-import src.base.Effect;
+import src.effect.Effect;
 import src.base.Obj;
 import src.base.ObjEX;
 import src.command.GadgetMenu;
@@ -21,12 +21,12 @@ import src.command.GadgetMenu.MainCategoryName;
 import src.enums.AgeState;
 import src.game.Shit;
 import src.game.Vomit;
-import src.item.Barrier;
-import src.item.Beltconveyor;
+import src.field.impl.Barrier;
+import src.field.impl.Beltconveyor;
 import src.item.BeltconveyorObj;
-import src.item.Farm;
-import src.item.Pool;
-import src.system.FieldShapeBase;
+import src.field.impl.Farm;
+import src.field.impl.Pool;
+import src.field.FieldShape;
 import src.system.IconPool;
 import src.system.LoggerYukkuri;
 import src.system.MainCommandUI;
@@ -35,6 +35,7 @@ import src.system.Sprite;
 import src.util.GameWorld;
 import src.util.GameEnvironment;
 import src.util.BodyUtil;
+import src.visual.TerrainBillboard;
 
 final class Renderer {
 
@@ -286,8 +287,8 @@ final class Renderer {
 			if (curGadget != null && curGadget.getGroup() == MainCategoryName.BARRIER) {
 				if ((SimYukkuri.fieldSX >= 0) && (SimYukkuri.fieldSY >= 0)
 						&& (SimYukkuri.fieldEX >= 0) && (SimYukkuri.fieldEY >= 0)) {
-					pane.getBackBufferG2().setStroke(FieldShapeBase.PREVIEW_STROKE);
-					pane.getBackBufferG2().setColor(FieldShapeBase.PREVIEW_COLOR);
+					pane.getBackBufferG2().setStroke(FieldShape.PREVIEW_STROKE);
+					pane.getBackBufferG2().setColor(FieldShape.PREVIEW_COLOR);
 					switch (curGadget) {
 						case GAP_MINI:
 						case GAP_BIG:
@@ -318,8 +319,8 @@ final class Renderer {
 			if (curGadget != null && curGadget.getGroup() == MainCategoryName.CONVEYOR) {
 				if ((SimYukkuri.fieldSX >= 0) && (SimYukkuri.fieldSY >= 0)
 						&& (SimYukkuri.fieldEX >= 0) && (SimYukkuri.fieldEY >= 0)) {
-					pane.getBackBufferG2().setStroke(FieldShapeBase.PREVIEW_STROKE);
-					pane.getBackBufferG2().setColor(FieldShapeBase.PREVIEW_COLOR);
+					pane.getBackBufferG2().setStroke(FieldShape.PREVIEW_STROKE);
+					pane.getBackBufferG2().setColor(FieldShape.PREVIEW_COLOR);
 					switch (curGadget) {
 						case BELTCONVEYOR_CUSTOM:
 							BeltconveyorObj.drawPreview(pane.getBackBufferG2(), SimYukkuri.fieldSX, SimYukkuri.fieldSY,

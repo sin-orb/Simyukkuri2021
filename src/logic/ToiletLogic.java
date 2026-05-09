@@ -9,7 +9,7 @@ import src.SimYukkuri;
 import src.util.GameRandom;
 import src.util.GameWorld;
 import src.base.Body;
-import src.base.EventPacket;
+import src.event.EventPacket;
 import src.base.Obj;
 import src.draw.Translate;
 import src.enums.AgeState;
@@ -18,7 +18,7 @@ import src.enums.Intelligence;
 import src.enums.PublicRank;
 import src.enums.TakeoutItemType;
 import src.game.Shit;
-import src.item.Barrier;
+import src.field.impl.Barrier;
 import src.item.Toilet;
 import src.system.MessagePool;
 

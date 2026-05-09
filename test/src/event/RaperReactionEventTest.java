@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
 import src.base.Body;
-import src.base.EventPacket.EventPriority;
+import src.event.EventPacket.EventPriority;
 import src.draw.World;
 import src.enums.ActionState;
 import src.enums.AgeState;
@@ -84,7 +84,7 @@ public class RaperReactionEventTest {
         Body b = createBody();
         RaperReactionEvent event = new RaperReactionEvent();
         // from=-1 → null → ABORT
-        assertEquals(src.base.EventPacket.UpdateState.ABORT, event.update(b));
+        assertEquals(src.event.EventPacket.UpdateState.ABORT, event.update(b));
     }
 
     @Test

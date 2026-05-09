@@ -12,7 +12,7 @@ import src.SimYukkuri;
 import src.base.Body;
 import src.base.ItemTestBase;
 import src.base.ObjEX;
-import src.enums.ObjEXType;
+import src.enums.WorldEntityKind;
 import src.enums.Type;
 import src.util.WorldTestHelper;
 
@@ -32,7 +32,7 @@ class MachinePressTest extends ItemTestBase {
         assertEquals(100, item.getX());
         assertEquals(200, item.getY());
         assertEquals(Type.FIX_OBJECT, item.getObjType());
-        assertEquals(ObjEXType.MACHINEPRESS, item.getObjEXType());
+        assertEquals(WorldEntityKind.MACHINEPRESS, item.getObjEXType());
         assertEquals(500000, item.getValue());
         assertEquals(1500, item.getCost());
         assertTrue(SimYukkuri.world.getCurrentMap().getMachinePress().containsKey(item.getObjId()));

@@ -1,4 +1,4 @@
-package src.draw;
+package src.visual;
 
 import java.awt.Graphics2D;
 import java.awt.geom.AffineTransform;

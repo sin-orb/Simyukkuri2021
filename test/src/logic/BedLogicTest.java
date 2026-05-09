@@ -299,9 +299,9 @@ class BedLogicTest {
         body.setHasBaby(true);
         body.setPregnantPeriod(body.getPregPeriodBase()); // nearToBirth()=true
         // Set HIGH priority event at lines 46-49: getPriority()==HIGH → return false
-        src.base.EventPacket highEvent = new src.base.EventPacket() {
+        src.event.EventPacket highEvent = new src.event.EventPacket() {
             private static final long serialVersionUID = 1L;
-            { this.priority = src.base.EventPacket.EventPriority.HIGH; }
+            { this.priority = src.event.EventPacket.EventPriority.HIGH; }
             @Override public boolean checkEventResponse(src.base.Body b) { return true; }
             @Override public void start(src.base.Body b) {}
             @Override public boolean execute(src.base.Body b) { return false; }
@@ -315,9 +315,9 @@ class BedLogicTest {
     @Test
     void testCheckBed_notNearToBirth_MiddleEvent_returnsFalse() {
         // MIDDLE priority event and !nearToBirth → line 52: priority!=LOW → return false
-        src.base.EventPacket middleEvent = new src.base.EventPacket() {
+        src.event.EventPacket middleEvent = new src.event.EventPacket() {
             private static final long serialVersionUID = 1L;
-            { this.priority = src.base.EventPacket.EventPriority.MIDDLE; }
+            { this.priority = src.event.EventPacket.EventPriority.MIDDLE; }
             @Override public boolean checkEventResponse(src.base.Body b) { return true; }
             @Override public void start(src.base.Body b) {}
             @Override public boolean execute(src.base.Body b) { return false; }

@@ -8,6 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import src.event.EventPacket;
 import src.SimYukkuri;
 import src.draw.World;
 import src.enums.AgeState;
@@ -16,9 +17,10 @@ import src.yukkuri.Reimu;
 
 import org.junit.jupiter.api.Nested;
 
-import src.base.EventPacket.EventPriority;
-import src.base.EventPacket.UpdateState;
+import src.event.EventPacket.EventPriority;
+import src.event.EventPacket.UpdateState;
 import src.draw.Translate;
+import src.entity.world.bodylinked.Okazari;
 import src.enums.Attitude;
 import src.enums.BurialState;
 import src.enums.Happiness;

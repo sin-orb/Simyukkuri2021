@@ -12,7 +12,7 @@ import src.util.GameWorld;
 import src.base.ObjEX;
 import src.draw.ModLoader;
 import src.draw.Rectangle4y;
-import src.enums.ObjEXType;
+import src.enums.WorldEntityKind;
 import src.enums.Type;
 
 /***************************************************
@@ -92,7 +92,7 @@ public class Bed extends ObjEX {
 		setCollisionSize(getPivotX(), getPivotY());
 		GameWorld.get().getCurrentMap().getBed().put(objId, this);
 		objType = Type.PLATFORM;
-		objEXType = ObjEXType.BED;
+		objEXType = WorldEntityKind.BED;
 		itemRank = ItemRank.values()[initOption];
 		// 森なら野生に変更
 		if (GameWorld.get().getCurrentMap().getMapIndex() == 5

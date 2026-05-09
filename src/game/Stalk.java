@@ -23,9 +23,9 @@ import src.draw.Rectangle4y;
 import src.draw.Translate;
 import src.enums.Direction;
 import src.enums.Event;
-import src.enums.ObjEXType;
+import src.enums.WorldEntityKind;
 import src.enums.Type;
-import src.item.Barrier;
+import src.field.impl.Barrier;
 import src.system.ItemMenu.GetMenuTarget;
 
 /**
@@ -411,7 +411,7 @@ public class Stalk extends ObjEX {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		objType = Type.OBJECT;
-		objEXType = ObjEXType.STALK;
+		objEXType = WorldEntityKind.STALK;
 		amount = 100 * 24 * 5;
 		GameWorld.get().getCurrentMap().getStalk().put(objId, this);
 		calcPos();
@@ -420,7 +420,7 @@ public class Stalk extends ObjEX {
 	public Stalk() {
 		setBoundary(boundary);
 		objType = Type.OBJECT;
-		objEXType = ObjEXType.STALK;
+		objEXType = WorldEntityKind.STALK;
 		amount = 100 * 24 * 5;
 		GameWorld.get().getCurrentMap().getStalk().put(objId, this);
 		calcPos();

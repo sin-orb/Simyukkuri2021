@@ -4,7 +4,7 @@ import java.util.Map;
 
 import src.base.Body;
 import src.enums.PanicType;
-import src.item.Barrier;
+import src.field.impl.Barrier;
 import src.util.GameWorld;
 
 /**

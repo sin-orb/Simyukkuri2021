@@ -13,10 +13,10 @@ import src.command.GadgetMenu.MainCategoryName;
 import src.draw.Point4y;
 import src.draw.Rectangle4y;
 import src.draw.Translate;
-import src.item.Barrier;
-import src.item.Beltconveyor;
-import src.item.Farm;
-import src.item.Pool;
+import src.field.impl.Barrier;
+import src.field.impl.Beltconveyor;
+import src.field.impl.Farm;
+import src.field.impl.Pool;
 import src.system.Cash;
 
 /******************************************************************

@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import src.SimYukkuri;
 import src.base.Body;
-import src.base.EventPacket;
+import src.event.EventPacket;
 import src.base.Obj;
 import src.enums.AgeState;
 import src.enums.Attitude;

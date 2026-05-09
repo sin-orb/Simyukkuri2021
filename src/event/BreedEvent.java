@@ -4,7 +4,7 @@ import src.util.GameText;
 
 import src.attachment.Ants;
 import src.base.Body;
-import src.base.EventPacket;
+import src.event.EventPacket;
 import src.base.Obj;
 import src.draw.Translate;
 import src.enums.BurialState;

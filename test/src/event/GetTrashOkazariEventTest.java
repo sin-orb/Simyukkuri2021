@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import src.SimYukkuri;
 import src.base.Body;
-import src.base.EventPacket;
+import src.event.EventPacket;
 import src.base.EventTestBase;
 import src.base.Obj;
 import src.item.GarbageChute;

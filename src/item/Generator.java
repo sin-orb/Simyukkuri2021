@@ -8,7 +8,7 @@ import java.io.IOException;
 
 import src.base.ObjEX;
 import src.draw.ModLoader;
-import src.enums.ObjEXType;
+import src.enums.WorldEntityKind;
 import src.enums.Type;
 
 /***************************************************
@@ -114,7 +114,7 @@ public class Generator extends ObjEX {
 		setCollisionSize(getPivotX(), getPivotY());
 		// GameWorld.get().currentMap.generator.add(this);
 		objType = Type.PLATFORM;
-		objEXType = ObjEXType.GENERATOR;
+		objEXType = WorldEntityKind.GENERATOR;
 		interval = 4;
 		value = 5000;
 		cost = 10;

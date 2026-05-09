@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
 import src.base.Body;
-import src.base.EventPacket.EventPriority;
+import src.event.EventPacket.EventPriority;
 import src.draw.World;
 import src.enums.AgeState;
 import src.system.Sprite;

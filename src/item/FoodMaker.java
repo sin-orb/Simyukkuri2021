@@ -17,7 +17,7 @@ import src.draw.ModLoader;
 import src.draw.Rectangle4y;
 import src.draw.Translate;
 import src.enums.CoreAnkoState;
-import src.enums.ObjEXType;
+import src.enums.WorldEntityKind;
 import src.enums.Type;
 import src.enums.YukkuriType;
 import src.game.Shit;
@@ -317,7 +317,7 @@ public class FoodMaker extends ObjEX {
 		setCollisionSize(getPivotX(), getPivotY());
 		GameWorld.get().getCurrentMap().getFoodmaker().put(objId, this);
 		objType = Type.PLATFORM;
-		objEXType = ObjEXType.FOODMAKER;
+		objEXType = WorldEntityKind.FOODMAKER;
 
 		interval = 20;
 		value = 50000;

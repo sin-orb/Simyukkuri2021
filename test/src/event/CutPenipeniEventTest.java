@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import src.SimYukkuri;
 import src.base.Body;
-import src.base.EventPacket.UpdateState;
+import src.event.EventPacket.UpdateState;
 import src.base.EventTestBase;
 import src.enums.Happiness;
 import src.enums.ImageCode;

@@ -1,7 +1,6 @@
 package src.event;
 
 import src.base.Body;
-import src.base.EventPacket;
 import src.base.Obj;
 import src.draw.Terrarium;
 import src.draw.Translate;

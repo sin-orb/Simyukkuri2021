@@ -6,7 +6,7 @@ import src.SimYukkuri;
 import src.util.GameRandom;
 import src.attachment.Fire;
 import src.base.Body;
-import src.base.EventPacket;
+import src.event.EventPacket;
 import src.base.Obj;
 import src.enums.CriticalDamegeType;
 import src.enums.Happiness;

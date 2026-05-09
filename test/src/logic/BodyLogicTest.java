@@ -45,7 +45,7 @@ import src.enums.GatheringDirection;
 import src.yukkuri.TarinaiReimu;
 import src.yukkuri.Remirya;
 import src.yukkuri.Sakuya;
-import src.base.Okazari;
+import src.entity.world.bodylinked.Okazari;
 import src.attachment.Ants;
 import src.item.Toilet;
 import src.enums.PredatorType;
@@ -2860,12 +2860,12 @@ class BodyLogicTest {
 
     @Test
     void testCheckPartner_highPriorityEvent_returnsFalse() {
-        src.base.EventPacket evt = new src.event.HateNoOkazariEvent();
+        src.event.EventPacket evt = new src.event.HateNoOkazariEvent();
         // Set priority to HIGH via checkEventResponse or reflection
         try {
-            java.lang.reflect.Field f = src.base.EventPacket.class.getDeclaredField("priority");
+            java.lang.reflect.Field f = src.event.EventPacket.class.getDeclaredField("priority");
             f.setAccessible(true);
-            f.set(evt, src.base.EventPacket.EventPriority.HIGH);
+            f.set(evt, src.event.EventPacket.EventPriority.HIGH);
         } catch (Exception e) {
         }
         me.setCurrentEvent(evt);
@@ -3442,12 +3442,12 @@ class BodyLogicTest {
     @Test
     void testCheckPartner_NormalPriorityEvent_ReturnsFalse_L119() {
         // L118-119: getCurrentEvent()!=null && priority!=LOW → false
-        src.base.EventPacket evt = new src.base.EventPacket(me, null, null, 1) {
+        src.event.EventPacket evt = new src.event.EventPacket(me, null, null, 1) {
             @Override public void start(Body b) {}
             @Override public boolean execute(Body b) { return false; }
             @Override public boolean checkEventResponse(Body b) { return false; }
         };
-        evt.setPriority(src.base.EventPacket.EventPriority.HIGH);
+        evt.setPriority(src.event.EventPacket.EventPriority.HIGH);
         me.setCurrentEvent(evt);
         assertFalse(BodyLogic.checkPartner(me));
     }
@@ -3594,7 +3594,7 @@ class BodyLogicTest {
         idiot.setBodySpr(makeSprites(1, 1));
         idiot.setX(100); idiot.setY(100);
         idiot.setAgeState(AgeState.ADULT);
-        idiot.giveOkazari(src.base.Okazari.OkazariType.DEFAULT);
+        idiot.giveOkazari(src.entity.world.bodylinked.Okazari.OkazariType.DEFAULT);
         SimYukkuri.world.getCurrentMap().getBody().put(idiot.getUniqueID(), idiot);
         me.setExciting(true);
         me.setAgeState(AgeState.ADULT);
@@ -3831,7 +3831,7 @@ class BodyLogicTest {
         you.setBodySpr(makeSprites(10, 10));
         me.setX(100); me.setY(100);
         you.setX(500); you.setY(100);
-        src.base.EventPacket evt = new src.base.EventPacket(me, null, null, 1) {
+        src.event.EventPacket evt = new src.event.EventPacket(me, null, null, 1) {
             @Override public void start(Body b) {}
             @Override public boolean execute(Body b) { return false; }
             @Override public boolean checkEventResponse(Body b) { return false; }
@@ -5328,7 +5328,7 @@ class BodyLogicTest {
         // e != null → moveToEvent (L1690) path for bMoved=true (nMaxRowSize==1)
         me.setBodySpr(makeSprites(10, 10)); me.setX(500); me.setY(500);
         you.setBodySpr(makeSprites(10, 10)); you.setX(100); you.setY(100);
-        src.base.EventPacket evt = new src.base.EventPacket(me, null, null, 1) {
+        src.event.EventPacket evt = new src.event.EventPacket(me, null, null, 1) {
             @Override public void start(Body b) {}
             @Override public boolean execute(Body b) { return false; }
             @Override public boolean checkEventResponse(Body b) { return false; }
@@ -5345,12 +5345,12 @@ class BodyLogicTest {
         // e != null, b.currentEvent != null, b.currentEvent != e → continue (L1612-1614)
         me.setBodySpr(makeSprites(10, 10)); me.setX(500); me.setY(500);
         you.setBodySpr(makeSprites(10, 10)); you.setX(100); you.setY(100);
-        src.base.EventPacket evt1 = new src.base.EventPacket(me, null, null, 1) {
+        src.event.EventPacket evt1 = new src.event.EventPacket(me, null, null, 1) {
             @Override public void start(Body b) {}
             @Override public boolean execute(Body b) { return false; }
             @Override public boolean checkEventResponse(Body b) { return false; }
         };
-        src.base.EventPacket evt2 = new src.base.EventPacket(me, null, null, 2) {
+        src.event.EventPacket evt2 = new src.event.EventPacket(me, null, null, 2) {
             @Override public void start(Body b) {}
             @Override public boolean execute(Body b) { return false; }
             @Override public boolean checkEventResponse(Body b) { return false; }
@@ -5396,12 +5396,12 @@ class BodyLogicTest {
         // e != null, b.currentEvent != null, b.currentEvent != e → continue (L1828-1829)
         me.setBodySpr(makeSprites(10, 10)); me.setX(100); me.setY(100);
         you.setBodySpr(makeSprites(10, 10)); you.setX(500); you.setY(100);
-        src.base.EventPacket evt1 = new src.base.EventPacket(me, null, null, 1) {
+        src.event.EventPacket evt1 = new src.event.EventPacket(me, null, null, 1) {
             @Override public void start(Body b) {}
             @Override public boolean execute(Body b) { return false; }
             @Override public boolean checkEventResponse(Body b) { return false; }
         };
-        src.base.EventPacket evt2 = new src.base.EventPacket(me, null, null, 2) {
+        src.event.EventPacket evt2 = new src.event.EventPacket(me, null, null, 2) {
             @Override public void start(Body b) {}
             @Override public boolean execute(Body b) { return false; }
             @Override public boolean checkEventResponse(Body b) { return false; }
@@ -6187,7 +6187,7 @@ class BodyLogicTest {
         b2.setBodySpr(makeSprites(1, 1));     b2.setX(30);    b2.setY(20);
         b3.setBodySpr(makeSprites(1, 1));     b3.setX(40);    b3.setY(20);
         b4.setBodySpr(makeSprites(1, 1));     b4.setX(50);    b4.setY(20);
-        src.base.EventPacket evt = new src.base.EventPacket(center, null, null, 1) {
+        src.event.EventPacket evt = new src.event.EventPacket(center, null, null, 1) {
             @Override public void start(Body b) {}
             @Override public boolean execute(Body b) { return false; }
             @Override public boolean checkEventResponse(Body b) { return false; }
@@ -6311,7 +6311,7 @@ class BodyLogicTest {
         me.setX(100); me.setY(100);
         you.setX(110); you.setY(100); // 10 units 離れる
         // me→you 経路 (101,100) にバリア設置 → acrossBarrier=true
-        SimYukkuri.world.getCurrentMap().getWallMap()[101][100] |= src.system.FieldShapeBase.BARRIER_KEKKAI;
+        SimYukkuri.world.getCurrentMap().getWallMap()[101][100] |= src.field.FieldShape.BARRIER_KEKKAI;
         me.setExciting(true);
         me.setRaper(true);
         me.setToSukkiri(true);

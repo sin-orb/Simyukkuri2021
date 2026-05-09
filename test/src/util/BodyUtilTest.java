@@ -10,7 +10,7 @@ import java.util.ArrayList;
 
 import src.SimYukkuri;
 import src.base.Body;
-import src.base.Okazari.OkazariType;
+import src.entity.world.bodylinked.Okazari.OkazariType;
 import src.enums.AgeState;
 import src.enums.HairState;
 import src.enums.Direction;

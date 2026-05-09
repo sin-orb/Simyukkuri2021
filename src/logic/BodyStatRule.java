@@ -1,7 +1,7 @@
 package src.logic;
 
 import src.base.BodyAttributes;
-import src.base.BodyStatProfile;
+import src.entity.living.profile.BodyStatProfile;
 
 /**
  * BodyAttributes の配列型統計値をまとめるルール.

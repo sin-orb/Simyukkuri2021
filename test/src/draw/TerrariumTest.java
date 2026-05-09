@@ -11,10 +11,10 @@ import src.attachment.BreedingAmpoule;
 import src.attachment.Fire;
 import src.attachment.PoisonAmpoule;
 import src.base.Body;
-import src.base.Effect;
-import src.base.EventPacket;
+import src.effect.Effect;
+import src.event.EventPacket;
 import src.base.Obj;
-import src.base.Okazari.OkazariType;
+import src.entity.world.bodylinked.Okazari.OkazariType;
 import src.enums.ActionState;
 import src.enums.BurialState;
 import src.enums.PanicType;
@@ -34,8 +34,8 @@ import src.event.ShitExercisesEvent;
 import src.event.SuperEatingTimeEvent;
 import src.item.AutoFeeder;
 import src.item.Bed;
-import src.item.Beltconveyor;
-import src.item.Farm;
+import src.field.impl.Beltconveyor;
+import src.field.impl.Farm;
 import src.item.Diffuser;
 import src.item.Food;
 import src.item.GarbageChute;
@@ -99,7 +99,7 @@ class TerrariumTest {
     }
 
     private Fire findFireAttachment(Body body) {
-        for (src.base.Attachment attachment : body.getAttach()) {
+        for (src.attachment.Attachment attachment : body.getAttach()) {
             if (attachment instanceof Fire) {
                 return (Fire) attachment;
             }
@@ -108,7 +108,7 @@ class TerrariumTest {
     }
 
     private <T> T findAttachment(Body body, Class<T> type) {
-        for (src.base.Attachment attachment : body.getAttach()) {
+        for (src.attachment.Attachment attachment : body.getAttach()) {
             if (type.isInstance(attachment)) {
                 return type.cast(attachment);
             }

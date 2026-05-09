@@ -1,11 +1,11 @@
 package src.logic;
 
 import src.base.Body;
-import src.base.EventPacket.EventPriority;
+import src.event.EventPacket.EventPriority;
 import src.base.Obj;
 import src.draw.Translate;
 import src.enums.TakeoutItemType;
-import src.item.Barrier;
+import src.field.impl.Barrier;
 import src.util.GameRandom;
 
 /**

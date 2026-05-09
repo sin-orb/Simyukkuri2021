@@ -8,10 +8,10 @@ import src.base.Body;
 import src.base.Obj;
 import src.base.ObjEX;
 import src.enums.Event;
-import src.item.Beltconveyor;
-import src.item.Farm;
-import src.item.Pool;
-import src.system.FieldShapeBase;
+import src.field.impl.Beltconveyor;
+import src.field.impl.Farm;
+import src.field.impl.Pool;
+import src.field.FieldShape;
 import src.system.MapPlaceData;
 import src.util.GameWorld;
 
@@ -75,7 +75,7 @@ public final class TerrariumCollisionProcessor {
 			if (o == null || o.isRemoved()) {
 				continue;
 			}
-			if ((Translate.getCurrentFieldMapNum(o.getX(), o.getY()) & FieldShapeBase.FIELD_BELT) == 0) {
+			if ((Translate.getCurrentFieldMapNum(o.getX(), o.getY()) & FieldShape.FIELD_BELT) == 0) {
 				continue;
 			}
 			for (Iterator<Beltconveyor> i = beltList.iterator(); i.hasNext();) {
@@ -122,7 +122,7 @@ public final class TerrariumCollisionProcessor {
 			if (o == null || o.isRemoved()) {
 				continue;
 			}
-			if ((Translate.getCurrentFieldMapNum(o.getX(), o.getY()) & FieldShapeBase.FIELD_POOL) == 0) {
+			if ((Translate.getCurrentFieldMapNum(o.getX(), o.getY()) & FieldShape.FIELD_POOL) == 0) {
 				if (o.isInPool()) {
 					if (o instanceof Body) {
 						((Body) o).setLockmove(false);
@@ -163,7 +163,7 @@ public final class TerrariumCollisionProcessor {
 			if (o == null || o.isRemoved()) {
 				continue;
 			}
-			if ((Translate.getCurrentFieldMapNum(o.getX(), o.getY()) & FieldShapeBase.FIELD_FARM) == 0) {
+			if ((Translate.getCurrentFieldMapNum(o.getX(), o.getY()) & FieldShape.FIELD_FARM) == 0) {
 				continue;
 			}
 			for (Farm farm : farmList) {

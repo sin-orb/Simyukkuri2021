@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
 import src.base.Body;
-import src.base.EventPacket.EventPriority;
+import src.event.EventPacket.EventPriority;
 import src.draw.World;
 import src.enums.AgeState;
 import src.enums.Happiness;
@@ -94,7 +94,7 @@ class PredatorsGameEventTest {
         Body b = createBody();
         PredatorsGameEvent event = new PredatorsGameEvent();
         // from=-1, toy=-1 → both null → ABORT
-        assertEquals(src.base.EventPacket.UpdateState.ABORT, event.update(b));
+        assertEquals(src.event.EventPacket.UpdateState.ABORT, event.update(b));
     }
 
     @Test
@@ -128,7 +128,7 @@ class PredatorsGameEventTest {
         PredatorsGameEvent event = new PredatorsGameEvent(from, null, null, 1);
         event.toy = toy.getUniqueID();
         toy.setGrabbed(true);
-        assertEquals(src.base.EventPacket.UpdateState.ABORT, event.update(from));
+        assertEquals(src.event.EventPacket.UpdateState.ABORT, event.update(from));
     }
 
     // --- update: toy dead → ABORT ---
@@ -139,7 +139,7 @@ class PredatorsGameEventTest {
         PredatorsGameEvent event = new PredatorsGameEvent(from, null, null, 1);
         event.toy = toy.getUniqueID();
         toy.setDead(true);
-        assertEquals(src.base.EventPacket.UpdateState.ABORT, event.update(from));
+        assertEquals(src.event.EventPacket.UpdateState.ABORT, event.update(from));
     }
 
     // --- update: snack=true → FORCE_EXEC ---
@@ -150,7 +150,7 @@ class PredatorsGameEventTest {
         PredatorsGameEvent event = new PredatorsGameEvent(from, null, null, 1);
         event.toy = toy.getUniqueID();
         event.snack = true;
-        assertEquals(src.base.EventPacket.UpdateState.FORCE_EXEC, event.update(from));
+        assertEquals(src.event.EventPacket.UpdateState.FORCE_EXEC, event.update(from));
     }
 
     // --- update: tick=0 (default) >= 0, b==from → does not throw ---
@@ -171,7 +171,7 @@ class PredatorsGameEventTest {
         PredatorsGameEvent event = new PredatorsGameEvent(from, null, null, 1);
         event.toy = toy.getUniqueID();
         toy.setRemoved(true);
-        assertEquals(src.base.EventPacket.UpdateState.ABORT, event.update(from));
+        assertEquals(src.event.EventPacket.UpdateState.ABORT, event.update(from));
     }
 
     // --- checkEventResponse: predator body (from) with a prey in body map ---
@@ -218,7 +218,7 @@ class PredatorsGameEventTest {
         event.toy = toy.getUniqueID();
         event.tick = -1; // skip the tick>=0 block
         // from.hungry = 0 (default) → isVeryHungry() = true → ABORT
-        assertEquals(src.base.EventPacket.UpdateState.ABORT, event.update(from));
+        assertEquals(src.event.EventPacket.UpdateState.ABORT, event.update(from));
     }
 
     // --- update: tick=-1, not hungry, non-contact → b.moveTo, returns null ---
@@ -321,7 +321,7 @@ class PredatorsGameEventTest {
             PredatorsGameEvent event = new PredatorsGameEvent(from, null, null, 1);
             event.toy = toy.getUniqueID();
 
-            assertEquals(src.base.EventPacket.UpdateState.ABORT, event.update(from));
+            assertEquals(src.event.EventPacket.UpdateState.ABORT, event.update(from));
             assertEquals(ImageCode.PUFF.ordinal(), from.getForceFace());
         }
     }

@@ -10,6 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import src.effect.Effect;
 import src.SimYukkuri;
 import src.draw.Point4y;
 import src.draw.Rectangle4y;

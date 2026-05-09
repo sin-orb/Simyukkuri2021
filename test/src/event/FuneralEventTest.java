@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
 import src.base.Body;
-import src.base.EventPacket.EventPriority;
+import src.event.EventPacket.EventPriority;
 import src.draw.World;
 import src.enums.AgeState;
 import src.enums.Attitude;
@@ -173,7 +173,7 @@ class FuneralEventTest {
     void testUpdate_fromNull_returnsAbort() {
         Body b = createBody();
         FuneralEvent event = new FuneralEvent();
-        assertEquals(src.base.EventPacket.UpdateState.ABORT, event.update(b));
+        assertEquals(src.event.EventPacket.UpdateState.ABORT, event.update(b));
     }
 
     @Test
@@ -182,7 +182,7 @@ class FuneralEventTest {
         Body b = createBody();
         b.setCoreAnkoState(src.enums.CoreAnkoState.NonYukkuriDisease);
         FuneralEvent event = new FuneralEvent(from, null, null, 10);
-        assertEquals(src.base.EventPacket.UpdateState.ABORT, event.update(b));
+        assertEquals(src.event.EventPacket.UpdateState.ABORT, event.update(b));
     }
 
     @Test
@@ -191,7 +191,7 @@ class FuneralEventTest {
         Body b = createBody();
         from.setRemoved(true);
         FuneralEvent event = new FuneralEvent(from, null, null, 10);
-        assertEquals(src.base.EventPacket.UpdateState.ABORT, event.update(b));
+        assertEquals(src.event.EventPacket.UpdateState.ABORT, event.update(b));
     }
 
     @Test
@@ -200,7 +200,7 @@ class FuneralEventTest {
         FuneralEvent event = new FuneralEvent(from, null, null, 10);
         from.setCurrentEvent(event);
         // b == from, no children → ABORT
-        assertEquals(src.base.EventPacket.UpdateState.ABORT, event.update(from));
+        assertEquals(src.event.EventPacket.UpdateState.ABORT, event.update(from));
     }
 
     @Test
@@ -243,7 +243,7 @@ class FuneralEventTest {
         FuneralEvent event = new FuneralEvent(from, null, null, 10);
         from.setCurrentEvent(event);
         event.fromWaitCount = 2001;
-        assertEquals(src.base.EventPacket.UpdateState.ABORT, event.update(from));
+        assertEquals(src.event.EventPacket.UpdateState.ABORT, event.update(from));
     }
 
     // --- update: child path (b != from && !partner) ---
@@ -511,7 +511,7 @@ class FuneralEventTest {
         FuneralEvent event = new FuneralEvent(from, null, null, 10);
         from.setCurrentEvent(event);
         child.setCurrentEvent(event);
-        assertEquals(src.base.EventPacket.UpdateState.ABORT, event.update(child));
+        assertEquals(src.event.EventPacket.UpdateState.ABORT, event.update(child));
     }
 
     // --- update: b==from, with baby child present, state=GO → does not throw ---

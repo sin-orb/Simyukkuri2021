@@ -10,7 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import src.base.Body;
-import src.base.EventPacket;
+import src.event.EventPacket;
 import src.enums.Event;
 import src.util.WorldTestHelper;
 

@@ -2,11 +2,11 @@ package src.event;
 import src.util.GameText;
 
 import src.base.Body;
-import src.base.EventPacket;
+import src.event.EventPacket;
 import src.base.Obj;
 import src.enums.FavItemType;
 import src.enums.PublicRank;
-import src.item.Barrier;
+import src.field.impl.Barrier;
 import src.system.ResourceUtil;
 
 /***************************************************

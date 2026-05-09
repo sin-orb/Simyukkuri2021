@@ -26,11 +26,11 @@ import src.draw.Point4y;
 import src.draw.Rectangle4y;
 import src.draw.Translate;
 import src.game.Stalk;
-import src.item.Beltconveyor;
+import src.field.impl.Beltconveyor;
 import src.item.BeltconveyorObj;
-import src.item.Farm;
-import src.item.Pool;
-import src.system.FieldShapeBase;
+import src.field.impl.Farm;
+import src.field.impl.Pool;
+import src.field.FieldShape;
 import src.system.ItemMenu.ShapeMenuTarget;
 import src.system.MapPlaceData;
 
@@ -133,13 +133,13 @@ public class MouseInputController extends MouseAdapter {
 	}
 
 	// マウス位置の最も手前にあるシェイプを取得
-	private FieldShapeBase getShapeFront(int mx, int my) {
+	private FieldShape getShapeFront(int mx, int my) {
 		Point4y pos = Translate.invert(mx, my);
 		if (pos == null)
 			return null;
 		MapPlaceData curMap = src.util.GameWorld.get().getCurrentMap();
 		int flags = Translate.getCurrentFieldMapNum(pos.getX(), pos.getY());
-		if ((flags & FieldShapeBase.FIELD_BELT) != 0) {
+		if ((flags & FieldShape.FIELD_BELT) != 0) {
 			int num = curMap.getBeltconveyor().size();
 			for (int i = num - 1; i >= 0; i--) {
 				Beltconveyor b = curMap.getBeltconveyor().get(i);
@@ -148,7 +148,7 @@ public class MouseInputController extends MouseAdapter {
 				}
 			}
 		}
-		if ((flags & FieldShapeBase.FIELD_FARM) != 0) {
+		if ((flags & FieldShape.FIELD_FARM) != 0) {
 			int num = curMap.getFarm().size();
 			for (int i = num - 1; i >= 0; i--) {
 				Farm b = curMap.getFarm().get(i);
@@ -157,7 +157,7 @@ public class MouseInputController extends MouseAdapter {
 				}
 			}
 		}
-		if ((flags & FieldShapeBase.FIELD_POOL) != 0) {
+		if ((flags & FieldShape.FIELD_POOL) != 0) {
 			int num = curMap.getPool().size();
 			for (int i = num - 1; i >= 0; i--) {
 				Pool b = curMap.getPool().get(i);
@@ -187,7 +187,7 @@ public class MouseInputController extends MouseAdapter {
 
 					Obj found = getUpFront(SimYukkuri.fieldMousePos[0], SimYukkuri.fieldMousePos[1], false);
 					if (found == null) {
-						FieldShapeBase foundShape = getShapeFront(SimYukkuri.fieldMousePos[0], SimYukkuri.fieldMousePos[1]);
+						FieldShape foundShape = getShapeFront(SimYukkuri.fieldMousePos[0], SimYukkuri.fieldMousePos[1]);
 						if (foundShape != null && foundShape.hasShapePopup() != ShapeMenuTarget.NONE) {
 							ItemMenu.setShapePopupMenu(foundShape);
 							ItemMenu.getShapePopup().show(SimYukkuri.mypane, e.getX() + 10, e.getY());

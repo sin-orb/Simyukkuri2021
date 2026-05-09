@@ -17,7 +17,7 @@ import src.draw.ModLoader;
 import src.draw.Rectangle4y;
 import src.enums.Happiness;
 import src.enums.ImageCode;
-import src.enums.ObjEXType;
+import src.enums.WorldEntityKind;
 import src.enums.Type;
 import src.system.Cash;
 import src.system.MessagePool;
@@ -111,7 +111,7 @@ public class MachinePress extends ObjEX {
 		setCollisionSize(getPivotX(), 8);
 		GameWorld.get().getCurrentMap().getMachinePress().put(objId, this);
 		objType = Type.FIX_OBJECT;
-		objEXType = ObjEXType.MACHINEPRESS;
+		objEXType = WorldEntityKind.MACHINEPRESS;
 
 		value = 500000;
 		cost = 1500;

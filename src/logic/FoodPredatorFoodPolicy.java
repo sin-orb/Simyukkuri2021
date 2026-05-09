@@ -12,7 +12,7 @@ import src.enums.TangType;
 import src.game.Shit;
 import src.game.Stalk;
 import src.game.Vomit;
-import src.item.Barrier;
+import src.field.impl.Barrier;
 import src.item.Food;
 import src.item.Food.FoodType;
 import src.util.GameWorld;

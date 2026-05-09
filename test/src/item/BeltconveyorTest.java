@@ -19,7 +19,8 @@ import src.enums.Type;
 import src.game.Shit;
 import src.game.Stalk;
 import src.game.Vomit;
-import src.system.FieldShapeBase;
+import src.field.FieldShape;
+import src.field.impl.Beltconveyor;
 import src.system.Sprite;
 import src.util.WorldTestHelper;
 import src.yukkuri.Reimu;
@@ -49,7 +50,7 @@ class BeltconveyorTest {
     @Test
     void testGetAttribute_returnsFIELD_BELT() {
         Beltconveyor item = new Beltconveyor();
-        assertEquals(FieldShapeBase.FIELD_BELT, item.getAttribute());
+        assertEquals(FieldShape.FIELD_BELT, item.getAttribute());
     }
 
     // --- getMinimumSize ---
@@ -423,7 +424,7 @@ class BeltconveyorTest {
 
     private static int setupMenuOrdinal(String constantName) {
         try {
-            Class<?> enumClass = Class.forName("src.item.Beltconveyor$SetupMenu");
+            Class<?> enumClass = Class.forName("src.field.impl.Beltconveyor$SetupMenu");
             @SuppressWarnings({ "rawtypes", "unchecked" })
             Enum<?> constant = Enum.valueOf((Class) enumClass, constantName);
             return constant.ordinal();
@@ -434,7 +435,7 @@ class BeltconveyorTest {
 
     private static void setPrivateEnumField(Beltconveyor item, String fieldName, String enumSimpleName, String constantName) {
         try {
-            Class<?> enumClass = Class.forName("src.item.Beltconveyor$" + enumSimpleName);
+            Class<?> enumClass = Class.forName("src.field.impl.Beltconveyor$" + enumSimpleName);
             @SuppressWarnings({ "rawtypes", "unchecked" })
             Enum<?> constant = Enum.valueOf((Class) enumClass, constantName);
             Field field = Beltconveyor.class.getDeclaredField(fieldName);

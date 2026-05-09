@@ -1,8 +1,8 @@
 package src.logic;
 
 import src.base.Body;
-import src.base.EventPacket.EventPriority;
-import src.base.Okazari.OkazariType;
+import src.event.EventPacket.EventPriority;
+import src.entity.world.bodylinked.Okazari.OkazariType;
 import src.draw.Translate;
 import src.enums.Attitude;
 import src.enums.PublicRank;

@@ -23,7 +23,7 @@ import src.base.ObjEX;
 import src.draw.ModLoader;
 import src.draw.Rectangle4y;
 import src.draw.Translate;
-import src.enums.ObjEXType;
+import src.enums.WorldEntityKind;
 import src.enums.Type;
 import src.system.Cash;
 import src.system.ResourceUtil;
@@ -193,7 +193,7 @@ public class Toilet extends ObjEX {
 		setCollisionSize(getPivotX(), getPivotY());
 		GameWorld.get().getCurrentMap().getToilet().put(objId, this);
 		objType = Type.PLATFORM;
-		objEXType = ObjEXType.TOILET;
+		objEXType = WorldEntityKind.TOILET;
 		interval = 30;
 
 		boolean setupSucceeded = setupToilet(this);

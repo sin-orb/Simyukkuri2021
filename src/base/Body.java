@@ -28,6 +28,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
 import src.Const;
 import src.SimYukkuri;
+import src.attachment.Attachment;
 import src.attachment.ANYDAmpoule;
 import src.attachment.AccelAmpoule;
 import src.attachment.Ants;
@@ -37,7 +38,8 @@ import src.attachment.Needle;
 import src.attachment.PoisonAmpoule;
 import src.attachment.StopAmpoule;
 import src.attachment.VeryShitAmpoule;
-import src.base.Okazari.OkazariType;
+import src.entity.world.bodylinked.Okazari;
+import src.entity.world.bodylinked.Okazari.OkazariType;
 import src.draw.Dimension4y;
 import src.draw.ModLoader;
 import src.draw.MyPane;
@@ -75,6 +77,7 @@ import src.enums.Type;
 import src.enums.UnbirthBabyState;
 import src.enums.Where;
 import src.enums.WindowType;
+import src.event.EventPacket;
 import src.event.AvoidMoldEvent;
 import src.event.BegForLifeEvent;
 import src.event.BreedEvent;
@@ -92,10 +95,10 @@ import src.game.Dna;
 import src.game.Shit;
 import src.game.Stalk;
 import src.game.Vomit;
-import src.item.Barrier;
+import src.field.impl.Barrier;
 import src.item.Bed;
 import src.item.Food;
-import src.item.Pool;
+import src.field.impl.Pool;
 import src.item.StickyPlate;
 import src.item.Sui;
 import src.item.Toilet;
@@ -110,7 +113,7 @@ import src.logic.FamilyActionLogic;
 import src.logic.ToyLogic;
 import src.logic.TrashLogic;
 import src.system.BodyLayer;
-import src.system.FieldShapeBase;
+import src.field.FieldShape;
 import src.system.ItemMenu.GetMenuTarget;
 import src.system.ItemMenu.UseMenuTarget;
 import src.system.MainCommandUI;
@@ -6482,7 +6485,7 @@ public abstract class Body extends BodyAttributes {
 		// 畑にいるか
 		int xCoord = getX();
 		int yCoord = getY();
-		if ((Translate.getCurrentFieldMapNum(xCoord, yCoord) & FieldShapeBase.FIELD_FARM) == 0) {
+		if ((Translate.getCurrentFieldMapNum(xCoord, yCoord) & FieldShape.FIELD_FARM) == 0) {
 			return;
 		}
 

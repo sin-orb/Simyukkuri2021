@@ -5,7 +5,7 @@ import src.base.ItemTestBase;
 import src.base.ObjEX;
 import src.SimYukkuri;
 import src.draw.Translate;
-import src.enums.ObjEXType;
+import src.enums.WorldEntityKind;
 import src.enums.Type;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -28,7 +28,7 @@ class TrashTest extends ItemTestBase {
         Trash trash = new Trash(100, 200, 0);
         assertNotNull(trash);
         assertEquals(Type.OBJECT, trash.getObjType());
-        assertEquals(ObjEXType.TRASH, trash.getObjEXType());
+        assertEquals(WorldEntityKind.TRASH, trash.getObjEXType());
         assertEquals(0, trash.getValue());
         assertEquals(0, trash.getCost());
         assertTrue(trash.getObjId() > 0);
@@ -141,7 +141,7 @@ class TrashTest extends ItemTestBase {
     @Test
     void testGetObjEXType() {
         Trash trash = new Trash(100, 100, 0);
-        assertEquals(ObjEXType.TRASH, trash.getObjEXType());
+        assertEquals(WorldEntityKind.TRASH, trash.getObjEXType());
     }
 
     @Test
@@ -597,8 +597,8 @@ class TrashTest extends ItemTestBase {
     @Test
     void testSetObjEXType() {
         Trash trash = new Trash();
-        trash.setObjEXType(ObjEXType.TRASH);
-        assertEquals(ObjEXType.TRASH, trash.getObjEXType());
+        trash.setObjEXType(WorldEntityKind.TRASH);
+        assertEquals(WorldEntityKind.TRASH, trash.getObjEXType());
     }
 
     @Test

@@ -1,4 +1,4 @@
-package src.base;
+package src.entity.living.profile;
 
 /**
  * BodyAttributes の時刻・閾値系パラメータをまとめた値オブジェクト.

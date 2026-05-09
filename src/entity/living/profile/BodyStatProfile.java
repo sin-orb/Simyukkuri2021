@@ -1,4 +1,4 @@
-package src.base;
+package src.entity.living.profile;
 
 /**
  * BodyAttributes の配列型の統計パラメータをまとめた値オブジェクト.

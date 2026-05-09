@@ -48,7 +48,7 @@ public class UnunSlaveDebug {
         System.out.println("DEBUG: actual distance squared="
                 + Translate.distance(body.getX(), body.getY(), shit.getX(), shit.getY()));
         System.out.println("DEBUG: acrossBarrier="
-                + src.item.Barrier.acrossBarrier(body.getX(), body.getY(), shit.getX(), shit.getY(), 4096)); // 4096 is
+                + src.field.impl.Barrier.acrossBarrier(body.getX(), body.getY(), shit.getX(), shit.getY(), 4096)); // 4096 is
                                                                                                              // Barrier.BARRIER_KEKKAI
 
         if (found == null) {

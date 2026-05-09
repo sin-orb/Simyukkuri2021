@@ -12,7 +12,7 @@ import src.base.Body;
 import src.base.ObjEX;
 import src.draw.ModLoader;
 import src.draw.Rectangle4y;
-import src.enums.ObjEXType;
+import src.enums.WorldEntityKind;
 import src.enums.Type;
 
 /***************************************************
@@ -124,7 +124,7 @@ public class Toy extends ObjEX {
 		setCollisionSize(getPivotX(), getPivotY());
 		GameWorld.get().getCurrentMap().getToy().put(objId, this);
 		objType = Type.OBJECT;
-		objEXType = ObjEXType.TOY;
+		objEXType = WorldEntityKind.TOY;
 
 		itemRank = ItemRank.values()[initOption];
 		if (itemRank == ItemRank.HOUSE) {

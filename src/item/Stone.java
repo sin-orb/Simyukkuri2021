@@ -14,7 +14,7 @@ import src.base.ObjEX;
 import src.draw.ModLoader;
 import src.draw.Rectangle4y;
 import src.enums.CriticalDamegeType;
-import src.enums.ObjEXType;
+import src.enums.WorldEntityKind;
 import src.enums.Type;
 
 /***************************************************
@@ -115,7 +115,7 @@ public class Stone extends ObjEX {
 		setCollisionSize(getPivotX(), getPivotY());
 		GameWorld.get().getCurrentMap().getStone().put(objId, this);
 		objType = Type.OBJECT;
-		objEXType = ObjEXType.STONE;
+		objEXType = WorldEntityKind.STONE;
 		interval = 5;
 		itemRank = ItemRank.values()[initOption];
 		if (GameWorld.get().getCurrentMap().getMapIndex() == 2 || GameWorld.get().getCurrentMap().getMapIndex() == 3

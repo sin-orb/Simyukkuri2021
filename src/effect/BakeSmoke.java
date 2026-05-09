@@ -6,7 +6,7 @@ import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
 
-import src.base.Effect;
+import src.effect.Effect;
 import src.draw.ModLoader;
 
 

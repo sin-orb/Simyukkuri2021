@@ -14,6 +14,9 @@ import src.game.Shit;
 import src.system.ItemMenu.ShapeMenu;
 import src.system.ItemMenu.ShapeMenuTarget;
 import src.util.WorldTestHelper;
+import src.field.impl.Farm;
+import src.field.impl.Pool;
+import src.field.FieldShape;
 
 class FarmTest {
 
@@ -58,7 +61,7 @@ class FarmTest {
         assertEquals(ShapeMenuTarget.FARM, item.hasShapePopup());
     }
 
-    // --- Inherited FieldShapeBase methods ---
+    // --- Inherited FieldShape methods ---
 
     @Test
     void testRemoveAndIsRemoved() {

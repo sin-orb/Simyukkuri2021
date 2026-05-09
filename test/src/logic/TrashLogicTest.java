@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import src.SimYukkuri;
 import src.base.Body;
-import src.base.Okazari;
+import src.entity.world.bodylinked.Okazari;
 import src.draw.Translate;
 import src.item.Trash;
 import src.util.WorldTestHelper;

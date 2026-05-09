@@ -11,7 +11,7 @@ import src.enums.PublicRank;
 import src.enums.TakeoutItemType;
 import src.game.Shit;
 import src.game.Vomit;
-import src.item.Barrier;
+import src.field.impl.Barrier;
 import src.item.Food;
 import src.util.GameWorld;
 

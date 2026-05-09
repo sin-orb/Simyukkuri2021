@@ -441,7 +441,7 @@ class BodyMovementTest {
 		body.setDestY(100);
 		body.setDirX(1);
 		body.setDirY(0);
-		Translate.setCurrentWallMapNum(101, 100, src.item.Barrier.MAP_BODY[body.getBodyAgeState().ordinal()]);
+		Translate.setCurrentWallMapNum(101, 100, src.field.impl.Barrier.MAP_BODY[body.getBodyAgeState().ordinal()]);
 
 		BodyMovement.applyDirectedMovement(body, BodyMovement.MovementVector.of(1, 0, 0));
 		BodyMovement.resolveDirectedMovement(body, BodyMovement.MovementVector.of(1, 0, 0));
@@ -463,7 +463,7 @@ class BodyMovementTest {
 		body.setLikeWater(false);
 		body.setIntelligence(src.enums.Intelligence.WISE);
 		GameRandom.setOverride(fixedRandom(1, true));
-		Translate.setCurrentFieldMapNum(141, 140, src.system.FieldShapeBase.FIELD_POOL);
+		Translate.setCurrentFieldMapNum(141, 140, src.field.FieldShape.FIELD_POOL);
 		Translate.setCurrentFieldMapNum(140, 140, 0);
 
 		BodyMovement.applyDirectedMovement(body, BodyMovement.MovementVector.of(1, 0, 0));

@@ -17,12 +17,12 @@ import javax.swing.JPanel;
 
 import src.SimYukkuri;
 import src.util.GameWorld;
-import src.base.Effect;
+import src.effect.Effect;
 import src.base.ObjEX;
 import src.draw.ModLoader;
 import src.draw.Rectangle4y;
 import src.enums.EffectType;
-import src.enums.ObjEXType;
+import src.enums.WorldEntityKind;
 import src.enums.Type;
 import src.system.Cash;
 import src.system.ResourceUtil;
@@ -154,7 +154,7 @@ public class Diffuser extends ObjEX {
 
 		GameWorld.get().getCurrentMap().getDiffuser().put(objId, this);
 		objType = Type.OBJECT;
-		objEXType = ObjEXType.DIFFUSER;
+		objEXType = WorldEntityKind.DIFFUSER;
 		value = 15000;
 		cost = 100;
 

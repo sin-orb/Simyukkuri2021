@@ -1,4 +1,4 @@
-package src.base;
+package src.entity.living.profile;
 
 import src.system.Sprite;
 import src.draw.Rectangle4y;

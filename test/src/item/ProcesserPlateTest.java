@@ -182,7 +182,7 @@ class ProcesserPlateTest extends ItemTestBase {
     @Test
     void testGetSetProcessedBodyEffectList() {
         ProcesserPlate item = new ProcesserPlate();
-        List<src.base.Effect> list = new LinkedList<>();
+        List<src.effect.Effect> list = new LinkedList<>();
         item.setProcessedBodyEffectList(list);
         assertEquals(list, item.getProcessedBodyEffectList());
     }

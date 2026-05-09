@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import src.SimYukkuri;
 import src.base.Body;
 import src.base.ItemTestBase;
-import src.enums.ObjEXType;
+import src.enums.WorldEntityKind;
 import src.enums.Type;
 import src.util.WorldTestHelper;
 
@@ -30,7 +30,7 @@ class ProductChuteTest extends ItemTestBase {
         assertEquals(100, item.getX());
         assertEquals(200, item.getY());
         assertEquals(Type.PLATFORM, item.getObjType());
-        assertEquals(ObjEXType.PRODUCTCHUTE, item.getObjEXType());
+        assertEquals(WorldEntityKind.PRODUCTCHUTE, item.getObjEXType());
         assertEquals(5000, item.getValue());
         assertEquals(50, item.getCost());
         assertEquals(10, item.getInterval());

@@ -23,7 +23,7 @@ import src.base.ObjEX;
 import src.draw.ModLoader;
 import src.draw.Rectangle4y;
 import src.enums.FootBake;
-import src.enums.ObjEXType;
+import src.enums.WorldEntityKind;
 import src.enums.Type;
 import src.system.Cash;
 import src.system.ResourceUtil;
@@ -190,7 +190,7 @@ public class OrangePool extends ObjEX {
 		GameWorld.get().getCurrentMap().getOrangePool().put(objId, this);
 
 		objType = Type.PLATFORM;
-		objEXType = ObjEXType.ORANGEPOOL;
+		objEXType = WorldEntityKind.ORANGEPOOL;
 		interval = 3;
 
 		boolean setupSucceeded = setupOrange(this, false);

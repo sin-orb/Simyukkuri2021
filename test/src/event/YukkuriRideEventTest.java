@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
 import src.base.Body;
-import src.base.EventPacket.EventPriority;
+import src.event.EventPacket.EventPriority;
 import src.draw.World;
 import src.enums.AgeState;
 import src.system.Sprite;
@@ -117,7 +117,7 @@ public class YukkuriRideEventTest {
         Body b = createBody();
         YukkuriRideEvent event = new YukkuriRideEvent();
         // from=-1 → null → ABORT
-        assertEquals(src.base.EventPacket.UpdateState.ABORT, event.update(b));
+        assertEquals(src.event.EventPacket.UpdateState.ABORT, event.update(b));
     }
 
     @Test
@@ -127,7 +127,7 @@ public class YukkuriRideEventTest {
         YukkuriRideEvent event = new YukkuriRideEvent(from, null, null, 100);
         from.setCurrentEvent(event);
         // to=-1 → null → ABORT
-        assertEquals(src.base.EventPacket.UpdateState.ABORT, event.update(b));
+        assertEquals(src.event.EventPacket.UpdateState.ABORT, event.update(b));
     }
 
     @Test
@@ -138,7 +138,7 @@ public class YukkuriRideEventTest {
         to.setDead(true);
         YukkuriRideEvent event = new YukkuriRideEvent(from, to, null, 100);
         from.setCurrentEvent(event);
-        assertEquals(src.base.EventPacket.UpdateState.ABORT, event.update(b));
+        assertEquals(src.event.EventPacket.UpdateState.ABORT, event.update(b));
     }
 
     @Test
@@ -147,7 +147,7 @@ public class YukkuriRideEventTest {
         Body to = createBody();
         YukkuriRideEvent event = new YukkuriRideEvent(from, to, null, 100);
         // from.getCurrentEvent() != this → ABORT
-        assertEquals(src.base.EventPacket.UpdateState.ABORT, event.update(from));
+        assertEquals(src.event.EventPacket.UpdateState.ABORT, event.update(from));
     }
 
     // --- start ---
@@ -180,7 +180,7 @@ public class YukkuriRideEventTest {
             f.setAccessible(true);
             f.setInt(event, 10000); // becomes 10001 after tick++ in update
         } catch (Exception e) { }
-        assertEquals(src.base.EventPacket.UpdateState.ABORT, event.update(from));
+        assertEquals(src.event.EventPacket.UpdateState.ABORT, event.update(from));
     }
 
     @Test
@@ -217,7 +217,7 @@ public class YukkuriRideEventTest {
         from.setRemoved(true);
         YukkuriRideEvent event = new YukkuriRideEvent(from, to, null, 100);
         from.setCurrentEvent(event);
-        assertEquals(src.base.EventPacket.UpdateState.ABORT, event.update(from));
+        assertEquals(src.event.EventPacket.UpdateState.ABORT, event.update(from));
     }
 
     @Test
@@ -227,7 +227,7 @@ public class YukkuriRideEventTest {
         to.setRemoved(true);
         YukkuriRideEvent event = new YukkuriRideEvent(from, to, null, 100);
         from.setCurrentEvent(event);
-        assertEquals(src.base.EventPacket.UpdateState.ABORT, event.update(from));
+        assertEquals(src.event.EventPacket.UpdateState.ABORT, event.update(from));
     }
 
     // --- simpleEventAction: default EventPacket returns false ---
@@ -246,7 +246,7 @@ public class YukkuriRideEventTest {
         to.setDirty(true); // isNormalDirty() = !dead && dirty → true
         YukkuriRideEvent event = new YukkuriRideEvent(from, to, null, 100);
         from.setCurrentEvent(event);
-        assertEquals(src.base.EventPacket.UpdateState.ABORT, event.update(from));
+        assertEquals(src.event.EventPacket.UpdateState.ABORT, event.update(from));
     }
 
     // --- update: from.findSick(to) → ABORT ---
@@ -259,7 +259,7 @@ public class YukkuriRideEventTest {
         to.setSickPeriod(2000); // isSick() = sickPeriod > incubationPeriodBase(1200) → true
         YukkuriRideEvent event = new YukkuriRideEvent(from, to, null, 100);
         from.setCurrentEvent(event);
-        assertEquals(src.base.EventPacket.UpdateState.ABORT, event.update(from));
+        assertEquals(src.event.EventPacket.UpdateState.ABORT, event.update(from));
     }
 
     // --- update: b == from, to on head (carrying logic) → null ---

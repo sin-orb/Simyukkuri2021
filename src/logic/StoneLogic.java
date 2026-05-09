@@ -9,7 +9,7 @@ import src.draw.Translate;
 import src.enums.CriticalDamegeType;
 import src.enums.Intelligence;
 //import src.Body.CoreAnkoState;
-//import src.item.Barrier;
+//import src.field.impl.Barrier;
 import src.item.Stone;
 //import src.EventPacket;
 

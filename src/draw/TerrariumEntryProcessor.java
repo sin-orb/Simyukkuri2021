@@ -4,7 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import src.base.Okazari;
+import src.entity.world.bodylinked.Okazari;
 import src.enums.Event;
 import src.game.Shit;
 import src.game.Vomit;

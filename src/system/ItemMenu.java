@@ -14,6 +14,7 @@ import src.draw.Point4y;
 import src.draw.Translate;
 import src.game.Shit;
 import src.game.Vomit;
+import src.field.FieldShape;
 
 
 /**********************************************
@@ -161,7 +162,7 @@ public class ItemMenu {
 	private static JPopupMenu shapePopup;
 	private static JMenuItem[] shapeMenu;
 	/** シェイプのターゲット */
-	private static FieldShapeBase shapeTarget;
+	private static FieldShape shapeTarget;
 
 	/**
 	 * ポップアップメニューを作成する.
@@ -222,7 +223,7 @@ public class ItemMenu {
 	 *  シェイプメニューを開く前にターゲットと有効なコマンド設定
 	 * @param shp ターゲット
 	 */
-	public static final void setShapePopupMenu(FieldShapeBase shp) {
+	public static final void setShapePopupMenu(FieldShape shp) {
 		shapeTarget = shp;
 		shapeMenu[0].setEnabled(shp.hasShapePopup().canSetup());
 		shapeMenu[1].setVisible(shp.hasShapePopup().isFarm());
@@ -282,11 +283,11 @@ public class ItemMenu {
 		ItemMenu.shapePopup = shapePopup;
 	}
 	
-	public static FieldShapeBase getShapeTarget() {
+	public static FieldShape getShapeTarget() {
 		return shapeTarget;
 	}
 	
-	public static void setShapeTarget(FieldShapeBase shapeTarget) {
+	public static void setShapeTarget(FieldShape shapeTarget) {
 		ItemMenu.shapeTarget = shapeTarget;
 	}
 

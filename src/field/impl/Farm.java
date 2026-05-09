@@ -1,4 +1,4 @@
-package src.item;
+package src.field.impl;
 
 import java.awt.Graphics2D;
 import java.awt.TexturePaint;
@@ -23,7 +23,7 @@ import src.enums.BurialState;
 import src.game.Shit;
 import src.game.Stalk;
 import src.game.Vomit;
-import src.system.FieldShapeBase;
+import src.field.FieldShape;
 import src.system.ItemMenu.ShapeMenu;
 import src.system.ItemMenu.ShapeMenuTarget;
 import src.system.MapPlaceData;
@@ -33,7 +33,7 @@ import src.system.MapPlaceData;
  * <br>
  * これはほかのアイテムと違い、ObjEXを継承していないので注意。
  */
-public class Farm extends FieldShapeBase {
+public class Farm extends FieldShape {
 
 	private static final long serialVersionUID = 2194998702502315898L;
 

@@ -27,7 +27,7 @@ import src.command.GadgetAction;
 import src.draw.ModLoader;
 import src.draw.Rectangle4y;
 import src.enums.AgeState;
-import src.enums.ObjEXType;
+import src.enums.WorldEntityKind;
 import src.enums.TakeoutItemType;
 import src.enums.Type;
 import src.item.Food.FoodType;
@@ -270,7 +270,7 @@ public class AutoFeeder extends ObjEX {
 		GameWorld.get().getCurrentMap().getAutofeeder().put(objId, this);
 
 		objType = Type.PLATFORM;
-		objEXType = ObjEXType.AUTOFEEDER;
+		objEXType = WorldEntityKind.AUTOFEEDER;
 
 		boolean ret = setupFeeder(this, false);
 		if (setupFeederMode(this, false)) {

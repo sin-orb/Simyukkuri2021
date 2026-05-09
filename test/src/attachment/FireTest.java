@@ -18,7 +18,7 @@ import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
 import src.base.Body;
-import src.base.Okazari;
+import src.entity.world.bodylinked.Okazari;
 import src.draw.World;
 import src.enums.AgeState;
 import src.enums.CoreAnkoState;

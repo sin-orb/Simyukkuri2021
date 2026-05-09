@@ -6,7 +6,7 @@ import java.util.Map;
 import src.base.Body;
 import src.base.Obj;
 import src.draw.Translate;
-import src.item.Barrier;
+import src.field.impl.Barrier;
 import src.item.Food;
 import src.game.Shit;
 import src.game.Vomit;

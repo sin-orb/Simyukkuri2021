@@ -18,7 +18,7 @@ import src.draw.ModLoader;
 import src.draw.Rectangle4y;
 import src.draw.Translate;
 import src.enums.Happiness;
-import src.enums.ObjEXType;
+import src.enums.WorldEntityKind;
 import src.enums.Type;
 import src.system.Cash;
 import src.system.MessagePool;
@@ -159,7 +159,7 @@ public class GarbageChute extends ObjEX {
 		setCollisionSize(getPivotX(), getPivotY());
 		GameWorld.get().getCurrentMap().getGarbagechute().put(objId, this);
 		objType = Type.PLATFORM;
-		objEXType = ObjEXType.GARBAGECHUTE;
+		objEXType = WorldEntityKind.GARBAGECHUTE;
 
 		interval = 4;
 

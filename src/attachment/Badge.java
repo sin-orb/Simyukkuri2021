@@ -11,7 +11,6 @@ import java.io.IOException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import src.base.Attachment;
 import src.base.Body;
 import src.draw.ModLoader;
 import src.enums.AgeState;

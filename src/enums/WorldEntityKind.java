@@ -2,7 +2,7 @@ package src.enums;
 
 import src.game.Stalk;
 /** ゆっくり以外のオブジェクトのタイプ */
-public enum ObjEXType {
+public enum WorldEntityKind {
 	FOOD(src.item.Food.class),
 	TOILET(src.item.Toilet.class),
 	BED(src.item.Bed.class),
@@ -30,7 +30,7 @@ public enum ObjEXType {
 	GENERATOR(src.item.Generator.class),
 	;
 	private final Class<?> classPack;
-	ObjEXType(Class<?> cls) { this.classPack = cls; }
+	WorldEntityKind(Class<?> cls) { this.classPack = cls; }
 
 	public Class<?> getClassPack() {
 		return classPack;

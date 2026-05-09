@@ -10,7 +10,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 import src.base.Body;
-import src.base.Effect;
+import src.effect.Effect;
 import src.draw.MyPane;
 import src.draw.Terrarium;
 import src.enums.AgeState;

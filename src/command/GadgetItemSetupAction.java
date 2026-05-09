@@ -4,7 +4,7 @@ import java.awt.event.MouseEvent;
 
 import src.base.Obj;
 import src.command.GadgetMenu.GadgetList;
-import src.item.Beltconveyor;
+import src.field.impl.Beltconveyor;
 import src.item.BeltconveyorObj;
 import src.item.BreedingPool;
 import src.item.Diffuser;

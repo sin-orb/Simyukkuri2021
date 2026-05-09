@@ -4,7 +4,7 @@ import java.awt.Color;
 
 import src.Const;
 import src.base.Body;
-import src.base.EventPacket;
+import src.event.EventPacket;
 import src.enums.Event;
 import src.enums.WindowType;
 import src.enums.Intelligence;

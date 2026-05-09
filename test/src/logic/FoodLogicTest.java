@@ -16,9 +16,9 @@ import org.junit.jupiter.api.Test;
 import src.ConstState;
 import src.SimYukkuri;
 import src.base.Body;
-import src.base.EventPacket;
+import src.event.EventPacket;
 import src.base.Obj;
-import src.base.Okazari;
+import src.entity.world.bodylinked.Okazari;
 import src.draw.Point4y;
 import src.draw.Translate;
 import src.enums.AgeState;
@@ -5459,7 +5459,7 @@ class FoodLogicTest {
         // Need ankoAmount > damageLimitBase[ageState] / 2 to avoid the crushed/remove path.
         deadBody.setAnkoAmount(20000);
         // Add okazari so !isVeryRude fails checkCanEatBody → !checkCanEatBody=true → L357-358 EatBodyEvent
-        deadBody.setOkazari(new src.base.Okazari());
+        deadBody.setOkazari(new src.entity.world.bodylinked.Okazari());
         SimYukkuri.world.getCurrentMap().getBody().put(deadBody.getUniqueID(), deadBody);
         body.setMoveTargetId(deadBody.getObjId());
         body.setToFood(true);
@@ -6293,7 +6293,7 @@ class FoodLogicTest {
         deadFamily.setY(body.getY());
         deadFamily.setDead(true);
         // Add okazari to dead family
-        deadFamily.setOkazari(new src.base.Okazari());
+        deadFamily.setOkazari(new src.entity.world.bodylinked.Okazari());
         // Make deadFamily a family member
         WorldTestHelper.setParents(body, deadFamily.getUniqueID(), 0);
         SimYukkuri.world.getCurrentMap().getBody().put(deadFamily.getUniqueID(), deadFamily);
@@ -7461,7 +7461,7 @@ class FoodLogicTest {
     private void setWallMapBarrier(int x, int y) {
         int[][] wm = SimYukkuri.world.getCurrentMap().getWallMap();
         if (x >= 0 && x < wm.length && y >= 0 && y < wm[0].length) {
-            wm[x][y] |= (src.system.FieldShapeBase.MAP_ADULT + src.system.FieldShapeBase.MAP_KEKKAI);
+            wm[x][y] |= (src.field.FieldShape.MAP_ADULT + src.field.FieldShape.MAP_KEKKAI);
         }
     }
 

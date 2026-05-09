@@ -15,7 +15,7 @@ import src.enums.Direction;
 import src.enums.EffectType;
 import src.enums.ImageCode;
 import src.enums.PublicRank;
-import src.item.Barrier;
+import src.field.impl.Barrier;
 import src.logic.BodyLogic;
 import src.system.MessagePool;
 import src.system.ResourceUtil;

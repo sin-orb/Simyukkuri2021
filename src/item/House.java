@@ -11,7 +11,7 @@ import src.util.GameWorld;
 import src.base.ObjEX;
 import src.draw.ModLoader;
 import src.draw.Rectangle4y;
-import src.enums.ObjEXType;
+import src.enums.WorldEntityKind;
 import src.enums.Type;
 
 /***************************************************
@@ -128,7 +128,7 @@ public class House extends ObjEX {
 		setCollisionSize(getPivotX(), getPivotY());
 		GameWorld.get().getCurrentMap().getHouse().put(objId, this);
 		objType = Type.PLATFORM;
-		objEXType = ObjEXType.HOUSE;
+		objEXType = WorldEntityKind.HOUSE;
 		itemRank = ItemRank.values()[houseType.getRank()];
 
 		interval = 5000;

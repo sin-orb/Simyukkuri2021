@@ -32,14 +32,14 @@ import src.util.GameWorld;
 import src.base.Body;
 import src.base.Obj;
 import src.base.ObjEX;
-import src.base.Okazari.OkazariType;
+import src.entity.world.bodylinked.Okazari.OkazariType;
 import src.draw.ModLoader;
 import src.draw.Rectangle4y;
 import src.draw.Translate;
 import src.enums.Attitude;
 import src.enums.Event;
 import src.enums.Intelligence;
-import src.enums.ObjEXType;
+import src.enums.WorldEntityKind;
 import src.enums.Type;
 import src.game.Shit;
 import src.game.Stalk;
@@ -47,6 +47,7 @@ import src.game.Vomit;
 import src.system.Cash;
 import src.system.MapPlaceData;
 import src.system.ResourceUtil;
+import src.field.impl.Barrier;
 
 /***************************************************
  * ゆんば
@@ -838,7 +839,7 @@ public class Yunba extends ObjEX {
 
 		GameWorld.get().getCurrentMap().getYunba().put(objId, this);
 		objType = Type.OBJECT;
-		objEXType = ObjEXType.YUNBA;
+		objEXType = WorldEntityKind.YUNBA;
 		interval = 5;
 		value = 30000;
 		cost = 200;

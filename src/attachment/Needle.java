@@ -8,7 +8,7 @@ import java.io.IOException;
 
 import src.SimYukkuri;
 import src.util.GameRandom;
-import src.base.Attachment;
+import src.attachment.Attachment;
 import src.base.Body;
 import src.draw.ModLoader;
 import src.enums.AgeState;

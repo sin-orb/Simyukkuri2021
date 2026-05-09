@@ -13,7 +13,7 @@ import java.util.Map;
 import src.Const;
 import src.SimYukkuri;
 import src.base.Body;
-import src.base.Okazari.OkazariType;
+import src.entity.world.bodylinked.Okazari.OkazariType;
 import src.draw.Dimension4y;
 import src.draw.ModLoader;
 import src.draw.Point4y;

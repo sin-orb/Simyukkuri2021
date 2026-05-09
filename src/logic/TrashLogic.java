@@ -10,7 +10,7 @@ import src.base.Obj;
 import src.draw.Translate;
 import src.enums.AgeState;
 import src.event.GetTrashOkazariEvent;
-import src.item.Barrier;
+import src.field.impl.Barrier;
 import src.item.Trash;
 
 

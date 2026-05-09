@@ -11,11 +11,11 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import src.SimYukkuri;
 import src.base.Body;
-import src.base.Effect;
+import src.effect.Effect;
 import src.base.Obj;
 import src.base.ObjEX;
-import src.game.Player;
-import src.system.FieldShapeBase;
+import src.meta.Player;
+import src.field.FieldShape;
 import src.system.MapPlaceData;
 import src.system.MapWindow;
 import src.yukkuri.HybridYukkuri;
@@ -310,8 +310,8 @@ public class World implements Serializable {
 	 * @return ベルトコンベア/畑/池のリスト
 	 */
 	@Transient
-	public List<FieldShapeBase> getFieldShapeList() {
-		List<FieldShapeBase> fieldShapeGroupList = new LinkedList<>();
+	public List<FieldShape> getFieldShapeList() {
+		List<FieldShape> fieldShapeGroupList = new LinkedList<>();
 		fieldShapeGroupList.addAll(mapList.get(currentMapIdx).getBeltconveyor());
 		fieldShapeGroupList.addAll(mapList.get(currentMapIdx).getFarm());
 		fieldShapeGroupList.addAll(mapList.get(currentMapIdx).getPool());

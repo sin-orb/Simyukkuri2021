@@ -3,7 +3,7 @@ package src.util;
 import java.awt.Component;
 
 import src.base.Body;
-import src.base.Effect;
+import src.effect.Effect;
 import src.draw.MyPane;
 import src.draw.Terrarium;
 import src.enums.AgeState;

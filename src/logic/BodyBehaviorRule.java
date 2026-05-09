@@ -1,7 +1,7 @@
 package src.logic;
 
 import src.base.BodyAttributes;
-import src.base.BodyBehaviorProfile;
+import src.entity.living.profile.BodyBehaviorProfile;
 
 /**
  * Bodyの行動・繁殖系の設定判定を集約する.

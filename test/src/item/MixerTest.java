@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import src.ConstState;
 import src.SimYukkuri;
 import src.base.Body;
-import src.base.Effect;
+import src.effect.Effect;
 import src.base.ItemTestBase;
 import src.enums.CriticalDamegeType;
 import src.enums.Happiness;

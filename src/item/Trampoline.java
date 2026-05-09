@@ -24,7 +24,7 @@ import src.base.ObjEX;
 import src.draw.ModLoader;
 import src.draw.Rectangle4y;
 import src.draw.Translate;
-import src.enums.ObjEXType;
+import src.enums.WorldEntityKind;
 import src.enums.Type;
 import src.system.ResourceUtil;
 
@@ -149,7 +149,7 @@ public class Trampoline extends ObjEX {
 		setCollisionSize(getPivotX(), getPivotY());
 		GameWorld.get().getCurrentMap().getTrampoline().put(objId, this);
 		objType = Type.OBJECT;
-		objEXType = ObjEXType.TOY;
+		objEXType = WorldEntityKind.TOY;
 		boolean setupSuccess = setupTrampoline(this);
 		if (!setupSuccess) {
 			GameWorld.get().getCurrentMap().getTrampoline().remove(objId);

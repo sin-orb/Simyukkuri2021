@@ -760,7 +760,7 @@ NOCOPY_FIELD 相当は `copyYukkuriFrom()` 内で skip するか、
 | `YukkuriUtil` の縮小 | 完了 | 実体の `YukkuriUtil.java` は撤去済み。出生・変身・世界参照の残りは `BodyFactory` / `TransformationService` / `BodyRegistry` / `BabyDnaFactory` 側へ移動済み |
 | `Body` の直接依存整理 | 進行中 | `BodyRegistry` 直参照を削り、`BodyRelations` などへ寄せ始めた。まだ `Body` 側に残る直接依存と旧名回収がある |
 | `BodyAttributes` の状態分解 | 進行中 | `BodyNameSet` / `BodySpriteSet` / `BodyStatProfile` / `BodyTimingProfile` / `BodyBehaviorProfile` は大幅に分離済み。残りの生の状態フィールドを順に切る |
-| Step 3: `src.base` 解体 | 未着手 | パッケージの大移動はまだ開始していない |
+| Step 3: `src.base` 解体 | **完了** | Effect→src.effect, Attachment→src.attachment, EventPacket→src.event, BodyXxxProfile/BodyNameSet/BodySpriteSet→src.entity.living.profile, Okazari→src.entity.world.bodylinked, FieldShapeBase→src.field.FieldShape, Barrier/Farm/Pool/Beltconveyor→src.field.impl, TerrainBillboard→src.visual, Player→src.meta, ObjEXType→WorldEntityKind 全移動完了。テスト 6988/6988 通過 |
 | Step 4: 新継承階層の導入 | 未着手 | `Entity` / `LivingEntity` / `SocialEntity` / `Yukkuri` の実体化はまだ |
 | Step 5: パッケージ名変更 | 未着手 | `src.*` の全面置換は最後に回す |
 
@@ -899,7 +899,7 @@ Step 2 までで導入した正規名を基準に、旧名の残骸を消す。
 | **Step 2**: YukkuriType 循環参照の修正 | **完了** |
 | └ typeID・nameJ・nameE を enum 内に直接埋め込み、yukkuri クラスへの import を全削除 | 完了 |
 | └ `getNameJ()` は後方互換でロケール依存の表示名を返す。`getJapaneseName()`/`getEnglishName()` を追加 | 完了 |
-| **Step 3**: src.base 解体 | **未着手** |
+| **Step 3**: src.base 解体 | **完了** |
 | **Step 4**: 継承階層の新設 | **未着手** |
 | **Step 5**: パッケージ名変更 | **未着手** |
 

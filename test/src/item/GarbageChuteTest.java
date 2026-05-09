@@ -15,7 +15,7 @@ import src.base.ObjEX.ItemRank;
 import src.draw.Translate;
 import src.enums.AgeState;
 import src.enums.Happiness;
-import src.enums.ObjEXType;
+import src.enums.WorldEntityKind;
 import src.system.Sprite;
 import src.yukkuri.Reimu;
 
@@ -65,12 +65,12 @@ class GarbageChuteTest extends ItemTestBase {
         assertEquals(0, item.getCost());
     }
 
-    // --- ObjEXType ---
+    // --- WorldEntityKind ---
 
     @Test
     void testObjEXType_GARBAGECHUTE() {
         GarbageChute item = new GarbageChute(100, 100, 0);
-        assertEquals(ObjEXType.GARBAGECHUTE, item.getObjEXType());
+        assertEquals(WorldEntityKind.GARBAGECHUTE, item.getObjEXType());
     }
 
     // --- getShadowImage ---

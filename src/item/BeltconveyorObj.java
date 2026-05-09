@@ -37,7 +37,7 @@ import src.draw.ModLoader;
 import src.draw.Point4y;
 import src.draw.Rectangle4y;
 import src.draw.Translate;
-import src.enums.ObjEXType;
+import src.enums.WorldEntityKind;
 import src.enums.Type;
 import src.enums.YukkuriType;
 import src.game.Shit;
@@ -46,6 +46,8 @@ import src.game.Vomit;
 import src.system.Cash;
 import src.system.ResourceUtil;
 import src.system.YukkuriFilterPanel;
+import src.field.impl.Barrier;
+import src.field.impl.Beltconveyor;
 
 /***************************************************
  * ベルコン2
@@ -449,7 +451,7 @@ public class BeltconveyorObj extends ObjEX {
 		setCollisionSize(getPivotX(), getPivotY());
 		GameWorld.get().getCurrentMap().getBeltconveyorObj().put(objId, this);
 		objType = Type.PLATFORM;
-		objEXType = ObjEXType.BELTCONVEYOR;
+		objEXType = WorldEntityKind.BELTCONVEYOR;
 		value = 3000;
 		cost = 25;
 	}
