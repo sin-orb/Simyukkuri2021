@@ -60,7 +60,7 @@ public class BodyMetabolismTest {
     public void testCheckHungry_Complex() throws Exception {
         // 1. Super eating case
         body.setHungry(100);
-        Field f = BodyAttributes.class.getDeclaredField("noHungrybySupereatingTimePeriod");
+        Field f = BodyAttributes.class.getDeclaredField("superEatingNoHungryPeriod");
         f.setAccessible(true);
         f.set(body, 10);
         body.checkHungry();

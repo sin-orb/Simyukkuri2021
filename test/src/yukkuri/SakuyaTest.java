@@ -41,6 +41,14 @@ public class SakuyaTest {
     }
 
     @Test
+    public void testSakuyaIsServantOfPredatorMasters() {
+        Sakuya sakuya = new Sakuya();
+        assertTrue(sakuya.isServantOf(Remirya.type));
+        assertTrue(sakuya.isServantOf(Fran.type));
+        assertFalse(sakuya.isServantOf(Marisa.type));
+    }
+
+    @Test
     public void testSakuyaParameterizedConstructor() {
         Sakuya parent1 = new Sakuya();
         Sakuya parent2 = new Sakuya();

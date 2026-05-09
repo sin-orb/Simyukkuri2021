@@ -43,7 +43,7 @@ class SuiTest extends ItemTestBase {
     void testRideOn_NYDBody_returnsFalse() {
         Sui sui = new Sui();
         Body b = createBody();
-        b.seteCoreAnkoState(src.enums.CoreAnkoState.NonYukkuriDisease);
+        b.setCoreAnkoState(src.enums.CoreAnkoState.NonYukkuriDisease);
         assertFalse(sui.rideOn(b));
     }
 

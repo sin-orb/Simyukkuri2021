@@ -90,7 +90,7 @@ public class TrashLogicTest {
         // body=(50,50) のすぐ近くに Trash を配置（wallMap 範囲内）
         Trash trash = new Trash(55, 55, 0);
 
-        // 視野範囲は EYESIGHTorg = 4000*4000 (デフォルト) なので 5 ピクセル距離は十分近い
+        // 視野範囲は eyesightBase = 4000*4000 (デフォルト) なので 5 ピクセル距離は十分近い
         assertTrue(SimYukkuri.world.getCurrentMap().getTrash().containsKey(trash.getObjId()));
 
         boolean result = TrashLogic.checkTrashOkazari(body);
@@ -101,14 +101,14 @@ public class TrashLogicTest {
     }
 
     // ---------------------------------------------------------------
-    // Trash が視野外にある（EYESIGHTorg を 0 にする）-> false を返す
+    // Trash が視野外にある（eyesightBase を 0 にする）-> false を返す
     // ---------------------------------------------------------------
     @Test
     void testCheckTrashOkazari_TrashOutOfSight_ReturnsFalse() {
         assertFalse(body.hasOkazari());
 
-        // EYESIGHTorg を 0 に設定 → searchTrashObj で minDistance=0 なので見つからない
-        setEYESIGHTorg(body, 0);
+        // eyesightBase を 0 に設定 → searchTrashObj で minDistance=0 なので見つからない
+        setEyesightBase(body, 0);
 
         Trash trash = new Trash(55, 55, 0);
 
@@ -130,7 +130,7 @@ public class TrashLogicTest {
         boolean result = TrashLogic.checkTrashOkazari(body);
 
         // 距離 0 は minDistance より小さい場合のみ採用される
-        // minDistance 初期値 = EYESIGHTorg = 4000*4000 >> 大きい -> 0 < minDistance なので採用される
+        // minDistance 初期値 = eyesightBase = 4000*4000 >> 大きい -> 0 < minDistance なので採用される
         assertTrue(result, "同位置の Trash は視野内として true を返すべき");
     }
 
@@ -263,12 +263,12 @@ public class TrashLogicTest {
     }
 
     // ---------------------------------------------------------------
-    // EYESIGHTorg が負の場合、minDistance < 1 の判定で即ブレーク -> false
+    // eyesightBase が負の場合、minDistance < 1 の判定で即ブレーク -> false
     // ---------------------------------------------------------------
     @Test
     void testCheckTrashOkazari_NegativeEyesight_ReturnsFalse() {
         assertFalse(body.hasOkazari());
-        setEYESIGHTorg(body, -1);
+        setEyesightBase(body, -1);
 
         Trash trash = new Trash(55, 55, 0);
 
@@ -277,7 +277,7 @@ public class TrashLogicTest {
     }
 
     // ---------------------------------------------------------------
-    // Trash が遠くにあり、かつ EYESIGHTorg がちょうど境界値の場合
+    // Trash が遠くにあり、かつ eyesightBase がちょうど境界値の場合
     // body=(50,50), trash=(60,50)
     // distance = 10*10 = 100
     // ---------------------------------------------------------------
@@ -288,11 +288,11 @@ public class TrashLogicTest {
         // body=(50,50), trash=(60,50) -> distance = 100
         Trash trash = new Trash(60, 50, 0);
 
-        // EYESIGHTorg = 101 (distance=100 < 101 なので見つかる)
-        setEYESIGHTorg(body, 101);
+        // eyesightBase = 101 (distance=100 < 101 なので見つかる)
+        setEyesightBase(body, 101);
 
         boolean result = TrashLogic.checkTrashOkazari(body);
-        assertTrue(result, "EYESIGHTorg > distance の場合、Trash を見つけて true を返すべき");
+        assertTrue(result, "eyesightBase > distance の場合、Trash を見つけて true を返すべき");
     }
 
     @Test
@@ -302,22 +302,22 @@ public class TrashLogicTest {
         // body=(50,50), trash=(60,50) -> distance = 100
         Trash trash = new Trash(60, 50, 0);
 
-        // EYESIGHTorg = 100 (distance == minDistance なので採用されない: minDistance > distance が必要)
-        setEYESIGHTorg(body, 100);
+        // eyesightBase = 100 (distance == minDistance なので採用されない: minDistance > distance が必要)
+        setEyesightBase(body, 100);
 
         boolean result = TrashLogic.checkTrashOkazari(body);
         // minDistance > distance は false なので見つからない
-        assertFalse(result, "EYESIGHTorg == distance のとき Trash は視野ぎりぎり外なので false");
+        assertFalse(result, "eyesightBase == distance のとき Trash は視野ぎりぎり外なので false");
     }
 
     // ---------------------------------------------------------------
-    // Helper: EYESIGHTorg フィールドをリフレクションで設定
+    // Helper: eyesightBase フィールドをリフレクションで設定
     // ---------------------------------------------------------------
-    private void setEYESIGHTorg(Body body, int value) {
+    private void setEyesightBase(Body body, int value) {
         try {
-            body.setEYESIGHTorg(value);
+            body.setEyesightBase(value);
         } catch (Exception e) {
-            fail("EYESIGHTorg の設定に失敗: " + e.getMessage());
+            fail("eyesightBase の設定に失敗: " + e.getMessage());
         }
     }
 }

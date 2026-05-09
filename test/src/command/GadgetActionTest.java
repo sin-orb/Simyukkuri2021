@@ -265,7 +265,7 @@ public class GadgetActionTest {
 
             GadgetAction.evaluateCommunicate(GadgetList.YUKKURISITEITTENE, ev, b);
 
-            assertNotNull(b.getMessageBuf(), "ゆっくりしていってね！でメッセージが設定されるべき");
+            assertNotNull(b.getMessageBuffer(), "ゆっくりしていってね！でメッセージが設定されるべき");
         }
     }
 

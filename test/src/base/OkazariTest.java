@@ -105,7 +105,7 @@ public class OkazariTest {
     public void testConstructorWithNamedTypeAndBodyNotInWorld() {
         Body body = new Reimu();
         body.setAgeState(AgeState.ADULT);
-        // worldに追加しない → YukkuriUtil.getBodyInstance returns null
+        // worldに追加しない → BodyRegistry では見つからない
 
         Okazari okazari = new Okazari(body, Okazari.OkazariType.BABY1);
 

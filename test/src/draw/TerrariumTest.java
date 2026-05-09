@@ -16,7 +16,7 @@ import src.base.EventPacket;
 import src.base.Obj;
 import src.base.Okazari.OkazariType;
 import src.enums.ActionState;
-import src.enums.BaryInUGState;
+import src.enums.BurialState;
 import src.enums.PanicType;
 import src.enums.TakeoutItemType;
 import src.enums.AgeState;
@@ -411,7 +411,7 @@ class TerrariumTest {
             Body far = WorldTestHelper.createBody();
             far.setX(1000);
             far.setY(1000);
-            far.setEYESIGHTorg(10);
+            far.setEyesightBase(10);
 
             SimYukkuri.world.getCurrentMap().getBody().put(source.getUniqueID(), source);
             SimYukkuri.world.getCurrentMap().getBody().put(nearby.getUniqueID(), nearby);
@@ -478,7 +478,7 @@ class TerrariumTest {
                 Food carriedFood = new Food(100, 100, Food.FoodType.FOOD.ordinal());
                 int carriedFoodObjId = carriedFood.getObjId();
 
-                carrier.setTakeoutItem(TakeoutItemType.FOOD, carriedFood);
+                carrier.setCarryItem(TakeoutItemType.FOOD, carriedFood);
 
                 Terrarium.saveState(tempFile);
 
@@ -500,9 +500,9 @@ class TerrariumTest {
                 }
 
                 assertNotNull(restoredCarrier, "carrier body should survive save/load on some map");
-                assertNotNull(restoredCarrier.getTakeoutItem(TakeoutItemType.FOOD),
+                assertNotNull(restoredCarrier.getCarryItem(TakeoutItemType.FOOD),
                         "carrier should still resolve its carried food after load");
-                assertEquals(carriedFoodObjId, restoredCarrier.getTakeoutItem(TakeoutItemType.FOOD).getObjId(),
+                assertEquals(carriedFoodObjId, restoredCarrier.getCarryItem(TakeoutItemType.FOOD).getObjId(),
                         "carried food should preserve the original object id across save/load");
                 assertTrue(carriedFoodFoundInTakenOutMap,
                         "taken-out food map should be restored for carried food after load");
@@ -526,14 +526,14 @@ class TerrariumTest {
                 int carrierId = carrier.getUniqueID();
                 int carriedFoodObjId = carriedFood.getObjId();
 
-                carrier.setTakeoutItem(TakeoutItemType.FOOD, carriedFood);
+                carrier.setCarryItem(TakeoutItemType.FOOD, carriedFood);
 
                 roundTripSaveLoad(tempFile);
 
                 Body restoredCarrier = findBodyAcrossMaps(carrierId);
                 assertNotNull(restoredCarrier);
-                assertNotNull(restoredCarrier.getTakeoutItem(TakeoutItemType.FOOD));
-                assertEquals(carriedFoodObjId, restoredCarrier.getTakeoutItem(TakeoutItemType.FOOD).getObjId());
+                assertNotNull(restoredCarrier.getCarryItem(TakeoutItemType.FOOD));
+                assertEquals(carriedFoodObjId, restoredCarrier.getCarryItem(TakeoutItemType.FOOD).getObjId());
                 assertTrue(SimYukkuri.world.getCurrentMap().getTakenOutFood().containsKey(carriedFoodObjId)
                         || SimYukkuri.world.getMapList().stream().anyMatch(
                                 map -> map.getTakenOutFood().containsKey(carriedFoodObjId)));
@@ -651,7 +651,7 @@ class TerrariumTest {
                 stalk.getBindBabies().add(unbornBaby.getUniqueID());
                 parent.getStalks().add(stalk);
 
-                unbornBaby.setLinkParent(parent.getUniqueID());
+                unbornBaby.setParentLinkId(parent.getUniqueID());
                 unbornBaby.setBindStalk(stalk);
 
                 int parentId = parent.getUniqueID();
@@ -671,7 +671,7 @@ class TerrariumTest {
                 assertEquals(1, restoredParent.getStalkBabyTypes().size());
                 assertEquals(parentId, restoredStalk.getPlantYukkuri());
                 assertTrue(restoredStalk.getBindBabies().contains(babyId));
-                assertEquals(parentId, restoredBaby.getLinkParent());
+                assertEquals(parentId, restoredBaby.getParentLinkId());
                 assertNotNull(restoredBaby.getBindStalk());
                 assertEquals(stalkId, restoredBaby.getBindStalk().getStalkId());
             } finally {
@@ -790,15 +790,15 @@ class TerrariumTest {
                 int bodyId = body.getUniqueID();
                 int bedObjId = bed.getObjId();
 
-                body.setFavItem(FavItemType.BED, bed);
+                body.setFavoriteItem(FavItemType.BED, bed);
 
                 roundTripSaveLoad(tempFile);
 
                 Body restoredBody = findBodyAcrossMaps(bodyId);
                 assertNotNull(restoredBody);
-                assertNotNull(restoredBody.getFavItem(FavItemType.BED),
+                assertNotNull(restoredBody.getFavoriteItem(FavItemType.BED),
                         "favorite bed should still resolve after save/load");
-                assertEquals(bedObjId, restoredBody.getFavItem(FavItemType.BED).getObjId(),
+                assertEquals(bedObjId, restoredBody.getFavoriteItem(FavItemType.BED).getObjId(),
                         "favorite bed should preserve its object id across save/load");
             } finally {
                 tempFile.delete();
@@ -813,7 +813,7 @@ class TerrariumTest {
                 SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
 
                 Bed bed = new Bed(160, 160, Bed.ItemRank.NORA.ordinal());
-                body.setFavItem(FavItemType.BED, bed);
+                body.setFavoriteItem(FavItemType.BED, bed);
                 body.forceToSleep();
                 body.setX(163);
                 body.setY(158);
@@ -832,7 +832,7 @@ class TerrariumTest {
                 assertNotNull(restoredBed);
                 assertEquals(expectedX, restoredBody.getX(), "sleeping body x position should survive save/load");
                 assertEquals(expectedY, restoredBody.getY(), "sleeping body y position should survive save/load");
-                assertSame(restoredBed, restoredBody.getFavItem(FavItemType.BED),
+                assertSame(restoredBed, restoredBody.getFavoriteItem(FavItemType.BED),
                         "sleeping body should still point to the restored bed instance");
             } finally {
                 tempFile.delete();
@@ -1100,7 +1100,7 @@ class TerrariumTest {
 
                 Body body = WorldTestHelper.createBody();
                 body.setObjId(5326);
-                body.setBodyAmount(2000);
+                body.setAnkoAmount(2000);
                 SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
 
                 mixer.objHitProcess(body);
@@ -1542,9 +1542,9 @@ class TerrariumTest {
             File tempFile = Files.createTempFile("simyukkuri_test_save_ants_attachment", ".sav").toFile();
             try {
                 Reimu body = new Reimu();
-                body.setNumOfAnts(120);
+                body.setAntCount(120);
                 body.addAttachment(new Ants(body));
-                body.setNumOfAnts(120);
+                body.setAntCount(120);
                 SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
 
                 int bodyId = body.getUniqueID();
@@ -1555,7 +1555,7 @@ class TerrariumTest {
                 assertNotNull(restored);
                 assertEquals(1, restored.getAttachmentSize(Ants.class));
                 assertNotNull(findAttachment(restored, Ants.class));
-                assertEquals(120, restored.getNumOfAnts());
+                assertEquals(120, restored.getAntCount());
             } finally {
                 tempFile.delete();
             }
@@ -1578,7 +1578,7 @@ class TerrariumTest {
                 assertEquals(1, restored.getAttachmentSize(Badge.class));
                 Badge restoredBadge = findAttachment(restored, Badge.class);
                 assertNotNull(restoredBadge);
-                assertEquals(Badge.BadgeRank.GOLD, restoredBadge.getEBadgeRank());
+                assertEquals(Badge.BadgeRank.GOLD, restoredBadge.getBadgeRank());
             } finally {
                 tempFile.delete();
             }
@@ -1642,7 +1642,7 @@ class TerrariumTest {
 
                 assertNotNull(restoredRider);
                 assertNotNull(restoredSui);
-                assertEquals(suiId, restoredRider.getLinkParent());
+                assertEquals(suiId, restoredRider.getParentLinkId());
                 assertEquals(restoredRider, restoredSui.getBindobj());
                 assertTrue(restoredSui.isriding(restoredRider));
             } finally {
@@ -1663,7 +1663,7 @@ class TerrariumTest {
                 child.setAgeState(AgeState.BABY);
                 child.setX(180);
                 child.setY(180);
-                child.setLinkParent(parent.getObjId());
+                child.setParentLinkId(parent.getObjId());
                 SimYukkuri.world.getCurrentMap().getBody().put(child.getUniqueID(), child);
 
                 int parentId = parent.getUniqueID();
@@ -1677,8 +1677,8 @@ class TerrariumTest {
 
                 assertNotNull(restoredParent);
                 assertNotNull(restoredChild);
-                assertEquals(parentObjId, restoredChild.getLinkParent());
-                assertEquals(restoredParent, restoredChild.takeMappedObj(restoredChild.getLinkParent()));
+                assertEquals(parentObjId, restoredChild.getParentLinkId());
+                assertEquals(restoredParent, restoredChild.takeMappedObj(restoredChild.getParentLinkId()));
             } finally {
                 tempFile.delete();
             }
@@ -1692,7 +1692,7 @@ class TerrariumTest {
                 Reimu body = new Reimu();
                 body.setX((farm.getMapSX() + farm.getMapEX()) / 2);
                 body.setY((farm.getMapSY() + farm.getMapEY()) / 2);
-                body.setBaryState(BaryInUGState.NEARLY_ALL);
+                body.setBurialState(BurialState.NEARLY_ALL);
                 SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
 
                 int bodyId = body.getUniqueID();
@@ -1708,7 +1708,7 @@ class TerrariumTest {
 
                 assertNotNull(restored);
                 assertNotNull(restoredFarm);
-                assertEquals(BaryInUGState.NEARLY_ALL, restored.getBaryState());
+                assertEquals(BurialState.NEARLY_ALL, restored.getBurialState());
                 assertTrue(restoredFarm.mapContains(restored.getX(), restored.getY()));
             } finally {
                 tempFile.delete();
@@ -1721,19 +1721,19 @@ class TerrariumTest {
             try {
                 Reimu body = new Reimu();
                 installSyntheticBodySprites(body, 100, 80);
-                body.setGodHandHoldPoint(80);
+                body.setGodHandHoldCount(80);
                 assertTrue(body.getSize() > body.getOriginSize(),
                         "fixture should observe the enlarged body before save");
                 SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
 
                 int bodyId = body.getUniqueID();
-                int expectedHoldPoint = body.getGodHandHoldPoint();
+                int expectedHoldCount = body.getGodHandHoldCount();
 
                 roundTripSaveLoad(tempFile);
 
                 Body restored = findBodyAcrossMaps(bodyId);
                 assertNotNull(restored);
-                assertEquals(expectedHoldPoint, restored.getGodHandHoldPoint());
+                assertEquals(expectedHoldCount, restored.getGodHandHoldCount());
                 assertTrue(restored.getSize() > restored.getOriginSize(),
                         "expanded body should still be larger than its origin size after load");
             } finally {
@@ -1756,7 +1756,7 @@ class TerrariumTest {
                 Reimu body = new Reimu();
                 body.setX((belt.getMapSX() + belt.getMapEX()) / 2);
                 body.setY((belt.getMapSY() + belt.getMapEY()) / 2);
-                body.setbOnDontMoveBeltconveyor(true);
+                body.setOnNonMovingConveyor(true);
                 SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
 
                 int bodyId = body.getUniqueID();
@@ -1772,7 +1772,7 @@ class TerrariumTest {
 
                 assertNotNull(restored);
                 assertNotNull(restoredBelt);
-                assertTrue(restored.isbOnDontMoveBeltconveyor());
+                assertTrue(restored.isOnNonMovingConveyor());
                 assertTrue(restoredBelt.mapContains(restored.getX(), restored.getY()));
             } finally {
                 tempFile.delete();
@@ -1881,8 +1881,8 @@ class TerrariumTest {
                 SuperEatingTimeEvent event = new SuperEatingTimeEvent(from, null, food, 10);
                 event.setState(SuperEatingTimeEvent.STATE.START);
                 event.setTick(19);
-                event.setFromWaitCount(11);
-                event.setLowestStep(4);
+                event.setWaitTicks(11);
+                event.setMinimumStep(4);
                 from.setCurrentEvent(event);
                 child.setCurrentEvent(event);
 
@@ -1905,11 +1905,11 @@ class TerrariumTest {
                 assertEquals(SuperEatingTimeEvent.STATE.START, fromEvent.getState());
                 assertEquals(SuperEatingTimeEvent.STATE.START, childEvent.getState());
                 assertEquals(19, fromEvent.getTick());
-                assertEquals(11, fromEvent.getFromWaitCount());
-                assertEquals(4, fromEvent.getLowestStep());
+                assertEquals(11, fromEvent.getWaitTicks());
+                assertEquals(4, fromEvent.getMinimumStep());
                 assertEquals(19, childEvent.getTick());
-                assertEquals(11, childEvent.getFromWaitCount());
-                assertEquals(4, childEvent.getLowestStep());
+                assertEquals(11, childEvent.getWaitTicks());
+                assertEquals(4, childEvent.getMinimumStep());
                 assertEquals(fromId, fromEvent.getFrom());
                 assertEquals(foodId, fromEvent.getTarget());
                 assertEquals(fromId, childEvent.getFrom());

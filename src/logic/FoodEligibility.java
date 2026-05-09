@@ -28,7 +28,7 @@ public final class FoodEligibility {
 		if (!prey.isDead()) {
 			return false;
 		}
-		if (prey.isbindStalk()) {
+		if (prey.hasBindStalk()) {
 			return false;
 		}
 		if (!eater.isVeryRude() && prey.hasOkazari()) {

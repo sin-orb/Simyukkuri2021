@@ -41,6 +41,14 @@ public class MeirinTest {
     }
 
     @Test
+    public void testMeirinIsServantOfPredatorMasters() {
+        Meirin meirin = new Meirin();
+        assertTrue(meirin.isServantOf(Remirya.type));
+        assertTrue(meirin.isServantOf(Fran.type));
+        assertFalse(meirin.isServantOf(Marisa.type));
+    }
+
+    @Test
     public void testMeirinParameterizedConstructor() {
         Meirin parent1 = new Meirin();
         Meirin parent2 = new Meirin();

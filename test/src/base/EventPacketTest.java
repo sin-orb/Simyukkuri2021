@@ -20,7 +20,7 @@ import src.base.EventPacket.EventPriority;
 import src.base.EventPacket.UpdateState;
 import src.draw.Translate;
 import src.enums.Attitude;
-import src.enums.BaryInUGState;
+import src.enums.BurialState;
 import src.enums.Happiness;
 import src.enums.PublicRank;
 import src.event.BreedEvent;
@@ -309,7 +309,7 @@ public class EventPacketTest {
             Body b = createBody();
             CutPenipeniEvent event = new CutPenipeniEvent(b, null, null, 10);
             event.update(b);
-            assertTrue(b.isbPenipeniCutted());
+            assertTrue(b.isPenipeniCutted());
             assertTrue(b.isLockmove());
         }
 
@@ -319,7 +319,7 @@ public class EventPacketTest {
             CutPenipeniEvent event = new CutPenipeniEvent(b, null, null, 10);
             b.setLockmove(true);
             event.end(b);
-            assertTrue(b.isbPenipeniCutted());
+            assertTrue(b.isPenipeniCutted());
             assertEquals(Happiness.VERY_SAD, b.getHappiness());
             assertFalse(b.isLockmove());
         }
@@ -450,7 +450,7 @@ public class EventPacketTest {
         public void testCheckEventResponse_falseWhenBaryStateNotNone() {
             Body from = createBody();
             Body b = createBody();
-            b.setBaryState(BaryInUGState.HALF);
+            b.setBurialState(BurialState.HALF);
             BreedEvent event = new BreedEvent(from, null, null, 2);
             assertFalse(event.checkEventResponse(b));
         }

@@ -11,7 +11,6 @@ import src.enums.Happiness;
 import src.enums.ImageCode;
 import src.system.MessagePool;
 import src.system.ResourceUtil;
-import src.util.YukkuriUtil;
 
 /***************************************************
  * ぺに切りの反応イベント
@@ -28,8 +27,8 @@ public class CutPenipeniEvent extends EventPacket {
 	/**
 	 * コンストラクタ.
 	 */
-	public CutPenipeniEvent(Body f, Body t, Obj tgt, int cnt) {
-		super(f, t, tgt, cnt);
+	public CutPenipeniEvent(Body fromBody, Body toBody, Obj targetObject, int count) {
+		super(fromBody, toBody, targetObject, count);
 	}
 
 	public CutPenipeniEvent() {
@@ -48,98 +47,98 @@ public class CutPenipeniEvent extends EventPacket {
 	// ここで各種チェックを行い、イベントへ参加するかを返す
 	// また、イベント優先度も必要に応じて設定できる
 	@Override
-	public boolean checkEventResponse(Body b) {
+	public boolean checkEventResponse(Body body) {
 
 		priority = EventPriority.HIGH;
-		Body p = YukkuriUtil.getBodyInstance(getFrom());
-		if (b == p)
+		Body fromBody = src.util.BodyRegistry.getBodyInstance(getFrom());
+		if (body == fromBody)
 			return true;
 		return false;
 	}
 
 	// イベント開始動作
 	@Override
-	public void start(Body b) {
+	public void start(Body body) {
 	}
 
 	// 毎フレーム処理
 	// UpdateState.ABORTを返すとイベント終了
 	@Override
-	public UpdateState update(Body b) {
-		if (b.isUnBirth()) {
-			b.wakeup();
+	public UpdateState update(Body body) {
+		if (body.isUnBirth()) {
+			body.wakeup();
 			// ぺにぺ二があれば切断
-			b.setbPenipeniCutted(true);
+			body.setPenipeniCutted(true);
 			// 興奮状態解除
-			b.setCalm();
+			body.setCalm();
 			// レイパーじゃなくなる
-			b.setRaper(false);
+			body.setRaper(false);
 			// ダメージをくらう
-			b.addDamage(50);
-			b.setForceFace(ImageCode.CUTPENIPENI.ordinal());
-			b.setHappiness(Happiness.VERY_SAD);
-			b.setCanTalk(true);
-			b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.Scream2), 50, true, true);
-			b.setCanTalk(false);
+			body.addDamage(50);
+			body.setForceFace(ImageCode.CUTPENIPENI.ordinal());
+			body.setHappiness(Happiness.VERY_SAD);
+			body.setCanTalk(true);
+			body.setBodyEventResMessage(GameMessages.getMessage(body, MessagePool.Action.Scream2), 50, true, true);
+			body.setCanTalk(false);
 			return UpdateState.FORCE_EXEC;
 		}
 
 		if (tick == 0) {
-			b.wakeup();
+			body.wakeup();
 			// ぺにぺ二があれば切断
-			b.setbPenipeniCutted(true);
+			body.setPenipeniCutted(true);
 			// 興奮状態解除
-			b.setCalm();
+			body.setCalm();
 			// レイパーじゃなくなる
-			b.setRaper(false);
+			body.setRaper(false);
 			// 固まる
-			b.stayPurupuru(40);
+			body.stayPurupuru(40);
 			// ダメージをくらう
-			b.addDamage(50);
-			b.setLockmove(true);
-			b.setForceFace(ImageCode.CUTPENIPENI.ordinal());
+			body.addDamage(50);
+			body.setLockmove(true);
+			body.setForceFace(ImageCode.CUTPENIPENI.ordinal());
 		} else if (tick == 20) {
 			// 驚く
-			b.setLockmove(false);
-			if (b.isNotNYD()) {
-				b.setForceFace(ImageCode.SURPRISE.ordinal());
+			body.setLockmove(false);
+			if (body.isNotNYD()) {
+				body.setForceFace(ImageCode.SURPRISE.ordinal());
 				if (GameRandom.nextInt(2) == 0)
-					b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.Scream2), 30, true, false);
+					body.setBodyEventResMessage(GameMessages.getMessage(body, MessagePool.Action.Scream2), 30, true, false);
 				else
-					b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.Surprise), 30, true, false);
+					body.setBodyEventResMessage(GameMessages.getMessage(body, MessagePool.Action.Surprise), 30, true, false);
 			}
 		} else if (tick == 40) {
 			// 反応する
-			if (b.isNotNYD()) {
-				b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.PenipeniCutting), 50, true, true);
-				b.setHappiness(Happiness.VERY_SAD);
-				b.setForceFace(ImageCode.CRYING.ordinal());
-				b.stay(30);
+			if (body.isNotNYD()) {
+				body.setBodyEventResMessage(GameMessages.getMessage(body, MessagePool.Action.PenipeniCutting), 50, true, true);
+				body.setHappiness(Happiness.VERY_SAD);
+				body.setForceFace(ImageCode.CRYING.ordinal());
+				body.stay(30);
 			}
 			// なつき度設定
-			b.addLovePlayer(-500);
-			b.stay(20);
+			body.addLovePlayer(-500);
+			body.stay(20);
 			// ゲスほどストレスを受ける
-			switch (b.getAttitude()) {
+			switch (body.getAttitude()) {
 				default:
 					break;
 				case VERY_NICE:
-					b.addStress(b.getStressLimit() / 10);
+					body.addStress(body.getStressLimit() / 10);
 					break;
 				case NICE:
-					b.addStress(b.getStressLimit() / 8);
+					body.addStress(body.getStressLimit() / 8);
 					break;
 				case AVERAGE:
-					b.addStress(b.getStressLimit() / 5);
+					body.addStress(body.getStressLimit() / 5);
 					break;
 				case SHITHEAD:
 				case SUPER_SHITHEAD:
-					b.addStress(b.getStressLimit() / 3);
+					body.addStress(body.getStressLimit() / 3);
 					break;
 			}
 		} else if (tick == 70) {
 			if (GameRandom.nextBoolean())
-				b.doYunnyaa(true);
+				body.doYunnyaa(true);
 			return UpdateState.FORCE_EXEC;
 		}
 		tick++;
@@ -149,17 +148,17 @@ public class CutPenipeniEvent extends EventPacket {
 	// イベント目標に到着した際に呼ばれる
 	// trueを返すとイベント終了
 	@Override
-	public boolean execute(Body b) {
+	public boolean execute(Body body) {
 		return true;
 	}
 
 	// イベント終了処理
 	@Override
-	public void end(Body b) {
-		b.setCalm();
-		b.setbPenipeniCutted(true);
-		b.setHappiness(Happiness.VERY_SAD);
-		b.setLockmove(false);
+	public void end(Body body) {
+		body.setCalm();
+		body.setPenipeniCutted(true);
+		body.setHappiness(Happiness.VERY_SAD);
+		body.setLockmove(false);
 	}
 
 	@Override

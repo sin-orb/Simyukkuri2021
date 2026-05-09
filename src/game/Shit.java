@@ -291,12 +291,12 @@ public class Shit extends Obj {
 					vz += 1;
 					z -= vz;
 					falldownDamage += vz;
-					if (!bFallingUnderGround) {
-						if (z <= nMostDepth) {
+					if (!isFallingUnderGround()) {
+						if (z <= mostDepth) {
 							if (falldownDamage > 10) {
 								crushShit();
 							}
-							z = nMostDepth;
+							z = mostDepth;
 							vx = 0;
 							vy = 0;
 							vz = 0;

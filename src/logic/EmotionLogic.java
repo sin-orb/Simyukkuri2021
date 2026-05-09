@@ -20,16 +20,16 @@ public class EmotionLogic {
 		// -------------------------------------------------
 		// 対象の状態判定
 		// 自分がゲスかどうか
-		boolean bIsRude = b.isRude();
+		boolean isRude = b.isRude();
 
 		// 自分との関係
-		EnumRelationMine eRelation = BodyLogic.checkMyRelation(b, bodyTarget);
+		EnumRelationMine relation = BodyLogic.checkMyRelation(b, bodyTarget);
 
 		// 自分の幸福度
-		Happiness eHappinessMine = b.getHappiness();
+		Happiness happinessMine = b.getHappiness();
 
 		// 相手の幸福度
-		Happiness eHappinessTarget = bodyTarget.getHappiness();
+		Happiness happinessTarget = bodyTarget.getHappiness();
 
 		boolean[] abEmote = new boolean[7];
 
@@ -41,20 +41,20 @@ public class EmotionLogic {
 		abEmote[5] = false; // うらやましい
 		abEmote[6] = false; // 心配
 
-		boolean bIsPainOther = bodyTarget.isFeelPain() || bodyTarget.isDamaged()
+		boolean isPainOther = bodyTarget.isFeelPain() || bodyTarget.isDamaged()
 				|| bodyTarget.getCriticalDamege() != null;
 		// 針が刺さっている、足焼き中、切断されている、ダメージをくらっている
 		// 感情判定
-		switch (eHappinessTarget) {
+		switch (happinessTarget) {
 			// --------------------------------------------------------
 			// 相手がとってもしあわせ
 			case VERY_HAPPY:
 				// 相手がしあわせ
 			case HAPPY:
-				switch (eHappinessMine) {
+				switch (happinessMine) {
 					case VERY_HAPPY:
 					case HAPPY:
-						switch (eRelation) {
+						switch (relation) {
 							case FATHER: // 父
 							case MOTHER: // 母
 							case PARTNAR: // つがい
@@ -75,7 +75,7 @@ public class EmotionLogic {
 						}
 						break;
 					case AVERAGE:
-						switch (eRelation) {
+						switch (relation) {
 							case FATHER: // 父
 							case MOTHER: // 母
 							case ELDERSISTER: // 姉
@@ -96,7 +96,7 @@ public class EmotionLogic {
 						}
 						break;
 					case SAD:
-						switch (eRelation) {
+						switch (relation) {
 							case FATHER: // 父
 							case MOTHER: // 母
 								// おちびちゃんとってもゆっくりしてるよ！いもうちょとってもゆっくりしてるのじぇ
@@ -119,7 +119,7 @@ public class EmotionLogic {
 						break;
 					case VERY_SAD:
 						// 自分がゲスではない
-						if (!bIsRude) {
+						if (!isRude) {
 							// まりさもゆっくりしたいんだぜ
 							abEmote[2] = true; // 哀
 							abEmote[5] = true; // うらやましい
@@ -144,10 +144,10 @@ public class EmotionLogic {
 				// --------------------------------------------------------
 				// 相手がとてもかなしい
 			case VERY_SAD:
-				switch (eHappinessMine) {
+				switch (happinessMine) {
 					case VERY_HAPPY:
 					case HAPPY:
-						switch (eRelation) {
+						switch (relation) {
 							case FATHER: // 父
 							case MOTHER: // 母
 							case PARTNAR: // つがい
@@ -160,14 +160,14 @@ public class EmotionLogic {
 								abEmote[6] = true; // 心配
 
 								// 痛みを伴う場合
-								if (bIsPainOther) {
+								if (isPainOther) {
 									// ゆんやーゆっくりできないーー！
 									abEmote[4] = true; // 恐怖
 								}
 								break;
 							default: // 他人
 								// 自分がゲス
-								if (bIsRude) {
+								if (isRude) {
 									// ゆっくりしていないゆっくりがいるよ！
 									abEmote[0] = true; // 喜
 									abEmote[3] = true; // 楽
@@ -176,7 +176,7 @@ public class EmotionLogic {
 						}
 						break;
 					case AVERAGE:
-						switch (eRelation) {
+						switch (relation) {
 							case FATHER: // 父
 							case MOTHER: // 母
 							case ELDERSISTER: // 姉
@@ -188,16 +188,16 @@ public class EmotionLogic {
 								abEmote[6] = true; // 心配
 
 								// 痛みを伴う場合
-								if (bIsPainOther) {
+								if (isPainOther) {
 									// ゆっくりにげるよ！
 									abEmote[4] = true; // 恐怖
 								}
 								break;
 							default: // 他人
 								// 自分がゲスではない
-								if (!bIsRude) {
+								if (!isRude) {
 									// 痛みを伴う場合
-									if (bIsPainOther) {
+									if (isPainOther) {
 										// ゆっくりにげるよ！
 										abEmote[4] = true; // 恐怖
 									}
@@ -212,7 +212,7 @@ public class EmotionLogic {
 						break;
 					case SAD:
 					case VERY_SAD:
-						switch (eRelation) {
+						switch (relation) {
 							case FATHER: // 父
 							case MOTHER: // 母
 							case PARTNAR: // つがい
@@ -225,7 +225,7 @@ public class EmotionLogic {
 								abEmote[6] = true; // 心配
 
 								// 痛みを伴う場合
-								if (bIsPainOther) {
+								if (isPainOther) {
 									// ゆんやーゆっくりできないーー！
 									abEmote[4] = true; // 恐怖
 								}
@@ -235,7 +235,7 @@ public class EmotionLogic {
 								abEmote[2] = true; // 哀
 
 								// 痛みを伴う場合
-								if (bIsPainOther) {
+								if (isPainOther) {
 									// ゆっくりにげるよ！
 									abEmote[4] = true; // 恐怖
 								}

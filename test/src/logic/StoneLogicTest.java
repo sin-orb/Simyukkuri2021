@@ -8,7 +8,7 @@ import src.SimYukkuri;
 import src.base.Body;
 import src.draw.World;
 import src.enums.AgeState;
-import src.enums.BaryInUGState;
+import src.enums.BurialState;
 import src.enums.CriticalDamegeType;
 import src.enums.Intelligence;
 import src.item.Stone;
@@ -82,7 +82,7 @@ public class StoneLogicTest {
         // ADULT body close to stone → bodyInjure() called
         // Use BaryState HALF to avoid mypane.addVomit NPE
         Body b = createAdultBody(100, 100);
-        b.setBaryState(BaryInUGState.HALF);
+        b.setBurialState(BurialState.HALF);
         // Stone at same position → distance=0, getStepDist()=16 > 0 → bodyInjure
         Stone stone = new Stone(100, 100, 0);
         assertDoesNotThrow(() -> StoneLogic.checkPubble(b));
@@ -118,7 +118,7 @@ public class StoneLogicTest {
         for (int i = 0; i < 3; i++) spr[i] = new Sprite(10, 10, Sprite.PIVOT_CENTER_BOTTOM);
         baby.setBodySpr(spr);
         baby.setX(100); baby.setY(100); baby.setZ(0);
-        baby.setBaryState(BaryInUGState.HALF); // NONE だと addVomit で mypane NPE になる
+        baby.setBurialState(BurialState.HALF); // NONE だと addVomit で mypane NPE になる
         SimYukkuri.world.getCurrentMap().getBody().put(baby.getUniqueID(), baby);
         new Stone(100, 100, 0); // auto-registers; distance=0 → stepDist(1)>0 → bodyCut
         assertDoesNotThrow(() -> StoneLogic.checkPubble(baby));

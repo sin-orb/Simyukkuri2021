@@ -8,7 +8,6 @@ import src.enums.FavItemType;
 import src.enums.PublicRank;
 import src.item.Barrier;
 import src.system.ResourceUtil;
-import src.util.YukkuriUtil;
 
 /***************************************************
  * お気に入りの情報を家族で共有するシンプルアクション
@@ -24,8 +23,8 @@ public class FavCopyEvent extends EventPacket {
 	/**
 	 * コンストラクタ.
 	 */
-	public FavCopyEvent(Body f, Body t, Obj tgt, int cnt) {
-		super(f, t, tgt, cnt);
+	public FavCopyEvent(Body fromBody, Body toBody, Obj targetObject, int count) {
+		super(fromBody, toBody, targetObject, count);
 	}
 
 	public FavCopyEvent() {
@@ -33,20 +32,20 @@ public class FavCopyEvent extends EventPacket {
 	}
 
 	@Override
-	public boolean simpleEventAction(Body b) {
-		Body from = YukkuriUtil.getBodyInstance(getFrom());
-		if (from == b || from == null)
+	public boolean simpleEventAction(Body body) {
+		Body sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
+		if (sourceBody == body || sourceBody == null)
 			return false;
 		// イベントの発信者が家族かチェック
-		if (b.isParent(from) || from.isParent(b) || b.isPartner(from)) {
-			if (!Barrier.acrossBarrier(b.getX(), b.getY(), from.getX(), from.getY(),
-					Barrier.MAP_BODY[b.getBodyAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
+		if (body.isParent(sourceBody) || sourceBody.isParent(body) || body.isPartner(sourceBody)) {
+			if (!Barrier.acrossBarrier(body.getX(), body.getY(), sourceBody.getX(), sourceBody.getY(),
+					Barrier.MAP_BODY[body.getBodyAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
 
 				// 片方だけがうんうん奴隷の場合はなにもしない
-				if (((b.getPublicRank() == PublicRank.UnunSlave) && (from.getPublicRank() == PublicRank.UnunSlave)) ||
-						((b.getPublicRank() != PublicRank.UnunSlave)
-								&& (from.getPublicRank() != PublicRank.UnunSlave))) {
-					b.setFavItem(FavItemType.BED, from.getFavItem(FavItemType.BED));
+				if (((body.getPublicRank() == PublicRank.UnunSlave) && (sourceBody.getPublicRank() == PublicRank.UnunSlave)) ||
+						((body.getPublicRank() != PublicRank.UnunSlave)
+								&& (sourceBody.getPublicRank() != PublicRank.UnunSlave))) {
+					body.setFavoriteItem(FavItemType.BED, sourceBody.getFavoriteItem(FavItemType.BED));
 				}
 			}
 		}
@@ -54,16 +53,16 @@ public class FavCopyEvent extends EventPacket {
 	}
 
 	@Override
-	public boolean checkEventResponse(Body b) {
+	public boolean checkEventResponse(Body body) {
 		return false;
 	}
 
 	@Override
-	public void start(Body b) {
+	public void start(Body body) {
 	}
 
 	@Override
-	public boolean execute(Body b) {
+	public boolean execute(Body body) {
 		return true;
 	}
 

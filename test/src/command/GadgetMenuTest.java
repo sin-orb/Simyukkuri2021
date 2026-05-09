@@ -23,9 +23,9 @@ public class GadgetMenuTest {
 
     @Test
     public void testActionTargetFlags() {
-        assertEquals(1, ActionTarget.IMMEDIATE.getFlag());
-        assertEquals(2, ActionTarget.BODY.getFlag());
-        assertEquals(4, ActionTarget.GADGET.getFlag());
+        assertEquals(1, ActionTarget.IMMEDIATE.getMask());
+        assertEquals(2, ActionTarget.BODY.getMask());
+        assertEquals(4, ActionTarget.GADGET.getMask());
     }
 
     @Test

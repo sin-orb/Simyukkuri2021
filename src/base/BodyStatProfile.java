@@ -8,29 +8,29 @@ public class BodyStatProfile implements java.io.Serializable {
 	private static final long serialVersionUID = -3459479387085400798L;
 
 	/** 一回の食事量 */
-	private int EATAMOUNTorg[] = { 100 * 6, 100 * 12, 100 * 24 };
+	private int eatAmountBase[] = { 100 * 6, 100 * 12, 100 * 24 };
 	/** 体重 */
-	private int WEIGHTorg[] = { 100, 300, 600 };
+	private int weightBase[] = { 100, 300, 600 };
 	/** 空腹限界 */
-	private int HUNGRYLIMITorg[] = { 100 * 24, 100 * 24 * 2, 100 * 24 * 4 };
+	private int hungryLimitBase[] = { 100 * 24, 100 * 24 * 2, 100 * 24 * 4 };
 	/** うんうん限界 */
-	private int SHITLIMITorg[] = { 100 * 12, 100 * 24, 100 * 24 };
+	private int shitLimitBase[] = { 100 * 12, 100 * 24, 100 * 24 };
 	/** ダメージ限界 */
-	private int DAMAGELIMITorg[] = { 100 * 24, 100 * 24 * 3, 100 * 24 * 7 };
+	private int damageLimitBase[] = { 100 * 24, 100 * 24 * 3, 100 * 24 * 7 };
 	/** ストレス限界 */
-	private int STRESSLIMITorg[] = { 100 * 24, 100 * 24 * 3, 100 * 24 * 7 };
+	private int stressLimitBase[] = { 100 * 24, 100 * 24 * 3, 100 * 24 * 7 };
 	/** 味覚レベル */
-	private int TANGLEVELorg[] = { 300, 600, 1000 };
+	private int tangLevelBase[] = { 300, 600, 1000 };
 	/** 足の速さ */
-	private int STEPorg[] = { 1, 2, 4 };
+	private int stepBase[] = { 1, 2, 4 };
 	/** 赤ゆ、子ゆ、成ゆの攻撃力 */
-	private int STRENGTHorg[] = { 500, 1000, 3000 };
+	private int strengthBase[] = { 500, 1000, 3000 };
 	/** 免疫力(左から順に赤ゆ、子ゆ、成ゆ、老ゆ) */
 	private int immunity[] = { 1, 2, 3, 0 };
 	/** ゲスポイントの下限 */
-	private int RudeLimit[] = { -100, -250 };
+	private int rudeLimit[] = { -100, -250 };
 	/** 善良限界 */
-	private int NiceLimit[] = { 100, 500 };
+	private int niceLimit[] = { 100, 500 };
 	/** 自主洗浄失敗確率 - 賢い [0]:赤ゆ [1]:子ゆ [2]:成ゆ */
 	private int[] cleaningFailProbWise = { 10, 5, 2 };
 	/** 自主洗浄失敗確率 - 普通 [0]:赤ゆ [1]:子ゆ [2]:成ゆ */
@@ -53,18 +53,18 @@ public class BodyStatProfile implements java.io.Serializable {
 		if (from == null) {
 			return;
 		}
-		EATAMOUNTorg = copyArray(from.EATAMOUNTorg);
-		WEIGHTorg = copyArray(from.WEIGHTorg);
-		HUNGRYLIMITorg = copyArray(from.HUNGRYLIMITorg);
-		SHITLIMITorg = copyArray(from.SHITLIMITorg);
-		DAMAGELIMITorg = copyArray(from.DAMAGELIMITorg);
-		STRESSLIMITorg = copyArray(from.STRESSLIMITorg);
-		TANGLEVELorg = copyArray(from.TANGLEVELorg);
-		STEPorg = copyArray(from.STEPorg);
-		STRENGTHorg = copyArray(from.STRENGTHorg);
+		eatAmountBase = copyArray(from.eatAmountBase);
+		weightBase = copyArray(from.weightBase);
+		hungryLimitBase = copyArray(from.hungryLimitBase);
+		shitLimitBase = copyArray(from.shitLimitBase);
+		damageLimitBase = copyArray(from.damageLimitBase);
+		stressLimitBase = copyArray(from.stressLimitBase);
+		tangLevelBase = copyArray(from.tangLevelBase);
+		stepBase = copyArray(from.stepBase);
+		strengthBase = copyArray(from.strengthBase);
 		immunity = copyArray(from.immunity);
-		RudeLimit = copyArray(from.RudeLimit);
-		NiceLimit = copyArray(from.NiceLimit);
+		rudeLimit = copyArray(from.rudeLimit);
+		niceLimit = copyArray(from.niceLimit);
 		cleaningFailProbWise = copyArray(from.cleaningFailProbWise);
 		cleaningFailProbAverage = copyArray(from.cleaningFailProbAverage);
 		cleaningFailProbFool = copyArray(from.cleaningFailProbFool);
@@ -85,76 +85,76 @@ public class BodyStatProfile implements java.io.Serializable {
 		return src == null ? null : src.clone();
 	}
 
-	public int[] getEATAMOUNTorg() {
-		return EATAMOUNTorg;
+	public int[] getEatAmountBase() {
+		return eatAmountBase;
 	}
 
-	public void setEATAMOUNTorg(int[] eATAMOUNTorg) {
-		EATAMOUNTorg = eATAMOUNTorg;
+	public void setEatAmountBase(int[] eatAmount) {
+		eatAmountBase = eatAmount;
 	}
 
-	public int[] getWEIGHTorg() {
-		return WEIGHTorg;
+	public int[] getWeightBase() {
+		return weightBase;
 	}
 
-	public void setWEIGHTorg(int[] wEIGHTorg) {
-		WEIGHTorg = wEIGHTorg;
+	public void setWeightBase(int[] weight) {
+		weightBase = weight;
 	}
 
-	public int[] getHUNGRYLIMITorg() {
-		return HUNGRYLIMITorg;
+	public int[] getHungryLimitBase() {
+		return hungryLimitBase;
 	}
 
-	public void setHUNGRYLIMITorg(int[] hUNGRYLIMITorg) {
-		HUNGRYLIMITorg = hUNGRYLIMITorg;
+	public void setHungryLimitBase(int[] hungryLimit) {
+		hungryLimitBase = hungryLimit;
 	}
 
-	public int[] getSHITLIMITorg() {
-		return SHITLIMITorg;
+	public int[] getShitLimitBase() {
+		return shitLimitBase;
 	}
 
-	public void setSHITLIMITorg(int[] sHITLIMITorg) {
-		SHITLIMITorg = sHITLIMITorg;
+	public void setShitLimitBase(int[] shitLimit) {
+		shitLimitBase = shitLimit;
 	}
 
-	public int[] getDAMAGELIMITorg() {
-		return DAMAGELIMITorg;
+	public int[] getDamageLimitBase() {
+		return damageLimitBase;
 	}
 
-	public void setDAMAGELIMITorg(int[] dAMAGELIMITorg) {
-		DAMAGELIMITorg = dAMAGELIMITorg;
+	public void setDamageLimitBase(int[] damageLimit) {
+		damageLimitBase = damageLimit;
 	}
 
-	public int[] getSTRESSLIMITorg() {
-		return STRESSLIMITorg;
+	public int[] getStressLimitBase() {
+		return stressLimitBase;
 	}
 
-	public void setSTRESSLIMITorg(int[] sTRESSLIMITorg) {
-		STRESSLIMITorg = sTRESSLIMITorg;
+	public void setStressLimitBase(int[] stressLimit) {
+		stressLimitBase = stressLimit;
 	}
 
-	public int[] getTANGLEVELorg() {
-		return TANGLEVELorg;
+	public int[] getTangLevelBase() {
+		return tangLevelBase;
 	}
 
-	public void setTANGLEVELorg(int[] tANGLEVELorg) {
-		TANGLEVELorg = tANGLEVELorg;
+	public void setTangLevelBase(int[] tangLevel) {
+		tangLevelBase = tangLevel;
 	}
 
-	public int[] getSTEPorg() {
-		return STEPorg;
+	public int[] getStepBase() {
+		return stepBase;
 	}
 
-	public void setSTEPorg(int[] sTEPorg) {
-		STEPorg = sTEPorg;
+	public void setStepBase(int[] step) {
+		stepBase = step;
 	}
 
-	public int[] getSTRENGTHorg() {
-		return STRENGTHorg;
+	public int[] getStrengthBase() {
+		return strengthBase;
 	}
 
-	public void setSTRENGTHorg(int[] sTRENGTHorg) {
-		STRENGTHorg = sTRENGTHorg;
+	public void setStrengthBase(int[] strength) {
+		strengthBase = strength;
 	}
 
 	public int[] getImmunity() {
@@ -166,19 +166,19 @@ public class BodyStatProfile implements java.io.Serializable {
 	}
 
 	public int[] getRudeLimit() {
-		return RudeLimit;
+		return rudeLimit;
 	}
 
 	public void setRudeLimit(int[] rudeLimit) {
-		RudeLimit = rudeLimit;
+		this.rudeLimit = rudeLimit;
 	}
 
 	public int[] getNiceLimit() {
-		return NiceLimit;
+		return niceLimit;
 	}
 
 	public void setNiceLimit(int[] niceLimit) {
-		NiceLimit = niceLimit;
+		this.niceLimit = niceLimit;
 	}
 
 	public int[] getCleaningFailProbWise() {

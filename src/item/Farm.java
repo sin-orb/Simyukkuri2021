@@ -19,7 +19,7 @@ import src.command.GadgetAction;
 import src.draw.ModLoader;
 import src.draw.Point4y;
 import src.draw.Translate;
-import src.enums.BaryInUGState;
+import src.enums.BurialState;
 import src.game.Shit;
 import src.game.Stalk;
 import src.game.Vomit;
@@ -42,8 +42,8 @@ public class Farm extends FieldShapeBase {
 	private static BufferedImage images;
 	private static TexturePaint texture;
 	private int amount = 1000;
-	private int[] anPointX = new int[4];
-	private int[] anPointY = new int[4];
+	private int[] polygonX = new int[4];
+	private int[] polygonY = new int[4];
 
 	/** 画像ロード */
 	public static void loadImages(ClassLoader loader, ImageObserver io) throws IOException {
@@ -59,8 +59,8 @@ public class Farm extends FieldShapeBase {
 	@Override
 	public void executeShapePopup(ShapeMenu menu) {
 
-		List<Farm> list = GameWorld.get().getCurrentMap().getFarm();
-		int pos;
+		List<Farm> farmList = GameWorld.get().getCurrentMap().getFarm();
+		int currentIndex;
 
 		switch (menu) {
 			case SETUP:
@@ -68,26 +68,26 @@ public class Farm extends FieldShapeBase {
 			case HERVEST:
 				break;
 			case TOP:
-				list.remove(this);
-				list.add(0, this);
+				farmList.remove(this);
+				farmList.add(0, this);
 				break;
 			case UP:
-				pos = list.indexOf(this);
-				if (pos > 0) {
-					list.remove(this);
-					list.add(pos - 1, this);
+				currentIndex = farmList.indexOf(this);
+				if (currentIndex > 0) {
+					farmList.remove(this);
+					farmList.add(currentIndex - 1, this);
 				}
 				break;
 			case DOWN:
-				pos = list.indexOf(this);
-				if (pos < (list.size() - 1)) {
-					list.remove(this);
-					list.add(pos + 1, this);
+				currentIndex = farmList.indexOf(this);
+				if (currentIndex < (farmList.size() - 1)) {
+					farmList.remove(this);
+					farmList.add(currentIndex + 1, this);
 				}
 				break;
 			case BOTTOM:
-				list.remove(this);
-				list.add(this);
+				farmList.remove(this);
+				farmList.add(this);
 				break;
 		}
 	}
@@ -106,18 +106,18 @@ public class Farm extends FieldShapeBase {
 
 	/** プレビューラインの描画 */
 	public static void drawPreview(Graphics2D g2, int sx, int sy, int ex, int ey) {
-		int[] anPointX = new int[4];
-		int[] anPointY = new int[4];
-		Translate.getPolygonPoint(sx, sy, ex, ey, anPointX, anPointY);
+		int[] previewPolygonX = new int[4];
+		int[] previewPolygonY = new int[4];
+		Translate.getPolygonPoint(sx, sy, ex, ey, previewPolygonX, previewPolygonY);
 
-		g2.drawPolygon(anPointX, anPointY, 4);
+		g2.drawPolygon(previewPolygonX, previewPolygonY, 4);
 	}
 
 	@Override
 	public void drawShape(Graphics2D g2) {
-		Translate.getPolygonPoint(fieldSX, fieldSY, fieldEX, fieldEY, anPointX, anPointY);
+		Translate.getPolygonPoint(fieldSX, fieldSY, fieldEX, fieldEY, polygonX, polygonY);
 		g2.setPaint(texture);
-		g2.fillPolygon(anPointX, anPointY, 4);
+		g2.fillPolygon(polygonX, polygonY, 4);
 	}
 
 	/**
@@ -129,25 +129,25 @@ public class Farm extends FieldShapeBase {
 	 * @param fey 設置終点のY座標
 	 */
 	public Farm(int fsx, int fsy, int fex, int fey) {
-		Point4y pS = Translate.getFieldLimitForMap(fsx, fsy);
-		Point4y pE = Translate.getFieldLimitForMap(fex, fey);
-		fieldSX = pS.getX();
-		fieldSY = pS.getY();
-		fieldEX = pE.getX();
-		fieldEY = pE.getY();
+		Point4y startPoint = Translate.getFieldLimitForMap(fsx, fsy);
+		Point4y endPoint = Translate.getFieldLimitForMap(fex, fey);
+		fieldSX = startPoint.getX();
+		fieldSY = startPoint.getY();
+		fieldEX = endPoint.getX();
+		fieldEY = endPoint.getY();
 
-		int[] anPointBaseX = new int[2];
-		int[] anPointBaseY = new int[2];
-		Translate.getMovedPoint(fieldSX, fieldSY, fieldEX, fieldEY, 0, 0, 0, 0, anPointBaseX, anPointBaseY);
+		int[] basePolygonX = new int[2];
+		int[] basePolygonY = new int[2];
+		Translate.getMovedPoint(fieldSX, fieldSY, fieldEX, fieldEY, 0, 0, 0, 0, basePolygonX, basePolygonY);
 
 		// フィールド座標が渡ってくるのでマップ座標も計算しておく
-		Point4y pos = Translate.invertLimit(anPointBaseX[0], anPointBaseY[0]);
-		mapSX = Math.max(0, Math.min(pos.getX(), Translate.getMapW()));
-		mapSY = Math.max(0, Math.min(pos.getY(), Translate.getMapH()));
+		Point4y mapStart = Translate.invertLimit(basePolygonX[0], basePolygonY[0]);
+		mapSX = Math.max(0, Math.min(mapStart.getX(), Translate.getMapW()));
+		mapSY = Math.max(0, Math.min(mapStart.getY(), Translate.getMapH()));
 
-		pos = Translate.invertLimit(anPointBaseX[1], anPointBaseY[1]);
-		mapEX = Math.max(0, Math.min(pos.getX(), Translate.getMapW()));
-		mapEY = Math.max(0, Math.min(pos.getY(), Translate.getMapH()));
+		Point4y mapEnd = Translate.invertLimit(basePolygonX[1], basePolygonY[1]);
+		mapEX = Math.max(0, Math.min(mapEnd.getX(), Translate.getMapW()));
+		mapEY = Math.max(0, Math.min(mapEnd.getY(), Translate.getMapH()));
 
 		// 規定サイズと位置へ合わせる
 		if ((mapEX - mapSX) < MIN_SIZE)
@@ -188,25 +188,25 @@ public class Farm extends FieldShapeBase {
 	/** フィールド座標にあるシェイプ取得 */
 	public static Farm getFarm(int fx, int fy) {
 
-		for (Farm bc : GameWorld.get().getCurrentMap().getFarm()) {
-			if (bc.fieldSX <= fx && fx <= bc.fieldEX
-					&& bc.fieldSY <= fy && fy <= bc.fieldEY) {
-				return bc;
+		for (Farm targetFarm : GameWorld.get().getCurrentMap().getFarm()) {
+			if (targetFarm.fieldSX <= fx && fx <= targetFarm.fieldEX
+					&& targetFarm.fieldSY <= fy && fy <= targetFarm.fieldEY) {
+				return targetFarm;
 			}
 		}
 		return null;
 	}
 
 	/** 削除 */
-	public static void deleteFarm(Farm b) {
-		MapPlaceData.setFiledFlag(GameWorld.get().getCurrentMap().getFieldMap(), b.mapSX, b.mapSY, b.mapW, b.mapH,
+	public static void deleteFarm(Farm farm) {
+		MapPlaceData.setFiledFlag(GameWorld.get().getCurrentMap().getFieldMap(), farm.mapSX, farm.mapSY, farm.mapW, farm.mapH,
 				false,
 				FIELD_FARM);
-		GameWorld.get().getCurrentMap().getFarm().remove(b);
+		GameWorld.get().getCurrentMap().getFarm().remove(farm);
 		// 重なってた部分の復元
-		for (Farm bc : GameWorld.get().getCurrentMap().getFarm()) {
-			MapPlaceData.setFiledFlag(GameWorld.get().getCurrentMap().getFieldMap(), bc.mapSX, bc.mapSY, bc.mapW,
-					bc.mapH,
+		for (Farm targetFarm : GameWorld.get().getCurrentMap().getFarm()) {
+			MapPlaceData.setFiledFlag(GameWorld.get().getCurrentMap().getFieldMap(), targetFarm.mapSX, targetFarm.mapSY, targetFarm.mapW,
+					targetFarm.mapH,
 					true,
 					FIELD_FARM);
 		}
@@ -217,21 +217,22 @@ public class Farm extends FieldShapeBase {
 	 * 
 	 * @param inX      ある点のX座標
 	 * @param inY      ある点Y座標
-	 * @param bIsField 渡された座標がフィールド座標かどうか
+	 * @param isField 渡された座標がフィールド座標かどうか
 	 */
-	public boolean checkContain(int inX, int inY, boolean bIsField) {
-		int nX = inX;
-		int nY = inY;
-		if (bIsField) {
+	public boolean checkContain(int inX, int inY, boolean isField) {
+		int xCoord = inX;
+		int yCoord = inY;
+		if (isField) {
 			Point4y pos = Translate.invertLimit(inX, inY);
-			nX = pos.getX();
-			nY = pos.getY();
+			xCoord = pos.getX();
+			yCoord = pos.getY();
 		}
 
-		Point4y posFirst = Translate.invertLimit(anPointX[0], anPointY[0]);
-		Point4y posSecond = Translate.invertLimit(anPointX[2], anPointY[2]);
+		Point4y posFirst = Translate.invertLimit(polygonX[0], polygonY[0]);
+		Point4y posSecond = Translate.invertLimit(polygonX[2], polygonY[2]);
 		if (posFirst != null && posSecond != null) {
-			if (posFirst.getX() <= nX && nX <= posSecond.getX() && posFirst.getY() <= nY && nY <= posSecond.getY()) {
+			if (posFirst.getX() <= xCoord && xCoord <= posSecond.getX() && posFirst.getY() <= yCoord
+					&& yCoord <= posSecond.getY()) {
 				return true;
 			}
 		}
@@ -261,20 +262,19 @@ public class Farm extends FieldShapeBase {
 			return 0;
 		}
 		// 空中は無視
-		int nZ = o.getZ();
+		int zCoord = o.getZ();
 		if (o instanceof Body) {
-			Body b = (Body) o;
-			// int nH = b.getCollisionY();
-			if (0 < nZ) {
-				if (b.getBaryState() != BaryInUGState.NONE) {
+			Body body = (Body) o;
+			if (0 < zCoord) {
+				if (body.getBurialState() != BurialState.NONE) {
 					o.setMostDepth(0);
-					b.setLockmove(false);
-					b.setBaryState(BaryInUGState.NONE);
+					body.setLockmove(false);
+					body.setBurialState(BurialState.NONE);
 					return 1;
 				}
 			}
 		} else {
-			if (0 < nZ) {
+			if (0 < zCoord) {
 				if (o.getMostDepth() != 0) {
 					o.setMostDepth(0);
 				}
@@ -310,35 +310,35 @@ public class Farm extends FieldShapeBase {
 			return;
 		}
 
-		int nTempAmount = 100;
+		int fertilizerAmount = 100;
 		if (o instanceof Shit) {
-			Shit s = (Shit) o;
-			amount += nTempAmount;
-			s.eatShit(nTempAmount);
+			Shit shit = (Shit) o;
+			amount += fertilizerAmount;
+			shit.eatShit(fertilizerAmount);
 		}
 
 		if (o instanceof Vomit) {
-			Vomit v = (Vomit) o;
-			amount += nTempAmount;
-			v.eatVomit(nTempAmount);
+			Vomit vomit = (Vomit) o;
+			amount += fertilizerAmount;
+			vomit.eatVomit(fertilizerAmount);
 		}
 
 		if (o instanceof Body) {
-			Body b = (Body) o;
-			if (b.isDead()) {
-				amount += nTempAmount;
-				b.eatBody(nTempAmount);
+			Body body = (Body) o;
+			if (body.isDead()) {
+				amount += fertilizerAmount;
+				body.eatBody(fertilizerAmount);
 				// 潰れてたり溶けてたらもう1回
-				if (b.isCrushed() || b.isMelt()) {
-					amount += nTempAmount;
-					b.eatBody(nTempAmount);
+				if (body.isCrushed() || body.isMelt()) {
+					amount += fertilizerAmount;
+					body.eatBody(fertilizerAmount);
 				}
 			}
 
-			int nShit = b.getShit();
+			int bodyShit = body.getShit();
 			// 体内のうんうんも吸う
-			if (o.getZ() < 0 && nTempAmount < nShit) {
-				b.setShit(nShit - nTempAmount, false);
+			if (o.getZ() < 0 && fertilizerAmount < bodyShit) {
+				body.setShit(bodyShit - fertilizerAmount, false);
 			}
 		}
 	}
@@ -348,53 +348,53 @@ public class Farm extends FieldShapeBase {
 		if (o == null) {
 			return;
 		}
-		int nTempAmount = 100;
+		int fertilizerAmount = 100;
 		if (o instanceof Body) {
-			Body b = (Body) o;
-			if (b.isDead() || b.isRemoved()) {
+			Body body = (Body) o;
+			if (body.isDead() || body.isRemoved()) {
 				return;
 			}
 
 			// 土にかなり埋まってたら茎がはえる
-			if (b.getBaryState() == BaryInUGState.NEARLY_ALL ||
-					b.getBaryState() == BaryInUGState.ALL) {
+			if (body.getBurialState() == BurialState.NEARLY_ALL ||
+					body.getBurialState() == BurialState.ALL) {
 				// 茎が生えていたら救済モード(10%回復)
-				if (b.isHasStalk() && nTempAmount <= amount) {
-					if (b.isSoHungry()) {
-						amount -= nTempAmount;
-						b.addHungry(b.getHungryLimit() / 10);
+				if (body.isHasStalk() && fertilizerAmount <= amount) {
+					if (body.isSoHungry()) {
+						amount -= fertilizerAmount;
+						body.addHungry(body.getHungryLimit() / 10);
 					}
 
-					if (b.isDamaged()) {
-						amount -= nTempAmount;
-						b.addDamage(-b.getDamageLimit() / 10);
+					if (body.isDamaged()) {
+						amount -= fertilizerAmount;
+						body.addDamage(-body.getDamageLimit() / 10);
 					}
 				}
 
-				if (!b.isHasStalk() && 1000 < amount) {
-					Stalk s = (Stalk) GadgetAction.putObjEX(Stalk.class, b.getX(), b.getY(),
-							b.getDirection().ordinal());
-					GameWorld.get().getCurrentMap().getStalk().put(s.objId, s);
-					if (b.getStalks() != null) {
-						b.getStalks().add(s);
-						s.setPlantYukkuri(b);
-						b.setHasStalk(true);
-						amount -= 200;
-					}
-				} else {
-					// 余裕がありそうならランダムで茎を生やす
-					if (3000 < amount && !b.isDamaged()) {
-						if (GameRandom.nextInt(100) == 0) {
-							Stalk s = (Stalk) GadgetAction.putObjEX(Stalk.class, b.getX(), b.getY(),
-									b.getDirection().ordinal());
-							GameWorld.get().getCurrentMap().getStalk().put(s.objId, s);
-							if (b.getStalks() != null) {
-								b.getStalks().add(s);
-								s.setPlantYukkuri(b);
-								b.setHasStalk(true);
-							}
+					if (!body.isHasStalk() && 1000 < amount) {
+						Stalk stalk = (Stalk) GadgetAction.putObjEX(Stalk.class, body.getX(), body.getY(),
+								body.getDirection().ordinal());
+						GameWorld.get().getCurrentMap().getStalk().put(stalk.objId, stalk);
+						if (body.getStalks() != null) {
+							body.getStalks().add(stalk);
+							stalk.setPlantYukkuri(body);
+							body.setHasStalk(true);
 							amount -= 200;
 						}
+					} else {
+						// 余裕がありそうならランダムで茎を生やす
+						if (3000 < amount && !body.isDamaged()) {
+							if (GameRandom.nextInt(100) == 0) {
+								Stalk stalk = (Stalk) GadgetAction.putObjEX(Stalk.class, body.getX(), body.getY(),
+										body.getDirection().ordinal());
+								GameWorld.get().getCurrentMap().getStalk().put(stalk.objId, stalk);
+								if (body.getStalks() != null) {
+									body.getStalks().add(stalk);
+									stalk.setPlantYukkuri(body);
+									body.setHasStalk(true);
+								}
+								amount -= 200;
+							}
 					}
 				}
 			}
@@ -409,20 +409,20 @@ public class Farm extends FieldShapeBase {
 		this.amount = amount;
 	}
 
-	public int[] getAnPointX() {
-		return anPointX;
+	public int[] getPolygonX() {
+		return polygonX;
 	}
 
-	public void setAnPointX(int[] anPointX) {
-		this.anPointX = anPointX;
+	public void setPolygonX(int[] polygonX) {
+		this.polygonX = polygonX;
 	}
 
-	public int[] getAnPointY() {
-		return anPointY;
+	public int[] getPolygonY() {
+		return polygonY;
 	}
 
-	public void setAnPointY(int[] anPointY) {
-		this.anPointY = anPointY;
+	public void setPolygonY(int[] polygonY) {
+		this.polygonY = polygonY;
 	}
 
 }

@@ -76,7 +76,7 @@ class KillPredeatorEventTest {
     @Test
     void testCheckEventResponse_NYD() {
         Body b = createBody();
-        b.seteCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
+        b.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
         KillPredeatorEvent event = new KillPredeatorEvent();
         // NYD body: canEventResponse() may return false → return true(skip)
         // OR if canEventResponse() passes → isNYD() → return false
@@ -140,7 +140,7 @@ class KillPredeatorEventTest {
     @Test
     void testStart_NYDBody_returnsEarly() {
         Body b = createBody();
-        b.seteCoreAnkoState(CoreAnkoState.NonYukkuriDisease); // isNYD() returns true
+        b.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease); // isNYD() returns true
         KillPredeatorEvent event = new KillPredeatorEvent();
         assertDoesNotThrow(() -> event.start(b));
     }

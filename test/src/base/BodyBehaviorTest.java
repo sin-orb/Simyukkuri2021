@@ -99,8 +99,8 @@ public class BodyBehaviorTest {
     @Test
     public void testCheckSick_Terminal() throws Exception {
         // Reset message constraints
-        body.setMessageCount(0);
-        Field fDisc = BodyAttributes.class.getDeclaredField("messageDiscipline");
+        body.setMessageTicks(0);
+        Field fDisc = BodyAttributes.class.getDeclaredField("speechDiscipline");
         fDisc.setAccessible(true);
         fDisc.set(body, 0);
 
@@ -113,7 +113,7 @@ public class BodyBehaviorTest {
 
         assertTrue(body.getStress() >= 100);
 
-        Field fBuf = BodyAttributes.class.getDeclaredField("messageBuf");
+        Field fBuf = BodyAttributes.class.getDeclaredField("messageBuffer");
         fBuf.setAccessible(true);
         String msg = (String) fBuf.get(body);
         // MessagePool might return "NO ACTION [...]" or "NO MESSAGE FILE" if not loaded

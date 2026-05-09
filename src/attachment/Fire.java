@@ -20,7 +20,6 @@ import src.enums.HairState;
 import src.enums.Happiness;
 import src.system.MessagePool;
 import src.system.ResourceUtil;
-import src.util.YukkuriUtil;
 
 
 /****************************************
@@ -91,14 +90,14 @@ public class Fire extends Attachment {
 
 	@Override
 	public BufferedImage getImage(Body b) {
-		Body pa = YukkuriUtil.getBodyInstance(parent);
+		Body pa = src.util.BodyRegistry.getBodyInstance(parent);
 		if (pa == null) return null; 
 		return images[pa.getBodyAgeState().ordinal()][animeFrame];
 	}
 
 	@Override
 	protected Event update() {
-		Body pa = YukkuriUtil.getBodyInstance(parent);
+		Body pa = src.util.BodyRegistry.getBodyInstance(parent);
 		if (pa == null) return Event.DONOTHING;
 		// 生きてたらセリフとダメージ加算
 		if(!pa.isDead()) {
@@ -132,7 +131,7 @@ public class Fire extends Attachment {
 		if(burnPeriod > (pa.getDamageLimit() / 3) && pa.hasOkazari()) {
 			pa.takeOkazari(false);
 		}
-		else if(burnPeriod > (pa.getDamageLimit()*2 / 3) && pa.geteHairState()!=HairState.BALDHEAD){
+		else if(burnPeriod > (pa.getDamageLimit()*2 / 3) && pa.getHairState()!=HairState.BALDHEAD){
 			pa.pickHair();
 
 		}
@@ -147,7 +146,7 @@ public class Fire extends Attachment {
 
 		// 実ゆの場合、親が反応する
 		if(GameRandom.nextInt(3) == 0){
-			Body bodyMother = YukkuriUtil.getBodyInstance(pa.getBindStalkMotherCanNotice());
+			Body bodyMother = src.util.BodyRegistry.getBodyInstance(pa.getBindStalkMotherCanNotice());
 			if ( bodyMother != null ) {
 				if( bodyMother.isNotNYD() ){
 					bodyMother.setHappiness(Happiness.VERY_SAD);
@@ -161,7 +160,7 @@ public class Fire extends Attachment {
 
 	@Override
 	public void resetBoundary(){
-		Body pa = YukkuriUtil.getBodyInstance(parent);
+		Body pa = src.util.BodyRegistry.getBodyInstance(parent);
 		if (pa == null) return;
 		if (pivX == null || pivY == null || imgW == null || imgH == null) return;
 		int idx = pa.getBodyAgeState().ordinal();
@@ -181,7 +180,7 @@ public class Fire extends Attachment {
 	public Fire(Body body) {
 		super(body);
 		setAttachProperty(property, POS_KEY);
-		Body pa = YukkuriUtil.getBodyInstance(parent);
+		Body pa = src.util.BodyRegistry.getBodyInstance(parent);
 		if (pa != null && pivX != null && pivY != null && imgW != null && imgH != null) {
 			int idx = pa.getBodyAgeState().ordinal();
 			if (idx >= 0 && idx < pivX.length && idx < pivY.length && idx < imgW.length && idx < imgH.length) {

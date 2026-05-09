@@ -31,7 +31,7 @@ public class Cash {
 	 */
 	public static long buyYukkuri(Body body) {
 		int val = 0;
-		val = body.getYcost();
+		val = body.getCost();
 		switch(body.getBodyAgeState()) {
 			case BABY:
 				val /= 3;

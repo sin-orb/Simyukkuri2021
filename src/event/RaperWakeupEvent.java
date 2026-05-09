@@ -7,7 +7,6 @@ import src.base.Obj;
 import src.item.Barrier;
 import src.logic.EventLogic;
 import src.system.ResourceUtil;
-import src.util.YukkuriUtil;
 
 /***************************************************
  * レイパー発情通知イベント
@@ -32,53 +31,53 @@ public class RaperWakeupEvent extends EventPacket {
 	}
 
 	@Override
-	public boolean simpleEventAction(Body b) {
+	public boolean simpleEventAction(Body body) {
 		// 自分自身はスキップ、またはレイパーが既に消えていればスキップ
-		Body from = YukkuriUtil.getBodyInstance(getFrom());
-		if (from == null || b == from)
+		Body sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
+		if (sourceBody == null || body == sourceBody)
 			return false;
 		// 死体、睡眠、皮なし、目無しはスキップ
-		if (!b.canEventResponse())
+		if (!body.canEventResponse())
 			return true;
 
 		// 非ゆっくり症、針刺し状態のはスキップ
-		if (b.isNYD() || b.isNeedled()) {
+		if (body.isNYD() || body.isNeedled()) {
 			return false;
 		}
 
 		// 相手との間に壁があればスキップ
-		if (Barrier.acrossBarrier(b.getX(), b.getY(), from.getX(), from.getY(),
-				Barrier.MAP_BODY[b.getBodyAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
+		if (Barrier.acrossBarrier(body.getX(), body.getY(), sourceBody.getX(), sourceBody.getY(),
+				Barrier.MAP_BODY[body.getBodyAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
 			return false;
 		}
 
 		// 自分もレイパーなら連鎖して発情
-		if (b.isRaper()) {
-			b.forceToRaperExcite(true);
+		if (body.isRaper()) {
+			body.forceToRaperExcite(true);
 			return true;
 		}
 
 		// 一般人の反応
 		// 固体ごとに異なる行動をするため新しいイベントのインスタンスを作成して固体イベントに登録
-		EventLogic.addBodyEvent(b, new RaperReactionEvent(from, null, null, 1), null, null);
+		EventLogic.addBodyEvent(body, new RaperReactionEvent(sourceBody, null, null, 1), null, null);
 		return true;
 	}
 
 	// 参加チェック
 	@Override
-	public boolean checkEventResponse(Body b) {
+	public boolean checkEventResponse(Body body) {
 		return false;
 	}
 
 	// イベント開始動作
 	@Override
-	public void start(Body b) {
+	public void start(Body body) {
 	}
 
 	// イベント目標に到着した際に呼ばれる
 	// trueを返すとイベント終了
 	@Override
-	public boolean execute(Body b) {
+	public boolean execute(Body body) {
 		return true;
 	}
 

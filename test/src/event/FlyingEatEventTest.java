@@ -129,10 +129,10 @@ class FlyingEatEventTest {
     void testEnd_setsLinkParentToMinusOne() {
         Body from = createBody();
         Body to = createBody();
-        to.setLinkParent(from.objId);
+        to.setParentLinkId(from.objId);
         FlyingEatEvent event = new FlyingEatEvent(from, to, null, 1);
         event.end(from);
-        assertEquals(-1, to.getLinkParent());
+        assertEquals(-1, to.getParentLinkId());
     }
 
     // --- start: to != null ---
@@ -211,7 +211,7 @@ class FlyingEatEventTest {
         Body to = createBody();
         to.setDead(true);
         to.setCrushed(true);
-        to.setBodyAmount(10000);
+        to.setAnkoAmount(10000);
         from.setAttitude(src.enums.Attitude.SHITHEAD);
         FlyingEatEvent event = new FlyingEatEvent(from, to, null, 1);
         event.tick = 19;
@@ -224,7 +224,7 @@ class FlyingEatEventTest {
         Body from = createBody();
         Body to = createBody();
         to.setDead(true);
-        to.setBodyAmount(10000);
+        to.setAnkoAmount(10000);
         from.setAttitude(src.enums.Attitude.SHITHEAD); // isRude() = true
         FlyingEatEvent event = new FlyingEatEvent(from, to, null, 1);
         event.tick = 19;
@@ -237,19 +237,19 @@ class FlyingEatEventTest {
         Body from = createBody();
         Body to = createBody();
         to.setDead(true);
-        to.setBodyAmount(10000);
+        to.setAnkoAmount(10000);
         FlyingEatEvent event = new FlyingEatEvent(from, to, null, 1);
         event.tick = 19;
         assertTrue(event.execute(from));
     }
 
-    // --- execute: tick=19→20, alive to, eatAmount=0+bodyAmount=10000 → no bodyCut, to.isNotNYD → false ---
+    // --- execute: tick=19→20, alive to, eatAmount=0+ankoAmount=10000 → no bodyCut, to.isNotNYD → false ---
     @Test
     void testExecute_tick19_zeroEat_toNotNYD_returnsFalse() {
         Body from = createBody();
         Body to = createBody();
-        from.setEATAMOUNTorg(new int[]{0, 0, 0}); // eatAmount=0, no bodyCut
-        to.setBodyAmount(10000); // avoid bodyCut NPE when alive
+        from.setEatAmountBase(new int[]{0, 0, 0}); // eatAmount=0, no bodyCut
+        to.setAnkoAmount(10000); // avoid bodyCut NPE when alive
         FlyingEatEvent event = new FlyingEatEvent(from, to, null, 1);
         event.tick = 19;
         assertFalse(event.execute(from));
@@ -260,8 +260,8 @@ class FlyingEatEventTest {
     void testExecute_tick19_zeroEat_bFull_returnsTrue() {
         Body from = createBody();
         Body to = createBody();
-        from.setEATAMOUNTorg(new int[]{0, 0, 0}); // eatAmount=0, no bodyCut
-        to.setBodyAmount(10000);
+        from.setEatAmountBase(new int[]{0, 0, 0}); // eatAmount=0, no bodyCut
+        to.setAnkoAmount(10000);
         from.setHungry(99999); // isFull() regardless of HUNGRYLIMIT
         FlyingEatEvent event = new FlyingEatEvent(from, to, null, 1);
         event.tick = 19;
@@ -275,9 +275,9 @@ class FlyingEatEventTest {
         void testScenario_AlivePreyBecomesVerySadAndPainFacedAtEatTick() {
             Body from = createBody();
             Body to = createBody();
-            from.setEATAMOUNTorg(new int[] { 0, 0, 0 });
+            from.setEatAmountBase(new int[] { 0, 0, 0 });
             from.setHungry(0);
-            to.setBodyAmount(10000);
+            to.setAnkoAmount(10000);
             to.setHappiness(Happiness.HAPPY);
             to.setForceFace(-1);
 

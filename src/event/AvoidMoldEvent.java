@@ -16,7 +16,6 @@ import src.item.Barrier;
 import src.logic.BodyLogic;
 import src.system.MessagePool;
 import src.system.ResourceUtil;
-import src.util.YukkuriUtil;
 
 /***************************************************
  * かびたゆっくりへの反応イベント
@@ -46,21 +45,21 @@ public class AvoidMoldEvent extends EventPacket {
 	 * また、イベント優先度も必要に応じて設定できる
 	 */
 	@Override
-	public boolean checkEventResponse(Body b) {
+	public boolean checkEventResponse(Body body) {
 		priority = EventPriority.MIDDLE;
 		// うんうん奴隷は参加しない
-		if (b.getPublicRank() == PublicRank.UnunSlave)
+		if (body.getPublicRank() == PublicRank.UnunSlave)
 			return false;
 		// 足りないゆは参加しない
-		if (b.isIdiot())
+		if (body.isIdiot())
 			return false;
 		// 非ゆっくり症は参加しない
-		if (!b.canEventResponse())
+		if (!body.canEventResponse())
 			return false;
 		// 相手との間に壁があればスキップ
-		Body to = YukkuriUtil.getBodyInstance(getTo());
-		if (to != null && Barrier.acrossBarrier(b.getX(), b.getY(), to.getX(), to.getY(),
-				Barrier.MAP_BODY[b.getBodyAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
+		Body targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
+		if (targetBody != null && Barrier.acrossBarrier(body.getX(), body.getY(), targetBody.getX(), targetBody.getY(),
+				Barrier.MAP_BODY[body.getBodyAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
 			return false;
 		}
 		return true;
@@ -70,13 +69,13 @@ public class AvoidMoldEvent extends EventPacket {
 	 * イベント開始動作
 	 */
 	@Override
-	public void start(Body b) {
-		Body to = YukkuriUtil.getBodyInstance(getTo());
-		if (to == null) {
+	public void start(Body body) {
+		Body targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
+		if (targetBody == null) {
 			return;
 		}
-		int colX = BodyLogic.calcCollisionX(b, to);
-		b.moveToEvent(this, to.getX() + colX, to.getY());
+		int collisionX = BodyLogic.calcCollisionX(body, targetBody);
+		body.moveToEvent(this, targetBody.getX() + collisionX, targetBody.getY());
 	}
 
 	/**
@@ -84,16 +83,16 @@ public class AvoidMoldEvent extends EventPacket {
 	 * UpdateState.ABORTを返すとイベント終了
 	 */
 	@Override
-	public UpdateState update(Body b) {
+	public UpdateState update(Body body) {
 		// 相手が消えてしまったらイベント中断
-		Body to = YukkuriUtil.getBodyInstance(getTo());
-		if (to == null)
+		Body targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
+		if (targetBody == null)
 			return UpdateState.ABORT;
-		if (to.isDead() || to.isRemoved())
+		if (targetBody.isDead() || targetBody.isRemoved())
 			return UpdateState.ABORT;
-		to.stay();
-		int colX = BodyLogic.calcCollisionX(b, to);
-		b.moveToEvent(this, to.getX() + colX, to.getY());
+		targetBody.stay();
+		int collisionX = BodyLogic.calcCollisionX(body, targetBody);
+		body.moveToEvent(this, targetBody.getX() + collisionX, targetBody.getY());
 		return null;
 	}
 
@@ -102,94 +101,94 @@ public class AvoidMoldEvent extends EventPacket {
 	 * trueを返すとイベント終了
 	 */
 	@Override
-	public boolean execute(Body b) {
-		Body to = YukkuriUtil.getBodyInstance(getTo());
-		Body from = YukkuriUtil.getBodyInstance(getFrom());
-		if (from == null || to == null) {
+	public boolean execute(Body body) {
+		Body targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
+		Body sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
+		if (sourceBody == null || targetBody == null) {
 			return true;
 		}
 		// ドゲスの場合、楽しんで制裁
-		if (from.isVeryRude()) {
-			from.setBodyEventResMessage(GameMessages.getMessage(from, MessagePool.Action.HateMoldyYukkuri),
+		if (sourceBody.isVeryRude()) {
+			sourceBody.setBodyEventResMessage(GameMessages.getMessage(sourceBody, MessagePool.Action.HateMoldyYukkuri),
 					Const.HOLDMESSAGE, true, false);
-			to.strikeByYukkuri(from, this, false);
-			from.setForceFace(ImageCode.PUFF.ordinal());
-			if (from.getIntelligence() == Intelligence.FOOL)
-				from.addSickPeriod(100);
+			targetBody.strikeByYukkuri(sourceBody, this, false);
+			sourceBody.setForceFace(ImageCode.PUFF.ordinal());
+			if (sourceBody.getIntelligence() == Intelligence.FOOL)
+				sourceBody.addSickPeriod(100);
 			return true;
 		}
 
 		// 自分が成体のばあい。ちゃんと制裁する
-		if (from.isAdult()) {
+		if (sourceBody.isAdult()) {
 			// 自分が成体で相手が家族なら嘆く
-			if (!b.isTalking()) {
+			if (!body.isTalking()) {
 				// 共通処理
-				b.setHappiness(Happiness.VERY_SAD);
-				b.addMemories(-1);
-				b.addStress(80);
+				body.setHappiness(Happiness.VERY_SAD);
+				body.addMemories(-1);
+				body.addStress(80);
 				// 相手が子供か、又は番
-				if (from.isParent(to) || from.isPartner(to)) {
-					switch (from.getIntelligence()) {
+				if (sourceBody.isParent(targetBody) || sourceBody.isPartner(targetBody)) {
+					switch (sourceBody.getIntelligence()) {
 						case FOOL:
 							if (GameRandom.nextInt(5) == 0) {
-								from.doPeropero(to);
+								sourceBody.doPeropero(targetBody);
 								return true;
 							} else {
-								saySadMessage(from, to);
+								saySadMessage(sourceBody, targetBody);
 								return false;
 							}
 						case WISE:
 							if (GameRandom.nextInt(5) == 0) {
-								sayApologyMessage(from, to);
-								to.strikeByYukkuri(from, this, false);
+								sayApologyMessage(sourceBody, targetBody);
+								targetBody.strikeByYukkuri(sourceBody, this, false);
 							}
 							return false;
 						default:
 							if (GameRandom.nextInt(5) == 0) {
-								sayApologyMessage(from, to);
-								to.strikeByYukkuri(from, this, false);
+								sayApologyMessage(sourceBody, targetBody);
+								targetBody.strikeByYukkuri(sourceBody, this, false);
 								return true;
 							} else {
-								saySadMessage(from, to);
+								saySadMessage(sourceBody, targetBody);
 								return false;
 							}
 					}
 				}
 				// 相手が親化、又は姉妹の場合
-				else if (from.isFamily(to)) {
-					switch (from.getIntelligence()) {
+				else if (sourceBody.isFamily(targetBody)) {
+					switch (sourceBody.getIntelligence()) {
 						case FOOL:
 							if (GameRandom.nextInt(5) == 0) {
-								from.doPeropero(to);
+								sourceBody.doPeropero(targetBody);
 							} else {
-								saySadMessage(from, to);
+								saySadMessage(sourceBody, targetBody);
 							}
 							return true;
 						case WISE:
 							if (GameRandom.nextInt(5) == 0) {
-								sayApologyMessage(from, to);
-								to.runAway(to.getX(), to.getY());
+								sayApologyMessage(sourceBody, targetBody);
+								targetBody.runAway(targetBody.getX(), targetBody.getY());
 							}
 							return true;
 						default:
 							if (GameRandom.nextInt(5) == 0) {
-								sayApologyMessage(from, to);
-								to.runAway(to.getX(), to.getY());
+								sayApologyMessage(sourceBody, targetBody);
+								targetBody.runAway(targetBody.getX(), targetBody.getY());
 								return true;
 							} else {
-								saySadMessage(from, to);
+								saySadMessage(sourceBody, targetBody);
 								return false;
 							}
 					}
 				}
 				// 家族でない場合
 				else {
-					from.setBodyEventResMessage(GameMessages.getMessage(from, MessagePool.Action.HateMoldyYukkuri),
+					sourceBody.setBodyEventResMessage(GameMessages.getMessage(sourceBody, MessagePool.Action.HateMoldyYukkuri),
 							Const.HOLDMESSAGE, true, false);
-					to.strikeByYukkuri(from, this, false);
-					from.setForceFace(ImageCode.PUFF.ordinal());
-					if (from.getIntelligence() == Intelligence.FOOL)
-						from.forceSetSick();
+					targetBody.strikeByYukkuri(sourceBody, this, false);
+					sourceBody.setForceFace(ImageCode.PUFF.ordinal());
+					if (sourceBody.getIntelligence() == Intelligence.FOOL)
+						sourceBody.forceSetSick();
 					return true;
 				}
 			}
@@ -198,83 +197,83 @@ public class AvoidMoldEvent extends EventPacket {
 		// 子ゆ、赤ゆの場合。嘆くのみ
 		else {
 			// 共通処理
-			b.setHappiness(Happiness.VERY_SAD);
-			b.addStress(80);
-			b.addMemories(-1);
+			body.setHappiness(Happiness.VERY_SAD);
+			body.addStress(80);
+			body.addMemories(-1);
 			// かびてるのが親
-			if (from.isChild(to)) {
-				b.addStress(70);
-				switch (from.getIntelligence()) {
+			if (sourceBody.isChild(targetBody)) {
+				body.addStress(70);
+				switch (sourceBody.getIntelligence()) {
 					case FOOL:
 						if (GameRandom.nextInt(5) == 0) {
-							from.doPeropero(to);
+							sourceBody.doPeropero(targetBody);
 							return false;
 						} else {
-							saySadMessage(from, to);
+							saySadMessage(sourceBody, targetBody);
 							return false;
 						}
 					case WISE:
 						if (GameRandom.nextInt(5) == 0) {
-							sayApologyMessage(from, to);
-							to.runAway(to.getX(), to.getY());
+							sayApologyMessage(sourceBody, targetBody);
+							targetBody.runAway(targetBody.getX(), targetBody.getY());
 							return true;
 						} else {
-							saySadMessage(from, to);
+							saySadMessage(sourceBody, targetBody);
 							return false;
 						}
 					default:
 						if (GameRandom.nextInt(25) == 0) {
-							sayApologyMessage(from, to);
-							to.runAway(to.getX(), to.getY());
+							sayApologyMessage(sourceBody, targetBody);
+							targetBody.runAway(targetBody.getX(), targetBody.getY());
 							return true;
 						} else if (GameRandom.nextInt(5) == 0) {
-							from.doPeropero(to);
+							sourceBody.doPeropero(targetBody);
 							return false;
 						} else {
-							saySadMessage(from, to);
+							saySadMessage(sourceBody, targetBody);
 							return false;
 						}
 				}
 			}
 			// かびてるのが家族
-			else if (to.isFamily(from)) {
-				switch (from.getIntelligence()) {
+			else if (targetBody.isFamily(sourceBody)) {
+				switch (sourceBody.getIntelligence()) {
 					case FOOL:
 						if (GameRandom.nextInt(5) == 0) {
-							from.doPeropero(to);
+							sourceBody.doPeropero(targetBody);
 							return false;
 						} else {
-							saySadMessage(from, to);
+							saySadMessage(sourceBody, targetBody);
 							return false;
 						}
 					case WISE:
 						if (GameRandom.nextInt(5) == 0) {
-							sayApologyMessage(from, to);
-							to.runAway(to.getX(), to.getY());
+							sayApologyMessage(sourceBody, targetBody);
+							targetBody.runAway(targetBody.getX(), targetBody.getY());
 							return true;
 						} else {
-							saySadMessage(from, to);
+							saySadMessage(sourceBody, targetBody);
 							return false;
 						}
 					default:
 						if (GameRandom.nextInt(10) == 0) {
-							sayApologyMessage(from, to);
-							to.runAway(to.getX(), to.getY());
+							sayApologyMessage(sourceBody, targetBody);
+							targetBody.runAway(targetBody.getX(), targetBody.getY());
 							return true;
 						} else {
-							saySadMessage(from, to);
+							saySadMessage(sourceBody, targetBody);
 							return false;
 						}
 				}
 			}
 			// 家族でない場合
 			else {
-				from.setBodyEventResMessage(GameMessages.getMessage(from, MessagePool.Action.HateMoldyYukkuri),
+				sourceBody.setBodyEventResMessage(GameMessages.getMessage(sourceBody, MessagePool.Action.HateMoldyYukkuri),
 						Const.HOLDMESSAGE, true, false);
-				from.runAway(to.getX(), to.getY());
-				from.setForceFace(ImageCode.PUFF.ordinal());
-				if (from.getIntelligence() == Intelligence.FOOL)
-					from.forceSetSick();
+				sourceBody.runAway(targetBody.getX(), targetBody.getY());
+				sourceBody.setForceFace(ImageCode.PUFF.ordinal());
+				if (sourceBody.getIntelligence() == Intelligence.FOOL)
+					sourceBody.forceSetSick();
 				return true;
 			}
 		}
@@ -288,24 +287,24 @@ public class AvoidMoldEvent extends EventPacket {
 	 * @param To   イベント対象
 	 */
 	public void saySadMessage(Body From, Body To) {
-		Body from = YukkuriUtil.getBodyInstance(getFrom());
-		if (from == null)
+		Body sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
+		if (sourceBody == null)
 			return;
 		String message = null;
 		if (From.isParent(To)) {
-			message = GameMessages.getMessage(from, MessagePool.Action.SadnessForMoldyChild);
+			message = GameMessages.getMessage(sourceBody, MessagePool.Action.SadnessForMoldyChild);
 		} else if (From.isPartner(To)) {
-			message = GameMessages.getMessage(from, MessagePool.Action.SadnessForMoldyPartner);
+			message = GameMessages.getMessage(sourceBody, MessagePool.Action.SadnessForMoldyPartner);
 		} else if (To.isParent(From)) {
 			if (To.isFather(From))
-				message = GameMessages.getMessage(from, MessagePool.Action.SadnessForMoldyFather);
+				message = GameMessages.getMessage(sourceBody, MessagePool.Action.SadnessForMoldyFather);
 			else
-				message = GameMessages.getMessage(from, MessagePool.Action.SadnessForMoldyMother);
+				message = GameMessages.getMessage(sourceBody, MessagePool.Action.SadnessForMoldyMother);
 		} else if (To.isSister(From)) {
 			if (To.getAge() >= From.getAge())
-				message = GameMessages.getMessage(from, MessagePool.Action.SadnessForEldersister);
+				message = GameMessages.getMessage(sourceBody, MessagePool.Action.SadnessForEldersister);
 			else
-				message = GameMessages.getMessage(from, MessagePool.Action.SadnessForMoldySister);
+				message = GameMessages.getMessage(sourceBody, MessagePool.Action.SadnessForMoldySister);
 		}
 		From.setBodyEventResMessage(message, Const.HOLDMESSAGE, true, GameRandom.nextBoolean());
 	}
@@ -317,14 +316,14 @@ public class AvoidMoldEvent extends EventPacket {
 	 * @param To   イベント対象
 	 */
 	public void sayApologyMessage(Body From, Body To) {
-		Body from = YukkuriUtil.getBodyInstance(getFrom());
-		if (from == null)
+		Body sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
+		if (sourceBody == null)
 			return;
 		String message = null;
 		if (From.isParent(To)) {
-			message = GameMessages.getMessage(from, MessagePool.Action.ApologyToChild);
+			message = GameMessages.getMessage(sourceBody, MessagePool.Action.ApologyToChild);
 		} else if (To.isFamily(From)) {
-			message = GameMessages.getMessage(from, MessagePool.Action.ApologyToFamily);
+			message = GameMessages.getMessage(sourceBody, MessagePool.Action.ApologyToFamily);
 		}
 		From.setBodyEventResMessage(message, Const.HOLDMESSAGE, true, GameRandom.nextBoolean());
 	}

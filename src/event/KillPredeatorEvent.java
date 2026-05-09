@@ -19,7 +19,6 @@ import src.item.Barrier;
 import src.logic.BodyLogic;
 import src.system.MessagePool;
 import src.system.ResourceUtil;
-import src.util.YukkuriUtil;
 
 /**
  * 善良なゆっくりが主に参加し、ドスは捕食種がいる限り殺しに行く.
@@ -50,39 +49,39 @@ public class KillPredeatorEvent extends RevengeAttackEvent {
 	 * また、イベント優先度も必要に応じて設定できる
 	 */
 	@Override
-	public boolean checkEventResponse(Body b) {
+	public boolean checkEventResponse(Body body) {
 		priority = EventPriority.HIGH;
 		// 死体、睡眠、皮なし、目無しはスキップ
-		if (!b.canEventResponse())
+		if (!body.canEventResponse())
 			return true;
 		// 非ゆっくり症、針刺し状態はスキップ
-		if (b.isNYD() || b.isNeedled())
+		if (body.isNYD() || body.isNeedled())
 			return false;
-		boolean bIsNearPreadeator = false;
+		boolean isNearPredator = false;
 		// 全ゆっくりに対してチェック
 		for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
-			Body p = entry.getValue();
+			Body predatorBody = entry.getValue();
 			// 自分同士のチェックは無意味なのでスキップ
-			if (p == b) {
+			if (predatorBody == body) {
 				continue;
 			}
 			// 捕食種でないか、捕食種でも親子または姉妹であればスキップ
-			if (!p.isPredatorType() || p.isParent(b) || b.isParent(p) || b.isSister(p) || b.isElderSister(p)) {
+			if (!predatorBody.isPredatorType() || predatorBody.isParent(body) || body.isParent(predatorBody) || body.isSister(predatorBody) || body.isElderSister(predatorBody)) {
 				continue;
 			}
 			// 相手との間に壁があればスキップ
-			if (Barrier.acrossBarrier(b.getX(), b.getY(), p.getX(), p.getY(),
-					Barrier.MAP_BODY[b.getBodyAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
+			if (Barrier.acrossBarrier(body.getX(), body.getY(), predatorBody.getX(), predatorBody.getY(),
+					Barrier.MAP_BODY[body.getBodyAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
 				continue;
 			}
-			bIsNearPreadeator = true;
+			isNearPredator = true;
 			break;
 		}
 		// 捕食種が近くにいない
-		if (!bIsNearPreadeator) {
+		if (!isNearPredator) {
 			return false;
 		}
-		b.clearActionsForEvent();
+		body.clearActionsForEvent();
 		return true;
 	}
 
@@ -92,81 +91,81 @@ public class KillPredeatorEvent extends RevengeAttackEvent {
 	 * @return 次のターゲット
 	 */
 	public Body searchNextTarget() {
-		Body ret = null;
+		Body nextTarget = null;
 		for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
-			Body b = entry.getValue();
-			if (b.isPredatorType()) {
-				ret = b;
+			Body body = entry.getValue();
+			if (body.isPredatorType()) {
+				nextTarget = body;
 				break;
 			}
 		}
-		return ret;
+		return nextTarget;
 	}
 
 	@Override
-	public UpdateState update(Body b) {
+	public UpdateState update(Body body) {
 		// ランダムで復讐を諦める
 		if (GameRandom.nextInt(1000) == 0) {
 			return UpdateState.ABORT;
 		}
-		Body from = YukkuriUtil.getBodyInstance(getFrom());
+		Body from = src.util.BodyRegistry.getBodyInstance(getFrom());
 		// 相手が消えてしまったら他の捕食種を捜索
 		if (from.isRemoved() || from.isDead() || !from.isPredatorType()) {
 			setFrom(searchNextTarget());
-			from = YukkuriUtil.getBodyInstance(getFrom());
+			from = src.util.BodyRegistry.getBodyInstance(getFrom());
 			if (from == null)
 				return UpdateState.ABORT;
 		}
 
-		b.setForceFace(ImageCode.PUFF.ordinal());
-		int colX = BodyLogic.calcCollisionX(b, from);
-		b.moveToEvent(this, from.getX() + colX, from.getY());
-		if (b.getType() == 2006 ||
-				(b.isAdult() && b.getPublicRank() != PublicRank.UnunSlave)) {
+		body.setForceFace(ImageCode.PUFF.ordinal());
+		int colX = BodyLogic.calcCollisionX(body, from);
+		body.moveToEvent(this, from.getX() + colX, from.getY());
+		if (body.getType() == 2006 ||
+				(body.isAdult() && body.getPublicRank() != PublicRank.UnunSlave)) {
 			Body target = searchNextTarget();
 			setFrom(target);
-			b.setWorldEventResMessage(GameMessages.getMessage(b, MessagePool.Action.RevengeForChild),
+			body.setWorldEventResMessage(GameMessages.getMessage(body, MessagePool.Action.RevengeForChild),
 					Const.HOLDMESSAGE, true, false);
 		}
 		return null;
 	}
 
 	@Override
-	public void start(Body b) {
-		if (b.isNYD()) {
+	public void start(Body body) {
+		if (body.isNYD()) {
 			return;
 		}
-		b.setAngry();
-		Body from = YukkuriUtil.getBodyInstance(getFrom());
-		int colX = BodyLogic.calcCollisionX(b, from);
-		b.moveToEvent(this, from.getX() + colX, from.getY());
+		body.setAngry();
+		Body from = src.util.BodyRegistry.getBodyInstance(getFrom());
+		int colX = BodyLogic.calcCollisionX(body, from);
+		body.moveToEvent(this, from.getX() + colX, from.getY());
 	}
 
 	@Override
-	public boolean execute(Body b) {
-		Body from = YukkuriUtil.getBodyInstance(getFrom());
+	public boolean execute(Body body) {
+		Body from = src.util.BodyRegistry.getBodyInstance(getFrom());
 		// 相手が消えてしまったら他の捕食種を捜索
 		if (from == null || from.isRemoved() || from.isDead()) {
 			setFrom(searchNextTarget());
-			from = YukkuriUtil.getBodyInstance(getFrom());
+			from = src.util.BodyRegistry.getBodyInstance(getFrom());
 			// 捕食種全滅でイベント終了
 			if (from == null)
 				return true;
 			return false;
 		}
 		if (from.getZ() < 5) {
-			b.setWorldEventResMessage(GameMessages.getMessage(b, MessagePool.Action.RevengeForChild), Const.HOLDMESSAGE,
+			body.setWorldEventResMessage(GameMessages.getMessage(body, MessagePool.Action.RevengeForChild), Const.HOLDMESSAGE,
 					true, false);
-			if (b.getDirection() == Direction.LEFT) {
-				GameView.addEffect(EffectType.HIT, b.getX() - 10, b.getY(), 0,
+			if (body.getDirection() == Direction.LEFT) {
+				GameView.addEffect(EffectType.HIT, body.getX() - 10, body.getY(), 0,
 						0, 0, 0, false, 500, 1, true, false, true);
 			} else {
-				GameView.addEffect(EffectType.HIT, b.getX() + 10, b.getY(), 0,
+				GameView.addEffect(EffectType.HIT, body.getX() + 10, body.getY(), 0,
 						0, 0, 0, true, 500, 1, true, false, true);
 			}
-			b.setForceFace(ImageCode.PUFF.ordinal());
-			from.strikeByYukkuri(b, this, false);
-			b.addStress(-300);
+			body.setForceFace(ImageCode.PUFF.ordinal());
+			from.strikeByYukkuri(body, this, false);
+			body.addStress(-300);
 		}
 		return false;
 	}

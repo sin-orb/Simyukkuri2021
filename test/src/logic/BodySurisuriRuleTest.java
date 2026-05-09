@@ -1,11 +1,14 @@
 package src.logic;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import src.base.Body;
+import src.base.StubBodyAttributes;
 import src.util.WorldTestHelper;
 
 /**
@@ -21,13 +24,23 @@ public class BodySurisuriRuleTest {
 
 	@Test
 	void testCheckActionSurisuriFromPlayer_returnsNoneForNull() {
-		assertEquals(BodyLogic.eActionGo.NONE, BodySurisuriRule.checkActionSurisuriFromPlayer(null, null));
+		assertEquals(BodyLogic.ActionGo.NONE, BodySurisuriRule.checkActionSurisuriFromPlayer(null, null));
 	}
 
 	@Test
 	void testCheckActionSurisuriFromPlayer_returnsNoneWhenTargetNotFlagged() {
 		Body me = WorldTestHelper.createBody();
 		Body you = WorldTestHelper.createBody();
-		assertEquals(BodyLogic.eActionGo.NONE, BodySurisuriRule.checkActionSurisuriFromPlayer(me, you));
+		assertEquals(BodyLogic.ActionGo.NONE, BodySurisuriRule.checkActionSurisuriFromPlayer(me, you));
+	}
+
+	@Test
+	void testIsSurisuriFromPlayerReadsRawFlag() {
+		StubBodyAttributes body = new StubBodyAttributes();
+		body.setSurisuriFromPlayer(false);
+		assertFalse(BodySurisuriRule.isSurisuriFromPlayer(body));
+
+		body.setSurisuriFromPlayer(true);
+		assertTrue(BodySurisuriRule.isSurisuriFromPlayer(body));
 	}
 }

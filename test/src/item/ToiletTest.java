@@ -78,27 +78,27 @@ class ToiletTest extends ItemTestBase {
     }
 
     // ---------------------------------------------------------------
-    // isBForSlave / setBForSlave / isForSlave
+    // isForSlave / setForSlave / isForSlave
     // ---------------------------------------------------------------
 
     @Test
     void testIsForSlave_Default() {
         Toilet toilet = new Toilet();
-        assertFalse(toilet.isBForSlave());
+        assertFalse(toilet.isForSlave());
     }
 
     @Test
     void testSetBForSlave() {
         Toilet toilet = new Toilet();
-        toilet.setBForSlave(true);
-        assertTrue(toilet.isBForSlave());
+        toilet.setForSlave(true);
+        assertTrue(toilet.isForSlave());
     }
 
     @Test
     void testIsForSlave() {
         Toilet toilet = new Toilet();
         assertFalse(toilet.isForSlave());
-        toilet.setBForSlave(true);
+        toilet.setForSlave(true);
         assertTrue(toilet.isForSlave());
     }
 

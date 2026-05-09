@@ -47,8 +47,8 @@ public class NonYukkuriDiseaseEstrusTest {
 
     private void prepareRelaxBase(StubBody target) {
         target.setAgeState(AgeState.ADULT);
-        target.setNoHungryPeriod(target.getRELAXPERIODorg() + 1);
-        target.setNoDamagePeriod(target.getRELAXPERIODorg() + 1);
+        target.setNoHungryPeriod(target.getRelaxPeriodBase() + 1);
+        target.setNoDamagePeriod(target.getRelaxPeriodBase() + 1);
         target.setSleeping(false);
         target.setShitting(false);
         target.setEating(false);
@@ -56,7 +56,7 @@ public class NonYukkuriDiseaseEstrusTest {
         target.setCriticalDamege(null);
         target.setExciting(false);
         target.setExciteProb(1);
-        target.setHungry(target.getHUNGRYLIMITorg()[target.getBodyAgeState().ordinal()]);
+        target.setHungry(target.getHungryLimitBase()[target.getBodyAgeState().ordinal()]);
         target.setShit(0);
         target.setHasBraid(true);
         target.setDirty(false);
@@ -69,7 +69,7 @@ public class NonYukkuriDiseaseEstrusTest {
         body.setPartner(-1); // 独身
         
         // 非ゆっくり症を設定
-        body.seteCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
+        body.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
         assertTrue(body.isNYD());
         
         // 感情チェック実行

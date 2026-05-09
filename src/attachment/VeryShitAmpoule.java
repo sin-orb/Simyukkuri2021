@@ -16,7 +16,6 @@ import src.enums.CriticalDamegeType;
 import src.enums.Direction;
 import src.enums.Event;
 import src.system.ResourceUtil;
-import src.util.YukkuriUtil;
 
 
 /****************************************
@@ -82,7 +81,7 @@ public class VeryShitAmpoule extends Attachment {
 
 	@Override
 	protected Event update() {
-		Body pa = YukkuriUtil.getBodyInstance(parent);
+		Body pa = src.util.BodyRegistry.getBodyInstance(parent);
 		if (pa == null) return Event.DONOTHING;
 		if (pa.isDead()) {
 			// 死んだゆっくりはうんうんしない
@@ -91,15 +90,15 @@ public class VeryShitAmpoule extends Attachment {
 		// ちぎれていない場合
 		if( pa.getCriticalDamegeType() != CriticalDamegeType.CUT)
 		{
-			// 常にうんうんを最高の状態にする
-			pa.setShit( 50, true );
+			// 常にうんうんを最高状態にする
+			pa.setShit( 0, true );
 			pa.wakeup();
 		}
 		return Event.DONOTHING;
 	}
 	@Override
 	public BufferedImage getImage(Body b) {
-		Body pa = YukkuriUtil.getBodyInstance(parent);
+		Body pa = src.util.BodyRegistry.getBodyInstance(parent);
 		if (pa == null) return null;
 		if(b.getDirection() == Direction.RIGHT) {
 			return images[pa.getBodyAgeState().ordinal()][1];
@@ -109,7 +108,7 @@ public class VeryShitAmpoule extends Attachment {
 	@Override
 	public void resetBoundary()
 	{
-		Body pa = YukkuriUtil.getBodyInstance(parent);
+		Body pa = src.util.BodyRegistry.getBodyInstance(parent);
 		if (pa != null) {
 			setBoundary(pivX[pa.getBodyAgeState().ordinal()],
 					pivY[pa.getBodyAgeState().ordinal()],
@@ -124,7 +123,7 @@ public class VeryShitAmpoule extends Attachment {
 	public VeryShitAmpoule(Body body) {
 		super(body);
 		setAttachProperty(property, POS_KEY);
-		Body pa = YukkuriUtil.getBodyInstance(parent);
+		Body pa = src.util.BodyRegistry.getBodyInstance(parent);
 		if (pa != null) {
 			setBoundary(pivX[pa.getBodyAgeState().ordinal()],
 					pivY[pa.getBodyAgeState().ordinal()],

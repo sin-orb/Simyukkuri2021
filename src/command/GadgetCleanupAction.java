@@ -12,7 +12,6 @@ import src.item.Barrier;
 import src.item.Food;
 import src.system.MapPlaceData;
 import src.util.GameWorld;
-import src.util.YukkuriUtil;
 
 final class GadgetCleanupAction {
 
@@ -61,16 +60,16 @@ final class GadgetCleanupAction {
 		List<Stalk> stalkList = new LinkedList<Stalk>(GameWorld.get().getCurrentMap().getStalk().values());
 		List<Barrier> wallList = GameWorld.get().getCurrentMap().getBarrier();
 		if (isBody) {
-			for (Body b : bodyList) {
-				if (!b.isDead()) {
-					b.setCleaning();
+			for (Body body : bodyList) {
+				if (!body.isDead()) {
+					body.setCleaning();
 				}
 			}
 		}
 		if (isDead) {
-			for (Body b : bodyList) {
-				if (b.isDead()) {
-					b.remove();
+			for (Body body : bodyList) {
+				if (body.isDead()) {
+					body.remove();
 				}
 			}
 		}
@@ -103,8 +102,8 @@ final class GadgetCleanupAction {
 			MapPlaceData.clearMap(GameWorld.get().getCurrentMap().getWallMap());
 		}
 		if (isRemoveAll) {
-			for (Body bodyTarget : bodyList) {
-				bodyTarget.remove();
+			for (Body body : bodyList) {
+				body.remove();
 			}
 			for (Shit s : shitList) {
 				s.remove();
@@ -141,8 +140,8 @@ final class GadgetCleanupAction {
 			if (i == null) {
 				continue;
 			}
-			Body b = YukkuriUtil.getBodyInstance(i);
-			if (b != null && !b.isDead()) {
+			Body body = src.util.BodyRegistry.getBodyInstance(i);
+			if (body != null && !body.isDead()) {
 				return false;
 			}
 		}

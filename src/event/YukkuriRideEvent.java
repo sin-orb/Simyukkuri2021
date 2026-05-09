@@ -1,10 +1,5 @@
 package src.event;
-import src.util.GameEnvironment;
-import src.util.GameMessages;
-import src.util.GameText;
 
-import src.SimYukkuri;
-import src.util.GameRandom;
 import src.base.Body;
 import src.base.EventPacket;
 import src.base.Obj;
@@ -17,9 +12,11 @@ import src.enums.TakeoutItemType;
 import src.item.Food;
 import src.logic.BedLogic;
 import src.logic.FamilyActionLogic;
+import src.util.GameEnvironment;
+import src.util.GameMessages;
+import src.util.GameRandom;
+import src.util.GameText;
 import src.system.MessagePool;
-import src.system.ResourceUtil;
-import src.util.YukkuriUtil;
 
 /***************************************************
  * おちびちゃん運びイベント
@@ -32,7 +29,7 @@ public class YukkuriRideEvent extends EventPacket {
 
 	private static final long serialVersionUID = 7916220303996368395L;
 	int tick = 0;
-	boolean bMoveTarget = false;
+	boolean hasRideTarget = false;
 
 	/**
 	 * コンストラクタ.
@@ -43,7 +40,6 @@ public class YukkuriRideEvent extends EventPacket {
 	}
 
 	public YukkuriRideEvent() {
-
 	}
 
 	public int getTick() {
@@ -55,169 +51,164 @@ public class YukkuriRideEvent extends EventPacket {
 	}
 
 	public boolean isMoveTarget() {
-		return bMoveTarget;
+		return hasRideTarget;
 	}
 
-	public void setMoveTarget(boolean moveTarget) {
-		this.bMoveTarget = moveTarget;
+	public void setMoveTargetId(boolean moveTargetId) {
+		this.hasRideTarget = moveTargetId;
 	}
 
 	// 参加チェック
 	// ここで各種チェックを行い、イベントへ参加するかを返す
 	// また、イベント優先度も必要に応じて設定できる
 	@Override
-	public boolean checkEventResponse(Body b) {
-		Body to = YukkuriUtil.getBodyInstance(getTo());
-		if (to == null) {
+	public boolean checkEventResponse(Body body) {
+		Body targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
+		if (targetBody == null) {
 			return false;
 		}
-		Body from = YukkuriUtil.getBodyInstance(getFrom());
-		if (from == b) {
+		Body sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
+		if (sourceBody == body) {
 			return true;
 		}
-
-		if (to == b) {
-			return true;
-		}
-
-		return false;
+		return targetBody == body;
 	}
 
 	// イベント開始動作
 	@Override
-	public void start(Body b) {
-		Body to = YukkuriUtil.getBodyInstance(getTo());
-		if (to == null) {
+	public void start(Body body) {
+		Body targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
+		if (targetBody == null) {
 			return;
 		}
-		b.setCurrentEvent(this);
-		b.clearActionsForEvent();
-		b.moveToEvent(this, to.getX(), to.getY());
+		body.setCurrentEvent(this);
+		body.clearActionsForEvent();
+		body.moveToEvent(this, targetBody.getX(), targetBody.getY());
 	}
 
 	// 毎フレーム処理
 	@Override
-	public UpdateState update(Body b) {
+	public UpdateState update(Body body) {
 		tick++;
-		Body from = YukkuriUtil.getBodyInstance(getFrom());
-		if (from == null || from.canActionForEvent() == false || from.isRemoved()) {
+		Body sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
+		if (sourceBody == null || !sourceBody.canActionForEvent() || sourceBody.isRemoved()) {
 			return UpdateState.ABORT;
 		}
-		Body to = YukkuriUtil.getBodyInstance(getTo());
-		if (to == null || to.isDead() || to.isRemoved()) {
-			return UpdateState.ABORT;
-		}
-
-		if (from.getCurrentEvent() != this) {
+		Body targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
+		if (targetBody == null || targetBody.isDead() || targetBody.isRemoved()) {
 			return UpdateState.ABORT;
 		}
 
-		if (!from.isIdiot() && from.getIntelligence() != Intelligence.FOOL && from.findSick(to)) {
-			from.setMessage(GameMessages.getMessage(to, MessagePool.Action.Surprise), 30);
-			from.setHappiness(Happiness.VERY_SAD);
-			from.setForceFace(ImageCode.CRYING.ordinal());
+		if (sourceBody.getCurrentEvent() != this) {
 			return UpdateState.ABORT;
 		}
 
-		if (to.isNormalDirty()) {
-			to.setLinkParent(-1);
-			from.doPeropero(to);
+		if (!sourceBody.isIdiot() && sourceBody.getIntelligence() != Intelligence.FOOL && sourceBody.findSick(targetBody)) {
+			sourceBody.setMessage(GameMessages.getMessage(targetBody, MessagePool.Action.Surprise), 30);
+			sourceBody.setHappiness(Happiness.VERY_SAD);
+			sourceBody.setForceFace(ImageCode.CRYING.ordinal());
+			return UpdateState.ABORT;
+		}
+
+		if (targetBody.isNormalDirty()) {
+			targetBody.setParentLinkId(-1);
+			sourceBody.doPeropero(targetBody);
 			return UpdateState.ABORT;
 		}
 
 		// 親
-		if (b == from) {
+		if (body == sourceBody) {
 			// 一定期間で終了
 			if (tick > 10000) {
-				to.setCalcZ(from.getZ());
-				to.setLinkParent(-1);
+				targetBody.setCalcZ(sourceBody.getZ());
+				targetBody.setParentLinkId(-1);
 				return UpdateState.ABORT;
 			}
 
-			if (to.takeMappedObj(to.getLinkParent()) == null) {
+			if (targetBody.takeMappedObj(targetBody.getParentLinkId()) == null) {
 				if (tick % 20 != 0) {
 					return null;
 				}
-				int nDistance = Translate.getRealDistance(from.getX(), from.getY(), to.getX(), to.getY());
-				if (3 < nDistance) {
+				int distanceToTarget = Translate.getRealDistance(sourceBody.getX(), sourceBody.getY(), targetBody.getX(), targetBody.getY());
+				if (3 < distanceToTarget) {
 					// 子供に近づく
-					from.moveToEvent(this, to.getX(), to.getY());
+					sourceBody.moveToEvent(this, targetBody.getX(), targetBody.getY());
 				} else {
 					// 子供を頭にのせる
-					to.setLinkParent(from.objId);
+					targetBody.setParentLinkId(sourceBody.objId);
 				}
 			} else {
 				// 子供をのせて移動する
-				to.setCalcX(from.getX());
-				to.setCalcY(from.getY());
-				int nZ = Translate.invertZ(from.getCollisionY() + 15);
-				nZ += from.getZ();
-				to.setCalcZ(nZ);
-				to.setDirection(from.getDirection());
-				Obj target = b.takeMappedObj(this.target);
-				if (target != null) {
-					bMoveTarget = true;
+				targetBody.setCalcX(sourceBody.getX());
+				targetBody.setCalcY(sourceBody.getY());
+				int liftZ = Translate.invertZ(sourceBody.getCollisionY() + 15);
+				liftZ += sourceBody.getZ();
+				targetBody.setCalcZ(liftZ);
+				targetBody.setDirection(sourceBody.getDirection());
+				Obj targetObject = body.takeMappedObj(this.target);
+				if (targetObject != null) {
+					hasRideTarget = true;
 				}
 
 				// 目的地がない場合は目的地チェック
-				if (!bMoveTarget) {
+				if (!hasRideTarget) {
 					// 空腹
-					if (target == null) {
-						if (to.isHungry()) {
+					if (targetObject == null) {
+						if (targetBody.isHungry()) {
 							// 餌を持っていたら落とす
-							b.dropTakeoutItem(TakeoutItemType.FOOD);
-							Obj found = FamilyActionLogic.searchFood(b);
-							if (found != null) {
-								target = found;
-								bMoveTarget = true;
-								from.moveToEvent(this, target.getX(), target.getY());
+							body.dropTakeoutItem(TakeoutItemType.FOOD);
+							Obj candidateObject = FamilyActionLogic.searchFood(body);
+							if (candidateObject != null) {
+								targetObject = candidateObject;
+								hasRideTarget = true;
+								sourceBody.moveToEvent(this, targetObject.getX(), targetObject.getY());
 							}
 						}
 					}
 
 					// トイレ
-					if (target == null) {
-						if (to.wantToShit()) {
-							Obj found = FamilyActionLogic.searchToilet(b);
-							if (found != null) {
-								target = found;
-								bMoveTarget = true;
-								from.moveToEvent(this, target.getX(), target.getY());
+					if (targetObject == null) {
+						if (targetBody.wantToShit()) {
+							Obj candidateObject = FamilyActionLogic.searchToilet(body);
+							if (candidateObject != null) {
+								targetObject = candidateObject;
+								hasRideTarget = true;
+								sourceBody.moveToEvent(this, targetObject.getX(), targetObject.getY());
 							}
 						}
 					}
 
 					// ベッド
-					if (target == null) {
-						if (to.isSleepy()
+					if (targetObject == null) {
+						if (targetBody.isSleepy()
 								|| GameEnvironment.getDayState().ordinal() >= Terrarium.DayState.EVENING.ordinal()) {
-							Obj found = BedLogic.searchBed(b);
-							if (found != null) {
-								target = found;
-								bMoveTarget = true;
-								from.moveToEvent(this, target.getX(), target.getY());
+							Obj candidateObject = BedLogic.searchBed(body);
+							if (candidateObject != null) {
+								targetObject = candidateObject;
+								hasRideTarget = true;
+								sourceBody.moveToEvent(this, targetObject.getX(), targetObject.getY());
 							}
 						}
 					}
 				} else {
-					if (target instanceof Food) {
+					if (targetObject instanceof Food) {
 						// 餌を持っていたら落とす
-						if (b.getTakeoutItem(TakeoutItemType.FOOD) != null) {
-							b.dropTakeoutItem(TakeoutItemType.FOOD);
-							to.setCalcZ(from.getZ());
-							to.setLinkParent(-1);
+						if (body.getCarryItem(TakeoutItemType.FOOD) != null) {
+							body.dropTakeoutItem(TakeoutItemType.FOOD);
+							targetBody.setCalcZ(sourceBody.getZ());
+							targetBody.setParentLinkId(-1);
 							return UpdateState.ABORT;
 						}
 					}
 					// 目的地についたなら終了
-					if (target != null) {
-						int nDistance = Translate.getRealDistance(from.getX(), from.getY(), target.getX(),
-								target.getY());
-						if (3 < nDistance) {
-							from.moveToEvent(this, target.getX(), target.getY());
+					if (targetObject != null) {
+						int distanceToTarget = Translate.getRealDistance(sourceBody.getX(), sourceBody.getY(), targetObject.getX(),
+								targetObject.getY());
+						if (3 < distanceToTarget) {
+							sourceBody.moveToEvent(this, targetObject.getX(), targetObject.getY());
 						} else {
-							to.setCalcZ(from.getZ());
-							to.setLinkParent(-1);
+							targetBody.setCalcZ(sourceBody.getZ());
+							targetBody.setParentLinkId(-1);
 							return UpdateState.ABORT;
 						}
 					}
@@ -225,25 +216,25 @@ public class YukkuriRideEvent extends EventPacket {
 			}
 		} else {
 			// 子供
-			if (b.takeMappedObj(b.getLinkParent()) == null) {
-				int nDistance = Translate.getRealDistance(to.getX(), to.getY(), from.getX(), from.getY());
-				if (3 < nDistance) {
+			if (body.takeMappedObj(body.getParentLinkId()) == null) {
+				int distanceToParent = Translate.getRealDistance(targetBody.getX(), targetBody.getY(), sourceBody.getX(), sourceBody.getY());
+				if (3 < distanceToParent) {
 					// 親に近づく
-					to.moveToEvent(this, from.getX(), from.getY());
+					targetBody.moveToEvent(this, sourceBody.getX(), sourceBody.getY());
 				} else {
-					to.stay();
+					targetBody.stay();
 				}
 			} else {
-				if (!to.isDamaged() && !to.isNeedled()) {
+				if (!targetBody.isDamaged() && !targetBody.isNeedled()) {
 					// 親の頭の上で待機
 					if (GameRandom.nextInt(30) == 0) {
-						to.addMemories(10);
-						to.addStress(-150);
-						if (!to.isSleeping() && !to.isDead()) {
+						targetBody.addMemories(10);
+						targetBody.addStress(-150);
+						if (!targetBody.isSleeping() && !targetBody.isDead()) {
 							if (GameRandom.nextInt(10) == 0) {
-								to.setMessage(GameMessages.getMessage(to, MessagePool.Action.Flying), 30);
+								targetBody.setMessage(GameMessages.getMessage(targetBody, MessagePool.Action.Flying), 30);
 							} else {
-								to.setMessage(GameMessages.getMessage(to, MessagePool.Action.Relax), 30);
+								targetBody.setMessage(GameMessages.getMessage(targetBody, MessagePool.Action.Relax), 30);
 							}
 						}
 					}
@@ -257,17 +248,18 @@ public class YukkuriRideEvent extends EventPacket {
 	// イベント目標に到着した際に呼ばれる
 	// trueを返すとイベント終了
 	@Override
-	public boolean execute(Body b) {
+	public boolean execute(Body body) {
 		return false;
 	}
 
 	@Override
-	public void end(Body b) {
+	public void end(Body body) {
 		// 他のイベントで強制的にイベントが終わることがある
 		// 子供をおろす
-		Body to = YukkuriUtil.getBodyInstance(getTo());
-		if (to != null)
-			to.setLinkParent(-1);
+		Body targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
+		if (targetBody != null) {
+			targetBody.setParentLinkId(-1);
+		}
 	}
 
 	@Override

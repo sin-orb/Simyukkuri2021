@@ -15,28 +15,56 @@ import src.util.GameWorld;
  */
 public class BodyMethodDispatcher {
 
+	private static List<Body> getBodies() {
+		return new LinkedList<Body>(GameWorld.get().getCurrentMap().getBody().values());
+	}
+
+	private static Body asBody(Obj targetObject) {
+		if (targetObject instanceof Body) {
+			return (Body) targetObject;
+		}
+		return null;
+	}
+
+	private static void invokeNoArgMethod(Body body, String methodName)
+			throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException,
+			InvocationTargetException {
+		Method method = body.getClass().getMethod(methodName, (Class<?>[]) null);
+		method.invoke(body, (Object[]) null);
+	}
+
+	private static void invokeIntMethod(Body body, String methodName, int value)
+			throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException,
+			InvocationTargetException {
+		Method method = body.getClass().getMethod(methodName, int.class);
+		method.invoke(body, value);
+	}
+
+	private static void invokeBooleanMethod(Body body, String methodName, boolean value)
+			throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException,
+			InvocationTargetException {
+		Method method = body.getClass().getMethod(methodName, boolean.class);
+		method.invoke(body, value);
+	}
+
 	/**
 	 * ゆっくりにメソッド実行
 	 * <br>パラメータなし、SHIFTで全体実行系のコマンド用
 	 *
 	 * @param e      入力されたマウスの動作
-	 * @param found  対象オブジェクト(主にゆっくり)
+	 * @param targetObject  対象オブジェクト(主にゆっくり)
 	 * @param method 実行したいメソッド名
 	 */
-	public static final void execute(MouseEvent e, Obj found, String method) {
+	public static final void execute(MouseEvent e, Obj targetObject, String method) {
 		try {
-			Method m;
-			List<Body> bodyList = new LinkedList<Body>(GameWorld.get().getCurrentMap().getBody().values());
+			Body targetBody = asBody(targetObject);
+			List<Body> bodyList = getBodies();
 			if (e.isShiftDown()) {
-				for (Body b : bodyList) {
-					m = b.getClass().getMethod(method, (Class<?>[]) null);
-					m.invoke(b, (Object[]) null);
+				for (Body body : bodyList) {
+					invokeNoArgMethod(body, method);
 				}
-			} else {
-				if (found instanceof Body) {
-					m = ((Body) found).getClass().getMethod(method, (Class<?>[]) null);
-					m.invoke(((Body) found), (Object[]) null);
-				}
+			} else if (targetBody != null) {
+				invokeNoArgMethod(targetBody, method);
 			}
 		} catch (SecurityException e1) {
 			e1.printStackTrace();
@@ -56,24 +84,20 @@ public class BodyMethodDispatcher {
 	 * <br>パラメータあり、SHIFTで全体実行系のコマンド用
 	 *
 	 * @param e      入力されたマウスの動作
-	 * @param found  対象オブジェクト(主にゆっくり)
+	 * @param targetObject  対象オブジェクト(主にゆっくり)
 	 * @param method 実行したいメソッド名
 	 * @param prm    指定パラメータ
 	 */
-	public static final void execute(MouseEvent e, Obj found, String method, int prm) {
+	public static final void execute(MouseEvent e, Obj targetObject, String method, int prm) {
 		try {
-			Method m;
-			List<Body> bodyList = new LinkedList<Body>(GameWorld.get().getCurrentMap().getBody().values());
+			Body targetBody = asBody(targetObject);
+			List<Body> bodyList = getBodies();
 			if (e.isShiftDown()) {
-				for (Body b : bodyList) {
-					m = b.getClass().getMethod(method, int.class);
-					m.invoke(b, prm);
+				for (Body body : bodyList) {
+					invokeIntMethod(body, method, prm);
 				}
-			} else {
-				if (found instanceof Body) {
-					m = ((Body) found).getClass().getMethod(method, int.class);
-					m.invoke(((Body) found), prm);
-				}
+			} else if (targetBody != null) {
+				invokeIntMethod(targetBody, method, prm);
 			}
 		} catch (SecurityException e1) {
 			e1.printStackTrace();
@@ -93,35 +117,30 @@ public class BodyMethodDispatcher {
 	 * <br>パラメータboolean、SHIFTで全体、CTRLで反転実行系のコマンド用
 	 *
 	 * @param e         入力されたマウスの動作
-	 * @param found     対象オブジェクト(主にゆっくり)
+	 * @param targetObject     対象オブジェクト(主にゆっくり)
 	 * @param getMethod 取得メソッド名
 	 * @param setMethod 設定メソッド名
 	 * @param invMethod 反転実行メソッド名
 	 */
-	public static final void execute(MouseEvent e, Obj found, String getMethod, String setMethod, String invMethod) {
+	public static final void execute(MouseEvent e, Obj targetObject, String getMethod, String setMethod, String invMethod) {
 		try {
-			Method m;
-			List<Body> bodyList = new LinkedList<Body>(GameWorld.get().getCurrentMap().getBody().values());
+			Body targetBody = asBody(targetObject);
+			List<Body> bodyList = getBodies();
 			if (e.isShiftDown()) {
-				boolean flag = true;
-				if (found instanceof Body) {
-					m = ((Body) found).getClass().getMethod(getMethod, (Class<?>[]) null);
-					flag = !((Boolean) m.invoke(((Body) found), (Object[]) null)).booleanValue();
+				boolean enabled = true;
+				if (targetBody != null) {
+					Method method = targetBody.getClass().getMethod(getMethod, (Class<?>[]) null);
+					enabled = !((Boolean) method.invoke(targetBody, (Object[]) null)).booleanValue();
 				}
-				for (Body b : bodyList) {
-					m = b.getClass().getMethod(setMethod, boolean.class);
-					m.invoke(b, flag);
+				for (Body body : bodyList) {
+					invokeBooleanMethod(body, setMethod, enabled);
 				}
 			} else if (e.isControlDown()) {
-				for (Body b : bodyList) {
-					m = b.getClass().getMethod(invMethod, (Class<?>[]) null);
-					m.invoke(b, (Object[]) null);
+				for (Body body : bodyList) {
+					invokeNoArgMethod(body, invMethod);
 				}
-			} else {
-				if (found instanceof Body) {
-					m = ((Body) found).getClass().getMethod(invMethod, (Class<?>[]) null);
-					m.invoke(((Body) found), (Object[]) null);
-				}
+			} else if (targetBody != null) {
+				invokeNoArgMethod(targetBody, invMethod);
 			}
 		} catch (SecurityException e1) {
 			e1.printStackTrace();

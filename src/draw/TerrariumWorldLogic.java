@@ -6,7 +6,6 @@ import src.base.Body;
 import src.enums.PanicType;
 import src.item.Barrier;
 import src.util.GameWorld;
-import src.util.YukkuriUtil;
 
 /**
  * Terrarium に残っていたワールド寄りの個別ロジックをまとめる。
@@ -39,7 +38,7 @@ public final class TerrariumWorldLogic {
 				continue;
 			}
 			minDistance = Translate.distance(b.getX(), b.getY(), p.getX(), p.getY());
-			if (minDistance <= p.getEYESIGHTorg()) {
+			if (minDistance <= p.getEyesightBase()) {
 				if (b.getPanicType() == PanicType.BURN && !p.isRaper()) {
 					p.setPanic(true, PanicType.FEAR);
 				}
@@ -59,7 +58,7 @@ public final class TerrariumWorldLogic {
 			return;
 		}
 		for (Integer childId : b.getChildrenList()) {
-			Body child = YukkuriUtil.getBodyInstance(childId);
+			Body child = src.util.BodyRegistry.getBodyInstance(childId);
 			if (child == null) {
 				continue;
 			}

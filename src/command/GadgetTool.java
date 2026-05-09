@@ -14,91 +14,91 @@ public class GadgetTool {
 
 	/**
 	 * ゆ虐神拳を実行する.
-	 * @param b ゆっくりの実体
+	 * @param body ゆっくりの実体
 	 */
-	public static void doGodHand(Body b) {
+	public static void doGodHand(Body body) {
 		// 死んでたら何もしない
-		if( b.isDead() ){
+		if( body.isDead() ){
 			return;
 		}
 
 		switch( GameRandom.nextInt(8) ){
 		case 0:
-			if( b.judgeCanTransForGodHand() ){
+			if( body.judgeCanTransForGodHand() ){
 				// 突然変異
-				b.execTransform();
-				b.kick();
+				body.execTransform();
+				body.kick();
 			}
 			else{
 				// 突然変異できない場合はレイパーをToggle
-				b.setRapist(!b.isRapist());
-				b.kick();
+				body.setRapist(!body.isRapist());
+				body.kick();
 			}
 			// 持ち物を全部落とす
-			b.dropAllTakeoutItem();
+			body.dropAllTakeoutItem();
 			break;
 
 		case 1:	// 切断
-			b.bodyCut();
+			body.bodyCut();
 			// 持ち物を全部落とす
-			b.dropAllTakeoutItem();
-			b.kick();
+			body.dropAllTakeoutItem();
+			body.kick();
 			break;
 
 		case 2:
 			// つぶしていたのを引っ張る場合
-			if( b.getAbFlagGodHand()[2]  ){
-				b.setGodHandStretchPoint(b.getGodHandCompressPoint());
+			if( body.getAbFlagGodHand()[2]  ){
+				body.setGodHandStretchCount(body.getGodHandCompressCount());
 			}
 			// 引っ張る
-			b.getAbFlagGodHand()[1] = true;
-			b.getAbFlagGodHand()[2] = false;
+			body.getAbFlagGodHand()[1] = true;
+			body.getAbFlagGodHand()[2] = false;
 			// 実ゆの場合、親が反応する
-			b.checkReactionStalkMother(UnbirthBabyState.SAD);
+			body.checkReactionStalkMother(UnbirthBabyState.SAD);
 			break;
 
 		case 3:
 			// 伸ばしていたのをつぶす場合
-			if( b.getAbFlagGodHand()[1] ){
-				b.setGodHandCompressPoint(b.getGodHandStretchPoint());
+			if( body.getAbFlagGodHand()[1] ){
+				body.setGodHandCompressCount(body.getGodHandStretchCount());
 			}
 			// つぶす
-			b.getAbFlagGodHand()[1] = false;
-			b.getAbFlagGodHand()[2] = true;
+			body.getAbFlagGodHand()[1] = false;
+			body.getAbFlagGodHand()[2] = true;
 			// 実ゆの場合、親が反応する
-			b.checkReactionStalkMother(UnbirthBabyState.SAD);
+			body.checkReactionStalkMother(UnbirthBabyState.SAD);
 			break;
 
 		case 4:// 回復
 			// 痛めつけてから回復
 			// ダメージがある状態から復活した場合のセリフをしゃべる
-			b.setDamage(b.getDAMAGELIMITorg()[b.getBodyAgeState().ordinal()]/2);
+			body.setDamage(body.getDamageLimitBase()[body.getBodyAgeState().ordinal()]/2);
 			// 実ゆの場合、親が反応する
-			b.checkReactionStalkMother(UnbirthBabyState.HAPPY);
-			b.giveJuice();
+			body.checkReactionStalkMother(UnbirthBabyState.HAPPY);
+			body.giveJuice();
 			break;
 		case 5:// 言語破壊
 			// れいむの場合
-			if( b.getType() == Reimu.type){
-				b.setMsgType(YukkuriType.TARINAIREIMU);
+			if( body.getType() == Reimu.type){
+				body.setMsgType(YukkuriType.TARINAIREIMU);
 			}
 			else{
-				b.setMsgType(YukkuriType.TARINAI);
+				body.setMsgType(YukkuriType.TARINAI);
 			}
 			break;
 		default:
-			b.kick();
+			body.kick();
 			// 持ち物を全部落とす
-			b.dropAllTakeoutItem();
+			body.dropAllTakeoutItem();
 			// 二回目なら爆発的拡大
-			if( b.getAbFlagGodHand()[0] ){
-				b.setShit(b.getSHITLIMITorg()[b.getBodyAgeState().ordinal()] * 10);
-				b.setAnalClose(true);
+			if( body.getAbFlagGodHand()[0] ){
+				body.setShit(body.getShitLimitBase()[body.getBodyAgeState().ordinal()] * 10);
+				body.setAnalClose(true);
 			}
 			// 膨らむ
-			b.getAbFlagGodHand()[0] = true;
+			body.getAbFlagGodHand()[0] = true;
 			// 実ゆの場合、親が反応する
-			b.checkReactionStalkMother(UnbirthBabyState.SAD);
+			body.checkReactionStalkMother(UnbirthBabyState.SAD);
 			break;
 		}
 	}

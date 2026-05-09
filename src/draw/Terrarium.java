@@ -82,7 +82,6 @@ import src.logic.ToiletLogic;
 import src.system.FieldShapeBase;
 import src.system.MainCommandUI;
 import src.system.MapPlaceData;
-import src.util.YukkuriUtil;
 import src.yukkuri.Alice;
 import src.yukkuri.Ayaya;
 import src.yukkuri.Chen;
@@ -319,7 +318,7 @@ public class Terrarium implements Serializable {
 		// 茎と実ゆの参照を復元
 		for (MapPlaceData mpd : GameWorld.get().getMapList()) {
 			for (Stalk s : mpd.getStalk().values()) {
-				Body b = YukkuriUtil.getBodyInstance(s.getPlantYukkuri());
+				Body b = mpd.getBody().get(s.getPlantYukkuri());
 				if (b != null) {
 					// ゾンビ除去: ID一致のStalkを除去してから、Map側のインスタンスで上書き
 					b.getStalks().removeIf(z -> z.getStalkId().equals(s.getStalkId()));
@@ -327,13 +326,13 @@ public class Terrarium implements Serializable {
 				}
 			}
 			for (Stalk s : mpd.getStalk().values()) {
-				Body parent = YukkuriUtil.getBodyInstance(s.getPlantYukkuri());
+				Body parent = mpd.getBody().get(s.getPlantYukkuri());
 
 				for (Integer babyId : s.getBindBabies()) {
-					Body baby = YukkuriUtil.getBodyInstance(babyId);
+					Body baby = mpd.getBody().get(babyId);
 
 					if (baby != null && parent != null && baby.isUnBirth()) {
-						baby.setLinkParent(parent.getUniqueID());
+						baby.setParentLinkId(parent.getUniqueID());
 						baby.setBindStalk(s);
 						int i = s.getBindBabies().indexOf(babyId);
 						int babyZ = ((i % 5) * -2 + 14);
@@ -355,19 +354,19 @@ public class Terrarium implements Serializable {
 				Body restoredOwner = null;
 				int restoredBindCount = 0;
 
-				if (sui.getBindobj() instanceof Body && ((Body) sui.getBindobj()).getLinkParent() == sui.getObjId()) {
+				if (sui.getBindobj() instanceof Body && ((Body) sui.getBindobj()).getParentLinkId() == sui.getObjId()) {
 					restoredOwner = (Body) sui.getBindobj();
 				}
 
 				for (Body b : mpd.getBody().values()) {
-					if (b.getLinkParent() != sui.getObjId()) {
+					if (b.getParentLinkId() != sui.getObjId()) {
 						continue;
 					}
 					if (restoredBindCount >= restoredBindBodies.length) {
 						break;
 					}
 					restoredBindBodies[restoredBindCount++] = b;
-					b.setDropShadow(false);
+					b.setShadowVisible(false);
 					if (restoredOwner == null) {
 						restoredOwner = b;
 					}
@@ -626,7 +625,7 @@ public class Terrarium implements Serializable {
 		stalk.setBindBaby(b);
 		b.setBindStalk(stalk);
 		b.setUnBirth(true);
-		b.setDropShadow(false);
+		b.setShadowVisible(false);
 	}
 
 	/**

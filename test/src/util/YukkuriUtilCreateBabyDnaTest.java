@@ -9,6 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import src.SimYukkuri;
 import src.ConstState;
 import src.SequenceRNG;
+import src.engine.birth.BabyDnaFactory;
 import src.draw.Terrarium;
 import src.enums.Attitude;
 import src.enums.Intelligence;
@@ -85,7 +86,7 @@ public class YukkuriUtilCreateBabyDnaTest {
 
     @Test
     public void testCreateBabyDnaWithNullMother() {
-        Dna dna = YukkuriUtil.createBabyDna(null, null, 0, Attitude.AVERAGE, Intelligence.AVERAGE,
+        Dna dna = BabyDnaFactory.createBabyDna(null, null, 0, Attitude.AVERAGE, Intelligence.AVERAGE,
                 false, false, true);
         assertNull(dna);
     }
@@ -97,7 +98,7 @@ public class YukkuriUtilCreateBabyDnaTest {
         Reimu mother = new Reimu();
         Marisa father = new Marisa();
 
-        Dna dna = YukkuriUtil.createBabyDna(mother, father, father.getType(), Attitude.AVERAGE,
+        Dna dna = BabyDnaFactory.createBabyDna(mother, father, father.getType(), Attitude.AVERAGE,
                 Intelligence.AVERAGE, false, false, true);
 
         assertNotNull(dna);
@@ -111,7 +112,7 @@ public class YukkuriUtilCreateBabyDnaTest {
         DosMarisa mother = new DosMarisa();
         Reimu father = new Reimu();
 
-        Dna dna = YukkuriUtil.createBabyDna(mother, father, father.getType(), Attitude.AVERAGE,
+        Dna dna = BabyDnaFactory.createBabyDna(mother, father, father.getType(), Attitude.AVERAGE,
                 Intelligence.AVERAGE, false, false, true);
 
         assertNotNull(dna);
@@ -125,7 +126,7 @@ public class YukkuriUtilCreateBabyDnaTest {
         Reimu mother = new Reimu();
         Reimu father = new Reimu();
 
-        Dna dna = YukkuriUtil.createBabyDna(mother, father, father.getType(), Attitude.AVERAGE,
+        Dna dna = BabyDnaFactory.createBabyDna(mother, father, father.getType(), Attitude.AVERAGE,
                 Intelligence.AVERAGE, false, false, false);
 
         assertNull(dna, "Force-disabled creation should return null when the random check fails");
@@ -144,7 +145,7 @@ public class YukkuriUtilCreateBabyDnaTest {
             Reimu father = new Reimu();
             father.setUniqueID(Numbering.INSTANCE.numberingYukkuriID());
 
-            Dna dna = YukkuriUtil.createBabyDna(mother, father, father.getType(), Attitude.NICE,
+            Dna dna = BabyDnaFactory.createBabyDna(mother, father, father.getType(), Attitude.NICE,
                     Intelligence.WISE, true, true, true);
 
             assertNotNull(dna);
@@ -166,7 +167,7 @@ public class YukkuriUtilCreateBabyDnaTest {
             Reimu father = new Reimu();
             father.setUniqueID(Numbering.INSTANCE.numberingYukkuriID());
 
-            Dna dna = YukkuriUtil.createBabyDna(mother, father, father.getType(), Attitude.AVERAGE,
+            Dna dna = BabyDnaFactory.createBabyDna(mother, father, father.getType(), Attitude.AVERAGE,
                     Intelligence.AVERAGE, false, false, true);
 
             assertNotNull(dna);
@@ -182,7 +183,7 @@ public class YukkuriUtilCreateBabyDnaTest {
             Marisa father = new Marisa();
             SimYukkuri.RND = new SequenceBooleanRng(new int[] { 1, 0, 1, 1, 1, 1, 1 }, true);
 
-            Dna dna = YukkuriUtil.createBabyDna(mother, father, father.getType(), Attitude.AVERAGE,
+            Dna dna = BabyDnaFactory.createBabyDna(mother, father, father.getType(), Attitude.AVERAGE,
                     Intelligence.AVERAGE, false, false, true);
 
             assertNotNull(dna);
@@ -199,7 +200,7 @@ public class YukkuriUtilCreateBabyDnaTest {
             Reimu mother = new Reimu();
             Marisa father = new Marisa();
 
-            Dna dna = YukkuriUtil.createBabyDna(mother, father, father.getType(), Attitude.AVERAGE,
+            Dna dna = BabyDnaFactory.createBabyDna(mother, father, father.getType(), Attitude.AVERAGE,
                     Intelligence.AVERAGE, false, false, true);
 
             assertNotNull(dna);
@@ -215,7 +216,7 @@ public class YukkuriUtilCreateBabyDnaTest {
             Reimu mother = new Reimu();
             DosMarisa father = new DosMarisa();
 
-            Dna dna = YukkuriUtil.createBabyDna(mother, father, father.getType(), Attitude.AVERAGE,
+            Dna dna = BabyDnaFactory.createBabyDna(mother, father, father.getType(), Attitude.AVERAGE,
                     Intelligence.AVERAGE, false, false, true);
 
             assertNotNull(dna);
@@ -231,7 +232,7 @@ public class YukkuriUtilCreateBabyDnaTest {
             Deibu mother = new Deibu();
             Reimu father = new Reimu();
 
-            Dna dna = YukkuriUtil.createBabyDna(mother, father, father.getType(), Attitude.AVERAGE,
+            Dna dna = BabyDnaFactory.createBabyDna(mother, father, father.getType(), Attitude.AVERAGE,
                     Intelligence.AVERAGE, false, false, true);
 
             assertNotNull(dna);
@@ -244,7 +245,7 @@ public class YukkuriUtilCreateBabyDnaTest {
             Reimu father = new Reimu();
             SimYukkuri.RND = new SequenceBooleanRng(new int[] { 1, 0, 0, 4, 1 }, false);
 
-            Dna dna = YukkuriUtil.createBabyDna(mother, father, father.getType(), Attitude.AVERAGE,
+            Dna dna = BabyDnaFactory.createBabyDna(mother, father, father.getType(), Attitude.AVERAGE,
                     Intelligence.AVERAGE, false, false, true);
 
             assertNotNull(dna);
@@ -257,7 +258,7 @@ public class YukkuriUtilCreateBabyDnaTest {
             Reimu father = new Reimu();
             SimYukkuri.RND = new SequenceBooleanRng(new int[] { 1, 1, 0, 1, 1 }, false);
 
-            Dna dna = YukkuriUtil.createBabyDna(mother, father, father.getType(), Attitude.AVERAGE,
+            Dna dna = BabyDnaFactory.createBabyDna(mother, father, father.getType(), Attitude.AVERAGE,
                     Intelligence.AVERAGE, false, false, true);
 
             assertNotNull(dna);
@@ -270,7 +271,7 @@ public class YukkuriUtilCreateBabyDnaTest {
             Marisa father = new Marisa();
             SimYukkuri.RND = new SequenceBooleanRng(new int[] { 1, 1, 0, 1, 1 }, false);
 
-            Dna dna = YukkuriUtil.createBabyDna(mother, father, father.getType(), Attitude.AVERAGE,
+            Dna dna = BabyDnaFactory.createBabyDna(mother, father, father.getType(), Attitude.AVERAGE,
                     Intelligence.AVERAGE, false, false, true);
 
             assertNotNull(dna);
@@ -285,7 +286,7 @@ public class YukkuriUtilCreateBabyDnaTest {
             SimYukkuri.RND = new SequenceBooleanRng(
                     new int[] { 0, 0, 1, 1, 1, 1, 1, 1, 1 }, false);
 
-            Dna dna = YukkuriUtil.createBabyDna(mother, father, father.getType(), Attitude.AVERAGE,
+            Dna dna = BabyDnaFactory.createBabyDna(mother, father, father.getType(), Attitude.AVERAGE,
                     Intelligence.AVERAGE, false, false, true);
 
             assertNotNull(dna);
@@ -317,7 +318,7 @@ public class YukkuriUtilCreateBabyDnaTest {
             mother.setAttitude(Attitude.VERY_NICE);
             SimYukkuri.RND = new BoundCheckedRandom();
 
-            Dna dna = YukkuriUtil.createBabyDna(mother, father, Reimu.type, Attitude.VERY_NICE,
+            Dna dna = BabyDnaFactory.createBabyDna(mother, father, Reimu.type, Attitude.VERY_NICE,
                     Intelligence.AVERAGE, false, false, true);
 
             assertNotNull(dna);
@@ -333,7 +334,7 @@ public class YukkuriUtilCreateBabyDnaTest {
             SimYukkuri.RND = new SequenceBooleanRng(
                     new int[] { 1, 1, 1, 1, 2, 0, 0 }, true);
 
-            Dna dna = YukkuriUtil.createBabyDna(mother, father, Reimu.type, Attitude.VERY_NICE,
+            Dna dna = BabyDnaFactory.createBabyDna(mother, father, Reimu.type, Attitude.VERY_NICE,
                     Intelligence.FOOL, false, false, true);
 
             assertNotNull(dna);

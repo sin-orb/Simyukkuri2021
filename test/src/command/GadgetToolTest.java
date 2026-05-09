@@ -14,7 +14,7 @@ import src.SimYukkuri;
 import src.base.Body;
 import src.draw.World;
 import src.enums.AgeState;
-import src.enums.BaryInUGState;
+import src.enums.BurialState;
 import src.enums.CriticalDamegeType;
 import src.enums.Intelligence;
 import src.enums.YukkuriType;
@@ -88,7 +88,7 @@ public class GadgetToolTest {
         public void testCase0RapistToggleWhenCannotTransform() {
             // StubBody(getType()=0) は Body.judgeCanTransForGodHand()=false を返す
             // Reimuは judgeCanTransForGodHand()=true でexecTransformはmypaneが必要
-            // → Reimu + BaryInUGState で isUnBirth=false なのでtrue → execTransformでNPE
+            // → Reimu + BurialState で isUnBirth=false なのでtrue → execTransformでNPE
             // → Body基底クラスのjudgeCanTransForGodHandはfalseを返す
             // → StubBodyと同等の別手段が必要
             // → 代わりにReimuで、rapistトグル前後の値を確認
@@ -116,8 +116,8 @@ public class GadgetToolTest {
             Body b = createReimuBody(AgeState.ADULT);
             ConstState cs = new ConstState(1);
             SimYukkuri.RND = cs;
-            // BaryInUGState.ALL にしてaddVomitをスキップ
-            b.setBaryState(BaryInUGState.ALL);
+            // BurialState.ALL にしてaddVomitをスキップ
+            b.setBurialState(BurialState.ALL);
 
             assertNull(b.getCriticalDamegeType());
 
@@ -150,14 +150,14 @@ public class GadgetToolTest {
 
             // つぶし状態から引っ張りに切り替え
             b.getAbFlagGodHand()[2] = true;
-            b.setGodHandCompressPoint(42);
+            b.setGodHandCompressCount(42);
 
             GadgetTool.doGodHand(b);
 
             assertTrue(b.getAbFlagGodHand()[1]);
             assertFalse(b.getAbFlagGodHand()[2]);
             // compressPointがstretchPointにコピーされる
-            assertEquals(42, b.getGodHandStretchPoint());
+            assertEquals(42, b.getGodHandStretchCount());
         }
 
         @Test
@@ -183,14 +183,14 @@ public class GadgetToolTest {
 
             // 引っ張り状態からつぶしに切り替え
             b.getAbFlagGodHand()[1] = true;
-            b.setGodHandStretchPoint(99);
+            b.setGodHandStretchCount(99);
 
             GadgetTool.doGodHand(b);
 
             assertFalse(b.getAbFlagGodHand()[1]);
             assertTrue(b.getAbFlagGodHand()[2]);
             // stretchPointがcompressPointにコピーされる
-            assertEquals(99, b.getGodHandCompressPoint());
+            assertEquals(99, b.getGodHandCompressCount());
         }
 
         @Test
@@ -200,7 +200,7 @@ public class GadgetToolTest {
             SimYukkuri.RND = cs;
 
             // ダメージを与えてから回復
-            int halfDamage = b.getDAMAGELIMITorg()[AgeState.ADULT.ordinal()] / 2;
+            int halfDamage = b.getDamageLimitBase()[AgeState.ADULT.ordinal()] / 2;
             b.setDamage(halfDamage);
             assertTrue(b.getDamage() > 0 || halfDamage > 0, "ダメージが設定されているべき");
 

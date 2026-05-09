@@ -57,7 +57,7 @@ public class ModLoader {
 
 	private static String developRoot = null;
 	// 表情の別バージョンの最大数
-	private static final int nMaxImgOtherVer = 6;
+	private static final int maxImageVariantCount = 6;
 
 	public static String getDefaultImgRootDir() {
 		return DEFAULT_IMG_ROOT_DIR;
@@ -116,7 +116,7 @@ public class ModLoader {
 	}
 
 	public static int getMaxImgOtherVer() {
-		return nMaxImgOtherVer;
+		return maxImageVariantCount;
 	}
 
 	/**
@@ -514,7 +514,7 @@ public class ModLoader {
 	 * @return キーから取得されたINIファイル上の数値
 	 */
 	public static int loadBodyIniMapForInt(ClassLoader loader, String path, String name, String inKey) {
-		int nRet = 0;
+		int result = 0;
 		IniFileReader iniFile = null;
 		boolean jarTry = true;
 
@@ -533,20 +533,20 @@ public class ModLoader {
 
 		boolean err = iniFile.open(loader);
 		if (!err)
-			return nRet;
+			return result;
 
 		HashMap<String, String> map = null;
 		while ((map = iniFile.readNext()) != null) {
 			String key = map.get(IniFileReader.INI_KEY);
 			String value = map.get(IniFileReader.INI_VALUE);
 			if (key.equals(inKey)) {
-				nRet = Integer.valueOf(value);
+				result = Integer.valueOf(value);
 				break;
 			}
 		}
 		iniFile.close();
 
-		return nRet;
+		return result;
 	}
 
 	/**
@@ -590,11 +590,11 @@ public class ModLoader {
 			}
 		}
 
-		String[] anStr = strTemp.split(":", 0);
+		String[] parts = strTemp.split(":", 0);
 
 		iniFile.close();
 
-		return anStr;
+		return parts;
 	}
 
 	/**
@@ -735,7 +735,7 @@ public class ModLoader {
 			images[i][Const.LEFT][adultIndex][0] = tmp.getImg()[Const.LEFT];
 			images[i][Const.RIGHT][adultIndex][0] = tmp.getImg()[Const.RIGHT];
 
-			for (int j = 0; j < ModLoader.nMaxImgOtherVer; j++) {
+			for (int j = 0; j < ModLoader.maxImageVariantCount; j++) {
 				images[i][Const.LEFT][adultIndex][j + 1] = tmp.getImgOtherVer()[Const.LEFT][j];
 				images[i][Const.RIGHT][adultIndex][j + 1] = tmp.getImgOtherVer()[Const.RIGHT][j];
 
@@ -773,7 +773,7 @@ public class ModLoader {
 		// 子、赤ゆサイズの画像作成
 		for (BufferedImage[][][] array3d : images) {
 			for (BufferedImage[][] array2d : array3d) {
-				for (int i = 0; i < nMaxImgOtherVer + 1; i++) {
+				for (int i = 0; i < maxImageVariantCount + 1; i++) {
 					if (array2d[adultIndex][i] == null) {
 						array2d[childIndex][i] = null;
 						array2d[babyIndex][i] = null;
@@ -954,10 +954,10 @@ public class ModLoader {
 						}
 
 						// ver違いの画像があった場合の採用チェック
-						for (int j = 0; j < ModLoader.nMaxImgOtherVer; j++) {
-							int nTempVer = j + 2;// v2スタート
+						for (int j = 0; j < ModLoader.maxImageVariantCount; j++) {
+							int variantIndex = j + 2;// v2スタート
 							// v2,v3などが存在するか
-							String strTempPath = strBeforeTemp + "_v" + nTempVer + ".png";
+							String strTempPath = strBeforeTemp + "_v" + variantIndex + ".png";
 
 							if (loader.getResource(strTempPath) == null) {
 								ret.getImgOtherVer()[i][j] = null;

@@ -25,7 +25,7 @@ public class BodyWakeupRuleTest {
 	void testCheckWakeupOtherYukkuri_returnsTrueWhenAwakeBodyVisible() {
 		Body me = WorldTestHelper.createBody();
 		Body you = WorldTestHelper.createBody();
-		me.setEYESIGHTorg(1);
+		me.setEyesightBase(1);
 		me.setX(10);
 		me.setY(10);
 		you.setX(200);
@@ -40,7 +40,7 @@ public class BodyWakeupRuleTest {
 	void testCheckWakeupOtherYukkuri_returnsFalseWhenVisibleBodySleeping() {
 		Body me = WorldTestHelper.createBody();
 		Body you = WorldTestHelper.createBody();
-		me.setEYESIGHTorg(1);
+		me.setEyesightBase(1);
 		me.setX(10);
 		me.setY(10);
 		you.setX(200);

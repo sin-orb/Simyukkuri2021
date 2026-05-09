@@ -23,7 +23,6 @@ import src.logic.FoodLogic;
 import src.logic.ToyLogic;
 import src.system.MessagePool;
 import src.system.ResourceUtil;
-import src.util.YukkuriUtil;
 import src.yukkuri.Fran;
 import src.yukkuri.Meirin;
 import src.yukkuri.Remirya;
@@ -115,12 +114,12 @@ public class PredatorsGameEvent extends EventPacket {
 
 		if (b.isDead())
 			return false;
-		Body from = YukkuriUtil.getBodyInstance(getFrom());
+		Body from = src.util.BodyRegistry.getBodyInstance(getFrom());
 		if (b.isPredatorType() && b == from) {
 			// 遊び相手の決定
 			for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
 				Body d = entry.getValue();
-				int minDistance = b.getEYESIGHTorg();
+				int minDistance = b.getEyesightBase();
 				int wallMode = b.getBodyAgeState().ordinal();
 				int size = b.getBodyAgeState().ordinal();
 				// 飛行可能なら壁以外は通過可能
@@ -181,8 +180,8 @@ public class PredatorsGameEvent extends EventPacket {
 	// UpdateState.ABORTを返すとイベント終了
 	@Override
 	public UpdateState update(Body b) {
-		Body from = YukkuriUtil.getBodyInstance(getFrom());
-		Body toy = YukkuriUtil.getBodyInstance(this.toy);
+		Body from = src.util.BodyRegistry.getBodyInstance(getFrom());
+		Body toy = src.util.BodyRegistry.getBodyInstance(this.toy);
 		// 対象が決定できなかったり、捕食防止ディフューザー環境だったりしたら中止。ボール遊びを試す
 		if (from == null || toy == null || GameEnvironment.isPredatorSteam()) {
 			if (ToyLogic.checkToy(from)) {
@@ -193,14 +192,14 @@ public class PredatorsGameEvent extends EventPacket {
 		}
 		// 相手が消えてしまったらイベント中断
 		if (toy.isRemoved() || toy.isGrabbed()) {
-			toy.setLinkParent(-1);
+			toy.setParentLinkId(-1);
 			return UpdateState.ABORT;
 		}
 		// 相手が死んだらイベント中断
 		if (toy.isDead()) {
 			from.setMessage(GameMessages.getMessage(b, MessagePool.Action.ComplainAboutFragleness), true);
 			from.setForceFace(ImageCode.PUFF.ordinal());
-			toy.setLinkParent(-1);
+			toy.setParentLinkId(-1);
 			return UpdateState.ABORT;
 		}
 		// 各動作は1回ずつ
@@ -214,7 +213,7 @@ public class PredatorsGameEvent extends EventPacket {
 		// 満足したら辞める
 		if (from.isVeryHungry() || from.isSleepy() || GameRandom.nextInt(1000) == 0) {
 			// b.setMessage(GameMessages.getMessage(b, MessagePool.Action.GameEnd));
-			toy.setLinkParent(-1);
+			toy.setParentLinkId(-1);
 			return UpdateState.ABORT;
 		}
 
@@ -255,7 +254,7 @@ public class PredatorsGameEvent extends EventPacket {
 					b.setForceFace(ImageCode.SMILE.ordinal());
 					b.setMessage(GameMessages.getMessage(b, MessagePool.Action.DropYukkuri));
 					b.addStress(-100);
-					toy.setLinkParent(-1);
+					toy.setParentLinkId(-1);
 					toy.strikeByYukkuri(b, this, false);
 					b.moveTo(toy.getX(), toy.getY(), Translate.getFlyHeightLimit());
 					// toy.addDamage(25);
@@ -309,7 +308,7 @@ public class PredatorsGameEvent extends EventPacket {
 				else
 					b.setForceFace(ImageCode.SMILE.ordinal());
 				b.setMessage(GameMessages.getMessage(b, MessagePool.Action.CaughtYou), true);
-				toy.setLinkParent(b.objId);
+				toy.setParentLinkId(b.objId);
 				grabbing = true;
 				b.moveTo(b.getX(), b.getY(), 5);
 			}
@@ -348,25 +347,25 @@ public class PredatorsGameEvent extends EventPacket {
 	// trueを返すとイベント終了
 	@Override
 	public boolean execute(Body b) {
-		Body toy = YukkuriUtil.getBodyInstance(this.toy);
+		Body toy = src.util.BodyRegistry.getBodyInstance(this.toy);
 		// 相手が消えてしまったらイベント中断
 		if (toy == null || toy.isRemoved()) {
-			toy.setLinkParent(-1);
+			toy.setParentLinkId(-1);
 			return true;
 		}
-		Body from = YukkuriUtil.getBodyInstance(getFrom());
+		Body from = src.util.BodyRegistry.getBodyInstance(getFrom());
 		if (from == null)
 			return true;
 		// 相手が捕まれたらイベント中断
 		if (toy.isGrabbed()) {
-			Body to = YukkuriUtil.getBodyInstance(getTo());
+			Body to = src.util.BodyRegistry.getBodyInstance(getTo());
 			if (to != null)
-				to.setLinkParent(-1);
+				to.setParentLinkId(-1);
 			return true;
 		}
 		// 相手が死んだらイベント中断
 		if (toy.isDead()) {
-			toy.setLinkParent(-1);
+			toy.setParentLinkId(-1);
 			return true;
 		}
 		// 相手の座標を縛る
@@ -377,13 +376,13 @@ public class PredatorsGameEvent extends EventPacket {
 		tick2++;
 		if (tick2 == 20) {
 			tick2 = 0;
-			FoodLogic.eatFood(b, Food.FoodType.BODY, Math.min(b.getEatAmount(), toy.getBodyAmount()));
-			toy.eatBody(Math.min(b.getEatAmount(), toy.getBodyAmount()));
+			FoodLogic.eatFood(b, Food.FoodType.BODY, Math.min(b.getEatAmount(), toy.getAnkoAmount()));
+			toy.eatBody(Math.min(b.getEatAmount(), toy.getAnkoAmount()));
 			if (toy.isSick() && GameRandom.nextBoolean())
 				b.addSickPeriod(100);
 			if (toy.isDead()) {
 				toy.setMessage(GameMessages.getMessage(toy, MessagePool.Action.Dead));
-				toy.setLinkParent(-1);
+				toy.setParentLinkId(-1);
 				return true;
 			} else {
 				if (toy.isNotNYD()) {
@@ -401,9 +400,9 @@ public class PredatorsGameEvent extends EventPacket {
 	public void end(Body b) {
 		b.setMessage(GameMessages.getMessage(b, MessagePool.Action.GameEnd));
 		grabbing = false;
-		Body toy = YukkuriUtil.getBodyInstance(this.toy);
+		Body toy = src.util.BodyRegistry.getBodyInstance(this.toy);
 		if (toy != null) {
-			toy.setLinkParent(-1);
+			toy.setParentLinkId(-1);
 			toy = null;
 		}
 	}

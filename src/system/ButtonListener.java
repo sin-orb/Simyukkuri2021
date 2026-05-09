@@ -71,7 +71,7 @@ public final class ButtonListener implements ActionListener {
 		} else if (source.equals(MainCommandUI.getPinButton())) {
 			Body selected = MyPane.getSelectBody();
 			if (selected != null && !selected.isRemoved()) {
-				selected.setPin(MainCommandUI.getPinButton().isSelected());
+				selected.setPinned(MainCommandUI.getPinButton().isSelected());
 			}
 		}
 	}

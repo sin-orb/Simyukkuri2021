@@ -454,7 +454,7 @@ class ProcesserPlateTest extends ItemTestBase {
 
             Body body = WorldTestHelper.createBody();
             body.setSleeping(true);
-            body.setDropShadow(true);
+            body.setShadowVisible(true);
             int damageBefore = body.getDamage();
             int stressBefore = body.getStress();
 
@@ -464,7 +464,7 @@ class ProcesserPlateTest extends ItemTestBase {
             item.upDate();
 
             assertFalse(body.isSleeping());
-            assertFalse(body.isDropShadow());
+            assertFalse(body.isShadowVisible());
             assertEquals(damageBefore + 5, body.getDamage());
             assertEquals(stressBefore + 30, body.getStress());
             assertEquals(Happiness.VERY_SAD, body.getHappiness());
@@ -490,7 +490,7 @@ class ProcesserPlateTest extends ItemTestBase {
 
             assertFalse(body.isSleeping());
             assertTrue(body.isPealed());
-            assertEquals(HairState.BALDHEAD, body.geteHairState());
+            assertEquals(HairState.BALDHEAD, body.getHairState());
         }
 
         @Test
@@ -504,7 +504,7 @@ class ProcesserPlateTest extends ItemTestBase {
             body.setHasBraid(false);
             body.setBlind(true);
             body.setShutmouth(true);
-            body.seteHairState(HairState.BALDHEAD);
+            body.setHairState(HairState.BALDHEAD);
 
             item.getProcessedBodyList().add(body);
             item.getProcessedBodyEffectList().add(null);

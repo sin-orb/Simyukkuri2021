@@ -319,7 +319,7 @@ class AvoidMoldEventTest {
     void testExecute_adultFrom_isTalking_returnsTrue() {
         Body from = createBody(); // adult
         Body to = createBody();
-        from.setMessageCount(1); // isTalking() = true → inner block skipped
+        from.setMessageTicks(1); // isTalking() = true → inner block skipped
         AvoidMoldEvent event = new AvoidMoldEvent(from, to, null, 10);
         assertTrue(event.execute(from));
     }

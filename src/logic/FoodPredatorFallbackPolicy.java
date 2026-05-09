@@ -10,9 +10,8 @@ import src.item.Barrier;
 import src.item.Food;
 import src.game.Shit;
 import src.game.Vomit;
-import src.enums.BaryInUGState;
+import src.enums.BurialState;
 import src.util.GameWorld;
-import src.util.YukkuriUtil;
 
 /**
  * 捕食種向けの非 body 食候補検索.
@@ -25,92 +24,92 @@ public final class FoodPredatorFallbackPolicy {
 	/**
 	 * 残りの食候補を探索する.
 	 */
-	public static Obj searchFallbackFood(Body b, Obj found, Obj found3, int minDistance, int wallMode) {
-		if (found == null && b.isFull()) {
-			return found;
+	public static Obj searchFallbackFood(Body body, Obj nearestFood, Obj fallbackFood, int nearestDistance, int wallMode) {
+		if (nearestFood == null && body.isFull()) {
+			return nearestFood;
 		}
 
-		Obj result = found;
+		Obj selectedFood = nearestFood;
 
 		// 非常食検索
 		for (Map.Entry<Integer, src.game.Stalk> entry : GameWorld.get().getCurrentMap().getStalk().entrySet()) {
-			src.game.Stalk s = entry.getValue();
-			Body p = GameWorld.get().getCurrentMap().getBody().get(s.getPlantYukkuri());
-			if (p != null) {
-				if (p == b) {
+			src.game.Stalk stalk = entry.getValue();
+			Body plantBody = GameWorld.get().getCurrentMap().getBody().get(stalk.getPlantYukkuri());
+			if (plantBody != null) {
+				if (plantBody == body) {
 					continue;
 				}
 				// 地中に埋まっているなら引っこ抜いて食べる
-				if (p.getBaryState() != BaryInUGState.ALL &&
-						!(p.getBaryState() == BaryInUGState.NEARLY_ALL && !p.hasOkazari())) {
+				if (plantBody.getBurialState() != BurialState.ALL &&
+						!(plantBody.getBurialState() == BurialState.NEARLY_ALL && !plantBody.hasOkazari())) {
 					continue;
 				}
 
 				// 通常は実ゆつきは食べない
-				List<Integer> babyList = s.getBindBabies();
+				List<Integer> babyList = stalk.getBindBabies();
 				if (babyList != null && babyList.size() != 0) {
-					boolean bBabyFlag = false;
-					for (int ibaby : babyList) {
-						Body baby = YukkuriUtil.getBodyInstance(ibaby);
+					boolean hasBaby = false;
+					for (int babyId : babyList) {
+						Body baby = src.util.BodyRegistry.getBodyInstance(babyId);
 						if (baby == null) {
 							continue;
 						}
-						bBabyFlag = true;
+						hasBaby = true;
 						break;
 					}
-					if (bBabyFlag) {
+					if (hasBaby) {
 						continue;
 					}
 				}
 			}
 
-			int distance = Translate.distance(b.getX(), b.getY(), s.getX(), s.getY());
-			if (minDistance > distance) {
-				if (Barrier.acrossBarrier(b.getX(), b.getY(), s.getX(), s.getY(),
+			int distance = Translate.distance(body.getX(), body.getY(), stalk.getX(), stalk.getY());
+			if (nearestDistance > distance) {
+				if (Barrier.acrossBarrier(body.getX(), body.getY(), stalk.getX(), stalk.getY(),
 						Barrier.MAP_BODY[wallMode] + Barrier.BARRIER_KEKKAI)) {
 					continue;
 				}
-				result = s;
-				minDistance = distance;
+				selectedFood = stalk;
+				nearestDistance = distance;
 			}
 		}
 
-		if (result == null) {
-			result = found3;
+		if (selectedFood == null) {
+			selectedFood = fallbackFood;
 		}
 
-		if (result == null) {
+		if (selectedFood == null) {
 			for (Map.Entry<Integer, Vomit> entry : GameWorld.get().getCurrentMap().getVomit().entrySet()) {
-				Vomit v = entry.getValue();
-				int distance = Translate.distance(b.getX(), b.getY(), v.getX(), v.getY());
-				if (minDistance > distance) {
-					if (Barrier.acrossBarrier(b.getX(), b.getY(), v.getX(), v.getY(),
+				Vomit vomit = entry.getValue();
+				int distance = Translate.distance(body.getX(), body.getY(), vomit.getX(), vomit.getY());
+				if (nearestDistance > distance) {
+					if (Barrier.acrossBarrier(body.getX(), body.getY(), vomit.getX(), vomit.getY(),
 							Barrier.MAP_BODY[wallMode] + Barrier.BARRIER_KEKKAI)) {
 						continue;
 					}
-					result = v;
-					minDistance = distance;
+					selectedFood = vomit;
+					nearestDistance = distance;
 				}
 			}
 		}
-		if (result == null) {
+		if (selectedFood == null) {
 			for (Map.Entry<Integer, Shit> entry : GameWorld.get().getCurrentMap().getShit().entrySet()) {
-				Shit s = entry.getValue();
-				if (!b.isTooHungry()) {
+				Shit shit = entry.getValue();
+				if (!body.isTooHungry()) {
 					break;
 				}
-				int distance = Translate.distance(b.getX(), b.getY(), s.getX(), s.getY());
-				if (minDistance > distance) {
-					if (Barrier.acrossBarrier(b.getX(), b.getY(), s.getX(), s.getY(),
+				int distance = Translate.distance(body.getX(), body.getY(), shit.getX(), shit.getY());
+				if (nearestDistance > distance) {
+					if (Barrier.acrossBarrier(body.getX(), body.getY(), shit.getX(), shit.getY(),
 							Barrier.MAP_BODY[wallMode] + Barrier.BARRIER_KEKKAI)) {
 						continue;
 					}
-					result = s;
-					minDistance = distance;
+					selectedFood = shit;
+					nearestDistance = distance;
 				}
 			}
 		}
 
-		return result;
+		return selectedFood;
 	}
 }

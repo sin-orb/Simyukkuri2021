@@ -249,18 +249,18 @@ public class GarbageStation extends ObjEX {
 	/** iniファイル読み込み */
 	public void readIniFile() {
 		ClassLoader loader = this.getClass().getClassLoader();
-		int nTemp = 0;
+		int iniValue = 0;
 		// 時間
-		nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataItemIniDir(), "GarbageStation", "throwingTime");
-		if (nTemp >= 6)
-			throwingTime = nTemp * 100 - 600;
-		else if (nTemp >= 0)
-			throwingTime = nTemp * 100 + 1800;
+		iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataItemIniDir(), "GarbageStation", "throwingTime");
+		if (iniValue >= 6)
+			throwingTime = iniValue * 100 - 600;
+		else if (iniValue >= 0)
+			throwingTime = iniValue * 100 + 1800;
 		// 確率
-		nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataItemIniDir(), "GarbageStation",
+		iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataItemIniDir(), "GarbageStation",
 				"gettingProbability");
-		if (nTemp != 0)
-			gettingP = nTemp;
+		if (iniValue != 0)
+			gettingP = iniValue;
 	}
 
 	public boolean[] getEnable() {

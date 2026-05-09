@@ -16,11 +16,11 @@ import src.draw.ModLoader;
 public class BakeSmoke extends Effect {
 
 	private static final long serialVersionUID = 5547702513633744632L;
-	private static BufferedImage[] images;
-	private static int imgW;
-	private static int imgH;
-	private static int pivX;
-	private static int pivY;
+	private static BufferedImage[] imageLayers;
+	private static int imageWidth;
+	private static int imageHeight;
+	private static int pivotX;
+	private static int pivotY;
 
 	/**
 	 * イメージをロードする.
@@ -31,21 +31,21 @@ public class BakeSmoke extends Effect {
 	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
 		
 		// ホットプレートの煙
-		images = new BufferedImage[3];
+		imageLayers = new BufferedImage[3];
 		for(int i = 0; i < 3; i++) {
-			images[i] = ModLoader.loadItemImage(loader, "effect" + File.separator + "smoke_" + i + ".png");
+			imageLayers[i] = ModLoader.loadItemImage(loader, "effect" + File.separator + "smoke_" + i + ".png");
 		}
-		imgW = images[0].getWidth(io);
-		imgH = images[0].getHeight(io);
-		pivX = imgW >> 1;
-		pivY = imgH - 1;
+		imageWidth = imageLayers[0].getWidth(io);
+		imageHeight = imageLayers[0].getHeight(io);
+		pivotX = imageWidth >> 1;
+		pivotY = imageHeight - 1;
 	}
 	/**
 	 * イメージを取得する.
 	 */
 	@Override
 	public BufferedImage getImage() {
-		return images[animeFrame];
+		return imageLayers[animeFrame];
 	}
 	/**
 	 * コンストラクタ.
@@ -53,7 +53,7 @@ public class BakeSmoke extends Effect {
 	public BakeSmoke(int sX, int sY, int sZ, int vX, int vY, int vZ, boolean invert,
 						int life, int loop, boolean end, boolean grav, boolean front) {
 		super(sX, sY, sZ, vX, vY, vZ, invert, life, loop, end, grav, front);
-		setBoundary(pivX, pivY, imgW, imgH);
+		setBoundary(pivotX, pivotY, imageWidth, imageHeight);
 		interval = 0;
 		frames = 3;
 	}
@@ -61,10 +61,11 @@ public class BakeSmoke extends Effect {
 	public BakeSmoke() {
 		
 	}
-	public static BufferedImage[] getImages() {
-		return images;
+	public static BufferedImage[] getImageLayers() {
+		return imageLayers;
 	}
-	public static void setImages(BufferedImage[] images) {
-		BakeSmoke.images = images;
+
+	public static void setImageLayers(BufferedImage[] imageLayers) {
+		BakeSmoke.imageLayers = imageLayers;
 	}	
 }

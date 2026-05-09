@@ -324,14 +324,14 @@ class StoneTest extends ItemTestBase {
     @Test
     void testGetLinkParent_Default() {
         Stone stone = new Stone(100, 100, 0);
-        assertEquals(-1, stone.getLinkParent());
+        assertEquals(-1, stone.getParentLinkId());
     }
 
     @Test
     void testSetLinkParent() {
         Stone stone = new Stone(100, 100, 0);
-        stone.setLinkParent(42);
-        assertEquals(42, stone.getLinkParent());
+        stone.setParentLinkId(42);
+        assertEquals(42, stone.getParentLinkId());
     }
 
     @Test
@@ -497,7 +497,7 @@ class StoneTest extends ItemTestBase {
     @Test
     void testAddBxyz() {
         Stone stone = new Stone(100, 100, 0);
-        stone.addBxyz(1, 2, 3);
+        stone.addMotion(1, 2, 3);
         assertEquals(1, stone.getBx());
         assertEquals(2, stone.getBy());
         assertEquals(3, stone.getBz());
@@ -509,7 +509,7 @@ class StoneTest extends ItemTestBase {
         stone.setBx(5);
         stone.setBy(7);
         stone.setBz(2);
-        stone.resetBPos();
+        stone.resetMotion();
         assertEquals(0, stone.getBx());
         assertEquals(0, stone.getBy());
         assertEquals(0, stone.getBz());
@@ -575,42 +575,42 @@ class StoneTest extends ItemTestBase {
     }
 
     @Test
-    void testIsbFallingUnderGround_Default() {
+    void testIsFallingUnderGround_Default() {
         Stone stone = new Stone(100, 100, 0);
-        assertFalse(stone.isbFallingUnderGround());
+        assertFalse(stone.isFallingUnderGround());
     }
 
     @Test
-    void testSetbFallingUnderGround() {
+    void testSetFallingUnderGround() {
         Stone stone = new Stone(100, 100, 0);
-        stone.setbFallingUnderGround(true);
-        assertTrue(stone.isbFallingUnderGround());
+        stone.setFallingUnderGround(true);
+        assertTrue(stone.isFallingUnderGround());
     }
 
     @Test
     void testIsbInPool_Default() {
         Stone stone = new Stone(100, 100, 0);
-        assertFalse(stone.isbInPool());
+        assertFalse(stone.isInPool());
     }
 
     @Test
     void testSetbInPool() {
         Stone stone = new Stone(100, 100, 0);
-        stone.setbInPool(true);
-        assertTrue(stone.isbInPool());
+        stone.setInPool(true);
+        assertTrue(stone.isInPool());
     }
 
     @Test
     void testGetnMostDepth_Default() {
         Stone stone = new Stone(100, 100, 0);
-        assertEquals(0, stone.getnMostDepth());
+        assertEquals(0, stone.getMostDepth());
     }
 
     @Test
     void testSetnMostDepth() {
         Stone stone = new Stone(100, 100, 0);
-        stone.setnMostDepth(-10);
-        assertEquals(-10, stone.getnMostDepth());
+        stone.setMostDepth(-10);
+        assertEquals(-10, stone.getMostDepth());
     }
 
     @Test

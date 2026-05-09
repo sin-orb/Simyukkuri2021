@@ -169,7 +169,7 @@ public class CashTest {
             Reimu baby = new Reimu();
             baby.setAge(0);
             long initialCash = SimYukkuri.world.getPlayer().getCash();
-            long expectedCost = baby.getYcost() / 3;
+            long expectedCost = baby.getCost() / 3;
 
             long cost = Cash.buyYukkuri(baby);
 

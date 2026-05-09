@@ -61,7 +61,7 @@ public final class FoodConsumptionPolicy {
 		b.checkTang();
 	}
 
-	static int[][] anLovePoint = {
+	static int[][] lovePointTable = {
 			// バカ舌,	普通,	肥えてる
 			{ -50, -100, -500 }, //	SHIT　うんうん
 			{ -1, -30, -50 }, //	BITTER
@@ -89,7 +89,7 @@ public final class FoodConsumptionPolicy {
 			// 飼いゆの場合のみ。野良ならうんうん奴隷の可能性があるので
 			if (b.getBodyRank() == BodyRank.KAIYU) {
 				// なつき度設定
-				b.addLovePlayer(anLovePoint[0][0]);
+				b.addLovePlayer(lovePointTable[0][0]);
 			}
 			break;
 		case BITTER:
@@ -101,7 +101,7 @@ public final class FoodConsumptionPolicy {
 				b.addStress(-500);
 				b.addTang(200);
 				// なつき度設定
-				b.addLovePlayer(-1 * anLovePoint[1][0]);
+				b.addLovePlayer(-1 * lovePointTable[1][0]);
 			} else {
 				b.strike(NEEDLE * 2);
 				b.setHappiness(Happiness.SAD);
@@ -112,7 +112,7 @@ public final class FoodConsumptionPolicy {
 				b.addStress(250);
 				b.addMemories(-5);
 				// なつき度設定
-				b.addLovePlayer(anLovePoint[1][0]);
+				b.addLovePlayer(lovePointTable[1][0]);
 			}
 			break;
 		case LEMONPOP:
@@ -124,7 +124,7 @@ public final class FoodConsumptionPolicy {
 			b.addStress(-500);
 			b.addTang(50);
 			// なつき度設定
-			b.addLovePlayer(anLovePoint[2][0]);
+			b.addLovePlayer(lovePointTable[2][0]);
 			break;
 		case HOT:
 		case HOT_NORA:
@@ -135,7 +135,7 @@ public final class FoodConsumptionPolicy {
 				b.addStress(-500);
 				b.addTang(200);
 				// なつき度設定
-				b.addLovePlayer(-1 * anLovePoint[3][0]);
+				b.addLovePlayer(-1 * lovePointTable[3][0]);
 			} else {
 				b.strike(HAMMER >> 1);
 				b.setHappiness(Happiness.SAD);
@@ -144,7 +144,7 @@ public final class FoodConsumptionPolicy {
 				b.addStress(500);
 				b.addMemories(-10);
 				// なつき度設定
-				b.addLovePlayer(anLovePoint[3][0]);
+				b.addLovePlayer(lovePointTable[3][0]);
 			}
 			break;
 		case VIYUGRA:
@@ -157,7 +157,7 @@ public final class FoodConsumptionPolicy {
 				b.setSuperRaper(true);
 				b.setRaper(true);
 			}
-			b.addLovePlayer(anLovePoint[4][0]);
+			b.addLovePlayer(lovePointTable[4][0]);
 			break;
 		case BODY:// 生け餌
 			b.setHappiness(Happiness.VERY_HAPPY);
@@ -168,7 +168,7 @@ public final class FoodConsumptionPolicy {
 			// 飼いゆの場合のみ
 			if (b.getBodyRank() == BodyRank.KAIYU) {
 				// なつき度設定
-				b.addLovePlayer(anLovePoint[5][0]);
+				b.addLovePlayer(lovePointTable[5][0]);
 			}
 			break;
 		case STALK:
@@ -180,7 +180,7 @@ public final class FoodConsumptionPolicy {
 			// 飼いゆの場合のみ
 			if (b.getBodyRank() == BodyRank.KAIYU) {
 				// なつき度設定
-				b.addLovePlayer(anLovePoint[6][0]);
+				b.addLovePlayer(lovePointTable[6][0]);
 			}
 			break;
 		case SWEETS1:
@@ -192,7 +192,7 @@ public final class FoodConsumptionPolicy {
 			b.addTang(200);
 			b.addMemories(30);
 			// なつき度設定
-			b.addLovePlayer(anLovePoint[7][0]);
+			b.addLovePlayer(lovePointTable[7][0]);
 			break;
 		case SWEETS2:
 		case SWEETS_NORA2:
@@ -203,7 +203,7 @@ public final class FoodConsumptionPolicy {
 			b.addTang(1000);
 			b.addMemories(50);
 			// なつき度設定
-			b.addLovePlayer(anLovePoint[8][0]);
+			b.addLovePlayer(lovePointTable[8][0]);
 			break;
 		case WASTE:// 生ゴミ
 		case WASTE_NORA:
@@ -217,7 +217,7 @@ public final class FoodConsumptionPolicy {
 			// 飼いゆの場合のみ
 			if (b.getBodyRank() == BodyRank.KAIYU) {
 				// なつき度設定
-				b.addLovePlayer(anLovePoint[9][0]);
+				b.addLovePlayer(lovePointTable[9][0]);
 			}
 			break;
 		case VOMIT:
@@ -226,7 +226,7 @@ public final class FoodConsumptionPolicy {
 			b.setStress(0);
 			b.addTang(100);
 			// なつき度設定
-			b.addLovePlayer(anLovePoint[10][0]);
+			b.addLovePlayer(lovePointTable[10][0]);
 			break;
 		default:
 			b.setHappiness(Happiness.VERY_HAPPY);
@@ -250,7 +250,7 @@ public final class FoodConsumptionPolicy {
 			// 飼いゆの場合のみ。野良ならうんうん奴隷の可能性があるので
 			if (b.getBodyRank() == BodyRank.KAIYU) {
 				// なつき度設定
-				b.addLovePlayer(anLovePoint[0][1]);
+				b.addLovePlayer(lovePointTable[0][1]);
 			}
 			break;
 		case BITTER:
@@ -262,7 +262,7 @@ public final class FoodConsumptionPolicy {
 				b.addStress(-200);
 				b.addTang(20);
 				// なつき度設定
-				b.addLovePlayer(-1 * anLovePoint[1][1]);
+				b.addLovePlayer(-1 * lovePointTable[1][1]);
 			} else {
 				b.strike(NEEDLE * 4);
 				b.setHappiness(Happiness.SAD);
@@ -273,7 +273,7 @@ public final class FoodConsumptionPolicy {
 				b.addStress(300);
 				b.addMemories(-5);
 				// なつき度設定
-				b.addLovePlayer(anLovePoint[1][1]);
+				b.addLovePlayer(lovePointTable[1][1]);
 			}
 			break;
 		case LEMONPOP:
@@ -285,7 +285,7 @@ public final class FoodConsumptionPolicy {
 			b.addStress(-200);
 			b.addTang(20);
 			// なつき度設定
-			b.addLovePlayer(anLovePoint[2][1]);
+			b.addLovePlayer(lovePointTable[2][1]);
 			break;
 		case HOT:
 		case HOT_NORA:
@@ -298,14 +298,14 @@ public final class FoodConsumptionPolicy {
 				b.addStress(800);
 				b.addMemories(-10);
 				// なつき度設定
-				b.addLovePlayer(anLovePoint[3][1]);
+				b.addLovePlayer(lovePointTable[3][1]);
 			} else {
 				b.setHappiness(Happiness.HAPPY);
 				b.setMessage(GameMessages.getMessage(b, MessagePool.Action.Eating));
 				b.addStress(-200);
 				b.addTang(20);
 				// なつき度設定
-				b.addLovePlayer(-1 * anLovePoint[3][1]);
+				b.addLovePlayer(-1 * lovePointTable[3][1]);
 			}
 			break;
 		case VIYUGRA:
@@ -318,7 +318,7 @@ public final class FoodConsumptionPolicy {
 				b.setSuperRaper(true);
 				b.setRaper(true);
 			}
-			b.addLovePlayer(anLovePoint[4][1]);
+			b.addLovePlayer(lovePointTable[4][1]);
 			break;
 		case BODY:
 			b.setHappiness(Happiness.AVERAGE);
@@ -331,7 +331,7 @@ public final class FoodConsumptionPolicy {
 			// 飼いゆの場合のみ
 			if (b.getBodyRank() == BodyRank.KAIYU) {
 				// なつき度設定
-				b.addLovePlayer(anLovePoint[5][1]);
+				b.addLovePlayer(lovePointTable[5][1]);
 			}
 			break;
 		case STALK:
@@ -343,7 +343,7 @@ public final class FoodConsumptionPolicy {
 			// 飼いゆの場合のみ
 			if (b.getBodyRank() == BodyRank.KAIYU) {
 				// なつき度設定
-				b.addLovePlayer(anLovePoint[6][1]);
+				b.addLovePlayer(lovePointTable[6][1]);
 			}
 			break;
 		case SWEETS1:
@@ -355,7 +355,7 @@ public final class FoodConsumptionPolicy {
 			b.addTang(100);
 			b.addMemories(30);
 			// なつき度設定
-			b.addLovePlayer(anLovePoint[7][1]);
+			b.addLovePlayer(lovePointTable[7][1]);
 			break;
 		case SWEETS2:
 		case SWEETS_NORA2:
@@ -366,7 +366,7 @@ public final class FoodConsumptionPolicy {
 			b.addTang(1000);
 			b.addMemories(50);
 			// なつき度設定
-			b.addLovePlayer(anLovePoint[8][1]);
+			b.addLovePlayer(lovePointTable[8][1]);
 			break;
 		case WASTE:
 		case WASTE_NORA:
@@ -381,7 +381,7 @@ public final class FoodConsumptionPolicy {
 			// 飼いゆの場合のみ
 			if (b.getBodyRank() == BodyRank.KAIYU) {
 				// なつき度設定
-				b.addLovePlayer(anLovePoint[9][1]);
+				b.addLovePlayer(lovePointTable[9][1]);
 			}
 			break;
 		case VOMIT:
@@ -392,7 +392,7 @@ public final class FoodConsumptionPolicy {
 				b.addTang(50);
 			}
 			// なつき度設定
-			b.addLovePlayer(anLovePoint[10][1]);
+			b.addLovePlayer(lovePointTable[10][1]);
 			break;
 		default:
 			b.setHappiness(Happiness.HAPPY);
@@ -415,7 +415,7 @@ public final class FoodConsumptionPolicy {
 			// 飼いゆの場合のみ。野良ならうんうん奴隷の可能性があるので
 			if (b.getBodyRank() == BodyRank.KAIYU) {
 				// なつき度設定
-				b.addLovePlayer(anLovePoint[0][2]);
+				b.addLovePlayer(lovePointTable[0][2]);
 			}
 			break;
 		case BITTER:
@@ -427,7 +427,7 @@ public final class FoodConsumptionPolicy {
 				b.addStress(-100);
 				b.addTang(20);
 				// なつき度設定
-				b.addLovePlayer(-1 * anLovePoint[1][2]);
+				b.addLovePlayer(-1 * lovePointTable[1][2]);
 			} else {
 				b.strike(NEEDLE * 4);
 				b.setHappiness(Happiness.VERY_SAD);
@@ -438,7 +438,7 @@ public final class FoodConsumptionPolicy {
 				b.addStress(300);
 				b.addMemories(-5);
 				// なつき度設定
-				b.addLovePlayer(anLovePoint[1][2]);
+				b.addLovePlayer(lovePointTable[1][2]);
 			}
 			break;
 		case LEMONPOP:
@@ -450,7 +450,7 @@ public final class FoodConsumptionPolicy {
 			b.addStress(-800);
 			b.addTang(-100);
 			// なつき度設定
-			b.addLovePlayer(anLovePoint[2][2]);
+			b.addLovePlayer(lovePointTable[2][2]);
 			break;
 		case HOT:
 		case HOT_NORA:
@@ -463,14 +463,14 @@ public final class FoodConsumptionPolicy {
 				b.addStress(1000);
 				b.addMemories(-10);
 				// なつき度設定
-				b.addLovePlayer(anLovePoint[3][2]);
+				b.addLovePlayer(lovePointTable[3][2]);
 			} else {
 				b.setHappiness(Happiness.AVERAGE);
 				b.setMessage(GameMessages.getMessage(b, MessagePool.Action.Eating));
 				b.addStress(-100);
 				b.addTang(20);
 				// なつき度設定
-				b.addLovePlayer(-1 * anLovePoint[3][2]);
+				b.addLovePlayer(-1 * lovePointTable[3][2]);
 			}
 			break;
 		case VIYUGRA:
@@ -483,7 +483,7 @@ public final class FoodConsumptionPolicy {
 				b.setSuperRaper(true);
 				b.setRaper(true);
 			}
-			b.addLovePlayer(anLovePoint[4][2]);
+			b.addLovePlayer(lovePointTable[4][2]);
 			break;
 		case BODY:
 			b.setHappiness(Happiness.AVERAGE);
@@ -496,7 +496,7 @@ public final class FoodConsumptionPolicy {
 			// 飼いゆの場合のみ
 			if (b.getBodyRank() == BodyRank.KAIYU) {
 				// なつき度設定
-				b.addLovePlayer(anLovePoint[5][2]);
+				b.addLovePlayer(lovePointTable[5][2]);
 			}
 			break;
 		case STALK:
@@ -508,7 +508,7 @@ public final class FoodConsumptionPolicy {
 			// 飼いゆの場合のみ
 			if (b.getBodyRank() == BodyRank.KAIYU) {
 				// なつき度設定
-				b.addLovePlayer(anLovePoint[6][2]);
+				b.addLovePlayer(lovePointTable[6][2]);
 			}
 			break;
 		case SWEETS1:
@@ -520,7 +520,7 @@ public final class FoodConsumptionPolicy {
 			b.addTang(500);
 			b.addMemories(20);
 			// なつき度設定
-			b.addLovePlayer(anLovePoint[7][2]);
+			b.addLovePlayer(lovePointTable[7][2]);
 			break;
 		case SWEETS2:
 		case SWEETS_NORA2:
@@ -531,7 +531,7 @@ public final class FoodConsumptionPolicy {
 			b.addTang(1000);
 			b.addMemories(40);
 			// なつき度設定
-			b.addLovePlayer(anLovePoint[8][2]);
+			b.addLovePlayer(lovePointTable[8][2]);
 			break;
 		case WASTE:
 		case WASTE_NORA:
@@ -545,7 +545,7 @@ public final class FoodConsumptionPolicy {
 			// 飼いゆの場合のみ
 			if (b.getBodyRank() == BodyRank.KAIYU) {
 				// なつき度設定
-				b.addLovePlayer(anLovePoint[9][2]);
+				b.addLovePlayer(lovePointTable[9][2]);
 			}
 			break;
 		case VOMIT:
@@ -556,7 +556,7 @@ public final class FoodConsumptionPolicy {
 				b.addTang(100);
 			}
 			// なつき度設定
-			b.addLovePlayer(anLovePoint[10][2]);
+			b.addLovePlayer(lovePointTable[10][2]);
 			break;
 		default:
 			b.setHappiness(b.isRude() ? Happiness.VERY_SAD : Happiness.SAD);

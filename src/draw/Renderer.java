@@ -40,7 +40,7 @@ final class Renderer {
 
 	void render(MyPane pane, Graphics g) {
 		synchronized (SimYukkuri.lock) {
-			MapPlaceData curMap = GameWorld.get().getCurrentMap();
+			MapPlaceData map = GameWorld.get().getCurrentMap();
 
 			pane.getList4sort().clear();
 			pane.getList4sort().addAll(GameWorld.get().getYukkuriList());
@@ -59,37 +59,37 @@ final class Renderer {
 
 			pane.getMsgList().clear();
 			MyPane.markList.clear();
-			Body selectBody = MyPane.getSelectBody();
-			if (selectBody != null) {
-				if (selectBody.isRemoved()) {
+			Body selectedBody = MyPane.getSelectBody();
+			if (selectedBody != null) {
+				if (selectedBody.isRemoved()) {
 					MyPane.setSelectBody(null);
-					selectBody = null;
+					selectedBody = null;
 				} else {
-					MainCommandUI.showStatus(selectBody);
+					MainCommandUI.showStatus(selectedBody);
 				}
 			}
 
 			TerrainField.drawBackGroundImage(pane.getBackBufferG2(), pane);
 			TerrainField.drawFloor(pane.getBackBufferG2(), pane);
 
-			for (int i = curMap.getFarm().size() - 1; i >= 0; i--) {
-				curMap.getFarm().get(i).drawShape(pane.getBackBufferG2());
+			for (int i = map.getFarm().size() - 1; i >= 0; i--) {
+				map.getFarm().get(i).drawShape(pane.getBackBufferG2());
 			}
-			for (int i = curMap.getPool().size() - 1; i >= 0; i--) {
-				curMap.getPool().get(i).drawShape(pane.getBackBufferG2());
+			for (int i = map.getPool().size() - 1; i >= 0; i--) {
+				map.getPool().get(i).drawShape(pane.getBackBufferG2());
 			}
-			for (int i = curMap.getBeltconveyor().size() - 1; i >= 0; i--) {
-				curMap.getBeltconveyor().get(i).drawShape(pane.getBackBufferG2());
+			for (int i = map.getBeltconveyor().size() - 1; i >= 0; i--) {
+				map.getBeltconveyor().get(i).drawShape(pane.getBackBufferG2());
 			}
 
 			List<ObjEX> platformList = GameWorld.get().getPlatformList();
-			for (ObjEX oex : platformList) {
-				pane.calcDrawPosition(oex, pane.getTmpRect());
-				int layerNum = oex.getImageLayer(pane.getLayerTmp());
-				if (oex instanceof BeltconveyorObj) {
-					((BeltconveyorObj) oex).getImageLayer(pane.getBackBufferG2(), pane.getLayerTmp());
+			for (ObjEX platform : platformList) {
+				pane.calcDrawPosition(platform, pane.getTmpRect());
+				int layerCount = platform.getImageLayer(pane.getLayerTmp());
+				if (platform instanceof BeltconveyorObj) {
+					((BeltconveyorObj) platform).getImageLayer(pane.getBackBufferG2(), pane.getLayerTmp());
 				} else {
-					for (int j = 0; j < layerNum; j++) {
+					for (int j = 0; j < layerCount; j++) {
 						pane.getBackBufferG2().drawImage(pane.getLayerTmp()[j], pane.getTmpRect().getX(),
 								pane.getTmpRect().getY(), pane.getTmpRect().getWidth(), pane.getTmpRect().getHeight(), pane);
 					}
@@ -97,106 +97,106 @@ final class Renderer {
 			}
 
 			pane.getBackBufferG2().setStroke(Barrier.WALL_STROKE);
-			for (Barrier b : curMap.getBarrier()) {
-				b.drawShape(pane.getBackBufferG2());
+			for (Barrier barrier : map.getBarrier()) {
+				barrier.drawShape(pane.getBackBufferG2());
 			}
 			pane.getBackBufferG2().setStroke(MyPane.getDefaultStroke());
 
-			Sprite base;
-			Sprite expand;
-			Sprite braid;
-			Body selectBodyCheck = null;
+			Sprite bodyBaseSprite;
+			Sprite bodyExpandedSprite;
+			Sprite braidSprite;
+			Body selectedBodyCheck = null;
 
 			for (Obj o : pane.getList4sort()) {
 				switch (o.getObjType()) {
 					case YUKKURI: {
-						Body b = (Body) o;
-						if (b == MyPane.getSelectBody()) {
-							selectBodyCheck = b;
+						Body body = (Body) o;
+						if (body == MyPane.getSelectBody()) {
+							selectedBodyCheck = body;
 						}
-						int direction = b.getDirection().ordinal();
-						b.updateSpriteSize();
-						base = b.getBodyBaseSpr();
-						expand = b.getBodyExpandSpr();
-						braid = b.getBraidSprite();
-						int shadowH = b.getShadowH();
-						Translate.translate(b.getDrawOfsX(), b.getDrawOfsY(), pane.getTmpPoint());
-						pane.calcDrawBodyPosition(pane.getTmpPoint(), base);
-						pane.calcDrawBodyPosition(pane.getTmpPoint(), expand);
-						pane.calcDrawBodyPosition(pane.getTmpPoint(), braid);
-						boolean bDrawShadow = true;
-						Obj obj = b.takeMappedObj(b.getLinkParent());
-						if (obj != null && obj.getZ() < b.getZ()) {
-							bDrawShadow = false;
+						int direction = body.getDirection().ordinal();
+						body.updateSpriteSize();
+						bodyBaseSprite = body.getBodyBaseSpr();
+						bodyExpandedSprite = body.getBodyExpandSpr();
+						braidSprite = body.getBraidSprite();
+						int shadowHeight = body.getShadowH();
+						Translate.translate(body.getDrawOfsX(), body.getDrawOfsY(), pane.getTmpPoint());
+						pane.calcDrawBodyPosition(pane.getTmpPoint(), bodyBaseSprite);
+						pane.calcDrawBodyPosition(pane.getTmpPoint(), bodyExpandedSprite);
+						pane.calcDrawBodyPosition(pane.getTmpPoint(), braidSprite);
+						boolean drawShadow = true;
+						Obj parentObject = body.takeMappedObj(body.getParentLinkId());
+						if (parentObject != null && parentObject.getZ() < body.getZ()) {
+							drawShadow = false;
 						}
-						if (bDrawShadow && b.isDropShadow() && !b.isUnBirth() && 0 <= b.getZ()) {
-							if (b.getType() == src.yukkuri.Remirya.type && b.isbImageNagasiMode()) {
-								pane.getBackBufferG2().drawImage(b.getShadowImage(),
-										expand.getScreenRect()[direction].getX(),
-										expand.getScreenRect()[direction].getY()
-												+ expand.getScreenRect()[direction].getHeight() * 11 / 12 - shadowH,
-										expand.getScreenRect()[direction].getWidth(), shadowH, pane);
+						if (drawShadow && body.isShadowVisible() && !body.isUnBirth() && 0 <= body.getZ()) {
+							if (body.getType() == src.yukkuri.Remirya.type && body.isImageNagasiMode()) {
+								pane.getBackBufferG2().drawImage(body.getShadowImage(),
+										bodyExpandedSprite.getScreenRect()[direction].getX(),
+										bodyExpandedSprite.getScreenRect()[direction].getY()
+												+ bodyExpandedSprite.getScreenRect()[direction].getHeight() * 11 / 12 - shadowHeight,
+										bodyExpandedSprite.getScreenRect()[direction].getWidth(), shadowHeight, pane);
 							} else {
-								pane.getBackBufferG2().drawImage(b.getShadowImage(),
-										expand.getScreenRect()[direction].getX(),
-										expand.getScreenRect()[direction].getY()
-												+ expand.getScreenRect()[direction].getHeight() - shadowH,
-										expand.getScreenRect()[direction].getWidth(), shadowH, pane);
+								pane.getBackBufferG2().drawImage(body.getShadowImage(),
+										bodyExpandedSprite.getScreenRect()[direction].getX(),
+										bodyExpandedSprite.getScreenRect()[direction].getY()
+												+ bodyExpandedSprite.getScreenRect()[direction].getHeight() - shadowHeight,
+										bodyExpandedSprite.getScreenRect()[direction].getWidth(), shadowHeight, pane);
 							}
 						}
-						int tz = Translate.translateZ(b.getZ());
-						base.getScreenRect()[0].setY(base.getScreenRect()[0].getY() - tz);
-						expand.getScreenRect()[0].setY(expand.getScreenRect()[0].getY() - tz);
-						braid.getScreenRect()[0].setY(braid.getScreenRect()[0].getY() - tz);
-						base.getScreenRect()[1].setY(base.getScreenRect()[1].getY() - tz);
-						expand.getScreenRect()[1].setY(expand.getScreenRect()[1].getY() - tz);
-						braid.getScreenRect()[1].setY(braid.getScreenRect()[1].getY() - tz);
-						b.setScreenPivot(pane.getTmpPoint());
-						b.setScreenRect(expand.getScreenRect()[0]);
-						if (b.isPin()) {
-							MyPane.markList.add(expand.getScreenRect()[0]);
+						int zOffset = Translate.translateZ(body.getZ());
+						bodyBaseSprite.getScreenRect()[0].setY(bodyBaseSprite.getScreenRect()[0].getY() - zOffset);
+						bodyExpandedSprite.getScreenRect()[0].setY(bodyExpandedSprite.getScreenRect()[0].getY() - zOffset);
+						braidSprite.getScreenRect()[0].setY(braidSprite.getScreenRect()[0].getY() - zOffset);
+						bodyBaseSprite.getScreenRect()[1].setY(bodyBaseSprite.getScreenRect()[1].getY() - zOffset);
+						bodyExpandedSprite.getScreenRect()[1].setY(bodyExpandedSprite.getScreenRect()[1].getY() - zOffset);
+						braidSprite.getScreenRect()[1].setY(braidSprite.getScreenRect()[1].getY() - zOffset);
+						body.setScreenPivot(pane.getTmpPoint());
+						body.setScreenRect(bodyExpandedSprite.getScreenRect()[0]);
+						if (body.isPinned()) {
+							MyPane.markList.add(bodyExpandedSprite.getScreenRect()[0]);
 						}
-						if (b.getBaryState() != src.enums.BaryInUGState.ALL) {
-							BodyUtil.drawBody(pane.getBackBufferG2(), pane, b);
+						if (body.getBurialState() != src.enums.BurialState.ALL) {
+							BodyUtil.drawBody(pane.getBackBufferG2(), pane, body);
 						}
-						if (b.getMessageBuf() != null && !MyPane.isDisableScript()) {
-							pane.getMsgList().add(b);
+						if (body.getMessageBuffer() != null && !MyPane.isDisableScript()) {
+							pane.getMsgList().add(body);
 						}
 						break;
 					}
 					case SHIT: {
-						Shit s = (Shit) o;
-						pane.calcDrawPosition(s, pane.getTmpRect());
-						if (MyPane.getDrawShadowShitBaby() == 1 || s.getAgeState() != AgeState.BABY || 0 < s.getZ()) {
-							pane.getBackBufferG2().drawImage(s.getShadowImage(), pane.getTmpRect().getX(),
+						Shit shit = (Shit) o;
+						pane.calcDrawPosition(shit, pane.getTmpRect());
+						if (MyPane.getDrawShadowShitBaby() == 1 || shit.getAgeState() != AgeState.BABY || 0 < shit.getZ()) {
+							pane.getBackBufferG2().drawImage(shit.getShadowImage(), pane.getTmpRect().getX(),
 									pane.getTmpRect().getY(), pane.getTmpRect().getWidth(),
 									pane.getTmpRect().getHeight(), pane);
 						}
-						pane.getTmpRect().setY(pane.getTmpRect().getY() - Translate.translateZ(s.getZ()));
-						pane.getBackBufferG2().drawImage(s.getImage(), pane.getTmpRect().getX(),
+						pane.getTmpRect().setY(pane.getTmpRect().getY() - Translate.translateZ(shit.getZ()));
+						pane.getBackBufferG2().drawImage(shit.getImage(), pane.getTmpRect().getX(),
 								pane.getTmpRect().getY(), pane.getTmpRect().getWidth(),
 								pane.getTmpRect().getHeight(), pane);
 						break;
 					}
 					case VOMIT: {
-						Vomit v = (Vomit) o;
-						pane.calcDrawPosition(v, pane.getTmpRect());
-						if (MyPane.getDrawShadowVomitBaby() == 1 || v.getAgeState() != AgeState.BABY || 0 < v.getZ()) {
-							pane.getBackBufferG2().drawImage(v.getShadowImage(), pane.getTmpRect().getX(),
+						Vomit vomit = (Vomit) o;
+						pane.calcDrawPosition(vomit, pane.getTmpRect());
+						if (MyPane.getDrawShadowVomitBaby() == 1 || vomit.getAgeState() != AgeState.BABY || 0 < vomit.getZ()) {
+							pane.getBackBufferG2().drawImage(vomit.getShadowImage(), pane.getTmpRect().getX(),
 									pane.getTmpRect().getY(), pane.getTmpRect().getWidth(),
 									pane.getTmpRect().getHeight(), pane);
 						}
-						pane.getTmpRect().setY(pane.getTmpRect().getY() - Translate.translateZ(v.getZ()));
-						pane.getBackBufferG2().drawImage(v.getImage(), pane.getTmpRect().getX(),
+						pane.getTmpRect().setY(pane.getTmpRect().getY() - Translate.translateZ(vomit.getZ()));
+						pane.getBackBufferG2().drawImage(vomit.getImage(), pane.getTmpRect().getX(),
 								pane.getTmpRect().getY(), pane.getTmpRect().getWidth(),
 								pane.getTmpRect().getHeight(), pane);
 						break;
 					}
 					case FIX_OBJECT: {
-						ObjEX oex = (ObjEX) o;
-						pane.calcDrawPosition(oex, pane.getTmpRect());
-						int layerNum = oex.getImageLayer(pane.getLayerTmp());
-						for (int i = 0; i < layerNum; i++) {
+						ObjEX platform = (ObjEX) o;
+						pane.calcDrawPosition(platform, pane.getTmpRect());
+						int layerCount = platform.getImageLayer(pane.getLayerTmp());
+						for (int i = 0; i < layerCount; i++) {
 							pane.getBackBufferG2().drawImage(pane.getLayerTmp()[i], pane.getTmpRect().getX(),
 									pane.getTmpRect().getY(), pane.getTmpRect().getWidth(),
 									pane.getTmpRect().getHeight(), pane);
@@ -204,14 +204,14 @@ final class Renderer {
 						break;
 					}
 					case OBJECT: {
-						ObjEX oex = (ObjEX) o;
-						pane.calcDrawPosition(oex, pane.getTmpRect());
-						pane.getBackBufferG2().drawImage(oex.getShadowImage(), pane.getTmpRect().getX(),
+						ObjEX platform = (ObjEX) o;
+						pane.calcDrawPosition(platform, pane.getTmpRect());
+						pane.getBackBufferG2().drawImage(platform.getShadowImage(), pane.getTmpRect().getX(),
 								pane.getTmpRect().getY(), pane.getTmpRect().getWidth(),
 								pane.getTmpRect().getHeight(), pane);
-						pane.getTmpRect().setY(pane.getTmpRect().getY() - Translate.translateZ(oex.getZ()));
-						int layerNum = oex.getImageLayer(pane.getLayerTmp());
-						for (int i = 0; i < layerNum; i++) {
+						pane.getTmpRect().setY(pane.getTmpRect().getY() - Translate.translateZ(platform.getZ()));
+						int layerCount = platform.getImageLayer(pane.getLayerTmp());
+						for (int i = 0; i < layerCount; i++) {
 							pane.getBackBufferG2().drawImage(pane.getLayerTmp()[i], pane.getTmpRect().getX(),
 									pane.getTmpRect().getY(), pane.getTmpRect().getWidth(),
 									pane.getTmpRect().getHeight(), pane);
@@ -219,17 +219,17 @@ final class Renderer {
 						break;
 					}
 					case LIGHT_EFFECT: {
-						Effect ef = (Effect) o;
-						pane.calcDrawPosition(ef, pane.getTmpRect());
-						pane.getTmpRect().setY(pane.getTmpRect().getY() - Translate.translateZ(ef.getZ()));
-						pane.getBackBufferG2().drawImage(ef.getImage(), pane.getTmpRect().getX(),
+						Effect effect = (Effect) o;
+						pane.calcDrawPosition(effect, pane.getTmpRect());
+						pane.getTmpRect().setY(pane.getTmpRect().getY() - Translate.translateZ(effect.getZ()));
+						pane.getBackBufferG2().drawImage(effect.getImage(), pane.getTmpRect().getX(),
 								pane.getTmpRect().getY(), pane.getTmpRect().getWidth(),
 								pane.getTmpRect().getHeight(), pane);
 						break;
 					}
 					case BG_OBJECT: {
-						TerrainBillboard tb = (TerrainBillboard) o;
-						tb.draw(pane.getBackBufferG2(), pane);
+						TerrainBillboard billboard = (TerrainBillboard) o;
+						billboard.draw(pane.getBackBufferG2(), pane);
 						break;
 					}
 					default:
@@ -238,10 +238,10 @@ final class Renderer {
 			}
 
 			for (Obj o : GameWorld.get().getFrontEffectList()) {
-				Effect ef = (Effect) o;
-				pane.calcDrawPosition(ef, pane.getTmpRect());
-				pane.getTmpRect().setY(pane.getTmpRect().getY() - Translate.translateZ(ef.getZ()));
-				pane.getBackBufferG2().drawImage(ef.getImage(), pane.getTmpRect().getX(), pane.getTmpRect().getY(),
+				Effect effect = (Effect) o;
+				pane.calcDrawPosition(effect, pane.getTmpRect());
+				pane.getTmpRect().setY(pane.getTmpRect().getY() - Translate.translateZ(effect.getZ()));
+				pane.getBackBufferG2().drawImage(effect.getImage(), pane.getTmpRect().getX(), pane.getTmpRect().getY(),
 						pane.getTmpRect().getWidth(), pane.getTmpRect().getHeight(), pane);
 			}
 
@@ -250,28 +250,28 @@ final class Renderer {
 
 			if (MyPane.isEnableTarget()) {
 				Image[] cursor = IconPool.getCursorIconImageArray();
-				int st = IconPool.CursorIcon.CUR_LB.ordinal();
+				int cursorBaseIndex = IconPool.CursorIcon.CUR_LB.ordinal();
 				for (Rectangle4y rect : MyPane.markList) {
-					pane.getBackBufferG2().drawImage(cursor[st + 1], rect.getX(), rect.getY(), pane);
-					pane.getBackBufferG2().drawImage(cursor[st + 0], rect.getX(), rect.getY() + rect.getWidth() - 20, pane);
-					pane.getBackBufferG2().drawImage(cursor[st + 2], rect.getX() + rect.getWidth() - 20,
+					pane.getBackBufferG2().drawImage(cursor[cursorBaseIndex + 1], rect.getX(), rect.getY(), pane);
+					pane.getBackBufferG2().drawImage(cursor[cursorBaseIndex + 0], rect.getX(), rect.getY() + rect.getWidth() - 20, pane);
+					pane.getBackBufferG2().drawImage(cursor[cursorBaseIndex + 2], rect.getX() + rect.getWidth() - 20,
 							rect.getY() + rect.getWidth() - 20, pane);
-					pane.getBackBufferG2().drawImage(cursor[st + 3], rect.getX() + rect.getWidth() - 20, rect.getY(),
+					pane.getBackBufferG2().drawImage(cursor[cursorBaseIndex + 3], rect.getX() + rect.getWidth() - 20, rect.getY(),
 							pane);
 				}
 			}
 
-			if (selectBodyCheck == null) {
+			if (selectedBodyCheck == null) {
 				MyPane.setSelectBody(null);
 			}
-			selectBody = MyPane.getSelectBody();
-			if (selectBody != null) {
+			selectedBody = MyPane.getSelectBody();
+			if (selectedBody != null) {
 				Image[] select = IconPool.getCursorIconImageArray();
 				int st = IconPool.CursorIcon.SEL_0.ordinal();
-				Rectangle4y r = selectBody.getScreenRect();
+				Rectangle4y r = selectedBody.getScreenRect();
 				int x = r.getX() + (r.getWidth() >> 1) - 12;
 				int y = r.getY() + r.getHeight() + 2;
-				pane.getBackBufferG2().drawImage(select[st + (int) (selectBody.getAge() % 4)], x, y, pane);
+				pane.getBackBufferG2().drawImage(select[st + (int) (selectedBody.getAge() % 4)], x, y, pane);
 			}
 
 			if (GameWorld.get().getPlayer().getHoldItem() != null && mousePos != null) {
@@ -341,7 +341,7 @@ final class Renderer {
 			}
 
 			for (Body b : pane.getMsgList()) {
-				String message = b.getMessageBuf();
+				String message = b.getMessageBuffer();
 				int fontSize = b.getMessageTextSize();
 				if (fontSize == 120) {
 					g2.setFont(MyPane.getNegiFont());

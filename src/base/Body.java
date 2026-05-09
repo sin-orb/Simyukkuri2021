@@ -46,7 +46,7 @@ import src.draw.Terrarium;
 import src.draw.Translate;
 import src.enums.AgeState;
 import src.enums.Attitude;
-import src.enums.BaryInUGState;
+import src.enums.BurialState;
 import src.enums.BodyBake;
 import src.enums.BodyRank;
 import src.enums.Burst;
@@ -87,6 +87,7 @@ import src.event.RaperReactionEvent;
 import src.event.RaperWakeupEvent;
 import src.event.RevengeAttackEvent;
 import src.event.SuperEatingTimeEvent;
+import src.engine.birth.BabyDnaFactory;
 import src.game.Dna;
 import src.game.Shit;
 import src.game.Stalk;
@@ -117,10 +118,11 @@ import src.system.MapPlaceData;
 import src.system.MessagePool;
 import src.system.ResourceUtil;
 import src.system.Sprite;
+import src.logic.AntInfestationPolicy;
 import src.util.GameRandom;
 import src.util.GameWorld;
 import src.util.IniFileUtil;
-import src.util.YukkuriUtil;
+import src.util.ListUtil;
 
 /*********************************************************
  * ゆっくり本体の元となる抽象クラス（動作のみ。）
@@ -199,8 +201,8 @@ public abstract class Body extends BodyAttributes {
 	 */
 	public void checkHungry() {
 		// すーぱーむーしゃむーしゃたいむ実施後は一定期間お腹が減らない、というかむしろ腹いっぱいになっていく
-		if (0 < getNoHungrybySupereatingTimePeriod()) {
-			noHungrybySupereatingTimePeriod--;
+		if (0 < getSuperEatingNoHungryPeriod()) {
+			superEatingNoHungryPeriod--;
 			if (hungry <= getHungryLimit()) {
 				hungry += TICK;
 			}
@@ -215,9 +217,12 @@ public abstract class Body extends BodyAttributes {
 
 		// 生まれていない場合
 		if (isUnBirth()) {
-			// 親と茎で繋がっていない場合のみ通常の100倍空腹になる
 			if (!isPlantForUnbirthChild()) {
+				// 親と茎で繋がっていない場合のみ通常の100倍空腹になる
 				hungry -= TICK * 100;
+			} else {
+				// 親か救命オレンジプールから供給あり → 満腹度を満タンに維持
+				hungry = getHungryLimit();
 			}
 		}
 		// 寝ている場合の空腹は通常の1/2倍
@@ -260,32 +265,32 @@ public abstract class Body extends BodyAttributes {
 	 */
 	public void checkDamage() {
 		// オレンジジュースや砂糖水などで体力が回復するかどうかのフラグ
-		boolean bHealFlag = true;
+		boolean healFlag = true;
 		// 実ゆの場合、茎で生きている親につながっているなら回復フラグON
 		if (isUnBirth()) {
-			bHealFlag = isPlantForUnbirthChild();
+			healFlag = isPlantForUnbirthChild();
 		}
 
 		// かびてる時のダメージ加算
 		if (isSick()) {
 			// かびている期間が潜伏期間の32倍を超え、かつダメージをヘビーに受けている場合
-			if (getSickPeriod() > (getINCUBATIONPERIODorg() * 32) && isDamagedHeavily()) {
+			if (getSickPeriod() > (getIncubationPeriodBase() * 32) && isDamagedHeavily()) {
 				// 追加ダメージは1/3の確率で1
 				if (GameRandom.nextInt(3) == 0)
 					damage += TICK;
 			}
 			// かびている期間が潜伏期間の32倍を超えていて、ダメージがヘビーでない場合
-			else if (getSickPeriod() > (getINCUBATIONPERIODorg() * 32)) {
+			else if (getSickPeriod() > (getIncubationPeriodBase() * 32)) {
 				// 通常の3倍ダメージ
 				damage += TICK * 3;
 			}
 			// かびている期間が潜伏期間の8倍を超えている場合
-			else if (getSickPeriod() > (getINCUBATIONPERIODorg() * 8)) {
+			else if (getSickPeriod() > (getIncubationPeriodBase() * 8)) {
 				// 通常の2倍のダメージ
 				damage += TICK * 2;
 			}
 			// かびている期間が潜伏期間と同じ
-			else if (getSickPeriod() > getINCUBATIONPERIODorg()) {
+			else if (getSickPeriod() > getIncubationPeriodBase()) {
 				// 通常ダメージ
 				damage += TICK;
 			}
@@ -311,7 +316,7 @@ public abstract class Body extends BodyAttributes {
 				GameEnvironment.setAlarm();
 				// 1/50の確率でしゃべる
 				if (GameRandom.nextInt(50) == 0) {
-					if (geteCoreAnkoState() != CoreAnkoState.NonYukkuriDiseaseNear)
+					if (getCoreAnkoState() != CoreAnkoState.NonYukkuriDiseaseNear)
 						setNYDMessage(GameMessages.getMessage(this, MessagePool.Action.Dying2), false);
 					else
 						setMessage(GameMessages.getMessage(this, MessagePool.Action.Dying2));
@@ -351,7 +356,7 @@ public abstract class Body extends BodyAttributes {
 			setPeropero(false);
 			addStress(200);
 			addMemories(-5);
-			if (geteCoreAnkoState() == CoreAnkoState.NonYukkuriDiseaseNear) {
+			if (getCoreAnkoState() == CoreAnkoState.NonYukkuriDiseaseNear) {
 				setNYDMessage(GameMessages.getMessage(this, MessagePool.Action.Dying2), false);
 			}
 			setMessage(GameMessages.getMessage(this, MessagePool.Action.Dying2));
@@ -375,15 +380,15 @@ public abstract class Body extends BodyAttributes {
 
 		// ディヒューザーオレンジ
 		if (GameEnvironment.isOrangeSteam()) {
-			if (bHealFlag) {
+			if (healFlag) {
 				damage -= TICK * 50;
 			}
 		}
 		// ディヒューザー砂糖水
 		if (GameEnvironment.isSugerSteam()) {
 			// ダメージ限界の8割以上の場合
-			if (damage >= getDAMAGELIMITorg()[getBodyAgeState().ordinal()] * 80 / 100) {
-				if (bHealFlag) {
+			if (damage >= getDamageLimitBase()[getBodyAgeState().ordinal()] * 80 / 100) {
+				if (healFlag) {
 					damage -= TICK * 100;
 				}
 			}
@@ -451,7 +456,7 @@ public abstract class Body extends BodyAttributes {
 			return false; // 非ゆっくり症ではく
 		if (isBlind() || isPealed() || isPacked() || isShutmouth())
 			return false; // 目抜き/皮むき/あにゃる封印/口封じされておらず
-		if (geteHairState() != HairState.DEFAULT)
+		if (getHairState() != HairState.DEFAULT)
 			return false; // はげまんじゅうにされていない
 		return true;// そのような場合のみ、突然変異可能
 	}
@@ -467,7 +472,7 @@ public abstract class Body extends BodyAttributes {
 		}
 		// すでにアリがたかっていると、5回に1回、アリの数が2増える
 		if (getAttachmentSize(Ants.class) != 0 && getAge() % 5 == 0) {
-			numOfAnts += TICK * 2;
+			antCount += TICK * 2;
 			// アリにたかられてたらイベントどころじゃないでしょ
 			clearEvent();
 			return;
@@ -477,7 +482,7 @@ public abstract class Body extends BodyAttributes {
 			return;
 		}
 		// 新規でアリたかる？
-		YukkuriUtil.judgeNewAnt(this);
+		AntInfestationPolicy.judgeNewAnt(this);
 	}
 
 	/**
@@ -496,7 +501,7 @@ public abstract class Body extends BodyAttributes {
 							if (!canflyCheck()) {
 								if (getFootBakeLevel() == FootBake.NONE &&
 										!isDamaged() && !isSick() && !isFeelPain()
-										&& takeMappedObj(getLinkParent()) == null
+										&& takeMappedObj(getParentLinkId()) == null
 										&& !isPeropero() && !(isEating() && !isPikopiko())) {
 									changeUnyo(0, 0,
 											(int) (GameRandom
@@ -506,7 +511,7 @@ public abstract class Body extends BodyAttributes {
 							} else if (z == 0) {
 								if (getFootBakeLevel() == FootBake.NONE &&
 										!isDamaged() && !isSick() && !isFeelPain()
-										&& takeMappedObj(getLinkParent()) == null
+										&& takeMappedObj(getParentLinkId()) == null
 										&& !isPeropero() && !(isEating() && !isPikopiko())) {
 									changeUnyo(0, 0,
 											(int) (GameRandom
@@ -553,26 +558,26 @@ public abstract class Body extends BodyAttributes {
 	public void changeUnyo(int x, int y, int z) {
 		if (!isDead() && !isCrushed()) {
 			if (x != 0) {
-				unyoForceH += x;
-				unyoForceW -= x;
+				unyoOffsetH += x;
+				unyoOffsetW -= x;
 			}
 			if (y != 0) {
-				unyoForceH -= y;
-				unyoForceW += y;
+				unyoOffsetH -= y;
+				unyoOffsetW += y;
 			}
 			if (z != 0) {
-				unyoForceH -= z;
-				unyoForceW += z;
+				unyoOffsetH -= z;
+				unyoOffsetW += z;
 			}
 			// 限界を越えていると描画が裏返るので調整
-			if (unyoForceH > Const.EXT_FORCE_PULL_LIMIT[getBodyAgeState().ordinal()])
-				unyoForceH = Const.EXT_FORCE_PULL_LIMIT[getBodyAgeState().ordinal()];
-			else if (unyoForceH < Const.EXT_FORCE_PUSH_LIMIT[getBodyAgeState().ordinal()])
-				unyoForceH = Const.EXT_FORCE_PUSH_LIMIT[getBodyAgeState().ordinal()];
-			if (unyoForceW < Const.EXT_FORCE_PUSH_LIMIT[getBodyAgeState().ordinal()])
-				unyoForceW = Const.EXT_FORCE_PUSH_LIMIT[getBodyAgeState().ordinal()];
-			else if (unyoForceW > Const.EXT_FORCE_PULL_LIMIT[getBodyAgeState().ordinal()])
-				unyoForceW = Const.EXT_FORCE_PULL_LIMIT[getBodyAgeState().ordinal()];
+			if (unyoOffsetH > Const.EXT_FORCE_PULL_LIMIT[getBodyAgeState().ordinal()])
+				unyoOffsetH = Const.EXT_FORCE_PULL_LIMIT[getBodyAgeState().ordinal()];
+			else if (unyoOffsetH < Const.EXT_FORCE_PUSH_LIMIT[getBodyAgeState().ordinal()])
+				unyoOffsetH = Const.EXT_FORCE_PUSH_LIMIT[getBodyAgeState().ordinal()];
+			if (unyoOffsetW < Const.EXT_FORCE_PUSH_LIMIT[getBodyAgeState().ordinal()])
+				unyoOffsetW = Const.EXT_FORCE_PUSH_LIMIT[getBodyAgeState().ordinal()];
+			else if (unyoOffsetW > Const.EXT_FORCE_PULL_LIMIT[getBodyAgeState().ordinal()])
+				unyoOffsetW = Const.EXT_FORCE_PULL_LIMIT[getBodyAgeState().ordinal()];
 		}
 	}
 
@@ -580,32 +585,32 @@ public abstract class Body extends BodyAttributes {
 	 * Eases unyo offsets back toward neutral.
 	 */
 	public void changeReUnyo() {
-		if (unyoForceH == 0) {
-		} else if (unyoForceH < Const.EXT_FORCE_PUSH_LIMIT[getBodyAgeState().ordinal()] * 0.6)
-			unyoForceH += GameRandom.nextInt(3) + 5;
-		else if (unyoForceH < 0)
-			unyoForceH += GameRandom.nextInt(3) + 2;
-		else if (unyoForceH > Const.EXT_FORCE_PULL_LIMIT[getBodyAgeState().ordinal()] * 0.6)
-			unyoForceH -= GameRandom.nextInt(3) + 5;
-		else if (unyoForceH > 0)
-			unyoForceH -= GameRandom.nextInt(3) + 2;
-		if (unyoForceW == 0) {
-		} else if (unyoForceW < Const.EXT_FORCE_PUSH_LIMIT[getBodyAgeState().ordinal()] * 0.6)
-			unyoForceW += GameRandom.nextInt(3) + 5;
-		else if (unyoForceW < 0)
-			unyoForceW += GameRandom.nextInt(3) + 2;
-		else if (unyoForceW > Const.EXT_FORCE_PULL_LIMIT[getBodyAgeState().ordinal()] * 0.6)
-			unyoForceW -= GameRandom.nextInt(3) + 5;
-		else if (unyoForceW > 0)
-			unyoForceW -= GameRandom.nextInt(3) + 2;
+		if (unyoOffsetH == 0) {
+		} else if (unyoOffsetH < Const.EXT_FORCE_PUSH_LIMIT[getBodyAgeState().ordinal()] * 0.6)
+			unyoOffsetH += GameRandom.nextInt(3) + 5;
+		else if (unyoOffsetH < 0)
+			unyoOffsetH += GameRandom.nextInt(3) + 2;
+		else if (unyoOffsetH > Const.EXT_FORCE_PULL_LIMIT[getBodyAgeState().ordinal()] * 0.6)
+			unyoOffsetH -= GameRandom.nextInt(3) + 5;
+		else if (unyoOffsetH > 0)
+			unyoOffsetH -= GameRandom.nextInt(3) + 2;
+		if (unyoOffsetW == 0) {
+		} else if (unyoOffsetW < Const.EXT_FORCE_PUSH_LIMIT[getBodyAgeState().ordinal()] * 0.6)
+			unyoOffsetW += GameRandom.nextInt(3) + 5;
+		else if (unyoOffsetW < 0)
+			unyoOffsetW += GameRandom.nextInt(3) + 2;
+		else if (unyoOffsetW > Const.EXT_FORCE_PULL_LIMIT[getBodyAgeState().ordinal()] * 0.6)
+			unyoOffsetW -= GameRandom.nextInt(3) + 5;
+		else if (unyoOffsetW > 0)
+			unyoOffsetW -= GameRandom.nextInt(3) + 2;
 	}
 
 	/**
 	 * Resets unyo offsets to neutral.
 	 */
 	public void resetUnyo() {
-		unyoForceH = 0;
-		unyoForceW = 0;
+		unyoOffsetH = 0;
+		unyoOffsetW = 0;
 	}
 
 	/**
@@ -622,18 +627,18 @@ public abstract class Body extends BodyAttributes {
 			// うんうんアンプルが刺さっている
 			if (getAttachmentSize(VeryShitAmpoule.class) != 0) {
 				// 限界を超えた場合のチェック
-				if (shit > getSHITLIMITorg()[getBodyAgeState().ordinal()]) {
-					int nNowDamage = 100 * damage / getDamageLimit();
+				if (shit > getShitLimitBase()[getBodyAgeState().ordinal()]) {
+					int currentDamagePercent = 100 * damage / getDamageLimit();
 					// 現在のダメージがダメージ限界の1/10以下ならダメージを与える
-					if (nNowDamage < 10) {
+					if (currentDamagePercent < 10) {
 						addDamage(Const.NEEDLE * 5);
 					}
 					// あなる閉鎖時
-					if (isAnalClose() || (isFixBack() && isbNeedled())) {
+					if (isAnalClose() || (isFixBack() && isNeedled())) {
 						setHappiness(Happiness.VERY_SAD);
 						// 破裂寸前までうんうんをためる
 						if (getBurstState() != Burst.NEAR) {
-							shit += TICK * 2 + (shitBoost * 20);
+							shit += TICK * 2 + (excretionBoost * 20);
 						}
 					} else {
 						// あなる未閉鎖
@@ -656,7 +661,7 @@ public abstract class Body extends BodyAttributes {
 						checkReactionStalkMother(UnbirthBabyState.SAD);
 					}
 				} else {
-					shit += TICK * 2 + (shitBoost * 20);
+					shit += TICK * 2 + (excretionBoost * 20);
 				}
 			}
 			return true;
@@ -685,38 +690,38 @@ public abstract class Body extends BodyAttributes {
 
 		// うんうん蓄積処理
 		// うんうんの蓄積の減少度判定
-		int nDown = 1;
+		int dropChanceDivisor = 1;
 		// うんうん奴隷
 		if (getPublicRank() == PublicRank.UnunSlave) {
 			if (!isShitting()) {
-				nDown = 5;
+				dropChanceDivisor = 5;
 			}
 		}
 		// 地中
-		if (getBaryState() != BaryInUGState.NONE) {
-			nDown = 10;
+		if (getBurialState() != BurialState.NONE) {
+			dropChanceDivisor = 10;
 		}
 
 		boolean cantMove = false;
 		// 蓄積実行
-		if (GameRandom.nextInt(nDown) == 0) {
+		if (GameRandom.nextInt(dropChanceDivisor) == 0) {
 			if (isFull()) {
-				shit += TICK * 2 + (shitBoost * 20);
+				shit += TICK * 2 + (excretionBoost * 20);
 			} else {
-				shit += TICK + (shitBoost * 20);
+				shit += TICK + (excretionBoost * 20);
 			}
 		}
 
 		// ちぎれ状態の場合は餡子を漏らす
-		if ((getCriticalDamege() == CriticalDamegeType.CUT || isPealed()) && getBaryState() == BaryInUGState.NONE) {
-			if (shit > getSHITLIMITorg()[getBodyAgeState().ordinal()] - TICK * Const.SHITSTAY * 2) {
+		if ((getCriticalDamege() == CriticalDamegeType.CUT || isPealed()) && getBurialState() == BurialState.NONE) {
+			if (shit > getShitLimitBase()[getBodyAgeState().ordinal()] - TICK * Const.SHITSTAY * 2) {
 				GameView.addCrushedVomit(getX() + 3 - GameRandom.nextInt(6), getY() - 2, 0,
 						this,
 						getShitType());
 				addDamage(Const.NEEDLE * 2);
 				shit = 1;
-				if (shitBoost > 0) {
-					shitBoost--;
+				if (excretionBoost > 0) {
+					excretionBoost--;
 					strike(Const.NEEDLE * 2);
 				}
 				return true;
@@ -725,22 +730,22 @@ public abstract class Body extends BodyAttributes {
 
 		// 寝ている場合はうんうん限界の1.5倍までは我慢できる
 		if (isSleeping()) {
-			if (shit < (getSHITLIMITorg()[getBodyAgeState().ordinal()] * 1.5f)) {
+			if (shit < (getShitLimitBase()[getBodyAgeState().ordinal()] * 1.5f)) {
 				setShitting(false);
 				return false;
 			}
 		}
 
 		// 非ゆっくり症ではない場合
-		if (isNotNYD() && getBaryState() == BaryInUGState.NONE) {
+		if (isNotNYD() && getBurialState() == BurialState.NONE) {
 			// うんうん奴隷ではない場合
 			if (getPublicRank() != PublicRank.UnunSlave) {
 				Obj oTarget = takeMoveTarget();
 				// もしトイレに到着していたら即排泄へ
 				if (isToShit() && oTarget instanceof Toilet) {
 					if (((Toilet) oTarget).checkHitObj(this)) {
-						if (shit < getSHITLIMITorg()[getBodyAgeState().ordinal()] - TICK * Const.SHITSTAY + 1) {
-							shit = getSHITLIMITorg()[getBodyAgeState().ordinal()] - TICK * Const.SHITSTAY + 1;
+						if (shit < getShitLimitBase()[getBodyAgeState().ordinal()] - TICK * Const.SHITSTAY + 1) {
+							shit = getShitLimitBase()[getBodyAgeState().ordinal()] - TICK * Const.SHITSTAY + 1;
 						}
 					} else if (checkOnBed()) {// トイレがある場合
 						// 大人で寝てたなら起きる
@@ -748,14 +753,14 @@ public abstract class Body extends BodyAttributes {
 							wakeup();
 						}
 						// トイレに到着していないかつベッドの上では我慢する
-						if (shit < (getSHITLIMITorg()[getBodyAgeState().ordinal()] * 1.5f)) {
+						if (shit < (getShitLimitBase()[getBodyAgeState().ordinal()] * 1.5f)) {
 							setShitting(false);
 							return false;
 						}
 					} else if ((getAttitude() == Attitude.NICE || getAttitude() == Attitude.VERY_NICE)
 							|| (getAttitude() == Attitude.AVERAGE && getIntelligence() == Intelligence.WISE)) {
 						// 性格が善良か普通でも知能が高ければトイレに着くまで150%まで我慢できる
-						if (shit < (getSHITLIMITorg()[getBodyAgeState().ordinal()] * 1.5f)) {
+						if (shit < (getShitLimitBase()[getBodyAgeState().ordinal()] * 1.5f)) {
 							setShitting(false);
 							return false;
 						}
@@ -764,7 +769,7 @@ public abstract class Body extends BodyAttributes {
 				// トイレがない場合
 				else if (checkOnBed()) {
 					// ベッドの上では我慢する
-					if (shit < (getSHITLIMITorg()[getBodyAgeState().ordinal()] * 1.5f)) {
+					if (shit < (getShitLimitBase()[getBodyAgeState().ordinal()] * 1.5f)) {
 						setShitting(false);
 						return false;
 					}
@@ -772,19 +777,19 @@ public abstract class Body extends BodyAttributes {
 			}
 
 			// 限界が近づいたら排泄チェック
-			if (shit > getSHITLIMITorg()[getBodyAgeState().ordinal()] - TICK * Const.SHITSTAY) {
+			if (shit > getShitLimitBase()[getBodyAgeState().ordinal()] - TICK * Const.SHITSTAY) {
 				// あなるがふさがれていない
-				if (!isAnalClose() && !(isFixBack() && isbNeedled())) {
+				if (!isAnalClose() && !(isFixBack() && isNeedled())) {
 					// 寝ているか埋まっているか粘着床(あんよ固定)についているか針が刺さっていたら体勢をかえられずに漏らす
-					if ((isLockmove() && !isFixBack()) || isSleeping() || isbNeedled()
-							|| getBaryState() != BaryInUGState.NONE) {
+					if ((isLockmove() && !isFixBack()) || isSleeping() || isNeedled()
+							|| getBurialState() != BurialState.NONE) {
 						makeDirty(true);
 						setHappiness(Happiness.VERY_SAD);
 						addStress(150);
 						shit = 0;
 						clearActions();
-						if (shitBoost > 0) {
-							shitBoost--;
+						if (excretionBoost > 0) {
+							excretionBoost--;
 							addDamage(Const.NEEDLE * 2);
 							addStress(400);
 						}
@@ -798,7 +803,7 @@ public abstract class Body extends BodyAttributes {
 				}
 
 				// あなるがふさがれていない
-				if (!isAnalClose() && !(isFixBack() && isbNeedled())) {
+				if (!isAnalClose() && !(isFixBack() && isNeedled())) {
 					if (getAge() % 100 == 0) {
 						if (!isShitting()) {
 							setMessage(GameMessages.getMessage(this, MessagePool.Action.Shit), TICK * Const.SHITSTAY);
@@ -822,9 +827,9 @@ public abstract class Body extends BodyAttributes {
 		}
 
 		// 限界を超えた場合のチェック
-		if (shit > getSHITLIMITorg()[getBodyAgeState().ordinal()]) {
+		if (shit > getShitLimitBase()[getBodyAgeState().ordinal()]) {
 			// 肛門が塞がれてなければ排泄
-			if (!isAnalClose() && !(isFixBack() || isbNeedled()) && getBaryState() == BaryInUGState.NONE) {
+			if (!isAnalClose() && !(isFixBack() || isNeedled()) && getBurialState() == BurialState.NONE) {
 				setShitting(false);
 				clearActions();
 				shit = 0;
@@ -853,8 +858,8 @@ public abstract class Body extends BodyAttributes {
 					}
 				}
 
-				if (shitBoost > 0) {
-					shitBoost--;
+				if (excretionBoost > 0) {
+					excretionBoost--;
 					addDamage(Const.NEEDLE * 2);
 					addStress(400);
 				}
@@ -877,7 +882,7 @@ public abstract class Body extends BodyAttributes {
 
 				setHappiness(Happiness.SAD);
 				// if(GameRandom.nextInt(4) == 0){
-				shit += TICK + (shitBoost * 10);
+				shit += TICK + (excretionBoost * 10);
 				// }
 
 				if (!isAnalClose() || getAge() % 100 == 0) {
@@ -898,24 +903,24 @@ public abstract class Body extends BodyAttributes {
 		// このあと動かなくなるフラグ
 		boolean cantMove = false;
 		if (hasBabyOrStalk() || (!hasBabyOrStalk() && isBirth())) {
-			pregnantPeriod += TICK + (pregnantPeriodBoost / 2);
+			pregnantPeriod += TICK + (pregnancyPeriodBoost / 2);
 			// 出産直前
-			if (pregnantPeriod > getPREGPERIODorg() - TICK * 100) {
+			if (pregnantPeriod > getPregPeriodBase() - TICK * 100) {
 				if (!isBirth() && hasBabyOrStalk()) {
 					setMessage(GameMessages.getMessage(this, MessagePool.Action.Breed), true);
 					wakeup();
 				}
 				cantMove = true;
 				setBirth(true);
-				pregnantPeriodBoost = 0;
+				pregnancyPeriodBoost = 0;
 			}
 			// 皮がない時の出産
-			if (pregnantPeriod > getPREGPERIODorg() && isPealed()) {
+			if (pregnantPeriod > getPregPeriodBase() && isPealed()) {
 				damage += 40000;
 				toDead();
 			}
 			// 出産
-			else if (pregnantPeriod > getPREGPERIODorg()) {
+			else if (pregnantPeriod > getPregPeriodBase()) {
 				// Keep babyType for generating baby.
 				wakeup();
 				setHasBaby(false);
@@ -936,22 +941,22 @@ public abstract class Body extends BodyAttributes {
 				} else {
 					cantMove = true;
 				}
-				boolean bBirthFlag = true;
+				boolean birthAllowed = true;
 				// 穴がふさがれている
-				if (isHasPants() || (isFixBack() && isbNeedled())) {
-					bBirthFlag = false;
+				if (isHasPants() || (isFixBack() && isNeedled())) {
+					birthAllowed = false;
 				}
 				// 動けない
-				if ((isLockmove() && (!isFixBack() || geteCoreAnkoState() != CoreAnkoState.NonYukkuriDisease))
+				if ((isLockmove() && (!isFixBack() || getCoreAnkoState() != CoreAnkoState.NonYukkuriDisease))
 						&& !isShitting()) {
-					bBirthFlag = false;
+					birthAllowed = false;
 				}
 				// 非ゆっくり症
 				// 20210415 削除。非ゆっくり症だって出産くらいするでしょ
 				// if (isNYD()) {
-				// bBirthFlag = false;
+				// birthAllowed = false;
 				// }
-				if (!bBirthFlag) {
+				if (!birthAllowed) {
 					// お腹の赤ゆだけクリア
 					getBabyTypes().clear();
 					makeDirty(true);
@@ -964,6 +969,10 @@ public abstract class Body extends BodyAttributes {
 							setMessage(GameMessages.getMessage(this, MessagePool.Action.Breed2), true);
 						}
 					}
+					// 出産不能なら妊娠状態を継続させず、一度ここで終わらせる。
+					setBirth(false);
+					pregnantPeriod = 0;
+					pregnancyPeriodBoost = 0;
 					setHappiness(Happiness.VERY_SAD);
 				}
 			}
@@ -1016,11 +1025,11 @@ public abstract class Body extends BodyAttributes {
 			stay();
 			wakeup();
 		} else if (isSleeping()
-				|| (wakeUpTime + getACTIVEPERIODorg() * 3 / 2 < getAge() && !isExciting() && !isScare() && !isVerySad()
-						&& !isEating() && !isbNeedled() && !isTooHungry() && !(isVeryHungry() && isToFood()))
-				|| (wakeUpTime + getACTIVEPERIODorg() * 3 < getAge() && !isExciting() && !isScare() && !isEating()
-						&& !isbNeedled() && !(isTooHungry() && isToFood()))
-				|| (isUnBirth() && !isbNeedled())) {
+				|| (wakeUpTime + getActivePeriodBase() * 3 / 2 < getAge() && !isExciting() && !isScare() && !isVerySad()
+						&& !isEating() && !isNeedled() && !isTooHungry() && !(isVeryHungry() && isToFood()))
+				|| (wakeUpTime + getActivePeriodBase() * 3 < getAge() && !isExciting() && !isScare() && !isEating()
+						&& !isNeedled() && !(isTooHungry() && isToFood()))
+				|| (isUnBirth() && !isNeedled())) {
 			clearActions();
 			setSleeping(true);
 			setAngry(false);
@@ -1032,13 +1041,13 @@ public abstract class Body extends BodyAttributes {
 				return isSleeping();
 			}
 			if (GameEnvironment.getDayState() == Terrarium.DayState.NIGHT) {
-				if ((getAge() % (GameEnvironment.getNightTime() / getSLEEPPERIODorg() + 1)) == 0) {
+				if ((getAge() % (GameEnvironment.getNightTime() / getSleepPeriodBase() + 1)) == 0) {
 					sleepingPeriod += TICK;
 				}
 			} else {
 				sleepingPeriod += TICK;
 			}
-			if (sleepingPeriod > getSLEEPPERIODorg()) {
+			if (sleepingPeriod > getSleepPeriodBase()) {
 				setMessage(GameMessages.getMessage(this, MessagePool.Action.Wakeup), true);
 				stay();
 				wakeup();
@@ -1109,26 +1118,26 @@ public abstract class Body extends BodyAttributes {
 	 */
 	public boolean doSurisuriByPlayer() {
 		// プレイヤーにすりすりされていないなら終了
-		if (!isbSurisuriFromPlayer()) {
+		if (!isSurisuriFromPlayer()) {
 			return false;
 		}
 
-		boolean bFlag = false;
+		boolean foundTarget = false;
 		// 初回なら時間を初期化
-		if (lnLastTimeSurisuri == 0) {
-			lnLastTimeSurisuri = System.currentTimeMillis();
-			bFlag = true;
+		if (lastSurisuriTime == 0) {
+			lastSurisuriTime = System.currentTimeMillis();
+			foundTarget = true;
 		} else {
 			// 二回目以降は前回より3秒以上経過してたら処理実行
 			long lnTimeNow = System.currentTimeMillis();
-			long lnSec = lnTimeNow - lnLastTimeSurisuri;
+			long lnSec = lnTimeNow - lastSurisuriTime;
 			if (2000 < lnSec) {
-				lnLastTimeSurisuri = lnTimeNow;
-				bFlag = true;
+				lastSurisuriTime = lnTimeNow;
+				foundTarget = true;
 			}
 		}
 
-		if (!bFlag) {
+		if (!foundTarget) {
 			return false;
 		}
 
@@ -1136,7 +1145,7 @@ public abstract class Body extends BodyAttributes {
 		if ((isLockmove()) ||
 				(getPanicType() != null) ||
 				(isSleeping()) ||
-				(takeMappedObj(getLinkParent()) instanceof Sui)) {
+				(takeMappedObj(getParentLinkId()) instanceof Sui)) {
 			return false;
 		}
 
@@ -1207,7 +1216,7 @@ public abstract class Body extends BodyAttributes {
 		}
 
 		// 針が刺さっている場合
-		if (isbNeedled()) {
+		if (isNeedled()) {
 			stayPurupuru(40);
 			setHappiness(Happiness.VERY_SAD);
 			addStress(50);
@@ -1234,10 +1243,10 @@ public abstract class Body extends BodyAttributes {
 		setNobinobi(true);
 		addMemories(1);
 
-		int nRnd = GameRandom.nextInt(5);
-		if (nRnd == 0) {
+		int randomIndex = GameRandom.nextInt(5);
+		if (randomIndex == 0) {
 			setForceFace(ImageCode.SMILE.ordinal());
-		} else if (0 < nRnd && nRnd < 3) {
+		} else if (0 < randomIndex && randomIndex < 3) {
 			setForceFace(ImageCode.NORMAL.ordinal());
 		} else {
 			setForceFace(ImageCode.CHEER.ordinal());
@@ -1258,7 +1267,7 @@ public abstract class Body extends BodyAttributes {
 		// 怒り状態の経過
 		if (isAngry()) {
 			angryPeriod += TICK;
-			if (angryPeriod > getANGRYPERIODorg()) {
+			if (angryPeriod > getAngryPeriodBase()) {
 				angryPeriod = 0;
 				setAngry(false);
 			}
@@ -1266,7 +1275,7 @@ public abstract class Body extends BodyAttributes {
 		// 恐怖状態の経過
 		if (isScare()) {
 			scarePeriod += TICK;
-			if (scarePeriod > getSCAREPERIODorg()) {
+			if (scarePeriod > getScarePeriodBase()) {
 				scarePeriod = 0;
 				setScare(false);
 			}
@@ -1324,7 +1333,7 @@ public abstract class Body extends BodyAttributes {
 			return;
 		}
 		// 加工中を想定した反応
-		else if ((isDamaged() || hasDisorder()) && isbOnDontMoveBeltconveyor() && !hasBabyOrStalk() && !isPealed()) {
+		else if ((isDamaged() || hasDisorder()) && isOnNonMovingConveyor() && !hasBabyOrStalk() && !isPealed()) {
 			if (GameRandom.nextInt(80) == 0) {
 				begForLife();
 			} else if (GameRandom.nextInt(40) == 0) {
@@ -1384,7 +1393,7 @@ public abstract class Body extends BodyAttributes {
 			setHappiness(Happiness.SAD);
 			excitingPeriod = 0;
 			// 強制発情ではない場合
-			if ((!isVeryRude() || getIntelligence() != Intelligence.FOOL) && isExciting() && !isbForceExciting()) {
+			if ((!isVeryRude() || getIntelligence() != Intelligence.FOOL) && isExciting() && !isForceExciting()) {
 				setCalm();
 				setForceFace(ImageCode.TIRED.ordinal());
 				setMessage(GameMessages.getMessage(this, MessagePool.Action.CantUsePenipeni));
@@ -1416,11 +1425,11 @@ public abstract class Body extends BodyAttributes {
 		}
 
 		// ゆっくりしてるとき
-		if (noHungryPeriod > getRELAXPERIODorg() && noDamagePeriod > getRELAXPERIODorg()
+		if (noHungryPeriod > getRelaxPeriodBase() && noDamagePeriod > getRelaxPeriodBase()
 				&& !isSleeping() && !isShitting() && !isEating()
 				&& !isSad() && !isVerySad() && !isFeelPain()
 				&& getAttachmentSize(PoisonAmpoule.class) == 0) {
-			// && moveTarget == null) {
+			// && moveTargetId == null) {
 			// すっきり発動条件
 			if (!isExciting() && isNotNYD() && GameRandom.nextInt(getExciteProb()) == 0) {
 				int r = 1;
@@ -1435,9 +1444,9 @@ public abstract class Body extends BodyAttributes {
 					r = GameRandom.nextInt(24 + adjust);
 				}
 				// すっきりーしにいく条件判定
-				boolean bToExcite = false;
+				boolean shouldExcite = false;
 				// ぺにぺにがないとダメ
-				if (isbPenipeniCutted()) {
+				if (isPenipeniCutted()) {
 					r = 1;
 				}
 				// 大人じゃないとやらない(ドゲスの子ゆ除く)
@@ -1462,50 +1471,50 @@ public abstract class Body extends BodyAttributes {
 						// レイパー
 						if (isRapist()) {
 							if (isRapist() && FamilyActionLogic.isRapeTarget()) {
-								bToExcite = true;
+								shouldExcite = true;
 							}
 						} else {
 							// 自分の通常の子ゆリスト作成
 							List<Body> childrenList = BodyLogic.createActiveChildList(this, true);
 							// パートナーがいる場合
-							Body pa = YukkuriUtil.getBodyInstance(getPartner());
+							Body pa = BodyRelations.getPartnerBody(this);
 							if (pa != null) {
 								if (isVeryRude()) {
 									// ドゲスはすぐ興奮
-									bToExcite = true;
+									shouldExcite = true;
 								} else if (!pa.hasBabyOrStalk()) {
 									if (childrenList == null || childrenList.size() == 0) {
-										bToExcite = true;
+										shouldExcite = true;
 									} else {
 										switch (getIntelligence()) {
 											case WISE:
 												// 賢いのは3匹以下で子づくり
 												if (childrenList.size() <= 3) {
-													bToExcite = true;
+													shouldExcite = true;
 												}
 												break;
 											case AVERAGE:
 												// 普通の知能は10匹以下で子づくり
 												if (childrenList.size() <= 10) {
-													bToExcite = true;
+													shouldExcite = true;
 												}
 												break;
 											case FOOL:
 												// 餡子脳は子の数を気にしない
-												bToExcite = true;
+												shouldExcite = true;
 												break;
 										}
 									}
 								}
 							} else {
 								// 独身orバツイチは、相手を探すために興奮する
-								bToExcite = true;
+								shouldExcite = true;
 							}
 						}
 					}
 				}
 
-				if (bToExcite) {
+				if (shouldExcite) {
 					clearActionsForEvent();
 					setExciting(true);
 					excitingPeriod = 0;
@@ -1524,8 +1533,8 @@ public abstract class Body extends BodyAttributes {
 				setAngry(false);
 				setScare(false);
 			} else {
-				excitingPeriod += TICK + getExcitingPeriodBoost();
-				if (excitingPeriod > getEXCITEPERIODorg()) {
+				excitingPeriod += TICK + getExcitementPeriodBoost();
+				if (excitingPeriod > getExcitePeriodBase()) {
 					excitingPeriod = 0;
 					if (!isRaper()) {
 						setCalm();
@@ -1684,35 +1693,35 @@ public abstract class Body extends BodyAttributes {
 	 */
 	@Override
 	public int checkNonYukkuriDiseaseTolerance() {
-		int nTolerance = 100;
+		int tolerance = 100;
 		if (isIdiot()) {
-			nTolerance += 50000;
+			tolerance += 50000;
 		}
 		if (getPublicRank() == PublicRank.UnunSlave) {
-			nTolerance += 10000;
+			tolerance += 10000;
 		}
 		switch (getIntelligence()) {
 			case WISE:
-				nTolerance += 5;
+				tolerance += 5;
 				break;
 			case FOOL:
-				nTolerance += 10;
+				tolerance += 10;
 				break;
 			default:
 				break;
 		}
 		switch (getAttitude()) {
 			case VERY_NICE:
-				nTolerance += 5;
+				tolerance += 5;
 				break;
 			case NICE:
-				nTolerance += 10;
+				tolerance += 10;
 				break;
 			case SHITHEAD:
-				nTolerance += 30;
+				tolerance += 30;
 				break;
 			case SUPER_SHITHEAD:
-				nTolerance += 50;
+				tolerance += 50;
 				break;
 			default:
 				break;
@@ -1721,97 +1730,97 @@ public abstract class Body extends BodyAttributes {
 			case BABY:
 				break;
 			case CHILD:
-				nTolerance += 30;
+				tolerance += 30;
 				break;
 			case ADULT:
-				nTolerance += 50;
+				tolerance += 50;
 				break;
 		}
 		if (isRapist()) {
-			nTolerance += 5000;
+			tolerance += 5000;
 		}
 		if (isSoHungry()) {
 			if (isVeryHungry())
-				nTolerance -= 5;
+				tolerance -= 5;
 			else
-				nTolerance -= 3;
+				tolerance -= 3;
 		}
 		switch (getFootBakeLevel()) {
 			case MIDIUM:
-				nTolerance -= 30;
+				tolerance -= 30;
 				break;
 			case CRITICAL:
-				nTolerance -= 50;
+				tolerance -= 50;
 				break;
 			default:
 				break;
 		}
 		switch (getBodyBakeLevel()) {
 			case MIDIUM:
-				nTolerance -= 15;
+				tolerance -= 15;
 				break;
 			case CRITICAL:
-				nTolerance -= 25;
+				tolerance -= 25;
 				break;
 			default:
 				break;
 		}
 		if (isSick()) {
-			nTolerance -= 15;
+			tolerance -= 15;
 		}
 		if (!hasOkazari()) {
-			nTolerance -= 25;
+			tolerance -= 25;
 		}
 		if (!isHasBraid()) {
-			nTolerance -= 10;
+			tolerance -= 10;
 		}
-		if (isbPenipeniCutted()) {
-			nTolerance -= 20;
+		if (isPenipeniCutted()) {
+			tolerance -= 20;
 		}
 		if (isDirty()) {
-			nTolerance -= 5;
+			tolerance -= 5;
 		}
 		if (isLockmove()) {
-			nTolerance -= 5;
+			tolerance -= 5;
 		}
 		if (isBlind()) {
-			nTolerance -= 20;
+			tolerance -= 20;
 		}
 		if (isShutmouth()) {
-			nTolerance -= 10;
+			tolerance -= 10;
 		}
 		if (getCriticalDamege() == CriticalDamegeType.INJURED) {
-			nTolerance -= 10;
+			tolerance -= 10;
 		}
 		if (getChildrenList() != null) {
 			for (int iChild : getChildrenList()) {
-				Body bChild = YukkuriUtil.getBodyInstance(iChild);
-				if (bChild == null || bChild.isAdult()) {
+				Body childBody = BodyRelations.getBody(iChild);
+				if (childBody == null || childBody.isAdult()) {
 					continue;
 				}
 				// 死んでる
-				if (bChild.isRemoved() || bChild.isDead()) {
-					nTolerance -= 10;
+				if (childBody.isRemoved() || childBody.isDead()) {
+					tolerance -= 10;
 					continue;
 				}
 				// 死にかけてる
-				if (bChild.isCrushed() || bChild.isDamaged() || bChild.isBurned() || findSick(bChild)
-						|| bChild.isTooHungry()) {
-					nTolerance -= 3;
+				if (childBody.isCrushed() || childBody.isDamaged() || childBody.isBurned() || findSick(childBody)
+						|| childBody.isTooHungry()) {
+					tolerance -= 3;
 					continue;
 				}
 				if (hasDisorder()) {
-					nTolerance -= 5;
+					tolerance -= 5;
 					continue;
 				}
 				// 大丈夫っぽい
-				nTolerance += 10;
+				tolerance += 10;
 			}
 		}
-		nTolerance += memories;
-		if (nTolerance <= -1)
-			nTolerance = -1;
-		return nTolerance;
+		tolerance += memories;
+		if (tolerance <= -1)
+			tolerance = -1;
+		return tolerance;
 	}
 
 	/**
@@ -1822,27 +1831,27 @@ public abstract class Body extends BodyAttributes {
 	private boolean checkNonYukkuriDisease() {
 		// 非ゆっくり症防止ディフューザー、非ゆっくり症防止アンプルの際は非ゆっくり症にならない/治る
 		if (GameEnvironment.isAntiNonYukkuriDiseaseSteam() || getAttachmentSize(ANYDAmpoule.class) != 0) {
-			seteCoreAnkoState(CoreAnkoState.DEFAULT);
+			setCoreAnkoState(CoreAnkoState.DEFAULT);
 			return false;
 		}
 
-		int nStressLimit = getSTRESSLIMITorg()[getBodyAgeState().ordinal()];
-		int nTolerance = checkNonYukkuriDiseaseTolerance();
+		int stressLimit = getStressLimitBase()[getBodyAgeState().ordinal()];
+		int tolerance = checkNonYukkuriDiseaseTolerance();
 		// ストレス限界を超えている場合
-		if (nStressLimit * nTolerance / 100 < getStress()) {
+		if (stressLimit * tolerance / 100 < getStress()) {
 			// 初回
 			if (isNotNYD()) {
 				setCalm();
-				seteCoreAnkoState(CoreAnkoState.NonYukkuriDiseaseNear);
+				setCoreAnkoState(CoreAnkoState.NonYukkuriDiseaseNear);
 				nonYukkuriDiseasePeriod = 0;
 				speed = speed / 2;
 			}
 			// ストレス限界の2倍を超えている場合
-			if (nStressLimit * nTolerance / 100 * 2 < getStress()) {
+			if (stressLimit * tolerance / 100 * 2 < getStress()) {
 				// 初回
-				if (geteCoreAnkoState() == CoreAnkoState.NonYukkuriDiseaseNear) {
+				if (getCoreAnkoState() == CoreAnkoState.NonYukkuriDiseaseNear) {
 					setCalm();
-					seteCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
+					setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
 					nonYukkuriDiseasePeriod = 0;
 				}
 			}
@@ -1851,7 +1860,7 @@ public abstract class Body extends BodyAttributes {
 			if (isNYD()) {
 				speed = speed * 2;
 			}
-			seteCoreAnkoState(CoreAnkoState.DEFAULT);
+			setCoreAnkoState(CoreAnkoState.DEFAULT);
 		}
 
 		// 通常のままなら終了
@@ -1864,7 +1873,7 @@ public abstract class Body extends BodyAttributes {
 		if (isUnBirth()) {
 			return true;
 		}
-		int nRnd = 40;
+		int randomThreshold = 40;
 		wakeup();
 		setBirth(false);
 
@@ -1873,7 +1882,7 @@ public abstract class Body extends BodyAttributes {
 			wakeup();
 		}
 		// 非ゆっくり症初期
-		if (geteCoreAnkoState() == CoreAnkoState.NonYukkuriDiseaseNear && GameRandom.nextInt(nRnd) == 0) {
+		if (getCoreAnkoState() == CoreAnkoState.NonYukkuriDiseaseNear && GameRandom.nextInt(randomThreshold) == 0) {
 			switch (nonYukkuriDiseasePeriod) {
 				case 0:
 					if (GameRandom.nextBoolean()) {
@@ -1929,9 +1938,9 @@ public abstract class Body extends BodyAttributes {
 			setHappiness(Happiness.VERY_SAD);
 			setNYDMessage(GameMessages.getMessage(this, MessagePool.Action.NonYukkuriDiseaseNear), false);
 		}
-		nRnd = 20;
+		randomThreshold = 20;
 		// 非ゆっくり症
-		if (geteCoreAnkoState() == CoreAnkoState.NonYukkuriDisease && GameRandom.nextInt(nRnd) == 0) {
+		if (getCoreAnkoState() == CoreAnkoState.NonYukkuriDisease && GameRandom.nextInt(randomThreshold) == 0) {
 			switch (nonYukkuriDiseasePeriod) {
 				case 0:
 					if (GameRandom.nextBoolean()) {
@@ -2007,7 +2016,7 @@ public abstract class Body extends BodyAttributes {
 			addMemories(-5);// 耐性が減っていく
 			setHappiness(Happiness.VERY_SAD);
 			setNYDMessage(GameMessages.getMessage(this, MessagePool.Action.NonYukkuriDisease), false);
-			if (GameRandom.nextInt(nRnd) == 0)
+			if (GameRandom.nextInt(randomThreshold) == 0)
 				nonYukkuriDiseasePeriod = 0;
 		}
 		return true;
@@ -2020,7 +2029,7 @@ public abstract class Body extends BodyAttributes {
 	 */
 	public boolean checkEmotionBlind() {
 		if (isBlind()) {
-			setEYESIGHTorg(5 * 5);
+			setEyesightBase(5 * 5);
 			addStress(5);
 			setHappiness(Happiness.SAD);
 			if (GameRandom.nextInt(40) <= 5) {
@@ -2060,7 +2069,7 @@ public abstract class Body extends BodyAttributes {
 	public boolean checkEmotionLockmove() {
 		// 動けるとき、すっきりしてる時、埋まってない時はリターン
 		if (!isLockmove() || isSukkiri() || (getFootBakeLevel() != FootBake.NONE
-				&& (getBaryState() == BaryInUGState.NONE || getBaryState() == BaryInUGState.HALF))) {
+				&& (getBurialState() == BurialState.NONE || getBurialState() == BurialState.HALF))) {
 			return false;
 		}
 
@@ -2085,7 +2094,7 @@ public abstract class Body extends BodyAttributes {
 			if (GameRandom.nextInt(15) == 0) {
 				clearActions();
 				// 土に埋まっている場合は苦しむ
-				if (getBaryState() == BaryInUGState.ALL || getBaryState() == BaryInUGState.NEARLY_ALL) {
+				if (getBurialState() == BurialState.ALL || getBurialState() == BurialState.NEARLY_ALL) {
 					setHappiness(Happiness.VERY_SAD);
 					setMessage(GameMessages.getMessage(this, MessagePool.Action.BaryInUnderGround));
 					stay();
@@ -2106,7 +2115,7 @@ public abstract class Body extends BodyAttributes {
 			} else if (GameRandom.nextInt(15) == 0) {
 				clearActions();
 				// 土に埋まっている場合は苦しむ
-				if (getBaryState() == BaryInUGState.ALL || getBaryState() == BaryInUGState.NEARLY_ALL) {
+				if (getBurialState() == BurialState.ALL || getBurialState() == BurialState.NEARLY_ALL) {
 					setHappiness(Happiness.VERY_SAD);
 					setMessage(GameMessages.getMessage(this, MessagePool.Action.BaryInUnderGround));
 					stay();
@@ -2247,7 +2256,7 @@ public abstract class Body extends BodyAttributes {
 			if (isStubbornlyDirty()) {
 				dirtyPeriod += TICK;
 			}
-			if (dirtyPeriod > getDIRTYPERIODorg()) {
+			if (dirtyPeriod > getDirtyPeriodBase()) {
 				addSickPeriod(100);
 				dirtyPeriod = 0;
 			}
@@ -2260,8 +2269,8 @@ public abstract class Body extends BodyAttributes {
 			} else {
 				sickPeriod++;
 			}
-			if (sickPeriod > getINCUBATIONPERIODorg() * 32
-					&& (damage >= getDAMAGELIMITorg()[getBodyAgeState().ordinal()] * 85 / 100) && !isTalking()) {
+			if (sickPeriod > getIncubationPeriodBase() * 32
+					&& (damage >= getDamageLimitBase()[getBodyAgeState().ordinal()] * 85 / 100) && !isTalking()) {
 				if (isSleeping())
 					wakeup();
 				// 末期症状
@@ -2322,8 +2331,8 @@ public abstract class Body extends BodyAttributes {
 			return Event.DONOTHING;
 		}
 		if (!isDead()) {
-			messageCount--;
-			if (messageCount <= 0) {
+			messageTicks--;
+			if (messageTicks <= 0) {
 				switch (getPanicType()) {
 					case FEAR:
 						setMessage(GameMessages.getMessage(this, MessagePool.Action.Fear));
@@ -2386,21 +2395,21 @@ public abstract class Body extends BodyAttributes {
 	public final void checkTang() {
 		if (getTang() < 0)
 			setTang(0);
-		if (getTang() > getTANGLEVELorg()[2])
-			setTang(getTANGLEVELorg()[2]);
+		if (getTang() > getTangLevelBase()[2])
+			setTang(getTangLevelBase()[2]);
 	}
 
 	/**
 	 * メッセージを出すかどうか.
 	 */
 	public void checkMessage() {
-		--messageCount;
-		if (messageCount <= 5) {
+		--messageTicks;
+		if (messageTicks <= 5) {
 			// stop to show the message 0.5 sec. before.
-			setMessageBuf(null);
+			setMessageBuffer(null);
 		}
-		if (messageCount <= 0) {
-			messageCount = 0;
+		if (messageTicks <= 0) {
+			messageTicks = 0;
 			setFurifuri(false);
 			setStrike(false);
 			setEating(false);
@@ -2416,8 +2425,8 @@ public abstract class Body extends BodyAttributes {
 		// しゃべれないor生まれていないor非ゆっくり症
 		if (isSilent() || isUnBirth() || isNYD()) {
 			if (isUnBirth()) {
-				setMessageCount(0);
-				setMessageBuf(null);
+				setMessageTicks(0);
+				setMessageBuffer(null);
 			}
 			return;
 		}
@@ -2426,14 +2435,14 @@ public abstract class Body extends BodyAttributes {
 			if (!isSilent()) {
 				String messages = GameMessages.getMessage(this, MessagePool.Action.Dead);
 				setMessage(messages);
-				setForceBirthMessage(false);
-				if (getMessageBuf() == messages) {
+				setBirthMessageForced(false);
+				if (getMessageBuffer() == messages) {
 					// if the message is set successfully, be silent.
 					setSilent(true);
 				}
 			}
 			return;
-		} else if (getMessageBuf() == null) {
+		} else if (getMessageBuffer() == null) {
 			if (isSleeping()) {
 				if (GameRandom.nextInt(10) == 0) {
 					if (isNightmare()) {
@@ -2444,8 +2453,8 @@ public abstract class Body extends BodyAttributes {
 						addStress(-20);
 					}
 				}
-			} else if (!isUnBirth() && isForceBirthMessage()) {
-				setForceBirthMessage(false);
+			} else if (!isUnBirth() && isBirthMessageForced()) {
+				setBirthMessageForced(false);
 				setPikoMessage(GameMessages.getMessage(this, MessagePool.Action.Birth), true);
 				addMemories(10);
 			} else if (!isFlyingType() && getZ() > 15 && getPanicType() == null && !isLockmove()
@@ -2480,13 +2489,13 @@ public abstract class Body extends BodyAttributes {
 							GameRandom.nextBoolean());
 				}
 			} else if (nearToBirth() && !isBirth()) {
-				// if( baryState == Body.BaryInUGState.NONE ){
-				if (!isTalking() && getBaryState() == BaryInUGState.NONE && GameRandom.nextInt(8) == 0) {
+				// if( burialState == Body.BurialState.NONE ){
+				if (!isTalking() && getBurialState() == BurialState.NONE && GameRandom.nextInt(8) == 0) {
 					setMessage(GameMessages.getMessage(this, MessagePool.Action.NearToBirth));
 					// BreedEventの重複作成を防ぐ（同じfromのイベントが既にあれば追加しない）
 					boolean hasBreedEvent = false;
 					for (EventPacket ep : GameWorld.get().getCurrentMap().getEvent()) {
-						if (ep instanceof BreedEvent && YukkuriUtil.getBodyInstance(ep.getFrom()) == this) {
+						if (ep instanceof BreedEvent && BodyRelations.getBody(ep.getFrom()) == this) {
 							hasBreedEvent = true;
 							break;
 						}
@@ -2533,11 +2542,11 @@ public abstract class Body extends BodyAttributes {
 	 * ぷるぷるする.
 	 */
 	public final void doPurupuru() {
-		if (!isbPurupuru()) {
-			setbPurupuru(true);
+		if (!isShakePhase()) {
+			setShakePhase(true);
 			setOfsXY(1, ofsY);
 		} else {
-			setbPurupuru(false);
+			setShakePhase(false);
 			setOfsXY(0, ofsY);
 		}
 	}
@@ -2593,7 +2602,7 @@ public abstract class Body extends BodyAttributes {
 			if (SimYukkuri.UNYO) {
 				centerH = (getBodySpr()[getBodyAgeState().ordinal()].getImageH() + getExpandSizeH()
 						+ getExternalForceW()
-						+ unyoForceH);
+						+ unyoOffsetH);
 			}
 			int sX;
 			int ofsX;
@@ -2613,7 +2622,7 @@ public abstract class Body extends BodyAttributes {
 					stalk.setCalcX(getX() + ofsX);
 					stalk.setCalcY(getY());
 					// 完全に埋まっていたら茎だけ地上に出す
-					if (getBaryState() == BaryInUGState.ALL) {
+					if (getBurialState() == BurialState.ALL) {
 						stalk.setCalcZ(0);
 					} else {
 						stalk.setCalcZ(getZ() + (int) (centerH * 0.09f) + Const.STALK_OF_S_Y[k]);
@@ -2631,13 +2640,13 @@ public abstract class Body extends BodyAttributes {
 	 * @param dontMove 動けない場合
 	 */
 	public void moveBody(boolean dontMove) {
-		if (grabbed || takeMappedObj(getLinkParent()) != null) {
+		if (grabbed || takeMappedObj(getParentLinkId()) != null) {
 			// if grabbed, it cannot move.
 			setFalldownDamage(0);
-			setbNoDamageNextFall(false);
-			setBx(0);
-			setBy(0);
-			bz = 0;
+			setNoDamageNextFall(false);
+			setMotionX(0);
+			setMotionY(0);
+			setMotionZ(0);
 			return;
 		}
 		if (BodyMovement.applyExternalMotion(this)) {
@@ -2652,16 +2661,16 @@ public abstract class Body extends BodyAttributes {
 		z = Math.min(z, Translate.getMapZ());
 
 		if (dontMove || isLockmove()) {
-			setBx(0);
-			setBy(0);
-			bz = 0;
+			setMotionX(0);
+			setMotionY(0);
+			setMotionZ(0);
 			return;
 		}
 		// 仮の処理 コンベア移動中は動けなくする
-		if ((getBx() + getBy() + bz) != 0) {
-			setBx(0);
-			setBy(0);
-			bz = 0;
+		if ((getMotionX() + getMotionY() + motionZ) != 0) {
+			setMotionX(0);
+			setMotionY(0);
+			setMotionZ(0);
 			return;
 		}
 
@@ -2669,9 +2678,9 @@ public abstract class Body extends BodyAttributes {
 		int step = BodyMovement.calculateMovementStep(this);
 		int freq = BodyMovement.calculateMovementFrequency(this, step);
 		if (getAge() % freq != 0) {
-			setBx(0);
-			setBy(0);
-			bz = 0;
+			setMotionX(0);
+			setMotionY(0);
+			setMotionZ(0);
 			return;
 		}
 
@@ -2695,9 +2704,9 @@ public abstract class Body extends BodyAttributes {
 			BodyMovement.MovementVector vector = BodyMovement.calculateMovementVector(this, step);
 			BodyMovement.applyDirectedMovement(this, vector);
 			BodyMovement.resolveDirectedMovement(this, vector);
-			setBx(0);
-			setBy(0);
-			bz = 0;
+			setMotionX(0);
+			setMotionY(0);
+			setMotionZ(0);
 	}
 
 	/**
@@ -2867,7 +2876,7 @@ public abstract class Body extends BodyAttributes {
 		unBirth = flag;
 		enableWall = !flag;
 		setCanTalk(!flag);
-		setBFirstGround(true);
+			setFirstGround(true);
 		if (flag) {
 			setMessage(null);
 			forceToSleep();
@@ -2887,7 +2896,7 @@ public abstract class Body extends BodyAttributes {
 		super.setUnBirth(flag);
 		enableWall = !flag;
 		setCanTalk(!flag);
-		setBFirstGround(true);
+			setFirstGround(true);
 	}
 
 	/**
@@ -2898,16 +2907,25 @@ public abstract class Body extends BodyAttributes {
 	@Transient
 	public final boolean isPlantForUnbirthChild() {
 		if (isUnBirth()) {
-			// 茎がある
+			// 茎があって親が生きてる
 			if (getBindStalk() != null) {
 				int id = getBindStalk().getPlantYukkuri();
 				Obj oBind = GameWorld.get().getCurrentMap().getBody().get(id);
 				if (oBind != null && oBind instanceof Body) {
 					Body bodyBind = (Body) oBind;
-					// 茎があって親が生きてる
 					if (bodyBind != null && !bodyBind.isDead() && !bodyBind.isRemoved()) {
 						return true;
 					}
+				}
+			}
+			// 救命オレンジプール上にいる
+			for (src.item.OrangePool pool : GameWorld.get().getCurrentMap().getOrangePool().values()) {
+				if (!pool.isRescue()) continue;
+				src.draw.Rectangle4y b = src.item.OrangePool.getBounding();
+				int halfW = b.getWidth() >> 1;
+				int halfH = b.getHeight() >> 1;
+				if (Math.abs(getX() - pool.getX()) <= halfW && Math.abs(getY() - pool.getY()) <= halfH) {
+					return true;
 				}
 			}
 			return false;
@@ -2936,11 +2954,11 @@ public abstract class Body extends BodyAttributes {
 			setShittingDiscipline(0);
 			setExcitingDiscipline(0);
 			setFurifuriDiscipline(0);
-			setMessageDiscipline(0);
+			setSpeechDiscipline(0);
 			return;
 		}
 		// 基本ゲーム内時間12分に1回
-		int period = getDECLINEPERIODorg();
+		int period = getDeclinePeriodBase();
 		// int period = (isRude() ? 1 : 2) * DECLINEPERIOD;
 		// 知性による補正
 		switch (getIntelligence()) {
@@ -2958,7 +2976,7 @@ public abstract class Body extends BodyAttributes {
 			shittingDiscipline--;
 			excitingDiscipline--;
 			furifuriDiscipline--;
-			messageDiscipline--;
+			speechDiscipline--;
 			if (shittingDiscipline < 0) {
 				shittingDiscipline = 0;
 			}
@@ -2974,11 +2992,11 @@ public abstract class Body extends BodyAttributes {
 			if (furifuriDiscipline > 20) {
 				furifuriDiscipline = 20;
 			}
-			if (messageDiscipline < 0) {
-				messageDiscipline = 0;
+			if (speechDiscipline < 0) {
+				speechDiscipline = 0;
 			}
-			if (messageDiscipline > 20) {
-				messageDiscipline = 20;
+			if (speechDiscipline > 20) {
+				speechDiscipline = 20;
 			}
 		}
 	}
@@ -2995,13 +3013,13 @@ public abstract class Body extends BodyAttributes {
 		} else if (isShitting()) {
 			shittingDiscipline = shittingDiscipline + p;
 			setShitting(false);
-			shit -= getANGRYPERIODorg() * 2;
+			shit -= getAngryPeriodBase() * 2;
 		} else if (isFurifuri()) {
 			furifuriDiscipline = furifuriDiscipline + p;
 			setFurifuri(false);
-		} else if (getMessageBuf() != null) {
-			messageDiscipline = messageDiscipline + (p / 2);
-			setMessageBuf(null);
+		} else if (getMessageBuffer() != null) {
+			speechDiscipline = speechDiscipline + (p / 2);
+			setMessageBuffer(null);
 		}
 	}
 
@@ -3014,57 +3032,23 @@ public abstract class Body extends BodyAttributes {
 			setAttitudePoint(0);
 			return;
 		}
-		// ドゲス、超善良は変化しない
-		if (getAttitude() == Attitude.VERY_NICE || getAttitude() == Attitude.SUPER_SHITHEAD) {
+		// 超善良は固定、ゲス矯正は1段ずつ戻す
+		if (getAttitude() == Attitude.VERY_NICE) {
 			setAttitudePoint(0);
 			return;
 		}
-		double Correction = 1;
-		// 知性による補正
-		switch (getIntelligence()) {
-			case FOOL:
-				Correction = 0.75;
-				break;
-			case WISE:
-				Correction = 1.5;
-				break;
-			default:
-				break;
+		if (getAttitude() == Attitude.SUPER_SHITHEAD) {
+			if (getAttitudePoint() >= getNiceLimit()[0]) {
+				setAttitude(Attitude.SHITHEAD);
+				setAttitudePoint(0);
+			}
+			return;
 		}
-		// 性格変化実行
-		switch (getAttitude()) {
-			case NICE:
-				if (getAttitudePoint() >= getNiceLimit()[1] && getIntelligence() != Intelligence.FOOL) {
-					setAttitude(Attitude.VERY_NICE);
-					setAttitudePoint(0);
-				}
-				if (getAttitudePoint() <= getRudeLimit()[0] * Correction) {
-					setAttitude(Attitude.AVERAGE);
-					setAttitudePoint(0);
-				}
-				break;
-			case AVERAGE:
-				if (getAttitudePoint() <= getRudeLimit()[0] * Correction) {
-					setAttitude(Attitude.SHITHEAD);
-					setAttitudePoint(0);
-				}
-				if (getAttitudePoint() >= getNiceLimit()[0]) {
-					setAttitude(Attitude.NICE);
-					setAttitudePoint(0);
-				}
-				break;
-			case SHITHEAD:
-				if (getAttitudePoint() <= getRudeLimit()[1] * Correction) {
-					setAttitude(Attitude.SUPER_SHITHEAD);
-					setAttitudePoint(0);
-				}
-				if (getAttitudePoint() >= getNiceLimit()[0]) {
-					setAttitude(Attitude.AVERAGE);
-					setAttitudePoint(0);
-				}
-				break;
-			default:
-				break;
+		if (getAttitude() == Attitude.SHITHEAD) {
+			if (getAttitudePoint() >= getNiceLimit()[0]) {
+				setAttitude(Attitude.AVERAGE);
+				setAttitudePoint(0);
+			}
 		}
 	}
 
@@ -3113,11 +3097,11 @@ public abstract class Body extends BodyAttributes {
 	 */
 	public final LovePlayer checkLovePlayerState() {
 		// -50%以下なら嫌い
-		if (getnLovePlayer() < -1 * getLOVEPLAYERLIMITorg() / 2) {
+		if (getLovePlayer() < -1 * getLovePlayerLimitBase() / 2) {
 			return LovePlayer.BAD;
 		}
 		// 50%以上なら好き
-		if (getLOVEPLAYERLIMITorg() / 2 < getnLovePlayer()) {
+		if (getLovePlayerLimitBase() / 2 < getLovePlayer()) {
 			return LovePlayer.GOOD;
 		}
 		return LovePlayer.NONE;
@@ -3175,9 +3159,9 @@ public abstract class Body extends BodyAttributes {
 		} else if (OE <= 100)
 			OE = 100;
 		return (20 - 20 / (getBabyTypes().size() + 1)) + getBabyTypes().size() * 2
-				+ ((shit * 4 / 5) / getSHITLIMITorg()[getBodyAgeState().ordinal()]) * 5
+				+ ((shit * 4 / 5) / getShitLimitBase()[getBodyAgeState().ordinal()]) * 5
 				+ getBodySpr()[getBodyAgeState().ordinal()].getImageW() * (OE - 100) / 100
-				+ getGodHandHoldPoint() / 2;
+				+ getGodHandHoldCount() / 2;
 	}
 
 	/**
@@ -3187,8 +3171,8 @@ public abstract class Body extends BodyAttributes {
 	@Transient
 	public int getExpandSizeH() {
 		return (20 - 20 / (getBabyTypes().size() + 1)) + getBabyTypes().size() * 2
-				+ ((shit * 4 / 5) / getSHITLIMITorg()[getBodyAgeState().ordinal()]) * 5
-				+ getGodHandHoldPoint() / 2;
+				+ ((shit * 4 / 5) / getShitLimitBase()[getBodyAgeState().ordinal()]) * 5
+				+ getGodHandHoldCount() / 2;
 	}
 
 	/**
@@ -3254,8 +3238,8 @@ public abstract class Body extends BodyAttributes {
 		int forceW = getExternalForceW();
 		int forceH = getExternalForceH();
 		if (SimYukkuri.UNYO) {
-			forceW = getExternalForceW() + unyoForceW;
-			forceH = getExternalForceH() + unyoForceH;
+			forceW = getExternalForceW() + unyoOffsetW;
+			forceH = getExternalForceH() + unyoOffsetH;
 		}
 
 		int expSizeW = getExpandSizeW();
@@ -3274,8 +3258,8 @@ public abstract class Body extends BodyAttributes {
 		r.setWidth(getExpandSpr()[getBodyAgeState().ordinal()].getScreenRect()[0].getWidth());
 		r.setHeight(getExpandSpr()[getBodyAgeState().ordinal()].getScreenRect()[0].getHeight());
 		if (SimYukkuri.UNYO) {
-			r.setWidth(getExpandSpr()[getBodyAgeState().ordinal()].getScreenRect()[0].getWidth() + unyoForceW);
-			r.setHeight(getExpandSpr()[getBodyAgeState().ordinal()].getScreenRect()[0].getHeight() + unyoForceH);
+			r.setWidth(getExpandSpr()[getBodyAgeState().ordinal()].getScreenRect()[0].getWidth() + unyoOffsetW);
+			r.setHeight(getExpandSpr()[getBodyAgeState().ordinal()].getScreenRect()[0].getHeight() + unyoOffsetH);
 		}
 
 		r.setX(r.getWidth() >> 1);
@@ -3287,9 +3271,9 @@ public abstract class Body extends BodyAttributes {
 	 */
 	public final Obj takeMoveTarget() {
 		// 移動対象が床からなくなっていた場合は初期化
-		Obj o = takeMappedObj(moveTarget);
+		Obj o = takeMappedObj(moveTargetId);
 		if (o != null && o.getWhere() != Where.ON_FLOOR) {
-			setMoveTarget(-1);
+			setMoveTargetId(-1);
 			return null;
 		}
 		return o;
@@ -3338,8 +3322,8 @@ public abstract class Body extends BodyAttributes {
 	 * @param key アイテムのタイプ
 	 * @param val 持つアイテムのオブジェクト
 	 */
-	public void setTakeoutItem(TakeoutItemType key, Obj val) {
-		getTakeoutItem().put(key, val.objId);
+	public void setCarryItem(TakeoutItemType key, Obj val) {
+		getCarryItems().put(key, val.objId);
 		// 動作の表現と、フラグ管理
 		setInOutTakeoutItem(true);
 		setToTakeout(false);
@@ -3372,7 +3356,7 @@ public abstract class Body extends BodyAttributes {
 	public Obj dropTakeoutItem(TakeoutItemType key) {
 		Obj val = takeTakenOutItem(key);
 		if (val == null) {
-			getTakeoutItem().remove(key);
+			getCarryItems().remove(key);
 			return null;
 		}
 		// 動作の表現
@@ -3392,7 +3376,7 @@ public abstract class Body extends BodyAttributes {
 			}
 			val.setCalcZ(z + 10);
 			val.setWhere(Where.ON_FLOOR);
-			getTakeoutItem().remove(key);
+			getCarryItems().remove(key);
 		}
 		// 落としたもの(餌)の処理
 		if (val instanceof Food) {
@@ -3407,13 +3391,13 @@ public abstract class Body extends BodyAttributes {
 			}
 			val.setCalcZ(z + 10);
 			val.setWhere(Where.ON_FLOOR);
-			getTakeoutItem().remove(key);
+			getCarryItems().remove(key);
 		}
 		return val;
 	}
 
 	private Obj takeTakenOutItem(TakeoutItemType key) {
-		Integer i = getTakeoutItem().get(key);
+		Integer i = getCarryItems().get(key);
 		if (i == null)
 			return null;
 		MapPlaceData m = GameWorld.get().getCurrentMap();
@@ -3431,10 +3415,10 @@ public abstract class Body extends BodyAttributes {
 	 */
 	public void dropAllTakeoutItem() {
 		// 運んでいるものがなかったらリターン
-		if (getTakeoutItem() == null || getTakeoutItem().size() == 0) {
+		if (getCarryItems() == null || getCarryItems().size() == 0) {
 			return;
 		}
-		Set<TakeoutItemType> keyset = getTakeoutItem().keySet();
+		Set<TakeoutItemType> keyset = getCarryItems().keySet();
 		// 運んでいるものすべてに対して落とす処理をする
 		for (TakeoutItemType key : keyset) {
 			dropTakeoutItem(key);
@@ -3489,7 +3473,7 @@ public abstract class Body extends BodyAttributes {
 		if (!isRaper()) {
 			setExciting(false);
 		}
-		setbForceExciting(false);
+		setForceExciting(false);
 		setRelax(false);
 		setBeVain(false);
 		setNobinobi(false);
@@ -3816,7 +3800,7 @@ public abstract class Body extends BodyAttributes {
 	 * @param b れいぱーかどうか
 	 */
 	public final void setRaper(boolean b) {
-		if (isbPenipeniCutted()) {
+		if (isPenipeniCutted()) {
 			setRapist(false);
 		} else {
 			setRapist(b);
@@ -3833,7 +3817,7 @@ public abstract class Body extends BodyAttributes {
 		if (isUnBirth()) {
 			return false;
 		}
-		if (isbPenipeniCutted()) {
+		if (isPenipeniCutted()) {
 			setSuperRapist(false);
 		}
 		return isSuperRapist();
@@ -3845,7 +3829,7 @@ public abstract class Body extends BodyAttributes {
 	 * @param b すーぱーれいぱーかどうか
 	 */
 	public final void setSuperRaper(boolean b) {
-		if (isbPenipeniCutted()) {
+		if (isPenipeniCutted()) {
 			setSuperRapist(false);
 		} else {
 			setSuperRapist(b);
@@ -3887,7 +3871,7 @@ public abstract class Body extends BodyAttributes {
 	 * @return 現在飛行可能か
 	 */
 	public final boolean canflyCheck() {
-		return (isFlyingType() && isHasBraid() && !isDead() && !isSleeping() && !isbNeedled()
+		return (isFlyingType() && isHasBraid() && !isDead() && !isSleeping() && !isNeedled()
 				&& getCriticalDamege() == null);
 	}
 
@@ -3950,7 +3934,7 @@ public abstract class Body extends BodyAttributes {
 		addLovePlayer(-300);
 		setPealed(true);
 		setShutmouth(false);
-		seteHairState(HairState.BALDHEAD);
+		setHairState(HairState.BALDHEAD);
 		setHappiness(Happiness.VERY_SAD);
 		setMessage(GameMessages.getMessage(this, MessagePool.Action.PEALING), true);
 		// 実ゆの場合、親が反応する
@@ -4008,7 +3992,7 @@ public abstract class Body extends BodyAttributes {
 		castrateBody(true);
 		setCanTalk(false);
 		setBlind(true);
-		seteHairState(HairState.BALDHEAD);
+		setHairState(HairState.BALDHEAD);
 		if (isBraidType())
 			setHasBraid(false);
 		setPacked(true);
@@ -4025,7 +4009,7 @@ public abstract class Body extends BodyAttributes {
 			return;
 		if (isBlind()) {
 			setBlind(false);
-			setEYESIGHTorg(400 * 400);
+			setEyesightBase(400 * 400);
 			return;
 		}
 
@@ -4070,20 +4054,20 @@ public abstract class Body extends BodyAttributes {
 	public void pickHair() {
 		if (isDead())
 			return;
-		switch (geteHairState()) {
+		switch (getHairState()) {
 			case BALDHEAD:
-				seteHairState(HairState.DEFAULT);
+				setHairState(HairState.DEFAULT);
 				setHappiness(Happiness.HAPPY);
 				addLovePlayer(100);
 				return;
 			case DEFAULT:
-				seteHairState(HairState.BRINDLED1);
+				setHairState(HairState.BRINDLED1);
 				break;
 			case BRINDLED1:
-				seteHairState(HairState.BRINDLED2);
+				setHairState(HairState.BRINDLED2);
 				break;
 			case BRINDLED2:
-				seteHairState(HairState.BALDHEAD);
+				setHairState(HairState.BALDHEAD);
 				break;
 			default:
 		}
@@ -4117,15 +4101,15 @@ public abstract class Body extends BodyAttributes {
 				|| isRemoved()
 				|| isUnBirth()
 				|| isSleeping()
-				|| isbNeedled()
+				|| isNeedled()
 				|| getFootBakeLevel() == FootBake.CRITICAL
 				|| isLockmove()
 				|| isMelt()
-				|| getBaryState() != BaryInUGState.NONE
+				|| getBurialState() != BurialState.NONE
 				|| isBirth()
 				|| isGrabbed()
-				|| isbOnDontMoveBeltconveyor()
-				|| geteCoreAnkoState() == CoreAnkoState.NonYukkuriDisease
+				|| isOnNonMovingConveyor()
+				|| getCoreAnkoState() == CoreAnkoState.NonYukkuriDisease
 				|| getCriticalDamegeType() == CriticalDamegeType.CUT
 				|| isPealed()
 				|| isBlind()
@@ -4146,13 +4130,13 @@ public abstract class Body extends BodyAttributes {
 		if (isDead()
 				|| isRemoved()
 				|| isUnBirth()
-				|| isbNeedled()
+				|| isNeedled()
 				|| isLockmove()
 				|| isMelt()
-				|| getBaryState() != BaryInUGState.NONE
+				|| getBurialState() != BurialState.NONE
 				|| isBirth()
-				|| isbOnDontMoveBeltconveyor()
-				|| geteCoreAnkoState() == CoreAnkoState.NonYukkuriDisease
+				|| isOnNonMovingConveyor()
+				|| getCoreAnkoState() == CoreAnkoState.NonYukkuriDisease
 				|| getCriticalDamegeType() == CriticalDamegeType.CUT
 				|| isPealed()
 				|| isBlind()
@@ -4203,7 +4187,7 @@ public abstract class Body extends BodyAttributes {
 	public boolean wantToShit() {
 		int step = (!isHungry() ? TICK * 2 : TICK);
 		int adjust = 50 * (isRude() ? 1 : 2) * shittingDiscipline / (isBaby() ? 2 : 1);
-		if ((getSHITLIMITorg()[getBodyAgeState().ordinal()] - shit) < (Const.DIAGONAL * step + adjust)) {
+		if ((getShitLimitBase()[getBodyAgeState().ordinal()] - shit) < (Const.DIAGONAL * step + adjust)) {
 			return true;
 		}
 		return false;
@@ -4218,7 +4202,7 @@ public abstract class Body extends BodyAttributes {
 		int step = (!isHungry() ? TICK * 2 : TICK);
 		int adjust = 100 * (isRude() ? 1 : 2);
 
-		int limit = getPREGPERIODorg() - pregnantPeriod - (pregnantPeriodBoost / 2);
+		int limit = getPregPeriodBase() - pregnantPeriod - (pregnancyPeriodBoost / 2);
 		int diagonal = Const.DIAGONAL * step + adjust;
 		if (limit < diagonal && hasBabyOrStalk()) {
 			return true;
@@ -4240,6 +4224,15 @@ public abstract class Body extends BodyAttributes {
 			}
 		}
 		if (getStalks() != null) {
+			if (s != null && s.getBindBabies() != null) {
+				for (Integer childId : s.getBindBabies()) {
+					if (childId == null) continue;
+					Body child = BodyRelations.getBody(childId);
+					if (child != null) {
+						child.setParentLinkId(-1);
+					}
+				}
+			}
 			getStalks().remove(s);
 			if (getStalks().size() == 0)
 				setHasStalk(false);
@@ -4261,7 +4254,7 @@ public abstract class Body extends BodyAttributes {
 					Stalk s = itr.next();
 					Iterator<Integer> chit = s.getBindBabies().iterator();
 					while (chit.hasNext()) {
-						Body child = YukkuriUtil.getBodyInstance(chit.next());
+						Body child = BodyRelations.getBody(chit.next());
 						if (child != null && (child.isDead() || child.isRemoved())) {
 							// まだ死んでない無い実ゆだけは茎から落ちる。
 							child.remove();
@@ -4300,9 +4293,9 @@ public abstract class Body extends BodyAttributes {
 	/**
 	 * 茎のあるゆっくりの基本反応
 	 * 
-	 * @param eState 実ゆの状態
+	 * @param state 実ゆの状態
 	 */
-	public void checkReactionStalkMother(UnbirthBabyState eState) {
+	public void checkReactionStalkMother(UnbirthBabyState state) {
 		Body bodyMother = GameWorld.get().getCurrentMap().getBody().get(getBindStalkMotherCanNotice());
 		if (bodyMother == null) {
 			return;
@@ -4318,7 +4311,7 @@ public abstract class Body extends BodyAttributes {
 			return;
 		}
 
-		switch (eState) {
+		switch (state) {
 			case ATTAKED:// 実ゆが攻撃されている
 				// 攻撃されて生きている場合
 				if (!isDead()) {
@@ -4376,7 +4369,7 @@ public abstract class Body extends BodyAttributes {
 		setSukkiri(true);
 		setCalm();
 		setHappiness(Happiness.HAPPY);
-		hungry -= getHUNGRYLIMITorg()[AgeState.BABY.ordinal()];
+		hungry -= getHungryLimitBase()[AgeState.BABY.ordinal()];
 		// hungryState = checkHungryState();
 		// if it has pants, cannot get pregnant
 		if (isHasPants() || p.isHasPants()) {
@@ -4407,7 +4400,7 @@ public abstract class Body extends BodyAttributes {
 		}
 		p.stay(60);
 		p.setCalm();
-		p.hungry -= (getHUNGRYLIMITorg()[AgeState.BABY.ordinal()] * 2);
+		p.hungry -= (getHungryLimitBase()[AgeState.BABY.ordinal()] * 2);
 
 		// 妊娠タイプはランダムで決定
 		boolean stalkMode = GameRandom.nextBoolean();
@@ -4435,7 +4428,7 @@ public abstract class Body extends BodyAttributes {
 		 */
 		Dna baby;
 		for (int i = 0; i < 5; i++) {
-			baby = YukkuriUtil.createBabyDna(p, this, getType(), getAttitude(), getIntelligence(), false,
+			baby = BabyDnaFactory.createBabyDna(p, this, getType(), getAttitude(), getIntelligence(), false,
 					(isSickHeavily() || isStarving()), i == 4);
 			if (stalkMode) {
 				p.getStalkBabyTypes().add(baby);
@@ -4483,9 +4476,9 @@ public abstract class Body extends BodyAttributes {
 		setSukkiri(true);
 		setHappiness(Happiness.HAPPY);
 		if (isRaper()) {
-			hungry -= (getHUNGRYLIMITorg()[AgeState.BABY.ordinal()] / 4);
+			hungry -= (getHungryLimitBase()[AgeState.BABY.ordinal()] / 4);
 		} else {
-			hungry -= (getHUNGRYLIMITorg()[AgeState.BABY.ordinal()] * 4);
+			hungry -= (getHungryLimitBase()[AgeState.BABY.ordinal()] * 4);
 		}
 		// hungryState = checkHungryState();
 		// if it has pants, cannot get pregnant
@@ -4525,7 +4518,7 @@ public abstract class Body extends BodyAttributes {
 			p.setForceFace(ImageCode.CRYING.ordinal());
 		}
 		p.subtractPregnantLimit();
-		p.hungry -= getHUNGRYLIMITorg()[AgeState.BABY.ordinal()];
+		p.hungry -= getHungryLimitBase()[AgeState.BABY.ordinal()];
 
 		// 避妊されてたら妊娠失敗
 		if (p.isStalkCastration()) {
@@ -4536,7 +4529,7 @@ public abstract class Body extends BodyAttributes {
 		p.setHasStalk(true);
 		Dna baby;
 		for (int i = 0; i < 5; i++) {
-			baby = YukkuriUtil.createBabyDna(p, this, getType(), getAttitude(), getIntelligence(), true,
+			baby = BabyDnaFactory.createBabyDna(p, this, getType(), getAttitude(), getIntelligence(), true,
 					(isSickHeavily() || isStarving()), i == 4);
 			p.getStalkBabyTypes().add(baby);
 		}
@@ -4575,7 +4568,7 @@ public abstract class Body extends BodyAttributes {
 		clearActions();
 		setCalm();
 		setHappiness(Happiness.HAPPY);
-		hungry -= getHUNGRYLIMITorg()[AgeState.BABY.ordinal()];
+		hungry -= getHungryLimitBase()[AgeState.BABY.ordinal()];
 		// hungryState = checkHungryState();
 		// パンツは汚れる
 		if (isHasPants()) {
@@ -4612,7 +4605,7 @@ public abstract class Body extends BodyAttributes {
 		if (dna == null || isBodyCastration()) {
 			return;
 		}
-		Dna baby = YukkuriUtil.createBabyDna(this, YukkuriUtil.getBodyInstance(dna.getFather()),
+		Dna baby = BabyDnaFactory.createBabyDna(this, BodyRelations.getBody(dna.getFather()),
 				dna.getType(), dna.getAttitude(), dna.getIntelligence(), false, false, true);
 		getBabyTypes().add(baby);
 		setHasBaby(true);
@@ -4632,7 +4625,7 @@ public abstract class Body extends BodyAttributes {
 			return;
 		}
 		for (int i = 0; i < 5; i++) {
-			Dna baby = YukkuriUtil.createBabyDna(this, YukkuriUtil.getBodyInstance(dna.getFather()),
+			Dna baby = BabyDnaFactory.createBabyDna(this, BodyRelations.getBody(dna.getFather()),
 					dna.getType(), dna.getAttitude(), dna.getIntelligence(), false, false, true);
 			getStalkBabyTypes().add((GameRandom.nextBoolean() ? baby : null));
 		}
@@ -4650,7 +4643,7 @@ public abstract class Body extends BodyAttributes {
 	public boolean isOverPregnantLimit() {
 		// 20210327
 		// リアルな妊娠限界のとき
-		if (isRealPregnantLimit()) {
+		if (isUseRealPregnantLimit()) {
 			// 妊娠限界を超えてたら
 			if (getPregnantLimit() <= 0) {
 				// 1/20の確率でまともなゆっくり
@@ -4705,7 +4698,7 @@ public abstract class Body extends BodyAttributes {
 
 		// 興奮中にさらにバイブしたら強制発情
 		if (isExciting()) {
-			setbForceExciting(true);
+			setForceExciting(true);
 		}
 
 		// 興奮できる状態ではないなら終了
@@ -4714,7 +4707,7 @@ public abstract class Body extends BodyAttributes {
 		}
 
 		// ぺにぺにが切断されている場合
-		if (isbPenipeniCutted()) {
+		if (isPenipeniCutted()) {
 			setMessage(GameMessages.getMessage(this, MessagePool.Action.PenipeniCutted));
 			setHappiness(Happiness.VERY_SAD);
 			setForceFace(ImageCode.TIRED.ordinal());
@@ -4738,10 +4731,10 @@ public abstract class Body extends BodyAttributes {
 	 */
 	public void cutPenipeni() {
 		// ぺにぺにがないなら復活
-		if (isbPenipeniCutted()) {
+		if (isPenipeniCutted()) {
 			// Penipeni restoration happens immediately; consider event-based recovery if
 			// needed.
-			setbPenipeniCutted(false);
+			setPenipeniCutted(false);
 			return;
 		}
 		clearActions();
@@ -4756,13 +4749,13 @@ public abstract class Body extends BodyAttributes {
 	 * @param raper れいぱーかどうか
 	 */
 	public void forceToRaperExcite(boolean raper) {
-		if (isDead() || isExciting() || isbPenipeniCutted()) {
+		if (isDead() || isExciting() || isPenipeniCutted()) {
 			return;
 		}
 		wakeup();
 		clearActions();
 		setExciting(raper);
-		setbForceExciting(raper);
+		setForceExciting(raper);
 		if (raper) {
 			setPartner(-1);
 		}
@@ -4793,7 +4786,7 @@ public abstract class Body extends BodyAttributes {
 	 * フェロモン状態をトグルする.
 	 */
 	public final void invPheromone() {
-		setbPheromone(!isbPheromone());
+		setPheromone(!isPheromone());
 	}
 
 	/**
@@ -4815,9 +4808,9 @@ public abstract class Body extends BodyAttributes {
 			return;
 		}
 		// 自分との関係
-		EnumRelationMine eRelation = BodyLogic.checkMyRelation(this, p);
+		EnumRelationMine relation = BodyLogic.checkMyRelation(this, p);
 		if (findSick(p) || p.isFeelHardPain() || p.isDamaged()) {
-			switch (eRelation) {
+			switch (relation) {
 				case FATHER: // 父
 				case MOTHER: // 母
 					// 子供を治そうとする
@@ -4850,44 +4843,6 @@ public abstract class Body extends BodyAttributes {
 			addStress(-50);
 			p.addStress(-50);
 		} else {
-			// 相手によってセリフを変えるようにする処理。現在はセリフ制作時に作者の血管が切れそうなのでオミット
-			/*
-			 * switch( eRelation ){
-			 * case FATHER: // 父
-			 * case MOTHER: // 母
-			 * // 子供とすりすり
-			 * setMessage(GameMessages.getMessage(this,
-			 * MessagePool.Action.surisuriWithChild));
-			 * break;
-			 * case PARTNAR: // つがい
-			 * // つがいとすりすり
-			 * setMessage(GameMessages.getMessage(this,
-			 * MessagePool.Action.surisuriWithPartner));
-			 * break;
-			 * case CHILD_FATHER: // 父の子供
-			 * // 父とすりすり
-			 * setMessage(GameMessages.getMessage(this,
-			 * MessagePool.Action.surisuriWithFather));
-			 * break;
-			 * case CHILD_MOTHER: // 母の子供
-			 * // 母とすりすり
-			 * setMessage(GameMessages.getMessage(this,
-			 * MessagePool.Action.surisuriWithMother));
-			 * break;
-			 * case ELDERSISTER: // 姉
-			 * // 妹とすりすり
-			 * setMessage(GameMessages.getMessage(this,
-			 * MessagePool.Action.surisuriWithElderSister));
-			 * break;
-			 * case YOUNGSISTER: // 妹
-			 * // 姉とすりすり
-			 * setMessage(GameMessages.getMessage(this,
-			 * MessagePool.Action.surisuriWithSister));
-			 * break;
-			 * default : // 他人
-			 * break;
-			 * }
-			 */
 			setMessage(GameMessages.getMessage(this, MessagePool.Action.SuriSuri));
 			addStress(-100);
 			p.addStress(-100);
@@ -4898,14 +4853,14 @@ public abstract class Body extends BodyAttributes {
 		}
 		// 確率ですりすりしてる方にもアリ伝染る
 		if (p.getAttachmentSize(Ants.class) > 0 && GameRandom.nextInt(200) == 0) {
-			if (getNumOfAnts() <= 0) {
-				setNumOfAnts(0);
+			if (getAntCount() <= 0) {
+				setAntCount(0);
 				addAttachment(new Ants(this));
 				addStress(50);
 				setHappiness(Happiness.VERY_SAD);
 				addMemories(-1);
 			}
-			setNumOfAnts(getNumOfAnts() + 10);
+			setAntCount(getAntCount() + 10);
 		}
 		setNobinobi(true);
 		stay(40);
@@ -4942,9 +4897,9 @@ public abstract class Body extends BodyAttributes {
 			return;
 
 		// 自分との関係
-		EnumRelationMine eRelation = BodyLogic.checkMyRelation(this, p);
+		EnumRelationMine relation = BodyLogic.checkMyRelation(this, p);
 		if (findSick(p) || p.isFeelHardPain() || p.isDamaged() || p.getAttachmentSize(Ants.class) != 0) {
-			switch (eRelation) {
+			switch (relation) {
 				case FATHER: // 父
 				case MOTHER: // 母
 					// 子供を治そうとする
@@ -4977,38 +4932,6 @@ public abstract class Body extends BodyAttributes {
 			p.addMemories(1);
 			p.addStress(-75);
 		} else {
-			// 相手によってセリフを変えるようにする処理。現在はセリフ制作時に作者の血管が切れそうなのでオミット
-			/*
-			 * switch( eRelation ){
-			 * case FATHER: // 父
-			 * case MOTHER: // 母
-			 * // 子供とぺろぺろ
-			 * setMessage(GameMessages.getMessage(this, MessagePool.Action.PeroPero));
-			 * break;
-			 * case PARTNAR: // つがい
-			 * // つがいとぺろぺろ
-			 * setMessage(GameMessages.getMessage(this, MessagePool.Action.PeroPero));
-			 * break;
-			 * case CHILD_FATHER: // 父の子供
-			 * // 父とぺろぺろ
-			 * setMessage(GameMessages.getMessage(this, MessagePool.Action.PeroperoFather));
-			 * break;
-			 * case CHILD_MOTHER: // 母の子供
-			 * // 母とぺろぺろ
-			 * setMessage(GameMessages.getMessage(this, MessagePool.Action.PeroperoMother));
-			 * break;
-			 * case ELDERSISTER: // 姉
-			 * // 妹とぺろぺろ
-			 * setMessage(GameMessages.getMessage(this, MessagePool.Action.PeroPero));
-			 * break;
-			 * case YOUNGSISTER: // 妹
-			 * //姉 とぺろぺろ
-			 * setMessage(GameMessages.getMessage(this, MessagePool.Action.PeroPero));
-			 * break;
-			 * default : // 他人
-			 * break;
-			 * }
-			 */
 			setMessage(GameMessages.getMessage(this, MessagePool.Action.PeroPero));
 
 			setHappiness(Happiness.VERY_HAPPY);
@@ -5018,22 +4941,22 @@ public abstract class Body extends BodyAttributes {
 			p.addStress(-200);
 		}
 		// アリ減少
-		int ant = p.getNumOfAnts();
+		int ant = p.getAntCount();
 		ant -= 40;
 		if (ant <= 0) {
 			ant = 0;
 			p.removeAnts();
 		}
-		p.setNumOfAnts(ant);
+		p.setAntCount(ant);
 		// しかし確率でぺろぺろしてる方にもアリ伝染る
 		if (ant > 0 && GameRandom.nextInt(200) == 0) {
-			if (getNumOfAnts() <= 0) {
+			if (getAntCount() <= 0) {
 				addAttachment(new Ants(this));
 				addStress(50);
 				setHappiness(Happiness.VERY_SAD);
 				addMemories(-1);
 			}
-			setNumOfAnts(getNumOfAnts() + 10);
+			setAntCount(getAntCount() + 10);
 		}
 
 		setPeropero(true);
@@ -5147,8 +5070,8 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	public final void setTargetMoveOffset(int ox, int oy) {
-		setTargetPosOfsX(ox);
-		setTargetPosOfsY(oy);
+		setTargetOffsetX(ox);
+		setTargetOffsetY(oy);
 	}
 
 	/**
@@ -5176,7 +5099,7 @@ public abstract class Body extends BodyAttributes {
 		clearActions();
 		purposeOfMoving = PurposeOfMoving.TAKEOUT;
 		setToFood(true);
-		setMoveTarget(target.objId);
+		setMoveTargetId(target.objId);
 		moveTo(toX, toY, toZ);
 	}
 
@@ -5202,7 +5125,7 @@ public abstract class Body extends BodyAttributes {
 	public final void moveToSukkiri(Obj target, int toX, int toY, int toZ) {
 		clearActions();
 		setToSukkiri(true);
-		setMoveTarget(target.objId);
+		setMoveTargetId(target.objId);
 		moveTo(toX, toY, toZ);
 	}
 
@@ -5228,7 +5151,7 @@ public abstract class Body extends BodyAttributes {
 	public final void moveToToilet(Obj target, int toX, int toY, int toZ) {
 		clearActions();
 		setToShit(true);
-		setMoveTarget(target.objId);
+		setMoveTargetId(target.objId);
 		moveTo(toX, toY, toZ);
 	}
 
@@ -5254,7 +5177,7 @@ public abstract class Body extends BodyAttributes {
 	public final void moveToBed(Obj target, int toX, int toY, int toZ) {
 		clearActions();
 		setToBed(true);
-		setMoveTarget(target.objId);
+		setMoveTargetId(target.objId);
 		moveTo(toX, toY, toZ);
 	}
 
@@ -5353,14 +5276,14 @@ public abstract class Body extends BodyAttributes {
 	 * @param amount 食われる量
 	 */
 	public void eatBody(int amount) {
-		setBodyAmount(getBodyAmount() - amount);
+		setAnkoAmount(getAnkoAmount() - amount);
 		if (isDead()) {
 			// 死体食べ
-			if (getBodyAmount() <= getDAMAGELIMITorg()[getBodyAgeState().ordinal()] / 2) {
+			if (getAnkoAmount() <= getDamageLimitBase()[getBodyAgeState().ordinal()] / 2) {
 				setCrushed(true);
-				if (getBodyAmount() <= 0) {
+				if (getAnkoAmount() <= 0) {
 					remove();
-					setBodyAmount(0);
+					setAnkoAmount(0);
 				}
 			}
 		} else {
@@ -5370,12 +5293,12 @@ public abstract class Body extends BodyAttributes {
 				addDamage(amount);
 			}
 			wakeup();
-			if (getBodyAmount() <= getDAMAGELIMITorg()[getBodyAgeState().ordinal()] / 2) {
+			if (getAnkoAmount() <= getDamageLimitBase()[getBodyAgeState().ordinal()] / 2) {
 				bodyCut();
-				if (getBodyAmount() <= 0) {
+				if (getAnkoAmount() <= 0) {
 					toDead();
 					setCrushed(true);
-					setBodyAmount(1);
+					setAnkoAmount(1);
 				}
 			}
 		}
@@ -5524,7 +5447,7 @@ public abstract class Body extends BodyAttributes {
 		setDamageState(getDamageState());
 		wakeup();
 		// 背面固定でかつ針が刺さっていない場合
-		if (isFixBack() && !isbNeedled()) {
+		if (isFixBack() && !isNeedled()) {
 			setFurifuri(true);
 		}
 	}
@@ -5623,7 +5546,7 @@ public abstract class Body extends BodyAttributes {
 
 		// なつき度設定
 		addLovePlayer(-500);
-		strike(getDAMAGELIMITorg()[getBodyAgeState().ordinal()] / 5);
+		strike(getDamageLimitBase()[getBodyAgeState().ordinal()] / 5);
 		setCalm();
 
 		setPikoMessage(GameMessages.getMessage(this, MessagePool.Action.Scream), true);
@@ -5645,9 +5568,9 @@ public abstract class Body extends BodyAttributes {
 	 * 
 	 * @param enemy      攻撃してきたゆっくり
 	 * @param e          イベント
-	 * @param bAllowance 手加減ありの場合
+	 * @param allowDamageCap 手加減ありの場合
 	 */
-	public void strikeByYukkuri(Body enemy, EventPacket e, boolean bAllowance) {
+	public void strikeByYukkuri(Body enemy, EventPacket event, boolean allowDamageCap) {
 		if (isDead()) {
 			return;
 		}
@@ -5695,11 +5618,11 @@ public abstract class Body extends BodyAttributes {
 				ap = (int) (ap * 0.25f);
 		}
 		// 手加減あり
-		if (bAllowance) {
-			int nDamage = damage + ap;
+		if (allowDamageCap) {
+			int damageAfterHit = damage + ap;
 			// 次の一撃でダメージが75%を超える場合
-			if (getDAMAGELIMITorg()[getBodyAgeState().ordinal()] * 3 / 4 < nDamage) {
-				ap = getDAMAGELIMITorg()[getBodyAgeState().ordinal()] * 4 / 5 - damage;
+			if (getDamageLimitBase()[getBodyAgeState().ordinal()] * 3 / 4 < damageAfterHit) {
+				ap = getDamageLimitBase()[getBodyAgeState().ordinal()] * 4 / 5 - damage;
 				if (ap < 0) {
 					ap = 0;
 				}
@@ -5711,13 +5634,13 @@ public abstract class Body extends BodyAttributes {
 		dropAllTakeoutItem();
 		strike(ap);
 		// ぴこぴこ破壊
-		if (!isBraidType() && isHasBraid() && 0 < getnBreakBraidRand()
-				&& GameRandom.nextInt(getnBreakBraidRand()) == 0) {
+		if (!isBraidType() && isHasBraid() && 0 < getBraidBreakChance()
+				&& GameRandom.nextInt(getBraidBreakChance()) == 0) {
 			setHasBraid(false);
 		}
 		setHappiness(Happiness.SAD);
 		// 土に埋まっていないなら吹っ飛ぶ
-		if (getBaryState() == BaryInUGState.NONE) {
+		if (getBurialState() == BurialState.NONE) {
 			kick(kickX, kickY, -4);
 		}
 
@@ -5733,7 +5656,7 @@ public abstract class Body extends BodyAttributes {
 				enemy.changeUnyo(GameRandom.nextInt(3), 0, 0);
 			}
 			if (isNotNYD() && !isUnBirth()) {
-				if (e instanceof HateNoOkazariEvent) {
+			if (event instanceof HateNoOkazariEvent) {
 					// お飾りの迫害
 					setMessage(GameMessages.getMessage(this, MessagePool.Action.Scream), true);
 					if (getPublicRank() != PublicRank.UnunSlave
@@ -5741,13 +5664,13 @@ public abstract class Body extends BodyAttributes {
 						setAngry();
 						EventLogic.addBodyEvent(this, new RevengeAttackEvent(this, enemy, null, 1), null, null);
 					}
-				} else if (e instanceof PredatorsGameEvent) {
+				} else if (event instanceof PredatorsGameEvent) {
 					// 自分が捕食種のおもちゃにされたとき
 					// 逃げる
 					runAway(enemy.getX(), enemy.getY());
 					setPikoMessage(GameMessages.getMessage(this, MessagePool.Action.DontPlayMe), true);
 					// おもちゃにされたとき、母がいたら33%の確率で「捕食種はあっちいってね！」イベントが発生。
-					Body m = YukkuriUtil.getBodyInstance(getMother());
+					Body m = BodyRelations.getMotherBody(this);
 					if (m != null) {
 						if (GameRandom.nextInt(3) == 0 && m != null && !m.isDead() && !m.isRemoved()) {
 							m.clearEvent();
@@ -5761,7 +5684,7 @@ public abstract class Body extends BodyAttributes {
 					if (GameRandom.nextInt(10) == 0) {
 						bodyInjure();
 					}
-				} else if (e instanceof RaperReactionEvent) {
+				} else if (event instanceof RaperReactionEvent) {
 					// 自分がレイパーで攻撃されたとき
 					// 相手をレイプ対象に
 					int colX = BodyLogic.calcCollisionX(this, enemy);
@@ -5769,7 +5692,7 @@ public abstract class Body extends BodyAttributes {
 					if (GameRandom.nextInt(200) == 0) {
 						bodyInjure();
 					}
-				} else if (e instanceof AvoidMoldEvent) {
+				} else if (event instanceof AvoidMoldEvent) {
 					// 自分がかびてる時
 					setMessage(GameMessages.getMessage(this, MessagePool.Action.Scream), true);
 					if (!isBaby() && !isSmart() && getIntelligence() == Intelligence.FOOL) {
@@ -5794,7 +5717,7 @@ public abstract class Body extends BodyAttributes {
 	 */
 	@Transient
 	public final int getStrength() {
-		return getSTRENGTHorg()[getBodyAgeState().ordinal()];
+		return getStrengthBase()[getBodyAgeState().ordinal()];
 	}
 
 	/**
@@ -5802,11 +5725,11 @@ public abstract class Body extends BodyAttributes {
 	 * 
 	 * @param ap         基本ダメージ量
 	 * @param weight     体重
-	 * @param bAllowance 手加減あり
+	 * @param allowDamageCap 手加減あり
 	 * @param vecX       X方向のベクトル
 	 * @param vecY       Y方向のベクトル
 	 */
-	public void strikeByObject(int ap, int weight, boolean bAllowance, int vecX, int vecY) {
+	public void strikeByObject(int ap, int weight, boolean allowDamageCap, int vecX, int vecY) {
 		if (isDead()) {
 			return;
 		}
@@ -5827,11 +5750,11 @@ public abstract class Body extends BodyAttributes {
 		vecX *= kick;
 		vecY *= kick;
 		// 手加減あり
-		if (bAllowance) {
-			int nDamage = damage + ap;
+		if (allowDamageCap) {
+			int damageAfterHit = damage + ap;
 			// 次の一撃でダメージが85%を超える場合
-			if (getDAMAGELIMITorg()[getBodyAgeState().ordinal()] * 85 / 100 < nDamage) {
-				ap = getDAMAGELIMITorg()[getBodyAgeState().ordinal()] * 85 / 100 - damage;
+			if (getDamageLimitBase()[getBodyAgeState().ordinal()] * 85 / 100 < damageAfterHit) {
+				ap = getDamageLimitBase()[getBodyAgeState().ordinal()] * 85 / 100 - damage;
 				if (ap < 0) {
 					ap = 0;
 				}
@@ -5839,7 +5762,7 @@ public abstract class Body extends BodyAttributes {
 		}
 		strike(ap);
 		// 土に埋まっていないなら吹っ飛ぶ
-		if (getBaryState() == BaryInUGState.NONE) {
+		if (getBurialState() == BurialState.NONE) {
 			kick(vecX, vecY, -5);
 		}
 		if (isDead()) {
@@ -5863,7 +5786,7 @@ public abstract class Body extends BodyAttributes {
 			strike(Const.HAMMER * 30);
 			toDead();
 		}
-		if (isDead() && getBaryState() != BaryInUGState.ALL) {
+		if (isDead() && getBurialState() != BurialState.ALL) {
 			setMessage(GameMessages.getMessage(this, MessagePool.Action.Dying), true);
 			stay();
 			setCrushed(true);
@@ -5883,7 +5806,7 @@ public abstract class Body extends BodyAttributes {
 	public void bodyCut() {
 		clearActions();
 		setCriticalDamege(CriticalDamegeType.CUT);
-		if (getBaryState() == BaryInUGState.NONE) {
+		if (getBurialState() == BurialState.NONE) {
 			for (int i = 0; i < 5; i++) {
 				GameView.addVomit(getX() + 7 - GameRandom.nextInt(14),
 						getY() + 7 - GameRandom.nextInt(14), 0,
@@ -5910,7 +5833,7 @@ public abstract class Body extends BodyAttributes {
 		setHappiness(Happiness.VERY_SAD);
 		setMessage(GameMessages.getMessage(this, MessagePool.Action.Scream), 40, true, true);
 		setCriticalDamege(CriticalDamegeType.INJURED);
-		if (getBaryState() == BaryInUGState.NONE) {
+		if (getBurialState() == BurialState.NONE) {
 			GameView.addVomit(getX() + 7 - GameRandom.nextInt(14),
 					getY() + 7 - GameRandom.nextInt(14), 0, this,
 					getShitType());
@@ -5924,7 +5847,7 @@ public abstract class Body extends BodyAttributes {
 	 */
 	public final void kick() {
 		// 土に埋まっていないなら吹っ飛ぶ
-		if (getBaryState() == BaryInUGState.NONE) {
+		if (getBurialState() == BurialState.NONE) {
 			int blowLevel[] = { -4, -3, -2 };
 			kick(0, blowLevel[getBodyAgeState().ordinal()] * 2, blowLevel[getBodyAgeState().ordinal()]);
 		}
@@ -5940,7 +5863,7 @@ public abstract class Body extends BodyAttributes {
 			return;
 		}
 
-		if (getOkazari() != null || isbNoticeNoOkazari()) {
+		if (getOkazari() != null || isNoticeNoOkazari()) {
 			return;
 		}
 
@@ -5949,16 +5872,16 @@ public abstract class Body extends BodyAttributes {
 			setMessage(GameMessages.getMessage(this, MessagePool.Action.NoticeNoAccessory), true);
 			setHappiness(Happiness.VERY_SAD);
 			addStress(1200);
-			setbNoticeNoOkazari(true);
+			setNoticeNoOkazari(true);
 		}
 	}
 
 	/**
 	 * お飾りを取られる
 	 * 
-	 * @param bByPlayer プレイヤーに取られたかどうか
+	 * @param takenByPlayer プレイヤーに取られたかどうか
 	 */
-	public void takeOkazari(boolean bByPlayer) {
+	public void takeOkazari(boolean takenByPlayer) {
 		setOkazari(null);
 		if (isIdiot())
 			return;
@@ -5967,13 +5890,13 @@ public abstract class Body extends BodyAttributes {
 				setMessage(GameMessages.getMessage(this, MessagePool.Action.NoAccessory), true);
 				setHappiness(Happiness.VERY_SAD);
 				addStress(1200);
-				if (bByPlayer) {
+				if (takenByPlayer) {
 					// なつき度設定
 					addLovePlayer(-100);
 				}
-				setbNoticeNoOkazari(true);
+				setNoticeNoOkazari(true);
 			} else {
-				setbNoticeNoOkazari(false);
+				setNoticeNoOkazari(false);
 			}
 		}
 		// 実ゆの場合、親が反応する
@@ -6001,7 +5924,7 @@ public abstract class Body extends BodyAttributes {
 	 */
 	public void giveOkazari(OkazariType type) {
 		setOkazari(new Okazari(this, type));
-		setbNoticeNoOkazari(false);
+		setNoticeNoOkazari(false);
 		if (!isDead() && !isIdiot()) {
 			if (getOkazari().getOkazariType() == OkazariType.DEFAULT) {
 				setHappiness(Happiness.VERY_HAPPY);
@@ -6123,8 +6046,8 @@ public abstract class Body extends BodyAttributes {
 			giveJuice();
 		}
 		if (SimYukkuri.UNYO) {
-			unyoForceH = 0;
-			unyoForceW = 0;
+			unyoOffsetH = 0;
+			unyoOffsetW = 0;
 		}
 	}
 
@@ -6265,7 +6188,7 @@ public abstract class Body extends BodyAttributes {
 			if (isSleeping())
 				wakeup();
 			setCalm();
-			setStaycount(0);
+			setStayTicks(0);
 			setStaying(false);
 			setToFood(false);
 			setToSukkiri(false);
@@ -6304,7 +6227,7 @@ public abstract class Body extends BodyAttributes {
 	 * 針を刺す（トグル
 	 */
 	public final void invNeedle() {
-		setNeedle(!isbNeedled());
+		setNeedle(!isNeedled());
 	}
 
 	/**
@@ -6313,44 +6236,44 @@ public abstract class Body extends BodyAttributes {
 	 * @return 針に刺さっているかどうか
 	 */
 	public final boolean getNeedle() {
-		return isbNeedled();
+		return isNeedled();
 	}
 
 	/**
 	 * 針刺しを設定する.
 	 * 
-	 * @param bOn 針刺し
+	 * @param needleOn 針刺し
 	 */
-	public void setNeedle(boolean bOn) {
+	public void setNeedle(boolean needleOn) {
 		if (getAttachmentSize(Needle.class) != 0) {
 			// 針が刺さっている場合は抜く
-			if (!bOn) {
+			if (!needleOn) {
 				// 生まれていなくてもしゃべれるようにする
 				if (isUnBirth()) {
 					setCanTalk(false);
 				}
 
-				setbNeedled(false);
+				setNeedled(false);
 				setMessage(GameMessages.getMessage(this, MessagePool.Action.NeedleRemove));
 				removeAttachment(Needle.class);
 
 				// 粘着板で固定されていないなら背面固定解除
 				Map<Integer, StickyPlate> stickyPlates = GameWorld.get().getCurrentMap().getStickyPlate();
-				boolean bReset = true;
+				boolean resetBackFix = true;
 				for (Map.Entry<Integer, StickyPlate> entry : stickyPlates.entrySet()) {
 					StickyPlate s = entry.getValue();
 					if (s.getBindBody() == this) {
-						bReset = false;
+						resetBackFix = false;
 						break;
 					}
 				}
-				if (bReset) {
+				if (resetBackFix) {
 					setFixBack(false);
 				}
 			}
 		} else {
 			// 針が刺さっていない場合は刺す
-			if (bOn) {
+			if (needleOn) {
 				getAttach().add(new Needle(this));
 
 				// 針を刺す際に判定するので刺した後で初期化する
@@ -6364,7 +6287,7 @@ public abstract class Body extends BodyAttributes {
 					if (isSleeping())
 						wakeup();
 					setCalm();
-					setStaycount(0);
+					setStayTicks(0);
 					setStaying(false);
 					setToFood(false);
 					setToSukkiri(false);
@@ -6394,7 +6317,7 @@ public abstract class Body extends BodyAttributes {
 					// 実ゆの場合、親が反応する
 					checkReactionStalkMother(UnbirthBabyState.ATTAKED);
 				}
-				setbNeedled(true);
+				setNeedled(true);
 			}
 		}
 	}
@@ -6406,21 +6329,21 @@ public abstract class Body extends BodyAttributes {
 		if (getAbFlagGodHand()[0]) {
 			if (getBurstState() != Burst.NEAR) {
 				// 爆発直前まで膨らませる
-				setGodHandHoldPoint(getGodHandHoldPoint() + 1);
+				setGodHandHoldCount(getGodHandHoldCount() + 1);
 			}
 		}
 		if (getAbFlagGodHand()[1]) {
 			// 伸ばす
-			if (getGodHandStretchPoint() < Const.EXT_FORCE_PULL_LIMIT[getBodyAgeState().ordinal()]) {
-				setGodHandStretchPoint(getGodHandStretchPoint() + 1);
+			if (getGodHandStretchCount() < Const.EXT_FORCE_PULL_LIMIT[getBodyAgeState().ordinal()]) {
+				setGodHandStretchCount(getGodHandStretchCount() + 1);
 			}
-			lockSetZ(getGodHandStretchPoint());
+			lockSetZ(getGodHandStretchCount());
 		} else if (getAbFlagGodHand()[2]) {
 			// 縮める
-			if (Const.EXT_FORCE_PUSH_LIMIT[getBodyAgeState().ordinal()] < getGodHandCompressPoint()) {
-				setGodHandCompressPoint(getGodHandCompressPoint() - 1);
+			if (Const.EXT_FORCE_PUSH_LIMIT[getBodyAgeState().ordinal()] < getGodHandCompressCount()) {
+				setGodHandCompressCount(getGodHandCompressCount() - 1);
 			}
-			lockSetZ(getGodHandCompressPoint());
+			lockSetZ(getGodHandCompressCount());
 		}
 	}
 
@@ -6433,7 +6356,7 @@ public abstract class Body extends BodyAttributes {
 			if (isSleeping())
 				wakeup();
 			setCalm();
-			setStaycount(0);
+			setStayTicks(0);
 			setStaying(false);
 			setToFood(false);
 			setToSukkiri(false);
@@ -6482,15 +6405,15 @@ public abstract class Body extends BodyAttributes {
 	/**
 	 * 水の中にいる
 	 * 
-	 * @param eDepth 深さ
+	 * @param depth 深さ
 	 */
-	public void inWater(Pool.DEPTH eDepth) {
+	public void inWater(Pool.DEPTH depth) {
 		if (!isDead() && !isUnBirth()) {
 			// 寝てたら起きる
 			if (isSleeping())
 				wakeup();
 			setCalm();
-			setStaycount(0);
+			setStayTicks(0);
 			setStaying(false);
 			setToFood(false);
 			setToSukkiri(false);
@@ -6521,7 +6444,7 @@ public abstract class Body extends BodyAttributes {
 			} else {
 				setHappiness(Happiness.VERY_SAD);
 				if (getPanicType() != PanicType.BURN) {
-					switch (eDepth) {
+					switch (depth) {
 						case SHALLOW:
 							setMessage(GameMessages.getMessage(this, MessagePool.Action.WetInShallowWater), true);
 							break;
@@ -6557,31 +6480,31 @@ public abstract class Body extends BodyAttributes {
 		}
 
 		// 畑にいるか
-		int nX = getX();
-		int nY = getY();
-		if ((Translate.getCurrentFieldMapNum(nX, nY) & FieldShapeBase.FIELD_FARM) == 0) {
+		int xCoord = getX();
+		int yCoord = getY();
+		if ((Translate.getCurrentFieldMapNum(xCoord, yCoord) & FieldShapeBase.FIELD_FARM) == 0) {
 			return;
 		}
 
-		int nH = getCollisionY();
+		int collisionHeight = getCollisionY();
 		setLockmove(true);
 
 		// 現在の深さチェック
-		switch (getBaryState()) {
+		switch (getBurialState()) {
 			case NONE:
-				setBaryState(BaryInUGState.HALF);
-				setMostDepth(-nH / 16);
-				setCalcZ(-nH / 16);
+				setBurialState(BurialState.HALF);
+				setMostDepth(-collisionHeight / 16);
+				setCalcZ(-collisionHeight / 16);
 				break;
 			case HALF:
-				setBaryState(BaryInUGState.NEARLY_ALL);
-				setMostDepth(-nH / 8);
-				setCalcZ(-nH / 8);
+				setBurialState(BurialState.NEARLY_ALL);
+				setMostDepth(-collisionHeight / 8);
+				setCalcZ(-collisionHeight / 8);
 				break;
 			case NEARLY_ALL:
-				setBaryState(BaryInUGState.ALL);
-				setMostDepth(-nH / 3);
-				setCalcZ(-nH / 3);
+				setBurialState(BurialState.ALL);
+				setMostDepth(-collisionHeight / 3);
+				setCalcZ(-collisionHeight / 3);
 				break;
 			case ALL:
 				break;
@@ -6616,7 +6539,7 @@ public abstract class Body extends BodyAttributes {
 			}
 			setPanicType(pType);
 			panicPeriod = 0;
-			setStaycount(0);
+			setStayTicks(0);
 			setCalm();
 			setStaying(false);
 			setToFood(false);
@@ -6628,7 +6551,7 @@ public abstract class Body extends BodyAttributes {
 			if (!isFixBack()) {
 				setFurifuri(false);
 			} else {
-				if (!isSleeping() && isbNeedled() && GameRandom.nextInt(10) == 0) {
+				if (!isSleeping() && isNeedled() && GameRandom.nextInt(10) == 0) {
 					setFurifuri(true);
 				}
 			}
@@ -6670,7 +6593,7 @@ public abstract class Body extends BodyAttributes {
 				setFurifuri(false);
 				if (!isRaper())
 					setExciting(false);
-				setbForceExciting(false);
+				setForceExciting(false);
 				setNobinobi(false);
 				setYunnyaa(false);
 				excitingPeriod = 0;
@@ -6863,7 +6786,7 @@ public abstract class Body extends BodyAttributes {
 			setRemoved(true);
 			int[] is = { -1, -1 };
 			setParents(is);
-			Body pa = YukkuriUtil.getBodyInstance(getPartner());
+			Body pa = BodyRelations.getPartnerBody(this);
 			if (pa != null)
 				pa.setPartner(-1);
 			setPartner(-1);
@@ -6878,13 +6801,13 @@ public abstract class Body extends BodyAttributes {
 			List<Body> bodies = new LinkedList<Body>(GameWorld.get().getCurrentMap().getBody().values());
 			for (Body b : bodies) {
 				if (b.getChildrenList() != null) {
-					YukkuriUtil.removeContent(b.getChildrenList(), getUniqueID());
+					ListUtil.removeContent(b.getChildrenList(), getUniqueID());
 				}
 				if (b.getElderSisterList() != null) {
-					YukkuriUtil.removeContent(b.getElderSisterList(), getUniqueID());
+					ListUtil.removeContent(b.getElderSisterList(), getUniqueID());
 				}
 				if (b.getSisterList() != null) {
-					YukkuriUtil.removeContent(b.getSisterList(), getUniqueID());
+					ListUtil.removeContent(b.getSisterList(), getUniqueID());
 				}
 			}
 			getAttach().clear();
@@ -6892,12 +6815,12 @@ public abstract class Body extends BodyAttributes {
 			getBabyTypes().clear();
 			getStalkBabyTypes().clear();
 			getAncestorList().clear();
-			setLinkParent(-1);
-			setMoveTarget(-1);
+			setParentLinkId(-1);
+			setMoveTargetId(-1);
 			getEventList().clear();
 			setCurrentEvent(null);
-			getFavItem().clear();
-			getTakeoutItem().clear();
+			getFavoriteItems().clear();
+			getCarryItems().clear();
 		}
 	}
 
@@ -6905,14 +6828,14 @@ public abstract class Body extends BodyAttributes {
 	 * 親子関係をなくす
 	 */
 	public void clearRelation() {
-		if (YukkuriUtil.getBodyInstance(getParents()[Parent.PAPA.ordinal()]) != null)
-			if (YukkuriUtil.getBodyInstance(getParents()[Parent.PAPA.ordinal()]).isRemoved())
+		if (BodyRelations.getParentBody(getParents()[Parent.PAPA.ordinal()]) != null)
+			if (BodyRelations.getParentBody(getParents()[Parent.PAPA.ordinal()]).isRemoved())
 				getParents()[Parent.PAPA.ordinal()] = -1;
-		if (YukkuriUtil.getBodyInstance(getParents()[Parent.MAMA.ordinal()]) != null)
-			if (YukkuriUtil.getBodyInstance(getParents()[Parent.MAMA.ordinal()]).isRemoved())
+		if (BodyRelations.getParentBody(getParents()[Parent.MAMA.ordinal()]) != null)
+			if (BodyRelations.getParentBody(getParents()[Parent.MAMA.ordinal()]).isRemoved())
 				getParents()[Parent.MAMA.ordinal()] = -1;
 		if (getPartner() != -1) {
-			Body partnerCandidate = YukkuriUtil.getBodyInstance(getPartner());
+			Body partnerCandidate = BodyRelations.getPartnerBody(this);
 			if (partnerCandidate == null || partnerCandidate.isRemoved())
 				setPartner(-1);
 		}
@@ -6937,7 +6860,7 @@ public abstract class Body extends BodyAttributes {
 	 */
 	public void rapidPregnantPeriod() {
 		if (hasBabyOrStalk()) {
-			pregnantPeriodBoost += TICK;
+			pregnancyPeriodBoost += TICK;
 		}
 	}
 
@@ -6945,7 +6868,7 @@ public abstract class Body extends BodyAttributes {
 	 * うんうんを素早く貯めさせる
 	 */
 	public void rapidShit() {
-		shitBoost += TICK * 5;
+		excretionBoost += TICK * 5;
 	}
 
 	/**
@@ -7082,8 +7005,8 @@ public abstract class Body extends BodyAttributes {
 	public final boolean canEventResponse() {
 		if (isDead() || getCriticalDamege() == CriticalDamegeType.CUT || isPealed() ||
 				isPacked() || (isBlind() && !isCutPeni()) || isSleeping() || isShitting() || isBirth() || isSukkiri() ||
-				isbNeedled() || getCurrentEvent() != null || isNYD() || isTaken()
-				|| getBaryState() != BaryInUGState.NONE || isLockmove() || isStarving()) {
+				isNeedled() || getCurrentEvent() != null || isNYD() || isTaken()
+				|| getBurialState() != BurialState.NONE || isLockmove() || isStarving()) {
 			return false;
 		}
 		// Rapers ignore events while exciting and continue their action.
@@ -7117,9 +7040,9 @@ public abstract class Body extends BodyAttributes {
 	 */
 	public final boolean canAction() {
 		if (isDead() || getCriticalDamege() == CriticalDamegeType.CUT || isPealed() ||
-				isPacked() || isSleeping() || isShitting() || isBirth() || isSukkiri() || isbNeedled() ||
+				isPacked() || isSleeping() || isShitting() || isBirth() || isSukkiri() || isNeedled() ||
 				getCurrentEvent() != null || isNYD() ||
-				getBaryState() != BaryInUGState.NONE) {
+				getBurialState() != BurialState.NONE) {
 			return false;
 		}
 		return true;
@@ -7133,8 +7056,8 @@ public abstract class Body extends BodyAttributes {
 	 */
 	public final boolean canActionForEvent() {
 		if (isDead() || getCriticalDamege() == CriticalDamegeType.CUT || isPealed() ||
-				isPacked() || isSleeping() || isShitting() || isBirth() || isSukkiri() || isbNeedled() ||
-				isNYD() || getBaryState() != BaryInUGState.NONE) {
+				isPacked() || isSleeping() || isShitting() || isBirth() || isSukkiri() || isNeedled() ||
+				isNYD() || getBurialState() != BurialState.NONE) {
 			return false;
 		}
 		return true;
@@ -7145,12 +7068,29 @@ public abstract class Body extends BodyAttributes {
 		grabbed = true;
 		if (getBindStalk() != null) {
 			checkReactionStalkMother(UnbirthBabyState.KILLED);
-			if (getBindStalk().getBindBabies() != null
-					&& getBindStalk().getBindBabies().indexOf(this.getUniqueID()) >= 0) {
-				getBindStalk().getBindBabies().set(getBindStalk().getBindBabies().indexOf(this.getUniqueID()), null);
-			}
-			setBindStalk(null);
+			detachFromStalk();
 		}
+	}
+
+	/**
+	 * 茎からこの個体を切り離す.
+	 * <p>
+	 * 子側の bindStalk だけでなく、茎側の bindBabies からも自分自身を消す。
+	 * これをしないと Stalk.upDate() が次tickで再結合してしまう。
+	 * </p>
+	 */
+	public final void detachFromStalk() {
+		if (getBindStalk() == null) {
+			return;
+		}
+		if (getBindStalk().getBindBabies() != null) {
+			int idx = getBindStalk().getBindBabies().indexOf(this.getUniqueID());
+			if (idx >= 0) {
+				getBindStalk().getBindBabies().set(idx, null);
+			}
+		}
+		setBindStalk(null);
+		setParentLinkId(-1);
 	}
 
 	/**
@@ -7190,8 +7130,8 @@ public abstract class Body extends BodyAttributes {
 			clearActions();
 			moveBody(true); // for falling the body
 			if (isUnBirth()) {
-				setMessageCount(0);
-				setMessageBuf(null);
+				setMessageTicks(0);
+				setMessageBuffer(null);
 			}
 			checkMessage();
 			if (SimYukkuri.UNYO) {
@@ -7200,7 +7140,7 @@ public abstract class Body extends BodyAttributes {
 			setSilent(true);
 			setDeadPeriod(getDeadPeriod() + 1);
 			// 死後3日
-			if (getROTTINGTIMEorg() < getDeadPeriod()) {
+			if (getRottingTimeBase() < getDeadPeriod()) {
 				if (!isCrushed()) {
 					// 初回は潰れる
 					setCrushed(true);
@@ -7229,24 +7169,24 @@ public abstract class Body extends BodyAttributes {
 		}
 
 		Event retval = Event.DONOTHING;
-		boolean bStopAmple = false;
+		boolean stopAgeSteamAmple = false;
 		if (getAttachmentSize(StopAmpoule.class) != 0) {
-			bStopAmple = true;
+			stopAgeSteamAmple = true;
 		}
 
-		boolean bAccelAmple = false;
+		boolean accelAgeSteamAmple = false;
 		if (getAttachmentSize(AccelAmpoule.class) != 0) {
-			bAccelAmple = true;
+			accelAgeSteamAmple = true;
 		}
 
 		if (GameEnvironment.getInterval() == 0) {
 			if (GameEnvironment.isAgeBoostSteam() && getBodyAgeState() != AgeState.ADULT)
 				addAge(10000);
-			if (GameEnvironment.isAgeStopSteam() && !bAccelAmple)
+			if (GameEnvironment.isAgeStopSteam() && !accelAgeSteamAmple)
 				addAge(-256);
 		}
 
-		if (getBaryState() == BaryInUGState.NONE || getBaryState() == BaryInUGState.HALF) {
+		if (getBurialState() == BurialState.NONE || getBurialState() == BurialState.HALF) {
 			if (GameEnvironment.isRapidPregnantSteam())
 				rapidPregnantPeriod();
 		}
@@ -7255,7 +7195,7 @@ public abstract class Body extends BodyAttributes {
 		// ageが変化しないと状態が変化しないロジックになっているのでそっとしておく
 		setAge(getAge() + TICK);
 
-		if (getAge() > getLIFELIMITorg()) {
+		if (getAge() > getLifeLimitBase()) {
 			toDead();
 			moveBody(true); // for falling the body
 			checkMessage();
@@ -7269,7 +7209,7 @@ public abstract class Body extends BodyAttributes {
 		FootBake foot = getFootBakeLevel();
 		if (curAge.ordinal() < getBodyAgeState().ordinal()) {
 			// 状態変更有かつ成長抑制されている場合は強制的に元に戻す。成長促進アンプルが刺さっていたら成長する
-			if (((GameEnvironment.isAgeStopSteam()) || (bStopAmple)) && !bAccelAmple) {
+			if (((GameEnvironment.isAgeStopSteam()) || (stopAgeSteamAmple)) && !accelAgeSteamAmple) {
 				setAgeState(curAge);
 				setAge(getAge() + TICK);
 			} else {
@@ -7279,10 +7219,10 @@ public abstract class Body extends BodyAttributes {
 				// DamageLimitを流用してるパラメータは状態を維持するためここで再計算
 				switch (foot) {
 					case MIDIUM:
-						footBakePeriod = (getDAMAGELIMITorg()[getBodyAgeState().ordinal()] >> 1) + 1;
+						footBakePeriod = (getDamageLimitBase()[getBodyAgeState().ordinal()] >> 1) + 1;
 						break;
 					case CRITICAL:
-						footBakePeriod = getDAMAGELIMITorg()[getBodyAgeState().ordinal()] + 1;
+						footBakePeriod = getDamageLimitBase()[getBodyAgeState().ordinal()] + 1;
 						break;
 					default:
 						break;
@@ -7293,8 +7233,8 @@ public abstract class Body extends BodyAttributes {
 		plusGodHand();
 
 		boolean dontMove = false;
-		if (geteCoreAnkoState() == CoreAnkoState.NonYukkuriDisease ||
-				isbOnDontMoveBeltconveyor() || isbSurisuriFromPlayer() || isPealed() || isPacked()) {
+		if (getCoreAnkoState() == CoreAnkoState.NonYukkuriDisease ||
+				isOnNonMovingConveyor() || isSurisuriFromPlayer() || isPealed() || isPacked()) {
 			dontMove = true;
 		}
 
@@ -7313,8 +7253,8 @@ public abstract class Body extends BodyAttributes {
 			}
 			shit = 0;
 			hungry = getHungryLimit();
-			if (damage > getDAMAGELIMITorg()[getBodyAgeState().ordinal()] * 80 / 100) {
-				damage = getDAMAGELIMITorg()[getBodyAgeState().ordinal()] * 80 / 100;
+			if (damage > getDamageLimitBase()[getBodyAgeState().ordinal()] * 80 / 100) {
+				damage = getDamageLimitBase()[getBodyAgeState().ordinal()] * 80 / 100;
 			}
 			stay();
 			checkDamage();
@@ -7372,7 +7312,7 @@ public abstract class Body extends BodyAttributes {
 		}
 
 		// パニック時はただ走る
-		if (getPanicType() != null && !isbNeedled() && isNotNYD()) {
+		if (getPanicType() != null && !isNeedled() && isNotNYD()) {
 			retval = checkFear();
 			if (isLockmove())
 				dontMove = true;
@@ -7382,7 +7322,7 @@ public abstract class Body extends BodyAttributes {
 				dontMove = true;
 			if (getFootBakeLevel() == FootBake.CRITICAL && !canflyCheck())
 				dontMove = true;
-			if (isbNeedled())
+			if (isNeedled())
 				dontMove = true;
 			if (isUnBirth())
 				dontMove = true;
@@ -7396,7 +7336,7 @@ public abstract class Body extends BodyAttributes {
 		// check can move or not
 		if (getCriticalDamegeType() == CriticalDamegeType.CUT ||
 				(getFootBakeLevel() == FootBake.CRITICAL && !canflyCheck()) ||
-				isbNeedled() || getBaryState() != BaryInUGState.NONE || isUnBirth()) {
+				isNeedled() || getBurialState() != BurialState.NONE || isUnBirth()) {
 			dontMove = true;
 		}
 
@@ -7409,10 +7349,10 @@ public abstract class Body extends BodyAttributes {
 		// うんうん処理
 		if (!isShitting() && oldShit != 0 && shit == 0) {
 			if (!isHasPants()) {
-				if (!isAnalClose() && !(isFixBack() && isbNeedled())) {
+				if (!isAnalClose() && !(isFixBack() && isNeedled())) {
 					// 寝ているか粘着床についているか針が刺さっていたら体勢をかえられずに漏らす
-					if ((isLockmove() && isFixBack()) || isSleeping() || isbNeedled() ||
-							getBaryState() != BaryInUGState.NONE) {
+					if ((isLockmove() && isFixBack()) || isSleeping() || isNeedled() ||
+							getBurialState() != BurialState.NONE) {
 						retval = Event.DOCRUSHEDSHIT;
 					} else {
 						if (isNotNYD()) {
@@ -7441,9 +7381,9 @@ public abstract class Body extends BodyAttributes {
 		}
 
 		if (isStaying()) {
-			setStaycount(getStaycount() + TICK);
-			if (getStaycount() > stayTime) {
-				setStaycount(0);
+			setStayTicks(getStayTicks() + TICK);
+			if (getStayTicks() > stayTime) {
+				setStayTicks(0);
 				setStaying(false);
 				setPurupuru(false);
 			} else {
@@ -7459,7 +7399,7 @@ public abstract class Body extends BodyAttributes {
 
 		// move to destination
 		// if there is no destination, walking randomly.
-		if (geteCoreAnkoState() == CoreAnkoState.NonYukkuriDiseaseNear) {
+		if (getCoreAnkoState() == CoreAnkoState.NonYukkuriDiseaseNear) {
 			// 非ゆっくり症初期の場合はあまり動かない
 			if (GameRandom.nextInt(5) == 0) {
 				moveBody(true);
@@ -7480,7 +7420,7 @@ public abstract class Body extends BodyAttributes {
 	}
 
 	/**
-	 * moveTargetが範囲外のとき、範囲内に収める
+	 * moveTargetIdが範囲外のとき、範囲内に収める
 	 */
 	public void calcMoveTarget() {
 		Obj o = takeMoveTarget();
@@ -7559,7 +7499,7 @@ public abstract class Body extends BodyAttributes {
 	public Body[] getArrayOfBody(List<Integer> list) {
 		List<Body> bodies = new LinkedList<Body>();
 		for (int i : list) {
-			bodies.add(YukkuriUtil.getBodyInstance(i));
+			bodies.add(BodyRelations.getBody(i));
 		}
 		return bodies.toArray(new Body[0]);
 	}
@@ -7591,9 +7531,9 @@ public abstract class Body extends BodyAttributes {
 		y = initY;
 		z = initZ;
 		if (z == 0) {
-			setBFirstGround(false);
+			setFirstGround(false);
 		} else {
-			setBFirstGround(true);
+			setFirstGround(true);
 		}
 		getParents()[Parent.PAPA.ordinal()] = papa == null ? -1 : papa.getUniqueID();
 		getParents()[Parent.MAMA.ordinal()] = mama == null ? -1 : mama.getUniqueID();
@@ -7629,10 +7569,10 @@ public abstract class Body extends BodyAttributes {
 			}
 		}
 
-		if (papa != null && papa.getFavItem(FavItemType.BED) != null) {
-			setFavItem(FavItemType.BED, papa.getFavItem(FavItemType.BED));
-		} else if (mama != null && mama.getFavItem(FavItemType.BED) != null) {
-			setFavItem(FavItemType.BED, mama.getFavItem(FavItemType.BED));
+		if (papa != null && papa.getFavoriteItem(FavItemType.BED) != null) {
+			setFavoriteItem(FavItemType.BED, papa.getFavoriteItem(FavItemType.BED));
+		} else if (mama != null && mama.getFavoriteItem(FavItemType.BED) != null) {
+			setFavoriteItem(FavItemType.BED, mama.getFavoriteItem(FavItemType.BED));
 		}
 
 		setOkazari(new Okazari(this, OkazariType.DEFAULT));
@@ -7646,11 +7586,11 @@ public abstract class Body extends BodyAttributes {
 				setAge(0);
 				break;
 			case CHILD:
-				setAge(getBABYLIMITorg());
+				setAge(getBabyLimitBase());
 				break;
 			case ADULT:
 			default:
-				setAge(getCHILDLIMITorg());
+				setAge(getChildLimitBase());
 				break;
 		}
 		setAge(getAge() + GameRandom.nextInt(100));
@@ -7658,11 +7598,11 @@ public abstract class Body extends BodyAttributes {
 		getMindAgeState();
 		initAmount(initAgeState);
 		wakeUpTime = getAge();
-		shit = GameRandom.nextInt(getSHITLIMITorg()[getBodyAgeState().ordinal()] / 2);
+		shit = GameRandom.nextInt(getShitLimitBase()[getBodyAgeState().ordinal()] / 2);
 		if (getBodyAgeState() == AgeState.BABY) {
 			if (mama != null) {
 				if (mama.isDamaged()) {
-					damage = GameRandom.nextInt(mama.damage) * getDAMAGELIMITorg()[Const.BABY_INDEX]
+					damage = GameRandom.nextInt(mama.damage) * getDamageLimitBase()[Const.BABY_INDEX]
 							/ mama.getDamageLimit();
 					getBodyAgeState();
 					getDamageState();
@@ -7671,10 +7611,10 @@ public abstract class Body extends BodyAttributes {
 					addSickPeriod(100);
 				}
 				if (mama.isDead()) {
-					damage += getDAMAGELIMITorg()[Const.BABY_INDEX] / 4 * 3
-							+ GameRandom.nextInt(getDAMAGELIMITorg()[Const.BABY_INDEX]);
+					damage += getDamageLimitBase()[Const.BABY_INDEX] / 4 * 3
+							+ GameRandom.nextInt(getDamageLimitBase()[Const.BABY_INDEX]);
 				}
-				setForceBirthMessage(true);
+				setBirthMessageForced(true);
 			}
 			setBirthAge(getAge());
 		}
@@ -7683,41 +7623,19 @@ public abstract class Body extends BodyAttributes {
 		setMessageTextSize(12);
 		setUniqueID(Numbering.INSTANCE.numberingYukkuriID());
 		// 生い立ちの設定
-		BodyRank eBodyRank = BodyRank.KAIYU;
-		PublicRank ePublicRank = PublicRank.NONE;
+		BodyRank bodyRank = BodyRank.KAIYU;
+		PublicRank publicRank = PublicRank.NONE;
 		if (mama != null) {
-			eBodyRank = mama.getBodyRank();
-			/*
-			 * // 141229時点で飼いゆと野良ゆしか機能していないので他の選択肢はコメントアウト
-			 * switch(eMotherBodyRank){
-			 * case KAIYU:// 飼いゆ
-			 * eBodyRank = Body.BodyRank.KAIYU;
-			 * break;
-			 * case SUTEYU:// 捨てゆ
-			 * eBodyRank = Body.BodyRank.NORAYU_CLEAN;
-			 * break;
-			 * case NORAYU_CLEAN:// きれいな野良ゆ
-			 * eBodyRank = Body.BodyRank.NORAYU_CLEAN;
-			 * break;
-			 * case NORAYU:// 野良ゆ
-			 * eBodyRank = Body.BodyRank.NORAYU_CLEAN;
-			 * break;
-			 * case YASEIYU:// 野生ゆ
-			 * eBodyRank = Body.BodyRank.YASEIYU
-			 * break;
-			 * default:
-			 * break;
-			 * }
-			 */
+			bodyRank = mama.getBodyRank();
 			// 階級の設定
-			PublicRank eMotherPubRank = mama.getPublicRank();
+			PublicRank motherPublicRank = mama.getPublicRank();
 			// 母親のランクに応じて変更
-			switch (eMotherPubRank) {
+			switch (motherPublicRank) {
 				case NONE:
-					ePublicRank = PublicRank.NONE;
+					publicRank = PublicRank.NONE;
 					break;
 				case UnunSlave:// うんうん奴隷
-					ePublicRank = PublicRank.UnunSlave;
+					publicRank = PublicRank.UnunSlave;
 					break;
 				default:
 					break;
@@ -7725,36 +7643,36 @@ public abstract class Body extends BodyAttributes {
 		} else if (GameWorld.get() != null) {
 			if (GameWorld.get().getCurrentMap().getMapIndex() == 5
 					|| GameWorld.get().getCurrentMap().getMapIndex() == 6)
-				eBodyRank = BodyRank.YASEIYU;
+				bodyRank = BodyRank.YASEIYU;
 		}
 		// 生い立ちを設定
-		setBodyRank(eBodyRank);
-		setPublicRank(ePublicRank);
+		setBodyRank(bodyRank);
+		setPublicRank(publicRank);
 
 		// 先祖の情報を引き継ぐ
 		if (mama != null) {
-			List<Integer> anTempList = mama.getAncestorList();
-			int nType = mama.getType();
-			addAncestorList(anTempList);
-			addAncestorList(nType);
+			List<Integer> ancestorList = mama.getAncestorList();
+			int ancestorType = mama.getType();
+			addAncestorList(ancestorList);
+			addAncestorList(ancestorType);
 		}
 		if (papa != null) {
-			List<Integer> anTempList = papa.getAncestorList();
-			int nType = papa.getType();
-			addAncestorList(anTempList);
-			addAncestorList(nType);
+			List<Integer> ancestorList = papa.getAncestorList();
+			int ancestorType = papa.getType();
+			addAncestorList(ancestorList);
+			addAncestorList(ancestorType);
 		}
 
-		hungry = getHUNGRYLIMITorg()[getBodyAgeState().ordinal()] + (100 * getBodyAgeState().ordinal());
+		hungry = getHungryLimitBase()[getBodyAgeState().ordinal()] + (100 * getBodyAgeState().ordinal());
 
 	}
 
 	public Body() {
 		objType = Type.YUKKURI;
 		if (z == 0) {
-			setBFirstGround(false);
+			setFirstGround(false);
 		} else {
-			setBFirstGround(true);
+			setFirstGround(true);
 		}
 		setRemoved(false);
 		if (getAttitude() == null) {
@@ -7781,19 +7699,19 @@ public abstract class Body extends BodyAttributes {
 		getBodyAgeState();
 		getMindAgeState();
 		wakeUpTime = getAge();
-		shit = GameRandom.nextInt(getSHITLIMITorg()[getBodyAgeState().ordinal()] / 2);
+		shit = GameRandom.nextInt(getShitLimitBase()[getBodyAgeState().ordinal()] / 2);
 		dirX = randomDirection(dirX);
 		dirY = randomDirection(dirY);
 		setMessageTextSize(12);
 		setUniqueID(Numbering.INSTANCE.numberingYukkuriID());
 		// 生い立ちの設定
-		BodyRank eBodyRank = BodyRank.KAIYU;
-		PublicRank ePublicRank = PublicRank.NONE;
+		BodyRank bodyRank = BodyRank.KAIYU;
+		PublicRank publicRank = PublicRank.NONE;
 		// 生い立ちを設定
-		setBodyRank(eBodyRank);
-		setPublicRank(ePublicRank);
+		setBodyRank(bodyRank);
+		setPublicRank(publicRank);
 
-		hungry = getHUNGRYLIMITorg()[getBodyAgeState().ordinal()] + (100 * getBodyAgeState().ordinal());
+		hungry = getHungryLimitBase()[getBodyAgeState().ordinal()] + (100 * getBodyAgeState().ordinal());
 	}
 
 	@Transient
@@ -7817,12 +7735,12 @@ public abstract class Body extends BodyAttributes {
 	/**
 	 * 待つ
 	 * 
-	 * @param nWaitTime 待ち時間
+	 * @param waitTime 待ち時間
 	 * @return 待ち時間が過ぎたらtrue
 	 */
-	public final boolean checkWait(int nWaitTime) {
+	public final boolean checkWait(int waitTime) {
 		long lnNowTime = System.currentTimeMillis();
-		long lnLastActionTime = getInLastActionTime();
+		long lnLastActionTime = getLastActionTime();
 		int speed = 100; // default NORMAL
 		String osName = System.getProperty("os.name", "").toLowerCase();
 		boolean hasDisplay = System.getenv("DISPLAY") != null;
@@ -7834,7 +7752,7 @@ public abstract class Body extends BodyAttributes {
 				speed = 100;
 			}
 		}
-		if (lnNowTime - lnLastActionTime < nWaitTime * speed / 100) {
+		if (lnNowTime - lnLastActionTime < waitTime * speed / 100) {
 			return false;
 		}
 		// setlnLastActionTime(lnNowTime);
@@ -7880,4 +7798,13 @@ public abstract class Body extends BodyAttributes {
 	/** 捕食種に仕える従者種（咲夜・美鈴）であれば {@code true}. */
 	@JsonIgnore
 	public boolean isServant() { return false; }
+
+	/**
+	 * 指定した主種族に仕える従者種であれば {@code true}.
+	 *
+	 * @param masterType 主の種族ID
+	 * @return 指定種族の従者かどうか
+	 */
+	@JsonIgnore
+	public boolean isServantOf(int masterType) { return false; }
 }

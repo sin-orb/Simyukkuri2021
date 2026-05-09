@@ -1,0 +1,45 @@
+package src.logic;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import org.junit.jupiter.api.Test;
+
+import src.base.StubBodyAttributes;
+
+class BodyStressRuleTest {
+	private static final class StressBody extends StubBodyAttributes {
+		@Override
+		public int checkNonYukkuriDiseaseTolerance() {
+			return 100;
+		}
+	}
+
+	@Test
+	void detectsStressThresholds() {
+		StressBody body = new StressBody();
+		int limit = body.getStressLimit();
+
+		body.setStress(limit * 2 / 5);
+		assertFalse(BodyStressRule.isStressful(body));
+		assertFalse(BodyStressRule.isVeryStressful(body));
+
+		body.setStress(limit * 2 / 5 + 1);
+		assertTrue(BodyStressRule.isStressful(body));
+		assertFalse(BodyStressRule.isVeryStressful(body));
+
+		body.setStress(limit * 3 / 5 + 1);
+		assertTrue(BodyStressRule.isStressful(body));
+		assertTrue(BodyStressRule.isVeryStressful(body));
+	}
+
+	@Test
+	void ignoresDeadBodiesByDelegatingToStressValueOnly() {
+		StressBody body = new StressBody();
+		body.setStress(body.getStressLimit());
+		body.setDead(true);
+
+		assertTrue(BodyStressRule.isStressful(body));
+		assertTrue(BodyStressRule.isVeryStressful(body));
+	}
+}

@@ -12,13 +12,10 @@ import java.util.Map;
 
 import src.Const;
 import src.SimYukkuri;
-import src.util.GameRandom;
-import src.util.GameWorld;
 import src.base.Body;
 import src.base.Okazari.OkazariType;
 import src.draw.Dimension4y;
 import src.draw.ModLoader;
-import src.draw.MyPane;
 import src.draw.Point4y;
 import src.draw.Terrarium;
 import src.enums.AgeState;
@@ -30,11 +27,12 @@ import src.enums.ImageCode;
 import src.enums.Intelligence;
 import src.enums.PlayStyle;
 import src.enums.YukkuriType;
+import src.engine.transform.TransformationService;
 import src.logic.ToyLogic;
 import src.system.BodyLayer;
 import src.system.MessagePool;
+import src.util.GameRandom;
 import src.util.IniFileUtil;
-import src.util.YukkuriUtil;
 
 /*****************************************************
  * れいむ。でいぶ、わさ、まりされいむはこれを継承している
@@ -65,7 +63,7 @@ public class Reimu extends Body {
 	// iniファイルから読み込んだ初期値
 	private static int baseSpeed = 100;
 	// 個別表情管理(まりちゃ流し用)
-	private int anImageVerStateCtrlNagasi[][] = new int[ImageCode.values().length][2];
+	private int imageVariantState[][] = new int[ImageCode.values().length][2];
 
 	/** イメージのロード */
 	public static void loadImages(ClassLoader loader, ImageObserver io) throws IOException {
@@ -118,7 +116,7 @@ public class Reimu extends Body {
 
 	@Override
 	public int getImage(int type, int direction, BodyLayer layer, int index) {
-		if (!isbImageNagasiMode() || imagesNagasi == null) {
+		if (!isImageNagasiMode() || imagesNagasi == null) {
 			layer.getImage()[index] = imagePack[getBodyRank().getImageIndex()][type][direction
 					* directionOffset[type][0]][getBodyAgeState().ordinal()];
 			layer.getDir()[index] = direction * directionOffset[type][1];
@@ -126,38 +124,38 @@ public class Reimu extends Body {
 			// インターバル毎に初期化する
 			if (GameEnvironment.getInterval() == 0 && !isDead()) {
 				for (int i = 0; i < ImageCode.values().length; i++) {
-					anImageVerStateCtrlNagasi[i][1] = 0;
+					imageVariantState[i][1] = 0;
 				}
 			}
 
 			// 前回と同じ表示
-			if (anImageVerStateCtrlNagasi[type][1] == 1) {
-				int nIndex = anImageVerStateCtrlNagasi[type][0];
+			if (imageVariantState[type][1] == 1) {
+				int imageIndex = imageVariantState[type][0];
 				layer.getImage()[index] = imagesNagasi[type][direction
 						* directionOffsetNagasi[type][0]][getBodyAgeState()
-								.ordinal()][nIndex];
+								.ordinal()][imageIndex];
 
 			} else {
-				int nOtherVerCount = 0;
+				int otherVersionCount = 0;
 				for (int i = 0; i < ModLoader.getMaxImgOtherVer(); i++) {
 					if (imagesNagasi[type][direction * directionOffsetNagasi[type][0]][getBodyAgeState().ordinal()][i
 							+ 1] != null) {
-						nOtherVerCount++;
+						otherVersionCount++;
 					}
 				}
 
-				if (nOtherVerCount != 0) {
-					int nRndIndex = GameRandom.nextInt(nOtherVerCount + 1);
-					anImageVerStateCtrlNagasi[type][0] = nRndIndex;
+				if (otherVersionCount != 0) {
+					int randomIndex = GameRandom.nextInt(otherVersionCount + 1);
+					imageVariantState[type][0] = randomIndex;
 					layer.getImage()[index] = imagesNagasi[type][direction
-							* directionOffsetNagasi[type][0]][getBodyAgeState().ordinal()][nRndIndex];
+							* directionOffsetNagasi[type][0]][getBodyAgeState().ordinal()][randomIndex];
 				} else {
-					anImageVerStateCtrlNagasi[type][0] = 0;
+					imageVariantState[type][0] = 0;
 					layer.getImage()[index] = imagesNagasi[type][direction
 							* directionOffsetNagasi[type][0]][getBodyAgeState().ordinal()][0];
 				}
 
-				anImageVerStateCtrlNagasi[type][1] = 1;
+				imageVariantState[type][1] = 1;
 			}
 
 			layer.getDir()[index] = direction * directionOffsetNagasi[type][1];
@@ -186,25 +184,7 @@ public class Reimu extends Body {
 	@Override
 	public void execTransform() {
 		// でいぶ化
-		synchronized (SimYukkuri.lock) {
-			int originalId = getUniqueID();
-			GameWorld.get().getCurrentMap().getBody().remove(this.getUniqueID());
-			GameView.loadBodyImage(YukkuriType.DEIBU);
-			Body to = new Deibu(getX(), getY(), getZ(), getBodyAgeState(), null, null);
-			try {
-				YukkuriUtil.changeBody(to, this);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			to.setUniqueID(originalId);
-			GameWorld.get().getCurrentMap().getBody().put(to.getUniqueID(), to);
-			to.setBaseBodyFileName("deibu");
-			IniFileUtil.readYukkuriIniFile(to);
-			if (MyPane.getSelectBody() == this) {
-				MyPane.setSelectBody(to);
-			}
-			setRemoved(true);
-		}
+		TransformationService.transform(this, YukkuriType.DEIBU);
 	}
 
 	/**
@@ -219,14 +199,14 @@ public class Reimu extends Body {
 		if (!canTransform())
 			return null;
 		// 大人であり、夫がいて夫がゲスではなく、自身がゲス
-		Body partner = YukkuriUtil.getBodyInstance(getPartner());
+		Body partner = src.util.BodyRegistry.getBodyInstance(getPartner());
 		if (isAdult() && partner != null && !partner.isRude() && isRude()) {
 			if (GameRandom.nextInt(1000) == 0) {
 				return this;
 			}
 		}
 		// または、ゲスでいぶの子供である
-		Body mother = YukkuriUtil.getBodyInstance(getMother());
+		Body mother = src.util.BodyRegistry.getBodyInstance(getMother());
 		if (!isAdult() && mother != null && mother.getType() == Deibu.type && mother.isRude()) {
 			// ゲスバカとドゲスは確実にでいぶ化
 			if ((isRude() && getIntelligence() != Intelligence.FOOL) || getAttitude() == Attitude.SUPER_SHITHEAD) {
@@ -271,8 +251,8 @@ public class Reimu extends Body {
 	@Override
 	@Transient
 	public String getMyName() {
-		if (getAnMyName()[getBodyAgeState().ordinal()] != null) {
-			return getAnMyName()[getBodyAgeState().ordinal()];
+		if (getMyNames()[getBodyAgeState().ordinal()] != null) {
+			return getMyNames()[getBodyAgeState().ordinal()];
 		}
 		return nameJ;
 	}
@@ -280,8 +260,8 @@ public class Reimu extends Body {
 	@Override
 	@Transient
 	public String getMyNameD() {
-		if (getAnMyNameD()[getBodyAgeState().ordinal()] != null) {
-			return getAnMyNameD()[getBodyAgeState().ordinal()];
+		if (getMyNamesDamaged()[getBodyAgeState().ordinal()] != null) {
+			return getMyNamesDamaged()[getBodyAgeState().ordinal()];
 		}
 		return getMyName();
 	}
@@ -343,9 +323,9 @@ public class Reimu extends Body {
 			// 排泄、出産時
 			idx += getImage(ImageCode.FRONT_SHIT.ordinal(), Const.LEFT, layer, idx);
 
-			if (geteHairState() == HairState.DEFAULT) {
+			if (getHairState() == HairState.DEFAULT) {
 				idx += getImage(ImageCode.FRONT_HAIR.ordinal(), Const.LEFT, layer, idx);
-			} else if (geteHairState() == HairState.BRINDLED1 || geteHairState() == HairState.BRINDLED2) {
+			} else if (getHairState() == HairState.BRINDLED1 || getHairState() == HairState.BRINDLED2) {
 				idx += getImage(ImageCode.FRONT_HAIR2.ordinal(), Const.LEFT, layer, idx);
 			}
 
@@ -372,9 +352,9 @@ public class Reimu extends Body {
 			if (getAge() % 8 <= 3) {
 				idx += getImage(ImageCode.ROLL_LEFT_SHIT.ordinal(), Const.LEFT, layer, idx);
 
-				if (geteHairState() == HairState.DEFAULT) {
+				if (getHairState() == HairState.DEFAULT) {
 					idx += getImage(ImageCode.ROLL_LEFT_HAIR.ordinal(), Const.LEFT, layer, idx);
-				} else if (geteHairState() == HairState.BRINDLED1 || geteHairState() == HairState.BRINDLED2) {
+				} else if (getHairState() == HairState.BRINDLED1 || getHairState() == HairState.BRINDLED2) {
 					idx += getImage(ImageCode.FRONT_HAIR2.ordinal(), Const.LEFT, layer, idx);
 				}
 
@@ -397,9 +377,9 @@ public class Reimu extends Body {
 			} else if (getAge() % 8 <= 7) {
 				idx += getImage(ImageCode.ROLL_RIGHT_SHIT.ordinal(), Const.LEFT, layer, idx);
 
-				if (geteHairState() == HairState.DEFAULT) {
+				if (getHairState() == HairState.DEFAULT) {
 					idx += getImage(ImageCode.ROLL_RIGHT_HAIR.ordinal(), Const.LEFT, layer, idx);
-				} else if (geteHairState() == HairState.BRINDLED1 || geteHairState() == HairState.BRINDLED2) {
+				} else if (getHairState() == HairState.BRINDLED1 || getHairState() == HairState.BRINDLED2) {
 					idx += getImage(ImageCode.FRONT_HAIR2.ordinal(), Const.LEFT, layer, idx);
 				}
 
@@ -433,9 +413,9 @@ public class Reimu extends Body {
 					if (getOkazari() != null && getOkazari().getOkazariType() == OkazariType.DEFAULT) {
 						idx += getImage(ImageCode.YUNYAA1_ACCESSORY.ordinal(), direction, layer, idx);
 					}
-					if (geteHairState() == HairState.DEFAULT) {
+					if (getHairState() == HairState.DEFAULT) {
 						idx += getImage(ImageCode.YUNYAA1_HAIR.ordinal(), direction, layer, idx);
-					} else if (geteHairState() == HairState.BRINDLED1 || geteHairState() == HairState.BRINDLED2) {
+					} else if (getHairState() == HairState.BRINDLED1 || getHairState() == HairState.BRINDLED2) {
 						idx += getImage(ImageCode.YUNYAA1_HAIR2.ordinal(), direction, layer, idx);
 					}
 					if (getCriticalDamege() == CriticalDamegeType.INJURED) {
@@ -462,9 +442,9 @@ public class Reimu extends Body {
 					if (getOkazari() != null && getOkazari().getOkazariType() == OkazariType.DEFAULT) {
 						idx += getImage(ImageCode.YUNYAA2_ACCESSORY.ordinal(), direction, layer, idx);
 					}
-					if (geteHairState() == HairState.DEFAULT) {
+					if (getHairState() == HairState.DEFAULT) {
 						idx += getImage(ImageCode.YUNYAA2_HAIR.ordinal(), direction, layer, idx);
-					} else if (geteHairState() == HairState.BRINDLED1 || geteHairState() == HairState.BRINDLED2) {
+					} else if (getHairState() == HairState.BRINDLED1 || getHairState() == HairState.BRINDLED2) {
 						idx += getImage(ImageCode.YUNYAA2_HAIR2.ordinal(), direction, layer, idx);
 					}
 					if (getCriticalDamege() == CriticalDamegeType.INJURED) {
@@ -491,9 +471,9 @@ public class Reimu extends Body {
 					if (getOkazari() != null && getOkazari().getOkazariType() == OkazariType.DEFAULT) {
 						idx += getImage(ImageCode.YUNYAA3_ACCESSORY.ordinal(), direction, layer, idx);
 					}
-					if (geteHairState() == HairState.DEFAULT) {
+					if (getHairState() == HairState.DEFAULT) {
 						idx += getImage(ImageCode.YUNYAA3_HAIR.ordinal(), direction, layer, idx);
-					} else if (geteHairState() == HairState.BRINDLED1 || geteHairState() == HairState.BRINDLED2) {
+					} else if (getHairState() == HairState.BRINDLED1 || getHairState() == HairState.BRINDLED2) {
 						idx += getImage(ImageCode.YUNYAA3_HAIR3.ordinal(), direction, layer, idx);
 					}
 					if (getCriticalDamege() == CriticalDamegeType.INJURED) {
@@ -634,46 +614,46 @@ public class Reimu extends Body {
 		 * }
 		 */
 		double factor = Math.random() * 2 + 1;
-		getHUNGRYLIMITorg()[AgeState.ADULT.ordinal()] *= factor;
-		getHUNGRYLIMITorg()[AgeState.CHILD.ordinal()] *= factor;
-		getHUNGRYLIMITorg()[AgeState.BABY.ordinal()] *= factor;
+		getHungryLimitBase()[AgeState.ADULT.ordinal()] *= factor;
+		getHungryLimitBase()[AgeState.CHILD.ordinal()] *= factor;
+		getHungryLimitBase()[AgeState.BABY.ordinal()] *= factor;
 		factor = Math.random() * 2 + 1;
-		getSHITLIMITorg()[AgeState.ADULT.ordinal()] *= factor;
-		getSHITLIMITorg()[AgeState.CHILD.ordinal()] *= factor;
-		getSHITLIMITorg()[AgeState.BABY.ordinal()] *= factor;
+		getShitLimitBase()[AgeState.ADULT.ordinal()] *= factor;
+		getShitLimitBase()[AgeState.CHILD.ordinal()] *= factor;
+		getShitLimitBase()[AgeState.BABY.ordinal()] *= factor;
 		factor = Math.random() + 0.5;
-		getDAMAGELIMITorg()[AgeState.ADULT.ordinal()] *= factor;
-		getDAMAGELIMITorg()[AgeState.CHILD.ordinal()] *= factor;
-		getDAMAGELIMITorg()[AgeState.BABY.ordinal()] *= factor;
+		getDamageLimitBase()[AgeState.ADULT.ordinal()] *= factor;
+		getDamageLimitBase()[AgeState.CHILD.ordinal()] *= factor;
+		getDamageLimitBase()[AgeState.BABY.ordinal()] *= factor;
 		factor = Math.random() + 0.5;
-		setBABYLIMITorg((int) (getBABYLIMITorg() * factor));
-		setCHILDLIMITorg((int) (getCHILDLIMITorg() * factor));
-		setLIFELIMITorg((int) (getLIFELIMITorg() * factor));
+		setBabyLimitBase((int) (getBabyLimitBase() * factor));
+		setChildLimitBase((int) (getChildLimitBase() * factor));
+		setLifeLimitBase((int) (getLifeLimitBase() * factor));
 		factor = Math.random() + 1;
-		setRELAXPERIODorg((int) (getRELAXPERIODorg() * factor));
-		setEXCITEPERIODorg((int) (getEXCITEPERIODorg() * factor));
-		setPREGPERIODorg((int) (getPREGPERIODorg() * factor));
-		setSLEEPPERIODorg((int) (getSLEEPPERIODorg() * factor));
-		setACTIVEPERIODorg((int) (getACTIVEPERIODorg() * factor));
-		setSameDest(GameRandom.nextInt(20) + 20);
-		setDECLINEPERIODorg((int) (getDECLINEPERIODorg() * (Math.random() + 0.5)));
-		setROBUSTNESS(GameRandom.nextInt(10) + 1);
+		setRelaxPeriodBase((int) (getRelaxPeriodBase() * factor));
+		setExcitePeriodBase((int) (getExcitePeriodBase() * factor));
+		setPregPeriodBase((int) (getPregPeriodBase() * factor));
+		setSleepPeriodBase((int) (getSleepPeriodBase() * factor));
+		setActivePeriodBase((int) (getActivePeriodBase() * factor));
+		setSameDirectionFactor(GameRandom.nextInt(20) + 20);
+		setDeclinePeriodBase((int) (getDeclinePeriodBase() * (Math.random() + 0.5)));
+		setImmunityStrength(GameRandom.nextInt(10) + 1);
 		// EYESIGHT /= 4;
 		factor = Math.random() + 0.5;
-		getSTRENGTHorg()[AgeState.ADULT.ordinal()] *= factor;
-		getSTRENGTHorg()[AgeState.CHILD.ordinal()] *= factor;
-		getSTRENGTHorg()[AgeState.BABY.ordinal()] *= factor;
+		getStrengthBase()[AgeState.ADULT.ordinal()] *= factor;
+		getStrengthBase()[AgeState.CHILD.ordinal()] *= factor;
+		getStrengthBase()[AgeState.BABY.ordinal()] *= factor;
 
 		// speed = 120;
 		speed = baseSpeed;
 	}
 
-	public int[][] getAnImageVerStateCtrlNagasi() {
-		return anImageVerStateCtrlNagasi;
+	public int[][] getImageVariantState() {
+		return imageVariantState;
 	}
 
-	public void setAnImageVerStateCtrlNagasi(int[][] anImageVerStateCtrlNagasi) {
-		this.anImageVerStateCtrlNagasi = anImageVerStateCtrlNagasi;
+	public void setImageVariantState(int[][] imageVariantState) {
+		this.imageVariantState = imageVariantState;
 	}
 
 }

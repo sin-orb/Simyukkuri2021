@@ -56,7 +56,7 @@ public class BadgeTest {
 
         assertEquals(parent.getUniqueID(), badge.getParent());
         assertEquals(BadgeRank.BRONZE, badge.getBadgeRank());
-        assertEquals(BadgeRank.BRONZE, badge.getEBadgeRank());
+        assertEquals(BadgeRank.BRONZE, badge.getBadgeRank());
         assertEquals(0, badge.getValue());
         assertEquals(0, badge.getCost());
     }
@@ -131,10 +131,10 @@ public class BadgeTest {
 
         assertEquals(BadgeRank.FAKE, badge.getBadgeRank());
 
-        badge.setEBadgeRank(BadgeRank.GOLD);
+        badge.setBadgeRank(BadgeRank.GOLD);
 
         assertEquals(BadgeRank.GOLD, badge.getBadgeRank());
-        assertEquals(BadgeRank.GOLD, badge.getEBadgeRank());
+        assertEquals(BadgeRank.GOLD, badge.getBadgeRank());
     }
 
     @Test
@@ -224,7 +224,7 @@ public class BadgeTest {
             Body parent = createParent(AgeState.CHILD);
             Badge badge = new Badge(parent, BadgeRank.FAKE);
 
-            badge.setEBadgeRank(BadgeRank.GOLD);
+            badge.setBadgeRank(BadgeRank.GOLD);
 
             assertEquals(BadgeRank.GOLD, badge.getBadgeRank());
             assertSame(Badge.getImages()[AgeState.CHILD.ordinal()][BadgeRank.GOLD.ordinal()], badge.getImage(parent));

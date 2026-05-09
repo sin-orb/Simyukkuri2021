@@ -18,7 +18,6 @@ import src.enums.Parent;
 import src.enums.PredatorType;
 import src.enums.YukkuriType;
 import src.system.BodyLayer;
-import src.util.YukkuriUtil;
 
 /**
  * ハイブリッドゆっくり。
@@ -68,8 +67,8 @@ public class HybridYukkuri extends Body {
 		nameE = "Yukkuri";
 		nameJ2 = "ゆっくり";
 		nameE2 = "Yukkuri";
-		Body mama = YukkuriUtil.getBodyInstance(getParents()[Parent.MAMA.ordinal()]);
-		Body papa = YukkuriUtil.getBodyInstance(getParents()[Parent.PAPA.ordinal()]);
+		Body mama = src.util.BodyRegistry.getBodyInstance(getParents()[Parent.MAMA.ordinal()]);
+		Body papa = src.util.BodyRegistry.getBodyInstance(getParents()[Parent.PAPA.ordinal()]);
 
 		if (mama == null && papa == null) {
 			doreiTmp = new Reimu(100, 100, 0, AgeState.BABY, null, null);
@@ -126,14 +125,14 @@ public class HybridYukkuri extends Body {
 			dorei4 = doreiTmp2;
 		}
 		nameJ = dorei.getNameJ();
-		setAnMyName(dorei.getAnMyName());
-		setAnMyNameD(dorei.getAnMyNameD());
+		setMyNames(dorei.getMyNames());
+		setMyNamesDamaged(dorei.getMyNamesDamaged());
 		nameE = dorei.getNameE();
 		nameJ2 = dorei2.getNameJ();
 		nameE2 = dorei2.getNameE();
-		setcost(dorei.getYcost());
-		getSaleValue()[0] = dorei.getSellingPrice(0);
-		getSaleValue()[1] = dorei.getSellingPrice(1);
+		setCost(dorei.getCost());
+		getSaleValues()[0] = dorei.getSellingPrice(0);
+		getSaleValues()[1] = dorei.getSellingPrice(1);
 
 		// 横
 		images[ImageCode.BODY.ordinal()] = dorei;
@@ -372,8 +371,8 @@ public class HybridYukkuri extends Body {
 	@Override
 	@Transient
 	public String getMyName() {
-		if (getAnMyName()[getBodyAgeState().ordinal()] != null) {
-			return getAnMyName()[getBodyAgeState().ordinal()];
+		if (getMyNames()[getBodyAgeState().ordinal()] != null) {
+			return getMyNames()[getBodyAgeState().ordinal()];
 		}
 		return nameJ;
 	}
@@ -381,8 +380,8 @@ public class HybridYukkuri extends Body {
 	@Override
 	@Transient
 	public String getMyNameD() {
-		if (getAnMyNameD()[getBodyAgeState().ordinal()] != null) {
-			return getAnMyNameD()[getBodyAgeState().ordinal()];
+		if (getMyNamesDamaged()[getBodyAgeState().ordinal()] != null) {
+			return getMyNamesDamaged()[getBodyAgeState().ordinal()];
 		}
 		return nameJ;
 	}
@@ -429,35 +428,35 @@ public class HybridYukkuri extends Body {
 		 * }
 		 */
 		double factor = Math.random() * 2 + 1;
-		getHUNGRYLIMITorg()[AgeState.ADULT.ordinal()] *= factor;
-		getHUNGRYLIMITorg()[AgeState.CHILD.ordinal()] *= factor;
-		getHUNGRYLIMITorg()[AgeState.BABY.ordinal()] *= factor;
+		getHungryLimitBase()[AgeState.ADULT.ordinal()] *= factor;
+		getHungryLimitBase()[AgeState.CHILD.ordinal()] *= factor;
+		getHungryLimitBase()[AgeState.BABY.ordinal()] *= factor;
 		factor = Math.random() * 2 + 1;
-		getSHITLIMITorg()[AgeState.ADULT.ordinal()] *= factor;
-		getSHITLIMITorg()[AgeState.CHILD.ordinal()] *= factor;
-		getSHITLIMITorg()[AgeState.BABY.ordinal()] *= factor;
+		getShitLimitBase()[AgeState.ADULT.ordinal()] *= factor;
+		getShitLimitBase()[AgeState.CHILD.ordinal()] *= factor;
+		getShitLimitBase()[AgeState.BABY.ordinal()] *= factor;
 		factor = Math.random() + 0.5;
-		getDAMAGELIMITorg()[AgeState.ADULT.ordinal()] *= factor;
-		getDAMAGELIMITorg()[AgeState.CHILD.ordinal()] *= factor;
-		getDAMAGELIMITorg()[AgeState.BABY.ordinal()] *= factor;
+		getDamageLimitBase()[AgeState.ADULT.ordinal()] *= factor;
+		getDamageLimitBase()[AgeState.CHILD.ordinal()] *= factor;
+		getDamageLimitBase()[AgeState.BABY.ordinal()] *= factor;
 		factor = Math.random() + 0.5;
-		setBABYLIMITorg((int) (getBABYLIMITorg() * factor));
-		setCHILDLIMITorg((int) (getCHILDLIMITorg() * factor));
-		setLIFELIMITorg((int) (getLIFELIMITorg() * factor));
+		setBabyLimitBase((int) (getBabyLimitBase() * factor));
+		setChildLimitBase((int) (getChildLimitBase() * factor));
+		setLifeLimitBase((int) (getLifeLimitBase() * factor));
 		factor = Math.random() + 1;
-		setRELAXPERIODorg((int) (getRELAXPERIODorg() * factor));
-		setEXCITEPERIODorg((int) (getEXCITEPERIODorg() * factor));
-		setPREGPERIODorg((int) (getPREGPERIODorg() * factor));
-		setSLEEPPERIODorg((int) (getSLEEPPERIODorg() * factor));
-		setACTIVEPERIODorg((int) (getACTIVEPERIODorg() * factor));
-		setSameDest(GameRandom.nextInt(20) + 20);
-		setDECLINEPERIODorg((int) (getDECLINEPERIODorg() * (Math.random() + 0.5)));
-		setROBUSTNESS(GameRandom.nextInt(10) + 1);
+		setRelaxPeriodBase((int) (getRelaxPeriodBase() * factor));
+		setExcitePeriodBase((int) (getExcitePeriodBase() * factor));
+		setPregPeriodBase((int) (getPregPeriodBase() * factor));
+		setSleepPeriodBase((int) (getSleepPeriodBase() * factor));
+		setActivePeriodBase((int) (getActivePeriodBase() * factor));
+		setSameDirectionFactor(GameRandom.nextInt(20) + 20);
+		setDeclinePeriodBase((int) (getDeclinePeriodBase() * (Math.random() + 0.5)));
+		setImmunityStrength(GameRandom.nextInt(10) + 1);
 		// EYESIGHT /= 4;
 		factor = Math.random() + 0.5;
-		getSTRENGTHorg()[AgeState.ADULT.ordinal()] *= factor;
-		getSTRENGTHorg()[AgeState.CHILD.ordinal()] *= factor;
-		getSTRENGTHorg()[AgeState.BABY.ordinal()] *= factor;
+		getStrengthBase()[AgeState.ADULT.ordinal()] *= factor;
+		getStrengthBase()[AgeState.CHILD.ordinal()] *= factor;
+		getStrengthBase()[AgeState.BABY.ordinal()] *= factor;
 		images = new Body[ImageCode.values().length];
 		try {
 			loadImages_Hyblid();

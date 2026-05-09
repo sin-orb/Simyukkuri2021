@@ -180,7 +180,7 @@ class FuneralEventTest {
     void testUpdate_bodyNYD_returnsAbort() {
         Body from = createBody();
         Body b = createBody();
-        b.seteCoreAnkoState(src.enums.CoreAnkoState.NonYukkuriDisease);
+        b.setCoreAnkoState(src.enums.CoreAnkoState.NonYukkuriDisease);
         FuneralEvent event = new FuneralEvent(from, null, null, 10);
         assertEquals(src.base.EventPacket.UpdateState.ABORT, event.update(b));
     }
@@ -242,7 +242,7 @@ class FuneralEventTest {
         Body from = createBody();
         FuneralEvent event = new FuneralEvent(from, null, null, 10);
         from.setCurrentEvent(event);
-        event.nFromWaitCount = 2001;
+        event.fromWaitCount = 2001;
         assertEquals(src.base.EventPacket.UpdateState.ABORT, event.update(from));
     }
 
@@ -275,7 +275,7 @@ class FuneralEventTest {
         Body from = createBody();
         Body child = createBody();
         FuneralEvent event = new FuneralEvent(from, null, null, 10);
-        event.bActionFlag = true;
+        event.actionFlag = true;
         from.setCurrentEvent(event);
         child.setCurrentEvent(event);
         event.setState(FuneralEvent.STATE.START);
@@ -287,7 +287,7 @@ class FuneralEventTest {
         Body from = createBody();
         Body child = createBody();
         FuneralEvent event = new FuneralEvent(from, null, null, 10);
-        event.bActionFlag = true;
+        event.actionFlag = true;
         from.setCurrentEvent(event);
         child.setCurrentEvent(event);
         event.setState(FuneralEvent.STATE.INTRODUCE);
@@ -299,7 +299,7 @@ class FuneralEventTest {
         Body from = createBody();
         Body child = createBody();
         FuneralEvent event = new FuneralEvent(from, null, null, 10);
-        event.bActionFlag = false; // !bActionFlag in child SING case
+        event.actionFlag = false; // !actionFlag in child SING case
         from.setCurrentEvent(event);
         child.setCurrentEvent(event);
         event.setState(FuneralEvent.STATE.SING);
@@ -311,7 +311,7 @@ class FuneralEventTest {
         Body from = createBody();
         Body child = createBody();
         FuneralEvent event = new FuneralEvent(from, null, null, 10);
-        event.bActionFlag = true;
+        event.actionFlag = true;
         from.setCurrentEvent(event);
         child.setCurrentEvent(event);
         event.setState(FuneralEvent.STATE.TALK);
@@ -323,7 +323,7 @@ class FuneralEventTest {
         Body from = createBody();
         Body child = createBody();
         FuneralEvent event = new FuneralEvent(from, null, null, 10);
-        event.bActionFlag = true;
+        event.actionFlag = true;
         from.setCurrentEvent(event);
         child.setCurrentEvent(event);
         event.setState(FuneralEvent.STATE.GOODBYE);
@@ -411,7 +411,7 @@ class FuneralEventTest {
             child.setAgeState(AgeState.BABY);
             child.setHappiness(Happiness.SAD);
             child.setToFood(true);
-            child.setMoveTarget(from.getObjId());
+            child.setMoveTargetId(from.getObjId());
 
             FuneralEvent event = new FuneralEvent(from, null, null, 10);
 
@@ -434,7 +434,7 @@ class FuneralEventTest {
             from.setCurrentEvent(event);
             child.setCurrentEvent(event);
             event.setState(FuneralEvent.STATE.FIND);
-            child.setInLastActionTime(0);
+            child.setLastActionTime(0);
             int memoriesBefore = child.getMemories();
 
             assertNull(event.update(child));
@@ -457,14 +457,14 @@ class FuneralEventTest {
             from.setCurrentEvent(event);
             child.setCurrentEvent(event);
             event.setState(FuneralEvent.STATE.GOODBYE);
-            event.bActionFlag = false;
-            from.setInLastActionTime(0);
+            event.actionFlag = false;
+            from.setLastActionTime(0);
             int memoriesBefore = from.getMemories();
 
             assertTrue(deceased.hasOkazari());
             assertNull(event.update(from));
             assertFalse(deceased.hasOkazari());
-            assertTrue(event.bActionFlag);
+            assertTrue(event.actionFlag);
             assertTrue(from.getMemories() > memoriesBefore,
                     "from goodbye branch should increase memories after removing the deceased okazari");
         }
@@ -479,8 +479,8 @@ class FuneralEventTest {
             from.setCurrentEvent(event);
             child.setCurrentEvent(event);
             event.setState(FuneralEvent.STATE.GOODBYE);
-            event.bActionFlag = true;
-            child.setInLastActionTime(0);
+            event.actionFlag = true;
+            child.setLastActionTime(0);
             int memoriesBefore = child.getMemories();
 
             java.util.Random original = SimYukkuri.RND;
@@ -589,7 +589,7 @@ class FuneralEventTest {
         Body child = createBody();
         child.setAttitude(Attitude.SUPER_SHITHEAD); // isRude() = true
         FuneralEvent event = new FuneralEvent(from, null, null, 10);
-        event.bActionFlag = true;
+        event.actionFlag = true;
         from.setCurrentEvent(event);
         child.setCurrentEvent(event);
         event.setState(FuneralEvent.STATE.GOODBYE);

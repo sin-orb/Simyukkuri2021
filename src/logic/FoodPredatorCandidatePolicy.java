@@ -19,105 +19,114 @@ public final class FoodPredatorCandidatePolicy {
 	/**
 	 * live body を候補として評価する.
 	 */
-	public static BodyCandidateResult considerLiveBody(Body b, Body d, int minDistance, int minDistance2, int size,
-			int wallMode, Obj found, Obj found2) {
-		if (b.getIntelligence() != Intelligence.FOOL && b.findSick(d) && !b.isTooHungry()) {
-			return new BodyCandidateResult(found, found2, minDistance, minDistance2, size);
+	public static BodyCandidateResult considerLiveBody(Body hunter, Body candidate, int nearestLiveDistance,
+			int nearestOtherDistance, int candidateSize, int wallMode, Obj nearestLiveObject, Obj nearestOtherObject) {
+		if (hunter.getIntelligence() != Intelligence.FOOL && hunter.findSick(candidate) && !hunter.isTooHungry()) {
+			return new BodyCandidateResult(nearestLiveObject, nearestOtherObject, nearestLiveDistance,
+					nearestOtherDistance, candidateSize);
 		}
-		if (d.isPredatorType()) {
-			return new BodyCandidateResult(found, found2, minDistance, minDistance2, size);
+		if (candidate.isPredatorType()) {
+			return new BodyCandidateResult(nearestLiveObject, nearestOtherObject, nearestLiveDistance,
+					nearestOtherDistance, candidateSize);
 		}
-		if (b.isFamily(d)) {
-			return new BodyCandidateResult(found, found2, minDistance, minDistance2, size);
+		if (hunter.isFamily(candidate)) {
+			return new BodyCandidateResult(nearestLiveObject, nearestOtherObject, nearestLiveDistance,
+					nearestOtherDistance, candidateSize);
 		}
-		if (!b.canflyCheck() && d.getZ() != 0) {
-			return new BodyCandidateResult(found, found2, minDistance, minDistance2, size);
+		if (!hunter.canflyCheck() && candidate.getZ() != 0) {
+			return new BodyCandidateResult(nearestLiveObject, nearestOtherObject, nearestLiveDistance,
+					nearestOtherDistance, candidateSize);
 		}
-		if (d.isServant() && b.isPredator()) {
-			return new BodyCandidateResult(found, found2, minDistance, minDistance2, size);
+		if (candidate.isServantOf(hunter.getType()) && hunter.isPredator()) {
+			return new BodyCandidateResult(nearestLiveObject, nearestOtherObject, nearestLiveDistance,
+					nearestOtherDistance, candidateSize);
 		}
 
-		int distance = Translate.distance(b.getX(), b.getY(), d.getX(), d.getY());
-		if (d.getBodyAgeState().ordinal() < b.getBodyAgeState().ordinal()) {
-			if (minDistance > distance || d.getBodyAgeState().ordinal() < size) {
-				if (Barrier.acrossBarrier(b.getX(), b.getY(), d.getX(), d.getY(),
+		int distance = Translate.distance(hunter.getX(), hunter.getY(), candidate.getX(), candidate.getY());
+		if (candidate.getBodyAgeState().ordinal() < hunter.getBodyAgeState().ordinal()) {
+			if (nearestLiveDistance > distance || candidate.getBodyAgeState().ordinal() < candidateSize) {
+				if (Barrier.acrossBarrier(hunter.getX(), hunter.getY(), candidate.getX(), candidate.getY(),
 						Barrier.MAP_BODY[wallMode] + Barrier.BARRIER_KEKKAI)) {
-					return new BodyCandidateResult(found, found2, minDistance, minDistance2, size);
+					return new BodyCandidateResult(nearestLiveObject, nearestOtherObject, nearestLiveDistance,
+							nearestOtherDistance, candidateSize);
 				}
-				found = d;
-				minDistance = distance;
-				size = d.getBodyAgeState().ordinal();
+				nearestLiveObject = candidate;
+				nearestLiveDistance = distance;
+				candidateSize = candidate.getBodyAgeState().ordinal();
 			}
 		} else {
-			if (minDistance2 > distance) {
-				if (Barrier.acrossBarrier(b.getX(), b.getY(), d.getX(), d.getY(),
+			if (nearestOtherDistance > distance) {
+				if (Barrier.acrossBarrier(hunter.getX(), hunter.getY(), candidate.getX(), candidate.getY(),
 						Barrier.MAP_BODY[wallMode] + Barrier.BARRIER_KEKKAI)) {
-					return new BodyCandidateResult(found, found2, minDistance, minDistance2, size);
+					return new BodyCandidateResult(nearestLiveObject, nearestOtherObject, nearestLiveDistance,
+							nearestOtherDistance, candidateSize);
 				}
-				found2 = d;
-				minDistance2 = distance;
+				nearestOtherObject = candidate;
+				nearestOtherDistance = distance;
 			}
 		}
-		return new BodyCandidateResult(found, found2, minDistance, minDistance2, size);
+		return new BodyCandidateResult(nearestLiveObject, nearestOtherObject, nearestLiveDistance,
+				nearestOtherDistance, candidateSize);
 	}
 
 	/**
 	 * 死体候補を評価する.
 	 */
-	public static BodyCandidateResult considerDeadBody(Body b, Body d, int minDistance3, int wallMode, Obj found3) {
-		if (!b.isRude() && d.hasOkazari() && b.isFamily(d)) {
-			return new BodyCandidateResult(null, null, 0, 0, 0, found3, minDistance3);
+	public static BodyCandidateResult considerDeadBody(Body hunter, Body candidate, int nearestDeadDistance, int wallMode,
+			Obj nearestDeadObject) {
+		if (!hunter.isRude() && candidate.hasOkazari() && hunter.isFamily(candidate)) {
+			return new BodyCandidateResult(null, null, 0, 0, 0, nearestDeadObject, nearestDeadDistance);
 		}
-		int distance = Translate.distance(b.getX(), b.getY(), d.getX(), d.getY());
-		if (minDistance3 > distance) {
-			if (Barrier.acrossBarrier(b.getX(), b.getY(), d.getX(), d.getY(),
+		int distance = Translate.distance(hunter.getX(), hunter.getY(), candidate.getX(), candidate.getY());
+		if (nearestDeadDistance > distance) {
+			if (Barrier.acrossBarrier(hunter.getX(), hunter.getY(), candidate.getX(), candidate.getY(),
 					Barrier.MAP_BODY[wallMode] + Barrier.BARRIER_KEKKAI)) {
-				return new BodyCandidateResult(null, null, 0, 0, 0, found3, minDistance3);
+				return new BodyCandidateResult(null, null, 0, 0, 0, nearestDeadObject, nearestDeadDistance);
 			}
-			found3 = d;
-			minDistance3 = distance;
+			nearestDeadObject = candidate;
+			nearestDeadDistance = distance;
 		}
-		return new BodyCandidateResult(null, null, 0, 0, 0, found3, minDistance3);
+		return new BodyCandidateResult(null, null, 0, 0, 0, nearestDeadObject, nearestDeadDistance);
 	}
 
 	public static final class BodyCandidateResult {
-		private final Obj found;
-		private final Obj found2;
-		private final int minDistance;
-		private final int minDistance2;
+		private final Obj nearestLiveObject;
+		private final Obj nearestOtherObject;
+		private final int nearestLiveDistance;
+		private final int nearestOtherDistance;
 		private final int size;
-		private final Obj found3;
-		private final int minDistance3;
+		private final Obj nearestDeadObject;
+		private final int nearestDeadDistance;
 
-		BodyCandidateResult(Obj found, Obj found2, int minDistance, int minDistance2, int size) {
-			this(found, found2, minDistance, minDistance2, size, null, 0);
+		BodyCandidateResult(Obj nearestLiveObject, Obj nearestOtherObject, int nearestLiveDistance, int nearestOtherDistance, int size) {
+			this(nearestLiveObject, nearestOtherObject, nearestLiveDistance, nearestOtherDistance, size, null, 0);
 		}
 
-		BodyCandidateResult(Obj found, Obj found2, int minDistance, int minDistance2, int size, Obj found3,
-				int minDistance3) {
-			this.found = found;
-			this.found2 = found2;
-			this.minDistance = minDistance;
-			this.minDistance2 = minDistance2;
+		BodyCandidateResult(Obj nearestLiveObject, Obj nearestOtherObject, int nearestLiveDistance, int nearestOtherDistance, int size, Obj nearestDeadObject,
+				int nearestDeadDistance) {
+			this.nearestLiveObject = nearestLiveObject;
+			this.nearestOtherObject = nearestOtherObject;
+			this.nearestLiveDistance = nearestLiveDistance;
+			this.nearestOtherDistance = nearestOtherDistance;
 			this.size = size;
-			this.found3 = found3;
-			this.minDistance3 = minDistance3;
+			this.nearestDeadObject = nearestDeadObject;
+			this.nearestDeadDistance = nearestDeadDistance;
 		}
 
 		public Obj getFound() {
-			return found;
+			return nearestLiveObject;
 		}
 
 		public Obj getFound2() {
-			return found2;
+			return nearestOtherObject;
 		}
 
 		public int getMinDistance() {
-			return minDistance;
+			return nearestLiveDistance;
 		}
 
 		public int getMinDistance2() {
-			return minDistance2;
+			return nearestOtherDistance;
 		}
 
 		public int getSize() {
@@ -125,11 +134,11 @@ public final class FoodPredatorCandidatePolicy {
 		}
 
 		public Obj getFound3() {
-			return found3;
+			return nearestDeadObject;
 		}
 
 		public int getMinDistance3() {
-			return minDistance3;
+			return nearestDeadDistance;
 		}
 	}
 }

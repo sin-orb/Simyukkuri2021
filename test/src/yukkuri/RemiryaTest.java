@@ -72,18 +72,18 @@ public class RemiryaTest {
         // Remirya should be a predator
         assertNotNull(remirya.getPredatorType());
 
-        // ROBUSTNESS should be: nextInt(10) + 1 = min(6, 9) + 1 = 6 + 1 = 7
-        assertEquals(7, remirya.getROBUSTNESS());
+        // Robustness should be: nextInt(10) + 1 = min(6, 9) + 1 = 6 + 1 = 7
+        assertEquals(7, remirya.getImmunityStrength());
     }
 
     @Test
     public void testRemiryaNagasiMethods() {
         Remirya remirya = new Remirya();
-        assertNotNull(remirya.getAnImageVerStateCtrlNagasi());
+        assertNotNull(remirya.getImageVariantState());
 
         int[][] testArray = new int[10][2];
-        remirya.setAnImageVerStateCtrlNagasi(testArray);
-        assertSame(testArray, remirya.getAnImageVerStateCtrlNagasi());
+        remirya.setImageVariantState(testArray);
+        assertSame(testArray, remirya.getImageVariantState());
     }
 
     @Test

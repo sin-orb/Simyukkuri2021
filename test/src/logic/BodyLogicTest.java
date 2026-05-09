@@ -29,7 +29,7 @@ import src.enums.Happiness;
 import src.enums.ImageCode;
 import src.enums.PanicType;
 import src.enums.PublicRank;
-import src.logic.BodyLogic.eActionGo;
+import src.logic.BodyLogic.ActionGo;
 import src.util.WorldTestHelper;
 import src.util.GameRandom;
 import src.event.KillPredeatorEvent;
@@ -104,15 +104,15 @@ class BodyLogicTest {
 
             src.game.Shit carried = new src.game.Shit();
             SimYukkuri.world.getCurrentMap().getTakenOutShit().put(carried.getObjId(), carried);
-            me.getTakeoutItem().put(TakeoutItemType.SHIT, carried.getObjId());
+            me.getCarryItems().put(TakeoutItemType.SHIT, carried.getObjId());
 
             assertTrue(BodyLogic.checkPartner(me));
-            assertNull(me.getTakeoutItem(TakeoutItemType.SHIT));
+            assertNull(me.getCarryItem(TakeoutItemType.SHIT));
             assertTrue(me.isInOutTakeoutItem(), "dropping carried shit should mark in/out takeout animation state");
             assertEquals(Where.ON_FLOOR, carried.getWhere(), "dropped shit should be returned to the floor");
             assertTrue(me.isToSukkiri(), "exciting partner branch should move toward sukkiri");
             assertTrue(me.isTargetBind(), "move-to-sukkiri branch should bind the target");
-            assertEquals(you.getObjId(), me.getMoveTarget());
+            assertEquals(you.getObjId(), me.getMoveTargetId());
         }
 
         @Test
@@ -207,7 +207,7 @@ class BodyLogicTest {
             me.setStress(300);
             you.setStress(300);
             me.setToBody(true);
-            me.setMoveTarget(you.getObjId());
+            me.setMoveTargetId(you.getObjId());
 
             assertTrue(BodyLogic.checkPartner(me));
 
@@ -236,13 +236,13 @@ class BodyLogicTest {
             WorldTestHelper.setParents(you, -1, me.getUniqueID());
             me.setHappiness(Happiness.HAPPY);
             you.setHappiness(Happiness.HAPPY);
-            you.setbSurisuriFromPlayer(true);
+            you.setSurisuriFromPlayer(true);
             SimYukkuri.RND = new ConstState(0);
 
             assertTrue(BodyLogic.checkPartner(me));
 
             assertTrue(me.isToBody(), "surisuri-from-player mother branch should start moveToBody");
-            assertEquals(you.getObjId(), me.getMoveTarget(), "child should become the move target");
+            assertEquals(you.getObjId(), me.getMoveTargetId(), "child should become the move target");
             assertFalse(me.isTargetBind(), "surisuri-from-player GO branch should approach without binding");
             assertNull(me.getCurrentEvent(), "surisuri-from-player GO branch should not start an event");
         }
@@ -267,7 +267,7 @@ class BodyLogicTest {
 
             assertTrue(BodyLogic.checkPartner(me));
             assertTrue(me.isToSteal(), "rude body without okazari should enter steal mode");
-            assertEquals(you.getObjId(), me.getMoveTarget(), "decorated target should become move target");
+            assertEquals(you.getObjId(), me.getMoveTargetId(), "decorated target should become move target");
             assertFalse(me.isTargetBind(), "steal approach should not bind the target");
         }
 
@@ -287,7 +287,7 @@ class BodyLogicTest {
             you.setX(130);
             you.setY(100);
             you.setSleeping(true);
-            you.setbPheromone(true);
+            you.setPheromone(true);
             me.takeOkazari(false);
             me.setAttitude(Attitude.SHITHEAD);
             me.setAgeState(AgeState.ADULT);
@@ -300,7 +300,7 @@ class BodyLogicTest {
             assertTrue(BodyLogic.checkPartner(me));
 
             assertTrue(me.isToSteal(), "pheromone-decorated target should still enter steal mode");
-            assertEquals(you.getObjId(), me.getMoveTarget(),
+            assertEquals(you.getObjId(), me.getMoveTargetId(),
                     "pheromone-decorated target should override a closer non-pheromone body");
             assertFalse(me.isTargetBind(), "steal approach chosen through pheromone should remain unbound");
             assertNull(me.getCurrentEvent(), "pheromone-decorated steal branch should not start an event");
@@ -496,7 +496,7 @@ class BodyLogicTest {
             me.setBodySpr(makeSprites(1, 1));
             you.setBodySpr(makeSprites(1, 1));
             me.setToBody(true);
-            me.setMoveTarget(you.getObjId());
+            me.setMoveTargetId(you.getObjId());
             you.setRemoved(true);
 
             assertFalse(BodyLogic.doActionOther(you, me));
@@ -511,7 +511,7 @@ class BodyLogicTest {
             me.setBodySpr(makeSprites(1, 1));
             you.setBodySpr(makeSprites(1, 1));
             me.setToBody(true);
-            me.setMoveTarget(you.getObjId());
+            me.setMoveTargetId(you.getObjId());
             you.setZ(40);
 
             assertFalse(BodyLogic.doActionOther(you, me));
@@ -596,7 +596,7 @@ class BodyLogicTest {
             you.setPublicRank(PublicRank.NONE);
             me.setAgeState(AgeState.CHILD);
             you.setAgeState(AgeState.BABY);
-            WorldTestHelper.setDamage(you, you.getDAMAGELIMITorg()[AgeState.BABY.ordinal()] / 2 + 1);
+            WorldTestHelper.setDamage(you, you.getDamageLimitBase()[AgeState.BABY.ordinal()] / 2 + 1);
             Body sharedParent = WorldTestHelper.createBody();
             SimYukkuri.world.getCurrentMap().getBody().put(sharedParent.getUniqueID(), sharedParent);
             WorldTestHelper.setParents(me, -1, sharedParent.getUniqueID());
@@ -635,7 +635,7 @@ class BodyLogicTest {
             assertTrue(BodyLogic.checkPartner(me));
 
             assertTrue(me.isToBody(), "dirty child branch should switch to move-to-body mode");
-            assertEquals(you.getObjId(), me.getMoveTarget(), "dirty child should become the move target");
+            assertEquals(you.getObjId(), me.getMoveTargetId(), "dirty child should become the move target");
             assertTrue(me.isTargetBind(), "dirty child care branch should bind the target");
         }
 
@@ -652,13 +652,13 @@ class BodyLogicTest {
             me.setPublicRank(PublicRank.NONE);
             you.setPublicRank(PublicRank.NONE);
             WorldTestHelper.setParents(you, -1, me.getUniqueID());
-            you.setbNeedled(true);
+            you.setNeedled(true);
             SimYukkuri.RND = new ConstState(0);
 
             assertTrue(BodyLogic.checkPartner(me));
 
             assertTrue(me.isToBody(), "needled child branch should switch to move-to-body mode");
-            assertEquals(you.getObjId(), me.getMoveTarget(), "needled child should become the move target");
+            assertEquals(you.getObjId(), me.getMoveTargetId(), "needled child should become the move target");
             assertFalse(me.isTargetBind(), "needled child guriguri branch should not bind the target");
         }
 
@@ -710,7 +710,7 @@ class BodyLogicTest {
             assertTrue(BodyLogic.checkPartner(me));
 
             assertTrue(me.isToBody(), "partner random approach should switch to move-to-body mode");
-            assertEquals(you.getObjId(), me.getMoveTarget(), "partner should become the move target");
+            assertEquals(you.getObjId(), me.getMoveTargetId(), "partner should become the move target");
             assertFalse(me.isTargetBind(), "partner random approach should not bind the target");
         }
 
@@ -734,7 +734,7 @@ class BodyLogicTest {
             assertTrue(BodyLogic.checkPartner(me));
 
             assertTrue(me.isToBody(), "random child approach should switch to move-to-body mode");
-            assertEquals(you.getObjId(), me.getMoveTarget(), "parent should become the move target");
+            assertEquals(you.getObjId(), me.getMoveTargetId(), "parent should become the move target");
             assertFalse(me.isTargetBind(), "random child approach should not bind the target");
         }
 
@@ -758,7 +758,7 @@ class BodyLogicTest {
             assertTrue(BodyLogic.checkPartner(me));
 
             assertTrue(me.isToBody(), "random family approach should switch to move-to-body mode");
-            assertEquals(you.getObjId(), me.getMoveTarget(), "family child should become the move target");
+            assertEquals(you.getObjId(), me.getMoveTargetId(), "family child should become the move target");
             assertFalse(me.isTargetBind(), "random family approach should not bind the target");
         }
 
@@ -776,13 +776,13 @@ class BodyLogicTest {
             you.setPublicRank(PublicRank.NONE);
             me.setPartner(you.getUniqueID());
             you.setPartner(me.getUniqueID());
-            you.setbNeedled(true);
+            you.setNeedled(true);
             SimYukkuri.RND = new ConstState(0);
 
             assertTrue(BodyLogic.checkPartner(me));
 
             assertTrue(me.isToBody(), "needled partner branch should switch to move-to-body mode");
-            assertEquals(you.getObjId(), me.getMoveTarget(), "needled partner should become the move target");
+            assertEquals(you.getObjId(), me.getMoveTargetId(), "needled partner should become the move target");
             assertFalse(me.isTargetBind(), "needled partner approach should not bind the target");
         }
 
@@ -800,7 +800,7 @@ class BodyLogicTest {
             you.setPublicRank(PublicRank.NONE);
             me.setPartner(you.getUniqueID());
             you.setPartner(me.getUniqueID());
-            you.setbNeedled(true);
+            you.setNeedled(true);
             me.setStress(0);
             you.setStress(0);
 
@@ -828,7 +828,7 @@ class BodyLogicTest {
             me.setPublicRank(PublicRank.NONE);
             you.setPublicRank(PublicRank.NONE);
             WorldTestHelper.setParents(you, me.getUniqueID(), -1);
-            you.setbNeedled(true);
+            you.setNeedled(true);
             me.setStress(0);
             you.setStress(0);
 
@@ -987,7 +987,7 @@ class BodyLogicTest {
             assertTrue(BodyLogic.checkPartner(me));
 
             assertTrue(me.isToBody(), "dead child branch should switch to move-to-body mode");
-            assertEquals(you.getObjId(), me.getMoveTarget(), "dead child should become the move target");
+            assertEquals(you.getObjId(), me.getMoveTargetId(), "dead child should become the move target");
             assertFalse(me.isTargetBind(), "corpse mourning branch should not bind the target");
         }
 
@@ -1011,7 +1011,7 @@ class BodyLogicTest {
             assertTrue(BodyLogic.checkPartner(me));
 
             assertTrue(me.isToBody(), "dead partner branch should switch to move-to-body mode");
-            assertEquals(you.getObjId(), me.getMoveTarget(), "dead partner should become the move target");
+            assertEquals(you.getObjId(), me.getMoveTargetId(), "dead partner should become the move target");
             assertFalse(me.isTargetBind(), "corpse mourning branch should not bind the target");
         }
 
@@ -1031,11 +1031,11 @@ class BodyLogicTest {
             you.setHungry(0);
             Food food = new Food(100, 100, Food.FoodType.FOOD.ordinal());
             SimYukkuri.world.getCurrentMap().getFood().put(food.getObjId(), food);
-            me.setTakeoutItem(TakeoutItemType.FOOD, food);
+            me.setCarryItem(TakeoutItemType.FOOD, food);
 
             assertTrue(BodyLogic.doActionOther(you, me));
 
-            assertNull(me.getTakeoutItem(TakeoutItemType.FOOD), "parent should release carried food for the hungry child");
+            assertNull(me.getCarryItem(TakeoutItemType.FOOD), "parent should release carried food for the hungry child");
             assertTrue(me.isInOutTakeoutItem(), "dropTakeoutItem branch should mark in/out takeout animation state");
             assertEquals(Where.ON_FLOOR, food.getWhere(), "dropped food should be returned to the floor");
         }
@@ -1173,10 +1173,10 @@ class BodyLogicTest {
             you.setPartner(me.getUniqueID());
             me.setHappiness(Happiness.HAPPY);
             you.setHappiness(Happiness.VERY_HAPPY);
-            you.setbSurisuriFromPlayer(true);
+            you.setSurisuriFromPlayer(true);
             SimYukkuri.RND = new ConstState(0);
 
-            assertEquals(eActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you));
+            assertEquals(ActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you));
 
             assertEquals(Happiness.HAPPY, me.getHappiness(), "glad-about-partner branch should leave the actor happy");
             assertTrue(me.isStaying(), "glad-about-partner branch should stop the actor");
@@ -1195,10 +1195,10 @@ class BodyLogicTest {
             me.setAttitude(Attitude.SHITHEAD);
             me.setHappiness(Happiness.VERY_SAD);
             you.setHappiness(Happiness.VERY_HAPPY);
-            you.setbSurisuriFromPlayer(true);
+            you.setSurisuriFromPlayer(true);
             SimYukkuri.RND = new ConstState(0);
 
-            assertEquals(eActionGo.WAIT, BodyLogic.checkActionSurisuriFromPlayer(me, you));
+            assertEquals(ActionGo.WAIT, BodyLogic.checkActionSurisuriFromPlayer(me, you));
 
             assertEquals(Happiness.VERY_SAD, me.getHappiness(),
                     "envy-angry partner branch should leave the actor very sad");
@@ -1216,11 +1216,11 @@ class BodyLogicTest {
             me.setHappiness(Happiness.AVERAGE);
             you.setHappiness(Happiness.VERY_SAD);
             WorldTestHelper.setParents(you, -1, me.getUniqueID());
-            WorldTestHelper.setDamage(you, you.getDAMAGELIMITorg()[AgeState.ADULT.ordinal()] / 2 + 1);
-            you.setbSurisuriFromPlayer(true);
+            WorldTestHelper.setDamage(you, you.getDamageLimitBase()[AgeState.ADULT.ordinal()] / 2 + 1);
+            you.setSurisuriFromPlayer(true);
             SimYukkuri.RND = new ConstState(0);
 
-            assertEquals(eActionGo.WAIT, BodyLogic.checkActionSurisuriFromPlayer(me, you));
+            assertEquals(ActionGo.WAIT, BodyLogic.checkActionSurisuriFromPlayer(me, you));
 
             assertEquals(Happiness.SAD, me.getHappiness(), "fear-only branch should make the actor sad");
             assertTrue(me.isStaying(), "fear-only branch should stop the actor");
@@ -1238,10 +1238,10 @@ class BodyLogicTest {
             you.setPartner(-1);
             me.setHappiness(Happiness.VERY_SAD);
             you.setHappiness(Happiness.VERY_SAD);
-            you.setbSurisuriFromPlayer(true);
+            you.setSurisuriFromPlayer(true);
             SimYukkuri.RND = new ConstState(0);
 
-            assertEquals(eActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you));
+            assertEquals(ActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you));
 
             assertEquals(Happiness.VERY_SAD, me.getHappiness(),
                     "mercy-about-other branch should leave the actor very sad");
@@ -1260,10 +1260,10 @@ class BodyLogicTest {
             you.setPartner(me.getUniqueID());
             me.setHappiness(Happiness.VERY_HAPPY);
             you.setHappiness(Happiness.VERY_SAD);
-            you.setbSurisuriFromPlayer(true);
+            you.setSurisuriFromPlayer(true);
             SimYukkuri.RND = new ConstState(0);
 
-            assertEquals(eActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you));
+            assertEquals(ActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you));
 
             assertEquals(Happiness.SAD, me.getHappiness(),
                     "concern-about-partner branch should make the actor sad");
@@ -1281,11 +1281,11 @@ class BodyLogicTest {
             me.setHappiness(Happiness.HAPPY);
             you.setHappiness(Happiness.VERY_SAD);
             WorldTestHelper.setParents(you, -1, me.getUniqueID());
-            WorldTestHelper.setDamage(you, you.getDAMAGELIMITorg()[AgeState.ADULT.ordinal()] / 2 + 1);
-            you.setbSurisuriFromPlayer(true);
+            WorldTestHelper.setDamage(you, you.getDamageLimitBase()[AgeState.ADULT.ordinal()] / 2 + 1);
+            you.setSurisuriFromPlayer(true);
             SimYukkuri.RND = new ConstState(0);
 
-            assertEquals(eActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you));
+            assertEquals(ActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you));
 
             assertEquals(Happiness.VERY_SAD, me.getHappiness(),
                     "concern-about-child with pain branch should make the actor very sad");
@@ -1303,10 +1303,10 @@ class BodyLogicTest {
             me.setHappiness(Happiness.AVERAGE);
             you.setHappiness(Happiness.VERY_HAPPY);
             WorldTestHelper.setParents(you, -1, me.getUniqueID());
-            you.setbSurisuriFromPlayer(true);
+            you.setSurisuriFromPlayer(true);
             SimYukkuri.RND = new ConstState(0);
 
-            assertEquals(eActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you));
+            assertEquals(ActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you));
 
             assertEquals(Happiness.HAPPY, me.getHappiness(),
                     "glad-about-child branch should make the actor happy");
@@ -1324,10 +1324,10 @@ class BodyLogicTest {
             me.setHappiness(Happiness.AVERAGE);
             you.setHappiness(Happiness.VERY_HAPPY);
             WorldTestHelper.setParents(you, -1, me.getUniqueID());
-            you.setbSurisuriFromPlayer(true);
+            you.setSurisuriFromPlayer(true);
             SimYukkuri.RND = new ConstState(0);
 
-            assertEquals(eActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you));
+            assertEquals(ActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you));
 
             assertEquals(Happiness.HAPPY, me.getHappiness(),
                     "glad-about-mother branch should make the actor happy");
@@ -1345,10 +1345,10 @@ class BodyLogicTest {
             me.setHappiness(Happiness.HAPPY);
             you.setHappiness(Happiness.HAPPY);
             WorldTestHelper.setParents(you, me.getUniqueID(), -1);
-            you.setbSurisuriFromPlayer(true);
+            you.setSurisuriFromPlayer(true);
             SimYukkuri.RND = new ConstState(0);
 
-            assertEquals(eActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you));
+            assertEquals(ActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you));
 
             assertEquals(Happiness.HAPPY, me.getHappiness(),
                     "glad-about-father branch should keep the actor happy");
@@ -1366,11 +1366,11 @@ class BodyLogicTest {
             me.setHappiness(Happiness.HAPPY);
             you.setHappiness(Happiness.VERY_SAD);
             WorldTestHelper.setParents(you, me.getUniqueID(), -1);
-            WorldTestHelper.setDamage(you, you.getDAMAGELIMITorg()[AgeState.BABY.ordinal()] / 2 + 1);
-            you.setbSurisuriFromPlayer(true);
+            WorldTestHelper.setDamage(you, you.getDamageLimitBase()[AgeState.BABY.ordinal()] / 2 + 1);
+            you.setSurisuriFromPlayer(true);
             SimYukkuri.RND = new ConstState(0);
 
-            assertEquals(eActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you));
+            assertEquals(ActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you));
 
             assertEquals(Happiness.VERY_SAD, me.getHappiness(),
                     "concern-about-father with pain branch should make the actor very sad");
@@ -1389,10 +1389,10 @@ class BodyLogicTest {
             you.setHappiness(Happiness.VERY_HAPPY);
             me.setPartner(you.getUniqueID());
             you.setPartner(me.getUniqueID());
-            you.setbSurisuriFromPlayer(true);
+            you.setSurisuriFromPlayer(true);
             SimYukkuri.RND = new ConstState(0);
 
-            assertEquals(eActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you));
+            assertEquals(ActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you));
 
             assertEquals(Happiness.VERY_HAPPY, me.getHappiness(),
                     "very-happy partner branch should keep the actor very happy");
@@ -1411,10 +1411,10 @@ class BodyLogicTest {
             you.setHappiness(Happiness.VERY_SAD);
             me.setPartner(you.getUniqueID());
             you.setPartner(me.getUniqueID());
-            you.setbSurisuriFromPlayer(true);
+            you.setSurisuriFromPlayer(true);
             SimYukkuri.RND = new ConstState(0);
 
-            assertEquals(eActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you));
+            assertEquals(ActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you));
 
             assertEquals(Happiness.SAD, me.getHappiness(),
                     "concern-about-partner branch should make the actor sad");
@@ -1432,10 +1432,10 @@ class BodyLogicTest {
             me.setHappiness(Happiness.HAPPY);
             you.setHappiness(Happiness.VERY_SAD);
             WorldTestHelper.setParents(you, -1, me.getUniqueID());
-            you.setbSurisuriFromPlayer(true);
+            you.setSurisuriFromPlayer(true);
             SimYukkuri.RND = new ConstState(0);
 
-            assertEquals(eActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you));
+            assertEquals(ActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you));
 
             assertEquals(Happiness.SAD, me.getHappiness(),
                     "concern-about-mother without pain branch should make the actor sad");
@@ -1453,10 +1453,10 @@ class BodyLogicTest {
             me.setHappiness(Happiness.HAPPY);
             you.setHappiness(Happiness.VERY_SAD);
             WorldTestHelper.setParents(me, you.getUniqueID(), -1);
-            you.setbSurisuriFromPlayer(true);
+            you.setSurisuriFromPlayer(true);
             SimYukkuri.RND = new ConstState(0);
 
-            assertEquals(eActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you));
+            assertEquals(ActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you));
 
             assertEquals(Happiness.SAD, me.getHappiness(),
                     "concern-about-father without pain branch should make the actor sad");
@@ -1481,10 +1481,10 @@ class BodyLogicTest {
             WorldTestHelper.setParents(you, -1, sharedParent.getUniqueID());
             me.setAge(500);
             you.setAge(100);
-            you.setbSurisuriFromPlayer(true);
+            you.setSurisuriFromPlayer(true);
             SimYukkuri.RND = new ConstState(0);
 
-            assertEquals(eActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you));
+            assertEquals(ActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you));
 
             assertEquals(Happiness.HAPPY, me.getHappiness(),
                     "glad-about-sister branch should make the actor happy");
@@ -1508,10 +1508,10 @@ class BodyLogicTest {
             WorldTestHelper.setParents(you, -1, sharedParent.getUniqueID());
             me.setAge(100);
             you.setAge(500);
-            you.setbSurisuriFromPlayer(true);
+            you.setSurisuriFromPlayer(true);
             SimYukkuri.RND = new ConstState(0);
 
-            assertEquals(eActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you));
+            assertEquals(ActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you));
 
             assertEquals(Happiness.SAD, me.getHappiness(),
                     "concern-about-elder-sister without pain branch should make the actor sad");
@@ -1536,11 +1536,11 @@ class BodyLogicTest {
             WorldTestHelper.setParents(you, -1, sharedParent.getUniqueID());
             me.setAge(500);
             you.setAge(100);
-            WorldTestHelper.setDamage(you, you.getDAMAGELIMITorg()[AgeState.ADULT.ordinal()] / 2 + 1);
-            you.setbSurisuriFromPlayer(true);
+            WorldTestHelper.setDamage(you, you.getDamageLimitBase()[AgeState.ADULT.ordinal()] / 2 + 1);
+            you.setSurisuriFromPlayer(true);
             SimYukkuri.RND = new ConstState(0);
 
-            assertEquals(eActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you));
+            assertEquals(ActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you));
 
             assertEquals(Happiness.VERY_SAD, me.getHappiness(),
                     "concern-about-younger-sister with pain branch should make the actor very sad");
@@ -1564,7 +1564,7 @@ class BodyLogicTest {
             SimYukkuri.world.getCurrentMap().getBody().put(sharedParent.getUniqueID(), sharedParent);
             WorldTestHelper.setParents(me, -1, sharedParent.getUniqueID());
             WorldTestHelper.setParents(you, -1, sharedParent.getUniqueID());
-            you.setbNeedled(true);
+            you.setNeedled(true);
             me.setStress(0);
             you.setStress(0);
             SimYukkuri.RND = new ConstState(0);
@@ -1621,7 +1621,7 @@ class BodyLogicTest {
             you.setPublicRank(PublicRank.NONE);
             me.setIntelligence(Intelligence.AVERAGE);
             you.setIntelligence(Intelligence.AVERAGE);
-            you.setSickPeriod(you.getINCUBATIONPERIODorg() + 1);
+            you.setSickPeriod(you.getIncubationPeriodBase() + 1);
 
             assertTrue(BodyLogic.doActionOther(you, me));
 
@@ -1646,7 +1646,7 @@ class BodyLogicTest {
             you.setPublicRank(PublicRank.NONE);
             me.setIntelligence(Intelligence.AVERAGE);
             you.setIntelligence(Intelligence.AVERAGE);
-            me.setSickPeriod(me.getINCUBATIONPERIODorg() + 1);
+            me.setSickPeriod(me.getIncubationPeriodBase() + 1);
 
             assertTrue(BodyLogic.doActionOther(you, me));
 
@@ -1671,7 +1671,7 @@ class BodyLogicTest {
             you.setAgeState(AgeState.BABY);
             me.setIntelligence(Intelligence.FOOL);
             WorldTestHelper.setParents(you, me.getUniqueID(), -1);
-            you.seteCoreAnkoState(CoreAnkoState.NonYukkuriDiseaseNear);
+            you.setCoreAnkoState(CoreAnkoState.NonYukkuriDiseaseNear);
             you.takeOkazari(false);
             ConstState rng = new ConstState(0);
             rng.setFixedBoolean(true);
@@ -1702,7 +1702,7 @@ class BodyLogicTest {
             me.setIntelligence(Intelligence.FOOL);
             me.setCurrentEvent(new ProposeEvent());
             WorldTestHelper.setParents(you, me.getUniqueID(), -1);
-            you.seteCoreAnkoState(CoreAnkoState.NonYukkuriDiseaseNear);
+            you.setCoreAnkoState(CoreAnkoState.NonYukkuriDiseaseNear);
             you.takeOkazari(false);
             ConstState rng = new ConstState(0);
             rng.setFixedBoolean(true);
@@ -1801,7 +1801,7 @@ class BodyLogicTest {
             me.setPublicRank(PublicRank.NONE);
             you.setPublicRank(PublicRank.NONE);
             me.setExciting(true);
-            me.setbForceExciting(true);
+            me.setForceExciting(true);
             me.setRaper(false);
             me.setStress(150);
             you.setAgeState(AgeState.BABY);
@@ -1857,7 +1857,7 @@ class BodyLogicTest {
             me.setMemories(10);
             you.setDead(true);
             WorldTestHelper.setParents(you, -1, me.getUniqueID());
-            me.setInLastActionTime(System.currentTimeMillis() - 5000);
+            me.setLastActionTime(System.currentTimeMillis() - 5000);
 
             assertTrue(BodyLogic.doActionOther(you, me));
 
@@ -1991,7 +1991,7 @@ class BodyLogicTest {
             you.setX(110);
             you.setY(110);
             you.takeOkazari(true);
-            you.seteCoreAnkoState(CoreAnkoState.NonYukkuriDiseaseNear);
+            you.setCoreAnkoState(CoreAnkoState.NonYukkuriDiseaseNear);
             me.setAttitude(Attitude.SHITHEAD);
             me.setPublicRank(PublicRank.NONE);
             you.setPublicRank(PublicRank.NONE);
@@ -2023,7 +2023,7 @@ class BodyLogicTest {
             assertTrue(BodyLogic.checkPartner(me));
 
             assertTrue(me.isToSukkiri(), "very rude exciting actor should enter moveToSukkiri");
-            assertEquals(you.getObjId(), me.getMoveTarget(), "found body should become the sukkiri target");
+            assertEquals(you.getObjId(), me.getMoveTargetId(), "found body should become the sukkiri target");
             assertTrue(me.isTargetBind(), "moveToSukkiri branch should bind the target");
             assertNull(me.getCurrentEvent(), "moveToSukkiri branch should not start an event");
         }
@@ -2045,7 +2045,7 @@ class BodyLogicTest {
             assertTrue(BodyLogic.checkPartner(me));
 
             assertTrue(me.isToSukkiri(), "raper branch should enter moveToSukkiri");
-            assertEquals(you.getObjId(), me.getMoveTarget(), "found body should become the sukkiri target");
+            assertEquals(you.getObjId(), me.getMoveTargetId(), "found body should become the sukkiri target");
             assertTrue(me.isTargetBind(), "raper moveToSukkiri branch should bind the target");
             assertNull(me.getCurrentEvent(), "raper moveToSukkiri branch should not start an event");
         }
@@ -2067,7 +2067,7 @@ class BodyLogicTest {
             assertTrue(BodyLogic.checkPartner(me));
 
             assertTrue(me.isToSukkiri(), "rape-only super shithead branch should enter moveToSukkiri");
-            assertEquals(you.getObjId(), me.getMoveTarget(), "found body should become the sukkiri target");
+            assertEquals(you.getObjId(), me.getMoveTargetId(), "found body should become the sukkiri target");
             assertTrue(me.isTargetBind(), "rape-only super shithead branch should bind the target");
             assertNull(me.getCurrentEvent(), "rape-only branch should not start an event");
         }
@@ -2155,7 +2155,7 @@ class BodyLogicTest {
             assertTrue(BodyLogic.checkPartner(me));
 
             assertTrue(me.isToSukkiri(), "low-priority current event should not block moveToSukkiri");
-            assertEquals(you.getObjId(), me.getMoveTarget(), "partner should remain the move target");
+            assertEquals(you.getObjId(), me.getMoveTargetId(), "partner should remain the move target");
             assertTrue(me.isTargetBind(), "moveToSukkiri branch should still bind the target");
             assertNull(me.getCurrentEvent(),
                     "moveToSukkiri selection should not preserve the low-priority current event as an active observable state");
@@ -2347,7 +2347,7 @@ class BodyLogicTest {
             me.setBodySpr(makeSprites(1, 1));
             you.setBodySpr(makeSprites(1, 1));
             me.setExciting(false);
-            me.setShit(me.getSHITLIMITorg()[me.getBodyAgeState().ordinal()] + 1);
+            me.setShit(me.getShitLimitBase()[me.getBodyAgeState().ordinal()] + 1);
             me.setHappiness(Happiness.AVERAGE);
             me.setDirection(Direction.LEFT);
 
@@ -2366,7 +2366,7 @@ class BodyLogicTest {
             me.setBodySpr(makeSprites(1, 1));
             you.setBodySpr(makeSprites(1, 1));
             me.setHasBaby(true);
-            me.setPregnantPeriod(me.getPREGPERIODorg());
+            me.setPregnantPeriod(me.getPregPeriodBase());
             me.setHappiness(Happiness.AVERAGE);
             me.setDirection(Direction.LEFT);
 
@@ -2384,7 +2384,7 @@ class BodyLogicTest {
         void testScenario_CheckPartnerNYDGuardBlocksAllNewActions() {
             me.setBodySpr(makeSprites(1, 1));
             you.setBodySpr(makeSprites(1, 1));
-            me.seteCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
+            me.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
             me.setDirection(Direction.LEFT);
             Happiness expectedHappiness = me.getHappiness();
 
@@ -2405,14 +2405,14 @@ class BodyLogicTest {
             src.game.Shit carried = new src.game.Shit();
             carried.setObjId(9999);
             SimYukkuri.world.getCurrentMap().getTakenOutShit().put(9999, carried);
-            me.getTakeoutItem().put(TakeoutItemType.SHIT, 9999);
+            me.getCarryItems().put(TakeoutItemType.SHIT, 9999);
             me.setExciting(false);
             me.setHappiness(Happiness.AVERAGE);
             me.setDirection(Direction.LEFT);
 
             assertFalse(BodyLogic.checkPartner(me));
 
-            assertSame(carried, me.getTakeoutItem(TakeoutItemType.SHIT),
+            assertSame(carried, me.getCarryItem(TakeoutItemType.SHIT),
                     "non-exciting branch should keep carrying the same shit object");
             assertFalse(me.isInOutTakeoutItem(), "non-exciting branch should not trigger takeout drop animation");
             assertFalse(me.isToBody(), "non-exciting branch should not start moveToBody");
@@ -2491,12 +2491,12 @@ class BodyLogicTest {
 
     @Test
     void testEActionGoEnum() {
-        BodyLogic.eActionGo[] values = BodyLogic.eActionGo.values();
+        BodyLogic.ActionGo[] values = BodyLogic.ActionGo.values();
         assertEquals(4, values.length);
-        assertEquals(BodyLogic.eActionGo.NONE, BodyLogic.eActionGo.valueOf("NONE"));
-        assertEquals(BodyLogic.eActionGo.WAIT, BodyLogic.eActionGo.valueOf("WAIT"));
-        assertEquals(BodyLogic.eActionGo.GO, BodyLogic.eActionGo.valueOf("GO"));
-        assertEquals(BodyLogic.eActionGo.BACK, BodyLogic.eActionGo.valueOf("BACK"));
+        assertEquals(BodyLogic.ActionGo.NONE, BodyLogic.ActionGo.valueOf("NONE"));
+        assertEquals(BodyLogic.ActionGo.WAIT, BodyLogic.ActionGo.valueOf("WAIT"));
+        assertEquals(BodyLogic.ActionGo.GO, BodyLogic.ActionGo.valueOf("GO"));
+        assertEquals(BodyLogic.ActionGo.BACK, BodyLogic.ActionGo.valueOf("BACK"));
     }
 
     // --- checkPartner ---
@@ -2515,7 +2515,7 @@ class BodyLogicTest {
 
     @Test
     void testCheckPartner_IsNYDReturnsFalse() {
-        me.seteCoreAnkoState(src.enums.CoreAnkoState.NonYukkuriDisease);
+        me.setCoreAnkoState(src.enums.CoreAnkoState.NonYukkuriDisease);
         assertFalse(BodyLogic.checkPartner(me));
     }
 
@@ -2547,15 +2547,15 @@ class BodyLogicTest {
 
     @Test
     void testCheckActionSurisuriFromPlayer_NullArgs() {
-        assertEquals(eActionGo.NONE, BodyLogic.checkActionSurisuriFromPlayer(null, you));
-        assertEquals(eActionGo.NONE, BodyLogic.checkActionSurisuriFromPlayer(me, null));
+        assertEquals(ActionGo.NONE, BodyLogic.checkActionSurisuriFromPlayer(null, you));
+        assertEquals(ActionGo.NONE, BodyLogic.checkActionSurisuriFromPlayer(me, null));
     }
 
     @Test
     void testCheckActionSurisuriFromPlayer_NotSurisuriReturnsNONE() {
-        // bSurisuriFromPlayerがfalse → NONE
-        you.setbSurisuriFromPlayer(false);
-        assertEquals(eActionGo.NONE, BodyLogic.checkActionSurisuriFromPlayer(me, you));
+        // surisuriFromPlayerがfalse → NONE
+        you.setSurisuriFromPlayer(false);
+        assertEquals(ActionGo.NONE, BodyLogic.checkActionSurisuriFromPlayer(me, you));
     }
 
     // --- createActiveFianceeList ---
@@ -2664,7 +2664,7 @@ class BodyLogicTest {
 
     @Test
     void testDoActionOther_NYDBody_ReturnsFalse() {
-        me.seteCoreAnkoState(src.enums.CoreAnkoState.NonYukkuriDisease);
+        me.setCoreAnkoState(src.enums.CoreAnkoState.NonYukkuriDisease);
         assertFalse(BodyLogic.doActionOther(you, me));
     }
 
@@ -2747,7 +2747,7 @@ class BodyLogicTest {
 
     @Test
     void testCheckActionSurisuriFromPlayer_SurisuriTrue_DoesNotThrow() {
-        you.setbSurisuriFromPlayer(true);
+        you.setSurisuriFromPlayer(true);
         assertDoesNotThrow(() -> BodyLogic.checkActionSurisuriFromPlayer(me, you));
     }
 
@@ -2767,13 +2767,13 @@ class BodyLogicTest {
 
     @Test
     void testCheckWakeupOtherYukkuri_YouNYD_ReturnsFalse() {
-        you.seteCoreAnkoState(src.enums.CoreAnkoState.NonYukkuriDisease);
+        you.setCoreAnkoState(src.enums.CoreAnkoState.NonYukkuriDisease);
         assertFalse(BodyLogic.checkWakeupOtherYukkuri(me));
     }
 
     @Test
     void testCheckWakeupOtherYukkuri_YouBuried_ReturnsFalse() {
-        you.setBaryState(src.enums.BaryInUGState.HALF);
+        you.setBurialState(src.enums.BurialState.HALF);
         assertFalse(BodyLogic.checkWakeupOtherYukkuri(me));
     }
 
@@ -2852,7 +2852,7 @@ class BodyLogicTest {
         // nearToBirth() = (limit < diagonal && hasBabyOrStalk())
         // Set hasBaby=true, pregnantPeriod=PREGPERIODorg → limit=0 < diagonal → true
         me.setHasBaby(true);
-        me.setPregnantPeriod(me.getPREGPERIODorg());
+        me.setPregnantPeriod(me.getPregPeriodBase());
         assertFalse(BodyLogic.checkPartner(me));
     }
 
@@ -2879,7 +2879,7 @@ class BodyLogicTest {
         src.game.Shit s = new src.game.Shit();
         s.setObjId(9999);
         SimYukkuri.world.getCurrentMap().getTakenOutShit().put(9999, s);
-        me.getTakeoutItem().put(src.enums.TakeoutItemType.SHIT, 9999);
+        me.getCarryItems().put(src.enums.TakeoutItemType.SHIT, 9999);
         me.setExciting(false);
         assertFalse(BodyLogic.checkPartner(me));
     }
@@ -3002,19 +3002,19 @@ class BodyLogicTest {
         assertDoesNotThrow(() -> BodyLogic.doActionOther(you, me));
     }
 
-    // --- checkActionSurisuriFromPlayer: isbSurisuriFromPlayer=true path ---
+    // --- checkActionSurisuriFromPlayer: isSurisuriFromPlayer=true path ---
 
     @Test
     void testCheckActionSurisuriFromPlayer_SurisuriTrue_NoRelation_DoesNotThrow() {
-        // Need: bodyTarget.isbSurisuriFromPlayer() = true AND RNG nextInt(10) = 0
-        you.setbSurisuriFromPlayer(true);
+        // Need: bodyTarget.isSurisuriFromPlayer() = true AND RNG nextInt(10) = 0
+        you.setSurisuriFromPlayer(true);
         SimYukkuri.RND = new src.ConstState(0); // nextInt(10) = 0
         assertDoesNotThrow(() -> BodyLogic.checkActionSurisuriFromPlayer(me, you));
     }
 
     @Test
     void testCheckActionSurisuriFromPlayer_SurisuriTrue_AsPartner_DoesNotThrow() {
-        you.setbSurisuriFromPlayer(true);
+        you.setSurisuriFromPlayer(true);
         SimYukkuri.RND = new src.ConstState(0);
         me.setPartner(you.getUniqueID());
         you.setPartner(me.getUniqueID());
@@ -3023,15 +3023,15 @@ class BodyLogicTest {
 
     @Test
     void testCheckActionSurisuriFromPlayer_Null_ReturnsNone() {
-        src.logic.BodyLogic.eActionGo result = BodyLogic.checkActionSurisuriFromPlayer(null, null);
-        assertEquals(src.logic.BodyLogic.eActionGo.NONE, result);
+        src.logic.BodyLogic.ActionGo result = BodyLogic.checkActionSurisuriFromPlayer(null, null);
+        assertEquals(src.logic.BodyLogic.ActionGo.NONE, result);
     }
 
     @Test
     void testCheckActionSurisuriFromPlayer_TargetNotSurisuri_ReturnsNone() {
-        you.setbSurisuriFromPlayer(false);
-        src.logic.BodyLogic.eActionGo result = BodyLogic.checkActionSurisuriFromPlayer(me, you);
-        assertEquals(src.logic.BodyLogic.eActionGo.NONE, result);
+        you.setSurisuriFromPlayer(false);
+        src.logic.BodyLogic.ActionGo result = BodyLogic.checkActionSurisuriFromPlayer(me, you);
+        assertEquals(src.logic.BodyLogic.ActionGo.NONE, result);
     }
 
     // --- checkActionSurisuriFromPlayer emotion branches ---
@@ -3040,7 +3040,7 @@ class BodyLogicTest {
     void testCheckActionSurisuriFromPlayer_EnvyCry_StrangerSadAboutHappy() {
         // me=SAD, you=HAPPY, strangers → abEmote[2]+abEmote[5] → EnvyCryAboutOther
         // branch
-        you.setbSurisuriFromPlayer(true);
+        you.setSurisuriFromPlayer(true);
         SimYukkuri.RND = new ConstState(0); // nextInt(10)=0 → passes
         me.setHappiness(Happiness.SAD);
         you.setHappiness(Happiness.HAPPY);
@@ -3052,7 +3052,7 @@ class BodyLogicTest {
     void testCheckActionSurisuriFromPlayer_WorryConcern_PartnerSad() {
         // me=VERY_HAPPY, you=VERY_SAD, partner → abEmote[2]+abEmote[6] → worry3/PARTNAR
         // (concern)
-        you.setbSurisuriFromPlayer(true);
+        you.setSurisuriFromPlayer(true);
         SimYukkuri.RND = new ConstState(0);
         me.setHappiness(Happiness.VERY_HAPPY);
         you.setHappiness(Happiness.VERY_SAD);
@@ -3065,7 +3065,7 @@ class BodyLogicTest {
     void testCheckActionSurisuriFromPlayer_HappyPartner_BothVeryHappy() {
         // me=VERY_HAPPY, you=VERY_HAPPY, partner → abEmote[0]=true → happy/PARTNAR
         // branch
-        you.setbSurisuriFromPlayer(true);
+        you.setSurisuriFromPlayer(true);
         SimYukkuri.RND = new ConstState(0);
         me.setHappiness(Happiness.VERY_HAPPY);
         you.setHappiness(Happiness.VERY_HAPPY);
@@ -3078,7 +3078,7 @@ class BodyLogicTest {
     void testCheckActionSurisuriFromPlayer_Envy_ChildMotherRelation() {
         // me=VERY_HAPPY, you=VERY_HAPPY, me is child of you (CHILD_MOTHER) →
         // abEmote[5]=true
-        you.setbSurisuriFromPlayer(true);
+        you.setSurisuriFromPlayer(true);
         SimYukkuri.RND = new ConstState(0);
         me.setHappiness(Happiness.VERY_HAPPY);
         you.setHappiness(Happiness.VERY_HAPPY);
@@ -3091,7 +3091,7 @@ class BodyLogicTest {
     void testCheckActionSurisuriFromPlayer_EnvyAnger_RudeMeVeryHappyTarget() {
         // me=VERY_SAD (SHITHEAD attitude), you=VERY_HAPPY, strangers →
         // abEmote[1]+abEmote[5] → envy+anger
-        you.setbSurisuriFromPlayer(true);
+        you.setSurisuriFromPlayer(true);
         SimYukkuri.RND = new ConstState(0);
         me.setAttitude(src.enums.Attitude.SHITHEAD); // isRude=true
         me.setHappiness(Happiness.VERY_SAD);
@@ -3121,11 +3121,11 @@ class BodyLogicTest {
         assertTrue(BodyLogic.checkPartner(me));
     }
 
-    // --- checkPartner: isToBody + moveTarget set → doActionOther path ---
+    // --- checkPartner: isToBody + moveTargetId set → doActionOther path ---
 
     @Test
     void testCheckPartner_ToBodyWithTarget_CallsDoActionOther_ReturnsTrue() {
-        // me.isToBody()=true, moveTarget=you → takeMappedObj returns you →
+        // me.isToBody()=true, moveTargetId=you → takeMappedObj returns you →
         // doActionOther(you, me)
         me.setBodySpr(makeSprites(1, 1));
         you.setBodySpr(makeSprites(1, 1));
@@ -3134,7 +3134,7 @@ class BodyLogicTest {
         you.setX(100);
         you.setY(100);
         me.setToBody(true);
-        me.setMoveTarget(you.getObjId());
+        me.setMoveTargetId(you.getObjId());
         // Ensure same rank
         me.setPublicRank(PublicRank.NONE);
         you.setPublicRank(PublicRank.NONE);
@@ -3369,7 +3369,7 @@ class BodyLogicTest {
 
         // Ensure b.checkWait(2000) passes
         // setInLastActionTime to long ago
-        me.setInLastActionTime(System.currentTimeMillis() - 5000);
+        me.setLastActionTime(System.currentTimeMillis() - 5000);
 
         BodyLogic.doActionOther(you, me);
 
@@ -3426,7 +3426,7 @@ class BodyLogicTest {
         WorldTestHelper.setParents(you, -1, me.getUniqueID()); // me is mother of you
         you.setHasPants(false);
         you.makeDirty(true);
-        me.setInLastActionTime(System.currentTimeMillis() - 5000);
+        me.setLastActionTime(System.currentTimeMillis() - 5000);
 
         BodyLogic.doActionOther(you, me);
 
@@ -3457,7 +3457,7 @@ class BodyLogicTest {
         // L125: exciting + SHIT takeout → drop, continues
         src.game.Shit s = new src.game.Shit();
         SimYukkuri.world.getCurrentMap().getTakenOutShit().put(s.getObjId(), s);
-        me.getTakeoutItem().put(src.enums.TakeoutItemType.SHIT, s.getObjId());
+        me.getCarryItems().put(src.enums.TakeoutItemType.SHIT, s.getObjId());
         me.setExciting(true);
         me.setBodySpr(makeSprites(1, 1));
         you.setBodySpr(makeSprites(1, 1));
@@ -3470,7 +3470,7 @@ class BodyLogicTest {
         // L167-168: purposeOfMoving=NONE → L142 false; takeMoveTarget→you → bodyOldMoveTarget=you
         me.setBodySpr(makeSprites(1, 1));
         you.setBodySpr(makeSprites(1, 1));
-        me.setMoveTarget(you.getObjId()); // takeMoveTarget()=you (Body)
+        me.setMoveTargetId(you.getObjId()); // takeMoveTarget()=you (Body)
         SimYukkuri.RND = new ConstState(59);
         assertDoesNotThrow(() -> BodyLogic.checkPartner(me));
     }
@@ -3493,7 +3493,7 @@ class BodyLogicTest {
         me.setExciting(true);
         me.setBodySpr(makeSprites(1, 1));
         you.setBodySpr(makeSprites(1, 1));
-        you.setBaryState(src.enums.BaryInUGState.HALF);
+        you.setBurialState(src.enums.BurialState.HALF);
         SimYukkuri.RND = new ConstState(59);
         assertDoesNotThrow(() -> BodyLogic.checkPartner(me));
     }
@@ -3631,7 +3631,7 @@ class BodyLogicTest {
         me.setAgeState(AgeState.ADULT);
         you.setAgeState(AgeState.BABY);
         WorldTestHelper.setParents(you, -1, me.getUniqueID());
-        you.setbNeedled(true);
+        you.setNeedled(true);
         me.setPublicRank(PublicRank.NONE);
         you.setPublicRank(PublicRank.NONE);
         SimYukkuri.RND = new ConstState(0); // nextInt(50)=0
@@ -3873,7 +3873,7 @@ class BodyLogicTest {
         // L632-634: b.isNYD() → false
         me.setBodySpr(makeSprites(1, 1));
         you.setBodySpr(makeSprites(1, 1));
-        me.seteCoreAnkoState(CoreAnkoState.NonYukkuriDiseaseNear);
+        me.setCoreAnkoState(CoreAnkoState.NonYukkuriDiseaseNear);
         assertFalse(BodyLogic.doActionOther(you, me));
     }
 
@@ -3946,7 +3946,7 @@ class BodyLogicTest {
         you.setDead(true);
         me.setPartner(you.getUniqueID());
         you.setPartner(me.getUniqueID());
-        me.setInLastActionTime(0); // not isTalking
+        me.setLastActionTime(0); // not isTalking
         assertDoesNotThrow(() -> assertTrue(BodyLogic.doActionOther(you, me)));
         assertEquals(Happiness.VERY_SAD, me.getHappiness());
     }
@@ -4055,7 +4055,7 @@ class BodyLogicTest {
         me.setAgeState(AgeState.ADULT);
         you.setAgeState(AgeState.BABY);
         WorldTestHelper.setParents(you, -1, me.getUniqueID()); // me is mother of you
-        you.setbNeedled(true);
+        you.setNeedled(true);
         assertDoesNotThrow(() -> assertTrue(BodyLogic.doActionOther(you, me)));
     }
 
@@ -4070,7 +4070,7 @@ class BodyLogicTest {
         you.setPublicRank(PublicRank.NONE);
         me.setPartner(you.getUniqueID());
         you.setPartner(me.getUniqueID());
-        you.setbNeedled(true);
+        you.setNeedled(true);
         assertDoesNotThrow(() -> assertTrue(BodyLogic.doActionOther(you, me)));
     }
 
@@ -4086,7 +4086,7 @@ class BodyLogicTest {
         // b=me の intelligence を AVERAGE に固定 (FOOL だと findSick が isSickHeavily を使うため)
         me.setIntelligence(Intelligence.AVERAGE);
         // you is sick, me is not sick
-        you.setSickPeriod(you.getINCUBATIONPERIODorg() + 1);
+        you.setSickPeriod(you.getIncubationPeriodBase() + 1);
         assertDoesNotThrow(() -> BodyLogic.doActionOther(you, me));
     }
 
@@ -4105,7 +4105,7 @@ class BodyLogicTest {
         you.setHungry(0); // isVeryHungry=true
         Food food = new Food(100, 100, Food.FoodType.FOOD.ordinal());
         SimYukkuri.world.getCurrentMap().getFood().put(food.getObjId(), food);
-        me.setTakeoutItem(TakeoutItemType.FOOD, food);
+        me.setCarryItem(TakeoutItemType.FOOD, food);
         assertDoesNotThrow(() -> assertTrue(BodyLogic.doActionOther(you, me)));
     }
 
@@ -4182,64 +4182,64 @@ class BodyLogicTest {
     @Test
     void testCheckActionSurisuriFromPlayer_NullB_ReturnsNone() {
         // L974: b=null → NONE
-        assertEquals(eActionGo.NONE, BodyLogic.checkActionSurisuriFromPlayer(null, you));
+        assertEquals(ActionGo.NONE, BodyLogic.checkActionSurisuriFromPlayer(null, you));
     }
 
     @Test
     void testCheckActionSurisuriFromPlayer_NullTarget_ReturnsNone() {
         // L974: bodyTarget=null → NONE
-        assertEquals(eActionGo.NONE, BodyLogic.checkActionSurisuriFromPlayer(me, null));
+        assertEquals(ActionGo.NONE, BodyLogic.checkActionSurisuriFromPlayer(me, null));
     }
 
     @Test
     void testCheckActionSurisuriFromPlayer_NotSurisuri_ReturnsNone() {
-        // L977: !isbSurisuriFromPlayer → NONE
-        you.setbSurisuriFromPlayer(false);
-        assertEquals(eActionGo.NONE, BodyLogic.checkActionSurisuriFromPlayer(me, you));
+        // L977: !isSurisuriFromPlayer → NONE
+        you.setSurisuriFromPlayer(false);
+        assertEquals(ActionGo.NONE, BodyLogic.checkActionSurisuriFromPlayer(me, you));
     }
 
     @Test
     void testCheckActionSurisuriFromPlayer_RandNotZero_ReturnsNone() {
         // L982: nextInt(10)!=0 → NONE
-        you.setbSurisuriFromPlayer(true);
+        you.setSurisuriFromPlayer(true);
         SimYukkuri.RND = new ConstState(5); // nextInt(10)=5 !=0
-        assertEquals(eActionGo.NONE, BodyLogic.checkActionSurisuriFromPlayer(me, you));
+        assertEquals(ActionGo.NONE, BodyLogic.checkActionSurisuriFromPlayer(me, you));
     }
 
     @Test
     void testCheckActionSurisuriFromPlayer_BNYD_ReturnsNone() {
         // L990: b.isNYD() → NONE
-        you.setbSurisuriFromPlayer(true);
+        you.setSurisuriFromPlayer(true);
         SimYukkuri.RND = new ConstState(0);
-        me.seteCoreAnkoState(CoreAnkoState.NonYukkuriDiseaseNear);
-        assertEquals(eActionGo.NONE, BodyLogic.checkActionSurisuriFromPlayer(me, you));
+        me.setCoreAnkoState(CoreAnkoState.NonYukkuriDiseaseNear);
+        assertEquals(ActionGo.NONE, BodyLogic.checkActionSurisuriFromPlayer(me, you));
     }
 
     @Test
     void testCheckActionSurisuriFromPlayer_JoyMother_ReturnsGO() {
         // abEmote[0]=true, eRelation=MOTHER → GladAboutChild, GO
         // target=VERY_HAPPY, mine=AVERAGE, me=MOTHER of you → abEmote[0]
-        you.setbSurisuriFromPlayer(true);
+        you.setSurisuriFromPlayer(true);
         SimYukkuri.RND = new ConstState(0);
         me.setHappiness(Happiness.AVERAGE);
         you.setHappiness(Happiness.VERY_HAPPY);
         WorldTestHelper.setParents(you, -1, me.getUniqueID()); // me is mother of you
         assertDoesNotThrow(() ->
-            assertEquals(eActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you)));
+            assertEquals(ActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you)));
     }
 
     @Test
     void testCheckActionSurisuriFromPlayer_JoyPartnar_ReturnsGO() {
         // abEmote[0]=true, eRelation=PARTNAR → GladAboutPartner, GO
         // target=VERY_HAPPY, mine=HAPPY, me=partner of you → abEmote[0]
-        you.setbSurisuriFromPlayer(true);
+        you.setSurisuriFromPlayer(true);
         SimYukkuri.RND = new ConstState(0);
         me.setHappiness(Happiness.HAPPY);
         you.setHappiness(Happiness.VERY_HAPPY);
         me.setPartner(you.getUniqueID());
         you.setPartner(me.getUniqueID());
         assertDoesNotThrow(() ->
-            assertEquals(eActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you)));
+            assertEquals(ActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you)));
     }
 
     @Test
@@ -4254,7 +4254,7 @@ class BodyLogicTest {
         // L65: case CHILD_FATHER/CHILD_MOTHER/YOUNGSISTER → abEmote[5] (for mine=HAPPY/VERY_HAPPY)
         // So CHILD_MOTHER never gives abEmote[0], it gives abEmote[5].
         // → This test actually tests abEmote[5] + CHILD_MOTHER → case breaks in "羨望2" → falls to NONE
-        you.setbSurisuriFromPlayer(true);
+        you.setSurisuriFromPlayer(true);
         SimYukkuri.RND = new ConstState(0);
         me.setHappiness(Happiness.HAPPY);
         you.setHappiness(Happiness.VERY_HAPPY);
@@ -4269,7 +4269,7 @@ class BodyLogicTest {
     void testCheckActionSurisuriFromPlayer_EnvyYoungSister_ReturnsGO() {
         // abEmote[5]=true, eRelation=YOUNGSISTER → EnvyAboutSisterInSurisuri, GO
         // target=VERY_HAPPY, mine=AVERAGE, me is YOUNGSISTER of you
-        you.setbSurisuriFromPlayer(true);
+        you.setSurisuriFromPlayer(true);
         SimYukkuri.RND = new ConstState(0);
         me.setHappiness(Happiness.AVERAGE);
         you.setHappiness(Happiness.VERY_HAPPY);
@@ -4280,41 +4280,41 @@ class BodyLogicTest {
         me.setAge(100);   // me younger → YOUNGSISTER
         you.setAge(500);  // you older
         assertDoesNotThrow(() ->
-            assertEquals(eActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you)));
+            assertEquals(ActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you)));
     }
 
     @Test
     void testCheckActionSurisuriFromPlayer_JoyOtherRude_ReturnsWAIT() {
         // abEmote[0]+abEmote[3], eRelation=OTHER → "喜び1" default → HateYukkuri, WAIT
         // target=VERY_SAD, mine=HAPPY, isRude=true, no relation → abEmote[0]+abEmote[3]
-        you.setbSurisuriFromPlayer(true);
+        you.setSurisuriFromPlayer(true);
         SimYukkuri.RND = new ConstState(0);
         me.setHappiness(Happiness.HAPPY);
         you.setHappiness(Happiness.VERY_SAD);
         me.setAttitude(Attitude.SHITHEAD); // isRude=true
         me.setPartner(-1);
         assertDoesNotThrow(() ->
-            assertEquals(eActionGo.WAIT, BodyLogic.checkActionSurisuriFromPlayer(me, you)));
+            assertEquals(ActionGo.WAIT, BodyLogic.checkActionSurisuriFromPlayer(me, you)));
     }
 
     @Test
     void testCheckActionSurisuriFromPlayer_EnvyCryStranger_ReturnsWAIT() {
         // abEmote[2]+abEmote[5]+!abEmote[1], eRelation=OTHER → EnvyCryAboutOther, WAIT
         // target=VERY_HAPPY, mine=SAD, no relation → abEmote[2]+abEmote[5]
-        you.setbSurisuriFromPlayer(true);
+        you.setSurisuriFromPlayer(true);
         SimYukkuri.RND = new ConstState(0);
         me.setHappiness(Happiness.SAD);
         you.setHappiness(Happiness.VERY_HAPPY);
         me.setPartner(-1);
         assertDoesNotThrow(() ->
-            assertEquals(eActionGo.WAIT, BodyLogic.checkActionSurisuriFromPlayer(me, you)));
+            assertEquals(ActionGo.WAIT, BodyLogic.checkActionSurisuriFromPlayer(me, you)));
     }
 
     @Test
     void testCheckActionSurisuriFromPlayer_EnvyAngryPartner_ReturnsWAIT() {
         // abEmote[5]+abEmote[1], eRelation=PARTNAR → HateWithEnvyAboutPartner, WAIT
         // target=VERY_HAPPY, mine=VERY_SAD+isRude → abEmote[1]+abEmote[5]
-        you.setbSurisuriFromPlayer(true);
+        you.setSurisuriFromPlayer(true);
         SimYukkuri.RND = new ConstState(0);
         me.setHappiness(Happiness.VERY_SAD);
         you.setHappiness(Happiness.VERY_HAPPY);
@@ -4322,7 +4322,7 @@ class BodyLogicTest {
         me.setPartner(you.getUniqueID());
         you.setPartner(me.getUniqueID());
         assertDoesNotThrow(() ->
-            assertEquals(eActionGo.WAIT, BodyLogic.checkActionSurisuriFromPlayer(me, you)));
+            assertEquals(ActionGo.WAIT, BodyLogic.checkActionSurisuriFromPlayer(me, you)));
     }
 
     @Test
@@ -4330,61 +4330,61 @@ class BodyLogicTest {
         // !abEmote[2]+abEmote[4], any relation → Scare, WAIT
         // mine=AVERAGE, target=VERY_SAD+isDamaged, family → abEmote[6]+abEmote[4] (no abEmote[2])
         // → L1196: !abEmote[2] + abEmote[4] → Scare, WAIT
-        you.setbSurisuriFromPlayer(true);
+        you.setSurisuriFromPlayer(true);
         SimYukkuri.RND = new ConstState(0);
         me.setHappiness(Happiness.AVERAGE);
         you.setHappiness(Happiness.VERY_SAD);
         WorldTestHelper.setParents(you, -1, me.getUniqueID()); // me is mother of you
-        WorldTestHelper.setDamage(you, you.getDAMAGELIMITorg()[AgeState.ADULT.ordinal()] / 2 + 1);
+        WorldTestHelper.setDamage(you, you.getDamageLimitBase()[AgeState.ADULT.ordinal()] / 2 + 1);
         assertDoesNotThrow(() ->
-            assertEquals(eActionGo.WAIT, BodyLogic.checkActionSurisuriFromPlayer(me, you)));
+            assertEquals(ActionGo.WAIT, BodyLogic.checkActionSurisuriFromPlayer(me, you)));
     }
 
     @Test
     void testCheckActionSurisuriFromPlayer_ConcernMother_WithPain_ReturnsGO() {
         // abEmote[2]+abEmote[6]+abEmote[4], eRelation=MOTHER → ConcernAboutChild, GO
         // mine=HAPPY, target=VERY_SAD+isDamaged, me=MOTHER of you → abEmote[2]+abEmote[6]+abEmote[4]
-        you.setbSurisuriFromPlayer(true);
+        you.setSurisuriFromPlayer(true);
         SimYukkuri.RND = new ConstState(0);
         me.setHappiness(Happiness.HAPPY);
         you.setHappiness(Happiness.VERY_SAD);
         WorldTestHelper.setParents(you, -1, me.getUniqueID()); // me is mother of you
-        WorldTestHelper.setDamage(you, you.getDAMAGELIMITorg()[AgeState.ADULT.ordinal()] / 2 + 1);
+        WorldTestHelper.setDamage(you, you.getDamageLimitBase()[AgeState.ADULT.ordinal()] / 2 + 1);
         assertDoesNotThrow(() ->
-            assertEquals(eActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you)));
+            assertEquals(ActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you)));
     }
 
     @Test
     void testCheckActionSurisuriFromPlayer_ConcernMother_NoPain_ReturnsGO() {
         // abEmote[2]+abEmote[6]+!abEmote[4], eRelation=MOTHER → ConcernAboutChild, GO
         // mine=HAPPY, target=VERY_SAD, no damage, me=MOTHER of you → abEmote[2]+abEmote[6]
-        you.setbSurisuriFromPlayer(true);
+        you.setSurisuriFromPlayer(true);
         SimYukkuri.RND = new ConstState(0);
         me.setHappiness(Happiness.HAPPY);
         you.setHappiness(Happiness.VERY_SAD);
         WorldTestHelper.setParents(you, -1, me.getUniqueID()); // me is mother of you
         assertDoesNotThrow(() ->
-            assertEquals(eActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you)));
+            assertEquals(ActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you)));
     }
 
     @Test
     void testCheckActionSurisuriFromPlayer_MercyStranger_ReturnsGO() {
         // abEmote[2]+!abEmote[6], eRelation=OTHER → MercyAboutOther, GO
         // mine=VERY_SAD, target=VERY_SAD, no relation → abEmote[2]=true, abEmote[6]=false
-        you.setbSurisuriFromPlayer(true);
+        you.setSurisuriFromPlayer(true);
         SimYukkuri.RND = new ConstState(0);
         me.setHappiness(Happiness.VERY_SAD);
         you.setHappiness(Happiness.VERY_SAD);
         me.setPartner(-1);
         assertDoesNotThrow(() ->
-            assertEquals(eActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you)));
+            assertEquals(ActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you)));
     }
 
     @Test
     void testCheckActionSurisuriFromPlayer_JoyElderSister_ReturnsGO() {
         // abEmote[0]=true, eRelation=ELDERSISTER → GladAboutSister, GO
         // target=VERY_HAPPY, mine=AVERAGE, me=ELDERSISTER of you
-        you.setbSurisuriFromPlayer(true);
+        you.setSurisuriFromPlayer(true);
         SimYukkuri.RND = new ConstState(0);
         me.setHappiness(Happiness.AVERAGE);
         you.setHappiness(Happiness.VERY_HAPPY);
@@ -4395,7 +4395,7 @@ class BodyLogicTest {
         me.setAge(500);   // me older → ELDERSISTER
         you.setAge(100);  // you younger
         assertDoesNotThrow(() ->
-            assertEquals(eActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you)));
+            assertEquals(ActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you)));
     }
 
     // =================================================================
@@ -4422,14 +4422,14 @@ class BodyLogicTest {
 
     @Test
     void testCheckPartner_Pheromone_FoundHasPheromone_L310() {
-        // L308-311: p.isbPheromone=true → bodyHasPheromone=p → found=p
+        // L308-311: p.isPheromone=true → bodyHasPheromone=p → found=p
         me.setBodySpr(makeSprites(1, 1));
         you.setBodySpr(makeSprites(1, 1));
         me.setX(100); me.setY(100);
         you.setX(110); you.setY(100); // same row, minimal distance
         me.setPublicRank(PublicRank.NONE);
         you.setPublicRank(PublicRank.NONE);
-        you.setbPheromone(true);
+        you.setPheromone(true);
         SimYukkuri.RND = new ConstState(59);
         try {
             BodyLogic.checkPartner(me);
@@ -4668,7 +4668,7 @@ class BodyLogicTest {
         WorldTestHelper.setParents(you, -1, me.getUniqueID()); // me is parent of you
         me.setIntelligence(Intelligence.FOOL);
         you.takeOkazari(false); // you has no okazari
-        you.seteCoreAnkoState(CoreAnkoState.NonYukkuriDiseaseNear); // you.isNYD=true
+        you.setCoreAnkoState(CoreAnkoState.NonYukkuriDiseaseNear); // you.isNYD=true
         SimYukkuri.RND = new ConstState(1); // nextBoolean=true
         assertDoesNotThrow(() -> assertTrue(BodyLogic.doActionOther(you, me)));
     }
@@ -4683,7 +4683,7 @@ class BodyLogicTest {
         me.setPublicRank(PublicRank.NONE);
         you.setPublicRank(PublicRank.NONE);
         me.setExciting(true);
-        me.setbForceExciting(true);
+        me.setForceExciting(true);
         me.setRaper(false);
         you.setAgeState(AgeState.BABY); // !p.isAdult → skip L778 block → enter L790
         assertDoesNotThrow(() -> assertTrue(BodyLogic.doActionOther(you, me)));
@@ -4704,7 +4704,7 @@ class BodyLogicTest {
         SimYukkuri.world.getCurrentMap().getBody().put(sharedParent.getUniqueID(), sharedParent);
         WorldTestHelper.setParents(me, -1, sharedParent.getUniqueID());
         WorldTestHelper.setParents(you, -1, sharedParent.getUniqueID());
-        you.setbNeedled(true);
+        you.setNeedled(true);
         SimYukkuri.RND = new ConstState(0); // nextInt(1)=0 for L807
         assertDoesNotThrow(() -> assertTrue(BodyLogic.doActionOther(you, me)));
     }
@@ -4770,17 +4770,17 @@ class BodyLogicTest {
     void testCheckActionSurisuriFromPlayer_Idiot_ReturnsNone_L988() {
         // isIdiot=true → return NONE (L988)
         Body idiot = new TarinaiReimu();
-        you.setbSurisuriFromPlayer(true);
+        you.setSurisuriFromPlayer(true);
         SimYukkuri.RND = new ConstState(0);
         assertDoesNotThrow(() ->
-            assertEquals(eActionGo.NONE, BodyLogic.checkActionSurisuriFromPlayer(idiot, you)));
+            assertEquals(ActionGo.NONE, BodyLogic.checkActionSurisuriFromPlayer(idiot, you)));
     }
 
     @Test
     void testCheckActionSurisuriFromPlayer_EnvyEldersister_ReturnsGO_L1105() {
         // abEmote[5]+!abEmote[1]+ELDERSISTER → EnvyAboutSisterInSurisuri, GO (L1105)
         // me=SAD+you=VERY_HAPPY+ELDERSISTER → abEmote[5]=true (EmotionLogic L108)
-        you.setbSurisuriFromPlayer(true);
+        you.setSurisuriFromPlayer(true);
         SimYukkuri.RND = new ConstState(0);
         me.setHappiness(Happiness.SAD);
         you.setHappiness(Happiness.VERY_HAPPY);
@@ -4790,54 +4790,54 @@ class BodyLogicTest {
         WorldTestHelper.setParents(you, -1, sharedParent.getUniqueID());
         me.setAge(500); you.setAge(100); // me=elder sister
         assertDoesNotThrow(() ->
-            assertEquals(eActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you)));
+            assertEquals(ActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you)));
     }
 
     @Test
     void testCheckActionSurisuriFromPlayer_EnvyAngryParent_ReturnsWAIT_L1140() {
         // abEmote[5]+abEmote[1]+FATHER → HateWithEnvyAboutChild WAIT (L1140)
         // me=FATHER of you, me=VERY_SAD+isRude, you=VERY_HAPPY → abEmote[1]+abEmote[5]
-        you.setbSurisuriFromPlayer(true);
+        you.setSurisuriFromPlayer(true);
         SimYukkuri.RND = new ConstState(0);
         me.setHappiness(Happiness.VERY_SAD);
         you.setHappiness(Happiness.VERY_HAPPY);
         me.setAttitude(Attitude.SHITHEAD);
         WorldTestHelper.setParents(you, me.getUniqueID(), -1); // me is father of you
         assertDoesNotThrow(() ->
-            assertEquals(eActionGo.WAIT, BodyLogic.checkActionSurisuriFromPlayer(me, you)));
+            assertEquals(ActionGo.WAIT, BodyLogic.checkActionSurisuriFromPlayer(me, you)));
     }
 
     @Test
     void testCheckActionSurisuriFromPlayer_EnvyAngryChildFather_ReturnsWAIT_L1154() {
         // abEmote[5]+abEmote[1]+CHILD_FATHER → HateWithEnvyAboutFather WAIT (L1154)
         // me=child, father=you, me=VERY_SAD+isRude, you=VERY_HAPPY
-        you.setbSurisuriFromPlayer(true);
+        you.setSurisuriFromPlayer(true);
         SimYukkuri.RND = new ConstState(0);
         me.setHappiness(Happiness.VERY_SAD);
         you.setHappiness(Happiness.VERY_HAPPY);
         me.setAttitude(Attitude.SHITHEAD);
         WorldTestHelper.setParents(me, you.getUniqueID(), -1); // you is father of me
         assertDoesNotThrow(() ->
-            assertEquals(eActionGo.WAIT, BodyLogic.checkActionSurisuriFromPlayer(me, you)));
+            assertEquals(ActionGo.WAIT, BodyLogic.checkActionSurisuriFromPlayer(me, you)));
     }
 
     @Test
     void testCheckActionSurisuriFromPlayer_EnvyAngryChildMother_ReturnsWAIT_L1161() {
         // abEmote[5]+abEmote[1]+CHILD_MOTHER → HateWithEnvyAboutMother WAIT (L1161)
-        you.setbSurisuriFromPlayer(true);
+        you.setSurisuriFromPlayer(true);
         SimYukkuri.RND = new ConstState(0);
         me.setHappiness(Happiness.VERY_SAD);
         you.setHappiness(Happiness.VERY_HAPPY);
         me.setAttitude(Attitude.SHITHEAD);
         WorldTestHelper.setParents(me, -1, you.getUniqueID()); // you is mother of me
         assertDoesNotThrow(() ->
-            assertEquals(eActionGo.WAIT, BodyLogic.checkActionSurisuriFromPlayer(me, you)));
+            assertEquals(ActionGo.WAIT, BodyLogic.checkActionSurisuriFromPlayer(me, you)));
     }
 
     @Test
     void testCheckActionSurisuriFromPlayer_EnvyAngryEldersister_ReturnsWAIT_L1168() {
         // abEmote[5]+abEmote[1]+ELDERSISTER → HateWithEnvyAboutSister WAIT (L1168)
-        you.setbSurisuriFromPlayer(true);
+        you.setSurisuriFromPlayer(true);
         SimYukkuri.RND = new ConstState(0);
         me.setHappiness(Happiness.VERY_SAD);
         you.setHappiness(Happiness.VERY_HAPPY);
@@ -4848,13 +4848,13 @@ class BodyLogicTest {
         WorldTestHelper.setParents(you, -1, sharedParent.getUniqueID());
         me.setAge(500); you.setAge(100); // me=elder sister
         assertDoesNotThrow(() ->
-            assertEquals(eActionGo.WAIT, BodyLogic.checkActionSurisuriFromPlayer(me, you)));
+            assertEquals(ActionGo.WAIT, BodyLogic.checkActionSurisuriFromPlayer(me, you)));
     }
 
     @Test
     void testCheckActionSurisuriFromPlayer_EnvyAngryYoungsister_ReturnsWAIT_L1175() {
         // abEmote[5]+abEmote[1]+YOUNGSISTER → HateWithEnvyAboutElderSister WAIT (L1175)
-        you.setbSurisuriFromPlayer(true);
+        you.setSurisuriFromPlayer(true);
         SimYukkuri.RND = new ConstState(0);
         me.setHappiness(Happiness.VERY_SAD);
         you.setHappiness(Happiness.VERY_HAPPY);
@@ -4865,53 +4865,53 @@ class BodyLogicTest {
         WorldTestHelper.setParents(you, -1, sharedParent.getUniqueID());
         me.setAge(100); you.setAge(500); // me=younger sister
         assertDoesNotThrow(() ->
-            assertEquals(eActionGo.WAIT, BodyLogic.checkActionSurisuriFromPlayer(me, you)));
+            assertEquals(ActionGo.WAIT, BodyLogic.checkActionSurisuriFromPlayer(me, you)));
     }
 
     @Test
     void testCheckActionSurisuriFromPlayer_ConcernPartnar_WithPain_ReturnsGO_L1234() {
         // abEmote[2]+abEmote[6]+abEmote[4]+PARTNAR → ConcernAboutPartner GO (L1234)
-        you.setbSurisuriFromPlayer(true);
+        you.setSurisuriFromPlayer(true);
         SimYukkuri.RND = new ConstState(0);
         me.setHappiness(Happiness.HAPPY);
         you.setHappiness(Happiness.VERY_SAD);
         me.setPartner(you.getUniqueID());
         you.setPartner(me.getUniqueID());
-        WorldTestHelper.setDamage(you, you.getDAMAGELIMITorg()[AgeState.ADULT.ordinal()] / 2 + 1);
+        WorldTestHelper.setDamage(you, you.getDamageLimitBase()[AgeState.ADULT.ordinal()] / 2 + 1);
         assertDoesNotThrow(() ->
-            assertEquals(eActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you)));
+            assertEquals(ActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you)));
     }
 
     @Test
     void testCheckActionSurisuriFromPlayer_ConcernChildFather_WithPain_ReturnsGO_L1241() {
         // abEmote[2]+abEmote[6]+abEmote[4]+CHILD_FATHER → ConcernAboutFather GO (L1241)
-        you.setbSurisuriFromPlayer(true);
+        you.setSurisuriFromPlayer(true);
         SimYukkuri.RND = new ConstState(0);
         me.setHappiness(Happiness.HAPPY);
         you.setHappiness(Happiness.VERY_SAD);
         WorldTestHelper.setParents(me, you.getUniqueID(), -1); // you is father of me
-        WorldTestHelper.setDamage(you, you.getDAMAGELIMITorg()[AgeState.ADULT.ordinal()] / 2 + 1);
+        WorldTestHelper.setDamage(you, you.getDamageLimitBase()[AgeState.ADULT.ordinal()] / 2 + 1);
         assertDoesNotThrow(() ->
-            assertEquals(eActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you)));
+            assertEquals(ActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you)));
     }
 
     @Test
     void testCheckActionSurisuriFromPlayer_ConcernChildMother_WithPain_ReturnsGO_L1248() {
         // abEmote[2]+abEmote[6]+abEmote[4]+CHILD_MOTHER → ConcernAboutMother GO (L1248)
-        you.setbSurisuriFromPlayer(true);
+        you.setSurisuriFromPlayer(true);
         SimYukkuri.RND = new ConstState(0);
         me.setHappiness(Happiness.HAPPY);
         you.setHappiness(Happiness.VERY_SAD);
         WorldTestHelper.setParents(me, -1, you.getUniqueID()); // you is mother of me
-        WorldTestHelper.setDamage(you, you.getDAMAGELIMITorg()[AgeState.ADULT.ordinal()] / 2 + 1);
+        WorldTestHelper.setDamage(you, you.getDamageLimitBase()[AgeState.ADULT.ordinal()] / 2 + 1);
         assertDoesNotThrow(() ->
-            assertEquals(eActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you)));
+            assertEquals(ActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you)));
     }
 
     @Test
     void testCheckActionSurisuriFromPlayer_ConcernEldersister_WithPain_ReturnsGO_L1255() {
         // abEmote[2]+abEmote[6]+abEmote[4]+ELDERSISTER → ConcernAboutEldersister GO (L1255)
-        you.setbSurisuriFromPlayer(true);
+        you.setSurisuriFromPlayer(true);
         SimYukkuri.RND = new ConstState(0);
         me.setHappiness(Happiness.HAPPY);
         you.setHappiness(Happiness.VERY_SAD);
@@ -4920,15 +4920,15 @@ class BodyLogicTest {
         WorldTestHelper.setParents(me, -1, sharedParent.getUniqueID());
         WorldTestHelper.setParents(you, -1, sharedParent.getUniqueID());
         me.setAge(500); you.setAge(100);
-        WorldTestHelper.setDamage(you, you.getDAMAGELIMITorg()[AgeState.ADULT.ordinal()] / 2 + 1);
+        WorldTestHelper.setDamage(you, you.getDamageLimitBase()[AgeState.ADULT.ordinal()] / 2 + 1);
         assertDoesNotThrow(() ->
-            assertEquals(eActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you)));
+            assertEquals(ActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you)));
     }
 
     @Test
     void testCheckActionSurisuriFromPlayer_ConcernYoungsister_WithPain_ReturnsGO_L1262() {
         // abEmote[2]+abEmote[6]+abEmote[4]+YOUNGSISTER → ConcernAboutEldersister GO (L1262)
-        you.setbSurisuriFromPlayer(true);
+        you.setSurisuriFromPlayer(true);
         SimYukkuri.RND = new ConstState(0);
         me.setHappiness(Happiness.HAPPY);
         you.setHappiness(Happiness.VERY_SAD);
@@ -4937,39 +4937,39 @@ class BodyLogicTest {
         WorldTestHelper.setParents(me, -1, sharedParent.getUniqueID());
         WorldTestHelper.setParents(you, -1, sharedParent.getUniqueID());
         me.setAge(100); you.setAge(500);
-        WorldTestHelper.setDamage(you, you.getDAMAGELIMITorg()[AgeState.ADULT.ordinal()] / 2 + 1);
+        WorldTestHelper.setDamage(you, you.getDamageLimitBase()[AgeState.ADULT.ordinal()] / 2 + 1);
         assertDoesNotThrow(() ->
-            assertEquals(eActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you)));
+            assertEquals(ActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you)));
     }
 
     @Test
     void testCheckActionSurisuriFromPlayer_ConcernChildFather_NoPain_ReturnsGO_L1298() {
         // abEmote[2]+abEmote[6]+!abEmote[4]+CHILD_FATHER → ConcernAboutFather GO (L1298)
-        you.setbSurisuriFromPlayer(true);
+        you.setSurisuriFromPlayer(true);
         SimYukkuri.RND = new ConstState(0);
         me.setHappiness(Happiness.HAPPY);
         you.setHappiness(Happiness.VERY_SAD);
         WorldTestHelper.setParents(me, you.getUniqueID(), -1); // you is father of me
         assertDoesNotThrow(() ->
-            assertEquals(eActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you)));
+            assertEquals(ActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you)));
     }
 
     @Test
     void testCheckActionSurisuriFromPlayer_ConcernChildMother_NoPain_ReturnsGO_L1305() {
         // abEmote[2]+abEmote[6]+!abEmote[4]+CHILD_MOTHER → ConcernAboutMother GO (L1305)
-        you.setbSurisuriFromPlayer(true);
+        you.setSurisuriFromPlayer(true);
         SimYukkuri.RND = new ConstState(0);
         me.setHappiness(Happiness.HAPPY);
         you.setHappiness(Happiness.VERY_SAD);
         WorldTestHelper.setParents(me, -1, you.getUniqueID()); // you is mother of me
         assertDoesNotThrow(() ->
-            assertEquals(eActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you)));
+            assertEquals(ActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you)));
     }
 
     @Test
     void testCheckActionSurisuriFromPlayer_ConcernEldersister_NoPain_ReturnsGO_L1312() {
         // abEmote[2]+abEmote[6]+!abEmote[4]+ELDERSISTER → ConcernAboutEldersister GO (L1312)
-        you.setbSurisuriFromPlayer(true);
+        you.setSurisuriFromPlayer(true);
         SimYukkuri.RND = new ConstState(0);
         me.setHappiness(Happiness.HAPPY);
         you.setHappiness(Happiness.VERY_SAD);
@@ -4979,13 +4979,13 @@ class BodyLogicTest {
         WorldTestHelper.setParents(you, -1, sharedParent.getUniqueID());
         me.setAge(500); you.setAge(100);
         assertDoesNotThrow(() ->
-            assertEquals(eActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you)));
+            assertEquals(ActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you)));
     }
 
     @Test
     void testCheckActionSurisuriFromPlayer_ConcernYoungsister_NoPain_ReturnsGO_L1319() {
         // abEmote[2]+abEmote[6]+!abEmote[4]+YOUNGSISTER → ConcernAboutEldersister GO (L1319)
-        you.setbSurisuriFromPlayer(true);
+        you.setSurisuriFromPlayer(true);
         SimYukkuri.RND = new ConstState(0);
         me.setHappiness(Happiness.HAPPY);
         you.setHappiness(Happiness.VERY_SAD);
@@ -4995,7 +4995,7 @@ class BodyLogicTest {
         WorldTestHelper.setParents(you, -1, sharedParent.getUniqueID());
         me.setAge(100); you.setAge(500);
         assertDoesNotThrow(() ->
-            assertEquals(eActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you)));
+            assertEquals(ActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you)));
     }
 
     // =================================================================
@@ -5014,7 +5014,7 @@ class BodyLogicTest {
     @Test
     void testCheckEmotionFromUnunSlave_NYD_ReturnsFalse_L1895() {
         // isNYD=true → return false (L1895)
-        me.seteCoreAnkoState(CoreAnkoState.NonYukkuriDiseaseNear);
+        me.setCoreAnkoState(CoreAnkoState.NonYukkuriDiseaseNear);
         SimYukkuri.RND = new ConstState(0);
         assertDoesNotThrow(() ->
             assertFalse(BodyLogic.checkEmotionFromUnunSlave(me, you)));
@@ -5460,7 +5460,7 @@ class BodyLogicTest {
         // hasDisorder=false (okazari set) + isSick=true → findSick → skip
         me.setIntelligence(Intelligence.AVERAGE);
         you.setOkazari(new Okazari());
-        you.setSickPeriod(you.getINCUBATIONPERIODorg() + 1);
+        you.setSickPeriod(you.getIncubationPeriodBase() + 1);
         List<Body> list = BodyLogic.createActiveFianceeList(me, 0);
         assertFalse(list.contains(you));
     }
@@ -5579,7 +5579,7 @@ class BodyLogicTest {
     void testCreateActiveChildList_NYDChild_Skipped_L1504() {
         Body child = WorldTestHelper.createBody();
         child.setAgeState(AgeState.BABY);
-        child.seteCoreAnkoState(CoreAnkoState.NonYukkuriDiseaseNear);
+        child.setCoreAnkoState(CoreAnkoState.NonYukkuriDiseaseNear);
         SimYukkuri.world.getCurrentMap().getBody().put(child.getUniqueID(), child);
         WorldTestHelper.addChild(me, child.getUniqueID());
         List<Body> list = BodyLogic.createActiveChildList(me, true);
@@ -5673,7 +5673,7 @@ class BodyLogicTest {
         me.setAgeState(AgeState.ADULT);
         you.setAgeState(AgeState.BABY);
         WorldTestHelper.setParents(you, me.getUniqueID(), -1); // me=father of you
-        you.setbNeedled(true); // isNeedled=true
+        you.setNeedled(true); // isNeedled=true
         SimYukkuri.RND = new ConstState(0); // nextInt(50)=0
         assertTrue(BodyLogic.checkPartner(me));
     }
@@ -5731,7 +5731,7 @@ class BodyLogicTest {
         // b=me の intelligence を AVERAGE に固定 (FOOL だと findSick が isSickHeavily を使うため)
         me.setIntelligence(Intelligence.AVERAGE);
         // p=you is sick, b=me is not sick
-        you.setSickPeriod(you.getINCUBATIONPERIODorg() + 1); // isSick=true
+        you.setSickPeriod(you.getIncubationPeriodBase() + 1); // isSick=true
         assertTrue(BodyLogic.doActionOther(you, me));
         // L818が実行されたか確認 (addBodyEventはEventListにaddする)
         assertFalse(me.getEventList().isEmpty(), "L818: AvoidMoldEvent should be added to me's eventList");
@@ -5750,8 +5750,8 @@ class BodyLogicTest {
         me.setIntelligence(Intelligence.AVERAGE);
         you.setIntelligence(Intelligence.AVERAGE);
         // 両方かびてる
-        me.setSickPeriod(me.getINCUBATIONPERIODorg() + 1);
-        you.setSickPeriod(you.getINCUBATIONPERIODorg() + 1);
+        me.setSickPeriod(me.getIncubationPeriodBase() + 1);
+        you.setSickPeriod(you.getIncubationPeriodBase() + 1);
         assertTrue(BodyLogic.doActionOther(you, me));
     }
 
@@ -5769,7 +5769,7 @@ class BodyLogicTest {
         // p.findSick(b)=true (me sick, you=AVERAGE) + !p.isSick()=true → L822 true → addBodyEvent(you)
         me.setIntelligence(Intelligence.AVERAGE);
         you.setIntelligence(Intelligence.AVERAGE);
-        me.setSickPeriod(me.getINCUBATIONPERIODorg() + 1); // me.isSick()=true
+        me.setSickPeriod(me.getIncubationPeriodBase() + 1); // me.isSick()=true
         // you is NOT sick → you.findSick(me)=true, !you.isSick()=true
         assertTrue(BodyLogic.doActionOther(you, me));
         assertFalse(you.getEventList().isEmpty(), "L823: AvoidMoldEvent should be added to you's eventList");
@@ -5785,7 +5785,7 @@ class BodyLogicTest {
         me.setAgeState(AgeState.ADULT);
         you.setAgeState(AgeState.BABY);
         WorldTestHelper.setParents(you, me.getUniqueID(), -1); // me is father of you
-        you.setbNeedled(true); // p.isNeedled()=true
+        you.setNeedled(true); // p.isNeedled()=true
         assertTrue(BodyLogic.doActionOther(you, me)); // p=you(needled baby), b=me(adult parent)
     }
 
@@ -5888,7 +5888,7 @@ class BodyLogicTest {
         me.setAgeState(AgeState.CHILD);  // b is CHILD (age=BABYLIMITorg)
         you.setAgeState(AgeState.BABY);  // p is BABY (age=0) → b is elder
         // me.isSmart=false (default AVERAGE), so L895 false
-        WorldTestHelper.setDamage(you, you.getDAMAGELIMITorg()[AgeState.BABY.ordinal()] / 2 + 1); // isDamaged=true
+        WorldTestHelper.setDamage(you, you.getDamageLimitBase()[AgeState.BABY.ordinal()] / 2 + 1); // isDamaged=true
         Body parent = WorldTestHelper.createBody();
         SimYukkuri.world.getCurrentMap().getBody().put(parent.getUniqueID(), parent);
         WorldTestHelper.setParents(me, -1, parent.getUniqueID());
@@ -5910,7 +5910,7 @@ class BodyLogicTest {
         you.setPublicRank(PublicRank.NONE);
         me.setAgeState(AgeState.BABY);   // b is BABY (age=0) → b is younger
         you.setAgeState(AgeState.CHILD); // p is CHILD (age=BABYLIMITorg) → p is elder
-        WorldTestHelper.setDamage(you, you.getDAMAGELIMITorg()[AgeState.CHILD.ordinal()] / 2 + 1);
+        WorldTestHelper.setDamage(you, you.getDamageLimitBase()[AgeState.CHILD.ordinal()] / 2 + 1);
         Body parent = WorldTestHelper.createBody();
         SimYukkuri.world.getCurrentMap().getBody().put(parent.getUniqueID(), parent);
         WorldTestHelper.setParents(me, -1, parent.getUniqueID());
@@ -6024,7 +6024,7 @@ class BodyLogicTest {
         you.setBodySpr(makeSprites(1, 1));
         me.setAgeState(AgeState.ADULT);
         you.setAgeState(AgeState.ADULT); // !found.isAdult()=false → first if at L467 fails → else-if
-        you.setbNeedled(true);
+        you.setNeedled(true);
         you.setPartner(me.getUniqueID()); // found.isPartner(b)=true → L471 else-if
         SimYukkuri.RND = new ConstState(0); // nextInt(50)=0 → enter needled block
         assertTrue(BodyLogic.checkPartner(me));
@@ -6063,7 +6063,7 @@ class BodyLogicTest {
         me.setIntelligence(Intelligence.FOOL);
         you.setOkazari(null); // Marisa はデフォルトでおかざり有り → !p.hasOkazari() のため null に
         WorldTestHelper.setParents(you, me.getUniqueID(), -1); // me が you の父 → you.isChild(me)=true
-        you.seteCoreAnkoState(CoreAnkoState.NonYukkuriDiseaseNear); // you.isNYD()=true
+        you.setCoreAnkoState(CoreAnkoState.NonYukkuriDiseaseNear); // you.isNYD()=true
         ConstState rnd = new ConstState(0);
         rnd.setFixedBoolean(true); // nextBoolean=true → L831 実行
         SimYukkuri.RND = rnd;
@@ -6081,8 +6081,8 @@ class BodyLogicTest {
         me.setBodySpr(makeSprites(1, 1));
         you.setBodySpr(makeSprites(1, 1));
         me.setAgeState(AgeState.CHILD); // !isAdult
-        // EYESIGHTorg を縮小してしきい値 = 1600/32 = 50 にする
-        me.setEYESIGHTorg(1600); // threshold = 1600/32 = 50
+        // eyesightBase を縮小してしきい値 = 1600/32 = 50 にする
+        me.setEyesightBase(1600); // threshold = 1600/32 = 50
         // me の母親として you を設定
         WorldTestHelper.setParents(me, -1, you.getUniqueID()); // MAMA=you
         // dist = dx^2 >= 50 → dx=8 → dist=64 >= 50 OK, y は wallMap 範囲内
@@ -6228,7 +6228,7 @@ class BodyLogicTest {
         me.setPublicRank(PublicRank.NONE);
         you.setPublicRank(PublicRank.NONE);
         WorldTestHelper.setParents(you, -1, me.getUniqueID()); // me は you の母
-        you.setbNeedled(true); // p.isNeedled()=true
+        you.setNeedled(true); // p.isNeedled()=true
         SimYukkuri.RND = new ConstState(0);
         assertDoesNotThrow(() -> assertTrue(BodyLogic.doActionOther(you, me)));
     }
@@ -6315,7 +6315,7 @@ class BodyLogicTest {
         me.setExciting(true);
         me.setRaper(true);
         me.setToSukkiri(true);
-        me.setMoveTarget(you.getObjId()); // bodyOldMoveTarget = you, !you.isRaper()=true
+        me.setMoveTargetId(you.getObjId()); // bodyOldMoveTarget = you, !you.isRaper()=true
         me.setPublicRank(PublicRank.NONE);
         you.setPublicRank(PublicRank.NONE);
         SimYukkuri.RND = new ConstState(0);
@@ -6339,7 +6339,7 @@ class BodyLogicTest {
         you.setPublicRank(PublicRank.NONE);
         WorldTestHelper.setParents(me, -1, you.getUniqueID()); // you は me の母
         // you.isDamaged()=true: damage >= ADULT limit / 2
-        WorldTestHelper.setDamage(you, you.getDAMAGELIMITorg()[AgeState.ADULT.ordinal()] / 2 + 1);
+        WorldTestHelper.setDamage(you, you.getDamageLimitBase()[AgeState.ADULT.ordinal()] / 2 + 1);
         ConstState rnd = new ConstState(0);
         rnd.setFixedBoolean(true); // nextBoolean=true → L881 true → doPeropero
         SimYukkuri.RND = rnd;
@@ -6369,7 +6369,7 @@ class BodyLogicTest {
         WorldTestHelper.setParents(me, -1, sharedMom.getUniqueID());
         WorldTestHelper.setParents(you, -1, sharedMom.getUniqueID());
         // you.isDamaged()=true
-        WorldTestHelper.setDamage(you, you.getDAMAGELIMITorg()[AgeState.BABY.ordinal()] / 2 + 1);
+        WorldTestHelper.setDamage(you, you.getDamageLimitBase()[AgeState.BABY.ordinal()] / 2 + 1);
         // nextBoolean sequence: true (L891), false (L898), true (L907)
         final int[] boolSeq = {1, 0, 1};
         final int[] boolIdx = {0};
@@ -6400,7 +6400,7 @@ class BodyLogicTest {
         you.setX(100); you.setY(100); // 隣接
         me.setPublicRank(PublicRank.NONE);
         you.setPublicRank(PublicRank.NONE);
-        // you を map から外してから Ants を装着 (YukkuriUtil.getBodyInstance が null を返すので setBoundary をスキップ)
+        // you を map から外してから Ants を装着 (BodyRegistry で見つからないので setBoundary をスキップ)
         SimYukkuri.world.getCurrentMap().getBody().remove(you.getUniqueID());
         you.addAttachment(new Ants(you));
         SimYukkuri.world.getCurrentMap().getBody().put(you.getUniqueID(), you);
@@ -6424,7 +6424,7 @@ class BodyLogicTest {
         me.setHappiness(Happiness.HAPPY);
         you.setHappiness(Happiness.HAPPY);
         // プレイヤーがすりすり中
-        you.setbSurisuriFromPlayer(true);
+        you.setSurisuriFromPlayer(true);
         // nextInt(10)=0 → 1/10 フィルタ通過
         SimYukkuri.RND = new ConstState(0);
         assertDoesNotThrow(() -> BodyLogic.checkPartner(me));
@@ -6502,10 +6502,10 @@ class BodyLogicTest {
 
     @Test
     void testCheckPartner_NearlyBuriedNoOkazari_Skip_L304() {
-        // L304: if (p.getBaryState() == NEARLY_ALL && !p.hasOkazari()) → continue
+        // L304: if (p.getBurialState() == NEARLY_ALL && !p.hasOkazari()) → continue
         me.setBodySpr(makeSprites(1, 1));
         you.setBodySpr(makeSprites(1, 1));
-        you.setBaryState(src.enums.BaryInUGState.NEARLY_ALL);
+        you.setBurialState(src.enums.BurialState.NEARLY_ALL);
         you.setOkazari(null); // Body() constructor sets default okazari; clear it so !hasOkazari=true
         SimYukkuri.RND = new ConstState(0);
         assertFalse(BodyLogic.checkPartner(me));
@@ -6627,7 +6627,7 @@ class BodyLogicTest {
         you.setAgeState(AgeState.ADULT); // both ADULT → !p.isAdult()=false at L799
         me.setPartner(you.getUniqueID());
         you.setPartner(me.getUniqueID());
-        you.setbNeedled(true);
+        you.setNeedled(true);
         assertDoesNotThrow(() -> assertTrue(BodyLogic.doActionOther(you, me)));
     }
 
@@ -6644,7 +6644,7 @@ class BodyLogicTest {
         you.setPublicRank(PublicRank.NONE);
         me.setAgeState(AgeState.ADULT); // b=ADULT
         you.setAgeState(AgeState.BABY); // p=BABY, no child/mother/partner/sister relation
-        you.setbNeedled(true);
+        you.setNeedled(true);
         SimYukkuri.RND = new ConstState(0);
         assertDoesNotThrow(() -> assertTrue(BodyLogic.doActionOther(you, me)));
     }
@@ -6662,7 +6662,7 @@ class BodyLogicTest {
         me.setAgeState(AgeState.ADULT);
         you.setAgeState(AgeState.BABY);
         WorldTestHelper.setParents(you, -1, me.getUniqueID()); // you is child of me (mother)
-        you.setbNeedled(true);
+        you.setNeedled(true);
         SimYukkuri.RND = new ConstState(0); // nextInt(50)=0 → enters L466 block
         assertDoesNotThrow(() -> BodyLogic.checkPartner(me));
     }
@@ -6713,14 +6713,14 @@ class BodyLogicTest {
         // me and you have no relationship → STRANGER
         // mine=VERY_SAD + isRude → abEmote[1]+abEmote[5] (EmotionLogic L128-130)
         // !abEmote[2] → skips 羨望 block; abEmote[1]=true → skips 羨望2; hits 羨望3 default
-        you.setbSurisuriFromPlayer(true);
+        you.setSurisuriFromPlayer(true);
         SimYukkuri.RND = new ConstState(0);
         me.setHappiness(Happiness.VERY_SAD);
         you.setHappiness(Happiness.HAPPY);
         me.setAttitude(Attitude.SHITHEAD); // isRude=true
         // no partner/parent relationship → STRANGER
-        eActionGo result = BodyLogic.checkActionSurisuriFromPlayer(me, you);
-        assertEquals(eActionGo.WAIT, result);
+        ActionGo result = BodyLogic.checkActionSurisuriFromPlayer(me, you);
+        assertEquals(ActionGo.WAIT, result);
     }
 
     // =================================================================
@@ -6737,13 +6737,13 @@ class BodyLogicTest {
         WorldTestHelper.setParents(me, -1, mother.getUniqueID());
         WorldTestHelper.setParents(you, -1, mother.getUniqueID());
         // me.getAge()=0 >= you.getAge()=0 → isElderSister=true → ELDERSISTER
-        you.setbSurisuriFromPlayer(true);
+        you.setSurisuriFromPlayer(true);
         you.setHappiness(Happiness.HAPPY);   // target=HAPPY
         me.setHappiness(Happiness.VERY_SAD); // mine=VERY_SAD
         // me.isRude()=false (Marisa default) → abEmote[2]=true, abEmote[5]=true
         SimYukkuri.RND = new ConstState(0);  // nextInt(10)=0
-        eActionGo result = BodyLogic.checkActionSurisuriFromPlayer(me, you);
-        assertEquals(eActionGo.GO, result);
+        ActionGo result = BodyLogic.checkActionSurisuriFromPlayer(me, you);
+        assertEquals(ActionGo.GO, result);
     }
 
     // =================================================================
@@ -6760,12 +6760,12 @@ class BodyLogicTest {
         WorldTestHelper.setParents(you, -1, mother.getUniqueID());
         // me.getAge()=0 < you.getAge()=1 → isElderSister=false → YOUNGSISTER
         you.setAge(1);
-        you.setbSurisuriFromPlayer(true);
+        you.setSurisuriFromPlayer(true);
         you.setHappiness(Happiness.HAPPY);   // target=HAPPY
         me.setHappiness(Happiness.VERY_SAD); // mine=VERY_SAD
         SimYukkuri.RND = new ConstState(0);  // nextInt(10)=0
-        eActionGo result = BodyLogic.checkActionSurisuriFromPlayer(me, you);
-        assertEquals(eActionGo.GO, result);
+        ActionGo result = BodyLogic.checkActionSurisuriFromPlayer(me, you);
+        assertEquals(ActionGo.GO, result);
     }
 
     // =================================================================
@@ -6919,15 +6919,15 @@ class BodyLogicTest {
     }
 
     // =================================================================
-    // checkPartner: p.getBaryState()==ALL → continue, found=null → return false (L301)
+    // checkPartner: p.getBurialState()==ALL → continue, found=null → return false (L301)
     // =================================================================
 
     @Test
     void testCheckPartner_BaryStateAll_SkipContinue_L301() {
-        // p.getBaryState()==ALL → L300 TRUE → continue (L301); found=null → return false
+        // p.getBurialState()==ALL → L300 TRUE → continue (L301); found=null → return false
         me.setBodySpr(makeSprites(1, 1));
         you.setBodySpr(makeSprites(1, 1));
-        you.setBaryState(src.enums.BaryInUGState.ALL);
+        you.setBurialState(src.enums.BurialState.ALL);
         assertDoesNotThrow(() -> assertFalse(BodyLogic.checkPartner(me)));
     }
 
@@ -6992,10 +6992,10 @@ class BodyLogicTest {
         me.setBodySpr(makeSprites(1, 1));
         you.setBodySpr(makeSprites(1, 1));
         // me = ADULT (not exciting)
-        me.setAge((long) me.getCHILDLIMITorg());
+        me.setAge((long) me.getChildLimitBase());
         // you = BABY, isChild(me)=true
         WorldTestHelper.setParents(you, me.getUniqueID(), -1);
-        you.setbNeedled(true); // found.isNeedled()=true
+        you.setNeedled(true); // found.isNeedled()=true
         // nextInt(50)=0: checkEmotionFromUnunSlave (rank=NONE → returns false), then L466 (=0 → enter block)
         SimYukkuri.RND = new ConstState(0);
         assertDoesNotThrow(() -> assertTrue(BodyLogic.checkPartner(me)));
@@ -7007,7 +7007,7 @@ class BodyLogicTest {
         me.setBodySpr(makeSprites(1, 1));
         you.setBodySpr(makeSprites(1, 1));
         // me = ADULT, FOOL intelligence (not exciting)
-        me.setAge((long) me.getCHILDLIMITorg());
+        me.setAge((long) me.getChildLimitBase());
         me.setIntelligence(src.enums.Intelligence.FOOL);
         // you = BABY, isChild(me)=true
         WorldTestHelper.setParents(you, me.getUniqueID(), -1);
@@ -7024,7 +7024,7 @@ class BodyLogicTest {
         me.setBodySpr(makeSprites(1, 1));
         you.setBodySpr(makeSprites(1, 1));
         // me = ADULT, AVERAGE intelligence (not exciting)
-        me.setAge((long) me.getCHILDLIMITorg());
+        me.setAge((long) me.getChildLimitBase());
         // you = BABY, dirty, isChild(me)=true
         WorldTestHelper.setParents(you, me.getUniqueID(), -1);
         you.setDirty(true); // found.isNormalDirty()=true
@@ -7054,9 +7054,9 @@ class BodyLogicTest {
         // → else-if L471 (isPartner=false) → return true (L477)
         me.setBodySpr(makeSprites(1, 1));
         you.setBodySpr(makeSprites(1, 1));
-        me.setAge((long) me.getCHILDLIMITorg()); // b=ADULT
+        me.setAge((long) me.getChildLimitBase()); // b=ADULT
         // you = BABY (default), NO parent relationship → found.isChild(b)=false
-        you.setbNeedled(true); // found.isNeedled()=true
+        you.setNeedled(true); // found.isNeedled()=true
         SimYukkuri.RND = new ConstState(0); // nextInt(50)=0
         assertDoesNotThrow(() -> assertTrue(BodyLogic.checkPartner(me)));
     }
@@ -7067,7 +7067,7 @@ class BodyLogicTest {
         // → L483 condition false; no ants → L489 false; not dirty → L494 false → falls through
         me.setBodySpr(makeSprites(1, 1));
         you.setBodySpr(makeSprites(1, 1));
-        me.setAge((long) me.getCHILDLIMITorg()); // b=ADULT, FOOL
+        me.setAge((long) me.getChildLimitBase()); // b=ADULT, FOOL
         me.setIntelligence(src.enums.Intelligence.FOOL);
         // you = BABY, no parent, not needled (default) → isChild(b)=false
         ConstState rng = new ConstState(0);
@@ -7082,7 +7082,7 @@ class BodyLogicTest {
         // → L495 condition false; b.isChild(found) false → falls through → return false
         me.setBodySpr(makeSprites(1, 1));
         you.setBodySpr(makeSprites(1, 1));
-        me.setAge((long) me.getCHILDLIMITorg()); // b=ADULT, AVERAGE intelligence
+        me.setAge((long) me.getChildLimitBase()); // b=ADULT, AVERAGE intelligence
         you.setDirty(true); // found.isNormalDirty()=true
         // no parent relationship → isChild(b)=false, isMother(found)=false
         ConstState rng = new ConstState(0);
@@ -7131,7 +7131,7 @@ class BodyLogicTest {
         you.setBodySpr(makeSprites(1, 1));
         me.setX(100); me.setY(100);
         you.setX(100); you.setY(100);
-        me.setAge((long) me.getCHILDLIMITorg()); // b=ADULT
+        me.setAge((long) me.getChildLimitBase()); // b=ADULT
         me.setIntelligence(Intelligence.FOOL);
         WorldTestHelper.setParents(you, me.getUniqueID(), -1); // you.isChild(me)=true
         SimYukkuri.RND = new ConstState(0); // nextBoolean=false → L829 inner false
@@ -7145,10 +7145,10 @@ class BodyLogicTest {
         you.setBodySpr(makeSprites(1, 1));
         me.setX(100); me.setY(100);
         you.setX(100); you.setY(100);
-        me.setAge((long) me.getCHILDLIMITorg()); // b=ADULT
+        me.setAge((long) me.getChildLimitBase()); // b=ADULT
         me.setIntelligence(Intelligence.FOOL);
         WorldTestHelper.setParents(you, me.getUniqueID(), -1); // you.isChild(me)=true
-        you.seteCoreAnkoState(CoreAnkoState.NonYukkuriDiseaseNear); // p.isNYD()=true
+        you.setCoreAnkoState(CoreAnkoState.NonYukkuriDiseaseNear); // p.isNYD()=true
         ConstState rng = new ConstState(0);
         rng.setFixedBoolean(true); // nextBoolean=true → L829 inner true
         SimYukkuri.RND = rng;
@@ -7166,7 +7166,7 @@ class BodyLogicTest {
         you.setBodySpr(makeSprites(1, 1));
         me.setX(100); me.setY(100);
         you.setX(100); you.setY(100);
-        me.setAge((long) me.getCHILDLIMITorg()); // b=ADULT
+        me.setAge((long) me.getChildLimitBase()); // b=ADULT
         me.setIntelligence(Intelligence.FOOL);
         // no setParents → you.isChild(me)=false → b.isMother(p) IS evaluated
         SimYukkuri.RND = new ConstState(0);
@@ -7185,7 +7185,7 @@ class BodyLogicTest {
         you.setBodySpr(makeSprites(1, 1));
         me.setX(100); me.setY(100);
         you.setX(100); you.setY(100);
-        me.setAge((long) me.getCHILDLIMITorg()); // b=ADULT
+        me.setAge((long) me.getChildLimitBase()); // b=ADULT
         // AVERAGE intelligence (default) → L827 false, L852 true
         WorldTestHelper.setParents(you, me.getUniqueID(), -1); // you.isChild(me)=true
         ConstState rng = new ConstState(0);
@@ -7205,7 +7205,7 @@ class BodyLogicTest {
         you.setBodySpr(makeSprites(1, 1));
         me.setX(100); me.setY(100);
         you.setX(100); you.setY(100);
-        me.setAge((long) me.getCHILDLIMITorg()); // b=ADULT
+        me.setAge((long) me.getChildLimitBase()); // b=ADULT
         WorldTestHelper.setParents(you, me.getUniqueID(), -1); // you.isChild(me)=true
         // you.isDirty()=false → L856 first condition false → nextBoolean called
         final int[] boolSeq = {0, 1}; // [false, true]
@@ -7232,7 +7232,7 @@ class BodyLogicTest {
         you.setBodySpr(makeSprites(1, 1));
         me.setX(100); me.setY(100);
         you.setX(100); you.setY(100);
-        me.setAge((long) me.getCHILDLIMITorg()); // b=ADULT
+        me.setAge((long) me.getChildLimitBase()); // b=ADULT
         // no parent relationship → p.isChild(b)=false → b.isParent(p) IS evaluated
         SimYukkuri.RND = new ConstState(0);
         assertDoesNotThrow(() -> BodyLogic.doActionOther(you, me));
@@ -7260,30 +7260,30 @@ class BodyLogicTest {
     @Test
     void testCheckActionSurisuriFromPlayer_HappyFather_ReturnsGo() {
         // abEmote[0]=true, FATHER → L1003-1010 → GO
-        you.setbSurisuriFromPlayer(true);
+        you.setSurisuriFromPlayer(true);
         SimYukkuri.RND = new ConstState(0);
         WorldTestHelper.setParents(you, me.getUniqueID(), -1); // checkMyRelation(me,you)=FATHER
         me.setHappiness(Happiness.HAPPY);
         you.setHappiness(Happiness.HAPPY);
-        assertEquals(BodyLogic.eActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you));
+        assertEquals(BodyLogic.ActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you));
     }
 
     @Test
     void testCheckActionSurisuriFromPlayer_HappyPartner_ReturnsGo() {
         // abEmote[0]=true, PARTNAR → L1011-1017 → GO
-        you.setbSurisuriFromPlayer(true);
+        you.setSurisuriFromPlayer(true);
         SimYukkuri.RND = new ConstState(0);
         me.setPartner(you.getUniqueID()); // checkMyRelation(me,you)=PARTNAR
         me.setHappiness(Happiness.HAPPY);
         you.setHappiness(Happiness.HAPPY);
         assertDoesNotThrow(() ->
-            assertEquals(BodyLogic.eActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you)));
+            assertEquals(BodyLogic.ActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you)));
     }
 
     @Test
     void testCheckActionSurisuriFromPlayer_HappyElderSister_ReturnsGo() {
         // abEmote[0]=true, ELDERSISTER → L1032-1038 → GO
-        you.setbSurisuriFromPlayer(true);
+        you.setSurisuriFromPlayer(true);
         SimYukkuri.RND = new ConstState(0);
         Body sharedMom = WorldTestHelper.createBody();
         SimYukkuri.world.getCurrentMap().getBody().put(sharedMom.getUniqueID(), sharedMom);
@@ -7292,7 +7292,7 @@ class BodyLogicTest {
         // me.ID < you.ID → me=ELDERSISTER, you=YOUNGSISTER
         me.setHappiness(Happiness.HAPPY);
         you.setHappiness(Happiness.HAPPY);
-        assertEquals(BodyLogic.eActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you));
+        assertEquals(BodyLogic.ActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you));
     }
 
     // =================================================================
@@ -7303,11 +7303,11 @@ class BodyLogicTest {
     void testCheckActionSurisuriFromPlayer_SadEnvy_Stranger_Wait_L1084() {
         // me=SAD, you=HAPPY, no relation → abEmote[2]+abEmote[5]=true, !abEmote[1]
         // L1058 true → default → "他人をうらやましがって泣く" → WAIT
-        you.setbSurisuriFromPlayer(true);
+        you.setSurisuriFromPlayer(true);
         SimYukkuri.RND = new ConstState(0);
         me.setHappiness(Happiness.SAD);
         you.setHappiness(Happiness.HAPPY);
-        assertEquals(BodyLogic.eActionGo.WAIT, BodyLogic.checkActionSurisuriFromPlayer(me, you));
+        assertEquals(BodyLogic.ActionGo.WAIT, BodyLogic.checkActionSurisuriFromPlayer(me, you));
     }
 
     // =================================================================
@@ -7318,7 +7318,7 @@ class BodyLogicTest {
     void testCheckActionSurisuriFromPlayer_SadEnvyElderSister_Go_L1103() {
         // me=SAD, you=HAPPY, ELDERSISTER → abEmote[5]=true, abEmote[2]=false
         // L1095 true → ELDERSISTER → GO
-        you.setbSurisuriFromPlayer(true);
+        you.setSurisuriFromPlayer(true);
         SimYukkuri.RND = new ConstState(0);
         Body sharedMom = WorldTestHelper.createBody();
         SimYukkuri.world.getCurrentMap().getBody().put(sharedMom.getUniqueID(), sharedMom);
@@ -7327,7 +7327,7 @@ class BodyLogicTest {
         me.setHappiness(Happiness.SAD);
         you.setHappiness(Happiness.HAPPY);
         assertDoesNotThrow(() ->
-            assertEquals(BodyLogic.eActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you)));
+            assertEquals(BodyLogic.ActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you)));
     }
 
     // =================================================================
@@ -7338,14 +7338,14 @@ class BodyLogicTest {
     void testCheckActionSurisuriFromPlayer_EnvyAngryFather_Wait_L1140() {
         // me=VERY_SAD+isRude, you=HAPPY, FATHER → abEmote[1]+abEmote[5]=true
         // L1133 true → FATHER/MOTHER case → WAIT
-        you.setbSurisuriFromPlayer(true);
+        you.setSurisuriFromPlayer(true);
         SimYukkuri.RND = new ConstState(0);
         WorldTestHelper.setParents(you, me.getUniqueID(), -1); // me=FATHER
         me.setHappiness(Happiness.VERY_SAD);
         me.setAttitude(Attitude.SHITHEAD); // isRude()=true
         you.setHappiness(Happiness.HAPPY);
         assertDoesNotThrow(() ->
-            assertEquals(BodyLogic.eActionGo.WAIT, BodyLogic.checkActionSurisuriFromPlayer(me, you)));
+            assertEquals(BodyLogic.ActionGo.WAIT, BodyLogic.checkActionSurisuriFromPlayer(me, you)));
     }
 
     // =================================================================
@@ -7356,13 +7356,13 @@ class BodyLogicTest {
     void testCheckActionSurisuriFromPlayer_FearOnly_Stranger_Wait_L1196() {
         // me=AVERAGE, you=VERY_SAD+damaged, no relation, !isRude
         // abEmote[4]=true, abEmote[2]=false → L1196 true → WAIT
-        you.setbSurisuriFromPlayer(true);
+        you.setSurisuriFromPlayer(true);
         SimYukkuri.RND = new ConstState(0);
         you.setHappiness(Happiness.VERY_SAD);
-        WorldTestHelper.setDamage(you, you.getDAMAGELIMITorg()[AgeState.BABY.ordinal()] / 2 + 1);
+        WorldTestHelper.setDamage(you, you.getDamageLimitBase()[AgeState.BABY.ordinal()] / 2 + 1);
         // me=AVERAGE (default), no relation, !isRude → abEmote[4]=true only
         assertDoesNotThrow(() ->
-            assertEquals(BodyLogic.eActionGo.WAIT, BodyLogic.checkActionSurisuriFromPlayer(me, you)));
+            assertEquals(BodyLogic.ActionGo.WAIT, BodyLogic.checkActionSurisuriFromPlayer(me, you)));
     }
 
     // =================================================================
@@ -7373,14 +7373,14 @@ class BodyLogicTest {
     void testCheckActionSurisuriFromPlayer_WorrySadFear_Father_Go_L1221() {
         // me=HAPPY, you=VERY_SAD+damaged, FATHER → abEmote[2]+abEmote[6]+abEmote[4]=true
         // L1221 true → FATHER/MOTHER case → GO
-        you.setbSurisuriFromPlayer(true);
+        you.setSurisuriFromPlayer(true);
         SimYukkuri.RND = new ConstState(0);
         WorldTestHelper.setParents(you, me.getUniqueID(), -1); // me=FATHER
         me.setHappiness(Happiness.HAPPY);
         you.setHappiness(Happiness.VERY_SAD);
-        WorldTestHelper.setDamage(you, you.getDAMAGELIMITorg()[AgeState.BABY.ordinal()] / 2 + 1);
+        WorldTestHelper.setDamage(you, you.getDamageLimitBase()[AgeState.BABY.ordinal()] / 2 + 1);
         assertDoesNotThrow(() ->
-            assertEquals(BodyLogic.eActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you)));
+            assertEquals(BodyLogic.ActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you)));
     }
 
     // =================================================================
@@ -7390,7 +7390,7 @@ class BodyLogicTest {
     @Test
     void testCheckWakeupOtherYukkuri_YouNYD_SkipContinue() {
         // p.isNYD()=true → continue (L2024-2025 カバー)
-        you.seteCoreAnkoState(CoreAnkoState.NonYukkuriDiseaseNear);
+        you.setCoreAnkoState(CoreAnkoState.NonYukkuriDiseaseNear);
         assertFalse(BodyLogic.checkWakeupOtherYukkuri(me));
     }
 
@@ -7417,7 +7417,7 @@ class BodyLogicTest {
     @Test
     void testCheckNearParent_AdultBody_EarlyReturn() {
         // b.isAdult()=true → L1949-1950 早期終了
-        me.setAge((long) me.getCHILDLIMITorg()); // ADULT
+        me.setAge((long) me.getChildLimitBase()); // ADULT
         assertDoesNotThrow(() -> BodyLogic.checkNearParent(me));
     }
 
@@ -7445,7 +7445,7 @@ class BodyLogicTest {
     void testCheckActionSurisuriFromPlayer_ConcernPartnar_NoPain_ReturnsGO_L1291() {
         // abEmote[2]+abEmote[6]+!abEmote[4]+PARTNAR → ConcernAboutPartner, GO (L1289-1295)
         // me=HAPPY, you=VERY_SAD (no damage), me.setPartner(you.ID) → PARTNAR relation
-        you.setbSurisuriFromPlayer(true);
+        you.setSurisuriFromPlayer(true);
         SimYukkuri.RND = new ConstState(0);
         me.setHappiness(Happiness.HAPPY);
         you.setHappiness(Happiness.VERY_SAD);
@@ -7453,7 +7453,7 @@ class BodyLogicTest {
         you.setPartner(me.getUniqueID());
         // no damage → bIsPainOther=false → abEmote[4]=false → hits 心配3 block
         assertDoesNotThrow(() ->
-            assertEquals(BodyLogic.eActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you)));
+            assertEquals(BodyLogic.ActionGo.GO, BodyLogic.checkActionSurisuriFromPlayer(me, you)));
     }
 
     // =================================================================
@@ -7516,7 +7516,7 @@ class BodyLogicTest {
         me.setElderSisterList(elderList);
         me.setX(10); me.setY(10);
         you.setX(50); you.setY(10); // far
-        me.setEYESIGHTorg(1600); // threshold = 50
+        me.setEyesightBase(1600); // threshold = 50
         assertDoesNotThrow(() -> BodyLogic.checkNearParent(me));
     }
 
@@ -7553,7 +7553,7 @@ class BodyLogicTest {
     void testCheckWakeupOtherYukkuri_YouFarAway_L2032False() {
         // minDistance < dist → L2032 false → no barrier check, go to L2039
         // me.EYESIGHT < dist → set EYESIGHT small, put you far away
-        me.setEYESIGHTorg(1); // very small eyesight
+        me.setEyesightBase(1); // very small eyesight
         me.setX(10); me.setY(10);
         you.setX(50); you.setY(10); // dist=1600 > EYESIGHT=1
         // you not sleeping → bIsWakeup=true
@@ -7619,7 +7619,7 @@ class BodyLogicTest {
         you.setBodySpr(makeSprites(1, 1));
         me.setOkazari(null);
         me.setAttitude(Attitude.SHITHEAD);
-        you.setbPheromone(true);
+        you.setPheromone(true);
         assertDoesNotThrow(() -> BodyLogic.checkPartner(me));
     }
 
@@ -7644,7 +7644,7 @@ class BodyLogicTest {
         // third: NYD → hasDisorder=true → L1439 continue (L1440)
         Body third = WorldTestHelper.createBody();
         third.setX(200); third.setY(200);
-        third.seteCoreAnkoState(CoreAnkoState.NonYukkuriDiseaseNear); // isNYD=true → hasDisorder=true
+        third.setCoreAnkoState(CoreAnkoState.NonYukkuriDiseaseNear); // isNYD=true → hasDisorder=true
         SimYukkuri.world.getCurrentMap().getBody().put(third.getUniqueID(), third);
         assertDoesNotThrow(() -> BodyLogic.createActiveFianceeList(me, AgeState.ADULT.ordinal()));
     }

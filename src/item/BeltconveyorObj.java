@@ -46,7 +46,6 @@ import src.game.Vomit;
 import src.system.Cash;
 import src.system.ResourceUtil;
 import src.system.YukkuriFilterPanel;
-import src.util.YukkuriUtil;
 
 /***************************************************
  * ベルコン2
@@ -77,22 +76,22 @@ public class BeltconveyorObj extends ObjEX {
 	private int speed_before = 0;
 	private int targetType;
 	private int cantmove = 0;
-	private boolean bMoveOnce = false;
+	private boolean moveOnce = false;
 	protected List<Obj> bindObjList = new LinkedList<Obj>(); // ベルトコンベア上で移動不可能な状態になっているアイテムのリスト
 
 	protected List<YukkuriType> selectedYukkuriType = new LinkedList<YukkuriType>(); // 処理対象のゆっくり
 	static protected List<String> istrOptionList = new LinkedList<String>(); // 処理対象設定(オプション)
 	protected List<Boolean> obOptionSelectionList = new LinkedList<Boolean>(); // 処理対象設定(オプション)の選択状態
 
-	protected boolean bFilter = false;
+	protected boolean filter = false;
 	protected int fieldSX;
 	protected int fieldSY;
 	protected int fieldEX;
 	protected int fieldEY;
 	protected int firstX;
 	protected int firstY;
-	protected int[] anPointX = new int[4];
-	protected int[] anPointY = new int[4];
+	protected int[] polygonX = new int[4];
+	protected int[] polygonY = new int[4];
 
 	public static enum Action {
 		YUKKURI_FILTER(GameText.read("item_filtersettings"), ""),
@@ -161,17 +160,15 @@ public class BeltconveyorObj extends ObjEX {
 	}
 
 	public int getImageLayer(Graphics2D g2, BufferedImage[] layer) {
-		int[] anPointBaseX = new int[2];
-		int[] anPointBaseY = new int[2];
-		Translate.getMovedPoint(fieldSX, fieldSY, fieldEX, fieldEY, firstX, firstY, x, y, anPointBaseX, anPointBaseY);
-		Translate.getPolygonPoint(anPointBaseX[0], anPointBaseY[0], anPointBaseX[1], anPointBaseY[1], anPointX,
-				anPointY);
-		// Translate.getPolygonPoint(fieldSX, fieldSY, fieldEX, fieldEY, anPointX,
-		// anPointY);
+		int[] basePolygonX = new int[2];
+		int[] basePolygonY = new int[2];
+		Translate.getMovedPoint(fieldSX, fieldSY, fieldEX, fieldEY, firstX, firstY, x, y, basePolygonX, basePolygonY);
+		Translate.getPolygonPoint(basePolygonX[0], basePolygonY[0], basePolygonX[1], basePolygonY[1], polygonX,
+				polygonY);
 		TexturePaint texture = new TexturePaint(layer[0],
 				new Rectangle2D.Float(0, 0, layer[0].getWidth() - 10, layer[0].getHeight() - 10));
 		g2.setPaint(texture);
-		g2.fillPolygon(anPointX, anPointY, 4);
+		g2.fillPolygon(polygonX, polygonY, 4);
 		return 1;
 	}
 
@@ -191,10 +188,10 @@ public class BeltconveyorObj extends ObjEX {
 	}
 
 	public static void drawPreview(Graphics2D g2, int sx, int sy, int ex, int ey) {
-		int[] anPointX = new int[4];
-		int[] anPointY = new int[4];
-		Translate.getPolygonPoint(sx, sy, ex, ey, anPointX, anPointY);
-		g2.drawPolygon(anPointX, anPointY, 4);
+		int[] polygonX = new int[4];
+		int[] polygonY = new int[4];
+		Translate.getPolygonPoint(sx, sy, ex, ey, polygonX, polygonY);
+		g2.drawPolygon(polygonX, polygonY, 4);
 	}
 
 	public static Rectangle4y getBounding() {
@@ -206,19 +203,20 @@ public class BeltconveyorObj extends ObjEX {
 		return hitCheckObjType;
 	}
 
-	public boolean checkContain(int inX, int inY, boolean bIsField) {
-		int nX = inX;
-		int nY = inY;
-		if (bIsField) {
+	public boolean checkContain(int inX, int inY, boolean isField) {
+		int xCoord = inX;
+		int yCoord = inY;
+		if (isField) {
 			Point4y pos = Translate.invertLimit(inX, inY);
-			nX = pos.getX();
-			nY = pos.getY();
+			xCoord = pos.getX();
+			yCoord = pos.getY();
 		}
 
-		Point4y posFirst = Translate.invertLimit(anPointX[0], anPointY[0]);
-		Point4y posSecond = Translate.invertLimit(anPointX[2], anPointY[2]);
+		Point4y posFirst = Translate.invertLimit(polygonX[0], polygonY[0]);
+		Point4y posSecond = Translate.invertLimit(polygonX[2], polygonY[2]);
 		if (posFirst != null && posSecond != null) {
-			if (posFirst.getX() <= nX && nX <= posSecond.getX() && posFirst.getY() <= nY && nY <= posSecond.getY()) {
+			if (posFirst.getX() <= xCoord && xCoord <= posSecond.getX() && posFirst.getY() <= yCoord
+					&& yCoord <= posSecond.getY()) {
 				return true;
 			}
 		}
@@ -238,7 +236,7 @@ public class BeltconveyorObj extends ObjEX {
 			}
 			if (bindObjList != null && bindObjList.contains(o)) {
 				if (o instanceof Body) {
-					((Body) o).setbOnDontMoveBeltconveyor(false);
+					((Body) o).setOnNonMovingConveyor(false);
 				}
 				bindObjList.remove(o);
 			}
@@ -255,9 +253,9 @@ public class BeltconveyorObj extends ObjEX {
 		int attr = 16;
 
 		// フィルター有効時
-		if (o instanceof Body && bFilter) {
+		if (o instanceof Body && filter) {
 			Body bodyTarget = (Body) o;
-			YukkuriType type = YukkuriUtil.getYukkuriType(bodyTarget.getClass().getSimpleName());
+			YukkuriType type = YukkuriType.fromClassName(bodyTarget.getClass().getSimpleName());
 			// ゆっくりタイプチェック
 			if (selectedYukkuriType != null && selectedYukkuriType.contains(type)) {
 				return 0;
@@ -337,9 +335,9 @@ public class BeltconveyorObj extends ObjEX {
 		if (o instanceof Body)
 			attr = Barrier.MAP_BODY[((Body) o).getBodyAgeState().ordinal()];
 		if (!Barrier.onBarrier(objX, objY, objW >> 1, objH >> 2, attr)) {
-			boolean bMove = true;
+			boolean shouldMove = true;
 			// 一体づつ流す設定の時
-			if (bMoveOnce == true) {
+			if (moveOnce == true) {
 				if ((bindObjList != null) && bindObjList.contains(o) == true) {
 					for (Obj oBind : bindObjList) {
 						if (oBind == null || oBind.isRemoved()) {
@@ -356,13 +354,13 @@ public class BeltconveyorObj extends ObjEX {
 						// リスト上の優先データがフィールドにひかかっていないなら終了
 						if (!Barrier.onBarrier(oBind.getX(), oBind.getY(), oBind.getW() >> 1, oBind.getH() >> 2,
 								attrBind)) {
-							bMove = false;
+							shouldMove = false;
 							break;
 						}
 					}
 				}
 			}
-			if (bMove == true) {
+			if (shouldMove == true) {
 				switch (option) {
 					case 0: // '\0'
 					default:
@@ -384,7 +382,7 @@ public class BeltconveyorObj extends ObjEX {
 		if (cantmove != 0) {
 			// 移動不可
 			if (o instanceof Body) {
-				((Body) o).setbOnDontMoveBeltconveyor(true);
+				((Body) o).setOnNonMovingConveyor(true);
 			}
 			if ((bindObjList != null) && !bindObjList.contains(o)) {
 				bindObjList.add(o);
@@ -409,7 +407,7 @@ public class BeltconveyorObj extends ObjEX {
 					continue;
 				}
 				if (o instanceof Body) {
-					((Body) o).setbOnDontMoveBeltconveyor(false);
+					((Body) o).setOnNonMovingConveyor(false);
 				}
 			}
 			bindObjList.clear();
@@ -440,8 +438,8 @@ public class BeltconveyorObj extends ObjEX {
 		obOptionSelectionList.add(true);
 		obOptionSelectionList.add(false);
 
-		boolean bRet = setBeltconveyor(this, false);
-		if (!bRet) {
+		boolean setupSuccess = setBeltconveyor(this, false);
+		if (!setupSuccess) {
 			remove();
 			return;
 		}
@@ -585,11 +583,11 @@ public class BeltconveyorObj extends ObjEX {
 			belt.cantmove = 0;
 		} else if (move == 1) {
 			belt.cantmove = 1;
-			belt.bMoveOnce = false;
+			belt.moveOnce = false;
 		} else {
 			// 移動不可能
 			belt.cantmove = 1;
-			belt.bMoveOnce = true;
+			belt.moveOnce = true;
 		}
 		belt.beltSpeed = speed + 1;
 		// ----------------------
@@ -601,29 +599,29 @@ public class BeltconveyorObj extends ObjEX {
 			belt.fieldEX = pE.getX();
 			belt.fieldEY = pE.getY();
 
-			int[] anPointBaseX = new int[2];
-			int[] anPointBaseY = new int[2];
-			Translate.getMovedPoint(belt.fieldSX, belt.fieldSY, belt.fieldEX, belt.fieldEY, 0, 0, 0, 0, anPointBaseX,
-					anPointBaseY);
+			int[] basePolygonX = new int[2];
+			int[] basePolygonY = new int[2];
+			Translate.getMovedPoint(belt.fieldSX, belt.fieldSY, belt.fieldEX, belt.fieldEY, 0, 0, 0, 0, basePolygonX,
+					basePolygonY);
 
-			int nTempX = anPointBaseX[0] + Math.abs(anPointBaseX[1] - anPointBaseX[0]) / 2;
-			int nTempY = anPointBaseY[0] + Math.abs(anPointBaseY[1] - anPointBaseY[0]) / 2;
-			Point4y pos = Translate.invertLimit(nTempX, nTempY);
+			int centerX = basePolygonX[0] + Math.abs(basePolygonX[1] - basePolygonX[0]) / 2;
+			int centerY = basePolygonY[0] + Math.abs(basePolygonY[1] - basePolygonY[0]) / 2;
+			Point4y pos = Translate.invertLimit(centerX, centerY);
 			BeltconveyorObj.x_default = pos.getX();
 			BeltconveyorObj.y_default = pos.getY();
 			belt.setCalcX(pos.getX());
 			belt.setCalcY(pos.getY());
 
-			BeltconveyorObj.boundary.setWidth(Math.abs(anPointBaseX[1] - anPointBaseX[0]));
+			BeltconveyorObj.boundary.setWidth(Math.abs(basePolygonX[1] - basePolygonX[0]));
 			BeltconveyorObj.boundary.setHeight(Math.abs(SimYukkuri.fieldEY - SimYukkuri.fieldSY));
-			BeltconveyorObj.boundary.setX(Math.abs(anPointBaseX[1] - anPointBaseX[0]) >> 1);
-			BeltconveyorObj.boundary.setY(Math.abs(anPointBaseY[1] - anPointBaseY[0]) >> 1);
+			BeltconveyorObj.boundary.setX(Math.abs(basePolygonX[1] - basePolygonX[0]) >> 1);
+			BeltconveyorObj.boundary.setY(Math.abs(basePolygonY[1] - basePolygonY[0]) >> 1);
 		}
 		return true;
 	}
 
-	public void setFilter(boolean bFlag) {
-		bFilter = bFlag;
+	public void applyFilterSetting(boolean filterEnabled) {
+		filter = filterEnabled;
 	}
 
 	public List<YukkuriType> getYukkuriFilter() {
@@ -694,12 +692,12 @@ public class BeltconveyorObj extends ObjEX {
 		this.cantmove = cantmove;
 	}
 
-	public boolean isbMoveOnce() {
-		return bMoveOnce;
+	public boolean isMoveOnce() {
+		return moveOnce;
 	}
 
-	public void setbMoveOnce(boolean bMoveOnce) {
-		this.bMoveOnce = bMoveOnce;
+	public void setMoveOnce(boolean moveOnce) {
+		this.moveOnce = moveOnce;
 	}
 
 	public List<Obj> getBindObjList() {
@@ -726,12 +724,12 @@ public class BeltconveyorObj extends ObjEX {
 		this.obOptionSelectionList = obOptionSelectionList;
 	}
 
-	public boolean isbFilter() {
-		return bFilter;
+	public boolean isFilter() {
+		return filter;
 	}
 
-	public void setbFilter(boolean bFilter) {
-		this.bFilter = bFilter;
+	public void setFilter(boolean filter) {
+		this.filter = filter;
 	}
 
 	public int getFieldSX() {
@@ -782,20 +780,20 @@ public class BeltconveyorObj extends ObjEX {
 		this.firstY = firstY;
 	}
 
-	public int[] getAnPointX() {
-		return anPointX;
+	public int[] getPolygonX() {
+		return polygonX;
 	}
 
-	public void setAnPointX(int[] anPointX) {
-		this.anPointX = anPointX;
+	public void setPolygonX(int[] polygonX) {
+		this.polygonX = polygonX;
 	}
 
-	public int[] getAnPointY() {
-		return anPointY;
+	public int[] getPolygonY() {
+		return polygonY;
 	}
 
-	public void setAnPointY(int[] anPointY) {
-		this.anPointY = anPointY;
+	public void setPolygonY(int[] polygonY) {
+		this.polygonY = polygonY;
 	}
 
 	public void setBeltSpeed(int beltSpeed) {
@@ -816,12 +814,12 @@ public class BeltconveyorObj extends ObjEX {
 					List<String> istrOptionList = master.getOptionFilter();
 					List<Boolean> obOptionSelectionList = master.getOptionResultFilter();
 					List<YukkuriType> arrayTemp = master.getYukkuriFilter();
-					boolean bFilter = YukkuriFilterPanel.openFilterPanel(
+					boolean filterEnabled = YukkuriFilterPanel.openFilterPanel(
 							GameText.read("item_targetsettings"),
 							GameText.read("item_explanation"),
 							istrOptionList, arrayTemp, obOptionSelectionList);
-					if (bFilter) {
-						master.setFilter(bFilter);
+					if (filterEnabled) {
+						master.setFilter(filterEnabled);
 						master.setYukkuriFilter(arrayTemp);
 						master.setOptionResultFilter(obOptionSelectionList);
 					}

@@ -18,7 +18,6 @@ import src.logic.BodyLogic;
 import src.logic.FoodLogic;
 import src.system.MessagePool;
 import src.system.ResourceUtil;
-import src.util.YukkuriUtil;
 
 /***************************************************
  * すーぱーむーしゃむーしゃたいむイベント
@@ -31,9 +30,9 @@ public class SuperEatingTimeEvent extends EventPacket {
 
 	private static final long serialVersionUID = -2604356330046082053L;
 	int tick = 0;
-	int nFromWaitCount = 0;
+	int waitTicks = 0;
 	private STATE state = STATE.WAIT;
-	int nLowestStep = 0;
+	int minimumStep = 0;
 
 	/** 行動ステート */
 	public enum STATE {
@@ -69,17 +68,17 @@ public class SuperEatingTimeEvent extends EventPacket {
 		this.tick = tick;
 	}
 
-	public int getFromWaitCount() {
-		return nFromWaitCount;
+	public int getWaitTicks() {
+		return waitTicks;
 	}
 
-	public void setFromWaitCount(int fromWaitCount) {
-		this.nFromWaitCount = fromWaitCount;
+	public void setWaitTicks(int waitTicks) {
+		this.waitTicks = waitTicks;
 	}
 
 	@Override
 	public boolean simpleEventAction(Body b) {
-		Body from = YukkuriUtil.getBodyInstance(getFrom());
+		Body from = src.util.BodyRegistry.getBodyInstance(getFrom());
 		if (from == null || from.isShutmouth()) {
 			return true;
 		}
@@ -91,8 +90,7 @@ public class SuperEatingTimeEvent extends EventPacket {
 	// また、イベント優先度も必要に応じて設定できる
 	@Override
 	public boolean checkEventResponse(Body b) {
-		boolean ret = false;
-		Body from = YukkuriUtil.getBodyInstance(getFrom());
+		Body from = src.util.BodyRegistry.getBodyInstance(getFrom());
 		if (from == null)
 			return false;
 		if (from == b && !(b.isShutmouth())) {
@@ -128,9 +126,7 @@ public class SuperEatingTimeEvent extends EventPacket {
 		if (b.isAdult())
 			return false;
 
-		ret = true;
-
-		return ret;
+		return true;
 	}
 
 	// イベント開始動作
@@ -139,12 +135,12 @@ public class SuperEatingTimeEvent extends EventPacket {
 		b.setCurrentEvent(this);
 	}
 
-	public int getLowestStep() {
-		return nLowestStep;
+	public int getMinimumStep() {
+		return minimumStep;
 	}
 
-	public void setLowestStep(int lowestStep) {
-		this.nLowestStep = lowestStep;
+	public void setMinimumStep(int minimumStep) {
+		this.minimumStep = minimumStep;
 	}
 
 	public STATE getState() {
@@ -161,7 +157,7 @@ public class SuperEatingTimeEvent extends EventPacket {
 	@Override
 	public UpdateState update(Body b) {
 		b.clearActionsForEvent();
-		Body from = YukkuriUtil.getBodyInstance(getFrom());
+		Body from = src.util.BodyRegistry.getBodyInstance(getFrom());
 		if (b == null || from == null) {
 			return UpdateState.ABORT;
 		}
@@ -189,7 +185,7 @@ public class SuperEatingTimeEvent extends EventPacket {
 			return UpdateState.ABORT;
 		}
 
-		if ((10 < nFromWaitCount && from.getCurrentEvent() == null) || target == null || target.isRemoved()) {
+		if ((10 < waitTicks && from.getCurrentEvent() == null) || target == null || target.isRemoved()) {
 			return UpdateState.ABORT;
 		}
 
@@ -207,10 +203,10 @@ public class SuperEatingTimeEvent extends EventPacket {
 		// 親
 		if (b == from) {
 			// 何らかの理由で終了しそうにないなら終わらせる
-			if (5000 < nFromWaitCount) {
+			if (5000 < waitTicks) {
 				return UpdateState.ABORT;
 			}
-			nFromWaitCount++;
+			waitTicks++;
 			// 子ゆがいなければ終了
 			List<Body> childrenList = BodyLogic.createActiveChildList(from, true);
 			if ((childrenList == null) || (childrenList.size() == 0)) {
@@ -218,42 +214,41 @@ public class SuperEatingTimeEvent extends EventPacket {
 			}
 
 			// 最小歩幅の設定と、子ゆがイベント中かのチェック
-			Body bodyTarget = childrenList.get(0);
-			boolean bIsChildInEvent = false;
+			boolean childInEvent = false;
 			for (Body child : childrenList) {
 				int step = child.getStep();
-				if (nLowestStep == 0 || step < nLowestStep) {
-					nLowestStep = step;
+				if (minimumStep == 0 || step < minimumStep) {
+					minimumStep = step;
 				}
 				if (child.getCurrentEvent() == this) {
-					bIsChildInEvent = true;
+					childInEvent = true;
 				}
 			}
-			if (1000 < nFromWaitCount) {
+			if (1000 < waitTicks) {
 				// イベント参加者がいないなら終了
-				if (!bIsChildInEvent) {
+				if (!childInEvent) {
 					return UpdateState.ABORT;
 				}
 			}
 
 			// 番の設定
-			Body partner = YukkuriUtil.getBodyInstance(from.getPartner());
+			Body partner = src.util.BodyRegistry.getBodyInstance(from.getPartner());
 			if (partner == from) {
 				partner = null;
 			}
 
 			// 親のステート
-			boolean bResult = false;
+			boolean gathered = false;
 			switch (state) {
 				case WAIT:// ごはんさんをたべにいくよ！みんなあつまってね！
 					// 家族を集める
-					bResult = BodyLogic.gatheringYukkuriSquare(from, childrenList.toArray(new Body[0]),
+					gathered = BodyLogic.gatheringYukkuriSquare(from, childrenList.toArray(new Body[0]),
 							GatheringDirection.DOWN, this);
-					for (Body bChild : childrenList) {
-						if (bChild != null) {
+					for (Body childBody : childrenList) {
+						if (childBody != null) {
 							// 他に用事があれば除外
-							bChild.setMoveTarget(-1);
-							bChild.wakeup();
+							childBody.setMoveTargetId(-1);
+							childBody.wakeup();
 						}
 					}
 					if (GameRandom.nextInt(100) == 0) {
@@ -266,32 +261,33 @@ public class SuperEatingTimeEvent extends EventPacket {
 						partner.moveTo(from.getX() + colX * 2, from.getY());
 						partner.setHappiness(Happiness.HAPPY);
 						// 他に用事があれば除外
-						partner.setMoveTarget(-1);
+						partner.setMoveTargetId(-1);
 					}
 					// ステート移行
-					if (bResult) {
+					if (gathered) {
 						state = STATE.GO;
 					} else {
 						b.stay(100);
 					}
 					// 何らかの理由で終了しそうにないなら終わらせる
-					if (1000 < nFromWaitCount) {
+					if (1000 < waitTicks) {
 						return UpdateState.ABORT;
 					}
-					nFromWaitCount++;
+					waitTicks++;
 					break;
 				case GO:// ごはんさんのにおいがするよ！
 					// 移動開始
-					bResult = BodyLogic.gatheringYukkuriBackLine(from, childrenList, this);
-					for (Body bChild : childrenList) {
+					gathered = BodyLogic.gatheringYukkuriBackLine(from, childrenList, this);
+					for (Body childBody : childrenList) {
 						// 他に用事があれば除外
-						bChild.setMoveTarget(-1);
-						bChild.wakeup();
+						childBody.setMoveTargetId(-1);
+						childBody.wakeup();
 					}
-					int nDistance = Translate.getRealDistance(b.getX(), b.getY(), bodyTarget.getX(), bodyTarget.getY());
-					int colXChild = Math.abs(BodyLogic.calcCollisionX(b, bodyTarget));
+					Body firstChild = childrenList.get(0);
+					int distance = Translate.getRealDistance(b.getX(), b.getY(), firstChild.getX(), firstChild.getY());
+					int colXChild = Math.abs(BodyLogic.calcCollisionX(b, firstChild));
 					// 一定距離を保つ
-					if (colXChild * 3 < nDistance) {
+					if (colXChild * 3 < distance) {
 						b.stay();
 					}
 
@@ -301,7 +297,7 @@ public class SuperEatingTimeEvent extends EventPacket {
 						partner.moveTo(from.getX() + colX * 2, from.getY());
 						partner.setHappiness(Happiness.HAPPY);
 						// 他に用事があれば除外
-						partner.setMoveTarget(-1);
+						partner.setMoveTargetId(-1);
 						if (GameRandom.nextInt(50) == 0) {
 							partner.setMessage(GameMessages.getMessage(partner, MessagePool.Action.WantFood));
 						}
@@ -309,11 +305,11 @@ public class SuperEatingTimeEvent extends EventPacket {
 
 					int colX = Translate.invertX(b.getCollisionX(), target.getY());
 					colX = Translate.transSize(colX);
-					int nDistanceFood = Translate.getRealDistance(b.getX(), b.getY(), target.getX(),
+					int distanceToFood = Translate.getRealDistance(b.getX(), b.getY(), target.getX(),
 							target.getY() - 20);
 					// 餌の近くで待つ
-					if (nDistanceFood <= 1) {
-						if (bResult) {
+					if (distanceToFood <= 1) {
+						if (gathered) {
 							state = STATE.START_BEFORE;
 						}
 						b.stay();
@@ -328,16 +324,16 @@ public class SuperEatingTimeEvent extends EventPacket {
 					break;
 				case START_BEFORE:// ごはんの上に集合
 					b.stay();
-					bResult = BodyLogic.gatheringYukkuriSquare(target, childrenList.toArray(new Body[0]),
+					gathered = BodyLogic.gatheringYukkuriSquare(target, childrenList.toArray(new Body[0]),
 							GatheringDirection.UP, this);
-					for (Body bChild : childrenList) {
+					for (Body childBody : childrenList) {
 						// 他に用事があれば除外
-						bChild.setMoveTarget(-1);
-						bChild.wakeup();
+						childBody.setMoveTargetId(-1);
+						childBody.wakeup();
 					}
 
 					// 配置済みの場合
-					if (bResult) {
+					if (gathered) {
 						b.setMessage(GameMessages.getMessage(b, MessagePool.Action.SuperEatingTime));
 						b.setHappiness(Happiness.VERY_HAPPY);
 						b.addMemories(1);
@@ -348,12 +344,12 @@ public class SuperEatingTimeEvent extends EventPacket {
 							partner.addMemories(1);
 						}
 						// 子ゆの処理
-						for (Body bChild : childrenList) {
-							if (bChild != null) {
-								bChild.setMessage(GameMessages.getMessage(b, MessagePool.Action.SuperEatingTime));
-								bChild.setHappiness(Happiness.VERY_HAPPY);
-								bChild.stay();
-								bChild.addMemories(1);
+						for (Body childBody : childrenList) {
+							if (childBody != null) {
+								childBody.setMessage(GameMessages.getMessage(b, MessagePool.Action.SuperEatingTime));
+								childBody.setHappiness(Happiness.VERY_HAPPY);
+								childBody.stay();
+								childBody.addMemories(1);
 							}
 						}
 						state = STATE.START;
@@ -364,12 +360,12 @@ public class SuperEatingTimeEvent extends EventPacket {
 							partner.moveTo((int) (from.getX() + colX * 1.5), from.getY());
 							partner.setHappiness(Happiness.HAPPY);
 							// 他に用事があれば除外
-							partner.setMoveTarget(-1);
+							partner.setMoveTargetId(-1);
 						}
 					}
 					break;
 				case START:
-					boolean bIsHungry = false;
+					boolean isHungry = false;
 					int noHungerPeriod = 500;
 
 					// ご飯がない時の処理
@@ -383,31 +379,31 @@ public class SuperEatingTimeEvent extends EventPacket {
 						}
 					}
 
-					for (Body bChild : childrenList) {
-						if (bChild != null) {
-							bChild.wakeup();
-							if (bChild.getHungryLimit() * 10 / 100 > bChild.getHungry()) {
-								bChild.setMoveTarget(target.objId);
-								bChild.setToFood(true);
-								bIsHungry = true;
+					for (Body childBody : childrenList) {
+						if (childBody != null) {
+							childBody.wakeup();
+							if (childBody.getHungryLimit() * 10 / 100 > childBody.getHungry()) {
+								childBody.setMoveTargetId(target.objId);
+								childBody.setToFood(true);
+								isHungry = true;
 							} else {
-								bChild.addMemories(10);
+								childBody.addMemories(10);
 							}
-							bChild.setNoHungrybySupereatingTimePeriod(noHungerPeriod);
+							childBody.setSuperEatingNoHungryPeriod(noHungerPeriod);
 						}
 					}
 
-					if (!bIsHungry) {
+					if (!isHungry) {
 						// 子供の食事が終わってから食べる
-						b.setMoveTarget(target.objId);
+						b.setMoveTargetId(target.objId);
 						b.setToFood(true);
-						b.setNoHungrybySupereatingTimePeriod(noHungerPeriod);
+						b.setSuperEatingNoHungryPeriod(noHungerPeriod);
 						b.addMemories(10);
 						// 番の処理
 						if (partner != null) {
-							partner.setMoveTarget(target.objId);
+							partner.setMoveTargetId(target.objId);
 							partner.setToFood(true);
-							partner.setNoHungrybySupereatingTimePeriod(noHungerPeriod);
+							partner.setSuperEatingNoHungryPeriod(noHungerPeriod);
 							partner.addMemories(10);
 						}
 
@@ -423,10 +419,10 @@ public class SuperEatingTimeEvent extends EventPacket {
 					} else {
 						// 子供の食事が終わってなくても空腹なら食べる
 						if (b.isHungry()) {
-							b.setMoveTarget(target.objId);
+							b.setMoveTargetId(target.objId);
 							b.setToFood(true);
 						} else {
-							b.setMoveTarget(-1);
+							b.setMoveTargetId(-1);
 							b.stay(100);
 							if (GameRandom.nextInt(30) == 0) {
 								// 余裕なら子供の状態を喜ぶ
@@ -438,10 +434,10 @@ public class SuperEatingTimeEvent extends EventPacket {
 						if (partner != null) {
 							// 子供の食事が終わってなくても空腹なら食べる
 							if (partner.isHungry()) {
-								partner.setMoveTarget(target.objId);
+								partner.setMoveTargetId(target.objId);
 								partner.setToFood(true);
 							} else {
-								partner.setMoveTarget(-1);
+								partner.setMoveTargetId(-1);
 								partner.stay(100);
 								if (GameRandom.nextInt(30) == 0) {
 									// 余裕なら子供の状態を喜ぶ
@@ -486,8 +482,8 @@ public class SuperEatingTimeEvent extends EventPacket {
 					break;
 				case START:
 					b.setHappiness(Happiness.VERY_HAPPY);
-					int nDistance = Translate.getRealDistance(b.getX(), b.getY(), target.getX(), target.getY());
-					if (nDistance < 3) {
+					int distance = Translate.getRealDistance(b.getX(), b.getY(), target.getX(), target.getY());
+					if (distance < 3) {
 						Food f = (Food) target;
 						FoodLogic.eatFood(b, f.getFoodType(), Math.min(b.getEatAmount(), f.getAmount()));
 						f.eatFood(Math.min(b.getEatAmount(), f.getAmount()));

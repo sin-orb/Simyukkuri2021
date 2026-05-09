@@ -79,7 +79,7 @@ public class BodyRenderingTest {
 
     @Test
     public void testGetFaceImage_NYD() throws Exception {
-        setField(body, "eCoreAnkoState", CoreAnkoState.NonYukkuriDisease);
+        setField(body, "coreAnkoState", CoreAnkoState.NonYukkuriDisease);
         body.getFaceImage(layer);
         assertTrue(body.codes.contains(ImageCode.NYD_FRONT_WIDE.ordinal()));
     }
@@ -115,7 +115,7 @@ public class BodyRenderingTest {
 
     @Test
     public void testGetEffectImage_HungryAndWet() throws Exception {
-        // Set age to Adult (CHILDLIMITorg is 50400)
+        // Set age to Adult (ChildLimitBase is 50400)
         body.setAge(100000);
         body.setHungry(0);
         // damageState is calculated from damage field.
@@ -149,12 +149,12 @@ public class BodyRenderingTest {
     public void testGetFaceImage_BlinkingUnyo() throws Exception {
         SimYukkuri.UNYO = true;
         body.setSleeping(true);
-        setField(body, "mabatakiCnt", 1);
+        setField(body, "blinkCount", 1);
         body.getFaceImage(layer);
         assertTrue(body.codes.contains(ImageCode.EYE2.ordinal()));
 
         body.codes.clear();
-        setField(body, "mabatakiCnt", 4);
+        setField(body, "blinkCount", 4);
         body.getFaceImage(layer);
         assertTrue(body.codes.contains(ImageCode.EYE3.ordinal()));
 

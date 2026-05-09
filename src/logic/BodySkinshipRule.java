@@ -19,91 +19,91 @@ public final class BodySkinshipRule {
 	/**
 	 * Handle the family-contact and skinship branches in doActionOther.
 	 *
-	 * @param p target body
-	 * @param b actor body
+	 * @param targetBody target body
+	 * @param actorBody actor body
 	 * @return true when the branch handled the action
 	 */
-	public static boolean handleSkinship(Body p, Body b) {
+	public static boolean handleSkinship(Body targetBody, Body actorBody) {
 		// 相手がありに食われてる時
-		if (p.getAttachmentSize(Ants.class) != 0) {
+		if (targetBody.getAttachmentSize(Ants.class) != 0) {
 			// 自分がアリに食われてない時のみ相手をぺろぺろする余裕がある
-			if (b.getAttachmentSize(Ants.class) == 0) {
-				b.doPeropero(p);
+			if (actorBody.getAttachmentSize(Ants.class) == 0) {
+				actorBody.doPeropero(targetBody);
 			}
-			b.clearActions();
+			actorBody.clearActions();
 			return true;
 		}
 
 		// 餌を保持している
-		if (b.isParent(p) && p.isVeryHungry() && !p.isAdult() && b.getTakeoutItem(TakeoutItemType.FOOD) != null) {
+		if (actorBody.isParent(targetBody) && targetBody.isVeryHungry() && !targetBody.isAdult() && actorBody.getCarryItem(TakeoutItemType.FOOD) != null) {
 			// 吐き出す
-			b.setMessage(GameMessages.getMessage(b, MessagePool.Action.GiveFood), false);
-			b.dropTakeoutItem(TakeoutItemType.FOOD);
+			actorBody.setMessage(GameMessages.getMessage(actorBody, MessagePool.Action.GiveFood), false);
+			actorBody.dropTakeoutItem(TakeoutItemType.FOOD);
 			return true;
 		}
 
-		if (b.isAdult() && !p.isAdult() && (p.isChild(b) || b.isParent(p))) {
+		if (actorBody.isAdult() && !targetBody.isAdult() && (targetBody.isChild(actorBody) || actorBody.isParent(targetBody))) {
 			// 自分が親で相手が子供の時のスキンシップ
-			b.constraintDirection(p, false);
+			actorBody.constraintDirection(targetBody, false);
 			// 相手が汚れていてかつ自分が母親の時か、ランダムでぺろぺろ
-			if ((p.isDirty() && b.isMother(p)) || GameRandom.nextBoolean()) {
-				b.doPeropero(p);
+			if ((targetBody.isDirty() && actorBody.isMother(targetBody)) || GameRandom.nextBoolean()) {
+				actorBody.doPeropero(targetBody);
 			}
 			// 他はすりすり
 			else if (GameRandom.nextBoolean()) {
-				b.doSurisuri(p);
+				actorBody.doSurisuri(targetBody);
 			}
-			b.clearActions();
+			actorBody.clearActions();
 			return true;
 		}
-		if (p.isPartner(b) && GameRandom.nextBoolean()) {
+		if (targetBody.isPartner(actorBody) && GameRandom.nextBoolean()) {
 			// 相手が自分の番ならすりすり
-			b.constraintDirection(p, false);
-			b.doSurisuri(p);
-			b.clearActions();
+			actorBody.constraintDirection(targetBody, false);
+			actorBody.doSurisuri(targetBody);
+			actorBody.clearActions();
 			return true;
 		}
-		if (!b.isAdult() && (b.isChild(p) || p.isParent(b))) {
+		if (!actorBody.isAdult() && (actorBody.isChild(targetBody) || targetBody.isParent(actorBody))) {
 			// 自分が子供で、相手が親の時のスキンシップ
-			b.constraintDirection(p, false);
+			actorBody.constraintDirection(targetBody, false);
 			// 自分が汚れた赤ゆなら、ぺろぺろしてもらう
-			if (b.isBaby() && b.isDirty() && p.isMother(b)) {
-				p.doPeropero(b);
+			if (actorBody.isBaby() && actorBody.isDirty() && targetBody.isMother(actorBody)) {
+				targetBody.doPeropero(actorBody);
 			}
 			// 親がダメージ食らってたらランダムでぺろぺろ
-			if (p.isDamaged() && GameRandom.nextBoolean()) {
-				b.doPeropero(p);
+			if (targetBody.isDamaged() && GameRandom.nextBoolean()) {
+				actorBody.doPeropero(targetBody);
 			}
 			// 他はすりすり
 			else if (GameRandom.nextBoolean()) {
-				b.doSurisuri(p);
+				actorBody.doSurisuri(targetBody);
 			}
-			b.clearActions();
+			actorBody.clearActions();
 			return true;
 		}
-		if (!b.isAdult() && b.isSister(p) && GameRandom.nextBoolean()) {
+		if (!actorBody.isAdult() && actorBody.isSister(targetBody) && GameRandom.nextBoolean()) {
 			// 姉妹の場合のスキンシップ
 			// 善良で、赤ゆでなく、相手が汚れていたら無条件でぺろぺろ
-			b.constraintDirection(p, false);
-			if (b.isSmart() && !b.isBaby() && p.isDirty()) {
-				b.doPeropero(p);
+			actorBody.constraintDirection(targetBody, false);
+			if (actorBody.isSmart() && !actorBody.isBaby() && targetBody.isDirty()) {
+				actorBody.doPeropero(targetBody);
 			} else {
-				if (p.isDamaged() && GameRandom.nextBoolean()) {
-					if (b.isElderSister(p)) {
-						b.setMessage(GameMessages.getMessage(b, MessagePool.Action.ConcernAboutEldersister));
+				if (targetBody.isDamaged() && GameRandom.nextBoolean()) {
+					if (actorBody.isElderSister(targetBody)) {
+						actorBody.setMessage(GameMessages.getMessage(actorBody, MessagePool.Action.ConcernAboutEldersister));
 					} else {
-						b.setMessage(GameMessages.getMessage(b, MessagePool.Action.ConcernAboutSister));
+						actorBody.setMessage(GameMessages.getMessage(actorBody, MessagePool.Action.ConcernAboutSister));
 					}
-					b.setHappiness(Happiness.SAD);
-					b.stay();
-					p.stay();
-				} else if (p.isDamaged() && GameRandom.nextBoolean()) {
-					b.doPeropero(p);
+					actorBody.setHappiness(Happiness.SAD);
+					actorBody.stay();
+					targetBody.stay();
+				} else if (targetBody.isDamaged() && GameRandom.nextBoolean()) {
+					actorBody.doPeropero(targetBody);
 				} else if (GameRandom.nextBoolean()) {
-					b.doSurisuri(p);
+					actorBody.doSurisuri(targetBody);
 				}
 			}
-			b.clearActions();
+			actorBody.clearActions();
 			return true;
 		}
 

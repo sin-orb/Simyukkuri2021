@@ -12,8 +12,8 @@ import src.enums.Direction;
 import src.enums.GatheringDirection;
 import src.item.Barrier;
 import src.item.Toilet;
+import src.util.BodyRegistry;
 import src.util.GameWorld;
-import src.util.YukkuriUtil;
 
 /**
  * ゆっくりの集合移動ロジック.
@@ -27,7 +27,7 @@ public final class BodyGatheringRule {
 	 * ぜんゆん集合.
 	 */
 	public static void gatheringYukkuri() {
-		Body[] bodyList = YukkuriUtil.getBodyInstances();
+		Body[] bodyList = BodyRegistry.getBodyInstances();
 		if (bodyList.length != 0) {
 			Toilet t = null;
 			for (Map.Entry<Integer, Toilet> entry : GameWorld.get().getCurrentMap().getToilet().entrySet()) {
@@ -43,101 +43,101 @@ public final class BodyGatheringRule {
 	/**
 	 * ぜんゆん集合(四角形前面)
 	 */
-	public static boolean gatheringYukkuriFront(Body bTop, List<Body> TargetList) {
-		return gatheringYukkuriSquare(bTop, TargetList.toArray(new Body[0]), GatheringDirection.DOWN, null);
+	public static boolean gatheringYukkuriFront(Body topBody, List<Body> targetList) {
+		return gatheringYukkuriSquare(topBody, targetList.toArray(new Body[0]), GatheringDirection.DOWN, null);
 	}
 
 	/**
 	 * ぜんゆん集合(四角形前面)
 	 */
-	public static boolean gatheringYukkuriFront(Body bTop, List<Body> TargetList, EventPacket e) {
-		return gatheringYukkuriSquare(bTop, TargetList.toArray(new Body[0]), GatheringDirection.DOWN, e);
+	public static boolean gatheringYukkuriFront(Body topBody, List<Body> targetList, EventPacket event) {
+		return gatheringYukkuriSquare(topBody, targetList.toArray(new Body[0]), GatheringDirection.DOWN, event);
 	}
 
 	/**
 	 * ぜんゆん集合.
 	 */
-	public static boolean gatheringYukkuriSquare(Obj oTop, Body[] TargetList, GatheringDirection eDir,
-			EventPacket e) {
-		int nMaxRowSize = 3;
+	public static boolean gatheringYukkuriSquare(Obj topObject, Body[] targetList, GatheringDirection direction,
+			EventPacket event) {
+		int maxRowSize = 3;
 
-		if (oTop == null || TargetList == null) {
+		if (topObject == null || targetList == null) {
 			return false;
 		}
-		int nSize = TargetList.length;
-		if (nSize == 0) {
+		int targetCount = targetList.length;
+		if (targetCount == 0) {
 			return false;
 		}
 
-		boolean bKi = true;
-		if (nSize < nMaxRowSize) {
-			nMaxRowSize = nSize;
+		boolean isOddLayout = true;
+		if (targetCount < maxRowSize) {
+			maxRowSize = targetCount;
 		}
-		if (nMaxRowSize % 2 == 0) {
-			bKi = false;
+		if (maxRowSize % 2 == 0) {
+			isOddLayout = false;
 		}
 
-		int nCount = 0;
-		int nColY = 0;
-		int nCol = 0;
-		int nRow = 1;
-		int nDir = -1;
-		int colX = 10;
-		Obj objFrontCenter = oTop;
-		Obj objNextFrontCenter = null;
+		int processedCount = 0;
+		int lineOffset = 0;
+		int lineIndex = 0;
+		int row = 1;
+		int horizontalDirection = -1;
+		int collisionOffset = 10;
+		Obj frontCenter = topObject;
+		Obj nextFrontCenter = null;
 
-		boolean bFlag = true;
-		for (Body b : TargetList) {
-			int nSpace = 10;
-			if (b == null) {
+		boolean success = true;
+		for (Body body : targetList) {
+			int gap = 10;
+			if (body == null) {
 				continue;
 			}
-			if (e != null && b.getCurrentEvent() != null && b.getCurrentEvent() != e) {
+			if (event != null && body.getCurrentEvent() != null && body.getCurrentEvent() != event) {
 				continue;
 			}
 
-			nCount++;
-			int mz = 0;
-			if (b.canflyCheck()) {
-				mz = oTop.getZ();
+			processedCount++;
+			int zShift = 0;
+			if (body.canflyCheck()) {
+				zShift = topObject.getZ();
 			}
 
-			colX = Translate.invertX(b.getCollisionX(), objFrontCenter.getY());
+			collisionOffset = Translate.invertX(body.getCollisionX(), frontCenter.getY());
 			int x = 0;
 			int y = 0;
-			boolean bMoved = false;
+			boolean moved = false;
 
-			if ((nMaxRowSize == 1) || (nCount % nMaxRowSize == 1)) {
-				nCol++;
-				if (objNextFrontCenter != null) {
-					objFrontCenter = objNextFrontCenter;
+			if ((maxRowSize == 1) || (processedCount % maxRowSize == 1)) {
+				lineIndex++;
+				if (nextFrontCenter != null) {
+					frontCenter = nextFrontCenter;
 				}
-				objNextFrontCenter = b;
-				int nLastLineSize = nSize - nMaxRowSize * (nCol - 1);
-				if ((nLastLineSize < nMaxRowSize) && (0 < nLastLineSize)) {
-					bKi = true;
-					if (nLastLineSize % 2 == 0) {
-						bKi = false;
+				nextFrontCenter = body;
+				int lastLineSize = targetCount - maxRowSize * (lineIndex - 1);
+				if ((lastLineSize < maxRowSize) && (0 < lastLineSize)) {
+					isOddLayout = true;
+					if (lastLineSize % 2 == 0) {
+						isOddLayout = false;
 					}
 				}
 
-				nColY = colX + nSpace;
-				switch (eDir) {
+				lineOffset = collisionOffset + gap;
+				switch (direction) {
 					case UP:
-						x = objFrontCenter.getX();
-						y = objFrontCenter.getY() - nColY;
+						x = frontCenter.getX();
+						y = frontCenter.getY() - lineOffset;
 						break;
 					case DOWN:
-						x = objFrontCenter.getX();
-						y = objFrontCenter.getY() + nColY;
+						x = frontCenter.getX();
+						y = frontCenter.getY() + lineOffset;
 						break;
 					case LEFT:
-						x = objFrontCenter.getX() - nColY;
-						y = objFrontCenter.getY();
+						x = frontCenter.getX() - lineOffset;
+						y = frontCenter.getY();
 						break;
 					case RIGHT:
-						x = objFrontCenter.getX() + nColY;
-						y = objFrontCenter.getY();
+						x = frontCenter.getX() + lineOffset;
+						y = frontCenter.getY();
 						break;
 				}
 
@@ -153,65 +153,65 @@ public final class BodyGatheringRule {
 					y = Translate.getMapH();
 				}
 
-				nRow = 1;
-				if (bKi) {
-					if (e == null) {
-						b.moveToBody(objFrontCenter, x, y, mz);
+				row = 1;
+				if (isOddLayout) {
+					if (event == null) {
+						body.moveToBody(frontCenter, x, y, zShift);
 					} else {
-						b.moveToEvent(e, x, y, mz);
+						body.moveToEvent(event, x, y, zShift);
 					}
-					bMoved = true;
+					moved = true;
 				}
 			}
 
-			if (!bMoved) {
-				switch (eDir) {
+			if (!moved) {
+				switch (direction) {
 					case UP:
-						if (bKi) {
-							x = objFrontCenter.getX() + (colX + nSpace) * nRow * nDir;
-							y = objFrontCenter.getY() - nColY;
+						if (isOddLayout) {
+							x = frontCenter.getX() + (collisionOffset + gap) * row * horizontalDirection;
+							y = frontCenter.getY() - lineOffset;
 						} else {
-							if (nRow == 1) {
-								nSpace = nSpace / 2;
+							if (row == 1) {
+								gap = gap / 2;
 							}
-							x = objFrontCenter.getX() + (colX + nSpace) * (2 * nRow - 1) * nDir;
-							y = objFrontCenter.getY() - nColY;
+							x = frontCenter.getX() + (collisionOffset + gap) * (2 * row - 1) * horizontalDirection;
+							y = frontCenter.getY() - lineOffset;
 						}
 						break;
 					case DOWN:
-						if (bKi) {
-							x = objFrontCenter.getX() + (colX + nSpace) * nRow * nDir;
-							y = objFrontCenter.getY() + nColY;
+						if (isOddLayout) {
+							x = frontCenter.getX() + (collisionOffset + gap) * row * horizontalDirection;
+							y = frontCenter.getY() + lineOffset;
 						} else {
-							if (nRow == 1) {
-								nSpace = nSpace / 2;
+							if (row == 1) {
+								gap = gap / 2;
 							}
-							x = objFrontCenter.getX() + (colX * nRow + nSpace * 3 / 2 * nRow - 1) * nDir;
-							y = objFrontCenter.getY() + nColY;
+							x = frontCenter.getX() + (collisionOffset * row + gap * 3 / 2 * row - 1) * horizontalDirection;
+							y = frontCenter.getY() + lineOffset;
 						}
 						break;
 					case LEFT:
-						if (bKi) {
-							x = objFrontCenter.getX() - nColY;
-							y = objFrontCenter.getY() + (colX + nSpace) * nRow * nDir;
+						if (isOddLayout) {
+							x = frontCenter.getX() - lineOffset;
+							y = frontCenter.getY() + (collisionOffset + gap) * row * horizontalDirection;
 						} else {
-							if (nRow == 1) {
-								nSpace = nSpace / 2;
+							if (row == 1) {
+								gap = gap / 2;
 							}
-							x = objFrontCenter.getX() - nColY;
-							y = objFrontCenter.getY() + (colX + nSpace) * (2 * nRow - 1) * nDir;
+							x = frontCenter.getX() - lineOffset;
+							y = frontCenter.getY() + (collisionOffset + gap) * (2 * row - 1) * horizontalDirection;
 						}
 						break;
 					case RIGHT:
-						if (bKi) {
-							x = objFrontCenter.getX() + nColY;
-							y = objFrontCenter.getY() + (colX + nSpace) * nRow * nDir;
+						if (isOddLayout) {
+							x = frontCenter.getX() + lineOffset;
+							y = frontCenter.getY() + (collisionOffset + gap) * row * horizontalDirection;
 						} else {
-							if (nRow == 1) {
-								nSpace = nSpace / 2;
+							if (row == 1) {
+								gap = gap / 2;
 							}
-							x = objFrontCenter.getX() + nColY;
-							y = objFrontCenter.getY() + (colX + nSpace) * (2 * nRow - 1) * nDir;
+							x = frontCenter.getX() + lineOffset;
+							y = frontCenter.getY() + (collisionOffset + gap) * (2 * row - 1) * horizontalDirection;
 						}
 						break;
 				}
@@ -227,87 +227,87 @@ public final class BodyGatheringRule {
 					y = Translate.getMapH();
 				}
 
-				if (e == null) {
-					b.moveToBody(oTop, x, y, mz);
+				if (event == null) {
+					body.moveToBody(topObject, x, y, zShift);
 				} else {
-					b.moveToEvent(e, x, y, mz);
+					body.moveToEvent(event, x, y, zShift);
 				}
 
-				if (nDir == -1) {
-					nDir = 1;
+				if (horizontalDirection == -1) {
+					horizontalDirection = 1;
 				} else {
-					nDir = -1;
-					nRow++;
+					horizontalDirection = -1;
+					row++;
 				}
 			}
 
-			if (Barrier.onBarrier(b.getX(), b.getY(), x, y,
-					Barrier.MAP_BODY[b.getBodyAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
+			if (Barrier.onBarrier(body.getX(), body.getY(), x, y,
+					Barrier.MAP_BODY[body.getBodyAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
 				continue;
 			}
 
-			if (1 < Translate.distance(b.getX(), b.getY(), x, y)) {
-				bFlag = false;
+			if (1 < Translate.distance(body.getX(), body.getY(), x, y)) {
+				success = false;
 			}
 		}
-		return bFlag;
+		return success;
 	}
 
 	/**
 	 * ぜんゆん集合(先頭の後ろに一列)
 	 */
-	public static boolean gatheringYukkuriBackLine(Body bTop, List<Body> TargetList, EventPacket e) {
-		if (TargetList == null) {
+	public static boolean gatheringYukkuriBackLine(Body topBody, List<Body> targetList, EventPacket event) {
+		if (targetList == null) {
 			return false;
 		}
 
-		Body bodyFound = bTop;
-		if (bodyFound.getDirection() == Direction.RIGHT) {
+		Body currentBody = topBody;
+		if (currentBody.getDirection() == Direction.RIGHT) {
 			// no-op
 		}
-		boolean bResult = true;
+		boolean success = true;
 
-		for (Body b : TargetList) {
-			if (b == null) {
+		for (Body body : targetList) {
+			if (body == null) {
 				continue;
 			}
-			if (b.isDead()) {
+			if (body.isDead()) {
 				continue;
 			}
-			if (e != null && b.getCurrentEvent() != null && b.getCurrentEvent() != e) {
+			if (event != null && body.getCurrentEvent() != null && body.getCurrentEvent() != event) {
 				continue;
 			}
-			int colX = Math.abs(BodyLogic.calcCollisionX(b, bodyFound));
-			int mz = 0;
-			if (b.canflyCheck()) {
-				mz = bodyFound.getZ();
+			int collisionOffset = Math.abs(BodyLogic.calcCollisionX(body, currentBody));
+			int zShift = 0;
+			if (body.canflyCheck()) {
+				zShift = currentBody.getZ();
 			}
-			int dist = Translate.getRealDistance(b.getX(), b.getY(), bodyFound.getX(), bodyFound.getY());
-			int nToDist = dist - colX * 2;
-			if (nToDist < 1) {
+			int dist = Translate.getRealDistance(body.getX(), body.getY(), currentBody.getX(), currentBody.getY());
+			int targetDistance = dist - collisionOffset * 2;
+			if (targetDistance < 1) {
 				continue;
 			}
-			double dRad = Translate.getRadian(b.getX(), b.getY(), bodyFound.getX(), bodyFound.getY());
-			Point4y p2 = Translate.getPointByDistAndRad(b.getX(), b.getY(), nToDist, dRad);
+			double radian = Translate.getRadian(body.getX(), body.getY(), currentBody.getX(), currentBody.getY());
+			Point4y p2 = Translate.getPointByDistAndRad(body.getX(), body.getY(), targetDistance, radian);
 			int x = p2.getX();
 			int y = p2.getY();
-			if (e == null) {
-				b.moveToBody(bodyFound, x, y, mz);
+			if (event == null) {
+				body.moveToBody(currentBody, x, y, zShift);
 			} else {
-				b.moveToEvent(e, x, y, mz);
+				body.moveToEvent(event, x, y, zShift);
 			}
-			b.setTargetBind(false);
-			bodyFound = b;
-			if (Barrier.onBarrier(b.getX(), b.getY(), x, y,
-					Barrier.MAP_BODY[b.getBodyAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
+			body.setTargetBind(false);
+			currentBody = body;
+			if (Barrier.onBarrier(body.getX(), body.getY(), x, y,
+					Barrier.MAP_BODY[body.getBodyAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
 				continue;
 			}
-			if (1 < Translate.distance(b.getX(), b.getY(), x, y)) {
-				bResult = false;
+			if (1 < Translate.distance(body.getX(), body.getY(), x, y)) {
+				success = false;
 			} else {
-				b.setDirection(bodyFound.getDirection());
+				body.setDirection(currentBody.getDirection());
 			}
 		}
-		return bResult;
+		return success;
 	}
 }

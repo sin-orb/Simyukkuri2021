@@ -25,7 +25,7 @@ public class BodyParentRuleTest {
 	@Test
 	void testCheckNearParent_returnsWhenAdult() {
 		Body me = WorldTestHelper.createBody();
-		me.setAge((long) me.getCHILDLIMITorg());
+		me.setAge((long) me.getChildLimitBase());
 		assertDoesNotThrow(() -> BodyParentRule.checkNearParent(me));
 	}
 

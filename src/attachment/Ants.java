@@ -14,7 +14,6 @@ import src.enums.AgeState;
 import src.enums.AttachProperty;
 import src.enums.Event;
 import src.system.ResourceUtil;
-import src.util.YukkuriUtil;
 
 
 /****************************************
@@ -76,15 +75,15 @@ public class Ants extends Attachment {
 
 	@Override
 	protected Event update() {
-		Body pa = YukkuriUtil.getBodyInstance(parent);
+		Body pa = src.util.BodyRegistry.getBodyInstance(parent);
 		if (pa == null) return Event.DONOTHING;
-		pa.beEaten((pa.getNumOfAnts()/3), 0, false);
+		pa.beEaten((pa.getAntCount()/3), 0, false);
 		return Event.DONOTHING;
 	}
 
 	@Override
 	public BufferedImage getImage(Body b) {
-		int ants = b.getNumOfAnts();
+		int ants = b.getAntCount();
 		if(ants>= b.getDamageLimit()*2/3) {
 			return images[b.getBodyAgeState().ordinal()][2];
 		}
@@ -96,7 +95,7 @@ public class Ants extends Attachment {
 
 	@Override
 	public void resetBoundary(){
-		Body pa = YukkuriUtil.getBodyInstance(parent);
+		Body pa = src.util.BodyRegistry.getBodyInstance(parent);
 		if (pa == null) return;
 		setBoundary(pivX[pa.getBodyAgeState().ordinal()],
 					pivY[pa.getBodyAgeState().ordinal()],
@@ -110,13 +109,13 @@ public class Ants extends Attachment {
 	public Ants(Body body) {
 		super(body);
 		setAttachProperty(property, POS_KEY);
-		Body pa = YukkuriUtil.getBodyInstance(parent);
+		Body pa = src.util.BodyRegistry.getBodyInstance(parent);
 		if (pa != null)  {
 			setBoundary(pivX[pa.getBodyAgeState().ordinal()],
 					pivY[pa.getBodyAgeState().ordinal()],
 					imgW[pa.getBodyAgeState().ordinal()],
 					imgH[pa.getBodyAgeState().ordinal()]);
-			pa.setNumOfAnts(50);
+			pa.setAntCount(50);
 		}
 		value = 0;
 		cost = 0;

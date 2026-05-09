@@ -14,8 +14,8 @@ class SimpleEnumsTest {
     }
 
     @Test
-    void testBaryInUGState() {
-        verifyEnum(BaryInUGState.values());
+    void testBurialState() {
+        verifyEnum(BurialState.values());
     }
 
     @Test

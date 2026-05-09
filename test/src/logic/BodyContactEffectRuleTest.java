@@ -43,7 +43,7 @@ class BodyContactEffectRuleTest {
 		me.setPublicRank(PublicRank.NONE);
 		you.setPublicRank(PublicRank.NONE);
 		me.setIntelligence(src.enums.Intelligence.AVERAGE);
-		you.setSickPeriod(you.getINCUBATIONPERIODorg() + 1);
+		you.setSickPeriod(you.getIncubationPeriodBase() + 1);
 
 		assertDoesNotThrow(() -> assertTrue(BodyContactEffectRule.handleContactEffects(you, me)));
 		assertEquals(1, me.getEventList().size(), "actor should receive exactly one body event");
@@ -73,7 +73,7 @@ class BodyContactEffectRuleTest {
 		me.setIntelligence(src.enums.Intelligence.FOOL);
 		WorldTestHelper.setParents(you, -1, me.getUniqueID());
 		you.takeOkazari(false);
-		you.seteCoreAnkoState(CoreAnkoState.NonYukkuriDiseaseNear);
+		you.setCoreAnkoState(CoreAnkoState.NonYukkuriDiseaseNear);
 		ConstState rnd = new ConstState(0);
 		rnd.setFixedBoolean(true);
 		SimYukkuri.RND = rnd;

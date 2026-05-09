@@ -33,9 +33,9 @@ public class FoodMaker extends ObjEX {
 	private static final long serialVersionUID = 2267609715917033769L;
 	/** 処理対象(ゆっくり、うんうん、フード、吐餡、茎) */
 	public static final int hitCheckObjType = ObjEX.YUKKURI | ObjEX.SHIT | ObjEX.FOOD | ObjEX.VOMIT | ObjEX.STALK;
-	private static final int images_num = 6; // このクラスの総使用画像数
-	private static int AnimeImagesNum[] = { images_num };// アニメごとに何枚使うか
-	private static BufferedImage[] images = new BufferedImage[images_num + 1];
+	private static final int IMAGE_COUNT = 6; // このクラスの総使用画像数
+	private static int[] animationFrameCounts = { IMAGE_COUNT };// アニメごとに何枚使うか
+	private static BufferedImage[] imageLayers = new BufferedImage[IMAGE_COUNT + 1];
 	private static Rectangle4y boundary = new Rectangle4y();
 
 	protected boolean processReady = true;
@@ -74,13 +74,13 @@ public class FoodMaker extends ObjEX {
 
 	/** 画像ロード */
 	public static void loadImages(ClassLoader loader, ImageObserver io) throws IOException {
-		for (int i = 0; i < images_num; i++) {
-			images[i] = ModLoader.loadItemImage(loader,
+		for (int i = 0; i < IMAGE_COUNT; i++) {
+			imageLayers[i] = ModLoader.loadItemImage(loader,
 					"foodmaker" + File.separator + "foodmaker" + String.format("%03d", i + 1) + ".png");
 		}
-		images[images_num] = ModLoader.loadItemImage(loader, "foodmaker" + File.separator + "foodmaker_off.png");
-		boundary.setWidth(images[0].getWidth(io));
-		boundary.setHeight(images[0].getHeight(io));
+		imageLayers[IMAGE_COUNT] = ModLoader.loadItemImage(loader, "foodmaker" + File.separator + "foodmaker_off.png");
+		boundary.setWidth(imageLayers[0].getWidth(io));
+		boundary.setHeight(imageLayers[0].getHeight(io));
 		boundary.setX(boundary.getWidth() >> 1);
 		boundary.setY(boundary.getHeight() >> 1);
 	}
@@ -88,9 +88,9 @@ public class FoodMaker extends ObjEX {
 	@Override
 	public int getImageLayer(BufferedImage[] layer) {
 		if (enabled) {
-			layer[0] = images[(int) getAge() / 2 % AnimeImagesNum[0]];
+			layer[0] = imageLayers[(int) getAge() / 2 % animationFrameCounts[0]];
 		} else {
-			layer[0] = images[AnimeImagesNum[0]];
+			layer[0] = imageLayers[animationFrameCounts[0]];
 		}
 		return 1;
 	}
@@ -124,9 +124,9 @@ public class FoodMaker extends ObjEX {
 				if (b.isCrushed() || b.isPealed() || b.isBaby()) {
 					if (b.isSick()) {// カビ
 						stockFood = 11;
-					} else if (b.geteCoreAnkoState() == CoreAnkoState.NonYukkuriDiseaseNear) {// 軽度の非ゆっくり症
+					} else if (b.getCoreAnkoState() == CoreAnkoState.NonYukkuriDiseaseNear) {// 軽度の非ゆっくり症
 						stockFood = 12;
-					} else if (b.geteCoreAnkoState() == CoreAnkoState.NonYukkuriDisease) {// 重度の非ゆっくり症
+					} else if (b.getCoreAnkoState() == CoreAnkoState.NonYukkuriDisease) {// 重度の非ゆっくり症
 						stockFood = 13;
 					} else if (b.getType() == 2) {// ありす
 						stockFood = 2;
@@ -204,9 +204,9 @@ public class FoodMaker extends ObjEX {
 				if (b.isCrushed() || b.isPealed() || b.isBaby()) {
 					if (b.isSick()) {// カビ
 						foodType = foodTable[makeTable[stockFood][11]];
-					} else if (b.geteCoreAnkoState() == CoreAnkoState.NonYukkuriDiseaseNear) {// 軽度の非ゆっくり症
+					} else if (b.getCoreAnkoState() == CoreAnkoState.NonYukkuriDiseaseNear) {// 軽度の非ゆっくり症
 						foodType = foodTable[makeTable[stockFood][12]];
-					} else if (b.geteCoreAnkoState() == CoreAnkoState.NonYukkuriDisease) {// 重度の非ゆっくり症
+					} else if (b.getCoreAnkoState() == CoreAnkoState.NonYukkuriDisease) {// 重度の非ゆっくり症
 						foodType = foodTable[makeTable[stockFood][13]];
 					} else if (b.getType() == 2) {// ありす
 						foodType = foodTable[makeTable[stockFood][2]];

@@ -261,7 +261,7 @@ class GarbageChuteTest extends ItemTestBase {
             assertSame(body, item.getBindBody());
             assertTrue(item.getBindObjList().contains(body));
             assertEquals(Happiness.VERY_SAD, body.getHappiness());
-            assertTrue(body.getFallingUnderGround());
+            assertTrue(body.isFallingUnderGround());
             assertEquals(beforeCash - item.getCost(), SimYukkuri.world.getPlayer().getCash());
         }
 

@@ -62,7 +62,7 @@ public class BodyLogicTest {
     @Test
     public void testEatBody_DeadBodyCrush() {
         body.setDead(true);
-        body.setBodyAmount(10000);
+        body.setAnkoAmount(10000);
         // limit/2 for Adult is 8400.
         body.eatBody(2000);
         assertTrue(body.isCrushed(), "Should be crushed when amount <= limit/2 (8400)");
@@ -71,7 +71,7 @@ public class BodyLogicTest {
     @Test
     public void testEatBody_DeadBodyRemove() {
         body.setDead(true);
-        body.setBodyAmount(1000);
+        body.setAnkoAmount(1000);
         body.eatBody(1000);
         assertTrue(body.isRemoved());
     }
@@ -80,7 +80,7 @@ public class BodyLogicTest {
     public void testEatBody_LiveBodyDamage() {
         body.setDead(false);
         body.setHungry(100);
-        body.setBodyAmount(10000);
+        body.setAnkoAmount(10000);
         body.eatBody(200);
         assertEquals(-100, body.getHungry());
         assertTrue(body.getDamage() > 0);
@@ -89,7 +89,7 @@ public class BodyLogicTest {
     @Test
     public void testEatBody_LiveBodyDeath() {
         body.setDead(false);
-        body.setBodyAmount(1000);
+        body.setAnkoAmount(1000);
         body.eatBody(1000);
         assertTrue(body.isDead());
         assertTrue(body.isCrushed());

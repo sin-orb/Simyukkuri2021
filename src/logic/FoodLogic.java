@@ -8,7 +8,7 @@ import src.base.Body;
 import src.base.Obj;
 import src.draw.Translate;
 import src.enums.AgeState;
-import src.enums.BaryInUGState;
+import src.enums.BurialState;
 import src.enums.FootBake;
 import src.enums.PublicRank;
 import src.game.Stalk;
@@ -23,206 +23,206 @@ public class FoodLogic {
 
 	/**
 	 *  フィールド内から餌候補の検索と移動、捕食処理
-	 * @param b ゆっくり
+	 * @param body ゆっくり
 	 * @return 処理が行われたか
 	 */
-	public static final boolean checkFood(Body b) {
+	public static final boolean checkFood(Body body) {
 		/*流れとしては、C1→C2→B1→B2　(Aはキャンセル判定)といった感じ
 		*/
 		boolean[] forceEat = { false };
 
 		//A.餌行動の終了
 		/*		// 他の用事がある場合
-				if(b.isToBody() || b.isToBed() || (b.isToShit() && !b.isSoHungry() && !(b.isAdult() && b.intelligence == Intelligence.WISE)) || ( b.isAdult() && b.isToSukkiri()) || b.isToSteal() ){
+				if(body.isToBody() || body.isToBed() || (body.isToShit() && !body.isSoHungry() && !(body.isAdult() && body.intelligence == Intelligence.WISE)) || (body.isAdult() && body.isToSukkiri()) || body.isToSteal() ){
 					return false;
 				}*/
 
-		if (FoodActionGate.shouldSkipBeforeSearch(b, forceEat)) {
+		if (FoodActionGate.shouldSkipBeforeSearch(body, forceEat)) {
 			return false;
 		}
 
 		//B1.餌補足済みの時の特殊行動
 		// 食べる対象が決まっていたら到達したかチェック
-		Obj food = b.takeMoveTarget();
+		Obj food = body.takeMoveTarget();
 
 		//対象が決まってる時
-		if ((b.isToFood() || b.isToTakeout()) && food != null) {
+		if ((body.isToFood() || body.isToTakeout()) && food != null) {
 			// 途中で消されてたら他の餌候補を探す
 			if (food.isRemoved()) {
-				b.clearActions();
+				body.clearActions();
 				return false;
 			}
 			//茎の場合の探索
 			if (food instanceof Stalk) {
-				Body p = GameWorld.get().getCurrentMap().getBody().get(((Stalk) food).getPlantYukkuri());
+				Body plantBody = GameWorld.get().getCurrentMap().getBody().get(((Stalk) food).getPlantYukkuri());
 				// 自分の茎は無視
-				if (p == b) {
-					b.clearActions();
+				if (plantBody == body) {
+					body.clearActions();
 					return false;
 				}
-				if (p != null) {
+				if (plantBody != null) {
 					// 地中に埋まっているなら引っこ抜いて食べる。それ以外はスキップ
-					if (p.getBaryState() != BaryInUGState.ALL &&
-							!(p.getBaryState() == BaryInUGState.NEARLY_ALL && !p.hasOkazari())) {
-						b.clearActions();
+					if (plantBody.getBurialState() != BurialState.ALL &&
+							!(plantBody.getBurialState() == BurialState.NEARLY_ALL && !plantBody.hasOkazari())) {
+						body.clearActions();
 						return false;
 					}
 				}
 			}
 			// 食べることができなかったら他の餌候補を探す
 			else {
-				if (!b.canflyCheck() && food.getZ() != 0) {
-					b.clearActions();
+				if (!body.canflyCheck() && food.getZ() != 0) {
+					body.clearActions();
 					return false;
 				}
 			}
 
-			if ((b.getStepDist() + 2) >= Translate.distance(b.getX(), b.getY(), food.getX(), food.getY())) {
-				return FoodArrivalActionPolicy.handleArrivedFood(b, food, forceEat);
+			if ((body.getStepDist() + 2) >= Translate.distance(body.getX(), body.getY(), food.getX(), food.getY())) {
+				return FoodArrivalActionPolicy.handleArrivedFood(body, food, forceEat);
 			}
 			//餌に未到着の時
 			else {
-				return FoodApproachPolicy.handleUnarrivedFood(b, food);
+				return FoodApproachPolicy.handleUnarrivedFood(body, food);
 			}
 		}
 
 		//C.餌探索
-		Obj found = null;
+		Obj candidate = null;
 		// うんうん奴隷の場合
-		if (b.getPublicRank() == PublicRank.UnunSlave) {
-			found = searchFoodForUnunSlave(b, forceEat);
+		if (body.getPublicRank() == PublicRank.UnunSlave) {
+			candidate = searchFoodForUnunSlave(body, forceEat);
 		} else {
 			// フィールドの餌検索
-			if (b.isIdiot() || (b.getFootBakeLevel() == FootBake.CRITICAL && !b.canflyCheck())) {
+			if (body.isIdiot() || (body.getFootBakeLevel() == FootBake.CRITICAL && !body.canflyCheck())) {
 				// 足りないゆ、完全足焼き用
-				found = FoodNearestSearchPolicy.searchFoodNearest(b, forceEat);
+				candidate = FoodNearestSearchPolicy.searchFoodNearest(body, forceEat);
 			} else {
-				if (b.isPredatorType() && !GameEnvironment.isPredatorSteam()) {
+				if (body.isPredatorType() && !GameEnvironment.isPredatorSteam()) {
 					// 捕食種用
-					found = searchFoodPredetor(b, forceEat);
+					candidate = searchFoodPredetor(body, forceEat);
 				} else {
 					// 通常種用
-					found = searchFoodStandard(b, forceEat);
+					candidate = searchFoodStandard(body, forceEat);
 				}
 			}
 		}
 
 		//C2.探索して補足した餌に対する反応
-		if (found != null) {
-			return FoodFoundReaction.handleFoundFood(b, found, forceEat);
+		if (candidate != null) {
+			return FoodFoundReaction.handleFoundFood(body, candidate, forceEat);
 		}
 		//何も見つからなかったとき
 		else {
-			FoodNoFoodReaction.handleNoFoodFound(b);
+			FoodNoFoodReaction.handleNoFoodFound(body);
 		}
 		return false;
 	}
 
 	// 餌検索B
 	// 一般用
-	public static final Obj searchFoodStandard(Body b, boolean[] forceEat) {
-		return FoodSearchPolicy.searchFoodStandard(b, forceEat);
+	public static final Obj searchFoodStandard(Body body, boolean[] forceEat) {
+		return FoodSearchPolicy.searchFoodStandard(body, forceEat);
 	}
 
 	// 餌検索C
 	/**
 	 *  捕食種用エサ検索
-	 * @param b 捕食種
+	 * @param body 捕食種
 	 * @param forceEat 強制給餌フラグ
 	 * @return 検索されたエサオブジェクト
 	 */
-	public static final Obj searchFoodPredetor(Body b, boolean[] forceEat) {
-		Obj found = null;
-		Obj found2 = null; // 副候補
-		Obj found3 = null; // 死体候補
-		int minDistance = b.getEYESIGHTorg();
-		int minDistance2 = minDistance;
-		int minDistance3 = minDistance;
-		int size = b.getBodyAgeState().ordinal();
+	public static final Obj searchFoodPredetor(Body body, boolean[] forceEat) {
+		Obj candidate = null;
+		Obj candidate2 = null; // 副候補
+		Obj deadCandidate = null; // 死体候補
+		int nearestDistance = body.getEyesightBase();
+		int secondaryNearestDistance = nearestDistance;
+		int deadNearestDistance = nearestDistance;
+		int size = body.getBodyAgeState().ordinal();
 		int looks = -1000;
-		int wallMode = b.getBodyAgeState().ordinal();
+		int wallMode = body.getBodyAgeState().ordinal();
 		forceEat[0] = false;
 		// 飛行可能なら壁以外は通過可能
-		if (b.canflyCheck()) {
+		if (body.canflyCheck()) {
 			wallMode = AgeState.ADULT.ordinal();
 		}
 
 		// ゆっくりから検索
 		for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
-			Body d = entry.getValue();
-			if (b == d) {
+			Body candidateBody = entry.getValue();
+			if (body == candidateBody) {
 				continue;
 			}
-			if (!d.isDead()) {
+			if (!candidateBody.isDead()) {
 				FoodPredatorCandidatePolicy.BodyCandidateResult result = FoodPredatorCandidatePolicy
-						.considerLiveBody(b, d, minDistance, minDistance2, size, wallMode, found, found2);
-				found = result.getFound();
-				found2 = result.getFound2();
-				minDistance = result.getMinDistance();
-				minDistance2 = result.getMinDistance2();
+						.considerLiveBody(body, candidateBody, nearestDistance, secondaryNearestDistance, size, wallMode, candidate, candidate2);
+				candidate = result.getFound();
+				candidate2 = result.getFound2();
+				nearestDistance = result.getMinDistance();
+				secondaryNearestDistance = result.getMinDistance2();
 				size = result.getSize();
 			} else {
 				FoodPredatorCandidatePolicy.BodyCandidateResult result = FoodPredatorCandidatePolicy
-						.considerDeadBody(b, d, minDistance3, wallMode, found3);
-				found3 = result.getFound3();
-				minDistance3 = result.getMinDistance3();
+						.considerDeadBody(body, candidateBody, deadNearestDistance, wallMode, deadCandidate);
+				deadCandidate = result.getFound3();
+				deadNearestDistance = result.getMinDistance3();
 			}
 		}
 		// 自分より小さい相手がいなかったら副目標にする
-		if (found == null)
-			found = found2;
+		if (candidate == null)
+			candidate = candidate2;
 
-		FoodPredatorFoodPolicy.FoodSearchResult foodResult = FoodPredatorFoodPolicy.searchFood(b, forceEat, wallMode,
-				found, found3, minDistance, looks);
-		found = foodResult.getFound();
-		minDistance = foodResult.getMinDistance();
+		FoodPredatorFoodPolicy.FoodSearchResult foodResult = FoodPredatorFoodPolicy.searchFood(body, forceEat, wallMode,
+				candidate, deadCandidate, nearestDistance, looks);
+		candidate = foodResult.getFound();
+		nearestDistance = foodResult.getMinDistance();
 		looks = foodResult.getLooks();
-		if (found == null && b.isFull()) {
-			return found;
+		if (candidate == null && body.isFull()) {
+			return candidate;
 		}
-		return FoodPredatorFallbackPolicy.searchFallbackFood(b, found, found3, minDistance, wallMode);
+		return FoodPredatorFallbackPolicy.searchFallbackFood(body, candidate, deadCandidate, nearestDistance, wallMode);
 	}
 
 	// 餌検索D
 	// うんうん奴隷用
-	private static final Obj searchFoodForUnunSlave(Body b, boolean[] forceEat) {
-		return FoodUnunSlaveSearchPolicy.searchFoodForUnunSlave(b, forceEat);
+	private static final Obj searchFoodForUnunSlave(Body body, boolean[] forceEat) {
+		return FoodUnunSlaveSearchPolicy.searchFoodForUnunSlave(body, forceEat);
 	}
 
 	// 餌検索A
 	// 足りないゆ、足焼き用 最も近いものを適当に食べる
-	private static final Obj searchFoodNearlest(Body b, boolean[] forceEat) {
-		return FoodNearestSearchPolicy.searchFoodNearest(b, forceEat);
+	private static final Obj searchFoodNearlest(Body body, boolean[] forceEat) {
+		return FoodNearestSearchPolicy.searchFoodNearest(body, forceEat);
 	}
 
 	/**
 	 *  食事処理
-	 * @param b ゆっくり
+	 * @param body ゆっくり
 	 * @param foodType エサタイプ
 	 * @param amount 食事量
 	 */
-	public static final void eatFood(Body b, FoodType foodType, int amount) {
-		FoodConsumptionPolicy.eatFood(b, foodType, amount);
+	public static final void eatFood(Body body, FoodType foodType, int amount) {
+		FoodConsumptionPolicy.eatFood(body, foodType, amount);
 	}
 
 	/**
 	 * お持ち帰り判定
-	 * @param b ゆっくり
+	 * @param body ゆっくり
 	 * @param o エサオブジェクト
 	 * @return 持ち帰るかどうか
 	 */
-	public static boolean checkTakeout(Body b, Obj o) {
-		return FoodTakeoutPolicy.checkTakeout(b, o);
+	public static boolean checkTakeout(Body body, Obj target) {
+		return FoodTakeoutPolicy.checkTakeout(body, target);
 	}
 
 	/**
 	 * 死体食べ判定
-	 * @param b ゆっくり
-	 * @param p 死体
+	 * @param body ゆっくり
+	 * @param target 死体
 	 * @return 食べるかどうか
 	 */
-	public static boolean checkCanEatBody(Body b, Body p) {
-		return FoodEligibility.checkCanEatBody(b, p);
+	public static boolean checkCanEatBody(Body body, Body target) {
+		return FoodEligibility.checkCanEatBody(body, target);
 	}
 
 }

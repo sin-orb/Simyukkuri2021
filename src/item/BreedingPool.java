@@ -133,15 +133,15 @@ public class BreedingPool extends ObjEX {
 	}
 
 	@Override
-	public int objHitProcess(Obj o) {
+	public int objHitProcess(Obj targetObject) {
 		if (!enabled)
 			return 0;
-		if (o.getObjType() == Type.YUKKURI) {
-			Body p = (Body) o;
+		if (targetObject.getObjType() == Type.YUKKURI) {
+			Body body = (Body) targetObject;
 			// 避妊されてたら妊娠しない
-			if (p.isBodyCastration() && !stalkPool)
+			if (body.isBodyCastration() && !stalkPool)
 				return 0;
-			if (p.isStalkCastration() && stalkPool)
+			if (body.isStalkCastration() && stalkPool)
 				return 0;
 
 			// 工業用専用の特殊処理
@@ -152,37 +152,37 @@ public class BreedingPool extends ObjEX {
 				}
 				// 赤ゆには茎を実らせない
 				if (stalkPool) {
-					if (p.isBaby())
+					if (body.isBaby())
 						return 0;
 				}
 				// ゆっくりが膨らんでる時の糞抜き
-				if (p.isInfration()) {
-					p.setShit(0, false);
+				if (body.isInfration()) {
+					body.setShit(0, false);
 					// 胎生妊娠プールの場合爆発寸前でストップ
-					if (!stalkPool && p.isAboutToBurst()) {
-						cry(p);
+					if (!stalkPool && body.isAboutToBurst()) {
+						cry(body);
 						return 0;
 					}
 				}
 				// 母体の自動回復
-				if (p.isDamaged()) {
-					p.injectJuice();
+				if (body.isDamaged()) {
+					body.injectJuice();
 				}
 			}
 
-			if (!p.isDead()
+			if (!body.isDead()
 					&& (int) getAge() % (((highQuality == true) ? 5 : 10) * ((stalkPool == true) ? 2 : 1)) == 0) {
 				// 赤ゆのDNA決定
 				for (int i = 0; i < 5; i++) {
 					int babyType;
 					if (liquidYukkuriType == -1) {
-						babyType = p.getType();
-					} else if (!p.isHybrid() && liquidYukkuriType < 10000 && (GameRandom.nextInt(50) == 0)) {
-						babyType = p.getHybridType(liquidYukkuriType);
+						babyType = body.getType();
+					} else if (!body.isHybrid() && liquidYukkuriType < 10000 && (GameRandom.nextInt(50) == 0)) {
+						babyType = body.getHybridType(liquidYukkuriType);
 					} else if (GameRandom.nextBoolean()) {
 						babyType = liquidYukkuriType;
 					} else {
-						babyType = p.getType();
+						babyType = body.getType();
 					}
 					// ドスまりさはただのまりさに変換
 					if (babyType == DosMarisa.type) {
@@ -210,7 +210,7 @@ public class BreedingPool extends ObjEX {
 					} else if ((babyType == Ayaya.type) && GameRandom.nextInt(20) == 0) {
 						babyType = Kimeemaru.type;
 					}
-					if (p.isSick() || p.isDamaged() || p.isOverPregnantLimit()
+					if (body.isSick() || body.isDamaged() || body.isOverPregnantLimit()
 							|| (!highQuality && GameRandom.nextInt(500) == 0)) {
 						if (GameRandom.nextBoolean() && (babyType == Reimu.type || babyType == WasaReimu.type)) {
 							babyType = TarinaiReimu.type;
@@ -220,35 +220,35 @@ public class BreedingPool extends ObjEX {
 					}
 					// 実らせる
 					if (stalkPool) {
-						cry(p);
-						p.setHappiness(Happiness.VERY_SAD);
-						p.addStress(50);
+						cry(body);
+						body.setHappiness(Happiness.VERY_SAD);
+						body.addStress(50);
 						// p.addMemories(-10);
-						p.getStalkBabyTypes()
+						body.getStalkBabyTypes()
 								.add((GameRandom.nextBoolean() ? new Dna(babyType, null, null, false) : null));
-						p.setHasStalk(true);
+						body.setHasStalk(true);
 					} else {
-						cry(p);
-						p.setHappiness(Happiness.VERY_SAD);
-						p.getBabyTypes().add(new Dna(babyType, null, null, false));
-						p.setHasBaby(true);
-						p.addStress(50);
+						cry(body);
+						body.setHappiness(Happiness.VERY_SAD);
+						body.getBabyTypes().add(new Dna(babyType, null, null, false));
+						body.setHasBaby(true);
+						body.addStress(50);
 						// p.addMemories(-10);
 						break;
 					}
 				}
-				p.subtractPregnantLimit();
+				body.subtractPregnantLimit();
 				// 廉価版では成長促進効果なし
 				if (option != 0 && option != 4) {
-					p.rapidPregnantPeriod();
+					body.rapidPregnantPeriod();
 				}
 				// 一匹一匹でコストになるのは工業用以外
 				if (option != 3 && option != 7) {
 					Cash.addCash(-getCost());
 				}
-			} else if (p.isDead() && liquidYukkuriType == -1 && p.isCrushed()) {
-				liquidYukkuriType = p.getType();
-				p.remove();
+			} else if (body.isDead() && liquidYukkuriType == -1 && body.isCrushed()) {
+				liquidYukkuriType = body.getType();
+				body.remove();
 			}
 		}
 		return 0;
@@ -270,14 +270,14 @@ public class BreedingPool extends ObjEX {
 	}
 
 	/** プール上のゆっくりを泣かせる処理 */
-	public void cry(Body p) {
-		if (p.hasBabyOrStalk()) {
-			if (p.isNYD()) {
-				p.setNYDMessage(GameMessages.getMessage(p, MessagePool.Action.NonYukkuriDisease), false);
+	public void cry(Body body) {
+		if (body.hasBabyOrStalk()) {
+			if (body.isNYD()) {
+				body.setNYDMessage(GameMessages.getMessage(body, MessagePool.Action.NonYukkuriDisease), false);
 			} else if (GameRandom.nextInt(40) == 0) {
-				p.setPikoMessage(GameMessages.getMessage(p, MessagePool.Action.PoolSukkiri), true);
+				body.setPikoMessage(GameMessages.getMessage(body, MessagePool.Action.PoolSukkiri), true);
 			} else {
-				p.setMessage(GameMessages.getMessage(p, MessagePool.Action.PoolSukkiri));
+				body.setMessage(GameMessages.getMessage(body, MessagePool.Action.PoolSukkiri));
 			}
 		}
 	}
@@ -295,8 +295,8 @@ public class BreedingPool extends ObjEX {
 
 		interval = 1;
 
-		boolean ret = setupPool(this, false);
-		if (!ret) {
+		boolean setupSucceeded = setupPool(this, false);
+		if (!setupSucceeded) {
 			GameWorld.get().getCurrentMap().getBreedingPool().remove(objId);
 		}
 	}
@@ -306,108 +306,108 @@ public class BreedingPool extends ObjEX {
 	}
 
 	// 設定メニュー
-	public static boolean setupPool(BreedingPool o, boolean init) {
+	public static boolean setupPool(BreedingPool pool, boolean init) {
 
 		JPanel mainPanel = new JPanel();
-		JRadioButton[] but = new JRadioButton[PoolType.values().length];
-		boolean ret = false;
+		JRadioButton[] buttons = new JRadioButton[PoolType.values().length];
+		boolean setupSucceeded = false;
 
 		mainPanel.setLayout(new GridLayout(4, 2));
 		mainPanel.setPreferredSize(new Dimension(350, 150));
-		ButtonGroup bg = new ButtonGroup();
+		ButtonGroup buttonGroup = new ButtonGroup();
 
-		for (int i = 0; i < but.length; i++) {
-			but[i] = new JRadioButton(PoolType.values()[i].toString());
-			bg.add(but[i]);
+		for (int i = 0; i < buttons.length; i++) {
+			buttons[i] = new JRadioButton(PoolType.values()[i].toString());
+			buttonGroup.add(buttons[i]);
 
-			mainPanel.add(but[i]);
+			mainPanel.add(buttons[i]);
 		}
 
 		if (!init) {
-			but[0].setSelected(true);
+			buttons[0].setSelected(true);
 		} else {
-			but[o.lastSelected].setSelected(true);
+			buttons[pool.lastSelected].setSelected(true);
 		}
-		int dlgRet = JOptionPane.showConfirmDialog(GameView.getDialogParent(), mainPanel,
+		int dialogResult = JOptionPane.showConfirmDialog(GameView.getDialogParent(), mainPanel,
 				GameText.read("item_poolsettings"),
 				JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
-		if (dlgRet == JOptionPane.OK_OPTION) {
+		if (dialogResult == JOptionPane.OK_OPTION) {
 			// 廉価版
-			if (but[0].isSelected()) {
-				o.highQuality = false;
+			if (buttons[0].isSelected()) {
+				pool.highQuality = false;
 				// o.rapidGrowth = false;
-				o.stalkPool = false;
+				pool.stalkPool = false;
 				// o.industrial = false;
-				o.lastSelected = 0;
-				o.option = 0;
+				pool.lastSelected = 0;
+				pool.option = 0;
 			}
 			// 通常版
-			else if (but[1].isSelected()) {
-				o.highQuality = false;
+			else if (buttons[1].isSelected()) {
+				pool.highQuality = false;
 				// o.rapidGrowth = true;
-				o.stalkPool = false;
+				pool.stalkPool = false;
 				// o.industrial = false;
-				o.lastSelected = 1;
-				o.option = 1;
+				pool.lastSelected = 1;
+				pool.option = 1;
 			}
 			// プロ用
-			else if (but[2].isSelected()) {
-				o.highQuality = true;
+			else if (buttons[2].isSelected()) {
+				pool.highQuality = true;
 				// o.rapidGrowth = true;
-				o.stalkPool = false;
+				pool.stalkPool = false;
 				// o.industrial = false;
-				o.lastSelected = 2;
-				o.option = 2;
+				pool.lastSelected = 2;
+				pool.option = 2;
 			}
 			// 工業用
-			else if (but[3].isSelected()) {
-				o.highQuality = true;
+			else if (buttons[3].isSelected()) {
+				pool.highQuality = true;
 				// o.rapidGrowth = true;
-				o.stalkPool = false;
+				pool.stalkPool = false;
 				// o.industrial = true;
-				o.lastSelected = 3;
-				o.option = 3;
+				pool.lastSelected = 3;
+				pool.option = 3;
 			}
 			// 廉価版(茎)
-			else if (but[4].isSelected()) {
-				o.highQuality = false;
+			else if (buttons[4].isSelected()) {
+				pool.highQuality = false;
 				// o.rapidGrowth = false;
-				o.stalkPool = true;
+				pool.stalkPool = true;
 				// o.industrial = false;
-				o.lastSelected = 4;
-				o.option = 4;
+				pool.lastSelected = 4;
+				pool.option = 4;
 			}
 			// 通常版(茎)
-			else if (but[5].isSelected()) {
-				o.highQuality = false;
+			else if (buttons[5].isSelected()) {
+				pool.highQuality = false;
 				// o.rapidGrowth = true;
-				o.stalkPool = true;
+				pool.stalkPool = true;
 				// o.industrial = false;
-				o.lastSelected = 5;
-				o.option = 5;
+				pool.lastSelected = 5;
+				pool.option = 5;
 			}
 			// プロ用(茎)
-			else if (but[6].isSelected()) {
-				o.highQuality = true;
+			else if (buttons[6].isSelected()) {
+				pool.highQuality = true;
 				// o.rapidGrowth = true;
-				o.stalkPool = true;
+				pool.stalkPool = true;
 				// o.industrial = false;
-				o.lastSelected = 6;
-				o.option = 6;
+				pool.lastSelected = 6;
+				pool.option = 6;
 			}
 			// 工業用(茎)
-			else if (but[7].isSelected()) {
-				o.highQuality = true;
+			else if (buttons[7].isSelected()) {
+				pool.highQuality = true;
 				// o.rapidGrowth = true;
-				o.stalkPool = true;
+				pool.stalkPool = true;
 				// o.industrial = true;
-				o.lastSelected = 7;
-				o.option = 7;
+				pool.lastSelected = 7;
+				pool.option = 7;
 			}
-			ret = true;
+			setupSucceeded = true;
 		}
-		return ret;
+		return setupSucceeded;
 	}
 
 	public boolean isHighQuality() {

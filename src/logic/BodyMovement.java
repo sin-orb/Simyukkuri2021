@@ -97,7 +97,7 @@ public final class BodyMovement {
 	 * @return 1以上に補正された移動step
 	 */
 	public static int calculateMovementStep(Body body) {
-		int step = body.getSTEPorg()[body.getBodyAgeState().ordinal()];
+		int step = body.getStepBase()[body.getBodyAgeState().ordinal()];
 		if (body.hasBabyOrStalk() || (body.isSoHungry() && !body.isPredatorType())
 				|| body.getDamageState() != Damage.NONE || body.isSick() || body.isFeelPain()
 				|| (body.isFlyingType() && !body.canflyCheck())
@@ -112,7 +112,7 @@ public final class BodyMovement {
 		}
 
 		if (body.getCurrentEvent() instanceof SuperEatingTimeEvent) {
-			step = ((SuperEatingTimeEvent) body.getCurrentEvent()).getLowestStep();
+			step = ((SuperEatingTimeEvent) body.getCurrentEvent()).getMinimumStep();
 		}
 
 		if (step == 0) {
@@ -129,7 +129,7 @@ public final class BodyMovement {
 	 * @return 移動判定に使う周期
 	 */
 	public static int calculateMovementFrequency(Body body, int step) {
-		return body.getSTEPorg()[AgeState.ADULT.ordinal()] / step;
+		return body.getStepBase()[AgeState.ADULT.ordinal()] / step;
 	}
 
 	/**
@@ -178,9 +178,9 @@ public final class BodyMovement {
 	 * @param body 更新対象のゆっくり
 	 */
 	public static void updateRandomDirectionX(Body body) {
-		int count = body.getCountX();
-		body.setCountX(count + 1);
-		if (count >= getRandomDirectionLimit(body)) {
+		int directionCount = body.getCountX();
+		body.setCountX(directionCount + 1);
+		if (directionCount >= getRandomDirectionLimit(body)) {
 			body.setCountX(0);
 			body.setDirX(body.randomDirection(body.getDirX()));
 			showNoAccessoryMessageIfNeeded(body);
@@ -197,9 +197,9 @@ public final class BodyMovement {
 	 * @param body 更新対象のゆっくり
 	 */
 	public static void updateRandomDirectionY(Body body) {
-		int count = body.getCountY();
-		body.setCountY(count + 1);
-		if (count >= getRandomDirectionLimit(body)) {
+		int directionCount = body.getCountY();
+		body.setCountY(directionCount + 1);
+		if (directionCount >= getRandomDirectionLimit(body)) {
 			body.setCountY(0);
 			body.setDirY(body.randomDirection(body.getDirY()));
 			showNoAccessoryMessageIfNeeded(body);
@@ -284,7 +284,7 @@ public final class BodyMovement {
 		if (body.isDead()) {
 			return;
 		}
-		if (body.getBlockedCount() != 0) {
+		if (body.getBlockedTicks() != 0) {
 			return;
 		}
 		body.setDestX(Math.max(0, Math.min(toX, Translate.getMapW())));
@@ -304,7 +304,7 @@ public final class BodyMovement {
 	public static void moveToBody(Body body, src.base.Obj target, int toX, int toY, int toZ) {
 		body.clearActions();
 		body.setToBody(true);
-		body.setMoveTarget(target.objId);
+		body.setMoveTargetId(target.objId);
 		moveTo(body, toX, toY, toZ);
 	}
 
@@ -362,9 +362,9 @@ public final class BodyMovement {
 	 * @return このtickの移動処理をここで終了すべき場合は{@code true}
 	 */
 	public static boolean applyExternalMotion(Body body) {
-		int mx = body.getVx() + body.getBx();
-		int my = body.getVy() + body.getBy();
-		int mz = body.getVz() + body.getBz();
+		int mx = body.getVx() + body.getMotionX();
+		int my = body.getVy() + body.getMotionY();
+		int mz = body.getVz() + body.getMotionZ();
 
 		if (mx != 0) {
 			body.setX(body.getX() + mx);
@@ -403,22 +403,22 @@ public final class BodyMovement {
 		}
 
 		if (body.getZ() > 0) {
-			body.setbFallingUnderGround(false);
+			body.setFallingUnderGround(false);
 		}
 
 		if ((mz != 0 || (!body.canflyCheck() && body.getMostDepth() != body.getZ() && body.getBindStalk() == null))
-				&& !body.isbFallingUnderGround()) {
+				&& !body.isFallingUnderGround()) {
 			body.setFalldownDamage(body.getVz() > 0 ? body.getFalldownDamage() : 0);
 			mz += 1;
 			body.setVz(body.getVz() + 1);
 			body.setZ(body.getZ() - mz);
 			body.setFalldownDamage(body.getFalldownDamage() + (body.getVz() > 0 ? body.getVz() : 0));
-			if (body.getZ() <= body.getnMostDepth()) {
+			if (body.getZ() <= body.getMostDepth()) {
 				applyLanding(body);
 			}
-			body.setBx(0);
-			body.setBy(0);
-			body.setBz(0);
+			body.setMotionX(0);
+			body.setMotionY(0);
+			body.setMotionZ(0);
 			return true;
 		}
 		return false;
@@ -436,7 +436,7 @@ public final class BodyMovement {
 			revertDirectedMovement(body, vector);
 			handleWallCollision(body);
 		} else {
-			body.setBlockedCount(Math.max(0, body.getBlockedCount() - 1));
+			body.setBlockedTicks(Math.max(0, body.getBlockedTicks() - 1));
 			handlePoolEntry(body, vector);
 		}
 
@@ -445,7 +445,7 @@ public final class BodyMovement {
 	}
 
 	private static int getRandomDirectionLimit(Body body) {
-		return body.getSameDest() * body.getSTEPorg()[body.getBodyAgeState().ordinal()];
+		return body.getSameDirectionFactor() * body.getStepBase()[body.getBodyAgeState().ordinal()];
 	}
 
 	private static int applyAxisMovement(int current, int destination, int direction, int vector) {
@@ -469,8 +469,8 @@ public final class BodyMovement {
 
 	private static void handleWallCollision(Body body) {
 		if (hasAnyDestination(body)) {
-			body.setBlockedCount(Math.min(body.getBlockedCount() + 1, body.getBLOCKEDLIMITorg() * 2));
-			if (body.getBlockedCount() > body.getBLOCKEDLIMITorg()) {
+			body.setBlockedTicks(Math.min(body.getBlockedTicks() + 1, body.getBlockedLimitBase() * 2));
+			if (body.getBlockedTicks() > body.getBlockedLimitBase()) {
 				randomizeBlockedDirection(body);
 				body.setDestX(-1);
 				body.setDestY(-1);
@@ -478,7 +478,7 @@ public final class BodyMovement {
 				if (body.getIntelligence() == Intelligence.FOOL && body.getPanicType() != null) {
 					body.setHappiness(Happiness.VERY_SAD);
 				}
-			} else if (body.getBlockedCount() > body.getBLOCKEDLIMITorg() / 2
+			} else if (body.getBlockedTicks() > body.getBlockedLimitBase() / 2
 					&& body.getIntelligence() == Intelligence.FOOL && body.getPanicType() != null) {
 				if (body.isRude()) {
 					body.setAngry();
@@ -595,7 +595,7 @@ public final class BodyMovement {
 			body.changeUnyo(0, 0, (int) (body.getFalldownDamage() * 0.4 + 1));
 		}
 		body.setFalldownDamage(body.getFalldownDamage() + Math.abs(body.getVy()));
-		body.setZ(body.getnMostDepth());
+		body.setZ(body.getMostDepth());
 		body.setVz(0);
 		body.setVy(0);
 		body.setVx(0);
@@ -604,7 +604,7 @@ public final class BodyMovement {
 		if (body.getFalldownDamage() >= 8 / jumpLevel[body.getBodyAgeState().ordinal()]) {
 			if (body.checkOnBed()) {
 				damageCut = 4;
-			} else if (body.isBFirstGround()) {
+			} else if (body.isFirstGround()) {
 				body.addMemories(-20);
 			}
 
@@ -618,8 +618,8 @@ public final class BodyMovement {
 				}
 			}
 
-			if (body.isbNoDamageNextFall() && body.getFalldownDamage() != 0) {
-				body.setbNoDamageNextFall(false);
+			if (body.isNoDamageNextFall() && body.getFalldownDamage() != 0) {
+				body.setNoDamageNextFall(false);
 				body.setFalldownDamage(0);
 			}
 
@@ -627,14 +627,14 @@ public final class BodyMovement {
 				body.strike(body.getFalldownDamage() * 100 * 24 * 3 / 100 / damageCut);
 			}
 
-			if (body.isBFirstGround()) {
+			if (body.isFirstGround()) {
 				if (!body.isNYD()) {
 					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.TakeItEasy));
 					body.addStress(-400);
 					body.addMemories(20);
 				}
 			}
-			body.setBFirstGround(false);
+			body.setFirstGround(false);
 
 			if (body.isPealed()) {
 				body.toDead();

@@ -113,7 +113,7 @@ public class AccelAmpouleTest {
     public void testConstructorWithParentNotInWorld() {
         Body parent = new Reimu();
         parent.setAgeState(AgeState.CHILD);
-        // parentをworldに登録しないのでYukkuriUtil.getBodyInstanceがnullを返す
+        // parentをworldに登録しないのでBodyRegistryでは見つからない
         AccelAmpoule ampoule = new AccelAmpoule(parent);
         assertEquals(1000, ampoule.getValue());
         assertEquals(0, ampoule.getCost());

@@ -87,17 +87,17 @@ abstract public class EventPacket implements java.io.Serializable{
 	}
 
 	/**イベントを発した個体セッター*/
-	public void setFrom(Body b) {
-		if (b!= null) {
-			from = b.getUniqueID();
+	public void setFrom(Body body) {
+		if (body!= null) {
+			from = body.getUniqueID();
 		} else {
 			from = -1;
 		}
 	}
 
 	/**特定の対象に向けた場合はその個体セッター*/
-	public void setTo(Body b) {
-		to = b.getUniqueID();
+	public void setTo(Body body) {
+		to = body.getUniqueID();
 	}
 
 	/**イベント対象セッター*/
@@ -110,7 +110,7 @@ abstract public class EventPacket implements java.io.Serializable{
 	<br> trueを返すとイベントは終了してcheckEventResponse以降は呼ばれない
 	 <br>また、このメソッドは例外的にイベント実行中でも呼ばれるので困る場合は
 	 このメソッド内でBody.currentEventがnullかチェックすること*/
-	public boolean simpleEventAction(Body b) {
+	public boolean simpleEventAction(Body body) {
 		return false;
 	}
 
@@ -120,7 +120,7 @@ abstract public class EventPacket implements java.io.Serializable{
 	 * <br>ワールドイベントの場合はイベント発行した本人に対してもチェックが発生するので
 	 * 処理を避けたければここでチェックを忘れず行う
 	 */
-	abstract public boolean checkEventResponse(Body b);
+	abstract public boolean checkEventResponse(Body body);
 
 	/** 
 	 * イベント開始動作
@@ -128,7 +128,7 @@ abstract public class EventPacket implements java.io.Serializable{
 	 * 主に移動先の設定などに使用。
 	 * イベント用の移動はBody.moveToEvent()を使用する
 	 */
-	abstract public void start(Body b);
+	abstract public void start(Body body);
 
 	/**
 	 * 毎フレーム呼ばれるメソッド
@@ -139,7 +139,7 @@ abstract public class EventPacket implements java.io.Serializable{
 	 * UpdateState.FORCE_EXECで強制的にexecuteへ移行できる。
 	 * 移動中に対象がremoveされたら困る場合などはここでチェックしてABORTなどを行う
 	 */
-	public UpdateState update(Body b) {
+	public UpdateState update(Body body) {
 		return null;
 	}
 
@@ -149,7 +149,7 @@ abstract public class EventPacket implements java.io.Serializable{
 	 * falseを返している間は毎フレームupdateとexecuteが呼ばれるので、
 	 * 自前でステート管理すれば小芝居的なものも可能
 	 */
-	abstract public boolean execute(Body b);
+	abstract public boolean execute(Body body);
 
 	/**
 	 *  イベント終了時に呼ばれるメソッド。
@@ -157,7 +157,7 @@ abstract public class EventPacket implements java.io.Serializable{
 	 *  外部からのアクションによってclearActions()が発生してイベントが消される場合も呼ばれる。
 	 *  普通は必要ないが後始末の処理が必要な場合はこれをオーバーライドする
 	 */
-	public void end(Body b) {
+	public void end(Body body) {
 		return;
 	}
 	/**
@@ -219,17 +219,17 @@ abstract public class EventPacket implements java.io.Serializable{
 	}
 	/**
 	 * 待ち時間チェック
-	 * @param b ゆっくり
-	 * @param nWaitTime 待ち時間
+	 * @param body ゆっくり
+	 * @param waitTime 待ち時間
 	 * @return 待ち時間が過ぎていたらtrue
 	 */
-	public boolean checkWait(Body b,int nWaitTime)
+	public boolean checkWait(Body body,int waitTime)
 	{
-		if( !b.checkWait(nWaitTime))
+		if( !body.checkWait(waitTime))
 		{
 			return false;
 		}
-		b.setLastActionTime();
+		body.setLastActionTime();
 		return true;
 	}
 

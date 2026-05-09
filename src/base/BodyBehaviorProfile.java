@@ -8,15 +8,15 @@ public class BodyBehaviorProfile implements java.io.Serializable {
 	private static final long serialVersionUID = 2065720843157054021L;
 
 	/** なつき度限界 */
-	private int LOVEPLAYERLIMITorg = 1000;
+	private int lovePlayerLimitBase = 1000;
 	/** 攻撃された際のぴこぴこ破壊確率。0だと破壊されない */
-	private int nBreakBraidRand = 0;
+	private int braidBreakChance = 0;
 	/** 何回のうち1回の確率ですりすり事故で妊娠するかの値 */
-	private int SurisuriAccidentProb = 200;
+	private int surisuriAccidentProb = 200;
 	/** 何回のうち1回の確率で路上で車に轢かれるかの値 */
-	private int CarAccidentProb = 10000;
+	private int carAccidentProb = 10000;
 	/** 何回のうち1回の確率であんよが傷ついているとあんよが破壊されるかの確率 */
-	private int BreakBodyByShitProb = 100;
+	private int breakBodyByShitProb = 100;
 	/** 何回のうち1回の確率で苦いフードを食べた際にゆ下痢になるかの確率 */
 	private int diarrheaProb = 5;
 	/** 何回のうち１回の確率で発情するかの確率 */
@@ -24,15 +24,15 @@ public class BodyBehaviorProfile implements java.io.Serializable {
 	/** 性格変化の切り替え */
 	private boolean notChangeCharacter = false;
 	/** ゲスポイント */
-	private int AttitudePoint = 0;
+	private int attitudePoint = 0;
 	/** 同一方向に動き続ける */
-	private int sameDest = 30;
+	private int sameDirectionFactor = 30;
 	/** 固有の免疫力（個体値。これは仮） */
-	private int ROBUSTNESS = 1;
+	private int immunityStrength = 1;
 	/** 妊娠限界 */
-	private int PregnantLimit = 1000;
+	private int pregnantLimit = 1000;
 	/** よりリアルな妊娠限界 */
-	private boolean realPregnantLimit = true;
+	private boolean useRealPregnantLimit = true;
 
 	/**
 	 * BodyBehaviorProfile を生成する.
@@ -49,19 +49,19 @@ public class BodyBehaviorProfile implements java.io.Serializable {
 		if (from == null) {
 			return;
 		}
-		LOVEPLAYERLIMITorg = from.LOVEPLAYERLIMITorg;
-		nBreakBraidRand = from.nBreakBraidRand;
-		SurisuriAccidentProb = from.SurisuriAccidentProb;
-		CarAccidentProb = from.CarAccidentProb;
-		BreakBodyByShitProb = from.BreakBodyByShitProb;
+		lovePlayerLimitBase = from.lovePlayerLimitBase;
+		braidBreakChance = from.braidBreakChance;
+		surisuriAccidentProb = from.surisuriAccidentProb;
+		carAccidentProb = from.carAccidentProb;
+		breakBodyByShitProb = from.breakBodyByShitProb;
 		diarrheaProb = from.diarrheaProb;
 		exciteProb = from.exciteProb;
 		notChangeCharacter = from.notChangeCharacter;
-		AttitudePoint = from.AttitudePoint;
-		sameDest = from.sameDest;
-		ROBUSTNESS = from.ROBUSTNESS;
-		PregnantLimit = from.PregnantLimit;
-		realPregnantLimit = from.realPregnantLimit;
+		attitudePoint = from.attitudePoint;
+		sameDirectionFactor = from.sameDirectionFactor;
+		immunityStrength = from.immunityStrength;
+		pregnantLimit = from.pregnantLimit;
+		useRealPregnantLimit = from.useRealPregnantLimit;
 	}
 
 	/**
@@ -75,44 +75,44 @@ public class BodyBehaviorProfile implements java.io.Serializable {
 		return ret;
 	}
 
-	public int getLOVEPLAYERLIMITorg() {
-		return LOVEPLAYERLIMITorg;
+	public int getLovePlayerLimitBase() {
+		return lovePlayerLimitBase;
 	}
 
-	public void setLOVEPLAYERLIMITorg(int lOVEPLAYERLIMITorg) {
-		LOVEPLAYERLIMITorg = lOVEPLAYERLIMITorg;
+	public void setLovePlayerLimitBase(int lovePlayerLimitBase) {
+		this.lovePlayerLimitBase = lovePlayerLimitBase;
 	}
 
-	public int getnBreakBraidRand() {
-		return nBreakBraidRand;
+	public int getBraidBreakChance() {
+		return braidBreakChance;
 	}
 
-	public void setnBreakBraidRand(int nBreakBraidRand) {
-		this.nBreakBraidRand = nBreakBraidRand;
+	public void setBraidBreakChance(int braidBreakChance) {
+		this.braidBreakChance = braidBreakChance;
 	}
 
 	public int getSurisuriAccidentProb() {
-		return SurisuriAccidentProb;
+		return surisuriAccidentProb;
 	}
 
 	public void setSurisuriAccidentProb(int surisuriAccidentProb) {
-		SurisuriAccidentProb = surisuriAccidentProb;
+		this.surisuriAccidentProb = surisuriAccidentProb;
 	}
 
 	public int getCarAccidentProb() {
-		return CarAccidentProb;
+		return carAccidentProb;
 	}
 
 	public void setCarAccidentProb(int carAccidentProb) {
-		CarAccidentProb = carAccidentProb;
+		this.carAccidentProb = carAccidentProb;
 	}
 
 	public int getBreakBodyByShitProb() {
-		return BreakBodyByShitProb;
+		return breakBodyByShitProb;
 	}
 
 	public void setBreakBodyByShitProb(int breakBodyByShitProb) {
-		BreakBodyByShitProb = breakBodyByShitProb;
+		this.breakBodyByShitProb = breakBodyByShitProb;
 	}
 
 	public int getDiarrheaProb() {
@@ -140,42 +140,42 @@ public class BodyBehaviorProfile implements java.io.Serializable {
 	}
 
 	public int getAttitudePoint() {
-		return AttitudePoint;
+		return attitudePoint;
 	}
 
 	public void setAttitudePoint(int attitudePoint) {
-		AttitudePoint = attitudePoint;
+		this.attitudePoint = attitudePoint;
 	}
 
-	public int getSameDest() {
-		return sameDest;
+	public int getSameDirectionFactor() {
+		return sameDirectionFactor;
 	}
 
-	public void setSameDest(int sameDest) {
-		this.sameDest = sameDest;
+	public void setSameDirectionFactor(int sameDirectionFactor) {
+		this.sameDirectionFactor = sameDirectionFactor;
 	}
 
-	public int getROBUSTNESS() {
-		return ROBUSTNESS;
+	public int getImmunityStrength() {
+		return immunityStrength;
 	}
 
-	public void setROBUSTNESS(int rOBUSTNESS) {
-		ROBUSTNESS = rOBUSTNESS;
+	public void setImmunityStrength(int immunityStrength) {
+		this.immunityStrength = immunityStrength;
 	}
 
 	public int getPregnantLimit() {
-		return PregnantLimit;
+		return pregnantLimit;
 	}
 
 	public void setPregnantLimit(int pregnantLimit) {
-		PregnantLimit = pregnantLimit;
+		this.pregnantLimit = pregnantLimit;
 	}
 
-	public boolean isRealPregnantLimit() {
-		return realPregnantLimit;
+	public boolean isUseRealPregnantLimit() {
+		return useRealPregnantLimit;
 	}
 
-	public void setRealPregnantLimit(boolean realPregnantLimit) {
-		this.realPregnantLimit = realPregnantLimit;
+	public void setUseRealPregnantLimit(boolean useRealPregnantLimit) {
+		this.useRealPregnantLimit = useRealPregnantLimit;
 	}
 }

@@ -218,6 +218,7 @@ public class HybridYukkuriTest {
     public void testGetImage_afterTuneParameters_imagesSlotNull_throwsNPE() {
         HybridYukkuri hybrid = new HybridYukkuri();
         hybrid.tuneParameters(); // images = new Body[size], but elements are null
+        hybrid.setImages(new Body[src.enums.ImageCode.values().length]);
         BodyLayer layer = new BodyLayer();
         // images[0] == null → images[0].setAgeState → NPE
         assertEquals(0, hybrid.getImage(0, 0, layer, 0));

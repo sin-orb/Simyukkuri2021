@@ -31,6 +31,9 @@ public final class ItemGetMenuAction implements ActionListener {
 				GameWorld.get().getPlayer().getItemList().addElement(ItemMenu.getGetTarget());
 				if (ItemMenu.getGetTarget() instanceof Body) {
 					Body b = (Body) ItemMenu.getGetTarget();
+					if (b.getBindStalk() != null) {
+						b.detachFromStalk();
+					}
 					b.removeAllStalks();
 					b.setTaken(true);
 					curMap.getBody().remove(b.getUniqueID());

@@ -120,14 +120,14 @@ class BedLogicTest {
     @Test
     void testCheckBed_sleepy_noBed_returnsFalse() {
         // isSleepy via sleepPoint limit
-        body.setACTIVEPERIODorg(0); // make isSleepy() return true
+        body.setActivePeriodBase(0); // make isSleepy() return true
         assertDoesNotThrow(() -> BedLogic.checkBed(body));
     }
 
     @Test
     void testCheckBed_withBed_sleepy_executesCode() {
         // Make body sleepy
-        body.setACTIVEPERIODorg(0); // make isSleepy() return true
+        body.setActivePeriodBase(0); // make isSleepy() return true
         body.setAge(999);
         Bed bed = new Bed();
         bed.setX(150); bed.setY(150);
@@ -153,7 +153,7 @@ class BedLogicTest {
     @Test
     void testCheckBed_isToBed_targetNull_returnsFalse() {
         body.setToBed(true);
-        body.setMoveTarget(-1); // no target
+        body.setMoveTargetId(-1); // no target
         // target==null so isToBed branch skips
         assertDoesNotThrow(() -> BedLogic.checkBed(body));
     }
@@ -166,7 +166,7 @@ class BedLogicTest {
         SimYukkuri.world.getCurrentMap().getBed().put(bed.getObjId(), bed);
 
         body.setToBed(true);
-        body.setMoveTarget(bed.getObjId());
+        body.setMoveTargetId(bed.getObjId());
         // target.isRemoved() → clearActions and return false
         assertFalse(BedLogic.checkBed(body));
     }
@@ -178,7 +178,7 @@ class BedLogicTest {
         SimYukkuri.world.getCurrentMap().getBed().put(bed.getObjId(), bed);
 
         body.setToBed(true);
-        body.setMoveTarget(bed.getObjId());
+        body.setMoveTargetId(bed.getObjId());
         body.setPublicRank(PublicRank.UnunSlave);
         // UnunSlave heading to Bed → clearActions and return false
         assertFalse(BedLogic.checkBed(body));
@@ -191,7 +191,7 @@ class BedLogicTest {
         SimYukkuri.world.getCurrentMap().getBed().put(bed.getObjId(), bed);
 
         body.setToBed(true);
-        body.setMoveTarget(bed.getObjId());
+        body.setMoveTargetId(bed.getObjId());
         body.setZ(0);
         // stepDist >= distance(0) → arrival, sets stay and returns true
         assertTrue(BedLogic.checkBed(body));
@@ -204,7 +204,7 @@ class BedLogicTest {
         SimYukkuri.world.getCurrentMap().getBed().put(bed.getObjId(), bed);
 
         body.setToBed(true);
-        body.setMoveTarget(bed.getObjId());
+        body.setMoveTargetId(bed.getObjId());
         body.setZ(0);
         // not arrived → moveTo and returns true
         assertTrue(BedLogic.checkBed(body));
@@ -221,13 +221,13 @@ class BedLogicTest {
             SimYukkuri.world.getCurrentMap().getBed().put(bed.getObjId(), bed);
 
             body.setToBed(true);
-            body.setMoveTarget(bed.getObjId());
+            body.setMoveTargetId(bed.getObjId());
             body.setZ(0);
-            body.setFavItem(src.enums.FavItemType.BED, null);
+            body.setFavoriteItem(src.enums.FavItemType.BED, null);
 
             assertTrue(BedLogic.checkBed(body));
-            assertNotNull(body.getFavItem(src.enums.FavItemType.BED));
-            assertEquals(bed.getObjId(), body.getFavItem(src.enums.FavItemType.BED).getObjId());
+            assertNotNull(body.getFavoriteItem(src.enums.FavItemType.BED));
+            assertEquals(bed.getObjId(), body.getFavoriteItem(src.enums.FavItemType.BED).getObjId());
         }
     }
 
@@ -266,7 +266,7 @@ class BedLogicTest {
         House house = new House();
         house.setX(100); house.setY(100);
         SimYukkuri.world.getCurrentMap().getHouse().put(house.getObjId(), house);
-        body.setACTIVEPERIODorg(0); // make isSleepy() return true
+        body.setActivePeriodBase(0); // make isSleepy() return true
         assertDoesNotThrow(() -> BedLogic.checkBed(body));
     }
 
@@ -297,7 +297,7 @@ class BedLogicTest {
     @Test
     void testCheckBed_nearToBirth_HighEvent_returnsFalse() {
         body.setHasBaby(true);
-        body.setPregnantPeriod(body.getPREGPERIODorg()); // nearToBirth()=true
+        body.setPregnantPeriod(body.getPregPeriodBase()); // nearToBirth()=true
         // Set HIGH priority event at lines 46-49: getPriority()==HIGH → return false
         src.base.EventPacket highEvent = new src.base.EventPacket() {
             private static final long serialVersionUID = 1L;
@@ -331,7 +331,7 @@ class BedLogicTest {
     @Test
     void testCheckBed_isNYD_returnsFalse() {
         // NonYukkuriDiseaseNear makes isNYD()=true → line 58: return false
-        body.seteCoreAnkoState(src.enums.CoreAnkoState.NonYukkuriDiseaseNear);
+        body.setCoreAnkoState(src.enums.CoreAnkoState.NonYukkuriDiseaseNear);
         assertFalse(BedLogic.checkBed(body));
     }
 
@@ -343,12 +343,12 @@ class BedLogicTest {
         bed.setX(100); bed.setY(100); // same position as body → arrived
         SimYukkuri.world.getCurrentMap().getBed().put(bed.getObjId(), bed);
         body.setToBed(true);
-        body.setMoveTarget(bed.getObjId());
-        // Setup FOOD takeout at line 95: getTakeoutItem(FOOD) != null → dropTakeoutItem
+        body.setMoveTargetId(bed.getObjId());
+        // Setup FOOD takeout at line 95: getCarryItem(FOOD) != null → dropTakeoutItem
         src.item.Food food = new src.item.Food(100, 100, src.item.Food.FoodType.FOOD.ordinal());
         food.setAmount(100);
         SimYukkuri.world.getCurrentMap().getTakenOutFood().put(food.getObjId(), food);
-        body.getTakeoutItem().put(src.enums.TakeoutItemType.FOOD, food.getObjId());
+        body.getCarryItems().put(src.enums.TakeoutItemType.FOOD, food.getObjId());
         assertDoesNotThrow(() -> BedLogic.checkBed(body));
     }
 

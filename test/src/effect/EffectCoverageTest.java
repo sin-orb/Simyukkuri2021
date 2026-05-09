@@ -39,7 +39,7 @@ public class EffectCoverageTest {
 
     @Test
     public void testBakeSmoke() {
-        BakeSmoke.setImages(dummyImages);
+        BakeSmoke.setImageLayers(dummyImages);
         BakeSmoke effect = new BakeSmoke(0, 0, 0, 0, 0, 0, false, 10, 0, false, false, false);
         assertNotNull(effect.getImage());
         new BakeSmoke();
@@ -47,7 +47,7 @@ public class EffectCoverageTest {
 
     @Test
     public void testSteam() {
-        Steam.setImages(dummyImages);
+        Steam.setImageLayers(dummyImages);
         Steam effect = new Steam(0, 0, 0, 0, 0, 0, false, 10, 0, false, false, false);
         assertNotNull(effect.getImage());
         new Steam();
@@ -55,7 +55,7 @@ public class EffectCoverageTest {
 
     @Test
     public void testMix() {
-        Mix.setImages(dummyImages);
+        Mix.setImageLayers(dummyImages);
         Mix effect = new Mix(0, 0, 0, 0, 0, 0, false, 10, 0, false, false, false);
         assertNotNull(effect.getImage());
         new Mix();
@@ -63,7 +63,7 @@ public class EffectCoverageTest {
 
     @Test
     public void testHit() {
-        Hit.setImages(dummyImages2D);
+        Hit.setImageLayers(dummyImages2D);
         Hit effect = new Hit(0, 0, 0, 0, 0, 0, false, 10, 0, false, false, false);
         assertNotNull(effect.getImage());
         new Hit();
@@ -71,16 +71,16 @@ public class EffectCoverageTest {
 
     @Test
     public void testGetImages() {
-        BakeSmoke.setImages(dummyImages);
-        assertSame(dummyImages, BakeSmoke.getImages());
+        BakeSmoke.setImageLayers(dummyImages);
+        assertSame(dummyImages, BakeSmoke.getImageLayers());
 
-        Mix.setImages(dummyImages);
-        assertSame(dummyImages, Mix.getImages());
+        Mix.setImageLayers(dummyImages);
+        assertSame(dummyImages, Mix.getImageLayers());
 
-        Steam.setImages(dummyImages);
-        assertSame(dummyImages, Steam.getImages());
+        Steam.setImageLayers(dummyImages);
+        assertSame(dummyImages, Steam.getImageLayers());
 
-        Hit.setImages(dummyImages2D);
-        assertSame(dummyImages2D, Hit.getImages());
+        Hit.setImageLayers(dummyImages2D);
+        assertSame(dummyImages2D, Hit.getImageLayers());
     }
 }

@@ -130,7 +130,7 @@ class BegForLifeEventTest {
     @Test
     void testUpdate_bTalking_returnsNull() {
         Body b = createBody();
-        b.setMessageCount(1); // isTalking() = true
+        b.setMessageTicks(1); // isTalking() = true
         BegForLifeEvent event = new BegForLifeEvent(b, null, null, 10);
         assertNull(event.update(b));
     }

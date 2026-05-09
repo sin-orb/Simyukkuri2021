@@ -48,15 +48,15 @@ public class ProcesserPlate extends ObjEX {
 	private static final long serialVersionUID = -32909400197144018L;
 	/** 処理対象(ゆっくり) */
 	public static final int hitCheckObjType = ObjEX.YUKKURI;
-	private static BufferedImage[] images = new BufferedImage[2];
+	private static BufferedImage[] imageLayers = new BufferedImage[2];
 	private static Rectangle4y boundary = new Rectangle4y();
 
 	/** 加工対象のリスト */
-	protected List<Body> processedBodyList = new LinkedList<Body>();
+	protected List<Body> activeBodies = new LinkedList<Body>();
 	/** 加工エフェクトのリスト */
-	protected List<Effect> processedBodyEffectList = new LinkedList<Effect>();
+	protected List<Effect> activeEffects = new LinkedList<Effect>();
 	/** 加工するタイプ */
-	protected ProcessType enumProcessType;
+	protected ProcessType processType;
 	/** ランニングコスト */
 	protected int runningCost[] = { 500, 800, 2000, 3500 };
 
@@ -90,22 +90,22 @@ public class ProcesserPlate extends ObjEX {
 		PACKING(GameText.read("item_hotplatepack"), ProcessMode.PACKING, 1);
 
 		private String name;
-		private ProcessMode eMode;
-		private int nParam;
+		private ProcessMode mode;
+		private int parameter;
 
-		ProcessType(String name, ProcessMode eMode, int nParam) {
+		ProcessType(String name, ProcessMode mode, int parameter) {
 			this.name = name;
-			this.eMode = eMode;
-			this.nParam = nParam;
+			this.mode = mode;
+			this.parameter = parameter;
 		}
 	}
 
 	/** 画像ロード */
 	public static void loadImages(ClassLoader loader, ImageObserver io) throws IOException {
-		images[0] = ModLoader.loadItemImage(loader, "ProcesserPlate" + File.separator + "ProcesserPlate.png");
-		images[1] = ModLoader.loadItemImage(loader, "ProcesserPlate" + File.separator + "ProcesserPlate_off.png");
-		boundary.setWidth(images[0].getWidth(io));
-		boundary.setHeight(images[0].getHeight(io));
+		imageLayers[0] = ModLoader.loadItemImage(loader, "ProcesserPlate" + File.separator + "ProcesserPlate.png");
+		imageLayers[1] = ModLoader.loadItemImage(loader, "ProcesserPlate" + File.separator + "ProcesserPlate_off.png");
+		boundary.setWidth(imageLayers[0].getWidth(io));
+		boundary.setHeight(imageLayers[0].getHeight(io));
 		boundary.setX(boundary.getWidth() >> 1);
 		boundary.setY(boundary.getHeight() >> 1);
 	}
@@ -113,9 +113,9 @@ public class ProcesserPlate extends ObjEX {
 	@Override
 	public int getImageLayer(BufferedImage[] layer) {
 		if (enabled) {
-			layer[0] = images[0];
+			layer[0] = imageLayers[0];
 		} else {
-			layer[0] = images[1];
+			layer[0] = imageLayers[1];
 		}
 		return 1;
 	}
@@ -149,27 +149,27 @@ public class ProcesserPlate extends ObjEX {
 	 * <br>
 	 * これは例外的に、エフェクトを外す作業もここでやってる
 	 */
-	public boolean checkHitObj(Rectangle colRect, Obj o) {
-		if (o.getZ() == 0) {
-			Translate.translate(o.getX(), o.getY(), tmpPos);
-			if (colRect.contains(new java.awt.Point(tmpPos.getX(), tmpPos.getY()))) {
-				objHitProcess(o);
+	public boolean checkHitObj(Rectangle collisionRect, Obj targetObject) {
+		if (targetObject.getZ() == 0) {
+			Translate.translate(targetObject.getX(), targetObject.getY(), tmpPos);
+			if (collisionRect.contains(new java.awt.Point(tmpPos.getX(), tmpPos.getY()))) {
+				objHitProcess(targetObject);
 				return true;
 			} else {
-				if (o != null && processedBodyList.contains(o)) {
-					if (o instanceof Body) {
-						Body bTarget = (Body) o;
-						int nIndex = processedBodyList.indexOf(bTarget);
-						Effect effect = processedBodyEffectList.get(nIndex);
+				if (targetObject != null && activeBodies.contains(targetObject)) {
+					if (targetObject instanceof Body) {
+						Body targetBody = (Body) targetObject;
+						int activeIndex = activeBodies.indexOf(targetBody);
+						Effect effect = activeEffects.get(activeIndex);
 						if (effect != null) {
 							effect.remove();
 						}
-						bTarget.setForceFace(-1);
-						bTarget.setDropShadow(true);
-						bTarget.setLockmove(false);
-						bTarget.setForcePanicClear();
-						processedBodyList.remove(bTarget);
-						processedBodyEffectList.remove(effect);
+						targetBody.setForceFace(-1);
+						targetBody.setShadowVisible(true);
+						targetBody.setLockmove(false);
+						targetBody.setForcePanicClear();
+						activeBodies.remove(targetBody);
+						activeEffects.remove(effect);
 					}
 				}
 			}
@@ -178,23 +178,23 @@ public class ProcesserPlate extends ObjEX {
 	}
 
 	@Override
-	public int objHitProcess(Obj o) {
+	public int objHitProcess(Obj targetObject) {
 		if (!enabled)
 			return 0;
-		if (o == null)
+		if (targetObject == null)
 			return 0;
-		if (o instanceof Body) {
-			Body bTarget = (Body) o;
+		if (targetObject instanceof Body) {
+			Body targetBody = (Body) targetObject;
 			// 切断されていたら何も起きない
-			if (bTarget.getCriticalDamegeType() == CriticalDamegeType.CUT)
+			if (targetBody.getCriticalDamegeType() == CriticalDamegeType.CUT)
 				return 0;
 			// 初回
-			if (!processedBodyList.contains(bTarget)) {
+			if (!activeBodies.contains(targetBody)) {
 				Effect effect;
-				switch (enumProcessType.eMode) {
+				switch (processType.mode) {
 					case HOTPLATE:
-						effect = GameView.addEffect(EffectType.BAKE, bTarget.getX(),
-								bTarget.getY() + 1,
+						effect = GameView.addEffect(EffectType.BAKE, targetBody.getX(),
+								targetBody.getY() + 1,
 								-2, 0, 0, 0, false, -1, -1, false, false, false);
 						break;
 					default:
@@ -202,8 +202,8 @@ public class ProcesserPlate extends ObjEX {
 						effect = null;
 						break;
 				}
-				processedBodyList.add(bTarget);
-				processedBodyEffectList.add(effect);
+				activeBodies.add(targetBody);
+				activeEffects.add(effect);
 			}
 		}
 		return 1;
@@ -212,19 +212,19 @@ public class ProcesserPlate extends ObjEX {
 	@Override
 	public void upDate() {
 		if (!enabled) {
-			if (processedBodyList == null || processedBodyEffectList == null) {
+			if (activeBodies == null || activeEffects == null) {
 				return;
 			}
-			for (int i = processedBodyList.size() - 1; 0 <= i; i--) {
-				Body bTarget = processedBodyList.get(i);
-				Effect effect = processedBodyEffectList.get(i);
+			for (int i = activeBodies.size() - 1; 0 <= i; i--) {
+				Body targetBody = activeBodies.get(i);
+				Effect effect = activeEffects.get(i);
 				if (effect != null) {
 					effect.remove();
 				}
-				bTarget.setForceFace(-1);
-				bTarget.setDropShadow(true);
-				processedBodyList.remove(i);
-				processedBodyEffectList.remove(i);
+				targetBody.setForceFace(-1);
+				targetBody.setShadowVisible(true);
+				activeBodies.remove(i);
+				activeEffects.remove(i);
 			}
 			return;
 		}
@@ -232,69 +232,69 @@ public class ProcesserPlate extends ObjEX {
 		if (getAge() % 2400 == 0) {
 			Cash.addCash(-getCost());
 		}
-		if (processedBodyList == null || processedBodyEffectList == null) {
+		if (activeBodies == null || activeEffects == null) {
 			return;
 		}
-		for (int i = processedBodyList.size() - 1; 0 <= i; i--) {
-			Body bTarget = processedBodyList.get(i);
-			Effect effect = processedBodyEffectList.get(i);
+		for (int i = activeBodies.size() - 1; 0 <= i; i--) {
+			Body targetBody = activeBodies.get(i);
+			Effect effect = activeEffects.get(i);
 
 			// 対象がいないor除去されたor飛んでいるときを除外
-			if (bTarget == null || bTarget.isRemoved() || bTarget.getZ() >= 10) {
+			if (targetBody == null || targetBody.isRemoved() || targetBody.getZ() >= 10) {
 				if (effect != null) {
 					effect.remove();
 				}
-				bTarget.setForceFace(-1);
-				bTarget.setDropShadow(true);
-				processedBodyList.remove(i);
-				processedBodyEffectList.remove(i);
+				targetBody.setForceFace(-1);
+				targetBody.setShadowVisible(true);
+				activeBodies.remove(i);
+				activeEffects.remove(i);
 				continue;
 			}
 			if (effect != null) {
-				effect.setCalcX(bTarget.getX());
-				effect.setCalcY(bTarget.getY() + 2);
+				effect.setCalcX(targetBody.getX());
+				effect.setCalcY(targetBody.getY() + 2);
 			}
-			bTarget.clearActions();
-			bTarget.setDropShadow(false);
-			switch (enumProcessType.eMode) {
+			targetBody.clearActions();
+			targetBody.setShadowVisible(false);
+			switch (processType.mode) {
 				case HOTPLATE:
-					if (!bTarget.isDead()) {
-						if (bTarget.isSleeping())
-							bTarget.wakeup();
-						if (enumProcessType != ProcessType.HOTPLATE_MIDDLE
-								|| bTarget.getFootBakeLevel() != FootBake.MIDIUM) {
+					if (!targetBody.isDead()) {
+						if (targetBody.isSleeping())
+							targetBody.wakeup();
+						if (processType != ProcessType.HOTPLATE_MIDDLE
+								|| targetBody.getFootBakeLevel() != FootBake.MIDIUM) {
 							// 中火の場合は完全に足を焼かない
-							bTarget.addFootBakePeriod(enumProcessType.nParam);
+							targetBody.addFootBakePeriod(processType.parameter);
 						}
-						bTarget.addDamage(20);
-						if (bTarget.isPealed())
-							bTarget.addStress(400);
+						targetBody.addDamage(20);
+						if (targetBody.isPealed())
+							targetBody.addStress(400);
 						else
-							bTarget.addStress(40);
-						if (bTarget.isNotNYD()) {
-							bTarget.setHappiness(Happiness.VERY_SAD);
-							bTarget.setForceFace(ImageCode.PAIN.ordinal());
+							targetBody.addStress(40);
+						if (targetBody.isNotNYD()) {
+							targetBody.setHappiness(Happiness.VERY_SAD);
+							targetBody.setForceFace(ImageCode.PAIN.ordinal());
 							if (GameRandom.nextInt(10) == 0) {
-								bTarget.setMessage(GameMessages.getMessage(bTarget, MessagePool.Action.Burning), 40,
+								targetBody.setMessage(GameMessages.getMessage(targetBody, MessagePool.Action.Burning), 40,
 										true, true);
 							}
 						}
 					}
 					break;
 				case PAIN:
-					if (!bTarget.isDead()) {
-						if (bTarget.isSleeping())
-							bTarget.wakeup();
-						bTarget.addDamage(5);
-						if (bTarget.isPealed())
-							bTarget.addStress(400);
+					if (!targetBody.isDead()) {
+						if (targetBody.isSleeping())
+							targetBody.wakeup();
+						targetBody.addDamage(5);
+						if (targetBody.isPealed())
+							targetBody.addStress(400);
 						else
-							bTarget.addStress(30);
-						if (bTarget.isNotNYD()) {
-							bTarget.setHappiness(Happiness.VERY_SAD);
-							bTarget.setForceFace(ImageCode.PAIN.ordinal());
+							targetBody.addStress(30);
+						if (targetBody.isNotNYD()) {
+							targetBody.setHappiness(Happiness.VERY_SAD);
+							targetBody.setForceFace(ImageCode.PAIN.ordinal());
 							if (GameRandom.nextInt(15) == 0) {
-								bTarget.setMessage(GameMessages.getMessage(bTarget, MessagePool.Action.Scream), 40, true,
+								targetBody.setMessage(GameMessages.getMessage(targetBody, MessagePool.Action.Scream), 40, true,
 										true);
 							}
 						}
@@ -302,128 +302,121 @@ public class ProcesserPlate extends ObjEX {
 					break;
 				case BAIBAI_OKAZARI:// お飾り除去（燃やす）
 					// 潰れていたらそのまま流す
-					if (bTarget.isCrushed()) {
+					if (targetBody.isCrushed()) {
 						break;
 					}
-					if (bTarget.hasOkazari()) {
-						if (bTarget.getAttachmentSize(Fire.class) == 0) {
-							bTarget.setForcePanicClear();
-							bTarget.giveFire();
+					if (targetBody.hasOkazari()) {
+						if (targetBody.getAttachmentSize(Fire.class) == 0) {
+							targetBody.setForcePanicClear();
+							targetBody.giveFire();
 						}
-						bTarget.setLockmove(true);
-						if (!bTarget.isDead()) {
+						targetBody.setLockmove(true);
+						if (!targetBody.isDead()) {
 							// 死にそうなら回復する
-							if (bTarget.getDamage() >= bTarget.getDamageLimit() * 60 / 100) {
-								bTarget.addDamage(-TICK * 100);
+							if (targetBody.getDamage() >= targetBody.getDamageLimit() * 60 / 100) {
+								targetBody.addDamage(-TICK * 100);
 							}
 						}
 					} else {
-						if (bTarget.getAttachmentSize(Fire.class) != 0) {
-							bTarget.removeAttachment(Fire.class);
-							// bTarget.giveWater(); // 水をかけると赤ゆが高確率で死ぬのでOFF
-							bTarget.setLockmove(false);
-							bTarget.setForcePanicClear();
+						if (targetBody.getAttachmentSize(Fire.class) != 0) {
+							targetBody.removeAttachment(Fire.class);
+							targetBody.setForcePanicClear();
 						}
 					}
 					break;
 				case PEALING:
 					// 潰れ、加工済み除外
-					if (bTarget.isCrushed() || bTarget.isPealed()) {
+					if (targetBody.isCrushed() || targetBody.isPealed()) {
 						break;
 					}
 					// ゲームバランス調整用。お飾り付、おさげ付の個体は処理しない
-					if (bTarget.hasOkazari() || (bTarget.hasBraidCheck() && bTarget.isBraidType())) {
+					if (targetBody.hasOkazari() || (targetBody.hasBraidCheck() && targetBody.isBraidType())) {
 						break;
 					}
-					if (bTarget.isSleeping())
-						bTarget.wakeup();
-					bTarget.cutHair();
-					bTarget.peal();
-					/*
-					 * if(bTarget.hasBraidCheck()){
-					 * bTarget.takeBraid();
-					 * }
-					 */
-					if (!bTarget.isDead()) {
-						// 死にそうなら回復する
-						if (bTarget.isDamagedHeavily()) {
-							bTarget.addDamage(-TICK * 100);
+						if (targetBody.isSleeping())
+							targetBody.wakeup();
+						targetBody.cutHair();
+						targetBody.peal();
+						if (!targetBody.isDead()) {
+							// 死にそうなら回復する
+							if (targetBody.isDamagedHeavily()) {
+								targetBody.addDamage(-TICK * 100);
+							}
 						}
-					}
-					break;
+						break;
 				case BLINDING:
 					// 潰れ、加工済み除外
-					if (bTarget.isCrushed() || bTarget.isBlind()) {
+					if (targetBody.isCrushed() || targetBody.isBlind()) {
 						break;
 					}
-					if (bTarget.isSleeping())
-						bTarget.wakeup();
-					bTarget.breakeyes();
+					if (targetBody.isSleeping())
+						targetBody.wakeup();
+					targetBody.breakeyes();
 					break;
 				case ACCELERATE:
 					// 潰れ、死体の除外
-					if (bTarget.isCrushed() || bTarget.isDead()) {
+					if (targetBody.isCrushed() || targetBody.isDead()) {
 						break;
 					}
-					if (bTarget.isSleeping())
-						bTarget.wakeup();
+					if (targetBody.isSleeping())
+						targetBody.wakeup();
 					// 赤、子ゆのみ
-					if (!bTarget.isAdult()) {
-						bTarget.setHappiness(Happiness.VERY_SAD);
-						bTarget.setForceFace(ImageCode.PAIN.ordinal());
-						bTarget.addAge(TICK * 1000);
-						bTarget.setMessage(GameMessages.getMessage(bTarget, MessagePool.Action.Inflation), 40, false,
+					if (!targetBody.isAdult()) {
+						targetBody.setHappiness(Happiness.VERY_SAD);
+						targetBody.setForceFace(ImageCode.PAIN.ordinal());
+						targetBody.addAge(TICK * 1000);
+						targetBody.setMessage(GameMessages.getMessage(targetBody, MessagePool.Action.Inflation), 40, false,
 								true);
 					}
 					break;
 				case SHUTMOUTH:
-					if (bTarget.isCrushed() || bTarget.isPealed()) {
+					if (targetBody.isCrushed() || targetBody.isPealed()) {
 						break;
 					}
-					if (!bTarget.isShutmouth()) {
-						if (bTarget.isSleeping())
-							bTarget.wakeup();
-						bTarget.setMessage(GameMessages.getMessage(bTarget, MessagePool.Action.CantTalk), 40, true,
+					if (!targetBody.isShutmouth()) {
+						if (targetBody.isSleeping())
+							targetBody.wakeup();
+						targetBody.setMessage(GameMessages.getMessage(targetBody, MessagePool.Action.CantTalk), 40, true,
 								true);
-						bTarget.setHappiness(Happiness.SAD);
-						bTarget.setShutmouth(true);
+						targetBody.setHappiness(Happiness.SAD);
+						targetBody.setShutmouth(true);
 					}
 					break;
 				case PLUCKING:
 					// 潰れ、加工済み除外
-					if (bTarget.isCrushed() || bTarget.geteHairState() == HairState.BALDHEAD) {
+					if (targetBody.isCrushed() || targetBody.getHairState() == HairState.BALDHEAD) {
 						break;
 					}
 					// ゲームバランス調整用。お飾り付は処理しない
-					if (bTarget.hasOkazari()) {
+					if (targetBody.hasOkazari()) {
 						break;
 					}
-					if (bTarget.isSleeping())
-						bTarget.wakeup();
-					if (bTarget.hasBraidCheck()) {
-						bTarget.takeBraid();
+					if (targetBody.isSleeping())
+						targetBody.wakeup();
+					if (targetBody.hasBraidCheck()) {
+						targetBody.takeBraid();
 					}
-					bTarget.setHappiness(Happiness.VERY_SAD);
-					bTarget.setForceFace(ImageCode.PAIN.ordinal());
+					targetBody.setHappiness(Happiness.VERY_SAD);
+					targetBody.setForceFace(ImageCode.PAIN.ordinal());
 					if (GameRandom.nextInt(3) == 0) {
-						bTarget.setMessage(GameMessages.getMessage(bTarget, MessagePool.Action.Scream), 40, true, true);
+						targetBody.setMessage(GameMessages.getMessage(targetBody, MessagePool.Action.Scream), 40, true, true);
 					} else {
-						bTarget.setMessage(GameMessages.getMessage(bTarget, MessagePool.Action.PLUNCKING), 40, true,
+						targetBody.setMessage(GameMessages.getMessage(targetBody, MessagePool.Action.PLUNCKING), 40, true,
 								true);
 					}
-					bTarget.cutHair();
+					targetBody.cutHair();
 					break;
 				case PACKING:
 					// 潰れ、死体、加工済み除外
-					if (bTarget.isCrushed() || bTarget.isDead() || bTarget.isPacked()) {
+					if (targetBody.isCrushed() || targetBody.isDead() || targetBody.isPacked()) {
 						break;
 					}
 					// ゲームバランス調整用。お飾り付、目有、髪付き、おさげ付、口未加工は処理しない
-					if (bTarget.hasOkazari() || !bTarget.isBlind() || bTarget.geteHairState() != HairState.BALDHEAD
-							|| (bTarget.hasBraidCheck() && bTarget.isBraidType()) || !bTarget.isShutmouth()) {
+					if (targetBody.hasOkazari() || !targetBody.isBlind() || targetBody.getHairState() != HairState.BALDHEAD
+							|| (targetBody.hasBraidCheck() && targetBody.isBraidType()) || !targetBody.isShutmouth()) {
 						break;
 					}
-					bTarget.pack();
+					targetBody.pack();
 					break;
 				default:
 					break;
@@ -434,7 +427,7 @@ public class ProcesserPlate extends ObjEX {
 	@Override
 	@Transient
 	public int getCost() {
-		switch (enumProcessType.eMode) {
+		switch (processType.mode) {
 			case PAIN:
 				return runningCost[0];
 			case HOTPLATE:
@@ -454,18 +447,18 @@ public class ProcesserPlate extends ObjEX {
 
 	@Override
 	public void removeListData() {
-		if (processedBodyList != null && processedBodyEffectList != null) {
-			for (int i = processedBodyList.size() - 1; 0 <= i; i--) {
-				Body bTarget = processedBodyList.get(i);
-				bTarget.setForceFace(-1);
-				bTarget.setLockmove(false);
-				Effect effect = processedBodyEffectList.get(i);
+		if (activeBodies != null && activeEffects != null) {
+			for (int i = activeBodies.size() - 1; 0 <= i; i--) {
+				Body targetBody = activeBodies.get(i);
+				targetBody.setForceFace(-1);
+				targetBody.setLockmove(false);
+				Effect effect = activeEffects.get(i);
 				if (effect != null) {
 					effect.remove();
 				}
 			}
-			processedBodyList.clear();
-			processedBodyEffectList.clear();
+			activeBodies.clear();
+			activeEffects.clear();
 		}
 		GameWorld.get().getCurrentMap().getProcesserPlate().remove(objId);
 	}
@@ -474,55 +467,55 @@ public class ProcesserPlate extends ObjEX {
 	public static boolean setupProcesserPlate(ProcesserPlate plate) {
 
 		JPanel mainPanel = new JPanel();
-		JRadioButton[] but = new JRadioButton[ProcessType.values().length];
-		boolean ret = false;
+		JRadioButton[] buttons = new JRadioButton[ProcessType.values().length];
+		boolean setupSucceeded = false;
 
 		mainPanel.setLayout(new GridLayout(7, 1));
 		mainPanel.setPreferredSize(new Dimension(150, 100));
-		ButtonGroup bg = new ButtonGroup();
+		ButtonGroup buttonGroup = new ButtonGroup();
 
-		for (int i = 0; i < but.length; i++) {
-			but[i] = new JRadioButton(ProcessType.values()[i].name);
-			bg.add(but[i]);
+		for (int i = 0; i < buttons.length; i++) {
+			buttons[i] = new JRadioButton(ProcessType.values()[i].name);
+			buttonGroup.add(buttons[i]);
 
-			mainPanel.add(but[i]);
+			mainPanel.add(buttons[i]);
 		}
 
-		but[0].setSelected(true);
+		buttons[0].setSelected(true);
 
-		int dlgRet = JOptionPane.showConfirmDialog(GameView.getDialogParent(), mainPanel, "加工設定", JOptionPane.OK_CANCEL_OPTION,
+		int dialogResult = JOptionPane.showConfirmDialog(GameView.getDialogParent(), mainPanel, "加工設定", JOptionPane.OK_CANCEL_OPTION,
 				JOptionPane.PLAIN_MESSAGE);
 
-		if (dlgRet == JOptionPane.OK_OPTION) {
-			if (but[0].isSelected())
-				plate.enumProcessType = ProcessType.HOTPLATE_MIN;
-			if (but[1].isSelected())
-				plate.enumProcessType = ProcessType.HOTPLATE_LOW;
-			if (but[2].isSelected())
-				plate.enumProcessType = ProcessType.HOTPLATE_MIDDLE;
-			if (but[3].isSelected())
-				plate.enumProcessType = ProcessType.HOTPLATE_HIGH;
-			if (but[4].isSelected())
-				plate.enumProcessType = ProcessType.HOTPLATE_MAX;
-			if (but[5].isSelected())
-				plate.enumProcessType = ProcessType.PAIN;
-			if (but[6].isSelected())
-				plate.enumProcessType = ProcessType.BAIBAI_OKAZARI_WITH_FIRE;
-			if (but[7].isSelected())
-				plate.enumProcessType = ProcessType.PEALING;
-			if (but[8].isSelected())
-				plate.enumProcessType = ProcessType.BLINDING;
-			if (but[9].isSelected())
-				plate.enumProcessType = ProcessType.ACCELERATE;
-			if (but[10].isSelected())
-				plate.enumProcessType = ProcessType.SHUTMOUTH;
-			if (but[11].isSelected())
-				plate.enumProcessType = ProcessType.PLUCKING;
-			if (but[12].isSelected())
-				plate.enumProcessType = ProcessType.PACKING;
-			ret = true;
+		if (dialogResult == JOptionPane.OK_OPTION) {
+			if (buttons[0].isSelected())
+				plate.processType = ProcessType.HOTPLATE_MIN;
+			if (buttons[1].isSelected())
+				plate.processType = ProcessType.HOTPLATE_LOW;
+			if (buttons[2].isSelected())
+				plate.processType = ProcessType.HOTPLATE_MIDDLE;
+			if (buttons[3].isSelected())
+				plate.processType = ProcessType.HOTPLATE_HIGH;
+			if (buttons[4].isSelected())
+				plate.processType = ProcessType.HOTPLATE_MAX;
+			if (buttons[5].isSelected())
+				plate.processType = ProcessType.PAIN;
+			if (buttons[6].isSelected())
+				plate.processType = ProcessType.BAIBAI_OKAZARI_WITH_FIRE;
+			if (buttons[7].isSelected())
+				plate.processType = ProcessType.PEALING;
+			if (buttons[8].isSelected())
+				plate.processType = ProcessType.BLINDING;
+			if (buttons[9].isSelected())
+				plate.processType = ProcessType.ACCELERATE;
+			if (buttons[10].isSelected())
+				plate.processType = ProcessType.SHUTMOUTH;
+			if (buttons[11].isSelected())
+				plate.processType = ProcessType.PLUCKING;
+			if (buttons[12].isSelected())
+				plate.processType = ProcessType.PACKING;
+			setupSucceeded = true;
 		}
-		return ret;
+		return setupSucceeded;
 	}
 
 	/**
@@ -542,8 +535,8 @@ public class ProcesserPlate extends ObjEX {
 		interval = 5;
 		value = 250000;
 		readIniFile();
-		boolean ret = setupProcesserPlate(this);
-		if (!ret) {
+		boolean setupSucceeded = setupProcesserPlate(this);
+		if (!setupSucceeded) {
 			GameWorld.get().getCurrentMap().getProcesserPlate().remove(objId);
 		}
 	}
@@ -555,46 +548,46 @@ public class ProcesserPlate extends ObjEX {
 	/** iniファイル読み込み */
 	public void readIniFile() {
 		ClassLoader loader = this.getClass().getClassLoader();
-		int nTemp = 0;
+		int iniValue = 0;
 		// 自動お仕置きプレートコスト
-		nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataItemIniDir(), "ProcesserPlate", "MachineCost");
-		runningCost[0] = nTemp;
+		iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataItemIniDir(), "ProcesserPlate", "MachineCost");
+		runningCost[0] = iniValue;
 		// 軽加工プレートコスト
-		nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataItemIniDir(), "ProcesserPlate",
+		iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataItemIniDir(), "ProcesserPlate",
 				"LightProcessCost");
-		runningCost[1] = nTemp;
+		runningCost[1] = iniValue;
 		// 中加工プレートコスト
-		nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataItemIniDir(), "ProcesserPlate",
+		iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataItemIniDir(), "ProcesserPlate",
 				"MidiumProcessCost");
-		runningCost[2] = nTemp;
+		runningCost[2] = iniValue;
 		// 重加工プレートコスト
-		nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataItemIniDir(), "ProcesserPlate",
+		iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataItemIniDir(), "ProcesserPlate",
 				"HeavyProcessCost");
-		runningCost[3] = nTemp;
+		runningCost[3] = iniValue;
 	}
 
 	public List<Body> getProcessedBodyList() {
-		return processedBodyList;
+		return activeBodies;
 	}
 
 	public void setProcessedBodyList(List<Body> processedBodyList) {
-		this.processedBodyList = processedBodyList;
+		this.activeBodies = processedBodyList;
 	}
 
 	public List<Effect> getProcessedBodyEffectList() {
-		return processedBodyEffectList;
+		return activeEffects;
 	}
 
 	public void setProcessedBodyEffectList(List<Effect> processedBodyEffectList) {
-		this.processedBodyEffectList = processedBodyEffectList;
+		this.activeEffects = processedBodyEffectList;
 	}
 
 	public ProcessType getEnumProcessType() {
-		return enumProcessType;
+		return processType;
 	}
 
 	public void setEnumProcessType(ProcessType enumProcessType) {
-		this.enumProcessType = enumProcessType;
+		this.processType = enumProcessType;
 	}
 
 	public int[] getRunningCost() {

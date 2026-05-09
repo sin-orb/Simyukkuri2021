@@ -18,7 +18,6 @@ import src.logic.BodyLogic;
 import src.logic.EventLogic;
 import src.system.MessagePool;
 import src.system.ResourceUtil;
-import src.util.YukkuriUtil;
 
 /***************************************************
  * すぃーの乗車管理イベント
@@ -31,7 +30,7 @@ public class SuiRideEvent extends EventPacket {
 
 	private static final long serialVersionUID = -3480227497799647328L;
 	int tick = 0;
-	boolean memberride = false;
+	boolean hasMemberRide = false;
 
 	/**
 	 * コンストラクタ.
@@ -53,71 +52,70 @@ public class SuiRideEvent extends EventPacket {
 	}
 
 	public boolean isMemberride() {
-		return memberride;
+		return hasMemberRide;
 	}
 
 	public void setMemberride(boolean memberride) {
-		this.memberride = memberride;
+		this.hasMemberRide = memberride;
 	}
 
 	// 参加チェック
 	// ここで各種チェックを行い、イベントへ参加するかを返す
 	// また、イベント優先度も必要に応じて設定できる
 	@Override
-	public boolean checkEventResponse(Body b) {
-		// boolean ret = false;
-		Obj target = b.takeMappedObj(this.target);
-		if (target == null) {
+	public boolean checkEventResponse(Body body) {
+		Obj targetObject = body.takeMappedObj(this.target);
+		if (targetObject == null) {
 			return false;
 		}
-		Body from = YukkuriUtil.getBodyInstance(getFrom());
-		if (from == null)
+		Body sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
+		if (sourceBody == null)
 			return false;
-		if (from == b) {
+		if (sourceBody == body) {
 			return true;
 		}
-		if (!b.canEventResponse()) {
+		if (!body.canEventResponse()) {
 			return false;
-		} else if (from.getCurrentEvent() == this) {
-			if (b.isParent(from) || from.isParent(b) || b.isPartner(from) || from.isSister(b)) {
-				if (b.canAction() == false || b.isExciting() || b.isScare()) {
+		} else if (sourceBody.getCurrentEvent() == this) {
+			if (body.isParent(sourceBody) || sourceBody.isParent(body) || body.isPartner(sourceBody) || sourceBody.isSister(body)) {
+				if (body.canAction() == false || body.isExciting() || body.isScare()) {
 					return false;
 				}
 				// うんうん奴隷の場合
-				if (b.getPublicRank() == PublicRank.UnunSlave) {
+				if (body.getPublicRank() == PublicRank.UnunSlave) {
 					// 自分との関係
-					EnumRelationMine eRelation = BodyLogic.checkMyRelation(b, from);
+					EnumRelationMine relation = BodyLogic.checkMyRelation(body, sourceBody);
 					// 嘆く
-					switch (eRelation) {
+					switch (relation) {
 						case FATHER: // 父
 						case MOTHER: // 母
-							b.setMessage(GameMessages.getMessage(b, MessagePool.Action.HateWithEnvyAboutMother));
+							body.setMessage(GameMessages.getMessage(body, MessagePool.Action.HateWithEnvyAboutMother));
 							break;
 						case PARTNAR: // つがい
-							b.setMessage(GameMessages.getMessage(b, MessagePool.Action.HateWithEnvyAboutPartner));
+							body.setMessage(GameMessages.getMessage(body, MessagePool.Action.HateWithEnvyAboutPartner));
 							break;
 						case CHILD_FATHER: // 父の子供
-							b.setMessage(GameMessages.getMessage(b, MessagePool.Action.HateWithEnvyAboutFather));
+							body.setMessage(GameMessages.getMessage(body, MessagePool.Action.HateWithEnvyAboutFather));
 							break;
 						case CHILD_MOTHER: // 母の子供
-							b.setMessage(GameMessages.getMessage(b, MessagePool.Action.HateWithEnvyAboutMother));
+							body.setMessage(GameMessages.getMessage(body, MessagePool.Action.HateWithEnvyAboutMother));
 							break;
 						case ELDERSISTER: // 姉
-							b.setMessage(GameMessages.getMessage(b, MessagePool.Action.HateWithEnvyAboutSister));
+							body.setMessage(GameMessages.getMessage(body, MessagePool.Action.HateWithEnvyAboutSister));
 							break;
 						case YOUNGSISTER: // 妹
-							b.setMessage(GameMessages.getMessage(b, MessagePool.Action.HateWithEnvyAboutElderSister));
+							body.setMessage(GameMessages.getMessage(body, MessagePool.Action.HateWithEnvyAboutElderSister));
 							break;
 						default: // 他人
 							break;
 					}
-					b.setHappiness(Happiness.VERY_SAD);
-					b.stay();
+					body.setHappiness(Happiness.VERY_SAD);
+					body.stay();
 
 					return false;
 				}
 
-				b.setWorldEventResMessage(GameMessages.getMessage(b, MessagePool.Action.FindGetSuiOtner),
+				body.setWorldEventResMessage(GameMessages.getMessage(body, MessagePool.Action.FindGetSuiOtner),
 						Const.HOLDMESSAGE, true, false);
 				return true;
 			}
@@ -128,68 +126,68 @@ public class SuiRideEvent extends EventPacket {
 
 	// イベント開始動作
 	@Override
-	public void start(Body b) {
-		Obj target = b.takeMappedObj(this.target);
-		if (target == null) {
+	public void start(Body body) {
+		Obj targetObject = body.takeMappedObj(this.target);
+		if (targetObject == null) {
 			return;
 		}
-		b.moveToEvent(this, target.getX(), target.getY());
+		body.moveToEvent(this, targetObject.getX(), targetObject.getY());
 	}
 
 	// 毎フレーム処理
 	@Override
-	public UpdateState update(Body b) {
-		Obj target = b.takeMappedObj(this.target);
-		Sui s = (Sui) target;
-		if (s == null) {
+	public UpdateState update(Body body) {
+		Obj targetObject = body.takeMappedObj(this.target);
+		Sui targetSui = (Sui) targetObject;
+		if (targetSui == null) {
 			return UpdateState.ABORT;
 		}
 
 		// すぃーを所持している場合
-		if (b.getFavItem(FavItemType.SUI) != null) {
+		if (body.getFavoriteItem(FavItemType.SUI) != null) {
 
 			// 対象のすぃーに乗っていない場合は終了
-			if (!s.isriding(b)) {
+			if (!targetSui.isriding(body)) {
 				return null;
 			}
-			Body from = YukkuriUtil.getBodyInstance(getFrom());
-			if (from == null)
+			Body sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
+			if (sourceBody == null)
 				return UpdateState.ABORT;
-			if (from == b) {
+			if (sourceBody == body) {
 				// 乗客数が上限、またはカウント50以上の場合
-				if (s.getCurrent_bindbody_num() >= 3 || tick > 50) {
-					b.setHappiness(Happiness.HAPPY);
+				if (targetSui.getCurrent_bindbody_num() >= 3 || tick > 50) {
+					body.setHappiness(Happiness.HAPPY);
 					// すぃーが待機中の場合
-					if (s.getCurrent_condition() == 1) {
+					if (targetSui.getCurrent_condition() == 1) {
 						// 乗ろうとしているゆっくりがいない、またはカウントが50の倍数の場合ランダムに移動する
 						// ※移動中はすぃーの状態を変えるなりなんなりした方がいいのでは
-						if (!memberride || tick % 50 == 0) {
-							b.moveTo(GameRandom.nextInt(Translate.getMapW()),
+						if (!hasMemberRide || tick % 50 == 0) {
+							body.moveTo(GameRandom.nextInt(Translate.getMapW()),
 									GameRandom.nextInt(Translate.getMapH() - Sui.getBounding().getHeight() / 2));
 						}
 						// カウントが500を超える場合
 						if (tick > 500) {
 							// しゃべってないなら降りる宣言
-							if (!b.isTalking()) {
-								b.setMessage(GameMessages.getMessage(b, MessagePool.Action.RideOffSui), true);
+							if (!body.isTalking()) {
+								body.setMessage(GameMessages.getMessage(body, MessagePool.Action.RideOffSui), true);
 							}
 
 							// すぃーから降りる
-							s.rideOff(b);
+							targetSui.rideOff(body);
 							return UpdateState.ABORT;
 						}
 					} else {
-						if (!b.isTalking()) {
+						if (!body.isTalking()) {
 							if (GameRandom.nextBoolean()) {
-								b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.RidingSui),
+								body.setBodyEventResMessage(GameMessages.getMessage(body, MessagePool.Action.RidingSui),
 										Const.HOLDMESSAGE, true, false);
 							} else {
-								b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.DrivingSui),
+								body.setBodyEventResMessage(GameMessages.getMessage(body, MessagePool.Action.DrivingSui),
 										Const.HOLDMESSAGE, true, false);
 							}
 						}
 						if (GameRandom.nextInt(100) == 0) {
-							EventLogic.addWorldEvent(new SuiSpeake(null, null, target, 1), null, null);
+							EventLogic.addWorldEvent(new SuiSpeake(null, null, targetObject, 1), null, null);
 						}
 					}
 				}
@@ -197,19 +195,19 @@ public class SuiRideEvent extends EventPacket {
 			} else {
 				// 処理対象とすぃーに乗ろうとしているゆっくりが異なる場合
 				// しゃべっていないかつ、すぃーが待機中ではない場合
-				if (!b.isTalking() && s.getCurrent_condition() != 1) {
+				if (!body.isTalking() && targetSui.getCurrent_condition() != 1) {
 					// すぃーに乗っている時のセリフ
-					b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.RidingSui), Const.HOLDMESSAGE,
+					body.setBodyEventResMessage(GameMessages.getMessage(body, MessagePool.Action.RidingSui), Const.HOLDMESSAGE,
 							true, false);
 				}
 
 				// イベント実施中ではない、かつすぃーが待機中の場合
-				if (from.getCurrentEvent() != this && s.getCurrent_condition() == 1) {
+				if (sourceBody.getCurrentEvent() != this && targetSui.getCurrent_condition() == 1) {
 					// すぃーからおりる
-					if (!b.isTalking()) {
-						b.setMessage(GameMessages.getMessage(b, MessagePool.Action.RideOffSui), true);
+					if (!body.isTalking()) {
+						body.setMessage(GameMessages.getMessage(body, MessagePool.Action.RideOffSui), true);
 					}
-					s.rideOff(b);
+					targetSui.rideOff(body);
 					return UpdateState.ABORT;
 				}
 			}
@@ -217,35 +215,35 @@ public class SuiRideEvent extends EventPacket {
 			// すぃーを所持していない場合
 
 			// いずれかのすぃーに乗っている場合
-			if (b.takeMappedObj(b.getLinkParent()) != null) {
-				return null;
-			}
-			Body from = YukkuriUtil.getBodyInstance(getFrom());
-			// 移動する
-			b.moveToEvent(this, target.getX(), target.getY());
-			if (from == null)
-				return UpdateState.ABORT;
-			if (from == b && s.iscanriding() || s.getCurrent_bindbody_num() >= 3) {
-				memberride = false;
-				return UpdateState.ABORT;
-			}
-			if (from != b && from.getCurrentEvent() == null) {
-				memberride = false;
-				return UpdateState.ABORT;
-			}
-			if (b.isDontMove() || b.isExciting() || b.isScare()) {
-				memberride = false;
-				return UpdateState.ABORT;
-			}
-			if (from != b && from.getFavItem(FavItemType.SUI) != null
-					&& b.getFavItem(FavItemType.SUI) == null && memberride == false && GameRandom.nextBoolean()) {
-				if (!b.isTalking()) {
-					// 他人のすぃーに乗りたがる
-					b.setMessage(GameMessages.getMessage(b, MessagePool.Action.WantRideSuiOtner), true);
+				if (body.takeMappedObj(body.getParentLinkId()) != null) {
+					return null;
 				}
-				from.moveTo(b.getX(), b.getY());
-				memberride = true;
-			}
+				Body sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
+				// 移動する
+				body.moveToEvent(this, targetObject.getX(), targetObject.getY());
+				if (sourceBody == null)
+					return UpdateState.ABORT;
+				if (sourceBody == body && targetSui.iscanriding() || targetSui.getCurrent_bindbody_num() >= 3) {
+					hasMemberRide = false;
+					return UpdateState.ABORT;
+				}
+				if (sourceBody != body && sourceBody.getCurrentEvent() == null) {
+					hasMemberRide = false;
+					return UpdateState.ABORT;
+				}
+				if (body.isDontMove() || body.isExciting() || body.isScare()) {
+					hasMemberRide = false;
+					return UpdateState.ABORT;
+				}
+				if (sourceBody != body && sourceBody.getFavoriteItem(FavItemType.SUI) != null
+					&& body.getFavoriteItem(FavItemType.SUI) == null && hasMemberRide == false && GameRandom.nextBoolean()) {
+					if (!body.isTalking()) {
+						// 他人のすぃーに乗りたがる
+						body.setMessage(GameMessages.getMessage(body, MessagePool.Action.WantRideSuiOtner), true);
+					}
+					sourceBody.moveTo(body.getX(), body.getY());
+					hasMemberRide = true;
+				}
 		}
 		return null;
 	}
@@ -253,33 +251,33 @@ public class SuiRideEvent extends EventPacket {
 	// イベント目標に到着した際に呼ばれる
 	// trueを返すとイベント終了
 	@Override
-	public boolean execute(Body b) {
-		Obj target = b.takeMappedObj(this.target);
-		if (target == null) {
+	public boolean execute(Body body) {
+		Obj targetObject = body.takeMappedObj(this.target);
+		if (targetObject == null) {
 			return false;
 		}
 
-		Sui s = (Sui) target;
+		Sui targetSui = (Sui) targetObject;
 		// すぃーが待機状態
-		if (s.getCurrent_condition() == 1) {
+		if (targetSui.getCurrent_condition() == 1) {
 			// すぃーに乗る
-			s.rideOn(b);
-			memberride = false;
+			targetSui.rideOn(body);
+			hasMemberRide = false;
 		}
 
 		return false;
 	}
 
 	@Override
-	public void end(Body b) {
+	public void end(Body body) {
 		// 他のイベントで強制的にイベントが終わることがある
 		// すぃーにのってたら降りる
-		Sui s = (Sui) b.takeMappedObj(b.getLinkParent());
-		if (s != null) {
-			s.rideOff(b);
+		Sui targetSui = (Sui) body.takeMappedObj(body.getParentLinkId());
+		if (targetSui != null) {
+			targetSui.rideOff(body);
 		}
-
-		memberride = false;
+	
+		hasMemberRide = false;
 	}
 
 	@Override

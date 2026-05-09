@@ -137,13 +137,13 @@ public class Barrier extends FieldShapeBase {
 	}
 
 	/** 除去 */
-	public static void clearBarrier(Barrier b) {
-		int x1 = b.getMapSX();
-		int y1 = b.getMapSY();
-		int x2 = b.getMapEX();
-		int y2 = b.getMapEY();
-		if (GameWorld.get().getCurrentMap().getBarrier().remove(b)) {
-			MapPlaceData.setWallLine(GameWorld.get().getCurrentMap().getWallMap(), x1, y1, x2, y2, false, b.attribute);
+	public static void clearBarrier(Barrier barrier) {
+		int x1 = barrier.getMapSX();
+		int y1 = barrier.getMapSY();
+		int x2 = barrier.getMapEX();
+		int y2 = barrier.getMapEY();
+		if (GameWorld.get().getCurrentMap().getBarrier().remove(barrier)) {
+			MapPlaceData.setWallLine(GameWorld.get().getCurrentMap().getWallMap(), x1, y1, x2, y2, false, barrier.attribute);
 		}
 	}
 
@@ -175,11 +175,11 @@ public class Barrier extends FieldShapeBase {
 	public static Barrier getBarrier(int cx, int cy, int thickness) {
 		List<Barrier> barrierList = GameWorld.get().getCurrentMap().getBarrier();
 
-		for (Barrier b : barrierList) {
-			int x1 = b.getMapSX();
-			int y1 = b.getMapSY();
-			int x2 = b.getMapEX();
-			int y2 = b.getMapEY();
+		for (Barrier targetBarrier : barrierList) {
+			int x1 = targetBarrier.getMapSX();
+			int y1 = targetBarrier.getMapSY();
+			int x2 = targetBarrier.getMapEX();
+			int y2 = targetBarrier.getMapEY();
 			int distance = (int) Math.sqrt(Translate.distance(x1, y1, x2, y2));
 			double deltaX = (double) (x2 - x1) / (double) distance;
 			double deltaY = (double) (y2 - y1) / (double) distance;
@@ -189,7 +189,7 @@ public class Barrier extends FieldShapeBase {
 				int x = sX + (int) (deltaX * t);
 				int y = sY + (int) (deltaY * t);
 				if ((Math.abs(x - cx) <= thickness) && (Math.abs(y - cy) <= thickness)) {
-					return b;
+					return targetBarrier;
 				}
 			}
 		}

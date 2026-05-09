@@ -72,11 +72,11 @@ public class MarisaTest {
 
         // With ConstState, Math.random() still returns random values, but nextInt is
         // deterministic
-        // The sameDest should be: nextInt(10) + 10 = min(5, 9) + 10 = 5 + 10 = 15
-        assertEquals(15, marisa.getSameDest());
+        // The sameDirectionFactor should be: nextInt(10) + 10 = min(5, 9) + 10 = 5 + 10 = 15
+        assertEquals(15, marisa.getSameDirectionFactor());
 
-        // ROBUSTNESS should be: nextInt(10) + 1 = min(5, 9) + 1 = 5 + 1 = 6
-        assertEquals(6, marisa.getROBUSTNESS());
+        // Robustness should be: nextInt(10) + 1 = min(5, 9) + 1 = 5 + 1 = 6
+        assertEquals(6, marisa.getImmunityStrength());
     }
 
     @Test
@@ -93,11 +93,11 @@ public class MarisaTest {
     @Test
     public void testMarisaNagasiMethods() {
         Marisa marisa = new Marisa();
-        assertNotNull(marisa.getAnImageVerStateCtrlNagasi());
+        assertNotNull(marisa.getImageVariantState());
 
         int[][] testArray = new int[10][2];
-        marisa.setAnImageVerStateCtrlNagasi(testArray);
-        assertSame(testArray, marisa.getAnImageVerStateCtrlNagasi());
+        marisa.setImageVariantState(testArray);
+        assertSame(testArray, marisa.getImageVariantState());
     }
 
     @Test

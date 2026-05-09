@@ -14,13 +14,10 @@ import java.util.Map;
 
 import src.Const;
 import src.SimYukkuri;
-import src.util.GameRandom;
-import src.util.GameWorld;
 import src.base.Body;
 import src.base.Okazari.OkazariType;
 import src.draw.Dimension4y;
 import src.draw.ModLoader;
-import src.draw.MyPane;
 import src.draw.Point4y;
 import src.draw.Terrarium;
 import src.enums.AgeState;
@@ -29,10 +26,12 @@ import src.enums.CriticalDamegeType;
 import src.enums.HairState;
 import src.enums.ImageCode;
 import src.enums.YukkuriType;
+import src.engine.transform.TransformationService;
 import src.system.BodyLayer;
 import src.system.ResourceUtil;
+import src.util.GameRandom;
+import src.util.GameWorld;
 import src.util.IniFileUtil;
-import src.util.YukkuriUtil;
 
 /*****************************************************
  * まりさ。れいむまりさ、つむりまりさはこれを継承している
@@ -64,7 +63,7 @@ public class Marisa extends Body {
 	// iniファイルから読み込んだ初期値
 	private static int baseSpeed = 100;
 	// 個別表情管理(まりちゃ流し用)
-	private int anImageVerStateCtrlNagasi[][] = new int[ImageCode.values().length][2];
+	private int imageVariantState[][] = new int[ImageCode.values().length][2];
 
 	/** イメージのロード */
 	public static void loadImages(ClassLoader loader, ImageObserver io) throws IOException {
@@ -121,7 +120,7 @@ public class Marisa extends Body {
 
 	@Override
 	public int getImage(int type, int direction, BodyLayer layer, int index) {
-		if (!isbImageNagasiMode() || imagesNagasi == null) {
+		if (!isImageNagasiMode() || imagesNagasi == null) {
 			layer.getImage()[index] = imagePack[getBodyRank().getImageIndex()][type][direction
 					* directionOffset[type][0]][getBodyAgeState().ordinal()];
 			layer.getDir()[index] = direction * directionOffset[type][1];
@@ -131,34 +130,34 @@ public class Marisa extends Body {
 			// インターバル毎に初期化する
 			if (GameEnvironment.getInterval() == 0 && !isDead()) {
 				for (int i = 0; i < ImageCode.values().length; i++) {
-					anImageVerStateCtrlNagasi[i][1] = 0;
+					imageVariantState[i][1] = 0;
 				}
 			}
 			// 前回と同じ表示
-			if (anImageVerStateCtrlNagasi[type][1] == 1) {
-				int nIndex = anImageVerStateCtrlNagasi[type][0];
+			if (imageVariantState[type][1] == 1) {
+				int imageIndex = imageVariantState[type][0];
 				layer.getImage()[index] = imagesNagasi[type][direction
 						* directionOffsetNagasi[type][0]][getBodyAgeState()
-								.ordinal()][nIndex];
+								.ordinal()][imageIndex];
 			} else {
-				int nOtherVerCount = 0;
+				int otherVersionCount = 0;
 				for (int i = 0; i < ModLoader.getMaxImgOtherVer(); i++) {
 					if (imagesNagasi[type][direction * directionOffsetNagasi[type][0]][getBodyAgeState().ordinal()][i
 							+ 1] != null) {
-						nOtherVerCount++;
+						otherVersionCount++;
 					}
 				}
-				if (nOtherVerCount != 0) {
-					int nRndIndex = GameRandom.nextInt(nOtherVerCount + 1);
-					anImageVerStateCtrlNagasi[type][0] = nRndIndex;
+				if (otherVersionCount != 0) {
+					int randomIndex = GameRandom.nextInt(otherVersionCount + 1);
+					imageVariantState[type][0] = randomIndex;
 					layer.getImage()[index] = imagesNagasi[type][direction
-							* directionOffsetNagasi[type][0]][getBodyAgeState().ordinal()][nRndIndex];
+							* directionOffsetNagasi[type][0]][getBodyAgeState().ordinal()][randomIndex];
 				} else {
-					anImageVerStateCtrlNagasi[type][0] = 0;
+					imageVariantState[type][0] = 0;
 					layer.getImage()[index] = imagesNagasi[type][direction
 							* directionOffsetNagasi[type][0]][getBodyAgeState().ordinal()][0];
 				}
-				anImageVerStateCtrlNagasi[type][1] = 1;
+				imageVariantState[type][1] = 1;
 			}
 			layer.getDir()[index] = direction * directionOffsetNagasi[type][1];
 		}
@@ -192,31 +191,7 @@ public class Marisa extends Body {
 			return;
 		if (isRude())
 			return;// ゲスもだめ
-		synchronized (SimYukkuri.lock) {
-			int originalId = getUniqueID();
-			// ドス化
-			// ドスはフィールドに一体だけ
-			if (!GameWorld.get().getCurrentMap().makeOrKillDos(true)) {
-				return;
-			}
-			GameWorld.get().getCurrentMap().getBody().remove(this.getUniqueID());
-			GameView.loadBodyImage(YukkuriType.DOSMARISA);
-			Body to = new DosMarisa(getX(), getY(), getZ(), getBodyAgeState(), null, null);
-			try {
-				YukkuriUtil.changeBody(to, this);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-			to.setUniqueID(originalId);
-			GameWorld.get().getCurrentMap().getBody().put(to.getUniqueID(), to);
-			// iniファイル再設定
-			to.setBaseBodyFileName("dosmarisa");
-			IniFileUtil.readYukkuriIniFile(to);
-			if (MyPane.getSelectBody() == this) {
-				MyPane.setSelectBody(to);
-			}
-			setRemoved(true);
-		}
+		TransformationService.transform(this, YukkuriType.DOSMARISA);
 	}
 
 	/**
@@ -232,17 +207,17 @@ public class Marisa extends Body {
 			return null;
 
 		// 自分以外に幸せを感じている大人のゆっくりが10体以上いる
-		int nCount = 0;
+		int adultCount = 0;
 		List<Body> bodyList = new LinkedList<Body>(GameWorld.get().getCurrentMap().getBody().values());
-		for (Body bOther : bodyList) {
-			if (bOther == this) {
+		for (Body otherBody : bodyList) {
+			if (otherBody == this) {
 				continue;
 			}
-			if (bOther.isAdult() && bOther.isHappy()) {
-				nCount++;
+			if (otherBody.isAdult() && otherBody.isHappy()) {
+				adultCount++;
 			}
 		}
-		if (nCount < 10) {
+		if (adultCount < 10) {
 			return null;
 		}
 
@@ -283,8 +258,8 @@ public class Marisa extends Body {
 	@Override
 	@Transient
 	public String getMyName() {
-		if (getAnMyName()[getBodyAgeState().ordinal()] != null) {
-			return getAnMyName()[getBodyAgeState().ordinal()];
+		if (getMyNames()[getBodyAgeState().ordinal()] != null) {
+			return getMyNames()[getBodyAgeState().ordinal()];
 		}
 		if (GameLocale.isJapanese()) {
 			return nameJ;
@@ -296,8 +271,8 @@ public class Marisa extends Body {
 	@Override
 	@Transient
 	public String getMyNameD() {
-		if (getAnMyNameD()[getBodyAgeState().ordinal()] != null) {
-			return getAnMyNameD()[getBodyAgeState().ordinal()];
+		if (getMyNamesDamaged()[getBodyAgeState().ordinal()] != null) {
+			return getMyNamesDamaged()[getBodyAgeState().ordinal()];
 		}
 		return getMyName();
 	}
@@ -359,9 +334,9 @@ public class Marisa extends Body {
 			// 排泄、出産時
 			idx += getImage(ImageCode.FRONT_SHIT.ordinal(), Const.LEFT, layer, idx);
 
-			if (geteHairState() == HairState.DEFAULT) {
+			if (getHairState() == HairState.DEFAULT) {
 				idx += getImage(ImageCode.FRONT_HAIR.ordinal(), Const.LEFT, layer, idx);
-			} else if (geteHairState() == HairState.BRINDLED1 || geteHairState() == HairState.BRINDLED2) {
+			} else if (getHairState() == HairState.BRINDLED1 || getHairState() == HairState.BRINDLED2) {
 				idx += getImage(ImageCode.FRONT_HAIR2.ordinal(), Const.LEFT, layer, idx);
 			}
 
@@ -386,16 +361,16 @@ public class Marisa extends Body {
 		} else if (isFurifuri() && !isSleeping() && (!isLockmove() || isFixBack())) {
 			// ふりふり
 			// 流し用もるもる
-			if (isbImageNagasiMode()) {
+			if (isImageNagasiMode()) {
 				if (getAge() % 8 == 0) {
 					idx += getImage(ImageCode.MROLL_LEFT2_SHIT.ordinal(), Const.LEFT, layer, idx);
 
 					if (getOkazari() != null && getOkazari().getOkazariType() == OkazariType.DEFAULT) {
 						idx += getImage(ImageCode.MROLL_ACCESSORY_LEFT2.ordinal(), Const.LEFT, layer, idx);
 					}
-					if (geteHairState() == HairState.DEFAULT) {
+					if (getHairState() == HairState.DEFAULT) {
 						idx += getImage(ImageCode.MROLL_LEFT2_HAIR.ordinal(), Const.LEFT, layer, idx);
-					} else if (geteHairState() == HairState.BRINDLED1 || geteHairState() == HairState.BRINDLED2) {
+					} else if (getHairState() == HairState.BRINDLED1 || getHairState() == HairState.BRINDLED2) {
 						idx += getImage(ImageCode.MROLL_LEFT2_HAIR2.ordinal(), Const.LEFT, layer, idx);
 					}
 
@@ -423,9 +398,9 @@ public class Marisa extends Body {
 					if (getOkazari() != null && getOkazari().getOkazariType() == OkazariType.DEFAULT) {
 						idx += getImage(ImageCode.MROLL_ACCESSORY_LEFT.ordinal(), Const.LEFT, layer, idx);
 					}
-					if (geteHairState() == HairState.DEFAULT) {
+					if (getHairState() == HairState.DEFAULT) {
 						idx += getImage(ImageCode.MROLL_LEFT_HAIR.ordinal(), Const.LEFT, layer, idx);
-					} else if (geteHairState() == HairState.BRINDLED1 || geteHairState() == HairState.BRINDLED2) {
+					} else if (getHairState() == HairState.BRINDLED1 || getHairState() == HairState.BRINDLED2) {
 						idx += getImage(ImageCode.MROLL_LEFT_HAIR2.ordinal(), Const.LEFT, layer, idx);
 					}
 
@@ -453,9 +428,9 @@ public class Marisa extends Body {
 					if (getOkazari() != null && getOkazari().getOkazariType() == OkazariType.DEFAULT) {
 						idx += getImage(ImageCode.MROLL_ACCESSORY_LEFT2.ordinal(), Const.LEFT, layer, idx);
 					}
-					if (geteHairState() == HairState.DEFAULT) {
+					if (getHairState() == HairState.DEFAULT) {
 						idx += getImage(ImageCode.MROLL_LEFT2_HAIR.ordinal(), Const.LEFT, layer, idx);
-					} else if (geteHairState() == HairState.BRINDLED1 || geteHairState() == HairState.BRINDLED2) {
+					} else if (getHairState() == HairState.BRINDLED1 || getHairState() == HairState.BRINDLED2) {
 						idx += getImage(ImageCode.MROLL_LEFT2_HAIR2.ordinal(), Const.LEFT, layer, idx);
 					}
 
@@ -483,9 +458,9 @@ public class Marisa extends Body {
 					if (getOkazari() != null && getOkazari().getOkazariType() == OkazariType.DEFAULT) {
 						idx += getImage(ImageCode.MROLL_ACCESSORY_RIGHT2.ordinal(), Const.LEFT, layer, idx);
 					}
-					if (geteHairState() == HairState.DEFAULT) {
+					if (getHairState() == HairState.DEFAULT) {
 						idx += getImage(ImageCode.MROLL_RIGHT2_HAIR.ordinal(), Const.LEFT, layer, idx);
-					} else if (geteHairState() == HairState.BRINDLED1 || geteHairState() == HairState.BRINDLED2) {
+					} else if (getHairState() == HairState.BRINDLED1 || getHairState() == HairState.BRINDLED2) {
 						idx += getImage(ImageCode.MROLL_RIGHT2_HAIR2.ordinal(), Const.LEFT, layer, idx);
 					}
 					if (isAnalClose()) {
@@ -509,9 +484,9 @@ public class Marisa extends Body {
 					if (getOkazari() != null && getOkazari().getOkazariType() == OkazariType.DEFAULT) {
 						idx += getImage(ImageCode.MROLL_ACCESSORY_RIGHT.ordinal(), Const.LEFT, layer, idx);
 					}
-					if (geteHairState() == HairState.DEFAULT) {
+					if (getHairState() == HairState.DEFAULT) {
 						idx += getImage(ImageCode.MROLL_RIGHT_HAIR.ordinal(), Const.LEFT, layer, idx);
-					} else if (geteHairState() == HairState.BRINDLED1 || geteHairState() == HairState.BRINDLED2) {
+					} else if (getHairState() == HairState.BRINDLED1 || getHairState() == HairState.BRINDLED2) {
 						idx += getImage(ImageCode.MROLL_RIGHT_HAIR2.ordinal(), Const.LEFT, layer, idx);
 					}
 					if (isAnalClose()) {
@@ -535,9 +510,9 @@ public class Marisa extends Body {
 					if (getOkazari() != null && getOkazari().getOkazariType() == OkazariType.DEFAULT) {
 						idx += getImage(ImageCode.MROLL_ACCESSORY_RIGHT2.ordinal(), Const.LEFT, layer, idx);
 					}
-					if (geteHairState() == HairState.DEFAULT) {
+					if (getHairState() == HairState.DEFAULT) {
 						idx += getImage(ImageCode.MROLL_RIGHT2_HAIR.ordinal(), Const.LEFT, layer, idx);
-					} else if (geteHairState() == HairState.BRINDLED1 || geteHairState() == HairState.BRINDLED2) {
+					} else if (getHairState() == HairState.BRINDLED1 || getHairState() == HairState.BRINDLED2) {
 						idx += getImage(ImageCode.MROLL_RIGHT2_HAIR2.ordinal(), Const.LEFT, layer, idx);
 					}
 					if (isAnalClose()) {
@@ -563,9 +538,9 @@ public class Marisa extends Body {
 				if (getAge() % 8 <= 3) {
 					idx += getImage(ImageCode.ROLL_LEFT_SHIT.ordinal(), Const.LEFT, layer, idx);
 
-					if (geteHairState() == HairState.DEFAULT) {
+					if (getHairState() == HairState.DEFAULT) {
 						idx += getImage(ImageCode.ROLL_LEFT_HAIR.ordinal(), Const.LEFT, layer, idx);
-					} else if (geteHairState() == HairState.BRINDLED1 || geteHairState() == HairState.BRINDLED2) {
+					} else if (getHairState() == HairState.BRINDLED1 || getHairState() == HairState.BRINDLED2) {
 						idx += getImage(ImageCode.FRONT_HAIR2.ordinal(), Const.LEFT, layer, idx);
 					}
 
@@ -587,9 +562,9 @@ public class Marisa extends Body {
 				} else if (getAge() % 8 <= 7) {
 					idx += getImage(ImageCode.ROLL_RIGHT_SHIT.ordinal(), Const.LEFT, layer, idx);
 
-					if (geteHairState() == HairState.DEFAULT) {
+					if (getHairState() == HairState.DEFAULT) {
 						idx += getImage(ImageCode.ROLL_RIGHT_HAIR.ordinal(), Const.LEFT, layer, idx);
-					} else if (geteHairState() == HairState.BRINDLED1 || geteHairState() == HairState.BRINDLED2) {
+					} else if (getHairState() == HairState.BRINDLED1 || getHairState() == HairState.BRINDLED2) {
 						idx += getImage(ImageCode.FRONT_HAIR2.ordinal(), Const.LEFT, layer, idx);
 					}
 
@@ -650,44 +625,44 @@ public class Marisa extends Body {
 		 */
 		// Tune individual parameters.
 		double factor = Math.random() + 1;
-		getHUNGRYLIMITorg()[AgeState.ADULT.ordinal()] *= factor;
-		getHUNGRYLIMITorg()[AgeState.CHILD.ordinal()] *= factor;
-		getHUNGRYLIMITorg()[AgeState.BABY.ordinal()] *= factor;
+		getHungryLimitBase()[AgeState.ADULT.ordinal()] *= factor;
+		getHungryLimitBase()[AgeState.CHILD.ordinal()] *= factor;
+		getHungryLimitBase()[AgeState.BABY.ordinal()] *= factor;
 		factor = Math.random() + 1;
-		getSHITLIMITorg()[AgeState.ADULT.ordinal()] *= factor;
-		getSHITLIMITorg()[AgeState.CHILD.ordinal()] *= factor;
-		getSHITLIMITorg()[AgeState.BABY.ordinal()] *= factor;
+		getShitLimitBase()[AgeState.ADULT.ordinal()] *= factor;
+		getShitLimitBase()[AgeState.CHILD.ordinal()] *= factor;
+		getShitLimitBase()[AgeState.BABY.ordinal()] *= factor;
 		factor = Math.random() * 2 + 1;
-		getDAMAGELIMITorg()[AgeState.ADULT.ordinal()] *= factor;
-		getDAMAGELIMITorg()[AgeState.CHILD.ordinal()] *= factor;
-		getDAMAGELIMITorg()[AgeState.BABY.ordinal()] *= factor;
+		getDamageLimitBase()[AgeState.ADULT.ordinal()] *= factor;
+		getDamageLimitBase()[AgeState.CHILD.ordinal()] *= factor;
+		getDamageLimitBase()[AgeState.BABY.ordinal()] *= factor;
 		factor = Math.random() + 0.5;
-		setBABYLIMITorg((int) (getBABYLIMITorg() * factor));
-		setCHILDLIMITorg((int) (getCHILDLIMITorg() * factor));
-		setLIFELIMITorg((int) (getLIFELIMITorg() * factor));
+		setBabyLimitBase((int) (getBabyLimitBase() * factor));
+		setChildLimitBase((int) (getChildLimitBase() * factor));
+		setLifeLimitBase((int) (getLifeLimitBase() * factor));
 		factor = Math.random() + 1;
-		setRELAXPERIODorg((int) (getRELAXPERIODorg() * factor));
-		setEXCITEPERIODorg((int) (getEXCITEPERIODorg() * factor));
-		setPREGPERIODorg((int) (getPREGPERIODorg() * factor));
-		setSLEEPPERIODorg((int) (getSLEEPPERIODorg() * factor));
-		setACTIVEPERIODorg((int) (getACTIVEPERIODorg() * factor));
-		setSameDest(GameRandom.nextInt(10) + 10);
-		setDECLINEPERIODorg((int) (getDECLINEPERIODorg() * (Math.random() + 0.5)));
-		setROBUSTNESS(GameRandom.nextInt(10) + 1);
+		setRelaxPeriodBase((int) (getRelaxPeriodBase() * factor));
+		setExcitePeriodBase((int) (getExcitePeriodBase() * factor));
+		setPregPeriodBase((int) (getPregPeriodBase() * factor));
+		setSleepPeriodBase((int) (getSleepPeriodBase() * factor));
+		setActivePeriodBase((int) (getActivePeriodBase() * factor));
+		setSameDirectionFactor(GameRandom.nextInt(10) + 10);
+		setDeclinePeriodBase((int) (getDeclinePeriodBase() * (Math.random() + 0.5)));
+		setImmunityStrength(GameRandom.nextInt(10) + 1);
 		// EYESIGHT /= 1;
 		factor = Math.random() + 1;
-		getSTRENGTHorg()[AgeState.ADULT.ordinal()] *= factor;
-		getSTRENGTHorg()[AgeState.CHILD.ordinal()] *= factor;
-		getSTRENGTHorg()[AgeState.BABY.ordinal()] *= factor;
+		getStrengthBase()[AgeState.ADULT.ordinal()] *= factor;
+		getStrengthBase()[AgeState.CHILD.ordinal()] *= factor;
+		getStrengthBase()[AgeState.BABY.ordinal()] *= factor;
 		speed = baseSpeed;
 	}
 
-	public int[][] getAnImageVerStateCtrlNagasi() {
-		return anImageVerStateCtrlNagasi;
+	public int[][] getImageVariantState() {
+		return imageVariantState;
 	}
 
-	public void setAnImageVerStateCtrlNagasi(int[][] anImageVerStateCtrlNagasi) {
-		this.anImageVerStateCtrlNagasi = anImageVerStateCtrlNagasi;
+	public void setImageVariantState(int[][] imageVariantState) {
+		this.imageVariantState = imageVariantState;
 	}
 
 }

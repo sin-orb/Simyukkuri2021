@@ -13,7 +13,6 @@ import src.item.Sui;
 import src.logic.EventLogic;
 import src.system.MessagePool;
 import src.system.ResourceUtil;
-import src.util.YukkuriUtil;
 
 /***************************************************
  * すぃーに関連した会話イベント
@@ -45,8 +44,8 @@ public class SuiSpeake extends EventPacket {
 			return false;
 		}
 		Obj target = b.takeMappedObj(this.target);
-		Body from = YukkuriUtil.getBodyInstance(getFrom());
-		if (from == null) {
+		Body sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
+		if (sourceBody == null) {
 			if (target == null) {
 				if (b.isRude() || GameRandom.nextBoolean()) {
 					b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.WantingSui),
@@ -84,30 +83,30 @@ public class SuiSpeake extends EventPacket {
 				}
 			}
 		} else {
-			if (from == b)
+			if (sourceBody == b)
 				return false;
 			if (target == null) {
-				if (Translate.distance(b.getX(), b.getY(), from.getX(), from.getY()) < 200000) {
-					if (b.isParent(from)) {
+				if (Translate.distance(b.getX(), b.getY(), sourceBody.getX(), sourceBody.getY()) < 200000) {
+					if (b.isParent(sourceBody)) {
 						b.setMessage(GameMessages.getMessage(b, MessagePool.Action.WantingSuiParent), true);
-					} else if (b.isPartner(from)) {
+					} else if (b.isPartner(sourceBody)) {
 						b.setMessage(GameMessages.getMessage(b, MessagePool.Action.WantingSuiPartner), true);
 					}
 				}
 			} else {
 				if (Translate.distance(b.getX(), b.getY(), target.getX(), target.getY()) < 200000) {
-					if (from.isParent(b)) {
-						if (from.isMother(b)) {
+					if (sourceBody.isParent(b)) {
+						if (sourceBody.isMother(b)) {
 							b.setMessage(GameMessages.getMessage(b, MessagePool.Action.hasSuiPAPAChild), true);
 						} else {
 							b.setMessage(GameMessages.getMessage(b, MessagePool.Action.hasSuiMAMAChild), true);
 						}
-					} else if (b.isPartner(from)) {
+					} else if (b.isPartner(sourceBody)) {
 						b.setMessage(GameMessages.getMessage(b, MessagePool.Action.hasSuiPartner), true);
-					} else if (b.isParent(from)) {
+					} else if (b.isParent(sourceBody)) {
 						b.setMessage(GameMessages.getMessage(b, MessagePool.Action.hasSuiChild), true);
-					} else if (from.isSister(b)) {
-						if (from.isElderSister(b)) {
+					} else if (sourceBody.isSister(b)) {
+						if (sourceBody.isElderSister(b)) {
 							b.setMessage(GameMessages.getMessage(b, MessagePool.Action.hasSuiOldSister), true);
 						} else {
 							b.setMessage(GameMessages.getMessage(b, MessagePool.Action.hasSuiYoungSister), true);

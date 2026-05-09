@@ -132,38 +132,38 @@ public class BodyUtil {
 			expand.getScreenRect()[1].setHeight(expand.getScreenRect()[1].getHeight() + jh);
 
 			// 何かとリンクしてる場合の全体の高度補正
-			Obj oLinkParent = b.takeMappedObj(b.getLinkParent());
+			Obj oLinkParent = b.takeMappedObj(b.getParentLinkId());
 			if (oLinkParent != null && oLinkParent.getZ() < b.getZ() && oLinkParent instanceof Body) {
-				Body bLink = (Body) oLinkParent;
-				int jyLink = 0;
-				int jhLink = 0;
+				Body linkedBody = (Body) oLinkParent;
+				int linkedVerticalOffset = 0;
+				int linkedHorizontalOffset = 0;
 				BodyLayer layer2Link = new BodyLayer();
-				bLink.getFaceImage(layer2Link);
+				linkedBody.getFaceImage(layer2Link);
 				switch (layer2Link.getOption()[0]) {
 					case 0:
 					default:
 						break;
 					case 1:
 						// 発情 大ジャンプ
-						jyLink = -Translate.transSize(jumpTable[(int) bLink.getAge() % 9]
-								/ BODY_JUMP_LEVEL[bLink.getBodyAgeState().ordinal()]);
+						linkedVerticalOffset = -Translate.transSize(jumpTable[(int) linkedBody.getAge() % 9]
+								/ BODY_JUMP_LEVEL[linkedBody.getBodyAgeState().ordinal()]);
 						break;
 					case 2:
 						// すっきり
-						jhLink = Translate.transSize(jumpTable[(int) bLink.getAge() / 2 % 9] / 2
-								/ BODY_JUMP_LEVEL[bLink.getBodyAgeState().ordinal()] * 5 / 2);
-						jyLink = -jhLink;
+						linkedHorizontalOffset = Translate.transSize(jumpTable[(int) linkedBody.getAge() / 2 % 9] / 2
+								/ BODY_JUMP_LEVEL[linkedBody.getBodyAgeState().ordinal()] * 5 / 2);
+						linkedVerticalOffset = -linkedHorizontalOffset;
 						break;
 					case 3:
 						// 通常ジャンプ
-						jyLink = -Translate.transSize(jumpTable[(int) bLink.getAge() % 9] / 2
-								/ BODY_JUMP_LEVEL[bLink.getBodyAgeState().ordinal()]);
+						linkedVerticalOffset = -Translate.transSize(jumpTable[(int) linkedBody.getAge() % 9] / 2
+								/ BODY_JUMP_LEVEL[linkedBody.getBodyAgeState().ordinal()]);
 						break;
 					case 4:
 						// のびのび
-						jhLink = Translate.transSize(jumpTable[(int) bLink.getAge() / 2 % 9] / 2
-								/ BODY_JUMP_LEVEL[bLink.getBodyAgeState().ordinal()] * 5 / 2);
-						jyLink = -jhLink;
+						linkedHorizontalOffset = Translate.transSize(jumpTable[(int) linkedBody.getAge() / 2 % 9] / 2
+								/ BODY_JUMP_LEVEL[linkedBody.getBodyAgeState().ordinal()] * 5 / 2);
+						linkedVerticalOffset = -linkedHorizontalOffset;
 						break;
 					case 5:
 						// ゆんやあーー
@@ -172,12 +172,12 @@ public class BodyUtil {
 						jy = -jh;
 						break;
 				}
-				base.getScreenRect()[0].setY(base.getScreenRect()[0].getY() + jyLink);
-				base.getScreenRect()[1].setY(base.getScreenRect()[1].getY() + jyLink);
-				expand.getScreenRect()[0].setY(expand.getScreenRect()[0].getY() + jyLink);
-				expand.getScreenRect()[1].setY(expand.getScreenRect()[1].getY() + jyLink);
-				braid.getScreenRect()[0].setY(braid.getScreenRect()[0].getY() + jyLink);
-				braid.getScreenRect()[1].setY(braid.getScreenRect()[1].getY() + jyLink);
+				base.getScreenRect()[0].setY(base.getScreenRect()[0].getY() + linkedVerticalOffset);
+				base.getScreenRect()[1].setY(base.getScreenRect()[1].getY() + linkedVerticalOffset);
+				expand.getScreenRect()[0].setY(expand.getScreenRect()[0].getY() + linkedVerticalOffset);
+				expand.getScreenRect()[1].setY(expand.getScreenRect()[1].getY() + linkedVerticalOffset);
+				braid.getScreenRect()[0].setY(braid.getScreenRect()[0].getY() + linkedVerticalOffset);
+				braid.getScreenRect()[1].setY(braid.getScreenRect()[1].getY() + linkedVerticalOffset);
 			}
 
 			// ひっぱり時の各種の位置補正計算
@@ -246,12 +246,12 @@ public class BodyUtil {
 			// 口封じマスク描画は顔グラフィック表示のほうに含めたためオミット
 
 			// 髪の毛マスク
-			if (b.geteHairState() != HairState.BALDHEAD) {
-				if (b.geteHairState() == HairState.DEFAULT) {
+			if (b.getHairState() != HairState.BALDHEAD) {
+				if (b.getHairState() == HairState.DEFAULT) {
 					b.getImage(ImageCode.HAIR0.ordinal(), direction, layer, 0);
-				} else if (b.geteHairState() == HairState.BRINDLED1) {
+				} else if (b.getHairState() == HairState.BRINDLED1) {
 					b.getImage(ImageCode.HAIR1.ordinal(), direction, layer, 0);
-				} else if (b.geteHairState() == HairState.BRINDLED2) {
+				} else if (b.getHairState() == HairState.BRINDLED2) {
 					b.getImage(ImageCode.HAIR2.ordinal(), direction, layer, 0);
 				}
 
@@ -396,11 +396,11 @@ public class BodyUtil {
 		int sx1 = 0;
 		int sy1 = 0;
 		if (img == null) return;
-		int nWidth = img.getWidth();
-		int nHeight = img.getHeight();
-		int sx2 = nWidth;
-		int sy2 = nHeight + tz * nHeight / expandHeight;
-		g2.drawImage(img, dx1, dy1, dx2, dy2, sx1, sy1, sx2, sy2, io);
+		int imageWidth = img.getWidth();
+		int imageHeight = img.getHeight();
+		int sourceX2 = imageWidth;
+		int sourceY2 = imageHeight + tz * imageHeight / expandHeight;
+		g2.drawImage(img, dx1, dy1, dx2, dy2, sx1, sy1, sourceX2, sourceY2, io);
 	}
 }
 

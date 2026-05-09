@@ -5,7 +5,6 @@ import src.base.Body;
 import src.draw.Point4y;
 import src.draw.Translate;
 import src.item.Barrier;
-import src.util.YukkuriUtil;
 
 /**
  * Parent-nearness handling used by BodyLogic.
@@ -18,58 +17,58 @@ public final class BodyParentRule {
 	/**
 	 * Check and process a nearby parent body.
 	 *
-	 * @param b target body
+	 * @param body target body
 	 */
-	public static void checkNearParent(Body b) {
-		if (b.isAdult()) {
+	public static void checkNearParent(Body body) {
+		if (body.isAdult()) {
 			return;
 		}
 
-		int minDistance = b.getEYESIGHTorg();
-		Body bodyParent = YukkuriUtil.getBodyInstance(b.getMother());
-		if (bodyParent == null) {
-			bodyParent = YukkuriUtil.getBodyInstance(b.getFather());
+		int nearestDistance = body.getEyesightBase();
+		Body parentBody = src.util.BodyRegistry.getBodyInstance(body.getMother());
+		if (parentBody == null) {
+			parentBody = src.util.BodyRegistry.getBodyInstance(body.getFather());
 		}
-		if (bodyParent == null) {
-			int nSize = b.getElderSisterListSize();
-			if (0 < nSize) {
-				bodyParent = b.getElderSister(0);
+		if (parentBody == null) {
+			int elderSisterCount = body.getElderSisterListSize();
+			if (0 < elderSisterCount) {
+				parentBody = body.getElderSister(0);
 			}
 		}
-		if (bodyParent == null) {
+		if (parentBody == null) {
 			return;
 		}
 
-		int dist = Translate.distance(b.getX(), b.getY(), bodyParent.getX(), bodyParent.getY());
-		int nParcent = 32;
+		int distanceToParent = Translate.distance(body.getX(), body.getY(), parentBody.getX(), parentBody.getY());
+		int parentDistanceRatio = 32;
 
-		if (b.isCallingParents() && bodyParent.isSleeping()) {
-			bodyParent.wakeup();
+		if (body.isCallingParents() && parentBody.isSleeping()) {
+			parentBody.wakeup();
 		}
-		if ((b.isDirty() || b.getAttachmentSize(Ants.class) != 0) && bodyParent.canEventResponse()) {
-			if (dist <= bodyParent.getStepDist()) {
-				bodyParent.constraintDirection(b, false);
-				bodyParent.doPeropero(b);
+		if ((body.isDirty() || body.getAttachmentSize(Ants.class) != 0) && parentBody.canEventResponse()) {
+			if (distanceToParent <= parentBody.getStepDist()) {
+				parentBody.constraintDirection(body, false);
+				parentBody.doPeropero(body);
 				return;
 			}
-			b.moveTo(bodyParent.getX(), bodyParent.getY());
+			body.moveTo(parentBody.getX(), parentBody.getY());
 			return;
 		}
 
-		if (dist < minDistance / nParcent) {
+		if (distanceToParent < nearestDistance / parentDistanceRatio) {
 			return;
 		}
 
-		if (minDistance / nParcent <= dist) {
-			if (Barrier.acrossBarrier(b.getX(), b.getY(), bodyParent.getX(), bodyParent.getY(),
-					Barrier.MAP_BODY[b.getBodyAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
+		if (nearestDistance / parentDistanceRatio <= distanceToParent) {
+			if (Barrier.acrossBarrier(body.getX(), body.getY(), parentBody.getX(), parentBody.getY(),
+					Barrier.MAP_BODY[body.getBodyAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
 				return;
 			}
 
-			int nToDist = (int) Math.sqrt(dist) - (int) Math.sqrt(minDistance / nParcent);
-			double dRad = Translate.getRadian(b.getX(), b.getY(), bodyParent.getX(), bodyParent.getY());
-			Point4y p2 = Translate.getPointByDistAndRad(b.getX(), b.getY(), nToDist, dRad);
-			b.moveTo(p2.getX(), p2.getY(), b.getZ());
+			int moveDistance = (int) Math.sqrt(distanceToParent) - (int) Math.sqrt(nearestDistance / parentDistanceRatio);
+			double radian = Translate.getRadian(body.getX(), body.getY(), parentBody.getX(), parentBody.getY());
+			Point4y destination = Translate.getPointByDistAndRad(body.getX(), body.getY(), moveDistance, radian);
+			body.moveTo(destination.getX(), destination.getY(), body.getZ());
 		}
 	}
 }

@@ -113,7 +113,7 @@ public class RaperWakeupEventTest {
     public void testSimpleEventAction_bIsNYD_returnsTrue() {
         Body from = createBody();
         Body b = createBody();
-        b.seteCoreAnkoState(src.enums.CoreAnkoState.NonYukkuriDisease);
+        b.setCoreAnkoState(src.enums.CoreAnkoState.NonYukkuriDisease);
         RaperWakeupEvent event = new RaperWakeupEvent(from, null, null, 1);
         assertTrue(event.simpleEventAction(b));
     }
@@ -123,7 +123,7 @@ public class RaperWakeupEventTest {
     public void testSimpleEventAction_bIsNeedled_returnsTrue() {
         Body from = createBody();
         Body b = createBody();
-        b.setbNeedled(true);
+        b.setNeedled(true);
         RaperWakeupEvent event = new RaperWakeupEvent(from, null, null, 1);
         assertTrue(event.simpleEventAction(b));
     }
@@ -174,7 +174,7 @@ public class RaperWakeupEventTest {
             chainedRaper.setRapist(true);
             chainedRaper.setPartner(sourceRaper.getUniqueID());
             chainedRaper.setExciting(false);
-            chainedRaper.setbForceExciting(false);
+            chainedRaper.setForceExciting(false);
             RaperWakeupEvent event = new RaperWakeupEvent(sourceRaper, null, null, 1);
 
             assertTrue(event.simpleEventAction(chainedRaper));

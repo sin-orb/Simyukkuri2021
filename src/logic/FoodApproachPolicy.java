@@ -14,11 +14,11 @@ public final class FoodApproachPolicy {
 	/**
 	 * 目標へ移動する.
 	 */
-	public static boolean handleUnarrivedFood(Body b, Obj food) {
-		if (!b.canflyCheck()) {
-			b.moveTo(food.getX(), food.getY(), 0);
+	public static boolean handleUnarrivedFood(Body body, Obj food) {
+		if (!body.canflyCheck()) {
+			body.moveTo(food.getX(), food.getY(), 0);
 		} else {
-			b.moveTo(food.getX(), food.getY(), food.getZ());
+			body.moveTo(food.getX(), food.getY(), food.getZ());
 		}
 		return true;
 	}

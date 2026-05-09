@@ -17,85 +17,85 @@ public final class FoodActionGate {
 	private FoodActionGate() {
 	}
 
-	public static boolean shouldSkipBeforeSearch(Body b, boolean[] forceEat) {
-		if (!b.isVeryHungry()) {
-			if (b.isToBody() || b.isToBed() || (b.isToShit() && b.getIntelligence() == src.enums.Intelligence.WISE)
-					|| (b.isAdult() && b.isToSukkiri()) || b.isToSteal()
-					|| (b.isRaper() && b.isExciting())) {
-				if (b.isToFood()) {
-					b.setToFood(false);
+	public static boolean shouldSkipBeforeSearch(Body body, boolean[] forceEat) {
+		if (!body.isVeryHungry()) {
+			if (body.isToBody() || body.isToBed() || (body.isToShit() && body.getIntelligence() == src.enums.Intelligence.WISE)
+					|| (body.isAdult() && body.isToSukkiri()) || body.isToSteal()
+					|| (body.isRaper() && body.isExciting())) {
+				if (body.isToFood()) {
+					body.setToFood(false);
 				}
 				return true;
 			}
 		}
-		if (b.getCurrentEvent() != null && b.getCurrentEvent() instanceof FlyingEatEvent) {
+		if (body.getCurrentEvent() != null && body.getCurrentEvent() instanceof FlyingEatEvent) {
 			return true;
 		}
-		if (b.isSleepy()) {
-			if ((!b.isHungry() && b.isSmart() && b.getBodyRank() == BodyRank.KAIYU)
-					|| (b.isFull() && b.getIntelligence() != src.enums.Intelligence.WISE && b.getBodyRank() != BodyRank.KAIYU)) {
+		if (body.isSleepy()) {
+			if ((!body.isHungry() && body.isSmart() && body.getBodyRank() == BodyRank.KAIYU)
+					|| (body.isFull() && body.getIntelligence() != src.enums.Intelligence.WISE && body.getBodyRank() != BodyRank.KAIYU)) {
 				return true;
 			}
 		}
-		if (b.geteCoreAnkoState() == CoreAnkoState.NonYukkuriDisease) {
+		if (body.getCoreAnkoState() == CoreAnkoState.NonYukkuriDisease) {
 			return true;
 		}
-		if (b.isRaper() && b.isExciting() && !b.isStarving()) {
+		if (body.isRaper() && body.isExciting() && !body.isStarving()) {
 			return true;
 		}
 
-		EventPacket ev = b.getCurrentEvent();
+		EventPacket ev = body.getCurrentEvent();
 		if (ev != null && ev.getPriority() != EventPacket.EventPriority.LOW) {
 			if (ev instanceof SuperEatingTimeEvent
 					&& ((SuperEatingTimeEvent) ev).getState() == SuperEatingTimeEvent.STATE.START) {
 				forceEat[0] = true;
-			} else if (!b.isVeryHungry()) {
+			} else if (!body.isVeryHungry()) {
 				return true;
 			}
 		}
 
-		if (b.getPublicRank() != PublicRank.UnunSlave) {
-			if (b.getTakeoutItem(TakeoutItemType.SHIT) != null) {
+		if (body.getPublicRank() != PublicRank.UnunSlave) {
+			if (body.getCarryItem(TakeoutItemType.SHIT) != null) {
 				return true;
 			}
 		}
-		if (b.getBaryState() != src.enums.BaryInUGState.NONE) {
+		if (body.getBurialState() != src.enums.BurialState.NONE) {
 			return true;
 		}
-		if (!b.isRude() && !b.isIdiot() && b.wantToShit() && !b.isSoHungry()) {
-			b.clearActions();
+		if (!body.isRude() && !body.isIdiot() && body.wantToShit() && !body.isSoHungry()) {
+			body.clearActions();
 			return true;
 		}
-		if (b.isExciting() && !b.isRaper() && !b.isSoHungry()) {
-			if (b.isToFood()) {
-				b.setToFood(false);
+		if (body.isExciting() && !body.isRaper() && !body.isSoHungry()) {
+			if (body.isToFood()) {
+				body.setToFood(false);
 			}
 			return true;
 		}
-		if (b.isExciting() && !b.isRaper() && b.isSoHungry()) {
-			b.setCalm();
+		if (body.isExciting() && !body.isRaper() && body.isSoHungry()) {
+			body.setCalm();
 		}
-		if (b.isSleeping() || b.nearToBirth() || b.isUnBirth() || b.isShutmouth()) {
+		if (body.isSleeping() || body.nearToBirth() || body.isUnBirth() || body.isShutmouth()) {
 			return true;
 		}
-		if (!b.canAction()) {
+		if (!body.canAction()) {
 			// isVeryHungry かつ currentEvent のみが canAction=false の原因なら食事を許可する
-			if (b.isVeryHungry() && b.getCurrentEvent() != null
-					&& !b.isDead()
-					&& b.getCriticalDamegeType() == null
-					&& !b.isPealed() && !b.isPacked() && !b.isShitting()
-					&& !b.isBirth() && !b.isSukkiri() && !b.isbNeedled()
-					&& !b.isNYD() && b.getBaryState() == src.enums.BaryInUGState.NONE) {
+			if (body.isVeryHungry() && body.getCurrentEvent() != null
+					&& !body.isDead()
+					&& body.getCriticalDamegeType() == null
+					&& !body.isPealed() && !body.isPacked() && !body.isShitting()
+					&& !body.isBirth() && !body.isSukkiri() && !body.isNeedled()
+					&& !body.isNYD() && body.getBurialState() == src.enums.BurialState.NONE) {
 				// currentEvent のみが阻害要因 → 食事を許可（スキップしない）
 			} else {
 				return true;
 			}
 		}
-		if ((b.isScare() || b.isFeelHardPain()) && GameRandom.nextBoolean()) {
+		if ((body.isScare() || body.isFeelHardPain()) && GameRandom.nextBoolean()) {
 			return true;
 		}
-		if (GameRandom.nextInt(300) == 0 && !b.isEating() && !forceEat[0]) {
-			b.clearActions();
+		if (GameRandom.nextInt(300) == 0 && !body.isEating() && !forceEat[0]) {
+			body.clearActions();
 			return true;
 		}
 		return false;

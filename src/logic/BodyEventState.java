@@ -176,28 +176,28 @@ public final class BodyEventState {
 			return;
 		}
 		if (body.isSilent() || body.isUnBirth()) {
-			body.setMessageCount(0);
-			body.setMessageBuf(null);
+			body.setMessageTicks(0);
+			body.setMessageBuffer(null);
 			return;
 		}
-		if (!interrupt && GameRandom.nextInt(body.getMessageDiscipline() + 1) != 0
+		if (!interrupt && GameRandom.nextInt(body.getSpeechDiscipline() + 1) != 0
 				&& body.getIntelligence() != Intelligence.WISE) {
 			message = GameMessages.getMessage(body, MessagePool.Action.BeingQuiet);
 			return;
 		}
 		if (!body.isCanTalk()) {
-			body.setMessageCount(0);
-			body.setMessageBuf(null);
+			body.setMessageTicks(0);
+			body.setMessageBuffer(null);
 			return;
 		}
 		if (message == null || message.length() == 0) {
-			body.setMessageCount(0);
-			body.setMessageBuf(null);
+			body.setMessageTicks(0);
+			body.setMessageBuffer(null);
 			return;
 		}
-		if (interrupt || body.getMessageCount() == 0) {
-			body.setMessageCount(count);
-			body.setMessageBuf(message);
+		if (interrupt || body.getMessageTicks() == 0) {
+			body.setMessageTicks(count);
+			body.setMessageBuffer(message);
 			resetMessageActions(body, piko);
 			body.setOrigMessageLineColor(Const.WINDOW_COLOR[type.ordinal()][0]);
 			body.setOrigMessageBoxColor(Const.WINDOW_COLOR[type.ordinal()][1]);
@@ -228,12 +228,12 @@ public final class BodyEventState {
 	 */
 	public static void setNegiMessage(Body body, String message, int count, boolean piko) {
 		if (!body.isCanTalk() || body.isUnBirth()) {
-			body.setMessageCount(0);
-			body.setMessageBuf(null);
+			body.setMessageTicks(0);
+			body.setMessageBuffer(null);
 			return;
 		}
-		body.setMessageCount(count);
-		body.setMessageBuf(message);
+		body.setMessageTicks(count);
+		body.setMessageBuffer(message);
 		body.setPikopiko(piko);
 		if (!body.isFixBack()) {
 			body.setFurifuri(false);
@@ -265,11 +265,11 @@ public final class BodyEventState {
 			body.getCurrentEvent().end(body);
 		}
 		body.setCurrentEvent(null);
-		body.setMoveTarget(-1);
+		body.setMoveTargetId(-1);
 		body.setForceFace(-1);
-		body.setDropShadow(true);
-		body.setTargetPosOfsX(0);
-		body.setTargetPosOfsY(0);
+		body.setShadowVisible(true);
+		body.setTargetOffsetX(0);
+		body.setTargetOffsetY(0);
 		body.setTargetBind(false);
 		body.stopPlaying();
 		body.setOfsXY(0, 0);
@@ -286,7 +286,7 @@ public final class BodyEventState {
 		}
 		body.setCurrentEvent(null);
 		body.setForceFace(-1);
-		body.setDropShadow(true);
+		body.setShadowVisible(true);
 		body.stopPlaying();
 	}
 
@@ -337,9 +337,9 @@ public final class BodyEventState {
 		if (fallbackAction != Event.DONOTHING && currentEvent.getPriority() == EventPacket.EventPriority.LOW) {
 			return fallbackAction;
 		}
-		Event eventResultAction = body.getEventResultAction();
-		body.setEventResultAction(Event.DONOTHING);
-		return eventResultAction;
+		Event eventResult = body.getEventResult();
+		body.setEventResult(Event.DONOTHING);
+		return eventResult;
 	}
 
 	/**
@@ -405,7 +405,7 @@ public final class BodyEventState {
 	}
 
 	private static void applyMessageWindowStyle(Body body) {
-		switch (body.getBaryState()) {
+		switch (body.getBurialState()) {
 			case NONE:
 				body.setMessageTextSize(12);
 				break;

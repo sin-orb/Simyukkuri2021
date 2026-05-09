@@ -19,7 +19,6 @@ import src.item.Barrier;
 import src.logic.BodyLogic;
 import src.system.MessagePool;
 import src.system.ResourceUtil;
-import src.util.YukkuriUtil;
 
 /***************************************************
  * うんうん体操イベント
@@ -32,9 +31,9 @@ public class ShitExercisesEvent extends EventPacket {
 
 	private static final long serialVersionUID = 2219635802037985212L;
 	int tick = 0;
-	boolean bActionFlag = true;
-	boolean bUnunActionFlag = true;
-	int nFromWaitCount = 0;
+	boolean actionFlag = true;
+	boolean ununActionFlag = true;
+	int fromWaitCount = 0;
 
 	/** 行動ステート */
 	enum STATE {
@@ -80,33 +79,33 @@ public class ShitExercisesEvent extends EventPacket {
 	}
 
 	public boolean isActionFlag() {
-		return bActionFlag;
+		return actionFlag;
 	}
 
 	public void setActionFlag(boolean actionFlag) {
-		this.bActionFlag = actionFlag;
+		this.actionFlag = actionFlag;
 	}
 
 	public boolean isUnunActionFlag() {
-		return bUnunActionFlag;
+		return ununActionFlag;
 	}
 
 	public void setUnunActionFlag(boolean ununActionFlag) {
-		this.bUnunActionFlag = ununActionFlag;
+		this.ununActionFlag = ununActionFlag;
 	}
 
 	public int getFromWaitCount() {
-		return nFromWaitCount;
+		return fromWaitCount;
 	}
 
 	public void setFromWaitCount(int fromWaitCount) {
-		this.nFromWaitCount = fromWaitCount;
+		this.fromWaitCount = fromWaitCount;
 	}
 
 	@Override
-	public boolean simpleEventAction(Body b) {
-		Body from = YukkuriUtil.getBodyInstance(getFrom());
-		if (from == null || from.isShutmouth()) {
+	public boolean simpleEventAction(Body body) {
+		Body sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
+		if (sourceBody == null || sourceBody.isShutmouth()) {
 			return true;
 		}
 		return false;
@@ -116,45 +115,45 @@ public class ShitExercisesEvent extends EventPacket {
 	// ここで各種チェックを行い、イベントへ参加するかを返す
 	// また、イベント優先度も必要に応じて設定できる
 	@Override
-	public boolean checkEventResponse(Body b) {
-		Body from = YukkuriUtil.getBodyInstance(getFrom());
-		if (from == null)
+	public boolean checkEventResponse(Body body) {
+		Body sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
+		if (sourceBody == null)
 			return false;
-		boolean ret = false;
-		if (from == b) {
+		boolean accepted = false;
+		if (sourceBody == body) {
 			return true;
 		}
 		// うんうん奴隷の場合は参加しない
-		if (b.getPublicRank() == PublicRank.UnunSlave)
+		if (body.getPublicRank() == PublicRank.UnunSlave)
 			return false;
 
 		// つがいも参加する
-		if (from.isPartner(b)) {
+		if (sourceBody.isPartner(body)) {
 			return true;
 		}
-		if (!b.canEventResponse()) {
+		if (!body.canEventResponse()) {
 			return false;
 		}
 		// Fromの子供だけ参加する(※Fromが教育係のときは全ての子供が参加するようにする？)
-		if (!b.isChild(from))
+		if (!body.isChild(sourceBody))
 			return false;
 		// 赤ゆ以外は終了
-		if (!b.isBaby())
+		if (!body.isBaby())
 			return false;
 
-		b.setWorldEventResMessage(GameMessages.getMessage(b, MessagePool.Action.ShitExercisesGO), Const.HOLDMESSAGE,
+		body.setWorldEventResMessage(GameMessages.getMessage(body, MessagePool.Action.ShitExercisesGO), Const.HOLDMESSAGE,
 				true, false);
-		b.setHappiness(Happiness.VERY_HAPPY);
-		b.wakeup();
-		b.clearActions();
-		ret = true;
-		return ret;
+		body.setHappiness(Happiness.VERY_HAPPY);
+		body.wakeup();
+		body.clearActions();
+		accepted = true;
+		return accepted;
 	}
 
 	// イベント開始動作
 	@Override
-	public void start(Body b) {
-		b.setCurrentEvent(this);
+	public void start(Body body) {
+		body.setCurrentEvent(this);
 	}
 
 	public STATE getState() {
@@ -169,360 +168,303 @@ public class ShitExercisesEvent extends EventPacket {
 	// "UpdateState.ABORT"を返すとイベント終了
 	// 親→子供→次のステート、の順で処理をする
 	@Override
-	public UpdateState update(Body b) {
-		Body from = YukkuriUtil.getBodyInstance(getFrom());
-		// イベント中止
-		if (b == null || from == null) {
+	public UpdateState update(Body body) {
+		Body sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
+		if (body == null || sourceBody == null) {
 			return UpdateState.ABORT;
 		}
-		if (b.isNYD()) {
+		if (body.isNYD() || body.isDead() || body.isRemoved()) {
 			return UpdateState.ABORT;
 		}
-		if (b.isDead() || b.isRemoved()) {
+		if (sourceBody.isRemoved() || sourceBody.getCurrentEvent() == null) {
+			body.setHappiness(Happiness.VERY_HAPPY);
 			return UpdateState.ABORT;
 		}
-		// 相手が消えてしまったら
-		if (from.isRemoved()) {
-			b.setHappiness(Happiness.VERY_HAPPY);
+		if (body.nearToBirth()) {
 			return UpdateState.ABORT;
 		}
-		if (from.getCurrentEvent() == null) {
-			return UpdateState.ABORT;
-		}
-		// 産気づいたら
-		if (b.nearToBirth()) {
-			return UpdateState.ABORT;
-		}
-		// 親を持ち上げたときの反応
-		if (!from.canflyCheck() && from.getZ() >= 2) {
-			if (GameRandom.nextInt(50) == 0)
+		if (!sourceBody.canflyCheck() && sourceBody.getZ() >= 2) {
+			if (GameRandom.nextInt(50) == 0) {
 				return UpdateState.ABORT;
-			else if (b == from) {
-				// 空処理
-			} else {
-				if (b.isSad())
-					b.setMessage(GameMessages.getMessage(b, MessagePool.Action.LookForParents), false);
-				else
-					b.setMessage(GameMessages.getMessage(b, MessagePool.Action.LookForParents), true);
-				b.setHappiness(Happiness.SAD);
+			}
+			if (body != sourceBody) {
+				if (body.isSad()) {
+					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.LookForParents), false);
+				} else {
+					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.LookForParents), true);
+				}
+				body.setHappiness(Happiness.SAD);
 				return null;
 			}
 		}
 
-		// 間隔をあけてチェック（FROMのみ tick を進め、参加者数に依らず20フレーム周期を保つ）
-		if (b == from) {
-			if (tick++ % 20 != 0) return null;
-		} else {
-			if (tick % 20 != 0) return null;
-		}
-
-		// 体操中は寝ない
-		b.wakeup();
-
-		// 空腹状態なら60%にする(強制イベント救済措置)
-		if (b.isHungry()) {
-			b.setHungry(b.getHungryLimit() * 6 / 10);
-		}
-
-		// つがいはスキップ
-		if (b.isPartner(from)) {
-			if (GameRandom.nextInt(100) == 0) {
-				b.setMessage(GameMessages.getMessage(b, MessagePool.Action.GladAboutChild), true);
+		if (body == sourceBody) {
+			if (tick++ % 20 != 0) {
+				return null;
 			}
-
-			if (state != STATE.GO) {
-				b.stay();
-			} else {
-				int colX = BodyLogic.calcCollisionX(b, from);
-				b.moveTo(from.getX() + colX * 2, from.getY());
-			}
-
+		} else if (tick % 20 != 0) {
 			return null;
 		}
 
-		int nWait = 2000;
-		int nWait2 = 300;
-		// 親
-		if (b == from) {
-			// 何らかの理由で終了しそうにないなら終わらせる
-			if (2000 < nFromWaitCount) {
-				return UpdateState.ABORT;
-			}
-			nFromWaitCount++;
+		body.wakeup();
+		if (body.isHungry()) {
+			body.setHungry(body.getHungryLimit() * 6 / 10);
+		}
 
-			// 赤ゆのみ集合
-			List<Body> childrenList = BodyLogic.createActiveChildList(from, false);
-			if ((childrenList == null) || (childrenList.size() == 0)) {
+		if (body.isPartner(sourceBody)) {
+			if (GameRandom.nextInt(100) == 0) {
+				body.setMessage(GameMessages.getMessage(body, MessagePool.Action.GladAboutChild), true);
+			}
+			if (state != STATE.GO) {
+				body.stay();
+			} else {
+				int collisionX = BodyLogic.calcCollisionX(body, sourceBody);
+				body.moveTo(sourceBody.getX() + collisionX * 2, sourceBody.getY());
+			}
+			return null;
+		}
+
+		int waitTicks = 2000;
+		int stayTicks = 300;
+		if (body == sourceBody) {
+			if (2000 < fromWaitCount) {
 				return UpdateState.ABORT;
 			}
-			if (10 < nFromWaitCount) {
-				boolean bIsChildInEvent = false;
+			fromWaitCount++;
+
+			List<Body> childrenList = BodyLogic.createActiveChildList(sourceBody, false);
+			if (childrenList == null || childrenList.isEmpty()) {
+				return UpdateState.ABORT;
+			}
+			if (10 < fromWaitCount) {
+				boolean childInEvent = false;
 				for (Body child : childrenList) {
 					if (child.getCurrentEvent() == this) {
-						bIsChildInEvent = true;
+						childInEvent = true;
 						break;
 					}
 				}
-				if (!bIsChildInEvent) {
+				if (!childInEvent) {
 					return UpdateState.ABORT;
 				}
 			}
 
 			switch (state) {
-				case GO:
-					if (GameRandom.nextInt(30) == 0) {
-						b.setMessage(GameMessages.getMessage(b, MessagePool.Action.ShitExercisesGOFrom), true);
+			case GO:
+				if (GameRandom.nextInt(30) == 0) {
+					sourceBody.setMessage(GameMessages.getMessage(sourceBody, MessagePool.Action.ShitExercisesGOFrom), true);
+				}
+				boolean gathered = BodyLogic.gatheringYukkuriFront(sourceBody, childrenList, this);
+				int distanceToToilet = 0;
+				Obj targetObject = sourceBody.takeMappedObj(this.target);
+				if (targetObject != null) {
+					distanceToToilet = Translate.getRealDistance(sourceBody.getX(), sourceBody.getY(),
+							targetObject.getX(), targetObject.getY() - 20);
+				}
+				if (distanceToToilet <= 1) {
+					if (gathered) {
+						state = STATE.WAIT;
 					}
-					// b.setBodyEventResMessage(GameMessages.getMessage(b,
-					// MessagePool.Action.ShitExercisesWAITFrom), 52, true, false);
-					boolean bResult = BodyLogic.gatheringYukkuriFront(from, childrenList, this);
-
-					int nDistanceToilet = 0;
-					Obj target = b.takeMappedObj(this.target);
-					if (target != null) {
-						nDistanceToilet = Translate.getRealDistance(b.getX(), b.getY(), target.getX(),
-								target.getY() - 20);
-					}
-					// 親はトイレの近くで待つ
-					if (nDistanceToilet <= 1) {
-						// 目的地に到着
-						if (bResult) {
-							state = STATE.WAIT;
-						}
-						b.stay();
-					} else {
-						if (target != null) {
-							// トイレに近づく
-							b.moveToEvent(this, target.getX(), target.getY() - 20);
-						}
-					}
-
-					break;
-				case WAIT:
-					if (checkWait(b, nWait)) {
-						b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.ShitExercisesWAITFrom),
-								52,
-								true, false);
-						state = STATE.START;
-						bActionFlag = false;
-					}
-					b.stay(nWait2);
-					break;
-				case START:
-					if (checkWait(b, nWait)) {
-						if (!bActionFlag) {
-							b.setBodyEventResMessage(
-									GameMessages.getMessage(b, MessagePool.Action.ShitExercisesSTARTFrom),
-									52, true, false);
-							bActionFlag = true;
-							b.stay(nWait2);
-							b.addMemories(10);
-						} else {
-							state = STATE.YURAYURA;
-							bActionFlag = false;
-						}
-					}
-					break;
-				case YURAYURA:
-					if (checkWait(b, nWait)) {
-						if (!bActionFlag) {
-							b.setBodyEventResMessage(
-									GameMessages.getMessage(b, MessagePool.Action.ShitExercisesYURAYURAFrom), 52, true,
-									false);
-							bActionFlag = true;
-							b.stay(nWait2);
-							b.addMemories(10);
-						} else {
-							state = STATE.NOBINOBI;
-							bActionFlag = false;
-						}
-					}
-					break;
-				case NOBINOBI:
-					if (checkWait(b, nWait)) {
-						if (!bActionFlag) {
-							b.setBodyEventResMessage(
-									GameMessages.getMessage(b, MessagePool.Action.ShitExercisesNOBINOBIFrom), 52, true,
-									false);
-							bActionFlag = true;
-							b.stay(nWait2);
-							b.addMemories(10);
-						} else {
-							state = STATE.POKAPOKA;
-							bActionFlag = false;
-						}
-					}
-					break;
-				case POKAPOKA:
-					if (checkWait(b, nWait)) {
-						if (!bActionFlag) {
-							b.setBodyEventResMessage(
-									GameMessages.getMessage(b, MessagePool.Action.ShitExercisesPOKAPOKAFrom), 52, true,
-									false);
-							bActionFlag = true;
-							b.stay(nWait2);
-							b.addMemories(10);
-						} else {
-							state = STATE.UNUN;
-							bActionFlag = false;
-						}
-					}
-					break;
-				case UNUN:
-					if (checkWait(b, nWait)) {
-						if (!bActionFlag) {
-							b.setBodyEventResMessage(
-									GameMessages.getMessage(b, MessagePool.Action.ShitExercisesUNUNFrom),
-									52, true, false);
-							bActionFlag = true;
-							b.stay(nWait2);
-							b.addMemories(10);
-						}
-						if (bUnunActionFlag) {
-							bActionFlag = false;
-						}
-					}
-					break;
-				case END:
-					if (checkWait(b, nWait)) {
-						if (!bActionFlag) {
-							b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.ShitExercisesENDFrom),
-									52,
-									true, false);
-							bActionFlag = true;
-							b.stay(nWait2);
-							b.addMemories(10);
-							return UpdateState.ABORT;
-						}
-					}
-				default:
-					break;
-			}
-
-		} else {
-			// 子供
-			switch (state) {
-				case GO:
-					// 壁に引っかかってるなら終了
-					if (Barrier.onBarrier(b.getX(), b.getY(), from.getX(), from.getY(),
-							Barrier.MAP_BODY[b.getBodyAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
-						return UpdateState.ABORT;
-					}
-
-					if (b.isDontMove()) {
-						return UpdateState.ABORT;
-					}
-
-					if (GameRandom.nextInt(30) == 0) {
-						b.setMessage(GameMessages.getMessage(b, MessagePool.Action.ShitExercisesGO), true);
-						b.addMemories(5);
-					}
-
-					break;
-				case WAIT:
-					if (checkWait(b, nWait)) {
-						b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.ShitExercisesWAIT), 52,
-								true,
+					sourceBody.stay();
+				} else if (targetObject != null) {
+					sourceBody.moveToEvent(this, targetObject.getX(), targetObject.getY() - 20);
+				}
+				break;
+			case WAIT:
+				if (checkWait(sourceBody, waitTicks)) {
+					sourceBody.setBodyEventResMessage(
+							GameMessages.getMessage(sourceBody, MessagePool.Action.ShitExercisesWAITFrom), 52, true, false);
+					state = STATE.START;
+					actionFlag = false;
+				}
+				sourceBody.stay(stayTicks);
+				break;
+			case START:
+				if (checkWait(sourceBody, waitTicks)) {
+					if (!actionFlag) {
+						sourceBody.setBodyEventResMessage(
+								GameMessages.getMessage(sourceBody, MessagePool.Action.ShitExercisesSTARTFrom), 52, true,
 								false);
-						b.addMemories(5);
-					}
-					b.stay();
-					break;
-				case START:
-					if (bActionFlag) {
-						if (checkWait(b, nWait)) {
-							b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.ShitExercisesSTART),
-									52,
-									true, false);
-							b.stay(nWait2);
-							b.addMemories(10);
-						}
-					}
-					break;
-				case YURAYURA:
-					if (bActionFlag) {
-						if (checkWait(b, nWait)) {
-							b.setBodyEventResMessage(
-									GameMessages.getMessage(b, MessagePool.Action.ShitExercisesYURAYURA),
-									52, true, false);
-							b.stay(nWait2);
-							b.addMemories(10);
-						}
-					}
-					break;
-				case NOBINOBI:
-					if (bActionFlag) {
-						if (checkWait(b, nWait)) {
-							b.setBodyEventResMessage(
-									GameMessages.getMessage(b, MessagePool.Action.ShitExercisesNOBINOBI),
-									52, true, false);
-							b.setNobinobi(true);
-							b.stay(nWait2);
-							b.addMemories(10);
-						}
-					}
-					break;
-				case POKAPOKA:
-					if (bActionFlag) {
-						if (checkWait(b, nWait)) {
-							b.setBodyEventResMessage(
-									GameMessages.getMessage(b, MessagePool.Action.ShitExercisesPOKAPOKA),
-									52, true, false);
-							b.setFurifuri(true);
-							bUnunActionFlag = false;
-							b.stay(nWait2);
-							b.addMemories(10);
-						}
-					}
-					break;
-				case UNUN:
-					if (bActionFlag) {
-						if (checkWait(b, nWait)) {
-							b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.ShitExercisesUNUN),
-									52,
-									true, false);
-							b.setFurifuri(true);
-							// 肛門が塞がれてなければ排泄
-							if ((!b.isAnalClose()) && !b.isHasPants()) {
-								if (b.getBodyAgeState() == AgeState.BABY) {
-									b.setHappiness(Happiness.VERY_HAPPY);
-									b.addStress(250);
-									// お尻が汚れる
-									if (GameRandom.nextInt(4) == 0) {
-										b.makeDirty(true);
-										// 汚れた場合、親の元に移動
-										// ゆっくり同士が重ならないように目標地点は体のサイズを考慮
-										int colX = BodyLogic.calcCollisionX(b, from);
-										b.moveToBody(from, from.getX() + colX, from.getY());
-										b.setTargetBind(true);
-									}
-								}
-								b.setShit(0, false);
-								// アクション設定
-								b.setEventResultAction(Event.DOSHIT);
-								b.addMemories(10);
-							} else {
-								b.setShit(10, true);
-							}
-							b.stay();
-							bUnunActionFlag = true;
-						}
+						actionFlag = true;
+						sourceBody.stay(stayTicks);
+						sourceBody.addMemories(10);
 					} else {
-						// うんうんチェック
-						if (bUnunActionFlag) {
-							b.addMemories(5);
-							// 子供たちのうんうんが終わったらステート変更
-							state = STATE.END;
-						}
+						state = STATE.YURAYURA;
+						actionFlag = false;
 					}
-					break;
-				case END:
-				default:
-					break;
+				}
+				break;
+			case YURAYURA:
+				if (checkWait(sourceBody, waitTicks)) {
+					if (!actionFlag) {
+						sourceBody.setBodyEventResMessage(
+								GameMessages.getMessage(sourceBody, MessagePool.Action.ShitExercisesYURAYURAFrom), 52, true,
+								false);
+						actionFlag = true;
+						sourceBody.stay(stayTicks);
+						sourceBody.addMemories(10);
+					} else {
+						state = STATE.NOBINOBI;
+						actionFlag = false;
+					}
+				}
+				break;
+			case NOBINOBI:
+				if (checkWait(sourceBody, waitTicks)) {
+					if (!actionFlag) {
+						sourceBody.setBodyEventResMessage(
+								GameMessages.getMessage(sourceBody, MessagePool.Action.ShitExercisesNOBINOBIFrom), 52, true,
+								false);
+						actionFlag = true;
+						sourceBody.stay(stayTicks);
+						sourceBody.addMemories(10);
+					} else {
+						state = STATE.POKAPOKA;
+						actionFlag = false;
+					}
+				}
+				break;
+			case POKAPOKA:
+				if (checkWait(sourceBody, waitTicks)) {
+					if (!actionFlag) {
+						sourceBody.setBodyEventResMessage(
+								GameMessages.getMessage(sourceBody, MessagePool.Action.ShitExercisesPOKAPOKAFrom), 52,
+								true, false);
+						actionFlag = true;
+						sourceBody.stay(stayTicks);
+						sourceBody.addMemories(10);
+					} else {
+						state = STATE.UNUN;
+						actionFlag = false;
+					}
+				}
+				break;
+			case UNUN:
+				if (checkWait(sourceBody, waitTicks)) {
+					if (!actionFlag) {
+						sourceBody.setBodyEventResMessage(
+								GameMessages.getMessage(sourceBody, MessagePool.Action.ShitExercisesUNUNFrom), 52, true,
+								false);
+						actionFlag = true;
+						sourceBody.stay(stayTicks);
+						sourceBody.addMemories(10);
+					}
+					if (ununActionFlag) {
+						actionFlag = false;
+					}
+				}
+				break;
+			case END:
+				if (checkWait(sourceBody, waitTicks)) {
+					if (!actionFlag) {
+						sourceBody.setBodyEventResMessage(
+								GameMessages.getMessage(sourceBody, MessagePool.Action.ShitExercisesENDFrom), 52, true, false);
+						actionFlag = true;
+						sourceBody.stay(stayTicks);
+						sourceBody.addMemories(10);
+						return UpdateState.ABORT;
+					}
+				}
+				break;
+			default:
+				break;
+			}
+		} else {
+			switch (state) {
+			case GO:
+				if (Barrier.onBarrier(body.getX(), body.getY(), sourceBody.getX(), sourceBody.getY(),
+						Barrier.MAP_BODY[body.getBodyAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
+					return UpdateState.ABORT;
+				}
+				if (body.isDontMove()) {
+					return UpdateState.ABORT;
+				}
+				if (GameRandom.nextInt(30) == 0) {
+					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.ShitExercisesGO), true);
+					body.addMemories(5);
+				}
+				break;
+			case WAIT:
+				if (checkWait(body, waitTicks)) {
+					body.setBodyEventResMessage(GameMessages.getMessage(body, MessagePool.Action.ShitExercisesWAIT), 52, true,
+							false);
+					body.addMemories(5);
+				}
+				body.stay();
+				break;
+			case START:
+				if (actionFlag && checkWait(body, waitTicks)) {
+					body.setBodyEventResMessage(GameMessages.getMessage(body, MessagePool.Action.ShitExercisesSTART), 52, true,
+							false);
+					body.stay(stayTicks);
+					body.addMemories(10);
+				}
+				break;
+			case YURAYURA:
+				if (actionFlag && checkWait(body, waitTicks)) {
+					body.setBodyEventResMessage(GameMessages.getMessage(body, MessagePool.Action.ShitExercisesYURAYURA), 52,
+							true, false);
+					body.stay(stayTicks);
+					body.addMemories(10);
+				}
+				break;
+			case NOBINOBI:
+				if (actionFlag && checkWait(body, waitTicks)) {
+					body.setBodyEventResMessage(GameMessages.getMessage(body, MessagePool.Action.ShitExercisesNOBINOBI), 52,
+							true, false);
+					body.setNobinobi(true);
+					body.stay(stayTicks);
+					body.addMemories(10);
+				}
+				break;
+			case POKAPOKA:
+				if (actionFlag && checkWait(body, waitTicks)) {
+					body.setBodyEventResMessage(GameMessages.getMessage(body, MessagePool.Action.ShitExercisesPOKAPOKA), 52,
+							true, false);
+					body.setFurifuri(true);
+					ununActionFlag = false;
+					body.stay(stayTicks);
+					body.addMemories(10);
+				}
+				break;
+			case UNUN:
+				if (actionFlag) {
+					if (checkWait(body, waitTicks)) {
+						body.setBodyEventResMessage(GameMessages.getMessage(body, MessagePool.Action.ShitExercisesUNUN), 52,
+								true, false);
+						body.setFurifuri(true);
+						if (!body.isAnalClose() && !body.isHasPants()) {
+							if (body.getBodyAgeState() == AgeState.BABY) {
+								body.setHappiness(Happiness.VERY_HAPPY);
+								body.addStress(250);
+								if (GameRandom.nextInt(4) == 0) {
+									body.makeDirty(true);
+									int collisionX = BodyLogic.calcCollisionX(body, sourceBody);
+									body.moveToBody(sourceBody, sourceBody.getX() + collisionX, sourceBody.getY());
+									body.setTargetBind(true);
+								}
+							}
+							body.setShit(0, false);
+							body.setEventResult(Event.DOSHIT);
+							body.addMemories(10);
+						} else {
+							body.setShit(10, true);
+						}
+						body.stay();
+						ununActionFlag = true;
+					}
+				} else if (ununActionFlag) {
+					body.addMemories(5);
+					state = STATE.END;
+				}
+				break;
+			case END:
+				body.stay(52);
+				return UpdateState.ABORT;
+			default:
+				break;
 			}
 		}
-
-		// 一定時間経過、赤ゆ全集合でうんうん体操開始
 		return null;
 	}
 

@@ -26,16 +26,16 @@ public class ProductChute extends ObjEX {
 	/** 処理対象(ゆっくり、うんうん、フード、おもちゃ、物全般、吐餡、茎) */
 	public static final int hitCheckObjType = ObjEX.YUKKURI + ObjEX.SHIT + ObjEX.FOOD + ObjEX.TOY + ObjEX.OBJECT
 			+ ObjEX.VOMIT + ObjEX.STALK;
-	private static final int images_num = 2; // このクラスの総使用画像数
-	private static BufferedImage[] images = new BufferedImage[images_num];
+	private static final int IMAGE_COUNT = 2; // このクラスの総使用画像数
+	private static BufferedImage[] imageLayers = new BufferedImage[IMAGE_COUNT];
 	private static Rectangle4y boundary = new Rectangle4y();
 
 	/** 画像ロード */
 	public static void loadImages(ClassLoader loader, ImageObserver io) throws IOException {
-		images[0] = ModLoader.loadItemImage(loader, "ProductChute" + File.separator + "ProductChute.png");
-		images[1] = ModLoader.loadItemImage(loader, "ProductChute" + File.separator + "ProductChute_off.png");
-		boundary.setWidth(images[0].getWidth(io));
-		boundary.setHeight(images[0].getHeight(io));
+		imageLayers[0] = ModLoader.loadItemImage(loader, "ProductChute" + File.separator + "ProductChute.png");
+		imageLayers[1] = ModLoader.loadItemImage(loader, "ProductChute" + File.separator + "ProductChute_off.png");
+		boundary.setWidth(imageLayers[0].getWidth(io));
+		boundary.setHeight(imageLayers[0].getHeight(io));
 		boundary.setX(boundary.getWidth() >> 1);
 		boundary.setY(boundary.getHeight() >> 1);
 	}
@@ -43,9 +43,9 @@ public class ProductChute extends ObjEX {
 	@Override
 	public int getImageLayer(BufferedImage[] layer) {
 		if (enabled)
-			layer[0] = images[0];
+			layer[0] = imageLayers[0];
 		else
-			layer[0] = images[1];
+			layer[0] = imageLayers[1];
 		return 1;
 	}
 

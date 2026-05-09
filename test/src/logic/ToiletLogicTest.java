@@ -92,8 +92,8 @@ class ToiletLogicTest {
 
         boolean result = ToiletLogic.checkToilet(body);
         assertTrue(result);
-        assertTrue(body.getMoveTarget() != -1);
-        Obj target = SimYukkuri.world.getCurrentMap().getToilet().get(body.getMoveTarget());
+        assertTrue(body.getMoveTargetId() != -1);
+        Obj target = SimYukkuri.world.getCurrentMap().getToilet().get(body.getMoveTargetId());
         assertTrue(target instanceof Toilet);
     }
 
@@ -124,7 +124,7 @@ class ToiletLogicTest {
         SimYukkuri.world.getCurrentMap().getShit().put(shit.getObjId(), shit);
 
         body.setAge(0); // 0 % 15 == 0
-        body.seteCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
+        body.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
         boolean result = ToiletLogic.checkShit(body);
         assertFalse(result);
     }
@@ -140,7 +140,7 @@ class ToiletLogicTest {
 
     @Test
     void testCheckToilet_IsNYD() {
-        body.seteCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
+        body.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
         assertFalse(ToiletLogic.checkToilet(body));
     }
 
@@ -170,7 +170,7 @@ class ToiletLogicTest {
         Toilet toilet = new Toilet();
         toilet.setX(500); toilet.setY(500); // far from body at (100,100)
         SimYukkuri.world.getCurrentMap().getToilet().put(toilet.getObjId(), toilet);
-        body.setMoveTarget(toilet.getObjId());
+        body.setMoveTargetId(toilet.getObjId());
         body.setToShit(true);
         assertTrue(ToiletLogic.checkToilet(body));
     }
@@ -229,7 +229,7 @@ class ToiletLogicTest {
         shit.setX(101); shit.setY(101);
         SimYukkuri.world.getCurrentMap().getShit().put(shit.getObjId(), shit);
         body.setAge(0);
-        body.setMessageCount(1); // isTalking()=true → skips hate reaction
+        body.setMessageTicks(1); // isTalking()=true → skips hate reaction
         assertFalse(ToiletLogic.checkShit(body));
     }
 
@@ -269,7 +269,7 @@ class ToiletLogicTest {
         SimYukkuri.world.getCurrentMap().getShit().put(shit.getObjId(), shit);
         body.setAge(0);
         body.setHasBaby(true);
-        body.setPregnantPeriod(body.getPREGPERIODorg()); // nearToBirth()=true
+        body.setPregnantPeriod(body.getPregPeriodBase()); // nearToBirth()=true
         assertFalse(ToiletLogic.checkShit(body));
     }
 
@@ -295,7 +295,7 @@ class ToiletLogicTest {
         SimYukkuri.world.getCurrentMap().getShit().put(shit.getObjId(), shit);
         body.setAge(0);
         // Set damage to half+1 of ADULT limit → isDamaged()=VERY → bCanTransport=false
-        int damageLimit = body.getDAMAGELIMITorg()[src.enums.AgeState.ADULT.ordinal()];
+        int damageLimit = body.getDamageLimitBase()[src.enums.AgeState.ADULT.ordinal()];
         WorldTestHelper.setDamage(body, damageLimit / 2 + 1);
         // section C still runs → hates nearby shit → returns true
         assertTrue(ToiletLogic.checkShit(body));
@@ -339,7 +339,7 @@ class ToiletLogicTest {
             zf.setInt(toilet, 10); // toilet.getZ()=10
         } catch (Exception e) {}
         SimYukkuri.world.getCurrentMap().getToilet().put(toilet.getObjId(), toilet);
-        body.setMoveTarget(toilet.getObjId());
+        body.setMoveTargetId(toilet.getObjId());
         body.setToShit(true);
         // arrived at toilet with Z=10 → clearActions, return false
         assertFalse(ToiletLogic.checkToilet(body));
@@ -352,12 +352,12 @@ class ToiletLogicTest {
         body.setPublicRank(PublicRank.UnunSlave);
         Shit shit = new Shit();
         SimYukkuri.world.getCurrentMap().getTakenOutShit().put(shit.getObjId(), shit);
-        body.getTakeoutItem().put(src.enums.TakeoutItemType.SHIT, shit.getObjId());
+        body.getCarryItems().put(src.enums.TakeoutItemType.SHIT, shit.getObjId());
 
         Toilet toilet = new Toilet();
         toilet.setX(100); toilet.setY(100); // same position as body → arrived
         SimYukkuri.world.getCurrentMap().getToilet().put(toilet.getObjId(), toilet);
-        body.setMoveTarget(toilet.getObjId());
+        body.setMoveTargetId(toilet.getObjId());
         // !wantToShit (shit=0) + UnunSlave + bHasShit → drops shit, returns true
         assertDoesNotThrow(() -> ToiletLogic.checkToilet(body));
     }
@@ -368,12 +368,12 @@ class ToiletLogicTest {
     void testCheckToilet_NonSlave_HasShit_Arrived_Drops() {
         Shit shit = new Shit();
         SimYukkuri.world.getCurrentMap().getTakenOutShit().put(shit.getObjId(), shit);
-        body.getTakeoutItem().put(src.enums.TakeoutItemType.SHIT, shit.getObjId());
+        body.getCarryItems().put(src.enums.TakeoutItemType.SHIT, shit.getObjId());
 
         Toilet toilet = new Toilet();
         toilet.setX(100); toilet.setY(100); // same position as body → arrived
         SimYukkuri.world.getCurrentMap().getToilet().put(toilet.getObjId(), toilet);
-        body.setMoveTarget(toilet.getObjId());
+        body.setMoveTargetId(toilet.getObjId());
         // bHasShit=true, !wantToShit, non-slave → drops shit, returns true
         assertDoesNotThrow(() -> ToiletLogic.checkToilet(body));
     }
@@ -396,8 +396,8 @@ class ToiletLogicTest {
         // bHasShit=true, no toilet → found=null → drop takeout on spot
         Shit shit = new Shit();
         SimYukkuri.world.getCurrentMap().getTakenOutShit().put(shit.getObjId(), shit);
-        body.getTakeoutItem().put(src.enums.TakeoutItemType.SHIT, shit.getObjId());
-        // No toilet in map, no moveTarget
+        body.getCarryItems().put(src.enums.TakeoutItemType.SHIT, shit.getObjId());
+        // No toilet in map, no moveTargetId
         assertDoesNotThrow(() -> ToiletLogic.checkToilet(body));
     }
 
@@ -408,7 +408,7 @@ class ToiletLogicTest {
         // body is carrying shit (bHasShit=true at L62)
         Shit carried = new Shit();
         SimYukkuri.world.getCurrentMap().getTakenOutShit().put(carried.getObjId(), carried);
-        body.getTakeoutItem().put(TakeoutItemType.SHIT, carried.getObjId());
+        body.getCarryItems().put(TakeoutItemType.SHIT, carried.getObjId());
 
         Shit nearby = new Shit();
         nearby.setX(101); nearby.setY(101); // very close
@@ -484,7 +484,7 @@ class ToiletLogicTest {
     @Test
     void testCheckToilet_NYD_NearState_ReturnsFalse() {
         // NonYukkuriDiseaseNear → isNYD=true, isDontMove=false → L223 passes, L227 returns false
-        body.seteCoreAnkoState(CoreAnkoState.NonYukkuriDiseaseNear);
+        body.setCoreAnkoState(CoreAnkoState.NonYukkuriDiseaseNear);
         assertFalse(ToiletLogic.checkToilet(body));
     }
 
@@ -510,7 +510,7 @@ class ToiletLogicTest {
         Shit shit = new Shit();
         shit.setX(150); shit.setY(150);
         SimYukkuri.world.getCurrentMap().getShit().put(shit.getObjId(), shit);
-        body.setMoveTarget(shit.getObjId());
+        body.setMoveTargetId(shit.getObjId());
         // oTarget is Shit (not Toilet) → return false at L241
         assertFalse(ToiletLogic.checkToilet(body));
     }
@@ -523,7 +523,7 @@ class ToiletLogicTest {
         Toilet toilet = new Toilet();
         toilet.setX(500); toilet.setY(500); // far, not arrived
         SimYukkuri.world.getCurrentMap().getToilet().put(toilet.getObjId(), toilet);
-        body.setMoveTarget(toilet.getObjId());
+        body.setMoveTargetId(toilet.getObjId());
         body.setToShit(true);
         toilet.setRemoved(true);
         // target.isRemoved() → clearActions, return false
@@ -538,7 +538,7 @@ class ToiletLogicTest {
         Toilet toilet = new Toilet();
         toilet.setX(100); toilet.setY(100); // same pos as body → arrived (distance=0)
         SimYukkuri.world.getCurrentMap().getToilet().put(toilet.getObjId(), toilet);
-        body.setMoveTarget(toilet.getObjId());
+        body.setMoveTargetId(toilet.getObjId());
         body.setToShit(true);
         // arrived, Z=0, wantToShit=true → else: b.stay() (L329)
         assertDoesNotThrow(() -> ToiletLogic.checkToilet(body));
@@ -561,12 +561,12 @@ class ToiletLogicTest {
         body.setPublicRank(PublicRank.UnunSlave);
         Shit shit = new Shit();
         SimYukkuri.world.getCurrentMap().getTakenOutShit().put(shit.getObjId(), shit);
-        body.getTakeoutItem().put(TakeoutItemType.SHIT, shit.getObjId());
+        body.getCarryItems().put(TakeoutItemType.SHIT, shit.getObjId());
 
         Toilet slaveTiolet = new Toilet();
         slaveTiolet.setX(100); slaveTiolet.setY(100);
         slaveTiolet.setColW(1000); slaveTiolet.setColH(1000);
-        slaveTiolet.setBForSlave(true);
+        slaveTiolet.setForSlave(true);
         SimYukkuri.world.getCurrentMap().getToilet().put(slaveTiolet.getObjId(), slaveTiolet);
         // bHasShit=true, UnunSlave on slave toilet → drops shit (L260-262)
         assertDoesNotThrow(() -> ToiletLogic.checkToilet(body));
@@ -581,7 +581,7 @@ class ToiletLogicTest {
         Toilet slaveToilet = new Toilet();
         slaveToilet.setX(100); slaveToilet.setY(100);
         slaveToilet.setColW(1000); slaveToilet.setColH(1000);
-        slaveToilet.setBForSlave(true);
+        slaveToilet.setForSlave(true);
         SimYukkuri.world.getCurrentMap().getToilet().put(slaveToilet.getObjId(), slaveToilet);
         // UnunSlave on slave toilet, !bHasShit → return false (L266)
         assertFalse(ToiletLogic.checkToilet(body));
@@ -606,7 +606,7 @@ class ToiletLogicTest {
     void testCheckToilet_HasShit_NotWantShit_NoTarget_moveToBody() {
         Shit shit = new Shit();
         SimYukkuri.world.getCurrentMap().getTakenOutShit().put(shit.getObjId(), shit);
-        body.getTakeoutItem().put(TakeoutItemType.SHIT, shit.getObjId());
+        body.getCarryItems().put(TakeoutItemType.SHIT, shit.getObjId());
         // bHasShit=true, !wantToShit (shit=0), no target set
 
         Toilet toilet = new Toilet();
@@ -651,7 +651,7 @@ class ToiletLogicTest {
     @Test
     void testCheckShit_bCanTransportTrue_LoopSelfContinue_returnsTrue() {
         // Set hungry > 20% threshold so isSoHungry=false → bCanTransport=true
-        body.setHungry(body.getHUNGRYLIMITorg()[AgeState.ADULT.ordinal()]);
+        body.setHungry(body.getHungryLimitBase()[AgeState.ADULT.ordinal()]);
 
         Shit shit = new Shit();
         shit.setX(101); shit.setY(101);
@@ -662,7 +662,7 @@ class ToiletLogicTest {
             @Override public AgeState getBodyAgeState() { return AgeState.ADULT; }
         };
         other.setX(300); other.setY(300);
-        other.setHungry(body.getHUNGRYLIMITorg()[AgeState.ADULT.ordinal()]);
+        other.setHungry(body.getHungryLimitBase()[AgeState.ADULT.ordinal()]);
         SimYukkuri.world.getCurrentMap().getBody().put(other.getObjId(), other);
 
         body.setAge(0);
@@ -746,7 +746,7 @@ class ToiletLogicTest {
         };
         painBody.setX(100); painBody.setY(100);
         // setHungry to avoid isSoHungry short-circuiting before isFeelPain
-        painBody.setHungry(painBody.getHUNGRYLIMITorg()[AgeState.ADULT.ordinal()]);
+        painBody.setHungry(painBody.getHungryLimitBase()[AgeState.ADULT.ordinal()]);
         SimYukkuri.world.getCurrentMap().getBody().put(painBody.getObjId(), painBody);
         Shit shit = new Shit();
         shit.setX(101); shit.setY(101);
@@ -760,7 +760,7 @@ class ToiletLogicTest {
 
     @Test
     void testCheckShit_DeadBodyAndSelfInMap_L78_continue() {
-        body.setHungry(body.getHUNGRYLIMITorg()[AgeState.ADULT.ordinal()]); // isSoHungry=false → bCanTransport=true
+        body.setHungry(body.getHungryLimitBase()[AgeState.ADULT.ordinal()]); // isSoHungry=false → bCanTransport=true
         Body deadBody = new src.yukkuri.Marisa() {
             @Override public int getCollisionX() { return 10; }
             @Override public AgeState getBodyAgeState() { return AgeState.ADULT; }
@@ -874,7 +874,7 @@ class ToiletLogicTest {
     @Test
     void testCheckToilet_NearToBirth_returnsFalse() {
         body.setHasBaby(true);
-        body.setPregnantPeriod(body.getPREGPERIODorg()); // nearToBirth=true
+        body.setPregnantPeriod(body.getPregPeriodBase()); // nearToBirth=true
         assertFalse(ToiletLogic.checkToilet(body));
     }
 
@@ -900,7 +900,7 @@ class ToiletLogicTest {
         Toilet toilet = new Toilet();
         toilet.setX(100); toilet.setY(100); // same pos → arrived
         SimYukkuri.world.getCurrentMap().getToilet().put(toilet.getObjId(), toilet);
-        body.setMoveTarget(toilet.getObjId());
+        body.setMoveTargetId(toilet.getObjId());
         // UnunSlave → L192 true → arrived → !wantToShit → UnunSlave → L210: no shit → null → return true
         assertDoesNotThrow(() -> assertTrue(ToiletLogic.checkToilet(body)));
     }
@@ -915,7 +915,7 @@ class ToiletLogicTest {
         Toilet toilet = new Toilet();
         toilet.setX(100); toilet.setY(100);
         SimYukkuri.world.getCurrentMap().getToilet().put(toilet.getObjId(), toilet);
-        body.setMoveTarget(toilet.getObjId());
+        body.setMoveTargetId(toilet.getObjId());
         // wantToShit=true → L174 skip → L192: isToShit=true && target!=null → return true
         assertTrue(ToiletLogic.checkToilet(body));
     }
@@ -957,7 +957,7 @@ class ToiletLogicTest {
         body.setShit(body.getShitLimit()); // wantToShit=true
         Toilet slaveTlt = new Toilet();
         slaveTlt.setX(140); slaveTlt.setY(100); // distance~=40
-        slaveTlt.setBForSlave(true);
+        slaveTlt.setForSlave(true);
         SimYukkuri.world.getCurrentMap().getToilet().put(slaveTlt.getObjId(), slaveTlt);
         Toilet nonSlaveTlt = new Toilet();
         nonSlaveTlt.setX(120); nonSlaveTlt.setY(100); // distance~=20
@@ -1018,7 +1018,7 @@ class ToiletLogicTest {
 
     @Test
     void testCheckShit_RemovedBodyInMap_continue_returnsTrue() {
-        body.setHungry(body.getHUNGRYLIMITorg()[AgeState.ADULT.ordinal()]); // isSoHungry=false
+        body.setHungry(body.getHungryLimitBase()[AgeState.ADULT.ordinal()]); // isSoHungry=false
         Body removedBody = new src.yukkuri.Marisa() {
             @Override public int getCollisionX() { return 10; }
         };
@@ -1056,7 +1056,7 @@ class ToiletLogicTest {
         body.setShit(body.getShitLimit());
         Toilet slaveTlt = new Toilet();
         slaveTlt.setX(150); slaveTlt.setY(100); // farther=2500
-        slaveTlt.setBForSlave(true);
+        slaveTlt.setForSlave(true);
         Toilet nonSlaveTlt = new Toilet();
         nonSlaveTlt.setX(110); nonSlaveTlt.setY(100); // closer=100
         SimYukkuri.world.getCurrentMap().getToilet().put(1, slaveTlt);  // processed first
@@ -1073,10 +1073,10 @@ class ToiletLogicTest {
         body.setShit(body.getShitLimit());
         Toilet slave1 = new Toilet();
         slave1.setX(150); slave1.setY(100); // farther=2500
-        slave1.setBForSlave(true);
+        slave1.setForSlave(true);
         Toilet slave2 = new Toilet();
         slave2.setX(110); slave2.setY(100); // closer=100
-        slave2.setBForSlave(true);
+        slave2.setForSlave(true);
         SimYukkuri.world.getCurrentMap().getToilet().put(1, slave1);  // processed first
         SimYukkuri.world.getCurrentMap().getToilet().put(2, slave2);
         // slave1 found first; slave2: found.slave=true && !slave2.slave=false → AND false → no continue → found=slave2
@@ -1116,17 +1116,17 @@ class ToiletLogicTest {
         void testScenario_ArrivalWithCarriedShitDropsItAndRelaxes() {
             Shit carried = new Shit();
             SimYukkuri.world.getCurrentMap().getTakenOutShit().put(carried.getObjId(), carried);
-            body.getTakeoutItem().put(TakeoutItemType.SHIT, carried.getObjId());
+            body.getCarryItems().put(TakeoutItemType.SHIT, carried.getObjId());
             body.addStress(30);
 
             Toilet toilet = new Toilet();
             toilet.setX(100);
             toilet.setY(100);
             SimYukkuri.world.getCurrentMap().getToilet().put(toilet.getObjId(), toilet);
-            body.setMoveTarget(toilet.getObjId());
+            body.setMoveTargetId(toilet.getObjId());
 
             assertTrue(ToiletLogic.checkToilet(body));
-            assertNull(body.getTakeoutItem(TakeoutItemType.SHIT));
+            assertNull(body.getCarryItem(TakeoutItemType.SHIT));
             assertFalse(body.isToShit());
             assertTrue(body.getStress() < 30, "dropping the carried shit at arrival should reduce stress");
         }

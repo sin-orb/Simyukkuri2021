@@ -25,7 +25,6 @@ import src.enums.ObjEXType;
 import src.enums.Type;
 import src.item.Barrier;
 import src.system.ItemMenu.GetMenuTarget;
-import src.util.YukkuriUtil;
 
 
 /**
@@ -113,13 +112,13 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 		if (getBindBabies() == null) {
 			return;
 		}
-		Body parent = YukkuriUtil.getBodyInstance(this.getPlantYukkuri()); // ← これ追加！
+		Body parent = src.util.BodyRegistry.getBodyInstance(this.getPlantYukkuri()); // ← これ追加！
 		for (Integer j : getBindBabies()){
 			if (j == null) {
 				i++;
 				continue;
 			}
-			Body b = YukkuriUtil.getBodyInstance(j);
+			Body b = src.util.BodyRegistry.getBodyInstance(j);
 			if ( b == null ) {
 				i++;
 				continue;
@@ -205,14 +204,14 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 	 */
 	public void disBindBabys() {
 		if ( plantYukkuri != -1) {
-			Body planted = YukkuriUtil.getBodyInstance(plantYukkuri);
+			Body planted = src.util.BodyRegistry.getBodyInstance(plantYukkuri);
 			if (planted != null && planted.getStalks() != null) {
 				planted.getStalks().set(planted.getStalks().indexOf( this ), null );
 			}
 		}
 
 		for ( int i : bindBabies ){
-			Body b = YukkuriUtil.getBodyInstance(i);
+			Body b = src.util.BodyRegistry.getBodyInstance(i);
 			if ( b != null ){
 				b.setBindStalk(null) ;
 			}
@@ -280,7 +279,7 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 	@Transient
 	public boolean isPlantYukkuri(){
 		for ( int i : bindBabies ){
-			Body b = YukkuriUtil.getBodyInstance(i);
+			Body b = src.util.BodyRegistry.getBodyInstance(i);
 			if ( b != null ){
 				return true;
 			}
@@ -300,7 +299,7 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 				if (i == null) {
 					continue;
 				}
-				Body b = YukkuriUtil.getBodyInstance(i);
+				Body b = src.util.BodyRegistry.getBodyInstance(i);
 				if ( b != null ){
 					b.setBindStalk(null) ;
 				}
@@ -428,7 +427,7 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 			if (i == null) {
 				continue;
 			}
-			Body baby = YukkuriUtil.getBodyInstance(i);
+			Body baby = src.util.BodyRegistry.getBodyInstance(i);
 			if (baby != null) {
 				baby.setBindStalk(null);
 				baby.setBindObj(-1);
@@ -441,7 +440,7 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 	
 //	@Override
 //	public String toString() {
-//		Body p = YukkuriUtil.getBodyInstance(plantYukkuri);
+//		Body p = src.util.BodyRegistry.getBodyInstance(plantYukkuri);
 //		String ret = "";
 //		ret += ResourceUtil.getInstance().read("game_stalk1");
 //		if (p != null) {
@@ -457,7 +456,7 @@ public class Stalk extends ObjEX implements java.io.Serializable {
 //					continue;
 //				} else {
 //					Integer b = (Integer)o;
-//					Body baby = YukkuriUtil.getBodyInstance(b);
+//					Body baby = src.util.BodyRegistry.getBodyInstance(b);
 //					if (baby == null) {
 //						ret += ResourceUtil.getInstance().read("game_empty");
 //					} else {

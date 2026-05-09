@@ -69,7 +69,7 @@ import src.effect.Hit;
 import src.effect.Mix;
 import src.effect.Steam;
 import src.enums.AgeState;
-import src.enums.BaryInUGState;
+import src.enums.BurialState;
 import src.enums.BodyRank;
 import src.enums.YukkuriType;
 import src.game.Shit;
@@ -286,11 +286,11 @@ public class MyPane extends JPanel implements Runnable {
 
 	// ini設定
 	/** ログダイアログへの出力有無 */
-	private static int nLogOutput = 1;
+	private static int logOutput = 1;
 	/** 赤ゆサイズのうんうんの影描写の有無 */
-	private static int nDrawShadowShit_Baby = 1;
+	private static int drawShadowShitBaby = 1;
 	/** 赤ゆサイズの吐餡の影描写の有無 */
-	private static int nDrawShadowVomit_Baby = 1;
+	private static int drawShadowVomitBaby = 1;
 
 	/**
 	 * 全画像の読み込み
@@ -490,7 +490,7 @@ public class MyPane extends JPanel implements Runnable {
 
 			int ret = JOptionPane.showConfirmDialog(this, panel, SimYukkuri.TITLE, JOptionPane.OK_CANCEL_OPTION,
 					JOptionPane.QUESTION_MESSAGE);
-			if (ret == 2) {
+			if (!shouldProceedAfterAddDialog(ret)) {
 				break;
 			}
 
@@ -545,7 +545,7 @@ public class MyPane extends JPanel implements Runnable {
 							break;
 					}
 
-					boolean bImageNagasiMode = false;
+					boolean imageNagasiMode = false;
 					if (selectType == Reimu.type && GameRandom.nextInt(20) == 0)
 						selectType = WasaReimu.type;
 					if (selectType == Reimu.type && GameRandom.nextInt(15) == 0)
@@ -560,11 +560,11 @@ public class MyPane extends JPanel implements Runnable {
 					// if(selectType == Reimu.type || selectType == Marisa.type)
 					{
 						if (SimYukkuri.NAGASI_MODE == 1) {
-							bImageNagasiMode = true;
+							imageNagasiMode = true;
 						}
 						if (SimYukkuri.NAGASI_MODE == 2) {
 							if (GameRandom.nextInt(20) == 0) {
-								bImageNagasiMode = true;
+								imageNagasiMode = true;
 							}
 						}
 					}
@@ -594,7 +594,7 @@ public class MyPane extends JPanel implements Runnable {
 					} else {
 						b.setRaper(false);
 					}
-					b.setbImageNagasiMode(bImageNagasiMode);
+					b.setImageNagasiMode(imageNagasiMode);
 
 					bodies.add(b);
 				}
@@ -610,6 +610,10 @@ public class MyPane extends JPanel implements Runnable {
 					Cash.buyYukkuri(b);
 			}
 		}
+	}
+
+	static boolean shouldProceedAfterAddDialog(int result) {
+		return result == JOptionPane.OK_OPTION;
 	}
 
 	/**
@@ -695,7 +699,7 @@ public class MyPane extends JPanel implements Runnable {
 	}
 
 	int getLogOutput() {
-		return nLogOutput;
+		return logOutput;
 	}
 
 	public Terrarium getTerrarium() {
@@ -776,10 +780,10 @@ public class MyPane extends JPanel implements Runnable {
 	}
 
 	static int getDrawShadowShitBaby() {
-		return nDrawShadowShit_Baby;
+		return drawShadowShitBaby;
 	}
 
 	static int getDrawShadowVomitBaby() {
-		return nDrawShadowVomit_Baby;
+		return drawShadowVomitBaby;
 	}
 }

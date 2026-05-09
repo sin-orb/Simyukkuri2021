@@ -14,8 +14,8 @@ import src.enums.AttachProperty;
 import src.enums.Direction;
 import src.enums.Event;
 import src.game.Dna;
+import src.engine.birth.YukkuriBirthTypeResolver;
 import src.system.ResourceUtil;
-import src.util.YukkuriUtil;
 
 /****************************************
  *  精子アンプル
@@ -82,7 +82,7 @@ public class BreedingAmpoule extends Attachment {
 
 	@Override
 	protected Event update() {
-		Body pa = YukkuriUtil.getBodyInstance(parent);
+		Body pa = src.util.BodyRegistry.getBodyInstance(parent);
 		if (pa == null) return Event.DONOTHING;
 		// 死んでる/焼かれてる/壊れてる/胎生去勢　の場合は何もしない
 		if (pa.isDead() || pa.isBurned() || pa.isCrushed() || pa.isBodyCastration()){
@@ -90,7 +90,7 @@ public class BreedingAmpoule extends Attachment {
 		}
 		pa.setHungry(100);
 		pa.addDamage(-100);
-		int babyType = YukkuriUtil.getRandomYukkuriType(pa);
+		int babyType = YukkuriBirthTypeResolver.getRandomYukkuriType(pa);
 		pa.getBabyTypes().add(new Dna(babyType, null, null, false));
 		pa.setHasBaby(true);
 
@@ -99,7 +99,7 @@ public class BreedingAmpoule extends Attachment {
 
 	@Override
 	public BufferedImage getImage(Body b) {
-		Body pa = YukkuriUtil.getBodyInstance(parent);
+		Body pa = src.util.BodyRegistry.getBodyInstance(parent);
 		if (pa == null) return null;
 		if (b.getDirection() == Direction.RIGHT) {
 			return images[pa.getBodyAgeState().ordinal()][1];
@@ -109,7 +109,7 @@ public class BreedingAmpoule extends Attachment {
 
 	@Override
 	public void resetBoundary() {
-		Body pa = YukkuriUtil.getBodyInstance(parent);
+		Body pa = src.util.BodyRegistry.getBodyInstance(parent);
 		if (pa == null) return;
 		setBoundary(pivX[pa.getBodyAgeState().ordinal()],
 				pivY[pa.getBodyAgeState().ordinal()],
@@ -124,7 +124,7 @@ public class BreedingAmpoule extends Attachment {
 	public BreedingAmpoule(Body body) {
 		super(body);
 		setAttachProperty(property, POS_KEY);
-		Body pa = YukkuriUtil.getBodyInstance(parent);
+		Body pa = src.util.BodyRegistry.getBodyInstance(parent);
 		if (pa != null) {
 			setBoundary(pivX[pa.getBodyAgeState().ordinal()],
 				pivY[pa.getBodyAgeState().ordinal()],

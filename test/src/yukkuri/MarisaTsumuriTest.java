@@ -224,7 +224,7 @@ public class MarisaTsumuriTest {
     @Test
     public void testGetAnImageVerStateCtrlNagasi_doesNotThrow() {
         MarisaTsumuri obj = new MarisaTsumuri();
-        org.junit.jupiter.api.Assertions.assertDoesNotThrow(() -> obj.getAnImageVerStateCtrlNagasi());
+        org.junit.jupiter.api.Assertions.assertDoesNotThrow(() -> obj.getImageVariantState());
     }
 
     @Test

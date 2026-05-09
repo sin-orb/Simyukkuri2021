@@ -87,8 +87,8 @@ public class Toy extends ObjEX {
 	 * 
 	 * @param b おもちゃの持ち主
 	 */
-	public void setOwner(Body b) {
-		owner = b;
+	public void setOwner(Body body) {
+		owner = body;
 	}
 
 	/**
@@ -107,8 +107,8 @@ public class Toy extends ObjEX {
 	 * @return そのゆっくりに所有されているかどうか
 	 */
 	@Transient
-	public boolean isOwned(Body b) {
-		return (owner == b);
+	public boolean isOwned(Body body) {
+		return (owner == body);
 	}
 
 	/**

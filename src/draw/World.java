@@ -18,7 +18,6 @@ import src.game.Player;
 import src.system.FieldShapeBase;
 import src.system.MapPlaceData;
 import src.system.MapWindow;
-import src.util.YukkuriUtil;
 import src.yukkuri.HybridYukkuri;
 
 /***********************************************
@@ -197,12 +196,12 @@ public class World implements Serializable {
 				Body b = entry.getValue();
 				if (b.getType() == HybridYukkuri.type) {
 					HybridYukkuri hb = (HybridYukkuri) b;
-					GameView.loadBodyImage(YukkuriUtil.getYukkuriType(hb.getBaseBody(0).getClass().getSimpleName()));
-					GameView.loadBodyImage(YukkuriUtil.getYukkuriType(hb.getBaseBody(1).getClass().getSimpleName()));
-					GameView.loadBodyImage(YukkuriUtil.getYukkuriType(hb.getBaseBody(2).getClass().getSimpleName()));
-					GameView.loadBodyImage(YukkuriUtil.getYukkuriType(hb.getBaseBody(3).getClass().getSimpleName()));
+					GameView.loadBodyImage(src.enums.YukkuriType.fromClassName(hb.getBaseBody(0).getClass().getSimpleName()));
+					GameView.loadBodyImage(src.enums.YukkuriType.fromClassName(hb.getBaseBody(1).getClass().getSimpleName()));
+					GameView.loadBodyImage(src.enums.YukkuriType.fromClassName(hb.getBaseBody(2).getClass().getSimpleName()));
+					GameView.loadBodyImage(src.enums.YukkuriType.fromClassName(hb.getBaseBody(3).getClass().getSimpleName()));
 				} else {
-					GameView.loadBodyImage(YukkuriUtil.getYukkuriType(b.getClass().getSimpleName()));
+					GameView.loadBodyImage(src.enums.YukkuriType.fromClassName(b.getClass().getSimpleName()));
 				}
 			}
 		}

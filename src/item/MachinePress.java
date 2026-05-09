@@ -30,20 +30,20 @@ public class MachinePress extends ObjEX {
 	private static final long serialVersionUID = 5340736342470019134L;
 	/** 処理対象(ゆっくり、うんうん、吐餡) */
 	public static final int hitCheckObjType = ObjEX.YUKKURI | ObjEX.SHIT | ObjEX.VOMIT;
-	private static final int images_num = 8; // このクラスの総使用画像数
-	private static int AnimeImagesNum[] = { 8 };// アニメごとに何枚使うか
-	private static BufferedImage[] images = new BufferedImage[images_num + 1];
+	private static final int IMAGE_COUNT = 8; // このクラスの総使用画像数
+	private static int[] animationFrameCounts = { 8 };// アニメごとに何枚使うか
+	private static BufferedImage[] imageLayers = new BufferedImage[IMAGE_COUNT + 1];
 	private static Rectangle4y boundary = new Rectangle4y();
 
 	/** 画像ロード */
 	public static void loadImages(ClassLoader loader, ImageObserver io) throws IOException {
-		for (int i = 0; i < images_num; i++) {
-			images[i] = ModLoader.loadItemImage(loader,
+		for (int i = 0; i < IMAGE_COUNT; i++) {
+			imageLayers[i] = ModLoader.loadItemImage(loader,
 					"machinepress" + File.separator + "machinepress" + String.format("%03d", i + 1) + ".png");
 		}
-		images[images_num] = ModLoader.loadItemImage(loader, "machinepress" + File.separator + "machinepress_off.png");
-		boundary.setWidth(images[0].getWidth(io));
-		boundary.setHeight(images[0].getHeight(io));
+		imageLayers[IMAGE_COUNT] = ModLoader.loadItemImage(loader, "machinepress" + File.separator + "machinepress_off.png");
+		boundary.setWidth(imageLayers[0].getWidth(io));
+		boundary.setHeight(imageLayers[0].getHeight(io));
 		boundary.setX(boundary.getWidth() >> 1);
 		boundary.setY(boundary.getHeight() - 1);
 	}
@@ -51,9 +51,9 @@ public class MachinePress extends ObjEX {
 	@Override
 	public int getImageLayer(BufferedImage[] layer) {
 		if (enabled)
-			layer[0] = images[(int) getAge() / 2 % AnimeImagesNum[0]];
+			layer[0] = imageLayers[(int) getAge() / 2 % animationFrameCounts[0]];
 		else
-			layer[0] = images[AnimeImagesNum[0]];
+			layer[0] = imageLayers[animationFrameCounts[0]];
 		return 1;
 	}
 
@@ -83,7 +83,7 @@ public class MachinePress extends ObjEX {
 				p.setForceFace(ImageCode.CRYING.ordinal());
 				p.setMessage(GameMessages.getMessage(p, MessagePool.Action.KilledInFactory), 40, true, true);
 			}
-			if ((int) getAge() / 2 % AnimeImagesNum[0] == 0) {
+			if ((int) getAge() / 2 % animationFrameCounts[0] == 0) {
 				p.setSilent(true);
 				p.setShit(0, false);
 				p.strikeByPress();

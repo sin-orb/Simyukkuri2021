@@ -17,6 +17,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 import src.SimYukkuri;
+import src.engine.birth.YukkuriBirthTypeResolver;
 import src.util.GameRandom;
 import src.util.GameWorld;
 import src.base.Body;
@@ -32,7 +33,6 @@ import src.enums.Type;
 import src.item.Food.FoodType;
 import src.system.Cash;
 import src.system.ResourceUtil;
-import src.util.YukkuriUtil;
 
 /***************************************************
  * 自動給餌機
@@ -85,8 +85,8 @@ public class AutoFeeder extends ObjEX {
 
 	/** 当たり判定 */
 	public static final int hitCheckObjType = 0;
-	private static final int images_num = 2;
-	private static BufferedImage[] images = new BufferedImage[images_num];
+	private static final int IMAGE_COUNT = 2;
+	private static BufferedImage[] imageLayers = new BufferedImage[IMAGE_COUNT];
 	private static Rectangle4y boundary = new Rectangle4y();
 	private int type = 0;
 	private int mode = 0;
@@ -102,10 +102,10 @@ public class AutoFeeder extends ObjEX {
 	 * @throws IOException IO例外
 	 */
 	public static void loadImages(ClassLoader loader, ImageObserver io) throws IOException {
-		images[0] = ModLoader.loadItemImage(loader, "autofeeder" + File.separator + "autofeed.png");
-		images[1] = ModLoader.loadItemImage(loader, "autofeeder" + File.separator + "autofeed_off.png");
-		boundary.setWidth(images[0].getWidth(io));
-		boundary.setHeight(images[0].getHeight(io));
+		imageLayers[0] = ModLoader.loadItemImage(loader, "autofeeder" + File.separator + "autofeed.png");
+		imageLayers[1] = ModLoader.loadItemImage(loader, "autofeeder" + File.separator + "autofeed_off.png");
+		boundary.setWidth(imageLayers[0].getWidth(io));
+		boundary.setHeight(imageLayers[0].getHeight(io));
 		boundary.setX(boundary.getWidth() >> 1);
 		boundary.setY(boundary.getHeight() >> 1);
 	}
@@ -113,9 +113,9 @@ public class AutoFeeder extends ObjEX {
 	@Override
 	public int getImageLayer(BufferedImage[] layer) {
 		if (enabled) {
-			layer[0] = images[0];
+			layer[0] = imageLayers[0];
 		} else {
-			layer[0] = images[1];
+			layer[0] = imageLayers[1];
 		}
 		return 1;
 	}
@@ -245,7 +245,7 @@ public class AutoFeeder extends ObjEX {
 	private boolean isTakenOut() {
 		for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
 			Body b = entry.getValue();
-			Integer i = b.getTakeoutItem().get(TakeoutItemType.FOOD);
+			Integer i = b.getCarryItems().get(TakeoutItemType.FOOD);
 			if (i == null) {
 				continue;
 			}
@@ -257,7 +257,7 @@ public class AutoFeeder extends ObjEX {
 	}
 
 	private int makeRandomType() {
-		return YukkuriUtil.getRandomYukkuriType(null);
+		return YukkuriBirthTypeResolver.getRandomYukkuriType(null);
 	}
 
 	/**
@@ -374,16 +374,16 @@ public class AutoFeeder extends ObjEX {
 	 */
 	public void readIniFile() {
 		ClassLoader loader = this.getClass().getClassLoader();
-		int nTemp = 0;
+		int iniValue = 0;
 		// 間隔
-		nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataItemIniDir(), "AutoFeeder", "FeedingInterval");
-		if (nTemp != 0)
-			feedingInterval = nTemp;
+		iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataItemIniDir(), "AutoFeeder", "FeedingInterval");
+		if (iniValue != 0)
+			feedingInterval = iniValue;
 		// 確率
-		nTemp = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataItemIniDir(), "AutoFeeder",
+		iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataItemIniDir(), "AutoFeeder",
 				"FeedingProbability");
-		if (nTemp != 0)
-			feedingP = nTemp;
+		if (iniValue != 0)
+			feedingP = iniValue;
 	}
 
 	public int getType() {

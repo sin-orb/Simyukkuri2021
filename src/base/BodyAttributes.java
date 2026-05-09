@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 import java.beans.Transient;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -15,6 +14,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
 import src.Const;
 import src.SimYukkuri;
+import src.logic.BodyRelations;
 import src.util.GameRandom;
 import src.util.GameWorld;
 import src.attachment.Ants;
@@ -22,7 +22,7 @@ import src.draw.Color4y;
 import src.draw.Point4y;
 import src.enums.AgeState;
 import src.enums.Attitude;
-import src.enums.BaryInUGState;
+import src.enums.BurialState;
 import src.enums.BodyBake;
 import src.enums.BodyRank;
 import src.enums.Burst;
@@ -51,16 +51,52 @@ import src.enums.Trauma;
 import src.enums.YukkuriType;
 import src.game.Dna;
 import src.game.Stalk;
+import src.logic.BodyDependencyRule;
+import src.logic.BodyAppearanceRule;
+import src.logic.BodyActivityRule;
+import src.logic.BodyAttitudeRule;
+import src.logic.BodyExcitementRule;
+import src.logic.BodyBehaviorRule;
+import src.logic.BodyFallRule;
+import src.logic.BodyDisplayRule;
+import src.logic.BodyExpressionRule;
+import src.logic.BodyHungerRule;
+import src.logic.BodyMovementGoalRule;
+import src.logic.BodyStressRule;
+import src.logic.BodyAgeRule;
+import src.logic.BodyAgeCategoryRule;
+import src.logic.BodyAnimalRule;
+import src.logic.BodySpeechRule;
 import src.logic.BodyVitals;
+import src.logic.BodyRelations;
+import src.logic.BodyStyleRule;
+import src.logic.BodyFlagRule;
+import src.logic.BodySurisuriRule;
+import src.logic.BodyNeedleRule;
+import src.logic.BodyBurnRule;
+import src.logic.BodyBirthRule;
+import src.logic.BodyBurstRule;
+import src.logic.BodyDamageRule;
+import src.logic.BodyExcretionRule;
+import src.logic.BodySpecialTypeRule;
+import src.logic.BodyConditionRule;
+import src.logic.BodyActionStateRule;
+import src.logic.BodyControlRule;
+import src.logic.BodyHungerStateRule;
+import src.logic.BodyPresentationRule;
+import src.logic.BodyPreferenceRule;
+import src.logic.BodyCoreStateRule;
+import src.logic.BodyTraitRule;
+import src.logic.BodyStructureRule;
+import src.logic.BodyTimingRule;
+import src.logic.BodyStatRule;
 import src.system.BasicStrokeEX;
 import src.system.BodyLayer;
 import src.system.MapPlaceData;
 import src.system.Sprite;
-import src.util.YukkuriUtil;
-
 /**
  * ゆっくり本体の抽象クラスの属性/状態の取得を抜き出したクラス.
- * 属性を増やしたらYukkuriUtil.NOCOPY_FIELDでコピーしたくない属性であれば定義する。
+ * 属性を増やしたらTransformationBodyCopierのコピー除外リストに反映する。
  * コピーしたくない属性かどうかは、れいむ→でいぶ、まりさ→ドスまりさとなったときに
  * もととなるゆっくりから変異後のゆっくりにコピーしたい属性かどうかで決める。
  * 例えば、子供リスト等はコピーしたいが、自分の呼称やあんこ量等はコピーしたくない。
@@ -141,7 +177,7 @@ public abstract class BodyAttributes extends Obj {
 	private final BodyTimingProfile bodyTimingProfile = new BodyTimingProfile();
 	// individual state variables for each Yukkuri.
 	/** 画像がまりちゃ流しか */
-	private boolean bImageNagasiMode = false;
+	private boolean imageNagasiMode = false;
 	/** 飼いゆ、野良ゆなどのランク */
 	protected BodyRank bodyRank = BodyRank.KAIYU;
 	/** 群れ内のうんうん奴隷などのランク */
@@ -178,11 +214,11 @@ public abstract class BodyAttributes extends Obj {
 	/** 幸福度 */
 	private Happiness happiness = Happiness.AVERAGE;
 	/** プレイヤーへのなつき度 */
-	protected int nLovePlayer = 0;
+	protected int lovePlayer = 0;
 	/** プレイヤーへのなつき度概算 */
-	private LovePlayer eLovePlayerState = LovePlayer.NONE;
+	private LovePlayer lovePlayerState = LovePlayer.NONE;
 	/** 髪の状態 */
-	private HairState eHairState = HairState.DEFAULT;
+	private HairState hairState = HairState.DEFAULT;
 	/** うんうんの溜まり具合 */
 	protected int shit = 0;
 	/** 思い出（悪夢関連） */
@@ -208,9 +244,9 @@ public abstract class BodyAttributes extends Obj {
 	/** 茎去勢有無 */
 	protected boolean stalkCastration = false;
 	/** ぺにぺにの去勢有無 */
-	private boolean bPenipeniCutted = false;
+	private boolean penipeniCutted = false;
 	/** フェロモンの有無 */
-	private boolean bPheromone = false;
+	private boolean pheromone = false;
 	/** 胎生ゆのリスト */
 	private List<Dna> babyTypes = new LinkedList<Dna>();
 	/** 実ゆのリスト */
@@ -222,19 +258,19 @@ public abstract class BodyAttributes extends Obj {
 	/** 死亡フラグdead of alive */
 	private boolean dead = false;
 	/** うまれて初めての地面か */
-	private boolean bFirstGround = true;
+	private boolean firstGround = true;
 	/** うまれて初めての食事か */
-	private boolean bFirstEatStalk = true;
+	private boolean firstEatStalk = true;
 	/** 死体が損壊されているか */
 	private boolean crushed = false;
 	/** 死体が焼損されているか */
 	private boolean burned = false;
 	/** 中枢餡の状態（非ゆっくり症フラグ */
-	private CoreAnkoState eCoreAnkoState = CoreAnkoState.DEFAULT;
+	private CoreAnkoState coreAnkoState = CoreAnkoState.DEFAULT;
 	/** 発情フラグ want to sukkiri or not */
 	private boolean exciting = false;
 	/** 強制発情フラグ want to sukkiri or not */
-	private boolean bForceExciting = false;
+	private boolean forceExciting = false;
 	/** ゆっくりしてるかどうか */
 	private boolean relax = false;
 	/** 睡眠中かどうか */
@@ -249,7 +285,7 @@ public abstract class BodyAttributes extends Obj {
 	/** 頑固な汚れ有無 */
 	private boolean stubbornlyDirty = false;
 	/** 針の有無 */
-	private boolean bNeedled = false;
+	private boolean needled = false;
 	/** レイパー化有無 */
 	private boolean rapist = false;
 	/** バイゆグラでレイパーになる、すーぱーれいぱー状態 */
@@ -265,7 +301,7 @@ public abstract class BodyAttributes extends Obj {
 	/** アマギられた状態 */
 	private boolean blind = false;
 	/** おかざりがなくなっていることに気がついているか */
-	private boolean bNoticeNoOkazari = false;
+	private boolean noticeNoOkazari = false;
 	/** パニック種別 */
 	private PanicType panicType = null;
 	/** 致命傷種別 */
@@ -291,17 +327,17 @@ public abstract class BodyAttributes extends Obj {
 	/** ふりふり抑制 */
 	protected int furifuriDiscipline = 0;
 	/** おしゃべり抑制 */
-	protected int messageDiscipline = 0;
+	protected int speechDiscipline = 0;
 	/** あまあまへの慣れ具合 */
 	protected int amaamaDiscipline = 0;
 	/** 自身の持っているアタッチメント */
 	private List<Attachment> attach = new LinkedList<Attachment>();
 	/** なにかのオブジェクト（すぃー、親ゆなど）に載せられている等のリンクが有る際のそのオブジェクト */
-	private int linkParent = -1;
+	private int parentLinkId = -1;
 	/** 移動不可ベルトコンベアの有無 */
-	private boolean bOnDontMoveBeltconveyor = false;
+	private boolean nonMovingConveyor = false;
 	/** 埋まり状態 */
-	private BaryInUGState baryState = BaryInUGState.NONE;
+	private BurialState burialState = BurialState.NONE;
 	/** 希少種か */
 	private boolean rareType = false;
 	/** 苦いえさが好きか */
@@ -325,13 +361,13 @@ public abstract class BodyAttributes extends Obj {
 	/** 外圧 */
 	protected int extForce = 0;
 	/** まばたき、同じ表情の時にカウント */
-	private int mabatakiCnt = 0;
+	private int blinkCount = 0;
 	/** まばたき、表情の値を代入 */
-	private int mabatakiType = 0;
+	private int blinkType = 0;
 	/** プレイヤーにすりすりされているか */
-	private boolean bSurisuriFromPlayer = false;
-	/** ぷるぷる震えているか */
-	private boolean bPurupuru = false;
+	private boolean surisuriFromPlayer = false;
+	/** ぷるぷるアニメーションの位相(左右揺れのトグル) */
+	private boolean shakePhase = false;
 	/** 粘着板で背中を固定されている */
 	private boolean fixBack = false;
 	/** ダメージを受けていない期間 */
@@ -339,7 +375,7 @@ public abstract class BodyAttributes extends Obj {
 	/** 飢餓状態になっていない期間 */
 	protected int noHungryPeriod = 0;
 	/** スーパーむーしゃむーしゃタイムのおかげで飢餓状態にならない期間 */
-	protected int noHungrybySupereatingTimePeriod = 0;
+	protected int superEatingNoHungryPeriod = 0;
 	/** 妊娠期間 */
 	protected int pregnantPeriod = 0;
 	/** 発情期間 */
@@ -372,21 +408,21 @@ public abstract class BodyAttributes extends Obj {
 	/** 死んでからの期間 */
 	private int deadPeriod = 0;
 	/** 最後にプレイヤーにすりすりしてもらった時間 */
-	protected long lnLastTimeSurisuri = 0;
+	protected long lastSurisuriTime = 0;
 	/** 最後にプレイヤーがアクションを行った時間 */
-	private long inLastActionTime = 0;
+	private long lastActionTime = 0;
 	/** 出産期間のブースト（この分だけ早まる） */
-	protected int pregnantPeriodBoost = 0;
+	protected int pregnancyPeriodBoost = 0;
 	/** 発情期間のブースト（この分だけ早まる） */
-	private int excitingPeriodBoost = 0;
+	private int excitementPeriodBoost = 0;
 	/** うんうんブースト */
-	protected int shitBoost = 0;
+	protected int excretionBoost = 0;
 	/** 移動対象（移動先） */
-	protected int moveTarget = -1;
+	protected int moveTargetId = -1;
 	/** 移動対象のX座標オフセット */
-	private int targetPosOfsX = 0;
+	private int targetOffsetX = 0;
 	/** 移動対象のY座標オフセット */
-	private int targetPosOfsY = 0;
+	private int targetOffsetY = 0;
 	/** 対象を呼び止めるほど強い動機を持っているかどうか */
 	private boolean targetBind = false;
 	/** アイテムを出し入れする動作フラグ */
@@ -438,22 +474,23 @@ public abstract class BodyAttributes extends Obj {
 	/** 遊び時間上限 */
 	protected int playingLimit = 0;
 	/** メッセージのバッファ */
-	private String messageBuf;
+	private String messageBuffer;
 	/** いくつメッセージが溜まってるか */
-	protected int messageCount = 0;
+	protected int messageTicks = 0;
 	/** その場に留まってる回数 */
-	private int staycount = 0;
+	private int stayTicks = 0;
 	/** とどまる限界 */
 	protected int stayTime = Const.STAYLIMIT;
 	/** 落下ダメージ */
 	protected int falldownDamage = 0;
 	/** あんこ量 */
-	private int bodyAmount = 0;
+	private int ankoAmount = 0;
 	/** 壁に引っかかった回数 */
-	private int blockedCount = 0;
+	private int blockedTicks = 0;
 	/** 死なない期間 */
 	protected int cantDiePeriod = 0;
 	/** 実ゆかどうか */
+	@JsonProperty("unBirth")
 	protected boolean unBirth = false;
 	/** 喋れる状態かどうか */
 	private boolean canTalk = true;
@@ -468,7 +505,7 @@ public abstract class BodyAttributes extends Obj {
 	/** メッセージテキストのサイズ */
 	private int messageTextSize;
 	/** 強制的に誕生時メッセージを言わされるかどうか */
-	private boolean forceBirthMessage = false;
+	private boolean birthMessageForced = false;
 	/** ゆっくりのオブジェクトのユニークID */
 	private int uniqueID = 0;
 	/** どのゆっくり的なメッセージを言うか */
@@ -476,11 +513,11 @@ public abstract class BodyAttributes extends Obj {
 	/** どのゆっくり的なうんうんをするか */
 	private YukkuriType shitType = null;
 	/** 右ペインメニューのピン留めをされているかどうか */
-	private boolean pin = false;
+	private boolean isPinned = false;
 	/** ゆっくりの移動速度 */
 	protected int speed = 100;
 	/** 次の落下でダメージを受けないかどうか */
-	private boolean bNoDamageNextFall = false;
+	private boolean noDamageNextFall = false;
 	/** この個体に対して発行されたイベントのリスト */
 	private List<EventPacket> eventList = new LinkedList<EventPacket>();
 	/** 現在実行中のイベント */
@@ -488,31 +525,31 @@ public abstract class BodyAttributes extends Obj {
 	/** 表情の強制設定 */
 	protected int forceFace = -1;
 	/** 影の表示有無 */
-	private boolean dropShadow = true;
+	private boolean shadowVisible = true;
 	/** イベントで設定されたアクション */
-	private Event eventResultAction = Event.DONOTHING;
+	private Event eventResult = Event.DONOTHING;
 	/** ゆ虐神拳により 膨らんでいるか/伸ばされているか/押さえつけられているか */
 	private boolean[] abFlagGodHand = { false, false, false };
 	/** ゆ虐神拳の回数 */
-	private int godHandHoldPoint = 0;
-	private int godHandStretchPoint = 0;
-	private int godHandCompressPoint = 0;
+	private int godHandHoldCount = 0;
+	private int godHandStretchCount = 0;
+	private int godHandCompressCount = 0;
 	/** お気に入りアイテム */
-	private HashMap<FavItemType, Integer> favItem = new HashMap<FavItemType, Integer>();
+	private HashMap<FavItemType, Integer> favoriteItems = new HashMap<FavItemType, Integer>();
 	/** 持ち歩きアイテム */
-	private HashMap<TakeoutItemType, Integer> takeoutItem = new HashMap<TakeoutItemType, Integer>();
+	private HashMap<TakeoutItemType, Integer> carryItems = new HashMap<TakeoutItemType, Integer>();
 	/** ゆっくり本体の購入基本額 */
-	private int Ycost = 200;
+	private int cost = 200;
 	/** ゆっくり本体、中身の売却基本額 飼いゆとしての価値/加工品としての価値 */
-	private int saleValue[] = { 50, 100 };
+	private int saleValues[] = { 50, 100 };
 	/** たかっているアリの数 */
-	protected int numOfAnts = 0;
+	protected int antCount = 0;
 	/** うにょ機能を使用するかどうかのフラグ */
-	private int unyoFlg = 1;
+	private int unyoMode = 1;
 	/** うにょの高さ方向 */
-	protected int unyoForceH = 0;
+	protected int unyoOffsetH = 0;
 	/** うにょの横方向 */
-	protected int unyoForceW = 0;
+	protected int unyoOffsetW = 0;
 	/** うにょの動きの強さ */
 	public final static int UNYOSTRENGTH[] = { 4, 7, 10 };
 	/** 「取る」で取られているかどうか */
@@ -544,18 +581,18 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 赤ゆの一人称
 	 */
 	@JsonProperty
-	public String[] getAnBabyName() {
-		return bodyNameSet.getAnBabyName();
+	public String[] getBabyNames() {
+		return bodyNameSet.getBabyNames();
 	}
 
 	/**
 	 * 赤ゆの一人称を設定する.
 	 * 
-	 * @param anBabyName 赤ゆの一人称
+	 * @param babyNames 赤ゆの一人称
 	 */
 	@JsonProperty
-	public void setAnBabyName(String[] anBabyName) {
-		bodyNameSet.setAnBabyName(anBabyName);
+	public void setBabyNames(String[] babyNames) {
+		bodyNameSet.setBabyNames(babyNames);
 	}
 
 	/**
@@ -564,18 +601,18 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 子ゆの一人称
 	 */
 	@JsonProperty
-	public String[] getAnChildName() {
-		return bodyNameSet.getAnChildName();
+	public String[] getChildNames() {
+		return bodyNameSet.getChildNames();
 	}
 
 	/**
 	 * 子ゆの一人称を設定する.
 	 * 
-	 * @param anChildName 子ゆの一人称
+	 * @param childNames 子ゆの一人称
 	 */
 	@JsonProperty
-	public void setAnChildName(String[] anChildName) {
-		bodyNameSet.setAnChildName(anChildName);
+	public void setChildNames(String[] childNames) {
+		bodyNameSet.setChildNames(childNames);
 	}
 
 	/**
@@ -584,18 +621,18 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 成ゆの一人称
 	 */
 	@JsonProperty
-	public String[] getAnAdultName() {
-		return bodyNameSet.getAnAdultName();
+	public String[] getAdultNames() {
+		return bodyNameSet.getAdultNames();
 	}
 
 	/**
 	 * 成ゆの一人称を設定する.
 	 * 
-	 * @param anAdultName 成ゆの一人称
+	 * @param adultNames 成ゆの一人称
 	 */
 	@JsonProperty
-	public void setAnAdultName(String[] anAdultName) {
-		bodyNameSet.setAnAdultName(anAdultName);
+	public void setAdultNames(String[] adultNames) {
+		bodyNameSet.setAdultNames(adultNames);
 	}
 
 	/**
@@ -604,18 +641,18 @@ public abstract class BodyAttributes extends Obj {
 	 * @return [0]:赤ゆの一人称 [1]:子ゆの一人称 [2]:大人ゆの一人称
 	 */
 	@JsonProperty
-	public String[] getAnMyName() {
-		return bodyNameSet.getAnMyName();
+	public String[] getMyNames() {
+		return bodyNameSet.getMyNames();
 	}
 
 	/**
 	 * [0]:赤ゆの一人称 [1]:子ゆの一人称 [2]:大人ゆの一人称 を設定する.
 	 * 
-	 * @param anMyName [0]:赤ゆの一人称 [1]:子ゆの一人称 [2]:大人ゆの一人称
+	 * @param myNames [0]:赤ゆの一人称 [1]:子ゆの一人称 [2]:大人ゆの一人称
 	 */
 	@JsonProperty
-	public void setAnMyName(String[] anMyName) {
-		bodyNameSet.setAnMyName(anMyName);
+	public void setMyNames(String[] myNames) {
+		bodyNameSet.setMyNames(myNames);
 	}
 
 	/**
@@ -624,18 +661,18 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 赤ゆの一人称（ダメージ時）
 	 */
 	@JsonProperty
-	public String[] getAnBabyNameD() {
-		return bodyNameSet.getAnBabyNameD();
+	public String[] getBabyNamesDamaged() {
+		return bodyNameSet.getBabyNamesDamaged();
 	}
 
 	/**
 	 * 赤ゆの一人称（ダメージ時）を設定する.
 	 * 
-	 * @param anBabyNameD 赤ゆの一人称（ダメージ時）
+	 * @param babyNamesDamaged 赤ゆの一人称（ダメージ時）
 	 */
 	@JsonProperty
-	public void setAnBabyNameD(String[] anBabyNameD) {
-		bodyNameSet.setAnBabyNameD(anBabyNameD);
+	public void setBabyNamesDamaged(String[] babyNamesDamaged) {
+		bodyNameSet.setBabyNamesDamaged(babyNamesDamaged);
 	}
 
 	/**
@@ -644,18 +681,18 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 子ゆの一人称（ダメージ時）
 	 */
 	@JsonProperty
-	public String[] getAnChildNameD() {
-		return bodyNameSet.getAnChildNameD();
+	public String[] getChildNamesDamaged() {
+		return bodyNameSet.getChildNamesDamaged();
 	}
 
 	/**
 	 * 子ゆの一人称（ダメージ時）を設定する.
 	 * 
-	 * @param anChildNameD 子ゆの一人称（ダメージ時）
+	 * @param childNamesDamaged 子ゆの一人称（ダメージ時）
 	 */
 	@JsonProperty
-	public void setAnChildNameD(String[] anChildNameD) {
-		bodyNameSet.setAnChildNameD(anChildNameD);
+	public void setChildNamesDamaged(String[] childNamesDamaged) {
+		bodyNameSet.setChildNamesDamaged(childNamesDamaged);
 	}
 
 	/**
@@ -664,18 +701,18 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 大人ゆの一人称（ダメージ時）
 	 */
 	@JsonProperty
-	public String[] getAnAdultNameD() {
-		return bodyNameSet.getAnAdultNameD();
+	public String[] getAdultNamesDamaged() {
+		return bodyNameSet.getAdultNamesDamaged();
 	}
 
 	/**
 	 * 大人ゆの一人称（ダメージ時） を設定する.
 	 * 
-	 * @param anAdultNameD 大人ゆの一人称（ダメージ時）
+	 * @param adultNamesDamaged 大人ゆの一人称（ダメージ時）
 	 */
 	@JsonProperty
-	public void setAnAdultNameD(String[] anAdultNameD) {
-		bodyNameSet.setAnAdultNameD(anAdultNameD);
+	public void setAdultNamesDamaged(String[] adultNamesDamaged) {
+		bodyNameSet.setAdultNamesDamaged(adultNamesDamaged);
 	}
 
 	/**
@@ -684,18 +721,18 @@ public abstract class BodyAttributes extends Obj {
 	 * @return ダメージ時の、[0]:赤ゆの一人称 [1]:子ゆの一人称 [2]:大人ゆの一人称
 	 */
 	@JsonProperty
-	public String[] getAnMyNameD() {
-		return bodyNameSet.getAnMyNameD();
+	public String[] getMyNamesDamaged() {
+		return bodyNameSet.getMyNamesDamaged();
 	}
 
 	/**
 	 * ダメージ時の、[0]:赤ゆの一人称 [1]:子ゆの一人称 [2]:大人ゆの一人称 を設定する.
 	 * 
-	 * @param anMyNameD ダメージ時の、[0]:赤ゆの一人称 [1]:子ゆの一人称 [2]:大人ゆの一人称
+	 * @param myNamesDamaged ダメージ時の、[0]:赤ゆの一人称 [1]:子ゆの一人称 [2]:大人ゆの一人称
 	 */
 	@JsonProperty
-	public void setAnMyNameD(String[] anMyNameD) {
-		bodyNameSet.setAnMyNameD(anMyNameD);
+	public void setMyNamesDamaged(String[] myNamesDamaged) {
+		bodyNameSet.setMyNamesDamaged(myNamesDamaged);
 	}
 
 	/**
@@ -884,18 +921,18 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 一回の食事量
 	 */
 	@JsonProperty
-	public int[] getEATAMOUNTorg() {
-		return bodyStatProfile.getEATAMOUNTorg();
+	public int[] getEatAmountBase() {
+		return BodyStatRule.getEatAmountBase(this);
 	}
 
 	/**
 	 * 一回の食事量 を設定する.
 	 * 
-	 * @param eATAMOUNT 一回の食事量
+	 * @param eatAmount 一回の食事量
 	 */
 	@JsonProperty
-	public void setEATAMOUNTorg(int[] eATAMOUNT) {
-		bodyStatProfile.setEATAMOUNTorg(eATAMOUNT);
+	public void setEatAmountBase(int[] eatAmount) {
+		BodyStatRule.setEatAmountBase(this, eatAmount);
 	}
 
 	/**
@@ -904,18 +941,18 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 体重
 	 */
 	@JsonProperty
-	public int[] getWEIGHTorg() {
-		return bodyStatProfile.getWEIGHTorg();
+	public int[] getWeightBase() {
+		return BodyStatRule.getWeightBase(this);
 	}
 
 	/**
 	 * 体重を設定する.
 	 * 
-	 * @param wEIGHT 体重
+	 * @param weight 体重
 	 */
 	@JsonProperty
-	public void setWEIGHTorg(int[] wEIGHT) {
-		bodyStatProfile.setWEIGHTorg(wEIGHT);
+	public void setWeightBase(int[] weight) {
+		BodyStatRule.setWeightBase(this, weight);
 	}
 
 	/**
@@ -924,18 +961,18 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 空腹限界
 	 */
 	@JsonProperty
-	public int[] getHUNGRYLIMITorg() {
-		return bodyStatProfile.getHUNGRYLIMITorg();
+	public int[] getHungryLimitBase() {
+		return BodyStatRule.getHungryLimitBase(this);
 	}
 
 	/**
 	 * 空腹限界を設定する.
 	 * 
-	 * @param hUNGRYLIMIT 空腹限界
+	 * @param hungryLimit 空腹限界
 	 */
 	@JsonProperty
-	public void setHUNGRYLIMITorg(int[] hUNGRYLIMIT) {
-		bodyStatProfile.setHUNGRYLIMITorg(hUNGRYLIMIT);
+	public void setHungryLimitBase(int[] hungryLimit) {
+		BodyStatRule.setHungryLimitBase(this, hungryLimit);
 	}
 
 	/**
@@ -944,18 +981,18 @@ public abstract class BodyAttributes extends Obj {
 	 * @return うんうん限界
 	 */
 	@JsonProperty
-	public int[] getSHITLIMITorg() {
-		return bodyStatProfile.getSHITLIMITorg();
+	public int[] getShitLimitBase() {
+		return BodyStatRule.getShitLimitBase(this);
 	}
 
 	/**
 	 * うんうん限界を設定する.
 	 * 
-	 * @param sHITLIMIT うんうん限界
+	 * @param shitLimit うんうん限界
 	 */
 	@JsonProperty
-	public void setSHITLIMITorg(int[] sHITLIMIT) {
-		bodyStatProfile.setSHITLIMITorg(sHITLIMIT);
+	public void setShitLimitBase(int[] shitLimit) {
+		BodyStatRule.setShitLimitBase(this, shitLimit);
 	}
 
 	/**
@@ -964,18 +1001,18 @@ public abstract class BodyAttributes extends Obj {
 	 * @return ダメージ限界
 	 */
 	@JsonProperty
-	public int[] getDAMAGELIMITorg() {
-		return bodyStatProfile.getDAMAGELIMITorg();
+	public int[] getDamageLimitBase() {
+		return BodyStatRule.getDamageLimitBase(this);
 	}
 
 	/**
 	 * ダメージ限界を設定する.
 	 * 
-	 * @param dAMAGELIMIT ダメージ限界
+	 * @param damageLimit ダメージ限界
 	 */
 	@JsonProperty
-	public void setDAMAGELIMITorg(int[] dAMAGELIMIT) {
-		bodyStatProfile.setDAMAGELIMITorg(dAMAGELIMIT);
+	public void setDamageLimitBase(int[] damageLimit) {
+		BodyStatRule.setDamageLimitBase(this, damageLimit);
 	}
 
 	/**
@@ -984,18 +1021,18 @@ public abstract class BodyAttributes extends Obj {
 	 * @return ストレス限界
 	 */
 	@JsonProperty
-	public int[] getSTRESSLIMITorg() {
-		return bodyStatProfile.getSTRESSLIMITorg();
+	public int[] getStressLimitBase() {
+		return BodyStatRule.getStressLimitBase(this);
 	}
 
 	/**
 	 * ストレス限界を設定する.
 	 * 
-	 * @param sTRESSLIMIT ストレス限界
+	 * @param stressLimit ストレス限界
 	 */
 	@JsonProperty
-	public void setSTRESSLIMITorg(int[] sTRESSLIMIT) {
-		bodyStatProfile.setSTRESSLIMITorg(sTRESSLIMIT);
+	public void setStressLimitBase(int[] stressLimit) {
+		BodyStatRule.setStressLimitBase(this, stressLimit);
 	}
 
 	/**
@@ -1004,18 +1041,18 @@ public abstract class BodyAttributes extends Obj {
 	 * @return なつき度限界
 	 */
 	@JsonProperty
-	public int getLOVEPLAYERLIMITorg() {
-		return bodyBehaviorProfile.getLOVEPLAYERLIMITorg();
+	public int getLovePlayerLimitBase() {
+		return BodyPreferenceRule.getLovePlayerLimitBase(this);
 	}
 
 	/**
 	 * なつき度限界を設定する.
 	 * 
-	 * @param lOVEPLAYERLIMIT なつき度限界
+	 * @param lovePlayerLimit なつき度限界
 	 */
 	@JsonProperty
-	public void setLOVEPLAYERLIMITorg(int lOVEPLAYERLIMIT) {
-		bodyBehaviorProfile.setLOVEPLAYERLIMITorg(lOVEPLAYERLIMIT);
+	public void setLovePlayerLimitBase(int lovePlayerLimit) {
+		BodyPreferenceRule.setLovePlayerLimitBase(this, lovePlayerLimit);
 	}
 
 	/**
@@ -1024,278 +1061,38 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 味覚レベル
 	 */
 	@JsonProperty
-	public int[] getTANGLEVELorg() {
-		return bodyStatProfile.getTANGLEVELorg();
+	public int[] getTangLevelBase() {
+		return BodyStatRule.getTangLevelBase(this);
 	}
 
 	/**
 	 * 味覚レベル を設定する.
 	 * 
-	 * @param tANGLEVEL 味覚レベル
+	 * @param tangLevel 味覚レベル
 	 */
 	@JsonProperty
-	public void setTANGLEVELorg(int[] tANGLEVEL) {
-		bodyStatProfile.setTANGLEVELorg(tANGLEVEL);
-	}
-
-	/**
-	 * 赤ゆ期間 を取得する.
-	 * 
-	 * @return 赤ゆ期間
-	 */
-	@JsonProperty
-	public int getBABYLIMITorg() {
-		return bodyTimingProfile.getBABYLIMITorg();
-	}
-
-	/**
-	 * 赤ゆ期間 を設定する.
-	 * 
-	 * @param bABYLIMIT 赤ゆ期間
-	 */
-	@JsonProperty
-	public void setBABYLIMITorg(int bABYLIMIT) {
-		bodyTimingProfile.setBABYLIMITorg(bABYLIMIT);
-	}
-
-	/**
-	 * 子ゆ期間 を取得する.
-	 * 
-	 * @return 子ゆ期間
-	 */
-	@JsonProperty
-	public int getCHILDLIMITorg() {
-		return bodyTimingProfile.getCHILDLIMITorg();
-	}
-
-	/**
-	 * 子ゆ期間 を設定する.
-	 * 
-	 * @param cHILDLIMIT 子ゆ期間
-	 */
-	@JsonProperty
-	public void setCHILDLIMITorg(int cHILDLIMIT) {
-		bodyTimingProfile.setCHILDLIMITorg(cHILDLIMIT);
-	}
-
-	/**
-	 * 寿命を取得する.
-	 * 
-	 * @return 寿命
-	 */
-	@JsonProperty
-	public int getLIFELIMITorg() {
-		return bodyTimingProfile.getLIFELIMITorg();
-	}
-
-	/**
-	 * 寿命を設定する.
-	 * 
-	 * @param lIFELIMIT 寿命
-	 */
-	@JsonProperty
-	public void setLIFELIMITorg(int lIFELIMIT) {
-		bodyTimingProfile.setLIFELIMITorg(lIFELIMIT);
-	}
-
-	/**
-	 * 腐敗日数 を取得する.
-	 * 
-	 * @return 腐敗日数
-	 */
-	@JsonProperty
-	public int getROTTINGTIMEorg() {
-		return bodyTimingProfile.getROTTINGTIMEorg();
-	}
-
-	/**
-	 * 腐敗日数 を設定する.
-	 * 
-	 * @param rOTTINGTIME 腐敗日数
-	 */
-	@JsonProperty
-	public void setROTTINGTIMEorg(int rOTTINGTIME) {
-		bodyTimingProfile.setROTTINGTIMEorg(rOTTINGTIME);
-	}
-
-	/**
-	 * 足の速さを取得する.
-	 * 
-	 * @return 足の速さ
-	 */
-	@JsonProperty
-	public int[] getSTEPorg() {
-		return bodyStatProfile.getSTEPorg();
-	}
-
-	/**
-	 * 足の速さを設定する.
-	 * 
-	 * @param sTEP 足の速さ
-	 */
-	@JsonProperty
-	public void setSTEPorg(int[] sTEP) {
-		bodyStatProfile.setSTEPorg(sTEP);
-	}
-
-	/**
-	 * リラックス状態の期間を取得する.
-	 * 
-	 * @return リラックス状態の期間
-	 */
-	@JsonProperty
-	public int getRELAXPERIODorg() {
-		return bodyTimingProfile.getRELAXPERIODorg();
-	}
-
-	/**
-	 * リラックス状態の期間 を設定する.
-	 * 
-	 * @param rELAXPERIOD リラックス状態の期間
-	 */
-	@JsonProperty
-	public void setRELAXPERIODorg(int rELAXPERIOD) {
-		bodyTimingProfile.setRELAXPERIODorg(rELAXPERIOD);
-	}
-
-	/**
-	 * 発情状態の期間 を取得する.
-	 * 
-	 * @return 発情状態の期間
-	 */
-	@JsonProperty
-	public int getEXCITEPERIODorg() {
-		return bodyTimingProfile.getEXCITEPERIODorg();
-	}
-
-	/**
-	 * 発情状態の期間 を設定する.
-	 * 
-	 * @param eXCITEPERIOD 発情状態の期間
-	 */
-	@JsonProperty
-	public void setEXCITEPERIODorg(int eXCITEPERIOD) {
-		bodyTimingProfile.setEXCITEPERIODorg(eXCITEPERIOD);
-	}
-
-	/**
-	 * 妊娠期間 を取得する.
-	 * 
-	 * @return 妊娠期間
-	 */
-	@JsonProperty
-	public int getPREGPERIODorg() {
-		return bodyTimingProfile.getPREGPERIODorg();
-	}
-
-	/**
-	 * 妊娠期間 を設定する.
-	 * 
-	 * @param pREGPERIOD 妊娠期間
-	 */
-	@JsonProperty
-	public void setPREGPERIODorg(int pREGPERIOD) {
-		bodyTimingProfile.setPREGPERIODorg(pREGPERIOD);
-	}
-
-	/**
-	 * 睡眠時間 を取得する.
-	 * 
-	 * @return 睡眠時間
-	 */
-	@JsonProperty
-	public int getSLEEPPERIODorg() {
-		return bodyTimingProfile.getSLEEPPERIODorg();
-	}
-
-	/**
-	 * 睡眠時間 を設定する.
-	 * 
-	 * @param sLEEPPERIOD 睡眠時間
-	 */
-	@JsonProperty
-	public void setSLEEPPERIODorg(int sLEEPPERIOD) {
-		bodyTimingProfile.setSLEEPPERIODorg(sLEEPPERIOD);
-	}
-
-	/**
-	 * アクティブな期間 を取得する.
-	 * 
-	 * @return アクティブな期間
-	 */
-	@JsonProperty
-	public int getACTIVEPERIODorg() {
-		return bodyTimingProfile.getACTIVEPERIODorg();
-	}
-
-	/**
-	 * アクティブな期間 を設定する.
-	 * 
-	 * @param aCTIVEPERIOD アクティブな期間
-	 */
-	@JsonProperty
-	public void setACTIVEPERIODorg(int aCTIVEPERIOD) {
-		bodyTimingProfile.setACTIVEPERIODorg(aCTIVEPERIOD);
-	}
-
-	/**
-	 * 怒り期間 を取得する.
-	 * 
-	 * @return 怒り期間
-	 */
-	@JsonProperty
-	public int getANGRYPERIODorg() {
-		return bodyTimingProfile.getANGRYPERIODorg();
-	}
-
-	/**
-	 * 怒り期間 を設定する.
-	 * 
-	 * @param aNGRYPERIOD 怒り期間
-	 */
-	@JsonProperty
-	public void setANGRYPERIODorg(int aNGRYPERIOD) {
-		bodyTimingProfile.setANGRYPERIODorg(aNGRYPERIOD);
-	}
-
-	/**
-	 * 恐怖期間 を取得する.
-	 * 
-	 * @return 恐怖期間
-	 */
-	@JsonProperty
-	public int getSCAREPERIODorg() {
-		return bodyTimingProfile.getSCAREPERIODorg();
-	}
-
-	/**
-	 * 恐怖期間 を設定する.
-	 * 
-	 * @param sCAREPERIOD 恐怖期間
-	 */
-	@JsonProperty
-	public void setSCAREPERIODorg(int sCAREPERIOD) {
-		bodyTimingProfile.setSCAREPERIODorg(sCAREPERIOD);
+	public void setTangLevelBase(int[] tangLevel) {
+		BodyStatRule.setTangLevelBase(this, tangLevel);
 	}
 
 	/**
 	 * 同一方向に動き続けるかを取得する.
 	 * 
-	 * @return 同一方向に動き続けるか
+	 * @return 同一方向に動き続ける倍率
 	 */
 	@JsonProperty
-	public int getSameDest() {
-		return bodyBehaviorProfile.getSameDest();
+	public int getSameDirectionFactor() {
+		return BodyPreferenceRule.getSameDirectionFactor(this);
 	}
 
 	/**
-	 * 同一方向に動き続けるかを設定する.
+	 * 同一方向に動き続ける倍率を設定する.
 	 * 
-	 * @param sameDest 同一方向に動き続けるか
+	 * @param sameDirectionFactor 同一方向に動き続ける倍率
 	 */
 	@JsonProperty
-	public void setSameDest(int sameDest) {
-		bodyBehaviorProfile.setSameDest(sameDest);
+	public void setSameDirectionFactor(int sameDirectionFactor) {
+		BodyPreferenceRule.setSameDirectionFactor(this, sameDirectionFactor);
 	}
 
 	/**
@@ -1304,18 +1101,18 @@ public abstract class BodyAttributes extends Obj {
 	 * @return ゲーム内12分、衝動の抑制のための変数
 	 */
 	@JsonProperty
-	public int getDECLINEPERIODorg() {
-		return bodyTimingProfile.getDECLINEPERIODorg();
+	public int getDeclinePeriodBase() {
+		return BodyTimingRule.getDeclinePeriodBase(this);
 	}
 
 	/**
 	 * ゲーム内12分、衝動の抑制のための変数 を設定する.
 	 * 
-	 * @param dECLINEPERIOD ゲーム内12分、衝動の抑制のための変数
+	 * @param declinePeriod ゲーム内12分、衝動の抑制のための変数
 	 */
 	@JsonProperty
-	public void setDECLINEPERIODorg(int dECLINEPERIOD) {
-		bodyTimingProfile.setDECLINEPERIODorg(dECLINEPERIOD);
+	public void setDeclinePeriodBase(int declinePeriod) {
+		BodyTimingRule.setDeclinePeriodBase(this, declinePeriod);
 	}
 
 	/**
@@ -1324,18 +1121,18 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 壁等にブロックされた回数の限界（怒りだす等）
 	 */
 	@JsonProperty
-	public int getBLOCKEDLIMITorg() {
-		return bodyTimingProfile.getBLOCKEDLIMITorg();
+	public int getBlockedLimitBase() {
+		return BodyTimingRule.getBlockedLimitBase(this);
 	}
 
 	/**
 	 * 壁等にブロックされた回数の限界（怒りだす等） を設定する.
 	 * 
-	 * @param bLOCKEDLIMIT 壁等にブロックされた回数の限界（怒りだす等）
+	 * @param blockedLimit 壁等にブロックされた回数の限界（怒りだす等）
 	 */
 	@JsonProperty
-	public void setBLOCKEDLIMITorg(int bLOCKEDLIMIT) {
-		bodyTimingProfile.setBLOCKEDLIMITorg(bLOCKEDLIMIT);
+	public void setBlockedLimitBase(int blockedLimit) {
+		BodyTimingRule.setBlockedLimitBase(this, blockedLimit);
 	}
 
 	/**
@@ -1344,18 +1141,18 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 汚れ限界（超えるとゆかび状態）
 	 */
 	@JsonProperty
-	public int getDIRTYPERIODorg() {
-		return bodyTimingProfile.getDIRTYPERIODorg();
+	public int getDirtyPeriodBase() {
+		return BodyTimingRule.getDirtyPeriodBase(this);
 	}
 
 	/**
 	 * 汚れ限界（超えるとゆかび状態） を設定する.
 	 * 
-	 * @param dIRTYPERIOD 汚れ限界（超えるとゆかび状態）
+	 * @param dirtyPeriod 汚れ限界（超えるとゆかび状態）
 	 */
 	@JsonProperty
-	public void setDIRTYPERIODorg(int dIRTYPERIOD) {
-		bodyTimingProfile.setDIRTYPERIODorg(dIRTYPERIOD);
+	public void setDirtyPeriodBase(int dirtyPeriod) {
+		BodyTimingRule.setDirtyPeriodBase(this, dirtyPeriod);
 	}
 
 	/**
@@ -1364,18 +1161,18 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 視界
 	 */
 	@JsonProperty
-	public int getEYESIGHTorg() {
-		return bodyTimingProfile.getEYESIGHTorg();
+	public int getEyesightBase() {
+		return BodyTimingRule.getEyesightBase(this);
 	}
 
 	/**
 	 * 視界を設定する.
 	 * 
-	 * @param eYESIGHT 視界
+	 * @param eyesight 視界
 	 */
 	@JsonProperty
-	public void setEYESIGHTorg(int eYESIGHT) {
-		bodyTimingProfile.setEYESIGHTorg(eYESIGHT);
+	public void setEyesightBase(int eyesight) {
+		BodyTimingRule.setEyesightBase(this, eyesight);
 	}
 
 	/**
@@ -1384,18 +1181,18 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 強さ
 	 */
 	@JsonProperty
-	public int[] getSTRENGTHorg() {
-		return bodyStatProfile.getSTRENGTHorg();
+	public int[] getStrengthBase() {
+		return BodyStatRule.getStrengthBase(this);
 	}
 
 	/**
 	 * 強さを設定する.
 	 * 
-	 * @param sTRENGTH 強さ
+	 * @param strength 強さ
 	 */
 	@JsonProperty
-	public void setSTRENGTHorg(int[] sTRENGTH) {
-		bodyStatProfile.setSTRENGTHorg(sTRENGTH);
+	public void setStrengthBase(int[] strength) {
+		BodyStatRule.setStrengthBase(this, strength);
 	}
 
 	/**
@@ -1404,18 +1201,273 @@ public abstract class BodyAttributes extends Obj {
 	 * @return ゆかびの潜伏期間
 	 */
 	@JsonProperty
-	public int getINCUBATIONPERIODorg() {
-		return bodyTimingProfile.getINCUBATIONPERIODorg();
+	public int getIncubationPeriodBase() {
+		return BodyTimingRule.getIncubationPeriodBase(this);
 	}
 
 	/**
 	 * ゆかびの潜伏期間 を設定する.
 	 * 
-	 * @param iNCUBATIONPERIOD ゆかびの潜伏期間
+	 * @param incubationPeriod ゆかびの潜伏期間
 	 */
 	@JsonProperty
-	public void setINCUBATIONPERIODorg(int iNCUBATIONPERIOD) {
-		bodyTimingProfile.setINCUBATIONPERIODorg(iNCUBATIONPERIOD);
+	public void setIncubationPeriodBase(int incubationPeriod) {
+		BodyTimingRule.setIncubationPeriodBase(this, incubationPeriod);
+	}
+
+	@JsonIgnore
+	public BodyTimingProfile getBodyTimingProfileRaw() {
+		return bodyTimingProfile;
+	}
+
+	@JsonIgnore
+	public BodyStatProfile getBodyStatProfileRaw() {
+		return bodyStatProfile;
+	}
+
+	@JsonIgnore
+	public BodyBehaviorProfile getBodyBehaviorProfileRaw() {
+		return bodyBehaviorProfile;
+	}
+
+	/**
+	 * 赤ゆ期間 を取得する.
+	 *
+	 * @return 赤ゆ期間
+	 */
+	@JsonProperty
+	public int getBabyLimitBase() {
+		return BodyTimingRule.getBabyLimitBase(this);
+	}
+
+	/**
+	 * 赤ゆ期間 を設定する.
+	 *
+	 * @param babyLimit 赤ゆ期間
+	 */
+	@JsonProperty
+	public void setBabyLimitBase(int babyLimit) {
+		BodyTimingRule.setBabyLimitBase(this, babyLimit);
+	}
+
+	/**
+	 * 子ゆ期間 を取得する.
+	 *
+	 * @return 子ゆ期間
+	 */
+	@JsonProperty
+	public int getChildLimitBase() {
+		return BodyTimingRule.getChildLimitBase(this);
+	}
+
+	/**
+	 * 子ゆ期間 を設定する.
+	 *
+	 * @param cHILDLIMIT 子ゆ期間
+	 */
+	@JsonProperty
+	public void setChildLimitBase(int cHILDLIMIT) {
+		BodyTimingRule.setChildLimitBase(this, cHILDLIMIT);
+	}
+
+	/**
+	 * 寿命を取得する.
+	 *
+	 * @return 寿命
+	 */
+	@JsonProperty
+	public int getLifeLimitBase() {
+		return BodyTimingRule.getLifeLimitBase(this);
+	}
+
+	/**
+	 * 寿命を設定する.
+	 *
+	 * @param lIFELIMIT 寿命
+	 */
+	@JsonProperty
+	public void setLifeLimitBase(int lIFELIMIT) {
+		BodyTimingRule.setLifeLimitBase(this, lIFELIMIT);
+	}
+
+	/**
+	 * 腐敗日数 を取得する.
+	 *
+	 * @return 腐敗日数
+	 */
+	@JsonProperty
+	public int getRottingTimeBase() {
+		return BodyTimingRule.getRottingTimeBase(this);
+	}
+
+	/**
+	 * 腐敗日数 を設定する.
+	 *
+	 * @param rOTTINGTIME 腐敗日数
+	 */
+	@JsonProperty
+	public void setRottingTimeBase(int rOTTINGTIME) {
+		BodyTimingRule.setRottingTimeBase(this, rOTTINGTIME);
+	}
+
+	/**
+	 * 足の速さを取得する.
+	 *
+	 * @return 足の速さ
+	 */
+	@JsonProperty
+	public int[] getStepBase() {
+		return BodyTimingRule.getStepBase(this);
+	}
+
+	/**
+	 * 足の速さを設定する.
+	 *
+	 * @param step 足の速さ
+	 */
+	@JsonProperty
+	public void setStepBase(int[] step) {
+		BodyTimingRule.setStepBase(this, step);
+	}
+
+	/**
+	 * リラックス状態の期間を取得する.
+	 *
+	 * @return リラックス状態の期間
+	 */
+	@JsonProperty
+	public int getRelaxPeriodBase() {
+		return BodyTimingRule.getRelaxPeriodBase(this);
+	}
+
+	/**
+	 * リラックス状態の期間 を設定する.
+	 *
+	 * @param relaxPeriod リラックス状態の期間
+	 */
+	@JsonProperty
+	public void setRelaxPeriodBase(int relaxPeriod) {
+		BodyTimingRule.setRelaxPeriodBase(this, relaxPeriod);
+	}
+
+	/**
+	 * 発情状態の期間 を取得する.
+	 *
+	 * @return 発情状態の期間
+	 */
+	@JsonProperty
+	public int getExcitePeriodBase() {
+		return BodyTimingRule.getExcitePeriodBase(this);
+	}
+
+	/**
+	 * 発情状態の期間 を設定する.
+	 *
+	 * @param excitePeriod 発情状態の期間
+	 */
+	@JsonProperty
+	public void setExcitePeriodBase(int excitePeriod) {
+		BodyTimingRule.setExcitePeriodBase(this, excitePeriod);
+	}
+
+	/**
+	 * 妊娠期間 を取得する.
+	 *
+	 * @return 妊娠期間
+	 */
+	@JsonProperty
+	public int getPregPeriodBase() {
+		return BodyTimingRule.getPregPeriodBase(this);
+	}
+
+	/**
+	 * 妊娠期間 を設定する.
+	 *
+	 * @param pregPeriod 妊娠期間
+	 */
+	@JsonProperty
+	public void setPregPeriodBase(int pregPeriod) {
+		BodyTimingRule.setPregPeriodBase(this, pregPeriod);
+	}
+
+	/**
+	 * 睡眠時間 を取得する.
+	 *
+	 * @return 睡眠時間
+	 */
+	@JsonProperty
+	public int getSleepPeriodBase() {
+		return BodyTimingRule.getSleepPeriodBase(this);
+	}
+
+	/**
+	 * 睡眠時間 を設定する.
+	 *
+	 * @param sleepPeriod 睡眠時間
+	 */
+	@JsonProperty
+	public void setSleepPeriodBase(int sleepPeriod) {
+		BodyTimingRule.setSleepPeriodBase(this, sleepPeriod);
+	}
+
+	/**
+	 * アクティブな期間 を取得する.
+	 *
+	 * @return アクティブな期間
+	 */
+	@JsonProperty
+	public int getActivePeriodBase() {
+		return BodyTimingRule.getActivePeriodBase(this);
+	}
+
+	/**
+	 * アクティブな期間 を設定する.
+	 *
+	 * @param activePeriod アクティブな期間
+	 */
+	@JsonProperty
+	public void setActivePeriodBase(int activePeriod) {
+		BodyTimingRule.setActivePeriodBase(this, activePeriod);
+	}
+
+	/**
+	 * 怒り期間 を取得する.
+	 *
+	 * @return 怒り期間
+	 */
+	@JsonProperty
+	public int getAngryPeriodBase() {
+		return BodyTimingRule.getAngryPeriodBase(this);
+	}
+
+	/**
+	 * 怒り期間 を設定する.
+	 *
+	 * @param angryPeriod 怒り期間
+	 */
+	@JsonProperty
+	public void setAngryPeriodBase(int angryPeriod) {
+		BodyTimingRule.setAngryPeriodBase(this, angryPeriod);
+	}
+
+	/**
+	 * 恐怖期間 を取得する.
+	 *
+	 * @return 恐怖期間
+	 */
+	@JsonProperty
+	public int getScarePeriodBase() {
+		return BodyTimingRule.getScarePeriodBase(this);
+	}
+
+	/**
+	 * 恐怖期間 を設定する.
+	 *
+	 * @param scarePeriod 恐怖期間
+	 */
+	@JsonProperty
+	public void setScarePeriodBase(int scarePeriod) {
+		BodyTimingRule.setScarePeriodBase(this, scarePeriod);
 	}
 
 	/**
@@ -1423,17 +1475,17 @@ public abstract class BodyAttributes extends Obj {
 	 * 
 	 * @return 攻撃された際のぴこぴこ破壊確率。0だと破壊されない
 	 */
-	public int getnBreakBraidRand() {
-		return bodyBehaviorProfile.getnBreakBraidRand();
+	public int getBraidBreakChance() {
+		return BodyBehaviorRule.getBraidBreakChance(this);
 	}
 
 	/**
 	 * 攻撃された際のぴこぴこ破壊確率。0だと破壊されない を設定する.
 	 * 
-	 * @param nBreakBraidRand 攻撃された際のぴこぴこ破壊確率。0だと破壊されない
+	 * @param braidBreakChance 攻撃された際のぴこぴこ破壊確率。0だと破壊されない
 	 */
-	public void setnBreakBraidRand(int nBreakBraidRand) {
-		bodyBehaviorProfile.setnBreakBraidRand(nBreakBraidRand);
+	public void setBraidBreakChance(int braidBreakChance) {
+		BodyBehaviorRule.setBraidBreakChance(this, braidBreakChance);
 	}
 
 	/**
@@ -1442,7 +1494,7 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 何回のうち1回の確率ですりすり事故で妊娠するかの値
 	 */
 	public int getSurisuriAccidentProb() {
-		return bodyBehaviorProfile.getSurisuriAccidentProb();
+		return BodyBehaviorRule.getSurisuriAccidentProb(this);
 	}
 
 	/**
@@ -1451,7 +1503,7 @@ public abstract class BodyAttributes extends Obj {
 	 * @param surisuriAccidentProb 何回のうち1回の確率ですりすり事故で妊娠するかの値
 	 */
 	public void setSurisuriAccidentProb(int surisuriAccidentProb) {
-		bodyBehaviorProfile.setSurisuriAccidentProb(surisuriAccidentProb);
+		BodyBehaviorRule.setSurisuriAccidentProb(this, surisuriAccidentProb);
 	}
 
 	/**
@@ -1460,7 +1512,7 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 何回のうち1回の確率で路上で車に轢かれるかの値
 	 */
 	public int getCarAccidentProb() {
-		return bodyBehaviorProfile.getCarAccidentProb();
+		return BodyBehaviorRule.getCarAccidentProb(this);
 	}
 
 	/**
@@ -1469,7 +1521,7 @@ public abstract class BodyAttributes extends Obj {
 	 * @param carAccidentProb 何回のうち1回の確率で路上で車に轢かれるかの値
 	 */
 	public void setCarAccidentProb(int carAccidentProb) {
-		bodyBehaviorProfile.setCarAccidentProb(carAccidentProb);
+		BodyBehaviorRule.setCarAccidentProb(this, carAccidentProb);
 	}
 
 	/**
@@ -1478,7 +1530,7 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 何回のうち1回の確率であんよが傷ついているとあんよが破壊されるかの確率
 	 */
 	public int getBreakBodyByShitProb() {
-		return bodyBehaviorProfile.getBreakBodyByShitProb();
+		return BodyBehaviorRule.getBreakBodyByShitProb(this);
 	}
 
 	/**
@@ -1487,7 +1539,7 @@ public abstract class BodyAttributes extends Obj {
 	 * @param breakBodyByShitProb 何回のうち1回の確率であんよが傷ついているとあんよが破壊されるかの確率
 	 */
 	public void setBreakBodyByShitProb(int breakBodyByShitProb) {
-		bodyBehaviorProfile.setBreakBodyByShitProb(breakBodyByShitProb);
+		BodyBehaviorRule.setBreakBodyByShitProb(this, breakBodyByShitProb);
 	}
 
 	/**
@@ -1496,7 +1548,7 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 何回のうち1回の確率で苦いフードを食べた際にゆ下痢になるかの確率
 	 */
 	public int getDiarrheaProb() {
-		return bodyBehaviorProfile.getDiarrheaProb();
+		return BodyBehaviorRule.getDiarrheaProb(this);
 	}
 
 	/**
@@ -1505,7 +1557,7 @@ public abstract class BodyAttributes extends Obj {
 	 * @param diarrheaProb 何回のうち1回の確率で苦いフードを食べた際にゆ下痢になるかの確率
 	 */
 	public void setDiarrheaProb(int diarrheaProb) {
-		bodyBehaviorProfile.setDiarrheaProb(diarrheaProb);
+		BodyBehaviorRule.setDiarrheaProb(this, diarrheaProb);
 	}
 
 	/**
@@ -1514,7 +1566,7 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 自主洗浄失敗確率配列 [0]:赤ゆ [1]:子ゆ [2]:成ゆ
 	 */
 	public int[] getCleaningFailProbWise() {
-		return bodyStatProfile.getCleaningFailProbWise();
+		return BodyPreferenceRule.getCleaningFailProbWise(this);
 	}
 
 	/**
@@ -1523,7 +1575,7 @@ public abstract class BodyAttributes extends Obj {
 	 * @param cleaningFailProbWise 自主洗浄失敗確率配列 [0]:赤ゆ [1]:子ゆ [2]:成ゆ
 	 */
 	public void setCleaningFailProbWise(int[] cleaningFailProbWise) {
-		bodyStatProfile.setCleaningFailProbWise(cleaningFailProbWise);
+		BodyPreferenceRule.setCleaningFailProbWise(this, cleaningFailProbWise);
 	}
 
 	/**
@@ -1532,7 +1584,7 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 自主洗浄失敗確率配列 [0]:赤ゆ [1]:子ゆ [2]:成ゆ
 	 */
 	public int[] getCleaningFailProbAverage() {
-		return bodyStatProfile.getCleaningFailProbAverage();
+		return BodyPreferenceRule.getCleaningFailProbAverage(this);
 	}
 
 	/**
@@ -1541,7 +1593,7 @@ public abstract class BodyAttributes extends Obj {
 	 * @param cleaningFailProbAverage 自主洗浄失敗確率配列 [0]:赤ゆ [1]:子ゆ [2]:成ゆ
 	 */
 	public void setCleaningFailProbAverage(int[] cleaningFailProbAverage) {
-		bodyStatProfile.setCleaningFailProbAverage(cleaningFailProbAverage);
+		BodyPreferenceRule.setCleaningFailProbAverage(this, cleaningFailProbAverage);
 	}
 
 	/**
@@ -1550,7 +1602,7 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 自主洗浄失敗確率配列 [0]:赤ゆ [1]:子ゆ [2]:成ゆ
 	 */
 	public int[] getCleaningFailProbFool() {
-		return bodyStatProfile.getCleaningFailProbFool();
+		return BodyPreferenceRule.getCleaningFailProbFool(this);
 	}
 
 	/**
@@ -1559,7 +1611,7 @@ public abstract class BodyAttributes extends Obj {
 	 * @param cleaningFailProbFool 自主洗浄失敗確率配列 [0]:赤ゆ [1]:子ゆ [2]:成ゆ
 	 */
 	public void setCleaningFailProbFool(int[] cleaningFailProbFool) {
-		bodyStatProfile.setCleaningFailProbFool(cleaningFailProbFool);
+		BodyPreferenceRule.setCleaningFailProbFool(this, cleaningFailProbFool);
 	}
 
 	/**
@@ -1568,7 +1620,7 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 何回のうち１回の確率で発情するかの確率
 	 */
 	public int getExciteProb() {
-		return bodyBehaviorProfile.getExciteProb();
+		return BodyBehaviorRule.getExciteProb(this);
 	}
 
 	/**
@@ -1577,7 +1629,7 @@ public abstract class BodyAttributes extends Obj {
 	 * @param exciteProb 何回のうち１回の確率で発情するかの確率
 	 */
 	public void setExciteProb(int exciteProb) {
-		bodyBehaviorProfile.setExciteProb(exciteProb);
+		BodyBehaviorRule.setExciteProb(this, exciteProb);
 	}
 
 	/**
@@ -1585,17 +1637,17 @@ public abstract class BodyAttributes extends Obj {
 	 * 
 	 * @return 固有の免疫力（個体値。これは仮）
 	 */
-	public int getROBUSTNESS() {
-		return bodyBehaviorProfile.getROBUSTNESS();
+	public int getImmunityStrength() {
+		return BodyBehaviorRule.getImmunityStrength(this);
 	}
 
 	/**
 	 * 固有の免疫力（個体値。これは仮） を設定する.
 	 * 
-	 * @param rOBUSTNESS 固有の免疫力（個体値。これは仮）
+	 * @param immunityStrength 固有の免疫力（個体値。これは仮）
 	 */
-	public void setROBUSTNESS(int rOBUSTNESS) {
-		bodyBehaviorProfile.setROBUSTNESS(rOBUSTNESS);
+	public void setImmunityStrength(int immunityStrength) {
+		BodyBehaviorRule.setImmunityStrength(this, immunityStrength);
 	}
 
 	/**
@@ -1605,7 +1657,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@JsonProperty
 	public int[] getImmunity() {
-		return bodyStatProfile.getImmunity();
+		return BodyStatRule.getImmunity(this);
 	}
 
 	/**
@@ -1615,7 +1667,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@JsonProperty
 	public void setImmunity(int[] immunity) {
-		bodyStatProfile.setImmunity(immunity);
+		BodyStatRule.setImmunity(this, immunity);
 	}
 
 	/**
@@ -1624,6 +1676,11 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 性格変化の切り替え
 	 */
 	public boolean isNotChangeCharacter() {
+		return BodyPreferenceRule.isNotChangeCharacter(this);
+	}
+
+	@JsonIgnore
+	public boolean isNotChangeCharacterRaw() {
 		return bodyBehaviorProfile.isNotChangeCharacter();
 	}
 
@@ -1633,7 +1690,7 @@ public abstract class BodyAttributes extends Obj {
 	 * @param notChangeCharacter 性格変化の切り替え
 	 */
 	public void setNotChangeCharacter(boolean notChangeCharacter) {
-		bodyBehaviorProfile.setNotChangeCharacter(notChangeCharacter);
+		BodyPreferenceRule.setNotChangeCharacter(this, notChangeCharacter);
 	}
 
 	/**
@@ -1642,7 +1699,7 @@ public abstract class BodyAttributes extends Obj {
 	 * @return ゲスポイント
 	 */
 	public int getAttitudePoint() {
-		return bodyBehaviorProfile.getAttitudePoint();
+		return BodyBehaviorRule.getAttitudePoint(this);
 	}
 
 	/**
@@ -1651,7 +1708,7 @@ public abstract class BodyAttributes extends Obj {
 	 * @param attitudePoint ゲスポイント
 	 */
 	public void setAttitudePoint(int attitudePoint) {
-		bodyBehaviorProfile.setAttitudePoint(attitudePoint);
+		BodyBehaviorRule.setAttitudePoint(this, attitudePoint);
 	}
 
 	/**
@@ -1661,7 +1718,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@JsonProperty
 	public int[] getRudeLimit() {
-		return bodyStatProfile.getRudeLimit();
+		return BodyStatRule.getRudeLimit(this);
 	}
 
 	/**
@@ -1671,7 +1728,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@JsonProperty
 	public void setRudeLimit(int[] rudeLimit) {
-		bodyStatProfile.setRudeLimit(rudeLimit);
+		BodyStatRule.setRudeLimit(this, rudeLimit);
 	}
 
 	/**
@@ -1681,7 +1738,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@JsonProperty
 	public int[] getNiceLimit() {
-		return bodyStatProfile.getNiceLimit();
+		return BodyPreferenceRule.getNiceLimit(this);
 	}
 
 	/**
@@ -1691,7 +1748,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@JsonProperty
 	public void setNiceLimit(int[] niceLimit) {
-		bodyStatProfile.setNiceLimit(niceLimit);
+		BodyPreferenceRule.setNiceLimit(this, niceLimit);
 	}
 
 	/**
@@ -1700,7 +1757,7 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 妊娠限界
 	 */
 	public int getPregnantLimit() {
-		return bodyBehaviorProfile.getPregnantLimit();
+		return BodyBehaviorRule.getPregnantLimit(this);
 	}
 
 	/**
@@ -1709,25 +1766,30 @@ public abstract class BodyAttributes extends Obj {
 	 * @param pregnantLimit 妊娠限界
 	 */
 	public void setPregnantLimit(int pregnantLimit) {
-		bodyBehaviorProfile.setPregnantLimit(pregnantLimit);
+		BodyBehaviorRule.setPregnantLimit(this, pregnantLimit);
 	}
 
 	/**
-	 * よりリアルな妊娠限界かどうか を取得する.
+	 * 妊娠限界を厳密に扱うかどうかを取得する.
 	 * 
-	 * @return よりリアルな妊娠限界かどうか
+	 * @return 妊娠限界を厳密に扱うかどうか
 	 */
-	public boolean isRealPregnantLimit() {
-		return bodyBehaviorProfile.isRealPregnantLimit();
+	public boolean isUseRealPregnantLimit() {
+		return BodyPreferenceRule.isUseRealPregnantLimit(this);
+	}
+
+	@JsonIgnore
+	public boolean isUseRealPregnantLimitRaw() {
+		return bodyBehaviorProfile.isUseRealPregnantLimit();
 	}
 
 	/**
-	 * よりリアルな妊娠限界かどうかを返却する.
+	 * 妊娠限界を厳密に扱うかどうかを設定する.
 	 * 
-	 * @param realPregnantLimit よりリアルな妊娠限界かどうか
+	 * @param useRealPregnantLimit 妊娠限界を厳密に扱うかどうか
 	 */
-	public void setRealPregnantLimit(boolean realPregnantLimit) {
-		bodyBehaviorProfile.setRealPregnantLimit(realPregnantLimit);
+	public void setUseRealPregnantLimit(boolean useRealPregnantLimit) {
+		BodyPreferenceRule.setUseRealPregnantLimit(this, useRealPregnantLimit);
 	}
 
 	/**
@@ -1735,17 +1797,22 @@ public abstract class BodyAttributes extends Obj {
 	 * 
 	 * @return 画像がまりちゃ流しか
 	 */
-	public boolean isbImageNagasiMode() {
-		return bImageNagasiMode;
+	public boolean isImageNagasiMode() {
+		return BodyDisplayRule.isImageNagasiMode(this);
+	}
+
+	@JsonIgnore
+	public boolean isImageNagasiModeRaw() {
+		return imageNagasiMode;
 	}
 
 	/**
 	 * 画像がまりちゃ流しか を設定する.
 	 * 
-	 * @param bImageNagasiMode 画像がまりちゃ流しか
+	 * @param imageNagasiMode 画像がまりちゃ流しか
 	 */
-	public void setbImageNagasiMode(boolean bImageNagasiMode) {
-		this.bImageNagasiMode = bImageNagasiMode;
+	public void setImageNagasiMode(boolean imageNagasiMode) {
+		this.imageNagasiMode = imageNagasiMode;
 	}
 
 	/**
@@ -1971,7 +2038,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@JsonProperty
 	public int getDamage() {
-		return damage;
+		return BodyCoreStateRule.getDamage(this);
 	}
 
 	/**
@@ -1981,7 +2048,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@JsonProperty
 	public void setDamage(int damage) {
-		this.damage = damage;
+		BodyCoreStateRule.setDamage(this, damage);
 	}
 
 	/**
@@ -1990,7 +2057,7 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 蓄積ストレス
 	 */
 	public int getStress() {
-		return stress;
+		return BodyCoreStateRule.getStress(this);
 	}
 
 	/**
@@ -1999,7 +2066,7 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 舌の肥え
 	 */
 	public int getTang() {
-		return tang;
+		return BodyCoreStateRule.getTang(this);
 	}
 
 	/**
@@ -2008,7 +2075,7 @@ public abstract class BodyAttributes extends Obj {
 	 * @param tang 舌の肥え
 	 */
 	public void setTang(int tang) {
-		this.tang = tang;
+		BodyCoreStateRule.setTang(this, tang);
 	}
 
 	/**
@@ -2017,7 +2084,7 @@ public abstract class BodyAttributes extends Obj {
 	 * @param damageState ダメージ外観
 	 */
 	public void setDamageState(Damage damageState) {
-		this.damageState = damageState;
+		BodyCoreStateRule.setDamageState(this, damageState);
 	}
 
 	/**
@@ -2026,6 +2093,11 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 性格 counter indicating shithead/nice etc.
 	 */
 	public Attitude getAttitude() {
+		return BodyCoreStateRule.getAttitude(this);
+	}
+
+	@JsonIgnore
+	public Attitude getAttitudeRaw() {
 		return attitude;
 	}
 
@@ -2035,6 +2107,11 @@ public abstract class BodyAttributes extends Obj {
 	 * @param attitude 性格 counter indicating shithead/nice etc.
 	 */
 	public void setAttitude(Attitude attitude) {
+		BodyCoreStateRule.setAttitude(this, attitude);
+	}
+
+	@JsonIgnore
+	public void setAttitudeRaw(Attitude attitude) {
 		this.attitude = attitude;
 	}
 
@@ -2044,7 +2121,7 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 知性
 	 */
 	public Intelligence getIntelligence() {
-		return intelligence;
+		return BodyCoreStateRule.getIntelligence(this);
 	}
 
 	/**
@@ -2053,7 +2130,112 @@ public abstract class BodyAttributes extends Obj {
 	 * @param intelligence 知性
 	 */
 	public void setIntelligence(Intelligence intelligence) {
+		BodyCoreStateRule.setIntelligence(this, intelligence);
+	}
+
+	@JsonIgnore
+	public int getDamageRaw() {
+		return damage;
+	}
+
+	@JsonIgnore
+	public void setDamageRaw(int damage) {
+		this.damage = damage;
+	}
+
+	@JsonIgnore
+	public int getStressRaw() {
+		return stress;
+	}
+
+	@JsonIgnore
+	public void setStressRaw(int stress) {
+		this.stress = stress;
+	}
+
+	@JsonIgnore
+	public int getTangRaw() {
+		return tang;
+	}
+
+	@JsonIgnore
+	public void setTangRaw(int tang) {
+		this.tang = tang;
+	}
+
+	@JsonIgnore
+	public Damage getDamageStateRaw() {
+		return damageState;
+	}
+
+	@JsonIgnore
+	public void setDamageStateRaw(Damage damageState) {
+		this.damageState = damageState;
+	}
+
+	@JsonIgnore
+	public Intelligence getIntelligenceRaw() {
+		return intelligence;
+	}
+
+	@JsonIgnore
+	public void setIntelligenceRaw(Intelligence intelligence) {
 		this.intelligence = intelligence;
+	}
+
+	@JsonIgnore
+	public int getShitRaw() {
+		return shit;
+	}
+
+	@JsonIgnore
+	public void setShitRaw(int shit) {
+		this.shit = shit;
+	}
+
+	@JsonIgnore
+	public int getMemoriesRaw() {
+		return memories;
+	}
+
+	@JsonIgnore
+	public void setMemoriesRaw(int memories) {
+		this.memories = memories;
+	}
+
+	@JsonIgnore
+	public void setTraumaRaw(Trauma trauma) {
+		this.trauma = trauma;
+	}
+
+	@JsonIgnore
+	public int getLovePlayerRaw() {
+		return lovePlayer;
+	}
+
+	@JsonIgnore
+	public void setLovePlayerRaw(int lovePlayer) {
+		this.lovePlayer = lovePlayer;
+	}
+
+	@JsonIgnore
+	public LovePlayer getLovePlayerStateRaw() {
+		return lovePlayerState;
+	}
+
+	@JsonIgnore
+	public void setLovePlayerStateRaw(LovePlayer lovePlayerState) {
+		this.lovePlayerState = lovePlayerState;
+	}
+
+	@JsonIgnore
+	public HairState getHairStateRaw() {
+		return hairState;
+	}
+
+	@JsonIgnore
+	public void setHairStateRaw(HairState hairState) {
+		this.hairState = hairState;
 	}
 
 	/**
@@ -2070,17 +2252,17 @@ public abstract class BodyAttributes extends Obj {
 	 * 
 	 * @return プレイヤーへのなつき度
 	 */
-	public int getnLovePlayer() {
-		return nLovePlayer;
+	public int getLovePlayer() {
+		return BodyCoreStateRule.getLovePlayer(this);
 	}
 
 	/**
 	 * プレイヤーへのなつき度 を設定する.
 	 * 
-	 * @param nLovePlayer プレイヤーへのなつき度
+	 * @param lovePlayer プレイヤーへのなつき度
 	 */
-	public void setnLovePlayer(int nLovePlayer) {
-		this.nLovePlayer = nLovePlayer;
+	public void setLovePlayer(int lovePlayer) {
+		BodyCoreStateRule.setLovePlayer(this, lovePlayer);
 	}
 
 	/**
@@ -2088,17 +2270,17 @@ public abstract class BodyAttributes extends Obj {
 	 * 
 	 * @return プレイヤーへのなつき度概算
 	 */
-	public LovePlayer geteLovePlayerState() {
-		return eLovePlayerState;
+	public LovePlayer getLovePlayerState() {
+		return BodyCoreStateRule.getLovePlayerState(this);
 	}
 
 	/**
 	 * プレイヤーへのなつき度概算 を設定する.
 	 * 
-	 * @param eLovePlayerState プレイヤーへのなつき度概算
+	 * @param lovePlayerState プレイヤーへのなつき度概算
 	 */
-	public void seteLovePlayerState(LovePlayer eLovePlayerState) {
-		this.eLovePlayerState = eLovePlayerState;
+	public void setLovePlayerState(LovePlayer lovePlayerState) {
+		BodyCoreStateRule.setLovePlayerState(this, lovePlayerState);
 	}
 
 	/**
@@ -2106,17 +2288,17 @@ public abstract class BodyAttributes extends Obj {
 	 * 
 	 * @return 髪の状態
 	 */
-	public HairState geteHairState() {
-		return eHairState;
+	public HairState getHairState() {
+		return BodyCoreStateRule.getHairState(this);
 	}
 
 	/**
 	 * 髪の状態 を設定する.
 	 * 
-	 * @param eHairState 髪の状態
+	 * @param hairState 髪の状態
 	 */
-	public void seteHairState(HairState eHairState) {
-		this.eHairState = eHairState;
+	public void setHairState(HairState hairState) {
+		BodyCoreStateRule.setHairState(this, hairState);
 	}
 
 	/**
@@ -2125,7 +2307,7 @@ public abstract class BodyAttributes extends Obj {
 	 * @return うんうんの溜まり具合
 	 */
 	public int getShit() {
-		return shit;
+		return BodyCoreStateRule.getShit(this);
 	}
 
 	/**
@@ -2134,7 +2316,7 @@ public abstract class BodyAttributes extends Obj {
 	 * @param shit うんうんの溜まり具合
 	 */
 	public void setShit(int shit) {
-		this.shit = shit;
+		BodyCoreStateRule.setShit(this, shit);
 	}
 
 	/**
@@ -2143,7 +2325,7 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 思い出（悪夢関連）
 	 */
 	public int getMemories() {
-		return memories;
+		return BodyCoreStateRule.getMemories(this);
 	}
 
 	/**
@@ -2152,7 +2334,7 @@ public abstract class BodyAttributes extends Obj {
 	 * @param memories 思い出（悪夢関連）
 	 */
 	public void setMemories(int memories) {
-		this.memories = memories;
+		BodyCoreStateRule.setMemories(this, memories);
 	}
 
 	/**
@@ -2161,7 +2343,7 @@ public abstract class BodyAttributes extends Obj {
 	 * @return トラウマ
 	 */
 	public Trauma getTrauma() {
-		return trauma;
+		return BodyCoreStateRule.getTrauma(this);
 	}
 
 	/**
@@ -2170,7 +2352,7 @@ public abstract class BodyAttributes extends Obj {
 	 * @param trauma トラウマ
 	 */
 	public void setTrauma(Trauma trauma) {
-		this.trauma = trauma;
+		BodyCoreStateRule.setTrauma(this, trauma);
 	}
 
 	/**
@@ -2215,6 +2397,11 @@ public abstract class BodyAttributes extends Obj {
 	 * @return おさげ、羽、尻尾有無 種族として何も持っていないものはtrue
 	 */
 	public boolean isHasBraid() {
+		return BodyStructureRule.isHasBraid(this);
+	}
+
+	@JsonIgnore
+	public boolean isHasBraidRaw() {
 		return hasBraid;
 	}
 
@@ -2233,6 +2420,11 @@ public abstract class BodyAttributes extends Obj {
 	 * @return おくるみ有無 true if having pants
 	 */
 	public boolean isHasPants() {
+		return BodyStructureRule.isHasPants(this);
+	}
+
+	@JsonIgnore
+	public boolean isHasPantsRaw() {
 		return hasPants;
 	}
 
@@ -2251,6 +2443,11 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 胎生妊娠有無 having baby or not
 	 */
 	public boolean isHasBaby() {
+		return BodyStructureRule.isHasBaby(this);
+	}
+
+	@JsonIgnore
+	public boolean isHasBabyRaw() {
 		return hasBaby;
 	}
 
@@ -2269,6 +2466,11 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 茎妊娠有無 having baby or not
 	 */
 	public boolean isHasStalk() {
+		return BodyStructureRule.isHasStalk(this);
+	}
+
+	@JsonIgnore
+	public boolean isHasStalkRaw() {
 		return hasStalk;
 	}
 
@@ -2287,6 +2489,11 @@ public abstract class BodyAttributes extends Obj {
 	 * @return あにゃるふさぎ有無
 	 */
 	public boolean isAnalClose() {
+		return BodyStructureRule.isAnalClose(this);
+	}
+
+	@JsonIgnore
+	public boolean isAnalCloseRaw() {
 		return analClose;
 	}
 
@@ -2305,6 +2512,11 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 胎生去勢有無
 	 */
 	public boolean isBodyCastration() {
+		return BodyStructureRule.isBodyCastration(this);
+	}
+
+	@JsonIgnore
+	public boolean isBodyCastrationRaw() {
 		return bodyCastration;
 	}
 
@@ -2323,6 +2535,11 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 茎去勢有無
 	 */
 	public boolean isStalkCastration() {
+		return BodyStructureRule.isStalkCastration(this);
+	}
+
+	@JsonIgnore
+	public boolean isStalkCastrationRaw() {
 		return stalkCastration;
 	}
 
@@ -2340,17 +2557,23 @@ public abstract class BodyAttributes extends Obj {
 	 * 
 	 * @return ぺにぺにの去勢有無
 	 */
-	public boolean isbPenipeniCutted() {
-		return bPenipeniCutted;
+	public boolean isPenipeniCutted() {
+		return BodyFlagRule.isPenipeniCutted(this);
+	}
+
+	@JsonIgnore
+	public boolean isPenipeniCuttedRaw() {
+		return penipeniCutted;
 	}
 
 	/**
 	 * ぺにぺにの去勢有無 を設定する.
 	 * 
-	 * @param bPenipeniCutted ぺにぺにの去勢有無
+	 * @param penipeniCutted ぺにぺにの去勢有無
 	 */
-	public void setbPenipeniCutted(boolean bPenipeniCutted) {
-		this.bPenipeniCutted = bPenipeniCutted;
+	@JsonProperty("penipeniCutted")
+	public void setPenipeniCutted(boolean penipeniCutted) {
+		this.penipeniCutted = penipeniCutted;
 	}
 
 	/**
@@ -2358,17 +2581,23 @@ public abstract class BodyAttributes extends Obj {
 	 * 
 	 * @return フェロモンの有無
 	 */
-	public boolean isbPheromone() {
-		return bPheromone;
+	public boolean isPheromone() {
+		return BodyFlagRule.isPheromone(this);
+	}
+
+	@JsonIgnore
+	public boolean isPheromoneRaw() {
+		return pheromone;
 	}
 
 	/**
 	 * フェロモンの有無 を設定する.
 	 * 
-	 * @param bPheromone フェロモンの有無
+	 * @param pheromone フェロモンの有無
 	 */
-	public void setbPheromone(boolean bPheromone) {
-		this.bPheromone = bPheromone;
+	@JsonProperty("pheromone")
+	public void setPheromone(boolean pheromone) {
+		this.pheromone = pheromone;
 	}
 
 	/**
@@ -2449,6 +2678,11 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 死亡フラグdead of alive
 	 */
 	public boolean isDead() {
+		return BodyConditionRule.isDead(this);
+	}
+
+	@JsonIgnore
+	public boolean isDeadRaw() {
 		return dead;
 	}
 
@@ -2466,17 +2700,24 @@ public abstract class BodyAttributes extends Obj {
 	 * 
 	 * @return うまれて初めての地面か
 	 */
-	public boolean isBFirstGround() {
-		return bFirstGround;
+	@JsonIgnore
+	public boolean isFirstGround() {
+		return BodyConditionRule.isFirstGround(this);
+	}
+
+	@JsonIgnore
+	public boolean isFirstGroundRaw() {
+		return firstGround;
 	}
 
 	/**
 	 * うまれて初めての地面か を設定する.
 	 * 
-	 * @param bFirstGround うまれて初めての地面か
+	 * @param firstGround うまれて初めての地面か
 	 */
-	public void setBFirstGround(boolean bFirstGround) {
-		this.bFirstGround = bFirstGround;
+	@JsonProperty("firstGround")
+	public void setFirstGround(boolean firstGround) {
+		this.firstGround = firstGround;
 	}
 
 	/**
@@ -2484,17 +2725,23 @@ public abstract class BodyAttributes extends Obj {
 	 * 
 	 * @return うまれて初めての食事か
 	 */
-	public boolean isbFirstEatStalk() {
-		return bFirstEatStalk;
+	public boolean isFirstEatStalk() {
+		return BodyBirthRule.isFirstEatStalk(this);
+	}
+
+	@JsonIgnore
+	public boolean isFirstEatStalkRaw() {
+		return firstEatStalk;
 	}
 
 	/**
 	 * うまれて初めての食事か を設定する.
 	 * 
-	 * @param bFirstEatStalk うまれて初めての食事か
+	 * @param firstEatStalk うまれて初めての食事か
 	 */
-	public void setbFirstEatStalk(boolean bFirstEatStalk) {
-		this.bFirstEatStalk = bFirstEatStalk;
+	@JsonProperty("firstEatStalk")
+	public void setFirstEatStalk(boolean firstEatStalk) {
+		this.firstEatStalk = firstEatStalk;
 	}
 
 	/**
@@ -2503,6 +2750,11 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 死体が損壊されているか
 	 */
 	public boolean isCrushed() {
+		return BodyConditionRule.isCrushed(this);
+	}
+
+	@JsonIgnore
+	public boolean isCrushedRaw() {
 		return crushed;
 	}
 
@@ -2521,6 +2773,11 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 死体が焼損されているか
 	 */
 	public boolean isBurned() {
+		return BodyConditionRule.isBurned(this);
+	}
+
+	@JsonIgnore
+	public boolean isBurnedRaw() {
 		return burned;
 	}
 
@@ -2529,17 +2786,17 @@ public abstract class BodyAttributes extends Obj {
 	 * 
 	 * @return 中枢餡の状態（非ゆっくり症フラグ
 	 */
-	public CoreAnkoState geteCoreAnkoState() {
-		return eCoreAnkoState;
+	public CoreAnkoState getCoreAnkoState() {
+		return coreAnkoState;
 	}
 
 	/**
 	 * 中枢餡の状態（非ゆっくり症フラグ を設定する.
 	 * 
-	 * @param eCoreAnkoState 中枢餡の状態（非ゆっくり症フラグ
+	 * @param coreAnkoState 中枢餡の状態（非ゆっくり症フラグ
 	 */
-	public void seteCoreAnkoState(CoreAnkoState eCoreAnkoState) {
-		this.eCoreAnkoState = eCoreAnkoState;
+	public void setCoreAnkoState(CoreAnkoState coreAnkoState) {
+		this.coreAnkoState = coreAnkoState;
 	}
 
 	/**
@@ -2556,17 +2813,23 @@ public abstract class BodyAttributes extends Obj {
 	 * 
 	 * @return 強制発情フラグ want to sukkiri or not
 	 */
-	public boolean isbForceExciting() {
-		return bForceExciting;
+	@JsonIgnore
+	public boolean isForceExciting() {
+		return BodyActivityRule.isForceExciting(this);
+	}
+
+	@JsonIgnore
+	public boolean isForceExcitingRaw() {
+		return forceExciting;
 	}
 
 	/**
 	 * 強制発情フラグ want to sukkiri or not を設定する.
 	 * 
-	 * @param bForceExciting 強制発情フラグ want to sukkiri or not
+	 * @param forceExciting 強制発情フラグ want to sukkiri or not
 	 */
-	public void setbForceExciting(boolean bForceExciting) {
-		this.bForceExciting = bForceExciting;
+	public void setForceExciting(boolean forceExciting) {
+		this.forceExciting = forceExciting;
 	}
 
 	/**
@@ -2575,6 +2838,11 @@ public abstract class BodyAttributes extends Obj {
 	 * @return ゆっくりしてるかどうか
 	 */
 	public boolean isRelax() {
+		return BodyConditionRule.isRelax(this);
+	}
+
+	@JsonIgnore
+	public boolean isRelaxRaw() {
 		return relax;
 	}
 
@@ -2603,6 +2871,11 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 悪夢を見るかどうか
 	 */
 	public boolean isNightmare() {
+		return BodyConditionRule.isNightmare(this);
+	}
+
+	@JsonIgnore
+	public boolean isNightmareRaw() {
 		return nightmare;
 	}
 
@@ -2656,17 +2929,23 @@ public abstract class BodyAttributes extends Obj {
 	 * 
 	 * @return 針の有無
 	 */
-	public boolean isbNeedled() {
-		return bNeedled;
+	@JsonIgnore
+	public boolean isNeedled() {
+		return BodyActionStateRule.isNeedled(this);
+	}
+
+	@JsonIgnore
+	public boolean isNeedledRaw() {
+		return needled;
 	}
 
 	/**
 	 * 針の有無 を設定する.
 	 * 
-	 * @param bNeedled 針の有無
+	 * @param needled 針の有無
 	 */
-	public void setbNeedled(boolean bNeedled) {
-		this.bNeedled = bNeedled;
+	public void setNeedled(boolean needled) {
+		this.needled = needled;
 	}
 
 	/**
@@ -2675,6 +2954,11 @@ public abstract class BodyAttributes extends Obj {
 	 * @return レイパー化有無
 	 */
 	public boolean isRapist() {
+		return BodyConditionRule.isRapist(this);
+	}
+
+	@JsonIgnore
+	public boolean isRapistRaw() {
 		return rapist;
 	}
 
@@ -2693,6 +2977,11 @@ public abstract class BodyAttributes extends Obj {
 	 * @return バイゆグラでレイパーになる、すーぱーれいぱー状態
 	 */
 	public boolean isSuperRapist() {
+		return BodyConditionRule.isSuperRapist(this);
+	}
+
+	@JsonIgnore
+	public boolean isSuperRapistRaw() {
 		return superRapist;
 	}
 
@@ -2711,6 +3000,11 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 濡れ状態
 	 */
 	public boolean isWet() {
+		return BodyConditionRule.isWet(this);
+	}
+
+	@JsonIgnore
+	public boolean isWetRaw() {
 		return wet;
 	}
 
@@ -2729,6 +3023,11 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 水に溶けた状態
 	 */
 	public boolean isMelt() {
+		return BodyConditionRule.isMelt(this);
+	}
+
+	@JsonIgnore
+	public boolean isMeltRaw() {
 		return melt;
 	}
 
@@ -2747,6 +3046,11 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 皮をむいた状態
 	 */
 	public boolean isPealed() {
+		return BodyConditionRule.isPealed(this);
+	}
+
+	@JsonIgnore
+	public boolean isPealedRaw() {
 		return pealed;
 	}
 
@@ -2765,6 +3069,11 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 饅頭にされた状態
 	 */
 	public boolean isPacked() {
+		return BodyConditionRule.isPacked(this);
+	}
+
+	@JsonIgnore
+	public boolean isPackedRaw() {
 		return packed;
 	}
 
@@ -2783,6 +3092,11 @@ public abstract class BodyAttributes extends Obj {
 	 * @return アマギられた状態 かどうか
 	 */
 	public boolean isBlind() {
+		return BodyConditionRule.isBlind(this);
+	}
+
+	@JsonIgnore
+	public boolean isBlindRaw() {
 		return blind;
 	}
 
@@ -2800,17 +3114,23 @@ public abstract class BodyAttributes extends Obj {
 	 * 
 	 * @return おかざりがなくなっていることに気がついているか
 	 */
-	public boolean isbNoticeNoOkazari() {
-		return bNoticeNoOkazari;
+	public boolean isNoticeNoOkazari() {
+		return BodyFlagRule.isNoticeNoOkazari(this);
+	}
+
+	@JsonIgnore
+	public boolean isNoticeNoOkazariRaw() {
+		return noticeNoOkazari;
 	}
 
 	/**
 	 * おかざりがなくなっていることに気がついているか を設定する.
 	 * 
-	 * @param bNoticeNoOkazari おかざりがなくなっていることに気がついているか
+	 * @param noticeNoOkazari おかざりがなくなっていることに気がついているか
 	 */
-	public void setbNoticeNoOkazari(boolean bNoticeNoOkazari) {
-		this.bNoticeNoOkazari = bNoticeNoOkazari;
+	@JsonProperty("noticeNoOkazari")
+	public void setNoticeNoOkazari(boolean noticeNoOkazari) {
+		this.noticeNoOkazari = noticeNoOkazari;
 	}
 
 	/**
@@ -2963,6 +3283,11 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 自分がレイプでできた子か
 	 */
 	public boolean isFatherRaper() {
+		return BodyConditionRule.isFatherRaper(this);
+	}
+
+	@JsonIgnore
+	public boolean isFatherRaperRaw() {
 		return fatherRaper;
 	}
 
@@ -3025,17 +3350,17 @@ public abstract class BodyAttributes extends Obj {
 	 * 
 	 * @return おしゃべり抑制
 	 */
-	public int getMessageDiscipline() {
-		return messageDiscipline;
+	public int getSpeechDiscipline() {
+		return speechDiscipline;
 	}
 
 	/**
 	 * おしゃべり抑制 を設定する.
 	 * 
-	 * @param messageDiscipline おしゃべり抑制
+	 * @param speechDiscipline おしゃべり抑制
 	 */
-	public void setMessageDiscipline(int messageDiscipline) {
-		this.messageDiscipline = messageDiscipline;
+	public void setSpeechDiscipline(int speechDiscipline) {
+		this.speechDiscipline = speechDiscipline;
 	}
 
 	/**
@@ -3079,17 +3404,17 @@ public abstract class BodyAttributes extends Obj {
 	 * 
 	 * @return なにかのオブジェクト（すぃー、親ゆなど）に載せられている等のリンクが有る際のそのオブジェクト
 	 */
-	public int getLinkParent() {
-		return linkParent;
+	public int getParentLinkId() {
+		return parentLinkId;
 	}
 
 	/**
 	 * なにかのオブジェクト（すぃー、親ゆなど）に載せられている等のリンクが有る際のそのオブジェクト を設定する.
 	 * 
-	 * @param linkParent なにかのオブジェクト（すぃー、親ゆなど）に載せられている等のリンクが有る際のそのオブジェクト
+	 * @param parentLinkId なにかのオブジェクト（すぃー、親ゆなど）に載せられている等のリンクが有る際のそのオブジェクト
 	 */
-	public void setLinkParent(int linkParent) {
-		this.linkParent = linkParent;
+	public void setParentLinkId(int parentLinkId) {
+		this.parentLinkId = parentLinkId;
 	}
 
 	/**
@@ -3097,17 +3422,23 @@ public abstract class BodyAttributes extends Obj {
 	 * 
 	 * @return 移動不可ベルトコンベアの有無
 	 */
-	public boolean isbOnDontMoveBeltconveyor() {
-		return bOnDontMoveBeltconveyor;
+	public boolean isOnNonMovingConveyor() {
+		return BodyFlagRule.isOnNonMovingConveyor(this);
+	}
+
+	@JsonIgnore
+	public boolean isOnDontMoveBeltconveyorRaw() {
+		return nonMovingConveyor;
 	}
 
 	/**
 	 * 移動不可ベルトコンベアの有無 を設定する.
 	 * 
-	 * @param bOnDontMoveBeltconveyor 移動不可ベルトコンベアの有無
+	 * @param nonMovingConveyor 移動不可ベルトコンベアの有無
 	 */
-	public void setbOnDontMoveBeltconveyor(boolean bOnDontMoveBeltconveyor) {
-		this.bOnDontMoveBeltconveyor = bOnDontMoveBeltconveyor;
+	@JsonProperty("nonMovingConveyor")
+	public void setOnNonMovingConveyor(boolean nonMovingConveyor) {
+		this.nonMovingConveyor = nonMovingConveyor;
 	}
 
 	/**
@@ -3115,17 +3446,17 @@ public abstract class BodyAttributes extends Obj {
 	 * 
 	 * @return 埋まり状態
 	 */
-	public BaryInUGState getBaryState() {
-		return baryState;
+	public BurialState getBurialState() {
+		return burialState;
 	}
 
 	/**
 	 * 埋まり状態 を設定する.
 	 * 
-	 * @param baryState 埋まり状態
+	 * @param burialState 埋まり状態
 	 */
-	public void setBaryState(BaryInUGState baryState) {
-		this.baryState = baryState;
+	public void setBurialState(BurialState burialState) {
+		this.burialState = burialState;
 	}
 
 	/**
@@ -3134,6 +3465,11 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 希少種か
 	 */
 	public boolean isRareType() {
+		return BodyTraitRule.isRareType(this);
+	}
+
+	@JsonIgnore
+	public boolean isRareTypeRaw() {
 		return rareType;
 	}
 
@@ -3143,6 +3479,11 @@ public abstract class BodyAttributes extends Obj {
 	 * @param rareType 希少種か
 	 */
 	public void setRareType(boolean rareType) {
+		BodyTraitRule.setRareType(this, rareType);
+	}
+
+	@JsonIgnore
+	public void setRareTypeRaw(boolean rareType) {
 		this.rareType = rareType;
 	}
 
@@ -3152,6 +3493,11 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 苦いえさが好きか
 	 */
 	public boolean isLikeBitterFood() {
+		return BodyTraitRule.isLikeBitterFood(this);
+	}
+
+	@JsonIgnore
+	public boolean isLikeBitterFoodRaw() {
 		return likeBitterFood;
 	}
 
@@ -3161,6 +3507,11 @@ public abstract class BodyAttributes extends Obj {
 	 * @param likeBitterFood 苦いえさが好きか
 	 */
 	public void setLikeBitterFood(boolean likeBitterFood) {
+		BodyTraitRule.setLikeBitterFood(this, likeBitterFood);
+	}
+
+	@JsonIgnore
+	public void setLikeBitterFoodRaw(boolean likeBitterFood) {
 		this.likeBitterFood = likeBitterFood;
 	}
 
@@ -3170,6 +3521,11 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 辛いえさが好きか
 	 */
 	public boolean isLikeHotFood() {
+		return BodyTraitRule.isLikeHotFood(this);
+	}
+
+	@JsonIgnore
+	public boolean isLikeHotFoodRaw() {
 		return likeHotFood;
 	}
 
@@ -3179,6 +3535,11 @@ public abstract class BodyAttributes extends Obj {
 	 * @param likeHotFood 辛いえさが好きか
 	 */
 	public void setLikeHotFood(boolean likeHotFood) {
+		BodyTraitRule.setLikeHotFood(this, likeHotFood);
+	}
+
+	@JsonIgnore
+	public void setLikeHotFoodRaw(boolean likeHotFood) {
 		this.likeHotFood = likeHotFood;
 	}
 
@@ -3188,6 +3549,11 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 水が平気か
 	 */
 	public boolean isLikeWater() {
+		return BodyTraitRule.isLikeWater(this);
+	}
+
+	@JsonIgnore
+	public boolean isLikeWaterRaw() {
 		return likeWater;
 	}
 
@@ -3197,6 +3563,11 @@ public abstract class BodyAttributes extends Obj {
 	 * @param likeWater 水が平気か
 	 */
 	public void setLikeWater(boolean likeWater) {
+		BodyTraitRule.setLikeWater(this, likeWater);
+	}
+
+	@JsonIgnore
+	public void setLikeWaterRaw(boolean likeWater) {
 		this.likeWater = likeWater;
 	}
 
@@ -3206,6 +3577,11 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 空を飛ぶか
 	 */
 	public boolean isFlyingType() {
+		return BodyTraitRule.isFlyingType(this);
+	}
+
+	@JsonIgnore
+	public boolean isFlyingTypeRaw() {
 		return flyingType;
 	}
 
@@ -3215,6 +3591,11 @@ public abstract class BodyAttributes extends Obj {
 	 * @param flyingType 空を飛ぶか
 	 */
 	public void setFlyingType(boolean flyingType) {
+		BodyTraitRule.setFlyingType(this, flyingType);
+	}
+
+	@JsonIgnore
+	public void setFlyingTypeRaw(boolean flyingType) {
 		this.flyingType = flyingType;
 	}
 
@@ -3224,6 +3605,11 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 種族としてお下げ、羽、尻尾を持つか
 	 */
 	public boolean isBraidType() {
+		return BodyTraitRule.isBraidType(this);
+	}
+
+	@JsonIgnore
+	public boolean isBraidTypeRaw() {
 		return braidType;
 	}
 
@@ -3233,6 +3619,11 @@ public abstract class BodyAttributes extends Obj {
 	 * @param braidType 種族としてお下げ、羽、尻尾を持つか
 	 */
 	public void setBraidType(boolean braidType) {
+		BodyTraitRule.setBraidType(this, braidType);
+	}
+
+	@JsonIgnore
+	public void setBraidTypeRaw(boolean braidType) {
 		this.braidType = braidType;
 	}
 
@@ -3260,6 +3651,11 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 動けないかどうか
 	 */
 	public boolean isLockmove() {
+		return BodyMovementGoalRule.isLockmove(this);
+	}
+
+	@JsonIgnore
+	public boolean isLockmoveRaw() {
 		return lockmove;
 	}
 
@@ -3278,6 +3674,11 @@ public abstract class BodyAttributes extends Obj {
 	 * @return ひっぱり、押しつぶし可能か
 	 */
 	public boolean isPullAndPush() {
+		return BodyMovementGoalRule.isPullAndPush(this);
+	}
+
+	@JsonIgnore
+	public boolean isPullAndPushRaw() {
 		return pullAndPush;
 	}
 
@@ -3331,17 +3732,17 @@ public abstract class BodyAttributes extends Obj {
 	 * 
 	 * @return まばたき、同じ表情の時にカウント
 	 */
-	public int getMabatakiCnt() {
-		return mabatakiCnt;
+	public int getBlinkCount() {
+		return blinkCount;
 	}
 
 	/**
 	 * まばたき、同じ表情の時にカウント を設定する.
 	 * 
-	 * @param mabatakiCnt まばたき、同じ表情の時にカウント
+	 * @param blinkCount まばたき、同じ表情の時にカウント
 	 */
-	public void setMabatakiCnt(int mabatakiCnt) {
-		this.mabatakiCnt = mabatakiCnt;
+	public void setBlinkCount(int blinkCount) {
+		this.blinkCount = blinkCount;
 	}
 
 	/**
@@ -3349,17 +3750,17 @@ public abstract class BodyAttributes extends Obj {
 	 * 
 	 * @return まばたき、表情の値を代入
 	 */
-	public int getMabatakiType() {
-		return mabatakiType;
+	public int getBlinkType() {
+		return blinkType;
 	}
 
 	/**
 	 * まばたき、表情の値を代入 を設定する.
 	 * 
-	 * @param mabatakiType まばたき、表情の値を代入
+	 * @param blinkType まばたき、表情の値を代入
 	 */
-	public void setMabatakiType(int mabatakiType) {
-		this.mabatakiType = mabatakiType;
+	public void setBlinkType(int blinkType) {
+		this.blinkType = blinkType;
 	}
 
 	/**
@@ -3367,35 +3768,47 @@ public abstract class BodyAttributes extends Obj {
 	 * 
 	 * @return プレイヤーにすりすりされているか
 	 */
-	public boolean isbSurisuriFromPlayer() {
-		return bSurisuriFromPlayer;
+	public boolean isSurisuriFromPlayer() {
+		return BodySurisuriRule.isSurisuriFromPlayer(this);
+	}
+
+	@JsonIgnore
+	public boolean isSurisuriFromPlayerRaw() {
+		return surisuriFromPlayer;
 	}
 
 	/**
 	 * プレイヤーにすりすりされているか を設定する.
 	 * 
-	 * @param bSurisuriFromPlayer プレイヤーにすりすりされているか
+	 * @param surisuriFromPlayer プレイヤーにすりすりされているか
 	 */
-	public void setbSurisuriFromPlayer(boolean bSurisuriFromPlayer) {
-		this.bSurisuriFromPlayer = bSurisuriFromPlayer;
+	@JsonProperty("surisuriFromPlayer")
+	public void setSurisuriFromPlayer(boolean surisuriFromPlayer) {
+		this.surisuriFromPlayer = surisuriFromPlayer;
 	}
 
 	/**
-	 * ぷるぷる震えているか を取得する.
+	 * ぷるぷるアニメーション位相 を取得する.
 	 * 
-	 * @return ぷるぷる震えているか
+	 * @return ぷるぷるアニメーション位相
 	 */
-	public boolean isbPurupuru() {
-		return bPurupuru;
+	@JsonIgnore
+	public boolean isShakePhase() {
+		return BodyExpressionRule.isShakePhase(this);
+	}
+
+	@JsonIgnore
+	public boolean isShakePhaseRaw() {
+		return shakePhase;
 	}
 
 	/**
-	 * ぷるぷる震えているか を設定する.
-	 * 
-	 * @param bPurupuru ぷるぷる震えているか
+	 * ぷるぷるアニメーション位相 を設定する.
+	 *
+	 * @param shakePhase ぷるぷるアニメーション位相
 	 */
-	public void setbPurupuru(boolean bPurupuru) {
-		this.bPurupuru = bPurupuru;
+	public void setShakePhase(boolean shakePhase) {
+		this.shakePhase = shakePhase;
 	}
 
 	/**
@@ -3404,6 +3817,11 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 粘着板で背中を固定されているか
 	 */
 	public boolean isFixBack() {
+		return BodyControlRule.isFixBack(this);
+	}
+
+	@JsonIgnore
+	public boolean isFixBackRaw() {
 		return fixBack;
 	}
 
@@ -3412,8 +3830,8 @@ public abstract class BodyAttributes extends Obj {
 	 * 
 	 * @param 粘着板で背中を固定されているか
 	 */
-	public void setFixBack(boolean bFixBack) {
-		this.fixBack = bFixBack;
+	public void setFixBack(boolean fixBack) {
+		this.fixBack = fixBack;
 	}
 
 	/**
@@ -3457,17 +3875,17 @@ public abstract class BodyAttributes extends Obj {
 	 * 
 	 * @return スーパーむーしゃむーしゃタイムのおかげで飢餓状態にならない期間
 	 */
-	public int getNoHungrybySupereatingTimePeriod() {
-		return noHungrybySupereatingTimePeriod;
+	public int getSuperEatingNoHungryPeriod() {
+		return superEatingNoHungryPeriod;
 	}
 
 	/**
 	 * スーパーむーしゃむーしゃタイムのおかげで飢餓状態にならない期間 を設定する.
 	 * 
-	 * @param noHungrybySupereatingTimePeriod スーパーむーしゃむーしゃタイムのおかげで飢餓状態にならない期間
+	 * @param superEatingNoHungryPeriod スーパーむーしゃむーしゃタイムのおかげで飢餓状態にならない期間
 	 */
-	public void setNoHungrybySupereatingTimePeriod(int noHungrybySupereatingTimePeriod) {
-		this.noHungrybySupereatingTimePeriod = noHungrybySupereatingTimePeriod;
+	public void setSuperEatingNoHungryPeriod(int superEatingNoHungryPeriod) {
+		this.superEatingNoHungryPeriod = superEatingNoHungryPeriod;
 	}
 
 	/**
@@ -3747,17 +4165,17 @@ public abstract class BodyAttributes extends Obj {
 	 * 
 	 * @return 最後にプレイヤーにすりすりしてもらった時間
 	 */
-	public long getLnLastTimeSurisuri() {
-		return lnLastTimeSurisuri;
+	public long getLastSurisuriTime() {
+		return lastSurisuriTime;
 	}
 
 	/**
 	 * 最後にプレイヤーにすりすりしてもらった時間 を設定する.
 	 * 
-	 * @param lnLastTimeSurisuri 最後にプレイヤーにすりすりしてもらった時間
+	 * @param lastSurisuriTime 最後にプレイヤーにすりすりしてもらった時間
 	 */
-	public void setLnLastTimeSurisuri(long lnLastTimeSurisuri) {
-		this.lnLastTimeSurisuri = lnLastTimeSurisuri;
+	public void setLastSurisuriTime(long lastSurisuriTime) {
+		this.lastSurisuriTime = lastSurisuriTime;
 	}
 
 	/**
@@ -3765,17 +4183,17 @@ public abstract class BodyAttributes extends Obj {
 	 * 
 	 * @return 最後にプレイヤーがアクションを行った時間
 	 */
-	public long getInLastActionTime() {
-		return inLastActionTime;
+	public long getLastActionTime() {
+		return lastActionTime;
 	}
 
 	/**
 	 * 最後にプレイヤーがアクションを行った時間 を設定する.
 	 * 
-	 * @param inLastActionTime 最後にプレイヤーがアクションを行った時間
+	 * @param lastActionTime 最後にプレイヤーがアクションを行った時間
 	 */
-	public void setInLastActionTime(long inLastActionTime) {
-		this.inLastActionTime = inLastActionTime;
+	public void setLastActionTime(long lastActionTime) {
+		this.lastActionTime = lastActionTime;
 	}
 
 	/**
@@ -3783,17 +4201,17 @@ public abstract class BodyAttributes extends Obj {
 	 * 
 	 * @return 出産期間のブースト（この分だけ早まる）
 	 */
-	public int getPregnantPeriodBoost() {
-		return pregnantPeriodBoost;
+	public int getPregnancyPeriodBoost() {
+		return pregnancyPeriodBoost;
 	}
 
 	/**
 	 * 出産期間のブースト（この分だけ早まる） を設定する.
 	 * 
-	 * @param pregnantPeriodBoost 出産期間のブースト（この分だけ早まる）
+	 * @param pregnancyPeriodBoost 出産期間のブースト（この分だけ早まる）
 	 */
-	public void setPregnantPeriodBoost(int pregnantPeriodBoost) {
-		this.pregnantPeriodBoost = pregnantPeriodBoost;
+	public void setPregnancyPeriodBoost(int pregnancyPeriodBoost) {
+		this.pregnancyPeriodBoost = pregnancyPeriodBoost;
 	}
 
 	/**
@@ -3801,17 +4219,17 @@ public abstract class BodyAttributes extends Obj {
 	 * 
 	 * @return 発情期間のブースト（この分だけ早まる）
 	 */
-	public int getExcitingPeriodBoost() {
-		return excitingPeriodBoost;
+	public int getExcitementPeriodBoost() {
+		return excitementPeriodBoost;
 	}
 
 	/**
 	 * 発情期間のブースト（この分だけ早まる） を設定する.
 	 * 
-	 * @param excitingPeriodBoost 発情期間のブースト（この分だけ早まる）
+	 * @param excitementPeriodBoost 発情期間のブースト（この分だけ早まる）
 	 */
-	public void setExcitingPeriodBoost(int excitingPeriodBoost) {
-		this.excitingPeriodBoost = excitingPeriodBoost;
+	public void setExcitementPeriodBoost(int excitementPeriodBoost) {
+		this.excitementPeriodBoost = excitementPeriodBoost;
 	}
 
 	/**
@@ -3819,17 +4237,17 @@ public abstract class BodyAttributes extends Obj {
 	 * 
 	 * @return うんうんブースト
 	 */
-	public int getShitBoost() {
-		return shitBoost;
+	public int getExcretionBoost() {
+		return excretionBoost;
 	}
 
 	/**
 	 * うんうんブースト を設定する.
 	 * 
-	 * @param shitBoost うんうんブースト
+	 * @param excretionBoost うんうんブースト
 	 */
-	public void setShitBoost(int shitBoost) {
-		this.shitBoost = shitBoost;
+	public void setExcretionBoost(int excretionBoost) {
+		this.excretionBoost = excretionBoost;
 	}
 
 	/**
@@ -3837,17 +4255,17 @@ public abstract class BodyAttributes extends Obj {
 	 * 
 	 * @return 移動対象（移動先）
 	 */
-	public int getMoveTarget() {
-		return moveTarget;
+	public int getMoveTargetId() {
+		return moveTargetId;
 	}
 
 	/**
 	 * 移動対象（移動先） を設定する.
 	 * 
-	 * @param moveTarget 移動対象（移動先）
+	 * @param moveTargetId 移動対象（移動先）
 	 */
-	public void setMoveTarget(int moveTarget) {
-		this.moveTarget = moveTarget;
+	public void setMoveTargetId(int moveTargetId) {
+		this.moveTargetId = moveTargetId;
 	}
 
 	/**
@@ -3855,17 +4273,17 @@ public abstract class BodyAttributes extends Obj {
 	 * 
 	 * @return 移動対象のX座標オフセット
 	 */
-	public int getTargetPosOfsX() {
-		return targetPosOfsX;
+	public int getTargetOffsetX() {
+		return targetOffsetX;
 	}
 
 	/**
 	 * 移動対象のX座標オフセット を設定する.
 	 * 
-	 * @param targetPosOfsX 移動対象のX座標オフセット
+	 * @param targetOffsetX 移動対象のX座標オフセット
 	 */
-	public void setTargetPosOfsX(int targetPosOfsX) {
-		this.targetPosOfsX = targetPosOfsX;
+	public void setTargetOffsetX(int targetOffsetX) {
+		this.targetOffsetX = targetOffsetX;
 	}
 
 	/**
@@ -3873,17 +4291,17 @@ public abstract class BodyAttributes extends Obj {
 	 * 
 	 * @return 移動対象のY座標オフセット
 	 */
-	public int getTargetPosOfsY() {
-		return targetPosOfsY;
+	public int getTargetOffsetY() {
+		return targetOffsetY;
 	}
 
 	/**
 	 * 移動対象のY座標オフセット を設定する.
 	 * 
-	 * @param targetPosOfsY 移動対象のY座標オフセット
+	 * @param targetOffsetY 移動対象のY座標オフセット
 	 */
-	public void setTargetPosOfsY(int targetPosOfsY) {
-		this.targetPosOfsY = targetPosOfsY;
+	public void setTargetOffsetY(int targetOffsetY) {
+		this.targetOffsetY = targetOffsetY;
 	}
 
 	/**
@@ -3892,6 +4310,11 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 対象を呼び止めるほど強い動機を持っているかどうか
 	 */
 	public boolean isTargetBind() {
+		return BodyMovementGoalRule.isTargetBind(this);
+	}
+
+	@JsonIgnore
+	public boolean isTargetBindRaw() {
 		return targetBind;
 	}
 
@@ -3910,7 +4333,7 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 移動目的がフードかどうか
 	 */
 	public boolean isToFood() {
-		return purposeOfMoving == PurposeOfMoving.FOOD;
+		return BodyMovementGoalRule.isToFood(this);
 	}
 
 	/**
@@ -3932,7 +4355,7 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 移動目的がすっきりかどうか
 	 */
 	public boolean isToSukkiri() {
-		return purposeOfMoving == PurposeOfMoving.SUKKIRI;
+		return BodyMovementGoalRule.isToSukkiri(this);
 	}
 
 	/**
@@ -3954,7 +4377,7 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 移動目的がうんうんかどうか
 	 */
 	public boolean isToShit() {
-		return purposeOfMoving == PurposeOfMoving.SHIT;
+		return BodyMovementGoalRule.isToShit(this);
 	}
 
 	/**
@@ -3976,7 +4399,7 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 移動目的がベッドかどうか
 	 */
 	public boolean isToBed() {
-		return purposeOfMoving == PurposeOfMoving.BED;
+		return BodyMovementGoalRule.isToBed(this);
 	}
 
 	/**
@@ -3998,7 +4421,7 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 移動目的が他のゆっくりかどうか
 	 */
 	public boolean isToBody() {
-		return purposeOfMoving == PurposeOfMoving.YUKKURI;
+		return BodyMovementGoalRule.isToBody(this);
 	}
 
 	/**
@@ -4020,7 +4443,7 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 移動目的がおかざりを盗むためかどうか
 	 */
 	public boolean isToSteal() {
-		return purposeOfMoving == PurposeOfMoving.STEAL;
+		return BodyMovementGoalRule.isToSteal(this);
 	}
 
 	/**
@@ -4042,7 +4465,7 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 移動目的がアイテムを持つことかどうか
 	 */
 	public boolean isToTakeout() {
-		return purposeOfMoving == PurposeOfMoving.TAKEOUT;
+		return BodyMovementGoalRule.isToTakeout(this);
 	}
 
 	/**
@@ -4075,7 +4498,7 @@ public abstract class BodyAttributes extends Obj {
 	 * @see #stopStaying()
 	 */
 	public final void stopStaying() {
-		staycount = 0;
+		stayTicks = 0;
 	}
 
 	/**
@@ -4084,16 +4507,21 @@ public abstract class BodyAttributes extends Obj {
 	 * @return アイテムを出し入れする動作フラグ
 	 */
 	public boolean isInOutTakeoutItem() {
+		return BodyControlRule.isInOutTakeoutItem(this);
+	}
+
+	@JsonIgnore
+	public boolean isInOutTakeoutItemRaw() {
 		return inOutTakeoutItem;
 	}
 
 	/**
 	 * アイテムを出し入れする動作フラグ を設定する.
 	 * 
-	 * @param bIsInOutTakeoutItem アイテムを出し入れする動作フラグ
+	 * @param inOutTakeoutItem アイテムを出し入れする動作フラグ
 	 */
-	public void setInOutTakeoutItem(boolean bIsInOutTakeoutItem) {
-		this.inOutTakeoutItem = bIsInOutTakeoutItem;
+	public void setInOutTakeoutItem(boolean inOutTakeoutItem) {
+		this.inOutTakeoutItem = inOutTakeoutItem;
 	}
 
 	/**
@@ -4102,6 +4530,11 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 待機アクション中かどうか
 	 */
 	public boolean isStaying() {
+		return BodyControlRule.isStaying(this);
+	}
+
+	@JsonIgnore
+	public boolean isStayingRaw() {
 		return staying;
 	}
 
@@ -4210,6 +4643,11 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 沈黙フラグ
 	 */
 	public boolean isSilent() {
+		return BodyExpressionRule.isSilent(this);
+	}
+
+	@JsonIgnore
+	public boolean isSilentRaw() {
 		return silent;
 	}
 
@@ -4228,6 +4666,11 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 口ふさがれ中 かどうか
 	 */
 	public boolean isShutmouth() {
+		return BodyExpressionRule.isShutmouth(this);
+	}
+
+	@JsonIgnore
+	public boolean isShutmouthRaw() {
 		return shutmouth;
 	}
 
@@ -4255,6 +4698,11 @@ public abstract class BodyAttributes extends Obj {
 	 * @return ぴこぴこ中 かどうか
 	 */
 	public boolean isPikopiko() {
+		return BodyExpressionRule.isPikopiko(this);
+	}
+
+	@JsonIgnore
+	public boolean isPikopikoRaw() {
 		return pikopiko;
 	}
 
@@ -4273,6 +4721,11 @@ public abstract class BodyAttributes extends Obj {
 	 * @return ぷるぷる中 かどうか
 	 */
 	public boolean isPurupuru() {
+		return BodyExpressionRule.isPurupuru(this);
+	}
+
+	@JsonIgnore
+	public boolean isPurupuruRaw() {
 		return purupuru;
 	}
 
@@ -4344,17 +4797,17 @@ public abstract class BodyAttributes extends Obj {
 	 * 
 	 * @return メッセージのバッファ
 	 */
-	public String getMessageBuf() {
-		return messageBuf;
+	public String getMessageBuffer() {
+		return messageBuffer;
 	}
 
 	/**
 	 * メッセージのバッファ を設定する.
 	 * 
-	 * @param messageBuf メッセージのバッファ
+	 * @param messageBuffer メッセージのバッファ
 	 */
-	public void setMessageBuf(String messageBuf) {
-		this.messageBuf = messageBuf;
+	public void setMessageBuffer(String messageBuffer) {
+		this.messageBuffer = messageBuffer;
 	}
 
 	/**
@@ -4362,17 +4815,17 @@ public abstract class BodyAttributes extends Obj {
 	 * 
 	 * @return いくつメッセージが溜まってるか
 	 */
-	public int getMessageCount() {
-		return messageCount;
+	public int getMessageTicks() {
+		return messageTicks;
 	}
 
 	/**
 	 * いくつメッセージが溜まってるか を設定する.
 	 * 
-	 * @param messageCount いくつメッセージが溜まってるか
+	 * @param messageTicks いくつメッセージが溜まってるか
 	 */
-	public void setMessageCount(int messageCount) {
-		this.messageCount = messageCount;
+	public void setMessageTicks(int messageTicks) {
+		this.messageTicks = messageTicks;
 	}
 
 	/**
@@ -4380,17 +4833,17 @@ public abstract class BodyAttributes extends Obj {
 	 * 
 	 * @return その場に留まってる回数
 	 */
-	public int getStaycount() {
-		return staycount;
+	public int getStayTicks() {
+		return stayTicks;
 	}
 
 	/**
 	 * その場に留まってる回数 を設定する.
 	 * 
-	 * @param staycount その場に留まってる回数
+	 * @param stayTicks その場に留まってる回数
 	 */
-	public void setStaycount(int staycount) {
-		this.staycount = staycount;
+	public void setStayTicks(int stayTicks) {
+		this.stayTicks = stayTicks;
 	}
 
 	/**
@@ -4434,17 +4887,17 @@ public abstract class BodyAttributes extends Obj {
 	 * 
 	 * @return あんこ量
 	 */
-	public int getBodyAmount() {
-		return bodyAmount;
+	public int getAnkoAmount() {
+		return ankoAmount;
 	}
 
 	/**
 	 * あんこ量 を設定する.
 	 * 
-	 * @param bodyAmount あんこ量
+	 * @param ankoAmount あんこ量
 	 */
-	public void setBodyAmount(int bodyAmount) {
-		this.bodyAmount = bodyAmount;
+	public void setAnkoAmount(int ankoAmount) {
+		this.ankoAmount = ankoAmount;
 	}
 
 	/**
@@ -4452,17 +4905,17 @@ public abstract class BodyAttributes extends Obj {
 	 * 
 	 * @return 壁に引っかかった回数
 	 */
-	public int getBlockedCount() {
-		return blockedCount;
+	public int getBlockedTicks() {
+		return blockedTicks;
 	}
 
 	/**
 	 * 壁に引っかかった回数 を設定する.
 	 * 
-	 * @param blockedCount 壁に引っかかった回数
+	 * @param blockedTicks 壁に引っかかった回数
 	 */
-	public void setBlockedCount(int blockedCount) {
-		this.blockedCount = blockedCount;
+	public void setBlockedTicks(int blockedTicks) {
+		this.blockedTicks = blockedTicks;
 	}
 
 	/**
@@ -4489,6 +4942,11 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 実ゆかどうか
 	 */
 	public boolean isUnBirth() {
+		return BodyBirthRule.isUnBirth(this);
+	}
+
+	@JsonIgnore
+	public boolean isUnBirthRaw() {
 		return unBirth;
 	}
 
@@ -4507,6 +4965,11 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 喋れる状態かどうか
 	 */
 	public boolean isCanTalk() {
+		return BodySpeechRule.isCanTalk(this);
+	}
+
+	@JsonIgnore
+	public boolean isCanTalkRaw() {
 		return canTalk;
 	}
 
@@ -4644,17 +5107,22 @@ public abstract class BodyAttributes extends Obj {
 	 * 
 	 * @return 強制的に誕生時メッセージを言わされるかどうか
 	 */
-	public boolean isForceBirthMessage() {
-		return forceBirthMessage;
+	public boolean isBirthMessageForced() {
+		return BodyBirthRule.isBirthMessageForced(this);
+	}
+
+	@JsonIgnore
+	public boolean isForceBirthMessageRaw() {
+		return birthMessageForced;
 	}
 
 	/**
 	 * 強制的に誕生時メッセージを言わされるかどうか を設定する.
 	 * 
-	 * @param forceBirthMessage 強制的に誕生時メッセージを言わされるかどうか
+	 * @param birthMessageForced 強制的に誕生時メッセージを言わされるかどうか
 	 */
-	public void setForceBirthMessage(boolean forceBirthMessage) {
-		this.forceBirthMessage = forceBirthMessage;
+	public void setBirthMessageForced(boolean birthMessageForced) {
+		this.birthMessageForced = birthMessageForced;
 	}
 
 	/**
@@ -4716,17 +5184,22 @@ public abstract class BodyAttributes extends Obj {
 	 * 
 	 * @return 右ペインメニューのピン留めをされているかどうか
 	 */
-	public boolean isPin() {
-		return pin;
+	public boolean isPinned() {
+		return BodyControlRule.isPinned(this);
+	}
+
+	@JsonIgnore
+	public boolean isPinRaw() {
+		return isPinned;
 	}
 
 	/**
 	 * 右ペインメニューのピン留めをされているかどうか を設定する.
 	 * 
-	 * @param pin 右ペインメニューのピン留めをされているかどうか
+	 * @param isPinned 右ペインメニューのピン留めをされているかどうか
 	 */
-	public void setPin(boolean pin) {
-		this.pin = pin;
+	public void setPinned(boolean isPinned) {
+		this.isPinned = isPinned;
 	}
 
 	/**
@@ -4752,17 +5225,23 @@ public abstract class BodyAttributes extends Obj {
 	 * 
 	 * @return 次の落下でダメージを受けないかどうか
 	 */
-	public boolean isbNoDamageNextFall() {
-		return bNoDamageNextFall;
+	public boolean isNoDamageNextFall() {
+		return BodyControlRule.isNoDamageNextFall(this);
+	}
+
+	@JsonIgnore
+	public boolean isNoDamageNextFallRaw() {
+		return noDamageNextFall;
 	}
 
 	/**
 	 * 次の落下でダメージを受けないかどうか を設定する.
 	 * 
-	 * @param bNoDamageNextFall 次の落下でダメージを受けないかどうか
+	 * @param noDamageNextFall 次の落下でダメージを受けないかどうか
 	 */
-	public void setbNoDamageNextFall(boolean bNoDamageNextFall) {
-		this.bNoDamageNextFall = bNoDamageNextFall;
+	@JsonProperty("noDamageNextFall")
+	public void setNoDamageNextFall(boolean noDamageNextFall) {
+		this.noDamageNextFall = noDamageNextFall;
 	}
 
 	/**
@@ -4824,17 +5303,22 @@ public abstract class BodyAttributes extends Obj {
 	 * 
 	 * @return 影の表示有無
 	 */
-	public boolean isDropShadow() {
-		return dropShadow;
+	public boolean isShadowVisible() {
+		return BodyDisplayRule.isShadowVisible(this);
+	}
+
+	@JsonIgnore
+	public boolean isDropShadowRaw() {
+		return shadowVisible;
 	}
 
 	/**
 	 * 影の表示有無 を設定する.
 	 * 
-	 * @param dropShadow 影の表示有無
+	 * @param shadowVisible 影の表示有無
 	 */
-	public void setDropShadow(boolean dropShadow) {
-		this.dropShadow = dropShadow;
+	public void setShadowVisible(boolean shadowVisible) {
+		this.shadowVisible = shadowVisible;
 	}
 
 	/**
@@ -4842,17 +5326,17 @@ public abstract class BodyAttributes extends Obj {
 	 * 
 	 * @return イベントで設定されたアクション
 	 */
-	public Event getEventResultAction() {
-		return eventResultAction;
+	public Event getEventResult() {
+		return eventResult;
 	}
 
 	/**
 	 * イベントで設定されたアクション を設定する.
 	 * 
-	 * @param eventResultAction イベントで設定されたアクション
+	 * @param eventResult イベントで設定されたアクション
 	 */
-	public void setEventResultAction(Event eventResultAction) {
-		this.eventResultAction = eventResultAction;
+	public void setEventResult(Event eventResult) {
+		this.eventResult = eventResult;
 	}
 
 	/**
@@ -4878,8 +5362,8 @@ public abstract class BodyAttributes extends Obj {
 	 * 
 	 * @return ゆ虐神拳の回数
 	 */
-	public int getGodHandHoldPoint() {
-		return godHandHoldPoint;
+	public int getGodHandHoldCount() {
+		return godHandHoldCount;
 	}
 
 	/**
@@ -4887,8 +5371,8 @@ public abstract class BodyAttributes extends Obj {
 	 * 
 	 * @param v ゆ虐神拳の回数（押さえ）
 	 */
-	public void setGodHandHoldPoint(int v) {
-		this.godHandHoldPoint = v;
+	public void setGodHandHoldCount(int v) {
+		this.godHandHoldCount = v;
 	}
 
 	/**
@@ -4896,8 +5380,8 @@ public abstract class BodyAttributes extends Obj {
 	 * 
 	 * @return ゆ虐神拳の回数（伸ばし）
 	 */
-	public int getGodHandStretchPoint() {
-		return godHandStretchPoint;
+	public int getGodHandStretchCount() {
+		return godHandStretchCount;
 	}
 
 	/**
@@ -4905,8 +5389,8 @@ public abstract class BodyAttributes extends Obj {
 	 * 
 	 * @param v ゆ虐神拳の回数（伸ばし）
 	 */
-	public void setGodHandStretchPoint(int v) {
-		this.godHandStretchPoint = v;
+	public void setGodHandStretchCount(int v) {
+		this.godHandStretchCount = v;
 	}
 
 	/**
@@ -4914,8 +5398,8 @@ public abstract class BodyAttributes extends Obj {
 	 * 
 	 * @return ゆ虐神拳の回数（押さえ）
 	 */
-	public int getGodHandCompressPoint() {
-		return godHandCompressPoint;
+	public int getGodHandCompressCount() {
+		return godHandCompressCount;
 	}
 
 	/**
@@ -4923,8 +5407,8 @@ public abstract class BodyAttributes extends Obj {
 	 * 
 	 * @param v ゆ虐神拳の回数（押さえ）
 	 */
-	public void setGodHandCompressPoint(int v) {
-		this.godHandCompressPoint = v;
+	public void setGodHandCompressCount(int v) {
+		this.godHandCompressCount = v;
 	}
 
 	/**
@@ -4932,17 +5416,17 @@ public abstract class BodyAttributes extends Obj {
 	 * 
 	 * @return お気に入りアイテム
 	 */
-	public HashMap<FavItemType, Integer> getFavItem() {
-		return favItem;
+	public HashMap<FavItemType, Integer> getFavoriteItems() {
+		return favoriteItems;
 	}
 
 	/**
 	 * お気に入りアイテム を設定する.
 	 * 
-	 * @param favItem お気に入りアイテム
+	 * @param favoriteItems お気に入りアイテム
 	 */
-	public void setFavItem(HashMap<FavItemType, Integer> favItem) {
-		this.favItem = favItem;
+	public void setFavoriteItems(HashMap<FavItemType, Integer> favoriteItems) {
+		this.favoriteItems = favoriteItems;
 	}
 
 	/**
@@ -4950,17 +5434,17 @@ public abstract class BodyAttributes extends Obj {
 	 * 
 	 * @return 持ち歩きアイテム
 	 */
-	public HashMap<TakeoutItemType, Integer> getTakeoutItem() {
-		return takeoutItem;
+	public HashMap<TakeoutItemType, Integer> getCarryItems() {
+		return carryItems;
 	}
 
 	/**
 	 * 持ち歩きアイテム を設定する.
 	 * 
-	 * @param takeoutItem 持ち歩きアイテム
+	 * @param carryItems 持ち歩きアイテム
 	 */
-	public void setTakeoutItem(HashMap<TakeoutItemType, Integer> takeoutItem) {
-		this.takeoutItem = takeoutItem;
+	public void setCarryItems(HashMap<TakeoutItemType, Integer> carryItems) {
+		this.carryItems = carryItems;
 	}
 
 	/**
@@ -4968,17 +5452,17 @@ public abstract class BodyAttributes extends Obj {
 	 * 
 	 * @return ゆっくり本体の購入基本額
 	 */
-	public int getYcost() {
-		return Ycost;
+	public int getCost() {
+		return cost;
 	}
 
 	/**
 	 * ゆっくり本体の購入基本額 を設定する.
 	 * 
-	 * @param ycost ゆっくり本体の購入基本額
+	 * @param costValue ゆっくり本体の購入基本額
 	 */
-	public void setcost(int ycost) {
-		Ycost = ycost;
+	public void setCost(int costValue) {
+		cost = costValue;
 	}
 
 	/**
@@ -4986,8 +5470,8 @@ public abstract class BodyAttributes extends Obj {
 	 * 
 	 * @return ゆっくり本体、中身の売却基本額 飼いゆとしての価値/加工品としての価値
 	 */
-	public int[] getSaleValue() {
-		return saleValue;
+	public int[] getSaleValues() {
+		return saleValues;
 	}
 
 	/**
@@ -4995,8 +5479,8 @@ public abstract class BodyAttributes extends Obj {
 	 * 
 	 * @param value
 	 */
-	public void setSaleValue(int[] value) {
-		saleValue = value;
+	public void setSaleValues(int[] values) {
+		saleValues = values;
 	}
 
 	/**
@@ -5004,20 +5488,20 @@ public abstract class BodyAttributes extends Obj {
 	 * 
 	 * @return たかっているアリの数
 	 */
-	public int getNumOfAnts() {
-		return numOfAnts;
+	public int getAntCount() {
+		return antCount;
 	}
 
 	/**
 	 * たかっているアリの数 を設定する.
 	 * 
-	 * @param numOfAnts たかっているアリの数
+	 * @param antCount たかっているアリの数
 	 */
-	public void setNumOfAnts(int numOfAnts) {
-		if (numOfAnts < 0) {
-			this.numOfAnts = 0;
+	public void setAntCount(int antCount) {
+		if (antCount < 0) {
+			this.antCount = 0;
 		} else {
-			this.numOfAnts = numOfAnts;
+			this.antCount = antCount;
 		}
 	}
 
@@ -5026,17 +5510,17 @@ public abstract class BodyAttributes extends Obj {
 	 * 
 	 * @return うにょ機能を使用するかどうかのフラグ
 	 */
-	public int getUnyoFlg() {
-		return unyoFlg;
+	public int getUnyoMode() {
+		return unyoMode;
 	}
 
 	/**
 	 * うにょ機能を使用するかどうかのフラグ を設定する.
 	 * 
-	 * @param unyoFlg うにょ機能を使用するかどうかのフラグ
+	 * @param unyoMode うにょ機能を使用するかどうかのフラグ
 	 */
-	public void setUnyoFlg(int unyoFlg) {
-		this.unyoFlg = unyoFlg;
+	public void setUnyoMode(int unyoMode) {
+		this.unyoMode = unyoMode;
 	}
 
 	/**
@@ -5044,17 +5528,17 @@ public abstract class BodyAttributes extends Obj {
 	 * 
 	 * @return うにょの高さ方向
 	 */
-	public int getUnyoForceH() {
-		return unyoForceH;
+	public int getUnyoOffsetH() {
+		return unyoOffsetH;
 	}
 
 	/**
 	 * うにょの高さ方向 を設定する.
 	 * 
-	 * @param unyoForceH うにょの高さ方向
+	 * @param unyoOffsetH うにょの高さ方向
 	 */
-	public void setUnyoForceH(int unyoForceH) {
-		this.unyoForceH = unyoForceH;
+	public void setUnyoOffsetH(int unyoOffsetH) {
+		this.unyoOffsetH = unyoOffsetH;
 	}
 
 	/**
@@ -5062,17 +5546,17 @@ public abstract class BodyAttributes extends Obj {
 	 * 
 	 * @return うにょの横方向
 	 */
-	public int getUnyoForceW() {
-		return unyoForceW;
+	public int getUnyoOffsetW() {
+		return unyoOffsetW;
 	}
 
 	/**
 	 * うにょの横方向 を設定する.
 	 * 
-	 * @param unyoForceW うにょの横方向
+	 * @param unyoOffsetW うにょの横方向
 	 */
-	public void setUnyoForceW(int unyoForceW) {
-		this.unyoForceW = unyoForceW;
+	public void setUnyoOffsetW(int unyoOffsetW) {
+		this.unyoOffsetW = unyoOffsetW;
 	}
 
 	/**
@@ -5089,7 +5573,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	public void setLastActionTime() {
 		long lnNowTime = System.currentTimeMillis();
-		inLastActionTime = lnNowTime;
+		lastActionTime = lnNowTime;
 	}
 
 	/**
@@ -5100,7 +5584,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	public int getSellingPrice(int F) {
 		// Fが0だと飼いゆとして、1だと加工品としての価値を返す
-		return saleValue[F];
+		return saleValues[F];
 	}
 
 	/**
@@ -5124,11 +5608,11 @@ public abstract class BodyAttributes extends Obj {
 	/**
 	 * 妹のインスタンスを取得する.
 	 * 
-	 * @param nIndex 何番目の妹か
+	 * @param sisterIndex 何番目の妹か
 	 * @return 妹のインスタンス
 	 */
-	public Body getSister(int nIndex) {
-		return YukkuriUtil.getBodyInstance(sisterList.get(nIndex));
+	public Body getSister(int sisterIndex) {
+		return BodyRelations.getSister(this, sisterIndex);
 	}
 
 	/**
@@ -5144,11 +5628,11 @@ public abstract class BodyAttributes extends Obj {
 	/**
 	 * 姉のインスタンスを取得する.
 	 * 
-	 * @param nIndex 何番目の姉か
+	 * @param elderSisterIndex 何番目の姉か
 	 * @return 姉のインスタンス
 	 */
-	public Body getElderSister(int nIndex) {
-		return YukkuriUtil.getBodyInstance(elderSisterList.get(nIndex));
+	public Body getElderSister(int elderSisterIndex) {
+		return BodyRelations.getElderSister(this, elderSisterIndex);
 	}
 
 	/**
@@ -5167,14 +5651,14 @@ public abstract class BodyAttributes extends Obj {
 	/**
 	 * 子のインスタンスを取得する.
 	 * 
-	 * @param nIndex 何番目の子か
+	 * @param childIndex 何番目の子か
 	 * @return 子のインスタンス
 	 */
-	public Body getChildren(int nIndex) {
+	public Body getChildren(int childIndex) {
 		if (childrenList == null) {
 			return null;
 		}
-		return YukkuriUtil.getBodyInstance(childrenList.get(nIndex));
+		return BodyRelations.getChildren(this, childIndex);
 	}
 
 	/**
@@ -5186,9 +5670,9 @@ public abstract class BodyAttributes extends Obj {
 		if (setAgeState == AgeState.BABY) {
 			setAge(0);
 		} else if (setAgeState == AgeState.CHILD) {
-			setAge(getBABYLIMITorg());
+			setAge(getBabyLimitBase());
 		} else if (setAgeState == AgeState.ADULT) {
-			setAge(getCHILDLIMITorg());
+			setAge(getChildLimitBase());
 		}
 	}
 
@@ -5199,16 +5683,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public boolean getDiarrhea() {
-		// 飼いゆだったら無条件で下す
-		if (getBodyRank() == BodyRank.KAIYU)
-			return true;
-		int P = bodyBehaviorProfile.getDiarrheaProb();
-		// かび、ダメージ有なら確率2倍
-		if (isSick() || isDamaged())
-			P /= 2;
-		if (P < 1)
-			P = 1;
-		return (GameRandom.nextInt(P) == 0);
+		return BodyExcretionRule.getDiarrhea(this);
 	}
 
 	/**
@@ -5218,7 +5693,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public boolean isNoDamaged() {
-		return BodyVitals.isNoDamaged(this);
+		return BodyDamageRule.isNoDamaged(this);
 	}
 
 	/**
@@ -5228,7 +5703,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public boolean isDamagedLightly() {
-		return BodyVitals.isDamagedLightly(this);
+		return BodyDamageRule.isDamagedLightly(this);
 	}
 
 	/**
@@ -5238,7 +5713,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public boolean isDamaged() {
-		return BodyVitals.isDamaged(this);
+		return BodyDamageRule.isDamaged(this);
 	}
 
 	/**
@@ -5248,7 +5723,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public boolean isDamagedHeavily() {
-		return BodyVitals.isDamagedHeavily(this);
+		return BodyDamageRule.isDamagedHeavily(this);
 	}
 
 	/**
@@ -5258,7 +5733,7 @@ public abstract class BodyAttributes extends Obj {
 	 * @param k 命乞い中かどうか
 	 */
 	public void setBegging(boolean k) {
-		if (baryState == BaryInUGState.NONE)
+		if (burialState == BurialState.NONE)
 			begging = k;
 	}
 
@@ -5270,7 +5745,12 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public boolean isBeggingForLife() {
-		return (!dead && begging);
+		return BodyActionStateRule.isBeggingForLife(this);
+	}
+
+	@JsonIgnore
+	public boolean isBeggingRaw() {
+		return begging;
 	}
 
 	/**
@@ -5280,7 +5760,12 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 攻撃アクション中かどうか
 	 */
 	public boolean isStrike() {
-		return (!dead && strike);
+		return BodyActionStateRule.isStrike(this);
+	}
+
+	@JsonIgnore
+	public boolean isStrikeRaw() {
+		return strike;
 	}
 
 	/**
@@ -5290,7 +5775,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public boolean isFeelPain() {
-		return (getPainState() == Pain.VERY || getPainState() == Pain.SOME);
+		return BodyActionStateRule.isFeelPain(this);
 	}
 
 	/**
@@ -5300,7 +5785,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public boolean isFeelHardPain() {
-		return (getPainState() == Pain.VERY);
+		return BodyActionStateRule.isFeelHardPain(this);
 	}
 
 	/**
@@ -5310,7 +5795,12 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 誕生済みか否か
 	 */
 	public boolean isBirth() {
-		return (!dead && birth);
+		return BodyActionStateRule.isBirth(this);
+	}
+
+	@JsonIgnore
+	public boolean isBirthRaw() {
+		return birth;
 	}
 
 	/**
@@ -5338,6 +5828,11 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public boolean isNewborn() {
+		return BodyActionStateRule.isNewborn(this);
+	}
+
+	@JsonIgnore
+	public boolean isNewbornRaw() {
 		return birthAge >= 0 && (getAge() - birthAge) < 300;
 	}
 
@@ -5348,7 +5843,12 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 食事中か否か
 	 */
 	public boolean isEating() {
-		return (!dead && eating);
+		return BodyActionStateRule.isEating(this);
+	}
+
+	@JsonIgnore
+	public boolean isEatingRaw() {
+		return eating;
 	}
 
 	/**
@@ -5358,7 +5858,12 @@ public abstract class BodyAttributes extends Obj {
 	 * @return うんうん食い中か否か
 	 */
 	public boolean isEatingShit() {
-		return (!dead && eatingShit);
+		return BodyActionStateRule.isEatingShit(this);
+	}
+
+	@JsonIgnore
+	public boolean isEatingShitRaw() {
+		return eatingShit;
 	}
 
 	/**
@@ -5368,7 +5873,12 @@ public abstract class BodyAttributes extends Obj {
 	 * @return すっきり中か否か
 	 */
 	public boolean isSukkiri() {
-		return (!dead && sukkiri);
+		return BodyActionStateRule.isSukkiri(this);
+	}
+
+	@JsonIgnore
+	public boolean isSukkiriRaw() {
+		return sukkiri;
 	}
 
 	/**
@@ -5377,11 +5887,6 @@ public abstract class BodyAttributes extends Obj {
 	 * 
 	 * @return 針でさされ中か否か
 	 */
-	@Transient
-	public boolean isNeedled() {
-		return (!dead && bNeedled);
-	}
-
 	/**
 	 * ドゲスか否かを返却する.
 	 * 
@@ -5389,7 +5894,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public boolean isVeryRude() {
-		return (attitude == Attitude.SUPER_SHITHEAD);
+		return BodyAttitudeRule.isVeryRude(this);
 	}
 
 	/**
@@ -5399,7 +5904,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public boolean isRude() {
-		return (attitude == Attitude.SHITHEAD || attitude == Attitude.SUPER_SHITHEAD);
+		return BodyAttitudeRule.isRude(this);
 	}
 
 	/**
@@ -5409,7 +5914,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public boolean isNormal() {
-		return (attitude == Attitude.AVERAGE);
+		return BodyAttitudeRule.isNormal(this);
 	}
 
 	/**
@@ -5419,7 +5924,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public boolean isSmart() {
-		return (attitude == Attitude.VERY_NICE || attitude == Attitude.NICE);
+		return BodyAttitudeRule.isSmart(this);
 	}
 
 	/**
@@ -5496,7 +6001,7 @@ public abstract class BodyAttributes extends Obj {
 			return 0;
 		}
 		if (SimYukkuri.UNYO) {
-			return spr.getImageW() + getExpandSizeW() + unyoForceW;
+		return spr.getImageW() + getExpandSizeW() + unyoOffsetW;
 		}
 		return spr.getImageW() + getExpandSizeW();
 	}
@@ -5545,9 +6050,9 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public AgeState getBodyAgeState() {
-		if (getAge() < getBABYLIMITorg()) {
+		if (getAge() < getBabyLimitBase()) {
 			return AgeState.BABY;
-		} else if (getAge() < getCHILDLIMITorg()) {
+		} else if (getAge() < getChildLimitBase()) {
 			return AgeState.CHILD;
 		}
 		return AgeState.ADULT;
@@ -5570,17 +6075,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public Damage getDamageState() {
-		if (damage > getDAMAGELIMITorg()[getBodyAgeState().ordinal()]) {
-			toDead();
-			return Damage.TOOMUCH;
-		}
-		if (damage >= getDAMAGELIMITorg()[getBodyAgeState().ordinal()] * 3 / 4) {
-			return Damage.TOOMUCH;
-		}
-		if (damage >= getDAMAGELIMITorg()[getBodyAgeState().ordinal()] / 2) {
-			return Damage.VERY;
-		}
-		return Damage.NONE;
+		return BodyCoreStateRule.getDamageState(this);
 	}
 
 	/**
@@ -5589,7 +6084,7 @@ public abstract class BodyAttributes extends Obj {
 	public void toDead() {
 		if (!isCantDie() && !dead) {
 			dead = true;
-			godHandHoldPoint = 0;// 死んだらゆ虐神拳1をリセット
+			godHandHoldCount = 0;// 死んだらゆ虐神拳1をリセット
 		}
 	}
 
@@ -5600,7 +6095,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public boolean isCantDie() {
-		return (cantDiePeriod > 0);
+		return BodyDamageRule.isCantDie(this);
 	}
 
 	/**
@@ -5610,7 +6105,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public boolean isBurst() {
-		return (getBurstState() == Burst.BURST);
+		return BodyDamageRule.isBurst(this);
 	}
 
 	/**
@@ -5620,7 +6115,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public boolean isAboutToBurst() {
-		return (getBurstState() == Burst.NEAR);
+		return BodyDamageRule.isAboutToBurst(this);
 	}
 
 	/**
@@ -5630,7 +6125,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public boolean isInfration() {
-		return (getBurstState() != Burst.NONE);
+		return BodyDamageRule.isInfration(this);
 	}
 
 	/**
@@ -5649,8 +6144,9 @@ public abstract class BodyAttributes extends Obj {
 	 * 
 	 * @return 茎が生えているかどうか
 	 */
-	public boolean isbindStalk() {
-		return (bindStalk != null);
+	@JsonIgnore
+	public boolean hasBindStalk() {
+		return BodyDependencyRule.hasBindStalk(this);
 	}
 
 	/**
@@ -5661,7 +6157,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public boolean isIdiot() {
-		return false;
+		return BodySpecialTypeRule.isIdiot(this);
 	}
 
 	/**
@@ -5679,7 +6175,12 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 怒っているかどうか
 	 */
 	public boolean isAngry() {
-		return (!dead && angry);
+		return src.logic.BodyMoodRule.isAngry(this);
+	}
+
+	@JsonIgnore
+	public boolean isAngryRaw() {
+		return angry;
 	}
 
 	/**
@@ -5689,7 +6190,12 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 怯えているかどうか
 	 */
 	public boolean isScare() {
-		return (!dead && scare);
+		return src.logic.BodyMoodRule.isScare(this);
+	}
+
+	@JsonIgnore
+	public boolean isScareRaw() {
+		return scare;
 	}
 
 	/**
@@ -5700,7 +6206,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public boolean isSad() {
-		return (!dead && happiness == Happiness.SAD);
+		return src.logic.BodyMoodRule.isSad(this);
 	}
 
 	/**
@@ -5711,7 +6217,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public boolean isVerySad() {
-		return (!dead && happiness == Happiness.VERY_SAD);
+		return src.logic.BodyMoodRule.isVerySad(this);
 	}
 
 	/**
@@ -5722,7 +6228,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public boolean isHappy() {
-		return (!dead && (happiness == Happiness.HAPPY || happiness == Happiness.VERY_HAPPY));
+		return src.logic.BodyMoodRule.isHappy(this);
 	}
 
 	/**
@@ -5733,7 +6239,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public boolean isUnhappy() {
-		return (!dead && (happiness == Happiness.SAD || happiness == Happiness.VERY_SAD));
+		return src.logic.BodyMoodRule.isUnhappy(this);
 	}
 
 	/**
@@ -5744,7 +6250,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public boolean isOverEating() {
-		return (!dead && (hungry >= getHUNGRYLIMITorg()[getBodyAgeState().ordinal()] * 1.3f));
+		return BodyHungerRule.isOverEating(this);
 	}
 
 	/**
@@ -5755,7 +6261,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public boolean isTooFull() {
-		return (!dead && hungry >= getHUNGRYLIMITorg()[getBodyAgeState().ordinal()]);
+		return BodyHungerRule.isTooFull(this);
 	}
 
 	/**
@@ -5766,7 +6272,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public boolean isFull() {
-		return BodyVitals.isFull(this);
+		return BodyHungerStateRule.isFull(this);
 	}
 
 	/**
@@ -5777,7 +6283,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public boolean isHungry() {
-		return BodyVitals.isHungry(this);
+		return BodyHungerStateRule.isHungry(this);
 	}
 
 	/**
@@ -5788,7 +6294,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public boolean isSoHungry() {
-		return BodyVitals.isSoHungry(this);
+		return BodyHungerStateRule.isSoHungry(this);
 	}
 
 	/**
@@ -5799,7 +6305,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public boolean isVeryHungry() {
-		return BodyVitals.isVeryHungry(this);
+		return BodyHungerStateRule.isVeryHungry(this);
 	}
 
 	/**
@@ -5810,7 +6316,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public boolean isTooHungry() {
-		return BodyVitals.isTooHungry(this);
+		return BodyHungerStateRule.isTooHungry(this);
 	}
 
 	/**
@@ -5821,7 +6327,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public boolean isStarving() {
-		return BodyVitals.isStarving(this);
+		return BodyHungerStateRule.isStarving(this);
 	}
 
 	/**
@@ -5861,14 +6367,6 @@ public abstract class BodyAttributes extends Obj {
 		this.hungry = hungry;
 	}
 
-	public boolean isbFirstGround() {
-		return bFirstGround;
-	}
-
-	public void setbFirstGround(boolean bFirstGround) {
-		this.bFirstGround = bFirstGround;
-	}
-
 	/**
 	 * 段階別（赤/子/成）の飢餓状態限界を取得する.
 	 * 
@@ -5876,7 +6374,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public int getHungryLimit() {
-		return getHUNGRYLIMITorg()[getBodyAgeState().ordinal()];
+		return getHungryLimitBase()[getBodyAgeState().ordinal()];
 	}
 
 	/**
@@ -5886,7 +6384,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public boolean isAdult() {
-		return (getBodyAgeState() == AgeState.ADULT);
+		return BodyAgeCategoryRule.isAdult(this);
 	}
 
 	/**
@@ -5896,7 +6394,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public boolean isChild() {
-		return (getBodyAgeState() == AgeState.CHILD);
+		return BodyAgeCategoryRule.isChild(this);
 	}
 
 	/**
@@ -5906,7 +6404,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public boolean isBaby() {
-		return (getBodyAgeState() == AgeState.BABY);
+		return BodyAgeCategoryRule.isBaby(this);
 	}
 
 	/**
@@ -5917,7 +6415,12 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@JsonProperty
 	public boolean isSleeping() {
-		return (!dead && sleeping);
+		return BodyActivityRule.isSleeping(this);
+	}
+
+	@JsonIgnore
+	public boolean isSleepingRaw() {
+		return sleeping;
 	}
 
 	/**
@@ -5928,10 +6431,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public boolean isSleepy() {
-		if (!sleeping && wakeUpTime + getACTIVEPERIODorg() < getAge()) {
-			return true;
-		}
-		return false;
+		return BodyActivityRule.isSleepy(this);
 	}
 
 	/**
@@ -5941,7 +6441,12 @@ public abstract class BodyAttributes extends Obj {
 	 * @return うんうん中かどうか
 	 */
 	public boolean isShitting() {
-		return (!dead && shitting);
+		return BodyActivityRule.isShitting(this);
+	}
+
+	@JsonIgnore
+	public boolean isShittingRaw() {
+		return shitting;
 	}
 
 	/**
@@ -5951,18 +6456,23 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 発情中かどうか
 	 */
 	public boolean isExciting() {
-		return (!dead && exciting);
+		return BodyActivityRule.isExciting(this);
+	}
+
+	@JsonIgnore
+	public boolean isExcitingRaw() {
+		return exciting;
 	}
 
 	/**
 	 * 発情状態を設定する.
 	 * 
-	 * @param bTemp 発情状態
+	 * @param temp 発情状態
 	 */
-	public void setExciting(Boolean bTemp) {
-		if (bTemp)
+	public void setExciting(Boolean temp) {
+		if (temp)
 			setForceFace(ImageCode.EXCITING.ordinal());
-		exciting = bTemp;
+		exciting = temp;
 	}
 
 	/**
@@ -5971,16 +6481,11 @@ public abstract class BodyAttributes extends Obj {
 	 * 
 	 * @return 強制発情状態かどうか
 	 */
-	@Transient
-	public boolean isForceExciting() {
-		return (!dead && exciting && bForceExciting);
-	}
-
 	/**
 	 * 発情を落ち着かせる.
 	 */
 	public void setCalm() {
-		bForceExciting = false;
+		forceExciting = false;
 		exciting = false;
 	}
 
@@ -5991,7 +6496,12 @@ public abstract class BodyAttributes extends Obj {
 	 * @return ゆんやあしているかどうか
 	 */
 	public boolean isYunnyaa() {
-		return (!dead && yunnyaa);
+		return BodyActivityRule.isYunnyaa(this);
+	}
+
+	@JsonIgnore
+	public boolean isYunnyaaRaw() {
+		return yunnyaa;
 	}
 
 	/**
@@ -6001,7 +6511,12 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 親を呼んで泣き叫び中かどうか
 	 */
 	public boolean isCallingParents() {
-		return (!dead && callingParents);
+		return BodyActivityRule.isCallingParents(this);
+	}
+
+	@JsonIgnore
+	public boolean isCallingParentsRaw() {
+		return callingParents;
 	}
 
 	/**
@@ -6021,7 +6536,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public boolean isHybrid() {
-		return false;
+		return BodySpecialTypeRule.isHybrid(this);
 	}
 
 	/**
@@ -6031,7 +6546,17 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 汚れているかどうか
 	 */
 	public boolean isDirty() {
-		return (!dead && (dirty || stubbornlyDirty));
+		return BodyActivityRule.isDirty(this);
+	}
+
+	@JsonIgnore
+	public boolean isDirtyRaw() {
+		return dirty;
+	}
+
+	@JsonIgnore
+	public boolean isStubbornlyDirtyRaw() {
+		return stubbornlyDirty;
 	}
 
 	/**
@@ -6042,7 +6567,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public boolean isNormalDirty() {
-		return (!dead && dirty);
+		return BodyActivityRule.isNormalDirty(this);
 	}
 
 	/**
@@ -6051,21 +6576,21 @@ public abstract class BodyAttributes extends Obj {
 	 * @param key アイテムのキー
 	 * @return 運んでいるアイテム
 	 */
-	public Obj getTakeoutItem(TakeoutItemType key) {
-		if (takeoutItem == null) {
+	public Obj getCarryItem(TakeoutItemType key) {
+		if (carryItems == null) {
 			return null;
 		}
-		if (takeoutItem.get(key) == null) {
+		if (carryItems.get(key) == null) {
 			return null;
 		}
 		MapPlaceData m = GameWorld.get().getCurrentMap();
-		if (m.getTakenOutFood().containsKey(takeoutItem.get(key))) {
-			return m.getTakenOutFood().get(takeoutItem.get(key));
+		if (m.getTakenOutFood().containsKey(carryItems.get(key))) {
+			return m.getTakenOutFood().get(carryItems.get(key));
 		}
-		if (m.getTakenOutShit().containsKey(takeoutItem.get(key))) {
-			return m.getTakenOutShit().get(takeoutItem.get(key));
+		if (m.getTakenOutShit().containsKey(carryItems.get(key))) {
+			return m.getTakenOutShit().get(carryItems.get(key));
 		}
-		return YukkuriUtil.getBodyInstanceFromObjId(takeoutItem.get(key));
+		return BodyRelations.getBodyFromObjId(carryItems.get(key));
 	}
 
 	/**
@@ -6073,8 +6598,8 @@ public abstract class BodyAttributes extends Obj {
 	 * 
 	 * @param key アイテムのキー
 	 */
-	public void removeTakeoutItem(TakeoutItemType key) {
-		takeoutItem.remove(key);
+	public void removeCarryItem(TakeoutItemType key) {
+		carryItems.remove(key);
 	}
 
 	/**
@@ -6084,10 +6609,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public boolean isEatenByAnimals() {
-		if (getAttachmentSize(Ants.class) != 0)
-			return true;
-		else
-			return false;
+		return BodyAnimalRule.isEatenByAnimals(this);
 	}
 
 	/**
@@ -6095,7 +6617,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	public void removeAnts() {
 		removeAttachment(Ants.class);
-		numOfAnts = 0;
+		antCount = 0;
 	}
 
 	/**
@@ -6104,9 +6626,9 @@ public abstract class BodyAttributes extends Obj {
 	 * @param A 減らしたいアリの数
 	 */
 	public void substractNumOfAnts(int A) {
-		numOfAnts -= A;
-		if (numOfAnts < 0) {
-			numOfAnts = 0;
+		antCount -= A;
+		if (antCount < 0) {
+			antCount = 0;
 		}
 	}
 
@@ -6179,19 +6701,10 @@ public abstract class BodyAttributes extends Obj {
 	/**
 	 * 指定の子供をリストから除去する.
 	 * 
-	 * @param bTarget 子のインスタンス
+	 * @param target 子のインスタンス
 	 */
-	public void removeChildrenList(Body bTarget) {
-		if (bTarget == null) {
-			return;
-		}
-		Iterator<Integer> itr = childrenList.iterator();
-		while (itr.hasNext()) {
-			Body at = YukkuriUtil.getBodyInstance(itr.next());
-			if (at == bTarget) {
-				itr.remove();
-			}
-		}
+	public void removeChildrenList(Body target) {
+		BodyRelations.removeChildrenList(this, target);
 	}
 
 	// ------------------------------------------
@@ -6209,19 +6722,10 @@ public abstract class BodyAttributes extends Obj {
 	/**
 	 * 指定の姉をリストから除去する.
 	 * 
-	 * @param bTarget 姉インスタンス
+	 * @param target 姉インスタンス
 	 */
-	public void removeElderSisterList(Body bTarget) {
-		if (bTarget == null) {
-			return;
-		}
-		Iterator<Integer> itr = elderSisterList.iterator();
-		while (itr.hasNext()) {
-			Body at = YukkuriUtil.getBodyInstance(itr.next());
-			if (at == bTarget) {
-				itr.remove();
-			}
-		}
+	public void removeElderSisterList(Body target) {
+		BodyRelations.removeElderSisterList(this, target);
 	}
 	// ------------------------------------------
 
@@ -6239,19 +6743,10 @@ public abstract class BodyAttributes extends Obj {
 	/**
 	 * 指定の妹をリストから除去する.
 	 * 
-	 * @param bTarget 妹のインスタンス
+	 * @param target 妹のインスタンス
 	 */
-	public void removeSisterList(Body bTarget) {
-		if (bTarget == null) {
-			return;
-		}
-		Iterator<Integer> itr = sisterList.iterator();
-		while (itr.hasNext()) {
-			Body at = YukkuriUtil.getBodyInstance(itr.next());
-			if (at == bTarget) {
-				itr.remove();
-			}
-		}
+	public void removeSisterList(Body target) {
+		BodyRelations.removeSisterList(this, target);
 	}
 
 	/**
@@ -6261,7 +6756,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public int getShitLimit() {
-		return getSHITLIMITorg()[getBodyAgeState().ordinal()];
+		return getShitLimitBase()[getBodyAgeState().ordinal()];
 	}
 
 	/**
@@ -6286,8 +6781,8 @@ public abstract class BodyAttributes extends Obj {
 		if (shitting)
 			return;
 		if (ibVeryShit) {
-			if (shit < getSHITLIMITorg()[getBodyAgeState().ordinal()]) {
-				shit = getSHITLIMITorg()[getBodyAgeState().ordinal()] - inShit;
+			if (shit < getShitLimitBase()[getBodyAgeState().ordinal()]) {
+				shit = getShitLimitBase()[getBodyAgeState().ordinal()] - inShit;
 			}
 		} else {
 			shit = inShit;
@@ -6335,7 +6830,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public int getDamageLimit() {
-		return getDAMAGELIMITorg()[getBodyAgeState().ordinal()];
+		return getDamageLimitBase()[getBodyAgeState().ordinal()];
 	}
 
 	/**
@@ -6344,8 +6839,7 @@ public abstract class BodyAttributes extends Obj {
 	 * @param s ストレス値
 	 */
 	public void setStress(int s) {
-		if (s > 0)
-			stress = s;
+		BodyCoreStateRule.setStress(this, s);
 	}
 
 	/**
@@ -6357,7 +6851,7 @@ public abstract class BodyAttributes extends Obj {
 		if (dead)
 			return;
 		// ストレスに応じてうんうん増加
-		if (s > 0 && eCoreAnkoState == CoreAnkoState.DEFAULT && getBurstState() != Burst.HALF)
+		if (s > 0 && coreAnkoState == CoreAnkoState.DEFAULT && getBurstState() != Burst.HALF)
 			plusShit(s / 5);
 		stress += TICK * s;
 		if (stress < 0)
@@ -6371,7 +6865,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public int getStressLimit() {
-		return getSTRESSLIMITorg()[getBodyAgeState().ordinal()];
+		return getStressLimitBase()[getBodyAgeState().ordinal()];
 	}
 
 	/**
@@ -6381,11 +6875,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public boolean isStressful() {
-		// ストレス限界の40%を超えている場合
-		if (getSTRESSLIMITorg()[getBodyAgeState().ordinal()] * checkNonYukkuriDiseaseTolerance() / 100 * 2 / 5 < stress) {
-			return true;
-		}
-		return false;
+		return BodyStressRule.isStressful(this);
 	}
 
 	/**
@@ -6395,11 +6885,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public boolean isVeryStressful() {
-		// ストレス限界の60%を超えている場合
-		if (getSTRESSLIMITorg()[getBodyAgeState().ordinal()] * checkNonYukkuriDiseaseTolerance() / 100 * 3 / 5 < stress) {
-			return true;
-		}
-		return false;
+		return BodyStressRule.isVeryStressful(this);
 	}
 
 	/**
@@ -6408,10 +6894,12 @@ public abstract class BodyAttributes extends Obj {
 	 * @return トラウマ持ちかどうか
 	 */
 	public boolean hasTrauma() {
-		if (trauma != null)
-			return true;
-		else
-			return false;
+		return BodyFlagRule.hasTrauma(this);
+	}
+
+	@JsonIgnore
+	public Trauma getTraumaRaw() {
+		return trauma;
 	}
 
 	/**
@@ -6420,7 +6908,12 @@ public abstract class BodyAttributes extends Obj {
 	 * @return ふりふりしているかどうか
 	 */
 	public boolean isFurifuri() {
-		return (!isDead() && furifuri);
+		return BodyStyleRule.isFurifuri(this);
+	}
+
+	@JsonIgnore
+	public boolean isFurifuriRaw() {
+		return furifuri;
 	}
 
 	/**
@@ -6441,7 +6934,7 @@ public abstract class BodyAttributes extends Obj {
 	 * @return ふりふり可能な状態かどうか
 	 */
 	public boolean canFurifuri() {
-		if (getFootBakeLevel() != FootBake.CRITICAL && eCoreAnkoState == CoreAnkoState.DEFAULT) {
+		if (getFootBakeLevel() != FootBake.CRITICAL && coreAnkoState == CoreAnkoState.DEFAULT) {
 			return true;
 		}
 		return false;
@@ -6462,7 +6955,12 @@ public abstract class BodyAttributes extends Obj {
 	 * @return のびのびをしているかどうか
 	 */
 	public boolean isNobinobi() {
-		return (!dead && nobinobi);
+		return BodyStyleRule.isNobinobi(this);
+	}
+
+	@JsonIgnore
+	public boolean isNobinobiRaw() {
+		return nobinobi;
 	}
 
 	/**
@@ -6494,9 +6992,9 @@ public abstract class BodyAttributes extends Obj {
 		if (footBakePeriod < 0) {
 			footBakePeriod = 0;
 		}
-		if (footBakePeriod > getDAMAGELIMITorg()[getBodyAgeState().ordinal()]) {
+		if (footBakePeriod > getDamageLimitBase()[getBodyAgeState().ordinal()]) {
 			ret = FootBake.CRITICAL;
-		} else if (footBakePeriod > (getDAMAGELIMITorg()[getBodyAgeState().ordinal()] >> 1)) {
+		} else if (footBakePeriod > (getDamageLimitBase()[getBodyAgeState().ordinal()] >> 1)) {
 			ret = FootBake.MIDIUM;
 		}
 		return ret;
@@ -6509,7 +7007,27 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public boolean isVain() {
-		return (!dead && beVain);
+		return BodyStyleRule.isVain(this);
+	}
+
+	@JsonIgnore
+	public boolean isVainRaw() {
+		return beVain;
+	}
+
+	/**
+	 * キリッ！中かどうかを取得する.
+	 *
+	 * @return キリッ！中ならtrue
+	 */
+	@Transient
+	public boolean isBeVain() {
+		return BodyStyleRule.isBeVain(this);
+	}
+
+	@JsonIgnore
+	public boolean isBeVainRaw() {
+		return beVain;
 	}
 
 	/**
@@ -6519,9 +7037,9 @@ public abstract class BodyAttributes extends Obj {
 	 * @return あんこ量がなくなったかどうか
 	 */
 	public boolean addAmount(int val) {
-		bodyAmount += val;
-		if (bodyAmount <= 0) {
-			bodyAmount = 0;
+		ankoAmount += val;
+		if (ankoAmount <= 0) {
+			ankoAmount = 0;
 			return true;
 		}
 		return false;
@@ -6533,7 +7051,7 @@ public abstract class BodyAttributes extends Obj {
 	 * @param val 成長段階
 	 */
 	public void initAmount(AgeState val) {
-		bodyAmount = getDAMAGELIMITorg()[val.ordinal()];
+		ankoAmount = getDamageLimitBase()[val.ordinal()];
 	}
 
 	@Transient
@@ -6553,12 +7071,12 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public int getStep() {
-		return (getSTEPorg()[getBodyAgeState().ordinal()]);
+		return (getStepBase()[getBodyAgeState().ordinal()]);
 	}
 
 	@Transient
 	public int getStepDist() {
-		int p = (getSTEPorg()[getBodyAgeState().ordinal()]) * (getSTEPorg()[getBodyAgeState().ordinal()]);
+		int p = (getStepBase()[getBodyAgeState().ordinal()]) * (getStepBase()[getBodyAgeState().ordinal()]);
 		return p;
 	}
 
@@ -6630,7 +7148,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public int getWeight() {
-		return (getWEIGHTorg()[getBodyAgeState().ordinal()] + (babyTypes.size() + stalkBabyTypes.size()) * 50);
+		return (getWeightBase()[getBodyAgeState().ordinal()] + (babyTypes.size() + stalkBabyTypes.size()) * 50);
 	}
 
 	/**
@@ -6657,8 +7175,8 @@ public abstract class BodyAttributes extends Obj {
 	 * @param key お気に入りアイテムのタイプ
 	 * @return お気に入りアイテムのインスタンス
 	 */
-	public Obj getFavItem(FavItemType key) {
-		return favItem.get(key) == null ? null : takeMappedObj(favItem.get(key));
+	public Obj getFavoriteItem(FavItemType key) {
+		return favoriteItems.get(key) == null ? null : takeMappedObj(favoriteItems.get(key));
 	}
 
 	/**
@@ -6667,8 +7185,8 @@ public abstract class BodyAttributes extends Obj {
 	 * @param key お気に入りアイテムのタイプ
 	 * @param val お気に入りアイテムのインスタンス
 	 */
-	public void setFavItem(FavItemType key, Obj val) {
-		favItem.put(key, val == null ? -1 : val.objId);
+	public void setFavoriteItem(FavItemType key, Obj val) {
+		favoriteItems.put(key, val == null ? -1 : val.objId);
 	}
 
 	/**
@@ -6676,15 +7194,15 @@ public abstract class BodyAttributes extends Obj {
 	 * 
 	 * @param key 取り除くアイテムのタイプ
 	 */
-	public void removeFavItem(FavItemType key) {
-		favItem.remove(key);
+	public void removeFavoriteItem(FavItemType key) {
+		favoriteItems.remove(key);
 	}
 
 	/**
 	 * はげまんじゅうにする.
 	 */
 	public void cutHair() {
-		eHairState = HairState.BALDHEAD;
+		hairState = HairState.BALDHEAD;
 	}
 
 	/**
@@ -6694,7 +7212,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public boolean isPredatorType() {
-		return (predatorType != null);
+		return BodyAppearanceRule.isPredatorType(this);
 	}
 
 	/**
@@ -6704,7 +7222,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public boolean hasBabyOrStalk() {
-		return (hasBaby || hasStalk);
+		return BodyDependencyRule.hasBabyOrStalk(this);
 	}
 
 	/**
@@ -6714,14 +7232,14 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public final boolean hasOkazari() {
-		return (okazari != null);
+		return BodyAppearanceRule.hasOkazari(this);
 	}
 
 	/**
 	 * 次の落下でのダメージをなくす.
 	 */
 	public final void setNoDamageNextFall() {
-		setbNoDamageNextFall(true);
+		setNoDamageNextFall(true);
 	}
 
 	/**
@@ -6735,9 +7253,9 @@ public abstract class BodyAttributes extends Obj {
 	 * 思い出を追加する.
 	 * 思い出量は非ゆっくり症チェックで使用する.
 	 * 
-	 * @param nAdd 追加する思い出量
+	 * @param memoryDelta 追加する思い出量
 	 */
-	public final void addMemories(int nAdd) {
+	public final void addMemories(int memoryDelta) {
 		/*
 		 * 知能による補正
 		 * 賢いと補正無
@@ -6746,19 +7264,19 @@ public abstract class BodyAttributes extends Obj {
 		 */
 		switch (getIntelligence()) {
 			case WISE:
-				memories += nAdd / 2;
+				memories += memoryDelta / 2;
 				break;
 			case FOOL:
-				if (nAdd < 0)
-					memories += nAdd / 2;
+				if (memoryDelta < 0)
+					memories += memoryDelta / 2;
 				else
-					memories += nAdd * 2;
+					memories += memoryDelta * 2;
 				break;
 			default:
-				if (nAdd < 0)
-					memories += nAdd;
+				if (memoryDelta < 0)
+					memories += memoryDelta;
 				else
-					memories += nAdd * 2;
+					memories += memoryDelta * 2;
 				break;
 		}
 	}
@@ -6769,21 +7287,7 @@ public abstract class BodyAttributes extends Obj {
 	 * @return かびているかどうか
 	 */
 	public boolean findSick(BodyAttributes b) {
-		switch (getIntelligence()) {
-			case WISE:
-				if (b.isSick())
-					return true;
-				break;
-			case AVERAGE:
-				if (b.isSick())
-					return true;
-				break;
-			case FOOL:
-				if (b.isSickHeavily())
-					return true;
-				break;
-		}
-		return false;
+		return src.logic.BodyIllnessRule.findSick(this, b);
 	}
 
 	/**
@@ -6820,7 +7324,7 @@ public abstract class BodyAttributes extends Obj {
 	 * 強制的にゆかびにする.
 	 */
 	public final void forceSetSick() {
-		sickPeriod = (getINCUBATIONPERIODorg() * 32) + 2;
+		sickPeriod = (getIncubationPeriodBase() * 32) + 2;
 	}
 
 	/**
@@ -6830,7 +7334,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public final boolean isOld() {
-		return getAge() > (getLIFELIMITorg() * 9 / 10);
+		return BodyAgeRule.isOld(this);
 	}
 
 	/**
@@ -6840,7 +7344,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public final boolean isTalking() {
-		return (messageCount > 0);
+		return BodySpeechRule.isTalking(this);
 	}
 
 	/**
@@ -6895,9 +7399,9 @@ public abstract class BodyAttributes extends Obj {
 		if (bodyBakePeriod < 0) {
 			footBakePeriod = 0;
 		}
-		if (bodyBakePeriod > getDAMAGELIMITorg()[getBodyAgeState().ordinal()] * 3 / 4) {
+		if (bodyBakePeriod > getDamageLimitBase()[getBodyAgeState().ordinal()] * 3 / 4) {
 			ret = BodyBake.CRITICAL;
-		} else if (bodyBakePeriod > (getDAMAGELIMITorg()[getBodyAgeState().ordinal()] * 2 / 5)) {
+		} else if (bodyBakePeriod > (getDamageLimitBase()[getBodyAgeState().ordinal()] * 2 / 5)) {
 			ret = BodyBake.MIDIUM;
 		}
 		return ret;
@@ -6910,11 +7414,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public boolean isGotBurned() {
-		if (getFootBakeLevel() == FootBake.NONE && getBodyBakeLevel() == BodyBake.NONE) {
-			return false;
-		} else {
-			return true;
-		}
+		return BodyBurnRule.isGotBurned(this);
 	}
 
 	/**
@@ -6924,11 +7424,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public boolean isGotBurnedHeavily() {
-		if (getFootBakeLevel() != FootBake.NONE || getBodyBakeLevel() == BodyBake.CRITICAL) {
-			return true;
-		} else {
-			return false;
-		}
+		return BodyBurnRule.isGotBurnedHeavily(this);
 	}
 
 	/**
@@ -6939,16 +7435,16 @@ public abstract class BodyAttributes extends Obj {
 	public void addLovePlayer(int val) {
 		// 非ゆっくり症発症個体は常にプレイヤーを嫌いに
 		if (isNYD()) {
-			nLovePlayer = -1 * getLOVEPLAYERLIMITorg();
+			lovePlayer = -1 * getLovePlayerLimitBase();
 			return;
 		}
-		nLovePlayer += (TICK * val);
-		if (nLovePlayer < -1 * getLOVEPLAYERLIMITorg()) {
+		lovePlayer += (TICK * val);
+		if (lovePlayer < -1 * getLovePlayerLimitBase()) {
 			// 下限設定
-			nLovePlayer = -1 * getLOVEPLAYERLIMITorg();
-		} else if (getLOVEPLAYERLIMITorg() < nLovePlayer) {
+			lovePlayer = -1 * getLovePlayerLimitBase();
+		} else if (getLovePlayerLimitBase() < lovePlayer) {
 			// 上限設定
-			nLovePlayer = getLOVEPLAYERLIMITorg();
+			lovePlayer = getLovePlayerLimitBase();
 		}
 	}
 
@@ -6979,9 +7475,9 @@ public abstract class BodyAttributes extends Obj {
 	@Transient
 	public TangType getTangType() {
 		TangType ret;
-		if (getTang() < getTANGLEVELorg()[0]) {
+		if (getTang() < getTangLevelBase()[0]) {
 			ret = TangType.POOR;
-		} else if (getTang() < getTANGLEVELorg()[1]) {
+		} else if (getTang() < getTangLevelBase()[1]) {
 			ret = TangType.NORMAL;
 		} else {
 			ret = TangType.GOURMET;
@@ -6996,7 +7492,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public int getEatAmount() {
-		return getEATAMOUNTorg()[getBodyAgeState().ordinal()];
+		return getEatAmountBase()[getBodyAgeState().ordinal()];
 	}
 
 	/**
@@ -7021,7 +7517,7 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 頑固な汚れかどうか
 	 */
 	public final boolean isStubbornlyDirty() {
-		return (!isDead() && stubbornlyDirty);
+		return BodyFlagRule.isStubbornlyDirty(this);
 	}
 
 	/**
@@ -7031,7 +7527,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public final boolean isNYD() {
-		return geteCoreAnkoState() != CoreAnkoState.DEFAULT;
+		return BodyFlagRule.isNYD(this);
 	}
 
 	/**
@@ -7041,7 +7537,7 @@ public abstract class BodyAttributes extends Obj {
 	 */
 	@Transient
 	public final boolean isNotNYD() {
-		return geteCoreAnkoState() == CoreAnkoState.DEFAULT;
+		return BodyFlagRule.isNotNYD(this);
 	}
 
 	/**
@@ -7100,6 +7596,11 @@ public abstract class BodyAttributes extends Obj {
 	 * @return 取られているかどうか
 	 */
 	public boolean isTaken() {
+		return BodyFlagRule.isTaken(this);
+	}
+
+	@JsonIgnore
+	public boolean isTakenRaw() {
 		return taken;
 	}
 
@@ -7113,18 +7614,16 @@ public abstract class BodyAttributes extends Obj {
 	}
 
 	public boolean isPeropero() {
-		return (!dead && peropero);
+		return BodyFlagRule.isPeropero(this);
 	}
 
-	public boolean isBeVain() {
-		return beVain;
+	@JsonIgnore
+	public boolean isPeroperoRaw() {
+		return peropero;
 	}
 
 	public boolean isBegging() {
-		return begging;
+		return BodyFlagRule.isBegging(this);
 	}
 
-	public void setYcost(int ycost) {
-		Ycost = ycost;
-	}
 }

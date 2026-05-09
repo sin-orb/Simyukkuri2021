@@ -116,10 +116,10 @@ public class BodyUtilTest {
         body.setFlyingType(false);
         body.setExciting(false);
 
-        body.seteCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
+        body.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
         body.setExciting(true);
         BodyUtil.drawBody(g2, null, body);
-        body.seteCoreAnkoState(CoreAnkoState.DEFAULT);
+        body.setCoreAnkoState(CoreAnkoState.DEFAULT);
         body.setExciting(false);
 
         // --- 3. Front View (Option 0) States ---
@@ -129,12 +129,12 @@ public class BodyUtilTest {
 
         body.setFurifuri(true);
         BodyUtil.drawBody(g2, null, body);
-        body.setbImageNagasiMode(true);
+        body.setImageNagasiMode(true);
         for (int age : new int[] { 0, 2, 4 }) {
             body.setAge(age);
             BodyUtil.drawBody(g2, null, body);
         }
-        body.setbImageNagasiMode(false);
+        body.setImageNagasiMode(false);
         body.setFurifuri(false);
 
         body.setCrushed(true);
@@ -166,15 +166,15 @@ public class BodyUtilTest {
             ((Map<Integer, Body>) mapBodyField.get(SimYukkuri.world.getCurrentMap())).put(parent.getUniqueID(), parent);
         } catch (Exception e) {
         }
-        body.setLinkParent(parent.getUniqueID());
+        body.setParentLinkId(parent.getUniqueID());
         parent.setExciting(true);
         BodyUtil.drawBody(g2, null, body);
         parent.setExciting(false);
-        parent.setLinkParent(-1);
+        parent.setParentLinkId(-1);
 
         // --- 5. Abnormal States and Hair ---
         for (HairState h : HairState.values()) {
-            body.seteHairState(h);
+            body.setHairState(h);
             BodyUtil.drawBody(g2, null, body);
         }
 

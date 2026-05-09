@@ -122,6 +122,70 @@ class StalkTest {
     }
 
     @Test
+    void testDetachFromStalkPreventsRebindOnUpdate() {
+        Body parent = WorldTestHelper.createBody();
+        parent.setX(100);
+        parent.setY(100);
+        parent.setAgeState(src.enums.AgeState.ADULT);
+        SimYukkuri.world.getCurrentMap().getBody().put(parent.getUniqueID(), parent);
+
+        Body child = WorldTestHelper.createBody();
+        child.setX(120);
+        child.setY(120);
+        child.setAgeState(src.enums.AgeState.BABY);
+        child.setUnBirth(true);
+        child.setBindStalk(stalk);
+        child.setParentLinkId(parent.getUniqueID());
+        SimYukkuri.world.getCurrentMap().getBody().put(child.getUniqueID(), child);
+
+        stalk.setPlantYukkuri(parent);
+        stalk.getBindBabies().add(child.getUniqueID());
+
+        child.detachFromStalk();
+
+        assertNull(child.getBindStalk());
+        assertEquals(-1, child.getParentLinkId());
+        assertNull(stalk.getBindBabies().get(0));
+        assertTrue(child.isUnBirth());
+
+        stalk.upDate();
+
+        assertNull(child.getBindStalk());
+        assertEquals(-1, child.getParentLinkId());
+    }
+
+    @Test
+    void testDetachFromStalkAllowsFallAfterRelease() {
+        Body parent = WorldTestHelper.createBody();
+        parent.setX(100);
+        parent.setY(100);
+        parent.setAgeState(src.enums.AgeState.ADULT);
+        SimYukkuri.world.getCurrentMap().getBody().put(parent.getUniqueID(), parent);
+
+        Body child = WorldTestHelper.createBody();
+        child.setX(120);
+        child.setY(120);
+        child.setZ(10);
+        child.setAgeState(src.enums.AgeState.BABY);
+        child.setUnBirth(true);
+        child.setBindStalk(stalk);
+        child.setParentLinkId(parent.getUniqueID());
+        SimYukkuri.world.getCurrentMap().getBody().put(child.getUniqueID(), child);
+
+        stalk.setPlantYukkuri(parent);
+        stalk.getBindBabies().add(child.getUniqueID());
+
+        child.detachFromStalk();
+        child.release();
+        int before = child.getZ();
+
+        child.clockTick();
+
+        assertTrue(child.isUnBirth());
+        assertTrue(child.getZ() <= before);
+    }
+
+    @Test
     void testSetBindBabyAndGetBindBabies() {
         Body baby = WorldTestHelper.createBody();
         baby.setX(50);
@@ -299,7 +363,7 @@ class StalkTest {
 
             planted.upDate();
 
-            assertEquals(parent.getUniqueID(), baby.getLinkParent());
+            assertEquals(parent.getUniqueID(), baby.getParentLinkId());
             assertEquals(planted, baby.getBindStalk());
             assertEquals(Direction.RIGHT, baby.getDirection());
             assertEquals(114, baby.getX());

@@ -45,11 +45,6 @@ public final class BodyRenderState {
 			layer.getOption()[0] = 0;
 		}
 
-		if (body.isUnBirth()) {
-			idx += appendFace(body, ImageCode.SLEEPING.ordinal(), direction, layer, idx);
-			return appendFaceOverlays(body, direction, layer, idx);
-		}
-
 		if (body.getForceFace() != -1) {
 			idx += appendFace(body, body.getForceFace(), direction, layer, idx);
 			return appendFaceOverlays(body, direction, layer, idx);
@@ -58,6 +53,8 @@ public final class BodyRenderState {
 		if (body.isDead()) {
 			idx += appendFace(body, body.isPealed() ? ImageCode.PEALEDDEADFACE.ordinal() : ImageCode.DEAD.ordinal(),
 					direction, layer, idx);
+		} else if (body.isUnBirth()) {
+			idx += appendFace(body, ImageCode.SLEEPING.ordinal(), direction, layer, idx);
 		} else if (body.isPealed()) {
 			idx += appendFace(body, ImageCode.PEALEDFACE.ordinal(), direction, layer, idx);
 		} else if (body.isNYD()) {
@@ -286,7 +283,7 @@ public final class BodyRenderState {
 			return;
 		}
 		if (!body.isGrabbed() && body.getZ() == 0 && !body.isSleeping() && !body.isPurupuru()) {
-			if (body.isExciting() && !body.isDontJump() && !body.isbNeedled()) {
+			if (body.isExciting() && !body.isDontJump() && !body.isNeedled()) {
 				layer.getOption()[0] = 1;
 			} else if (body.isSukkiri()) {
 				layer.getOption()[0] = 2;
@@ -294,7 +291,7 @@ public final class BodyRenderState {
 				layer.getOption()[0] = 4;
 			} else if (body.isYunnyaa() || body.isBeggingForLife()) {
 				layer.getOption()[0] = 5;
-			} else if (!body.isLockmove() && !body.isDontJump() && body.takeMappedObj(body.getLinkParent()) == null
+			} else if (!body.isLockmove() && !body.isDontJump() && body.takeMappedObj(body.getParentLinkId()) == null
 					&& !body.isPeropero() && !(body.isEating() && !body.isPikopiko())) {
 				layer.getOption()[0] = 3;
 			}
@@ -306,23 +303,23 @@ public final class BodyRenderState {
 			return appendFace(body, body.isNightmare() ? ImageCode.NIGHTMARE.ordinal() : ImageCode.SLEEPING.ordinal(),
 					direction, layer, idx);
 		}
-		if (body.getMabatakiType() != ImageCode.SLEEPING.ordinal()
-				&& body.getMabatakiType() != ImageCode.NIGHTMARE.ordinal()) {
-			body.setMabatakiCnt(0);
+		if (body.getBlinkType() != ImageCode.SLEEPING.ordinal()
+				&& body.getBlinkType() != ImageCode.NIGHTMARE.ordinal()) {
+			body.setBlinkCount(0);
 		}
-		if (body.getMabatakiCnt() >= 0 && body.getMabatakiCnt() <= 2) {
+		if (body.getBlinkCount() >= 0 && body.getBlinkCount() <= 2) {
 			idx += appendFace(body, ImageCode.NORMAL0.ordinal(), direction, layer, idx);
 			idx += appendFace(body, ImageCode.EYE2.ordinal(), direction, layer, idx);
-		} else if (body.getMabatakiCnt() >= 3 && body.getMabatakiCnt() <= 5) {
+		} else if (body.getBlinkCount() >= 3 && body.getBlinkCount() <= 5) {
 			idx += appendFace(body, ImageCode.NORMAL0.ordinal(), direction, layer, idx);
 			idx += appendFace(body, ImageCode.EYE3.ordinal(), direction, layer, idx);
 		} else {
 			idx += appendFace(body, body.isNightmare() ? ImageCode.NIGHTMARE.ordinal() : ImageCode.SLEEPING.ordinal(),
 					direction, layer, idx);
 		}
-		body.setMabatakiType(ImageCode.SLEEPING.ordinal());
+		body.setBlinkType(ImageCode.SLEEPING.ordinal());
 		if (MainCommandUI.getSelectedGameSpeed() != 0) {
-			body.setMabatakiCnt(body.getMabatakiCnt() + 1);
+			body.setBlinkCount(body.getBlinkCount() + 1);
 		}
 		return idx;
 	}
@@ -370,7 +367,7 @@ public final class BodyRenderState {
 			return appendBlinkingFace(body, direction, layer, idx, ImageCode.CHEER.ordinal(), ImageCode.CHEER0.ordinal());
 		}
 		if ((!body.canflyCheck() && body.getZ() != 0) && !body.isLockmove()
-				&& !(body.takeMappedObj(body.getLinkParent()) instanceof Sui)) {
+				&& !(body.takeMappedObj(body.getParentLinkId()) instanceof Sui)) {
 			if (SimYukkuri.UNYO) {
 				return appendBlinkingFace(body, direction, layer, idx, ImageCode.CHEER.ordinal(),
 						ImageCode.CHEER0.ordinal());
@@ -389,28 +386,28 @@ public final class BodyRenderState {
 		if (!SimYukkuri.UNYO || !supportsNormalBlinkImages(body)) {
 			return appendFace(body, baseFace, direction, layer, idx);
 		}
-		if (body.getMabatakiType() != baseFace) {
-			body.setMabatakiCnt(0);
+		if (body.getBlinkType() != baseFace) {
+			body.setBlinkCount(0);
 		}
-		if ((body.getMabatakiCnt() >= 91 && body.getMabatakiCnt() <= 94)
-				|| (body.getMabatakiCnt() >= 97 && body.getMabatakiCnt() <= 100)) {
+		if ((body.getBlinkCount() >= 91 && body.getBlinkCount() <= 94)
+				|| (body.getBlinkCount() >= 97 && body.getBlinkCount() <= 100)) {
 			idx += appendFace(body, blinkBaseFace, direction, layer, idx);
 			idx += appendFace(body, ImageCode.EYE2.ordinal(), direction, layer, idx);
-		} else if (body.getMabatakiCnt() >= 95 && body.getMabatakiCnt() <= 96) {
+		} else if (body.getBlinkCount() >= 95 && body.getBlinkCount() <= 96) {
 			idx += appendFace(body, blinkBaseFace, direction, layer, idx);
 			idx += appendFace(body, ImageCode.EYE3.ordinal(), direction, layer, idx);
 		} else {
 			idx += appendFace(body, baseFace, direction, layer, idx);
 		}
-		body.setMabatakiType(baseFace);
+		body.setBlinkType(baseFace);
 		if (MainCommandUI.getSelectedGameSpeed() != 0) {
-			body.setMabatakiCnt(body.getMabatakiCnt() + 1);
+			body.setBlinkCount(body.getBlinkCount() + 1);
 		}
-		if (body.getMabatakiType() == baseFace && body.getMabatakiCnt() > 100) {
+		if (body.getBlinkType() == baseFace && body.getBlinkCount() > 100) {
 			if (GameRandom.nextInt(30) != 0) {
-				body.setMabatakiCnt(GameRandom.nextInt(30));
+				body.setBlinkCount(GameRandom.nextInt(30));
 			} else {
-				body.setMabatakiCnt(85);
+				body.setBlinkCount(85);
 			}
 		}
 		return idx;
@@ -424,10 +421,10 @@ public final class BodyRenderState {
 			idx += appendFace(body, ImageCode.BLIND.ordinal(), direction, layer, idx);
 		}
 		if (body.isPeropero() || body.isInOutTakeoutItem()) {
-			if (body.getMessageBuf() != null) {
+			if (body.getMessageBuffer() != null) {
 				idx += appendFace(body, ImageCode.LICK.ordinal(), direction, layer, idx);
 			}
-		} else if ((body.isEating() || body.isEatingShit()) && body.getMessageBuf() != null) {
+		} else if ((body.isEating() || body.isEatingShit()) && body.getMessageBuffer() != null) {
 			idx += appendFace(body, ImageCode.NOMNOM.ordinal(), direction, layer, idx);
 		}
 		return idx;
@@ -466,9 +463,9 @@ public final class BodyRenderState {
 
 	private static int appendFrontBody(Body body, BodyLayer layer, int idx) {
 		idx += appendFace(body, ImageCode.FRONT_SHIT.ordinal(), Const.LEFT, layer, idx);
-		if (body.geteHairState() == HairState.DEFAULT) {
+		if (body.getHairState() == HairState.DEFAULT) {
 			idx += appendFace(body, ImageCode.FRONT_HAIR.ordinal(), Const.LEFT, layer, idx);
-		} else if (body.geteHairState() == HairState.BRINDLED1 || body.geteHairState() == HairState.BRINDLED2) {
+		} else if (body.getHairState() == HairState.BRINDLED1 || body.getHairState() == HairState.BRINDLED2) {
 			idx += appendFace(body, ImageCode.FRONT_HAIR2.ordinal(), Const.LEFT, layer, idx);
 		}
 		if (body.isAnalClose()) {
@@ -507,10 +504,10 @@ public final class BodyRenderState {
 	}
 
 	private static int appendRollingStateOverlays(Body body, BodyLayer layer, int idx, boolean left) {
-		if (body.geteHairState() == HairState.DEFAULT) {
+		if (body.getHairState() == HairState.DEFAULT) {
 			idx += appendFace(body, left ? ImageCode.ROLL_LEFT_HAIR.ordinal() : ImageCode.ROLL_RIGHT_HAIR.ordinal(),
 					Const.LEFT, layer, idx);
-		} else if (body.geteHairState() == HairState.BRINDLED1 || body.geteHairState() == HairState.BRINDLED2) {
+		} else if (body.getHairState() == HairState.BRINDLED1 || body.getHairState() == HairState.BRINDLED2) {
 			idx += appendFace(body, ImageCode.FRONT_HAIR2.ordinal(), Const.LEFT, layer, idx);
 		}
 		if (body.isAnalClose()) {
@@ -567,7 +564,7 @@ public final class BodyRenderState {
 
 	private static int appendSickEffect(Body body, int direction, BodyLayer layer, int idx) {
 		int sickPeriod = body.getSickPeriod();
-		int incubation = body.getINCUBATIONPERIODorg();
+		int incubation = body.getIncubationPeriodBase();
 		if (sickPeriod > (incubation << 5)) {
 			return appendFace(body, ImageCode.SICK3.ordinal(), direction, layer, idx);
 		}

@@ -16,7 +16,6 @@ import src.system.MapPlaceData;
 import src.draw.Translate;
 import src.util.GameRandom;
 import src.util.GameWorld;
-import src.util.YukkuriUtil;
 import src.logic.BodyLogic;
 import src.logic.BedLogic;
 import src.logic.EventLogic;
@@ -87,69 +86,69 @@ public final class BodyTickProcessor {
 				EventLogic.eventUpdate(b);
 			}
 
-			boolean bHasChildren = false;
+			boolean hasChildren = false;
 			List<Body> childrenList = BodyLogic.createActiveChildList(b, true);
 			if (childrenList != null && !childrenList.isEmpty()) {
-				bHasChildren = true;
+				hasChildren = true;
 			}
 
-			boolean bCheck = b.getBlockedCount() == 0;
-			if (bHasChildren) {
-				if (bCheck) {
+			boolean shouldCheck = b.getBlockedTicks() == 0;
+			if (hasChildren) {
+				if (shouldCheck) {
 					if (FamilyActionLogic.checkFamilyAction(b)) {
-						bCheck = false;
+						shouldCheck = false;
 					} else {
-						bCheck = true;
+						shouldCheck = true;
 					}
 				}
 			}
 
-			if (bCheck) {
+			if (shouldCheck) {
 				if (FoodLogic.checkFood(b)) {
-					bCheck = false;
+					shouldCheck = false;
 				} else {
-					bCheck = true;
+					shouldCheck = true;
 				}
 			}
 
-			if (bCheck) {
+			if (shouldCheck) {
 				if (BodyLogic.checkPartner(b)) {
-					bCheck = false;
+					shouldCheck = false;
 				} else {
-					bCheck = true;
+					shouldCheck = true;
 				}
 			}
 
-			if (bCheck) {
+			if (shouldCheck) {
 				if (ToiletLogic.checkShit(b)) {
-					bCheck = false;
+					shouldCheck = false;
 				} else {
-					bCheck = true;
+					shouldCheck = true;
 				}
 			}
 
-			if (bCheck) {
+			if (shouldCheck) {
 				if (ToiletLogic.checkToilet(b)) {
-					bCheck = false;
+					shouldCheck = false;
 				} else {
-					bCheck = true;
+					shouldCheck = true;
 				}
 			}
 
-			if (bCheck) {
+			if (shouldCheck) {
 				if (BedLogic.checkBed(b)) {
-					bCheck = false;
+					shouldCheck = false;
 				} else {
-					bCheck = true;
+					shouldCheck = true;
 				}
 			}
 
-			if (!bHasChildren) {
-				if (bCheck) {
+			if (!hasChildren) {
+				if (shouldCheck) {
 					if (!FamilyActionLogic.checkFamilyAction(b)) {
-						bCheck = true;
+						shouldCheck = true;
 					} else {
-						bCheck = false;
+						shouldCheck = false;
 					}
 				}
 			}
@@ -166,12 +165,12 @@ public final class BodyTickProcessor {
 				}
 				if (babyTypes != null) {
 					Body baby = terrarium.makeBody(b.getX(), b.getY(), 0, babyTypes, AgeState.BABY, b,
-							YukkuriUtil.getBodyInstance(b.getPartner()));
+							src.util.BodyRegistry.getBodyInstance(b.getPartner()));
 					babyList.add(baby);
 					baby.setBindStalk(s);
 					s.setBindBaby(baby);
 					baby.setUnBirth(true);
-					baby.setDropShadow(false);
+					baby.setShadowVisible(false);
 				} else {
 					s.setBindBaby(null);
 				}
@@ -192,7 +191,7 @@ public final class BodyTickProcessor {
 			int burstPower = (b.getSize() - b.getOriginSize()) * 3 / 4;
 			for (Dna babyTypes : b.getBabyTypes()) {
 				Body baby = terrarium.makeBody(b.getX(), b.getY(), b.getZ() + b.getSize() / 20, babyTypes,
-						AgeState.BABY, b, YukkuriUtil.getBodyInstance(b.getPartner()));
+						AgeState.BABY, b, src.util.BodyRegistry.getBodyInstance(b.getPartner()));
 				baby.kick(GameRandom.nextInt(burstPower / 4 + 1) - burstPower / 8,
 						GameRandom.nextInt(burstPower / 4 + 1) - burstPower / 8,
 						GameRandom.nextInt(burstPower / 5 + 1) - burstPower / 10 - 1);
@@ -209,8 +208,8 @@ public final class BodyTickProcessor {
 				}
 			}
 			b.disPlantStalks();
-			if (b.getShit() > b.getSHITLIMITorg()[b.getBodyAgeState().ordinal()]) {
-				for (int j = 0; b.getShit() / b.getSHITLIMITorg()[b.getBodyAgeState().ordinal()] > j; j++) {
+			if (b.getShit() > b.getShitLimitBase()[b.getBodyAgeState().ordinal()]) {
+				for (int j = 0; b.getShit() / b.getShitLimitBase()[b.getBodyAgeState().ordinal()] > j; j++) {
 					int i = terrarium.addShit(b.getX(), b.getY(), b.getZ() + b.getSize() / 15, b, b.getShitType());
 					curMap.getShit().get(i).kick(GameRandom.nextInt(burstPower / 4 + 1) - burstPower / 8,
 							GameRandom.nextInt(burstPower / 4 + 1) - burstPower / 8,
@@ -231,7 +230,7 @@ public final class BodyTickProcessor {
 				Dna babyType = b.getBabyTypesDequeue();
 				if (babyType != null) {
 					Body baby = terrarium.makeBody(b.getX(), b.getY(), b.getZ() + b.getSize() / 15, babyType,
-							AgeState.BABY, b, YukkuriUtil.getBodyInstance(b.getPartner()));
+							AgeState.BABY, b, src.util.BodyRegistry.getBodyInstance(b.getPartner()));
 					baby.kick(0, 5, -2);
 					babyList.add(baby);
 				}
@@ -243,12 +242,12 @@ public final class BodyTickProcessor {
 						if (bab == null) {
 							continue;
 						}
-						Body ba = YukkuriUtil.getBodyInstance(bab);
+						Body ba = src.util.BodyRegistry.getBodyInstance(bab);
 						if (ba != null) {
 							ba.setUnBirth(false);
-							ba.setDropShadow(true);
+							ba.setShadowVisible(true);
 							ba.setBindStalk(null);
-							ba.setLinkParent(-1);
+							ba.setParentLinkId(-1);
 							if (ba.isBaby()) {
 								ba.setAgeState(AgeState.BABY);
 							}
@@ -298,7 +297,7 @@ public final class BodyTickProcessor {
 				continue;
 			}
 			minDistance = Translate.distance(b.getX(), b.getY(), p.getX(), p.getY());
-			if (minDistance <= p.getEYESIGHTorg()) {
+			if (minDistance <= p.getEyesightBase()) {
 				if (b.getPanicType() == PanicType.BURN && !p.isRaper()) {
 					p.setPanic(true, PanicType.FEAR);
 				}

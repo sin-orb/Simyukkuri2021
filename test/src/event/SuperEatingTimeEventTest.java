@@ -123,12 +123,12 @@ public class SuperEatingTimeEventTest {
         assertEquals(SuperEatingTimeEvent.STATE.END, event.getState());
     }
 
-    // --- getLowestStep ---
+    // --- getMinimumStep ---
 
     @Test
-    public void testGetLowestStep_defaultIsZero() {
+    public void testGetMinimumStep_defaultIsZero() {
         SuperEatingTimeEvent event = new SuperEatingTimeEvent();
-        assertEquals(0, event.getLowestStep());
+        assertEquals(0, event.getMinimumStep());
     }
 
     // --- simpleEventAction (from not null, not shutmouth) ---
@@ -180,7 +180,7 @@ public class SuperEatingTimeEventTest {
     public void testUpdate_bodyNYD_returnsAbort() {
         Body from = createBody();
         Body b = createBody();
-        b.seteCoreAnkoState(src.enums.CoreAnkoState.NonYukkuriDisease);
+        b.setCoreAnkoState(src.enums.CoreAnkoState.NonYukkuriDisease);
         SuperEatingTimeEvent event = new SuperEatingTimeEvent(from, null, null, 10);
         assertEquals(src.base.EventPacket.UpdateState.ABORT, event.update(b));
     }
@@ -277,8 +277,8 @@ public class SuperEatingTimeEventTest {
         Body b = createBody();
         Food food = createFood();
         SuperEatingTimeEvent event = new SuperEatingTimeEvent(from, null, food, 10);
-        // from.getCurrentEvent() == null (not set), nFromWaitCount=11 → line 166 ABORT
-        event.nFromWaitCount = 11;
+        // from.getCurrentEvent() == null (not set), waitTicks=11 → line 166 ABORT
+        event.waitTicks = 11;
         assertEquals(src.base.EventPacket.UpdateState.ABORT, event.update(b));
     }
 
@@ -390,7 +390,7 @@ public class SuperEatingTimeEventTest {
     public void testCheckEventResponse_isNYD_returnsFalse() {
         Body from = createBody();
         Body b = createBody();
-        b.seteCoreAnkoState(src.enums.CoreAnkoState.NonYukkuriDisease);
+        b.setCoreAnkoState(src.enums.CoreAnkoState.NonYukkuriDisease);
         SuperEatingTimeEvent event = new SuperEatingTimeEvent(from, null, null, 10);
         assertFalse(event.checkEventResponse(b));
     }
@@ -425,14 +425,14 @@ public class SuperEatingTimeEventTest {
         assertTrue(event.checkEventResponse(child));
     }
 
-    // --- update: nFromWaitCount > 5000 → ABORT ---
+    // --- update: waitTicks > 5000 → ABORT ---
     @Test
     public void testUpdate_nFromWaitCountOver5000_returnsAbort() {
         Body from = createBody();
         Food food = createFood();
         SuperEatingTimeEvent event = new SuperEatingTimeEvent(from, null, food, 10);
         from.setCurrentEvent(event);
-        event.nFromWaitCount = 5001;
+        event.waitTicks = 5001;
         assertEquals(src.base.EventPacket.UpdateState.ABORT, event.update(from));
     }
 
@@ -559,8 +559,8 @@ public class SuperEatingTimeEventTest {
 
             assertNull(event.update(from));
             assertTrue(from.isToFood());
-            assertEquals(food.getObjId(), from.getMoveTarget());
-            assertEquals(500, from.getNoHungrybySupereatingTimePeriod());
+            assertEquals(food.getObjId(), from.getMoveTargetId());
+            assertEquals(500, from.getSuperEatingNoHungryPeriod());
         }
 
         @Test
@@ -583,7 +583,7 @@ public class SuperEatingTimeEventTest {
             assertTrue(food.getAmount() < foodBefore);
             assertTrue(child.getMemories() > memoriesBefore);
             assertFalse(child.isToFood());
-            assertEquals(-1, child.getMoveTarget());
+            assertEquals(-1, child.getMoveTargetId());
         }
     }
 }

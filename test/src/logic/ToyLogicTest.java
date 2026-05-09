@@ -80,7 +80,7 @@ class ToyLogicTest {
         body.setPealed(false);
         body.setPacked(false);
         body.setSleeping(false);
-        body.setBaryState(src.enums.BaryInUGState.NONE);
+        body.setBurialState(src.enums.BurialState.NONE);
         body.setShit(0); // Add this to make wantToShit() return false
         body.setX(100);
         body.setY(100);
@@ -111,11 +111,11 @@ class ToyLogicTest {
             System.out.println("Distance to toy: "
                     + src.draw.Translate.distance(body.getX(), body.getY(), toy.getX(), toy.getY()));
             System.out.println("StepDist: " + body.getStepDist());
-            System.out.println("EYESIGHTorg: " + body.getEYESIGHTorg());
+            System.out.println("eyesightBase: " + body.getEyesightBase());
         }
         assertTrue(result);
-        assertTrue(body.getMoveTarget() != -1);
-        Obj target = SimYukkuri.world.getCurrentMap().getToy().get(body.getMoveTarget());
+        assertTrue(body.getMoveTargetId() != -1);
+        Obj target = SimYukkuri.world.getCurrentMap().getToy().get(body.getMoveTargetId());
         assertTrue(target instanceof Toy);
     }
 
@@ -143,7 +143,7 @@ class ToyLogicTest {
 
     @Test
     void testCanPlay_NYDReturnsFalse() {
-        body.seteCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
+        body.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
         assertFalse(ToyLogic.canPlay(body));
     }
 
@@ -257,7 +257,7 @@ class ToyLogicTest {
         Sui sui = new Sui(5000, 5000, 0);
         SimYukkuri.world.getCurrentMap().getSui().put(sui.getObjId(), sui);
         // body is CHILD, hungry > 0 → canPlay true
-        // body is not riding sui (linkParent != sui)
+        // body is not riding sui (parentLinkId != sui)
         org.junit.jupiter.api.Assertions.assertDoesNotThrow(() -> ToyLogic.checkSui(body));
     }
 
@@ -446,7 +446,7 @@ class ToyLogicTest {
         toy.setObjId(4444);
         toy.setZ(10);       // in air
         toy.setOwner(other); // bOwnedFamily=false
-        body.setFavItem(FavItemType.BALL, toy);
+        body.setFavoriteItem(FavItemType.BALL, toy);
         body.setAttitude(Attitude.SHITHEAD); // isRude=true
         // age=0 by default → 0%20==0 → enter stress block
         SimYukkuri.world.getCurrentMap().getToy().put(toy.getObjId(), toy);
@@ -463,7 +463,7 @@ class ToyLogicTest {
         toy.setObjId(4445);
         toy.setZ(10);
         toy.setOwner(other);
-        body.setFavItem(FavItemType.BALL, toy);
+        body.setFavoriteItem(FavItemType.BALL, toy);
         // body is Marisa (not rude by default)
         SimYukkuri.world.getCurrentMap().getToy().put(toy.getObjId(), toy);
         assertDoesNotThrow(() -> ToyLogic.checkToy(body));
@@ -479,7 +479,7 @@ class ToyLogicTest {
         toy.setX(body.getX()); toy.setY(body.getY() + 50);
         toy.setObjId(4446);
         toy.setOwner(other);
-        body.setFavItem(FavItemType.BALL, toy);
+        body.setFavoriteItem(FavItemType.BALL, toy);
         body.setAttitude(Attitude.SHITHEAD); // isRude=true
         SimYukkuri.world.getCurrentMap().getToy().put(toy.getObjId(), toy);
         assertDoesNotThrow(() -> ToyLogic.checkToy(body));
@@ -494,7 +494,7 @@ class ToyLogicTest {
         toy.setX(body.getX()); toy.setY(body.getY() + 50);
         toy.setObjId(4447);
         toy.setOwner(other);
-        body.setFavItem(FavItemType.BALL, toy);
+        body.setFavoriteItem(FavItemType.BALL, toy);
         SimYukkuri.world.getCurrentMap().getToy().put(toy.getObjId(), toy);
         assertDoesNotThrow(() -> ToyLogic.checkToy(body));
     }
@@ -511,13 +511,13 @@ class ToyLogicTest {
         assertFalse(ToyLogic.checkToy(body));
     }
 
-    // ---- checkSui: linkParent is Sui instance → return false (L157-158) ----
+    // ---- checkSui: parentLinkId is Sui instance → return false (L157-158) ----
 
     @Test
     void testCheckSui_LinkParentIsSui_ReturnsFalse() {
         Sui sui = new Sui(body.getX(), body.getY(), 0);
         SimYukkuri.world.getCurrentMap().getSui().put(sui.getObjId(), sui);
-        body.setLinkParent(sui.getObjId());
+        body.setParentLinkId(sui.getObjId());
         assertFalse(ToyLogic.checkSui(body));
     }
 
@@ -540,17 +540,17 @@ class ToyLogicTest {
         sui.setBindobj(other); // NoCanBind()=(bindobj!=null)=true; other is not family
         SimYukkuri.world.getCurrentMap().getSui().put(sui.getObjId(), sui);
         SimYukkuri.world.getCurrentMap().getBody().put(other.getObjId(), other);
-        // body has no favItem SUI → enters loop → NoCanBind+non-family → skip → found=null
+        // body has no favoriteItems SUI → enters loop → NoCanBind+non-family → skip → found=null
         assertDoesNotThrow(() -> ToyLogic.checkSui(body));
     }
 
-    // ---- checkSui: favItem SUI set + nextBoolean=true → return false (L201-204) ----
+    // ---- checkSui: favoriteItems SUI set + nextBoolean=true → return false (L201-204) ----
 
     @Test
     void testCheckSui_FavItemSet_NextBoolTrue_ReturnsFalse() {
         Sui sui = new Sui(body.getX(), body.getY(), 0); // close → dist<200000
         SimYukkuri.world.getCurrentMap().getSui().put(sui.getObjId(), sui);
-        body.setFavItem(FavItemType.SUI, sui);
+        body.setFavoriteItem(FavItemType.SUI, sui);
         src.ConstState cs = new src.ConstState(200); // nextInt(150)=149 ≠ 0
         cs.setFixedBoolean(true);                     // nextBoolean()=true
         SimYukkuri.RND = cs;
@@ -577,7 +577,7 @@ class ToyLogicTest {
         Sui sui = new Sui(body.getX(), body.getY(), 0);
         sui.setBindobj(body); // bindobj=self
         SimYukkuri.world.getCurrentMap().getSui().put(sui.getObjId(), sui);
-        body.setFavItem(FavItemType.SUI, sui);
+        body.setFavoriteItem(FavItemType.SUI, sui);
         src.ConstState cs = new src.ConstState(200);
         cs.setFixedBoolean(false); // nextBoolean()=false → skip L201
         SimYukkuri.RND = cs;
@@ -592,7 +592,7 @@ class ToyLogicTest {
         Sui sui = new Sui(body.getX(), body.getY(), 0);
         sui.setBindobj(other);
         SimYukkuri.world.getCurrentMap().getSui().put(sui.getObjId(), sui);
-        body.setFavItem(FavItemType.SUI, sui);
+        body.setFavoriteItem(FavItemType.SUI, sui);
         src.ConstState cs = new src.ConstState(200);
         cs.setFixedBoolean(false);
         SimYukkuri.RND = cs;
@@ -604,7 +604,7 @@ class ToyLogicTest {
     @Test
     void testCheckTrampoline_WithinEyesight_OutsideStepDist_MovesTo() {
         Trampoline trampoline = new Trampoline();
-        // dist²=50²=2500 < EYESIGHTorg(16M); dist²=2500 > stepDist(4 for CHILD)
+        // dist²=50²=2500 < eyesightBase(16M); dist²=2500 > stepDist(4 for CHILD)
         trampoline.setX(body.getX()); trampoline.setY(body.getY() + 50);
         trampoline.setObjId(3331);
         SimYukkuri.world.getCurrentMap().getTrampoline().put(trampoline.getObjId(), trampoline);
@@ -652,7 +652,7 @@ class ToyLogicTest {
         toy.setObjId(2001);
         SimYukkuri.world.getCurrentMap().getToy().put(toy.getObjId(), toy);
         // shit at limit → wantToShit()=true
-        body.setShit(body.getSHITLIMITorg()[src.enums.AgeState.CHILD.ordinal()]);
+        body.setShit(body.getShitLimitBase()[src.enums.AgeState.CHILD.ordinal()]);
         assertFalse(ToyLogic.checkToy(body));
     }
 
@@ -662,7 +662,7 @@ class ToyLogicTest {
         t.setX(body.getX()); t.setY(body.getY());
         t.setObjId(2002);
         SimYukkuri.world.getCurrentMap().getTrampoline().put(t.getObjId(), t);
-        body.setShit(body.getSHITLIMITorg()[src.enums.AgeState.CHILD.ordinal()]);
+        body.setShit(body.getShitLimitBase()[src.enums.AgeState.CHILD.ordinal()]);
         assertFalse(ToyLogic.checkTrampoline(body));
     }
 
@@ -725,7 +725,7 @@ class ToyLogicTest {
         Sui sui = new Sui(body.getX(), body.getY(), 0);
         sui.setGrabbed(true); // grabbed=true, Z=0 → L210 false → use original bindobj
         SimYukkuri.world.getCurrentMap().getSui().put(sui.getObjId(), sui);
-        body.setFavItem(FavItemType.SUI, sui);
+        body.setFavoriteItem(FavItemType.SUI, sui);
         src.ConstState cs = new src.ConstState(200);
         cs.setFixedBoolean(false);
         SimYukkuri.RND = cs;
@@ -740,7 +740,7 @@ class ToyLogicTest {
         Toy toy = new Toy();
         toy.setX(body.getX()); toy.setY(body.getY()); toy.setObjId(2050);
         toy.setZ(10); toy.setOwner(other);
-        body.setFavItem(FavItemType.BALL, toy);
+        body.setFavoriteItem(FavItemType.BALL, toy);
         body.setAge(2401L); // 2401 % 20 = 1 ≠ 0
         SimYukkuri.world.getCurrentMap().getToy().put(toy.getObjId(), toy);
         assertDoesNotThrow(() -> ToyLogic.checkToy(body));
@@ -762,7 +762,7 @@ class ToyLogicTest {
         Toy toy = new Toy();
         toy.setX(body.getX()); toy.setY(body.getY() + 50); toy.setObjId(2052);
         toy.setOwner(other);
-        body.setFavItem(FavItemType.BALL, toy);
+        body.setFavoriteItem(FavItemType.BALL, toy);
         body.setAge(2401L);
         SimYukkuri.world.getCurrentMap().getToy().put(toy.getObjId(), toy);
         assertDoesNotThrow(() -> ToyLogic.checkToy(body));
@@ -786,8 +786,8 @@ class ToyLogicTest {
         Toy toy = new Toy();
         toy.setX(body.getX()); toy.setY(body.getY()); toy.setObjId(2060);
         toy.setZ(10); toy.setOwner(other);
-        body.setFavItem(FavItemType.BALL, toy);
-        body.setMessageCount(1); // isTalking()=true → skip message
+        body.setFavoriteItem(FavItemType.BALL, toy);
+        body.setMessageTicks(1); // isTalking()=true → skip message
         SimYukkuri.world.getCurrentMap().getToy().put(toy.getObjId(), toy);
         assertDoesNotThrow(() -> ToyLogic.checkToy(body));
     }
@@ -796,7 +796,7 @@ class ToyLogicTest {
     void testCheckToy_InRange_Talking_NewToy() {
         Toy toy = new Toy();
         toy.setX(body.getX()); toy.setY(body.getY()); toy.setObjId(2061);
-        body.setMessageCount(1);
+        body.setMessageTicks(1);
         SimYukkuri.world.getCurrentMap().getToy().put(toy.getObjId(), toy);
         SimYukkuri.RND = new src.ConstState(5);
         assertDoesNotThrow(() -> ToyLogic.checkToy(body));
@@ -808,8 +808,8 @@ class ToyLogicTest {
         Toy toy = new Toy();
         toy.setX(body.getX()); toy.setY(body.getY() + 50); toy.setObjId(2062);
         toy.setOwner(other);
-        body.setFavItem(FavItemType.BALL, toy);
-        body.setMessageCount(1);
+        body.setFavoriteItem(FavItemType.BALL, toy);
+        body.setMessageTicks(1);
         SimYukkuri.world.getCurrentMap().getToy().put(toy.getObjId(), toy);
         assertDoesNotThrow(() -> ToyLogic.checkToy(body));
     }
@@ -818,7 +818,7 @@ class ToyLogicTest {
     void testCheckSui_RND150_0_Talking() {
         Sui sui = new Sui(body.getX(), body.getY(), 0);
         SimYukkuri.world.getCurrentMap().getSui().put(sui.getObjId(), sui);
-        body.setMessageCount(1); // isTalking()=true → skip message in L164
+        body.setMessageTicks(1); // isTalking()=true → skip message in L164
         SimYukkuri.RND = new src.ConstState(0); // nextInt(150)=0 → enter block
         assertFalse(ToyLogic.checkSui(body));
     }
@@ -828,7 +828,7 @@ class ToyLogicTest {
         Sui sui = new Sui(body.getX(), body.getY(), 0);
         sui.setGrabbed(true); sui.setZ(10);
         SimYukkuri.world.getCurrentMap().getSui().put(sui.getObjId(), sui);
-        body.setMessageCount(1); // isTalking()=true → skip FindSui message
+        body.setMessageTicks(1); // isTalking()=true → skip FindSui message
         SimYukkuri.RND = new src.ConstState(200);
         assertDoesNotThrow(() -> ToyLogic.checkSui(body));
     }
@@ -838,8 +838,8 @@ class ToyLogicTest {
         Sui sui = new Sui(body.getX(), body.getY(), 0);
         sui.setBindobj(body);
         SimYukkuri.world.getCurrentMap().getSui().put(sui.getObjId(), sui);
-        body.setFavItem(FavItemType.SUI, sui);
-        body.setMessageCount(1); // isTalking()=true → skip FindGetSui message
+        body.setFavoriteItem(FavItemType.SUI, sui);
+        body.setMessageTicks(1); // isTalking()=true → skip FindGetSui message
         src.ConstState cs = new src.ConstState(200);
         cs.setFixedBoolean(false);
         SimYukkuri.RND = cs;
@@ -852,8 +852,8 @@ class ToyLogicTest {
         Sui sui = new Sui(body.getX(), body.getY(), 0);
         sui.setBindobj(other);
         SimYukkuri.world.getCurrentMap().getSui().put(sui.getObjId(), sui);
-        body.setFavItem(FavItemType.SUI, sui);
-        body.setMessageCount(1);
+        body.setFavoriteItem(FavItemType.SUI, sui);
+        body.setMessageTicks(1);
         src.ConstState cs = new src.ConstState(200);
         cs.setFixedBoolean(false);
         SimYukkuri.RND = cs;
@@ -905,7 +905,7 @@ class ToyLogicTest {
         toy.setX(body.getX()); toy.setY(body.getY()); toy.setObjId(2090);
         toy.setZ(10);
         toy.setOwner(body); // owner=b → bOwnedFamily=true
-        body.setFavItem(FavItemType.BALL, toy);
+        body.setFavoriteItem(FavItemType.BALL, toy);
         SimYukkuri.world.getCurrentMap().getToy().put(toy.getObjId(), toy);
         assertDoesNotThrow(() -> ToyLogic.checkToy(body));
     }
@@ -917,19 +917,19 @@ class ToyLogicTest {
         Toy toy = new Toy();
         toy.setX(body.getX()); toy.setY(body.getY() + 50); toy.setObjId(2091);
         toy.setOwner(body); // bOwnedFamily=true → L123: !bOwnedFamily=false → skip stress
-        body.setFavItem(FavItemType.BALL, toy);
+        body.setFavoriteItem(FavItemType.BALL, toy);
         SimYukkuri.world.getCurrentMap().getToy().put(toy.getObjId(), toy);
         assertDoesNotThrow(() -> ToyLogic.checkToy(body));
     }
 
-    // ---- checkSui: favItem set, nextBoolean=true, isTalking=true → L201 false ----
+    // ---- checkSui: favoriteItems set, nextBoolean=true, isTalking=true → L201 false ----
 
     @Test
     void testCheckSui_FavItem_NextBoolTrue_Talking_L201False() {
         Sui sui = new Sui(body.getX(), body.getY(), 0);
         SimYukkuri.world.getCurrentMap().getSui().put(sui.getObjId(), sui);
-        body.setFavItem(FavItemType.SUI, sui);
-        body.setMessageCount(1); // isTalking=true → L201: !isTalking()=false → condition false
+        body.setFavoriteItem(FavItemType.SUI, sui);
+        body.setMessageTicks(1); // isTalking=true → L201: !isTalking()=false → condition false
         src.ConstState cs = new src.ConstState(200);
         cs.setFixedBoolean(true); // nextBoolean=true (but !talking short-circuits to false)
         SimYukkuri.RND = cs;
@@ -989,8 +989,8 @@ class ToyLogicTest {
             SimYukkuri.world.getCurrentMap().getToy().put(toy.getObjId(), toy);
 
             assertTrue(ToyLogic.checkToy(body));
-            assertNotNull(body.getFavItem(FavItemType.BALL));
-            assertEquals(toy.getObjId(), body.getFavItem(FavItemType.BALL).getObjId());
+            assertNotNull(body.getFavoriteItem(FavItemType.BALL));
+            assertEquals(toy.getObjId(), body.getFavoriteItem(FavItemType.BALL).getObjId());
             assertTrue(toy.isOwned(body));
             assertEquals(Happiness.HAPPY, body.getHappiness());
         }

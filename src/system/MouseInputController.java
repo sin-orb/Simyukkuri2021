@@ -255,13 +255,13 @@ public class MouseInputController extends MouseAdapter {
 			}
 
 			if (sel.getActionControl() == ActionControl.LEFT_CLICK) {
-				if ((sel.getActionTarget().getFlag() & foundType.getFlag()) != 0
+				if ((sel.getActionTarget().getMask() & foundType.getMask()) != 0
 						|| sel.getActionTarget() == ActionTarget.WALL
 						|| sel.getActionTarget() == ActionTarget.FIELD) {
 					GadgetAction.leftClickEvaluate(sel, found, e, SimYukkuri.fieldMousePos);
 				}
 			} else if (sel.getActionControl() == ActionControl.LEFT_MULTI_CLICK) {
-				if ((sel.getActionTarget().getFlag() & foundType.getFlag()) != 0) {
+				if ((sel.getActionTarget().getMask() & foundType.getMask()) != 0) {
 					GadgetAction.leftMultiClickEvaluate(sel, found, e, SimYukkuri.fieldMousePos);
 				}
 			}
@@ -305,23 +305,22 @@ public class MouseInputController extends MouseAdapter {
 					if (sel == GadgetList.SURISURI) {
 						if (grabbedObj instanceof Body) {
 							Body b = (Body) grabbedObj;
-							b.setbSurisuriFromPlayer(true);
+							b.setSurisuriFromPlayer(true);
 						}
 					}
 				} else {
 					if (grabbedObj instanceof Body) {
 						Body b = (Body) grabbedObj;
 
-						if (b.getBindStalk() != null) {
-							b.setBindStalk(null);
-							b.setLinkParent(-1);
-							b.setZ(0);
-							b.setCalcZ(0);
-							b.kick(0, 0, 0);
+					if (b.getBindStalk() != null) {
+						b.detachFromStalk();
+						b.setZ(0);
+						b.setCalcZ(0);
+						b.kick(0, 0, 0);
 							b.setZ(b.getZ() - 1);
 							b.setCalcZ(b.getZ());
 						}
-						if (b.getBindStalk() == null && b.getLinkParent() == -1) {
+						if (b.getBindStalk() == null && b.getParentLinkId() == -1) {
 							b.setZ(0);
 							b.setCalcZ(0);
 						}
@@ -354,7 +353,7 @@ public class MouseInputController extends MouseAdapter {
 						body.releaseLockNobinobi();
 					}
 
-					body.setbSurisuriFromPlayer(false);
+					body.setSurisuriFromPlayer(false);
 
 					if (body.canflyCheck()) {
 						if (grabbedObj.getZ() > 0) {
@@ -487,19 +486,19 @@ public class MouseInputController extends MouseAdapter {
 				}
 				if ((button == 1) && (sel == GadgetList.SURISURI)) {
 					Obj found = getUpFront(SimYukkuri.fieldMousePos[0], SimYukkuri.fieldMousePos[1], false);
-					boolean bOn = true;
+					boolean onTarget = true;
 					if (found == null) {
-						bOn = false;
+						onTarget = false;
 					} else {
 						if (grabbedObj != found) {
-							bOn = false;
+							onTarget = false;
 						}
 					}
 
-					if (!bOn) {
+					if (!onTarget) {
 						if (grabbedObj instanceof Body) {
 							Body b = (Body) grabbedObj;
-							b.setbSurisuriFromPlayer(false);
+							b.setSurisuriFromPlayer(false);
 							grabbedObj.release();
 							grabbedObj = null;
 						}

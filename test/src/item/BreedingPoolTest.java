@@ -212,7 +212,7 @@ class BreedingPoolTest extends ItemTestBase {
         BreedingPool item = new BreedingPool();
         Body body = WorldTestHelper.createBody();
         body.setHasBaby(true);
-        body.seteCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
+        body.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
         assertDoesNotThrow(() -> item.cry(body));
     }
 

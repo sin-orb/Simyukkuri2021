@@ -759,10 +759,10 @@ public class Translate {
 	 * @param sy       フィールドY座標
 	 * @param ex       マップX座標
 	 * @param ey       マップY座標
-	 * @param anPointX ポリゴン位置X座標
-	 * @param anPointY ポリゴン位置Y座標
+	 * @param polygonX ポリゴン位置X座標
+	 * @param polygonY ポリゴン位置Y座標
 	 */
-	public static final void getPolygonPoint(int sx, int sy, int ex, int ey, int[] anPointX, int[] anPointY) {
+	public static final void getPolygonPoint(int sx, int sy, int ex, int ey, int[] polygonX, int[] polygonY) {
 		// フィールド座標が渡ってくるのでマップ座標も計算しておく
 		Point4y pos;
 		pos = Translate.invertLimit(sx, sy);
@@ -787,14 +787,14 @@ public class Translate {
 		int nex = posInv.getX();
 		int ney = posInv.getY();
 
-		anPointX[0] = nsx;
-		anPointY[0] = nsy;
-		anPointX[1] = fieldSX2;
-		anPointY[1] = nsy;
-		anPointX[3] = fieldSX3;
-		anPointY[3] = ney;
-		anPointX[2] = nex;
-		anPointY[2] = ney;
+		polygonX[0] = nsx;
+		polygonY[0] = nsy;
+		polygonX[1] = fieldSX2;
+		polygonY[1] = nsy;
+		polygonX[3] = fieldSX3;
+		polygonY[3] = ney;
+		polygonX[2] = nex;
+		polygonY[2] = ney;
 	}
 
 	/**
@@ -808,13 +808,13 @@ public class Translate {
 	 * @param firsty   初期Y座標
 	 * @param nextx    移動後X座標
 	 * @param nexty    移動後Y座標
-	 * @param anPointX 計算後X座標
-	 * @param anPointY 計算後Y座標
+	 * @param polygonX 計算後X座標
+	 * @param polygonY 計算後Y座標
 	 */
 	public static final void getMovedPoint(int sx, int sy, int ex, int ey, int firstx, int firsty, int nextx, int nexty,
-			int[] anPointX, int[] anPointY) {
-		int nDecX = nextx - firstx;
-		int nDecY = nexty - firsty;
+			int[] polygonX, int[] polygonY) {
+		int deltaX = nextx - firstx;
+		int deltaY = nexty - firsty;
 
 		// フィールド座標が渡ってくるのでマップ座標も計算しておく
 		Point4y pos;
@@ -826,30 +826,30 @@ public class Translate {
 		int mEX = Math.max(0, Math.min(pos.getX(), Translate.mapW));
 		int mEY = Math.max(0, Math.min(pos.getY(), Translate.mapH));
 
-		mSX += nDecX;
-		mEX += nDecX;
-		mSY += nDecY;
-		mEY += nDecY;
+		mSX += deltaX;
+		mEX += deltaX;
+		mSY += deltaY;
+		mEY += deltaY;
 
-		int nTemp = 0;
+		int swapValue = 0;
 		if (mEX < mSX) {
-			nTemp = mSX;
+			swapValue = mSX;
 			mSX = mEX;
-			mEX = nTemp;
+			mEX = swapValue;
 		}
 		if (mEY < mSY) {
-			nTemp = mSY;
+			swapValue = mSY;
 			mSY = mEY;
-			mEY = nTemp;
+			mEY = swapValue;
 		}
 		// マップ座標で調整されたフィールド座標を再取得する
 		Point4y posInv = new Point4y();
 		Translate.translate(mSX, mSY, posInv);
-		anPointX[0] = posInv.getX();
-		anPointY[0] = posInv.getY();
+		polygonX[0] = posInv.getX();
+		polygonY[0] = posInv.getY();
 		Translate.translate(mEX, mEY, posInv);
-		anPointX[1] = posInv.getX();
-		anPointY[1] = posInv.getY();
+		polygonX[1] = posInv.getX();
+		polygonY[1] = posInv.getY();
 	}
 
 	/**

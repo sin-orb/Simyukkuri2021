@@ -24,50 +24,50 @@ public class TrashLogic {
 
 	/**
 	 *  ゴミおかざりチェック
-	 * @param b ゆっくり
+	 * @param body ゆっくり
 	 * @return 処理が行われたか
 	 */
-	public static final boolean checkTrashOkazari(Body b) {
+	public static final boolean checkTrashOkazari(Body body) {
 		
-		if(b.hasOkazari()) return false;
+		if(body.hasOkazari()) return false;
 
-		Obj found = searchTrashObj(b);
+		Obj trashCandidate = searchTrashObj(body);
 
-		if (found != null) {
-			EventLogic.addBodyEvent(b, new GetTrashOkazariEvent(b, null, found, 1), null, null);
+		if (trashCandidate != null) {
+			EventLogic.addBodyEvent(body, new GetTrashOkazariEvent(body, null, trashCandidate, 1), null, null);
 			return true;
 		}
 		return false;
 	}
 	
 	// 共通ガラクタ検索
-	private static final Obj searchTrashObj(Body b) {
+	private static final Obj searchTrashObj(Body body) {
 
-		Obj found = null;
-		int minDistance = b.getEYESIGHTorg();
-		int wallMode = b.getBodyAgeState().ordinal();
+		Obj trashCandidate = null;
+		int nearestDistance = body.getEyesightBase();
+		int wallMode = body.getBodyAgeState().ordinal();
 		// 飛行可能なら壁以外は通過可能
-		if(b.canflyCheck()) {
+		if(body.canflyCheck()) {
 			wallMode = AgeState.ADULT.ordinal();
 		}
 
 		for (Map.Entry<Integer, Trash> entry : GameWorld.get().getCurrentMap().getTrash().entrySet()) {
 			Trash t = entry.getValue();
 			// 最小距離のものが見つかっていたら
-			if( minDistance < 1 )
+			if( nearestDistance < 1 )
 			{
 				break;
 			}
-			int distance = Translate.distance(b.getX(), b.getY(), t.getX(), t.getY() - t.getH()/6);
-			if (minDistance > distance) {
-				if (Barrier.acrossBarrier(b.getX(), b.getY(), t.getX(), t.getY() - t.getH()/6, Barrier.MAP_BODY[wallMode] + Barrier.BARRIER_KEKKAI)) {
+			int distance = Translate.distance(body.getX(), body.getY(), t.getX(), t.getY() - t.getH()/6);
+			if (nearestDistance > distance) {
+				if (Barrier.acrossBarrier(body.getX(), body.getY(), t.getX(), t.getY() - t.getH()/6, Barrier.MAP_BODY[wallMode] + Barrier.BARRIER_KEKKAI)) {
 					continue;
 				}
-				found = t;
-				minDistance = distance;
+				trashCandidate = t;
+				nearestDistance = distance;
 			}
 		}
-		return found;
+		return trashCandidate;
 	}
 }
 

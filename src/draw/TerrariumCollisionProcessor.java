@@ -108,7 +108,7 @@ public final class TerrariumCollisionProcessor {
 		objList = GameWorld.get().getHitTargetList();
 		for (Obj o : objList) {
 			if (poolList == null || poolList.size() == 0) {
-				if (o.getInPool()) {
+				if (o.isInPool()) {
 					o.setInPool(false);
 					o.setMostDepth(0);
 					o.setInPool(false);
@@ -123,7 +123,7 @@ public final class TerrariumCollisionProcessor {
 				continue;
 			}
 			if ((Translate.getCurrentFieldMapNum(o.getX(), o.getY()) & FieldShapeBase.FIELD_POOL) == 0) {
-				if (o.getInPool()) {
+				if (o.isInPool()) {
 					if (o instanceof Body) {
 						((Body) o).setLockmove(false);
 					}

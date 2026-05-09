@@ -101,11 +101,11 @@ public class VeryShitAmpouleTest {
 
         ampoule.update();
 
-        // setShit(50, true)はSHITLIMITorg - 50を設定する
+        // setShit(0, true)はshitLimitBaseを設定する
         // うんうんが増加していることを確認
         assertTrue(parent.getShit() > shitBefore);
-        // うんうん限界に近い値（限界値-50）になっていることを確認
-        assertEquals(parent.getShitLimit() - 50, parent.getShit());
+        // うんうん限界に達していることを確認
+        assertEquals(parent.getShitLimit(), parent.getShit());
     }
 
     @Test
@@ -261,7 +261,7 @@ public class VeryShitAmpouleTest {
 
             assertEquals(Event.DONOTHING, result);
             assertEquals(false, parent.isSleeping());
-            assertEquals(parent.getShitLimit() - 50, parent.getShit());
+            assertEquals(parent.getShitLimit(), parent.getShit());
         }
 
         @Test

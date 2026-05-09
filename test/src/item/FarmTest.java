@@ -172,16 +172,16 @@ class FarmTest {
     void testGetSetAnPointX() {
         Farm item = new Farm();
         int[] pts = {10, 20, 30, 40};
-        item.setAnPointX(pts);
-        assertArrayEquals(pts, item.getAnPointX());
+        item.setPolygonX(pts);
+        assertArrayEquals(pts, item.getPolygonX());
     }
 
     @Test
     void testGetSetAnPointY() {
         Farm item = new Farm();
         int[] pts = {15, 25, 35, 45};
-        item.setAnPointY(pts);
-        assertArrayEquals(pts, item.getAnPointY());
+        item.setPolygonY(pts);
+        assertArrayEquals(pts, item.getPolygonY());
     }
 
     // --- checkHitObj ---

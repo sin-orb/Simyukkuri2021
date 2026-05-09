@@ -150,8 +150,8 @@ public class Trampoline extends ObjEX {
 		GameWorld.get().getCurrentMap().getTrampoline().put(objId, this);
 		objType = Type.OBJECT;
 		objEXType = ObjEXType.TOY;
-		boolean bRet = setupTrampoline(this);
-		if (!bRet) {
+		boolean setupSuccess = setupTrampoline(this);
+		if (!setupSuccess) {
 			GameWorld.get().getCurrentMap().getTrampoline().remove(objId);
 			return;
 		}

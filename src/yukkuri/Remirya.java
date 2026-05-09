@@ -60,7 +60,7 @@ public class Remirya extends Body {
 	// iniファイルから読み込んだ初期値
 	private static int baseSpeed = 100;
 	// 個別表情管理(まりちゃ流し用)
-	private int anImageVerStateCtrlNagasi[][] = new int[ImageCode.values().length][2];
+	private int imageVariantState[][] = new int[ImageCode.values().length][2];
 
 	/** イメージのロード */
 	public static void loadImages(ClassLoader loader, ImageObserver io) throws IOException {
@@ -110,7 +110,7 @@ public class Remirya extends Body {
 
 	@Override
 	public int getImage(int type, int direction, BodyLayer layer, int index) {
-		if (!isbImageNagasiMode() || imagesNagasi == null) {
+		if (!isImageNagasiMode() || imagesNagasi == null) {
 			layer.getImage()[index] = imagePack[getBodyRank().getImageIndex()][type][direction
 					* directionOffset[type][0]][getBodyAgeState().ordinal()];
 			layer.getDir()[index] = direction * directionOffset[type][1];
@@ -118,33 +118,33 @@ public class Remirya extends Body {
 			// インターバル毎に初期化する
 			if (GameEnvironment.getInterval() == 0 && !isDead()) {
 				for (int i = 0; i < ImageCode.values().length; i++) {
-					anImageVerStateCtrlNagasi[i][1] = 0;
+					imageVariantState[i][1] = 0;
 				}
 			}
 			// 前回と同じ表示
-			if (anImageVerStateCtrlNagasi[type][1] == 1) {
-				int nIndex = anImageVerStateCtrlNagasi[type][0];
+			if (imageVariantState[type][1] == 1) {
+				int variantIndex = imageVariantState[type][0];
 				layer.getImage()[index] = imagesNagasi[type][direction
-						* directionOffsetNagasi[type][0]][getBodyAgeState().ordinal()][nIndex];
+						* directionOffsetNagasi[type][0]][getBodyAgeState().ordinal()][variantIndex];
 			} else {
-				int nOtherVerCount = 0;
+				int otherVariantCount = 0;
 				for (int i = 0; i < ModLoader.getMaxImgOtherVer(); i++) {
 					if (imagesNagasi[type][direction * directionOffsetNagasi[type][0]][getBodyAgeState().ordinal()][i
 							+ 1] != null) {
-						nOtherVerCount++;
+						otherVariantCount++;
 					}
 				}
-				if (nOtherVerCount != 0) {
-					int nRndIndex = GameRandom.nextInt(nOtherVerCount + 1);
-					anImageVerStateCtrlNagasi[type][0] = nRndIndex;
+				if (otherVariantCount != 0) {
+					int randomVariantIndex = GameRandom.nextInt(otherVariantCount + 1);
+					imageVariantState[type][0] = randomVariantIndex;
 					layer.getImage()[index] = imagesNagasi[type][direction
-							* directionOffsetNagasi[type][0]][getBodyAgeState().ordinal()][nRndIndex];
+							* directionOffsetNagasi[type][0]][getBodyAgeState().ordinal()][randomVariantIndex];
 				} else {
-					anImageVerStateCtrlNagasi[type][0] = 0;
+					imageVariantState[type][0] = 0;
 					layer.getImage()[index] = imagesNagasi[type][direction
 							* directionOffsetNagasi[type][0]][getBodyAgeState().ordinal()][0];
 				}
-				anImageVerStateCtrlNagasi[type][1] = 1;
+				imageVariantState[type][1] = 1;
 			}
 			layer.getDir()[index] = direction * directionOffsetNagasi[type][1];
 		}
@@ -177,8 +177,8 @@ public class Remirya extends Body {
 	@Override
 	@Transient
 	public String getMyName() {
-		if (getAnMyName()[getBodyAgeState().ordinal()] != null) {
-			return getAnMyName()[getBodyAgeState().ordinal()];
+		if (getMyNames()[getBodyAgeState().ordinal()] != null) {
+			return getMyNames()[getBodyAgeState().ordinal()];
 		}
 		return nameJ;
 	}
@@ -186,8 +186,8 @@ public class Remirya extends Body {
 	@Override
 	@Transient
 	public String getMyNameD() {
-		if (getAnMyNameD()[getBodyAgeState().ordinal()] != null) {
-			return getAnMyNameD()[getBodyAgeState().ordinal()];
+		if (getMyNamesDamaged()[getBodyAgeState().ordinal()] != null) {
+			return getMyNamesDamaged()[getBodyAgeState().ordinal()];
 		}
 		return getMyName();
 	}
@@ -300,35 +300,35 @@ public class Remirya extends Body {
 		 * }
 		 */
 		double factor = Math.random() * 2 + 1;
-		getHUNGRYLIMITorg()[AgeState.ADULT.ordinal()] *= factor;
-		getHUNGRYLIMITorg()[AgeState.CHILD.ordinal()] *= factor;
-		getHUNGRYLIMITorg()[AgeState.BABY.ordinal()] *= factor;
+		getHungryLimitBase()[AgeState.ADULT.ordinal()] *= factor;
+		getHungryLimitBase()[AgeState.CHILD.ordinal()] *= factor;
+		getHungryLimitBase()[AgeState.BABY.ordinal()] *= factor;
 		factor = Math.random() * 2 + 1;
-		getSHITLIMITorg()[AgeState.ADULT.ordinal()] *= factor;
-		getSHITLIMITorg()[AgeState.CHILD.ordinal()] *= factor;
-		getSHITLIMITorg()[AgeState.BABY.ordinal()] *= factor;
+		getShitLimitBase()[AgeState.ADULT.ordinal()] *= factor;
+		getShitLimitBase()[AgeState.CHILD.ordinal()] *= factor;
+		getShitLimitBase()[AgeState.BABY.ordinal()] *= factor;
 		factor = Math.random() + 0.5;
-		getDAMAGELIMITorg()[AgeState.ADULT.ordinal()] *= factor;
-		getDAMAGELIMITorg()[AgeState.CHILD.ordinal()] *= factor;
-		getDAMAGELIMITorg()[AgeState.BABY.ordinal()] *= factor;
+		getDamageLimitBase()[AgeState.ADULT.ordinal()] *= factor;
+		getDamageLimitBase()[AgeState.CHILD.ordinal()] *= factor;
+		getDamageLimitBase()[AgeState.BABY.ordinal()] *= factor;
 		factor = Math.random() + 0.5;
-		setBABYLIMITorg((int) (getBABYLIMITorg() * factor));
-		setCHILDLIMITorg((int) (getCHILDLIMITorg() * factor));
-		setLIFELIMITorg((int) (getLIFELIMITorg() * factor));
+		setBabyLimitBase((int) (getBabyLimitBase() * factor));
+		setChildLimitBase((int) (getChildLimitBase() * factor));
+		setLifeLimitBase((int) (getLifeLimitBase() * factor));
 		factor = Math.random() + 1;
-		setRELAXPERIODorg((int) (getRELAXPERIODorg() * factor));
-		setEXCITEPERIODorg((int) (getEXCITEPERIODorg() * factor));
-		setPREGPERIODorg((int) (getPREGPERIODorg() * factor));
-		setSLEEPPERIODorg((int) (getSLEEPPERIODorg() * factor));
-		setACTIVEPERIODorg((int) (getACTIVEPERIODorg() * factor));
-		setSameDest(GameRandom.nextInt(20) + 20);
-		setDECLINEPERIODorg((int) (getDECLINEPERIODorg() * (Math.random() + 0.5)));
-		setROBUSTNESS(GameRandom.nextInt(15) + 1);
+		setRelaxPeriodBase((int) (getRelaxPeriodBase() * factor));
+		setExcitePeriodBase((int) (getExcitePeriodBase() * factor));
+		setPregPeriodBase((int) (getPregPeriodBase() * factor));
+		setSleepPeriodBase((int) (getSleepPeriodBase() * factor));
+		setActivePeriodBase((int) (getActivePeriodBase() * factor));
+		setSameDirectionFactor(GameRandom.nextInt(20) + 20);
+		setDeclinePeriodBase((int) (getDeclinePeriodBase() * (Math.random() + 0.5)));
+		setImmunityStrength(GameRandom.nextInt(15) + 1);
 		// EYESIGHT /= 4;
 		factor = Math.random() + 0.5;
-		getSTRENGTHorg()[AgeState.ADULT.ordinal()] *= factor;
-		getSTRENGTHorg()[AgeState.CHILD.ordinal()] *= factor;
-		getSTRENGTHorg()[AgeState.BABY.ordinal()] *= factor;
+		getStrengthBase()[AgeState.ADULT.ordinal()] *= factor;
+		getStrengthBase()[AgeState.CHILD.ordinal()] *= factor;
+		getStrengthBase()[AgeState.BABY.ordinal()] *= factor;
 
 		// speed = 150;
 		setFlyingType(true);
@@ -338,12 +338,12 @@ public class Remirya extends Body {
 		speed = baseSpeed;
 	}
 
-	public int[][] getAnImageVerStateCtrlNagasi() {
-		return anImageVerStateCtrlNagasi;
+	public int[][] getImageVariantState() {
+		return imageVariantState;
 	}
 
-	public void setAnImageVerStateCtrlNagasi(int[][] anImageVerStateCtrlNagasi) {
-		this.anImageVerStateCtrlNagasi = anImageVerStateCtrlNagasi;
+	public void setImageVariantState(int[][] imageVariantState) {
+		this.imageVariantState = imageVariantState;
 	}
 
 	@Override

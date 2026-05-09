@@ -15,7 +15,6 @@ import src.item.Food;
 import src.logic.FoodLogic;
 import src.system.MessagePool;
 import src.system.ResourceUtil;
-import src.util.YukkuriUtil;
 
 /***************************************************
  * 空中捕食イベント
@@ -51,57 +50,57 @@ public class FlyingEatEvent extends EventPacket {
 
 	// 参加チェック
 	@Override
-	public boolean checkEventResponse(Body b) {
+	public boolean checkEventResponse(Body body) {
 		priority = EventPriority.HIGH;
 		return true;
 	}
 
 	// イベント開始動作
 	@Override
-	public void start(Body b) {
-		Body to = YukkuriUtil.getBodyInstance(getTo());
-		if (to == null)
+	public void start(Body body) {
+		Body targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
+		if (targetBody == null)
 			return;
-		b.setToBed(false);
-		b.setToFood(false);
-		b.setToShit(false);
-		b.setToSteal(false);
-		b.setToSukkiri(false);
-		b.setToTakeout(true);
-		b.moveToEvent(this, b.getX(), b.getY(), Translate.getFlyHeightLimit());
-		b.setWakeUpTime(b.getAge());// 眠気が覚める
-		to.setLinkParent(b.objId);
+		body.setToBed(false);
+		body.setToFood(false);
+		body.setToShit(false);
+		body.setToSteal(false);
+		body.setToSukkiri(false);
+		body.setToTakeout(true);
+		body.moveToEvent(this, body.getX(), body.getY(), Translate.getFlyHeightLimit());
+		body.setWakeUpTime(body.getAge());// 眠気が覚める
+		targetBody.setParentLinkId(body.objId);
 	}
 
 	// 毎フレーム処理
 	// UpdateState.ABORTを返すとイベント終了
 	@Override
-	public UpdateState update(Body b) {
-		Body to = YukkuriUtil.getBodyInstance(getTo());
+	public UpdateState update(Body body) {
+		Body targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
 		// 相手が消えてしまったらイベント中断
-		if (to == null || to.isRemoved()) {
-			// to.setLinkParent(null);
+		if (targetBody == null || targetBody.isRemoved()) {
+			// to.setParentLinkId(null);
 			return UpdateState.ABORT;
 		}
 		// 相手が捕まれたらイベント中断
-		if (to.isGrabbed()) {
-			// to.setLinkParent(null);
+		if (targetBody.isGrabbed()) {
+			// to.setParentLinkId(null);
 			return UpdateState.ABORT;
 		}
 		/*
 		 * // 相手が死んだらイベント中断
 		 * if(to.dead) {
-		 * to.linkParent = null);
+		 * to.parentLinkId = null);
 		 * return UpdateState.ABORT;
 		 * }
 		 */
 		// 相手の座標を縛る
-		to.setCalcX(b.getX());
-		to.setCalcY(b.getY() + 1);
-		to.setCalcZ(b.getZ() + ofsZ[to.getBodyAgeState().ordinal()]);
+		targetBody.setCalcX(body.getX());
+		targetBody.setCalcY(body.getY() + 1);
+		targetBody.setCalcZ(body.getZ() + ofsZ[targetBody.getBodyAgeState().ordinal()]);
 
 		// 高度に達してたらexecuteへ
-		if (Math.abs(b.getZ() - Translate.getFlyHeightLimit()) < 3)
+		if (Math.abs(body.getZ() - Translate.getFlyHeightLimit()) < 3)
 			return UpdateState.FORCE_EXEC;
 		return null;
 	}
@@ -109,48 +108,48 @@ public class FlyingEatEvent extends EventPacket {
 	// イベント目標に到着した際に呼ばれる
 	// trueを返すとイベント終了
 	@Override
-	public boolean execute(Body b) {
-		Body to = YukkuriUtil.getBodyInstance(getTo());
-		if (to == null)
+	public boolean execute(Body body) {
+		Body targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
+		if (targetBody == null)
 			return true;
 		// 相手が消えてしまったらイベント中断
-		if (to.isRemoved()) {
-			// to.setLinkParent(null);
+		if (targetBody.isRemoved()) {
+			// to.setParentLinkId(null);
 			return true;
 		}
 		// 相手が捕まれたらイベント中断
-		if (to.isGrabbed()) {
-			// to.setLinkParent(null);
+		if (targetBody.isGrabbed()) {
+			// to.setParentLinkId(null);
 			return true;
 		}
 
 		tick++;
 		if (tick == 20) {
 			tick = 0;
-			FoodLogic.eatFood(b, Food.FoodType.BODY, Math.min(b.getEatAmount(), to.getBodyAmount()));
-			to.eatBody(Math.min(b.getEatAmount(), to.getBodyAmount()));
-			if (to != null && to.isSick() && GameRandom.nextBoolean())
-				b.addSickPeriod(100);
-			if (to != null && to.isCrushed()) {
-				// to.setLinkParent(null);
+			FoodLogic.eatFood(body, Food.FoodType.BODY, Math.min(body.getEatAmount(), targetBody.getAnkoAmount()));
+			targetBody.eatBody(Math.min(body.getEatAmount(), targetBody.getAnkoAmount()));
+			if (targetBody != null && targetBody.isSick() && GameRandom.nextBoolean())
+				body.addSickPeriod(100);
+			if (targetBody != null && targetBody.isCrushed()) {
+				// to.setParentLinkId(null);
 				return true;
-			} else if (to != null && to.isDead()) {
-				to.setMessage(GameMessages.getMessage(to, MessagePool.Action.Dead));
-				if (b.getBodyRank() != BodyRank.KAIYU || b.isRude()) {
-					// to.setLinkParent(null);
+			} else if (targetBody != null && targetBody.isDead()) {
+				targetBody.setMessage(GameMessages.getMessage(targetBody, MessagePool.Action.Dead));
+				if (body.getBodyRank() != BodyRank.KAIYU || body.isRude()) {
+					// to.setParentLinkId(null);
 					return true;
 				}
 			} else {
-				if (b.isFull()) {
+				if (body.isFull()) {
 					// うー。おなかいっぱいだからもういらないんだどー。ぽいするどー。
-					b.setMessage(GameMessages.getMessage(b, MessagePool.Action.POI));
-					// to.setLinkParent(null);
+					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.POI));
+					// to.setParentLinkId(null);
 					return true;
 				}
-				if (to != null && to.isNotNYD()) {
-					to.setMessage(GameMessages.getMessage(to, MessagePool.Action.EatenByBody2));
-					to.setHappiness(Happiness.VERY_SAD);
-					to.setForceFace(ImageCode.PAIN.ordinal());
+				if (targetBody != null && targetBody.isNotNYD()) {
+					targetBody.setMessage(GameMessages.getMessage(targetBody, MessagePool.Action.EatenByBody2));
+					targetBody.setHappiness(Happiness.VERY_SAD);
+					targetBody.setForceFace(ImageCode.PAIN.ordinal());
 				}
 			}
 		}
@@ -159,10 +158,10 @@ public class FlyingEatEvent extends EventPacket {
 
 	// イベント終了処理
 	@Override
-	public void end(Body b) {
-		Body to = YukkuriUtil.getBodyInstance(getTo());
-		if (to != null)
-			to.setLinkParent(-1);
+	public void end(Body body) {
+		Body targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
+		if (targetBody != null)
+			targetBody.setParentLinkId(-1);
 	}
 
 	@Override

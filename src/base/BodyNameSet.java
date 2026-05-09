@@ -10,26 +10,26 @@ public class BodyNameSet implements java.io.Serializable {
 	/** 各ゆっくりに特有の画像読み込みのためのファイル名 */
 	private String baseBodyFileName;
 	/** 赤ゆの一人称 */
-	private String[] anBabyName;
+	private String[] babyNames;
 	/** 子ゆの一人称 */
-	private String[] anChildName;
+	private String[] childNames;
 	/** 大人ゆの一人称 */
-	private String[] anAdultName;
+	private String[] adultNames;
 	/** [0]:赤ゆの一人称 [1]:子ゆの一人称 [2]:大人ゆの一人称 */
-	private String[] anMyName;
+	private String[] myNames;
 	/** 赤ゆの一人称（ダメージ時） */
-	private String[] anBabyNameD;
+	private String[] babyNamesDamaged;
 	/** 子ゆの一人称（ダメージ時） */
-	private String[] anChildNameD;
+	private String[] childNamesDamaged;
 	/** 大人ゆの一人称（ダメージ時） */
-	private String[] anAdultNameD;
+	private String[] adultNamesDamaged;
 	/** ダメージ時の、[0]:赤ゆの一人称 [1]:子ゆの一人称 [2]:大人ゆの一人称 */
-	private String[] anMyNameD;
+	private String[] myNamesDamaged;
 
 	/** BodyNameSet を生成する. */
 	public BodyNameSet() {
-		anMyName = new String[3];
-		anMyNameD = new String[3];
+		myNames = new String[3];
+		myNamesDamaged = new String[3];
 	}
 
 	/**
@@ -42,14 +42,14 @@ public class BodyNameSet implements java.io.Serializable {
 			return;
 		}
 		baseBodyFileName = from.baseBodyFileName;
-		anBabyName = copyArray(from.anBabyName);
-		anChildName = copyArray(from.anChildName);
-		anAdultName = copyArray(from.anAdultName);
-		anMyName = copyArray(from.anMyName);
-		anBabyNameD = copyArray(from.anBabyNameD);
-		anChildNameD = copyArray(from.anChildNameD);
-		anAdultNameD = copyArray(from.anAdultNameD);
-		anMyNameD = copyArray(from.anMyNameD);
+		babyNames = copyArray(from.babyNames);
+		childNames = copyArray(from.childNames);
+		adultNames = copyArray(from.adultNames);
+		myNames = copyArray(from.myNames);
+		babyNamesDamaged = copyArray(from.babyNamesDamaged);
+		childNamesDamaged = copyArray(from.childNamesDamaged);
+		adultNamesDamaged = copyArray(from.adultNamesDamaged);
+		myNamesDamaged = copyArray(from.myNamesDamaged);
 	}
 
 	/**
@@ -75,67 +75,68 @@ public class BodyNameSet implements java.io.Serializable {
 		this.baseBodyFileName = baseBodyFileName;
 	}
 
-	public String[] getAnBabyName() {
-		return anBabyName;
+	public String[] getBabyNames() {
+		return babyNames;
 	}
 
-	public void setAnBabyName(String[] anBabyName) {
-		this.anBabyName = anBabyName;
+	public void setBabyNames(String[] babyNames) {
+		this.babyNames = babyNames;
 	}
 
-	public String[] getAnChildName() {
-		return anChildName;
+	public String[] getChildNames() {
+		return childNames;
 	}
 
-	public void setAnChildName(String[] anChildName) {
-		this.anChildName = anChildName;
+	public void setChildNames(String[] childNames) {
+		this.childNames = childNames;
 	}
 
-	public String[] getAnAdultName() {
-		return anAdultName;
+	public String[] getAdultNames() {
+		return adultNames;
 	}
 
-	public void setAnAdultName(String[] anAdultName) {
-		this.anAdultName = anAdultName;
+	public void setAdultNames(String[] adultNames) {
+		this.adultNames = adultNames;
 	}
 
-	public String[] getAnMyName() {
-		return anMyName;
+	public String[] getMyNames() {
+		return myNames;
 	}
 
-	public void setAnMyName(String[] anMyName) {
-		this.anMyName = anMyName;
+	public void setMyNames(String[] myNames) {
+		this.myNames = myNames;
 	}
 
-	public String[] getAnBabyNameD() {
-		return anBabyNameD;
+	public String[] getBabyNamesDamaged() {
+		return babyNamesDamaged;
 	}
 
-	public void setAnBabyNameD(String[] anBabyNameD) {
-		this.anBabyNameD = anBabyNameD;
+	public void setBabyNamesDamaged(String[] babyNamesDamaged) {
+		this.babyNamesDamaged = babyNamesDamaged;
 	}
 
-	public String[] getAnChildNameD() {
-		return anChildNameD;
+	public String[] getChildNamesDamaged() {
+		return childNamesDamaged;
 	}
 
-	public void setAnChildNameD(String[] anChildNameD) {
-		this.anChildNameD = anChildNameD;
+	public void setChildNamesDamaged(String[] childNamesDamaged) {
+		this.childNamesDamaged = childNamesDamaged;
 	}
 
-	public String[] getAnAdultNameD() {
-		return anAdultNameD;
+	public String[] getAdultNamesDamaged() {
+		return adultNamesDamaged;
 	}
 
-	public void setAnAdultNameD(String[] anAdultNameD) {
-		this.anAdultNameD = anAdultNameD;
+	public void setAdultNamesDamaged(String[] adultNamesDamaged) {
+		this.adultNamesDamaged = adultNamesDamaged;
 	}
 
-	public String[] getAnMyNameD() {
-		return anMyNameD;
+	public String[] getMyNamesDamaged() {
+		return myNamesDamaged;
 	}
 
-	public void setAnMyNameD(String[] anMyNameD) {
-		this.anMyNameD = anMyNameD;
+	public void setMyNamesDamaged(String[] myNamesDamaged) {
+		this.myNamesDamaged = myNamesDamaged;
 	}
+
 }

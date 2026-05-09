@@ -33,7 +33,7 @@ public class GetTrashOkazariEvent extends EventPacket {
 	// ここで各種チェックを行い、イベントへ参加するかを返す
 	// また、イベント優先度も必要に応じて設定できる
 	@Override
-	public boolean checkEventResponse(Body b) {
+	public boolean checkEventResponse(Body body) {
 
 		priority = EventPriority.MIDDLE;
 		return true;
@@ -41,31 +41,31 @@ public class GetTrashOkazariEvent extends EventPacket {
 
 	// イベント開始動作
 	@Override
-	public void start(Body b) {
-		Obj target = b.takeMappedObj(this.target);
-		b.moveToEvent(this, target.getX(), target.getY());
+	public void start(Body body) {
+		Obj targetObject = body.takeMappedObj(this.target);
+		body.moveToEvent(this, targetObject.getX(), targetObject.getY());
 	}
 
 	@Override
-	public UpdateState update(Body b) {
-		Obj target = b.takeMappedObj(this.target);
-		if (target.isRemoved())
+	public UpdateState update(Body body) {
+		Obj targetObject = body.takeMappedObj(this.target);
+		if (targetObject.isRemoved())
 			return UpdateState.ABORT;
-		if (b.hasOkazari())
+		if (body.hasOkazari())
 			return UpdateState.ABORT;
-		b.moveToEvent(this, target.getX(), target.getY());
+		body.moveToEvent(this, targetObject.getX(), targetObject.getY());
 		return null;
 	}
 
 	// イベント目標に到着した際に呼ばれる
 	// trueを返すとイベント終了
 	@Override
-	public boolean execute(Body b) {
-		Obj target = b.takeMappedObj(this.target);
-		if (target.isRemoved())
+	public boolean execute(Body body) {
+		Obj targetObject = body.takeMappedObj(this.target);
+		if (targetObject.isRemoved())
 			return true;
 		// おかざりランダム入手
-		b.giveOkazari(Okazari.getRandomOkazari(b.getBodyAgeState()));
+		body.giveOkazari(Okazari.getRandomOkazari(body.getBodyAgeState()));
 		return true;
 	}
 

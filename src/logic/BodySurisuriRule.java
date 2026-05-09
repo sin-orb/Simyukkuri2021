@@ -1,6 +1,7 @@
 package src.logic;
 
 import src.base.Body;
+import src.base.BodyAttributes;
 import src.enums.EnumRelationMine;
 import src.enums.Happiness;
 import src.system.MessagePool;
@@ -18,314 +19,292 @@ public final class BodySurisuriRule {
 	/**
 	 * Check action when another body is being petted by player.
 	 *
-	 * @param b subject body
-	 * @param bodyTarget target body
+	 * @param body subject body
+	 * @param targetBody target body
 	 * @return action result
 	 */
-	public static final BodyLogic.eActionGo checkActionSurisuriFromPlayer(Body b, Body bodyTarget) {
-		if (b == null || bodyTarget == null) {
-			return BodyLogic.eActionGo.NONE;
+	public static final BodyLogic.ActionGo checkActionSurisuriFromPlayer(Body body, Body targetBody) {
+		if (body == null || targetBody == null) {
+			return BodyLogic.ActionGo.NONE;
 		}
-		if (!bodyTarget.isbSurisuriFromPlayer()) {
-			return BodyLogic.eActionGo.NONE;
+		if (!targetBody.isSurisuriFromPlayer()) {
+			return BodyLogic.ActionGo.NONE;
 		}
 
 		if (GameRandom.nextInt(10) != 0) {
-			return BodyLogic.eActionGo.NONE;
+			return BodyLogic.ActionGo.NONE;
 		}
-		if (b.isIdiot() || b.isNYD()) {
-			return BodyLogic.eActionGo.NONE;
+		if (body.isIdiot() || body.isNYD()) {
+			return BodyLogic.ActionGo.NONE;
 		}
 
-		boolean[] abEmote = EmotionLogic.checkEmotionForOther(b, bodyTarget);
-		EnumRelationMine eRelation = BodyRelations.checkMyRelation(b, bodyTarget);
-		BodyLogic.eActionGo eAct = BodyLogic.eActionGo.NONE;
+		boolean[] emotionFlags = EmotionLogic.checkEmotionForOther(body, targetBody);
+		EnumRelationMine relation = BodyRelations.checkMyRelation(body, targetBody);
+		BodyLogic.ActionGo actionGo = BodyLogic.ActionGo.NONE;
 
-		if (abEmote[0]) {
-			switch (eRelation) {
+		if (emotionFlags[0]) {
+			switch (relation) {
 			case FATHER:
 			case MOTHER:
-				b.setMessage(GameMessages.getMessage(b, MessagePool.Action.GladAboutChild));
-				b.setHappiness(Happiness.HAPPY);
-				b.stay();
-				eAct = BodyLogic.eActionGo.GO;
+				body.setMessage(GameMessages.getMessage(body, MessagePool.Action.GladAboutChild));
+				body.setHappiness(Happiness.HAPPY);
+				body.stay();
+				actionGo = BodyLogic.ActionGo.GO;
 				break;
 			case PARTNAR:
-				b.setMessage(GameMessages.getMessage(b, MessagePool.Action.GladAboutPartner));
-				b.setHappiness(Happiness.HAPPY);
-				b.stay();
-				eAct = BodyLogic.eActionGo.GO;
+				body.setMessage(GameMessages.getMessage(body, MessagePool.Action.GladAboutPartner));
+				body.setHappiness(Happiness.HAPPY);
+				body.stay();
+				actionGo = BodyLogic.ActionGo.GO;
 				break;
 			case CHILD_FATHER:
-				b.setMessage(GameMessages.getMessage(b, MessagePool.Action.GladAboutFather));
-				b.setHappiness(Happiness.HAPPY);
-				b.stay();
-				eAct = BodyLogic.eActionGo.GO;
+				body.setMessage(GameMessages.getMessage(body, MessagePool.Action.GladAboutFather));
+				body.setHappiness(Happiness.HAPPY);
+				body.stay();
+				actionGo = BodyLogic.ActionGo.GO;
 				break;
 			case CHILD_MOTHER:
-				b.setMessage(GameMessages.getMessage(b, MessagePool.Action.GladAboutMother));
-				b.setHappiness(Happiness.HAPPY);
-				b.stay();
-				eAct = BodyLogic.eActionGo.GO;
+				body.setMessage(GameMessages.getMessage(body, MessagePool.Action.GladAboutMother));
+				body.setHappiness(Happiness.HAPPY);
+				body.stay();
+				actionGo = BodyLogic.ActionGo.GO;
 				break;
 			case ELDERSISTER:
-				b.setMessage(GameMessages.getMessage(b, MessagePool.Action.GladAboutSister));
-				b.setHappiness(Happiness.HAPPY);
-				b.stay();
-				eAct = BodyLogic.eActionGo.GO;
+				body.setMessage(GameMessages.getMessage(body, MessagePool.Action.GladAboutSister));
+				body.setHappiness(Happiness.HAPPY);
+				body.stay();
+				actionGo = BodyLogic.ActionGo.GO;
 				break;
 			case YOUNGSISTER:
-				b.setMessage(GameMessages.getMessage(b, MessagePool.Action.GladAboutElderSister));
-				b.setHappiness(Happiness.HAPPY);
-				b.stay();
-				eAct = BodyLogic.eActionGo.GO;
+				body.setMessage(GameMessages.getMessage(body, MessagePool.Action.GladAboutElderSister));
+				body.setHappiness(Happiness.HAPPY);
+				body.stay();
+				actionGo = BodyLogic.ActionGo.GO;
 				break;
 			default:
 				break;
 			}
 		}
-		if (eAct != BodyLogic.eActionGo.NONE) {
-			return eAct;
+		if (actionGo != BodyLogic.ActionGo.NONE) {
+			return actionGo;
 		}
 
-		if (abEmote[2] && abEmote[5] && !abEmote[1]) {
-			switch (eRelation) {
-			case FATHER:
-			case MOTHER:
-			case PARTNAR:
-			case CHILD_FATHER:
-			case CHILD_MOTHER:
-			case ELDERSISTER:
-				b.setMessage(GameMessages.getMessage(b, MessagePool.Action.EnvyCryAboutSisterInSurisuri));
-				b.setHappiness(Happiness.VERY_SAD);
-				b.stay();
-				eAct = BodyLogic.eActionGo.GO;
-				break;
-			case YOUNGSISTER:
-				b.setMessage(GameMessages.getMessage(b, MessagePool.Action.EnvyCryAboutElderSisterInSurisuri));
-				b.setHappiness(Happiness.VERY_SAD);
-				b.stay();
-				eAct = BodyLogic.eActionGo.GO;
-				break;
-			default:
-				b.setMessage(GameMessages.getMessage(b, MessagePool.Action.EnvyCryAboutOther));
-				b.setHappiness(Happiness.SAD);
-				b.stay();
-				eAct = BodyLogic.eActionGo.WAIT;
-				break;
-			}
-		}
-		if (eAct != BodyLogic.eActionGo.NONE) {
-			return eAct;
-		}
-
-		if (abEmote[5] && !abEmote[1]) {
-			switch (eRelation) {
-			case FATHER:
-			case MOTHER:
-			case PARTNAR:
-			case CHILD_FATHER:
-			case CHILD_MOTHER:
-				break;
-			case ELDERSISTER:
-			case YOUNGSISTER:
-				b.setMessage(GameMessages.getMessage(b, MessagePool.Action.EnvyAboutSisterInSurisuri));
-				b.setHappiness(Happiness.SAD);
-				b.stay();
-				eAct = BodyLogic.eActionGo.GO;
-				break;
-			default:
-				b.setMessage(GameMessages.getMessage(b, MessagePool.Action.EnvyAboutOther));
-				b.setHappiness(Happiness.SAD);
-				b.stay();
-				eAct = BodyLogic.eActionGo.WAIT;
-				break;
-			}
-		}
-		if (eAct != BodyLogic.eActionGo.NONE) {
-			return eAct;
-		}
-
-		if (abEmote[5] && abEmote[1]) {
-			b.addMemories(-1);
-			switch (eRelation) {
-			case FATHER:
-			case MOTHER:
-				b.setMessage(GameMessages.getMessage(b, MessagePool.Action.HateWithEnvyAboutChild));
-				b.setHappiness(Happiness.VERY_SAD);
-				b.stay();
-				eAct = BodyLogic.eActionGo.WAIT;
-				break;
-			case PARTNAR:
-				b.setMessage(GameMessages.getMessage(b, MessagePool.Action.HateWithEnvyAboutPartner));
-				b.setHappiness(Happiness.VERY_SAD);
-				b.stay();
-				eAct = BodyLogic.eActionGo.WAIT;
-				break;
-			case CHILD_FATHER:
-				b.setMessage(GameMessages.getMessage(b, MessagePool.Action.HateWithEnvyAboutFather));
-				b.setHappiness(Happiness.VERY_SAD);
-				b.stay();
-				eAct = BodyLogic.eActionGo.WAIT;
-				break;
-			case CHILD_MOTHER:
-				b.setMessage(GameMessages.getMessage(b, MessagePool.Action.HateWithEnvyAboutMother));
-				b.setHappiness(Happiness.VERY_SAD);
-				b.stay();
-				eAct = BodyLogic.eActionGo.WAIT;
-				break;
-			case ELDERSISTER:
-				b.setMessage(GameMessages.getMessage(b, MessagePool.Action.HateWithEnvyAboutSister));
-				b.setHappiness(Happiness.VERY_SAD);
-				b.stay();
-				eAct = BodyLogic.eActionGo.WAIT;
-				break;
-			case YOUNGSISTER:
-				b.setMessage(GameMessages.getMessage(b, MessagePool.Action.HateWithEnvyAboutElderSister));
-				b.setHappiness(Happiness.VERY_SAD);
-				b.stay();
-				eAct = BodyLogic.eActionGo.WAIT;
-				break;
-			default:
-				b.setMessage(GameMessages.getMessage(b, MessagePool.Action.HateWithEnvyAboutOther));
-				b.setHappiness(Happiness.VERY_SAD);
-				b.stay();
-				eAct = BodyLogic.eActionGo.WAIT;
-				break;
-			}
-		}
-		if (eAct != BodyLogic.eActionGo.NONE) {
-			return eAct;
-		}
-
-		if (!abEmote[2] && abEmote[4]) {
-			b.setMessage(GameMessages.getMessage(b, MessagePool.Action.Scare));
-			b.setHappiness(Happiness.SAD);
-			b.stay();
-			eAct = BodyLogic.eActionGo.WAIT;
-		}
-		if (eAct != BodyLogic.eActionGo.NONE) {
-			return eAct;
-		}
-
-		if (abEmote[2] && abEmote[6] && abEmote[4]) {
-			switch (eRelation) {
-			case FATHER:
-			case MOTHER:
-				eAct = BodyLogic.eActionGo.GO;
-				b.setMessage(GameMessages.getMessage(b, MessagePool.Action.ConcernAboutChild));
-				b.setHappiness(Happiness.VERY_SAD);
-				b.stay();
-				break;
-			case PARTNAR:
-				eAct = BodyLogic.eActionGo.GO;
-				b.setMessage(GameMessages.getMessage(b, MessagePool.Action.ConcernAboutPartner));
-				b.setHappiness(Happiness.VERY_SAD);
-				b.stay();
-				break;
-			case CHILD_FATHER:
-				eAct = BodyLogic.eActionGo.GO;
-				b.setMessage(GameMessages.getMessage(b, MessagePool.Action.ConcernAboutFather));
-				b.setHappiness(Happiness.VERY_SAD);
-				b.stay();
-				break;
-			case CHILD_MOTHER:
-				eAct = BodyLogic.eActionGo.GO;
-				b.setMessage(GameMessages.getMessage(b, MessagePool.Action.ConcernAboutMother));
-				b.setHappiness(Happiness.VERY_SAD);
-				b.stay();
-				break;
-			case ELDERSISTER:
-				eAct = BodyLogic.eActionGo.GO;
-				b.setMessage(GameMessages.getMessage(b, MessagePool.Action.ConcernAboutEldersister));
-				b.setHappiness(Happiness.VERY_SAD);
-				b.stay();
-				break;
-			case YOUNGSISTER:
-				b.setMessage(GameMessages.getMessage(b, MessagePool.Action.ConcernAboutEldersister));
-				b.setHappiness(Happiness.VERY_SAD);
-				b.stay();
-				eAct = BodyLogic.eActionGo.GO;
-				break;
-			default:
-				break;
-			}
-		}
-		if (eAct != BodyLogic.eActionGo.NONE) {
-			return eAct;
-		}
-
-		if (abEmote[2] && abEmote[6] && !abEmote[4]) {
-			switch (eRelation) {
-			case FATHER:
-			case MOTHER:
-				eAct = BodyLogic.eActionGo.GO;
-				b.setMessage(GameMessages.getMessage(b, MessagePool.Action.ConcernAboutChild));
-				b.setHappiness(Happiness.SAD);
-				b.stay();
-				break;
-			case PARTNAR:
-				eAct = BodyLogic.eActionGo.GO;
-				b.setMessage(GameMessages.getMessage(b, MessagePool.Action.ConcernAboutPartner));
-				b.setHappiness(Happiness.SAD);
-				b.stay();
-				break;
-			case CHILD_FATHER:
-				eAct = BodyLogic.eActionGo.GO;
-				b.setMessage(GameMessages.getMessage(b, MessagePool.Action.ConcernAboutFather));
-				b.setHappiness(Happiness.SAD);
-				b.stay();
-				break;
-			case CHILD_MOTHER:
-				eAct = BodyLogic.eActionGo.GO;
-				b.setMessage(GameMessages.getMessage(b, MessagePool.Action.ConcernAboutMother));
-				b.setHappiness(Happiness.SAD);
-				b.stay();
-				break;
-			case ELDERSISTER:
-				eAct = BodyLogic.eActionGo.GO;
-				b.setMessage(GameMessages.getMessage(b, MessagePool.Action.ConcernAboutEldersister));
-				b.setHappiness(Happiness.SAD);
-				b.stay();
-				break;
-			case YOUNGSISTER:
-				b.setMessage(GameMessages.getMessage(b, MessagePool.Action.ConcernAboutEldersister));
-				b.setHappiness(Happiness.SAD);
-				b.stay();
-				eAct = BodyLogic.eActionGo.GO;
-				break;
-			default:
-				break;
-			}
-		}
-		if (eAct != BodyLogic.eActionGo.NONE) {
-			return eAct;
-		}
-
-		if (abEmote[2] && !abEmote[6]) {
-			switch (eRelation) {
+		if (emotionFlags[2] && emotionFlags[5] && !emotionFlags[1]) {
+			switch (relation) {
 			case FATHER:
 			case MOTHER:
 			case PARTNAR:
 			case CHILD_FATHER:
 			case CHILD_MOTHER:
 			case ELDERSISTER:
+				body.setMessage(GameMessages.getMessage(body, MessagePool.Action.EnvyCryAboutSisterInSurisuri));
+				body.setHappiness(Happiness.VERY_SAD);
+				body.stay();
+				actionGo = BodyLogic.ActionGo.GO;
+				break;
 			case YOUNGSISTER:
+				body.setMessage(GameMessages.getMessage(body, MessagePool.Action.EnvyCryAboutElderSisterInSurisuri));
+				body.setHappiness(Happiness.VERY_SAD);
+				body.stay();
+				actionGo = BodyLogic.ActionGo.GO;
 				break;
 			default:
-				b.setMessage(GameMessages.getMessage(b, MessagePool.Action.MercyAboutOther));
-				b.setHappiness(Happiness.SAD);
-				b.stay();
-				eAct = BodyLogic.eActionGo.GO;
+				body.setMessage(GameMessages.getMessage(body, MessagePool.Action.EnvyCryAboutOther));
+				body.setHappiness(Happiness.SAD);
+				body.stay();
+				actionGo = BodyLogic.ActionGo.WAIT;
 				break;
 			}
 		}
-		if (eAct != BodyLogic.eActionGo.NONE) {
-			return eAct;
+		if (actionGo != BodyLogic.ActionGo.NONE) {
+			return actionGo;
 		}
 
-		if (abEmote[0] && abEmote[0]) {
-			switch (eRelation) {
+		if (emotionFlags[5] && !emotionFlags[1]) {
+			switch (relation) {
+			case FATHER:
+			case MOTHER:
+			case PARTNAR:
+			case CHILD_FATHER:
+			case CHILD_MOTHER:
+				break;
+			case ELDERSISTER:
+			case YOUNGSISTER:
+				body.setMessage(GameMessages.getMessage(body, MessagePool.Action.EnvyAboutSisterInSurisuri));
+				body.setHappiness(Happiness.SAD);
+				body.stay();
+				actionGo = BodyLogic.ActionGo.GO;
+				break;
+			default:
+				body.setMessage(GameMessages.getMessage(body, MessagePool.Action.EnvyAboutOther));
+				body.setHappiness(Happiness.SAD);
+				body.stay();
+				actionGo = BodyLogic.ActionGo.WAIT;
+				break;
+			}
+		}
+		if (actionGo != BodyLogic.ActionGo.NONE) {
+			return actionGo;
+		}
+
+		if (emotionFlags[5] && emotionFlags[1]) {
+			body.addMemories(-1);
+			switch (relation) {
+			case FATHER:
+			case MOTHER:
+				body.setMessage(GameMessages.getMessage(body, MessagePool.Action.HateWithEnvyAboutChild));
+				body.setHappiness(Happiness.VERY_SAD);
+				body.stay();
+				actionGo = BodyLogic.ActionGo.WAIT;
+				break;
+			case PARTNAR:
+				body.setMessage(GameMessages.getMessage(body, MessagePool.Action.HateWithEnvyAboutPartner));
+				body.setHappiness(Happiness.VERY_SAD);
+				body.stay();
+				actionGo = BodyLogic.ActionGo.WAIT;
+				break;
+			case CHILD_FATHER:
+				body.setMessage(GameMessages.getMessage(body, MessagePool.Action.HateWithEnvyAboutFather));
+				body.setHappiness(Happiness.VERY_SAD);
+				body.stay();
+				actionGo = BodyLogic.ActionGo.WAIT;
+				break;
+			case CHILD_MOTHER:
+				body.setMessage(GameMessages.getMessage(body, MessagePool.Action.HateWithEnvyAboutMother));
+				body.setHappiness(Happiness.VERY_SAD);
+				body.stay();
+				actionGo = BodyLogic.ActionGo.WAIT;
+				break;
+			case ELDERSISTER:
+				body.setMessage(GameMessages.getMessage(body, MessagePool.Action.HateWithEnvyAboutSister));
+				body.setHappiness(Happiness.VERY_SAD);
+				body.stay();
+				actionGo = BodyLogic.ActionGo.WAIT;
+				break;
+			case YOUNGSISTER:
+				body.setMessage(GameMessages.getMessage(body, MessagePool.Action.HateWithEnvyAboutElderSister));
+				body.setHappiness(Happiness.VERY_SAD);
+				body.stay();
+				actionGo = BodyLogic.ActionGo.WAIT;
+				break;
+			default:
+				body.setMessage(GameMessages.getMessage(body, MessagePool.Action.HateWithEnvyAboutOther));
+				body.setHappiness(Happiness.VERY_SAD);
+				body.stay();
+				actionGo = BodyLogic.ActionGo.WAIT;
+				break;
+			}
+		}
+		if (actionGo != BodyLogic.ActionGo.NONE) {
+			return actionGo;
+		}
+
+		if (!emotionFlags[2] && emotionFlags[4]) {
+			body.setMessage(GameMessages.getMessage(body, MessagePool.Action.Scare));
+			body.setHappiness(Happiness.SAD);
+			body.stay();
+			actionGo = BodyLogic.ActionGo.WAIT;
+		}
+		if (actionGo != BodyLogic.ActionGo.NONE) {
+			return actionGo;
+		}
+
+		if (emotionFlags[2] && emotionFlags[6] && emotionFlags[4]) {
+			switch (relation) {
+			case FATHER:
+			case MOTHER:
+				actionGo = BodyLogic.ActionGo.GO;
+				body.setMessage(GameMessages.getMessage(body, MessagePool.Action.ConcernAboutChild));
+				body.setHappiness(Happiness.VERY_SAD);
+				body.stay();
+				break;
+			case PARTNAR:
+				actionGo = BodyLogic.ActionGo.GO;
+				body.setMessage(GameMessages.getMessage(body, MessagePool.Action.ConcernAboutPartner));
+				body.setHappiness(Happiness.VERY_SAD);
+				body.stay();
+				break;
+			case CHILD_FATHER:
+				actionGo = BodyLogic.ActionGo.GO;
+				body.setMessage(GameMessages.getMessage(body, MessagePool.Action.ConcernAboutFather));
+				body.setHappiness(Happiness.VERY_SAD);
+				body.stay();
+				break;
+			case CHILD_MOTHER:
+				actionGo = BodyLogic.ActionGo.GO;
+				body.setMessage(GameMessages.getMessage(body, MessagePool.Action.ConcernAboutMother));
+				body.setHappiness(Happiness.VERY_SAD);
+				body.stay();
+				break;
+			case ELDERSISTER:
+				actionGo = BodyLogic.ActionGo.GO;
+				body.setMessage(GameMessages.getMessage(body, MessagePool.Action.ConcernAboutEldersister));
+				body.setHappiness(Happiness.VERY_SAD);
+				body.stay();
+				break;
+			case YOUNGSISTER:
+				body.setMessage(GameMessages.getMessage(body, MessagePool.Action.ConcernAboutEldersister));
+				body.setHappiness(Happiness.VERY_SAD);
+				body.stay();
+				actionGo = BodyLogic.ActionGo.GO;
+				break;
+			default:
+				break;
+			}
+		}
+		if (actionGo != BodyLogic.ActionGo.NONE) {
+			return actionGo;
+		}
+
+		if (emotionFlags[2] && emotionFlags[6] && !emotionFlags[4]) {
+			switch (relation) {
+			case FATHER:
+			case MOTHER:
+				actionGo = BodyLogic.ActionGo.GO;
+				body.setMessage(GameMessages.getMessage(body, MessagePool.Action.ConcernAboutChild));
+				body.setHappiness(Happiness.SAD);
+				body.stay();
+				break;
+			case PARTNAR:
+				actionGo = BodyLogic.ActionGo.GO;
+				body.setMessage(GameMessages.getMessage(body, MessagePool.Action.ConcernAboutPartner));
+				body.setHappiness(Happiness.SAD);
+				body.stay();
+				break;
+			case CHILD_FATHER:
+				actionGo = BodyLogic.ActionGo.GO;
+				body.setMessage(GameMessages.getMessage(body, MessagePool.Action.ConcernAboutFather));
+				body.setHappiness(Happiness.SAD);
+				body.stay();
+				break;
+			case CHILD_MOTHER:
+				actionGo = BodyLogic.ActionGo.GO;
+				body.setMessage(GameMessages.getMessage(body, MessagePool.Action.ConcernAboutMother));
+				body.setHappiness(Happiness.SAD);
+				body.stay();
+				break;
+			case ELDERSISTER:
+				actionGo = BodyLogic.ActionGo.GO;
+				body.setMessage(GameMessages.getMessage(body, MessagePool.Action.ConcernAboutEldersister));
+				body.setHappiness(Happiness.SAD);
+				body.stay();
+				break;
+			case YOUNGSISTER:
+				body.setMessage(GameMessages.getMessage(body, MessagePool.Action.ConcernAboutEldersister));
+				body.setHappiness(Happiness.SAD);
+				body.stay();
+				actionGo = BodyLogic.ActionGo.GO;
+				break;
+			default:
+				break;
+			}
+		}
+		if (actionGo != BodyLogic.ActionGo.NONE) {
+			return actionGo;
+		}
+
+		if (emotionFlags[2] && !emotionFlags[6]) {
+			switch (relation) {
 			case FATHER:
 			case MOTHER:
 			case PARTNAR:
@@ -335,15 +314,47 @@ public final class BodySurisuriRule {
 			case YOUNGSISTER:
 				break;
 			default:
-				eAct = BodyLogic.eActionGo.WAIT;
-				b.setMessage(GameMessages.getMessage(b, MessagePool.Action.HateYukkuri));
+				body.setMessage(GameMessages.getMessage(body, MessagePool.Action.MercyAboutOther));
+				body.setHappiness(Happiness.SAD);
+				body.stay();
+				actionGo = BodyLogic.ActionGo.GO;
 				break;
 			}
 		}
-		if (eAct == BodyLogic.eActionGo.NONE) {
-			return eAct;
+		if (actionGo != BodyLogic.ActionGo.NONE) {
+			return actionGo;
 		}
 
-		return eAct;
+		if (emotionFlags[0]) {
+			switch (relation) {
+			case FATHER:
+			case MOTHER:
+			case PARTNAR:
+			case CHILD_FATHER:
+			case CHILD_MOTHER:
+			case ELDERSISTER:
+			case YOUNGSISTER:
+				break;
+			default:
+				actionGo = BodyLogic.ActionGo.WAIT;
+				body.setMessage(GameMessages.getMessage(body, MessagePool.Action.HateYukkuri));
+				break;
+			}
+		}
+		if (actionGo == BodyLogic.ActionGo.NONE) {
+			return actionGo;
+		}
+
+		return actionGo;
+	}
+
+	/**
+	 * プレイヤーにすりすりされているかを判定する.
+	 *
+	 * @param body 判定対象
+	 * @return すりすりされていればtrue
+	 */
+	public static boolean isSurisuriFromPlayer(BodyAttributes body) {
+		return body.isSurisuriFromPlayerRaw();
 	}
 }

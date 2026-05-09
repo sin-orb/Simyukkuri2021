@@ -33,7 +33,7 @@ class BodyEventStateTest {
 		body.setToShit(true);
 		body.setToBody(true);
 		body.setToSteal(true);
-		body.setMoveTarget(42);
+		body.setMoveTargetId(42);
 
 		BodyEventState.clearActions(body);
 
@@ -43,7 +43,7 @@ class BodyEventStateTest {
 		assertFalse(body.isToShit());
 		assertFalse(body.isToBody());
 		assertFalse(body.isToSteal());
-		assertEquals(-1, body.getMoveTarget());
+		assertEquals(-1, body.getMoveTargetId());
 	}
 
 	@Test
@@ -59,20 +59,20 @@ class BodyEventStateTest {
 
 	@Test
 	void setMessageIgnoresEmptyString() {
-		body.setMessageCount(0);
+		body.setMessageTicks(0);
 
 		BodyEventState.setMessage(body, "");
 
-		assertEquals(0, body.getMessageCount());
+		assertEquals(0, body.getMessageTicks());
 	}
 
 	@Test
 	void setPikoMessageWithCountUpdatesMessageCount() {
-		body.setMessageCount(0);
+		body.setMessageTicks(0);
 
 		BodyEventState.setPikoMessage(body, "hi", 3, true);
 
-		assertEquals(3, body.getMessageCount());
+		assertEquals(3, body.getMessageTicks());
 	}
 
 	@Test
@@ -111,34 +111,34 @@ class BodyEventStateTest {
 	@Test
 	void resolveEventResultActionOverridesDoNothingWithLowPriorityEvent() {
 		body.setCurrentEvent(new TrackingEventPacket(EventPacket.EventPriority.LOW));
-		body.setEventResultAction(Event.DOSHIT);
+		body.setEventResult(Event.DOSHIT);
 
 		Event result = BodyEventState.resolveEventResultAction(body, Event.DONOTHING);
 
 		assertEquals(Event.DOSHIT, result);
-		assertEquals(Event.DONOTHING, body.getEventResultAction());
+		assertEquals(Event.DONOTHING, body.getEventResult());
 	}
 
 	@Test
 	void resolveEventResultActionKeepsExistingActionForLowPriorityEvent() {
 		body.setCurrentEvent(new TrackingEventPacket(EventPacket.EventPriority.LOW));
-		body.setEventResultAction(Event.DOSHIT);
+		body.setEventResult(Event.DOSHIT);
 
 		Event result = BodyEventState.resolveEventResultAction(body, Event.BIRTHBABY);
 
 		assertEquals(Event.BIRTHBABY, result);
-		assertEquals(Event.DOSHIT, body.getEventResultAction());
+		assertEquals(Event.DOSHIT, body.getEventResult());
 	}
 
 	@Test
 	void resolveEventResultActionOverridesExistingActionForHighPriorityEvent() {
 		body.setCurrentEvent(new TrackingEventPacket(EventPacket.EventPriority.HIGH));
-		body.setEventResultAction(Event.DOSHIT);
+		body.setEventResult(Event.DOSHIT);
 
 		Event result = BodyEventState.resolveEventResultAction(body, Event.BIRTHBABY);
 
 		assertEquals(Event.DOSHIT, result);
-		assertEquals(Event.DONOTHING, body.getEventResultAction());
+		assertEquals(Event.DONOTHING, body.getEventResult());
 	}
 
 	@Test

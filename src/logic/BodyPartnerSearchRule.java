@@ -8,7 +8,7 @@ import src.base.Body;
 import src.base.Okazari.OkazariType;
 import src.draw.Translate;
 import src.enums.AgeState;
-import src.enums.BaryInUGState;
+import src.enums.BurialState;
 import src.enums.PanicType;
 import src.enums.PublicRank;
 import src.event.KillPredeatorEvent;
@@ -26,11 +26,11 @@ public final class BodyPartnerSearchRule {
 	 * Search result for partner selection.
 	 */
 	public static final class SearchResult {
-		private final Body found;
+		private final Body targetBody;
 		private final Body bodyHasOkazari;
 
-		SearchResult(Body found, Body bodyHasOkazari) {
-			this.found = found;
+		SearchResult(Body targetBody, Body bodyHasOkazari) {
+			this.targetBody = targetBody;
 			this.bodyHasOkazari = bodyHasOkazari;
 		}
 
@@ -38,7 +38,7 @@ public final class BodyPartnerSearchRule {
 		 * @return selected target body
 		 */
 		public Body getFound() {
-			return found;
+			return targetBody;
 		}
 
 		/**
@@ -56,47 +56,48 @@ public final class BodyPartnerSearchRule {
 	 * Select the best search targets for the current body.
 	 *
 	 * @param b                 actor body
-	 * @param found             current preferred body
+	 * @param targetBody        current preferred body
 	 * @param minDistance       current minimum distance
 	 * @param secondMinDistance current second minimum distance
 	 * @return search result
 	 */
-	public static SearchResult selectTargets(Body b, Body found, int minDistance, int secondMinDistance) {
+	public static SearchResult selectTargets(Body body, Body targetBody, int minDistance, int secondMinDistance) {
 		Body bodyHasOkazari = null;
 		Body bodyHasOkazariAndPherommone = null;
 		Body bodyHasPheromone = null;
 
 		for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
-			Body p = entry.getValue();
-			if (p == b) {
+			Body candidateBody = entry.getValue();
+			if (candidateBody == body) {
 				continue;
 			}
-			if (minDistance < 1 && !p.isbPheromone()) {
+			if (minDistance < 1 && !candidateBody.isPheromone()) {
 				continue;
 			}
-			if (!b.canflyCheck() && p.getZ() != 0) {
+			if (!body.canflyCheck() && candidateBody.getZ() != 0) {
 				continue;
 			}
 
-			if (p.isPacked()) {
-			} else if (b.isServant() && p.isPredator()) {
-			} else if (p.isFamily(b)) {
+			if (candidateBody.isPacked()) {
+			} else if (body.isServantOf(candidateBody.getType()) && candidateBody.isPredator()) {
+				continue;
+			} else if (candidateBody.isFamily(body)) {
 			} else if (GameEnvironment.isPredatorSteam()) {
 			} else {
-				if (b.getCurrentEvent() != null && b.getCurrentEvent().getClass().equals(KillPredeatorEvent.class)
-						&& b.isAdult() && b.isNotNYD() && !b.isPacked() && !b.isBurned()
-						&& !b.isHasBaby() && !b.isHasStalk()) {
-					b.setPanic(false, null);
-					b.setAngry();
+				if (body.getCurrentEvent() != null && body.getCurrentEvent().getClass().equals(KillPredeatorEvent.class)
+						&& body.isAdult() && body.isNotNYD() && !body.isPacked() && !body.isBurned()
+						&& !body.isHasBaby() && !body.isHasStalk()) {
+					body.setPanic(false, null);
+					body.setAngry();
 				} else {
-					int dist = Translate.distance(b.getX(), b.getY(), p.getX(), p.getY());
-					if (p.isPredatorType() && dist <= b.getEYESIGHTorg() && b.getPanicType() == null) {
-						if (b.canAction() && !b.isPredatorType() && !p.isFamily(b) && !b.isSleeping()) {
-							if (p.getZ() < Translate.getFlyHeightLimit() || b.canflyCheck()) {
-								if (!Barrier.acrossBarrier(b.getX(), b.getY(), p.getX(), p.getY(),
-										Barrier.MAP_BODY[b.getBodyAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
-									if (b.isNotNYD() && !b.isNeedled() && !b.isRaper()) {
-										b.setPanic(true, PanicType.REMIRYA);
+					int distance = Translate.distance(body.getX(), body.getY(), candidateBody.getX(), candidateBody.getY());
+					if (candidateBody.isPredatorType() && distance <= body.getEyesightBase() && body.getPanicType() == null) {
+						if (body.canAction() && !body.isPredatorType() && !candidateBody.isFamily(body) && !body.isSleeping()) {
+							if (candidateBody.getZ() < Translate.getFlyHeightLimit() || body.canflyCheck()) {
+								if (!Barrier.acrossBarrier(body.getX(), body.getY(), candidateBody.getX(), candidateBody.getY(),
+										Barrier.MAP_BODY[body.getBodyAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
+									if (body.isNotNYD() && !body.isNeedled() && !body.isRaper()) {
+										body.setPanic(true, PanicType.REMIRYA);
 									}
 								}
 							}
@@ -105,84 +106,84 @@ public final class BodyPartnerSearchRule {
 				}
 			}
 
-			if (b.isExciting()) {
-				if (p.getBaryState() != BaryInUGState.NONE) {
+			if (body.isExciting()) {
+				if (candidateBody.getBurialState() != BurialState.NONE) {
 					continue;
 				}
-				if (p.getAttachmentSize(Fire.class) != 0) {
+				if (candidateBody.getAttachmentSize(Fire.class) != 0) {
 					continue;
 				}
-				if (p.isPacked()) {
+				if (candidateBody.isPacked()) {
 					continue;
 				}
-				if (b.isRaper()) {
-					if ((p.isDead() && p.isCrushed()) || p.isUnBirth() || p.isRaper()) {
+				if (body.isRaper()) {
+					if ((candidateBody.isDead() && candidateBody.isCrushed()) || candidateBody.isUnBirth() || candidateBody.isRaper()) {
 						continue;
 					}
 				} else {
-					if (p.isDead()) {
+					if (candidateBody.isDead()) {
 						continue;
 					}
-					if (!b.isForceExciting()) {
-						if (b.getPublicRank() != p.getPublicRank()) {
+					if (!body.isForceExciting()) {
+						if (body.getPublicRank() != candidateBody.getPublicRank()) {
 							continue;
 						}
-						if (b.getBodyAgeState().ordinal() > p.getBodyAgeState().ordinal() || p.isChild(b)
-								|| p.isParent(b)) {
+						if (body.getBodyAgeState().ordinal() > candidateBody.getBodyAgeState().ordinal() || candidateBody.isChild(body)
+								|| candidateBody.isParent(body)) {
 							continue;
 						}
 					}
 				}
-			} else if (p.isDead() && !p.hasOkazari() && b.isIdiot()) {
+			} else if (candidateBody.isDead() && !candidateBody.hasOkazari() && body.isIdiot()) {
 				continue;
 			}
-			if (p.isRaper() && p.isExciting()) {
+			if (candidateBody.isRaper() && candidateBody.isExciting()) {
 				continue;
 			}
-			if (Barrier.acrossBarrier(b.getX(), b.getY(), p.getX(), p.getY(),
-					Barrier.MAP_BODY[b.getBodyAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
+			if (Barrier.acrossBarrier(body.getX(), body.getY(), candidateBody.getX(), candidateBody.getY(),
+					Barrier.MAP_BODY[body.getBodyAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
 				continue;
 			}
-			if (p.getBaryState() == BaryInUGState.ALL) {
+			if (candidateBody.getBurialState() == BurialState.ALL) {
 				continue;
 			}
-			if (p.getBaryState() == BaryInUGState.NEARLY_ALL && !p.hasOkazari()) {
+			if (candidateBody.getBurialState() == BurialState.NEARLY_ALL && !candidateBody.hasOkazari()) {
 				continue;
 			}
-			if (p.isbPheromone()) {
-				bodyHasPheromone = p;
+			if (candidateBody.isPheromone()) {
+				bodyHasPheromone = candidateBody;
 			}
-			int dist = Translate.distance(b.getX(), b.getY(), p.getX(), p.getY());
-			if (minDistance > dist) {
-				minDistance = dist;
-				found = p;
-			} else if (minDistance <= dist && dist < secondMinDistance) {
-				secondMinDistance = dist;
+			int distance = Translate.distance(body.getX(), body.getY(), candidateBody.getX(), candidateBody.getY());
+			if (minDistance > distance) {
+				minDistance = distance;
+				targetBody = candidateBody;
+			} else if (minDistance <= distance && distance < secondMinDistance) {
+				secondMinDistance = distance;
 				if (GameRandom.nextBoolean()) {
-					found = p;
+					targetBody = candidateBody;
 				}
 			}
-			if (!b.hasOkazari() && p.hasOkazari() && b.getBodyAgeState() == p.getBodyAgeState()
-					&& b.getType() == p.getType() && !b.isHybrid()
-					&& p.getOkazari().getOkazariType() == OkazariType.DEFAULT
-					&& (p.getPublicRank() == PublicRank.NONE || b.getPublicRank() == PublicRank.UnunSlave)
-					&& !b.isLockmove()) {
-				if (b.isRude()) {
-					bodyHasOkazari = p;
-					if (p.isbPheromone()) {
-						bodyHasOkazariAndPherommone = p;
+			if (!body.hasOkazari() && candidateBody.hasOkazari() && body.getBodyAgeState() == candidateBody.getBodyAgeState()
+					&& body.getType() == candidateBody.getType() && !body.isHybrid()
+					&& candidateBody.getOkazari().getOkazariType() == OkazariType.DEFAULT
+					&& (candidateBody.getPublicRank() == PublicRank.NONE || body.getPublicRank() == PublicRank.UnunSlave)
+					&& !body.isLockmove()) {
+				if (body.isRude()) {
+					bodyHasOkazari = candidateBody;
+					if (candidateBody.isPheromone()) {
+						bodyHasOkazariAndPherommone = candidateBody;
 					}
 				}
 			}
 		}
 
 		if (bodyHasPheromone != null) {
-			found = bodyHasPheromone;
+			targetBody = bodyHasPheromone;
 		}
 		if (bodyHasOkazariAndPherommone != null) {
 			bodyHasOkazari = bodyHasOkazariAndPherommone;
 		}
 
-		return new SearchResult(found, bodyHasOkazari);
+		return new SearchResult(targetBody, bodyHasOkazari);
 	}
 }

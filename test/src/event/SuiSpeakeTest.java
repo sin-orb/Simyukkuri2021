@@ -91,8 +91,8 @@ public class SuiSpeakeTest {
     @Test
     public void testSimpleEventAction_Talking() {
         Body b = createBody();
-        // isTalking() は messageCount > 0 で true になる
-        b.setMessageCount(1);
+        // isTalking() は messageTicks > 0 で true になる
+        b.setMessageTicks(1);
         SuiSpeake event = new SuiSpeake();
         assertTrue(event.simpleEventAction(b));
     }

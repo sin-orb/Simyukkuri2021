@@ -64,14 +64,14 @@ public class GadgetMenu {
 		TERRAIN_AND_GADET(12),
 		;
 
-		private int flag;
+		private int mask;
 
 		ActionTarget(int flg) {
-			this.flag = flg;
+			this.mask = flg;
 		}
 
-		public int getFlag() {
-			return this.flag;
+		public int getMask() {
+			return this.mask;
 		}
 	}
 
@@ -953,35 +953,35 @@ public class GadgetMenu {
 	/** ゆっくりにメソッド実行
 	 *<br> パラメータなし、SHIFTで全体実行系のコマンド用
 	 * @param e 入力されたマウスの動作
-	 * @param found 対象オブジェクト(主にゆっくり)
+	 * @param targetObject 対象オブジェクト(主にゆっくり)
 	 * @param method 実行したいメソッド名
 	 */
-	public static final void executeBodyMethod(MouseEvent e, Obj found, String method) {
-		BodyMethodDispatcher.execute(e, found, method);
+	public static final void executeBodyMethod(MouseEvent e, Obj targetObject, String method) {
+		BodyMethodDispatcher.execute(e, targetObject, method);
 	}
 
 	/** ゆっくりにメソッド実行
 	 *<br>パラメータあり、SHIFTで全体実行系のコマンド用
 	 * @param e 入力されたマウスの動作
-	 * @param found 対象オブジェクト(主にゆっくり)
+	 * @param targetObject 対象オブジェクト(主にゆっくり)
 	 * @param method 実行したいメソッド名
 	 * @param prm 指定パラメータ
 	 */
-	public static final void executeBodyMethod(MouseEvent e, Obj found, String method, int prm) {
-		BodyMethodDispatcher.execute(e, found, method, prm);
+	public static final void executeBodyMethod(MouseEvent e, Obj targetObject, String method, int prm) {
+		BodyMethodDispatcher.execute(e, targetObject, method, prm);
 	}
 
 	/** ゆっくりにメソッド実行
 	 * <br> パラメータboolean、SHIFTで全体、CTRLで反転実行系のコマンド用
 	 *
 	 * @param e 入力されたマウスの動作
-	 * @param found 対象オブジェクト(主にゆっくり)
+	 * @param targetObject 対象オブジェクト(主にゆっくり)
 	 * @param getMethod 実行したいメソッド名(ゆっくり用)
 	 * @param setMethod 実行したいメソッド名(その他用)
 	 * @param invMethod 反転実行系コマンド実行
 	 */
-	public static final void executeBodyMethod(MouseEvent e, Obj found, String getMethod, String setMethod, String invMethod) {
-		BodyMethodDispatcher.execute(e, found, getMethod, setMethod, invMethod);
+	public static final void executeBodyMethod(MouseEvent e, Obj targetObject, String getMethod, String setMethod, String invMethod) {
+		BodyMethodDispatcher.execute(e, targetObject, getMethod, setMethod, invMethod);
 	}
 }
 

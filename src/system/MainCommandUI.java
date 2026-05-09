@@ -421,7 +421,7 @@ public class MainCommandUI {
 		int hungry = 100 * b.getHungry() / b.getHungryLimit();
 		int shit = 100 * b.getShit() / b.getShitLimit();
 		int stress = 100 * b.getStress() / b.getStressLimit();
-		int nLovePlayer = 100 * b.getnLovePlayer() / b.getLOVEPLAYERLIMITorg();
+		int lovePlayerPercent = 100 * b.getLovePlayer() / b.getLovePlayerLimitBase();
 
 		yuStatusLabel[StatusLabel.MONEY.ordinal()].setText(StatusLabel.MONEY.getLabel() + GameWorld.get().getPlayer().getCash());
 		yuStatusLabel[StatusLabel.NAME.ordinal()].setText(" " + (GameLocale.isJapanese() ? b.getNameJ() : b.getNameE()));
@@ -436,9 +436,9 @@ public class MainCommandUI {
 		yuStatusLabel[StatusLabel.TANG.ordinal()].setText(StatusLabel.TANG.getLabel() + 
 				(GameLocale.isJapanese() ? TANG_LEVEL_J[b.getTangType().ordinal()] : TANG_LEVEL_E[b.getTangType().ordinal()]));
 		yuStatusLabel[StatusLabel.SHIT.ordinal()].setText(StatusLabel.SHIT.getLabel() + shit + "%");
-		yuStatusLabel[StatusLabel.LOVEPLAYER.ordinal()].setText(StatusLabel.LOVEPLAYER.getLabel() + nLovePlayer + "%");
+		yuStatusLabel[StatusLabel.LOVEPLAYER.ordinal()].setText(StatusLabel.LOVEPLAYER.getLabel() + lovePlayerPercent + "%");
 
-		pinButton.setSelected(b.isPin());
+		pinButton.setSelected(b.isPinned());
 
 		IconPool.StatusIcon[] stat = IconPool.StatusIcon.values();
 		ImageIcon[] img = IconPool.getStatusIconImageArray();
@@ -483,7 +483,7 @@ public class MainCommandUI {
 			statIconLabel[4].setIcon(null);
 			statIconLabel[4].setToolTipText(null);
 		}
-		if(b.isbPenipeniCutted()) {
+		if(b.isPenipeniCutted()) {
 			statIconLabel[5].setIcon(img[IconPool.StatusIcon.PENIPENICUT.ordinal()]);
 			statIconLabel[5].setToolTipText(stat[IconPool.StatusIcon.PENIPENICUT.ordinal()].getHelp());
 		}
@@ -491,7 +491,7 @@ public class MainCommandUI {
 			statIconLabel[5].setIcon(null);
 			statIconLabel[5].setToolTipText(null);
 		}
-		if(b.isbPheromone()) {
+		if(b.isPheromone()) {
 			statIconLabel[6].setIcon(img[IconPool.StatusIcon.PHEROMONE.ordinal()]);
 			statIconLabel[6].setToolTipText(stat[IconPool.StatusIcon.PHEROMONE.ordinal()].getHelp());
 		}

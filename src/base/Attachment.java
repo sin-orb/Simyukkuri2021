@@ -10,8 +10,6 @@ import src.draw.Point4y;
 import src.enums.AttachProperty;
 import src.enums.Event;
 import src.enums.Type;
-import src.util.YukkuriUtil;
-
 /****************************************
  * ゆっくりの体に付くアタッチメントのベースクラス
  */
@@ -43,12 +41,12 @@ public abstract class Attachment extends Obj {
 
 	/** 画像取得 */
 	@Transient
-	public abstract BufferedImage getImage(Body b);
+	public abstract BufferedImage getImage(Body body);
 
 	/** X方向の描画座標オフセット分 */
 	@Transient
 	public int getOfsX() {
-		Body pa = YukkuriUtil.getBodyInstance(parent);
+		Body pa = src.util.BodyRegistry.getBodyInstance(parent);
 		if (pa == null)
 			return -1;
 		return posOfs[pa.getBodyAgeState().ordinal()].getX();
@@ -57,7 +55,7 @@ public abstract class Attachment extends Obj {
 	/** Y方向の描画座標オフセット分 */
 	@Transient
 	public int getOfsY() {
-		Body pa = YukkuriUtil.getBodyInstance(parent);
+		Body pa = src.util.BodyRegistry.getBodyInstance(parent);
 		if (pa == null)
 			return -1;
 		return posOfs[pa.getBodyAgeState().ordinal()].getY();
@@ -70,12 +68,12 @@ public abstract class Attachment extends Obj {
 	}
 
 	/** アタッチメントの詳細設定 */
-	protected void setAttachProperty(int[] p, String ofsKey) {
-		Body pa = YukkuriUtil.getBodyInstance(parent);
+	protected void setAttachProperty(int[] property, String ofsKey) {
+		Body pa = src.util.BodyRegistry.getBodyInstance(parent);
 		if (pa == null)
 			return;
 		posOfs = pa.getMountPoint(ofsKey);
-		attachProperty = p;
+		attachProperty = property;
 		animeInterval = 0;
 		animeLoop = attachProperty[AttachProperty.ANIME_LOOP.ordinal()];
 		if (attachProperty[AttachProperty.ANIME_INTERVAL.ordinal()] == 0)

@@ -74,7 +74,7 @@ public class EmotionLogicTest {
     }
 
     private void setPainStates(Body b, boolean pain, boolean damaged, boolean critical) throws Exception {
-        java.lang.reflect.Field needleField = src.base.BodyAttributes.class.getDeclaredField("bNeedled");
+        java.lang.reflect.Field needleField = src.base.BodyAttributes.class.getDeclaredField("needled");
         needleField.setAccessible(true);
         needleField.set(b, pain);
 

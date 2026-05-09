@@ -99,7 +99,7 @@ public class PoisonAmpouleTest {
     @Test
     public void testUpdateIncreasesShitWhenAlive() {
         Body parent = createParent(AgeState.ADULT);
-        parent.initAmount(AgeState.ADULT); // bodyAmount > 0 => isDead() returns false
+        parent.initAmount(AgeState.ADULT); // ankoAmount > 0 => isDead() returns false
         parent.setShit(100); // plusShit is no-op when shit==0, so initialize to positive
         PoisonAmpoule ampoule = new PoisonAmpoule(parent);
 

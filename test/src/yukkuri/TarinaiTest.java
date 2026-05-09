@@ -71,8 +71,8 @@ public class TarinaiTest {
         // Tarinai should have no braid
         assertFalse(tarinai.isBraidType());
 
-        // ROBUSTNESS should be: nextInt(5) + 1 = min(10, 4) + 1 = 4 + 1 = 5
-        assertEquals(5, tarinai.getROBUSTNESS());
+        // Robustness should be: nextInt(5) + 1 = min(10, 4) + 1 = 4 + 1 = 5
+        assertEquals(5, tarinai.getImmunityStrength());
     }
 
     @Test

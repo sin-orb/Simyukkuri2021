@@ -1,5 +1,5 @@
 @echo off
-setlocal
+setlocal EnableExtensions EnableDelayedExpansion
 set d=%CD%
 cd /d "%~dp0.."
 
@@ -14,7 +14,10 @@ dir /s /b test\src\*.java > test_sources.txt
 javac -source 8 -target 8 -d bin -cp "bin;lib\*" -encoding UTF-8 @test_sources.txt
 if %ERRORLEVEL% NEQ 0 goto :fail
 
-java -Djava.awt.headless=true -jar lib\junit-platform-console-standalone-1.10.2.jar execute --class-path "bin;lib\*" --scan-class-path
+set "CP=bin;."
+for %%J in (lib\*.jar) do set "CP=!CP!;%%~fJ"
+
+java -Djava.awt.headless=true -jar lib\junit-platform-console-standalone-1.10.2.jar execute --class-path "!CP!" --scan-class-path
 if %ERRORLEVEL% NEQ 0 goto :fail
 
 cd /d "%d%"

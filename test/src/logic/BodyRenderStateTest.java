@@ -43,8 +43,18 @@ class BodyRenderStateTest {
 	}
 
 	@Test
+	void getFaceImageUsesDeadFaceEvenWhenUnBirth() {
+		body.setDead(true);
+		body.setUnBirth(true);
+
+		BodyRenderState.getFaceImage(body, layer);
+
+		assertTrue(body.codes.contains(ImageCode.DEAD.ordinal()));
+	}
+
+	@Test
 	void getFaceImageUsesNydFace() throws Exception {
-		setField(body, "eCoreAnkoState", CoreAnkoState.NonYukkuriDisease);
+		setField(body, "coreAnkoState", CoreAnkoState.NonYukkuriDisease);
 
 		BodyRenderState.getFaceImage(body, layer);
 
@@ -56,7 +66,7 @@ class BodyRenderStateTest {
 		SimYukkuri.UNYO = true;
 		try {
 			body.setSleeping(true);
-			setField(body, "mabatakiCnt", 1);
+			setField(body, "blinkCount", 1);
 
 			BodyRenderState.getFaceImage(body, layer);
 
@@ -123,6 +133,16 @@ class BodyRenderStateTest {
 
 		assertTrue(body.codes.contains(ImageCode.HUNGRY2.ordinal()));
 		assertTrue(body.codes.contains(ImageCode.WET.ordinal()));
+	}
+
+	@Test
+	void getEffectImageUsesDeadBodyOverlayForDeadUnBirth() {
+		body.setDead(true);
+		body.setUnBirth(true);
+
+		BodyRenderState.getEffectImage(body, layer);
+
+		assertTrue(body.codes.contains(ImageCode.DEAD_BODY.ordinal()));
 	}
 
 	@Test

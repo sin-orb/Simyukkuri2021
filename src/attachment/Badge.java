@@ -8,6 +8,9 @@ import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import src.base.Attachment;
 import src.base.Body;
 import src.draw.ModLoader;
@@ -16,7 +19,6 @@ import src.enums.AttachProperty;
 //import src.Attachment.AttachProperty;
 import src.enums.Event;
 import src.system.ResourceUtil;
-import src.util.YukkuriUtil;
 
 
 /****************************************
@@ -62,7 +64,8 @@ public class Badge extends Attachment {
 	 * <br>[親オブジェクト(ゆっくり)の年齢][ランク]*/
 	private static BufferedImage[][] images = new BufferedImage[3][BadgeRank.values().length];
 	/**ランクの入れ物*/
-	private BadgeRank eBadgeRank;
+	@JsonProperty("badgeRank")
+	private BadgeRank badgeRank;
 	/**
 	 * イメージをロードする.
 	 * @param loader ローダ
@@ -104,19 +107,20 @@ public class Badge extends Attachment {
 	
 	@Override
 	public BufferedImage getImage(Body b) {
-		Body pa = YukkuriUtil.getBodyInstance(parent);
+		Body pa = src.util.BodyRegistry.getBodyInstance(parent);
 		if (pa == null) return null;
-		return images[pa.getBodyAgeState().ordinal()][eBadgeRank.ordinal()];
+		return images[pa.getBodyAgeState().ordinal()][badgeRank.ordinal()];
 	}
 	/**バッジランク取得*/
 	@Transient
+	@JsonIgnore
 	public BadgeRank getBadgeRank() {
-		return eBadgeRank;
+		return badgeRank;
 	}
 	
 	@Override
 	public void resetBoundary() {
-		Body pa = YukkuriUtil.getBodyInstance(parent);
+		Body pa = src.util.BodyRegistry.getBodyInstance(parent);
 		if (pa == null) return;
 		setBoundary(pivX[pa.getBodyAgeState().ordinal()],
 					pivY[pa.getBodyAgeState().ordinal()],
@@ -128,11 +132,11 @@ public class Badge extends Attachment {
 	 * @param body 装着されるゆっくり
 	 * @param ieBadgeRank バッジランク
 	 */	
-	public Badge(Body body, BadgeRank ieBadgeRank) {
+	public Badge(Body body, BadgeRank badgeRank) {
 		super(body);
 		setAttachProperty(property, POS_KEY);
-		eBadgeRank = ieBadgeRank;
-		Body pa = YukkuriUtil.getBodyInstance(parent);
+		this.badgeRank = badgeRank;
+		Body pa = src.util.BodyRegistry.getBodyInstance(parent);
 		if (pa != null) {
 			setBoundary(pivX[pa.getBodyAgeState().ordinal()],
 					pivY[pa.getBodyAgeState().ordinal()],
@@ -152,12 +156,8 @@ public class Badge extends Attachment {
 		return GameText.read("item_badge");
 	}
 
-	public BadgeRank getEBadgeRank() {
-		return eBadgeRank;
-	}
-
-	public void setEBadgeRank(BadgeRank eBadgeRank) {
-		this.eBadgeRank = eBadgeRank;
+	public void setBadgeRank(BadgeRank badgeRank) {
+		this.badgeRank = badgeRank;
 	}
 
 	// テスト用静的アクセサ

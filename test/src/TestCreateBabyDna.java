@@ -1,6 +1,6 @@
 package src;
 
-import src.util.YukkuriUtil;
+import src.engine.birth.BabyDnaFactory;
 import src.yukkuri.Reimu;
 import src.yukkuri.Marisa;
 
@@ -13,7 +13,7 @@ public class TestCreateBabyDna {
 
         try {
             System.out.println("Calling createBabyDna...");
-            Object dna = YukkuriUtil.createBabyDna(
+            Object dna = BabyDnaFactory.createBabyDna(
                     mother, father, father.getType(),
                     src.enums.Attitude.AVERAGE,
                     src.enums.Intelligence.AVERAGE,

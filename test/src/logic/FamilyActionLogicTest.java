@@ -41,12 +41,12 @@ class FamilyActionLogicTest {
 
         parent.setX(50);
         parent.setY(50);
-        parent.setAge(parent.getCHILDLIMITorg() + 1); // ADULT
+        parent.setAge(parent.getChildLimitBase() + 1); // ADULT
 
         child.setX(55);
         child.setY(55);
         child.setAge(0); // BABY
-        child.setbFirstEatStalk(true);
+        child.setFirstEatStalk(true);
         child.giveOkazari(src.base.Okazari.OkazariType.DEFAULT); // Ensure proper OKAZARI
         parent.giveOkazari(src.base.Okazari.OkazariType.DEFAULT);
 
@@ -70,7 +70,7 @@ class FamilyActionLogicTest {
 
     // A helper method to fast-forward age so we can do wait time checks easily
     private void setReady(Body b) {
-        b.setInLastActionTime(0L);
+        b.setLastActionTime(0L);
     }
 
     @Test
@@ -136,7 +136,7 @@ class FamilyActionLogicTest {
     @Test
     void testCheckFamilyAction_SelfStateChecks() {
 
-        parent.addDamage(parent.getDAMAGELIMITorg()[AgeState.ADULT.ordinal()] / 2); // VERY or OVER
+        parent.addDamage(parent.getDamageLimitBase()[AgeState.ADULT.ordinal()] / 2); // VERY or OVER
         assertFalse(FamilyActionLogic.checkFamilyAction(parent));
         parent.addDamage(-99999);
 
@@ -194,7 +194,7 @@ class FamilyActionLogicTest {
         partner.setAge(parent.getAge() + 100);
 
         // Partner damaged
-        partner.addDamage(parent.getDAMAGELIMITorg()[AgeState.ADULT.ordinal()]);
+        partner.addDamage(parent.getDamageLimitBase()[AgeState.ADULT.ordinal()]);
         assertFalse(FamilyActionLogic.checkFamilyAction(parent));
         partner.addDamage(-99999);
     }
@@ -204,15 +204,15 @@ class FamilyActionLogicTest {
         setReady(parent);
 
         // Child damaged -> cancels all
-        child.addDamage(parent.getDAMAGELIMITorg()[AgeState.BABY.ordinal()]);
+        child.addDamage(parent.getDamageLimitBase()[AgeState.BABY.ordinal()]);
         // Doesn't trigger any event
         assertFalse(FamilyActionLogic.checkFamilyAction(parent));
         child.addDamage(-99999);
 
         // Child firstEatStalk false -> cancels all
-        child.setbFirstEatStalk(false);
+        child.setFirstEatStalk(false);
         assertFalse(FamilyActionLogic.checkFamilyAction(parent));
-        child.setbFirstEatStalk(true);
+        child.setFirstEatStalk(true);
 
         // Child shit <= 25% -> cancels shit
         child.setShit((int) (child.getShitLimit() * 0.1));
@@ -508,7 +508,7 @@ class FamilyActionLogicTest {
 
     @Test
     void testCheckFamilyAction_IsNYD_ReturnsFalse() {
-        parent.seteCoreAnkoState(src.enums.CoreAnkoState.NonYukkuriDiseaseNear);
+        parent.setCoreAnkoState(src.enums.CoreAnkoState.NonYukkuriDiseaseNear);
         assertFalse(FamilyActionLogic.checkFamilyAction(parent));
     }
 
@@ -533,7 +533,7 @@ class FamilyActionLogicTest {
     @Test
     void testCheckFamilyAction_NearToBirth_ReturnsFalse() {
         parent.setHasBaby(true);
-        parent.setPregnantPeriod(parent.getPREGPERIODorg());
+        parent.setPregnantPeriod(parent.getPregPeriodBase());
         assertFalse(FamilyActionLogic.checkFamilyAction(parent));
     }
 
@@ -558,7 +558,7 @@ class FamilyActionLogicTest {
         partner2.setAge(parent.getAge() + 100);
         partner2.giveOkazari(src.base.Okazari.OkazariType.DEFAULT);
         partner2.setHasBaby(true);
-        partner2.setPregnantPeriod(partner2.getPREGPERIODorg());
+        partner2.setPregnantPeriod(partner2.getPregPeriodBase());
         parent.setPartner(partner2.getUniqueID());
         SimYukkuri.world.getCurrentMap().getBody().put(partner2.getUniqueID(), partner2);
         assertFalse(FamilyActionLogic.checkFamilyAction(parent));
@@ -591,7 +591,7 @@ class FamilyActionLogicTest {
         Body partner2 = WorldTestHelper.createBody();
         partner2.setAge(parent.getAge() + 100);
         partner2.giveOkazari(src.base.Okazari.OkazariType.DEFAULT);
-        partner2.setbNeedled(true);
+        partner2.setNeedled(true);
         parent.setPartner(partner2.getUniqueID());
         SimYukkuri.world.getCurrentMap().getBody().put(partner2.getUniqueID(), partner2);
         assertFalse(FamilyActionLogic.checkFamilyAction(parent));
@@ -625,7 +625,7 @@ class FamilyActionLogicTest {
     @Test
     void testCheckFamilyAction_ChildNeedled_ReturnsFalse() {
         setReady(parent);
-        child.setbNeedled(true);
+        child.setNeedled(true);
         SimYukkuri.RND = new ConstState(0) {
             @Override
             public boolean nextBoolean() { return false; }
@@ -737,7 +737,7 @@ class FamilyActionLogicTest {
     void testCheckFamilyAction_NoBabyChild_WantToShitFalse() {
         setReady(parent);
         // Make child an adult (not baby)
-        child.setAge(child.getCHILDLIMITorg() + 1);
+        child.setAge(child.getChildLimitBase() + 1);
         child.setHungry((int)(child.getHungryLimit() * 0.9)); // >=80%
         child.setShit(0);
         SimYukkuri.RND = new ConstState(0) {
@@ -756,7 +756,7 @@ class FamilyActionLogicTest {
         // 修正前は bIsBaby=false でも proudChild が呼ばれバグの原因だった
         setReady(parent);
         // 子を子ゆ年齢（CHILD）に設定（BABY ではないが ADULT でもない）
-        child.setAge(child.getBABYLIMITorg() + 1); // CHILD age
+        child.setAge(child.getBabyLimitBase() + 1); // CHILD age
         child.setHungry((int)(child.getHungryLimit() * 0.9)); // >=80% → bWantToEat=false
         child.setShit(0);
         SimYukkuri.RND = new ConstState(0) {
@@ -863,7 +863,7 @@ class FamilyActionLogicTest {
     void testRideOnParent_ChildNotBaby_SkippedReturnsFalse() {
         setReady(parent);
         // Make child adult
-        child.setAge(child.getCHILDLIMITorg() + 1);
+        child.setAge(child.getChildLimitBase() + 1);
         child.setHungry(0); // hungry
         java.util.List<Body> list = new java.util.ArrayList<>();
         list.add(child);
@@ -902,7 +902,7 @@ class FamilyActionLogicTest {
     void testRideOnParent_BabyChildWantToShitToiletFar_ReturnsTrue() {
         setReady(parent);
         child.setHungry((int)(child.getHungryLimit() * 0.9)); // not hungry
-        // Use setShit to push up shit value; wantToShit() uses getSHITLIMITorg
+        // Use setShit to push up shit value; wantToShit() uses getShitLimitBase
         child.setShit(child.getShitLimit() - 1); // near limit → wantToShit=true
         Toilet toilet = new Toilet();
         toilet.setX(300);
@@ -1006,7 +1006,7 @@ class FamilyActionLogicTest {
             @Override public boolean isIdiot() { return true; }
         };
         idiotBody.setX(50); idiotBody.setY(50);
-        idiotBody.setAge(idiotBody.getCHILDLIMITorg() + 1);
+        idiotBody.setAge(idiotBody.getChildLimitBase() + 1);
         idiotBody.giveOkazari(src.base.Okazari.OkazariType.DEFAULT);
         WorldTestHelper.addChild(idiotBody, child.getUniqueID());
         SimYukkuri.world.getCurrentMap().getBody().put(idiotBody.getUniqueID(), idiotBody);
@@ -1228,7 +1228,7 @@ class FamilyActionLogicTest {
         // Give parent a food takeout item
         Food takenFood = new Food(50, 50, Food.FoodType.SWEETS1.ordinal());
         SimYukkuri.world.getCurrentMap().getTakenOutFood().put(takenFood.getObjId(), takenFood);
-        parent.setTakeoutItem(src.enums.TakeoutItemType.FOOD, takenFood);
+        parent.setCarryItem(src.enums.TakeoutItemType.FOOD, takenFood);
         java.util.List<Body> list = new java.util.ArrayList<>();
         list.add(child);
         // child.isHungry=true but parent has takeout food -> no food search -> target=null
@@ -1243,7 +1243,7 @@ class FamilyActionLogicTest {
     void testCheckFamilyAction_MiddleAgeChild_NoBabyLoop() {
         setReady(parent);
         // Set child to middle age: not baby, not adult
-        int midAge = child.getBABYLIMITorg() + 1; // just past baby threshold
+        int midAge = child.getBabyLimitBase() + 1; // just past baby threshold
         child.setAge(midAge);
         child.setHungry(child.getHungryLimit()); // full -> dHungryPer>=80 -> bWantToEat=false
         child.setShit(0);
@@ -1313,7 +1313,7 @@ class FamilyActionLogicTest {
             @Override public int getCollisionX() { return 10; }
         };
         loner.setX(50); loner.setY(50);
-        loner.setAge(loner.getCHILDLIMITorg() + 1); // adult
+        loner.setAge(loner.getChildLimitBase() + 1); // adult
         loner.giveOkazari(src.base.Okazari.OkazariType.DEFAULT);
         // addChild を呼ばない → 子リスト空
         SimYukkuri.world.getCurrentMap().getBody().put(loner.getUniqueID(), loner);
@@ -1329,7 +1329,7 @@ class FamilyActionLogicTest {
         parent.setHungry(0);   // hungry <= 0
         // getDamageState() != NONE: damage >= DAMAGELIMIT/2 で VERY になる
         WorldTestHelper.setDamage(parent,
-            parent.getDAMAGELIMITorg()[src.enums.AgeState.ADULT.ordinal()] / 2 + 1);
+            parent.getDamageLimitBase()[src.enums.AgeState.ADULT.ordinal()] / 2 + 1);
         Obj found = FamilyActionLogic.searchFood(parent);
         assertNotNull(found);
     }
@@ -1394,7 +1394,7 @@ class FamilyActionLogicTest {
 
             Food takenFood = new Food(50, 50, Food.FoodType.SWEETS1.ordinal());
             SimYukkuri.world.getCurrentMap().getTakenOutFood().put(takenFood.getObjId(), takenFood);
-            parent.setTakeoutItem(src.enums.TakeoutItemType.FOOD, takenFood);
+            parent.setCarryItem(src.enums.TakeoutItemType.FOOD, takenFood);
 
             Food fieldFood = new Food(140, 140, Food.FoodType.SWEETS2.ordinal());
             SimYukkuri.world.getCurrentMap().getFood().put(fieldFood.getObjId(), fieldFood);
@@ -1407,7 +1407,7 @@ class FamilyActionLogicTest {
             assertEquals(takenFood.getObjId(), parent.getCurrentEvent().getTarget());
             assertEquals(1, SimYukkuri.world.getCurrentMap().getEvent().size());
             assertTrue(SimYukkuri.world.getCurrentMap().getEvent().get(0) instanceof SuperEatingTimeEvent);
-            assertTrue(parent.getTakeoutItem(src.enums.TakeoutItemType.FOOD) == null);
+            assertTrue(parent.getCarryItem(src.enums.TakeoutItemType.FOOD) == null);
         }
 
         @Test

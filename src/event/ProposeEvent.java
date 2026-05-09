@@ -13,7 +13,6 @@ import src.enums.Intelligence;
 import src.logic.BodyLogic;
 import src.system.MessagePool;
 import src.system.ResourceUtil;
-import src.util.YukkuriUtil;
 
 /***************************************************
  * プロポーズイベント
@@ -58,10 +57,10 @@ public class ProposeEvent extends EventPacket {
 
 	// 参加チェック
 	@Override
-	public boolean checkEventResponse(Body b) {
-		Body to = YukkuriUtil.getBodyInstance(getTo());
-		Body from = YukkuriUtil.getBodyInstance(getFrom());
-		if (b == from || b == to)
+	public boolean checkEventResponse(Body body) {
+		Body targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
+		Body sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
+		if (body == sourceBody || body == targetBody)
 			return true;
 
 		return false;
@@ -69,18 +68,18 @@ public class ProposeEvent extends EventPacket {
 
 	// イベント開始動作
 	@Override
-	public void start(Body b) {
-		Body to = YukkuriUtil.getBodyInstance(getTo());
-		Body from = YukkuriUtil.getBodyInstance(getFrom());
-		if (to != null && from != null) {
-			to.wakeup();
-			from.setCurrentEvent(this);
-			to.setCurrentEvent(this);
-			int colX = BodyLogic.calcCollisionX(b, to);
-			if (from.canflyCheck()) {
-				from.moveToEvent(this, to.getX() + colX, to.getY(), to.getZ());
+	public void start(Body body) {
+		Body targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
+		Body sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
+		if (targetBody != null && sourceBody != null) {
+			targetBody.wakeup();
+			sourceBody.setCurrentEvent(this);
+			targetBody.setCurrentEvent(this);
+			int collisionX = BodyLogic.calcCollisionX(body, targetBody);
+			if (sourceBody.canflyCheck()) {
+				sourceBody.moveToEvent(this, targetBody.getX() + collisionX, targetBody.getY(), targetBody.getZ());
 			} else {
-				from.moveToEvent(this, to.getX() + colX, to.getY());
+				sourceBody.moveToEvent(this, targetBody.getX() + collisionX, targetBody.getY());
 			}
 		}
 	}
@@ -88,54 +87,54 @@ public class ProposeEvent extends EventPacket {
 	// 毎フレーム処理
 	// UpdateState.ABORTを返すとイベント終了
 	@Override
-	public UpdateState update(Body b) {
-		Body to = YukkuriUtil.getBodyInstance(getTo());
-		Body from = YukkuriUtil.getBodyInstance(getFrom());
-		if (from == null || to == null || from.isDead() || from.isRemoved() || from.isNYD())
+	public UpdateState update(Body body) {
+		Body targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
+		Body sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
+		if (sourceBody == null || targetBody == null || sourceBody.isDead() || sourceBody.isRemoved() || sourceBody.isNYD())
 			return UpdateState.ABORT;
 		// 相手が死んだか 相手が消えてしまったか非ゆっくり症発症したか取られたらイベント中断
-		if (to.isDead() || to.isRemoved() || to.isNYD() || to.isTaken()) {
-			from.setCalm();
-			from.setBodyEventResMessage(GameMessages.getMessage(from, MessagePool.Action.Surprise), 30, true,
+		if (targetBody.isDead() || targetBody.isRemoved() || targetBody.isNYD() || targetBody.isTaken()) {
+			sourceBody.setCalm();
+			sourceBody.setBodyEventResMessage(GameMessages.getMessage(sourceBody, MessagePool.Action.Surprise), 30, true,
 					false);
-			from.setHappiness(Happiness.VERY_SAD);
-			from.addStress(from.getStressLimit() / 10);
+			sourceBody.setHappiness(Happiness.VERY_SAD);
+			sourceBody.addStress(sourceBody.getStressLimit() / 10);
 			if (GameRandom.nextBoolean()) {
-				from.setForceFace(ImageCode.TIRED.ordinal());
+				sourceBody.setForceFace(ImageCode.TIRED.ordinal());
 			} else {
-				from.setForceFace(ImageCode.CRYING.ordinal());
+				sourceBody.setForceFace(ImageCode.CRYING.ordinal());
 				if (GameRandom.nextInt(3) == 0)
-					from.doYunnyaa(true);
+					sourceBody.doYunnyaa(true);
 			}
 			return UpdateState.ABORT;
 		}
 
-		int colX = BodyLogic.calcCollisionX(b, to);
+		int collisionX = BodyLogic.calcCollisionX(body, targetBody);
 		// 相手がつかまれているとき
-		if (to.isGrabbed()) {
-			from.setBodyEventResMessage(GameMessages.getMessage(from, MessagePool.Action.DontPreventUs), 30,
+		if (targetBody.isGrabbed()) {
+			sourceBody.setBodyEventResMessage(GameMessages.getMessage(sourceBody, MessagePool.Action.DontPreventUs), 30,
 					false, GameRandom.nextBoolean());
-			from.setForceFace(ImageCode.PUFF.ordinal());
-			from.setAngry();
+			sourceBody.setForceFace(ImageCode.PUFF.ordinal());
+			sourceBody.setAngry();
 			started = false;
-			from.setLockmove(false);
-			to.setLockmove(false);
-			if (from.canflyCheck())
-				from.moveToEvent(this, to.getX() + colX, to.getY(), to.getZ());
+			sourceBody.setLockmove(false);
+			targetBody.setLockmove(false);
+			if (sourceBody.canflyCheck())
+				sourceBody.moveToEvent(this, targetBody.getX() + collisionX, targetBody.getY(), targetBody.getZ());
 			else
-				from.moveToEvent(this, to.getX() + colX, to.getY());
+				sourceBody.moveToEvent(this, targetBody.getX() + collisionX, targetBody.getY());
 			// ランダムであきらめる
-			if (from.getIntelligence() != Intelligence.FOOL && GameRandom.nextInt(1500) == 0) {
+			if (sourceBody.getIntelligence() != Intelligence.FOOL && GameRandom.nextInt(1500) == 0) {
 				if (GameRandom.nextBoolean()) {
-					from.setBodyEventResMessage(
-							GameMessages.getMessage(from, MessagePool.Action.LamentNoYukkuri), 30, true, true);
-					from.setHappiness(Happiness.VERY_SAD);
-					from.setForceFace(ImageCode.CRYING.ordinal());
+					sourceBody.setBodyEventResMessage(
+							GameMessages.getMessage(sourceBody, MessagePool.Action.LamentNoYukkuri), 30, true, true);
+					sourceBody.setHappiness(Happiness.VERY_SAD);
+					sourceBody.setForceFace(ImageCode.CRYING.ordinal());
 				} else {
-					from.setBodyEventResMessage(
-							GameMessages.getMessage(from, MessagePool.Action.LamentLowYukkuri), 30, true, true);
-					from.setHappiness(Happiness.SAD);
-					from.setForceFace(ImageCode.TIRED.ordinal());
+					sourceBody.setBodyEventResMessage(
+							GameMessages.getMessage(sourceBody, MessagePool.Action.LamentLowYukkuri), 30, true, true);
+					sourceBody.setHappiness(Happiness.SAD);
+					sourceBody.setForceFace(ImageCode.TIRED.ordinal());
 				}
 				return UpdateState.ABORT;
 			}
@@ -147,28 +146,28 @@ public class ProposeEvent extends EventPacket {
 			return UpdateState.FORCE_EXEC;
 
 		// たどり着くまで
-		if (from.canflyCheck())
-			from.moveToEvent(this, to.getX() + colX, to.getY(), to.getZ());
+		if (sourceBody.canflyCheck())
+			sourceBody.moveToEvent(this, targetBody.getX() + collisionX, targetBody.getY(), targetBody.getZ());
 		else
-			from.moveToEvent(this, to.getX() + colX, to.getY());
+			sourceBody.moveToEvent(this, targetBody.getX() + collisionX, targetBody.getY());
 		tick = 0;
 		// 行動主の呼び止め
 		// from.setCalm();
 		// from.setForceFace(ImageCode.EXCITING.ordinal());
-		from.setExciting(true);
-		from.clearActionsForEvent();
+		sourceBody.setExciting(true);
+		sourceBody.clearActionsForEvent();
 		// 相手も興奮して、ぺにぺに相撲になるのの防止
-		if (to.isExciting()) {
-			to.setCalm();
-			to.clearEvent();
+		if (targetBody.isExciting()) {
+			targetBody.setCalm();
+			targetBody.clearEvent();
 		}
-		to.stay();
+		targetBody.stay();
 		if (GameRandom.nextInt(20) == 0) {
 			if (GameRandom.nextBoolean())
-				from.setBodyEventResMessage(GameMessages.getMessage(from, MessagePool.Action.PleaseWait), 30,
+				sourceBody.setBodyEventResMessage(GameMessages.getMessage(sourceBody, MessagePool.Action.PleaseWait), 30,
 						true, false);
 			else
-				from.setBodyEventResMessage(GameMessages.getMessage(from, MessagePool.Action.Excite), 30, true,
+				sourceBody.setBodyEventResMessage(GameMessages.getMessage(sourceBody, MessagePool.Action.Excite), 30, true,
 						false);
 		}
 		return null;
@@ -177,197 +176,197 @@ public class ProposeEvent extends EventPacket {
 	// イベント目標に到着した際に呼ばれる
 	// trueを返すとイベント終了
 	@Override
-	public boolean execute(Body b) {
-		Body to = YukkuriUtil.getBodyInstance(getTo());
-		Body from = YukkuriUtil.getBodyInstance(getFrom());
-		if (to == null || from == null)
+	public boolean execute(Body body) {
+		Body targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
+		Body sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
+		if (targetBody == null || sourceBody == null)
 			return true;
 		// to から呼ばれた場合は tick を進めない（2倍速防止）
-		if (b != from)
+		if (body != sourceBody)
 			return false;
-		if (to.isGrabbed()) {
+		if (targetBody.isGrabbed()) {
 			return false;
 		}
 		// 相手がかびてるor食われてる時の挙動
-		if (from.findSick(to) || to.isEatenByAnimals() || to.hasDisorder()) {
-			from.setCalm();
-			from.setBodyEventResMessage(GameMessages.getMessage(from, MessagePool.Action.Surprise), 30, true,
+		if (sourceBody.findSick(targetBody) || targetBody.isEatenByAnimals() || targetBody.hasDisorder()) {
+			sourceBody.setCalm();
+			sourceBody.setBodyEventResMessage(GameMessages.getMessage(sourceBody, MessagePool.Action.Surprise), 30, true,
 					false);
-			from.setHappiness(Happiness.VERY_SAD);
-			from.addStress(from.getStressLimit() / 10);
+			sourceBody.setHappiness(Happiness.VERY_SAD);
+			sourceBody.addStress(sourceBody.getStressLimit() / 10);
 			if (GameRandom.nextBoolean()) {
-				from.setForceFace(ImageCode.TIRED.ordinal());
+				sourceBody.setForceFace(ImageCode.TIRED.ordinal());
 			} else {
-				from.setForceFace(ImageCode.CRYING.ordinal());
+				sourceBody.setForceFace(ImageCode.CRYING.ordinal());
 				if (GameRandom.nextInt(3) == 0)
-					from.doYunnyaa(true);
+					sourceBody.doYunnyaa(true);
 			}
 			// 夫婦関係の解消
-			from.setPartner(-1);
-			if (to.getPartner() == from.getUniqueID()) {
-				to.setPartner(-1);
+			sourceBody.setPartner(-1);
+			if (targetBody.getPartner() == sourceBody.getUniqueID()) {
+				targetBody.setPartner(-1);
 			}
 			return true;
 		}
 
 		if (tick == 0) {
 			// 行動主の呼び止め
-			from.setCalm();
-			from.stayPurupuru(30);
-			from.addStress(10);
-			if (from.isRude())
-				from.setForceFace(ImageCode.VAIN.ordinal());
+			sourceBody.setCalm();
+			sourceBody.stayPurupuru(30);
+			sourceBody.addStress(10);
+			if (sourceBody.isRude())
+				sourceBody.setForceFace(ImageCode.VAIN.ordinal());
 			else
-				from.setForceFace(ImageCode.EMBARRASSED.ordinal());
-			from.setBodyEventResMessage(GameMessages.getMessage(from, MessagePool.Action.PleaseWait), 30, true,
+				sourceBody.setForceFace(ImageCode.EMBARRASSED.ordinal());
+			sourceBody.setBodyEventResMessage(GameMessages.getMessage(sourceBody, MessagePool.Action.PleaseWait), 30, true,
 					false);
 			started = true;
 		} else if (tick == 5) {
 			// 振り向く
-			to.setCurrentEvent(this);
-			to.constraintDirection(from, false);
-			from.setLockmove(true);
-			to.setLockmove(true);
+			targetBody.setCurrentEvent(this);
+			targetBody.constraintDirection(sourceBody, false);
+			sourceBody.setLockmove(true);
+			targetBody.setLockmove(true);
 		} else if (tick == 20) {
 			// 告白
-			if (from.isRude() || GameRandom.nextInt(20) == 0)
-				from.setForceFace(ImageCode.VAIN.ordinal());
+			if (sourceBody.isRude() || GameRandom.nextInt(20) == 0)
+				sourceBody.setForceFace(ImageCode.VAIN.ordinal());
 			else
-				from.setForceFace(ImageCode.EMBARRASSED.ordinal());
+				sourceBody.setForceFace(ImageCode.EMBARRASSED.ordinal());
 			// カップルの設定(ただし、ここではやる側のみ)
-			from.setPartner(to.getUniqueID());
+			sourceBody.setPartner(targetBody.getUniqueID());
 			// 告白セリフ
-			from.setBodyEventResMessage(GameMessages.getMessage(from, MessagePool.Action.Propose), 30, true,
+			sourceBody.setBodyEventResMessage(GameMessages.getMessage(sourceBody, MessagePool.Action.Propose), 30, true,
 					false);
-			from.stayPurupuru(50);
-			to.setForceFace(ImageCode.EMBARRASSED.ordinal());
+			sourceBody.stayPurupuru(50);
+			targetBody.setForceFace(ImageCode.EMBARRASSED.ordinal());
 		} else if (tick == 40) {
 			// 双方の反応
 			// 成功判定
-			boolean sayOK = acceptPropose(from, to);
+			boolean sayOK = acceptPropose(sourceBody, targetBody);
 
 			// 成功
 			if (sayOK) {
-				to.setForceFace(ImageCode.SMILE.ordinal());
-				to.setPartner(from.getUniqueID());
-				to.setBodyEventResMessage(GameMessages.getMessage(to, MessagePool.Action.ProposeYes), 30, true,
+				targetBody.setForceFace(ImageCode.SMILE.ordinal());
+				targetBody.setPartner(sourceBody.getUniqueID());
+				targetBody.setBodyEventResMessage(GameMessages.getMessage(targetBody, MessagePool.Action.ProposeYes), 30, true,
 						false);
 				// ゲスほど幸福度は低い
-				switch (from.getAttitude()) {
+				switch (sourceBody.getAttitude()) {
 					case VERY_NICE:
-						from.addStress(-from.getStressLimit() / 5);
-						from.addMemories(50);
+						sourceBody.addStress(-sourceBody.getStressLimit() / 5);
+						sourceBody.addMemories(50);
 						break;
 					case NICE:
-						from.addStress(-from.getStressLimit() / 10);
-						from.addMemories(40);
+						sourceBody.addStress(-sourceBody.getStressLimit() / 10);
+						sourceBody.addMemories(40);
 						break;
 					case AVERAGE:
-						from.addStress(-from.getStressLimit() / 20);
-						from.addMemories(30);
+						sourceBody.addStress(-sourceBody.getStressLimit() / 20);
+						sourceBody.addMemories(30);
 						break;
 					case SHITHEAD:
 					case SUPER_SHITHEAD:
-						from.addStress(-from.getStressLimit() / 30);
-						from.addMemories(30);
+						sourceBody.addStress(-sourceBody.getStressLimit() / 30);
+						sourceBody.addMemories(30);
 						break;
 				}
-				switch (to.getAttitude()) {
+				switch (targetBody.getAttitude()) {
 					case VERY_NICE:
-						to.addStress(-to.getStressLimit() / 5);
-						to.addMemories(50);
+						targetBody.addStress(-targetBody.getStressLimit() / 5);
+						targetBody.addMemories(50);
 						break;
 					case NICE:
-						to.addStress(-to.getStressLimit() / 10);
-						to.addMemories(40);
+						targetBody.addStress(-targetBody.getStressLimit() / 10);
+						targetBody.addMemories(40);
 						break;
 					case AVERAGE:
-						to.addStress(-to.getStressLimit() / 20);
-						to.addMemories(30);
+						targetBody.addStress(-targetBody.getStressLimit() / 20);
+						targetBody.addMemories(30);
 						break;
 					case SHITHEAD:
 					case SUPER_SHITHEAD:
-						to.addStress(-to.getStressLimit() / 30);
-						to.addMemories(30);
+						targetBody.addStress(-targetBody.getStressLimit() / 30);
+						targetBody.addMemories(30);
 						break;
 				}
 			}
 			// 失敗
 			else {
-				if (to.findSick(from)) {
-					to.setBodyEventResMessage(GameMessages.getMessage(to, MessagePool.Action.HateMoldyYukkuri),
+				if (targetBody.findSick(sourceBody)) {
+					targetBody.setBodyEventResMessage(GameMessages.getMessage(targetBody, MessagePool.Action.HateMoldyYukkuri),
 							30, true, false);
-					to.setForceFace(ImageCode.PUFF.ordinal());
+					targetBody.setForceFace(ImageCode.PUFF.ordinal());
 				} else {
-					to.setBodyEventResMessage(GameMessages.getMessage(to, MessagePool.Action.ProposeNo), 30,
+					targetBody.setBodyEventResMessage(GameMessages.getMessage(targetBody, MessagePool.Action.ProposeNo), 30,
 							true, false);
-					if (to.isRude()) {
-						to.setForceFace(ImageCode.RUDE.ordinal());
+					if (targetBody.isRude()) {
+						targetBody.setForceFace(ImageCode.RUDE.ordinal());
 					} else {
-						to.setForceFace(ImageCode.TIRED.ordinal());
+						targetBody.setForceFace(ImageCode.TIRED.ordinal());
 					}
 				}
-				from.setPartner(-1);
+				sourceBody.setPartner(-1);
 				// ストレスと思い出の上下
-				switch (from.getAttitude()) {
+				switch (sourceBody.getAttitude()) {
 					case VERY_NICE:
-						from.addStress(from.getStressLimit() / 20);
-						from.addMemories(-50);
+						sourceBody.addStress(sourceBody.getStressLimit() / 20);
+						sourceBody.addMemories(-50);
 						break;
 					case NICE:
-						from.addStress(from.getStressLimit() / 16);
-						from.addMemories(-40);
+						sourceBody.addStress(sourceBody.getStressLimit() / 16);
+						sourceBody.addMemories(-40);
 						break;
 					case AVERAGE:
-						from.addStress(from.getStressLimit() / 10);
-						from.addMemories(-30);
+						sourceBody.addStress(sourceBody.getStressLimit() / 10);
+						sourceBody.addMemories(-30);
 						break;
 					case SHITHEAD:
 					case SUPER_SHITHEAD:
-						from.addStress(from.getStressLimit() / 6);
-						from.addMemories(-20);
+						sourceBody.addStress(sourceBody.getStressLimit() / 6);
+						sourceBody.addMemories(-20);
 						break;
 				}
-				switch (to.getAttitude()) {
+				switch (targetBody.getAttitude()) {
 					case VERY_NICE:
-						to.addStress(-to.getStressLimit() / 20);
+						targetBody.addStress(-targetBody.getStressLimit() / 20);
 						break;
 					case NICE:
-						to.addStress(-to.getStressLimit() / 16);
+						targetBody.addStress(-targetBody.getStressLimit() / 16);
 						break;
 					case AVERAGE:
-						to.addStress(-to.getStressLimit() / 10);
+						targetBody.addStress(-targetBody.getStressLimit() / 10);
 						break;
 					case SHITHEAD:
 					case SUPER_SHITHEAD:
-						to.addStress(-to.getStressLimit() / 6);
+						targetBody.addStress(-targetBody.getStressLimit() / 6);
 						break;
 				}
 			}
 		} else if (tick == 60) {
 			// 成功時はすっきりを迫る
-			if (from.getPartner() == to.getUniqueID()) {
-				from.setHappiness(Happiness.VERY_HAPPY);
-				from.clearActionsForEvent();
-				from.setExciting(true);
-				from.setForceFace(ImageCode.EXCITING.ordinal());
-				from.setBodyEventResMessage(GameMessages.getMessage(from, MessagePool.Action.LetsPlay), 30,
+			if (sourceBody.getPartner() == targetBody.getUniqueID()) {
+				sourceBody.setHappiness(Happiness.VERY_HAPPY);
+				sourceBody.clearActionsForEvent();
+				sourceBody.setExciting(true);
+				sourceBody.setForceFace(ImageCode.EXCITING.ordinal());
+				sourceBody.setBodyEventResMessage(GameMessages.getMessage(sourceBody, MessagePool.Action.LetsPlay), 30,
 						true, false);
-				to.setBodyEventResMessage(GameMessages.getMessage(to, MessagePool.Action.OKcome), 30, true,
+				targetBody.setBodyEventResMessage(GameMessages.getMessage(targetBody, MessagePool.Action.OKcome), 30, true,
 						false);
 			}
 			// 失敗時は泣いて逃げる
 			else {
-				from.setHappiness(Happiness.VERY_SAD);
-				from.setForceFace(ImageCode.CRYING.ordinal());
-				from.setBodyEventResMessage(GameMessages.getMessage(from, MessagePool.Action.Heartbreak), 30,
-						true, false);
-				from.runAway(to.getX(), to.getY());
+				sourceBody.setHappiness(Happiness.VERY_SAD);
+				sourceBody.setForceFace(ImageCode.CRYING.ordinal());
+				sourceBody.setBodyEventResMessage(GameMessages.getMessage(sourceBody, MessagePool.Action.Heartbreak), 30,
+							true, false);
+				sourceBody.runAway(targetBody.getX(), targetBody.getY());
 				return true;
 			}
 		} else if (tick == 70) {
-			to.constraintDirection(from, true);
-			from.doSukkiri(to);
+			targetBody.constraintDirection(sourceBody, true);
+			sourceBody.doSukkiri(targetBody);
 			return true;
 		}
 		tick++;
@@ -383,7 +382,7 @@ public class ProposeEvent extends EventPacket {
 	 */
 	public boolean acceptPropose(Body f, Body t) {
 		// 既婚
-		if (YukkuriUtil.getBodyInstance(t.getPartner()) != null)
+		if (src.util.BodyRegistry.getBodyInstance(t.getPartner()) != null)
 			return false;
 		// カビ発見
 		if (t.findSick(f))
@@ -400,17 +399,17 @@ public class ProposeEvent extends EventPacket {
 
 	// イベント終了処理
 	@Override
-	public void end(Body b) {
-		Body to = YukkuriUtil.getBodyInstance(getTo());
-		Body from = YukkuriUtil.getBodyInstance(getFrom());
-		if (from != null) {
-			from.setCalm();
-			from.setCurrentEvent(null);
-			from.setLockmove(false);
+	public void end(Body body) {
+		Body targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
+		Body sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
+		if (sourceBody != null) {
+			sourceBody.setCalm();
+			sourceBody.setCurrentEvent(null);
+			sourceBody.setLockmove(false);
 		}
-		if (to != null) {
-			to.setCurrentEvent(null);
-			to.setLockmove(false);
+		if (targetBody != null) {
+			targetBody.setCurrentEvent(null);
+			targetBody.setLockmove(false);
 		}
 	}
 

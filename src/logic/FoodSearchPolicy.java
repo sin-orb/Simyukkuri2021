@@ -7,7 +7,7 @@ import src.base.Body;
 import src.base.Obj;
 import src.draw.Translate;
 import src.enums.AgeState;
-import src.enums.BaryInUGState;
+import src.enums.BurialState;
 import src.enums.BodyRank;
 import src.enums.FavItemType;
 import src.enums.FootBake;
@@ -25,7 +25,6 @@ import src.util.GameEnvironment;
 import src.util.GameMessages;
 import src.util.GameRandom;
 import src.util.GameWorld;
-import src.util.YukkuriUtil;
 
 /**
  * 食料探索のルールをまとめたヘルパー。
@@ -34,20 +33,20 @@ public final class FoodSearchPolicy {
 	private FoodSearchPolicy() {
 	}
 
-	public static Obj searchFoodStandard(Body b, boolean[] forceEat) {
-		Obj found = null;
-		Obj foundTakeout = null;
-		int minDistance = b.getEYESIGHTorg();
+	public static Obj searchFoodStandard(Body body, boolean[] forceEat) {
+		Obj targetObject = null;
+		Obj takeoutTargetObject = null;
+		int minDistance = body.getEyesightBase();
 		int looks = -1000;
-		int wallMode = b.getBodyAgeState().ordinal();
+		int wallMode = body.getBodyAgeState().ordinal();
 		forceEat[0] = false;
-		if (b.canflyCheck()) {
+		if (body.canflyCheck()) {
 			wallMode = AgeState.ADULT.ordinal();
 		}
 
-		if (b.isSoHungry()) {
-			if (b.getTakeoutItem(TakeoutItemType.FOOD) != null) {
-				found = b.dropTakeoutItem(TakeoutItemType.FOOD);
+		if (body.isSoHungry()) {
+			if (body.getCarryItem(TakeoutItemType.FOOD) != null) {
+				targetObject = body.dropTakeoutItem(TakeoutItemType.FOOD);
 			}
 		}
 
@@ -59,30 +58,30 @@ public final class FoodSearchPolicy {
 			if (minDistance < 1) {
 				break;
 			}
-			int distance = Translate.distance(b.getX(), b.getY(), f.getX(), f.getY());
+			int distance = Translate.distance(body.getX(), body.getY(), f.getX(), f.getY());
 			if (minDistance > distance) {
-				if (Barrier.acrossBarrier(b.getX(), b.getY(), f.getX(), f.getY(),
+				if (Barrier.acrossBarrier(body.getX(), body.getY(), f.getX(), f.getY(),
 						Barrier.MAP_BODY[wallMode] + Barrier.BARRIER_KEKKAI)) {
 					continue;
 				}
 
-				boolean flag = false;
-				boolean flagtakeout = false;
+				boolean acceptable = false;
+				boolean takeoutCandidate = false;
 				switch (f.getFoodType()) {
 				case STALK:
-					if (b.isBaby()) {
-						if (!b.isbFirstEatStalk()) {
-							flag = true;
+					if (body.isBaby()) {
+						if (!body.isFirstEatStalk()) {
+							acceptable = true;
 							forceEat[0] = true;
-						} else if (b.isHungry()) {
-							flag = true;
+						} else if (body.isHungry()) {
+							acceptable = true;
 						}
-					} else if (b.isRude() && b.isSoHungry()) {
-						flag = true;
-					} else if (!b.isRude() && b.isVeryHungry()) {
-						flag = true;
-					} else if (b.isRaper() && b.isExciting()) {
-						flag = true;
+					} else if (body.isRude() && body.isSoHungry()) {
+						acceptable = true;
+					} else if (!body.isRude() && body.isVeryHungry()) {
+						acceptable = true;
+					} else if (body.isRaper() && body.isExciting()) {
+						acceptable = true;
 					}
 					break;
 				case SWEETS1:
@@ -91,49 +90,49 @@ public final class FoodSearchPolicy {
 				case SWEETS_NORA2:
 				case SWEETS_YASEI1:
 				case SWEETS_YASEI2:
-					if (!b.isTooFull()) {
-						flag = true;
-					} else if (!b.isOverEating() && (b.isRude() || b.isNormal())) {
-						flag = true;
+					if (!body.isTooFull()) {
+						acceptable = true;
+					} else if (!body.isOverEating() && (body.isRude() || body.isNormal())) {
+						acceptable = true;
 						forceEat[0] = true;
 					} else {
-						flagtakeout = true;
+						takeoutCandidate = true;
 					}
 					break;
 				case WASTE:
 				case WASTE_NORA:
 				case WASTE_YASEI:
-					if (b.getTangType() == TangType.GOURMET && b.isStarving()) {
-						flag = true;
-					} else if (b.getTangType() == TangType.NORMAL && b.isTooHungry()) {
-						flag = true;
-					} else if (b.getTangType() == TangType.POOR) {
-						if (b.isHungry()) {
-							flag = true;
+					if (body.getTangType() == TangType.GOURMET && body.isStarving()) {
+						acceptable = true;
+					} else if (body.getTangType() == TangType.NORMAL && body.isTooHungry()) {
+						acceptable = true;
+					} else if (body.getTangType() == TangType.POOR) {
+						if (body.isHungry()) {
+							acceptable = true;
 						} else {
-							flagtakeout = true;
+							takeoutCandidate = true;
 						}
 					}
 					break;
 				default:
-					if (b.isHungry()) {
-						flag = true;
+					if (body.isHungry()) {
+						acceptable = true;
 					} else {
-						flagtakeout = true;
+						takeoutCandidate = true;
 					}
 					break;
 				}
 
-				if (flag) {
+				if (acceptable) {
 					if (looks <= f.getLooks()) {
-						found = f;
+						targetObject = f;
 						minDistance = distance;
 						looks = f.getLooks();
 					}
 				}
-				if (flagtakeout) {
+				if (takeoutCandidate) {
 					if (looks <= f.getLooks()) {
-						foundTakeout = f;
+						takeoutTargetObject = f;
 						minDistance = distance;
 						looks = f.getLooks();
 					}
@@ -141,119 +140,119 @@ public final class FoodSearchPolicy {
 			}
 		}
 
-		if (foundTakeout != null) {
-			if (b.getTakeoutItem(TakeoutItemType.FOOD) == null) {
-				if (FoodLogic.checkTakeout(b, foundTakeout)) {
-					b.setToTakeout(true);
-					return foundTakeout;
+		if (takeoutTargetObject != null) {
+			if (body.getCarryItem(TakeoutItemType.FOOD) == null) {
+				if (FoodLogic.checkTakeout(body, takeoutTargetObject)) {
+					body.setToTakeout(true);
+					return takeoutTargetObject;
 				}
 			}
 		}
-		if (found == null && b.isFull()) {
+		if (targetObject == null && body.isFull()) {
 			return null;
 		}
 
 		for (Map.Entry<Integer, Stalk> entry : GameWorld.get().getCurrentMap().getStalk().entrySet()) {
 			Stalk s = entry.getValue();
-			Body p = GameWorld.get().getCurrentMap().getBody().get(s.getPlantYukkuri());
-			if (p != null) {
-				if (p == b) {
+			Body plantBody = GameWorld.get().getCurrentMap().getBody().get(s.getPlantYukkuri());
+			if (plantBody != null) {
+				if (plantBody == body) {
 					continue;
 				}
-				if (p.getBaryState() != BaryInUGState.ALL &&
-						!(p.getBaryState() == BaryInUGState.NEARLY_ALL && !p.hasOkazari())) {
+				if (plantBody.getBurialState() != BurialState.ALL &&
+						!(plantBody.getBurialState() == BurialState.NEARLY_ALL && !plantBody.hasOkazari())) {
 					continue;
 				}
 				List<Integer> babyList = ((Stalk) s).getBindBabies();
 				if (babyList != null && babyList.size() != 0) {
-					boolean bBabyFlag = false;
-					for (int ibaby : babyList) {
-						Body baby = YukkuriUtil.getBodyInstance(ibaby);
+					boolean hasBaby = false;
+					for (int babyId : babyList) {
+						Body baby = src.util.BodyRegistry.getBodyInstance(babyId);
 						if (baby == null) {
 							continue;
 						}
-						bBabyFlag = true;
+						hasBaby = true;
 						break;
 					}
-					if (bBabyFlag) {
+					if (hasBaby) {
 						continue;
 					}
 				}
 			}
-			int distance = Translate.distance(b.getX(), b.getY(), s.getX(), s.getY());
+			int distance = Translate.distance(body.getX(), body.getY(), s.getX(), s.getY());
 			if (minDistance > distance) {
-				if (Barrier.acrossBarrier(b.getX(), b.getY(), s.getX(), s.getY(),
+				if (Barrier.acrossBarrier(body.getX(), body.getY(), s.getX(), s.getY(),
 						Barrier.MAP_BODY[wallMode] + Barrier.BARRIER_KEKKAI)) {
 					continue;
 				}
-				found = s;
+				targetObject = s;
 				minDistance = distance;
 			}
 		}
 
-		if (found == null) {
+		if (targetObject == null) {
 			for (Map.Entry<Integer, Vomit> entry : GameWorld.get().getCurrentMap().getVomit().entrySet()) {
-				Vomit v = entry.getValue();
-				int distance = Translate.distance(b.getX(), b.getY(), v.getX(), v.getY());
+				Vomit vomit = entry.getValue();
+				int distance = Translate.distance(body.getX(), body.getY(), vomit.getX(), vomit.getY());
 				if (minDistance > distance) {
-					if (Barrier.acrossBarrier(b.getX(), b.getY(), v.getX(), v.getY(),
+					if (Barrier.acrossBarrier(body.getX(), body.getY(), vomit.getX(), vomit.getY(),
 							Barrier.MAP_BODY[wallMode] + Barrier.BARRIER_KEKKAI)) {
 						continue;
 					}
-					found = v;
+					targetObject = vomit;
 					minDistance = distance;
 				}
 			}
 		}
-		if (found == null) {
+		if (targetObject == null) {
 			for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
-				Body d = entry.getValue();
-				if (d == null || d.isRemoved()) {
+				Body deadCandidate = entry.getValue();
+				if (deadCandidate == null || deadCandidate.isRemoved()) {
 					continue;
 				}
-				if (b == d) {
+				if (body == deadCandidate) {
 					continue;
 				}
-				if (b.isRaper()) {
-					if (!d.isDead() && !d.isUnBirth()) {
+				if (body.isRaper()) {
+					if (!deadCandidate.isDead() && !deadCandidate.isUnBirth()) {
 						continue;
 					}
 				} else {
-					if (!FoodLogic.checkCanEatBody(b, d)) {
+					if (!FoodLogic.checkCanEatBody(body, deadCandidate)) {
 						continue;
 					}
 				}
-				if (d.isbindStalk()) {
+				if (deadCandidate.hasBindStalk()) {
 					continue;
 				}
-				int distance = Translate.distance(b.getX(), b.getY(), d.getX(), d.getY());
+				int distance = Translate.distance(body.getX(), body.getY(), deadCandidate.getX(), deadCandidate.getY());
 				if (minDistance > distance) {
-					if (Barrier.acrossBarrier(b.getX(), b.getY(), d.getX(), d.getY(),
+					if (Barrier.acrossBarrier(body.getX(), body.getY(), deadCandidate.getX(), deadCandidate.getY(),
 							Barrier.MAP_BODY[wallMode] + Barrier.BARRIER_KEKKAI)) {
 						continue;
 					}
-					found = d;
+					targetObject = deadCandidate;
 					minDistance = distance;
 				}
 			}
 		}
-		if (found == null) {
+		if (targetObject == null) {
 			for (Map.Entry<Integer, Shit> entry : GameWorld.get().getCurrentMap().getShit().entrySet()) {
-				Shit s = entry.getValue();
-				if (!b.isTooHungry()) {
+				Shit shit = entry.getValue();
+				if (!body.isTooHungry()) {
 					break;
 				}
-				int distance = Translate.distance(b.getX(), b.getY(), s.getX(), s.getY());
+				int distance = Translate.distance(body.getX(), body.getY(), shit.getX(), shit.getY());
 				if (minDistance > distance) {
-					if (Barrier.acrossBarrier(b.getX(), b.getY(), s.getX(), s.getY(),
+					if (Barrier.acrossBarrier(body.getX(), body.getY(), shit.getX(), shit.getY(),
 							Barrier.MAP_BODY[wallMode] + Barrier.BARRIER_KEKKAI)) {
 						continue;
 					}
-					found = s;
+					targetObject = shit;
 					minDistance = distance;
 				}
 			}
 		}
-		return found;
+		return targetObject;
 	}
 }

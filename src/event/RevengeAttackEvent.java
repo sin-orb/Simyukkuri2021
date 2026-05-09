@@ -17,7 +17,6 @@ import src.enums.ImageCode;
 import src.logic.BodyLogic;
 import src.system.MessagePool;
 import src.system.ResourceUtil;
-import src.util.YukkuriUtil;
 
 /***************************************************
  * ゆっくりが攻撃されたときの反撃イベント
@@ -43,7 +42,7 @@ public class RevengeAttackEvent extends EventPacket {
 
 	// 参加チェック
 	@Override
-	public boolean checkEventResponse(Body b) {
+	public boolean checkEventResponse(Body body) {
 		priority = EventPriority.HIGH;
 		// これは特殊な扱いをするイベントで先に条件をチェックしてから
 		// 自分自身のリストに登録するので無条件にtrue
@@ -52,63 +51,63 @@ public class RevengeAttackEvent extends EventPacket {
 
 	// イベント開始動作
 	@Override
-	public void start(Body b) {
-		Body to = YukkuriUtil.getBodyInstance(getTo());
-		b.setToFood(false);
-		b.setToBed(false);
-		b.setToShit(false);
-		b.setToSteal(false);
-		b.setToSukkiri(false);
-		b.setToTakeout(true);
-		b.setWakeUpTime(b.getAge());// 眠気が覚める
-		if (to != null) {
-			int colX = BodyLogic.calcCollisionX(b, to);
-			b.moveToEvent(this, to.getX() + colX, to.getY());
+	public void start(Body body) {
+		Body targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
+		body.setToFood(false);
+		body.setToBed(false);
+		body.setToShit(false);
+		body.setToSteal(false);
+		body.setToSukkiri(false);
+		body.setToTakeout(true);
+		body.setWakeUpTime(body.getAge());// 眠気が覚める
+		if (targetBody != null) {
+			int colX = BodyLogic.calcCollisionX(body, targetBody);
+			body.moveToEvent(this, targetBody.getX() + colX, targetBody.getY());
 		}
 	}
 
 	// 毎フレーム処理
 	// UpdateState.ABORTを返すとイベント終了
 	@Override
-	public UpdateState update(Body b) {
-		Body to = YukkuriUtil.getBodyInstance(getTo());
+	public UpdateState update(Body body) {
+		Body targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
 		// 相手が消えてしまったらイベント中断
-		if (to == null || to.isRemoved() || to.isTaken())
+		if (targetBody == null || targetBody.isRemoved() || targetBody.isTaken())
 			return UpdateState.ABORT;
 		// 相手に追いつけないケースがあるため、一定距離まで近づいたら相手を呼び止める
-		if (Translate.distance(b.getX(), b.getY(), to.getX(), to.getY()) < 2500) {
-			to.stay();
+		if (Translate.distance(body.getX(), body.getY(), targetBody.getX(), targetBody.getY()) < 2500) {
+			targetBody.stay();
 		}
-		int colX = BodyLogic.calcCollisionX(b, to);
-		b.moveToEvent(this, to.getX() + colX, to.getY());
+		int colX = BodyLogic.calcCollisionX(body, targetBody);
+		body.moveToEvent(this, targetBody.getX() + colX, targetBody.getY());
 		return null;
 	}
 
 	// イベント目標に到着した際に呼ばれる
 	// trueを返すとイベント終了
 	@Override
-	public boolean execute(Body b) {
+	public boolean execute(Body body) {
 		// 動けない場合と、ランダムであきらめる
-		if (b.isDontMove() || GameRandom.nextInt(50) == 0) {
-			b.setMessage(GameMessages.getMessage(b, MessagePool.Action.LamentNoYukkuri), 40, true, true);
-			b.setHappiness(Happiness.SAD);
+		if (body.isDontMove() || GameRandom.nextInt(50) == 0) {
+			body.setMessage(GameMessages.getMessage(body, MessagePool.Action.LamentNoYukkuri), 40, true, true);
+			body.setHappiness(Happiness.SAD);
 			return true;
 		}
-		Body to = YukkuriUtil.getBodyInstance(getTo());
+		Body targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
 		// 相手が残っていたら攻撃
-		if (to != null && !to.isRemoved() && to.getZ() < 5) {
-			b.setWorldEventResMessage(GameMessages.getMessage(b, MessagePool.Action.RevengeAttack), Const.HOLDMESSAGE,
+		if (targetBody != null && !targetBody.isRemoved() && targetBody.getZ() < 5) {
+			body.setWorldEventResMessage(GameMessages.getMessage(body, MessagePool.Action.RevengeAttack), Const.HOLDMESSAGE,
 					true, false);
-			if (b.getDirection() == Direction.LEFT) {
-				GameView.addEffect(EffectType.HIT, b.getX() - 10, b.getY(), 0,
+			if (body.getDirection() == Direction.LEFT) {
+				GameView.addEffect(EffectType.HIT, body.getX() - 10, body.getY(), 0,
 						0, 0, 0, false, 500, 1, true, false, true);
 			} else {
-				GameView.addEffect(EffectType.HIT, b.getX() + 10, b.getY(), 0,
+				GameView.addEffect(EffectType.HIT, body.getX() + 10, body.getY(), 0,
 						0, 0, 0, true, 500, 1, true, false, true);
 			}
-			b.setForceFace(ImageCode.PUFF.ordinal());
-			to.strikeByYukkuri(b, this, false);
-			b.addStress(-500);
+			body.setForceFace(ImageCode.PUFF.ordinal());
+			targetBody.strikeByYukkuri(body, this, false);
+			body.addStress(-500);
 		}
 		return true;
 	}

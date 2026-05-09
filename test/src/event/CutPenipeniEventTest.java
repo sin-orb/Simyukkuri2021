@@ -62,7 +62,7 @@ public class CutPenipeniEventTest extends EventTestBase {
         Body victim = createBody(2, 120, 120);
         CutPenipeniEvent event = new CutPenipeniEvent(attacker, victim, null, 10);
         assertDoesNotThrow(() -> event.end(victim));
-        assertTrue(victim.isbPenipeniCutted());
+        assertTrue(victim.isPenipeniCutted());
     }
 
     @Test
@@ -91,7 +91,7 @@ public class CutPenipeniEventTest extends EventTestBase {
         CutPenipeniEvent event = new CutPenipeniEvent(attacker, victim, null, 10);
         UpdateState result = event.update(victim);
         assertNull(result);
-        assertTrue(victim.isbPenipeniCutted());
+        assertTrue(victim.isPenipeniCutted());
     }
 
     // --- tick=20: isNotNYD=true, nextInt(2)==0 → Scream2 ---
@@ -197,7 +197,7 @@ public class CutPenipeniEventTest extends EventTestBase {
             CutPenipeniEvent event = new CutPenipeniEvent(attacker, victim, null, 10);
 
             assertEquals(UpdateState.FORCE_EXEC, event.update(victim));
-            assertTrue(victim.isbPenipeniCutted());
+            assertTrue(victim.isPenipeniCutted());
             assertFalse(victim.isRaper());
             assertEquals(beforeDamage + 50, victim.getDamage());
             assertEquals(Happiness.VERY_SAD, victim.getHappiness());

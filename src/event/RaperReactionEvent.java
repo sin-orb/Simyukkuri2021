@@ -15,7 +15,7 @@ import src.base.Obj;
 import src.draw.Translate;
 import src.enums.ActionState;
 import src.enums.Attitude;
-import src.enums.BaryInUGState;
+import src.enums.BurialState;
 import src.enums.Direction;
 import src.enums.EffectType;
 import src.enums.Happiness;
@@ -27,7 +27,6 @@ import src.logic.BodyLogic;
 import src.logic.FamilyActionLogic;
 import src.system.MessagePool;
 import src.system.ResourceUtil;
-import src.util.YukkuriUtil;
 
 /***************************************************
  * レイパー襲撃に対する反応イベント
@@ -47,8 +46,8 @@ public class RaperReactionEvent extends EventPacket {
 	/**
 	 * コンストラクタ.
 	 */
-	public RaperReactionEvent(Body f, Body t, Obj tgt, int cnt) {
-		super(f, t, tgt, cnt);
+	public RaperReactionEvent(Body fromBody, Body toBody, Obj targetObject, int count) {
+		super(fromBody, toBody, targetObject, count);
 	}
 
 	public RaperReactionEvent() {
@@ -65,55 +64,55 @@ public class RaperReactionEvent extends EventPacket {
 
 	// 参加チェック
 	@Override
-	public boolean checkEventResponse(Body b) {
+	public boolean checkEventResponse(Body body) {
 		// 最低限のチェックはRaperWakeupEventで済んでるんで省略
 		priority = EventPriority.HIGH;
-		if (b.canflyCheck()) {
+		if (body.canflyCheck()) {
 			// 飛べる固体
 			return false;
 		} else {
-			boolean bIsNearRaper = false;
+			boolean foundRaper = false;
 
 			// 全ゆっくりに対してチェック
 			for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
-				Body p = entry.getValue();
+				Body predatorBody = entry.getValue();
 				// 自分同士のチェックは無意味なのでスキップ
-				if (p == b) {
+				if (predatorBody == body) {
 					continue;
 				}
 
 				// 興奮したレイパーでなければスキップ
-				if (!p.isRaper() && !p.isExciting() && !p.isDead()) {
+				if (!predatorBody.isRaper() && !predatorBody.isExciting() && !predatorBody.isDead()) {
 					continue;
 				}
 
 				// 相手との間に壁があればスキップ
-				if (Barrier.acrossBarrier(b.getX(), b.getY(), p.getX(), p.getY(),
-						Barrier.MAP_BODY[b.getBodyAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
+				if (Barrier.acrossBarrier(body.getX(), body.getY(), predatorBody.getX(), predatorBody.getY(),
+						Barrier.MAP_BODY[body.getBodyAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
 					continue;
 				}
 
-				bIsNearRaper = true;
+				foundRaper = true;
 			}
 
 			// レイパーが近くにいない
-			if (!bIsNearRaper) {
+			if (!foundRaper) {
 				return false;
 			}
 
 			// 埋まっていたら参加しない
-			if (b.getBaryState() == BaryInUGState.ALL || b.getBaryState() == BaryInUGState.NEARLY_ALL) {
+			if (body.getBurialState() == BurialState.ALL || body.getBurialState() == BurialState.NEARLY_ALL) {
 				return false;
 			}
 
 			// うんうん奴隷は逃げる
-			if (b.getPublicRank() == PublicRank.UnunSlave) {
+			if (body.getPublicRank() == PublicRank.UnunSlave) {
 				state = ActionState.ESCAPE;
 			} else {
 				// 飛べない固体
-				if ((b.isAdult() && !b.isDamaged() && !b.isSick() && !b.hasBabyOrStalk()
-						&& (b.isSmart() && b.getIntelligence() == Intelligence.FOOL) && !b.isDontMove()) ||
-						b.getType() == 2006) {
+				if ((body.isAdult() && !body.isDamaged() && !body.isSick() && !body.hasBabyOrStalk()
+						&& (body.isSmart() && body.getIntelligence() == Intelligence.FOOL) && !body.isDontMove()) ||
+						body.getType() == 2006) {
 					// 健康でバカな善良な大人（またはドスまりさは状態に限らず常に）迎撃に向かう
 					state = ActionState.ATTACK;
 				} else {
@@ -127,18 +126,18 @@ public class RaperReactionEvent extends EventPacket {
 
 	// イベント開始動作
 	@Override
-	public void start(Body b) {
-		if (b.isNYD()) {
+	public void start(Body body) {
+		if (body.isNYD()) {
 			return;
 		}
 		if (state == ActionState.ATTACK) {
 			// 攻撃は敵に向かう
-			moveTarget(b);
-			b.setAngry();
+			moveTargetId(body);
+			body.setAngry();
 		} else {
 			// 逃げは敵と反対方向へ
-			escapeTarget(b);
-			b.setHappiness(Happiness.VERY_SAD);
+			escapeTarget(body);
+			body.setHappiness(Happiness.VERY_SAD);
 		}
 	}
 
@@ -152,12 +151,12 @@ public class RaperReactionEvent extends EventPacket {
 
 	// 毎フレーム処理
 	@Override
-	public UpdateState update(Body b) {
-		Body from = YukkuriUtil.getBodyInstance(getFrom());
+	public UpdateState update(Body body) {
+		Body sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
 		// 相手が消えてしまったら他のレイパーを捜索
-		if (from == null || from.isRemoved() || from.isDead() || !from.isRaper()) {
+		if (sourceBody == null || sourceBody.isRemoved() || sourceBody.isDead() || !sourceBody.isRaper()) {
 			setFrom(searchNextTarget());
-			if (from == null)
+			if (sourceBody == null)
 				return UpdateState.ABORT;
 		}
 
@@ -169,66 +168,66 @@ public class RaperReactionEvent extends EventPacket {
 
 		if (state == ActionState.ATTACK) {
 			// 妊娠したらドスでない限り逃げに変更
-			if (b.hasBabyOrStalk() && b.getType() != 2006) {
+			if (body.hasBabyOrStalk() && body.getType() != 2006) {
 				state = ActionState.ESCAPE;
 			} else {
 				// 攻撃は敵に向かう。ドスは妊娠させられようが何しようが駆除に向かう。
-				b.setForceFace(ImageCode.PUFF.ordinal());
-				moveTarget(b);
+				body.setForceFace(ImageCode.PUFF.ordinal());
+				moveTargetId(body);
 				if (GameRandom.nextInt(20) == 0) {
-					b.setWorldEventResMessage(GameMessages.getMessage(b, MessagePool.Action.AttackRapist),
+					body.setWorldEventResMessage(GameMessages.getMessage(body, MessagePool.Action.AttackRapist),
 							Const.HOLDMESSAGE, true, false);
 				}
 			}
 		} else {
 			// 賢い固体は反撃チェック
 			if ((age % 10) == 0) {
-				if (b.getType() == 2006 ||
-						(b.isAdult() && b.getIntelligence() == Intelligence.WISE &&
-								b.getPublicRank() != PublicRank.UnunSlave)) {
-					Body target = null;
+				if (body.getType() == 2006 ||
+						(body.isAdult() && body.getIntelligence() == Intelligence.WISE &&
+								body.getPublicRank() != PublicRank.UnunSlave)) {
+					Body targetBody = null;
 					// 何らかの原因で発情が解除されたら制裁
 					if (!checkConditionOfTarget()) {
-						target = from;
-						if (target.isDead()) {
-							target = searchAttackTarget();
+						targetBody = sourceBody;
+						if (targetBody.isDead()) {
+							targetBody = searchAttackTarget();
 						}
 					} else {
-						target = searchAttackTarget();
+						targetBody = searchAttackTarget();
 					}
-					if (target != null) {
-						int num = 0;
+					if (targetBody != null) {
+						int participantCount = 0;
 						// 反撃対象が見つかったら同イベント実行中の固体イベントを書き換え
 						for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
-							Body body = entry.getValue();
-							if (body.getCurrentEvent() instanceof RaperReactionEvent) {
+							Body eventBody = entry.getValue();
+							if (eventBody.getCurrentEvent() instanceof RaperReactionEvent) {
 								// うんうん奴隷は不参加
-								if (body.getPublicRank() == PublicRank.UnunSlave)
+								if (eventBody.getPublicRank() == PublicRank.UnunSlave)
 									continue;
 								// 妊娠、大人以外は不参加.動けない場合も不参加
-								if (body.hasBabyOrStalk() || body.isSick() || !body.isAdult() || body.isDontMove())
+								if (eventBody.hasBabyOrStalk() || eventBody.isSick() || !eventBody.isAdult() || eventBody.isDontMove())
 									continue;
 								// ドゲスは不参加、善良ほど参加しやすく
-								if (body.getAttitude() == Attitude.SUPER_SHITHEAD)
-									num = 1;
-								else if (body.getAttitude() == Attitude.SHITHEAD)
-									num = GameRandom.nextInt(3);
-								else if (body.getAttitude() == Attitude.AVERAGE)
-									num = GameRandom.nextInt(2);
+								if (eventBody.getAttitude() == Attitude.SUPER_SHITHEAD)
+									participantCount = 1;
+								else if (eventBody.getAttitude() == Attitude.SHITHEAD)
+									participantCount = GameRandom.nextInt(3);
+								else if (eventBody.getAttitude() == Attitude.AVERAGE)
+									participantCount = GameRandom.nextInt(2);
 								else
-									num = 0;
+									participantCount = 0;
 								// ドスは常に参加。ドスはとにかく群れをゆっくりさせるため、れいぱー駆除に命をかける
-								if (body.getType() == 2006) {
-									num = 0;
+								if (eventBody.getType() == 2006) {
+									participantCount = 0;
 								}
-								if (num == 0) {
-									RaperReactionEvent ev = (RaperReactionEvent) body.getCurrentEvent();
-									ev.setFrom(target);
+								if (participantCount == 0) {
+									RaperReactionEvent ev = (RaperReactionEvent) eventBody.getCurrentEvent();
+									ev.setFrom(targetBody);
 									ev.state = ActionState.ATTACK;
 								}
 							}
 						}
-						setCounterWorldEventMessage(b);
+						setCounterWorldEventMessage(body);
 					} else {
 						// れいぱーがもういない
 						return UpdateState.ABORT;
@@ -236,12 +235,12 @@ public class RaperReactionEvent extends EventPacket {
 				}
 			} else {
 				// 逃げは敵と反対方向へ
-				b.setForceFace(ImageCode.CRYING.ordinal());
+				body.setForceFace(ImageCode.CRYING.ordinal());
 				if ((age % 10) == 0) {
-					escapeTarget(b);
+					escapeTarget(body);
 				}
 				if (GameRandom.nextInt(20) == 0) {
-					setScareWorldEventMessage(b);
+					setScareWorldEventMessage(body);
 				}
 			}
 		}
@@ -252,20 +251,20 @@ public class RaperReactionEvent extends EventPacket {
 	/**
 	 * 逃げるときのメッセージを設定する.
 	 * 
-	 * @param b 逃げる個体
+	 * @param body 逃げる個体
 	 */
-	public void setScareWorldEventMessage(Body b) {
-		b.setWorldEventResMessage(GameMessages.getMessage(b, MessagePool.Action.ScareRapist), Const.HOLDMESSAGE, true,
+	public void setScareWorldEventMessage(Body body) {
+		body.setWorldEventResMessage(GameMessages.getMessage(body, MessagePool.Action.ScareRapist), Const.HOLDMESSAGE, true,
 				false);
 	}
 
 	/**
 	 * 反撃するときのメッセージを設定する.
 	 * 
-	 * @param b 反撃する個体
+	 * @param body 反撃する個体
 	 */
-	public void setCounterWorldEventMessage(Body b) {
-		b.setWorldEventResMessage(GameMessages.getMessage(b, MessagePool.Action.CounterRapist), Const.HOLDMESSAGE, true,
+	public void setCounterWorldEventMessage(Body body) {
+		body.setWorldEventResMessage(GameMessages.getMessage(body, MessagePool.Action.CounterRapist), Const.HOLDMESSAGE, true,
 				false);
 	}
 
@@ -276,50 +275,50 @@ public class RaperReactionEvent extends EventPacket {
 	 * @return !制裁条件
 	 */
 	public boolean checkConditionOfTarget() {
-		Body from = YukkuriUtil.getBodyInstance(getFrom());
-		if (from == null) {
+		Body sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
+		if (sourceBody == null) {
 			setFrom(-1);
 			return false;
 		}
-		return from.isExciting();
+		return sourceBody.isExciting();
 	}
 
 	// イベント目標に到着した際に呼ばれる
 	// trueを返すとイベント終了
 	@Override
-	public boolean execute(Body b) {
-		Body from = YukkuriUtil.getBodyInstance(getFrom());
+	public boolean execute(Body body) {
+		Body sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
 		// 相手が消えてしまったら他のレイパーを捜索
-		if (from == null || from.isRemoved() || from.isDead()) {
+		if (sourceBody == null || sourceBody.isRemoved() || sourceBody.isDead()) {
 			setFrom(searchNextTarget());
-			from = YukkuriUtil.getBodyInstance(getFrom());
+			sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
 			// レイパー全滅でイベント終了
-			if (from == null)
+			if (sourceBody == null)
 				return true;
 			return false;
 		}
 
-		if (state == ActionState.ATTACK && !b.isDontMove()) {
+		if (state == ActionState.ATTACK && !body.isDontMove()) {
 			// 攻撃
-			if (from.getZ() < 5) {
-				b.setWorldEventResMessage(GameMessages.getMessage(b, MessagePool.Action.RevengeAttack),
+			if (sourceBody.getZ() < 5) {
+				body.setWorldEventResMessage(GameMessages.getMessage(body, MessagePool.Action.RevengeAttack),
 						Const.HOLDMESSAGE, true, false);
-				if (b.getDirection() == Direction.LEFT) {
-					GameView.addEffect(EffectType.HIT, b.getX() - 10, b.getY(), 0,
+				if (body.getDirection() == Direction.LEFT) {
+					GameView.addEffect(EffectType.HIT, body.getX() - 10, body.getY(), 0,
 							0, 0, 0, false, 500, 1, true, false, true);
 				} else {
-					GameView.addEffect(EffectType.HIT, b.getX() + 10, b.getY(), 0,
+					GameView.addEffect(EffectType.HIT, body.getX() + 10, body.getY(), 0,
 							0, 0, 0, true, 500, 1, true, false, true);
 				}
-				b.setForceFace(ImageCode.PUFF.ordinal());
-				from.strikeByYukkuri(b, this, false);
-				b.addStress(-300);
+				body.setForceFace(ImageCode.PUFF.ordinal());
+				sourceBody.strikeByYukkuri(body, this, false);
+				body.addStress(-300);
 			}
 		} else {
 			// 逃げ
-			escapeTarget(b);
+			escapeTarget(body);
 			if (GameRandom.nextInt(20) == 0) {
-				setScareWorldEventMessage(b);
+				setScareWorldEventMessage(body);
 			}
 		}
 		return false;
@@ -332,15 +331,15 @@ public class RaperReactionEvent extends EventPacket {
 	 * @return 次のターゲット
 	 */
 	public Body searchNextTarget() {
-		Body ret = null;
+		Body nextTargetBody = null;
 		for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
-			Body b = entry.getValue();
-			if (b.isRaper() && b.isExciting() && !b.isDead()) {
-				ret = b;
+			Body candidateBody = entry.getValue();
+			if (candidateBody.isRaper() && candidateBody.isExciting() && !candidateBody.isDead()) {
+				nextTargetBody = candidateBody;
 				break;
 			}
 		}
-		return ret;
+		return nextTargetBody;
 	}
 
 	/**
@@ -350,47 +349,47 @@ public class RaperReactionEvent extends EventPacket {
 	 * @return 次の攻撃ターゲット
 	 */
 	public Body searchAttackTarget() {
-		Body ret = null;
+		Body attackTargetBody = null;
 		for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
-			Body b = entry.getValue();
-			if (!b.isDead() && b.isExciting() && b.isRaper() && b.isSukkiri()) {
-				ret = b;
+			Body candidateBody = entry.getValue();
+			if (!candidateBody.isDead() && candidateBody.isExciting() && candidateBody.isRaper() && candidateBody.isSukkiri()) {
+				attackTargetBody = candidateBody;
 				break;
 			}
 		}
-		return ret;
+		return attackTargetBody;
 	}
 
 	/**
 	 * ターゲットまで移動する.
 	 * 
-	 * @param b ターゲット
+	 * @param body ターゲット
 	 */
-	public void moveTarget(Body b) {
-		Body from = YukkuriUtil.getBodyInstance(getFrom());
-		if (from == null) {
+	public void moveTargetId(Body body) {
+		Body sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
+		if (sourceBody == null) {
 			return;
 		}
-		int colX = BodyLogic.calcCollisionX(b, from);
-		b.moveToEvent(this, from.getX() + colX, from.getY());
+		int collisionX = BodyLogic.calcCollisionX(body, sourceBody);
+		body.moveToEvent(this, sourceBody.getX() + collisionX, sourceBody.getY());
 	}
 
 	/**
 	 * 敵から逃げるように移動する.
 	 * 
-	 * @param b 敵
+	 * @param body 敵
 	 */
-	protected void escapeTarget(Body b) {
+	protected void escapeTarget(Body body) {
 		int mapX = Translate.getMapW();
 		int mapY = Translate.getMapH();
-		Body from = YukkuriUtil.getBodyInstance(getFrom());
-		if (from == null) {
+		Body sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
+		if (sourceBody == null) {
 			return;
 		}
-		int vx = b.getX() - from.getX();
-		if (b.getX() < 2) {
+		int vx = body.getX() - sourceBody.getX();
+		if (body.getX() < 2) {
 			vx = mapX;
-		} else if (b.getX() > mapX - 2) {
+		} else if (body.getX() > mapX - 2) {
 			vx = 0;
 		} else {
 			if (vx > 0)
@@ -398,10 +397,10 @@ public class RaperReactionEvent extends EventPacket {
 			else
 				vx = 0;
 		}
-		int vy = b.getY() - from.getY();
-		if (b.getY() < 2) {
+		int vy = body.getY() - sourceBody.getY();
+		if (body.getY() < 2) {
 			vy = mapY;
-		} else if (b.getY() > mapY - 2) {
+		} else if (body.getY() > mapY - 2) {
 			vy = 0;
 		} else {
 			if (vy > 0)
@@ -409,7 +408,7 @@ public class RaperReactionEvent extends EventPacket {
 			else
 				vy = 0;
 		}
-		b.moveToEvent(this, vx, vy);
+		body.moveToEvent(this, vx, vy);
 	}
 
 	@Override

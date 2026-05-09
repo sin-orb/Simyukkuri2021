@@ -7,12 +7,11 @@ import src.base.Body;
 import src.base.EventPacket;
 import src.base.Obj;
 import src.draw.Translate;
-import src.enums.BaryInUGState;
+import src.enums.BurialState;
 import src.enums.Happiness;
 import src.enums.Intelligence;
 import src.system.MessagePool;
 import src.system.ResourceUtil;
-import src.util.YukkuriUtil;
 
 /*
 	出産時の励ましイベント
@@ -42,68 +41,68 @@ public class BreedEvent extends EventPacket {
 	 * また、イベント優先度も必要に応じて設定できる
 	 */
 	@Override
-	public boolean checkEventResponse(Body b) {
+	public boolean checkEventResponse(Body body) {
 		// このイベントは固体どうしのイベントだが親子関係の探索が面倒なので
 		// ワールドイベントとして登録、受け取り側が自分のつがいか親かを確認する
-		boolean ret = false;
+		boolean accepted = false;
 
 		priority = EventPriority.MIDDLE;
-		Body from = YukkuriUtil.getBodyInstance(getFrom());
-		if (from == null)
+		Body sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
+		if (sourceBody == null)
 			return false;
 
-		if (b.nearToBirth())
+		if (body.nearToBirth())
 			return false;
-		if (b.isUnBirth())
+		if (body.isUnBirth())
 			return false;
 		// 生まれたての赤ゆは親の出産応援イベントに参加させない。
 		// 既に生まれていて見に来る赤ゆは参加してよいので、出生直後の一時フラグだけを見る。
-		if (from.isParent(b) && b.isForceBirthMessage()) {
+		if (sourceBody.isParent(body) && body.isBirthMessageForced()) {
 			return false;
 		}
-		if (from == b)
+		if (sourceBody == body)
 			return false;
-		if (!b.canEventResponse())
+		if (!body.canEventResponse())
 			return false;
 
 		// 興奮してるレイパーは参加しない
-		if (b.isRaper() && b.isExciting()) {
+		if (body.isRaper() && body.isExciting()) {
 			return false;
 		}
 
 		// うんうん奴隷など格差があれば祝わない
-		if (b.getPublicRank() != from.getPublicRank()) {
+		if (body.getPublicRank() != sourceBody.getPublicRank()) {
 			return false;
 		}
 
 		// 埋まっていたら参加しない
-		if (b.getBaryState() != BaryInUGState.NONE) {
+		if (body.getBurialState() != BurialState.NONE) {
 			return false;
 		}
 
 		// 自分が馬鹿で親におかざりがなかったら参加しない
-		if (!from.hasOkazari() && b.getIntelligence() == Intelligence.FOOL)
+		if (!sourceBody.hasOkazari() && body.getIntelligence() == Intelligence.FOOL)
 			return false;
 
-		if (from.isParent(b) || from.isPartner(b) || b.isParent(from) || b.isPartner(from))
+		if (sourceBody.isParent(body) || sourceBody.isPartner(body) || body.isParent(sourceBody) || body.isPartner(sourceBody))
 			return true;
 
 		// アリにたかられてたらそれどころじゃないので参加しない
-		if (from.getAttachmentSize(Ants.class) != 0 || from.getNumOfAnts() != 0) {
+		if (sourceBody.getAttachmentSize(Ants.class) != 0 || sourceBody.getAntCount() != 0) {
 			return false;
 		}
 
-		return ret;
+		return accepted;
 	}
 
 	/**
 	 * イベント開始動作
 	 */
 	@Override
-	public void start(Body b) {
-		Body from = YukkuriUtil.getBodyInstance(getFrom());
-		if (from != null)
-			b.moveToEvent(this, from.getX(), from.getY());
+	public void start(Body body) {
+		Body sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
+		if (sourceBody != null)
+			body.moveToEvent(this, sourceBody.getX(), sourceBody.getY());
 	}
 
 	/**
@@ -111,33 +110,33 @@ public class BreedEvent extends EventPacket {
 	 * UpdateState.ABORTを返すとイベント終了
 	 */
 	@Override
-	public UpdateState update(Body b) {
-		Body from = YukkuriUtil.getBodyInstance(getFrom());
-		if (from == null)
+	public UpdateState update(Body body) {
+		Body sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
+		if (sourceBody == null)
 			return UpdateState.ABORT;
-		if (from.isParent(b) && b.isForceBirthMessage()) {
+		if (sourceBody.isParent(body) && body.isBirthMessageForced()) {
 			return UpdateState.ABORT;
 		}
-		if (b.nearToBirth())
+		if (body.nearToBirth())
 			return UpdateState.FORCE_EXEC;
 		// 相手の一定距離まで近づいたら移動終了
-		if (Translate.distance(b.getX(), b.getY(), from.getX(), from.getY()) < 20000) {
-			b.moveToEvent(this, b.getX(), b.getY());
+		if (Translate.distance(body.getX(), body.getY(), sourceBody.getX(), sourceBody.getY()) < 20000) {
+			body.moveToEvent(this, body.getX(), body.getY());
 			return UpdateState.FORCE_EXEC;
 		} else {
-			b.moveToEvent(this, from.getX(), from.getY());
+			body.moveToEvent(this, sourceBody.getX(), sourceBody.getY());
 		}
 
-		if (from.isDead() || from.isPealed() ||
-				from.isBurned() || from.isBurst() ||
-				from.isRemoved() || from.isCrushed() ||
-				from.isPacked() || !from.nearToBirth()) {
+		if (sourceBody.isDead() || sourceBody.isPealed() ||
+				sourceBody.isBurned() || sourceBody.isBurst() ||
+				sourceBody.isRemoved() || sourceBody.isCrushed() ||
+				sourceBody.isPacked() || !sourceBody.nearToBirth()) {
 			return UpdateState.ABORT;
 		}
 
 		// アリにたかられたら参加どころではなくなる
-		if (b.getNumOfAnts() != 0 || b.getAttachmentSize(Ants.class) != 0) {
-			b.clearEvent();
+		if (body.getAntCount() != 0 || body.getAttachmentSize(Ants.class) != 0) {
+			body.clearEvent();
 			return UpdateState.ABORT;
 		}
 
@@ -149,42 +148,42 @@ public class BreedEvent extends EventPacket {
 	 * trueを返すとイベント終了
 	 */
 	@Override
-	public boolean execute(Body b) {
-		if (b.nearToBirth())
+	public boolean execute(Body body) {
+		if (body.nearToBirth())
 			return true;
-		if (b.isNYD()) {
+		if (body.isNYD()) {
 			return false;
 		}
-		Body from = YukkuriUtil.getBodyInstance(getFrom());
-		if (from == null)
+		Body sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
+		if (sourceBody == null)
 			return true;
 		// 相手が出産前なら応援
-		if (from.isBirth()) {
-			b.setHappiness(Happiness.AVERAGE);
-			b.lookTo(from.getX(), from.getY());
-			b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.RootForPartner), 40, false, false);
-			from.addMemories(1);
-			b.addMemories(1);
+		if (sourceBody.isBirth()) {
+			body.setHappiness(Happiness.AVERAGE);
+			body.lookTo(sourceBody.getX(), sourceBody.getY());
+			body.setBodyEventResMessage(GameMessages.getMessage(body, MessagePool.Action.RootForPartner), 40, false, false);
+			sourceBody.addMemories(1);
+			body.addMemories(1);
 			return false;
 		} else {
 			// 誕生
-			if (!from.hasBabyOrStalk()) {
-				b.lookTo(from.getX(), from.getY());
-				if (from.isHasPants()) {
-					b.setHappiness(Happiness.VERY_SAD);
-					b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.Surprise), 40, true, true);
-					b.addStress(1800);
-					b.addMemories(-30);
+			if (!sourceBody.hasBabyOrStalk()) {
+				body.lookTo(sourceBody.getX(), sourceBody.getY());
+				if (sourceBody.isHasPants()) {
+					body.setHappiness(Happiness.VERY_SAD);
+					body.setBodyEventResMessage(GameMessages.getMessage(body, MessagePool.Action.Surprise), 40, true, true);
+					body.addStress(1800);
+					body.addMemories(-30);
 				} else {
-					b.setHappiness(Happiness.VERY_HAPPY);
-					b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.FirstGreeting), 40, true,
+					body.setHappiness(Happiness.VERY_HAPPY);
+					body.setBodyEventResMessage(GameMessages.getMessage(body, MessagePool.Action.FirstGreeting), 40, true,
 							false);
-					b.addStress(-30);
-					b.addMemories(20);
+					body.addStress(-30);
+					body.addMemories(20);
 				}
 			} else {
-				b.setHappiness(Happiness.AVERAGE);
-				b.lookTo(from.getX(), from.getY());
+				body.setHappiness(Happiness.AVERAGE);
+				body.lookTo(sourceBody.getX(), sourceBody.getY());
 				return false;
 			}
 			return true;

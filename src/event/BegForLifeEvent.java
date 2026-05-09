@@ -14,7 +14,6 @@ import src.enums.ImageCode;
 import src.enums.Intelligence;
 import src.system.MessagePool;
 import src.system.ResourceUtil;
-import src.util.YukkuriUtil;
 
 /***************************************************
  * 命乞いイベント
@@ -90,11 +89,11 @@ public class BegForLifeEvent extends EventPacket {
 	 * また、イベント優先度も必要に応じて設定できる
 	 */
 	@Override
-	public boolean checkEventResponse(Body b) {
+	public boolean checkEventResponse(Body body) {
 
 		priority = EventPriority.HIGH;
-		Body from = YukkuriUtil.getBodyInstance(getFrom());
-		if (b == from && !b.isUnBirth())
+		Body sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
+		if (body == sourceBody && !body.isUnBirth())
 			return true;
 		return false;
 	}
@@ -103,88 +102,88 @@ public class BegForLifeEvent extends EventPacket {
 	 * イベント開始動作
 	 */
 	@Override
-	public void start(Body b) {
+	public void start(Body body) {
 	}
 
 	/**
 	 * 毎フレーム処理
 	 * UpdateState.ABORTを返すとイベント終了
 	 */
-	@Override
-	public UpdateState update(Body b) {
-		if (b.isTalking()) {
-			// b.setBodyEventResMessage(GameMessages.getMessage(b,
+		@Override
+		public UpdateState update(Body body) {
+		if (body.isTalking()) {
+			// body.setBodyEventResMessage(GameMessages.getMessage(body,
 			// MessagePool.Action.ApologyToHuman), 20, false, true);
 			return null;
 		}
-		if (b.getDamage() == 0) {
+		if (body.getDamage() == 0) {
 			roop = 0;
 			roop2 = 0;
 		}
 		if (tick == 0) {
-			b.wakeup();
+			body.wakeup();
 			// 興奮状態解除
-			b.setCalm();
-			b.stayPurupuru(5);
-			b.setForceFace(ImageCode.VAIN.ordinal());
+			body.setCalm();
+			body.stayPurupuru(5);
+			body.setForceFace(ImageCode.VAIN.ordinal());
 			roop = GameRandom.nextInt(5) + 5;
 			roop2 = GameRandom.nextInt(10) + 8;
 			roop3 = GameRandom.nextInt(3) + 1;
 		} else if (tick >= 7 && roop != 0 && roop2 != 0 && roop3 != 0) {
-			b.stay(30);
-			b.setForceFace(ImageCode.CRYING.ordinal());
-			b.setBegging(true);
-			b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.ApologyToHuman), 20, false,
+			body.stay(30);
+			body.setForceFace(ImageCode.CRYING.ordinal());
+			body.setBegging(true);
+			body.setBodyEventResMessage(GameMessages.getMessage(body, MessagePool.Action.ApologyToHuman), 20, false,
 					GameRandom.nextBoolean());
 			roop--;
 		}
 
 		else if (roop == 0 && roop2 != 0 && roop3 != 0) {
 			// 反応する
-			b.stay(80);
-			b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.BegForLife), 20, false,
+			body.stay(80);
+			body.setBodyEventResMessage(GameMessages.getMessage(body, MessagePool.Action.BegForLife), 20, false,
 					GameRandom.nextBoolean());
-			b.setHappiness(Happiness.VERY_SAD);
-			b.setForceFace(ImageCode.CRYING.ordinal());
+			body.setHappiness(Happiness.VERY_SAD);
+			body.setForceFace(ImageCode.CRYING.ordinal());
 			// なつき度設定
-			b.addLovePlayer(-10);
+			body.addLovePlayer(-10);
 			roop2--;
 			wait = 0;
 		} else if (wait == 50 && roop == 0 && roop2 == 0 && roop3 != 0) {
-			b.setBegging(false);
+			body.setBegging(false);
 			// 着火状態か足が破れてる状態で見逃してもらう
-			if (b.getAttachmentSize(Fire.class) != 0 || b.getCriticalDamegeType() == CriticalDamegeType.CUT) {
-				b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.ThanksHuman2), 25, true, false);
-				b.setHappiness(Happiness.VERY_SAD);
-				b.setForceFace(ImageCode.CRYING.ordinal());
+			if (body.getAttachmentSize(Fire.class) != 0 || body.getCriticalDamegeType() == CriticalDamegeType.CUT) {
+				body.setBodyEventResMessage(GameMessages.getMessage(body, MessagePool.Action.ThanksHuman2), 25, true, false);
+				body.setHappiness(Happiness.VERY_SAD);
+				body.setForceFace(ImageCode.CRYING.ordinal());
 				return UpdateState.ABORT;
 			}
 			// ダメージ状態で見逃してもらう
-			if (b.isDamaged()) {
-				b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.ThanksHuman2), 25, true, false);
-				b.setHappiness(Happiness.SAD);
-				b.setForceFace(ImageCode.TIRED.ordinal());
+			if (body.isDamaged()) {
+				body.setBodyEventResMessage(GameMessages.getMessage(body, MessagePool.Action.ThanksHuman2), 25, true, false);
+				body.setHappiness(Happiness.SAD);
+				body.setForceFace(ImageCode.TIRED.ordinal());
 				// 増長
-				switch (b.getAttitude()) {
+				switch (body.getAttitude()) {
 					case VERY_NICE:
-						b.addStress(b.getStressLimit() / 30);
-						b.plusAttitude(10);
+						body.addStress(body.getStressLimit() / 30);
+						body.plusAttitude(10);
 						break;
 					case NICE:
-						b.addStress(b.getStressLimit() / 20);
-						b.plusAttitude(5);
+						body.addStress(body.getStressLimit() / 20);
+						body.plusAttitude(5);
 						break;
 					case AVERAGE:
-						b.addStress(b.getStressLimit() / 20);
-						// b.plusAttitude(0);
+						body.addStress(body.getStressLimit() / 20);
+						// body.plusAttitude(0);
 						break;
 					case SHITHEAD:
 					case SUPER_SHITHEAD:
-						b.addStress(b.getStressLimit() / 10);
-						if (b.getIntelligence() == Intelligence.FOOL)
-							b.plusAttitude(-30);
+						body.addStress(body.getStressLimit() / 10);
+						if (body.getIntelligence() == Intelligence.FOOL)
+							body.plusAttitude(-30);
 						else
-							b.plusAttitude(-20);
+							body.plusAttitude(-20);
 						break;
 					default:
 						break;
@@ -194,34 +193,34 @@ public class BegForLifeEvent extends EventPacket {
 			// 命乞い成功
 			else {
 				// 賢くないゲス
-				if (b.isRude() && b.getIntelligence() != Intelligence.WISE) {
-					b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.ThanksHuman), 25, true, true);
-					b.setHappiness(Happiness.VERY_HAPPY);
-					b.setForceFace(ImageCode.RUDE.ordinal());
+				if (body.isRude() && body.getIntelligence() != Intelligence.WISE) {
+					body.setBodyEventResMessage(GameMessages.getMessage(body, MessagePool.Action.ThanksHuman), 25, true, true);
+					body.setHappiness(Happiness.VERY_HAPPY);
+					body.setForceFace(ImageCode.RUDE.ordinal());
 				} else {
-					b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.ThanksHuman), 25, true, true);
-					b.setHappiness(Happiness.VERY_HAPPY);
-					b.setForceFace(ImageCode.SMILE.ordinal());
+					body.setBodyEventResMessage(GameMessages.getMessage(body, MessagePool.Action.ThanksHuman), 25, true, true);
+					body.setHappiness(Happiness.VERY_HAPPY);
+					body.setForceFace(ImageCode.SMILE.ordinal());
 				}
 
 				// 増長
-				switch (b.getAttitude()) {
+				switch (body.getAttitude()) {
 					case VERY_NICE:
-						b.addStress(-b.getStressLimit() / 20);
-						b.plusAttitude(10);
+						body.addStress(-body.getStressLimit() / 20);
+						body.plusAttitude(10);
 						break;
 					case NICE:
-						b.addStress(-b.getStressLimit() / 10);
-						// b.plusAttitude(0);
+						body.addStress(-body.getStressLimit() / 10);
+						// body.plusAttitude(0);
 						break;
 					case AVERAGE:
-						b.addStress(-b.getStressLimit() / 5);
-						b.plusAttitude(-30);
+						body.addStress(-body.getStressLimit() / 5);
+						body.plusAttitude(-30);
 						break;
 					case SHITHEAD:
 					case SUPER_SHITHEAD:
-						b.addStress(-b.getStressLimit() / 3);
-						b.plusAttitude(-50);
+						body.addStress(-body.getStressLimit() / 3);
+						body.plusAttitude(-50);
 						break;
 					default:
 						break;
@@ -231,7 +230,7 @@ public class BegForLifeEvent extends EventPacket {
 			wait = 0;
 		} else if (wait == 30 && roop == 0 && roop2 == 0 && roop3 == 0) {
 			// 独り言ちる
-			b.setMessage(GameMessages.getMessage(b, MessagePool.Action.Monologue), true);
+			body.setMessage(GameMessages.getMessage(body, MessagePool.Action.Monologue), true);
 			return UpdateState.ABORT;
 		}
 		tick++;
@@ -244,7 +243,7 @@ public class BegForLifeEvent extends EventPacket {
 	 * trueを返すとイベント終了
 	 */
 	@Override
-	public boolean execute(Body b) {
+	public boolean execute(Body body) {
 		return true;
 	}
 
@@ -252,8 +251,8 @@ public class BegForLifeEvent extends EventPacket {
 	 * もしもの後始末
 	 */
 	@Override
-	public void end(Body b) {
-		b.setBegging(false);
+	public void end(Body body) {
+		body.setBegging(false);
 		return;
 	}
 

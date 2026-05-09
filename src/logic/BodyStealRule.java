@@ -18,30 +18,30 @@ public final class BodyStealRule {
 	/**
 	 * Handle the steal branch in doActionOther.
 	 *
-	 * @param p target body
-	 * @param b actor body
+	 * @param targetBody target body
+	 * @param actorBody actor body
 	 * @return true when the steal branch handled the action
 	 */
-	public static boolean handleOkazariSteal(Body p, Body b) {
-		if (!b.hasOkazari() && p.hasOkazari() && b.getBodyAgeState() == p.getBodyAgeState()
-				&& b.getType() == p.getType() && !b.isHybrid()
-				&& p.getOkazari().getOkazariType() == OkazariType.DEFAULT
-				&& (p.getPublicRank() == PublicRank.NONE || b.getPublicRank() == PublicRank.UnunSlave)
-				&& !b.isLockmove()) {
-			if (b.isRude()) {
-				if (!BodyWakeupRule.checkWakeupOtherYukkuri(b)) {
-					if (b.getPublicRank() != PublicRank.NONE && p.getPublicRank() == PublicRank.NONE) {
-						b.setPublicRank(PublicRank.NONE);
-						p.setPublicRank(PublicRank.UnunSlave);
+	public static boolean handleOkazariSteal(Body targetBody, Body actorBody) {
+		if (!actorBody.hasOkazari() && targetBody.hasOkazari() && actorBody.getBodyAgeState() == targetBody.getBodyAgeState()
+				&& actorBody.getType() == targetBody.getType() && !actorBody.isHybrid()
+				&& targetBody.getOkazari().getOkazariType() == OkazariType.DEFAULT
+				&& (targetBody.getPublicRank() == PublicRank.NONE || actorBody.getPublicRank() == PublicRank.UnunSlave)
+				&& !actorBody.isLockmove()) {
+			if (actorBody.isRude()) {
+				if (!BodyWakeupRule.checkWakeupOtherYukkuri(actorBody)) {
+					if (actorBody.getPublicRank() != PublicRank.NONE && targetBody.getPublicRank() == PublicRank.NONE) {
+						actorBody.setPublicRank(PublicRank.NONE);
+						targetBody.setPublicRank(PublicRank.UnunSlave);
 					}
-					p.takeOkazari(false);
-					b.giveOkazari(OkazariType.DEFAULT);
-					b.setHappiness(Happiness.HAPPY);
-					b.setMessage(GameMessages.getMessage(b, MessagePool.Action.GetOtherAccessoryStealthily));
-					b.addMemories(100);
-					b.addStress(-b.getStressLimit() / 2);
-					b.clearActions();
-					b.stay();
+					targetBody.takeOkazari(false);
+					actorBody.giveOkazari(OkazariType.DEFAULT);
+					actorBody.setHappiness(Happiness.HAPPY);
+					actorBody.setMessage(GameMessages.getMessage(actorBody, MessagePool.Action.GetOtherAccessoryStealthily));
+					actorBody.addMemories(100);
+					actorBody.addStress(-actorBody.getStressLimit() / 2);
+					actorBody.clearActions();
+					actorBody.stay();
 					return true;
 				}
 			}

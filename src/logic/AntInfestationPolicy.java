@@ -1,0 +1,40 @@
+package src.logic;
+
+import src.attachment.Ants;
+import src.base.Body;
+import src.util.GameRandom;
+
+/**
+ * アリがたかる判定.
+ */
+public final class AntInfestationPolicy {
+	private AntInfestationPolicy() {
+	}
+
+	public static void judgeNewAnt(Body body) {
+		int antProbability = 1;
+		switch (body.getBodyAgeState()) {
+		case BABY:
+			antProbability = 240000;
+			break;
+		case CHILD:
+			antProbability = 480000;
+			break;
+		case ADULT:
+			antProbability = 960000;
+			break;
+		default:
+			// NOP.
+		}
+		if (body.isDirty() || body.isDamaged()) {
+			antProbability /= 2;
+		}
+		if (body.isDontJump()) {
+			antProbability /= 2;
+		}
+		if (GameRandom.nextInt(antProbability) == 1) {
+			body.addAttachment(new Ants(body));
+			body.clearEvent();
+		}
+	}
+}

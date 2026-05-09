@@ -73,8 +73,8 @@ public class DeibuTest {
         // Deibu should set SUPER_SHITHEAD attitude
         assertEquals(Attitude.SUPER_SHITHEAD, deibu.getAttitude());
 
-        // ROBUSTNESS should be: nextInt(10) + 1 = min(8, 9) + 1 = 8 + 1 = 9
-        assertEquals(5, deibu.getROBUSTNESS());
+        // Robustness should be: nextInt(10) + 1 = min(8, 9) + 1 = 8 + 1 = 9
+        assertEquals(5, deibu.getImmunityStrength());
     }
 
     @Test
@@ -86,11 +86,11 @@ public class DeibuTest {
     @Test
     public void testDeibuNagasiMethods() {
         Deibu deibu = new Deibu();
-        assertNotNull(deibu.getAnImageVerStateCtrlNagasi());
+        assertNotNull(deibu.getImageVariantState());
 
         int[][] testArray = new int[10][2];
-        deibu.setAnImageVerStateCtrlNagasi(testArray);
-        assertSame(testArray, deibu.getAnImageVerStateCtrlNagasi());
+        deibu.setImageVariantState(testArray);
+        assertSame(testArray, deibu.getImageVariantState());
     }
 
     @Test

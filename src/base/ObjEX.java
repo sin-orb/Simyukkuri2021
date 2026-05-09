@@ -53,7 +53,7 @@ public abstract class ObjEX extends Obj {
 	protected static Rectangle4y boundary = new Rectangle4y();
 
 	/** 親オブジェクト */
-	protected int linkParent = -1;
+	protected int parentLinkId = -1;
 	/** ゆっくりに対しての見た目(FOODでのみ使用) */
 	protected int looks = 0;
 	/** 負荷分散のためのインターバル値 */
@@ -100,8 +100,8 @@ public abstract class ObjEX extends Obj {
 	}
 
 	/** 親オブジェクトのゲッター */
-	public int getLinkParent() {
-		return linkParent;
+	public int getParentLinkId() {
+		return parentLinkId;
 	}
 
 	/** 見た目 */
@@ -163,21 +163,21 @@ public abstract class ObjEX extends Obj {
 	/**
 	 * 当たり判定
 	 * 
-	 * @param o       判定を受けるオブジェクト
-	 * @param bCheckZ 空中のものもチェックするかどうか
+	 * @param obj       判定を受けるオブジェクト
+	 * @param checkZ 空中のものもチェックするかどうか
 	 * @return 当たっているかどうか
 	 */
-	public boolean checkHitObj(Obj o, boolean bCheckZ) {
-		if (o == null) {
+	public boolean checkHitObj(Obj obj, boolean checkZ) {
+		if (obj == null) {
 			return false;
 		}
-		int objZ = o.getZ();
-		if ((!bCheckZ || objZ == 0)) {
+		int objZ = obj.getZ();
+		if ((!checkZ || objZ == 0)) {
 			// フラグ非設定時は空中の物はチェックしない
 			Rectangle tmpRect = new Rectangle();
 			getCollisionRect(tmpRect);
 			// 対象の座標をフィールド座標に変換
-			Translate.translate(o.getX(), o.getY(), tmpPos);
+			Translate.translate(obj.getX(), obj.getY(), tmpPos);
 			// 点が描画矩形に入ったかの判定
 			if (tmpRect.contains(new java.awt.Point(tmpPos.getX(), tmpPos.getY()))) {
 				return true;
@@ -233,9 +233,9 @@ public abstract class ObjEX extends Obj {
 		int mapY = Translate.getMapH();
 
 		if (!grabbed) {
-			int mx = vx + getBx();
-			int my = vy + getBy();
-			int mz = vz + bz;
+			int mx = vx + getMotionX();
+			int my = vy + getMotionY();
+			int mz = vz + getMotionZ();
 
 			if (mx != 0) {
 				x += mx;
@@ -267,9 +267,9 @@ public abstract class ObjEX extends Obj {
 				mz += 1;
 				vz += 1;
 				z -= mz;
-				if (!bFallingUnderGround || objType == Type.PLATFORM) {
-					if (z <= nMostDepth || objType == Type.PLATFORM) {
-						z = nMostDepth;
+				if (!fallingUnderGround || objType == Type.PLATFORM) {
+					if (z <= mostDepth || objType == Type.PLATFORM) {
+						z = mostDepth;
 						vx = 0;
 						vy = 0;
 						vz = 0;
@@ -278,9 +278,9 @@ public abstract class ObjEX extends Obj {
 			}
 		}
 		upDate();
-		setBx(0);
-		setBy(0);
-		bz = 0;
+		setMotionX(0);
+		setMotionY(0);
+		setMotionZ(0);
 		calcPos();
 		return Event.DONOTHING;
 	}
@@ -341,8 +341,8 @@ public abstract class ObjEX extends Obj {
 		this.objEXType = objEXType;
 	}
 
-	public void setLinkParent(int linkParent) {
-		this.linkParent = linkParent;
+	public void setParentLinkId(int parentLinkId) {
+		this.parentLinkId = parentLinkId;
 	}
 
 	public void setLooks(int looks) {

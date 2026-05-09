@@ -17,7 +17,6 @@ import src.logic.EventLogic;
 import src.logic.FamilyActionLogic;
 import src.system.MessagePool;
 import src.util.GameMessages;
-import src.util.YukkuriUtil;
 
 /**
  * テスト/デバッグカテゴリのコマンド群
@@ -29,116 +28,116 @@ public class GadgetDebugAction {
 	 *
 	 * @param item  実行内容
 	 * @param ev    入力されたマウスの動作
-	 * @param found 対象オブジェクト
+	 * @param targetObject 対象オブジェクト
 	 */
-	public static void evaluateTest(GadgetList item, MouseEvent ev, Obj found) {
+	public static void evaluateTest(GadgetList item, MouseEvent ev, Obj targetObject) {
 		switch (item) {
 			case RANKSET:
-				if (found instanceof Body) {
-					Body b = (Body) found;
-					BodyRank rank = b.getBodyRank();
+				if (targetObject instanceof Body) {
+					Body body = (Body) targetObject;
+					BodyRank rank = body.getBodyRank();
 					if (rank == BodyRank.KAIYU) {
-						b.setBodyRank(BodyRank.NORAYU);
+						body.setBodyRank(BodyRank.NORAYU);
 					} else {
-						b.setBodyRank(BodyRank.KAIYU);
+						body.setBodyRank(BodyRank.KAIYU);
 					}
 				}
 				break;
 			case RANKSET2:
-				if (found instanceof Body) {
-					Body b = (Body) found;
-					PublicRank rank = b.getPublicRank();
+				if (targetObject instanceof Body) {
+					Body body = (Body) targetObject;
+					PublicRank rank = body.getPublicRank();
 					if (rank == PublicRank.NONE) {
-						b.setPublicRank(PublicRank.UnunSlave);
-						b.getFavItem().clear();
-						Body p = YukkuriUtil.getBodyInstance(b.getPartner());
-						if (p != null) {
+						body.setPublicRank(PublicRank.UnunSlave);
+						body.getFavoriteItems().clear();
+						Body partnerBody = src.util.BodyRegistry.getBodyInstance(body.getPartner());
+						if (partnerBody != null) {
 							// うんうんどれいになるようなくずとは りこんっ！だよ！！
-							b.setPartner(-1);
-							p.setPartner(-1);
+							body.setPartner(-1);
+							partnerBody.setPartner(-1);
 						}
 					} else {
-						b.setPublicRank(PublicRank.NONE);
-						b.getFavItem().clear();
+						body.setPublicRank(PublicRank.NONE);
+						body.getFavoriteItems().clear();
 					}
 				}
 				break;
 			case EVENT_SHIT:
-				if (found instanceof Body) {
-					Body b = (Body) found;
-					b.wakeup();
-					List<Body> childrenList = BodyLogic.createActiveChildList(b, true);
+				if (targetObject instanceof Body) {
+					Body body = (Body) targetObject;
+					body.wakeup();
+					List<Body> childrenList = BodyLogic.createActiveChildList(body, true);
 					if (childrenList != null && childrenList.size() != 0) {
-						FamilyActionLogic.goToShit(b, childrenList);
+						FamilyActionLogic.goToShit(body, childrenList);
 					}
 				}
 				break;
 			case EVENT_EAT:
-				if (found instanceof Body) {
-					Body b = (Body) found;
-					b.wakeup();
-					List<Body> childrenList = BodyLogic.createActiveChildList(b, true);
+				if (targetObject instanceof Body) {
+					Body body = (Body) targetObject;
+					body.wakeup();
+					List<Body> childrenList = BodyLogic.createActiveChildList(body, true);
 					if (childrenList != null && childrenList.size() != 0) {
-						FamilyActionLogic.goToEat(b, childrenList);
+						FamilyActionLogic.goToEat(body, childrenList);
 					}
 				}
 				break;
 			case EVENT_RIDEYUKKURI:
-				if (found instanceof Body) {
-					Body b = (Body) found;
-					b.wakeup();
-					List<Body> childrenList = BodyLogic.createActiveChildList(b, true);
+				if (targetObject instanceof Body) {
+					Body body = (Body) targetObject;
+					body.wakeup();
+					List<Body> childrenList = BodyLogic.createActiveChildList(body, true);
 					if (childrenList != null && childrenList.size() != 0) {
-						FamilyActionLogic.rideOnParent(b, childrenList);
+						FamilyActionLogic.rideOnParent(body, childrenList);
 					}
 				}
 				break;
 			case EVENT_PROUDCHILD:
-				if (found instanceof Body) {
-					Body b = (Body) found;
-					b.wakeup();
-					List<Body> childrenList = BodyLogic.createActiveChildList(b, true);
+				if (targetObject instanceof Body) {
+					Body body = (Body) targetObject;
+					body.wakeup();
+					List<Body> childrenList = BodyLogic.createActiveChildList(body, true);
 					if (childrenList != null && childrenList.size() != 0) {
-						FamilyActionLogic.proudChild(b, childrenList);
+						FamilyActionLogic.proudChild(body, childrenList);
 					}
 				}
 				break;
 			case SETVAIN:
-				if (found instanceof Body) {
-					Body b = (Body) found;
-					b.getInVain(true);
+				if (targetObject instanceof Body) {
+					Body body = (Body) targetObject;
+					body.getInVain(true);
 				}
 				break;
 			case Yunnyaa:
-				if (found instanceof Body) {
-					Body b = (Body) found;
-					b.doYunnyaa(true);
+				if (targetObject instanceof Body) {
+					Body body = (Body) targetObject;
+					body.doYunnyaa(true);
 				}
 				break;
 			case BEGGINGFORLIFE:
-				if (found instanceof Body) {
-					Body b = (Body) found;
-					b.begForLife(true);
+				if (targetObject instanceof Body) {
+					Body body = (Body) targetObject;
+					body.begForLife(true);
 				}
 				break;
 			case PREDATORSGAME:
-				if (found instanceof Body) {
-					Body b = (Body) found;
-					if (b.isPredatorType())
-						EventLogic.addWorldEvent(new PredatorsGameEvent(b, null, null, 1), b,
-								GameMessages.getMessage(b, MessagePool.Action.GameStart));
+				if (targetObject instanceof Body) {
+					Body body = (Body) targetObject;
+					if (body.isPredatorType())
+						EventLogic.addWorldEvent(new PredatorsGameEvent(body, null, null, 1), body,
+								GameMessages.getMessage(body, MessagePool.Action.GameStart));
 				}
 				break;
 			case INVITEANTS:
 				if (ev.isShiftDown() || ev.isControlDown()) {
 					break;
 				} else {
-					if (found instanceof Body) {
-						Body b = (Body) found;
-						if (b.getAttachmentSize(Ants.class) != 0) {
-							b.removeAnts();
+					if (targetObject instanceof Body) {
+						Body body = (Body) targetObject;
+						if (body.getAttachmentSize(Ants.class) != 0) {
+							body.removeAnts();
 						} else {
-							b.addAttachment(new Ants((Body) found));
+							body.addAttachment(new Ants(body));
 						}
 					}
 				}
@@ -147,21 +146,21 @@ public class GadgetDebugAction {
 				if (ev.isShiftDown() || ev.isControlDown()) {
 					break;
 				} else {
-					if (found instanceof Body) {
-						Body b = (Body) found;
-						if (b.isDead())
+					if (targetObject instanceof Body) {
+						Body body = (Body) targetObject;
+						if (body.isDead())
 							break;
-						b.feed();
+						body.feed();
 					}
 				}
 				break;
 			case BADGE:
-				if (found instanceof Body) {
-					Body b = (Body) found;
-					if (b.getAttachmentSize(Badge.class) != 0) {
-						b.removeAttachment(Badge.class);
+				if (targetObject instanceof Body) {
+					Body body = (Body) targetObject;
+					if (body.getAttachmentSize(Badge.class) != 0) {
+						body.removeAttachment(Badge.class);
 					} else {
-						BadgeLogic.badgeTest(b);
+						BadgeLogic.badgeTest(body);
 					}
 				}
 				break;

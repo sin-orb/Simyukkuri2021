@@ -66,11 +66,11 @@ public class DosMarisaTest {
         dosMarisa.tuneParameters();
 
         // DosMarisa has extreme multipliers in tuneParameters
-        // ROBUSTNESS should be: nextInt(10) + 1 = min(7, 9) + 1 = 7 + 1 = 8
-        assertEquals(8, dosMarisa.getROBUSTNESS());
+        // Robustness should be: nextInt(10) + 1 = min(7, 9) + 1 = 7 + 1 = 8
+        assertEquals(8, dosMarisa.getImmunityStrength());
 
-        // sameDest should be: nextInt(10) + 10 = min(7, 9) + 10 = 7 + 10 = 17
-        assertEquals(17, dosMarisa.getSameDest());
+        // sameDirectionFactor should be: nextInt(10) + 10 = min(7, 9) + 10 = 7 + 10 = 17
+        assertEquals(17, dosMarisa.getSameDirectionFactor());
     }
 
     @Test

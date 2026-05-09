@@ -26,7 +26,6 @@ import src.enums.ObjEXType;
 import src.enums.Type;
 import src.system.Cash;
 import src.system.MessagePool;
-import src.util.YukkuriUtil;
 
 /***************************************************
  * ミキサー
@@ -60,11 +59,11 @@ public class Mixer extends ObjEX {
 
 	@Override
 	public int getImageLayer(BufferedImage[] layer) {
-		Body bindBody = YukkuriUtil.getBodyInstance(bind);
+		Body bindBody = src.util.BodyRegistry.getBodyInstance(bind);
 		if (enabled) {
 			if (bindBody != null) {
 				if (counter > 60) {
-					if (bindBody.getBodyAmount() < (bindBody.getDamageLimit() >> 1))
+					if (bindBody.getAnkoAmount() < (bindBody.getDamageLimit() >> 1))
 						layer[0] = images[2];
 					else
 						layer[0] = images[1];
@@ -99,7 +98,7 @@ public class Mixer extends ObjEX {
 
 	@Override
 	public boolean enableHitCheck() {
-		Body bindBody = YukkuriUtil.getBodyInstance(bind);
+		Body bindBody = src.util.BodyRegistry.getBodyInstance(bind);
 		if (bindBody != null)
 			return false;
 		return true;
@@ -125,9 +124,9 @@ public class Mixer extends ObjEX {
 		if (getAge() % 2400 == 0) {
 			Cash.addCash(-getCost());
 		}
-		Body bindBody = YukkuriUtil.getBodyInstance(bind);
+		Body bindBody = src.util.BodyRegistry.getBodyInstance(bind);
 		if (bindBody != null && enabled) {
-			bindBody.setDropShadow(false);
+			bindBody.setShadowVisible(false);
 			if (grabbed) {
 				bindBody.setCalcX(x);
 				bindBody.setCalcY(y);
@@ -141,7 +140,7 @@ public class Mixer extends ObjEX {
 					bindBody.setCriticalDamegeType(CriticalDamegeType.CUT);
 				bindBody.setForceFace(-1);
 				bindBody.setLockmove(false);
-				bindBody.setDropShadow(true);
+				bindBody.setShadowVisible(true);
 				bind = -1;
 				return;
 			}
@@ -208,7 +207,7 @@ public class Mixer extends ObjEX {
 
 	@Override
 	public void removeListData() {
-		Body bindBody = YukkuriUtil.getBodyInstance(bind);
+		Body bindBody = src.util.BodyRegistry.getBodyInstance(bind);
 		if (bindBody != null) {
 			bindBody.setForceFace(-1);
 			bindBody.setLockmove(false);

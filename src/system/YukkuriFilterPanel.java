@@ -98,14 +98,14 @@ public class YukkuriFilterPanel {
 	public static boolean openFilterPanel(String strHead, String strTop, List<String> istrOptionList,
 			List<YukkuriType> ioResultSelectType, List<Boolean> obOptionSelection) {
 		List<YukkuriType> retSelectedType = new LinkedList<YukkuriType>();
-		int nListSize = yukkuriTypes.length;
-		int nOptionListSize = 0;
+		int typeCount = yukkuriTypes.length;
+		int optionCount = 0;
 		if (istrOptionList != null) {
-			nOptionListSize = istrOptionList.size();
+			optionCount = istrOptionList.size();
 		}
 
 		JComboBox cb1 = new JComboBox();
-		JCheckBox[] checkBox = new JCheckBox[nListSize + nOptionListSize];
+		JCheckBox[] checkBox = new JCheckBox[typeCount + optionCount];
 		JPanel mainPanel = new JPanel();
 		JPanel yukkuriPanel = new JPanel();
 		JPanel optionPanel = new JPanel();
@@ -149,8 +149,8 @@ public class YukkuriFilterPanel {
 		optionPanel.setBorder(border);
 		// buttonPanel.setBorder(border);
 
-		String names2[] = new String[nListSize + nOptionListSize];
-		for (int k = 0; k < nListSize; k++) {
+		String names2[] = new String[typeCount + optionCount];
+		for (int k = 0; k < typeCount; k++) {
 			String strTemp = yukkuriTypes[k].getNameJ();
 			if (strTemp.length() != 0) {
 				names2[k] = yukkuriTypes[k].getNameJ();
@@ -160,8 +160,8 @@ public class YukkuriFilterPanel {
 		}
 
 		if (istrOptionList != null) {
-			for (int k = nListSize; k < nListSize + nOptionListSize; k++) {
-				names2[k] = istrOptionList.get(k - nListSize);
+			for (int k = typeCount; k < typeCount + optionCount; k++) {
+				names2[k] = istrOptionList.get(k - typeCount);
 			}
 		}
 
@@ -170,13 +170,12 @@ public class YukkuriFilterPanel {
 		cb1 = new JComboBox(names2);
 		cb1.setSelectedIndex(0);
 		centerPanel.add(cb1);
-		int checkIdx = cb1.getSelectedIndex();
 		JLabel l2 = new JLabel(strTop);
 		center2Panel.add(l2);
 		JLabel l3 = new JLabel("");
 
 		center2Panel.add(l3);
-		for (int i = 0; i < nListSize; i++) {
+		for (int i = 0; i < typeCount; i++) {
 			checkBox[i] = new JCheckBox(names2[i].toString());
 			if (ioResultSelectType != null && ioResultSelectType.size() != 0) {
 				if (ioResultSelectType.contains(yukkuriTypes[i])) {
@@ -188,10 +187,10 @@ public class YukkuriFilterPanel {
 			yukkuriPanel.add(checkBox[i]);
 		}
 
-		for (int i = nListSize; i < nListSize + nOptionListSize; i++) {
+		for (int i = typeCount; i < typeCount + optionCount; i++) {
 			checkBox[i] = new JCheckBox(names2[i].toString());
-			if (obOptionSelection != null && nOptionListSize == obOptionSelection.size()) {
-				if (obOptionSelection.get(i - nListSize)) {
+			if (obOptionSelection != null && optionCount == obOptionSelection.size()) {
+				if (obOptionSelection.get(i - typeCount)) {
 					checkBox[i].setSelected(true);
 				} else {
 					checkBox[i].setSelected(false);
@@ -213,7 +212,7 @@ public class YukkuriFilterPanel {
 
 		int dlgRet = JOptionPane.showConfirmDialog(GameView.getDialogParent(), mainPanel, strHead, 2, -1);
 		if (dlgRet == 0) {
-			for (int i = 0; i < nListSize; i++) {
+			for (int i = 0; i < typeCount; i++) {
 				if (checkBox[i].isSelected()) {
 					retSelectedType.add(yukkuriTypes[i]);
 				}
@@ -223,7 +222,7 @@ public class YukkuriFilterPanel {
 
 			if (obOptionSelection != null) {
 				obOptionSelection.clear();
-				for (int i = nListSize; i < nListSize + nOptionListSize; i++) {
+				for (int i = typeCount; i < typeCount + optionCount; i++) {
 					if (checkBox[i].isSelected()) {
 						obOptionSelection.add(true);
 					} else {

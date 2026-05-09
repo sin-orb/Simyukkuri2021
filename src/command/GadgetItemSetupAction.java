@@ -20,25 +20,25 @@ public class GadgetItemSetupAction {
 	/**
 	 * 床設置カテゴリの実行
 	 *
-	 * @param item  実行内容
-	 * @param ev    入力されたマウスの動作
-	 * @param found 対象オブジェクト
+	 * @param actionItem  実行内容
+	 * @param ev          入力されたマウスの動作
+	 * @param targetObject 対象オブジェクト
 	 */
-	public static void evaluateFloorItems(GadgetList item, MouseEvent ev, Obj found) {
-		switch (item) {
+	public static void evaluateFloorItems(GadgetList actionItem, MouseEvent ev, Obj targetObject) {
+		switch (actionItem) {
 			case DIFFUSER:
-				if (found instanceof Diffuser) {
-					Diffuser.setupDiffuser((Diffuser) found, true);
+				if (targetObject instanceof Diffuser) {
+					Diffuser.setupDiffuser((Diffuser) targetObject, true);
 				}
 				break;
 			case ORANGE_POOL:
-				if (found instanceof OrangePool) {
-					OrangePool.setupOrange((OrangePool) found, true);
+				if (targetObject instanceof OrangePool) {
+					OrangePool.setupOrange((OrangePool) targetObject, true);
 				}
 				break;
 			case BREED_POOL:
-				if (found instanceof BreedingPool) {
-					BreedingPool.setupPool((BreedingPool) found, true);
+				if (targetObject instanceof BreedingPool) {
+					BreedingPool.setupPool((BreedingPool) targetObject, true);
 				}
 				break;
 			default:
@@ -49,15 +49,15 @@ public class GadgetItemSetupAction {
 	/**
 	 * おもちゃカテゴリの実行
 	 *
-	 * @param item  実行内容
-	 * @param ev    入力されたマウスの動作
-	 * @param found 対象オブジェクト
+	 * @param actionItem  実行内容
+	 * @param ev          入力されたマウスの動作
+	 * @param targetObject 対象オブジェクト
 	 */
-	public static void evaluateToys(GadgetList item, MouseEvent ev, Obj found) {
-		switch (item) {
+	public static void evaluateToys(GadgetList actionItem, MouseEvent ev, Obj targetObject) {
+		switch (actionItem) {
 			case YUNBA_SETUP:
-				if (found instanceof Yunba) {
-					Yunba.setupYunba((Yunba) found, true);
+				if (targetObject instanceof Yunba) {
+					Yunba.setupYunba((Yunba) targetObject, true);
 				}
 				break;
 			default:
@@ -68,15 +68,15 @@ public class GadgetItemSetupAction {
 	/**
 	 * コンベアカテゴリの実行
 	 *
-	 * @param item  実行内容
-	 * @param ev    入力されたマウスの動作
-	 * @param found 対象オブジェクト
+	 * @param actionItem  実行内容
+	 * @param ev          入力されたマウスの動作
+	 * @param targetObject 対象オブジェクト
 	 */
-	public static void evaluateConveyor(GadgetList item, MouseEvent ev, Obj found) {
-		switch (item) {
+	public static void evaluateConveyor(GadgetList actionItem, MouseEvent ev, Obj targetObject) {
+		switch (actionItem) {
 			case BELTCONVEYOR_SETUP:
-				if (found instanceof BeltconveyorObj) {
-					BeltconveyorObj.setBeltconveyor((BeltconveyorObj) found, true);
+				if (targetObject instanceof BeltconveyorObj) {
+					BeltconveyorObj.setBeltconveyor((BeltconveyorObj) targetObject, true);
 				}
 				break;
 			default:

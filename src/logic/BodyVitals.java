@@ -124,7 +124,7 @@ public final class BodyVitals {
 	 * @return ゆかび期間が潜伏期間を超えていればtrue
 	 */
 	public static boolean isSick(BodyAttributes body) {
-		return body.getSickPeriod() > body.getINCUBATIONPERIODorg();
+		return body.getSickPeriod() > body.getIncubationPeriodBase();
 	}
 
 	/**
@@ -134,7 +134,7 @@ public final class BodyVitals {
 	 * @return ゆかび期間が潜伏期間の8倍を超えていればtrue
 	 */
 	public static boolean isSickHeavily(BodyAttributes body) {
-		return body.getSickPeriod() > body.getINCUBATIONPERIODorg() * 8;
+		return body.getSickPeriod() > body.getIncubationPeriodBase() * 8;
 	}
 
 	/**
@@ -144,6 +144,6 @@ public final class BodyVitals {
 	 * @return ゆかび期間が潜伏期間の32倍を超え、ダメージ判定もtrueならtrue
 	 */
 	public static boolean isSickTooHeavily(BodyAttributes body) {
-		return body.getSickPeriod() > body.getINCUBATIONPERIODorg() * 32 && isDamaged(body);
+		return body.getSickPeriod() > body.getIncubationPeriodBase() * 32 && isDamaged(body);
 	}
 }

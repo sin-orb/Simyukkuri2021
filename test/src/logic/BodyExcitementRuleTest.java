@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import src.ConstState;
 import src.SimYukkuri;
 import src.base.Body;
+import src.base.StubBodyAttributes;
 import src.enums.AgeState;
 import src.enums.PublicRank;
 import src.system.Sprite;
@@ -87,11 +88,21 @@ class BodyExcitementRuleTest {
 		me.setAgeState(AgeState.ADULT);
 		you.setAgeState(AgeState.BABY);
 		me.setExciting(true);
-		me.setbForceExciting(true);
+		me.setForceExciting(true);
 		me.setRaper(false);
 
 		assertDoesNotThrow(() -> assertFalse(BodyExcitementRule.handleExcitingContact(you, me)));
 		assertTrue(me.isSukkiri(), "force exciting should still trigger sukkiri side effect");
+	}
+
+	@Test
+	void testIsForceExcitingReadsRawFlag() {
+		StubBodyAttributes body = new StubBodyAttributes();
+		body.setForceExciting(false);
+		assertFalse(BodyExcitementRule.isForceExciting(body));
+
+		body.setForceExciting(true);
+		assertTrue(BodyExcitementRule.isForceExciting(body));
 	}
 
 	private static Sprite[] makeSprites(int w, int h) {

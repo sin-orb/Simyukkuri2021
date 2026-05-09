@@ -80,7 +80,7 @@ public class ProudChildEventTest {
     public void testSimpleEventAction_returnsTrueWhenFromIsNull() {
         Body b = createBody();
         ProudChildEvent event = new ProudChildEvent();
-        // from is -1 (null lookup), so YukkuriUtil.getBodyInstance returns null
+        // from is -1 (null lookup), so BodyRegistry lookup returns null
         assertTrue(event.simpleEventAction(b));
     }
 
@@ -127,7 +127,7 @@ public class ProudChildEventTest {
         WorldTestHelper.setParents(baby, -1, from.getUniqueID());
         baby.setAgeState(AgeState.BABY);
         baby.setBirthAge(baby.getAge());
-        baby.setBFirstGround(false);
+        baby.setFirstGround(false);
         ProudChildEvent event = new ProudChildEvent(from, null, null, 10);
         assertFalse(event.checkEventResponse(baby));
     }
@@ -139,9 +139,9 @@ public class ProudChildEventTest {
         WorldTestHelper.setParents(baby, -1, from.getUniqueID());
         baby.setAgeState(AgeState.BABY);
         baby.setBirthAge(0);
-        baby.setBFirstGround(false);
+        baby.setFirstGround(false);
         baby.setZ(10);
-        baby.setnMostDepth(0);
+        baby.setMostDepth(0);
         ProudChildEvent event = new ProudChildEvent(from, null, null, 10);
         assertFalse(event.checkEventResponse(baby));
     }
@@ -222,7 +222,7 @@ public class ProudChildEventTest {
     public void testUpdate_bodyNYD_returnsAbort() {
         Body from = createBody();
         Body b = createBody();
-        b.seteCoreAnkoState(src.enums.CoreAnkoState.NonYukkuriDisease);
+        b.setCoreAnkoState(src.enums.CoreAnkoState.NonYukkuriDisease);
         ProudChildEvent event = new ProudChildEvent(from, null, null, 10);
         from.setCurrentEvent(event);
         assertEquals(EventPacket.UpdateState.ABORT, event.update(b));
@@ -235,7 +235,7 @@ public class ProudChildEventTest {
         WorldTestHelper.setParents(baby, -1, from.getUniqueID());
         baby.setAgeState(AgeState.BABY);
         baby.setBirthAge(baby.getAge());
-        baby.setBFirstGround(false);
+        baby.setFirstGround(false);
         ProudChildEvent event = new ProudChildEvent(from, null, null, 10);
         from.setCurrentEvent(event);
         assertEquals(EventPacket.UpdateState.ABORT, event.update(baby));
@@ -297,7 +297,7 @@ public class ProudChildEventTest {
         Body from = createBody();
         Body child = createBody();
         ProudChildEvent event = new ProudChildEvent(from, null, null, 10);
-        event.bActionFlag = true;
+        event.setActionFlag(true);
         event.setState(ProudChildEvent.STATE.START);
         from.setCurrentEvent(event);
         child.setCurrentEvent(event);
@@ -309,7 +309,7 @@ public class ProudChildEventTest {
         Body from = createBody();
         Body child = createBody();
         ProudChildEvent event = new ProudChildEvent(from, null, null, 10);
-        event.bActionFlag = true;
+        event.setActionFlag(true);
         event.setState(ProudChildEvent.STATE.SING);
         from.setCurrentEvent(event);
         child.setCurrentEvent(event);
@@ -321,7 +321,7 @@ public class ProudChildEventTest {
         Body from = createBody();
         Body child = createBody();
         ProudChildEvent event = new ProudChildEvent(from, null, null, 10);
-        event.bActionFlag = true;
+        event.setActionFlag(true);
         event.setState(ProudChildEvent.STATE.PROUD);
         from.setCurrentEvent(event);
         child.setCurrentEvent(event);
@@ -336,7 +336,37 @@ public class ProudChildEventTest {
         event.setState(ProudChildEvent.STATE.END);
         from.setCurrentEvent(event);
         child.setCurrentEvent(event);
-        assertDoesNotThrow(() -> event.update(child));
+        assertEquals(EventPacket.UpdateState.ABORT, event.update(child));
+    }
+
+    @Test
+    public void testUpdate_parentBody_stateEND_returnsAbort() {
+        Body from = createBody();
+        Body child = createBody();
+        child.setParents(new int[] { from.getUniqueID(), -1 });
+        child.setAgeState(AgeState.BABY);
+        from.getChildrenList().add(child.getUniqueID());
+        ProudChildEvent event = new ProudChildEvent(from, null, null, 10);
+        event.setState(ProudChildEvent.STATE.END);
+        event.setActionFlag(false);
+        from.setCurrentEvent(event);
+        child.setCurrentEvent(event);
+        assertEquals(EventPacket.UpdateState.ABORT, event.update(from));
+    }
+
+    @Test
+    public void testUpdate_parentBody_allSleepingChildren_returnsAbort() {
+        Body from = createBody();
+        Body child = createBody();
+        child.setParents(new int[] { from.getUniqueID(), -1 });
+        child.setAgeState(AgeState.BABY);
+        child.setSleeping(true);
+        from.getChildrenList().add(child.getUniqueID());
+        ProudChildEvent event = new ProudChildEvent(from, null, null, 10);
+        from.setCurrentEvent(event);
+        child.setCurrentEvent(event);
+
+        assertEquals(EventPacket.UpdateState.ABORT, event.update(from));
     }
 
     // --- update: partner path ---
@@ -398,7 +428,7 @@ public class ProudChildEventTest {
         WorldTestHelper.setParents(baby, -1, from.getUniqueID());
         baby.setAgeState(AgeState.BABY);
         baby.setBirthAge(0);
-        baby.setBFirstGround(false);
+        baby.setFirstGround(false);
         baby.setDamage(baby.getDamageLimit() / 2 + 1);
         ProudChildEvent event = new ProudChildEvent(from, null, null, 10);
         from.setCurrentEvent(event);
@@ -412,7 +442,7 @@ public class ProudChildEventTest {
         Body from = createBody();
         Body b = createBody();
         ProudChildEvent event = new ProudChildEvent(from, null, null, 10);
-        event.tick = 1; // 1 % 30 = 1 != 0 → returns null
+        event.setTick(1); // 1 % 30 = 1 != 0 → returns null
         from.setCurrentEvent(event);
         b.setCurrentEvent(event);
         assertNull(event.update(b));
@@ -430,13 +460,13 @@ public class ProudChildEventTest {
         assertEquals(EventPacket.UpdateState.ABORT, event.update(b));
     }
 
-    // --- update: child SING, bActionFlag=false (inner path) ---
+    // --- update: child SING, actionFlag=false (inner path) ---
     @Test
     public void testUpdate_childBody_SING_bActionFlagFalse_doesNotThrow() {
         Body from = createBody();
         Body child = createBody();
         ProudChildEvent event = new ProudChildEvent(from, null, null, 10);
-        event.bActionFlag = false;
+        event.setActionFlag(false);
         event.setState(ProudChildEvent.STATE.SING);
         from.setCurrentEvent(event);
         child.setCurrentEvent(event);
@@ -515,12 +545,12 @@ public class ProudChildEventTest {
             from.setCurrentEvent(event);
             child.setCurrentEvent(event);
             event.setState(ProudChildEvent.STATE.PROUD);
-            event.bActionFlag = false;
-            from.setInLastActionTime(0);
+            event.setActionFlag(false);
+            from.setLastActionTime(0);
             int memoriesBefore = from.getMemories();
 
             assertNull(event.update(from));
-            assertTrue(event.bActionFlag);
+            assertTrue(event.isActionFlag());
             assertEquals(Happiness.VERY_HAPPY, from.getHappiness());
             assertEquals(memoriesBefore + 20, from.getMemories());
         }
@@ -537,8 +567,8 @@ public class ProudChildEventTest {
             from.setCurrentEvent(event);
             child.setCurrentEvent(event);
             event.setState(ProudChildEvent.STATE.PROUD);
-            event.bActionFlag = true;
-            child.setInLastActionTime(0);
+            event.setActionFlag(true);
+            child.setLastActionTime(0);
             int memoriesBefore = child.getMemories();
 
             GameRandom.setOverride(new RandomSource() {

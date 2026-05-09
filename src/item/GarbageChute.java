@@ -120,9 +120,9 @@ public class GarbageChute extends ObjEX {
 		if (bindObjList == null || bindObjList.size() == 0) {
 			return;
 		}
-		int nSize = bindObjList.size();
+		int size = bindObjList.size();
 
-		for (int i = nSize - 1; 0 <= i; i--) {
+		for (int i = size - 1; 0 <= i; i--) {
 			Obj o = bindObjList.get(i);
 			o.setFallingUnderGround(true);
 			if (o == null || o.isRemoved()) {
@@ -130,11 +130,11 @@ public class GarbageChute extends ObjEX {
 			}
 			o.setCalcX(this.getX());
 			o.setCalcY(this.getY());
-			int nZ = o.getZ();
-			o.setCalcZ(nZ - 2);
-			int tz = Translate.translateZ(nZ - 1);
-			int nColX = o.getH();
-			if (tz < -nColX) {
+			int zCoord = o.getZ();
+			o.setCalcZ(zCoord - 2);
+			int translateZ = Translate.translateZ(zCoord - 1);
+			int collisionX = o.getH();
+			if (translateZ < -collisionX) {
 				bindObjList.remove(o);
 				o.remove();
 			}

@@ -204,7 +204,7 @@ public class RaperReactionEventTest {
         Body unregistered = new Reimu();
         RaperReactionEvent event = new RaperReactionEvent(unregistered, null, null, 10);
         // from not registered → getBodyInstance returns null → early return
-        assertDoesNotThrow(() -> event.moveTarget(b));
+        assertDoesNotThrow(() -> event.moveTargetId(b));
     }
 
     @Test
@@ -212,7 +212,7 @@ public class RaperReactionEventTest {
         Body from = createBody();
         Body b = createBody();
         RaperReactionEvent event = new RaperReactionEvent(from, null, null, 10);
-        assertDoesNotThrow(() -> event.moveTarget(b));
+        assertDoesNotThrow(() -> event.moveTargetId(b));
     }
 
     // --- checkEventResponse: raper nearby, normal body → state=ESCAPE, return true ---
@@ -245,13 +245,13 @@ public class RaperReactionEventTest {
     public void testStart_NYD_earlyReturn() {
         Body from = createBody();
         Body b = createBody();
-        b.seteCoreAnkoState(src.enums.CoreAnkoState.NonYukkuriDisease); // isNYD() = true
+        b.setCoreAnkoState(src.enums.CoreAnkoState.NonYukkuriDisease); // isNYD() = true
         RaperReactionEvent event = new RaperReactionEvent(from, null, null, 1);
         event.setState(ActionState.ATTACK);
         assertDoesNotThrow(() -> event.start(b)); // returns early, no throw
     }
 
-    // --- start: ATTACK state → moveTarget + setAngry ---
+    // --- start: ATTACK state → moveTargetId + setAngry ---
     @Test
     public void testStart_attackState_doesNotThrow() {
         Body from = createBody();

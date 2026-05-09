@@ -67,8 +67,8 @@ public class EventLogicTest {
 
         assertEquals(1, src.SimYukkuri.world.getCurrentMap().getEvent().size());
         assertSame(event, src.SimYukkuri.world.getCurrentMap().getEvent().get(0));
-        assertEquals("world-message", speaker.getMessageBuf());
-        assertEquals(42, speaker.getMessageCount());
+        assertEquals("world-message", speaker.getMessageBuffer());
+        assertEquals(42, speaker.getMessageTicks());
     }
 
     @Test
@@ -124,8 +124,8 @@ public class EventLogicTest {
 
         assertEquals(1, target.getEventList().size());
         assertSame(event, target.getEventList().get(0));
-        assertEquals("body-message", speaker.getMessageBuf());
-        assertEquals(24, speaker.getMessageCount());
+        assertEquals("body-message", speaker.getMessageBuffer());
+        assertEquals(24, speaker.getMessageTicks());
     }
 
     @Test

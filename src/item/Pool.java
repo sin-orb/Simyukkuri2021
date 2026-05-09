@@ -38,8 +38,8 @@ public class Pool extends FieldShapeBase {
 
 	private static BufferedImage images;
 	private static TexturePaint texture;
-	private int[] anWaterPointX = new int[4];
-	private int[] anWaterPointY = new int[4];
+	private int[] waterPolygonX = new int[4];
+	private int[] waterPolygonY = new int[4];
 
 	/** 池に捕まってるオブジェクトのリスト */
 	List<Obj> bindObjList = new LinkedList<Obj>();
@@ -113,25 +113,25 @@ public class Pool extends FieldShapeBase {
 
 	/** プレビューラインの描画 */
 	public static void drawPreview(Graphics2D g2, int sx, int sy, int ex, int ey) {
-		int[] anPointX = new int[4];
-		int[] anPointY = new int[4];
-		Translate.getPolygonPoint(sx, sy, ex, ey, anPointX, anPointY);
+		int[] polygonX = new int[4];
+		int[] polygonY = new int[4];
+		Translate.getPolygonPoint(sx, sy, ex, ey, polygonX, polygonY);
 
-		g2.drawPolygon(anPointX, anPointY, 4);
+		g2.drawPolygon(polygonX, polygonY, 4);
 	}
 
 	@Override
 	public void drawShape(Graphics2D g2) {
-		int[] anPointX = new int[4];
-		int[] anPointY = new int[4];
-		Translate.getPolygonPoint(fieldSX, fieldSY, fieldEX, fieldEY, anPointX, anPointY);
+		int[] polygonX = new int[4];
+		int[] polygonY = new int[4];
+		Translate.getPolygonPoint(fieldSX, fieldSY, fieldEX, fieldEY, polygonX, polygonY);
 
 		g2.setPaint(ROCK_COLOR);
-		g2.fillPolygon(anPointX, anPointY, 4);
+		g2.fillPolygon(polygonX, polygonY, 4);
 
-		Translate.getPolygonPoint(fieldSX + 8, fieldSY + 8, fieldEX - 8, fieldEY - 8, anWaterPointX, anWaterPointY);
+		Translate.getPolygonPoint(fieldSX + 8, fieldSY + 8, fieldEX - 8, fieldEY - 8, waterPolygonX, waterPolygonY);
 		g2.setPaint(texture);
-		g2.fillPolygon(anWaterPointX, anWaterPointY, 4);
+		g2.fillPolygon(waterPolygonX, waterPolygonY, 4);
 	}
 
 	/**
@@ -143,23 +143,23 @@ public class Pool extends FieldShapeBase {
 	 * @param fey 設置終点のY座標
 	 */
 	public Pool(int fsx, int fsy, int fex, int fey) {
-		Point4y pS = Translate.getFieldLimitForMap(fsx, fsy);
-		Point4y pE = Translate.getFieldLimitForMap(fex, fey);
-		fieldSX = pS.getX();
-		fieldSY = pS.getY();
-		fieldEX = pE.getX();
-		fieldEY = pE.getY();
+		Point4y start = Translate.getFieldLimitForMap(fsx, fsy);
+		Point4y end = Translate.getFieldLimitForMap(fex, fey);
+		fieldSX = start.getX();
+		fieldSY = start.getY();
+		fieldEX = end.getX();
+		fieldEY = end.getY();
 
-		int[] anPointBaseX = new int[2];
-		int[] anPointBaseY = new int[2];
-		Translate.getMovedPoint(fieldSX, fieldSY, fieldEX, fieldEY, 0, 0, 0, 0, anPointBaseX, anPointBaseY);
+		int[] basePolygonX = new int[2];
+		int[] basePolygonY = new int[2];
+		Translate.getMovedPoint(fieldSX, fieldSY, fieldEX, fieldEY, 0, 0, 0, 0, basePolygonX, basePolygonY);
 
 		// フィールド座標が渡ってくるのでマップ座標も計算しておく
-		Point4y pos = Translate.invertLimit(anPointBaseX[0], anPointBaseY[0]);
+		Point4y pos = Translate.invertLimit(basePolygonX[0], basePolygonY[0]);
 		mapSX = Math.max(0, Math.min(pos.getX(), Translate.getMapW()));
 		mapSY = Math.max(0, Math.min(pos.getY(), Translate.getMapH()));
 
-		pos = Translate.invertLimit(anPointBaseX[1], anPointBaseY[1]);
+		pos = Translate.invertLimit(basePolygonX[1], basePolygonY[1]);
 		mapEX = Math.max(0, Math.min(pos.getX(), Translate.getMapW()));
 		mapEY = Math.max(0, Math.min(pos.getY(), Translate.getMapH()));
 
@@ -228,21 +228,22 @@ public class Pool extends FieldShapeBase {
 	 * 
 	 * @param inX      ある点のX座標
 	 * @param inY      ある点Y座標
-	 * @param bIsField 渡された座標がフィールド座標かどうか
+	 * @param isField 渡された座標がフィールド座標かどうか
 	 */
-	public boolean checkContain(int inX, int inY, boolean bIsField) {
-		int nX = inX;
-		int nY = inY;
-		if (bIsField) {
+	public boolean checkContain(int inX, int inY, boolean isField) {
+		int xCoord = inX;
+		int yCoord = inY;
+		if (isField) {
 			Point4y pos = Translate.invertLimit(inX, inY);
-			nX = pos.getX();
-			nY = pos.getY();
+			xCoord = pos.getX();
+			yCoord = pos.getY();
 		}
 
-		Point4y posFirst = Translate.invertLimit(anWaterPointX[0], anWaterPointY[0]);
-		Point4y posSecond = Translate.invertLimit(anWaterPointX[2], anWaterPointY[2]);
+		Point4y posFirst = Translate.invertLimit(waterPolygonX[0], waterPolygonY[0]);
+		Point4y posSecond = Translate.invertLimit(waterPolygonX[2], waterPolygonY[2]);
 		if (posFirst != null && posSecond != null) {
-			if (posFirst.getX() <= nX && nX <= posSecond.getX() && posFirst.getY() <= nY && nY <= posSecond.getY()) {
+			if (posFirst.getX() <= xCoord && xCoord <= posSecond.getX() && posFirst.getY() <= yCoord
+					&& yCoord <= posSecond.getY()) {
 				return true;
 			}
 		}
@@ -280,40 +281,40 @@ public class Pool extends FieldShapeBase {
 	/** 当たり判定されたオブジェクトへの処理 */
 	public int objHitProcess(Obj o) {
 		// 空中は無視
-		int nZ = o.getZ();
-		if (0 < nZ) {
+		int zCoord = o.getZ();
+		if (0 < zCoord) {
 			return 0;
 		}
 
-		boolean bIsInWater = false;
+		boolean isInWater = false;
 		o.setInPool(true);
-		DEPTH eDepth = checkArea(o.getX(), o.getY());
-		switch (eDepth) {
+		DEPTH depth = checkArea(o.getX(), o.getY());
+		switch (depth) {
 			case EDGE:
 				o.setFallingUnderGround(false);
 				o.setMostDepth(0);
-				if (nZ < 0) {
+				if (zCoord < 0) {
 					o.setCalcZ(0);
 				}
 				break;
 			case SHALLOW:
-				bIsInWater = true;
+				isInWater = true;
 				// すこし沈む
-				if (!o.getFallingUnderGround()) {
+				if (!o.isFallingUnderGround()) {
 					o.setMostDepth(-1);
 				}
 
-				if (nZ == 0) {
+				if (zCoord == 0) {
 					o.setCalcZ(-1);
 				}
 				break;
 			case DEEP:
-				bIsInWater = true;
+				isInWater = true;
 				// もうすこし沈む
-				if (!o.getFallingUnderGround()) {
+				if (!o.isFallingUnderGround()) {
 					o.setMostDepth(-2);
 				}
-				if (nZ == 0 || nZ == -1) {
+				if (zCoord == 0 || zCoord == -1) {
 					o.setCalcZ(-2);
 				}
 				break;
@@ -323,82 +324,82 @@ public class Pool extends FieldShapeBase {
 
 		if (o instanceof Body) {
 			Body bodyTarget = (Body) o;
-			AgeState eAge = bodyTarget.getBodyAgeState();
-			boolean bLikeWater = bodyTarget.isLikeWater();
-			int nLimit = -2;
+			AgeState ageState = bodyTarget.getBodyAgeState();
+			boolean likesWater = bodyTarget.isLikeWater();
+			int depthLimit = -2;
 
-			switch (eAge) {
+			switch (ageState) {
 				case BABY:
-					nLimit = 1;
+					depthLimit = 1;
 					break;
 				case CHILD:
-					nLimit = 2;
+					depthLimit = 2;
 					break;
 				case ADULT:
-					nLimit = 3;
+					depthLimit = 3;
 					break;
 				default:
 					break;
 			}
 
-			switch (eDepth) {
+			switch (depth) {
 				case SHALLOW:
-					bIsInWater = true;
+					isInWater = true;
 					if (GameRandom.nextInt(70) == 0 || !bodyTarget.isWet()) {
-						bodyTarget.inWater(eDepth);
+						bodyTarget.inWater(depth);
 					}
 					break;
 				case DEEP:
-					bIsInWater = true;
+					isInWater = true;
 					if (GameRandom.nextInt(40) == 0 || !bodyTarget.isWet()) {
-						bodyTarget.inWater(eDepth);
+						bodyTarget.inWater(depth);
 					}
 					break;
 				default:
 					break;
 			}
 
-			if (bIsInWater) {
-				int tz = Translate.translateZ(nZ - 1);
-				int nH = o.getH();
+			if (isInWater) {
+				int tz = Translate.translateZ(zCoord - 1);
+				int objectHeight = o.getH();
 
-				if (!bLikeWater) {
+				if (!likesWater) {
 					// ある程度沈むと大ダメージ
-					if (tz < -nH / 3 && GameRandom.nextInt(10 + nLimit * 5) == 0) {
+					if (tz < -objectHeight / 3 && GameRandom.nextInt(10 + depthLimit * 5) == 0) {
 						bodyTarget.addDamage(bodyTarget.getDamageLimit() / 4);
 					}
 
 					// 水深が深いと動けなくなる
-					if (nZ < -nLimit) {
+					if (zCoord < -depthLimit) {
 						bodyTarget.setLockmove(true);
 					}
 
-					int nRndDeepInWater = 50;
+					int deepWaterChance = 50;
 					// 溶けている場合、沈む確率UP
 					if (bodyTarget.isMelt()) {
-						nRndDeepInWater = nRndDeepInWater / 2;
+						deepWaterChance = deepWaterChance / 2;
 					}
 
 					// 死んでいる場合、沈む確率UP
 					if (bodyTarget.isDead()) {
-						nRndDeepInWater = nRndDeepInWater / 2;
+						deepWaterChance = deepWaterChance / 2;
 					}
 
-					if (GameRandom.nextInt(nRndDeepInWater) == 0) {
+					if (GameRandom.nextInt(deepWaterChance) == 0) {
 						bodyTarget.setFallingUnderGround(true);
-						o.setMostDepth(nZ - 1);
-						o.setCalcZ(nZ - 1);
+						o.setMostDepth(zCoord - 1);
+						o.setCalcZ(zCoord - 1);
 					}
 				}
 
 				// 溶けて消える
-				if (tz < -nH) {
+				if (tz < -objectHeight) {
 					o.remove();
 				}
 			}
 		} else {
 			// 溶ける
-			if (Translate.translateZ(nZ) < -10) {
+			if (Translate.translateZ(zCoord) < -10) {
 				o.remove();
 			}
 		}
@@ -414,68 +415,68 @@ public class Pool extends FieldShapeBase {
 	 * @return ある点の池の深さ
 	 */
 	public DEPTH checkArea(int x, int y) {
-		DEPTH eDepthW = DEPTH.NONE;
-		DEPTH eDepthH = DEPTH.NONE;
-		DEPTH eDepthRet = DEPTH.NONE;
-		int nEdgeWidth = 10;
-		if (mapEX - mapSX < nEdgeWidth) {
-			nEdgeWidth = 0;
+		DEPTH depthW = DEPTH.NONE;
+		DEPTH depthH = DEPTH.NONE;
+		DEPTH depthResult = DEPTH.NONE;
+		int edgeWidth = 10;
+		if (mapEX - mapSX < edgeWidth) {
+			edgeWidth = 0;
 		}
 
-		int nEdgeHeight = 5;
-		if (mapEY - mapSY < nEdgeHeight) {
-			nEdgeHeight = 0;
+		int edgeHeight = 5;
+		if (mapEY - mapSY < edgeHeight) {
+			edgeHeight = 0;
 		}
 
 		// --------------------------------------
 		// 左右判定
 		if (x < mapSX || mapEX < x) {
-			eDepthW = DEPTH.NONE;
-		} else if ((mapSX <= x && x < mapSX + nEdgeWidth) || (mapEX - nEdgeWidth < x && x <= mapEX)) {
-			eDepthW = DEPTH.EDGE;
-		} else if ((mapSX + nEdgeWidth <= x && x < mapSX + nEdgeWidth * 2)
-				|| (mapEX - nEdgeWidth * 2 < x && x <= mapEX - nEdgeWidth)) {
-			eDepthW = DEPTH.SHALLOW;
-		} else if (mapSX + nEdgeWidth * 2 <= x && x < mapEX - nEdgeWidth * 2) {
-			eDepthW = DEPTH.DEEP;
+			depthW = DEPTH.NONE;
+		} else if ((mapSX <= x && x < mapSX + edgeWidth) || (mapEX - edgeWidth < x && x <= mapEX)) {
+			depthW = DEPTH.EDGE;
+		} else if ((mapSX + edgeWidth <= x && x < mapSX + edgeWidth * 2)
+				|| (mapEX - edgeWidth * 2 < x && x <= mapEX - edgeWidth)) {
+			depthW = DEPTH.SHALLOW;
+		} else if (mapSX + edgeWidth * 2 <= x && x < mapEX - edgeWidth * 2) {
+			depthW = DEPTH.DEEP;
 		}
 		// --------------------------------------
 		// 上下判定
 		if (y < mapSY || mapEY < y) {
-			eDepthH = DEPTH.NONE;
-		} else if ((mapSY <= y && y < mapSY + nEdgeHeight) || (mapEY - nEdgeHeight < y && y <= mapEY)) {
-			eDepthH = DEPTH.EDGE;
-		} else if ((mapSY + nEdgeHeight <= y && y < mapSY + nEdgeHeight * 2)
-				|| (mapEY - nEdgeHeight * 2 < y && y <= mapEY - nEdgeHeight)) {
-			eDepthH = DEPTH.SHALLOW;
-		} else if (mapSY + nEdgeHeight * 2 <= y && y < mapEY - nEdgeHeight * 2) {
-			eDepthH = DEPTH.DEEP;
+			depthH = DEPTH.NONE;
+		} else if ((mapSY <= y && y < mapSY + edgeHeight) || (mapEY - edgeHeight < y && y <= mapEY)) {
+			depthH = DEPTH.EDGE;
+		} else if ((mapSY + edgeHeight <= y && y < mapSY + edgeHeight * 2)
+				|| (mapEY - edgeHeight * 2 < y && y <= mapEY - edgeHeight)) {
+			depthH = DEPTH.SHALLOW;
+		} else if (mapSY + edgeHeight * 2 <= y && y < mapEY - edgeHeight * 2) {
+			depthH = DEPTH.DEEP;
 		}
 
 		// 小さい方(浅い方)にあわせる
-		if (eDepthW == eDepthH || eDepthW.ordinal() < eDepthH.ordinal()) {
-			eDepthRet = eDepthW;
+		if (depthW == depthH || depthW.ordinal() < depthH.ordinal()) {
+			depthResult = depthW;
 		} else {
-			eDepthRet = eDepthH;
+			depthResult = depthH;
 		}
 
-		return eDepthRet;
+		return depthResult;
 	}
 
-	public int[] getAnWaterPointX() {
-		return anWaterPointX;
+	public int[] getWaterPolygonX() {
+		return waterPolygonX;
 	}
 
-	public void setAnWaterPointX(int[] anWaterPointX) {
-		this.anWaterPointX = anWaterPointX;
+	public void setWaterPolygonX(int[] waterPolygonX) {
+		this.waterPolygonX = waterPolygonX;
 	}
 
-	public int[] getAnWaterPointY() {
-		return anWaterPointY;
+	public int[] getWaterPolygonY() {
+		return waterPolygonY;
 	}
 
-	public void setAnWaterPointY(int[] anWaterPointY) {
-		this.anWaterPointY = anWaterPointY;
+	public void setWaterPolygonY(int[] waterPolygonY) {
+		this.waterPolygonY = waterPolygonY;
 	}
 
 	public List<Obj> getBindObjList() {

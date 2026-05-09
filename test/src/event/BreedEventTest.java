@@ -34,7 +34,7 @@ public class BreedEventTest extends EventTestBase {
         Body baby = createBody(2, 120, 120);
         WorldTestHelper.setParents(baby, -1, parent.getUniqueID());
         baby.setAgeState(src.enums.AgeState.BABY);
-        baby.setForceBirthMessage(true);
+        baby.setBirthMessageForced(true);
 
         BreedEvent event = new BreedEvent(parent, baby, null, 10);
 
@@ -47,7 +47,7 @@ public class BreedEventTest extends EventTestBase {
         Body baby = createBody(2, 120, 120);
         WorldTestHelper.setParents(baby, -1, parent.getUniqueID());
         baby.setAgeState(src.enums.AgeState.BABY);
-        baby.setForceBirthMessage(false);
+        baby.setBirthMessageForced(false);
 
         BreedEvent event = new BreedEvent(parent, baby, null, 10);
 
@@ -177,7 +177,7 @@ public class BreedEventTest extends EventTestBase {
     void testCheckEventResponse_bBuried_returnsFalse() {
         Body parent = createBody(1, 100, 100);
         Body b = createBody(2, 120, 120);
-        b.setBaryState(src.enums.BaryInUGState.HALF);
+        b.setBurialState(src.enums.BurialState.HALF);
         BreedEvent event = new BreedEvent(parent, null, null, 10);
         assertFalse(event.checkEventResponse(b));
     }
@@ -239,7 +239,7 @@ public class BreedEventTest extends EventTestBase {
         Body b = createBody(2, 105, 105);
         WorldTestHelper.setParents(b, -1, from.getUniqueID());
         b.setAgeState(src.enums.AgeState.BABY);
-        b.setForceBirthMessage(true);
+        b.setBirthMessageForced(true);
         from.setBirth(true);
 
         BreedEvent event = new BreedEvent(from, null, null, 10);
@@ -272,7 +272,7 @@ public class BreedEventTest extends EventTestBase {
     void testExecute_bIsNYD_returnsFalse() {
         Body from = createBody(1, 100, 100);
         Body b = createBody(2, 120, 120);
-        b.seteCoreAnkoState(src.enums.CoreAnkoState.NonYukkuriDisease);
+        b.setCoreAnkoState(src.enums.CoreAnkoState.NonYukkuriDisease);
         BreedEvent event = new BreedEvent(from, null, null, 10);
         assertFalse(event.execute(b));
     }

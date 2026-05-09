@@ -9,7 +9,6 @@ import src.enums.AgeState;
 import src.enums.YukkuriType;
 import src.game.Dna;
 import src.util.GameRandom;
-import src.util.YukkuriUtil;
 import src.yukkuri.*;
 
 /**
@@ -71,7 +70,7 @@ public final class BodyFactory {
 		Body papa = p2;
 		Body mama = p1;
 		if (papa == null && dna != null) {
-			papa = YukkuriUtil.getBodyInstance(dna.getFather());
+			papa = src.util.BodyRegistry.getBodyInstance(dna.getFather());
 		}
 		Body body;
 		switch (type) {
@@ -242,28 +241,28 @@ public final class BodyFactory {
 
 	private static void applyNagasiMode(Body body, Body mama, Body papa) {
 		if (SimYukkuri.NAGASI_MODE == 2) {
-			int nCount = 0;
-			if (mama != null && mama.isbImageNagasiMode()) {
-				nCount++;
+			int parentCount = 0;
+			if (mama != null && mama.isImageNagasiMode()) {
+				parentCount++;
 			}
-			if (papa != null && papa.isbImageNagasiMode()) {
-				nCount++;
+			if (papa != null && papa.isImageNagasiMode()) {
+				parentCount++;
 			}
-			if (nCount == 0) {
+			if (parentCount == 0) {
 				if (GameRandom.nextInt(20) == 0) {
-					body.setbImageNagasiMode(true);
+					body.setImageNagasiMode(true);
 				}
-			} else if (nCount == 1) {
+			} else if (parentCount == 1) {
 				if (GameRandom.nextBoolean()) {
-					body.setbImageNagasiMode(true);
+					body.setImageNagasiMode(true);
 				}
 			} else {
 				if (GameRandom.nextInt(20) != 0) {
-					body.setbImageNagasiMode(true);
+					body.setImageNagasiMode(true);
 				}
 			}
-		} else if (mama != null && mama.isbImageNagasiMode()) {
-			body.setbImageNagasiMode(true);
+		} else if (mama != null && mama.isImageNagasiMode()) {
+			body.setImageNagasiMode(true);
 		}
 	}
 }

@@ -15,7 +15,6 @@ import src.enums.AttachProperty;
 import src.enums.Direction;
 import src.enums.Event;
 import src.system.ResourceUtil;
-import src.util.YukkuriUtil;
 
 
 /****************************************
@@ -82,7 +81,7 @@ public class StopAmpoule extends Attachment {
 
 	@Override
 	protected Event update() {
-		Body pa = YukkuriUtil.getBodyInstance(parent);
+		Body pa = src.util.BodyRegistry.getBodyInstance(parent);
 		if (pa == null) return Event.DONOTHING;
 		if(!pa.isAdult()) {
 			pa.addAge(-TICK * 100);
@@ -91,7 +90,7 @@ public class StopAmpoule extends Attachment {
 	}
 	@Override
 	public BufferedImage getImage(Body b) {
-		Body pa = YukkuriUtil.getBodyInstance(parent);
+		Body pa = src.util.BodyRegistry.getBodyInstance(parent);
 		if (pa == null) return null;
 		if(b.getDirection() == Direction.RIGHT) {
 			return images[pa.getBodyAgeState().ordinal()][1];
@@ -101,7 +100,7 @@ public class StopAmpoule extends Attachment {
 	@Override
 	public void resetBoundary()
 	{
-		Body pa = YukkuriUtil.getBodyInstance(parent);
+		Body pa = src.util.BodyRegistry.getBodyInstance(parent);
 		if (pa != null) {
 			setBoundary(pivX[pa.getBodyAgeState().ordinal()],
 					pivY[pa.getBodyAgeState().ordinal()],
@@ -116,7 +115,7 @@ public class StopAmpoule extends Attachment {
 	public StopAmpoule(Body body) {
 		super(body);
 		setAttachProperty(property, POS_KEY);
-		Body pa = YukkuriUtil.getBodyInstance(parent);
+		Body pa = src.util.BodyRegistry.getBodyInstance(parent);
 		if (pa != null) {
 			setBoundary(pivX[pa.getBodyAgeState().ordinal()],
 					pivY[pa.getBodyAgeState().ordinal()],

@@ -58,7 +58,7 @@ public class StickyPlate extends ObjEX {
 	private static Rectangle4y boundary = new Rectangle4y();
 
 	private Body bindBody = null;
-	private boolean bFixBack = false;
+	private boolean fixBack = false;
 
 	private ItemRank itemRank;
 
@@ -144,7 +144,7 @@ public class StickyPlate extends ObjEX {
 		bindBody.setCalcX(x);
 		bindBody.setCalcY(y);
 		bindBody.setLockmove(true);
-		if (!bFixBack || bindBody.isPealed()) {
+			if (!fixBack || bindBody.isPealed()) {
 			bindBody.setPullAndPush(true);
 		} else {
 			bindBody.setFixBack(true);
@@ -159,7 +159,7 @@ public class StickyPlate extends ObjEX {
 			return;
 		}
 		if (bindBody != null) {
-			if (bFixBack) {
+			if (fixBack) {
 				// 針が刺さっていない
 				if (!bindBody.isNeedled() && !bindBody.isSleeping()) {
 					if (GameRandom.nextInt(10) == 0) {
@@ -257,20 +257,20 @@ public class StickyPlate extends ObjEX {
 
 		if (dlgRet == JOptionPane.OK_OPTION) {
 			if (but[0].isSelected())
-				s.bFixBack = false;
+				s.fixBack = false;
 			if (but[1].isSelected())
-				s.bFixBack = true;
+				s.fixBack = true;
 			ret = true;
 		}
 		return ret;
 	}
 
-	public boolean isbFixBack() {
-		return bFixBack;
+	public boolean isFixBack() {
+		return fixBack;
 	}
 
-	public void setbFixBack(boolean bFixBack) {
-		this.bFixBack = bFixBack;
+	public void setFixBack(boolean fixBack) {
+		this.fixBack = fixBack;
 	}
 
 	public ItemRank getItemRank() {

@@ -156,12 +156,12 @@ public class ObjTest {
     @Test
     public void testSetCalcZBelowMostDepthNotFalling() {
         Obj obj = new Obj();
-        obj.setnMostDepth(0);
+        obj.setMostDepth(0);
         obj.setZ(-10); // z < nMostDepth を事前に設定
-        obj.setbFallingUnderGround(false);
+        obj.setFallingUnderGround(false);
 
         obj.setCalcZ(-5);
-        // z < nMostDepth → !bFallingUnderGround → z = nMostDepth = 0
+        // z < nMostDepth → !fallingUnderGround → z = nMostDepth = 0
         // しかし次の if (Z > mapZ) else z = Z → z = -5
         assertEquals(-5, obj.getZ());
     }
@@ -169,12 +169,12 @@ public class ObjTest {
     @Test
     public void testSetCalcZBelowMostDepthFalling() {
         Obj obj = new Obj();
-        obj.setnMostDepth(0);
+        obj.setMostDepth(0);
         obj.setZ(-10);
-        obj.setbFallingUnderGround(true);
+        obj.setFallingUnderGround(true);
 
         obj.setCalcZ(-5);
-        // z < nMostDepth → bFallingUnderGround → z = Z
+        // z < nMostDepth → fallingUnderGround → z = Z
         assertEquals(-5, obj.getZ());
     }
 
@@ -205,7 +205,7 @@ public class ObjTest {
     @Test
     public void testSetBxyz() {
         Obj obj = new Obj();
-        obj.setBxyz(1, 2, 3);
+        obj.setMotion(1, 2, 3);
         assertEquals(1, obj.getBx());
         assertEquals(2, obj.getBy());
         assertEquals(3, obj.getBz());
@@ -214,8 +214,8 @@ public class ObjTest {
     @Test
     public void testAddBxyz() {
         Obj obj = new Obj();
-        obj.setBxyz(1, 2, 3);
-        obj.addBxyz(10, 20, 30);
+        obj.setMotion(1, 2, 3);
+        obj.addMotion(10, 20, 30);
         assertEquals(11, obj.getBx());
         assertEquals(22, obj.getBy());
         assertEquals(33, obj.getBz());
@@ -224,8 +224,8 @@ public class ObjTest {
     @Test
     public void testResetBPos() {
         Obj obj = new Obj();
-        obj.setBxyz(1, 2, 3);
-        obj.resetBPos();
+        obj.setMotion(1, 2, 3);
+        obj.resetMotion();
         assertEquals(0, obj.getBx());
         assertEquals(0, obj.getBy());
         assertEquals(0, obj.getBz());
@@ -377,13 +377,13 @@ public class ObjTest {
     public void testWhere() {
         Obj obj = new Obj();
         assertEquals(Where.ON_FLOOR, obj.getWhere());
-        assertEquals(Where.ON_FLOOR, obj.geteWhere());
+        assertEquals(Where.ON_FLOOR, obj.getWhere());
 
         obj.setWhere(Where.ON_YUKKURI);
         assertEquals(Where.ON_YUKKURI, obj.getWhere());
 
-        obj.seteWhere(Where.IN_YUKKURI);
-        assertEquals(Where.IN_YUKKURI, obj.geteWhere());
+        obj.setWhere(Where.IN_YUKKURI);
+        assertEquals(Where.IN_YUKKURI, obj.getWhere());
     }
 
     // --- fallingUnderGround / inPool ---
@@ -391,17 +391,17 @@ public class ObjTest {
     @Test
     public void testFallingUnderGround() {
         Obj obj = new Obj();
-        assertFalse(obj.getFallingUnderGround());
+        assertFalse(obj.isFallingUnderGround());
         obj.setFallingUnderGround(true);
-        assertTrue(obj.getFallingUnderGround());
+        assertTrue(obj.isFallingUnderGround());
     }
 
     @Test
     public void testInPool() {
         Obj obj = new Obj();
-        assertFalse(obj.getInPool());
+        assertFalse(obj.isInPool());
         obj.setInPool(true);
-        assertTrue(obj.getInPool());
+        assertTrue(obj.isInPool());
     }
 
     // --- mostDepth ---
@@ -638,8 +638,8 @@ public class ObjTest {
         obj.setY(500);
         obj.setZ(1);
         obj.setVz(5);
-        obj.setnMostDepth(0);
-        obj.setbFallingUnderGround(false);
+        obj.setMostDepth(0);
+        obj.setFallingUnderGround(false);
 
         obj.clockTick();
 
@@ -656,12 +656,12 @@ public class ObjTest {
         obj.setY(500);
         obj.setZ(1);
         obj.setVz(5);
-        obj.setnMostDepth(0);
-        obj.setbFallingUnderGround(true);
+        obj.setMostDepth(0);
+        obj.setFallingUnderGround(true);
 
         obj.clockTick();
 
-        // bFallingUnderGround=true → z != nMostDepth
+        // fallingUnderGround=true → z != nMostDepth
         // vx, vy は 0 にセットされる（z <= nMostDepth の外側）
         assertEquals(0, obj.getVx());
         assertEquals(0, obj.getVy());
@@ -818,7 +818,7 @@ public class ObjTest {
             obj.setY(100);
             obj.setVx(5);
             obj.setVy(7);
-            obj.setBxyz(3, 4, 0);
+            obj.setMotion(3, 4, 0);
 
             Event result = obj.clockTick();
 
@@ -839,8 +839,8 @@ public class ObjTest {
             obj.setVz(5);
             obj.setVx(9);
             obj.setVy(11);
-            obj.setnMostDepth(0);
-            obj.setbFallingUnderGround(true);
+            obj.setMostDepth(0);
+            obj.setFallingUnderGround(true);
 
             Event result = obj.clockTick();
 

@@ -74,7 +74,7 @@ public class HotPlate extends ObjEX {
 				bindBody.setForceFace(-1);
 				bindBody.setLockmove(false);
 				bindBody.setPullAndPush(false);
-				bindBody.setDropShadow(true);
+				bindBody.setShadowVisible(true);
 				bindBody = null;
 			}
 		}
@@ -128,7 +128,7 @@ public class HotPlate extends ObjEX {
 			Cash.addCash(-getCost());
 		}
 		if (bindBody != null) {
-			bindBody.setDropShadow(false);
+			bindBody.setShadowVisible(false);
 			if (grabbed) {
 				bindBody.setCalcX(x);
 				bindBody.setCalcY(y);
@@ -140,7 +140,7 @@ public class HotPlate extends ObjEX {
 				bindBody.setForceFace(-1);
 				bindBody.setLockmove(false);
 				bindBody.setPullAndPush(false);
-				bindBody.setDropShadow(true);
+				bindBody.setShadowVisible(true);
 				bindBody = null;
 			} else {
 				if (!bindBody.isDead()) {

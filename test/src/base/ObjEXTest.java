@@ -211,8 +211,8 @@ public class ObjEXTest {
         StubObjEX obj = new StubObjEX(500, 500, 0);
         obj.setZ(1);
         obj.setVz(5);
-        obj.setnMostDepth(0);
-        obj.setbFallingUnderGround(false);
+        obj.setMostDepth(0);
+        obj.setFallingUnderGround(false);
 
         obj.clockTick();
 
@@ -228,13 +228,13 @@ public class ObjEXTest {
         StubObjEX obj = new StubObjEX(500, 500, 0);
         obj.setZ(1);
         obj.setVz(5);
-        obj.setnMostDepth(0);
-        obj.setbFallingUnderGround(true);
+        obj.setMostDepth(0);
+        obj.setFallingUnderGround(true);
         obj.setObjType(Type.SHIT); // not PLATFORM
 
         obj.clockTick();
 
-        // bFallingUnderGround=true → (!bFallingUnderGround || objType==PLATFORM) は false
+        // fallingUnderGround=true → (!fallingUnderGround || objType==PLATFORM) は false
         // z <= nMostDepth 条件に到達するが、内側分岐の条件不成立
     }
 
@@ -243,8 +243,8 @@ public class ObjEXTest {
         StubObjEX obj = new StubObjEX(500, 500, 0);
         obj.setZ(1);
         obj.setVz(5);
-        obj.setnMostDepth(0);
-        obj.setbFallingUnderGround(true);
+        obj.setMostDepth(0);
+        obj.setFallingUnderGround(true);
         obj.setObjType(Type.PLATFORM);
 
         obj.clockTick();
@@ -528,8 +528,8 @@ public class ObjEXTest {
         obj.setOption(42);
         assertEquals(42, obj.getOption());
 
-        obj.setLinkParent(7);
-        assertEquals(7, obj.getLinkParent());
+        obj.setParentLinkId(7);
+        assertEquals(7, obj.getParentLinkId());
 
         obj.setLooks(3);
         assertEquals(3, obj.getLooks());
@@ -583,7 +583,7 @@ public class ObjEXTest {
             StubObjEX obj = new StubObjEX(100, 100, 0);
             obj.setVx(5);
             obj.setVy(7);
-            obj.setBxyz(3, 4, 0);
+            obj.setMotion(3, 4, 0);
 
             Event result = obj.clockTick();
 

@@ -240,7 +240,7 @@ public class NeedleTest {
         Body parent = createParent(AgeState.ADULT);
         Needle needle = new Needle(parent);
         parent.setDead(false);
-        parent.seteCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
+        parent.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
 
         int damageBefore = parent.getDamage();
         needle.update();
@@ -253,7 +253,7 @@ public class NeedleTest {
         Body parent = createParent(AgeState.ADULT);
         Needle needle = new Needle(parent);
         parent.setDead(false);
-        parent.seteCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
+        parent.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
         parent.setSleeping(true);
 
         needle.update();
@@ -266,7 +266,7 @@ public class NeedleTest {
         Body parent = createParent(AgeState.ADULT);
         Needle needle = new Needle(parent);
         parent.setDead(false);
-        parent.seteCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
+        parent.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
         parent.setSleeping(false);
 
         needle.update();
@@ -277,7 +277,7 @@ public class NeedleTest {
         Body parent = createParent(AgeState.ADULT);
         Needle needle = new Needle(parent);
         parent.setDead(false);
-        parent.seteCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
+        parent.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
         parent.setFixBack(true);
         parent.setDirection(Direction.RIGHT);
 
@@ -291,7 +291,7 @@ public class NeedleTest {
         Body parent = createParent(AgeState.ADULT);
         Needle needle = new Needle(parent);
         parent.setDead(false);
-        parent.seteCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
+        parent.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
         parent.setFixBack(false);
 
         needle.update();
@@ -303,9 +303,9 @@ public class NeedleTest {
         Needle needle = new Needle(parent);
         parent.setDead(false);
         parent.setFixBack(true);
-        parent.seteCoreAnkoState(CoreAnkoState.DEFAULT);
+        parent.setCoreAnkoState(CoreAnkoState.DEFAULT);
         // isTalking=trueにしてsetMessage呼び出し回避
-        parent.setMessageCount(1);
+        parent.setMessageTicks(1);
 
         needle.update();
         // isNotNYD && isFixBack && isTalking の分岐を通る
@@ -317,8 +317,8 @@ public class NeedleTest {
         Needle needle = new Needle(parent);
         parent.setDead(false);
         parent.setFixBack(false);
-        parent.seteCoreAnkoState(CoreAnkoState.DEFAULT);
-        parent.setMessageCount(1);
+        parent.setCoreAnkoState(CoreAnkoState.DEFAULT);
+        parent.setMessageTicks(1);
 
         needle.update();
         // isNotNYD && !isFixBack && isTalking の分岐を通る
@@ -329,7 +329,7 @@ public class NeedleTest {
         Body parent = createParent(AgeState.ADULT);
         Needle needle = new Needle(parent);
         parent.setDead(false);
-        parent.seteCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
+        parent.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
 
         Event result = needle.update();
         assertEquals(Event.DONOTHING, result);
@@ -342,7 +342,7 @@ public class NeedleTest {
         Body parent = createParent(AgeState.ADULT);
         Needle needle = new Needle(parent);
         parent.setDead(false);
-        parent.seteCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
+        parent.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
 
         needle.update();
 
@@ -356,7 +356,7 @@ public class NeedleTest {
         Body parent = createParent(AgeState.ADULT);
         Needle needle = new Needle(parent);
         parent.setDead(false);
-        parent.seteCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
+        parent.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
 
         needle.update();
     }
@@ -395,7 +395,7 @@ public class NeedleTest {
             mother.setHappiness(Happiness.HAPPY);
             mother.setMsgType(YukkuriType.REIMU);
             // 子をNYDにしてsetMessage NPE回避
-            child.seteCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
+            child.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
 
             Stalk stalk = new Stalk();
             stalk.setPlantYukkuri(mother);
@@ -419,7 +419,7 @@ public class NeedleTest {
             Body child = createParent(AgeState.BABY);
             Body mother = createParent(AgeState.ADULT);
             mother.setHappiness(Happiness.HAPPY);
-            child.seteCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
+            child.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
 
             Stalk stalk = new Stalk();
             stalk.setPlantYukkuri(mother);
@@ -441,7 +441,7 @@ public class NeedleTest {
             // RND=0 → nextInt(50)==0 だが茎がないなら反応しない
             SimYukkuri.RND = new ConstState(0);
             Body child = createParent(AgeState.BABY);
-            child.seteCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
+            child.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
 
             Needle needle = new Needle(child);
             child.setDead(false);
@@ -464,7 +464,7 @@ public class NeedleTest {
             parent.setFixBack(true);
             parent.setSleeping(true);
             parent.setDirection(Direction.RIGHT);
-            parent.seteCoreAnkoState(CoreAnkoState.DEFAULT);
+            parent.setCoreAnkoState(CoreAnkoState.DEFAULT);
 
             int damageBefore = parent.getDamage();
             int stressBefore = parent.getStress();
@@ -489,7 +489,7 @@ public class NeedleTest {
             mother.setHappiness(Happiness.HAPPY);
             mother.setMsgType(YukkuriType.REIMU);
             child.setUnBirth(true);
-            child.seteCoreAnkoState(CoreAnkoState.DEFAULT);
+            child.setCoreAnkoState(CoreAnkoState.DEFAULT);
 
             Stalk stalk = new Stalk();
             stalk.setPlantYukkuri(mother);

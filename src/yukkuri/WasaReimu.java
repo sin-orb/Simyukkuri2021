@@ -50,7 +50,7 @@ public class WasaReimu extends Reimu {
 	// iniファイルから読み込んだ初期値
 	private static int baseSpeed = 100;
 	// 個別表情管理(まりちゃ流し用)
-	private int anImageVerStateCtrlNagasi[][] = new int[ImageCode.values().length][2];
+	private int[][] imageVariantState = new int[ImageCode.values().length][2];
 	/** イメージのロード */
 	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
 
@@ -92,7 +92,7 @@ public class WasaReimu extends Reimu {
 	}
 	@Override
 	public int getImage(int type, int direction, BodyLayer layer, int index) {
-		if( !isbImageNagasiMode() || imagesNagasi == null)
+		if( !isImageNagasiMode() || imagesNagasi == null)
 		{
 			layer.getImage()[index] = imagePack[getBodyRank().getImageIndex()][type][direction * directionOffset[type][0]][getBodyAgeState().ordinal()];
 			layer.getDir()[index] = direction * directionOffset[type][1];
@@ -102,37 +102,37 @@ public class WasaReimu extends Reimu {
 			{
 				for( int i=0; i<ImageCode.values().length; i++ )
 				{
-					anImageVerStateCtrlNagasi[i][1] = 0;
+					imageVariantState[i][1] = 0;
 				}
 			}
 
 			// 前回と同じ表示
-			if(anImageVerStateCtrlNagasi[type][1] == 1)
-			{
-				int nIndex = anImageVerStateCtrlNagasi[type][0];
-				layer.getImage()[index] = imagesNagasi[type][direction * directionOffsetNagasi[type][0]][getBodyAgeState().ordinal()][nIndex];
+				if(imageVariantState[type][1] == 1)
+				{
+					int imageIndex = imageVariantState[type][0];
+				layer.getImage()[index] = imagesNagasi[type][direction * directionOffsetNagasi[type][0]][getBodyAgeState().ordinal()][imageIndex];
 
 			}else{
-				int nOtherVerCount = 0;
+				int otherVersionCount = 0;
 				for( int i=0; i < ModLoader.getMaxImgOtherVer(); i++ )
 				{
 					if( imagesNagasi[type][direction * directionOffsetNagasi[type][0]][getBodyAgeState().ordinal()][i+1] != null )
 					{
-						nOtherVerCount++;
+						otherVersionCount++;
 					}
 				}
 
-				if( nOtherVerCount != 0 )
+				if( otherVersionCount != 0 )
 				{
-					int nRndIndex = GameRandom.nextInt(nOtherVerCount+1);
-					anImageVerStateCtrlNagasi[type][0] = nRndIndex;
-					layer.getImage()[index] = imagesNagasi[type][direction * directionOffsetNagasi[type][0]][getBodyAgeState().ordinal()][nRndIndex];
+					int randomIndex = GameRandom.nextInt(otherVersionCount+1);
+						imageVariantState[type][0] = randomIndex;
+					layer.getImage()[index] = imagesNagasi[type][direction * directionOffsetNagasi[type][0]][getBodyAgeState().ordinal()][randomIndex];
 				}else{
-					anImageVerStateCtrlNagasi[type][0] = 0;
+						imageVariantState[type][0] = 0;
 					layer.getImage()[index] = imagesNagasi[type][direction * directionOffsetNagasi[type][0]][getBodyAgeState().ordinal()][0];
 				}
 
-				anImageVerStateCtrlNagasi[type][1] = 1;
+					imageVariantState[type][1] = 1;
 			}
 
 			layer.getDir()[index] = direction * directionOffsetNagasi[type][1];
@@ -163,11 +163,11 @@ public class WasaReimu extends Reimu {
 	public WasaReimu() {
 		
 	}
-	public int[][] getAnImageVerStateCtrlNagasi() {
-		return anImageVerStateCtrlNagasi;
+	public int[][] getImageVariantState() {
+		return imageVariantState;
 	}
-	public void setAnImageVerStateCtrlNagasi(int[][] anImageVerStateCtrlNagasi) {
-		this.anImageVerStateCtrlNagasi = anImageVerStateCtrlNagasi;
+	public void setImageVariantState(int[][] imageVariantState) {
+		this.imageVariantState = imageVariantState;
 	}
 	
 }

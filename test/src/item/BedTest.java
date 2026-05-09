@@ -294,14 +294,14 @@ class BedTest extends ItemTestBase {
     @Test
     void testGetLinkParent_Default() {
         Bed bed = new Bed(100, 100, 0);
-        assertEquals(-1, bed.getLinkParent());
+        assertEquals(-1, bed.getParentLinkId());
     }
 
     @Test
     void testSetLinkParent() {
         Bed bed = new Bed(100, 100, 0);
-        bed.setLinkParent(99);
-        assertEquals(99, bed.getLinkParent());
+        bed.setParentLinkId(99);
+        assertEquals(99, bed.getParentLinkId());
     }
 
     @Test
@@ -521,7 +521,7 @@ class BedTest extends ItemTestBase {
         assertEquals(3, bed.getBx());
         assertEquals(4, bed.getBy());
         assertEquals(5, bed.getBz());
-        bed.resetBPos();
+        bed.resetMotion();
         assertEquals(0, bed.getBx());
         assertEquals(0, bed.getBy());
         assertEquals(0, bed.getBz());
@@ -530,49 +530,49 @@ class BedTest extends ItemTestBase {
     @Test
     void testAddBxyz() {
         Bed bed = new Bed(100, 100, 0);
-        bed.addBxyz(2, 3, 4);
+        bed.addMotion(2, 3, 4);
         assertEquals(2, bed.getBx());
         assertEquals(3, bed.getBy());
         assertEquals(4, bed.getBz());
     }
 
     @Test
-    void testIsbFallingUnderGround_Default() {
+    void testIsFallingUnderGround_Default() {
         Bed bed = new Bed(100, 100, 0);
-        assertFalse(bed.isbFallingUnderGround());
+        assertFalse(bed.isFallingUnderGround());
     }
 
     @Test
-    void testSetbFallingUnderGround() {
+    void testSetFallingUnderGround() {
         Bed bed = new Bed(100, 100, 0);
-        bed.setbFallingUnderGround(true);
-        assertTrue(bed.isbFallingUnderGround());
+        bed.setFallingUnderGround(true);
+        assertTrue(bed.isFallingUnderGround());
     }
 
     @Test
     void testIsbInPool_Default() {
         Bed bed = new Bed(100, 100, 0);
-        assertFalse(bed.isbInPool());
+        assertFalse(bed.isInPool());
     }
 
     @Test
     void testSetbInPool() {
         Bed bed = new Bed(100, 100, 0);
-        bed.setbInPool(true);
-        assertTrue(bed.isbInPool());
+        bed.setInPool(true);
+        assertTrue(bed.isInPool());
     }
 
     @Test
     void testGetnMostDepth_Default() {
         Bed bed = new Bed(100, 100, 0);
-        assertEquals(0, bed.getnMostDepth());
+        assertEquals(0, bed.getMostDepth());
     }
 
     @Test
     void testSetnMostDepth() {
         Bed bed = new Bed(100, 100, 0);
-        bed.setnMostDepth(-5);
-        assertEquals(-5, bed.getnMostDepth());
+        bed.setMostDepth(-5);
+        assertEquals(-5, bed.getMostDepth());
     }
 
     @Test

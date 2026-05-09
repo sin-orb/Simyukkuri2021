@@ -20,12 +20,12 @@ public class SerializationTest {
             // 1. Create a Yukkuri (Reimu)
             Reimu reimu = new Reimu();
 
-            // 2. Tune parameters (this randomizes DAMAGELIMITorg)
+            // 2. Tune parameters (this randomizes damageLimitBase)
             reimu.tuneParameters();
 
             // Capture the tuned limit and age state
             int ageStateIndex = reimu.getBodyAgeState().ordinal();
-            int tunedLimit = reimu.getDAMAGELIMITorg()[ageStateIndex];
+            int tunedLimit = reimu.getDamageLimitBase()[ageStateIndex];
 
             System.out.println("Original Tuned DAMAGELIMIT: " + tunedLimit);
 
@@ -49,7 +49,7 @@ public class SerializationTest {
             Reimu loadedReimu = loadYukkuri(tempFile);
 
             // 6. Verify
-            int loadedLimit = loadedReimu.getDAMAGELIMITorg()[loadedReimu.getBodyAgeState().ordinal()];
+            int loadedLimit = loadedReimu.getDamageLimitBase()[loadedReimu.getBodyAgeState().ordinal()];
             int loadedDamage = loadedReimu.getDamage();
 
             System.out.println("Loaded DAMAGELIMIT: " + loadedLimit);
@@ -57,10 +57,10 @@ public class SerializationTest {
             System.out.println("Is Dead after load? " + loadedReimu.isDead());
 
             if (loadedLimit != tunedLimit) {
-                System.err.println("FAILURE: DAMAGELIMITorg was NOT restored correctly!");
+                System.err.println("FAILURE: damageLimitBase was NOT restored correctly!");
                 System.err.println("Expected: " + tunedLimit + ", Got: " + loadedLimit);
             } else {
-                System.out.println("SUCCESS: DAMAGELIMITorg restored correctly.");
+                System.out.println("SUCCESS: damageLimitBase restored correctly.");
             }
 
             if (loadedDamage != testDamage) {

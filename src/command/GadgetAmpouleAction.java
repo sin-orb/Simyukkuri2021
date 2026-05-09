@@ -22,243 +22,243 @@ final class GadgetAmpouleAction {
 	private GadgetAmpouleAction() {
 	}
 
-	static void evaluateAmpoule(GadgetList item, MouseEvent ev, Obj found) {
+	static void evaluateAmpoule(GadgetList item, MouseEvent ev, Obj targetObject) {
 		List<Body> bodyList = new LinkedList<Body>(GameWorld.get().getCurrentMap().getBody().values());
 		switch (item) {
 			case ORANGE_AMP:
 				if (ev.isShiftDown()) {
-					int flag = 0;
-					if (found instanceof Body) {
-						flag = ((Body) found).getAttachmentSize(OrangeAmpoule.class);
+					int attachmentCount = 0;
+					if (targetObject instanceof Body) {
+						attachmentCount = ((Body) targetObject).getAttachmentSize(OrangeAmpoule.class);
 					}
-					for (Body b : bodyList) {
-						if (flag == 0) {
-							if (b.getAttachmentSize(OrangeAmpoule.class) == 0)
-								b.addAttachment(new OrangeAmpoule(b));
+					for (Body body : bodyList) {
+						if (attachmentCount == 0) {
+							if (body.getAttachmentSize(OrangeAmpoule.class) == 0)
+								body.addAttachment(new OrangeAmpoule(body));
 						} else {
-							if (b.getAttachmentSize(OrangeAmpoule.class) != 0)
-								b.removeAttachment(OrangeAmpoule.class);
+							if (body.getAttachmentSize(OrangeAmpoule.class) != 0)
+								body.removeAttachment(OrangeAmpoule.class);
 						}
 					}
 				} else if (ev.isControlDown()) {
-					for (Body b : bodyList) {
-						if (b.getAttachmentSize(OrangeAmpoule.class) != 0) {
-							b.removeAttachment(OrangeAmpoule.class);
+					for (Body body : bodyList) {
+						if (body.getAttachmentSize(OrangeAmpoule.class) != 0) {
+							body.removeAttachment(OrangeAmpoule.class);
 						} else {
-							b.addAttachment(new OrangeAmpoule(b));
+							body.addAttachment(new OrangeAmpoule(body));
 						}
 					}
 				} else {
-					if (found instanceof Body) {
-						Body b = (Body) found;
-						if (b.getAttachmentSize(OrangeAmpoule.class) != 0) {
-							b.removeAttachment(OrangeAmpoule.class);
+					if (targetObject instanceof Body) {
+						Body body = (Body) targetObject;
+						if (body.getAttachmentSize(OrangeAmpoule.class) != 0) {
+							body.removeAttachment(OrangeAmpoule.class);
 						} else {
-							b.addAttachment(new OrangeAmpoule((Body) found));
+							body.addAttachment(new OrangeAmpoule(body));
 						}
 					}
 				}
 				break;
 			case ACCEL_AMP:
 				if (ev.isShiftDown()) {
-					int flag = 0;
-					if (found instanceof Body) {
-						flag = ((Body) found).getAttachmentSize(AccelAmpoule.class);
+					int attachmentCount = 0;
+					if (targetObject instanceof Body) {
+						attachmentCount = ((Body) targetObject).getAttachmentSize(AccelAmpoule.class);
 					}
-					for (Body b : bodyList) {
-						if (flag == 0) {
-							if (b.getAttachmentSize(AccelAmpoule.class) == 0)
-								b.addAttachment(new AccelAmpoule(b));
+					for (Body body : bodyList) {
+						if (attachmentCount == 0) {
+							if (body.getAttachmentSize(AccelAmpoule.class) == 0)
+								body.addAttachment(new AccelAmpoule(body));
 						} else {
-							if (b.getAttachmentSize(AccelAmpoule.class) != 0)
-								b.removeAttachment(AccelAmpoule.class);
+							if (body.getAttachmentSize(AccelAmpoule.class) != 0)
+								body.removeAttachment(AccelAmpoule.class);
 						}
 					}
 				} else if (ev.isControlDown()) {
-					for (Body b : bodyList) {
-						if (b.getAttachmentSize(AccelAmpoule.class) != 0) {
-							b.removeAttachment(AccelAmpoule.class);
+					for (Body body : bodyList) {
+						if (body.getAttachmentSize(AccelAmpoule.class) != 0) {
+							body.removeAttachment(AccelAmpoule.class);
 						} else {
-							b.addAttachment(new AccelAmpoule(b));
+							body.addAttachment(new AccelAmpoule(body));
 						}
 					}
 				} else {
-					if (found instanceof Body) {
-						Body b = (Body) found;
-						if (b.getAttachmentSize(AccelAmpoule.class) != 0) {
-							b.removeAttachment(AccelAmpoule.class);
+					if (targetObject instanceof Body) {
+						Body body = (Body) targetObject;
+						if (body.getAttachmentSize(AccelAmpoule.class) != 0) {
+							body.removeAttachment(AccelAmpoule.class);
 						} else {
-							b.addAttachment(new AccelAmpoule((Body) found));
+							body.addAttachment(new AccelAmpoule(body));
 						}
 					}
 				}
 				break;
 			case STOP_AMP:
 				if (ev.isShiftDown()) {
-					int flag = 0;
-					if (found instanceof Body) {
-						flag = ((Body) found).getAttachmentSize(StopAmpoule.class);
+					int attachmentCount = 0;
+					if (targetObject instanceof Body) {
+						attachmentCount = ((Body) targetObject).getAttachmentSize(StopAmpoule.class);
 					}
-					for (Body b : bodyList) {
-						if (flag == 0) {
-							if (b.getAttachmentSize(StopAmpoule.class) == 0)
-								b.addAttachment(new StopAmpoule(b));
+					for (Body body : bodyList) {
+						if (attachmentCount == 0) {
+							if (body.getAttachmentSize(StopAmpoule.class) == 0)
+								body.addAttachment(new StopAmpoule(body));
 						} else {
-							if (b.getAttachmentSize(StopAmpoule.class) != 0)
-								b.removeAttachment(StopAmpoule.class);
+							if (body.getAttachmentSize(StopAmpoule.class) != 0)
+								body.removeAttachment(StopAmpoule.class);
 						}
 					}
 				} else if (ev.isControlDown()) {
-					for (Body b : bodyList) {
-						if (b.getAttachmentSize(StopAmpoule.class) != 0) {
-							b.removeAttachment(StopAmpoule.class);
+					for (Body body : bodyList) {
+						if (body.getAttachmentSize(StopAmpoule.class) != 0) {
+							body.removeAttachment(StopAmpoule.class);
 						} else {
-							b.addAttachment(new StopAmpoule(b));
+							body.addAttachment(new StopAmpoule(body));
 						}
 					}
 				} else {
-					if (found instanceof Body) {
-						Body b = (Body) found;
-						if (b.getAttachmentSize(StopAmpoule.class) != 0) {
-							b.removeAttachment(StopAmpoule.class);
+					if (targetObject instanceof Body) {
+						Body body = (Body) targetObject;
+						if (body.getAttachmentSize(StopAmpoule.class) != 0) {
+							body.removeAttachment(StopAmpoule.class);
 						} else {
-							b.addAttachment(new StopAmpoule((Body) found));
+							body.addAttachment(new StopAmpoule(body));
 						}
 					}
 				}
 				break;
 			case HUNGRY_AMP:
 				if (ev.isShiftDown()) {
-					int flag = 0;
-					if (found instanceof Body) {
-						flag = ((Body) found).getAttachmentSize(HungryAmpoule.class);
+					int attachmentCount = 0;
+					if (targetObject instanceof Body) {
+						attachmentCount = ((Body) targetObject).getAttachmentSize(HungryAmpoule.class);
 					}
-					for (Body b : bodyList) {
-						if (flag == 0) {
-							if (b.getAttachmentSize(HungryAmpoule.class) == 0)
-								b.addAttachment(new HungryAmpoule(b));
+					for (Body body : bodyList) {
+						if (attachmentCount == 0) {
+							if (body.getAttachmentSize(HungryAmpoule.class) == 0)
+								body.addAttachment(new HungryAmpoule(body));
 						} else {
-							if (b.getAttachmentSize(HungryAmpoule.class) != 0)
-								b.removeAttachment(HungryAmpoule.class);
+							if (body.getAttachmentSize(HungryAmpoule.class) != 0)
+								body.removeAttachment(HungryAmpoule.class);
 						}
 					}
 				} else if (ev.isControlDown()) {
-					for (Body b : bodyList) {
-						if (b.getAttachmentSize(HungryAmpoule.class) != 0) {
-							b.removeAttachment(HungryAmpoule.class);
+					for (Body body : bodyList) {
+						if (body.getAttachmentSize(HungryAmpoule.class) != 0) {
+							body.removeAttachment(HungryAmpoule.class);
 						} else {
-							b.addAttachment(new HungryAmpoule(b));
+							body.addAttachment(new HungryAmpoule(body));
 						}
 					}
 				} else {
-					if (found instanceof Body) {
-						Body b = (Body) found;
-						if (b.getAttachmentSize(HungryAmpoule.class) != 0) {
-							b.removeAttachment(HungryAmpoule.class);
+					if (targetObject instanceof Body) {
+						Body body = (Body) targetObject;
+						if (body.getAttachmentSize(HungryAmpoule.class) != 0) {
+							body.removeAttachment(HungryAmpoule.class);
 						} else {
-							b.addAttachment(new HungryAmpoule((Body) found));
+							body.addAttachment(new HungryAmpoule(body));
 						}
 					}
 				}
 				break;
 			case VERYSHIT_AMP:
 				if (ev.isShiftDown()) {
-					int flag = 0;
-					if (found instanceof Body) {
-						flag = ((Body) found).getAttachmentSize(VeryShitAmpoule.class);
+					int attachmentCount = 0;
+					if (targetObject instanceof Body) {
+						attachmentCount = ((Body) targetObject).getAttachmentSize(VeryShitAmpoule.class);
 					}
-					for (Body b : bodyList) {
-						if (flag == 0) {
-							if (b.getAttachmentSize(VeryShitAmpoule.class) == 0)
-								b.addAttachment(new VeryShitAmpoule(b));
+					for (Body body : bodyList) {
+						if (attachmentCount == 0) {
+							if (body.getAttachmentSize(VeryShitAmpoule.class) == 0)
+								body.addAttachment(new VeryShitAmpoule(body));
 						} else {
-							if (b.getAttachmentSize(VeryShitAmpoule.class) != 0)
-								b.removeAttachment(VeryShitAmpoule.class);
+							if (body.getAttachmentSize(VeryShitAmpoule.class) != 0)
+								body.removeAttachment(VeryShitAmpoule.class);
 						}
 					}
 				} else if (ev.isControlDown()) {
-					for (Body b : bodyList) {
-						if (b.getAttachmentSize(VeryShitAmpoule.class) != 0) {
-							b.removeAttachment(VeryShitAmpoule.class);
+					for (Body body : bodyList) {
+						if (body.getAttachmentSize(VeryShitAmpoule.class) != 0) {
+							body.removeAttachment(VeryShitAmpoule.class);
 						} else {
-							b.addAttachment(new VeryShitAmpoule(b));
+							body.addAttachment(new VeryShitAmpoule(body));
 						}
 					}
 				} else {
-					if (found instanceof Body) {
-						Body b = (Body) found;
-						if (b.getAttachmentSize(VeryShitAmpoule.class) != 0) {
-							b.removeAttachment(VeryShitAmpoule.class);
+					if (targetObject instanceof Body) {
+						Body body = (Body) targetObject;
+						if (body.getAttachmentSize(VeryShitAmpoule.class) != 0) {
+							body.removeAttachment(VeryShitAmpoule.class);
 						} else {
-							b.addAttachment(new VeryShitAmpoule((Body) found));
+							body.addAttachment(new VeryShitAmpoule(body));
 						}
 					}
 				}
 				break;
 			case POISON_AMP:
 				if (ev.isShiftDown()) {
-					int flag = 0;
-					if (found instanceof Body) {
-						flag = ((Body) found).getAttachmentSize(PoisonAmpoule.class);
+					int attachmentCount = 0;
+					if (targetObject instanceof Body) {
+						attachmentCount = ((Body) targetObject).getAttachmentSize(PoisonAmpoule.class);
 					}
-					for (Body b : bodyList) {
-						if (flag == 0) {
-							if (b.getAttachmentSize(PoisonAmpoule.class) == 0)
-								b.addAttachment(new PoisonAmpoule(b));
+					for (Body body : bodyList) {
+						if (attachmentCount == 0) {
+							if (body.getAttachmentSize(PoisonAmpoule.class) == 0)
+								body.addAttachment(new PoisonAmpoule(body));
 						} else {
-							if (b.getAttachmentSize(PoisonAmpoule.class) != 0)
-								b.removeAttachment(PoisonAmpoule.class);
+							if (body.getAttachmentSize(PoisonAmpoule.class) != 0)
+								body.removeAttachment(PoisonAmpoule.class);
 						}
 					}
 				} else if (ev.isControlDown()) {
-					for (Body b : bodyList) {
-						if (b.getAttachmentSize(PoisonAmpoule.class) != 0) {
-							b.removeAttachment(PoisonAmpoule.class);
+					for (Body body : bodyList) {
+						if (body.getAttachmentSize(PoisonAmpoule.class) != 0) {
+							body.removeAttachment(PoisonAmpoule.class);
 						} else {
-							b.addAttachment(new PoisonAmpoule(b));
+							body.addAttachment(new PoisonAmpoule(body));
 						}
 					}
 				} else {
-					if (found instanceof Body) {
-						Body b = (Body) found;
-						if (b.getAttachmentSize(PoisonAmpoule.class) != 0) {
-							b.removeAttachment(PoisonAmpoule.class);
+					if (targetObject instanceof Body) {
+						Body body = (Body) targetObject;
+						if (body.getAttachmentSize(PoisonAmpoule.class) != 0) {
+							body.removeAttachment(PoisonAmpoule.class);
 						} else {
-							b.addAttachment(new PoisonAmpoule((Body) found));
+							body.addAttachment(new PoisonAmpoule(body));
 						}
 					}
 				}
 				break;
 			case BREEDING_AMP:
 				if (ev.isShiftDown()) {
-					int flag = 0;
-					if (found instanceof Body) {
-						flag = ((Body) found).getAttachmentSize(BreedingAmpoule.class);
+					int attachmentCount = 0;
+					if (targetObject instanceof Body) {
+						attachmentCount = ((Body) targetObject).getAttachmentSize(BreedingAmpoule.class);
 					}
-					for (Body b : bodyList) {
-						if (flag == 0) {
-							if (b.getAttachmentSize(BreedingAmpoule.class) == 0)
-								b.addAttachment(new BreedingAmpoule(b));
+					for (Body body : bodyList) {
+						if (attachmentCount == 0) {
+							if (body.getAttachmentSize(BreedingAmpoule.class) == 0)
+								body.addAttachment(new BreedingAmpoule(body));
 						} else {
-							if (b.getAttachmentSize(BreedingAmpoule.class) != 0)
-								b.removeAttachment(BreedingAmpoule.class);
+							if (body.getAttachmentSize(BreedingAmpoule.class) != 0)
+								body.removeAttachment(BreedingAmpoule.class);
 						}
 					}
 				} else if (ev.isControlDown()) {
-					for (Body b : bodyList) {
-						if (b.getAttachmentSize(BreedingAmpoule.class) != 0) {
-							b.removeAttachment(BreedingAmpoule.class);
+					for (Body body : bodyList) {
+						if (body.getAttachmentSize(BreedingAmpoule.class) != 0) {
+							body.removeAttachment(BreedingAmpoule.class);
 						} else {
-							b.addAttachment(new BreedingAmpoule(b));
+							body.addAttachment(new BreedingAmpoule(body));
 						}
 					}
 				} else {
-					if (found instanceof Body) {
-						Body b = (Body) found;
-						if (b.getAttachmentSize(BreedingAmpoule.class) != 0) {
-							b.removeAttachment(BreedingAmpoule.class);
+					if (targetObject instanceof Body) {
+						Body body = (Body) targetObject;
+						if (body.getAttachmentSize(BreedingAmpoule.class) != 0) {
+							body.removeAttachment(BreedingAmpoule.class);
 						} else {
-							b.addAttachment(new BreedingAmpoule((Body) found));
+							body.addAttachment(new BreedingAmpoule(body));
 						}
 					}
 				}
@@ -266,33 +266,33 @@ final class GadgetAmpouleAction {
 			case ANYD_AMP:
 				if (ev.isShiftDown()) {
 					int flag = 0;
-					if (found instanceof Body) {
-						flag = ((Body) found).getAttachmentSize(ANYDAmpoule.class);
+					if (targetObject instanceof Body) {
+						flag = ((Body) targetObject).getAttachmentSize(ANYDAmpoule.class);
 					}
-					for (Body b : bodyList) {
+					for (Body body : bodyList) {
 						if (flag == 0) {
-							if (b.getAttachmentSize(ANYDAmpoule.class) == 0)
-								b.addAttachment(new ANYDAmpoule(b));
+							if (body.getAttachmentSize(ANYDAmpoule.class) == 0)
+								body.addAttachment(new ANYDAmpoule(body));
 						} else {
-							if (b.getAttachmentSize(ANYDAmpoule.class) != 0)
-								b.removeAttachment(ANYDAmpoule.class);
+							if (body.getAttachmentSize(ANYDAmpoule.class) != 0)
+								body.removeAttachment(ANYDAmpoule.class);
 						}
 					}
 				} else if (ev.isControlDown()) {
-					for (Body b : bodyList) {
-						if (b.getAttachmentSize(ANYDAmpoule.class) != 0) {
-							b.removeAttachment(ANYDAmpoule.class);
+					for (Body body : bodyList) {
+						if (body.getAttachmentSize(ANYDAmpoule.class) != 0) {
+							body.removeAttachment(ANYDAmpoule.class);
 						} else {
-							b.addAttachment(new ANYDAmpoule(b));
+							body.addAttachment(new ANYDAmpoule(body));
 						}
 					}
 				} else {
-					if (found instanceof Body) {
-						Body b = (Body) found;
-						if (b.getAttachmentSize(ANYDAmpoule.class) != 0) {
-							b.removeAttachment(ANYDAmpoule.class);
+					if (targetObject instanceof Body) {
+						Body body = (Body) targetObject;
+						if (body.getAttachmentSize(ANYDAmpoule.class) != 0) {
+							body.removeAttachment(ANYDAmpoule.class);
 						} else {
-							b.addAttachment(new ANYDAmpoule((Body) found));
+							body.addAttachment(new ANYDAmpoule(body));
 						}
 					}
 				}

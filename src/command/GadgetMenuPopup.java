@@ -38,13 +38,13 @@ public final class GadgetMenuPopup {
 	}
 
 	private static JMenu createSubGroup(GadgetMenu.GadgetList root, GadgetMenu.GadgetList[] group, ActionListener action) {
-		JMenu ret = new JMenu(root.getDisplayName());
+		JMenu menu = new JMenu(root.getDisplayName());
 		for (int i = 0; i < group.length; i++) {
 			JMenuItem subMenu = new JMenuItem(group[i].getDisplayName());
 			subMenu.addActionListener(action);
 			subMenu.setActionCommand(group[i].name());
-			ret.add(subMenu);
+			menu.add(subMenu);
 		}
-		return ret;
+		return menu;
 	}
 }

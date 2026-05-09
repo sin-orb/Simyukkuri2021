@@ -60,7 +60,7 @@ public class Toilet extends ObjEX {
 	private ItemRank itemRank;
 
 	private boolean autoClean;
-	private boolean bForSlave = false;
+	private boolean forSlave = false;
 
 	/** 画像ロード */
 	public static void loadImages(ClassLoader loader, ImageObserver io) throws IOException {
@@ -91,7 +91,7 @@ public class Toilet extends ObjEX {
 		if (itemRank == ItemRank.HOUSE) {
 			if (autoClean)
 				layer[0] = images[1];
-			else if (bForSlave)
+			else if (forSlave)
 				layer[0] = images[4];
 			else
 				layer[0] = images[0];
@@ -128,11 +128,11 @@ public class Toilet extends ObjEX {
 		return 0;
 	}
 
-	public boolean checkHitObj(Obj o) {
+	public boolean checkHitObj(Obj targetObject) {
 		Rectangle tmpRect = new Rectangle();
 		getCollisionRect(tmpRect);
 		// 対象の座標をフィールド座標に変換
-		Translate.translate(o.getX(), o.getY(), tmpPos);
+		Translate.translate(targetObject.getX(), targetObject.getY(), tmpPos);
 		// 点が描画矩形に入ったかの判定
 		if (tmpRect.contains(new java.awt.Point(tmpPos.getX(), tmpPos.getY()))) {
 			return true;
@@ -141,15 +141,15 @@ public class Toilet extends ObjEX {
 	}
 
 	@Override
-	public boolean checkHitObj(Rectangle colRect, Obj o) {
+	public boolean checkHitObj(Rectangle collisionRect, Obj targetObject) {
 		Rectangle tmpRect = new Rectangle();
 		getCollisionRect(tmpRect);
 		// 対象の座標をフィールド座標に変換
-		Translate.translate(o.getX(), o.getY(), tmpPos);
+		Translate.translate(targetObject.getX(), targetObject.getY(), tmpPos);
 		// 点が描画矩形に入ったかの判定
 		if (tmpRect.contains(new java.awt.Point(tmpPos.getX(), tmpPos.getY()))) {
 			if (autoClean) {
-				o.remove();
+				targetObject.remove();
 			}
 			return true;
 		}
@@ -177,7 +177,7 @@ public class Toilet extends ObjEX {
 	 */
 	@Transient
 	public boolean isForSlave() {
-		return bForSlave;
+		return forSlave;
 	}
 
 	/**
@@ -196,8 +196,8 @@ public class Toilet extends ObjEX {
 		objEXType = ObjEXType.TOILET;
 		interval = 30;
 
-		boolean ret = setupToilet(this);
-		if (ret) {
+		boolean setupSucceeded = setupToilet(this);
+		if (setupSucceeded) {
 			itemRank = ItemRank.values()[initOption];
 			// 森なら野生に変更
 			if (GameWorld.get().getCurrentMap().getMapIndex() == 5
@@ -228,47 +228,47 @@ public class Toilet extends ObjEX {
 
 	}
 
-	public int objHitProcess(Obj o) {
-		o.remove();
+	public int objHitProcess(Obj targetObject) {
+		targetObject.remove();
 		Cash.addCash(-getCost());
 		return 1;
 	}
 
 	/** 設定メニュー */
-	public static boolean setupToilet(Toilet t) {
+	public static boolean setupToilet(Toilet toilet) {
 
 		JPanel mainPanel = new JPanel();
-		JRadioButton[] but = new JRadioButton[ToiletType.values().length];
-		boolean ret = false;
+		JRadioButton[] buttons = new JRadioButton[ToiletType.values().length];
+		boolean setupSucceeded = false;
 
 		mainPanel.setLayout(new GridLayout(3, 1));
 		mainPanel.setPreferredSize(new Dimension(150, 100));
-		ButtonGroup bg = new ButtonGroup();
+		ButtonGroup buttonGroup = new ButtonGroup();
 
-		for (int i = 0; i < but.length; i++) {
-			but[i] = new JRadioButton(ToiletType.values()[i].toString());
-			bg.add(but[i]);
+		for (int i = 0; i < buttons.length; i++) {
+			buttons[i] = new JRadioButton(ToiletType.values()[i].toString());
+			buttonGroup.add(buttons[i]);
 
-			mainPanel.add(but[i]);
+			mainPanel.add(buttons[i]);
 		}
 
-		but[0].setSelected(true);
+		buttons[0].setSelected(true);
 
-		int dlgRet = JOptionPane.showConfirmDialog(GameView.getDialogParent(), mainPanel, "トイレ設定", JOptionPane.OK_CANCEL_OPTION,
+		int dialogResult = JOptionPane.showConfirmDialog(GameView.getDialogParent(), mainPanel, "トイレ設定", JOptionPane.OK_CANCEL_OPTION,
 				JOptionPane.PLAIN_MESSAGE);
 
-		if (dlgRet == JOptionPane.OK_OPTION) {
-			if (but[0].isSelected())
-				t.autoClean = false;
-			if (but[1].isSelected())
-				t.autoClean = true;
-			if (but[2].isSelected()) {
-				t.bForSlave = true;
-				t.autoClean = false;
+		if (dialogResult == JOptionPane.OK_OPTION) {
+			if (buttons[0].isSelected())
+				toilet.autoClean = false;
+			if (buttons[1].isSelected())
+				toilet.autoClean = true;
+			if (buttons[2].isSelected()) {
+				toilet.forSlave = true;
+				toilet.autoClean = false;
 			}
-			ret = true;
+			setupSucceeded = true;
 		}
-		return ret;
+		return setupSucceeded;
 	}
 
 	public ItemRank getItemRank() {
@@ -279,20 +279,16 @@ public class Toilet extends ObjEX {
 		this.itemRank = itemRank;
 	}
 
-	// public boolean isbForSlave() {
-	// return bForSlave;
+	// public boolean isForSlave() {
+	// return forSlave;
 	// }
 	//
-	// public void setbForSlave(boolean bForSlave) {
-	// this.bForSlave = bForSlave;
+	// public void setForSlave(boolean forSlave) {
+	// this.forSlave = forSlave;
 	// }
 
-	public boolean isBForSlave() {
-		return bForSlave;
-	}
-
-	public void setBForSlave(boolean bForSlave) {
-		this.bForSlave = bForSlave;
+	public void setForSlave(boolean forSlave) {
+		this.forSlave = forSlave;
 	}
 
 	public void setAutoClean(boolean autoClean) {

@@ -138,15 +138,15 @@ public class Sui extends ObjEX {
 
 		// すぃーの所有者が乗っていない場合、1枠あけておく
 		if ((bindobj != null) && (bindobj != b)) {
-			int nCount = 0;
+			int passengerCount = 0;
 			for (int i = 0; i < bindbody_num; i++) {
 				if (bindBody[i] == null) {
-					nCount++;
+					passengerCount++;
 				}
 			}
 
 			// 枠が空いていない
-			if (nCount < 2) {
+			if (passengerCount < 2) {
 				return false;
 			}
 		}
@@ -154,7 +154,7 @@ public class Sui extends ObjEX {
 		for (int i = 0; i < bindbody_num; i++) {
 			if (bindBody[i] == null) {
 				bindBody[i] = b;
-				b.setLinkParent(this.objId);
+				b.setParentLinkId(this.objId);
 				bindBody[i].setCalcX(x + OfsX[i][current_direction]);
 				bindBody[i].setCalcY(y + OfsY[i][current_direction] + 10);
 				bindBody[i].setCalcZ(1);
@@ -162,7 +162,7 @@ public class Sui extends ObjEX {
 				if (bindobj == null) {
 					bindobj = b;
 					b.setMessage(GameMessages.getMessage(b, MessagePool.Action.GetSui), true);
-					b.setFavItem(FavItemType.SUI, this);
+					b.setFavoriteItem(FavItemType.SUI, this);
 				} else {
 					b.setMessage(GameMessages.getMessage(b, MessagePool.Action.RideSui), true);
 				}
@@ -171,7 +171,7 @@ public class Sui extends ObjEX {
 		}
 		// 乗客数カウントアップ
 		current_bindbody_num++;
-		b.setDropShadow(false);
+		b.setShadowVisible(false);
 
 		b.addMemories(5);
 
@@ -224,27 +224,27 @@ public class Sui extends ObjEX {
 			return;
 		}
 
-		boolean bFlagOwner = false;
+		boolean isOwnerLeaving = false;
 		for (int i = 0; i < bindbody_num; i++) {
 			if (bindBody[i] == b) {
 				if (bindobj == b) {
-					bFlagOwner = true;
+					isOwnerLeaving = true;
 				}
 			}
 		}
 		// 所有者が降りる場合
-		if (bFlagOwner) {
+		if (isOwnerLeaving) {
 			// 全員降ろす
 			for (int i = 0; i < bindbody_num; i++) {
 				if (bindBody[i] != null) {
-					bindBody[i].setLinkParent(-1);
+					bindBody[i].setParentLinkId(-1);
 					bindBody[i] = null;
 				}
 			}
 			current_bindbody_num = 0;
 		} else {
 			// 対象だけ降ろす
-			b.setLinkParent(-1);
+			b.setParentLinkId(-1);
 			for (int i = 0; i < bindbody_num; i++) {
 				if (bindBody[i] == b) {
 					bindBody[i] = null;
@@ -325,12 +325,12 @@ public class Sui extends ObjEX {
 			for (Body r : bindBody) {
 				if (r != null) {
 					rideOff(r);
-					r.removeFavItem(FavItemType.SUI);
+					r.removeFavoriteItem(FavItemType.SUI);
 					r.clearActions();
 				}
 			}
 			if (bindobj instanceof Body) {
-				((Body) bindobj).removeFavItem(FavItemType.SUI);
+				((Body) bindobj).removeFavoriteItem(FavItemType.SUI);
 				bindobj = null;
 			}
 			removeListData();

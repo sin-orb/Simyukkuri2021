@@ -27,7 +27,6 @@ import src.item.Barrier;
 import src.item.Food;
 import src.item.Toilet;
 import src.system.MessagePool;
-import src.util.YukkuriUtil;
 
 /***************************************************
 	家族イベント関係の処理
@@ -36,13 +35,13 @@ public class FamilyActionLogic {
 
 	/**
 	 * 家族関係処理
-	 * @param b ゆっくり
+	 * @param body ゆっくり
 	 * @return 処理が行われたか
 	 */
-	public static final boolean checkFamilyAction(Body b) {
+	public static final boolean checkFamilyAction(Body body) {
 		// 他の用事がある場合
-		if (b.isToFood() || b.isToBody() || b.isToSukkiri() ||
-				b.isToBed() || b.isToShit() || b.isToSteal() || b.isToTakeout()) {
+		if (body.isToFood() || body.isToBody() || body.isToSukkiri() ||
+				body.isToBed() || body.isToShit() || body.isToSteal() || body.isToTakeout()) {
 			return false;
 		}
 
@@ -53,84 +52,84 @@ public class FamilyActionLogic {
 		//-------------------------------------
 		// イベント処理
 		//-------------------------------------
-		EventPacket p = b.getCurrentEvent();
+		EventPacket currentEvent = body.getCurrentEvent();
 		// イベント中なら終了
-		if (p instanceof SuperEatingTimeEvent || p instanceof ShitExercisesEvent || p instanceof YukkuriRideEvent
-				|| p instanceof ProudChildEvent || p instanceof FuneralEvent) {
+		if (currentEvent instanceof SuperEatingTimeEvent || currentEvent instanceof ShitExercisesEvent
+				|| currentEvent instanceof YukkuriRideEvent || currentEvent instanceof ProudChildEvent
+				|| currentEvent instanceof FuneralEvent) {
 			return true;
-		} else if (p != null) {
+		} else if (currentEvent != null) {
 			return false;
 		}
 		// 大人だけが実行する
-		if (!b.isAdult()) {
+		if (!body.isAdult()) {
 			return false;
 		}
 
 		// パートナーもチェック
-		Body partner = YukkuriUtil.getBodyInstance(b.getPartner());
-		if (partner != null) {
+		Body partnerBody = src.util.BodyRegistry.getBodyInstance(body.getPartner());
+		if (partnerBody != null) {
 			// イベント中なら終了
-			if (partner.getCurrentEvent() != null) {
+			if (partnerBody.getCurrentEvent() != null) {
 				return false;
 			}
 			// 同時にイベントを行わないよう、歳をとっている方にイベントを任せる
-			if (partner.getAge() < b.getAge()) {
+			if (partnerBody.getAge() < body.getAge()) {
 				return false;
 			}
 		}
 
 		//--------------------------------------------------
 		//自分の状態チェック
-		if (b.isIdiot() || b.isDamaged() || !b.hasOkazari())
+		if (body.isIdiot() || body.isDamaged() || !body.hasOkazari())
 			return false;
 		// うんうん奴隷の場合
-		if (b.getPublicRank() == PublicRank.UnunSlave)
+		if (body.getPublicRank() == PublicRank.UnunSlave)
 			return false;
 		// 非ゆっくり症の場合
-		if (b.isNYD())
+		if (body.isNYD())
 			return false;
 		// うんうん中、出産中、食事中は終了
-		if (b.isShitting() || b.isBirth() || b.isEating() || b.nearToBirth()) {
+		if (body.isShitting() || body.isBirth() || body.isEating() || body.nearToBirth()) {
 			return false;
 		}
 		//　子供のリストに生きている子供がいるか
-		List<Body> childrenList = BodyLogic.createActiveChildList(b, true);
+		List<Body> childrenList = BodyLogic.createActiveChildList(body, true);
 		if (childrenList == null || childrenList.size() == 0) {
 			return false;
 		}
 		// 興奮中は終了
-		if (b.isExciting()) {
+		if (body.isExciting()) {
 			return false;
 		}
 
 		//-------------------------------
 		// 番の状態チェック
-		Body bPartner = YukkuriUtil.getBodyInstance(b.getPartner());
-		if (bPartner != null) {
-			if (bPartner.isDamaged() ||
-					bPartner.isLockmove() ||
-					bPartner.isNeedled() ||
-					bPartner.getCriticalDamegeType() != null ||
-					!bPartner.hasOkazari()) {
+		if (partnerBody != null) {
+			if (partnerBody.isDamaged() ||
+					partnerBody.isLockmove() ||
+					partnerBody.isNeedled() ||
+					partnerBody.getCriticalDamegeType() != null ||
+					!partnerBody.hasOkazari()) {
 				return false;
 			}
 			// 産気づいたら終了
-			if (partner.nearToBirth()) {
+			if (partnerBody.nearToBirth()) {
 				return false;
 			}
 			// うんうん中、出産中は終了
-			if (bPartner.isShitting() || bPartner.isBirth()) {
+			if (partnerBody.isShitting() || partnerBody.isBirth()) {
 				return false;
 			}
 		}
 		//-------------------------------
 		// 子供の状態チェック
-		boolean bWantToShit = true;
-		boolean bWantToEat = true;
-		boolean bIsBaby = false;
+		boolean wantToShit = true;
+		boolean wantToEat = true;
+		boolean hasBaby = false;
 		// 自分が満腹なら食欲はない
-		if (b.isFull()) {
-			bWantToEat = false;
+		if (body.isFull()) {
+			wantToEat = false;
 		}
 		// 子供がダメージを受けている、動けない場合は終了
 		for (Body bodyChild : childrenList) {
@@ -140,27 +139,27 @@ public class FamilyActionLogic {
 
 			// 怪我をしている
 			if (bodyChild.isDamaged() || bodyChild.isNeedled() || bodyChild.getCriticalDamegeType() != null) {
-				bWantToShit = false;
-				bWantToEat = false;
+				wantToShit = false;
+				wantToEat = false;
 				break;
 			}
 			if (bodyChild.isLockmove() || !bodyChild.hasOkazari()) {
-				bWantToShit = false;
-				bWantToEat = false;
+				wantToShit = false;
+				wantToEat = false;
 				continue;
 			}
 
 			// 子供の初回食事がすんでいない場合はやらない
-			if (!bodyChild.isbFirstEatStalk()) {
-				bWantToShit = false;
-				bWantToEat = false;
+			if (!bodyChild.isFirstEatStalk()) {
+				wantToShit = false;
+				wantToEat = false;
 				break;
 			}
 
 			// 自分と子ゆとの間に壁があるなら終了
-			if (Barrier.onBarrier(b.getX(), b.getY(), bodyChild.getX(), bodyChild.getY(), Barrier.BARRIER_YUKKURI)) {
-				bWantToShit = false;
-				bWantToEat = false;
+			if (Barrier.onBarrier(body.getX(), body.getY(), bodyChild.getX(), bodyChild.getY(), Barrier.BARRIER_YUKKURI)) {
+				wantToShit = false;
+				wantToEat = false;
 				break;
 			}
 
@@ -169,46 +168,46 @@ public class FamilyActionLogic {
 			double dShitPer = 100 * bodyChild.getShit() / bodyChild.getShitLimit();
 			// 赤ゆのみチェック
 			if (bodyChild.isBaby()) {
-				bIsBaby = true;
+				hasBaby = true;
 				// 子供がうんうん中ならスキップ
 				if (bodyChild.isShitting()) {
-					bWantToShit = false;
+					wantToShit = false;
 				}
 				// 各子供のうんうん量が25%以下、100%以上ならスキップ
 				if (dShitPer <= 25 || 100 <= dShitPer) {
-					bWantToShit = false;
+					wantToShit = false;
 				}
 				// 子供が空腹ならスキップ
 				if (bodyChild.isHungry()) {
-					bWantToShit = false;
+					wantToShit = false;
 				}
 			}
 
 			//-------------------------------------
 			// 子供が食事中なら何もしない
 			if (bodyChild.isEating()) {
-				bWantToEat = false;
+				wantToEat = false;
 			}
 			double dHungryPer = 100 * bodyChild.getHungry() / bodyChild.getHungryLimit();
 			// 各子供の満腹度が80%以上ならスキップ
 			if (dHungryPer >= 80) {
-				bWantToEat = false;
+				wantToEat = false;
 			} else {
 				// うんうん量が多いならやらない
 				if (50 < dShitPer) {
-					bWantToEat = false;
+					wantToEat = false;
 				}
 			}
 		}
 
 		// 赤ゆがいないならうんうん体操はしない
-		if (!bIsBaby) {
-			bWantToShit = false;
+		if (!hasBaby) {
+			wantToShit = false;
 		}
 
 		// おチビちゃん運び判定
-		List<Body> childrenListForRideYukkuriTarget = new LinkedList<Body>();
-		if (!bWantToShit && !bWantToEat) {
+		List<Body> rideCandidates = new LinkedList<Body>();
+		if (!wantToShit && !wantToEat) {
 			// 子供がダメージを受けている、動けない場合は終了
 			for (Body bodyChild : childrenList) {
 				if (bodyChild == null || bodyChild.canAction() == false || bodyChild.isRemoved()) {
@@ -221,7 +220,7 @@ public class FamilyActionLogic {
 					continue;
 				}
 				// 子供の初回食事がすんでいない場合はやらない
-				if (!bodyChild.isbFirstEatStalk()) {
+				if (!bodyChild.isFirstEatStalk()) {
 					break;
 				}
 				// 子供がうんうん中ならスキップ
@@ -237,11 +236,11 @@ public class FamilyActionLogic {
 				}
 
 				// 自分と子ゆとの間に壁があるなら終了
-				if (Barrier.onBarrier(b.getX(), b.getY(), bodyChild.getX(), bodyChild.getY(),
+				if (Barrier.onBarrier(body.getX(), body.getY(), bodyChild.getX(), bodyChild.getY(),
 						Barrier.BARRIER_YUKKURI)) {
 					continue;
 				}
-				childrenListForRideYukkuriTarget.add(bodyChild);
+				rideCandidates.add(bodyChild);
 			}
 		}
 		//-------------------------
@@ -252,8 +251,8 @@ public class FamilyActionLogic {
 		//   ・家族で移動する場合、移動速度は一番若い子ゆに合わせる
 		//   ・餌まで移動した場合、一緒に食事をする
 		//   ・空腹じゃなくても食べて家族で空腹度を合わせる
-		if (bWantToEat) {
-			if (goToEat(b, childrenList)) {
+		if (wantToEat) {
+			if (goToEat(body, childrenList)) {
 				return true;
 			}
 		}
@@ -263,21 +262,21 @@ public class FamilyActionLogic {
 		//   ・少量でも出して家族でうんうん量を合わせる
 		//   ・汚れていた場合ぺろぺろする
 		//     ・子は親に近づく
-		if (bWantToShit) {
-			if (goToShit(b, childrenList)) {
+		if (wantToShit) {
+			if (goToShit(body, childrenList)) {
 				return true;
 			}
 		}
 
 		//おちび自慢（赤ゆがいる場合のみ）
-		if (bIsBaby && GameRandom.nextBoolean()) {
-			if (proudChild(b, childrenList)) {
+		if (hasBaby && GameRandom.nextBoolean()) {
+			if (proudChild(body, childrenList)) {
 				return true;
 			}
 		}
 
 		// おちびちゃん運び
-		if (rideOnParent(b, childrenListForRideYukkuriTarget)) {
+		if (rideOnParent(body, rideCandidates)) {
 			return true;
 		}
 
@@ -290,137 +289,137 @@ public class FamilyActionLogic {
 	}
 
 	// うんうん体操
-	public static final boolean goToShit(Body b, List<Body> childrenList) {
-		Obj found = searchToilet(b);
-		if (!b.checkWait(2000)) {
+	public static final boolean goToShit(Body body, List<Body> childrenList) {
+		Obj targetToilet = searchToilet(body);
+		if (!body.checkWait(2000)) {
 			return false;
 		}
-		b.setLastActionTime();
+		body.setLastActionTime();
 		// うんうん体操実施
-		ShitExercisesEvent ev = new ShitExercisesEvent(b, null, found, 10);
-		EventLogic.addWorldEvent(ev, b, GameMessages.getMessage(b, MessagePool.Action.ShitExercisesGOFrom));
+		ShitExercisesEvent event = new ShitExercisesEvent(body, null, targetToilet, 10);
+		EventLogic.addWorldEvent(event, body, GameMessages.getMessage(body, MessagePool.Action.ShitExercisesGOFrom));
 		// イベント開始
 		//b.currentEvent = ev);
-		ev.start(b);
+		event.start(body);
 		return true;
 	}
 
 	/**
 	 * トイレを探す
-	 * @param b ゆっくり
+	 * @param body ゆっくり
 	 * @return 探しだしたトイレオブジェクト
 	 */
-	public static Obj searchToilet(Body b) {
-		Obj found = null;
-		int minDistance = b.getEYESIGHTorg();
+	public static Obj searchToilet(Body body) {
+		Obj nearestToilet = null;
+		int minimumDistance = body.getEyesightBase();
 		for (Map.Entry<Integer, Toilet> entry : GameWorld.get().getCurrentMap().getToilet().entrySet()) {
-			Toilet t = entry.getValue();
+			Toilet toilet = entry.getValue();
 			// 最小距離のものが見つかっていたら
-			if (minDistance < 1) {
+			if (minimumDistance < 1) {
 				break;
 			}
-			int distance = Translate.distance(b.getX(), b.getY(), t.getX(), t.getY() - t.getH() / 6);
-			if (minDistance > distance) {
-				if (Barrier.acrossBarrier(b.getX(), b.getY(), t.getX(), t.getY() - t.getH() / 6,
+			int distance = Translate.distance(body.getX(), body.getY(), toilet.getX(), toilet.getY() - toilet.getH() / 6);
+			if (minimumDistance > distance) {
+				if (Barrier.acrossBarrier(body.getX(), body.getY(), toilet.getX(), toilet.getY() - toilet.getH() / 6,
 						Barrier.BARRIER_YUKKURI + Barrier.BARRIER_KEKKAI)) {
 					continue;
 				}
-				found = (Toilet) t;
-				minDistance = distance;
+				nearestToilet = toilet;
+				minimumDistance = distance;
 			}
 		}
-		return found;
+		return nearestToilet;
 	}
 
 	/**
 	 *  食事に行く
-	 * @param b ゆっくり
+	 * @param body ゆっくり
 	 * @param childrenList 子供リスト
 	 * @return 処理が行われたか
 	 */
-	public static final boolean goToEat(Body b, List<Body> childrenList) {
+	public static final boolean goToEat(Body body, List<Body> childrenList) {
 		// 餌を持っていたら落とす
-		b.dropTakeoutItem(TakeoutItemType.FOOD);
+		body.dropTakeoutItem(TakeoutItemType.FOOD);
 		// フィールドの餌検索
 		// 基本普通の餌でしかイベントは起こさない。茎があれば終了。
-		Obj found = searchFood(b);
-		if (found == null) {
+		Obj targetFood = searchFood(body);
+		if (targetFood == null) {
 			return false;
 		}
-		if (!b.checkWait(5000)) {
+		if (!body.checkWait(5000)) {
 			return false;
 		}
-		b.setLastActionTime();
-		SuperEatingTimeEvent ev = new SuperEatingTimeEvent(b, null, found, 10);
-		EventLogic.addWorldEvent(ev, b, GameMessages.getMessage(b, MessagePool.Action.FamilyEatingTimeWait));
+		body.setLastActionTime();
+		SuperEatingTimeEvent event = new SuperEatingTimeEvent(body, null, targetFood, 10);
+		EventLogic.addWorldEvent(event, body, GameMessages.getMessage(body, MessagePool.Action.FamilyEatingTimeWait));
 		// イベント開始
 		//b.currentEvent = ev);
-		ev.start(b);
+		event.start(body);
 		return true;
 	}
 
 	/**
 	 * 餌を探す
-	 * @param b ゆっくり
+	 * @param body ゆっくり
 	 * @return 処理が行われたか
 	 */
-	public static final Obj searchFood(Body b) {
-		Obj found = null;
-		int minDistance = b.getEYESIGHTorg();
-		int looks = -1000;
+	public static final Obj searchFood(Body body) {
+		Obj nearestFood = null;
+		int minimumDistance = body.getEyesightBase();
+		int bestLooks = -1000;
 
 		// フィールドの餌検索
 		for (Map.Entry<Integer, Food> entry : GameWorld.get().getCurrentMap().getFood().entrySet()) {
-			Food f = entry.getValue();
-			if (f.isEmpty()) {
+			Food food = entry.getValue();
+			if (food.isEmpty()) {
 				continue;
 			}
 			// 最小距離のものが見つかっていたら
-			if (minDistance < 1) {
+			if (minimumDistance < 1) {
 				break;
 			}
-			int distance = Translate.distance(b.getX(), b.getY(), f.getX(), f.getY());
-			if (minDistance > distance) {
+			int distance = Translate.distance(body.getX(), body.getY(), food.getX(), food.getY());
+			if (minimumDistance > distance) {
 				// 餌と自分との間に何らかの壁があればスキップ
-				if (Barrier.acrossBarrier(b.getX(), b.getY(), f.getX(), f.getY(),
+				if (Barrier.acrossBarrier(body.getX(), body.getY(), food.getX(), food.getY(),
 						Barrier.BARRIER_YUKKURI + Barrier.BARRIER_KEKKAI)) {
 					continue;
 				}
-				boolean flag = false;
-				switch (f.getFoodType()) {
+				boolean isCandidate = false;
+				switch (food.getFoodType()) {
 				// 普通のフード
 				default:
-					flag = true;
+					isCandidate = true;
 					break;
 				// 噛み砕いた茎
 				case STALK:
-					flag = true;
+					isCandidate = true;
 					break;
 				//return null;
 				// あまあま
 				case SWEETS1:
 				case SWEETS2:
-					flag = true;
+					isCandidate = true;
 					break;
 				// 生ゴミ
 				case WASTE:
 					// 飢餓状態かバカ舌なら食べる
-					if (b.isTooHungry() || b.getTangType() == TangType.POOR)
-						flag = true;
+					if (body.isTooHungry() || body.getTangType() == TangType.POOR)
+						isCandidate = true;
 					break;
 				}
 
 				// 候補の中から最も価値の高いもの、近いものを食べに行く
-				if (flag) {
-					if (looks <= f.getLooks()) {
-						found = f;
-						minDistance = distance;
-						looks = f.getLooks();
+				if (isCandidate) {
+					if (bestLooks <= food.getLooks()) {
+						nearestFood = food;
+						minimumDistance = distance;
+						bestLooks = food.getLooks();
 					}
 				}
 			}
 		}
-		return found;
+		return nearestFood;
 	}
 
 	/**
@@ -428,13 +427,13 @@ public class FamilyActionLogic {
 	 * @return レイパーしかいないかどうか
 	 */
 	public static final boolean checkRaperFamily() {
-		boolean bIsNotRaperTarget = isRapeTarget();
+		boolean hasRapeTarget = isRapeTarget();
 		// レイプ対象がいない
-		if (!bIsNotRaperTarget) {
+		if (!hasRapeTarget) {
 			for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
-				Body b = entry.getValue();
-				if (b.isRaper()) {
-					b.setExciting(false);
+				Body body = entry.getValue();
+				if (body.isRaper()) {
+					body.setExciting(false);
 				}
 			}
 			return true;
@@ -448,9 +447,9 @@ public class FamilyActionLogic {
 	 */
 	public static final boolean isRapeTarget() {
 		for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
-			Body b = entry.getValue();
+			Body body = entry.getValue();
 			// レイプの対象がいる
-			if (!b.isUnBirth() && !b.isDead() && !b.isRemoved() && !b.isRaper()) {
+			if (!body.isUnBirth() && !body.isDead() && !body.isRemoved() && !body.isRaper()) {
 				return true;
 			}
 		}
@@ -459,19 +458,19 @@ public class FamilyActionLogic {
 
 	/**
 	 * 親に乗る処理
-	 * @param b ゆっくり
+	 * @param body ゆっくり
 	 * @param childrenList 子供リスト
 	 * @return 処理が行われたか
 	 */
-	public static final boolean rideOnParent(Body b, List<Body> childrenList) {
+	public static final boolean rideOnParent(Body body, List<Body> childrenList) {
 		if (childrenList == null || childrenList.size() == 0) {
 			return false;
 		}
 
-		if (!b.checkWait(3000)) {
+		if (!body.checkWait(3000)) {
 			return false;
 		}
-		b.setLastActionTime();
+		body.setLastActionTime();
 		Collections.shuffle(childrenList);
 		for (Body child : childrenList) {
 			if (child.isBaby() && !child.isEating() && !child.isShitting()) {
@@ -479,10 +478,10 @@ public class FamilyActionLogic {
 				// 空腹
 				if (target == null) {
 					if (child.isHungry()) {
-						if (b.getTakeoutItem(TakeoutItemType.FOOD) == null) {
-							Obj found = FamilyActionLogic.searchFood(b);
-							if (found != null) {
-								target = found;
+						if (body.getCarryItem(TakeoutItemType.FOOD) == null) {
+							Obj foundFood = FamilyActionLogic.searchFood(body);
+							if (foundFood != null) {
+								target = foundFood;
 							}
 						}
 					}
@@ -491,9 +490,9 @@ public class FamilyActionLogic {
 				// トイレ
 				if (target == null) {
 					if (child.wantToShit()) {
-						Obj found = FamilyActionLogic.searchToilet(b);
-						if (found != null) {
-							target = found;
+						Obj foundToilet = FamilyActionLogic.searchToilet(body);
+						if (foundToilet != null) {
+							target = foundToilet;
 						}
 					}
 				}
@@ -501,9 +500,9 @@ public class FamilyActionLogic {
 				// ベッド
 				if (target == null) {
 					if (child.isSleepy() || GameEnvironment.getDayState().ordinal() >= Terrarium.DayState.EVENING.ordinal()) {
-						Obj found = BedLogic.searchBed(b);
-						if (found != null) {
-							target = found;
+						Obj foundBed = BedLogic.searchBed(body);
+						if (foundBed != null) {
+							target = foundBed;
 						}
 					}
 				}
@@ -513,15 +512,14 @@ public class FamilyActionLogic {
 					// 近いなら運ばない
 					int distance = Translate.distance(child.getX(), child.getY(), target.getX(), target.getY());
 					if (distance < 10) {
-						target = null;
 						continue;
 					} else {
 						// おちびちゃん運び実施
-						YukkuriRideEvent ev = new YukkuriRideEvent(b, childrenList.get(0), target, 10);
-						EventLogic.addWorldEvent(ev, b, GameMessages.getMessage(b, MessagePool.Action.RideOnMe));
+						YukkuriRideEvent event = new YukkuriRideEvent(body, childrenList.get(0), target, 10);
+						EventLogic.addWorldEvent(event, body, GameMessages.getMessage(body, MessagePool.Action.RideOnMe));
 						// イベント開始
 						//b.currentEvent = ev);
-						ev.start(b);
+						event.start(body);
 						return true;
 					}
 				}
@@ -532,22 +530,22 @@ public class FamilyActionLogic {
 
 	/**
 	 * おちび自慢処理
-	 * @param b ゆっくり
+	 * @param body ゆっくり
 	 * @param childrenList 子供リスト
 	 * @return 処理が行われたか
 	 */
-	public static final boolean proudChild(Body b, List<Body> childrenList) {
-		if (!b.checkWait(2000)) {
+	public static final boolean proudChild(Body body, List<Body> childrenList) {
+		if (!body.checkWait(2000)) {
 			return false;
 		}
-		b.setLastActionTime();
+		body.setLastActionTime();
 
 		// 実施
-		ProudChildEvent ev = new ProudChildEvent(b, null, null, 10);
-		EventLogic.addWorldEvent(ev, b, GameMessages.getMessage(b, MessagePool.Action.ProudChildsGOFrom));
+		ProudChildEvent event = new ProudChildEvent(body, null, null, 10);
+		EventLogic.addWorldEvent(event, body, GameMessages.getMessage(body, MessagePool.Action.ProudChildsGOFrom));
 		// イベント開始
 		//b.currentEvent = ev);
-		ev.start(b);
+		event.start(body);
 		return true;
 	}
 }

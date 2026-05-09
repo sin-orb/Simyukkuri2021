@@ -17,6 +17,7 @@ import src.base.Body;
 import src.draw.World;
 import src.enums.AgeState;
 import src.game.Shit;
+import src.game.Stalk;
 import src.game.Vomit;
 import src.system.ItemMenu.GetMenu;
 import src.util.WorldTestHelper;
@@ -78,6 +79,31 @@ public class ItemListenerTest {
         assertFalse(SimYukkuri.world.getCurrentMap().getBody().containsKey(b.getUniqueID()));
         assertTrue(SimYukkuri.world.getPlayer().getItemList().contains(b));
         assertTrue(b.isTaken());
+        assertNull(ItemMenu.getGetTarget());
+    }
+
+    @Test
+    public void testGetMenuAction_PICKUP_BodyDetachesFromStalk() {
+        Body b = new Reimu();
+        b.setAgeState(AgeState.ADULT);
+        Stalk stalk = new Stalk();
+        stalk.getBindBabies().add(b.getUniqueID());
+        b.setBindStalk(stalk);
+        b.setParentLinkId(123);
+        SimYukkuri.world.getCurrentMap().getBody().put(b.getUniqueID(), b);
+        ItemMenu.setGetTarget(b);
+
+        ItemGetMenuAction action = new ItemGetMenuAction();
+        ActionEvent e = new ActionEvent(this, ActionEvent.ACTION_PERFORMED, GetMenu.PICKUP.name());
+
+        action.actionPerformed(e);
+
+        assertFalse(SimYukkuri.world.getCurrentMap().getBody().containsKey(b.getUniqueID()));
+        assertTrue(SimYukkuri.world.getPlayer().getItemList().contains(b));
+        assertTrue(b.isTaken());
+        assertNull(b.getBindStalk());
+        assertEquals(-1, b.getParentLinkId());
+        assertNull(stalk.getBindBabies().get(0));
         assertNull(ItemMenu.getGetTarget());
     }
 

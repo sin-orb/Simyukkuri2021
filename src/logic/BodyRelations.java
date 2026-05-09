@@ -1,9 +1,10 @@
 package src.logic;
 
 import src.base.Body;
+import src.base.BodyAttributes;
 import src.enums.Parent;
 import src.enums.EnumRelationMine;
-import src.util.YukkuriUtil;
+import java.util.Iterator;
 
 /**
  * Body同士の家族関係を判定するためのロジック集約クラス。
@@ -15,6 +16,26 @@ import src.util.YukkuriUtil;
  */
 public final class BodyRelations {
 	private BodyRelations() {
+	}
+
+	/**
+	 * ゆっくりIDからインスタンスを取得する。
+	 *
+	 * @param bodyId ゆっくりID
+	 * @return インスタンス。存在しない場合はnull
+	 */
+	public static Body getBody(int bodyId) {
+		return src.util.BodyRegistry.getBodyInstance(bodyId);
+	}
+
+	/**
+	 * オブジェクトIDからインスタンスを取得する。
+	 *
+	 * @param objId オブジェクトID
+	 * @return インスタンス。存在しない場合はnull
+	 */
+	public static Body getBodyFromObjId(int objId) {
+		return src.util.BodyRegistry.getBodyInstanceFromObjId(objId);
 	}
 
 	/**
@@ -83,8 +104,8 @@ public final class BodyRelations {
 		if (other == null) {
 			return false;
 		}
-		return YukkuriUtil.getBodyInstance(other.getParents()[Parent.PAPA.ordinal()]) == self
-				|| YukkuriUtil.getBodyInstance(other.getParents()[Parent.MAMA.ordinal()]) == self;
+		return getBody(other.getParents()[Parent.PAPA.ordinal()]) == self
+				|| getBody(other.getParents()[Parent.MAMA.ordinal()]) == self;
 	}
 
 	/**
@@ -98,7 +119,7 @@ public final class BodyRelations {
 		if (other == null) {
 			return false;
 		}
-		return YukkuriUtil.getBodyInstance(other.getParents()[Parent.PAPA.ordinal()]) == self;
+		return getBody(other.getParents()[Parent.PAPA.ordinal()]) == self;
 	}
 
 	/**
@@ -112,7 +133,7 @@ public final class BodyRelations {
 		if (other == null) {
 			return false;
 		}
-		return YukkuriUtil.getBodyInstance(other.getParents()[Parent.MAMA.ordinal()]) == self;
+		return getBody(other.getParents()[Parent.MAMA.ordinal()]) == self;
 	}
 
 	/**
@@ -140,7 +161,7 @@ public final class BodyRelations {
 		if (other == null) {
 			return false;
 		}
-		Body partner = YukkuriUtil.getBodyInstance(self.getPartner());
+		Body partner = getBody(self.getPartner());
 		return partner != null && partner == other;
 	}
 
@@ -157,10 +178,10 @@ public final class BodyRelations {
 	 * @return 既知の親が同じならtrue
 	 */
 	public static boolean isSister(Body self, Body other) {
-		if (YukkuriUtil.getBodyInstance(self.getParents()[Parent.MAMA.ordinal()]) != null) {
+		if (getBody(self.getParents()[Parent.MAMA.ordinal()]) != null) {
 			return self.getParents()[Parent.MAMA.ordinal()] == other.getParents()[Parent.MAMA.ordinal()];
 		}
-		if (YukkuriUtil.getBodyInstance(self.getParents()[Parent.PAPA.ordinal()]) != null) {
+		if (getBody(self.getParents()[Parent.PAPA.ordinal()]) != null) {
 			return self.getParents()[Parent.PAPA.ordinal()] == other.getParents()[Parent.PAPA.ordinal()];
 		}
 		return false;
@@ -175,5 +196,138 @@ public final class BodyRelations {
 	 */
 	public static boolean isElderSister(Body self, Body other) {
 		return isSister(self, other) && self.getAge() >= other.getAge();
+	}
+
+	/**
+	 * {@code self}の妹をインデックス指定で取得する。
+	 *
+	 * @param self 参照元のゆっくり
+	 * @param index 何番目の妹か
+	 * @return 妹のインスタンス
+	 */
+	public static Body getSister(BodyAttributes self, int index) {
+		return getBody(self.getSisterList().get(index));
+	}
+
+	/**
+	 * {@code self}の姉をインデックス指定で取得する。
+	 *
+	 * @param self 参照元のゆっくり
+	 * @param index 何番目の姉か
+	 * @return 姉のインスタンス
+	 */
+	public static Body getElderSister(BodyAttributes self, int index) {
+		return getBody(self.getElderSisterList().get(index));
+	}
+
+	/**
+	 * {@code self}の子をインデックス指定で取得する。
+	 *
+	 * @param self 参照元のゆっくり
+	 * @param index 何番目の子か
+	 * @return 子のインスタンス
+	 */
+	public static Body getChildren(BodyAttributes self, int index) {
+		if (self.getChildrenList() == null) {
+			return null;
+		}
+		return getBody(self.getChildrenList().get(index));
+	}
+
+	/**
+	 * {@code self}の番インスタンスを取得する。
+	 *
+	 * @param self 参照元のゆっくり
+	 * @return 番のインスタンス
+	 */
+	public static Body getPartnerBody(BodyAttributes self) {
+		return getBody(self.getPartner());
+	}
+
+	/**
+	 * {@code self}の母親インスタンスを取得する。
+	 *
+	 * @param self 参照元のゆっくり
+	 * @return 母親のインスタンス
+	 */
+	public static Body getMotherBody(BodyAttributes self) {
+		return getBody(self.getMother());
+	}
+
+	/**
+	 * {@code self}の父親インスタンスを取得する。
+	 *
+	 * @param self 参照元のゆっくり
+	 * @return 父親のインスタンス
+	 */
+	public static Body getFatherBody(BodyAttributes self) {
+		return getBody(self.getFather());
+	}
+
+	/**
+	 * 親IDを指定してインスタンスを取得する。
+	 *
+	 * @param parentId 親ID
+	 * @return 親インスタンス
+	 */
+	public static Body getParentBody(int parentId) {
+		return getBody(parentId);
+	}
+
+	/**
+	 * {@code self}の子リストから指定個体を除去する。
+	 *
+	 * @param self 参照元のゆっくり
+	 * @param targetBody 除去対象
+	 */
+	public static void removeChildrenList(BodyAttributes self, Body targetBody) {
+		if (self.getChildrenList() == null || targetBody == null) {
+			return;
+		}
+		Iterator<Integer> itr = self.getChildrenList().iterator();
+		while (itr.hasNext()) {
+			Body at = getBody(itr.next());
+			if (at == targetBody) {
+				itr.remove();
+			}
+		}
+	}
+
+	/**
+	 * {@code self}の姉リストから指定個体を除去する。
+	 *
+	 * @param self 参照元のゆっくり
+	 * @param targetBody 除去対象
+	 */
+	public static void removeElderSisterList(BodyAttributes self, Body targetBody) {
+		if (self.getElderSisterList() == null || targetBody == null) {
+			return;
+		}
+		Iterator<Integer> itr = self.getElderSisterList().iterator();
+		while (itr.hasNext()) {
+			Body at = getBody(itr.next());
+			if (at == targetBody) {
+				itr.remove();
+			}
+		}
+	}
+
+	/**
+	 * {@code self}の妹リストから指定個体を除去する。
+	 *
+	 * @param self 参照元のゆっくり
+	 * @param targetBody 除去対象
+	 */
+	public static void removeSisterList(BodyAttributes self, Body targetBody) {
+		if (self.getSisterList() == null || targetBody == null) {
+			return;
+		}
+		Iterator<Integer> itr = self.getSisterList().iterator();
+		while (itr.hasNext()) {
+			Body at = getBody(itr.next());
+			if (at == targetBody) {
+				itr.remove();
+			}
+		}
 	}
 }

@@ -97,21 +97,21 @@ class BodyVitalsTest {
 
 	@Test
 	void detectsSicknessStages() {
-		body.setSickPeriod(body.getINCUBATIONPERIODorg());
+		body.setSickPeriod(body.getIncubationPeriodBase());
 		assertFalse(BodyVitals.isSick(body));
 		assertFalse(BodyVitals.isSickHeavily(body));
 
-		body.setSickPeriod(body.getINCUBATIONPERIODorg() + 1);
+		body.setSickPeriod(body.getIncubationPeriodBase() + 1);
 		assertTrue(BodyVitals.isSick(body));
 		assertFalse(BodyVitals.isSickHeavily(body));
 
-		body.setSickPeriod(body.getINCUBATIONPERIODorg() * 8 + 1);
+		body.setSickPeriod(body.getIncubationPeriodBase() * 8 + 1);
 		assertTrue(BodyVitals.isSickHeavily(body));
 	}
 
 	@Test
 	void sickTooHeavilyRequiresHeavyStageAndDamage() {
-		body.setSickPeriod(body.getINCUBATIONPERIODorg() * 32 + 1);
+		body.setSickPeriod(body.getIncubationPeriodBase() * 32 + 1);
 		body.setDamage(0);
 		assertFalse(BodyVitals.isSickTooHeavily(body));
 

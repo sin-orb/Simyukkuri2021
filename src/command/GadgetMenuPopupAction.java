@@ -31,81 +31,81 @@ public final class GadgetMenuPopupAction implements ActionListener {
 	}
 
 	private int getIndex(GadgetList item) {
-		int num;
-		num = GadgetMenu.getToolCategory().length;
-		for (int i = 0; i < num; i++) {
+		int categorySize;
+		categorySize = GadgetMenu.getToolCategory().length;
+		for (int i = 0; i < categorySize; i++) {
 			if (item == GadgetMenu.getToolCategory()[i]) {
 				return i;
 			}
 		}
-		num = GadgetMenu.getToolCategory2().length;
-		for (int i = 0; i < num; i++) {
+		categorySize = GadgetMenu.getToolCategory2().length;
+		for (int i = 0; i < categorySize; i++) {
 			if (item == GadgetMenu.getToolCategory2()[i]) {
 				return i;
 			}
 		}
-		num = GadgetMenu.getAmpouleCategory().length;
-		for (int i = 0; i < num; i++) {
+		categorySize = GadgetMenu.getAmpouleCategory().length;
+		for (int i = 0; i < categorySize; i++) {
 			if (item == GadgetMenu.getAmpouleCategory()[i]) {
 				return i;
 			}
 		}
-		num = GadgetMenu.getFoodCategory().length;
-		for (int i = 0; i < num; i++) {
+		categorySize = GadgetMenu.getFoodCategory().length;
+		for (int i = 0; i < categorySize; i++) {
 			if (item == GadgetMenu.getFoodCategory()[i]) {
 				return i;
 			}
 		}
-		num = GadgetMenu.getCleanCategory().length;
-		for (int i = 0; i < num; i++) {
+		categorySize = GadgetMenu.getCleanCategory().length;
+		for (int i = 0; i < categorySize; i++) {
 			if (item == GadgetMenu.getCleanCategory()[i]) {
 				return i;
 			}
 		}
-		num = GadgetMenu.getOkazariCategory().length;
-		for (int i = 0; i < num; i++) {
+		categorySize = GadgetMenu.getOkazariCategory().length;
+		for (int i = 0; i < categorySize; i++) {
 			if (item == GadgetMenu.getOkazariCategory()[i]) {
 				return i;
 			}
 		}
-		num = GadgetMenu.getPantsCategory().length;
-		for (int i = 0; i < num; i++) {
+		categorySize = GadgetMenu.getPantsCategory().length;
+		for (int i = 0; i < categorySize; i++) {
 			if (item == GadgetMenu.getPantsCategory()[i]) {
 				return i;
 			}
 		}
-		num = GadgetMenu.getFloorCategory().length;
-		for (int i = 0; i < num; i++) {
+		categorySize = GadgetMenu.getFloorCategory().length;
+		for (int i = 0; i < categorySize; i++) {
 			if (item == GadgetMenu.getFloorCategory()[i]) {
 				return i;
 			}
 		}
-		num = GadgetMenu.getBarrierCategory().length;
-		for (int i = 0; i < num; i++) {
+		categorySize = GadgetMenu.getBarrierCategory().length;
+		for (int i = 0; i < categorySize; i++) {
 			if (item == GadgetMenu.getBarrierCategory()[i]) {
 				return i;
 			}
 		}
-		num = GadgetMenu.getToysCategory().length;
-		for (int i = 0; i < num; i++) {
+		categorySize = GadgetMenu.getToysCategory().length;
+		for (int i = 0; i < categorySize; i++) {
 			if (item == GadgetMenu.getToysCategory()[i]) {
 				return i;
 			}
 		}
-		num = GadgetMenu.getConveyorCategory().length;
-		for (int i = 0; i < num; i++) {
+		categorySize = GadgetMenu.getConveyorCategory().length;
+		for (int i = 0; i < categorySize; i++) {
 			if (item == GadgetMenu.getConveyorCategory()[i]) {
 				return i;
 			}
 		}
-		num = GadgetMenu.getVoiceCategory().length;
-		for (int i = 0; i < num; i++) {
+		categorySize = GadgetMenu.getVoiceCategory().length;
+		for (int i = 0; i < categorySize; i++) {
 			if (item == GadgetMenu.getVoiceCategory()[i]) {
 				return i;
 			}
 		}
-		num = GadgetMenu.getTestCategory().length;
-		for (int i = 0; i < num; i++) {
+		categorySize = GadgetMenu.getTestCategory().length;
+		for (int i = 0; i < categorySize; i++) {
 			if (item == GadgetMenu.getTestCategory()[i]) {
 				return i;
 			}

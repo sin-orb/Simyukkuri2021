@@ -31,43 +31,43 @@ public class GadgetAction {
 	/**
 	 * 即時実行処理(清掃系)
 	 *
-	 * @param item 対象オブジェクト
+	 * @param actionItem 対象オブジェクト
 	 */
-	public static final void immediateEvaluate(GadgetList item) {
-		GadgetCleanupAction.immediateEvaluate(item);
+	public static final void immediateEvaluate(GadgetList actionItem) {
+		GadgetCleanupAction.immediateEvaluate(actionItem);
 	}
 
 	/**
 	 * 左クリック処理
 	 *
-	 * @param item          実行内容
-	 * @param target        対象アイテム
+	 * @param actionItem    実行内容
+	 * @param targetObject  対象アイテム
 	 * @param ev            入力されたマウス操作
 	 * @param fieldMousePos マウスの座標
 	 * @return
 	 */
-	public static final ObjEX leftClickEvaluate(GadgetList item, Obj target, MouseEvent ev, int[] fieldMousePos) {
-		ObjEX ret = null;
-		ActionTarget eActionTarget = item.getActionTarget();
+	public static final ObjEX leftClickEvaluate(GadgetList actionItem, Obj targetObject, MouseEvent ev, int[] fieldMousePos) {
+		ObjEX placedObject = null;
+		ActionTarget actionTarget = actionItem.getActionTarget();
 
 		// 実行対象の選別
-		if (eActionTarget == ActionTarget.TERRAIN_AND_GADET) {
-			if (target != null) {
-				eActionTarget = ActionTarget.GADGET;
+		if (actionTarget == ActionTarget.TERRAIN_AND_GADET) {
+			if (targetObject != null) {
+				actionTarget = ActionTarget.GADGET;
 			} else {
-				eActionTarget = ActionTarget.TERRAIN;
+				actionTarget = ActionTarget.TERRAIN;
 			}
 		}
 
 		// クリック対象とガジェットの選択モードチェック
-		if (eActionTarget == ActionTarget.TERRAIN) {
+		if (actionTarget == ActionTarget.TERRAIN) {
 			// 背景設置物
-			if (target != null)
-				return null;
+				if (targetObject != null)
+					return null;
 
 			// 今のところキーは使用しないので未チェック
 			// 座標変換と設置可能範囲チェック
-			Class<?> cls = item.getGadgetClass();
+				Class<?> cls = actionItem.getGadgetClass();
 			Method mtd;
 			Rectangle4y bound = null;
 			try {
@@ -84,33 +84,33 @@ public class GadgetAction {
 				// 設置実行
 				try {
 					Constructor<?> cst = cls.getConstructor(int.class, int.class, int.class);
-					ret = (ObjEX) cst.newInstance(pos.getX(), pos.getY(), item.getInitOption());
-					if (ret != null) {
-						Cash.buyItem(ret);
+						placedObject = (ObjEX) cst.newInstance(pos.getX(), pos.getY(), actionItem.getInitOption());
+						if (placedObject != null) {
+							Cash.buyItem(placedObject);
 					}
 				} catch (NoSuchMethodException | SecurityException | InstantiationException
 						| IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 					e.printStackTrace();
 				}
 			}
-		} else if (eActionTarget == ActionTarget.WALL) {
+		} else if (actionTarget == ActionTarget.WALL) {
 			// 壁選択
-			switch (item) {
+			switch (actionItem) {
 				case WALL_DELETE:
 					Point4y pos = Translate.invert(fieldMousePos[0], fieldMousePos[1]);
 					if (pos != null) {
-						Barrier found = Barrier.getBarrier(pos.getX(), pos.getY(), 1);
-						if (found != null) {
-							Barrier.clearBarrier(found);
+						Barrier targetBarrier = Barrier.getBarrier(pos.getX(), pos.getY(), 1);
+						if (targetBarrier != null) {
+							Barrier.clearBarrier(targetBarrier);
 						}
 					}
 					break;
 				default:
 					break;
 			}
-		} else if (item.getActionTarget() == ActionTarget.FIELD) {
+			} else if (actionItem.getActionTarget() == ActionTarget.FIELD) {
 			// フィールド選択
-			switch (item) {
+				switch (actionItem) {
 				case FIELD_DELETE:
 					Beltconveyor belt = Beltconveyor.getBeltconveyor(fieldMousePos[0], fieldMousePos[1]);
 					if (belt != null) {
@@ -132,47 +132,47 @@ public class GadgetAction {
 			}
 		} else {
 			// 選択物体
-			if (target == null)
+			if (targetObject == null)
 				return null;
-			switch (item.getGroup()) {
+			switch (actionItem.getGroup()) {
 				case TOOL:
-					evaluateTool(item, ev, target);
+					evaluateTool(actionItem, ev, targetObject);
 					break;
 				case TOOL2:
-					evaluateTool2(item, ev, target);
+					evaluateTool2(actionItem, ev, targetObject);
 					break;
 				case AMPOULE:
-					evaluateAmpoule(item, ev, target);
+					evaluateAmpoule(actionItem, ev, targetObject);
 					break;
 				case CLEAN:
-					evaluateClean(item, ev, target);
+					evaluateClean(actionItem, ev, targetObject);
 					break;
 				case ACCESSORY:
-					evaluateAccessory(item, ev, target);
+					evaluateAccessory(actionItem, ev, targetObject);
 					break;
 				case PANTS:
-					evaluatePants(item, ev, target);
+					evaluatePants(actionItem, ev, targetObject);
 					break;
 				case FLOOR:
-					evaluateFloorItems(item, ev, target);
+					evaluateFloorItems(actionItem, ev, targetObject);
 					break;
 				case TOYS:
-					evaluateToys(item, ev, target);
+					evaluateToys(actionItem, ev, targetObject);
 					break;
 				case CONVEYOR:
-					evaluateConveyor(item, ev, target);
+					evaluateConveyor(actionItem, ev, targetObject);
 					break;
 				case VOICE:
-					evaluateCommunicate(item, ev, target);
+					evaluateCommunicate(actionItem, ev, targetObject);
 					break;
 				case TEST:
-					evaluateTest(item, ev, target);
+					evaluateTest(actionItem, ev, targetObject);
 					break;
 				default:
 					break;
 			}
 		}
-		return ret;
+		return placedObject;
 	}
 
 	/**
@@ -198,15 +198,15 @@ public class GadgetAction {
 	 * @return
 	 */
 	public static ObjEX putObjEX(Class<?> cls, int px, int py, int initOption) {
-		ObjEX ret = null;
+		ObjEX placedObject = null;
 		try {
 			Constructor<?> cst = cls.getConstructor(int.class, int.class, int.class);
-			ret = (ObjEX) cst.newInstance(px, py, initOption);
+			placedObject = (ObjEX) cst.newInstance(px, py, initOption);
 		} catch (NoSuchMethodException | SecurityException | InstantiationException
 				| IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			e.printStackTrace();
 		}
-		return ret;
+		return placedObject;
 	}
 
 	// 対象物をクリックするアクション-----------------------------------------------
@@ -218,10 +218,10 @@ public class GadgetAction {
 	 *
 	 * @param item  実行内容
 	 * @param ev    入力されたマウスの動作
-	 * @param found 対象オブジェクト
+	 * @param targetObject 対象オブジェクト
 	 */
-	public static void evaluateTool(GadgetList item, MouseEvent ev, Obj found) {
-		GadgetToolAction.evaluateTool(item, ev, found);
+	public static void evaluateTool(GadgetList actionItem, MouseEvent ev, Obj targetObject) {
+		GadgetToolAction.evaluateTool(actionItem, ev, targetObject);
 	}
 
 	/**
@@ -231,10 +231,10 @@ public class GadgetAction {
 	 *
 	 * @param item  実行内容
 	 * @param ev    入力されたマウスの動作
-	 * @param found 対象オブジェクト
+	 * @param targetObject 対象オブジェクト
 	 */
-	public static void evaluateTool2(GadgetList item, MouseEvent ev, Obj found) {
-		GadgetToolAction.evaluateTool2(item, ev, found);
+	public static void evaluateTool2(GadgetList actionItem, MouseEvent ev, Obj targetObject) {
+		GadgetToolAction.evaluateTool2(actionItem, ev, targetObject);
 	}
 
 	/**
@@ -244,10 +244,10 @@ public class GadgetAction {
 	 *
 	 * @param item  実行内容
 	 * @param ev    入力されたマウスの動作
-	 * @param found 対象オブジェクト
+	 * @param targetObject 対象オブジェクト
 	 */
-	public static void evaluateAmpoule(GadgetList item, MouseEvent ev, Obj found) {
-		GadgetAmpouleAction.evaluateAmpoule(item, ev, found);
+	public static void evaluateAmpoule(GadgetList actionItem, MouseEvent ev, Obj targetObject) {
+		GadgetAmpouleAction.evaluateAmpoule(actionItem, ev, targetObject);
 	}
 
 	/**
@@ -257,10 +257,10 @@ public class GadgetAction {
 	 *
 	 * @param item  実行内容
 	 * @param ev    入力されたマウスの動作
-	 * @param found 対象オブジェクト
+	 * @param targetObject 対象オブジェクト
 	 */
-	public static void evaluateClean(GadgetList item, MouseEvent ev, Obj found) {
-		GadgetBodyAction.evaluateClean(item, ev, found);
+	public static void evaluateClean(GadgetList actionItem, MouseEvent ev, Obj targetObject) {
+		GadgetBodyAction.evaluateClean(actionItem, ev, targetObject);
 	}
 
 	/**
@@ -270,10 +270,10 @@ public class GadgetAction {
 	 *
 	 * @param item  実行内容
 	 * @param ev    入力されたマウスの動作
-	 * @param found 対象オブジェクト
+	 * @param targetObject 対象オブジェクト
 	 */
-	public static void evaluateAccessory(GadgetList item, MouseEvent ev, Obj found) {
-		GadgetBodyAction.evaluateAccessory(item, ev, found);
+	public static void evaluateAccessory(GadgetList actionItem, MouseEvent ev, Obj targetObject) {
+		GadgetBodyAction.evaluateAccessory(actionItem, ev, targetObject);
 	}
 
 	/**
@@ -283,10 +283,10 @@ public class GadgetAction {
 	 *
 	 * @param item  実行内容
 	 * @param ev    入力されたマウスの動作
-	 * @param found 対象オブジェクト
+	 * @param targetObject 対象オブジェクト
 	 */
-	public static void evaluatePants(GadgetList item, MouseEvent ev, Obj found) {
-		GadgetBodyAction.evaluatePants(item, ev, found);
+	public static void evaluatePants(GadgetList actionItem, MouseEvent ev, Obj targetObject) {
+		GadgetBodyAction.evaluatePants(actionItem, ev, targetObject);
 	}
 
 	/**
@@ -296,10 +296,10 @@ public class GadgetAction {
 	 *
 	 * @param item  実行内容
 	 * @param ev    入力されたマウスの動作
-	 * @param found 対象オブジェクト
+	 * @param targetObject 対象オブジェクト
 	 */
-	public static void evaluateFloorItems(GadgetList item, MouseEvent ev, Obj found) {
-		GadgetItemSetupAction.evaluateFloorItems(item, ev, found);
+	public static void evaluateFloorItems(GadgetList actionItem, MouseEvent ev, Obj targetObject) {
+		GadgetItemSetupAction.evaluateFloorItems(actionItem, ev, targetObject);
 	}
 
 	/**
@@ -309,10 +309,10 @@ public class GadgetAction {
 	 *
 	 * @param item  実行内容
 	 * @param ev    入力されたマウスの動作
-	 * @param found 対象オブジェクト
+	 * @param targetObject 対象オブジェクト
 	 */
-	public static void evaluateToys(GadgetList item, MouseEvent ev, Obj found) {
-		GadgetItemSetupAction.evaluateToys(item, ev, found);
+	public static void evaluateToys(GadgetList actionItem, MouseEvent ev, Obj targetObject) {
+		GadgetItemSetupAction.evaluateToys(actionItem, ev, targetObject);
 	}
 
 	/**
@@ -322,10 +322,10 @@ public class GadgetAction {
 	 *
 	 * @param item  実行内容
 	 * @param ev    入力されたマウスの動作
-	 * @param found 対象オブジェクト
+	 * @param targetObject 対象オブジェクト
 	 */
-	public static void evaluateConveyor(GadgetList item, MouseEvent ev, Obj found) {
-		GadgetItemSetupAction.evaluateConveyor(item, ev, found);
+	public static void evaluateConveyor(GadgetList actionItem, MouseEvent ev, Obj targetObject) {
+		GadgetItemSetupAction.evaluateConveyor(actionItem, ev, targetObject);
 	}
 
 	/**
@@ -335,10 +335,10 @@ public class GadgetAction {
 	 *
 	 * @param item  実行内容
 	 * @param ev    入力されたマウスの動作
-	 * @param found 対象オブジェクト
+	 * @param targetObject 対象オブジェクト
 	 */
-	public static void evaluateCommunicate(GadgetList item, MouseEvent ev, Obj found) {
-		GadgetBodyAction.evaluateCommunicate(item, ev, found);
+	public static void evaluateCommunicate(GadgetList actionItem, MouseEvent ev, Obj targetObject) {
+		GadgetBodyAction.evaluateCommunicate(actionItem, ev, targetObject);
 	}
 
 	/**
@@ -348,10 +348,10 @@ public class GadgetAction {
 	 *
 	 * @param item  実行内容
 	 * @param ev    入力されたマウスの動作
-	 * @param found 対象オブジェクト
+	 * @param targetObject 対象オブジェクト
 	 */
-	public static void evaluateTest(GadgetList item, MouseEvent ev, Obj found) {
-		GadgetDebugAction.evaluateTest(item, ev, found);
+	public static void evaluateTest(GadgetList actionItem, MouseEvent ev, Obj targetObject) {
+		GadgetDebugAction.evaluateTest(actionItem, ev, targetObject);
 	}
 }
 

@@ -48,4 +48,20 @@ public class YukkuriTypeTest {
             assertTrue(added, "Duplicate typeID found: " + type.getTypeID() + " for " + type.name());
         }
     }
+
+    @Test
+    public void testLookupByClassNameAndTypeID() {
+        assertEquals(YukkuriType.REIMU, YukkuriType.fromClassName("Reimu"));
+        assertEquals(YukkuriType.MARISA, YukkuriType.fromTypeID(0));
+        assertNull(YukkuriType.fromClassName(null));
+        assertNull(YukkuriType.fromClassName("UnknownClass"));
+        assertNull(YukkuriType.fromTypeID(-999));
+    }
+
+    @Test
+    public void testNormalizeOffspringType() {
+        assertEquals(YukkuriType.MARISA.getTypeID(), YukkuriType.normalizeOffspringType(YukkuriType.DOSMARISA.getTypeID()));
+        assertEquals(YukkuriType.REIMU.getTypeID(), YukkuriType.normalizeOffspringType(YukkuriType.DEIBU.getTypeID()));
+        assertEquals(YukkuriType.ALICE.getTypeID(), YukkuriType.normalizeOffspringType(YukkuriType.ALICE.getTypeID()));
+    }
 }

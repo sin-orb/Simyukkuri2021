@@ -317,8 +317,8 @@ class LoggerYukkuriTest {
         Body b = WorldTestHelper.createBody();
         b.setX(100); b.setY(100);
         // sickはHPが低い状態で発動するのでHP=1に設定
-        // sickPeriod > INCUBATIONPERIODorgにしてisSick()=trueにする
-        b.setSickPeriod(b.getINCUBATIONPERIODorg() + 1);
+        // sickPeriod > incubationPeriodBaseにしてisSick()=trueにする
+        b.setSickPeriod(b.getIncubationPeriodBase() + 1);
         SimYukkuri.world.getCurrentMap().getBody().put(b.getUniqueID(), b);
         assertDoesNotThrow(() -> LoggerYukkuri.run());
     }

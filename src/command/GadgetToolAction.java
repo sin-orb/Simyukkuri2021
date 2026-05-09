@@ -49,17 +49,16 @@ import src.system.MainCommandUI;
 import src.system.MapPlaceData;
 import src.util.GameEnvironment;
 import src.util.GameWorld;
-import src.util.YukkuriUtil;
 
 final class GadgetToolAction {
 
 	private GadgetToolAction() {
 	}
 
-	static void evaluateTool(GadgetList item, MouseEvent ev, Obj found) {
+	static void evaluateTool(GadgetList item, MouseEvent ev, Obj targetObject) {
 		switch (item) {
 			case PUNISH:
-				GadgetMenu.executeBodyMethod(ev, found, "strikeByPunish");
+				GadgetMenu.executeBodyMethod(ev, targetObject, "strikeByPunish");
 				break;
 			case SNAPPING:
 				if (ev.isShiftDown()) {
@@ -75,244 +74,244 @@ final class GadgetToolAction {
 						entry.getValue().kick();
 					}
 				} else {
-					found.kick();
+					targetObject.kick();
 				}
 				break;
 			case VIBRATOR:
-				GadgetMenu.executeBodyMethod(ev, found, "forceToExcite");
+				GadgetMenu.executeBodyMethod(ev, targetObject, "forceToExcite");
 				break;
 			case PENICUT:
-				GadgetMenu.executeBodyMethod(ev, found, "cutPenipeni");
+				GadgetMenu.executeBodyMethod(ev, targetObject, "cutPenipeni");
 				break;
 			case JUICE:
-				GadgetMenu.executeBodyMethod(ev, found, "giveJuice");
+				GadgetMenu.executeBodyMethod(ev, targetObject, "giveJuice");
 				break;
 			case Medical_JUICE:
-				GadgetMenu.executeBodyMethod(ev, found, "injectJuice");
+				GadgetMenu.executeBodyMethod(ev, targetObject, "injectJuice");
 				break;
 			case LEMON_SPLAY:
-				GadgetMenu.executeBodyMethod(ev, found, "forceToSleep");
+				GadgetMenu.executeBodyMethod(ev, targetObject, "forceToSleep");
 				break;
 			case Pheromone_SPLAY:
-				GadgetMenu.executeBodyMethod(ev, found, "invPheromone");
+				GadgetMenu.executeBodyMethod(ev, targetObject, "invPheromone");
 				break;
 			case HAMMER:
 				if (ev.isShiftDown()) {
 					for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
-						Body b = entry.getValue();
-						b.strikeByHammer();
-						if (!b.isHasPants() && !b.isDead() && !b.isShutmouth()) {
-							int ofsX = Translate.invertX(b.getCollisionX() >> 1, b.getY());
-							if (b.getDirection() == Direction.LEFT) {
-								ofsX = -ofsX;
+						Body body = entry.getValue();
+						body.strikeByHammer();
+						if (!body.isHasPants() && !body.isDead() && !body.isShutmouth()) {
+							int offsetX = Translate.invertX(body.getCollisionX() >> 1, body.getY());
+							if (body.getDirection() == Direction.LEFT) {
+								offsetX = -offsetX;
 							}
-							if (!b.isPacked() && !b.isShutmouth()) {
-								GameView.addVomit(b.getX() + ofsX, b.getY(), b.getZ(), b, b.getShitType());
+							if (!body.isPacked() && !body.isShutmouth()) {
+								GameView.addVomit(body.getX() + offsetX, body.getY(), body.getZ(), body, body.getShitType());
 							}
-							b.stay();
+							body.stay();
 						}
-						b.makeDirty(true);
+						body.makeDirty(true);
 					}
 					GameEnvironment.setAlarm();
-				} else if (found instanceof Body) {
-					Body b = (Body) found;
-					b.strikeByHammer();
-					if (!b.isHasPants() && !b.isDead() && !b.isShutmouth()) {
-						int ofsX = Translate.invertX(b.getCollisionX() >> 1, b.getY());
-						if (b.getDirection() == Direction.LEFT) {
-							ofsX = -ofsX;
+				} else if (targetObject instanceof Body) {
+					Body body = (Body) targetObject;
+					body.strikeByHammer();
+					if (!body.isHasPants() && !body.isDead() && !body.isShutmouth()) {
+						int offsetX = Translate.invertX(body.getCollisionX() >> 1, body.getY());
+						if (body.getDirection() == Direction.LEFT) {
+							offsetX = -offsetX;
 						}
-						if (!b.isPacked() && !b.isShutmouth()) {
-							GameView.addVomit(b.getX() + ofsX, b.getY(), b.getZ(), b, b.getShitType());
+						if (!body.isPacked() && !body.isShutmouth()) {
+							GameView.addVomit(body.getX() + offsetX, body.getY(), body.getZ(), body, body.getShitType());
 						}
-						b.stay();
+						body.stay();
 					}
-					b.makeDirty(true);
+					body.makeDirty(true);
 					GameEnvironment.setAlarm();
 				}
 				break;
 			case GATHERINJECTINTO:
-			if (found instanceof Body) {
-				Body b = (Body) found;
-				if (SimYukkuri.sperm == null) {
-					SimYukkuri.sperm = b.getDna();
-				} else {
-					b.injectInto(SimYukkuri.sperm);
-					SimYukkuri.sperm = null;
+				if (targetObject instanceof Body) {
+					Body body = (Body) targetObject;
+					if (SimYukkuri.sperm == null) {
+						SimYukkuri.sperm = body.getDna();
+					} else {
+						body.injectInto(SimYukkuri.sperm);
+						SimYukkuri.sperm = null;
+					}
 				}
-			}
-			break;
-		case DRIPSPERM:
-			if (found instanceof Body) {
-				Body b = (Body) found;
-				if (SimYukkuri.sperm == null) {
-					SimYukkuri.sperm = b.getDna();
-				} else {
-					b.dripSperm(SimYukkuri.sperm);
-					SimYukkuri.sperm = null;
+				break;
+			case DRIPSPERM:
+				if (targetObject instanceof Body) {
+					Body body = (Body) targetObject;
+					if (SimYukkuri.sperm == null) {
+						SimYukkuri.sperm = body.getDna();
+					} else {
+						body.dripSperm(SimYukkuri.sperm);
+						SimYukkuri.sperm = null;
+					}
 				}
-			}
-			break;
-		case PUNCH:
+				break;
+			case PUNCH:
 				if (ev.isShiftDown()) {
 					for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
-						Body b = entry.getValue();
-						b.strikeByPunch();
-						if (!b.isHasPants() && !b.isDead() && !b.isShutmouth()) {
-							int ofsX = Translate.invertX(b.getCollisionX() >> 1, b.getY());
-							if (b.getDirection() == Direction.LEFT) {
-								ofsX = -ofsX;
+						Body body = entry.getValue();
+						body.strikeByPunch();
+						if (!body.isHasPants() && !body.isDead() && !body.isShutmouth()) {
+							int offsetX = Translate.invertX(body.getCollisionX() >> 1, body.getY());
+							if (body.getDirection() == Direction.LEFT) {
+								offsetX = -offsetX;
 							}
-							if (!b.isPacked() && !b.isShutmouth()) {
-								GameView.addVomit(b.getX() + ofsX, b.getY(), b.getZ(), b, b.getShitType());
+							if (!body.isPacked() && !body.isShutmouth()) {
+								GameView.addVomit(body.getX() + offsetX, body.getY(), body.getZ(), body, body.getShitType());
 							}
-							b.stay();
+							body.stay();
 						}
-						b.makeDirty(true);
+						body.makeDirty(true);
 					}
 					GameEnvironment.setAlarm();
-				} else if (found instanceof Body) {
-					Body b = (Body) found;
-					b.strikeByPunch();
-					if (!b.isHasPants() && !b.isDead() && !b.isShutmouth()) {
-						int ofsX = Translate.invertX(b.getCollisionX() >> 1, b.getY());
-						if (b.getDirection() == Direction.LEFT) {
-							ofsX = -ofsX;
+				} else if (targetObject instanceof Body) {
+					Body body = (Body) targetObject;
+					body.strikeByPunch();
+					if (!body.isHasPants() && !body.isDead() && !body.isShutmouth()) {
+						int offsetX = Translate.invertX(body.getCollisionX() >> 1, body.getY());
+						if (body.getDirection() == Direction.LEFT) {
+							offsetX = -offsetX;
 						}
-						if (!b.isPacked() && !b.isShutmouth()) {
-							GameView.addVomit(b.getX() + ofsX, b.getY(), b.getZ(), b, b.getShitType());
+						if (!body.isPacked() && !body.isShutmouth()) {
+							GameView.addVomit(body.getX() + offsetX, body.getY(), body.getZ(), body, body.getShitType());
 						}
-						b.stay();
+						body.stay();
 					}
-					b.makeDirty(true);
+					body.makeDirty(true);
 					GameEnvironment.setAlarm();
 				}
 				break;
 			case GODHAND:
 				if (ev.isShiftDown()) {
 					List<Body> bodyList = new LinkedList<Body>(GameWorld.get().getCurrentMap().getBody().values());
-					int nSize = bodyList.size();
-					for (int i = nSize - 1; -1 < i; i--) {
-						Body b = bodyList.get(i);
-						if (b != null) {
-							GadgetTool.doGodHand(b);
+					int bodyCount = bodyList.size();
+					for (int i = bodyCount - 1; -1 < i; i--) {
+						Body body = bodyList.get(i);
+						if (body != null) {
+							GadgetTool.doGodHand(body);
 						}
 					}
-				} else if (found instanceof Body) {
-					Body b = (Body) found;
-					GadgetTool.doGodHand(b);
+				} else if (targetObject instanceof Body) {
+					Body body = (Body) targetObject;
+					GadgetTool.doGodHand(body);
 				}
 				break;
 			case PEAL:
 				List<Body> bodyListP = new LinkedList<Body>(GameWorld.get().getCurrentMap().getBody().values());
 				if (ev.isShiftDown() || ev.isControlDown()) {
-					for (Body b : bodyListP) {
-						b.peal();
-						b.setStubbornlyDirty(false);
+					for (Body body : bodyListP) {
+						body.peal();
+						body.setStubbornlyDirty(false);
 					}
-				} else if (found instanceof Body) {
-					((Body) found).peal();
-					((Body) found).setStubbornlyDirty(false);
+				} else if (targetObject instanceof Body) {
+					((Body) targetObject).peal();
+					((Body) targetObject).setStubbornlyDirty(false);
 				}
 				break;
 			case Blind:
 				List<Body> bodyListB = new LinkedList<Body>(GameWorld.get().getCurrentMap().getBody().values());
 				if (ev.isShiftDown()) {
-					boolean flag = true;
-					if (found instanceof Body) {
-						flag = !((Body) found).isBlind();
+					boolean shouldBreakEyes = true;
+					if (targetObject instanceof Body) {
+						shouldBreakEyes = !((Body) targetObject).isBlind();
 					}
-					for (Body b : bodyListB) {
-						if (!flag && b.isBlind()) {
-							b.breakeyes();
-						} else if (flag && !b.isBlind()) {
-							b.breakeyes();
+					for (Body body : bodyListB) {
+						if (!shouldBreakEyes && body.isBlind()) {
+							body.breakeyes();
+						} else if (shouldBreakEyes && !body.isBlind()) {
+							body.breakeyes();
 						}
 					}
 				} else if (ev.isControlDown()) {
-					for (Body b : bodyListB) {
-						b.breakeyes();
+					for (Body body : bodyListB) {
+						body.breakeyes();
 					}
-				} else if (found instanceof Body) {
-					((Body) found).breakeyes();
+				} else if (targetObject instanceof Body) {
+					((Body) targetObject).breakeyes();
 				}
 				break;
 			case SHUTMOUTH:
 				List<Body> bodyListS = new LinkedList<Body>(GameWorld.get().getCurrentMap().getBody().values());
 				if (ev.isShiftDown()) {
-					boolean flag = true;
-					if (found instanceof Body) {
-						flag = !((Body) found).isShutmouth();
+					boolean shouldShutMouth = true;
+					if (targetObject instanceof Body) {
+						shouldShutMouth = !((Body) targetObject).isShutmouth();
 					}
-					for (Body b : bodyListS) {
-						if (!flag && b.isShutmouth()) {
-							b.ShutMouth();
-						} else if (flag && !b.isShutmouth()) {
-							b.ShutMouth();
+					for (Body body : bodyListS) {
+						if (!shouldShutMouth && body.isShutmouth()) {
+							body.ShutMouth();
+						} else if (shouldShutMouth && !body.isShutmouth()) {
+							body.ShutMouth();
 						}
 					}
 				} else if (ev.isControlDown()) {
-					for (Body b : bodyListS) {
-						b.ShutMouth();
+					for (Body body : bodyListS) {
+						body.ShutMouth();
 					}
-				} else if (found instanceof Body) {
-					((Body) found).ShutMouth();
+				} else if (targetObject instanceof Body) {
+					((Body) targetObject).ShutMouth();
 				}
 				break;
 			case HAIRCUT:
 				if (!ev.isShiftDown()) {
-					GadgetMenu.executeBodyMethod(ev, found, "pickHair");
+					GadgetMenu.executeBodyMethod(ev, targetObject, "pickHair");
 				}
 				break;
 			case PACK:
 				List<Body> bodyListPa = new LinkedList<Body>(GameWorld.get().getCurrentMap().getBody().values());
 				if (ev.isShiftDown()) {
-					boolean flag = true;
-					if (found instanceof Body) {
-						flag = !((Body) found).isPacked();
+					boolean shouldPack = true;
+					if (targetObject instanceof Body) {
+						shouldPack = !((Body) targetObject).isPacked();
 					}
-					for (Body b : bodyListPa) {
-						if (!flag && b.isPacked()) {
-							b.pack();
-						} else if (flag && !b.isPacked()) {
-							b.pack();
+					for (Body body : bodyListPa) {
+						if (!shouldPack && body.isPacked()) {
+							body.pack();
+						} else if (shouldPack && !body.isPacked()) {
+							body.pack();
 						}
 					}
 				} else if (ev.isControlDown()) {
-					for (Body b : bodyListPa) {
-						b.pack();
+					for (Body body : bodyListPa) {
+						body.pack();
 					}
-				} else if (found instanceof Body) {
-					((Body) found).pack();
+				} else if (targetObject instanceof Body) {
+					((Body) targetObject).pack();
 				}
 				break;
 			case HOLD:
 				if (!ev.isShiftDown()) {
-					GadgetMenu.executeBodyMethod(ev, found, "Hold");
+					GadgetMenu.executeBodyMethod(ev, targetObject, "Hold");
 				}
 				break;
 			case STOMP:
-				GadgetMenu.executeBodyMethod(ev, found, "strikeByPress");
+				GadgetMenu.executeBodyMethod(ev, targetObject, "strikeByPress");
 				break;
 			default:
 				break;
 		}
 	}
 
-	static void evaluateTool2(GadgetList item, MouseEvent ev, Obj found) {
+	static void evaluateTool2(GadgetList item, MouseEvent ev, Obj targetObject) {
 		switch (item) {
 			case BRAID_PLUCK:
-				GadgetMenu.executeBodyMethod(ev, found, "takeBraid");
+				GadgetMenu.executeBodyMethod(ev, targetObject, "takeBraid");
 				break;
 			case ANAL_CLOSE:
-				GadgetMenu.executeBodyMethod(ev, found, "isAnalClose", "setAnalClose", "invAnalClose");
+				GadgetMenu.executeBodyMethod(ev, targetObject, "isAnalClose", "setAnalClose", "invAnalClose");
 				break;
 			case STALK_CUT:
-				GadgetMenu.executeBodyMethod(ev, found, "getStalkCastration", "castrateStalk", "invStalkCastration");
+				GadgetMenu.executeBodyMethod(ev, targetObject, "getStalkCastration", "castrateStalk", "invStalkCastration");
 				break;
 			case STALK_UNPLUG:
-				if (found instanceof Stalk) {
-					Stalk s = ((Stalk) found);
+				if (targetObject instanceof Stalk) {
+					Stalk s = ((Stalk) targetObject);
 					int id = s.getPlantYukkuri();
 					if (GameWorld.get().getCurrentMap().getBody().get(id) == null) {
 						int id2 = s.getPlantYukkuri();
@@ -321,25 +320,25 @@ final class GadgetToolAction {
 				}
 				break;
 			case CASTRATION:
-				GadgetMenu.executeBodyMethod(ev, found, "getBodyCastration", "castrateBody", "invBodyCastration");
+				GadgetMenu.executeBodyMethod(ev, targetObject, "getBodyCastration", "castrateBody", "invBodyCastration");
 				break;
 			case LIGHTER:
-				GadgetMenu.executeBodyMethod(ev, found, "giveFire");
+				GadgetMenu.executeBodyMethod(ev, targetObject, "giveFire");
 				break;
 			case NEEDLE:
-				GadgetMenu.executeBodyMethod(ev, found, "getNeedle", "setNeedle", "invNeedle");
+				GadgetMenu.executeBodyMethod(ev, targetObject, "getNeedle", "setNeedle", "invNeedle");
 				break;
 			case WATER:
-				GadgetMenu.executeBodyMethod(ev, found, "giveWater");
+				GadgetMenu.executeBodyMethod(ev, targetObject, "giveWater");
 				break;
 			case BURY:
-				GadgetMenu.executeBodyMethod(ev, found, "baryInUnderGround");
+				GadgetMenu.executeBodyMethod(ev, targetObject, "baryInUnderGround");
 				break;
 			case SET_SICK:
-				GadgetMenu.executeBodyMethod(ev, found, "moldToggle");
+				GadgetMenu.executeBodyMethod(ev, targetObject, "moldToggle");
 				break;
 			case SET_RAPER:
-				GadgetMenu.executeBodyMethod(ev, found, "raperToggle");
+				GadgetMenu.executeBodyMethod(ev, targetObject, "raperToggle");
 				break;
 			default:
 				break;

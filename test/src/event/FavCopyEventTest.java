@@ -102,7 +102,7 @@ public class FavCopyEventTest extends EventTestBase {
         assertTrue(event.simpleEventAction(b));
     }
 
-    // --- both UnunSlave → setFavItem ---
+    // --- both UnunSlave → setFavoriteItem ---
     @Test
     void testSimpleEventAction_bothUnunSlave_returnsTrue() {
         Body b = createBody(1, 100, 100);
@@ -115,7 +115,7 @@ public class FavCopyEventTest extends EventTestBase {
         assertTrue(event.simpleEventAction(b));
     }
 
-    // --- one UnunSlave, other not → no setFavItem ---
+    // --- one UnunSlave, other not → no setFavoriteItem ---
     @Test
     void testSimpleEventAction_oneUnunSlave_returnsTrue() {
         Body b = createBody(1, 100, 100);
@@ -139,13 +139,13 @@ public class FavCopyEventTest extends EventTestBase {
             parent.setPartner(child.getUniqueID());
             Bed bed = new Bed();
             SimYukkuri.world.getCurrentMap().getBed().put(bed.getObjId(), bed);
-            parent.setFavItem(FavItemType.BED, bed);
-            child.setFavItem(FavItemType.BED, null);
+            parent.setFavoriteItem(FavItemType.BED, bed);
+            child.setFavoriteItem(FavItemType.BED, null);
 
             FavCopyEvent event = new FavCopyEvent(parent, child, null, 1);
 
             assertTrue(event.simpleEventAction(child));
-            assertEquals(bed.getObjId(), child.getFavItem(FavItemType.BED).getObjId());
+            assertEquals(bed.getObjId(), child.getFavoriteItem(FavItemType.BED).getObjId());
         }
     }
 }

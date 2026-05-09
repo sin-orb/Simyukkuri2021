@@ -19,12 +19,12 @@ public final class BodyUnunSlaveEmotionRule {
 	/**
 	 * Process the special emotion reaction for unun slave bodies.
 	 *
-	 * @param b          actor body
+	 * @param body actor body
 	 * @param bodyTarget target body
 	 * @return true if a reaction was handled
 	 */
-	public static boolean checkEmotionFromUnunSlave(Body b, Body bodyTarget) {
-		if (b == null || bodyTarget == null) {
+	public static boolean checkEmotionFromUnunSlave(Body body, Body bodyTarget) {
+		if (body == null || bodyTarget == null) {
 			return false;
 		}
 
@@ -32,46 +32,46 @@ public final class BodyUnunSlaveEmotionRule {
 			return false;
 		}
 
-		if (b.isIdiot()) {
+		if (body.isIdiot()) {
 			return false;
 		}
 
-		if (b.isNYD()) {
+		if (body.isNYD()) {
 			return false;
 		}
 
-		boolean[] abEmote = EmotionLogic.checkEmotionForOther(b, bodyTarget);
-		EnumRelationMine eRelation = BodyLogic.checkMyRelation(b, bodyTarget);
+		boolean[] emotionFlags = EmotionLogic.checkEmotionForOther(body, bodyTarget);
+		EnumRelationMine relation = BodyLogic.checkMyRelation(body, bodyTarget);
 
-		if ((b.getPublicRank() == PublicRank.UnunSlave) && (bodyTarget.getPublicRank() != PublicRank.UnunSlave)) {
-			if (abEmote[5]) {
-				switch (eRelation) {
+		if ((body.getPublicRank() == PublicRank.UnunSlave) && (bodyTarget.getPublicRank() != PublicRank.UnunSlave)) {
+			if (emotionFlags[5]) {
+				switch (relation) {
 					case FATHER:
 					case MOTHER:
-						b.setMessage(GameMessages.getMessage(b, MessagePool.Action.HateWithEnvyAboutChild));
+						body.setMessage(GameMessages.getMessage(body, MessagePool.Action.HateWithEnvyAboutChild));
 						break;
 					case PARTNAR:
-						b.setMessage(GameMessages.getMessage(b, MessagePool.Action.HateWithEnvyAboutPartner));
+						body.setMessage(GameMessages.getMessage(body, MessagePool.Action.HateWithEnvyAboutPartner));
 						break;
 					case CHILD_FATHER:
-						b.setMessage(GameMessages.getMessage(b, MessagePool.Action.HateWithEnvyAboutFather));
+						body.setMessage(GameMessages.getMessage(body, MessagePool.Action.HateWithEnvyAboutFather));
 						break;
 					case CHILD_MOTHER:
-						b.setMessage(GameMessages.getMessage(b, MessagePool.Action.HateWithEnvyAboutMother));
+						body.setMessage(GameMessages.getMessage(body, MessagePool.Action.HateWithEnvyAboutMother));
 						break;
 					case ELDERSISTER:
-						b.setMessage(GameMessages.getMessage(b, MessagePool.Action.HateWithEnvyAboutElderSister));
+						body.setMessage(GameMessages.getMessage(body, MessagePool.Action.HateWithEnvyAboutElderSister));
 						break;
 					case YOUNGSISTER:
-						b.setMessage(GameMessages.getMessage(b, MessagePool.Action.HateWithEnvyAboutSister));
+						body.setMessage(GameMessages.getMessage(body, MessagePool.Action.HateWithEnvyAboutSister));
 						break;
 					default:
-						b.setMessage(GameMessages.getMessage(b, MessagePool.Action.HateWithEnvyAboutOther));
+						body.setMessage(GameMessages.getMessage(body, MessagePool.Action.HateWithEnvyAboutOther));
 						break;
 				}
-				b.setHappiness(Happiness.VERY_SAD);
-				b.addStress(10);
-				b.stay();
+				body.setHappiness(Happiness.VERY_SAD);
+				body.addStress(10);
+				body.stay();
 				return true;
 			}
 		}

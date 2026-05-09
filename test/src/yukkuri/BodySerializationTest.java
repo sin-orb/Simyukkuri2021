@@ -16,12 +16,12 @@ public class BodySerializationTest {
         reimu.setZ(0);
 
         // 2. Tune parameters to randomize them (simulating game start)
-        // This modifies DAMAGELIMITorg among others
+        // This modifies damageLimitBase among others
         reimu.tuneParameters();
 
         // Capture the tuned values
-        int[] originalDamageLimit = reimu.getDAMAGELIMITorg();
-        int[] originalHungryLimit = reimu.getHUNGRYLIMITorg();
+        int[] originalDamageLimit = reimu.getDamageLimitBase();
+        int[] originalHungryLimit = reimu.getHungryLimitBase();
 
         // Set a specific damage value
         int testDamage = 500;
@@ -37,13 +37,13 @@ public class BodySerializationTest {
         // 5. Verify constraints
         assertNotNull(loadedReimu, "Deserialized object should not be null");
 
-        // Verify DAMAGELIMITorg matches
-        assertArrayEquals(originalDamageLimit, loadedReimu.getDAMAGELIMITorg(),
-                "DAMAGELIMITorg should be preserved exactly through serialization");
+        // Verify damageLimitBase matches
+        assertArrayEquals(originalDamageLimit, loadedReimu.getDamageLimitBase(),
+                "damageLimitBase should be preserved exactly through serialization");
 
-        // Verify HUNGRYLIMITorg matches (checking another one for safety)
-        assertArrayEquals(originalHungryLimit, loadedReimu.getHUNGRYLIMITorg(),
-                "HUNGRYLIMITorg should be preserved exactly through serialization");
+        // Verify hungryLimitBase matches (checking another one for safety)
+        assertArrayEquals(originalHungryLimit, loadedReimu.getHungryLimitBase(),
+                "hungryLimitBase should be preserved exactly through serialization");
 
         // Verify Damage matches
         assertEquals(testDamage, loadedReimu.getDamage(),

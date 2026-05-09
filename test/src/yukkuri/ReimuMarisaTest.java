@@ -240,7 +240,7 @@ public class ReimuMarisaTest {
     @Test
     public void testGetAnImageVerStateCtrlNagasi_doesNotThrow() {
         ReimuMarisa obj = new ReimuMarisa();
-        org.junit.jupiter.api.Assertions.assertDoesNotThrow(() -> obj.getAnImageVerStateCtrlNagasi());
+        org.junit.jupiter.api.Assertions.assertDoesNotThrow(() -> obj.getImageVariantState());
     }
 
     @Test

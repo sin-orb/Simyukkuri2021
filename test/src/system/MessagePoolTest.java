@@ -28,20 +28,10 @@ public class MessagePoolTest {
     public void testPlaceholderReplacement_Name() {
         DummyBody body = new DummyBody();
         body.setMyNameCustom("ReimuTest");
-        // Relax contains some messages with %name and some without (flaky due to
-        // random)
-        // Try multiple times to find one with the name
-        boolean found = false;
-        String lastMsg = "";
-        for (int i = 0; i < 20; i++) {
-            String msg = MessagePool.getMessage(body, MessagePool.Action.Relax);
-            if (msg != null && msg.contains("ReimuTest")) {
-                found = true;
-                break;
-            }
-            lastMsg = msg;
-        }
-        assertTrue(found, "Message should contain replaced name in at least one attempt. Last tried: " + lastMsg);
+        body.setMsgType(YukkuriType.ALICE);
+        String msg = MessagePool.getMessage(body, MessagePool.Action.Birth);
+        assertNotNull(msg);
+        assertTrue(msg.contains("ReimuTest"), "Message should contain replaced name: " + msg);
     }
 
     @Test
@@ -50,7 +40,7 @@ public class MessagePoolTest {
         DummyBody partner = new DummyBody();
         partner.setMyNameCustom("PartnerReimu");
         body.setPartner(partner.getUniqueID());
-        src.util.YukkuriUtil.getBodyInstance(partner.getUniqueID()); // ensure it's in world
+        src.util.BodyRegistry.getBodyInstance(partner.getUniqueID()); // ensure it's in world
 
         // FindPartner or similar likely uses %partner
         String msg = MessagePool.getMessage(body, MessagePool.Action.ProposeYes);
@@ -96,7 +86,7 @@ public class MessagePoolTest {
             setMsgType(YukkuriType.REIMU);
             setBodyRank(BodyRank.KAIYU);
             setAgeState(AgeState.ADULT);
-            // Put in world so YukkuriUtil can find it for %partner
+            // Put in world so MessagePool can resolve %partner from the registry
             SimYukkuri.world.getCurrentMap().getBody().put(getUniqueID(), this);
         }
 

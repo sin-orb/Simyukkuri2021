@@ -134,12 +134,12 @@ class BeltconveyorObjTest extends ItemTestBase {
     }
 
     @Test
-    void testGetSetbMoveOnce() {
+    void testGetSetMoveOnce() {
         BeltconveyorObj belt = new BeltconveyorObj();
-        belt.setbMoveOnce(true);
-        assertTrue(belt.isbMoveOnce());
-        belt.setbMoveOnce(false);
-        assertFalse(belt.isbMoveOnce());
+        belt.setMoveOnce(true);
+        assertTrue(belt.isMoveOnce());
+        belt.setMoveOnce(false);
+        assertFalse(belt.isMoveOnce());
     }
 
     @Test
@@ -169,19 +169,19 @@ class BeltconveyorObjTest extends ItemTestBase {
     }
 
     @Test
-    void testGetSetbFilter() {
+    void testGetSetFilter() {
         BeltconveyorObj belt = new BeltconveyorObj();
-        belt.setbFilter(true);
-        assertTrue(belt.isbFilter());
-        belt.setbFilter(false);
-        assertFalse(belt.isbFilter());
+        belt.setFilter(true);
+        assertTrue(belt.isFilter());
+        belt.setFilter(false);
+        assertFalse(belt.isFilter());
     }
 
     @Test
     void testSetFilterMethod() {
         BeltconveyorObj belt = new BeltconveyorObj();
         belt.setFilter(true);
-        assertTrue(belt.isbFilter());
+        assertTrue(belt.isFilter());
     }
 
     @Test
@@ -261,16 +261,16 @@ class BeltconveyorObjTest extends ItemTestBase {
     void testGetSetAnPointX() {
         BeltconveyorObj belt = new BeltconveyorObj();
         int[] pts = {1, 2, 3, 4};
-        belt.setAnPointX(pts);
-        assertArrayEquals(pts, belt.getAnPointX());
+        belt.setPolygonX(pts);
+        assertArrayEquals(pts, belt.getPolygonX());
     }
 
     @Test
     void testGetSetAnPointY() {
         BeltconveyorObj belt = new BeltconveyorObj();
         int[] pts = {10, 20, 30, 40};
-        belt.setAnPointY(pts);
-        assertArrayEquals(pts, belt.getAnPointY());
+        belt.setPolygonY(pts);
+        assertArrayEquals(pts, belt.getPolygonY());
     }
 
     // --- removeListData ---
@@ -292,7 +292,7 @@ class BeltconveyorObjTest extends ItemTestBase {
         SimYukkuri.world.getCurrentMap().getBeltconveyorObj().put(98, belt);
 
         Body body = createBodyWithSprites();
-        body.setbOnDontMoveBeltconveyor(true);
+        body.setOnNonMovingConveyor(true);
         List<src.base.Obj> list = new LinkedList<>();
         list.add(body);
         belt.setBindObjList(list);
@@ -300,7 +300,7 @@ class BeltconveyorObjTest extends ItemTestBase {
         belt.removeListData();
 
         assertFalse(SimYukkuri.world.getCurrentMap().getBeltconveyorObj().containsKey(98));
-        assertFalse(body.isbOnDontMoveBeltconveyor());
+        assertFalse(body.isOnNonMovingConveyor());
     }
 
     @Test
@@ -393,7 +393,7 @@ class BeltconveyorObjTest extends ItemTestBase {
         belt.setCantmove(1);
         Body body = createBodyWithSprites();
         belt.objHitProcess(body);
-        assertTrue(body.isbOnDontMoveBeltconveyor());
+        assertTrue(body.isOnNonMovingConveyor());
     }
 
     @Test
@@ -444,7 +444,7 @@ class BeltconveyorObjTest extends ItemTestBase {
     @Test
     void testObjHitProcess_FilterEnabled_BodyInFilter_ReturnsZero() {
         BeltconveyorObj belt = new BeltconveyorObj();
-        belt.setbFilter(true);
+        belt.setFilter(true);
         List<YukkuriType> filter = new ArrayList<>();
         filter.add(YukkuriType.MARISA); // Marisa filtered out
         belt.setSelectedYukkuriType(filter);
@@ -495,8 +495,8 @@ class BeltconveyorObjTest extends ItemTestBase {
     @Test
     void testCheckHitObj_NotContained_ReturnsFalse() {
         BeltconveyorObj belt = new BeltconveyorObj();
-        belt.setAnPointX(new int[]{0, 0, 0, 0});
-        belt.setAnPointY(new int[]{0, 0, 0, 0});
+        belt.setPolygonX(new int[]{0, 0, 0, 0});
+        belt.setPolygonY(new int[]{0, 0, 0, 0});
         Shit shit = new Shit();
         shit.setX(500); shit.setY(500); // far from belt bounds
         assertFalse(belt.checkHitObj(null, shit));
@@ -507,8 +507,8 @@ class BeltconveyorObjTest extends ItemTestBase {
     @Test
     void testCheckContain_mapCoords_doesNotThrow() {
         BeltconveyorObj belt = new BeltconveyorObj();
-        belt.setAnPointX(new int[]{0, 0, 100, 100});
-        belt.setAnPointY(new int[]{0, 100, 100, 0});
+        belt.setPolygonX(new int[]{0, 0, 100, 100});
+        belt.setPolygonY(new int[]{0, 100, 100, 0});
         // bIsField=false → uses nX/nY directly, anPoints converted via invertLimit
         assertDoesNotThrow(() -> belt.checkContain(50, 50, false));
     }
@@ -516,8 +516,8 @@ class BeltconveyorObjTest extends ItemTestBase {
     @Test
     void testCheckContain_outsideBounds_returnsFalse() {
         BeltconveyorObj belt = new BeltconveyorObj();
-        belt.setAnPointX(new int[]{0, 0, 0, 0});
-        belt.setAnPointY(new int[]{0, 0, 0, 0});
+        belt.setPolygonX(new int[]{0, 0, 0, 0});
+        belt.setPolygonY(new int[]{0, 0, 0, 0});
         // All anPoints at origin → very small region → large point is outside
         assertFalse(belt.checkContain(999, 999, false));
     }
@@ -525,8 +525,8 @@ class BeltconveyorObjTest extends ItemTestBase {
     @Test
     void testCheckContain_fieldCoords_doesNotThrow() {
         BeltconveyorObj belt = new BeltconveyorObj();
-        belt.setAnPointX(new int[]{0, 0, 100, 100});
-        belt.setAnPointY(new int[]{0, 100, 100, 0});
+        belt.setPolygonX(new int[]{0, 0, 100, 100});
+        belt.setPolygonY(new int[]{0, 100, 100, 0});
         // bIsField=true → calls Translate.invertLimit for input coords too
         assertDoesNotThrow(() -> belt.checkContain(50, 50, true));
     }
@@ -570,8 +570,8 @@ class BeltconveyorObjTest extends ItemTestBase {
     @Test
     void testGetImageLayer_g2_withImage_returnsOne() {
         BeltconveyorObj belt = new BeltconveyorObj();
-        belt.setAnPointX(new int[]{0, 0, 100, 100});
-        belt.setAnPointY(new int[]{0, 100, 100, 0});
+        belt.setPolygonX(new int[]{0, 0, 100, 100});
+        belt.setPolygonY(new int[]{0, 100, 100, 0});
         BufferedImage img = new BufferedImage(10, 10, BufferedImage.TYPE_INT_RGB);
         java.awt.Graphics2D g2 = img.createGraphics();
         BufferedImage[] layer = new BufferedImage[]{img};

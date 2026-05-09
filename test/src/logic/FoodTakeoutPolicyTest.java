@@ -64,7 +64,7 @@ class FoodTakeoutPolicyTest {
         SimYukkuri.world.getCurrentMap().getShit().put(shit.getObjId(), shit);
 
         Toilet slaveToilet = new Toilet();
-        slaveToilet.setBForSlave(true);
+        slaveToilet.setForSlave(true);
         slaveToilet.setScreenPivot(10, 10);
         SimYukkuri.world.getCurrentMap().getToilet().put(slaveToilet.getObjId(), slaveToilet);
 
@@ -77,7 +77,7 @@ class FoodTakeoutPolicyTest {
 
         Bed favBed = new Bed(300, 300, 0);
         SimYukkuri.world.getCurrentMap().getBed().put(favBed.getObjId(), favBed);
-        body.setFavItem(FavItemType.BED, favBed);
+        body.setFavoriteItem(FavItemType.BED, favBed);
 
         Food food = new Food(300, 300, Food.FoodType.FOOD.ordinal());
         food.setAmount(100);
@@ -98,7 +98,7 @@ class FoodTakeoutPolicyTest {
 
         Bed favBed = new Bed(300, 300, 0);
         SimYukkuri.world.getCurrentMap().getBed().put(favBed.getObjId(), favBed);
-        body.setFavItem(FavItemType.BED, favBed);
+        body.setFavoriteItem(FavItemType.BED, favBed);
 
         Food food = new Food(500, 500, Food.FoodType.FOOD.ordinal());
         food.setAmount(100);

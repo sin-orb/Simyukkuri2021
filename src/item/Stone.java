@@ -71,17 +71,17 @@ public class Stone extends ObjEX {
 	}
 
 	@Override
-	public int objHitProcess(Obj o) {
-		if (o instanceof Body) {
-			Body b = (Body) o;
-			if (b.getCriticalDamege() == CriticalDamegeType.CUT) {
+	public int objHitProcess(Obj targetObject) {
+		if (targetObject instanceof Body) {
+			Body body = (Body) targetObject;
+			if (body.getCriticalDamege() == CriticalDamegeType.CUT) {
 				return 0;
 			}
-			if (b.isBaby())
-				b.bodyCut();
+			if (body.isBaby())
+				body.bodyCut();
 			else {
-				b.bodyInjure();
-				b.runAway(getX(), getY());
+				body.bodyInjure();
+				body.runAway(getX(), getY());
 			}
 		}
 		return 0;

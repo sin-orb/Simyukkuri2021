@@ -31,7 +31,6 @@ import src.enums.FavItemType;
 import src.enums.Pain;
 import src.enums.TakeoutItemType;
 import src.system.ResourceUtil;
-import src.util.YukkuriUtil;
 
 /**
  * ゆっくりのステータスを表示するFrame.
@@ -112,11 +111,11 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 					return;
 				}
 				final int id = idTemp;
-				Body yukkuri = GameWorld.get().getCurrentMap().getBody().get(id);
-				if (yukkuri == null) {
+				Body body = GameWorld.get().getCurrentMap().getBody().get(id);
+				if (body == null) {
 					showError(GameText.read("command_status_noexistyukkurierror"));
 				} else {
-					ShowStatusFrame.getInstance().giveBodyInfo(yukkuri);
+					ShowStatusFrame.getInstance().giveBodyInfo(body);
 				}
 			}
 		});
@@ -136,8 +135,8 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 						.sorted().collect(Collectors.toList());
 				int target = -1;
 				for (int i = 0; i < sorted.size(); i++) {
-					Body b = sorted.get(i);
-					if (b.getUniqueID() > id) {
+					Body body = sorted.get(i);
+					if (body.getUniqueID() > id) {
 						target = i;
 						break;
 					}
@@ -171,8 +170,8 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 						.sorted(Comparator.reverseOrder()).collect(Collectors.toList());
 				int target = -1;
 				for (int i = 0; i < sorted.size(); i++) {
-					Body b = sorted.get(i);
-					if (b.getUniqueID() < id) {
+					Body body = sorted.get(i);
+					if (body.getUniqueID() < id) {
 						target = i;
 						break;
 					}
@@ -234,11 +233,11 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 					return;
 				}
 				int random = GameRandom.nextInt(GameWorld.get().getCurrentMap().getBody().size());
-				List<Body> bodies = new LinkedList<>();
+				List<Body> bodyList = new LinkedList<>();
 				for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
-					bodies.add(entry.getValue());
+					bodyList.add(entry.getValue());
 				}
-				ShowStatusFrame.getInstance().giveBodyInfo(bodies.get(random));
+				ShowStatusFrame.getInstance().giveBodyInfo(bodyList.get(random));
 			}
 		});
 		btnNewButton_5.setBounds(665, 167, 91, 21);
@@ -255,12 +254,12 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 					return;
 				}
 				final int id = idTemp;
-				Body yukkuri = GameWorld.get().getCurrentMap().getBody().get(id);
-				if (yukkuri == null) {
+				Body body = GameWorld.get().getCurrentMap().getBody().get(id);
+				if (body == null) {
 					showError(GameText.read("command_status_noexistyukkurierror"));
 					return;
 				} else {
-					Body partner = YukkuriUtil.getBodyInstance(yukkuri.getPartner());
+					Body partner = src.util.BodyRegistry.getBodyInstance(body.getPartner());
 					if (partner == null) {
 						showError(GameText.read("command_status_noexistyukkurierror"));
 						return;
@@ -284,17 +283,17 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 					return;
 				}
 				final int id = idTemp;
-				Body yukkuri = GameWorld.get().getCurrentMap().getBody().get(id);
-				if (yukkuri == null) {
+				Body body = GameWorld.get().getCurrentMap().getBody().get(id);
+				if (body == null) {
 					showError(GameText.read("command_status_noexistyukkurierror"));
 					return;
 				} else {
-					List<Integer> children = yukkuri.getChildrenList();
+					List<Integer> children = body.getChildrenList();
 					if (children.size() == 0) {
 						showError(GameText.read("command_status_noexistyukkurierror"));
 						return;
 					} else {
-						ShowStatusFrame.getInstance().giveBodyInfo(YukkuriUtil.getBodyInstance(children.get(0)));
+						ShowStatusFrame.getInstance().giveBodyInfo(src.util.BodyRegistry.getBodyInstance(children.get(0)));
 					}
 				}
 			}
@@ -313,17 +312,17 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 					return;
 				}
 				final int id = idTemp;
-				Body yukkuri = GameWorld.get().getCurrentMap().getBody().get(id);
-				if (yukkuri == null) {
+				Body body = GameWorld.get().getCurrentMap().getBody().get(id);
+				if (body == null) {
 					showError(GameText.read("command_status_noexistyukkurierror"));
 					return;
 				} else {
-					List<Integer> elderSisters = yukkuri.getElderSisterList();
+					List<Integer> elderSisters = body.getElderSisterList();
 					if (elderSisters.size() == 0) {
 						showError(GameText.read("command_status_noexistyukkurierror"));
 						return;
 					} else {
-						ShowStatusFrame.getInstance().giveBodyInfo(YukkuriUtil.getBodyInstance(elderSisters.get(0)));
+						ShowStatusFrame.getInstance().giveBodyInfo(src.util.BodyRegistry.getBodyInstance(elderSisters.get(0)));
 					}
 				}
 			}
@@ -342,17 +341,17 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 					return;
 				}
 				final int id = idTemp;
-				Body yukkuri = GameWorld.get().getCurrentMap().getBody().get(id);
-				if (yukkuri == null) {
+				Body body = GameWorld.get().getCurrentMap().getBody().get(id);
+				if (body == null) {
 					showError(GameText.read("command_status_noexistyukkurierror"));
 					return;
 				} else {
-					List<Integer> sisters = yukkuri.getSisterList();
+					List<Integer> sisters = body.getSisterList();
 					if (sisters.size() == 0) {
 						showError(GameText.read("command_status_noexistyukkurierror"));
 						return;
 					} else {
-						ShowStatusFrame.getInstance().giveBodyInfo(YukkuriUtil.getBodyInstance(sisters.get(0)));
+						ShowStatusFrame.getInstance().giveBodyInfo(src.util.BodyRegistry.getBodyInstance(sisters.get(0)));
 					}
 				}
 			}
@@ -371,12 +370,12 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 					return;
 				}
 				final int id = idTemp;
-				Body yukkuri = GameWorld.get().getCurrentMap().getBody().get(id);
-				if (yukkuri == null) {
+				Body body = GameWorld.get().getCurrentMap().getBody().get(id);
+				if (body == null) {
 					showError(GameText.read("command_status_noexistyukkurierror"));
 					return;
 				} else {
-					Body father = YukkuriUtil.getBodyInstance(yukkuri.getFather());
+					Body father = src.util.BodyRegistry.getBodyInstance(body.getFather());
 					if (father == null) {
 						showError(GameText.read("command_status_noexistyukkurierror"));
 						return;
@@ -400,12 +399,12 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 					return;
 				}
 				final int id = idTemp;
-				Body yukkuri = GameWorld.get().getCurrentMap().getBody().get(id);
-				if (yukkuri == null) {
+				Body body = GameWorld.get().getCurrentMap().getBody().get(id);
+				if (body == null) {
 					showError(GameText.read("command_status_noexistyukkurierror"));
 					return;
 				} else {
-					Body mother = YukkuriUtil.getBodyInstance(yukkuri.getMother());
+					Body mother = src.util.BodyRegistry.getBodyInstance(body.getMother());
 					if (mother == null) {
 						showError(GameText.read("command_status_noexistyukkurierror"));
 						return;
@@ -672,14 +671,14 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 
 	/**
 	 * ゆっくりの情報を表示する.
-	 * @param b ゆっくり
+	 * @param body ゆっくり
 	 */
-	public void giveBodyInfo(Body b) {
-		textField.setText(String.valueOf(b.getUniqueID()));
-		textField_1.setText(b.toString());
-		textField_2.setText(String.valueOf(b.getAge()));
+	public void giveBodyInfo(Body body) {
+		textField.setText(String.valueOf(body.getUniqueID()));
+		textField_1.setText(body.toString());
+		textField_2.setText(String.valueOf(body.getAge()));
 		String purpose = null;
-		switch (b.getPurposeOfMoving()) {
+		switch (body.getPurposeOfMoving()) {
 		case BED:
 			purpose = GameText.read("command_status_wantsleep");
 			break;
@@ -705,27 +704,27 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 			purpose = GameText.read("command_status_wantyukkuri");
 		}
 		textField_3.setText(purpose);
-		String moveTarget = GameText.read("command_status_nothing");
-		Obj o = b.takeMappedObj(b.getMoveTarget());
-		if (o != null) {
-			moveTarget = o.getX() + "," + o.getY();
+		String moveTargetId = GameText.read("command_status_nothing");
+		Obj targetObject = body.takeMappedObj(body.getMoveTargetId());
+		if (targetObject != null) {
+			moveTargetId = targetObject.getX() + "," + targetObject.getY();
 		}
-		textField_4.setText(moveTarget);
+		textField_4.setText(moveTargetId);
 		String event = GameText.read("command_status_nothing");
-		if (b.getCurrentEvent() != null) {
-			event = b.getCurrentEvent().toString();
+		if (body.getCurrentEvent() != null) {
+			event = body.getCurrentEvent().toString();
 		}
 		textField_5.setText(event);
 
-		textField_6.setText(String.valueOf(b.checkNonYukkuriDiseaseTolerance()));
-		textField_7.setText((b.getDamageLimit() - b.getDamage()) + " / " + b.getDamageLimit());
-		textField_8.setText(b.getHungry() + " / " + b.getHUNGRYLIMITorg()[b.getBodyAgeState().ordinal()]);
-		textField_9.setText(b.getMyName());
-		textField_10.setText(String.valueOf(b.getSickPeriod()));
-		textField_11.setText(String.valueOf(b.getWeight()));
-		textField_12.setText(String.valueOf(b.getBodyAmount()));
+		textField_6.setText(String.valueOf(body.checkNonYukkuriDiseaseTolerance()));
+		textField_7.setText((body.getDamageLimit() - body.getDamage()) + " / " + body.getDamageLimit());
+		textField_8.setText(body.getHungry() + " / " + body.getHungryLimitBase()[body.getBodyAgeState().ordinal()]);
+		textField_9.setText(body.getMyName());
+		textField_10.setText(String.valueOf(body.getSickPeriod()));
+		textField_11.setText(String.valueOf(body.getWeight()));
+		textField_12.setText(String.valueOf(body.getAnkoAmount()));
 		String footBake = null;
-		switch (b.getFootBakeLevel()) {
+		switch (body.getFootBakeLevel()) {
 		case CRITICAL:
 			footBake = GameText.read("command_status_fatal");
 			break;
@@ -737,8 +736,8 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		}
 		textField_13.setText(footBake);
 		String fav = "";
-		if (b.getFavItem().size() != 0) {
-			for (Map.Entry<FavItemType, Integer> entry : b.getFavItem().entrySet()) {
+		if (body.getFavoriteItems().size() != 0) {
+			for (Map.Entry<FavItemType, Integer> entry : body.getFavoriteItems().entrySet()) {
 				fav += entry.getKey() + ",";
 			}
 			fav = fav.substring(0, fav.length() - 1);
@@ -747,7 +746,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		}
 		textField_14.setText(fav);
 		String trauma = null;
-		switch (b.getTrauma()) {
+		switch (body.getTrauma()) {
 		case Factory:
 			trauma = GameText.read("command_status_plant");
 			break;
@@ -759,9 +758,9 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		}
 		textField_15.setText(trauma);
 		String elder = "";
-		if (b.getElderSisterList().size() != 0) {
-			for (int y : b.getElderSisterList()) {
-				elder = elder += y + ", ";
+		if (body.getElderSisterList().size() != 0) {
+			for (int sisterId : body.getElderSisterList()) {
+				elder = elder += sisterId + ", ";
 			}
 			elder = elder.substring(0, elder.length() - 2);
 		} else {
@@ -769,9 +768,9 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		}
 		textField_16.setText(elder);
 		String sister = "";
-		if (b.getSisterList().size() != 0) {
-			for (int y : b.getSisterList()) {
-				sister += y + ", ";
+		if (body.getSisterList().size() != 0) {
+			for (int sisterId : body.getSisterList()) {
+				sister += sisterId + ", ";
 			}
 			sister = sister.substring(0, sister.length() - 2);
 		} else {
@@ -779,20 +778,20 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		}
 		textField_17.setText(sister);
 		String child = "";
-		if (b.getChildrenList().size() != 0) {
-			for (int y : b.getChildrenList()) {
-				child += y + ",";
+		if (body.getChildrenList().size() != 0) {
+			for (int childId : body.getChildrenList()) {
+				child += childId + ",";
 			}
 			child = child.substring(0, child.length() - 1);
 		} else {
 			child = GameText.read("command_status_nothing");
 		}
 		textField_18.setText(child);
-		textField_19.setText(YukkuriUtil.getBodyInstance(b.getPartner()) != null ? 
-				String.valueOf(b.getPartner()) : GameText.read("command_status_nothing"));
+		textField_19.setText(src.util.BodyRegistry.getBodyInstance(body.getPartner()) != null ? 
+				String.valueOf(body.getPartner()) : GameText.read("command_status_nothing"));
 		String bring = "";
-		if (b.getTakeoutItem().size() != 0) {
-			for (TakeoutItemType item : b.getTakeoutItem().keySet()) {
+		if (body.getCarryItems().size() != 0) {
+			for (TakeoutItemType item : body.getCarryItems().keySet()) {
 				switch (item) {
 				case FOOD:
 					bring = GameText.read("command_status_food");
@@ -812,58 +811,58 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		}
 		textField_20.setText(bring);
 		String emo = "";
-		if (b.isAngry()) {
+		if (body.isAngry()) {
 			emo += GameText.read("command_status_anger");
 		}
-		if (b.isScare()) {
+		if (body.isScare()) {
 			emo += GameText.read("command_status_scare");
 		}
-		if (b.getPainState() != Pain.NONE) {
+		if (body.getPainState() != Pain.NONE) {
 			emo += GameText.read("command_status_hurt");
 		}
-		if (b.isSad()) {
+		if (body.isSad()) {
 			emo += GameText.read("command_status_sad");
 		}
-		if (b.isBlind()) {
+		if (body.isBlind()) {
 			emo += GameText.read("command_status_blind");
 		}
-		if (b.isbPurupuru()) {
+		if (body.isPurupuru()) {
 			emo += GameText.read("command_status_shake");
 		}
-		if (b.isDirty()) {
+		if (body.isDirty()) {
 			emo += GameText.read("command_status_dirty");
 		}
-		if (b.isExciting()) {
+		if (body.isExciting()) {
 			emo += GameText.read("command_status_hatsujou");
 		}
-		if (b.isHappy()) {
+		if (body.isHappy()) {
 			emo += GameText.read("command_status_pleasure");
 		}
-		if (b.isMelt()) {
+		if (body.isMelt()) {
 			emo += GameText.read("command_status_melt");
 		}
-		if (b.isOnlyAmaama()) {
+		if (body.isOnlyAmaama()) {
 			emo += GameText.read("command_status_tastedestruct");
 		}
-		if (b.isRelax()) {
+		if (body.isRelax()) {
 			emo += GameText.read("command_status_doyukkuri");
 		}
-		if (b.isSilent()) {
+		if (body.isSilent()) {
 			emo += GameText.read("command_status_silent");
 		}
-		if (b.isSleepy()) {
+		if (body.isSleepy()) {
 			emo += GameText.read("command_status_sleepy");
 		}
-		if (b.isStaying()) {
+		if (body.isStaying()) {
 			emo += GameText.read("command_status_wait");
 		}
-		if (b.isVain()) {
+		if (body.isVain()) {
 			emo += GameText.read("command_status_vain");
 		}
-		if (b.isWet()) {
+		if (body.isWet()) {
 			emo += GameText.read("command_status_wet");
 		}
-		if (b.isYunnyaa()) {
+		if (body.isYunnyaa()) {
 			emo += GameText.read("command_status_yunyaa");
 		}
 		if (emo.length() == 0) {
@@ -873,9 +872,9 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		}
 		textField_21.setText(emo);
 		String attach = "";
-		if (b.getAttach() != null && b.getAttach().size() != 0) {
-			for (Attachment a : b.getAttach()) {
-				attach = attach += a.toString() + " / ";
+		if (body.getAttach() != null && body.getAttach().size() != 0) {
+			for (Attachment attachment : body.getAttach()) {
+				attach = attach += attachment.toString() + " / ";
 			}
 		}
 		if (attach.length() == 0) {
@@ -885,11 +884,11 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		}
 		textField_22.setText(attach);
 
-		textField_23.setText(String.valueOf(b.getNumOfAnts()));
-		textField_24.setText(String.valueOf(b.getBlockedCount()));
-		textField_25.setText(b.isLockmove() || b.isDead() ? GameText.read("command_status_cantmove") : GameText.read("command_status_canmove"));
-		textField_26.setText(String.valueOf(b.getAttitudePoint()));
-		MyPane.setSelectBody(b);
+		textField_23.setText(String.valueOf(body.getAntCount()));
+		textField_24.setText(String.valueOf(body.getBlockedTicks()));
+		textField_25.setText(body.isLockmove() || body.isDead() ? GameText.read("command_status_cantmove") : GameText.read("command_status_canmove"));
+		textField_26.setText(String.valueOf(body.getAttitudePoint()));
+		MyPane.setSelectBody(body);
 	}
 
 	public static void showError(String s) {

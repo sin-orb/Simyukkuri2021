@@ -259,7 +259,7 @@ class HotPlateTest extends ItemTestBase {
             body.setCalcY(item.getY());
             body.setCalcZ(item.getZ());
             body.setLockmove(true);
-            body.setDropShadow(false);
+            body.setShadowVisible(false);
             body.setPullAndPush(true);
             body.setForceFace(ImageCode.PAIN.ordinal());
 
@@ -271,7 +271,7 @@ class HotPlateTest extends ItemTestBase {
             assertNull(item.getBindBody());
             assertFalse(body.isLockmove());
             assertFalse(body.isPullAndPush());
-            assertTrue(body.isDropShadow());
+            assertTrue(body.isShadowVisible());
             assertEquals(-1, body.getForceFace());
         }
     }

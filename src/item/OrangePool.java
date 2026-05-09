@@ -53,8 +53,8 @@ public class OrangePool extends ObjEX {
 
 	/** 処理対象(ゆっくり) */
 	public static final int hitCheckObjType = ObjEX.YUKKURI;
-	private static final int images_num = 6; // このクラスの総使用画像数
-	private static BufferedImage[] images = new BufferedImage[images_num];
+	private static final int IMAGE_COUNT = 6; // このクラスの総使用画像数
+	private static BufferedImage[] imageLayers = new BufferedImage[IMAGE_COUNT];
 	private static Rectangle4y boundary = new Rectangle4y();
 	private boolean rescue;
 	private static int[] value = { 500, 10000 };
@@ -64,18 +64,18 @@ public class OrangePool extends ObjEX {
 
 	/** 画像ロード */
 	public static void loadImages(ClassLoader loader, ImageObserver io) throws IOException {
-		images[0] = ModLoader.loadItemImage(loader, "orangepool" + File.separator + "orangepool.png");
-		images[1] = ModLoader.loadItemImage(loader, "orangepool" + File.separator + "orangepool_off.png");
-		images[2] = ModLoader.loadItemImage(loader,
+		imageLayers[0] = ModLoader.loadItemImage(loader, "orangepool" + File.separator + "orangepool.png");
+		imageLayers[1] = ModLoader.loadItemImage(loader, "orangepool" + File.separator + "orangepool_off.png");
+		imageLayers[2] = ModLoader.loadItemImage(loader,
 				"orangepool" + File.separator + "orangepool" + ModLoader.getYkWordNora() + ".png");
-		images[3] = ModLoader.loadItemImage(loader,
+		imageLayers[3] = ModLoader.loadItemImage(loader,
 				"orangepool" + File.separator + "orangepool" + ModLoader.getYkWordNora() + "_off.png");
-		images[4] = ModLoader.loadItemImage(loader,
+		imageLayers[4] = ModLoader.loadItemImage(loader,
 				"orangepool" + File.separator + "orangepool" + ModLoader.getYkWordYasei() + ".png");
-		images[5] = ModLoader.loadItemImage(loader,
+		imageLayers[5] = ModLoader.loadItemImage(loader,
 				"orangepool" + File.separator + "orangepool" + ModLoader.getYkWordYasei() + "_off.png");
-		boundary.setWidth(images[0].getWidth(io));
-		boundary.setHeight(images[0].getHeight(io));
+		boundary.setWidth(imageLayers[0].getWidth(io));
+		boundary.setHeight(imageLayers[0].getHeight(io));
 		boundary.setX(boundary.getWidth() >> 1);
 		boundary.setY(boundary.getHeight() >> 1);
 	}
@@ -84,19 +84,19 @@ public class OrangePool extends ObjEX {
 	public int getImageLayer(BufferedImage[] layer) {
 		if (itemRank == ItemRank.HOUSE) {
 			if (enabled)
-				layer[0] = images[0];
+				layer[0] = imageLayers[0];
 			else
-				layer[0] = images[1];
+				layer[0] = imageLayers[1];
 		} else if (itemRank == ItemRank.NORA) {
 			if (enabled)
-				layer[0] = images[2];
+				layer[0] = imageLayers[2];
 			else
-				layer[0] = images[3];
+				layer[0] = imageLayers[3];
 		} else {
 			if (enabled)
-				layer[0] = images[4];
+				layer[0] = imageLayers[4];
 			else
-				layer[0] = images[5];
+				layer[0] = imageLayers[5];
 		}
 		return 1;
 	}
@@ -119,24 +119,24 @@ public class OrangePool extends ObjEX {
 	}
 
 	@Override
-	public int objHitProcess(Obj o) {
+	public int objHitProcess(Obj targetObject) {
 		if (!enabled)
 			return 0;
-		if (o.getObjType() == Type.YUKKURI) {
-			Body b = (Body) o;
-			b.giveJuice();
-			if (b.isDirty()) {
-				b.setDirtyFlag(false);
+		if (targetObject.getObjType() == Type.YUKKURI) {
+			Body body = (Body) targetObject;
+			body.giveJuice();
+			if (body.isDirty()) {
+				body.setDirtyFlag(false);
 			}
 			if (rescue) {
-				if (b.isDead() && !b.isCrushed() && !b.isBurned()) {
-					b.revival();
+				if (body.isDead() && !body.isCrushed() && !body.isBurned()) {
+					body.revival();
 				}
-				if (b.getFootBakeLevel() != FootBake.CRITICAL) {
-					b.setFootBakePeriod(0);
+				if (body.getFootBakeLevel() != FootBake.CRITICAL) {
+					body.setFootBakePeriod(0);
 				}
-				if (b.isBurst() == false) {
-					b.setCantDie();
+				if (body.isBurst() == false) {
+					body.setCantDie();
 				}
 			}
 			Cash.addCash(-getCost());
@@ -193,8 +193,8 @@ public class OrangePool extends ObjEX {
 		objEXType = ObjEXType.ORANGEPOOL;
 		interval = 3;
 
-		boolean ret = setupOrange(this, false);
-		if (ret) {
+		boolean setupSucceeded = setupOrange(this, false);
+		if (setupSucceeded) {
 			itemRank = ItemRank.values()[initOption];
 			// 森なら野生に変更
 			if (GameWorld.get().getCurrentMap().getMapIndex() == 5
@@ -213,43 +213,43 @@ public class OrangePool extends ObjEX {
 	}
 
 	/** 設定メニュー */
-	public static boolean setupOrange(OrangePool o, boolean init) {
+	public static boolean setupOrange(OrangePool orangePool, boolean init) {
 
 		JPanel mainPanel = new JPanel();
-		JRadioButton[] but = new JRadioButton[OrangeType.values().length];
-		boolean ret = false;
+		JRadioButton[] buttons = new JRadioButton[OrangeType.values().length];
+		boolean result = false;
 
 		mainPanel.setLayout(new GridLayout(2, 1));
 		mainPanel.setPreferredSize(new Dimension(150, 100));
-		ButtonGroup bg = new ButtonGroup();
+		ButtonGroup buttonGroup = new ButtonGroup();
 
-		for (int i = 0; i < but.length; i++) {
-			but[i] = new JRadioButton(OrangeType.values()[i].toString());
-			bg.add(but[i]);
+		for (int i = 0; i < buttons.length; i++) {
+			buttons[i] = new JRadioButton(OrangeType.values()[i].toString());
+			buttonGroup.add(buttons[i]);
 
-			mainPanel.add(but[i]);
+			mainPanel.add(buttons[i]);
 		}
 		if (!init) {
-			but[0].setSelected(true);
+			buttons[0].setSelected(true);
 		} else {
-			if (!o.rescue) {
-				but[0].setSelected(true);
+			if (!orangePool.rescue) {
+				buttons[0].setSelected(true);
 			} else {
-				but[1].setSelected(true);
+				buttons[1].setSelected(true);
 			}
 		}
 
-		int dlgRet = JOptionPane.showConfirmDialog(GameView.getDialogParent(), mainPanel, "オレンジプール設定",
+		int dialogResult = JOptionPane.showConfirmDialog(GameView.getDialogParent(), mainPanel, "オレンジプール設定",
 				JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
 
-		if (dlgRet == JOptionPane.OK_OPTION) {
-			if (but[0].isSelected())
-				o.rescue = false;
+		if (dialogResult == JOptionPane.OK_OPTION) {
+			if (buttons[0].isSelected())
+				orangePool.rescue = false;
 			else
-				o.rescue = true;
-			ret = true;
+				orangePool.rescue = true;
+			result = true;
 		}
-		return ret;
+		return result;
 	}
 
 	public boolean isRescue() {

@@ -225,14 +225,14 @@ class TrashTest extends ItemTestBase {
     @Test
     void testGetLinkParent_Default() {
         Trash trash = new Trash(100, 100, 0);
-        assertEquals(-1, trash.getLinkParent());
+        assertEquals(-1, trash.getParentLinkId());
     }
 
     @Test
     void testSetLinkParent() {
         Trash trash = new Trash(100, 100, 0);
-        trash.setLinkParent(55);
-        assertEquals(55, trash.getLinkParent());
+        trash.setParentLinkId(55);
+        assertEquals(55, trash.getParentLinkId());
     }
 
     @Test
@@ -458,7 +458,7 @@ class TrashTest extends ItemTestBase {
         assertEquals(1, trash.getBx());
         assertEquals(2, trash.getBy());
         assertEquals(3, trash.getBz());
-        trash.resetBPos();
+        trash.resetMotion();
         assertEquals(0, trash.getBx());
         assertEquals(0, trash.getBy());
         assertEquals(0, trash.getBz());
@@ -467,7 +467,7 @@ class TrashTest extends ItemTestBase {
     @Test
     void testAddBxyz() {
         Trash trash = new Trash(100, 100, 0);
-        trash.addBxyz(5, 6, 7);
+        trash.addMotion(5, 6, 7);
         assertEquals(5, trash.getBx());
         assertEquals(6, trash.getBy());
         assertEquals(7, trash.getBz());
@@ -487,42 +487,42 @@ class TrashTest extends ItemTestBase {
     }
 
     @Test
-    void testIsbFallingUnderGround_Default() {
+    void testIsFallingUnderGround_Default() {
         Trash trash = new Trash(100, 100, 0);
-        assertFalse(trash.isbFallingUnderGround());
+        assertFalse(trash.isFallingUnderGround());
     }
 
     @Test
-    void testSetbFallingUnderGround() {
+    void testSetFallingUnderGround() {
         Trash trash = new Trash(100, 100, 0);
-        trash.setbFallingUnderGround(true);
-        assertTrue(trash.isbFallingUnderGround());
+        trash.setFallingUnderGround(true);
+        assertTrue(trash.isFallingUnderGround());
     }
 
     @Test
     void testIsbInPool_Default() {
         Trash trash = new Trash(100, 100, 0);
-        assertFalse(trash.isbInPool());
+        assertFalse(trash.isInPool());
     }
 
     @Test
     void testSetbInPool() {
         Trash trash = new Trash(100, 100, 0);
-        trash.setbInPool(true);
-        assertTrue(trash.isbInPool());
+        trash.setInPool(true);
+        assertTrue(trash.isInPool());
     }
 
     @Test
     void testGetnMostDepth_Default() {
         Trash trash = new Trash(100, 100, 0);
-        assertEquals(0, trash.getnMostDepth());
+        assertEquals(0, trash.getMostDepth());
     }
 
     @Test
     void testSetnMostDepth() {
         Trash trash = new Trash(100, 100, 0);
-        trash.setnMostDepth(-20);
-        assertEquals(-20, trash.getnMostDepth());
+        trash.setMostDepth(-20);
+        assertEquals(-20, trash.getMostDepth());
     }
 
     @Test

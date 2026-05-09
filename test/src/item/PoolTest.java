@@ -191,16 +191,16 @@ class PoolTest {
     void testGetSetAnWaterPointX() {
         Pool item = new Pool();
         int[] pts = {10, 20, 30, 40};
-        item.setAnWaterPointX(pts);
-        assertArrayEquals(pts, item.getAnWaterPointX());
+        item.setWaterPolygonX(pts);
+        assertArrayEquals(pts, item.getWaterPolygonX());
     }
 
     @Test
     void testGetSetAnWaterPointY() {
         Pool item = new Pool();
         int[] pts = {15, 25, 35, 45};
-        item.setAnWaterPointY(pts);
-        assertArrayEquals(pts, item.getAnWaterPointY());
+        item.setWaterPolygonY(pts);
+        assertArrayEquals(pts, item.getWaterPolygonY());
     }
 
     // --- checkHitObj ---
@@ -450,7 +450,7 @@ class PoolTest {
             food.setZ(-1);
 
             assertEquals(0, item.objHitProcess(food));
-            assertTrue(food.getInPool());
+            assertTrue(food.isInPool());
             assertEquals(0, food.getMostDepth());
             assertEquals(0, food.getZ());
         }
@@ -464,7 +464,7 @@ class PoolTest {
             food.setZ(0);
 
             assertEquals(0, item.objHitProcess(food));
-            assertTrue(food.getInPool());
+            assertTrue(food.isInPool());
             assertEquals(-1, food.getMostDepth());
             assertEquals(-1, food.getZ());
         }

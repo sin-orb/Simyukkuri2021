@@ -70,21 +70,21 @@ public class ReimuTest {
         Reimu reimu = new Reimu();
         reimu.tuneParameters();
 
-        // ROBUSTNESS should be: nextInt(10) + 1 = min(7, 9) + 1 = 7 + 1 = 8
-        assertEquals(8, reimu.getROBUSTNESS());
+        // Robustness should be: nextInt(10) + 1 = min(7, 9) + 1 = 7 + 1 = 8
+        assertEquals(8, reimu.getImmunityStrength());
 
-        // sameDest should be: nextInt(20) + 20 = min(7, 19) + 20 = 7 + 20 = 27
-        assertEquals(27, reimu.getSameDest());
+        // sameDirectionFactor should be: nextInt(20) + 20 = min(7, 19) + 20 = 7 + 20 = 27
+        assertEquals(27, reimu.getSameDirectionFactor());
     }
 
     @Test
     public void testReimuNagasiMethods() {
         Reimu reimu = new Reimu();
-        assertNotNull(reimu.getAnImageVerStateCtrlNagasi());
+        assertNotNull(reimu.getImageVariantState());
 
         int[][] testArray = new int[10][2];
-        reimu.setAnImageVerStateCtrlNagasi(testArray);
-        assertSame(testArray, reimu.getAnImageVerStateCtrlNagasi());
+        reimu.setImageVariantState(testArray);
+        assertSame(testArray, reimu.getImageVariantState());
     }
 
     @Test

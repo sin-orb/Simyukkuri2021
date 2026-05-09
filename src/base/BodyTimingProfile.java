@@ -8,37 +8,37 @@ public class BodyTimingProfile implements java.io.Serializable {
 	private static final long serialVersionUID = -7023557212791696945L;
 
 	/** 赤ゆ期間 */
-	private int BABYLIMITorg = 100 * 24 * 7;
+	private int babyLimitBase = 100 * 24 * 7;
 	/** 子ゆ期間 */
-	private int CHILDLIMITorg = 100 * 24 * 21;
+	private int childLimitBase = 100 * 24 * 21;
 	/** 寿命 */
-	private int LIFELIMITorg = 100 * 24 * 365;
+	private int lifeLimitBase = 100 * 24 * 365;
 	/** 腐敗日数 */
-	private int ROTTINGTIMEorg = 100 * 24 * 3;
+	private int rottingTimeBase = 100 * 24 * 3;
 	/** リラックス状態の期間 */
-	private int RELAXPERIODorg = 100 * 1;
+	private int relaxPeriodBase = 100 * 1;
 	/** 発情状態の期間 */
-	private int EXCITEPERIODorg = 100 * 3;
+	private int excitePeriodBase = 100 * 3;
 	/** 妊娠期間 */
-	private int PREGPERIODorg = 100 * 24;
+	private int pregPeriodBase = 100 * 24;
 	/** 睡眠時間 */
-	private int SLEEPPERIODorg = 100 * 3;
+	private int sleepPeriodBase = 100 * 3;
 	/** アクティブな期間 */
-	private int ACTIVEPERIODorg = 100 * 6;
+	private int activePeriodBase = 100 * 6;
 	/** 怒り期間 */
-	private int ANGRYPERIODorg = 100 * 1;
+	private int angryPeriodBase = 100 * 1;
 	/** 恐怖期間 */
-	private int SCAREPERIODorg = 100 * 1;
+	private int scarePeriodBase = 100 * 1;
 	/** ゲーム内12分、衝動の抑制のための変数 */
-	private int DECLINEPERIODorg = 20;
+	private int declinePeriodBase = 20;
 	/** 壁等にブロックされた回数の限界（怒りだす等） */
-	private int BLOCKEDLIMITorg = 60;
+	private int blockedLimitBase = 60;
 	/** 汚れ限界（超えるとゆかび状態） */
-	private int DIRTYPERIODorg = 300;
+	private int dirtyPeriodBase = 300;
 	/** 視界の広さ */
-	private int EYESIGHTorg = 4000 * 4000;
+	private int eyesightBase = 4000 * 4000;
 	/** ゆかびの潜伏期間 */
-	private int INCUBATIONPERIODorg = 100 * 12;
+	private int incubationPeriodBase = 100 * 12;
 
 	/** BodyTimingProfile を生成する. */
 	public BodyTimingProfile() {
@@ -53,22 +53,22 @@ public class BodyTimingProfile implements java.io.Serializable {
 		if (from == null) {
 			return;
 		}
-		BABYLIMITorg = from.BABYLIMITorg;
-		CHILDLIMITorg = from.CHILDLIMITorg;
-		LIFELIMITorg = from.LIFELIMITorg;
-		ROTTINGTIMEorg = from.ROTTINGTIMEorg;
-		RELAXPERIODorg = from.RELAXPERIODorg;
-		EXCITEPERIODorg = from.EXCITEPERIODorg;
-		PREGPERIODorg = from.PREGPERIODorg;
-		SLEEPPERIODorg = from.SLEEPPERIODorg;
-		ACTIVEPERIODorg = from.ACTIVEPERIODorg;
-		ANGRYPERIODorg = from.ANGRYPERIODorg;
-		SCAREPERIODorg = from.SCAREPERIODorg;
-		DECLINEPERIODorg = from.DECLINEPERIODorg;
-		BLOCKEDLIMITorg = from.BLOCKEDLIMITorg;
-		DIRTYPERIODorg = from.DIRTYPERIODorg;
-		EYESIGHTorg = from.EYESIGHTorg;
-		INCUBATIONPERIODorg = from.INCUBATIONPERIODorg;
+		babyLimitBase = from.babyLimitBase;
+		childLimitBase = from.childLimitBase;
+		lifeLimitBase = from.lifeLimitBase;
+		rottingTimeBase = from.rottingTimeBase;
+		relaxPeriodBase = from.relaxPeriodBase;
+		excitePeriodBase = from.excitePeriodBase;
+		pregPeriodBase = from.pregPeriodBase;
+		sleepPeriodBase = from.sleepPeriodBase;
+		activePeriodBase = from.activePeriodBase;
+		angryPeriodBase = from.angryPeriodBase;
+		scarePeriodBase = from.scarePeriodBase;
+		declinePeriodBase = from.declinePeriodBase;
+		blockedLimitBase = from.blockedLimitBase;
+		dirtyPeriodBase = from.dirtyPeriodBase;
+		eyesightBase = from.eyesightBase;
+		incubationPeriodBase = from.incubationPeriodBase;
 	}
 
 	/**
@@ -82,131 +82,131 @@ public class BodyTimingProfile implements java.io.Serializable {
 		return ret;
 	}
 
-	public int getBABYLIMITorg() {
-		return BABYLIMITorg;
+	public int getBabyLimitBase() {
+		return babyLimitBase;
 	}
 
-	public void setBABYLIMITorg(int bABYLIMITorg) {
-		BABYLIMITorg = bABYLIMITorg;
+	public void setBabyLimitBase(int babyLimit) {
+		babyLimitBase = babyLimit;
 	}
 
-	public int getCHILDLIMITorg() {
-		return CHILDLIMITorg;
+	public int getChildLimitBase() {
+		return childLimitBase;
 	}
 
-	public void setCHILDLIMITorg(int cHILDLIMITorg) {
-		CHILDLIMITorg = cHILDLIMITorg;
+	public void setChildLimitBase(int childLimit) {
+		childLimitBase = childLimit;
 	}
 
-	public int getLIFELIMITorg() {
-		return LIFELIMITorg;
+	public int getLifeLimitBase() {
+		return lifeLimitBase;
 	}
 
-	public void setLIFELIMITorg(int lIFELIMITorg) {
-		LIFELIMITorg = lIFELIMITorg;
+	public void setLifeLimitBase(int lifeLimit) {
+		lifeLimitBase = lifeLimit;
 	}
 
-	public int getROTTINGTIMEorg() {
-		return ROTTINGTIMEorg;
+	public int getRottingTimeBase() {
+		return rottingTimeBase;
 	}
 
-	public void setROTTINGTIMEorg(int rOTTINGTIMEorg) {
-		ROTTINGTIMEorg = rOTTINGTIMEorg;
+	public void setRottingTimeBase(int rottingTime) {
+		rottingTimeBase = rottingTime;
 	}
 
-	public int getRELAXPERIODorg() {
-		return RELAXPERIODorg;
+	public int getRelaxPeriodBase() {
+		return relaxPeriodBase;
 	}
 
-	public void setRELAXPERIODorg(int rELAXPERIODorg) {
-		RELAXPERIODorg = rELAXPERIODorg;
+	public void setRelaxPeriodBase(int relaxPeriod) {
+		relaxPeriodBase = relaxPeriod;
 	}
 
-	public int getEXCITEPERIODorg() {
-		return EXCITEPERIODorg;
+	public int getExcitePeriodBase() {
+		return excitePeriodBase;
 	}
 
-	public void setEXCITEPERIODorg(int eXCITEPERIODorg) {
-		EXCITEPERIODorg = eXCITEPERIODorg;
+	public void setExcitePeriodBase(int excitePeriod) {
+		excitePeriodBase = excitePeriod;
 	}
 
-	public int getPREGPERIODorg() {
-		return PREGPERIODorg;
+	public int getPregPeriodBase() {
+		return pregPeriodBase;
 	}
 
-	public void setPREGPERIODorg(int pREGPERIODorg) {
-		PREGPERIODorg = pREGPERIODorg;
+	public void setPregPeriodBase(int pregPeriod) {
+		pregPeriodBase = pregPeriod;
 	}
 
-	public int getSLEEPPERIODorg() {
-		return SLEEPPERIODorg;
+	public int getSleepPeriodBase() {
+		return sleepPeriodBase;
 	}
 
-	public void setSLEEPPERIODorg(int sLEEPPERIODorg) {
-		SLEEPPERIODorg = sLEEPPERIODorg;
+	public void setSleepPeriodBase(int sleepPeriod) {
+		sleepPeriodBase = sleepPeriod;
 	}
 
-	public int getACTIVEPERIODorg() {
-		return ACTIVEPERIODorg;
+	public int getActivePeriodBase() {
+		return activePeriodBase;
 	}
 
-	public void setACTIVEPERIODorg(int aCTIVEPERIODorg) {
-		ACTIVEPERIODorg = aCTIVEPERIODorg;
+	public void setActivePeriodBase(int activePeriod) {
+		activePeriodBase = activePeriod;
 	}
 
-	public int getANGRYPERIODorg() {
-		return ANGRYPERIODorg;
+	public int getAngryPeriodBase() {
+		return angryPeriodBase;
 	}
 
-	public void setANGRYPERIODorg(int aNGRYPERIODorg) {
-		ANGRYPERIODorg = aNGRYPERIODorg;
+	public void setAngryPeriodBase(int angryPeriod) {
+		angryPeriodBase = angryPeriod;
 	}
 
-	public int getSCAREPERIODorg() {
-		return SCAREPERIODorg;
+	public int getScarePeriodBase() {
+		return scarePeriodBase;
 	}
 
-	public void setSCAREPERIODorg(int sCAREPERIODorg) {
-		SCAREPERIODorg = sCAREPERIODorg;
+	public void setScarePeriodBase(int scarePeriod) {
+		scarePeriodBase = scarePeriod;
 	}
 
-	public int getDECLINEPERIODorg() {
-		return DECLINEPERIODorg;
+	public int getDeclinePeriodBase() {
+		return declinePeriodBase;
 	}
 
-	public void setDECLINEPERIODorg(int dECLINEPERIODorg) {
-		DECLINEPERIODorg = dECLINEPERIODorg;
+	public void setDeclinePeriodBase(int declinePeriod) {
+		declinePeriodBase = declinePeriod;
 	}
 
-	public int getBLOCKEDLIMITorg() {
-		return BLOCKEDLIMITorg;
+	public int getBlockedLimitBase() {
+		return blockedLimitBase;
 	}
 
-	public void setBLOCKEDLIMITorg(int bLOCKEDLIMITorg) {
-		BLOCKEDLIMITorg = bLOCKEDLIMITorg;
+	public void setBlockedLimitBase(int blockedLimit) {
+		blockedLimitBase = blockedLimit;
 	}
 
-	public int getDIRTYPERIODorg() {
-		return DIRTYPERIODorg;
+	public int getDirtyPeriodBase() {
+		return dirtyPeriodBase;
 	}
 
-	public void setDIRTYPERIODorg(int dIRTYPERIODorg) {
-		DIRTYPERIODorg = dIRTYPERIODorg;
+	public void setDirtyPeriodBase(int dirtyPeriod) {
+		dirtyPeriodBase = dirtyPeriod;
 	}
 
-	public int getEYESIGHTorg() {
-		return EYESIGHTorg;
+	public int getEyesightBase() {
+		return eyesightBase;
 	}
 
-	public void setEYESIGHTorg(int eYESIGHTorg) {
-		EYESIGHTorg = eYESIGHTorg;
+	public void setEyesightBase(int eyesight) {
+		eyesightBase = eyesight;
 	}
 
-	public int getINCUBATIONPERIODorg() {
-		return INCUBATIONPERIODorg;
+	public int getIncubationPeriodBase() {
+		return incubationPeriodBase;
 	}
 
-	public void setINCUBATIONPERIODorg(int iNCUBATIONPERIODorg) {
-		INCUBATIONPERIODorg = iNCUBATIONPERIODorg;
+	public void setIncubationPeriodBase(int incubationPeriod) {
+		incubationPeriodBase = incubationPeriod;
 	}
 }

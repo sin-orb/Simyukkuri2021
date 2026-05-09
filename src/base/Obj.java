@@ -58,9 +58,9 @@ public class Obj implements java.io.Serializable, Comparable {
 	 * 基本内部パラメータ5
 	 * コンベアなど拘束による移動量ベクトル
 	 */
-	private int bx;
-	private int by;
-	protected int bz;
+	private int motionX;
+	private int motionY;
+	protected int motionZ;
 	/**
 	 * 基本内部パラメータ6
 	 * 除去されたか否か
@@ -99,22 +99,22 @@ public class Obj implements java.io.Serializable, Comparable {
 	 * 基本内部パラメータ13
 	 * どこにあるか
 	 */
-	protected Where eWhere = Where.ON_FLOOR;
+	protected Where where = Where.ON_FLOOR;
 	/**
 	 * 基本内部パラメータ14
 	 * 地下に落下中か
 	 */
-	protected boolean bFallingUnderGround = false;
+	protected boolean fallingUnderGround = false;
 	/**
 	 * 基本内部パラメータ15
 	 * プールの中にいるか否か
 	 */
-	protected boolean bInPool = false;
+	protected boolean inPool = false;
 	/**
 	 * 基本内部パラメータ16
 	 * 最大深度
 	 */
-	protected int nMostDepth = 0;
+	protected int mostDepth = 0;
 
 	// 画面描画情報
 	/**
@@ -214,11 +214,11 @@ public class Obj implements java.io.Serializable, Comparable {
 
 	/** z座標セッター */
 	public void setCalcZ(int Z) {
-		if (z < nMostDepth && enableWall) {
-			if (bFallingUnderGround) {
+		if (z < mostDepth && enableWall) {
+			if (fallingUnderGround) {
 				z = Z;
 			} else {
-				z = nMostDepth;
+				z = mostDepth;
 			}
 		}
 		if (Z > Translate.getMapZ() && enableWall) {
@@ -259,36 +259,36 @@ public class Obj implements java.io.Serializable, Comparable {
 	}
 
 	/**
-	 * 移動量追加
-	 * 
+	 * 移動量を加算する.
+	 *
 	 * @param x x方向
 	 * @param y y方向
 	 * @param z z方向
 	 */
-	public void addBxyz(int x, int y, int z) {
-		setBx(getBx() + x);
-		setBy(getBy() + y);
-		bz += z;
+	public void addMotion(int x, int y, int z) {
+		setMotionX(getMotionX() + x);
+		setMotionY(getMotionY() + y);
+		motionZ += z;
 	}
 
 	/**
-	 * 移動量セット
-	 * 
+	 * 移動量を設定する.
+	 *
 	 * @param x x方向
 	 * @param y y方向
 	 * @param z z方向
 	 */
-	public void setBxyz(int x, int y, int z) {
-		setBx(x);
-		setBy(y);
-		bz = z;
+	public void setMotion(int x, int y, int z) {
+		setMotionX(x);
+		setMotionY(y);
+		motionZ = z;
 	}
 
-	/** 移動量リセット */
-	public void resetBPos() {
-		setBx(0);
-		setBy(0);
-		bz = 0;
+	/** 移動量をゼロに戻す. */
+	public void resetMotion() {
+		setMotionX(0);
+		setMotionY(0);
+		motionZ = 0;
 	}
 
 	/**
@@ -382,12 +382,12 @@ public class Obj implements java.io.Serializable, Comparable {
 		this.vz = vz;
 	}
 
-	public int getBz() {
-		return bz;
+	public int getMotionZ() {
+		return motionZ;
 	}
 
-	public void setBz(int bz) {
-		this.bz = bz;
+	public void setMotionZ(int motionZ) {
+		this.motionZ = motionZ;
 	}
 
 	public boolean isEnableWall() {
@@ -398,36 +398,28 @@ public class Obj implements java.io.Serializable, Comparable {
 		this.enableWall = enableWall;
 	}
 
-	public Where geteWhere() {
-		return eWhere;
+	public Where getWhere() {
+		return where;
 	}
 
-	public void seteWhere(Where eWhere) {
-		this.eWhere = eWhere;
+	public void setWhere(Where where) {
+		this.where = where;
 	}
 
-	public boolean isbFallingUnderGround() {
-		return bFallingUnderGround;
+	public boolean isFallingUnderGround() {
+		return fallingUnderGround;
 	}
 
-	public void setbFallingUnderGround(boolean bFallingUnderGround) {
-		this.bFallingUnderGround = bFallingUnderGround;
+	public void setFallingUnderGround(boolean fallingUnderGround) {
+		this.fallingUnderGround = fallingUnderGround;
 	}
 
-	public boolean isbInPool() {
-		return bInPool;
+	public boolean isInPool() {
+		return inPool;
 	}
 
-	public void setbInPool(boolean bInPool) {
-		this.bInPool = bInPool;
-	}
-
-	public int getnMostDepth() {
-		return nMostDepth;
-	}
-
-	public void setnMostDepth(int nMostDepth) {
-		this.nMostDepth = nMostDepth;
+	public void setInPool(boolean inPool) {
+		this.inPool = inPool;
 	}
 
 	public void setW(int imgW) {
@@ -737,25 +729,6 @@ public class Obj implements java.io.Serializable, Comparable {
 	}
 
 	/**
-	 * どこにいるか取得
-	 * 
-	 * @return 床の上か、ゆっくりの上or中か
-	 */
-	@Transient
-	public Where getWhere() {
-		return eWhere;
-	}
-
-	/**
-	 * どこにいるかセット
-	 * 
-	 * @param ieWhere 床の上か、ゆっくりの上or中か
-	 */
-	public void setWhere(Where ieWhere) {
-		eWhere = ieWhere;
-	}
-
-	/**
 	 * オブジェクトごとに毎ティックごとに呼び出される処理
 	 * <br>
 	 * オーバーライドしてるものが多い
@@ -767,9 +740,9 @@ public class Obj implements java.io.Serializable, Comparable {
 		}
 
 		if (!grabbed) {
-			int mx = vx + getBx();
-			int my = vy + getBy();
-			int mz = vz + bz;
+			int mx = vx + getMotionX();
+			int my = vy + getMotionY();
+			int mz = vz + motionZ;
 
 			if (mx != 0) {
 				x += mx;
@@ -801,9 +774,9 @@ public class Obj implements java.io.Serializable, Comparable {
 				mz += 1;
 				vz += 1;
 				z -= mz;
-				if (z <= nMostDepth) {
-					if (!bFallingUnderGround) {
-						z = nMostDepth;
+				if (z <= mostDepth) {
+					if (!fallingUnderGround) {
+						z = mostDepth;
 						vz = 0;
 					}
 					vx = 0;
@@ -811,9 +784,9 @@ public class Obj implements java.io.Serializable, Comparable {
 				}
 			}
 		}
-		setBx(0);
-		setBy(0);
-		bz = 0;
+		setMotionX(0);
+		setMotionY(0);
+		motionZ = 0;
 		if (x < 0) {
 			x = 5;
 		}
@@ -823,34 +796,14 @@ public class Obj implements java.io.Serializable, Comparable {
 		return Event.DONOTHING;
 	}
 
-	/** 地面に堕ちつつあるか否か */
-	public boolean getFallingUnderGround() {
-		return bFallingUnderGround;
-	}
-
-	/** 地面に落とすセッター */
-	public void setFallingUnderGround(boolean bFlag) {
-		bFallingUnderGround = bFlag;
-	}
-
-	/** 池の中か否か */
-	public boolean getInPool() {
-		return bInPool;
-	}
-
-	/** 池の中にいるかフラグのセッター */
-	public void setInPool(boolean bFlag) {
-		bInPool = bFlag;
-	}
-
 	/** 最大深度ゲッター */
 	public int getMostDepth() {
-		return nMostDepth;
+		return mostDepth;
 	}
 
 	/** 最大深度セッター */
-	public void setMostDepth(int nTemp) {
-		nMostDepth = nTemp;
+	public void setMostDepth(int mostDepth) {
+		this.mostDepth = mostDepth;
 	}
 
 	/**
@@ -876,8 +829,8 @@ public class Obj implements java.io.Serializable, Comparable {
 	 * 
 	 * @return X座標の加速度
 	 */
-	public int getBx() {
-		return bx;
+	public int getMotionX() {
+		return motionX;
 	}
 
 	/**
@@ -885,8 +838,8 @@ public class Obj implements java.io.Serializable, Comparable {
 	 * 
 	 * @param bx X座標の加速度
 	 */
-	public void setBx(int bx) {
-		this.bx = bx;
+	public void setMotionX(int motionX) {
+		this.motionX = motionX;
 	}
 
 	/**
@@ -894,8 +847,8 @@ public class Obj implements java.io.Serializable, Comparable {
 	 * 
 	 * @param bx Y座標の加速度
 	 */
-	public int getBy() {
-		return by;
+	public int getMotionY() {
+		return motionY;
 	}
 
 	/**
@@ -903,8 +856,68 @@ public class Obj implements java.io.Serializable, Comparable {
 	 * 
 	 * @param by Y座標の加速度
 	 */
+	public void setMotionY(int motionY) {
+		this.motionY = motionY;
+	}
+
+	/**
+	 * 後方互換のための旧API.
+	 *
+	 * @deprecated use {@link #getMotionX()}
+	 */
+	@Deprecated
+	public int getBx() {
+		return getMotionX();
+	}
+
+	/**
+	 * 後方互換のための旧API.
+	 *
+	 * @deprecated use {@link #setMotionX(int)}
+	 */
+	@Deprecated
+	public void setBx(int bx) {
+		setMotionX(bx);
+	}
+
+	/**
+	 * 後方互換のための旧API.
+	 *
+	 * @deprecated use {@link #getMotionY()}
+	 */
+	@Deprecated
+	public int getBy() {
+		return getMotionY();
+	}
+
+	/**
+	 * 後方互換のための旧API.
+	 *
+	 * @deprecated use {@link #setMotionY(int)}
+	 */
+	@Deprecated
 	public void setBy(int by) {
-		this.by = by;
+		setMotionY(by);
+	}
+
+	/**
+	 * 後方互換のための旧API.
+	 *
+	 * @deprecated use {@link #getMotionZ()}
+	 */
+	@Deprecated
+	public int getBz() {
+		return getMotionZ();
+	}
+
+	/**
+	 * 後方互換のための旧API.
+	 *
+	 * @deprecated use {@link #setMotionZ(int)}
+	 */
+	@Deprecated
+	public void setBz(int bz) {
+		setMotionZ(bz);
 	}
 
 	@Override

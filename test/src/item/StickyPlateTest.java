@@ -70,13 +70,13 @@ class StickyPlateTest extends ItemTestBase {
     }
 
     @Test
-    void testGetSetbFixBack() {
+    void testGetSetFixBack() {
         StickyPlate item = new StickyPlate();
-        assertFalse(item.isbFixBack());
-        item.setbFixBack(true);
-        assertTrue(item.isbFixBack());
-        item.setbFixBack(false);
-        assertFalse(item.isbFixBack());
+        assertFalse(item.isFixBack());
+        item.setFixBack(true);
+        assertTrue(item.isFixBack());
+        item.setFixBack(false);
+        assertFalse(item.isFixBack());
     }
 
     @Test

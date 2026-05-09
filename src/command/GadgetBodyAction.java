@@ -21,19 +21,20 @@ public class GadgetBodyAction {
 	 *
 	 * @param item  実行内容
 	 * @param ev    入力されたマウスの動作
-	 * @param found 対象オブジェクト
+	 * @param targetObject 対象オブジェクト
 	 */
-	public static void evaluateClean(GadgetList item, MouseEvent ev, Obj found) {
+	public static void evaluateClean(GadgetList item, MouseEvent ev, Obj targetObject) {
 		switch (item) {
 			case INDIVIDUAL:
-				if (found instanceof Body) {
-					if (((Body) found).isDead()) {
-						found.remove();
+				if (targetObject instanceof Body) {
+					Body body = (Body) targetObject;
+					if (body.isDead()) {
+						targetObject.remove();
 					} else {
-						((Body) found).setCleaning();
+						body.setCleaning();
 					}
 				} else {
-					found.remove();
+					targetObject.remove();
 				}
 				break;
 			default:
@@ -46,37 +47,37 @@ public class GadgetBodyAction {
 	 *
 	 * @param item  実行内容
 	 * @param ev    入力されたマウスの動作
-	 * @param found 対象オブジェクト
+	 * @param targetObject 対象オブジェクト
 	 */
-	public static void evaluateAccessory(GadgetList item, MouseEvent ev, Obj found) {
+	public static void evaluateAccessory(GadgetList item, MouseEvent ev, Obj targetObject) {
 		List<Body> bodyList = new LinkedList<Body>(GameWorld.get().getCurrentMap().getBody().values());
 		if (ev.isShiftDown()) {
-			boolean flag = true;
-			if (found instanceof Body) {
-				flag = !((Body) found).hasOkazari();
+			boolean shouldGiveAccessory = true;
+			if (targetObject instanceof Body) {
+				shouldGiveAccessory = !((Body) targetObject).hasOkazari();
 			}
-			for (Body b : bodyList) {
-				if (!flag && b.hasOkazari()) {
-					b.takeOkazari(true);
-				} else if (flag && !b.hasOkazari()) {
-					b.giveOkazari(Okazari.OkazariType.DEFAULT);
+			for (Body body : bodyList) {
+				if (!shouldGiveAccessory && body.hasOkazari()) {
+					body.takeOkazari(true);
+				} else if (shouldGiveAccessory && !body.hasOkazari()) {
+					body.giveOkazari(Okazari.OkazariType.DEFAULT);
 				}
 			}
 		} else if (ev.isControlDown()) {
-			for (Body b : bodyList) {
-				if (b.hasOkazari()) {
-					b.takeOkazari(true);
+			for (Body body : bodyList) {
+				if (body.hasOkazari()) {
+					body.takeOkazari(true);
 				} else {
-					b.giveOkazari(Okazari.OkazariType.DEFAULT);
+					body.giveOkazari(Okazari.OkazariType.DEFAULT);
 				}
 			}
 		} else {
-			if (found instanceof Body) {
-				Body b = (Body) found;
-				if (b.hasOkazari()) {
-					b.takeOkazari(true);
+			if (targetObject instanceof Body) {
+				Body body = (Body) targetObject;
+				if (body.hasOkazari()) {
+					body.takeOkazari(true);
 				} else {
-					b.giveOkazari(Okazari.OkazariType.DEFAULT);
+					body.giveOkazari(Okazari.OkazariType.DEFAULT);
 				}
 			}
 		}
@@ -87,34 +88,34 @@ public class GadgetBodyAction {
 	 *
 	 * @param item  実行内容
 	 * @param ev    入力されたマウスの動作
-	 * @param found 対象オブジェクト
+	 * @param targetObject 対象オブジェクト
 	 */
-	public static void evaluatePants(GadgetList item, MouseEvent ev, Obj found) {
+	public static void evaluatePants(GadgetList item, MouseEvent ev, Obj targetObject) {
 		List<Body> bodyList = new LinkedList<Body>(GameWorld.get().getCurrentMap().getBody().values());
 		if (ev.isShiftDown()) {
-			boolean flag = true;
-			if (found instanceof Body) {
-				flag = !((Body) found).isHasPants();
+			boolean shouldGivePants = true;
+			if (targetObject instanceof Body) {
+				shouldGivePants = !((Body) targetObject).isHasPants();
 			}
-			for (Body b : bodyList) {
-				if (!flag && b.isHasPants())
-					b.takePants();
-				else if (flag && !b.isHasPants())
-					b.givePants();
+			for (Body body : bodyList) {
+				if (!shouldGivePants && body.isHasPants())
+					body.takePants();
+				else if (shouldGivePants && !body.isHasPants())
+					body.givePants();
 			}
 		} else if (ev.isControlDown()) {
-			for (Body b : bodyList) {
-				if (b.isHasPants())
-					b.takePants();
+			for (Body body : bodyList) {
+				if (body.isHasPants())
+					body.takePants();
 				else
-					b.givePants();
+					body.givePants();
 			}
 		} else {
-			if (found instanceof Body) {
-				if (((Body) found).isHasPants())
-					((Body) found).takePants();
+			if (targetObject instanceof Body) {
+				if (((Body) targetObject).isHasPants())
+					((Body) targetObject).takePants();
 				else
-					((Body) found).givePants();
+					((Body) targetObject).givePants();
 			}
 		}
 	}
@@ -124,18 +125,18 @@ public class GadgetBodyAction {
 	 *
 	 * @param item  実行内容
 	 * @param ev    入力されたマウスの動作
-	 * @param found 対象オブジェクト
+	 * @param targetObject 対象オブジェクト
 	 */
-	public static void evaluateCommunicate(GadgetList item, MouseEvent ev, Obj found) {
+	public static void evaluateCommunicate(GadgetList item, MouseEvent ev, Obj targetObject) {
 		switch (item) {
 			case YUKKURISITEITTENE:
-				BodyMethodDispatcher.execute(ev, found, "voiceReaction", 0);
+				BodyMethodDispatcher.execute(ev, targetObject, "voiceReaction", 0);
 				return;
 			case YUKKURIDIE:
-				BodyMethodDispatcher.execute(ev, found, "voiceReaction", 1);
+				BodyMethodDispatcher.execute(ev, targetObject, "voiceReaction", 1);
 				return;
 			case YUKKURIFURIFURI:
-				BodyMethodDispatcher.execute(ev, found, "voiceReaction", 2);
+				BodyMethodDispatcher.execute(ev, targetObject, "voiceReaction", 2);
 				return;
 			default:
 				break;

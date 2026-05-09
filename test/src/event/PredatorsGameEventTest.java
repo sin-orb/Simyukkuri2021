@@ -82,7 +82,7 @@ class PredatorsGameEventTest {
             // If it doesn't throw, it should return true (toy==null path)
             assertTrue(result);
         } catch (NullPointerException e) {
-            // The source code does toy.setLinkParent(-1) when toy is null,
+            // The source code does toy.setParentLinkId(-1) when toy is null,
             // which causes NPE - this is expected behavior
             assertNotNull(e);
         }
@@ -241,7 +241,7 @@ class PredatorsGameEventTest {
         }
     }
 
-    // --- execute: toy removed → setLinkParent(-1), returns true ---
+    // --- execute: toy removed → setParentLinkId(-1), returns true ---
     @Test
     void testExecute_toyRemoved_returnsTrue() {
         Body from = createBody();

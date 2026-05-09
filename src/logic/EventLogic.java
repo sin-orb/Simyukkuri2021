@@ -6,7 +6,6 @@ import src.SimYukkuri;
 import src.util.GameWorld;
 import src.base.Body;
 import src.base.EventPacket;
-import src.util.YukkuriUtil;
 
 /***************************************************
 	イベントの処理ロジック
@@ -80,47 +79,47 @@ public class EventLogic {
 	 * @param b 参加ゆっくり
 	 * @return 始まるイベント
 	 */
-	public static final EventPacket checkWorldEvent(Body b) {
-		EventPacket ret = null;
+	public static final EventPacket checkWorldEvent(Body body) {
+		EventPacket eventPacket = null;
 		EventPacket e;
 		//リストに登録されているイベントすべてをチェック
 		for (Iterator<EventPacket> i = GameWorld.get().getCurrentMap().getEvent().iterator(); i.hasNext();) {
 			e = i.next();
 			// from が設定されていてかつ実体が消えていればイベントを除去
-			if (e.getFrom() != -1 && YukkuriUtil.getBodyInstance(e.getFrom()) == null) {
+			if (e.getFrom() != -1 && src.util.BodyRegistry.getBodyInstance(e.getFrom()) == null) {
 				i.remove();
 				continue;
 			}
 //			if(e.from == b) continue;
-			if(e.simpleEventAction(b)) {
+			if(e.simpleEventAction(body)) {
 				continue;
 			}
-			if(e.checkEventResponse(b)) {
-				ret = e;
+			if(e.checkEventResponse(body)) {
+				eventPacket = e;
 				break;
 			}
 		}
-		return ret;
+		return eventPacket;
 	}
 
 	/**個体イベントの開始チェック
 	 * @param b 対象ゆっくり
 	 * @return 始めるイベント
 	 */
-	public static final EventPacket checkBodyEvent(Body b) {
-		EventPacket ret = null;
+	public static final EventPacket checkBodyEvent(Body body) {
+		EventPacket eventPacket = null;
 		EventPacket e;
 
 		//リストに登録されているイベントすべてをチェック
-		for (Iterator<EventPacket> i = b.getEventList().iterator(); i.hasNext();) {
+		for (Iterator<EventPacket> i = body.getEventList().iterator(); i.hasNext();) {
 			e = i.next();
-			if(e.simpleEventAction(b)) {
+			if(e.simpleEventAction(body)) {
 				i.remove();
 				continue;
 			}
-			if(ret == null) {
-				if(e.checkEventResponse(b)) {
-					ret = e;
+			if(eventPacket == null) {
+				if(e.checkEventResponse(body)) {
+					eventPacket = e;
 					i.remove();
 					continue;
 				}
@@ -129,21 +128,21 @@ public class EventLogic {
 				i.remove();
 			}
 		}
-		return ret;
+		return eventPacket;
 	}
 
 	/**
 	 * ワールドイベントのチェック simpleEventAction用
 	 * @param b ゆっくり
 	 */
-	public static final void checkSimpleWorldEvent(Body b) {
+	public static final void checkSimpleWorldEvent(Body body) {
 		EventPacket e;
 		//リストに登録されているイベントすべてをチェック
 		for (Iterator<EventPacket> i = GameWorld.get().getCurrentMap().getEvent().iterator(); i.hasNext();) {
 			e = i.next();
-			Body from = YukkuriUtil.getBodyInstance(e.getFrom());
-			if(from == b) continue;
-			if(e.simpleEventAction(b)) {
+			Body from = src.util.BodyRegistry.getBodyInstance(e.getFrom());
+			if(from == body) continue;
+			if(e.simpleEventAction(body)) {
 				continue;
 			}
 		}
@@ -153,13 +152,13 @@ public class EventLogic {
 	 *  固体イベントのチェック simpleEventAction用
 	 * @param b ゆっくり
 	 */
-	public static final void checkSimpleBodyEvent(Body b) {
+	public static final void checkSimpleBodyEvent(Body body) {
 		EventPacket e;
 
-		for (Iterator<EventPacket> i = b.getEventList().iterator(); i.hasNext();) {
+		for (Iterator<EventPacket> i = body.getEventList().iterator(); i.hasNext();) {
 			e = i.next();
 
-			if(e.simpleEventAction(b)) {
+			if(e.simpleEventAction(body)) {
 				i.remove();
 				continue;
 			}
@@ -170,8 +169,8 @@ public class EventLogic {
 	 *  イベントの毎フレーム処理
 	 * @param b ゆっくり
 	 */
-	public static final void eventUpdate(Body b) {
-		BodyEventState.updateCurrentEvent(b);
+	public static final void eventUpdate(Body body) {
+		BodyEventState.updateCurrentEvent(body);
 	}
 }
 

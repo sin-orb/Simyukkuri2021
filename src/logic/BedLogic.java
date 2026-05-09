@@ -32,201 +32,201 @@ public class BedLogic {
 
 	/**
 	 * ベッド関連処理を行う
-	 * @param b ゆっくり
+	 * @param body ゆっくり
 	 * @return ベッド関連処理の対象かどうか
 	 */
-	public static final boolean checkBed(Body b) {
+	public static final boolean checkBed(Body body) {
 		// 他の用事がある場合
-		if( b.isToFood() || b.isToBody() || /*b.isToBed() ||*/ b.isToShit() || 
-				b.isToSukkiri() || b.isToSteal() || b.isToTakeout())
+		if( body.isToFood() || body.isToBody() || /*body.isToBed() ||*/ body.isToShit() || 
+				body.isToSukkiri() || body.isToSteal() || body.isToTakeout())
 		{
 			return false;
 		}
 
-		if(b.isIdiot()) return false;
+		if(body.isIdiot()) return false;
 
-		EventPacket p = b.getCurrentEvent();
-		if(b.nearToBirth()) {
-			if(p != null && p.getPriority() == EventPacket.EventPriority.HIGH) {
+		EventPacket currentEvent = body.getCurrentEvent();
+		if(body.nearToBirth()) {
+			if(currentEvent != null && currentEvent.getPriority() == EventPacket.EventPriority.HIGH) {
 				return false;
 			}
 		}
 		else {
-			if(p != null && p.getPriority() != EventPacket.EventPriority.LOW) {
+			if(currentEvent != null && currentEvent.getPriority() != EventPacket.EventPriority.LOW) {
 				return false;
 			}
 		}
 
 		// 非ゆっくり症の場合
-		if( b.isNYD() )
+		if( body.isNYD() )
 		{
 			return false;
 		}
 
 		// 対象が決まっていたら到達したかチェック
-		Obj target = b.takeMappedObj(b.getMoveTarget());
-		if(b.isToBed() && target != null) {
+		Obj target = body.takeMappedObj(body.getMoveTargetId());
+		if(body.isToBed() && target != null) {
 			// 途中で消されてたら他の候補を探す
 			if(target.isRemoved()) {
-				b.setFavItem(FavItemType.BED, null);
-				b.clearActions();
+				body.setFavoriteItem(FavItemType.BED, null);
+				body.clearActions();
 				return false;
 			}
 
 			// うんうん奴隷の場合
-			if( b.getPublicRank() == PublicRank.UnunSlave){
+			if( body.getPublicRank() == PublicRank.UnunSlave){
 				// ベッドには向かわない
 				if( target instanceof Bed){
-					b.setFavItem(FavItemType.BED, null);
-					b.clearActions();
+					body.setFavoriteItem(FavItemType.BED, null);
+					body.clearActions();
 					return false;
 				}
 			}
 
-			if ((b.getStepDist()) >= Translate.distance(b.getX(), b.getY(), target.getX() + b.getTargetPosOfsX(), target.getY() + b.getTargetPosOfsY())
-					&& b.getZ() == 0) {
+			if ((body.getStepDist()) >= Translate.distance(body.getX(), body.getY(), target.getX() + body.getTargetOffsetX(), target.getY() + body.getTargetOffsetY())
+					&& body.getZ() == 0) {
 				// 到着したら待機状態へ
-				if(b.getFavItem(FavItemType.BED) == null) {
+				if(body.getFavoriteItem(FavItemType.BED) == null) {
 					// うんうん奴隷ではない場合
-					if( b.getPublicRank() != PublicRank.UnunSlave){
+					if( body.getPublicRank() != PublicRank.UnunSlave){
 						// 見つけたベッドをお気に入りにして家族にも伝達
-						b.setFavItem(FavItemType.BED, target);
-						EventLogic.addWorldEvent(new FavCopyEvent(b, null, null, 1), null, null);
+						body.setFavoriteItem(FavItemType.BED, target);
+						EventLogic.addWorldEvent(new FavCopyEvent(body, null, null, 1), null, null);
 					}
 				}
 				// 餌を保持している
-				if(b.getTakeoutItem(TakeoutItemType.FOOD) != null){
+				if(body.getCarryItem(TakeoutItemType.FOOD) != null){
 					// 吐き出す
-					b.dropTakeoutItem(TakeoutItemType.FOOD);
+					body.dropTakeoutItem(TakeoutItemType.FOOD);
 				}
-				b.clearActions();
-				b.stay();
+				body.clearActions();
+				body.stay();
 			}
 			else{
-				b.moveTo(target.getX() + b.getTargetPosOfsX(), target.getY() + b.getTargetPosOfsY(), 0);
+				body.moveTo(target.getX() + body.getTargetOffsetX(), target.getY() + body.getTargetOffsetY(), 0);
 			}
 			return true;
 		}
 
 		// ベッドに向かう条件
-		boolean flag = false;
-		if ((b.isSleepy()	//	眠い
+		boolean shouldSearchBed = false;
+		if ((body.isSleepy()	//	眠い
 			|| GameEnvironment.getDayState().ordinal() >= Terrarium.DayState.EVENING.ordinal()	// 夜になった
-			|| b.nearToBirth()) // 出産間近
-			&& b.getCurrentEvent() == null) {// イベントがない <- イベントありのままだと不眠ディフューザーとかでおかしくなる
-			flag = true;
+			|| body.nearToBirth()) // 出産間近
+			&& body.getCurrentEvent() == null) {// イベントがない <- イベントありのままだと不眠ディフューザーとかでおかしくなる
+			shouldSearchBed = true;
 		}
-		if(b.getTakeoutItem(TakeoutItemType.FOOD) != null){
-			flag = true;
+		if(body.getCarryItem(TakeoutItemType.FOOD) != null){
+			shouldSearchBed = true;
 		}
 
-		if(!flag) return false;
+		if(!shouldSearchBed) return false;
 
-		boolean ret = false;
-		Obj found = searchBed(b);
+		boolean foundBed = false;
+		Obj targetObject = searchBed(body);
 
-		if (found != null) {
-			int ofsX = 0;
-			int ofsY = 0;
-			if(b.hasBabyOrStalk()) {
-				ofsY = Translate.invertY(found.getH() - 4);
-				ofsY = -(ofsY >> 1);
+		if (targetObject != null) {
+			int offsetX = 0;
+			int offsetY = 0;
+			if(body.hasBabyOrStalk()) {
+				offsetY = Translate.invertY(targetObject.getH() - 4);
+				offsetY = -(offsetY >> 1);
 				// 茎妊娠の場合は茎がベッドの上に収まるように親を茎の反対方向にオフセット
-				if(b.isHasStalk()) {
-					int stalkOffset = Translate.invertX(15, found.getY());
-					if(b.getDirection() == Direction.RIGHT) {
-						ofsX = -stalkOffset; // 茎が右にあるので親を左に
+				if(body.isHasStalk()) {
+					int stalkOffset = Translate.invertX(15, targetObject.getY());
+					if(body.getDirection() == Direction.RIGHT) {
+						offsetX = -stalkOffset; // 茎が右にあるので親を左に
 					} else {
-						ofsX = stalkOffset; // 茎が左にあるので親を右に
+						offsetX = stalkOffset; // 茎が左にあるので親を右に
 					}
 				}
 			}
 			else {
-				ofsX = Translate.invertX(found.getW(), found.getY() - 4);
-				ofsX = -(ofsX >> 1) + GameRandom.nextInt(ofsX);
-				ofsY = Translate.invertY(found.getH() - 4);
-				ofsY = -(ofsY >> 1) + GameRandom.nextInt(ofsY);
+				offsetX = Translate.invertX(targetObject.getW(), targetObject.getY() - 4);
+				offsetX = -(offsetX >> 1) + GameRandom.nextInt(offsetX);
+				offsetY = Translate.invertY(targetObject.getH() - 4);
+				offsetY = -(offsetY >> 1) + GameRandom.nextInt(offsetY);
 			}
-			b.moveToBed(found, found.getX() + ofsX, found.getY() + ofsY, 0);
-			b.setTargetMoveOffset(ofsX, ofsY);
-			ret = true;
+			body.moveToBed(targetObject, targetObject.getX() + offsetX, targetObject.getY() + offsetY, 0);
+			body.setTargetMoveOffset(offsetX, offsetY);
+			foundBed = true;
 		}
-		return ret;
+		return foundBed;
 	}
 	/**
 	 * ベッドを探し出す.
-	 * @param b ゆっくり
+	 * @param body ゆっくり
 	 * @return 探しだしたベッドのオブジェクト
 	 */
-	public static Obj searchBed(Body b){
-		Obj found = b.getFavItem(FavItemType.BED);
-		int minDistance = b.getEYESIGHTorg();
+	public static Obj searchBed(Body body){
+		Obj targetObject = body.getFavoriteItem(FavItemType.BED);
+		int nearestDistance = body.getEyesightBase();
 		// うんうん奴隷の場合
-		if( b.getPublicRank() == PublicRank.UnunSlave){
-			b.setFavItem(FavItemType.BED, null);
-			found = null;
+		if( body.getPublicRank() == PublicRank.UnunSlave){
+			body.setFavoriteItem(FavItemType.BED, null);
+			targetObject = null;
 		}
-		int wallMode = b.getBodyAgeState().ordinal();
+		int wallMode = body.getBodyAgeState().ordinal();
 		// 飛行可能なら壁以外は通過可能
-		if(b.canflyCheck()) {
+		if(body.canflyCheck()) {
 			wallMode = AgeState.ADULT.ordinal();
 		}
-		if (found != null) {
+		if (targetObject != null) {
 			// お気に入りが壁で到達できなくなってたらリセット
-			if (Barrier.acrossBarrier(b.getX(), b.getY(), found.getX(), found.getY(), Barrier.MAP_BODY[wallMode] + Barrier.BARRIER_KEKKAI)) {
-				found = null;
+			if (Barrier.acrossBarrier(body.getX(), body.getY(), targetObject.getX(), targetObject.getY(), Barrier.MAP_BODY[wallMode] + Barrier.BARRIER_KEKKAI)) {
+				targetObject = null;
 			}
 		}
 
 
 		// うんうん奴隷ではない場合
-		if( b.getPublicRank() != PublicRank.UnunSlave){
-			if(found == null) {
+		if( body.getPublicRank() != PublicRank.UnunSlave){
+			if(targetObject == null) {
 				for (Map.Entry<Integer, Bed> entry : GameWorld.get().getCurrentMap().getBed().entrySet()) {
 					ObjEX t = entry.getValue();
-					int distance = Translate.distance(b.getX(), b.getY(), t.getX(), t.getY());
-					if (minDistance > distance) {
-						if (Barrier.acrossBarrier(b.getX(), b.getY(), t.getX(), t.getY(), Barrier.MAP_BODY[wallMode] + Barrier.BARRIER_KEKKAI)) {
+					int distance = Translate.distance(body.getX(), body.getY(), t.getX(), t.getY());
+					if (nearestDistance > distance) {
+						if (Barrier.acrossBarrier(body.getX(), body.getY(), t.getX(), t.getY(), Barrier.MAP_BODY[wallMode] + Barrier.BARRIER_KEKKAI)) {
 							continue;
 						}
-						found = (Bed)t;
-						minDistance = distance;
+						targetObject = (Bed)t;
+						nearestDistance = distance;
 					}
 				}
 			}
-	//// 仮 おうち検索
-			if(found == null) {
+		//// 仮 おうち検索
+			if(targetObject == null) {
 				for (Map.Entry<Integer, House> entry : GameWorld.get().getCurrentMap().getHouse().entrySet()) {
 					ObjEX t = entry.getValue();
-					int distance = Translate.distance(b.getX(), b.getY(), t.getX(), t.getY());
-					if (minDistance > distance) {
-						if (Barrier.acrossBarrier(b.getX(), b.getY(), t.getX(), t.getY(), Barrier.MAP_BODY[wallMode] + Barrier.BARRIER_KEKKAI)) {
+					int distance = Translate.distance(body.getX(), body.getY(), t.getX(), t.getY());
+					if (nearestDistance > distance) {
+						if (Barrier.acrossBarrier(body.getX(), body.getY(), t.getX(), t.getY(), Barrier.MAP_BODY[wallMode] + Barrier.BARRIER_KEKKAI)) {
 							continue;
 						}
-						found = (House)t;
-						minDistance = distance;
+						targetObject = (House)t;
+						nearestDistance = distance;
 					}
 				}
 			}
 		}
 		else{
 			// うんうん奴隷の場合、トイレを探す
-			if(found == null) {
+			if(targetObject == null) {
 				for (Map.Entry<Integer, Toilet> entry : GameWorld.get().getCurrentMap().getToilet().entrySet()) {
 					ObjEX t = entry.getValue();
-					int distance = Translate.distance(b.getX(), b.getY(), t.getX(), t.getY());
-					if (minDistance > distance) {
-						if (Barrier.acrossBarrier(b.getX(), b.getY(), t.getX(), t.getY(), Barrier.MAP_BODY[wallMode] + Barrier.BARRIER_KEKKAI)) {
+					int distance = Translate.distance(body.getX(), body.getY(), t.getX(), t.getY());
+					if (nearestDistance > distance) {
+						if (Barrier.acrossBarrier(body.getX(), body.getY(), t.getX(), t.getY(), Barrier.MAP_BODY[wallMode] + Barrier.BARRIER_KEKKAI)) {
 							continue;
 						}
 
-						found = (Toilet)t;
-						minDistance = distance;
+						targetObject = (Toilet)t;
+						nearestDistance = distance;
 					}
 				}
 			}
 		}
-		return found;
+		return targetObject;
 	}
 }
 

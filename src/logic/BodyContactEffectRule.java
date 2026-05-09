@@ -18,28 +18,28 @@ public final class BodyContactEffectRule {
 	/**
 	 * Handle mold avoidance and hate-no-okazari reaction branches.
 	 *
-	 * @param p target body
-	 * @param b actor body
+	 * @param targetBody target body
+	 * @param actorBody actor body
 	 * @return true when the branch handled the action
 	 */
-	public static boolean handleContactEffects(Body p, Body b) {
+	public static boolean handleContactEffects(Body targetBody, Body actorBody) {
 		// 自分がかびてなくてかつ、相手がかびてるとき
-		if (b.findSick(p) && !b.isSick()) {
-			EventLogic.addBodyEvent(b, new AvoidMoldEvent(b, p, null, 1), null, null);
+		if (actorBody.findSick(targetBody) && !actorBody.isSick()) {
+			EventLogic.addBodyEvent(actorBody, new AvoidMoldEvent(actorBody, targetBody, null, 1), null, null);
 			return true;
 		}
 		// 相手がかびてなくてかつ、自分がかびてるとき
-		if (p.findSick(b) && !p.isSick()) {
-			EventLogic.addBodyEvent(p, new AvoidMoldEvent(p, b, null, 1), null, null);
+		if (targetBody.findSick(actorBody) && !targetBody.isSick()) {
+			EventLogic.addBodyEvent(targetBody, new AvoidMoldEvent(targetBody, actorBody, null, 1), null, null);
 			return true;
 		}
 		// 相手が子供でも、子供にお飾りがなくてかつ親がバカならなら制裁する
-		if (b.isAdult() && !p.isAdult() && (p.isChild(b) || b.isMother(p))
-				&& (b.getIntelligence() == src.enums.Intelligence.FOOL && !p.hasOkazari())) {
-			if (b.getCurrentEvent() == null && p.isNYD() && GameRandom.nextBoolean()) {
-				b.clearActions();
-				EventLogic.addWorldEvent(new HateNoOkazariEvent(b, p, null, 10), b,
-						GameMessages.getMessage(b, MessagePool.Action.HateYukkuri));
+		if (actorBody.isAdult() && !targetBody.isAdult() && (targetBody.isChild(actorBody) || actorBody.isMother(targetBody))
+				&& (actorBody.getIntelligence() == src.enums.Intelligence.FOOL && !targetBody.hasOkazari())) {
+			if (actorBody.getCurrentEvent() == null && targetBody.isNYD() && GameRandom.nextBoolean()) {
+				actorBody.clearActions();
+				EventLogic.addWorldEvent(new HateNoOkazariEvent(actorBody, targetBody, null, 10), actorBody,
+						GameMessages.getMessage(actorBody, MessagePool.Action.HateYukkuri));
 			}
 			return true;
 		}

@@ -17,11 +17,11 @@ import src.draw.ModLoader;
 public class Hit extends Effect {
 
 	private static final long serialVersionUID = -4151167914114725276L;
-	private static BufferedImage[][] images;
-	private static int imgW;
-	private static int imgH;
-	private static int pivX;
-	private static int pivY;
+	private static BufferedImage[][] imageLayers;
+	private static int imageWidth;
+	private static int imageHeight;
+	private static int pivotX;
+	private static int pivotY;
 	/**
 	 * イメージをロードする.
 	 * @param loader ローダ
@@ -30,16 +30,16 @@ public class Hit extends Effect {
 	 */
 	public static void loadImages (ClassLoader loader, ImageObserver io) throws IOException {
 		
-		images = new BufferedImage[2][4];
+		imageLayers = new BufferedImage[2][4];
 		for(int i = 0; i < 4; i++) {
-			images[0][i] = ModLoader.loadItemImage(loader, "effect" + File.separator + "hit_" + i + ".png");
-			images[1][i] = ModLoader.flipImage(images[0][i]);
+			imageLayers[0][i] = ModLoader.loadItemImage(loader, "effect" + File.separator + "hit_" + i + ".png");
+			imageLayers[1][i] = ModLoader.flipImage(imageLayers[0][i]);
 		}
 
-		imgW = images[0][0].getWidth(io);
-		imgH = images[0][0].getHeight(io);
-		pivX = imgW >> 1;
-		pivY = imgH >> 1;
+		imageWidth = imageLayers[0][0].getWidth(io);
+		imageHeight = imageLayers[0][0].getHeight(io);
+		pivotX = imageWidth >> 1;
+		pivotY = imageHeight >> 1;
 	}
 	/**
 	 * イメージを取得する.
@@ -47,7 +47,7 @@ public class Hit extends Effect {
 	@Override
 	@Transient
 	public BufferedImage getImage() {
-		return images[direction][animeFrame];
+		return imageLayers[direction][animeFrame];
 	}
 	/**
 	 * コンストラクタ.
@@ -55,7 +55,7 @@ public class Hit extends Effect {
 	public Hit(int sX, int sY, int sZ, int vX, int vY, int vZ, boolean invert,
 						int life, int loop, boolean end, boolean grav, boolean front) {
 		super(sX, sY, sZ, vX, vY, vZ, invert, life, loop, end, grav, front);
-		setBoundary(pivX, pivY, imgW, imgH);
+		setBoundary(pivotX, pivotY, imageWidth, imageHeight);
 		interval = 1;
 		frames = 4;
 	}
@@ -63,10 +63,11 @@ public class Hit extends Effect {
 	public Hit() {
 		
 	}
-	public static BufferedImage[][] getImages() {
-		return images;
+	public static BufferedImage[][] getImageLayers() {
+		return imageLayers;
 	}
-	public static void setImages(BufferedImage[][] images) {
-		Hit.images = images;
+
+	public static void setImageLayers(BufferedImage[][] imageLayers) {
+		Hit.imageLayers = imageLayers;
 	}
 }

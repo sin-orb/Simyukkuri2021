@@ -15,25 +15,25 @@ public final class BodyApproachRule {
 	/**
 	 * Handle the non-contact approach branch in doActionOther.
 	 *
-	 * @param p target body
-	 * @param b actor body
+	 * @param targetBody target body
+	 * @param actorBody actor body
 	 */
-	public static void handleApproach(Body p, Body b, int rangeX) {
-		int dir = 1;
-		if (b.getX() < p.getX()) {
-			dir = -1;
+	public static void handleApproach(Body targetBody, Body actorBody, int offsetX) {
+		int directionSign = 1;
+		if (actorBody.getX() < targetBody.getX()) {
+			directionSign = -1;
 		}
-		rangeX *= dir;
-		if (b.canflyCheck()) {
-			b.moveTo(p.getX() + rangeX, p.getY(), p.getZ());
+		offsetX *= directionSign;
+		if (actorBody.canflyCheck()) {
+			actorBody.moveTo(targetBody.getX() + offsetX, targetBody.getY(), targetBody.getZ());
 		} else {
-			b.moveTo(p.getX() + rangeX, p.getY());
+			actorBody.moveTo(targetBody.getX() + offsetX, targetBody.getY());
 		}
 		// 相手に追いつけないケースがあるため、一定距離まで近づいたら相手を呼び止める
-		if (Translate.distance(b.getX(), b.getY(), p.getX(), p.getY()) < 2500) {
+		if (Translate.distance(actorBody.getX(), actorBody.getY(), targetBody.getX(), targetBody.getY()) < 2500) {
 			if (GameRandom.nextInt(3) == 0) {
-				if (b.isTargetBind()) {
-					p.stay();
+				if (actorBody.isTargetBind()) {
+					targetBody.stay();
 				}
 			}
 		}

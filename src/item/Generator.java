@@ -20,8 +20,8 @@ public class Generator extends ObjEX {
 	// static final long serialVersionUID = 1L;
 	//
 	// public static final int hitCheckObjType = ObjEX.YUKKURI;
-	private static final int images_num = 2; // このクラスの総使用画像数
-	private static BufferedImage[] images = new BufferedImage[images_num];
+	private static final int IMAGE_COUNT = 2; // このクラスの総使用画像数
+	private static BufferedImage[] imageLayers = new BufferedImage[IMAGE_COUNT];
 
 	// private static Rectangle boundary = new Rectangle4y()();
 	// protected Random rnd = new Random();
@@ -31,10 +31,10 @@ public class Generator extends ObjEX {
 	// private Obj o = null;
 	//
 	public static void loadImages(ClassLoader loader, ImageObserver io) throws IOException {
-		images[0] = ModLoader.loadItemImage(loader, "garbagechute" + File.separator + "garbagechute.png");
-		images[1] = ModLoader.loadItemImage(loader, "garbagechute" + File.separator + "garbagechute_off.png");
-		boundary.setWidth(images[0].getWidth(io));
-		boundary.setHeight(images[0].getHeight(io));
+		imageLayers[0] = ModLoader.loadItemImage(loader, "garbagechute" + File.separator + "garbagechute.png");
+		imageLayers[1] = ModLoader.loadItemImage(loader, "garbagechute" + File.separator + "garbagechute_off.png");
+		boundary.setWidth(imageLayers[0].getWidth(io));
+		boundary.setHeight(imageLayers[0].getHeight(io));
 		boundary.setX(boundary.getWidth() >> 1);
 		boundary.setY(boundary.getHeight() >> 1);
 	}
@@ -43,9 +43,9 @@ public class Generator extends ObjEX {
 	@Override
 	public int getImageLayer(BufferedImage[] layer) {
 		if (enabled)
-			layer[0] = images[0];
+			layer[0] = imageLayers[0];
 		else
-			layer[0] = images[1];
+			layer[0] = imageLayers[1];
 		return 1;
 	}
 
@@ -96,25 +96,6 @@ public class Generator extends ObjEX {
 	// @Override
 	// public void upDate() {
 	// if( fuelBodyList == null || fuelBodyList.size() == 0){
-	// return;
-	// }
-	//
-	// for( int i=fuelBodyList.size()-1; 0<=i; i-- ){
-	// Body bFuel = fuelBodyList.get(i);
-	// if( bFuel == null || bFuel.isRemoved() )
-	// {
-	// continue;
-	// }
-	// bFuel.setDropShadow(false);
-	// if(bFuel.isDead() && bFuel.isBurned()){
-	// bFuel.setLockmove(false);
-	// bFuel.setFallingUnderGround(true);
-	// int nZ = bFuel.getZ();
-	// int tz = Translate.translateZ(nZ-1);
-	// int nColX = bFuel.getH();
-	// if( tz < -nColX ){
-	// fuelBodyList.remove(i);
-	// bFuel.remove();
 	// }
 	// }
 	// }

@@ -18,7 +18,6 @@ import src.draw.World;
 import src.enums.AgeState;
 import src.system.Sprite;
 import src.util.WorldTestHelper;
-import src.util.YukkuriUtil;
 import src.yukkuri.Reimu;
 
 public class YukkuriRideEventTest {
@@ -106,10 +105,10 @@ public class YukkuriRideEventTest {
     public void testEnd_setsLinkParentToNegativeOneOnTo() {
         Body from = createBody();
         Body to = createBody();
-        to.setLinkParent(from.objId);
+        to.setParentLinkId(from.objId);
         YukkuriRideEvent event = new YukkuriRideEvent(from, to, null, 100);
         event.end(from);
-        assertEquals(-1, to.getLinkParent());
+        assertEquals(-1, to.getParentLinkId());
     }
 
     // --- update ---
@@ -185,10 +184,10 @@ public class YukkuriRideEventTest {
     }
 
     @Test
-    public void testUpdate_bEqualsFrom_linkParentNull_doesNotThrow() {
+    public void testUpdate_bEqualsFrom_parentLinkIdNull_doesNotThrow() {
         Body from = createBody();
         Body to = createBody();
-        to.setLinkParent(-1); // no parent
+        to.setParentLinkId(-1); // no parent
         YukkuriRideEvent event = new YukkuriRideEvent(from, to, null, 100);
         from.setCurrentEvent(event);
         // Set tick so tick%20 == 0 → enters the move logic
@@ -204,7 +203,7 @@ public class YukkuriRideEventTest {
     public void testUpdate_bEqualsTo_notLinked_doesNotThrow() {
         Body from = createBody();
         Body to = createBody();
-        to.setLinkParent(-1); // not on parent
+        to.setParentLinkId(-1); // not on parent
         YukkuriRideEvent event = new YukkuriRideEvent(from, to, null, 100);
         from.setCurrentEvent(event);
         to.setCurrentEvent(event);
@@ -257,7 +256,7 @@ public class YukkuriRideEventTest {
         Body to = createBody();
         // Body() constructor randomly sets intelligence; ensure AVERAGE (not FOOL) so findSick checks isSick()
         from.setIntelligence(src.enums.Intelligence.AVERAGE);
-        to.setSickPeriod(2000); // isSick() = sickPeriod > INCUBATIONPERIODorg(1200) → true
+        to.setSickPeriod(2000); // isSick() = sickPeriod > incubationPeriodBase(1200) → true
         YukkuriRideEvent event = new YukkuriRideEvent(from, to, null, 100);
         from.setCurrentEvent(event);
         assertEquals(src.base.EventPacket.UpdateState.ABORT, event.update(from));
@@ -268,7 +267,7 @@ public class YukkuriRideEventTest {
     public void testUpdate_bEqualsFrom_toOnHead_doesNotThrow() {
         Body from = createBody();
         Body to = createBody();
-        to.setLinkParent(from.objId); // takeMappedObj(to.getLinkParent()) finds from → not null
+        to.setParentLinkId(from.objId); // takeMappedObj(to.getParentLinkId()) finds from → not null
         YukkuriRideEvent event = new YukkuriRideEvent(from, to, null, 100);
         from.setCurrentEvent(event);
         assertDoesNotThrow(() -> event.update(from));
@@ -279,7 +278,7 @@ public class YukkuriRideEventTest {
     public void testUpdate_bEqualsTo_onHead_doesNotThrow() {
         Body from = createBody();
         Body to = createBody();
-        to.setLinkParent(from.objId); // takeMappedObj(to.getLinkParent()) finds from → not null
+        to.setParentLinkId(from.objId); // takeMappedObj(to.getParentLinkId()) finds from → not null
         YukkuriRideEvent event = new YukkuriRideEvent(from, to, null, 100);
         from.setCurrentEvent(event);
         to.setCurrentEvent(event);
@@ -297,7 +296,7 @@ public class YukkuriRideEventTest {
             from.setY(100);
             to.setX(101);
             to.setY(100);
-            to.setLinkParent(-1);
+            to.setParentLinkId(-1);
 
             YukkuriRideEvent event = new YukkuriRideEvent(from, to, null, 100);
             from.setCurrentEvent(event);
@@ -307,7 +306,7 @@ public class YukkuriRideEventTest {
             f.setInt(event, -1); // update後に0になり、親ロジックに入る
 
             assertNull(event.update(from));
-            assertEquals(from.objId, to.getLinkParent());
+            assertEquals(from.objId, to.getParentLinkId());
         }
     }
 

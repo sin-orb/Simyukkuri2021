@@ -3,6 +3,7 @@ package src.logic;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertSame;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.AfterEach;
@@ -70,6 +71,35 @@ class BodyRelationsTest {
 		assertTrue(BodyRelations.isSister(child, sibling));
 		assertTrue(BodyRelations.isElderSister(child, sibling));
 		assertTrue(BodyRelations.isFamily(child, sibling));
+	}
+
+	@Test
+	void resolvesFamilyMembersByIndex() {
+		WorldTestHelper.setParents(child, -1, parent.getUniqueID());
+		WorldTestHelper.setParents(sibling, -1, parent.getUniqueID());
+		child.getChildrenList().add(unrelated.getUniqueID());
+		child.getSisterList().add(sibling.getUniqueID());
+		child.getElderSisterList().add(partner.getUniqueID());
+
+		assertSame(sibling, BodyRelations.getSister(child, 0));
+		assertSame(partner, BodyRelations.getElderSister(child, 0));
+		assertSame(unrelated, BodyRelations.getChildren(child, 0));
+	}
+
+	@Test
+	void removesFamilyMembersByIndexTarget() {
+		WorldTestHelper.setParents(child, -1, parent.getUniqueID());
+		child.getChildrenList().add(unrelated.getUniqueID());
+		child.getElderSisterList().add(partner.getUniqueID());
+		child.getSisterList().add(sibling.getUniqueID());
+
+		BodyRelations.removeChildrenList(child, unrelated);
+		BodyRelations.removeElderSisterList(child, partner);
+		BodyRelations.removeSisterList(child, sibling);
+
+		assertTrue(child.getChildrenList().isEmpty());
+		assertTrue(child.getElderSisterList().isEmpty());
+		assertTrue(child.getSisterList().isEmpty());
 	}
 
 	@Test

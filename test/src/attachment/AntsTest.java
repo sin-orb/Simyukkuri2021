@@ -24,7 +24,6 @@ import src.enums.ImageCode;
 import src.enums.YukkuriType;
 import src.game.Vomit;
 import src.system.ResourceUtil;
-import src.util.YukkuriUtil;
 import src.yukkuri.Reimu;
 
 public class AntsTest {
@@ -110,9 +109,9 @@ public class AntsTest {
     public void testConstructorSetsNumOfAntsTo50() {
         Body parent = createParent(AgeState.ADULT);
         Ants ants = new Ants(parent);
-        assertEquals(50, parent.getNumOfAnts());
+        assertEquals(50, parent.getAntCount());
         // parent should be retrievable from world map
-        assertSame(parent, YukkuriUtil.getBodyInstance(ants.getParent()));
+        assertSame(parent, src.util.BodyRegistry.getBodyInstance(ants.getParent()));
     }
 
     @Test
@@ -125,28 +124,28 @@ public class AntsTest {
     @Test
     public void testUpdateCallsBeEaten() {
         Body parent = createParent(AgeState.ADULT);
-        parent.setNumOfAnts(60);
+        parent.setAntCount(60);
         parent.setHappiness(Happiness.HAPPY);
         parent.setDamage(0);
         parent.setHungry(0); // hungry<=0 triggers addDamage in eatBody
-        parent.initAmount(AgeState.ADULT); // bodyAmount = DAMAGELIMIT[ADULT] so body is alive
-        // Ensure eCoreAnkoState is DEFAULT so isNotNYD() is true -> happiness set to
+        parent.initAmount(AgeState.ADULT); // ankoAmount = DAMAGELIMIT[ADULT] so body is alive
+        // Ensure coreAnkoState is DEFAULT so isNotNYD() is true -> happiness set to
         // VERY_SAD
-        parent.seteCoreAnkoState(CoreAnkoState.DEFAULT);
+        parent.setCoreAnkoState(CoreAnkoState.DEFAULT);
         // Ensure parent has a valid Shit type to avoid NPE in Vomit
         parent.setShitType(YukkuriType.REIMU);
         // Initialize MyPane to provide Terrarium for beEaten
         SimYukkuri.mypane = new MyPane();
 
-        int bodyAmountBefore = parent.getBodyAmount();
+        int bodyAmountBefore = parent.getAnkoAmount();
         Ants ants = new Ants(parent);
         ants.update();
 
-        // pa.beEaten(60/3=20, 0, false) -> eatBody reduces bodyAmount; makeDirty sets
+        // pa.beEaten(60/3=20, 0, false) -> eatBody reduces ankoAmount; makeDirty sets
         // flag
-        assertTrue(parent.getBodyAmount() < bodyAmountBefore, "bodyAmount should decrease after eatBody");
+        assertTrue(parent.getAnkoAmount() < bodyAmountBefore, "ankoAmount should decrease after eatBody");
         assertTrue(parent.isDirty(), "body should be marked dirty by beEaten");
-        // With eCoreAnkoState=DEFAULT, P=0 -> setHappiness(VERY_SAD)
+        // With coreAnkoState=DEFAULT, P=0 -> setHappiness(VERY_SAD)
         assertEquals(Happiness.VERY_SAD, parent.getHappiness(), "happiness should be set to VERY_SAD by beEaten");
     }
 
@@ -155,7 +154,7 @@ public class AntsTest {
         Body parent = createParent(AgeState.CHILD);
         Ants ants = new Ants(parent);
 
-        parent.setNumOfAnts(0);
+        parent.setAntCount(0);
         BufferedImage img = ants.getImage(parent);
         assertSame(Ants.getImages()[parent.getBodyAgeState().ordinal()][0], img);
     }
@@ -166,7 +165,7 @@ public class AntsTest {
         Ants ants = new Ants(parent);
 
         // ants >= getDamageLimit()/3 -> image index 1
-        parent.setNumOfAnts(parent.getDamageLimit() / 3);
+        parent.setAntCount(parent.getDamageLimit() / 3);
         BufferedImage img = ants.getImage(parent);
         assertSame(Ants.getImages()[parent.getBodyAgeState().ordinal()][1], img);
     }
@@ -177,7 +176,7 @@ public class AntsTest {
         Ants ants = new Ants(parent);
 
         // ants >= getDamageLimit()*2/3 -> image index 2
-        parent.setNumOfAnts(parent.getDamageLimit() * 2 / 3);
+        parent.setAntCount(parent.getDamageLimit() * 2 / 3);
         BufferedImage img = ants.getImage(parent);
         assertSame(Ants.getImages()[parent.getBodyAgeState().ordinal()][2], img);
     }
@@ -264,18 +263,18 @@ public class AntsTest {
         void testScenario_UpdateConsumesExactlyNumOfAntsDividedByThreeFromBodyAndHungry() {
             Body parent = createParent(AgeState.ADULT);
             parent.initAmount(AgeState.ADULT);
-            parent.setNumOfAnts(9);
+            parent.setAntCount(9);
             parent.setHungry(100);
-            int bodyAmountBefore = parent.getBodyAmount();
+            int bodyAmountBefore = parent.getAnkoAmount();
             int hungryBefore = parent.getHungry();
 
             Ants ants = new Ants(parent);
-            parent.setNumOfAnts(9);
+            parent.setAntCount(9);
             testRnd.setNextInt(1);
 
             ants.update();
 
-            assertEquals(bodyAmountBefore - 3, parent.getBodyAmount());
+            assertEquals(bodyAmountBefore - 3, parent.getAnkoAmount());
             assertEquals(hungryBefore - 3, parent.getHungry());
             assertTrue(parent.isDirty());
             assertFalse(parent.isPurupuru());
@@ -285,12 +284,12 @@ public class AntsTest {
         void testScenario_LockmoveBodyHitByAntsEntersPainPurupuruBranchWithoutReducingAntCount() {
             Body parent = createParent(AgeState.ADULT);
             parent.initAmount(AgeState.ADULT);
-            parent.setNumOfAnts(12);
+            parent.setAntCount(12);
             parent.setLockmove(true);
             parent.setHappiness(Happiness.HAPPY);
 
             Ants ants = new Ants(parent);
-            parent.setNumOfAnts(12);
+            parent.setAntCount(12);
             testRnd.setNextInt(0);
 
             ants.update();
@@ -298,7 +297,7 @@ public class AntsTest {
             assertEquals(Happiness.VERY_SAD, parent.getHappiness());
             assertEquals(ImageCode.PAIN.ordinal(), parent.getForceFace());
             assertTrue(parent.isPurupuru());
-            assertEquals(12, parent.getNumOfAnts());
+            assertEquals(12, parent.getAntCount());
         }
     }
 }

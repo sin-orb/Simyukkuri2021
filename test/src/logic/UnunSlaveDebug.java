@@ -23,8 +23,8 @@ public class UnunSlaveDebug {
         body.setHungry(body.getHungryLimit() / 4);
         body.setPublicRank(PublicRank.UnunSlave);
 
-        // Set EYESIGHTorg via reflection
-        java.lang.reflect.Field eyesightField = src.base.BodyAttributes.class.getDeclaredField("EYESIGHTorg");
+        // Set eyesightBase via reflection
+        java.lang.reflect.Field eyesightField = src.base.BodyAttributes.class.getDeclaredField("eyesightBase");
         eyesightField.setAccessible(true);
         eyesightField.set(body, 1000000);
 
@@ -44,7 +44,7 @@ public class UnunSlaveDebug {
 
         System.out.println("DEBUG: body pos=(" + body.getX() + "," + body.getY() + ")");
         System.out.println("DEBUG: shit pos=(" + shit.getX() + "," + shit.getY() + ")");
-        System.out.println("DEBUG: minDistance=" + body.getEYESIGHTorg());
+        System.out.println("DEBUG: minDistance=" + body.getEyesightBase());
         System.out.println("DEBUG: actual distance squared="
                 + Translate.distance(body.getX(), body.getY(), shit.getX(), shit.getY()));
         System.out.println("DEBUG: acrossBarrier="

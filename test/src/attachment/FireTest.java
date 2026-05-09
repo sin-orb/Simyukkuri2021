@@ -279,7 +279,7 @@ public class FireTest {
 
         // お飾りなし、髪ありの状態
         parent.setOkazari(null);
-        parent.seteHairState(HairState.DEFAULT);
+        parent.setHairState(HairState.DEFAULT);
 
         // burnPeriodをdamageLimit*2/3より大きくする
         int damageLimit = parent.getDamageLimit();
@@ -300,7 +300,7 @@ public class FireTest {
 
         // お飾りなし、ハゲの状態（上2つのelse ifを通過させる）
         parent.setOkazari(null);
-        parent.seteHairState(HairState.BALDHEAD);
+        parent.setHairState(HairState.BALDHEAD);
 
         // burnPeriod*90 > damageLimitになるようにする
         int damageLimit = parent.getDamageLimit();
@@ -318,7 +318,7 @@ public class FireTest {
         Fire fire = new Fire(parent);
         parent.setDead(false);
         // NYD状態にしてメッセージ呼び出しを回避
-        parent.seteCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
+        parent.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
 
         int damageBefore = parent.getDamage();
         fire.update();
@@ -331,9 +331,9 @@ public class FireTest {
         Body parent = createParent(AgeState.ADULT);
         Fire fire = new Fire(parent);
         parent.setDead(false);
-        parent.seteCoreAnkoState(CoreAnkoState.DEFAULT);
+        parent.setCoreAnkoState(CoreAnkoState.DEFAULT);
         // isTalking=trueにしてsetMessage呼び出しを回避
-        parent.setMessageCount(1);
+        parent.setMessageTicks(1);
 
         fire.update();
 
@@ -347,9 +347,9 @@ public class FireTest {
         Body parent = createParent(AgeState.ADULT);
         Fire fire = new Fire(parent);
         parent.setDead(false);
-        parent.seteCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
+        parent.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
         parent.setFixBack(true);
-        parent.setbNeedled(false);
+        parent.setNeedled(false);
 
         fire.update();
 
@@ -363,9 +363,9 @@ public class FireTest {
         Body parent = createParent(AgeState.ADULT);
         Fire fire = new Fire(parent);
         parent.setDead(false);
-        parent.seteCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
+        parent.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
         parent.setFixBack(true);
-        parent.setbNeedled(false);
+        parent.setNeedled(false);
 
         fire.update();
         // furifuriはセットされない（RNDが1なので）
@@ -376,9 +376,9 @@ public class FireTest {
         Body parent = createParent(AgeState.ADULT);
         Fire fire = new Fire(parent);
         parent.setDead(false);
-        parent.seteCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
+        parent.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
         parent.setFixBack(true);
-        parent.setbNeedled(true);
+        parent.setNeedled(true);
 
         fire.update();
         // isFixBack && isNeedled → else分岐に入る
@@ -391,7 +391,7 @@ public class FireTest {
         Body parent = createParent(AgeState.ADULT);
         Fire fire = new Fire(parent);
         parent.setDead(false);
-        parent.seteCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
+        parent.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
         parent.setFixBack(false);
         parent.setLockmove(true);
 
@@ -407,7 +407,7 @@ public class FireTest {
         Body parent = createParent(AgeState.ADULT);
         Fire fire = new Fire(parent);
         parent.setDead(false);
-        parent.seteCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
+        parent.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
         parent.setFixBack(false);
         parent.setLockmove(true);
 
@@ -420,7 +420,7 @@ public class FireTest {
         Body parent = createParent(AgeState.ADULT);
         Fire fire = new Fire(parent);
         parent.setDead(false);
-        parent.seteCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
+        parent.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
         parent.setFixBack(false);
         parent.setLockmove(false);
 
@@ -434,7 +434,7 @@ public class FireTest {
         Fire fire = new Fire(parent);
         parent.setDead(false);
         // NYD状態にする（isNotNYD() == false）
-        parent.seteCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
+        parent.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
 
         Event result = fire.update();
         assertEquals(Event.DONOTHING, result);
@@ -445,7 +445,7 @@ public class FireTest {
         Body parent = createParent(AgeState.ADULT);
         Fire fire = new Fire(parent);
         parent.setDead(false);
-        parent.seteCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
+        parent.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
 
         assertEquals(0, fire.getBurnPeriod());
         fire.update();
@@ -488,7 +488,7 @@ public class FireTest {
             mother.setHappiness(Happiness.HAPPY);
             mother.setMsgType(YukkuriType.REIMU);
             // 子をNYDにしてsetMessage NPE回避（茎母親のNYDチェックは母親側）
-            child.seteCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
+            child.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
 
             // 茎を作って親子関係を設定
             Stalk stalk = new Stalk();
@@ -514,7 +514,7 @@ public class FireTest {
             Body child = createParent(AgeState.BABY);
             Body mother = createParent(AgeState.ADULT);
             mother.setHappiness(Happiness.HAPPY);
-            child.seteCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
+            child.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
 
             Stalk stalk = new Stalk();
             stalk.setPlantYukkuri(mother);
@@ -537,8 +537,8 @@ public class FireTest {
             Body child = createParent(AgeState.BABY);
             Body mother = createParent(AgeState.ADULT);
             mother.setHappiness(Happiness.HAPPY);
-            mother.seteCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
-            child.seteCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
+            mother.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
+            child.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
 
             Stalk stalk = new Stalk();
             stalk.setPlantYukkuri(mother);
@@ -559,7 +559,7 @@ public class FireTest {
             // RND=0 → nextInt(3)==0 だが茎がないなら反応しない
             SimYukkuri.RND = new ConstState(0);
             Body child = createParent(AgeState.BABY);
-            child.seteCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
+            child.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
 
             Fire fire = new Fire(child);
             child.setDead(false);
@@ -579,7 +579,7 @@ public class FireTest {
             Body parent = createParent(AgeState.ADULT);
             Fire fire = new Fire(parent);
             parent.setDead(false);
-            parent.seteCoreAnkoState(CoreAnkoState.DEFAULT);
+            parent.setCoreAnkoState(CoreAnkoState.DEFAULT);
             parent.setOkazari(new Okazari());
 
             int damageBefore = parent.getDamage();
@@ -603,7 +603,7 @@ public class FireTest {
             parent.setDead(true);
             parent.setBurned(false);
             parent.setOkazari(null);
-            parent.seteHairState(HairState.BALDHEAD);
+            parent.setHairState(HairState.BALDHEAD);
             fire.setBurnPeriod(parent.getDamageLimit() + 1);
 
             Event result = fire.update();

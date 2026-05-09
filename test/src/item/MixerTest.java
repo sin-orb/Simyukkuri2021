@@ -240,7 +240,7 @@ class MixerTest extends ItemTestBase {
             body.setY(100);
             body.setZ(0);
             body.setLockmove(true);
-            body.setBodyAmount(1000);
+            body.setAnkoAmount(1000);
             int beforeDamage = body.getDamage();
             SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
             item.setBind(body.getUniqueID());
@@ -254,7 +254,7 @@ class MixerTest extends ItemTestBase {
             assertEquals(beforeDamage + 100, body.getDamage());
             assertEquals(Happiness.VERY_SAD, body.getHappiness());
             assertEquals(ImageCode.PAIN.ordinal(), body.getForceFace());
-            assertFalse(body.isDropShadow());
+            assertFalse(body.isShadowVisible());
             assertEquals(body.getUniqueID(), item.getBind());
         }
 
@@ -272,7 +272,7 @@ class MixerTest extends ItemTestBase {
             body.setY(100);
             body.setZ(0);
             body.setLockmove(true);
-            body.setDropShadow(false);
+            body.setShadowVisible(false);
             body.setForceFace(ImageCode.PAIN.ordinal());
             SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
             item.setBind(body.getUniqueID());
@@ -283,7 +283,7 @@ class MixerTest extends ItemTestBase {
             assertEquals(CriticalDamegeType.CUT, body.getCriticalDamegeType());
             assertEquals(-1, body.getForceFace());
             assertFalse(body.isLockmove());
-            assertTrue(body.isDropShadow());
+            assertTrue(body.isShadowVisible());
         }
 
         @Test

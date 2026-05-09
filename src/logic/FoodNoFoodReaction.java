@@ -17,18 +17,18 @@ public final class FoodNoFoodReaction {
 	/**
 	 * 空振り時の気分・メッセージ更新を行う.
 	 */
-	public static void handleNoFoodFound(Body b) {
-		if (!b.isNotNYD()) {
+	public static void handleNoFoodFound(Body body) {
+		if (!body.isNotNYD()) {
 			return;
 		}
-		if (!b.isSoHungry() || !b.isLockmove()) {
+		if (!body.isSoHungry() || !body.isLockmove()) {
 			return;
 		}
-		b.setToFood(false);
-		if (!b.isTalking() && (GameRandom.nextInt(20) == 0)) {
-			b.setMessage(GameMessages.getMessage(b, MessagePool.Action.NoFood), false);
-			b.stay();
+		body.setToFood(false);
+		if (!body.isTalking() && (GameRandom.nextInt(20) == 0)) {
+			body.setMessage(GameMessages.getMessage(body, MessagePool.Action.NoFood), false);
+			body.stay();
 		}
-		b.setHappiness(Happiness.SAD);
+		body.setHappiness(Happiness.SAD);
 	}
 }

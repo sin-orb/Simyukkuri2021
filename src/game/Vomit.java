@@ -306,12 +306,12 @@ public class Vomit extends Obj {
 					vz += 1;
 					z -= vz;
 					falldownDamage += vz;
-					if (!bFallingUnderGround) {
-						if (z <= nMostDepth) {
+					if (!isFallingUnderGround()) {
+						if (z <= mostDepth) {
 							if (falldownDamage > 10) {
 								crushVomit();
 							}
-							z = nMostDepth;
+							z = mostDepth;
 							vx = 0;
 							vy = 0;
 							vz = 0;

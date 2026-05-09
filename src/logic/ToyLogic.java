@@ -31,11 +31,11 @@ public class ToyLogic {
 
 	/**
 	 *  ボールで遊ぶ
-	 * @param b ゆっくり
+	 * @param body ゆっくり
 	 * @return 処理が行われたか
 	 */
-	public static final boolean checkToy(Body b) {
-		if( b == null ){
+	public static final boolean checkToy(Body body) {
+		if( body == null ){
 			return false;
 		}
 
@@ -44,207 +44,207 @@ public class ToyLogic {
 			return false;
 		}
 
-		if(canPlay(b)==false)return false;
-		if (!b.isRude() && (b.isAdult() || b.wantToShit()) ){
+		if(canPlay(body)==false)return false;
+		if (!body.isRude() && (body.isAdult() || body.wantToShit()) ){
 			return false;
 		}
 
-		boolean ret = true;
-		Toy found = null;
-		int minDistance = b.getEYESIGHTorg();
-		for (Toy t: list) {
+		boolean handled = true;
+		Toy foundToy = null;
+		int nearestDistance = body.getEyesightBase();
+		for (Toy toy: list) {
 			// 最小距離のものが見つかっていたら
-			if( minDistance < b.getStepDist() ){
+			if( nearestDistance < body.getStepDist() ){
 				break;
 			}
-			int distance = Translate.distance(b.getX(), b.getY(), t.getX(), t.getY());
-			if (minDistance > distance) {
-				if (!b.isRude()) {
-					if (Barrier.acrossBarrier(b.getX(), b.getY(), t.getX(), t.getY(), Barrier.MAP_BODY[b.getBodyAgeState().ordinal()]+Barrier.BARRIER_KEKKAI )) {
+			int distance = Translate.distance(body.getX(), body.getY(), toy.getX(), toy.getY());
+			if (nearestDistance > distance) {
+				if (!body.isRude()) {
+					if (Barrier.acrossBarrier(body.getX(), body.getY(), toy.getX(), toy.getY(), Barrier.MAP_BODY[body.getBodyAgeState().ordinal()]+Barrier.BARRIER_KEKKAI )) {
 						continue;
 					}
 				}
-				found = (Toy)t;
-				minDistance = distance;
+				foundToy = toy;
+				nearestDistance = distance;
 			}
 		}
-		if (found != null) {
-			boolean bOwnedFamily = false;
+		if (foundToy != null) {
+			boolean ownedByFamily = false;
 			// プレイヤーに持ち上げられたら所有権を消す
-			if( found.isGrabbed() && found.getZ() != 0 ){
-				found.setOwner(null);
+			if( foundToy.isGrabbed() && foundToy.getZ() != 0 ){
+				foundToy.setOwner(null);
 			}
 			else{
-				Body owner = found.getOwner();
-				if( owner == null || owner == b || b.isFamily(owner) ){
-					bOwnedFamily = true;
+				Body ownerBody = foundToy.getOwner();
+				if( ownerBody == null || ownerBody == body || body.isFamily(ownerBody) ){
+					ownedByFamily = true;
 				}
 			}
-			if (minDistance <= b.getStepDist()) {
+			if (nearestDistance <= body.getStepDist()) {
 				// 空中
-				if (found.getZ() != 0) {
+				if (foundToy.getZ() != 0) {
 					// お気に入りのボールの所有者が家族ではない場合
-					if (b.getFavItem(FavItemType.BALL) == found && !bOwnedFamily) {
-						if (b.getAge() % 20 == 0) {
-							if (b.isRude()) {
-								b.setHappiness(Happiness.VERY_SAD);
-								b.addStress(20);
+					if (body.getFavoriteItem(FavItemType.BALL) == foundToy && !ownedByFamily) {
+						if (body.getAge() % 20 == 0) {
+							if (body.isRude()) {
+								body.setHappiness(Happiness.VERY_SAD);
+								body.addStress(20);
 							}
 							else {
-								b.setHappiness(Happiness.SAD);
-								b.addStress(5);
+								body.setHappiness(Happiness.SAD);
+								body.addStress(5);
 							}
-							if (!b.isTalking()){
-								b.setMessage(GameMessages.getMessage(b, MessagePool.Action.LostTreasure), true);
+							if (!body.isTalking()){
+								body.setMessage(GameMessages.getMessage(body, MessagePool.Action.LostTreasure), true);
 							}
 						}
 					}
 					return true;
 				}
-				int strength[] = {-1, -4, -6};
-				if (b.getAge() % 20 == 0) {
-					b.setHappiness(Happiness.HAPPY);
-					b.addStress(-400);
+				int kickStrength[] = {-1, -4, -6};
+				if (body.getAge() % 20 == 0) {
+					body.setHappiness(Happiness.HAPPY);
+					body.addStress(-400);
 				}
 				// 自分のものではない
-				if (!found.isOwned(b)) {
-					found.setOwner(b);
-					b.setFavItem(FavItemType.BALL, found);
-					if (!b.isTalking()) {
-						b.setHappiness(Happiness.HAPPY);
-						b.setMessage(GameMessages.getMessage(b, MessagePool.Action.GetTreasure), true);
+				if (!foundToy.isOwned(body)) {
+					foundToy.setOwner(body);
+					body.setFavoriteItem(FavItemType.BALL, foundToy);
+					if (!body.isTalking()) {
+						body.setHappiness(Happiness.HAPPY);
+						body.setMessage(GameMessages.getMessage(body, MessagePool.Action.GetTreasure), true);
 					}
 				}
 				else if(GameRandom.nextInt(10) == 0){
-					b.getInVain(true);
+					body.getInVain(true);
 				}
 				else{
-					found.kick(b.getDirX() * b.getStep(), b.getDirY() * b.getStep(), strength[b.getBodyAgeState().ordinal()]);
+					foundToy.kick(body.getDirX() * body.getStep(), body.getDirY() * body.getStep(), kickStrength[body.getBodyAgeState().ordinal()]);
 				}
 			}
 			else {
-				if (b.getFavItem(FavItemType.BALL) == found && !bOwnedFamily ) {
-					if (b.getAge() % 20 == 0) {
-						if (b.isRude()) {
-							b.setHappiness(Happiness.VERY_SAD);
-							b.addStress(20);
+				if (body.getFavoriteItem(FavItemType.BALL) == foundToy && !ownedByFamily ) {
+					if (body.getAge() % 20 == 0) {
+						if (body.isRude()) {
+							body.setHappiness(Happiness.VERY_SAD);
+							body.addStress(20);
 						}
 						else {
-							b.setHappiness(Happiness.SAD);
-							b.addStress(5);
+							body.setHappiness(Happiness.SAD);
+							body.addStress(5);
 						}
-						if (!b.isTalking()) {
-							b.setMessage(GameMessages.getMessage(b, MessagePool.Action.LostTreasure), true);
+						if (!body.isTalking()) {
+							body.setMessage(GameMessages.getMessage(body, MessagePool.Action.LostTreasure), true);
 						}
 					}
 				}
-				b.moveTo(found.getX(), found.getY());
+				body.moveTo(foundToy.getX(), foundToy.getY());
 			}
 		}
-		return ret;
+		return handled;
 	}
 
 	/**
 	 *  すぃーで遊ぶ
-	 * @param b ゆっくり
+	 * @param body ゆっくり
 	 * @return 処理が行われたか
 	 */
-	public static final boolean checkSui(Body b) {
+	public static final boolean checkSui(Body body) {
 		List<Sui> list = new LinkedList<>(GameWorld.get().getCurrentMap().getSui().values());
 		if( list.size() == 0 ){
 			return false;
 		}
 
-		if(canPlay(b)==false)return false;
+		if(canPlay(body)==false)return false;
 		if (//				|| GameRandom.nextInt(100) != 0 ||
-				b.takeMappedObj(b.getLinkParent()) instanceof Sui) {
+				body.takeMappedObj(body.getParentLinkId()) instanceof Sui) {
 			return false;
 		}
 
 		// すぃーがあるかつ1/150の確率でゆっくりする
 		if(GameRandom.nextInt(150) == 0) {
-			if(!b.isTalking()) {
-				b.setMessage(GameMessages.getMessage(b, MessagePool.Action.YukkuringSui), true);
+			if(!body.isTalking()) {
+				body.setMessage(GameMessages.getMessage(body, MessagePool.Action.YukkuringSui), true);
 			}
 			return false;
 		}
-		boolean ret = true;
-		Obj found = b.getFavItem(FavItemType.SUI);
+		boolean handled = true;
+		Obj favoriteSui = body.getFavoriteItem(FavItemType.SUI);
 
 		// 自分のすぃーがない場合
-		if(found == null) {
-			int minDistance = b.getEYESIGHTorg();
-			for (ObjEX s: list) {
+		if(favoriteSui == null) {
+			int nearestDistance = body.getEyesightBase();
+			for (ObjEX sui: list) {
 				// 最小距離のものが見つかっていたら
-				if( minDistance < b.getStepDist()){
+				if( nearestDistance < body.getStepDist()){
 					break;
 				}
-				int distance = Translate.distance(b.getX(), b.getY(), s.getX(), s.getY());
+				int distance = Translate.distance(body.getX(), body.getY(), sui.getX(), sui.getY());
 				// 視界内にすぃーがある
-				if (minDistance > distance) {
+				if (nearestDistance > distance) {
 					// 壁の向こうならなにもしない
-					if (Barrier.acrossBarrier(b.getX(), b.getY(), s.getX(), s.getY(), Barrier.MAP_BODY[b.getBodyAgeState().ordinal()]+Barrier.BARRIER_KEKKAI )) {
+					if (Barrier.acrossBarrier(body.getX(), body.getY(), sui.getX(), sui.getY(), Barrier.MAP_BODY[body.getBodyAgeState().ordinal()]+Barrier.BARRIER_KEKKAI )) {
 						continue;
 					}
 
 					// 所有できない場合
-					if(((Sui)s).NoCanBind()) {
-						Body bindBody = (Body)((Sui)s).getBindobj();
+					if(((Sui)sui).NoCanBind()) {
+						Body bindBody = (Body)((Sui)sui).getBindobj();
 						// 所有者が家族ではないならなにもしない
-						if(!(b.isParent(bindBody) || bindBody.isParent(b) || b.isPartner(bindBody) || bindBody.isSister(b))){
+						if(!(body.isParent(bindBody) || bindBody.isParent(body) || body.isPartner(bindBody) || bindBody.isSister(body))){
 							continue;
 						}
 					}
-					found = s;
-					minDistance = distance;
+					favoriteSui = sui;
+					nearestDistance = distance;
 				}
 			}
 		}
-		else if(GameRandom.nextBoolean() && !b.isTalking() && Translate.distance(b.getX(), b.getY(), found.getX(), found.getY()) < 200000){
-			b.setMessage(GameMessages.getMessage(b, MessagePool.Action.hasSui), true);
-			EventLogic.addWorldEvent(new SuiSpeake(b, null, found, 10), null, null);
+		else if(GameRandom.nextBoolean() && !body.isTalking() && Translate.distance(body.getX(), body.getY(), favoriteSui.getX(), favoriteSui.getY()) < 200000){
+			body.setMessage(GameMessages.getMessage(body, MessagePool.Action.hasSui), true);
+			EventLogic.addWorldEvent(new SuiSpeake(body, null, favoriteSui, 10), null, null);
 			return false;
 		}
 		// すぃーが見つかった場合
-		if (found != null) {
-			Body bindBody =(Body)((Sui)found).getBindobj() ;
+		if (favoriteSui != null) {
+			Body bindBody =(Body)((Sui)favoriteSui).getBindobj() ;
 			// プレイヤーに持ち上げられたら所有権を消す
-			if( found.isGrabbed() && found.getZ() != 0 ){
+			if( favoriteSui.isGrabbed() && favoriteSui.getZ() != 0 ){
 				bindBody = null;
 			}
 			// 所有者がいない場合
 			if(bindBody == null){
-				if (!b.isTalking()) {
+				if (!body.isTalking()) {
 					// すぃー発見セリフ
-					EventLogic.addWorldEvent(new SuiRideEvent(b, null, found, 100), b, GameMessages.getMessage(b, MessagePool.Action.FindSui));
+					EventLogic.addWorldEvent(new SuiRideEvent(body, null, favoriteSui, 100), body, GameMessages.getMessage(body, MessagePool.Action.FindSui));
 				}
 			}
-			else if(bindBody == b){
+			else if(bindBody == body){
 				// 所有者が自分の場合
-				if (!b.isTalking()) {
+				if (!body.isTalking()) {
 					// 自分のすぃーにのりにいくセリフ
-					EventLogic.addWorldEvent(new SuiRideEvent(b, null, found, 100), b, GameMessages.getMessage(b, MessagePool.Action.FindGetSui));
+					EventLogic.addWorldEvent(new SuiRideEvent(body, null, favoriteSui, 100), body, GameMessages.getMessage(body, MessagePool.Action.FindGetSui));
 				}
 			}
 			else{
 				// 自分以外が所有者の場合
-				if (!b.isTalking()) {
-		//			EventLogic.addWorldEvent(new SuiRideEvent(bindBody, null, found, 100), b, GameMessages.getMessage(b, MessagePool.Action.HateYukkuri));
+				if (!body.isTalking()) {
+		//			EventLogic.addWorldEvent(new SuiRideEvent(bindBody, null, favoriteSui, 100), body, GameMessages.getMessage(body, MessagePool.Action.HateYukkuri));
 				}
 			}
 		}
 		else if(GameWorld.get().getCurrentMap().getSui().size() > 0){
-			EventLogic.addBodyEvent(b,new SuiSpeake(null, null, null, 10), null, null);
+			EventLogic.addBodyEvent(body,new SuiSpeake(null, null, null, 10), null, null);
 		}
-		return ret;
+		return handled;
 	}
 	/**
 	 * トランポリンで遊ぶ
-	 * @param b ゆっくり
+	 * @param body ゆっくり
 	 * @return 処理が行われたか
 	 */
-	public static final boolean checkTrampoline(Body b){
-		if( b == null ){
+	public static final boolean checkTrampoline(Body body){
+		if( body == null ){
 			return false;
 		}
 
@@ -253,80 +253,80 @@ public class ToyLogic {
 			return false;
 		}
 
-		if(canPlay(b)==false)return false;
-		if(!b.isRude() && (b.isAdult() || b.wantToShit())){
+		if(canPlay(body)==false)return false;
+		if(!body.isRude() && (body.isAdult() || body.wantToShit())){
 			return false;
 		}
 
-		Trampoline found = null;
+		Trampoline foundTrampoline = null;
 		// 視界内の一番近いトランポリンを取得
-		int minDistance = b.getEYESIGHTorg();
-		for(Trampoline t: trampolineList ){
+		int nearestDistance = body.getEyesightBase();
+		for(Trampoline trampoline: trampolineList ){
 			// 最小距離のものが見つかっていたら
-			if( minDistance < b.getStepDist() )
+			if( nearestDistance < body.getStepDist() )
 			{
 				break;
 			}
-			int distance = Translate.distance(b.getX(), b.getY(), t.getX(), t.getY());
-			if(minDistance > distance && (b.isRude() || !Barrier.acrossBarrier(b.getX(), b.getY(), t.getX(), t.getY(), Barrier.MAP_BODY[b.getBodyAgeState().ordinal()] +Barrier.BARRIER_KEKKAI )))
+			int distance = Translate.distance(body.getX(), body.getY(), trampoline.getX(), trampoline.getY());
+			if(nearestDistance > distance && (body.isRude() || !Barrier.acrossBarrier(body.getX(), body.getY(), trampoline.getX(), trampoline.getY(), Barrier.MAP_BODY[body.getBodyAgeState().ordinal()] +Barrier.BARRIER_KEKKAI )))
 			{
-				found = (Trampoline)t;
-				minDistance = distance;
+				foundTrampoline = trampoline;
+				nearestDistance = distance;
 			}
 		}
 
-		if(found == null){
+		if(foundTrampoline == null){
 			return false;
 		}
 
 		// 乗った場合
-		if(minDistance <= b.getStepDist()){
-			int strength[] = {-1, -4, -6};
-			if(b.getAge() % 20L == 0L){
-				b.setHappiness(Happiness.HAPPY);
-				b.addStress(-200);
+		if(nearestDistance <= body.getStepDist()){
+			int kickStrength[] = {-1, -4, -6};
+			if(body.getAge() % 20L == 0L){
+				body.setHappiness(Happiness.HAPPY);
+				body.addStress(-200);
 			}
 
-			if(b.getZ() == 0){
-				if(found.getOption() == 0){
-					if(b.getIntelligence() == Intelligence.FOOL && GameRandom.nextInt(100) + 1 < found.getAccident2() || b.getIntelligence() != Intelligence.FOOL && GameRandom.nextInt(100) + 1 < found.getAccident1())
+			if(body.getZ() == 0){
+				if(foundTrampoline.getOption() == 0){
+					if(body.getIntelligence() == Intelligence.FOOL && GameRandom.nextInt(100) + 1 < foundTrampoline.getAccident2() || body.getIntelligence() != Intelligence.FOOL && GameRandom.nextInt(100) + 1 < foundTrampoline.getAccident1())
 					{
-						b.kick(0, 0, ((strength[b.getBodyAgeState().ordinal()] + strength[b.getBodyAgeState().ordinal()] * GameRandom.nextInt(1)) - GameRandom.nextInt(5)) * 3);
+						body.kick(0, 0, ((kickStrength[body.getBodyAgeState().ordinal()] + kickStrength[body.getBodyAgeState().ordinal()] * GameRandom.nextInt(1)) - GameRandom.nextInt(5)) * 3);
 					}
 					else{
-						b.kick(0, 0, (strength[b.getBodyAgeState().ordinal()] + strength[b.getBodyAgeState().ordinal()] * GameRandom.nextInt(1)) - GameRandom.nextInt(5));
+						body.kick(0, 0, (kickStrength[body.getBodyAgeState().ordinal()] + kickStrength[body.getBodyAgeState().ordinal()] * GameRandom.nextInt(1)) - GameRandom.nextInt(5));
 					}
 				}
 				else{
-					if(b.getIntelligence() == Intelligence.FOOL && GameRandom.nextInt(100) + 1 <= found.getAccident2() || b.getIntelligence() != Intelligence.FOOL && GameRandom.nextInt(100) + 1 < found.getAccident1())
+					if(body.getIntelligence() == Intelligence.FOOL && GameRandom.nextInt(100) + 1 <= foundTrampoline.getAccident2() || body.getIntelligence() != Intelligence.FOOL && GameRandom.nextInt(100) + 1 < foundTrampoline.getAccident1())
 					{
-						b.kick(b.getDirX() * b.getStep(), b.getDirY() * b.getStep(), ((strength[b.getBodyAgeState().ordinal()] + strength[b.getBodyAgeState().ordinal()] * GameRandom.nextInt(1)) - GameRandom.nextInt(5)) * 3);
+						body.kick(body.getDirX() * body.getStep(), body.getDirY() * body.getStep(), ((kickStrength[body.getBodyAgeState().ordinal()] + kickStrength[body.getBodyAgeState().ordinal()] * GameRandom.nextInt(1)) - GameRandom.nextInt(5)) * 3);
 					}
 					else{
-						b.kick(b.getDirX() * b.getStep(), b.getDirY() * b.getStep(), (strength[b.getBodyAgeState().ordinal()] + strength[b.getBodyAgeState().ordinal()] * GameRandom.nextInt(1)) - GameRandom.nextInt(5));
+						body.kick(body.getDirX() * body.getStep(), body.getDirY() * body.getStep(), (kickStrength[body.getBodyAgeState().ordinal()] + kickStrength[body.getBodyAgeState().ordinal()] * GameRandom.nextInt(1)) - GameRandom.nextInt(5));
 					}
 				}
 			}
 		}
 		else{
-			b.moveTo(found.getX(), found.getY());
+			body.moveTo(foundTrampoline.getX(), foundTrampoline.getY());
 		}
 			return true;
 	}
 	/**
 	 * 遊べる状態かどうか
-	 * @param b ゆっくり
+	 * @param body ゆっくり
 	 * @return 遊べる状態かどうか
 	 */
-	public static boolean canPlay(Body b){
+	public static boolean canPlay(Body body){
 		// 他の用事がある場合
-		if( b.isToFood() || b.isToBody() || b.isToSukkiri() || b.isToSteal() || b.isToBed() || b.isToShit() ){
+		if( body.isToFood() || body.isToBody() || body.isToSukkiri() || body.isToSteal() || body.isToBed() || body.isToShit() ){
 			return false;
 		}
-		if (!b.canAction() || b.isDontMove() || b.isExciting() || b.isScare() || b.isDamaged() ){
+		if (!body.canAction() || body.isDontMove() || body.isExciting() || body.isScare() || body.isDamaged() ){
 			return false;
 		}
-		if(!b.canEventResponse()){
+		if(!body.canEventResponse()){
 			return false;
 		}
 		return true;

@@ -287,18 +287,18 @@ public class Yunba extends ObjEX {
 						continue;
 					}
 
-					boolean bIsShitOnToilet = false;
+					boolean shitOnToilet = false;
 					// トイレの上のうんうんは無視。空中もチェック
 					List<Toilet> toiletList = new LinkedList<>(GameWorld.get().getCurrentMap().getToilet().values());
 					for (Toilet t : toiletList) {
 						// Hitするなら終了
 						if (t.checkHitObj(o, true)) {
-							bIsShitOnToilet = true;
+							shitOnToilet = true;
 							break;
 						}
 					}
 					// トイレの上にある
-					if (bIsShitOnToilet) {
+					if (shitOnToilet) {
 						continue;
 					}
 
@@ -402,7 +402,7 @@ public class Yunba extends ObjEX {
 					if (norndCheck == false && GameRandom.nextBoolean())
 						continue;
 					// 茎にぶら下がってる固体はスルー
-					if (b.isbindStalk() || b.getZ() > 0)
+					if (b.hasBindStalk() || b.getZ() > 0)
 						continue;
 
 					// 追加
@@ -419,52 +419,52 @@ public class Yunba extends ObjEX {
 					// ---------------------------
 					// 性格
 					// ---------------------------
-					boolean bWithoutFlagAtt = false;
+					boolean skipByAttitude = false;
 					// 超善良
 					if ((b.getAttitude() == Attitude.VERY_NICE && actionFlags2[0][0])) {
-						bWithoutFlagAtt = true;
+						skipByAttitude = true;
 					}
 					// 善良
 					if (b.getAttitude() == Attitude.NICE && actionFlags2[0][1]) {
-						bWithoutFlagAtt = true;
+						skipByAttitude = true;
 					}
 					// 普通
 					if (b.getAttitude() == Attitude.AVERAGE && actionFlags2[0][2]) {
-						bWithoutFlagAtt = true;
+						skipByAttitude = true;
 					}
 					// ゲス
 					if (b.getAttitude() == Attitude.SHITHEAD && actionFlags2[0][3]) {
-						bWithoutFlagAtt = true;
+						skipByAttitude = true;
 					}
 					// ドゲス
 					if ((b.getAttitude() == Attitude.SUPER_SHITHEAD && actionFlags2[0][4])) {
-						bWithoutFlagAtt = true;
+						skipByAttitude = true;
 					}
 					// ---------------------------
 					// 知性
 					// ---------------------------
-					boolean bWithoutFlagInt = false;
+					boolean skipByIntelligence = false;
 					// バッジ級
 					if (b.getIntelligence() == Intelligence.WISE && actionFlags3[0][0]) {
-						bWithoutFlagInt = true;
+						skipByIntelligence = true;
 					}
 					// 普通
 					if (b.getIntelligence() == Intelligence.AVERAGE && actionFlags3[0][1]) {
-						bWithoutFlagInt = true;
+						skipByIntelligence = true;
 					}
 					// あんこ脳
 					if ((b.getIntelligence() == Intelligence.FOOL && actionFlags3[0][2])) {
-						bWithoutFlagInt = true;
+						skipByIntelligence = true;
 					}
 					// ---------------------------
 					// 性格、知能の両方を同時にチェックする
 					if (actionFlags[Action.WITHOUT_AND.ordinal()][0]) {
 						// 性格、知能の両方を同時にチェックする
-						if (bWithoutFlagAtt && bWithoutFlagInt) {
+						if (skipByAttitude && skipByIntelligence) {
 							continue;
 						}
 					} else {
-						if (bWithoutFlagAtt || bWithoutFlagInt) {
+						if (skipByAttitude || skipByIntelligence) {
 							continue;
 						}
 					}
@@ -625,16 +625,16 @@ public class Yunba extends ObjEX {
 			int vecX = destX - x;
 			int vecY = destY - y;
 			moveBody();
-			boolean bNear = false;
+			boolean nearTarget = false;
 			if (target != null) {
 				// 距離が20以内なら掃除する
 				if (distance(x, y, target.getX(), target.getY()) < 20) {
-					bNear = true;
+					nearTarget = true;
 				}
 			}
 
 			// 目的地到着
-			if ((destX == -1 && destY == -1) || bNear) {
+			if ((destX == -1 && destY == -1) || nearTarget) {
 				if (action == null || target == null)
 					return Event.DONOTHING;
 				if (target.isRemoved() || target.getZ() > 0) {
@@ -642,7 +642,7 @@ public class Yunba extends ObjEX {
 					target = null;
 					return Event.DONOTHING;
 				}
-				if (!bNear) {
+				if (!nearTarget) {
 					moveTo(target.getX(), target.getY());
 					return Event.DONOTHING;
 				}

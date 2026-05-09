@@ -1,4 +1,8 @@
 package src.enums;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import src.util.GameLocale;
 
 /** ゆっくりのタイプ */
@@ -36,6 +40,16 @@ public enum YukkuriType {
 	YUUKA("Yuuka", "yuuka", "yuuka", "ゆうか", "Yuuka", 1010),
 	YUYUKO("Yuyuko", "yuyuko", "yuyuko", "ゆゆこ", "Yuyuko", 3002),
 	;
+	private static final Map<String, YukkuriType> BY_CLASS_NAME = new HashMap<String, YukkuriType>();
+	private static final Map<Integer, YukkuriType> BY_TYPE_ID = new HashMap<Integer, YukkuriType>();
+
+	static {
+		for (YukkuriType type : values()) {
+			BY_CLASS_NAME.put(type.className, type);
+			BY_TYPE_ID.put(Integer.valueOf(type.typeID), type);
+		}
+	}
+
 	private final String className;
 	private final String messageFileName;
 	private final String imageDirName;
@@ -80,5 +94,27 @@ public enum YukkuriType {
 
 	public int getTypeID() {
 		return typeID;
+	}
+
+	public static YukkuriType fromClassName(String className) {
+		if (className == null) {
+			return null;
+		}
+		return BY_CLASS_NAME.get(className);
+	}
+
+	public static YukkuriType fromTypeID(int typeID) {
+		return BY_TYPE_ID.get(Integer.valueOf(typeID));
+	}
+
+	public static int normalizeOffspringType(int typeID) {
+		switch (typeID) {
+		case 2006:
+			return MARISA.getTypeID();
+		case 2005:
+			return REIMU.getTypeID();
+		default:
+			return typeID;
+		}
 	}
 }

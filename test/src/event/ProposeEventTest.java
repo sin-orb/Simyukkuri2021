@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
+import src.ConstState;
 import src.base.Body;
 import src.base.EventPacket;
 import src.base.EventTestBase;
@@ -176,6 +177,7 @@ public class ProposeEventTest extends EventTestBase {
         Body to = createSprBody(120, 120);
         ProposeEvent event = new ProposeEvent(from, to, null, 10);
         to.setGrabbed(true);
+        SimYukkuri.RND = new ConstState(1);
         // Reaches calcCollisionX, then to.isGrabbed()=true branch → null
         assertNull(event.update(from));
     }
@@ -211,7 +213,7 @@ public class ProposeEventTest extends EventTestBase {
     void testUpdate_ToNYD_returnsAbort() {
         Body from = createSprBody(100, 100);
         Body to = createSprBody(120, 120);
-        to.seteCoreAnkoState(src.enums.CoreAnkoState.NonYukkuriDisease);
+        to.setCoreAnkoState(src.enums.CoreAnkoState.NonYukkuriDisease);
         ProposeEvent event = new ProposeEvent(from, to, null, 10);
         assertEquals(EventPacket.UpdateState.ABORT, event.update(from));
     }

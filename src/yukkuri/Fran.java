@@ -131,8 +131,8 @@ public class Fran extends Body {
 	@Override
 	@Transient
 	public String getMyName() {
-		if (getAnMyName()[getBodyAgeState().ordinal()] != null) {
-			return getAnMyName()[getBodyAgeState().ordinal()];
+		if (getMyNames()[getBodyAgeState().ordinal()] != null) {
+			return getMyNames()[getBodyAgeState().ordinal()];
 		}
 		return nameJ;
 	}
@@ -140,8 +140,8 @@ public class Fran extends Body {
 	@Override
 	@Transient
 	public String getMyNameD() {
-		if (getAnMyNameD()[getBodyAgeState().ordinal()] != null) {
-			return getAnMyNameD()[getBodyAgeState().ordinal()];
+		if (getMyNamesDamaged()[getBodyAgeState().ordinal()] != null) {
+			return getMyNamesDamaged()[getBodyAgeState().ordinal()];
 		}
 		return getMyName();
 	}
@@ -256,35 +256,35 @@ public class Fran extends Body {
 		 * }
 		 */
 		double factor = Math.random() * 2 + 1;
-		getHUNGRYLIMITorg()[AgeState.ADULT.ordinal()] *= factor;
-		getHUNGRYLIMITorg()[AgeState.CHILD.ordinal()] *= factor;
-		getHUNGRYLIMITorg()[AgeState.BABY.ordinal()] *= factor;
+		getHungryLimitBase()[AgeState.ADULT.ordinal()] *= factor;
+		getHungryLimitBase()[AgeState.CHILD.ordinal()] *= factor;
+		getHungryLimitBase()[AgeState.BABY.ordinal()] *= factor;
 		factor = Math.random() * 2 + 1;
-		getSHITLIMITorg()[AgeState.ADULT.ordinal()] *= factor;
-		getSHITLIMITorg()[AgeState.CHILD.ordinal()] *= factor;
-		getSHITLIMITorg()[AgeState.BABY.ordinal()] *= factor;
+		getShitLimitBase()[AgeState.ADULT.ordinal()] *= factor;
+		getShitLimitBase()[AgeState.CHILD.ordinal()] *= factor;
+		getShitLimitBase()[AgeState.BABY.ordinal()] *= factor;
 		factor = Math.random() + 0.5;
-		getDAMAGELIMITorg()[AgeState.ADULT.ordinal()] *= factor;
-		getDAMAGELIMITorg()[AgeState.CHILD.ordinal()] *= factor;
-		getDAMAGELIMITorg()[AgeState.BABY.ordinal()] *= factor;
+		getDamageLimitBase()[AgeState.ADULT.ordinal()] *= factor;
+		getDamageLimitBase()[AgeState.CHILD.ordinal()] *= factor;
+		getDamageLimitBase()[AgeState.BABY.ordinal()] *= factor;
 		factor = Math.random() + 0.5;
-		setBABYLIMITorg((int) (getBABYLIMITorg() * factor));
-		setCHILDLIMITorg((int) (getCHILDLIMITorg() * factor));
-		setLIFELIMITorg((int) (getLIFELIMITorg() * factor));
+		setBabyLimitBase((int) (getBabyLimitBase() * factor));
+		setChildLimitBase((int) (getChildLimitBase() * factor));
+		setLifeLimitBase((int) (getLifeLimitBase() * factor));
 		factor = Math.random() + 1;
-		setRELAXPERIODorg((int) (getRELAXPERIODorg() * factor));
-		setEXCITEPERIODorg((int) (getEXCITEPERIODorg() * factor));
-		setPREGPERIODorg((int) (getPREGPERIODorg() * factor));
-		setSLEEPPERIODorg((int) (getSLEEPPERIODorg() * factor));
-		setACTIVEPERIODorg((int) (getACTIVEPERIODorg() * factor));
-		setSameDest(GameRandom.nextInt(20) + 20);
-		setDECLINEPERIODorg((int) (getDECLINEPERIODorg() * (Math.random() + 0.5)));
-		setROBUSTNESS(GameRandom.nextInt(15) + 1);
+		setRelaxPeriodBase((int) (getRelaxPeriodBase() * factor));
+		setExcitePeriodBase((int) (getExcitePeriodBase() * factor));
+		setPregPeriodBase((int) (getPregPeriodBase() * factor));
+		setSleepPeriodBase((int) (getSleepPeriodBase() * factor));
+		setActivePeriodBase((int) (getActivePeriodBase() * factor));
+		setSameDirectionFactor(GameRandom.nextInt(20) + 20);
+		setDeclinePeriodBase((int) (getDeclinePeriodBase() * (Math.random() + 0.5)));
+		setImmunityStrength(GameRandom.nextInt(15) + 1);
 		// EYESIGHT /= 4;
 		factor = Math.random() + 0.5;
-		getSTRENGTHorg()[AgeState.ADULT.ordinal()] *= factor;
-		getSTRENGTHorg()[AgeState.CHILD.ordinal()] *= factor;
-		getSTRENGTHorg()[AgeState.BABY.ordinal()] *= factor;
+		getStrengthBase()[AgeState.ADULT.ordinal()] *= factor;
+		getStrengthBase()[AgeState.CHILD.ordinal()] *= factor;
+		getStrengthBase()[AgeState.BABY.ordinal()] *= factor;
 
 		// speed = 150;
 		setFlyingType(true);

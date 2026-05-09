@@ -1,6 +1,7 @@
 package src.logic;
 
 import src.base.Body;
+import src.base.BodyAttributes;
 import src.enums.Direction;
 
 /**
@@ -14,45 +15,55 @@ public final class BodyExcitementRule {
 	/**
 	 * Handle the exciting-body contact branch.
 	 *
-	 * @param p target body
-	 * @param b actor body
+	 * @param targetBody target body
+	 * @param actorBody  actor body
 	 * @return true when the branch consumed the action
 	 */
-	public static boolean handleExcitingContact(Body p, Body b) {
-		if (!b.isExciting()) {
+	public static boolean handleExcitingContact(Body targetBody, Body actorBody) {
+		if (!actorBody.isExciting()) {
 			return false;
 		}
 		// れいぱーまたは確率でドゲスはれいぷする
-		if (b.isRaper() || b.isVeryRude()) {
-			if (!p.isRaper()) {
-				if (b.getX() < p.getX()) {
-					b.setDirection(Direction.RIGHT);
+		if (actorBody.isRaper() || actorBody.isVeryRude()) {
+			if (!targetBody.isRaper()) {
+				if (actorBody.getX() < targetBody.getX()) {
+					actorBody.setDirection(Direction.RIGHT);
 				} else {
-					b.setDirection(Direction.LEFT);
+					actorBody.setDirection(Direction.LEFT);
 				}
-				b.constraintDirection(p, true);
-				b.doRape(p);
-				b.clearActions();
+				actorBody.constraintDirection(targetBody, true);
+				actorBody.doRape(targetBody);
+				actorBody.clearActions();
 				return true;
 			}
 			return false;
 		}
 		// 大人が相手の場合は、プロポーズしてからすっきりする
-		if (p.isAdult()) {
-			b.constraintDirection(p, false);
-			b.clearActions();
-			if (b.isPartner(p) || p.isPartner(b)) {
-				b.doSukkiri(p);
+		if (targetBody.isAdult()) {
+			actorBody.constraintDirection(targetBody, false);
+			actorBody.clearActions();
+			if (actorBody.isPartner(targetBody) || targetBody.isPartner(actorBody)) {
+				actorBody.doSukkiri(targetBody);
 				return true;
 			}
-			b.doOnanism();
+			actorBody.doOnanism();
 			return true;
 		}
 		// 強制的に発情させられた場合は見境なし
-		if (b.isForceExciting()) {
-			b.doSukkiri(p);
-			b.clearActions();
+		if (actorBody.isForceExciting()) {
+			actorBody.doSukkiri(targetBody);
+			actorBody.clearActions();
 		}
 		return false;
+	}
+
+	/**
+	 * 強制発情の旧アクセサを判定する.
+	 *
+	 * @param body 判定対象
+	 * @return 強制発情ならtrue
+	 */
+	public static boolean isForceExciting(BodyAttributes body) {
+		return body.isForceExcitingRaw();
 	}
 }

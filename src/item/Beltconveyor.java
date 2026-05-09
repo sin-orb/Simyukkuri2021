@@ -284,26 +284,23 @@ public class Beltconveyor extends FieldShapeBase {
 
 	/** プレビューラインの描画 */
 	public static void drawPreview(Graphics2D g2, int sx, int sy, int ex, int ey) {
-		int[] anPointX = new int[4];
-		int[] anPointY = new int[4];
-		Translate.getPolygonPoint(sx, sy, ex, ey, anPointX, anPointY);
+		int[] polygonX = new int[4];
+		int[] polygonY = new int[4];
+		Translate.getPolygonPoint(sx, sy, ex, ey, polygonX, polygonY);
 
-		g2.drawPolygon(anPointX, anPointY, 4);
+		g2.drawPolygon(polygonX, polygonY, 4);
 	}
 
 	@Override
 	public void drawShape(Graphics2D g2) {
-		int[] anPointX = new int[4];
-		int[] anPointY = new int[4];
-		Translate.getPolygonPoint(fieldSX, fieldSY, fieldEX, fieldEY, anPointX, anPointY);
+		int[] polygonX = new int[4];
+		int[] polygonY = new int[4];
+		Translate.getPolygonPoint(fieldSX, fieldSY, fieldEX, fieldEY, polygonX, polygonY);
 
 		g2.setPaint(texture[direction.getDirect()]);
-		g2.fillPolygon(anPointX, anPointY, 4);
-		// g2.setStroke(Beltconveyor.BELTCONVEYOR_STROKE);
-		// g2.setColor(Beltconveyor.BELTCONVEYOR_COLOR);
-		// g2.fillPolygon(anPointX, anPointY, 4 );
+		g2.fillPolygon(polygonX, polygonY, 4);
+		return;
 	}
-
 	/**
 	 * コンストラクタ
 	 *
@@ -321,16 +318,16 @@ public class Beltconveyor extends FieldShapeBase {
 		fieldEX = pE.getX();
 		fieldEY = pE.getY();
 
-		int[] anPointBaseX = new int[2];
-		int[] anPointBaseY = new int[2];
-		Translate.getMovedPoint(fieldSX, fieldSY, fieldEX, fieldEY, 0, 0, 0, 0, anPointBaseX, anPointBaseY);
+		int[] basePolygonX = new int[2];
+		int[] basePolygonY = new int[2];
+		Translate.getMovedPoint(fieldSX, fieldSY, fieldEX, fieldEY, 0, 0, 0, 0, basePolygonX, basePolygonY);
 
 		// フィールド座標が渡ってくるのでマップ座標も計算しておく
-		Point4y pos = Translate.invertLimit(anPointBaseX[0], anPointBaseY[0]);
+		Point4y pos = Translate.invertLimit(basePolygonX[0], basePolygonY[0]);
 		mapSX = Math.max(0, Math.min(pos.getX(), Translate.getMapW()));
 		mapSY = Math.max(0, Math.min(pos.getY(), Translate.getMapH()));
 
-		pos = Translate.invertLimit(anPointBaseX[1], anPointBaseY[1]);
+		pos = Translate.invertLimit(basePolygonX[1], basePolygonY[1]);
 		mapEX = Math.max(0, Math.min(pos.getX(), Translate.getMapW()));
 		mapEY = Math.max(0, Math.min(pos.getY(), Translate.getMapH()));
 
@@ -367,8 +364,8 @@ public class Beltconveyor extends FieldShapeBase {
 		direction = DirectCombo.RIGHT;
 		beltSpeed = SpeedCombo.MIDDLE;
 
-		boolean ret = setupBelt(this);
-		if (ret) {
+		boolean success = setupBelt(this);
+		if (success) {
 			GameWorld.get().getCurrentMap().getBeltconveyor().add(this);
 			MapPlaceData.setFiledFlag(GameWorld.get().getCurrentMap().getFieldMap(), mapSX, mapSY, mapW, mapH, true,
 					FIELD_BELT);
@@ -382,7 +379,7 @@ public class Beltconveyor extends FieldShapeBase {
 	/** 処理する必要のあるオブジェクトか判定 */
 	public boolean checkHitObj(Obj o) {
 
-		boolean ret = false;
+		boolean matches = false;
 
 		switch (o.getObjType()) {
 			case YUKKURI:
@@ -408,29 +405,29 @@ public class Beltconveyor extends FieldShapeBase {
 					bodyIdx = SetupButton.NORMAL.ordinal() + SetupMenu.NORMAL_BABY.ordinal();
 				}
 				if (setting[bodyIdx][ageIdx])
-					ret = true;
+					matches = true;
 				break;
 			case SHIT:
 				if (setting[SetupMenu.SHIT.ordinal()][0])
-					ret = true;
+					matches = true;
 				break;
 			case OBJECT:
 				if (o instanceof Food) {
 					if (setting[SetupMenu.FOOD.ordinal()][0])
-						ret = true;
+						matches = true;
 				} else if (o instanceof Stalk) {
 					if (setting[SetupMenu.STALK.ordinal()][0])
-						ret = true;
+						matches = true;
 				}
 				break;
 			case VOMIT:
 				if (setting[SetupMenu.VOMIT.ordinal()][0])
-					ret = true;
+					matches = true;
 				break;
 			default:
 				break;
 		}
-		return ret;
+		return matches;
 	}
 
 	/** ヒットしたオブジェクトの処理 */
@@ -438,16 +435,16 @@ public class Beltconveyor extends FieldShapeBase {
 
 		switch (direction) {
 			case RIGHT:
-				o.addBxyz(beltSpeed.getSpeed(), 0, 0);
+				o.addMotion(beltSpeed.getSpeed(), 0, 0);
 				break;
 			case UP:
-				o.addBxyz(0, -beltSpeed.getSpeed(), 0);
+				o.addMotion(0, -beltSpeed.getSpeed(), 0);
 				break;
 			case LEFT:
-				o.addBxyz(-beltSpeed.getSpeed(), 0, 0);
+				o.addMotion(-beltSpeed.getSpeed(), 0, 0);
 				break;
 			case BOTTOM:
-				o.addBxyz(0, beltSpeed.getSpeed(), 0);
+				o.addMotion(0, beltSpeed.getSpeed(), 0);
 				break;
 		}
 	}

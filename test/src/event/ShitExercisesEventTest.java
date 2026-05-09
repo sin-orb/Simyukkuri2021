@@ -178,7 +178,7 @@ public class ShitExercisesEventTest {
     public void testUpdate_bodyNYD_returnsAbort() {
         Body from = createBody();
         Body b = createBody();
-        b.seteCoreAnkoState(src.enums.CoreAnkoState.NonYukkuriDisease);
+        b.setCoreAnkoState(src.enums.CoreAnkoState.NonYukkuriDisease);
         ShitExercisesEvent event = new ShitExercisesEvent(from, null, null, 10);
         from.setCurrentEvent(event);
         assertEquals(EventPacket.UpdateState.ABORT, event.update(b));
@@ -208,7 +208,7 @@ public class ShitExercisesEventTest {
         Body from = createBody();
         ShitExercisesEvent event = new ShitExercisesEvent(from, null, null, 10);
         from.setCurrentEvent(event);
-        // b == from, nFromWaitCount < 2000, children empty → ABORT at childrenList
+        // b == from, fromWaitCount < 2000, children empty → ABORT at childrenList
         assertEquals(EventPacket.UpdateState.ABORT, event.update(from));
     }
 
@@ -236,13 +236,13 @@ public class ShitExercisesEventTest {
         assertNull(event.update(b));
     }
 
-    // --- update: nFromWaitCount > 2000 → ABORT ---
+    // --- update: fromWaitCount > 2000 → ABORT ---
     @Test
     public void testUpdate_nFromWaitCountOver2000_returnsAbort() {
         Body from = createBody();
         ShitExercisesEvent event = new ShitExercisesEvent(from, null, null, 10);
         from.setCurrentEvent(event);
-        event.nFromWaitCount = 2001;
+        event.fromWaitCount = 2001;
         assertEquals(EventPacket.UpdateState.ABORT, event.update(from));
     }
 
@@ -287,7 +287,7 @@ public class ShitExercisesEventTest {
         Body from = createBody();
         Body child = createBody();
         ShitExercisesEvent event = new ShitExercisesEvent(from, null, null, 10);
-        event.bActionFlag = true;
+        event.actionFlag = true;
         event.setState(ShitExercisesEvent.STATE.START);
         from.setCurrentEvent(event);
         child.setCurrentEvent(event);
@@ -299,7 +299,7 @@ public class ShitExercisesEventTest {
         Body from = createBody();
         Body child = createBody();
         ShitExercisesEvent event = new ShitExercisesEvent(from, null, null, 10);
-        event.bActionFlag = true;
+        event.actionFlag = true;
         event.setState(ShitExercisesEvent.STATE.YURAYURA);
         from.setCurrentEvent(event);
         child.setCurrentEvent(event);
@@ -311,7 +311,7 @@ public class ShitExercisesEventTest {
         Body from = createBody();
         Body child = createBody();
         ShitExercisesEvent event = new ShitExercisesEvent(from, null, null, 10);
-        event.bActionFlag = true;
+        event.actionFlag = true;
         event.setState(ShitExercisesEvent.STATE.NOBINOBI);
         from.setCurrentEvent(event);
         child.setCurrentEvent(event);
@@ -323,7 +323,7 @@ public class ShitExercisesEventTest {
         Body from = createBody();
         Body child = createBody();
         ShitExercisesEvent event = new ShitExercisesEvent(from, null, null, 10);
-        event.bActionFlag = true;
+        event.actionFlag = true;
         event.setState(ShitExercisesEvent.STATE.POKAPOKA);
         from.setCurrentEvent(event);
         child.setCurrentEvent(event);
@@ -335,7 +335,7 @@ public class ShitExercisesEventTest {
         Body from = createBody();
         Body child = createBody();
         ShitExercisesEvent event = new ShitExercisesEvent(from, null, null, 10);
-        event.bActionFlag = true;
+        event.actionFlag = true;
         event.setState(ShitExercisesEvent.STATE.UNUN);
         from.setCurrentEvent(event);
         child.setCurrentEvent(event);
@@ -350,7 +350,7 @@ public class ShitExercisesEventTest {
         event.setState(ShitExercisesEvent.STATE.END);
         from.setCurrentEvent(event);
         child.setCurrentEvent(event);
-        assertDoesNotThrow(() -> event.update(child));
+        assertEquals(EventPacket.UpdateState.ABORT, event.update(child));
     }
 
     // --- checkEventResponse: !canEventResponse → false ---
@@ -456,15 +456,15 @@ public class ShitExercisesEventTest {
         }
     }
 
-    // --- update: child UNUN, bActionFlag=false, bUnunActionFlag=true → state=END
+    // --- update: child UNUN, actionFlag=false, ununActionFlag=true → state=END
     // ---
     @Test
     public void testUpdate_childBody_UNUN_bActionFlagFalse_transitionToEnd() {
         Body from = createBody();
         Body child = createBody();
         ShitExercisesEvent event = new ShitExercisesEvent(from, null, null, 10);
-        event.bActionFlag = false;
-        event.bUnunActionFlag = true;
+        event.actionFlag = false;
+        event.ununActionFlag = true;
         event.setState(ShitExercisesEvent.STATE.UNUN);
         from.setCurrentEvent(event);
         child.setCurrentEvent(event);
@@ -472,7 +472,7 @@ public class ShitExercisesEventTest {
         assertEquals(ShitExercisesEvent.STATE.END, event.getState());
     }
 
-    // --- update: b==from with baby, STATE.START, bActionFlag=false → does not
+    // --- update: b==from with baby, STATE.START, actionFlag=false → does not
     // throw ---
     @Test
     public void testUpdate_bEqualsFrom_withBaby_stateSTART_bActionFlagFalse_doesNotThrow() {
@@ -482,7 +482,7 @@ public class ShitExercisesEventTest {
         baby.setAgeState(AgeState.BABY);
         ShitExercisesEvent event = new ShitExercisesEvent(from, null, null, 10);
         event.setState(ShitExercisesEvent.STATE.START);
-        event.bActionFlag = false;
+        event.actionFlag = false;
         from.setCurrentEvent(event);
         baby.setCurrentEvent(event);
         assertDoesNotThrow(() -> event.update(from));
@@ -591,14 +591,14 @@ public class ShitExercisesEventTest {
 
             ShitExercisesEvent event = new ShitExercisesEvent(from, null, null, 10);
             event.setState(ShitExercisesEvent.STATE.POKAPOKA);
-            event.bActionFlag = true;
+            event.actionFlag = true;
             from.setCurrentEvent(event);
             child.setCurrentEvent(event);
-            child.setInLastActionTime(0);
+            child.setLastActionTime(0);
 
             assertNull(event.update(child));
             assertTrue(child.isFurifuri());
-            assertFalse(event.bUnunActionFlag);
+            assertFalse(event.ununActionFlag);
         }
 
         @Test
@@ -610,10 +610,10 @@ public class ShitExercisesEventTest {
 
             ShitExercisesEvent event = new ShitExercisesEvent(from, null, null, 10);
             event.setState(ShitExercisesEvent.STATE.UNUN);
-            event.bActionFlag = true;
+            event.actionFlag = true;
             from.setCurrentEvent(event);
             child.setCurrentEvent(event);
-            child.setInLastActionTime(0);
+            child.setLastActionTime(0);
             int memoriesBefore = child.getMemories();
 
             java.util.Random original = SimYukkuri.RND;
@@ -630,7 +630,7 @@ public class ShitExercisesEventTest {
             }
 
             assertEquals(0, child.getShit());
-            assertEquals(src.enums.Event.DOSHIT, child.getEventResultAction());
+            assertEquals(src.enums.Event.DOSHIT, child.getEventResult());
             assertTrue(child.isFurifuri());
             assertTrue(child.getMemories() > memoriesBefore);
         }
@@ -645,15 +645,15 @@ public class ShitExercisesEventTest {
 
             ShitExercisesEvent event = new ShitExercisesEvent(from, null, null, 10);
             event.setState(ShitExercisesEvent.STATE.UNUN);
-            event.bActionFlag = true;
+            event.actionFlag = true;
             from.setCurrentEvent(event);
             child.setCurrentEvent(event);
-            child.setInLastActionTime(0);
+            child.setLastActionTime(0);
             int shitBefore = child.getShit();
 
             assertNull(event.update(child));
             assertTrue(child.getShit() > shitBefore);
-            assertEquals(src.enums.Event.DONOTHING, child.getEventResultAction());
+            assertEquals(src.enums.Event.DONOTHING, child.getEventResult());
             assertTrue(child.isFurifuri());
         }
     }

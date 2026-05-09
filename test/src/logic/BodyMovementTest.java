@@ -49,7 +49,7 @@ class BodyMovementTest {
 
 	@Test
 	void normalAdultUsesConfiguredStep() {
-		assertEquals(body.getSTEPorg()[AgeState.ADULT.ordinal()], BodyMovement.calculateMovementStep(body));
+		assertEquals(body.getStepBase()[AgeState.ADULT.ordinal()], BodyMovement.calculateMovementStep(body));
 	}
 
 	@Test
@@ -96,7 +96,7 @@ class BodyMovementTest {
 
 	@Test
 	void stepZeroIsCorrectedToOne() {
-		body.setSTEPorg(new int[] { 0, 0, 0 });
+		body.setStepBase(new int[] { 0, 0, 0 });
 
 		assertEquals(1, BodyMovement.calculateMovementStep(body));
 	}
@@ -175,20 +175,20 @@ class BodyMovementTest {
 
 	@Test
 	void randomDirectionXBeforeThresholdOnlyIncrementsCount() {
-		body.setSameDest(2);
-		body.setCountX(body.getSameDest() * body.getSTEPorg()[AgeState.ADULT.ordinal()] - 1);
+		body.setSameDirectionFactor(2);
+		body.setCountX(body.getSameDirectionFactor() * body.getStepBase()[AgeState.ADULT.ordinal()] - 1);
 		body.setDirX(1);
 
 		BodyMovement.updateRandomDirectionX(body);
 
-		assertEquals(body.getSameDest() * body.getSTEPorg()[AgeState.ADULT.ordinal()], body.getCountX());
+		assertEquals(body.getSameDirectionFactor() * body.getStepBase()[AgeState.ADULT.ordinal()], body.getCountX());
 		assertEquals(1, body.getDirX());
 	}
 
 	@Test
 	void randomDirectionXAtThresholdResetsCountAndUpdatesDirection() {
-		body.setSameDest(2);
-		body.setCountX(body.getSameDest() * body.getSTEPorg()[AgeState.ADULT.ordinal()]);
+		body.setSameDirectionFactor(2);
+		body.setCountX(body.getSameDirectionFactor() * body.getStepBase()[AgeState.ADULT.ordinal()]);
 		body.setDirX(0);
 		GameRandom.setOverride(fixedRandom(0, true));
 
@@ -200,20 +200,20 @@ class BodyMovementTest {
 
 	@Test
 	void randomDirectionYBeforeThresholdOnlyIncrementsCount() {
-		body.setSameDest(2);
-		body.setCountY(body.getSameDest() * body.getSTEPorg()[AgeState.ADULT.ordinal()] - 1);
+		body.setSameDirectionFactor(2);
+		body.setCountY(body.getSameDirectionFactor() * body.getStepBase()[AgeState.ADULT.ordinal()] - 1);
 		body.setDirY(-1);
 
 		BodyMovement.updateRandomDirectionY(body);
 
-		assertEquals(body.getSameDest() * body.getSTEPorg()[AgeState.ADULT.ordinal()], body.getCountY());
+		assertEquals(body.getSameDirectionFactor() * body.getStepBase()[AgeState.ADULT.ordinal()], body.getCountY());
 		assertEquals(-1, body.getDirY());
 	}
 
 	@Test
 	void randomDirectionYAtThresholdResetsCountAndUpdatesDirection() {
-		body.setSameDest(2);
-		body.setCountY(body.getSameDest() * body.getSTEPorg()[AgeState.ADULT.ordinal()]);
+		body.setSameDirectionFactor(2);
+		body.setCountY(body.getSameDirectionFactor() * body.getStepBase()[AgeState.ADULT.ordinal()]);
 		body.setDirY(0);
 		GameRandom.setOverride(fixedRandom(0, false));
 
@@ -280,7 +280,7 @@ class BodyMovementTest {
 	@Test
 	void flightDestinationAheadSetsPositiveZDirection() {
 		Body target = createMappedMoveTarget();
-		body.setMoveTarget(target.getObjId());
+		body.setMoveTargetId(target.getObjId());
 		body.setFlyingType(true);
 		body.setHasBraid(true);
 		body.setZ(10);
@@ -295,7 +295,7 @@ class BodyMovementTest {
 	@Test
 	void flightDestinationReachedClearsDestinationWhenTargetExists() {
 		Body target = createMappedMoveTarget();
-		body.setMoveTarget(target.getObjId());
+		body.setMoveTargetId(target.getObjId());
 		body.setFlyingType(true);
 		body.setHasBraid(true);
 		body.setZ(10);
@@ -309,7 +309,7 @@ class BodyMovementTest {
 
 	@Test
 	void flightWithoutTargetKeepsHeightLimitAsDestination() {
-		body.setMoveTarget(-1);
+		body.setMoveTargetId(-1);
 		body.setFlyingType(true);
 		body.setHasBraid(true);
 		body.setDestZ(-1);
@@ -421,14 +421,14 @@ class BodyMovementTest {
 		body.setBy(0);
 		body.setBz(0);
 		body.setFalldownDamage(10);
-		body.setbNoDamageNextFall(true);
+		body.setNoDamageNextFall(true);
 
 		boolean handled = BodyMovement.applyExternalMotion(body);
 
 		assertTrue(handled);
 		assertEquals(0, body.getZ());
 		assertEquals(0, body.getFalldownDamage());
-		assertEquals(false, body.isbNoDamageNextFall());
+		assertEquals(false, body.isNoDamageNextFall());
 	}
 
 	@Test
@@ -447,7 +447,7 @@ class BodyMovementTest {
 		BodyMovement.resolveDirectedMovement(body, BodyMovement.MovementVector.of(1, 0, 0));
 
 		assertEquals(100, body.getX());
-		assertEquals(1, body.getBlockedCount());
+		assertEquals(1, body.getBlockedTicks());
 	}
 
 	@Test
@@ -492,7 +492,7 @@ class BodyMovementTest {
 		assertTrue(body.isToBody());
 		assertFalse(body.isToShit());
 		assertFalse(body.isToSukkiri());
-		assertEquals(target.getObjId(), body.getMoveTarget());
+		assertEquals(target.getObjId(), body.getMoveTargetId());
 		assertEquals(100, body.getDestX());
 		assertEquals(Math.min(200, Translate.getMapH()), body.getDestY());
 	}

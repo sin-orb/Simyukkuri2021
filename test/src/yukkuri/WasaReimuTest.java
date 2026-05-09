@@ -41,11 +41,11 @@ public class WasaReimuTest {
     @Test
     public void testWasaReimuNagasiMethods() {
         WasaReimu wasaReimu = new WasaReimu();
-        assertNotNull(wasaReimu.getAnImageVerStateCtrlNagasi());
+        assertNotNull(wasaReimu.getImageVariantState());
 
         int[][] testArray = new int[10][2];
-        wasaReimu.setAnImageVerStateCtrlNagasi(testArray);
-        assertSame(testArray, wasaReimu.getAnImageVerStateCtrlNagasi());
+        wasaReimu.setImageVariantState(testArray);
+        assertSame(testArray, wasaReimu.getImageVariantState());
     }
 
     @Test

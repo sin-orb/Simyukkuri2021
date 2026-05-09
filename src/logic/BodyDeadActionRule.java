@@ -18,63 +18,63 @@ public final class BodyDeadActionRule {
 	/**
 	 * Handle interaction with a dead target.
 	 *
-	 * @param p target body
-	 * @param b actor body
+	 * @param targetBody target body
+	 * @param actorBody actor body
 	 * @return true when the dead-body branch handled the action
 	 */
-	public static boolean handleDeadBodyInteraction(Body p, Body b) {
-		if (b.isExciting()) {
-			if (b.isRaper()) {
-				if (!p.isRaper()) {
-					b.doRape(p);
-					b.clearActions();
+	public static boolean handleDeadBodyInteraction(Body targetBody, Body actorBody) {
+		if (actorBody.isExciting()) {
+			if (actorBody.isRaper()) {
+				if (!targetBody.isRaper()) {
+					actorBody.doRape(targetBody);
+					actorBody.clearActions();
 					return true;
 				}
 			} else {
-				b.doOnanism(p);
-				b.clearActions();
+				actorBody.doOnanism(targetBody);
+				actorBody.clearActions();
 				return true;
 			}
 		}
 
-		if (b.isAdult()) {
-			if (!b.isTalking()) {
-				if (b.isParent(p)) {
-					b.setMessage(GameMessages.getMessage(b, MessagePool.Action.SadnessForChild));
-					if (b.checkWait(2000)) {
-						b.setLastActionTime();
-						EventLogic.addWorldEvent(new FuneralEvent(b, p, null, 10), b, null);
+		if (actorBody.isAdult()) {
+			if (!actorBody.isTalking()) {
+				if (actorBody.isParent(targetBody)) {
+					actorBody.setMessage(GameMessages.getMessage(actorBody, MessagePool.Action.SadnessForChild));
+					if (actorBody.checkWait(2000)) {
+						actorBody.setLastActionTime();
+						EventLogic.addWorldEvent(new FuneralEvent(actorBody, targetBody, null, 10), actorBody, null);
 					}
-				} else if (b.isPartner(p)) {
-					b.setMessage(GameMessages.getMessage(b, MessagePool.Action.SadnessForPartner));
+				} else if (actorBody.isPartner(targetBody)) {
+					actorBody.setMessage(GameMessages.getMessage(actorBody, MessagePool.Action.SadnessForPartner));
 				}
-				b.setHappiness(Happiness.VERY_SAD);
-				b.addMemories(-2);
-				b.addStress(100);
+				actorBody.setHappiness(Happiness.VERY_SAD);
+				actorBody.addMemories(-2);
+				actorBody.addStress(100);
 				return true;
 			}
 		}
 
-		if (p.isParent(b)) {
-			if (!b.isTalking()) {
-				b.setMessage(GameMessages.getMessage(b, MessagePool.Action.SadnessForParent));
+		if (targetBody.isParent(actorBody)) {
+			if (!actorBody.isTalking()) {
+				actorBody.setMessage(GameMessages.getMessage(actorBody, MessagePool.Action.SadnessForParent));
 			}
-			b.setHappiness(Happiness.VERY_SAD);
-			b.setForceFace(ImageCode.SURPRISE.ordinal());
-			b.addMemories(-2);
-			b.addStress(100);
+			actorBody.setHappiness(Happiness.VERY_SAD);
+			actorBody.setForceFace(ImageCode.SURPRISE.ordinal());
+			actorBody.addMemories(-2);
+			actorBody.addStress(100);
 			return true;
 		}
-		if (b.isSister(p)) {
-			if (!b.isTalking()) {
-				if (b.getAge() < p.getAge()) {
-					b.setMessage(GameMessages.getMessage(b, MessagePool.Action.SadnessForEldersister));
+		if (actorBody.isSister(targetBody)) {
+			if (!actorBody.isTalking()) {
+				if (actorBody.getAge() < targetBody.getAge()) {
+					actorBody.setMessage(GameMessages.getMessage(actorBody, MessagePool.Action.SadnessForEldersister));
 				} else {
-					b.setMessage(GameMessages.getMessage(b, MessagePool.Action.SadnessForSister));
+					actorBody.setMessage(GameMessages.getMessage(actorBody, MessagePool.Action.SadnessForSister));
 				}
-				b.setHappiness(Happiness.VERY_SAD);
-				b.addStress(100);
-				b.addMemories(-2);
+				actorBody.setHappiness(Happiness.VERY_SAD);
+				actorBody.addStress(100);
+				actorBody.addMemories(-2);
 			}
 		}
 		return true;

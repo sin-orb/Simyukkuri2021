@@ -12,7 +12,6 @@ import src.draw.Point4y;
 import src.draw.Rectangle4y;
 import src.enums.AgeState;
 import src.enums.Type;
-import src.util.YukkuriUtil;
 
 /***************************************************
   おかざりオブジェクトクラス 
@@ -110,9 +109,9 @@ public class Okazari extends Obj {
 		if (offsetPos == null) {
 			return null;
 		}
-		Body o = YukkuriUtil.getBodyInstance(owner);
-		if  (o == null) return null;
-		return offsetPos[YukkuriUtil.getBodyInstance(owner).getBodyAgeState().ordinal()];
+		Body body = src.util.BodyRegistry.getBodyInstance(owner);
+		if  (body == null) return null;
+		return offsetPos[body.getBodyAgeState().ordinal()];
 	}
 
 	/**
@@ -120,17 +119,17 @@ public class Okazari extends Obj {
 	 * @param b ゆっくりのインスタンス
 	 * @param type おかざりのタイプ
 	 */
-	public Okazari(Body b, OkazariType type) {
+	public Okazari(Body body, OkazariType type) {
 
-		owner = b.getUniqueID();
+		owner = body.getUniqueID();
 		okazariType = type;
 		if (okazariType.getFileName() == null) {
 			offsetPos = null;
 			setBoundary(64, 127, 128, 128);
 		} else {
-			Body o = YukkuriUtil.getBodyInstance(owner);
-			if (o != null) {
-				offsetPos = YukkuriUtil.getBodyInstance(owner).getMountPoint(okazariType.getFileName());
+			Body ownerBody = src.util.BodyRegistry.getBodyInstance(owner);
+			if (ownerBody != null) {
+				offsetPos = ownerBody.getMountPoint(okazariType.getFileName());
 				setBoundary(boundary[type.ordinal()]);
 			}
 		}

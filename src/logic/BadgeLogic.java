@@ -15,105 +15,105 @@ public class BadgeLogic {
 
 	/**
 	 * バッジ試験を受けさせる（自動的）
-	 * @param b 受けさせるゆっくり
+	 * @param body 受けさせるゆっくり
 	 * @return 現状は常にTrue
 	 */
-	public static boolean badgeTest( Body b )
+	public static boolean badgeTest( Body body )
 	{
-		if( b == null || b.isDead()|| b.isRemoved())
+		if( body == null || body.isDead()|| body.isRemoved())
 		{
 			return false;
 		}
 
-		Attitude eAtt = b.getAttitude();
-		Intelligence eInt = b.getIntelligence();
-		boolean bIdiot = b.isIdiot();
-		BodyRank eBodyRank = b.getBodyRank();
+		Attitude attitude = body.getAttitude();
+		Intelligence intelligence = body.getIntelligence();
+		boolean isIdiot = body.isIdiot();
+		BodyRank bodyRank = body.getBodyRank();
 		
-		Badge.BadgeRank eBadgeRank = Badge.BadgeRank.FAKE;
+		Badge.BadgeRank badgeRank = Badge.BadgeRank.FAKE;
 		// 飼いゆ以外,足りないゆは偽バッチのみ
-		if( eBodyRank != BodyRank.KAIYU || bIdiot )
+		if( bodyRank != BodyRank.KAIYU || isIdiot )
 		{
-			eBadgeRank = Badge.BadgeRank.FAKE;
+			badgeRank = Badge.BadgeRank.FAKE;
 		}
 		else{
-			switch(eAtt)
+			switch(attitude)
 			{
 				case VERY_NICE:
-					switch(eInt)
+					switch(intelligence)
 					{
 						case WISE:
-							eBadgeRank = Badge.BadgeRank.GOLD;
+							badgeRank = Badge.BadgeRank.GOLD;
 							break;
 						case AVERAGE:
-							eBadgeRank = Badge.BadgeRank.SILVER;
+							badgeRank = Badge.BadgeRank.SILVER;
 							break;
 						case FOOL:
-							eBadgeRank = Badge.BadgeRank.BRONZE;
+							badgeRank = Badge.BadgeRank.BRONZE;
 							break;
 						default:
 							break;
 					}				
 					break;
 				case NICE:
-					switch(eInt)
+					switch(intelligence)
 					{
 						case WISE:
-							eBadgeRank = Badge.BadgeRank.GOLD;
+							badgeRank = Badge.BadgeRank.GOLD;
 							break;
 						case AVERAGE:
-							eBadgeRank = Badge.BadgeRank.SILVER;
+							badgeRank = Badge.BadgeRank.SILVER;
 							break;
 						case FOOL:
-							eBadgeRank = Badge.BadgeRank.BRONZE;
+							badgeRank = Badge.BadgeRank.BRONZE;
 							break;
 						default:
 							break;
 					}			
 					break;
 				case AVERAGE:
-					switch(eInt)
+					switch(intelligence)
 					{
 						case WISE:
-							eBadgeRank = Badge.BadgeRank.SILVER;
+							badgeRank = Badge.BadgeRank.SILVER;
 							break;
 						case AVERAGE:
-							eBadgeRank = Badge.BadgeRank.BRONZE;
+							badgeRank = Badge.BadgeRank.BRONZE;
 							break;
 						case FOOL:
-							eBadgeRank = Badge.BadgeRank.BRONZE;
+							badgeRank = Badge.BadgeRank.BRONZE;
 							break;
 						default:
 							break;
 					}			
 					break;
 				case SHITHEAD:
-					switch(eInt)
+					switch(intelligence)
 					{
 						case WISE:
-							eBadgeRank = Badge.BadgeRank.BRONZE;
+							badgeRank = Badge.BadgeRank.BRONZE;
 							break;
 						case AVERAGE:
-							eBadgeRank = Badge.BadgeRank.BRONZE;
+							badgeRank = Badge.BadgeRank.BRONZE;
 							break;
 						case FOOL:
-							eBadgeRank = Badge.BadgeRank.FAKE;
+							badgeRank = Badge.BadgeRank.FAKE;
 							break;
 						default:
 							break;
 					}			
 					break;
 				case SUPER_SHITHEAD:
-					switch(eInt)
+					switch(intelligence)
 					{
 						case WISE:
-							eBadgeRank = Badge.BadgeRank.BRONZE;
+							badgeRank = Badge.BadgeRank.BRONZE;
 							break;
 						case AVERAGE:
-							eBadgeRank = Badge.BadgeRank.FAKE;
+							badgeRank = Badge.BadgeRank.FAKE;
 							break;
 						case FOOL:
-							eBadgeRank = Badge.BadgeRank.FAKE;
+							badgeRank = Badge.BadgeRank.FAKE;
 							break;
 						default:
 							break;
@@ -124,12 +124,12 @@ public class BadgeLogic {
 			}
 		}
 		
-		if(b.getAttachmentSize(Badge.class) != 0 ){
-			b.removeAttachment(Badge.class);
+		if(body.getAttachmentSize(Badge.class) != 0 ){
+			body.removeAttachment(Badge.class);
 		}
 		else{
-			b.addAttachment(new Badge(b, eBadgeRank));
-			b.getInVain(true);
+			body.addAttachment(new Badge(body, badgeRank));
+			body.getInVain(true);
 		}
 		
 		return true;
