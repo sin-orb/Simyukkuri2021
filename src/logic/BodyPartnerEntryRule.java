@@ -1,8 +1,8 @@
 package src.logic;
 
-import src.base.Body;
+import src.base.Yukkuri;
 import src.event.EventPacket.EventPriority;
-import src.base.Obj;
+import src.base.Entity;
 import src.draw.Translate;
 import src.enums.TakeoutItemType;
 import src.field.impl.Barrier;
@@ -19,7 +19,7 @@ public final class BodyPartnerEntryRule {
 	/**
 	 * パートナー処理をスキップすべきか判定する.
 	 */
-	public static boolean shouldSkipPartnerAction(Body body) {
+	public static boolean shouldSkipPartnerAction(Yukkuri body) {
 		if (body.isToFood() || body.isToBed() || body.isToShit()) {
 			return true;
 		}
@@ -45,11 +45,11 @@ public final class BodyPartnerEntryRule {
 	/**
 	 * 既存の移動対象が相手ボディなら、到達済みか確認して返す.
 	 */
-	public static Body resolveMappedTarget(Body body, int nearestDistance) {
-		Obj target = body.takeMappedObj(body.getMoveTargetId());
-		if ((body.isToBody() || body.isToSukkiri() || body.isToSteal()) && target instanceof Body) {
-			Body targetBody = (Body) target;
-			Body foundBody = targetBody;
+	public static Yukkuri resolveMappedTarget(Yukkuri body, int nearestDistance) {
+		Entity target = body.takeMappedObj(body.getMoveTargetId());
+		if ((body.isToBody() || body.isToSukkiri() || body.isToSteal()) && target instanceof Yukkuri) {
+			Yukkuri targetBody = (Yukkuri) target;
+			Yukkuri foundBody = targetBody;
 			int distanceToTarget = Translate.distance(body.getX(), body.getY(), targetBody.getX(), targetBody.getY());
 			if (nearestDistance > distanceToTarget) {
 				if (Barrier.acrossBarrier(body.getX(), body.getY(), targetBody.getX(), targetBody.getY(),
@@ -65,15 +65,15 @@ public final class BodyPartnerEntryRule {
 	/**
 	 * 親に向かうべきか判定する.
 	 */
-	public static boolean shouldGoToParent(Body body) {
+	public static boolean shouldGoToParent(Yukkuri body) {
 		return body.isCallingParents();
 	}
 
 	/**
 	 * つがいが優先対象か判定する.
 	 */
-	public static Body getPartnerIfPreferred(Body body) {
-		Body partnerBody = src.util.BodyRegistry.getBodyInstance(body.getPartner());
+	public static Yukkuri getPartnerIfPreferred(Yukkuri body) {
+		Yukkuri partnerBody = src.util.BodyRegistry.getBodyInstance(body.getPartner());
 		if (body.isExciting() && body.isRaper() && body.isToSukkiri()) {
 			return null;
 		}
@@ -88,10 +88,10 @@ public final class BodyPartnerEntryRule {
 	/**
 	 * 既存候補が見つからなければ null を返す.
 	 */
-	public static Body resolveMoveTarget(Body body) {
-		Obj moveTarget = body.takeMoveTarget();
-		if (moveTarget instanceof Body) {
-			return (Body) moveTarget;
+	public static Yukkuri resolveMoveTarget(Yukkuri body) {
+		Entity moveTarget = body.takeMoveTarget();
+		if (moveTarget instanceof Yukkuri) {
+			return (Yukkuri) moveTarget;
 		}
 		return null;
 	}
@@ -101,7 +101,7 @@ public final class BodyPartnerEntryRule {
 	 *
 	 * @return 行動したかどうか
 	 */
-	public static boolean handleNoFoundTarget(Body body) {
+	public static boolean handleNoFoundTarget(Yukkuri body) {
 		if (body.isExciting() && GameRandom.nextInt(60) == 0) {
 			body.doOnanism();
 			return true;

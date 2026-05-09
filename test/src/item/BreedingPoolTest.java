@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import src.ConstState;
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.base.ItemTestBase;
 import src.enums.CoreAnkoState;
 import src.util.WorldTestHelper;
@@ -124,7 +124,7 @@ class BreedingPoolTest extends ItemTestBase {
     void testObjHitProcess_Disabled() {
         BreedingPool item = new BreedingPool();
         item.setEnabled(false);
-        Body body = WorldTestHelper.createBody();
+        Yukkuri body = WorldTestHelper.createBody();
         assertEquals(0, item.objHitProcess(body));
     }
 
@@ -135,7 +135,7 @@ class BreedingPoolTest extends ItemTestBase {
         BreedingPool item = new BreedingPool();
         item.setEnabled(true);
         item.setStalkPool(false);
-        Body body = WorldTestHelper.createBody();
+        Yukkuri body = WorldTestHelper.createBody();
         body.setBodyCastration(true);
         assertEquals(0, item.objHitProcess(body));
     }
@@ -147,7 +147,7 @@ class BreedingPoolTest extends ItemTestBase {
         BreedingPool item = new BreedingPool();
         item.setEnabled(true);
         item.setStalkPool(true);
-        Body body = WorldTestHelper.createBody();
+        Yukkuri body = WorldTestHelper.createBody();
         body.setStalkCastration(true);
         assertEquals(0, item.objHitProcess(body));
     }
@@ -159,7 +159,7 @@ class BreedingPoolTest extends ItemTestBase {
         BreedingPool item = new BreedingPool();
         item.setEnabled(true);
         item.setLiquidYukkuriType(-1);
-        Body body = WorldTestHelper.createBody();
+        Yukkuri body = WorldTestHelper.createBody();
         body.setDead(true);
         body.setCrushed(true);
         int expectedType = body.getType();
@@ -178,7 +178,7 @@ class BreedingPoolTest extends ItemTestBase {
         item.setStalkPool(false);
         item.setOption(0);
         item.setAge(0); // 0 % 10 == 0
-        Body body = WorldTestHelper.createBody();
+        Yukkuri body = WorldTestHelper.createBody();
         body.setDead(false);
         body.setBodyCastration(false);
         assertDoesNotThrow(() -> item.objHitProcess(body));
@@ -189,7 +189,7 @@ class BreedingPoolTest extends ItemTestBase {
     @Test
     void testCry_NoBabyOrStalk() {
         BreedingPool item = new BreedingPool();
-        Body body = WorldTestHelper.createBody();
+        Yukkuri body = WorldTestHelper.createBody();
         // hasBabyOrStalk() is false by default → cry() does nothing
         assertDoesNotThrow(() -> item.cry(body));
     }
@@ -199,7 +199,7 @@ class BreedingPoolTest extends ItemTestBase {
     @Test
     void testCry_WithBabyOrStalk_NotNYD() {
         BreedingPool item = new BreedingPool();
-        Body body = WorldTestHelper.createBody();
+        Yukkuri body = WorldTestHelper.createBody();
         body.setHasBaby(true); // hasBabyOrStalk() returns true
         // isNYD() = false by default → setMessage or setPikoMessage path
         assertDoesNotThrow(() -> item.cry(body));
@@ -210,7 +210,7 @@ class BreedingPoolTest extends ItemTestBase {
     @Test
     void testCry_WithBabyOrStalk_IsNYD() {
         BreedingPool item = new BreedingPool();
-        Body body = WorldTestHelper.createBody();
+        Yukkuri body = WorldTestHelper.createBody();
         body.setHasBaby(true);
         body.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
         assertDoesNotThrow(() -> item.cry(body));
@@ -300,7 +300,7 @@ class BreedingPoolTest extends ItemTestBase {
             item.setOption(0);
             item.setAge(0);
 
-            Body body = WorldTestHelper.createBody();
+            Yukkuri body = WorldTestHelper.createBody();
             int beforeBabyTypes = body.getBabyTypes().size();
             int beforePregnantLimit = body.getPregnantLimit();
             long beforeCash = SimYukkuri.world.getPlayer().getCash();
@@ -323,7 +323,7 @@ class BreedingPoolTest extends ItemTestBase {
             item.setOption(4);
             item.setAge(0);
 
-            Body body = WorldTestHelper.createBody();
+            Yukkuri body = WorldTestHelper.createBody();
             int beforeStalkBabyTypes = body.getStalkBabyTypes().size();
             int beforePregnantLimit = body.getPregnantLimit();
             long beforeCash = SimYukkuri.world.getPlayer().getCash();

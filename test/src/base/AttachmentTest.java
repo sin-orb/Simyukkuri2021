@@ -34,7 +34,7 @@ public class AttachmentTest {
 		private Event updateResult = Event.DONOTHING;
 		private int updateCallCount = 0;
 
-		public StubAttachment(Body body) {
+		public StubAttachment(Yukkuri body) {
 			super(body);
 		}
 
@@ -53,7 +53,7 @@ public class AttachmentTest {
 		}
 
 		@Override
-		public BufferedImage getImage(Body b) {
+		public BufferedImage getImage(Yukkuri b) {
 			return null;
 		}
 
@@ -80,7 +80,7 @@ public class AttachmentTest {
 
 	@Test
 	public void testConstructorWithBody() {
-		Body parent = createParent(AgeState.ADULT);
+		Yukkuri parent = createParent(AgeState.ADULT);
 		StubAttachment att = new StubAttachment(parent);
 
 		assertEquals(Type.ATTACHMENT, att.getObjType());
@@ -100,7 +100,7 @@ public class AttachmentTest {
 
 	@Test
 	public void testParentGetterSetter() {
-		Body parent = createParent(AgeState.BABY);
+		Yukkuri parent = createParent(AgeState.BABY);
 		StubAttachment att = new StubAttachment(parent);
 
 		assertEquals(parent.getUniqueID(), att.getParent());
@@ -182,7 +182,7 @@ public class AttachmentTest {
 
 	@Test
 	public void testSetAttachPropertySetsAnimateTrue() {
-		Body parent = createParentWithMountPoint(AgeState.CHILD);
+		Yukkuri parent = createParentWithMountPoint(AgeState.CHILD);
 		StubAttachment att = new StubAttachment(parent);
 
 		// ANIME_INTERVAL != 0 → animate = true
@@ -201,7 +201,7 @@ public class AttachmentTest {
 
 	@Test
 	public void testSetAttachPropertySetsAnimateFalse() {
-		Body parent = createParentWithMountPoint(AgeState.ADULT);
+		Yukkuri parent = createParentWithMountPoint(AgeState.ADULT);
 		StubAttachment att = new StubAttachment(parent);
 
 		// ANIME_INTERVAL == 0 → animate = false
@@ -218,19 +218,19 @@ public class AttachmentTest {
 
 	@Test
 	public void testClockTickIncrementsAge() {
-		Body parent = createParent(AgeState.BABY);
+		Yukkuri parent = createParent(AgeState.BABY);
 		StubAttachment att = new StubAttachment(parent);
 		att.setProcessInterval(10);
 
 		long ageBefore = att.getAge();
 		att.clockTick();
 
-		assertEquals(ageBefore + Obj.TICK, att.getAge());
+		assertEquals(ageBefore + Entity.TICK, att.getAge());
 	}
 
 	@Test
 	public void testClockTickCallsUpdateAtProcessInterval() {
-		Body parent = createParent(AgeState.BABY);
+		Yukkuri parent = createParent(AgeState.BABY);
 		StubAttachment att = new StubAttachment(parent);
 		att.setProcessInterval(10);
 		att.setAnimate(false);
@@ -244,7 +244,7 @@ public class AttachmentTest {
 
 	@Test
 	public void testClockTickDoesNotCallUpdateBetweenIntervals() {
-		Body parent = createParent(AgeState.BABY);
+		Yukkuri parent = createParent(AgeState.BABY);
 		StubAttachment att = new StubAttachment(parent);
 		att.setProcessInterval(10);
 		att.setAnimate(false);
@@ -258,7 +258,7 @@ public class AttachmentTest {
 
 	@Test
 	public void testClockTickReturnsUpdateResult() {
-		Body parent = createParent(AgeState.BABY);
+		Yukkuri parent = createParent(AgeState.BABY);
 		StubAttachment att = new StubAttachment(parent);
 		att.setProcessInterval(1); // 毎ティック呼ばれる
 		att.setAnimate(false);
@@ -270,7 +270,7 @@ public class AttachmentTest {
 
 	@Test
 	public void testClockTickReturnsDoNothingWhenNotAtInterval() {
-		Body parent = createParent(AgeState.BABY);
+		Yukkuri parent = createParent(AgeState.BABY);
 		StubAttachment att = new StubAttachment(parent);
 		att.setProcessInterval(100);
 		att.setAnimate(false);
@@ -284,7 +284,7 @@ public class AttachmentTest {
 
 	@Test
 	public void testClockTickAdvancesAnimationFrame() {
-		Body parent = createParent(AgeState.BABY);
+		Yukkuri parent = createParent(AgeState.BABY);
 		StubAttachment att = new StubAttachment(parent);
 		att.setProcessInterval(9999); // updateを避ける
 		att.setAnimate(true);
@@ -304,7 +304,7 @@ public class AttachmentTest {
 
 	@Test
 	public void testClockTickWrapsAnimationFrame() {
-		Body parent = createParent(AgeState.BABY);
+		Yukkuri parent = createParent(AgeState.BABY);
 		StubAttachment att = new StubAttachment(parent);
 		att.setProcessInterval(9999);
 		att.setAnimate(true);
@@ -324,7 +324,7 @@ public class AttachmentTest {
 
 	@Test
 	public void testClockTickDecreasesAnimeLoop() {
-		Body parent = createParent(AgeState.BABY);
+		Yukkuri parent = createParent(AgeState.BABY);
 		StubAttachment att = new StubAttachment(parent);
 		att.setProcessInterval(9999);
 		att.setAnimate(true);
@@ -345,7 +345,7 @@ public class AttachmentTest {
 
 	@Test
 	public void testClockTickStopsAnimationWhenLoopReachesZero() {
-		Body parent = createParent(AgeState.BABY);
+		Yukkuri parent = createParent(AgeState.BABY);
 		StubAttachment att = new StubAttachment(parent);
 		att.setProcessInterval(9999);
 		att.setAnimate(true);
@@ -366,7 +366,7 @@ public class AttachmentTest {
 
 	@Test
 	public void testClockTickNoAnimationWhenDisabled() {
-		Body parent = createParent(AgeState.BABY);
+		Yukkuri parent = createParent(AgeState.BABY);
 		StubAttachment att = new StubAttachment(parent);
 		att.setProcessInterval(9999);
 		att.setAnimate(false);
@@ -398,7 +398,7 @@ public class AttachmentTest {
 
 	@Test
 	public void testGetOfsXReturnsCorrectValue() {
-		Body parent = createParent(AgeState.CHILD);
+		Yukkuri parent = createParent(AgeState.CHILD);
 		StubAttachment att = new StubAttachment(parent);
 		Point4y[] ofs = new Point4y[] {
 				new Point4y(10, 20),
@@ -412,7 +412,7 @@ public class AttachmentTest {
 
 	@Test
 	public void testGetOfsYReturnsCorrectValue() {
-		Body parent = createParent(AgeState.CHILD);
+		Yukkuri parent = createParent(AgeState.CHILD);
 		StubAttachment att = new StubAttachment(parent);
 		Point4y[] ofs = new Point4y[] {
 				new Point4y(10, 20),
@@ -438,8 +438,8 @@ public class AttachmentTest {
 
 	// --- ヘルパーメソッド ---
 
-	private Body createParent(AgeState ageState) {
-		Body parent = new Reimu();
+	private Yukkuri createParent(AgeState ageState) {
+		Yukkuri parent = new Reimu();
 		parent.setAgeState(ageState);
 		SimYukkuri.world.getCurrentMap().getBody().put(parent.getUniqueID(), parent);
 		return parent;
@@ -448,8 +448,8 @@ public class AttachmentTest {
 	/**
 	 * getMountPointがPoint4y配列を返すStubBodyを作成する.
 	 */
-	private Body createParentWithMountPoint(AgeState ageState) {
-		Body parent = new StubBody() {
+	private Yukkuri createParentWithMountPoint(AgeState ageState) {
+		Yukkuri parent = new StubBody() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -471,7 +471,7 @@ public class AttachmentTest {
 
 		@Test
 		public void testScenario_UpdateAndAnimationAdvanceOnSameTick() {
-			Body parent = createParent(AgeState.BABY);
+			Yukkuri parent = createParent(AgeState.BABY);
 			StubAttachment att = new StubAttachment(parent);
 			att.setProcessInterval(1);
 			att.setAnimate(true);
@@ -491,7 +491,7 @@ public class AttachmentTest {
 
 		@Test
 		public void testScenario_FinalAnimationLoopStopsExactlyWhenFrameWraps() {
-			Body parent = createParent(AgeState.BABY);
+			Yukkuri parent = createParent(AgeState.BABY);
 			StubAttachment att = new StubAttachment(parent);
 			att.setProcessInterval(9999);
 			att.setAnimate(true);

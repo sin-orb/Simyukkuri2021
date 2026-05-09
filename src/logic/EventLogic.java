@@ -4,7 +4,7 @@ import java.util.Iterator;
 import src.Const;
 import src.SimYukkuri;
 import src.util.GameWorld;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.event.EventPacket;
 
 /***************************************************
@@ -18,7 +18,7 @@ public class EventLogic {
 	 * @param msgBody イベント開始時にしゃべる個体
 	 * @param message しゃべる内容
 	 */
-	public static final void addWorldEvent(EventPacket event, Body msgBody, String message) {
+	public static final void addWorldEvent(EventPacket event, Yukkuri msgBody, String message) {
 		addWorldEvent(event, msgBody, message, Const.HOLDMESSAGE);
 	}
 
@@ -29,7 +29,7 @@ public class EventLogic {
 	 * @param message しゃべる内容
 	 * @param count しゃべる時間
 	 */
-	public static final void addWorldEvent(EventPacket event, Body msgBody, String message, int count) {
+	public static final void addWorldEvent(EventPacket event, Yukkuri msgBody, String message, int count) {
 		GameWorld.get().getCurrentMap().getEvent().add(event);
 		if(msgBody != null) {
 			msgBody.setWorldEventSendMessage(message, count);
@@ -43,7 +43,7 @@ public class EventLogic {
 	 * @param msgBody イベント開始時にしゃべる個体
 	 * @param message しゃべる内容
 	 */
-	public static final void addBodyEvent(Body to, EventPacket event, Body msgBody, String message) {
+	public static final void addBodyEvent(Yukkuri to, EventPacket event, Yukkuri msgBody, String message) {
 		addBodyEvent(to, event, msgBody, message, Const.HOLDMESSAGE);
 	}
 
@@ -55,7 +55,7 @@ public class EventLogic {
 	 * @param message しゃべる内容
 	 * * @param count しゃべる時間
 	 */
-	public static final void addBodyEvent(Body to, EventPacket event, Body msgBody, String message, int count) {
+	public static final void addBodyEvent(Yukkuri to, EventPacket event, Yukkuri msgBody, String message, int count) {
 		to.getEventList().add(event);
 		if(msgBody != null) {
 			msgBody.setBodyEventSendMessage(message, count);
@@ -79,7 +79,7 @@ public class EventLogic {
 	 * @param b 参加ゆっくり
 	 * @return 始まるイベント
 	 */
-	public static final EventPacket checkWorldEvent(Body body) {
+	public static final EventPacket checkWorldEvent(Yukkuri body) {
 		EventPacket eventPacket = null;
 		EventPacket e;
 		//リストに登録されているイベントすべてをチェック
@@ -106,7 +106,7 @@ public class EventLogic {
 	 * @param b 対象ゆっくり
 	 * @return 始めるイベント
 	 */
-	public static final EventPacket checkBodyEvent(Body body) {
+	public static final EventPacket checkBodyEvent(Yukkuri body) {
 		EventPacket eventPacket = null;
 		EventPacket e;
 
@@ -135,12 +135,12 @@ public class EventLogic {
 	 * ワールドイベントのチェック simpleEventAction用
 	 * @param b ゆっくり
 	 */
-	public static final void checkSimpleWorldEvent(Body body) {
+	public static final void checkSimpleWorldEvent(Yukkuri body) {
 		EventPacket e;
 		//リストに登録されているイベントすべてをチェック
 		for (Iterator<EventPacket> i = GameWorld.get().getCurrentMap().getEvent().iterator(); i.hasNext();) {
 			e = i.next();
-			Body from = src.util.BodyRegistry.getBodyInstance(e.getFrom());
+			Yukkuri from = src.util.BodyRegistry.getBodyInstance(e.getFrom());
 			if(from == body) continue;
 			if(e.simpleEventAction(body)) {
 				continue;
@@ -152,7 +152,7 @@ public class EventLogic {
 	 *  固体イベントのチェック simpleEventAction用
 	 * @param b ゆっくり
 	 */
-	public static final void checkSimpleBodyEvent(Body body) {
+	public static final void checkSimpleBodyEvent(Yukkuri body) {
 		EventPacket e;
 
 		for (Iterator<EventPacket> i = body.getEventList().iterator(); i.hasNext();) {
@@ -169,7 +169,7 @@ public class EventLogic {
 	 *  イベントの毎フレーム処理
 	 * @param b ゆっくり
 	 */
-	public static final void eventUpdate(Body body) {
+	public static final void eventUpdate(Yukkuri body) {
 		BodyEventState.updateCurrentEvent(body);
 	}
 }

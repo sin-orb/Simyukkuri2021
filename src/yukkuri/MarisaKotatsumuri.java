@@ -12,7 +12,7 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import src.SimYukkuri;
 import src.util.GameRandom;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.draw.Dimension4y;
 import src.draw.ModLoader;
 import src.draw.Point4y;
@@ -28,7 +28,7 @@ import src.util.IniFileUtil;
  * こたつむり
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class MarisaKotatsumuri extends Body {
+public class MarisaKotatsumuri extends Yukkuri {
 	private static final long serialVersionUID = 3052532904240393393L;
 	/** こたつむりのタイプ */
 	public static final int type = 2004;
@@ -203,7 +203,7 @@ public class MarisaKotatsumuri extends Body {
 	}
 
 	/** コンストラクタ */
-	public MarisaKotatsumuri(int initX, int initY, int initZ, AgeState initAgeState, Body p1, Body p2) {
+	public MarisaKotatsumuri(int initX, int initY, int initZ, AgeState initAgeState, Yukkuri p1, Yukkuri p2) {
 		super(initX, initY, initZ, initAgeState, p1, p2);
 		setBoundary(boundary, braidBoundary);
 		setMsgType(YukkuriType.MARISAKOTATSUMURI);

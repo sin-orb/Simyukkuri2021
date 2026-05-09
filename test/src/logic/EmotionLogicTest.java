@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Map;
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.enums.EnumRelationMine;
 import src.enums.Happiness;
 import src.enums.Attitude;
@@ -16,7 +16,7 @@ import src.system.MapPlaceData;
 
 public class EmotionLogicTest {
 
-    private Body dummyParent;
+    private Yukkuri dummyParent;
 
     @BeforeEach
     public void setUp() {
@@ -26,44 +26,39 @@ public class EmotionLogicTest {
         try {
             java.lang.reflect.Field mapBodyField = MapPlaceData.class.getDeclaredField("body");
             mapBodyField.setAccessible(true);
-            ((Map<Integer, Body>) mapBodyField.get(SimYukkuri.world.getCurrentMap())).put(dummyParent.getUniqueID(),
+            ((Map<Integer, Yukkuri>) mapBodyField.get(SimYukkuri.world.getCurrentMap())).put(dummyParent.getUniqueID(),
                     dummyParent);
         } catch (Exception e) {
         }
     }
 
-    private void mockRelation(Body me, Body you, EnumRelationMine relation) throws Exception {
-        java.lang.reflect.Field parentsField = src.base.BodyAttributes.class.getDeclaredField("parents");
-        parentsField.setAccessible(true);
-
+    private void mockRelation(Yukkuri me, Yukkuri you, EnumRelationMine relation) throws Exception {
         switch (relation) {
             case FATHER:
-                parentsField.set(you, new int[] { me.getUniqueID(), -1 });
+                you.setParents(new int[] { me.getUniqueID(), -1 });
                 break;
             case MOTHER:
-                parentsField.set(you, new int[] { -1, me.getUniqueID() });
+                you.setParents(new int[] { -1, me.getUniqueID() });
                 break;
             case PARTNAR:
-                java.lang.reflect.Field partnerField = src.base.BodyAttributes.class.getDeclaredField("partner");
-                partnerField.setAccessible(true);
-                partnerField.set(me, you.getUniqueID());
-                partnerField.set(you, me.getUniqueID());
+                me.setPartner(you.getUniqueID());
+                you.setPartner(me.getUniqueID());
                 break;
             case CHILD_FATHER:
-                parentsField.set(me, new int[] { you.getUniqueID(), -1 });
+                me.setParents(new int[] { you.getUniqueID(), -1 });
                 break;
             case CHILD_MOTHER:
-                parentsField.set(me, new int[] { -1, you.getUniqueID() });
+                me.setParents(new int[] { -1, you.getUniqueID() });
                 break;
             case ELDERSISTER:
-                parentsField.set(me, new int[] { 999, -1 });
-                parentsField.set(you, new int[] { 999, -1 });
+                me.setParents(new int[] { 999, -1 });
+                you.setParents(new int[] { 999, -1 });
                 me.setAge(100);
                 you.setAge(50);
                 break;
             case YOUNGSISTER:
-                parentsField.set(me, new int[] { 999, -1 });
-                parentsField.set(you, new int[] { 999, -1 });
+                me.setParents(new int[] { 999, -1 });
+                you.setParents(new int[] { 999, -1 });
                 me.setAge(50);
                 you.setAge(100);
                 break;
@@ -73,22 +68,16 @@ public class EmotionLogicTest {
         }
     }
 
-    private void setPainStates(Body b, boolean pain, boolean damaged, boolean critical) throws Exception {
-        java.lang.reflect.Field needleField = src.base.BodyAttributes.class.getDeclaredField("needled");
-        needleField.setAccessible(true);
-        needleField.set(b, pain);
-
-        java.lang.reflect.Field damageField = src.base.BodyAttributes.class.getDeclaredField("damage");
-        damageField.setAccessible(true);
-        damageField.setInt(b, damaged ? 1000 : 0);
-
+    private void setPainStates(Yukkuri b, boolean pain, boolean damaged, boolean critical) {
+        b.setNeedled(pain);
+        b.setDamage(damaged ? 1000 : 0);
         b.setCriticalDamege(critical ? CriticalDamegeType.CUT : null);
     }
 
     @Test
     public void testCheckEmotionForOther() throws Exception {
-        Body me = WorldTestHelper.createBody();
-        Body you = WorldTestHelper.createBody();
+        Yukkuri me = WorldTestHelper.createBody();
+        Yukkuri you = WorldTestHelper.createBody();
         me.setUniqueID(1);
         you.setUniqueID(2);
 
@@ -122,8 +111,8 @@ public class EmotionLogicTest {
 
     @Test
     public void testCheckEmotion_FamilyJoy() throws Exception {
-        Body me = WorldTestHelper.createBody();
-        Body you = WorldTestHelper.createBody();
+        Yukkuri me = WorldTestHelper.createBody();
+        Yukkuri you = WorldTestHelper.createBody();
         registerBodies(me, you);
 
         // Both happy family -> Joy
@@ -137,8 +126,8 @@ public class EmotionLogicTest {
 
     @Test
     public void testCheckEmotion_ChildEnvy() throws Exception {
-        Body me = WorldTestHelper.createBody();
-        Body you = WorldTestHelper.createBody();
+        Yukkuri me = WorldTestHelper.createBody();
+        Yukkuri you = WorldTestHelper.createBody();
         registerBodies(me, you);
 
         // Happy parent + sad child -> Envy
@@ -152,8 +141,8 @@ public class EmotionLogicTest {
 
     @Test
     public void testCheckEmotion_RudeSchadenfreude() throws Exception {
-        Body me = WorldTestHelper.createBody();
-        Body you = WorldTestHelper.createBody();
+        Yukkuri me = WorldTestHelper.createBody();
+        Yukkuri you = WorldTestHelper.createBody();
         registerBodies(me, you);
 
         // Rude self + sad other -> Joy + Pleasure (Schadenfreude)
@@ -169,8 +158,8 @@ public class EmotionLogicTest {
 
     @Test
     public void testCheckEmotion_FamilyWorry() throws Exception {
-        Body me = WorldTestHelper.createBody();
-        Body you = WorldTestHelper.createBody();
+        Yukkuri me = WorldTestHelper.createBody();
+        Yukkuri you = WorldTestHelper.createBody();
         registerBodies(me, you);
 
         // Family in pain -> Worry + Fear
@@ -185,8 +174,8 @@ public class EmotionLogicTest {
 
     @Test
     public void testCheckEmotion_RudeEnvyAndAnger() throws Exception {
-        Body me = WorldTestHelper.createBody();
-        Body you = WorldTestHelper.createBody();
+        Yukkuri me = WorldTestHelper.createBody();
+        Yukkuri you = WorldTestHelper.createBody();
         registerBodies(me, you);
 
         // Rude very sad self + happy other -> Anger + Envy
@@ -212,8 +201,8 @@ public class EmotionLogicTest {
 
     @Test
     public void testCheckEmotion_SadMeSeeHappyFather_Joy() throws Exception {
-        Body me = WorldTestHelper.createBody();
-        Body you = WorldTestHelper.createBody();
+        Yukkuri me = WorldTestHelper.createBody();
+        Yukkuri you = WorldTestHelper.createBody();
         registerBodies(me, you);
 
         // me=SAD, you=HAPPY, rel=FATHER (me is father of you)
@@ -230,8 +219,8 @@ public class EmotionLogicTest {
 
     @Test
     public void testCheckEmotion_SadMeSeesSadFamily_SadAndWorry() throws Exception {
-        Body me = WorldTestHelper.createBody();
-        Body you = WorldTestHelper.createBody();
+        Yukkuri me = WorldTestHelper.createBody();
+        Yukkuri you = WorldTestHelper.createBody();
         registerBodies(me, you);
 
         // me=SAD, you=SAD, rel=MOTHER (me is mother of you)
@@ -249,8 +238,8 @@ public class EmotionLogicTest {
 
     @Test
     public void testCheckEmotion_VerySadMeSeesSadOther_SadOnly() throws Exception {
-        Body me = WorldTestHelper.createBody();
-        Body you = WorldTestHelper.createBody();
+        Yukkuri me = WorldTestHelper.createBody();
+        Yukkuri you = WorldTestHelper.createBody();
         registerBodies(me, you);
 
         // me=VERY_SAD, you=SAD, rel=OTHER
@@ -266,8 +255,8 @@ public class EmotionLogicTest {
 
     @Test
     public void testScenario_HappyParentSeesSadInjuredChild_SadWorryFearOnly() throws Exception {
-        Body me = WorldTestHelper.createBody();
-        Body you = WorldTestHelper.createBody();
+        Yukkuri me = WorldTestHelper.createBody();
+        Yukkuri you = WorldTestHelper.createBody();
         registerBodies(me, you);
 
         me.setHappiness(Happiness.HAPPY);
@@ -282,8 +271,8 @@ public class EmotionLogicTest {
 
     @Test
     public void testScenario_AverageNonRudeSeesSadInjuredStranger_FearOnly() throws Exception {
-        Body me = WorldTestHelper.createBody();
-        Body you = WorldTestHelper.createBody();
+        Yukkuri me = WorldTestHelper.createBody();
+        Yukkuri you = WorldTestHelper.createBody();
         registerBodies(me, you);
 
         me.setAttitude(Attitude.AVERAGE);
@@ -299,8 +288,8 @@ public class EmotionLogicTest {
 
     @Test
     public void testScenario_VerySadRudeSeesHappyStranger_AngerAndEnvyOnly() throws Exception {
-        Body me = WorldTestHelper.createBody();
-        Body you = WorldTestHelper.createBody();
+        Yukkuri me = WorldTestHelper.createBody();
+        Yukkuri you = WorldTestHelper.createBody();
         registerBodies(me, you);
 
         me.setAttitude(Attitude.SHITHEAD);
@@ -315,8 +304,8 @@ public class EmotionLogicTest {
 
     @Test
     public void testScenario_HappyNonRudeSeesHappyStranger_PleasureOnly() throws Exception {
-        Body me = WorldTestHelper.createBody();
-        Body you = WorldTestHelper.createBody();
+        Yukkuri me = WorldTestHelper.createBody();
+        Yukkuri you = WorldTestHelper.createBody();
         registerBodies(me, you);
 
         me.setAttitude(Attitude.AVERAGE);
@@ -331,8 +320,8 @@ public class EmotionLogicTest {
 
     @Test
     public void testScenario_AverageSeesHappyPartner_EnvyOnly() throws Exception {
-        Body me = WorldTestHelper.createBody();
-        Body you = WorldTestHelper.createBody();
+        Yukkuri me = WorldTestHelper.createBody();
+        Yukkuri you = WorldTestHelper.createBody();
         registerBodies(me, you);
 
         me.setAttitude(Attitude.AVERAGE);
@@ -347,8 +336,8 @@ public class EmotionLogicTest {
 
     @Test
     public void testScenario_SadSeesHappyStranger_SadAndEnvyOnly() throws Exception {
-        Body me = WorldTestHelper.createBody();
-        Body you = WorldTestHelper.createBody();
+        Yukkuri me = WorldTestHelper.createBody();
+        Yukkuri you = WorldTestHelper.createBody();
         registerBodies(me, you);
 
         me.setAttitude(Attitude.AVERAGE);
@@ -363,8 +352,8 @@ public class EmotionLogicTest {
 
     @Test
     public void testScenario_AverageRudeSeesSadStranger_JoyAndPleasureOnly() throws Exception {
-        Body me = WorldTestHelper.createBody();
-        Body you = WorldTestHelper.createBody();
+        Yukkuri me = WorldTestHelper.createBody();
+        Yukkuri you = WorldTestHelper.createBody();
         registerBodies(me, you);
 
         me.setAttitude(Attitude.SHITHEAD);
@@ -378,21 +367,16 @@ public class EmotionLogicTest {
         assertArrayEquals(new boolean[] { true, false, false, true, false, false, false }, result);
     }
 
-    private void registerBodies(Body... bodies) {
-        for (Body b : bodies) {
+    private void registerBodies(Yukkuri... bodies) {
+        for (Yukkuri b : bodies) {
             src.SimYukkuri.world.getCurrentMap().getBody().put(b.getUniqueID(), b);
         }
     }
 
-    private void resetRelation(Body me, Body you) throws Exception {
-        java.lang.reflect.Field parentsField = src.base.BodyAttributes.class.getDeclaredField("parents");
-        parentsField.setAccessible(true);
-        parentsField.set(me, new int[] { -1, -1 });
-        parentsField.set(you, new int[] { -1, -1 });
-
-        java.lang.reflect.Field partnerField = src.base.BodyAttributes.class.getDeclaredField("partner");
-        partnerField.setAccessible(true);
-        partnerField.set(me, -1);
-        partnerField.set(you, -1);
+    private void resetRelation(Yukkuri me, Yukkuri you) throws Exception {
+        me.setParents(new int[] { -1, -1 });
+        you.setParents(new int[] { -1, -1 });
+        me.setPartner(-1);
+        you.setPartner(-1);
     }
 }

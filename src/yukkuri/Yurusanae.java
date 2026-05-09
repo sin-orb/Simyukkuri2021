@@ -9,7 +9,7 @@ import java.util.Map;
 
 import src.SimYukkuri;
 import src.util.GameRandom;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.draw.Dimension4y;
 import src.draw.ModLoader;
 import src.draw.Point4y;
@@ -23,7 +23,7 @@ import src.util.IniFileUtil;
 /**
  * ゆるさなえ
  */
-public class Yurusanae extends Body {
+public class Yurusanae extends Yukkuri {
 	private static final long serialVersionUID = 877378525371487134L;
 	/** ゆるさなえのタイプ */
 	public static final int type = 1000;
@@ -156,7 +156,7 @@ public class Yurusanae extends Body {
 	}
 
 	/** コンストラクタ */
-	public Yurusanae(int initX, int initY, int initZ, AgeState initAgeState, Body p1, Body p2) {
+	public Yurusanae(int initX, int initY, int initZ, AgeState initAgeState, Yukkuri p1, Yukkuri p2) {
 		super(initX, initY, initZ, initAgeState, p1, p2);
 		setBoundary(boundary, braidBoundary);
 		setMsgType(YukkuriType.YURUSANAE);

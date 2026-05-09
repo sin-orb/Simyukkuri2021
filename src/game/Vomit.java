@@ -10,8 +10,8 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import src.Const;
-import src.base.Body;
-import src.base.Obj;
+import src.base.Yukkuri;
+import src.base.Entity;
 import src.draw.ModLoader;
 import src.draw.Translate;
 import src.enums.AgeState;
@@ -27,7 +27,7 @@ import src.system.ResourceUtil;
 /**
  * 吐餡クラス.
  */
-public class Vomit extends Obj {
+public class Vomit extends Entity {
 
 	private static final long serialVersionUID = -5000572959095410611L;
 	// public variables
@@ -165,7 +165,7 @@ public class Vomit extends Obj {
 	 * @param b     吐いたゆっくり
 	 * @param type  吐餡タイプ
 	 */
-	public Vomit(int initX, int initY, int initZ, Body b, YukkuriType type) {
+	public Vomit(int initX, int initY, int initZ, Yukkuri b, YukkuriType type) {
 		objId = Numbering.INSTANCE.numberingObjId();
 		objType = Type.VOMIT;
 		vomitType = type.ordinal();

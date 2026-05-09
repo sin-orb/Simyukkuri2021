@@ -4,9 +4,9 @@ import src.util.GameText;
 
 import src.SimYukkuri;
 import src.util.GameRandom;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.event.EventPacket;
-import src.base.Obj;
+import src.base.Entity;
 import src.draw.Translate;
 import src.enums.BodyRank;
 import src.enums.Happiness;
@@ -18,9 +18,9 @@ import src.system.ResourceUtil;
 
 /***************************************************
  * 空中捕食イベント
- * protected Body from; // イベントを発した個体
- * protected Body to; // 捕食対象
- * protected Obj target; // 未使用
+ * protected Yukkuri from; // イベントを発した個体
+ * protected Yukkuri to; // 捕食対象
+ * protected Entity target; // 未使用
  * protected int count; // 1
  */
 public class FlyingEatEvent extends EventPacket {
@@ -32,7 +32,7 @@ public class FlyingEatEvent extends EventPacket {
 	/**
 	 * コンストラクタ.
 	 */
-	public FlyingEatEvent(Body f, Body t, Obj tgt, int cnt) {
+	public FlyingEatEvent(Yukkuri f, Yukkuri t, Entity tgt, int cnt) {
 		super(f, t, tgt, cnt);
 	}
 
@@ -50,15 +50,15 @@ public class FlyingEatEvent extends EventPacket {
 
 	// 参加チェック
 	@Override
-	public boolean checkEventResponse(Body body) {
+	public boolean checkEventResponse(Yukkuri body) {
 		priority = EventPriority.HIGH;
 		return true;
 	}
 
 	// イベント開始動作
 	@Override
-	public void start(Body body) {
-		Body targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
+	public void start(Yukkuri body) {
+		Yukkuri targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
 		if (targetBody == null)
 			return;
 		body.setToBed(false);
@@ -75,8 +75,8 @@ public class FlyingEatEvent extends EventPacket {
 	// 毎フレーム処理
 	// UpdateState.ABORTを返すとイベント終了
 	@Override
-	public UpdateState update(Body body) {
-		Body targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
+	public UpdateState update(Yukkuri body) {
+		Yukkuri targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
 		// 相手が消えてしまったらイベント中断
 		if (targetBody == null || targetBody.isRemoved()) {
 			// to.setParentLinkId(null);
@@ -108,8 +108,8 @@ public class FlyingEatEvent extends EventPacket {
 	// イベント目標に到着した際に呼ばれる
 	// trueを返すとイベント終了
 	@Override
-	public boolean execute(Body body) {
-		Body targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
+	public boolean execute(Yukkuri body) {
+		Yukkuri targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
 		if (targetBody == null)
 			return true;
 		// 相手が消えてしまったらイベント中断
@@ -158,8 +158,8 @@ public class FlyingEatEvent extends EventPacket {
 
 	// イベント終了処理
 	@Override
-	public void end(Body body) {
-		Body targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
+	public void end(Yukkuri body) {
+		Yukkuri targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
 		if (targetBody != null)
 			targetBody.setParentLinkId(-1);
 	}

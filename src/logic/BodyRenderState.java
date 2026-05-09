@@ -2,7 +2,7 @@ package src.logic;
 
 import src.Const;
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.entity.world.bodylinked.Okazari;
 import src.entity.world.bodylinked.Okazari.OkazariType;
 import src.enums.BodyBake;
@@ -17,9 +17,9 @@ import src.system.MainCommandUI;
 import src.util.GameRandom;
 
 /**
- * {@link Body} の描画状態計算を扱う補助クラス。
+ * {@link Yukkuri} の描画状態計算を扱う補助クラス。
  * <p>
- * Phase 2 では、描画用レイヤ構築のうち表情選択を {@link Body} から切り出し、
+ * Phase 2 では、描画用レイヤ構築のうち表情選択を {@link Yukkuri} から切り出し、
  * public API は facade として残す。
  * </p>
  */
@@ -34,7 +34,7 @@ public final class BodyRenderState {
 	 * @param layer 描画先レイヤ
 	 * @return 追加した画像数
 	 */
-	public static int getFaceImage(Body body, BodyLayer layer) {
+	public static int getFaceImage(Yukkuri body, BodyLayer layer) {
 		int direction = body.getDirection().ordinal();
 		int idx = 0;
 
@@ -91,7 +91,7 @@ public final class BodyRenderState {
 	 * @param layer 描画先レイヤ
 	 * @return 追加した画像数
 	 */
-	public static int getBodyBaseImage(Body body, BodyLayer layer) {
+	public static int getBodyBaseImage(Yukkuri body, BodyLayer layer) {
 		int direction = body.getDirection().ordinal();
 		int idx = 0;
 
@@ -124,7 +124,7 @@ public final class BodyRenderState {
 	 * @param layer 描画先レイヤ
 	 * @return 追加した画像数
 	 */
-	public static int getAbnormalBodyImage(Body body, BodyLayer layer) {
+	public static int getAbnormalBodyImage(Yukkuri body, BodyLayer layer) {
 		int direction = body.getDirection().ordinal();
 		int idx = 0;
 
@@ -149,7 +149,7 @@ public final class BodyRenderState {
 	 * @param layer 描画先レイヤ
 	 * @return 追加した画像数
 	 */
-	public static int getEffectImage(Body body, BodyLayer layer) {
+	public static int getEffectImage(Yukkuri body, BodyLayer layer) {
 		int direction = body.getDirection().ordinal();
 		int idx = 0;
 
@@ -207,7 +207,7 @@ public final class BodyRenderState {
 	 * @param type  0 なら前方、1 なら後方
 	 * @return 追加した画像数
 	 */
-	public static int getOlazariImage(Body body, BodyLayer layer, int type) {
+	public static int getOlazariImage(Yukkuri body, BodyLayer layer, int type) {
 		int direction = body.getDirection().ordinal();
 		int idx = 0;
 
@@ -233,7 +233,7 @@ public final class BodyRenderState {
 	 * @param type  0 なら前方、1 なら後方
 	 * @return 追加した画像数
 	 */
-	public static int getBraidImage(Body body, BodyLayer layer, int type) {
+	public static int getBraidImage(Yukkuri body, BodyLayer layer, int type) {
 		int direction = body.getDirection().ordinal();
 		int idx = 0;
 
@@ -265,7 +265,7 @@ public final class BodyRenderState {
 		return idx;
 	}
 
-	private static void applyFaceJumpOption(Body body, BodyLayer layer) {
+	private static void applyFaceJumpOption(Yukkuri body, BodyLayer layer) {
 		if (body.isFlyingType()) {
 			if (!body.isGrabbed() && !body.isSleeping() && !body.isPurupuru()) {
 				if (body.isExciting()) {
@@ -298,7 +298,7 @@ public final class BodyRenderState {
 		}
 	}
 
-	private static int appendSleepingFace(Body body, int direction, BodyLayer layer, int idx) {
+	private static int appendSleepingFace(Yukkuri body, int direction, BodyLayer layer, int idx) {
 		if (!SimYukkuri.UNYO) {
 			return appendFace(body, body.isNightmare() ? ImageCode.NIGHTMARE.ordinal() : ImageCode.SLEEPING.ordinal(),
 					direction, layer, idx);
@@ -324,7 +324,7 @@ public final class BodyRenderState {
 		return idx;
 	}
 
-	private static int appendEatingFace(Body body, int direction, BodyLayer layer, int idx) {
+	private static int appendEatingFace(Yukkuri body, int direction, BodyLayer layer, int idx) {
 		if (body.isStrike() || body.isVerySad() || body.isFeelHardPain()) {
 			return appendFace(body, ImageCode.CRYING.ordinal(), direction, layer, idx);
 		}
@@ -334,7 +334,7 @@ public final class BodyRenderState {
 		return appendFace(body, ImageCode.SMILE.ordinal(), direction, layer, idx);
 	}
 
-	private static int appendDamagedFace(Body body, int direction, BodyLayer layer, int idx) {
+	private static int appendDamagedFace(Yukkuri body, int direction, BodyLayer layer, int idx) {
 		if (body.isFeelPain() && body.getAge() % 50 == 0 && GameRandom.nextInt(50) == 0) {
 			body.setForceFace(ImageCode.PAIN.ordinal());
 		}
@@ -344,7 +344,7 @@ public final class BodyRenderState {
 		return appendTiredFace(body, direction, layer, idx);
 	}
 
-	private static int appendNormalStateFace(Body body, int direction, BodyLayer layer, int idx) {
+	private static int appendNormalStateFace(Yukkuri body, int direction, BodyLayer layer, int idx) {
 		if (body.getPanicType() != null || body.isStrike() || body.isVerySad()) {
 			return appendFace(body, ImageCode.CRYING.ordinal(), direction, layer, idx);
 		}
@@ -377,11 +377,11 @@ public final class BodyRenderState {
 		return appendBlinkingFace(body, direction, layer, idx, ImageCode.NORMAL.ordinal(), ImageCode.NORMAL0.ordinal());
 	}
 
-	private static int appendTiredFace(Body body, int direction, BodyLayer layer, int idx) {
+	private static int appendTiredFace(Yukkuri body, int direction, BodyLayer layer, int idx) {
 		return appendBlinkingFace(body, direction, layer, idx, ImageCode.TIRED.ordinal(), ImageCode.TIRED0.ordinal());
 	}
 
-	private static int appendBlinkingFace(Body body, int direction, BodyLayer layer, int idx, int baseFace,
+	private static int appendBlinkingFace(Yukkuri body, int direction, BodyLayer layer, int idx, int baseFace,
 			int blinkBaseFace) {
 		if (!SimYukkuri.UNYO || !supportsNormalBlinkImages(body)) {
 			return appendFace(body, baseFace, direction, layer, idx);
@@ -413,7 +413,7 @@ public final class BodyRenderState {
 		return idx;
 	}
 
-	private static int appendFaceOverlays(Body body, int direction, BodyLayer layer, int idx) {
+	private static int appendFaceOverlays(Yukkuri body, int direction, BodyLayer layer, int idx) {
 		if (body.isShutmouth()) {
 			idx += appendFace(body, ImageCode.SHUTMOUTH.ordinal(), direction, layer, idx);
 		}
@@ -430,15 +430,15 @@ public final class BodyRenderState {
 		return idx;
 	}
 
-	private static boolean supportsNormalBlinkImages(Body body) {
+	private static boolean supportsNormalBlinkImages(Yukkuri body) {
 		return body.getType() != 20000;
 	}
 
-	private static int appendFace(Body body, int imageCode, int direction, BodyLayer layer, int idx) {
+	private static int appendFace(Yukkuri body, int imageCode, int direction, BodyLayer layer, int idx) {
 		return body.getImage(imageCode, direction, layer, idx);
 	}
 
-	private static int appendCrushedBody(Body body, BodyLayer layer, int idx) {
+	private static int appendCrushedBody(Yukkuri body, BodyLayer layer, int idx) {
 		if (body.isBurned()) {
 			return idx + appendFace(body, ImageCode.BURNED2.ordinal(), Const.LEFT, layer, idx);
 		}
@@ -451,7 +451,7 @@ public final class BodyRenderState {
 		return idx + appendFace(body, ImageCode.CRUSHED2.ordinal(), Const.LEFT, layer, idx);
 	}
 
-	private static int appendPackedBody(Body body, BodyLayer layer, int idx) {
+	private static int appendPackedBody(Yukkuri body, BodyLayer layer, int idx) {
 		if (body.isDead()) {
 			return idx + appendFace(body, ImageCode.PACKED_DEAD.ordinal(), Const.LEFT, layer, idx);
 		}
@@ -461,7 +461,7 @@ public final class BodyRenderState {
 		return idx + appendFace(body, ImageCode.PACKED2.ordinal(), Const.LEFT, layer, idx);
 	}
 
-	private static int appendFrontBody(Body body, BodyLayer layer, int idx) {
+	private static int appendFrontBody(Yukkuri body, BodyLayer layer, int idx) {
 		idx += appendFace(body, ImageCode.FRONT_SHIT.ordinal(), Const.LEFT, layer, idx);
 		if (body.getHairState() == HairState.DEFAULT) {
 			idx += appendFace(body, ImageCode.FRONT_HAIR.ordinal(), Const.LEFT, layer, idx);
@@ -489,7 +489,7 @@ public final class BodyRenderState {
 		return idx;
 	}
 
-	private static int appendRollingBody(Body body, BodyLayer layer, int idx) {
+	private static int appendRollingBody(Yukkuri body, BodyLayer layer, int idx) {
 		if (body.getAge() % 8 <= 3) {
 			idx += appendFace(body, ImageCode.ROLL_LEFT_SHIT.ordinal(), Const.LEFT, layer, idx);
 			idx += appendRollingStateOverlays(body, layer, idx, true);
@@ -503,7 +503,7 @@ public final class BodyRenderState {
 		return idx;
 	}
 
-	private static int appendRollingStateOverlays(Body body, BodyLayer layer, int idx, boolean left) {
+	private static int appendRollingStateOverlays(Yukkuri body, BodyLayer layer, int idx, boolean left) {
 		if (body.getHairState() == HairState.DEFAULT) {
 			idx += appendFace(body, left ? ImageCode.ROLL_LEFT_HAIR.ordinal() : ImageCode.ROLL_RIGHT_HAIR.ordinal(),
 					Const.LEFT, layer, idx);
@@ -533,14 +533,14 @@ public final class BodyRenderState {
 		return idx;
 	}
 
-	private static int appendNormalBody(Body body, int direction, BodyLayer layer, int idx) {
+	private static int appendNormalBody(Yukkuri body, int direction, BodyLayer layer, int idx) {
 		if (body.isPealed()) {
 			return idx + appendFace(body, ImageCode.PEALED.ordinal(), direction, layer, idx);
 		}
 		return idx + appendFace(body, ImageCode.BODY.ordinal(), direction, layer, idx);
 	}
 
-	private static int appendDamageEffect(Body body, int direction, BodyLayer layer, int idx) {
+	private static int appendDamageEffect(Yukkuri body, int direction, BodyLayer layer, int idx) {
 		if (body.isPealed()) {
 			return 0;
 		}
@@ -562,7 +562,7 @@ public final class BodyRenderState {
 		return 0;
 	}
 
-	private static int appendSickEffect(Body body, int direction, BodyLayer layer, int idx) {
+	private static int appendSickEffect(Yukkuri body, int direction, BodyLayer layer, int idx) {
 		int sickPeriod = body.getSickPeriod();
 		int incubation = body.getIncubationPeriodBase();
 		if (sickPeriod > (incubation << 5)) {

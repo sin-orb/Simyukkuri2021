@@ -7,7 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.enums.AgeState;
 import src.util.WorldTestHelper;
 
@@ -24,15 +24,15 @@ public class BodyParentRuleTest {
 
 	@Test
 	void testCheckNearParent_returnsWhenAdult() {
-		Body me = WorldTestHelper.createBody();
+		Yukkuri me = WorldTestHelper.createBody();
 		me.setAge((long) me.getChildLimitBase());
 		assertDoesNotThrow(() -> BodyParentRule.checkNearParent(me));
 	}
 
 	@Test
 	void testCheckNearParent_callingParentsWakesSleepingParent() {
-		Body me = WorldTestHelper.createBody();
-		Body parent = WorldTestHelper.createBody();
+		Yukkuri me = WorldTestHelper.createBody();
+		Yukkuri parent = WorldTestHelper.createBody();
 		me.setAgeState(AgeState.CHILD);
 		me.setCallingParents(true);
 		parent.setSleeping(true);

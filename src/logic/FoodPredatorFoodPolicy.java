@@ -3,8 +3,8 @@ package src.logic;
 import java.util.List;
 import java.util.Map;
 
-import src.base.Body;
-import src.base.Obj;
+import src.base.Yukkuri;
+import src.base.Entity;
 import src.draw.Translate;
 import src.enums.BurialState;
 import src.enums.Intelligence;
@@ -28,10 +28,10 @@ public final class FoodPredatorFoodPolicy {
 	/**
 	 * Food / stalk / vomit / shit をまとめて探索する.
 	 */
-	public static FoodSearchResult searchFood(Body body, boolean[] forceEat, int wallMode, Obj nearestObject,
-			Obj nearestDeadObject, int nearestDistance, int looks) {
-		Obj result = nearestObject;
-		Obj deadCandidate = nearestDeadObject;
+	public static FoodSearchResult searchFood(Yukkuri body, boolean[] forceEat, int wallMode, Entity nearestObject,
+			Entity nearestDeadObject, int nearestDistance, int looks) {
+		Entity result = nearestObject;
+		Entity deadCandidate = nearestDeadObject;
 		int distanceLimit = nearestDistance;
 		int bestLooks = looks;
 
@@ -110,7 +110,7 @@ public final class FoodPredatorFoodPolicy {
 
 		for (Map.Entry<Integer, Stalk> entry : GameWorld.get().getCurrentMap().getStalk().entrySet()) {
 			Stalk stalk = entry.getValue();
-			Body plantBody = GameWorld.get().getCurrentMap().getBody().get(stalk.getPlantYukkuri());
+			Yukkuri plantBody = GameWorld.get().getCurrentMap().getBody().get(stalk.getPlantYukkuri());
 			if (plantBody != null) {
 				if (plantBody == body) {
 					continue;
@@ -123,7 +123,7 @@ public final class FoodPredatorFoodPolicy {
 				if (babyList != null && babyList.size() != 0) {
 					boolean hasBaby = false;
 					for (int babyId : babyList) {
-						Body baby = src.util.BodyRegistry.getBodyInstance(babyId);
+						Yukkuri baby = src.util.BodyRegistry.getBodyInstance(babyId);
 						if (baby == null) {
 							continue;
 						}
@@ -185,17 +185,17 @@ public final class FoodPredatorFoodPolicy {
 	}
 
 	public static final class FoodSearchResult {
-		private final Obj nearestObject;
+		private final Entity nearestObject;
 		private final int nearestDistance;
 		private final int looks;
 
-		FoodSearchResult(Obj nearestObject, int nearestDistance, int looks) {
+		FoodSearchResult(Entity nearestObject, int nearestDistance, int looks) {
 			this.nearestObject = nearestObject;
 			this.nearestDistance = nearestDistance;
 			this.looks = looks;
 		}
 
-		public Obj getFound() {
+		public Entity getFound() {
 			return nearestObject;
 		}
 

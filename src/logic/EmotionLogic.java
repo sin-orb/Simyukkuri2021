@@ -1,6 +1,6 @@
 package src.logic;
 
-import src.base.Body;
+import src.base.Yukkuri;
 import src.enums.EnumRelationMine;
 import src.enums.Happiness;
 
@@ -16,7 +16,7 @@ public class EmotionLogic {
 	 * @param bodyTarget 相手
 	 * @return 喜//怒/哀/楽/恐怖/羨望/心配のbool値の配列
 	 */
-	public static boolean[] checkEmotionForOther(Body b, Body bodyTarget) {
+	public static boolean[] checkEmotionForOther(Yukkuri b, Yukkuri bodyTarget) {
 		// -------------------------------------------------
 		// 対象の状態判定
 		// 自分がゲスかどうか

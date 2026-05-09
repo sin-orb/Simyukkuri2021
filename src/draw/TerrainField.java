@@ -14,7 +14,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import src.base.Obj;
+import src.base.Entity;
 import src.system.IniFileReader;
 import src.system.MapWindow;
 import src.visual.TerrainBillboard;
@@ -81,9 +81,9 @@ public class TerrainField implements Serializable {
 
 	private static LinearGradientPaint[] skyColor; // 空の色
 
-	private static List<Obj> floorList;
-	private static List<Obj> structList;
-	private static List<Obj> ceilingList;
+	private static List<Entity> floorList;
+	private static List<Entity> structList;
+	private static List<Entity> ceilingList;
 
 	private static boolean isPers;
 	private static int ownerType;
@@ -112,18 +112,18 @@ public class TerrainField implements Serializable {
 				skyColor[1] = null;
 				skyColor[2] = null;
 				skyColor[3] = null;
-				floorList = new LinkedList<Obj>();
-				structList = new LinkedList<Obj>();
-				ceilingList = new LinkedList<Obj>();
+				floorList = new LinkedList<Entity>();
+				structList = new LinkedList<Entity>();
+				ceilingList = new LinkedList<Entity>();
 				isPers = true;
 				ownerType = 0;
 			} else {
 				// 新フォーマット
 				assetMap = new HashMap<String, BufferedImage>();
 				skyColor = new LinearGradientPaint[4];
-				floorList = new LinkedList<Obj>();
-				structList = new LinkedList<Obj>();
-				ceilingList = new LinkedList<Obj>();
+				floorList = new LinkedList<Entity>();
+				structList = new LinkedList<Entity>();
+				ceilingList = new LinkedList<Entity>();
 				loadTerrainAsset(loader, reader, mapName, io);
 			}
 		} catch (IOException e) {
@@ -169,7 +169,7 @@ public class TerrainField implements Serializable {
 	 * INIファイルキーが"Objcet"のものを取得する.
 	 * @return 構造物リスト
 	 */
-	public static List<Obj> getStructList() {
+	public static List<Entity> getStructList() {
 		return structList;
 	}
 
@@ -196,7 +196,7 @@ public class TerrainField implements Serializable {
 	 * @param obs イメージオブザーバ
 	 */
 	public static void drawFloor(Graphics2D g2, ImageObserver obs) {
-		for (Obj o : floorList) {
+		for (Entity o : floorList) {
 			TerrainBillboard b = (TerrainBillboard) o;
 			b.draw(g2, obs);
 		}
@@ -208,7 +208,7 @@ public class TerrainField implements Serializable {
 	 * @param obs イメージオブザーバ
 	 */
 	public static void drawCeiling(Graphics2D g2, ImageObserver obs) {
-		for (Obj o : ceilingList) {
+		for (Entity o : ceilingList) {
 			TerrainBillboard b = (TerrainBillboard) o;
 			b.draw(g2, obs);
 		}

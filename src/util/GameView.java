@@ -3,7 +3,7 @@ package src.util;
 import java.awt.Component;
 
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.effect.Effect;
 import src.draw.MyPane;
 import src.draw.Terrarium;
@@ -58,28 +58,28 @@ public final class GameView {
 		}
 
 		@Override
-		public Body addBody(int x, int y, int z, int type, AgeState age, Body p1, Body p2) {
+		public Yukkuri addBody(int x, int y, int z, int type, AgeState age, Yukkuri p1, Yukkuri p2) {
 			return getPane().getTerrarium().addBody(x, y, z, type, age, p1, p2);
 		}
 
 		@Override
-		public Body makeBody(int x, int y, int z, int type, Dna dna, AgeState age, Body p1, Body p2,
+		public Yukkuri makeBody(int x, int y, int z, int type, Dna dna, AgeState age, Yukkuri p1, Yukkuri p2,
 				boolean adjust) {
 			return getPane().getTerrarium().makeBody(x, y, z, type, dna, age, p1, p2, adjust);
 		}
 
 		@Override
-		public Vomit addVomit(int x, int y, int z, Body body, YukkuriType type) {
+		public Vomit addVomit(int x, int y, int z, Yukkuri body, YukkuriType type) {
 			return getPane().getTerrarium().addVomit(x, y, z, body, type);
 		}
 
 		@Override
-		public void addCrushedVomit(int x, int y, int z, Body body, YukkuriType type) {
+		public void addCrushedVomit(int x, int y, int z, Yukkuri body, YukkuriType type) {
 			getPane().getTerrarium().addCrushedVomit(x, y, z, body, type);
 		}
 
 		@Override
-		public void addCrushedShit(int x, int y, int z, Body body, YukkuriType type) {
+		public void addCrushedShit(int x, int y, int z, Yukkuri body, YukkuriType type) {
 			getPane().getTerrarium().addCrushedShit(x, y, z, body, type);
 		}
 
@@ -129,24 +129,24 @@ public final class GameView {
 		source().createBackBuffer();
 	}
 
-	public static Body addBody(int x, int y, int z, int type, AgeState age, Body p1, Body p2) {
+	public static Yukkuri addBody(int x, int y, int z, int type, AgeState age, Yukkuri p1, Yukkuri p2) {
 		return source().addBody(x, y, z, type, age, p1, p2);
 	}
 
-	public static Body makeBody(int x, int y, int z, int type, Dna dna, AgeState age, Body p1, Body p2,
+	public static Yukkuri makeBody(int x, int y, int z, int type, Dna dna, AgeState age, Yukkuri p1, Yukkuri p2,
 			boolean adjust) {
 		return source().makeBody(x, y, z, type, dna, age, p1, p2, adjust);
 	}
 
-	public static Vomit addVomit(int x, int y, int z, Body body, YukkuriType type) {
+	public static Vomit addVomit(int x, int y, int z, Yukkuri body, YukkuriType type) {
 		return source().addVomit(x, y, z, body, type);
 	}
 
-	public static void addCrushedVomit(int x, int y, int z, Body body, YukkuriType type) {
+	public static void addCrushedVomit(int x, int y, int z, Yukkuri body, YukkuriType type) {
 		source().addCrushedVomit(x, y, z, body, type);
 	}
 
-	public static void addCrushedShit(int x, int y, int z, Body body, YukkuriType type) {
+	public static void addCrushedShit(int x, int y, int z, Yukkuri body, YukkuriType type) {
 		source().addCrushedShit(x, y, z, body, type);
 	}
 

@@ -51,7 +51,7 @@ public class ObjTest {
 
     @Test
     public void testAge() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         obj.setAge(10);
         assertEquals(10, obj.getAge());
 
@@ -66,7 +66,7 @@ public class ObjTest {
 
     @Test
     public void testCoordinates() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         obj.setX(100);
         obj.setY(200);
         obj.setZ(5);
@@ -80,28 +80,28 @@ public class ObjTest {
 
     @Test
     public void testSetCalcXNormal() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         obj.setCalcX(500);
         assertEquals(500, obj.getX());
     }
 
     @Test
     public void testSetCalcXMin() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         obj.setCalcX(-10);
         assertEquals(0, obj.getX());
     }
 
     @Test
     public void testSetCalcXMax() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         obj.setCalcX(Translate.getMapW() + 100);
         assertEquals(Translate.getMapW(), obj.getX());
     }
 
     @Test
     public void testSetCalcXNoWall() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         obj.setEnableWall(false);
         obj.setCalcX(-100);
         assertEquals(-100, obj.getX()); // wall無効なのでそのまま
@@ -111,28 +111,28 @@ public class ObjTest {
 
     @Test
     public void testSetCalcYNormal() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         obj.setCalcY(500);
         assertEquals(500, obj.getY());
     }
 
     @Test
     public void testSetCalcYMin() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         obj.setCalcY(-10);
         assertEquals(0, obj.getY());
     }
 
     @Test
     public void testSetCalcYMax() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         obj.setCalcY(Translate.getMapH() + 100);
         assertEquals(Translate.getMapH(), obj.getY());
     }
 
     @Test
     public void testSetCalcYNoWall() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         obj.setEnableWall(false);
         obj.setCalcY(-100);
         assertEquals(-100, obj.getY());
@@ -142,21 +142,21 @@ public class ObjTest {
 
     @Test
     public void testSetCalcZNormal() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         obj.setCalcZ(100);
         assertEquals(100, obj.getZ());
     }
 
     @Test
     public void testSetCalcZAboveMax() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         obj.setCalcZ(Translate.getMapZ() + 100);
         assertEquals(Translate.getMapZ(), obj.getZ());
     }
 
     @Test
     public void testSetCalcZBelowMostDepthNotFalling() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         obj.setMostDepth(0);
         obj.setZ(-10); // z < nMostDepth を事前に設定
         obj.setFallingUnderGround(false);
@@ -169,7 +169,7 @@ public class ObjTest {
 
     @Test
     public void testSetCalcZBelowMostDepthFalling() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         obj.setMostDepth(0);
         obj.setZ(-10);
         obj.setFallingUnderGround(true);
@@ -181,7 +181,7 @@ public class ObjTest {
 
     @Test
     public void testSetCalcZNoWall() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         obj.setEnableWall(false);
         obj.setCalcZ(9999);
         assertEquals(9999, obj.getZ());
@@ -191,7 +191,7 @@ public class ObjTest {
 
     @Test
     public void testVectors() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         obj.kick(10, 20, 30);
         assertEquals(10, obj.getVx());
         assertEquals(20, obj.getVy());
@@ -205,7 +205,7 @@ public class ObjTest {
 
     @Test
     public void testSetBxyz() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         obj.setMotion(1, 2, 3);
         assertEquals(1, obj.getBx());
         assertEquals(2, obj.getBy());
@@ -214,7 +214,7 @@ public class ObjTest {
 
     @Test
     public void testAddBxyz() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         obj.setMotion(1, 2, 3);
         obj.addMotion(10, 20, 30);
         assertEquals(11, obj.getBx());
@@ -224,7 +224,7 @@ public class ObjTest {
 
     @Test
     public void testResetBPos() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         obj.setMotion(1, 2, 3);
         obj.resetMotion();
         assertEquals(0, obj.getBx());
@@ -236,7 +236,7 @@ public class ObjTest {
 
     @Test
     public void testOfsXY() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         obj.setX(100);
         obj.setY(200);
         obj.setOfsXY(5, 10);
@@ -249,7 +249,7 @@ public class ObjTest {
 
     @Test
     public void testSetBoundaryDirect() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         obj.setPivotX(10);
         obj.setPivotY(20);
         obj.setW(30);
@@ -263,7 +263,7 @@ public class ObjTest {
 
     @Test
     public void testGetBoundaryShape() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         obj.setPivotX(10);
         obj.setPivotY(20);
         obj.setW(30);
@@ -282,7 +282,7 @@ public class ObjTest {
 
     @Test
     public void testScreenPivotDirect() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         obj.setScreenPivot(100, 200);
         assertEquals(100, obj.getScreenPivot().getX());
         assertEquals(200, obj.getScreenPivot().getY());
@@ -290,7 +290,7 @@ public class ObjTest {
 
     @Test
     public void testScreenPivotPoint() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         Point4y p = new Point4y();
         p.setX(50);
         p.setY(60);
@@ -301,7 +301,7 @@ public class ObjTest {
 
     @Test
     public void testScreenRectDirect() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         obj.setScreenRect(10, 20, 30, 40);
         Rectangle4y r = obj.getScreenRect();
         assertEquals(10, r.getX());
@@ -312,7 +312,7 @@ public class ObjTest {
 
     @Test
     public void testScreenRectWithRect() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         Rectangle4y r = new Rectangle4y();
         r.setX(1);
         r.setY(2);
@@ -331,7 +331,7 @@ public class ObjTest {
 
     @Test
     public void testGrabRelease() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         assertFalse(obj.isGrabbed());
         assertTrue(obj.isCanGrab());
 
@@ -346,7 +346,7 @@ public class ObjTest {
 
     @Test
     public void testRemove() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         assertFalse(obj.isRemoved());
 
         obj.remove();
@@ -358,14 +358,14 @@ public class ObjTest {
 
     @Test
     public void testObjType() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         obj.setObjType(Type.YUKKURI);
         assertEquals(Type.YUKKURI, obj.getObjType());
     }
 
     @Test
     public void testValueCost() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         obj.setValue(100);
         obj.setCost(50);
         assertEquals(100, obj.getValue());
@@ -376,7 +376,7 @@ public class ObjTest {
 
     @Test
     public void testWhere() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         assertEquals(Where.ON_FLOOR, obj.getWhere());
         assertEquals(Where.ON_FLOOR, obj.getWhere());
 
@@ -391,7 +391,7 @@ public class ObjTest {
 
     @Test
     public void testFallingUnderGround() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         assertFalse(obj.isFallingUnderGround());
         obj.setFallingUnderGround(true);
         assertTrue(obj.isFallingUnderGround());
@@ -399,7 +399,7 @@ public class ObjTest {
 
     @Test
     public void testInPool() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         assertFalse(obj.isInPool());
         obj.setInPool(true);
         assertTrue(obj.isInPool());
@@ -409,7 +409,7 @@ public class ObjTest {
 
     @Test
     public void testMostDepth() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         obj.setMostDepth(-10);
         assertEquals(-10, obj.getMostDepth());
     }
@@ -418,7 +418,7 @@ public class ObjTest {
 
     @Test
     public void testBindObj() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         obj.setBindObj(42);
         assertEquals(42, obj.getBindObj());
     }
@@ -427,21 +427,21 @@ public class ObjTest {
 
     @Test
     public void testCompareTo() {
-        Obj obj = new Obj();
-        assertEquals(0, obj.compareTo(new Obj()));
+        Entity obj = new Entity();
+        assertEquals(0, obj.compareTo(new Entity()));
     }
 
     // --- hasPopup ---
 
     @Test
     public void testHasGetPopup() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         assertEquals(GetMenuTarget.NONE, obj.hasGetPopup());
     }
 
     @Test
     public void testHasUsePopup() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         assertEquals(UseMenuTarget.NONE, obj.hasUsePopup());
     }
 
@@ -449,7 +449,7 @@ public class ObjTest {
 
     @Test
     public void testForceXY() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         obj.setForceX(-100);
         assertEquals(-100, obj.getX());
 
@@ -461,7 +461,7 @@ public class ObjTest {
 
     @Test
     public void testKickNoArgs() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         obj.kick(); // does nothing, should not throw
     }
 
@@ -469,7 +469,7 @@ public class ObjTest {
 
     @Test
     public void testCalcPosClampXLow() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         obj.setX(-10);
         obj.setY(500);
         obj.calcPos();
@@ -478,7 +478,7 @@ public class ObjTest {
 
     @Test
     public void testCalcPosClampYLow() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         obj.setX(500);
         obj.setY(-10);
         obj.calcPos();
@@ -487,7 +487,7 @@ public class ObjTest {
 
     @Test
     public void testCalcPosClampXHigh() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         obj.setX(Translate.getMapW() + 100);
         obj.setY(500);
         obj.calcPos();
@@ -496,7 +496,7 @@ public class ObjTest {
 
     @Test
     public void testCalcPosClampYHigh() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         obj.setX(500);
         obj.setY(Translate.getMapH() + 100);
         obj.calcPos();
@@ -505,7 +505,7 @@ public class ObjTest {
 
     @Test
     public void testCalcPosNoClamp() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         obj.setX(500);
         obj.setY(500);
         obj.calcPos();
@@ -517,7 +517,7 @@ public class ObjTest {
 
     @Test
     public void testClockTickRemovedReturnsRemoved() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         obj.setRemoved(true);
 
         assertEquals(Event.REMOVED, obj.clockTick());
@@ -525,7 +525,7 @@ public class ObjTest {
 
     @Test
     public void testClockTickGrabbedNoMovement() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         obj.setX(500);
         obj.setY(500);
         obj.setGrabbed(true);
@@ -541,7 +541,7 @@ public class ObjTest {
 
     @Test
     public void testClockTickMoveX() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         obj.setX(500);
         obj.setY(500);
         obj.setVx(10);
@@ -553,7 +553,7 @@ public class ObjTest {
 
     @Test
     public void testClockTickXBoundsLow() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         obj.setX(5);
         obj.setY(500);
         obj.setVx(-100);
@@ -568,7 +568,7 @@ public class ObjTest {
 
     @Test
     public void testClockTickXBoundsHigh() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         obj.setX(990);
         obj.setY(500);
         obj.setVx(100);
@@ -581,7 +581,7 @@ public class ObjTest {
 
     @Test
     public void testClockTickMoveY() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         obj.setX(500);
         obj.setY(500);
         obj.setVy(10);
@@ -593,7 +593,7 @@ public class ObjTest {
 
     @Test
     public void testClockTickYBoundsLow() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         obj.setX(500);
         obj.setY(5);
         obj.setVy(-100);
@@ -607,7 +607,7 @@ public class ObjTest {
 
     @Test
     public void testClockTickYBoundsHigh() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         obj.setX(500);
         obj.setY(990);
         obj.setVy(100);
@@ -620,7 +620,7 @@ public class ObjTest {
 
     @Test
     public void testClockTickZGravity() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         obj.setX(500);
         obj.setY(500);
         obj.setZ(100);
@@ -634,7 +634,7 @@ public class ObjTest {
 
     @Test
     public void testClockTickZLandsAtMostDepth() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         obj.setX(500);
         obj.setY(500);
         obj.setZ(1);
@@ -652,7 +652,7 @@ public class ObjTest {
 
     @Test
     public void testClockTickZFallingUnderGround() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         obj.setX(500);
         obj.setY(500);
         obj.setZ(1);
@@ -670,7 +670,7 @@ public class ObjTest {
 
     @Test
     public void testClockTickXBarrierHit() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         obj.setX(500);
         obj.setY(500);
         obj.setVx(10);
@@ -693,7 +693,7 @@ public class ObjTest {
 
     @Test
     public void testClockTickYBarrierHit() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         obj.setX(500);
         obj.setY(500);
         obj.setVy(10);
@@ -715,7 +715,7 @@ public class ObjTest {
 
     @Test
     public void testClockTickNoMovement() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         obj.setX(500);
         obj.setY(500);
 
@@ -728,7 +728,7 @@ public class ObjTest {
 
     @Test
     public void testClockTickNegativeXYClamp() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         obj.setX(-10);
         obj.setY(-20);
 
@@ -743,7 +743,7 @@ public class ObjTest {
 
     @Test
     public void testImgWH() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         obj.setImgW(100);
         obj.setImgH(200);
         assertEquals(100, obj.getImgW());
@@ -754,7 +754,7 @@ public class ObjTest {
 
     @Test
     public void testPivXY() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         obj.setPivX(10);
         obj.setPivY(20);
         assertEquals(10, obj.getPivX());
@@ -765,7 +765,7 @@ public class ObjTest {
 
     @Test
     public void testOfsXYGetSet() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         obj.setOfsX(5);
         obj.setOfsY(10);
         assertEquals(5, obj.getOfsX());
@@ -776,7 +776,7 @@ public class ObjTest {
 
     @Test
     public void testObjId() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         obj.setObjId(42);
         assertEquals(42, obj.getObjId());
     }
@@ -785,13 +785,13 @@ public class ObjTest {
 
     @Test
     public void testTakeMappedObjReturnsNull() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         assertNull(obj.takeMappedObj(99999));
     }
 
     @Test
     public void testTakeMappedObjFromFrontEffect() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         DummyEffect effect = new DummyEffect();
         effect.objId = 12345;
         SimYukkuri.world.getCurrentMap().getFrontEffect().put(effect.objId, effect);
@@ -801,7 +801,7 @@ public class ObjTest {
 
     @Test
     public void testTakeMappedObjFromBodyMap() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         StubBody body = new StubBody();
         body.objId = 2222;
         SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
@@ -814,7 +814,7 @@ public class ObjTest {
 
         @Test
         public void testScenario_ClockTickAppliesVelocityAndKnockbackThenResetsBVector() {
-            Obj obj = new Obj();
+            Entity obj = new Entity();
             obj.setX(100);
             obj.setY(100);
             obj.setVx(5);
@@ -833,7 +833,7 @@ public class ObjTest {
 
         @Test
         public void testScenario_FallingUnderGroundKeepsNegativeZButStillZeroesXYVelocity() {
-            Obj obj = new Obj();
+            Entity obj = new Entity();
             obj.setX(500);
             obj.setY(500);
             obj.setZ(1);

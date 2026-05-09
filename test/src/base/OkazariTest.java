@@ -70,7 +70,7 @@ public class OkazariTest {
 
     @Test
     public void testConstructorWithDefaultType() {
-        Body body = createBody();
+        Yukkuri body = createBody();
 
         Okazari okazari = new Okazari(body, Okazari.OkazariType.DEFAULT);
 
@@ -91,7 +91,7 @@ public class OkazariTest {
 
     @Test
     public void testConstructorWithNamedTypeAndBodyInWorld() {
-        Body body = createBody();
+        Yukkuri body = createBody();
 
         Okazari okazari = new Okazari(body, Okazari.OkazariType.ADULT1);
 
@@ -104,7 +104,7 @@ public class OkazariTest {
 
     @Test
     public void testConstructorWithNamedTypeAndBodyNotInWorld() {
-        Body body = new Reimu();
+        Yukkuri body = new Reimu();
         body.setAgeState(AgeState.ADULT);
         // worldに追加しない → BodyRegistry では見つからない
 
@@ -218,7 +218,7 @@ public class OkazariTest {
 
     @Test
     public void testTakeOkazariOfsPosReturnsNullWhenOffsetPosNull() {
-        Body body = createBody();
+        Yukkuri body = createBody();
         Okazari okazari = new Okazari(body, Okazari.OkazariType.DEFAULT);
 
         // DEFAULT → offsetPos = null
@@ -237,7 +237,7 @@ public class OkazariTest {
 
     @Test
     public void testTakeOkazariOfsPosReturnsCorrectPos() {
-        Body body = createBody();
+        Yukkuri body = createBody();
         body.setAgeState(AgeState.ADULT);
 
         Point4y[] offsets = new Point4y[3];
@@ -274,8 +274,8 @@ public class OkazariTest {
 
     // --- ヘルパー ---
 
-    private static Body createBody() {
-        Body body = new Reimu();
+    private static Yukkuri createBody() {
+        Yukkuri body = new Reimu();
         body.setAgeState(AgeState.ADULT);
         Sprite[] spr = new Sprite[3];
         for (int i = 0; i < 3; i++) {

@@ -7,14 +7,14 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import src.base.Body;
+import src.base.Yukkuri;
 import src.enums.Intelligence;
 import src.util.WorldTestHelper;
 
 class BodyIllnessRuleTest {
 
-	private Body self;
-	private Body target;
+	private Yukkuri self;
+	private Yukkuri target;
 
 	@BeforeEach
 	void setUp() {

@@ -8,7 +8,7 @@ import src.ConstState;
 import src.SimYukkuri;
 import src.enums.AgeState;
 import src.draw.Point4y;
-import src.base.Body;
+import src.base.Yukkuri;
 
 public class DosMarisaTest {
 
@@ -100,7 +100,7 @@ public class DosMarisaTest {
         DosMarisa obj = new DosMarisa();
         // checkTransform() checks transformation conditions
         // Without proper World setup, will likely return null
-        Body result = obj.checkTransform();
+        Yukkuri result = obj.checkTransform();
         // Just verify the method executes without crashing
     }
 

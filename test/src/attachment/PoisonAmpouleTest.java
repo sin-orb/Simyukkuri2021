@@ -17,7 +17,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.draw.World;
 import src.enums.AgeState;
 import src.enums.Direction;
@@ -63,7 +63,7 @@ public class PoisonAmpouleTest {
 
     @Test
     public void testConstructorDefaultsAndBoundary() {
-        Body parent = createParent(AgeState.CHILD);
+        Yukkuri parent = createParent(AgeState.CHILD);
         PoisonAmpoule ampoule = new PoisonAmpoule(parent);
 
         assertEquals(parent.getUniqueID(), ampoule.getParent());
@@ -86,7 +86,7 @@ public class PoisonAmpouleTest {
 
     @Test
     public void testUpdateReturnsDoNothingWhenParentIsDead() {
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         PoisonAmpoule ampoule = new PoisonAmpoule(parent);
 
         parent.setDead(true);
@@ -98,7 +98,7 @@ public class PoisonAmpouleTest {
 
     @Test
     public void testUpdateIncreasesShitWhenAlive() {
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         parent.initAmount(AgeState.ADULT); // ankoAmount > 0 => isDead() returns false
         parent.setShit(100); // plusShit is no-op when shit==0, so initialize to positive
         PoisonAmpoule ampoule = new PoisonAmpoule(parent);
@@ -113,7 +113,7 @@ public class PoisonAmpouleTest {
 
     @Test
     public void testUpdateSetsHappinessToSad() {
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         PoisonAmpoule ampoule = new PoisonAmpoule(parent);
 
         parent.setHappiness(Happiness.VERY_HAPPY);
@@ -127,7 +127,7 @@ public class PoisonAmpouleTest {
 
     @Test
     public void testGetImageReturnsNullWhenParentNotInMap() {
-        Body parent = createParent(AgeState.CHILD);
+        Yukkuri parent = createParent(AgeState.CHILD);
         PoisonAmpoule ampoule = new PoisonAmpoule(parent);
 
         SimYukkuri.world.getCurrentMap().getBody().remove(parent.getUniqueID());
@@ -138,7 +138,7 @@ public class PoisonAmpouleTest {
 
     @Test
     public void testGetImageReturnsLeftImageWhenDirectionLeft() {
-        Body parent = createParent(AgeState.CHILD);
+        Yukkuri parent = createParent(AgeState.CHILD);
         PoisonAmpoule ampoule = new PoisonAmpoule(parent);
 
         parent.setDirection(Direction.LEFT);
@@ -149,7 +149,7 @@ public class PoisonAmpouleTest {
 
     @Test
     public void testGetImageReturnsRightImageWhenDirectionRight() {
-        Body parent = createParent(AgeState.CHILD);
+        Yukkuri parent = createParent(AgeState.CHILD);
         PoisonAmpoule ampoule = new PoisonAmpoule(parent);
 
         parent.setDirection(Direction.RIGHT);
@@ -160,9 +160,9 @@ public class PoisonAmpouleTest {
 
     @Test
     public void testGetImageReturnsCorrectImageForAge() {
-        Body babyParent = createParent(AgeState.BABY);
-        Body childParent = createParent(AgeState.CHILD);
-        Body adultParent = createParent(AgeState.ADULT);
+        Yukkuri babyParent = createParent(AgeState.BABY);
+        Yukkuri childParent = createParent(AgeState.CHILD);
+        Yukkuri adultParent = createParent(AgeState.ADULT);
 
         PoisonAmpoule babyAmpoule = new PoisonAmpoule(babyParent);
         PoisonAmpoule childAmpoule = new PoisonAmpoule(childParent);
@@ -179,7 +179,7 @@ public class PoisonAmpouleTest {
 
     @Test
     public void testResetBoundaryUsesParentAge() {
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         PoisonAmpoule ampoule = new PoisonAmpoule(parent);
 
         ampoule.resetBoundary();
@@ -192,7 +192,7 @@ public class PoisonAmpouleTest {
 
     @Test
     public void testResetBoundaryDoesNothingWhenParentNotInMap() {
-        Body parent = createParent(AgeState.CHILD);
+        Yukkuri parent = createParent(AgeState.CHILD);
         PoisonAmpoule ampoule = new PoisonAmpoule(parent);
 
         int origPivotX = ampoule.getPivotX();
@@ -208,7 +208,7 @@ public class PoisonAmpouleTest {
 
     @Test
     public void testToStringUsesResourceUtil() {
-        Body parent = createParent(AgeState.BABY);
+        Yukkuri parent = createParent(AgeState.BABY);
         PoisonAmpoule ampoule = new PoisonAmpoule(parent);
 
         assertEquals(ResourceUtil.getInstance().read("item_poison"), ampoule.toString());
@@ -222,7 +222,7 @@ public class PoisonAmpouleTest {
 
     @Test
     public void testConstructorWithParentNotInWorld() {
-        Body parent = new Reimu();
+        Yukkuri parent = new Reimu();
         parent.setAgeState(AgeState.CHILD);
         PoisonAmpoule ampoule = new PoisonAmpoule(parent);
         assertEquals(500, ampoule.getValue());
@@ -233,7 +233,7 @@ public class PoisonAmpouleTest {
     public void testUpdatePoisonDamageWhenRndHits() {
         // RNDが常に0を返す → nextInt(1000)==0 がtrue → 毒ダメージ分岐に入る
         SimYukkuri.RND = new ConstState(0);
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         PoisonAmpoule ampoule = new PoisonAmpoule(parent);
         parent.setDead(false);
 
@@ -249,7 +249,7 @@ public class PoisonAmpouleTest {
     public void testUpdateNoPoisonDamageWhenRndMisses() {
         // RNDが1を返す → nextInt(1000)==0 がfalse
         SimYukkuri.RND = new ConstState(1);
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         PoisonAmpoule ampoule = new PoisonAmpoule(parent);
         parent.setDead(false);
 
@@ -260,7 +260,7 @@ public class PoisonAmpouleTest {
 
     @Test
     public void testUpdateDoesNotAddShitWhenCut() {
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         PoisonAmpoule ampoule = new PoisonAmpoule(parent);
 
         parent.setCriticalDamegeType(src.enums.CriticalDamegeType.CUT);
@@ -272,8 +272,8 @@ public class PoisonAmpouleTest {
         assertEquals(shitBefore, parent.getShit());
     }
 
-    private static Body createParent(AgeState ageState) {
-        Body parent = new Reimu();
+    private static Yukkuri createParent(AgeState ageState) {
+        Yukkuri parent = new Reimu();
         parent.setAgeState(ageState);
         parent.setMsgType(YukkuriType.REIMU);
         Sprite[] spr = new Sprite[3];
@@ -308,7 +308,7 @@ public class PoisonAmpouleTest {
         @Test
         void testScenario_LivePoisonAmpouleHitWakesBodyAddsShitAndAppliesPoisonDamage() {
             SimYukkuri.RND = new ConstState(0);
-            Body parent = createParent(AgeState.ADULT);
+            Yukkuri parent = createParent(AgeState.ADULT);
             parent.initAmount(AgeState.ADULT);
             parent.setSleeping(true);
             parent.setShit(100);
@@ -330,7 +330,7 @@ public class PoisonAmpouleTest {
         @Test
         void testScenario_CutBodyDoesNotWakeOrGainShitWhenPoisonDoesNotProc() {
             SimYukkuri.RND = new ConstState(1);
-            Body parent = createParent(AgeState.ADULT);
+            Yukkuri parent = createParent(AgeState.ADULT);
             parent.setSleeping(true);
             parent.setShit(100);
             parent.setCriticalDamegeType(CriticalDamegeType.CUT);

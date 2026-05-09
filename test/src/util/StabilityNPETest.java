@@ -3,7 +3,7 @@ package src.util;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
-import src.base.Body;
+import src.base.Yukkuri;
 import src.yukkuri.HybridYukkuri;
 import src.yukkuri.Reimu;
 import src.system.MessagePool;
@@ -29,7 +29,7 @@ public class StabilityNPETest {
         assertEquals(0, hybrid.getImage(0, 0, layer, 0));
 
         // 2. 配列はあるが要素が null の場合
-        hybrid.setImages(new Body[100]);
+        hybrid.setImages(new Yukkuri[100]);
         assertDoesNotThrow(() -> hybrid.getImage(0, 0, layer, 0));
         assertEquals(0, hybrid.getImage(0, 0, layer, 0));
     }
@@ -39,8 +39,8 @@ public class StabilityNPETest {
      */
     @Test
     public void testMessagePool_getMessage_withNullName_shouldNotThrow() {
-        // Body のサブクラスを作成し、意図的に null 名前を返させる
-        Body glitchyBody = new Reimu() {
+        // Yukkuri のサブクラスを作成し、意図的に null 名前を返させる
+        Yukkuri glitchyBody = new Reimu() {
             @Override
             public String getMyName() { return null; }
             @Override
@@ -56,7 +56,7 @@ public class StabilityNPETest {
     }
 
     /**
-     * GameWorld が未初期化の状態でも Body の生成が成功することを検証
+     * GameWorld が未初期化の状態でも Yukkuri の生成が成功することを検証
      */
     @Test
     public void testBody_Constructor_withoutGameWorld_shouldNotThrow() {

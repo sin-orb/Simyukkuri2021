@@ -26,9 +26,9 @@ public abstract class ItemTestBase {
     }
 
     /**
-     * Helper to verify common ObjEX properties
+     * Helper to verify common WorldEntity properties
      */
-    protected void verifyCommonProperties(ObjEX item) {
+    protected void verifyCommonProperties(WorldEntity item) {
         assertNotNull(item, "Item should not be null");
         assertTrue(item.getObjId() > 0, "Item should have a valid ID");
         assertNotNull(SimYukkuri.world.getCurrentMap(), "Map should exist");

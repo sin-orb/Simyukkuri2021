@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.entity.world.bodylinked.Okazari;
 import src.draw.Translate;
 import src.item.Trash;
@@ -18,12 +18,12 @@ import src.yukkuri.Marisa;
  * Test class for TrashLogic.
  *
  * TrashLogic has two methods:
- *   checkTrashOkazari(Body b) - public
- *   searchTrashObj(Body b)    - private (tested indirectly via checkTrashOkazari)
+ *   checkTrashOkazari(Yukkuri b) - public
+ *   searchTrashObj(Yukkuri b)    - private (tested indirectly via checkTrashOkazari)
  */
 public class TrashLogicTest {
 
-    private Body body;
+    private Yukkuri body;
 
     // WorldTestHelper が new World(0,0) を呼び出すため、
     // wallMap のサイズは DEFAULT_MAP_X[0]*fieldScaleData[0]/100 + 1 = 151x151 に固定される
@@ -185,7 +185,7 @@ public class TrashLogicTest {
     @Test
     void testCheckTrashOkazariMethodExists() {
         try {
-            TrashLogic.class.getDeclaredMethod("checkTrashOkazari", Body.class);
+            TrashLogic.class.getDeclaredMethod("checkTrashOkazari", Yukkuri.class);
             assertTrue(true, "checkTrashOkazari メソッドが存在する");
         } catch (NoSuchMethodException e) {
             fail("checkTrashOkazari メソッドが存在しない");
@@ -195,7 +195,7 @@ public class TrashLogicTest {
     @Test
     void testSearchTrashObjMethodExists() {
         try {
-            java.lang.reflect.Method m = TrashLogic.class.getDeclaredMethod("searchTrashObj", Body.class);
+            java.lang.reflect.Method m = TrashLogic.class.getDeclaredMethod("searchTrashObj", Yukkuri.class);
             assertNotNull(m);
             // private メソッドであることを確認
             assertTrue(java.lang.reflect.Modifier.isPrivate(m.getModifiers()),
@@ -234,7 +234,7 @@ public class TrashLogicTest {
     // ---------------------------------------------------------------
     @Test
     void testCheckTrashOkazari_DifferentBody() {
-        Body body2 = new Marisa();
+        Yukkuri body2 = new Marisa();
         body2.setX(30);
         body2.setY(30);
         body2.setOkazari(null);
@@ -248,7 +248,7 @@ public class TrashLogicTest {
     }
 
     // ---------------------------------------------------------------
-    // hasOkazari が true の Body に対して複数 Trash があっても false を返す
+    // hasOkazari が true の Yukkuri に対して複数 Trash があっても false を返す
     // ---------------------------------------------------------------
     @Test
     void testCheckTrashOkazari_HasOkazari_MultipleTrash_ReturnsFalse() {
@@ -313,7 +313,7 @@ public class TrashLogicTest {
     // ---------------------------------------------------------------
     // Helper: eyesightBase フィールドをリフレクションで設定
     // ---------------------------------------------------------------
-    private void setEyesightBase(Body body, int value) {
+    private void setEyesightBase(Yukkuri body, int value) {
         try {
             body.setEyesightBase(value);
         } catch (Exception e) {

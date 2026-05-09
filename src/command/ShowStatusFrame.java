@@ -24,8 +24,8 @@ import src.SimYukkuri;
 import src.util.GameRandom;
 import src.util.GameWorld;
 import src.attachment.Attachment;
-import src.base.Body;
-import src.base.Obj;
+import src.base.Yukkuri;
+import src.base.Entity;
 import src.draw.MyPane;
 import src.enums.FavItemType;
 import src.enums.Pain;
@@ -111,7 +111,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 					return;
 				}
 				final int id = idTemp;
-				Body body = GameWorld.get().getCurrentMap().getBody().get(id);
+				Yukkuri body = GameWorld.get().getCurrentMap().getBody().get(id);
 				if (body == null) {
 					showError(GameText.read("command_status_noexistyukkurierror"));
 				} else {
@@ -131,11 +131,11 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 					return;
 				}
 				final int id = idTemp;
-				List<Body> sorted = new LinkedList<Body>(GameWorld.get().getCurrentMap().getBody().values()).stream()
+				List<Yukkuri> sorted = new LinkedList<Yukkuri>(GameWorld.get().getCurrentMap().getBody().values()).stream()
 						.sorted().collect(Collectors.toList());
 				int target = -1;
 				for (int i = 0; i < sorted.size(); i++) {
-					Body body = sorted.get(i);
+					Yukkuri body = sorted.get(i);
 					if (body.getUniqueID() > id) {
 						target = i;
 						break;
@@ -166,11 +166,11 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 					return;
 				}
 				final int id = idTemp;
-				List<Body> sorted = (List<Body>)new LinkedList<Body>(GameWorld.get().getCurrentMap().getBody().values()).stream()
+				List<Yukkuri> sorted = (List<Yukkuri>)new LinkedList<Yukkuri>(GameWorld.get().getCurrentMap().getBody().values()).stream()
 						.sorted(Comparator.reverseOrder()).collect(Collectors.toList());
 				int target = -1;
 				for (int i = 0; i < sorted.size(); i++) {
-					Body body = sorted.get(i);
+					Yukkuri body = sorted.get(i);
 					if (body.getUniqueID() < id) {
 						target = i;
 						break;
@@ -195,7 +195,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		JButton btnNewButton_3 = new JButton(GameText.read("command_status_first"));
 		btnNewButton_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				List<Body> sorted = new LinkedList<Body>(GameWorld.get().getCurrentMap().getBody().values()).stream()
+				List<Yukkuri> sorted = new LinkedList<Yukkuri>(GameWorld.get().getCurrentMap().getBody().values()).stream()
 						.sorted().collect(Collectors.toList());
 				if (sorted.size() == 0) {
 					showError(GameText.read("command_status_noexistyukkurierror"));
@@ -212,7 +212,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		btnNewButton_4.addActionListener(new ActionListener() {
 			@SuppressWarnings("unchecked")
 			public void actionPerformed(ActionEvent e) {
-				List<Body> sorted = (List<Body>) new LinkedList<>(GameWorld.get().getCurrentMap().getBody().values()).stream()
+				List<Yukkuri> sorted = (List<Yukkuri>) new LinkedList<>(GameWorld.get().getCurrentMap().getBody().values()).stream()
 						.sorted(Comparator.reverseOrder()).collect(Collectors.toList());
 				if (sorted.size() == 0) {
 					showError(GameText.read("command_status_noexistyukkurierror"));
@@ -233,8 +233,8 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 					return;
 				}
 				int random = GameRandom.nextInt(GameWorld.get().getCurrentMap().getBody().size());
-				List<Body> bodyList = new LinkedList<>();
-				for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
+				List<Yukkuri> bodyList = new LinkedList<>();
+				for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
 					bodyList.add(entry.getValue());
 				}
 				ShowStatusFrame.getInstance().giveBodyInfo(bodyList.get(random));
@@ -254,12 +254,12 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 					return;
 				}
 				final int id = idTemp;
-				Body body = GameWorld.get().getCurrentMap().getBody().get(id);
+				Yukkuri body = GameWorld.get().getCurrentMap().getBody().get(id);
 				if (body == null) {
 					showError(GameText.read("command_status_noexistyukkurierror"));
 					return;
 				} else {
-					Body partner = src.util.BodyRegistry.getBodyInstance(body.getPartner());
+					Yukkuri partner = src.util.BodyRegistry.getBodyInstance(body.getPartner());
 					if (partner == null) {
 						showError(GameText.read("command_status_noexistyukkurierror"));
 						return;
@@ -283,7 +283,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 					return;
 				}
 				final int id = idTemp;
-				Body body = GameWorld.get().getCurrentMap().getBody().get(id);
+				Yukkuri body = GameWorld.get().getCurrentMap().getBody().get(id);
 				if (body == null) {
 					showError(GameText.read("command_status_noexistyukkurierror"));
 					return;
@@ -312,7 +312,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 					return;
 				}
 				final int id = idTemp;
-				Body body = GameWorld.get().getCurrentMap().getBody().get(id);
+				Yukkuri body = GameWorld.get().getCurrentMap().getBody().get(id);
 				if (body == null) {
 					showError(GameText.read("command_status_noexistyukkurierror"));
 					return;
@@ -341,7 +341,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 					return;
 				}
 				final int id = idTemp;
-				Body body = GameWorld.get().getCurrentMap().getBody().get(id);
+				Yukkuri body = GameWorld.get().getCurrentMap().getBody().get(id);
 				if (body == null) {
 					showError(GameText.read("command_status_noexistyukkurierror"));
 					return;
@@ -370,12 +370,12 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 					return;
 				}
 				final int id = idTemp;
-				Body body = GameWorld.get().getCurrentMap().getBody().get(id);
+				Yukkuri body = GameWorld.get().getCurrentMap().getBody().get(id);
 				if (body == null) {
 					showError(GameText.read("command_status_noexistyukkurierror"));
 					return;
 				} else {
-					Body father = src.util.BodyRegistry.getBodyInstance(body.getFather());
+					Yukkuri father = src.util.BodyRegistry.getBodyInstance(body.getFather());
 					if (father == null) {
 						showError(GameText.read("command_status_noexistyukkurierror"));
 						return;
@@ -399,12 +399,12 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 					return;
 				}
 				final int id = idTemp;
-				Body body = GameWorld.get().getCurrentMap().getBody().get(id);
+				Yukkuri body = GameWorld.get().getCurrentMap().getBody().get(id);
 				if (body == null) {
 					showError(GameText.read("command_status_noexistyukkurierror"));
 					return;
 				} else {
-					Body mother = src.util.BodyRegistry.getBodyInstance(body.getMother());
+					Yukkuri mother = src.util.BodyRegistry.getBodyInstance(body.getMother());
 					if (mother == null) {
 						showError(GameText.read("command_status_noexistyukkurierror"));
 						return;
@@ -673,7 +673,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 	 * ゆっくりの情報を表示する.
 	 * @param body ゆっくり
 	 */
-	public void giveBodyInfo(Body body) {
+	public void giveBodyInfo(Yukkuri body) {
 		textField.setText(String.valueOf(body.getUniqueID()));
 		textField_1.setText(body.toString());
 		textField_2.setText(String.valueOf(body.getAge()));
@@ -705,7 +705,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		}
 		textField_3.setText(purpose);
 		String moveTargetId = GameText.read("command_status_nothing");
-		Obj targetObject = body.takeMappedObj(body.getMoveTargetId());
+		Entity targetObject = body.takeMappedObj(body.getMoveTargetId());
 		if (targetObject != null) {
 			moveTargetId = targetObject.getX() + "," + targetObject.getY();
 		}

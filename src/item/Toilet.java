@@ -18,8 +18,8 @@ import javax.swing.JRadioButton;
 
 import src.SimYukkuri;
 import src.util.GameWorld;
-import src.base.Obj;
-import src.base.ObjEX;
+import src.base.Entity;
+import src.base.WorldEntity;
 import src.draw.ModLoader;
 import src.draw.Rectangle4y;
 import src.draw.Translate;
@@ -31,7 +31,7 @@ import src.system.ResourceUtil;
 /***************************************************
  * トイレ
  */
-public class Toilet extends ObjEX {
+public class Toilet extends WorldEntity {
 	private static final long serialVersionUID = -484401473340388552L;
 
 	/** トイレのタイプ */
@@ -53,7 +53,7 @@ public class Toilet extends ObjEX {
 	}
 
 	/** 処理対象(うんうん) */
-	public static final int hitCheckObjType = ObjEX.SHIT;
+	public static final int hitCheckObjType = WorldEntity.SHIT;
 	private static BufferedImage[] images = new BufferedImage[6];
 	private static Rectangle4y boundary = new Rectangle4y();
 
@@ -128,7 +128,7 @@ public class Toilet extends ObjEX {
 		return 0;
 	}
 
-	public boolean checkHitObj(Obj targetObject) {
+	public boolean checkHitObj(Entity targetObject) {
 		Rectangle tmpRect = new Rectangle();
 		getCollisionRect(tmpRect);
 		// 対象の座標をフィールド座標に変換
@@ -141,7 +141,7 @@ public class Toilet extends ObjEX {
 	}
 
 	@Override
-	public boolean checkHitObj(Rectangle collisionRect, Obj targetObject) {
+	public boolean checkHitObj(Rectangle collisionRect, Entity targetObject) {
 		Rectangle tmpRect = new Rectangle();
 		getCollisionRect(tmpRect);
 		// 対象の座標をフィールド座標に変換
@@ -193,7 +193,7 @@ public class Toilet extends ObjEX {
 		setCollisionSize(getPivotX(), getPivotY());
 		GameWorld.get().getCurrentMap().getToilet().put(objId, this);
 		objType = Type.PLATFORM;
-		objEXType = WorldEntityKind.TOILET;
+		worldEntityType = WorldEntityKind.TOILET;
 		interval = 30;
 
 		boolean setupSucceeded = setupToilet(this);
@@ -228,7 +228,7 @@ public class Toilet extends ObjEX {
 
 	}
 
-	public int objHitProcess(Obj targetObject) {
+	public int objHitProcess(Entity targetObject) {
 		targetObject.remove();
 		Cash.addCash(-getCost());
 		return 1;

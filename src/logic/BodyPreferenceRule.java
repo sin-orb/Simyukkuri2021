@@ -1,8 +1,6 @@
 package src.logic;
 
 import src.base.BodyAttributes;
-import src.entity.living.profile.BodyBehaviorProfile;
-import src.entity.living.profile.BodyStatProfile;
 
 /**
  * Bodyの好み・設定系の値を集約する.
@@ -11,75 +9,67 @@ public final class BodyPreferenceRule {
 	private BodyPreferenceRule() {
 	}
 
-	private static BodyBehaviorProfile behavior(BodyAttributes body) {
-		return body.getBodyBehaviorProfileRaw();
-	}
-
-	private static BodyStatProfile stat(BodyAttributes body) {
-		return body.getBodyStatProfileRaw();
-	}
-
 	public static int getLovePlayerLimitBase(BodyAttributes body) {
-		return behavior(body).getLovePlayerLimitBase();
+		return body.getLovePlayerLimitBase();
 	}
 
 	public static void setLovePlayerLimitBase(BodyAttributes body, int value) {
-		behavior(body).setLovePlayerLimitBase(value);
+		body.setLovePlayerLimitBase(value);
 	}
 
 	public static int[] getCleaningFailProbWise(BodyAttributes body) {
-		return stat(body).getCleaningFailProbWise();
+		return body.getCleaningFailProbWise();
 	}
 
 	public static void setCleaningFailProbWise(BodyAttributes body, int[] value) {
-		stat(body).setCleaningFailProbWise(value);
+		body.setCleaningFailProbWise(value);
 	}
 
 	public static int[] getCleaningFailProbAverage(BodyAttributes body) {
-		return stat(body).getCleaningFailProbAverage();
+		return body.getCleaningFailProbAverage();
 	}
 
 	public static void setCleaningFailProbAverage(BodyAttributes body, int[] value) {
-		stat(body).setCleaningFailProbAverage(value);
+		body.setCleaningFailProbAverage(value);
 	}
 
 	public static int[] getCleaningFailProbFool(BodyAttributes body) {
-		return stat(body).getCleaningFailProbFool();
+		return body.getCleaningFailProbFool();
 	}
 
 	public static void setCleaningFailProbFool(BodyAttributes body, int[] value) {
-		stat(body).setCleaningFailProbFool(value);
+		body.setCleaningFailProbFool(value);
 	}
 
 	public static int[] getNiceLimit(BodyAttributes body) {
-		return stat(body).getNiceLimit();
+		return body.getNiceLimit();
 	}
 
 	public static void setNiceLimit(BodyAttributes body, int[] value) {
-		stat(body).setNiceLimit(value);
+		body.setNiceLimit(value);
 	}
 
 	public static int getSameDirectionFactor(BodyAttributes body) {
-		return behavior(body).getSameDirectionFactor();
+		return body.getSameDirectionFactor();
 	}
 
 	public static void setSameDirectionFactor(BodyAttributes body, int value) {
-		behavior(body).setSameDirectionFactor(value);
+		body.setSameDirectionFactor(value);
 	}
 
 	public static boolean isNotChangeCharacter(BodyAttributes body) {
-		return behavior(body).isNotChangeCharacter();
+		return body.isNotChangeCharacter();
 	}
 
 	public static void setNotChangeCharacter(BodyAttributes body, boolean value) {
-		behavior(body).setNotChangeCharacter(value);
+		body.setNotChangeCharacter(value);
 	}
 
 	public static boolean isUseRealPregnantLimit(BodyAttributes body) {
-		return behavior(body).isUseRealPregnantLimit();
+		return body.isUseRealPregnantLimit();
 	}
 
 	public static void setUseRealPregnantLimit(BodyAttributes body, boolean value) {
-		behavior(body).setUseRealPregnantLimit(value);
+		body.setUseRealPregnantLimit(value);
 	}
 }

@@ -6,13 +6,13 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.beans.Transient;
 
-import src.base.Obj;
+import src.base.Entity;
 import src.enums.Type;
 
 /*************************************************
 背景の部品画像管理
 */
-public class TerrainBillboard extends Obj {
+public class TerrainBillboard extends Entity {
 
 	private static final long serialVersionUID = -587830180580728404L;
 	/**画像*/

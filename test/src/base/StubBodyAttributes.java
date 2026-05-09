@@ -9,6 +9,11 @@ public class StubBodyAttributes extends BodyAttributes {
     private static final long serialVersionUID = 1L;
 
     private int expandSizeW = 0;
+    private boolean noticeNoOkazariField = false;
+
+    @Override
+    public boolean isNoticeNoOkazari() { return noticeNoOkazariField; }
+    public void setNoticeNoOkazari(boolean v) { this.noticeNoOkazariField = v; }
 
     @Override
     public int getType() {
@@ -25,13 +30,7 @@ public class StubBodyAttributes extends BodyAttributes {
     }
 
     public void forceSetHappiness(Happiness h) {
-        try {
-            java.lang.reflect.Field f = BodyAttributes.class.getDeclaredField("happiness");
-            f.setAccessible(true);
-            f.set(this, h);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        happiness = h;
     }
 
     @Override
@@ -87,4 +86,33 @@ public class StubBodyAttributes extends BodyAttributes {
     public int checkNonYukkuriDiseaseTolerance() {
         return 0;
     }
+
+    private String baseBodyFileName;
+    private String[] babyNames;
+    private String[] childNames;
+    private String[] adultNames;
+    private String[] myNames = new String[3];
+    private String[] babyNamesDamaged;
+    private String[] childNamesDamaged;
+    private String[] adultNamesDamaged;
+    private String[] myNamesDamaged = new String[3];
+
+    @Override public String getBaseBodyFileName() { return baseBodyFileName; }
+    @Override public void setBaseBodyFileName(String v) { baseBodyFileName = v; }
+    @Override public String[] getBabyNames() { return babyNames; }
+    @Override public void setBabyNames(String[] v) { babyNames = v; }
+    @Override public String[] getChildNames() { return childNames; }
+    @Override public void setChildNames(String[] v) { childNames = v; }
+    @Override public String[] getAdultNames() { return adultNames; }
+    @Override public void setAdultNames(String[] v) { adultNames = v; }
+    @Override public String[] getMyNames() { return myNames; }
+    @Override public void setMyNames(String[] v) { myNames = v; }
+    @Override public String[] getBabyNamesDamaged() { return babyNamesDamaged; }
+    @Override public void setBabyNamesDamaged(String[] v) { babyNamesDamaged = v; }
+    @Override public String[] getChildNamesDamaged() { return childNamesDamaged; }
+    @Override public void setChildNamesDamaged(String[] v) { childNamesDamaged = v; }
+    @Override public String[] getAdultNamesDamaged() { return adultNamesDamaged; }
+    @Override public void setAdultNamesDamaged(String[] v) { adultNamesDamaged = v; }
+    @Override public String[] getMyNamesDamaged() { return myNamesDamaged; }
+    @Override public void setMyNamesDamaged(String[] v) { myNamesDamaged = v; }
 }

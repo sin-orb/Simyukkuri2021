@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.draw.MyPane;
 import src.draw.World;
 import src.enums.AgeState;
@@ -33,8 +33,8 @@ public class ShowStatusFrameTest {
         SimYukkuri.world = new World();
     }
 
-    private Body createReimuBody(AgeState age) {
-        Body b = new Reimu();
+    private Yukkuri createReimuBody(AgeState age) {
+        Yukkuri b = new Reimu();
         Sprite[] spr = new Sprite[3];
         Sprite[] expSpr = new Sprite[3];
         Sprite[] brdSpr = new Sprite[3];
@@ -57,7 +57,7 @@ public class ShowStatusFrameTest {
 
     @Test
     public void testGiveBodyInfoUpdatesSelectBody() {
-        Body b = createReimuBody(AgeState.ADULT);
+        Yukkuri b = createReimuBody(AgeState.ADULT);
         ShowStatusFrame.getInstance().giveBodyInfo(b);
 
         assertSame(b, MyPane.getSelectBody());

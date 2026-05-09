@@ -56,10 +56,10 @@ import src.attachment.OrangeAmpoule;
 import src.attachment.PoisonAmpoule;
 import src.attachment.StopAmpoule;
 import src.attachment.VeryShitAmpoule;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.effect.Effect;
-import src.base.Obj;
-import src.base.ObjEX;
+import src.base.Entity;
+import src.base.WorldEntity;
 import src.entity.world.bodylinked.Okazari;
 import src.command.GadgetMenu;
 import src.command.GadgetMenu.GadgetList;
@@ -169,8 +169,8 @@ public class MyPane extends JPanel implements Runnable {
 	private Graphics2D backBufferG2 = null;
 
 	/** 描画用テンポラリ */
-	private List<Obj> list4sort = new LinkedList<Obj>();
-	private List<Body> msgList = new LinkedList<Body>();
+	private List<Entity> list4sort = new LinkedList<Entity>();
+	private List<Yukkuri> msgList = new LinkedList<Yukkuri>();
 	private int[] posTmp = new int[10];
 	private BufferedImage[] layerTmp = new BufferedImage[10];
 	/** 拡大表示倍率 */
@@ -222,7 +222,7 @@ public class MyPane extends JPanel implements Runnable {
 	private static boolean isEnableTarget = false;
 	private static boolean isDisableHelp = false;
 	/** カーソルで選択されているゆっくり */
-	private static Body selectBody = null;
+	private static Yukkuri selectBody = null;
 
 	public static int getNormalSpeed() {
 		return NORMAL;
@@ -256,11 +256,11 @@ public class MyPane extends JPanel implements Runnable {
 		isDisableHelp = disableHelp;
 	}
 
-	public static Body getSelectBody() {
+	public static Yukkuri getSelectBody() {
 		return selectBody;
 	}
 
-	public static void setSelectBody(Body body) {
+	public static void setSelectBody(Yukkuri body) {
 		selectBody = body;
 	}
 
@@ -411,7 +411,7 @@ public class MyPane extends JPanel implements Runnable {
 	*/
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void initBodies() {
-		List<Body> bodies = new LinkedList<Body>();
+		List<Yukkuri> bodies = new LinkedList<Yukkuri>();
 		String[] options;
 		String[] ages;
 		String[] rare;
@@ -582,7 +582,7 @@ public class MyPane extends JPanel implements Runnable {
 							age = AgeState.ADULT;
 							break;
 					}
-					Body b;
+					Yukkuri b;
 					synchronized (SimYukkuri.lock) {
 						b = terrarium.makeBody(GameRandom.nextInt(Translate.getMapW()),
 								GameRandom.nextInt(Translate.getMapH()), 0, selectType,
@@ -603,7 +603,7 @@ public class MyPane extends JPanel implements Runnable {
 			choice = JOptionPane.showOptionDialog(this, mess2 + System.getProperty("line.separator"), SimYukkuri.TITLE,
 					JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
 		}
-		for (Body b : bodies) {
+		for (Yukkuri b : bodies) {
 			synchronized (SimYukkuri.lock) {
 				terrarium.addBody(b);
 				if (b.getBodyRank() == BodyRank.KAIYU)
@@ -638,7 +638,7 @@ public class MyPane extends JPanel implements Runnable {
 	 * @param o    描画対象オブジェクト
 	 * @param rect オブジェクトの占有長方形
 	 */
-	void calcDrawPosition(Obj o, Rectangle4y rect) {
+	void calcDrawPosition(Entity o, Rectangle4y rect) {
 		int sizeW = Translate.transSize(o.getW());
 		int sizeH = Translate.transSize(o.getH());
 		int pivX = Translate.transSize(o.getPivotX());
@@ -711,19 +711,19 @@ public class MyPane extends JPanel implements Runnable {
 	}
 
 
-	public List<Obj> getList4sort() {
+	public List<Entity> getList4sort() {
 		return list4sort;
 	}
 
-	public void setList4sort(List<Obj> list4sort) {
+	public void setList4sort(List<Entity> list4sort) {
 		this.list4sort = list4sort;
 	}
 
-	public List<Body> getMsgList() {
+	public List<Yukkuri> getMsgList() {
 		return msgList;
 	}
 
-	public void setMsgList(List<Body> msgList) {
+	public void setMsgList(List<Yukkuri> msgList) {
 		this.msgList = msgList;
 	}
 

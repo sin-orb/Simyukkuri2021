@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.enums.AgeState;
 import src.enums.PublicRank;
 import src.system.Sprite;
@@ -21,8 +21,8 @@ class BodyDeadSearchRuleTest {
 	@Test
 	void testHandleDeadFound_excitingBranchMovesToSukkiri() {
 		WorldTestHelper.initializeMinimalWorld();
-		Body me = WorldTestHelper.createBody();
-		Body you = WorldTestHelper.createBody();
+		Yukkuri me = WorldTestHelper.createBody();
+		Yukkuri you = WorldTestHelper.createBody();
 		me.setBodySpr(makeSprites(1, 1));
 		you.setBodySpr(makeSprites(1, 1));
 		me.setX(100);
@@ -41,8 +41,8 @@ class BodyDeadSearchRuleTest {
 	@Test
 	void testHandleDeadFound_randomSkipReturnsFalse() {
 		WorldTestHelper.initializeMinimalWorld();
-		Body me = WorldTestHelper.createBody();
-		Body you = WorldTestHelper.createBody();
+		Yukkuri me = WorldTestHelper.createBody();
+		Yukkuri you = WorldTestHelper.createBody();
 		me.setBodySpr(makeSprites(1, 1));
 		you.setBodySpr(makeSprites(1, 1));
 		me.setX(100);

@@ -1,6 +1,6 @@
 package src.engine.birth;
 
-import src.base.Body;
+import src.base.Yukkuri;
 import src.enums.Attitude;
 import src.enums.Intelligence;
 import src.game.Dna;
@@ -12,7 +12,7 @@ public final class BabyDnaFactory {
 	private BabyDnaFactory() {
 	}
 
-	public static Dna createBabyDna(Body mother, Body father, int iFatherType, Attitude fatherrAtt,
+	public static Dna createBabyDna(Yukkuri mother, Yukkuri father, int iFatherType, Attitude fatherrAtt,
 			Intelligence fatherInt, boolean isRape, boolean fatherDamage, boolean forceCreate) {
 		if (mother == null) {
 			return null;

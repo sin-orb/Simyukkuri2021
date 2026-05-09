@@ -12,8 +12,8 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
-import src.base.Body;
-import src.base.Obj;
+import src.base.Yukkuri;
+import src.base.Entity;
 import src.enums.AgeState;
 import src.enums.Type;
 import src.game.Shit;
@@ -184,7 +184,7 @@ class BeltconveyorTest {
     @Test
     void testCheckHitObj_yukkuriType_settingFalse_returnsFalse() {
         Beltconveyor item = new Beltconveyor();
-        Body body = WorldTestHelper.createBody();
+        Yukkuri body = WorldTestHelper.createBody();
         body.setObjType(Type.YUKKURI);
         body.setAgeState(AgeState.ADULT);
         assertFalse(item.checkHitObj(body));
@@ -195,7 +195,7 @@ class BeltconveyorTest {
     @Test
     void testProcessHitObj_directionNull_throwsNPEOrDoesNotThrow() {
         Beltconveyor item = new Beltconveyor();
-        Body body = WorldTestHelper.createBody();
+        Yukkuri body = WorldTestHelper.createBody();
         // direction is null by default → NullPointerException from switch(direction)
         try {
             item.processHitObj(body);
@@ -346,7 +346,7 @@ class BeltconveyorTest {
         } catch (Exception e) {
             return; // reflection failed, skip
         }
-        Body body = WorldTestHelper.createBody();
+        Yukkuri body = WorldTestHelper.createBody();
         assertDoesNotThrow(() -> item.processHitObj(body));
     }
 
@@ -387,7 +387,7 @@ class BeltconveyorTest {
             Beltconveyor item = new Beltconveyor();
             item.getSetting()[setupMenuOrdinal("NORMAL_BABY")][AgeState.ADULT.ordinal()] = true;
 
-            Body body = WorldTestHelper.createBody();
+            Yukkuri body = WorldTestHelper.createBody();
             body.setAgeState(AgeState.ADULT);
             body.setObjType(Type.YUKKURI);
 
@@ -411,7 +411,7 @@ class BeltconveyorTest {
             setPrivateEnumField(item, "direction", "DirectCombo", "RIGHT");
             setPrivateEnumField(item, "beltSpeed", "SpeedCombo", "MIDDLE");
 
-            Body body = WorldTestHelper.createBody();
+            Yukkuri body = WorldTestHelper.createBody();
             assertEquals(0, body.getBx());
             assertEquals(0, body.getBy());
 

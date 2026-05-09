@@ -8,9 +8,9 @@ import java.io.IOException;
 
 import src.SimYukkuri;
 import src.util.GameWorld;
-import src.base.Body;
-import src.base.Obj;
-import src.base.ObjEX;
+import src.base.Yukkuri;
+import src.base.Entity;
+import src.base.WorldEntity;
 import src.draw.ModLoader;
 import src.draw.Rectangle4y;
 import src.enums.WorldEntityKind;
@@ -20,12 +20,12 @@ import src.system.Cash;
 /***************************************************
  * 製品投入口
  */
-public class ProductChute extends ObjEX {
+public class ProductChute extends WorldEntity {
 
 	private static final long serialVersionUID = 3997454948004838706L;
 	/** 処理対象(ゆっくり、うんうん、フード、おもちゃ、物全般、吐餡、茎) */
-	public static final int hitCheckObjType = ObjEX.YUKKURI + ObjEX.SHIT + ObjEX.FOOD + ObjEX.TOY + ObjEX.OBJECT
-			+ ObjEX.VOMIT + ObjEX.STALK;
+	public static final int hitCheckObjType = WorldEntity.YUKKURI + WorldEntity.SHIT + WorldEntity.FOOD + WorldEntity.TOY + WorldEntity.OBJECT
+			+ WorldEntity.VOMIT + WorldEntity.STALK;
 	private static final int IMAGE_COUNT = 2; // このクラスの総使用画像数
 	private static BufferedImage[] imageLayers = new BufferedImage[IMAGE_COUNT];
 	private static Rectangle4y boundary = new Rectangle4y();
@@ -67,13 +67,13 @@ public class ProductChute extends ObjEX {
 	}
 
 	@Override
-	public int objHitProcess(Obj o) {
+	public int objHitProcess(Entity o) {
 		// ディフューザー、ゆんばは消さない
 		if ((o instanceof Diffuser) || (o instanceof Yunba)) {
 			return 0;
 		}
-		if (o instanceof Body) {
-			Cash.sellYukkuri((Body) o);
+		if (o instanceof Yukkuri) {
+			Cash.sellYukkuri((Yukkuri) o);
 		} else {
 			Cash.addCash(o.getValue() >> 1);
 		}
@@ -96,7 +96,7 @@ public class ProductChute extends ObjEX {
 		setCollisionSize(getPivotX(), getPivotY());
 		GameWorld.get().getCurrentMap().getProductchute().put(objId, this);
 		objType = Type.PLATFORM;
-		objEXType = WorldEntityKind.PRODUCTCHUTE;
+		worldEntityType = WorldEntityKind.PRODUCTCHUTE;
 		interval = 10;
 		value = 5000;
 		cost = 50;

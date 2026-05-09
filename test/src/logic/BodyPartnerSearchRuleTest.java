@@ -8,7 +8,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.enums.Attitude;
 import src.util.GameRandom;
 import src.util.WorldTestHelper;
@@ -35,18 +35,18 @@ class BodyPartnerSearchRuleTest {
 
 	@Test
 	void testSelectTargets_prefersPheromoneBodyOverCloserNonPheromone() {
-		Body me = WorldTestHelper.createBody();
+		Yukkuri me = WorldTestHelper.createBody();
 		me.setX(40);
 		me.setY(40);
 		me.setOkazari(null);
 		me.setAttitude(Attitude.SUPER_SHITHEAD);
 
-		Body closer = WorldTestHelper.createBody();
+		Yukkuri closer = WorldTestHelper.createBody();
 		closer.setX(50);
 		closer.setY(40);
 		closer.setOkazari(null);
 
-		Body pheromone = WorldTestHelper.createBody();
+		Yukkuri pheromone = WorldTestHelper.createBody();
 		pheromone.setX(70);
 		pheromone.setY(40);
 		pheromone.setPheromone(true);
@@ -63,13 +63,13 @@ class BodyPartnerSearchRuleTest {
 
 	@Test
 	void testSelectTargets_reportsOkazariCandidateForRudeBody() {
-		Body me = WorldTestHelper.createBody();
+		Yukkuri me = WorldTestHelper.createBody();
 		me.setX(40);
 		me.setY(40);
 		me.setOkazari(null);
 		me.setAttitude(Attitude.SUPER_SHITHEAD);
 
-		Body target = WorldTestHelper.createBody();
+		Yukkuri target = WorldTestHelper.createBody();
 		target.setX(50);
 		target.setY(40);
 

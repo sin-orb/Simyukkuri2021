@@ -19,7 +19,7 @@ import src.attachment.OrangeAmpoule;
 import src.attachment.PoisonAmpoule;
 import src.attachment.StopAmpoule;
 import src.attachment.VeryShitAmpoule;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.enums.YukkuriType;
 import src.effect.BakeSmoke;
 import src.effect.Hit;
@@ -121,7 +121,7 @@ public final class ImageLoadService {
 
 			if (isBody) {
 				win.addLine("Load Shadow/Poo-poo/Vomit");
-				Body.loadShadowImages(loader, pane);
+				Yukkuri.loadShadowImages(loader, pane);
 				src.game.Shit.loadImages(loader, pane);
 				src.game.Vomit.loadImages(loader, pane);
 			}

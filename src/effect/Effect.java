@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
 import src.SimYukkuri;
-import src.base.Obj;
+import src.base.Entity;
 import src.util.GameWorld;
 import src.enums.Event;
 import src.enums.Type;
@@ -18,7 +18,7 @@ import src.enums.Type;
  *
  */
 @JsonTypeInfo(use = Id.CLASS)
-public abstract class Effect extends Obj {
+public abstract class Effect extends Entity {
 
 	private static final long serialVersionUID = 8592462375468621258L;
 	/**向き*/

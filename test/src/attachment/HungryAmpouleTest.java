@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.draw.World;
 import src.enums.AgeState;
 import src.enums.Direction;
@@ -42,7 +42,7 @@ public class HungryAmpouleTest {
 
     @Test
     public void testConstructorDefaultsAndBoundary() {
-        Body parent = createParent(AgeState.CHILD);
+        Yukkuri parent = createParent(AgeState.CHILD);
         HungryAmpoule ampoule = new HungryAmpoule(parent);
 
         assertEquals(parent.getUniqueID(), ampoule.getParent());
@@ -65,7 +65,7 @@ public class HungryAmpouleTest {
 
     @Test
     public void testUpdateReducesHungryWhenNotEating() {
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         HungryAmpoule ampoule = new HungryAmpoule(parent);
 
         // 満腹状態に設定
@@ -82,7 +82,7 @@ public class HungryAmpouleTest {
 
     @Test
     public void testUpdateDoesNotReduceHungryWhenEating() {
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         HungryAmpoule ampoule = new HungryAmpoule(parent);
 
         parent.setHungry(10000);
@@ -98,7 +98,7 @@ public class HungryAmpouleTest {
 
     @Test
     public void testUpdateClampsHungryToZero() {
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         HungryAmpoule ampoule = new HungryAmpoule(parent);
 
         // hungryを低い値に設定
@@ -113,7 +113,7 @@ public class HungryAmpouleTest {
 
     @Test
     public void testGetImageReturnsNullWhenParentNotInMap() {
-        Body parent = createParent(AgeState.CHILD);
+        Yukkuri parent = createParent(AgeState.CHILD);
         HungryAmpoule ampoule = new HungryAmpoule(parent);
 
         SimYukkuri.world.getCurrentMap().getBody().remove(parent.getUniqueID());
@@ -124,7 +124,7 @@ public class HungryAmpouleTest {
 
     @Test
     public void testGetImageReturnsLeftImageWhenDirectionLeft() {
-        Body parent = createParent(AgeState.CHILD);
+        Yukkuri parent = createParent(AgeState.CHILD);
         HungryAmpoule ampoule = new HungryAmpoule(parent);
 
         parent.setDirection(Direction.LEFT);
@@ -135,7 +135,7 @@ public class HungryAmpouleTest {
 
     @Test
     public void testGetImageReturnsRightImageWhenDirectionRight() {
-        Body parent = createParent(AgeState.CHILD);
+        Yukkuri parent = createParent(AgeState.CHILD);
         HungryAmpoule ampoule = new HungryAmpoule(parent);
 
         parent.setDirection(Direction.RIGHT);
@@ -146,7 +146,7 @@ public class HungryAmpouleTest {
 
     @Test
     public void testResetBoundaryUsesParentAge() {
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         HungryAmpoule ampoule = new HungryAmpoule(parent);
 
         ampoule.resetBoundary();
@@ -159,7 +159,7 @@ public class HungryAmpouleTest {
 
     @Test
     public void testResetBoundaryDoesNothingWhenParentNotInMap() {
-        Body parent = createParent(AgeState.CHILD);
+        Yukkuri parent = createParent(AgeState.CHILD);
         HungryAmpoule ampoule = new HungryAmpoule(parent);
 
         int origPivotX = ampoule.getPivotX();
@@ -175,7 +175,7 @@ public class HungryAmpouleTest {
 
     @Test
     public void testToStringUsesResourceUtil() {
-        Body parent = createParent(AgeState.BABY);
+        Yukkuri parent = createParent(AgeState.BABY);
         HungryAmpoule ampoule = new HungryAmpoule(parent);
 
         assertEquals(ResourceUtil.getInstance().read("item_hungry"), ampoule.toString());
@@ -189,15 +189,15 @@ public class HungryAmpouleTest {
 
     @Test
     public void testConstructorWithParentNotInWorld() {
-        Body parent = new Reimu();
+        Yukkuri parent = new Reimu();
         parent.setAgeState(AgeState.CHILD);
         HungryAmpoule ampoule = new HungryAmpoule(parent);
         assertEquals(500, ampoule.getValue());
         assertEquals(0, ampoule.getCost());
     }
 
-    private static Body createParent(AgeState ageState) {
-        Body parent = new Reimu();
+    private static Yukkuri createParent(AgeState ageState) {
+        Yukkuri parent = new Reimu();
         parent.setAgeState(ageState);
         SimYukkuri.world.getCurrentMap().getBody().put(parent.getUniqueID(), parent);
         return parent;
@@ -225,7 +225,7 @@ public class HungryAmpouleTest {
 
         @Test
         void testScenario_NonEatingBodyLosesExactlyOneTickOfHungry() {
-            Body parent = createParent(AgeState.ADULT);
+            Yukkuri parent = createParent(AgeState.ADULT);
             HungryAmpoule ampoule = new HungryAmpoule(parent);
             parent.setHungry(4321);
             parent.setEating(false);
@@ -238,7 +238,7 @@ public class HungryAmpouleTest {
 
         @Test
         void testScenario_EatingBodyPreservesHungryEvenNearClampBoundary() {
-            Body parent = createParent(AgeState.ADULT);
+            Yukkuri parent = createParent(AgeState.ADULT);
             HungryAmpoule ampoule = new HungryAmpoule(parent);
             parent.setHungry(200);
             parent.setEating(true);

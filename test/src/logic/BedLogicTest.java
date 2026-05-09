@@ -16,17 +16,17 @@ import src.SimYukkuri;
 import src.logic.BedLogic;
 import src.util.WorldTestHelper;
 import src.yukkuri.Marisa;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.enums.AgeState;
 import src.enums.PublicRank;
 import src.item.Bed;
 import src.item.House;
 import src.item.Toilet;
-import src.base.Obj;
+import src.base.Entity;
 
 class BedLogicTest {
 
-    private Body body;
+    private Yukkuri body;
 
     @BeforeEach
     void setUp() {
@@ -64,14 +64,14 @@ class BedLogicTest {
         bed.setY(150);
         SimYukkuri.world.getCurrentMap().getBed().put(bed.getObjId(), bed);
 
-        Obj result = BedLogic.searchBed(body);
+        Entity result = BedLogic.searchBed(body);
         assertNotNull(result);
         assertEquals(bed, result);
     }
 
     @Test
     void testSearchBed_NotFound() {
-        Obj result = BedLogic.searchBed(body);
+        Entity result = BedLogic.searchBed(body);
         assertNull(result);
     }
 
@@ -133,10 +133,10 @@ class BedLogicTest {
         bed.setX(150); bed.setY(150);
         // Set bed dimensions so nextInt(ofsX) doesn't throw
         try {
-            java.lang.reflect.Field wf = src.base.Obj.class.getDeclaredField("w");
+            java.lang.reflect.Field wf = src.base.Entity.class.getDeclaredField("w");
             wf.setAccessible(true);
             wf.setInt(bed, 20);
-            java.lang.reflect.Field hf = src.base.Obj.class.getDeclaredField("h");
+            java.lang.reflect.Field hf = src.base.Entity.class.getDeclaredField("h");
             hf.setAccessible(true);
             hf.setInt(bed, 20);
         } catch (Exception e) { }
@@ -245,7 +245,7 @@ class BedLogicTest {
     @Test
     void testSearchBed_UnunSlave_noToilet_returnsNull() {
         body.setPublicRank(PublicRank.UnunSlave);
-        Obj result = BedLogic.searchBed(body);
+        Entity result = BedLogic.searchBed(body);
         assertNull(result);
     }
 
@@ -302,9 +302,9 @@ class BedLogicTest {
         src.event.EventPacket highEvent = new src.event.EventPacket() {
             private static final long serialVersionUID = 1L;
             { this.priority = src.event.EventPacket.EventPriority.HIGH; }
-            @Override public boolean checkEventResponse(src.base.Body b) { return true; }
-            @Override public void start(src.base.Body b) {}
-            @Override public boolean execute(src.base.Body b) { return false; }
+            @Override public boolean checkEventResponse(src.base.Yukkuri b) { return true; }
+            @Override public void start(src.base.Yukkuri b) {}
+            @Override public boolean execute(src.base.Yukkuri b) { return false; }
         };
         body.setCurrentEvent(highEvent);
         assertFalse(BedLogic.checkBed(body));
@@ -318,9 +318,9 @@ class BedLogicTest {
         src.event.EventPacket middleEvent = new src.event.EventPacket() {
             private static final long serialVersionUID = 1L;
             { this.priority = src.event.EventPacket.EventPriority.MIDDLE; }
-            @Override public boolean checkEventResponse(src.base.Body b) { return true; }
-            @Override public void start(src.base.Body b) {}
-            @Override public boolean execute(src.base.Body b) { return false; }
+            @Override public boolean checkEventResponse(src.base.Yukkuri b) { return true; }
+            @Override public void start(src.base.Yukkuri b) {}
+            @Override public boolean execute(src.base.Yukkuri b) { return false; }
         };
         body.setCurrentEvent(middleEvent);
         assertFalse(BedLogic.checkBed(body));

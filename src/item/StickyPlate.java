@@ -18,9 +18,9 @@ import javax.swing.JRadioButton;
 import src.SimYukkuri;
 import src.util.GameRandom;
 import src.util.GameWorld;
-import src.base.Body;
-import src.base.Obj;
-import src.base.ObjEX;
+import src.base.Yukkuri;
+import src.base.Entity;
+import src.base.WorldEntity;
 import src.draw.ModLoader;
 import src.draw.Rectangle4y;
 import src.enums.CriticalDamegeType;
@@ -31,7 +31,7 @@ import src.system.ResourceUtil;
 /***************************************************
  * 粘着板
  */
-public class StickyPlate extends ObjEX {
+public class StickyPlate extends WorldEntity {
 
 	private static final long serialVersionUID = -4372169494877309751L;
 
@@ -53,11 +53,11 @@ public class StickyPlate extends ObjEX {
 	}
 
 	/** 処理対象(ゆっくり) */
-	public static final int hitCheckObjType = ObjEX.YUKKURI;
+	public static final int hitCheckObjType = WorldEntity.YUKKURI;
 	private static BufferedImage[] images = new BufferedImage[4];
 	private static Rectangle4y boundary = new Rectangle4y();
 
-	private Body bindBody = null;
+	private Yukkuri bindBody = null;
 	private boolean fixBack = false;
 
 	private ItemRank itemRank;
@@ -116,21 +116,21 @@ public class StickyPlate extends ObjEX {
 		return true;
 	}
 
-	public Body getBindBody() {
+	public Yukkuri getBindBody() {
 		return bindBody;
 	}
 
 	@Override
-	public int objHitProcess(Obj o) {
-		if (((Body) o).isDead())
+	public int objHitProcess(Entity o) {
+		if (((Yukkuri) o).isDead())
 			return 0;
-		if (((Body) o).getCriticalDamegeType() == CriticalDamegeType.CUT)
+		if (((Yukkuri) o).getCriticalDamegeType() == CriticalDamegeType.CUT)
 			return 0;
 
-		if (bindBody != (Body) o) {
+		if (bindBody != (Yukkuri) o) {
 			// 入れ替える場合
 			if (bindBody != null) {
-				bindBody.setPullAndPush(false);
+				bindBody.setCanPullOrPush(false);
 
 				// 針が刺さっていない、死んでる
 				if (!bindBody.isNeedled() || bindBody.isDead()) {
@@ -138,14 +138,14 @@ public class StickyPlate extends ObjEX {
 					bindBody.setFixBack(false);
 				}
 			}
-			bindBody = (Body) o;
+			bindBody = (Yukkuri) o;
 			bindBody.clearActions();
 		}
 		bindBody.setCalcX(x);
 		bindBody.setCalcY(y);
 		bindBody.setLockmove(true);
 			if (!fixBack || bindBody.isPealed()) {
-			bindBody.setPullAndPush(true);
+			bindBody.setCanPullOrPush(true);
 		} else {
 			bindBody.setFixBack(true);
 		}
@@ -176,7 +176,7 @@ public class StickyPlate extends ObjEX {
 				// ぷるぷる以外が原因で座標がずれている、死んでいる場合は初期化
 				if (((bindBody.getX() != x || bindBody.getY() != y) && !bindBody.isPurupuru()) ||
 						(bindBody.isRemoved() || bindBody.isDead())) {
-					bindBody.setPullAndPush(false);
+					bindBody.setCanPullOrPush(false);
 					// 針が刺さっていない、死んでる
 					if (!bindBody.isNeedled() || bindBody.isDead()) {
 						bindBody.setLockmove(false);
@@ -192,7 +192,7 @@ public class StickyPlate extends ObjEX {
 	public void removeListData() {
 		if (bindBody != null) {
 			bindBody.setLockmove(false);
-			bindBody.setPullAndPush(false);
+			bindBody.setCanPullOrPush(false);
 			bindBody = null;
 		}
 		GameWorld.get().getCurrentMap().getStickyPlate().remove(objId);
@@ -211,7 +211,7 @@ public class StickyPlate extends ObjEX {
 		setCollisionSize(getPivotX(), getPivotY());
 		GameWorld.get().getCurrentMap().getStickyPlate().put(objId, this);
 		objType = Type.PLATFORM;
-		objEXType = WorldEntityKind.STICKYPLATE;
+		worldEntityType = WorldEntityKind.STICKYPLATE;
 		interval = 5;
 		if (!setupStickyPlate(this)) {
 			GameWorld.get().getCurrentMap().getStickyPlate().remove(objId);
@@ -281,7 +281,7 @@ public class StickyPlate extends ObjEX {
 		this.itemRank = itemRank;
 	}
 
-	public void setBindBody(Body bindBody) {
+	public void setBindBody(Yukkuri bindBody) {
 		this.bindBody = bindBody;
 	}
 

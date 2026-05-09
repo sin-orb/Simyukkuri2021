@@ -8,9 +8,9 @@ import java.util.Map;
 import src.SimYukkuri;
 import src.util.GameRandom;
 import src.util.GameWorld;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.event.EventPacket;
-import src.base.Obj;
+import src.base.Entity;
 import src.draw.Translate;
 import src.enums.AgeState;
 import src.enums.ImageCode;
@@ -29,13 +29,13 @@ import src.system.MessagePool;
  */
 public class ToiletLogic {
 	/** うんうんどれい */
-	private static Body bodyUnunSlave;
+	private static Yukkuri bodyUnunSlave;
 	
-	public static Body getBodyUnunSlave() {
+	public static Yukkuri getBodyUnunSlave() {
 		return bodyUnunSlave;
 	}
 	
-	public static void setBodyUnunSlave(Body bodyUnunSlave) {
+	public static void setBodyUnunSlave(Yukkuri bodyUnunSlave) {
 		ToiletLogic.bodyUnunSlave = bodyUnunSlave;
 	}
 	/**
@@ -43,7 +43,7 @@ public class ToiletLogic {
 	 * @param body ゆっくり
 	 * @return 処理が行われたか
 	 */
-	public static final boolean checkShit(Body body) {
+	public static final boolean checkShit(Yukkuri body) {
 		//A.トイレ行動中止
 		// 毎フレームチェックは重いのでインターバル
 		if(body.getAge() % 15 != 0) return false;
@@ -89,8 +89,8 @@ public class ToiletLogic {
 		}
 		// うんうん奴隷がいれば運ばない
 		if( canTransport  ){
-			for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
-				Body bodyOther = entry.getValue();
+			for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
+				Yukkuri bodyOther = entry.getValue();
 				if(bodyOther == body || bodyOther.isDead() || bodyOther.isRemoved() ){
 					continue;
 				}
@@ -153,9 +153,9 @@ public class ToiletLogic {
 			// ある程度近いうんうんが自分の子供のものかチェック。すでにうんうんを運んでる、自分のうんうんがトイレ外にあれば無視する
 			if( canTransport  && distance < collisionX && !hasShit && !foundMyShitOutOfToilet && foundMyToilet  ){
 				int bodyOwnerId = s.getOwnerId();
-				Body owner = null;
-				for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
-					Body otherBody = entry.getValue();
+				Yukkuri owner = null;
+				for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
+					Yukkuri otherBody = entry.getValue();
 					if (otherBody.getUniqueID() == bodyOwnerId) {
 						owner = otherBody;
 						break;
@@ -217,7 +217,7 @@ public class ToiletLogic {
 	 * @param body ゆっくり
 	 * @return 処理が行われたか
 	 */
-	public static final boolean checkToilet(Body body) {
+	public static final boolean checkToilet(Yukkuri body) {
 		//A.トイレ行動の中止
 		// 他の用事がある場合
 		if( body.isToFood() || body.isToBody() || body.isToSukkiri() || body.isToBed() || /*body.isToShit() ||*/ body.isToSteal() ){
@@ -238,7 +238,7 @@ public class ToiletLogic {
 			if( body.getCarryItem(TakeoutItemType.SHIT) != null ){
 				hasShit = true;
 			}
-		Obj targetObject = body.takeMoveTarget();
+		Entity targetObject = body.takeMoveTarget();
 		if( targetObject != null ){
 			if( !(targetObject instanceof Toilet)){
 				return false;
@@ -290,7 +290,7 @@ public class ToiletLogic {
 
 
 		// 対象が決まっていたら到達したかチェック
-		Obj target = body.takeMoveTarget();
+		Entity target = body.takeMoveTarget();
 			if( (body.isToShit() || publicRank == PublicRank.UnunSlave || hasShit) && target != null) {
 			// 途中で消されてたら他の候補を探す
 			if(target.isRemoved()) {

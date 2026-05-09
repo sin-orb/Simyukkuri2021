@@ -11,10 +11,10 @@ import java.io.IOException;
 import src.SimYukkuri;
 import src.util.GameRandom;
 import src.util.GameWorld;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.effect.Effect;
-import src.base.Obj;
-import src.base.ObjEX;
+import src.base.Entity;
+import src.base.WorldEntity;
 import src.draw.ModLoader;
 import src.draw.Rectangle4y;
 import src.enums.CriticalDamegeType;
@@ -30,15 +30,15 @@ import src.system.MessagePool;
 /***************************************************
  * ホットプレート
  */
-public class HotPlate extends ObjEX {
+public class HotPlate extends WorldEntity {
 
 	private static final long serialVersionUID = -7407652564177670504L;
 	/** 処理対象(ゆっくり) */
-	public static final int hitCheckObjType = ObjEX.YUKKURI;
+	public static final int hitCheckObjType = WorldEntity.YUKKURI;
 	private static BufferedImage[] images = new BufferedImage[4];
 	private static Rectangle4y boundary = new Rectangle4y();
 
-	private Body bindBody = null;
+	private Yukkuri bindBody = null;
 	private Effect smoke = null;
 
 	/** 画像ロード */
@@ -73,7 +73,7 @@ public class HotPlate extends ObjEX {
 			if (bindBody != null) {
 				bindBody.setForceFace(-1);
 				bindBody.setLockmove(false);
-				bindBody.setPullAndPush(false);
+				bindBody.setCanPullOrPush(false);
 				bindBody.setShadowVisible(true);
 				bindBody = null;
 			}
@@ -106,9 +106,9 @@ public class HotPlate extends ObjEX {
 	}
 
 	@Override
-	public int objHitProcess(Obj o) {
+	public int objHitProcess(Entity o) {
 
-		bindBody = (Body) o;
+		bindBody = (Yukkuri) o;
 		if (bindBody.getCriticalDamegeType() == CriticalDamegeType.CUT)
 			return 0;
 		bindBody.clearActions();
@@ -139,7 +139,7 @@ public class HotPlate extends ObjEX {
 			} else if (bindBody.getX() != x || bindBody.getY() != y || bindBody.getZ() != z || bindBody.isRemoved()) {
 				bindBody.setForceFace(-1);
 				bindBody.setLockmove(false);
-				bindBody.setPullAndPush(false);
+				bindBody.setCanPullOrPush(false);
 				bindBody.setShadowVisible(true);
 				bindBody = null;
 			} else {
@@ -150,7 +150,7 @@ public class HotPlate extends ObjEX {
 					bindBody.addDamage(20);
 					bindBody.addStress(20);
 					if (bindBody.getFootBakeLevel() == FootBake.CRITICAL) {
-						bindBody.setPullAndPush(true);
+						bindBody.setCanPullOrPush(true);
 					}
 					if (bindBody.isNotNYD()) {
 						bindBody.setHappiness(Happiness.VERY_SAD);
@@ -191,7 +191,7 @@ public class HotPlate extends ObjEX {
 		setCollisionSize(getPivotX(), getPivotY());
 		GameWorld.get().getCurrentMap().getHotPlate().put(objId, this);
 		objType = Type.PLATFORM;
-		objEXType = WorldEntityKind.HOTPLATE;
+		worldEntityType = WorldEntityKind.HOTPLATE;
 
 		interval = 5;
 		value = 5000;
@@ -202,11 +202,11 @@ public class HotPlate extends ObjEX {
 
 	}
 
-	public Body getBindBody() {
+	public Yukkuri getBindBody() {
 		return bindBody;
 	}
 
-	public void setBindBody(Body bindBody) {
+	public void setBindBody(Yukkuri bindBody) {
 		this.bindBody = bindBody;
 	}
 

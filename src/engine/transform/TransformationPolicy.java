@@ -1,6 +1,6 @@
 package src.engine.transform;
 
-import src.base.Body;
+import src.base.Yukkuri;
 import src.enums.AgeState;
 import src.enums.YukkuriType;
 
@@ -22,11 +22,11 @@ public final class TransformationPolicy {
 		return targetType.getClassName().toLowerCase();
 	}
 
-	public static boolean isSelectedBody(Body body) {
+	public static boolean isSelectedBody(Yukkuri body) {
 		return body != null && src.draw.MyPane.getSelectBody() == body;
 	}
 
-	public static void normalizeTransformedAge(Body to, Body from) {
+	public static void normalizeTransformedAge(Yukkuri to, Yukkuri from) {
 		if (to == null || from == null) {
 			return;
 		}

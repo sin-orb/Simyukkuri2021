@@ -23,10 +23,10 @@ import src.SimYukkuri;
 import src.util.GameRandom;
 import src.util.GameWorld;
 import src.attachment.Fire;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.effect.Effect;
-import src.base.Obj;
-import src.base.ObjEX;
+import src.base.Entity;
+import src.base.WorldEntity;
 import src.draw.ModLoader;
 import src.draw.Rectangle4y;
 import src.draw.Translate;
@@ -44,15 +44,15 @@ import src.system.ResourceUtil;
 /***************************************************
  * 加工プレート
  */
-public class ProcesserPlate extends ObjEX {
+public class ProcesserPlate extends WorldEntity {
 	private static final long serialVersionUID = -32909400197144018L;
 	/** 処理対象(ゆっくり) */
-	public static final int hitCheckObjType = ObjEX.YUKKURI;
+	public static final int hitCheckObjType = WorldEntity.YUKKURI;
 	private static BufferedImage[] imageLayers = new BufferedImage[2];
 	private static Rectangle4y boundary = new Rectangle4y();
 
 	/** 加工対象のリスト */
-	protected List<Body> activeBodies = new LinkedList<Body>();
+	protected List<Yukkuri> activeBodies = new LinkedList<Yukkuri>();
 	/** 加工エフェクトのリスト */
 	protected List<Effect> activeEffects = new LinkedList<Effect>();
 	/** 加工するタイプ */
@@ -145,11 +145,11 @@ public class ProcesserPlate extends ObjEX {
 	/**
 	 * 当たり判定されるオブジェクトのチェック
 	 * <br>
-	 * 動作はobjHitProcess( Obj o )で
+	 * 動作はobjHitProcess( Entity o )で
 	 * <br>
 	 * これは例外的に、エフェクトを外す作業もここでやってる
 	 */
-	public boolean checkHitObj(Rectangle collisionRect, Obj targetObject) {
+	public boolean checkHitObj(Rectangle collisionRect, Entity targetObject) {
 		if (targetObject.getZ() == 0) {
 			Translate.translate(targetObject.getX(), targetObject.getY(), tmpPos);
 			if (collisionRect.contains(new java.awt.Point(tmpPos.getX(), tmpPos.getY()))) {
@@ -157,8 +157,8 @@ public class ProcesserPlate extends ObjEX {
 				return true;
 			} else {
 				if (targetObject != null && activeBodies.contains(targetObject)) {
-					if (targetObject instanceof Body) {
-						Body targetBody = (Body) targetObject;
+					if (targetObject instanceof Yukkuri) {
+						Yukkuri targetBody = (Yukkuri) targetObject;
 						int activeIndex = activeBodies.indexOf(targetBody);
 						Effect effect = activeEffects.get(activeIndex);
 						if (effect != null) {
@@ -178,13 +178,13 @@ public class ProcesserPlate extends ObjEX {
 	}
 
 	@Override
-	public int objHitProcess(Obj targetObject) {
+	public int objHitProcess(Entity targetObject) {
 		if (!enabled)
 			return 0;
 		if (targetObject == null)
 			return 0;
-		if (targetObject instanceof Body) {
-			Body targetBody = (Body) targetObject;
+		if (targetObject instanceof Yukkuri) {
+			Yukkuri targetBody = (Yukkuri) targetObject;
 			// 切断されていたら何も起きない
 			if (targetBody.getCriticalDamegeType() == CriticalDamegeType.CUT)
 				return 0;
@@ -216,7 +216,7 @@ public class ProcesserPlate extends ObjEX {
 				return;
 			}
 			for (int i = activeBodies.size() - 1; 0 <= i; i--) {
-				Body targetBody = activeBodies.get(i);
+				Yukkuri targetBody = activeBodies.get(i);
 				Effect effect = activeEffects.get(i);
 				if (effect != null) {
 					effect.remove();
@@ -236,7 +236,7 @@ public class ProcesserPlate extends ObjEX {
 			return;
 		}
 		for (int i = activeBodies.size() - 1; 0 <= i; i--) {
-			Body targetBody = activeBodies.get(i);
+			Yukkuri targetBody = activeBodies.get(i);
 			Effect effect = activeEffects.get(i);
 
 			// 対象がいないor除去されたor飛んでいるときを除外
@@ -449,7 +449,7 @@ public class ProcesserPlate extends ObjEX {
 	public void removeListData() {
 		if (activeBodies != null && activeEffects != null) {
 			for (int i = activeBodies.size() - 1; 0 <= i; i--) {
-				Body targetBody = activeBodies.get(i);
+				Yukkuri targetBody = activeBodies.get(i);
 				targetBody.setForceFace(-1);
 				targetBody.setLockmove(false);
 				Effect effect = activeEffects.get(i);
@@ -531,7 +531,7 @@ public class ProcesserPlate extends ObjEX {
 		setCollisionSize(getPivotX(), getPivotY());
 		GameWorld.get().getCurrentMap().getProcesserPlate().put(objId, this);
 		// objType = Type.PLATFORM;
-		objEXType = WorldEntityKind.PROCESSERPLATE;
+		worldEntityType = WorldEntityKind.PROCESSERPLATE;
 		interval = 5;
 		value = 250000;
 		readIniFile();
@@ -566,11 +566,11 @@ public class ProcesserPlate extends ObjEX {
 		runningCost[3] = iniValue;
 	}
 
-	public List<Body> getProcessedBodyList() {
+	public List<Yukkuri> getProcessedBodyList() {
 		return activeBodies;
 	}
 
-	public void setProcessedBodyList(List<Body> processedBodyList) {
+	public void setProcessedBodyList(List<Yukkuri> processedBodyList) {
 		this.activeBodies = processedBodyList;
 	}
 

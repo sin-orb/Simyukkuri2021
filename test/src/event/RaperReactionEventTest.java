@@ -6,7 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.event.EventPacket.EventPriority;
 import src.draw.World;
 import src.enums.ActionState;
@@ -38,8 +38,8 @@ public class RaperReactionEventTest {
 
     @Test
     public void testParameterizedConstructor() {
-        Body from = createBody();
-        Body to = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
         RaperReactionEvent event = new RaperReactionEvent(from, to, null, 1);
         assertEquals(from.getUniqueID(), event.getFrom());
         assertEquals(to.getUniqueID(), event.getTo());
@@ -50,8 +50,8 @@ public class RaperReactionEventTest {
 
     @Test
     public void testCheckEventResponse_setsPriorityHigh() {
-        Body b = createBody();
-        Body raper = createBody();
+        Yukkuri b = createBody();
+        Yukkuri raper = createBody();
         // Set up raper as exciting raper in the map so the check finds one
         raper.setRapist(true);
         raper.setExciting(true);
@@ -81,7 +81,7 @@ public class RaperReactionEventTest {
     // --- update ---
     @Test
     public void testUpdate_fromNull_returnsAbort() {
-        Body b = createBody();
+        Yukkuri b = createBody();
         RaperReactionEvent event = new RaperReactionEvent();
         // from=-1 → null → ABORT
         assertEquals(src.event.EventPacket.UpdateState.ABORT, event.update(b));
@@ -89,8 +89,8 @@ public class RaperReactionEventTest {
 
     @Test
     public void testUpdate_fromDead_doesNotThrow() {
-        Body from = createBody();
-        Body b = createBody();
+        Yukkuri from = createBody();
+        Yukkuri b = createBody();
         from.setDead(true);
         RaperReactionEvent event = new RaperReactionEvent(from, null, null, 1);
         // from is dead → searches next target (null) → continues, returns null or ABORT
@@ -99,8 +99,8 @@ public class RaperReactionEventTest {
 
     @Test
     public void testUpdate_fromRemoved_doesNotThrow() {
-        Body from = createBody();
-        Body b = createBody();
+        Yukkuri from = createBody();
+        Yukkuri b = createBody();
         from.setRemoved(true);
         RaperReactionEvent event = new RaperReactionEvent(from, null, null, 1);
         assertDoesNotThrow(() -> event.update(b));
@@ -109,8 +109,8 @@ public class RaperReactionEventTest {
     // --- start ---
     @Test
     public void testStart_doesNotThrow() {
-        Body from = createBody();
-        Body b = createBody();
+        Yukkuri from = createBody();
+        Yukkuri b = createBody();
         RaperReactionEvent event = new RaperReactionEvent(from, null, null, 1);
         assertDoesNotThrow(() -> event.start(b));
     }
@@ -125,7 +125,7 @@ public class RaperReactionEventTest {
     // --- checkEventResponse (from=null) ---
     @Test
     public void testCheckEventResponse_fromNull_doesNotThrow() {
-        Body b = createBody();
+        Yukkuri b = createBody();
         RaperReactionEvent event = new RaperReactionEvent();
         assertDoesNotThrow(() -> event.checkEventResponse(b));
     }
@@ -133,7 +133,7 @@ public class RaperReactionEventTest {
     // --- execute ---
     @Test
     public void testExecute_fromNull_returnsTrue() {
-        Body b = createBody();
+        Yukkuri b = createBody();
         RaperReactionEvent event = new RaperReactionEvent();
         assertTrue(event.execute(b));
     }
@@ -141,15 +141,15 @@ public class RaperReactionEventTest {
     // --- end ---
     @Test
     public void testEnd_doesNotThrow() {
-        Body b = createBody();
+        Yukkuri b = createBody();
         RaperReactionEvent event = new RaperReactionEvent(b, null, null, 1);
         assertDoesNotThrow(() -> event.end(b));
     }
 
     // --- Helper ---
 
-    private static Body createBody() {
-        Body b = new Reimu();
+    private static Yukkuri createBody() {
+        Yukkuri b = new Reimu();
         b.setAgeState(AgeState.ADULT);
         Sprite[] spr = new Sprite[3];
         for (int i = 0; i < 3; i++) {
@@ -162,16 +162,16 @@ public class RaperReactionEventTest {
 
     @Test
     public void testSetScareWorldEventMessage_doesNotThrow() {
-        Body from = createBody();
-        Body b = createBody();
+        Yukkuri from = createBody();
+        Yukkuri b = createBody();
         RaperReactionEvent event = new RaperReactionEvent(from, null, null, 10);
         assertDoesNotThrow(() -> event.setScareWorldEventMessage(b));
     }
 
     @Test
     public void testSetCounterWorldEventMessage_doesNotThrow() {
-        Body from = createBody();
-        Body b = createBody();
+        Yukkuri from = createBody();
+        Yukkuri b = createBody();
         RaperReactionEvent event = new RaperReactionEvent(from, null, null, 10);
         assertDoesNotThrow(() -> event.setCounterWorldEventMessage(b));
     }
@@ -179,14 +179,14 @@ public class RaperReactionEventTest {
     @Test
     public void testCheckConditionOfTarget_fromNull_returnsFalse() {
         // unregistered from → getBodyInstance returns null → returns false
-        Body unregistered = new Reimu();
+        Yukkuri unregistered = new Reimu();
         RaperReactionEvent event = new RaperReactionEvent(unregistered, null, null, 10);
         assertFalse(event.checkConditionOfTarget());
     }
 
     @Test
     public void testCheckConditionOfTarget_fromRegistered_doesNotThrow() {
-        Body from = createBody();
+        Yukkuri from = createBody();
         RaperReactionEvent event = new RaperReactionEvent(from, null, null, 10);
         assertDoesNotThrow(() -> event.checkConditionOfTarget());
     }
@@ -200,8 +200,8 @@ public class RaperReactionEventTest {
 
     @Test
     public void testMoveTarget_fromNull_doesNotThrow() {
-        Body b = createBody();
-        Body unregistered = new Reimu();
+        Yukkuri b = createBody();
+        Yukkuri unregistered = new Reimu();
         RaperReactionEvent event = new RaperReactionEvent(unregistered, null, null, 10);
         // from not registered → getBodyInstance returns null → early return
         assertDoesNotThrow(() -> event.moveTargetId(b));
@@ -209,8 +209,8 @@ public class RaperReactionEventTest {
 
     @Test
     public void testMoveTarget_fromExists_doesNotThrow() {
-        Body from = createBody();
-        Body b = createBody();
+        Yukkuri from = createBody();
+        Yukkuri b = createBody();
         RaperReactionEvent event = new RaperReactionEvent(from, null, null, 10);
         assertDoesNotThrow(() -> event.moveTargetId(b));
     }
@@ -218,8 +218,8 @@ public class RaperReactionEventTest {
     // --- checkEventResponse: raper nearby, normal body → state=ESCAPE, return true ---
     @Test
     public void testCheckEventResponse_raperNearby_normalBody_stateEscape_returnsTrue() {
-        Body b = createBody();
-        Body raper = createBody();
+        Yukkuri b = createBody();
+        Yukkuri raper = createBody();
         raper.setRapist(true); // isRaper() = true → not skipped
         RaperReactionEvent event = new RaperReactionEvent(raper, null, null, 1);
         boolean result = event.checkEventResponse(b);
@@ -230,9 +230,9 @@ public class RaperReactionEventTest {
     // --- checkEventResponse: raper nearby, UnunSlave → state=ESCAPE, return true ---
     @Test
     public void testCheckEventResponse_raperNearby_UnunSlave_stateEscape_returnsTrue() {
-        Body b = createBody();
+        Yukkuri b = createBody();
         b.setPublicRank(src.enums.PublicRank.UnunSlave);
-        Body raper = createBody();
+        Yukkuri raper = createBody();
         raper.setRapist(true);
         RaperReactionEvent event = new RaperReactionEvent(raper, null, null, 1);
         boolean result = event.checkEventResponse(b);
@@ -243,8 +243,8 @@ public class RaperReactionEventTest {
     // --- start: NYD → early return ---
     @Test
     public void testStart_NYD_earlyReturn() {
-        Body from = createBody();
-        Body b = createBody();
+        Yukkuri from = createBody();
+        Yukkuri b = createBody();
         b.setCoreAnkoState(src.enums.CoreAnkoState.NonYukkuriDisease); // isNYD() = true
         RaperReactionEvent event = new RaperReactionEvent(from, null, null, 1);
         event.setState(ActionState.ATTACK);
@@ -254,8 +254,8 @@ public class RaperReactionEventTest {
     // --- start: ATTACK state → moveTargetId + setAngry ---
     @Test
     public void testStart_attackState_doesNotThrow() {
-        Body from = createBody();
-        Body b = createBody();
+        Yukkuri from = createBody();
+        Yukkuri b = createBody();
         RaperReactionEvent event = new RaperReactionEvent(from, null, null, 1);
         event.setState(ActionState.ATTACK);
         assertDoesNotThrow(() -> event.start(b));
@@ -264,8 +264,8 @@ public class RaperReactionEventTest {
     // --- start: ESCAPE state → escapeTarget + VERY_SAD ---
     @Test
     public void testStart_escapeState_doesNotThrow() {
-        Body from = createBody();
-        Body b = createBody();
+        Yukkuri from = createBody();
+        Yukkuri b = createBody();
         RaperReactionEvent event = new RaperReactionEvent(from, null, null, 1);
         event.setState(ActionState.ESCAPE);
         assertDoesNotThrow(() -> event.start(b));
@@ -274,9 +274,9 @@ public class RaperReactionEventTest {
     // --- update: from is alive raper, state=ATTACK → ATTACK path, returns null ---
     @Test
     public void testUpdate_state_ATTACK_raperFrom_returnsNull() {
-        Body from = createBody();
+        Yukkuri from = createBody();
         from.setRapist(true); // isRaper() = true
-        Body b = createBody();
+        Yukkuri b = createBody();
         RaperReactionEvent event = new RaperReactionEvent(from, null, null, 1);
         event.setState(ActionState.ATTACK);
         SimYukkuri.RND = new src.ConstState(1); // avoid nextInt(500)=0 and nextInt(20)=0
@@ -290,9 +290,9 @@ public class RaperReactionEventTest {
     // --- update: state=ESCAPE, age=1 (1%10 != 0) → CRYING path ---
     @Test
     public void testUpdate_state_ESCAPE_age1_doesNotThrow() {
-        Body from = createBody();
+        Yukkuri from = createBody();
         from.setRapist(true);
-        Body b = createBody();
+        Yukkuri b = createBody();
         RaperReactionEvent event = new RaperReactionEvent(from, null, null, 1);
         event.setState(ActionState.ESCAPE);
         // Set age=1 via reflection so age%10 != 0 → enters else branch (CRYING path)
@@ -312,8 +312,8 @@ public class RaperReactionEventTest {
     // --- execute: from alive, state=ESCAPE → escapeTarget, returns false ---
     @Test
     public void testExecute_fromAlive_stateEscape_returnsFalse() {
-        Body from = createBody();
-        Body b = createBody();
+        Yukkuri from = createBody();
+        Yukkuri b = createBody();
         RaperReactionEvent event = new RaperReactionEvent(from, null, null, 1);
         event.setState(ActionState.ESCAPE);
         SimYukkuri.RND = new src.ConstState(1); // avoid nextInt(20)=0
@@ -327,8 +327,8 @@ public class RaperReactionEventTest {
     // --- execute: from alive, state=ATTACK, isDontMove → escape path, returns false ---
     @Test
     public void testExecute_fromAlive_stateAttack_isDontMove_returnsFalse() {
-        Body from = createBody();
-        Body b = createBody();
+        Yukkuri from = createBody();
+        Yukkuri b = createBody();
         b.setGrabbed(true); // isDontMove() = true → else branch (escape)
         RaperReactionEvent event = new RaperReactionEvent(from, null, null, 1);
         event.setState(ActionState.ATTACK);
@@ -343,12 +343,12 @@ public class RaperReactionEventTest {
     // --- execute: from dead, new raper found → returns false ---
     @Test
     public void testExecute_fromDead_newRaperFound_returnsFalse() {
-        Body from = createBody();
+        Yukkuri from = createBody();
         from.setDead(true); // from is dead
-        Body newRaper = createBody();
+        Yukkuri newRaper = createBody();
         newRaper.setRapist(true);
         newRaper.setExciting(true); // searchNextTarget finds this
-        Body b = createBody();
+        Yukkuri b = createBody();
         RaperReactionEvent event = new RaperReactionEvent(from, null, null, 1);
         event.setState(ActionState.ESCAPE);
         assertFalse(event.execute(b));
@@ -357,11 +357,11 @@ public class RaperReactionEventTest {
     // --- searchNextTarget: raper+exciting body in map → returns it ---
     @Test
     public void testSearchNextTarget_raperExists_returnsBody() {
-        Body raper = createBody();
+        Yukkuri raper = createBody();
         raper.setRapist(true);
         raper.setExciting(true);
         RaperReactionEvent event = new RaperReactionEvent();
-        Body result = event.searchNextTarget();
+        Yukkuri result = event.searchNextTarget();
         assertNotNull(result);
         assertEquals(raper.getUniqueID(), result.getUniqueID());
     }
@@ -369,8 +369,8 @@ public class RaperReactionEventTest {
     // --- escapeTarget: from null → early return ---
     @Test
     public void testEscapeTarget_fromNull_doesNotThrow() {
-        Body b = createBody();
-        Body unregistered = new src.yukkuri.Reimu(); // NOT in world map
+        Yukkuri b = createBody();
+        Yukkuri unregistered = new src.yukkuri.Reimu(); // NOT in world map
         RaperReactionEvent event = new RaperReactionEvent(unregistered, null, null, 1);
         assertDoesNotThrow(() -> event.escapeTarget(b));
     }
@@ -378,8 +378,8 @@ public class RaperReactionEventTest {
     // --- escapeTarget: from exists → computes escape direction ---
     @Test
     public void testEscapeTarget_fromExists_doesNotThrow() {
-        Body from = createBody();
-        Body b = createBody();
+        Yukkuri from = createBody();
+        Yukkuri b = createBody();
         b.setX(500); b.setY(500); // middle of map
         from.setX(100); from.setY(100);
         RaperReactionEvent event = new RaperReactionEvent(from, null, null, 1);
@@ -389,7 +389,7 @@ public class RaperReactionEventTest {
     // --- checkConditionOfTarget: from is exciting → returns true ---
     @Test
     public void testCheckConditionOfTarget_fromExciting_returnsTrue() {
-        Body from = createBody();
+        Yukkuri from = createBody();
         from.setExciting(true);
         RaperReactionEvent event = new RaperReactionEvent(from, null, null, 10);
         assertTrue(event.checkConditionOfTarget());

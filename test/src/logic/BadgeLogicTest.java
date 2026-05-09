@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import src.SimYukkuri;
 import src.attachment.Badge;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.draw.World;
 import src.enums.Attitude;
 import src.enums.BodyRank;
@@ -57,7 +57,7 @@ public class BadgeLogicTest {
     }
 
     // ========== Non-Kaiyu Tests ==========
-    // Note: Body doesn't have setBodyRank/setIdiot setters
+    // Note: Yukkuri doesn't have setBodyRank/setIdiot setters
     // These tests are simplified to test the method signature
 
     // ========== Kaiyu Badge Tests (Attitude x Intelligence combinations)
@@ -163,7 +163,7 @@ public class BadgeLogicTest {
 
     /**
      * Creates a yukkuri with specified attitude and intelligence.
-     * Note: Body doesn't have setBodyRank/setIdiot setters, so we just set what we
+     * Note: Yukkuri doesn't have setBodyRank/setIdiot setters, so we just set what we
      * can.
      */
     private Reimu createKaiyuYukkuri(Attitude attitude, Intelligence intelligence) {
@@ -174,7 +174,7 @@ public class BadgeLogicTest {
         return yukkuri;
     }
 
-    private Badge.BadgeRank getBadgeRank(Body b) {
+    private Badge.BadgeRank getBadgeRank(Yukkuri b) {
         List<Attachment> list = b.getAttach();
         if (list == null)
             return null;

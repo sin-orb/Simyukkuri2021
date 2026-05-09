@@ -8,8 +8,8 @@ import java.io.IOException;
 
 import src.SimYukkuri;
 import src.util.GameWorld;
-import src.base.Body;
-import src.base.ObjEX;
+import src.base.Yukkuri;
+import src.base.WorldEntity;
 import src.draw.ModLoader;
 import src.draw.Rectangle4y;
 import src.enums.WorldEntityKind;
@@ -18,7 +18,7 @@ import src.enums.Type;
 /***************************************************
  * おもちゃ
  */
-public class Toy extends ObjEX {
+public class Toy extends WorldEntity {
 
 	private static final long serialVersionUID = -5700583776006467893L;
 	private static final int BALL = 0;
@@ -27,7 +27,7 @@ public class Toy extends ObjEX {
 	private static final int NUM_OF_BALL_IMG = 3;
 	private static BufferedImage[] images = new BufferedImage[NUM_OF_BALL_IMG];
 	private static Rectangle4y boundary = new Rectangle4y();
-	private Body owner = null;
+	private Yukkuri owner = null;
 
 	private ItemRank itemRank;
 
@@ -87,7 +87,7 @@ public class Toy extends ObjEX {
 	 * 
 	 * @param b おもちゃの持ち主
 	 */
-	public void setOwner(Body body) {
+	public void setOwner(Yukkuri body) {
 		owner = body;
 	}
 
@@ -96,7 +96,7 @@ public class Toy extends ObjEX {
 	 * 
 	 * @return おもちゃの持ち主
 	 */
-	public Body getOwner() {
+	public Yukkuri getOwner() {
 		return owner;
 	}
 
@@ -107,7 +107,7 @@ public class Toy extends ObjEX {
 	 * @return そのゆっくりに所有されているかどうか
 	 */
 	@Transient
-	public boolean isOwned(Body body) {
+	public boolean isOwned(Yukkuri body) {
 		return (owner == body);
 	}
 
@@ -124,7 +124,7 @@ public class Toy extends ObjEX {
 		setCollisionSize(getPivotX(), getPivotY());
 		GameWorld.get().getCurrentMap().getToy().put(objId, this);
 		objType = Type.OBJECT;
-		objEXType = WorldEntityKind.TOY;
+		worldEntityType = WorldEntityKind.TOY;
 
 		itemRank = ItemRank.values()[initOption];
 		if (itemRank == ItemRank.HOUSE) {

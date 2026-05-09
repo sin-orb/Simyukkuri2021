@@ -1,7 +1,7 @@
 package src.command;
 
 import src.SimYukkuri;
-import src.base.ObjEX;
+import src.base.WorldEntity;
 import src.command.GadgetMenu.ActionTarget;
 import src.command.GadgetMenu.GadgetList;
 import src.command.GadgetMenu.MainCategoryName;
@@ -24,7 +24,7 @@ public class GadgetFieldPlacementAction {
 	 * @param fieldMousePos マウスの座標
 	 * @return 設置されたオブジェクト (通常 null)
 	 */
-	public static ObjEX leftMultiClickEvaluate(GadgetList item, int[] fieldMousePos) {
+	public static WorldEntity leftMultiClickEvaluate(GadgetList item, int[] fieldMousePos) {
 
 		if (item.getActionTarget() != ActionTarget.TERRAIN) {
 			return null;

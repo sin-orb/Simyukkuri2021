@@ -2,7 +2,7 @@ package src.item;
 
 import org.junit.jupiter.api.Test;
 import src.base.ItemTestBase;
-import src.base.ObjEX;
+import src.base.WorldEntity;
 import src.SimYukkuri;
 import src.draw.Translate;
 import src.enums.WorldEntityKind;
@@ -28,7 +28,7 @@ class TrashTest extends ItemTestBase {
         Trash trash = new Trash(100, 200, 0);
         assertNotNull(trash);
         assertEquals(Type.OBJECT, trash.getObjType());
-        assertEquals(WorldEntityKind.TRASH, trash.getObjEXType());
+        assertEquals(WorldEntityKind.TRASH, trash.getWorldEntityType());
         assertEquals(0, trash.getValue());
         assertEquals(0, trash.getCost());
         assertTrue(trash.getObjId() > 0);
@@ -116,7 +116,7 @@ class TrashTest extends ItemTestBase {
     }
 
     // ---------------------------------------------------------------
-    // getHitCheckObjType（ObjEX のデフォルト = 0）
+    // getHitCheckObjType（WorldEntity のデフォルト = 0）
     // ---------------------------------------------------------------
     @Test
     void testGetHitCheckObjType_DefaultZero() {
@@ -136,12 +136,12 @@ class TrashTest extends ItemTestBase {
     }
 
     // ---------------------------------------------------------------
-    // ObjEX 共通メソッド群
+    // WorldEntity 共通メソッド群
     // ---------------------------------------------------------------
     @Test
     void testGetObjEXType() {
         Trash trash = new Trash(100, 100, 0);
-        assertEquals(WorldEntityKind.TRASH, trash.getObjEXType());
+        assertEquals(WorldEntityKind.TRASH, trash.getWorldEntityType());
     }
 
     @Test
@@ -153,7 +153,7 @@ class TrashTest extends ItemTestBase {
     @Test
     void testCheckInterval() {
         Trash trash = new Trash(100, 100, 0);
-        // interval=1（ObjEX デフォルト）
+        // interval=1（WorldEntity デフォルト）
         assertTrue(trash.checkInterval(0));
         assertTrue(trash.checkInterval(1));
         assertTrue(trash.checkInterval(100));
@@ -250,7 +250,7 @@ class TrashTest extends ItemTestBase {
     }
 
     // ---------------------------------------------------------------
-    // Obj 継承メソッド群
+    // Entity 継承メソッド群
     // ---------------------------------------------------------------
     @Test
     void testGetX_GetY() {
@@ -598,7 +598,7 @@ class TrashTest extends ItemTestBase {
     void testSetObjEXType() {
         Trash trash = new Trash();
         trash.setObjEXType(WorldEntityKind.TRASH);
-        assertEquals(WorldEntityKind.TRASH, trash.getObjEXType());
+        assertEquals(WorldEntityKind.TRASH, trash.getWorldEntityType());
     }
 
     @Test

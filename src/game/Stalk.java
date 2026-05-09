@@ -15,9 +15,9 @@ import javax.imageio.ImageIO;
 
 import src.SimYukkuri;
 import src.util.GameWorld;
-import src.base.Body;
-import src.base.Obj;
-import src.base.ObjEX;
+import src.base.Yukkuri;
+import src.base.Entity;
+import src.base.WorldEntity;
 import src.draw.ModLoader;
 import src.draw.Rectangle4y;
 import src.draw.Translate;
@@ -31,7 +31,7 @@ import src.system.ItemMenu.GetMenuTarget;
 /**
  * 茎
  */
-public class Stalk extends ObjEX {
+public class Stalk extends WorldEntity {
 
 	private static final long serialVersionUID = -7644967944795406729L;
 	private static final int IMAGE_COUNT = 1; // このクラスの総使用画像数
@@ -122,13 +122,13 @@ public class Stalk extends ObjEX {
 		if (getBindBabies() == null) {
 			return;
 		}
-		Body parent = src.util.BodyRegistry.getBodyInstance(this.getPlantYukkuri());
+		Yukkuri parent = src.util.BodyRegistry.getBodyInstance(this.getPlantYukkuri());
 		for (Integer j : getBindBabies()) {
 			if (j == null) {
 				i++;
 				continue;
 			}
-			Body b = src.util.BodyRegistry.getBodyInstance(j);
+			Yukkuri b = src.util.BodyRegistry.getBodyInstance(j);
 			if (b == null) {
 				i++;
 				continue;
@@ -165,7 +165,7 @@ public class Stalk extends ObjEX {
 	 * @param b この茎をはやしているゆっくり
 	 */
 	@Transient
-	public void setPlantYukkuri(Body b) {
+	public void setPlantYukkuri(Yukkuri b) {
 		if (b == null) {
 			plantYukkuri = -1;
 		} else {
@@ -204,7 +204,7 @@ public class Stalk extends ObjEX {
 	 * @param b この茎に生やそうとしている実ゆっくり
 	 */
 	@Transient
-	public void setBindBaby(Body b) {
+	public void setBindBaby(Yukkuri b) {
 		if (bindBabies.size() < 5) {
 			bindBabies.add(b == null ? -1 : b.getUniqueID());
 		}
@@ -224,14 +224,14 @@ public class Stalk extends ObjEX {
 	 */
 	public void disBindBabys() {
 		if (plantYukkuri != -1) {
-			Body planted = src.util.BodyRegistry.getBodyInstance(plantYukkuri);
+			Yukkuri planted = src.util.BodyRegistry.getBodyInstance(plantYukkuri);
 			if (planted != null && planted.getStalks() != null) {
 				planted.getStalks().set(planted.getStalks().indexOf(this), null);
 			}
 		}
 
 		for (int i : bindBabies) {
-			Body b = src.util.BodyRegistry.getBodyInstance(i);
+			Yukkuri b = src.util.BodyRegistry.getBodyInstance(i);
 			if (b != null) {
 				b.setBindStalk(null);
 			}
@@ -298,7 +298,7 @@ public class Stalk extends ObjEX {
 	@Transient
 	public boolean isPlantYukkuri() {
 		for (int i : bindBabies) {
-			Body b = src.util.BodyRegistry.getBodyInstance(i);
+			Yukkuri b = src.util.BodyRegistry.getBodyInstance(i);
 			if (b != null) {
 				return true;
 			}
@@ -319,7 +319,7 @@ public class Stalk extends ObjEX {
 				if (i == null) {
 					continue;
 				}
-				Body b = src.util.BodyRegistry.getBodyInstance(i);
+				Yukkuri b = src.util.BodyRegistry.getBodyInstance(i);
 				if (b != null) {
 					b.setBindStalk(null);
 				}
@@ -343,7 +343,7 @@ public class Stalk extends ObjEX {
 	 * 
 	 * @return 生えているゆっくり
 	 */
-	public Body takePlantYukkuri() {
+	public Yukkuri takePlantYukkuri() {
 		return GameWorld.get().getCurrentMap().getBody().get(plantYukkuri);
 	}
 
@@ -411,7 +411,7 @@ public class Stalk extends ObjEX {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		objType = Type.OBJECT;
-		objEXType = WorldEntityKind.STALK;
+		worldEntityType = WorldEntityKind.STALK;
 		amount = 100 * 24 * 5;
 		GameWorld.get().getCurrentMap().getStalk().put(objId, this);
 		calcPos();
@@ -420,7 +420,7 @@ public class Stalk extends ObjEX {
 	public Stalk() {
 		setBoundary(boundary);
 		objType = Type.OBJECT;
-		objEXType = WorldEntityKind.STALK;
+		worldEntityType = WorldEntityKind.STALK;
 		amount = 100 * 24 * 5;
 		GameWorld.get().getCurrentMap().getStalk().put(objId, this);
 		calcPos();
@@ -433,7 +433,7 @@ public class Stalk extends ObjEX {
 	}
 
 	@Override
-	public int objHitProcess(Obj o) {
+	public int objHitProcess(Entity o) {
 		return 0;
 	}
 
@@ -444,7 +444,7 @@ public class Stalk extends ObjEX {
 			if (i == null) {
 				continue;
 			}
-			Body baby = src.util.BodyRegistry.getBodyInstance(i);
+			Yukkuri baby = src.util.BodyRegistry.getBodyInstance(i);
 			if (baby != null) {
 				baby.setBindStalk(null);
 				baby.setBindObj(-1);
@@ -457,7 +457,7 @@ public class Stalk extends ObjEX {
 
 	// @Override
 	// public String toString() {
-	// Body p = src.util.BodyRegistry.getBodyInstance(plantYukkuri);
+	// Yukkuri p = src.util.BodyRegistry.getBodyInstance(plantYukkuri);
 	// String ret = "";
 	// ret += GameText.read("game_stalk1");
 	// if (p != null) {
@@ -475,7 +475,7 @@ public class Stalk extends ObjEX {
 	// continue;
 	// } else {
 	// Integer b = (Integer)o;
-	// Body baby = src.util.BodyRegistry.getBodyInstance(b);
+	// Yukkuri baby = src.util.BodyRegistry.getBodyInstance(b);
 	// if (baby == null) {
 	// ret += GameText.read("game_empty");
 	// } else {

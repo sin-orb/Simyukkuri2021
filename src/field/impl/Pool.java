@@ -15,8 +15,8 @@ import java.util.List;
 import src.SimYukkuri;
 import src.util.GameRandom;
 import src.util.GameWorld;
-import src.base.Body;
-import src.base.Obj;
+import src.base.Yukkuri;
+import src.base.Entity;
 import src.draw.ModLoader;
 import src.draw.Point4y;
 import src.draw.Translate;
@@ -43,7 +43,7 @@ public class Pool extends FieldShape {
 	private int[] waterPolygonY = new int[4];
 
 	/** 池に捕まってるオブジェクトのリスト */
-	List<Obj> bindObjList = new LinkedList<Obj>();
+	List<Entity> bindObjList = new LinkedList<Entity>();
 
 	/** 池の深さの列挙 */
 	public enum DEPTH {
@@ -254,9 +254,9 @@ public class Pool extends FieldShape {
 	/**
 	 * 渡されたオブジェクトが畑の中にあるかを判定
 	 * <br>
-	 * 動作はobjHitProcess( Obj o )で
+	 * 動作はobjHitProcess( Entity o )で
 	 */
-	public boolean checkHitObj(Obj o) {
+	public boolean checkHitObj(Entity o) {
 		if (o == null) {
 			return false;
 		}
@@ -280,7 +280,7 @@ public class Pool extends FieldShape {
 	}
 
 	/** 当たり判定されたオブジェクトへの処理 */
-	public int objHitProcess(Obj o) {
+	public int objHitProcess(Entity o) {
 		// 空中は無視
 		int zCoord = o.getZ();
 		if (0 < zCoord) {
@@ -323,8 +323,8 @@ public class Pool extends FieldShape {
 				break;
 		}
 
-		if (o instanceof Body) {
-			Body bodyTarget = (Body) o;
+		if (o instanceof Yukkuri) {
+			Yukkuri bodyTarget = (Yukkuri) o;
 			AgeState ageState = bodyTarget.getBodyAgeState();
 			boolean likesWater = bodyTarget.isLikeWater();
 			int depthLimit = -2;
@@ -480,11 +480,11 @@ public class Pool extends FieldShape {
 		this.waterPolygonY = waterPolygonY;
 	}
 
-	public List<Obj> getBindObjList() {
+	public List<Entity> getBindObjList() {
 		return bindObjList;
 	}
 
-	public void setBindObjList(List<Obj> bindObjList) {
+	public void setBindObjList(List<Entity> bindObjList) {
 		this.bindObjList = bindObjList;
 	}
 

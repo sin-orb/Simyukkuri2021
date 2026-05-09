@@ -1,6 +1,6 @@
 package src.logic;
 
-import src.base.Body;
+import src.base.Yukkuri;
 import src.enums.EnumRelationMine;
 import src.enums.Happiness;
 import src.enums.PublicRank;
@@ -23,7 +23,7 @@ public final class BodyUnunSlaveEmotionRule {
 	 * @param bodyTarget target body
 	 * @return true if a reaction was handled
 	 */
-	public static boolean checkEmotionFromUnunSlave(Body body, Body bodyTarget) {
+	public static boolean checkEmotionFromUnunSlave(Yukkuri body, Yukkuri bodyTarget) {
 		if (body == null || bodyTarget == null) {
 			return false;
 		}

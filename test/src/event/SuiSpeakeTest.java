@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.event.EventPacket.EventPriority;
 import src.draw.World;
 import src.enums.AgeState;
@@ -43,8 +43,8 @@ public class SuiSpeakeTest {
 
     @Test
     public void testParameterizedConstructor() {
-        Body from = createBody();
-        Body to = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
         SuiSpeake event = new SuiSpeake(from, to, null, 1);
         assertEquals(from.getUniqueID(), event.getFrom());
         assertEquals(to.getUniqueID(), event.getTo());
@@ -55,11 +55,11 @@ public class SuiSpeakeTest {
 
     @Test
     public void testCheckEventResponse_alwaysReturnsFalse() {
-        Body b = createBody();
+        Yukkuri b = createBody();
         SuiSpeake event = new SuiSpeake();
         assertFalse(event.checkEventResponse(b));
 
-        Body from = createBody();
+        Yukkuri from = createBody();
         SuiSpeake event2 = new SuiSpeake(from, null, null, 1);
         assertFalse(event2.checkEventResponse(b));
         assertFalse(event2.checkEventResponse(from));
@@ -69,7 +69,7 @@ public class SuiSpeakeTest {
 
     @Test
     public void testExecute_returnsTrue() {
-        Body b = createBody();
+        Yukkuri b = createBody();
         SuiSpeake event = new SuiSpeake();
         assertTrue(event.execute(b));
     }
@@ -78,7 +78,7 @@ public class SuiSpeakeTest {
 
     @Test
     public void testSimpleEventAction_WithCurrentEvent() {
-        Body b = createBody();
+        Yukkuri b = createBody();
         // setCurrentEvent(EventPacket) で currentEvent を非 null にする
         b.setCurrentEvent(new SuiSpeake());
         SuiSpeake event = new SuiSpeake();
@@ -90,7 +90,7 @@ public class SuiSpeakeTest {
 
     @Test
     public void testSimpleEventAction_Talking() {
-        Body b = createBody();
+        Yukkuri b = createBody();
         // isTalking() は messageTicks > 0 で true になる
         b.setMessageTicks(1);
         SuiSpeake event = new SuiSpeake();
@@ -101,7 +101,7 @@ public class SuiSpeakeTest {
 
     @Test
     public void testStart_DoesNotThrow() {
-        Body b = createBody();
+        Yukkuri b = createBody();
         SuiSpeake event = new SuiSpeake();
         assertDoesNotThrow(() -> event.start(b));
     }
@@ -110,7 +110,7 @@ public class SuiSpeakeTest {
 
     @Test
     public void testCheckEventResponse_alwaysFalse() {
-        Body b = createBody();
+        Yukkuri b = createBody();
         SuiSpeake event = new SuiSpeake();
         assertFalse(event.checkEventResponse(b));
     }
@@ -119,7 +119,7 @@ public class SuiSpeakeTest {
 
     @Test
     public void testExecute_alwaysTrue() {
-        Body b = createBody();
+        Yukkuri b = createBody();
         SuiSpeake event = new SuiSpeake();
         assertTrue(event.execute(b));
     }
@@ -128,7 +128,7 @@ public class SuiSpeakeTest {
 
     @Test
     public void testSimpleEventAction_DeadBody_doesNotThrow() {
-        Body b = createBody();
+        Yukkuri b = createBody();
         b.setDead(true);
         SuiSpeake event = new SuiSpeake();
         assertDoesNotThrow(() -> event.simpleEventAction(b));
@@ -151,7 +151,7 @@ public class SuiSpeakeTest {
             SimYukkuri.RND = new java.util.Random() {
                 @Override public int nextInt(int bound) { return 0; }
             };
-            Body b = createBody();
+            Yukkuri b = createBody();
             SuiSpeake event = new SuiSpeake(b, null, null, 1);
             // from == b → line 84 → return false
             assertFalse(event.simpleEventAction(b));
@@ -168,9 +168,9 @@ public class SuiSpeakeTest {
                 @Override public int nextInt(int bound) { return 0; }
                 @Override public boolean nextBoolean() { return true; }
             };
-            Body b = createBody();
+            Yukkuri b = createBody();
             // Use parameterized constructor with null bodies to ensure from=-1, target=-1
-            SuiSpeake event = new SuiSpeake((Body)null, null, null, 1);
+            SuiSpeake event = new SuiSpeake((Yukkuri)null, null, null, 1);
             // from=null, target=null, nextBoolean=true → setBodyEventResMessage + addWorldEvent
             assertDoesNotThrow(() -> event.simpleEventAction(b));
         } finally {
@@ -186,9 +186,9 @@ public class SuiSpeakeTest {
                 @Override public int nextInt(int bound) { return 0; }
                 @Override public boolean nextBoolean() { return false; }
             };
-            Body b = createBody();
+            Yukkuri b = createBody();
             // Use parameterized constructor with null bodies to ensure from=-1, target=-1
-            SuiSpeake event = new SuiSpeake((Body)null, null, null, 1);
+            SuiSpeake event = new SuiSpeake((Yukkuri)null, null, null, 1);
             // from=null, target=null, !isRude, nextBoolean=false → setMessage(YukkuringSui)
             assertDoesNotThrow(() -> event.simpleEventAction(b));
         } finally {
@@ -203,8 +203,8 @@ public class SuiSpeakeTest {
             SimYukkuri.RND = new java.util.Random() {
                 @Override public int nextInt(int bound) { return 0; }
             };
-            Body from = createBody();
-            Body b = createBody();
+            Yukkuri from = createBody();
+            Yukkuri b = createBody();
             SuiSpeake event = new SuiSpeake(from, null, null, 1);
             // from != null, from != b, target=null, distance check → no parent/partner → returns true
             assertDoesNotThrow(() -> event.simpleEventAction(b));
@@ -220,8 +220,8 @@ public class SuiSpeakeTest {
             SimYukkuri.RND = new java.util.Random() {
                 @Override public int nextInt(int bound) { return 0; }
             };
-            Body from = createBody();
-            Body b = createBody();
+            Yukkuri from = createBody();
+            Yukkuri b = createBody();
             from.setPartner(b.getUniqueID());
             b.setPartner(from.getUniqueID());
             SuiSpeake event = new SuiSpeake(from, null, null, 1);
@@ -240,10 +240,10 @@ public class SuiSpeakeTest {
             SimYukkuri.RND = new java.util.Random() {
                 @Override public int nextInt(int bound) { return 0; }
             };
-            Body db = createBody();
+            Yukkuri db = createBody();
             src.item.Sui sui = createSui(db, 1000, 1000); // far from b
-            Body b = createBody(); // at 0,0
-            SuiSpeake event = new SuiSpeake((Body)null, null, sui, 1);
+            Yukkuri b = createBody(); // at 0,0
+            SuiSpeake event = new SuiSpeake((Yukkuri)null, null, sui, 1);
             assertDoesNotThrow(() -> event.simpleEventAction(b));
         } finally {
             SimYukkuri.RND = savedRND;
@@ -259,8 +259,8 @@ public class SuiSpeakeTest {
                 @Override public int nextInt(int bound) { return 0; }
             };
             src.item.Sui sui = createSui(null, 0, 0); // bindobj=null
-            Body b = createBody();
-            SuiSpeake event = new SuiSpeake((Body)null, null, sui, 1);
+            Yukkuri b = createBody();
+            SuiSpeake event = new SuiSpeake((Yukkuri)null, null, sui, 1);
             assertFalse(event.simpleEventAction(b));
         } finally {
             SimYukkuri.RND = savedRND;
@@ -275,11 +275,11 @@ public class SuiSpeakeTest {
             SimYukkuri.RND = new java.util.Random() {
                 @Override public int nextInt(int bound) { return 0; }
             };
-            Body db = createBody();
-            Body b = createBody();
+            Yukkuri db = createBody();
+            Yukkuri b = createBody();
             b.setParents(new int[]{db.getUniqueID(), -1}); // db is father of b
             src.item.Sui sui = createSui(db, 0, 0);
-            SuiSpeake event = new SuiSpeake((Body)null, null, sui, 1);
+            SuiSpeake event = new SuiSpeake((Yukkuri)null, null, sui, 1);
             assertDoesNotThrow(() -> event.simpleEventAction(b));
         } finally {
             SimYukkuri.RND = savedRND;
@@ -294,11 +294,11 @@ public class SuiSpeakeTest {
             SimYukkuri.RND = new java.util.Random() {
                 @Override public int nextInt(int bound) { return 0; }
             };
-            Body db = createBody();
-            Body b = createBody();
+            Yukkuri db = createBody();
+            Yukkuri b = createBody();
             b.setParents(new int[]{-1, db.getUniqueID()}); // db is mother of b
             src.item.Sui sui = createSui(db, 0, 0);
-            SuiSpeake event = new SuiSpeake((Body)null, null, sui, 1);
+            SuiSpeake event = new SuiSpeake((Yukkuri)null, null, sui, 1);
             assertDoesNotThrow(() -> event.simpleEventAction(b));
         } finally {
             SimYukkuri.RND = savedRND;
@@ -313,12 +313,12 @@ public class SuiSpeakeTest {
             SimYukkuri.RND = new java.util.Random() {
                 @Override public int nextInt(int bound) { return 0; }
             };
-            Body db = createBody();
-            Body b = createBody();
+            Yukkuri db = createBody();
+            Yukkuri b = createBody();
             b.setPartner(db.getUniqueID());
             db.setPartner(b.getUniqueID());
             src.item.Sui sui = createSui(db, 0, 0);
-            SuiSpeake event = new SuiSpeake((Body)null, null, sui, 1);
+            SuiSpeake event = new SuiSpeake((Yukkuri)null, null, sui, 1);
             assertDoesNotThrow(() -> event.simpleEventAction(b));
         } finally {
             SimYukkuri.RND = savedRND;
@@ -333,11 +333,11 @@ public class SuiSpeakeTest {
             SimYukkuri.RND = new java.util.Random() {
                 @Override public int nextInt(int bound) { return 0; }
             };
-            Body db = createBody();
-            Body b = createBody();
+            Yukkuri db = createBody();
+            Yukkuri b = createBody();
             db.setParents(new int[]{b.getUniqueID(), -1}); // b is father of db
             src.item.Sui sui = createSui(db, 0, 0);
-            SuiSpeake event = new SuiSpeake((Body)null, null, sui, 1);
+            SuiSpeake event = new SuiSpeake((Yukkuri)null, null, sui, 1);
             assertDoesNotThrow(() -> event.simpleEventAction(b));
         } finally {
             SimYukkuri.RND = savedRND;
@@ -352,14 +352,14 @@ public class SuiSpeakeTest {
             SimYukkuri.RND = new java.util.Random() {
                 @Override public int nextInt(int bound) { return 0; }
             };
-            Body sharedMama = createBody();
-            Body db = createBody();
-            Body b = createBody();
+            Yukkuri sharedMama = createBody();
+            Yukkuri db = createBody();
+            Yukkuri b = createBody();
             db.setParents(new int[]{-1, sharedMama.getUniqueID()});
             b.setParents(new int[]{-1, sharedMama.getUniqueID()});
             db.setAge(200); // db older than b (b has default age ~50-150)
             src.item.Sui sui = createSui(db, 0, 0);
-            SuiSpeake event = new SuiSpeake((Body)null, null, sui, 1);
+            SuiSpeake event = new SuiSpeake((Yukkuri)null, null, sui, 1);
             assertDoesNotThrow(() -> event.simpleEventAction(b));
         } finally {
             SimYukkuri.RND = savedRND;
@@ -374,14 +374,14 @@ public class SuiSpeakeTest {
             SimYukkuri.RND = new java.util.Random() {
                 @Override public int nextInt(int bound) { return 0; }
             };
-            Body sharedMama = createBody();
-            Body db = createBody();
-            Body b = createBody();
+            Yukkuri sharedMama = createBody();
+            Yukkuri db = createBody();
+            Yukkuri b = createBody();
             db.setParents(new int[]{-1, sharedMama.getUniqueID()});
             b.setParents(new int[]{-1, sharedMama.getUniqueID()});
             db.setAge(0); b.setAge(200); // b is older
             src.item.Sui sui = createSui(db, 0, 0);
-            SuiSpeake event = new SuiSpeake((Body)null, null, sui, 1);
+            SuiSpeake event = new SuiSpeake((Yukkuri)null, null, sui, 1);
             assertDoesNotThrow(() -> event.simpleEventAction(b));
         } finally {
             SimYukkuri.RND = savedRND;
@@ -396,10 +396,10 @@ public class SuiSpeakeTest {
             SimYukkuri.RND = new java.util.Random() {
                 @Override public int nextInt(int bound) { return 0; }
             };
-            Body db = createBody();
-            Body b = createBody(); // no relationship with db
+            Yukkuri db = createBody();
+            Yukkuri b = createBody(); // no relationship with db
             src.item.Sui sui = createSui(db, 0, 0);
-            SuiSpeake event = new SuiSpeake((Body)null, null, sui, 1);
+            SuiSpeake event = new SuiSpeake((Yukkuri)null, null, sui, 1);
             assertDoesNotThrow(() -> event.simpleEventAction(b));
         } finally {
             SimYukkuri.RND = savedRND;
@@ -414,8 +414,8 @@ public class SuiSpeakeTest {
             SimYukkuri.RND = new java.util.Random() {
                 @Override public int nextInt(int bound) { return 0; }
             };
-            Body from = createBody();
-            Body b = createBody();
+            Yukkuri from = createBody();
+            Yukkuri b = createBody();
             from.setParents(new int[]{b.getUniqueID(), -1}); // b is parent of from
             SuiSpeake event = new SuiSpeake(from, null, null, 1);
             assertDoesNotThrow(() -> event.simpleEventAction(b));
@@ -432,9 +432,9 @@ public class SuiSpeakeTest {
             SimYukkuri.RND = new java.util.Random() {
                 @Override public int nextInt(int bound) { return 0; }
             };
-            Body from = createBody();
+            Yukkuri from = createBody();
             from.setX(1000); from.setY(1000); // far from b
-            Body b = createBody(); // at 0,0
+            Yukkuri b = createBody(); // at 0,0
             from.setPartner(b.getUniqueID());
             b.setPartner(from.getUniqueID());
             SuiSpeake event = new SuiSpeake(from, null, null, 1);
@@ -452,8 +452,8 @@ public class SuiSpeakeTest {
             SimYukkuri.RND = new java.util.Random() {
                 @Override public int nextInt(int bound) { return 0; }
             };
-            Body from = createBody();
-            Body b = createBody();
+            Yukkuri from = createBody();
+            Yukkuri b = createBody();
             b.setParents(new int[]{-1, from.getUniqueID()}); // from is mother of b
             src.item.Sui sui = createSui(new Reimu(), 0, 0);
             SuiSpeake event = new SuiSpeake(from, null, sui, 1);
@@ -471,8 +471,8 @@ public class SuiSpeakeTest {
             SimYukkuri.RND = new java.util.Random() {
                 @Override public int nextInt(int bound) { return 0; }
             };
-            Body from = createBody();
-            Body b = createBody();
+            Yukkuri from = createBody();
+            Yukkuri b = createBody();
             b.setParents(new int[]{from.getUniqueID(), -1}); // from is father of b
             src.item.Sui sui = createSui(new Reimu(), 0, 0);
             SuiSpeake event = new SuiSpeake(from, null, sui, 1);
@@ -490,8 +490,8 @@ public class SuiSpeakeTest {
             SimYukkuri.RND = new java.util.Random() {
                 @Override public int nextInt(int bound) { return 0; }
             };
-            Body from = createBody();
-            Body b = createBody();
+            Yukkuri from = createBody();
+            Yukkuri b = createBody();
             b.setPartner(from.getUniqueID());
             from.setPartner(b.getUniqueID());
             src.item.Sui sui = createSui(new Reimu(), 0, 0);
@@ -510,8 +510,8 @@ public class SuiSpeakeTest {
             SimYukkuri.RND = new java.util.Random() {
                 @Override public int nextInt(int bound) { return 0; }
             };
-            Body from = createBody();
-            Body b = createBody();
+            Yukkuri from = createBody();
+            Yukkuri b = createBody();
             from.setParents(new int[]{b.getUniqueID(), -1}); // b is father of from
             src.item.Sui sui = createSui(new Reimu(), 0, 0);
             SuiSpeake event = new SuiSpeake(from, null, sui, 1);
@@ -529,9 +529,9 @@ public class SuiSpeakeTest {
             SimYukkuri.RND = new java.util.Random() {
                 @Override public int nextInt(int bound) { return 0; }
             };
-            Body sharedMama = createBody();
-            Body from = createBody();
-            Body b = createBody();
+            Yukkuri sharedMama = createBody();
+            Yukkuri from = createBody();
+            Yukkuri b = createBody();
             from.setParents(new int[]{-1, sharedMama.getUniqueID()});
             b.setParents(new int[]{-1, sharedMama.getUniqueID()});
             from.setAge(200); b.setAge(0); // from is elder
@@ -551,9 +551,9 @@ public class SuiSpeakeTest {
             SimYukkuri.RND = new java.util.Random() {
                 @Override public int nextInt(int bound) { return 0; }
             };
-            Body sharedMama = createBody();
-            Body from = createBody();
-            Body b = createBody();
+            Yukkuri sharedMama = createBody();
+            Yukkuri from = createBody();
+            Yukkuri b = createBody();
             from.setParents(new int[]{-1, sharedMama.getUniqueID()});
             b.setParents(new int[]{-1, sharedMama.getUniqueID()});
             from.setAge(0); b.setAge(200); // b is elder, from is younger
@@ -573,8 +573,8 @@ public class SuiSpeakeTest {
             SimYukkuri.RND = new java.util.Random() {
                 @Override public int nextInt(int bound) { return 0; }
             };
-            Body from = createBody();
-            Body b = createBody(); // no relationship
+            Yukkuri from = createBody();
+            Yukkuri b = createBody(); // no relationship
             src.item.Sui sui = createSui(new Reimu(), 0, 0);
             SuiSpeake event = new SuiSpeake(from, null, sui, 1);
             assertDoesNotThrow(() -> event.simpleEventAction(b));
@@ -591,8 +591,8 @@ public class SuiSpeakeTest {
             SimYukkuri.RND = new java.util.Random() {
                 @Override public int nextInt(int bound) { return 0; }
             };
-            Body from = createBody();
-            Body b = createBody();
+            Yukkuri from = createBody();
+            Yukkuri b = createBody();
             src.item.Sui sui = createSui(new Reimu(), 1000, 1000); // far from b (at 0,0)
             SuiSpeake event = new SuiSpeake(from, null, sui, 1);
             assertDoesNotThrow(() -> event.simpleEventAction(b));
@@ -612,9 +612,9 @@ public class SuiSpeakeTest {
                     @Override public int nextInt(int bound) { return 0; }
                     @Override public boolean nextBoolean() { return true; }
                 };
-                Body b = createBody();
+                Yukkuri b = createBody();
                 b.setAttitude(src.enums.Attitude.SHITHEAD);
-                SuiSpeake event = new SuiSpeake((Body) null, null, null, 1);
+                SuiSpeake event = new SuiSpeake((Yukkuri) null, null, null, 1);
 
                 assertTrue(event.simpleEventAction(b));
 
@@ -637,10 +637,10 @@ public class SuiSpeakeTest {
                 SimYukkuri.RND = new java.util.Random() {
                     @Override public int nextInt(int bound) { return 0; }
                 };
-                Body driver = createBody();
-                Body observer = createBody();
+                Yukkuri driver = createBody();
+                Yukkuri observer = createBody();
                 src.item.Sui sui = createSui(driver, 0, 0);
-                SuiSpeake event = new SuiSpeake((Body) null, null, sui, 1);
+                SuiSpeake event = new SuiSpeake((Yukkuri) null, null, sui, 1);
 
                 assertTrue(event.simpleEventAction(observer));
 
@@ -657,8 +657,8 @@ public class SuiSpeakeTest {
 
     // --- Helper ---
 
-    private static Body createBody() {
-        Body b = new Reimu();
+    private static Yukkuri createBody() {
+        Yukkuri b = new Reimu();
         b.setAgeState(AgeState.ADULT);
         Sprite[] spr = new Sprite[3];
         for (int i = 0; i < 3; i++) {
@@ -669,7 +669,7 @@ public class SuiSpeakeTest {
         return b;
     }
 
-    private static src.item.Sui createSui(Body bindobj, int x, int y) {
+    private static src.item.Sui createSui(Yukkuri bindobj, int x, int y) {
         src.item.Sui sui = new src.item.Sui(x, y, 0);
         sui.setBindobj(bindobj);
         return sui;

@@ -2,9 +2,9 @@ package src.logic;
 
 import java.util.Map;
 
-import src.base.Body;
-import src.base.Obj;
-import src.base.ObjEX;
+import src.base.Yukkuri;
+import src.base.Entity;
+import src.base.WorldEntity;
 import src.enums.FavItemType;
 import src.enums.PublicRank;
 import src.enums.TakeoutItemType;
@@ -17,7 +17,7 @@ import src.util.GameWorld;
 /**
  * お持ち帰り判定を集約するロジック。
  * <p>
- * 既存の {@link FoodLogic#checkTakeout(Body, Obj)} の実装を切り出し、
+ * 既存の {@link FoodLogic#checkTakeout(Yukkuri, Entity)} の実装を切り出し、
  * 食べ物とシットの判定を小さくまとめる。
  * </p>
  */
@@ -32,7 +32,7 @@ public final class FoodTakeoutPolicy {
 	 * @param target 対象オブジェクト
 	 * @return 持ち帰るならtrue
 	 */
-	public static boolean checkTakeout(Body body, Obj target) {
+	public static boolean checkTakeout(Yukkuri body, Entity target) {
 		if (body == null || target == null) {
 			return false;
 		}
@@ -45,7 +45,7 @@ public final class FoodTakeoutPolicy {
 		return checkFoodTakeout(body, target);
 	}
 
-	private static boolean checkShitTakeout(Body body, Obj target) {
+	private static boolean checkShitTakeout(Yukkuri body, Entity target) {
 		if (!(target instanceof Shit)) {
 			return false;
 		}
@@ -69,7 +69,7 @@ public final class FoodTakeoutPolicy {
 		return hasSlaveToilet && !inSlaveToilet;
 	}
 
-	private static boolean checkFoodTakeout(Body body, Obj target) {
+	private static boolean checkFoodTakeout(Yukkuri body, Entity target) {
 		if (body.isExciting() || body.isRaper()) {
 			return false;
 		}
@@ -83,11 +83,11 @@ public final class FoodTakeoutPolicy {
 		if (body.getCarryItem(TakeoutItemType.FOOD) != null) {
 			return false;
 		}
-		Obj favoriteBed = body.getFavoriteItem(FavItemType.BED);
-		if (!(favoriteBed instanceof ObjEX)) {
+		Entity favoriteBed = body.getFavoriteItem(FavItemType.BED);
+		if (!(favoriteBed instanceof WorldEntity)) {
 			return false;
 		}
-		ObjEX favoriteBedObj = (ObjEX) favoriteBed;
+		WorldEntity favoriteBedObj = (WorldEntity) favoriteBed;
 		if (src.util.BodyRegistry.getBodyInstance(body.getPartner()) == null && body.getChildrenListSize() == 0) {
 			return false;
 		}

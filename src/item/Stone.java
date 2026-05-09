@@ -8,9 +8,9 @@ import java.io.IOException;
 
 import src.SimYukkuri;
 import src.util.GameWorld;
-import src.base.Body;
-import src.base.Obj;
-import src.base.ObjEX;
+import src.base.Yukkuri;
+import src.base.Entity;
+import src.base.WorldEntity;
 import src.draw.ModLoader;
 import src.draw.Rectangle4y;
 import src.enums.CriticalDamegeType;
@@ -20,10 +20,10 @@ import src.enums.Type;
 /***************************************************
  * 小石
  */
-public class Stone extends ObjEX {
+public class Stone extends WorldEntity {
 	private static final long serialVersionUID = 6460240997300861568L;
 	/** 処理対象(ゆっくり) */
-	public static final int hitCheckObjType = ObjEX.YUKKURI;
+	public static final int hitCheckObjType = WorldEntity.YUKKURI;
 	private static final int NUM_OF_STONE_IMG = 3;
 	private static BufferedImage[] images = new BufferedImage[NUM_OF_STONE_IMG];
 	private static Rectangle4y boundary = new Rectangle4y();
@@ -71,9 +71,9 @@ public class Stone extends ObjEX {
 	}
 
 	@Override
-	public int objHitProcess(Obj targetObject) {
-		if (targetObject instanceof Body) {
-			Body body = (Body) targetObject;
+	public int objHitProcess(Entity targetObject) {
+		if (targetObject instanceof Yukkuri) {
+			Yukkuri body = (Yukkuri) targetObject;
 			if (body.getCriticalDamege() == CriticalDamegeType.CUT) {
 				return 0;
 			}
@@ -115,7 +115,7 @@ public class Stone extends ObjEX {
 		setCollisionSize(getPivotX(), getPivotY());
 		GameWorld.get().getCurrentMap().getStone().put(objId, this);
 		objType = Type.OBJECT;
-		objEXType = WorldEntityKind.STONE;
+		worldEntityType = WorldEntityKind.STONE;
 		interval = 5;
 		itemRank = ItemRank.values()[initOption];
 		if (GameWorld.get().getCurrentMap().getMapIndex() == 2 || GameWorld.get().getCurrentMap().getMapIndex() == 3

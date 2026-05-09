@@ -11,9 +11,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.event.EventPacket;
-import src.base.Obj;
+import src.base.Entity;
 import src.enums.AgeState;
 import src.enums.Attitude;
 import src.enums.CoreAnkoState;
@@ -26,7 +26,7 @@ import src.util.WorldTestHelper;
 
 class ToiletLogicTest {
 
-    private Body body;
+    private Yukkuri body;
 
     @BeforeEach
     void setUp() {
@@ -93,7 +93,7 @@ class ToiletLogicTest {
         boolean result = ToiletLogic.checkToilet(body);
         assertTrue(result);
         assertTrue(body.getMoveTargetId() != -1);
-        Obj target = SimYukkuri.world.getCurrentMap().getToilet().get(body.getMoveTargetId());
+        Entity target = SimYukkuri.world.getCurrentMap().getToilet().get(body.getMoveTargetId());
         assertTrue(target instanceof Toilet);
     }
 
@@ -132,7 +132,7 @@ class ToiletLogicTest {
     @Test
     void testGetSetBodyUnunSlave() {
         assertNull(ToiletLogic.getBodyUnunSlave());
-        Body slave = WorldTestHelper.createBody();
+        Yukkuri slave = WorldTestHelper.createBody();
         ToiletLogic.setBodyUnunSlave(slave);
         assertNotNull(ToiletLogic.getBodyUnunSlave());
         ToiletLogic.setBodyUnunSlave(null);
@@ -204,7 +204,7 @@ class ToiletLogicTest {
         SimYukkuri.world.getCurrentMap().getShit().put(shit.getObjId(), shit);
         body.setAge(0);
         // Add UnunSlave → bCanTransport=false
-        Body slave = WorldTestHelper.createBody();
+        Yukkuri slave = WorldTestHelper.createBody();
         slave.setPublicRank(PublicRank.UnunSlave);
         SimYukkuri.world.getCurrentMap().getBody().put(slave.getUniqueID(), slave);
         // Section C still runs even when bCanTransport=false
@@ -306,7 +306,7 @@ class ToiletLogicTest {
     @Test
     void testCheckShit_FoolChild_NearShit_ShitIntimidation() {
         // Use anonymous subclass with getCollisionX() override to avoid sprite NPE
-        Body child = new src.yukkuri.Marisa() {
+        Yukkuri child = new src.yukkuri.Marisa() {
             @Override public int getCollisionX() { return 10; }
             @Override public src.enums.AgeState getBodyAgeState() { return src.enums.AgeState.CHILD; }
         };
@@ -334,7 +334,7 @@ class ToiletLogicTest {
         Toilet toilet = new Toilet();
         toilet.setX(100); toilet.setY(100); // same position as body → arrived
         try {
-            java.lang.reflect.Field zf = src.base.Obj.class.getDeclaredField("z");
+            java.lang.reflect.Field zf = src.base.Entity.class.getDeclaredField("z");
             zf.setAccessible(true);
             zf.setInt(toilet, 10); // toilet.getZ()=10
         } catch (Exception e) {}
@@ -466,7 +466,7 @@ class ToiletLogicTest {
         SimYukkuri.world.getCurrentMap().getShit().put(shit.getObjId(), shit);
 
         // Another non-slave, non-dead body in the map
-        Body other = new src.yukkuri.Marisa() {
+        Yukkuri other = new src.yukkuri.Marisa() {
             @Override public int getCollisionX() { return 10; }
             @Override public AgeState getBodyAgeState() { return AgeState.ADULT; }
         };
@@ -493,9 +493,9 @@ class ToiletLogicTest {
     @Test
     void testCheckToilet_CurrentEvent_HighPriority_ReturnsFalse() {
         EventPacket ep = new EventPacket() {
-            @Override public boolean checkEventResponse(Body b) { return false; }
-            @Override public void start(Body b) {}
-            @Override public boolean execute(Body b) { return false; }
+            @Override public boolean checkEventResponse(Yukkuri b) { return false; }
+            @Override public void start(Yukkuri b) {}
+            @Override public boolean execute(Yukkuri b) { return false; }
         };
         ep.setPriority(EventPacket.EventPriority.HIGH);
         body.setCurrentEvent(ep);
@@ -633,7 +633,7 @@ class ToiletLogicTest {
 
     @Test
     void testCheckShit_PreExistingUnunSlave_bCanTransportFalse_returnsTrue() {
-        Body slave = WorldTestHelper.createBody();
+        Yukkuri slave = WorldTestHelper.createBody();
         slave.setPublicRank(PublicRank.UnunSlave);
         ToiletLogic.setBodyUnunSlave(slave); // pre-existing alive UnunSlave → L73
 
@@ -657,7 +657,7 @@ class ToiletLogicTest {
         shit.setX(101); shit.setY(101);
         SimYukkuri.world.getCurrentMap().getShit().put(shit.getObjId(), shit);
 
-        Body other = new src.yukkuri.Marisa() {
+        Yukkuri other = new src.yukkuri.Marisa() {
             @Override public int getCollisionX() { return 10; }
             @Override public AgeState getBodyAgeState() { return AgeState.ADULT; }
         };
@@ -675,7 +675,7 @@ class ToiletLogicTest {
 
     @Test
     void testCheckToilet_CanflyCheck_WallModeAdult_returnsTrue() {
-        Body flyingBody = new src.yukkuri.Marisa() {
+        Yukkuri flyingBody = new src.yukkuri.Marisa() {
             @Override public int getCollisionX() { return 10; }
             @Override public AgeState getBodyAgeState() { return AgeState.CHILD; }
             @Override public boolean isFlyingType() { return true; }
@@ -695,7 +695,7 @@ class ToiletLogicTest {
 
     @Test
     void testCheckShit_BodyUnunSlave_NotSlaveRank_elseBranch() {
-        Body notSlave = WorldTestHelper.createBody();
+        Yukkuri notSlave = WorldTestHelper.createBody();
         // default rank is NONE (not UnunSlave) → L63 false → else
         ToiletLogic.setBodyUnunSlave(notSlave);
         Shit shit = new Shit();
@@ -709,7 +709,7 @@ class ToiletLogicTest {
 
     @Test
     void testCheckShit_BodyUnunSlave_Dead_elseBranch() {
-        Body deadSlave = WorldTestHelper.createBody();
+        Yukkuri deadSlave = WorldTestHelper.createBody();
         deadSlave.setPublicRank(PublicRank.UnunSlave);
         deadSlave.setDead(true); // !isDead()=false → AND short-circuits at L64
         ToiletLogic.setBodyUnunSlave(deadSlave);
@@ -724,7 +724,7 @@ class ToiletLogicTest {
 
     @Test
     void testCheckShit_BodyUnunSlave_Removed_elseBranch() {
-        Body removedSlave = WorldTestHelper.createBody();
+        Yukkuri removedSlave = WorldTestHelper.createBody();
         removedSlave.setPublicRank(PublicRank.UnunSlave);
         removedSlave.setRemoved(true); // !isRemoved()=false → AND short-circuits at L65
         ToiletLogic.setBodyUnunSlave(removedSlave);
@@ -739,7 +739,7 @@ class ToiletLogicTest {
 
     @Test
     void testCheckShit_FeelPain_bCanTransportFalse_HatesNearbyShit() {
-        Body painBody = new src.yukkuri.Marisa() {
+        Yukkuri painBody = new src.yukkuri.Marisa() {
             @Override public int getCollisionX() { return 10; }
             @Override public AgeState getBodyAgeState() { return AgeState.ADULT; }
             @Override public boolean isFeelPain() { return true; }
@@ -761,7 +761,7 @@ class ToiletLogicTest {
     @Test
     void testCheckShit_DeadBodyAndSelfInMap_L78_continue() {
         body.setHungry(body.getHungryLimitBase()[AgeState.ADULT.ordinal()]); // isSoHungry=false → bCanTransport=true
-        Body deadBody = new src.yukkuri.Marisa() {
+        Yukkuri deadBody = new src.yukkuri.Marisa() {
             @Override public int getCollisionX() { return 10; }
             @Override public AgeState getBodyAgeState() { return AgeState.ADULT; }
         };
@@ -785,7 +785,7 @@ class ToiletLogicTest {
         Shit shit = new Shit();
         shit.setX(101); shit.setY(101);
         try {
-            java.lang.reflect.Field zf = src.base.Obj.class.getDeclaredField("z");
+            java.lang.reflect.Field zf = src.base.Entity.class.getDeclaredField("z");
             zf.setAccessible(true);
             zf.setInt(shit, 1); // z=1 != body.z=0 → continue
         } catch (Exception e) {}
@@ -799,7 +799,7 @@ class ToiletLogicTest {
 
     @Test
     void testCheckShit_ChildNotNoneRank_HateShit_returnsTrue() {
-        Body childSlave = new src.yukkuri.Marisa() {
+        Yukkuri childSlave = new src.yukkuri.Marisa() {
             @Override public int getCollisionX() { return 10; }
             @Override public AgeState getBodyAgeState() { return AgeState.CHILD; }
         };
@@ -817,7 +817,7 @@ class ToiletLogicTest {
 
     @Test
     void testCheckShit_ChildNoneNotFool_HateShit_returnsTrue() {
-        Body childNormal = new src.yukkuri.Marisa() {
+        Yukkuri childNormal = new src.yukkuri.Marisa() {
             @Override public int getCollisionX() { return 10; }
             @Override public AgeState getBodyAgeState() { return AgeState.CHILD; }
         };
@@ -835,7 +835,7 @@ class ToiletLogicTest {
 
     @Test
     void testCheckShit_ChildFoolNextBoolFalse_HateShit_returnsTrue() {
-        Body childFool = new src.yukkuri.Marisa() {
+        Yukkuri childFool = new src.yukkuri.Marisa() {
             @Override public int getCollisionX() { return 10; }
             @Override public AgeState getBodyAgeState() { return AgeState.CHILD; }
         };
@@ -995,7 +995,7 @@ class ToiletLogicTest {
         Shit shit = new Shit();
         shit.setX(150); shit.setY(150);
         SimYukkuri.world.getCurrentMap().getShit().put(shit.getObjId(), shit);
-        Body idiotBody = new src.yukkuri.Marisa() {
+        Yukkuri idiotBody = new src.yukkuri.Marisa() {
             @Override public int getCollisionX() { return 10; }
             @Override public boolean isIdiot() { return true; }
         };
@@ -1007,7 +1007,7 @@ class ToiletLogicTest {
 
     @Test
     void testCheckToilet_Idiot_returnsFalse() {
-        Body idiotBody = new src.yukkuri.Marisa() {
+        Yukkuri idiotBody = new src.yukkuri.Marisa() {
             @Override public int getCollisionX() { return 10; }
             @Override public boolean isIdiot() { return true; }
         };
@@ -1019,7 +1019,7 @@ class ToiletLogicTest {
     @Test
     void testCheckShit_RemovedBodyInMap_continue_returnsTrue() {
         body.setHungry(body.getHungryLimitBase()[AgeState.ADULT.ordinal()]); // isSoHungry=false
-        Body removedBody = new src.yukkuri.Marisa() {
+        Yukkuri removedBody = new src.yukkuri.Marisa() {
             @Override public int getCollisionX() { return 10; }
         };
         removedBody.setRemoved(true); // isRemoved=true → L77 continue
@@ -1104,9 +1104,9 @@ class ToiletLogicTest {
         public TestEventPacket(EventPriority priority) {
             this.priority = priority;
         }
-        @Override public boolean checkEventResponse(Body b) { return true; }
-        @Override public void start(Body b) {}
-        @Override public boolean execute(Body b) { return true; }
+        @Override public boolean checkEventResponse(Yukkuri b) { return true; }
+        @Override public void start(Yukkuri b) {}
+        @Override public boolean execute(Yukkuri b) { return true; }
     }
 
     @Nested

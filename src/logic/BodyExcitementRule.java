@@ -1,6 +1,6 @@
 package src.logic;
 
-import src.base.Body;
+import src.base.Yukkuri;
 import src.base.BodyAttributes;
 import src.enums.Direction;
 
@@ -19,7 +19,7 @@ public final class BodyExcitementRule {
 	 * @param actorBody  actor body
 	 * @return true when the branch consumed the action
 	 */
-	public static boolean handleExcitingContact(Body targetBody, Body actorBody) {
+	public static boolean handleExcitingContact(Yukkuri targetBody, Yukkuri actorBody) {
 		if (!actorBody.isExciting()) {
 			return false;
 		}

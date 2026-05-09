@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.event.EventPacket;
 import src.event.EventPacket.EventPriority;
 import src.event.EventPacket.UpdateState;
@@ -26,8 +26,8 @@ class AvoidMoldEventTest {
         WorldTestHelper.initializeStandardTranslate500();
     }
 
-    private static Body createBody() {
-        Body b = new src.yukkuri.Reimu();
+    private static Yukkuri createBody() {
+        Yukkuri b = new src.yukkuri.Reimu();
         b.setAgeState(AgeState.ADULT);
         src.system.Sprite[] spr = new src.system.Sprite[3];
         for (int i = 0; i < 3; i++) {
@@ -48,8 +48,8 @@ class AvoidMoldEventTest {
 
     @Test
     void testParameterizedConstructor() {
-        Body from = createBody();
-        Body to = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
         AvoidMoldEvent event = new AvoidMoldEvent(from, to, null, 10);
         assertNotNull(event);
         assertEquals(from.getUniqueID(), event.getFrom());
@@ -59,9 +59,9 @@ class AvoidMoldEventTest {
 
     @Test
     void testCheckEventResponse_setsPriorityMiddle() {
-        Body from = createBody();
-        Body to = createBody();
-        Body responder = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
+        Yukkuri responder = createBody();
         AvoidMoldEvent event = new AvoidMoldEvent(from, to, null, 10);
         event.checkEventResponse(responder);
         assertEquals(EventPriority.MIDDLE, event.getPriority());
@@ -69,9 +69,9 @@ class AvoidMoldEventTest {
 
     @Test
     void testCheckEventResponse_returnsFalseForUnunSlave() {
-        Body from = createBody();
-        Body to = createBody();
-        Body responder = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
+        Yukkuri responder = createBody();
         responder.setPublicRank(PublicRank.UnunSlave);
         AvoidMoldEvent event = new AvoidMoldEvent(from, to, null, 10);
         assertFalse(event.checkEventResponse(responder));
@@ -82,9 +82,9 @@ class AvoidMoldEventTest {
         // isIdiot() is overridden in specific subclasses (e.g. TarinaiReimu).
         // For a normal Reimu, isIdiot() returns false, so we verify the logic path
         // by confirming that a non-idiot body does NOT get rejected by the idiot check.
-        Body from = createBody();
-        Body to = createBody();
-        Body responder = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
+        Yukkuri responder = createBody();
         // Reimu.isIdiot() returns false, so the idiot check should not block
         assertFalse(responder.isIdiot());
         // The method should pass the idiot check (not return false due to isIdiot)
@@ -96,9 +96,9 @@ class AvoidMoldEventTest {
 
     @Test
     void testCheckEventResponse_returnsFalseWhenCanEventResponseIsFalse() {
-        Body from = createBody();
-        Body to = createBody();
-        Body responder = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
+        Yukkuri responder = createBody();
         // Make responder dead so canEventResponse returns false
         responder.setDead(true);
         AvoidMoldEvent event = new AvoidMoldEvent(from, to, null, 10);
@@ -113,8 +113,8 @@ class AvoidMoldEventTest {
 
     @Test
     void testUpdate_returnsAbortWhenToIsNull() {
-        Body from = createBody();
-        Body responder = createBody();
+        Yukkuri from = createBody();
+        Yukkuri responder = createBody();
         // Create event with no 'to' body registered in map
         AvoidMoldEvent event = new AvoidMoldEvent();
         event.setFrom(from.getUniqueID());
@@ -125,10 +125,10 @@ class AvoidMoldEventTest {
 
     @Test
     void testUpdate_returnsAbortWhenToIsDead() {
-        Body from = createBody();
-        Body to = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
         to.setDead(true);
-        Body responder = createBody();
+        Yukkuri responder = createBody();
         AvoidMoldEvent event = new AvoidMoldEvent(from, to, null, 10);
         UpdateState result = event.update(responder);
         assertEquals(UpdateState.ABORT, result);
@@ -136,8 +136,8 @@ class AvoidMoldEventTest {
 
     @Test
     void testExecute_returnsTrueWhenFromIsNull() {
-        Body to = createBody();
-        Body responder = createBody();
+        Yukkuri to = createBody();
+        Yukkuri responder = createBody();
         AvoidMoldEvent event = new AvoidMoldEvent();
         event.setFrom(-1);
         event.setTo(to.getUniqueID());
@@ -147,8 +147,8 @@ class AvoidMoldEventTest {
 
     @Test
     void testUpdate_toRemoved_returnsAbort() {
-        Body from = createBody();
-        Body to = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
         to.setRemoved(true);
         AvoidMoldEvent event = new AvoidMoldEvent(from, to, null, 10);
         assertEquals(UpdateState.ABORT, event.update(from));
@@ -156,7 +156,7 @@ class AvoidMoldEventTest {
 
     @Test
     void testStart_toNull_doesNotThrow() {
-        Body from = createBody();
+        Yukkuri from = createBody();
         AvoidMoldEvent event = new AvoidMoldEvent(from, null, null, 10);
         // to is null → returns early without throwing
         assertDoesNotThrow(() -> event.start(from));
@@ -164,7 +164,7 @@ class AvoidMoldEventTest {
 
     @Test
     void testExecute_toNull_returnsTrue() {
-        Body from = createBody();
+        Yukkuri from = createBody();
         AvoidMoldEvent event = new AvoidMoldEvent(from, null, null, 10);
         // to=null → from=null check → both null → true
         assertTrue(event.execute(from));
@@ -172,8 +172,8 @@ class AvoidMoldEventTest {
 
     @Test
     void testUpdate_toAlive_returnsNull() {
-        Body from = createBody();
-        Body to = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
         AvoidMoldEvent event = new AvoidMoldEvent(from, to, null, 10);
         // to is alive, not removed → calls calcCollisionX (needs rateX) → returns null
         assertNull(event.update(from));
@@ -181,8 +181,8 @@ class AvoidMoldEventTest {
 
     @Test
     void testStart_toNotNull_doesNotThrow() {
-        Body from = createBody();
-        Body to = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
         AvoidMoldEvent event = new AvoidMoldEvent(from, to, null, 10);
         // to != null → calls calcCollisionX
         assertDoesNotThrow(() -> event.start(from));
@@ -190,8 +190,8 @@ class AvoidMoldEventTest {
 
     @Test
     void testExecute_fromAdult_notFamily_doesNotThrow() {
-        Body from = createBody();
-        Body to = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
         AvoidMoldEvent event = new AvoidMoldEvent(from, to, null, 10);
         // from is adult, not family → "not family" path in execute
         assertDoesNotThrow(() -> event.execute(from));
@@ -200,32 +200,32 @@ class AvoidMoldEventTest {
     @Test
     void testSaySadMessage_fromNull_doesNotThrow() {
         // unregistered from → getBodyInstance returns null → early return
-        Body unregistered = new src.yukkuri.Reimu();
-        Body to = createBody();
+        Yukkuri unregistered = new src.yukkuri.Reimu();
+        Yukkuri to = createBody();
         AvoidMoldEvent event = new AvoidMoldEvent(unregistered, to, null, 10);
         assertDoesNotThrow(() -> event.saySadMessage(unregistered, to));
     }
 
     @Test
     void testSaySadMessage_fromExists_doesNotThrow() {
-        Body from = createBody();
-        Body to = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
         AvoidMoldEvent event = new AvoidMoldEvent(from, to, null, 10);
         assertDoesNotThrow(() -> event.saySadMessage(from, to));
     }
 
     @Test
     void testSayApologyMessage_fromNull_doesNotThrow() {
-        Body unregistered = new src.yukkuri.Reimu();
-        Body to = createBody();
+        Yukkuri unregistered = new src.yukkuri.Reimu();
+        Yukkuri to = createBody();
         AvoidMoldEvent event = new AvoidMoldEvent(unregistered, to, null, 10);
         assertDoesNotThrow(() -> event.sayApologyMessage(unregistered, to));
     }
 
     @Test
     void testSayApologyMessage_fromExists_doesNotThrow() {
-        Body from = createBody();
-        Body to = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
         AvoidMoldEvent event = new AvoidMoldEvent(from, to, null, 10);
         assertDoesNotThrow(() -> event.sayApologyMessage(from, to));
     }
@@ -234,8 +234,8 @@ class AvoidMoldEventTest {
 
     @Test
     void testExecute_fromVeryRude_doesNotThrow() {
-        Body from = createBody();
-        Body to = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
         // Make from very rude (attitude = SUPER_SHITHEAD)
         from.setAttitude(src.enums.Attitude.SUPER_SHITHEAD);
         AvoidMoldEvent event = new AvoidMoldEvent(from, to, null, 10);
@@ -246,8 +246,8 @@ class AvoidMoldEventTest {
 
     @Test
     void testExecute_adultParent_FOOL_doesNotThrow() {
-        Body from = createBody(); // adult
-        Body to = createBody();
+        Yukkuri from = createBody(); // adult
+        Yukkuri to = createBody();
         // Set from as parent of to
         src.util.WorldTestHelper.addChild(from, to.getUniqueID());
         from.setIntelligence(src.enums.Intelligence.FOOL);
@@ -258,8 +258,8 @@ class AvoidMoldEventTest {
 
     @Test
     void testExecute_adultParent_WISE_doesNotThrow() {
-        Body from = createBody(); // adult
-        Body to = createBody();
+        Yukkuri from = createBody(); // adult
+        Yukkuri to = createBody();
         src.util.WorldTestHelper.addChild(from, to.getUniqueID());
         from.setIntelligence(src.enums.Intelligence.WISE);
         SimYukkuri.RND = new src.ConstState(0); // sayApologyMessage + strike
@@ -269,8 +269,8 @@ class AvoidMoldEventTest {
 
     @Test
     void testExecute_adultParent_DEFAULT_doesNotThrow() {
-        Body from = createBody(); // adult
-        Body to = createBody();
+        Yukkuri from = createBody(); // adult
+        Yukkuri to = createBody();
         src.util.WorldTestHelper.addChild(from, to.getUniqueID());
         from.setIntelligence(src.enums.Intelligence.AVERAGE);
         SimYukkuri.RND = new src.ConstState(1); // nextInt(5)!=0 → saySadMessage
@@ -282,9 +282,9 @@ class AvoidMoldEventTest {
 
     @Test
     void testExecute_childFrom_notFamily_doesNotThrow() {
-        Body from = createBody();
+        Yukkuri from = createBody();
         from.setAgeState(src.enums.AgeState.CHILD);
-        Body to = createBody();
+        Yukkuri to = createBody();
         // from and to are not related
         AvoidMoldEvent event = new AvoidMoldEvent(from, to, null, 10);
         assertDoesNotThrow(() -> event.execute(from));
@@ -292,9 +292,9 @@ class AvoidMoldEventTest {
 
     @Test
     void testExecute_childFrom_isChild_FOOL_doesNotThrow() {
-        Body from = createBody();
+        Yukkuri from = createBody();
         from.setAgeState(src.enums.AgeState.CHILD);
-        Body to = createBody(); // parent (to is from's parent)
+        Yukkuri to = createBody(); // parent (to is from's parent)
         // Make to have from as child (so from.isChild(to) is true)
         src.util.WorldTestHelper.addChild(to, from.getUniqueID());
         from.setIntelligence(src.enums.Intelligence.FOOL);
@@ -307,8 +307,8 @@ class AvoidMoldEventTest {
 
     @Test
     void testUpdate_toDead_returnsAbort() {
-        Body from = createBody();
-        Body to = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
         to.setDead(true);
         AvoidMoldEvent event = new AvoidMoldEvent(from, to, null, 10);
         assertEquals(src.event.EventPacket.UpdateState.ABORT, event.update(from));
@@ -317,8 +317,8 @@ class AvoidMoldEventTest {
     // --- execute: adult, isTalking → return true ---
     @Test
     void testExecute_adultFrom_isTalking_returnsTrue() {
-        Body from = createBody(); // adult
-        Body to = createBody();
+        Yukkuri from = createBody(); // adult
+        Yukkuri to = createBody();
         from.setMessageTicks(1); // isTalking() = true → inner block skipped
         AvoidMoldEvent event = new AvoidMoldEvent(from, to, null, 10);
         assertTrue(event.execute(from));
@@ -327,8 +327,8 @@ class AvoidMoldEventTest {
     // --- execute: isVeryRude + FOOL → addSickPeriod ---
     @Test
     void testExecute_fromVeryRude_FOOL_doesNotThrow() {
-        Body from = createBody();
-        Body to = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
         from.setAttitude(src.enums.Attitude.SUPER_SHITHEAD); // isVeryRude() = true
         from.setIntelligence(src.enums.Intelligence.FOOL); // addSickPeriod(100) path
         AvoidMoldEvent event = new AvoidMoldEvent(from, to, null, 10);
@@ -338,8 +338,8 @@ class AvoidMoldEventTest {
     // --- execute: adult, isParent, FOOL, nextInt(5)!=0 → saySadMessage, false ---
     @Test
     void testExecute_adultParent_FOOL_saySadMessage_returnsFalse() {
-        Body from = createBody();
-        Body to = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
         to.setParents(new int[]{from.getUniqueID(), -1}); // from.isParent(to) = true
         from.setIntelligence(src.enums.Intelligence.FOOL);
         SimYukkuri.RND = new src.ConstState(1); // nextInt(5)=1 → saySadMessage path
@@ -353,8 +353,8 @@ class AvoidMoldEventTest {
     // --- execute: adult, isParent, WISE, nextInt(5)!=0 → return false ---
     @Test
     void testExecute_adultParent_WISE_returnsFalse() {
-        Body from = createBody();
-        Body to = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
         to.setParents(new int[]{from.getUniqueID(), -1}); // from.isParent(to) = true
         from.setIntelligence(src.enums.Intelligence.WISE);
         SimYukkuri.RND = new src.ConstState(1); // nextInt(5)=1 → no apology
@@ -368,8 +368,8 @@ class AvoidMoldEventTest {
     // --- execute: adult, isParent, DEFAULT, nextInt(5)==0 → sayApology+strike+true ---
     @Test
     void testExecute_adultParent_DEFAULT_trueWhenApology() {
-        Body from = createBody();
-        Body to = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
         src.util.WorldTestHelper.addChild(from, to.getUniqueID());
         from.setIntelligence(src.enums.Intelligence.AVERAGE);
         SimYukkuri.RND = new src.ConstState(0); // nextInt(5)=0 → sayApology+strike+true
@@ -383,9 +383,9 @@ class AvoidMoldEventTest {
     // --- execute: adult, isFamily (siblings, not parent/partner) ---
     @Test
     void testExecute_adultFamily_FOOL_doesNotThrow() {
-        Body sharedParent = createBody();
-        Body from = createBody();
-        Body to = createBody();
+        Yukkuri sharedParent = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
         // siblings (same father)
         from.setParents(new int[]{sharedParent.getUniqueID(), -1});
         to.setParents(new int[]{sharedParent.getUniqueID(), -1});
@@ -400,9 +400,9 @@ class AvoidMoldEventTest {
 
     @Test
     void testExecute_adultFamily_WISE_doesNotThrow() {
-        Body sharedParent = createBody();
-        Body from = createBody();
-        Body to = createBody();
+        Yukkuri sharedParent = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
         from.setParents(new int[]{sharedParent.getUniqueID(), -1});
         to.setParents(new int[]{sharedParent.getUniqueID(), -1});
         from.setIntelligence(src.enums.Intelligence.WISE);
@@ -416,9 +416,9 @@ class AvoidMoldEventTest {
 
     @Test
     void testExecute_adultFamily_DEFAULT_doesNotThrow() {
-        Body sharedParent = createBody();
-        Body from = createBody();
-        Body to = createBody();
+        Yukkuri sharedParent = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
         from.setParents(new int[]{sharedParent.getUniqueID(), -1});
         to.setParents(new int[]{sharedParent.getUniqueID(), -1});
         from.setIntelligence(src.enums.Intelligence.AVERAGE);
@@ -433,9 +433,9 @@ class AvoidMoldEventTest {
     // --- execute: child path, isChild(to) WISE ---
     @Test
     void testExecute_childFrom_isChild_WISE_doesNotThrow() {
-        Body from = createBody();
+        Yukkuri from = createBody();
         from.setAgeState(src.enums.AgeState.CHILD);
-        Body to = createBody();
+        Yukkuri to = createBody();
         from.setParents(new int[]{to.getUniqueID(), -1}); // from.isChild(to) = to.isParent(from)
         from.setIntelligence(src.enums.Intelligence.WISE);
         SimYukkuri.RND = new src.ConstState(1);
@@ -449,10 +449,10 @@ class AvoidMoldEventTest {
     // --- execute: child path, isFamily (siblings) ---
     @Test
     void testExecute_childFrom_isFamily_FOOL_doesNotThrow() {
-        Body sharedParent = createBody();
-        Body from = createBody();
+        Yukkuri sharedParent = createBody();
+        Yukkuri from = createBody();
         from.setAgeState(src.enums.AgeState.CHILD);
-        Body to = createBody();
+        Yukkuri to = createBody();
         from.setParents(new int[]{sharedParent.getUniqueID(), -1});
         to.setParents(new int[]{sharedParent.getUniqueID(), -1});
         from.setIntelligence(src.enums.Intelligence.FOOL);
@@ -466,10 +466,10 @@ class AvoidMoldEventTest {
 
     @Test
     void testExecute_childFrom_isFamily_WISE_doesNotThrow() {
-        Body sharedParent = createBody();
-        Body from = createBody();
+        Yukkuri sharedParent = createBody();
+        Yukkuri from = createBody();
         from.setAgeState(src.enums.AgeState.CHILD);
-        Body to = createBody();
+        Yukkuri to = createBody();
         from.setParents(new int[]{sharedParent.getUniqueID(), -1});
         to.setParents(new int[]{sharedParent.getUniqueID(), -1});
         from.setIntelligence(src.enums.Intelligence.WISE);
@@ -484,8 +484,8 @@ class AvoidMoldEventTest {
     // --- saySadMessage: isParent(to) → SadnessForMoldyChild ---
     @Test
     void testSaySadMessage_isParent_doesNotThrow() {
-        Body from = createBody();
-        Body to = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
         src.util.WorldTestHelper.addChild(from, to.getUniqueID()); // from.isParent(to)
         AvoidMoldEvent event = new AvoidMoldEvent(from, to, null, 10);
         assertDoesNotThrow(() -> event.saySadMessage(from, to));
@@ -494,8 +494,8 @@ class AvoidMoldEventTest {
     // --- saySadMessage: isPartner(to) → SadnessForMoldyPartner ---
     @Test
     void testSaySadMessage_isPartner_doesNotThrow() {
-        Body from = createBody();
-        Body to = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
         from.setPartner(to.getUniqueID());
         to.setPartner(from.getUniqueID());
         AvoidMoldEvent event = new AvoidMoldEvent(from, to, null, 10);
@@ -505,8 +505,8 @@ class AvoidMoldEventTest {
     // --- saySadMessage: to.isParent(from) → SadnessForMoldyFather/Mother ---
     @Test
     void testSaySadMessage_toIsParent_doesNotThrow() {
-        Body from = createBody();
-        Body to = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
         from.setParents(new int[]{to.getUniqueID(), -1}); // to.isParent(from) = true
         AvoidMoldEvent event = new AvoidMoldEvent(from, to, null, 10);
         assertDoesNotThrow(() -> event.saySadMessage(from, to));
@@ -515,15 +515,15 @@ class AvoidMoldEventTest {
     // --- sayApologyMessage: from.isParent(to) → ApologyToChild ---
     @Test
     void testSayApologyMessage_isParent_doesNotThrow() {
-        Body from = createBody();
-        Body to = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
         src.util.WorldTestHelper.addChild(from, to.getUniqueID()); // from.isParent(to)
         AvoidMoldEvent event = new AvoidMoldEvent(from, to, null, 10);
         assertDoesNotThrow(() -> event.sayApologyMessage(from, to));
     }
 
     // helper to create event without needing a new local
-    private static AvoidMoldEvent event(Body from, Body to) {
+    private static AvoidMoldEvent event(Yukkuri from, Yukkuri to) {
         return new AvoidMoldEvent(from, to, null, 10);
     }
 
@@ -543,8 +543,8 @@ class AvoidMoldEventTest {
 
         @Test
         void testScenario_VeryRudeFoolSanctionsMoldyTargetAndGetsPuffFace() {
-            Body from = createBody();
-            Body to = createBody();
+            Yukkuri from = createBody();
+            Yukkuri to = createBody();
             from.setAttitude(src.enums.Attitude.SUPER_SHITHEAD);
             from.setIntelligence(src.enums.Intelligence.FOOL);
             int beforeSick = from.getSickPeriod();

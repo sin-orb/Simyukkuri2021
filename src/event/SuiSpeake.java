@@ -5,9 +5,9 @@ import src.util.GameText;
 import src.Const;
 import src.SimYukkuri;
 import src.util.GameRandom;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.event.EventPacket;
-import src.base.Obj;
+import src.base.Entity;
 import src.draw.Translate;
 import src.item.Sui;
 import src.logic.EventLogic;
@@ -16,9 +16,9 @@ import src.system.ResourceUtil;
 
 /***************************************************
  * すぃーに関連した会話イベント
- * protected Body from; // 乗るゆっくり
- * protected Body to; // 未使用
- * protected Obj target; // すぃー
+ * protected Yukkuri from; // 乗るゆっくり
+ * protected Yukkuri to; // 未使用
+ * protected Entity target; // すぃー
  * protected int count; // 1
  */
 public class SuiSpeake extends EventPacket {
@@ -28,7 +28,7 @@ public class SuiSpeake extends EventPacket {
 	/**
 	 * コンストラクタ.
 	 */
-	public SuiSpeake(Body f, Body t, Obj tgt, int cnt) {
+	public SuiSpeake(Yukkuri f, Yukkuri t, Entity tgt, int cnt) {
 		super(f, t, tgt, cnt);
 	}
 
@@ -37,14 +37,14 @@ public class SuiSpeake extends EventPacket {
 	}
 
 	@Override
-	public boolean simpleEventAction(Body b) {
+	public boolean simpleEventAction(Yukkuri b) {
 		if (b.getCurrentEvent() != null || b.isTalking() || GameRandom.nextInt(20) != 0)
 			return true;
 		if (!b.canEventResponse()) {
 			return false;
 		}
-		Obj target = b.takeMappedObj(this.target);
-		Body sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
+		Entity target = b.takeMappedObj(this.target);
+		Yukkuri sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
 		if (sourceBody == null) {
 			if (target == null) {
 				if (b.isRude() || GameRandom.nextBoolean()) {
@@ -56,7 +56,7 @@ public class SuiSpeake extends EventPacket {
 				}
 			} else {
 				if (Translate.distance(b.getX(), b.getY(), target.getX(), target.getY()) < 200000) {
-					Body db = (Body) ((Sui) target).getBindobj();
+					Yukkuri db = (Yukkuri) ((Sui) target).getBindobj();
 					if (db == null)
 						return false;
 					if (db.isParent(b)) {
@@ -122,16 +122,16 @@ public class SuiSpeake extends EventPacket {
 	}
 
 	@Override
-	public boolean checkEventResponse(Body b) {
+	public boolean checkEventResponse(Yukkuri b) {
 		return false;
 	}
 
 	@Override
-	public void start(Body b) {
+	public void start(Yukkuri b) {
 	}
 
 	@Override
-	public boolean execute(Body b) {
+	public boolean execute(Yukkuri b) {
 		return true;
 	}
 

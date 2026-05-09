@@ -11,17 +11,17 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.enums.EnumRelationMine;
 import src.util.WorldTestHelper;
 
 class BodyRelationsTest {
 
-	private Body parent;
-	private Body child;
-	private Body partner;
-	private Body sibling;
-	private Body unrelated;
+	private Yukkuri parent;
+	private Yukkuri child;
+	private Yukkuri partner;
+	private Yukkuri sibling;
+	private Yukkuri unrelated;
 
 	@BeforeEach
 	void setUp() {
@@ -141,8 +141,8 @@ class BodyRelationsTest {
 		assertThrows(NullPointerException.class, () -> BodyRelations.isFamily(parent, null));
 	}
 
-	private Body createRegisteredBody() {
-		Body body = WorldTestHelper.createBody();
+	private Yukkuri createRegisteredBody() {
+		Yukkuri body = WorldTestHelper.createBody();
 		SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
 		return body;
 	}

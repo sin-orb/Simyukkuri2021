@@ -14,7 +14,6 @@ import src.enums.*;
 import src.event.BegForLifeEvent;
 import src.util.WorldTestHelper;
 import java.security.SecureRandom;
-import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 
 public class BodyBehaviorTest {
@@ -100,9 +99,7 @@ public class BodyBehaviorTest {
     public void testCheckSick_Terminal() throws Exception {
         // Reset message constraints
         body.setMessageTicks(0);
-        Field fDisc = BodyAttributes.class.getDeclaredField("speechDiscipline");
-        fDisc.setAccessible(true);
-        fDisc.set(body, 0);
+        body.setSpeechDiscipline(0);
 
         body.setSickPeriod(1200 * 33);
         body.setDamage(15000);
@@ -113,13 +110,7 @@ public class BodyBehaviorTest {
 
         assertTrue(body.getStress() >= 100);
 
-        Field fBuf = BodyAttributes.class.getDeclaredField("messageBuffer");
-        fBuf.setAccessible(true);
-        String msg = (String) fBuf.get(body);
-        // MessagePool might return "NO ACTION [...]" or "NO MESSAGE FILE" if not loaded
-        // correctly,
-        // but it shouldn't be null.
-        assertNotNull(msg);
+        assertNotNull(body.getMessageBuffer());
     }
 
     @Test
@@ -132,7 +123,7 @@ public class BodyBehaviorTest {
         neighbor.setY(body.getY());
         world.getCurrentMap().getBody().put(2, neighbor);
 
-        Method m = Terrarium.class.getDeclaredMethod("checkPanic", Body.class);
+        Method m = Terrarium.class.getDeclaredMethod("checkPanic", Yukkuri.class);
         m.setAccessible(true);
         m.invoke(SimYukkuri.mypane.getTerrarium(), body);
 
@@ -150,7 +141,7 @@ public class BodyBehaviorTest {
         neighbor.setY(body.getY());
         world.getCurrentMap().getBody().put(2, neighbor);
 
-        Method m = Terrarium.class.getDeclaredMethod("checkFire", Body.class);
+        Method m = Terrarium.class.getDeclaredMethod("checkFire", Yukkuri.class);
         m.setAccessible(true);
         m.invoke(SimYukkuri.mypane.getTerrarium(), body);
 
@@ -183,7 +174,7 @@ public class BodyBehaviorTest {
             raper.setRaper(true);
             world.getCurrentMap().getBody().put(2, raper);
 
-            Method m = Terrarium.class.getDeclaredMethod("checkPanic", Body.class);
+            Method m = Terrarium.class.getDeclaredMethod("checkPanic", Yukkuri.class);
             m.setAccessible(true);
             m.invoke(SimYukkuri.mypane.getTerrarium(), body);
 
@@ -200,7 +191,7 @@ public class BodyBehaviorTest {
             distant.setY(body.getY() + 1000);
             world.getCurrentMap().getBody().put(2, distant);
 
-            Method m = Terrarium.class.getDeclaredMethod("checkFire", Body.class);
+            Method m = Terrarium.class.getDeclaredMethod("checkFire", Yukkuri.class);
             m.setAccessible(true);
             m.invoke(SimYukkuri.mypane.getTerrarium(), body);
 

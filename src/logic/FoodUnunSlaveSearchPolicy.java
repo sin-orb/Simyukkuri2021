@@ -2,8 +2,8 @@ package src.logic;
 
 import java.util.Map;
 
-import src.base.Body;
-import src.base.Obj;
+import src.base.Yukkuri;
+import src.base.Entity;
 import src.draw.Translate;
 import src.enums.AgeState;
 import src.enums.BodyRank;
@@ -22,8 +22,8 @@ public final class FoodUnunSlaveSearchPolicy {
 	private FoodUnunSlaveSearchPolicy() {
 	}
 
-	public static Obj searchFoodForUnunSlave(Body body, boolean[] forceEat) {
-		Obj targetObject = null;
+	public static Entity searchFoodForUnunSlave(Yukkuri body, boolean[] forceEat) {
+		Entity targetObject = null;
 		int minDistance = body.getEyesightBase();
 		int wallMode = body.getBodyAgeState().ordinal();
 
@@ -53,12 +53,12 @@ public final class FoodUnunSlaveSearchPolicy {
 					}
 					if (FoodLogic.checkTakeout(body, shit)) {
 						boolean hasOtherTarget = false;
-						for (Map.Entry<Integer, Body> entry2 : GameWorld.get().getCurrentMap().getBody().entrySet()) {
-							Body otherBody = entry2.getValue();
+						for (Map.Entry<Integer, Yukkuri> entry2 : GameWorld.get().getCurrentMap().getBody().entrySet()) {
+							Yukkuri otherBody = entry2.getValue();
 							if (body == otherBody || otherBody == null || otherBody.isDead() || otherBody.isRemoved()) {
 								continue;
 							}
-							Obj targetObjectByBody = otherBody.takeMoveTarget();
+							Entity targetObjectByBody = otherBody.takeMoveTarget();
 							if (shit == targetObjectByBody) {
 								hasOtherTarget = true;
 								break;
@@ -94,8 +94,8 @@ public final class FoodUnunSlaveSearchPolicy {
 		}
 
 		if (targetObject == null) {
-			for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
-				Body candidateBody = entry.getValue();
+			for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
+				Yukkuri candidateBody = entry.getValue();
 				if (body == candidateBody) {
 					continue;
 				}

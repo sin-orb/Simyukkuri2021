@@ -5,10 +5,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.event.EventPacket;
 import src.base.EventTestBase;
-import src.base.Obj;
+import src.base.Entity;
 import src.item.GarbageChute;
 import src.item.Stone;
 import src.item.Trash;
@@ -17,8 +17,8 @@ public class GetTrashOkazariEventTest extends EventTestBase {
 
     @Test
     void testCheckEventResponse_AlwaysReturnsTrue() {
-        Body body = createBody(1, 100, 100);
-        Obj trash = new GarbageChute(120, 120, 0);
+        Yukkuri body = createBody(1, 100, 100);
+        Entity trash = new GarbageChute(120, 120, 0);
         trash.setObjId(10);
 
         GetTrashOkazariEvent event = new GetTrashOkazariEvent(body, null, trash, 1);
@@ -34,8 +34,8 @@ public class GetTrashOkazariEventTest extends EventTestBase {
 
     @Test
     void testCheckEventResponsePriorityIsMiddle() {
-        Body body = createBody(1, 100, 100);
-        Obj trash = new Stone(120, 120, 0);
+        Yukkuri body = createBody(1, 100, 100);
+        Entity trash = new Stone(120, 120, 0);
 
         GetTrashOkazariEvent event = new GetTrashOkazariEvent(body, null, trash, 1);
         event.checkEventResponse(body);
@@ -44,7 +44,7 @@ public class GetTrashOkazariEventTest extends EventTestBase {
 
     @Test
     void testStartDoesNotThrow() {
-        Body body = createBody(1, 100, 100);
+        Yukkuri body = createBody(1, 100, 100);
         Stone stone = new Stone(120, 120, 0);
         // takeMappedObj(stoneId)がStoneを返すようにワールドに登録
         SimYukkuri.world.getCurrentMap().getStone().put(stone.getObjId(), stone);
@@ -55,7 +55,7 @@ public class GetTrashOkazariEventTest extends EventTestBase {
 
     @Test
     void testUpdateWithRemovedTargetAbortsEarly() {
-        Body body = createBody(1, 100, 100);
+        Yukkuri body = createBody(1, 100, 100);
         Stone stone = new Stone(120, 120, 0);
         SimYukkuri.world.getCurrentMap().getStone().put(stone.getObjId(), stone);
         stone.remove();
@@ -67,7 +67,7 @@ public class GetTrashOkazariEventTest extends EventTestBase {
 
     @Test
     void testExecuteWithRemovedTargetReturnsTrue() {
-        Body body = createBody(1, 100, 100);
+        Yukkuri body = createBody(1, 100, 100);
         Stone stone = new Stone(120, 120, 0);
         SimYukkuri.world.getCurrentMap().getStone().put(stone.getObjId(), stone);
         stone.remove();
@@ -79,7 +79,7 @@ public class GetTrashOkazariEventTest extends EventTestBase {
 
     @Test
     void testUpdateWithNonRemovedAndNoOkazari() {
-        Body body = createBody(1, 100, 100);
+        Yukkuri body = createBody(1, 100, 100);
         Stone stone = new Stone(120, 120, 0);
         SimYukkuri.world.getCurrentMap().getStone().put(stone.getObjId(), stone);
 
@@ -92,7 +92,7 @@ public class GetTrashOkazariEventTest extends EventTestBase {
 
     @Test
     void testToString_doesNotThrow() {
-        Body body = createBody(1, 100, 100);
+        Yukkuri body = createBody(1, 100, 100);
         Stone stone = new Stone(120, 120, 0);
         GetTrashOkazariEvent event = new GetTrashOkazariEvent(body, null, stone, 1);
         assertDoesNotThrow(() -> event.toString());
@@ -101,10 +101,10 @@ public class GetTrashOkazariEventTest extends EventTestBase {
     // --- update: b.hasOkazari() = true → ABORT ---
     @Test
     void testUpdate_bodyHasOkazari_returnsAbort() {
-        Body body = createBody(1, 100, 100);
+        Yukkuri body = createBody(1, 100, 100);
         Stone stone = new Stone(120, 120, 0);
         SimYukkuri.world.getCurrentMap().getStone().put(stone.getObjId(), stone);
-        // body already has an okazari (set in Body constructor: setOkazari(new Okazari(this, OkazariType.DEFAULT)))
+        // body already has an okazari (set in Yukkuri constructor: setOkazari(new Okazari(this, OkazariType.DEFAULT)))
         // so hasOkazari() = true
         GetTrashOkazariEvent event = new GetTrashOkazariEvent(body, null, stone, 1);
         EventPacket.UpdateState state = event.update(body);
@@ -116,7 +116,7 @@ public class GetTrashOkazariEventTest extends EventTestBase {
 
         @Test
         void testScenario_BareBodyKeepsChasingTrashUntilExecution() {
-            Body body = createBody(1, 100, 100);
+            Yukkuri body = createBody(1, 100, 100);
             body.setOkazari(null);
             Stone stone = new Stone(120, 120, 0);
             SimYukkuri.world.getCurrentMap().getStone().put(stone.getObjId(), stone);

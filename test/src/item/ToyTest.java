@@ -3,10 +3,10 @@ package src.item;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.base.ItemTestBase;
-import src.base.ObjEX;
-import src.base.ObjEX.ItemRank;
+import src.base.WorldEntity;
+import src.base.WorldEntity.ItemRank;
 import src.util.WorldTestHelper;
 import src.yukkuri.Reimu;
 import static org.junit.jupiter.api.Assertions.*;
@@ -17,7 +17,7 @@ class ToyTest extends ItemTestBase {
     @Test
     void testConstructor_Parameterized() {
         // 0 = HOUSE
-        Toy toy = new Toy(0, 0, ObjEX.ItemRank.HOUSE.ordinal());
+        Toy toy = new Toy(0, 0, WorldEntity.ItemRank.HOUSE.ordinal());
         assertNotNull(toy);
     }
 

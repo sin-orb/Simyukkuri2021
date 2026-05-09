@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import src.base.Body;
+import src.base.Yukkuri;
 import src.enums.AgeState;
 import src.enums.Happiness;
 import src.util.WorldTestHelper;
@@ -24,8 +24,8 @@ public class BodyDeadActionRuleTest {
 
 	@Test
 	void testHandleDeadBodyInteraction_excitingBodyHandlesDeadTarget() {
-		Body me = WorldTestHelper.createBody();
-		Body dead = WorldTestHelper.createBody();
+		Yukkuri me = WorldTestHelper.createBody();
+		Yukkuri dead = WorldTestHelper.createBody();
 		me.setExciting(true);
 		me.setRaper(true);
 		dead.setDead(true);
@@ -35,8 +35,8 @@ public class BodyDeadActionRuleTest {
 
 	@Test
 	void testHandleDeadBodyInteraction_parentDeathMakesAdultVerySad() {
-		Body me = WorldTestHelper.createBody();
-		Body parent = WorldTestHelper.createBody();
+		Yukkuri me = WorldTestHelper.createBody();
+		Yukkuri parent = WorldTestHelper.createBody();
 		me.setAgeState(AgeState.ADULT);
 		parent.setDead(true);
 		WorldTestHelper.setParents(me, -1, parent.getUniqueID());

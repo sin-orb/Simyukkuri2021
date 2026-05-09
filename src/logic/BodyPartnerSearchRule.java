@@ -4,7 +4,7 @@ import java.util.Map;
 
 import src.attachment.Ants;
 import src.attachment.Fire;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.entity.world.bodylinked.Okazari.OkazariType;
 import src.draw.Translate;
 import src.enums.AgeState;
@@ -18,7 +18,7 @@ import src.util.GameRandom;
 import src.util.GameWorld;
 
 /**
- * Candidate search for {@link BodyLogic#checkPartner(Body)}.
+ * Candidate search for {@link BodyLogic#checkPartner(Yukkuri)}.
  */
 public final class BodyPartnerSearchRule {
 
@@ -26,10 +26,10 @@ public final class BodyPartnerSearchRule {
 	 * Search result for partner selection.
 	 */
 	public static final class SearchResult {
-		private final Body targetBody;
-		private final Body bodyHasOkazari;
+		private final Yukkuri targetBody;
+		private final Yukkuri bodyHasOkazari;
 
-		SearchResult(Body targetBody, Body bodyHasOkazari) {
+		SearchResult(Yukkuri targetBody, Yukkuri bodyHasOkazari) {
 			this.targetBody = targetBody;
 			this.bodyHasOkazari = bodyHasOkazari;
 		}
@@ -37,14 +37,14 @@ public final class BodyPartnerSearchRule {
 		/**
 		 * @return selected target body
 		 */
-		public Body getFound() {
+		public Yukkuri getFound() {
 			return targetBody;
 		}
 
 		/**
 		 * @return okazari steal target
 		 */
-		public Body getBodyHasOkazari() {
+		public Yukkuri getBodyHasOkazari() {
 			return bodyHasOkazari;
 		}
 	}
@@ -61,13 +61,13 @@ public final class BodyPartnerSearchRule {
 	 * @param secondMinDistance current second minimum distance
 	 * @return search result
 	 */
-	public static SearchResult selectTargets(Body body, Body targetBody, int minDistance, int secondMinDistance) {
-		Body bodyHasOkazari = null;
-		Body bodyHasOkazariAndPherommone = null;
-		Body bodyHasPheromone = null;
+	public static SearchResult selectTargets(Yukkuri body, Yukkuri targetBody, int minDistance, int secondMinDistance) {
+		Yukkuri bodyHasOkazari = null;
+		Yukkuri bodyHasOkazariAndPherommone = null;
+		Yukkuri bodyHasPheromone = null;
 
-		for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
-			Body candidateBody = entry.getValue();
+		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
+			Yukkuri candidateBody = entry.getValue();
 			if (candidateBody == body) {
 				continue;
 			}

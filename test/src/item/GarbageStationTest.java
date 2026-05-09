@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test;
 import src.ConstState;
 import src.SimYukkuri;
 import src.base.ItemTestBase;
-import src.base.Obj;
+import src.base.Entity;
 import src.enums.WorldEntityKind;
 import src.item.Food.FoodType;
 import src.item.GarbageStation.GomiType;
@@ -148,7 +148,7 @@ class GarbageStationTest extends ItemTestBase {
     @Test
     void testGetSetFood() {
         GarbageStation item = new GarbageStation();
-        Obj[] food = new Obj[2];
+        Entity[] food = new Entity[2];
         item.setFood(food);
         assertArrayEquals(food, item.getFood());
     }
@@ -194,7 +194,7 @@ class GarbageStationTest extends ItemTestBase {
         GarbageStation item = new GarbageStation();
         item.setEnabled(true);
         item.setEnable(new boolean[GomiType.values().length]);
-        item.setFood(new Obj[2]);
+        item.setFood(new Entity[2]);
         assertDoesNotThrow(() -> item.upDate());
     }
 
@@ -212,7 +212,7 @@ class GarbageStationTest extends ItemTestBase {
     void testObjEXType_afterManualSet() {
         GarbageStation item = new GarbageStation();
         item.setObjEXType(WorldEntityKind.GARBAGESTATION);
-        assertEquals(WorldEntityKind.GARBAGESTATION, item.getObjEXType());
+        assertEquals(WorldEntityKind.GARBAGESTATION, item.getWorldEntityType());
     }
 
     // --- enabled flag ---
@@ -321,7 +321,7 @@ class GarbageStationTest extends ItemTestBase {
             food.remove();
             java.lang.reflect.Field foodField = GarbageStation.class.getDeclaredField("food");
             foodField.setAccessible(true);
-            src.base.Obj[] foods = (src.base.Obj[]) foodField.get(item);
+            src.base.Entity[] foods = (src.base.Entity[]) foodField.get(item);
             foods[0] = food;
             foods[1] = food;
 
@@ -348,7 +348,7 @@ class GarbageStationTest extends ItemTestBase {
             item.setThrowingTime(0);
             item.setGettingP(1);
             item.setEnable(new boolean[GomiType.values().length]);
-            item.setFood(new Obj[2]);
+            item.setFood(new Entity[2]);
             item.getEnable()[GomiType.WASTE.ordinal()] = true;
 
             Field operationTimeField = src.draw.Terrarium.class.getDeclaredField("operationTime");
@@ -372,7 +372,7 @@ class GarbageStationTest extends ItemTestBase {
             item.setThrowingTime(0);
             item.setGettingP(1);
             item.setEnable(new boolean[GomiType.values().length]);
-            item.setFood(new Obj[2]);
+            item.setFood(new Entity[2]);
             item.getEnable()[GomiType.WASTE.ordinal()] = true;
 
             Food emptyFood = new Food(100, 100, FoodType.WASTE_NORA.ordinal());

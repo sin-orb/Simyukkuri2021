@@ -6,7 +6,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.draw.MyPane;
 import src.util.GameEnvironment;
 import src.util.GameView;
@@ -69,7 +69,7 @@ public final class ButtonListener implements ActionListener {
 				MainCommandUI.getOptionPopup().setVisible(false);
 			}
 		} else if (source.equals(MainCommandUI.getPinButton())) {
-			Body selected = MyPane.getSelectBody();
+			Yukkuri selected = MyPane.getSelectBody();
 			if (selected != null && !selected.isRemoved()) {
 				selected.setPinned(MainCommandUI.getPinButton().isSelected());
 			}

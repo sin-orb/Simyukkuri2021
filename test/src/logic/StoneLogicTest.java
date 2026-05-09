@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.draw.World;
 import src.enums.AgeState;
 import src.enums.BurialState;
@@ -27,8 +27,8 @@ public class StoneLogicTest {
         WorldTestHelper.initializeStandardTranslate500();
     }
 
-    private Body createAdultBody(int x, int y) {
-        Body b = new Reimu();
+    private Yukkuri createAdultBody(int x, int y) {
+        Yukkuri b = new Reimu();
         b.setAgeState(AgeState.ADULT);
         Sprite[] spr = new Sprite[3];
         for (int i = 0; i < 3; i++) {
@@ -56,14 +56,14 @@ public class StoneLogicTest {
 
     @Test
     public void testCheckPubbleNoStones() {
-        Body b = createAdultBody(100, 100);
+        Yukkuri b = createAdultBody(100, 100);
         // no stones in world → loop has no iterations
         assertDoesNotThrow(() -> StoneLogic.checkPubble(b));
     }
 
     @Test
     public void testCheckPubble_stoneFarAway_noEffect() {
-        Body b = createAdultBody(100, 100);
+        Yukkuri b = createAdultBody(100, 100);
         // Stone far away (distance=500) → neither branch fires
         Stone stone = new Stone(600, 100, 0);
         assertDoesNotThrow(() -> StoneLogic.checkPubble(b));
@@ -71,7 +71,7 @@ public class StoneLogicTest {
 
     @Test
     public void testCheckPubble_differentZ_skipped() {
-        Body b = createAdultBody(100, 100);
+        Yukkuri b = createAdultBody(100, 100);
         b.setZ(1); // stone at Z=0, body at Z=1 → skip
         Stone stone = new Stone(100, 100, 0); // stone at same position
         assertDoesNotThrow(() -> StoneLogic.checkPubble(b));
@@ -81,7 +81,7 @@ public class StoneLogicTest {
     public void testCheckPubble_adultBodyInjure_doesNotThrow() {
         // ADULT body close to stone → bodyInjure() called
         // Use BaryState HALF to avoid mypane.addVomit NPE
-        Body b = createAdultBody(100, 100);
+        Yukkuri b = createAdultBody(100, 100);
         b.setBurialState(BurialState.HALF);
         // Stone at same position → distance=0, getStepDist()=16 > 0 → bodyInjure
         Stone stone = new Stone(100, 100, 0);
@@ -93,7 +93,7 @@ public class StoneLogicTest {
     @Test
     public void testCheckPubble_wiseBody_runsAway() {
         // ADULT WISE body at moderate distance → runAway() called
-        Body b = createAdultBody(100, 100);
+        Yukkuri b = createAdultBody(100, 100);
         b.setIntelligence(Intelligence.WISE);
         // distance ~ 25 (100+25=125): getStepDist()=16, 16<=25 but 48>25 → WISE runAway
         Stone stone = new Stone(125, 100, 0);
@@ -132,7 +132,7 @@ public class StoneLogicTest {
     public void testCheckPubble_wiseBodyModerateDistance_callsRunAway() {
         // ADULT: getStepDist()=16; stone at (104,100) → distance=16
         // 16>16? No → not injure; 48>16 && WISE → runAway
-        Body b = createAdultBody(100, 100);
+        Yukkuri b = createAdultBody(100, 100);
         b.setIntelligence(Intelligence.WISE);
         new Stone(104, 100, 0); // distance=(104-100)^2=16; auto-registers
         assertDoesNotThrow(() -> StoneLogic.checkPubble(b));
@@ -145,7 +145,7 @@ public class StoneLogicTest {
     public void testCheckPubble_nonWiseModerateDistance_noRunAway() {
         // ADULT: getStepDist()=16; stone at (104,100) → distance=16
         // 16>16? No → not injure; 48>16 && !WISE → condition false → continue
-        Body b = createAdultBody(100, 100);
+        Yukkuri b = createAdultBody(100, 100);
         b.setIntelligence(Intelligence.FOOL); // not WISE
         new Stone(104, 100, 0); // auto-registers
         assertDoesNotThrow(() -> StoneLogic.checkPubble(b));
@@ -156,7 +156,7 @@ public class StoneLogicTest {
     @Test
     public void testCheckPubbleMethodExists() {
         try {
-            StoneLogic.class.getDeclaredMethod("checkPubble", Body.class);
+            StoneLogic.class.getDeclaredMethod("checkPubble", Yukkuri.class);
             assertTrue(true, "checkPubble method exists");
         } catch (NoSuchMethodException e) {
             fail("checkPubble method should exist");
@@ -168,7 +168,7 @@ public class StoneLogicTest {
 
         @Test
         void testScenario_WiseBodyNearStoneSetsRunAwayDestinationAndScare() {
-            Body body = createAdultBody(100, 100);
+            Yukkuri body = createAdultBody(100, 100);
             body.setIntelligence(Intelligence.WISE);
 
             new Stone(104, 100, 0);

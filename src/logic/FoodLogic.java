@@ -4,8 +4,8 @@ import src.util.GameEnvironment;
 import java.util.Map;
 
 import src.util.GameWorld;
-import src.base.Body;
-import src.base.Obj;
+import src.base.Yukkuri;
+import src.base.Entity;
 import src.draw.Translate;
 import src.enums.AgeState;
 import src.enums.BurialState;
@@ -26,7 +26,7 @@ public class FoodLogic {
 	 * @param body ゆっくり
 	 * @return 処理が行われたか
 	 */
-	public static final boolean checkFood(Body body) {
+	public static final boolean checkFood(Yukkuri body) {
 		/*流れとしては、C1→C2→B1→B2　(Aはキャンセル判定)といった感じ
 		*/
 		boolean[] forceEat = { false };
@@ -43,7 +43,7 @@ public class FoodLogic {
 
 		//B1.餌補足済みの時の特殊行動
 		// 食べる対象が決まっていたら到達したかチェック
-		Obj food = body.takeMoveTarget();
+		Entity food = body.takeMoveTarget();
 
 		//対象が決まってる時
 		if ((body.isToFood() || body.isToTakeout()) && food != null) {
@@ -54,7 +54,7 @@ public class FoodLogic {
 			}
 			//茎の場合の探索
 			if (food instanceof Stalk) {
-				Body plantBody = GameWorld.get().getCurrentMap().getBody().get(((Stalk) food).getPlantYukkuri());
+				Yukkuri plantBody = GameWorld.get().getCurrentMap().getBody().get(((Stalk) food).getPlantYukkuri());
 				// 自分の茎は無視
 				if (plantBody == body) {
 					body.clearActions();
@@ -87,7 +87,7 @@ public class FoodLogic {
 		}
 
 		//C.餌探索
-		Obj candidate = null;
+		Entity candidate = null;
 		// うんうん奴隷の場合
 		if (body.getPublicRank() == PublicRank.UnunSlave) {
 			candidate = searchFoodForUnunSlave(body, forceEat);
@@ -120,7 +120,7 @@ public class FoodLogic {
 
 	// 餌検索B
 	// 一般用
-	public static final Obj searchFoodStandard(Body body, boolean[] forceEat) {
+	public static final Entity searchFoodStandard(Yukkuri body, boolean[] forceEat) {
 		return FoodSearchPolicy.searchFoodStandard(body, forceEat);
 	}
 
@@ -131,10 +131,10 @@ public class FoodLogic {
 	 * @param forceEat 強制給餌フラグ
 	 * @return 検索されたエサオブジェクト
 	 */
-	public static final Obj searchFoodPredetor(Body body, boolean[] forceEat) {
-		Obj candidate = null;
-		Obj candidate2 = null; // 副候補
-		Obj deadCandidate = null; // 死体候補
+	public static final Entity searchFoodPredetor(Yukkuri body, boolean[] forceEat) {
+		Entity candidate = null;
+		Entity candidate2 = null; // 副候補
+		Entity deadCandidate = null; // 死体候補
 		int nearestDistance = body.getEyesightBase();
 		int secondaryNearestDistance = nearestDistance;
 		int deadNearestDistance = nearestDistance;
@@ -148,8 +148,8 @@ public class FoodLogic {
 		}
 
 		// ゆっくりから検索
-		for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
-			Body candidateBody = entry.getValue();
+		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
+			Yukkuri candidateBody = entry.getValue();
 			if (body == candidateBody) {
 				continue;
 			}
@@ -185,13 +185,13 @@ public class FoodLogic {
 
 	// 餌検索D
 	// うんうん奴隷用
-	private static final Obj searchFoodForUnunSlave(Body body, boolean[] forceEat) {
+	private static final Entity searchFoodForUnunSlave(Yukkuri body, boolean[] forceEat) {
 		return FoodUnunSlaveSearchPolicy.searchFoodForUnunSlave(body, forceEat);
 	}
 
 	// 餌検索A
 	// 足りないゆ、足焼き用 最も近いものを適当に食べる
-	private static final Obj searchFoodNearlest(Body body, boolean[] forceEat) {
+	private static final Entity searchFoodNearlest(Yukkuri body, boolean[] forceEat) {
 		return FoodNearestSearchPolicy.searchFoodNearest(body, forceEat);
 	}
 
@@ -201,7 +201,7 @@ public class FoodLogic {
 	 * @param foodType エサタイプ
 	 * @param amount 食事量
 	 */
-	public static final void eatFood(Body body, FoodType foodType, int amount) {
+	public static final void eatFood(Yukkuri body, FoodType foodType, int amount) {
 		FoodConsumptionPolicy.eatFood(body, foodType, amount);
 	}
 
@@ -211,7 +211,7 @@ public class FoodLogic {
 	 * @param o エサオブジェクト
 	 * @return 持ち帰るかどうか
 	 */
-	public static boolean checkTakeout(Body body, Obj target) {
+	public static boolean checkTakeout(Yukkuri body, Entity target) {
 		return FoodTakeoutPolicy.checkTakeout(body, target);
 	}
 
@@ -221,7 +221,7 @@ public class FoodLogic {
 	 * @param target 死体
 	 * @return 食べるかどうか
 	 */
-	public static boolean checkCanEatBody(Body body, Body target) {
+	public static boolean checkCanEatBody(Yukkuri body, Yukkuri target) {
 		return FoodEligibility.checkCanEatBody(body, target);
 	}
 

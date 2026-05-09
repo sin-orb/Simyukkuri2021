@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import src.ConstState;
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.effect.Effect;
 import src.base.ItemTestBase;
 import src.enums.CriticalDamegeType;
@@ -111,7 +111,7 @@ class MixerTest extends ItemTestBase {
         Mixer item = new Mixer();
         item.setObjId(98);
         SimYukkuri.world.getCurrentMap().getMixer().put(item.getObjId(), item);
-        Body body = WorldTestHelper.createBody();
+        Yukkuri body = WorldTestHelper.createBody();
         body.setLockmove(true);
         SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
         item.setBind(body.getUniqueID());
@@ -124,7 +124,7 @@ class MixerTest extends ItemTestBase {
     void testObjHitProcess_Disabled() {
         Mixer item = new Mixer();
         item.setEnabled(false);
-        Body body = WorldTestHelper.createBody();
+        Yukkuri body = WorldTestHelper.createBody();
         assertEquals(0, item.objHitProcess(body));
     }
 
@@ -134,7 +134,7 @@ class MixerTest extends ItemTestBase {
         item.setEnabled(true);
         item.setX(100);
         item.setY(100);
-        Body body = WorldTestHelper.createBody();
+        Yukkuri body = WorldTestHelper.createBody();
         SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
         assertEquals(1, item.objHitProcess(body));
         assertEquals(body.getUniqueID(), item.getBind());
@@ -153,7 +153,7 @@ class MixerTest extends ItemTestBase {
     @Test
     void testUpDate_Disabled_WithBind() {
         Mixer item = new Mixer();
-        Body body = WorldTestHelper.createBody();
+        Yukkuri body = WorldTestHelper.createBody();
         body.setLockmove(true);
         SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
         item.setBind(body.getUniqueID());
@@ -169,7 +169,7 @@ class MixerTest extends ItemTestBase {
         item.setY(100);
         item.setEnabled(true);
         item.setGrabbed(true);
-        Body body = WorldTestHelper.createBody();
+        Yukkuri body = WorldTestHelper.createBody();
         body.setX(100);
         body.setY(100);
         body.setLockmove(true);
@@ -185,7 +185,7 @@ class MixerTest extends ItemTestBase {
         item.setY(100);
         item.setEnabled(true);
         item.setGrabbed(false);
-        Body body = WorldTestHelper.createBody();
+        Yukkuri body = WorldTestHelper.createBody();
         // body at different position
         body.setX(200);
         body.setY(200);
@@ -235,7 +235,7 @@ class MixerTest extends ItemTestBase {
             item.setCounter(60);
             item.setMix(new DummyEffect());
 
-            Body body = WorldTestHelper.createBody();
+            Yukkuri body = WorldTestHelper.createBody();
             body.setX(100);
             body.setY(100);
             body.setZ(0);
@@ -267,7 +267,7 @@ class MixerTest extends ItemTestBase {
             item.setZ(0);
             item.setCounter(61);
 
-            Body body = WorldTestHelper.createBody();
+            Yukkuri body = WorldTestHelper.createBody();
             body.setX(140);
             body.setY(100);
             body.setZ(0);

@@ -9,9 +9,9 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.base.ItemTestBase;
-import src.base.ObjEX;
+import src.base.WorldEntity;
 import src.enums.WorldEntityKind;
 import src.enums.Type;
 import src.util.WorldTestHelper;
@@ -32,7 +32,7 @@ class MachinePressTest extends ItemTestBase {
         assertEquals(100, item.getX());
         assertEquals(200, item.getY());
         assertEquals(Type.FIX_OBJECT, item.getObjType());
-        assertEquals(WorldEntityKind.MACHINEPRESS, item.getObjEXType());
+        assertEquals(WorldEntityKind.MACHINEPRESS, item.getWorldEntityType());
         assertEquals(500000, item.getValue());
         assertEquals(1500, item.getCost());
         assertTrue(SimYukkuri.world.getCurrentMap().getMachinePress().containsKey(item.getObjId()));
@@ -41,7 +41,7 @@ class MachinePressTest extends ItemTestBase {
     @Test
     void testGetHitCheckObjType() {
         MachinePress item = new MachinePress();
-        int expected = ObjEX.YUKKURI | ObjEX.SHIT | ObjEX.VOMIT;
+        int expected = WorldEntity.YUKKURI | WorldEntity.SHIT | WorldEntity.VOMIT;
         assertEquals(expected, item.getHitCheckObjType());
     }
 
@@ -111,7 +111,7 @@ class MachinePressTest extends ItemTestBase {
         @Test
         void testScenario_PressCycleSilencesAndDamagesHealthyBody() {
             MachinePress machine = new MachinePress(50, 50, 0);
-            Body body = WorldTestHelper.createBody();
+            Yukkuri body = WorldTestHelper.createBody();
             body.setSilent(false);
             int beforeDamage = body.getDamage();
 

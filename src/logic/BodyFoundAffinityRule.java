@@ -1,7 +1,7 @@
 package src.logic;
 
 import src.attachment.Ants;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.enums.Intelligence;
 import src.util.GameRandom;
 
@@ -22,7 +22,7 @@ public final class BodyFoundAffinityRule {
 	 * @param mz        destination z coordinate
 	 * @return true when a branch consumed the action
 	 */
-	public static boolean handleFoundAffinity(Body actorBody, Body targetBody, int colX, int mz) {
+	public static boolean handleFoundAffinity(Yukkuri actorBody, Yukkuri targetBody, int colX, int mz) {
 		if (actorBody.getPublicRank() != targetBody.getPublicRank()) {
 			return false;
 		}

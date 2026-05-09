@@ -9,9 +9,9 @@ import java.io.IOException;
 
 import src.SimYukkuri;
 import src.util.GameWorld;
-import src.base.Body;
-import src.base.Obj;
-import src.base.ObjEX;
+import src.base.Yukkuri;
+import src.base.Entity;
+import src.base.WorldEntity;
 import src.command.GadgetAction;
 import src.draw.ModLoader;
 import src.draw.Rectangle4y;
@@ -28,11 +28,11 @@ import src.system.Cash;
 /***************************************************
  * フードメーカー
  */
-public class FoodMaker extends ObjEX {
+public class FoodMaker extends WorldEntity {
 
 	private static final long serialVersionUID = 2267609715917033769L;
 	/** 処理対象(ゆっくり、うんうん、フード、吐餡、茎) */
-	public static final int hitCheckObjType = ObjEX.YUKKURI | ObjEX.SHIT | ObjEX.FOOD | ObjEX.VOMIT | ObjEX.STALK;
+	public static final int hitCheckObjType = WorldEntity.YUKKURI | WorldEntity.SHIT | WorldEntity.FOOD | WorldEntity.VOMIT | WorldEntity.STALK;
 	private static final int IMAGE_COUNT = 6; // このクラスの総使用画像数
 	private static int[] animationFrameCounts = { IMAGE_COUNT };// アニメごとに何枚使うか
 	private static BufferedImage[] imageLayers = new BufferedImage[IMAGE_COUNT + 1];
@@ -113,14 +113,14 @@ public class FoodMaker extends ObjEX {
 	}
 
 	@Override
-	public int objHitProcess(Obj o) {
+	public int objHitProcess(Entity o) {
 		if (!processReady) {
 			return 0;
 		}
 		FoodType foodType = null;
 		if (stockFood == -1) {
 			if (o.getObjType() == Type.YUKKURI) {
-				Body b = (Body) o;
+				Yukkuri b = (Yukkuri) o;
 				if (b.isCrushed() || b.isPealed() || b.isBaby()) {
 					if (b.isSick()) {// カビ
 						stockFood = 11;
@@ -200,7 +200,7 @@ public class FoodMaker extends ObjEX {
 
 		} else {
 			if (o.getObjType() == Type.YUKKURI) {
-				Body b = (Body) o;
+				Yukkuri b = (Yukkuri) o;
 				if (b.isCrushed() || b.isPealed() || b.isBaby()) {
 					if (b.isSick()) {// カビ
 						foodType = foodTable[makeTable[stockFood][11]];
@@ -317,7 +317,7 @@ public class FoodMaker extends ObjEX {
 		setCollisionSize(getPivotX(), getPivotY());
 		GameWorld.get().getCurrentMap().getFoodmaker().put(objId, this);
 		objType = Type.PLATFORM;
-		objEXType = WorldEntityKind.FOODMAKER;
+		worldEntityType = WorldEntityKind.FOODMAKER;
 
 		interval = 20;
 		value = 50000;

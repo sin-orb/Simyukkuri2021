@@ -3,8 +3,8 @@ package src.logic;
 import java.util.List;
 import java.util.Map;
 
-import src.base.Body;
-import src.base.Obj;
+import src.base.Yukkuri;
+import src.base.Entity;
 import src.draw.Translate;
 import src.enums.AgeState;
 import src.enums.BurialState;
@@ -28,8 +28,8 @@ public final class FoodNearestSearchPolicy {
 	/**
 	 * 足りないゆ、足焼き用 最も近いものを適当に食べる.
 	 */
-	public static Obj searchFoodNearest(Body body, boolean[] forceEat) {
-		Obj nearestFood = null;
+	public static Entity searchFoodNearest(Yukkuri body, boolean[] forceEat) {
+		Entity nearestFood = null;
 		int nearestDistance = body.getEyesightBase();
 		int wallMode = body.getBodyAgeState().ordinal();
 		forceEat[0] = false;
@@ -61,7 +61,7 @@ public final class FoodNearestSearchPolicy {
 		}
 		for (Map.Entry<Integer, Stalk> entry : GameWorld.get().getCurrentMap().getStalk().entrySet()) {
 			Stalk stalk = entry.getValue();
-			Body plantBody = GameWorld.get().getCurrentMap().getBody().get(stalk.getPlantYukkuri());
+			Yukkuri plantBody = GameWorld.get().getCurrentMap().getBody().get(stalk.getPlantYukkuri());
 			if (plantBody != null) {
 				if (plantBody == body) {
 					continue;
@@ -75,7 +75,7 @@ public final class FoodNearestSearchPolicy {
 				if (babyList != null && babyList.size() != 0) {
 					boolean hasBaby = false;
 					for (int babyId : babyList) {
-						Body baby = src.util.BodyRegistry.getBodyInstance(babyId);
+						Yukkuri baby = src.util.BodyRegistry.getBodyInstance(babyId);
 						if (baby == null) {
 							continue;
 						}
@@ -109,8 +109,8 @@ public final class FoodNearestSearchPolicy {
 				nearestDistance = distance;
 			}
 		}
-		for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
-			Body candidateBody = entry.getValue();
+		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
+			Yukkuri candidateBody = entry.getValue();
 			if (body == candidateBody) {
 				continue;
 			}

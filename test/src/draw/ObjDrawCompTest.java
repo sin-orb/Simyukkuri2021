@@ -6,8 +6,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
-import src.base.Body;
-import src.base.Obj;
+import src.base.Yukkuri;
+import src.base.Entity;
 import src.enums.AgeState;
 import src.util.WorldTestHelper;
 import src.yukkuri.Reimu;
@@ -36,9 +36,9 @@ class ObjDrawCompTest {
 
     @Test
     void testCompareO1YLessThanO2YReturnsNegative() {
-        Obj o1 = new Obj();
+        Entity o1 = new Entity();
         o1.setY(100);
-        Obj o2 = new Obj();
+        Entity o2 = new Entity();
         o2.setY(200);
 
         assertTrue(ObjDrawComp.getInstance().compare(o1, o2) < 0);
@@ -46,39 +46,39 @@ class ObjDrawCompTest {
 
     @Test
     void testCompareO1YGreaterThanO2YReturnsPositive() {
-        Obj o1 = new Obj();
+        Entity o1 = new Entity();
         o1.setY(300);
-        Obj o2 = new Obj();
+        Entity o2 = new Entity();
         o2.setY(100);
 
         assertTrue(ObjDrawComp.getInstance().compare(o1, o2) > 0);
     }
 
-    // --- compare: same y, both non-Body ---
+    // --- compare: same y, both non-Yukkuri ---
 
     @Test
     void testCompareSameYBothNonBodyReturnsZero() {
-        Obj o1 = new Obj();
+        Entity o1 = new Entity();
         o1.setY(100);
-        Obj o2 = new Obj();
+        Entity o2 = new Entity();
         o2.setY(100);
 
-        // For non-Body objects: ordinal defaults to 1 for both, so difference is 0
+        // For non-Yukkuri objects: ordinal defaults to 1 for both, so difference is 0
         assertEquals(0, ObjDrawComp.getInstance().compare(o1, o2));
     }
 
-    // --- compare: same y, Body with different AgeStates ---
+    // --- compare: same y, Yukkuri with different AgeStates ---
 
     @Test
     void testCompareSameYBabyVsAdult() {
         // BABY ordinal = 0, ADULT ordinal = 2
         // compare returns: (o2.ageState.ordinal) - (o1.ageState.ordinal)
         // For BABY (o1) vs ADULT (o2): 2 - 0 = 2 > 0 means BABY drawn after ADULT
-        Body baby = new Reimu();
+        Yukkuri baby = new Reimu();
         baby.setY(100);
         baby.setAge(0); // age < BABYLIMITorg -> BABY
 
-        Body adult = new Reimu();
+        Yukkuri adult = new Reimu();
         adult.setY(100);
         adult.setAge(100000); // age >= CHILDLIMITorg -> ADULT
 
@@ -93,11 +93,11 @@ class ObjDrawCompTest {
 
     @Test
     void testCompareSameYAdultVsBaby() {
-        Body adult = new Reimu();
+        Yukkuri adult = new Reimu();
         adult.setY(100);
         adult.setAge(100000); // ADULT
 
-        Body baby = new Reimu();
+        Yukkuri baby = new Reimu();
         baby.setY(100);
         baby.setAge(0); // BABY
 
@@ -106,49 +106,49 @@ class ObjDrawCompTest {
         assertTrue(result < 0, "ADULT should be drawn before BABY (negative result)");
     }
 
-    // --- compare: same y, one Body one Obj ---
+    // --- compare: same y, one Yukkuri one Entity ---
 
     @Test
     void testCompareSameYBodyVsObj() {
-        Body body = new Reimu();
+        Yukkuri body = new Reimu();
         body.setY(100);
         body.setAge(100000); // ADULT, ordinal = 2
 
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         obj.setY(100);
 
         // body as o1, obj as o2: (1) - (2) = -1
-        // o2 is non-Body so its value is 1, o1 is Body ADULT so ordinal is 2
+        // o2 is non-Yukkuri so its value is 1, o1 is Yukkuri ADULT so ordinal is 2
         int result = ObjDrawComp.getInstance().compare(body, obj);
-        assertTrue(result < 0, "ADULT Body drawn before non-Body Obj at same y");
+        assertTrue(result < 0, "ADULT Yukkuri drawn before non-Yukkuri Entity at same y");
     }
 
     @Test
     void testCompareSameYObjVsBody() {
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         obj.setY(100);
 
-        Body body = new Reimu();
+        Yukkuri body = new Reimu();
         body.setY(100);
         body.setAge(100000); // ADULT, ordinal = 2
 
         // obj as o1, body as o2: (2) - (1) = 1
-        // o1 is non-Body so its value is 1, o2 is Body ADULT so ordinal is 2
+        // o1 is non-Yukkuri so its value is 1, o2 is Yukkuri ADULT so ordinal is 2
         int result = ObjDrawComp.getInstance().compare(obj, body);
-        assertTrue(result > 0, "non-Body Obj drawn after ADULT Body at same y");
+        assertTrue(result > 0, "non-Yukkuri Entity drawn after ADULT Yukkuri at same y");
     }
 
     @Test
     void testCompareSameYBabyBodyVsObj() {
-        Body baby = new Reimu();
+        Yukkuri baby = new Reimu();
         baby.setY(100);
         baby.setAge(0); // BABY, ordinal = 0
 
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         obj.setY(100);
 
         // baby as o1, obj as o2: (1) - (0) = 1
         int result = ObjDrawComp.getInstance().compare(baby, obj);
-        assertTrue(result > 0, "BABY Body drawn after non-Body Obj at same y");
+        assertTrue(result > 0, "BABY Yukkuri drawn after non-Yukkuri Entity at same y");
     }
 }

@@ -8,7 +8,7 @@ import java.io.IOException;
 
 import src.SimYukkuri;
 import src.util.GameWorld;
-import src.base.ObjEX;
+import src.base.WorldEntity;
 import src.draw.ModLoader;
 import src.draw.Rectangle4y;
 import src.enums.WorldEntityKind;
@@ -17,7 +17,7 @@ import src.enums.Type;
 /***************************************************
  * 食べ物
  */
-public class Food extends ObjEX {
+public class Food extends WorldEntity {
 
 	private static final long serialVersionUID = -3577739035547355691L;
 
@@ -270,7 +270,7 @@ public class Food extends ObjEX {
 		setCollisionSize(getPivotX(), getPivotY());
 		GameWorld.get().getCurrentMap().getFood().put(objId, this);
 		objType = Type.OBJECT;
-		objEXType = WorldEntityKind.FOOD;
+		worldEntityType = WorldEntityKind.FOOD;
 		setRemoved(false);
 	}
 

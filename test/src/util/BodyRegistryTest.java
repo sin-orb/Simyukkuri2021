@@ -8,7 +8,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.yukkuri.Reimu;
 
 public class BodyRegistryTest {
@@ -20,7 +20,7 @@ public class BodyRegistryTest {
 	@Test
 	public void testGetBodyInstance() {
 		WorldTestHelper.initializeMinimalWorld();
-		Body body = new Reimu();
+		Yukkuri body = new Reimu();
 		SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
 
 		assertNotNull(BodyRegistry.getBodyInstance(body.getUniqueID()));
@@ -30,7 +30,7 @@ public class BodyRegistryTest {
 	@Test
 	public void testGetBodyInstanceFromObjId() {
 		WorldTestHelper.initializeMinimalWorld();
-		Body body = new Reimu();
+		Yukkuri body = new Reimu();
 		SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
 
 		assertNotNull(BodyRegistry.getBodyInstanceFromObjId(body.getObjId()));
@@ -40,9 +40,9 @@ public class BodyRegistryTest {
 	@Test
 	public void testGetBodyInstances() {
 		WorldTestHelper.initializeMinimalWorld();
-		Body body = new Reimu();
+		Yukkuri body = new Reimu();
 		SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
 
-		assertArrayEquals(new Body[] { body }, BodyRegistry.getBodyInstances());
+		assertArrayEquals(new Yukkuri[] { body }, BodyRegistry.getBodyInstances());
 	}
 }

@@ -9,7 +9,7 @@ import java.util.List;
 
 import src.SimYukkuri;
 import src.util.GameRandom;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.draw.ModLoader;
 import src.enums.AgeState;
 import src.enums.BodyRank;
@@ -810,7 +810,7 @@ public class MessagePool {
 	 * @param action アクション
 	 * @return メッセージ
 	 */
-	public static final String getMessage(Body body, Action action) {
+	public static final String getMessage(Yukkuri body, Action action) {
 		if (body == null || pool_j == null || body.getMsgType() == null) {
 			return null;
 		}
@@ -859,7 +859,7 @@ public class MessagePool {
 			// name = body.getNameJ() / body.getNameE() fallback already handled above.
 		}
 		name2 = GameLocale.isJapanese() ? body.getNameJ2() : body.getNameE2();
-		Body pa = src.util.BodyRegistry.getBodyInstance(body.getPartner());
+		Yukkuri pa = src.util.BodyRegistry.getBodyInstance(body.getPartner());
 		if (pa != null)
 			partnerName = GameLocale.isJapanese() ? pa.getNameJ() : pa.getNameE();
 

@@ -10,7 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.draw.World;
 import src.enums.AgeState;
 import src.enums.PredatorType;
@@ -266,11 +266,11 @@ class LoggerYukkuriTest {
         assertDoesNotThrow(() -> LoggerYukkuri.outputLogFile("test log message"));
     }
 
-    // --- run with Body ---
+    // --- run with Yukkuri ---
 
     @Test
     void testRunWithNormalBody() {
-        Body b = WorldTestHelper.createBody();
+        Yukkuri b = WorldTestHelper.createBody();
         b.setX(100); b.setY(100);
         SimYukkuri.world.getCurrentMap().getBody().put(b.getUniqueID(), b);
         assertDoesNotThrow(() -> LoggerYukkuri.run());
@@ -278,7 +278,7 @@ class LoggerYukkuriTest {
 
     @Test
     void testRunWithBabyBody() {
-        Body b = WorldTestHelper.createBody();
+        Yukkuri b = WorldTestHelper.createBody();
         b.setX(100); b.setY(100);
         b.setAgeState(AgeState.BABY);
         SimYukkuri.world.getCurrentMap().getBody().put(b.getUniqueID(), b);
@@ -287,7 +287,7 @@ class LoggerYukkuriTest {
 
     @Test
     void testRunWithChildBody() {
-        Body b = WorldTestHelper.createBody();
+        Yukkuri b = WorldTestHelper.createBody();
         b.setX(100); b.setY(100);
         b.setAgeState(AgeState.CHILD);
         SimYukkuri.world.getCurrentMap().getBody().put(b.getUniqueID(), b);
@@ -296,7 +296,7 @@ class LoggerYukkuriTest {
 
     @Test
     void testRunWithPredatorBody() {
-        Body b = WorldTestHelper.createBody();
+        Yukkuri b = WorldTestHelper.createBody();
         b.setX(100); b.setY(100);
         b.setPredatorType(PredatorType.BITE);
         SimYukkuri.world.getCurrentMap().getBody().put(b.getUniqueID(), b);
@@ -305,7 +305,7 @@ class LoggerYukkuriTest {
 
     @Test
     void testRunWithDeadBody() {
-        Body b = WorldTestHelper.createBody();
+        Yukkuri b = WorldTestHelper.createBody();
         b.setX(100); b.setY(100);
         b.setDead(true);
         SimYukkuri.world.getCurrentMap().getBody().put(b.getUniqueID(), b);
@@ -314,7 +314,7 @@ class LoggerYukkuriTest {
 
     @Test
     void testRunWithSickBody() {
-        Body b = WorldTestHelper.createBody();
+        Yukkuri b = WorldTestHelper.createBody();
         b.setX(100); b.setY(100);
         // sickはHPが低い状態で発動するのでHP=1に設定
         // sickPeriod > incubationPeriodBaseにしてisSick()=trueにする
@@ -326,7 +326,7 @@ class LoggerYukkuriTest {
     @Test
     void testRunWithMultipleBodies() {
         for (int i = 0; i < 5; i++) {
-            Body b = WorldTestHelper.createBody();
+            Yukkuri b = WorldTestHelper.createBody();
             b.setX(50 + i * 10); b.setY(50);
             SimYukkuri.world.getCurrentMap().getBody().put(b.getUniqueID(), b);
         }

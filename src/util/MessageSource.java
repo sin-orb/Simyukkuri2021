@@ -1,10 +1,10 @@
 package src.util;
 
-import src.base.Body;
+import src.base.Yukkuri;
 import src.system.MessagePool;
 
 public interface MessageSource {
 	void loadMessage(ClassLoader loader);
 
-	String getMessage(Body body, MessagePool.Action action);
+	String getMessage(Yukkuri body, MessagePool.Action action);
 }

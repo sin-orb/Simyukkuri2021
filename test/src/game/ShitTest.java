@@ -58,7 +58,7 @@ class ShitTest {
         shit.eatShit(1000); // eat more than rest
         assertEquals(0, shit.getAmount());
         // Since we are not in a full world simulation, remove() just sets removed flag
-        // in Obj
+        // in Entity
         assertTrue(shit.isRemoved());
     }
 
@@ -348,7 +348,7 @@ class ShitTest {
     @Test
     void testConstructorWithArgs_headless_executesCode() {
         try {
-            src.base.Body body = src.util.WorldTestHelper.createBody();
+            src.base.Yukkuri body = src.util.WorldTestHelper.createBody();
             src.game.Shit s = new src.game.Shit(100, 100, 0, body, src.enums.YukkuriType.REIMU);
         } catch (Exception e) { }
     }

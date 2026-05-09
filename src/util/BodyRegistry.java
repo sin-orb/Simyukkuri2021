@@ -4,7 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import src.base.Body;
+import src.base.Yukkuri;
 
 /**
  * 現在のマップに属する body の参照を引く.
@@ -19,11 +19,11 @@ public final class BodyRegistry {
 	 * @param i ユニークID
 	 * @return ユニークIDが指し示すゆっくり
 	 */
-	public static Body getBodyInstance(int i) {
+	public static Yukkuri getBodyInstance(int i) {
 		if (i == -1) {
 			return null;
 		}
-		Map<Integer, Body> bodies = GameWorld.get().getCurrentMap().getBody();
+		Map<Integer, Yukkuri> bodies = GameWorld.get().getCurrentMap().getBody();
 		if (bodies.containsKey(i)) {
 			return bodies.get(i);
 		}
@@ -36,12 +36,12 @@ public final class BodyRegistry {
 	 * @param i オブジェクトID
 	 * @return 対象のゆっくり
 	 */
-	public static Body getBodyInstanceFromObjId(int i) {
+	public static Yukkuri getBodyInstanceFromObjId(int i) {
 		if (i == -1) {
 			return null;
 		}
-		for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
-			Body b = entry.getValue();
+		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
+			Yukkuri b = entry.getValue();
 			if (b.objId == i) {
 				return b;
 			}
@@ -54,11 +54,11 @@ public final class BodyRegistry {
 	 *
 	 * @return 現在のマップに属するゆっくりの配列
 	 */
-	public static Body[] getBodyInstances() {
-		List<Body> bodies = new LinkedList<>();
-		for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
+	public static Yukkuri[] getBodyInstances() {
+		List<Yukkuri> bodies = new LinkedList<>();
+		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
 			bodies.add(entry.getValue());
 		}
-		return bodies.toArray(new Body[0]);
+		return bodies.toArray(new Yukkuri[0]);
 	}
 }

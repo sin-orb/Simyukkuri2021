@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import src.ConstState;
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.base.StubBodyAttributes;
 import src.enums.AgeState;
 import src.enums.PublicRank;
@@ -24,8 +24,8 @@ class BodyExcitementRuleTest {
 	void testHandleExcitingContact_raperBranchConsumesAction() {
 		WorldTestHelper.initializeMinimalWorld();
 		SimYukkuri.world.getCurrentMap().getEvent().clear();
-		Body me = WorldTestHelper.createBody();
-		Body you = WorldTestHelper.createBody();
+		Yukkuri me = WorldTestHelper.createBody();
+		Yukkuri you = WorldTestHelper.createBody();
 		me.setBodySpr(makeSprites(1, 1));
 		you.setBodySpr(makeSprites(1, 1));
 		me.setX(100);
@@ -49,8 +49,8 @@ class BodyExcitementRuleTest {
 	void testHandleExcitingContact_adultPartnerFallsBackToSukkiri() {
 		WorldTestHelper.initializeMinimalWorld();
 		SimYukkuri.world.getCurrentMap().getEvent().clear();
-		Body me = WorldTestHelper.createBody();
-		Body you = WorldTestHelper.createBody();
+		Yukkuri me = WorldTestHelper.createBody();
+		Yukkuri you = WorldTestHelper.createBody();
 		me.setBodySpr(makeSprites(1, 1));
 		you.setBodySpr(makeSprites(1, 1));
 		me.setX(100);
@@ -75,8 +75,8 @@ class BodyExcitementRuleTest {
 	void testHandleExcitingContact_forceExcitingContinues() {
 		WorldTestHelper.initializeMinimalWorld();
 		SimYukkuri.world.getCurrentMap().getEvent().clear();
-		Body me = WorldTestHelper.createBody();
-		Body you = WorldTestHelper.createBody();
+		Yukkuri me = WorldTestHelper.createBody();
+		Yukkuri you = WorldTestHelper.createBody();
 		me.setBodySpr(makeSprites(1, 1));
 		you.setBodySpr(makeSprites(1, 1));
 		me.setX(100);

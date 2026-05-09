@@ -4,9 +4,9 @@ import java.awt.Rectangle;
 import java.util.Iterator;
 import java.util.List;
 
-import src.base.Body;
-import src.base.Obj;
-import src.base.ObjEX;
+import src.base.Yukkuri;
+import src.base.Entity;
+import src.base.WorldEntity;
 import src.enums.Event;
 import src.field.impl.Beltconveyor;
 import src.field.impl.Farm;
@@ -31,11 +31,11 @@ public final class TerrariumCollisionProcessor {
 	 */
 	public static void processCollisions(MapPlaceData curMap, int intervalCount) {
 		Event ret = Event.DONOTHING;
-		List<ObjEX> platformList = GameWorld.get().getHitBaseList();
-		List<Obj> objList = GameWorld.get().getHitTargetList();
+		List<WorldEntity> platformList = GameWorld.get().getHitBaseList();
+		List<Entity> objList = GameWorld.get().getHitTargetList();
 
-		for (Iterator<ObjEX> i = platformList.iterator(); i.hasNext();) {
-			ObjEX platform = i.next();
+		for (Iterator<WorldEntity> i = platformList.iterator(); i.hasNext();) {
+			WorldEntity platform = i.next();
 			ret = platform.clockTick();
 			if (ret == Event.REMOVED) {
 				i.remove();
@@ -55,7 +55,7 @@ public final class TerrariumCollisionProcessor {
 			}
 
 			Rectangle re = platform.getCollisionRect(new Rectangle(0, 0, 0, 0));
-			for (Obj o : objList) {
+			for (Entity o : objList) {
 				if (o == null) {
 					continue;
 				}
@@ -68,7 +68,7 @@ public final class TerrariumCollisionProcessor {
 
 		List<Beltconveyor> beltList = curMap.getBeltconveyor();
 		objList = GameWorld.get().getHitTargetList();
-		for (Obj o : objList) {
+		for (Entity o : objList) {
 			if (beltList == null || beltList.size() == 0) {
 				break;
 			}
@@ -106,7 +106,7 @@ public final class TerrariumCollisionProcessor {
 			}
 		}
 		objList = GameWorld.get().getHitTargetList();
-		for (Obj o : objList) {
+		for (Entity o : objList) {
 			if (poolList == null || poolList.size() == 0) {
 				if (o.isInPool()) {
 					o.setInPool(false);
@@ -124,8 +124,8 @@ public final class TerrariumCollisionProcessor {
 			}
 			if ((Translate.getCurrentFieldMapNum(o.getX(), o.getY()) & FieldShape.FIELD_POOL) == 0) {
 				if (o.isInPool()) {
-					if (o instanceof Body) {
-						((Body) o).setLockmove(false);
+					if (o instanceof Yukkuri) {
+						((Yukkuri) o).setLockmove(false);
 					}
 					o.setInPool(false);
 					o.setMostDepth(0);
@@ -156,7 +156,7 @@ public final class TerrariumCollisionProcessor {
 			}
 		}
 		objList = GameWorld.get().getHitTargetList();
-		for (Obj o : objList) {
+		for (Entity o : objList) {
 			if (farmList == null || farmList.size() == 0) {
 				break;
 			}

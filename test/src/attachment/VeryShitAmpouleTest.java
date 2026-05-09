@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.draw.World;
 import src.enums.AgeState;
 import src.enums.CriticalDamegeType;
@@ -44,7 +44,7 @@ public class VeryShitAmpouleTest {
 
     @Test
     public void testConstructorDefaultsAndBoundary() {
-        Body parent = createParent(AgeState.CHILD);
+        Yukkuri parent = createParent(AgeState.CHILD);
         VeryShitAmpoule ampoule = new VeryShitAmpoule(parent);
 
         assertEquals(parent.getUniqueID(), ampoule.getParent());
@@ -67,7 +67,7 @@ public class VeryShitAmpouleTest {
 
     @Test
     public void testUpdateReturnsDoNothingWhenParentIsDead() {
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         VeryShitAmpoule ampoule = new VeryShitAmpoule(parent);
 
         parent.setDead(true);
@@ -79,7 +79,7 @@ public class VeryShitAmpouleTest {
 
     @Test
     public void testUpdateReturnsDoNothingWhenParentIsCut() {
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         VeryShitAmpoule ampoule = new VeryShitAmpoule(parent);
 
         parent.setCriticalDamegeType(CriticalDamegeType.CUT);
@@ -92,7 +92,7 @@ public class VeryShitAmpouleTest {
 
     @Test
     public void testUpdateSetsShitWhenAlive() {
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         VeryShitAmpoule ampoule = new VeryShitAmpoule(parent);
 
         // shitを0にリセット
@@ -110,7 +110,7 @@ public class VeryShitAmpouleTest {
 
     @Test
     public void testGetImageReturnsNullWhenParentNotInMap() {
-        Body parent = createParent(AgeState.CHILD);
+        Yukkuri parent = createParent(AgeState.CHILD);
         VeryShitAmpoule ampoule = new VeryShitAmpoule(parent);
 
         SimYukkuri.world.getCurrentMap().getBody().remove(parent.getUniqueID());
@@ -121,7 +121,7 @@ public class VeryShitAmpouleTest {
 
     @Test
     public void testGetImageReturnsLeftImageWhenDirectionLeft() {
-        Body parent = createParent(AgeState.CHILD);
+        Yukkuri parent = createParent(AgeState.CHILD);
         VeryShitAmpoule ampoule = new VeryShitAmpoule(parent);
 
         parent.setDirection(Direction.LEFT);
@@ -132,7 +132,7 @@ public class VeryShitAmpouleTest {
 
     @Test
     public void testGetImageReturnsRightImageWhenDirectionRight() {
-        Body parent = createParent(AgeState.CHILD);
+        Yukkuri parent = createParent(AgeState.CHILD);
         VeryShitAmpoule ampoule = new VeryShitAmpoule(parent);
 
         parent.setDirection(Direction.RIGHT);
@@ -143,9 +143,9 @@ public class VeryShitAmpouleTest {
 
     @Test
     public void testGetImageReturnsCorrectImageForAge() {
-        Body babyParent = createParent(AgeState.BABY);
-        Body childParent = createParent(AgeState.CHILD);
-        Body adultParent = createParent(AgeState.ADULT);
+        Yukkuri babyParent = createParent(AgeState.BABY);
+        Yukkuri childParent = createParent(AgeState.CHILD);
+        Yukkuri adultParent = createParent(AgeState.ADULT);
 
         VeryShitAmpoule babyAmpoule = new VeryShitAmpoule(babyParent);
         VeryShitAmpoule childAmpoule = new VeryShitAmpoule(childParent);
@@ -162,7 +162,7 @@ public class VeryShitAmpouleTest {
 
     @Test
     public void testResetBoundaryUsesParentAge() {
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         VeryShitAmpoule ampoule = new VeryShitAmpoule(parent);
 
         ampoule.resetBoundary();
@@ -175,7 +175,7 @@ public class VeryShitAmpouleTest {
 
     @Test
     public void testResetBoundaryDoesNothingWhenParentNotInMap() {
-        Body parent = createParent(AgeState.CHILD);
+        Yukkuri parent = createParent(AgeState.CHILD);
         VeryShitAmpoule ampoule = new VeryShitAmpoule(parent);
 
         int origPivotX = ampoule.getPivotX();
@@ -191,7 +191,7 @@ public class VeryShitAmpouleTest {
 
     @Test
     public void testToStringUsesResourceUtil() {
-        Body parent = createParent(AgeState.BABY);
+        Yukkuri parent = createParent(AgeState.BABY);
         VeryShitAmpoule ampoule = new VeryShitAmpoule(parent);
 
         assertEquals(ResourceUtil.getInstance().read("item_veryshit"), ampoule.toString());
@@ -205,15 +205,15 @@ public class VeryShitAmpouleTest {
 
     @Test
     public void testConstructorWithParentNotInWorld() {
-        Body parent = new Reimu();
+        Yukkuri parent = new Reimu();
         parent.setAgeState(AgeState.CHILD);
         VeryShitAmpoule ampoule = new VeryShitAmpoule(parent);
         assertEquals(500, ampoule.getValue());
         assertEquals(0, ampoule.getCost());
     }
 
-    private static Body createParent(AgeState ageState) {
-        Body parent = new Reimu();
+    private static Yukkuri createParent(AgeState ageState) {
+        Yukkuri parent = new Reimu();
         // 適切な年齢を設定（getBodyAgeState()はageの値から計算される）
         switch (ageState) {
             case BABY:
@@ -252,7 +252,7 @@ public class VeryShitAmpouleTest {
 
         @Test
         void testScenario_LiveBodyWakesUpAndSetsShitNearLimit() {
-            Body parent = createParent(AgeState.ADULT);
+            Yukkuri parent = createParent(AgeState.ADULT);
             VeryShitAmpoule ampoule = new VeryShitAmpoule(parent);
             parent.setSleeping(true);
             parent.setShit(0);
@@ -266,7 +266,7 @@ public class VeryShitAmpouleTest {
 
         @Test
         void testScenario_CutBodyKeepsSleepingAndDoesNotRaiseShit() {
-            Body parent = createParent(AgeState.ADULT);
+            Yukkuri parent = createParent(AgeState.ADULT);
             VeryShitAmpoule ampoule = new VeryShitAmpoule(parent);
             parent.setSleeping(true);
             parent.setShit(10);

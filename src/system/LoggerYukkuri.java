@@ -19,7 +19,7 @@ import java.util.logging.Logger;
 
 import src.SimYukkuri;
 import src.util.GameWorld;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.draw.Terrarium;
 import src.draw.Translate;
 import src.yukkuri.Deibu;
@@ -146,8 +146,8 @@ public class LoggerYukkuri {
 
 		long logData[] = new long[NUM_OF_LOGDATA_TYPE];
 		try {
-			for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
-				Body b = entry.getValue();
+			for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
+				Yukkuri b = entry.getValue();
 				if (!b.isDead()) {
 					if (b.isPredatorType()) {
 						// 捕食種

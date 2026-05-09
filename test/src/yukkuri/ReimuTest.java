@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import src.ConstState;
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.draw.MyPane;
 import src.draw.Point4y;
 import src.enums.AgeState;
@@ -124,7 +124,7 @@ public class ReimuTest {
         Reimu reimu = new Reimu();
         // checkTransform() checks if Reimu can transform to Deibu
         // Without proper conditions, should return null
-        Body result = reimu.checkTransform();
+        Yukkuri result = reimu.checkTransform();
         // Just verify the method executes without crashing
     }
 
@@ -305,7 +305,7 @@ public class ReimuTest {
 
             reimu.execTransform();
 
-            Body transformed = SimYukkuri.world.getCurrentMap().getBody().get(originalId);
+            Yukkuri transformed = SimYukkuri.world.getCurrentMap().getBody().get(originalId);
             assertNotNull(transformed);
             assertInstanceOf(Deibu.class, transformed);
             assertEquals(originalId, transformed.getUniqueID());
@@ -344,7 +344,7 @@ public class ReimuTest {
 
             reimu.execTransform();
 
-            Body transformed = SimYukkuri.world.getCurrentMap().getBody().get(originalId);
+            Yukkuri transformed = SimYukkuri.world.getCurrentMap().getBody().get(originalId);
             assertNotNull(transformed);
             assertEquals(partnerId, transformed.getPartner());
             assertTrue(transformed.getChildrenList().contains(childId));
@@ -384,7 +384,7 @@ public class ReimuTest {
 
             reimu.execTransform();
 
-            Body transformed = SimYukkuri.world.getCurrentMap().getBody().get(originalId);
+            Yukkuri transformed = SimYukkuri.world.getCurrentMap().getBody().get(originalId);
             assertNotNull(transformed);
             assertTrue(transformed.isHasBaby());
             assertEquals(1, transformed.getBabyTypes().size());
@@ -426,7 +426,7 @@ public class ReimuTest {
 
             reimu.execTransform();
 
-            Body transformed = SimYukkuri.world.getCurrentMap().getBody().get(originalId);
+            Yukkuri transformed = SimYukkuri.world.getCurrentMap().getBody().get(originalId);
             assertNotNull(transformed);
             assertTrue(transformed.isHasStalk());
             assertEquals(1, transformed.getStalkBabyTypes().size());

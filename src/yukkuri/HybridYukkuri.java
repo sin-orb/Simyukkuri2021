@@ -8,7 +8,7 @@ import java.io.IOException;
 
 import src.SimYukkuri;
 import src.util.GameRandom;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.draw.Dimension4y;
 import src.draw.Point4y;
 import src.enums.AgeState;
@@ -24,7 +24,7 @@ import src.system.BodyLayer;
  * 2つの異なる種類のゆっくりを親に持ち、両方の親の特徴を受け継ぐハイブリッド。
  * 親ゆっくりインスタンス４つをメンバに持つ。
  */
-public class HybridYukkuri extends Body {
+public class HybridYukkuri extends Yukkuri {
 	private static final long serialVersionUID = -4811724924330805888L;
 	/** ハイブリッドゆっくりのタイプ */
 	public static final int type = 20000;
@@ -37,15 +37,15 @@ public class HybridYukkuri extends Body {
 	/** ハイブリッドゆっくりの英名２ */
 	private String nameE2;
 	/** 型となるゆっくり１ */
-	protected Body dorei;
+	protected Yukkuri dorei;
 	/** 型となるゆっくり２ */
-	protected Body dorei2;
+	protected Yukkuri dorei2;
 	/** 型となるゆっくり３ */
-	protected Body dorei3;
+	protected Yukkuri dorei3;
 	/** 型となるゆっくり４ */
-	protected Body dorei4;
+	protected Yukkuri dorei4;
 
-	private Body[] images;
+	private Yukkuri[] images;
 	private static Dimension4y[] boundary = new Dimension4y[3];
 	private static Dimension4y[] braidBoundary = new Dimension4y[3];
 
@@ -61,14 +61,14 @@ public class HybridYukkuri extends Body {
 	public void loadImages_Hyblid() throws IOException {
 		HybridYukkuri parentTmp = null;
 		HybridYukkuri parentTmp2 = null;
-		Body doreiTmp = null;
-		Body doreiTmp2 = null;
+		Yukkuri doreiTmp = null;
+		Yukkuri doreiTmp2 = null;
 		nameJ = "ゆっくり";
 		nameE = "Yukkuri";
 		nameJ2 = "ゆっくり";
 		nameE2 = "Yukkuri";
-		Body mama = src.util.BodyRegistry.getBodyInstance(getParents()[Parent.MAMA.ordinal()]);
-		Body papa = src.util.BodyRegistry.getBodyInstance(getParents()[Parent.PAPA.ordinal()]);
+		Yukkuri mama = src.util.BodyRegistry.getBodyInstance(getParents()[Parent.MAMA.ordinal()]);
+		Yukkuri papa = src.util.BodyRegistry.getBodyInstance(getParents()[Parent.PAPA.ordinal()]);
 
 		if (mama == null && papa == null) {
 			doreiTmp = new Reimu(100, 100, 0, AgeState.BABY, null, null);
@@ -335,7 +335,7 @@ public class HybridYukkuri extends Body {
 	 * @param idx 型のインデックス
 	 * @return 型となるゆっくり
 	 */
-	public Body getBaseBody(int idx) {
+	public Yukkuri getBaseBody(int idx) {
 		if (idx == 0)
 			return dorei;
 		else if (idx == 1)
@@ -409,7 +409,7 @@ public class HybridYukkuri extends Body {
 	}
 
 	/** コンストラクタ */
-	public HybridYukkuri(int initX, int initY, int initZ, AgeState initAgeState, Body p1, Body p2) {
+	public HybridYukkuri(int initX, int initY, int initZ, AgeState initAgeState, Yukkuri p1, Yukkuri p2) {
 		super(initX, initY, initZ, initAgeState, p1, p2);
 		setBoundary(boundary, braidBoundary);
 		setMsgType(YukkuriType.HYBRIDYUKKURI);
@@ -457,7 +457,7 @@ public class HybridYukkuri extends Body {
 		getStrengthBase()[AgeState.ADULT.ordinal()] *= factor;
 		getStrengthBase()[AgeState.CHILD.ordinal()] *= factor;
 		getStrengthBase()[AgeState.BABY.ordinal()] *= factor;
-		images = new Body[ImageCode.values().length];
+		images = new Yukkuri[ImageCode.values().length];
 		try {
 			loadImages_Hyblid();
 		} catch (IOException e1) {
@@ -474,43 +474,43 @@ public class HybridYukkuri extends Body {
 		dorei4.remove();
 	}
 
-	public Body getDorei() {
+	public Yukkuri getDorei() {
 		return dorei;
 	}
 
-	public void setDorei(Body dorei) {
+	public void setDorei(Yukkuri dorei) {
 		this.dorei = dorei;
 	}
 
-	public Body getDorei2() {
+	public Yukkuri getDorei2() {
 		return dorei2;
 	}
 
-	public void setDorei2(Body dorei2) {
+	public void setDorei2(Yukkuri dorei2) {
 		this.dorei2 = dorei2;
 	}
 
-	public Body getDorei3() {
+	public Yukkuri getDorei3() {
 		return dorei3;
 	}
 
-	public void setDorei3(Body dorei3) {
+	public void setDorei3(Yukkuri dorei3) {
 		this.dorei3 = dorei3;
 	}
 
-	public Body getDorei4() {
+	public Yukkuri getDorei4() {
 		return dorei4;
 	}
 
-	public void setDorei4(Body dorei4) {
+	public void setDorei4(Yukkuri dorei4) {
 		this.dorei4 = dorei4;
 	}
 
-	public Body[] getImages() {
+	public Yukkuri[] getImages() {
 		return images;
 	}
 
-	public void setImages(Body[] images) {
+	public void setImages(Yukkuri[] images) {
 		this.images = images;
 	}
 

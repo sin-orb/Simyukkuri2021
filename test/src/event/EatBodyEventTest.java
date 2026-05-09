@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.base.EventTestBase;
 import src.enums.Attitude;
 import src.enums.Happiness;
@@ -13,8 +13,8 @@ public class EatBodyEventTest extends EventTestBase {
 
     @Test
     void testCheckEventResponse_ReturnsTrueForEater() {
-        Body eater = createBody(1, 100, 100);
-        Body eaten = createBody(2, 120, 120);
+        Yukkuri eater = createBody(1, 100, 100);
+        Yukkuri eaten = createBody(2, 120, 120);
 
         EatBodyEvent event = new EatBodyEvent(eater, eaten, null, 10);
 
@@ -24,9 +24,9 @@ public class EatBodyEventTest extends EventTestBase {
 
     @Test
     void testCheckEventResponse_ReturnsFalseForNonEater() {
-        Body eater = createBody(1, 100, 100);
-        Body eaten = createBody(2, 120, 120);
-        Body bystander = createBody(3, 150, 150);
+        Yukkuri eater = createBody(1, 100, 100);
+        Yukkuri eaten = createBody(2, 120, 120);
+        Yukkuri bystander = createBody(3, 150, 150);
 
         EatBodyEvent event = new EatBodyEvent(eater, eaten, null, 10);
         assertFalse(event.checkEventResponse(bystander));
@@ -34,8 +34,8 @@ public class EatBodyEventTest extends EventTestBase {
 
     @Test
     void testCheckEventResponse_ReturnsFalseForSuperShithead() {
-        Body eater = createBody(1, 100, 100);
-        Body eaten = createBody(2, 120, 120);
+        Yukkuri eater = createBody(1, 100, 100);
+        Yukkuri eaten = createBody(2, 120, 120);
         eater.setAttitude(Attitude.SUPER_SHITHEAD);
 
         EatBodyEvent event = new EatBodyEvent(eater, eaten, null, 10);
@@ -50,8 +50,8 @@ public class EatBodyEventTest extends EventTestBase {
 
     @Test
     void testEndResetsLockmove() {
-        Body eater = createBody(1, 100, 100);
-        Body eaten = createBody(2, 120, 120);
+        Yukkuri eater = createBody(1, 100, 100);
+        Yukkuri eaten = createBody(2, 120, 120);
         EatBodyEvent event = new EatBodyEvent(eater, eaten, null, 10);
         eater.setLockmove(true);
         event.end(eater);
@@ -60,16 +60,16 @@ public class EatBodyEventTest extends EventTestBase {
 
     @Test
     void testStartDoesNotThrow() {
-        Body eater = createBody(1, 100, 100);
-        Body eaten = createBody(2, 120, 120);
+        Yukkuri eater = createBody(1, 100, 100);
+        Yukkuri eaten = createBody(2, 120, 120);
         EatBodyEvent event = new EatBodyEvent(eater, eaten, null, 10);
         org.junit.jupiter.api.Assertions.assertDoesNotThrow(() -> event.start(eater));
     }
 
     @Test
     void testExecuteMultipleTicks() {
-        Body eater = createBody(1, 100, 100);
-        Body eaten = createBody(2, 120, 120);
+        Yukkuri eater = createBody(1, 100, 100);
+        Yukkuri eaten = createBody(2, 120, 120);
         EatBodyEvent event = new EatBodyEvent(eater, eaten, null, 30);
         // tick=0,10,70,120未満を順次実行
         for (int i = 0; i < 15; i++) {
@@ -82,8 +82,8 @@ public class EatBodyEventTest extends EventTestBase {
 
     @Test
     void testToString_doesNotThrow() {
-        Body eater = createBody(1, 100, 100);
-        Body eaten = createBody(2, 120, 120);
+        Yukkuri eater = createBody(1, 100, 100);
+        Yukkuri eaten = createBody(2, 120, 120);
         EatBodyEvent event = new EatBodyEvent(eater, eaten, null, 10);
         assertDoesNotThrow(() -> event.toString());
     }
@@ -92,8 +92,8 @@ public class EatBodyEventTest extends EventTestBase {
 
     @Test
     void testExecute_tick120_veryNice_returnsTrue() {
-        Body eater = createBody(1, 100, 100);
-        Body eaten = createBody(2, 120, 120);
+        Yukkuri eater = createBody(1, 100, 100);
+        Yukkuri eaten = createBody(2, 120, 120);
         eater.setAttitude(Attitude.VERY_NICE);
         EatBodyEvent event = new EatBodyEvent(eater, eaten, null, 10);
         event.tick = 120;
@@ -102,8 +102,8 @@ public class EatBodyEventTest extends EventTestBase {
 
     @Test
     void testExecute_tick120_nice_returnsTrue() {
-        Body eater = createBody(1, 100, 100);
-        Body eaten = createBody(2, 120, 120);
+        Yukkuri eater = createBody(1, 100, 100);
+        Yukkuri eaten = createBody(2, 120, 120);
         eater.setAttitude(Attitude.NICE);
         EatBodyEvent event = new EatBodyEvent(eater, eaten, null, 10);
         event.tick = 120;
@@ -112,8 +112,8 @@ public class EatBodyEventTest extends EventTestBase {
 
     @Test
     void testExecute_tick120_average_returnsTrue() {
-        Body eater = createBody(1, 100, 100);
-        Body eaten = createBody(2, 120, 120);
+        Yukkuri eater = createBody(1, 100, 100);
+        Yukkuri eaten = createBody(2, 120, 120);
         eater.setAttitude(Attitude.AVERAGE);
         EatBodyEvent event = new EatBodyEvent(eater, eaten, null, 10);
         event.tick = 120;
@@ -122,8 +122,8 @@ public class EatBodyEventTest extends EventTestBase {
 
     @Test
     void testExecute_tick120_shithead_returnsTrue() {
-        Body eater = createBody(1, 100, 100);
-        Body eaten = createBody(2, 120, 120);
+        Yukkuri eater = createBody(1, 100, 100);
+        Yukkuri eaten = createBody(2, 120, 120);
         eater.setAttitude(Attitude.SHITHEAD);
         EatBodyEvent event = new EatBodyEvent(eater, eaten, null, 10);
         event.tick = 120;
@@ -133,7 +133,7 @@ public class EatBodyEventTest extends EventTestBase {
     // --- update (default EventPacket behavior returns null) ---
     @Test
     void testUpdate_returnsNull() {
-        Body b = createBody(1, 100, 100);
+        Yukkuri b = createBody(1, 100, 100);
         EatBodyEvent event = new EatBodyEvent();
         assertNull(event.update(b));
     }
@@ -141,7 +141,7 @@ public class EatBodyEventTest extends EventTestBase {
     // --- start: to==null → early return ---
     @Test
     void testStart_toNull_doesNotThrow() {
-        Body eater = createBody(1, 100, 100);
+        Yukkuri eater = createBody(1, 100, 100);
         EatBodyEvent event = new EatBodyEvent(); // to=-1 → null
         assertDoesNotThrow(() -> event.start(eater));
     }
@@ -149,8 +149,8 @@ public class EatBodyEventTest extends EventTestBase {
     // --- checkEventResponse: from==b but !canEventResponse() → false ---
     @Test
     void testCheckEventResponse_eaterDead_returnsFalse() {
-        Body eater = createBody(1, 100, 100);
-        Body eaten = createBody(2, 120, 120);
+        Yukkuri eater = createBody(1, 100, 100);
+        Yukkuri eaten = createBody(2, 120, 120);
         eater.setDead(true); // !canEventResponse() → false
         EatBodyEvent event = new EatBodyEvent(eater, eaten, null, 10);
         assertFalse(event.checkEventResponse(eater));
@@ -159,8 +159,8 @@ public class EatBodyEventTest extends EventTestBase {
     // --- execute: tick=10 with to!=null ---
     @Test
     void testExecute_tick10_doesNotThrow() {
-        Body eater = createBody(1, 100, 100);
-        Body eaten = createBody(2, 120, 120);
+        Yukkuri eater = createBody(1, 100, 100);
+        Yukkuri eaten = createBody(2, 120, 120);
         EatBodyEvent event = new EatBodyEvent(eater, eaten, null, 10);
         event.tick = 10;
         assertDoesNotThrow(() -> event.execute(eater));
@@ -171,8 +171,8 @@ public class EatBodyEventTest extends EventTestBase {
 
         @Test
         void testScenario_AverageEaterFinishesVerySadWithStressPenalty() {
-            Body eater = createBody(1, 100, 100);
-            Body eaten = createBody(2, 120, 120);
+            Yukkuri eater = createBody(1, 100, 100);
+            Yukkuri eaten = createBody(2, 120, 120);
             eater.setAttitude(Attitude.AVERAGE);
             int beforeStress = eater.getStress();
 

@@ -13,7 +13,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.draw.World;
 import src.enums.AgeState;
 import src.game.Shit;
@@ -66,7 +66,7 @@ public class ItemListenerTest {
 
     @Test
     public void testGetMenuAction_PICKUP_Body() {
-        Body b = new Reimu();
+        Yukkuri b = new Reimu();
         b.setAgeState(AgeState.ADULT);
         SimYukkuri.world.getCurrentMap().getBody().put(b.getUniqueID(), b);
         ItemMenu.setGetTarget(b);
@@ -84,7 +84,7 @@ public class ItemListenerTest {
 
     @Test
     public void testGetMenuAction_PICKUP_BodyDetachesFromStalk() {
-        Body b = new Reimu();
+        Yukkuri b = new Reimu();
         b.setAgeState(AgeState.ADULT);
         Stalk stalk = new Stalk();
         stalk.getBindBabies().add(b.getUniqueID());

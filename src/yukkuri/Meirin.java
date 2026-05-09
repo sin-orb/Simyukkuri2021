@@ -9,7 +9,7 @@ import java.util.Map;
 
 import src.SimYukkuri;
 import src.util.GameRandom;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.draw.Dimension4y;
 import src.draw.ModLoader;
 import src.draw.Point4y;
@@ -23,7 +23,7 @@ import src.util.IniFileUtil;
 /**
  * めーりん
  */
-public class Meirin extends Body {
+public class Meirin extends Yukkuri {
 	private static final long serialVersionUID = 2660074445040949515L;
 	/** めーりんのタイプ */
 	public static final int type = 1004;
@@ -160,7 +160,7 @@ public class Meirin extends Body {
 	}
 
 	/** コンストラクタ */
-	public Meirin(int initX, int initY, int initZ, AgeState initAgeState, Body p1, Body p2) {
+	public Meirin(int initX, int initY, int initZ, AgeState initAgeState, Yukkuri p1, Yukkuri p2) {
 		super(initX, initY, initZ, initAgeState, p1, p2);
 		setBoundary(boundary, braidBoundary);
 		setMsgType(YukkuriType.MEIRIN);

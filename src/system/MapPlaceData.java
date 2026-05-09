@@ -8,7 +8,7 @@ import java.util.Map;
 
 import src.SimYukkuri;
 import src.util.GameWorld;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.effect.Effect;
 import src.event.EventPacket;
 import src.entity.world.bodylinked.Okazari;
@@ -63,7 +63,7 @@ public class MapPlaceData implements Serializable {
 
 	// シーン内の各オブジェクトリスト
 	/** ゆっくりのリスト */
-	private Map<Integer, Body> body;
+	private Map<Integer, Yukkuri> body;
 	/** うんうんリスト */
 	private Map<Integer, Shit> shit;
 	/** 吐餡リスト */
@@ -156,7 +156,7 @@ public class MapPlaceData implements Serializable {
 		alarmPeriod = 0;
 		alarm = false;
 
-		body = new HashMap<Integer, Body>();
+		body = new HashMap<Integer, Yukkuri>();
 		shit = new HashMap<Integer, Shit>();
 		vomit = new HashMap<Integer, Vomit>();
 		barrier = new LinkedList<Barrier>();
@@ -210,7 +210,7 @@ public class MapPlaceData implements Serializable {
 		alarmPeriod = 0;
 		alarm = false;
 
-		body = new HashMap<Integer, Body>();
+		body = new HashMap<Integer, Yukkuri>();
 		shit = new HashMap<Integer, Shit>();
 		vomit = new HashMap<Integer, Vomit>();
 		barrier = new LinkedList<Barrier>();
@@ -396,11 +396,11 @@ public class MapPlaceData implements Serializable {
 		this.alarm = alarm;
 	}
 
-	public Map<Integer, Body> getBody() {
+	public Map<Integer, Yukkuri> getBody() {
 		return body;
 	}
 
-	public void setBody(Map<Integer, Body> body) {
+	public void setBody(Map<Integer, Yukkuri> body) {
 		this.body = body;
 	}
 

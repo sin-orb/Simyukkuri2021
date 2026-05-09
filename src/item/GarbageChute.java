@@ -11,9 +11,9 @@ import java.util.List;
 
 import src.SimYukkuri;
 import src.util.GameWorld;
-import src.base.Body;
-import src.base.Obj;
-import src.base.ObjEX;
+import src.base.Yukkuri;
+import src.base.Entity;
+import src.base.WorldEntity;
 import src.draw.ModLoader;
 import src.draw.Rectangle4y;
 import src.draw.Translate;
@@ -26,19 +26,19 @@ import src.system.MessagePool;
 /***************************************************
  * ダストシュート
  */
-public class GarbageChute extends ObjEX {
+public class GarbageChute extends WorldEntity {
 
 	private static final long serialVersionUID = -2629236583041612041L;
 	/** 処理対象(ゆっくり、うんうん、フード、吐餡、茎) */
-	public static final int hitCheckObjType = ObjEX.YUKKURI | ObjEX.SHIT | ObjEX.FOOD | ObjEX.TOY | ObjEX.OBJECT
-			| ObjEX.VOMIT | ObjEX.STALK;
+	public static final int hitCheckObjType = WorldEntity.YUKKURI | WorldEntity.SHIT | WorldEntity.FOOD | WorldEntity.TOY | WorldEntity.OBJECT
+			| WorldEntity.VOMIT | WorldEntity.STALK;
 	private static final int images_num = 4; // このクラスの総使用画像数
 	private static BufferedImage[] images = new BufferedImage[images_num];
 	private static Rectangle4y boundary = new Rectangle4y();
-	List<Obj> bindObjList = new LinkedList<Obj>();
+	List<Entity> bindObjList = new LinkedList<Entity>();
 
 	private ItemRank itemRank;
-	private Body bindBody = null;
+	private Yukkuri bindBody = null;
 
 	/** 画像ロード */
 	public static void loadImages(ClassLoader loader, ImageObserver io) throws IOException {
@@ -88,7 +88,7 @@ public class GarbageChute extends ObjEX {
 	}
 
 	@Override
-	public int objHitProcess(Obj o) {
+	public int objHitProcess(Entity o) {
 		// ディフューザー、ゆんばは消さない
 		if ((o instanceof Diffuser) || (o instanceof Yunba)) {
 			return 0;
@@ -96,8 +96,8 @@ public class GarbageChute extends ObjEX {
 		if (o == null || bindObjList.contains(o)) {
 			return 0;
 		}
-		if (o instanceof Body) {
-			bindBody = (Body) o;
+		if (o instanceof Yukkuri) {
+			bindBody = (Yukkuri) o;
 			bindObjList.add(o);
 			if (!bindBody.isDead()) {
 				bindBody.setHappiness(Happiness.VERY_SAD);
@@ -123,7 +123,7 @@ public class GarbageChute extends ObjEX {
 		int size = bindObjList.size();
 
 		for (int i = size - 1; 0 <= i; i--) {
-			Obj o = bindObjList.get(i);
+			Entity o = bindObjList.get(i);
 			o.setFallingUnderGround(true);
 			if (o == null || o.isRemoved()) {
 				continue;
@@ -159,7 +159,7 @@ public class GarbageChute extends ObjEX {
 		setCollisionSize(getPivotX(), getPivotY());
 		GameWorld.get().getCurrentMap().getGarbagechute().put(objId, this);
 		objType = Type.PLATFORM;
-		objEXType = WorldEntityKind.GARBAGECHUTE;
+		worldEntityType = WorldEntityKind.GARBAGECHUTE;
 
 		interval = 4;
 
@@ -177,11 +177,11 @@ public class GarbageChute extends ObjEX {
 
 	}
 
-	public List<Obj> getBindObjList() {
+	public List<Entity> getBindObjList() {
 		return bindObjList;
 	}
 
-	public void setBindObjList(List<Obj> bindObjList) {
+	public void setBindObjList(List<Entity> bindObjList) {
 		this.bindObjList = bindObjList;
 	}
 
@@ -193,11 +193,11 @@ public class GarbageChute extends ObjEX {
 		this.itemRank = itemRank;
 	}
 
-	public Body getBindBody() {
+	public Yukkuri getBindBody() {
 		return bindBody;
 	}
 
-	public void setBindBody(Body bindBody) {
+	public void setBindBody(Yukkuri bindBody) {
 		this.bindBody = bindBody;
 	}
 

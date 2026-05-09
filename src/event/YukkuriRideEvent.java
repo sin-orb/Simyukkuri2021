@@ -1,7 +1,7 @@
 package src.event;
 
-import src.base.Body;
-import src.base.Obj;
+import src.base.Yukkuri;
+import src.base.Entity;
 import src.draw.Terrarium;
 import src.draw.Translate;
 import src.enums.Happiness;
@@ -19,9 +19,9 @@ import src.system.MessagePool;
 
 /***************************************************
  * おちびちゃん運びイベント
- * protected Body from; // 乗せるゆっくり
- * protected Body to; // 乗るゆっくり
- * protected Obj target; // 未使用
+ * protected Yukkuri from; // 乗せるゆっくり
+ * protected Yukkuri to; // 乗るゆっくり
+ * protected Entity target; // 未使用
  * protected int count; // 100
  */
 public class YukkuriRideEvent extends EventPacket {
@@ -33,7 +33,7 @@ public class YukkuriRideEvent extends EventPacket {
 	/**
 	 * コンストラクタ.
 	 */
-	public YukkuriRideEvent(Body f, Body t, Obj tgt, int cnt) {
+	public YukkuriRideEvent(Yukkuri f, Yukkuri t, Entity tgt, int cnt) {
 		super(f, t, tgt, cnt);
 		priority = EventPriority.MIDDLE;// 食事、睡眠、トイレよりは上
 	}
@@ -61,12 +61,12 @@ public class YukkuriRideEvent extends EventPacket {
 	// ここで各種チェックを行い、イベントへ参加するかを返す
 	// また、イベント優先度も必要に応じて設定できる
 	@Override
-	public boolean checkEventResponse(Body body) {
-		Body targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
+	public boolean checkEventResponse(Yukkuri body) {
+		Yukkuri targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
 		if (targetBody == null) {
 			return false;
 		}
-		Body sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
+		Yukkuri sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
 		if (sourceBody == body) {
 			return true;
 		}
@@ -75,8 +75,8 @@ public class YukkuriRideEvent extends EventPacket {
 
 	// イベント開始動作
 	@Override
-	public void start(Body body) {
-		Body targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
+	public void start(Yukkuri body) {
+		Yukkuri targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
 		if (targetBody == null) {
 			return;
 		}
@@ -87,13 +87,13 @@ public class YukkuriRideEvent extends EventPacket {
 
 	// 毎フレーム処理
 	@Override
-	public UpdateState update(Body body) {
+	public UpdateState update(Yukkuri body) {
 		tick++;
-		Body sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
+		Yukkuri sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
 		if (sourceBody == null || !sourceBody.canActionForEvent() || sourceBody.isRemoved()) {
 			return UpdateState.ABORT;
 		}
-		Body targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
+		Yukkuri targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
 		if (targetBody == null || targetBody.isDead() || targetBody.isRemoved()) {
 			return UpdateState.ABORT;
 		}
@@ -144,7 +144,7 @@ public class YukkuriRideEvent extends EventPacket {
 				liftZ += sourceBody.getZ();
 				targetBody.setCalcZ(liftZ);
 				targetBody.setDirection(sourceBody.getDirection());
-				Obj targetObject = body.takeMappedObj(this.target);
+				Entity targetObject = body.takeMappedObj(this.target);
 				if (targetObject != null) {
 					hasRideTarget = true;
 				}
@@ -156,7 +156,7 @@ public class YukkuriRideEvent extends EventPacket {
 						if (targetBody.isHungry()) {
 							// 餌を持っていたら落とす
 							body.dropTakeoutItem(TakeoutItemType.FOOD);
-							Obj candidateObject = FamilyActionLogic.searchFood(body);
+							Entity candidateObject = FamilyActionLogic.searchFood(body);
 							if (candidateObject != null) {
 								targetObject = candidateObject;
 								hasRideTarget = true;
@@ -168,7 +168,7 @@ public class YukkuriRideEvent extends EventPacket {
 					// トイレ
 					if (targetObject == null) {
 						if (targetBody.wantToShit()) {
-							Obj candidateObject = FamilyActionLogic.searchToilet(body);
+							Entity candidateObject = FamilyActionLogic.searchToilet(body);
 							if (candidateObject != null) {
 								targetObject = candidateObject;
 								hasRideTarget = true;
@@ -181,7 +181,7 @@ public class YukkuriRideEvent extends EventPacket {
 					if (targetObject == null) {
 						if (targetBody.isSleepy()
 								|| GameEnvironment.getDayState().ordinal() >= Terrarium.DayState.EVENING.ordinal()) {
-							Obj candidateObject = BedLogic.searchBed(body);
+							Entity candidateObject = BedLogic.searchBed(body);
 							if (candidateObject != null) {
 								targetObject = candidateObject;
 								hasRideTarget = true;
@@ -247,15 +247,15 @@ public class YukkuriRideEvent extends EventPacket {
 	// イベント目標に到着した際に呼ばれる
 	// trueを返すとイベント終了
 	@Override
-	public boolean execute(Body body) {
+	public boolean execute(Yukkuri body) {
 		return false;
 	}
 
 	@Override
-	public void end(Body body) {
+	public void end(Yukkuri body) {
 		// 他のイベントで強制的にイベントが終わることがある
 		// 子供をおろす
-		Body targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
+		Yukkuri targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
 		if (targetBody != null) {
 			targetBody.setParentLinkId(-1);
 		}

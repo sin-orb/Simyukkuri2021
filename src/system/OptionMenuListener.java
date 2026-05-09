@@ -4,7 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Map;
 
-import src.base.Body;
+import src.base.Yukkuri;
 import src.util.GameView;
 import src.util.GameWorld;
 import src.util.IniFileUtil;
@@ -21,8 +21,8 @@ public final class OptionMenuListener implements ActionListener {
 		switch (sel) {
 		case INI_RELOAD:
 			GameView.loadImage(false, false, false, false, false, true);
-			for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
-				Body b = entry.getValue();
+			for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
+				Yukkuri b = entry.getValue();
 				IniFileUtil.readIniFile(b, true);
 				IniFileUtil.readYukkuriIniFile(b, true);
 			}

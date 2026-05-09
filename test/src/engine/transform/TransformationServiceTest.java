@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.draw.MyPane;
 import src.enums.AgeState;
 import src.enums.YukkuriType;
@@ -34,7 +34,7 @@ public class TransformationServiceTest {
 
 			TransformationService.transform(reimu, YukkuriType.DEIBU);
 
-			Body transformed = SimYukkuri.world.getCurrentMap().getBody().get(originalId);
+			Yukkuri transformed = SimYukkuri.world.getCurrentMap().getBody().get(originalId);
 			assertNotNull(transformed);
 			assertInstanceOf(Deibu.class, transformed);
 			assertEquals(originalId, transformed.getUniqueID());

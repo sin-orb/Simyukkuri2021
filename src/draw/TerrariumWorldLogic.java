@@ -2,7 +2,7 @@ package src.draw;
 
 import java.util.Map;
 
-import src.base.Body;
+import src.base.Yukkuri;
 import src.enums.PanicType;
 import src.field.impl.Barrier;
 import src.util.GameWorld;
@@ -23,13 +23,13 @@ public final class TerrariumWorldLogic {
 	 *
 	 * @param b 対象ゆっくり
 	 */
-	public static void checkPanic(Body b) {
+	public static void checkPanic(Yukkuri b) {
 		if (b.isDead() || b.isPealed()) {
 			return;
 		}
 		int minDistance;
-		for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
-			Body p = entry.getValue();
+		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
+			Yukkuri p = entry.getValue();
 			if (p == b) {
 				continue;
 			}
@@ -53,12 +53,12 @@ public final class TerrariumWorldLogic {
 	 * @param p            対象のつがい
 	 * @param bodyNewChild 新たに家族に加える新しい個体
 	 */
-	public static void setNewFamily(Body b, Body p, Body bodyNewChild) {
+	public static void setNewFamily(Yukkuri b, Yukkuri p, Yukkuri bodyNewChild) {
 		if (b == null) {
 			return;
 		}
 		for (Integer childId : b.getChildrenList()) {
-			Body child = src.util.BodyRegistry.getBodyInstance(childId);
+			Yukkuri child = src.util.BodyRegistry.getBodyInstance(childId);
 			if (child == null) {
 				continue;
 			}

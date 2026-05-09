@@ -6,8 +6,8 @@ import java.beans.Transient;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
-import src.base.Body;
-import src.base.Obj;
+import src.base.Yukkuri;
+import src.base.Entity;
 import src.draw.Point4y;
 import src.enums.AttachProperty;
 import src.enums.Event;
@@ -17,7 +17,7 @@ import src.enums.Type;
  * ゆっくりの体に付くアタッチメントのベースクラス
  */
 @JsonTypeInfo(use = Id.CLASS)
-public abstract class Attachment extends Obj {
+public abstract class Attachment extends Entity {
 
 	private static final long serialVersionUID = 4324305548250241185L;
 	/** アタッチメントのつけられている元のID */
@@ -44,12 +44,12 @@ public abstract class Attachment extends Obj {
 
 	/** 画像取得 */
 	@Transient
-	public abstract BufferedImage getImage(Body body);
+	public abstract BufferedImage getImage(Yukkuri body);
 
 	/** X方向の描画座標オフセット分 */
 	@Transient
 	public int getOfsX() {
-		Body pa = src.util.BodyRegistry.getBodyInstance(parent);
+		Yukkuri pa = src.util.BodyRegistry.getBodyInstance(parent);
 		if (pa == null)
 			return -1;
 		return posOfs[pa.getBodyAgeState().ordinal()].getX();
@@ -58,7 +58,7 @@ public abstract class Attachment extends Obj {
 	/** Y方向の描画座標オフセット分 */
 	@Transient
 	public int getOfsY() {
-		Body pa = src.util.BodyRegistry.getBodyInstance(parent);
+		Yukkuri pa = src.util.BodyRegistry.getBodyInstance(parent);
 		if (pa == null)
 			return -1;
 		return posOfs[pa.getBodyAgeState().ordinal()].getY();
@@ -72,7 +72,7 @@ public abstract class Attachment extends Obj {
 
 	/** アタッチメントの詳細設定 */
 	protected void setAttachProperty(int[] property, String ofsKey) {
-		Body pa = src.util.BodyRegistry.getBodyInstance(parent);
+		Yukkuri pa = src.util.BodyRegistry.getBodyInstance(parent);
 		if (pa == null)
 			return;
 		posOfs = pa.getMountPoint(ofsKey);
@@ -90,7 +90,7 @@ public abstract class Attachment extends Obj {
 	 *
 	 * @param body つけられるゆっくり
 	 */
-	public Attachment(Body body) {
+	public Attachment(Yukkuri body) {
 		objType = Type.ATTACHMENT;
 		parent = body.getUniqueID();
 	}

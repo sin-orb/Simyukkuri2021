@@ -5,14 +5,14 @@ import src.system.BodyLayer;
 import src.draw.Point4y;
 import src.enums.AgeState;
 
-public class StubBody extends Body {
+public class StubBody extends Yukkuri {
     private static final long serialVersionUID = 1L;
 
     public StubBody() {
         super();
     }
 
-    public StubBody(int initX, int initY, int initZ, AgeState initAgeState, Body mama, Body papa) {
+    public StubBody(int initX, int initY, int initZ, AgeState initAgeState, Yukkuri mama, Yukkuri papa) {
         super(initX, initY, initZ, initAgeState, mama, papa);
     }
 

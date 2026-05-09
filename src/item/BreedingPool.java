@@ -19,9 +19,9 @@ import javax.swing.JRadioButton;
 import src.SimYukkuri;
 import src.util.GameRandom;
 import src.util.GameWorld;
-import src.base.Body;
-import src.base.Obj;
-import src.base.ObjEX;
+import src.base.Yukkuri;
+import src.base.Entity;
+import src.base.WorldEntity;
 import src.draw.ModLoader;
 import src.draw.Rectangle4y;
 import src.enums.Happiness;
@@ -46,7 +46,7 @@ import src.yukkuri.WasaReimu;
 /***************************************************
  * 養殖プール
  */
-public class BreedingPool extends ObjEX {
+public class BreedingPool extends WorldEntity {
 
 	private static final long serialVersionUID = -2544191380264314199L;
 
@@ -74,7 +74,7 @@ public class BreedingPool extends ObjEX {
 	}
 
 	/** 処理対象(ゆっくり) */
-	public static final int hitCheckObjType = ObjEX.YUKKURI;
+	public static final int hitCheckObjType = WorldEntity.YUKKURI;
 	private static final int images_num = 4; // このクラスの総使用画像数
 	private static BufferedImage[] images = new BufferedImage[images_num];
 	private static Rectangle4y boundary = new Rectangle4y();
@@ -133,11 +133,11 @@ public class BreedingPool extends ObjEX {
 	}
 
 	@Override
-	public int objHitProcess(Obj targetObject) {
+	public int objHitProcess(Entity targetObject) {
 		if (!enabled)
 			return 0;
 		if (targetObject.getObjType() == Type.YUKKURI) {
-			Body body = (Body) targetObject;
+			Yukkuri body = (Yukkuri) targetObject;
 			// 避妊されてたら妊娠しない
 			if (body.isBodyCastration() && !stalkPool)
 				return 0;
@@ -270,7 +270,7 @@ public class BreedingPool extends ObjEX {
 	}
 
 	/** プール上のゆっくりを泣かせる処理 */
-	public void cry(Body body) {
+	public void cry(Yukkuri body) {
 		if (body.hasBabyOrStalk()) {
 			if (body.isNYD()) {
 				body.setNYDMessage(GameMessages.getMessage(body, MessagePool.Action.NonYukkuriDisease), false);
@@ -291,7 +291,7 @@ public class BreedingPool extends ObjEX {
 		GameWorld.get().getCurrentMap().getBreedingPool().put(objId, this);
 
 		objType = Type.PLATFORM;
-		objEXType = WorldEntityKind.BREEDINGPOOL;
+		worldEntityType = WorldEntityKind.BREEDINGPOOL;
 
 		interval = 1;
 

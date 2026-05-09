@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import src.enums.AgeState;
 import src.draw.Point4y;
-import src.base.Body;
+import src.base.Yukkuri;
 
 public class RanTest {
 
@@ -74,7 +74,7 @@ public class RanTest {
         Ran obj = new Ran();
         // checkTransform() checks transformation conditions
         // Without proper World setup, will likely return null
-        Body result = obj.checkTransform();
+        Yukkuri result = obj.checkTransform();
         // Just verify the method executes without crashing
     }
 

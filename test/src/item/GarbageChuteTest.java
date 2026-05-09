@@ -9,9 +9,9 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.base.ItemTestBase;
-import src.base.ObjEX.ItemRank;
+import src.base.WorldEntity.ItemRank;
 import src.draw.Translate;
 import src.enums.AgeState;
 import src.enums.Happiness;
@@ -21,8 +21,8 @@ import src.yukkuri.Reimu;
 
 class GarbageChuteTest extends ItemTestBase {
 
-    private static Body createBody() {
-        Body b = new Reimu();
+    private static Yukkuri createBody() {
+        Yukkuri b = new Reimu();
         b.setAgeState(AgeState.ADULT);
         Sprite[] spr = new Sprite[3];
         for (int i = 0; i < 3; i++) {
@@ -70,7 +70,7 @@ class GarbageChuteTest extends ItemTestBase {
     @Test
     void testObjEXType_GARBAGECHUTE() {
         GarbageChute item = new GarbageChute(100, 100, 0);
-        assertEquals(WorldEntityKind.GARBAGECHUTE, item.getObjEXType());
+        assertEquals(WorldEntityKind.GARBAGECHUTE, item.getWorldEntityType());
     }
 
     // --- getShadowImage ---
@@ -113,7 +113,7 @@ class GarbageChuteTest extends ItemTestBase {
     @Test
     void testGetSetBindObjList() {
         GarbageChute item = new GarbageChute();
-        List<src.base.Obj> list = new LinkedList<>();
+        List<src.base.Entity> list = new LinkedList<>();
         item.setBindObjList(list);
         assertEquals(list, item.getBindObjList());
     }
@@ -130,7 +130,7 @@ class GarbageChuteTest extends ItemTestBase {
     @Test
     void testGetSetBindBody() {
         GarbageChute item = new GarbageChute();
-        Body b = createBody();
+        Yukkuri b = createBody();
         item.setBindBody(b);
         assertEquals(b, item.getBindBody());
         item.setBindBody(null);
@@ -162,7 +162,7 @@ class GarbageChuteTest extends ItemTestBase {
         GarbageChute item = new GarbageChute(100, 100, 0);
         Food food = new Food(50, 50, 0);
         food.setRemoved(true);
-        List<src.base.Obj> list = new LinkedList<>();
+        List<src.base.Entity> list = new LinkedList<>();
         list.add(food);
         item.setBindObjList(list);
         // upDate calls translateZ which needs rateX - already set by ItemTestBase.setUp
@@ -253,7 +253,7 @@ class GarbageChuteTest extends ItemTestBase {
         @Test
         void testScenario_LiveBodyStartsFallingAndCostsCash() {
             GarbageChute item = new GarbageChute(100, 100, 0);
-            Body body = createBody();
+            Yukkuri body = createBody();
             long beforeCash = SimYukkuri.world.getPlayer().getCash();
 
             assertEquals(0, item.objHitProcess(body));
@@ -268,7 +268,7 @@ class GarbageChuteTest extends ItemTestBase {
         @Test
         void testScenario_DeepFallingBodyIsRemovedFromChuteOnUpdate() {
             GarbageChute item = new GarbageChute(100, 100, 0);
-            Body body = createBody();
+            Yukkuri body = createBody();
             body.setZ(-1000);
             item.getBindObjList().add(body);
 

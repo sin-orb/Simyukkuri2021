@@ -9,8 +9,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import src.attachment.Ants;
-import src.base.Body;
-import src.base.Obj;
+import src.base.Yukkuri;
+import src.base.Entity;
 import src.enums.AgeState;
 import src.enums.CriticalDamegeType;
 import src.enums.PredatorType;
@@ -23,7 +23,7 @@ import src.util.WorldTestHelper;
 
 class BodyMovementTest {
 
-	private Body body;
+	private Yukkuri body;
 
 	@BeforeEach
 	void setUp() {
@@ -279,7 +279,7 @@ class BodyMovementTest {
 
 	@Test
 	void flightDestinationAheadSetsPositiveZDirection() {
-		Body target = createMappedMoveTarget();
+		Yukkuri target = createMappedMoveTarget();
 		body.setMoveTargetId(target.getObjId());
 		body.setFlyingType(true);
 		body.setHasBraid(true);
@@ -294,7 +294,7 @@ class BodyMovementTest {
 
 	@Test
 	void flightDestinationReachedClearsDestinationWhenTargetExists() {
-		Body target = createMappedMoveTarget();
+		Yukkuri target = createMappedMoveTarget();
 		body.setMoveTargetId(target.getObjId());
 		body.setFlyingType(true);
 		body.setHasBraid(true);
@@ -483,7 +483,7 @@ class BodyMovementTest {
 
 	@Test
 	void moveToBodyClearsActionsAndSetsTargetFlag() {
-		Obj target = createMappedMoveTarget();
+		Entity target = createMappedMoveTarget();
 		body.setToShit(true);
 		body.setToSukkiri(true);
 
@@ -536,13 +536,13 @@ class BodyMovementTest {
 		};
 	}
 
-	private Body createMappedMoveTarget() {
-		Body target = WorldTestHelper.createBody();
+	private Yukkuri createMappedMoveTarget() {
+		Yukkuri target = WorldTestHelper.createBody();
 		GameWorld.get().getCurrentMap().getBody().put(target.getUniqueID(), target);
 		return target;
 	}
 
-	private void initializeSprites(Body target) {
+	private void initializeSprites(Yukkuri target) {
 		Sprite[] bodySprites = new Sprite[3];
 		Sprite[] expandSprites = new Sprite[3];
 		Sprite[] braidSprites = new Sprite[3];

@@ -11,7 +11,7 @@ import java.io.IOException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import src.base.Body;
+import src.base.Yukkuri;
 import src.draw.ModLoader;
 import src.enums.AgeState;
 import src.enums.AttachProperty;
@@ -105,8 +105,8 @@ public class Badge extends Attachment {
 	}
 	
 	@Override
-	public BufferedImage getImage(Body b) {
-		Body pa = src.util.BodyRegistry.getBodyInstance(parent);
+	public BufferedImage getImage(Yukkuri b) {
+		Yukkuri pa = src.util.BodyRegistry.getBodyInstance(parent);
 		if (pa == null) return null;
 		return images[pa.getBodyAgeState().ordinal()][badgeRank.ordinal()];
 	}
@@ -119,7 +119,7 @@ public class Badge extends Attachment {
 	
 	@Override
 	public void resetBoundary() {
-		Body pa = src.util.BodyRegistry.getBodyInstance(parent);
+		Yukkuri pa = src.util.BodyRegistry.getBodyInstance(parent);
 		if (pa == null) return;
 		setBoundary(pivX[pa.getBodyAgeState().ordinal()],
 					pivY[pa.getBodyAgeState().ordinal()],
@@ -131,11 +131,11 @@ public class Badge extends Attachment {
 	 * @param body 装着されるゆっくり
 	 * @param ieBadgeRank バッジランク
 	 */	
-	public Badge(Body body, BadgeRank badgeRank) {
+	public Badge(Yukkuri body, BadgeRank badgeRank) {
 		super(body);
 		setAttachProperty(property, POS_KEY);
 		this.badgeRank = badgeRank;
-		Body pa = src.util.BodyRegistry.getBodyInstance(parent);
+		Yukkuri pa = src.util.BodyRegistry.getBodyInstance(parent);
 		if (pa != null) {
 			setBoundary(pivX[pa.getBodyAgeState().ordinal()],
 					pivY[pa.getBodyAgeState().ordinal()],

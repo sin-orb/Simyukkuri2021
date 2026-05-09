@@ -5,9 +5,9 @@ import src.util.GameText;
 import src.Const;
 import src.SimYukkuri;
 import src.util.GameRandom;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.event.EventPacket;
-import src.base.Obj;
+import src.base.Entity;
 import src.draw.Translate;
 import src.enums.EnumRelationMine;
 import src.enums.FavItemType;
@@ -21,9 +21,9 @@ import src.system.ResourceUtil;
 
 /***************************************************
  * すぃーの乗車管理イベント
- * protected Body from; // 乗るゆっくり
- * protected Body to; // 未使用
- * protected Obj target; // すぃー
+ * protected Yukkuri from; // 乗るゆっくり
+ * protected Yukkuri to; // 未使用
+ * protected Entity target; // すぃー
  * protected int count; // 100
  */
 public class SuiRideEvent extends EventPacket {
@@ -35,7 +35,7 @@ public class SuiRideEvent extends EventPacket {
 	/**
 	 * コンストラクタ.
 	 */
-	public SuiRideEvent(Body f, Body t, Obj tgt, int cnt) {
+	public SuiRideEvent(Yukkuri f, Yukkuri t, Entity tgt, int cnt) {
 		super(f, t, tgt, cnt);
 		priority = EventPriority.MIDDLE; // すぃーの乗車イベントを食事、睡眠、トイレより上にする
 	}
@@ -63,12 +63,12 @@ public class SuiRideEvent extends EventPacket {
 	// ここで各種チェックを行い、イベントへ参加するかを返す
 	// また、イベント優先度も必要に応じて設定できる
 	@Override
-	public boolean checkEventResponse(Body body) {
-		Obj targetObject = body.takeMappedObj(this.target);
+	public boolean checkEventResponse(Yukkuri body) {
+		Entity targetObject = body.takeMappedObj(this.target);
 		if (targetObject == null) {
 			return false;
 		}
-		Body sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
+		Yukkuri sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
 		if (sourceBody == null)
 			return false;
 		if (sourceBody == body) {
@@ -126,8 +126,8 @@ public class SuiRideEvent extends EventPacket {
 
 	// イベント開始動作
 	@Override
-	public void start(Body body) {
-		Obj targetObject = body.takeMappedObj(this.target);
+	public void start(Yukkuri body) {
+		Entity targetObject = body.takeMappedObj(this.target);
 		if (targetObject == null) {
 			return;
 		}
@@ -136,8 +136,8 @@ public class SuiRideEvent extends EventPacket {
 
 	// 毎フレーム処理
 	@Override
-	public UpdateState update(Body body) {
-		Obj targetObject = body.takeMappedObj(this.target);
+	public UpdateState update(Yukkuri body) {
+		Entity targetObject = body.takeMappedObj(this.target);
 		Sui targetSui = (Sui) targetObject;
 		if (targetSui == null) {
 			return UpdateState.ABORT;
@@ -150,7 +150,7 @@ public class SuiRideEvent extends EventPacket {
 			if (!targetSui.isriding(body)) {
 				return null;
 			}
-			Body sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
+			Yukkuri sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
 			if (sourceBody == null)
 				return UpdateState.ABORT;
 			if (sourceBody == body) {
@@ -218,7 +218,7 @@ public class SuiRideEvent extends EventPacket {
 				if (body.takeMappedObj(body.getParentLinkId()) != null) {
 					return null;
 				}
-				Body sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
+				Yukkuri sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
 				// 移動する
 				body.moveToEvent(this, targetObject.getX(), targetObject.getY());
 				if (sourceBody == null)
@@ -251,8 +251,8 @@ public class SuiRideEvent extends EventPacket {
 	// イベント目標に到着した際に呼ばれる
 	// trueを返すとイベント終了
 	@Override
-	public boolean execute(Body body) {
-		Obj targetObject = body.takeMappedObj(this.target);
+	public boolean execute(Yukkuri body) {
+		Entity targetObject = body.takeMappedObj(this.target);
 		if (targetObject == null) {
 			return false;
 		}
@@ -269,7 +269,7 @@ public class SuiRideEvent extends EventPacket {
 	}
 
 	@Override
-	public void end(Body body) {
+	public void end(Yukkuri body) {
 		// 他のイベントで強制的にイベントが終わることがある
 		// すぃーにのってたら降りる
 		Sui targetSui = (Sui) body.takeMappedObj(body.getParentLinkId());

@@ -1,6 +1,6 @@
 package src.draw;
 
-import src.base.Body;
+import src.base.Yukkuri;
 import src.util.GameWorld;
 
 /**
@@ -15,7 +15,7 @@ public final class TerrariumBodyRegistry {
 	 *
 	 * @param body 登録する body
 	 */
-	public static void register(Body body) {
+	public static void register(Yukkuri body) {
 		GameWorld.get().getCurrentMap().getBody().put(body.getUniqueID(), body);
 	}
 }

@@ -4,7 +4,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.event.EventPacket;
 import src.yukkuri.Reimu;
 
@@ -86,7 +86,7 @@ public class EventLogicTest {
         }
     }
 
-    // ========== Body Event Registration Tests ==========
+    // ========== Yukkuri Event Registration Tests ==========
 
     @Test
     public void testAddBodyEventShortcut() {
@@ -427,31 +427,31 @@ public class EventLogicTest {
         }
 
         @Override
-        public boolean checkEventResponse(Body b) {
+        public boolean checkEventResponse(Yukkuri b) {
             return false;
         }
 
         @Override
-        public void start(Body b) {
+        public void start(Yukkuri b) {
         }
 
         @Override
-        public UpdateState update(Body b) {
+        public UpdateState update(Yukkuri b) {
             return null;
         }
 
         @Override
-        public boolean execute(Body b) {
+        public boolean execute(Yukkuri b) {
             wasExecuteCalled = true;
             return true;
         }
 
         @Override
-        public void end(Body b) {
+        public void end(Yukkuri b) {
         }
 
         @Override
-        public boolean simpleEventAction(Body b) {
+        public boolean simpleEventAction(Yukkuri b) {
             wasSimpleActionCalled = true;
             return false;
         }
@@ -466,7 +466,7 @@ public class EventLogicTest {
 
     private static class MockAbortEvent extends MockEventPacket {
         @Override
-        public UpdateState update(Body b) {
+        public UpdateState update(Yukkuri b) {
             return UpdateState.ABORT;
         }
     }
@@ -480,12 +480,12 @@ public class EventLogicTest {
         }
 
         @Override
-        public UpdateState update(Body b) {
+        public UpdateState update(Yukkuri b) {
             return UpdateState.FORCE_EXEC;
         }
 
         @Override
-        public boolean execute(Body b) {
+        public boolean execute(Yukkuri b) {
             wasExecuteCalled = true;
             return execResult;
         }
@@ -493,19 +493,19 @@ public class EventLogicTest {
 
     private static class MockSimpleEventTruePacket extends MockEventPacket {
         @Override
-        public boolean simpleEventAction(Body b) {
+        public boolean simpleEventAction(Yukkuri b) {
             return true;
         }
     }
 
     private static class MockCheckResponseTruePacket extends MockEventPacket {
         @Override
-        public boolean simpleEventAction(Body b) {
+        public boolean simpleEventAction(Yukkuri b) {
             return false;
         }
 
         @Override
-        public boolean checkEventResponse(Body b) {
+        public boolean checkEventResponse(Yukkuri b) {
             return true;
         }
     }
@@ -586,7 +586,7 @@ public class EventLogicTest {
             yukkuri.setZ(0);
             MockForceExecEvent event = new MockForceExecEvent(false) {
                 @Override
-                public UpdateState update(Body b) {
+                public UpdateState update(Yukkuri b) {
                     return null;
                 }
             };

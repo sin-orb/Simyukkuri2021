@@ -15,7 +15,7 @@ import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
 import src.base.ItemTestBase;
-import src.base.ObjEX;
+import src.base.WorldEntity;
 import src.draw.Rectangle4y;
 
 class HouseTest extends ItemTestBase {
@@ -73,8 +73,8 @@ class HouseTest extends ItemTestBase {
     @Test
     void testGetSetItemRank() {
         House house = new House();
-        house.setItemRank(ObjEX.ItemRank.NORA);
-        assertEquals(ObjEX.ItemRank.NORA, house.getItemRank());
+        house.setItemRank(WorldEntity.ItemRank.NORA);
+        assertEquals(WorldEntity.ItemRank.NORA, house.getItemRank());
     }
 
     // ---------------------------------------------------------------
@@ -152,7 +152,7 @@ class HouseTest extends ItemTestBase {
             Rectangle collision = house.getCollisionRect(new Rectangle());
 
             assertEquals(House.HouseTable.HOUSE_NORA2, house.getHouseType());
-            assertEquals(ObjEX.ItemRank.NORA, house.getItemRank());
+            assertEquals(WorldEntity.ItemRank.NORA, house.getItemRank());
             assertSame(house, SimYukkuri.world.getCurrentMap().getHouse().get(house.getObjId()));
             assertEquals(60, house.getPivotX());
             assertEquals(20, house.getPivotY());

@@ -4,7 +4,7 @@ import java.util.Map;
 
 import src.SimYukkuri;
 import src.attachment.Ants;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.draw.Translate;
 import src.enums.AgeState;
 import src.enums.Damage;
@@ -23,9 +23,9 @@ import src.util.GameWorld;
 /**
  * ゆっくり本体の移動状態を計算するロジック集約クラス。
  * <p>
- * Phase 2では、まず{@link Body#moveBody(boolean)}全体を移すのではなく、
+ * Phase 2では、まず{@link Yukkuri#moveBody(boolean)}全体を移すのではなく、
  * 移動速度に関する判定だけをこのクラスへ委譲する。落下、衝突、目的地更新などの
- * 副作用はまだ{@link Body}側に残し、挙動変更の範囲を小さく保つ。
+ * 副作用はまだ{@link Yukkuri}側に残し、挙動変更の範囲を小さく保つ。
  * </p>
  */
 public final class BodyMovement {
@@ -90,13 +90,13 @@ public final class BodyMovement {
 	 * 現在の状態から、移動処理で使う基礎step値を計算する。
 	 * <p>
 	 * 妊娠/茎、空腹、ダメージ、病気、痛み、飛行不能、重度火傷、蟻、盲目、
-	 * 家族イベント中の最低速度を既存の{@link Body#moveBody(boolean)}と同じ順序で反映する。
+	 * 家族イベント中の最低速度を既存の{@link Yukkuri#moveBody(boolean)}と同じ順序で反映する。
 	 * </p>
 	 *
 	 * @param body 判定対象のゆっくり
 	 * @return 1以上に補正された移動step
 	 */
-	public static int calculateMovementStep(Body body) {
+	public static int calculateMovementStep(Yukkuri body) {
 		int step = body.getStepBase()[body.getBodyAgeState().ordinal()];
 		if (body.hasBabyOrStalk() || (body.isSoHungry() && !body.isPredatorType())
 				|| body.getDamageState() != Damage.NONE || body.isSick() || body.isFeelPain()
@@ -125,24 +125,24 @@ public final class BodyMovement {
 	 * 現在のstep値から、何tickに一度移動するかを計算する。
 	 *
 	 * @param body 判定対象のゆっくり
-	 * @param step {@link #calculateMovementStep(Body)}で計算した移動step
+	 * @param step {@link #calculateMovementStep(Yukkuri)}で計算した移動step
 	 * @return 移動判定に使う周期
 	 */
-	public static int calculateMovementFrequency(Body body, int step) {
+	public static int calculateMovementFrequency(Yukkuri body, int step) {
 		return body.getStepBase()[AgeState.ADULT.ordinal()] / step;
 	}
 
 	/**
 	 * X座標の目的地に向けた移動方向を更新する。
 	 * <p>
-	 * 目的地へ到達済みの場合は、既存の{@link Body#moveBody(boolean)}と同じく
+	 * 目的地へ到達済みの場合は、既存の{@link Yukkuri#moveBody(boolean)}と同じく
 	 * X目的地を未設定値へ戻す。目的地が未設定の場合のランダム方向更新は、
 	 * 呼び出し元の分岐に残す。
 	 * </p>
 	 *
 	 * @param body 更新対象のゆっくり
 	 */
-	public static void updateDestinationDirectionX(Body body) {
+	public static void updateDestinationDirectionX(Yukkuri body) {
 		int direction = body.decideDirection(body.getX(), body.getDestX(), 0);
 		body.setDirX(direction);
 		if (direction == 0) {
@@ -153,14 +153,14 @@ public final class BodyMovement {
 	/**
 	 * Y座標の目的地に向けた移動方向を更新する。
 	 * <p>
-	 * 目的地へ到達済みの場合は、既存の{@link Body#moveBody(boolean)}と同じく
+	 * 目的地へ到達済みの場合は、既存の{@link Yukkuri#moveBody(boolean)}と同じく
 	 * Y目的地を未設定値へ戻す。目的地が未設定の場合のランダム方向更新は、
 	 * 呼び出し元の分岐に残す。
 	 * </p>
 	 *
 	 * @param body 更新対象のゆっくり
 	 */
-	public static void updateDestinationDirectionY(Body body) {
+	public static void updateDestinationDirectionY(Yukkuri body) {
 		int direction = body.decideDirection(body.getY(), body.getDestY(), 0);
 		body.setDirY(direction);
 		if (direction == 0) {
@@ -177,7 +177,7 @@ public final class BodyMovement {
 	 *
 	 * @param body 更新対象のゆっくり
 	 */
-	public static void updateRandomDirectionX(Body body) {
+	public static void updateRandomDirectionX(Yukkuri body) {
 		int directionCount = body.getCountX();
 		body.setCountX(directionCount + 1);
 		if (directionCount >= getRandomDirectionLimit(body)) {
@@ -196,7 +196,7 @@ public final class BodyMovement {
 	 *
 	 * @param body 更新対象のゆっくり
 	 */
-	public static void updateRandomDirectionY(Body body) {
+	public static void updateRandomDirectionY(Yukkuri body) {
 		int directionCount = body.getCountY();
 		body.setCountY(directionCount + 1);
 		if (directionCount >= getRandomDirectionLimit(body)) {
@@ -215,7 +215,7 @@ public final class BodyMovement {
 	 * @param body 判定対象のゆっくり
 	 * @return 方向ごとの移動量に掛けるステップ
 	 */
-	public static int calculateDirectionalStep(Body body) {
+	public static int calculateDirectionalStep(Yukkuri body) {
 		if (body.isRaper() && body.isExciting()) {
 			return 2;
 		}
@@ -230,10 +230,10 @@ public final class BodyMovement {
 	 * </p>
 	 *
 	 * @param body            判定対象のゆっくり
-	 * @param directionalStep {@link #calculateDirectionalStep(Body)}で計算した方向ステップ
+	 * @param directionalStep {@link #calculateDirectionalStep(Yukkuri)}で計算した方向ステップ
 	 * @return X/Y/Z方向の移動ベクトル
 	 */
-	public static MovementVector calculateMovementVector(Body body, int directionalStep) {
+	public static MovementVector calculateMovementVector(Yukkuri body, int directionalStep) {
 		int vecX = body.getDirX() * directionalStep * body.getSpeed() / 100;
 		int vecY = body.getDirY() * directionalStep * body.getSpeed() / 100;
 		int vecZ = body.getDirZ() * directionalStep * body.getSpeed() / 100;
@@ -258,7 +258,7 @@ public final class BodyMovement {
 	 * @param body   更新対象のゆっくり
 	 * @param vector このtickの移動ベクトル
 	 */
-	public static void applyDirectedMovement(Body body, MovementVector vector) {
+	public static void applyDirectedMovement(Yukkuri body, MovementVector vector) {
 		body.setX(applyAxisMovement(body.getX(), body.getDestX(), body.getDirX(), vector.getX()));
 		body.setY(applyAxisMovement(body.getY(), body.getDestY(), body.getDirY(), vector.getY()));
 		if (body.canflyCheck()) {
@@ -271,7 +271,7 @@ public final class BodyMovement {
 	/**
 	 * 指定座標への移動先を設定する。
 	 * <p>
-	 * 既存の {@link Body#moveTo(int, int, int)} と同じく、死亡中または blocked 中なら
+	 * 既存の {@link Yukkuri#moveTo(int, int, int)} と同じく、死亡中または blocked 中なら
 	 * 何もしない。設定時はマップ範囲へ clamp する。
 	 * </p>
 	 *
@@ -280,7 +280,7 @@ public final class BodyMovement {
 	 * @param toY  Y座標
 	 * @param toZ  Z座標
 	 */
-	public static void moveTo(Body body, int toX, int toY, int toZ) {
+	public static void moveTo(Yukkuri body, int toX, int toY, int toZ) {
 		if (body.isDead()) {
 			return;
 		}
@@ -301,7 +301,7 @@ public final class BodyMovement {
 	 * @param toY    Y座標
 	 * @param toZ    Z座標
 	 */
-	public static void moveToBody(Body body, src.base.Obj target, int toX, int toY, int toZ) {
+	public static void moveToBody(Yukkuri body, src.base.Entity target, int toX, int toY, int toZ) {
 		body.clearActions();
 		body.setToBody(true);
 		body.setMoveTargetId(target.objId);
@@ -315,7 +315,7 @@ public final class BodyMovement {
 	 * @param fromX 脅威側のX座標
 	 * @param fromY 脅威側のY座標
 	 */
-	public static void runAway(Body body, int fromX, int fromY) {
+	public static void runAway(Yukkuri body, int fromX, int fromY) {
 		if (!body.canAction() || body.isExciting() || body.isAngry() || body.isUnBirth()) {
 			return;
 		}
@@ -335,7 +335,7 @@ public final class BodyMovement {
 	 *
 	 * @param body 更新対象のゆっくり
 	 */
-	public static void updateFlightDestination(Body body) {
+	public static void updateFlightDestination(Yukkuri body) {
 		if (!body.canflyCheck()) {
 			return;
 		}
@@ -354,14 +354,14 @@ public final class BodyMovement {
 	/**
 	 * 外力による移動、壁衝突、落下、着地ダメージ処理を行う。
 	 * <p>
-	 * 既存の{@link Body#moveBody(boolean)}先頭にあった物理更新をそのまま移したもの。
+	 * 既存の{@link Yukkuri#moveBody(boolean)}先頭にあった物理更新をそのまま移したもの。
 	 * 落下処理を行ったtickは、既存実装と同じくこの段階で移動処理を打ち切る。
 	 * </p>
 	 *
 	 * @param body 更新対象のゆっくり
 	 * @return このtickの移動処理をここで終了すべき場合は{@code true}
 	 */
-	public static boolean applyExternalMotion(Body body) {
+	public static boolean applyExternalMotion(Yukkuri body) {
 		int mx = body.getVx() + body.getMotionX();
 		int my = body.getVy() + body.getMotionY();
 		int mz = body.getVz() + body.getMotionZ();
@@ -430,7 +430,7 @@ public final class BodyMovement {
 	 * @param body   更新対象のゆっくり
 	 * @param vector このtickの移動ベクトル
 	 */
-	public static void resolveDirectedMovement(Body body, MovementVector vector) {
+	public static void resolveDirectedMovement(Yukkuri body, MovementVector vector) {
 		if (Barrier.onBarrier(body.getX(), body.getY(), body.getW() >> 2, body.getH() >> 3,
 				Barrier.MAP_BODY[body.getBodyAgeState().ordinal()])) {
 			revertDirectedMovement(body, vector);
@@ -444,7 +444,7 @@ public final class BodyMovement {
 		updateFacingDirection(body);
 	}
 
-	private static int getRandomDirectionLimit(Body body) {
+	private static int getRandomDirectionLimit(Yukkuri body) {
 		return body.getSameDirectionFactor() * body.getStepBase()[body.getBodyAgeState().ordinal()];
 	}
 
@@ -461,13 +461,13 @@ public final class BodyMovement {
 		return current;
 	}
 
-	private static void revertDirectedMovement(Body body, MovementVector vector) {
+	private static void revertDirectedMovement(Yukkuri body, MovementVector vector) {
 		body.setX(body.getX() - vector.getX());
 		body.setY(body.getY() - vector.getY());
 		body.setZ(body.getZ() - vector.getZ());
 	}
 
-	private static void handleWallCollision(Body body) {
+	private static void handleWallCollision(Yukkuri body) {
 		if (hasAnyDestination(body)) {
 			body.setBlockedTicks(Math.min(body.getBlockedTicks() + 1, body.getBlockedLimitBase() * 2));
 			if (body.getBlockedTicks() > body.getBlockedLimitBase()) {
@@ -496,11 +496,11 @@ public final class BodyMovement {
 		}
 	}
 
-	private static boolean hasAnyDestination(Body body) {
+	private static boolean hasAnyDestination(Yukkuri body) {
 		return body.getDestX() >= 0 || body.getDestY() >= 0 || body.getDestZ() >= 0;
 	}
 
-	private static void randomizeBlockedDirection(Body body) {
+	private static void randomizeBlockedDirection(Yukkuri body) {
 		if (GameRandom.nextBoolean()) {
 			body.setDirX(body.randomDirection(body.getDirX()));
 			return;
@@ -508,7 +508,7 @@ public final class BodyMovement {
 		body.setDirY(body.randomDirection(body.getDirY()));
 	}
 
-	private static void clearActionsForBlockedMovement(Body body) {
+	private static void clearActionsForBlockedMovement(Yukkuri body) {
 		if (body.getCurrentEvent() != null) {
 			body.clearActionsForEvent();
 			return;
@@ -516,7 +516,7 @@ public final class BodyMovement {
 		body.clearActions();
 	}
 
-	private static void handlePoolEntry(Body body, MovementVector vector) {
+	private static void handlePoolEntry(Yukkuri body, MovementVector vector) {
 		if ((Translate.getCurrentFieldMapNum(body.getX(), body.getY()) & FieldShape.FIELD_POOL) == 0) {
 			return;
 		}
@@ -536,7 +536,7 @@ public final class BodyMovement {
 		}
 	}
 
-	private static int getPoolAvoidanceRandomLimit(Body body) {
+	private static int getPoolAvoidanceRandomLimit(Yukkuri body) {
 		switch (body.getIntelligence()) {
 			case FOOL:
 				return 10;
@@ -549,7 +549,7 @@ public final class BodyMovement {
 		}
 	}
 
-	private static void clampPositionToMap(Body body) {
+	private static void clampPositionToMap(Yukkuri body) {
 		if (body.getX() < 0) {
 			body.setX(0);
 			body.setDirX(1);
@@ -569,7 +569,7 @@ public final class BodyMovement {
 		}
 	}
 
-	private static void updateFacingDirection(Body body) {
+	private static void updateFacingDirection(Yukkuri body) {
 		if (body.getDirX() == -1) {
 			body.setDirection(Direction.LEFT);
 		} else if (body.getDirX() == 1) {
@@ -577,7 +577,7 @@ public final class BodyMovement {
 		}
 	}
 
-	private static void showNoAccessoryMessageIfNeeded(Body body) {
+	private static void showNoAccessoryMessageIfNeeded(Yukkuri body) {
 		if (!body.hasOkazari() && (body.isSad() || body.isVerySad())) {
 			if (GameRandom.nextInt(10) == 0) {
 				body.setMessage(GameMessages.getMessage(body, MessagePool.Action.NoAccessory));
@@ -590,7 +590,7 @@ public final class BodyMovement {
 	 *
 	 * @param body 更新対象のゆっくり
 	 */
-	private static void applyLanding(Body body) {
+	private static void applyLanding(Yukkuri body) {
 		if (SimYukkuri.UNYO) {
 			body.changeUnyo(0, 0, (int) (body.getFalldownDamage() * 0.4 + 1));
 		}

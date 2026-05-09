@@ -9,7 +9,7 @@ import java.util.Map;
 
 import src.SimYukkuri;
 import src.util.GameRandom;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.draw.Dimension4y;
 import src.draw.ModLoader;
 import src.draw.Point4y;
@@ -23,7 +23,7 @@ import src.util.IniFileUtil;
 /**
  * うどんげ
  */
-public class Udonge extends Body {
+public class Udonge extends Yukkuri {
 	private static final long serialVersionUID = 1364675267688805223L;
 	/** うどんげのタイプ */
 	public static final int type = 1003;
@@ -156,7 +156,7 @@ public class Udonge extends Body {
 	}
 
 	/** コンストラクタ */
-	public Udonge(int initX, int initY, int initZ, AgeState initAgeState, Body p1, Body p2) {
+	public Udonge(int initX, int initY, int initZ, AgeState initAgeState, Yukkuri p1, Yukkuri p2) {
 		super(initX, initY, initZ, initAgeState, p1, p2);
 		setBoundary(boundary, braidBoundary);
 		setMsgType(YukkuriType.UDONGE);

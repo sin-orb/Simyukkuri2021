@@ -3,7 +3,7 @@ package src.logic;
 import java.awt.Color;
 
 import src.Const;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.event.EventPacket;
 import src.enums.Event;
 import src.enums.WindowType;
@@ -14,9 +14,9 @@ import src.util.GameMessages;
 import src.util.GameRandom;
 
 /**
- * {@link Body} が持つイベント状態とメッセージ状態の更新を扱う補助クラス。
+ * {@link Yukkuri} が持つイベント状態とメッセージ状態の更新を扱う補助クラス。
  * <p>
- * Phase 2 では、public API を {@link Body} 側へ残したまま、message 表示と
+ * Phase 2 では、public API を {@link Yukkuri} 側へ残したまま、message 表示と
  * action reset の副作用をこのクラスへ委譲する。
  * </p>
  */
@@ -30,7 +30,7 @@ public final class BodyEventState {
 	 * @param body    更新対象のゆっくり
 	 * @param message 表示文字列
 	 */
-	public static void setMessage(Body body, String message) {
+	public static void setMessage(Yukkuri body, String message) {
 		if (message == null || message.length() == 0) {
 			return;
 		}
@@ -49,7 +49,7 @@ public final class BodyEventState {
 	 * @param message   表示文字列
 	 * @param interrupt 割り込み可否
 	 */
-	public static void setPikoMessage(Body body, String message, boolean interrupt) {
+	public static void setPikoMessage(Yukkuri body, String message, boolean interrupt) {
 		setMessage(body, message, WindowType.NORMAL, Const.HOLDMESSAGE, interrupt, true, false);
 	}
 
@@ -61,7 +61,7 @@ public final class BodyEventState {
 	 * @param count     表示時間
 	 * @param interrupt 割り込み可否
 	 */
-	public static void setPikoMessage(Body body, String message, int count, boolean interrupt) {
+	public static void setPikoMessage(Yukkuri body, String message, int count, boolean interrupt) {
 		setMessage(body, message, WindowType.NORMAL, count, interrupt, true, false);
 	}
 
@@ -72,7 +72,7 @@ public final class BodyEventState {
 	 * @param message 表示文字列
 	 * @param count   表示時間
 	 */
-	public static void setMessage(Body body, String message, int count) {
+	public static void setMessage(Yukkuri body, String message, int count) {
 		setMessage(body, message, WindowType.NORMAL, count, false, false, false);
 	}
 
@@ -83,7 +83,7 @@ public final class BodyEventState {
 	 * @param message   表示文字列
 	 * @param interrupt 割り込み可否
 	 */
-	public static void setMessage(Body body, String message, boolean interrupt) {
+	public static void setMessage(Yukkuri body, String message, boolean interrupt) {
 		setMessage(body, message, WindowType.NORMAL, Const.HOLDMESSAGE, interrupt, false, false);
 	}
 
@@ -96,7 +96,7 @@ public final class BodyEventState {
 	 * @param interrupt 割り込み可否
 	 * @param piko      ピコピコ有無
 	 */
-	public static void setMessage(Body body, String message, int count, boolean interrupt, boolean piko) {
+	public static void setMessage(Yukkuri body, String message, int count, boolean interrupt, boolean piko) {
 		setMessage(body, message, WindowType.NORMAL, count, interrupt, piko, false);
 	}
 
@@ -107,7 +107,7 @@ public final class BodyEventState {
 	 * @param message 表示文字列
 	 * @param count   表示時間
 	 */
-	public static void setWorldEventSendMessage(Body body, String message, int count) {
+	public static void setWorldEventSendMessage(Yukkuri body, String message, int count) {
 		setMessage(body, message, WindowType.WORLD_SEND, count, true, false, false);
 	}
 
@@ -120,7 +120,7 @@ public final class BodyEventState {
 	 * @param interrupt 割り込み可否
 	 * @param piko      ピコピコ有無
 	 */
-	public static void setWorldEventResMessage(Body body, String message, int count, boolean interrupt, boolean piko) {
+	public static void setWorldEventResMessage(Yukkuri body, String message, int count, boolean interrupt, boolean piko) {
 		setMessage(body, message, WindowType.WORLD_RES, count, interrupt, piko, false);
 	}
 
@@ -131,7 +131,7 @@ public final class BodyEventState {
 	 * @param message 表示文字列
 	 * @param count   表示時間
 	 */
-	public static void setBodyEventSendMessage(Body body, String message, int count) {
+	public static void setBodyEventSendMessage(Yukkuri body, String message, int count) {
 		setMessage(body, message, WindowType.BODY_SEND, count, true, false, false);
 	}
 
@@ -144,7 +144,7 @@ public final class BodyEventState {
 	 * @param interrupt 割り込み可否
 	 * @param piko      ピコピコ有無
 	 */
-	public static void setBodyEventResMessage(Body body, String message, int count, boolean interrupt, boolean piko) {
+	public static void setBodyEventResMessage(Yukkuri body, String message, int count, boolean interrupt, boolean piko) {
 		setMessage(body, message, WindowType.BODY_RES, count, interrupt, piko, false);
 	}
 
@@ -155,7 +155,7 @@ public final class BodyEventState {
 	 * @param message 表示文字列
 	 * @param piko    ピコピコ有無
 	 */
-	public static void setNYDMessage(Body body, String message, boolean piko) {
+	public static void setNYDMessage(Yukkuri body, String message, boolean piko) {
 		setMessage(body, message, WindowType.NORMAL, Const.HOLDMESSAGE, true, piko, true);
 	}
 
@@ -170,7 +170,7 @@ public final class BodyEventState {
 	 * @param piko      ピコピコ有無
 	 * @param nyd       非ゆっくり症メッセージかどうか
 	 */
-	public static void setMessage(Body body, String message, WindowType type, int count, boolean interrupt,
+	public static void setMessage(Yukkuri body, String message, WindowType type, int count, boolean interrupt,
 			boolean piko, boolean nyd) {
 		if (!nyd && (body.isNYD() || body.isSleeping())) {
 			return;
@@ -214,7 +214,7 @@ public final class BodyEventState {
 	 * @param message 表示文字列
 	 * @param piko    ピコピコ有無
 	 */
-	public static void setNegiMessage(Body body, String message, boolean piko) {
+	public static void setNegiMessage(Yukkuri body, String message, boolean piko) {
 		setNegiMessage(body, message, Const.HOLDMESSAGE, piko);
 	}
 
@@ -226,7 +226,7 @@ public final class BodyEventState {
 	 * @param count   表示時間
 	 * @param piko    ピコピコ有無
 	 */
-	public static void setNegiMessage(Body body, String message, int count, boolean piko) {
+	public static void setNegiMessage(Yukkuri body, String message, int count, boolean piko) {
 		if (!body.isCanTalk() || body.isUnBirth()) {
 			body.setMessageTicks(0);
 			body.setMessageBuffer(null);
@@ -259,7 +259,7 @@ public final class BodyEventState {
 	 *
 	 * @param body 更新対象のゆっくり
 	 */
-	public static void clearActions(Body body) {
+	public static void clearActions(Yukkuri body) {
 		clearActionsForEvent(body);
 		if (body.getCurrentEvent() != null) {
 			body.getCurrentEvent().end(body);
@@ -280,7 +280,7 @@ public final class BodyEventState {
 	 *
 	 * @param body 更新対象のゆっくり
 	 */
-	public static void clearEvent(Body body) {
+	public static void clearEvent(Yukkuri body) {
 		if (body.getCurrentEvent() != null) {
 			body.getCurrentEvent().end(body);
 		}
@@ -295,7 +295,7 @@ public final class BodyEventState {
 	 *
 	 * @param body 更新対象のゆっくり
 	 */
-	public static void clearActionsForEvent(Body body) {
+	public static void clearActionsForEvent(Yukkuri body) {
 		body.setToSukkiri(false);
 		body.setToBed(false);
 		body.setToFood(false);
@@ -313,7 +313,7 @@ public final class BodyEventState {
 	 *
 	 * @param body 更新対象のゆっくり
 	 */
-	public static void processPendingEvents(Body body) {
+	public static void processPendingEvents(Yukkuri body) {
 		if (body.canEventResponse()) {
 			startSelectedEvent(body, selectNextEvent(body));
 			return;
@@ -329,7 +329,7 @@ public final class BodyEventState {
 	 * @param fallbackAction 通常処理が返そうとしているイベント
 	 * @return 反映後の戻り値
 	 */
-	public static Event resolveEventResultAction(Body body, Event fallbackAction) {
+	public static Event resolveEventResultAction(Yukkuri body, Event fallbackAction) {
 		EventPacket currentEvent = body.getCurrentEvent();
 		if (currentEvent == null) {
 			return fallbackAction;
@@ -347,7 +347,7 @@ public final class BodyEventState {
 	 *
 	 * @param body 更新対象のゆっくり
 	 */
-	public static void updateCurrentEvent(Body body) {
+	public static void updateCurrentEvent(Yukkuri body) {
 		EventPacket currentEvent = body.getCurrentEvent();
 		if (currentEvent == null) {
 			return;
@@ -369,7 +369,7 @@ public final class BodyEventState {
 		}
 	}
 
-	private static EventPacket selectNextEvent(Body body) {
+	private static EventPacket selectNextEvent(Yukkuri body) {
 		EventPacket nextEvent = EventLogic.checkBodyEvent(body);
 		if (nextEvent != null) {
 			return nextEvent;
@@ -377,14 +377,14 @@ public final class BodyEventState {
 		return EventLogic.checkWorldEvent(body);
 	}
 
-	private static void startSelectedEvent(Body body, EventPacket nextEvent) {
+	private static void startSelectedEvent(Yukkuri body, EventPacket nextEvent) {
 		body.setCurrentEvent(nextEvent);
 		if (nextEvent != null) {
 			nextEvent.start(body);
 		}
 	}
 
-	private static boolean shouldExecuteCurrentEvent(Body body, EventPacket currentEvent, EventPacket.UpdateState state) {
+	private static boolean shouldExecuteCurrentEvent(Yukkuri body, EventPacket currentEvent, EventPacket.UpdateState state) {
 		if (EventPacket.UpdateState.FORCE_EXEC == state) {
 			return true;
 		}
@@ -393,7 +393,7 @@ public final class BodyEventState {
 						currentEvent.getToY());
 	}
 
-	private static void resetMessageActions(Body body, boolean piko) {
+	private static void resetMessageActions(Yukkuri body, boolean piko) {
 		if (!body.isFixBack()) {
 			body.setFurifuri(false);
 		}
@@ -404,7 +404,7 @@ public final class BodyEventState {
 		body.setPikopiko(piko);
 	}
 
-	private static void applyMessageWindowStyle(Body body) {
+	private static void applyMessageWindowStyle(Yukkuri body) {
 		switch (body.getBurialState()) {
 			case NONE:
 				body.setMessageTextSize(12);

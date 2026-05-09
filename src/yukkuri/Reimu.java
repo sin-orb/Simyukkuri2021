@@ -12,7 +12,7 @@ import java.util.Map;
 
 import src.Const;
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.entity.world.bodylinked.Okazari.OkazariType;
 import src.draw.Dimension4y;
 import src.draw.ModLoader;
@@ -37,7 +37,7 @@ import src.util.IniFileUtil;
 /*****************************************************
  * れいむ。でいぶ、わさ、まりされいむはこれを継承している
  */
-public class Reimu extends Body {
+public class Reimu extends Yukkuri {
 	private static final long serialVersionUID = -7573106487924456286L;
 	/** れいむのタイプ */
 	public static final int type = 1;
@@ -194,19 +194,19 @@ public class Reimu extends Body {
 	 * @return 突然変異する際のゆっくり
 	 */
 	@Override
-	public Body checkTransform() {
+	public Yukkuri checkTransform() {
 		// 自身が突然変異可能かチェック
 		if (!canTransform())
 			return null;
 		// 大人であり、夫がいて夫がゲスではなく、自身がゲス
-		Body partner = src.util.BodyRegistry.getBodyInstance(getPartner());
+		Yukkuri partner = src.util.BodyRegistry.getBodyInstance(getPartner());
 		if (isAdult() && partner != null && !partner.isRude() && isRude()) {
 			if (GameRandom.nextInt(1000) == 0) {
 				return this;
 			}
 		}
 		// または、ゲスでいぶの子供である
-		Body mother = src.util.BodyRegistry.getBodyInstance(getMother());
+		Yukkuri mother = src.util.BodyRegistry.getBodyInstance(getMother());
 		if (!isAdult() && mother != null && mother.getType() == Deibu.type && mother.isRude()) {
 			// ゲスバカとドゲスは確実にでいぶ化
 			if ((isRude() && getIntelligence() != Intelligence.FOOL) || getAttitude() == Attitude.SUPER_SHITHEAD) {
@@ -593,7 +593,7 @@ public class Reimu extends Body {
 	}
 
 	/** コンストラクタ */
-	public Reimu(int initX, int initY, int initZ, AgeState initAgeState, Body p1, Body p2) {
+	public Reimu(int initX, int initY, int initZ, AgeState initAgeState, Yukkuri p1, Yukkuri p2) {
 		super(initX, initY, initZ, initAgeState, p1, p2);
 		setBoundary(boundary, braidBoundary);
 		setMsgType(YukkuriType.REIMU);

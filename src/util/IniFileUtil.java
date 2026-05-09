@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.draw.ModLoader;
 
 /**
@@ -24,7 +24,7 @@ public class IniFileUtil {
 	 * @param force 強制読み込みフラグ
 	 */
 	@SuppressWarnings("rawtypes")
-	public static void readIniFile(Body b, boolean force) {
+	public static void readIniFile(Yukkuri b, boolean force) {
 		Class bodyClass = b.getClass();
 		if (bodyIniConfigs.containsKey(bodyClass) && !force) {
 			// すでに読み込まれている、または強制読み込みなしの場合
@@ -379,7 +379,7 @@ public class IniFileUtil {
 	 * ゆっくり用のINIファイルを読み込む
 	 * @param b ゆっくり
 	 */
-	public static void readYukkuriIniFile(Body b) {
+	public static void readYukkuriIniFile(Yukkuri b) {
 		readYukkuriIniFile(b, false);
 	}
 
@@ -389,7 +389,7 @@ public class IniFileUtil {
 	 * @param force 強制読み込みフラグ
 	 */
 	@SuppressWarnings({"rawtypes"})
-	public static void readYukkuriIniFile(Body b, boolean force) {
+	public static void readYukkuriIniFile(Yukkuri b, boolean force) {
 		Class bodyClass = b.getClass();
 		if (yukkuriIniConfigs.containsKey(bodyClass) && !force) {
 			// すでに読み込まれている、または強制読み込みなしの場合
@@ -484,7 +484,7 @@ public class IniFileUtil {
 		}
 	}
 	
-	private static void setFirstPersonName(Body b) {
+	private static void setFirstPersonName(Yukkuri b) {
 		int previousNameIndex = -1;
 		//一人称設定
 		if (b.getBabyNames() != null && 0 < b.getBabyNames().length) {

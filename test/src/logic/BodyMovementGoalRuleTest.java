@@ -18,10 +18,10 @@ class BodyMovementGoalRuleTest {
 		body.setLockmove(false);
 		assertFalse(BodyMovementGoalRule.isLockmove(body));
 
-		body.setPullAndPush(true);
-		assertTrue(BodyMovementGoalRule.isPullAndPush(body));
-		body.setPullAndPush(false);
-		assertFalse(BodyMovementGoalRule.isPullAndPush(body));
+		body.setCanPullOrPush(true);
+		assertTrue(BodyMovementGoalRule.canPullOrPush(body));
+		body.setCanPullOrPush(false);
+		assertFalse(BodyMovementGoalRule.canPullOrPush(body));
 
 		body.setTargetBind(true);
 		assertTrue(BodyMovementGoalRule.isTargetBind(body));

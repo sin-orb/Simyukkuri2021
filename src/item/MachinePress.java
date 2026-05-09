@@ -10,9 +10,9 @@ import java.io.IOException;
 import src.SimYukkuri;
 import src.util.GameRandom;
 import src.util.GameWorld;
-import src.base.Body;
-import src.base.Obj;
-import src.base.ObjEX;
+import src.base.Yukkuri;
+import src.base.Entity;
+import src.base.WorldEntity;
 import src.draw.ModLoader;
 import src.draw.Rectangle4y;
 import src.enums.Happiness;
@@ -25,11 +25,11 @@ import src.system.MessagePool;
 /***************************************************
  * プレス機
  */
-public class MachinePress extends ObjEX {
+public class MachinePress extends WorldEntity {
 
 	private static final long serialVersionUID = 5340736342470019134L;
 	/** 処理対象(ゆっくり、うんうん、吐餡) */
-	public static final int hitCheckObjType = ObjEX.YUKKURI | ObjEX.SHIT | ObjEX.VOMIT;
+	public static final int hitCheckObjType = WorldEntity.YUKKURI | WorldEntity.SHIT | WorldEntity.VOMIT;
 	private static final int IMAGE_COUNT = 8; // このクラスの総使用画像数
 	private static int[] animationFrameCounts = { 8 };// アニメごとに何枚使うか
 	private static BufferedImage[] imageLayers = new BufferedImage[IMAGE_COUNT + 1];
@@ -75,9 +75,9 @@ public class MachinePress extends ObjEX {
 	}
 
 	@Override
-	public int objHitProcess(Obj o) {
+	public int objHitProcess(Entity o) {
 		if (o.getObjType() == Type.YUKKURI) {
-			Body p = (Body) o;
+			Yukkuri p = (Yukkuri) o;
 			if (!p.isDead() && p.isNotNYD() && GameRandom.nextInt(5) == 0) {
 				p.setHappiness(Happiness.VERY_SAD);
 				p.setForceFace(ImageCode.CRYING.ordinal());
@@ -111,7 +111,7 @@ public class MachinePress extends ObjEX {
 		setCollisionSize(getPivotX(), 8);
 		GameWorld.get().getCurrentMap().getMachinePress().put(objId, this);
 		objType = Type.FIX_OBJECT;
-		objEXType = WorldEntityKind.MACHINEPRESS;
+		worldEntityType = WorldEntityKind.MACHINEPRESS;
 
 		value = 500000;
 		cost = 1500;

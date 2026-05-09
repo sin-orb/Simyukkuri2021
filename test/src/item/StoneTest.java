@@ -4,14 +4,14 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterEach;
 import src.base.ItemTestBase;
-import src.base.ObjEX;
-import src.base.ObjEX.ItemRank;
+import src.base.WorldEntity;
+import src.base.WorldEntity.ItemRank;
 import src.SimYukkuri;
 import src.draw.Translate;
 import src.enums.WorldEntityKind;
 import src.enums.Type;
 import src.enums.CriticalDamegeType;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.util.WorldTestHelper;
 import src.yukkuri.Marisa;
 import static org.junit.jupiter.api.Assertions.*;
@@ -36,7 +36,7 @@ class StoneTest extends ItemTestBase {
         Stone stone = new Stone(100, 200, 0);
         assertNotNull(stone);
         assertEquals(ItemRank.HOUSE, stone.getItemRank());
-        assertEquals(WorldEntityKind.STONE, stone.getObjEXType());
+        assertEquals(WorldEntityKind.STONE, stone.getWorldEntityType());
         assertEquals(Type.OBJECT, stone.getObjType());
         assertEquals(0, stone.getValue());
         assertEquals(0, stone.getCost());
@@ -145,12 +145,12 @@ class StoneTest extends ItemTestBase {
     @Test
     void testGetHitCheckObjType() {
         Stone stone = new Stone();
-        assertEquals(ObjEX.YUKKURI, stone.getHitCheckObjType());
+        assertEquals(WorldEntity.YUKKURI, stone.getHitCheckObjType());
     }
 
     @Test
     void testHitCheckObjTypeConstant() {
-        assertEquals(ObjEX.YUKKURI, Stone.hitCheckObjType);
+        assertEquals(WorldEntity.YUKKURI, Stone.hitCheckObjType);
     }
 
     // ---------------------------------------------------------------
@@ -203,33 +203,33 @@ class StoneTest extends ItemTestBase {
     @Test
     void testObjHitProcess_BodyWithCUT_returnsZero() {
         Stone stone = new Stone(100, 100, 0);
-        Body body = WorldTestHelper.createBody();
+        Yukkuri body = WorldTestHelper.createBody();
         body.setCriticalDamege(CriticalDamegeType.CUT);
         int result = stone.objHitProcess(body);
         assertEquals(0, result);
     }
 
     // ---------------------------------------------------------------
-    // objHitProcess - non-Body 引数 -> 0 を返す
+    // objHitProcess - non-Yukkuri 引数 -> 0 を返す
     // ---------------------------------------------------------------
     @Test
     void testObjHitProcess_NonBody_returnsZero() {
         Stone stone = new Stone(100, 100, 0);
-        // Trash は Obj だが Body ではない
+        // Trash は Entity だが Yukkuri ではない
         Trash trash = new Trash(50, 50, 0);
         int result = stone.objHitProcess(trash);
         assertEquals(0, result);
     }
 
     // ---------------------------------------------------------------
-    // objHitProcess - Body (adult, CriticalDamege=INJURED -> bodyInjure 呼び出し)
+    // objHitProcess - Yukkuri (adult, CriticalDamege=INJURED -> bodyInjure 呼び出し)
     // bodyInjure/bodyCut は MyPane に依存するためスキップし、
     // 既に CUT が設定されているケースをテストする
     // ---------------------------------------------------------------
     @Test
     void testObjHitProcess_AdultBody_INJURED_returnZero() {
         Stone stone = new Stone(100, 100, 0);
-        Body body = WorldTestHelper.createBody();
+        Yukkuri body = WorldTestHelper.createBody();
         // CUT に設定すると bodyInjure/bodyCut を呼ばずに 0 を返す分岐に入る
         body.setCriticalDamege(CriticalDamegeType.CUT);
         int result = stone.objHitProcess(body);
@@ -237,8 +237,8 @@ class StoneTest extends ItemTestBase {
     }
 
     // ---------------------------------------------------------------
-    // objHitProcess - Body (null CriticalDamege, ADULT) は GUI 依存なのでスキップ
-    // 代わりに再度 non-Body パターンをカバー
+    // objHitProcess - Yukkuri (null CriticalDamege, ADULT) は GUI 依存なのでスキップ
+    // 代わりに再度 non-Yukkuri パターンをカバー
     // ---------------------------------------------------------------
     @Test
     void testObjHitProcess_AnotherNonBody() {
@@ -258,7 +258,7 @@ class StoneTest extends ItemTestBase {
     }
 
     // ---------------------------------------------------------------
-    // ObjEX 共通メソッド群
+    // WorldEntity 共通メソッド群
     // ---------------------------------------------------------------
     @Test
     void testCheckInterval() {
@@ -361,7 +361,7 @@ class StoneTest extends ItemTestBase {
     }
 
     // ---------------------------------------------------------------
-    // Obj 継承メソッド群
+    // Entity 継承メソッド群
     // ---------------------------------------------------------------
     @Test
     void testGetX_GetY() {
@@ -466,14 +466,14 @@ class StoneTest extends ItemTestBase {
     @Test
     void testGetObjEXType() {
         Stone stone = new Stone(100, 100, 0);
-        assertEquals(WorldEntityKind.STONE, stone.getObjEXType());
+        assertEquals(WorldEntityKind.STONE, stone.getWorldEntityType());
     }
 
     @Test
     void testSetObjEXType() {
         Stone stone = new Stone();
         stone.setObjEXType(WorldEntityKind.TRASH);
-        assertEquals(WorldEntityKind.TRASH, stone.getObjEXType());
+        assertEquals(WorldEntityKind.TRASH, stone.getWorldEntityType());
     }
 
     @Test

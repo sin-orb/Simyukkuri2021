@@ -6,9 +6,9 @@ import java.util.List;
 
 import src.SimYukkuri;
 import src.util.GameRandom;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.event.EventPacket;
-import src.base.Obj;
+import src.base.Entity;
 import src.draw.Translate;
 import src.enums.GatheringDirection;
 import src.enums.Happiness;
@@ -21,9 +21,9 @@ import src.system.ResourceUtil;
 
 /***************************************************
  * すーぱーむーしゃむーしゃたいむイベント
- * protected Body from; // イベントを発した個体
- * protected Body to; // 未使用
- * protected Obj target; // 移動先
+ * protected Yukkuri from; // イベントを発した個体
+ * protected Yukkuri to; // 未使用
+ * protected Entity target; // 移動先
  * protected int count; // 10
  */
 public class SuperEatingTimeEvent extends EventPacket {
@@ -51,7 +51,7 @@ public class SuperEatingTimeEvent extends EventPacket {
 	/**
 	 * コンストラクタ.
 	 */
-	public SuperEatingTimeEvent(Body f, Body t, Obj tgt, int cnt) {
+	public SuperEatingTimeEvent(Yukkuri f, Yukkuri t, Entity tgt, int cnt) {
 		super(f, t, tgt, cnt);
 		priority = EventPriority.HIGH;
 	}
@@ -77,8 +77,8 @@ public class SuperEatingTimeEvent extends EventPacket {
 	}
 
 	@Override
-	public boolean simpleEventAction(Body b) {
-		Body from = src.util.BodyRegistry.getBodyInstance(getFrom());
+	public boolean simpleEventAction(Yukkuri b) {
+		Yukkuri from = src.util.BodyRegistry.getBodyInstance(getFrom());
 		if (from == null || from.isShutmouth()) {
 			return true;
 		}
@@ -89,8 +89,8 @@ public class SuperEatingTimeEvent extends EventPacket {
 	// ここで各種チェックを行い、イベントへ参加するかを返す
 	// また、イベント優先度も必要に応じて設定できる
 	@Override
-	public boolean checkEventResponse(Body b) {
-		Body from = src.util.BodyRegistry.getBodyInstance(getFrom());
+	public boolean checkEventResponse(Yukkuri b) {
+		Yukkuri from = src.util.BodyRegistry.getBodyInstance(getFrom());
 		if (from == null)
 			return false;
 		if (from == b && !(b.isShutmouth())) {
@@ -131,7 +131,7 @@ public class SuperEatingTimeEvent extends EventPacket {
 
 	// イベント開始動作
 	@Override
-	public void start(Body b) {
+	public void start(Yukkuri b) {
 		b.setCurrentEvent(this);
 	}
 
@@ -155,9 +155,9 @@ public class SuperEatingTimeEvent extends EventPacket {
 	// trueを返すとイベント終了
 	// 親→子供→次のステート、の順で処理をする
 	@Override
-	public UpdateState update(Body b) {
+	public UpdateState update(Yukkuri b) {
 		b.clearActionsForEvent();
-		Body from = src.util.BodyRegistry.getBodyInstance(getFrom());
+		Yukkuri from = src.util.BodyRegistry.getBodyInstance(getFrom());
 		if (b == null || from == null) {
 			return UpdateState.ABORT;
 		}
@@ -172,7 +172,7 @@ public class SuperEatingTimeEvent extends EventPacket {
 		if (from.isRemoved())
 			return UpdateState.ABORT;
 		// ターゲットが消えてしまったらイベント中断
-		Obj target = b.takeMappedObj(this.target);
+		Entity target = b.takeMappedObj(this.target);
 		if (target == null || target.isRemoved()) {
 			from.setMessage(GameMessages.getMessage(from, MessagePool.Action.NoFood));
 			from.setHappiness(Happiness.VERY_SAD);
@@ -208,14 +208,14 @@ public class SuperEatingTimeEvent extends EventPacket {
 			}
 			waitTicks++;
 			// 子ゆがいなければ終了
-			List<Body> childrenList = BodyLogic.createActiveChildList(from, true);
+			List<Yukkuri> childrenList = BodyLogic.createActiveChildList(from, true);
 			if ((childrenList == null) || (childrenList.size() == 0)) {
 				return UpdateState.ABORT;
 			}
 
 			// 最小歩幅の設定と、子ゆがイベント中かのチェック
 			boolean childInEvent = false;
-			for (Body child : childrenList) {
+			for (Yukkuri child : childrenList) {
 				int step = child.getStep();
 				if (minimumStep == 0 || step < minimumStep) {
 					minimumStep = step;
@@ -232,7 +232,7 @@ public class SuperEatingTimeEvent extends EventPacket {
 			}
 
 			// 番の設定
-			Body partner = src.util.BodyRegistry.getBodyInstance(from.getPartner());
+			Yukkuri partner = src.util.BodyRegistry.getBodyInstance(from.getPartner());
 			if (partner == from) {
 				partner = null;
 			}
@@ -242,9 +242,9 @@ public class SuperEatingTimeEvent extends EventPacket {
 			switch (state) {
 				case WAIT:// ごはんさんをたべにいくよ！みんなあつまってね！
 					// 家族を集める
-					gathered = BodyLogic.gatheringYukkuriSquare(from, childrenList.toArray(new Body[0]),
+					gathered = BodyLogic.gatheringYukkuriSquare(from, childrenList.toArray(new Yukkuri[0]),
 							GatheringDirection.DOWN, this);
-					for (Body childBody : childrenList) {
+					for (Yukkuri childBody : childrenList) {
 						if (childBody != null) {
 							// 他に用事があれば除外
 							childBody.setMoveTargetId(-1);
@@ -278,12 +278,12 @@ public class SuperEatingTimeEvent extends EventPacket {
 				case GO:// ごはんさんのにおいがするよ！
 					// 移動開始
 					gathered = BodyLogic.gatheringYukkuriBackLine(from, childrenList, this);
-					for (Body childBody : childrenList) {
+					for (Yukkuri childBody : childrenList) {
 						// 他に用事があれば除外
 						childBody.setMoveTargetId(-1);
 						childBody.wakeup();
 					}
-					Body firstChild = childrenList.get(0);
+					Yukkuri firstChild = childrenList.get(0);
 					int distance = Translate.getRealDistance(b.getX(), b.getY(), firstChild.getX(), firstChild.getY());
 					int colXChild = Math.abs(BodyLogic.calcCollisionX(b, firstChild));
 					// 一定距離を保つ
@@ -324,9 +324,9 @@ public class SuperEatingTimeEvent extends EventPacket {
 					break;
 				case START_BEFORE:// ごはんの上に集合
 					b.stay();
-					gathered = BodyLogic.gatheringYukkuriSquare(target, childrenList.toArray(new Body[0]),
+					gathered = BodyLogic.gatheringYukkuriSquare(target, childrenList.toArray(new Yukkuri[0]),
 							GatheringDirection.UP, this);
-					for (Body childBody : childrenList) {
+					for (Yukkuri childBody : childrenList) {
 						// 他に用事があれば除外
 						childBody.setMoveTargetId(-1);
 						childBody.wakeup();
@@ -344,7 +344,7 @@ public class SuperEatingTimeEvent extends EventPacket {
 							partner.addMemories(1);
 						}
 						// 子ゆの処理
-						for (Body childBody : childrenList) {
+						for (Yukkuri childBody : childrenList) {
 							if (childBody != null) {
 								childBody.setMessage(GameMessages.getMessage(b, MessagePool.Action.SuperEatingTime));
 								childBody.setHappiness(Happiness.VERY_HAPPY);
@@ -379,7 +379,7 @@ public class SuperEatingTimeEvent extends EventPacket {
 						}
 					}
 
-					for (Body childBody : childrenList) {
+					for (Yukkuri childBody : childrenList) {
 						if (childBody != null) {
 							childBody.wakeup();
 							if (childBody.getHungryLimit() * 10 / 100 > childBody.getHungry()) {
@@ -508,7 +508,7 @@ public class SuperEatingTimeEvent extends EventPacket {
 	// イベント目標に到着した際に呼ばれる
 	// trueを返すとイベント終了
 	@Override
-	public boolean execute(Body b) {
+	public boolean execute(Yukkuri b) {
 		return false;
 	}
 

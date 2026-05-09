@@ -2,8 +2,8 @@ package src.system;
 
 import src.SimYukkuri;
 import src.util.GameWorld;
-import src.base.Body;
-import src.base.Obj;
+import src.base.Yukkuri;
+import src.base.Entity;
 /**
  * プレイヤーの所持金
  */
@@ -20,7 +20,7 @@ public class Cash {
 	 * @param item アイテム
 	 * @return アイテムの金額
 	 */
-	public static long buyItem(Obj item) {
+	public static long buyItem(Entity item) {
 		addCash(-item.getValue());
 		return item.getValue();
 	}
@@ -29,7 +29,7 @@ public class Cash {
 	 * @param body ゆっくり
 	 * @return ゆっくりの金額
 	 */
-	public static long buyYukkuri(Body body) {
+	public static long buyYukkuri(Yukkuri body) {
 		int val = 0;
 		val = body.getCost();
 		switch(body.getBodyAgeState()) {
@@ -51,7 +51,7 @@ public class Cash {
 	 * @param body ゆっくり
 	 * @return ゆっくりの金額
 	 */
-	public static long sellYukkuri(Body body) {
+	public static long sellYukkuri(Yukkuri body) {
 		int val = 0;
 		//工業製品として出荷
 		//加工品チェック

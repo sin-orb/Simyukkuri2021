@@ -8,7 +8,7 @@ import java.io.File;
 import java.io.IOException;
 
 import src.attachment.Attachment;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.draw.ModLoader;
 import src.enums.AgeState;
 import src.enums.AttachProperty;
@@ -75,14 +75,14 @@ public class Ants extends Attachment {
 
 	@Override
 	protected Event update() {
-		Body pa = src.util.BodyRegistry.getBodyInstance(parent);
+		Yukkuri pa = src.util.BodyRegistry.getBodyInstance(parent);
 		if (pa == null) return Event.DONOTHING;
 		pa.beEaten((pa.getAntCount()/3), 0, false);
 		return Event.DONOTHING;
 	}
 
 	@Override
-	public BufferedImage getImage(Body b) {
+	public BufferedImage getImage(Yukkuri b) {
 		int ants = b.getAntCount();
 		if(ants>= b.getDamageLimit()*2/3) {
 			return images[b.getBodyAgeState().ordinal()][2];
@@ -95,7 +95,7 @@ public class Ants extends Attachment {
 
 	@Override
 	public void resetBoundary(){
-		Body pa = src.util.BodyRegistry.getBodyInstance(parent);
+		Yukkuri pa = src.util.BodyRegistry.getBodyInstance(parent);
 		if (pa == null) return;
 		setBoundary(pivX[pa.getBodyAgeState().ordinal()],
 					pivY[pa.getBodyAgeState().ordinal()],
@@ -106,10 +106,10 @@ public class Ants extends Attachment {
 	/**コンストラクタ
 	 * @param body 装着されるゆっくり
 	 */
-	public Ants(Body body) {
+	public Ants(Yukkuri body) {
 		super(body);
 		setAttachProperty(property, POS_KEY);
-		Body pa = src.util.BodyRegistry.getBodyInstance(parent);
+		Yukkuri pa = src.util.BodyRegistry.getBodyInstance(parent);
 		if (pa != null)  {
 			setBoundary(pivX[pa.getBodyAgeState().ordinal()],
 					pivY[pa.getBodyAgeState().ordinal()],

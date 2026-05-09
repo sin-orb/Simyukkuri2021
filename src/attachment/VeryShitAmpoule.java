@@ -8,7 +8,7 @@ import java.io.File;
 import java.io.IOException;
 
 import src.attachment.Attachment;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.draw.ModLoader;
 import src.enums.AgeState;
 import src.enums.AttachProperty;
@@ -81,7 +81,7 @@ public class VeryShitAmpoule extends Attachment {
 
 	@Override
 	protected Event update() {
-		Body pa = src.util.BodyRegistry.getBodyInstance(parent);
+		Yukkuri pa = src.util.BodyRegistry.getBodyInstance(parent);
 		if (pa == null) return Event.DONOTHING;
 		if (pa.isDead()) {
 			// 死んだゆっくりはうんうんしない
@@ -97,8 +97,8 @@ public class VeryShitAmpoule extends Attachment {
 		return Event.DONOTHING;
 	}
 	@Override
-	public BufferedImage getImage(Body b) {
-		Body pa = src.util.BodyRegistry.getBodyInstance(parent);
+	public BufferedImage getImage(Yukkuri b) {
+		Yukkuri pa = src.util.BodyRegistry.getBodyInstance(parent);
 		if (pa == null) return null;
 		if(b.getDirection() == Direction.RIGHT) {
 			return images[pa.getBodyAgeState().ordinal()][1];
@@ -108,7 +108,7 @@ public class VeryShitAmpoule extends Attachment {
 	@Override
 	public void resetBoundary()
 	{
-		Body pa = src.util.BodyRegistry.getBodyInstance(parent);
+		Yukkuri pa = src.util.BodyRegistry.getBodyInstance(parent);
 		if (pa != null) {
 			setBoundary(pivX[pa.getBodyAgeState().ordinal()],
 					pivY[pa.getBodyAgeState().ordinal()],
@@ -120,10 +120,10 @@ public class VeryShitAmpoule extends Attachment {
 	 * コンストラクタ
 	 * @param body 装着されるゆっくり
 	 */
-	public VeryShitAmpoule(Body body) {
+	public VeryShitAmpoule(Yukkuri body) {
 		super(body);
 		setAttachProperty(property, POS_KEY);
-		Body pa = src.util.BodyRegistry.getBodyInstance(parent);
+		Yukkuri pa = src.util.BodyRegistry.getBodyInstance(parent);
 		if (pa != null) {
 			setBoundary(pivX[pa.getBodyAgeState().ordinal()],
 					pivY[pa.getBodyAgeState().ordinal()],

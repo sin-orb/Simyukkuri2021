@@ -5,9 +5,9 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.base.ItemTestBase;
-import src.base.ObjEX.ItemRank;
+import src.base.WorldEntity.ItemRank;
 import src.enums.Event;
 import src.game.Shit;
 import src.game.Vomit;
@@ -440,7 +440,7 @@ class YunbaTest extends ItemTestBase {
         flags[Action.BODY_REMOVE.ordinal()][2] = true;
         item.setActionFlags(flags);
 
-        Body deadBody = WorldTestHelper.createBody();
+        Yukkuri deadBody = WorldTestHelper.createBody();
         deadBody.setDead(true);
         deadBody.setX(110); deadBody.setY(110);
         SimYukkuri.world.getCurrentMap().getBody().put(deadBody.getObjId(), deadBody);
@@ -645,7 +645,7 @@ class YunbaTest extends ItemTestBase {
     void testClockTick_NearDeadBody_BodyRemove_DoesNotThrow() {
         Yunba item = createNearActionYunba(100, 100);
         item.setAction(Action.BODY_REMOVE);
-        Body deadBody = WorldTestHelper.createBody();
+        Yukkuri deadBody = WorldTestHelper.createBody();
         deadBody.setDead(true);
         deadBody.setX(100); deadBody.setY(100);
         SimYukkuri.world.getCurrentMap().getBody().put(deadBody.getObjId(), deadBody);
@@ -659,7 +659,7 @@ class YunbaTest extends ItemTestBase {
     void testClockTick_NearDirtyBody_Clean_DoesNotThrow() {
         Yunba item = createNearActionYunba(100, 100);
         item.setAction(Action.CLEAN);
-        Body dirtyBody = WorldTestHelper.createBody();
+        Yukkuri dirtyBody = WorldTestHelper.createBody();
         dirtyBody.setDirty(true);
         dirtyBody.setX(100); dirtyBody.setY(100);
         SimYukkuri.world.getCurrentMap().getBody().put(dirtyBody.getObjId(), dirtyBody);
@@ -673,7 +673,7 @@ class YunbaTest extends ItemTestBase {
     void testClockTick_NearDamagedBody_Heal_DoesNotThrow() {
         Yunba item = createNearActionYunba(100, 100);
         item.setAction(Action.HEAL);
-        Body damagedBody = WorldTestHelper.createBody();
+        Yukkuri damagedBody = WorldTestHelper.createBody();
         WorldTestHelper.setDamage(damagedBody, 1);
         damagedBody.setX(100); damagedBody.setY(100);
         SimYukkuri.world.getCurrentMap().getBody().put(damagedBody.getObjId(), damagedBody);
@@ -714,7 +714,7 @@ class YunbaTest extends ItemTestBase {
         Yunba item = createNearActionYunba(100, 100);
         item.setAction(Action.DESTROY);
         item.setKillCheck(true); // strikeByPress path
-        Body targetBody = WorldTestHelper.createBody();
+        Yukkuri targetBody = WorldTestHelper.createBody();
         targetBody.setX(100); targetBody.setY(100);
         SimYukkuri.world.getCurrentMap().getBody().put(targetBody.getObjId(), targetBody);
         item.setTarget(targetBody);
@@ -727,7 +727,7 @@ class YunbaTest extends ItemTestBase {
     void testClockTick_NearSickBody_Kabi_DoesNotThrow() {
         Yunba item = createNearActionYunba(100, 100);
         item.setAction(Action.KABI);
-        Body sickBody = WorldTestHelper.createBody();
+        Yukkuri sickBody = WorldTestHelper.createBody();
         sickBody.setX(100); sickBody.setY(100);
         SimYukkuri.world.getCurrentMap().getBody().put(sickBody.getObjId(), sickBody);
         item.setTarget(sickBody);
@@ -751,7 +751,7 @@ class YunbaTest extends ItemTestBase {
         flags[Action.CLEAN.ordinal()][2] = true;
         item.setActionFlags(flags);
 
-        Body dirtyBody = WorldTestHelper.createBody();
+        Yukkuri dirtyBody = WorldTestHelper.createBody();
         dirtyBody.setDirty(true);
         dirtyBody.setX(110); dirtyBody.setY(110);
         SimYukkuri.world.getCurrentMap().getBody().put(dirtyBody.getObjId(), dirtyBody);

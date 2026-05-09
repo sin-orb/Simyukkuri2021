@@ -9,7 +9,7 @@ import java.util.Map;
 
 import src.SimYukkuri;
 import src.util.GameRandom;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.draw.Dimension4y;
 import src.draw.ModLoader;
 import src.draw.Point4y;
@@ -24,7 +24,7 @@ import src.util.IniFileUtil;
 /**
  * ちるの
  */
-public class Chiruno extends Body {
+public class Chiruno extends Yukkuri {
 
 	private static final long serialVersionUID = 6876159012304634289L;
 	/** ちるののタイプ */
@@ -153,7 +153,7 @@ public class Chiruno extends Body {
 	}
 
 	/** コンストラクタ */
-	public Chiruno(int initX, int initY, int initZ, AgeState initAgeState, Body p1, Body p2) {
+	public Chiruno(int initX, int initY, int initZ, AgeState initAgeState, Yukkuri p1, Yukkuri p2) {
 		super(initX, initY, initZ, initAgeState, p1, p2);
 		setBoundary(boundary, braidBoundary);
 		setMsgType(YukkuriType.CHIRUNO);

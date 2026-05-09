@@ -17,7 +17,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.effect.Effect;
 import src.event.EventPacket;
 import src.entity.world.bodylinked.Okazari;
@@ -189,7 +189,7 @@ class MapPlaceDataTest {
     @Test
     void testSetGetBody() {
         MapPlaceData data = new MapPlaceData(0);
-        Map<Integer, Body> m = new HashMap<>();
+        Map<Integer, Yukkuri> m = new HashMap<>();
         data.setBody(m);
         assertEquals(m, data.getBody());
     }

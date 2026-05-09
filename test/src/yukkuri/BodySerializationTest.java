@@ -9,7 +9,7 @@ public class BodySerializationTest {
 
     @Test
     public void testBodyAttributesSerialization() throws IOException {
-        // 1. Instantiate a Reimu object (Body subclass)
+        // 1. Instantiate a Reimu object (Yukkuri subclass)
         Reimu reimu = new Reimu();
         reimu.setX(0);
         reimu.setY(0);

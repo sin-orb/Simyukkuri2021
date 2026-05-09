@@ -11,7 +11,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import src.ConstState;
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.draw.World;
 import src.enums.AgeState;
 import src.enums.BurialState;
@@ -45,8 +45,8 @@ public class GadgetToolTest {
     }
 
     /** Reimu実体を生成・Sprite初期化・ワールドに登録する */
-    private Body createReimuBody(AgeState age) {
-        Body b = new Reimu();
+    private Yukkuri createReimuBody(AgeState age) {
+        Yukkuri b = new Reimu();
         Sprite[] spr = new Sprite[3];
         Sprite[] expSpr = new Sprite[3];
         Sprite[] brdSpr = new Sprite[3];
@@ -72,7 +72,7 @@ public class GadgetToolTest {
 
         @Test
         public void testDoGodHandDoesNothingWhenDead() {
-            Body b = createReimuBody(AgeState.ADULT);
+            Yukkuri b = createReimuBody(AgeState.ADULT);
             b.setDead(true);
             boolean rapistBefore = b.isRapist();
             boolean[] flagsBefore = b.getAbFlagGodHand().clone();
@@ -86,7 +86,7 @@ public class GadgetToolTest {
 
         @Test
         public void testCase0RapistToggleWhenCannotTransform() {
-            // StubBody(getType()=0) は Body.judgeCanTransForGodHand()=false を返す
+            // StubBody(getType()=0) は Yukkuri.judgeCanTransForGodHand()=false を返す
             // Reimuは judgeCanTransForGodHand()=true でexecTransformはmypaneが必要
             // → Reimu + BurialState で isUnBirth=false なのでtrue → execTransformでNPE
             // → Body基底クラスのjudgeCanTransForGodHandはfalseを返す
@@ -113,7 +113,7 @@ public class GadgetToolTest {
 
         @Test
         public void testCase1BodyCut() {
-            Body b = createReimuBody(AgeState.ADULT);
+            Yukkuri b = createReimuBody(AgeState.ADULT);
             ConstState cs = new ConstState(1);
             SimYukkuri.RND = cs;
             // BurialState.ALL にしてaddVomitをスキップ
@@ -129,7 +129,7 @@ public class GadgetToolTest {
 
         @Test
         public void testCase2Stretch() {
-            Body b = createReimuBody(AgeState.ADULT);
+            Yukkuri b = createReimuBody(AgeState.ADULT);
             ConstState cs = new ConstState(2);
             SimYukkuri.RND = cs;
 
@@ -144,7 +144,7 @@ public class GadgetToolTest {
 
         @Test
         public void testCase2StretchFromCompress() {
-            Body b = createReimuBody(AgeState.ADULT);
+            Yukkuri b = createReimuBody(AgeState.ADULT);
             ConstState cs = new ConstState(2);
             SimYukkuri.RND = cs;
 
@@ -162,7 +162,7 @@ public class GadgetToolTest {
 
         @Test
         public void testCase3Compress() {
-            Body b = createReimuBody(AgeState.ADULT);
+            Yukkuri b = createReimuBody(AgeState.ADULT);
             ConstState cs = new ConstState(3);
             SimYukkuri.RND = cs;
 
@@ -177,7 +177,7 @@ public class GadgetToolTest {
 
         @Test
         public void testCase3CompressFromStretch() {
-            Body b = createReimuBody(AgeState.ADULT);
+            Yukkuri b = createReimuBody(AgeState.ADULT);
             ConstState cs = new ConstState(3);
             SimYukkuri.RND = cs;
 
@@ -195,7 +195,7 @@ public class GadgetToolTest {
 
         @Test
         public void testCase4Heal() {
-            Body b = createReimuBody(AgeState.ADULT);
+            Yukkuri b = createReimuBody(AgeState.ADULT);
             ConstState cs = new ConstState(4);
             SimYukkuri.RND = cs;
 
@@ -212,7 +212,7 @@ public class GadgetToolTest {
 
         @Test
         public void testCase5LanguageBreakReimu() {
-            Body b = createReimuBody(AgeState.ADULT);
+            Yukkuri b = createReimuBody(AgeState.ADULT);
             ConstState cs = new ConstState(5);
             SimYukkuri.RND = cs;
 
@@ -226,7 +226,7 @@ public class GadgetToolTest {
 
         @Test
         public void testDefaultKickAndInflate() {
-            Body b = createReimuBody(AgeState.ADULT);
+            Yukkuri b = createReimuBody(AgeState.ADULT);
             ConstState cs = new ConstState(6);
             SimYukkuri.RND = cs;
 
@@ -239,7 +239,7 @@ public class GadgetToolTest {
 
         @Test
         public void testDefaultSecondTimeExplosion() {
-            Body b = createReimuBody(AgeState.ADULT);
+            Yukkuri b = createReimuBody(AgeState.ADULT);
             ConstState cs = new ConstState(7);
             SimYukkuri.RND = cs;
 

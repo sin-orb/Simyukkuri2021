@@ -9,7 +9,7 @@ import java.util.Map;
 
 import src.SimYukkuri;
 import src.util.GameRandom;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.entity.world.bodylinked.Okazari;
 import src.entity.world.bodylinked.Okazari.OkazariType;
 import src.draw.Dimension4y;
@@ -26,7 +26,7 @@ import src.util.IniFileUtil;
 /**
  * たりないゆ
  */
-public class Tarinai extends Body {
+public class Tarinai extends Yukkuri {
 	private static final long serialVersionUID = 1862934023339026324L;
 	/** たりないゆのタイプ */
 	public static final int type = 2000;
@@ -160,7 +160,7 @@ public class Tarinai extends Body {
 	}
 
 	/** コンストラクタ */
-	public Tarinai(int initX, int initY, int initZ, AgeState initAgeState, Body p1, Body p2) {
+	public Tarinai(int initX, int initY, int initZ, AgeState initAgeState, Yukkuri p1, Yukkuri p2) {
 		super(initX, initY, initZ, initAgeState, p1, p2);
 		setBoundary(boundary, braidBoundary);
 		setMsgType(YukkuriType.TARINAI);

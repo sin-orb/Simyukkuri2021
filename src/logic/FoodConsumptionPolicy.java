@@ -1,6 +1,6 @@
 package src.logic;
 
-import src.base.Body;
+import src.base.Yukkuri;
 import src.enums.BodyRank;
 import src.enums.Happiness;
 import src.item.Food.FoodType;
@@ -20,7 +20,7 @@ public final class FoodConsumptionPolicy {
 	private FoodConsumptionPolicy() {
 	}
 
-	public static void eatFood(Body b, FoodType foodType, int amount) {
+	public static void eatFood(Yukkuri b, FoodType foodType, int amount) {
 		if (b.isDead()) {
 			return;
 		}
@@ -78,7 +78,7 @@ public final class FoodConsumptionPolicy {
 	};
 
 	// バカ舌状態でのリアクション
-	private static final void poorEating(Body b, FoodType type) {
+	private static final void poorEating(Yukkuri b, FoodType type) {
 		switch (type) {
 		case SHIT:// うんうん
 			b.setHappiness(Happiness.SAD);
@@ -210,7 +210,7 @@ public final class FoodConsumptionPolicy {
 		case WASTE_YASEI:
 			b.setHappiness(Happiness.AVERAGE);
 			b.setMessage(GameMessages.getMessage(b, MessagePool.Action.Eating));
-			b.addDirtyPeriod(Body.TICK * 4);
+			b.addDirtyPeriod(Yukkuri.TICK * 4);
 			b.addStress(-100);
 			b.addTang(-30);
 			b.addMemories(-1);
@@ -239,7 +239,7 @@ public final class FoodConsumptionPolicy {
 	}
 
 	// 普通状態でのリアクション
-	private static final void normalEating(Body b, FoodType type) {
+	private static final void normalEating(Yukkuri b, FoodType type) {
 		switch (type) {
 		case SHIT:
 			b.setHappiness(Happiness.SAD);
@@ -374,7 +374,7 @@ public final class FoodConsumptionPolicy {
 			b.setHappiness(Happiness.SAD);
 			b.setMessage(GameMessages.getMessage(b, MessagePool.Action.EatingBadtasting));
 			b.setStrike(true);
-			b.addDirtyPeriod(Body.TICK * 4);
+			b.addDirtyPeriod(Yukkuri.TICK * 4);
 			b.addStress(100);
 			b.addTang(-30);
 			b.addMemories(-1);
@@ -404,7 +404,7 @@ public final class FoodConsumptionPolicy {
 	}
 
 	// 肥え状態でのリアクション
-	private static final void gourmetEating(Body b, FoodType type) {
+	private static final void gourmetEating(Yukkuri b, FoodType type) {
 		switch (type) {
 		case SHIT:
 			b.setHappiness(Happiness.VERY_SAD);
@@ -538,7 +538,7 @@ public final class FoodConsumptionPolicy {
 		case WASTE_YASEI:
 			b.setHappiness(Happiness.VERY_SAD);
 			b.setMessage(GameMessages.getMessage(b, MessagePool.Action.Eating));
-			b.addDirtyPeriod(Body.TICK * 4);
+			b.addDirtyPeriod(Yukkuri.TICK * 4);
 			b.addStress(0);
 			b.addTang(-30);
 			b.addMemories(-1);

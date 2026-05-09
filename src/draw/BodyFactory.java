@@ -4,7 +4,7 @@ import java.util.function.BooleanSupplier;
 import java.util.function.Consumer;
 
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.enums.AgeState;
 import src.enums.YukkuriType;
 import src.game.Dna;
@@ -23,11 +23,11 @@ public final class BodyFactory {
 	 */
 	@FunctionalInterface
 	public interface FamilyLinker {
-		void link(Body mama, Body papa, Body child);
+		void link(Yukkuri mama, Yukkuri papa, Yukkuri child);
 	}
 
 	/**
-	 * Body を生成する.
+	 * Yukkuri を生成する.
 	 *
 	 * @param x 発生場所X座標
 	 * @param y 発生場所Y座標
@@ -40,15 +40,15 @@ public final class BodyFactory {
 	 * @param buildNewFamily 家族を新規作成するか
 	 * @param imageLoader 画像読み込み要求を受ける callback
 	 * @param dosMaker DOS個体を生成するかどうかの callback
-	 * @return 生成された Body
+	 * @return 生成された Yukkuri
 	 */
-	public static Body create(int x, int y, int z, int type, Dna dna, AgeState age, Body p1, Body p2,
+	public static Yukkuri create(int x, int y, int z, int type, Dna dna, AgeState age, Yukkuri p1, Yukkuri p2,
 			boolean buildNewFamily, Consumer<YukkuriType> imageLoader, BooleanSupplier dosMaker) {
 		return create(x, y, z, type, dna, age, p1, p2, buildNewFamily, imageLoader, dosMaker, null);
 	}
 
 	/**
-	 * Body を生成する.
+	 * Yukkuri を生成する.
 	 *
 	 * @param x 発生場所X座標
 	 * @param y 発生場所Y座標
@@ -62,17 +62,17 @@ public final class BodyFactory {
 	 * @param imageLoader 画像読み込み要求を受ける callback
 	 * @param dosMaker DOS個体を生成するかどうかの callback
 	 * @param familyLinker 家族関係の接続 callback
-	 * @return 生成された Body
+	 * @return 生成された Yukkuri
 	 */
-	public static Body create(int x, int y, int z, int type, Dna dna, AgeState age, Body p1, Body p2,
+	public static Yukkuri create(int x, int y, int z, int type, Dna dna, AgeState age, Yukkuri p1, Yukkuri p2,
 			boolean buildNewFamily, Consumer<YukkuriType> imageLoader, BooleanSupplier dosMaker,
 			FamilyLinker familyLinker) {
-		Body papa = p2;
-		Body mama = p1;
+		Yukkuri papa = p2;
+		Yukkuri mama = p1;
 		if (papa == null && dna != null) {
 			papa = src.util.BodyRegistry.getBodyInstance(dna.getFather());
 		}
-		Body body;
+		Yukkuri body;
 		switch (type) {
 			case Marisa.type:
 				imageLoader.accept(YukkuriType.MARISA);
@@ -223,7 +223,7 @@ public final class BodyFactory {
 		return body;
 	}
 
-	private static void applyBodyPostProcess(Body body, Dna dna, Body mama, Body papa, boolean buildNewFamily,
+	private static void applyBodyPostProcess(Yukkuri body, Dna dna, Yukkuri mama, Yukkuri papa, boolean buildNewFamily,
 			FamilyLinker familyLinker) {
 		if (dna != null) {
 			if (dna.getAttitude() != null) {
@@ -239,7 +239,7 @@ public final class BodyFactory {
 		}
 	}
 
-	private static void applyNagasiMode(Body body, Body mama, Body papa) {
+	private static void applyNagasiMode(Yukkuri body, Yukkuri mama, Yukkuri papa) {
 		if (SimYukkuri.NAGASI_MODE == 2) {
 			int parentCount = 0;
 			if (mama != null && mama.isImageNagasiMode()) {

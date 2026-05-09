@@ -11,7 +11,7 @@ import java.util.Map;
 import src.SimYukkuri;
 import src.util.GameRandom;
 import src.util.GameWorld;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.command.GadgetAction;
 import src.draw.Dimension4y;
 import src.draw.ModLoader;
@@ -30,7 +30,7 @@ import src.util.IniFileUtil;
 /**
  * ありす
  */
-public class Alice extends Body {
+public class Alice extends Yukkuri {
 
 	private static final long serialVersionUID = -2849085882014396337L;
 	/** ありすのタイプNo：2 */
@@ -285,7 +285,7 @@ public class Alice extends Body {
 	/**
 	 * コンストラクタ
 	 */
-	public Alice(int initX, int initY, int initZ, AgeState initAgeState, Body p1, Body p2) {
+	public Alice(int initX, int initY, int initZ, AgeState initAgeState, Yukkuri p1, Yukkuri p2) {
 		super(initX, initY, initZ, initAgeState, p1, p2);
 		setBoundary(boundary, braidBoundary);
 		setMsgType(YukkuriType.ALICE);

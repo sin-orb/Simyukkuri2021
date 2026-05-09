@@ -11,8 +11,8 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import src.Const;
-import src.base.Body;
-import src.base.Obj;
+import src.base.Yukkuri;
+import src.base.Entity;
 import src.draw.ModLoader;
 import src.draw.Translate;
 import src.enums.AgeState;
@@ -28,7 +28,7 @@ import src.system.ResourceUtil;
 /**
  * うんうんのクラス.
  */
-public class Shit extends Obj {
+public class Shit extends Entity {
 
 	private static final long serialVersionUID = 8099262268179611867L;
 	// public variables
@@ -169,7 +169,7 @@ public class Shit extends Obj {
 	 * @param b     うんうんしたゆっくり
 	 * @param type  うんうんタイプ
 	 */
-	public Shit(int initX, int initY, int initZ, Body b, YukkuriType type) {
+	public Shit(int initX, int initY, int initZ, Yukkuri b, YukkuriType type) {
 		objId = Numbering.INSTANCE.numberingObjId();
 		objType = Type.SHIT;
 		shitType = type.ordinal();

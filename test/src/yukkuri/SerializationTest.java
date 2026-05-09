@@ -9,7 +9,7 @@ import java.util.zip.GZIPOutputStream;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import src.base.Body;
+import src.base.Yukkuri;
 
 public class SerializationTest {
 
@@ -82,7 +82,7 @@ public class SerializationTest {
         }
     }
 
-    private static void saveYukkuri(Body body, File file) throws IOException {
+    private static void saveYukkuri(Yukkuri body, File file) throws IOException {
         ObjectMapper mapper = new ObjectMapper();
         // Configure mapper if needed (e.g., allow private field access if we weren't
         // using annotations)

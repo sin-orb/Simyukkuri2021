@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.draw.World;
 import src.enums.AgeState;
 import src.enums.Direction;
@@ -48,7 +48,7 @@ public class OrangeAmpouleTest {
 
     @Test
     public void testConstructorDefaultsAndBoundary() {
-        Body parent = createParent(AgeState.CHILD);
+        Yukkuri parent = createParent(AgeState.CHILD);
         OrangeAmpoule ampoule = new OrangeAmpoule(parent);
 
         assertEquals(parent.getUniqueID(), ampoule.getParent());
@@ -71,7 +71,7 @@ public class OrangeAmpouleTest {
 
     @Test
     public void testUpdateReducesDamage() {
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         OrangeAmpoule ampoule = new OrangeAmpoule(parent);
 
         // ダメージを設定
@@ -86,7 +86,7 @@ public class OrangeAmpouleTest {
 
     @Test
     public void testUpdateDoesNotReviveWhenCrushed() {
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         OrangeAmpoule ampoule = new OrangeAmpoule(parent);
 
         parent.setDead(true);
@@ -100,7 +100,7 @@ public class OrangeAmpouleTest {
 
     @Test
     public void testUpdateDoesNotReviveWhenBurned() {
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         OrangeAmpoule ampoule = new OrangeAmpoule(parent);
 
         parent.setDead(true);
@@ -114,7 +114,7 @@ public class OrangeAmpouleTest {
 
     @Test
     public void testGetImageReturnsNullWhenParentNotInMap() {
-        Body parent = createParent(AgeState.CHILD);
+        Yukkuri parent = createParent(AgeState.CHILD);
         OrangeAmpoule ampoule = new OrangeAmpoule(parent);
 
         SimYukkuri.world.getCurrentMap().getBody().remove(parent.getUniqueID());
@@ -125,7 +125,7 @@ public class OrangeAmpouleTest {
 
     @Test
     public void testGetImageReturnsLeftImageWhenDirectionLeft() {
-        Body parent = createParent(AgeState.CHILD);
+        Yukkuri parent = createParent(AgeState.CHILD);
         OrangeAmpoule ampoule = new OrangeAmpoule(parent);
 
         parent.setDirection(Direction.LEFT);
@@ -136,7 +136,7 @@ public class OrangeAmpouleTest {
 
     @Test
     public void testGetImageReturnsRightImageWhenDirectionRight() {
-        Body parent = createParent(AgeState.CHILD);
+        Yukkuri parent = createParent(AgeState.CHILD);
         OrangeAmpoule ampoule = new OrangeAmpoule(parent);
 
         parent.setDirection(Direction.RIGHT);
@@ -147,9 +147,9 @@ public class OrangeAmpouleTest {
 
     @Test
     public void testGetImageReturnsCorrectImageForAge() {
-        Body babyParent = createParent(AgeState.BABY);
-        Body childParent = createParent(AgeState.CHILD);
-        Body adultParent = createParent(AgeState.ADULT);
+        Yukkuri babyParent = createParent(AgeState.BABY);
+        Yukkuri childParent = createParent(AgeState.CHILD);
+        Yukkuri adultParent = createParent(AgeState.ADULT);
 
         OrangeAmpoule babyAmpoule = new OrangeAmpoule(babyParent);
         OrangeAmpoule childAmpoule = new OrangeAmpoule(childParent);
@@ -166,7 +166,7 @@ public class OrangeAmpouleTest {
 
     @Test
     public void testResetBoundaryUsesParentAge() {
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         OrangeAmpoule ampoule = new OrangeAmpoule(parent);
 
         ampoule.resetBoundary();
@@ -179,7 +179,7 @@ public class OrangeAmpouleTest {
 
     @Test
     public void testResetBoundaryDoesNothingWhenParentNotInMap() {
-        Body parent = createParent(AgeState.CHILD);
+        Yukkuri parent = createParent(AgeState.CHILD);
         OrangeAmpoule ampoule = new OrangeAmpoule(parent);
 
         int origPivotX = ampoule.getPivotX();
@@ -195,7 +195,7 @@ public class OrangeAmpouleTest {
 
     @Test
     public void testToStringUsesResourceUtil() {
-        Body parent = createParent(AgeState.BABY);
+        Yukkuri parent = createParent(AgeState.BABY);
         OrangeAmpoule ampoule = new OrangeAmpoule(parent);
 
         assertEquals(ResourceUtil.getInstance().read("item_orange"), ampoule.toString());
@@ -209,7 +209,7 @@ public class OrangeAmpouleTest {
 
     @Test
     public void testConstructorWithParentNotInWorld() {
-        Body parent = new Reimu();
+        Yukkuri parent = new Reimu();
         parent.setAgeState(AgeState.CHILD);
         OrangeAmpoule ampoule = new OrangeAmpoule(parent);
         assertEquals(500, ampoule.getValue());
@@ -218,7 +218,7 @@ public class OrangeAmpouleTest {
 
     @Test
     public void testUpdateRevivesWhenDeadNotCrushedNotBurned() {
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         OrangeAmpoule ampoule = new OrangeAmpoule(parent);
 
         parent.addDamage(parent.getDamageLimit() + 100);
@@ -234,7 +234,7 @@ public class OrangeAmpouleTest {
 
     @Test
     public void testUpdateReducesDamageWhenAlive() {
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         OrangeAmpoule ampoule = new OrangeAmpoule(parent);
 
         parent.addDamage(1000);
@@ -246,8 +246,8 @@ public class OrangeAmpouleTest {
         assertTrue(parent.getDamage() < damageBefore);
     }
 
-    private static Body createParent(AgeState ageState) {
-        Body parent = new Reimu();
+    private static Yukkuri createParent(AgeState ageState) {
+        Yukkuri parent = new Reimu();
         parent.setAgeState(ageState);
         parent.setMsgType(YukkuriType.REIMU);
         Sprite[] spr = new Sprite[3];
@@ -281,7 +281,7 @@ public class OrangeAmpouleTest {
 
         @Test
         void testScenario_DeadNonBurnedBodyRevivesAndRecoversDamage() {
-            Body parent = createParent(AgeState.ADULT);
+            Yukkuri parent = createParent(AgeState.ADULT);
             OrangeAmpoule ampoule = new OrangeAmpoule(parent);
             parent.addDamage(parent.getDamageLimit() + 500);
             parent.setDead(true);
@@ -299,7 +299,7 @@ public class OrangeAmpouleTest {
 
         @Test
         void testScenario_BurnedCorpseDoesNotReviveOrRecoverDamage() {
-            Body parent = createParent(AgeState.ADULT);
+            Yukkuri parent = createParent(AgeState.ADULT);
             OrangeAmpoule ampoule = new OrangeAmpoule(parent);
             parent.addDamage(1000);
             parent.setDead(true);

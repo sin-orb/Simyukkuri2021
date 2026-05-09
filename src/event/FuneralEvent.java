@@ -7,9 +7,9 @@ import java.util.List;
 import src.Const;
 import src.SimYukkuri;
 import src.util.GameRandom;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.event.EventPacket;
-import src.base.Obj;
+import src.base.Entity;
 import src.enums.Happiness;
 import src.enums.ImageCode;
 import src.enums.PublicRank;
@@ -20,9 +20,9 @@ import src.system.ResourceUtil;
 
 /***************************************************
  * 葬式イベント
- * protected Body from; // イベントを発した個体
- * protected Body to; // 弔われる個体
- * protected Obj target; // 未使用
+ * protected Yukkuri from; // イベントを発した個体
+ * protected Yukkuri to; // 弔われる個体
+ * protected Entity target; // 未使用
  * protected int count; // 10
  */
 public class FuneralEvent extends EventPacket {
@@ -51,7 +51,7 @@ public class FuneralEvent extends EventPacket {
 	/**
 	 * コンストラクタ.
 	 */
-	public FuneralEvent(Body f, Body t, Obj tgt, int cnt) {
+	public FuneralEvent(Yukkuri f, Yukkuri t, Entity tgt, int cnt) {
 		super(f, t, tgt, cnt);
 		priority = EventPriority.HIGH;
 	}
@@ -92,8 +92,8 @@ public class FuneralEvent extends EventPacket {
 	}
 
 	@Override
-	public boolean simpleEventAction(Body b) {
-		Body from = src.util.BodyRegistry.getBodyInstance(getFrom());
+	public boolean simpleEventAction(Yukkuri b) {
+		Yukkuri from = src.util.BodyRegistry.getBodyInstance(getFrom());
 		if (from == null || from.isShutmouth()) {
 			return true;
 		}
@@ -107,8 +107,8 @@ public class FuneralEvent extends EventPacket {
 	// ここで各種チェックを行い、イベントへ参加するかを返す
 	// また、イベント優先度も必要に応じて設定できる
 	@Override
-	public boolean checkEventResponse(Body b) {
-		Body from = src.util.BodyRegistry.getBodyInstance(getFrom());
+	public boolean checkEventResponse(Yukkuri b) {
+		Yukkuri from = src.util.BodyRegistry.getBodyInstance(getFrom());
 		if (from.getUniqueID() == b.getUniqueID()) {
 			return true;
 		}
@@ -145,7 +145,7 @@ public class FuneralEvent extends EventPacket {
 
 	// イベント開始動作
 	@Override
-	public void start(Body b) {
+	public void start(Yukkuri b) {
 		b.setCurrentEvent(this);
 	}
 
@@ -161,8 +161,8 @@ public class FuneralEvent extends EventPacket {
 	// "UpdateState.ABORT"を返すとイベント終了
 	// 親→子供→次のステート、の順で処理をする
 	@Override
-	public UpdateState update(Body b) {
-		Body from = src.util.BodyRegistry.getBodyInstance(getFrom());
+	public UpdateState update(Yukkuri b) {
+		Yukkuri from = src.util.BodyRegistry.getBodyInstance(getFrom());
 		// イベント中止
 		if (b == null || from == null) {
 			return UpdateState.ABORT;
@@ -241,13 +241,13 @@ public class FuneralEvent extends EventPacket {
 			}
 			fromWaitCount++;
 			// 子のみ集合
-			List<Body> childrenList = BodyLogic.createActiveChildList(from, false);
+			List<Yukkuri> childrenList = BodyLogic.createActiveChildList(from, false);
 			if ((childrenList == null) || (childrenList.size() == 0)) {
 				return UpdateState.ABORT;
 			}
 			if (10 < fromWaitCount) {
 			boolean childInEvent = false;
-				for (Body child : childrenList) {
+				for (Yukkuri child : childrenList) {
 					if (child.getCurrentEvent() == this) {
 						childInEvent = true;
 						break;
@@ -351,7 +351,7 @@ public class FuneralEvent extends EventPacket {
 									true,
 									false);
 							b.getInVain(false);
-							Body to = src.util.BodyRegistry.getBodyInstance(getTo());
+							Yukkuri to = src.util.BodyRegistry.getBodyInstance(getTo());
 							if (to != null) {
 								to.takeOkazari(false);
 								actionFlag = true;
@@ -398,7 +398,7 @@ public class FuneralEvent extends EventPacket {
 					break;
 				case FIND:
 					if (checkWait(b, waitTicks)) {
-						Body to = src.util.BodyRegistry.getBodyInstance(getTo());
+						Yukkuri to = src.util.BodyRegistry.getBodyInstance(getTo());
 						if (to != null) {
 							if (to.isElderSister(b)) {
 								b.setBodyEventResMessage(
@@ -494,12 +494,12 @@ public class FuneralEvent extends EventPacket {
 	// イベント目標に到着した際に呼ばれる
 	// trueを返すとイベント終了
 	@Override
-	public boolean execute(Body b) {
+	public boolean execute(Yukkuri b) {
 		return false;
 	}
 
 	@Override
-	public void end(Body b) {
+	public void end(Yukkuri b) {
 		b.setCurrentEvent(null);
 		return;
 	}

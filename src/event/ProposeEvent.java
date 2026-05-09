@@ -4,9 +4,9 @@ import src.util.GameText;
 
 import src.SimYukkuri;
 import src.util.GameRandom;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.event.EventPacket;
-import src.base.Obj;
+import src.base.Entity;
 import src.enums.Happiness;
 import src.enums.ImageCode;
 import src.enums.Intelligence;
@@ -16,9 +16,9 @@ import src.system.ResourceUtil;
 
 /***************************************************
  * プロポーズイベント
- * protected Body from; // イベントを発した個体
- * protected Body to; // 結婚対象
- * protected Obj target; // 未使用
+ * protected Yukkuri from; // イベントを発した個体
+ * protected Yukkuri to; // 結婚対象
+ * protected Entity target; // 未使用
  * protected int count; // 1
  */
 public class ProposeEvent extends EventPacket {
@@ -30,7 +30,7 @@ public class ProposeEvent extends EventPacket {
 	/**
 	 * コンストラクタ.
 	 */
-	public ProposeEvent(Body f, Body t, Obj tgt, int cnt) {
+	public ProposeEvent(Yukkuri f, Yukkuri t, Entity tgt, int cnt) {
 		super(f, t, tgt, cnt);
 		priority = EventPriority.HIGH;
 	}
@@ -57,9 +57,9 @@ public class ProposeEvent extends EventPacket {
 
 	// 参加チェック
 	@Override
-	public boolean checkEventResponse(Body body) {
-		Body targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
-		Body sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
+	public boolean checkEventResponse(Yukkuri body) {
+		Yukkuri targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
+		Yukkuri sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
 		if (body == sourceBody || body == targetBody)
 			return true;
 
@@ -68,9 +68,9 @@ public class ProposeEvent extends EventPacket {
 
 	// イベント開始動作
 	@Override
-	public void start(Body body) {
-		Body targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
-		Body sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
+	public void start(Yukkuri body) {
+		Yukkuri targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
+		Yukkuri sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
 		if (targetBody != null && sourceBody != null) {
 			targetBody.wakeup();
 			sourceBody.setCurrentEvent(this);
@@ -87,9 +87,9 @@ public class ProposeEvent extends EventPacket {
 	// 毎フレーム処理
 	// UpdateState.ABORTを返すとイベント終了
 	@Override
-	public UpdateState update(Body body) {
-		Body targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
-		Body sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
+	public UpdateState update(Yukkuri body) {
+		Yukkuri targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
+		Yukkuri sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
 		if (sourceBody == null || targetBody == null || sourceBody.isDead() || sourceBody.isRemoved() || sourceBody.isNYD())
 			return UpdateState.ABORT;
 		// 相手が死んだか 相手が消えてしまったか非ゆっくり症発症したか取られたらイベント中断
@@ -176,9 +176,9 @@ public class ProposeEvent extends EventPacket {
 	// イベント目標に到着した際に呼ばれる
 	// trueを返すとイベント終了
 	@Override
-	public boolean execute(Body body) {
-		Body targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
-		Body sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
+	public boolean execute(Yukkuri body) {
+		Yukkuri targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
+		Yukkuri sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
 		if (targetBody == null || sourceBody == null)
 			return true;
 		// to から呼ばれた場合は tick を進めない（2倍速防止）
@@ -380,7 +380,7 @@ public class ProposeEvent extends EventPacket {
 	 * @param t プロポーズされた側
 	 * @return プロポーズ成功かどうか
 	 */
-	public boolean acceptPropose(Body f, Body t) {
+	public boolean acceptPropose(Yukkuri f, Yukkuri t) {
 		// 既婚
 		if (src.util.BodyRegistry.getBodyInstance(t.getPartner()) != null)
 			return false;
@@ -399,9 +399,9 @@ public class ProposeEvent extends EventPacket {
 
 	// イベント終了処理
 	@Override
-	public void end(Body body) {
-		Body targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
-		Body sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
+	public void end(Yukkuri body) {
+		Yukkuri targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
+		Yukkuri sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
 		if (sourceBody != null) {
 			sourceBody.setCalm();
 			sourceBody.setCurrentEvent(null);

@@ -8,7 +8,7 @@ import java.io.IOException;
 
 import src.SimYukkuri;
 import src.util.GameWorld;
-import src.base.ObjEX;
+import src.base.WorldEntity;
 import src.draw.ModLoader;
 import src.draw.Rectangle4y;
 import src.enums.WorldEntityKind;
@@ -17,7 +17,7 @@ import src.enums.Type;
 /***************************************************
  * がらくた
  */
-public class Trash extends ObjEX {
+public class Trash extends WorldEntity {
 
 	private static final long serialVersionUID = 4386384968548796846L;
 	private static BufferedImage[] images = new BufferedImage[2];
@@ -75,7 +75,7 @@ public class Trash extends ObjEX {
 		setCollisionSize(getPivotX(), getPivotY());
 		GameWorld.get().getCurrentMap().getTrash().put(objId, this);
 		objType = Type.OBJECT;
-		objEXType = WorldEntityKind.TRASH;
+		worldEntityType = WorldEntityKind.TRASH;
 
 		value = 0;
 		cost = 0;

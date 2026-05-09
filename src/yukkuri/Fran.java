@@ -10,7 +10,7 @@ import java.util.Map;
 
 import src.SimYukkuri;
 import src.util.GameRandom;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.draw.Dimension4y;
 import src.draw.ModLoader;
 import src.draw.Point4y;
@@ -31,7 +31,7 @@ import src.util.IniFileUtil;
 /**
  * ふらん
  */
-public class Fran extends Body {
+public class Fran extends Yukkuri {
 	private static final long serialVersionUID = -7839169741238599190L;
 	/** ふらんのタイプ */
 	public static final int type = 3001;
@@ -235,7 +235,7 @@ public class Fran extends Body {
 	}
 
 	/** コンストラクタ */
-	public Fran(int initX, int initY, int initZ, AgeState initAgeState, Body p1, Body p2) {
+	public Fran(int initX, int initY, int initZ, AgeState initAgeState, Yukkuri p1, Yukkuri p2) {
 		super(initX, initY, initZ, initAgeState, p1, p2);
 		setBoundary(boundary, braidBoundary);
 		setMsgType(YukkuriType.FRAN);

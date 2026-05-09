@@ -3,7 +3,7 @@ package src.system;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeAll;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.enums.*;
 import src.draw.Point4y;
 import src.draw.World;
@@ -73,9 +73,9 @@ public class MessagePoolTest {
     }
 
     /**
-     * テスト用の最小限の Body 実装.
+     * テスト用の最小限の Yukkuri 実装.
      */
-    static class DummyBody extends Body {
+    static class DummyBody extends Yukkuri {
         private String customName = "れいむ";
         private int customDamage = 0;
         private Attitude customAttitude = Attitude.AVERAGE;

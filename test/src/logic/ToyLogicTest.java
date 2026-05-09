@@ -12,8 +12,8 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
-import src.base.Body;
-import src.base.Obj;
+import src.base.Yukkuri;
+import src.base.Entity;
 import src.enums.Attitude;
 import src.enums.CoreAnkoState;
 import src.enums.FavItemType;
@@ -28,7 +28,7 @@ import src.util.WorldTestHelper;
 
 class ToyLogicTest {
 
-    private Body body;
+    private Yukkuri body;
 
     @BeforeEach
     void setUp() {
@@ -61,9 +61,9 @@ class ToyLogicTest {
     @org.junit.jupiter.api.Disabled("Failing due to complex state requirements not met by test setup")
     @Test
     void testCheckToy_WithToy() {
-        Toy toy = new Toy(150, 150, src.base.ObjEX.ItemRank.HOUSE.ordinal());
+        Toy toy = new Toy(150, 150, src.base.WorldEntity.ItemRank.HOUSE.ordinal());
         // Toy constructor check:
-        // Toy extends ObjEX. ObjEX(x, y, option).
+        // Toy extends WorldEntity. WorldEntity(x, y, option).
         // Toy might not have specific constructor. Using generic if needed.
         // Actually Toy.java might have its own.
         // Assuming Toy(int x, int y, int type) or similar.
@@ -115,7 +115,7 @@ class ToyLogicTest {
         }
         assertTrue(result);
         assertTrue(body.getMoveTargetId() != -1);
-        Obj target = SimYukkuri.world.getCurrentMap().getToy().get(body.getMoveTargetId());
+        Entity target = SimYukkuri.world.getCurrentMap().getToy().get(body.getMoveTargetId());
         assertTrue(target instanceof Toy);
     }
 
@@ -192,10 +192,10 @@ class ToyLogicTest {
     @Test
     void testCanPlay_HasCurrentEventReturnsFalse() {
         body.setCurrentEvent(new src.event.EventPacket(){
-            public boolean checkEventResponse(src.base.Body b){ return false; }
-            public void start(src.base.Body b){}
-            public UpdateState update(src.base.Body b){ return null; }
-            public boolean execute(src.base.Body b){ return true; }
+            public boolean checkEventResponse(src.base.Yukkuri b){ return false; }
+            public void start(src.base.Yukkuri b){}
+            public UpdateState update(src.base.Yukkuri b){ return null; }
+            public boolean execute(src.base.Yukkuri b){ return true; }
             public String toString(){ return "test"; }
         });
         assertFalse(ToyLogic.canPlay(body));
@@ -210,7 +210,7 @@ class ToyLogicTest {
         toy.setX(100); toy.setY(100);
         toy.setObjId(8888);
         SimYukkuri.world.getCurrentMap().getToy().put(toy.getObjId(), toy);
-        // Body at (100,100), toy at (100,100) → minDistance <= stepDist → owns toy
+        // Yukkuri at (100,100), toy at (100,100) → minDistance <= stepDist → owns toy
         org.junit.jupiter.api.Assertions.assertDoesNotThrow(() -> ToyLogic.checkToy(body));
     }
 
@@ -399,7 +399,7 @@ class ToyLogicTest {
 
     @Test
     void testCheckToy_GrabbedAndInAir_SetOwnerNull() {
-        Body other = WorldTestHelper.createBody();
+        Yukkuri other = WorldTestHelper.createBody();
         Toy toy = new Toy();
         toy.setX(body.getX()); toy.setY(body.getY());
         toy.setObjId(4441);
@@ -440,7 +440,7 @@ class ToyLogicTest {
 
     @Test
     void testCheckToy_FavBall_InAir_OtherOwner_Rude() {
-        Body other = WorldTestHelper.createBody();
+        Yukkuri other = WorldTestHelper.createBody();
         Toy toy = new Toy();
         toy.setX(body.getX()); toy.setY(body.getY());
         toy.setObjId(4444);
@@ -457,7 +457,7 @@ class ToyLogicTest {
 
     @Test
     void testCheckToy_FavBall_InAir_OtherOwner_NotRude() {
-        Body other = WorldTestHelper.createBody();
+        Yukkuri other = WorldTestHelper.createBody();
         Toy toy = new Toy();
         toy.setX(body.getX()); toy.setY(body.getY());
         toy.setObjId(4445);
@@ -473,7 +473,7 @@ class ToyLogicTest {
 
     @Test
     void testCheckToy_FavBall_OutOfRange_OtherOwner_Rude() {
-        Body other = WorldTestHelper.createBody();
+        Yukkuri other = WorldTestHelper.createBody();
         Toy toy = new Toy();
         // within eyesight (dist²<16M) but outside stepDist (dist²>4 for CHILD)
         toy.setX(body.getX()); toy.setY(body.getY() + 50);
@@ -489,7 +489,7 @@ class ToyLogicTest {
 
     @Test
     void testCheckToy_FavBall_OutOfRange_OtherOwner_NotRude() {
-        Body other = WorldTestHelper.createBody();
+        Yukkuri other = WorldTestHelper.createBody();
         Toy toy = new Toy();
         toy.setX(body.getX()); toy.setY(body.getY() + 50);
         toy.setObjId(4447);
@@ -535,7 +535,7 @@ class ToyLogicTest {
 
     @Test
     void testCheckSui_NoCanBind_NonFamily_Skip() {
-        Body other = WorldTestHelper.createBody();
+        Yukkuri other = WorldTestHelper.createBody();
         Sui sui = new Sui(body.getX(), body.getY(), 0);
         sui.setBindobj(other); // NoCanBind()=(bindobj!=null)=true; other is not family
         SimYukkuri.world.getCurrentMap().getSui().put(sui.getObjId(), sui);
@@ -588,7 +588,7 @@ class ToyLogicTest {
 
     @Test
     void testCheckSui_BindBodyOther() {
-        Body other = WorldTestHelper.createBody();
+        Yukkuri other = WorldTestHelper.createBody();
         Sui sui = new Sui(body.getX(), body.getY(), 0);
         sui.setBindobj(other);
         SimYukkuri.world.getCurrentMap().getSui().put(sui.getObjId(), sui);
@@ -736,7 +736,7 @@ class ToyLogicTest {
 
     @Test
     void testCheckToy_InAir_FavBall_AgeNotMult20() {
-        Body other = WorldTestHelper.createBody();
+        Yukkuri other = WorldTestHelper.createBody();
         Toy toy = new Toy();
         toy.setX(body.getX()); toy.setY(body.getY()); toy.setObjId(2050);
         toy.setZ(10); toy.setOwner(other);
@@ -758,7 +758,7 @@ class ToyLogicTest {
 
     @Test
     void testCheckToy_OutOfRange_FavBall_AgeNotMult20() {
-        Body other = WorldTestHelper.createBody();
+        Yukkuri other = WorldTestHelper.createBody();
         Toy toy = new Toy();
         toy.setX(body.getX()); toy.setY(body.getY() + 50); toy.setObjId(2052);
         toy.setOwner(other);
@@ -782,7 +782,7 @@ class ToyLogicTest {
 
     @Test
     void testCheckToy_InAir_FavBall_Talking() {
-        Body other = WorldTestHelper.createBody();
+        Yukkuri other = WorldTestHelper.createBody();
         Toy toy = new Toy();
         toy.setX(body.getX()); toy.setY(body.getY()); toy.setObjId(2060);
         toy.setZ(10); toy.setOwner(other);
@@ -804,7 +804,7 @@ class ToyLogicTest {
 
     @Test
     void testCheckToy_OutOfRange_FavBall_Talking() {
-        Body other = WorldTestHelper.createBody();
+        Yukkuri other = WorldTestHelper.createBody();
         Toy toy = new Toy();
         toy.setX(body.getX()); toy.setY(body.getY() + 50); toy.setObjId(2062);
         toy.setOwner(other);
@@ -848,7 +848,7 @@ class ToyLogicTest {
 
     @Test
     void testCheckSui_BindBodyOther_Talking() {
-        Body other = WorldTestHelper.createBody();
+        Yukkuri other = WorldTestHelper.createBody();
         Sui sui = new Sui(body.getX(), body.getY(), 0);
         sui.setBindobj(other);
         SimYukkuri.world.getCurrentMap().getSui().put(sui.getObjId(), sui);

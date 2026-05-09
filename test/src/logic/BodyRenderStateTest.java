@@ -10,7 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.entity.world.bodylinked.Okazari;
 import src.base.StubBody;
 import src.draw.World;
@@ -79,7 +79,7 @@ class BodyRenderStateTest {
 	@Test
 	void getBodyBaseImageUsesCrushedImageWhenCrushedWithoutAccessory() throws Exception {
 		body.setCrushed(true);
-		setField(body, "okazari", null);
+		body.setOkazari(null);
 
 		BodyRenderState.getBodyBaseImage(body, layer);
 

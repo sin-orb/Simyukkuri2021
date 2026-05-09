@@ -3,7 +3,7 @@ package src.command;
 import java.util.LinkedList;
 import java.util.List;
 
-import src.base.Body;
+import src.base.Yukkuri;
 import src.command.GadgetMenu.GadgetList;
 import src.game.Shit;
 import src.game.Stalk;
@@ -53,21 +53,21 @@ final class GadgetCleanupAction {
 				break;
 		}
 
-		List<Body> bodyList = new LinkedList<Body>(GameWorld.get().getCurrentMap().getBody().values());
+		List<Yukkuri> bodyList = new LinkedList<Yukkuri>(GameWorld.get().getCurrentMap().getBody().values());
 		List<Shit> shitList = new LinkedList<Shit>(GameWorld.get().getCurrentMap().getShit().values());
 		List<Vomit> vomitList = new LinkedList<Vomit>(GameWorld.get().getCurrentMap().getVomit().values());
 		List<Food> foodList = new LinkedList<Food>(GameWorld.get().getCurrentMap().getFood().values());
 		List<Stalk> stalkList = new LinkedList<Stalk>(GameWorld.get().getCurrentMap().getStalk().values());
 		List<Barrier> wallList = GameWorld.get().getCurrentMap().getBarrier();
 		if (isBody) {
-			for (Body body : bodyList) {
+			for (Yukkuri body : bodyList) {
 				if (!body.isDead()) {
 					body.setCleaning();
 				}
 			}
 		}
 		if (isDead) {
-			for (Body body : bodyList) {
+			for (Yukkuri body : bodyList) {
 				if (body.isDead()) {
 					body.remove();
 				}
@@ -102,7 +102,7 @@ final class GadgetCleanupAction {
 			MapPlaceData.clearMap(GameWorld.get().getCurrentMap().getWallMap());
 		}
 		if (isRemoveAll) {
-			for (Body body : bodyList) {
+			for (Yukkuri body : bodyList) {
 				body.remove();
 			}
 			for (Shit s : shitList) {
@@ -140,7 +140,7 @@ final class GadgetCleanupAction {
 			if (i == null) {
 				continue;
 			}
-			Body body = src.util.BodyRegistry.getBodyInstance(i);
+			Yukkuri body = src.util.BodyRegistry.getBodyInstance(i);
 			if (body != null && !body.isDead()) {
 				return false;
 			}

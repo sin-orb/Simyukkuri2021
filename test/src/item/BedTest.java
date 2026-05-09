@@ -2,7 +2,7 @@ package src.item;
 
 import org.junit.jupiter.api.Test;
 import src.base.ItemTestBase;
-import src.base.ObjEX.ItemRank;
+import src.base.WorldEntity.ItemRank;
 import src.SimYukkuri;
 import src.draw.Translate;
 import src.enums.WorldEntityKind;
@@ -30,7 +30,7 @@ class BedTest extends ItemTestBase {
         Bed bed = new Bed(100, 200, 0);
         assertNotNull(bed);
         assertEquals(ItemRank.HOUSE, bed.getItemRank());
-        assertEquals(WorldEntityKind.BED, bed.getObjEXType());
+        assertEquals(WorldEntityKind.BED, bed.getWorldEntityType());
         assertEquals(Type.PLATFORM, bed.getObjType());
         assertEquals(3000, bed.getValue());
         assertEquals(0, bed.getCost());
@@ -204,12 +204,12 @@ class BedTest extends ItemTestBase {
     }
 
     // ---------------------------------------------------------------
-    // ObjEX 共通メソッド群
+    // WorldEntity 共通メソッド群
     // ---------------------------------------------------------------
     @Test
     void testGetObjEXType() {
         Bed bed = new Bed(100, 100, 0);
-        assertEquals(WorldEntityKind.BED, bed.getObjEXType());
+        assertEquals(WorldEntityKind.BED, bed.getWorldEntityType());
     }
 
     @Test
@@ -319,7 +319,7 @@ class BedTest extends ItemTestBase {
     }
 
     // ---------------------------------------------------------------
-    // Obj 継承メソッド群
+    // Entity 継承メソッド群
     // ---------------------------------------------------------------
     @Test
     void testGetX_GetY() {
@@ -660,7 +660,7 @@ class BedTest extends ItemTestBase {
     void testSetObjEXType() {
         Bed bed = new Bed();
         bed.setObjEXType(WorldEntityKind.BED);
-        assertEquals(WorldEntityKind.BED, bed.getObjEXType());
+        assertEquals(WorldEntityKind.BED, bed.getWorldEntityType());
     }
 
     @Test
@@ -680,7 +680,7 @@ class BedTest extends ItemTestBase {
     @Test
     void testGetHitCheckObjType_DefaultZero() {
         Bed bed = new Bed(100, 100, 0);
-        // ObjEX のデフォルト hitCheckObjType = 0
+        // WorldEntity のデフォルト hitCheckObjType = 0
         assertEquals(0, bed.getHitCheckObjType());
     }
 

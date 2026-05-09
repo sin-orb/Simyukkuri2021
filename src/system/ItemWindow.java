@@ -27,7 +27,7 @@ import javax.swing.event.ListDataListener;
 
 import src.SimYukkuri;
 import src.util.GameWorld;
-import src.base.Obj;
+import src.base.Entity;
 import src.draw.Translate;
 import src.system.MainCommandUI.ToolButtonLabel;
 
@@ -147,7 +147,7 @@ public class ItemWindow extends JDialog implements WindowListener, MouseListener
 		if(itemList.getSelectedIndex() == -1) return;
 		
 		int[] idx = itemList.getSelectedIndices();
-		Obj[] obj = new Obj[idx.length];
+		Entity[] obj = new Entity[idx.length];
 		for(int i = 0; i < idx.length; i++) {
 			obj[i] = GameWorld.get().getPlayer().getItemList().get(idx[i]);
 			if(obj[i] != null) obj[i].remove();

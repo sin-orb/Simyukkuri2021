@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.event.EventPacket.UpdateState;
 import src.base.EventTestBase;
 import src.enums.Happiness;
@@ -14,8 +14,8 @@ public class BreedEventTest extends EventTestBase {
 
     @Test
     void testCheckEventResponse_ParentParticipates() {
-        Body parent = createBody(1, 100, 100);
-        Body child = createBody(2, 120, 120);
+        Yukkuri parent = createBody(1, 100, 100);
+        Yukkuri child = createBody(2, 120, 120);
         child.setAgeState(src.enums.AgeState.CHILD);
 
         // Set parent/child relationship
@@ -30,8 +30,8 @@ public class BreedEventTest extends EventTestBase {
 
     @Test
     void testCheckEventResponse_BabyChildOfFromDoesNotParticipate() {
-        Body parent = createBody(1, 100, 100);
-        Body baby = createBody(2, 120, 120);
+        Yukkuri parent = createBody(1, 100, 100);
+        Yukkuri baby = createBody(2, 120, 120);
         WorldTestHelper.setParents(baby, -1, parent.getUniqueID());
         baby.setAgeState(src.enums.AgeState.BABY);
         baby.setBirthMessageForced(true);
@@ -43,8 +43,8 @@ public class BreedEventTest extends EventTestBase {
 
     @Test
     void testCheckEventResponse_BabyChildOfFrom_withoutBirthMessage_participates() {
-        Body parent = createBody(1, 100, 100);
-        Body baby = createBody(2, 120, 120);
+        Yukkuri parent = createBody(1, 100, 100);
+        Yukkuri baby = createBody(2, 120, 120);
         WorldTestHelper.setParents(baby, -1, parent.getUniqueID());
         baby.setAgeState(src.enums.AgeState.BABY);
         baby.setBirthMessageForced(false);
@@ -56,8 +56,8 @@ public class BreedEventTest extends EventTestBase {
 
     @Test
     void testCheckEventResponse_StrangerDoesNotParticipate() {
-        Body parent = createBody(1, 100, 100);
-        Body stranger = createBody(2, 120, 120);
+        Yukkuri parent = createBody(1, 100, 100);
+        Yukkuri stranger = createBody(2, 120, 120);
 
         // No relationship
 
@@ -73,8 +73,8 @@ public class BreedEventTest extends EventTestBase {
 
     @Test
     void testToString_doesNotThrow() {
-        Body parent = createBody(1, 100, 100);
-        Body child = createBody(2, 120, 120);
+        Yukkuri parent = createBody(1, 100, 100);
+        Yukkuri child = createBody(2, 120, 120);
         BreedEvent event = new BreedEvent(parent, child, null, 10);
         assertDoesNotThrow(() -> event.toString());
     }
@@ -82,9 +82,9 @@ public class BreedEventTest extends EventTestBase {
     @Test
     void testStart_fromNull_doesNotThrow() {
         // from is not registered in body map → getBodyInstance returns null
-        Body child = createBody(2, 120, 120);
+        Yukkuri child = createBody(2, 120, 120);
         // Create event with an unregistered body as from
-        Body unregistered = WorldTestHelper.createBody();
+        Yukkuri unregistered = WorldTestHelper.createBody();
         BreedEvent event = new BreedEvent(unregistered, child, null, 10);
         // from is not in world map, so getBodyInstance returns null → no moveToEvent
         assertDoesNotThrow(() -> event.start(child));
@@ -92,8 +92,8 @@ public class BreedEventTest extends EventTestBase {
 
     @Test
     void testStart_fromExists_doesNotThrow() {
-        Body parent = createBody(1, 100, 100);
-        Body child = createBody(2, 120, 120);
+        Yukkuri parent = createBody(1, 100, 100);
+        Yukkuri child = createBody(2, 120, 120);
         BreedEvent event = new BreedEvent(parent, child, null, 10);
         assertDoesNotThrow(() -> event.start(child));
     }
@@ -101,16 +101,16 @@ public class BreedEventTest extends EventTestBase {
     @Test
     void testUpdate_fromNull_returnsAbort() {
         // from not registered → getBodyInstance returns null → ABORT
-        Body child = createBody(2, 120, 120);
-        Body unregistered = WorldTestHelper.createBody();
+        Yukkuri child = createBody(2, 120, 120);
+        Yukkuri unregistered = WorldTestHelper.createBody();
         BreedEvent event = new BreedEvent(unregistered, child, null, 10);
         assertEquals(UpdateState.ABORT, event.update(child));
     }
 
     @Test
     void testUpdate_fromExists_doesNotThrow() {
-        Body parent = createBody(1, 100, 100);
-        Body child = createBody(2, 500, 500); // far from parent
+        Yukkuri parent = createBody(1, 100, 100);
+        Yukkuri child = createBody(2, 500, 500); // far from parent
         BreedEvent event = new BreedEvent(parent, child, null, 10);
         assertDoesNotThrow(() -> event.update(child));
     }
@@ -118,16 +118,16 @@ public class BreedEventTest extends EventTestBase {
     @Test
     void testExecute_fromNull_returnsTrue() {
         // from not registered → getBodyInstance returns null → true
-        Body child = createBody(2, 120, 120);
-        Body unregistered = WorldTestHelper.createBody();
+        Yukkuri child = createBody(2, 120, 120);
+        Yukkuri unregistered = WorldTestHelper.createBody();
         BreedEvent event = new BreedEvent(unregistered, child, null, 10);
         assertTrue(event.execute(child));
     }
 
     @Test
     void testExecute_fromExists_doesNotThrow() {
-        Body parent = createBody(1, 100, 100);
-        Body child = createBody(2, 120, 120);
+        Yukkuri parent = createBody(1, 100, 100);
+        Yukkuri child = createBody(2, 120, 120);
         BreedEvent event = new BreedEvent(parent, child, null, 10);
         assertDoesNotThrow(() -> event.execute(child));
     }
@@ -136,8 +136,8 @@ public class BreedEventTest extends EventTestBase {
 
     @Test
     void testCheckEventResponse_bNearToBirth_returnsFalse() {
-        Body parent = createBody(1, 100, 100);
-        Body b = createBody(2, 120, 120);
+        Yukkuri parent = createBody(1, 100, 100);
+        Yukkuri b = createBody(2, 120, 120);
         // make b nearToBirth = true
         b.setHasBaby(true);
         b.setPregnantPeriod(Integer.MAX_VALUE / 2);
@@ -147,8 +147,8 @@ public class BreedEventTest extends EventTestBase {
 
     @Test
     void testCheckEventResponse_bIsUnBirth_returnsFalse() {
-        Body parent = createBody(1, 100, 100);
-        Body b = createBody(2, 120, 120);
+        Yukkuri parent = createBody(1, 100, 100);
+        Yukkuri b = createBody(2, 120, 120);
         b.setUnBirth(true);
         BreedEvent event = new BreedEvent(parent, null, null, 10);
         assertFalse(event.checkEventResponse(b));
@@ -156,8 +156,8 @@ public class BreedEventTest extends EventTestBase {
 
     @Test
     void testCheckEventResponse_bIsRaperExciting_returnsFalse() {
-        Body parent = createBody(1, 100, 100);
-        Body b = createBody(2, 120, 120);
+        Yukkuri parent = createBody(1, 100, 100);
+        Yukkuri b = createBody(2, 120, 120);
         b.setRapist(true);
         b.setExciting(true);
         BreedEvent event = new BreedEvent(parent, null, null, 10);
@@ -166,8 +166,8 @@ public class BreedEventTest extends EventTestBase {
 
     @Test
     void testCheckEventResponse_differentPublicRank_returnsFalse() {
-        Body parent = createBody(1, 100, 100);
-        Body b = createBody(2, 120, 120);
+        Yukkuri parent = createBody(1, 100, 100);
+        Yukkuri b = createBody(2, 120, 120);
         b.setPublicRank(src.enums.PublicRank.UnunSlave);
         BreedEvent event = new BreedEvent(parent, null, null, 10);
         assertFalse(event.checkEventResponse(b));
@@ -175,8 +175,8 @@ public class BreedEventTest extends EventTestBase {
 
     @Test
     void testCheckEventResponse_bBuried_returnsFalse() {
-        Body parent = createBody(1, 100, 100);
-        Body b = createBody(2, 120, 120);
+        Yukkuri parent = createBody(1, 100, 100);
+        Yukkuri b = createBody(2, 120, 120);
         b.setBurialState(src.enums.BurialState.HALF);
         BreedEvent event = new BreedEvent(parent, null, null, 10);
         assertFalse(event.checkEventResponse(b));
@@ -184,8 +184,8 @@ public class BreedEventTest extends EventTestBase {
 
     @Test
     void testCheckEventResponse_fromNoOkazariFoolB_returnsFalse() {
-        Body parent = createBody(1, 100, 100);
-        Body b = createBody(2, 120, 120);
+        Yukkuri parent = createBody(1, 100, 100);
+        Yukkuri b = createBody(2, 120, 120);
         parent.setOkazari(null); // from has no okazari
         b.setIntelligence(src.enums.Intelligence.FOOL);
         BreedEvent event = new BreedEvent(parent, null, null, 10);
@@ -194,8 +194,8 @@ public class BreedEventTest extends EventTestBase {
 
     @Test
     void testCheckEventResponse_fromIsPartnerOfB_returnsTrue() {
-        Body parent = createBody(1, 100, 100);
-        Body b = createBody(2, 120, 120);
+        Yukkuri parent = createBody(1, 100, 100);
+        Yukkuri b = createBody(2, 120, 120);
         b.setPartner(parent.getUniqueID());
         parent.setPartner(b.getUniqueID());
         BreedEvent event = new BreedEvent(parent, null, null, 10);
@@ -204,8 +204,8 @@ public class BreedEventTest extends EventTestBase {
 
     @Test
     void testCheckEventResponse_bIsParentOfFrom_returnsTrue() {
-        Body parent = createBody(1, 100, 100);
-        Body b = createBody(2, 120, 120);
+        Yukkuri parent = createBody(1, 100, 100);
+        Yukkuri b = createBody(2, 120, 120);
         parent.setParents(new int[]{b.getUniqueID(), -1}); // b is father of parent
         BreedEvent event = new BreedEvent(parent, null, null, 10);
         assertTrue(event.checkEventResponse(b));
@@ -215,8 +215,8 @@ public class BreedEventTest extends EventTestBase {
 
     @Test
     void testUpdate_bNearToBirth_returnsForceExec() {
-        Body from = createBody(1, 100, 100);
-        Body b = createBody(2, 120, 120);
+        Yukkuri from = createBody(1, 100, 100);
+        Yukkuri b = createBody(2, 120, 120);
         b.setHasBaby(true);
         b.setPregnantPeriod(Integer.MAX_VALUE / 2);
         BreedEvent event = new BreedEvent(from, null, null, 10);
@@ -225,8 +225,8 @@ public class BreedEventTest extends EventTestBase {
 
     @Test
     void testUpdate_closeDistance_returnsForceExec() {
-        Body from = createBody(1, 100, 100);
-        Body b = createBody(2, 105, 105); // very close → distance < 20000
+        Yukkuri from = createBody(1, 100, 100);
+        Yukkuri b = createBody(2, 105, 105); // very close → distance < 20000
         from.setHasBaby(true); // nearToBirth needs this
         from.setPregnantPeriod(Integer.MAX_VALUE / 2);
         BreedEvent event = new BreedEvent(from, null, null, 10);
@@ -235,8 +235,8 @@ public class BreedEventTest extends EventTestBase {
 
     @Test
     void testUpdate_BabyChildOfFrom_returnsAbort() {
-        Body from = createBody(1, 100, 100);
-        Body b = createBody(2, 105, 105);
+        Yukkuri from = createBody(1, 100, 100);
+        Yukkuri b = createBody(2, 105, 105);
         WorldTestHelper.setParents(b, -1, from.getUniqueID());
         b.setAgeState(src.enums.AgeState.BABY);
         b.setBirthMessageForced(true);
@@ -249,8 +249,8 @@ public class BreedEventTest extends EventTestBase {
 
     @Test
     void testUpdate_fromDead_returnsAbort() {
-        Body from = createBody(1, 100, 100);
-        Body b = createBody(2, 500, 500); // far
+        Yukkuri from = createBody(1, 100, 100);
+        Yukkuri b = createBody(2, 500, 500); // far
         from.setDead(true);
         BreedEvent event = new BreedEvent(from, null, null, 10);
         assertEquals(src.event.EventPacket.UpdateState.ABORT, event.update(b));
@@ -260,8 +260,8 @@ public class BreedEventTest extends EventTestBase {
 
     @Test
     void testExecute_bNearToBirth_returnsTrue() {
-        Body from = createBody(1, 100, 100);
-        Body b = createBody(2, 120, 120);
+        Yukkuri from = createBody(1, 100, 100);
+        Yukkuri b = createBody(2, 120, 120);
         b.setHasBaby(true);
         b.setPregnantPeriod(Integer.MAX_VALUE / 2);
         BreedEvent event = new BreedEvent(from, null, null, 10);
@@ -270,8 +270,8 @@ public class BreedEventTest extends EventTestBase {
 
     @Test
     void testExecute_bIsNYD_returnsFalse() {
-        Body from = createBody(1, 100, 100);
-        Body b = createBody(2, 120, 120);
+        Yukkuri from = createBody(1, 100, 100);
+        Yukkuri b = createBody(2, 120, 120);
         b.setCoreAnkoState(src.enums.CoreAnkoState.NonYukkuriDisease);
         BreedEvent event = new BreedEvent(from, null, null, 10);
         assertFalse(event.execute(b));
@@ -279,8 +279,8 @@ public class BreedEventTest extends EventTestBase {
 
     @Test
     void testExecute_fromIsBirth_returnsFalse() {
-        Body from = createBody(1, 100, 100);
-        Body b = createBody(2, 120, 120);
+        Yukkuri from = createBody(1, 100, 100);
+        Yukkuri b = createBody(2, 120, 120);
         from.setBirth(true);
         BreedEvent event = new BreedEvent(from, null, null, 10);
         assertFalse(event.execute(b));
@@ -288,8 +288,8 @@ public class BreedEventTest extends EventTestBase {
 
     @Test
     void testExecute_fromHasPants_returnsTrue() {
-        Body from = createBody(1, 100, 100);
-        Body b = createBody(2, 120, 120);
+        Yukkuri from = createBody(1, 100, 100);
+        Yukkuri b = createBody(2, 120, 120);
         from.setHasPants(true); // surprise message
         BreedEvent event = new BreedEvent(from, null, null, 10);
         assertTrue(event.execute(b));
@@ -297,8 +297,8 @@ public class BreedEventTest extends EventTestBase {
 
     @Test
     void testExecute_fromHasBabyOrStalk_returnsFalse() {
-        Body from = createBody(1, 100, 100);
-        Body b = createBody(2, 120, 120);
+        Yukkuri from = createBody(1, 100, 100);
+        Yukkuri b = createBody(2, 120, 120);
         from.setHasBaby(true); // still pregnant → else branch → return false
         BreedEvent event = new BreedEvent(from, null, null, 10);
         assertFalse(event.execute(b));
@@ -309,8 +309,8 @@ public class BreedEventTest extends EventTestBase {
 
         @Test
         void testScenario_BirthSuccessMakesResponderVeryHappyAndAddsGoodMemories() {
-            Body from = createBody(1, 100, 100);
-            Body b = createBody(2, 120, 120);
+            Yukkuri from = createBody(1, 100, 100);
+            Yukkuri b = createBody(2, 120, 120);
             b.setStress(100);
             int beforeStress = b.getStress();
             int beforeMemories = b.getMemories();

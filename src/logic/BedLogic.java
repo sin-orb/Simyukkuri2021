@@ -6,10 +6,10 @@ import java.util.Map;
 import src.SimYukkuri;
 import src.util.GameRandom;
 import src.util.GameWorld;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.event.EventPacket;
-import src.base.Obj;
-import src.base.ObjEX;
+import src.base.Entity;
+import src.base.WorldEntity;
 import src.draw.Terrarium;
 import src.draw.Translate;
 import src.enums.AgeState;
@@ -35,7 +35,7 @@ public class BedLogic {
 	 * @param body ゆっくり
 	 * @return ベッド関連処理の対象かどうか
 	 */
-	public static final boolean checkBed(Body body) {
+	public static final boolean checkBed(Yukkuri body) {
 		// 他の用事がある場合
 		if( body.isToFood() || body.isToBody() || /*body.isToBed() ||*/ body.isToShit() || 
 				body.isToSukkiri() || body.isToSteal() || body.isToTakeout())
@@ -64,7 +64,7 @@ public class BedLogic {
 		}
 
 		// 対象が決まっていたら到達したかチェック
-		Obj target = body.takeMappedObj(body.getMoveTargetId());
+		Entity target = body.takeMappedObj(body.getMoveTargetId());
 		if(body.isToBed() && target != null) {
 			// 途中で消されてたら他の候補を探す
 			if(target.isRemoved()) {
@@ -123,7 +123,7 @@ public class BedLogic {
 		if(!shouldSearchBed) return false;
 
 		boolean foundBed = false;
-		Obj targetObject = searchBed(body);
+		Entity targetObject = searchBed(body);
 
 		if (targetObject != null) {
 			int offsetX = 0;
@@ -158,8 +158,8 @@ public class BedLogic {
 	 * @param body ゆっくり
 	 * @return 探しだしたベッドのオブジェクト
 	 */
-	public static Obj searchBed(Body body){
-		Obj targetObject = body.getFavoriteItem(FavItemType.BED);
+	public static Entity searchBed(Yukkuri body){
+		Entity targetObject = body.getFavoriteItem(FavItemType.BED);
 		int nearestDistance = body.getEyesightBase();
 		// うんうん奴隷の場合
 		if( body.getPublicRank() == PublicRank.UnunSlave){
@@ -183,7 +183,7 @@ public class BedLogic {
 		if( body.getPublicRank() != PublicRank.UnunSlave){
 			if(targetObject == null) {
 				for (Map.Entry<Integer, Bed> entry : GameWorld.get().getCurrentMap().getBed().entrySet()) {
-					ObjEX t = entry.getValue();
+					WorldEntity t = entry.getValue();
 					int distance = Translate.distance(body.getX(), body.getY(), t.getX(), t.getY());
 					if (nearestDistance > distance) {
 						if (Barrier.acrossBarrier(body.getX(), body.getY(), t.getX(), t.getY(), Barrier.MAP_BODY[wallMode] + Barrier.BARRIER_KEKKAI)) {
@@ -197,7 +197,7 @@ public class BedLogic {
 		//// 仮 おうち検索
 			if(targetObject == null) {
 				for (Map.Entry<Integer, House> entry : GameWorld.get().getCurrentMap().getHouse().entrySet()) {
-					ObjEX t = entry.getValue();
+					WorldEntity t = entry.getValue();
 					int distance = Translate.distance(body.getX(), body.getY(), t.getX(), t.getY());
 					if (nearestDistance > distance) {
 						if (Barrier.acrossBarrier(body.getX(), body.getY(), t.getX(), t.getY(), Barrier.MAP_BODY[wallMode] + Barrier.BARRIER_KEKKAI)) {
@@ -213,7 +213,7 @@ public class BedLogic {
 			// うんうん奴隷の場合、トイレを探す
 			if(targetObject == null) {
 				for (Map.Entry<Integer, Toilet> entry : GameWorld.get().getCurrentMap().getToilet().entrySet()) {
-					ObjEX t = entry.getValue();
+					WorldEntity t = entry.getValue();
 					int distance = Translate.distance(body.getX(), body.getY(), t.getX(), t.getY());
 					if (nearestDistance > distance) {
 						if (Barrier.acrossBarrier(body.getX(), body.getY(), t.getX(), t.getY(), Barrier.MAP_BODY[wallMode] + Barrier.BARRIER_KEKKAI)) {

@@ -4,11 +4,11 @@ import java.util.Map;
 
 import src.SimYukkuri;
 import src.util.GameWorld;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.draw.Translate;
 import src.enums.CriticalDamegeType;
 import src.enums.Intelligence;
-//import src.Body.CoreAnkoState;
+//import src.Yukkuri.CoreAnkoState;
 //import src.field.impl.Barrier;
 import src.item.Stone;
 //import src.EventPacket;
@@ -22,7 +22,7 @@ public class StoneLogic {
 	 *  小石チェック
 	 * @param b ゆっくり
 	 */
-	public static final void checkPubble(Body b) {
+	public static final void checkPubble(Yukkuri b) {
 		if( b == null ){
 			return;
 		}

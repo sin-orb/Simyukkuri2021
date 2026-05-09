@@ -8,8 +8,8 @@ import javax.swing.JPopupMenu;
 
 import src.SimYukkuri;
 import src.util.GameWorld;
-import src.base.Body;
-import src.base.Obj;
+import src.base.Yukkuri;
+import src.base.Entity;
 import src.draw.Point4y;
 import src.draw.Translate;
 import src.game.Shit;
@@ -152,12 +152,12 @@ public class ItemMenu {
 	private static JPopupMenu getPopup;
 	private static JMenuItem[] getMenu;
 	/** 取得のターゲット */
-	private static Obj getTarget;
+	private static Entity getTarget;
 	/** 使用するポップアップ */
 	private static JPopupMenu usePopup;
 	private static JMenuItem[] useMenu;
 	/** 使用のターゲット */
-	private static Obj useTarget;
+	private static Entity useTarget;
 	/** シェイプのポップアップ */
 	private static JPopupMenu shapePopup;
 	private static JMenuItem[] shapeMenu;
@@ -213,7 +213,7 @@ public class ItemMenu {
 	 *  取得メニューを開く前にターゲットと有効なコマンド設定
 	 * @param obj ターゲット
 	 */
-	public static final void setGetPopupMenu(Obj obj) {
+	public static final void setGetPopupMenu(Entity obj) {
 		getTarget = obj;
 		getMenu[0].setEnabled(obj.hasGetPopup().canPickup());
 		getMenu[1].setEnabled(obj.hasGetPopup().canStatus());
@@ -251,11 +251,11 @@ public class ItemMenu {
 		ItemMenu.getPopup = getPopup;
 	}
 	
-	public static Obj getGetTarget() {
+	public static Entity getGetTarget() {
 		return getTarget;
 	}
 	
-	public static void setGetTarget(Obj getTarget) {
+	public static void setGetTarget(Entity getTarget) {
 		ItemMenu.getTarget = getTarget;
 	}
 	
@@ -267,11 +267,11 @@ public class ItemMenu {
 		ItemMenu.usePopup = usePopup;
 	}
 	
-	public static Obj getUseTarget() {
+	public static Entity getUseTarget() {
 		return useTarget;
 	}
 	
-	public static void setUseTarget(Obj useTarget) {
+	public static void setUseTarget(Entity useTarget) {
 		ItemMenu.useTarget = useTarget;
 	}
 	
@@ -297,11 +297,11 @@ public class ItemMenu {
 	 */
 	public static void dropItem(MouseEvent e) {
 		Point4y pos = Translate.invertLimit(e.getX(), e.getY());
-		Obj item = GameWorld.get().getPlayer().getHoldItem();
+		Entity item = GameWorld.get().getPlayer().getHoldItem();
 		MapPlaceData curMap = GameWorld.get().getCurrentMap();
 
-		if(item instanceof Body) {
-			Body b = (Body)item;
+		if(item instanceof Yukkuri) {
+			Yukkuri b = (Yukkuri)item;
 			b.setTaken(false);
 			curMap.getBody().put(b.getUniqueID(), b);
 		} else if(item instanceof Shit) {

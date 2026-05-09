@@ -1,6 +1,6 @@
 package src.engine.birth;
 
-import src.base.Body;
+import src.base.Yukkuri;
 import src.enums.Intelligence;
 import src.enums.Attitude;
 import src.enums.YukkuriType;
@@ -71,7 +71,7 @@ public final class YukkuriBirthTypeResolver {
 	 * @param parent 親のゆっくり（ドスチェック）
 	 * @return ランダムなタイプのゆっくりタイプ（int）
 	 */
-	public static int getRandomYukkuriType(Body parent) {
+	public static int getRandomYukkuriType(Yukkuri parent) {
 		int babyType = 0;
 		int i = GameRandom.nextInt(5);
 		if (i == 0 || i == 1) {
@@ -163,7 +163,7 @@ public final class YukkuriBirthTypeResolver {
 	 * @param fatherDamage 父ダメージ
 	 * @return 子タイプ
 	 */
-	public static int resolveBabyType(Body mother, Body father, int iFatherType, boolean forceCreate,
+	public static int resolveBabyType(Yukkuri mother, Yukkuri father, int iFatherType, boolean forceCreate,
 			boolean fatherDamage) {
 		int babyType;
 		int motherType = mother.getType();
@@ -262,7 +262,7 @@ public final class YukkuriBirthTypeResolver {
 		return babyType;
 	}
 
-	private static int applyConditionCorrection(Body mother, boolean fatherDamage, int babyType) {
+	private static int applyConditionCorrection(Yukkuri mother, boolean fatherDamage, int babyType) {
 		if (mother.isOverPregnantLimit() || mother.isSick() || mother.isDamagedHeavily() || fatherDamage) {
 			if (GameRandom.nextBoolean() && (babyType == Reimu.type || babyType == WasaReimu.type)) {
 				return TarinaiReimu.type;
@@ -272,18 +272,18 @@ public final class YukkuriBirthTypeResolver {
 		return babyType;
 	}
 
-	public static int resolveFatherType(int iFatherType, Body father) {
+	public static int resolveFatherType(int iFatherType, Yukkuri father) {
 		if (father == null) {
 			return iFatherType;
 		}
 		return applyAncestorReversion(father.getAncestorList(), iFatherType);
 	}
 
-	public static int resolveMotherType(Body mother) {
+	public static int resolveMotherType(Yukkuri mother) {
 		return applyAncestorReversion(mother.getAncestorList(), mother.getType());
 	}
 
-	public static Attitude resolveAttitude(Body mother, Attitude fatherrAtt) {
+	public static Attitude resolveAttitude(Yukkuri mother, Attitude fatherrAtt) {
 		int attBase = mother.getAttitude().ordinal() + fatherrAtt.ordinal();
 		Attitude[] attitude = Attitude.values();
 		switch (attBase) {
@@ -321,7 +321,7 @@ public final class YukkuriBirthTypeResolver {
 		}
 	}
 
-	public static Intelligence resolveIntelligence(Body mother, Intelligence fatherInt) {
+	public static Intelligence resolveIntelligence(Yukkuri mother, Intelligence fatherInt) {
 		int intBase = mother.getIntelligence().ordinal() + fatherInt.ordinal();
 		Intelligence[] intel = Intelligence.values();
 		switch (intBase) {

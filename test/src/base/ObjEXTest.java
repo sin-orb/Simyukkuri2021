@@ -22,7 +22,7 @@ import src.util.WorldTestHelper;
 public class ObjEXTest {
 
     /** テスト用のObjEX具象サブクラス */
-    static class StubObjEX extends ObjEX {
+    static class StubObjEX extends WorldEntity {
         boolean removeListDataCalled = false;
         boolean objHitProcessed = false;
         boolean upDateCalled = false;
@@ -51,7 +51,7 @@ public class ObjEXTest {
         }
 
         @Override
-        public int objHitProcess(Obj o) {
+        public int objHitProcess(Entity o) {
             objHitProcessed = true;
             return 0;
         }
@@ -388,10 +388,10 @@ public class ObjEXTest {
     @Test
     public void testObjHitProcessReturnsZero() {
         StubObjEX obj = new StubObjEX(0, 0, 0);
-        assertEquals(0, obj.objHitProcess(new Obj()));
+        assertEquals(0, obj.objHitProcess(new Entity()));
     }
 
-    // --- checkHitObj(Obj, boolean) ---
+    // --- checkHitObj(Entity, boolean) ---
 
     @Test
     public void testCheckHitObjNullReturnsFalse() {
@@ -405,7 +405,7 @@ public class ObjEXTest {
         obj.setColW(50);
         obj.setColH(50);
 
-        Obj target = new Obj();
+        Entity target = new Entity();
         target.setZ(10); // z != 0
         target.setX(500);
         target.setY(500);
@@ -423,7 +423,7 @@ public class ObjEXTest {
         obj.setColW(50);
         obj.setColH(50);
 
-        Obj target = new Obj();
+        Entity target = new Entity();
         target.setZ(0);
         target.setX(500);
         target.setY(500);
@@ -441,7 +441,7 @@ public class ObjEXTest {
         obj.setColW(10);
         obj.setColH(10);
 
-        Obj target = new Obj();
+        Entity target = new Entity();
         target.setZ(0);
         target.setX(600);
         target.setY(600);
@@ -453,7 +453,7 @@ public class ObjEXTest {
         assertFalse(obj.checkHitObj(target, true));
     }
 
-    // --- checkHitObj(Rectangle, Obj) ---
+    // --- checkHitObj(Rectangle, Entity) ---
 
     @Test
     public void testCheckHitObjRectNullReturnsFalse() {
@@ -465,7 +465,7 @@ public class ObjEXTest {
     public void testCheckHitObjRectObjZNonZeroReturnsTrue() {
         StubObjEX obj = new StubObjEX(500, 500, 0);
 
-        Obj target = new Obj();
+        Entity target = new Entity();
         target.setZ(10); // z != 0 → 空中 → 移動させない → return true
 
         assertTrue(obj.checkHitObj(new Rectangle(), target));
@@ -477,7 +477,7 @@ public class ObjEXTest {
         obj.setColW(10);
         obj.setColH(10);
 
-        Obj target = new Obj();
+        Entity target = new Entity();
         target.setZ(0);
         target.setX(50);
         target.setY(60);
@@ -553,26 +553,26 @@ public class ObjEXTest {
 
     @Test
     public void testItemRankValues() {
-        assertEquals(3, ObjEX.ItemRank.values().length);
-        assertEquals(ObjEX.ItemRank.HOUSE, ObjEX.ItemRank.valueOf("HOUSE"));
-        assertEquals(ObjEX.ItemRank.NORA, ObjEX.ItemRank.valueOf("NORA"));
-        assertEquals(ObjEX.ItemRank.YASEI, ObjEX.ItemRank.valueOf("YASEI"));
+        assertEquals(3, WorldEntity.ItemRank.values().length);
+        assertEquals(WorldEntity.ItemRank.HOUSE, WorldEntity.ItemRank.valueOf("HOUSE"));
+        assertEquals(WorldEntity.ItemRank.NORA, WorldEntity.ItemRank.valueOf("NORA"));
+        assertEquals(WorldEntity.ItemRank.YASEI, WorldEntity.ItemRank.valueOf("YASEI"));
     }
 
     // --- 定数 ---
 
     @Test
     public void testConstants() {
-        assertEquals(1, ObjEX.YUKKURI);
-        assertEquals(2, ObjEX.SHIT);
-        assertEquals(4, ObjEX.FOOD);
-        assertEquals(8, ObjEX.TOILET);
-        assertEquals(16, ObjEX.TOY);
-        assertEquals(32, ObjEX.PLATFORM);
-        assertEquals(64, ObjEX.FIX_OBJECT);
-        assertEquals(128, ObjEX.OBJECT);
-        assertEquals(256, ObjEX.VOMIT);
-        assertEquals(512, ObjEX.STALK);
+        assertEquals(1, WorldEntity.YUKKURI);
+        assertEquals(2, WorldEntity.SHIT);
+        assertEquals(4, WorldEntity.FOOD);
+        assertEquals(8, WorldEntity.TOILET);
+        assertEquals(16, WorldEntity.TOY);
+        assertEquals(32, WorldEntity.PLATFORM);
+        assertEquals(64, WorldEntity.FIX_OBJECT);
+        assertEquals(128, WorldEntity.OBJECT);
+        assertEquals(256, WorldEntity.VOMIT);
+        assertEquals(512, WorldEntity.STALK);
     }
 
     @Nested

@@ -107,7 +107,7 @@ public final class BodyFlagRule {
 	 * @return 気づいていればtrue
 	 */
 	public static boolean isNoticeNoOkazari(BodyAttributes body) {
-		return body.isNoticeNoOkazariRaw();
+		return body.isNoticeNoOkazari();
 	}
 
 	/**

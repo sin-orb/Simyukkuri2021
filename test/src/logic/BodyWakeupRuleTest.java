@@ -7,7 +7,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.util.WorldTestHelper;
 
 /**
@@ -23,8 +23,8 @@ public class BodyWakeupRuleTest {
 
 	@Test
 	void testCheckWakeupOtherYukkuri_returnsTrueWhenAwakeBodyVisible() {
-		Body me = WorldTestHelper.createBody();
-		Body you = WorldTestHelper.createBody();
+		Yukkuri me = WorldTestHelper.createBody();
+		Yukkuri you = WorldTestHelper.createBody();
 		me.setEyesightBase(1);
 		me.setX(10);
 		me.setY(10);
@@ -38,8 +38,8 @@ public class BodyWakeupRuleTest {
 
 	@Test
 	void testCheckWakeupOtherYukkuri_returnsFalseWhenVisibleBodySleeping() {
-		Body me = WorldTestHelper.createBody();
-		Body you = WorldTestHelper.createBody();
+		Yukkuri me = WorldTestHelper.createBody();
+		Yukkuri you = WorldTestHelper.createBody();
 		me.setEyesightBase(1);
 		me.setX(10);
 		me.setY(10);

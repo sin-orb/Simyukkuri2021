@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import src.base.Body;
+import src.base.Yukkuri;
 import src.enums.AgeState;
 import src.enums.Attitude;
 import src.enums.PublicRank;
@@ -25,8 +25,8 @@ public class BodyStealRuleTest {
 
 	@Test
 	void testHandleOkazariSteal_successfulStealTransfersOkazari() {
-		Body thief = WorldTestHelper.createBody();
-		Body target = WorldTestHelper.createBody();
+		Yukkuri thief = WorldTestHelper.createBody();
+		Yukkuri target = WorldTestHelper.createBody();
 		thief.setAgeState(AgeState.ADULT);
 		target.setAgeState(AgeState.ADULT);
 		thief.setAttitude(Attitude.SHITHEAD);
@@ -47,9 +47,9 @@ public class BodyStealRuleTest {
 
 	@Test
 	void testHandleOkazariSteal_awakeWitnessBlocksSteal() {
-		Body thief = WorldTestHelper.createBody();
-		Body target = WorldTestHelper.createBody();
-		Body witness = WorldTestHelper.createBody();
+		Yukkuri thief = WorldTestHelper.createBody();
+		Yukkuri target = WorldTestHelper.createBody();
+		Yukkuri witness = WorldTestHelper.createBody();
 		thief.setAgeState(AgeState.ADULT);
 		target.setAgeState(AgeState.ADULT);
 		thief.setAttitude(Attitude.SHITHEAD);

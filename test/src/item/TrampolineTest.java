@@ -110,14 +110,14 @@ class TrampolineTest extends ItemTestBase {
     @Test
     void testCheckHitObj_singleArg_doesNotThrow() {
         Trampoline item = new Trampoline();
-        src.base.Obj body = src.util.WorldTestHelper.createBody();
+        src.base.Entity body = src.util.WorldTestHelper.createBody();
         org.junit.jupiter.api.Assertions.assertDoesNotThrow(() -> item.checkHitObj(body));
     }
 
     @Test
     void testCheckHitObj_twoArgs_doesNotThrow() {
         Trampoline item = new Trampoline();
-        src.base.Obj body = src.util.WorldTestHelper.createBody();
+        src.base.Entity body = src.util.WorldTestHelper.createBody();
         org.junit.jupiter.api.Assertions.assertDoesNotThrow(() -> item.checkHitObj(null, body));
     }
 

@@ -1,6 +1,6 @@
 package src.logic;
 
-import src.base.Body;
+import src.base.Yukkuri;
 import src.event.AvoidMoldEvent;
 import src.event.HateNoOkazariEvent;
 import src.system.MessagePool;
@@ -22,7 +22,7 @@ public final class BodyContactEffectRule {
 	 * @param actorBody actor body
 	 * @return true when the branch handled the action
 	 */
-	public static boolean handleContactEffects(Body targetBody, Body actorBody) {
+	public static boolean handleContactEffects(Yukkuri targetBody, Yukkuri actorBody) {
 		// 自分がかびてなくてかつ、相手がかびてるとき
 		if (actorBody.findSick(targetBody) && !actorBody.isSick()) {
 			EventLogic.addBodyEvent(actorBody, new AvoidMoldEvent(actorBody, targetBody, null, 1), null, null);

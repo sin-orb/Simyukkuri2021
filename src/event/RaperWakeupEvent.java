@@ -1,18 +1,18 @@
 package src.event;
 import src.util.GameText;
 
-import src.base.Body;
+import src.base.Yukkuri;
 import src.event.EventPacket;
-import src.base.Obj;
+import src.base.Entity;
 import src.field.impl.Barrier;
 import src.logic.EventLogic;
 import src.system.ResourceUtil;
 
 /***************************************************
  * レイパー発情通知イベント
- * protected Body from; // レイパー
- * protected Body to; // 未使用
- * protected Obj target; // 未使用
+ * protected Yukkuri from; // レイパー
+ * protected Yukkuri to; // 未使用
+ * protected Entity target; // 未使用
  * protected int count; // 1
  */
 public class RaperWakeupEvent extends EventPacket {
@@ -22,7 +22,7 @@ public class RaperWakeupEvent extends EventPacket {
 	/**
 	 * コンストラクタ.
 	 */
-	public RaperWakeupEvent(Body f, Body t, Obj tgt, int cnt) {
+	public RaperWakeupEvent(Yukkuri f, Yukkuri t, Entity tgt, int cnt) {
 		super(f, t, tgt, cnt);
 	}
 
@@ -31,9 +31,9 @@ public class RaperWakeupEvent extends EventPacket {
 	}
 
 	@Override
-	public boolean simpleEventAction(Body body) {
+	public boolean simpleEventAction(Yukkuri body) {
 		// 自分自身はスキップ、またはレイパーが既に消えていればスキップ
-		Body sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
+		Yukkuri sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
 		if (sourceBody == null || body == sourceBody)
 			return false;
 		// 死体、睡眠、皮なし、目無しはスキップ
@@ -65,19 +65,19 @@ public class RaperWakeupEvent extends EventPacket {
 
 	// 参加チェック
 	@Override
-	public boolean checkEventResponse(Body body) {
+	public boolean checkEventResponse(Yukkuri body) {
 		return false;
 	}
 
 	// イベント開始動作
 	@Override
-	public void start(Body body) {
+	public void start(Yukkuri body) {
 	}
 
 	// イベント目標に到着した際に呼ばれる
 	// trueを返すとイベント終了
 	@Override
-	public boolean execute(Body body) {
+	public boolean execute(Yukkuri body) {
 		return true;
 	}
 

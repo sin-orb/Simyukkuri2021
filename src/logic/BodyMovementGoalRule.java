@@ -14,8 +14,8 @@ public final class BodyMovementGoalRule {
 		return body.isLockmoveRaw();
 	}
 
-	public static boolean isPullAndPush(BodyAttributes body) {
-		return body.isPullAndPushRaw();
+	public static boolean canPullOrPush(BodyAttributes body) {
+		return body.canPullOrPushRaw();
 	}
 
 	public static boolean isTargetBind(BodyAttributes body) {

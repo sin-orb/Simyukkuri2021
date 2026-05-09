@@ -6,7 +6,7 @@ import java.util.List;
 
 import javax.swing.DefaultListModel;
 
-import src.base.Obj;
+import src.base.Entity;
 import src.system.MainCommandUI;
 
 /*********************************************
@@ -14,17 +14,17 @@ import src.system.MainCommandUI;
  * プレイヤー情報
  * 
  */
-public class Player extends Obj {
+public class Player extends Entity {
 
 	private static final long serialVersionUID = 2359877855058696480L;
 	// 所持金
 	private long cash;
 	// 所持品
-	private DefaultListModel<Obj> itemList;
+	private DefaultListModel<Entity> itemList;
 	// アイテム
-	private Obj holdItem;
+	private Entity holdItem;
 	// セーブ用アイテムリスト
-	private List<Obj> itemForSave;
+	private List<Entity> itemForSave;
 
 	/**
 	 * 所持金を設定する.
@@ -64,7 +64,7 @@ public class Player extends Obj {
 	 */
 	public Player() {
 		cash = 10000;
-		itemList = new DefaultListModel<Obj>();
+		itemList = new DefaultListModel<Entity>();
 		holdItem = null;
 		itemForSave = new LinkedList<>();
 	}
@@ -74,28 +74,28 @@ public class Player extends Obj {
 	 * 
 	 * @param list アイテムリスト
 	 */
-	public void setItemList(DefaultListModel<Obj> list) {
+	public void setItemList(DefaultListModel<Entity> list) {
 		itemList = list;
 	}
 
-	public Obj getHoldItem() {
+	public Entity getHoldItem() {
 		return holdItem;
 	}
 
-	public void setHoldItem(Obj holdItem) {
+	public void setHoldItem(Entity holdItem) {
 		this.holdItem = holdItem;
 	}
 
 	@Transient
-	public DefaultListModel<Obj> getItemList() {
+	public DefaultListModel<Entity> getItemList() {
 		return itemList;
 	}
 
-	public List<Obj> getItemForSave() {
+	public List<Entity> getItemForSave() {
 		return itemForSave;
 	}
 
-	public void setItemForSave(List<Obj> itemForSave) {
+	public void setItemForSave(List<Entity> itemForSave) {
 		this.itemForSave = itemForSave;
 	}
 

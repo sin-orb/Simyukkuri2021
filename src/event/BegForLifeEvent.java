@@ -5,9 +5,9 @@ import src.util.GameText;
 import src.SimYukkuri;
 import src.util.GameRandom;
 import src.attachment.Fire;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.event.EventPacket;
-import src.base.Obj;
+import src.base.Entity;
 import src.enums.CriticalDamegeType;
 import src.enums.Happiness;
 import src.enums.ImageCode;
@@ -17,9 +17,9 @@ import src.system.ResourceUtil;
 
 /***************************************************
  * 命乞いイベント
- * protected Body from; // イベントを発した個体
- * protected Body to; // 攻撃対象
- * protected Obj target; // 未使用
+ * protected Yukkuri from; // イベントを発した個体
+ * protected Yukkuri to; // 攻撃対象
+ * protected Entity target; // 未使用
  * protected int count; // 10
  */
 public class BegForLifeEvent extends EventPacket {
@@ -35,7 +35,7 @@ public class BegForLifeEvent extends EventPacket {
 	/**
 	 * コンストラクタ.
 	 */
-	public BegForLifeEvent(Body f, Body t, Obj tgt, int cnt) {
+	public BegForLifeEvent(Yukkuri f, Yukkuri t, Entity tgt, int cnt) {
 		super(f, t, tgt, cnt);
 	}
 
@@ -89,10 +89,10 @@ public class BegForLifeEvent extends EventPacket {
 	 * また、イベント優先度も必要に応じて設定できる
 	 */
 	@Override
-	public boolean checkEventResponse(Body body) {
+	public boolean checkEventResponse(Yukkuri body) {
 
 		priority = EventPriority.HIGH;
-		Body sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
+		Yukkuri sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
 		if (body == sourceBody && !body.isUnBirth())
 			return true;
 		return false;
@@ -102,7 +102,7 @@ public class BegForLifeEvent extends EventPacket {
 	 * イベント開始動作
 	 */
 	@Override
-	public void start(Body body) {
+	public void start(Yukkuri body) {
 	}
 
 	/**
@@ -110,7 +110,7 @@ public class BegForLifeEvent extends EventPacket {
 	 * UpdateState.ABORTを返すとイベント終了
 	 */
 		@Override
-		public UpdateState update(Body body) {
+		public UpdateState update(Yukkuri body) {
 		if (body.isTalking()) {
 			// body.setBodyEventResMessage(GameMessages.getMessage(body,
 			// MessagePool.Action.ApologyToHuman), 20, false, true);
@@ -243,7 +243,7 @@ public class BegForLifeEvent extends EventPacket {
 	 * trueを返すとイベント終了
 	 */
 	@Override
-	public boolean execute(Body body) {
+	public boolean execute(Yukkuri body) {
 		return true;
 	}
 
@@ -251,7 +251,7 @@ public class BegForLifeEvent extends EventPacket {
 	 * もしもの後始末
 	 */
 	@Override
-	public void end(Body body) {
+	public void end(Yukkuri body) {
 		body.setBegging(false);
 		return;
 	}

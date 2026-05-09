@@ -8,9 +8,9 @@ import java.util.Map;
 import src.SimYukkuri;
 import src.util.GameRandom;
 import src.util.GameWorld;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.event.EventPacket;
-import src.base.Obj;
+import src.base.Entity;
 import src.draw.Terrarium;
 import src.draw.Translate;
 import src.enums.AgeState;
@@ -30,9 +30,9 @@ import src.yukkuri.Sakuya;
 
 /***************************************************
  * 空中捕食イベント
- * protected Body from; // イベントを発した個体
- * protected Body to; // 未使用
- * protected Obj target; // 未使用
+ * protected Yukkuri from; // イベントを発した個体
+ * protected Yukkuri to; // 未使用
+ * protected Entity target; // 未使用
  * protected int count; // 1
  */
 public class PredatorsGameEvent extends EventPacket {
@@ -50,7 +50,7 @@ public class PredatorsGameEvent extends EventPacket {
 	/**
 	 * コンストラクタ.
 	 */
-	public PredatorsGameEvent(Body f, Body t, Obj tgt, int cnt) {
+	public PredatorsGameEvent(Yukkuri f, Yukkuri t, Entity tgt, int cnt) {
 		super(f, t, tgt, cnt);
 	}
 
@@ -109,16 +109,16 @@ public class PredatorsGameEvent extends EventPacket {
 	// 参加チェック
 	// このイベントがスタートできるのはれみりゃ、ふらんのみ
 	@Override
-	public boolean checkEventResponse(Body b) {
+	public boolean checkEventResponse(Yukkuri b) {
 		priority = EventPriority.LOW;
 
 		if (b.isDead())
 			return false;
-		Body from = src.util.BodyRegistry.getBodyInstance(getFrom());
+		Yukkuri from = src.util.BodyRegistry.getBodyInstance(getFrom());
 		if (b.isPredatorType() && b == from) {
 			// 遊び相手の決定
-			for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
-				Body d = entry.getValue();
+			for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
+				Yukkuri d = entry.getValue();
 				int minDistance = b.getEyesightBase();
 				int wallMode = b.getBodyAgeState().ordinal();
 				int size = b.getBodyAgeState().ordinal();
@@ -172,16 +172,16 @@ public class PredatorsGameEvent extends EventPacket {
 
 	// イベント開始動作
 	@Override
-	public void start(Body b) {
+	public void start(Yukkuri b) {
 		b.setMessage(GameMessages.getMessage(b, MessagePool.Action.GameStart), true);
 	}
 
 	// 毎フレーム処理
 	// UpdateState.ABORTを返すとイベント終了
 	@Override
-	public UpdateState update(Body b) {
-		Body from = src.util.BodyRegistry.getBodyInstance(getFrom());
-		Body toy = src.util.BodyRegistry.getBodyInstance(this.toy);
+	public UpdateState update(Yukkuri b) {
+		Yukkuri from = src.util.BodyRegistry.getBodyInstance(getFrom());
+		Yukkuri toy = src.util.BodyRegistry.getBodyInstance(this.toy);
 		// 対象が決定できなかったり、捕食防止ディフューザー環境だったりしたら中止。ボール遊びを試す
 		if (from == null || toy == null || GameEnvironment.isPredatorSteam()) {
 			if (ToyLogic.checkToy(from)) {
@@ -346,19 +346,19 @@ public class PredatorsGameEvent extends EventPacket {
 	// イベント目標に到着した際に呼ばれる(このイベントでは別挙動の扱いをしている)
 	// trueを返すとイベント終了
 	@Override
-	public boolean execute(Body b) {
-		Body toy = src.util.BodyRegistry.getBodyInstance(this.toy);
+	public boolean execute(Yukkuri b) {
+		Yukkuri toy = src.util.BodyRegistry.getBodyInstance(this.toy);
 		// 相手が消えてしまったらイベント中断
 		if (toy == null || toy.isRemoved()) {
 			toy.setParentLinkId(-1);
 			return true;
 		}
-		Body from = src.util.BodyRegistry.getBodyInstance(getFrom());
+		Yukkuri from = src.util.BodyRegistry.getBodyInstance(getFrom());
 		if (from == null)
 			return true;
 		// 相手が捕まれたらイベント中断
 		if (toy.isGrabbed()) {
-			Body to = src.util.BodyRegistry.getBodyInstance(getTo());
+			Yukkuri to = src.util.BodyRegistry.getBodyInstance(getTo());
 			if (to != null)
 				to.setParentLinkId(-1);
 			return true;
@@ -397,10 +397,10 @@ public class PredatorsGameEvent extends EventPacket {
 
 	// イベント終了処理
 	@Override
-	public void end(Body b) {
+	public void end(Yukkuri b) {
 		b.setMessage(GameMessages.getMessage(b, MessagePool.Action.GameEnd));
 		grabbing = false;
-		Body toy = src.util.BodyRegistry.getBodyInstance(this.toy);
+		Yukkuri toy = src.util.BodyRegistry.getBodyInstance(this.toy);
 		if (toy != null) {
 			toy.setParentLinkId(-1);
 			toy = null;

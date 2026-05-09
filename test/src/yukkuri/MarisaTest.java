@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import src.ConstState;
 import src.SimYukkuri;
 import src.enums.AgeState;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.draw.MyPane;
 import src.system.BodyLayer;
 import src.system.ResourceUtil;
@@ -113,7 +113,7 @@ public class MarisaTest {
         try {
             WorldTestHelper.initializeMinimalWorld();
             Marisa marisa = new Marisa();
-            Body result = marisa.checkTransform();
+            Yukkuri result = marisa.checkTransform();
             assertNull(result);
         } finally {
             WorldTestHelper.resetWorld();
@@ -317,7 +317,7 @@ public class MarisaTest {
 
             marisa.execTransform();
 
-            Body transformed = SimYukkuri.world.getCurrentMap().getBody().get(originalId);
+            Yukkuri transformed = SimYukkuri.world.getCurrentMap().getBody().get(originalId);
             assertNotNull(transformed);
             assertInstanceOf(DosMarisa.class, transformed);
             assertEquals(originalId, transformed.getUniqueID());
@@ -356,7 +356,7 @@ public class MarisaTest {
 
             marisa.execTransform();
 
-            Body transformed = SimYukkuri.world.getCurrentMap().getBody().get(originalId);
+            Yukkuri transformed = SimYukkuri.world.getCurrentMap().getBody().get(originalId);
             assertNotNull(transformed);
             assertEquals(partnerId, transformed.getPartner());
             assertTrue(transformed.getChildrenList().contains(childId));
@@ -396,7 +396,7 @@ public class MarisaTest {
 
             marisa.execTransform();
 
-            Body transformed = SimYukkuri.world.getCurrentMap().getBody().get(originalId);
+            Yukkuri transformed = SimYukkuri.world.getCurrentMap().getBody().get(originalId);
             assertNotNull(transformed);
             assertTrue(transformed.isHasBaby());
             assertEquals(1, transformed.getBabyTypes().size());
@@ -438,7 +438,7 @@ public class MarisaTest {
 
             marisa.execTransform();
 
-            Body transformed = SimYukkuri.world.getCurrentMap().getBody().get(originalId);
+            Yukkuri transformed = SimYukkuri.world.getCurrentMap().getBody().get(originalId);
             assertNotNull(transformed);
             assertTrue(transformed.isHasStalk());
             assertEquals(1, transformed.getStalkBabyTypes().size());

@@ -5,8 +5,8 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 
 import src.attachment.Attachment;
-import src.base.Body;
-import src.base.Obj;
+import src.base.Yukkuri;
+import src.base.Entity;
 import src.entity.world.bodylinked.Okazari;
 import src.entity.world.bodylinked.Okazari.OkazariType;
 import src.draw.Point4y;
@@ -45,7 +45,7 @@ public class BodyUtil {
 	 * @param io イメージオブザーバ
 	 * @param b  ゆっくり
 	 */
-	public static void drawBody(Graphics2D g2, ImageObserver io, Body b) {
+	public static void drawBody(Graphics2D g2, ImageObserver io, Yukkuri b) {
 		layer.clear();
 		layer2.clear();
 		layer3.clear();
@@ -132,9 +132,9 @@ public class BodyUtil {
 			expand.getScreenRect()[1].setHeight(expand.getScreenRect()[1].getHeight() + jh);
 
 			// 何かとリンクしてる場合の全体の高度補正
-			Obj oLinkParent = b.takeMappedObj(b.getParentLinkId());
-			if (oLinkParent != null && oLinkParent.getZ() < b.getZ() && oLinkParent instanceof Body) {
-				Body linkedBody = (Body) oLinkParent;
+			Entity oLinkParent = b.takeMappedObj(b.getParentLinkId());
+			if (oLinkParent != null && oLinkParent.getZ() < b.getZ() && oLinkParent instanceof Yukkuri) {
+				Yukkuri linkedBody = (Yukkuri) oLinkParent;
 				int linkedVerticalOffset = 0;
 				int linkedHorizontalOffset = 0;
 				BodyLayer layer2Link = new BodyLayer();
@@ -182,7 +182,7 @@ public class BodyUtil {
 
 			// ひっぱり時の各種の位置補正計算
 			// 倍率は見た目で適当に調整
-			int force = b.getExtForce();
+			int force = b.getExternalPressure();
 			if (force > 0) {
 				faceOfsY += (int) ((float) force * 1.25f);
 				okazariOfsY += (int) ((float) force * 0.9f);

@@ -2,9 +2,9 @@ package src.logic;
 
 import java.util.Map;
 
-import src.base.Body;
+import src.base.Yukkuri;
 import src.event.EventPacket;
-import src.base.Obj;
+import src.base.Entity;
 import src.draw.Translate;
 import src.enums.BurialState;
 import src.enums.Happiness;
@@ -36,7 +36,7 @@ public final class FoodArrivalActionPolicy {
 	/**
 	 * 到着済みの target を処理する.
 	 */
-	public static boolean handleArrivedFood(Body body, Obj targetObject, boolean[] forceEat) {
+	public static boolean handleArrivedFood(Yukkuri body, Entity targetObject, boolean[] forceEat) {
 		boolean sweets = false;
 		boolean goodsweets = false;
 		boolean fullmessage = false;
@@ -108,8 +108,8 @@ public final class FoodArrivalActionPolicy {
 					body.stay();
 				}
 			}
-		} else if (targetObject instanceof Body) {
-			Body candidateBody = (Body) targetObject;
+		} else if (targetObject instanceof Yukkuri) {
+			Yukkuri candidateBody = (Yukkuri) targetObject;
 			if (!candidateBody.isDead()) {
 				if (body.isPredatorType() && !GameEnvironment.isPredatorSteam()) {
 					candidateBody.bodyInjure();
@@ -123,7 +123,7 @@ public final class FoodArrivalActionPolicy {
 							body.addSickPeriod(100);
 						}
 					}
-					Body motherBody = src.util.BodyRegistry.getBodyInstance(candidateBody.getMother());
+					Yukkuri motherBody = src.util.BodyRegistry.getBodyInstance(candidateBody.getMother());
 					if (GameRandom.nextInt(3) == 0 && motherBody != null && !motherBody.isDead() && !motherBody.isRemoved()) {
 						motherBody.clearEvent();
 						motherBody.setPanic(false, null);
@@ -157,7 +157,7 @@ public final class FoodArrivalActionPolicy {
 			}
 		} else if (targetObject instanceof Stalk) {
 			Stalk stalk = (Stalk) targetObject;
-			Body plantBody = GameWorld.get().getCurrentMap().getBody().get(stalk.getPlantYukkuri());
+			Yukkuri plantBody = GameWorld.get().getCurrentMap().getBody().get(stalk.getPlantYukkuri());
 			if (stalk.getZ() == 0 && plantBody == null) {
 				eatFood(body, FoodType.STALK, Math.min(body.getEatAmount(), stalk.getAmount()));
 				stalk.eatStalk(Math.min(body.getEatAmount(), stalk.getAmount()));
@@ -183,7 +183,7 @@ public final class FoodArrivalActionPolicy {
 			body.addAmaamaDiscipline(5);
 		} else if (sweets) {
 			body.addAmaamaDiscipline(3);
-		} else if (targetObject instanceof Body) {
+		} else if (targetObject instanceof Yukkuri) {
 			body.addAmaamaDiscipline(1);
 		} else {
 			body.addAmaamaDiscipline(-1);
@@ -208,7 +208,7 @@ public final class FoodArrivalActionPolicy {
 		return true;
 	}
 
-	private static void eatFood(Body body, FoodType foodType, int amount) {
+	private static void eatFood(Yukkuri body, FoodType foodType, int amount) {
 		FoodLogic.eatFood(body, foodType, amount);
 	}
 }

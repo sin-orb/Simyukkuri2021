@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.event.EventPacket.EventPriority;
 import src.draw.World;
 import src.enums.AgeState;
@@ -39,8 +39,8 @@ public class RaperWakeupEventTest {
 
     @Test
     public void testParameterizedConstructor() {
-        Body from = createBody();
-        Body to = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
         RaperWakeupEvent event = new RaperWakeupEvent(from, to, null, 1);
         assertEquals(from.getUniqueID(), event.getFrom());
         assertEquals(to.getUniqueID(), event.getTo());
@@ -51,7 +51,7 @@ public class RaperWakeupEventTest {
 
     @Test
     public void testSimpleEventAction_returnsFalseWhenBEqualsFrom() {
-        Body b = createBody();
+        Yukkuri b = createBody();
         RaperWakeupEvent event = new RaperWakeupEvent(b, null, null, 1);
         // b == from => return false (self is skipped)
         assertFalse(event.simpleEventAction(b));
@@ -59,8 +59,8 @@ public class RaperWakeupEventTest {
 
     @Test
     public void testSimpleEventAction_returnsTrueWhenCanEventResponseIsFalse() {
-        Body from = createBody();
-        Body b = createBody();
+        Yukkuri from = createBody();
+        Yukkuri b = createBody();
         // Make b unable to respond to events (e.g., dead)
         b.setDead(true);
         RaperWakeupEvent event = new RaperWakeupEvent(from, null, null, 1);
@@ -72,11 +72,11 @@ public class RaperWakeupEventTest {
 
     @Test
     public void testCheckEventResponse_alwaysReturnsFalse() {
-        Body b = createBody();
+        Yukkuri b = createBody();
         RaperWakeupEvent event = new RaperWakeupEvent();
         assertFalse(event.checkEventResponse(b));
 
-        Body from = createBody();
+        Yukkuri from = createBody();
         RaperWakeupEvent event2 = new RaperWakeupEvent(from, null, null, 1);
         assertFalse(event2.checkEventResponse(b));
         assertFalse(event2.checkEventResponse(from));
@@ -86,7 +86,7 @@ public class RaperWakeupEventTest {
 
     @Test
     public void testStart_doesNotThrow() {
-        Body b = createBody();
+        Yukkuri b = createBody();
         RaperWakeupEvent event = new RaperWakeupEvent();
         assertDoesNotThrow(() -> event.start(b));
     }
@@ -95,7 +95,7 @@ public class RaperWakeupEventTest {
 
     @Test
     public void testExecute_returnsTrue() {
-        Body b = createBody();
+        Yukkuri b = createBody();
         RaperWakeupEvent event = new RaperWakeupEvent();
         assertTrue(event.execute(b));
     }
@@ -111,8 +111,8 @@ public class RaperWakeupEventTest {
     // --- simpleEventAction: b.isNYD() → canEventResponse=false → true ---
     @Test
     public void testSimpleEventAction_bIsNYD_returnsTrue() {
-        Body from = createBody();
-        Body b = createBody();
+        Yukkuri from = createBody();
+        Yukkuri b = createBody();
         b.setCoreAnkoState(src.enums.CoreAnkoState.NonYukkuriDisease);
         RaperWakeupEvent event = new RaperWakeupEvent(from, null, null, 1);
         assertTrue(event.simpleEventAction(b));
@@ -121,8 +121,8 @@ public class RaperWakeupEventTest {
     // --- simpleEventAction: b.isNeedled() → canEventResponse=false → true ---
     @Test
     public void testSimpleEventAction_bIsNeedled_returnsTrue() {
-        Body from = createBody();
-        Body b = createBody();
+        Yukkuri from = createBody();
+        Yukkuri b = createBody();
         b.setNeedled(true);
         RaperWakeupEvent event = new RaperWakeupEvent(from, null, null, 1);
         assertTrue(event.simpleEventAction(b));
@@ -131,8 +131,8 @@ public class RaperWakeupEventTest {
     // --- simpleEventAction: b.isRaper() → forceToRaperExcite, return true ---
     @Test
     public void testSimpleEventAction_bIsRaper_returnsTrue() {
-        Body from = createBody();
-        Body b = createBody();
+        Yukkuri from = createBody();
+        Yukkuri b = createBody();
         b.setRapist(true); // isRaper() = true
         RaperWakeupEvent event = new RaperWakeupEvent(from, null, null, 1);
         assertTrue(event.simpleEventAction(b));
@@ -141,8 +141,8 @@ public class RaperWakeupEventTest {
     // --- simpleEventAction: normal body (not raper) → addBodyEvent, return true ---
     @Test
     public void testSimpleEventAction_normalBody_returnsTrue() {
-        Body from = createBody();
-        Body b = createBody(); // normal body, no raper
+        Yukkuri from = createBody();
+        Yukkuri b = createBody(); // normal body, no raper
         RaperWakeupEvent event = new RaperWakeupEvent(from, null, null, 1);
         assertTrue(event.simpleEventAction(b));
     }
@@ -152,8 +152,8 @@ public class RaperWakeupEventTest {
 
         @Test
         void testScenario_NormalBodyQueuesSingleRaperReactionEvent() {
-            Body raper = createBody();
-            Body bystander = createBody();
+            Yukkuri raper = createBody();
+            Yukkuri bystander = createBody();
             RaperWakeupEvent event = new RaperWakeupEvent(raper, null, null, 1);
 
             assertTrue(event.simpleEventAction(bystander));
@@ -169,8 +169,8 @@ public class RaperWakeupEventTest {
 
         @Test
         void testScenario_RaperBodyGetsForcedExcitedAndDropsPartner() {
-            Body sourceRaper = createBody();
-            Body chainedRaper = createBody();
+            Yukkuri sourceRaper = createBody();
+            Yukkuri chainedRaper = createBody();
             chainedRaper.setRapist(true);
             chainedRaper.setPartner(sourceRaper.getUniqueID());
             chainedRaper.setExciting(false);
@@ -188,8 +188,8 @@ public class RaperWakeupEventTest {
 
     // --- Helper ---
 
-    private static Body createBody() {
-        Body b = new Reimu();
+    private static Yukkuri createBody() {
+        Yukkuri b = new Reimu();
         b.setAgeState(AgeState.ADULT);
         Sprite[] spr = new Sprite[3];
         for (int i = 0; i < 3; i++) {

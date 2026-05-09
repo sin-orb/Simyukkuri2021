@@ -1,7 +1,7 @@
 package src.logic;
 
-import src.base.Body;
-import src.base.Obj;
+import src.base.Yukkuri;
+import src.base.Entity;
 import src.enums.PublicRank;
 import src.game.Shit;
 import src.game.Stalk;
@@ -19,7 +19,7 @@ public final class FoodFoundReaction {
 	private FoodFoundReaction() {
 	}
 
-	public static boolean handleFoundFood(Body body, Obj targetObject, boolean[] forceEat) {
+	public static boolean handleFoundFood(Yukkuri body, Entity targetObject, boolean[] forceEat) {
 		if (body.isOnlyAmaama() && body.getPublicRank() != PublicRank.UnunSlave) {
 			if (!body.isStarving()) {
 				if (targetObject instanceof Food) {
@@ -84,7 +84,7 @@ public final class FoodFoundReaction {
 				if (takeOut) {
 					body.setToTakeout(true);
 				}
-			} else if (targetObject instanceof Body) {
+			} else if (targetObject instanceof Yukkuri) {
 				body.moveToFood(targetObject, FoodType.BODY, targetObject.getX(), targetObject.getY(), destinationZ);
 			} else if (targetObject instanceof Stalk) {
 				body.moveToFood(targetObject, FoodType.STALK, targetObject.getX(), targetObject.getY(), destinationZ);

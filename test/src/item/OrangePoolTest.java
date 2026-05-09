@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
 import src.base.ItemTestBase;
-import src.base.ObjEX;
+import src.base.WorldEntity;
 import src.draw.Rectangle4y;
 import src.enums.AgeState;
 import src.system.Sprite;
@@ -87,8 +87,8 @@ class OrangePoolTest extends ItemTestBase {
     @Test
     void testGetSetItemRank() {
         OrangePool item = new OrangePool();
-        item.setItemRank(ObjEX.ItemRank.HOUSE);
-        assertEquals(ObjEX.ItemRank.HOUSE, item.getItemRank());
+        item.setItemRank(WorldEntity.ItemRank.HOUSE);
+        assertEquals(WorldEntity.ItemRank.HOUSE, item.getItemRank());
     }
 
     // --- removeListData ---
@@ -126,7 +126,7 @@ class OrangePoolTest extends ItemTestBase {
     @Test
     void testGetValue_HOUSE_NoRescue() {
         OrangePool item = new OrangePool();
-        item.setItemRank(ObjEX.ItemRank.HOUSE);
+        item.setItemRank(WorldEntity.ItemRank.HOUSE);
         item.setRescue(false);
         // value[] = {500, 10000}; rescue=false なら value[0]=500
         assertEquals(500, item.getValue());
@@ -137,7 +137,7 @@ class OrangePoolTest extends ItemTestBase {
     @Test
     void testGetValue_NonHOUSE() {
         OrangePool item = new OrangePool();
-        item.setItemRank(ObjEX.ItemRank.NORA);
+        item.setItemRank(WorldEntity.ItemRank.NORA);
         // NORA の場合は 0 を返す
         assertEquals(0, item.getValue());
     }
@@ -147,7 +147,7 @@ class OrangePoolTest extends ItemTestBase {
     @Test
     void testGetCost_HOUSE() {
         OrangePool item = new OrangePool();
-        item.setItemRank(ObjEX.ItemRank.HOUSE);
+        item.setItemRank(WorldEntity.ItemRank.HOUSE);
         item.setRescue(false);
         // cost[] = {5, 100}; rescue=false なら cost[0]=5
         assertEquals(5, item.getCost());
@@ -193,7 +193,7 @@ class OrangePoolTest extends ItemTestBase {
         void testScenario_NormalPoolCleansDirtyBodyAndChargesCost() {
             OrangePool item = new OrangePool();
             item.setEnabled(true);
-            item.setItemRank(ObjEX.ItemRank.HOUSE);
+            item.setItemRank(WorldEntity.ItemRank.HOUSE);
             item.setRescue(false);
 
             Reimu body = new Reimu();
@@ -219,7 +219,7 @@ class OrangePoolTest extends ItemTestBase {
         void testScenario_RescuePoolRevivesDeadBodyAndResetsFootBake() {
             OrangePool item = new OrangePool();
             item.setEnabled(true);
-            item.setItemRank(ObjEX.ItemRank.HOUSE);
+            item.setItemRank(WorldEntity.ItemRank.HOUSE);
             item.setRescue(true);
 
             Reimu body = new Reimu();

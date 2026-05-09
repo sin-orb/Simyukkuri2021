@@ -9,14 +9,14 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import src.base.Body;
+import src.base.Yukkuri;
 import src.event.EventPacket;
 import src.enums.Event;
 import src.util.WorldTestHelper;
 
 class BodyEventStateTest {
 
-	private Body body;
+	private Yukkuri body;
 
 	@BeforeEach
 	void setUp() {
@@ -207,35 +207,35 @@ class BodyEventStateTest {
 		}
 
 		@Override
-		public boolean simpleEventAction(Body b) {
+		public boolean simpleEventAction(Yukkuri b) {
 			simpleActionCalled = true;
 			return simpleAction;
 		}
 
 		@Override
-		public boolean checkEventResponse(Body b) {
+		public boolean checkEventResponse(Yukkuri b) {
 			return true;
 		}
 
 		@Override
-		public void start(Body b) {
+		public void start(Yukkuri b) {
 			started = true;
 			b.setCurrentEvent(this);
 		}
 
 		@Override
-		public UpdateState update(Body b) {
+		public UpdateState update(Yukkuri b) {
 			return updateState;
 		}
 
 		@Override
-		public boolean execute(Body b) {
+		public boolean execute(Yukkuri b) {
 			executed = true;
 			return true;
 		}
 
 		@Override
-		public void end(Body b) {
+		public void end(Yukkuri b) {
 			ended = true;
 		}
 	}

@@ -2,7 +2,7 @@ package src.command;
 
 import src.SimYukkuri;
 import src.util.GameRandom;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.enums.UnbirthBabyState;
 import src.enums.YukkuriType;
 import src.yukkuri.Reimu;
@@ -16,7 +16,7 @@ public class GadgetTool {
 	 * ゆ虐神拳を実行する.
 	 * @param body ゆっくりの実体
 	 */
-	public static void doGodHand(Body body) {
+	public static void doGodHand(Yukkuri body) {
 		// 死んでたら何もしない
 		if( body.isDead() ){
 			return;

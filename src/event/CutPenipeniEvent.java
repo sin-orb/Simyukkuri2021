@@ -4,9 +4,9 @@ import src.util.GameText;
 
 import src.SimYukkuri;
 import src.util.GameRandom;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.event.EventPacket;
-import src.base.Obj;
+import src.base.Entity;
 import src.enums.Happiness;
 import src.enums.ImageCode;
 import src.system.MessagePool;
@@ -14,9 +14,9 @@ import src.system.ResourceUtil;
 
 /***************************************************
  * ぺに切りの反応イベント
- * protected Body from; // イベントを発した個体
- * protected Body to; // 攻撃対象
- * protected Obj target; // 未使用
+ * protected Yukkuri from; // イベントを発した個体
+ * protected Yukkuri to; // 攻撃対象
+ * protected Entity target; // 未使用
  * protected int count; // 10
  */
 public class CutPenipeniEvent extends EventPacket {
@@ -27,7 +27,7 @@ public class CutPenipeniEvent extends EventPacket {
 	/**
 	 * コンストラクタ.
 	 */
-	public CutPenipeniEvent(Body fromBody, Body toBody, Obj targetObject, int count) {
+	public CutPenipeniEvent(Yukkuri fromBody, Yukkuri toBody, Entity targetObject, int count) {
 		super(fromBody, toBody, targetObject, count);
 	}
 
@@ -47,10 +47,10 @@ public class CutPenipeniEvent extends EventPacket {
 	// ここで各種チェックを行い、イベントへ参加するかを返す
 	// また、イベント優先度も必要に応じて設定できる
 	@Override
-	public boolean checkEventResponse(Body body) {
+	public boolean checkEventResponse(Yukkuri body) {
 
 		priority = EventPriority.HIGH;
-		Body fromBody = src.util.BodyRegistry.getBodyInstance(getFrom());
+		Yukkuri fromBody = src.util.BodyRegistry.getBodyInstance(getFrom());
 		if (body == fromBody)
 			return true;
 		return false;
@@ -58,13 +58,13 @@ public class CutPenipeniEvent extends EventPacket {
 
 	// イベント開始動作
 	@Override
-	public void start(Body body) {
+	public void start(Yukkuri body) {
 	}
 
 	// 毎フレーム処理
 	// UpdateState.ABORTを返すとイベント終了
 	@Override
-	public UpdateState update(Body body) {
+	public UpdateState update(Yukkuri body) {
 		if (body.isUnBirth()) {
 			body.wakeup();
 			// ぺにぺ二があれば切断
@@ -148,13 +148,13 @@ public class CutPenipeniEvent extends EventPacket {
 	// イベント目標に到着した際に呼ばれる
 	// trueを返すとイベント終了
 	@Override
-	public boolean execute(Body body) {
+	public boolean execute(Yukkuri body) {
 		return true;
 	}
 
 	// イベント終了処理
 	@Override
-	public void end(Body body) {
+	public void end(Yukkuri body) {
 		body.setCalm();
 		body.setPenipeniCutted(true);
 		body.setHappiness(Happiness.VERY_SAD);

@@ -7,8 +7,8 @@ import java.io.IOException;
 
 import src.SimYukkuri;
 import src.util.GameRandom;
-import src.base.Body;
-import src.base.Obj;
+import src.base.Yukkuri;
+import src.base.Entity;
 import src.draw.ModLoader;
 import src.draw.Point4y;
 import src.draw.Rectangle4y;
@@ -19,7 +19,7 @@ import src.enums.Type;
   おかざりオブジェクトクラス
 
  */
-public class Okazari extends Obj {
+public class Okazari extends Entity {
 
 	private static final long serialVersionUID = 5562152108201566916L;
 
@@ -111,7 +111,7 @@ public class Okazari extends Obj {
 		if (offsetPos == null) {
 			return null;
 		}
-		Body body = src.util.BodyRegistry.getBodyInstance(owner);
+		Yukkuri body = src.util.BodyRegistry.getBodyInstance(owner);
 		if  (body == null) return null;
 		return offsetPos[body.getBodyAgeState().ordinal()];
 	}
@@ -121,7 +121,7 @@ public class Okazari extends Obj {
 	 * @param b ゆっくりのインスタンス
 	 * @param type おかざりのタイプ
 	 */
-	public Okazari(Body body, OkazariType type) {
+	public Okazari(Yukkuri body, OkazariType type) {
 
 		owner = body.getUniqueID();
 		okazariType = type;
@@ -129,7 +129,7 @@ public class Okazari extends Obj {
 			offsetPos = null;
 			setBoundary(64, 127, 128, 128);
 		} else {
-			Body ownerBody = src.util.BodyRegistry.getBodyInstance(owner);
+			Yukkuri ownerBody = src.util.BodyRegistry.getBodyInstance(owner);
 			if (ownerBody != null) {
 				offsetPos = ownerBody.getMountPoint(okazariType.getFileName());
 				setBoundary(boundary[type.ordinal()]);

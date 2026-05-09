@@ -1,7 +1,7 @@
 package src.logic;
 
 import src.attachment.Badge;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.enums.Attitude;
 import src.enums.BodyRank;
 import src.enums.Intelligence;
@@ -18,7 +18,7 @@ public class BadgeLogic {
 	 * @param body 受けさせるゆっくり
 	 * @return 現状は常にTrue
 	 */
-	public static boolean badgeTest( Body body )
+	public static boolean badgeTest( Yukkuri body )
 	{
 		if( body == null || body.isDead()|| body.isRemoved())
 		{

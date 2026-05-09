@@ -8,7 +8,7 @@ import java.io.IOException;
 
 import src.SimYukkuri;
 import src.util.GameWorld;
-import src.base.ObjEX;
+import src.base.WorldEntity;
 import src.draw.ModLoader;
 import src.draw.Rectangle4y;
 import src.enums.WorldEntityKind;
@@ -17,7 +17,7 @@ import src.enums.Type;
 /***************************************************
  * おうち
  */
-public class House extends ObjEX {
+public class House extends WorldEntity {
 	private static final long serialVersionUID = -6609787822366581526L;
 
 	/** おうちの種類テーブル */
@@ -128,7 +128,7 @@ public class House extends ObjEX {
 		setCollisionSize(getPivotX(), getPivotY());
 		GameWorld.get().getCurrentMap().getHouse().put(objId, this);
 		objType = Type.PLATFORM;
-		objEXType = WorldEntityKind.HOUSE;
+		worldEntityType = WorldEntityKind.HOUSE;
 		itemRank = ItemRank.values()[houseType.getRank()];
 
 		interval = 5000;

@@ -1,9 +1,9 @@
 package src.event;
 import src.util.GameText;
 
-import src.base.Body;
+import src.base.Yukkuri;
 import src.event.EventPacket;
-import src.base.Obj;
+import src.base.Entity;
 import src.enums.FavItemType;
 import src.enums.PublicRank;
 import src.field.impl.Barrier;
@@ -11,9 +11,9 @@ import src.system.ResourceUtil;
 
 /***************************************************
  * お気に入りの情報を家族で共有するシンプルアクション
- * protected Body from; // イベントを発した個体
- * protected Body to; // 未使用
- * protected Obj target; // 未使用
+ * protected Yukkuri from; // イベントを発した個体
+ * protected Yukkuri to; // 未使用
+ * protected Entity target; // 未使用
  * protected int count; // 1
  */
 public class FavCopyEvent extends EventPacket {
@@ -23,7 +23,7 @@ public class FavCopyEvent extends EventPacket {
 	/**
 	 * コンストラクタ.
 	 */
-	public FavCopyEvent(Body fromBody, Body toBody, Obj targetObject, int count) {
+	public FavCopyEvent(Yukkuri fromBody, Yukkuri toBody, Entity targetObject, int count) {
 		super(fromBody, toBody, targetObject, count);
 	}
 
@@ -32,8 +32,8 @@ public class FavCopyEvent extends EventPacket {
 	}
 
 	@Override
-	public boolean simpleEventAction(Body body) {
-		Body sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
+	public boolean simpleEventAction(Yukkuri body) {
+		Yukkuri sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
 		if (sourceBody == body || sourceBody == null)
 			return false;
 		// イベントの発信者が家族かチェック
@@ -53,16 +53,16 @@ public class FavCopyEvent extends EventPacket {
 	}
 
 	@Override
-	public boolean checkEventResponse(Body body) {
+	public boolean checkEventResponse(Yukkuri body) {
 		return false;
 	}
 
 	@Override
-	public void start(Body body) {
+	public void start(Yukkuri body) {
 	}
 
 	@Override
-	public boolean execute(Body body) {
+	public boolean execute(Yukkuri body) {
 		return true;
 	}
 

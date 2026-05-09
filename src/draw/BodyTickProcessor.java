@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import src.attachment.Fire;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.command.GadgetAction;
 import src.enums.AgeState;
 import src.enums.Event;
@@ -42,7 +42,7 @@ public final class BodyTickProcessor {
 	 * @param transCheck 突然変異チェックを行うか
 	 * @return 突然変異候補。なければ null
 	 */
-	public static Body processBody(Terrarium terrarium, MapPlaceData curMap, Body b, List<Body> babyList,
+	public static Yukkuri processBody(Terrarium terrarium, MapPlaceData curMap, Yukkuri b, List<Yukkuri> babyList,
 			boolean transCheck) {
 		Event ret = b.clockTick();
 		switch (ret) {
@@ -87,7 +87,7 @@ public final class BodyTickProcessor {
 			}
 
 			boolean hasChildren = false;
-			List<Body> childrenList = BodyLogic.createActiveChildList(b, true);
+			List<Yukkuri> childrenList = BodyLogic.createActiveChildList(b, true);
 			if (childrenList != null && !childrenList.isEmpty()) {
 				hasChildren = true;
 			}
@@ -164,7 +164,7 @@ public final class BodyTickProcessor {
 					s.setPlantYukkuri(b);
 				}
 				if (babyTypes != null) {
-					Body baby = terrarium.makeBody(b.getX(), b.getY(), 0, babyTypes, AgeState.BABY, b,
+					Yukkuri baby = terrarium.makeBody(b.getX(), b.getY(), 0, babyTypes, AgeState.BABY, b,
 							src.util.BodyRegistry.getBodyInstance(b.getPartner()));
 					babyList.add(baby);
 					baby.setBindStalk(s);
@@ -186,11 +186,11 @@ public final class BodyTickProcessor {
 		return null;
 	}
 
-	private static void handleDead(Terrarium terrarium, MapPlaceData curMap, Body b, List<Body> babyList) {
+	private static void handleDead(Terrarium terrarium, MapPlaceData curMap, Yukkuri b, List<Yukkuri> babyList) {
 		if (b.isInfration()) {
 			int burstPower = (b.getSize() - b.getOriginSize()) * 3 / 4;
 			for (Dna babyTypes : b.getBabyTypes()) {
-				Body baby = terrarium.makeBody(b.getX(), b.getY(), b.getZ() + b.getSize() / 20, babyTypes,
+				Yukkuri baby = terrarium.makeBody(b.getX(), b.getY(), b.getZ() + b.getSize() / 20, babyTypes,
 						AgeState.BABY, b, src.util.BodyRegistry.getBodyInstance(b.getPartner()));
 				baby.kick(GameRandom.nextInt(burstPower / 4 + 1) - burstPower / 8,
 						GameRandom.nextInt(burstPower / 4 + 1) - burstPower / 8,
@@ -225,11 +225,11 @@ public final class BodyTickProcessor {
 		}
 	}
 
-	private static void handleBirthBaby(Terrarium terrarium, Body b, List<Body> babyList) {
+	private static void handleBirthBaby(Terrarium terrarium, Yukkuri b, List<Yukkuri> babyList) {
 		if (b.getAge() % 10 == 0 && !b.isHasPants()) {
 				Dna babyType = b.getBabyTypesDequeue();
 				if (babyType != null) {
-					Body baby = terrarium.makeBody(b.getX(), b.getY(), b.getZ() + b.getSize() / 15, babyType,
+					Yukkuri baby = terrarium.makeBody(b.getX(), b.getY(), b.getZ() + b.getSize() / 15, babyType,
 							AgeState.BABY, b, src.util.BodyRegistry.getBodyInstance(b.getPartner()));
 					baby.kick(0, 5, -2);
 					babyList.add(baby);
@@ -242,7 +242,7 @@ public final class BodyTickProcessor {
 						if (bab == null) {
 							continue;
 						}
-						Body ba = src.util.BodyRegistry.getBodyInstance(bab);
+						Yukkuri ba = src.util.BodyRegistry.getBodyInstance(bab);
 						if (ba != null) {
 							ba.setUnBirth(false);
 							ba.setShadowVisible(true);
@@ -282,13 +282,13 @@ public final class BodyTickProcessor {
 		}
 	}
 
-	private static void checkPanic(Body b) {
+	private static void checkPanic(Yukkuri b) {
 		if (b.isDead() || b.isPealed()) {
 			return;
 		}
 		int minDistance;
-		for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
-			Body p = entry.getValue();
+		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
+			Yukkuri p = entry.getValue();
 			if (p == b) {
 				continue;
 			}
@@ -305,13 +305,13 @@ public final class BodyTickProcessor {
 		}
 	}
 
-	private static void checkFire(Body b) {
+	private static void checkFire(Yukkuri b) {
 		int minDistance;
 		if (b.getAttachmentSize(Fire.class) == 0) {
 			return;
 		}
-		for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
-			Body p = entry.getValue();
+		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
+			Yukkuri p = entry.getValue();
 			if (p == b) {
 				continue;
 			}

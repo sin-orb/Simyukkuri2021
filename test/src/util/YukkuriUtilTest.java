@@ -149,7 +149,7 @@ public class YukkuriUtilTest {
 
             // This will likely return null without actual bodies in the map
             // but should not crash. Use Integer.MIN_VALUE as ID that can't be assigned.
-            src.base.Body body = src.util.BodyRegistry.getBodyInstance(Integer.MIN_VALUE);
+            src.base.Yukkuri body = src.util.BodyRegistry.getBodyInstance(Integer.MIN_VALUE);
 
             // Null is expected for non-existent ID
             assertNull(body);
@@ -165,7 +165,7 @@ public class YukkuriUtilTest {
         try {
             src.util.WorldTestHelper.initializeMinimalWorld();
 
-            src.base.Body[] bodies = BodyRegistry.getBodyInstances();
+            src.base.Yukkuri[] bodies = BodyRegistry.getBodyInstances();
 
             // Should return an array (possibly empty)
             assertNotNull(bodies);
@@ -193,7 +193,7 @@ public class YukkuriUtilTest {
         Reimu body = new Reimu();
         body.setObjId(42);
         SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
-        src.base.Body result = BodyRegistry.getBodyInstanceFromObjId(42);
+        src.base.Yukkuri result = BodyRegistry.getBodyInstanceFromObjId(42);
         assertNotNull(result);
         assertEquals(42, result.getObjId());
     }
@@ -471,18 +471,6 @@ public class YukkuriUtilTest {
         assertFalse(to.isUseRealPregnantLimit());
     }
 
-    // --- isNoCopyField: test known no-copy fields ---
-
-    @Test
-    public void testIsNoCopyField_KnownNoCopyField() {
-        assertTrue(TransformationBodyCopier.isNoCopyField("bodySpr"));
-    }
-
-    @Test
-    public void testIsNoCopyField_RandomField_DoesNotThrow() {
-        assertFalse(TransformationBodyCopier.isNoCopyField("someRandomField"));
-    }
-
     // --- getRandomYukkuriType ---
 
     @Test
@@ -517,7 +505,7 @@ public class YukkuriUtilTest {
         assertTrue(type >= 0);
     }
 
-    private static void copyTransformedBody(src.base.Body to, src.base.Body from) throws Exception {
+    private static void copyTransformedBody(src.base.Yukkuri to, src.base.Yukkuri from) {
         TransformationBodyCopier.copy(to, from);
         TransformationPolicy.normalizeTransformedAge(to, from);
     }

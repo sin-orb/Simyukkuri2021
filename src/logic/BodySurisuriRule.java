@@ -1,6 +1,6 @@
 package src.logic;
 
-import src.base.Body;
+import src.base.Yukkuri;
 import src.base.BodyAttributes;
 import src.enums.EnumRelationMine;
 import src.enums.Happiness;
@@ -23,7 +23,7 @@ public final class BodySurisuriRule {
 	 * @param targetBody target body
 	 * @return action result
 	 */
-	public static final BodyLogic.ActionGo checkActionSurisuriFromPlayer(Body body, Body targetBody) {
+	public static final BodyLogic.ActionGo checkActionSurisuriFromPlayer(Yukkuri body, Yukkuri targetBody) {
 		if (body == null || targetBody == null) {
 			return BodyLogic.ActionGo.NONE;
 		}

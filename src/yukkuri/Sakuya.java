@@ -9,7 +9,7 @@ import java.util.Map;
 
 import src.SimYukkuri;
 import src.util.GameRandom;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.draw.Dimension4y;
 import src.draw.ModLoader;
 import src.draw.Point4y;
@@ -23,7 +23,7 @@ import src.util.IniFileUtil;
 /**
  * さくや
  */
-public class Sakuya extends Body {
+public class Sakuya extends Yukkuri {
 	private static final long serialVersionUID = -7824015792761934296L;
 	/** さくやのタイプ */
 	public static final int type = 1011;
@@ -153,7 +153,7 @@ public class Sakuya extends Body {
 	}
 
 	/** コンストラクタ */
-	public Sakuya(int initX, int initY, int initZ, AgeState initAgeState, Body p1, Body p2) {
+	public Sakuya(int initX, int initY, int initZ, AgeState initAgeState, Yukkuri p1, Yukkuri p2) {
 		super(initX, initY, initZ, initAgeState, p1, p2);
 		setBoundary(boundary, braidBoundary);
 		setMsgType(YukkuriType.SAKUYA);

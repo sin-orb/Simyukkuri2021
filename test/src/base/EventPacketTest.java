@@ -43,21 +43,21 @@ public class EventPacketTest {
             super();
         }
 
-        public TestEventPacket(Body f, Body t, Obj tgt, int cnt) {
+        public TestEventPacket(Yukkuri f, Yukkuri t, Entity tgt, int cnt) {
             super(f, t, tgt, cnt);
         }
 
         @Override
-        public boolean checkEventResponse(Body b) {
+        public boolean checkEventResponse(Yukkuri b) {
             return true;
         }
 
         @Override
-        public void start(Body b) {
+        public void start(Yukkuri b) {
         }
 
         @Override
-        public boolean execute(Body b) {
+        public boolean execute(Yukkuri b) {
             return true;
         }
     }
@@ -80,9 +80,9 @@ public class EventPacketTest {
 
     @Test
     public void testConstructorWithBothBodies() {
-        Body from = createBody();
-        Body to = createBody();
-        Obj target = new Obj();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
+        Entity target = new Entity();
         target.objId = 42;
 
         TestEventPacket packet = new TestEventPacket(from, to, target, 10);
@@ -95,7 +95,7 @@ public class EventPacketTest {
 
     @Test
     public void testConstructorWithNullTo() {
-        Body from = createBody();
+        Yukkuri from = createBody();
 
         TestEventPacket packet = new TestEventPacket(from, null, null, 5);
 
@@ -129,12 +129,12 @@ public class EventPacketTest {
         assertEquals(-1, packet.getCount());
     }
 
-    // --- setFrom(Body) ---
+    // --- setFrom(Yukkuri) ---
 
     @Test
     public void testSetFromWithBody() {
         EventPacket packet = new TestEventPacket();
-        Body b = createBody();
+        Yukkuri b = createBody();
 
         packet.setFrom(b);
         assertEquals(b.getUniqueID(), packet.getFrom());
@@ -145,27 +145,27 @@ public class EventPacketTest {
         EventPacket packet = new TestEventPacket();
         packet.setFrom(10);
 
-        packet.setFrom((Body) null);
+        packet.setFrom((Yukkuri) null);
         assertEquals(-1, packet.getFrom());
     }
 
-    // --- setTo(Body) ---
+    // --- setTo(Yukkuri) ---
 
     @Test
     public void testSetToWithBody() {
         EventPacket packet = new TestEventPacket();
-        Body b = createBody();
+        Yukkuri b = createBody();
 
         packet.setTo(b);
         assertEquals(b.getUniqueID(), packet.getTo());
     }
 
-    // --- setTarget(Obj) ---
+    // --- setTarget(Entity) ---
 
     @Test
     public void testSetTargetWithObj() {
         EventPacket packet = new TestEventPacket();
-        Obj obj = new Obj();
+        Entity obj = new Entity();
         obj.objId = 99;
 
         packet.setTarget(obj);
@@ -275,8 +275,8 @@ public class EventPacketTest {
 
         @Test
         public void testParameterizedConstructor() {
-            Body from = createBody();
-            Body to = createBody();
+            Yukkuri from = createBody();
+            Yukkuri to = createBody();
             CutPenipeniEvent event = new CutPenipeniEvent(from, to, null, 10);
             assertEquals(from.getUniqueID(), event.getFrom());
             assertEquals(to.getUniqueID(), event.getTo());
@@ -285,7 +285,7 @@ public class EventPacketTest {
 
         @Test
         public void testCheckEventResponse_setsPriorityHigh() {
-            Body from = createBody();
+            Yukkuri from = createBody();
             CutPenipeniEvent event = new CutPenipeniEvent(from, null, null, 10);
             event.checkEventResponse(from);
             assertEquals(EventPriority.HIGH, event.getPriority());
@@ -293,22 +293,22 @@ public class EventPacketTest {
 
         @Test
         public void testCheckEventResponse_trueForFromBody() {
-            Body from = createBody();
+            Yukkuri from = createBody();
             CutPenipeniEvent event = new CutPenipeniEvent(from, null, null, 10);
             assertTrue(event.checkEventResponse(from));
         }
 
         @Test
         public void testCheckEventResponse_falseForOtherBody() {
-            Body from = createBody();
-            Body other = createBody();
+            Yukkuri from = createBody();
+            Yukkuri other = createBody();
             CutPenipeniEvent event = new CutPenipeniEvent(from, null, null, 10);
             assertFalse(event.checkEventResponse(other));
         }
 
         @Test
         public void testUpdate_tick0_setsPenipeniCutAndLockmove() {
-            Body b = createBody();
+            Yukkuri b = createBody();
             CutPenipeniEvent event = new CutPenipeniEvent(b, null, null, 10);
             event.update(b);
             assertTrue(b.isPenipeniCutted());
@@ -317,7 +317,7 @@ public class EventPacketTest {
 
         @Test
         public void testEnd_setsExpectedState() {
-            Body b = createBody();
+            Yukkuri b = createBody();
             CutPenipeniEvent event = new CutPenipeniEvent(b, null, null, 10);
             b.setLockmove(true);
             event.end(b);
@@ -328,7 +328,7 @@ public class EventPacketTest {
 
         @Test
         public void testExecute_returnsTrue() {
-            Body b = createBody();
+            Yukkuri b = createBody();
             CutPenipeniEvent event = new CutPenipeniEvent(b, null, null, 10);
             assertTrue(event.execute(b));
         }
@@ -347,8 +347,8 @@ public class EventPacketTest {
 
         @Test
         public void testParameterizedConstructor() {
-            Body from = createBody();
-            Body to = createBody();
+            Yukkuri from = createBody();
+            Yukkuri to = createBody();
             EatBodyEvent event = new EatBodyEvent(from, to, null, 30);
             assertEquals(from.getUniqueID(), event.getFrom());
             assertEquals(to.getUniqueID(), event.getTo());
@@ -357,22 +357,22 @@ public class EventPacketTest {
 
         @Test
         public void testCheckEventResponse_trueWhenFromMatches() {
-            Body b = createBody();
+            Yukkuri b = createBody();
             EatBodyEvent event = new EatBodyEvent(b, null, null, 30);
             assertTrue(event.checkEventResponse(b));
         }
 
         @Test
         public void testCheckEventResponse_falseWhenNotFrom() {
-            Body from = createBody();
-            Body other = createBody();
+            Yukkuri from = createBody();
+            Yukkuri other = createBody();
             EatBodyEvent event = new EatBodyEvent(from, null, null, 30);
             assertFalse(event.checkEventResponse(other));
         }
 
         @Test
         public void testCheckEventResponse_falseWhenSuperShithead() {
-            Body b = createBody();
+            Yukkuri b = createBody();
             b.setAttitude(Attitude.SUPER_SHITHEAD);
             EatBodyEvent event = new EatBodyEvent(b, null, null, 30);
             assertFalse(event.checkEventResponse(b));
@@ -380,7 +380,7 @@ public class EventPacketTest {
 
         @Test
         public void testCheckEventResponse_falseWhenDead() {
-            Body b = createBody();
+            Yukkuri b = createBody();
             b.setDead(true);
             EatBodyEvent event = new EatBodyEvent(b, null, null, 30);
             assertFalse(event.checkEventResponse(b));
@@ -388,7 +388,7 @@ public class EventPacketTest {
 
         @Test
         public void testEnd_clearsLockmove() {
-            Body b = createBody();
+            Yukkuri b = createBody();
             b.setLockmove(true);
             EatBodyEvent event = new EatBodyEvent(b, null, null, 30);
             event.end(b);
@@ -409,8 +409,8 @@ public class EventPacketTest {
 
         @Test
         public void testParameterizedConstructor() {
-            Body from = createBody();
-            Body to = createBody();
+            Yukkuri from = createBody();
+            Yukkuri to = createBody();
             BreedEvent event = new BreedEvent(from, to, null, 2);
             assertEquals(from.getUniqueID(), event.getFrom());
             assertEquals(to.getUniqueID(), event.getTo());
@@ -419,7 +419,7 @@ public class EventPacketTest {
 
         @Test
         public void testCheckEventResponse_setsPriorityMiddle() {
-            Body from = createBody();
+            Yukkuri from = createBody();
             BreedEvent event = new BreedEvent(from, null, null, 2);
             event.checkEventResponse(from);
             assertEquals(EventPriority.MIDDLE, event.getPriority());
@@ -427,22 +427,22 @@ public class EventPacketTest {
 
         @Test
         public void testCheckEventResponse_falseWhenFromNull() {
-            Body b = createBody();
+            Yukkuri b = createBody();
             BreedEvent event = new BreedEvent();
             assertFalse(event.checkEventResponse(b));
         }
 
         @Test
         public void testCheckEventResponse_falseWhenFromEqualsB() {
-            Body b = createBody();
+            Yukkuri b = createBody();
             BreedEvent event = new BreedEvent(b, null, null, 2);
             assertFalse(event.checkEventResponse(b));
         }
 
         @Test
         public void testCheckEventResponse_falseWhenDead() {
-            Body from = createBody();
-            Body b = createBody();
+            Yukkuri from = createBody();
+            Yukkuri b = createBody();
             b.setDead(true);
             BreedEvent event = new BreedEvent(from, null, null, 2);
             assertFalse(event.checkEventResponse(b));
@@ -450,8 +450,8 @@ public class EventPacketTest {
 
         @Test
         public void testCheckEventResponse_falseWhenBaryStateNotNone() {
-            Body from = createBody();
-            Body b = createBody();
+            Yukkuri from = createBody();
+            Yukkuri b = createBody();
             b.setBurialState(BurialState.HALF);
             BreedEvent event = new BreedEvent(from, null, null, 2);
             assertFalse(event.checkEventResponse(b));
@@ -459,8 +459,8 @@ public class EventPacketTest {
 
         @Test
         public void testCheckEventResponse_falseWhenPublicRankMismatch() {
-            Body from = createBody();
-            Body b = createBody();
+            Yukkuri from = createBody();
+            Yukkuri b = createBody();
             b.setPublicRank(PublicRank.UnunSlave);
             BreedEvent event = new BreedEvent(from, null, null, 2);
             assertFalse(event.checkEventResponse(b));
@@ -468,8 +468,8 @@ public class EventPacketTest {
 
         @Test
         public void testCheckEventResponse_trueWhenPartner() {
-            Body from = createBody();
-            Body b = createBody();
+            Yukkuri from = createBody();
+            Yukkuri b = createBody();
             b.setPartner(from.getUniqueID());
             BreedEvent event = new BreedEvent(from, null, null, 2);
             assertTrue(event.checkEventResponse(b));
@@ -477,7 +477,7 @@ public class EventPacketTest {
 
         @Test
         public void testUpdate_abortWhenFromNull() {
-            Body b = createBody();
+            Yukkuri b = createBody();
             BreedEvent event = new BreedEvent();
             assertEquals(UpdateState.ABORT, event.update(b));
         }
@@ -495,50 +495,50 @@ public class EventPacketTest {
 
         @Test
         public void testParameterizedConstructor_setsPriorityHigh() {
-            Body from = createBody();
-            Body to = createBody();
+            Yukkuri from = createBody();
+            Yukkuri to = createBody();
             ProposeEvent event = new ProposeEvent(from, to, null, 1);
             assertEquals(EventPriority.HIGH, event.getPriority());
         }
 
         @Test
         public void testCheckEventResponse_trueForFrom() {
-            Body from = createBody();
-            Body to = createBody();
+            Yukkuri from = createBody();
+            Yukkuri to = createBody();
             ProposeEvent event = new ProposeEvent(from, to, null, 1);
             assertTrue(event.checkEventResponse(from));
         }
 
         @Test
         public void testCheckEventResponse_trueForTo() {
-            Body from = createBody();
-            Body to = createBody();
+            Yukkuri from = createBody();
+            Yukkuri to = createBody();
             ProposeEvent event = new ProposeEvent(from, to, null, 1);
             assertTrue(event.checkEventResponse(to));
         }
 
         @Test
         public void testCheckEventResponse_falseForOther() {
-            Body from = createBody();
-            Body to = createBody();
-            Body other = createBody();
+            Yukkuri from = createBody();
+            Yukkuri to = createBody();
+            Yukkuri other = createBody();
             ProposeEvent event = new ProposeEvent(from, to, null, 1);
             assertFalse(event.checkEventResponse(other));
         }
 
         @Test
         public void testAcceptPropose_trueWhenEligible() {
-            Body f = createBodyWithOkazari();
-            Body t = createBody();
+            Yukkuri f = createBodyWithOkazari();
+            Yukkuri t = createBody();
             ProposeEvent event = new ProposeEvent(f, t, null, 1);
             assertTrue(event.acceptPropose(f, t));
         }
 
         @Test
         public void testAcceptPropose_falseWhenToHasPartner() {
-            Body f = createBodyWithOkazari();
-            Body t = createBody();
-            Body partner = createBody();
+            Yukkuri f = createBodyWithOkazari();
+            Yukkuri t = createBody();
+            Yukkuri partner = createBody();
             t.setPartner(partner.getUniqueID());
             ProposeEvent event = new ProposeEvent(f, t, null, 1);
             assertFalse(event.acceptPropose(f, t));
@@ -546,18 +546,18 @@ public class EventPacketTest {
 
         @Test
         public void testAcceptPropose_falseWhenFromHasDisorder() {
-            Body f = createBody();
+            Yukkuri f = createBody();
             f.setOkazari(null); // remove okazari → hasDisorder=true
-            Body t = createBody();
+            Yukkuri t = createBody();
             ProposeEvent event = new ProposeEvent(f, t, null, 1);
             assertFalse(event.acceptPropose(f, t));
         }
 
         @Test
         public void testAcceptPropose_falseWhenFromHasBabyOrStalk() {
-            Body f = createBodyWithOkazari();
+            Yukkuri f = createBodyWithOkazari();
             f.setHasBaby(true);
-            Body t = createBody();
+            Yukkuri t = createBody();
             ProposeEvent event = new ProposeEvent(f, t, null, 1);
             assertFalse(event.acceptPropose(f, t));
         }
@@ -576,14 +576,14 @@ public class EventPacketTest {
 
         @Test
         public void testCheckEventResponse_alwaysTrue() {
-            Body b = createBody();
+            Yukkuri b = createBody();
             RevengeAttackEvent event = new RevengeAttackEvent();
             assertTrue(event.checkEventResponse(b));
         }
 
         @Test
         public void testCheckEventResponse_setsPriorityHigh() {
-            Body b = createBody();
+            Yukkuri b = createBody();
             RevengeAttackEvent event = new RevengeAttackEvent();
             event.checkEventResponse(b);
             assertEquals(EventPriority.HIGH, event.getPriority());
@@ -591,7 +591,7 @@ public class EventPacketTest {
 
         @Test
         public void testStart_clearsActionFlags() {
-            Body b = createBody();
+            Yukkuri b = createBody();
             b.setToFood(true);
             RevengeAttackEvent event = new RevengeAttackEvent(b, null, null, 1);
             event.start(b);
@@ -605,15 +605,15 @@ public class EventPacketTest {
 
         @Test
         public void testUpdate_abortWhenToNull() {
-            Body b = createBody();
+            Yukkuri b = createBody();
             RevengeAttackEvent event = new RevengeAttackEvent(b, null, null, 1);
             assertEquals(UpdateState.ABORT, event.update(b));
         }
 
         @Test
         public void testUpdate_abortWhenToRemoved() {
-            Body b = createBody();
-            Body to = createBody();
+            Yukkuri b = createBody();
+            Yukkuri to = createBody();
             to.setRemoved(true);
             RevengeAttackEvent event = new RevengeAttackEvent(b, to, null, 1);
             assertEquals(UpdateState.ABORT, event.update(b));
@@ -633,28 +633,28 @@ public class EventPacketTest {
 
         @Test
         public void testCheckEventResponse_alwaysFalse() {
-            Body b = createBody();
+            Yukkuri b = createBody();
             FavCopyEvent event = new FavCopyEvent();
             assertFalse(event.checkEventResponse(b));
         }
 
         @Test
         public void testSimpleEventAction_falseWhenFromIsB() {
-            Body b = createBody();
+            Yukkuri b = createBody();
             FavCopyEvent event = new FavCopyEvent(b, null, null, 1);
             assertFalse(event.simpleEventAction(b));
         }
 
         @Test
         public void testSimpleEventAction_falseWhenFromIsNull() {
-            Body b = createBody();
+            Yukkuri b = createBody();
             FavCopyEvent event = new FavCopyEvent();
             assertFalse(event.simpleEventAction(b));
         }
 
         @Test
         public void testExecute_returnsTrue() {
-            Body b = createBody();
+            Yukkuri b = createBody();
             FavCopyEvent event = new FavCopyEvent();
             assertTrue(event.execute(b));
         }
@@ -673,7 +673,7 @@ public class EventPacketTest {
 
         @Test
         public void testCheckEventResponse_trueAndSetsPriorityMiddle() {
-            Body b = createBody();
+            Yukkuri b = createBody();
             GetTrashOkazariEvent event = new GetTrashOkazariEvent();
             assertTrue(event.checkEventResponse(b));
             assertEquals(EventPriority.MIDDLE, event.getPriority());
@@ -682,14 +682,14 @@ public class EventPacketTest {
 
     // ========== Helper methods ==========
 
-    private static Body createBodyWithOkazari() {
-        Body b = createBody();
+    private static Yukkuri createBodyWithOkazari() {
+        Yukkuri b = createBody();
         b.setOkazari(new Okazari());
         return b;
     }
 
-    private static Body createBody() {
-        Body b = new Reimu();
+    private static Yukkuri createBody() {
+        Yukkuri b = new Reimu();
         b.setAgeState(AgeState.ADULT);
         Sprite[] spr = new Sprite[3];
         for (int i = 0; i < 3; i++) {

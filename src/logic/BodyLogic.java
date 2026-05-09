@@ -3,9 +3,9 @@ package src.logic;
 import java.util.LinkedList;
 import java.util.List;
 
-import src.base.Body;
+import src.base.Yukkuri;
 import src.event.EventPacket;
-import src.base.Obj;
+import src.base.Entity;
 import src.draw.Translate;
 import src.enums.EnumRelationMine;
 import src.enums.GatheringDirection;
@@ -27,7 +27,7 @@ public class BodyLogic {
 	 * @param you 相手
 	 * @return 関係性
 	 */
-	public static final EnumRelationMine checkMyRelation(Body me, Body you) {
+	public static final EnumRelationMine checkMyRelation(Yukkuri me, Yukkuri you) {
 		return BodyRelations.checkMyRelation(me, you);
 	}
 
@@ -37,18 +37,18 @@ public class BodyLogic {
 	 * @param body ゆっくり
 	 * @return 処理を行ったかどうか
 	 */
-	public static final boolean checkPartner(Body body) {
+	public static final boolean checkPartner(Yukkuri body) {
 		if (BodyPartnerEntryRule.shouldSkipPartnerAction(body)) {
 			return false;
 		}
 
 		// 初期値
 		boolean handled = false;
-		Body targetBody = null;
+		Yukkuri targetBody = null;
 		int nearestDistance = body.getEyesightBase();
 		int secondNearestDistance = body.getEyesightBase();
 
-		Body mappedTarget = BodyPartnerEntryRule.resolveMappedTarget(body, nearestDistance);
+		Yukkuri mappedTarget = BodyPartnerEntryRule.resolveMappedTarget(body, nearestDistance);
 		if (mappedTarget != null) {
 			return doActionOther(mappedTarget, body);
 		}
@@ -56,14 +56,14 @@ public class BodyLogic {
 		/////////////////////////////////
 		// 移動判定
 		/////////////////////////////////
-		Body bodyHasOkazari = null;
-		Body bodyHasOkazariAndPherommone = null;
-		Body bodyHasPheromone = null;
-		Body bodyOldMoveTarget = BodyPartnerEntryRule.resolveMoveTarget(body);
+		Yukkuri bodyHasOkazari = null;
+		Yukkuri bodyHasOkazariAndPherommone = null;
+		Yukkuri bodyHasPheromone = null;
+		Yukkuri bodyOldMoveTarget = BodyPartnerEntryRule.resolveMoveTarget(body);
 
 		// 発情時
 		// レイパーですっきり中なら続けて同ターゲットに
-		Body partner = BodyPartnerEntryRule.getPartnerIfPreferred(body);
+		Yukkuri partner = BodyPartnerEntryRule.getPartnerIfPreferred(body);
 		if (body.isExciting() && body.isRaper() && body.isToSukkiri() && bodyOldMoveTarget != null
 				&& !bodyOldMoveTarget.isRaper()) {
 			targetBody = bodyOldMoveTarget;
@@ -115,7 +115,7 @@ public class BodyLogic {
 	 * @param target 相手
 	 * @return 動作を行った場合
 	 */
-	public static final boolean doActionOther(Body self, Body target) {
+	public static final boolean doActionOther(Yukkuri self, Yukkuri target) {
 		// 途中で消されてたら他の候補を探す
 		if (self.isRemoved()) {
 			target.clearActions();
@@ -170,7 +170,7 @@ public class BodyLogic {
 	 * @param to   相手のゆっくり
 	 * @return X座標
 	 */
-	public static final int calcCollisionX(Body from, Body to) {
+	public static final int calcCollisionX(Yukkuri from, Yukkuri to) {
 		if (from == null || to == null) {
 			return 0;
 		}
@@ -194,7 +194,7 @@ public class BodyLogic {
 	 * @param bodyTarget 相手
 	 * @return 行動をしたかどうか
 	 */
-	public static final ActionGo checkActionSurisuriFromPlayer(Body body, Body bodyTarget) {
+	public static final ActionGo checkActionSurisuriFromPlayer(Yukkuri body, Yukkuri bodyTarget) {
 		return BodySurisuriRule.checkActionSurisuriFromPlayer(body, bodyTarget);
 	}
 
@@ -205,7 +205,7 @@ public class BodyLogic {
 	 * @param age ゆん生のステージ
 	 * @return 婚姻候補のリスト
 	 */
-	public static final List<Body> createActiveFianceeList(Body body, int age) {
+	public static final List<Yukkuri> createActiveFianceeList(Yukkuri body, int age) {
 		return BodySelectionRule.createActiveFianceeList(body, age);
 	}
 
@@ -216,7 +216,7 @@ public class BodyLogic {
 	 * @param includeChildren 子ゆっくりを入れるかどうか（これがfalseなら赤ゆのみのリストになる）
 	 * @return アクティブな赤ゆ/子ゆのリスト
 	 */
-	public static final List<Body> createActiveChildList(Body body, boolean includeChildren) {
+	public static final List<Yukkuri> createActiveChildList(Yukkuri body, boolean includeChildren) {
 		return BodySelectionRule.createActiveChildList(body, includeChildren);
 	}
 
@@ -234,7 +234,7 @@ public class BodyLogic {
 	 * @param targetList 並べるゆっくりのリスト
 	 * @return 並んだかどうか
 	 */
-	public static final boolean gatheringYukkuriFront(Body topBody, List<Body> targetList) {
+	public static final boolean gatheringYukkuriFront(Yukkuri topBody, List<Yukkuri> targetList) {
 		return BodyGatheringRule.gatheringYukkuriFront(topBody, targetList);
 	}
 
@@ -246,7 +246,7 @@ public class BodyLogic {
 	 * @param event     イベント
 	 * @return 並んだかどうか
 	 */
-	public static final boolean gatheringYukkuriFront(Body topBody, List<Body> targetList, EventPacket event) {
+	public static final boolean gatheringYukkuriFront(Yukkuri topBody, List<Yukkuri> targetList, EventPacket event) {
 		return BodyGatheringRule.gatheringYukkuriFront(topBody, targetList, event);
 	}
 
@@ -259,7 +259,7 @@ public class BodyLogic {
 	 * @param event      イベント
 	 * @return 並んだかどうか
 	 */
-	public static final boolean gatheringYukkuriSquare(Obj topObject, Body[] targetList, GatheringDirection direction,
+	public static final boolean gatheringYukkuriSquare(Entity topObject, Yukkuri[] targetList, GatheringDirection direction,
 			EventPacket event) {
 		return BodyGatheringRule.gatheringYukkuriSquare(topObject, targetList, direction, event);
 	}
@@ -272,7 +272,7 @@ public class BodyLogic {
 	 * @param event     イベント
 	 * @return 並んだかどうか
 	 */
-	public static final boolean gatheringYukkuriBackLine(Body topBody, List<Body> targetList, EventPacket event) {
+	public static final boolean gatheringYukkuriBackLine(Yukkuri topBody, List<Yukkuri> targetList, EventPacket event) {
 		return BodyGatheringRule.gatheringYukkuriBackLine(topBody, targetList, event);
 	}
 
@@ -283,7 +283,7 @@ public class BodyLogic {
 	 * @param bodyTarget 相手
 	 * @return 処理を行ったかどうか
 	 */
-	public static boolean checkEmotionFromUnunSlave(Body body, Body bodyTarget) {
+	public static boolean checkEmotionFromUnunSlave(Yukkuri body, Yukkuri bodyTarget) {
 		return BodyUnunSlaveEmotionRule.checkEmotionFromUnunSlave(body, bodyTarget);
 	}
 
@@ -292,7 +292,7 @@ public class BodyLogic {
 	 * 
 	 * @param body 赤ゆなど
 	 */
-	public static void checkNearParent(Body body) {
+	public static void checkNearParent(Yukkuri body) {
 		BodyParentRule.checkNearParent(body);
 	}
 
@@ -302,7 +302,7 @@ public class BodyLogic {
 	 * @param body ゆっくり
 	 * @return 視界内に起きているゆっくりがいるかどうか
 	 */
-	public static boolean checkWakeupOtherYukkuri(Body body) {
+	public static boolean checkWakeupOtherYukkuri(Yukkuri body) {
 		return BodyWakeupRule.checkWakeupOtherYukkuri(body);
 	}
 }

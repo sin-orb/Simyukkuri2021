@@ -9,7 +9,7 @@ import java.util.Map;
 
 import src.SimYukkuri;
 import src.util.GameRandom;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.draw.Dimension4y;
 import src.draw.ModLoader;
 import src.draw.Point4y;
@@ -23,7 +23,7 @@ import src.util.IniFileUtil;
 /**
  * てんこ
  */
-public class Tenko extends Body {
+public class Tenko extends Yukkuri {
 	private static final long serialVersionUID = 408102192398297258L;
 	/** てんこのタイプ */
 	public static final int type = 1002;
@@ -155,7 +155,7 @@ public class Tenko extends Body {
 	}
 
 	/** コンストラクタ */
-	public Tenko(int initX, int initY, int initZ, AgeState initAgeState, Body p1, Body p2) {
+	public Tenko(int initX, int initY, int initZ, AgeState initAgeState, Yukkuri p1, Yukkuri p2) {
 		super(initX, initY, initZ, initAgeState, p1, p2);
 		setBoundary(boundary, braidBoundary);
 		setMsgType(YukkuriType.TENKO);

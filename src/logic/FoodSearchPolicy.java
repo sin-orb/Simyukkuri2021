@@ -3,8 +3,8 @@ package src.logic;
 import java.util.List;
 import java.util.Map;
 
-import src.base.Body;
-import src.base.Obj;
+import src.base.Yukkuri;
+import src.base.Entity;
 import src.draw.Translate;
 import src.enums.AgeState;
 import src.enums.BurialState;
@@ -33,9 +33,9 @@ public final class FoodSearchPolicy {
 	private FoodSearchPolicy() {
 	}
 
-	public static Obj searchFoodStandard(Body body, boolean[] forceEat) {
-		Obj targetObject = null;
-		Obj takeoutTargetObject = null;
+	public static Entity searchFoodStandard(Yukkuri body, boolean[] forceEat) {
+		Entity targetObject = null;
+		Entity takeoutTargetObject = null;
 		int minDistance = body.getEyesightBase();
 		int looks = -1000;
 		int wallMode = body.getBodyAgeState().ordinal();
@@ -154,7 +154,7 @@ public final class FoodSearchPolicy {
 
 		for (Map.Entry<Integer, Stalk> entry : GameWorld.get().getCurrentMap().getStalk().entrySet()) {
 			Stalk s = entry.getValue();
-			Body plantBody = GameWorld.get().getCurrentMap().getBody().get(s.getPlantYukkuri());
+			Yukkuri plantBody = GameWorld.get().getCurrentMap().getBody().get(s.getPlantYukkuri());
 			if (plantBody != null) {
 				if (plantBody == body) {
 					continue;
@@ -167,7 +167,7 @@ public final class FoodSearchPolicy {
 				if (babyList != null && babyList.size() != 0) {
 					boolean hasBaby = false;
 					for (int babyId : babyList) {
-						Body baby = src.util.BodyRegistry.getBodyInstance(babyId);
+						Yukkuri baby = src.util.BodyRegistry.getBodyInstance(babyId);
 						if (baby == null) {
 							continue;
 						}
@@ -205,8 +205,8 @@ public final class FoodSearchPolicy {
 			}
 		}
 		if (targetObject == null) {
-			for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
-				Body deadCandidate = entry.getValue();
+			for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
+				Yukkuri deadCandidate = entry.getValue();
 				if (deadCandidate == null || deadCandidate.isRemoved()) {
 					continue;
 				}

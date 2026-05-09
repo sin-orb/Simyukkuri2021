@@ -3,9 +3,9 @@ package src.logic;
 import java.util.List;
 import java.util.Map;
 
-import src.base.Body;
+import src.base.Yukkuri;
 import src.event.EventPacket;
-import src.base.Obj;
+import src.base.Entity;
 import src.draw.Point4y;
 import src.draw.Translate;
 import src.enums.Direction;
@@ -27,7 +27,7 @@ public final class BodyGatheringRule {
 	 * ぜんゆん集合.
 	 */
 	public static void gatheringYukkuri() {
-		Body[] bodyList = BodyRegistry.getBodyInstances();
+		Yukkuri[] bodyList = BodyRegistry.getBodyInstances();
 		if (bodyList.length != 0) {
 			Toilet t = null;
 			for (Map.Entry<Integer, Toilet> entry : GameWorld.get().getCurrentMap().getToilet().entrySet()) {
@@ -43,21 +43,21 @@ public final class BodyGatheringRule {
 	/**
 	 * ぜんゆん集合(四角形前面)
 	 */
-	public static boolean gatheringYukkuriFront(Body topBody, List<Body> targetList) {
-		return gatheringYukkuriSquare(topBody, targetList.toArray(new Body[0]), GatheringDirection.DOWN, null);
+	public static boolean gatheringYukkuriFront(Yukkuri topBody, List<Yukkuri> targetList) {
+		return gatheringYukkuriSquare(topBody, targetList.toArray(new Yukkuri[0]), GatheringDirection.DOWN, null);
 	}
 
 	/**
 	 * ぜんゆん集合(四角形前面)
 	 */
-	public static boolean gatheringYukkuriFront(Body topBody, List<Body> targetList, EventPacket event) {
-		return gatheringYukkuriSquare(topBody, targetList.toArray(new Body[0]), GatheringDirection.DOWN, event);
+	public static boolean gatheringYukkuriFront(Yukkuri topBody, List<Yukkuri> targetList, EventPacket event) {
+		return gatheringYukkuriSquare(topBody, targetList.toArray(new Yukkuri[0]), GatheringDirection.DOWN, event);
 	}
 
 	/**
 	 * ぜんゆん集合.
 	 */
-	public static boolean gatheringYukkuriSquare(Obj topObject, Body[] targetList, GatheringDirection direction,
+	public static boolean gatheringYukkuriSquare(Entity topObject, Yukkuri[] targetList, GatheringDirection direction,
 			EventPacket event) {
 		int maxRowSize = 3;
 
@@ -83,11 +83,11 @@ public final class BodyGatheringRule {
 		int row = 1;
 		int horizontalDirection = -1;
 		int collisionOffset = 10;
-		Obj frontCenter = topObject;
-		Obj nextFrontCenter = null;
+		Entity frontCenter = topObject;
+		Entity nextFrontCenter = null;
 
 		boolean success = true;
-		for (Body body : targetList) {
+		for (Yukkuri body : targetList) {
 			int gap = 10;
 			if (body == null) {
 				continue;
@@ -256,18 +256,18 @@ public final class BodyGatheringRule {
 	/**
 	 * ぜんゆん集合(先頭の後ろに一列)
 	 */
-	public static boolean gatheringYukkuriBackLine(Body topBody, List<Body> targetList, EventPacket event) {
+	public static boolean gatheringYukkuriBackLine(Yukkuri topBody, List<Yukkuri> targetList, EventPacket event) {
 		if (targetList == null) {
 			return false;
 		}
 
-		Body currentBody = topBody;
+		Yukkuri currentBody = topBody;
 		if (currentBody.getDirection() == Direction.RIGHT) {
 			// no-op
 		}
 		boolean success = true;
 
-		for (Body body : targetList) {
+		for (Yukkuri body : targetList) {
 			if (body == null) {
 				continue;
 			}

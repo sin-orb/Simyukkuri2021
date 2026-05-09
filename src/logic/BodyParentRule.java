@@ -1,7 +1,7 @@
 package src.logic;
 
 import src.attachment.Ants;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.draw.Point4y;
 import src.draw.Translate;
 import src.field.impl.Barrier;
@@ -19,13 +19,13 @@ public final class BodyParentRule {
 	 *
 	 * @param body target body
 	 */
-	public static void checkNearParent(Body body) {
+	public static void checkNearParent(Yukkuri body) {
 		if (body.isAdult()) {
 			return;
 		}
 
 		int nearestDistance = body.getEyesightBase();
-		Body parentBody = src.util.BodyRegistry.getBodyInstance(body.getMother());
+		Yukkuri parentBody = src.util.BodyRegistry.getBodyInstance(body.getMother());
 		if (parentBody == null) {
 			parentBody = src.util.BodyRegistry.getBodyInstance(body.getFather());
 		}

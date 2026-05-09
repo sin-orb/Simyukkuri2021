@@ -9,7 +9,7 @@ import java.util.Map;
 
 import src.SimYukkuri;
 import src.util.GameRandom;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.draw.Dimension4y;
 import src.draw.ModLoader;
 import src.draw.Point4y;
@@ -21,7 +21,7 @@ import src.system.BodyLayer;
 import src.util.IniFileUtil;
 
 /** きめぇ丸 */
-public class Kimeemaru extends Body {
+public class Kimeemaru extends Yukkuri {
 	private static final long serialVersionUID = -7322060543601360679L;
 	/** きめぇ丸のタイプ */
 	public static final int type = 2003;
@@ -155,7 +155,7 @@ public class Kimeemaru extends Body {
 	}
 
 	/** コンストラクタ */
-	public Kimeemaru(int initX, int initY, int initZ, AgeState initAgeState, Body p1, Body p2) {
+	public Kimeemaru(int initX, int initY, int initZ, AgeState initAgeState, Yukkuri p1, Yukkuri p2) {
 		super(initX, initY, initZ, initAgeState, p1, p2);
 		setBoundary(boundary, braidBoundary);
 		setMsgType(YukkuriType.KIMEEMARU);

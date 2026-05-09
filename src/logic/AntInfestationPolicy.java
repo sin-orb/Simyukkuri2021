@@ -1,7 +1,7 @@
 package src.logic;
 
 import src.attachment.Ants;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.util.GameRandom;
 
 /**
@@ -11,7 +11,7 @@ public final class AntInfestationPolicy {
 	private AntInfestationPolicy() {
 	}
 
-	public static void judgeNewAnt(Body body) {
+	public static void judgeNewAnt(Yukkuri body) {
 		int antProbability = 1;
 		switch (body.getBodyAgeState()) {
 		case BABY:

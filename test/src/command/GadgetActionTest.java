@@ -19,7 +19,7 @@ import src.SimYukkuri;
 import src.attachment.Ants;
 import src.attachment.OrangeAmpoule;
 import src.attachment.PoisonAmpoule;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.command.GadgetMenu.GadgetList;
 import src.draw.World;
 import src.enums.AgeState;
@@ -66,8 +66,8 @@ public class GadgetActionTest {
     }
 
     /** Reimu実体を生成・Sprite初期化・ワールドに登録する */
-    private Body createReimuBody(AgeState age) {
-        Body b = new Reimu();
+    private Yukkuri createReimuBody(AgeState age) {
+        Yukkuri b = new Reimu();
         Sprite[] spr = new Sprite[3];
         Sprite[] expSpr = new Sprite[3];
         Sprite[] brdSpr = new Sprite[3];
@@ -103,7 +103,7 @@ public class GadgetActionTest {
 
         @Test
         public void testYuCleanSetsCleaningOnLiveBodies() {
-            Body b = createReimuBody(AgeState.ADULT);
+            Yukkuri b = createReimuBody(AgeState.ADULT);
             b.makeDirty(true);
             assertTrue(b.isDirty());
 
@@ -114,7 +114,7 @@ public class GadgetActionTest {
 
         @Test
         public void testYuCleanDoesNotRemoveDeadBodies() {
-            Body dead = createReimuBody(AgeState.ADULT);
+            Yukkuri dead = createReimuBody(AgeState.ADULT);
             dead.setDead(true);
 
             GadgetAction.immediateEvaluate(GadgetList.YU_CLEAN);
@@ -125,8 +125,8 @@ public class GadgetActionTest {
 
         @Test
         public void testBodyRemovesDeadBodies() {
-            Body alive = createReimuBody(AgeState.ADULT);
-            Body dead = createReimuBody(AgeState.ADULT);
+            Yukkuri alive = createReimuBody(AgeState.ADULT);
+            Yukkuri dead = createReimuBody(AgeState.ADULT);
             dead.setDead(true);
 
             assertFalse(alive.isRemoved());
@@ -157,8 +157,8 @@ public class GadgetActionTest {
 
         @Test
         public void testAllRemovesDeadAndShitButNotLive() {
-            Body alive = createReimuBody(AgeState.ADULT);
-            Body dead = createReimuBody(AgeState.ADULT);
+            Yukkuri alive = createReimuBody(AgeState.ADULT);
+            Yukkuri dead = createReimuBody(AgeState.ADULT);
             dead.setDead(true);
 
             Shit shit = new Shit();
@@ -191,7 +191,7 @@ public class GadgetActionTest {
     class EvaluateToolTests {
         @Test
         public void testPunishStrikesBody() {
-            Body b = createReimuBody(AgeState.ADULT);
+            Yukkuri b = createReimuBody(AgeState.ADULT);
             int damageBefore = b.getDamage();
             MouseEvent ev = createEvent(0);
 
@@ -202,18 +202,18 @@ public class GadgetActionTest {
 
         @Test
         public void testSnappingKicksBody() {
-            Body b = createReimuBody(AgeState.ADULT);
+            Yukkuri b = createReimuBody(AgeState.ADULT);
             MouseEvent ev = createEvent(0);
 
             GadgetAction.evaluateTool(GadgetList.SNAPPING, ev, b);
 
-            // kick sets vx, vy, vz in Body.kick()
+            // kick sets vx, vy, vz in Yukkuri.kick()
             assertTrue(b.getVy() != 0 || b.getVx() != 0, "ケリで移動速度が設定されるべき");
         }
 
         @Test
         public void testVibratorExcitesBody() {
-            Body b = createReimuBody(AgeState.ADULT);
+            Yukkuri b = createReimuBody(AgeState.ADULT);
             assertFalse(b.isExciting());
             MouseEvent ev = createEvent(0);
 
@@ -231,7 +231,7 @@ public class GadgetActionTest {
     class EvaluateAmpouleTests {
         @Test
         public void testOrangeAmpouleAddsAttachment() {
-            Body b = createReimuBody(AgeState.ADULT);
+            Yukkuri b = createReimuBody(AgeState.ADULT);
             assertEquals(0, b.getAttachmentSize(src.attachment.OrangeAmpoule.class));
             MouseEvent ev = createEvent(0);
 
@@ -242,7 +242,7 @@ public class GadgetActionTest {
 
         @Test
         public void testPoisonAmpouleAddsAttachment() {
-            Body b = createReimuBody(AgeState.ADULT);
+            Yukkuri b = createReimuBody(AgeState.ADULT);
             assertEquals(0, b.getAttachmentSize(src.attachment.PoisonAmpoule.class));
             MouseEvent ev = createEvent(0);
 
@@ -260,7 +260,7 @@ public class GadgetActionTest {
     class EvaluateVoiceTests {
         @Test
         public void testTakeItEasySetsMessage() {
-            Body b = createReimuBody(AgeState.ADULT);
+            Yukkuri b = createReimuBody(AgeState.ADULT);
             MouseEvent ev = createEvent(0);
 
             GadgetAction.evaluateCommunicate(GadgetList.YUKKURISITEITTENE, ev, b);
@@ -278,7 +278,7 @@ public class GadgetActionTest {
 
         @Test
         public void testIndividualRemovesDeadBody() {
-            Body b = createReimuBody(AgeState.ADULT);
+            Yukkuri b = createReimuBody(AgeState.ADULT);
             b.setDead(true);
             MouseEvent ev = createEvent(0);
 
@@ -289,7 +289,7 @@ public class GadgetActionTest {
 
         @Test
         public void testIndividualSetsCleaningOnLiveBody() {
-            Body b = createReimuBody(AgeState.ADULT);
+            Yukkuri b = createReimuBody(AgeState.ADULT);
             b.makeDirty(true);
             MouseEvent ev = createEvent(0);
 
@@ -301,7 +301,7 @@ public class GadgetActionTest {
 
         @Test
         public void testIndividualRemovesNonBodyObj() {
-            // Shit is an Obj (non-Body)
+            // Shit is an Entity (non-Yukkuri)
             Shit shit = new Shit();
             MouseEvent ev = createEvent(0);
 
@@ -320,7 +320,7 @@ public class GadgetActionTest {
 
         @Test
         public void testNormalClickTakeOkazariWhenHasOkazari() {
-            Body b = createReimuBody(AgeState.ADULT);
+            Yukkuri b = createReimuBody(AgeState.ADULT);
             // Reimuはデフォルトでokazariあり
             assertTrue(b.hasOkazari());
             MouseEvent ev = createEvent(0);
@@ -332,7 +332,7 @@ public class GadgetActionTest {
 
         @Test
         public void testNormalClickGiveOkazariWhenNoOkazari() {
-            Body b = createReimuBody(AgeState.ADULT);
+            Yukkuri b = createReimuBody(AgeState.ADULT);
             b.setOkazari(null); // おかざりを無くす
             assertFalse(b.hasOkazari());
             MouseEvent ev = createEvent(0);
@@ -344,11 +344,11 @@ public class GadgetActionTest {
 
         @Test
         public void testShiftAppliesBasedOnTarget() {
-            Body target = createReimuBody(AgeState.ADULT);
+            Yukkuri target = createReimuBody(AgeState.ADULT);
             // targetはおかざりあり → flag=false → !flagで条件成立 → hasOkazariのをtake
             assertTrue(target.hasOkazari());
 
-            Body other = createReimuBody(AgeState.ADULT);
+            Yukkuri other = createReimuBody(AgeState.ADULT);
             assertTrue(other.hasOkazari());
 
             MouseEvent ev = createEvent(MouseEvent.SHIFT_DOWN_MASK);
@@ -363,10 +363,10 @@ public class GadgetActionTest {
 
         @Test
         public void testCtrlInvertsAll() {
-            Body withOkazari = createReimuBody(AgeState.ADULT);
+            Yukkuri withOkazari = createReimuBody(AgeState.ADULT);
             assertTrue(withOkazari.hasOkazari());
 
-            Body withoutOkazari = createReimuBody(AgeState.ADULT);
+            Yukkuri withoutOkazari = createReimuBody(AgeState.ADULT);
             withoutOkazari.setOkazari(null);
             assertFalse(withoutOkazari.hasOkazari());
 
@@ -388,7 +388,7 @@ public class GadgetActionTest {
 
         @Test
         public void testNormalClickGivePantsWhenNoPants() {
-            Body b = createReimuBody(AgeState.ADULT);
+            Yukkuri b = createReimuBody(AgeState.ADULT);
             assertFalse(b.isHasPants());
             MouseEvent ev = createEvent(0);
 
@@ -399,7 +399,7 @@ public class GadgetActionTest {
 
         @Test
         public void testNormalClickTakePantsWhenHasPants() {
-            Body b = createReimuBody(AgeState.ADULT);
+            Yukkuri b = createReimuBody(AgeState.ADULT);
             b.givePants();
             assertTrue(b.isHasPants());
             MouseEvent ev = createEvent(0);
@@ -411,11 +411,11 @@ public class GadgetActionTest {
 
         @Test
         public void testCtrlInvertsAllPants() {
-            Body withPants = createReimuBody(AgeState.ADULT);
+            Yukkuri withPants = createReimuBody(AgeState.ADULT);
             withPants.givePants();
             assertTrue(withPants.isHasPants());
 
-            Body withoutPants = createReimuBody(AgeState.ADULT);
+            Yukkuri withoutPants = createReimuBody(AgeState.ADULT);
             assertFalse(withoutPants.isHasPants());
 
             MouseEvent ev = createEvent(MouseEvent.CTRL_DOWN_MASK);
@@ -436,7 +436,7 @@ public class GadgetActionTest {
 
         @Test
         public void testRankSetTogglesKaiyuToNorayu() {
-            Body b = createReimuBody(AgeState.ADULT);
+            Yukkuri b = createReimuBody(AgeState.ADULT);
             b.setBodyRank(BodyRank.KAIYU);
             MouseEvent ev = createEvent(0);
 
@@ -447,7 +447,7 @@ public class GadgetActionTest {
 
         @Test
         public void testRankSetTogglesNorayuToKaiyu() {
-            Body b = createReimuBody(AgeState.ADULT);
+            Yukkuri b = createReimuBody(AgeState.ADULT);
             b.setBodyRank(BodyRank.NORAYU);
             MouseEvent ev = createEvent(0);
 
@@ -458,7 +458,7 @@ public class GadgetActionTest {
 
         @Test
         public void testSetVainCallsGetInVain() {
-            Body b = createReimuBody(AgeState.ADULT);
+            Yukkuri b = createReimuBody(AgeState.ADULT);
             ConstState cs = new ConstState(0);
             SimYukkuri.RND = cs;
 
@@ -472,7 +472,7 @@ public class GadgetActionTest {
 
         @Test
         public void testFeedCallsFeedOnLiveBody() {
-            Body b = createReimuBody(AgeState.ADULT);
+            Yukkuri b = createReimuBody(AgeState.ADULT);
             MouseEvent ev = createEvent(0);
             int hungryBefore = b.getHungry();
 
@@ -484,7 +484,7 @@ public class GadgetActionTest {
 
         @Test
         public void testFeedDoesNothingOnDeadBody() {
-            Body b = createReimuBody(AgeState.ADULT);
+            Yukkuri b = createReimuBody(AgeState.ADULT);
             b.setDead(true);
             MouseEvent ev = createEvent(0);
             int hungryBefore = b.getHungry();
@@ -498,7 +498,7 @@ public class GadgetActionTest {
         public void testInviteAntsIgnoresShiftAndCtrl() {
             // Ants()コンストラクタは画像リソースに依存するため、
             // Shift/Ctrlでのスキップのみテスト（Antsインスタンス化不要）
-            Body b = createReimuBody(AgeState.ADULT);
+            Yukkuri b = createReimuBody(AgeState.ADULT);
             MouseEvent shiftEv = createEvent(MouseEvent.SHIFT_DOWN_MASK);
             assertEquals(0, b.getAttachmentSize(Ants.class));
 
@@ -509,7 +509,7 @@ public class GadgetActionTest {
 
         @Test
         public void testInviteAntsIgnoresCtrl() {
-            Body b = createReimuBody(AgeState.ADULT);
+            Yukkuri b = createReimuBody(AgeState.ADULT);
             MouseEvent ctrlEv = createEvent(MouseEvent.CTRL_DOWN_MASK);
             assertEquals(0, b.getAttachmentSize(Ants.class));
 

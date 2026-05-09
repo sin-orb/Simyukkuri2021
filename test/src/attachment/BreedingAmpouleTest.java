@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.draw.World;
 import src.enums.AgeState;
 import src.enums.Direction;
@@ -46,7 +46,7 @@ public class BreedingAmpouleTest {
 
     @Test
     public void testConstructorDefaultsAndBoundary() {
-        Body parent = createParent(AgeState.CHILD);
+        Yukkuri parent = createParent(AgeState.CHILD);
         BreedingAmpoule ampoule = new BreedingAmpoule(parent);
 
         assertEquals(parent.getUniqueID(), ampoule.getParent());
@@ -70,7 +70,7 @@ public class BreedingAmpouleTest {
 
     @Test
     public void testUpdateReturnsDoNothingWhenParentIsDead() {
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         BreedingAmpoule ampoule = new BreedingAmpoule(parent);
 
         parent.setDead(true);
@@ -82,7 +82,7 @@ public class BreedingAmpouleTest {
 
     @Test
     public void testUpdateReturnsDoNothingWhenParentIsBurned() {
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         BreedingAmpoule ampoule = new BreedingAmpoule(parent);
 
         parent.setBurned(true);
@@ -94,7 +94,7 @@ public class BreedingAmpouleTest {
 
     @Test
     public void testUpdateReturnsDoNothingWhenParentIsCrushed() {
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         BreedingAmpoule ampoule = new BreedingAmpoule(parent);
 
         parent.setCrushed(true);
@@ -106,7 +106,7 @@ public class BreedingAmpouleTest {
 
     @Test
     public void testGetImageReturnsNullWhenParentNotInMap() {
-        Body parent = createParent(AgeState.CHILD);
+        Yukkuri parent = createParent(AgeState.CHILD);
         BreedingAmpoule ampoule = new BreedingAmpoule(parent);
 
         SimYukkuri.world.getCurrentMap().getBody().remove(parent.getUniqueID());
@@ -117,7 +117,7 @@ public class BreedingAmpouleTest {
 
     @Test
     public void testGetImageReturnsLeftImageWhenDirectionLeft() {
-        Body parent = createParent(AgeState.CHILD);
+        Yukkuri parent = createParent(AgeState.CHILD);
         BreedingAmpoule ampoule = new BreedingAmpoule(parent);
 
         parent.setDirection(Direction.LEFT);
@@ -128,7 +128,7 @@ public class BreedingAmpouleTest {
 
     @Test
     public void testGetImageReturnsRightImageWhenDirectionRight() {
-        Body parent = createParent(AgeState.CHILD);
+        Yukkuri parent = createParent(AgeState.CHILD);
         BreedingAmpoule ampoule = new BreedingAmpoule(parent);
 
         parent.setDirection(Direction.RIGHT);
@@ -139,7 +139,7 @@ public class BreedingAmpouleTest {
 
     @Test
     public void testResetBoundaryUsesParentAge() {
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         BreedingAmpoule ampoule = new BreedingAmpoule(parent);
 
         ampoule.resetBoundary();
@@ -152,7 +152,7 @@ public class BreedingAmpouleTest {
 
     @Test
     public void testResetBoundaryDoesNothingWhenParentNotInMap() {
-        Body parent = createParent(AgeState.CHILD);
+        Yukkuri parent = createParent(AgeState.CHILD);
         BreedingAmpoule ampoule = new BreedingAmpoule(parent);
 
         int origPivotX = ampoule.getPivotX();
@@ -168,7 +168,7 @@ public class BreedingAmpouleTest {
 
     @Test
     public void testToStringUsesResourceUtil() {
-        Body parent = createParent(AgeState.BABY);
+        Yukkuri parent = createParent(AgeState.BABY);
         BreedingAmpoule ampoule = new BreedingAmpoule(parent);
 
         assertEquals(ResourceUtil.getInstance().read("item_breeding"), ampoule.toString());
@@ -182,7 +182,7 @@ public class BreedingAmpouleTest {
 
     @Test
     public void testConstructorWithParentNotInWorld() {
-        Body parent = new Reimu();
+        Yukkuri parent = new Reimu();
         parent.setAgeState(AgeState.CHILD);
         BreedingAmpoule ampoule = new BreedingAmpoule(parent);
         assertEquals(1000, ampoule.getValue());
@@ -191,7 +191,7 @@ public class BreedingAmpouleTest {
 
     @Test
     public void testUpdateBreedsWhenParentIsAliveAndNotDisabled() {
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         BreedingAmpoule ampoule = new BreedingAmpoule(parent);
 
         parent.setDead(false);
@@ -209,7 +209,7 @@ public class BreedingAmpouleTest {
 
     @Test
     public void testUpdateReturnsDoNothingWhenParentIsBodyCastrated() {
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         BreedingAmpoule ampoule = new BreedingAmpoule(parent);
 
         parent.setBodyCastration(true);
@@ -221,8 +221,8 @@ public class BreedingAmpouleTest {
         assertEquals(babyTypesBefore, parent.getBabyTypes().size());
     }
 
-    private static Body createParent(AgeState ageState) {
-        Body parent = new Reimu();
+    private static Yukkuri createParent(AgeState ageState) {
+        Yukkuri parent = new Reimu();
         parent.setAgeState(ageState);
         SimYukkuri.world.getCurrentMap().getBody().put(parent.getUniqueID(), parent);
         return parent;
@@ -250,7 +250,7 @@ public class BreedingAmpouleTest {
 
         @Test
         void testScenario_LiveBodyGetsFedHealedAndPregnantWithNewBabyDna() {
-            Body parent = createParent(AgeState.ADULT);
+            Yukkuri parent = createParent(AgeState.ADULT);
             parent.setHungry(10);
             parent.addDamage(300);
             BreedingAmpoule ampoule = new BreedingAmpoule(parent);
@@ -273,7 +273,7 @@ public class BreedingAmpouleTest {
 
         @Test
         void testScenario_BodyCastrationBlocksPregnancyAndHealingSideEffects() {
-            Body parent = createParent(AgeState.ADULT);
+            Yukkuri parent = createParent(AgeState.ADULT);
             parent.setHungry(10);
             parent.addDamage(300);
             parent.setBodyCastration(true);

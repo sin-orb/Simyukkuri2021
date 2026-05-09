@@ -1,6 +1,6 @@
 package src.logic;
 
-import src.base.Body;
+import src.base.Yukkuri;
 import src.base.BodyAttributes;
 import src.util.GameRandom;
 
@@ -19,7 +19,7 @@ public final class BodyNeedleRule {
 	 * @param actorBody actor body
 	 * @return true when the branch handled the action
 	 */
-	public static boolean handleNeedledBody(Body targetBody, Body actorBody) {
+	public static boolean handleNeedledBody(Yukkuri targetBody, Yukkuri actorBody) {
 		if (!targetBody.isNeedled()) {
 			return false;
 		}

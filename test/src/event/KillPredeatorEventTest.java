@@ -6,7 +6,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.event.EventPacket;
 import src.event.EventPacket.EventPriority;
 import src.event.EventPacket.UpdateState;
@@ -25,8 +25,8 @@ class KillPredeatorEventTest {
         WorldTestHelper.initializeStandardTranslate500();
     }
 
-    private static Body createBody() {
-        Body b = new src.yukkuri.Reimu();
+    private static Yukkuri createBody() {
+        Yukkuri b = new src.yukkuri.Reimu();
         b.setAgeState(AgeState.ADULT);
         src.system.Sprite[] spr = new src.system.Sprite[3];
         for (int i = 0; i < 3; i++) {
@@ -47,8 +47,8 @@ class KillPredeatorEventTest {
 
     @Test
     void testParameterizedConstructor() {
-        Body from = createBody();
-        Body to = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
         KillPredeatorEvent event = new KillPredeatorEvent(from, to, null, 10);
         assertNotNull(event);
         assertEquals(from.getUniqueID(), event.getFrom());
@@ -58,8 +58,8 @@ class KillPredeatorEventTest {
 
     @Test
     void testCheckEventResponse_setsPriorityHigh() {
-        Body from = createBody();
-        Body responder = createBody();
+        Yukkuri from = createBody();
+        Yukkuri responder = createBody();
         KillPredeatorEvent event = new KillPredeatorEvent(from, null, null, 10);
         event.checkEventResponse(responder);
         assertEquals(EventPriority.HIGH, event.getPriority());
@@ -67,7 +67,7 @@ class KillPredeatorEventTest {
 
     @Test
     void testCheckEventResponse_NoPredatorReturnsFalse() {
-        Body b = createBody();
+        Yukkuri b = createBody();
         KillPredeatorEvent event = new KillPredeatorEvent();
         // no predators in world → bIsNearPredeator=false → returns false
         assertFalse(event.checkEventResponse(b));
@@ -75,7 +75,7 @@ class KillPredeatorEventTest {
 
     @Test
     void testCheckEventResponse_NYD() {
-        Body b = createBody();
+        Yukkuri b = createBody();
         b.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
         KillPredeatorEvent event = new KillPredeatorEvent();
         // NYD body: canEventResponse() may return false → return true(skip)
@@ -87,7 +87,7 @@ class KillPredeatorEventTest {
     @Test
     void testCheckEventResponse_DeadBodyReturnsTrue() {
         // !b.canEventResponse() → return true (skip dead bodies)
-        Body b = createBody();
+        Yukkuri b = createBody();
         b.setDead(true);
         KillPredeatorEvent event = new KillPredeatorEvent();
         // canEventResponse() returns false for dead → returns true
@@ -103,11 +103,11 @@ class KillPredeatorEventTest {
 
     @Test
     void testSearchNextTarget_WithPredator() {
-        Body predator = createBody();
+        Yukkuri predator = createBody();
         predator.setPredatorType(PredatorType.BITE);
         KillPredeatorEvent event = new KillPredeatorEvent();
         // predator exists → returns non-null
-        Body result = event.searchNextTarget();
+        Yukkuri result = event.searchNextTarget();
         // result could be the predator or null (depends on implementation)
         // just assert no exception
         assertDoesNotThrow(() -> event.searchNextTarget());
@@ -115,8 +115,8 @@ class KillPredeatorEventTest {
 
     @Test
     void testUpdate_FromDead_ReturnsAbort() {
-        Body b = createBody();
-        Body from = createBody();
+        Yukkuri b = createBody();
+        Yukkuri from = createBody();
         from.setDead(true);
         KillPredeatorEvent event = new KillPredeatorEvent(from, null, null, 10);
         // from.isDead() → searchNextTarget() → null (no predators) → ABORT
@@ -125,7 +125,7 @@ class KillPredeatorEventTest {
 
     @Test
     void testExecute_FromNull() {
-        Body b = createBody();
+        Yukkuri b = createBody();
         KillPredeatorEvent event = new KillPredeatorEvent();
         // from is null → execute returns true (early exit)
         assertTrue(event.execute(b));
@@ -139,7 +139,7 @@ class KillPredeatorEventTest {
 
     @Test
     void testStart_NYDBody_returnsEarly() {
-        Body b = createBody();
+        Yukkuri b = createBody();
         b.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease); // isNYD() returns true
         KillPredeatorEvent event = new KillPredeatorEvent();
         assertDoesNotThrow(() -> event.start(b));
@@ -149,8 +149,8 @@ class KillPredeatorEventTest {
 
     @Test
     void testStart_notNYD_doesNotThrow() {
-        Body predator = createBody();
-        Body b = createBody();
+        Yukkuri predator = createBody();
+        Yukkuri b = createBody();
         KillPredeatorEvent event = new KillPredeatorEvent(predator, null, null, 10);
         // b is not NYD → calls setAngry + moveToEvent
         assertDoesNotThrow(() -> event.start(b));
@@ -160,8 +160,8 @@ class KillPredeatorEventTest {
 
     @Test
     void testUpdate_RND0_returnsAbort() {
-        Body predator = createBody();
-        Body b = createBody();
+        Yukkuri predator = createBody();
+        Yukkuri b = createBody();
         SimYukkuri.RND = new src.ConstState(0);
         try {
             KillPredeatorEvent event = new KillPredeatorEvent(predator, null, null, 10);
@@ -175,11 +175,11 @@ class KillPredeatorEventTest {
 
     @Test
     void testExecute_fromRemoved_withPredator_returnsFalse() {
-        Body from = createBody();
+        Yukkuri from = createBody();
         from.setRemoved(true);
-        Body predator2 = createBody();
+        Yukkuri predator2 = createBody();
         predator2.setPredatorType(PredatorType.BITE);
-        Body b = createBody();
+        Yukkuri b = createBody();
         KillPredeatorEvent event = new KillPredeatorEvent(from, null, null, 10);
         // from is removed → searchNextTarget finds predator2 → returns false
         assertFalse(event.execute(b));
@@ -189,9 +189,9 @@ class KillPredeatorEventTest {
 
     @Test
     void testExecute_fromAlive_highZ_returnsFalse() {
-        Body from = createBody();
+        Yukkuri from = createBody();
         from.setZ(10); // z >= 5 → skips mypane.addEffect
-        Body b = createBody();
+        Yukkuri b = createBody();
         KillPredeatorEvent event = new KillPredeatorEvent(from, null, null, 10);
         assertFalse(event.execute(b));
     }
@@ -200,9 +200,9 @@ class KillPredeatorEventTest {
 
     @Test
     void testCheckEventResponse_withNearbyPredator_returnsTrue() {
-        Body b = createBody();
+        Yukkuri b = createBody();
         b.setX(100); b.setY(100);
-        Body predator = createBody();
+        Yukkuri predator = createBody();
         predator.setX(100); predator.setY(100);
         predator.setPredatorType(PredatorType.BITE);
         KillPredeatorEvent event = new KillPredeatorEvent();
@@ -213,8 +213,8 @@ class KillPredeatorEventTest {
     // --- checkEventResponse: predator is parent of b → skipped → returns false ---
     @Test
     void testCheckEventResponse_predatorIsParentOfB_returnsFalse() {
-        Body b = createBody();
-        Body predator = createBody();
+        Yukkuri b = createBody();
+        Yukkuri predator = createBody();
         predator.setPredatorType(PredatorType.BITE);
         // predator is parent of b (b.getParents()[0]=predator)
         b.setParents(new int[]{predator.getUniqueID(), -1});
@@ -226,9 +226,9 @@ class KillPredeatorEventTest {
     // --- update: from alive predator, b isAdult non-slave → enters branch, returns null ---
     @Test
     void testUpdate_fromAlive_predator_adultNonSlave_returnsNull() {
-        Body predator = createBody();
+        Yukkuri predator = createBody();
         predator.setPredatorType(PredatorType.BITE);
-        Body b = createBody();
+        Yukkuri b = createBody();
         b.setAge(100000); // isAdult() = true
         // b.getPublicRank() default != UnunSlave
         SimYukkuri.RND = new src.ConstState(999); // nextInt(1000) != 0 → no ABORT
@@ -243,9 +243,9 @@ class KillPredeatorEventTest {
     // --- execute: from dead, no next predator → returns true ---
     @Test
     void testExecute_fromDead_noPredator_returnsTrue() {
-        Body from = createBody();
+        Yukkuri from = createBody();
         from.setDead(true);
-        Body b = createBody();
+        Yukkuri b = createBody();
         KillPredeatorEvent event = new KillPredeatorEvent(from, null, null, 10);
         // from.isDead() → searchNextTarget() → null → return true
         assertTrue(event.execute(b));

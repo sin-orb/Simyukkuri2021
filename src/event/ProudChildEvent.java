@@ -7,9 +7,9 @@ import java.util.List;
 import src.Const;
 import src.SimYukkuri;
 import src.util.GameRandom;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.event.EventPacket;
-import src.base.Obj;
+import src.base.Entity;
 import src.enums.Happiness;
 import src.enums.PublicRank;
 import src.field.impl.Barrier;
@@ -19,9 +19,9 @@ import src.system.ResourceUtil;
 
 /***************************************************
  * おちびちゃん自慢イベント
- * protected Body from; // イベントを発した個体
- * protected Body to; // 未使用
- * protected Obj target; // 未使用
+ * protected Yukkuri from; // イベントを発した個体
+ * protected Yukkuri to; // 未使用
+ * protected Entity target; // 未使用
  * protected int count; // 10
  */
 public class ProudChildEvent extends EventPacket {
@@ -54,7 +54,7 @@ public class ProudChildEvent extends EventPacket {
 	/**
 	 * コンストラクタ.
 	 */
-	public ProudChildEvent(Body f, Body t, Obj tgt, int cnt) {
+	public ProudChildEvent(Yukkuri f, Yukkuri t, Entity tgt, int cnt) {
 		super(f, t, tgt, cnt);
 		priority = EventPriority.MIDDLE;
 	}
@@ -96,8 +96,8 @@ public class ProudChildEvent extends EventPacket {
 	}
 
 	@Override
-	public boolean simpleEventAction(Body body) {
-		Body sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
+	public boolean simpleEventAction(Yukkuri body) {
+		Yukkuri sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
 
 		if (sourceBody == null || sourceBody.isShutmouth()) {
 			return true;
@@ -112,7 +112,7 @@ public class ProudChildEvent extends EventPacket {
 	// ここで各種チェックを行い、イベントへ参加するかを返す
 	// また、イベント優先度も必要に応じて設定できる
 	@Override
-	public boolean checkEventResponse(Body body) {
+	public boolean checkEventResponse(Yukkuri body) {
 		// うんうん奴隷の場合は参加しない
 		if (body.getPublicRank() == PublicRank.UnunSlave)
 			return false;
@@ -120,7 +120,7 @@ public class ProudChildEvent extends EventPacket {
 		if (src.util.BodyRegistry.getBodyInstance(body.getFather()) == null &&
 				src.util.BodyRegistry.getBodyInstance(body.getMother()) == null)
 			return false;
-		Body sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
+		Yukkuri sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
 		if (sourceBody == null)
 			return false;
 		// つがいも参加する
@@ -153,7 +153,7 @@ public class ProudChildEvent extends EventPacket {
 
 	// イベント開始動作
 	@Override
-	public void start(Body body) {
+	public void start(Yukkuri body) {
 		body.setCurrentEvent(this);
 	}
 
@@ -169,8 +169,8 @@ public class ProudChildEvent extends EventPacket {
 	// "UpdateState.ABORT"を返すとイベント終了
 	// 親→子供→次のステート、の順で処理をする
 	@Override
-	public UpdateState update(Body body) {
-		Body sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
+	public UpdateState update(Yukkuri body) {
+		Yukkuri sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
 		// イベント中止のお知らせ
 		if (body == null || sourceBody == null) {
 			return UpdateState.ABORT;
@@ -263,12 +263,12 @@ public class ProudChildEvent extends EventPacket {
 			fromWaitTicks++;
 
 			// 子のみ集合
-			List<Body> childrenList = BodyLogic.createActiveChildList(sourceBody, false);
+			List<Yukkuri> childrenList = BodyLogic.createActiveChildList(sourceBody, false);
 			if ((childrenList == null) || (childrenList.size() == 0)) {
 				return UpdateState.ABORT;
 			}
 			boolean allSleeping = true;
-			for (Body child : childrenList) {
+			for (Yukkuri child : childrenList) {
 				if (child != null && !child.isSleeping()) {
 					allSleeping = false;
 					break;
@@ -280,7 +280,7 @@ public class ProudChildEvent extends EventPacket {
 
 			if (10 < fromWaitTicks) {
 				boolean childInEvent = false;
-				for (Body child : childrenList) {
+				for (Yukkuri child : childrenList) {
 					if (child.getCurrentEvent() == this) {
 						childInEvent = true;
 						break;
@@ -466,12 +466,12 @@ public class ProudChildEvent extends EventPacket {
 	// イベント目標に到着した際に呼ばれる
 	// trueを返すとイベント終了
 	@Override
-	public boolean execute(Body body) {
+	public boolean execute(Yukkuri body) {
 		return false;
 	}
 
 	@Override
-	public void end(Body body) {
+	public void end(Yukkuri body) {
 		body.setCurrentEvent(null);
 		return;
 	}

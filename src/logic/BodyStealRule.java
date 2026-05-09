@@ -1,6 +1,6 @@
 package src.logic;
 
-import src.base.Body;
+import src.base.Yukkuri;
 import src.entity.world.bodylinked.Okazari.OkazariType;
 import src.enums.Happiness;
 import src.enums.PublicRank;
@@ -22,7 +22,7 @@ public final class BodyStealRule {
 	 * @param actorBody actor body
 	 * @return true when the steal branch handled the action
 	 */
-	public static boolean handleOkazariSteal(Body targetBody, Body actorBody) {
+	public static boolean handleOkazariSteal(Yukkuri targetBody, Yukkuri actorBody) {
 		if (!actorBody.hasOkazari() && targetBody.hasOkazari() && actorBody.getBodyAgeState() == targetBody.getBodyAgeState()
 				&& actorBody.getType() == targetBody.getType() && !actorBody.isHybrid()
 				&& targetBody.getOkazari().getOkazariType() == OkazariType.DEFAULT

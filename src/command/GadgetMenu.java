@@ -9,7 +9,7 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JPopupMenu;
 
 import src.SimYukkuri;
-import src.base.Obj;
+import src.base.Entity;
 import src.item.AutoFeeder;
 import src.item.Bed;
 import src.item.BreedingPool;
@@ -956,7 +956,7 @@ public class GadgetMenu {
 	 * @param targetObject 対象オブジェクト(主にゆっくり)
 	 * @param method 実行したいメソッド名
 	 */
-	public static final void executeBodyMethod(MouseEvent e, Obj targetObject, String method) {
+	public static final void executeBodyMethod(MouseEvent e, Entity targetObject, String method) {
 		BodyMethodDispatcher.execute(e, targetObject, method);
 	}
 
@@ -967,7 +967,7 @@ public class GadgetMenu {
 	 * @param method 実行したいメソッド名
 	 * @param prm 指定パラメータ
 	 */
-	public static final void executeBodyMethod(MouseEvent e, Obj targetObject, String method, int prm) {
+	public static final void executeBodyMethod(MouseEvent e, Entity targetObject, String method, int prm) {
 		BodyMethodDispatcher.execute(e, targetObject, method, prm);
 	}
 
@@ -980,7 +980,7 @@ public class GadgetMenu {
 	 * @param setMethod 実行したいメソッド名(その他用)
 	 * @param invMethod 反転実行系コマンド実行
 	 */
-	public static final void executeBodyMethod(MouseEvent e, Obj targetObject, String getMethod, String setMethod, String invMethod) {
+	public static final void executeBodyMethod(MouseEvent e, Entity targetObject, String getMethod, String setMethod, String invMethod) {
 		BodyMethodDispatcher.execute(e, targetObject, getMethod, setMethod, invMethod);
 	}
 }

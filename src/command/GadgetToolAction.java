@@ -16,9 +16,9 @@ import src.attachment.OrangeAmpoule;
 import src.attachment.PoisonAmpoule;
 import src.attachment.StopAmpoule;
 import src.attachment.VeryShitAmpoule;
-import src.base.Body;
-import src.base.Obj;
-import src.base.ObjEX;
+import src.base.Yukkuri;
+import src.base.Entity;
+import src.base.WorldEntity;
 import src.command.GadgetMenu.GadgetList;
 import src.draw.Point4y;
 import src.draw.Rectangle4y;
@@ -55,14 +55,14 @@ final class GadgetToolAction {
 	private GadgetToolAction() {
 	}
 
-	static void evaluateTool(GadgetList item, MouseEvent ev, Obj targetObject) {
+	static void evaluateTool(GadgetList item, MouseEvent ev, Entity targetObject) {
 		switch (item) {
 			case PUNISH:
 				GadgetMenu.executeBodyMethod(ev, targetObject, "strikeByPunish");
 				break;
 			case SNAPPING:
 				if (ev.isShiftDown()) {
-					for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
+					for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
 						entry.getValue().kick();
 					}
 					Map<Integer, Shit> shits = GameWorld.get().getCurrentMap().getShit();
@@ -97,8 +97,8 @@ final class GadgetToolAction {
 				break;
 			case HAMMER:
 				if (ev.isShiftDown()) {
-					for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
-						Body body = entry.getValue();
+					for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
+						Yukkuri body = entry.getValue();
 						body.strikeByHammer();
 						if (!body.isHasPants() && !body.isDead() && !body.isShutmouth()) {
 							int offsetX = Translate.invertX(body.getCollisionX() >> 1, body.getY());
@@ -113,8 +113,8 @@ final class GadgetToolAction {
 						body.makeDirty(true);
 					}
 					GameEnvironment.setAlarm();
-				} else if (targetObject instanceof Body) {
-					Body body = (Body) targetObject;
+				} else if (targetObject instanceof Yukkuri) {
+					Yukkuri body = (Yukkuri) targetObject;
 					body.strikeByHammer();
 					if (!body.isHasPants() && !body.isDead() && !body.isShutmouth()) {
 						int offsetX = Translate.invertX(body.getCollisionX() >> 1, body.getY());
@@ -131,8 +131,8 @@ final class GadgetToolAction {
 				}
 				break;
 			case GATHERINJECTINTO:
-				if (targetObject instanceof Body) {
-					Body body = (Body) targetObject;
+				if (targetObject instanceof Yukkuri) {
+					Yukkuri body = (Yukkuri) targetObject;
 					if (SimYukkuri.sperm == null) {
 						SimYukkuri.sperm = body.getDna();
 					} else {
@@ -142,8 +142,8 @@ final class GadgetToolAction {
 				}
 				break;
 			case DRIPSPERM:
-				if (targetObject instanceof Body) {
-					Body body = (Body) targetObject;
+				if (targetObject instanceof Yukkuri) {
+					Yukkuri body = (Yukkuri) targetObject;
 					if (SimYukkuri.sperm == null) {
 						SimYukkuri.sperm = body.getDna();
 					} else {
@@ -154,8 +154,8 @@ final class GadgetToolAction {
 				break;
 			case PUNCH:
 				if (ev.isShiftDown()) {
-					for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
-						Body body = entry.getValue();
+					for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
+						Yukkuri body = entry.getValue();
 						body.strikeByPunch();
 						if (!body.isHasPants() && !body.isDead() && !body.isShutmouth()) {
 							int offsetX = Translate.invertX(body.getCollisionX() >> 1, body.getY());
@@ -170,8 +170,8 @@ final class GadgetToolAction {
 						body.makeDirty(true);
 					}
 					GameEnvironment.setAlarm();
-				} else if (targetObject instanceof Body) {
-					Body body = (Body) targetObject;
+				} else if (targetObject instanceof Yukkuri) {
+					Yukkuri body = (Yukkuri) targetObject;
 					body.strikeByPunch();
 					if (!body.isHasPants() && !body.isDead() && !body.isShutmouth()) {
 						int offsetX = Translate.invertX(body.getCollisionX() >> 1, body.getY());
@@ -189,39 +189,39 @@ final class GadgetToolAction {
 				break;
 			case GODHAND:
 				if (ev.isShiftDown()) {
-					List<Body> bodyList = new LinkedList<Body>(GameWorld.get().getCurrentMap().getBody().values());
+					List<Yukkuri> bodyList = new LinkedList<Yukkuri>(GameWorld.get().getCurrentMap().getBody().values());
 					int bodyCount = bodyList.size();
 					for (int i = bodyCount - 1; -1 < i; i--) {
-						Body body = bodyList.get(i);
+						Yukkuri body = bodyList.get(i);
 						if (body != null) {
 							GadgetTool.doGodHand(body);
 						}
 					}
-				} else if (targetObject instanceof Body) {
-					Body body = (Body) targetObject;
+				} else if (targetObject instanceof Yukkuri) {
+					Yukkuri body = (Yukkuri) targetObject;
 					GadgetTool.doGodHand(body);
 				}
 				break;
 			case PEAL:
-				List<Body> bodyListP = new LinkedList<Body>(GameWorld.get().getCurrentMap().getBody().values());
+				List<Yukkuri> bodyListP = new LinkedList<Yukkuri>(GameWorld.get().getCurrentMap().getBody().values());
 				if (ev.isShiftDown() || ev.isControlDown()) {
-					for (Body body : bodyListP) {
+					for (Yukkuri body : bodyListP) {
 						body.peal();
 						body.setStubbornlyDirty(false);
 					}
-				} else if (targetObject instanceof Body) {
-					((Body) targetObject).peal();
-					((Body) targetObject).setStubbornlyDirty(false);
+				} else if (targetObject instanceof Yukkuri) {
+					((Yukkuri) targetObject).peal();
+					((Yukkuri) targetObject).setStubbornlyDirty(false);
 				}
 				break;
 			case Blind:
-				List<Body> bodyListB = new LinkedList<Body>(GameWorld.get().getCurrentMap().getBody().values());
+				List<Yukkuri> bodyListB = new LinkedList<Yukkuri>(GameWorld.get().getCurrentMap().getBody().values());
 				if (ev.isShiftDown()) {
 					boolean shouldBreakEyes = true;
-					if (targetObject instanceof Body) {
-						shouldBreakEyes = !((Body) targetObject).isBlind();
+					if (targetObject instanceof Yukkuri) {
+						shouldBreakEyes = !((Yukkuri) targetObject).isBlind();
 					}
-					for (Body body : bodyListB) {
+					for (Yukkuri body : bodyListB) {
 						if (!shouldBreakEyes && body.isBlind()) {
 							body.breakeyes();
 						} else if (shouldBreakEyes && !body.isBlind()) {
@@ -229,21 +229,21 @@ final class GadgetToolAction {
 						}
 					}
 				} else if (ev.isControlDown()) {
-					for (Body body : bodyListB) {
+					for (Yukkuri body : bodyListB) {
 						body.breakeyes();
 					}
-				} else if (targetObject instanceof Body) {
-					((Body) targetObject).breakeyes();
+				} else if (targetObject instanceof Yukkuri) {
+					((Yukkuri) targetObject).breakeyes();
 				}
 				break;
 			case SHUTMOUTH:
-				List<Body> bodyListS = new LinkedList<Body>(GameWorld.get().getCurrentMap().getBody().values());
+				List<Yukkuri> bodyListS = new LinkedList<Yukkuri>(GameWorld.get().getCurrentMap().getBody().values());
 				if (ev.isShiftDown()) {
 					boolean shouldShutMouth = true;
-					if (targetObject instanceof Body) {
-						shouldShutMouth = !((Body) targetObject).isShutmouth();
+					if (targetObject instanceof Yukkuri) {
+						shouldShutMouth = !((Yukkuri) targetObject).isShutmouth();
 					}
-					for (Body body : bodyListS) {
+					for (Yukkuri body : bodyListS) {
 						if (!shouldShutMouth && body.isShutmouth()) {
 							body.ShutMouth();
 						} else if (shouldShutMouth && !body.isShutmouth()) {
@@ -251,11 +251,11 @@ final class GadgetToolAction {
 						}
 					}
 				} else if (ev.isControlDown()) {
-					for (Body body : bodyListS) {
+					for (Yukkuri body : bodyListS) {
 						body.ShutMouth();
 					}
-				} else if (targetObject instanceof Body) {
-					((Body) targetObject).ShutMouth();
+				} else if (targetObject instanceof Yukkuri) {
+					((Yukkuri) targetObject).ShutMouth();
 				}
 				break;
 			case HAIRCUT:
@@ -264,13 +264,13 @@ final class GadgetToolAction {
 				}
 				break;
 			case PACK:
-				List<Body> bodyListPa = new LinkedList<Body>(GameWorld.get().getCurrentMap().getBody().values());
+				List<Yukkuri> bodyListPa = new LinkedList<Yukkuri>(GameWorld.get().getCurrentMap().getBody().values());
 				if (ev.isShiftDown()) {
 					boolean shouldPack = true;
-					if (targetObject instanceof Body) {
-						shouldPack = !((Body) targetObject).isPacked();
+					if (targetObject instanceof Yukkuri) {
+						shouldPack = !((Yukkuri) targetObject).isPacked();
 					}
-					for (Body body : bodyListPa) {
+					for (Yukkuri body : bodyListPa) {
 						if (!shouldPack && body.isPacked()) {
 							body.pack();
 						} else if (shouldPack && !body.isPacked()) {
@@ -278,11 +278,11 @@ final class GadgetToolAction {
 						}
 					}
 				} else if (ev.isControlDown()) {
-					for (Body body : bodyListPa) {
+					for (Yukkuri body : bodyListPa) {
 						body.pack();
 					}
-				} else if (targetObject instanceof Body) {
-					((Body) targetObject).pack();
+				} else if (targetObject instanceof Yukkuri) {
+					((Yukkuri) targetObject).pack();
 				}
 				break;
 			case HOLD:
@@ -298,7 +298,7 @@ final class GadgetToolAction {
 		}
 	}
 
-	static void evaluateTool2(GadgetList item, MouseEvent ev, Obj targetObject) {
+	static void evaluateTool2(GadgetList item, MouseEvent ev, Entity targetObject) {
 		switch (item) {
 			case BRAID_PLUCK:
 				GadgetMenu.executeBodyMethod(ev, targetObject, "takeBraid");

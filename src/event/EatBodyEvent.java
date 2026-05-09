@@ -4,9 +4,9 @@ import src.util.GameMessages;
 import src.util.GameText;
 
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.event.EventPacket;
-import src.base.Obj;
+import src.base.Entity;
 import src.draw.Translate;
 import src.enums.Attitude;
 import src.enums.Direction;
@@ -17,9 +17,9 @@ import src.system.ResourceUtil;
 
 /***************************************************
  * 死体食事中におかざりがもどってきたイベント
- * protected Body from; // 食べてる側
- * protected Body to; // 食べられてる側
- * protected Obj target; // 未使用
+ * protected Yukkuri from; // 食べてる側
+ * protected Yukkuri to; // 食べられてる側
+ * protected Entity target; // 未使用
  * protected int count; // 30
  */
 public class EatBodyEvent extends EventPacket {
@@ -30,7 +30,7 @@ public class EatBodyEvent extends EventPacket {
 	/**
 	 * コンストラクタ.
 	 */
-	public EatBodyEvent(Body fromBody, Body toBody, Obj targetObject, int count) {
+	public EatBodyEvent(Yukkuri fromBody, Yukkuri toBody, Entity targetObject, int count) {
 		super(fromBody, toBody, targetObject, count);
 	}
 
@@ -50,7 +50,7 @@ public class EatBodyEvent extends EventPacket {
 	// ここで各種チェックを行い、イベントへ参加するかを返す
 	// また、イベント優先度も必要に応じて設定できる
 	@Override
-	public boolean checkEventResponse(Body body) {
+	public boolean checkEventResponse(Yukkuri body) {
 		if (src.util.BodyRegistry.getBodyInstance(getFrom()) == body && body.canEventResponse()
 				&& body.getAttitude() != Attitude.SUPER_SHITHEAD)
 			return true;
@@ -59,8 +59,8 @@ public class EatBodyEvent extends EventPacket {
 
 	// イベント開始動作
 	@Override
-	public void start(Body body) {
-		Body targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
+	public void start(Yukkuri body) {
+		Yukkuri targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
 		if (targetBody == null)
 			return;
 		// ゆっくりが隠れないように死体の奥に出る
@@ -70,8 +70,8 @@ public class EatBodyEvent extends EventPacket {
 	// イベント目標に到着した際に呼ばれる
 	// trueを返すとイベント終了
 	@Override
-	public boolean execute(Body body) {
-		Body targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
+	public boolean execute(Yukkuri body) {
+		Yukkuri targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
 		// 複数の動作を順次行うのでtickで管理
 		if (tick == 0) {
 			// 固まる
@@ -133,7 +133,7 @@ public class EatBodyEvent extends EventPacket {
 
 	// もしもの時のために解除
 	@Override
-	public void end(Body body) {
+	public void end(Yukkuri body) {
 		body.setLockmove(false);
 		return;
 	}

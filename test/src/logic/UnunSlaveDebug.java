@@ -3,8 +3,8 @@ package src.logic;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 import src.SimYukkuri;
-import src.base.Body;
-import src.base.Obj;
+import src.base.Yukkuri;
+import src.base.Entity;
 import src.draw.Translate;
 import src.enums.PublicRank;
 import src.game.Shit;
@@ -19,7 +19,7 @@ public class UnunSlaveDebug {
         Translate.createTransTable(false);
         WorldTestHelper.initializeMinimalWorld();
 
-        Body body = WorldTestHelper.createBody();
+        Yukkuri body = WorldTestHelper.createBody();
         body.setHungry(body.getHungryLimit() / 4);
         body.setPublicRank(PublicRank.UnunSlave);
 
@@ -37,10 +37,10 @@ public class UnunSlaveDebug {
         SimYukkuri.world.getCurrentMap().getToilet().clear();
 
         boolean[] forceEat = { false };
-        java.lang.reflect.Method m = FoodLogic.class.getDeclaredMethod("searchFoodForUnunSlave", Body.class,
+        java.lang.reflect.Method m = FoodLogic.class.getDeclaredMethod("searchFoodForUnunSlave", Yukkuri.class,
                 boolean[].class);
         m.setAccessible(true);
-        Obj found = (Obj) m.invoke(null, body, forceEat);
+        Entity found = (Entity) m.invoke(null, body, forceEat);
 
         System.out.println("DEBUG: body pos=(" + body.getX() + "," + body.getY() + ")");
         System.out.println("DEBUG: shit pos=(" + shit.getX() + "," + shit.getY() + ")");

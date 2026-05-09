@@ -1,7 +1,7 @@
 package src.logic;
 
 import src.attachment.Ants;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.enums.Happiness;
 import src.enums.TakeoutItemType;
 import src.util.GameMessages;
@@ -23,7 +23,7 @@ public final class BodySkinshipRule {
 	 * @param actorBody actor body
 	 * @return true when the branch handled the action
 	 */
-	public static boolean handleSkinship(Body targetBody, Body actorBody) {
+	public static boolean handleSkinship(Yukkuri targetBody, Yukkuri actorBody) {
 		// 相手がありに食われてる時
 		if (targetBody.getAttachmentSize(Ants.class) != 0) {
 			// 自分がアリに食われてない時のみ相手をぺろぺろする余裕がある

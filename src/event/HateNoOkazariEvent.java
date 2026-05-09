@@ -9,9 +9,9 @@ import src.Const;
 import src.SimYukkuri;
 import src.util.GameRandom;
 import src.util.GameWorld;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.event.EventPacket;
-import src.base.Obj;
+import src.base.Entity;
 import src.draw.Translate;
 import src.enums.Direction;
 import src.enums.EffectType;
@@ -26,9 +26,9 @@ import src.system.ResourceUtil;
 
 /***************************************************
  * おかざりのないゆっくりへの攻撃イベント
- * protected Body from; // イベントを発した個体
- * protected Body to; // 攻撃対象
- * protected Obj target; // 未使用
+ * protected Yukkuri from; // イベントを発した個体
+ * protected Yukkuri to; // 攻撃対象
+ * protected Entity target; // 未使用
  * protected int count; // 10
  */
 public class HateNoOkazariEvent extends EventPacket {
@@ -38,7 +38,7 @@ public class HateNoOkazariEvent extends EventPacket {
 	/**
 	 * コンストラクタ.
 	 */
-	public HateNoOkazariEvent(Body fromBody, Body toBody, Obj targetObject, int count) {
+	public HateNoOkazariEvent(Yukkuri fromBody, Yukkuri toBody, Entity targetObject, int count) {
 		super(fromBody, toBody, targetObject, count);
 	}
 
@@ -50,7 +50,7 @@ public class HateNoOkazariEvent extends EventPacket {
 	// ここで各種チェックを行い、イベントへ参加するかを返す
 	// また、イベント優先度も必要に応じて設定できる
 	@Override
-	public boolean checkEventResponse(Body body) {
+	public boolean checkEventResponse(Yukkuri body) {
 		boolean accepted = false;
 
 		priority = EventPriority.MIDDLE;
@@ -63,7 +63,7 @@ public class HateNoOkazariEvent extends EventPacket {
 		// 足りないゆは参加しない
 		if (body.isIdiot())
 			return false;
-		Body targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
+		Yukkuri targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
 		if (targetBody == null)
 			return false;
 		// 自分が賢い場合はおかざりがなくても家族を認識して参加しない
@@ -102,7 +102,7 @@ public class HateNoOkazariEvent extends EventPacket {
 		}
 
 		if (accepted) {
-			Body sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
+			Yukkuri sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
 			if (sourceBody != body) {
 				body.setWorldEventResMessage(GameMessages.getMessage(body, MessagePool.Action.HateYukkuri), Const.HOLDMESSAGE,
 						true, false);
@@ -113,8 +113,8 @@ public class HateNoOkazariEvent extends EventPacket {
 
 	// イベント開始動作
 	@Override
-	public void start(Body body) {
-		Body targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
+	public void start(Yukkuri body) {
+		Yukkuri targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
 		if (targetBody == null)
 			return;
 		int collisionX = BodyLogic.calcCollisionX(body, targetBody);
@@ -124,8 +124,8 @@ public class HateNoOkazariEvent extends EventPacket {
 	// 毎フレーム処理
 	// UpdateState.ABORTを返すとイベント終了
 	@Override
-	public UpdateState update(Body body) {
-		Body targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
+	public UpdateState update(Yukkuri body) {
+		Yukkuri targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
 		// 相手が消えてしまったらイベント中断
 		if (targetBody == null || targetBody.isRemoved())
 			return UpdateState.ABORT;
@@ -141,8 +141,8 @@ public class HateNoOkazariEvent extends EventPacket {
 	// イベント目標に到着した際に呼ばれる
 	// trueを返すとイベント終了
 	@Override
-	public boolean execute(Body body) {
-		Body targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
+	public boolean execute(Yukkuri body) {
+		Yukkuri targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
 		// 相手が残っていたら攻撃
 		if (targetBody != null && !targetBody.isDead() && !targetBody.isRemoved() && targetBody.getZ() < 5) {
 			// うんうん奴隷ではない場合
@@ -159,7 +159,7 @@ public class HateNoOkazariEvent extends EventPacket {
 				if (hasSlaveToilet) {
 					targetBody.setPublicRank(PublicRank.UnunSlave); // うんうんどれい認定
 					targetBody.getFavoriteItems().clear();
-					Body partnerBody = src.util.BodyRegistry.getBodyInstance(body.getPartner());
+					Yukkuri partnerBody = src.util.BodyRegistry.getBodyInstance(body.getPartner());
 					if (partnerBody != null) {
 						// うんうんどれいになるようなくずとは りこんっ！だよ！！
 						body.setPartner(-1);

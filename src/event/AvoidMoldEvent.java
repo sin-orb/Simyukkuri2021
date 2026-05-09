@@ -5,9 +5,9 @@ import src.util.GameText;
 import src.Const;
 import src.SimYukkuri;
 import src.util.GameRandom;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.event.EventPacket;
-import src.base.Obj;
+import src.base.Entity;
 import src.enums.Happiness;
 import src.enums.ImageCode;
 import src.enums.Intelligence;
@@ -19,9 +19,9 @@ import src.system.ResourceUtil;
 
 /***************************************************
  * かびたゆっくりへの反応イベント
- * protected Body from; // イベントを発した個体
- * protected Body to; // 攻撃対象
- * protected Obj target; // 未使用
+ * protected Yukkuri from; // イベントを発した個体
+ * protected Yukkuri to; // 攻撃対象
+ * protected Entity target; // 未使用
  * protected int count; // 10
  */
 public class AvoidMoldEvent extends EventPacket {
@@ -31,7 +31,7 @@ public class AvoidMoldEvent extends EventPacket {
 	/**
 	 * コンストラクタ.
 	 */
-	public AvoidMoldEvent(Body f, Body t, Obj tgt, int cnt) {
+	public AvoidMoldEvent(Yukkuri f, Yukkuri t, Entity tgt, int cnt) {
 		super(f, t, tgt, cnt);
 	}
 
@@ -45,7 +45,7 @@ public class AvoidMoldEvent extends EventPacket {
 	 * また、イベント優先度も必要に応じて設定できる
 	 */
 	@Override
-	public boolean checkEventResponse(Body body) {
+	public boolean checkEventResponse(Yukkuri body) {
 		priority = EventPriority.MIDDLE;
 		// うんうん奴隷は参加しない
 		if (body.getPublicRank() == PublicRank.UnunSlave)
@@ -57,7 +57,7 @@ public class AvoidMoldEvent extends EventPacket {
 		if (!body.canEventResponse())
 			return false;
 		// 相手との間に壁があればスキップ
-		Body targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
+		Yukkuri targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
 		if (targetBody != null && Barrier.acrossBarrier(body.getX(), body.getY(), targetBody.getX(), targetBody.getY(),
 				Barrier.MAP_BODY[body.getBodyAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
 			return false;
@@ -69,8 +69,8 @@ public class AvoidMoldEvent extends EventPacket {
 	 * イベント開始動作
 	 */
 	@Override
-	public void start(Body body) {
-		Body targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
+	public void start(Yukkuri body) {
+		Yukkuri targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
 		if (targetBody == null) {
 			return;
 		}
@@ -83,9 +83,9 @@ public class AvoidMoldEvent extends EventPacket {
 	 * UpdateState.ABORTを返すとイベント終了
 	 */
 	@Override
-	public UpdateState update(Body body) {
+	public UpdateState update(Yukkuri body) {
 		// 相手が消えてしまったらイベント中断
-		Body targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
+		Yukkuri targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
 		if (targetBody == null)
 			return UpdateState.ABORT;
 		if (targetBody.isDead() || targetBody.isRemoved())
@@ -101,9 +101,9 @@ public class AvoidMoldEvent extends EventPacket {
 	 * trueを返すとイベント終了
 	 */
 	@Override
-	public boolean execute(Body body) {
-		Body targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
-		Body sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
+	public boolean execute(Yukkuri body) {
+		Yukkuri targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
+		Yukkuri sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
 		if (sourceBody == null || targetBody == null) {
 			return true;
 		}
@@ -286,8 +286,8 @@ public class AvoidMoldEvent extends EventPacket {
 	 * @param From イベント発生元
 	 * @param To   イベント対象
 	 */
-	public void saySadMessage(Body From, Body To) {
-		Body sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
+	public void saySadMessage(Yukkuri From, Yukkuri To) {
+		Yukkuri sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
 		if (sourceBody == null)
 			return;
 		String message = null;
@@ -315,8 +315,8 @@ public class AvoidMoldEvent extends EventPacket {
 	 * @param From イベント発生元
 	 * @param To   イベント対象
 	 */
-	public void sayApologyMessage(Body From, Body To) {
-		Body sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
+	public void sayApologyMessage(Yukkuri From, Yukkuri To) {
+		Yukkuri sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
 		if (sourceBody == null)
 			return;
 		String message = null;

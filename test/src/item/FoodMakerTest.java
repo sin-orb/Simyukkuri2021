@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.base.ItemTestBase;
 import src.enums.AgeState;
 import src.enums.Type;
@@ -123,7 +123,7 @@ class FoodMakerTest extends ItemTestBase {
     void testObjHitProcess_notReady_returns0() {
         FoodMaker item = new FoodMaker();
         item.setProcessReady(false);
-        Body body = WorldTestHelper.createBody();
+        Yukkuri body = WorldTestHelper.createBody();
         assertEquals(0, item.objHitProcess(body));
     }
 
@@ -431,7 +431,7 @@ class FoodMakerTest extends ItemTestBase {
         @Test
         void testScenario_CrushedBabyBodyBecomesStockAndIsRemoved() {
             FoodMaker item = new FoodMaker();
-            Body body = WorldTestHelper.createBody();
+            Yukkuri body = WorldTestHelper.createBody();
             body.setObjType(Type.YUKKURI);
             body.setCrushed(true);
             body.setAgeState(AgeState.BABY);

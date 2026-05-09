@@ -2,7 +2,7 @@ package src.util;
 
 import src.SimYukkuri;
 import src.draw.World;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.base.BodyAttributes;
 import src.draw.Terrarium;
 import java.util.Random;
@@ -102,10 +102,10 @@ public class WorldTestHelper {
     }
 
     /**
-     * Set up a Body to be transformation-ready
+     * Set up a Yukkuri to be transformation-ready
      * This sets the necessary state for canTransform() to return true
      */
-    public static void makeTransformationReady(Body body) {
+    public static void makeTransformationReady(Yukkuri body) {
         try {
             // Use reflection to set private fields that affect canTransform()
             // canTransform() checks: !isDead, stress==0, !damaged, !feelPain, !unBirth,
@@ -156,54 +156,27 @@ public class WorldTestHelper {
         return null;
     }
 
-    public static void setDamage(Body body, int damage) {
-        try {
-            Field field = BodyAttributes.class.getDeclaredField("damage");
-            field.setAccessible(true);
-            field.setInt(body, damage);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public static void setDamage(Yukkuri body, int damage) {
+        body.setDamage(damage);
     }
 
-    public static Body createBody() {
-        Body b = new src.yukkuri.Marisa();
+    public static Yukkuri createBody() {
+        Yukkuri b = new src.yukkuri.Marisa();
         b.setObjId(src.enums.Numbering.INSTANCE.numberingObjId());
         b.setUniqueID(src.enums.Numbering.INSTANCE.numberingYukkuriID());
         return b;
     }
 
-    public static void setParents(Body body, int fatherId, int motherId) {
-        try {
-            Field field = BodyAttributes.class.getDeclaredField("parents");
-            field.setAccessible(true);
-            int[] parents = { fatherId, motherId };
-            field.set(body, parents);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public static void setParents(Yukkuri body, int fatherId, int motherId) {
+        body.setParents(new int[]{ fatherId, motherId });
     }
 
-    public static void addChild(Body body, int childId) {
-        try {
-            Field field = BodyAttributes.class.getDeclaredField("childrenList");
-            field.setAccessible(true);
-            @SuppressWarnings("unchecked")
-            List<Integer> children = (List<Integer>) field.get(body);
-            children.add(childId);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public static void addChild(Yukkuri body, int childId) {
+        body.getChildrenList().add(childId);
     }
 
-    public static void setSleeping(Body body, boolean sleeping) {
-        try {
-            Field field = BodyAttributes.class.getDeclaredField("sleeping");
-            field.setAccessible(true);
-            field.setBoolean(body, sleeping);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+    public static void setSleeping(Yukkuri body, boolean sleeping) {
+        body.setSleeping(sleeping);
     }
 
     /**

@@ -29,9 +29,9 @@ import javax.swing.border.LineBorder;
 import src.SimYukkuri;
 import src.util.GameRandom;
 import src.util.GameWorld;
-import src.base.Body;
-import src.base.Obj;
-import src.base.ObjEX;
+import src.base.Yukkuri;
+import src.base.Entity;
+import src.base.WorldEntity;
 import src.entity.world.bodylinked.Okazari.OkazariType;
 import src.draw.ModLoader;
 import src.draw.Rectangle4y;
@@ -52,7 +52,7 @@ import src.field.impl.Barrier;
 /***************************************************
  * ゆんば
  */
-public class Yunba extends ObjEX {
+public class Yunba extends WorldEntity {
 
 	private static final long serialVersionUID = 3347291782760455512L;
 
@@ -135,7 +135,7 @@ public class Yunba extends ObjEX {
 	private int[] drawLayer;
 	private int layerCount;
 	private Action action = null;
-	private Obj target = null;
+	private Entity target = null;
 
 	private int destX;
 	private int destY;
@@ -398,8 +398,8 @@ public class Yunba extends ObjEX {
 			}
 
 			if (bodyCheck && action == null) {
-				for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
-					Body b = entry.getValue();
+				for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
+					Yukkuri b = entry.getValue();
 					if (norndCheck == false && GameRandom.nextBoolean())
 						continue;
 					// 茎にぶら下がってる固体はスルー
@@ -650,26 +650,26 @@ public class Yunba extends ObjEX {
 
 				switch (action) {
 					case CLEAN:
-						((Body) target).setCleaning();
+						((Yukkuri) target).setCleaning();
 						break;
 					case HEAL:
-						((Body) target).giveJuice();
+						((Yukkuri) target).giveJuice();
 						break;
 					case KABI:
-						((Body) target).remove();
+						((Yukkuri) target).remove();
 						break;
 					case RUDE:
-						((Body) target).strikeByPunish();
+						((Yukkuri) target).strikeByPunish();
 						break;
 					case OKAZARI:
-						((Body) target).takeOkazari(false);
+						((Yukkuri) target).takeOkazari(false);
 						break;
 					case DESTROY:
 						if (noDamageFallCheck) {
-							((Body) target).setNoDamageNextFall();
+							((Yukkuri) target).setNoDamageNextFall();
 						}
 						if (killCheck) {// 追加
-							((Body) target).strikeByPress();
+							((Yukkuri) target).strikeByPress();
 						} else {
 							if (vecX > 5)
 								vecX = 5;
@@ -680,14 +680,14 @@ public class Yunba extends ObjEX {
 								vecY = 5;
 							else if (vecY < -5)
 								vecY = -5;
-							((Body) target).strikeByObject(1500, 500, mineutiCheck, vecX, vecY);
+							((Yukkuri) target).strikeByObject(1500, 500, mineutiCheck, vecX, vecY);
 						}
 						break;
 					case BODY_REMOVE:
 						target.remove();
 						break;
 					case BODY_OKAZARI:
-						((Body) target).takeOkazari(false);
+						((Yukkuri) target).takeOkazari(false);
 						break;
 					case SHIT:
 						if (target instanceof Shit) {
@@ -839,7 +839,7 @@ public class Yunba extends ObjEX {
 
 		GameWorld.get().getCurrentMap().getYunba().put(objId, this);
 		objType = Type.OBJECT;
-		objEXType = WorldEntityKind.YUNBA;
+		worldEntityType = WorldEntityKind.YUNBA;
 		interval = 5;
 		value = 30000;
 		cost = 200;
@@ -1199,7 +1199,7 @@ public class Yunba extends ObjEX {
 	}
 
 	// 他のゆんばのターゲットになっているか
-	public boolean cheackOtherYunbaTarget(Obj o) {
+	public boolean cheackOtherYunbaTarget(Entity o) {
 		for (Map.Entry<Integer, Yunba> entry : GameWorld.get().getCurrentMap().getYunba().entrySet()) {
 			Yunba yunba = entry.getValue();
 			if (yunba == this) {
@@ -1348,11 +1348,11 @@ public class Yunba extends ObjEX {
 		this.action = action;
 	}
 
-	public Obj getTarget() {
+	public Entity getTarget() {
 		return target;
 	}
 
-	public void setTarget(Obj target) {
+	public void setTarget(Entity target) {
 		this.target = target;
 	}
 

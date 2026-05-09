@@ -309,7 +309,7 @@ class VomitTest {
     @Test
     void testConstructorWithArgs_headless_executesCode() {
         try {
-            src.base.Body body = src.util.WorldTestHelper.createBody();
+            src.base.Yukkuri body = src.util.WorldTestHelper.createBody();
             src.game.Vomit v = new src.game.Vomit(100, 100, 0, body, src.enums.YukkuriType.REIMU);
         } catch (Exception e) { }
     }

@@ -14,7 +14,7 @@ import java.util.Map;
 
 import src.Const;
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.entity.world.bodylinked.Okazari.OkazariType;
 import src.draw.Dimension4y;
 import src.draw.ModLoader;
@@ -36,7 +36,7 @@ import src.util.IniFileUtil;
 /*****************************************************
  * まりさ。れいむまりさ、つむりまりさはこれを継承している
  */
-public class Marisa extends Body {
+public class Marisa extends Yukkuri {
 
 	private static final long serialVersionUID = -7022828510837286120L;
 	/** まりさのタイプ */
@@ -201,15 +201,15 @@ public class Marisa extends Body {
 	 * @return 突然変異する際のゆっくり
 	 */
 	@Override
-	public Body checkTransform() {
+	public Yukkuri checkTransform() {
 		// 自身が突然変異可能かチェック
 		if (!canTransform())
 			return null;
 
 		// 自分以外に幸せを感じている大人のゆっくりが10体以上いる
 		int adultCount = 0;
-		List<Body> bodyList = new LinkedList<Body>(GameWorld.get().getCurrentMap().getBody().values());
-		for (Body otherBody : bodyList) {
+		List<Yukkuri> bodyList = new LinkedList<Yukkuri>(GameWorld.get().getCurrentMap().getBody().values());
+		for (Yukkuri otherBody : bodyList) {
 			if (otherBody == this) {
 				continue;
 			}
@@ -603,7 +603,7 @@ public class Marisa extends Body {
 	}
 
 	/** コンストラクタ */
-	public Marisa(int initX, int initY, int initZ, AgeState initAgeState, Body p1, Body p2) {
+	public Marisa(int initX, int initY, int initZ, AgeState initAgeState, Yukkuri p1, Yukkuri p2) {
 		super(initX, initY, initZ, initAgeState, p1, p2);
 		setBoundary(boundary, braidBoundary);
 		setMsgType(YukkuriType.MARISA);

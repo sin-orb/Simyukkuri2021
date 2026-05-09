@@ -17,10 +17,10 @@ class BodyControlRuleTest {
 		body.setLockmove(false);
 		assertFalse(BodyControlRule.isLockmove(body));
 
-		body.setPullAndPush(true);
-		assertTrue(BodyControlRule.isPullAndPush(body));
-		body.setPullAndPush(false);
-		assertFalse(BodyControlRule.isPullAndPush(body));
+		body.setCanPullOrPush(true);
+		assertTrue(BodyControlRule.canPullOrPush(body));
+		body.setCanPullOrPush(false);
+		assertFalse(BodyControlRule.canPullOrPush(body));
 
 		body.setInOutTakeoutItem(true);
 		assertTrue(BodyControlRule.isInOutTakeoutItem(body));

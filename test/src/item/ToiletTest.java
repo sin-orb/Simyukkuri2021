@@ -3,9 +3,9 @@ package src.item;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.base.ItemTestBase;
-import src.base.ObjEX;
+import src.base.WorldEntity;
 import src.game.Shit;
 import src.util.WorldTestHelper;
 
@@ -109,8 +109,8 @@ class ToiletTest extends ItemTestBase {
     @Test
     void testGetSetItemRank() {
         Toilet toilet = new Toilet();
-        toilet.setItemRank(ObjEX.ItemRank.HOUSE);
-        assertEquals(ObjEX.ItemRank.HOUSE, toilet.getItemRank());
+        toilet.setItemRank(WorldEntity.ItemRank.HOUSE);
+        assertEquals(WorldEntity.ItemRank.HOUSE, toilet.getItemRank());
     }
 
     // ---------------------------------------------------------------
@@ -146,11 +146,11 @@ class ToiletTest extends ItemTestBase {
 
     @Test
     void testObjHitProcess() {
-        // Toilet.objHitProcess(Obj o): o.remove(); Cash.addCash(-getCost()); return 1
+        // Toilet.objHitProcess(Entity o): o.remove(); Cash.addCash(-getCost()); return 1
         // Cash.addCash requires SimYukkuri.world (already initialized by setUp()).
         Toilet toilet = new Toilet();
         // cost defaults to 0, so Cash.addCash(0) is safe.
-        Body body = WorldTestHelper.createBody();
+        Yukkuri body = WorldTestHelper.createBody();
         assertFalse(body.isRemoved());
 
         int result = toilet.objHitProcess(body);
@@ -188,14 +188,14 @@ class ToiletTest extends ItemTestBase {
     @Test
     void testCheckHitObj_singleArg_doesNotThrow() {
         Toilet toilet = new Toilet();
-        src.base.Obj body = src.util.WorldTestHelper.createBody();
+        src.base.Entity body = src.util.WorldTestHelper.createBody();
         org.junit.jupiter.api.Assertions.assertDoesNotThrow(() -> toilet.checkHitObj(body));
     }
 
     @Test
     void testCheckHitObj_twoArgs_doesNotThrow() {
         Toilet toilet = new Toilet();
-        src.base.Obj body = src.util.WorldTestHelper.createBody();
+        src.base.Entity body = src.util.WorldTestHelper.createBody();
         org.junit.jupiter.api.Assertions.assertDoesNotThrow(() -> toilet.checkHitObj(null, body));
     }
 

@@ -11,9 +11,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 import src.SimYukkuri;
-import src.base.Body;
-import src.base.Obj;
-import src.base.ObjEX;
+import src.base.Yukkuri;
+import src.base.Entity;
+import src.base.WorldEntity;
 import src.command.GadgetAction;
 import src.command.GadgetMenu;
 import src.command.GadgetMenu.ActionControl;
@@ -41,21 +41,21 @@ public class MouseInputController extends MouseAdapter {
 	private final SimYukkuri owner;
 	private final Cursor cr = new Cursor(Cursor.HAND_CURSOR);
 	private final Cursor defCr = new Cursor(Cursor.DEFAULT_CURSOR);
-	private Obj grabbedObj = null;
+	private Entity grabbedObj = null;
 	private int startY = -1, startZ = -1;
 	private int oX = 0, oY = 0;
 	@SuppressWarnings("unused")
 	private int altitude = 0;
 	private final Point4y translatePos = new Point4y();
 	private final Rectangle4y imageRect = new Rectangle4y();
-	private final List<Obj> list4sort = new LinkedList<Obj>();
+	private final List<Entity> list4sort = new LinkedList<Entity>();
 
 	public MouseInputController(SimYukkuri owner) {
 		this.owner = owner;
 	}
 
 	// マウス位置の最も手前にあるオブジェクトを取得
-	private Obj getUpFront(int mx, int my, boolean stalkMode) {
+	private Entity getUpFront(int mx, int my, boolean stalkMode) {
 		list4sort.clear();
 		list4sort.addAll(SimYukkuri.world.getYukkuriList());
 		list4sort.addAll(SimYukkuri.world.getFixObjList());
@@ -63,19 +63,19 @@ public class MouseInputController extends MouseAdapter {
 		list4sort.addAll(SimYukkuri.world.getPlatformList());
 
 		Collections.sort(list4sort, ObjDrawComp.getInstance());
-		Obj found = null;
-		Obj parent = null;
-		Body body = null;
+		Entity found = null;
+		Entity parent = null;
+		Yukkuri body = null;
 		Stalk stalk = null;
 		int num = list4sort.size() - 1;
-		Obj o = null;
+		Entity o = null;
 		for (int i = num; i >= 0; i--) {
 			o = list4sort.get(i);
 			if (!o.isCanGrab())
 				continue;
 
-			if (stalkMode && o instanceof Body) {
-				body = (Body) o;
+			if (stalkMode && o instanceof Yukkuri) {
+				body = (Yukkuri) o;
 				if (body.getStalks() != null && body.getStalks().size() > 0) {
 					parent = body.getStalks().get(0);
 				} else {
@@ -83,7 +83,7 @@ public class MouseInputController extends MouseAdapter {
 				}
 			} else if (!stalkMode && o instanceof Stalk) {
 				stalk = (Stalk) o;
-				Body b = src.util.GameWorld.get().getCurrentMap().getBody().get(stalk.getPlantYukkuri());
+				Yukkuri b = src.util.GameWorld.get().getCurrentMap().getBody().get(stalk.getPlantYukkuri());
 				if (b != null) {
 					parent = b;
 				} else {
@@ -95,8 +95,8 @@ public class MouseInputController extends MouseAdapter {
 			Rectangle4y r = parent.getScreenRect();
 			Rectangle screenRect = new Rectangle(r.getX(), r.getY(), r.getWidth(), r.getHeight());
 			if (screenRect.contains(mx, my)) {
-				if (parent instanceof Body) {
-					((Body) parent).getExpandShape(imageRect);
+				if (parent instanceof Yukkuri) {
+					((Yukkuri) parent).getExpandShape(imageRect);
 				} else {
 					parent.getBoundaryShape(imageRect);
 				}
@@ -108,9 +108,9 @@ public class MouseInputController extends MouseAdapter {
 		}
 
 		if (found == null) {
-			List<ObjEX> platformList = SimYukkuri.world.getPlatformList();
-			for (Iterator<ObjEX> i = platformList.iterator(); i.hasNext();) {
-				ObjEX oex = (ObjEX) i.next();
+			List<WorldEntity> platformList = SimYukkuri.world.getPlatformList();
+			for (Iterator<WorldEntity> i = platformList.iterator(); i.hasNext();) {
+				WorldEntity oex = (WorldEntity) i.next();
 				Rectangle4y r = oex.getScreenRect();
 				Rectangle screenRect = new Rectangle(r.getX(), r.getY(), r.getWidth(), r.getHeight());
 				oex.getBoundaryShape(imageRect);
@@ -185,7 +185,7 @@ public class MouseInputController extends MouseAdapter {
 						return;
 					}
 
-					Obj found = getUpFront(SimYukkuri.fieldMousePos[0], SimYukkuri.fieldMousePos[1], false);
+					Entity found = getUpFront(SimYukkuri.fieldMousePos[0], SimYukkuri.fieldMousePos[1], false);
 					if (found == null) {
 						FieldShape foundShape = getShapeFront(SimYukkuri.fieldMousePos[0], SimYukkuri.fieldMousePos[1]);
 						if (foundShape != null && foundShape.hasShapePopup() != ShapeMenuTarget.NONE) {
@@ -208,8 +208,8 @@ public class MouseInputController extends MouseAdapter {
 								ItemMenu.getGetPopup().show(SimYukkuri.mypane, e.getX() + 10, e.getY());
 							} else {
 								ItemMenu.itemModeCancel(true);
-								if (found instanceof ObjEX) {
-									ObjEX oex = (ObjEX) found;
+								if (found instanceof WorldEntity) {
+									WorldEntity oex = (WorldEntity) found;
 									oex.invertEnabled();
 								}
 							}
@@ -243,12 +243,12 @@ public class MouseInputController extends MouseAdapter {
 			if (sel == GadgetList.STALK_UNPLUG) {
 				stalkMode = true;
 			}
-			Obj found = getUpFront(SimYukkuri.fieldMousePos[0], SimYukkuri.fieldMousePos[1], stalkMode);
+			Entity found = getUpFront(SimYukkuri.fieldMousePos[0], SimYukkuri.fieldMousePos[1], stalkMode);
 			ActionTarget foundType = ActionTarget.TERRAIN;
 
-			if (found instanceof Body) {
-				MainCommandUI.showStatus((Body) found);
-				MyPane.setSelectBody((Body) found);
+			if (found instanceof Yukkuri) {
+				MainCommandUI.showStatus((Yukkuri) found);
+				MyPane.setSelectBody((Yukkuri) found);
 				foundType = ActionTarget.BODY;
 			} else if (found != null) {
 				foundType = ActionTarget.GADGET;
@@ -303,14 +303,14 @@ public class MouseInputController extends MouseAdapter {
 			if (grabbedObj != null) {
 				if (((e.getModifiers() & MouseEvent.BUTTON1_MASK) != 0) && (sel == GadgetList.SURISURI)) {
 					if (sel == GadgetList.SURISURI) {
-						if (grabbedObj instanceof Body) {
-							Body b = (Body) grabbedObj;
+						if (grabbedObj instanceof Yukkuri) {
+							Yukkuri b = (Yukkuri) grabbedObj;
 							b.setSurisuriFromPlayer(true);
 						}
 					}
 				} else {
-					if (grabbedObj instanceof Body) {
-						Body b = (Body) grabbedObj;
+					if (grabbedObj instanceof Yukkuri) {
+						Yukkuri b = (Yukkuri) grabbedObj;
 
 					if (b.getBindStalk() != null) {
 						b.detachFromStalk();
@@ -328,9 +328,9 @@ public class MouseInputController extends MouseAdapter {
 					startY = SimYukkuri.fieldMousePos[1];
 					startZ = SimYukkuri.fieldMousePos[1] + Translate.transSize(grabbedObj.getZ() * 58 / 10);
 					grabbedObj.grab();
-					if (grabbedObj instanceof Body) {
-						MainCommandUI.showStatus((Body) grabbedObj);
-						MyPane.setSelectBody((Body) grabbedObj);
+					if (grabbedObj instanceof Yukkuri) {
+						MainCommandUI.showStatus((Yukkuri) grabbedObj);
+						MyPane.setSelectBody((Yukkuri) grabbedObj);
 					}
 				}
 			}
@@ -347,9 +347,9 @@ public class MouseInputController extends MouseAdapter {
 			}
 
 			if (grabbedObj != null) {
-				if (grabbedObj instanceof Body) {
-					Body body = (Body) grabbedObj;
-					if (body.isPullAndPush()) {
+				if (grabbedObj instanceof Yukkuri) {
+					Yukkuri body = (Yukkuri) grabbedObj;
+					if (body.canPullOrPush()) {
 						body.releaseLockNobinobi();
 					}
 
@@ -411,8 +411,8 @@ public class MouseInputController extends MouseAdapter {
 					int hitX;
 					switch (grabbedObj.getObjType()) {
 					case YUKKURI:
-						Body b = (Body) grabbedObj;
-						if (b.isPullAndPush() && !b.isDead()) {
+						Yukkuri b = (Yukkuri) grabbedObj;
+						if (b.canPullOrPush() && !b.isDead()) {
 							b.wakeup();
 							if (b.getZ() <= 0)
 								b.lockSetZ(newZ * Translate.getMapZ() / Translate.getCanvasH());
@@ -485,7 +485,7 @@ public class MouseInputController extends MouseAdapter {
 					grabbedObj.setCalcY(translatePos.getY());
 				}
 				if ((button == 1) && (sel == GadgetList.SURISURI)) {
-					Obj found = getUpFront(SimYukkuri.fieldMousePos[0], SimYukkuri.fieldMousePos[1], false);
+					Entity found = getUpFront(SimYukkuri.fieldMousePos[0], SimYukkuri.fieldMousePos[1], false);
 					boolean onTarget = true;
 					if (found == null) {
 						onTarget = false;
@@ -496,8 +496,8 @@ public class MouseInputController extends MouseAdapter {
 					}
 
 					if (!onTarget) {
-						if (grabbedObj instanceof Body) {
-							Body b = (Body) grabbedObj;
+						if (grabbedObj instanceof Yukkuri) {
+							Yukkuri b = (Yukkuri) grabbedObj;
 							b.setSurisuriFromPlayer(false);
 							grabbedObj.release();
 							grabbedObj = null;

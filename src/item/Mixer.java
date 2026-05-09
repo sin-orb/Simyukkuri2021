@@ -11,10 +11,10 @@ import java.io.IOException;
 import src.SimYukkuri;
 import src.util.GameRandom;
 import src.util.GameWorld;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.effect.Effect;
-import src.base.Obj;
-import src.base.ObjEX;
+import src.base.Entity;
+import src.base.WorldEntity;
 import src.command.GadgetAction;
 import src.draw.ModLoader;
 import src.draw.Rectangle4y;
@@ -30,11 +30,11 @@ import src.system.MessagePool;
 /***************************************************
  * ミキサー
  */
-public class Mixer extends ObjEX {
+public class Mixer extends WorldEntity {
 
 	private static final long serialVersionUID = 6267442912877753797L;
 	/** 処理対象(ゆっくり) */
-	public static final int hitCheckObjType = ObjEX.YUKKURI;
+	public static final int hitCheckObjType = WorldEntity.YUKKURI;
 	private static BufferedImage[] images = new BufferedImage[4];
 	private static Rectangle4y boundary = new Rectangle4y();
 
@@ -59,7 +59,7 @@ public class Mixer extends ObjEX {
 
 	@Override
 	public int getImageLayer(BufferedImage[] layer) {
-		Body bindBody = src.util.BodyRegistry.getBodyInstance(bind);
+		Yukkuri bindBody = src.util.BodyRegistry.getBodyInstance(bind);
 		if (enabled) {
 			if (bindBody != null) {
 				if (counter > 60) {
@@ -98,17 +98,17 @@ public class Mixer extends ObjEX {
 
 	@Override
 	public boolean enableHitCheck() {
-		Body bindBody = src.util.BodyRegistry.getBodyInstance(bind);
+		Yukkuri bindBody = src.util.BodyRegistry.getBodyInstance(bind);
 		if (bindBody != null)
 			return false;
 		return true;
 	}
 
 	@Override
-	public int objHitProcess(Obj o) {
+	public int objHitProcess(Entity o) {
 		if (!enabled)
 			return 0;
-		Body bindBody = (Body) o;
+		Yukkuri bindBody = (Yukkuri) o;
 		bindBody.clearActions();
 		bindBody.setCalcX(x);
 		bindBody.setCalcY(y);
@@ -124,7 +124,7 @@ public class Mixer extends ObjEX {
 		if (getAge() % 2400 == 0) {
 			Cash.addCash(-getCost());
 		}
-		Body bindBody = src.util.BodyRegistry.getBodyInstance(bind);
+		Yukkuri bindBody = src.util.BodyRegistry.getBodyInstance(bind);
 		if (bindBody != null && enabled) {
 			bindBody.setShadowVisible(false);
 			if (grabbed) {
@@ -181,7 +181,7 @@ public class Mixer extends ObjEX {
 				}
 				// 一定量で餌生成
 				if (amount > 12000) {
-					ObjEX oex = null;
+					WorldEntity oex = null;
 					if (sick)
 						oex = GadgetAction.putObjEX(Food.class, getX(), getY(), Food.FoodType.WASTE.ordinal());
 					else {
@@ -207,7 +207,7 @@ public class Mixer extends ObjEX {
 
 	@Override
 	public void removeListData() {
-		Body bindBody = src.util.BodyRegistry.getBodyInstance(bind);
+		Yukkuri bindBody = src.util.BodyRegistry.getBodyInstance(bind);
 		if (bindBody != null) {
 			bindBody.setForceFace(-1);
 			bindBody.setLockmove(false);
@@ -227,7 +227,7 @@ public class Mixer extends ObjEX {
 		setCollisionSize(getPivotX(), getPivotY());
 		GameWorld.get().getCurrentMap().getMixer().put(objId, this);
 		objType = Type.PLATFORM;
-		objEXType = WorldEntityKind.MIXER;
+		worldEntityType = WorldEntityKind.MIXER;
 
 		interval = 5;
 		value = 3000;

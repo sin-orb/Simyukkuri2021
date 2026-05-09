@@ -1,6 +1,6 @@
 package src.logic;
 
-import src.base.Body;
+import src.base.Yukkuri;
 import src.event.EventPacket.EventPriority;
 import src.entity.world.bodylinked.Okazari.OkazariType;
 import src.draw.Translate;
@@ -30,7 +30,7 @@ public final class BodyPartnerActionRule {
 	 * @param zOffset Z移動量
 	 * @return 行動したかどうか
 	 */
-	public static boolean handleFoundTarget(Body body, Body targetBody, Body bodyHasOkazari, int collisionOffsetX, int zOffset) {
+	public static boolean handleFoundTarget(Yukkuri body, Yukkuri targetBody, Yukkuri bodyHasOkazari, int collisionOffsetX, int zOffset) {
 		// 相手が死体でなく、かつ除去されてなければ
 		if (!targetBody.isDead() && !targetBody.isRemoved()) {
 			// 生まれていない

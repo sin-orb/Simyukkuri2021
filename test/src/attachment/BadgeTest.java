@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
 import src.attachment.Badge.BadgeRank;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.draw.World;
 import src.enums.AgeState;
 import src.enums.Event;
@@ -51,7 +51,7 @@ public class BadgeTest {
 
     @Test
     public void testConstructorWithBronzeBadge() {
-        Body parent = createParent(AgeState.CHILD);
+        Yukkuri parent = createParent(AgeState.CHILD);
         Badge badge = new Badge(parent, BadgeRank.BRONZE);
 
         assertEquals(parent.getUniqueID(), badge.getParent());
@@ -63,7 +63,7 @@ public class BadgeTest {
 
     @Test
     public void testConstructorWithGoldBadge() {
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         Badge badge = new Badge(parent, BadgeRank.GOLD);
 
         assertEquals(BadgeRank.GOLD, badge.getBadgeRank());
@@ -75,7 +75,7 @@ public class BadgeTest {
 
     @Test
     public void testUpdateReturnsDoNothing() {
-        Body parent = createParent(AgeState.CHILD);
+        Yukkuri parent = createParent(AgeState.CHILD);
         Badge badge = new Badge(parent, BadgeRank.SILVER);
 
         Event result = badge.update();
@@ -85,7 +85,7 @@ public class BadgeTest {
 
     @Test
     public void testGetImageReturnsNullWhenParentNotInMap() {
-        Body parent = createParent(AgeState.CHILD);
+        Yukkuri parent = createParent(AgeState.CHILD);
         Badge badge = new Badge(parent, BadgeRank.BRONZE);
 
         SimYukkuri.world.getCurrentMap().getBody().remove(parent.getUniqueID());
@@ -96,7 +96,7 @@ public class BadgeTest {
 
     @Test
     public void testGetImageReturnsCorrectImageForRank() {
-        Body parent = createParent(AgeState.CHILD);
+        Yukkuri parent = createParent(AgeState.CHILD);
 
         for (BadgeRank rank : BadgeRank.values()) {
             Badge badge = new Badge(parent, rank);
@@ -108,9 +108,9 @@ public class BadgeTest {
 
     @Test
     public void testGetImageReturnsCorrectImageForAge() {
-        Body babyParent = createParent(AgeState.BABY);
-        Body childParent = createParent(AgeState.CHILD);
-        Body adultParent = createParent(AgeState.ADULT);
+        Yukkuri babyParent = createParent(AgeState.BABY);
+        Yukkuri childParent = createParent(AgeState.CHILD);
+        Yukkuri adultParent = createParent(AgeState.ADULT);
 
         Badge babyBadge = new Badge(babyParent, BadgeRank.GOLD);
         Badge childBadge = new Badge(childParent, BadgeRank.GOLD);
@@ -126,7 +126,7 @@ public class BadgeTest {
 
     @Test
     public void testSetEBadgeRankChangesRank() {
-        Body parent = createParent(AgeState.CHILD);
+        Yukkuri parent = createParent(AgeState.CHILD);
         Badge badge = new Badge(parent, BadgeRank.FAKE);
 
         assertEquals(BadgeRank.FAKE, badge.getBadgeRank());
@@ -139,7 +139,7 @@ public class BadgeTest {
 
     @Test
     public void testResetBoundaryUsesParentAge() {
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         Badge badge = new Badge(parent, BadgeRank.SILVER);
 
         badge.resetBoundary();
@@ -152,7 +152,7 @@ public class BadgeTest {
 
     @Test
     public void testResetBoundaryDoesNothingWhenParentNotInMap() {
-        Body parent = createParent(AgeState.CHILD);
+        Yukkuri parent = createParent(AgeState.CHILD);
         Badge badge = new Badge(parent, BadgeRank.BRONZE);
 
         int origPivotX = badge.getPivotX();
@@ -168,7 +168,7 @@ public class BadgeTest {
 
     @Test
     public void testToStringUsesResourceUtil() {
-        Body parent = createParent(AgeState.BABY);
+        Yukkuri parent = createParent(AgeState.BABY);
         Badge badge = new Badge(parent, BadgeRank.FAKE);
 
         assertEquals(ResourceUtil.getInstance().read("item_badge"), badge.toString());
@@ -183,7 +183,7 @@ public class BadgeTest {
 
     @Test
     public void testConstructorWithParentNotInWorld() {
-        Body parent = new Reimu();
+        Yukkuri parent = new Reimu();
         parent.setAgeState(AgeState.CHILD);
         Badge badge = new Badge(parent, BadgeRank.BRONZE);
         assertEquals(0, badge.getValue());
@@ -191,8 +191,8 @@ public class BadgeTest {
         assertEquals(BadgeRank.BRONZE, badge.getBadgeRank());
     }
 
-    private static Body createParent(AgeState ageState) {
-        Body parent = new Reimu();
+    private static Yukkuri createParent(AgeState ageState) {
+        Yukkuri parent = new Reimu();
         parent.setAgeState(ageState);
         SimYukkuri.world.getCurrentMap().getBody().put(parent.getUniqueID(), parent);
         return parent;
@@ -221,7 +221,7 @@ public class BadgeTest {
 
         @Test
         void testScenario_ChangingBadgeRankSwitchesRenderedImage() {
-            Body parent = createParent(AgeState.CHILD);
+            Yukkuri parent = createParent(AgeState.CHILD);
             Badge badge = new Badge(parent, BadgeRank.FAKE);
 
             badge.setBadgeRank(BadgeRank.GOLD);
@@ -232,7 +232,7 @@ public class BadgeTest {
 
         @Test
         void testScenario_AdultBadgeUsesAdultBoundaryAndSelectedRankImage() {
-            Body parent = createParent(AgeState.ADULT);
+            Yukkuri parent = createParent(AgeState.ADULT);
             Badge badge = new Badge(parent, BadgeRank.SILVER);
 
             assertEquals(3, badge.getPivotX());

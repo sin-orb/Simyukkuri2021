@@ -3,7 +3,7 @@ package src.draw;
 import java.util.Iterator;
 import java.util.List;
 
-import src.base.ObjEX;
+import src.base.WorldEntity;
 import src.enums.Event;
 import src.enums.WorldEntityKind;
 import src.item.Diffuser;
@@ -26,15 +26,15 @@ public final class TerrariumTickProcessor {
 	 */
 	public static void processMapTicks(MapPlaceData curMap, int intervalCount) {
 		TerrariumCollisionProcessor.processCollisions(curMap, intervalCount);
-		List<ObjEX> objectList = GameWorld.get().getObjectList();
+		List<WorldEntity> objectList = GameWorld.get().getObjectList();
 		Terrarium.resetTerrariumEnvironment();
-		for (Iterator<ObjEX> i = objectList.iterator(); i.hasNext();) {
-			ObjEX oex = i.next();
+		for (Iterator<WorldEntity> i = objectList.iterator(); i.hasNext();) {
+			WorldEntity oex = i.next();
 			Event ret = oex.clockTick();
 			if (ret == Event.REMOVED) {
 				i.remove();
 			}
-			if (oex.getObjEXType() == WorldEntityKind.DIFFUSER && oex.getEnabled()) {
+			if (oex.getWorldEntityType() == WorldEntityKind.DIFFUSER && oex.getEnabled()) {
 				boolean[] flags = ((Diffuser) oex).getSteamType();
 				Terrarium.applyDiffuserSteamFlags(flags);
 			}
@@ -43,32 +43,32 @@ public final class TerrariumTickProcessor {
 		TerrariumEntryProcessor.processEntries(curMap);
 	}
 
-	static int toObjExType(src.base.Obj o) {
+	static int toObjExType(src.base.Entity o) {
 		switch (o.getObjType()) {
 			case YUKKURI:
-				return ObjEX.YUKKURI;
+				return WorldEntity.YUKKURI;
 			case SHIT:
-				return ObjEX.SHIT;
+				return WorldEntity.SHIT;
 			case PLATFORM:
-				return ObjEX.PLATFORM;
+				return WorldEntity.PLATFORM;
 			case FIX_OBJECT:
-				return ObjEX.FIX_OBJECT;
+				return WorldEntity.FIX_OBJECT;
 			case OBJECT:
 				if (o instanceof src.item.Food) {
-					return ObjEX.FOOD;
+					return WorldEntity.FOOD;
 				}
 				if (o instanceof src.item.Toilet) {
-					return ObjEX.TOILET;
+					return WorldEntity.TOILET;
 				}
 				if (o instanceof src.item.Toy) {
-					return ObjEX.TOY;
+					return WorldEntity.TOY;
 				}
 				if (o instanceof src.game.Stalk) {
-					return ObjEX.STALK;
+					return WorldEntity.STALK;
 				}
-				return ObjEX.OBJECT;
+				return WorldEntity.OBJECT;
 			case VOMIT:
-				return ObjEX.VOMIT;
+				return WorldEntity.VOMIT;
 			default:
 				return 0;
 		}

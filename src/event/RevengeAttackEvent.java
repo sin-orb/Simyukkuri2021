@@ -6,9 +6,9 @@ import src.util.GameText;
 import src.Const;
 import src.SimYukkuri;
 import src.util.GameRandom;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.event.EventPacket;
-import src.base.Obj;
+import src.base.Entity;
 import src.draw.Translate;
 import src.enums.Direction;
 import src.enums.EffectType;
@@ -20,9 +20,9 @@ import src.system.ResourceUtil;
 
 /***************************************************
  * ゆっくりが攻撃されたときの反撃イベント
- * protected Body from; // イベントを発した個体
- * protected Body to; // 攻撃対象
- * protected Obj target; // 未使用
+ * protected Yukkuri from; // イベントを発した個体
+ * protected Yukkuri to; // 攻撃対象
+ * protected Entity target; // 未使用
  * protected int count; // 1
  */
 public class RevengeAttackEvent extends EventPacket {
@@ -32,7 +32,7 @@ public class RevengeAttackEvent extends EventPacket {
 	/**
 	 * コンストラクタ.
 	 */
-	public RevengeAttackEvent(Body f, Body t, Obj tgt, int cnt) {
+	public RevengeAttackEvent(Yukkuri f, Yukkuri t, Entity tgt, int cnt) {
 		super(f, t, tgt, cnt);
 	}
 
@@ -42,7 +42,7 @@ public class RevengeAttackEvent extends EventPacket {
 
 	// 参加チェック
 	@Override
-	public boolean checkEventResponse(Body body) {
+	public boolean checkEventResponse(Yukkuri body) {
 		priority = EventPriority.HIGH;
 		// これは特殊な扱いをするイベントで先に条件をチェックしてから
 		// 自分自身のリストに登録するので無条件にtrue
@@ -51,8 +51,8 @@ public class RevengeAttackEvent extends EventPacket {
 
 	// イベント開始動作
 	@Override
-	public void start(Body body) {
-		Body targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
+	public void start(Yukkuri body) {
+		Yukkuri targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
 		body.setToFood(false);
 		body.setToBed(false);
 		body.setToShit(false);
@@ -69,8 +69,8 @@ public class RevengeAttackEvent extends EventPacket {
 	// 毎フレーム処理
 	// UpdateState.ABORTを返すとイベント終了
 	@Override
-	public UpdateState update(Body body) {
-		Body targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
+	public UpdateState update(Yukkuri body) {
+		Yukkuri targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
 		// 相手が消えてしまったらイベント中断
 		if (targetBody == null || targetBody.isRemoved() || targetBody.isTaken())
 			return UpdateState.ABORT;
@@ -86,14 +86,14 @@ public class RevengeAttackEvent extends EventPacket {
 	// イベント目標に到着した際に呼ばれる
 	// trueを返すとイベント終了
 	@Override
-	public boolean execute(Body body) {
+	public boolean execute(Yukkuri body) {
 		// 動けない場合と、ランダムであきらめる
 		if (body.isDontMove() || GameRandom.nextInt(50) == 0) {
 			body.setMessage(GameMessages.getMessage(body, MessagePool.Action.LamentNoYukkuri), 40, true, true);
 			body.setHappiness(Happiness.SAD);
 			return true;
 		}
-		Body targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
+		Yukkuri targetBody = src.util.BodyRegistry.getBodyInstance(getTo());
 		// 相手が残っていたら攻撃
 		if (targetBody != null && !targetBody.isRemoved() && targetBody.getZ() < 5) {
 			body.setWorldEventResMessage(GameMessages.getMessage(body, MessagePool.Action.RevengeAttack), Const.HOLDMESSAGE,

@@ -11,7 +11,7 @@ import java.io.IOException;
 import src.SimYukkuri;
 import src.util.GameRandom;
 import src.attachment.Attachment;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.draw.ModLoader;
 import src.enums.AgeState;
 import src.enums.AttachProperty;
@@ -89,15 +89,15 @@ public class Fire extends Attachment {
 	}
 
 	@Override
-	public BufferedImage getImage(Body b) {
-		Body pa = src.util.BodyRegistry.getBodyInstance(parent);
+	public BufferedImage getImage(Yukkuri b) {
+		Yukkuri pa = src.util.BodyRegistry.getBodyInstance(parent);
 		if (pa == null) return null; 
 		return images[pa.getBodyAgeState().ordinal()][animeFrame];
 	}
 
 	@Override
 	protected Event update() {
-		Body pa = src.util.BodyRegistry.getBodyInstance(parent);
+		Yukkuri pa = src.util.BodyRegistry.getBodyInstance(parent);
 		if (pa == null) return Event.DONOTHING;
 		// 生きてたらセリフとダメージ加算
 		if(!pa.isDead()) {
@@ -146,7 +146,7 @@ public class Fire extends Attachment {
 
 		// 実ゆの場合、親が反応する
 		if(GameRandom.nextInt(3) == 0){
-			Body bodyMother = src.util.BodyRegistry.getBodyInstance(pa.getBindStalkMotherCanNotice());
+			Yukkuri bodyMother = src.util.BodyRegistry.getBodyInstance(pa.getBindStalkMotherCanNotice());
 			if ( bodyMother != null ) {
 				if( bodyMother.isNotNYD() ){
 					bodyMother.setHappiness(Happiness.VERY_SAD);
@@ -160,7 +160,7 @@ public class Fire extends Attachment {
 
 	@Override
 	public void resetBoundary(){
-		Body pa = src.util.BodyRegistry.getBodyInstance(parent);
+		Yukkuri pa = src.util.BodyRegistry.getBodyInstance(parent);
 		if (pa == null) return;
 		if (pivX == null || pivY == null || imgW == null || imgH == null) return;
 		int idx = pa.getBodyAgeState().ordinal();
@@ -177,10 +177,10 @@ public class Fire extends Attachment {
 	 * コンストラクタ
 	 * @param body 装着されるゆっくり
 	 */
-	public Fire(Body body) {
+	public Fire(Yukkuri body) {
 		super(body);
 		setAttachProperty(property, POS_KEY);
-		Body pa = src.util.BodyRegistry.getBodyInstance(parent);
+		Yukkuri pa = src.util.BodyRegistry.getBodyInstance(parent);
 		if (pa != null && pivX != null && pivY != null && imgW != null && imgH != null) {
 			int idx = pa.getBodyAgeState().ordinal();
 			if (idx >= 0 && idx < pivX.length && idx < pivY.length && idx < imgW.length && idx < imgH.length) {

@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.enums.AgeState;
 import src.enums.CoreAnkoState;
 import src.enums.PublicRank;
@@ -28,8 +28,8 @@ class BodyContactEffectRuleTest {
 	void testHandleContactEffects_addsAvoidMoldEventForHealthyActor() {
 		WorldTestHelper.initializeMinimalWorld();
 		SimYukkuri.world.getCurrentMap().getEvent().clear();
-		Body me = WorldTestHelper.createBody();
-		Body you = WorldTestHelper.createBody();
+		Yukkuri me = WorldTestHelper.createBody();
+		Yukkuri you = WorldTestHelper.createBody();
 		me.setBodySpr(makeSprites(1, 1));
 		you.setBodySpr(makeSprites(1, 1));
 		me.setX(100);
@@ -56,8 +56,8 @@ class BodyContactEffectRuleTest {
 	void testHandleContactEffects_addsHateNoOkazariWorldEvent() {
 		WorldTestHelper.initializeMinimalWorld();
 		SimYukkuri.world.getCurrentMap().getEvent().clear();
-		Body me = WorldTestHelper.createBody();
-		Body you = WorldTestHelper.createBody();
+		Yukkuri me = WorldTestHelper.createBody();
+		Yukkuri you = WorldTestHelper.createBody();
 		me.setBodySpr(makeSprites(1, 1));
 		you.setBodySpr(makeSprites(1, 1));
 		me.setX(100);

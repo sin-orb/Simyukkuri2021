@@ -39,7 +39,7 @@ class FoodTest extends ItemTestBase {
     @Test
     void testConstructor_SetsObjEXTypeToFood() {
         Food food = new Food(0, 0, FoodType.FOOD.ordinal());
-        assertEquals(WorldEntityKind.FOOD, food.getObjEXType());
+        assertEquals(WorldEntityKind.FOOD, food.getWorldEntityType());
     }
 
     @Test
@@ -798,12 +798,12 @@ class FoodTest extends ItemTestBase {
         assertNotEquals(food1.getObjId(), food2.getObjId());
     }
 
-    // getObjEXType tests
+    // getWorldEntityType tests
 
     @Test
     void testGetObjEXType_IsFood() {
         Food food = new Food(0, 0, FoodType.FOOD.ordinal());
-        assertEquals(WorldEntityKind.FOOD, food.getObjEXType());
+        assertEquals(WorldEntityKind.FOOD, food.getWorldEntityType());
     }
 
     // verifyCommonProperties

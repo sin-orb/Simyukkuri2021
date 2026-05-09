@@ -17,9 +17,9 @@ import javax.swing.JRadioButton;
 
 import src.SimYukkuri;
 import src.util.GameWorld;
-import src.base.Body;
-import src.base.Obj;
-import src.base.ObjEX;
+import src.base.Yukkuri;
+import src.base.Entity;
+import src.base.WorldEntity;
 import src.draw.ModLoader;
 import src.draw.Rectangle4y;
 import src.enums.FootBake;
@@ -31,7 +31,7 @@ import src.system.ResourceUtil;
 /***************************************************
  * オレンジプレート
  */
-public class OrangePool extends ObjEX {
+public class OrangePool extends WorldEntity {
 	private static final long serialVersionUID = -5312430078640748031L;
 
 	/** タイプ */
@@ -52,7 +52,7 @@ public class OrangePool extends ObjEX {
 	}
 
 	/** 処理対象(ゆっくり) */
-	public static final int hitCheckObjType = ObjEX.YUKKURI;
+	public static final int hitCheckObjType = WorldEntity.YUKKURI;
 	private static final int IMAGE_COUNT = 6; // このクラスの総使用画像数
 	private static BufferedImage[] imageLayers = new BufferedImage[IMAGE_COUNT];
 	private static Rectangle4y boundary = new Rectangle4y();
@@ -119,11 +119,11 @@ public class OrangePool extends ObjEX {
 	}
 
 	@Override
-	public int objHitProcess(Obj targetObject) {
+	public int objHitProcess(Entity targetObject) {
 		if (!enabled)
 			return 0;
 		if (targetObject.getObjType() == Type.YUKKURI) {
-			Body body = (Body) targetObject;
+			Yukkuri body = (Yukkuri) targetObject;
 			body.giveJuice();
 			if (body.isDirty()) {
 				body.setDirtyFlag(false);
@@ -190,7 +190,7 @@ public class OrangePool extends ObjEX {
 		GameWorld.get().getCurrentMap().getOrangePool().put(objId, this);
 
 		objType = Type.PLATFORM;
-		objEXType = WorldEntityKind.ORANGEPOOL;
+		worldEntityType = WorldEntityKind.ORANGEPOOL;
 		interval = 3;
 
 		boolean setupSucceeded = setupOrange(this, false);

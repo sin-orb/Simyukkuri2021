@@ -3,14 +3,14 @@ package src.item;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.base.ItemTestBase;
 import src.util.WorldTestHelper;
 
 class SuiTest extends ItemTestBase {
 
-    private Body createBody() {
-        Body b = WorldTestHelper.createBody();
+    private Yukkuri createBody() {
+        Yukkuri b = WorldTestHelper.createBody();
         b.setX(100); b.setY(100);
         SimYukkuri.world.getCurrentMap().getBody().put(b.getUniqueID(), b);
         return b;
@@ -42,7 +42,7 @@ class SuiTest extends ItemTestBase {
     @Test
     void testRideOn_NYDBody_returnsFalse() {
         Sui sui = new Sui();
-        Body b = createBody();
+        Yukkuri b = createBody();
         b.setCoreAnkoState(src.enums.CoreAnkoState.NonYukkuriDisease);
         assertFalse(sui.rideOn(b));
     }
@@ -50,7 +50,7 @@ class SuiTest extends ItemTestBase {
     @Test
     void testRideOn_FirstRider_returnsTrue() {
         Sui sui = new Sui();
-        Body b = createBody();
+        Yukkuri b = createBody();
         assertTrue(sui.rideOn(b));
         assertEquals(1, sui.getCurrent_bindbody_num());
     }
@@ -58,7 +58,7 @@ class SuiTest extends ItemTestBase {
     @Test
     void testRideOn_SameBodyTwice_returnsFalse() {
         Sui sui = new Sui();
-        Body b = createBody();
+        Yukkuri b = createBody();
         assertTrue(sui.rideOn(b));
         assertFalse(sui.rideOn(b));
     }
@@ -66,8 +66,8 @@ class SuiTest extends ItemTestBase {
     @Test
     void testRideOn_SecondRider_returnsTrue() {
         Sui sui = new Sui();
-        Body b1 = createBody();
-        Body b2 = createBody();
+        Yukkuri b1 = createBody();
+        Yukkuri b2 = createBody();
         assertTrue(sui.rideOn(b1));
         assertTrue(sui.rideOn(b2));
         assertEquals(2, sui.getCurrent_bindbody_num());
@@ -84,14 +84,14 @@ class SuiTest extends ItemTestBase {
     @Test
     void testIsriding_NotOnSui_returnsFalse() {
         Sui sui = new Sui();
-        Body b = createBody();
+        Yukkuri b = createBody();
         assertFalse(sui.isriding(b));
     }
 
     @Test
     void testIsriding_AfterRideOn_returnsTrue() {
         Sui sui = new Sui();
-        Body b = createBody();
+        Yukkuri b = createBody();
         sui.rideOn(b);
         assertTrue(sui.isriding(b));
     }
@@ -107,7 +107,7 @@ class SuiTest extends ItemTestBase {
     @Test
     void testIscanriding_OwnerOnBoard_returnsTrue() {
         Sui sui = new Sui();
-        Body b = createBody();
+        Yukkuri b = createBody();
         sui.rideOn(b);
         // bindobj == b, b is on board → true
         assertTrue(sui.iscanriding());
@@ -124,7 +124,7 @@ class SuiTest extends ItemTestBase {
     @Test
     void testNoCanBind_WithOwner_returnsTrue() {
         Sui sui = new Sui();
-        Body b = createBody();
+        Yukkuri b = createBody();
         sui.rideOn(b);
         assertTrue(sui.NoCanBind());
     }
@@ -140,8 +140,8 @@ class SuiTest extends ItemTestBase {
     @Test
     void testRideOff_Owner_allOff() {
         Sui sui = new Sui();
-        Body owner = createBody();
-        Body passenger = createBody();
+        Yukkuri owner = createBody();
+        Yukkuri passenger = createBody();
         sui.rideOn(owner);
         sui.rideOn(passenger);
         // owner descends → all off
@@ -154,8 +154,8 @@ class SuiTest extends ItemTestBase {
     @Test
     void testRideOff_NonOwner_onlyThatBodyOff() {
         Sui sui = new Sui();
-        Body owner = createBody();
-        Body passenger = createBody();
+        Yukkuri owner = createBody();
+        Yukkuri passenger = createBody();
         sui.rideOn(owner);
         sui.rideOn(passenger);
         // passenger descends → only passenger off
@@ -176,7 +176,7 @@ class SuiTest extends ItemTestBase {
     @Test
     void testGetSetBindBody() {
         Sui sui = new Sui();
-        Body[] bodies = new Body[3];
+        Yukkuri[] bodies = new Yukkuri[3];
         sui.setBindBody(bodies);
         assertNotNull(sui.getBindBody());
     }
@@ -256,7 +256,7 @@ class SuiTest extends ItemTestBase {
     void testGetSetBindobj() {
         Sui sui = new Sui();
         assertNull(sui.getBindobj());
-        Body b = createBody();
+        Yukkuri b = createBody();
         sui.setBindobj(b);
         assertEquals(b, sui.getBindobj());
     }
@@ -308,7 +308,7 @@ class SuiTest extends ItemTestBase {
     void testObjHitProcess_normalCondition_returnsZero() {
         Sui sui = new Sui();
         // default condition is rest (not out_of_control) → returns 0 without hitting
-        Body b = createBody();
+        Yukkuri b = createBody();
         assertEquals(0, sui.objHitProcess(b));
     }
 
@@ -334,7 +334,7 @@ class SuiTest extends ItemTestBase {
     @Test
     void testClockTick_withOwnerRiding_doesNotThrow() {
         Sui sui = new Sui(100, 100, 0);
-        Body b = createBody();
+        Yukkuri b = createBody();
         sui.rideOn(b);
         assertDoesNotThrow(() -> sui.clockTick());
     }
@@ -344,7 +344,7 @@ class SuiTest extends ItemTestBase {
     @Test
     void testUpDate_bodyGrabbed_ridesOff() {
         Sui sui = new Sui();
-        Body b = createBody();
+        Yukkuri b = createBody();
         sui.rideOn(b);
         b.setGrabbed(true);
         assertDoesNotThrow(() -> sui.upDate());
@@ -356,7 +356,7 @@ class SuiTest extends ItemTestBase {
     @Test
     void testUpDate_ownerRemoved_clearsBindobj() {
         Sui sui = new Sui();
-        Body b = createBody();
+        Yukkuri b = createBody();
         sui.setBindobj(b);
         b.setRemoved(true);
         assertDoesNotThrow(() -> sui.upDate());

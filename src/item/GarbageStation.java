@@ -19,8 +19,8 @@ import javax.swing.JPanel;
 import src.SimYukkuri;
 import src.util.GameRandom;
 import src.util.GameWorld;
-import src.base.Obj;
-import src.base.ObjEX;
+import src.base.Entity;
+import src.base.WorldEntity;
 import src.command.GadgetAction;
 import src.draw.ModLoader;
 import src.draw.Rectangle4y;
@@ -33,7 +33,7 @@ import src.system.ResourceUtil;
 /***************************************************
  * ゴミ捨て場
  */
-public class GarbageStation extends ObjEX {
+public class GarbageStation extends WorldEntity {
 
 	private static final long serialVersionUID = -3307339525828240055L;
 
@@ -107,7 +107,7 @@ public class GarbageStation extends ObjEX {
 	private static Rectangle4y boundary = new Rectangle4y();
 
 	private boolean[] enable = null;
-	private Obj[] food = null;
+	private Entity[] food = null;
 	private int throwingTime = 100;// ゴミ捨て時刻
 	private int gettingP = 1;
 
@@ -198,9 +198,9 @@ public class GarbageStation extends ObjEX {
 
 		GameWorld.get().getCurrentMap().getGarbageStation().put(objId, this);
 		objType = Type.OBJECT;
-		objEXType = WorldEntityKind.GARBAGESTATION;
+		worldEntityType = WorldEntityKind.GARBAGESTATION;
 		enable = new boolean[rndTable.length];
-		food = new Obj[2];
+		food = new Entity[2];
 		value = 0;
 		cost = 0;
 
@@ -271,11 +271,11 @@ public class GarbageStation extends ObjEX {
 		this.enable = enable;
 	}
 
-	public Obj[] getFood() {
+	public Entity[] getFood() {
 		return food;
 	}
 
-	public void setFood(Obj[] food) {
+	public void setFood(Entity[] food) {
 		this.food = food;
 	}
 

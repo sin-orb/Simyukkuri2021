@@ -1,6 +1,6 @@
 package src.logic;
 
-import src.base.Body;
+import src.base.Yukkuri;
 
 /**
  * doActionOther の接触時処理をまとめる.
@@ -20,7 +20,7 @@ public final class BodyContactRule {
 	 * @param range      X方向の近接度
 	 * @return 処理を消費したか
 	 */
-	public static boolean handleAdjacentContact(Body targetBody, Body actorBody, int rangeX, int distY, int range) {
+	public static boolean handleAdjacentContact(Yukkuri targetBody, Yukkuri actorBody, int rangeX, int distY, int range) {
 		if (range >= 3 || distY >= Math.max(rangeX / 2, 10)) {
 			return false;
 		}

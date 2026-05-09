@@ -7,7 +7,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
-import src.base.Body;
+import src.base.Yukkuri;
 import src.system.MessagePool;
 
 public class GameMessagesTest {
@@ -44,7 +44,7 @@ public class GameMessagesTest {
 		}
 
 		@Override
-		public String getMessage(Body body, MessagePool.Action action) {
+		public String getMessage(Yukkuri body, MessagePool.Action action) {
 			this.action = action;
 			return "fake-message";
 		}

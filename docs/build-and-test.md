@@ -106,7 +106,10 @@ dir /s /b src\*.java > sources.txt
 javac -d bin -cp "lib\*" -encoding UTF-8 @sources.txt
 dir /s /b test\src\*.java > test_sources.txt
 javac -d bin -cp "bin;lib\*" -encoding UTF-8 @test_sources.txt
-java -Djava.awt.headless=true -jar lib\junit-platform-console-standalone-1.10.2.jar execute --class-path "bin;lib\*" --scan-class-path
+setlocal EnableDelayedExpansion
+set "CP=bin;."
+for %%J in (lib\*.jar) do set "CP=!CP!;%%~fJ"
+java -Djava.awt.headless=true -jar lib\junit-platform-console-standalone-1.10.2.jar execute --class-path "!CP!" --scan-class-path
 ```
 
 注意:
@@ -115,6 +118,7 @@ java -Djava.awt.headless=true -jar lib\junit-platform-console-standalone-1.10.2.
 - `bin/` は生成物なので Git 管理しない。
 - この手順はテスト実行用で、配布 jar は作らない。
 - コンパイルに失敗した場合は JUnit を実行しない。
+- JUnit Console に `bin;lib\*` を直接渡すのではなく、`lib` 配下の jar を列挙した classpath を渡す。
 
 ## Linux/macOS: テスト実行
 
@@ -133,7 +137,7 @@ find src -name '*.java' | sort > /tmp/simyukkuri_sources.txt
 javac -d bin -cp "lib/*" -encoding UTF-8 @/tmp/simyukkuri_sources.txt
 find test -name '*.java' | sort > /tmp/simyukkuri_tests.txt
 javac -d bin -cp "bin:lib/*" -encoding UTF-8 @/tmp/simyukkuri_tests.txt
-CP="bin"
+CP="bin:."
 for jar in lib/*.jar; do
   CP="$CP:$jar"
 done
@@ -153,10 +157,11 @@ javac -source 8 -target 8 -d bin -cp "bin:lib/*" -encoding UTF-8 @/tmp/simyukkur
 
 JUnit は `lib/junit-platform-console-standalone-1.10.2.jar` で実行する。通常は `build/run_tests.bat` または `build/run_tests.sh` を使う。
 
-Linux/macOS では、JUnit Console の `--class-path "bin:lib/*"` が環境によって期待通り展開されないことがある。安定させるには classpath を明示的に組む。
+Linux/macOS では、JUnit Console の `--class-path "bin:lib/*"` が環境によって期待通り展開されないことがある。Windows でも同様に、コンソールランチャーへは明示的な classpath を渡す。
 
 ```sh
-CP="bin"
+CP="bin:."
+CP="$CP:."
 for j in lib/*.jar; do
   CP="$CP:$j"
 done
@@ -171,7 +176,10 @@ java -Djava.awt.headless=true \
 Windows の場合:
 
 ```bat
-java -Djava.awt.headless=true -jar lib\junit-platform-console-standalone-1.10.2.jar execute --class-path "bin;lib\*" --scan-class-path
+setlocal EnableDelayedExpansion
+set "CP=bin"
+for %%J in (lib\*.jar) do set "CP=!CP!;%%~fJ"
+java -Djava.awt.headless=true -jar lib\junit-platform-console-standalone-1.10.2.jar execute --class-path "!CP!" --scan-class-path
 ```
 
 ## パッケージ単位テスト
@@ -179,7 +187,7 @@ java -Djava.awt.headless=true -jar lib\junit-platform-console-standalone-1.10.2.
 例: `src.yukkuri` のみ。
 
 ```sh
-CP="bin"
+CP="bin:."
 for j in lib/*.jar; do
   CP="$CP:$j"
 done

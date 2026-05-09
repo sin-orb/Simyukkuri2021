@@ -1,6 +1,6 @@
 package src.logic;
 
-import src.base.Body;
+import src.base.Yukkuri;
 import src.enums.Happiness;
 import src.system.MessagePool;
 import src.util.GameMessages;
@@ -24,7 +24,7 @@ public final class BodyDeadSearchRule {
 	 * @param mz        destination z coordinate
 	 * @return true when a branch consumed the action
 	 */
-	public static boolean handleDeadFound(Body actorBody, Body targetBody, int colX, int mz) {
+	public static boolean handleDeadFound(Yukkuri actorBody, Yukkuri targetBody, int colX, int mz) {
 		boolean handled = false;
 		if (actorBody.isExciting()) {
 			// すっきり

@@ -12,7 +12,7 @@ import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 import java.awt.LinearGradientPaint;
 import java.util.List;
-import src.base.Obj;
+import src.base.Entity;
 import src.system.MapWindow;
 import src.util.WorldTestHelper;
 
@@ -137,7 +137,7 @@ public class TerrainFieldTest {
         assertNotNull(morning);
 
         // Struct list should have 1 item
-        List<Obj> structList = TerrainField.getStructList();
+        List<Entity> structList = TerrainField.getStructList();
         assertEquals(1, structList.size());
     }
 }

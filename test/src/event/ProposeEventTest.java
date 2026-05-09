@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
 import src.ConstState;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.event.EventPacket;
 import src.base.EventTestBase;
 import src.system.Sprite;
@@ -15,8 +15,8 @@ import src.yukkuri.Reimu;
 public class ProposeEventTest extends EventTestBase {
 
     /** createBody with sprites for tests that need calcCollisionX */
-    private Body createSprBody(int x, int y) {
-        Body b = new Reimu();
+    private Yukkuri createSprBody(int x, int y) {
+        Yukkuri b = new Reimu();
         b.setX(x);
         b.setY(y);
         Sprite[] spr = new Sprite[3];
@@ -30,8 +30,8 @@ public class ProposeEventTest extends EventTestBase {
 
     @Test
     void testCheckEventResponse_Participants() {
-        Body from = createBody(1, 100, 100);
-        Body to = createBody(2, 120, 120);
+        Yukkuri from = createBody(1, 100, 100);
+        Yukkuri to = createBody(2, 120, 120);
 
         ProposeEvent event = new ProposeEvent(from, to, null, 10);
 
@@ -49,8 +49,8 @@ public class ProposeEventTest extends EventTestBase {
 
     @Test
     void testParameterizedConstructor_setsPriorityHigh() {
-        Body from = createBody(1, 100, 100);
-        Body to = createBody(2, 120, 120);
+        Yukkuri from = createBody(1, 100, 100);
+        Yukkuri to = createBody(2, 120, 120);
         ProposeEvent event = new ProposeEvent(from, to, null, 10);
         assertEquals(EventPacket.EventPriority.HIGH, event.getPriority());
         assertEquals(from.getUniqueID(), event.getFrom());
@@ -60,16 +60,16 @@ public class ProposeEventTest extends EventTestBase {
 
     @Test
     void testCheckEventResponse_Stranger() {
-        Body from = createBody(1, 100, 100);
-        Body to = createBody(2, 120, 120);
-        Body stranger = createBody(3, 200, 200);
+        Yukkuri from = createBody(1, 100, 100);
+        Yukkuri to = createBody(2, 120, 120);
+        Yukkuri stranger = createBody(3, 200, 200);
         ProposeEvent event = new ProposeEvent(from, to, null, 10);
         assertFalse(event.checkEventResponse(stranger));
     }
 
     @Test
     void testCheckEventResponse_FromNull() {
-        Body b = createBody(1, 100, 100);
+        Yukkuri b = createBody(1, 100, 100);
         ProposeEvent event = new ProposeEvent();
         // from=-1 (null lookup) → b != null and b != null → false
         assertFalse(event.checkEventResponse(b));
@@ -77,7 +77,7 @@ public class ProposeEventTest extends EventTestBase {
 
     @Test
     void testExecute_BothNull() {
-        Body b = createBody(1, 100, 100);
+        Yukkuri b = createBody(1, 100, 100);
         ProposeEvent event = new ProposeEvent();
         // from and to both null → returns true
         assertTrue(event.execute(b));
@@ -85,8 +85,8 @@ public class ProposeEventTest extends EventTestBase {
 
     @Test
     void testExecute_ToGrabbed() {
-        Body from = createBody(1, 100, 100);
-        Body to = createBody(2, 120, 120);
+        Yukkuri from = createBody(1, 100, 100);
+        Yukkuri to = createBody(2, 120, 120);
         ProposeEvent event = new ProposeEvent(from, to, null, 10);
         to.setGrabbed(true);
         // to.isGrabbed() → return false
@@ -95,7 +95,7 @@ public class ProposeEventTest extends EventTestBase {
 
     @Test
     void testEnd_BothNull() {
-        Body b = createBody(1, 100, 100);
+        Yukkuri b = createBody(1, 100, 100);
         ProposeEvent event = new ProposeEvent();
         // from null → return early
         assertDoesNotThrow(() -> event.end(b));
@@ -103,8 +103,8 @@ public class ProposeEventTest extends EventTestBase {
 
     @Test
     void testEnd_WithBodies() {
-        Body from = createBody(1, 100, 100);
-        Body to = createBody(2, 120, 120);
+        Yukkuri from = createBody(1, 100, 100);
+        Yukkuri to = createBody(2, 120, 120);
         ProposeEvent event = new ProposeEvent(from, to, null, 10);
         from.setLockmove(true);
         to.setLockmove(true);
@@ -119,7 +119,7 @@ public class ProposeEventTest extends EventTestBase {
 
     @Test
     void testStart_ToAndFromBothNull() {
-        Body b = createBody(1, 100, 100);
+        Yukkuri b = createBody(1, 100, 100);
         ProposeEvent event = new ProposeEvent();
         // from and to both null → returns without doing anything
         assertDoesNotThrow(() -> event.start(b));
@@ -127,7 +127,7 @@ public class ProposeEventTest extends EventTestBase {
 
     @Test
     void testUpdate_FromNull() {
-        Body b = createBody(1, 100, 100);
+        Yukkuri b = createBody(1, 100, 100);
         ProposeEvent event = new ProposeEvent();
         // from null → ABORT
         assertEquals(EventPacket.UpdateState.ABORT, event.update(b));
@@ -135,8 +135,8 @@ public class ProposeEventTest extends EventTestBase {
 
     @Test
     void testUpdate_ToDead() {
-        Body from = createBody(1, 100, 100);
-        Body to = createBody(2, 120, 120);
+        Yukkuri from = createBody(1, 100, 100);
+        Yukkuri to = createBody(2, 120, 120);
         ProposeEvent event = new ProposeEvent(from, to, null, 10);
         to.setDead(true);
         assertEquals(EventPacket.UpdateState.ABORT, event.update(from));
@@ -144,10 +144,10 @@ public class ProposeEventTest extends EventTestBase {
 
     @Test
     void testAcceptPropose_AlreadyMarried() {
-        Body from = createBody(1, 100, 100);
-        Body to = createBody(2, 120, 120);
+        Yukkuri from = createBody(1, 100, 100);
+        Yukkuri to = createBody(2, 120, 120);
         // to already has a partner
-        Body partner = createBody(3, 200, 200);
+        Yukkuri partner = createBody(3, 200, 200);
         to.setPartner(partner.getUniqueID());
         ProposeEvent event = new ProposeEvent(from, to, null, 10);
         assertFalse(event.acceptPropose(from, to));
@@ -155,8 +155,8 @@ public class ProposeEventTest extends EventTestBase {
 
     @Test
     void testAcceptPropose_NoObstacles() {
-        Body from = createBody(1, 100, 100);
-        Body to = createBody(2, 120, 120);
+        Yukkuri from = createBody(1, 100, 100);
+        Yukkuri to = createBody(2, 120, 120);
         // no partner, no mold, no baby, no disorder
         ProposeEvent event = new ProposeEvent(from, to, null, 10);
         // from has no baby/stalk, no disorder → true
@@ -173,8 +173,8 @@ public class ProposeEventTest extends EventTestBase {
 
     @Test
     void testUpdate_ToGrabbed_returnsNull() {
-        Body from = createSprBody(100, 100);
-        Body to = createSprBody(120, 120);
+        Yukkuri from = createSprBody(100, 100);
+        Yukkuri to = createSprBody(120, 120);
         ProposeEvent event = new ProposeEvent(from, to, null, 10);
         to.setGrabbed(true);
         SimYukkuri.RND = new ConstState(1);
@@ -184,8 +184,8 @@ public class ProposeEventTest extends EventTestBase {
 
     @Test
     void testUpdate_Started_returnsForceExec() {
-        Body from = createSprBody(100, 100);
-        Body to = createSprBody(120, 120);
+        Yukkuri from = createSprBody(100, 100);
+        Yukkuri to = createSprBody(120, 120);
         ProposeEvent event = new ProposeEvent(from, to, null, 10);
         event.started = true;
         assertEquals(EventPacket.UpdateState.FORCE_EXEC, event.update(from));
@@ -193,8 +193,8 @@ public class ProposeEventTest extends EventTestBase {
 
     @Test
     void testUpdate_NormalCase_returnsNull() {
-        Body from = createSprBody(100, 100);
-        Body to = createSprBody(120, 120);
+        Yukkuri from = createSprBody(100, 100);
+        Yukkuri to = createSprBody(120, 120);
         ProposeEvent event = new ProposeEvent(from, to, null, 10);
         // started=false, to not grabbed → normal update path → null
         assertNull(event.update(from));
@@ -202,8 +202,8 @@ public class ProposeEventTest extends EventTestBase {
 
     @Test
     void testUpdate_ToRemoved_returnsAbort() {
-        Body from = createSprBody(100, 100);
-        Body to = createSprBody(120, 120);
+        Yukkuri from = createSprBody(100, 100);
+        Yukkuri to = createSprBody(120, 120);
         to.setRemoved(true);
         ProposeEvent event = new ProposeEvent(from, to, null, 10);
         assertEquals(EventPacket.UpdateState.ABORT, event.update(from));
@@ -211,8 +211,8 @@ public class ProposeEventTest extends EventTestBase {
 
     @Test
     void testUpdate_ToNYD_returnsAbort() {
-        Body from = createSprBody(100, 100);
-        Body to = createSprBody(120, 120);
+        Yukkuri from = createSprBody(100, 100);
+        Yukkuri to = createSprBody(120, 120);
         to.setCoreAnkoState(src.enums.CoreAnkoState.NonYukkuriDisease);
         ProposeEvent event = new ProposeEvent(from, to, null, 10);
         assertEquals(EventPacket.UpdateState.ABORT, event.update(from));
@@ -220,8 +220,8 @@ public class ProposeEventTest extends EventTestBase {
 
     @Test
     void testStart_WithBodies_doesNotThrow() {
-        Body from = createSprBody(100, 100);
-        Body to = createSprBody(120, 120);
+        Yukkuri from = createSprBody(100, 100);
+        Yukkuri to = createSprBody(120, 120);
         ProposeEvent event = new ProposeEvent(from, to, null, 10);
         assertDoesNotThrow(() -> event.start(from));
     }
@@ -230,8 +230,8 @@ public class ProposeEventTest extends EventTestBase {
 
     @Test
     void testExecute_tick0_setsStarted() {
-        Body from = createSprBody(100, 100);
-        Body to = createSprBody(120, 120);
+        Yukkuri from = createSprBody(100, 100);
+        Yukkuri to = createSprBody(120, 120);
         ProposeEvent event = new ProposeEvent(from, to, null, 10);
         event.tick = 0;
         event.execute(from);
@@ -240,8 +240,8 @@ public class ProposeEventTest extends EventTestBase {
 
     @Test
     void testExecute_tick5_doesNotThrow() {
-        Body from = createSprBody(100, 100);
-        Body to = createSprBody(120, 120);
+        Yukkuri from = createSprBody(100, 100);
+        Yukkuri to = createSprBody(120, 120);
         ProposeEvent event = new ProposeEvent(from, to, null, 10);
         event.tick = 5;
         assertDoesNotThrow(() -> event.execute(from));
@@ -249,8 +249,8 @@ public class ProposeEventTest extends EventTestBase {
 
     @Test
     void testExecute_tick20_doesNotThrow() {
-        Body from = createSprBody(100, 100);
-        Body to = createSprBody(120, 120);
+        Yukkuri from = createSprBody(100, 100);
+        Yukkuri to = createSprBody(120, 120);
         ProposeEvent event = new ProposeEvent(from, to, null, 10);
         event.tick = 20;
         assertDoesNotThrow(() -> event.execute(from));
@@ -258,8 +258,8 @@ public class ProposeEventTest extends EventTestBase {
 
     @Test
     void testExecute_tick40_success_doesNotThrow() {
-        Body from = createSprBody(100, 100);
-        Body to = createSprBody(120, 120);
+        Yukkuri from = createSprBody(100, 100);
+        Yukkuri to = createSprBody(120, 120);
         ProposeEvent event = new ProposeEvent(from, to, null, 10);
         event.tick = 40;
         // no partner, no mold, no baby → success
@@ -268,9 +268,9 @@ public class ProposeEventTest extends EventTestBase {
 
     @Test
     void testExecute_tick40_failure_alreadyMarried() {
-        Body from = createSprBody(100, 100);
-        Body to = createSprBody(120, 120);
-        Body otherPartner = createSprBody(200, 200);
+        Yukkuri from = createSprBody(100, 100);
+        Yukkuri to = createSprBody(120, 120);
+        Yukkuri otherPartner = createSprBody(200, 200);
         to.setPartner(otherPartner.getUniqueID());
         ProposeEvent event = new ProposeEvent(from, to, null, 10);
         event.tick = 40;
@@ -280,8 +280,8 @@ public class ProposeEventTest extends EventTestBase {
 
     @Test
     void testExecute_tick60_success_doesNotThrow() {
-        Body from = createSprBody(100, 100);
-        Body to = createSprBody(120, 120);
+        Yukkuri from = createSprBody(100, 100);
+        Yukkuri to = createSprBody(120, 120);
         ProposeEvent event = new ProposeEvent(from, to, null, 10);
         event.tick = 60;
         // set from.partner = to (success case)
@@ -293,8 +293,8 @@ public class ProposeEventTest extends EventTestBase {
 
     @Test
     void testAcceptPropose_FromHasBaby_returnsFalse() {
-        Body from = createSprBody(100, 100);
-        Body to = createSprBody(120, 120);
+        Yukkuri from = createSprBody(100, 100);
+        Yukkuri to = createSprBody(120, 120);
         from.setHasBaby(true); // hasBabyOrStalk() returns true
         ProposeEvent event = new ProposeEvent(from, to, null, 10);
         assertFalse(event.acceptPropose(from, to));
@@ -303,8 +303,8 @@ public class ProposeEventTest extends EventTestBase {
     // --- acceptPropose: t.findSick(f) → false ---
     @Test
     void testAcceptPropose_findSick_returnsFalse() {
-        Body from = createSprBody(100, 100);
-        Body to = createSprBody(120, 120);
+        Yukkuri from = createSprBody(100, 100);
+        Yukkuri to = createSprBody(120, 120);
         from.forceSetSick(); // from.isSick() = true
         to.setIntelligence(src.enums.Intelligence.WISE); // to.findSick(from) = true
         ProposeEvent event = new ProposeEvent(from, to, null, 10);
@@ -314,8 +314,8 @@ public class ProposeEventTest extends EventTestBase {
     // --- acceptPropose: f.hasDisorder() → false ---
     @Test
     void testAcceptPropose_fromHasDisorder_returnsFalse() {
-        Body from = createSprBody(100, 100);
-        Body to = createSprBody(120, 120);
+        Yukkuri from = createSprBody(100, 100);
+        Yukkuri to = createSprBody(120, 120);
         from.setBlind(true); // hasDisorder() = true
         ProposeEvent event = new ProposeEvent(from, to, null, 10);
         assertFalse(event.acceptPropose(from, to));
@@ -324,8 +324,8 @@ public class ProposeEventTest extends EventTestBase {
     // --- update: to.isTaken() → ABORT ---
     @Test
     void testUpdate_toTaken_returnsAbort() {
-        Body from = createSprBody(100, 100);
-        Body to = createSprBody(120, 120);
+        Yukkuri from = createSprBody(100, 100);
+        Yukkuri to = createSprBody(120, 120);
         to.setTaken(true);
         ProposeEvent event = new ProposeEvent(from, to, null, 10);
         assertEquals(EventPacket.UpdateState.ABORT, event.update(from));
@@ -334,8 +334,8 @@ public class ProposeEventTest extends EventTestBase {
     // --- execute: from.findSick(to) = true → returns true ---
     @Test
     void testExecute_fromFindSick_returnsTrue() {
-        Body from = createSprBody(100, 100);
-        Body to = createSprBody(120, 120);
+        Yukkuri from = createSprBody(100, 100);
+        Yukkuri to = createSprBody(120, 120);
         to.forceSetSick(); // to.isSick() = true
         from.setIntelligence(src.enums.Intelligence.WISE); // from.findSick(to) = true
         ProposeEvent event = new ProposeEvent(from, to, null, 10);
@@ -345,8 +345,8 @@ public class ProposeEventTest extends EventTestBase {
     // --- execute: to.hasDisorder() = true → returns true ---
     @Test
     void testExecute_toHasDisorder_returnsTrue() {
-        Body from = createSprBody(100, 100);
-        Body to = createSprBody(120, 120);
+        Yukkuri from = createSprBody(100, 100);
+        Yukkuri to = createSprBody(120, 120);
         to.setBlind(true); // hasDisorder() = true
         ProposeEvent event = new ProposeEvent(from, to, null, 10);
         assertTrue(event.execute(from));
@@ -355,8 +355,8 @@ public class ProposeEventTest extends EventTestBase {
     // --- execute: tick=0, from.isRude() = true → VAIN face ---
     @Test
     void testExecute_tick0_fromRude_setsStarted() {
-        Body from = createSprBody(100, 100);
-        Body to = createSprBody(120, 120);
+        Yukkuri from = createSprBody(100, 100);
+        Yukkuri to = createSprBody(120, 120);
         from.setAttitude(src.enums.Attitude.SHITHEAD); // isRude() = true
         ProposeEvent event = new ProposeEvent(from, to, null, 10);
         event.tick = 0;
@@ -367,8 +367,8 @@ public class ProposeEventTest extends EventTestBase {
     // --- execute: tick=20, from.isRude() = true → VAIN face ---
     @Test
     void testExecute_tick20_fromRude_doesNotThrow() {
-        Body from = createSprBody(100, 100);
-        Body to = createSprBody(120, 120);
+        Yukkuri from = createSprBody(100, 100);
+        Yukkuri to = createSprBody(120, 120);
         from.setAttitude(src.enums.Attitude.SHITHEAD); // isRude() = true
         ProposeEvent event = new ProposeEvent(from, to, null, 10);
         event.tick = 20;
@@ -378,8 +378,8 @@ public class ProposeEventTest extends EventTestBase {
     // --- execute: tick=40 success, VERY_NICE attitude ---
     @Test
     void testExecute_tick40_success_veryNice_doesNotThrow() {
-        Body from = createSprBody(100, 100);
-        Body to = createSprBody(120, 120);
+        Yukkuri from = createSprBody(100, 100);
+        Yukkuri to = createSprBody(120, 120);
         from.setAttitude(src.enums.Attitude.VERY_NICE);
         to.setAttitude(src.enums.Attitude.VERY_NICE);
         ProposeEvent event = new ProposeEvent(from, to, null, 10);
@@ -390,8 +390,8 @@ public class ProposeEventTest extends EventTestBase {
     // --- execute: tick=40 success, NICE attitude ---
     @Test
     void testExecute_tick40_success_nice_doesNotThrow() {
-        Body from = createSprBody(100, 100);
-        Body to = createSprBody(120, 120);
+        Yukkuri from = createSprBody(100, 100);
+        Yukkuri to = createSprBody(120, 120);
         from.setAttitude(src.enums.Attitude.NICE);
         to.setAttitude(src.enums.Attitude.NICE);
         ProposeEvent event = new ProposeEvent(from, to, null, 10);
@@ -402,8 +402,8 @@ public class ProposeEventTest extends EventTestBase {
     // --- execute: tick=40 success, SHITHEAD + SUPER_SHITHEAD attitude ---
     @Test
     void testExecute_tick40_success_shithead_doesNotThrow() {
-        Body from = createSprBody(100, 100);
-        Body to = createSprBody(120, 120);
+        Yukkuri from = createSprBody(100, 100);
+        Yukkuri to = createSprBody(120, 120);
         from.setAttitude(src.enums.Attitude.SHITHEAD);
         to.setAttitude(src.enums.Attitude.SUPER_SHITHEAD);
         ProposeEvent event = new ProposeEvent(from, to, null, 10);
@@ -414,12 +414,12 @@ public class ProposeEventTest extends EventTestBase {
     // --- execute: tick=40 failure, to.findSick(from) = true → HateMoldyYukkuri ---
     @Test
     void testExecute_tick40_failure_toFindSick_doesNotThrow() {
-        Body from = createSprBody(100, 100);
-        Body to = createSprBody(120, 120);
+        Yukkuri from = createSprBody(100, 100);
+        Yukkuri to = createSprBody(120, 120);
         from.forceSetSick(); // from.isSick() = true
         to.setIntelligence(src.enums.Intelligence.WISE); // to.findSick(from) = true
         // Make acceptPropose fail first (to already married)
-        Body partner = createSprBody(200, 200);
+        Yukkuri partner = createSprBody(200, 200);
         to.setPartner(partner.getUniqueID());
         ProposeEvent event = new ProposeEvent(from, to, null, 10);
         event.tick = 40;
@@ -429,10 +429,10 @@ public class ProposeEventTest extends EventTestBase {
     // --- execute: tick=40 failure, to.isRude() = true → RUDE face ---
     @Test
     void testExecute_tick40_failure_toIsRude_doesNotThrow() {
-        Body from = createSprBody(100, 100);
-        Body to = createSprBody(120, 120);
+        Yukkuri from = createSprBody(100, 100);
+        Yukkuri to = createSprBody(120, 120);
         to.setAttitude(src.enums.Attitude.SHITHEAD); // isRude() = true
-        Body partner = createSprBody(200, 200);
+        Yukkuri partner = createSprBody(200, 200);
         to.setPartner(partner.getUniqueID()); // acceptPropose = false (already married)
         ProposeEvent event = new ProposeEvent(from, to, null, 10);
         event.tick = 40;
@@ -442,11 +442,11 @@ public class ProposeEventTest extends EventTestBase {
     // --- execute: tick=40 failure, from VERY_NICE / to VERY_NICE ---
     @Test
     void testExecute_tick40_failure_veryNice_doesNotThrow() {
-        Body from = createSprBody(100, 100);
-        Body to = createSprBody(120, 120);
+        Yukkuri from = createSprBody(100, 100);
+        Yukkuri to = createSprBody(120, 120);
         from.setAttitude(src.enums.Attitude.VERY_NICE);
         to.setAttitude(src.enums.Attitude.VERY_NICE);
-        Body partner = createSprBody(200, 200);
+        Yukkuri partner = createSprBody(200, 200);
         to.setPartner(partner.getUniqueID());
         ProposeEvent event = new ProposeEvent(from, to, null, 10);
         event.tick = 40;
@@ -456,11 +456,11 @@ public class ProposeEventTest extends EventTestBase {
     // --- execute: tick=40 failure, from NICE / to NICE ---
     @Test
     void testExecute_tick40_failure_nice_doesNotThrow() {
-        Body from = createSprBody(100, 100);
-        Body to = createSprBody(120, 120);
+        Yukkuri from = createSprBody(100, 100);
+        Yukkuri to = createSprBody(120, 120);
         from.setAttitude(src.enums.Attitude.NICE);
         to.setAttitude(src.enums.Attitude.NICE);
-        Body partner = createSprBody(200, 200);
+        Yukkuri partner = createSprBody(200, 200);
         to.setPartner(partner.getUniqueID());
         ProposeEvent event = new ProposeEvent(from, to, null, 10);
         event.tick = 40;
@@ -470,11 +470,11 @@ public class ProposeEventTest extends EventTestBase {
     // --- execute: tick=40 failure, from SHITHEAD / to SUPER_SHITHEAD ---
     @Test
     void testExecute_tick40_failure_shithead_doesNotThrow() {
-        Body from = createSprBody(100, 100);
-        Body to = createSprBody(120, 120);
+        Yukkuri from = createSprBody(100, 100);
+        Yukkuri to = createSprBody(120, 120);
         from.setAttitude(src.enums.Attitude.SHITHEAD);
         to.setAttitude(src.enums.Attitude.SUPER_SHITHEAD);
-        Body partner = createSprBody(200, 200);
+        Yukkuri partner = createSprBody(200, 200);
         to.setPartner(partner.getUniqueID());
         ProposeEvent event = new ProposeEvent(from, to, null, 10);
         event.tick = 40;
@@ -484,8 +484,8 @@ public class ProposeEventTest extends EventTestBase {
     // --- execute: tick=40 success, check stress/memory ---
     @Test
     void testExecute_tick40_Success_Semantic() {
-        Body from = createSprBody(100, 100);
-        Body to = createSprBody(120, 120);
+        Yukkuri from = createSprBody(100, 100);
+        Yukkuri to = createSprBody(120, 120);
         from.setAttitude(src.enums.Attitude.VERY_NICE);
         to.setAttitude(src.enums.Attitude.VERY_NICE);
 
@@ -518,8 +518,8 @@ public class ProposeEventTest extends EventTestBase {
     // --- execute: tick=40 failure, check stress/memory ---
     @Test
     void testExecute_tick40_Failure_Semantic() {
-        Body from = createSprBody(100, 100);
-        Body to = createSprBody(120, 120);
+        Yukkuri from = createSprBody(100, 100);
+        Yukkuri to = createSprBody(120, 120);
         from.setAttitude(src.enums.Attitude.AVERAGE);
         to.setAttitude(src.enums.Attitude.AVERAGE);
 
@@ -529,7 +529,7 @@ public class ProposeEventTest extends EventTestBase {
         from.addMemories(500);
 
         // Make to already married so acceptPropose fails
-        Body partner = createSprBody(200, 200);
+        Yukkuri partner = createSprBody(200, 200);
         to.setPartner(partner.getUniqueID());
 
         int fromInitialStress = from.getStress();
@@ -551,8 +551,8 @@ public class ProposeEventTest extends EventTestBase {
 
     @Test
     void testAcceptPropose_FromHasStalk_returnsFalse() {
-        Body from = createSprBody(100, 100);
-        Body to = createSprBody(120, 120);
+        Yukkuri from = createSprBody(100, 100);
+        Yukkuri to = createSprBody(120, 120);
         from.setHasStalk(true); // hasBabyOrStalk() returns true
         ProposeEvent event = new ProposeEvent(from, to, null, 10);
         assertFalse(event.acceptPropose(from, to));
@@ -560,8 +560,8 @@ public class ProposeEventTest extends EventTestBase {
 
     @Test
     void testUpdate_ToTaken_ReturnsAbort() {
-        Body from = createSprBody(100, 100);
-        Body to = createSprBody(120, 120);
+        Yukkuri from = createSprBody(100, 100);
+        Yukkuri to = createSprBody(120, 120);
         to.setTaken(true);
         ProposeEvent event = new ProposeEvent(from, to, null, 10);
         assertEquals(EventPacket.UpdateState.ABORT, event.update(from));
@@ -570,8 +570,8 @@ public class ProposeEventTest extends EventTestBase {
 
     @Test
     void testExecute_ToSick_fromFindSick_ReturnsTrue() {
-        Body from = createSprBody(100, 100);
-        Body to = createSprBody(120, 120);
+        Yukkuri from = createSprBody(100, 100);
+        Yukkuri to = createSprBody(120, 120);
         to.forceSetSick();
         from.setIntelligence(src.enums.Intelligence.WISE); // will find sick
 
@@ -583,8 +583,8 @@ public class ProposeEventTest extends EventTestBase {
 
     @Test
     void testUpdate_ToGrabbed_ResetsStarted() {
-        Body from = createSprBody(100, 100);
-        Body to = createSprBody(120, 120);
+        Yukkuri from = createSprBody(100, 100);
+        Yukkuri to = createSprBody(120, 120);
         ProposeEvent event = new ProposeEvent(from, to, null, 10);
         event.started = true;
         to.setGrabbed(true);
@@ -595,8 +595,8 @@ public class ProposeEventTest extends EventTestBase {
 
     @Test
     void testExecute_tick60_Failure_Semantic() {
-        Body from = createSprBody(100, 100);
-        Body to = createSprBody(120, 120);
+        Yukkuri from = createSprBody(100, 100);
+        Yukkuri to = createSprBody(120, 120);
         ProposeEvent event = new ProposeEvent(from, to, null, 10);
         event.tick = 60;
         from.setPartner(-1);

@@ -37,9 +37,9 @@ import javax.swing.SwingWorker;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
-import src.base.Body;
-import src.base.Obj;
-import src.base.ObjEX;
+import src.base.Yukkuri;
+import src.base.Entity;
+import src.base.WorldEntity;
 import src.command.GadgetAction;
 import src.command.GadgetMenu;
 import src.command.GadgetMenu.ActionControl;

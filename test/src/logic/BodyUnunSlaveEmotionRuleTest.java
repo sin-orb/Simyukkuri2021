@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import src.ConstState;
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.enums.PublicRank;
 import src.util.WorldTestHelper;
 
@@ -37,8 +37,8 @@ public class BodyUnunSlaveEmotionRuleTest {
 
 	@Test
 	void testCheckEmotionFromUnunSlave_handlesUnunSlaveEnvyReaction() {
-		Body me = WorldTestHelper.createBody();
-		Body you = WorldTestHelper.createBody();
+		Yukkuri me = WorldTestHelper.createBody();
+		Yukkuri you = WorldTestHelper.createBody();
 		me.setPublicRank(PublicRank.UnunSlave);
 		me.setHappiness(src.enums.Happiness.AVERAGE);
 		you.setHappiness(src.enums.Happiness.VERY_HAPPY);

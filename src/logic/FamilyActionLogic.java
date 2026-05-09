@@ -10,9 +10,9 @@ import java.util.Map;
 import src.SimYukkuri;
 import src.util.GameRandom;
 import src.util.GameWorld;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.event.EventPacket;
-import src.base.Obj;
+import src.base.Entity;
 import src.draw.Terrarium;
 import src.draw.Translate;
 import src.enums.PublicRank;
@@ -38,7 +38,7 @@ public class FamilyActionLogic {
 	 * @param body ゆっくり
 	 * @return 処理が行われたか
 	 */
-	public static final boolean checkFamilyAction(Body body) {
+	public static final boolean checkFamilyAction(Yukkuri body) {
 		// 他の用事がある場合
 		if (body.isToFood() || body.isToBody() || body.isToSukkiri() ||
 				body.isToBed() || body.isToShit() || body.isToSteal() || body.isToTakeout()) {
@@ -67,7 +67,7 @@ public class FamilyActionLogic {
 		}
 
 		// パートナーもチェック
-		Body partnerBody = src.util.BodyRegistry.getBodyInstance(body.getPartner());
+		Yukkuri partnerBody = src.util.BodyRegistry.getBodyInstance(body.getPartner());
 		if (partnerBody != null) {
 			// イベント中なら終了
 			if (partnerBody.getCurrentEvent() != null) {
@@ -94,7 +94,7 @@ public class FamilyActionLogic {
 			return false;
 		}
 		//　子供のリストに生きている子供がいるか
-		List<Body> childrenList = BodyLogic.createActiveChildList(body, true);
+		List<Yukkuri> childrenList = BodyLogic.createActiveChildList(body, true);
 		if (childrenList == null || childrenList.size() == 0) {
 			return false;
 		}
@@ -132,7 +132,7 @@ public class FamilyActionLogic {
 			wantToEat = false;
 		}
 		// 子供がダメージを受けている、動けない場合は終了
-		for (Body bodyChild : childrenList) {
+		for (Yukkuri bodyChild : childrenList) {
 			if (bodyChild == null) {
 				continue;
 			}
@@ -206,10 +206,10 @@ public class FamilyActionLogic {
 		}
 
 		// おチビちゃん運び判定
-		List<Body> rideCandidates = new LinkedList<Body>();
+		List<Yukkuri> rideCandidates = new LinkedList<Yukkuri>();
 		if (!wantToShit && !wantToEat) {
 			// 子供がダメージを受けている、動けない場合は終了
-			for (Body bodyChild : childrenList) {
+			for (Yukkuri bodyChild : childrenList) {
 				if (bodyChild == null || bodyChild.canAction() == false || bodyChild.isRemoved()) {
 					continue;
 				}
@@ -289,8 +289,8 @@ public class FamilyActionLogic {
 	}
 
 	// うんうん体操
-	public static final boolean goToShit(Body body, List<Body> childrenList) {
-		Obj targetToilet = searchToilet(body);
+	public static final boolean goToShit(Yukkuri body, List<Yukkuri> childrenList) {
+		Entity targetToilet = searchToilet(body);
 		if (!body.checkWait(2000)) {
 			return false;
 		}
@@ -309,8 +309,8 @@ public class FamilyActionLogic {
 	 * @param body ゆっくり
 	 * @return 探しだしたトイレオブジェクト
 	 */
-	public static Obj searchToilet(Body body) {
-		Obj nearestToilet = null;
+	public static Entity searchToilet(Yukkuri body) {
+		Entity nearestToilet = null;
 		int minimumDistance = body.getEyesightBase();
 		for (Map.Entry<Integer, Toilet> entry : GameWorld.get().getCurrentMap().getToilet().entrySet()) {
 			Toilet toilet = entry.getValue();
@@ -337,12 +337,12 @@ public class FamilyActionLogic {
 	 * @param childrenList 子供リスト
 	 * @return 処理が行われたか
 	 */
-	public static final boolean goToEat(Body body, List<Body> childrenList) {
+	public static final boolean goToEat(Yukkuri body, List<Yukkuri> childrenList) {
 		// 餌を持っていたら落とす
 		body.dropTakeoutItem(TakeoutItemType.FOOD);
 		// フィールドの餌検索
 		// 基本普通の餌でしかイベントは起こさない。茎があれば終了。
-		Obj targetFood = searchFood(body);
+		Entity targetFood = searchFood(body);
 		if (targetFood == null) {
 			return false;
 		}
@@ -363,8 +363,8 @@ public class FamilyActionLogic {
 	 * @param body ゆっくり
 	 * @return 処理が行われたか
 	 */
-	public static final Obj searchFood(Body body) {
-		Obj nearestFood = null;
+	public static final Entity searchFood(Yukkuri body) {
+		Entity nearestFood = null;
 		int minimumDistance = body.getEyesightBase();
 		int bestLooks = -1000;
 
@@ -430,8 +430,8 @@ public class FamilyActionLogic {
 		boolean hasRapeTarget = isRapeTarget();
 		// レイプ対象がいない
 		if (!hasRapeTarget) {
-			for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
-				Body body = entry.getValue();
+			for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
+				Yukkuri body = entry.getValue();
 				if (body.isRaper()) {
 					body.setExciting(false);
 				}
@@ -446,8 +446,8 @@ public class FamilyActionLogic {
 	 * @return れいぱーのターゲットかどうか
 	 */
 	public static final boolean isRapeTarget() {
-		for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
-			Body body = entry.getValue();
+		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
+			Yukkuri body = entry.getValue();
 			// レイプの対象がいる
 			if (!body.isUnBirth() && !body.isDead() && !body.isRemoved() && !body.isRaper()) {
 				return true;
@@ -462,7 +462,7 @@ public class FamilyActionLogic {
 	 * @param childrenList 子供リスト
 	 * @return 処理が行われたか
 	 */
-	public static final boolean rideOnParent(Body body, List<Body> childrenList) {
+	public static final boolean rideOnParent(Yukkuri body, List<Yukkuri> childrenList) {
 		if (childrenList == null || childrenList.size() == 0) {
 			return false;
 		}
@@ -472,14 +472,14 @@ public class FamilyActionLogic {
 		}
 		body.setLastActionTime();
 		Collections.shuffle(childrenList);
-		for (Body child : childrenList) {
+		for (Yukkuri child : childrenList) {
 			if (child.isBaby() && !child.isEating() && !child.isShitting()) {
-				Obj target = null;
+				Entity target = null;
 				// 空腹
 				if (target == null) {
 					if (child.isHungry()) {
 						if (body.getCarryItem(TakeoutItemType.FOOD) == null) {
-							Obj foundFood = FamilyActionLogic.searchFood(body);
+							Entity foundFood = FamilyActionLogic.searchFood(body);
 							if (foundFood != null) {
 								target = foundFood;
 							}
@@ -490,7 +490,7 @@ public class FamilyActionLogic {
 				// トイレ
 				if (target == null) {
 					if (child.wantToShit()) {
-						Obj foundToilet = FamilyActionLogic.searchToilet(body);
+						Entity foundToilet = FamilyActionLogic.searchToilet(body);
 						if (foundToilet != null) {
 							target = foundToilet;
 						}
@@ -500,7 +500,7 @@ public class FamilyActionLogic {
 				// ベッド
 				if (target == null) {
 					if (child.isSleepy() || GameEnvironment.getDayState().ordinal() >= Terrarium.DayState.EVENING.ordinal()) {
-						Obj foundBed = BedLogic.searchBed(body);
+						Entity foundBed = BedLogic.searchBed(body);
 						if (foundBed != null) {
 							target = foundBed;
 						}
@@ -534,7 +534,7 @@ public class FamilyActionLogic {
 	 * @param childrenList 子供リスト
 	 * @return 処理が行われたか
 	 */
-	public static final boolean proudChild(Body body, List<Body> childrenList) {
+	public static final boolean proudChild(Yukkuri body, List<Yukkuri> childrenList) {
 		if (!body.checkWait(2000)) {
 			return false;
 		}

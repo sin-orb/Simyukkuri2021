@@ -3,8 +3,8 @@ package src.event;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
-import src.base.Body;
-import src.base.Obj;
+import src.base.Yukkuri;
+import src.base.Entity;
 
 /*****************************************************
 	ゆっくり同士や環境とのメッセージ伝達を行うためのイベントパックの抽象クラス
@@ -65,7 +65,7 @@ abstract public class EventPacket implements java.io.Serializable{
 	 * @param tgt イベント対象
 	 * @param cnt イベントの有効期間
 	 */
-	public EventPacket(Body f, Body t, Obj tgt, int cnt) {
+	public EventPacket(Yukkuri f, Yukkuri t, Entity tgt, int cnt) {
 		setFrom(f);
 		to = t == null? -1 : t.getUniqueID();
 		target = tgt == null ? -1 : tgt.objId;
@@ -90,7 +90,7 @@ abstract public class EventPacket implements java.io.Serializable{
 	}
 
 	/**イベントを発した個体セッター*/
-	public void setFrom(Body body) {
+	public void setFrom(Yukkuri body) {
 		if (body!= null) {
 			from = body.getUniqueID();
 		} else {
@@ -99,12 +99,12 @@ abstract public class EventPacket implements java.io.Serializable{
 	}
 
 	/**特定の対象に向けた場合はその個体セッター*/
-	public void setTo(Body body) {
+	public void setTo(Yukkuri body) {
 		to = body.getUniqueID();
 	}
 
 	/**イベント対象セッター*/
-	public void setTarget(Obj o) {
+	public void setTarget(Entity o) {
 		target = o.objId;
 	}
 
@@ -113,7 +113,7 @@ abstract public class EventPacket implements java.io.Serializable{
 	<br> trueを返すとイベントは終了してcheckEventResponse以降は呼ばれない
 	 <br>また、このメソッドは例外的にイベント実行中でも呼ばれるので困る場合は
 	 このメソッド内でBody.currentEventがnullかチェックすること*/
-	public boolean simpleEventAction(Body body) {
+	public boolean simpleEventAction(Yukkuri body) {
 		return false;
 	}
 
@@ -123,7 +123,7 @@ abstract public class EventPacket implements java.io.Serializable{
 	 * <br>ワールドイベントの場合はイベント発行した本人に対してもチェックが発生するので
 	 * 処理を避けたければここでチェックを忘れず行う
 	 */
-	abstract public boolean checkEventResponse(Body body);
+	abstract public boolean checkEventResponse(Yukkuri body);
 
 	/**
 	 * イベント開始動作
@@ -131,7 +131,7 @@ abstract public class EventPacket implements java.io.Serializable{
 	 * 主に移動先の設定などに使用。
 	 * イベント用の移動はBody.moveToEvent()を使用する
 	 */
-	abstract public void start(Body body);
+	abstract public void start(Yukkuri body);
 
 	/**
 	 * 毎フレーム呼ばれるメソッド
@@ -142,7 +142,7 @@ abstract public class EventPacket implements java.io.Serializable{
 	 * UpdateState.FORCE_EXECで強制的にexecuteへ移行できる。
 	 * 移動中に対象がremoveされたら困る場合などはここでチェックしてABORTなどを行う
 	 */
-	public UpdateState update(Body body) {
+	public UpdateState update(Yukkuri body) {
 		return null;
 	}
 
@@ -152,7 +152,7 @@ abstract public class EventPacket implements java.io.Serializable{
 	 * falseを返している間は毎フレームupdateとexecuteが呼ばれるので、
 	 * 自前でステート管理すれば小芝居的なものも可能
 	 */
-	abstract public boolean execute(Body body);
+	abstract public boolean execute(Yukkuri body);
 
 	/**
 	 *  イベント終了時に呼ばれるメソッド。
@@ -160,7 +160,7 @@ abstract public class EventPacket implements java.io.Serializable{
 	 *  外部からのアクションによってclearActions()が発生してイベントが消される場合も呼ばれる。
 	 *  普通は必要ないが後始末の処理が必要な場合はこれをオーバーライドする
 	 */
-	public void end(Body body) {
+	public void end(Yukkuri body) {
 		return;
 	}
 	/**
@@ -226,7 +226,7 @@ abstract public class EventPacket implements java.io.Serializable{
 	 * @param waitTime 待ち時間
 	 * @return 待ち時間が過ぎていたらtrue
 	 */
-	public boolean checkWait(Body body,int waitTime)
+	public boolean checkWait(Yukkuri body,int waitTime)
 	{
 		if( !body.checkWait(waitTime))
 		{

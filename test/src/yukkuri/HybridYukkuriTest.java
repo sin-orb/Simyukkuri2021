@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.enums.AgeState;
 import src.system.BodyLayer;
 import src.enums.BodyRank;
@@ -153,7 +153,7 @@ public class HybridYukkuriTest {
     @Test
     public void testSetImages_Getter() {
         HybridYukkuri hybrid = new HybridYukkuri();
-        Body[] imgs = new Body[3];
+        Yukkuri[] imgs = new Yukkuri[3];
         hybrid.setImages(imgs);
         assertSame(imgs, hybrid.getImages());
     }
@@ -217,14 +217,14 @@ public class HybridYukkuriTest {
     @Test
     public void testGetImage_afterTuneParameters_imagesSlotNull_throwsNPE() {
         HybridYukkuri hybrid = new HybridYukkuri();
-        hybrid.tuneParameters(); // images = new Body[size], but elements are null
-        hybrid.setImages(new Body[src.enums.ImageCode.values().length]);
+        hybrid.tuneParameters(); // images = new Yukkuri[size], but elements are null
+        hybrid.setImages(new Yukkuri[src.enums.ImageCode.values().length]);
         BodyLayer layer = new BodyLayer();
         // images[0] == null → images[0].setAgeState → NPE
         assertEquals(0, hybrid.getImage(0, 0, layer, 0));
     }
 
-    // --- Constructor(int, int, int, AgeState, Body, Body): with non-null p1 ---
+    // --- Constructor(int, int, int, AgeState, Yukkuri, Yukkuri): with non-null p1 ---
 
     @Test
     public void testConstructor_WithCoords_doesNotThrow() {

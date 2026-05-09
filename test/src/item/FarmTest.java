@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.enums.Event;
 import src.game.Shit;
 import src.system.ItemMenu.ShapeMenu;
@@ -211,12 +211,12 @@ class FarmTest {
         Farm item = new Farm();
         Food food = new Food(200, 200, 0);
         food.setZ(5); // airborne
-        // non-Body airborne: o.getMostDepth() != 0 → setMostDepth(0) → returns 1
+        // non-Yukkuri airborne: o.getMostDepth() != 0 → setMostDepth(0) → returns 1
         // But initially mostDepth == 0 → returns 1 only if different... let's just check no throw
         assertDoesNotThrow(() -> item.objHitProcess(food));
     }
 
-    // --- getAmount(Obj) ---
+    // --- getAmount(Entity) ---
 
     @Test
     void testGetAmountFromNull_DoesNotThrow() {
@@ -243,7 +243,7 @@ class FarmTest {
         Food food = new Food(100, 100, 0);
         food.setZ(0);
         item.getAmount(food);
-        // Food is not Shit or Vomit or Body, so no amount change
+        // Food is not Shit or Vomit or Yukkuri, so no amount change
         assertEquals(before, item.getAmount());
     }
 
@@ -391,14 +391,14 @@ class FarmTest {
         assertDoesNotThrow(() -> item.checkContain(50, 50, true));
     }
 
-    // --- giveAmount with Body ---
+    // --- giveAmount with Yukkuri ---
 
     @Test
     void testGiveAmount_withBody_doesNotThrow() {
         Farm item = new Farm();
         item.setMapPos(0, 0, 1000, 1000);
         item.setAmount(5000);
-        src.base.Body body = WorldTestHelper.createBody();
+        src.base.Yukkuri body = WorldTestHelper.createBody();
         body.setX(200); body.setY(200);
         assertDoesNotThrow(() -> item.giveAmount(body));
     }
@@ -444,7 +444,7 @@ class FarmTest {
     void testCheckHitObj_yukkuriInside_doesNotThrow() {
         Farm item = new Farm();
         item.setMapPos(0, 0, 1000, 1000);
-        src.base.Body body = WorldTestHelper.createBody();
+        src.base.Yukkuri body = WorldTestHelper.createBody();
         body.setX(200); body.setY(200); body.setZ(0);
         // Result depends on coordinate mapping, just verify no crash
         assertDoesNotThrow(() -> item.checkHitObj(body));
@@ -455,7 +455,7 @@ class FarmTest {
         Farm item = new Farm();
         item.setMapPos(0, 0, 1000, 1000);
         item.setAmount(100);
-        src.base.Body body = WorldTestHelper.createBody();
+        src.base.Yukkuri body = WorldTestHelper.createBody();
         body.setX(200); body.setY(200); body.setZ(0);
         assertDoesNotThrow(() -> item.objHitProcess(body));
     }
@@ -465,7 +465,7 @@ class FarmTest {
         Farm item = new Farm();
         item.setMapPos(0, 0, 1000, 1000);
         item.setAmount(100);
-        src.base.Body body = WorldTestHelper.createBody();
+        src.base.Yukkuri body = WorldTestHelper.createBody();
         body.setX(200); body.setY(200);
         assertDoesNotThrow(() -> item.getAmount(body));
     }

@@ -1,7 +1,7 @@
 package src.logic;
 
-import src.base.Body;
-import src.base.Obj;
+import src.base.Yukkuri;
+import src.base.Entity;
 
 /**
  * 到着前の餌追従.
@@ -14,7 +14,7 @@ public final class FoodApproachPolicy {
 	/**
 	 * 目標へ移動する.
 	 */
-	public static boolean handleUnarrivedFood(Body body, Obj food) {
+	public static boolean handleUnarrivedFood(Yukkuri body, Entity food) {
 		if (!body.canflyCheck()) {
 			body.moveTo(food.getX(), food.getY(), 0);
 		} else {

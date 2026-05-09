@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.base.ItemTestBase;
 import src.enums.Numbering;
 import src.enums.HairState;
@@ -20,8 +20,8 @@ import src.yukkuri.Reimu;
 
 class ProcesserPlateTest extends ItemTestBase {
 
-    private static Body createReimuBody() {
-        Body body = new Reimu();
+    private static Yukkuri createReimuBody() {
+        Yukkuri body = new Reimu();
         body.setObjId(Numbering.INSTANCE.numberingObjId());
         body.setUniqueID(Numbering.INSTANCE.numberingYukkuriID());
         SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
@@ -94,7 +94,7 @@ class ProcesserPlateTest extends ItemTestBase {
     @Test
     void testGetSetProcessedBodyList() {
         ProcesserPlate item = new ProcesserPlate();
-        List<Body> list = new LinkedList<>();
+        List<Yukkuri> list = new LinkedList<>();
         item.setProcessedBodyList(list);
         assertEquals(list, item.getProcessedBodyList());
     }
@@ -143,7 +143,7 @@ class ProcesserPlateTest extends ItemTestBase {
     void testObjHitProcess_Disabled() {
         ProcesserPlate item = new ProcesserPlate();
         item.setEnabled(false);
-        Body body = WorldTestHelper.createBody();
+        Yukkuri body = WorldTestHelper.createBody();
         assertEquals(0, item.objHitProcess(body));
     }
 
@@ -169,7 +169,7 @@ class ProcesserPlateTest extends ItemTestBase {
         item.setObjId(67);
         SimYukkuri.world.getCurrentMap().getProcesserPlate().put(item.getObjId(), item);
 
-        Body body = WorldTestHelper.createBody();
+        Yukkuri body = WorldTestHelper.createBody();
         body.setLockmove(true);
         item.getProcessedBodyList().add(body);
         item.getProcessedBodyEffectList().add(null); // null effect
@@ -198,7 +198,7 @@ class ProcesserPlateTest extends ItemTestBase {
     void testUpDate_disabled_withBodyInList() {
         ProcesserPlate item = new ProcesserPlate();
         item.setEnabled(false);
-        Body body = WorldTestHelper.createBody();
+        Yukkuri body = WorldTestHelper.createBody();
         item.getProcessedBodyList().add(body);
         item.getProcessedBodyEffectList().add(null);
         assertDoesNotThrow(() -> item.upDate());
@@ -218,7 +218,7 @@ class ProcesserPlateTest extends ItemTestBase {
         ProcesserPlate item = new ProcesserPlate();
         item.setEnabled(true);
         item.setEnumProcessType(ProcesserPlate.ProcessType.PAIN);
-        Body body = WorldTestHelper.createBody();
+        Yukkuri body = WorldTestHelper.createBody();
         body.remove();
         item.getProcessedBodyList().add(body);
         item.getProcessedBodyEffectList().add(null);
@@ -295,7 +295,7 @@ class ProcesserPlateTest extends ItemTestBase {
         ProcesserPlate item = new ProcesserPlate();
         item.setEnabled(true);
         item.setX(100); item.setY(100);
-        Body body = WorldTestHelper.createBody();
+        Yukkuri body = WorldTestHelper.createBody();
         body.setX(100); body.setY(100); body.setZ(5); // airborne
         java.awt.Rectangle rect = new java.awt.Rectangle(0, 0, 1000, 1000);
         assertFalse(item.checkHitObj(rect, body));
@@ -309,7 +309,7 @@ class ProcesserPlateTest extends ItemTestBase {
         ProcesserPlate item = new ProcesserPlate();
         item.setEnabled(true);
         item.setX(500); item.setY(500);
-        Body body = WorldTestHelper.createBody();
+        Yukkuri body = WorldTestHelper.createBody();
         body.setX(500); body.setY(500); body.setZ(0);
         java.awt.Rectangle rect = new java.awt.Rectangle(0, 0, 1, 1); // tiny rect
         assertDoesNotThrow(() -> item.checkHitObj(rect, body));
@@ -354,7 +354,7 @@ class ProcesserPlateTest extends ItemTestBase {
         ProcesserPlate item = new ProcesserPlate();
         item.setEnabled(true);
         item.setEnumProcessType(ProcesserPlate.ProcessType.HOTPLATE_MIN);
-        Body body = WorldTestHelper.createBody();
+        Yukkuri body = WorldTestHelper.createBody();
         // body is alive, z=0, not removed
         item.getProcessedBodyList().add(body);
         item.getProcessedBodyEffectList().add(null);
@@ -368,7 +368,7 @@ class ProcesserPlateTest extends ItemTestBase {
         ProcesserPlate item = new ProcesserPlate();
         item.setEnabled(true);
         item.setEnumProcessType(ProcesserPlate.ProcessType.PAIN);
-        Body body = WorldTestHelper.createBody();
+        Yukkuri body = WorldTestHelper.createBody();
         item.getProcessedBodyList().add(body);
         item.getProcessedBodyEffectList().add(null);
         assertDoesNotThrow(() -> item.upDate());
@@ -381,7 +381,7 @@ class ProcesserPlateTest extends ItemTestBase {
         ProcesserPlate item = new ProcesserPlate();
         item.setEnabled(true);
         item.setEnumProcessType(ProcesserPlate.ProcessType.PEALING);
-        Body body = WorldTestHelper.createBody();
+        Yukkuri body = WorldTestHelper.createBody();
         item.getProcessedBodyList().add(body);
         item.getProcessedBodyEffectList().add(null);
         assertDoesNotThrow(() -> item.upDate());
@@ -394,7 +394,7 @@ class ProcesserPlateTest extends ItemTestBase {
         ProcesserPlate item = new ProcesserPlate();
         item.setEnabled(true);
         item.setEnumProcessType(ProcesserPlate.ProcessType.PAIN);
-        Body body = WorldTestHelper.createBody();
+        Yukkuri body = WorldTestHelper.createBody();
         body.setZ(10);
         item.getProcessedBodyList().add(body);
         item.getProcessedBodyEffectList().add(null);
@@ -409,7 +409,7 @@ class ProcesserPlateTest extends ItemTestBase {
         ProcesserPlate item = new ProcesserPlate();
         item.setEnabled(true);
         item.setEnumProcessType(ProcesserPlate.ProcessType.PAIN);
-        Body body = WorldTestHelper.createBody();
+        Yukkuri body = WorldTestHelper.createBody();
         int result = item.objHitProcess(body);
         assertEquals(1, result);
         assertTrue(item.getProcessedBodyList().contains(body));
@@ -422,7 +422,7 @@ class ProcesserPlateTest extends ItemTestBase {
         ProcesserPlate item = new ProcesserPlate();
         item.setEnabled(true);
         item.setEnumProcessType(ProcesserPlate.ProcessType.PAIN);
-        Body body = WorldTestHelper.createBody();
+        Yukkuri body = WorldTestHelper.createBody();
         item.getProcessedBodyList().add(body);
         item.getProcessedBodyEffectList().add(null);
         int result = item.objHitProcess(body);
@@ -436,7 +436,7 @@ class ProcesserPlateTest extends ItemTestBase {
         ProcesserPlate item = new ProcesserPlate();
         item.setEnabled(false);
         item.setEnumProcessType(ProcesserPlate.ProcessType.PAIN);
-        Body body = WorldTestHelper.createBody();
+        Yukkuri body = WorldTestHelper.createBody();
         item.getProcessedBodyList().add(body);
         item.getProcessedBodyEffectList().add(null);
         assertDoesNotThrow(() -> item.upDate());
@@ -452,7 +452,7 @@ class ProcesserPlateTest extends ItemTestBase {
             item.setEnabled(true);
             item.setEnumProcessType(ProcesserPlate.ProcessType.PAIN);
 
-            Body body = WorldTestHelper.createBody();
+            Yukkuri body = WorldTestHelper.createBody();
             body.setSleeping(true);
             body.setShadowVisible(true);
             int damageBefore = body.getDamage();
@@ -478,7 +478,7 @@ class ProcesserPlateTest extends ItemTestBase {
             item.setEnabled(true);
             item.setEnumProcessType(ProcesserPlate.ProcessType.PEALING);
 
-            Body body = createReimuBody();
+            Yukkuri body = createReimuBody();
             body.setSleeping(true);
             body.setOkazari(null);
             body.setHasBraid(false);
@@ -499,7 +499,7 @@ class ProcesserPlateTest extends ItemTestBase {
             item.setEnabled(true);
             item.setEnumProcessType(ProcesserPlate.ProcessType.PACKING);
 
-            Body body = createReimuBody();
+            Yukkuri body = createReimuBody();
             body.setOkazari(null);
             body.setHasBraid(false);
             body.setBlind(true);

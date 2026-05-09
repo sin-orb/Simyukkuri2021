@@ -12,8 +12,8 @@ import src.attachment.OrangeAmpoule;
 import src.attachment.PoisonAmpoule;
 import src.attachment.StopAmpoule;
 import src.attachment.VeryShitAmpoule;
-import src.base.Body;
-import src.base.Obj;
+import src.base.Yukkuri;
+import src.base.Entity;
 import src.command.GadgetMenu.GadgetList;
 import src.util.GameWorld;
 
@@ -22,16 +22,16 @@ final class GadgetAmpouleAction {
 	private GadgetAmpouleAction() {
 	}
 
-	static void evaluateAmpoule(GadgetList item, MouseEvent ev, Obj targetObject) {
-		List<Body> bodyList = new LinkedList<Body>(GameWorld.get().getCurrentMap().getBody().values());
+	static void evaluateAmpoule(GadgetList item, MouseEvent ev, Entity targetObject) {
+		List<Yukkuri> bodyList = new LinkedList<Yukkuri>(GameWorld.get().getCurrentMap().getBody().values());
 		switch (item) {
 			case ORANGE_AMP:
 				if (ev.isShiftDown()) {
 					int attachmentCount = 0;
-					if (targetObject instanceof Body) {
-						attachmentCount = ((Body) targetObject).getAttachmentSize(OrangeAmpoule.class);
+					if (targetObject instanceof Yukkuri) {
+						attachmentCount = ((Yukkuri) targetObject).getAttachmentSize(OrangeAmpoule.class);
 					}
-					for (Body body : bodyList) {
+					for (Yukkuri body : bodyList) {
 						if (attachmentCount == 0) {
 							if (body.getAttachmentSize(OrangeAmpoule.class) == 0)
 								body.addAttachment(new OrangeAmpoule(body));
@@ -41,7 +41,7 @@ final class GadgetAmpouleAction {
 						}
 					}
 				} else if (ev.isControlDown()) {
-					for (Body body : bodyList) {
+					for (Yukkuri body : bodyList) {
 						if (body.getAttachmentSize(OrangeAmpoule.class) != 0) {
 							body.removeAttachment(OrangeAmpoule.class);
 						} else {
@@ -49,8 +49,8 @@ final class GadgetAmpouleAction {
 						}
 					}
 				} else {
-					if (targetObject instanceof Body) {
-						Body body = (Body) targetObject;
+					if (targetObject instanceof Yukkuri) {
+						Yukkuri body = (Yukkuri) targetObject;
 						if (body.getAttachmentSize(OrangeAmpoule.class) != 0) {
 							body.removeAttachment(OrangeAmpoule.class);
 						} else {
@@ -62,10 +62,10 @@ final class GadgetAmpouleAction {
 			case ACCEL_AMP:
 				if (ev.isShiftDown()) {
 					int attachmentCount = 0;
-					if (targetObject instanceof Body) {
-						attachmentCount = ((Body) targetObject).getAttachmentSize(AccelAmpoule.class);
+					if (targetObject instanceof Yukkuri) {
+						attachmentCount = ((Yukkuri) targetObject).getAttachmentSize(AccelAmpoule.class);
 					}
-					for (Body body : bodyList) {
+					for (Yukkuri body : bodyList) {
 						if (attachmentCount == 0) {
 							if (body.getAttachmentSize(AccelAmpoule.class) == 0)
 								body.addAttachment(new AccelAmpoule(body));
@@ -75,7 +75,7 @@ final class GadgetAmpouleAction {
 						}
 					}
 				} else if (ev.isControlDown()) {
-					for (Body body : bodyList) {
+					for (Yukkuri body : bodyList) {
 						if (body.getAttachmentSize(AccelAmpoule.class) != 0) {
 							body.removeAttachment(AccelAmpoule.class);
 						} else {
@@ -83,8 +83,8 @@ final class GadgetAmpouleAction {
 						}
 					}
 				} else {
-					if (targetObject instanceof Body) {
-						Body body = (Body) targetObject;
+					if (targetObject instanceof Yukkuri) {
+						Yukkuri body = (Yukkuri) targetObject;
 						if (body.getAttachmentSize(AccelAmpoule.class) != 0) {
 							body.removeAttachment(AccelAmpoule.class);
 						} else {
@@ -96,10 +96,10 @@ final class GadgetAmpouleAction {
 			case STOP_AMP:
 				if (ev.isShiftDown()) {
 					int attachmentCount = 0;
-					if (targetObject instanceof Body) {
-						attachmentCount = ((Body) targetObject).getAttachmentSize(StopAmpoule.class);
+					if (targetObject instanceof Yukkuri) {
+						attachmentCount = ((Yukkuri) targetObject).getAttachmentSize(StopAmpoule.class);
 					}
-					for (Body body : bodyList) {
+					for (Yukkuri body : bodyList) {
 						if (attachmentCount == 0) {
 							if (body.getAttachmentSize(StopAmpoule.class) == 0)
 								body.addAttachment(new StopAmpoule(body));
@@ -109,7 +109,7 @@ final class GadgetAmpouleAction {
 						}
 					}
 				} else if (ev.isControlDown()) {
-					for (Body body : bodyList) {
+					for (Yukkuri body : bodyList) {
 						if (body.getAttachmentSize(StopAmpoule.class) != 0) {
 							body.removeAttachment(StopAmpoule.class);
 						} else {
@@ -117,8 +117,8 @@ final class GadgetAmpouleAction {
 						}
 					}
 				} else {
-					if (targetObject instanceof Body) {
-						Body body = (Body) targetObject;
+					if (targetObject instanceof Yukkuri) {
+						Yukkuri body = (Yukkuri) targetObject;
 						if (body.getAttachmentSize(StopAmpoule.class) != 0) {
 							body.removeAttachment(StopAmpoule.class);
 						} else {
@@ -130,10 +130,10 @@ final class GadgetAmpouleAction {
 			case HUNGRY_AMP:
 				if (ev.isShiftDown()) {
 					int attachmentCount = 0;
-					if (targetObject instanceof Body) {
-						attachmentCount = ((Body) targetObject).getAttachmentSize(HungryAmpoule.class);
+					if (targetObject instanceof Yukkuri) {
+						attachmentCount = ((Yukkuri) targetObject).getAttachmentSize(HungryAmpoule.class);
 					}
-					for (Body body : bodyList) {
+					for (Yukkuri body : bodyList) {
 						if (attachmentCount == 0) {
 							if (body.getAttachmentSize(HungryAmpoule.class) == 0)
 								body.addAttachment(new HungryAmpoule(body));
@@ -143,7 +143,7 @@ final class GadgetAmpouleAction {
 						}
 					}
 				} else if (ev.isControlDown()) {
-					for (Body body : bodyList) {
+					for (Yukkuri body : bodyList) {
 						if (body.getAttachmentSize(HungryAmpoule.class) != 0) {
 							body.removeAttachment(HungryAmpoule.class);
 						} else {
@@ -151,8 +151,8 @@ final class GadgetAmpouleAction {
 						}
 					}
 				} else {
-					if (targetObject instanceof Body) {
-						Body body = (Body) targetObject;
+					if (targetObject instanceof Yukkuri) {
+						Yukkuri body = (Yukkuri) targetObject;
 						if (body.getAttachmentSize(HungryAmpoule.class) != 0) {
 							body.removeAttachment(HungryAmpoule.class);
 						} else {
@@ -164,10 +164,10 @@ final class GadgetAmpouleAction {
 			case VERYSHIT_AMP:
 				if (ev.isShiftDown()) {
 					int attachmentCount = 0;
-					if (targetObject instanceof Body) {
-						attachmentCount = ((Body) targetObject).getAttachmentSize(VeryShitAmpoule.class);
+					if (targetObject instanceof Yukkuri) {
+						attachmentCount = ((Yukkuri) targetObject).getAttachmentSize(VeryShitAmpoule.class);
 					}
-					for (Body body : bodyList) {
+					for (Yukkuri body : bodyList) {
 						if (attachmentCount == 0) {
 							if (body.getAttachmentSize(VeryShitAmpoule.class) == 0)
 								body.addAttachment(new VeryShitAmpoule(body));
@@ -177,7 +177,7 @@ final class GadgetAmpouleAction {
 						}
 					}
 				} else if (ev.isControlDown()) {
-					for (Body body : bodyList) {
+					for (Yukkuri body : bodyList) {
 						if (body.getAttachmentSize(VeryShitAmpoule.class) != 0) {
 							body.removeAttachment(VeryShitAmpoule.class);
 						} else {
@@ -185,8 +185,8 @@ final class GadgetAmpouleAction {
 						}
 					}
 				} else {
-					if (targetObject instanceof Body) {
-						Body body = (Body) targetObject;
+					if (targetObject instanceof Yukkuri) {
+						Yukkuri body = (Yukkuri) targetObject;
 						if (body.getAttachmentSize(VeryShitAmpoule.class) != 0) {
 							body.removeAttachment(VeryShitAmpoule.class);
 						} else {
@@ -198,10 +198,10 @@ final class GadgetAmpouleAction {
 			case POISON_AMP:
 				if (ev.isShiftDown()) {
 					int attachmentCount = 0;
-					if (targetObject instanceof Body) {
-						attachmentCount = ((Body) targetObject).getAttachmentSize(PoisonAmpoule.class);
+					if (targetObject instanceof Yukkuri) {
+						attachmentCount = ((Yukkuri) targetObject).getAttachmentSize(PoisonAmpoule.class);
 					}
-					for (Body body : bodyList) {
+					for (Yukkuri body : bodyList) {
 						if (attachmentCount == 0) {
 							if (body.getAttachmentSize(PoisonAmpoule.class) == 0)
 								body.addAttachment(new PoisonAmpoule(body));
@@ -211,7 +211,7 @@ final class GadgetAmpouleAction {
 						}
 					}
 				} else if (ev.isControlDown()) {
-					for (Body body : bodyList) {
+					for (Yukkuri body : bodyList) {
 						if (body.getAttachmentSize(PoisonAmpoule.class) != 0) {
 							body.removeAttachment(PoisonAmpoule.class);
 						} else {
@@ -219,8 +219,8 @@ final class GadgetAmpouleAction {
 						}
 					}
 				} else {
-					if (targetObject instanceof Body) {
-						Body body = (Body) targetObject;
+					if (targetObject instanceof Yukkuri) {
+						Yukkuri body = (Yukkuri) targetObject;
 						if (body.getAttachmentSize(PoisonAmpoule.class) != 0) {
 							body.removeAttachment(PoisonAmpoule.class);
 						} else {
@@ -232,10 +232,10 @@ final class GadgetAmpouleAction {
 			case BREEDING_AMP:
 				if (ev.isShiftDown()) {
 					int attachmentCount = 0;
-					if (targetObject instanceof Body) {
-						attachmentCount = ((Body) targetObject).getAttachmentSize(BreedingAmpoule.class);
+					if (targetObject instanceof Yukkuri) {
+						attachmentCount = ((Yukkuri) targetObject).getAttachmentSize(BreedingAmpoule.class);
 					}
-					for (Body body : bodyList) {
+					for (Yukkuri body : bodyList) {
 						if (attachmentCount == 0) {
 							if (body.getAttachmentSize(BreedingAmpoule.class) == 0)
 								body.addAttachment(new BreedingAmpoule(body));
@@ -245,7 +245,7 @@ final class GadgetAmpouleAction {
 						}
 					}
 				} else if (ev.isControlDown()) {
-					for (Body body : bodyList) {
+					for (Yukkuri body : bodyList) {
 						if (body.getAttachmentSize(BreedingAmpoule.class) != 0) {
 							body.removeAttachment(BreedingAmpoule.class);
 						} else {
@@ -253,8 +253,8 @@ final class GadgetAmpouleAction {
 						}
 					}
 				} else {
-					if (targetObject instanceof Body) {
-						Body body = (Body) targetObject;
+					if (targetObject instanceof Yukkuri) {
+						Yukkuri body = (Yukkuri) targetObject;
 						if (body.getAttachmentSize(BreedingAmpoule.class) != 0) {
 							body.removeAttachment(BreedingAmpoule.class);
 						} else {
@@ -266,10 +266,10 @@ final class GadgetAmpouleAction {
 			case ANYD_AMP:
 				if (ev.isShiftDown()) {
 					int flag = 0;
-					if (targetObject instanceof Body) {
-						flag = ((Body) targetObject).getAttachmentSize(ANYDAmpoule.class);
+					if (targetObject instanceof Yukkuri) {
+						flag = ((Yukkuri) targetObject).getAttachmentSize(ANYDAmpoule.class);
 					}
-					for (Body body : bodyList) {
+					for (Yukkuri body : bodyList) {
 						if (flag == 0) {
 							if (body.getAttachmentSize(ANYDAmpoule.class) == 0)
 								body.addAttachment(new ANYDAmpoule(body));
@@ -279,7 +279,7 @@ final class GadgetAmpouleAction {
 						}
 					}
 				} else if (ev.isControlDown()) {
-					for (Body body : bodyList) {
+					for (Yukkuri body : bodyList) {
 						if (body.getAttachmentSize(ANYDAmpoule.class) != 0) {
 							body.removeAttachment(ANYDAmpoule.class);
 						} else {
@@ -287,8 +287,8 @@ final class GadgetAmpouleAction {
 						}
 					}
 				} else {
-					if (targetObject instanceof Body) {
-						Body body = (Body) targetObject;
+					if (targetObject instanceof Yukkuri) {
+						Yukkuri body = (Yukkuri) targetObject;
 						if (body.getAttachmentSize(ANYDAmpoule.class) != 0) {
 							body.removeAttachment(ANYDAmpoule.class);
 						} else {

@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
-import src.base.Obj;
+import src.base.Entity;
 import src.enums.Event;
 import src.field.impl.Pool;
 import src.field.impl.Pool.DEPTH;
@@ -183,7 +183,7 @@ class PoolTest {
     @Test
     void testGetSetBindObjList() {
         Pool item = new Pool();
-        List<Obj> list = new LinkedList<>();
+        List<Entity> list = new LinkedList<>();
         item.setBindObjList(list);
         assertEquals(list, item.getBindObjList());
     }
@@ -345,7 +345,7 @@ class PoolTest {
         assertEquals(item1, SimYukkuri.world.getCurrentMap().getPool().get(1));
     }
 
-    // --- objHitProcess with non-Body, airborne ---
+    // --- objHitProcess with non-Yukkuri, airborne ---
 
     @Test
     void testObjHitProcess_AirborneObj_ReturnsZero() {
@@ -356,7 +356,7 @@ class PoolTest {
         assertEquals(0, item.objHitProcess(food));
     }
 
-    // --- objHitProcess with non-Body, on ground, outside pool ---
+    // --- objHitProcess with non-Yukkuri, on ground, outside pool ---
 
     @Test
     void testObjHitProcess_ObjOnGround_OutsidePool() {
@@ -410,13 +410,13 @@ class PoolTest {
         assertDoesNotThrow(() -> item.checkContain(50, 50, true));
     }
 
-    // --- objHitProcess with Body inside pool ---
+    // --- objHitProcess with Yukkuri inside pool ---
 
     @Test
     void testObjHitProcess_BodyInsidePool_executesCode() {
         Pool item = new Pool();
         item.setMapPos(0, 0, 1000, 1000);
-        src.base.Body body = WorldTestHelper.createBody();
+        src.base.Yukkuri body = WorldTestHelper.createBody();
         body.setX(200); body.setY(200); body.setZ(0);
         try {
             item.objHitProcess(body);

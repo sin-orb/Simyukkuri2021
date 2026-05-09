@@ -9,7 +9,7 @@ import java.awt.Panel;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
-import src.base.Body;
+import src.base.Yukkuri;
 import src.effect.Effect;
 import src.draw.MyPane;
 import src.draw.Terrarium;
@@ -125,31 +125,31 @@ public class GameViewTest {
 		}
 
 		@Override
-		public Body addBody(int x, int y, int z, int type, AgeState age, Body p1, Body p2) {
+		public Yukkuri addBody(int x, int y, int z, int type, AgeState age, Yukkuri p1, Yukkuri p2) {
 			addBody = true;
 			return null;
 		}
 
 		@Override
-		public Body makeBody(int x, int y, int z, int type, Dna dna, AgeState age, Body p1, Body p2,
+		public Yukkuri makeBody(int x, int y, int z, int type, Dna dna, AgeState age, Yukkuri p1, Yukkuri p2,
 				boolean adjust) {
 			makeBody = adjust;
 			return null;
 		}
 
 		@Override
-		public Vomit addVomit(int x, int y, int z, Body body, YukkuriType type) {
+		public Vomit addVomit(int x, int y, int z, Yukkuri body, YukkuriType type) {
 			addVomit = true;
 			return null;
 		}
 
 		@Override
-		public void addCrushedVomit(int x, int y, int z, Body body, YukkuriType type) {
+		public void addCrushedVomit(int x, int y, int z, Yukkuri body, YukkuriType type) {
 			addCrushedVomit = true;
 		}
 
 		@Override
-		public void addCrushedShit(int x, int y, int z, Body body, YukkuriType type) {
+		public void addCrushedShit(int x, int y, int z, Yukkuri body, YukkuriType type) {
 			addCrushedShit = true;
 		}
 

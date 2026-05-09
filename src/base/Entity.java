@@ -21,12 +21,10 @@ import src.system.MapPlaceData;
 
 /*********************************************************
  * すべてのゲーム内オブジェクトの元となるクラス
- * でいぶ、ドスなどの突然変異でエラーが出る可能性があるので
- * private変数は使わず代わりにprotectedを使用してください
  */
 @SuppressWarnings("rawtypes")
 @JsonTypeInfo(use = Id.CLASS)
-public class Obj implements java.io.Serializable, Comparable {
+public class Entity implements java.io.Serializable, Comparable {
 
 	private static final long serialVersionUID = 4119096412988786726L;
 
@@ -610,9 +608,9 @@ public class Obj implements java.io.Serializable, Comparable {
 	 * MapPlaceDataからobjIdをもつObjを取得する.
 	 * 
 	 * @param i objId
-	 * @return Obj
+	 * @return Entity
 	 */
-	public Obj takeMappedObj(int i) {
+	public Entity takeMappedObj(int i) {
 		MapPlaceData m = GameWorld.get().getCurrentMap();
 		if (m.getAutofeeder().containsKey(i)) {
 			return m.getAutofeeder().get(i);
@@ -704,8 +702,8 @@ public class Obj implements java.io.Serializable, Comparable {
 		if (m.getYunba().containsKey(i)) {
 			return m.getYunba().get(i);
 		}
-		for (Map.Entry<Integer, Body> entry : m.getBody().entrySet()) {
-			Body b = entry.getValue();
+		for (Map.Entry<Integer, Yukkuri> entry : m.getBody().entrySet()) {
+			Yukkuri b = entry.getValue();
 			if (b.objId == i) {
 				return b;
 			}
@@ -975,6 +973,34 @@ public class Obj implements java.io.Serializable, Comparable {
 
 	public void setPivY(int pivY) {
 		this.pivY = pivY;
+	}
+
+	/**
+	 * Entity レイヤーのフィールドを to へコピーする.
+	 * サブクラスは super.copyStateTo(to) を呼んだ後、自クラスのフィールドをコピーする.
+	 */
+	public void copyStateTo(Entity to) {
+		to.setObjType(objType);
+		to.setAge(getAge());
+		to.setX(x); to.setY(y); to.setZ(z);
+		to.setVx(vx); to.setVy(vy); to.setVz(vz);
+		to.setMotionX(getMotionX()); to.setMotionY(getMotionY()); to.setMotionZ(motionZ);
+		to.setRemoved(isRemoved());
+		to.setCanGrab(canGrab);
+		to.setGrabbed(grabbed);
+		to.setEnableWall(enableWall);
+		to.setBindObj(bindObj);
+		to.setValue(value);
+		to.setWhere(where);
+		to.setFallingUnderGround(fallingUnderGround);
+		to.setInPool(inPool);
+		to.setMostDepth(mostDepth);
+		to.setScreenPivot(screenPivot);
+		to.setScreenRect(screenRect);
+		to.setW(imgW); to.setH(imgH);
+		to.setPivotX(pivX); to.setPivotY(pivY);
+		to.setOfsX(ofsX); to.setOfsY(ofsY);
+		to.setObjId(objId);
 	}
 
 }

@@ -30,9 +30,9 @@ import javax.swing.JPanel;
 
 import src.SimYukkuri;
 import src.util.GameWorld;
-import src.base.Body;
-import src.base.Obj;
-import src.base.ObjEX;
+import src.base.Yukkuri;
+import src.base.Entity;
+import src.base.WorldEntity;
 import src.draw.ModLoader;
 import src.draw.Point4y;
 import src.draw.Rectangle4y;
@@ -54,11 +54,11 @@ import src.field.impl.Beltconveyor;
  * <br>
  * 拡張、YukkuriFilterPanel
  */
-public class BeltconveyorObj extends ObjEX {
+public class BeltconveyorObj extends WorldEntity {
 
 	private static final long serialVersionUID = -2840212904501204971L;
-	public static final int hitCheckObjType = ObjEX.YUKKURI + ObjEX.SHIT + ObjEX.FOOD + ObjEX.TOY + ObjEX.VOMIT
-			+ ObjEX.STALK;
+	public static final int hitCheckObjType = WorldEntity.YUKKURI + WorldEntity.SHIT + WorldEntity.FOOD + WorldEntity.TOY + WorldEntity.VOMIT
+			+ WorldEntity.STALK;
 	private static final int images_num = 10;
 	private static int AnimeImagesNum[] = {
 			5, 5
@@ -79,7 +79,7 @@ public class BeltconveyorObj extends ObjEX {
 	private int targetType;
 	private int cantmove = 0;
 	private boolean moveOnce = false;
-	protected List<Obj> bindObjList = new LinkedList<Obj>(); // ベルトコンベア上で移動不可能な状態になっているアイテムのリスト
+	protected List<Entity> bindObjList = new LinkedList<Entity>(); // ベルトコンベア上で移動不可能な状態になっているアイテムのリスト
 
 	protected List<YukkuriType> selectedYukkuriType = new LinkedList<YukkuriType>(); // 処理対象のゆっくり
 	static protected List<String> istrOptionList = new LinkedList<String>(); // 処理対象設定(オプション)
@@ -225,8 +225,8 @@ public class BeltconveyorObj extends ObjEX {
 		return false;
 	}
 
-	public boolean checkHitObj(Rectangle colRect, Obj o) {
-		if ((o instanceof Body) && ((Body) o).isLockmove())
+	public boolean checkHitObj(Rectangle colRect, Entity o) {
+		if ((o instanceof Yukkuri) && ((Yukkuri) o).isLockmove())
 			return false;
 		if (o.isRemoved()) {
 			bindObjList.remove(o);
@@ -237,8 +237,8 @@ public class BeltconveyorObj extends ObjEX {
 				return true;
 			}
 			if (bindObjList != null && bindObjList.contains(o)) {
-				if (o instanceof Body) {
-					((Body) o).setOnNonMovingConveyor(false);
+				if (o instanceof Yukkuri) {
+					((Yukkuri) o).setOnNonMovingConveyor(false);
 				}
 				bindObjList.remove(o);
 			}
@@ -247,7 +247,7 @@ public class BeltconveyorObj extends ObjEX {
 	}
 
 	// 箱を斜めから見下ろしている形式なので奥のxと手前のxで同じ座標でも垂直にならない
-	public int objHitProcess(Obj o) {
+	public int objHitProcess(Entity o) {
 		int objX = o.getX();
 		int objY = o.getY();
 		int objW = o.getW();
@@ -255,8 +255,8 @@ public class BeltconveyorObj extends ObjEX {
 		int attr = 16;
 
 		// フィルター有効時
-		if (o instanceof Body && filter) {
-			Body bodyTarget = (Body) o;
+		if (o instanceof Yukkuri && filter) {
+			Yukkuri bodyTarget = (Yukkuri) o;
 			YukkuriType type = YukkuriType.fromClassName(bodyTarget.getClass().getSimpleName());
 			// ゆっくりタイプチェック
 			if (selectedYukkuriType != null && selectedYukkuriType.contains(type)) {
@@ -313,7 +313,7 @@ public class BeltconveyorObj extends ObjEX {
 		if (targetType != 0) {
 			switch (targetType) {
 				case 1:
-					if (!(o instanceof Body))
+					if (!(o instanceof Yukkuri))
 						return 0;
 					break;
 				case 2:
@@ -321,7 +321,7 @@ public class BeltconveyorObj extends ObjEX {
 						return 0;
 					break;
 				case 3:
-					if (!(o instanceof Food) || o instanceof Shit || o instanceof Vomit || o instanceof Body)
+					if (!(o instanceof Food) || o instanceof Shit || o instanceof Vomit || o instanceof Yukkuri)
 						return 0;
 					break;
 				case 4:
@@ -329,19 +329,19 @@ public class BeltconveyorObj extends ObjEX {
 						return 0;
 					break;
 				default:
-					if (o instanceof Body)
+					if (o instanceof Yukkuri)
 						return 0;
 					break;
 			}
 		}
-		if (o instanceof Body)
-			attr = Barrier.MAP_BODY[((Body) o).getBodyAgeState().ordinal()];
+		if (o instanceof Yukkuri)
+			attr = Barrier.MAP_BODY[((Yukkuri) o).getBodyAgeState().ordinal()];
 		if (!Barrier.onBarrier(objX, objY, objW >> 1, objH >> 2, attr)) {
 			boolean shouldMove = true;
 			// 一体づつ流す設定の時
 			if (moveOnce == true) {
 				if ((bindObjList != null) && bindObjList.contains(o) == true) {
-					for (Obj oBind : bindObjList) {
+					for (Entity oBind : bindObjList) {
 						if (oBind == null || oBind.isRemoved()) {
 							continue;
 						}
@@ -350,8 +350,8 @@ public class BeltconveyorObj extends ObjEX {
 							break;
 						}
 						int attrBind = 16;
-						if (oBind instanceof Body) {
-							attrBind = Barrier.MAP_BODY[((Body) oBind).getBodyAgeState().ordinal()];
+						if (oBind instanceof Yukkuri) {
+							attrBind = Barrier.MAP_BODY[((Yukkuri) oBind).getBodyAgeState().ordinal()];
 						}
 						// リスト上の優先データがフィールドにひかかっていないなら終了
 						if (!Barrier.onBarrier(oBind.getX(), oBind.getY(), oBind.getW() >> 1, oBind.getH() >> 2,
@@ -383,8 +383,8 @@ public class BeltconveyorObj extends ObjEX {
 
 		if (cantmove != 0) {
 			// 移動不可
-			if (o instanceof Body) {
-				((Body) o).setOnNonMovingConveyor(true);
+			if (o instanceof Yukkuri) {
+				((Yukkuri) o).setOnNonMovingConveyor(true);
 			}
 			if ((bindObjList != null) && !bindObjList.contains(o)) {
 				bindObjList.add(o);
@@ -404,12 +404,12 @@ public class BeltconveyorObj extends ObjEX {
 
 	public void removeListData() {
 		if (bindObjList != null) {
-			for (Obj o : bindObjList) {
+			for (Entity o : bindObjList) {
 				if (o == null) {
 					continue;
 				}
-				if (o instanceof Body) {
-					((Body) o).setOnNonMovingConveyor(false);
+				if (o instanceof Yukkuri) {
+					((Yukkuri) o).setOnNonMovingConveyor(false);
 				}
 			}
 			bindObjList.clear();
@@ -451,7 +451,7 @@ public class BeltconveyorObj extends ObjEX {
 		setCollisionSize(getPivotX(), getPivotY());
 		GameWorld.get().getCurrentMap().getBeltconveyorObj().put(objId, this);
 		objType = Type.PLATFORM;
-		objEXType = WorldEntityKind.BELTCONVEYOR;
+		worldEntityType = WorldEntityKind.BELTCONVEYOR;
 		value = 3000;
 		cost = 25;
 	}
@@ -568,7 +568,7 @@ public class BeltconveyorObj extends ObjEX {
 		 * }
 		 * else if(obj == 2){
 		 * belt.targetType = 2;
-		 * // belt.targetType2 = src.Obj.Type.VOMIT;
+		 * // belt.targetType2 = src.Entity.Type.VOMIT;
 		 * }
 		 * else if(obj == 3){
 		 * belt.targetType = 3;
@@ -702,11 +702,11 @@ public class BeltconveyorObj extends ObjEX {
 		this.moveOnce = moveOnce;
 	}
 
-	public List<Obj> getBindObjList() {
+	public List<Entity> getBindObjList() {
 		return bindObjList;
 	}
 
-	public void setBindObjList(List<Obj> bindObjList) {
+	public void setBindObjList(List<Entity> bindObjList) {
 		this.bindObjList = bindObjList;
 	}
 

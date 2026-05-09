@@ -10,10 +10,10 @@ import src.attachment.Badge;
 import src.attachment.BreedingAmpoule;
 import src.attachment.Fire;
 import src.attachment.PoisonAmpoule;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.effect.Effect;
 import src.event.EventPacket;
-import src.base.Obj;
+import src.base.Entity;
 import src.entity.world.bodylinked.Okazari.OkazariType;
 import src.enums.ActionState;
 import src.enums.BurialState;
@@ -77,9 +77,9 @@ class TerrariumTest {
         Terrarium.loadState(tempFile);
     }
 
-    private Body findBodyAcrossMaps(int uniqueId) {
+    private Yukkuri findBodyAcrossMaps(int uniqueId) {
         for (src.system.MapPlaceData map : SimYukkuri.world.getMapList()) {
-            Body found = map.getBody().get(uniqueId);
+            Yukkuri found = map.getBody().get(uniqueId);
             if (found != null) {
                 return found;
             }
@@ -98,7 +98,7 @@ class TerrariumTest {
         return null;
     }
 
-    private Fire findFireAttachment(Body body) {
+    private Fire findFireAttachment(Yukkuri body) {
         for (src.attachment.Attachment attachment : body.getAttach()) {
             if (attachment instanceof Fire) {
                 return (Fire) attachment;
@@ -107,7 +107,7 @@ class TerrariumTest {
         return null;
     }
 
-    private <T> T findAttachment(Body body, Class<T> type) {
+    private <T> T findAttachment(Yukkuri body, Class<T> type) {
         for (src.attachment.Attachment attachment : body.getAttach()) {
             if (type.isInstance(attachment)) {
                 return type.cast(attachment);
@@ -255,7 +255,7 @@ class TerrariumTest {
         return null;
     }
 
-    private void installSyntheticBodySprites(Body body, int width, int height) {
+    private void installSyntheticBodySprites(Yukkuri body, int width, int height) {
         Sprite[] bodySpr = new Sprite[3];
         Sprite[] expandSpr = new Sprite[3];
         Sprite[] braidSpr = new Sprite[3];
@@ -290,7 +290,7 @@ class TerrariumTest {
     @Test
     void testAddBody_Success() {
         int initialBodyCount = SimYukkuri.world.getCurrentMap().getBody().size();
-        // addBody(int x, int y, int z, int type, AgeState age, Body p1, Body p2)
+        // addBody(int x, int y, int z, int type, AgeState age, Yukkuri p1, Yukkuri p2)
         // Use getTypeID() instead of ordinal()
         terrarium.addBody(100, 100, 0, YukkuriType.REIMU.getTypeID(), AgeState.ADULT, null, null);
         assertEquals(initialBodyCount + 1, SimYukkuri.world.getCurrentMap().getBody().size());
@@ -298,13 +298,13 @@ class TerrariumTest {
 
     @Test
     void testCheckPanic_PanicNearShit() {
-        Body body = WorldTestHelper.createBody();
+        Yukkuri body = WorldTestHelper.createBody();
         body.setX(100);
         body.setY(100);
         body.setPanicType(PanicType.FEAR);
 
         assertDoesNotThrow(() -> {
-            java.lang.reflect.Method m = Terrarium.class.getDeclaredMethod("checkPanic", Body.class);
+            java.lang.reflect.Method m = Terrarium.class.getDeclaredMethod("checkPanic", Yukkuri.class);
             m.setAccessible(true);
             m.invoke(terrarium, body);
         });
@@ -394,21 +394,21 @@ class TerrariumTest {
 
         @Test
         void testScenario_CheckPanicBurnPropagatesFearOnlyToNearbyNonRaperBodies() throws Exception {
-            Body source = WorldTestHelper.createBody();
+            Yukkuri source = WorldTestHelper.createBody();
             source.setX(100);
             source.setY(100);
             source.setPanic(true, PanicType.BURN);
 
-            Body nearby = WorldTestHelper.createBody();
+            Yukkuri nearby = WorldTestHelper.createBody();
             nearby.setX(102);
             nearby.setY(102);
 
-            Body nearbyRaper = WorldTestHelper.createBody();
+            Yukkuri nearbyRaper = WorldTestHelper.createBody();
             nearbyRaper.setX(103);
             nearbyRaper.setY(103);
             nearbyRaper.setRaper(true);
 
-            Body far = WorldTestHelper.createBody();
+            Yukkuri far = WorldTestHelper.createBody();
             far.setX(1000);
             far.setY(1000);
             far.setEyesightBase(10);
@@ -421,7 +421,7 @@ class TerrariumTest {
             assertTrue(nearbyRaper.isRaper());
             assertNull(nearbyRaper.getPanicType());
 
-            java.lang.reflect.Method m = Terrarium.class.getDeclaredMethod("checkPanic", Body.class);
+            java.lang.reflect.Method m = Terrarium.class.getDeclaredMethod("checkPanic", Yukkuri.class);
             m.setAccessible(true);
             m.invoke(terrarium, source);
 
@@ -434,7 +434,7 @@ class TerrariumTest {
         void testScenario_SaveLoadRestoresPickedUpBodyInPlayerInventory() throws Exception {
             File tempFile = Files.createTempFile("simyukkuri_test_save_inventory_body", ".sav").toFile();
             try {
-                Body pickedUp = WorldTestHelper.createBody();
+                Yukkuri pickedUp = WorldTestHelper.createBody();
                 int pickedUpId = pickedUp.getUniqueID();
                 SimYukkuri.world.getCurrentMap().getBody().put(pickedUpId, pickedUp);
 
@@ -456,8 +456,8 @@ class TerrariumTest {
                         "picked-up body should be restored into player inventory after load");
 
                 Object restored = SimYukkuri.world.getPlayer().getItemList().getElementAt(0);
-                assertTrue(restored instanceof Body, "player inventory should still contain a body after load");
-                Body restoredBody = (Body) restored;
+                assertTrue(restored instanceof Yukkuri, "player inventory should still contain a body after load");
+                Yukkuri restoredBody = (Yukkuri) restored;
                 assertEquals(pickedUpId, restoredBody.getUniqueID(),
                         "restored inventory body should preserve the original unique id");
                 assertTrue(restoredBody.isTaken(), "restored inventory body should remain marked as taken");
@@ -470,7 +470,7 @@ class TerrariumTest {
         void testScenario_SaveLoadRestoresBodyTakeoutFoodReference() throws Exception {
             File tempFile = Files.createTempFile("simyukkuri_test_save_takeout_food", ".sav").toFile();
             try {
-                Body carrier = WorldTestHelper.createBody();
+                Yukkuri carrier = WorldTestHelper.createBody();
                 carrier.setX(100);
                 carrier.setY(100);
                 SimYukkuri.world.getCurrentMap().getBody().put(carrier.getUniqueID(), carrier);
@@ -488,7 +488,7 @@ class TerrariumTest {
 
                 Terrarium.loadState(tempFile);
 
-                Body restoredCarrier = null;
+                Yukkuri restoredCarrier = null;
                 boolean carriedFoodFoundInTakenOutMap = false;
                 boolean carriedFoodFoundInFieldFoodMap = false;
                 for (src.system.MapPlaceData map : SimYukkuri.world.getMapList()) {
@@ -517,7 +517,7 @@ class TerrariumTest {
         void testScenario_SaveLoadPreservesFoodCarriedOnHeadState() throws Exception {
             File tempFile = Files.createTempFile("simyukkuri_test_save_food_on_head", ".sav").toFile();
             try {
-                Body carrier = WorldTestHelper.createBody();
+                Yukkuri carrier = WorldTestHelper.createBody();
                 carrier.setX(100);
                 carrier.setY(100);
                 SimYukkuri.world.getCurrentMap().getBody().put(carrier.getUniqueID(), carrier);
@@ -530,7 +530,7 @@ class TerrariumTest {
 
                 roundTripSaveLoad(tempFile);
 
-                Body restoredCarrier = findBodyAcrossMaps(carrierId);
+                Yukkuri restoredCarrier = findBodyAcrossMaps(carrierId);
                 assertNotNull(restoredCarrier);
                 assertNotNull(restoredCarrier.getCarryItem(TakeoutItemType.FOOD));
                 assertEquals(carriedFoodObjId, restoredCarrier.getCarryItem(TakeoutItemType.FOOD).getObjId());
@@ -566,9 +566,9 @@ class TerrariumTest {
 
                 roundTripSaveLoad(tempFile);
 
-                Body restoredParent = findBodyAcrossMaps(parentId);
-                Body restoredPartner = findBodyAcrossMaps(partnerId);
-                Body restoredChild = findBodyAcrossMaps(childId);
+                Yukkuri restoredParent = findBodyAcrossMaps(parentId);
+                Yukkuri restoredPartner = findBodyAcrossMaps(partnerId);
+                Yukkuri restoredChild = findBodyAcrossMaps(childId);
 
                 assertNotNull(restoredParent);
                 assertNotNull(restoredPartner);
@@ -613,9 +613,9 @@ class TerrariumTest {
 
                 roundTripSaveLoad(tempFile);
 
-                Body restoredMother = findBodyAcrossMaps(motherId);
-                Body restoredPartner = findBodyAcrossMaps(partnerId);
-                Body restoredChild = findBodyAcrossMaps(childId);
+                Yukkuri restoredMother = findBodyAcrossMaps(motherId);
+                Yukkuri restoredPartner = findBodyAcrossMaps(partnerId);
+                Yukkuri restoredChild = findBodyAcrossMaps(childId);
 
                 assertNotNull(restoredMother);
                 assertNotNull(restoredPartner);
@@ -660,8 +660,8 @@ class TerrariumTest {
 
                 roundTripSaveLoad(tempFile);
 
-                Body restoredParent = findBodyAcrossMaps(parentId);
-                Body restoredBaby = findBodyAcrossMaps(babyId);
+                Yukkuri restoredParent = findBodyAcrossMaps(parentId);
+                Yukkuri restoredBaby = findBodyAcrossMaps(babyId);
                 Stalk restoredStalk = findStalkAcrossMaps(stalkId);
 
                 assertNotNull(restoredParent);
@@ -710,9 +710,9 @@ class TerrariumTest {
 
                 roundTripSaveLoad(tempFile);
 
-                Body restored = findBodyAcrossMaps(transformedId);
-                Body restoredPartner = findBodyAcrossMaps(partnerId);
-                Body restoredChild = findBodyAcrossMaps(childId);
+                Yukkuri restored = findBodyAcrossMaps(transformedId);
+                Yukkuri restoredPartner = findBodyAcrossMaps(partnerId);
+                Yukkuri restoredChild = findBodyAcrossMaps(childId);
 
                 assertNotNull(restored);
                 assertTrue(restored instanceof Deibu);
@@ -760,9 +760,9 @@ class TerrariumTest {
 
                 roundTripSaveLoad(tempFile);
 
-                Body restored = findBodyAcrossMaps(transformedId);
-                Body restoredPartner = findBodyAcrossMaps(partnerId);
-                Body restoredChild = findBodyAcrossMaps(childId);
+                Yukkuri restored = findBodyAcrossMaps(transformedId);
+                Yukkuri restoredPartner = findBodyAcrossMaps(partnerId);
+                Yukkuri restoredChild = findBodyAcrossMaps(childId);
 
                 assertNotNull(restored);
                 assertTrue(restored instanceof DosMarisa);
@@ -783,7 +783,7 @@ class TerrariumTest {
         void testScenario_SaveLoadRestoresFavoriteBedReference() throws Exception {
             File tempFile = Files.createTempFile("simyukkuri_test_save_favorite_bed", ".sav").toFile();
             try {
-                Body body = WorldTestHelper.createBody();
+                Yukkuri body = WorldTestHelper.createBody();
                 SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
 
                 Bed bed = new Bed(120, 120, 1);
@@ -794,7 +794,7 @@ class TerrariumTest {
 
                 roundTripSaveLoad(tempFile);
 
-                Body restoredBody = findBodyAcrossMaps(bodyId);
+                Yukkuri restoredBody = findBodyAcrossMaps(bodyId);
                 assertNotNull(restoredBody);
                 assertNotNull(restoredBody.getFavoriteItem(FavItemType.BED),
                         "favorite bed should still resolve after save/load");
@@ -825,7 +825,7 @@ class TerrariumTest {
 
                 roundTripSaveLoad(tempFile);
 
-                Body restoredBody = findBodyAcrossMaps(bodyId);
+                Yukkuri restoredBody = findBodyAcrossMaps(bodyId);
                 Bed restoredBed = findBedAcrossMaps(bedId);
 
                 assertNotNull(restoredBody);
@@ -992,7 +992,7 @@ class TerrariumTest {
                 hotPlate.setY(280);
                 SimYukkuri.world.getCurrentMap().getHotPlate().put(hotPlate.getObjId(), hotPlate);
 
-                Body body = WorldTestHelper.createBody();
+                Yukkuri body = WorldTestHelper.createBody();
                 body.setObjId(5224);
                 body.setCalcX(hotPlate.getX());
                 body.setCalcY(hotPlate.getY());
@@ -1016,7 +1016,7 @@ class TerrariumTest {
                 SimYukkuri.mypane = new MyPane();
 
                 HotPlate restoredHotPlate = findHotPlateAcrossMaps(hotPlateId);
-                Body restoredBody = findBodyAcrossMaps(bodyId);
+                Yukkuri restoredBody = findBodyAcrossMaps(bodyId);
                 Effect restoredSmoke = findEffectAcrossMaps(smokeId);
 
                 assertNotNull(restoredHotPlate);
@@ -1054,7 +1054,7 @@ class TerrariumTest {
                 stickyPlate.setY(320);
                 SimYukkuri.world.getCurrentMap().getStickyPlate().put(stickyPlate.getObjId(), stickyPlate);
 
-                Body body = WorldTestHelper.createBody();
+                Yukkuri body = WorldTestHelper.createBody();
                 body.setObjId(5325);
                 SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
 
@@ -1069,7 +1069,7 @@ class TerrariumTest {
                 roundTripSaveLoad(tempFile);
 
                 StickyPlate restoredPlate = findStickyPlateAcrossMaps(plateId);
-                Body restoredBody = findBodyAcrossMaps(bodyId);
+                Yukkuri restoredBody = findBodyAcrossMaps(bodyId);
 
                 assertNotNull(restoredPlate);
                 assertNotNull(restoredBody);
@@ -1098,7 +1098,7 @@ class TerrariumTest {
                 mixer.setY(360);
                 SimYukkuri.world.getCurrentMap().getMixer().put(mixer.getObjId(), mixer);
 
-                Body body = WorldTestHelper.createBody();
+                Yukkuri body = WorldTestHelper.createBody();
                 body.setObjId(5326);
                 body.setAnkoAmount(2000);
                 SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
@@ -1121,7 +1121,7 @@ class TerrariumTest {
                 SimYukkuri.mypane = new MyPane();
 
                 Mixer restoredMixer = findMixerAcrossMaps(mixerId);
-                Body restoredBody = findBodyAcrossMaps(bodyId);
+                Yukkuri restoredBody = findBodyAcrossMaps(bodyId);
                 Effect restoredMix = findEffectAcrossMaps(mixId);
 
                 assertNotNull(restoredMixer);
@@ -1153,7 +1153,7 @@ class TerrariumTest {
                 garbageChute.setY(400);
                 SimYukkuri.world.getCurrentMap().getGarbagechute().put(garbageChute.getObjId(), garbageChute);
 
-                Body body = WorldTestHelper.createBody();
+                Yukkuri body = WorldTestHelper.createBody();
                 body.setObjId(5327);
                 installSyntheticBodySprites(body, 32, 32);
                 SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
@@ -1170,7 +1170,7 @@ class TerrariumTest {
                 roundTripSaveLoad(tempFile);
 
                 GarbageChute restoredChute = findGarbageChuteAcrossMaps(chuteId);
-                Body restoredBody = findBodyAcrossMaps(bodyId);
+                Yukkuri restoredBody = findBodyAcrossMaps(bodyId);
 
                 assertNotNull(restoredChute);
                 assertNotNull(restoredBody);
@@ -1203,7 +1203,7 @@ class TerrariumTest {
                 Food rightFood = new Food(garbageStation.getX() + 20, garbageStation.getY(), Food.FoodType.FOOD_NORA.ordinal());
                 SimYukkuri.world.getCurrentMap().getFood().put(leftFood.getObjId(), leftFood);
                 SimYukkuri.world.getCurrentMap().getFood().put(rightFood.getObjId(), rightFood);
-                garbageStation.setFood(new Obj[] { leftFood, rightFood });
+                garbageStation.setFood(new Entity[] { leftFood, rightFood });
 
                 int stationId = garbageStation.getObjId();
                 int leftFoodId = leftFood.getObjId();
@@ -1248,7 +1248,7 @@ class TerrariumTest {
                 feeder.setAge(0);
                 SimYukkuri.world.getCurrentMap().getAutofeeder().put(feeder.getObjId(), feeder);
 
-                Body spawnedBody = WorldTestHelper.createBody();
+                Yukkuri spawnedBody = WorldTestHelper.createBody();
                 spawnedBody.setAgeState(AgeState.BABY);
                 spawnedBody.setX(feeder.getX());
                 spawnedBody.setY(feeder.getY());
@@ -1261,7 +1261,7 @@ class TerrariumTest {
                 roundTripSaveLoad(tempFile);
 
                 AutoFeeder restoredFeeder = findAutoFeederAcrossMaps(feederId);
-                Body restoredSpawnedBody = findBodyAcrossMaps(spawnedBodyId);
+                Yukkuri restoredSpawnedBody = findBodyAcrossMaps(spawnedBodyId);
 
                 assertNotNull(restoredFeeder);
                 assertNotNull(restoredSpawnedBody);
@@ -1323,7 +1323,7 @@ class TerrariumTest {
                 yunba.setAction(Yunba.Action.HEAL);
                 SimYukkuri.world.getCurrentMap().getYunba().put(yunba.getObjId(), yunba);
 
-                Body targetBody = WorldTestHelper.createBody();
+                Yukkuri targetBody = WorldTestHelper.createBody();
                 WorldTestHelper.setDamage(targetBody, 50);
                 targetBody.setX(100);
                 targetBody.setY(100);
@@ -1336,7 +1336,7 @@ class TerrariumTest {
                 roundTripSaveLoad(tempFile);
 
                 Yunba restoredYunba = findYunbaAcrossMaps(yunbaId);
-                Body restoredTarget = findBodyAcrossMaps(targetId);
+                Yukkuri restoredTarget = findBodyAcrossMaps(targetId);
 
                 assertNotNull(restoredYunba);
                 assertNotNull(restoredTarget);
@@ -1387,7 +1387,7 @@ class TerrariumTest {
 
                 roundTripSaveLoad(tempFile);
 
-                Body restored = findBodyAcrossMaps(bodyId);
+                Yukkuri restored = findBodyAcrossMaps(bodyId);
                 assertNotNull(restored);
                 assertTrue(restored.hasOkazari());
                 assertNotNull(restored.getOkazari());
@@ -1409,7 +1409,7 @@ class TerrariumTest {
 
                 roundTripSaveLoad(tempFile);
 
-                Body restored = findBodyAcrossMaps(bodyId);
+                Yukkuri restored = findBodyAcrossMaps(bodyId);
                 assertNotNull(restored);
                 assertFalse(restored.hasOkazari());
                 assertNull(restored.getOkazari());
@@ -1430,7 +1430,7 @@ class TerrariumTest {
 
                 roundTripSaveLoad(tempFile);
 
-                Body restored = findBodyAcrossMaps(bodyId);
+                Yukkuri restored = findBodyAcrossMaps(bodyId);
                 assertNotNull(restored);
                 assertTrue(restored instanceof MarisaReimu);
                 assertTrue(restored.hasOkazari());
@@ -1453,7 +1453,7 @@ class TerrariumTest {
 
                 roundTripSaveLoad(tempFile);
 
-                Body restored = findBodyAcrossMaps(bodyId);
+                Yukkuri restored = findBodyAcrossMaps(bodyId);
                 assertNotNull(restored);
                 assertTrue(restored instanceof ReimuMarisa);
                 assertTrue(restored.hasOkazari());
@@ -1475,7 +1475,7 @@ class TerrariumTest {
 
                 roundTripSaveLoad(tempFile);
 
-                Body restored = findBodyAcrossMaps(bodyId);
+                Yukkuri restored = findBodyAcrossMaps(bodyId);
                 assertNotNull(restored);
                 assertFalse(restored.isDead());
                 assertFalse(restored.isBurned());
@@ -1500,7 +1500,7 @@ class TerrariumTest {
 
                 roundTripSaveLoad(tempFile);
 
-                Body restored = findBodyAcrossMaps(bodyId);
+                Yukkuri restored = findBodyAcrossMaps(bodyId);
                 assertNotNull(restored);
                 assertFalse(restored.isDead());
                 assertFalse(restored.isBurned());
@@ -1526,7 +1526,7 @@ class TerrariumTest {
 
                 roundTripSaveLoad(tempFile);
 
-                Body restored = findBodyAcrossMaps(bodyId);
+                Yukkuri restored = findBodyAcrossMaps(bodyId);
                 assertNotNull(restored);
                 assertTrue(restored.isDead());
                 assertTrue(restored.isBurned());
@@ -1551,7 +1551,7 @@ class TerrariumTest {
 
                 roundTripSaveLoad(tempFile);
 
-                Body restored = findBodyAcrossMaps(bodyId);
+                Yukkuri restored = findBodyAcrossMaps(bodyId);
                 assertNotNull(restored);
                 assertEquals(1, restored.getAttachmentSize(Ants.class));
                 assertNotNull(findAttachment(restored, Ants.class));
@@ -1573,7 +1573,7 @@ class TerrariumTest {
 
                 roundTripSaveLoad(tempFile);
 
-                Body restored = findBodyAcrossMaps(bodyId);
+                Yukkuri restored = findBodyAcrossMaps(bodyId);
                 assertNotNull(restored);
                 assertEquals(1, restored.getAttachmentSize(Badge.class));
                 Badge restoredBadge = findAttachment(restored, Badge.class);
@@ -1601,8 +1601,8 @@ class TerrariumTest {
 
                 roundTripSaveLoad(tempFile);
 
-                Body restoredPoisonBody = findBodyAcrossMaps(poisonBodyId);
-                Body restoredBreedingBody = findBodyAcrossMaps(breedingBodyId);
+                Yukkuri restoredPoisonBody = findBodyAcrossMaps(poisonBodyId);
+                Yukkuri restoredBreedingBody = findBodyAcrossMaps(breedingBodyId);
 
                 assertNotNull(restoredPoisonBody);
                 assertNotNull(restoredBreedingBody);
@@ -1619,7 +1619,7 @@ class TerrariumTest {
         void testScenario_SaveLoadPreservesBodyRidingOnSuiState() throws Exception {
             File tempFile = Files.createTempFile("simyukkuri_test_save_sui_ride", ".sav").toFile();
             try {
-                Body rider = WorldTestHelper.createBody();
+                Yukkuri rider = WorldTestHelper.createBody();
                 rider.setX(140);
                 rider.setY(140);
                 SimYukkuri.world.getCurrentMap().getBody().put(rider.getUniqueID(), rider);
@@ -1637,7 +1637,7 @@ class TerrariumTest {
 
                 roundTripSaveLoad(tempFile);
 
-                Body restoredRider = findBodyAcrossMaps(riderId);
+                Yukkuri restoredRider = findBodyAcrossMaps(riderId);
                 Sui restoredSui = findSuiAcrossMaps(suiId);
 
                 assertNotNull(restoredRider);
@@ -1672,8 +1672,8 @@ class TerrariumTest {
 
                 roundTripSaveLoad(tempFile);
 
-                Body restoredParent = findBodyAcrossMaps(parentId);
-                Body restoredChild = findBodyAcrossMaps(childId);
+                Yukkuri restoredParent = findBodyAcrossMaps(parentId);
+                Yukkuri restoredChild = findBodyAcrossMaps(childId);
 
                 assertNotNull(restoredParent);
                 assertNotNull(restoredChild);
@@ -1703,7 +1703,7 @@ class TerrariumTest {
 
                 roundTripSaveLoad(tempFile);
 
-                Body restored = findBodyAcrossMaps(bodyId);
+                Yukkuri restored = findBodyAcrossMaps(bodyId);
                 Farm restoredFarm = findFarmAcrossMaps(mapSX, mapSY, mapEX, mapEY);
 
                 assertNotNull(restored);
@@ -1731,7 +1731,7 @@ class TerrariumTest {
 
                 roundTripSaveLoad(tempFile);
 
-                Body restored = findBodyAcrossMaps(bodyId);
+                Yukkuri restored = findBodyAcrossMaps(bodyId);
                 assertNotNull(restored);
                 assertEquals(expectedHoldCount, restored.getGodHandHoldCount());
                 assertTrue(restored.getSize() > restored.getOriginSize(),
@@ -1767,7 +1767,7 @@ class TerrariumTest {
 
                 roundTripSaveLoad(tempFile);
 
-                Body restored = findBodyAcrossMaps(bodyId);
+                Yukkuri restored = findBodyAcrossMaps(bodyId);
                 Beltconveyor restoredBelt = findBeltAcrossMaps(mapSX, mapSY, mapEX, mapEY);
 
                 assertNotNull(restored);
@@ -1835,8 +1835,8 @@ class TerrariumTest {
 
                 roundTripSaveLoad(tempFile);
 
-                Body restoredFrom = findBodyAcrossMaps(fromId);
-                Body restoredChild = findBodyAcrossMaps(childId);
+                Yukkuri restoredFrom = findBodyAcrossMaps(fromId);
+                Yukkuri restoredChild = findBodyAcrossMaps(childId);
 
                 assertNotNull(restoredFrom);
                 assertNotNull(restoredChild);
@@ -1892,8 +1892,8 @@ class TerrariumTest {
 
                 roundTripSaveLoad(tempFile);
 
-                Body restoredFrom = findBodyAcrossMaps(fromId);
-                Body restoredChild = findBodyAcrossMaps(childId);
+                Yukkuri restoredFrom = findBodyAcrossMaps(fromId);
+                Yukkuri restoredChild = findBodyAcrossMaps(childId);
 
                 assertNotNull(restoredFrom);
                 assertNotNull(restoredChild);
@@ -1939,8 +1939,8 @@ class TerrariumTest {
 
                 roundTripSaveLoad(tempFile);
 
-                Body restoredFrom = findBodyAcrossMaps(fromId);
-                Body restoredTo = findBodyAcrossMaps(toId);
+                Yukkuri restoredFrom = findBodyAcrossMaps(fromId);
+                Yukkuri restoredTo = findBodyAcrossMaps(toId);
 
                 assertNotNull(restoredFrom);
                 assertNotNull(restoredTo);
@@ -1994,8 +1994,8 @@ class TerrariumTest {
 
                 roundTripSaveLoad(tempFile);
 
-                Body restoredFrom = findBodyAcrossMaps(fromId);
-                Body restoredChild = findBodyAcrossMaps(childId);
+                Yukkuri restoredFrom = findBodyAcrossMaps(fromId);
+                Yukkuri restoredChild = findBodyAcrossMaps(childId);
 
                 assertNotNull(restoredFrom);
                 assertNotNull(restoredChild);
@@ -2049,8 +2049,8 @@ class TerrariumTest {
 
                 roundTripSaveLoad(tempFile);
 
-                Body restoredFrom = findBodyAcrossMaps(fromId);
-                Body restoredChild = findBodyAcrossMaps(childId);
+                Yukkuri restoredFrom = findBodyAcrossMaps(fromId);
+                Yukkuri restoredChild = findBodyAcrossMaps(childId);
 
                 assertNotNull(restoredFrom);
                 assertNotNull(restoredChild);
@@ -2095,7 +2095,7 @@ class TerrariumTest {
 
                 roundTripSaveLoad(tempFile);
 
-                Body restoredTarget = findBodyAcrossMaps(targetId);
+                Yukkuri restoredTarget = findBodyAcrossMaps(targetId);
 
                 assertNotNull(restoredTarget);
                 assertTrue(restoredTarget.getCurrentEvent() instanceof RaperReactionEvent);
@@ -2132,7 +2132,7 @@ class TerrariumTest {
 
                 roundTripSaveLoad(tempFile);
 
-                Body restoredActor = findBodyAcrossMaps(actorId);
+                Yukkuri restoredActor = findBodyAcrossMaps(actorId);
 
                 assertNotNull(restoredActor);
                 assertTrue(restoredActor.getCurrentEvent() instanceof BegForLifeEvent);
@@ -2174,7 +2174,7 @@ class TerrariumTest {
 
                 roundTripSaveLoad(tempFile);
 
-                Body restoredPredator = findBodyAcrossMaps(predatorId);
+                Yukkuri restoredPredator = findBodyAcrossMaps(predatorId);
 
                 assertNotNull(restoredPredator);
                 assertTrue(restoredPredator.getCurrentEvent() instanceof PredatorsGameEvent);

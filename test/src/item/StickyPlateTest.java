@@ -10,9 +10,9 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.base.ItemTestBase;
-import src.base.ObjEX;
+import src.base.WorldEntity;
 import src.util.WorldTestHelper;
 
 class StickyPlateTest extends ItemTestBase {
@@ -53,7 +53,7 @@ class StickyPlateTest extends ItemTestBase {
     @Test
     void testEnableHitCheck_WithBindBody() {
         StickyPlate item = new StickyPlate();
-        Body body = WorldTestHelper.createBody();
+        Yukkuri body = WorldTestHelper.createBody();
         item.setBindBody(body);
         assertFalse(item.enableHitCheck());
     }
@@ -62,7 +62,7 @@ class StickyPlateTest extends ItemTestBase {
     void testGetSetBindBody() {
         StickyPlate item = new StickyPlate();
         assertNull(item.getBindBody());
-        Body body = WorldTestHelper.createBody();
+        Yukkuri body = WorldTestHelper.createBody();
         item.setBindBody(body);
         assertEquals(body, item.getBindBody());
         item.setBindBody(null);
@@ -82,10 +82,10 @@ class StickyPlateTest extends ItemTestBase {
     @Test
     void testGetSetItemRank() {
         StickyPlate item = new StickyPlate();
-        item.setItemRank(ObjEX.ItemRank.HOUSE);
-        assertEquals(ObjEX.ItemRank.HOUSE, item.getItemRank());
-        item.setItemRank(ObjEX.ItemRank.NORA);
-        assertEquals(ObjEX.ItemRank.NORA, item.getItemRank());
+        item.setItemRank(WorldEntity.ItemRank.HOUSE);
+        assertEquals(WorldEntity.ItemRank.HOUSE, item.getItemRank());
+        item.setItemRank(WorldEntity.ItemRank.NORA);
+        assertEquals(WorldEntity.ItemRank.NORA, item.getItemRank());
     }
 
     @Test
@@ -117,16 +117,16 @@ class StickyPlateTest extends ItemTestBase {
         item.setObjId(101);
         SimYukkuri.world.getCurrentMap().getStickyPlate().put(item.getObjId(), item);
 
-        Body body = WorldTestHelper.createBody();
+        Yukkuri body = WorldTestHelper.createBody();
         body.setLockmove(true);
-        body.setPullAndPush(true);
+        body.setCanPullOrPush(true);
         item.setBindBody(body);
 
         item.removeListData();
 
         assertFalse(SimYukkuri.world.getCurrentMap().getStickyPlate().containsKey(101));
         assertFalse(body.isLockmove());
-        assertFalse(body.isPullAndPush());
+        assertFalse(body.canPullOrPush());
     }
 
     @Test
@@ -135,7 +135,7 @@ class StickyPlateTest extends ItemTestBase {
         item.setObjId(102);
         SimYukkuri.world.getCurrentMap().getStickyPlate().put(item.getObjId(), item);
 
-        Body body = WorldTestHelper.createBody();
+        Yukkuri body = WorldTestHelper.createBody();
         try {
             java.lang.reflect.Field deadField = findField(body.getClass(), "dead");
             if (deadField != null) {
@@ -156,7 +156,7 @@ class StickyPlateTest extends ItemTestBase {
         item.setObjId(103);
         SimYukkuri.world.getCurrentMap().getStickyPlate().put(item.getObjId(), item);
 
-        Body body = WorldTestHelper.createBody();
+        Yukkuri body = WorldTestHelper.createBody();
 
         assertDoesNotThrow(() -> item.objHitProcess(body));
         assertEquals(body, item.getBindBody());
@@ -174,7 +174,7 @@ class StickyPlateTest extends ItemTestBase {
         StickyPlate item = new StickyPlate();
         item.setEnabled(false);
 
-        Body body = WorldTestHelper.createBody();
+        Yukkuri body = WorldTestHelper.createBody();
         body.setLockmove(true);
         item.setBindBody(body);
 

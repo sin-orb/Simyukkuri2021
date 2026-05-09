@@ -5,8 +5,8 @@ import java.util.List;
 
 import src.attachment.Ants;
 import src.attachment.Badge;
-import src.base.Body;
-import src.base.Obj;
+import src.base.Yukkuri;
+import src.base.Entity;
 import src.command.GadgetMenu.GadgetList;
 import src.enums.BodyRank;
 import src.enums.PublicRank;
@@ -30,11 +30,11 @@ public class GadgetDebugAction {
 	 * @param ev    入力されたマウスの動作
 	 * @param targetObject 対象オブジェクト
 	 */
-	public static void evaluateTest(GadgetList item, MouseEvent ev, Obj targetObject) {
+	public static void evaluateTest(GadgetList item, MouseEvent ev, Entity targetObject) {
 		switch (item) {
 			case RANKSET:
-				if (targetObject instanceof Body) {
-					Body body = (Body) targetObject;
+				if (targetObject instanceof Yukkuri) {
+					Yukkuri body = (Yukkuri) targetObject;
 					BodyRank rank = body.getBodyRank();
 					if (rank == BodyRank.KAIYU) {
 						body.setBodyRank(BodyRank.NORAYU);
@@ -44,13 +44,13 @@ public class GadgetDebugAction {
 				}
 				break;
 			case RANKSET2:
-				if (targetObject instanceof Body) {
-					Body body = (Body) targetObject;
+				if (targetObject instanceof Yukkuri) {
+					Yukkuri body = (Yukkuri) targetObject;
 					PublicRank rank = body.getPublicRank();
 					if (rank == PublicRank.NONE) {
 						body.setPublicRank(PublicRank.UnunSlave);
 						body.getFavoriteItems().clear();
-						Body partnerBody = src.util.BodyRegistry.getBodyInstance(body.getPartner());
+						Yukkuri partnerBody = src.util.BodyRegistry.getBodyInstance(body.getPartner());
 						if (partnerBody != null) {
 							// うんうんどれいになるようなくずとは りこんっ！だよ！！
 							body.setPartner(-1);
@@ -63,66 +63,66 @@ public class GadgetDebugAction {
 				}
 				break;
 			case EVENT_SHIT:
-				if (targetObject instanceof Body) {
-					Body body = (Body) targetObject;
+				if (targetObject instanceof Yukkuri) {
+					Yukkuri body = (Yukkuri) targetObject;
 					body.wakeup();
-					List<Body> childrenList = BodyLogic.createActiveChildList(body, true);
+					List<Yukkuri> childrenList = BodyLogic.createActiveChildList(body, true);
 					if (childrenList != null && childrenList.size() != 0) {
 						FamilyActionLogic.goToShit(body, childrenList);
 					}
 				}
 				break;
 			case EVENT_EAT:
-				if (targetObject instanceof Body) {
-					Body body = (Body) targetObject;
+				if (targetObject instanceof Yukkuri) {
+					Yukkuri body = (Yukkuri) targetObject;
 					body.wakeup();
-					List<Body> childrenList = BodyLogic.createActiveChildList(body, true);
+					List<Yukkuri> childrenList = BodyLogic.createActiveChildList(body, true);
 					if (childrenList != null && childrenList.size() != 0) {
 						FamilyActionLogic.goToEat(body, childrenList);
 					}
 				}
 				break;
 			case EVENT_RIDEYUKKURI:
-				if (targetObject instanceof Body) {
-					Body body = (Body) targetObject;
+				if (targetObject instanceof Yukkuri) {
+					Yukkuri body = (Yukkuri) targetObject;
 					body.wakeup();
-					List<Body> childrenList = BodyLogic.createActiveChildList(body, true);
+					List<Yukkuri> childrenList = BodyLogic.createActiveChildList(body, true);
 					if (childrenList != null && childrenList.size() != 0) {
 						FamilyActionLogic.rideOnParent(body, childrenList);
 					}
 				}
 				break;
 			case EVENT_PROUDCHILD:
-				if (targetObject instanceof Body) {
-					Body body = (Body) targetObject;
+				if (targetObject instanceof Yukkuri) {
+					Yukkuri body = (Yukkuri) targetObject;
 					body.wakeup();
-					List<Body> childrenList = BodyLogic.createActiveChildList(body, true);
+					List<Yukkuri> childrenList = BodyLogic.createActiveChildList(body, true);
 					if (childrenList != null && childrenList.size() != 0) {
 						FamilyActionLogic.proudChild(body, childrenList);
 					}
 				}
 				break;
 			case SETVAIN:
-				if (targetObject instanceof Body) {
-					Body body = (Body) targetObject;
+				if (targetObject instanceof Yukkuri) {
+					Yukkuri body = (Yukkuri) targetObject;
 					body.getInVain(true);
 				}
 				break;
 			case Yunnyaa:
-				if (targetObject instanceof Body) {
-					Body body = (Body) targetObject;
+				if (targetObject instanceof Yukkuri) {
+					Yukkuri body = (Yukkuri) targetObject;
 					body.doYunnyaa(true);
 				}
 				break;
 			case BEGGINGFORLIFE:
-				if (targetObject instanceof Body) {
-					Body body = (Body) targetObject;
+				if (targetObject instanceof Yukkuri) {
+					Yukkuri body = (Yukkuri) targetObject;
 					body.begForLife(true);
 				}
 				break;
 			case PREDATORSGAME:
-				if (targetObject instanceof Body) {
-					Body body = (Body) targetObject;
+				if (targetObject instanceof Yukkuri) {
+					Yukkuri body = (Yukkuri) targetObject;
 					if (body.isPredatorType())
 						EventLogic.addWorldEvent(new PredatorsGameEvent(body, null, null, 1), body,
 								GameMessages.getMessage(body, MessagePool.Action.GameStart));
@@ -132,8 +132,8 @@ public class GadgetDebugAction {
 				if (ev.isShiftDown() || ev.isControlDown()) {
 					break;
 				} else {
-					if (targetObject instanceof Body) {
-						Body body = (Body) targetObject;
+					if (targetObject instanceof Yukkuri) {
+						Yukkuri body = (Yukkuri) targetObject;
 						if (body.getAttachmentSize(Ants.class) != 0) {
 							body.removeAnts();
 						} else {
@@ -146,8 +146,8 @@ public class GadgetDebugAction {
 				if (ev.isShiftDown() || ev.isControlDown()) {
 					break;
 				} else {
-					if (targetObject instanceof Body) {
-						Body body = (Body) targetObject;
+					if (targetObject instanceof Yukkuri) {
+						Yukkuri body = (Yukkuri) targetObject;
 						if (body.isDead())
 							break;
 						body.feed();
@@ -155,8 +155,8 @@ public class GadgetDebugAction {
 				}
 				break;
 			case BADGE:
-				if (targetObject instanceof Body) {
-					Body body = (Body) targetObject;
+				if (targetObject instanceof Yukkuri) {
+					Yukkuri body = (Yukkuri) targetObject;
 					if (body.getAttachmentSize(Badge.class) != 0) {
 						body.removeAttachment(Badge.class);
 					} else {

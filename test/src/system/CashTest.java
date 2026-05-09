@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import src.yukkuri.Reimu;
 import src.yukkuri.Marisa;
-import src.base.Obj;
+import src.base.Entity;
 import src.SimYukkuri;
 import src.enums.Attitude;
 import src.enums.Intelligence;
@@ -50,7 +50,7 @@ public class CashTest {
     public void testBuyItem() {
         try {
             // Create a mock item
-            Obj item = new Obj() {
+            Entity item = new Entity() {
                 @Override
                 public int getValue() {
                     return 100;

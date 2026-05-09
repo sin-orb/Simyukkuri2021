@@ -13,8 +13,8 @@ import java.util.List;
 import src.SimYukkuri;
 import src.util.GameRandom;
 import src.util.GameWorld;
-import src.base.Body;
-import src.base.Obj;
+import src.base.Yukkuri;
+import src.base.Entity;
 import src.command.GadgetAction;
 import src.draw.ModLoader;
 import src.draw.Point4y;
@@ -242,9 +242,9 @@ public class Farm extends FieldShape {
 	/**
 	 * 渡されたオブジェクトが畑の中にあるかを判定
 	 * <br>
-	 * 動作はobjHitProcess( Obj o )で
+	 * 動作はobjHitProcess( Entity o )で
 	 */
-	public boolean checkHitObj(Obj o) {
+	public boolean checkHitObj(Entity o) {
 		if (o == null) {
 			return false;
 		}
@@ -257,14 +257,14 @@ public class Farm extends FieldShape {
 	}
 
 	/** 当たり判定されたオブジェクトへの処理 */
-	public int objHitProcess(Obj o) {
+	public int objHitProcess(Entity o) {
 		if (o == null) {
 			return 0;
 		}
 		// 空中は無視
 		int zCoord = o.getZ();
-		if (o instanceof Body) {
-			Body body = (Body) o;
+		if (o instanceof Yukkuri) {
+			Yukkuri body = (Yukkuri) o;
 			if (0 < zCoord) {
 				if (body.getBurialState() != BurialState.NONE) {
 					o.setMostDepth(0);
@@ -301,7 +301,7 @@ public class Farm extends FieldShape {
 	}
 
 	/** あるオブジェクトを肥料に変換する際に、そのオブジェクトの目方の減りを計算＆実行 */
-	public void getAmount(Obj o) {
+	public void getAmount(Entity o) {
 		if (o == null) {
 			return;
 		}
@@ -323,8 +323,8 @@ public class Farm extends FieldShape {
 			vomit.eatVomit(fertilizerAmount);
 		}
 
-		if (o instanceof Body) {
-			Body body = (Body) o;
+		if (o instanceof Yukkuri) {
+			Yukkuri body = (Yukkuri) o;
 			if (body.isDead()) {
 				amount += fertilizerAmount;
 				body.eatBody(fertilizerAmount);
@@ -344,13 +344,13 @@ public class Farm extends FieldShape {
 	}
 
 	/** 畑の中のゆっくりに対し肥料を与え、茎を生やす */
-	public void giveAmount(Obj o) {
+	public void giveAmount(Entity o) {
 		if (o == null) {
 			return;
 		}
 		int fertilizerAmount = 100;
-		if (o instanceof Body) {
-			Body body = (Body) o;
+		if (o instanceof Yukkuri) {
+			Yukkuri body = (Yukkuri) o;
 			if (body.isDead() || body.isRemoved()) {
 				return;
 			}

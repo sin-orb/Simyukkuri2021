@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.event.EventPacket.EventPriority;
 import src.event.EventPacket.UpdateState;
 import src.draw.World;
@@ -24,8 +24,8 @@ class HateNoOkazariEventTest {
         WorldTestHelper.initializeStandardTranslate500();
     }
 
-    private static Body createBody() {
-        Body b = new src.yukkuri.Reimu();
+    private static Yukkuri createBody() {
+        Yukkuri b = new src.yukkuri.Reimu();
         b.setAgeState(AgeState.ADULT);
         src.system.Sprite[] spr = new src.system.Sprite[3];
         for (int i = 0; i < 3; i++) {
@@ -46,8 +46,8 @@ class HateNoOkazariEventTest {
 
     @Test
     void testParameterizedConstructor() {
-        Body from = createBody();
-        Body to = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
         HateNoOkazariEvent event = new HateNoOkazariEvent(from, to, null, 10);
         assertNotNull(event);
         assertEquals(from.getUniqueID(), event.getFrom());
@@ -57,9 +57,9 @@ class HateNoOkazariEventTest {
 
     @Test
     void testCheckEventResponse_setsPriorityMiddle() {
-        Body from = createBody();
-        Body to = createBody();
-        Body responder = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
+        Yukkuri responder = createBody();
         HateNoOkazariEvent event = new HateNoOkazariEvent(from, to, null, 10);
         event.checkEventResponse(responder);
         assertEquals(EventPriority.MIDDLE, event.getPriority());
@@ -67,9 +67,9 @@ class HateNoOkazariEventTest {
 
     @Test
     void testCheckEventResponse_returnsFalseForUnunSlave() {
-        Body from = createBody();
-        Body to = createBody();
-        Body responder = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
+        Yukkuri responder = createBody();
         responder.setPublicRank(PublicRank.UnunSlave);
         HateNoOkazariEvent event = new HateNoOkazariEvent(from, to, null, 10);
         assertFalse(event.checkEventResponse(responder));
@@ -77,9 +77,9 @@ class HateNoOkazariEventTest {
 
     @Test
     void testCheckEventResponse_returnsFalseForSmart() {
-        Body from = createBody();
-        Body to = createBody();
-        Body responder = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
+        Yukkuri responder = createBody();
         // isSmart() returns true when attitude is VERY_NICE or NICE
         try {
             java.lang.reflect.Field f = findField(responder.getClass(), "attitude");
@@ -97,17 +97,17 @@ class HateNoOkazariEventTest {
     void testCheckEventResponse_returnsFalseForIdiot() {
         // isIdiot() is overridden in specific subclasses (e.g. TarinaiReimu).
         // For a normal Reimu, isIdiot() returns false, so we verify the logic path.
-        Body from = createBody();
-        Body to = createBody();
-        Body responder = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
+        Yukkuri responder = createBody();
         assertFalse(responder.isIdiot());
         // Non-idiot body passes the idiot check (may still return false for other reasons)
     }
 
     @Test
     void testCheckEventResponse_returnsFalseWhenToIsNull() {
-        Body from = createBody();
-        Body responder = createBody();
+        Yukkuri from = createBody();
+        Yukkuri responder = createBody();
         HateNoOkazariEvent event = new HateNoOkazariEvent();
         event.setFrom(from.getUniqueID());
         event.setTo(-1);
@@ -116,9 +116,9 @@ class HateNoOkazariEventTest {
 
     @Test
     void testCheckEventResponse_returnsFalseWhenCanEventResponseIsFalse() {
-        Body from = createBody();
-        Body to = createBody();
-        Body responder = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
+        Yukkuri responder = createBody();
         responder.setDead(true);
         HateNoOkazariEvent event = new HateNoOkazariEvent(from, to, null, 10);
         assertFalse(event.checkEventResponse(responder));
@@ -126,7 +126,7 @@ class HateNoOkazariEventTest {
 
     @Test
     void testUpdate_returnsAbortWhenToIsNull() {
-        Body b = createBody();
+        Yukkuri b = createBody();
         HateNoOkazariEvent event = new HateNoOkazariEvent();
         event.setFrom(b.getUniqueID());
         event.setTo(-1);
@@ -136,8 +136,8 @@ class HateNoOkazariEventTest {
 
     @Test
     void testUpdate_returnsAbortWhenToIsRemoved() {
-        Body from = createBody();
-        Body to = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
         to.setRemoved(true);
         HateNoOkazariEvent event = new HateNoOkazariEvent(from, to, null, 10);
         UpdateState result = event.update(from);
@@ -146,8 +146,8 @@ class HateNoOkazariEventTest {
 
     @Test
     void testUpdate_toAlive_returnsNull() {
-        Body from = createBody();
-        Body to = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
         HateNoOkazariEvent event = new HateNoOkazariEvent(from, to, null, 10);
         // to is alive → calls calcCollisionX (needs rateX) → returns null
         assertNull(event.update(from));
@@ -155,8 +155,8 @@ class HateNoOkazariEventTest {
 
     @Test
     void testStart_toNotNull_doesNotThrow() {
-        Body from = createBody();
-        Body to = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
         HateNoOkazariEvent event = new HateNoOkazariEvent(from, to, null, 10);
         // to != null → calls calcCollisionX
         assertDoesNotThrow(() -> event.start(from));
@@ -164,7 +164,7 @@ class HateNoOkazariEventTest {
 
     @Test
     void testExecute_toNull_returnsTrue() {
-        Body from = createBody();
+        Yukkuri from = createBody();
         // to not set → getTo() = -1 → getBodyInstance returns null → returns true
         HateNoOkazariEvent event = new HateNoOkazariEvent(from, null, null, 10);
         assertTrue(event.execute(from));
@@ -180,8 +180,8 @@ class HateNoOkazariEventTest {
 
     @Test
     void testExecute_toHighZ_returnsTrue() {
-        Body from = createBody();
-        Body to = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
         to.setZ(10); // z >= 5 → if condition false → returns true
         HateNoOkazariEvent event = new HateNoOkazariEvent(from, to, null, 10);
         assertTrue(event.execute(from));
@@ -189,8 +189,8 @@ class HateNoOkazariEventTest {
 
     @Test
     void testExecute_toDead_returnsTrue() {
-        Body from = createBody();
-        Body to = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
         to.setDead(true); // to.isDead() = true → returns true
         HateNoOkazariEvent event = new HateNoOkazariEvent(from, to, null, 10);
         assertTrue(event.execute(from));
@@ -200,10 +200,10 @@ class HateNoOkazariEventTest {
 
     @Test
     void testCheckEventResponse_bNotPredator_toIsPredator_returnsFalse() {
-        Body from = createBody();
-        Body to = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
         to.setPredatorType(src.enums.PredatorType.BITE);
-        Body responder = createBody(); // Reimu = not predator
+        Yukkuri responder = createBody(); // Reimu = not predator
         HateNoOkazariEvent event = new HateNoOkazariEvent(from, to, null, 10);
         assertFalse(event.checkEventResponse(responder));
     }
@@ -212,9 +212,9 @@ class HateNoOkazariEventTest {
 
     @Test
     void testCheckEventResponse_hasOkazari_isVeryRude_returnsTrue() {
-        Body from = createBody();
-        Body to = createBody();
-        Body responder = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
+        Yukkuri responder = createBody();
         // give responder an okazari
         responder.setOkazari(new src.entity.world.bodylinked.Okazari());
         // make responder very rude
@@ -232,9 +232,9 @@ class HateNoOkazariEventTest {
 
         @Test
         void testScenario_VeryRudeHealthyOkazariBodyActuallyJoinsAttack() {
-            Body from = createBody();
-            Body to = createBody();
-            Body responder = createBody();
+            Yukkuri from = createBody();
+            Yukkuri to = createBody();
+            Yukkuri responder = createBody();
             responder.setAttitude(src.enums.Attitude.SUPER_SHITHEAD);
             responder.setX(to.getX());
             responder.setY(to.getY());
@@ -250,9 +250,9 @@ class HateNoOkazariEventTest {
 
     @Test
     void testCheckEventResponse_WISE_toIsPartnerOfB_returnsFalse() {
-        Body from = createBody();
-        Body to = createBody();
-        Body responder = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
+        Yukkuri responder = createBody();
         responder.setIntelligence(src.enums.Intelligence.WISE);
         // make to the partner of responder
         to.setPartner(responder.getUniqueID());
@@ -264,8 +264,8 @@ class HateNoOkazariEventTest {
     // --- execute: to.isRemoved() → returns true ---
     @Test
     void testExecute_toRemoved_returnsTrue() {
-        Body from = createBody();
-        Body to = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
         to.setRemoved(true);
         HateNoOkazariEvent event = new HateNoOkazariEvent(from, to, null, 10);
         assertTrue(event.execute(from));
@@ -274,9 +274,9 @@ class HateNoOkazariEventTest {
     // --- checkEventResponse: b.isRude(), to not damaged → ret=true → returns true ---
     @Test
     void testCheckEventResponse_isRude_notDamaged_returnsTrue() {
-        Body from = createBody();
-        Body to = createBody();
-        Body responder = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
+        Yukkuri responder = createBody();
         responder.setAttitude(src.enums.Attitude.SHITHEAD); // isRude()=true
         // bodies at same position → no barrier
         responder.setX(to.getX()); responder.setY(to.getY());
@@ -287,8 +287,8 @@ class HateNoOkazariEventTest {
     // --- update: close distance (same pos) → to.stay() → returns null ---
     @Test
     void testUpdate_closeDistance_returnsNull() {
-        Body from = createBody(); // x=0,y=0
-        Body to = createBody();   // x=0,y=0
+        Yukkuri from = createBody(); // x=0,y=0
+        Yukkuri to = createBody();   // x=0,y=0
         HateNoOkazariEvent event = new HateNoOkazariEvent(from, to, null, 10);
         assertNull(event.update(from));
     }

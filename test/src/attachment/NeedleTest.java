@@ -18,7 +18,7 @@ import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
 import src.SequenceRNG;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.draw.World;
 import src.enums.AgeState;
 import src.enums.CoreAnkoState;
@@ -66,7 +66,7 @@ public class NeedleTest {
 
     @Test
     public void testConstructorDefaultsAndBoundary() {
-        Body parent = createParent(AgeState.CHILD);
+        Yukkuri parent = createParent(AgeState.CHILD);
         Needle needle = new Needle(parent);
 
         assertEquals(parent.getUniqueID(), needle.getParent());
@@ -81,7 +81,7 @@ public class NeedleTest {
 
     @Test
     public void testConstructorSetsFixBackWhenFurifuri() {
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         parent.setFurifuri(true);
 
         new Needle(parent);
@@ -91,7 +91,7 @@ public class NeedleTest {
 
     @Test
     public void testConstructorSetsFixBackWhenShitting() {
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         parent.setShitting(true);
 
         new Needle(parent);
@@ -101,7 +101,7 @@ public class NeedleTest {
 
     @Test
     public void testConstructorSetsFixBackWhenBirth() {
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         parent.setBirth(true);
 
         new Needle(parent);
@@ -120,7 +120,7 @@ public class NeedleTest {
 
     @Test
     public void testUpdateClearsFixBackWhenParentIsDead() {
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         parent.setFixBack(true);
         parent.setDead(true);
         Needle needle = new Needle(parent);
@@ -133,7 +133,7 @@ public class NeedleTest {
 
     @Test
     public void testGetImageReturnsNullWhenParentNotInMap() {
-        Body parent = createParent(AgeState.CHILD);
+        Yukkuri parent = createParent(AgeState.CHILD);
         Needle needle = new Needle(parent);
 
         SimYukkuri.world.getCurrentMap().getBody().remove(parent.getUniqueID());
@@ -144,7 +144,7 @@ public class NeedleTest {
 
     @Test
     public void testGetImageReturnsLeftImageWhenDirectionLeft() {
-        Body parent = createParent(AgeState.CHILD);
+        Yukkuri parent = createParent(AgeState.CHILD);
         Needle needle = new Needle(parent);
 
         parent.setDirection(Direction.LEFT);
@@ -155,7 +155,7 @@ public class NeedleTest {
 
     @Test
     public void testGetImageReturnsRightImageWhenDirectionRight() {
-        Body parent = createParent(AgeState.CHILD);
+        Yukkuri parent = createParent(AgeState.CHILD);
         Needle needle = new Needle(parent);
 
         parent.setDirection(Direction.RIGHT);
@@ -166,9 +166,9 @@ public class NeedleTest {
 
     @Test
     public void testGetImageReturnsCorrectImageForAge() {
-        Body babyParent = createParent(AgeState.BABY);
-        Body childParent = createParent(AgeState.CHILD);
-        Body adultParent = createParent(AgeState.ADULT);
+        Yukkuri babyParent = createParent(AgeState.BABY);
+        Yukkuri childParent = createParent(AgeState.CHILD);
+        Yukkuri adultParent = createParent(AgeState.ADULT);
 
         Needle babyNeedle = new Needle(babyParent);
         Needle childNeedle = new Needle(childParent);
@@ -185,7 +185,7 @@ public class NeedleTest {
 
     @Test
     public void testResetBoundaryUsesParentAge() {
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         Needle needle = new Needle(parent);
 
         needle.resetBoundary();
@@ -198,7 +198,7 @@ public class NeedleTest {
 
     @Test
     public void testResetBoundaryDoesNothingWhenParentNotInMap() {
-        Body parent = createParent(AgeState.CHILD);
+        Yukkuri parent = createParent(AgeState.CHILD);
         Needle needle = new Needle(parent);
 
         int origPivotX = needle.getPivotX();
@@ -214,7 +214,7 @@ public class NeedleTest {
 
     @Test
     public void testToStringUsesResourceUtil() {
-        Body parent = createParent(AgeState.BABY);
+        Yukkuri parent = createParent(AgeState.BABY);
         Needle needle = new Needle(parent);
 
         assertEquals(ResourceUtil.getInstance().read("item_needle"), needle.toString());
@@ -228,7 +228,7 @@ public class NeedleTest {
 
     @Test
     public void testConstructorWithParentNotInWorld() {
-        Body parent = new Reimu();
+        Yukkuri parent = new Reimu();
         parent.setAgeState(AgeState.CHILD);
         Needle needle = new Needle(parent);
         assertEquals(0, needle.getValue());
@@ -237,7 +237,7 @@ public class NeedleTest {
 
     @Test
     public void testUpdateAliveParentAddsDamageAndStress() {
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         Needle needle = new Needle(parent);
         parent.setDead(false);
         parent.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
@@ -250,7 +250,7 @@ public class NeedleTest {
 
     @Test
     public void testUpdateAliveParentWakesUpWhenSleeping() {
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         Needle needle = new Needle(parent);
         parent.setDead(false);
         parent.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
@@ -263,7 +263,7 @@ public class NeedleTest {
 
     @Test
     public void testUpdateAliveParentNotSleeping() {
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         Needle needle = new Needle(parent);
         parent.setDead(false);
         parent.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
@@ -274,7 +274,7 @@ public class NeedleTest {
 
     @Test
     public void testUpdateAliveParentFixBackSetsDirectionLeft() {
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         Needle needle = new Needle(parent);
         parent.setDead(false);
         parent.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
@@ -288,7 +288,7 @@ public class NeedleTest {
 
     @Test
     public void testUpdateAliveParentNotFixBack() {
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         Needle needle = new Needle(parent);
         parent.setDead(false);
         parent.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
@@ -299,7 +299,7 @@ public class NeedleTest {
 
     @Test
     public void testUpdateAliveParentNotNYDFixBackTalking() {
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         Needle needle = new Needle(parent);
         parent.setDead(false);
         parent.setFixBack(true);
@@ -313,7 +313,7 @@ public class NeedleTest {
 
     @Test
     public void testUpdateAliveParentNotNYDNotFixBackTalking() {
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         Needle needle = new Needle(parent);
         parent.setDead(false);
         parent.setFixBack(false);
@@ -326,7 +326,7 @@ public class NeedleTest {
 
     @Test
     public void testUpdateAliveParentNYDState() {
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         Needle needle = new Needle(parent);
         parent.setDead(false);
         parent.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
@@ -339,7 +339,7 @@ public class NeedleTest {
     public void testUpdateAliveParentPurupuru() {
         // RNDが常に0を返す → nextInt(50)==0 がtrue → stayPurupuru
         SimYukkuri.RND = new ConstState(0);
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         Needle needle = new Needle(parent);
         parent.setDead(false);
         parent.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
@@ -353,7 +353,7 @@ public class NeedleTest {
     public void testUpdateAliveParentNoPurupuru() {
         // RNDが1を返す → nextInt(50)==0 がfalse
         SimYukkuri.RND = new ConstState(1);
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         Needle needle = new Needle(parent);
         parent.setDead(false);
         parent.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
@@ -361,8 +361,8 @@ public class NeedleTest {
         needle.update();
     }
 
-    private static Body createParent(AgeState ageState) {
-        Body parent = new Reimu();
+    private static Yukkuri createParent(AgeState ageState) {
+        Yukkuri parent = new Reimu();
         parent.setAgeState(ageState);
         Sprite[] spr = new Sprite[3];
         for (int i = 0; i < 3; i++) {
@@ -390,8 +390,8 @@ public class NeedleTest {
         public void testStalkMotherReactsWhenRndHits() {
             // RND=0 → nextInt(50)==0 → checkReactionStalkMother(ATTAKED)
             SimYukkuri.RND = new ConstState(0);
-            Body child = createParent(AgeState.BABY);
-            Body mother = createParent(AgeState.ADULT);
+            Yukkuri child = createParent(AgeState.BABY);
+            Yukkuri mother = createParent(AgeState.ADULT);
             mother.setHappiness(Happiness.HAPPY);
             mother.setMsgType(YukkuriType.REIMU);
             // 子をNYDにしてsetMessage NPE回避
@@ -416,8 +416,8 @@ public class NeedleTest {
         public void testStalkMotherNoReactionWhenRndMisses() {
             // RND=1 → nextInt(50)==1≠0 → 親が反応しない
             SimYukkuri.RND = new ConstState(1);
-            Body child = createParent(AgeState.BABY);
-            Body mother = createParent(AgeState.ADULT);
+            Yukkuri child = createParent(AgeState.BABY);
+            Yukkuri mother = createParent(AgeState.ADULT);
             mother.setHappiness(Happiness.HAPPY);
             child.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
 
@@ -440,7 +440,7 @@ public class NeedleTest {
         public void testStalkMotherNoReactionWhenNoStalk() {
             // RND=0 → nextInt(50)==0 だが茎がないなら反応しない
             SimYukkuri.RND = new ConstState(0);
-            Body child = createParent(AgeState.BABY);
+            Yukkuri child = createParent(AgeState.BABY);
             child.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
 
             Needle needle = new Needle(child);
@@ -458,7 +458,7 @@ public class NeedleTest {
         @Test
         void testScenario_FixBackNeedleUpdateWakesBodyFacesPainAndCanTriggerPurupuru() {
             SimYukkuri.RND = new SequenceRNG(0, 1);
-            Body parent = createParent(AgeState.ADULT);
+            Yukkuri parent = createParent(AgeState.ADULT);
             Needle needle = new Needle(parent);
             parent.setDead(false);
             parent.setFixBack(true);
@@ -484,8 +484,8 @@ public class NeedleTest {
         @Test
         void testScenario_UnbirthChildNeedleCanTriggerStalkMotherReaction() {
             SimYukkuri.RND = new ConstState(0);
-            Body child = createParent(AgeState.BABY);
-            Body mother = createParent(AgeState.ADULT);
+            Yukkuri child = createParent(AgeState.BABY);
+            Yukkuri mother = createParent(AgeState.ADULT);
             mother.setHappiness(Happiness.HAPPY);
             mother.setMsgType(YukkuriType.REIMU);
             child.setUnBirth(true);

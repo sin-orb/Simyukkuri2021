@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
-import src.base.Obj;
+import src.base.Entity;
 import src.util.WorldTestHelper;
 import src.meta.Player;
 
@@ -43,7 +43,7 @@ class PlayerTest {
     @Test
     void testItemList() {
         Player player = new Player();
-        DefaultListModel<Obj> newList = new DefaultListModel<>();
+        DefaultListModel<Entity> newList = new DefaultListModel<>();
         player.setItemList(newList);
         assertSame(newList, player.getItemList());
     }
@@ -62,7 +62,7 @@ class PlayerTest {
     @Test
     void testSetItemForSave() {
         Player player = new Player();
-        java.util.List<Obj> newList = new java.util.ArrayList<>();
+        java.util.List<Entity> newList = new java.util.ArrayList<>();
         newList.add(new Player());
         player.setItemForSave(newList);
         assertSame(newList, player.getItemForSave());

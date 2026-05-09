@@ -336,7 +336,7 @@ class AutoFeederTest extends ItemTestBase {
             item.setFood(food);
 
             // Create a body in the world body map that holds this food
-            src.base.Body body = src.util.WorldTestHelper.createBody();
+            src.base.Yukkuri body = src.util.WorldTestHelper.createBody();
             body.getCarryItems().put(src.enums.TakeoutItemType.FOOD, food.objId);
             SimYukkuri.world.getCurrentMap().getBody().put(body.objId, body);
 

@@ -21,7 +21,7 @@ import javax.swing.border.EmptyBorder;
 
 import src.SimYukkuri;
 import src.util.GameWorld;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.command.GadgetMenu;
 import src.enums.BodyRank;
 import src.enums.PublicRank;
@@ -416,7 +416,7 @@ public class MainCommandUI {
 	 * ゆっくりのステータスを表示する.
 	 * @param b ゆっくり
 	 */
-	public static void showStatus(Body b) {
+	public static void showStatus(Yukkuri b) {
 		int damage = 100 * b.getDamage() / b.getDamageLimit();
 		int hungry = 100 * b.getHungry() / b.getHungryLimit();
 		int shit = 100 * b.getShit() / b.getShitLimit();

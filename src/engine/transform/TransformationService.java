@@ -3,7 +3,7 @@ package src.engine.transform;
 import java.util.function.BooleanSupplier;
 
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.draw.BodyFactory;
 import src.enums.YukkuriType;
 import src.util.GameView;
@@ -23,7 +23,7 @@ public final class TransformationService {
 	 * @param from 変身前
 	 * @param targetType 変身先種別
 	 */
-	public static void transform(Body from, YukkuriType targetType) {
+	public static void transform(Yukkuri from, YukkuriType targetType) {
 		transform(from, targetType, () -> true);
 	}
 
@@ -34,7 +34,7 @@ public final class TransformationService {
 	 * @param targetType 変身先種別
 	 * @param dosMaker DOSまりさ判定用 callback
 	 */
-	public static void transform(Body from, YukkuriType targetType, BooleanSupplier dosMaker) {
+	public static void transform(Yukkuri from, YukkuriType targetType, BooleanSupplier dosMaker) {
 		if (from == null || targetType == null) {
 			return;
 		}
@@ -46,14 +46,10 @@ public final class TransformationService {
 			}
 
 			int originalId = from.getUniqueID();
-			Body to = BodyFactory.create(from.getX(), from.getY(), from.getZ(), targetType.getTypeID(), null,
+			Yukkuri to = BodyFactory.create(from.getX(), from.getY(), from.getZ(), targetType.getTypeID(), null,
 					from.getBodyAgeState(), null, null, false, GameView::loadBodyImage, dosMaker);
-			try {
-				TransformationBodyCopier.copy(to, from);
-				TransformationPolicy.normalizeTransformedAge(to, from);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			TransformationBodyCopier.copy(to, from);
+			TransformationPolicy.normalizeTransformedAge(to, from);
 
 			to.setUniqueID(originalId);
 			GameWorld.get().getCurrentMap().getBody().remove(originalId);

@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
 import src.draw.MyPane;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.draw.World;
 import src.enums.AgeState;
 import src.enums.CoreAnkoState;
@@ -91,7 +91,7 @@ public class AntsTest {
 
     @Test
     public void testConstructorDefaultsAndBoundary() {
-        Body parent = createParent(AgeState.CHILD);
+        Yukkuri parent = createParent(AgeState.CHILD);
         Ants ants = new Ants(parent);
 
         assertEquals(parent.getUniqueID(), ants.getParent());
@@ -107,7 +107,7 @@ public class AntsTest {
 
     @Test
     public void testConstructorSetsNumOfAntsTo50() {
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         Ants ants = new Ants(parent);
         assertEquals(50, parent.getAntCount());
         // parent should be retrievable from world map
@@ -123,7 +123,7 @@ public class AntsTest {
 
     @Test
     public void testUpdateCallsBeEaten() {
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         parent.setAntCount(60);
         parent.setHappiness(Happiness.HAPPY);
         parent.setDamage(0);
@@ -151,7 +151,7 @@ public class AntsTest {
 
     @Test
     public void testGetImageReturnsImage0WhenAntsLow() {
-        Body parent = createParent(AgeState.CHILD);
+        Yukkuri parent = createParent(AgeState.CHILD);
         Ants ants = new Ants(parent);
 
         parent.setAntCount(0);
@@ -161,7 +161,7 @@ public class AntsTest {
 
     @Test
     public void testGetImageReturnsImage1WhenAntsMedium() {
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         Ants ants = new Ants(parent);
 
         // ants >= getDamageLimit()/3 -> image index 1
@@ -172,7 +172,7 @@ public class AntsTest {
 
     @Test
     public void testGetImageReturnsImage2WhenAntsHigh() {
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         Ants ants = new Ants(parent);
 
         // ants >= getDamageLimit()*2/3 -> image index 2
@@ -183,7 +183,7 @@ public class AntsTest {
 
     @Test
     public void testResetBoundaryUsesParentAge() {
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         Ants ants = new Ants(parent);
 
         // setPivX was called with {1,2,3} in setUp; ADULT index=2
@@ -196,7 +196,7 @@ public class AntsTest {
 
     @Test
     public void testToStringUsesResourceUtil() {
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         Ants ants = new Ants(parent);
         assertEquals(ResourceUtil.getInstance().read("item_ants"), ants.toString());
     }
@@ -209,7 +209,7 @@ public class AntsTest {
 
     @Test
     public void testConstructorWithParentNotInWorld() {
-        Body parent = new Reimu();
+        Yukkuri parent = new Reimu();
         parent.setAgeState(AgeState.CHILD);
         Ants ants = new Ants(parent);
         assertEquals(0, ants.getValue());
@@ -218,7 +218,7 @@ public class AntsTest {
 
     @Test
     public void testResetBoundaryDoesNothingWhenParentNotInMap() {
-        Body parent = createParent(AgeState.CHILD);
+        Yukkuri parent = createParent(AgeState.CHILD);
         Ants ants = new Ants(parent);
 
         int origPivotX = ants.getPivotX();
@@ -233,8 +233,8 @@ public class AntsTest {
         assertEquals(origPivotY, ants.getPivotY());
     }
 
-    private static Body createParent(AgeState ageState) {
-        Body parent = new Reimu();
+    private static Yukkuri createParent(AgeState ageState) {
+        Yukkuri parent = new Reimu();
         parent.setAgeState(ageState);
         SimYukkuri.world.getCurrentMap().getBody().put(parent.getUniqueID(), parent);
         return parent;
@@ -261,7 +261,7 @@ public class AntsTest {
     class RegressionScenarios {
         @Test
         void testScenario_UpdateConsumesExactlyNumOfAntsDividedByThreeFromBodyAndHungry() {
-            Body parent = createParent(AgeState.ADULT);
+            Yukkuri parent = createParent(AgeState.ADULT);
             parent.initAmount(AgeState.ADULT);
             parent.setAntCount(9);
             parent.setHungry(100);
@@ -282,7 +282,7 @@ public class AntsTest {
 
         @Test
         void testScenario_LockmoveBodyHitByAntsEntersPainPurupuruBranchWithoutReducingAntCount() {
-            Body parent = createParent(AgeState.ADULT);
+            Yukkuri parent = createParent(AgeState.ADULT);
             parent.initAmount(AgeState.ADULT);
             parent.setAntCount(12);
             parent.setLockmove(true);

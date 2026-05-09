@@ -1,6 +1,6 @@
 package src.draw;
 
-import src.base.Body;
+import src.base.Yukkuri;
 import src.game.Shit;
 import src.game.Vomit;
 import src.item.Diffuser;
@@ -19,7 +19,7 @@ public final class TerrariumObjectFactory {
 	 *
 	 * @return 生成したオブジェクトID
 	 */
-	public static int addShit(int x, int y, int z, Body b, YukkuriType type) {
+	public static int addShit(int x, int y, int z, Yukkuri b, YukkuriType type) {
 		Shit shit = new Shit(x, y, z, b, type);
 		GameWorld.get().getCurrentMap().getShit().put(shit.objId, shit);
 		return shit.objId;
@@ -28,7 +28,7 @@ public final class TerrariumObjectFactory {
 	/**
 	 * ゆ下痢を作成して登録する。
 	 */
-	public static void addCrushedShit(int x, int y, int z, Body b, YukkuriType type) {
+	public static void addCrushedShit(int x, int y, int z, Yukkuri b, YukkuriType type) {
 		Shit s = new Shit(x, y, z, b, type);
 		s.crushShit();
 		if (b != null && b.getMostDepth() < 0) {
@@ -41,7 +41,7 @@ public final class TerrariumObjectFactory {
 	/**
 	 * 吐餡を作成して登録する。
 	 */
-	public static Vomit addVomit(int x, int y, int z, Body body, YukkuriType type) {
+	public static Vomit addVomit(int x, int y, int z, Yukkuri body, YukkuriType type) {
 		Vomit v = new Vomit(x, y, z, body, type);
 		GameWorld.get().getCurrentMap().getVomit().put(v.objId, v);
 		if (body != null && body.getMostDepth() < 0) {
@@ -54,7 +54,7 @@ public final class TerrariumObjectFactory {
 	/**
 	 * つぶれ吐餡を作成して登録する。
 	 */
-	public static void addCrushedVomit(int x, int y, int z, Body body, YukkuriType type) {
+	public static void addCrushedVomit(int x, int y, int z, Yukkuri body, YukkuriType type) {
 		Vomit v = new Vomit(x, y, z, body, type);
 		v.crushVomit();
 		if (body != null && body.getMostDepth() < 0) {

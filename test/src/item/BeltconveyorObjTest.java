@@ -3,7 +3,7 @@ package src.item;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.base.ItemTestBase;
 import src.draw.Rectangle4y;
 import src.enums.YukkuriType;
@@ -29,8 +29,8 @@ class BeltconveyorObjTest extends ItemTestBase {
     }
 
     /** bodySprが設定されたBodyを生成する */
-    private Body createBodyWithSprites() {
-        Body body = WorldTestHelper.createBody();
+    private Yukkuri createBodyWithSprites() {
+        Yukkuri body = WorldTestHelper.createBody();
         Sprite[] spr = new Sprite[3];
         for (int i = 0; i < 3; i++) {
             spr[i] = new Sprite(10, 10, Sprite.PIVOT_CENTER_BOTTOM);
@@ -145,7 +145,7 @@ class BeltconveyorObjTest extends ItemTestBase {
     @Test
     void testGetSetBindObjList() {
         BeltconveyorObj belt = new BeltconveyorObj();
-        List<src.base.Obj> list = new LinkedList<>();
+        List<src.base.Entity> list = new LinkedList<>();
         belt.setBindObjList(list);
         assertEquals(list, belt.getBindObjList());
     }
@@ -291,9 +291,9 @@ class BeltconveyorObjTest extends ItemTestBase {
         belt.setObjId(98);
         SimYukkuri.world.getCurrentMap().getBeltconveyorObj().put(98, belt);
 
-        Body body = createBodyWithSprites();
+        Yukkuri body = createBodyWithSprites();
         body.setOnNonMovingConveyor(true);
-        List<src.base.Obj> list = new LinkedList<>();
+        List<src.base.Entity> list = new LinkedList<>();
         list.add(body);
         belt.setBindObjList(list);
 
@@ -309,7 +309,7 @@ class BeltconveyorObjTest extends ItemTestBase {
         belt.setObjId(97);
         SimYukkuri.world.getCurrentMap().getBeltconveyorObj().put(97, belt);
 
-        List<src.base.Obj> list = new LinkedList<>();
+        List<src.base.Entity> list = new LinkedList<>();
         list.add(null);
         belt.setBindObjList(list);
 
@@ -338,8 +338,8 @@ class BeltconveyorObjTest extends ItemTestBase {
     @Test
     void testObjHitProcess_TargetType1_NonBody_ReturnsZero() {
         BeltconveyorObj belt = new BeltconveyorObj();
-        belt.setTargetType(1); // Body only
-        Shit shit = new Shit(); // not a Body
+        belt.setTargetType(1); // Yukkuri only
+        Shit shit = new Shit(); // not a Yukkuri
         assertEquals(0, belt.objHitProcess(shit));
     }
 
@@ -347,15 +347,15 @@ class BeltconveyorObjTest extends ItemTestBase {
     void testObjHitProcess_TargetType2_Body_ReturnsZero() {
         BeltconveyorObj belt = new BeltconveyorObj();
         belt.setTargetType(2); // Shit or Vomit only
-        Body body = createBodyWithSprites();
+        Yukkuri body = createBodyWithSprites();
         assertEquals(0, belt.objHitProcess(body));
     }
 
     @Test
     void testObjHitProcess_TargetType3_Body_ReturnsZero() {
         BeltconveyorObj belt = new BeltconveyorObj();
-        belt.setTargetType(3); // Food only (not Body)
-        Body body = createBodyWithSprites();
+        belt.setTargetType(3); // Food only (not Yukkuri)
+        Yukkuri body = createBodyWithSprites();
         assertEquals(0, belt.objHitProcess(body));
     }
 
@@ -370,8 +370,8 @@ class BeltconveyorObjTest extends ItemTestBase {
     @Test
     void testObjHitProcess_TargetTypeDefault_Body_ReturnsZero() {
         BeltconveyorObj belt = new BeltconveyorObj();
-        belt.setTargetType(5); // default: excludes Body
-        Body body = createBodyWithSprites();
+        belt.setTargetType(5); // default: excludes Yukkuri
+        Yukkuri body = createBodyWithSprites();
         assertEquals(0, belt.objHitProcess(body));
     }
 
@@ -391,7 +391,7 @@ class BeltconveyorObjTest extends ItemTestBase {
         BeltconveyorObj belt = new BeltconveyorObj();
         belt.setTargetType(0);
         belt.setCantmove(1);
-        Body body = createBodyWithSprites();
+        Yukkuri body = createBodyWithSprites();
         belt.objHitProcess(body);
         assertTrue(body.isOnNonMovingConveyor());
     }
@@ -448,7 +448,7 @@ class BeltconveyorObjTest extends ItemTestBase {
         List<YukkuriType> filter = new ArrayList<>();
         filter.add(YukkuriType.MARISA); // Marisa filtered out
         belt.setSelectedYukkuriType(filter);
-        Body body = createBodyWithSprites(); // Marisa
+        Yukkuri body = createBodyWithSprites(); // Marisa
         assertEquals(0, belt.objHitProcess(body));
     }
 
@@ -478,7 +478,7 @@ class BeltconveyorObjTest extends ItemTestBase {
     @Test
     void testCheckHitObj_LockmoveBody_ReturnsFalse() {
         BeltconveyorObj belt = new BeltconveyorObj();
-        Body body = WorldTestHelper.createBody();
+        Yukkuri body = WorldTestHelper.createBody();
         body.setLockmove(true);
         assertFalse(belt.checkHitObj(null, body));
     }

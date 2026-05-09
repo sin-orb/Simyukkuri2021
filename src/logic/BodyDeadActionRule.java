@@ -1,6 +1,6 @@
 package src.logic;
 
-import src.base.Body;
+import src.base.Yukkuri;
 import src.enums.Happiness;
 import src.enums.ImageCode;
 import src.event.FuneralEvent;
@@ -22,7 +22,7 @@ public final class BodyDeadActionRule {
 	 * @param actorBody actor body
 	 * @return true when the dead-body branch handled the action
 	 */
-	public static boolean handleDeadBodyInteraction(Body targetBody, Body actorBody) {
+	public static boolean handleDeadBodyInteraction(Yukkuri targetBody, Yukkuri actorBody) {
 		if (actorBody.isExciting()) {
 			if (actorBody.isRaper()) {
 				if (!targetBody.isRaper()) {

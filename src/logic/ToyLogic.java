@@ -7,9 +7,9 @@ import java.util.List;
 import src.SimYukkuri;
 import src.util.GameRandom;
 import src.util.GameWorld;
-import src.base.Body;
-import src.base.Obj;
-import src.base.ObjEX;
+import src.base.Yukkuri;
+import src.base.Entity;
+import src.base.WorldEntity;
 import src.draw.Translate;
 import src.enums.FavItemType;
 import src.enums.Happiness;
@@ -34,7 +34,7 @@ public class ToyLogic {
 	 * @param body ゆっくり
 	 * @return 処理が行われたか
 	 */
-	public static final boolean checkToy(Body body) {
+	public static final boolean checkToy(Yukkuri body) {
 		if( body == null ){
 			return false;
 		}
@@ -75,7 +75,7 @@ public class ToyLogic {
 				foundToy.setOwner(null);
 			}
 			else{
-				Body ownerBody = foundToy.getOwner();
+				Yukkuri ownerBody = foundToy.getOwner();
 				if( ownerBody == null || ownerBody == body || body.isFamily(ownerBody) ){
 					ownedByFamily = true;
 				}
@@ -149,7 +149,7 @@ public class ToyLogic {
 	 * @param body ゆっくり
 	 * @return 処理が行われたか
 	 */
-	public static final boolean checkSui(Body body) {
+	public static final boolean checkSui(Yukkuri body) {
 		List<Sui> list = new LinkedList<>(GameWorld.get().getCurrentMap().getSui().values());
 		if( list.size() == 0 ){
 			return false;
@@ -169,12 +169,12 @@ public class ToyLogic {
 			return false;
 		}
 		boolean handled = true;
-		Obj favoriteSui = body.getFavoriteItem(FavItemType.SUI);
+		Entity favoriteSui = body.getFavoriteItem(FavItemType.SUI);
 
 		// 自分のすぃーがない場合
 		if(favoriteSui == null) {
 			int nearestDistance = body.getEyesightBase();
-			for (ObjEX sui: list) {
+			for (WorldEntity sui: list) {
 				// 最小距離のものが見つかっていたら
 				if( nearestDistance < body.getStepDist()){
 					break;
@@ -189,7 +189,7 @@ public class ToyLogic {
 
 					// 所有できない場合
 					if(((Sui)sui).NoCanBind()) {
-						Body bindBody = (Body)((Sui)sui).getBindobj();
+						Yukkuri bindBody = (Yukkuri)((Sui)sui).getBindobj();
 						// 所有者が家族ではないならなにもしない
 						if(!(body.isParent(bindBody) || bindBody.isParent(body) || body.isPartner(bindBody) || bindBody.isSister(body))){
 							continue;
@@ -207,7 +207,7 @@ public class ToyLogic {
 		}
 		// すぃーが見つかった場合
 		if (favoriteSui != null) {
-			Body bindBody =(Body)((Sui)favoriteSui).getBindobj() ;
+			Yukkuri bindBody =(Yukkuri)((Sui)favoriteSui).getBindobj() ;
 			// プレイヤーに持ち上げられたら所有権を消す
 			if( favoriteSui.isGrabbed() && favoriteSui.getZ() != 0 ){
 				bindBody = null;
@@ -243,7 +243,7 @@ public class ToyLogic {
 	 * @param body ゆっくり
 	 * @return 処理が行われたか
 	 */
-	public static final boolean checkTrampoline(Body body){
+	public static final boolean checkTrampoline(Yukkuri body){
 		if( body == null ){
 			return false;
 		}
@@ -318,7 +318,7 @@ public class ToyLogic {
 	 * @param body ゆっくり
 	 * @return 遊べる状態かどうか
 	 */
-	public static boolean canPlay(Body body){
+	public static boolean canPlay(Yukkuri body){
 		// 他の用事がある場合
 		if( body.isToFood() || body.isToBody() || body.isToSukkiri() || body.isToSteal() || body.isToBed() || body.isToShit() ){
 			return false;

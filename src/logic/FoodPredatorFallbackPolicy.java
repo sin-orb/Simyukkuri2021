@@ -3,8 +3,8 @@ package src.logic;
 import java.util.List;
 import java.util.Map;
 
-import src.base.Body;
-import src.base.Obj;
+import src.base.Yukkuri;
+import src.base.Entity;
 import src.draw.Translate;
 import src.field.impl.Barrier;
 import src.item.Food;
@@ -24,17 +24,17 @@ public final class FoodPredatorFallbackPolicy {
 	/**
 	 * 残りの食候補を探索する.
 	 */
-	public static Obj searchFallbackFood(Body body, Obj nearestFood, Obj fallbackFood, int nearestDistance, int wallMode) {
+	public static Entity searchFallbackFood(Yukkuri body, Entity nearestFood, Entity fallbackFood, int nearestDistance, int wallMode) {
 		if (nearestFood == null && body.isFull()) {
 			return nearestFood;
 		}
 
-		Obj selectedFood = nearestFood;
+		Entity selectedFood = nearestFood;
 
 		// 非常食検索
 		for (Map.Entry<Integer, src.game.Stalk> entry : GameWorld.get().getCurrentMap().getStalk().entrySet()) {
 			src.game.Stalk stalk = entry.getValue();
-			Body plantBody = GameWorld.get().getCurrentMap().getBody().get(stalk.getPlantYukkuri());
+			Yukkuri plantBody = GameWorld.get().getCurrentMap().getBody().get(stalk.getPlantYukkuri());
 			if (plantBody != null) {
 				if (plantBody == body) {
 					continue;
@@ -50,7 +50,7 @@ public final class FoodPredatorFallbackPolicy {
 				if (babyList != null && babyList.size() != 0) {
 					boolean hasBaby = false;
 					for (int babyId : babyList) {
-						Body baby = src.util.BodyRegistry.getBodyInstance(babyId);
+						Yukkuri baby = src.util.BodyRegistry.getBodyInstance(babyId);
 						if (baby == null) {
 							continue;
 						}

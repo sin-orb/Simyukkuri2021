@@ -1,6 +1,6 @@
 package src.logic;
 
-import src.base.Body;
+import src.base.Yukkuri;
 import src.base.BodyAttributes;
 import src.enums.Parent;
 import src.enums.EnumRelationMine;
@@ -9,9 +9,9 @@ import java.util.Iterator;
 /**
  * Body同士の家族関係を判定するためのロジック集約クラス。
  * <p>
- * Phase 2の責務分離では、まず{@link Body}のpublic APIを残したまま実装だけを
+ * Phase 2の責務分離では、まず{@link Yukkuri}のpublic APIを残したまま実装だけを
  * このクラスへ委譲する。呼び出し側の置換やnull時の挙動整理は後続作業で扱うため、
- * ここでは抽出前の{@link Body}メソッドと同じ挙動を維持する。
+ * ここでは抽出前の{@link Yukkuri}メソッドと同じ挙動を維持する。
  * </p>
  */
 public final class BodyRelations {
@@ -24,7 +24,7 @@ public final class BodyRelations {
 	 * @param bodyId ゆっくりID
 	 * @return インスタンス。存在しない場合はnull
 	 */
-	public static Body getBody(int bodyId) {
+	public static Yukkuri getBody(int bodyId) {
 		return src.util.BodyRegistry.getBodyInstance(bodyId);
 	}
 
@@ -34,7 +34,7 @@ public final class BodyRelations {
 	 * @param objId オブジェクトID
 	 * @return インスタンス。存在しない場合はnull
 	 */
-	public static Body getBodyFromObjId(int objId) {
+	public static Yukkuri getBodyFromObjId(int objId) {
 		return src.util.BodyRegistry.getBodyInstanceFromObjId(objId);
 	}
 
@@ -45,7 +45,7 @@ public final class BodyRelations {
 	 * @param other 相手側のゆっくり
 	 * @return 関係性
 	 */
-	public static EnumRelationMine checkMyRelation(Body self, Body other) {
+	public static EnumRelationMine checkMyRelation(Yukkuri self, Yukkuri other) {
 		if (self.isFather(other)) {
 			return EnumRelationMine.FATHER;
 		}
@@ -77,7 +77,7 @@ public final class BodyRelations {
 	 * @param other 判定対象のゆっくり
 	 * @return 家族関係がある場合はtrue
 	 */
-	public static boolean isFamily(Body self, Body other) {
+	public static boolean isFamily(Yukkuri self, Yukkuri other) {
 		if (isParent(self, other)) {
 			return true;
 		}
@@ -100,7 +100,7 @@ public final class BodyRelations {
 	 * @param other 子かどうかを調べるゆっくり
 	 * @return {@code self}が{@code other}の親ならtrue
 	 */
-	public static boolean isParent(Body self, Body other) {
+	public static boolean isParent(Yukkuri self, Yukkuri other) {
 		if (other == null) {
 			return false;
 		}
@@ -115,7 +115,7 @@ public final class BodyRelations {
 	 * @param other 子かどうかを調べるゆっくり
 	 * @return {@code self}が{@code other}の父親ならtrue
 	 */
-	public static boolean isFather(Body self, Body other) {
+	public static boolean isFather(Yukkuri self, Yukkuri other) {
 		if (other == null) {
 			return false;
 		}
@@ -129,7 +129,7 @@ public final class BodyRelations {
 	 * @param other 子かどうかを調べるゆっくり
 	 * @return {@code self}が{@code other}の母親ならtrue
 	 */
-	public static boolean isMother(Body self, Body other) {
+	public static boolean isMother(Yukkuri self, Yukkuri other) {
 		if (other == null) {
 			return false;
 		}
@@ -143,7 +143,7 @@ public final class BodyRelations {
 	 * @param other 親かどうかを調べるゆっくり
 	 * @return {@code self}が{@code other}の子ならtrue
 	 */
-	public static boolean isChild(Body self, Body other) {
+	public static boolean isChild(Yukkuri self, Yukkuri other) {
 		if (other == null) {
 			return false;
 		}
@@ -157,18 +157,18 @@ public final class BodyRelations {
 	 * @param other 番かどうかを調べるゆっくり
 	 * @return {@code other}が{@code self}の番ならtrue
 	 */
-	public static boolean isPartner(Body self, Body other) {
+	public static boolean isPartner(Yukkuri self, Yukkuri other) {
 		if (other == null) {
 			return false;
 		}
-		Body partner = getBody(self.getPartner());
+		Yukkuri partner = getBody(self.getPartner());
 		return partner != null && partner == other;
 	}
 
 	/**
 	 * 既知の父親または母親が同じかどうかで姉妹関係を判定する。
 	 * <p>
-	 * 抽出前の{@link Body#isSister(Body)}は、{@code self}側に既知の親がいる状態で
+	 * 抽出前の{@link Yukkuri#isSister(Yukkuri)}は、{@code self}側に既知の親がいる状態で
 	 * {@code other}がnullの場合に{@link NullPointerException}を送出し得る。
 	 * Phase 2の初期抽出では挙動を変えないため、このメソッドも同じnull挙動を維持する。
 	 * </p>
@@ -177,7 +177,7 @@ public final class BodyRelations {
 	 * @param other 姉妹かどうかを調べるゆっくり
 	 * @return 既知の親が同じならtrue
 	 */
-	public static boolean isSister(Body self, Body other) {
+	public static boolean isSister(Yukkuri self, Yukkuri other) {
 		if (getBody(self.getParents()[Parent.MAMA.ordinal()]) != null) {
 			return self.getParents()[Parent.MAMA.ordinal()] == other.getParents()[Parent.MAMA.ordinal()];
 		}
@@ -194,7 +194,7 @@ public final class BodyRelations {
 	 * @param other 年下側かどうかを調べるゆっくり
 	 * @return 姉妹で、かつ{@code self}の年齢が{@code other}以上ならtrue
 	 */
-	public static boolean isElderSister(Body self, Body other) {
+	public static boolean isElderSister(Yukkuri self, Yukkuri other) {
 		return isSister(self, other) && self.getAge() >= other.getAge();
 	}
 
@@ -205,7 +205,7 @@ public final class BodyRelations {
 	 * @param index 何番目の妹か
 	 * @return 妹のインスタンス
 	 */
-	public static Body getSister(BodyAttributes self, int index) {
+	public static Yukkuri getSister(BodyAttributes self, int index) {
 		return getBody(self.getSisterList().get(index));
 	}
 
@@ -216,7 +216,7 @@ public final class BodyRelations {
 	 * @param index 何番目の姉か
 	 * @return 姉のインスタンス
 	 */
-	public static Body getElderSister(BodyAttributes self, int index) {
+	public static Yukkuri getElderSister(BodyAttributes self, int index) {
 		return getBody(self.getElderSisterList().get(index));
 	}
 
@@ -227,7 +227,7 @@ public final class BodyRelations {
 	 * @param index 何番目の子か
 	 * @return 子のインスタンス
 	 */
-	public static Body getChildren(BodyAttributes self, int index) {
+	public static Yukkuri getChildren(BodyAttributes self, int index) {
 		if (self.getChildrenList() == null) {
 			return null;
 		}
@@ -240,7 +240,7 @@ public final class BodyRelations {
 	 * @param self 参照元のゆっくり
 	 * @return 番のインスタンス
 	 */
-	public static Body getPartnerBody(BodyAttributes self) {
+	public static Yukkuri getPartnerBody(BodyAttributes self) {
 		return getBody(self.getPartner());
 	}
 
@@ -250,7 +250,7 @@ public final class BodyRelations {
 	 * @param self 参照元のゆっくり
 	 * @return 母親のインスタンス
 	 */
-	public static Body getMotherBody(BodyAttributes self) {
+	public static Yukkuri getMotherBody(BodyAttributes self) {
 		return getBody(self.getMother());
 	}
 
@@ -260,7 +260,7 @@ public final class BodyRelations {
 	 * @param self 参照元のゆっくり
 	 * @return 父親のインスタンス
 	 */
-	public static Body getFatherBody(BodyAttributes self) {
+	public static Yukkuri getFatherBody(BodyAttributes self) {
 		return getBody(self.getFather());
 	}
 
@@ -270,7 +270,7 @@ public final class BodyRelations {
 	 * @param parentId 親ID
 	 * @return 親インスタンス
 	 */
-	public static Body getParentBody(int parentId) {
+	public static Yukkuri getParentBody(int parentId) {
 		return getBody(parentId);
 	}
 
@@ -280,13 +280,13 @@ public final class BodyRelations {
 	 * @param self 参照元のゆっくり
 	 * @param targetBody 除去対象
 	 */
-	public static void removeChildrenList(BodyAttributes self, Body targetBody) {
+	public static void removeChildrenList(BodyAttributes self, Yukkuri targetBody) {
 		if (self.getChildrenList() == null || targetBody == null) {
 			return;
 		}
 		Iterator<Integer> itr = self.getChildrenList().iterator();
 		while (itr.hasNext()) {
-			Body at = getBody(itr.next());
+			Yukkuri at = getBody(itr.next());
 			if (at == targetBody) {
 				itr.remove();
 			}
@@ -299,13 +299,13 @@ public final class BodyRelations {
 	 * @param self 参照元のゆっくり
 	 * @param targetBody 除去対象
 	 */
-	public static void removeElderSisterList(BodyAttributes self, Body targetBody) {
+	public static void removeElderSisterList(BodyAttributes self, Yukkuri targetBody) {
 		if (self.getElderSisterList() == null || targetBody == null) {
 			return;
 		}
 		Iterator<Integer> itr = self.getElderSisterList().iterator();
 		while (itr.hasNext()) {
-			Body at = getBody(itr.next());
+			Yukkuri at = getBody(itr.next());
 			if (at == targetBody) {
 				itr.remove();
 			}
@@ -318,13 +318,13 @@ public final class BodyRelations {
 	 * @param self 参照元のゆっくり
 	 * @param targetBody 除去対象
 	 */
-	public static void removeSisterList(BodyAttributes self, Body targetBody) {
+	public static void removeSisterList(BodyAttributes self, Yukkuri targetBody) {
 		if (self.getSisterList() == null || targetBody == null) {
 			return;
 		}
 		Iterator<Integer> itr = self.getSisterList().iterator();
 		while (itr.hasNext()) {
-			Body at = getBody(itr.next());
+			Yukkuri at = getBody(itr.next());
 			if (at == targetBody) {
 				itr.remove();
 			}

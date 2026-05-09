@@ -9,8 +9,8 @@ import src.Const;
 import src.SimYukkuri;
 import src.util.GameRandom;
 import src.util.GameWorld;
-import src.base.Body;
-import src.base.Obj;
+import src.base.Yukkuri;
+import src.base.Entity;
 import src.enums.Direction;
 import src.enums.EffectType;
 import src.enums.ImageCode;
@@ -35,7 +35,7 @@ public class KillPredeatorEvent extends RevengeAttackEvent {
 	 * @param tgt 未使用
 	 * @param cnt 10
 	 */
-	public KillPredeatorEvent(Body f, Body t, Obj tgt, int cnt) {
+	public KillPredeatorEvent(Yukkuri f, Yukkuri t, Entity tgt, int cnt) {
 		super(f, t, tgt, cnt);
 	}
 
@@ -49,7 +49,7 @@ public class KillPredeatorEvent extends RevengeAttackEvent {
 	 * また、イベント優先度も必要に応じて設定できる
 	 */
 	@Override
-	public boolean checkEventResponse(Body body) {
+	public boolean checkEventResponse(Yukkuri body) {
 		priority = EventPriority.HIGH;
 		// 死体、睡眠、皮なし、目無しはスキップ
 		if (!body.canEventResponse())
@@ -59,8 +59,8 @@ public class KillPredeatorEvent extends RevengeAttackEvent {
 			return false;
 		boolean isNearPredator = false;
 		// 全ゆっくりに対してチェック
-		for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
-			Body predatorBody = entry.getValue();
+		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
+			Yukkuri predatorBody = entry.getValue();
 			// 自分同士のチェックは無意味なのでスキップ
 			if (predatorBody == body) {
 				continue;
@@ -90,10 +90,10 @@ public class KillPredeatorEvent extends RevengeAttackEvent {
 	 * 
 	 * @return 次のターゲット
 	 */
-	public Body searchNextTarget() {
-		Body nextTarget = null;
-		for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
-			Body body = entry.getValue();
+	public Yukkuri searchNextTarget() {
+		Yukkuri nextTarget = null;
+		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
+			Yukkuri body = entry.getValue();
 			if (body.isPredatorType()) {
 				nextTarget = body;
 				break;
@@ -103,12 +103,12 @@ public class KillPredeatorEvent extends RevengeAttackEvent {
 	}
 
 	@Override
-	public UpdateState update(Body body) {
+	public UpdateState update(Yukkuri body) {
 		// ランダムで復讐を諦める
 		if (GameRandom.nextInt(1000) == 0) {
 			return UpdateState.ABORT;
 		}
-		Body from = src.util.BodyRegistry.getBodyInstance(getFrom());
+		Yukkuri from = src.util.BodyRegistry.getBodyInstance(getFrom());
 		// 相手が消えてしまったら他の捕食種を捜索
 		if (from.isRemoved() || from.isDead() || !from.isPredatorType()) {
 			setFrom(searchNextTarget());
@@ -122,7 +122,7 @@ public class KillPredeatorEvent extends RevengeAttackEvent {
 		body.moveToEvent(this, from.getX() + colX, from.getY());
 		if (body.getType() == 2006 ||
 				(body.isAdult() && body.getPublicRank() != PublicRank.UnunSlave)) {
-			Body target = searchNextTarget();
+			Yukkuri target = searchNextTarget();
 			setFrom(target);
 			body.setWorldEventResMessage(GameMessages.getMessage(body, MessagePool.Action.RevengeForChild),
 					Const.HOLDMESSAGE, true, false);
@@ -131,19 +131,19 @@ public class KillPredeatorEvent extends RevengeAttackEvent {
 	}
 
 	@Override
-	public void start(Body body) {
+	public void start(Yukkuri body) {
 		if (body.isNYD()) {
 			return;
 		}
 		body.setAngry();
-		Body from = src.util.BodyRegistry.getBodyInstance(getFrom());
+		Yukkuri from = src.util.BodyRegistry.getBodyInstance(getFrom());
 		int colX = BodyLogic.calcCollisionX(body, from);
 		body.moveToEvent(this, from.getX() + colX, from.getY());
 	}
 
 	@Override
-	public boolean execute(Body body) {
-		Body from = src.util.BodyRegistry.getBodyInstance(getFrom());
+	public boolean execute(Yukkuri body) {
+		Yukkuri from = src.util.BodyRegistry.getBodyInstance(getFrom());
 		// 相手が消えてしまったら他の捕食種を捜索
 		if (from == null || from.isRemoved() || from.isDead()) {
 			setFrom(searchNextTarget());

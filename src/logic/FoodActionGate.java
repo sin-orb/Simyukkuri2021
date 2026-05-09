@@ -1,6 +1,6 @@
 package src.logic;
 
-import src.base.Body;
+import src.base.Yukkuri;
 import src.event.EventPacket;
 import src.enums.BodyRank;
 import src.enums.CoreAnkoState;
@@ -17,7 +17,7 @@ public final class FoodActionGate {
 	private FoodActionGate() {
 	}
 
-	public static boolean shouldSkipBeforeSearch(Body body, boolean[] forceEat) {
+	public static boolean shouldSkipBeforeSearch(Yukkuri body, boolean[] forceEat) {
 		if (!body.isVeryHungry()) {
 			if (body.isToBody() || body.isToBed() || (body.isToShit() && body.getIntelligence() == src.enums.Intelligence.WISE)
 					|| (body.isAdult() && body.isToSukkiri()) || body.isToSteal()

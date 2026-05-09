@@ -1,6 +1,6 @@
 package src.logic;
 
-import src.base.Body;
+import src.base.Yukkuri;
 import src.draw.Translate;
 import src.util.GameRandom;
 
@@ -18,7 +18,7 @@ public final class BodyApproachRule {
 	 * @param targetBody target body
 	 * @param actorBody actor body
 	 */
-	public static void handleApproach(Body targetBody, Body actorBody, int offsetX) {
+	public static void handleApproach(Yukkuri targetBody, Yukkuri actorBody, int offsetX) {
 		int directionSign = 1;
 		if (actorBody.getX() < targetBody.getX()) {
 			directionSign = -1;

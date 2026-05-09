@@ -4,14 +4,14 @@ import java.awt.event.MouseEvent;
 import java.util.LinkedList;
 import java.util.List;
 
-import src.base.Body;
-import src.base.Obj;
+import src.base.Yukkuri;
+import src.base.Entity;
 import src.entity.world.bodylinked.Okazari;
 import src.command.GadgetMenu.GadgetList;
 import src.util.GameWorld;
 
 /**
- * Body に対する操作コマンド群
+ * Yukkuri に対する操作コマンド群
  * <br>清掃、おかざり、おくるみ、声かけカテゴリの実行
  */
 public class GadgetBodyAction {
@@ -23,11 +23,11 @@ public class GadgetBodyAction {
 	 * @param ev    入力されたマウスの動作
 	 * @param targetObject 対象オブジェクト
 	 */
-	public static void evaluateClean(GadgetList item, MouseEvent ev, Obj targetObject) {
+	public static void evaluateClean(GadgetList item, MouseEvent ev, Entity targetObject) {
 		switch (item) {
 			case INDIVIDUAL:
-				if (targetObject instanceof Body) {
-					Body body = (Body) targetObject;
+				if (targetObject instanceof Yukkuri) {
+					Yukkuri body = (Yukkuri) targetObject;
 					if (body.isDead()) {
 						targetObject.remove();
 					} else {
@@ -49,14 +49,14 @@ public class GadgetBodyAction {
 	 * @param ev    入力されたマウスの動作
 	 * @param targetObject 対象オブジェクト
 	 */
-	public static void evaluateAccessory(GadgetList item, MouseEvent ev, Obj targetObject) {
-		List<Body> bodyList = new LinkedList<Body>(GameWorld.get().getCurrentMap().getBody().values());
+	public static void evaluateAccessory(GadgetList item, MouseEvent ev, Entity targetObject) {
+		List<Yukkuri> bodyList = new LinkedList<Yukkuri>(GameWorld.get().getCurrentMap().getBody().values());
 		if (ev.isShiftDown()) {
 			boolean shouldGiveAccessory = true;
-			if (targetObject instanceof Body) {
-				shouldGiveAccessory = !((Body) targetObject).hasOkazari();
+			if (targetObject instanceof Yukkuri) {
+				shouldGiveAccessory = !((Yukkuri) targetObject).hasOkazari();
 			}
-			for (Body body : bodyList) {
+			for (Yukkuri body : bodyList) {
 				if (!shouldGiveAccessory && body.hasOkazari()) {
 					body.takeOkazari(true);
 				} else if (shouldGiveAccessory && !body.hasOkazari()) {
@@ -64,7 +64,7 @@ public class GadgetBodyAction {
 				}
 			}
 		} else if (ev.isControlDown()) {
-			for (Body body : bodyList) {
+			for (Yukkuri body : bodyList) {
 				if (body.hasOkazari()) {
 					body.takeOkazari(true);
 				} else {
@@ -72,8 +72,8 @@ public class GadgetBodyAction {
 				}
 			}
 		} else {
-			if (targetObject instanceof Body) {
-				Body body = (Body) targetObject;
+			if (targetObject instanceof Yukkuri) {
+				Yukkuri body = (Yukkuri) targetObject;
 				if (body.hasOkazari()) {
 					body.takeOkazari(true);
 				} else {
@@ -90,32 +90,32 @@ public class GadgetBodyAction {
 	 * @param ev    入力されたマウスの動作
 	 * @param targetObject 対象オブジェクト
 	 */
-	public static void evaluatePants(GadgetList item, MouseEvent ev, Obj targetObject) {
-		List<Body> bodyList = new LinkedList<Body>(GameWorld.get().getCurrentMap().getBody().values());
+	public static void evaluatePants(GadgetList item, MouseEvent ev, Entity targetObject) {
+		List<Yukkuri> bodyList = new LinkedList<Yukkuri>(GameWorld.get().getCurrentMap().getBody().values());
 		if (ev.isShiftDown()) {
 			boolean shouldGivePants = true;
-			if (targetObject instanceof Body) {
-				shouldGivePants = !((Body) targetObject).isHasPants();
+			if (targetObject instanceof Yukkuri) {
+				shouldGivePants = !((Yukkuri) targetObject).isHasPants();
 			}
-			for (Body body : bodyList) {
+			for (Yukkuri body : bodyList) {
 				if (!shouldGivePants && body.isHasPants())
 					body.takePants();
 				else if (shouldGivePants && !body.isHasPants())
 					body.givePants();
 			}
 		} else if (ev.isControlDown()) {
-			for (Body body : bodyList) {
+			for (Yukkuri body : bodyList) {
 				if (body.isHasPants())
 					body.takePants();
 				else
 					body.givePants();
 			}
 		} else {
-			if (targetObject instanceof Body) {
-				if (((Body) targetObject).isHasPants())
-					((Body) targetObject).takePants();
+			if (targetObject instanceof Yukkuri) {
+				if (((Yukkuri) targetObject).isHasPants())
+					((Yukkuri) targetObject).takePants();
 				else
-					((Body) targetObject).givePants();
+					((Yukkuri) targetObject).givePants();
 			}
 		}
 	}
@@ -127,7 +127,7 @@ public class GadgetBodyAction {
 	 * @param ev    入力されたマウスの動作
 	 * @param targetObject 対象オブジェクト
 	 */
-	public static void evaluateCommunicate(GadgetList item, MouseEvent ev, Obj targetObject) {
+	public static void evaluateCommunicate(GadgetList item, MouseEvent ev, Entity targetObject) {
 		switch (item) {
 			case YUKKURISITEITTENE:
 				BodyMethodDispatcher.execute(ev, targetObject, "voiceReaction", 0);

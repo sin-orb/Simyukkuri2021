@@ -5,8 +5,8 @@ import java.util.Map;
 
 import src.SimYukkuri;
 import src.util.GameWorld;
-import src.base.Body;
-import src.base.Obj;
+import src.base.Yukkuri;
+import src.base.Entity;
 import src.draw.Translate;
 import src.enums.AgeState;
 import src.event.GetTrashOkazariEvent;
@@ -27,11 +27,11 @@ public class TrashLogic {
 	 * @param body ゆっくり
 	 * @return 処理が行われたか
 	 */
-	public static final boolean checkTrashOkazari(Body body) {
+	public static final boolean checkTrashOkazari(Yukkuri body) {
 		
 		if(body.hasOkazari()) return false;
 
-		Obj trashCandidate = searchTrashObj(body);
+		Entity trashCandidate = searchTrashObj(body);
 
 		if (trashCandidate != null) {
 			EventLogic.addBodyEvent(body, new GetTrashOkazariEvent(body, null, trashCandidate, 1), null, null);
@@ -41,9 +41,9 @@ public class TrashLogic {
 	}
 	
 	// 共通ガラクタ検索
-	private static final Obj searchTrashObj(Body body) {
+	private static final Entity searchTrashObj(Yukkuri body) {
 
-		Obj trashCandidate = null;
+		Entity trashCandidate = null;
 		int nearestDistance = body.getEyesightBase();
 		int wallMode = body.getBodyAgeState().ordinal();
 		// 飛行可能なら壁以外は通過可能

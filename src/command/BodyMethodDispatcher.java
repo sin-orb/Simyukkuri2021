@@ -6,8 +6,8 @@ import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
 
-import src.base.Body;
-import src.base.Obj;
+import src.base.Yukkuri;
+import src.base.Entity;
 import src.util.GameWorld;
 
 /**
@@ -15,32 +15,32 @@ import src.util.GameWorld;
  */
 public class BodyMethodDispatcher {
 
-	private static List<Body> getBodies() {
-		return new LinkedList<Body>(GameWorld.get().getCurrentMap().getBody().values());
+	private static List<Yukkuri> getBodies() {
+		return new LinkedList<Yukkuri>(GameWorld.get().getCurrentMap().getBody().values());
 	}
 
-	private static Body asBody(Obj targetObject) {
-		if (targetObject instanceof Body) {
-			return (Body) targetObject;
+	private static Yukkuri asBody(Entity targetObject) {
+		if (targetObject instanceof Yukkuri) {
+			return (Yukkuri) targetObject;
 		}
 		return null;
 	}
 
-	private static void invokeNoArgMethod(Body body, String methodName)
+	private static void invokeNoArgMethod(Yukkuri body, String methodName)
 			throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException,
 			InvocationTargetException {
 		Method method = body.getClass().getMethod(methodName, (Class<?>[]) null);
 		method.invoke(body, (Object[]) null);
 	}
 
-	private static void invokeIntMethod(Body body, String methodName, int value)
+	private static void invokeIntMethod(Yukkuri body, String methodName, int value)
 			throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException,
 			InvocationTargetException {
 		Method method = body.getClass().getMethod(methodName, int.class);
 		method.invoke(body, value);
 	}
 
-	private static void invokeBooleanMethod(Body body, String methodName, boolean value)
+	private static void invokeBooleanMethod(Yukkuri body, String methodName, boolean value)
 			throws SecurityException, NoSuchMethodException, IllegalArgumentException, IllegalAccessException,
 			InvocationTargetException {
 		Method method = body.getClass().getMethod(methodName, boolean.class);
@@ -55,12 +55,12 @@ public class BodyMethodDispatcher {
 	 * @param targetObject  対象オブジェクト(主にゆっくり)
 	 * @param method 実行したいメソッド名
 	 */
-	public static final void execute(MouseEvent e, Obj targetObject, String method) {
+	public static final void execute(MouseEvent e, Entity targetObject, String method) {
 		try {
-			Body targetBody = asBody(targetObject);
-			List<Body> bodyList = getBodies();
+			Yukkuri targetBody = asBody(targetObject);
+			List<Yukkuri> bodyList = getBodies();
 			if (e.isShiftDown()) {
-				for (Body body : bodyList) {
+				for (Yukkuri body : bodyList) {
 					invokeNoArgMethod(body, method);
 				}
 			} else if (targetBody != null) {
@@ -88,12 +88,12 @@ public class BodyMethodDispatcher {
 	 * @param method 実行したいメソッド名
 	 * @param prm    指定パラメータ
 	 */
-	public static final void execute(MouseEvent e, Obj targetObject, String method, int prm) {
+	public static final void execute(MouseEvent e, Entity targetObject, String method, int prm) {
 		try {
-			Body targetBody = asBody(targetObject);
-			List<Body> bodyList = getBodies();
+			Yukkuri targetBody = asBody(targetObject);
+			List<Yukkuri> bodyList = getBodies();
 			if (e.isShiftDown()) {
-				for (Body body : bodyList) {
+				for (Yukkuri body : bodyList) {
 					invokeIntMethod(body, method, prm);
 				}
 			} else if (targetBody != null) {
@@ -122,21 +122,21 @@ public class BodyMethodDispatcher {
 	 * @param setMethod 設定メソッド名
 	 * @param invMethod 反転実行メソッド名
 	 */
-	public static final void execute(MouseEvent e, Obj targetObject, String getMethod, String setMethod, String invMethod) {
+	public static final void execute(MouseEvent e, Entity targetObject, String getMethod, String setMethod, String invMethod) {
 		try {
-			Body targetBody = asBody(targetObject);
-			List<Body> bodyList = getBodies();
+			Yukkuri targetBody = asBody(targetObject);
+			List<Yukkuri> bodyList = getBodies();
 			if (e.isShiftDown()) {
 				boolean enabled = true;
 				if (targetBody != null) {
 					Method method = targetBody.getClass().getMethod(getMethod, (Class<?>[]) null);
 					enabled = !((Boolean) method.invoke(targetBody, (Object[]) null)).booleanValue();
 				}
-				for (Body body : bodyList) {
+				for (Yukkuri body : bodyList) {
 					invokeBooleanMethod(body, setMethod, enabled);
 				}
 			} else if (e.isControlDown()) {
-				for (Body body : bodyList) {
+				for (Yukkuri body : bodyList) {
 					invokeNoArgMethod(body, invMethod);
 				}
 			} else if (targetBody != null) {

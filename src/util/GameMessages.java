@@ -1,6 +1,6 @@
 package src.util;
 
-import src.base.Body;
+import src.base.Yukkuri;
 import src.system.MessagePool;
 
 public final class GameMessages {
@@ -17,7 +17,7 @@ public final class GameMessages {
 		MessagePool.loadMessage(loader);
 	}
 
-	public static String getMessage(Body body, MessagePool.Action action) {
+	public static String getMessage(Yukkuri body, MessagePool.Action action) {
 		if (override != null) {
 			return override.getMessage(body, action);
 		}

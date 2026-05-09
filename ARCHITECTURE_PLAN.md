@@ -856,20 +856,97 @@ Step 2 までで導入した正規名を基準に、旧名の残骸を消す。
 **リスク**: 高（全ファイルに影響）  
 **効果**: 根本的な設計改善
 
-**安全に進める前提**
-- Step 1 と Step 2 を先に終える
-- Step 3 で `src.base` からの切り離しを進める
-- Step 4 は `copyFrom` / `factory` の土台ができてから入る
-- `TransformationService` は既に実装済みなので、変身の置換処理は前提として使える
-- 1回の変更は「1層 + 1責務」までに止める
-- 既存テストが落ちたら、その層の分割は止める
+**基本原則**
+- 外部からは `body.getHoge()` という API 呼び出しがほとんど。内部継承関係が変わっても呼び出し側は変更不要
+- `BodyAttributes` のフィールド+getter/setter を `SocialEntity` / `LivingEntity` に直接移す（委譲コードを `BodyAttributes` に残さない）
+- 移すたびに `BodyAttributes` が減る。全部終われば `BodyAttributes` は空になり削除できる
+- `Yukkuri`（旧 Body）は `BodyAttributes` 消滅後に `extends SocialEntity` に直す
+- `Yukkuri` 自身のメソッドも、中身を見て `SocialEntity` / `LivingEntity` に振り分けられるものは移す
 
-1. `LivingEntity`, `SocialEntity` クラスを `src.entity.living` に新設
-2. `BodyAttributes` のフィールドを `state` / `profile` / `inventory` / `relation` に分配
-3. `Obj` → `Entity` 改名、`ObjEX` → `WorldEntity` 改名、`Body` → `Yukkuri` 改名
-4. `WorldEntity` 配下を `StaticEntity` / `MobileEntity` / `BodyLinkedEntity` に分割する
-5. `changeBody()` をリフレクション廃止に書き直し
-6. `collisionWidth/Height` を Entity か WorldEntity のどちらに置くべきか再検討し、`getCollisionX/Y()` を廃止
+**フィールド分配の進め方（反省を踏まえたルール）**
+- POJO（YukkuriRelation 等）＋BodyAttributes に委譲コードを残すパターンは NG：委譲コードがいつまでも残り、BodyAttributes が消えない
+- フィールドは直接 `SocialEntity` / `LivingEntity` に定義し、getter/setter もそこに置く
+- `BodyAttributes` にはその層固有のコードだけを残す（移行期の一時的な滞在は許容）
+
+**現在の進め方（`YukkuriRelation` / `YukkuriInventory` POJO がある場合）**
+- `yukkuriRelation` フィールド + 関係 getter/setter → `SocialEntity` に移動
+- `yukkuriInventory` フィールド + 在庫 getter/setter → `LivingEntity` に移動
+- `BodyAttributes` の委譲メソッドを削除（継承で解決されるため呼び出し側変更なし）
+- `YukkuriRelation.java` / `YukkuriInventory.java` は削除
+
+**完了条件**
+1. `LivingEntity`, `SocialEntity` クラスを `src.entity.living` に新設 ✅
+2. `Obj` → `Entity`、`ObjEX` → `WorldEntity`、`Body` → `Yukkuri` リネーム ✅
+3. `BodyAttributes` のフィールドを `SocialEntity` / `LivingEntity` に移しきる（YukkuriRelation/YukkuriInventory 含む）
+4. `BodyAttributes` が空になり削除、`Yukkuri extends SocialEntity` に変更
+5. `WorldEntity` 配下を `StaticEntity` / `MobileEntity` / `BodyLinkedEntity` に分割する
+6. `changeBody()` をリフレクション廃止に書き直し
+7. `collisionWidth/Height` を Entity か WorldEntity のどちらに置くべきか再検討し、`getCollisionX/Y()` を廃止
+
+---
+
+### Step 6: BodyAttributes 削除（大規模）
+
+**リスク**: 中（メソッド移動のみで呼び出し側変更不要。static フィールドのみ43ファイル参照変更が必要）
+**効果**: 4000行の神クラスが消え、継承ツリーが `Entity→LivingEntity→SocialEntity→Yukkuri` に整理される
+
+**方針**
+- メソッドは「主に依存するフィールドを持つ最も基底の層」へ移動（§8 原則）
+- 移動後、BodyAttributes の当該メソッドを削除するだけ。継承で解決されるため呼び出し側変更不要
+- Rule 呼び出しメソッド（isDead/isHasBraid 等）はゆっくり固有処理を含むため Yukkuri に移動
+- @JsonIgnore / @JsonProperty アノテーションは移動先で維持
+
+**Step 6-1: LivingEntity へのメソッド移動（~40メソッド）**
+
+| メソッド群 | 根拠 |
+|----------|------|
+| isFull / isHungry / addHungry / isTooHungry 等 hungry 系 | hungry フィールドが LivingEntity |
+| isAdult / isChild / isBaby | ageState フィールドが LivingEntity |
+| addStress / isStressful / getStressLimit 等 stress 系 | stress フィールドが LivingEntity |
+| getDamageLimit | damage フィールドが LivingEntity |
+| isSick / isSickHeavily / forceSetSick 等 sick 系 | sickPeriod フィールドが LivingEntity |
+| isNYD / isNotNYD | coreAnkoState フィールドが LivingEntity |
+| addTang / getTangType | tang フィールドが LivingEntity |
+| getBodyBakeLevel / isGotBurned / addBodyBakePeriod 等 bake 系 | bodyBakePeriod が LivingEntity |
+| addFootBakePeriod / getFootBakeLevel | footBakePeriod が LivingEntity |
+| addAttachment / removeAttachment / getAttachmentSize / resetAttachmentBoundary | attach が LivingEntity |
+| getFavoriteItem / setFavoriteItem / removeFavoriteItem | favoriteItems が LivingEntity |
+| getCarryItem / removeCarryItem | carryItems が LivingEntity |
+| isOld / isTalking / getEatAmount | age / messageCount / eatAmount が LivingEntity |
+
+**Step 6-2: SocialEntity へのメソッド移動（~20メソッド）**
+
+| メソッド群 | 根拠 |
+|----------|------|
+| setHappiness（内部ロジックあり） | happiness フィールドが SocialEntity |
+| addLovePlayer | lovePlayer フィールドが SocialEntity |
+| addMemories / hasTrauma | memories フィールドが SocialEntity |
+| addAmaamaDiscipline / isStubbornlyDirty | amaamaDiscipline が SocialEntity |
+| addChildrenList / removeChildrenList 等リスト操作系 | childrenList 等が SocialEntity |
+
+**Step 6-3: Yukkuri へのメソッド移動（~130メソッド）**
+
+- abstract メソッド 31個（getType / getNameJ / getImage / tuneParameters 等）
+- copyBodyNameSetFrom / copyBodySpriteSetFrom
+- Rule 呼び出しメソッド ~40個（isDead / isHasBraid / isRelax 等）
+- ゆっくり固有ビジネスロジック（isPealed / isPacked / isFurifuri / isVain 等）
+- スプライト系（getCollisionX/Y / getBodyBaseSpr / getBraidSprite 等）
+- @JsonTypeInfo クラスアノテーション
+- @JsonProperty override（getDamage / isSleeping / setDamage 等）
+- equals / hashCode / compareTo
+
+**Step 6-4: static フィールドを Renderer へ移動**
+
+- `shadowImages[]`, `shadowImgW/H[]`, `shadowPivX/Y[]` → `Renderer` へ移動
+- `UNYOSTRENGTH[]` → `Yukkuri` 定数として残す
+- 43ファイルの `BodyAttributes.shadowImages` 等参照を `Renderer.getShadowImages()` 等に書き換え
+
+**Step 6-5: BodyAttributes 削除・継承変更**
+
+1. `Yukkuri.java`: `extends BodyAttributes` → `extends SocialEntity` に変更
+2. `BodyAttributes.java` を削除
+3. `StubBodyAttributes` / `PlainBodyAttributes` 等のテストスタブを `Yukkuri` か `SocialEntity` を継承するよう修正
+4. コンパイル・テスト（6986 passed / 0 failed）を確認
 
 ---
 
@@ -900,8 +977,26 @@ Step 2 までで導入した正規名を基準に、旧名の残骸を消す。
 | └ typeID・nameJ・nameE を enum 内に直接埋め込み、yukkuri クラスへの import を全削除 | 完了 |
 | └ `getNameJ()` は後方互換でロケール依存の表示名を返す。`getJapaneseName()`/`getEnglishName()` を追加 | 完了 |
 | **Step 3**: src.base 解体 | **完了** |
-| **Step 4**: 継承階層の新設 | **未着手** |
+| **Step 4**: 継承階層の新設 | **進行中** |
+| └ LivingEntity / SocialEntity を src.entity.living に新設・BodyAttributesの親をSocialEntityに変更 | 完了 |
+| └ ObjEX→WorldEntity リネーム・getObjEXType→getWorldEntityType | 完了 |
+| └ Obj→Entity リネーム（src/base/Entity.java）・全ファイル置換 | 完了 |
+| └ BodyAttributes のフィールド分配（SocialEntity/LivingEntity への直接移動） | **完了** |
+| └ &nbsp;&nbsp;YukkuriRelation → SocialEntity 移動・委譲コード削除 | 完了 |
+| └ &nbsp;&nbsp;YukkuriInventory → LivingEntity 移動・委譲コード削除 | 完了 |
+| └ &nbsp;&nbsp;全フィールドを SocialEntity / LivingEntity に移動、5プロファイルクラス削除 | 完了 |
+| └ &nbsp;&nbsp;copyStateTo チェーン実装（Entity→LivingEntity→SocialEntity→BodyAttributes→Yukkuri） | 完了 |
+| └ &nbsp;&nbsp;changeBody() リフレクション廃止 → copyStateTo チェーンに置換 | 完了 |
+| └ &nbsp;&nbsp;BodyAttributes 削除・Yukkuri extends SocialEntity に変更 | **→ Step 6** |
+| └ WorldEntity配下を StaticEntity/MobileEntity/BodyLinkedEntity に分割 | **未着手** |
+| └ Body→Yukkuri リネーム (371ファイル影響) | 完了 |
 | **Step 5**: パッケージ名変更 | **未着手** |
+| **Step 6**: BodyAttributes 削除 | **進行中** |
+| └ Step 6-1: LivingEntity へのメソッド移動（hungry/stress/damage/sick/bake/attachment 系 ~40メソッド） | **未着手** |
+| └ Step 6-2: SocialEntity へのメソッド移動（happiness/lovePlayer/memories/childrenList 系 ~20メソッド） | **未着手** |
+| └ Step 6-3: Yukkuri へのメソッド移動（abstract 31個 + Rule 系 ~40 + ゆっくり固有 ~60） | **未着手** |
+| └ Step 6-4: static フィールド（shadowImages 等）を Renderer へ移動、43ファイル参照書き換え | **未着手** |
+| └ Step 6-5: BodyAttributes.java 削除・Yukkuri extends SocialEntity に変更・テストスタブ修正 | **未着手** |
 
 ---
 

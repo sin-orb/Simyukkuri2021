@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.draw.World;
 import src.enums.AgeState;
 import src.enums.Direction;
@@ -43,7 +43,7 @@ public class StopAmpouleTest {
 
     @Test
     public void testConstructorDefaultsAndBoundary() {
-        Body parent = createParent(AgeState.CHILD);
+        Yukkuri parent = createParent(AgeState.CHILD);
         StopAmpoule ampoule = new StopAmpoule(parent);
 
         assertEquals(parent.getUniqueID(), ampoule.getParent());
@@ -67,7 +67,7 @@ public class StopAmpouleTest {
 
     @Test
     public void testUpdateReducesAgeWhenNotAdult() {
-        Body parent = createParent(AgeState.CHILD);
+        Yukkuri parent = createParent(AgeState.CHILD);
         StopAmpoule ampoule = new StopAmpoule(parent);
 
         // CHILDの範囲内のageを設定（16800 <= age < 50400）
@@ -83,7 +83,7 @@ public class StopAmpouleTest {
 
     @Test
     public void testUpdateReducesAgeWhenBaby() {
-        Body parent = createParent(AgeState.BABY);
+        Yukkuri parent = createParent(AgeState.BABY);
         StopAmpoule ampoule = new StopAmpoule(parent);
 
         // BABYの範囲内のageを設定（age < 16800、かつaddAgeは0未満にならない）
@@ -98,7 +98,7 @@ public class StopAmpouleTest {
 
     @Test
     public void testUpdateDoesNotReduceAgeWhenAdult() {
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         StopAmpoule ampoule = new StopAmpoule(parent);
 
         // ADULTの範囲内のageを設定（age >= 50400）
@@ -113,7 +113,7 @@ public class StopAmpouleTest {
 
     @Test
     public void testGetImageReturnsNullWhenParentNotInMap() {
-        Body parent = createParent(AgeState.CHILD);
+        Yukkuri parent = createParent(AgeState.CHILD);
         StopAmpoule ampoule = new StopAmpoule(parent);
 
         SimYukkuri.world.getCurrentMap().getBody().remove(parent.getUniqueID());
@@ -124,7 +124,7 @@ public class StopAmpouleTest {
 
     @Test
     public void testGetImageReturnsLeftImageWhenDirectionLeft() {
-        Body parent = createParent(AgeState.CHILD);
+        Yukkuri parent = createParent(AgeState.CHILD);
         StopAmpoule ampoule = new StopAmpoule(parent);
 
         parent.setDirection(Direction.LEFT);
@@ -135,7 +135,7 @@ public class StopAmpouleTest {
 
     @Test
     public void testGetImageReturnsRightImageWhenDirectionRight() {
-        Body parent = createParent(AgeState.CHILD);
+        Yukkuri parent = createParent(AgeState.CHILD);
         StopAmpoule ampoule = new StopAmpoule(parent);
 
         parent.setDirection(Direction.RIGHT);
@@ -146,9 +146,9 @@ public class StopAmpouleTest {
 
     @Test
     public void testGetImageReturnsCorrectImageForAge() {
-        Body babyParent = createParent(AgeState.BABY);
-        Body childParent = createParent(AgeState.CHILD);
-        Body adultParent = createParent(AgeState.ADULT);
+        Yukkuri babyParent = createParent(AgeState.BABY);
+        Yukkuri childParent = createParent(AgeState.CHILD);
+        Yukkuri adultParent = createParent(AgeState.ADULT);
 
         StopAmpoule babyAmpoule = new StopAmpoule(babyParent);
         StopAmpoule childAmpoule = new StopAmpoule(childParent);
@@ -165,7 +165,7 @@ public class StopAmpouleTest {
 
     @Test
     public void testResetBoundaryUsesParentAge() {
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         StopAmpoule ampoule = new StopAmpoule(parent);
 
         ampoule.resetBoundary();
@@ -178,7 +178,7 @@ public class StopAmpouleTest {
 
     @Test
     public void testResetBoundaryDoesNothingWhenParentNotInMap() {
-        Body parent = createParent(AgeState.CHILD);
+        Yukkuri parent = createParent(AgeState.CHILD);
         StopAmpoule ampoule = new StopAmpoule(parent);
 
         int origPivotX = ampoule.getPivotX();
@@ -194,7 +194,7 @@ public class StopAmpouleTest {
 
     @Test
     public void testToStringUsesResourceUtil() {
-        Body parent = createParent(AgeState.BABY);
+        Yukkuri parent = createParent(AgeState.BABY);
         StopAmpoule ampoule = new StopAmpoule(parent);
 
         assertEquals(ResourceUtil.getInstance().read("item_stop"), ampoule.toString());
@@ -208,15 +208,15 @@ public class StopAmpouleTest {
 
     @Test
     public void testConstructorWithParentNotInWorld() {
-        Body parent = new Reimu();
+        Yukkuri parent = new Reimu();
         parent.setAgeState(AgeState.CHILD);
         StopAmpoule ampoule = new StopAmpoule(parent);
         assertEquals(1000, ampoule.getValue());
         assertEquals(0, ampoule.getCost());
     }
 
-    private static Body createParent(AgeState ageState) {
-        Body parent = new Reimu();
+    private static Yukkuri createParent(AgeState ageState) {
+        Yukkuri parent = new Reimu();
         parent.setAgeState(ageState);
         SimYukkuri.world.getCurrentMap().getBody().put(parent.getUniqueID(), parent);
         return parent;
@@ -244,7 +244,7 @@ public class StopAmpouleTest {
 
         @Test
         void testScenario_ChildBodyLosesExactlyOneStopTickOfAge() {
-            Body parent = createParent(AgeState.CHILD);
+            Yukkuri parent = createParent(AgeState.CHILD);
             parent.setAge(20000);
             StopAmpoule ampoule = new StopAmpoule(parent);
 
@@ -256,7 +256,7 @@ public class StopAmpouleTest {
 
         @Test
         void testScenario_AdultBodyAgeRemainsStable() {
-            Body parent = createParent(AgeState.ADULT);
+            Yukkuri parent = createParent(AgeState.ADULT);
             StopAmpoule ampoule = new StopAmpoule(parent);
             long before = parent.getAge();
 

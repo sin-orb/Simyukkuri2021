@@ -3,9 +3,9 @@ import src.util.GameMessages;
 import src.util.GameText;
 
 import src.attachment.Ants;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.event.EventPacket;
-import src.base.Obj;
+import src.base.Entity;
 import src.draw.Translate;
 import src.enums.BurialState;
 import src.enums.Happiness;
@@ -15,9 +15,9 @@ import src.system.ResourceUtil;
 
 /*
 	出産時の励ましイベント
-	protected Body from;			// イベントを発した個体
-	protected Body to;				// 未使用
-	protected Obj target;			// 未使用
+	protected Yukkuri from;			// イベントを発した個体
+	protected Yukkuri to;				// 未使用
+	protected Entity target;			// 未使用
 	protected int count;			// 2
 */
 public class BreedEvent extends EventPacket {
@@ -27,7 +27,7 @@ public class BreedEvent extends EventPacket {
 	/**
 	 * コンストラクタ.
 	 */
-	public BreedEvent(Body f, Body t, Obj tgt, int cnt) {
+	public BreedEvent(Yukkuri f, Yukkuri t, Entity tgt, int cnt) {
 		super(f, t, tgt, cnt);
 	}
 
@@ -41,13 +41,13 @@ public class BreedEvent extends EventPacket {
 	 * また、イベント優先度も必要に応じて設定できる
 	 */
 	@Override
-	public boolean checkEventResponse(Body body) {
+	public boolean checkEventResponse(Yukkuri body) {
 		// このイベントは固体どうしのイベントだが親子関係の探索が面倒なので
 		// ワールドイベントとして登録、受け取り側が自分のつがいか親かを確認する
 		boolean accepted = false;
 
 		priority = EventPriority.MIDDLE;
-		Body sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
+		Yukkuri sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
 		if (sourceBody == null)
 			return false;
 
@@ -99,8 +99,8 @@ public class BreedEvent extends EventPacket {
 	 * イベント開始動作
 	 */
 	@Override
-	public void start(Body body) {
-		Body sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
+	public void start(Yukkuri body) {
+		Yukkuri sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
 		if (sourceBody != null)
 			body.moveToEvent(this, sourceBody.getX(), sourceBody.getY());
 	}
@@ -110,8 +110,8 @@ public class BreedEvent extends EventPacket {
 	 * UpdateState.ABORTを返すとイベント終了
 	 */
 	@Override
-	public UpdateState update(Body body) {
-		Body sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
+	public UpdateState update(Yukkuri body) {
+		Yukkuri sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
 		if (sourceBody == null)
 			return UpdateState.ABORT;
 		if (sourceBody.isParent(body) && body.isBirthMessageForced()) {
@@ -148,13 +148,13 @@ public class BreedEvent extends EventPacket {
 	 * trueを返すとイベント終了
 	 */
 	@Override
-	public boolean execute(Body body) {
+	public boolean execute(Yukkuri body) {
 		if (body.nearToBirth())
 			return true;
 		if (body.isNYD()) {
 			return false;
 		}
-		Body sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
+		Yukkuri sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
 		if (sourceBody == null)
 			return true;
 		// 相手が出産前なら応援

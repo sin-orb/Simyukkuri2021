@@ -4,7 +4,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.command.ShowStatusFrame;
 import src.game.Shit;
 import src.game.Vomit;
@@ -29,8 +29,8 @@ public final class ItemGetMenuAction implements ActionListener {
 		case PICKUP:
 			synchronized (SimYukkuri.lock) {
 				GameWorld.get().getPlayer().getItemList().addElement(ItemMenu.getGetTarget());
-				if (ItemMenu.getGetTarget() instanceof Body) {
-					Body b = (Body) ItemMenu.getGetTarget();
+				if (ItemMenu.getGetTarget() instanceof Yukkuri) {
+					Yukkuri b = (Yukkuri) ItemMenu.getGetTarget();
 					if (b.getBindStalk() != null) {
 						b.detachFromStalk();
 					}
@@ -49,7 +49,7 @@ public final class ItemGetMenuAction implements ActionListener {
 			if (ItemMenu.getGetTarget() == null) {
 				return;
 			}
-			Body b = (Body) ItemMenu.getGetTarget();
+			Yukkuri b = (Yukkuri) ItemMenu.getGetTarget();
 			ShowStatusFrame instance = ShowStatusFrame.getInstance();
 			instance.giveBodyInfo(b);
 			instance.setVisible(true);

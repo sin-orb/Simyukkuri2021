@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.ArrayList;
 
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.entity.world.bodylinked.Okazari.OkazariType;
 import src.enums.AgeState;
 import src.enums.HairState;
@@ -61,7 +61,7 @@ public class BodyUtilTest {
         return s;
     }
 
-    private void mockSprites(Body body) {
+    private void mockSprites(Yukkuri body) {
         body.setBodySpr(new Sprite[] { createMockSprite(), createMockSprite(), createMockSprite() });
         body.setExpandSpr(new Sprite[] { createMockSprite(), createMockSprite(), createMockSprite() });
         body.setBraidSpr(new Sprite[] { createMockSprite(), createMockSprite(), createMockSprite() });
@@ -69,7 +69,7 @@ public class BodyUtilTest {
 
     @Test
     public void testDrawBodyBasic() {
-        Body body = WorldTestHelper.createBody();
+        Yukkuri body = WorldTestHelper.createBody();
         mockSprites(body);
         BodyUtil.drawBody(g2, null, body);
     }
@@ -77,7 +77,7 @@ public class BodyUtilTest {
     @Test
     @SuppressWarnings("unchecked")
     public void testDrawBodyFullCoverage() {
-        Body body = WorldTestHelper.createBody();
+        Yukkuri body = WorldTestHelper.createBody();
         mockSprites(body);
 
         // --- 1. Basic State Variations (Direction, Age, Force) ---
@@ -86,7 +86,7 @@ public class BodyUtilTest {
             for (AgeState age : AgeState.values()) {
                 body.setAgeState(age);
                 for (int force : new int[] { -10, 0, 10 }) {
-                    body.setExtForce(force);
+                    body.setExternalPressure(force);
                     BodyUtil.drawBody(g2, null, body);
                 }
             }
@@ -155,7 +155,7 @@ public class BodyUtilTest {
         body.getBabyTypes().clear();
 
         // --- 4. Link Parent Scenarios ---
-        Body parent = WorldTestHelper.createBody();
+        Yukkuri parent = WorldTestHelper.createBody();
         mockSprites(parent);
         parent.setZ(-10);
         body.setZ(0);
@@ -163,7 +163,7 @@ public class BodyUtilTest {
         try {
             java.lang.reflect.Field mapBodyField = MapPlaceData.class.getDeclaredField("body");
             mapBodyField.setAccessible(true);
-            ((Map<Integer, Body>) mapBodyField.get(SimYukkuri.world.getCurrentMap())).put(parent.getUniqueID(), parent);
+            ((Map<Integer, Yukkuri>) mapBodyField.get(SimYukkuri.world.getCurrentMap())).put(parent.getUniqueID(), parent);
         } catch (Exception e) {
         }
         body.setParentLinkId(parent.getUniqueID());

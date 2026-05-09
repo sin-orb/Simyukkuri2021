@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.event.EventPacket.EventPriority;
 import src.event.EventPacket.UpdateState;
 import src.enums.FavItemType;
@@ -55,28 +55,28 @@ public class SuiRideEventTest extends EventTestBase {
 
     @Test
     public void testParameterizedConstructor_priorityIsMiddle() {
-        Body from = createBody(1, 100, 100);
+        Yukkuri from = createBody(1, 100, 100);
         SuiRideEvent event = new SuiRideEvent(from, null, null, 100);
         assertEquals(EventPriority.MIDDLE, event.getPriority());
     }
 
     @Test
     public void testParameterizedConstructor_fromIsSet() {
-        Body from = createBody(1, 100, 100);
+        Yukkuri from = createBody(1, 100, 100);
         SuiRideEvent event = new SuiRideEvent(from, null, null, 100);
         assertEquals(from.getUniqueID(), event.getFrom());
     }
 
     @Test
     public void testParameterizedConstructor_countIsSet() {
-        Body from = createBody(1, 100, 100);
+        Yukkuri from = createBody(1, 100, 100);
         SuiRideEvent event = new SuiRideEvent(from, null, null, 42);
         assertEquals(42, event.getCount());
     }
 
     @Test
     public void testParameterizedConstructor_toIsNegativeOneWhenNull() {
-        Body from = createBody(1, 100, 100);
+        Yukkuri from = createBody(1, 100, 100);
         SuiRideEvent event = new SuiRideEvent(from, null, null, 100);
         assertEquals(-1, event.getTo());
     }
@@ -103,22 +103,22 @@ public class SuiRideEventTest extends EventTestBase {
 
     @Test
     public void testCheckEventResponse_returnsFalseWhenTargetIsNull_defaultCtor() {
-        Body b = createBody(1, 100, 100);
+        Yukkuri b = createBody(1, 100, 100);
         SuiRideEvent event = new SuiRideEvent();
         assertFalse(event.checkEventResponse(b));
     }
 
     @Test
     public void testCheckEventResponse_returnsFalseWhenTargetIsNull_paramCtor() {
-        Body from = createBody(1, 100, 100);
-        Body b = createBody(2, 200, 200);
+        Yukkuri from = createBody(1, 100, 100);
+        Yukkuri b = createBody(2, 200, 200);
         SuiRideEvent event = new SuiRideEvent(from, null, null, 100);
         assertFalse(event.checkEventResponse(b));
     }
 
     @Test
     public void testCheckEventResponse_returnsFalseWhenFromIsNull_withValidTarget() {
-        Body b = createBody(1, 100, 100);
+        Yukkuri b = createBody(1, 100, 100);
         Sui sui = createSui(999);
         SuiRideEvent event = new SuiRideEvent();
         event.setTarget(sui.getObjId());
@@ -127,7 +127,7 @@ public class SuiRideEventTest extends EventTestBase {
 
     @Test
     public void testCheckEventResponse_returnsTrueWhenFromEqualsB_withValidTarget() {
-        Body from = createBody(1, 100, 100);
+        Yukkuri from = createBody(1, 100, 100);
         Sui sui = createSui(999);
         SuiRideEvent event = new SuiRideEvent(from, null, sui, 100);
         assertTrue(event.checkEventResponse(from));
@@ -135,8 +135,8 @@ public class SuiRideEventTest extends EventTestBase {
 
     @Test
     public void testCheckEventResponse_returnsFalseWhenBCannotRespond_noCurrentEvent() {
-        Body from = createBody(1, 100, 100);
-        Body b = createBody(2, 200, 200);
+        Yukkuri from = createBody(1, 100, 100);
+        Yukkuri b = createBody(2, 200, 200);
         Sui sui = createSui(999);
         SuiRideEvent event = new SuiRideEvent(from, null, sui, 100);
         assertFalse(event.checkEventResponse(b));
@@ -144,8 +144,8 @@ public class SuiRideEventTest extends EventTestBase {
 
     @Test
     public void testCheckEventResponse_returnsFalseWhenBCannotEventResponse_dead() {
-        Body from = createBody(1, 100, 100);
-        Body b = createBody(2, 200, 200);
+        Yukkuri from = createBody(1, 100, 100);
+        Yukkuri b = createBody(2, 200, 200);
         Sui sui = createSui(999);
         SuiRideEvent event = new SuiRideEvent(from, null, sui, 100);
         from.setCurrentEvent(event);
@@ -155,8 +155,8 @@ public class SuiRideEventTest extends EventTestBase {
 
     @Test
     public void testCheckEventResponse_returnsFalseWhenBAlreadyHasEvent() {
-        Body from = createBody(1, 100, 100);
-        Body b = createBody(2, 200, 200);
+        Yukkuri from = createBody(1, 100, 100);
+        Yukkuri b = createBody(2, 200, 200);
         Sui sui = createSui(999);
         SuiRideEvent event = new SuiRideEvent(from, null, sui, 100);
         from.setCurrentEvent(event);
@@ -166,8 +166,8 @@ public class SuiRideEventTest extends EventTestBase {
 
     @Test
     public void testCheckEventResponse_returnsFalseWhenBIsLockedMove() {
-        Body from = createBody(1, 100, 100);
-        Body b = createBody(2, 200, 200);
+        Yukkuri from = createBody(1, 100, 100);
+        Yukkuri b = createBody(2, 200, 200);
         Sui sui = createSui(999);
         SuiRideEvent event = new SuiRideEvent(from, null, sui, 100);
         from.setCurrentEvent(event);
@@ -177,8 +177,8 @@ public class SuiRideEventTest extends EventTestBase {
 
     @Test
     public void testCheckEventResponse_returnsFalseWhenNoFamilyRelationship() {
-        Body from = createBody(1, 100, 100);
-        Body b = createBody(2, 200, 200);
+        Yukkuri from = createBody(1, 100, 100);
+        Yukkuri b = createBody(2, 200, 200);
         Sui sui = createSui(999);
         SuiRideEvent event = new SuiRideEvent(from, null, sui, 100);
         from.setCurrentEvent(event);
@@ -187,8 +187,8 @@ public class SuiRideEventTest extends EventTestBase {
 
     @Test
     public void testCheckEventResponse_returnsTrueWhenBIsPartnerOfFrom() {
-        Body from = createBody(1, 100, 100);
-        Body b = createBody(2, 200, 200);
+        Yukkuri from = createBody(1, 100, 100);
+        Yukkuri b = createBody(2, 200, 200);
         Sui sui = createSui(999);
         SuiRideEvent event = new SuiRideEvent(from, null, sui, 100);
         from.setCurrentEvent(event);
@@ -199,8 +199,8 @@ public class SuiRideEventTest extends EventTestBase {
 
     @Test
     public void testCheckEventResponse_returnsTrueWhenFromIsParentOfB() {
-        Body from = createBody(1, 100, 100);
-        Body b = createBody(2, 200, 200);
+        Yukkuri from = createBody(1, 100, 100);
+        Yukkuri b = createBody(2, 200, 200);
         Sui sui = createSui(999);
         SuiRideEvent event = new SuiRideEvent(from, null, sui, 100);
         from.setCurrentEvent(event);
@@ -211,8 +211,8 @@ public class SuiRideEventTest extends EventTestBase {
 
     @Test
     public void testCheckEventResponse_returnsFalseWhenBIsExciting_withRelationship() {
-        Body from = createBody(1, 100, 100);
-        Body b = createBody(2, 200, 200);
+        Yukkuri from = createBody(1, 100, 100);
+        Yukkuri b = createBody(2, 200, 200);
         Sui sui = createSui(999);
         SuiRideEvent event = new SuiRideEvent(from, null, sui, 100);
         from.setCurrentEvent(event);
@@ -224,8 +224,8 @@ public class SuiRideEventTest extends EventTestBase {
 
     @Test
     public void testCheckEventResponse_returnsFalseWhenBIsScare_withRelationship() {
-        Body from = createBody(1, 100, 100);
-        Body b = createBody(2, 200, 200);
+        Yukkuri from = createBody(1, 100, 100);
+        Yukkuri b = createBody(2, 200, 200);
         Sui sui = createSui(999);
         SuiRideEvent event = new SuiRideEvent(from, null, sui, 100);
         from.setCurrentEvent(event);
@@ -237,8 +237,8 @@ public class SuiRideEventTest extends EventTestBase {
 
     @Test
     public void testCheckEventResponse_returnsFalseWhenBIsUnunSlave_withRelationship() {
-        Body from = createBody(1, 100, 100);
-        Body b = createBody(2, 200, 200);
+        Yukkuri from = createBody(1, 100, 100);
+        Yukkuri b = createBody(2, 200, 200);
         Sui sui = createSui(999);
         SuiRideEvent event = new SuiRideEvent(from, null, sui, 100);
         from.setCurrentEvent(event);
@@ -254,14 +254,14 @@ public class SuiRideEventTest extends EventTestBase {
 
     @Test
     public void testStart_doesNotThrowWhenTargetIsNull() {
-        Body b = createBody(1, 100, 100);
+        Yukkuri b = createBody(1, 100, 100);
         SuiRideEvent event = new SuiRideEvent();
         assertDoesNotThrow(() -> event.start(b));
     }
 
     @Test
     public void testStart_doesNotThrowWithValidTarget() {
-        Body b = createBody(1, 100, 100);
+        Yukkuri b = createBody(1, 100, 100);
         Sui sui = createSui(999);
         sui.setX(200);
         sui.setY(200);
@@ -275,14 +275,14 @@ public class SuiRideEventTest extends EventTestBase {
 
     @Test
     public void testExecute_returnsFalseWhenTargetIsNull() {
-        Body b = createBody(1, 100, 100);
+        Yukkuri b = createBody(1, 100, 100);
         SuiRideEvent event = new SuiRideEvent();
         assertFalse(event.execute(b));
     }
 
     @Test
     public void testExecute_returnsFalseWhenSuiNotInWaitingState() {
-        Body b = createBody(1, 100, 100);
+        Yukkuri b = createBody(1, 100, 100);
         Sui sui = createSui(999);
         sui.setCurrent_condition(2);
         SuiRideEvent event = new SuiRideEvent(b, null, sui, 100);
@@ -291,7 +291,7 @@ public class SuiRideEventTest extends EventTestBase {
 
     @Test
     public void testExecute_alwaysReturnsFalse_suiInWaitingState() {
-        Body b = createBody(1, 100, 100);
+        Yukkuri b = createBody(1, 100, 100);
         Sui sui = createSui(999);
         // Default getCurrent_condition() == 1 (rest/waiting)
         assertEquals(1, sui.getCurrent_condition());
@@ -301,7 +301,7 @@ public class SuiRideEventTest extends EventTestBase {
 
     @Test
     public void testExecute_suiWaiting_bodyRidesOnSui() {
-        Body b = createBody(1, 100, 100);
+        Yukkuri b = createBody(1, 100, 100);
         Sui sui = createSui(999);
         assertEquals(1, sui.getCurrent_condition());
         SuiRideEvent event = new SuiRideEvent(b, null, sui, 100);
@@ -315,14 +315,14 @@ public class SuiRideEventTest extends EventTestBase {
 
     @Test
     public void testEnd_doesNotThrowWhenLinkParentIsNegativeOne() {
-        Body b = createBody(1, 100, 100);
+        Yukkuri b = createBody(1, 100, 100);
         SuiRideEvent event = new SuiRideEvent(b, null, null, 100);
         assertDoesNotThrow(() -> event.end(b));
     }
 
     @Test
     public void testEnd_callsRideOffWhenBodyIsRidingSui() {
-        Body b = createBody(1, 100, 100);
+        Yukkuri b = createBody(1, 100, 100);
         Sui sui = createSui(999);
         sui.rideOn(b);
         assertTrue(sui.isriding(b));
@@ -334,7 +334,7 @@ public class SuiRideEventTest extends EventTestBase {
 
     @Test
     public void testEnd_doesNotThrowForNonRidingBody() {
-        Body b = createBody(1, 100, 100);
+        Yukkuri b = createBody(1, 100, 100);
         Sui sui = createSui(999);
         SuiRideEvent event = new SuiRideEvent(b, null, sui, 100);
         // b is not riding, parentLinkId = -1 => takeMappedObj returns null
@@ -347,7 +347,7 @@ public class SuiRideEventTest extends EventTestBase {
 
     @Test
     public void testUpdate_returnsAbortWhenTargetIsNull() {
-        Body b = createBody(1, 100, 100);
+        Yukkuri b = createBody(1, 100, 100);
         SuiRideEvent event = new SuiRideEvent();
         assertEquals(UpdateState.ABORT, event.update(b));
     }
@@ -358,7 +358,7 @@ public class SuiRideEventTest extends EventTestBase {
 
     @Test
     public void testUpdate_noFavSui_hasLinkParent_returnsNull() {
-        Body b = createBody(1, 100, 100);
+        Yukkuri b = createBody(1, 100, 100);
         Sui targetSui = createSui(999);
         Sui parentSui = createSui(888);
         b.setParentLinkId(parentSui.getObjId());
@@ -368,7 +368,7 @@ public class SuiRideEventTest extends EventTestBase {
 
     @Test
     public void testUpdate_noFavSui_noLinkParent_fromIsNull_returnsAbort() {
-        Body b = createBody(1, 100, 100);
+        Yukkuri b = createBody(1, 100, 100);
         Sui sui = createSui(999);
         SuiRideEvent event = new SuiRideEvent();
         event.setTarget(sui.getObjId());
@@ -380,7 +380,7 @@ public class SuiRideEventTest extends EventTestBase {
 
     @Test
     public void testUpdate_noFavSui_fromEqualsB_suiCannotRide_doesNotThrow() {
-        Body b = createBody(1, 100, 100);
+        Yukkuri b = createBody(1, 100, 100);
         Sui sui = createSui(999);
         SuiRideEvent event = new SuiRideEvent(b, null, sui, 100);
         assertDoesNotThrow(() -> event.update(b));
@@ -388,8 +388,8 @@ public class SuiRideEventTest extends EventTestBase {
 
     @Test
     public void testUpdate_noFavSui_fromNotEqualsB_fromCurrentEventIsNull_returnsAbort() {
-        Body from = createBody(1, 100, 100);
-        Body b = createBody(2, 200, 200);
+        Yukkuri from = createBody(1, 100, 100);
+        Yukkuri b = createBody(2, 200, 200);
         Sui sui = createSui(999);
         SuiRideEvent event = new SuiRideEvent(from, null, sui, 100);
         // from.getCurrentEvent() == null => ABORT
@@ -401,8 +401,8 @@ public class SuiRideEventTest extends EventTestBase {
 
     @Test
     public void testUpdate_noFavSui_bIsDontMove_returnsAbort() {
-        Body from = createBody(1, 100, 100);
-        Body b = createBody(2, 200, 200);
+        Yukkuri from = createBody(1, 100, 100);
+        Yukkuri b = createBody(2, 200, 200);
         Sui sui = createSui(999);
         SuiRideEvent event = new SuiRideEvent(from, null, sui, 100);
         from.setCurrentEvent(event);
@@ -416,8 +416,8 @@ public class SuiRideEventTest extends EventTestBase {
 
     @Test
     public void testUpdate_noFavSui_bIsExciting_returnsAbort() {
-        Body from = createBody(1, 100, 100);
-        Body b = createBody(2, 200, 200);
+        Yukkuri from = createBody(1, 100, 100);
+        Yukkuri b = createBody(2, 200, 200);
         Sui sui = createSui(999);
         SuiRideEvent event = new SuiRideEvent(from, null, sui, 100);
         from.setCurrentEvent(event);
@@ -430,8 +430,8 @@ public class SuiRideEventTest extends EventTestBase {
 
     @Test
     public void testUpdate_noFavSui_bIsScare_returnsAbort() {
-        Body from = createBody(1, 100, 100);
-        Body b = createBody(2, 200, 200);
+        Yukkuri from = createBody(1, 100, 100);
+        Yukkuri b = createBody(2, 200, 200);
         Sui sui = createSui(999);
         SuiRideEvent event = new SuiRideEvent(from, null, sui, 100);
         from.setCurrentEvent(event);
@@ -448,7 +448,7 @@ public class SuiRideEventTest extends EventTestBase {
 
     @Test
     public void testUpdate_hasFavSui_notRiding_fromEqualsB_returnsNull() {
-        Body b = createBody(1, 100, 100);
+        Yukkuri b = createBody(1, 100, 100);
         Sui sui = createSui(999);
         // Give b favitem SUI without actually riding (no rideOn)
         b.setFavoriteItem(FavItemType.SUI, sui);
@@ -462,7 +462,7 @@ public class SuiRideEventTest extends EventTestBase {
 
     @Test
     public void testUpdate_hasFavSui_riding_fromIsNull_returnsAbort() {
-        Body b = createBody(1, 100, 100);
+        Yukkuri b = createBody(1, 100, 100);
         Sui sui = createSui(999);
         sui.rideOn(b);
         b.setFavoriteItem(FavItemType.SUI, sui);
@@ -474,7 +474,7 @@ public class SuiRideEventTest extends EventTestBase {
 
     @Test
     public void testUpdate_hasFavSui_riding_fromEqualsB_bindbodyUnder3_tickUnder50_returnsNull() {
-        Body b = createBody(1, 100, 100);
+        Yukkuri b = createBody(1, 100, 100);
         Sui sui = createSui(999);
         sui.rideOn(b);
         b.setFavoriteItem(FavItemType.SUI, sui);
@@ -486,7 +486,7 @@ public class SuiRideEventTest extends EventTestBase {
 
     @Test
     public void testUpdate_hasFavSui_riding_fromEqualsB_bindbodyAtLimit_suiWaiting() {
-        Body b = createBody(1, 100, 100);
+        Yukkuri b = createBody(1, 100, 100);
         Sui sui = createSui(999);
         sui.rideOn(b);
         b.setFavoriteItem(FavItemType.SUI, sui);
@@ -499,7 +499,7 @@ public class SuiRideEventTest extends EventTestBase {
 
     @Test
     public void testUpdate_hasFavSui_riding_fromEqualsB_bindbodyAtLimit_suiNotWaiting() {
-        Body b = createBody(1, 100, 100);
+        Yukkuri b = createBody(1, 100, 100);
         Sui sui = createSui(999);
         sui.rideOn(b);
         b.setFavoriteItem(FavItemType.SUI, sui);
@@ -512,8 +512,8 @@ public class SuiRideEventTest extends EventTestBase {
 
     @Test
     public void testUpdate_hasFavSui_riding_fromNotEqualsB_fromCurrentEventIsThis_suiWaiting_returnsAbort() {
-        Body from = createBody(1, 100, 100);
-        Body b = createBody(2, 200, 200);
+        Yukkuri from = createBody(1, 100, 100);
+        Yukkuri b = createBody(2, 200, 200);
         Sui sui = createSui(999);
         sui.rideOn(from); // from is owner/rider
         // Manually make b ride in slot 1
@@ -531,8 +531,8 @@ public class SuiRideEventTest extends EventTestBase {
 
     @Test
     public void testUpdate_hasFavSui_riding_fromNotEqualsB_suiNotCondition1_returnsNull() {
-        Body from = createBody(1, 100, 100);
-        Body b = createBody(2, 200, 200);
+        Yukkuri from = createBody(1, 100, 100);
+        Yukkuri b = createBody(2, 200, 200);
         Sui sui = createSui(999);
         sui.rideOn(from);
         sui.getBindBody()[1] = b;
@@ -551,8 +551,8 @@ public class SuiRideEventTest extends EventTestBase {
 
         @Test
         void testScenario_UnunSlaveFamilyMemberBecomesVerySadAndDoesNotJoinRideEvent() {
-            Body owner = createBody(1, 100, 100);
-            Body partner = createBody(2, 120, 100);
+            Yukkuri owner = createBody(1, 100, 100);
+            Yukkuri partner = createBody(2, 120, 100);
             Sui sui = createSui(999);
             SuiRideEvent event = new SuiRideEvent(owner, null, sui, 100);
             owner.setCurrentEvent(event);
@@ -570,7 +570,7 @@ public class SuiRideEventTest extends EventTestBase {
 
         @Test
         void testScenario_ExecuteMakesFirstRiderOwnerAndRegistersSuiFavorite() {
-            Body rider = createBody(1, 100, 100);
+            Yukkuri rider = createBody(1, 100, 100);
             Sui sui = createSui(999);
             SuiRideEvent event = new SuiRideEvent(rider, null, sui, 100);
 

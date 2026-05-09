@@ -2,7 +2,7 @@ package src.command;
 
 import java.awt.event.MouseEvent;
 
-import src.base.Obj;
+import src.base.Entity;
 import src.command.GadgetMenu.GadgetList;
 import src.field.impl.Beltconveyor;
 import src.item.BeltconveyorObj;
@@ -24,7 +24,7 @@ public class GadgetItemSetupAction {
 	 * @param ev          入力されたマウスの動作
 	 * @param targetObject 対象オブジェクト
 	 */
-	public static void evaluateFloorItems(GadgetList actionItem, MouseEvent ev, Obj targetObject) {
+	public static void evaluateFloorItems(GadgetList actionItem, MouseEvent ev, Entity targetObject) {
 		switch (actionItem) {
 			case DIFFUSER:
 				if (targetObject instanceof Diffuser) {
@@ -53,7 +53,7 @@ public class GadgetItemSetupAction {
 	 * @param ev          入力されたマウスの動作
 	 * @param targetObject 対象オブジェクト
 	 */
-	public static void evaluateToys(GadgetList actionItem, MouseEvent ev, Obj targetObject) {
+	public static void evaluateToys(GadgetList actionItem, MouseEvent ev, Entity targetObject) {
 		switch (actionItem) {
 			case YUNBA_SETUP:
 				if (targetObject instanceof Yunba) {
@@ -72,7 +72,7 @@ public class GadgetItemSetupAction {
 	 * @param ev          入力されたマウスの動作
 	 * @param targetObject 対象オブジェクト
 	 */
-	public static void evaluateConveyor(GadgetList actionItem, MouseEvent ev, Obj targetObject) {
+	public static void evaluateConveyor(GadgetList actionItem, MouseEvent ev, Entity targetObject) {
 		switch (actionItem) {
 			case BELTCONVEYOR_SETUP:
 				if (targetObject instanceof BeltconveyorObj) {

@@ -4,7 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import src.base.Body;
+import src.base.Yukkuri;
 import src.enums.PublicRank;
 import src.util.GameRandom;
 import src.util.GameWorld;
@@ -21,23 +21,23 @@ public class BodySelectionRule {
 	 * @param age ゆん生のステージ
 	 * @return 婚姻候補のリスト
 	 */
-	public static final List<Body> createActiveFianceeList(Body body, int age) {
+	public static final List<Yukkuri> createActiveFianceeList(Yukkuri body, int age) {
 		// ほかにいないならスキップ
 		if (GameWorld.get().getCurrentMap().getBody().size() <= 1) {
 			return null;
 		}
 
-		List<Body> activeFianceeList = new LinkedList<Body>();
+		List<Yukkuri> activeFianceeList = new LinkedList<Yukkuri>();
 
 		// 番がすでにいれば要素はそれのみに
-		Body partnerBody = src.util.BodyRegistry.getBodyInstance(body.getPartner());
+		Yukkuri partnerBody = src.util.BodyRegistry.getBodyInstance(body.getPartner());
 		if (partnerBody != null) {
 			activeFianceeList.add(partnerBody);
 			return activeFianceeList;
 		}
 
-		for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
-			Body candidate = entry.getValue();
+		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
+			Yukkuri candidate = entry.getValue();
 			// 自身はスキップ
 			if (candidate == body) {
 				continue;
@@ -92,15 +92,15 @@ public class BodySelectionRule {
 	 * @param includeChildren 子ゆっくりを入れるかどうか（これがfalseなら赤ゆのみのリストになる）
 	 * @return アクティブな赤ゆ/子ゆのリスト
 	 */
-	public static final List<Body> createActiveChildList(Body body, boolean includeChildren) {
+	public static final List<Yukkuri> createActiveChildList(Yukkuri body, boolean includeChildren) {
 		// 子供がいないならスキップ
 		int childCount = body.getChildrenListSize();
 		if (childCount == 0) {
 			return null;
 		}
-		List<Body> activeChildrenList = new LinkedList<Body>();
+		List<Yukkuri> activeChildrenList = new LinkedList<Yukkuri>();
 		for (int i = 0; i < childCount; i++) {
-			Body childBody = body.getChildren(i);
+			Yukkuri childBody = body.getChildren(i);
 			if (childBody == null) {
 				continue;
 			}

@@ -9,7 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import src.ConstState;
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.enums.FavItemType;
 import src.enums.PublicRank;
 import src.game.Shit;
@@ -20,7 +20,7 @@ import src.util.WorldTestHelper;
 
 class FoodTakeoutPolicyTest {
 
-    private Body body;
+    private Yukkuri body;
 
     @BeforeEach
     void setUp() {
@@ -90,7 +90,7 @@ class FoodTakeoutPolicyTest {
     void checkTakeout_FoodWithFamilyAndNoOverlap_ReturnsTrue() {
         body.setHungry(body.getHungryLimit() / 2);
 
-        Body partner = WorldTestHelper.createBody();
+        Yukkuri partner = WorldTestHelper.createBody();
         partner.setX(200);
         partner.setY(200);
         SimYukkuri.world.getCurrentMap().getBody().put(partner.getUniqueID(), partner);

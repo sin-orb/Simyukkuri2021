@@ -11,8 +11,8 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
-import src.base.Body;
-import src.base.Obj;
+import src.base.Yukkuri;
+import src.base.Entity;
 import src.draw.World;
 import src.enums.AgeState;
 import src.enums.Direction;
@@ -42,7 +42,7 @@ public class AccelAmpouleTest {
 
     @Test
     public void testConstructorDefaultsAndBoundary() {
-        Body parent = createParent(AgeState.CHILD);
+        Yukkuri parent = createParent(AgeState.CHILD);
         AccelAmpoule ampoule = new AccelAmpoule(parent);
 
         assertEquals(parent.getUniqueID(), ampoule.getParent());
@@ -57,22 +57,22 @@ public class AccelAmpouleTest {
 
     @Test
     public void testUpdateIncreasesAgeForNonAdult() {
-        Body parent = createParent(AgeState.CHILD);
+        Yukkuri parent = createParent(AgeState.CHILD);
         AccelAmpoule ampoule = new AccelAmpoule(parent);
 
         long before = parent.getAge();
         Event result = ampoule.update();
 
         assertEquals(Event.DONOTHING, result);
-        assertEquals(before + Obj.TICK * 10000, parent.getAge());
+        assertEquals(before + Entity.TICK * 10000, parent.getAge());
     }
 
     @Test
     public void testGetImageUsesDirectionAndAge() {
-        Body parent = createParent(AgeState.CHILD);
+        Yukkuri parent = createParent(AgeState.CHILD);
         AccelAmpoule ampoule = new AccelAmpoule(parent);
 
-        Body holder = new Reimu();
+        Yukkuri holder = new Reimu();
         holder.setDirection(Direction.RIGHT);
         BufferedImage rightImage = ampoule.getImage(holder);
         assertSame(AccelAmpoule.getImages()[AgeState.CHILD.ordinal()][1], rightImage);
@@ -84,7 +84,7 @@ public class AccelAmpouleTest {
 
     @Test
     public void testResetBoundaryUsesParentAge() {
-        Body parent = createParent(AgeState.CHILD);
+        Yukkuri parent = createParent(AgeState.CHILD);
         AccelAmpoule ampoule = new AccelAmpoule(parent);
 
         ampoule.resetBoundary();
@@ -97,7 +97,7 @@ public class AccelAmpouleTest {
 
     @Test
     public void testToStringUsesResourceUtil() {
-        Body parent = createParent(AgeState.BABY);
+        Yukkuri parent = createParent(AgeState.BABY);
         AccelAmpoule ampoule = new AccelAmpoule(parent);
 
         assertEquals(ResourceUtil.getInstance().read("item_accell_ampoule"), ampoule.toString());
@@ -111,7 +111,7 @@ public class AccelAmpouleTest {
 
     @Test
     public void testConstructorWithParentNotInWorld() {
-        Body parent = new Reimu();
+        Yukkuri parent = new Reimu();
         parent.setAgeState(AgeState.CHILD);
         // parentをworldに登録しないのでBodyRegistryでは見つからない
         AccelAmpoule ampoule = new AccelAmpoule(parent);
@@ -121,7 +121,7 @@ public class AccelAmpouleTest {
 
     @Test
     public void testUpdateReturnsNullWhenParentNotInWorld() {
-        Body parent = new Reimu();
+        Yukkuri parent = new Reimu();
         parent.setAgeState(AgeState.CHILD);
         AccelAmpoule ampoule = new AccelAmpoule(parent);
         assertNull(ampoule.update());
@@ -129,7 +129,7 @@ public class AccelAmpouleTest {
 
     @Test
     public void testUpdateSkipsAgeForDeadParent() {
-        Body parent = createParent(AgeState.CHILD);
+        Yukkuri parent = createParent(AgeState.CHILD);
         AccelAmpoule ampoule = new AccelAmpoule(parent);
         parent.setDead(true);
 
@@ -142,7 +142,7 @@ public class AccelAmpouleTest {
 
     @Test
     public void testUpdateSkipsAgeForAdultParent() {
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         AccelAmpoule ampoule = new AccelAmpoule(parent);
 
         long before = parent.getAge();
@@ -154,18 +154,18 @@ public class AccelAmpouleTest {
 
     @Test
     public void testGetImageReturnsNullWhenParentNotInWorld() {
-        Body parent = new Reimu();
+        Yukkuri parent = new Reimu();
         parent.setAgeState(AgeState.CHILD);
         AccelAmpoule ampoule = new AccelAmpoule(parent);
 
-        Body holder = new Reimu();
+        Yukkuri holder = new Reimu();
         holder.setDirection(Direction.LEFT);
         assertNull(ampoule.getImage(holder));
     }
 
     @Test
     public void testResetBoundaryDoesNothingWhenParentNotInWorld() {
-        Body parent = new Reimu();
+        Yukkuri parent = new Reimu();
         parent.setAgeState(AgeState.CHILD);
         AccelAmpoule ampoule = new AccelAmpoule(parent);
 
@@ -175,8 +175,8 @@ public class AccelAmpouleTest {
         assertEquals(0, ampoule.getPivotY());
     }
 
-    private static Body createParent(AgeState ageState) {
-        Body parent = new Reimu();
+    private static Yukkuri createParent(AgeState ageState) {
+        Yukkuri parent = new Reimu();
         parent.setAgeState(ageState);
         SimYukkuri.world.getCurrentMap().getBody().put(parent.getUniqueID(), parent);
         return parent;
@@ -205,20 +205,20 @@ public class AccelAmpouleTest {
 
         @Test
         void testScenario_ChildBodyGetsLargeAgeAccelerationButStaysAlive() {
-            Body parent = createParent(AgeState.CHILD);
+            Yukkuri parent = createParent(AgeState.CHILD);
             parent.setAge(100);
             AccelAmpoule ampoule = new AccelAmpoule(parent);
 
             Event result = ampoule.update();
 
             assertEquals(Event.DONOTHING, result);
-            assertEquals(100 + Obj.TICK * 10000, parent.getAge());
+            assertEquals(100 + Entity.TICK * 10000, parent.getAge());
             assertEquals(false, parent.isDead());
         }
 
         @Test
         void testScenario_AdultBodyDoesNotAgeEvenWhenAmpouleUpdates() {
-            Body parent = createParent(AgeState.ADULT);
+            Yukkuri parent = createParent(AgeState.ADULT);
             AccelAmpoule ampoule = new AccelAmpoule(parent);
             long before = parent.getAge();
 

@@ -1,6 +1,6 @@
 package src.logic;
 
-import src.base.Body;
+import src.base.Yukkuri;
 import src.enums.Happiness;
 import src.system.MessagePool;
 import src.util.GameMessages;
@@ -17,7 +17,7 @@ public final class FoodNoFoodReaction {
 	/**
 	 * 空振り時の気分・メッセージ更新を行う.
 	 */
-	public static void handleNoFoodFound(Body body) {
+	public static void handleNoFoodFound(Yukkuri body) {
 		if (!body.isNotNYD()) {
 			return;
 		}

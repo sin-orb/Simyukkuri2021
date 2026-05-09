@@ -96,9 +96,9 @@ public class NonYukkuriDiseaseEstrusTest {
         assertFalse(body.isExciting(), "非ゆっくり症を発症した際に発情状態が解除されるべきです");
     }
 
-    private void invokeCheckNonYukkuriDisease(Body b) {
+    private void invokeCheckNonYukkuriDisease(Yukkuri b) {
         try {
-            java.lang.reflect.Method m = Body.class.getDeclaredMethod("checkNonYukkuriDisease");
+            java.lang.reflect.Method m = Yukkuri.class.getDeclaredMethod("checkNonYukkuriDisease");
             m.setAccessible(true);
             m.invoke(b);
         } catch (Exception e) {

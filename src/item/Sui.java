@@ -10,9 +10,9 @@ import java.io.IOException;
 import src.SimYukkuri;
 import src.util.GameRandom;
 import src.util.GameWorld;
-import src.base.Body;
-import src.base.Obj;
-import src.base.ObjEX;
+import src.base.Yukkuri;
+import src.base.Entity;
+import src.base.WorldEntity;
 import src.draw.ModLoader;
 import src.draw.Rectangle4y;
 import src.draw.Translate;
@@ -27,12 +27,12 @@ import src.field.impl.Barrier;
 /***************************************************
  * すぃー
  */
-public class Sui extends ObjEX {
+public class Sui extends WorldEntity {
 
 	private static final long serialVersionUID = 1901238489894890272L;
 
 	/** 処理対象(ゆっくり) */
-	public static final int hitCheckObjType = ObjEX.YUKKURI;
+	public static final int hitCheckObjType = WorldEntity.YUKKURI;
 
 	private static int lurd = 0;
 	private static int fb = 1;
@@ -55,8 +55,8 @@ public class Sui extends ObjEX {
 
 	private static int bindbody_num = 3;
 	private int current_bindbody_num = 0;
-	private Body[] bindBody = new Body[bindbody_num];
-	private Obj bindobj = null;
+	private Yukkuri[] bindBody = new Yukkuri[bindbody_num];
+	private Entity bindobj = null;
 
 	private int current_direction = bf;
 	private int current_condition = rest;
@@ -122,7 +122,7 @@ public class Sui extends ObjEX {
 	 * @param b 乗るゆっくり
 	 * @return 乗れたかどうか
 	 */
-	public boolean rideOn(Body b) {
+	public boolean rideOn(Yukkuri b) {
 		if (b == null) {
 			return false;
 		}
@@ -204,7 +204,7 @@ public class Sui extends ObjEX {
 	 * @param b 判定するゆっくり
 	 * @return すぃ～に乗ってるかどうか
 	 */
-	public boolean isriding(Body b) {
+	public boolean isriding(Yukkuri b) {
 		if (b == null)
 			return false;
 		for (int i = 0; i < bindbody_num; i++) {
@@ -220,7 +220,7 @@ public class Sui extends ObjEX {
 	 * 
 	 * @param b 降りるゆっくり
 	 */
-	public void rideOff(Body b) {
+	public void rideOff(Yukkuri b) {
 		if (b == null) {
 			return;
 		}
@@ -282,8 +282,8 @@ public class Sui extends ObjEX {
 	}
 
 	@Override
-	public int objHitProcess(Obj o) {
-		Body b = (Body) o;
+	public int objHitProcess(Entity o) {
+		Yukkuri b = (Yukkuri) o;
 		if (current_condition == out_of_control) {
 			b.strikeByHammer();
 			b.strikeByObject(0, 1000, false, vecX, vecY);
@@ -323,15 +323,15 @@ public class Sui extends ObjEX {
 	public Event clockTick() {
 		setAge(getAge() + TICK);
 		if (isRemoved()) {
-			for (Body r : bindBody) {
+			for (Yukkuri r : bindBody) {
 				if (r != null) {
 					rideOff(r);
 					r.removeFavoriteItem(FavItemType.SUI);
 					r.clearActions();
 				}
 			}
-			if (bindobj instanceof Body) {
-				((Body) bindobj).removeFavoriteItem(FavItemType.SUI);
+			if (bindobj instanceof Yukkuri) {
+				((Yukkuri) bindobj).removeFavoriteItem(FavItemType.SUI);
 				bindobj = null;
 			}
 			removeListData();
@@ -357,7 +357,7 @@ public class Sui extends ObjEX {
 				speed = 400;
 				if (iscanriding()) {
 
-					Body b = (Body) bindobj;
+					Yukkuri b = (Yukkuri) bindobj;
 					int bx = b.getDestX();
 					int by = b.getDestY();
 					if (bx == -1) {
@@ -487,7 +487,7 @@ public class Sui extends ObjEX {
 		setCollisionSize(getPivotX(), getPivotY());
 		GameWorld.get().getCurrentMap().getSui().put(objId, this);
 		objType = Type.OBJECT;
-		objEXType = WorldEntityKind.SUI;
+		worldEntityType = WorldEntityKind.SUI;
 
 		moveTo(x, y);
 
@@ -508,14 +508,14 @@ public class Sui extends ObjEX {
 	public void ChangeY(boolean A) {
 		if (A) {
 			setForceY(y + boundary.getHeight() / 2);
-			for (Body b : bindBody) {
+			for (Yukkuri b : bindBody) {
 				if (b == null)
 					continue;
 				b.setForceY(b.getY() + boundary.getHeight());
 			}
 		} else {
 			setForceY(y - boundary.getHeight() / 2);
-			for (Body b : bindBody) {
+			for (Yukkuri b : bindBody) {
 				if (b == null)
 					continue;
 				b.setForceY(b.getY() - boundary.getHeight());
@@ -531,19 +531,19 @@ public class Sui extends ObjEX {
 		this.current_bindbody_num = current_bindbody_num;
 	}
 
-	public Body[] getBindBody() {
+	public Yukkuri[] getBindBody() {
 		return bindBody;
 	}
 
-	public void setBindBody(Body[] bindBody) {
+	public void setBindBody(Yukkuri[] bindBody) {
 		this.bindBody = bindBody;
 	}
 
-	public Obj getBindobj() {
+	public Entity getBindobj() {
 		return bindobj;
 	}
 
-	public void setBindobj(Obj bindobj) {
+	public void setBindobj(Entity bindobj) {
 		this.bindobj = bindobj;
 	}
 

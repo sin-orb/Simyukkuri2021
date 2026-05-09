@@ -9,7 +9,7 @@ import java.io.IOException;
 
 import src.SimYukkuri;
 import src.util.GameWorld;
-import src.base.ObjEX;
+import src.base.WorldEntity;
 import src.draw.ModLoader;
 import src.draw.Rectangle4y;
 import src.enums.WorldEntityKind;
@@ -18,7 +18,7 @@ import src.enums.Type;
 /***************************************************
  * ベッド
  */
-public class Bed extends ObjEX {
+public class Bed extends WorldEntity {
 
 	private static final long serialVersionUID = -2355710591796200973L;
 	/** 画像の入れ物 */
@@ -92,7 +92,7 @@ public class Bed extends ObjEX {
 		setCollisionSize(getPivotX(), getPivotY());
 		GameWorld.get().getCurrentMap().getBed().put(objId, this);
 		objType = Type.PLATFORM;
-		objEXType = WorldEntityKind.BED;
+		worldEntityType = WorldEntityKind.BED;
 		itemRank = ItemRank.values()[initOption];
 		// 森なら野生に変更
 		if (GameWorld.get().getCurrentMap().getMapIndex() == 5

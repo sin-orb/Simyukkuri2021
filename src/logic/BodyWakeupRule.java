@@ -2,7 +2,7 @@ package src.logic;
 
 import java.util.Map;
 
-import src.base.Body;
+import src.base.Yukkuri;
 import src.enums.BurialState;
 import src.enums.PublicRank;
 import src.util.GameWorld;
@@ -23,11 +23,11 @@ public final class BodyWakeupRule {
 	 * @param body subject body
 	 * @return true if an awake body is visible
 	 */
-	public static boolean checkWakeupOtherYukkuri(Body body) {
+	public static boolean checkWakeupOtherYukkuri(Yukkuri body) {
 		boolean isWakeup = false;
 		int nearestDistance = body.getEyesightBase();
-		for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
-			Body otherBody = entry.getValue();
+		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
+			Yukkuri otherBody = entry.getValue();
 			if (otherBody == body) {
 				continue;
 			}

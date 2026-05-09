@@ -18,7 +18,7 @@ import javax.swing.JPanel;
 import src.SimYukkuri;
 import src.util.GameWorld;
 import src.effect.Effect;
-import src.base.ObjEX;
+import src.base.WorldEntity;
 import src.draw.ModLoader;
 import src.draw.Rectangle4y;
 import src.enums.EffectType;
@@ -30,7 +30,7 @@ import src.system.ResourceUtil;
 /***************************************************
  * ディヒューザー
  */
-public class Diffuser extends ObjEX {
+public class Diffuser extends WorldEntity {
 
 	private static final long serialVersionUID = -1780241956081220439L;
 
@@ -154,7 +154,7 @@ public class Diffuser extends ObjEX {
 
 		GameWorld.get().getCurrentMap().getDiffuser().put(objId, this);
 		objType = Type.OBJECT;
-		objEXType = WorldEntityKind.DIFFUSER;
+		worldEntityType = WorldEntityKind.DIFFUSER;
 		value = 15000;
 		cost = 100;
 

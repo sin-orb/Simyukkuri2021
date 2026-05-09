@@ -20,9 +20,9 @@ import src.SimYukkuri;
 import src.engine.birth.YukkuriBirthTypeResolver;
 import src.util.GameRandom;
 import src.util.GameWorld;
-import src.base.Body;
-import src.base.Obj;
-import src.base.ObjEX;
+import src.base.Yukkuri;
+import src.base.Entity;
+import src.base.WorldEntity;
 import src.command.GadgetAction;
 import src.draw.ModLoader;
 import src.draw.Rectangle4y;
@@ -37,7 +37,7 @@ import src.system.ResourceUtil;
 /***************************************************
  * 自動給餌機
  */
-public class AutoFeeder extends ObjEX {
+public class AutoFeeder extends WorldEntity {
 
 	private static final long serialVersionUID = -1132194333169381556L;
 
@@ -92,7 +92,7 @@ public class AutoFeeder extends ObjEX {
 	private int mode = 0;
 	private int feedingInterval = 6 * 100;
 	private int feedingP = 2;
-	private Obj food = null;
+	private Entity food = null;
 
 	/**
 	 * イメージをロードする.
@@ -172,7 +172,7 @@ public class AutoFeeder extends ObjEX {
 
 		if (food != null) {
 			if (type == FeedType.BODY.ordinal() || type == FeedType.PROCESSED_BODY.ordinal()) {
-				Body b = (Body) food;
+				Yukkuri b = (Yukkuri) food;
 				if (b.isDead()) {
 					b.remove();
 				}
@@ -192,19 +192,19 @@ public class AutoFeeder extends ObjEX {
 				// オートフィーダで出るゆっくりのタイプを決める。
 				int type = makeRandomType();
 				food = GameView.addBody(getX(), getY(), 0, type, AgeState.BABY, null, null);
-				Cash.buyYukkuri((Body) food);
+				Cash.buyYukkuri((Yukkuri) food);
 				Cash.addCash(-getCost());
 				// レイパーは生まれないようにする
-				((Body) food).setRaper(false);
+				((Yukkuri) food).setRaper(false);
 				// 静音仕様
-				((Body) food).setShutmouth(true);
+				((Yukkuri) food).setShutmouth(true);
 				// 糞害防止
-				((Body) food).setForceAnalClose(true);
+				((Yukkuri) food).setForceAnalClose(true);
 			} else if (type == FeedType.BODY.ordinal()) {
 				// オートフィーダで出るゆっくりのタイプを決める。
 				int type = makeRandomType();
 				food = GameView.addBody(getX(), getY(), 0, type, AgeState.BABY, null, null);
-				Cash.buyYukkuri((Body) food);
+				Cash.buyYukkuri((Yukkuri) food);
 				Cash.addCash(-getCost() + 5);
 			} else {
 				FoodType f = FoodType.FOOD;
@@ -243,8 +243,8 @@ public class AutoFeeder extends ObjEX {
 	}
 
 	private boolean isTakenOut() {
-		for (Map.Entry<Integer, Body> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
-			Body b = entry.getValue();
+		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
+			Yukkuri b = entry.getValue();
 			Integer i = b.getCarryItems().get(TakeoutItemType.FOOD);
 			if (i == null) {
 				continue;
@@ -270,7 +270,7 @@ public class AutoFeeder extends ObjEX {
 		GameWorld.get().getCurrentMap().getAutofeeder().put(objId, this);
 
 		objType = Type.PLATFORM;
-		objEXType = WorldEntityKind.AUTOFEEDER;
+		worldEntityType = WorldEntityKind.AUTOFEEDER;
 
 		boolean ret = setupFeeder(this, false);
 		if (setupFeederMode(this, false)) {
@@ -418,11 +418,11 @@ public class AutoFeeder extends ObjEX {
 		this.feedingP = feedingP;
 	}
 
-	public Obj getFood() {
+	public Entity getFood() {
 		return food;
 	}
 
-	public void setFood(Obj food) {
+	public void setFood(Entity food) {
 		this.food = food;
 	}
 

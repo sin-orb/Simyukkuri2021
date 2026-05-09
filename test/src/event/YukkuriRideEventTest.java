@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.event.EventPacket.EventPriority;
 import src.draw.World;
 import src.enums.AgeState;
@@ -43,8 +43,8 @@ public class YukkuriRideEventTest {
 
     @Test
     public void testParameterizedConstructor_setsPriorityMiddle() {
-        Body from = createBody();
-        Body to = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
         YukkuriRideEvent event = new YukkuriRideEvent(from, to, null, 100);
         assertEquals(EventPriority.MIDDLE, event.getPriority());
         assertEquals(from.getUniqueID(), event.getFrom());
@@ -56,7 +56,7 @@ public class YukkuriRideEventTest {
 
     @Test
     public void testCheckEventResponse_returnsFalseWhenToIsNull() {
-        Body b = createBody();
+        Yukkuri b = createBody();
         YukkuriRideEvent event = new YukkuriRideEvent();
         // to is -1 (null lookup) => returns false
         assertFalse(event.checkEventResponse(b));
@@ -64,8 +64,8 @@ public class YukkuriRideEventTest {
 
     @Test
     public void testCheckEventResponse_returnsTrueWhenFromEqualsB() {
-        Body from = createBody();
-        Body to = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
         YukkuriRideEvent event = new YukkuriRideEvent(from, to, null, 100);
         // from == b => returns true
         assertTrue(event.checkEventResponse(from));
@@ -73,8 +73,8 @@ public class YukkuriRideEventTest {
 
     @Test
     public void testCheckEventResponse_returnsTrueWhenToEqualsB() {
-        Body from = createBody();
-        Body to = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
         YukkuriRideEvent event = new YukkuriRideEvent(from, to, null, 100);
         // to == b => returns true
         assertTrue(event.checkEventResponse(to));
@@ -82,9 +82,9 @@ public class YukkuriRideEventTest {
 
     @Test
     public void testCheckEventResponse_returnsFalseForUnrelatedBody() {
-        Body from = createBody();
-        Body to = createBody();
-        Body other = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
+        Yukkuri other = createBody();
         YukkuriRideEvent event = new YukkuriRideEvent(from, to, null, 100);
         // other is neither from nor to => returns false
         assertFalse(event.checkEventResponse(other));
@@ -94,7 +94,7 @@ public class YukkuriRideEventTest {
 
     @Test
     public void testExecute_returnsFalse() {
-        Body b = createBody();
+        Yukkuri b = createBody();
         YukkuriRideEvent event = new YukkuriRideEvent(b, null, null, 100);
         assertFalse(event.execute(b));
     }
@@ -103,8 +103,8 @@ public class YukkuriRideEventTest {
 
     @Test
     public void testEnd_setsLinkParentToNegativeOneOnTo() {
-        Body from = createBody();
-        Body to = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
         to.setParentLinkId(from.objId);
         YukkuriRideEvent event = new YukkuriRideEvent(from, to, null, 100);
         event.end(from);
@@ -114,7 +114,7 @@ public class YukkuriRideEventTest {
     // --- update ---
     @Test
     public void testUpdate_fromNull_returnsAbort() {
-        Body b = createBody();
+        Yukkuri b = createBody();
         YukkuriRideEvent event = new YukkuriRideEvent();
         // from=-1 → null → ABORT
         assertEquals(src.event.EventPacket.UpdateState.ABORT, event.update(b));
@@ -122,8 +122,8 @@ public class YukkuriRideEventTest {
 
     @Test
     public void testUpdate_toNull_returnsAbort() {
-        Body from = createBody();
-        Body b = createBody();
+        Yukkuri from = createBody();
+        Yukkuri b = createBody();
         YukkuriRideEvent event = new YukkuriRideEvent(from, null, null, 100);
         from.setCurrentEvent(event);
         // to=-1 → null → ABORT
@@ -132,9 +132,9 @@ public class YukkuriRideEventTest {
 
     @Test
     public void testUpdate_toDead_returnsAbort() {
-        Body from = createBody();
-        Body to = createBody();
-        Body b = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
+        Yukkuri b = createBody();
         to.setDead(true);
         YukkuriRideEvent event = new YukkuriRideEvent(from, to, null, 100);
         from.setCurrentEvent(event);
@@ -143,8 +143,8 @@ public class YukkuriRideEventTest {
 
     @Test
     public void testUpdate_fromCurrentEventNotThis_returnsAbort() {
-        Body from = createBody();
-        Body to = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
         YukkuriRideEvent event = new YukkuriRideEvent(from, to, null, 100);
         // from.getCurrentEvent() != this → ABORT
         assertEquals(src.event.EventPacket.UpdateState.ABORT, event.update(from));
@@ -153,8 +153,8 @@ public class YukkuriRideEventTest {
     // --- start ---
     @Test
     public void testStart_doesNotThrow() {
-        Body from = createBody();
-        Body to = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
         YukkuriRideEvent event = new YukkuriRideEvent(from, to, null, 100);
         assertDoesNotThrow(() -> event.start(from));
     }
@@ -170,8 +170,8 @@ public class YukkuriRideEventTest {
 
     @Test
     public void testUpdate_bEqualsFrom_tick10001_returnsAbort() {
-        Body from = createBody();
-        Body to = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
         YukkuriRideEvent event = new YukkuriRideEvent(from, to, null, 100);
         from.setCurrentEvent(event);
         // Set tick > 10000 via reflection
@@ -185,8 +185,8 @@ public class YukkuriRideEventTest {
 
     @Test
     public void testUpdate_bEqualsFrom_parentLinkIdNull_doesNotThrow() {
-        Body from = createBody();
-        Body to = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
         to.setParentLinkId(-1); // no parent
         YukkuriRideEvent event = new YukkuriRideEvent(from, to, null, 100);
         from.setCurrentEvent(event);
@@ -201,8 +201,8 @@ public class YukkuriRideEventTest {
 
     @Test
     public void testUpdate_bEqualsTo_notLinked_doesNotThrow() {
-        Body from = createBody();
-        Body to = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
         to.setParentLinkId(-1); // not on parent
         YukkuriRideEvent event = new YukkuriRideEvent(from, to, null, 100);
         from.setCurrentEvent(event);
@@ -212,8 +212,8 @@ public class YukkuriRideEventTest {
 
     @Test
     public void testUpdate_fromRemoved_returnsAbort() {
-        Body from = createBody();
-        Body to = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
         from.setRemoved(true);
         YukkuriRideEvent event = new YukkuriRideEvent(from, to, null, 100);
         from.setCurrentEvent(event);
@@ -222,8 +222,8 @@ public class YukkuriRideEventTest {
 
     @Test
     public void testUpdate_toRemoved_returnsAbort() {
-        Body from = createBody();
-        Body to = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
         to.setRemoved(true);
         YukkuriRideEvent event = new YukkuriRideEvent(from, to, null, 100);
         from.setCurrentEvent(event);
@@ -233,7 +233,7 @@ public class YukkuriRideEventTest {
     // --- simpleEventAction: default EventPacket returns false ---
     @Test
     public void testSimpleEventAction_defaultReturnsFalse() {
-        Body b = createBody();
+        Yukkuri b = createBody();
         YukkuriRideEvent event = new YukkuriRideEvent();
         assertFalse(event.simpleEventAction(b));
     }
@@ -241,8 +241,8 @@ public class YukkuriRideEventTest {
     // --- update: to.isNormalDirty() → ABORT ---
     @Test
     public void testUpdate_toNormalDirty_returnsAbort() {
-        Body from = createBody();
-        Body to = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
         to.setDirty(true); // isNormalDirty() = !dead && dirty → true
         YukkuriRideEvent event = new YukkuriRideEvent(from, to, null, 100);
         from.setCurrentEvent(event);
@@ -252,9 +252,9 @@ public class YukkuriRideEventTest {
     // --- update: from.findSick(to) → ABORT ---
     @Test
     public void testUpdate_findSick_returnsAbort() {
-        Body from = createBody();
-        Body to = createBody();
-        // Body() constructor randomly sets intelligence; ensure AVERAGE (not FOOL) so findSick checks isSick()
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
+        // Yukkuri() constructor randomly sets intelligence; ensure AVERAGE (not FOOL) so findSick checks isSick()
         from.setIntelligence(src.enums.Intelligence.AVERAGE);
         to.setSickPeriod(2000); // isSick() = sickPeriod > incubationPeriodBase(1200) → true
         YukkuriRideEvent event = new YukkuriRideEvent(from, to, null, 100);
@@ -265,8 +265,8 @@ public class YukkuriRideEventTest {
     // --- update: b == from, to on head (carrying logic) → null ---
     @Test
     public void testUpdate_bEqualsFrom_toOnHead_doesNotThrow() {
-        Body from = createBody();
-        Body to = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
         to.setParentLinkId(from.objId); // takeMappedObj(to.getParentLinkId()) finds from → not null
         YukkuriRideEvent event = new YukkuriRideEvent(from, to, null, 100);
         from.setCurrentEvent(event);
@@ -276,8 +276,8 @@ public class YukkuriRideEventTest {
     // --- update: b == to (child), to on head (riding on parent) ---
     @Test
     public void testUpdate_bEqualsTo_onHead_doesNotThrow() {
-        Body from = createBody();
-        Body to = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
         to.setParentLinkId(from.objId); // takeMappedObj(to.getParentLinkId()) finds from → not null
         YukkuriRideEvent event = new YukkuriRideEvent(from, to, null, 100);
         from.setCurrentEvent(event);
@@ -290,8 +290,8 @@ public class YukkuriRideEventTest {
 
         @Test
         public void testScenario_CloseChildGetsLinkedOntoParent() throws Exception {
-            Body from = createBody();
-            Body to = createBody();
+            Yukkuri from = createBody();
+            Yukkuri to = createBody();
             from.setX(100);
             from.setY(100);
             to.setX(101);
@@ -312,8 +312,8 @@ public class YukkuriRideEventTest {
 
     // --- Helper ---
 
-    private static Body createBody() {
-        Body b = new Reimu();
+    private static Yukkuri createBody() {
+        Yukkuri b = new Reimu();
         b.setAgeState(AgeState.ADULT);
         Sprite[] spr = new Sprite[3];
         for (int i = 0; i < 3; i++) {

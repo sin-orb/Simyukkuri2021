@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.event.EventPacket;
 import src.event.EventPacket.EventPriority;
 import src.event.EventPacket.UpdateState;
@@ -45,8 +45,8 @@ public class RevengeAttackEventTest {
 
     @Test
     public void testParameterizedConstructor() {
-        Body from = createBody();
-        Body to = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
         RevengeAttackEvent event = new RevengeAttackEvent(from, to, null, 1);
         assertEquals(from.getUniqueID(), event.getFrom());
         assertEquals(to.getUniqueID(), event.getTo());
@@ -57,7 +57,7 @@ public class RevengeAttackEventTest {
 
     @Test
     public void testCheckEventResponse_alwaysTrueAndSetsPriorityHigh() {
-        Body b = createBody();
+        Yukkuri b = createBody();
         RevengeAttackEvent event = new RevengeAttackEvent();
         assertTrue(event.checkEventResponse(b));
         assertEquals(EventPriority.HIGH, event.getPriority());
@@ -67,7 +67,7 @@ public class RevengeAttackEventTest {
 
     @Test
     public void testStart_clearsActionFlags() {
-        Body b = createBody();
+        Yukkuri b = createBody();
         b.setToFood(true);
         b.setToBed(true);
         b.setToShit(true);
@@ -87,7 +87,7 @@ public class RevengeAttackEventTest {
 
     @Test
     public void testUpdate_returnsAbortWhenToIsNull() {
-        Body b = createBody();
+        Yukkuri b = createBody();
         RevengeAttackEvent event = new RevengeAttackEvent(b, null, null, 1);
         // to is -1 (null) => returns ABORT
         assertEquals(UpdateState.ABORT, event.update(b));
@@ -95,8 +95,8 @@ public class RevengeAttackEventTest {
 
     @Test
     public void testUpdate_returnsAbortWhenToIsRemoved() {
-        Body b = createBody();
-        Body to = createBody();
+        Yukkuri b = createBody();
+        Yukkuri to = createBody();
         to.setRemoved(true);
         RevengeAttackEvent event = new RevengeAttackEvent(b, to, null, 1);
         assertEquals(UpdateState.ABORT, event.update(b));
@@ -104,8 +104,8 @@ public class RevengeAttackEventTest {
 
     @Test
     public void testUpdate_toTaken_returnsAbort() {
-        Body b = createBody();
-        Body to = createBody();
+        Yukkuri b = createBody();
+        Yukkuri to = createBody();
         to.setTaken(true);
         RevengeAttackEvent event = new RevengeAttackEvent(b, to, null, 1);
         assertEquals(UpdateState.ABORT, event.update(b));
@@ -113,7 +113,7 @@ public class RevengeAttackEventTest {
 
     @Test
     public void testExecute_toNull_returnsTrue() {
-        Body b = createBody();
+        Yukkuri b = createBody();
         RevengeAttackEvent event = new RevengeAttackEvent(b, null, null, 1);
         // isDontMove=false, random might or might not be 0
         // but to=null → returns true (no mypane needed)
@@ -131,8 +131,8 @@ public class RevengeAttackEventTest {
 
     @Test
     public void testUpdate_toAlive_returnsNull() {
-        Body from = createBody();
-        Body to = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
         RevengeAttackEvent event = new RevengeAttackEvent(from, to, null, 1);
         assertNull(event.update(from));
     }
@@ -141,7 +141,7 @@ public class RevengeAttackEventTest {
 
     @Test
     public void testExecute_isDontMove_returnsTrue() {
-        Body from = createBody();
+        Yukkuri from = createBody();
         from.setGrabbed(true); // isDontMove() returns true when grabbed
         RevengeAttackEvent event = new RevengeAttackEvent(from, null, null, 1);
         assertTrue(event.execute(from));
@@ -151,7 +151,7 @@ public class RevengeAttackEventTest {
 
     @Test
     public void testExecute_RND0_returnsTrue() {
-        Body from = createBody();
+        Yukkuri from = createBody();
         SimYukkuri.RND = new src.ConstState(0); // nextInt always returns 0
         try {
             RevengeAttackEvent event = new RevengeAttackEvent(from, null, null, 1);
@@ -164,8 +164,8 @@ public class RevengeAttackEventTest {
     // --- start: to != null → calls moveToEvent ---
     @Test
     public void testStart_withTo_doesNotThrow() {
-        Body from = createBody();
-        Body to = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
         RevengeAttackEvent event = new RevengeAttackEvent(from, to, null, 1);
         assertDoesNotThrow(() -> event.start(from));
         assertTrue(from.isToTakeout());
@@ -174,8 +174,8 @@ public class RevengeAttackEventTest {
     // --- update: to alive, close distance → to.stay() + returns null ---
     @Test
     public void testUpdate_closeDistance_returnsNull() {
-        Body from = createBody(); // x=0,y=0
-        Body to = createBody();   // x=0,y=0 → distance=0 < 2500
+        Yukkuri from = createBody(); // x=0,y=0
+        Yukkuri to = createBody();   // x=0,y=0 → distance=0 < 2500
         RevengeAttackEvent event = new RevengeAttackEvent(from, to, null, 1);
         assertNull(event.update(from));
     }
@@ -185,8 +185,8 @@ public class RevengeAttackEventTest {
 
         @Test
         void testScenario_StartWakesSleeperClearsActionsAndTargetsVictim() {
-            Body attacker = createBody();
-            Body victim = createBody();
+            Yukkuri attacker = createBody();
+            Yukkuri victim = createBody();
             attacker.setX(100);
             attacker.setY(100);
             victim.setX(160);
@@ -216,8 +216,8 @@ public class RevengeAttackEventTest {
 
         @Test
         void testScenario_UpdateNearVictimForcesVictimToStay() {
-            Body attacker = createBody();
-            Body victim = createBody();
+            Yukkuri attacker = createBody();
+            Yukkuri victim = createBody();
             attacker.setX(100);
             attacker.setY(100);
             victim.setX(120);
@@ -232,7 +232,7 @@ public class RevengeAttackEventTest {
 
         @Test
         void testScenario_ExecuteDontMoveMakesAttackerSadAndLament() {
-            Body attacker = createBody();
+            Yukkuri attacker = createBody();
             attacker.setGrabbed(true);
             attacker.setHappiness(src.enums.Happiness.HAPPY);
             RevengeAttackEvent event = new RevengeAttackEvent(attacker, null, null, 1);
@@ -246,8 +246,8 @@ public class RevengeAttackEventTest {
 
     // --- Helper ---
 
-    private static Body createBody() {
-        Body b = new Reimu();
+    private static Yukkuri createBody() {
+        Yukkuri b = new Reimu();
         b.setAgeState(AgeState.ADULT);
         Sprite[] spr = new Sprite[3];
         for (int i = 0; i < 3; i++) {

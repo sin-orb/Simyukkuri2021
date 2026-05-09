@@ -10,7 +10,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.draw.World;
 import src.enums.AgeState;
 import src.enums.Direction;
@@ -41,7 +41,7 @@ public class ANYDAmpouleTest {
 
     @Test
     public void testConstructorDefaultsAndBoundary() {
-        Body parent = createParent(AgeState.CHILD);
+        Yukkuri parent = createParent(AgeState.CHILD);
         ANYDAmpoule ampoule = new ANYDAmpoule(parent);
 
         assertEquals(parent.getUniqueID(), ampoule.getParent());
@@ -55,7 +55,7 @@ public class ANYDAmpouleTest {
 
     @Test
     public void testUpdateReturnsDoNothing() {
-        Body parent = createParent(AgeState.CHILD);
+        Yukkuri parent = createParent(AgeState.CHILD);
         ANYDAmpoule ampoule = new ANYDAmpoule(parent);
 
         // ANYDAmpouleのupdate()は何もせずDONOTHINGを返す
@@ -66,7 +66,7 @@ public class ANYDAmpouleTest {
 
     @Test
     public void testGetImageReturnsNullWhenParentNotInMap() {
-        Body parent = createParent(AgeState.CHILD);
+        Yukkuri parent = createParent(AgeState.CHILD);
         ANYDAmpoule ampoule = new ANYDAmpoule(parent);
 
         // parentをマップから削除
@@ -78,7 +78,7 @@ public class ANYDAmpouleTest {
 
     @Test
     public void testGetImageReturnsLeftImageWhenDirectionLeft() {
-        Body parent = createParent(AgeState.CHILD);
+        Yukkuri parent = createParent(AgeState.CHILD);
         ANYDAmpoule ampoule = new ANYDAmpoule(parent);
 
         parent.setDirection(Direction.LEFT);
@@ -90,7 +90,7 @@ public class ANYDAmpouleTest {
 
     @Test
     public void testGetImageReturnsRightImageWhenDirectionRight() {
-        Body parent = createParent(AgeState.CHILD);
+        Yukkuri parent = createParent(AgeState.CHILD);
         ANYDAmpoule ampoule = new ANYDAmpoule(parent);
 
         parent.setDirection(Direction.RIGHT);
@@ -102,7 +102,7 @@ public class ANYDAmpouleTest {
 
     @Test
     public void testResetBoundaryUsesParentAge() {
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         ANYDAmpoule ampoule = new ANYDAmpoule(parent);
 
         ampoule.resetBoundary();
@@ -115,7 +115,7 @@ public class ANYDAmpouleTest {
 
     @Test
     public void testResetBoundaryDoesNothingWhenParentNotInMap() {
-        Body parent = createParent(AgeState.CHILD);
+        Yukkuri parent = createParent(AgeState.CHILD);
         ANYDAmpoule ampoule = new ANYDAmpoule(parent);
 
         // 初期値を記録
@@ -134,7 +134,7 @@ public class ANYDAmpouleTest {
 
     @Test
     public void testToStringUsesResourceUtil() {
-        Body parent = createParent(AgeState.BABY);
+        Yukkuri parent = createParent(AgeState.BABY);
         ANYDAmpoule ampoule = new ANYDAmpoule(parent);
 
         assertEquals(ResourceUtil.getInstance().read("item_anti_nyd"), ampoule.toString());
@@ -149,15 +149,15 @@ public class ANYDAmpouleTest {
 
     @Test
     public void testConstructorWithParentNotInWorld() {
-        Body parent = new Reimu();
+        Yukkuri parent = new Reimu();
         parent.setAgeState(AgeState.CHILD);
         ANYDAmpoule ampoule = new ANYDAmpoule(parent);
         assertEquals(1000, ampoule.getValue());
         assertEquals(0, ampoule.getCost());
     }
 
-    private static Body createParent(AgeState ageState) {
-        Body parent = new Reimu();
+    private static Yukkuri createParent(AgeState ageState) {
+        Yukkuri parent = new Reimu();
         parent.setAgeState(ageState);
         SimYukkuri.world.getCurrentMap().getBody().put(parent.getUniqueID(), parent);
         return parent;

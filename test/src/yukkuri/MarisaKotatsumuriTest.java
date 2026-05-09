@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import src.enums.AgeState;
 import src.draw.Point4y;
-import src.base.Body;
+import src.base.Yukkuri;
 
 public class MarisaKotatsumuriTest {
 
@@ -30,7 +30,7 @@ public class MarisaKotatsumuriTest {
     @Test
     public void testMarisaKotatsumuriExtendsBody() {
         MarisaKotatsumuri marisaKotatsumuri = new MarisaKotatsumuri();
-        assertTrue(marisaKotatsumuri instanceof src.base.Body);
+        assertTrue(marisaKotatsumuri instanceof src.base.Yukkuri);
     }
 
     @Test
@@ -60,7 +60,7 @@ public class MarisaKotatsumuriTest {
         MarisaKotatsumuri obj = new MarisaKotatsumuri();
         // checkTransform() checks transformation conditions
         // Without proper World setup, will likely return null
-        Body result = obj.checkTransform();
+        Yukkuri result = obj.checkTransform();
         // Just verify the method executes without crashing
     }
 

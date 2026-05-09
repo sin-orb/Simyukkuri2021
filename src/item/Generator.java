@@ -6,7 +6,7 @@ import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
 
-import src.base.ObjEX;
+import src.base.WorldEntity;
 import src.draw.ModLoader;
 import src.enums.WorldEntityKind;
 import src.enums.Type;
@@ -14,21 +14,21 @@ import src.enums.Type;
 /***************************************************
  * 発電機(開発途上)
  */
-public class Generator extends ObjEX {
+public class Generator extends WorldEntity {
 
 	private static final long serialVersionUID = -4583197623536851356L;
 	// static final long serialVersionUID = 1L;
 	//
-	// public static final int hitCheckObjType = ObjEX.YUKKURI;
+	// public static final int hitCheckObjType = WorldEntity.YUKKURI;
 	private static final int IMAGE_COUNT = 2; // このクラスの総使用画像数
 	private static BufferedImage[] imageLayers = new BufferedImage[IMAGE_COUNT];
 
 	// private static Rectangle boundary = new Rectangle4y()();
 	// protected Random rnd = new Random();
-	// protected ArrayList<Body> fuelBodyList = new ArrayList<Body>();
-	// protected ArrayList<Obj> bindObjList = new ArrayList<Obj>();
+	// protected ArrayList<Yukkuri> fuelBodyList = new ArrayList<Yukkuri>();
+	// protected ArrayList<Entity> bindObjList = new ArrayList<Entity>();
 	//
-	// private Obj o = null;
+	// private Entity o = null;
 	//
 	public static void loadImages(ClassLoader loader, ImageObserver io) throws IOException {
 		imageLayers[0] = ModLoader.loadItemImage(loader, "garbagechute" + File.separator + "garbagechute.png");
@@ -67,12 +67,12 @@ public class Generator extends ObjEX {
 	// }
 	//
 	// @Override
-	// public int objHitProcess( Obj o ) {
+	// public int objHitProcess( Entity o ) {
 	// if( o == null || bindObjList.contains(o) ){
 	// return 0;
 	// }
-	// if( o instanceof Body ){
-	// Body fuel = (Body)o;
+	// if( o instanceof Yukkuri ){
+	// Yukkuri fuel = (Yukkuri)o;
 	// if(!fuel.isDead() && !fuel.isBurned() ){
 	// if(fuel.isDamaged())fuel.addDamage(-TICK*100);
 	// if(fuel.getAttachmentSize(Fire.class) == 0){
@@ -114,7 +114,7 @@ public class Generator extends ObjEX {
 		setCollisionSize(getPivotX(), getPivotY());
 		// GameWorld.get().currentMap.generator.add(this);
 		objType = Type.PLATFORM;
-		objEXType = WorldEntityKind.GENERATOR;
+		worldEntityType = WorldEntityKind.GENERATOR;
 		interval = 4;
 		value = 5000;
 		cost = 10;

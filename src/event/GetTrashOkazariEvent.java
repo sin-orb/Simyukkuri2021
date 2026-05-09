@@ -1,17 +1,17 @@
 package src.event;
 import src.util.GameText;
 
-import src.base.Body;
+import src.base.Yukkuri;
 import src.event.EventPacket;
-import src.base.Obj;
+import src.base.Entity;
 import src.entity.world.bodylinked.Okazari;
 import src.system.ResourceUtil;
 
 /***************************************************
  * ゴミからおかざり入手イベント
- * protected Body from; // イベントを発した個体
- * protected Body to; // 未使用
- * protected Obj target; // ガラクタ
+ * protected Yukkuri from; // イベントを発した個体
+ * protected Yukkuri to; // 未使用
+ * protected Entity target; // ガラクタ
  * protected int count; // 1
  */
 public class GetTrashOkazariEvent extends EventPacket {
@@ -21,7 +21,7 @@ public class GetTrashOkazariEvent extends EventPacket {
 	/**
 	 * コンストラクタ.
 	 */
-	public GetTrashOkazariEvent(Body f, Body t, Obj tgt, int cnt) {
+	public GetTrashOkazariEvent(Yukkuri f, Yukkuri t, Entity tgt, int cnt) {
 		super(f, t, tgt, cnt);
 	}
 
@@ -33,7 +33,7 @@ public class GetTrashOkazariEvent extends EventPacket {
 	// ここで各種チェックを行い、イベントへ参加するかを返す
 	// また、イベント優先度も必要に応じて設定できる
 	@Override
-	public boolean checkEventResponse(Body body) {
+	public boolean checkEventResponse(Yukkuri body) {
 
 		priority = EventPriority.MIDDLE;
 		return true;
@@ -41,14 +41,14 @@ public class GetTrashOkazariEvent extends EventPacket {
 
 	// イベント開始動作
 	@Override
-	public void start(Body body) {
-		Obj targetObject = body.takeMappedObj(this.target);
+	public void start(Yukkuri body) {
+		Entity targetObject = body.takeMappedObj(this.target);
 		body.moveToEvent(this, targetObject.getX(), targetObject.getY());
 	}
 
 	@Override
-	public UpdateState update(Body body) {
-		Obj targetObject = body.takeMappedObj(this.target);
+	public UpdateState update(Yukkuri body) {
+		Entity targetObject = body.takeMappedObj(this.target);
 		if (targetObject.isRemoved())
 			return UpdateState.ABORT;
 		if (body.hasOkazari())
@@ -60,8 +60,8 @@ public class GetTrashOkazariEvent extends EventPacket {
 	// イベント目標に到着した際に呼ばれる
 	// trueを返すとイベント終了
 	@Override
-	public boolean execute(Body body) {
-		Obj targetObject = body.takeMappedObj(this.target);
+	public boolean execute(Yukkuri body) {
+		Entity targetObject = body.takeMappedObj(this.target);
 		if (targetObject.isRemoved())
 			return true;
 		// おかざりランダム入手

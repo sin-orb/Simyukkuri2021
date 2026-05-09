@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.event.EventPacket.EventPriority;
 import src.draw.World;
 import src.enums.AgeState;
@@ -25,8 +25,8 @@ class BegForLifeEventTest {
         WorldTestHelper.initializeStandardTranslate500();
     }
 
-    private static Body createBody() {
-        Body b = new src.yukkuri.Reimu();
+    private static Yukkuri createBody() {
+        Yukkuri b = new src.yukkuri.Reimu();
         b.setAgeState(AgeState.ADULT);
         src.system.Sprite[] spr = new src.system.Sprite[3];
         for (int i = 0; i < 3; i++) {
@@ -47,8 +47,8 @@ class BegForLifeEventTest {
 
     @Test
     void testParameterizedConstructor() {
-        Body from = createBody();
-        Body to = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
         BegForLifeEvent event = new BegForLifeEvent(from, to, null, 10);
         assertNotNull(event);
         assertEquals(from.getUniqueID(), event.getFrom());
@@ -58,7 +58,7 @@ class BegForLifeEventTest {
 
     @Test
     void testCheckEventResponse_setsPriorityHigh() {
-        Body from = createBody();
+        Yukkuri from = createBody();
         BegForLifeEvent event = new BegForLifeEvent(from, null, null, 10);
         // checkEventResponse checks b == from and !b.isUnBirth()
         event.checkEventResponse(from);
@@ -67,7 +67,7 @@ class BegForLifeEventTest {
 
     @Test
     void testCheckEventResponse_returnsTrueWhenBEqualsFromAndNotUnBirth() {
-        Body from = createBody();
+        Yukkuri from = createBody();
         // from is not unBirth by default
         BegForLifeEvent event = new BegForLifeEvent(from, null, null, 10);
         assertTrue(event.checkEventResponse(from));
@@ -75,15 +75,15 @@ class BegForLifeEventTest {
 
     @Test
     void testCheckEventResponse_returnsFalseWhenBIsNotFrom() {
-        Body from = createBody();
-        Body other = createBody();
+        Yukkuri from = createBody();
+        Yukkuri other = createBody();
         BegForLifeEvent event = new BegForLifeEvent(from, null, null, 10);
         assertFalse(event.checkEventResponse(other));
     }
 
     @Test
     void testCheckEventResponse_returnsFalseWhenBIsUnBirth() {
-        Body from = createBody();
+        Yukkuri from = createBody();
         // Set unBirth via reflection
         try {
             java.lang.reflect.Field f = findField(from.getClass(), "unBirth");
@@ -98,14 +98,14 @@ class BegForLifeEventTest {
 
     @Test
     void testExecute_returnsTrue() {
-        Body b = createBody();
+        Yukkuri b = createBody();
         BegForLifeEvent event = new BegForLifeEvent(b, null, null, 10);
         assertTrue(event.execute(b));
     }
 
     @Test
     void testEnd_setsBeggingToFalse() {
-        Body b = createBody();
+        Yukkuri b = createBody();
         b.setBegging(true);
         BegForLifeEvent event = new BegForLifeEvent(b, null, null, 10);
         event.end(b);
@@ -114,14 +114,14 @@ class BegForLifeEventTest {
 
     @Test
     void testStart_doesNotThrow() {
-        Body b = createBody();
+        Yukkuri b = createBody();
         BegForLifeEvent event = new BegForLifeEvent(b, null, null, 10);
         assertDoesNotThrow(() -> event.start(b));
     }
 
     @Test
     void testUpdate_tick0_doesNotThrow() {
-        Body b = createBody();
+        Yukkuri b = createBody();
         BegForLifeEvent event = new BegForLifeEvent(b, null, null, 10);
         // tick=0, sets body state
         assertDoesNotThrow(() -> event.update(b));
@@ -129,7 +129,7 @@ class BegForLifeEventTest {
 
     @Test
     void testUpdate_bTalking_returnsNull() {
-        Body b = createBody();
+        Yukkuri b = createBody();
         b.setMessageTicks(1); // isTalking() = true
         BegForLifeEvent event = new BegForLifeEvent(b, null, null, 10);
         assertNull(event.update(b));
@@ -145,7 +145,7 @@ class BegForLifeEventTest {
 
     @Test
     void testUpdate_tick7_roopNotZero_setsBegging() throws Exception {
-        Body b = createBody();
+        Yukkuri b = createBody();
         // Must set damage > 0 so getDamage() != 0, preventing roop reset
         src.util.WorldTestHelper.setDamage(b, 1);
         BegForLifeEvent event = new BegForLifeEvent(b, null, null, 10);
@@ -162,7 +162,7 @@ class BegForLifeEventTest {
 
     @Test
     void testUpdate_roop0_roop2NotZero_begForLife() throws Exception {
-        Body b = createBody();
+        Yukkuri b = createBody();
         BegForLifeEvent event = new BegForLifeEvent(b, null, null, 10);
         setField(event, "roop", 0);
         setField(event, "roop2", 5);
@@ -175,7 +175,7 @@ class BegForLifeEventTest {
 
     @Test
     void testUpdate_wait30_allRoopZero_returnsAbort() throws Exception {
-        Body b = createBody();
+        Yukkuri b = createBody();
         BegForLifeEvent event = new BegForLifeEvent(b, null, null, 10);
         setField(event, "roop", 0);
         setField(event, "roop2", 0);
@@ -189,7 +189,7 @@ class BegForLifeEventTest {
 
     @Test
     void testUpdate_wait50_damaged_setsMessage() throws Exception {
-        Body b = createBody();
+        Yukkuri b = createBody();
         src.util.WorldTestHelper.setDamage(b, b.getDamageLimit() + 100);
         BegForLifeEvent event = new BegForLifeEvent(b, null, null, 10);
         setField(event, "roop", 0);
@@ -204,7 +204,7 @@ class BegForLifeEventTest {
 
     @Test
     void testUpdate_wait50_notDamaged_thanksPath() throws Exception {
-        Body b = createBody();
+        Yukkuri b = createBody();
         // not damaged
         src.util.WorldTestHelper.setDamage(b, 0);
         BegForLifeEvent event = new BegForLifeEvent(b, null, null, 10);
@@ -238,7 +238,7 @@ class BegForLifeEventTest {
 
         @Test
         void testScenario_NotDamagedAverageBodyEndsBeggingVeryHappyAndSmiling() throws Exception {
-            Body b = createBody();
+            Yukkuri b = createBody();
             b.setAttitude(Attitude.AVERAGE);
             b.setBegging(true);
             WorldTestHelper.setDamage(b, 0);

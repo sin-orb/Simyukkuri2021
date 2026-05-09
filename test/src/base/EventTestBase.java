@@ -3,7 +3,7 @@ package src.base;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.util.WorldTestHelper;
 
 public class EventTestBase {
@@ -20,8 +20,8 @@ public class EventTestBase {
         WorldTestHelper.resetWorld();
     }
 
-    protected Body createBody(int id, int x, int y) {
-        Body b = WorldTestHelper.createBody();
+    protected Yukkuri createBody(int id, int x, int y) {
+        Yukkuri b = WorldTestHelper.createBody();
         b.setObjId(id);
         b.setX(x);
         b.setY(y);

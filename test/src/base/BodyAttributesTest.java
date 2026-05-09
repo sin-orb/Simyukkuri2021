@@ -37,7 +37,7 @@ public class BodyAttributesTest {
     private static class TestAttachment extends Attachment {
         private static final long serialVersionUID = 1L;
 
-        public TestAttachment(Body b) {
+        public TestAttachment(Yukkuri b) {
             super(b);
         }
 
@@ -55,7 +55,7 @@ public class BodyAttributesTest {
         }
 
         @Override
-        public BufferedImage getImage(Body b) {
+        public BufferedImage getImage(Yukkuri b) {
             return null;
         }
     }
@@ -96,16 +96,16 @@ public class BodyAttributesTest {
             body.setAgeState(AgeState.ADULT);
             body.getBodySpr()[AgeState.ADULT.ordinal()].setImageW(100);
             body.setExpandSizeW(50); // ratio 6 -> Burst.HALF
-            body.shit = 10;
+            body.setShit(10);
             int shitBefore = body.getShit();
-            int stressBefore = body.stress;
+            int stressBefore = body.getStress();
 
             body.addStress(100);
 
             assertEquals(Burst.HALF, body.getBurstState());
             assertEquals(shitBefore, body.getShit(),
                     "Burst.HALF should suppress the stress-driven plusShit side effect");
-            assertTrue(body.stress > stressBefore, "stress itself should still increase");
+            assertTrue(body.getStress() > stressBefore, "stress itself should still increase");
         }
 
         @Test
@@ -303,10 +303,10 @@ public class BodyAttributesTest {
 
     @Test
     public void testProtectedFieldAccess() {
-        body.damage = 100;
-        assertEquals(100, body.damage);
-        body.stress = 50;
-        assertEquals(50, body.stress);
+        body.setDamage(100);
+        assertEquals(100, body.getDamage());
+        body.setStress(50);
+        assertEquals(50, body.getStress());
     }
 
     // ===========================================
@@ -383,7 +383,7 @@ public class BodyAttributesTest {
         @Test
         public void testGetDamageStateNone() {
             body.setAgeState(AgeState.ADULT);
-            body.damage = 0;
+            body.setDamage(0);
             assertEquals(Damage.NONE, body.getDamageState());
             assertTrue(body.isNoDamaged());
             assertFalse(body.isDamagedLightly());
@@ -395,7 +395,7 @@ public class BodyAttributesTest {
         public void testGetDamageStateVery() {
             body.setAgeState(AgeState.ADULT);
             int limit = body.getDamageLimitBase()[AgeState.ADULT.ordinal()];
-            body.damage = limit / 2; // 50% -> VERY
+            body.setDamage(limit / 2); // 50% -> VERY
             assertEquals(Damage.VERY, body.getDamageState());
             assertFalse(body.isNoDamaged());
             assertTrue(body.isDamagedLightly());
@@ -407,7 +407,7 @@ public class BodyAttributesTest {
         public void testGetDamageStateToomuch() {
             body.setAgeState(AgeState.ADULT);
             int limit = body.getDamageLimitBase()[AgeState.ADULT.ordinal()];
-            body.damage = limit * 3 / 4; // 75% -> TOOMUCH
+            body.setDamage(limit * 3 / 4); // 75% -> TOOMUCH
             assertEquals(Damage.TOOMUCH, body.getDamageState());
             assertTrue(body.isDamagedHeavily());
         }
@@ -534,14 +534,14 @@ public class BodyAttributesTest {
         public void testAddHungry() {
             body.setHungry(1000);
             body.addHungry(100);
-            assertEquals(1000 + Obj.TICK * 100, body.getHungry());
+            assertEquals(1000 + Entity.TICK * 100, body.getHungry());
         }
 
         @Test
         public void testAddHungryNegative() {
             body.setHungry(1000);
             body.addHungry(-500);
-            assertEquals(1000 - Obj.TICK * 500, body.getHungry());
+            assertEquals(1000 - Entity.TICK * 500, body.getHungry());
         }
 
         @Test
@@ -577,7 +577,7 @@ public class BodyAttributesTest {
             body.setHungry(0);
             // TOOMUCH damage required
             int limit = body.getDamageLimitBase()[AgeState.ADULT.ordinal()];
-            body.damage = limit * 3 / 4;
+            body.setDamage(limit * 3 / 4);
             assertTrue(body.isStarving());
         }
 
@@ -585,7 +585,7 @@ public class BodyAttributesTest {
         public void testIsStarvingNotToomuch() {
             body.setDead(false);
             body.setHungry(0);
-            body.damage = 0;
+            body.setDamage(0);
             assertFalse(body.isStarving());
         }
 
@@ -605,38 +605,38 @@ public class BodyAttributesTest {
         @Test
         public void testSetStressPositive() {
             body.setStress(100);
-            assertEquals(100, body.stress);
+            assertEquals(100, body.getStress());
         }
 
         @Test
         public void testSetStressZeroIgnored() {
-            body.stress = 50;
+            body.setStress(50);
             body.setStress(0);
-            assertEquals(50, body.stress); // 変更されない
+            assertEquals(50, body.getStress()); // 変更されない
         }
 
         @Test
         public void testSetStressNegativeIgnored() {
-            body.stress = 50;
+            body.setStress(50);
             body.setStress(-10);
-            assertEquals(50, body.stress); // 変更されない
+            assertEquals(50, body.getStress()); // 変更されない
         }
 
         @Test
         public void testAddStressDeadIgnored() {
             body.setDead(true);
-            body.stress = 0;
+            body.setStress(0);
             body.addStress(100);
-            assertEquals(0, body.stress);
+            assertEquals(0, body.getStress());
         }
 
         @Test
         public void testAddStressAlive() {
             body.setDead(false);
-            body.stress = 0;
-            body.shit = 10; // plusShitが動くようにshitを0以外に
+            body.setStress(0);
+            body.setShit(10); // plusShitが動くようにshitを0以外に
             body.addStress(50);
-            assertEquals(Obj.TICK * 50, body.stress);
+            assertEquals(Entity.TICK * 50, body.getStress());
         }
 
         @Test
@@ -644,12 +644,12 @@ public class BodyAttributesTest {
             body.setDead(false);
             body.setAgeState(AgeState.ADULT);
             body.setCoreAnkoState(CoreAnkoState.DEFAULT);
-            body.stress = 0;
-            body.shit = 10;
-            int shitBefore = body.shit;
+            body.setStress(0);
+            body.setShit(10);
+            int shitBefore = body.getShit();
             body.addStress(50);
             // s > 0, DEFAULT, BURST != HALF → plusShit(50/5 = 10) で shit += 10
-            assertTrue(body.shit > shitBefore);
+            assertTrue(body.getShit() > shitBefore);
         }
 
         @Test
@@ -667,48 +667,48 @@ public class BodyAttributesTest {
     class ShitTests {
         @Test
         public void testPlusShit() {
-            body.shit = 10;
+            body.setShit(10);
             body.plusShit(5);
-            assertEquals(15, body.shit);
+            assertEquals(15, body.getShit());
         }
 
         @Test
         public void testPlusShitZeroBaseIgnored() {
-            body.shit = 0;
+            body.setShit(0);
             body.plusShit(5);
-            assertEquals(0, body.shit); // shit==0のとき何もしない
+            assertEquals(0, body.getShit()); // shit==0のとき何もしない
         }
 
         @Test
         public void testPlusShitNegativeIgnored() {
-            body.shit = 10;
+            body.setShit(10);
             body.plusShit(-5);
-            assertEquals(10, body.shit); // s<=0のとき何もしない
+            assertEquals(10, body.getShit()); // s<=0のとき何もしない
         }
 
         @Test
         public void testSetShitDirect() {
             body.setShitting(false);
             body.setShit(42, false);
-            assertEquals(42, body.shit);
+            assertEquals(42, body.getShit());
         }
 
         @Test
         public void testSetShitWhileShittingIgnored() {
             body.setShitting(true);
-            body.shit = 10;
+            body.setShit(10);
             body.setShit(99, false);
-            assertEquals(10, body.shit); // うんうん中は変更されない
+            assertEquals(10, body.getShit()); // うんうん中は変更されない
         }
 
         @Test
         public void testSetShitVeryShit() {
             body.setShitting(false);
             body.setAgeState(AgeState.ADULT);
-            body.shit = 0;
+            body.setShit(0);
             int limit = body.getShitLimitBase()[AgeState.ADULT.ordinal()];
             body.setShit(10, true);
-            assertEquals(limit - 10, body.shit);
+            assertEquals(limit - 10, body.getShit());
         }
 
         @Test
@@ -885,22 +885,22 @@ public class BodyAttributesTest {
     class SickTests {
         @Test
         public void testIsSickFalseWhenBelowIncubation() {
-            body.sickPeriod = body.getIncubationPeriodBase();
+            body.setSickPeriod(body.getIncubationPeriodBase());
             assertFalse(body.isSick());
         }
 
         @Test
         public void testIsSickTrueWhenAboveIncubation() {
-            body.sickPeriod = body.getIncubationPeriodBase() + 1;
+            body.setSickPeriod(body.getIncubationPeriodBase() + 1);
             assertTrue(body.isSick());
         }
 
         @Test
         public void testIsSickHeavily() {
-            body.sickPeriod = body.getIncubationPeriodBase() * 8;
+            body.setSickPeriod(body.getIncubationPeriodBase() * 8);
             assertFalse(body.isSickHeavily());
 
-            body.sickPeriod = body.getIncubationPeriodBase() * 8 + 1;
+            body.setSickPeriod(body.getIncubationPeriodBase() * 8 + 1);
             assertTrue(body.isSickHeavily());
         }
 
@@ -908,22 +908,22 @@ public class BodyAttributesTest {
         public void testIsSickTooHeavily() {
             body.setAgeState(AgeState.ADULT);
             int limit = body.getDamageLimitBase()[AgeState.ADULT.ordinal()];
-            body.damage = limit / 2; // VERY damage
-            body.sickPeriod = body.getIncubationPeriodBase() * 32 + 1;
+            body.setDamage(limit / 2); // VERY damage
+            body.setSickPeriod(body.getIncubationPeriodBase() * 32 + 1);
             assertTrue(body.isSickTooHeavily());
         }
 
         @Test
         public void testIsSickTooHeavilyNoDamage() {
-            body.damage = 0;
-            body.sickPeriod = body.getIncubationPeriodBase() * 32 + 1;
+            body.setDamage(0);
+            body.setSickPeriod(body.getIncubationPeriodBase() * 32 + 1);
             assertFalse(body.isSickTooHeavily()); // ダメージなしだとfalse
         }
 
         @Test
         public void testForceSetSick() {
             body.forceSetSick();
-            assertEquals(body.getIncubationPeriodBase() * 32 + 2, body.sickPeriod);
+            assertEquals(body.getIncubationPeriodBase() * 32 + 2, body.getSickPeriod());
             assertTrue(body.isSick());
             assertTrue(body.isSickHeavily());
         }
@@ -933,7 +933,7 @@ public class BodyAttributesTest {
             body.setIntelligence(Intelligence.WISE);
             StubBodyAttributes target = new StubBodyAttributes();
             initSprites(target);
-            target.sickPeriod = target.getIncubationPeriodBase() + 1;
+            target.setSickPeriod(target.getIncubationPeriodBase() + 1);
             assertTrue(body.findSick(target));
         }
 
@@ -944,11 +944,11 @@ public class BodyAttributesTest {
             initSprites(target);
 
             // 軽い病気は検知できない
-            target.sickPeriod = target.getIncubationPeriodBase() + 1;
+            target.setSickPeriod(target.getIncubationPeriodBase() + 1);
             assertFalse(body.findSick(target));
 
             // 重い病気は検知できる
-            target.sickPeriod = target.getIncubationPeriodBase() * 8 + 1;
+            target.setSickPeriod(target.getIncubationPeriodBase() * 8 + 1);
             assertTrue(body.findSick(target));
         }
     }
@@ -1014,7 +1014,7 @@ public class BodyAttributesTest {
         @Test
         public void testIsSleepyFalseWhenNotEnoughTime() {
             body.setSleeping(false);
-            body.wakeUpTime = 0;
+            body.setWakeUpTime(0);
             body.setAge(body.getActivePeriodBase()); // ちょうどでは眠くない（<で比較）
             assertFalse(body.isSleepy());
         }
@@ -1022,7 +1022,7 @@ public class BodyAttributesTest {
         @Test
         public void testIsSleepyTrueWhenEnoughTime() {
             body.setSleeping(false);
-            body.wakeUpTime = 0;
+            body.setWakeUpTime(0);
             body.setAge(body.getActivePeriodBase() + 1);
             assertTrue(body.isSleepy());
         }
@@ -1109,7 +1109,7 @@ public class BodyAttributesTest {
         @Test
         public void testFootBakeLevelNone() {
             body.setAgeState(AgeState.ADULT);
-            body.footBakePeriod = 0;
+            body.setFootBakePeriod(0);
             assertEquals(FootBake.NONE, body.getFootBakeLevel());
         }
 
@@ -1117,7 +1117,7 @@ public class BodyAttributesTest {
         public void testFootBakeLevelMidium() {
             body.setAgeState(AgeState.ADULT);
             int limit = body.getDamageLimitBase()[AgeState.ADULT.ordinal()];
-            body.footBakePeriod = (limit >> 1) + 1;
+            body.setFootBakePeriod((limit >> 1) + 1);
             assertEquals(FootBake.MIDIUM, body.getFootBakeLevel());
         }
 
@@ -1125,22 +1125,22 @@ public class BodyAttributesTest {
         public void testFootBakeLevelCritical() {
             body.setAgeState(AgeState.ADULT);
             int limit = body.getDamageLimitBase()[AgeState.ADULT.ordinal()];
-            body.footBakePeriod = limit + 1;
+            body.setFootBakePeriod(limit + 1);
             assertEquals(FootBake.CRITICAL, body.getFootBakeLevel());
         }
 
         @Test
         public void testFootBakeNegativeClamped() {
             body.setAgeState(AgeState.ADULT);
-            body.footBakePeriod = -5;
+            body.setFootBakePeriod(-5);
             assertEquals(FootBake.NONE, body.getFootBakeLevel());
-            assertEquals(0, body.footBakePeriod); // 負の値は0にクランプ
+            assertEquals(0, body.getFootBakePeriod()); // 負の値は0にクランプ
         }
 
         @Test
         public void testBodyBakeLevelNone() {
             body.setAgeState(AgeState.ADULT);
-            body.bodyBakePeriod = 0;
+            body.setBodyBakePeriod(0);
             assertEquals(BodyBake.NONE, body.getBodyBakeLevel());
         }
 
@@ -1148,7 +1148,7 @@ public class BodyAttributesTest {
         public void testBodyBakeLevelMidium() {
             body.setAgeState(AgeState.ADULT);
             int limit = body.getDamageLimitBase()[AgeState.ADULT.ordinal()];
-            body.bodyBakePeriod = limit * 2 / 5 + 1;
+            body.setBodyBakePeriod(limit * 2 / 5 + 1);
             assertEquals(BodyBake.MIDIUM, body.getBodyBakeLevel());
         }
 
@@ -1156,15 +1156,15 @@ public class BodyAttributesTest {
         public void testBodyBakeLevelCritical() {
             body.setAgeState(AgeState.ADULT);
             int limit = body.getDamageLimitBase()[AgeState.ADULT.ordinal()];
-            body.bodyBakePeriod = limit * 3 / 4 + 1;
+            body.setBodyBakePeriod(limit * 3 / 4 + 1);
             assertEquals(BodyBake.CRITICAL, body.getBodyBakeLevel());
         }
 
         @Test
         public void testIsGotBurnedFalse() {
             body.setAgeState(AgeState.ADULT);
-            body.footBakePeriod = 0;
-            body.bodyBakePeriod = 0;
+            body.setFootBakePeriod(0);
+            body.setBodyBakePeriod(0);
             assertFalse(body.isGotBurned());
         }
 
@@ -1172,24 +1172,24 @@ public class BodyAttributesTest {
         public void testIsGotBurnedTrue() {
             body.setAgeState(AgeState.ADULT);
             int limit = body.getDamageLimitBase()[AgeState.ADULT.ordinal()];
-            body.footBakePeriod = (limit >> 1) + 1;
+            body.setFootBakePeriod((limit >> 1) + 1);
             assertTrue(body.isGotBurned());
         }
 
         @Test
         public void testAddBodyBakePeriod() {
-            body.footBakePeriod = 0;
-            body.bodyBakePeriod = 0;
+            body.setFootBakePeriod(0);
+            body.setBodyBakePeriod(0);
             body.addBodyBakePeriod(100);
-            assertEquals(100 / 5, body.footBakePeriod); // s/5が足焼きに
-            assertEquals(100, body.bodyBakePeriod);
+            assertEquals(100 / 5, body.getFootBakePeriod()); // s/5が足焼きに
+            assertEquals(100, body.getBodyBakePeriod());
         }
 
         @Test
         public void testAddFootBakePeriod() {
-            body.footBakePeriod = 0;
+            body.setFootBakePeriod(0);
             body.addFootBakePeriod(50);
-            assertEquals(50, body.footBakePeriod);
+            assertEquals(50, body.getFootBakePeriod());
         }
     }
 
@@ -1234,23 +1234,23 @@ public class BodyAttributesTest {
     class AmaamaDisciplineTests {
         @Test
         public void testAddAmaamaDiscipline() {
-            body.amaamaDiscipline = 50;
+            body.setAmaamaDiscipline(50);
             body.addAmaamaDiscipline(10);
-            assertEquals(60, body.amaamaDiscipline);
+            assertEquals(60, body.getAmaamaDiscipline());
         }
 
         @Test
         public void testAddAmaamaDisciplineUpperClamp() {
-            body.amaamaDiscipline = 95;
+            body.setAmaamaDiscipline(95);
             body.addAmaamaDiscipline(10);
-            assertEquals(100, body.amaamaDiscipline);
+            assertEquals(100, body.getAmaamaDiscipline());
         }
 
         @Test
         public void testAddAmaamaDisciplineLowerClamp() {
-            body.amaamaDiscipline = 5;
+            body.setAmaamaDiscipline(5);
             body.addAmaamaDiscipline(-10);
-            assertEquals(0, body.amaamaDiscipline);
+            assertEquals(0, body.getAmaamaDiscipline());
         }
     }
 
@@ -1263,33 +1263,33 @@ public class BodyAttributesTest {
         @Test
         public void testAddLovePlayerPositive() {
             body.setCoreAnkoState(CoreAnkoState.DEFAULT);
-            body.lovePlayer = 0;
+            body.setLovePlayer(0);
             body.addLovePlayer(100);
-            assertEquals(Obj.TICK * 100, body.lovePlayer);
+            assertEquals(Entity.TICK * 100, body.getLovePlayer());
         }
 
         @Test
         public void testAddLovePlayerUpperClamp() {
             body.setCoreAnkoState(CoreAnkoState.DEFAULT);
-            body.lovePlayer = 0;
+            body.setLovePlayer(0);
             body.addLovePlayer(999999);
-            assertEquals(body.getLovePlayerLimitBase(), body.lovePlayer);
+            assertEquals(body.getLovePlayerLimitBase(), body.getLovePlayer());
         }
 
         @Test
         public void testAddLovePlayerLowerClamp() {
             body.setCoreAnkoState(CoreAnkoState.DEFAULT);
-            body.lovePlayer = 0;
+            body.setLovePlayer(0);
             body.addLovePlayer(-999999);
-            assertEquals(-1 * body.getLovePlayerLimitBase(), body.lovePlayer);
+            assertEquals(-1 * body.getLovePlayerLimitBase(), body.getLovePlayer());
         }
 
         @Test
         public void testAddLovePlayerNYDForcesHate() {
             body.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
-            body.lovePlayer = 500;
+            body.setLovePlayer(500);
             body.addLovePlayer(100);
-            assertEquals(-1 * body.getLovePlayerLimitBase(), body.lovePlayer);
+            assertEquals(-1 * body.getLovePlayerLimitBase(), body.getLovePlayer());
         }
     }
 
@@ -1302,41 +1302,41 @@ public class BodyAttributesTest {
         @Test
         public void testAddMemoriesWise() {
             body.setIntelligence(Intelligence.WISE);
-            body.memories = 0;
+            body.setMemories(0);
             body.addMemories(100);
-            assertEquals(50, body.memories); // nAdd / 2
+            assertEquals(50, body.getMemories()); // nAdd / 2
         }
 
         @Test
         public void testAddMemoriesFoolPositive() {
             body.setIntelligence(Intelligence.FOOL);
-            body.memories = 0;
+            body.setMemories(0);
             body.addMemories(100);
-            assertEquals(200, body.memories); // nAdd * 2
+            assertEquals(200, body.getMemories()); // nAdd * 2
         }
 
         @Test
         public void testAddMemoriesFoolNegative() {
             body.setIntelligence(Intelligence.FOOL);
-            body.memories = 200;
+            body.setMemories(200);
             body.addMemories(-100);
-            assertEquals(200 + (-100 / 2), body.memories); // nAdd / 2 for negative
+            assertEquals(200 + (-100 / 2), body.getMemories()); // nAdd / 2 for negative
         }
 
         @Test
         public void testAddMemoriesAveragePositive() {
             body.setIntelligence(Intelligence.AVERAGE);
-            body.memories = 0;
+            body.setMemories(0);
             body.addMemories(100);
-            assertEquals(200, body.memories); // nAdd * 2
+            assertEquals(200, body.getMemories()); // nAdd * 2
         }
 
         @Test
         public void testAddMemoriesAverageNegative() {
             body.setIntelligence(Intelligence.AVERAGE);
-            body.memories = 200;
+            body.setMemories(200);
             body.addMemories(-100);
-            assertEquals(200 + (-100), body.memories); // nAdd as-is
+            assertEquals(200 + (-100), body.getMemories()); // nAdd as-is
         }
     }
 
@@ -1400,7 +1400,7 @@ public class BodyAttributesTest {
         @Test
         public void testCanFurifuriTrue() {
             body.setAgeState(AgeState.ADULT);
-            body.footBakePeriod = 0;
+            body.setFootBakePeriod(0);
             body.setCoreAnkoState(CoreAnkoState.DEFAULT);
             assertTrue(body.canFurifuri());
         }
@@ -1409,7 +1409,7 @@ public class BodyAttributesTest {
         public void testCanFurifuriFalseWhenBurnedCritical() {
             body.setAgeState(AgeState.ADULT);
             int limit = body.getDamageLimitBase()[AgeState.ADULT.ordinal()];
-            body.footBakePeriod = limit + 1;
+            body.setFootBakePeriod(limit + 1);
             body.setCoreAnkoState(CoreAnkoState.DEFAULT);
             assertFalse(body.canFurifuri());
         }
@@ -1417,7 +1417,7 @@ public class BodyAttributesTest {
         @Test
         public void testCanFurifuriFalseWhenNYD() {
             body.setAgeState(AgeState.ADULT);
-            body.footBakePeriod = 0;
+            body.setFootBakePeriod(0);
             body.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
             assertFalse(body.canFurifuri());
         }
@@ -1537,7 +1537,7 @@ public class BodyAttributesTest {
         @Test
         public void testSetCantDie() {
             body.setCantDie();
-            assertEquals(3, body.cantDiePeriod);
+            assertEquals(3, body.getCantDiePeriod());
         }
 
         @Test
@@ -1623,7 +1623,7 @@ public class BodyAttributesTest {
         @Test
         public void testDamageStateNone() {
             body.setAgeState(AgeState.ADULT);
-            body.damage = 0;
+            body.setDamage(0);
             assertEquals(Damage.NONE, body.getDamageState());
         }
 
@@ -1631,7 +1631,7 @@ public class BodyAttributesTest {
         public void testDamageStateVery() {
             body.setAgeState(AgeState.ADULT);
             int limit = body.getDamageLimitBase()[AgeState.ADULT.ordinal()];
-            body.damage = limit / 2;
+            body.setDamage(limit / 2);
             assertEquals(Damage.VERY, body.getDamageState());
         }
 
@@ -1639,7 +1639,7 @@ public class BodyAttributesTest {
         public void testDamageStateToomuch() {
             body.setAgeState(AgeState.ADULT);
             int limit = body.getDamageLimitBase()[AgeState.ADULT.ordinal()];
-            body.damage = limit * 3 / 4;
+            body.setDamage(limit * 3 / 4);
             assertEquals(Damage.TOOMUCH, body.getDamageState());
         }
 
@@ -1647,7 +1647,7 @@ public class BodyAttributesTest {
         public void testDamageStateTriggersDeath() {
             body.setAgeState(AgeState.ADULT);
             int limit = body.getDamageLimitBase()[AgeState.ADULT.ordinal()];
-            body.damage = limit + 1;
+            body.setDamage(limit + 1);
             body.setDead(false);
 
             Damage result = body.getDamageState();
@@ -2252,7 +2252,7 @@ public class BodyAttributesTest {
         @Test
         public void testIsStressfulFalse() {
             body.setAgeState(AgeState.ADULT);
-            body.stress = 0;
+            body.setStress(0);
             assertFalse(body.isStressful());
         }
 
@@ -2261,14 +2261,14 @@ public class BodyAttributesTest {
             body.setAgeState(AgeState.ADULT);
             int limit = body.getStressLimitBase()[AgeState.ADULT.ordinal()];
             // 2/5以上でtrue (checkNonYukkuriDiseaseTolerance() returns 100 by default)
-            body.stress = limit * 2 / 5 + 1;
+            body.setStress(limit * 2 / 5 + 1);
             assertTrue(body.isStressful());
         }
 
         @Test
         public void testIsVeryStressfulFalse() {
             body.setAgeState(AgeState.ADULT);
-            body.stress = 0;
+            body.setStress(0);
             assertFalse(body.isVeryStressful());
         }
 
@@ -2277,7 +2277,7 @@ public class BodyAttributesTest {
             body.setAgeState(AgeState.ADULT);
             int limit = body.getStressLimitBase()[AgeState.ADULT.ordinal()];
             // 3/5以上でtrue
-            body.stress = limit * 3 / 5 + 1;
+            body.setStress(limit * 3 / 5 + 1);
             assertTrue(body.isVeryStressful());
         }
     }
@@ -2356,8 +2356,8 @@ public class BodyAttributesTest {
         public void testIsGotBurnedByFootBake() {
             body.setAgeState(AgeState.ADULT);
             int limit = body.getDamageLimitBase()[AgeState.ADULT.ordinal()];
-            body.footBakePeriod = (limit >> 1) + 1; // MIDIUM
-            body.bodyBakePeriod = 0;
+            body.setFootBakePeriod((limit >> 1) + 1); // MIDIUM
+            body.setBodyBakePeriod(0);
             assertTrue(body.isGotBurned());
         }
 
@@ -2365,16 +2365,16 @@ public class BodyAttributesTest {
         public void testIsGotBurnedByBodyBake() {
             body.setAgeState(AgeState.ADULT);
             int limit = body.getDamageLimitBase()[AgeState.ADULT.ordinal()];
-            body.footBakePeriod = 0;
-            body.bodyBakePeriod = limit * 2 / 5 + 1; // MIDIUM body bake
+            body.setFootBakePeriod(0);
+            body.setBodyBakePeriod(limit * 2 / 5 + 1); // MIDIUM body bake
             assertTrue(body.isGotBurned());
         }
 
         @Test
         public void testIsGotBurnedHeavilyFalse() {
             body.setAgeState(AgeState.ADULT);
-            body.footBakePeriod = 0;
-            body.bodyBakePeriod = 0;
+            body.setFootBakePeriod(0);
+            body.setBodyBakePeriod(0);
             assertFalse(body.isGotBurnedHeavily());
         }
 
@@ -2382,8 +2382,8 @@ public class BodyAttributesTest {
         public void testIsGotBurnedHeavilyByFootBakeCritical() {
             body.setAgeState(AgeState.ADULT);
             int limit = body.getDamageLimitBase()[AgeState.ADULT.ordinal()];
-            body.footBakePeriod = limit + 1; // CRITICAL
-            body.bodyBakePeriod = 0;
+            body.setFootBakePeriod(limit + 1); // CRITICAL
+            body.setBodyBakePeriod(0);
             assertTrue(body.isGotBurnedHeavily());
         }
 
@@ -2391,8 +2391,8 @@ public class BodyAttributesTest {
         public void testIsGotBurnedHeavilyByBodyBakeCritical() {
             body.setAgeState(AgeState.ADULT);
             int limit = body.getDamageLimitBase()[AgeState.ADULT.ordinal()];
-            body.footBakePeriod = 0;
-            body.bodyBakePeriod = limit * 3 / 4 + 1; // CRITICAL
+            body.setFootBakePeriod(0);
+            body.setBodyBakePeriod(limit * 3 / 4 + 1); // CRITICAL
             assertTrue(body.isGotBurnedHeavily());
         }
     }
@@ -2580,7 +2580,7 @@ public class BodyAttributesTest {
     }
 
     // ===========================================
-    // addChildrenList / removeChildrenList (with real Body instances)
+    // addChildrenList / removeChildrenList (with real Yukkuri instances)
     // ===========================================
 
     @Nested
@@ -2717,7 +2717,7 @@ public class BodyAttributesTest {
         public void testGetDiarrheaNonKaiyuWithSickDoublesProbability() {
             body.setBodyRank(BodyRank.NORAYU);
             body.setAgeState(AgeState.ADULT);
-            body.sickPeriod = body.getIncubationPeriodBase() + 1; // isSick = true
+            body.setSickPeriod(body.getIncubationPeriodBase() + 1); // isSick = true
 
             // With sick, P is halved, increasing chance of diarrhea
             // We can't assert the result deterministically without RND control
@@ -2730,7 +2730,7 @@ public class BodyAttributesTest {
             body.setBodyRank(BodyRank.NORAYU);
             body.setAgeState(AgeState.ADULT);
             int limit = body.getDamageLimitBase()[AgeState.ADULT.ordinal()];
-            body.damage = limit / 2; // isDamaged = true
+            body.setDamage(limit / 2); // isDamaged = true
 
             body.getDiarrhea();
         }
@@ -2775,7 +2775,7 @@ public class BodyAttributesTest {
             body.setAttitude(Attitude.SHITHEAD);
             body.setFurifuriDiscipline(0); // nextInt(1) always returns 0
             body.setAgeState(AgeState.ADULT);
-            body.footBakePeriod = 0;
+            body.setFootBakePeriod(0);
             body.setCoreAnkoState(CoreAnkoState.DEFAULT);
 
             // isRude=true, nextInt(0+1)=nextInt(1)=0, canFurifuri=true
@@ -2826,7 +2826,7 @@ public class BodyAttributesTest {
             src.game.Shit shit = new src.game.Shit();
             SimYukkuri.world.getCurrentMap().getTakenOutShit().put(itemId, shit);
 
-            Obj result = body.getCarryItem(src.enums.TakeoutItemType.SHIT);
+            Entity result = body.getCarryItem(src.enums.TakeoutItemType.SHIT);
             assertSame(shit, result);
 
             // Clean up
@@ -2845,7 +2845,7 @@ public class BodyAttributesTest {
             // Neither takenOutFood nor takenOutShit has this ID
             // So it falls through to BodyRegistry.getBodyInstanceFromObjId which returns
             // null
-            Obj result = body.getCarryItem(src.enums.TakeoutItemType.YUKKURI);
+            Entity result = body.getCarryItem(src.enums.TakeoutItemType.YUKKURI);
             assertNull(result);
         }
 
@@ -3088,8 +3088,8 @@ public class BodyAttributesTest {
 
         @Test
         public void testIsPullAndPush() {
-            body.setPullAndPush(true);
-            assertTrue(body.isPullAndPush());
+            body.setCanPullOrPush(true);
+            assertTrue(body.canPullOrPush());
         }
 
         @Test
@@ -3228,9 +3228,9 @@ public class BodyAttributesTest {
         @Test
         public void testAddStressDeadNoEffect() {
             body.setDead(true);
-            int stressBefore = body.stress;
+            int stressBefore = body.getStress();
             body.addStress(100);
-            assertEquals(stressBefore, body.stress);
+            assertEquals(stressBefore, body.getStress());
         }
 
         @Test
@@ -3251,7 +3251,7 @@ public class BodyAttributesTest {
         public void testAddStressNegativeNoShit() {
             body.setDead(false);
             body.setCoreAnkoState(CoreAnkoState.DEFAULT);
-            body.stress = 500;
+            body.setStress(500);
             int shitBefore = body.getShit();
             body.addStress(-100);
             // s <= 0 → no plusShit
@@ -3261,9 +3261,9 @@ public class BodyAttributesTest {
         @Test
         public void testAddStressClampToZero() {
             body.setDead(false);
-            body.stress = 100;
+            body.setStress(100);
             body.addStress(-99999);
-            assertEquals(0, body.stress);
+            assertEquals(0, body.getStress());
         }
     }
 
@@ -3293,12 +3293,12 @@ public class BodyAttributesTest {
     }
 
     // ===========================================
-    // isOverPregnantLimit テスト (Body method)
+    // isOverPregnantLimit テスト (Yukkuri method)
     // ===========================================
 
     @Nested
     class IsOverPregnantLimitTests {
-        private Body reimuBody;
+        private Yukkuri reimuBody;
 
         @BeforeEach
         public void setUpBody() {
@@ -3418,7 +3418,7 @@ public class BodyAttributesTest {
         public void testDiarrheaDamagedDoublesChance() {
             body.setBodyRank(BodyRank.NORAYU);
             body.setDiarrheaProb(10);
-            body.damage = body.getDamageLimitBase()[AgeState.ADULT.ordinal()] / 3 + 1; // isDamaged
+            body.setDamage(body.getDamageLimitBase()[AgeState.ADULT.ordinal()] / 3 + 1); // isDamaged
             SimYukkuri.RND = new ConstState(0);
             // P=10, damaged → P/2=5, nextInt(5)=0 → true
             assertTrue(body.getDiarrhea());
@@ -3436,7 +3436,7 @@ public class BodyAttributesTest {
             body.setAttitude(Attitude.SHITHEAD);
             body.setFurifuriDiscipline(0);
             body.setAgeState(AgeState.ADULT);
-            body.footBakePeriod = 0;
+            body.setFootBakePeriod(0);
             body.setCoreAnkoState(CoreAnkoState.DEFAULT);
             SimYukkuri.RND = new ConstState(0);
             // nextInt(1)=0 → RND check passes, canFurifuri=true → true
@@ -3448,7 +3448,7 @@ public class BodyAttributesTest {
             body.setAttitude(Attitude.SHITHEAD);
             body.setFurifuriDiscipline(5);
             body.setAgeState(AgeState.ADULT);
-            body.footBakePeriod = 0;
+            body.setFootBakePeriod(0);
             body.setCoreAnkoState(CoreAnkoState.DEFAULT);
             SimYukkuri.RND = new ConstState(0);
             // nextInt(6)=0 → RND check passes → true
@@ -3460,7 +3460,7 @@ public class BodyAttributesTest {
             body.setAttitude(Attitude.SHITHEAD);
             body.setFurifuriDiscipline(5);
             body.setAgeState(AgeState.ADULT);
-            body.footBakePeriod = 0;
+            body.setFootBakePeriod(0);
             body.setCoreAnkoState(CoreAnkoState.DEFAULT);
             SimYukkuri.RND = new ConstState(1);
             // nextInt(6)=1 (≠0) → false

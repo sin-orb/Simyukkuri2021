@@ -15,7 +15,7 @@ import src.system.BodyLayer;
 /**
  * StubBody のカバレッジ向上テスト.
  *
- * StubBody は Body の最小具象実装で test/src/base/ に配置されている。
+ * StubBody は Yukkuri の最小具象実装で test/src/base/ に配置されている。
  * 既存のテストでは一部メソッド（getNameE, getNameE2, getImage,
  * isImageLoaded, getPivotX, getPivotY）が未カバーだったため追加する。
  */

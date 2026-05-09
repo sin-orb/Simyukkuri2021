@@ -11,10 +11,10 @@ import java.util.Collections;
 import java.util.List;
 
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.effect.Effect;
-import src.base.Obj;
-import src.base.ObjEX;
+import src.base.Entity;
+import src.base.WorldEntity;
 import src.command.GadgetMenu;
 import src.command.GadgetMenu.GadgetList;
 import src.command.GadgetMenu.MainCategoryName;
@@ -60,7 +60,7 @@ final class Renderer {
 
 			pane.getMsgList().clear();
 			MyPane.markList.clear();
-			Body selectedBody = MyPane.getSelectBody();
+			Yukkuri selectedBody = MyPane.getSelectBody();
 			if (selectedBody != null) {
 				if (selectedBody.isRemoved()) {
 					MyPane.setSelectBody(null);
@@ -83,8 +83,8 @@ final class Renderer {
 				map.getBeltconveyor().get(i).drawShape(pane.getBackBufferG2());
 			}
 
-			List<ObjEX> platformList = GameWorld.get().getPlatformList();
-			for (ObjEX platform : platformList) {
+			List<WorldEntity> platformList = GameWorld.get().getPlatformList();
+			for (WorldEntity platform : platformList) {
 				pane.calcDrawPosition(platform, pane.getTmpRect());
 				int layerCount = platform.getImageLayer(pane.getLayerTmp());
 				if (platform instanceof BeltconveyorObj) {
@@ -106,12 +106,12 @@ final class Renderer {
 			Sprite bodyBaseSprite;
 			Sprite bodyExpandedSprite;
 			Sprite braidSprite;
-			Body selectedBodyCheck = null;
+			Yukkuri selectedBodyCheck = null;
 
-			for (Obj o : pane.getList4sort()) {
+			for (Entity o : pane.getList4sort()) {
 				switch (o.getObjType()) {
 					case YUKKURI: {
-						Body body = (Body) o;
+						Yukkuri body = (Yukkuri) o;
 						if (body == MyPane.getSelectBody()) {
 							selectedBodyCheck = body;
 						}
@@ -126,7 +126,7 @@ final class Renderer {
 						pane.calcDrawBodyPosition(pane.getTmpPoint(), bodyExpandedSprite);
 						pane.calcDrawBodyPosition(pane.getTmpPoint(), braidSprite);
 						boolean drawShadow = true;
-						Obj parentObject = body.takeMappedObj(body.getParentLinkId());
+						Entity parentObject = body.takeMappedObj(body.getParentLinkId());
 						if (parentObject != null && parentObject.getZ() < body.getZ()) {
 							drawShadow = false;
 						}
@@ -194,7 +194,7 @@ final class Renderer {
 						break;
 					}
 					case FIX_OBJECT: {
-						ObjEX platform = (ObjEX) o;
+						WorldEntity platform = (WorldEntity) o;
 						pane.calcDrawPosition(platform, pane.getTmpRect());
 						int layerCount = platform.getImageLayer(pane.getLayerTmp());
 						for (int i = 0; i < layerCount; i++) {
@@ -205,7 +205,7 @@ final class Renderer {
 						break;
 					}
 					case OBJECT: {
-						ObjEX platform = (ObjEX) o;
+						WorldEntity platform = (WorldEntity) o;
 						pane.calcDrawPosition(platform, pane.getTmpRect());
 						pane.getBackBufferG2().drawImage(platform.getShadowImage(), pane.getTmpRect().getX(),
 								pane.getTmpRect().getY(), pane.getTmpRect().getWidth(),
@@ -238,7 +238,7 @@ final class Renderer {
 				}
 			}
 
-			for (Obj o : GameWorld.get().getFrontEffectList()) {
+			for (Entity o : GameWorld.get().getFrontEffectList()) {
 				Effect effect = (Effect) o;
 				pane.calcDrawPosition(effect, pane.getTmpRect());
 				pane.getTmpRect().setY(pane.getTmpRect().getY() - Translate.translateZ(effect.getZ()));
@@ -341,7 +341,7 @@ final class Renderer {
 						Translate.getFieldH() * 100 / Translate.getMapScale());
 			}
 
-			for (Body b : pane.getMsgList()) {
+			for (Yukkuri b : pane.getMsgList()) {
 				String message = b.getMessageBuffer();
 				int fontSize = b.getMessageTextSize();
 				if (fontSize == 120) {

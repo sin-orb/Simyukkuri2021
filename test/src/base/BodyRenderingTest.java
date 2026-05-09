@@ -101,7 +101,7 @@ public class BodyRenderingTest {
     @Test
     public void testGetBodyBaseImage_Crushed() throws Exception {
         body.setCrushed(true);
-        setField(body, "okazari", null);
+        body.setOkazari(null);
         body.getBodyBaseImage(layer);
         assertTrue(body.codes.contains(ImageCode.CRUSHED2.ordinal()), "Actual: " + body.codes);
     }

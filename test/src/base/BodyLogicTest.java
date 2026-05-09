@@ -109,7 +109,7 @@ public class BodyLogicTest {
         body.getSisterList().add(2);
         body.getChildrenList().add(3);
 
-        Method m = Body.class.getDeclaredMethod("checkRemovedFamilyList");
+        Method m = Yukkuri.class.getDeclaredMethod("checkRemovedFamilyList");
         m.setAccessible(true);
         m.invoke(body);
 

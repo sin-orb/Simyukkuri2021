@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import src.base.Body;
+import src.base.Yukkuri;
 import src.enums.PublicRank;
 import src.util.WorldTestHelper;
 
@@ -19,8 +19,8 @@ class BodyApproachRuleTest {
 	void testHandleApproach_nonFlyerSetsMoveToBodyPosition() {
 		WorldTestHelper.initializeMinimalWorld();
 		WorldTestHelper.initializeStandardTranslate200();
-		Body me = WorldTestHelper.createBody();
-		Body you = WorldTestHelper.createBody();
+		Yukkuri me = WorldTestHelper.createBody();
+		Yukkuri you = WorldTestHelper.createBody();
 		me.setX(100);
 		me.setY(100);
 		you.setX(200);

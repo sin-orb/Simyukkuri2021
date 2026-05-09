@@ -17,7 +17,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.entity.world.bodylinked.Okazari;
 import src.draw.World;
 import src.enums.AgeState;
@@ -67,7 +67,7 @@ public class FireTest {
 
     @Test
     public void testConstructorDefaultsAndBoundary() {
-        Body parent = createParent(AgeState.CHILD);
+        Yukkuri parent = createParent(AgeState.CHILD);
         Fire fire = new Fire(parent);
 
         assertEquals(parent.getUniqueID(), fire.getParent());
@@ -83,7 +83,7 @@ public class FireTest {
 
     @Test
     public void testBurnPeriodGetterSetter() {
-        Body parent = createParent(AgeState.CHILD);
+        Yukkuri parent = createParent(AgeState.CHILD);
         Fire fire = new Fire(parent);
 
         assertEquals(0, fire.getBurnPeriod());
@@ -107,7 +107,7 @@ public class FireTest {
 
     @Test
     public void testGetImageReturnsNullWhenParentNotInMap() {
-        Body parent = createParent(AgeState.CHILD);
+        Yukkuri parent = createParent(AgeState.CHILD);
         Fire fire = new Fire(parent);
 
         SimYukkuri.world.getCurrentMap().getBody().remove(parent.getUniqueID());
@@ -118,7 +118,7 @@ public class FireTest {
 
     @Test
     public void testGetImageReturnsCorrectAnimeFrame() {
-        Body parent = createParent(AgeState.CHILD);
+        Yukkuri parent = createParent(AgeState.CHILD);
         Fire fire = new Fire(parent);
 
         // animeFrameが0の場合
@@ -144,9 +144,9 @@ public class FireTest {
 
     @Test
     public void testGetImageReturnsCorrectImageForAge() {
-        Body babyParent = createParent(AgeState.BABY);
-        Body childParent = createParent(AgeState.CHILD);
-        Body adultParent = createParent(AgeState.ADULT);
+        Yukkuri babyParent = createParent(AgeState.BABY);
+        Yukkuri childParent = createParent(AgeState.CHILD);
+        Yukkuri adultParent = createParent(AgeState.ADULT);
 
         Fire babyFire = new Fire(babyParent);
         Fire childFire = new Fire(childParent);
@@ -163,7 +163,7 @@ public class FireTest {
 
     @Test
     public void testResetBoundaryUsesParentAge() {
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         Fire fire = new Fire(parent);
 
         fire.resetBoundary();
@@ -176,7 +176,7 @@ public class FireTest {
 
     @Test
     public void testResetBoundaryDoesNothingWhenParentNotInMap() {
-        Body parent = createParent(AgeState.CHILD);
+        Yukkuri parent = createParent(AgeState.CHILD);
         Fire fire = new Fire(parent);
 
         int origPivotX = fire.getPivotX();
@@ -192,7 +192,7 @@ public class FireTest {
 
     @Test
     public void testToStringUsesResourceUtil() {
-        Body parent = createParent(AgeState.BABY);
+        Yukkuri parent = createParent(AgeState.BABY);
         Fire fire = new Fire(parent);
 
         assertEquals(ResourceUtil.getInstance().read("item_fire"), fire.toString());
@@ -207,7 +207,7 @@ public class FireTest {
 
     @Test
     public void testConstructorWithParentNotInWorld() {
-        Body parent = new Reimu();
+        Yukkuri parent = new Reimu();
         parent.setAgeState(AgeState.CHILD);
         Fire fire = new Fire(parent);
         assertEquals(0, fire.getValue());
@@ -216,7 +216,7 @@ public class FireTest {
 
     @Test
     public void testUpdateReturnsRemovedWhenDeadAndBurned() {
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         Fire fire = new Fire(parent);
 
         parent.setDead(true);
@@ -229,7 +229,7 @@ public class FireTest {
 
     @Test
     public void testUpdateDoesNotReturnRemovedWhenDeadButNotBurned() {
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         Fire fire = new Fire(parent);
 
         parent.setDead(true);
@@ -242,7 +242,7 @@ public class FireTest {
 
     @Test
     public void testUpdateIncreasesBurnPeriodWhenDead() {
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         Fire fire = new Fire(parent);
         parent.setDead(true);
 
@@ -253,7 +253,7 @@ public class FireTest {
 
     @Test
     public void testUpdateTakesOkazariWhenBurnPeriodHighAndHasOkazari() {
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         Fire fire = new Fire(parent);
         parent.setDead(true);
 
@@ -273,7 +273,7 @@ public class FireTest {
 
     @Test
     public void testUpdatePicksHairWhenBurnPeriodHighAndNotBald() {
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         Fire fire = new Fire(parent);
         parent.setDead(true);
 
@@ -293,7 +293,7 @@ public class FireTest {
 
     @Test
     public void testUpdateSetsBurnedWhenBurnPeriodVeryHighAndDead() {
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         Fire fire = new Fire(parent);
         parent.setDead(true);
         parent.setBurned(false);
@@ -314,7 +314,7 @@ public class FireTest {
 
     @Test
     public void testUpdateAliveParentAddsDamageAndStress() {
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         Fire fire = new Fire(parent);
         parent.setDead(false);
         // NYD状態にしてメッセージ呼び出しを回避
@@ -328,7 +328,7 @@ public class FireTest {
 
     @Test
     public void testUpdateAliveParentNotNYDTalking() {
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         Fire fire = new Fire(parent);
         parent.setDead(false);
         parent.setCoreAnkoState(CoreAnkoState.DEFAULT);
@@ -344,7 +344,7 @@ public class FireTest {
     public void testUpdateAliveParentFixBackNotNeedledFurifuri() {
         // RNDが常に0を返すようにする → nextInt(10)==0 がtrue
         SimYukkuri.RND = new ConstState(0);
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         Fire fire = new Fire(parent);
         parent.setDead(false);
         parent.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
@@ -360,7 +360,7 @@ public class FireTest {
     public void testUpdateAliveParentFixBackNotNeedledNoFurifuri() {
         // RNDが1を返す → nextInt(10)==0 がfalse
         SimYukkuri.RND = new ConstState(1);
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         Fire fire = new Fire(parent);
         parent.setDead(false);
         parent.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
@@ -373,7 +373,7 @@ public class FireTest {
 
     @Test
     public void testUpdateAliveParentFixBackNeedled() {
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         Fire fire = new Fire(parent);
         parent.setDead(false);
         parent.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
@@ -388,7 +388,7 @@ public class FireTest {
     public void testUpdateAliveParentLockmoveNobinobi() {
         // RNDが常に0を返す → nextInt(3)==0 がtrue
         SimYukkuri.RND = new ConstState(0);
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         Fire fire = new Fire(parent);
         parent.setDead(false);
         parent.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
@@ -404,7 +404,7 @@ public class FireTest {
     public void testUpdateAliveParentLockmoveNoNobinobi() {
         // RNDが1を返す → nextInt(3)==0 がfalse
         SimYukkuri.RND = new ConstState(1);
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         Fire fire = new Fire(parent);
         parent.setDead(false);
         parent.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
@@ -417,7 +417,7 @@ public class FireTest {
     @Test
     public void testUpdateAliveParentNotLockmove() {
         SimYukkuri.RND = new ConstState(1);
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         Fire fire = new Fire(parent);
         parent.setDead(false);
         parent.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
@@ -430,7 +430,7 @@ public class FireTest {
 
     @Test
     public void testUpdateAliveParentNYDState() {
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         Fire fire = new Fire(parent);
         parent.setDead(false);
         // NYD状態にする（isNotNYD() == false）
@@ -442,7 +442,7 @@ public class FireTest {
 
     @Test
     public void testUpdateAliveParentBurnPeriodIncreasesWhenAlive() {
-        Body parent = createParent(AgeState.ADULT);
+        Yukkuri parent = createParent(AgeState.ADULT);
         Fire fire = new Fire(parent);
         parent.setDead(false);
         parent.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
@@ -452,8 +452,8 @@ public class FireTest {
         assertTrue(fire.getBurnPeriod() > 0);
     }
 
-    private static Body createParent(AgeState ageState) {
-        Body parent = new Reimu();
+    private static Yukkuri createParent(AgeState ageState) {
+        Yukkuri parent = new Reimu();
         parent.setAgeState(ageState);
         // bodySprを初期化（addStress→getBurstState→getSize でNPE回避）
         Sprite[] spr = new Sprite[3];
@@ -483,8 +483,8 @@ public class FireTest {
         public void testStalkMotherReactsWhenRndHits() {
             // RND=0 → nextInt(3)==0 → 親が反応する
             SimYukkuri.RND = new ConstState(0);
-            Body child = createParent(AgeState.BABY);
-            Body mother = createParent(AgeState.ADULT);
+            Yukkuri child = createParent(AgeState.BABY);
+            Yukkuri mother = createParent(AgeState.ADULT);
             mother.setHappiness(Happiness.HAPPY);
             mother.setMsgType(YukkuriType.REIMU);
             // 子をNYDにしてsetMessage NPE回避（茎母親のNYDチェックは母親側）
@@ -511,8 +511,8 @@ public class FireTest {
         public void testStalkMotherNoReactionWhenRndMisses() {
             // RND=1 → nextInt(3)==1≠0 → 親が反応しない
             SimYukkuri.RND = new ConstState(1);
-            Body child = createParent(AgeState.BABY);
-            Body mother = createParent(AgeState.ADULT);
+            Yukkuri child = createParent(AgeState.BABY);
+            Yukkuri mother = createParent(AgeState.ADULT);
             mother.setHappiness(Happiness.HAPPY);
             child.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
 
@@ -534,8 +534,8 @@ public class FireTest {
         public void testStalkMotherNoReactionWhenMotherNYD() {
             // RND=0 → nextInt(3)==0 だが母がNYDなら反応しない
             SimYukkuri.RND = new ConstState(0);
-            Body child = createParent(AgeState.BABY);
-            Body mother = createParent(AgeState.ADULT);
+            Yukkuri child = createParent(AgeState.BABY);
+            Yukkuri mother = createParent(AgeState.ADULT);
             mother.setHappiness(Happiness.HAPPY);
             mother.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
             child.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
@@ -558,7 +558,7 @@ public class FireTest {
         public void testStalkMotherNoReactionWhenNoStalk() {
             // RND=0 → nextInt(3)==0 だが茎がないなら反応しない
             SimYukkuri.RND = new ConstState(0);
-            Body child = createParent(AgeState.BABY);
+            Yukkuri child = createParent(AgeState.BABY);
             child.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
 
             Fire fire = new Fire(child);
@@ -576,7 +576,7 @@ public class FireTest {
         @Test
         void testScenario_LiveBodyWithOkazariBurnsDamageStressAndLosesDecoration() {
             SimYukkuri.RND = new ConstState(1);
-            Body parent = createParent(AgeState.ADULT);
+            Yukkuri parent = createParent(AgeState.ADULT);
             Fire fire = new Fire(parent);
             parent.setDead(false);
             parent.setCoreAnkoState(CoreAnkoState.DEFAULT);
@@ -598,7 +598,7 @@ public class FireTest {
         @Test
         void testScenario_DeadBaldBodyCrossesFinalBurnThresholdAndIsRemoved() {
             SimYukkuri.RND = new ConstState(1);
-            Body parent = createParent(AgeState.ADULT);
+            Yukkuri parent = createParent(AgeState.ADULT);
             Fire fire = new Fire(parent);
             parent.setDead(true);
             parent.setBurned(false);

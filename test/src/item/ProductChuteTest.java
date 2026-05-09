@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.base.ItemTestBase;
 import src.enums.WorldEntityKind;
 import src.enums.Type;
@@ -30,7 +30,7 @@ class ProductChuteTest extends ItemTestBase {
         assertEquals(100, item.getX());
         assertEquals(200, item.getY());
         assertEquals(Type.PLATFORM, item.getObjType());
-        assertEquals(WorldEntityKind.PRODUCTCHUTE, item.getObjEXType());
+        assertEquals(WorldEntityKind.PRODUCTCHUTE, item.getWorldEntityType());
         assertEquals(5000, item.getValue());
         assertEquals(50, item.getCost());
         assertEquals(10, item.getInterval());
@@ -63,7 +63,7 @@ class ProductChuteTest extends ItemTestBase {
     void testObjHitProcessWithStone() {
         ProductChute chute = new ProductChute(50, 50, 0);
         Stone stone = new Stone(50, 50, 0);
-        // Stone は Body でも Diffuser でも Yunba でもないので Cash.addCash + o.remove()
+        // Stone は Yukkuri でも Diffuser でも Yunba でもないので Cash.addCash + o.remove()
         assertEquals(0, chute.objHitProcess(stone));
         assertTrue(stone.isRemoved());
     }
@@ -120,7 +120,7 @@ class ProductChuteTest extends ItemTestBase {
         @Test
         void testScenario_PackedBodyIsSoldAndRemovedWithNetCashGain() {
             ProductChute chute = new ProductChute(50, 50, 0);
-            Body body = WorldTestHelper.createBody();
+            Yukkuri body = WorldTestHelper.createBody();
             body.setPacked(true);
             body.setAgeState(src.enums.AgeState.ADULT);
             long beforeCash = SimYukkuri.world.getPlayer().getCash();

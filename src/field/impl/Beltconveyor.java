@@ -30,8 +30,8 @@ import javax.swing.JPanel;
 
 import src.SimYukkuri;
 import src.util.GameWorld;
-import src.base.Body;
-import src.base.Obj;
+import src.base.Yukkuri;
+import src.base.Entity;
 import src.draw.ModLoader;
 import src.draw.Point4y;
 import src.draw.Translate;
@@ -205,8 +205,8 @@ public class Beltconveyor extends FieldShape {
 	private static transient BufferedImage[] images = new BufferedImage[4];
 	private static transient TexturePaint[] texture = new TexturePaint[4];
 
-	private boolean[][] setting = new boolean[SetupMenu.values().length][3];// = ObjEX.YUKKURI | ObjEX.SHIT | ObjEX.FOOD
-																			// | ObjEX.VOMIT | ObjEX.STALK;
+	private boolean[][] setting = new boolean[SetupMenu.values().length][3];// = WorldEntity.YUKKURI | WorldEntity.SHIT | WorldEntity.FOOD
+																			// | WorldEntity.VOMIT | WorldEntity.STALK;
 	private DirectCombo direction;
 	private SpeedCombo beltSpeed;
 
@@ -378,13 +378,13 @@ public class Beltconveyor extends FieldShape {
 	}
 
 	/** 処理する必要のあるオブジェクトか判定 */
-	public boolean checkHitObj(Obj o) {
+	public boolean checkHitObj(Entity o) {
 
 		boolean matches = false;
 
 		switch (o.getObjType()) {
 			case YUKKURI:
-				Body b = (Body) o;
+				Yukkuri b = (Yukkuri) o;
 				int ageIdx = b.getBodyAgeState().ordinal();
 				int bodyIdx;
 				// settingのインデックスはSetupButton.ordinal() + SetupMenu.NORMAL_BABY.ordinal()
@@ -432,7 +432,7 @@ public class Beltconveyor extends FieldShape {
 	}
 
 	/** ヒットしたオブジェクトの処理 */
-	public void processHitObj(Obj o) {
+	public void processHitObj(Entity o) {
 
 		switch (direction) {
 			case RIGHT:

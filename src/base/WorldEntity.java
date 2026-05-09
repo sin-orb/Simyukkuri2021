@@ -20,9 +20,9 @@ import src.field.impl.Barrier;
  * ゆっくり以外のゲーム内オブジェクトの元となるクラス
  */
 @JsonTypeInfo(use = Id.CLASS)
-public abstract class ObjEX extends Obj {
+public abstract class WorldEntity extends Entity {
 	/** オブジェクトタイプ */
-	protected WorldEntityKind objEXType;
+	protected WorldEntityKind worldEntityType;
 	/** 追加情報用の汎用定数 */
 	protected int option;
 
@@ -80,8 +80,8 @@ public abstract class ObjEX extends Obj {
 	abstract public void removeListData();
 
 	/** オブジェクトのタイプのゲッター */
-	public WorldEntityKind getObjEXType() {
-		return objEXType;
+	public WorldEntityKind getWorldEntityType() {
+		return worldEntityType;
 	}
 
 	/** オプションのゲッター */
@@ -167,7 +167,7 @@ public abstract class ObjEX extends Obj {
 	 * @param checkZ 空中のものもチェックするかどうか
 	 * @return 当たっているかどうか
 	 */
-	public boolean checkHitObj(Obj obj, boolean checkZ) {
+	public boolean checkHitObj(Entity obj, boolean checkZ) {
 		if (obj == null) {
 			return false;
 		}
@@ -189,12 +189,12 @@ public abstract class ObjEX extends Obj {
 	/**
 	 * 当たり判定されるオブジェクトのチェック
 	 * <br>
-	 * 動作はobjHitProcess( Obj o )で
+	 * 動作はobjHitProcess( Entity o )で
 	 * 
 	 * @param colRect 判定用長方形
 	 * @param o       対象オブジェクト
 	 */
-	public boolean checkHitObj(Rectangle colRect, Obj o) {
+	public boolean checkHitObj(Rectangle colRect, Entity o) {
 		if (o == null) {
 			return false;
 		}
@@ -212,7 +212,7 @@ public abstract class ObjEX extends Obj {
 	}
 
 	/** 当たり判定されたオブジェクトへの処理 */
-	public int objHitProcess(Obj o) {
+	public int objHitProcess(Entity o) {
 		return 0;
 	};
 
@@ -295,7 +295,7 @@ public abstract class ObjEX extends Obj {
 	};
 
 	/** 初期設定 */
-	public ObjEX(int initX, int initY, int initOption) {
+	public WorldEntity(int initX, int initY, int initOption) {
 		objId = Numbering.INSTANCE.numberingObjId();
 		objType = Type.PLATFORM;
 		x = initX;
@@ -337,8 +337,8 @@ public abstract class ObjEX extends Obj {
 		this.tmpPos = tmpPos;
 	}
 
-	public void setObjEXType(WorldEntityKind objEXType) {
-		this.objEXType = objEXType;
+	public void setObjEXType(WorldEntityKind worldEntityType) {
+		this.worldEntityType = worldEntityType;
 	}
 
 	public void setParentLinkId(int parentLinkId) {
@@ -349,7 +349,7 @@ public abstract class ObjEX extends Obj {
 		this.looks = looks;
 	}
 
-	public ObjEX() {
+	public WorldEntity() {
 
 	}
 }

@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.event.EventPacket.EventPriority;
 import src.draw.World;
 import src.enums.AgeState;
@@ -24,8 +24,8 @@ class PredatorsGameEventTest {
         WorldTestHelper.initializeStandardTranslate500();
     }
 
-    private static Body createBody() {
-        Body b = new src.yukkuri.Reimu();
+    private static Yukkuri createBody() {
+        Yukkuri b = new src.yukkuri.Reimu();
         b.setAgeState(AgeState.ADULT);
         src.system.Sprite[] spr = new src.system.Sprite[3];
         for (int i = 0; i < 3; i++) {
@@ -46,8 +46,8 @@ class PredatorsGameEventTest {
 
     @Test
     void testParameterizedConstructor() {
-        Body from = createBody();
-        Body to = createBody();
+        Yukkuri from = createBody();
+        Yukkuri to = createBody();
         PredatorsGameEvent event = new PredatorsGameEvent(from, to, null, 1);
         assertNotNull(event);
         assertEquals(from.getUniqueID(), event.getFrom());
@@ -57,7 +57,7 @@ class PredatorsGameEventTest {
 
     @Test
     void testCheckEventResponse_setsPriorityLow() {
-        Body from = createBody();
+        Yukkuri from = createBody();
         PredatorsGameEvent event = new PredatorsGameEvent(from, null, null, 1);
         event.checkEventResponse(from);
         assertEquals(EventPriority.LOW, event.getPriority());
@@ -65,7 +65,7 @@ class PredatorsGameEventTest {
 
     @Test
     void testCheckEventResponse_returnsFalseWhenDead() {
-        Body from = createBody();
+        Yukkuri from = createBody();
         from.setDead(true);
         PredatorsGameEvent event = new PredatorsGameEvent(from, null, null, 1);
         assertFalse(event.checkEventResponse(from));
@@ -73,7 +73,7 @@ class PredatorsGameEventTest {
 
     @Test
     void testExecute_whenToyIsNull() {
-        Body from = createBody();
+        Yukkuri from = createBody();
         PredatorsGameEvent event = new PredatorsGameEvent(from, null, null, 1);
         // toy field defaults to -1, so getBodyInstance returns null
         // execute accesses toy and may throw NPE when toy is null and code does toy.setLinkParent
@@ -91,7 +91,7 @@ class PredatorsGameEventTest {
     // --- update ---
     @Test
     void testUpdate_fromNull_toyNull_returnsAbort() {
-        Body b = createBody();
+        Yukkuri b = createBody();
         PredatorsGameEvent event = new PredatorsGameEvent();
         // from=-1, toy=-1 → both null → ABORT
         assertEquals(src.event.EventPacket.UpdateState.ABORT, event.update(b));
@@ -99,9 +99,9 @@ class PredatorsGameEventTest {
 
     @Test
     void testUpdate_bNotFrom_returnsNull() {
-        Body from = createBody();
-        Body b = createBody();
-        Body toy = createBody(); // use as toy
+        Yukkuri from = createBody();
+        Yukkuri b = createBody();
+        Yukkuri toy = createBody(); // use as toy
         PredatorsGameEvent event = new PredatorsGameEvent(from, null, null, 1);
         try {
             java.lang.reflect.Field f = PredatorsGameEvent.class.getDeclaredField("toy");
@@ -115,7 +115,7 @@ class PredatorsGameEventTest {
     // --- start ---
     @Test
     void testStart_doesNotThrow() {
-        Body b = createBody();
+        Yukkuri b = createBody();
         PredatorsGameEvent event = new PredatorsGameEvent(b, null, null, 1);
         assertDoesNotThrow(() -> event.start(b));
     }
@@ -123,8 +123,8 @@ class PredatorsGameEventTest {
     // --- update: toy grabbed → ABORT ---
     @Test
     void testUpdate_toyGrabbed_returnsAbort() {
-        Body from = createBody();
-        Body toy = createBody();
+        Yukkuri from = createBody();
+        Yukkuri toy = createBody();
         PredatorsGameEvent event = new PredatorsGameEvent(from, null, null, 1);
         event.toy = toy.getUniqueID();
         toy.setGrabbed(true);
@@ -134,8 +134,8 @@ class PredatorsGameEventTest {
     // --- update: toy dead → ABORT ---
     @Test
     void testUpdate_toyDead_returnsAbort() {
-        Body from = createBody();
-        Body toy = createBody();
+        Yukkuri from = createBody();
+        Yukkuri toy = createBody();
         PredatorsGameEvent event = new PredatorsGameEvent(from, null, null, 1);
         event.toy = toy.getUniqueID();
         toy.setDead(true);
@@ -145,8 +145,8 @@ class PredatorsGameEventTest {
     // --- update: snack=true → FORCE_EXEC ---
     @Test
     void testUpdate_snackTrue_returnsForceExec() {
-        Body from = createBody();
-        Body toy = createBody();
+        Yukkuri from = createBody();
+        Yukkuri toy = createBody();
         PredatorsGameEvent event = new PredatorsGameEvent(from, null, null, 1);
         event.toy = toy.getUniqueID();
         event.snack = true;
@@ -156,8 +156,8 @@ class PredatorsGameEventTest {
     // --- update: tick=0 (default) >= 0, b==from → does not throw ---
     @Test
     void testUpdate_tickZero_bEqualsFrom_doesNotThrow() {
-        Body from = createBody();
-        Body toy = createBody();
+        Yukkuri from = createBody();
+        Yukkuri toy = createBody();
         PredatorsGameEvent event = new PredatorsGameEvent(from, null, null, 1);
         event.toy = toy.getUniqueID();
         assertDoesNotThrow(() -> event.update(from));
@@ -166,8 +166,8 @@ class PredatorsGameEventTest {
     // --- update: toy removed → ABORT ---
     @Test
     void testUpdate_toyRemoved_returnsAbort() {
-        Body from = createBody();
-        Body toy = createBody();
+        Yukkuri from = createBody();
+        Yukkuri toy = createBody();
         PredatorsGameEvent event = new PredatorsGameEvent(from, null, null, 1);
         event.toy = toy.getUniqueID();
         toy.setRemoved(true);
@@ -178,10 +178,10 @@ class PredatorsGameEventTest {
 
     @Test
     void testCheckEventResponse_predatorBody_scansBodies() {
-        Body from = createBody();
+        Yukkuri from = createBody();
         from.setPredatorType(src.enums.PredatorType.BITE); // make from a predator
         // Add a prey body (not predator) to the world
-        Body prey = createBody();
+        Yukkuri prey = createBody();
         // prey is Reimu (not predator), alive
 
         PredatorsGameEvent event = new PredatorsGameEvent(from, null, null, 1);
@@ -194,7 +194,7 @@ class PredatorsGameEventTest {
 
     @Test
     void testCheckEventResponse_notPredator_returnsFalse() {
-        Body from = createBody();
+        Yukkuri from = createBody();
         // from is not a predator (default predatorType=null)
         PredatorsGameEvent event = new PredatorsGameEvent(from, null, null, 1);
         // b == from but isPredatorType() = false → falls through to return false
@@ -212,8 +212,8 @@ class PredatorsGameEventTest {
     // --- update: isVeryHungry (hungry=0) with tick=-1 → ABORT ---
     @Test
     void testUpdate_veryHungry_returnsAbort() {
-        Body from = createBody();
-        Body toy = createBody();
+        Yukkuri from = createBody();
+        Yukkuri toy = createBody();
         PredatorsGameEvent event = new PredatorsGameEvent(from, null, null, 1);
         event.toy = toy.getUniqueID();
         event.tick = -1; // skip the tick>=0 block
@@ -224,8 +224,8 @@ class PredatorsGameEventTest {
     // --- update: tick=-1, not hungry, non-contact → b.moveTo, returns null ---
     @Test
     void testUpdate_tick_negative_notHungry_nonContact_doesNotThrow() {
-        Body from = createBody();
-        Body toy = createBody();
+        Yukkuri from = createBody();
+        Yukkuri toy = createBody();
         from.setHungry(5000); // not very hungry
         from.setX(0); from.setY(0);
         toy.setX(500); toy.setY(500); // far away → non-contact
@@ -244,8 +244,8 @@ class PredatorsGameEventTest {
     // --- execute: toy removed → setParentLinkId(-1), returns true ---
     @Test
     void testExecute_toyRemoved_returnsTrue() {
-        Body from = createBody();
-        Body toy = createBody();
+        Yukkuri from = createBody();
+        Yukkuri toy = createBody();
         toy.setRemoved(true);
         PredatorsGameEvent event = new PredatorsGameEvent(from, null, null, 1);
         event.toy = toy.getUniqueID();
@@ -255,8 +255,8 @@ class PredatorsGameEventTest {
     // --- execute: toy alive (not removed/grabbed/dead) → setCalc, return false ---
     @Test
     void testExecute_toyAlive_returnsFalse() {
-        Body from = createBody();
-        Body toy = createBody();
+        Yukkuri from = createBody();
+        Yukkuri toy = createBody();
         PredatorsGameEvent event = new PredatorsGameEvent(from, null, null, 1);
         event.toy = toy.getUniqueID();
         // tick2=0 → becomes 1, != 20 → returns false
@@ -266,8 +266,8 @@ class PredatorsGameEventTest {
     // --- execute: toy grabbed → returns true ---
     @Test
     void testExecute_toyGrabbed_returnsTrue() {
-        Body from = createBody();
-        Body toy = createBody();
+        Yukkuri from = createBody();
+        Yukkuri toy = createBody();
         toy.setGrabbed(true);
         PredatorsGameEvent event = new PredatorsGameEvent(from, null, null, 1);
         event.toy = toy.getUniqueID();
@@ -277,8 +277,8 @@ class PredatorsGameEventTest {
     // --- execute: toy dead → returns true ---
     @Test
     void testExecute_toyDead_returnsTrue() {
-        Body from = createBody();
-        Body toy = createBody();
+        Yukkuri from = createBody();
+        Yukkuri toy = createBody();
         toy.setDead(true);
         PredatorsGameEvent event = new PredatorsGameEvent(from, null, null, 1);
         event.toy = toy.getUniqueID();
@@ -288,7 +288,7 @@ class PredatorsGameEventTest {
     // --- end ---
     @Test
     void testEnd_setsGrabbingFalse() {
-        Body from = createBody();
+        Yukkuri from = createBody();
         PredatorsGameEvent event = new PredatorsGameEvent(from, null, null, 1);
         // Set grabbing to true via reflection
         try {
@@ -315,8 +315,8 @@ class PredatorsGameEventTest {
 
         @Test
         void testScenario_DeadToyMakesPredatorPuffAndAbort() {
-            Body from = createBody();
-            Body toy = createBody();
+            Yukkuri from = createBody();
+            Yukkuri toy = createBody();
             toy.setDead(true);
             PredatorsGameEvent event = new PredatorsGameEvent(from, null, null, 1);
             event.toy = toy.getUniqueID();

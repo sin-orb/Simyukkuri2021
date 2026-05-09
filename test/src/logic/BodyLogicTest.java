@@ -19,7 +19,7 @@ import org.junit.jupiter.api.Test;
 
 import src.ConstState;
 import src.SimYukkuri;
-import src.base.Body;
+import src.base.Yukkuri;
 import src.draw.Translate;
 import src.enums.AgeState;
 import src.enums.Attitude;
@@ -53,8 +53,8 @@ import src.enums.Where;
 
 class BodyLogicTest {
 
-    private Body me;
-    private Body you;
+    private Yukkuri me;
+    private Yukkuri you;
     private Random originalRnd;
 
     @BeforeEach
@@ -147,7 +147,7 @@ class BodyLogicTest {
             you.setX(105);
             you.setY(100);
 
-            Body normal = WorldTestHelper.createBody();
+            Yukkuri normal = WorldTestHelper.createBody();
             normal.setPublicRank(PublicRank.NONE);
             normal.setSleeping(false);
             normal.setX(110);
@@ -273,7 +273,7 @@ class BodyLogicTest {
 
         @Test
         void testScenario_PheromoneDecoratedTargetOverridesCloserBodyForSteal() {
-            Body closer = WorldTestHelper.createBody();
+            Yukkuri closer = WorldTestHelper.createBody();
             closer.setBodySpr(makeSprites(1, 1));
             closer.setX(105);
             closer.setY(100);
@@ -535,7 +535,7 @@ class BodyLogicTest {
             you.setAgeState(AgeState.CHILD);
             me.setAttitude(Attitude.NICE);
             you.makeDirty(true);
-            Body sharedParent = WorldTestHelper.createBody();
+            Yukkuri sharedParent = WorldTestHelper.createBody();
             SimYukkuri.world.getCurrentMap().getBody().put(sharedParent.getUniqueID(), sharedParent);
             WorldTestHelper.setParents(me, -1, sharedParent.getUniqueID());
             WorldTestHelper.setParents(you, -1, sharedParent.getUniqueID());
@@ -597,7 +597,7 @@ class BodyLogicTest {
             me.setAgeState(AgeState.CHILD);
             you.setAgeState(AgeState.BABY);
             WorldTestHelper.setDamage(you, you.getDamageLimitBase()[AgeState.BABY.ordinal()] / 2 + 1);
-            Body sharedParent = WorldTestHelper.createBody();
+            Yukkuri sharedParent = WorldTestHelper.createBody();
             SimYukkuri.world.getCurrentMap().getBody().put(sharedParent.getUniqueID(), sharedParent);
             WorldTestHelper.setParents(me, -1, sharedParent.getUniqueID());
             WorldTestHelper.setParents(you, -1, sharedParent.getUniqueID());
@@ -856,7 +856,7 @@ class BodyLogicTest {
             me.setPublicRank(PublicRank.NONE);
             you.setPublicRank(PublicRank.NONE);
             you.setDead(true);
-            Body sharedParent = WorldTestHelper.createBody();
+            Yukkuri sharedParent = WorldTestHelper.createBody();
             sharedParent.setBodySpr(makeSprites(1, 1));
             SimYukkuri.world.getCurrentMap().getBody().put(sharedParent.getUniqueID(), sharedParent);
             WorldTestHelper.setParents(me, -1, sharedParent.getUniqueID());
@@ -884,7 +884,7 @@ class BodyLogicTest {
             me.setPublicRank(PublicRank.NONE);
             you.setPublicRank(PublicRank.NONE);
             you.setDead(true);
-            Body sharedParent = WorldTestHelper.createBody();
+            Yukkuri sharedParent = WorldTestHelper.createBody();
             sharedParent.setBodySpr(makeSprites(1, 1));
             SimYukkuri.world.getCurrentMap().getBody().put(sharedParent.getUniqueID(), sharedParent);
             WorldTestHelper.setParents(me, -1, sharedParent.getUniqueID());
@@ -1141,7 +1141,7 @@ class BodyLogicTest {
             you.setAttitude(Attitude.SHITHEAD);
             me.setStress(100);
             you.setStress(100);
-            Body sharedParent = WorldTestHelper.createBody();
+            Yukkuri sharedParent = WorldTestHelper.createBody();
             sharedParent.setBodySpr(makeSprites(1, 1));
             SimYukkuri.world.getCurrentMap().getBody().put(sharedParent.getUniqueID(), sharedParent);
             WorldTestHelper.setParents(me, -1, sharedParent.getUniqueID());
@@ -1473,7 +1473,7 @@ class BodyLogicTest {
             you.setAgeState(AgeState.ADULT);
             me.setHappiness(Happiness.AVERAGE);
             you.setHappiness(Happiness.VERY_HAPPY);
-            Body sharedParent = WorldTestHelper.createBody();
+            Yukkuri sharedParent = WorldTestHelper.createBody();
             sharedParent.setBodySpr(makeSprites(1, 1));
             sharedParent.setAgeState(AgeState.ADULT);
             SimYukkuri.world.getCurrentMap().getBody().put(sharedParent.getUniqueID(), sharedParent);
@@ -1500,7 +1500,7 @@ class BodyLogicTest {
             you.setAgeState(AgeState.ADULT);
             me.setHappiness(Happiness.HAPPY);
             you.setHappiness(Happiness.VERY_SAD);
-            Body sharedParent = WorldTestHelper.createBody();
+            Yukkuri sharedParent = WorldTestHelper.createBody();
             sharedParent.setBodySpr(makeSprites(1, 1));
             sharedParent.setAgeState(AgeState.ADULT);
             SimYukkuri.world.getCurrentMap().getBody().put(sharedParent.getUniqueID(), sharedParent);
@@ -1528,7 +1528,7 @@ class BodyLogicTest {
             you.setAgeState(AgeState.ADULT);
             me.setHappiness(Happiness.HAPPY);
             you.setHappiness(Happiness.VERY_SAD);
-            Body sharedParent = WorldTestHelper.createBody();
+            Yukkuri sharedParent = WorldTestHelper.createBody();
             sharedParent.setBodySpr(makeSprites(1, 1));
             sharedParent.setAgeState(AgeState.ADULT);
             SimYukkuri.world.getCurrentMap().getBody().put(sharedParent.getUniqueID(), sharedParent);
@@ -1559,7 +1559,7 @@ class BodyLogicTest {
             you.setAgeState(AgeState.BABY);
             me.setPublicRank(PublicRank.NONE);
             you.setPublicRank(PublicRank.NONE);
-            Body sharedParent = WorldTestHelper.createBody();
+            Yukkuri sharedParent = WorldTestHelper.createBody();
             sharedParent.setBodySpr(makeSprites(1, 1));
             SimYukkuri.world.getCurrentMap().getBody().put(sharedParent.getUniqueID(), sharedParent);
             WorldTestHelper.setParents(me, -1, sharedParent.getUniqueID());
@@ -2074,7 +2074,7 @@ class BodyLogicTest {
 
         @Test
         void testScenario_CheckPartnerIdiotTargetCalmsActorWithoutStartingAnyAction() {
-            Body idiot = new TarinaiReimu();
+            Yukkuri idiot = new TarinaiReimu();
             idiot.setObjId(src.enums.Numbering.INSTANCE.numberingObjId());
             idiot.setUniqueID(src.enums.Numbering.INSTANCE.numberingYukkuriID());
             idiot.setBodySpr(makeSprites(1, 1));
@@ -2454,7 +2454,7 @@ class BodyLogicTest {
     void testCheckMyRelation_ElderSister() {
         // Set me as elder sister of you
         // Create a dummy parent and register it
-        Body parent = WorldTestHelper.createBody();
+        Yukkuri parent = WorldTestHelper.createBody();
         SimYukkuri.world.getCurrentMap().getBody().put(parent.getUniqueID(), parent);
         int parentId = parent.getUniqueID();
 
@@ -2471,7 +2471,7 @@ class BodyLogicTest {
     void testCheckMyRelation_Sister() {
         // Set me as younger sister
         // Create a dummy parent and register it
-        Body parent = WorldTestHelper.createBody();
+        Yukkuri parent = WorldTestHelper.createBody();
         SimYukkuri.world.getCurrentMap().getBody().put(parent.getUniqueID(), parent);
         int parentId = parent.getUniqueID();
 
@@ -2562,7 +2562,7 @@ class BodyLogicTest {
 
     @Test
     void testCreateActiveFianceeList_Empty() {
-        List<Body> list = BodyLogic.createActiveFianceeList(me, 0);
+        List<Yukkuri> list = BodyLogic.createActiveFianceeList(me, 0);
         assertNotNull(list);
     }
 
@@ -2685,7 +2685,7 @@ class BodyLogicTest {
     @Test
     void testGatheringYukkuriSquare_NullTop_ReturnsFalse() {
         assertFalse(
-                BodyLogic.gatheringYukkuriSquare(null, new Body[] { you }, src.enums.GatheringDirection.DOWN, null));
+                BodyLogic.gatheringYukkuriSquare(null, new Yukkuri[] { you }, src.enums.GatheringDirection.DOWN, null));
     }
 
     @Test
@@ -2695,7 +2695,7 @@ class BodyLogicTest {
 
     @Test
     void testGatheringYukkuriSquare_EmptyArray_ReturnsFalse() {
-        assertFalse(BodyLogic.gatheringYukkuriSquare(me, new Body[0], src.enums.GatheringDirection.DOWN, null));
+        assertFalse(BodyLogic.gatheringYukkuriSquare(me, new Yukkuri[0], src.enums.GatheringDirection.DOWN, null));
     }
 
     // --- gatheringYukkuriBackLine ---
@@ -2715,7 +2715,7 @@ class BodyLogicTest {
     @Test
     void testCreateActiveFianceeList_HasPartner_ReturnsNonNull() {
         me.setPartner(you.getUniqueID());
-        List<Body> list = BodyLogic.createActiveFianceeList(me, 0);
+        List<Yukkuri> list = BodyLogic.createActiveFianceeList(me, 0);
         assertNotNull(list);
     }
 
@@ -2787,7 +2787,7 @@ class BodyLogicTest {
 
     @Test
     void testCheckNearParent_WithRegisteredMother_DoesNotThrow() {
-        Body parent = WorldTestHelper.createBody();
+        Yukkuri parent = WorldTestHelper.createBody();
         parent.setX(200);
         parent.setY(200);
         SimYukkuri.world.getCurrentMap().getBody().put(parent.getUniqueID(), parent);
@@ -2798,7 +2798,7 @@ class BodyLogicTest {
 
     @Test
     void testCheckNearParent_WithRegisteredFather_DoesNotThrow() {
-        Body parent = WorldTestHelper.createBody();
+        Yukkuri parent = WorldTestHelper.createBody();
         parent.setX(200);
         parent.setY(200);
         SimYukkuri.world.getCurrentMap().getBody().put(parent.getUniqueID(), parent);
@@ -3188,7 +3188,7 @@ class BodyLogicTest {
         // Barrier.onBarrier may throw ArrayIndexOutOfBoundsException in headless
         // environment
         try {
-            BodyLogic.gatheringYukkuriSquare(me, new Body[] { you }, src.enums.GatheringDirection.DOWN, null);
+            BodyLogic.gatheringYukkuriSquare(me, new Yukkuri[] { you }, src.enums.GatheringDirection.DOWN, null);
         } catch (ArrayIndexOutOfBoundsException e) {
             // Expected: Barrier array not fully initialized in test environment
         }
@@ -3203,7 +3203,7 @@ class BodyLogicTest {
         you.setX(100);
         you.setY(100);
         try {
-            BodyLogic.gatheringYukkuriSquare(me, new Body[] { you }, src.enums.GatheringDirection.UP, null);
+            BodyLogic.gatheringYukkuriSquare(me, new Yukkuri[] { you }, src.enums.GatheringDirection.UP, null);
         } catch (ArrayIndexOutOfBoundsException e) {
             // Expected: Barrier array not fully initialized in test environment
         }
@@ -3219,7 +3219,7 @@ class BodyLogicTest {
         me.setY(100);
         you.setX(200);
         you.setY(100);
-        java.util.LinkedList<Body> list = new java.util.LinkedList<>();
+        java.util.LinkedList<Yukkuri> list = new java.util.LinkedList<>();
         list.add(you);
         // Barrier.onBarrier may throw ArrayIndexOutOfBoundsException in headless
         // environment
@@ -3280,9 +3280,9 @@ class BodyLogicTest {
 
     @Test
     void testGatheringYukkuriFront_Heavy() {
-        List<Body> list = new LinkedList<>();
+        List<Yukkuri> list = new LinkedList<>();
         for (int i = 0; i < 5; i++) {
-            Body b = WorldTestHelper.createBody();
+            Yukkuri b = WorldTestHelper.createBody();
             b.setBodySpr(makeSprites(1, 1));
             list.add(b);
         }
@@ -3443,9 +3443,9 @@ class BodyLogicTest {
     void testCheckPartner_NormalPriorityEvent_ReturnsFalse_L119() {
         // L118-119: getCurrentEvent()!=null && priority!=LOW → false
         src.event.EventPacket evt = new src.event.EventPacket(me, null, null, 1) {
-            @Override public void start(Body b) {}
-            @Override public boolean execute(Body b) { return false; }
-            @Override public boolean checkEventResponse(Body b) { return false; }
+            @Override public void start(Yukkuri b) {}
+            @Override public boolean execute(Yukkuri b) { return false; }
+            @Override public boolean checkEventResponse(Yukkuri b) { return false; }
         };
         evt.setPriority(src.event.EventPacket.EventPriority.HIGH);
         me.setCurrentEvent(evt);
@@ -3470,7 +3470,7 @@ class BodyLogicTest {
         // L167-168: purposeOfMoving=NONE → L142 false; takeMoveTarget→you → bodyOldMoveTarget=you
         me.setBodySpr(makeSprites(1, 1));
         you.setBodySpr(makeSprites(1, 1));
-        me.setMoveTargetId(you.getObjId()); // takeMoveTarget()=you (Body)
+        me.setMoveTargetId(you.getObjId()); // takeMoveTarget()=you (Yukkuri)
         SimYukkuri.RND = new ConstState(59);
         assertDoesNotThrow(() -> BodyLogic.checkPartner(me));
     }
@@ -3587,7 +3587,7 @@ class BodyLogicTest {
     void testCheckPartner_ExcitingFoundIsIdiot_SetCalm_L395() {
         // L393-395: exciting + found.isIdiot=true, me not idiot → setCalm, true
         me.setBodySpr(makeSprites(1, 1));
-        Body idiot = new src.yukkuri.Marisa() {
+        Yukkuri idiot = new src.yukkuri.Marisa() {
             @Override public boolean isIdiot() { return true; }
             @Override public int getCollisionX() { return 1; }
         };
@@ -3714,7 +3714,7 @@ class BodyLogicTest {
     @Test
     void testCheckNearParent_CallingParentsSleeping_L1973() {
         // L1972: callingParents + parent sleeping → wakeup
-        Body parent = WorldTestHelper.createBody();
+        Yukkuri parent = WorldTestHelper.createBody();
         parent.setX(200); parent.setY(200);
         SimYukkuri.world.getCurrentMap().getBody().put(parent.getUniqueID(), parent);
         me.setAgeState(AgeState.BABY);
@@ -3728,7 +3728,7 @@ class BodyLogicTest {
     @Test
     void testCheckNearParent_DirtyChildNearParent_L1977() {
         // L1975-1979: dirty child + parent canEventResponse + dist<=stepDist → peropero
-        Body parent = WorldTestHelper.createBody();
+        Yukkuri parent = WorldTestHelper.createBody();
         parent.setX(50); parent.setY(50);
         SimYukkuri.world.getCurrentMap().getBody().put(parent.getUniqueID(), parent);
         me.setAgeState(AgeState.BABY);
@@ -3741,7 +3741,7 @@ class BodyLogicTest {
     @Test
     void testCheckNearParent_DirtyChildFarFromParent_L1981() {
         // L1980-1983: dirty child + parent far → child moves to parent
-        Body parent = WorldTestHelper.createBody();
+        Yukkuri parent = WorldTestHelper.createBody();
         parent.setX(500); parent.setY(500);
         SimYukkuri.world.getCurrentMap().getBody().put(parent.getUniqueID(), parent);
         me.setAgeState(AgeState.BABY);
@@ -3754,7 +3754,7 @@ class BodyLogicTest {
     @Test
     void testCheckNearParent_FarFromParent_MoveTo_L2004() {
         // L1993-2004: not dirty, far from parent (dist>=minDist/32) → moveTo
-        Body parent = WorldTestHelper.createBody();
+        Yukkuri parent = WorldTestHelper.createBody();
         parent.setX(800); parent.setY(800);
         SimYukkuri.world.getCurrentMap().getBody().put(parent.getUniqueID(), parent);
         me.setAgeState(AgeState.BABY);
@@ -3778,7 +3778,7 @@ class BodyLogicTest {
         you.setBodySpr(makeSprites(10, 10));
         me.setX(100); me.setY(100);
         you.setX(500); you.setY(100); // far apart
-        java.util.List<Body> list = new java.util.LinkedList<>();
+        java.util.List<Yukkuri> list = new java.util.LinkedList<>();
         list.add(you);
         try {
             BodyLogic.gatheringYukkuriBackLine(me, list, null);
@@ -3794,7 +3794,7 @@ class BodyLogicTest {
         you.setBodySpr(makeSprites(1, 1));
         me.setX(100); me.setY(100);
         you.setX(101); you.setY(100); // getRealDistance=1, nToDist=1, 移動先=(100,100), distance=1
-        java.util.List<Body> list = new java.util.LinkedList<>();
+        java.util.List<Yukkuri> list = new java.util.LinkedList<>();
         list.add(you);
         assertDoesNotThrow(() -> BodyLogic.gatheringYukkuriBackLine(me, list, null));
     }
@@ -3807,7 +3807,7 @@ class BodyLogicTest {
         me.setX(100); me.setY(100);
         you.setX(500); you.setY(100);
         you.setDead(true);
-        java.util.List<Body> list = new java.util.LinkedList<>();
+        java.util.List<Yukkuri> list = new java.util.LinkedList<>();
         list.add(you);
         assertDoesNotThrow(() -> BodyLogic.gatheringYukkuriBackLine(me, list, null));
     }
@@ -3819,7 +3819,7 @@ class BodyLogicTest {
         you.setBodySpr(makeSprites(10, 10));
         me.setX(100); me.setY(100);
         you.setX(101); you.setY(100); // very close → nToDist=dist-colX*2 < 1
-        java.util.List<Body> list = new java.util.LinkedList<>();
+        java.util.List<Yukkuri> list = new java.util.LinkedList<>();
         list.add(you);
         assertDoesNotThrow(() -> BodyLogic.gatheringYukkuriBackLine(me, list, null));
     }
@@ -3832,12 +3832,12 @@ class BodyLogicTest {
         me.setX(100); me.setY(100);
         you.setX(500); you.setY(100);
         src.event.EventPacket evt = new src.event.EventPacket(me, null, null, 1) {
-            @Override public void start(Body b) {}
-            @Override public boolean execute(Body b) { return false; }
-            @Override public boolean checkEventResponse(Body b) { return false; }
+            @Override public void start(Yukkuri b) {}
+            @Override public boolean execute(Yukkuri b) { return false; }
+            @Override public boolean checkEventResponse(Yukkuri b) { return false; }
         };
         you.setCurrentEvent(evt);
-        java.util.List<Body> list = new java.util.LinkedList<>();
+        java.util.List<Yukkuri> list = new java.util.LinkedList<>();
         list.add(you);
         try {
             BodyLogic.gatheringYukkuriBackLine(me, list, evt);
@@ -3979,7 +3979,7 @@ class BodyLogicTest {
         me.setAgeState(AgeState.BABY);
         you.setDead(true);
         // Same mother (not their actual parent — just need same parent ID in world)
-        Body sharedParent = WorldTestHelper.createBody();
+        Yukkuri sharedParent = WorldTestHelper.createBody();
         SimYukkuri.world.getCurrentMap().getBody().put(sharedParent.getUniqueID(), sharedParent);
         WorldTestHelper.setParents(me, -1, sharedParent.getUniqueID());
         WorldTestHelper.setParents(you, -1, sharedParent.getUniqueID());
@@ -3999,7 +3999,7 @@ class BodyLogicTest {
         you.setPublicRank(PublicRank.NONE);
         me.setAgeState(AgeState.BABY);
         you.setDead(true);
-        Body sharedParent = WorldTestHelper.createBody();
+        Yukkuri sharedParent = WorldTestHelper.createBody();
         SimYukkuri.world.getCurrentMap().getBody().put(sharedParent.getUniqueID(), sharedParent);
         WorldTestHelper.setParents(me, -1, sharedParent.getUniqueID());
         WorldTestHelper.setParents(you, -1, sharedParent.getUniqueID());
@@ -4151,7 +4151,7 @@ class BodyLogicTest {
         you.setPublicRank(PublicRank.NONE);
         me.setAgeState(AgeState.BABY);
         you.setAgeState(AgeState.BABY);
-        Body sharedParent = WorldTestHelper.createBody();
+        Yukkuri sharedParent = WorldTestHelper.createBody();
         SimYukkuri.world.getCurrentMap().getBody().put(sharedParent.getUniqueID(), sharedParent);
         WorldTestHelper.setParents(me, -1, sharedParent.getUniqueID());
         WorldTestHelper.setParents(you, -1, sharedParent.getUniqueID());
@@ -4273,7 +4273,7 @@ class BodyLogicTest {
         SimYukkuri.RND = new ConstState(0);
         me.setHappiness(Happiness.AVERAGE);
         you.setHappiness(Happiness.VERY_HAPPY);
-        Body sharedParent = WorldTestHelper.createBody();
+        Yukkuri sharedParent = WorldTestHelper.createBody();
         SimYukkuri.world.getCurrentMap().getBody().put(sharedParent.getUniqueID(), sharedParent);
         WorldTestHelper.setParents(me, -1, sharedParent.getUniqueID());
         WorldTestHelper.setParents(you, -1, sharedParent.getUniqueID());
@@ -4388,7 +4388,7 @@ class BodyLogicTest {
         SimYukkuri.RND = new ConstState(0);
         me.setHappiness(Happiness.AVERAGE);
         you.setHappiness(Happiness.VERY_HAPPY);
-        Body sharedParent = WorldTestHelper.createBody();
+        Yukkuri sharedParent = WorldTestHelper.createBody();
         SimYukkuri.world.getCurrentMap().getBody().put(sharedParent.getUniqueID(), sharedParent);
         WorldTestHelper.setParents(me, -1, sharedParent.getUniqueID());
         WorldTestHelper.setParents(you, -1, sharedParent.getUniqueID());
@@ -4468,7 +4468,7 @@ class BodyLogicTest {
         me.setAgeState(AgeState.BABY);
         me.setPublicRank(PublicRank.NONE);
         you.setPublicRank(PublicRank.NONE);
-        Body sharedParent = WorldTestHelper.createBody();
+        Yukkuri sharedParent = WorldTestHelper.createBody();
         sharedParent.setBodySpr(makeSprites(1, 1));
         SimYukkuri.world.getCurrentMap().getBody().put(sharedParent.getUniqueID(), sharedParent);
         WorldTestHelper.setParents(me, -1, sharedParent.getUniqueID());
@@ -4547,7 +4547,7 @@ class BodyLogicTest {
         you.setAgeState(AgeState.BABY);
         me.setPublicRank(PublicRank.NONE);
         you.setPublicRank(PublicRank.NONE);
-        Body sharedParent = WorldTestHelper.createBody();
+        Yukkuri sharedParent = WorldTestHelper.createBody();
         sharedParent.setBodySpr(makeSprites(1, 1));
         sharedParent.setAgeState(AgeState.ADULT);
         sharedParent.setX(140);
@@ -4700,7 +4700,7 @@ class BodyLogicTest {
         you.setPublicRank(PublicRank.NONE);
         me.setAgeState(AgeState.BABY);
         you.setAgeState(AgeState.BABY);
-        Body sharedParent = WorldTestHelper.createBody();
+        Yukkuri sharedParent = WorldTestHelper.createBody();
         SimYukkuri.world.getCurrentMap().getBody().put(sharedParent.getUniqueID(), sharedParent);
         WorldTestHelper.setParents(me, -1, sharedParent.getUniqueID());
         WorldTestHelper.setParents(you, -1, sharedParent.getUniqueID());
@@ -4735,7 +4735,7 @@ class BodyLogicTest {
         you.setPublicRank(PublicRank.NONE);
         me.setAgeState(AgeState.BABY);
         you.setAgeState(AgeState.BABY);
-        Body sharedParent = WorldTestHelper.createBody();
+        Yukkuri sharedParent = WorldTestHelper.createBody();
         SimYukkuri.world.getCurrentMap().getBody().put(sharedParent.getUniqueID(), sharedParent);
         WorldTestHelper.setParents(me, -1, sharedParent.getUniqueID());
         WorldTestHelper.setParents(you, -1, sharedParent.getUniqueID());
@@ -4769,7 +4769,7 @@ class BodyLogicTest {
     @Test
     void testCheckActionSurisuriFromPlayer_Idiot_ReturnsNone_L988() {
         // isIdiot=true → return NONE (L988)
-        Body idiot = new TarinaiReimu();
+        Yukkuri idiot = new TarinaiReimu();
         you.setSurisuriFromPlayer(true);
         SimYukkuri.RND = new ConstState(0);
         assertDoesNotThrow(() ->
@@ -4784,7 +4784,7 @@ class BodyLogicTest {
         SimYukkuri.RND = new ConstState(0);
         me.setHappiness(Happiness.SAD);
         you.setHappiness(Happiness.VERY_HAPPY);
-        Body sharedParent = WorldTestHelper.createBody();
+        Yukkuri sharedParent = WorldTestHelper.createBody();
         SimYukkuri.world.getCurrentMap().getBody().put(sharedParent.getUniqueID(), sharedParent);
         WorldTestHelper.setParents(me, -1, sharedParent.getUniqueID());
         WorldTestHelper.setParents(you, -1, sharedParent.getUniqueID());
@@ -4842,7 +4842,7 @@ class BodyLogicTest {
         me.setHappiness(Happiness.VERY_SAD);
         you.setHappiness(Happiness.VERY_HAPPY);
         me.setAttitude(Attitude.SHITHEAD);
-        Body sharedParent = WorldTestHelper.createBody();
+        Yukkuri sharedParent = WorldTestHelper.createBody();
         SimYukkuri.world.getCurrentMap().getBody().put(sharedParent.getUniqueID(), sharedParent);
         WorldTestHelper.setParents(me, -1, sharedParent.getUniqueID());
         WorldTestHelper.setParents(you, -1, sharedParent.getUniqueID());
@@ -4859,7 +4859,7 @@ class BodyLogicTest {
         me.setHappiness(Happiness.VERY_SAD);
         you.setHappiness(Happiness.VERY_HAPPY);
         me.setAttitude(Attitude.SHITHEAD);
-        Body sharedParent = WorldTestHelper.createBody();
+        Yukkuri sharedParent = WorldTestHelper.createBody();
         SimYukkuri.world.getCurrentMap().getBody().put(sharedParent.getUniqueID(), sharedParent);
         WorldTestHelper.setParents(me, -1, sharedParent.getUniqueID());
         WorldTestHelper.setParents(you, -1, sharedParent.getUniqueID());
@@ -4915,7 +4915,7 @@ class BodyLogicTest {
         SimYukkuri.RND = new ConstState(0);
         me.setHappiness(Happiness.HAPPY);
         you.setHappiness(Happiness.VERY_SAD);
-        Body sharedParent = WorldTestHelper.createBody();
+        Yukkuri sharedParent = WorldTestHelper.createBody();
         SimYukkuri.world.getCurrentMap().getBody().put(sharedParent.getUniqueID(), sharedParent);
         WorldTestHelper.setParents(me, -1, sharedParent.getUniqueID());
         WorldTestHelper.setParents(you, -1, sharedParent.getUniqueID());
@@ -4932,7 +4932,7 @@ class BodyLogicTest {
         SimYukkuri.RND = new ConstState(0);
         me.setHappiness(Happiness.HAPPY);
         you.setHappiness(Happiness.VERY_SAD);
-        Body sharedParent = WorldTestHelper.createBody();
+        Yukkuri sharedParent = WorldTestHelper.createBody();
         SimYukkuri.world.getCurrentMap().getBody().put(sharedParent.getUniqueID(), sharedParent);
         WorldTestHelper.setParents(me, -1, sharedParent.getUniqueID());
         WorldTestHelper.setParents(you, -1, sharedParent.getUniqueID());
@@ -4973,7 +4973,7 @@ class BodyLogicTest {
         SimYukkuri.RND = new ConstState(0);
         me.setHappiness(Happiness.HAPPY);
         you.setHappiness(Happiness.VERY_SAD);
-        Body sharedParent = WorldTestHelper.createBody();
+        Yukkuri sharedParent = WorldTestHelper.createBody();
         SimYukkuri.world.getCurrentMap().getBody().put(sharedParent.getUniqueID(), sharedParent);
         WorldTestHelper.setParents(me, -1, sharedParent.getUniqueID());
         WorldTestHelper.setParents(you, -1, sharedParent.getUniqueID());
@@ -4989,7 +4989,7 @@ class BodyLogicTest {
         SimYukkuri.RND = new ConstState(0);
         me.setHappiness(Happiness.HAPPY);
         you.setHappiness(Happiness.VERY_SAD);
-        Body sharedParent = WorldTestHelper.createBody();
+        Yukkuri sharedParent = WorldTestHelper.createBody();
         SimYukkuri.world.getCurrentMap().getBody().put(sharedParent.getUniqueID(), sharedParent);
         WorldTestHelper.setParents(me, -1, sharedParent.getUniqueID());
         WorldTestHelper.setParents(you, -1, sharedParent.getUniqueID());
@@ -5005,7 +5005,7 @@ class BodyLogicTest {
     @Test
     void testCheckEmotionFromUnunSlave_Idiot_ReturnsFalse_L1891() {
         // isIdiot=true → return false (L1891)
-        Body idiot = new TarinaiReimu();
+        Yukkuri idiot = new TarinaiReimu();
         SimYukkuri.RND = new ConstState(0);
         assertDoesNotThrow(() ->
             assertFalse(BodyLogic.checkEmotionFromUnunSlave(idiot, you)));
@@ -5053,7 +5053,7 @@ class BodyLogicTest {
         you.setPublicRank(PublicRank.NONE);
         me.setHappiness(Happiness.SAD);
         you.setHappiness(Happiness.VERY_HAPPY);
-        Body sharedParent = WorldTestHelper.createBody();
+        Yukkuri sharedParent = WorldTestHelper.createBody();
         SimYukkuri.world.getCurrentMap().getBody().put(sharedParent.getUniqueID(), sharedParent);
         WorldTestHelper.setParents(me, -1, sharedParent.getUniqueID());
         WorldTestHelper.setParents(you, -1, sharedParent.getUniqueID());
@@ -5070,7 +5070,7 @@ class BodyLogicTest {
         you.setPublicRank(PublicRank.NONE);
         me.setHappiness(Happiness.AVERAGE);
         you.setHappiness(Happiness.VERY_HAPPY);
-        Body sharedParent = WorldTestHelper.createBody();
+        Yukkuri sharedParent = WorldTestHelper.createBody();
         SimYukkuri.world.getCurrentMap().getBody().put(sharedParent.getUniqueID(), sharedParent);
         WorldTestHelper.setParents(me, -1, sharedParent.getUniqueID());
         WorldTestHelper.setParents(you, -1, sharedParent.getUniqueID());
@@ -5105,7 +5105,7 @@ class BodyLogicTest {
         me.setX(500); me.setY(100);
         you.setX(100); you.setY(100);
         try {
-            BodyLogic.gatheringYukkuriSquare(me, new Body[]{you}, GatheringDirection.LEFT, null);
+            BodyLogic.gatheringYukkuriSquare(me, new Yukkuri[]{you}, GatheringDirection.LEFT, null);
         } catch (ArrayIndexOutOfBoundsException e) {
             // Barrier in test env
         }
@@ -5119,7 +5119,7 @@ class BodyLogicTest {
         me.setX(100); me.setY(100);
         you.setX(500); you.setY(100);
         try {
-            BodyLogic.gatheringYukkuriSquare(me, new Body[]{you}, GatheringDirection.RIGHT, null);
+            BodyLogic.gatheringYukkuriSquare(me, new Yukkuri[]{you}, GatheringDirection.RIGHT, null);
         } catch (ArrayIndexOutOfBoundsException e) {
             // Barrier in test env
         }
@@ -5128,13 +5128,13 @@ class BodyLogicTest {
     @Test
     void testGatheringYukkuriSquare_UpEvenRow_L1701() {
         // nSize=2 → nMaxRowSize=2, bKi=false → even-row UP path (L1701)
-        Body center = WorldTestHelper.createBody();
+        Yukkuri center = WorldTestHelper.createBody();
         center.setBodySpr(makeSprites(10, 10));
         center.setX(500); center.setY(500);
         me.setBodySpr(makeSprites(10, 10));
         you.setBodySpr(makeSprites(10, 10));
         try {
-            BodyLogic.gatheringYukkuriSquare(center, new Body[]{me, you}, GatheringDirection.UP, null);
+            BodyLogic.gatheringYukkuriSquare(center, new Yukkuri[]{me, you}, GatheringDirection.UP, null);
         } catch (ArrayIndexOutOfBoundsException e) {
             // Barrier in test env
         }
@@ -5143,13 +5143,13 @@ class BodyLogicTest {
     @Test
     void testGatheringYukkuriSquare_LeftEvenRow_L1729() {
         // nSize=2 → nMaxRowSize=2, bKi=false → even-row LEFT path (L1729)
-        Body center = WorldTestHelper.createBody();
+        Yukkuri center = WorldTestHelper.createBody();
         center.setBodySpr(makeSprites(10, 10));
         center.setX(500); center.setY(500);
         me.setBodySpr(makeSprites(10, 10));
         you.setBodySpr(makeSprites(10, 10));
         try {
-            BodyLogic.gatheringYukkuriSquare(center, new Body[]{me, you}, GatheringDirection.LEFT, null);
+            BodyLogic.gatheringYukkuriSquare(center, new Yukkuri[]{me, you}, GatheringDirection.LEFT, null);
         } catch (ArrayIndexOutOfBoundsException e) {
             // Barrier in test env
         }
@@ -5158,13 +5158,13 @@ class BodyLogicTest {
     @Test
     void testGatheringYukkuriSquare_RightEvenRow_L1743() {
         // nSize=2 → nMaxRowSize=2, bKi=false → even-row RIGHT path (L1743)
-        Body center = WorldTestHelper.createBody();
+        Yukkuri center = WorldTestHelper.createBody();
         center.setBodySpr(makeSprites(10, 10));
         center.setX(100); center.setY(500);
         me.setBodySpr(makeSprites(10, 10));
         you.setBodySpr(makeSprites(10, 10));
         try {
-            BodyLogic.gatheringYukkuriSquare(center, new Body[]{me, you}, GatheringDirection.RIGHT, null);
+            BodyLogic.gatheringYukkuriSquare(center, new Yukkuri[]{me, you}, GatheringDirection.RIGHT, null);
         } catch (ArrayIndexOutOfBoundsException e) {
             // Barrier in test env
         }
@@ -5177,16 +5177,16 @@ class BodyLogicTest {
     @Test
     void testGatheringYukkuriSquare_UP_3Bodies_OddRow_L1701() {
         // nSize=3 → nMaxRowSize=3, odd → bKi=true → L1701 if(bKi) x計算
-        Body third = WorldTestHelper.createBody();
+        Yukkuri third = WorldTestHelper.createBody();
         third.setBodySpr(makeSprites(10, 10));
         third.setX(300); third.setY(300);
         me.setBodySpr(makeSprites(10, 10)); me.setX(200); me.setY(200);
         you.setBodySpr(makeSprites(10, 10)); you.setX(400); you.setY(300);
-        Body center = WorldTestHelper.createBody();
+        Yukkuri center = WorldTestHelper.createBody();
         center.setBodySpr(makeSprites(10, 10));
         center.setX(500); center.setY(500);
         try {
-            BodyLogic.gatheringYukkuriSquare(center, new Body[]{me, you, third}, GatheringDirection.UP, null);
+            BodyLogic.gatheringYukkuriSquare(center, new Yukkuri[]{me, you, third}, GatheringDirection.UP, null);
         } catch (ArrayIndexOutOfBoundsException e) {
             // Barrier in test env
         }
@@ -5195,16 +5195,16 @@ class BodyLogicTest {
     @Test
     void testGatheringYukkuriSquare_DOWN_3Bodies_OddRow_L1715() {
         // nSize=3 → bKi=true → L1715 if(bKi) DOWN計算
-        Body third = WorldTestHelper.createBody();
+        Yukkuri third = WorldTestHelper.createBody();
         third.setBodySpr(makeSprites(10, 10));
         third.setX(300); third.setY(100);
         me.setBodySpr(makeSprites(10, 10)); me.setX(200); me.setY(100);
         you.setBodySpr(makeSprites(10, 10)); you.setX(400); you.setY(100);
-        Body center = WorldTestHelper.createBody();
+        Yukkuri center = WorldTestHelper.createBody();
         center.setBodySpr(makeSprites(10, 10));
         center.setX(500); center.setY(100);
         try {
-            BodyLogic.gatheringYukkuriSquare(center, new Body[]{me, you, third}, GatheringDirection.DOWN, null);
+            BodyLogic.gatheringYukkuriSquare(center, new Yukkuri[]{me, you, third}, GatheringDirection.DOWN, null);
         } catch (ArrayIndexOutOfBoundsException e) {
             // Barrier in test env
         }
@@ -5213,16 +5213,16 @@ class BodyLogicTest {
     @Test
     void testGatheringYukkuriSquare_LEFT_3Bodies_OddRow_L1729() {
         // nSize=3 → bKi=true → L1729 if(bKi) LEFT計算
-        Body third = WorldTestHelper.createBody();
+        Yukkuri third = WorldTestHelper.createBody();
         third.setBodySpr(makeSprites(10, 10));
         third.setX(800); third.setY(300);
         me.setBodySpr(makeSprites(10, 10)); me.setX(800); me.setY(200);
         you.setBodySpr(makeSprites(10, 10)); you.setX(800); you.setY(400);
-        Body center = WorldTestHelper.createBody();
+        Yukkuri center = WorldTestHelper.createBody();
         center.setBodySpr(makeSprites(10, 10));
         center.setX(800); center.setY(500);
         try {
-            BodyLogic.gatheringYukkuriSquare(center, new Body[]{me, you, third}, GatheringDirection.LEFT, null);
+            BodyLogic.gatheringYukkuriSquare(center, new Yukkuri[]{me, you, third}, GatheringDirection.LEFT, null);
         } catch (ArrayIndexOutOfBoundsException e) {
             // Barrier in test env
         }
@@ -5231,16 +5231,16 @@ class BodyLogicTest {
     @Test
     void testGatheringYukkuriSquare_RIGHT_3Bodies_OddRow_L1743() {
         // nSize=3 → bKi=true → L1743 if(bKi) RIGHT計算
-        Body third = WorldTestHelper.createBody();
+        Yukkuri third = WorldTestHelper.createBody();
         third.setBodySpr(makeSprites(10, 10));
         third.setX(100); third.setY(300);
         me.setBodySpr(makeSprites(10, 10)); me.setX(100); me.setY(200);
         you.setBodySpr(makeSprites(10, 10)); you.setX(100); you.setY(400);
-        Body center = WorldTestHelper.createBody();
+        Yukkuri center = WorldTestHelper.createBody();
         center.setBodySpr(makeSprites(10, 10));
         center.setX(100); center.setY(500);
         try {
-            BodyLogic.gatheringYukkuriSquare(center, new Body[]{me, you, third}, GatheringDirection.RIGHT, null);
+            BodyLogic.gatheringYukkuriSquare(center, new Yukkuri[]{me, you, third}, GatheringDirection.RIGHT, null);
         } catch (ArrayIndexOutOfBoundsException e) {
             // Barrier in test env
         }
@@ -5251,49 +5251,49 @@ class BodyLogicTest {
         // L1702-1703: !bMoved + bKi=true + UP → x/y計算
         // 4体、nMaxRowSize=3 → bKi=true(奇数)。body2,3 が !bMoved ブロックに入る
         // makeSprites(1,1) → colX=0 → 座標が壁マップ範囲内に収まる
-        Body b2 = WorldTestHelper.createBody();
-        Body b3 = WorldTestHelper.createBody();
-        Body b4 = WorldTestHelper.createBody();
-        Body center = WorldTestHelper.createBody();
+        Yukkuri b2 = WorldTestHelper.createBody();
+        Yukkuri b3 = WorldTestHelper.createBody();
+        Yukkuri b4 = WorldTestHelper.createBody();
+        Yukkuri center = WorldTestHelper.createBody();
         center.setBodySpr(makeSprites(1, 1)); center.setX(50); center.setY(50);
         me.setBodySpr(makeSprites(1, 1));     me.setX(20);    me.setY(20);
         b2.setBodySpr(makeSprites(1, 1));     b2.setX(30);    b2.setY(20);
         b3.setBodySpr(makeSprites(1, 1));     b3.setX(40);    b3.setY(20);
         b4.setBodySpr(makeSprites(1, 1));     b4.setX(50);    b4.setY(20);
         assertDoesNotThrow(() ->
-            BodyLogic.gatheringYukkuriSquare(center, new Body[]{me, b2, b3, b4}, GatheringDirection.UP, null));
+            BodyLogic.gatheringYukkuriSquare(center, new Yukkuri[]{me, b2, b3, b4}, GatheringDirection.UP, null));
     }
 
     @Test
     void testGatheringYukkuriSquare_LEFT_4Bodies_bKi_NotBMoved_L1731() {
         // L1731-1732: !bMoved + bKi=true + LEFT → y計算
-        Body b2 = WorldTestHelper.createBody();
-        Body b3 = WorldTestHelper.createBody();
-        Body b4 = WorldTestHelper.createBody();
-        Body center = WorldTestHelper.createBody();
+        Yukkuri b2 = WorldTestHelper.createBody();
+        Yukkuri b3 = WorldTestHelper.createBody();
+        Yukkuri b4 = WorldTestHelper.createBody();
+        Yukkuri center = WorldTestHelper.createBody();
         center.setBodySpr(makeSprites(1, 1)); center.setX(50); center.setY(50);
         me.setBodySpr(makeSprites(1, 1));     me.setX(20);    me.setY(20);
         b2.setBodySpr(makeSprites(1, 1));     b2.setX(20);    b2.setY(30);
         b3.setBodySpr(makeSprites(1, 1));     b3.setX(20);    b3.setY(40);
         b4.setBodySpr(makeSprites(1, 1));     b4.setX(20);    b4.setY(50);
         assertDoesNotThrow(() ->
-            BodyLogic.gatheringYukkuriSquare(center, new Body[]{me, b2, b3, b4}, GatheringDirection.LEFT, null));
+            BodyLogic.gatheringYukkuriSquare(center, new Yukkuri[]{me, b2, b3, b4}, GatheringDirection.LEFT, null));
     }
 
     @Test
     void testGatheringYukkuriSquare_RIGHT_4Bodies_bKi_NotBMoved_L1745() {
         // L1745-1746: !bMoved + bKi=true + RIGHT → y計算
-        Body b2 = WorldTestHelper.createBody();
-        Body b3 = WorldTestHelper.createBody();
-        Body b4 = WorldTestHelper.createBody();
-        Body center = WorldTestHelper.createBody();
+        Yukkuri b2 = WorldTestHelper.createBody();
+        Yukkuri b3 = WorldTestHelper.createBody();
+        Yukkuri b4 = WorldTestHelper.createBody();
+        Yukkuri center = WorldTestHelper.createBody();
         center.setBodySpr(makeSprites(1, 1)); center.setX(50); center.setY(50);
         me.setBodySpr(makeSprites(1, 1));     me.setX(80);    me.setY(20);
         b2.setBodySpr(makeSprites(1, 1));     b2.setX(80);    b2.setY(30);
         b3.setBodySpr(makeSprites(1, 1));     b3.setX(80);    b3.setY(40);
         b4.setBodySpr(makeSprites(1, 1));     b4.setX(80);    b4.setY(50);
         assertDoesNotThrow(() ->
-            BodyLogic.gatheringYukkuriSquare(center, new Body[]{me, b2, b3, b4}, GatheringDirection.RIGHT, null));
+            BodyLogic.gatheringYukkuriSquare(center, new Yukkuri[]{me, b2, b3, b4}, GatheringDirection.RIGHT, null));
     }
 
     @Test
@@ -5302,7 +5302,7 @@ class BodyLogicTest {
         me.setBodySpr(makeSprites(10, 10)); me.setX(500); me.setY(500);
         you.setBodySpr(makeSprites(10, 10)); you.setX(100); you.setY(100);
         try {
-            BodyLogic.gatheringYukkuriSquare(me, new Body[]{null, you}, GatheringDirection.UP, null);
+            BodyLogic.gatheringYukkuriSquare(me, new Yukkuri[]{null, you}, GatheringDirection.UP, null);
         } catch (ArrayIndexOutOfBoundsException e) {
             // Barrier in test env
         }
@@ -5317,7 +5317,7 @@ class BodyLogicTest {
         me.setBodySpr(makeSprites(10, 10));
         me.setX(500); me.setY(500);
         try {
-            BodyLogic.gatheringYukkuriSquare(me, new Body[]{you}, GatheringDirection.UP, null);
+            BodyLogic.gatheringYukkuriSquare(me, new Yukkuri[]{you}, GatheringDirection.UP, null);
         } catch (ArrayIndexOutOfBoundsException e) {
             // Barrier in test env
         }
@@ -5329,12 +5329,12 @@ class BodyLogicTest {
         me.setBodySpr(makeSprites(10, 10)); me.setX(500); me.setY(500);
         you.setBodySpr(makeSprites(10, 10)); you.setX(100); you.setY(100);
         src.event.EventPacket evt = new src.event.EventPacket(me, null, null, 1) {
-            @Override public void start(Body b) {}
-            @Override public boolean execute(Body b) { return false; }
-            @Override public boolean checkEventResponse(Body b) { return false; }
+            @Override public void start(Yukkuri b) {}
+            @Override public boolean execute(Yukkuri b) { return false; }
+            @Override public boolean checkEventResponse(Yukkuri b) { return false; }
         };
         try {
-            BodyLogic.gatheringYukkuriSquare(me, new Body[]{you}, GatheringDirection.UP, evt);
+            BodyLogic.gatheringYukkuriSquare(me, new Yukkuri[]{you}, GatheringDirection.UP, evt);
         } catch (ArrayIndexOutOfBoundsException e) {
             // Barrier in test env
         }
@@ -5346,18 +5346,18 @@ class BodyLogicTest {
         me.setBodySpr(makeSprites(10, 10)); me.setX(500); me.setY(500);
         you.setBodySpr(makeSprites(10, 10)); you.setX(100); you.setY(100);
         src.event.EventPacket evt1 = new src.event.EventPacket(me, null, null, 1) {
-            @Override public void start(Body b) {}
-            @Override public boolean execute(Body b) { return false; }
-            @Override public boolean checkEventResponse(Body b) { return false; }
+            @Override public void start(Yukkuri b) {}
+            @Override public boolean execute(Yukkuri b) { return false; }
+            @Override public boolean checkEventResponse(Yukkuri b) { return false; }
         };
         src.event.EventPacket evt2 = new src.event.EventPacket(me, null, null, 2) {
-            @Override public void start(Body b) {}
-            @Override public boolean execute(Body b) { return false; }
-            @Override public boolean checkEventResponse(Body b) { return false; }
+            @Override public void start(Yukkuri b) {}
+            @Override public boolean execute(Yukkuri b) { return false; }
+            @Override public boolean checkEventResponse(Yukkuri b) { return false; }
         };
         you.setCurrentEvent(evt1); // you has a different event
         try {
-            BodyLogic.gatheringYukkuriSquare(me, new Body[]{you}, GatheringDirection.UP, evt2);
+            BodyLogic.gatheringYukkuriSquare(me, new Yukkuri[]{you}, GatheringDirection.UP, evt2);
         } catch (ArrayIndexOutOfBoundsException e) {
             // Barrier in test env
         }
@@ -5371,7 +5371,7 @@ class BodyLogicTest {
     void testGatheringYukkuriBackLine_NullBodyInList_L1818() {
         // null body in list → if(b==null) continue (L1818-1819)
         me.setBodySpr(makeSprites(10, 10)); me.setX(100); me.setY(100);
-        java.util.List<Body> list = new java.util.LinkedList<>();
+        java.util.List<Yukkuri> list = new java.util.LinkedList<>();
         list.add(null);
         assertDoesNotThrow(() -> BodyLogic.gatheringYukkuriBackLine(me, list, null));
     }
@@ -5382,7 +5382,7 @@ class BodyLogicTest {
         me.setBodySpr(makeSprites(10, 10)); me.setX(100); me.setY(100);
         you.setBodySpr(makeSprites(10, 10)); you.setX(500); you.setY(100);
         you.setFlyingType(true); // canflyCheck=true
-        java.util.List<Body> list = new java.util.LinkedList<>();
+        java.util.List<Yukkuri> list = new java.util.LinkedList<>();
         list.add(you);
         try {
             BodyLogic.gatheringYukkuriBackLine(me, list, null);
@@ -5397,17 +5397,17 @@ class BodyLogicTest {
         me.setBodySpr(makeSprites(10, 10)); me.setX(100); me.setY(100);
         you.setBodySpr(makeSprites(10, 10)); you.setX(500); you.setY(100);
         src.event.EventPacket evt1 = new src.event.EventPacket(me, null, null, 1) {
-            @Override public void start(Body b) {}
-            @Override public boolean execute(Body b) { return false; }
-            @Override public boolean checkEventResponse(Body b) { return false; }
+            @Override public void start(Yukkuri b) {}
+            @Override public boolean execute(Yukkuri b) { return false; }
+            @Override public boolean checkEventResponse(Yukkuri b) { return false; }
         };
         src.event.EventPacket evt2 = new src.event.EventPacket(me, null, null, 2) {
-            @Override public void start(Body b) {}
-            @Override public boolean execute(Body b) { return false; }
-            @Override public boolean checkEventResponse(Body b) { return false; }
+            @Override public void start(Yukkuri b) {}
+            @Override public boolean execute(Yukkuri b) { return false; }
+            @Override public boolean checkEventResponse(Yukkuri b) { return false; }
         };
         you.setCurrentEvent(evt1); // different event
-        java.util.List<Body> list = new java.util.LinkedList<>();
+        java.util.List<Yukkuri> list = new java.util.LinkedList<>();
         list.add(you);
         assertDoesNotThrow(() -> BodyLogic.gatheringYukkuriBackLine(me, list, evt2));
     }
@@ -5419,7 +5419,7 @@ class BodyLogicTest {
     @Test
     void testCreateActiveFianceeList_DeadBody_Skipped_L1419() {
         you.setDead(true);
-        List<Body> list = BodyLogic.createActiveFianceeList(me, 0);
+        List<Yukkuri> list = BodyLogic.createActiveFianceeList(me, 0);
         assertNotNull(list);
         assertFalse(list.contains(you));
     }
@@ -5427,23 +5427,23 @@ class BodyLogicTest {
     @Test
     void testCreateActiveFianceeList_RemovedBody_Skipped_L1423() {
         you.setRemoved(true);
-        List<Body> list = BodyLogic.createActiveFianceeList(me, 0);
+        List<Yukkuri> list = BodyLogic.createActiveFianceeList(me, 0);
         assertFalse(list.contains(you));
     }
 
     @Test
     void testCreateActiveFianceeList_UnBirthBody_Skipped_L1427() {
         you.setUnBirth(true);
-        List<Body> list = BodyLogic.createActiveFianceeList(me, 0);
+        List<Yukkuri> list = BodyLogic.createActiveFianceeList(me, 0);
         assertFalse(list.contains(you));
     }
 
     @Test
     void testCreateActiveFianceeList_HasChildren_Skipped_L1431() {
-        Body child = WorldTestHelper.createBody();
+        Yukkuri child = WorldTestHelper.createBody();
         SimYukkuri.world.getCurrentMap().getBody().put(child.getUniqueID(), child);
         WorldTestHelper.addChild(you, child.getUniqueID());
-        List<Body> list = BodyLogic.createActiveFianceeList(me, 0);
+        List<Yukkuri> list = BodyLogic.createActiveFianceeList(me, 0);
         assertFalse(list.contains(you));
     }
 
@@ -5451,7 +5451,7 @@ class BodyLogicTest {
     void testCreateActiveFianceeList_RankMismatch_Skipped_L1435() {
         // me=NONE, you=UnunSlave → rank mismatch → skip
         you.setPublicRank(PublicRank.UnunSlave);
-        List<Body> list = BodyLogic.createActiveFianceeList(me, 0);
+        List<Yukkuri> list = BodyLogic.createActiveFianceeList(me, 0);
         assertFalse(list.contains(you));
     }
 
@@ -5461,7 +5461,7 @@ class BodyLogicTest {
         me.setIntelligence(Intelligence.AVERAGE);
         you.setOkazari(new Okazari());
         you.setSickPeriod(you.getIncubationPeriodBase() + 1);
-        List<Body> list = BodyLogic.createActiveFianceeList(me, 0);
+        List<Yukkuri> list = BodyLogic.createActiveFianceeList(me, 0);
         assertFalse(list.contains(you));
     }
 
@@ -5469,7 +5469,7 @@ class BodyLogicTest {
     void testCreateActiveFianceeList_AgeTooHigh_Skipped_L1447() {
         // ADULT.ordinal()=2, age=3 → 3 > 2 → skip
         you.setOkazari(new Okazari());
-        List<Body> list = BodyLogic.createActiveFianceeList(me, 3);
+        List<Yukkuri> list = BodyLogic.createActiveFianceeList(me, 3);
         assertFalse(list.contains(you));
     }
 
@@ -5481,7 +5481,7 @@ class BodyLogicTest {
         ConstState rnd = new ConstState(0);
         rnd.setFixedBoolean(true); // nextBoolean()=true → skip
         SimYukkuri.RND = rnd;
-        List<Body> list = BodyLogic.createActiveFianceeList(me, 0);
+        List<Yukkuri> list = BodyLogic.createActiveFianceeList(me, 0);
         assertFalse(list.contains(you));
     }
 
@@ -5491,7 +5491,7 @@ class BodyLogicTest {
         you.setOkazari(new Okazari());
         you.setPartner(me.getUniqueID());
         SimYukkuri.RND = new ConstState(0); // nextBoolean()=false → not skipped
-        List<Body> list = BodyLogic.createActiveFianceeList(me, 0);
+        List<Yukkuri> list = BodyLogic.createActiveFianceeList(me, 0);
         assertNotNull(list);
         assertTrue(list.contains(you));
     }
@@ -5509,104 +5509,104 @@ class BodyLogicTest {
 
     @Test
     void testCreateActiveChildList_DeadChild_Skipped_L1481() {
-        Body child = WorldTestHelper.createBody();
+        Yukkuri child = WorldTestHelper.createBody();
         child.setAgeState(AgeState.BABY);
         child.setDead(true);
         SimYukkuri.world.getCurrentMap().getBody().put(child.getUniqueID(), child);
         WorldTestHelper.addChild(me, child.getUniqueID());
-        List<Body> list = BodyLogic.createActiveChildList(me, true);
+        List<Yukkuri> list = BodyLogic.createActiveChildList(me, true);
         assertNotNull(list);
         assertFalse(list.contains(child));
     }
 
     @Test
     void testCreateActiveChildList_RemovedChild_Skipped_L1485() {
-        Body child = WorldTestHelper.createBody();
+        Yukkuri child = WorldTestHelper.createBody();
         child.setAgeState(AgeState.BABY);
         child.setRemoved(true);
         SimYukkuri.world.getCurrentMap().getBody().put(child.getUniqueID(), child);
         WorldTestHelper.addChild(me, child.getUniqueID());
-        List<Body> list = BodyLogic.createActiveChildList(me, true);
+        List<Yukkuri> list = BodyLogic.createActiveChildList(me, true);
         assertFalse(list.contains(child));
     }
 
     @Test
     void testCreateActiveChildList_UnBirthChild_Skipped_L1489() {
-        Body child = WorldTestHelper.createBody();
+        Yukkuri child = WorldTestHelper.createBody();
         child.setUnBirth(true);
         SimYukkuri.world.getCurrentMap().getBody().put(child.getUniqueID(), child);
         WorldTestHelper.addChild(me, child.getUniqueID());
-        List<Body> list = BodyLogic.createActiveChildList(me, true);
+        List<Yukkuri> list = BodyLogic.createActiveChildList(me, true);
         assertFalse(list.contains(child));
     }
 
     @Test
     void testCreateActiveChildList_TakenChild_Skipped_L1493() {
-        Body child = WorldTestHelper.createBody();
+        Yukkuri child = WorldTestHelper.createBody();
         child.setAgeState(AgeState.BABY);
         child.setTaken(true);
         SimYukkuri.world.getCurrentMap().getBody().put(child.getUniqueID(), child);
         WorldTestHelper.addChild(me, child.getUniqueID());
-        List<Body> list = BodyLogic.createActiveChildList(me, true);
+        List<Yukkuri> list = BodyLogic.createActiveChildList(me, true);
         assertFalse(list.contains(child));
     }
 
     @Test
     void testCreateActiveChildList_ChildHasChildren_Skipped_L1497() {
-        Body child = WorldTestHelper.createBody();
+        Yukkuri child = WorldTestHelper.createBody();
         child.setAgeState(AgeState.BABY);
-        Body grandchild = WorldTestHelper.createBody();
+        Yukkuri grandchild = WorldTestHelper.createBody();
         SimYukkuri.world.getCurrentMap().getBody().put(child.getUniqueID(), child);
         SimYukkuri.world.getCurrentMap().getBody().put(grandchild.getUniqueID(), grandchild);
         WorldTestHelper.addChild(child, grandchild.getUniqueID());
         WorldTestHelper.addChild(me, child.getUniqueID());
-        List<Body> list = BodyLogic.createActiveChildList(me, true);
+        List<Yukkuri> list = BodyLogic.createActiveChildList(me, true);
         assertFalse(list.contains(child));
     }
 
     @Test
     void testCreateActiveChildList_UnunSlaveChild_Skipped_L1501() {
-        Body child = WorldTestHelper.createBody();
+        Yukkuri child = WorldTestHelper.createBody();
         child.setAgeState(AgeState.BABY);
         child.setPublicRank(PublicRank.UnunSlave);
         SimYukkuri.world.getCurrentMap().getBody().put(child.getUniqueID(), child);
         WorldTestHelper.addChild(me, child.getUniqueID());
-        List<Body> list = BodyLogic.createActiveChildList(me, true);
+        List<Yukkuri> list = BodyLogic.createActiveChildList(me, true);
         assertFalse(list.contains(child));
     }
 
     @Test
     void testCreateActiveChildList_NYDChild_Skipped_L1504() {
-        Body child = WorldTestHelper.createBody();
+        Yukkuri child = WorldTestHelper.createBody();
         child.setAgeState(AgeState.BABY);
         child.setCoreAnkoState(CoreAnkoState.NonYukkuriDiseaseNear);
         SimYukkuri.world.getCurrentMap().getBody().put(child.getUniqueID(), child);
         WorldTestHelper.addChild(me, child.getUniqueID());
-        List<Body> list = BodyLogic.createActiveChildList(me, true);
+        List<Yukkuri> list = BodyLogic.createActiveChildList(me, true);
         assertFalse(list.contains(child));
     }
 
     @Test
     void testCreateActiveChildList_AdultChild_bStateFalse_Skipped_L1509() {
         // bState=false → 赤ゆのみ → ADULT child skip (L1509-1511)
-        Body child = WorldTestHelper.createBody();
+        Yukkuri child = WorldTestHelper.createBody();
         child.setAgeState(AgeState.ADULT);
         child.setOkazari(new Okazari()); // hasDisorder=false for isNYD check
         SimYukkuri.world.getCurrentMap().getBody().put(child.getUniqueID(), child);
         WorldTestHelper.addChild(me, child.getUniqueID());
-        List<Body> list = BodyLogic.createActiveChildList(me, false);
+        List<Yukkuri> list = BodyLogic.createActiveChildList(me, false);
         assertFalse(list.contains(child));
     }
 
     @Test
     void testCreateActiveChildList_AdultChild_bStateTrue_Skipped_L1514() {
         // bState=true → 赤ゆ・子ゆのみ → ADULT child skip (L1513-1515)
-        Body child = WorldTestHelper.createBody();
+        Yukkuri child = WorldTestHelper.createBody();
         child.setAgeState(AgeState.ADULT);
         child.setOkazari(new Okazari()); // hasDisorder=false
         SimYukkuri.world.getCurrentMap().getBody().put(child.getUniqueID(), child);
         WorldTestHelper.addChild(me, child.getUniqueID());
-        List<Body> list = BodyLogic.createActiveChildList(me, true);
+        List<Yukkuri> list = BodyLogic.createActiveChildList(me, true);
         assertFalse(list.contains(child));
     }
 
@@ -5645,7 +5645,7 @@ class BodyLogicTest {
         me.setAgeState(AgeState.BABY);
         you.setAgeState(AgeState.BABY);
         // 共通のmamaを設定 → isSister=true
-        Body parent = WorldTestHelper.createBody();
+        Yukkuri parent = WorldTestHelper.createBody();
         SimYukkuri.world.getCurrentMap().getBody().put(parent.getUniqueID(), parent);
         WorldTestHelper.setParents(me, -1, parent.getUniqueID());
         WorldTestHelper.setParents(you, -1, parent.getUniqueID());
@@ -5844,7 +5844,7 @@ class BodyLogicTest {
         me.setAgeState(AgeState.BABY);
         you.setAgeState(AgeState.BABY);
         // 共通のmamaを設定 → isSister=true
-        Body parent = WorldTestHelper.createBody();
+        Yukkuri parent = WorldTestHelper.createBody();
         SimYukkuri.world.getCurrentMap().getBody().put(parent.getUniqueID(), parent);
         WorldTestHelper.setParents(me, -1, parent.getUniqueID());
         WorldTestHelper.setParents(you, -1, parent.getUniqueID());
@@ -5866,7 +5866,7 @@ class BodyLogicTest {
         me.setAgeState(AgeState.CHILD); // !isAdult + !isBaby
         me.setAttitude(Attitude.NICE);  // isSmart=true
         you.setDirty(true);
-        Body parent = WorldTestHelper.createBody();
+        Yukkuri parent = WorldTestHelper.createBody();
         SimYukkuri.world.getCurrentMap().getBody().put(parent.getUniqueID(), parent);
         WorldTestHelper.setParents(me, -1, parent.getUniqueID()); // 同一MAMAで姉妹
         WorldTestHelper.setParents(you, -1, parent.getUniqueID());
@@ -5889,7 +5889,7 @@ class BodyLogicTest {
         you.setAgeState(AgeState.BABY);  // p is BABY (age=0) → b is elder
         // me.isSmart=false (default AVERAGE), so L895 false
         WorldTestHelper.setDamage(you, you.getDamageLimitBase()[AgeState.BABY.ordinal()] / 2 + 1); // isDamaged=true
-        Body parent = WorldTestHelper.createBody();
+        Yukkuri parent = WorldTestHelper.createBody();
         SimYukkuri.world.getCurrentMap().getBody().put(parent.getUniqueID(), parent);
         WorldTestHelper.setParents(me, -1, parent.getUniqueID());
         WorldTestHelper.setParents(you, -1, parent.getUniqueID());
@@ -5911,7 +5911,7 @@ class BodyLogicTest {
         me.setAgeState(AgeState.BABY);   // b is BABY (age=0) → b is younger
         you.setAgeState(AgeState.CHILD); // p is CHILD (age=BABYLIMITorg) → p is elder
         WorldTestHelper.setDamage(you, you.getDamageLimitBase()[AgeState.CHILD.ordinal()] / 2 + 1);
-        Body parent = WorldTestHelper.createBody();
+        Yukkuri parent = WorldTestHelper.createBody();
         SimYukkuri.world.getCurrentMap().getBody().put(parent.getUniqueID(), parent);
         WorldTestHelper.setParents(me, -1, parent.getUniqueID());
         WorldTestHelper.setParents(you, -1, parent.getUniqueID());
@@ -5945,7 +5945,7 @@ class BodyLogicTest {
         you.setBodySpr(makeSprites(1, 1));
         me.setAgeState(AgeState.BABY);
         you.setAgeState(AgeState.BABY);
-        Body parent = WorldTestHelper.createBody();
+        Yukkuri parent = WorldTestHelper.createBody();
         SimYukkuri.world.getCurrentMap().getBody().put(parent.getUniqueID(), parent);
         WorldTestHelper.setParents(me, -1, parent.getUniqueID());
         WorldTestHelper.setParents(you, -1, parent.getUniqueID());
@@ -6165,7 +6165,7 @@ class BodyLogicTest {
         you.setBodySpr(makeSprites(1, 1)); // body in list
         me.setX(20); me.setY(20);
         you.setX(50); you.setY(20); // dist=30 → nToDist=30>1 → L1863
-        java.util.List<Body> list = new java.util.LinkedList<>();
+        java.util.List<Yukkuri> list = new java.util.LinkedList<>();
         list.add(you);
         assertDoesNotThrow(() -> assertFalse(BodyLogic.gatheringYukkuriBackLine(me, list, null)));
     }
@@ -6178,22 +6178,22 @@ class BodyLogicTest {
     void testGatheringYukkuriSquare_WithEvent_4Bodies_MoveToEvent_L1771() {
         // L1771: !bMoved + e!=null → b.moveToEvent
         // 4体、nMaxRowSize=3、DOWN方向 (座標が安全) + event を渡す
-        Body b2 = WorldTestHelper.createBody();
-        Body b3 = WorldTestHelper.createBody();
-        Body b4 = WorldTestHelper.createBody();
-        Body center = WorldTestHelper.createBody();
+        Yukkuri b2 = WorldTestHelper.createBody();
+        Yukkuri b3 = WorldTestHelper.createBody();
+        Yukkuri b4 = WorldTestHelper.createBody();
+        Yukkuri center = WorldTestHelper.createBody();
         center.setBodySpr(makeSprites(1, 1)); center.setX(50); center.setY(50);
         me.setBodySpr(makeSprites(1, 1));     me.setX(20);    me.setY(20);
         b2.setBodySpr(makeSprites(1, 1));     b2.setX(30);    b2.setY(20);
         b3.setBodySpr(makeSprites(1, 1));     b3.setX(40);    b3.setY(20);
         b4.setBodySpr(makeSprites(1, 1));     b4.setX(50);    b4.setY(20);
         src.event.EventPacket evt = new src.event.EventPacket(center, null, null, 1) {
-            @Override public void start(Body b) {}
-            @Override public boolean execute(Body b) { return false; }
-            @Override public boolean checkEventResponse(Body b) { return false; }
+            @Override public void start(Yukkuri b) {}
+            @Override public boolean execute(Yukkuri b) { return false; }
+            @Override public boolean checkEventResponse(Yukkuri b) { return false; }
         };
         assertDoesNotThrow(() ->
-            BodyLogic.gatheringYukkuriSquare(center, new Body[]{me, b2, b3, b4}, GatheringDirection.DOWN, evt));
+            BodyLogic.gatheringYukkuriSquare(center, new Yukkuri[]{me, b2, b3, b4}, GatheringDirection.DOWN, evt));
     }
 
     // =================================================================
@@ -6303,7 +6303,7 @@ class BodyLogicTest {
     @Test
     void testCheckPartner_RaperSukkiri_L177() {
         // L174: isExciting && isRaper && isToSukkiri && bodyOldMoveTarget!=null && !target.isRaper()
-        // L141: found=you(Body) → L147: minDistance>dist=true → L148: acrossBarrier=true(バリア設置)
+        // L141: found=you(Yukkuri) → L147: minDistance>dist=true → L148: acrossBarrier=true(バリア設置)
         // → L150: found=null → L153: found!=null=false → フォールスルー
         // → L165: oMoveTarget=you → bodyOldMoveTarget=you → L174 TRUE → L176-177 カバー
         me.setBodySpr(makeSprites(1, 1));
@@ -6363,7 +6363,7 @@ class BodyLogicTest {
         me.setPublicRank(PublicRank.NONE);
         you.setPublicRank(PublicRank.NONE);
         // 共通の mama を持つ姉妹にする
-        Body sharedMom = WorldTestHelper.createBody();
+        Yukkuri sharedMom = WorldTestHelper.createBody();
         sharedMom.setBodySpr(makeSprites(1, 1));
         SimYukkuri.world.getCurrentMap().getBody().put(sharedMom.getUniqueID(), sharedMom);
         WorldTestHelper.setParents(me, -1, sharedMom.getUniqueID());
@@ -6483,7 +6483,7 @@ class BodyLogicTest {
         me.setBodySpr(makeSprites(1, 1));
         you.setBodySpr(makeSprites(1, 1));
         you.setDead(true);
-        you.setOkazari(null); // Body() constructor sets default okazari; clear it so !hasOkazari=true
+        you.setOkazari(null); // Yukkuri() constructor sets default okazari; clear it so !hasOkazari=true
         SimYukkuri.RND = new ConstState(0);
         assertDoesNotThrow(() -> BodyLogic.checkPartner(tarinai));
     }
@@ -6506,7 +6506,7 @@ class BodyLogicTest {
         me.setBodySpr(makeSprites(1, 1));
         you.setBodySpr(makeSprites(1, 1));
         you.setBurialState(src.enums.BurialState.NEARLY_ALL);
-        you.setOkazari(null); // Body() constructor sets default okazari; clear it so !hasOkazari=true
+        you.setOkazari(null); // Yukkuri() constructor sets default okazari; clear it so !hasOkazari=true
         SimYukkuri.RND = new ConstState(0);
         assertFalse(BodyLogic.checkPartner(me));
     }
@@ -6602,7 +6602,7 @@ class BodyLogicTest {
         you.setAgeState(AgeState.BABY);
         WorldTestHelper.setParents(you, -1, me.getUniqueID()); // you is child of me
         me.setIntelligence(Intelligence.FOOL);
-        me.setOkazari(null); // Body() sets default okazari; clear it so !b.hasOkazari()=true
+        me.setOkazari(null); // Yukkuri() sets default okazari; clear it so !b.hasOkazari()=true
         ConstState rnd = new ConstState(0);
         rnd.setFixedBoolean(true); // nextBoolean=true → enter L482 block
         SimYukkuri.RND = rnd;
@@ -6697,7 +6697,7 @@ class BodyLogicTest {
         you.setBodySpr(makeSprites(1, 1));
         me.setOkazari(null);       // !b.hasOkazari()=true
         me.setAttitude(src.enums.Attitude.SHITHEAD); // isRude()=true
-        // you has default okazari (OkazariType.DEFAULT) from Body() constructor
+        // you has default okazari (OkazariType.DEFAULT) from Yukkuri() constructor
         // both are Marisa (same type), both BABY (same age), both NONE publicRank
         SimYukkuri.RND = new ConstState(0);
         assertDoesNotThrow(() -> BodyLogic.checkPartner(me));
@@ -6731,7 +6731,7 @@ class BodyLogicTest {
     void testCheckActionSurisuriFromPlayer_EnvyCry_ElderSister_L1067() {
         // Setup: me=ELDERSISTER of you, mine=VERY_SAD, target=HAPPY, !isRude
         // → abEmote[2]=sad, abEmote[5]=envy → L1058 block → ELDERSISTER case → L1067
-        Body mother = WorldTestHelper.createBody();
+        Yukkuri mother = WorldTestHelper.createBody();
         SimYukkuri.world.getCurrentMap().getBody().put(mother.getUniqueID(), mother);
         // Both me and you share the same mother → isSister()=true
         WorldTestHelper.setParents(me, -1, mother.getUniqueID());
@@ -6754,7 +6754,7 @@ class BodyLogicTest {
     void testCheckActionSurisuriFromPlayer_EnvyCry_YoungerSister_L1074() {
         // Setup: me=YOUNGSISTER of you (me.age < you.age), mine=VERY_SAD, target=HAPPY
         // → abEmote[2]=sad, abEmote[5]=envy → L1058 block → YOUNGSISTER case → L1074
-        Body mother = WorldTestHelper.createBody();
+        Yukkuri mother = WorldTestHelper.createBody();
         SimYukkuri.world.getCurrentMap().getBody().put(mother.getUniqueID(), mother);
         WorldTestHelper.setParents(me, -1, mother.getUniqueID());
         WorldTestHelper.setParents(you, -1, mother.getUniqueID());
@@ -6827,7 +6827,7 @@ class BodyLogicTest {
     @Test
     void testCheckPartner_ExcitingFoundIdiot_SetCalm_L393() {
         // me is exciting, found=TarinaiReimu(isIdiot=true), !b.isIdiot → setCalm → true
-        Body idiot = new TarinaiReimu();
+        Yukkuri idiot = new TarinaiReimu();
         idiot.setObjId(src.enums.Numbering.INSTANCE.numberingObjId());
         idiot.setUniqueID(src.enums.Numbering.INSTANCE.numberingYukkuriID());
         idiot.setBodySpr(makeSprites(1, 1));
@@ -7285,7 +7285,7 @@ class BodyLogicTest {
         // abEmote[0]=true, ELDERSISTER → L1032-1038 → GO
         you.setSurisuriFromPlayer(true);
         SimYukkuri.RND = new ConstState(0);
-        Body sharedMom = WorldTestHelper.createBody();
+        Yukkuri sharedMom = WorldTestHelper.createBody();
         SimYukkuri.world.getCurrentMap().getBody().put(sharedMom.getUniqueID(), sharedMom);
         WorldTestHelper.setParents(me, -1, sharedMom.getUniqueID());
         WorldTestHelper.setParents(you, -1, sharedMom.getUniqueID());
@@ -7320,7 +7320,7 @@ class BodyLogicTest {
         // L1095 true → ELDERSISTER → GO
         you.setSurisuriFromPlayer(true);
         SimYukkuri.RND = new ConstState(0);
-        Body sharedMom = WorldTestHelper.createBody();
+        Yukkuri sharedMom = WorldTestHelper.createBody();
         SimYukkuri.world.getCurrentMap().getBody().put(sharedMom.getUniqueID(), sharedMom);
         WorldTestHelper.setParents(me, -1, sharedMom.getUniqueID());
         WorldTestHelper.setParents(you, -1, sharedMom.getUniqueID());
@@ -7432,7 +7432,7 @@ class BodyLogicTest {
         you.setBodySpr(makeSprites(1, 1));
         me.setX(20); me.setY(20);
         you.setX(50); you.setY(20); // 離れた位置 (マップ境界内) → nToDist > 0
-        java.util.List<Body> list = new java.util.ArrayList<>();
+        java.util.List<Yukkuri> list = new java.util.ArrayList<>();
         list.add(you);
         assertDoesNotThrow(() -> BodyLogic.gatheringYukkuriBackLine(me, list, null));
     }
@@ -7592,7 +7592,7 @@ class BodyLogicTest {
         // you と third を me から等距離に配置
         // → 2番目に処理された方がelse-if (L318) ヒット
         // ConstState.fixedBoolean=true → nextBoolean()=true → found=その体 (L322)
-        Body third = WorldTestHelper.createBody();
+        Yukkuri third = WorldTestHelper.createBody();
         third.setX(90); third.setY(100); // dist from me(100,100) = 100
         SimYukkuri.world.getCurrentMap().getBody().put(third.getUniqueID(), third);
         you.setX(110); you.setY(100);   // dist from me(100,100) = 100 (equal)
@@ -7631,7 +7631,7 @@ class BodyLogicTest {
     void testCreateActiveFianceeList_SingleBody_ReturnsNull_L1397() {
         // you をマップから削除 → me のみ (size<=1) → L1397: return null
         SimYukkuri.world.getCurrentMap().getBody().remove(you.getUniqueID());
-        List<Body> result = BodyLogic.createActiveFianceeList(me, AgeState.ADULT.ordinal());
+        List<Yukkuri> result = BodyLogic.createActiveFianceeList(me, AgeState.ADULT.ordinal());
         assertTrue(result == null);
     }
 
@@ -7642,7 +7642,7 @@ class BodyLogicTest {
     @Test
     void testCreateActiveFianceeList_DisorderBody_Skipped_L1440() {
         // third: NYD → hasDisorder=true → L1439 continue (L1440)
-        Body third = WorldTestHelper.createBody();
+        Yukkuri third = WorldTestHelper.createBody();
         third.setX(200); third.setY(200);
         third.setCoreAnkoState(CoreAnkoState.NonYukkuriDiseaseNear); // isNYD=true → hasDisorder=true
         SimYukkuri.world.getCurrentMap().getBody().put(third.getUniqueID(), third);
@@ -7656,12 +7656,12 @@ class BodyLogicTest {
     @Test
     void testCreateActiveChildList_NotAllrightChild_Skipped_L1505() {
         // me の子供を作って isLockmove=true → isNotAllright=true → L1504 true → L1505
-        Body child = WorldTestHelper.createBody();
+        Yukkuri child = WorldTestHelper.createBody();
         child.setX(100); child.setY(100);
         SimYukkuri.world.getCurrentMap().getBody().put(child.getUniqueID(), child);
         me.addChildrenList(child); // me の子供リストに追加
         child.setLockmove(true); // → isNotAllright=true
-        List<Body> result = BodyLogic.createActiveChildList(me, true);
+        List<Yukkuri> result = BodyLogic.createActiveChildList(me, true);
         assertTrue(result != null && result.isEmpty());
     }
 
@@ -7679,7 +7679,7 @@ class BodyLogicTest {
         me.setX(0); me.setY(0);
         you.setX(5); you.setY(50); // oTop=you
         assertDoesNotThrow(() ->
-            BodyLogic.gatheringYukkuriSquare(you, new Body[]{me}, GatheringDirection.LEFT, null));
+            BodyLogic.gatheringYukkuriSquare(you, new Yukkuri[]{me}, GatheringDirection.LEFT, null));
     }
 
     // =================================================================
@@ -7694,7 +7694,7 @@ class BodyLogicTest {
         me.setX(0); me.setY(0);
         you.setX(95); you.setY(50); // oTop=you
         assertDoesNotThrow(() ->
-            BodyLogic.gatheringYukkuriSquare(you, new Body[]{me}, GatheringDirection.RIGHT, null));
+            BodyLogic.gatheringYukkuriSquare(you, new Yukkuri[]{me}, GatheringDirection.RIGHT, null));
     }
 
     // =================================================================
@@ -7709,7 +7709,7 @@ class BodyLogicTest {
         me.setX(0); me.setY(0);
         you.setX(50); you.setY(95); // oTop=you
         assertDoesNotThrow(() ->
-            BodyLogic.gatheringYukkuriSquare(you, new Body[]{me}, GatheringDirection.DOWN, null));
+            BodyLogic.gatheringYukkuriSquare(you, new Yukkuri[]{me}, GatheringDirection.DOWN, null));
     }
 
     // =================================================================
@@ -7721,14 +7721,14 @@ class BodyLogicTest {
         // 2体 → nMaxRowSize=2(偶数) → bKi=false → 各体が if(!bMoved) に入る
         // RIGHT, center.x=95 → x=95+10=105 > mapW(101) → L1760: x=101
         WorldTestHelper.initializeTranslate(100, 100, 50, 800, 600, 100, 100, new float[] { 1.0f });
-        Body third = WorldTestHelper.createBody();
+        Yukkuri third = WorldTestHelper.createBody();
         me.setBodySpr(makeSprites(1, 1));
         third.setBodySpr(makeSprites(1, 1));
         me.setX(0); me.setY(0);
         third.setX(0); third.setY(0);
         you.setX(95); you.setY(50); // oTop=you
         assertDoesNotThrow(() ->
-            BodyLogic.gatheringYukkuriSquare(you, new Body[]{me, third}, GatheringDirection.RIGHT, null));
+            BodyLogic.gatheringYukkuriSquare(you, new Yukkuri[]{me, third}, GatheringDirection.RIGHT, null));
     }
 
     // =================================================================
@@ -7740,13 +7740,13 @@ class BodyLogicTest {
         // 2体 → nMaxRowSize=2(偶数) → bKi=false → if(!bMoved)
         // DOWN, center.y=95 → y=95+10=105 > mapH(101) → L1765: y=101
         WorldTestHelper.initializeTranslate(100, 100, 50, 800, 600, 100, 100, new float[] { 1.0f });
-        Body third = WorldTestHelper.createBody();
+        Yukkuri third = WorldTestHelper.createBody();
         me.setBodySpr(makeSprites(1, 1));
         third.setBodySpr(makeSprites(1, 1));
         me.setX(0); me.setY(0);
         third.setX(0); third.setY(0);
         you.setX(50); you.setY(95); // oTop=you
         assertDoesNotThrow(() ->
-            BodyLogic.gatheringYukkuriSquare(you, new Body[]{me, third}, GatheringDirection.DOWN, null));
+            BodyLogic.gatheringYukkuriSquare(you, new Yukkuri[]{me, third}, GatheringDirection.DOWN, null));
     }
 }

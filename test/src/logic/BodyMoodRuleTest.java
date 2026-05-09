@@ -7,13 +7,13 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import src.base.Body;
+import src.base.Yukkuri;
 import src.enums.Happiness;
 import src.util.WorldTestHelper;
 
 class BodyMoodRuleTest {
 
-	private Body body;
+	private Yukkuri body;
 
 	@BeforeEach
 	void setUp() {
