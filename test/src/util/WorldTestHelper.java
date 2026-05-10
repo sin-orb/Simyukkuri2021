@@ -3,7 +3,6 @@ package src.util;
 import src.SimYukkuri;
 import src.draw.World;
 import src.base.Yukkuri;
-import src.base.BodyAttributes;
 import src.draw.Terrarium;
 import java.util.Random;
 import java.lang.reflect.Field;

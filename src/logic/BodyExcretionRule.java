@@ -1,6 +1,8 @@
 package src.logic;
 
-import src.base.BodyAttributes;
+import src.base.Yukkuri;
+
+
 import src.enums.BodyRank;
 import src.util.GameRandom;
 
@@ -11,7 +13,7 @@ public final class BodyExcretionRule {
 	private BodyExcretionRule() {
 	}
 
-	public static boolean getDiarrhea(BodyAttributes body) {
+	public static boolean getDiarrhea(Yukkuri body) {
 		if (body.getBodyRank() == BodyRank.KAIYU) {
 			return true;
 		}

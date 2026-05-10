@@ -1,6 +1,8 @@
 package src.logic;
 
-import src.base.BodyAttributes;
+import src.base.Yukkuri;
+
+
 import src.enums.Intelligence;
 
 /**
@@ -17,7 +19,7 @@ public final class BodyIllnessRule {
 	 * @param targetBody 判定対象
 	 * @return 病気を見抜けるならtrue
 	 */
-	public static boolean findSick(BodyAttributes self, BodyAttributes targetBody) {
+	public static boolean findSick(Yukkuri self, Yukkuri targetBody) {
 		switch (self.getIntelligence()) {
 			case WISE:
 				if (targetBody.isSick()) {

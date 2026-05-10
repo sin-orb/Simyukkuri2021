@@ -1,7 +1,7 @@
 package src.logic;
 
 import src.base.Yukkuri;
-import src.base.BodyAttributes;
+
 import src.enums.Direction;
 
 /**
@@ -55,15 +55,5 @@ public final class BodyExcitementRule {
 			actorBody.clearActions();
 		}
 		return false;
-	}
-
-	/**
-	 * 強制発情の旧アクセサを判定する.
-	 *
-	 * @param body 判定対象
-	 * @return 強制発情ならtrue
-	 */
-	public static boolean isForceExciting(BodyAttributes body) {
-		return body.isForceExcitingRaw();
 	}
 }

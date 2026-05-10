@@ -6460,7 +6460,7 @@ public class BodyTest {
             body.setExciting(false);
             assertFalse(body.isExciting());
             try {
-                java.lang.reflect.Method m = BodyAttributes.class.getMethod("setExciting", Boolean.class);
+                java.lang.reflect.Method m = Yukkuri.class.getMethod("setExciting", Boolean.class);
                 m.invoke(body, Boolean.TRUE);
                 assertTrue(body.isExciting());
                 m.invoke(body, Boolean.FALSE);
@@ -7542,7 +7542,7 @@ public class BodyTest {
             body.setBegging(true);
             assertTrue(body.isBegging());
 
-            assertNotNull(BodyAttributes.getUnyostrength());
+            assertNotNull(Yukkuri.getUnyostrength());
         }
 
         @Test

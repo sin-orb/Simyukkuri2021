@@ -15,7 +15,7 @@
 |---|-----|--------|
 | 1 | 旧 `enums.YukkuriType` ↔ `yukkuri.*` 依存設計 | 最高 |
 | 2 | 8組のパッケージ間循環依存 | 最高 |
-| 3 | `BodyAttributes.java` 7133行・`Body.java` 7850行 | 最高 |
+| 3 | `Yukkuri.java` 9396行（`BodyAttributes` は削除済み。責務は LivingEntity=1865行・SocialEntity=474行に分散済み） | 高 |
 | 4 | `SimYukkuri.world` / `RND` がグローバル可変状態 | 最高 |
 | 5 | `src.base` が「基底クラス置き場」（責任でまとめていない） | 高 |
 | 6 | `changeBody()` がリフレクション依存 | 高 |
@@ -33,8 +33,13 @@
 ### 1-1. 巨大クラス（神クラス）
 
 ```
-src/base/BodyAttributes.java  7,133行  物理・生物・社会・ゆっくり固有が全混在
-src/base/Body.java            7,850行  ゆっくり固有メソッドが全混在
+（旧）src/base/BodyAttributes.java  7,133行  → 削除済み（Step 6-5 完了）
+（旧）src/base/Body.java            7,850行  → Yukkuri.java にリネーム
+
+（現在）
+src/entity/living/LivingEntity.java   1,865行  生物一般の状態・行動
+src/entity/living/SocialEntity.java     474行  社会的関係・感情
+src/yukkuri/Yukkuri.java              9,396行  ゆっくり固有（さらなる分割が次の課題）
 ```
 
 `Obj.java` のコメント「private変数は使わずprotectedを使用してください」が
@@ -950,6 +955,35 @@ Step 2 までで導入した正規名を基準に、旧名の残骸を消す。
 
 ---
 
+### Step 6.5: Rule クラス・Raw getter 整理（完了）
+
+**経緯**
+Step 6 完了後、Yukkuri.java には Rule クラスへ処理を委譲するだけのオーバーライドが大量に残っていた。
+これらは「Yukkuri → Rule → Raw getter → フィールド」という3段間接参照を形成しており、
+Rule クラス側のメソッドをインライン化することで Rule クラスが死コード化した。
+
+**削除した Rule クラス（34ファイル）**
+- 第1陣（6）: `BodyBurstRule`, `BodyDamageRule`, `BodyControlRule`, `BodyPresentationRule`, `BodyExpressionRule`, `BodyDisplayRule`
+- 第2陣（28）: `BodyActionStateRule`, `BodyActivityRule`, `BodyAgeCategoryRule`, `BodyAgeRule`, `BodyAnimalRule`, `BodyAppearanceRule`, `BodyAttitudeRule`, `BodyBehaviorRule`, `BodyBirthRule`, `BodyBurnRule`, `BodyConditionRule`, `BodyDependencyRule`, `BodyFallRule`, `BodyFlagRule`, `BodyHungerRule`, `BodyHungerStateRule`, `BodyMoodRule`, `BodyMovementGoalRule`, `BodyPreferenceRule`, `BodySpecialTypeRule`, `BodySpeechRule`, `BodyStatRule`, `BodyStructureRule`, `BodyStyleRule`, `BodyTimingRule`, `BodyTraitRule` + 2（一時削除後に復元: `BodySelectionRule`, `BodySurisuriRule`）
+
+**残存 Rule クラス（21ファイル）**
+実際のロジックを持つもののみ残した:
+`BodyApproachRule`, `BodyContactEffectRule`, `BodyContactRule`, `BodyCoreStateRule`, `BodyDeadActionRule`, `BodyDeadSearchRule`, `BodyExcitementRule`, `BodyExcretionRule`, `BodyFoundAffinityRule`, `BodyGatheringRule`, `BodyIllnessRule`, `BodyNeedleRule`, `BodyParentRule`, `BodyPartnerActionRule`, `BodyPartnerEntryRule`, `BodyPartnerSearchRule`, `BodySelectionRule`, `BodySkinshipRule`, `BodyStealRule`, `BodyStressRule`, `BodyWakeupRule`
+
+**削除した Raw getter（74本）**
+`isXxxRaw()` / `getXxxRaw()` 形式の bare-field accessor で、呼び出し元の Rule クラスが削除されたため不要になったもの。
+残存 Raw getter（12本）: `getDamageRaw`, `isCanTalkRaw`, `isDirtyRaw`, `isDropShadowRaw`, `isImageNagasiModeRaw`, `isNewbornRaw`, `isOnDontMoveBeltconveyorRaw`, `isPinRaw`, `isShakePhaseRaw`, `isSleepingRaw`, `isSurisuriFromPlayerRaw`, `isTargetBindRaw`
+
+**Yukkuri.java でのインライン化（~30メソッド）**
+Rule 委譲 override を直接式に書き換えた例:
+```java
+// Before: return BodyBurstRule.isBurst(this);
+// After:
+public boolean isBurst() { return getBurstState() == Burst.BURST; }
+```
+
+---
+
 ### Step 5: パッケージ名変更（長期）
 
 **リスク**: 最高（全ファイルの package 宣言と import 文）
@@ -965,7 +999,7 @@ Step 2 までで導入した正規名を基準に、旧名の残骸を消す。
 
 | フェーズ | 状態 |
 |---------|------|
-| Phase 3: BodyAttributes リファクタリング | **進行中** |
+| Phase 3: BodyAttributes リファクタリング | **完了** |
 | └ BodyNameSet getter 委譲化・alias フィールド削除 | 完了（29サブクラスの直接参照も getter 経由に変換） |
 | └ BodySpriteSet 完全委譲化 | 完了（alias 3本削除・syncSpriteAliases 削除） |
 | └ BodyStatProfile / BodyTimingProfile / BodyBehaviorProfile 統合 | 完了 |
@@ -991,12 +1025,18 @@ Step 2 までで導入した正規名を基準に、旧名の残骸を消す。
 | └ WorldEntity配下を StaticEntity/MobileEntity/BodyLinkedEntity に分割 | **未着手** |
 | └ Body→Yukkuri リネーム (371ファイル影響) | 完了 |
 | **Step 5**: パッケージ名変更 | **未着手** |
-| **Step 6**: BodyAttributes 削除 | **進行中** |
-| └ Step 6-1: LivingEntity へのメソッド移動（hungry/stress/damage/sick/bake/attachment 系 ~40メソッド） | **未着手** |
-| └ Step 6-2: SocialEntity へのメソッド移動（happiness/lovePlayer/memories/childrenList 系 ~20メソッド） | **未着手** |
-| └ Step 6-3: Yukkuri へのメソッド移動（abstract 31個 + Rule 系 ~40 + ゆっくり固有 ~60） | **未着手** |
-| └ Step 6-4: static フィールド（shadowImages 等）を Renderer へ移動、43ファイル参照書き換え | **未着手** |
-| └ Step 6-5: BodyAttributes.java 削除・Yukkuri extends SocialEntity に変更・テストスタブ修正 | **未着手** |
+| **Step 6**: BodyAttributes 削除 | **完了** |
+| └ Step 6-1: LivingEntity へのメソッド移動（hungry/stress/damage/sick/bake/attachment 系 ~40メソッド） | **完了** |
+| └ Step 6-2: SocialEntity へのメソッド移動（happiness/lovePlayer/memories/childrenList 系 ~20メソッド） | **完了** |
+| └ Step 6-3: Yukkuri へのメソッド移動（abstract 31個 + Rule 系 ~40 + ゆっくり固有 ~60） | **完了** |
+| └ Step 6-4: static フィールド（shadowImages 等）を Renderer へ移動、43ファイル参照書き換え | **完了** |
+| └ Step 6-5: BodyAttributes.java 削除・Yukkuri extends SocialEntity に変更・テストスタブ修正 | **完了** |
+| **Step 6.5**: Rule クラス・Raw getter 整理 | **完了** |
+| └ 死コード Rule クラス 34ファイル削除（BodyActionStateRule 等。src/logic/ に残存 21クラス） | **完了** |
+| └ Raw getter 74本削除（`isXxxRaw()` 形式。呼び出し元の Rule が消えたため不要に） | **完了** |
+| └ Yukkuri.java の Rule-delegate override を直接式にインライン化（~30メソッド） | **完了** |
+| └ 37テストファイル削除（削除した Rule クラスに対応するテスト） | **完了** |
+| └ テスト基準: 6988 → 6935 successful / 0 failed | **完了** |
 
 ---
 

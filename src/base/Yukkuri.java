@@ -38,6 +38,7 @@ import src.attachment.Needle;
 import src.attachment.PoisonAmpoule;
 import src.attachment.StopAmpoule;
 import src.attachment.VeryShitAmpoule;
+import src.entity.living.SocialEntity;
 import src.entity.world.bodylinked.Okazari;
 import src.entity.world.bodylinked.Okazari.OkazariType;
 import src.draw.Dimension4y;
@@ -103,15 +104,36 @@ import src.item.StickyPlate;
 import src.item.Sui;
 import src.item.Toilet;
 import src.item.Trampoline;
+import java.awt.image.BufferedImage;
+import src.draw.Color4y;
+import src.draw.Point4y;
+import src.enums.Burst;
+import src.enums.CriticalDamegeType;
+import src.enums.HairState;
+import src.enums.Happiness;
+import src.enums.ImageCode;
+import src.enums.Intelligence;
+import src.enums.LovePlayer;
+import src.enums.Pain;
+import src.enums.PlayStyle;
+import src.enums.PredatorType;
+import src.enums.PublicRank;
+import src.enums.Trauma;
+import src.logic.BodyCoreStateRule;
+import src.logic.BodyExcitementRule;
+import src.logic.BodyExcretionRule;
 import src.logic.BodyLogic;
 import src.logic.BodyMovement;
+import src.logic.BodyNeedleRule;
 import src.logic.BodyEventState;
 import src.logic.BodyRelations;
 import src.logic.BodyRenderState;
+import src.logic.BodyStressRule;
 import src.logic.EventLogic;
 import src.logic.FamilyActionLogic;
 import src.logic.ToyLogic;
 import src.logic.TrashLogic;
+import src.system.BasicStrokeEX;
 import src.system.BodyLayer;
 import src.field.FieldShape;
 import src.system.ItemMenu.GetMenuTarget;
@@ -140,7 +162,7 @@ import src.util.ListUtil;
  * "ToyLogic"をobjループで呼び出すだけだと頻度が低いので、"ToyLogic"をインポート、"killtime()"内で一定確率で"ToyLogic"内のおもちゃで遊ぶ処理を呼び出すようにしてある。objループからは削除
  */
 @JsonTypeInfo(use = Id.CLASS)
-public abstract class Yukkuri extends BodyAttributes {
+public abstract class Yukkuri extends SocialEntity {
 	private static final long serialVersionUID = 8856385435939508588L;
 
 	/**
@@ -1103,16 +1125,6 @@ public abstract class Yukkuri extends BodyAttributes {
 		}
 	}
 
-	/**
-	 * 寝ているゆっくりを起こす.
-	 * または寝ているゆっくりが起きる.
-	 */
-	public void wakeup() {
-		setSleepingPeriod(0);
-		setSleeping(false);
-		setNightmare(false);
-		setWakeUpTime(getAge());
-	}
 
 	/**
 	 * プレイヤーにすりすりされたときの処理.
@@ -1694,7 +1706,6 @@ public abstract class Yukkuri extends BodyAttributes {
 	 * うんうん体操に参加すると耐性Up
 	 * すぃーにのると耐性Up
 	 */
-	@Override
 	public int checkNonYukkuriDiseaseTolerance() {
 		int tolerance = 100;
 		if (isIdiot()) {
@@ -2387,20 +2398,6 @@ public abstract class Yukkuri extends BodyAttributes {
 	 * ストレスチェック.
 	 * ストレスがマイナスなら0にする.
 	 */
-	public final void checkStress() {
-		if (stress < 0)
-			stress = 0;
-	}
-
-	/**
-	 * バカ舌チェック.
-	 */
-	public final void checkTang() {
-		if (getTang() < 0)
-			setTang(0);
-		if (getTang() > getTangLevelBase()[2])
-			setTang(getTangLevelBase()[2]);
-	}
 
 	/**
 	 * メッセージを出すかどうか.
@@ -2512,47 +2509,6 @@ public abstract class Yukkuri extends BodyAttributes {
 		}
 	}
 
-	/**
-	 * 動かなくする.
-	 */
-	public final void stay() {
-		setStaying(true);
-		stayTime = Const.STAYLIMIT;
-	}
-
-	/**
-	 * time分だけ動かなくする.
-	 * 
-	 * @param time 動かなくする時間
-	 */
-	public final void stay(int time) {
-		setStaying(true);
-		stayTime = time;
-	}
-
-	/**
-	 * timeだけぷるぷるする.
-	 * 
-	 * @param time ぷるぷるする時間
-	 */
-	public final void stayPurupuru(int time) {
-		setStaying(true);
-		stayTime = time;
-		setPurupuru(true);
-	}
-
-	/**
-	 * ぷるぷるする.
-	 */
-	public final void doPurupuru() {
-		if (!isShakePhase()) {
-			setShakePhase(true);
-			setOfsXY(1, ofsY);
-		} else {
-			setShakePhase(false);
-			setOfsXY(0, ofsY);
-		}
-	}
 
 	/**
 	 * ランダムに方向を決定する.
@@ -3005,112 +2961,6 @@ public abstract class Yukkuri extends BodyAttributes {
 	}
 
 	/**
-	 * うんうん、興奮、ふりふり、セリフの抑制をする.
-	 * 
-	 * @param p 抑制ポイント
-	 */
-	public void disclipline(int p) {
-		if (isExciting() && !isRaper()) {
-			excitingDiscipline = excitingDiscipline + (p * 10);
-			setCalm();
-		} else if (isShitting()) {
-			shittingDiscipline = shittingDiscipline + p;
-			setShitting(false);
-			shit -= getAngryPeriodBase() * 2;
-		} else if (isFurifuri()) {
-			furifuriDiscipline = furifuriDiscipline + p;
-			setFurifuri(false);
-		} else if (getMessageBuffer() != null) {
-			speechDiscipline = speechDiscipline + (p / 2);
-			setMessageBuffer(null);
-		}
-	}
-
-	/**
-	 * ゲス度によって、性格変更。ゲス落ちor更生をする.
-	 */
-	public final void checkAttitude() {
-		// 非ゆっくり症、足りないゆは変化しない
-		if (isNYD() || isIdiot()) {
-			setAttitudePoint(0);
-			return;
-		}
-		// 超善良は固定、ゲス矯正は1段ずつ戻す
-		if (getAttitude() == Attitude.VERY_NICE) {
-			setAttitudePoint(0);
-			return;
-		}
-		if (getAttitude() == Attitude.SUPER_SHITHEAD) {
-			if (getAttitudePoint() >= getNiceLimit()[0]) {
-				setAttitude(Attitude.SHITHEAD);
-				setAttitudePoint(0);
-			}
-			return;
-		}
-		if (getAttitude() == Attitude.SHITHEAD) {
-			if (getAttitudePoint() >= getNiceLimit()[0]) {
-				setAttitude(Attitude.AVERAGE);
-				setAttitudePoint(0);
-			}
-		}
-	}
-
-	/**
-	 * 通常時の躾(お仕置き成功条件の判断後にゲス度をいじる)
-	 * 
-	 * @param p 抑制ポイント
-	 */
-	public final void teachManner(int p) {
-		disclipline(p * 5);
-		boolean flag = false;
-		// 通常、ゲス関係なく
-		// ふりふりしてる時、すっきりしててかつれいぱーじゃない時
-		if (isFurifuri() || (isSukkiri() && !isRaper())) {
-			flag = true;
-		}
-
-		// ゲスの時
-		if (isRude()) {
-			// しゃべってる時
-			if (isTalking()) {
-				flag = true;
-			}
-		}
-
-		if (flag) {
-			plusAttitude(p);
-		}
-	}
-
-	/**
-	 * 強制的にゲス度をいじる（加える）.
-	 * 
-	 * @param p ゲス度
-	 */
-	public final void plusAttitude(int p) {
-		if (isNotChangeCharacter())
-			return;
-		setAttitudePoint(getAttitudePoint() + p);
-	}
-
-	/**
-	 * プレイヤーが好きか嫌いかを返却する.
-	 * 
-	 * @return プレイヤーが好きか嫌いか
-	 */
-	public final LovePlayer checkLovePlayerState() {
-		// -50%以下なら嫌い
-		if (getLovePlayer() < -1 * getLovePlayerLimitBase() / 2) {
-			return LovePlayer.BAD;
-		}
-		// 50%以上なら好き
-		if (getLovePlayerLimitBase() / 2 < getLovePlayer()) {
-			return LovePlayer.GOOD;
-		}
-		return LovePlayer.NONE;
-	}
-
-	/**
 	 * あまあましか受け付けないかどうかを返却する.
 	 * 
 	 * @return あまあましか受け付けないかどうか
@@ -3151,7 +3001,6 @@ public abstract class Yukkuri extends BodyAttributes {
 	/**
 	 * 妊娠、うんうん、過食などによる横方向の体型のふくらみ取得
 	 */
-	@Override
 	@Transient
 	public int getExpandSizeW() {
 		int OE = 100 * hungry / getHungryLimit();
@@ -3170,7 +3019,6 @@ public abstract class Yukkuri extends BodyAttributes {
 	/**
 	 * 妊娠、うんうんなどによる縦方向の体型のふくらみ取得
 	 */
-	@Override
 	@Transient
 	public int getExpandSizeH() {
 		return (20 - 20 / (getBabyTypes().size() + 1)) + getBabyTypes().size() * 2
@@ -3687,86 +3535,6 @@ public abstract class Yukkuri extends BodyAttributes {
 	}
 
 	/**
-	 * otherと何らかの家族関係にあるかを返却する.
-	 * 
-	 * @param other チェックしたいゆっくりのインスタンス
-	 * @return otherと何らかの家族関係にあるか
-	 */
-	public final boolean isFamily(Yukkuri other) {
-		return BodyRelations.isFamily(this, other);
-	}
-
-	/**
-	 * 自分がotherの親か
-	 * 
-	 * @param other 対象のゆっくりのインスタンス
-	 * @return 自分がotherの親かどうか
-	 */
-	public final boolean isParent(Yukkuri other) {
-		return BodyRelations.isParent(this, other);
-	}
-
-	/**
-	 * 自分がotherの父親かどうか
-	 * 
-	 * @param other 対象のゆっくりのインスタンス
-	 * @return 自分がotherの父親かどうか
-	 */
-	public final boolean isFather(Yukkuri other) {
-		return BodyRelations.isFather(this, other);
-	}
-
-	/**
-	 * 自分がotherの母親かどうか
-	 * 
-	 * @param other 対象のゆっくりのインスタンス
-	 * @return 自分がotherの母親かどうか
-	 */
-	public final boolean isMother(Yukkuri other) {
-		return BodyRelations.isMother(this, other);
-	}
-
-	/**
-	 * otherが自分の子か
-	 * 
-	 * @param other 対象のゆっくりのインスタンス
-	 * @return otherが自分の子かどうか
-	 */
-	public final boolean isChild(Yukkuri other) {
-		return BodyRelations.isChild(this, other);
-	}
-
-	/**
-	 * otherが自分のつがいか
-	 * 
-	 * @param other 対象のゆっくりのインスタンス
-	 * @return otherがじぶんのつがいかどうか
-	 */
-	public final boolean isPartner(Yukkuri other) {
-		return BodyRelations.isPartner(this, other);
-	}
-
-	/**
-	 * otherが自分の姉妹か
-	 * 
-	 * @param other 対象のゆっくりのインスタンス
-	 * @return otherが自分の姉妹かどうか
-	 */
-	public final boolean isSister(Yukkuri other) {
-		return BodyRelations.isSister(this, other);
-	}
-
-	/**
-	 * otherが自分の妹か
-	 * 
-	 * @param other 対象のゆっくりのインスタンス
-	 * @return otherが自分の妹か
-	 */
-	public final boolean isElderSister(Yukkuri other) {
-		return BodyRelations.isElderSister(this, other);
-	}
-
-	/**
 	 * 先祖に加える
 	 * 
 	 * @param inAnc 加えたいゆっくりのUniqueID
@@ -3782,61 +3550,6 @@ public abstract class Yukkuri extends BodyAttributes {
 	 */
 	public final void addAncestorList(List<Integer> iAncList) {
 		getAncestorList().addAll(iAncList);
-	}
-
-	/**
-	 * れいぱーかどうか
-	 * 
-	 * @return れいぱーかどうか
-	 */
-	@Transient
-	public final boolean isRaper() {
-		if (isUnBirth()) {
-			return false;
-		}
-		return isRapist();
-	}
-
-	/**
-	 * れいぱーを設定する.
-	 * 
-	 * @param b れいぱーかどうか
-	 */
-	public final void setRaper(boolean b) {
-		if (isPenipeniCutted()) {
-			setRapist(false);
-		} else {
-			setRapist(b);
-		}
-	}
-
-	/**
-	 * スーパーれいぱーかどうか
-	 * 
-	 * @return スーパーれいぱーかどうか
-	 */
-	@Transient
-	public final boolean isSuperRaper() {
-		if (isUnBirth()) {
-			return false;
-		}
-		if (isPenipeniCutted()) {
-			setSuperRapist(false);
-		}
-		return isSuperRapist();
-	}
-
-	/**
-	 * すーぱーれいぱーを設定する.
-	 * 
-	 * @param b すーぱーれいぱーかどうか
-	 */
-	public final void setSuperRaper(boolean b) {
-		if (isPenipeniCutted()) {
-			setSuperRapist(false);
-		} else {
-			setSuperRapist(b);
-		}
 	}
 
 	/**
@@ -5421,17 +5134,6 @@ public abstract class Yukkuri extends BodyAttributes {
 		eatFood(1500);
 	}
 
-	/**
-	 * ダメージ追加
-	 * 
-	 * @param amount ダメージ量
-	 */
-	public final void addDamage(int amount) {
-		if (isDead()) {
-			return;
-		}
-		damage += amount;
-	}
 
 	/**
 	 * 打撃を受ける
@@ -7874,13 +7576,1821 @@ public abstract class Yukkuri extends BodyAttributes {
 
 	/**
 	 * Yukkuri レイヤーのフィールドを to へコピーする.
-	 * NameSet/SpriteSet は親の BodyAttributes.copyStateTo で処理済み.
 	 */
 	@Override
 	public void copyStateTo(Entity to) {
 		super.copyStateTo(to);
 		Yukkuri y = (Yukkuri) to;
 		y.setNoticeNoOkazari(noticeNoOkazari);
+		y.copyBodyNameSetFrom(this);
+		y.copyBodySpriteSetFrom(this);
+	}
+
+
+	// ===== Step6-3: BodyAttributes から移動したメソッド群 =====
+
+
+	/** ゆっくりのタイプ。まりさなら0、れいむなら1、等々ユニークなタイプを表す。 */
+	public abstract int getType();
+
+	/** ゆっくりの日本語名称を返却する */
+	public abstract String getNameJ();
+
+	/** ゆっくりの英語名称を返却する */
+	public abstract String getNameE();
+
+	/** ハイブリッドなゆっくりの2番めの日本語名称を返却する */
+	public abstract String getNameJ2();
+
+	/** ハイブリッドなゆっくりの2番めの英語名称を返却する */
+	public abstract String getNameE2();
+
+	/** ゆっくりが自分をどう呼称するかを返却する */
+	public abstract String getMyName();
+
+	/** ゆっくりがダメージを負っているとき自分をどう呼称するかを返却する */
+	public abstract String getMyNameD();
+
+	/** ゆっくりのタイプ、向き、レイヤー、indexからイメージ画像を取得する */
+	public abstract int getImage(int type, int direction, BodyLayer layer, int index);
+
+	/** 各ゆっくりのパラメータを作成時に調整する */
+	public abstract void tuneParameters();
+
+	/** 画像がロード済みかどうかを返却する */
+	public abstract boolean isImageLoaded();
+
+	/** 各ゆっくり用iniファイルからマウントポイントを取得する */
+	public abstract Point4y[] getMountPoint(String key);
+
+	/**
+	 * 非ゆっくり症のチェックメソッド.
+	 * Bodyでのオーバーライド.
+	 * 
+	 * @return 非ゆっくり症かどうか
+	 */
+
+	// BodyNameSet — 各ゆっくり固有の名前データ（Yukkuri で実装）
+
+	/**
+	 * 名前関連データを他の Yukkuri から深く複製する.
+	 * @param from 複製元
+	 */
+	public void copyBodyNameSetFrom(Yukkuri from) {
+		if (from == null) {
+			return;
+		}
+		setBaseBodyFileName(from.getBaseBodyFileName());
+		setBabyNames(from.getBabyNames() != null ? from.getBabyNames().clone() : null);
+		setChildNames(from.getChildNames() != null ? from.getChildNames().clone() : null);
+		setAdultNames(from.getAdultNames() != null ? from.getAdultNames().clone() : null);
+		setMyNames(from.getMyNames() != null ? from.getMyNames().clone() : null);
+		setBabyNamesDamaged(from.getBabyNamesDamaged() != null ? from.getBabyNamesDamaged().clone() : null);
+		setChildNamesDamaged(from.getChildNamesDamaged() != null ? from.getChildNamesDamaged().clone() : null);
+		setAdultNamesDamaged(from.getAdultNamesDamaged() != null ? from.getAdultNamesDamaged().clone() : null);
+		setMyNamesDamaged(from.getMyNamesDamaged() != null ? from.getMyNamesDamaged().clone() : null);
+	}
+
+	/**
+	 * スプライト関連データを他の Yukkuri から深く複製する.
+	 * @param from 複製元
+	 */
+	public void copyBodySpriteSetFrom(Yukkuri from) {
+		if (from == null) {
+			return;
+		}
+		setBodySpr(copySprites(from.getBodySpr()));
+		setExpandSpr(copySprites(from.getExpandSpr()));
+		setBraidSpr(copySprites(from.getBraidSpr()));
+	}
+
+	private static Sprite[] copySprites(Sprite[] src) {
+		if (src == null) {
+			return null;
+		}
+		Sprite[] ret = new Sprite[src.length];
+		for (int i = 0; i < src.length; i++) {
+			ret[i] = copySprite(src[i]);
+		}
+		return ret;
+	}
+
+	private static Sprite copySprite(Sprite src) {
+		if (src == null) {
+			return null;
+		}
+		Sprite ret = new Sprite();
+		ret.setOriginalW(src.getOriginalW());
+		ret.setOriginalH(src.getOriginalH());
+		ret.setImageW(src.getImageW());
+		ret.setImageH(src.getImageH());
+		ret.setPivotX(src.getPivotX());
+		ret.setPivotY(src.getPivotY());
+		ret.setPivotType(src.getPivotType());
+		Rectangle4y[] rect = src.getScreenRect();
+		if (rect != null) {
+			Rectangle4y[] rectCopy = new Rectangle4y[rect.length];
+			for (int i = 0; i < rect.length; i++) {
+				Rectangle4y r = rect[i];
+				rectCopy[i] = (r == null) ? null : new Rectangle4y(r.getX(), r.getY(), r.getWidth(), r.getHeight());
+			}
+			ret.setScreenRect(rectCopy);
+		}
+		return ret;
+	}
+
+	// public variables
+
+
+	// Used in image loading.
+	private static BufferedImage[] shadowImages = new BufferedImage[3];
+	/** 影画像のサイズ定義 */
+	protected static int[] shadowImgW = new int[3], shadowImgH = new int[3];
+	/** 影画像の中心定義 */
+	protected static int[] shadowPivX = new int[3], shadowPivY = new int[3];
+	// .INIファイルで変更可能な各ゆっくりのパラメータ.
+	/** うにょの動きの強さ */
+	public final static int UNYOSTRENGTH[] = { 4, 7, 10 };
+
+	public static BufferedImage[] getShadowImages() {
+		return shadowImages;
+	}
+
+	public static void setShadowImages(BufferedImage[] shadowImages) {
+		Yukkuri.shadowImages = shadowImages;
+	}
+
+	/**
+	 * 影画像のサイズ定義を取得する.
+	 * 
+	 * @return 影画像のサイズ定義
+	 */
+	public static int[] getShadowImgW() {
+		return shadowImgW;
+	}
+
+	/**
+	 * 影画像のサイズ定義を設定する.
+	 * 
+	 * @param shadowImgW 影画像のサイズ定義
+	 */
+	public static void setShadowImgW(int[] shadowImgW) {
+		Yukkuri.shadowImgW = shadowImgW;
+	}
+
+	public static int[] getShadowImgH() {
+		return shadowImgH;
+	}
+
+	public static void setShadowImgH(int[] shadowImgH) {
+		Yukkuri.shadowImgH = shadowImgH;
+	}
+
+	/**
+	 * 影画像の中心定義を取得する.
+	 * 
+	 * @return 影画像の中心定義
+	 */
+	public static int[] getShadowPivX() {
+		return shadowPivX;
+	}
+
+	/**
+	 * 影画像の中心定義を設定する.
+	 * 
+	 * @param shadowPivX 影画像の中心定義
+	 */
+	public static void setShadowPivX(int[] shadowPivX) {
+		Yukkuri.shadowPivX = shadowPivX;
+	}
+
+	public static int[] getShadowPivY() {
+		return shadowPivY;
+	}
+
+	public static void setShadowPivY(int[] shadowPivY) {
+		Yukkuri.shadowPivY = shadowPivY;
+	}
+
+	/**
+	 * BodyAttributes レイヤーのフィールドを to へコピーする (名前・スプライトセット).
+	 */
+	@Override
+
+	/**
+	 * 画像がまりちゃ流しか を設定する.
+	 * 
+	 * @return 画像がまりちゃ流しか
+	 */
+	public boolean isImageNagasiMode() {
+		return isImageNagasiModeRaw();
+	}
+
+	@JsonIgnore
+	public boolean isImageNagasiModeRaw() {
+		return imageNagasiMode;
+	}
+
+	/**
+	 * 画像がまりちゃ流しか を設定する.
+	 * 
+	 * @param imageNagasiMode 画像がまりちゃ流しか
+	 */
+	public void setImageNagasiMode(boolean imageNagasiMode) {
+		this.imageNagasiMode = imageNagasiMode;
+	}
+
+
+	/**
+	 * 蓄積ダメージ counter indicating damage を取得する.
+	 * 
+	 * @return 蓄積ダメージ counter indicating damage
+	 */
+
+	@JsonIgnore
+	public void setAttitudeRaw(Attitude attitude) {
+		this.attitude = attitude;
+	}
+
+	@JsonIgnore
+	public int getDamageRaw() {
+		return damage;
+	}
+
+	@JsonIgnore
+	public void setDamageRaw(int damage) {
+		this.damage = damage;
+	}
+
+
+	@JsonIgnore
+	public void setStressRaw(int stress) {
+		this.stress = stress;
+	}
+
+	@Override
+	public void setStress(int s) {
+		if (s > 0) {
+			setStressRaw(s);
+		}
+	}
+
+
+	@JsonIgnore
+	public void setTangRaw(int tang) {
+		this.tang = tang;
+	}
+
+
+	@JsonIgnore
+	public void setDamageStateRaw(Damage damageState) {
+		this.damageState = damageState;
+	}
+
+
+	@JsonIgnore
+	public void setIntelligenceRaw(Intelligence intelligence) {
+		this.intelligence = intelligence;
+	}
+
+
+	@JsonIgnore
+	public void setShitRaw(int shit) {
+		this.shit = shit;
+	}
+
+
+	@JsonIgnore
+	public void setMemoriesRaw(int memories) {
+		this.memories = memories;
+	}
+
+	@JsonIgnore
+	public void setTraumaRaw(Trauma trauma) {
+		this.trauma = trauma;
+	}
+
+
+	@JsonIgnore
+	public void setLovePlayerRaw(int lovePlayer) {
+		this.lovePlayer = lovePlayer;
+	}
+
+
+	@JsonIgnore
+	public void setLovePlayerStateRaw(LovePlayer lovePlayerState) {
+		this.lovePlayerState = lovePlayerState;
+	}
+
+
+	@JsonIgnore
+	public void setHairStateRaw(HairState hairState) {
+		this.hairState = hairState;
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	/**
+	 * うまれて初めての地面か を設定する.
+	 * 
+	 * @param firstGround うまれて初めての地面か
+	 */
+	@JsonProperty("firstGround")
+	public void setFirstGround(boolean firstGround) {
+		this.firstGround = firstGround;
+	}
+
+
+
+	/**
+	 * うまれて初めての食事か を設定する.
+	 * 
+	 * @param firstEatStalk うまれて初めての食事か
+	 */
+	@JsonProperty("firstEatStalk")
+	public void setFirstEatStalk(boolean firstEatStalk) {
+		this.firstEatStalk = firstEatStalk;
+	}
+
+
+
+
+
+	/**
+	 * 強制発情フラグ want to sukkiri or not を取得する.
+	 * 
+	 * @return 強制発情フラグ want to sukkiri or not
+	 */
+
+
+
+
+
+	/**
+	 * 針の有無 を取得する.
+	 * 
+	 * @return 針の有無
+	 */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	/**
+	 * 移動不可ベルトコンベアの有無 を取得する.
+	 * 
+	 * @return 移動不可ベルトコンベアの有無
+	 */
+	public boolean isOnNonMovingConveyor() {
+		return isOnDontMoveBeltconveyorRaw();
+	}
+
+	@JsonIgnore
+	public boolean isOnDontMoveBeltconveyorRaw() {
+		return nonMovingConveyor;
+	}
+
+	/**
+	 * 移動不可ベルトコンベアの有無 を設定する.
+	 * 
+	 * @param nonMovingConveyor 移動不可ベルトコンベアの有無
+	 */
+	@JsonProperty("nonMovingConveyor")
+	public void setOnNonMovingConveyor(boolean nonMovingConveyor) {
+		this.nonMovingConveyor = nonMovingConveyor;
+	}
+
+
+	@JsonIgnore
+	public void setRareTypeRaw(boolean rareType) {
+		this.rareType = rareType;
+	}
+
+
+	@JsonIgnore
+	public void setLikeBitterFoodRaw(boolean likeBitterFood) {
+		this.likeBitterFood = likeBitterFood;
+	}
+
+
+	@JsonIgnore
+	public void setLikeHotFoodRaw(boolean likeHotFood) {
+		this.likeHotFood = likeHotFood;
+	}
+
+
+	@JsonIgnore
+	public void setLikeWaterRaw(boolean likeWater) {
+		this.likeWater = likeWater;
+	}
+
+
+	@JsonIgnore
+	public void setFlyingTypeRaw(boolean flyingType) {
+		this.flyingType = flyingType;
+	}
+
+
+	@JsonIgnore
+	public void setBraidTypeRaw(boolean braidType) {
+		this.braidType = braidType;
+	}
+
+
+	/**
+	 * 動けないかどうか を設定する.
+	 * 
+	 * @param lockmove 動けないかどうか
+	 */
+	public void setLockmove(boolean lockmove) {
+		this.lockmove = lockmove;
+	}
+
+
+	/**
+	 * ひっぱり、押しつぶし可能か を設定する.
+	 * 
+	 * @param canPullOrPush ひっぱり、押しつぶし可能か
+	 */
+	public void setCanPullOrPush(boolean canPullOrPush) {
+		this.canPullOrPush = canPullOrPush;
+	}
+
+	/**
+	 * 動けない期間（押さえられてる等で） を取得する.
+	 * 
+	 * @return 動けない期間（押さえられてる等で）
+	 */
+	public int getLockmovePeriod() {
+		return lockmovePeriod;
+	}
+
+	/**
+	 * 動けない期間（押さえられてる等で） を設定する.
+	 * 
+	 * @param lockmovePeriod 動けない期間（押さえられてる等で）
+	 */
+	public void setLockmovePeriod(int lockmovePeriod) {
+		this.lockmovePeriod = lockmovePeriod;
+	}
+
+
+	/**
+	 * プレイヤーにすりすりされているか を取得する.
+	 * 
+	 * @return プレイヤーにすりすりされているか
+	 */
+	public boolean isSurisuriFromPlayer() {
+		return isSurisuriFromPlayerRaw();
+	}
+
+	@JsonIgnore
+	public boolean isSurisuriFromPlayerRaw() {
+		return surisuriFromPlayer;
+	}
+
+	/**
+	 * プレイヤーにすりすりされているか を設定する.
+	 * 
+	 * @param surisuriFromPlayer プレイヤーにすりすりされているか
+	 */
+	@JsonProperty("surisuriFromPlayer")
+	public void setSurisuriFromPlayer(boolean surisuriFromPlayer) {
+		this.surisuriFromPlayer = surisuriFromPlayer;
+	}
+
+	/**
+	 * ぷるぷるアニメーション位相 を取得する.
+	 * 
+	 * @return ぷるぷるアニメーション位相
+	 */
+	@JsonIgnore
+	public boolean isShakePhase() {
+		return isShakePhaseRaw();
+	}
+
+	@JsonIgnore
+	public boolean isShakePhaseRaw() {
+		return shakePhase;
+	}
+
+	/**
+	 * ぷるぷるアニメーション位相 を設定する.
+	 *
+	 * @param shakePhase ぷるぷるアニメーション位相
+	 */
+	public void setShakePhase(boolean shakePhase) {
+		this.shakePhase = shakePhase;
+	}
+
+
+
+	/**
+	 * 粘着板で背中を固定されているかを設定する.
+	 * 
+	 * @param 粘着板で背中を固定されているか
+	 */
+	public void setFixBack(boolean fixBack) {
+		this.fixBack = fixBack;
+	}
+
+
+	/**
+	 * 対象を呼び止めるほど強い動機を持っているかどうか を取得する.
+	 * 
+	 * @return 対象を呼び止めるほど強い動機を持っているかどうか
+	 */
+	public boolean isTargetBind() {
+		return isTargetBindRaw();
+	}
+
+	@JsonIgnore
+	public boolean isTargetBindRaw() {
+		return targetBind;
+	}
+
+	/**
+	 * 対象を呼び止めるほど強い動機を持っているかどうか を設定する.
+	 * 
+	 * @param targetBind 対象を呼び止めるほど強い動機を持っているかどうか
+	 */
+	public void setTargetBind(boolean targetBind) {
+		this.targetBind = targetBind;
+	}
+
+	/**
+	 * 移動目的がフードかどうかを取得する.
+	 * 
+	 * @return 移動目的がフードかどうか
+	 */
+	public boolean isToFood() {
+		return getPurposeOfMoving() == PurposeOfMoving.FOOD;
+	}
+
+	/**
+	 * 移動目的がフードかどうかを設定する.
+	 * 
+	 * @param b 移動目的がフードかどうか
+	 */
+	public void setToFood(boolean b) {
+		if (b) {
+			purposeOfMoving = PurposeOfMoving.FOOD;
+		} else if (purposeOfMoving == PurposeOfMoving.FOOD) {
+			purposeOfMoving = PurposeOfMoving.NONE;
+		}
+	}
+
+	/**
+	 * 移動目的がすっきりかどうかを取得する.
+	 * 
+	 * @return 移動目的がすっきりかどうか
+	 */
+	public boolean isToSukkiri() {
+		return getPurposeOfMoving() == PurposeOfMoving.SUKKIRI;
+	}
+
+	/**
+	 * 移動目的がすっきりかどうかを設定する.
+	 * 
+	 * @param b 移動目的がすっきりかどうか
+	 */
+	public void setToSukkiri(boolean b) {
+		if (b) {
+			purposeOfMoving = PurposeOfMoving.SUKKIRI;
+		} else if (purposeOfMoving == PurposeOfMoving.SUKKIRI) {
+			purposeOfMoving = PurposeOfMoving.NONE;
+		}
+	}
+
+	/**
+	 * 移動目的がうんうんかどうかを取得する.
+	 * 
+	 * @return 移動目的がうんうんかどうか
+	 */
+	public boolean isToShit() {
+		return getPurposeOfMoving() == PurposeOfMoving.SHIT;
+	}
+
+	/**
+	 * 移動目的がうんうんかどうかを設定する.
+	 * 
+	 * @param flag 移動目的がうんうんかどうか
+	 */
+	public void setToShit(boolean flag) {
+		if (flag) {
+			purposeOfMoving = PurposeOfMoving.SHIT;
+		} else if (purposeOfMoving == PurposeOfMoving.SHIT) {
+			purposeOfMoving = PurposeOfMoving.NONE;
+		}
+	}
+
+	/**
+	 * 移動目的がベッドかどうかを取得する.
+	 * 
+	 * @return 移動目的がベッドかどうか
+	 */
+	public boolean isToBed() {
+		return getPurposeOfMoving() == PurposeOfMoving.BED;
+	}
+
+	/**
+	 * 移動目的がベッドかどうかを設定する.
+	 * 
+	 * @param flag 移動目的がベッドかどうか
+	 */
+	public void setToBed(boolean flag) {
+		if (flag) {
+			purposeOfMoving = PurposeOfMoving.BED;
+		} else if (purposeOfMoving == PurposeOfMoving.BED) {
+			purposeOfMoving = PurposeOfMoving.NONE;
+		}
+	}
+
+	/**
+	 * 移動目的が他のゆっくりかどうかを取得する.
+	 * 
+	 * @return 移動目的が他のゆっくりかどうか
+	 */
+	public boolean isToBody() {
+		return getPurposeOfMoving() == PurposeOfMoving.YUKKURI;
+	}
+
+	/**
+	 * 移動目的が他のゆっくりかどうかを設定する.
+	 * 
+	 * @param flag 移動目的が他のゆっくりかどうか
+	 */
+	public void setToBody(boolean flag) {
+		if (flag) {
+			purposeOfMoving = PurposeOfMoving.YUKKURI;
+		} else if (purposeOfMoving == PurposeOfMoving.YUKKURI) {
+			purposeOfMoving = PurposeOfMoving.NONE;
+		}
+	}
+
+	/**
+	 * 移動目的がおかざりを盗むためかどうかを取得する.
+	 * 
+	 * @return 移動目的がおかざりを盗むためかどうか
+	 */
+	public boolean isToSteal() {
+		return getPurposeOfMoving() == PurposeOfMoving.STEAL;
+	}
+
+	/**
+	 * 移動目的がおかざりを盗むためかどうかを設定する.
+	 * 
+	 * @param flag 移動目的がおかざりを盗むためかどうか
+	 */
+	public void setToSteal(boolean flag) {
+		if (flag) {
+			purposeOfMoving = PurposeOfMoving.STEAL;
+		} else if (purposeOfMoving == PurposeOfMoving.STEAL) {
+			purposeOfMoving = PurposeOfMoving.NONE;
+		}
+	}
+
+	/**
+	 * 移動目的がアイテムを持つことかどうかを取得する.
+	 * 
+	 * @return 移動目的がアイテムを持つことかどうか
+	 */
+	public boolean isToTakeout() {
+		return getPurposeOfMoving() == PurposeOfMoving.TAKEOUT;
+	}
+
+	/**
+	 * 移動目的がアイテムを持つことかどうかを設定する.
+	 * 
+	 * @param flag 移動目的がアイテムを持つことかどうか
+	 */
+	public void setToTakeout(boolean flag) {
+		if (flag) {
+			purposeOfMoving = PurposeOfMoving.TAKEOUT;
+		} else if (purposeOfMoving == PurposeOfMoving.TAKEOUT) {
+			purposeOfMoving = PurposeOfMoving.NONE;
+		}
+	}
+
+	/** 移動目標のみキャンセル */
+	public final void clearTargets() {
+		purposeOfMoving = PurposeOfMoving.NONE;
+		stopStaying();
+	}
+
+	/**
+	 * とどまるのをやめる
+	 * 
+	 * @see #stay()
+	 * @see #stay(int)
+	 * @see ##stayPurupuru()
+	 * @see #stayPurupuru(int)
+	 * @see #isStaying()
+	 * @see #stopStaying()
+	 */
+	public final void stopStaying() {
+		stayTicks = 0;
+	}
+
+
+
+	/**
+	 * アイテムを出し入れする動作フラグ を設定する.
+	 * 
+	 * @param inOutTakeoutItem アイテムを出し入れする動作フラグ
+	 */
+	public void setInOutTakeoutItem(boolean inOutTakeoutItem) {
+		this.inOutTakeoutItem = inOutTakeoutItem;
+	}
+
+
+
+	/**
+	 * 待機アクション中かどうかを設定する.
+	 * 
+	 * @param staying 待機アクション中かどうか
+	 */
+	public void setStaying(boolean staying) {
+		this.staying = staying;
+	}
+
+
+	/**
+	 * 怒っているか否か を設定する.
+	 * 
+	 * @param angry 怒っているか否か
+	 */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	/**
+	 * 壁に引っかかった回数 を設定する.
+	 * 
+	 * @param blockedTicks 壁に引っかかった回数
+	 */
+
+
+
+	/**
+	 * 喋れる状態かどうか を取得する.
+	 * 
+	 * @return 喋れる状態かどうか
+	 */
+	public boolean isCanTalk() {
+		return isCanTalkRaw();
+	}
+
+	@JsonIgnore
+	public boolean isCanTalkRaw() {
+		return canTalk;
+	}
+
+	/**
+	 * 喋れる状態かどうか を設定する.
+	 * 
+	 * @param canTalk 喋れる状態かどうか
+	 */
+	public void setCanTalk(boolean canTalk) {
+		this.canTalk = canTalk;
+	}
+
+
+	/**
+	 * メッセージラインの色 を設定する.
+	 * 
+	 * @param messageLineColor メッセージラインの色
+	 */
+	public void setOrigMessageLineColor(Color messageLineColor) {
+		this.messageLineColor = new Color4y(messageLineColor.getRed(), messageLineColor.getGreen(),
+				messageLineColor.getBlue(), messageLineColor.getAlpha());
+	}
+
+
+	/**
+	 * メッセージボックスの色 を設定する.
+	 * 
+	 * @param messageBoxColor メッセージボックスの色
+	 */
+	public void setOrigMessageBoxColor(Color messageBoxColor) {
+		this.messageBoxColor = new Color4y(messageBoxColor.getRed(), messageBoxColor.getGreen(),
+				messageBoxColor.getBlue(), messageBoxColor.getAlpha());
+	}
+
+
+	/**
+	 * メッセージテキストの色 を設定する.
+	 * 
+	 * @param messageTextColor メッセージテキストの色
+	 */
+	public void setOrigMessageTextColor(Color messageTextColor) {
+		this.messageTextColor = new Color4y(messageTextColor.getRed(), messageTextColor.getGreen(),
+				messageTextColor.getBlue(), messageTextColor.getAlpha());
+	}
+
+
+
+
+	/**
+	 * 強制的に誕生時メッセージを言わされるかどうか を設定する.
+	 * 
+	 * @param birthMessageForced 強制的に誕生時メッセージを言わされるかどうか
+	 */
+	public void setBirthMessageForced(boolean birthMessageForced) {
+		this.birthMessageForced = birthMessageForced;
+	}
+
+
+	/**
+	 * 右ペインメニューのピン留めをされているかどうかを取得する.
+	 * 
+	 * @return 右ペインメニューのピン留めをされているかどうか
+	 */
+	public boolean isPinned() {
+		return isPinRaw();
+	}
+
+	@JsonIgnore
+	public boolean isPinRaw() {
+		return isPinned;
+	}
+
+	/**
+	 * 右ペインメニューのピン留めをされているかどうか を設定する.
+	 * 
+	 * @param isPinned 右ペインメニューのピン留めをされているかどうか
+	 */
+	public void setPinned(boolean isPinned) {
+		this.isPinned = isPinned;
+	}
+
+
+	/**
+	 * ゆっくりの移動速度 を設定する.
+	 * 
+	 * @param speed ゆっくりの移動速度
+	 */
+
+
+
+
+	/**
+	 * 影の表示有無 を取得する.
+	 * 
+	 * @return 影の表示有無
+	 */
+	public boolean isShadowVisible() {
+		return isDropShadowRaw();
+	}
+
+	@JsonIgnore
+	public boolean isDropShadowRaw() {
+		return shadowVisible;
+	}
+
+	/**
+	 * 影の表示有無 を設定する.
+	 * 
+	 * @param shadowVisible 影の表示有無
+	 */
+	public void setShadowVisible(boolean shadowVisible) {
+		this.shadowVisible = shadowVisible;
+	}
+
+
+	/**
+	 * たかっているアリの数 を設定する.
+	 * 
+	 * @param antCount たかっているアリの数
+	 */
+	public void setAntCount(int antCount) {
+		if (antCount < 0) {
+			this.antCount = 0;
+		} else {
+			this.antCount = antCount;
+		}
+	}
+
+
+	/**
+	 * うにょの動きの強さ を取得する.
+	 * 
+	 * @return
+	 */
+	public static int[] getUnyostrength() {
+		return UNYOSTRENGTH;
+	}
+
+	/**
+	 * 最後に行動した時間を設定する.
+	 */
+	public void setLastActionTime() {
+		long lnNowTime = System.currentTimeMillis();
+		lastActionTime = lnNowTime;
+	}
+
+	/**
+	 * 売却額を返却する.
+	 * 
+	 * @param F 0が飼いゆ、1が加工品
+	 * @return 売却額
+	 */
+	public int getSellingPrice(int F) {
+		// Fが0だと飼いゆとして、1だと加工品としての価値を返す
+		return saleValues[F];
+	}
+
+	/**
+	 * 死ねないように設定する.
+	 * 具体的には、死ねない期間に3を設定する.
+	 */
+	public void setCantDie() {
+		cantDiePeriod = 3;
+	}
+
+
+	/**
+	 * 妹のインスタンスを取得する.
+	 * 
+	 * @param sisterIndex 何番目の妹か
+	 * @return 妹のインスタンス
+	 */
+	public Yukkuri getSister(int sisterIndex) {
+		return BodyRelations.getSister(this, sisterIndex);
+	}
+
+
+	/**
+	 * 姉のインスタンスを取得する.
+	 * 
+	 * @param elderSisterIndex 何番目の姉か
+	 * @return 姉のインスタンス
+	 */
+	public Yukkuri getElderSister(int elderSisterIndex) {
+		return BodyRelations.getElderSister(this, elderSisterIndex);
+	}
+
+
+	/**
+	 * 子のインスタンスを取得する.
+	 * 
+	 * @param childIndex 何番目の子か
+	 * @return 子のインスタンス
+	 */
+	public Yukkuri getChildren(int childIndex) {
+		if (getChildrenList() == null) {
+			return null;
+		}
+		return BodyRelations.getChildren(this, childIndex);
+	}
+
+	/**
+	 * 身体年齢を設定し、同時に存続期間を設定する.
+	 * 
+	 * @param setAgeState ゆっくりの成長段階
+	 */
+	public void setAgeState(AgeState setAgeState) {
+		if (setAgeState == AgeState.BABY) {
+			setAge(0);
+		} else if (setAgeState == AgeState.CHILD) {
+			setAge(getBabyLimitBase());
+		} else if (setAgeState == AgeState.ADULT) {
+			setAge(getChildLimitBase());
+		}
+	}
+
+	/**
+	 * ゆ下痢かどうかを返却する.
+	 * 
+	 * @return ゆ下痢かどうか
+	 */
+	@Transient
+	public boolean getDiarrhea() {
+		return BodyExcretionRule.getDiarrhea(this);
+	}
+
+	/**
+	 * ダメージなしかどうかを返却する.
+	 * 
+	 * @return ダメージなしかどうか
+	 */
+	@Transient
+	public boolean isNoDamaged() {
+		return getDamageState() == Damage.NONE;
+	}
+
+	/**
+	 * 軽いダメージかどうかを返却する.
+	 * 
+	 * @return 軽いダメージかどうか
+	 */
+	@Transient
+	public boolean isDamagedLightly() {
+		return getDamageState() == Damage.SOME || getDamageState() == Damage.VERY || getDamageState() == Damage.TOOMUCH;
+	}
+
+	/**
+	 * 命乞い中かどうかを設定する.
+	 * 埋まっていないときが条件。
+	 * 
+	 * @param k 命乞い中かどうか
+	 */
+	public void setBegging(boolean k) {
+		if (burialState == BurialState.NONE)
+			begging = k;
+	}
+
+
+
+
+
+	/**
+	 * 痛みを感じているかどうかを返却する.
+	 * 
+	 * @return 痛みを感じているか
+	 */
+	@Transient
+	public boolean isFeelPain() {
+		return getPainState() == Pain.VERY || getPainState() == Pain.SOME;
+	}
+
+	/**
+	 * 激しい痛みを感じているかどうかを取得する.
+	 * 
+	 * @return 激しい痛みを感じているかどうか
+	 */
+	@Transient
+	public boolean isFeelHardPain() {
+		return getPainState() == Pain.VERY;
+	}
+
+
+	/**
+	 * 出生からしばらく経っていないかどうかを返却する.
+	 *
+	 * @return 出生直後ならtrue
+	 */
+	@Transient
+	public boolean isNewborn() {
+		return isNewbornRaw();
+	}
+
+	@JsonIgnore
+	public boolean isNewbornRaw() {
+		return birthAge >= 0 && (getAge() - birthAge) < 300;
+	}
+
+
+
+
+
+
+
+	/**
+	 * この個体の痛みを感じている程度から、相当するPain(Enum)を返却する.
+	 * 
+	 * @return この個体に相当するPain
+	 */
+	@Transient
+	public Pain getPainState() {
+		if (getBurstState() == Burst.NEAR || getBurstState() == Burst.BURST || isNeedled()) {
+			return Pain.VERY;
+		}
+		if (getBurstState() == Burst.HALF || criticalDamege != null) {
+			return Pain.SOME;
+		}
+		return Pain.NONE;
+	}
+
+	/**
+	 * この個体がどれくらい破裂しそうか、相当するBurst(Enum)を返却する.
+	 * 
+	 * @return この個体に相当するBurst
+	 */
+	@Transient
+	public Burst getBurstState() {
+		int origin = getOriginSize();
+		if (origin <= 0) {
+			return Burst.NONE;
+		}
+		if (getSize() * 4 / origin >= 8) {
+			return Burst.BURST;
+		} else if (getSize() * 4 / origin >= 7) {
+			return Burst.NEAR;
+		} else if (getSize() * 4 / origin >= 6) {
+			return Burst.HALF;
+		} else if (getSize() * 4 / origin >= 5) {
+			return Burst.SAFE;
+		}
+		return Burst.NONE;
+	}
+
+	/**
+	 * 画像上のゆっくりの大きさを取得する.
+	 * 
+	 * @return 画像上のゆっくりの大きさ
+	 */
+	@Transient
+	public int getSize() {
+		if (getBodySpr() == null) {
+			return 0;
+		}
+		Sprite spr = getBodySpr()[getBodyAgeState().ordinal()];
+		if (spr == null) {
+			return 0;
+		}
+		if (SimYukkuri.UNYO) {
+		return spr.getImageW() + getExpandSizeW() + unyoOffsetW;
+		}
+		return spr.getImageW() + getExpandSizeW();
+	}
+
+	/**
+	 * 画像上のゆっくりのオリジナルサイズを取得する.
+	 * 
+	 * @return 画像上のゆっくりのオリジナルサイズ
+	 */
+	@Transient
+	public int getOriginSize() {
+		if (getBodySpr() == null) {
+			return 0;
+		}
+		Sprite spr = getBodySpr()[getBodyAgeState().ordinal()];
+		if (spr == null) {
+			return 0;
+		}
+		return spr.getImageW();
+	}
+
+	/**
+	 * この個体の属する、精神のAgeState(Enum)を返却する.
+	 * 
+	 * @return この個体の属する、精神のAgeState
+	 */
+	@Transient
+	public AgeState getMindAgeState() {
+		return getBodyAgeState();
+	}
+
+	/**
+	 * この個体のダメージ具合から、相当するDamage(Enum)を返却する.
+	 * 
+	 * @return この個体のダメージ具合から計算した、相当するDamage(Enum)
+	 */
+	@Transient
+	/**
+	 * 死に向かわせる
+	 */
+	public void toDead() {
+		if (!isCantDie() && !dead) {
+			dead = true;
+			godHandHoldCount = 0;// 死んだらゆ虐神拳1をリセット
+		}
+	}
+
+	/**
+	 * 死ねない期間中かどうかを取得する.
+	 * 
+	 * @return 死ねない期間中かどうか
+	 */
+	@Transient
+	public boolean isCantDie() {
+		return getCantDiePeriod() > 0;
+	}
+
+	/**
+	 * 破裂しているかどうかを取得する.
+	 * 
+	 * @return 破裂しているかどうか
+	 */
+	@Transient
+	public boolean isBurst() {
+		return getBurstState() == Burst.BURST;
+	}
+
+	/**
+	 * まさに破裂するところかどうかを取得する.
+	 * 
+	 * @return まさに破裂するところかどうか
+	 */
+	@Transient
+	public boolean isAboutToBurst() {
+		return getBurstState() == Burst.NEAR;
+	}
+
+	/**
+	 * 破裂状態が通常でないかどうかを取得する.
+	 * 
+	 * @return 破裂状態が通常でないかどうか
+	 */
+	@Transient
+	public boolean isInfration() {
+		return getBurstState() != Burst.NONE;
+	}
+
+	/**
+	 * 燃やされているかどうかを設定する.
+	 * 同時にパニック状態をクリアする.
+	 * 
+	 * @param b 燃やされているかどうか
+	 */
+	public void setBurned(boolean b) {
+		burned = b;
+		setForcePanicClear();
+	}
+
+	/**
+	 * 茎が生えているかどうかを取得する.
+	 * 
+	 * @return 茎が生えているかどうか
+	 */
+	@JsonIgnore
+	public boolean hasBindStalk() {
+		return getBindStalk() != null;
+	}
+
+	/**
+	 * パニック状態をクリアする.
+	 */
+	public void setForcePanicClear() {
+		panicType = null;
+		panicPeriod = 0;
+	}
+
+
+
+
+
+
+
+
+
+	/**
+	 * 睡眠中かどうかを取得する.
+	 * 死んでいないことが条件.
+	 * 
+	 * @return 睡眠中かどうか
+	 */
+	@JsonIgnore
+	public boolean isSleepingRaw() {
+		return sleeping;
+	}
+
+	/**
+	 * 眠いかどうかを取得する.
+	 * 死んでいないことが条件.
+	 * 
+	 * @return 眠いかどうか
+	 */
+	@Transient
+	public boolean isSleepy() {
+		return !isSleepingRaw() && getWakeUpTime() + getActivePeriodBase() < getAge();
+	}
+
+
+
+
+	/**
+	 * 発情状態を設定する.
+	 * 
+	 * @param temp 発情状態
+	 */
+	public void setExciting(Boolean temp) {
+		if (temp)
+			setForceFace(ImageCode.EXCITING.ordinal());
+		exciting = temp;
+	}
+
+
+
+
+	/**
+	 * 汚れている期間を追加する.
+	 * 
+	 * @param val 追加する期間
+	 */
+	public void addDirtyPeriod(int val) {
+		dirtyPeriod += val;
+	}
+
+	/**
+	 * ハイブリッドかどうかを取得する.
+	 * ハイブリッドのクラスでオーバーライドする.
+	 * 
+	 * @return ハイブリッドかどうか
+	 */
+	@Transient
+
+	@JsonIgnore
+	public boolean isDirtyRaw() {
+		return dirty;
+	}
+
+
+
+	/**
+	 * 動物（というか現在はアリ一択か）に食べられてるかを返却する.
+	 * 
+	 * @return 動物（というか現在はアリ一択か）に食べられてるか
+	 */
+	@Transient
+	public boolean isEatenByAnimals() {
+		return getAttachmentSize(Ants.class) != 0;
+	}
+
+	/**
+	 * アリを除去する.
+	 */
+	public void removeAnts() {
+		removeAttachment(Ants.class);
+		antCount = 0;
+	}
+
+	/**
+	 * アリの数を減らす.
+	 * 
+	 * @param A 減らしたいアリの数
+	 */
+	public void substractNumOfAnts(int A) {
+		antCount -= A;
+		if (antCount < 0) {
+			antCount = 0;
+		}
+	}
+
+
+
+
+
+
+	/**
+	 * 胎生妊娠してる赤ゆを取得
+	 * <br>
+	 * 出産時に、順番に生んでゆくときの処理に使われている
+	 * 
+	 * @return 胎生妊娠してる赤ゆのDNA
+	 **/
+	@Transient
+	public Dna getBabyTypesDequeue() {
+		Dna babyType = null;
+		if (getBabyTypes().size() > 0) {
+			babyType = getBabyTypes().get(0);
+			getBabyTypes().remove(0);
+		}
+		return babyType;
+	}
+
+	/**
+	 * 茎妊娠してる茎を取得
+	 * <br>
+	 * 出産時に、順番に生んでゆくときの処理に使われている
+	 * 
+	 * @return 茎
+	 **/
+	@Transient
+	public Stalk getStalksDequeue() {
+		Stalk stalk = null;
+		if (getStalks().size() > 0) {
+			stalk = getStalks().get(0);
+			getStalks().remove(0);
+		}
+		return stalk;
+	}
+
+	/**
+	 * ストレス値に加える.
+	 * 
+	 * @param s ストレス値に加えたい値
+	 */
+	public void addStress(int s) {
+		if (dead)
+			return;
+		// ストレスに応じてうんうん増加
+		if (s > 0 && coreAnkoState == CoreAnkoState.DEFAULT && getBurstState() != Burst.HALF)
+			plusShit(s / 5);
+		stress += TICK * s;
+		if (stress < 0)
+			stress = 0;
+	}
+
+	/**
+	 * ストレスフルかどうかを返却する.
+	 * 
+	 * @return ストレスフルかどうか
+	 */
+	@Transient
+	public boolean isStressful() {
+		return BodyStressRule.isStressful(this);
+	}
+
+	/**
+	 * とてもストレスフルかどうかを返却する.
+	 * 
+	 * @return とてもストレスフルかどうか
+	 */
+	@Transient
+	public boolean isVeryStressful() {
+		return BodyStressRule.isVeryStressful(this);
+	}
+
+
+
+
+	/**
+	 * 自主的にふりふりするかどうかを返却する.
+	 * 
+	 * @return 自主的にふりふりするかどうか
+	 */
+	public boolean willingFurifuri() {
+		if (isRude() && GameRandom.nextInt(furifuriDiscipline + 1) == 0 && canFurifuri()) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * ふりふり可能な状態かどうかを返却する.
+	 * 
+	 * @return ふりふり可能な状態かどうか
+	 */
+	public boolean canFurifuri() {
+		if (getFootBakeLevel() != FootBake.CRITICAL && coreAnkoState == CoreAnkoState.DEFAULT) {
+			return true;
+		}
+		return false;
+	}
+
+
+
+	/**
+	 * のびのびをしているかどうかを設定する.
+	 * 
+	 * @param b のびのびをしているかどうか
+	 */
+	public void setNobinobi(boolean b) {
+		nobinobi = b;
+	}
+
+
+
+
+
+	/**
+	 * あんこ量を加える.
+	 * 
+	 * @param val 加えたいあんこ量
+	 * @return あんこ量がなくなったかどうか
+	 */
+	public boolean addAmount(int val) {
+		int cur = getAnkoAmount() + val;
+		if (cur <= 0) {
+			setAnkoAmount(0);
+			return true;
+		}
+		setAnkoAmount(cur);
+		return false;
+	}
+
+	/**
+	 * あんこ量を初期化する.
+	 * 
+	 * @param val 成長段階
+	 */
+	public void initAmount(AgeState val) {
+		setAnkoAmount(getDamageLimitBase()[val.ordinal()]);
+	}
+
+	@Transient
+	public int getCollisionX() {
+		return (getBodySpr()[getBodyAgeState().ordinal()].getImageW() + getExpandSizeW()) >> 1;
+	}
+
+	@Transient
+	public int getCollisionY() {
+		return (getBodySpr()[getBodyAgeState().ordinal()].getImageH() + getExpandSizeH()) >> 1;
+	}
+
+	/**
+	 * 足の速さを取得する.
+	 * 
+	 * @return 足の速さ
+	 */
+	@Transient
+	public int getStep() {
+		return (getStepBase()[getBodyAgeState().ordinal()]);
+	}
+
+	@Transient
+	public int getStepDist() {
+		int p = (getStepBase()[getBodyAgeState().ordinal()]) * (getStepBase()[getBodyAgeState().ordinal()]);
+		return p;
+	}
+
+	@Transient
+	public Sprite getBodyBaseSpr() {
+		return getBodySpr()[getBodyAgeState().ordinal()];
+	}
+
+	@Transient
+	public Sprite getBodyExpandSpr() {
+		return getExpandSpr()[getBodyAgeState().ordinal()];
+	}
+
+	@Transient
+	public Sprite getBraidSprite() {
+		return getBraidSpr()[getBodyAgeState().ordinal()];
+	}
+
+	@Transient
+	public BufferedImage getShadowImage() {
+		return shadowImages[getBodyAgeState().ordinal()];
+	}
+
+	@Transient
+	public int getShadowH() {
+		return shadowImgH[getBodyAgeState().ordinal()];
+	}
+
+	@Transient
+	public int getW() {
+		return getBodySpr()[getBodyAgeState().ordinal()].getImageW();
+	}
+
+	@Transient
+	public int getH() {
+		return getBodySpr()[getBodyAgeState().ordinal()].getImageH();
+	}
+
+	@Transient
+	public int getPivotX() {
+		return getBodySpr()[getBodyAgeState().ordinal()].getPivotX();
+	}
+
+	@Transient
+	public int getPivotY() {
+		return getBodySpr()[getBodyAgeState().ordinal()].getPivotY();
+	}
+
+	@Transient
+	public int getBraidW() {
+		return getBraidSpr()[getBodyAgeState().ordinal()].getImageW();
+	}
+
+	@Transient
+	public int getBraidH() {
+		return getBraidSpr()[getBodyAgeState().ordinal()].getImageH();
+	}
+
+	@Transient
+	public int getMaxHaveBaby() {
+		return getDamageLimit() / 300;
+	}
+
+	/**
+	 * 体重を取得する.
+	 * 外力を算出するときに使用する.
+	 * 
+	 * @return 体重
+	 */
+	@Transient
+	public int getWeight() {
+		return (getWeightBase()[getBodyAgeState().ordinal()] + (getBabyTypes().size() + getStalkBabyTypes().size()) * 50);
+	}
+
+	/**
+	 * 致命傷種別を取得する.
+	 * 
+	 * @return 致命傷種別
+	 */
+	public CriticalDamegeType getCriticalDamegeType() {
+		return criticalDamege;
+	}
+
+	/**
+	 * 致命傷種別を設定する.
+	 * 
+	 * @param type 致命傷種別
+	 */
+	public void setCriticalDamegeType(CriticalDamegeType type) {
+		criticalDamege = type;
+	}
+
+	/**
+	 * はげまんじゅうにする.
+	 */
+	public void cutHair() {
+		hairState = HairState.BALDHEAD;
+	}
+
+	/**
+	 * 捕食種かどうかを取得する.
+	 * 
+	 * @return
+	 */
+	@Transient
+	public boolean isPredatorType() {
+		return getPredatorType() != null;
+	}
+
+	/**
+	 * 茎または腹ではらんでいるかどうかを取得する.
+	 * 
+	 * @return 茎または腹ではらんでいるかどうか
+	 */
+	@Transient
+	public boolean hasBabyOrStalk() {
+		return isHasBaby() || isHasStalk();
+	}
+
+	/**
+	 * おかざりがあるかどうかを取得する.
+	 * 
+	 * @return おかざりがあるかどうか
+	 */
+	@Transient
+	public final boolean hasOkazari() {
+		return getOkazari() != null;
+	}
+
+	/**
+	 * 次の落下でのダメージをなくす.
+	 */
+	public final void setNoDamageNextFall() {
+		setNoDamageNextFall(true);
+	}
+
+	/**
+	 * おくるみを取る.
+	 */
+	public void takePants() {
+		setHasPants(false);
+	}
+
+	/**
+	 * かび判定を行う
+	 * 
+	 * @return かびているかどうか
+	 */
+	public boolean findSick(Yukkuri b) {
+		return src.logic.BodyIllnessRule.findSick(this, b);
+	}
+
+	/**
+	 * 幸福度を設定する.
+	 * 
+	 * @param happy 幸福度
+	 */
+	public void setHappiness(Happiness happy) {
+		if (isDead() || isIdiot()) {
+			happiness = Happiness.AVERAGE;
+			return;
+		}
+		if (isNYD()) {
+			happiness = Happiness.VERY_SAD;
+			sadPeriod = 1200 + GameRandom.nextInt(400) - 200;
+			return;
+		}
+		if (happy == Happiness.SAD) {
+			if (getHappiness() != Happiness.VERY_SAD) {
+				sadPeriod = 0;
+				happiness = happy;
+			}
+		} else if (happy == Happiness.HAPPY) {
+			if (getHappiness() != Happiness.VERY_HAPPY) {
+				sadPeriod = 0;
+				happiness = happy;
+			}
+		} else {
+			if (happy == Happiness.VERY_SAD) {
+				sadPeriod = 1200 + GameRandom.nextInt(400) - 200;
+			} else {
+				sadPeriod = 0;
+			}
+			happiness = happy;
+		}
+		if (getHappiness() == Happiness.HAPPY || getHappiness() == Happiness.VERY_HAPPY) {
+			setScare(false);
+			setAngry(false);
+		} else if (getHappiness() == Happiness.SAD || getHappiness() == Happiness.VERY_SAD) {
+			setAngry(false);
+		}
+	}
+
+	/**
+	 * 行動目的を設定する.
+	 *
+	 * @param purposeOfMoving 行動目的
+	 */
+
+
+	@Override
+	public boolean equals(Object o) {
+		if (o == null) {
+			return false;
+		}
+		if (!(o instanceof Yukkuri)) {
+			return false;
+		}
+		Yukkuri dest = (Yukkuri) o;
+		if (getUniqueID() == dest.getUniqueID()) {
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return getUniqueID() * 13;
+	}
+
+	@Override
+	public int compareTo(Object o) {
+		if (o == null) {
+			return 0;
+		}
+		if (!(o instanceof Yukkuri)) {
+			return 0;
+		}
+		Yukkuri b = (Yukkuri) o;
+		return getUniqueID() - b.getUniqueID();
+	}
+
+
+
+	/**
+	 * 取られているかどうかを設定する.
+	 * 
+	 * @param taken 取られているかどうか
+	 */
+	public void setTaken(boolean taken) {
+		this.taken = taken;
+	}
+
+
+
+
+
+	/**
+	 * この個体のダメージ具合から、相当するDamage(Enum)を返却する.
+	 * 
+	 * @return この個体のダメージ具合から計算した、相当するDamage(Enum)
+	 */
+	@Transient
+	public Damage getDamageState() {
+		return BodyCoreStateRule.getDamageState(this);
 	}
 
 }

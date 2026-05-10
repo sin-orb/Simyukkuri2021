@@ -1,6 +1,8 @@
 package src.logic;
 
-import src.base.BodyAttributes;
+import src.base.Yukkuri;
+
+
 import src.enums.Damage;
 
 /**
@@ -21,7 +23,7 @@ public final class BodyVitals {
 	 * @param body 判定対象のゆっくり
 	 * @return ダメージ状態がNONEならtrue
 	 */
-	public static boolean isNoDamaged(BodyAttributes body) {
+	public static boolean isNoDamaged(Yukkuri body) {
 		return body.getDamageState() == Damage.NONE;
 	}
 
@@ -31,7 +33,7 @@ public final class BodyVitals {
 	 * @param body 判定対象のゆっくり
 	 * @return ダメージ状態がSOME、VERY、TOOMUCHのいずれかならtrue
 	 */
-	public static boolean isDamagedLightly(BodyAttributes body) {
+	public static boolean isDamagedLightly(Yukkuri body) {
 		Damage damage = body.getDamageState();
 		return damage == Damage.SOME || damage == Damage.VERY || damage == Damage.TOOMUCH;
 	}
@@ -42,7 +44,7 @@ public final class BodyVitals {
 	 * @param body 判定対象のゆっくり
 	 * @return ダメージ状態がVERYまたはTOOMUCHならtrue
 	 */
-	public static boolean isDamaged(BodyAttributes body) {
+	public static boolean isDamaged(Yukkuri body) {
 		Damage damage = body.getDamageState();
 		return damage == Damage.VERY || damage == Damage.TOOMUCH;
 	}
@@ -53,7 +55,7 @@ public final class BodyVitals {
 	 * @param body 判定対象のゆっくり
 	 * @return ダメージ状態がTOOMUCHならtrue
 	 */
-	public static boolean isDamagedHeavily(BodyAttributes body) {
+	public static boolean isDamagedHeavily(Yukkuri body) {
 		return body.getDamageState() == Damage.TOOMUCH;
 	}
 
@@ -63,7 +65,7 @@ public final class BodyVitals {
 	 * @param body 判定対象のゆっくり
 	 * @return 生存中で、満腹度が空腹限界の80%以上ならtrue
 	 */
-	public static boolean isFull(BodyAttributes body) {
+	public static boolean isFull(Yukkuri body) {
 		return !body.isDead() && body.getHungry() >= body.getHungryLimit() * 0.8f;
 	}
 
@@ -73,7 +75,7 @@ public final class BodyVitals {
 	 * @param body 判定対象のゆっくり
 	 * @return 生存中で、満腹度が空腹限界の半分以下ならtrue
 	 */
-	public static boolean isHungry(BodyAttributes body) {
+	public static boolean isHungry(Yukkuri body) {
 		return !body.isDead() && body.getHungry() <= body.getHungryLimit() / 2;
 	}
 
@@ -83,7 +85,7 @@ public final class BodyVitals {
 	 * @param body 判定対象のゆっくり
 	 * @return 生存中で、満腹度が空腹限界の20%以下ならtrue
 	 */
-	public static boolean isSoHungry(BodyAttributes body) {
+	public static boolean isSoHungry(Yukkuri body) {
 		return !body.isDead() && body.getHungry() <= body.getHungryLimit() * 0.2f;
 	}
 
@@ -93,7 +95,7 @@ public final class BodyVitals {
 	 * @param body 判定対象のゆっくり
 	 * @return 生存中で、満腹度が0以下ならtrue
 	 */
-	public static boolean isVeryHungry(BodyAttributes body) {
+	public static boolean isVeryHungry(Yukkuri body) {
 		return !body.isDead() && body.getHungry() <= 0;
 	}
 
@@ -103,7 +105,7 @@ public final class BodyVitals {
 	 * @param body 判定対象のゆっくり
 	 * @return 生存中で、満腹度が0以下かつダメージ状態がNONE以外ならtrue
 	 */
-	public static boolean isTooHungry(BodyAttributes body) {
+	public static boolean isTooHungry(Yukkuri body) {
 		return !body.isDead() && body.getHungry() <= 0 && body.getDamageState() != Damage.NONE;
 	}
 
@@ -113,7 +115,7 @@ public final class BodyVitals {
 	 * @param body 判定対象のゆっくり
 	 * @return 生存中で、満腹度が0以下かつダメージ状態がTOOMUCHならtrue
 	 */
-	public static boolean isStarving(BodyAttributes body) {
+	public static boolean isStarving(Yukkuri body) {
 		return !body.isDead() && body.getHungry() <= 0 && body.getDamageState() == Damage.TOOMUCH;
 	}
 
@@ -123,7 +125,7 @@ public final class BodyVitals {
 	 * @param body 判定対象のゆっくり
 	 * @return ゆかび期間が潜伏期間を超えていればtrue
 	 */
-	public static boolean isSick(BodyAttributes body) {
+	public static boolean isSick(Yukkuri body) {
 		return body.getSickPeriod() > body.getIncubationPeriodBase();
 	}
 
@@ -133,7 +135,7 @@ public final class BodyVitals {
 	 * @param body 判定対象のゆっくり
 	 * @return ゆかび期間が潜伏期間の8倍を超えていればtrue
 	 */
-	public static boolean isSickHeavily(BodyAttributes body) {
+	public static boolean isSickHeavily(Yukkuri body) {
 		return body.getSickPeriod() > body.getIncubationPeriodBase() * 8;
 	}
 
@@ -143,7 +145,7 @@ public final class BodyVitals {
 	 * @param body 判定対象のゆっくり
 	 * @return ゆかび期間が潜伏期間の32倍を超え、ダメージ判定もtrueならtrue
 	 */
-	public static boolean isSickTooHeavily(BodyAttributes body) {
+	public static boolean isSickTooHeavily(Yukkuri body) {
 		return body.getSickPeriod() > body.getIncubationPeriodBase() * 32 && isDamaged(body);
 	}
 }

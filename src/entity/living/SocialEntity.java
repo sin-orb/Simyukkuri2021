@@ -1,5 +1,6 @@
 package src.entity.living;
 
+import java.beans.Transient;
 import java.util.LinkedList;
 import java.util.List;
 import src.base.Entity;
@@ -8,7 +9,9 @@ import src.enums.BodyRank;
 import src.enums.Happiness;
 import src.enums.Intelligence;
 import src.enums.LovePlayer;
+import src.enums.Parent;
 import src.enums.PublicRank;
+import src.logic.BodyRelations;
 
 /**
  * 社会的行動を持つ生命エンティティの抽象基底クラス。
@@ -62,6 +65,18 @@ public abstract class SocialEntity extends LivingEntity {
 	public Happiness getHappiness() { return happiness; }
 	/** 幸福度 を設定する. @param happiness 幸福度 */
 	public void setHappiness(Happiness happiness) { this.happiness = happiness; }
+	/** 喜んでいるか. @return 喜んでいるかどうか */
+	@com.fasterxml.jackson.annotation.JsonIgnore
+	public boolean isHappy() { return !dead && (happiness == Happiness.HAPPY || happiness == Happiness.VERY_HAPPY); }
+	/** 悲しんでいるか. @return 悲しんでいるかどうか */
+	@com.fasterxml.jackson.annotation.JsonIgnore
+	public boolean isSad() { return !dead && happiness == Happiness.SAD; }
+	/** とても悲しんでいるか. @return とても悲しんでいるかどうか */
+	@com.fasterxml.jackson.annotation.JsonIgnore
+	public boolean isVerySad() { return !dead && happiness == Happiness.VERY_SAD; }
+	/** 悲しんでいるか（SAD or VERY_SAD）. @return 悲しんでいるかどうか */
+	@com.fasterxml.jackson.annotation.JsonIgnore
+	public boolean isUnhappy() { return !dead && (happiness == Happiness.SAD || happiness == Happiness.VERY_SAD); }
 
 	/** プレイヤーへのなつき度 を取得する. @return プレイヤーへのなつき度 */
 	public int getLovePlayer() { return lovePlayer; }
@@ -189,13 +204,13 @@ public abstract class SocialEntity extends LivingEntity {
 	/** ぺろぺろ中 */
 	protected boolean peropero = false;
 	/** ぺろぺろ中 を取得する. @return ぺろぺろ中 */
-	public boolean isPeropero() { return peropero; }
+	public boolean isPeropero() { return !dead && peropero; }
 	/** ぺろぺろ中 を設定する. @param peropero ぺろぺろ中 */
 	public void setPeropero(boolean peropero) { this.peropero = peropero; }
 	/** 親を呼んで泣き叫び中 */
 	protected boolean callingParents = false;
 	/** 親を呼んで泣き叫び中 を取得する. @return 親を呼んで泣き叫び中 */
-	public boolean isCallingParents() { return callingParents; }
+	public boolean isCallingParents() { return !dead && callingParents; }
 	/** 親を呼んで泣き叫び中 を設定する. @param callingParents 親を呼んで泣き叫び中 */
 	public void setCallingParents(boolean callingParents) { this.callingParents = callingParents; }
 	/** 表情の強制設定 */
@@ -274,6 +289,186 @@ public abstract class SocialEntity extends LivingEntity {
 		s.setFatherRaper(fatherRaper); s.setParentLinkId(parentLinkId);
 		s.setTargetBind(targetBind); s.setPeropero(peropero);
 		s.setCallingParents(callingParents); s.setForceFace(forceFace);
+	}
+
+	// --- 性格種別判定 ---
+
+	/** 足りないゆタイプかどうか (デフォルトfalse; サブクラスでオーバーライド) */
+	@Transient
+	public boolean isIdiot() { return false; }
+
+	/** ドゲスか */
+	@Transient
+	public boolean isVeryRude() { return attitude == Attitude.SUPER_SHITHEAD; }
+
+	/** ゲスまたはドゲスか */
+	@Transient
+	public boolean isRude() { return attitude == Attitude.SHITHEAD || attitude == Attitude.SUPER_SHITHEAD; }
+
+	/** 普通か */
+	@Transient
+	public boolean isNormal() { return attitude == Attitude.AVERAGE; }
+
+	/** 善良または超善良か */
+	@Transient
+	public boolean isSmart() { return attitude == Attitude.VERY_NICE || attitude == Attitude.NICE; }
+
+	// --- れいぱー状態 ---
+
+	/** れいぱーかどうか */
+	@Transient
+	public final boolean isRaper() {
+		if (isUnBirth()) return false;
+		return isRapist();
+	}
+
+	/** れいぱーを設定する */
+	public final void setRaper(boolean b) {
+		if (isPenipeniCutted()) setRapist(false);
+		else setRapist(b);
+	}
+
+	/** スーパーれいぱーかどうか */
+	@Transient
+	public final boolean isSuperRaper() {
+		if (isUnBirth()) return false;
+		if (isPenipeniCutted()) setSuperRapist(false);
+		return isSuperRapist();
+	}
+
+	/** すーぱーれいぱーを設定する */
+	public final void setSuperRaper(boolean b) {
+		if (isPenipeniCutted()) setSuperRapist(false);
+		else setSuperRapist(b);
+	}
+
+	// --- プレイヤー好感度 ---
+
+	/** プレイヤーが好きか嫌いかを返却する */
+	public final LovePlayer checkLovePlayerState() {
+		if (getLovePlayer() < -1 * getLovePlayerLimitBase() / 2) return LovePlayer.BAD;
+		if (getLovePlayerLimitBase() / 2 < getLovePlayer()) return LovePlayer.GOOD;
+		return LovePlayer.NONE;
+	}
+
+	// --- ゲス度管理 ---
+
+	/** 強制的にゲス度をいじる */
+	public final void plusAttitude(int p) {
+		if (isNotChangeCharacter()) return;
+		setAttitudePoint(getAttitudePoint() + p);
+	}
+
+	/** ゲス度によって性格変更 */
+	public final void checkAttitude() {
+		if (isNYD() || isIdiot()) { setAttitudePoint(0); return; }
+		if (getAttitude() == Attitude.VERY_NICE) { setAttitudePoint(0); return; }
+		if (getAttitude() == Attitude.SUPER_SHITHEAD) {
+			if (getAttitudePoint() >= getNiceLimit()[0]) { setAttitude(Attitude.SHITHEAD); setAttitudePoint(0); }
+			return;
+		}
+		if (getAttitude() == Attitude.SHITHEAD) {
+			if (getAttitudePoint() >= getNiceLimit()[0]) { setAttitude(Attitude.AVERAGE); setAttitudePoint(0); }
+		}
+	}
+
+	/** 通常時の躾 */
+	public final void teachManner(int p) {
+		disclipline(p * 5);
+		boolean flag = false;
+		if (isFurifuri() || (isSukkiri() && !isRaper())) flag = true;
+		if (isRude()) { if (isTalking()) flag = true; }
+		if (flag) plusAttitude(p);
+	}
+
+	/** うんうん、興奮、ふりふり、セリフの抑制をする */
+	public void disclipline(int p) {
+		if (isExciting() && !isRaper()) {
+			excitingDiscipline = excitingDiscipline + (p * 10);
+			setCalm();
+		} else if (isShitting()) {
+			shittingDiscipline = shittingDiscipline + p;
+			setShitting(false);
+			shit -= getAngryPeriodBase() * 2;
+		} else if (isFurifuri()) {
+			furifuriDiscipline = furifuriDiscipline + p;
+			setFurifuri(false);
+		} else if (getMessageBuffer() != null) {
+			speechDiscipline = speechDiscipline + (p / 2);
+			setMessageBuffer(null);
+		}
+	}
+
+	// --- 家族関係 ---
+
+	/** 父親IDを返す */
+	@Transient
+	public int getFather() { return getParents()[Parent.PAPA.ordinal()]; }
+
+	/** 母親IDを返す */
+	@Transient
+	public int getMother() { return getParents()[Parent.MAMA.ordinal()]; }
+
+	/** 2体の間に家族関係があるか */
+	public final boolean isFamily(SocialEntity other) { return BodyRelations.isFamily(this, other); }
+
+	/** other の親か */
+	public final boolean isParent(SocialEntity other) { return BodyRelations.isParent(this, other); }
+
+	/** other の父親か */
+	public final boolean isFather(SocialEntity other) { return BodyRelations.isFather(this, other); }
+
+	/** other の母親か */
+	public final boolean isMother(SocialEntity other) { return BodyRelations.isMother(this, other); }
+
+	/** other の子か */
+	public final boolean isChild(SocialEntity other) { return BodyRelations.isChild(this, other); }
+
+	/** other が番か */
+	public final boolean isPartner(SocialEntity other) { return BodyRelations.isPartner(this, other); }
+
+	/** other が姉妹か */
+	public final boolean isSister(SocialEntity other) { return BodyRelations.isSister(this, other); }
+
+	/** other が妹か (自分が年上) */
+	public final boolean isElderSister(SocialEntity other) { return BodyRelations.isElderSister(this, other); }
+
+	// --- 家族リスト操作 ---
+
+	@Transient
+	public int getSisterListSize() { return getSisterList().size(); }
+
+	@Transient
+	public int getElderSisterListSize() { return getElderSisterList().size(); }
+
+	@Transient
+	public int getChildrenListSize() {
+		if (getChildrenList() == null) return 0;
+		return getChildrenList().size();
+	}
+
+	public void addChildrenList(SocialEntity at) {
+		if (at != null) getChildrenList().add(at.getUniqueID());
+	}
+
+	public void removeChildrenList(SocialEntity target) {
+		BodyRelations.removeChildrenList(this, target);
+	}
+
+	public void addElderSisterList(SocialEntity at) {
+		if (at != null) getElderSisterList().add(at.getUniqueID());
+	}
+
+	public void removeElderSisterList(SocialEntity target) {
+		BodyRelations.removeElderSisterList(this, target);
+	}
+
+	public void addSisterList(SocialEntity at) {
+		if (at != null) getSisterList().add(at.getUniqueID());
+	}
+
+	public void removeSisterList(SocialEntity target) {
+		BodyRelations.removeSisterList(this, target);
 	}
 
 }

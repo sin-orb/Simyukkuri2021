@@ -1,5 +1,7 @@
 package src.logic;
 
+import src.base.Yukkuri;
+
 import src.attachment.Ants;
 import src.base.Yukkuri;
 import src.enums.Happiness;

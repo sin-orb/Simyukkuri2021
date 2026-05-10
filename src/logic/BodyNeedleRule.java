@@ -1,7 +1,7 @@
 package src.logic;
 
 import src.base.Yukkuri;
-import src.base.BodyAttributes;
+
 import src.util.GameRandom;
 
 /**
@@ -36,15 +36,4 @@ public final class BodyNeedleRule {
 		actorBody.clearActions();
 		return true;
 	}
-
-	/**
-	 * 針でさされ中かを判定する.
-	 *
-	 * @param body 判定対象
-	 * @return 針でさされ中ならtrue
-	 */
-	public static boolean isNeedled(BodyAttributes body) {
-		return body.isNeedledRaw();
-	}
-
 }

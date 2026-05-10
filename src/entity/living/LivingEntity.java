@@ -183,6 +183,11 @@ public abstract class LivingEntity extends Entity {
 	public int getDamage() { return damage; }
 	/** 蓄積ダメージ counter indicating damage を設定する. @param damage 蓄積ダメージ counter indicating damage */
 	public void setDamage(int damage) { this.damage = damage; }
+	/** ダメージを追加する（死亡時は無効）. @param amount 追加量 */
+	public final void addDamage(int amount) {
+		if (isDead()) return;
+		damage += amount;
+	}
 
 	/** ダメージ外観 を取得する. @return ダメージ外観 */
 	public Damage getDamageState() { return damageState; }
@@ -230,7 +235,7 @@ public abstract class LivingEntity extends Entity {
 	public void setCoreAnkoState(CoreAnkoState coreAnkoState) { this.coreAnkoState = coreAnkoState; }
 
 	/** 睡眠中かどうか を取得する. @return 睡眠中かどうか */
-	public boolean isSleeping() { return sleeping; }
+	public boolean isSleeping() { return !dead && sleeping; }
 	/** 睡眠中かどうか を設定する. @param sleeping 睡眠中かどうか */
 	public void setSleeping(boolean sleeping) { this.sleeping = sleeping; }
 
@@ -244,15 +249,17 @@ public abstract class LivingEntity extends Entity {
 	/** 前回起きた時間 を設定する. @param wakeUpTime 前回起きた時間 */
 	public void setWakeUpTime(long wakeUpTime) { this.wakeUpTime = wakeUpTime; }
 
-	/** 発情フラグ want to sukkiri or not を取得する. @return 発情フラグ want to sukkiri or not */
-	public boolean isExciting() { return exciting; }
+	/** 発情フラグ want to sukkiri or not を取得する. @return 発情フラグ want to sukkuri or not */
+	public boolean isExciting() { return !dead && exciting; }
 	/** 発情フラグ want to sukkiri or not を設定する. @param exciting 発情フラグ want to sukkiri or not */
 	public void setExciting(boolean exciting) { this.exciting = exciting; }
 
 	/** 強制発情フラグ want to sukkiri or not を取得する. @return 強制発情フラグ want to sukkiri or not */
-	public boolean isForceExciting() { return forceExciting; }
+	public boolean isForceExciting() { return !dead && exciting && forceExciting; }
 	/** 強制発情フラグ want to sukkiri or not を設定する. @param forceExciting 強制発情フラグ want to sukkiri or not */
 	public void setForceExciting(boolean forceExciting) { this.forceExciting = forceExciting; }
+
+	public void setCalm() { forceExciting = false; exciting = false; }
 
 	/** ゆっくりしてるかどうか を取得する. @return ゆっくりしてるかどうか */
 	public boolean isRelax() { return relax; }
@@ -260,7 +267,10 @@ public abstract class LivingEntity extends Entity {
 	public void setRelax(boolean relax) { this.relax = relax; }
 
 	/** 汚れ有無 を取得する. @return 汚れ有無 */
-	public boolean isDirty() { return dirty; }
+	public boolean isDirty() { return !dead && (dirty || stubbornlyDirty); }
+	/** 通常の汚れ有無 を取得する. @return 通常の汚れ有無 */
+	@com.fasterxml.jackson.annotation.JsonIgnore
+	public boolean isNormalDirty() { return !dead && dirty; }
 	/** 汚れ有無 を設定する. @param dirty 汚れ有無 */
 	public void setDirty(boolean dirty) { this.dirty = dirty; }
 
@@ -310,7 +320,7 @@ public abstract class LivingEntity extends Entity {
 	public void setBlind(boolean blind) { this.blind = blind; }
 
 	/** 針の有無 を取得する. @return 針の有無 */
-	public boolean isNeedled() { return needled; }
+	public boolean isNeedled() { return !dead && needled; }
 	/** 針の有無 を設定する. @param needled 針の有無 */
 	public void setNeedled(boolean needled) { this.needled = needled; }
 
@@ -400,7 +410,7 @@ public abstract class LivingEntity extends Entity {
 	public void setLikeWater(boolean likeWater) { this.likeWater = likeWater; }
 
 	/** 誕生済みか否か を取得する. @return 誕生済みか否か */
-	public boolean isBirth() { return birth; }
+	public boolean isBirth() { return !dead && birth; }
 	/** 誕生済みか否か を設定する. @param birth 誕生済みか否か */
 	public void setBirth(boolean birth) { this.birth = birth; }
 
@@ -493,6 +503,26 @@ public abstract class LivingEntity extends Entity {
 	public int getSleepingPeriod() { return sleepingPeriod; }
 	/** 睡眠期間 を設定する. @param sleepingPeriod 睡眠期間 */
 	public void setSleepingPeriod(int sleepingPeriod) { this.sleepingPeriod = sleepingPeriod; }
+
+	/** 寝ているエンティティを起こす. */
+	public void wakeup() {
+		setSleepingPeriod(0);
+		setSleeping(false);
+		setNightmare(false);
+		setWakeUpTime(getAge());
+	}
+
+	/** 動かなくする. */
+	public final void stay() { setStaying(true); stayTime = Const.STAYLIMIT; }
+	/** time 分だけ動かなくする. */
+	public final void stay(int time) { setStaying(true); stayTime = time; }
+	/** time だけぷるぷるする. */
+	public final void stayPurupuru(int time) { setStaying(true); stayTime = time; setPurupuru(true); }
+	/** ぷるぷる振動アニメーションを更新する. */
+	public final void doPurupuru() {
+		if (!isShakePhase()) { setShakePhase(true);  setOfsXY(1, ofsY); }
+		else                 { setShakePhase(false); setOfsXY(0, ofsY); }
+	}
 
 	/** ゆかびに侵されている期間 を取得する. @return ゆかびに侵されている期間 */
 	public int getSickPeriod() { return sickPeriod; }
@@ -709,61 +739,64 @@ public abstract class LivingEntity extends Entity {
 	/** うんうんアクション中 */
 	protected boolean shitting = false;
 	/** うんうんアクション中 を取得する. @return うんうんアクション中 */
-	public boolean isShitting() { return shitting; }
+	public boolean isShitting() { return !dead && shitting; }
 	/** うんうんアクション中 を設定する. @param shitting うんうんアクション中 */
 	public void setShitting(boolean shitting) { this.shitting = shitting; }
 	/** 何かを食べ中 */
 	protected boolean eating = false;
 	/** 何かを食べ中 を取得する. @return 何かを食べ中 */
-	public boolean isEating() { return eating; }
+	public boolean isEating() { return !dead && eating; }
 	/** 何かを食べ中 を設定する. @param eating 何かを食べ中 */
 	public void setEating(boolean eating) { this.eating = eating; }
 	/** うんうんを食べ中 */
 	protected boolean eatingShit = false;
 	/** うんうんを食べ中 を取得する. @return うんうんを食べ中 */
-	public boolean isEatingShit() { return eatingShit; }
+	public boolean isEatingShit() { return !dead && eatingShit; }
 	/** うんうんを食べ中 を設定する. @param eatingShit うんうんを食べ中 */
 	public void setEatingShit(boolean eatingShit) { this.eatingShit = eatingShit; }
 	/** すっきり中 */
 	protected boolean sukkiri = false;
 	/** すっきり中 を取得する. @return すっきり中 */
-	public boolean isSukkiri() { return sukkiri; }
+	public boolean isSukkiri() { return !dead && sukkiri; }
 	/** すっきり中 を設定する. @param sukkiri すっきり中 */
 	public void setSukkiri(boolean sukkiri) { this.sukkiri = sukkiri; }
 	/** 怖がり中 */
 	protected boolean scare = false;
 	/** 怖がり中 を取得する. @return 怖がり中 */
-	public boolean isScare() { return scare; }
+	public boolean isScare() { return !dead && scare; }
 	/** 怖がり中 を設定する. @param scare 怖がり中 */
 	public void setScare(boolean scare) { this.scare = scare; }
 	/** 怒っているか否か */
 	protected boolean angry = false;
 	/** 怒っているか否か を取得する. @return 怒っているか否か */
-	public boolean isAngry() { return angry; }
+	public boolean isAngry() { return !dead && angry; }
 	/** 怒っているか否か を設定する. @param angry 怒っているか否か */
 	public void setAngry(boolean angry) { this.angry = angry; }
 	/** ふりふりアクション中 */
 	protected boolean furifuri = false;
 	/** ふりふりアクション中 を取得する. @return ふりふりアクション中 */
-	public boolean isFurifuri() { return furifuri; }
+	public boolean isFurifuri() { return !dead && furifuri; }
 	/** ふりふりアクション中 を設定する. @param furifuri ふりふりアクション中 */
 	public void setFurifuri(boolean furifuri) { this.furifuri = furifuri; }
 	/** 攻撃アクション中 */
 	protected boolean strike = false;
 	/** 攻撃アクション中 を取得する. @return 攻撃アクション中 */
-	public boolean isStrike() { return strike; }
+	public boolean isStrike() { return !dead && strike; }
 	/** 攻撃アクション中 を設定する. @param strike 攻撃アクション中 */
 	public void setStrike(boolean strike) { this.strike = strike; }
 	/** のびのび中 */
 	protected boolean nobinobi = false;
 	/** のびのび中 を取得する. @return のびのび中 */
-	public boolean isNobinobi() { return nobinobi; }
+	public boolean isNobinobi() { return !dead && nobinobi; }
 	/** のびのび中 を設定する. @param nobinobi のびのび中 */
 	public void setNobinobi(boolean nobinobi) { this.nobinobi = nobinobi; }
 	/** キリッ！中 */
 	protected boolean beVain = false;
 	/** キリッ！中 を取得する. @return キリッ！中 */
-	public boolean isBeVain() { return beVain; }
+	public boolean isBeVain() { return !dead && beVain; }
+	/** キリッ！中かどうか（isBeVain の別名）. @return キリッ！中かどうか */
+	@com.fasterxml.jackson.annotation.JsonIgnore
+	public boolean isVain() { return !dead && beVain; }
 	/** キリッ！中 を設定する. @param beVain キリッ！中 */
 	public void setBeVain(boolean beVain) { this.beVain = beVain; }
 	/** ぴこぴこ中 */
@@ -781,7 +814,7 @@ public abstract class LivingEntity extends Entity {
 	/** ゆんやぁ中 */
 	protected boolean yunnyaa = false;
 	/** ゆんやぁ中 を取得する. @return ゆんやぁ中 */
-	public boolean isYunnyaa() { return yunnyaa; }
+	public boolean isYunnyaa() { return !dead && yunnyaa; }
 	/** ゆんやぁ中 を設定する. @param yunnyaa ゆんやぁ中 */
 	public void setYunnyaa(boolean yunnyaa) { this.yunnyaa = yunnyaa; }
 	/** 沈黙フラグ */
@@ -800,6 +833,9 @@ public abstract class LivingEntity extends Entity {
 	protected boolean begging = false;
 	/** 命乞い中 を取得する. @return 命乞い中 */
 	public boolean isBegging() { return begging; }
+	/** 命乞い中（死亡時はfalse） を取得する. @return 命乞い中 */
+	@com.fasterxml.jackson.annotation.JsonIgnore
+	public boolean isBeggingForLife() { return !dead && begging; }
 	/** 命乞い中 を設定する. @param begging 命乞い中 */
 	public void setBegging(boolean begging) { this.begging = begging; }
 	/** 何で遊んでいるか */
@@ -1455,6 +1491,17 @@ public abstract class LivingEntity extends Entity {
 
 	public void addHungry(int val) {
 		hungry += (TICK * val);
+	}
+
+	/** ストレスが負の場合0にリセットする. */
+	public final void checkStress() {
+		if (stress < 0) stress = 0;
+	}
+
+	/** バカ舌値を上下限にクランプする. */
+	public final void checkTang() {
+		if (getTang() < 0) setTang(0);
+		if (getTang() > getTangLevelBase()[2]) setTang(getTangLevelBase()[2]);
 	}
 
 	@com.fasterxml.jackson.annotation.JsonIgnore

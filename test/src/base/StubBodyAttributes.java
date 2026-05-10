@@ -5,7 +5,7 @@ import src.system.BodyLayer;
 import src.draw.Point4y;
 import src.enums.Happiness;
 
-public class StubBodyAttributes extends BodyAttributes {
+public class StubBodyAttributes extends Yukkuri {
     private static final long serialVersionUID = 1L;
 
     private int expandSizeW = 0;

@@ -2,6 +2,8 @@ package src.logic;
 
 import src.base.Yukkuri;
 
+import src.base.Yukkuri;
+
 /**
  * doActionOther の接触時処理をまとめる.
  */

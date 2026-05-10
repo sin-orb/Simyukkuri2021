@@ -1,6 +1,8 @@
 package src.logic;
 
 import src.base.Yukkuri;
+
+import src.base.Yukkuri;
 import src.event.EventPacket.EventPriority;
 import src.entity.world.bodylinked.Okazari.OkazariType;
 import src.draw.Translate;

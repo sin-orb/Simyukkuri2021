@@ -4,7 +4,7 @@ import src.system.BodyLayer;
 import src.draw.Point4y;
 import src.enums.Happiness;
 
-public class PlainBodyAttributes extends BodyAttributes {
+public class PlainBodyAttributes extends Yukkuri {
     private static final long serialVersionUID = 1L;
 
     @Override
@@ -67,6 +67,16 @@ public class PlainBodyAttributes extends BodyAttributes {
 
     @Override
     public int checkNonYukkuriDiseaseTolerance() {
+        return 0;
+    }
+
+    @Override
+    public int getExpandSizeW() {
+        return 0;
+    }
+
+    @Override
+    public int getExpandSizeH() {
         return 0;
     }
 

@@ -1,6 +1,8 @@
 package src.logic;
 
-import src.base.BodyAttributes;
+import src.base.Yukkuri;
+
+
 
 /**
  * Bodyのストレスに関する単純判定を集約する.
@@ -15,7 +17,7 @@ public final class BodyStressRule {
 	 * @param body 判定対象
 	 * @return ストレスフルならtrue
 	 */
-	public static boolean isStressful(BodyAttributes body) {
+	public static boolean isStressful(Yukkuri body) {
 		return body.getStressLimit() * body.checkNonYukkuriDiseaseTolerance() / 100 * 2 / 5 < body.getStress();
 	}
 
@@ -25,7 +27,7 @@ public final class BodyStressRule {
 	 * @param body 判定対象
 	 * @return とてもストレスフルならtrue
 	 */
-	public static boolean isVeryStressful(BodyAttributes body) {
+	public static boolean isVeryStressful(Yukkuri body) {
 		return body.getStressLimit() * body.checkNonYukkuriDiseaseTolerance() / 100 * 3 / 5 < body.getStress();
 	}
 }

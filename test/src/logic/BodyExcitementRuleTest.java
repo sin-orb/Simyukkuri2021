@@ -95,16 +95,6 @@ class BodyExcitementRuleTest {
 		assertTrue(me.isSukkiri(), "force exciting should still trigger sukkiri side effect");
 	}
 
-	@Test
-	void testIsForceExcitingReadsRawFlag() {
-		StubBodyAttributes body = new StubBodyAttributes();
-		body.setForceExciting(false);
-		assertFalse(BodyExcitementRule.isForceExciting(body));
-
-		body.setForceExciting(true);
-		assertTrue(BodyExcitementRule.isForceExciting(body));
-	}
-
 	private static Sprite[] makeSprites(int w, int h) {
 		Sprite[] spr = new Sprite[3];
 		for (int i = 0; i < 3; i++) {

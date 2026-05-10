@@ -1,7 +1,6 @@
 package src.logic;
 
 import src.base.Yukkuri;
-import src.base.BodyAttributes;
 import src.enums.EnumRelationMine;
 import src.enums.Happiness;
 import src.system.MessagePool;
@@ -348,13 +347,4 @@ public final class BodySurisuriRule {
 		return actionGo;
 	}
 
-	/**
-	 * プレイヤーにすりすりされているかを判定する.
-	 *
-	 * @param body 判定対象
-	 * @return すりすりされていればtrue
-	 */
-	public static boolean isSurisuriFromPlayer(BodyAttributes body) {
-		return body.isSurisuriFromPlayerRaw();
-	}
 }

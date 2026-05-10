@@ -1,6 +1,8 @@
 package src.logic;
 
 import src.base.Yukkuri;
+
+import src.base.Yukkuri;
 import src.event.AvoidMoldEvent;
 import src.event.HateNoOkazariEvent;
 import src.system.MessagePool;

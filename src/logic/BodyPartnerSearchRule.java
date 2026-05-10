@@ -1,5 +1,7 @@
 package src.logic;
 
+import src.base.Yukkuri;
+
 import java.util.Map;
 
 import src.attachment.Ants;

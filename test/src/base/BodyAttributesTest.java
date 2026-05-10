@@ -187,16 +187,16 @@ public class BodyAttributesTest {
         int[] h = { 4, 5, 6 };
         int[] pivX = { 7, 8, 9 };
         int[] pivY = { 10, 11, 12 };
-        BodyAttributes.setShadowImages(imgs);
-        BodyAttributes.setShadowImgW(w);
-        BodyAttributes.setShadowImgH(h);
-        BodyAttributes.setShadowPivX(pivX);
-        BodyAttributes.setShadowPivY(pivY);
-        assertSame(imgs, BodyAttributes.getShadowImages());
-        assertArrayEquals(w, BodyAttributes.getShadowImgW());
-        assertArrayEquals(h, BodyAttributes.getShadowImgH());
-        assertArrayEquals(pivX, BodyAttributes.getShadowPivX());
-        assertArrayEquals(pivY, BodyAttributes.getShadowPivY());
+        Yukkuri.setShadowImages(imgs);
+        Yukkuri.setShadowImgW(w);
+        Yukkuri.setShadowImgH(h);
+        Yukkuri.setShadowPivX(pivX);
+        Yukkuri.setShadowPivY(pivY);
+        assertSame(imgs, Yukkuri.getShadowImages());
+        assertArrayEquals(w, Yukkuri.getShadowImgW());
+        assertArrayEquals(h, Yukkuri.getShadowImgH());
+        assertArrayEquals(pivX, Yukkuri.getShadowPivX());
+        assertArrayEquals(pivY, Yukkuri.getShadowPivY());
     }
 
     @Test

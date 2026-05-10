@@ -24,7 +24,7 @@ public class UnunSlaveDebug {
         body.setPublicRank(PublicRank.UnunSlave);
 
         // Set eyesightBase via reflection
-        java.lang.reflect.Field eyesightField = src.base.BodyAttributes.class.getDeclaredField("eyesightBase");
+        java.lang.reflect.Field eyesightField = src.entity.living.LivingEntity.class.getDeclaredField("eyesightBase");
         eyesightField.setAccessible(true);
         eyesightField.set(body, 1000000);
 

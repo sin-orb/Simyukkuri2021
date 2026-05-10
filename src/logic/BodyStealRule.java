@@ -1,6 +1,8 @@
 package src.logic;
 
 import src.base.Yukkuri;
+
+import src.base.Yukkuri;
 import src.entity.world.bodylinked.Okazari.OkazariType;
 import src.enums.Happiness;
 import src.enums.PublicRank;

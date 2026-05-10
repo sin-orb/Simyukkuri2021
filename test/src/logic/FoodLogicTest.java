@@ -4682,7 +4682,7 @@ class FoodLogicTest {
         body.setHungry(body.getHungryLimit() / 2); // not soHungry
         // Force wantToShit=true by setting shit to near limit
         try {
-            java.lang.reflect.Field shitField = src.base.BodyAttributes.class.getDeclaredField("shit");
+            java.lang.reflect.Field shitField = src.entity.living.LivingEntity.class.getDeclaredField("shit");
             shitField.setAccessible(true);
             int[] shitLimit = body.getShitLimitBase();
             int limit = shitLimit[AgeState.ADULT.ordinal()];

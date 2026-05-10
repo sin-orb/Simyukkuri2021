@@ -1,6 +1,8 @@
 package src.logic;
 
 import src.base.Yukkuri;
+
+import src.base.Yukkuri;
 import src.enums.Happiness;
 import src.enums.ImageCode;
 import src.event.FuneralEvent;

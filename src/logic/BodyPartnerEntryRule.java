@@ -1,6 +1,8 @@
 package src.logic;
 
 import src.base.Yukkuri;
+
+import src.base.Yukkuri;
 import src.event.EventPacket.EventPriority;
 import src.base.Entity;
 import src.draw.Translate;
