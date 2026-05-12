@@ -1,40 +1,40 @@
 package src.logic;
-import src.util.GameEnvironment;
-import src.util.GameMessages;
 
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import src.SimYukkuri;
-import src.util.GameRandom;
-import src.util.GameWorld;
-import src.base.Yukkuri;
-import src.event.EventPacket;
-import src.base.Entity;
 import src.draw.Terrarium;
 import src.draw.Translate;
+import src.entity.core.Entity;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.world.item.Food;
+import src.entity.core.world.item.Toilet;
 import src.enums.PublicRank;
 import src.enums.TakeoutItemType;
 import src.enums.TangType;
-import src.event.FuneralEvent;
-import src.event.ProudChildEvent;
-import src.event.ShitExercisesEvent;
-import src.event.SuperEatingTimeEvent;
-import src.event.YukkuriRideEvent;
+import src.event.EventPacket;
+import src.event.impl.FuneralEvent;
+import src.event.impl.ProudChildEvent;
+import src.event.impl.ShitExercisesEvent;
+import src.event.impl.SuperEatingTimeEvent;
+import src.event.impl.YukkuriRideEvent;
 import src.field.impl.Barrier;
-import src.item.Food;
-import src.item.Toilet;
 import src.system.MessagePool;
+import src.util.GameEnvironment;
+import src.util.GameMessages;
+import src.util.GameRandom;
+import src.util.GameWorld;
 
 /***************************************************
-	家族イベント関係の処理
+ * 家族イベント関係の処理
  */
 public class FamilyActionLogic {
 
 	/**
 	 * 家族関係処理
+	 * 
 	 * @param body ゆっくり
 	 * @return 処理が行われたか
 	 */
@@ -49,9 +49,9 @@ public class FamilyActionLogic {
 			return false;
 		}
 
-		//-------------------------------------
+		// -------------------------------------
 		// イベント処理
-		//-------------------------------------
+		// -------------------------------------
 		EventPacket currentEvent = body.getCurrentEvent();
 		// イベント中なら終了
 		if (currentEvent instanceof SuperEatingTimeEvent || currentEvent instanceof ShitExercisesEvent
@@ -79,8 +79,8 @@ public class FamilyActionLogic {
 			}
 		}
 
-		//--------------------------------------------------
-		//自分の状態チェック
+		// --------------------------------------------------
+		// 自分の状態チェック
 		if (body.isIdiot() || body.isDamaged() || !body.hasOkazari())
 			return false;
 		// うんうん奴隷の場合
@@ -93,7 +93,7 @@ public class FamilyActionLogic {
 		if (body.isShitting() || body.isBirth() || body.isEating() || body.nearToBirth()) {
 			return false;
 		}
-		//　子供のリストに生きている子供がいるか
+		// 子供のリストに生きている子供がいるか
 		List<Yukkuri> childrenList = BodyLogic.createActiveChildList(body, true);
 		if (childrenList == null || childrenList.size() == 0) {
 			return false;
@@ -103,7 +103,7 @@ public class FamilyActionLogic {
 			return false;
 		}
 
-		//-------------------------------
+		// -------------------------------
 		// 番の状態チェック
 		if (partnerBody != null) {
 			if (partnerBody.isDamaged() ||
@@ -122,7 +122,7 @@ public class FamilyActionLogic {
 				return false;
 			}
 		}
-		//-------------------------------
+		// -------------------------------
 		// 子供の状態チェック
 		boolean wantToShit = true;
 		boolean wantToEat = true;
@@ -157,13 +157,14 @@ public class FamilyActionLogic {
 			}
 
 			// 自分と子ゆとの間に壁があるなら終了
-			if (Barrier.onBarrier(body.getX(), body.getY(), bodyChild.getX(), bodyChild.getY(), Barrier.BARRIER_YUKKURI)) {
+			if (Barrier.onBarrier(body.getX(), body.getY(), bodyChild.getX(), bodyChild.getY(),
+					Barrier.BARRIER_YUKKURI)) {
 				wantToShit = false;
 				wantToEat = false;
 				break;
 			}
 
-			//-------------------------------------
+			// -------------------------------------
 			// うんうん判定
 			double dShitPer = 100 * bodyChild.getShit() / bodyChild.getShitLimit();
 			// 赤ゆのみチェック
@@ -183,7 +184,7 @@ public class FamilyActionLogic {
 				}
 			}
 
-			//-------------------------------------
+			// -------------------------------------
 			// 子供が食事中なら何もしない
 			if (bodyChild.isEating()) {
 				wantToEat = false;
@@ -243,32 +244,32 @@ public class FamilyActionLogic {
 				rideCandidates.add(bodyChild);
 			}
 		}
-		//-------------------------
+		// -------------------------
 		// 親が主体で行動を起こす
-		//-------------------------
+		// -------------------------
 
 		// ・子が空腹の場合、家族一緒に餌まで移動する
-		//   ・家族で移動する場合、移動速度は一番若い子ゆに合わせる
-		//   ・餌まで移動した場合、一緒に食事をする
-		//   ・空腹じゃなくても食べて家族で空腹度を合わせる
+		// ・家族で移動する場合、移動速度は一番若い子ゆに合わせる
+		// ・餌まで移動した場合、一緒に食事をする
+		// ・空腹じゃなくても食べて家族で空腹度を合わせる
 		if (wantToEat) {
 			if (goToEat(body, childrenList)) {
 				return true;
 			}
 		}
 		// ・子がうんうんをためていた場合、家族一緒にトイレまで移動する
-		//   ・トイレの近くでうんうん体操をする
-		//   ・トイレにうんうんを片付ける
-		//   ・少量でも出して家族でうんうん量を合わせる
-		//   ・汚れていた場合ぺろぺろする
-		//     ・子は親に近づく
+		// ・トイレの近くでうんうん体操をする
+		// ・トイレにうんうんを片付ける
+		// ・少量でも出して家族でうんうん量を合わせる
+		// ・汚れていた場合ぺろぺろする
+		// ・子は親に近づく
 		if (wantToShit) {
 			if (goToShit(body, childrenList)) {
 				return true;
 			}
 		}
 
-		//おちび自慢（赤ゆがいる場合のみ）
+		// おちび自慢（赤ゆがいる場合のみ）
 		if (hasBaby && GameRandom.nextBoolean()) {
 			if (proudChild(body, childrenList)) {
 				return true;
@@ -299,13 +300,14 @@ public class FamilyActionLogic {
 		ShitExercisesEvent event = new ShitExercisesEvent(body, null, targetToilet, 10);
 		EventLogic.addWorldEvent(event, body, GameMessages.getMessage(body, MessagePool.Action.ShitExercisesGOFrom));
 		// イベント開始
-		//b.currentEvent = ev);
+		// b.currentEvent = ev);
 		event.start(body);
 		return true;
 	}
 
 	/**
 	 * トイレを探す
+	 * 
 	 * @param body ゆっくり
 	 * @return 探しだしたトイレオブジェクト
 	 */
@@ -318,7 +320,8 @@ public class FamilyActionLogic {
 			if (minimumDistance < 1) {
 				break;
 			}
-			int distance = Translate.distance(body.getX(), body.getY(), toilet.getX(), toilet.getY() - toilet.getH() / 6);
+			int distance = Translate.distance(body.getX(), body.getY(), toilet.getX(),
+					toilet.getY() - toilet.getH() / 6);
 			if (minimumDistance > distance) {
 				if (Barrier.acrossBarrier(body.getX(), body.getY(), toilet.getX(), toilet.getY() - toilet.getH() / 6,
 						Barrier.BARRIER_YUKKURI + Barrier.BARRIER_KEKKAI)) {
@@ -332,8 +335,9 @@ public class FamilyActionLogic {
 	}
 
 	/**
-	 *  食事に行く
-	 * @param body ゆっくり
+	 * 食事に行く
+	 * 
+	 * @param body         ゆっくり
 	 * @param childrenList 子供リスト
 	 * @return 処理が行われたか
 	 */
@@ -353,13 +357,14 @@ public class FamilyActionLogic {
 		SuperEatingTimeEvent event = new SuperEatingTimeEvent(body, null, targetFood, 10);
 		EventLogic.addWorldEvent(event, body, GameMessages.getMessage(body, MessagePool.Action.FamilyEatingTimeWait));
 		// イベント開始
-		//b.currentEvent = ev);
+		// b.currentEvent = ev);
 		event.start(body);
 		return true;
 	}
 
 	/**
 	 * 餌を探す
+	 * 
 	 * @param body ゆっくり
 	 * @return 処理が行われたか
 	 */
@@ -387,26 +392,26 @@ public class FamilyActionLogic {
 				}
 				boolean isCandidate = false;
 				switch (food.getFoodType()) {
-				// 普通のフード
-				default:
-					isCandidate = true;
-					break;
-				// 噛み砕いた茎
-				case STALK:
-					isCandidate = true;
-					break;
-				//return null;
-				// あまあま
-				case SWEETS1:
-				case SWEETS2:
-					isCandidate = true;
-					break;
-				// 生ゴミ
-				case WASTE:
-					// 飢餓状態かバカ舌なら食べる
-					if (body.isTooHungry() || body.getTangType() == TangType.POOR)
+					// 普通のフード
+					default:
 						isCandidate = true;
-					break;
+						break;
+					// 噛み砕いた茎
+					case STALK:
+						isCandidate = true;
+						break;
+					// return null;
+					// あまあま
+					case SWEETS1:
+					case SWEETS2:
+						isCandidate = true;
+						break;
+					// 生ゴミ
+					case WASTE:
+						// 飢餓状態かバカ舌なら食べる
+						if (body.isTooHungry() || body.getTangType() == TangType.POOR)
+							isCandidate = true;
+						break;
 				}
 
 				// 候補の中から最も価値の高いもの、近いものを食べに行く
@@ -423,7 +428,8 @@ public class FamilyActionLogic {
 	}
 
 	/**
-	 *  レイパーしかいないかどうか
+	 * レイパーしかいないかどうか
+	 * 
 	 * @return レイパーしかいないかどうか
 	 */
 	public static final boolean checkRaperFamily() {
@@ -443,6 +449,7 @@ public class FamilyActionLogic {
 
 	/**
 	 * れいぱーのターゲットかどうか
+	 * 
 	 * @return れいぱーのターゲットかどうか
 	 */
 	public static final boolean isRapeTarget() {
@@ -458,7 +465,8 @@ public class FamilyActionLogic {
 
 	/**
 	 * 親に乗る処理
-	 * @param body ゆっくり
+	 * 
+	 * @param body         ゆっくり
 	 * @param childrenList 子供リスト
 	 * @return 処理が行われたか
 	 */
@@ -499,7 +507,8 @@ public class FamilyActionLogic {
 
 				// ベッド
 				if (target == null) {
-					if (child.isSleepy() || GameEnvironment.getDayState().ordinal() >= Terrarium.DayState.EVENING.ordinal()) {
+					if (child.isSleepy()
+							|| GameEnvironment.getDayState().ordinal() >= Terrarium.DayState.EVENING.ordinal()) {
 						Entity foundBed = BedLogic.searchBed(body);
 						if (foundBed != null) {
 							target = foundBed;
@@ -516,9 +525,10 @@ public class FamilyActionLogic {
 					} else {
 						// おちびちゃん運び実施
 						YukkuriRideEvent event = new YukkuriRideEvent(body, childrenList.get(0), target, 10);
-						EventLogic.addWorldEvent(event, body, GameMessages.getMessage(body, MessagePool.Action.RideOnMe));
+						EventLogic.addWorldEvent(event, body,
+								GameMessages.getMessage(body, MessagePool.Action.RideOnMe));
 						// イベント開始
-						//b.currentEvent = ev);
+						// b.currentEvent = ev);
 						event.start(body);
 						return true;
 					}
@@ -530,7 +540,8 @@ public class FamilyActionLogic {
 
 	/**
 	 * おちび自慢処理
-	 * @param body ゆっくり
+	 * 
+	 * @param body         ゆっくり
 	 * @param childrenList 子供リスト
 	 * @return 処理が行われたか
 	 */
@@ -544,9 +555,8 @@ public class FamilyActionLogic {
 		ProudChildEvent event = new ProudChildEvent(body, null, null, 10);
 		EventLogic.addWorldEvent(event, body, GameMessages.getMessage(body, MessagePool.Action.ProudChildsGOFrom));
 		// イベント開始
-		//b.currentEvent = ev);
+		// b.currentEvent = ev);
 		event.start(body);
 		return true;
 	}
 }
-

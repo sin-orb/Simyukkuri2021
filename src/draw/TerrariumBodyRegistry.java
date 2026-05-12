@@ -1,6 +1,6 @@
 package src.draw;
 
-import src.base.Yukkuri;
+import src.entity.core.living.yukkuri.Yukkuri;
 import src.util.GameWorld;
 
 /**

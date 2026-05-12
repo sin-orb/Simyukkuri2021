@@ -8,13 +8,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
-import src.base.Yukkuri;
+import src.entity.core.living.yukkuri.Yukkuri;
 import src.enums.Attitude;
 import src.util.GameRandom;
 import src.util.WorldTestHelper;
-import src.yukkuri.Marisa;
-import src.yukkuri.Remirya;
-import src.yukkuri.Sakuya;
+import src.entity.core.living.yukkuri.impl.Marisa;
+import src.entity.core.living.yukkuri.impl.Remirya;
+import src.entity.core.living.yukkuri.impl.Sakuya;
 
 /**
  * Tests for BodyPartnerSearchRule.

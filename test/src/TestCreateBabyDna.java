@@ -1,8 +1,8 @@
 package src;
 
 import src.engine.birth.BabyDnaFactory;
-import src.yukkuri.Reimu;
-import src.yukkuri.Marisa;
+import src.entity.core.living.yukkuri.impl.Marisa;
+import src.entity.core.living.yukkuri.impl.Reimu;
 
 public class TestCreateBabyDna {
     public static void main(String[] args) {

@@ -9,12 +9,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
-import src.base.Yukkuri;
+import src.entity.core.living.yukkuri.Yukkuri;
 import src.enums.AgeState;
 import src.enums.CoreAnkoState;
 import src.enums.PublicRank;
-import src.event.AvoidMoldEvent;
-import src.event.HateNoOkazariEvent;
+import src.event.impl.AvoidMoldEvent;
+import src.event.impl.HateNoOkazariEvent;
 import src.ConstState;
 import src.util.WorldTestHelper;
 import src.system.Sprite;

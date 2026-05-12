@@ -15,14 +15,14 @@ import org.junit.jupiter.api.Test;
 import src.SimYukkuri;
 import src.logic.BedLogic;
 import src.util.WorldTestHelper;
-import src.yukkuri.Marisa;
-import src.base.Yukkuri;
+import src.entity.core.living.yukkuri.impl.Marisa;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.world.item.Bed;
+import src.entity.core.world.item.House;
+import src.entity.core.world.item.Toilet;
 import src.enums.AgeState;
 import src.enums.PublicRank;
-import src.item.Bed;
-import src.item.House;
-import src.item.Toilet;
-import src.base.Entity;
+import src.entity.core.Entity;
 
 class BedLogicTest {
 
@@ -130,16 +130,18 @@ class BedLogicTest {
         body.setActivePeriodBase(0); // make isSleepy() return true
         body.setAge(999);
         Bed bed = new Bed();
-        bed.setX(150); bed.setY(150);
+        bed.setX(150);
+        bed.setY(150);
         // Set bed dimensions so nextInt(ofsX) doesn't throw
         try {
-            java.lang.reflect.Field wf = src.base.Entity.class.getDeclaredField("w");
+            java.lang.reflect.Field wf = src.entity.core.Entity.class.getDeclaredField("w");
             wf.setAccessible(true);
             wf.setInt(bed, 20);
-            java.lang.reflect.Field hf = src.base.Entity.class.getDeclaredField("h");
+            java.lang.reflect.Field hf = src.entity.core.Entity.class.getDeclaredField("h");
             hf.setAccessible(true);
             hf.setInt(bed, 20);
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
         SimYukkuri.world.getCurrentMap().getBed().put(bed.getObjId(), bed);
         try {
             BedLogic.checkBed(body);
@@ -161,7 +163,8 @@ class BedLogicTest {
     @Test
     void testCheckBed_isToBed_targetRemoved_clearsFavItem() {
         Bed bed = new Bed();
-        bed.setX(100); bed.setY(100);
+        bed.setX(100);
+        bed.setY(100);
         bed.setRemoved(true);
         SimYukkuri.world.getCurrentMap().getBed().put(bed.getObjId(), bed);
 
@@ -174,7 +177,8 @@ class BedLogicTest {
     @Test
     void testCheckBed_isToBed_UnunSlave_clearsFavItem() {
         Bed bed = new Bed();
-        bed.setX(200); bed.setY(200);
+        bed.setX(200);
+        bed.setY(200);
         SimYukkuri.world.getCurrentMap().getBed().put(bed.getObjId(), bed);
 
         body.setToBed(true);
@@ -187,7 +191,8 @@ class BedLogicTest {
     @Test
     void testCheckBed_isToBed_arrived_setsStay() {
         Bed bed = new Bed();
-        bed.setX(100); bed.setY(100); // same position as body → distance=0
+        bed.setX(100);
+        bed.setY(100); // same position as body → distance=0
         SimYukkuri.world.getCurrentMap().getBed().put(bed.getObjId(), bed);
 
         body.setToBed(true);
@@ -200,7 +205,8 @@ class BedLogicTest {
     @Test
     void testCheckBed_isToBed_notArrived_movesTo() {
         Bed bed = new Bed();
-        bed.setX(5000); bed.setY(5000); // far away
+        bed.setX(5000);
+        bed.setY(5000); // far away
         SimYukkuri.world.getCurrentMap().getBed().put(bed.getObjId(), bed);
 
         body.setToBed(true);
@@ -231,13 +237,14 @@ class BedLogicTest {
         }
     }
 
-    // --- searchBed: UnunSlave →  toilet ---
+    // --- searchBed: UnunSlave → toilet ---
 
     @Test
     void testSearchBed_UnunSlave_withToilet_findsToilet() {
         body.setPublicRank(PublicRank.UnunSlave);
-        src.item.Toilet toilet = new src.item.Toilet();
-        toilet.setX(100); toilet.setY(100); // same position as body
+        src.entity.core.world.item.Toilet toilet = new src.entity.core.world.item.Toilet();
+        toilet.setX(100);
+        toilet.setY(100); // same position as body
         SimYukkuri.world.getCurrentMap().getToilet().put(toilet.getObjId(), toilet);
         assertDoesNotThrow(() -> BedLogic.searchBed(body));
     }
@@ -254,7 +261,8 @@ class BedLogicTest {
     @Test
     void testSearchBed_noBedsButHouse_findsHouse() {
         House house = new House();
-        house.setX(100); house.setY(100); // same position as body
+        house.setX(100);
+        house.setY(100); // same position as body
         SimYukkuri.world.getCurrentMap().getHouse().put(house.getObjId(), house);
         assertDoesNotThrow(() -> BedLogic.searchBed(body));
     }
@@ -264,7 +272,8 @@ class BedLogicTest {
     @Test
     void testCheckBed_withHouseOnly_doesNotThrow() {
         House house = new House();
-        house.setX(100); house.setY(100);
+        house.setX(100);
+        house.setY(100);
         SimYukkuri.world.getCurrentMap().getHouse().put(house.getObjId(), house);
         body.setActivePeriodBase(0); // make isSleepy() return true
         assertDoesNotThrow(() -> BedLogic.checkBed(body));
@@ -283,8 +292,9 @@ class BedLogicTest {
     @Test
     void testCheckBed_isIdiot_returnsFalse() {
         // TarinaiReimu overrides isIdiot() to return true
-        src.yukkuri.TarinaiReimu tarinai = new src.yukkuri.TarinaiReimu();
-        tarinai.setX(100); tarinai.setY(100);
+        src.entity.core.living.yukkuri.impl.TarinaiReimu tarinai = new src.entity.core.living.yukkuri.impl.TarinaiReimu();
+        tarinai.setX(100);
+        tarinai.setY(100);
         tarinai.setObjId(src.enums.Numbering.INSTANCE.numberingObjId());
         tarinai.setUniqueID(src.enums.Numbering.INSTANCE.numberingYukkuriID());
         SimYukkuri.world.getCurrentMap().getBody().put(tarinai.getObjId(), tarinai);
@@ -301,10 +311,23 @@ class BedLogicTest {
         // Set HIGH priority event at lines 46-49: getPriority()==HIGH → return false
         src.event.EventPacket highEvent = new src.event.EventPacket() {
             private static final long serialVersionUID = 1L;
-            { this.priority = src.event.EventPacket.EventPriority.HIGH; }
-            @Override public boolean checkEventResponse(src.base.Yukkuri b) { return true; }
-            @Override public void start(src.base.Yukkuri b) {}
-            @Override public boolean execute(src.base.Yukkuri b) { return false; }
+            {
+                this.priority = src.event.EventPacket.EventPriority.HIGH;
+            }
+
+            @Override
+            public boolean checkEventResponse(src.entity.core.living.yukkuri.Yukkuri b) {
+                return true;
+            }
+
+            @Override
+            public void start(src.entity.core.living.yukkuri.Yukkuri b) {
+            }
+
+            @Override
+            public boolean execute(src.entity.core.living.yukkuri.Yukkuri b) {
+                return false;
+            }
         };
         body.setCurrentEvent(highEvent);
         assertFalse(BedLogic.checkBed(body));
@@ -314,13 +337,27 @@ class BedLogicTest {
 
     @Test
     void testCheckBed_notNearToBirth_MiddleEvent_returnsFalse() {
-        // MIDDLE priority event and !nearToBirth → line 52: priority!=LOW → return false
+        // MIDDLE priority event and !nearToBirth → line 52: priority!=LOW → return
+        // false
         src.event.EventPacket middleEvent = new src.event.EventPacket() {
             private static final long serialVersionUID = 1L;
-            { this.priority = src.event.EventPacket.EventPriority.MIDDLE; }
-            @Override public boolean checkEventResponse(src.base.Yukkuri b) { return true; }
-            @Override public void start(src.base.Yukkuri b) {}
-            @Override public boolean execute(src.base.Yukkuri b) { return false; }
+            {
+                this.priority = src.event.EventPacket.EventPriority.MIDDLE;
+            }
+
+            @Override
+            public boolean checkEventResponse(src.entity.core.living.yukkuri.Yukkuri b) {
+                return true;
+            }
+
+            @Override
+            public void start(src.entity.core.living.yukkuri.Yukkuri b) {
+            }
+
+            @Override
+            public boolean execute(src.entity.core.living.yukkuri.Yukkuri b) {
+                return false;
+            }
         };
         body.setCurrentEvent(middleEvent);
         assertFalse(BedLogic.checkBed(body));
@@ -340,12 +377,14 @@ class BedLogicTest {
     @Test
     void testCheckBed_isToBed_Arrived_HasFoodTakeout_DoesNotThrow() {
         Bed bed = new Bed();
-        bed.setX(100); bed.setY(100); // same position as body → arrived
+        bed.setX(100);
+        bed.setY(100); // same position as body → arrived
         SimYukkuri.world.getCurrentMap().getBed().put(bed.getObjId(), bed);
         body.setToBed(true);
         body.setMoveTargetId(bed.getObjId());
         // Setup FOOD takeout at line 95: getCarryItem(FOOD) != null → dropTakeoutItem
-        src.item.Food food = new src.item.Food(100, 100, src.item.Food.FoodType.FOOD.ordinal());
+        src.entity.core.world.item.Food food = new src.entity.core.world.item.Food(100, 100,
+                src.entity.core.world.item.Food.FoodType.FOOD.ordinal());
         food.setAmount(100);
         SimYukkuri.world.getCurrentMap().getTakenOutFood().put(food.getObjId(), food);
         body.getCarryItems().put(src.enums.TakeoutItemType.FOOD, food.getObjId());
@@ -357,8 +396,9 @@ class BedLogicTest {
     @Test
     void testSearchBed_FlyingType_WallModeAdult_DoesNotThrow() {
         // Remirya is a flying type with hasBraid=true → canflyCheck()=true
-        src.yukkuri.Remirya remirya = new src.yukkuri.Remirya();
-        remirya.setX(100); remirya.setY(100);
+        src.entity.core.living.yukkuri.impl.Remirya remirya = new src.entity.core.living.yukkuri.impl.Remirya();
+        remirya.setX(100);
+        remirya.setY(100);
         remirya.setObjId(src.enums.Numbering.INSTANCE.numberingObjId());
         remirya.setUniqueID(src.enums.Numbering.INSTANCE.numberingYukkuriID());
         SimYukkuri.world.getCurrentMap().getBody().put(remirya.getObjId(), remirya);

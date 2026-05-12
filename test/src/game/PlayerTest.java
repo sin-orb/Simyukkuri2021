@@ -1,10 +1,10 @@
 package src.game;
 
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertSame;
-import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 
 import javax.swing.DefaultListModel;
 
@@ -12,9 +12,9 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
-import src.base.Entity;
+import src.entity.core.Entity;
+import src.entity.core.meta.Player;
 import src.util.WorldTestHelper;
-import src.meta.Player;
 
 class PlayerTest {
 

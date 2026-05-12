@@ -7,12 +7,12 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import src.SimYukkuri;
-import src.base.Yukkuri;
+import src.entity.core.living.yukkuri.Yukkuri;
 import src.entity.world.bodylinked.Okazari;
 import src.draw.Translate;
 import src.item.Trash;
 import src.util.WorldTestHelper;
-import src.yukkuri.Marisa;
+import src.entity.core.living.yukkuri.impl.Marisa;
 
 /**
  * Test class for TrashLogic.

@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import src.enums.AgeState;
 import src.draw.Point4y;
-import src.base.Yukkuri;
+import src.entity.core.living.yukkuri.Yukkuri;
 
 public class MyonTest {
 

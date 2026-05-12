@@ -2,23 +2,21 @@ package src.logic;
 
 import java.util.Map;
 
-import src.base.Yukkuri;
-import src.event.EventPacket;
-import src.base.Entity;
-import src.draw.Translate;
+import src.entity.core.Entity;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.world.bodylinked.Stalk;
+import src.entity.core.world.item.Food;
+import src.entity.core.world.item.Food.FoodType;
+import src.entity.core.world.mobile.Shit;
+import src.entity.core.world.mobile.Vomit;
 import src.enums.BurialState;
 import src.enums.Happiness;
-import src.enums.PurposeOfMoving;
 import src.enums.PublicRank;
+import src.enums.PurposeOfMoving;
 import src.enums.TangType;
-import src.event.EatBodyEvent;
-import src.event.FlyingEatEvent;
-import src.event.KillPredeatorEvent;
-import src.game.Shit;
-import src.game.Stalk;
-import src.game.Vomit;
-import src.item.Food;
-import src.item.Food.FoodType;
+import src.event.impl.EatBodyEvent;
+import src.event.impl.FlyingEatEvent;
+import src.event.impl.KillPredeatorEvent;
 import src.system.MessagePool;
 import src.util.GameEnvironment;
 import src.util.GameMessages;
@@ -55,7 +53,8 @@ public final class FoodArrivalActionPolicy {
 				}
 				if (food.getFoodType() == FoodType.SWEETS1 || food.getFoodType() == FoodType.SWEETS2
 						|| food.getFoodType() == FoodType.SWEETS_NORA1 || food.getFoodType() == FoodType.SWEETS_NORA2
-						|| food.getFoodType() == FoodType.SWEETS_YASEI1 || food.getFoodType() == FoodType.SWEETS_YASEI2) {
+						|| food.getFoodType() == FoodType.SWEETS_YASEI1
+						|| food.getFoodType() == FoodType.SWEETS_YASEI2) {
 					sweets = true;
 				}
 				if (food.getFoodType() == FoodType.SWEETS2 || food.getFoodType() == FoodType.SWEETS_NORA2
@@ -124,12 +123,14 @@ public final class FoodArrivalActionPolicy {
 						}
 					}
 					Yukkuri motherBody = src.util.BodyRegistry.getBodyInstance(candidateBody.getMother());
-					if (GameRandom.nextInt(3) == 0 && motherBody != null && !motherBody.isDead() && !motherBody.isRemoved()) {
+					if (GameRandom.nextInt(3) == 0 && motherBody != null && !motherBody.isDead()
+							&& !motherBody.isRemoved()) {
 						motherBody.clearEvent();
 						motherBody.setPanic(false, null);
 						motherBody.setPeropero(false);
 						motherBody.setAngry();
-						EventLogic.addBodyEvent(motherBody, new KillPredeatorEvent(motherBody, body, null, 10), null, null);
+						EventLogic.addBodyEvent(motherBody, new KillPredeatorEvent(motherBody, body, null, 10), null,
+								null);
 					}
 				} else {
 					if (body.isRaper() && candidateBody.isUnBirth()) {

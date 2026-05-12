@@ -1,5 +1,4 @@
 package src.command;
-import src.util.GameText;
 
 import java.awt.Image;
 import java.awt.event.MouseEvent;
@@ -9,34 +8,34 @@ import javax.swing.DefaultComboBoxModel;
 import javax.swing.JPopupMenu;
 
 import src.SimYukkuri;
-import src.base.Entity;
-import src.item.AutoFeeder;
-import src.item.Bed;
-import src.item.BreedingPool;
-import src.item.Diffuser;
-import src.item.Food;
-import src.item.FoodMaker;
-import src.item.GarbageChute;
-import src.item.GarbageStation;
-import src.item.Generator;
-import src.item.HotPlate;
-import src.item.House;
-import src.item.MachinePress;
-import src.item.Mixer;
-import src.item.OrangePool;
-import src.item.ProcesserPlate;
-import src.item.ProductChute;
-import src.item.StickyPlate;
-import src.item.Stone;
-import src.item.Sui;
-import src.item.Toilet;
-import src.item.Toy;
-import src.item.Trampoline;
-import src.item.Trash;
-import src.item.Yunba;
+import src.entity.core.Entity;
+import src.entity.core.world.item.AutoFeeder;
+import src.entity.core.world.item.Bed;
+import src.entity.core.world.item.BreedingPool;
+import src.entity.core.world.item.Diffuser;
+import src.entity.core.world.item.Food;
+import src.entity.core.world.item.FoodMaker;
+import src.entity.core.world.item.GarbageChute;
+import src.entity.core.world.item.GarbageStation;
+import src.entity.core.world.item.Generator;
+import src.entity.core.world.item.HotPlate;
+import src.entity.core.world.item.House;
+import src.entity.core.world.item.MachinePress;
+import src.entity.core.world.item.Mixer;
+import src.entity.core.world.item.OrangePool;
+import src.entity.core.world.item.ProcesserPlate;
+import src.entity.core.world.item.ProductChute;
+import src.entity.core.world.item.StickyPlate;
+import src.entity.core.world.item.Stone;
+import src.entity.core.world.item.Sui;
+import src.entity.core.world.item.Toilet;
+import src.entity.core.world.item.Toy;
+import src.entity.core.world.item.Trampoline;
+import src.entity.core.world.item.Trash;
+import src.entity.core.world.item.Yunba;
 import src.system.IconPool;
 import src.system.MainCommandUI;
-import src.system.ResourceUtil;
+import src.util.GameText;
 
 /**********************************************
  * 各種コマンドメニューのまとめ
@@ -44,7 +43,7 @@ import src.system.ResourceUtil;
  */
 public class GadgetMenu {
 
-	/** ガジェットの効果対象*/
+	/** ガジェットの効果対象 */
 	public static enum ActionTarget {
 		/** コマンド選択時点で実行 */
 		IMMEDIATE(1),
@@ -75,7 +74,7 @@ public class GadgetMenu {
 		}
 	}
 
-	/**マウスアクションの種類*/
+	/** マウスアクションの種類 */
 	public static enum ActionControl {
 		/** 左クリック */
 		LEFT_CLICK,
@@ -85,7 +84,7 @@ public class GadgetMenu {
 		LEFT_DRAG,
 	}
 
-	/**右メニューンp最上位階層のカテゴライズの種類*/
+	/** 右メニューンp最上位階層のカテゴライズの種類 */
 	public static enum MainCategoryName {
 		/** メイン */
 		MAIN,
@@ -117,16 +116,18 @@ public class GadgetMenu {
 		TEST,
 	}
 
-	/** サブアクション用のヘルプコンテキスト
-	 *  %mlb : マウス左ボタン
-	 *  %mrb : マウス右ボタン
-	 *  %sft : SHIFTキー
-	 *  %ctl : CTRLキー*/
+	/**
+	 * サブアクション用のヘルプコンテキスト
+	 * %mlb : マウス左ボタン
+	 * %mrb : マウス右ボタン
+	 * %sft : SHIFTキー
+	 * %ctl : CTRLキー
+	 */
 	public static enum HelpContext {
-		SHIFT_LMB_ALL(GameText.read("command_lmb_all")), 
+		SHIFT_LMB_ALL(GameText.read("command_lmb_all")),
 		SHIFT_LMB_ALL_ONOFF(GameText.read("command_lmb_onoff")),
 		CTRL_LMB_ALL_INVERT(GameText.read("command_lmb_invert")),
-				;
+		;
 
 		private String name;
 
@@ -140,7 +141,7 @@ public class GadgetMenu {
 		}
 	}
 
-	/** 置き換え文字列 icon[]と対応*/
+	/** 置き換え文字列 icon[]と対応 */
 	public static enum HelpIcon {
 		mlb(1, 16), mrb(2, 16), sft(3, 32), ctl(0, 32),
 		;
@@ -162,156 +163,276 @@ public class GadgetMenu {
 		}
 	}
 
-	/** 全メニュー項目*/
+	/** 全メニュー項目 */
 	public static enum GadgetList {
 		// メインカテゴリ
-		TOOL(MainCategoryName.MAIN, GameText.read("command_item"), null, 0, null, null, null, null), 
-		TOOL2(MainCategoryName.MAIN, GameText.read("command_item2"), null, 0,null, null, null, null),
-		AMPOULE(MainCategoryName.MAIN, GameText.read("command_ampoule"), null, 0, null, null, null, null), 
-		FOODS(MainCategoryName.MAIN, GameText.read("command_food"), null, 0, null, null, null,null),
+		TOOL(MainCategoryName.MAIN, GameText.read("command_item"), null, 0, null, null, null, null),
+		TOOL2(MainCategoryName.MAIN, GameText.read("command_item2"), null, 0, null, null, null, null),
+		AMPOULE(MainCategoryName.MAIN, GameText.read("command_ampoule"), null, 0, null, null, null, null),
+		FOODS(MainCategoryName.MAIN, GameText.read("command_food"), null, 0, null, null, null, null),
 		CLEAN(MainCategoryName.MAIN, GameText.read("command_clean"), null, 0, null, null, null, null),
-		ACCESSORY(MainCategoryName.MAIN, GameText.read("command_accessory"), null, 0, null, null, null,null),
-		PANTS(MainCategoryName.MAIN, GameText.read("command_sweater"), null, 0, null, null, null, null), 
-		FLOOR(MainCategoryName.MAIN, GameText.read("command_floor"), null, 0, null, null, null,null),
-		BARRIER(MainCategoryName.MAIN, GameText.read("command_field"), null, 0, null, null, null,null),
-		TOYS(MainCategoryName.MAIN, GameText.read("command_toys"), null, 0, null, null, null,null),
-		CONVEYOR(MainCategoryName.MAIN, GameText.read("command_belcon"), null, 0, null,null, null, null),
-		VOICE(MainCategoryName.MAIN, GameText.read("command_approach"),null, 0, null, null, null,null),
-		TEST(MainCategoryName.MAIN, GameText.read("command_test"), null,0, null, null, null, null),
+		ACCESSORY(MainCategoryName.MAIN, GameText.read("command_accessory"), null, 0, null, null, null, null),
+		PANTS(MainCategoryName.MAIN, GameText.read("command_sweater"), null, 0, null, null, null, null),
+		FLOOR(MainCategoryName.MAIN, GameText.read("command_floor"), null, 0, null, null, null, null),
+		BARRIER(MainCategoryName.MAIN, GameText.read("command_field"), null, 0, null, null, null, null),
+		TOYS(MainCategoryName.MAIN, GameText.read("command_toys"), null, 0, null, null, null, null),
+		CONVEYOR(MainCategoryName.MAIN, GameText.read("command_belcon"), null, 0, null, null, null, null),
+		VOICE(MainCategoryName.MAIN, GameText.read("command_approach"), null, 0, null, null, null, null),
+		TEST(MainCategoryName.MAIN, GameText.read("command_test"), null, 0, null, null, null, null),
 		// ツールカテゴリ
-		PUNISH(MainCategoryName.TOOL, GameText.read("command_chastisement"), null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK,HelpContext.SHIFT_LMB_ALL, null),
-		SNAPPING(MainCategoryName.TOOL, GameText.read("command_decopin"), null, 0,ActionTarget.BODY_AND_GADGET, ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL,null),
-		PICKUP(MainCategoryName.TOOL, GameText.read("command_flyhigh"), null, 0, ActionTarget.BODY_AND_GADGET,ActionControl.LEFT_DRAG, null, null),
-		HOLD(MainCategoryName.TOOL, GameText.read("command_hold"), null, 0,ActionTarget.BODY, ActionControl.LEFT_CLICK, null,null),
-		SURISURI(MainCategoryName.TOOL, GameText.read("command_suri"), null, 0, ActionTarget.BODY,ActionControl.LEFT_DRAG, null, null),
-		VIBRATOR(MainCategoryName.TOOL,GameText.read("command_vibe"), null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK,HelpContext.SHIFT_LMB_ALL, null), 
-		PENICUT(MainCategoryName.TOOL,GameText.read("command_cutpeni"), null, 0, ActionTarget.BODY,ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL,null),
-		JUICE(MainCategoryName.TOOL, GameText.read("command_juice"), null, 0,ActionTarget.BODY, ActionControl.LEFT_CLICK,HelpContext.SHIFT_LMB_ALL,null),
-		Medical_JUICE(MainCategoryName.TOOL,GameText.read("command_orangejuice"), null, 0, ActionTarget.BODY,ActionControl.LEFT_CLICK,HelpContext.SHIFT_LMB_ALL,null),
-		LEMON_SPLAY(MainCategoryName.TOOL,GameText.read("command_ramune"), null, 0,ActionTarget.BODY,ActionControl.LEFT_CLICK,HelpContext.SHIFT_LMB_ALL,null),
-		Pheromone_SPLAY(MainCategoryName.TOOL,GameText.read("command_phero"), null, 0,ActionTarget.BODY,ActionControl.LEFT_CLICK,HelpContext.SHIFT_LMB_ALL,null),
-		HAMMER(MainCategoryName.TOOL,GameText.read("command_hammer"), null, 0,ActionTarget.BODY,ActionControl.LEFT_CLICK,HelpContext.SHIFT_LMB_ALL,null), 
-		GATHERINJECTINTO(MainCategoryName.TOOL,GameText.read("command_inject"),null, 0,ActionTarget.BODY,ActionControl.LEFT_CLICK,null,null),
-		DRIPSPERM(MainCategoryName.TOOL,GameText.read("command_drip"),null,0,ActionTarget.BODY,ActionControl.LEFT_CLICK,null,null),
-		PUNCH(MainCategoryName.TOOL,GameText.read("command_hit"),null,0,ActionTarget.BODY,ActionControl.LEFT_CLICK,null,null),
-		GODHAND(MainCategoryName.TOOL,GameText.read("command_godhand"),null,0,ActionTarget.BODY,ActionControl.LEFT_CLICK,null,null),
-		PEAL(MainCategoryName.TOOL,GameText.read("command_peal"),null,0,ActionTarget.BODY,ActionControl.LEFT_CLICK,null,null),
-		Blind(MainCategoryName.TOOL,GameText.read("command_eyeball"),null,0,ActionTarget.BODY,ActionControl.LEFT_CLICK,	null,null),
-		SHUTMOUTH(MainCategoryName.TOOL,GameText.read("command_mouthshut"),null,0,ActionTarget.BODY,ActionControl.LEFT_CLICK,null,null),
-		HAIRCUT(MainCategoryName.TOOL,GameText.read("command_hage"),null,0,ActionTarget.BODY,ActionControl.LEFT_CLICK,null,null),
-		PACK(MainCategoryName.TOOL,GameText.read("command_manju"),null,0,ActionTarget.BODY,ActionControl.LEFT_CLICK,null,null),
-		STOMP(MainCategoryName.TOOL,GameText.read("command_crush"),null,0,ActionTarget.BODY,ActionControl.LEFT_CLICK,null,null),
+		PUNISH(MainCategoryName.TOOL, GameText.read("command_chastisement"), null, 0, ActionTarget.BODY,
+				ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL, null),
+		SNAPPING(MainCategoryName.TOOL, GameText.read("command_decopin"), null, 0, ActionTarget.BODY_AND_GADGET,
+				ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL, null),
+		PICKUP(MainCategoryName.TOOL, GameText.read("command_flyhigh"), null, 0, ActionTarget.BODY_AND_GADGET,
+				ActionControl.LEFT_DRAG, null, null),
+		HOLD(MainCategoryName.TOOL, GameText.read("command_hold"), null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK,
+				null, null),
+		SURISURI(MainCategoryName.TOOL, GameText.read("command_suri"), null, 0, ActionTarget.BODY,
+				ActionControl.LEFT_DRAG, null, null),
+		VIBRATOR(MainCategoryName.TOOL, GameText.read("command_vibe"), null, 0, ActionTarget.BODY,
+				ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL, null),
+		PENICUT(MainCategoryName.TOOL, GameText.read("command_cutpeni"), null, 0, ActionTarget.BODY,
+				ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL, null),
+		JUICE(MainCategoryName.TOOL, GameText.read("command_juice"), null, 0, ActionTarget.BODY,
+				ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL, null),
+		Medical_JUICE(MainCategoryName.TOOL, GameText.read("command_orangejuice"), null, 0, ActionTarget.BODY,
+				ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL, null),
+		LEMON_SPLAY(MainCategoryName.TOOL, GameText.read("command_ramune"), null, 0, ActionTarget.BODY,
+				ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL, null),
+		Pheromone_SPLAY(MainCategoryName.TOOL, GameText.read("command_phero"), null, 0, ActionTarget.BODY,
+				ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL, null),
+		HAMMER(MainCategoryName.TOOL, GameText.read("command_hammer"), null, 0, ActionTarget.BODY,
+				ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL, null),
+		GATHERINJECTINTO(MainCategoryName.TOOL, GameText.read("command_inject"), null, 0, ActionTarget.BODY,
+				ActionControl.LEFT_CLICK, null, null),
+		DRIPSPERM(MainCategoryName.TOOL, GameText.read("command_drip"), null, 0, ActionTarget.BODY,
+				ActionControl.LEFT_CLICK, null, null),
+		PUNCH(MainCategoryName.TOOL, GameText.read("command_hit"), null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK,
+				null, null),
+		GODHAND(MainCategoryName.TOOL, GameText.read("command_godhand"), null, 0, ActionTarget.BODY,
+				ActionControl.LEFT_CLICK, null, null),
+		PEAL(MainCategoryName.TOOL, GameText.read("command_peal"), null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK,
+				null, null),
+		Blind(MainCategoryName.TOOL, GameText.read("command_eyeball"), null, 0, ActionTarget.BODY,
+				ActionControl.LEFT_CLICK, null, null),
+		SHUTMOUTH(MainCategoryName.TOOL, GameText.read("command_mouthshut"), null, 0, ActionTarget.BODY,
+				ActionControl.LEFT_CLICK, null, null),
+		HAIRCUT(MainCategoryName.TOOL, GameText.read("command_hage"), null, 0, ActionTarget.BODY,
+				ActionControl.LEFT_CLICK, null, null),
+		PACK(MainCategoryName.TOOL, GameText.read("command_manju"), null, 0, ActionTarget.BODY,
+				ActionControl.LEFT_CLICK, null, null),
+		STOMP(MainCategoryName.TOOL, GameText.read("command_crush"), null, 0, ActionTarget.BODY,
+				ActionControl.LEFT_CLICK, null, null),
 		// ツールカテゴリ2
-		BRAID_PLUCK(MainCategoryName.TOOL2, GameText.read("command_nopico"), null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK,	HelpContext.SHIFT_LMB_ALL, null),
-		ANAL_CLOSE(MainCategoryName.TOOL2, GameText.read("command_anal"), null, 0,ActionTarget.BODY, ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL_ONOFF,HelpContext.CTRL_LMB_ALL_INVERT),
-		STALK_CUT(MainCategoryName.TOOL2, GameText.read("command_stalkinfer"), null, 0,ActionTarget.BODY, ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL_ONOFF,HelpContext.CTRL_LMB_ALL_INVERT),
-		CASTRATION(MainCategoryName.TOOL2, GameText.read("command_babyinfer"), null, 0,ActionTarget.BODY, ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL_ONOFF,HelpContext.CTRL_LMB_ALL_INVERT),
-		STALK_UNPLUG(MainCategoryName.TOOL2, GameText.read("command_stalkpull"),null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK, null,null), 
-		LIGHTER(MainCategoryName.TOOL2, GameText.read("command_lighter"), null, 0,ActionTarget.BODY, ActionControl.LEFT_CLICK,HelpContext.SHIFT_LMB_ALL, null),
-		WATER(MainCategoryName.TOOL2,GameText.read("command_water"), null, 0, ActionTarget.BODY,ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL,null),
-		NEEDLE(MainCategoryName.TOOL2, GameText.read("command_needle"), null, 0,ActionTarget.BODY, ActionControl.LEFT_CLICK,HelpContext.SHIFT_LMB_ALL_ONOFF,HelpContext.CTRL_LMB_ALL_INVERT),
-		BURY(MainCategoryName.TOOL2, GameText.read("command_bury"), null,0, ActionTarget.BODY,ActionControl.LEFT_CLICK,HelpContext.SHIFT_LMB_ALL_ONOFF,HelpContext.CTRL_LMB_ALL_INVERT), 
-		SET_SICK(MainCategoryName.TOOL2, GameText.read("command_mold"),null, 0, ActionTarget.BODY,ActionControl.LEFT_CLICK, null,null),
-		SET_RAPER(MainCategoryName.TOOL2,GameText.read("command_raper"), null, 0,ActionTarget.BODY,ActionControl.LEFT_CLICK,null, null),
-		//	 アンプルカテゴリ
-		ORANGE_AMP(MainCategoryName.AMPOULE, GameText.read("item_orange"), null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK,HelpContext.SHIFT_LMB_ALL_ONOFF, HelpContext.CTRL_LMB_ALL_INVERT),
-		ACCEL_AMP(MainCategoryName.AMPOULE,GameText.read("item_accell_ampoule"), null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK,HelpContext.SHIFT_LMB_ALL_ONOFF,HelpContext.CTRL_LMB_ALL_INVERT), 
-		STOP_AMP(MainCategoryName.AMPOULE, GameText.read("item_stop"), null, 0,ActionTarget.BODY, ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL_ONOFF,HelpContext.CTRL_LMB_ALL_INVERT),
-		HUNGRY_AMP(MainCategoryName.AMPOULE, GameText.read("item_hungry"), null,0, ActionTarget.BODY, ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL_ONOFF,HelpContext.CTRL_LMB_ALL_INVERT),
-		VERYSHIT_AMP(MainCategoryName.AMPOULE,GameText.read("item_veryshit"), null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK,HelpContext.SHIFT_LMB_ALL_ONOFF,HelpContext.CTRL_LMB_ALL_INVERT),
-		POISON_AMP(MainCategoryName.AMPOULE,GameText.read("item_poison"), null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK,HelpContext.SHIFT_LMB_ALL_ONOFF,HelpContext.CTRL_LMB_ALL_INVERT), 
-		BREEDING_AMP(MainCategoryName.AMPOULE, GameText.read("item_breeding"), null, 0,ActionTarget.BODY, ActionControl.LEFT_CLICK,HelpContext.SHIFT_LMB_ALL_ONOFF,HelpContext.CTRL_LMB_ALL_INVERT),
-		ANYD_AMP(MainCategoryName.AMPOULE, GameText.read("item_anti_nyd"), null,0, ActionTarget.BODY, ActionControl.LEFT_CLICK,HelpContext.SHIFT_LMB_ALL_ONOFF,HelpContext.CTRL_LMB_ALL_INVERT),
+		BRAID_PLUCK(MainCategoryName.TOOL2, GameText.read("command_nopico"), null, 0, ActionTarget.BODY,
+				ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL, null),
+		ANAL_CLOSE(MainCategoryName.TOOL2, GameText.read("command_anal"), null, 0, ActionTarget.BODY,
+				ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL_ONOFF, HelpContext.CTRL_LMB_ALL_INVERT),
+		STALK_CUT(MainCategoryName.TOOL2, GameText.read("command_stalkinfer"), null, 0, ActionTarget.BODY,
+				ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL_ONOFF, HelpContext.CTRL_LMB_ALL_INVERT),
+		CASTRATION(MainCategoryName.TOOL2, GameText.read("command_babyinfer"), null, 0, ActionTarget.BODY,
+				ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL_ONOFF, HelpContext.CTRL_LMB_ALL_INVERT),
+		STALK_UNPLUG(MainCategoryName.TOOL2, GameText.read("command_stalkpull"), null, 0, ActionTarget.BODY,
+				ActionControl.LEFT_CLICK, null, null),
+		LIGHTER(MainCategoryName.TOOL2, GameText.read("command_lighter"), null, 0, ActionTarget.BODY,
+				ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL, null),
+		WATER(MainCategoryName.TOOL2, GameText.read("command_water"), null, 0, ActionTarget.BODY,
+				ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL, null),
+		NEEDLE(MainCategoryName.TOOL2, GameText.read("command_needle"), null, 0, ActionTarget.BODY,
+				ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL_ONOFF, HelpContext.CTRL_LMB_ALL_INVERT),
+		BURY(MainCategoryName.TOOL2, GameText.read("command_bury"), null, 0, ActionTarget.BODY,
+				ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL_ONOFF, HelpContext.CTRL_LMB_ALL_INVERT),
+		SET_SICK(MainCategoryName.TOOL2, GameText.read("command_mold"), null, 0, ActionTarget.BODY,
+				ActionControl.LEFT_CLICK, null, null),
+		SET_RAPER(MainCategoryName.TOOL2, GameText.read("command_raper"), null, 0, ActionTarget.BODY,
+				ActionControl.LEFT_CLICK, null, null),
+		// アンプルカテゴリ
+		ORANGE_AMP(MainCategoryName.AMPOULE, GameText.read("item_orange"), null, 0, ActionTarget.BODY,
+				ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL_ONOFF, HelpContext.CTRL_LMB_ALL_INVERT),
+		ACCEL_AMP(MainCategoryName.AMPOULE, GameText.read("item_accell_ampoule"), null, 0, ActionTarget.BODY,
+				ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL_ONOFF, HelpContext.CTRL_LMB_ALL_INVERT),
+		STOP_AMP(MainCategoryName.AMPOULE, GameText.read("item_stop"), null, 0, ActionTarget.BODY,
+				ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL_ONOFF, HelpContext.CTRL_LMB_ALL_INVERT),
+		HUNGRY_AMP(MainCategoryName.AMPOULE, GameText.read("item_hungry"), null, 0, ActionTarget.BODY,
+				ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL_ONOFF, HelpContext.CTRL_LMB_ALL_INVERT),
+		VERYSHIT_AMP(MainCategoryName.AMPOULE, GameText.read("item_veryshit"), null, 0, ActionTarget.BODY,
+				ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL_ONOFF, HelpContext.CTRL_LMB_ALL_INVERT),
+		POISON_AMP(MainCategoryName.AMPOULE, GameText.read("item_poison"), null, 0, ActionTarget.BODY,
+				ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL_ONOFF, HelpContext.CTRL_LMB_ALL_INVERT),
+		BREEDING_AMP(MainCategoryName.AMPOULE, GameText.read("item_breeding"), null, 0, ActionTarget.BODY,
+				ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL_ONOFF, HelpContext.CTRL_LMB_ALL_INVERT),
+		ANYD_AMP(MainCategoryName.AMPOULE, GameText.read("item_anti_nyd"), null, 0, ActionTarget.BODY,
+				ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL_ONOFF, HelpContext.CTRL_LMB_ALL_INVERT),
 		// えさカテゴリ
-		NORMAL(MainCategoryName.FOODS,GameText.read("command_food_normal"), Food.class, 3, ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null,null),
-		BITTER(MainCategoryName.FOODS, GameText.read("command_food_bitter"), Food.class, 4, ActionTarget.TERRAIN,ActionControl.LEFT_CLICK, null, null),
-		LEMON_POP(MainCategoryName.FOODS, GameText.read("command_food_ramune"), Food.class, 5,ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null, null),
-		HOT(MainCategoryName.FOODS,GameText.read("command_food_hot"), Food.class, 6, ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null,null),
-		VIYUGRA(MainCategoryName.FOODS, GameText.read("command_food_viagra"), Food.class, 7,ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null,null),
-		SWEETS1(MainCategoryName.FOODS, GameText.read("command_food_sweet1"), Food.class, 0,ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null,null),
-		SWEETS2(MainCategoryName.FOODS, GameText.read("command_food_sweet2"), Food.class,1, ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null,null),
-		WASTE(MainCategoryName.FOODS, GameText.read("command_food_garbage"), Food.class,8, ActionTarget.TERRAIN,ActionControl.LEFT_CLICK, null,null),
-		AUTO(MainCategoryName.FOODS, GameText.read("command_food_auto"),AutoFeeder.class, 0,ActionTarget.TERRAIN,ActionControl.LEFT_CLICK, null, null),
+		NORMAL(MainCategoryName.FOODS, GameText.read("command_food_normal"), Food.class, 3, ActionTarget.TERRAIN,
+				ActionControl.LEFT_CLICK, null, null),
+		BITTER(MainCategoryName.FOODS, GameText.read("command_food_bitter"), Food.class, 4, ActionTarget.TERRAIN,
+				ActionControl.LEFT_CLICK, null, null),
+		LEMON_POP(MainCategoryName.FOODS, GameText.read("command_food_ramune"), Food.class, 5, ActionTarget.TERRAIN,
+				ActionControl.LEFT_CLICK, null, null),
+		HOT(MainCategoryName.FOODS, GameText.read("command_food_hot"), Food.class, 6, ActionTarget.TERRAIN,
+				ActionControl.LEFT_CLICK, null, null),
+		VIYUGRA(MainCategoryName.FOODS, GameText.read("command_food_viagra"), Food.class, 7, ActionTarget.TERRAIN,
+				ActionControl.LEFT_CLICK, null, null),
+		SWEETS1(MainCategoryName.FOODS, GameText.read("command_food_sweet1"), Food.class, 0, ActionTarget.TERRAIN,
+				ActionControl.LEFT_CLICK, null, null),
+		SWEETS2(MainCategoryName.FOODS, GameText.read("command_food_sweet2"), Food.class, 1, ActionTarget.TERRAIN,
+				ActionControl.LEFT_CLICK, null, null),
+		WASTE(MainCategoryName.FOODS, GameText.read("command_food_garbage"), Food.class, 8, ActionTarget.TERRAIN,
+				ActionControl.LEFT_CLICK, null, null),
+		AUTO(MainCategoryName.FOODS, GameText.read("command_food_auto"), AutoFeeder.class, 0, ActionTarget.TERRAIN,
+				ActionControl.LEFT_CLICK, null, null),
 		// 清掃カテゴリ
-		INDIVIDUAL(MainCategoryName.CLEAN, GameText.read("command_clean_per"), null, 0, ActionTarget.BODY_AND_GADGET, ActionControl.LEFT_CLICK, null,null),
-		YU_CLEAN(MainCategoryName.CLEAN, GameText.read("command_clean_yuclean"), null, 0, ActionTarget.IMMEDIATE,ActionControl.LEFT_CLICK, null, null),
-		BODY(MainCategoryName.CLEAN, GameText.read("command_clean_body"), null, 0,ActionTarget.IMMEDIATE, ActionControl.LEFT_CLICK, null,null),
-		SHIT(MainCategoryName.CLEAN, GameText.read("command_clean_shit"), null, 0, ActionTarget.IMMEDIATE,ActionControl.LEFT_CLICK, null, null),
-		ETC(MainCategoryName.CLEAN, GameText.read("command_clean_etc"), null,0, ActionTarget.IMMEDIATE, ActionControl.LEFT_CLICK, null,null),
-		ALL(MainCategoryName.CLEAN, GameText.read("command_clean_all"), null, 0,ActionTarget.IMMEDIATE, ActionControl.LEFT_CLICK, null, null),
+		INDIVIDUAL(MainCategoryName.CLEAN, GameText.read("command_clean_per"), null, 0, ActionTarget.BODY_AND_GADGET,
+				ActionControl.LEFT_CLICK, null, null),
+		YU_CLEAN(MainCategoryName.CLEAN, GameText.read("command_clean_yuclean"), null, 0, ActionTarget.IMMEDIATE,
+				ActionControl.LEFT_CLICK, null, null),
+		BODY(MainCategoryName.CLEAN, GameText.read("command_clean_body"), null, 0, ActionTarget.IMMEDIATE,
+				ActionControl.LEFT_CLICK, null, null),
+		SHIT(MainCategoryName.CLEAN, GameText.read("command_clean_shit"), null, 0, ActionTarget.IMMEDIATE,
+				ActionControl.LEFT_CLICK, null, null),
+		ETC(MainCategoryName.CLEAN, GameText.read("command_clean_etc"), null, 0, ActionTarget.IMMEDIATE,
+				ActionControl.LEFT_CLICK, null, null),
+		ALL(MainCategoryName.CLEAN, GameText.read("command_clean_all"), null, 0, ActionTarget.IMMEDIATE,
+				ActionControl.LEFT_CLICK, null, null),
 		// おかざりカテゴリ
-		OKAZARI_HIDE(MainCategoryName.ACCESSORY, GameText.read("command_okazari"), null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK,HelpContext.SHIFT_LMB_ALL_ONOFF, HelpContext.CTRL_LMB_ALL_INVERT),
+		OKAZARI_HIDE(MainCategoryName.ACCESSORY, GameText.read("command_okazari"), null, 0, ActionTarget.BODY,
+				ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL_ONOFF, HelpContext.CTRL_LMB_ALL_INVERT),
 		// おくるみカテゴリ
-		PANTS_NORMAL(MainCategoryName.PANTS, GameText.read("command_okurumi"), null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK,HelpContext.SHIFT_LMB_ALL_ONOFF, HelpContext.CTRL_LMB_ALL_INVERT),
+		PANTS_NORMAL(MainCategoryName.PANTS, GameText.read("command_okurumi"), null, 0, ActionTarget.BODY,
+				ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL_ONOFF, HelpContext.CTRL_LMB_ALL_INVERT),
 		// 床設置カテゴリ
-		TOILET(MainCategoryName.FLOOR, GameText.read("command_floor_toilet"), Toilet.class, 0, ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null,null),
-		BED(MainCategoryName.FLOOR, GameText.read("command_floor_bed"), Bed.class, 0, ActionTarget.TERRAIN, ActionControl.LEFT_CLICK,null, null),
-		STICKY_PLATE(MainCategoryName.FLOOR, GameText.read("command_floor_sticky"), StickyPlate.class, 0,ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null,null),
-		HOT_PLATE(MainCategoryName.FLOOR, GameText.read("command_floor_hotplate"), HotPlate.class, 0,ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null,null),
-		PROCESSER_PLATE(MainCategoryName.FLOOR, GameText.read("command_floor_process"), ProcesserPlate.class,0, ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null,null),
-		FOOD_MAKER(MainCategoryName.FLOOR, GameText.read("command_floor_foodmaker"), FoodMaker.class, 0,ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null,null),
-		MIXER(MainCategoryName.FLOOR, GameText.read("command_floor_mixer"), Mixer.class, 0,ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null,null),
-		DIFFUSER(MainCategoryName.FLOOR, GameText.read("command_floor_diffuser"),Diffuser.class, 0,ActionTarget.TERRAIN_AND_GADET,ActionControl.LEFT_CLICK, null,null),
-		ORANGE_POOL(MainCategoryName.FLOOR,GameText.read("command_floor_orangepool"), OrangePool.class, 0,ActionTarget.TERRAIN_AND_GADET,ActionControl.LEFT_CLICK, null,null),
-		BREED_POOL(MainCategoryName.FLOOR, GameText.read("command_floor_cultivation"),BreedingPool.class, 0,ActionTarget.TERRAIN_AND_GADET,ActionControl.LEFT_CLICK, null,null),
-		GARBAGE_CHUTE(MainCategoryName.FLOOR,GameText.read("command_floor_dustchute"),GarbageChute.class, 0,ActionTarget.TERRAIN,ActionControl.LEFT_CLICK,null,null),
-		MACHINE_PRESS(MainCategoryName.FLOOR,GameText.read("command_floor_press"),MachinePress.class,0,ActionTarget.TERRAIN,ActionControl.LEFT_CLICK,null,null), 
-		GENERATOR(MainCategoryName.FLOOR,GameText.read("command_floor_generator"),Generator.class,0,ActionTarget.TERRAIN,ActionControl.LEFT_CLICK,null,null), 
-		PRODUCT_CHUTE(MainCategoryName.FLOOR,GameText.read("command_floor_product"),ProductChute.class,0,ActionTarget.TERRAIN,ActionControl.LEFT_CLICK,null,null),
+		TOILET(MainCategoryName.FLOOR, GameText.read("command_floor_toilet"), Toilet.class, 0, ActionTarget.TERRAIN,
+				ActionControl.LEFT_CLICK, null, null),
+		BED(MainCategoryName.FLOOR, GameText.read("command_floor_bed"), Bed.class, 0, ActionTarget.TERRAIN,
+				ActionControl.LEFT_CLICK, null, null),
+		STICKY_PLATE(MainCategoryName.FLOOR, GameText.read("command_floor_sticky"), StickyPlate.class, 0,
+				ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null, null),
+		HOT_PLATE(MainCategoryName.FLOOR, GameText.read("command_floor_hotplate"), HotPlate.class, 0,
+				ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null, null),
+		PROCESSER_PLATE(MainCategoryName.FLOOR, GameText.read("command_floor_process"), ProcesserPlate.class, 0,
+				ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null, null),
+		FOOD_MAKER(MainCategoryName.FLOOR, GameText.read("command_floor_foodmaker"), FoodMaker.class, 0,
+				ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null, null),
+		MIXER(MainCategoryName.FLOOR, GameText.read("command_floor_mixer"), Mixer.class, 0, ActionTarget.TERRAIN,
+				ActionControl.LEFT_CLICK, null, null),
+		DIFFUSER(MainCategoryName.FLOOR, GameText.read("command_floor_diffuser"), Diffuser.class, 0,
+				ActionTarget.TERRAIN_AND_GADET, ActionControl.LEFT_CLICK, null, null),
+		ORANGE_POOL(MainCategoryName.FLOOR, GameText.read("command_floor_orangepool"), OrangePool.class, 0,
+				ActionTarget.TERRAIN_AND_GADET, ActionControl.LEFT_CLICK, null, null),
+		BREED_POOL(MainCategoryName.FLOOR, GameText.read("command_floor_cultivation"), BreedingPool.class, 0,
+				ActionTarget.TERRAIN_AND_GADET, ActionControl.LEFT_CLICK, null, null),
+		GARBAGE_CHUTE(MainCategoryName.FLOOR, GameText.read("command_floor_dustchute"), GarbageChute.class, 0,
+				ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null, null),
+		MACHINE_PRESS(MainCategoryName.FLOOR, GameText.read("command_floor_press"), MachinePress.class, 0,
+				ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null, null),
+		GENERATOR(MainCategoryName.FLOOR, GameText.read("command_floor_generator"), Generator.class, 0,
+				ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null, null),
+		PRODUCT_CHUTE(MainCategoryName.FLOOR, GameText.read("command_floor_product"), ProductChute.class, 0,
+				ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null, null),
 		// フィールドカテゴリ
-		GAP_MINI(MainCategoryName.BARRIER, GameText.read("command_field_dansashou"), null, 1, ActionTarget.TERRAIN, ActionControl.LEFT_MULTI_CLICK, null,null),
-		GAP_BIG(MainCategoryName.BARRIER, GameText.read("command_field_dansadai"), null, 1, ActionTarget.TERRAIN,ActionControl.LEFT_MULTI_CLICK, null, null),
-		NET_MINI(MainCategoryName.BARRIER, GameText.read("command_field_wireshou"), null,1, ActionTarget.TERRAIN, ActionControl.LEFT_MULTI_CLICK, null,null),
-		NET_BIG(MainCategoryName.BARRIER, GameText.read("command_field_wiredai"), null, 1, ActionTarget.TERRAIN,ActionControl.LEFT_MULTI_CLICK, null, null),
-		WALL(MainCategoryName.BARRIER, GameText.read("command_field_wall"),null, 1, ActionTarget.TERRAIN, ActionControl.LEFT_MULTI_CLICK, null,null),
-		ITEM(MainCategoryName.BARRIER, GameText.read("command_field_noitem"), null, 1,ActionTarget.TERRAIN, ActionControl.LEFT_MULTI_CLICK, null,null),
-		NoUNUN(MainCategoryName.BARRIER, GameText.read("command_field_noitemunun"), null, 1,ActionTarget.TERRAIN, ActionControl.LEFT_MULTI_CLICK,null, null),
-		KEKKAI(MainCategoryName.BARRIER, GameText.read("command_field_kekkai"),null, 1, ActionTarget.TERRAIN,ActionControl.LEFT_MULTI_CLICK, null,null),
-		POOL(MainCategoryName.BARRIER, GameText.read("command_field_pond"), null,2, ActionTarget.TERRAIN,ActionControl.LEFT_MULTI_CLICK, null,null),
-		FARM(MainCategoryName.BARRIER,GameText.read("command_field_hatake"), null, 3,ActionTarget.TERRAIN,ActionControl.LEFT_MULTI_CLICK,null, null),
-		BELTCONVEYOR(MainCategoryName.BARRIER,GameText.read("command_belcon"), null, 4,ActionTarget.TERRAIN,ActionControl.LEFT_MULTI_CLICK,null,null),
-		WALL_DELETE(MainCategoryName.BARRIER,GameText.read("command_field_removewall"), null, 0,ActionTarget.WALL,ActionControl.LEFT_CLICK,null,null),
-		FIELD_DELETE(MainCategoryName.BARRIER,GameText.read("command_field_removefield"),null, 0,ActionTarget.FIELD,ActionControl.LEFT_CLICK,null,null), 
-		ALL_DELETE(MainCategoryName.BARRIER,GameText.read("command_field_removeall"),null,0,ActionTarget.IMMEDIATE,ActionControl.LEFT_CLICK,null,null),
+		GAP_MINI(MainCategoryName.BARRIER, GameText.read("command_field_dansashou"), null, 1, ActionTarget.TERRAIN,
+				ActionControl.LEFT_MULTI_CLICK, null, null),
+		GAP_BIG(MainCategoryName.BARRIER, GameText.read("command_field_dansadai"), null, 1, ActionTarget.TERRAIN,
+				ActionControl.LEFT_MULTI_CLICK, null, null),
+		NET_MINI(MainCategoryName.BARRIER, GameText.read("command_field_wireshou"), null, 1, ActionTarget.TERRAIN,
+				ActionControl.LEFT_MULTI_CLICK, null, null),
+		NET_BIG(MainCategoryName.BARRIER, GameText.read("command_field_wiredai"), null, 1, ActionTarget.TERRAIN,
+				ActionControl.LEFT_MULTI_CLICK, null, null),
+		WALL(MainCategoryName.BARRIER, GameText.read("command_field_wall"), null, 1, ActionTarget.TERRAIN,
+				ActionControl.LEFT_MULTI_CLICK, null, null),
+		ITEM(MainCategoryName.BARRIER, GameText.read("command_field_noitem"), null, 1, ActionTarget.TERRAIN,
+				ActionControl.LEFT_MULTI_CLICK, null, null),
+		NoUNUN(MainCategoryName.BARRIER, GameText.read("command_field_noitemunun"), null, 1, ActionTarget.TERRAIN,
+				ActionControl.LEFT_MULTI_CLICK, null, null),
+		KEKKAI(MainCategoryName.BARRIER, GameText.read("command_field_kekkai"), null, 1, ActionTarget.TERRAIN,
+				ActionControl.LEFT_MULTI_CLICK, null, null),
+		POOL(MainCategoryName.BARRIER, GameText.read("command_field_pond"), null, 2, ActionTarget.TERRAIN,
+				ActionControl.LEFT_MULTI_CLICK, null, null),
+		FARM(MainCategoryName.BARRIER, GameText.read("command_field_hatake"), null, 3, ActionTarget.TERRAIN,
+				ActionControl.LEFT_MULTI_CLICK, null, null),
+		BELTCONVEYOR(MainCategoryName.BARRIER, GameText.read("command_belcon"), null, 4, ActionTarget.TERRAIN,
+				ActionControl.LEFT_MULTI_CLICK, null, null),
+		WALL_DELETE(MainCategoryName.BARRIER, GameText.read("command_field_removewall"), null, 0, ActionTarget.WALL,
+				ActionControl.LEFT_CLICK, null, null),
+		FIELD_DELETE(MainCategoryName.BARRIER, GameText.read("command_field_removefield"), null, 0, ActionTarget.FIELD,
+				ActionControl.LEFT_CLICK, null, null),
+		ALL_DELETE(MainCategoryName.BARRIER, GameText.read("command_field_removeall"), null, 0, ActionTarget.IMMEDIATE,
+				ActionControl.LEFT_CLICK, null, null),
 		// おもちゃカテゴリ
-		BALL(MainCategoryName.TOYS, GameText.read("command_toys_ball"), Toy.class, 0, ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null,null),
-		YUNBA(MainCategoryName.TOYS, GameText.read("command_toys_yunba"), Yunba.class, 0, ActionTarget.TERRAIN,ActionControl.LEFT_CLICK, null, null),
-		YUNBA_SETUP(MainCategoryName.TOYS, GameText.read("command_toys_yunbasettings"), null, 0,ActionTarget.GADGET, ActionControl.LEFT_CLICK, null, null), 
-		SUI(MainCategoryName.TOYS,GameText.read("command_toys_suii"), Sui.class, 0, ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null,null),
-		TRASH(MainCategoryName.TOYS, GameText.read("command_toys_junk"), Trash.class, 0,ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null,null),
-		TRAMPOLINE(MainCategoryName.TOYS, GameText.read("command_toys_trampolin"), Trampoline.class, 0,ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null,null),
-		STONE(MainCategoryName.TOYS, GameText.read("command_toys_stone"), Stone.class, 0,ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null,null),
+		BALL(MainCategoryName.TOYS, GameText.read("command_toys_ball"), Toy.class, 0, ActionTarget.TERRAIN,
+				ActionControl.LEFT_CLICK, null, null),
+		YUNBA(MainCategoryName.TOYS, GameText.read("command_toys_yunba"), Yunba.class, 0, ActionTarget.TERRAIN,
+				ActionControl.LEFT_CLICK, null, null),
+		YUNBA_SETUP(MainCategoryName.TOYS, GameText.read("command_toys_yunbasettings"), null, 0, ActionTarget.GADGET,
+				ActionControl.LEFT_CLICK, null, null),
+		SUI(MainCategoryName.TOYS, GameText.read("command_toys_suii"), Sui.class, 0, ActionTarget.TERRAIN,
+				ActionControl.LEFT_CLICK, null, null),
+		TRASH(MainCategoryName.TOYS, GameText.read("command_toys_junk"), Trash.class, 0, ActionTarget.TERRAIN,
+				ActionControl.LEFT_CLICK, null, null),
+		TRAMPOLINE(MainCategoryName.TOYS, GameText.read("command_toys_trampolin"), Trampoline.class, 0,
+				ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null, null),
+		STONE(MainCategoryName.TOYS, GameText.read("command_toys_stone"), Stone.class, 0, ActionTarget.TERRAIN,
+				ActionControl.LEFT_CLICK, null, null),
 		// コンベアカテゴリ
-		BELTCONVEYOR_CUSTOM(MainCategoryName.CONVEYOR, GameText.read("command_conveyer_custom"), null, 5, ActionTarget.TERRAIN,ActionControl.LEFT_MULTI_CLICK, null, null),
-		BELTCONVEYOR_SETUP(MainCategoryName.CONVEYOR, GameText.read("command_conveyer_changesettings"), null,5, ActionTarget.GADGET, ActionControl.LEFT_CLICK, null, null),
+		BELTCONVEYOR_CUSTOM(MainCategoryName.CONVEYOR, GameText.read("command_conveyer_custom"), null, 5,
+				ActionTarget.TERRAIN, ActionControl.LEFT_MULTI_CLICK, null, null),
+		BELTCONVEYOR_SETUP(MainCategoryName.CONVEYOR, GameText.read("command_conveyer_changesettings"), null, 5,
+				ActionTarget.GADGET, ActionControl.LEFT_CLICK, null, null),
 		// 声掛け
-		YUKKURISITEITTENE(MainCategoryName.VOICE, GameText.read("command_say_takeiteasy"), null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK,HelpContext.SHIFT_LMB_ALL_ONOFF, null),
-		YUKKURIDIE(MainCategoryName.VOICE, GameText.read("command_say_dropdeadeasy"), null, 0,ActionTarget.BODY, ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL_ONOFF,null),
-		YUKKURIFURIFURI(MainCategoryName.VOICE, GameText.read("command_say_morunmorun"), null, 0, ActionTarget.BODY,ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL_ONOFF, null),
+		YUKKURISITEITTENE(MainCategoryName.VOICE, GameText.read("command_say_takeiteasy"), null, 0, ActionTarget.BODY,
+				ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL_ONOFF, null),
+		YUKKURIDIE(MainCategoryName.VOICE, GameText.read("command_say_dropdeadeasy"), null, 0, ActionTarget.BODY,
+				ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL_ONOFF, null),
+		YUKKURIFURIFURI(MainCategoryName.VOICE, GameText.read("command_say_morunmorun"), null, 0, ActionTarget.BODY,
+				ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL_ONOFF, null),
 		// テストコマンド
-		RANKSET(MainCategoryName.TEST, GameText.read("command_test_pick"), null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK, null,null),
-		RANKSET2(MainCategoryName.TEST, GameText.read("command_test_ununslave"), null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK,null, null),
-		GARBAGE_STATION(MainCategoryName.TEST, GameText.read("command_test_garbagepoint"), GarbageStation.class, 0,ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null,null), 
-		BED_NORA(MainCategoryName.TEST, GameText.read("command_test_bednora"), Bed.class, 1, ActionTarget.TERRAIN,ActionControl.LEFT_CLICK, null, null), 
-		TOILET_NORA(MainCategoryName.TEST,GameText.read("command_test_toiletnora"), Toilet.class, 1, ActionTarget.TERRAIN,ActionControl.LEFT_CLICK, null, null),
-		HOUSE_NORA(MainCategoryName.TEST,GameText.read("command_test_homenora"), House.class, 1, ActionTarget.TERRAIN,ActionControl.LEFT_CLICK, null,null),
-		GARBAGE_NORA(MainCategoryName.TEST, GameText.read("command_test_dustnora"),GarbageChute.class, 1, ActionTarget.TERRAIN,ActionControl.LEFT_CLICK, null,null),
-		ORANGE_NORA(MainCategoryName.TEST, GameText.read("command_test_orangenora"),OrangePool.class, 1, ActionTarget.TERRAIN,ActionControl.LEFT_CLICK, null,null),
-		STICKY_NORA(MainCategoryName.TEST,GameText.read("command_test_stickynora"), StickyPlate.class, 1,ActionTarget.TERRAIN,ActionControl.LEFT_CLICK, null,null),
-		TOY_NORA(MainCategoryName.TEST,GameText.read("command_test_toynora"), Toy.class, 1,ActionTarget.TERRAIN,ActionControl.LEFT_CLICK, null,null),
-		REMOVEALL(MainCategoryName.TEST,GameText.read("command_test_exterm"), null, 0,ActionTarget.IMMEDIATE,ActionControl.LEFT_CLICK,null, null),
-		EVENT_SHIT(MainCategoryName.TEST,GameText.read("command_test_ununtaiso"),null, 0,ActionTarget.BODY,ActionControl.LEFT_CLICK,null,null),
-		EVENT_EAT(MainCategoryName.TEST,GameText.read("command_test_super"),null, 0,ActionTarget.BODY,ActionControl.LEFT_CLICK,null,null),
-		EVENT_RIDEYUKKURI(MainCategoryName.TEST,GameText.read("command_test_ochibihakobi"),null,0,ActionTarget.BODY,ActionControl.LEFT_CLICK,null,null),
-		EVENT_PROUDCHILD(MainCategoryName.TEST,GameText.read("command_test_ochibijiman"),null,0,ActionTarget.BODY,ActionControl.LEFT_CLICK,null,null),
-		SETVAIN(MainCategoryName.TEST,GameText.read("command_test_vain"),null,0,ActionTarget.BODY,ActionControl.LEFT_CLICK,null,null), 
-		Yunnyaa(MainCategoryName.TEST,GameText.read("command_test_yunyaaa"),	null,0,ActionTarget.BODY,ActionControl.LEFT_CLICK,null,null),
-		BEGGINGFORLIFE(MainCategoryName.TEST,GameText.read("command_test_beg"),null,0,ActionTarget.BODY,ActionControl.LEFT_CLICK,null,null),
-		PREDATORSGAME(MainCategoryName.TEST,GameText.read("command_test_playofpredetor"),null,0,ActionTarget.BODY,ActionControl.LEFT_CLICK,null,null),
-		INVITEANTS(MainCategoryName.TEST,GameText.read("command_test_ants"),null,0,ActionTarget.BODY,ActionControl.LEFT_CLICK,null,null),
-		FEED(MainCategoryName.TEST,GameText.read("command_test_forcefeed"),null,0,ActionTarget.BODY,ActionControl.LEFT_CLICK,null,null),
-		BADGE(MainCategoryName.TEST,GameText.read("item_badge"),null,0,ActionTarget.BODY,ActionControl.LEFT_CLICK,	null,null),
-		;
+		RANKSET(MainCategoryName.TEST, GameText.read("command_test_pick"), null, 0, ActionTarget.BODY,
+				ActionControl.LEFT_CLICK, null, null),
+		RANKSET2(MainCategoryName.TEST, GameText.read("command_test_ununslave"), null, 0, ActionTarget.BODY,
+				ActionControl.LEFT_CLICK, null, null),
+		GARBAGE_STATION(MainCategoryName.TEST, GameText.read("command_test_garbagepoint"), GarbageStation.class, 0,
+				ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null, null),
+		BED_NORA(MainCategoryName.TEST, GameText.read("command_test_bednora"), Bed.class, 1, ActionTarget.TERRAIN,
+				ActionControl.LEFT_CLICK, null, null),
+		TOILET_NORA(MainCategoryName.TEST, GameText.read("command_test_toiletnora"), Toilet.class, 1,
+				ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null, null),
+		HOUSE_NORA(MainCategoryName.TEST, GameText.read("command_test_homenora"), House.class, 1, ActionTarget.TERRAIN,
+				ActionControl.LEFT_CLICK, null, null),
+		GARBAGE_NORA(MainCategoryName.TEST, GameText.read("command_test_dustnora"), GarbageChute.class, 1,
+				ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null, null),
+		ORANGE_NORA(MainCategoryName.TEST, GameText.read("command_test_orangenora"), OrangePool.class, 1,
+				ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null, null),
+		STICKY_NORA(MainCategoryName.TEST, GameText.read("command_test_stickynora"), StickyPlate.class, 1,
+				ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null, null),
+		TOY_NORA(MainCategoryName.TEST, GameText.read("command_test_toynora"), Toy.class, 1, ActionTarget.TERRAIN,
+				ActionControl.LEFT_CLICK, null, null),
+		REMOVEALL(MainCategoryName.TEST, GameText.read("command_test_exterm"), null, 0, ActionTarget.IMMEDIATE,
+				ActionControl.LEFT_CLICK, null, null),
+		EVENT_SHIT(MainCategoryName.TEST, GameText.read("command_test_ununtaiso"), null, 0, ActionTarget.BODY,
+				ActionControl.LEFT_CLICK, null, null),
+		EVENT_EAT(MainCategoryName.TEST, GameText.read("command_test_super"), null, 0, ActionTarget.BODY,
+				ActionControl.LEFT_CLICK, null, null),
+		EVENT_RIDEYUKKURI(MainCategoryName.TEST, GameText.read("command_test_ochibihakobi"), null, 0, ActionTarget.BODY,
+				ActionControl.LEFT_CLICK, null, null),
+		EVENT_PROUDCHILD(MainCategoryName.TEST, GameText.read("command_test_ochibijiman"), null, 0, ActionTarget.BODY,
+				ActionControl.LEFT_CLICK, null, null),
+		SETVAIN(MainCategoryName.TEST, GameText.read("command_test_vain"), null, 0, ActionTarget.BODY,
+				ActionControl.LEFT_CLICK, null, null),
+		Yunnyaa(MainCategoryName.TEST, GameText.read("command_test_yunyaaa"), null, 0, ActionTarget.BODY,
+				ActionControl.LEFT_CLICK, null, null),
+		BEGGINGFORLIFE(MainCategoryName.TEST, GameText.read("command_test_beg"), null, 0, ActionTarget.BODY,
+				ActionControl.LEFT_CLICK, null, null),
+		PREDATORSGAME(MainCategoryName.TEST, GameText.read("command_test_playofpredetor"), null, 0, ActionTarget.BODY,
+				ActionControl.LEFT_CLICK, null, null),
+		INVITEANTS(MainCategoryName.TEST, GameText.read("command_test_ants"), null, 0, ActionTarget.BODY,
+				ActionControl.LEFT_CLICK, null, null),
+		FEED(MainCategoryName.TEST, GameText.read("command_test_forcefeed"), null, 0, ActionTarget.BODY,
+				ActionControl.LEFT_CLICK, null, null),
+		BADGE(MainCategoryName.TEST, GameText.read("item_badge"), null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK,
+				null, null),
+				;
 
 		private MainCategoryName group;
 		private String displayName;
@@ -372,7 +493,7 @@ public class GadgetMenu {
 		}
 	}
 
-	/**メインカテゴリボタンの種類*/
+	/** メインカテゴリボタンの種類 */
 	private static final GadgetList[] MainCategory = {
 			GadgetList.TOOL,
 			GadgetList.TOOL2,
@@ -388,10 +509,11 @@ public class GadgetMenu {
 			GadgetList.VOICE,
 			GadgetList.TEST
 	};
-	/**メインカテゴリ用コンボボックス定義*/
-	private static final DefaultComboBoxModel<GadgetList> mainModel = new DefaultComboBoxModel<GadgetList>(MainCategory);
+	/** メインカテゴリ用コンボボックス定義 */
+	private static final DefaultComboBoxModel<GadgetList> mainModel = new DefaultComboBoxModel<GadgetList>(
+			MainCategory);
 
-	/**道具カテゴリボタンの種類*/
+	/** 道具カテゴリボタンの種類 */
 	private static final GadgetList[] ToolCategory = {
 			GadgetList.PUNISH,
 			GadgetList.SNAPPING,
@@ -416,10 +538,11 @@ public class GadgetMenu {
 			GadgetList.STOMP,
 			GadgetList.GODHAND
 	};
-	/**道具カテゴリ用コンボボックス定義*/
-	private static final DefaultComboBoxModel<GadgetList> toolModel = new DefaultComboBoxModel<GadgetList>(ToolCategory);
+	/** 道具カテゴリ用コンボボックス定義 */
+	private static final DefaultComboBoxModel<GadgetList> toolModel = new DefaultComboBoxModel<GadgetList>(
+			ToolCategory);
 
-	/**道具2カテゴリボタンの種類*/
+	/** 道具2カテゴリボタンの種類 */
 	private static final GadgetList[] ToolCategory2 = {
 			GadgetList.BRAID_PLUCK,
 			GadgetList.ANAL_CLOSE,
@@ -433,10 +556,11 @@ public class GadgetMenu {
 			GadgetList.SET_SICK,
 			GadgetList.SET_RAPER,
 	};
-	/**道具2カテゴリ用コンボボックス定義*/
-	private static final DefaultComboBoxModel<GadgetList> toolModel2 = new DefaultComboBoxModel<GadgetList>(ToolCategory2);
+	/** 道具2カテゴリ用コンボボックス定義 */
+	private static final DefaultComboBoxModel<GadgetList> toolModel2 = new DefaultComboBoxModel<GadgetList>(
+			ToolCategory2);
 
-	/**アンプルカテゴリボタンの種類*/
+	/** アンプルカテゴリボタンの種類 */
 	private static final GadgetList[] AmpouleCategory = {
 			GadgetList.ORANGE_AMP,
 			GadgetList.ACCEL_AMP,
@@ -447,10 +571,11 @@ public class GadgetMenu {
 			GadgetList.BREEDING_AMP,
 			GadgetList.ANYD_AMP,
 	};
-	/**アンプルカテゴリ用コンボボックス定義*/
-	private static final DefaultComboBoxModel<GadgetList> AmpouleModel = new DefaultComboBoxModel<GadgetList>(AmpouleCategory);
+	/** アンプルカテゴリ用コンボボックス定義 */
+	private static final DefaultComboBoxModel<GadgetList> AmpouleModel = new DefaultComboBoxModel<GadgetList>(
+			AmpouleCategory);
 
-	/**えさカテゴリボタンの種類*/
+	/** えさカテゴリボタンの種類 */
 	private static final GadgetList[] FoodCategory = {
 			GadgetList.NORMAL,
 			GadgetList.BITTER,
@@ -462,10 +587,11 @@ public class GadgetMenu {
 			GadgetList.WASTE,
 			GadgetList.AUTO
 	};
-	/**えさカテゴリ用コンボボックス定義*/
-	private static final DefaultComboBoxModel<GadgetList> foodModel = new DefaultComboBoxModel<GadgetList>(FoodCategory);
+	/** えさカテゴリ用コンボボックス定義 */
+	private static final DefaultComboBoxModel<GadgetList> foodModel = new DefaultComboBoxModel<GadgetList>(
+			FoodCategory);
 
-	/**清掃カテゴリボタンの種類*/
+	/** 清掃カテゴリボタンの種類 */
 	private static final GadgetList[] CleanCategory = {
 			GadgetList.INDIVIDUAL,
 			GadgetList.YU_CLEAN,
@@ -474,24 +600,27 @@ public class GadgetMenu {
 			GadgetList.ETC,
 			GadgetList.ALL
 	};
-	/**清掃カテゴリ用コンボボックス定義*/
-	private static final DefaultComboBoxModel<GadgetList> cleanModel = new DefaultComboBoxModel<GadgetList>(CleanCategory);
+	/** 清掃カテゴリ用コンボボックス定義 */
+	private static final DefaultComboBoxModel<GadgetList> cleanModel = new DefaultComboBoxModel<GadgetList>(
+			CleanCategory);
 
-	/**おかざりカテゴリボタンの種類*/
+	/** おかざりカテゴリボタンの種類 */
 	private static final GadgetList[] OkazariCategory = {
 			GadgetList.OKAZARI_HIDE,
 	};
-	/**おかざりカテゴリ用コンボボックス定義*/
-	private static final DefaultComboBoxModel<GadgetList> okazariModel = new DefaultComboBoxModel<GadgetList>(OkazariCategory);
+	/** おかざりカテゴリ用コンボボックス定義 */
+	private static final DefaultComboBoxModel<GadgetList> okazariModel = new DefaultComboBoxModel<GadgetList>(
+			OkazariCategory);
 
-	/**おくるみカテゴリボタンの種類*/
+	/** おくるみカテゴリボタンの種類 */
 	private static final GadgetList[] PantsCategory = {
 			GadgetList.PANTS_NORMAL,
 	};
-	/**おくるみカテゴリ用コンボボックス定義*/
-	private static final DefaultComboBoxModel<GadgetList> pantsModel = new DefaultComboBoxModel<GadgetList>(PantsCategory);
+	/** おくるみカテゴリ用コンボボックス定義 */
+	private static final DefaultComboBoxModel<GadgetList> pantsModel = new DefaultComboBoxModel<GadgetList>(
+			PantsCategory);
 
-	/**床設置カテゴリボタンの種類*/
+	/** 床設置カテゴリボタンの種類 */
 	private static final GadgetList[] FloorCategory = {
 			GadgetList.TOILET,
 			GadgetList.BED,
@@ -508,10 +637,11 @@ public class GadgetMenu {
 			GadgetList.GENERATOR,
 			GadgetList.PRODUCT_CHUTE
 	};
-	/**床設置カテゴリ用コンボボックス定義*/
-	private static final DefaultComboBoxModel<GadgetList> floorModel = new DefaultComboBoxModel<GadgetList>(FloorCategory);
+	/** 床設置カテゴリ用コンボボックス定義 */
+	private static final DefaultComboBoxModel<GadgetList> floorModel = new DefaultComboBoxModel<GadgetList>(
+			FloorCategory);
 
-	/**フィールドカテゴリボタンの種類*/
+	/** フィールドカテゴリボタンの種類 */
 	private static final GadgetList[] BarrierCategory = {
 			GadgetList.GAP_MINI,
 			GadgetList.GAP_BIG,
@@ -528,10 +658,11 @@ public class GadgetMenu {
 			GadgetList.FIELD_DELETE,
 			GadgetList.ALL_DELETE
 	};
-	/**フィールド用コンボボックス定義*/
-	private static final DefaultComboBoxModel<GadgetList> barrierModel = new DefaultComboBoxModel<GadgetList>(BarrierCategory);
+	/** フィールド用コンボボックス定義 */
+	private static final DefaultComboBoxModel<GadgetList> barrierModel = new DefaultComboBoxModel<GadgetList>(
+			BarrierCategory);
 
-	/**おもちゃカテゴリボタンの種類*/
+	/** おもちゃカテゴリボタンの種類 */
 	private static final GadgetList[] ToysCategory = {
 			GadgetList.BALL,
 			GadgetList.YUNBA,
@@ -541,28 +672,29 @@ public class GadgetMenu {
 			GadgetList.TRAMPOLINE,
 			GadgetList.STONE
 	};
-	/**おもちゃ用コンボボックス定義*/
+	/** おもちゃ用コンボボックス定義 */
 	private static final DefaultComboBoxModel<GadgetList> toyModel = new DefaultComboBoxModel<GadgetList>(ToysCategory);
 
-	/**コンベアカテゴリボタンの種類*/
+	/** コンベアカテゴリボタンの種類 */
 	private static final GadgetList[] ConveyorCategory = {
 			GadgetList.BELTCONVEYOR_CUSTOM,
 			GadgetList.BELTCONVEYOR_SETUP
 	};
-	/**コンベアカテゴリ用コンボボックス定義*/
+	/** コンベアカテゴリ用コンボボックス定義 */
 	private static final DefaultComboBoxModel<GadgetList> conveyorModel = new DefaultComboBoxModel<GadgetList>(
 			ConveyorCategory);
 
-	/**声かけカテゴリボタンの種類*/
+	/** 声かけカテゴリボタンの種類 */
 	private static final GadgetList[] VoiceCategory = {
 			GadgetList.YUKKURISITEITTENE,
 			GadgetList.YUKKURIDIE,
 			GadgetList.YUKKURIFURIFURI
 	};
-	/**声かけ用コンボボックス定義*/
-	private static final DefaultComboBoxModel<GadgetList> voiceModel = new DefaultComboBoxModel<GadgetList>(VoiceCategory);
+	/** 声かけ用コンボボックス定義 */
+	private static final DefaultComboBoxModel<GadgetList> voiceModel = new DefaultComboBoxModel<GadgetList>(
+			VoiceCategory);
 
-	/**テストカテゴリボタンの種類*/
+	/** テストカテゴリボタンの種類 */
 	private static final GadgetList[] TestCategory = {
 			GadgetList.RANKSET,
 			GadgetList.RANKSET2,
@@ -587,18 +719,19 @@ public class GadgetMenu {
 			GadgetList.FEED,
 			GadgetList.BADGE
 	};
-	/**テストカテゴリ用コンボボックス定義*/
-	private static final DefaultComboBoxModel<GadgetList> testModel = new DefaultComboBoxModel<GadgetList>(TestCategory);
+	/** テストカテゴリ用コンボボックス定義 */
+	private static final DefaultComboBoxModel<GadgetList> testModel = new DefaultComboBoxModel<GadgetList>(
+			TestCategory);
 
-	/**速度の種類定義*/
+	/** 速度の種類定義 */
 	public static enum GameSpeed {
-		PAUSE(GameText.read("command_gamespeed_pause"), "Pause"), 
-		X1(GameText.read("command_gamespeed_one"), "Speed: x1"), 
-		X2(GameText.read("command_gamespeed_two"), "Speed: x2"), 
-		X5(GameText.read("command_gamespeed_five"),"Speed: x5"),
+		PAUSE(GameText.read("command_gamespeed_pause"), "Pause"),
+		X1(GameText.read("command_gamespeed_one"), "Speed: x1"),
+		X2(GameText.read("command_gamespeed_two"), "Speed: x2"),
+		X5(GameText.read("command_gamespeed_five"), "Speed: x5"),
 		X10(GameText.read("command_gamespeed_ten"), "Speed: x10"),
 		MAX(GameText.read("command_gamespeed_max"), "Speed: Max"),
-				;
+		;
 
 		private String name;
 
@@ -612,16 +745,22 @@ public class GadgetMenu {
 		}
 	}
 
-	/**右上の真ん中のウィンドウ
-	 * <br>初期は”道具”となってるところ*/
+	/**
+	 * 右上の真ん中のウィンドウ
+	 * <br>
+	 * 初期は”道具”となってるところ
+	 */
 	private static GadgetList selectMain = GadgetList.TOOL;
-	/**右上の一番下のウィンドウ
-	 * <br>初期は”おしおき”となってるところ*/
+	/**
+	 * 右上の一番下のウィンドウ
+	 * <br>
+	 * 初期は”おしおき”となってるところ
+	 */
 	private static GadgetList selectSub = GadgetList.PUNISH;
 
-	/**ポップアップ汎用*/
+	/** ポップアップ汎用 */
 	private static final JPopupMenu popup = new JPopupMenu();
-	/**ポップアップが開いているかどうか*/
+	/** ポップアップが開いているかどうか */
 	private static boolean popupDisplay = false;
 	/** ヘルプの番号 */
 	private static int currentHelpNum = 0;
@@ -632,9 +771,9 @@ public class GadgetMenu {
 	/** ヘルプの幅・高さ */
 	private static int helpW, helpH;
 
-	/**アイコンの画像の入れ物*/
+	/** アイコンの画像の入れ物 */
 	private static BufferedImage[] icon;
-	/**ポップアップのインスタンス(?)*/
+	/** ポップアップのインスタンス(?) */
 	private static GadgetMenuPopupAction action = new GadgetMenuPopupAction();
 	/** ヘルプ */
 	private static HelpContext[] currentHelp = new HelpContext[4];
@@ -799,7 +938,7 @@ public class GadgetMenu {
 		return helpH;
 	}
 
-	/**最新状態の右上の、中と下のウィンドウの表示のゲッター*/
+	/** 最新状態の右上の、中と下のウィンドウの表示のゲッター */
 	public static final GadgetList getCurrentGadget() {
 		if (selectSub != null)
 			return selectSub;
@@ -810,6 +949,7 @@ public class GadgetMenu {
 
 	/**
 	 * ヘルプアイコンを取得する.
+	 * 
 	 * @param str ヘルプアイコンを表す文字列
 	 * @return ヘルプアイコン
 	 */
@@ -821,6 +961,7 @@ public class GadgetMenu {
 
 	/**
 	 * ヘルプアイコンのイメージを取得する.
+	 * 
 	 * @param help ヘルプアイコン
 	 * @return ヘルプアイコンのイメージ
 	 */
@@ -828,7 +969,7 @@ public class GadgetMenu {
 		return icon[help.getImageIndex()];
 	}
 
-	/**カテゴリーのポップアップを作る*/
+	/** カテゴリーのポップアップを作る */
 	public static final void createPopupMenu() {
 		icon = IconPool.getHelpIconImageArray();
 		GadgetMenuPopup.createPopupMenu(popup, action);
@@ -836,74 +977,75 @@ public class GadgetMenu {
 
 	/**
 	 * 選択グループのサブリストへ更新
+	 * 
 	 * @param mainSel メインセル
-	 * @param subSel サブセル
+	 * @param subSel  サブセル
 	 */
 	@SuppressWarnings("unchecked")
 	public static final void setSelectCategory(GadgetList mainSel, int subSel) {
 
 		synchronized (SimYukkuri.lock) {
 			switch (mainSel) {
-			case TOOL:
-				MainCommandUI.getSubItemCombo().setModel(toolModel);
-				GadgetMenu.setSelectSub(GadgetMenu.getToolCategory()[subSel]);
-				break;
-			case TOOL2:
-				MainCommandUI.getSubItemCombo().setModel(toolModel2);
-				GadgetMenu.setSelectSub(GadgetMenu.getToolCategory2()[subSel]);
-				break;
-			case AMPOULE:
-				MainCommandUI.getSubItemCombo().setModel(AmpouleModel);
-				GadgetMenu.setSelectSub(GadgetMenu.getAmpouleCategory()[subSel]);
-				break;
-			case FOODS:
-				MainCommandUI.getSubItemCombo().setModel(foodModel);
-				GadgetMenu.setSelectSub(GadgetMenu.getFoodCategory()[subSel]);
-				break;
-			case CLEAN:
-				MainCommandUI.getSubItemCombo().setModel(cleanModel);
-				GadgetMenu.setSelectSub(GadgetMenu.getCleanCategory()[subSel]);
-				break;
-			case ACCESSORY:
-				MainCommandUI.getSubItemCombo().setModel(okazariModel);
-				GadgetMenu.setSelectSub(GadgetMenu.getOkazariCategory()[subSel]);
-				break;
-			case PANTS:
-				MainCommandUI.getSubItemCombo().setModel(pantsModel);
-				GadgetMenu.setSelectSub(GadgetMenu.getPantsCategory()[subSel]);
-				break;
-			case FLOOR:
-				MainCommandUI.getSubItemCombo().setModel(floorModel);
-				GadgetMenu.setSelectSub(GadgetMenu.getFloorCategory()[subSel]);
-				break;
-			case BARRIER:
-				MainCommandUI.getSubItemCombo().setModel(barrierModel);
-				GadgetMenu.setSelectSub(GadgetMenu.getBarrierCategory()[subSel]);
-				break;
-			case TOYS:
-				MainCommandUI.getSubItemCombo().setModel(toyModel);
-				GadgetMenu.setSelectSub(GadgetMenu.getToysCategory()[subSel]);
-				break;
-			case CONVEYOR:
-				MainCommandUI.getSubItemCombo().setModel(conveyorModel);
-				GadgetMenu.setSelectSub(GadgetMenu.getConveyorCategory()[subSel]);
-				break;
-			case VOICE:
-				MainCommandUI.getSubItemCombo().setModel(voiceModel);
-				GadgetMenu.setSelectSub(GadgetMenu.getVoiceCategory()[subSel]);
-				break;
-			case TEST:
-				MainCommandUI.getSubItemCombo().setModel(testModel);
-				GadgetMenu.setSelectSub(GadgetMenu.getTestCategory()[subSel]);
-				break;
-			default:
-				break;
+				case TOOL:
+					MainCommandUI.getSubItemCombo().setModel(toolModel);
+					GadgetMenu.setSelectSub(GadgetMenu.getToolCategory()[subSel]);
+					break;
+				case TOOL2:
+					MainCommandUI.getSubItemCombo().setModel(toolModel2);
+					GadgetMenu.setSelectSub(GadgetMenu.getToolCategory2()[subSel]);
+					break;
+				case AMPOULE:
+					MainCommandUI.getSubItemCombo().setModel(AmpouleModel);
+					GadgetMenu.setSelectSub(GadgetMenu.getAmpouleCategory()[subSel]);
+					break;
+				case FOODS:
+					MainCommandUI.getSubItemCombo().setModel(foodModel);
+					GadgetMenu.setSelectSub(GadgetMenu.getFoodCategory()[subSel]);
+					break;
+				case CLEAN:
+					MainCommandUI.getSubItemCombo().setModel(cleanModel);
+					GadgetMenu.setSelectSub(GadgetMenu.getCleanCategory()[subSel]);
+					break;
+				case ACCESSORY:
+					MainCommandUI.getSubItemCombo().setModel(okazariModel);
+					GadgetMenu.setSelectSub(GadgetMenu.getOkazariCategory()[subSel]);
+					break;
+				case PANTS:
+					MainCommandUI.getSubItemCombo().setModel(pantsModel);
+					GadgetMenu.setSelectSub(GadgetMenu.getPantsCategory()[subSel]);
+					break;
+				case FLOOR:
+					MainCommandUI.getSubItemCombo().setModel(floorModel);
+					GadgetMenu.setSelectSub(GadgetMenu.getFloorCategory()[subSel]);
+					break;
+				case BARRIER:
+					MainCommandUI.getSubItemCombo().setModel(barrierModel);
+					GadgetMenu.setSelectSub(GadgetMenu.getBarrierCategory()[subSel]);
+					break;
+				case TOYS:
+					MainCommandUI.getSubItemCombo().setModel(toyModel);
+					GadgetMenu.setSelectSub(GadgetMenu.getToysCategory()[subSel]);
+					break;
+				case CONVEYOR:
+					MainCommandUI.getSubItemCombo().setModel(conveyorModel);
+					GadgetMenu.setSelectSub(GadgetMenu.getConveyorCategory()[subSel]);
+					break;
+				case VOICE:
+					MainCommandUI.getSubItemCombo().setModel(voiceModel);
+					GadgetMenu.setSelectSub(GadgetMenu.getVoiceCategory()[subSel]);
+					break;
+				case TEST:
+					MainCommandUI.getSubItemCombo().setModel(testModel);
+					GadgetMenu.setSelectSub(GadgetMenu.getTestCategory()[subSel]);
+					break;
+				default:
+					break;
 			}
 			MainCommandUI.getSubItemCombo().setSelectedIndex(subSel);
 		}
 	}
 
-	/** 選択コマンドのヘルプを設定*/
+	/** 選択コマンドのヘルプを設定 */
 	public static final void setActionHelp(GadgetList item) {
 
 		HelpContext help;
@@ -921,7 +1063,7 @@ public class GadgetMenu {
 		createHelpBuffer();
 	}
 
-	/**ヘルプのポップアップを作る実行部*/
+	/** ヘルプのポップアップを作る実行部 */
 	private static final void createHelpBuffer() {
 		if (currentHelpNum == 0) {
 			currentHelpBuf = null;
@@ -950,39 +1092,46 @@ public class GadgetMenu {
 		}
 	}
 
-	/** ゆっくりにメソッド実行
-	 *<br> パラメータなし、SHIFTで全体実行系のコマンド用
-	 * @param e 入力されたマウスの動作
+	/**
+	 * ゆっくりにメソッド実行
+	 * <br>
+	 * パラメータなし、SHIFTで全体実行系のコマンド用
+	 * 
+	 * @param e            入力されたマウスの動作
 	 * @param targetObject 対象オブジェクト(主にゆっくり)
-	 * @param method 実行したいメソッド名
+	 * @param method       実行したいメソッド名
 	 */
 	public static final void executeBodyMethod(MouseEvent e, Entity targetObject, String method) {
 		BodyMethodDispatcher.execute(e, targetObject, method);
 	}
 
-	/** ゆっくりにメソッド実行
-	 *<br>パラメータあり、SHIFTで全体実行系のコマンド用
-	 * @param e 入力されたマウスの動作
+	/**
+	 * ゆっくりにメソッド実行
+	 * <br>
+	 * パラメータあり、SHIFTで全体実行系のコマンド用
+	 * 
+	 * @param e            入力されたマウスの動作
 	 * @param targetObject 対象オブジェクト(主にゆっくり)
-	 * @param method 実行したいメソッド名
-	 * @param prm 指定パラメータ
+	 * @param method       実行したいメソッド名
+	 * @param prm          指定パラメータ
 	 */
 	public static final void executeBodyMethod(MouseEvent e, Entity targetObject, String method, int prm) {
 		BodyMethodDispatcher.execute(e, targetObject, method, prm);
 	}
 
-	/** ゆっくりにメソッド実行
-	 * <br> パラメータboolean、SHIFTで全体、CTRLで反転実行系のコマンド用
+	/**
+	 * ゆっくりにメソッド実行
+	 * <br>
+	 * パラメータboolean、SHIFTで全体、CTRLで反転実行系のコマンド用
 	 *
-	 * @param e 入力されたマウスの動作
+	 * @param e            入力されたマウスの動作
 	 * @param targetObject 対象オブジェクト(主にゆっくり)
-	 * @param getMethod 実行したいメソッド名(ゆっくり用)
-	 * @param setMethod 実行したいメソッド名(その他用)
-	 * @param invMethod 反転実行系コマンド実行
+	 * @param getMethod    実行したいメソッド名(ゆっくり用)
+	 * @param setMethod    実行したいメソッド名(その他用)
+	 * @param invMethod    反転実行系コマンド実行
 	 */
-	public static final void executeBodyMethod(MouseEvent e, Entity targetObject, String getMethod, String setMethod, String invMethod) {
+	public static final void executeBodyMethod(MouseEvent e, Entity targetObject, String getMethod, String setMethod,
+			String invMethod) {
 		BodyMethodDispatcher.execute(e, targetObject, getMethod, setMethod, invMethod);
 	}
 }
-
-

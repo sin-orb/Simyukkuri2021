@@ -6,8 +6,8 @@ import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
 
-import src.base.Yukkuri;
-import src.base.Entity;
+import src.entity.core.Entity;
+import src.entity.core.living.yukkuri.Yukkuri;
 import src.util.GameWorld;
 
 /**
@@ -49,11 +49,12 @@ public class BodyMethodDispatcher {
 
 	/**
 	 * ゆっくりにメソッド実行
-	 * <br>パラメータなし、SHIFTで全体実行系のコマンド用
+	 * <br>
+	 * パラメータなし、SHIFTで全体実行系のコマンド用
 	 *
-	 * @param e      入力されたマウスの動作
-	 * @param targetObject  対象オブジェクト(主にゆっくり)
-	 * @param method 実行したいメソッド名
+	 * @param e            入力されたマウスの動作
+	 * @param targetObject 対象オブジェクト(主にゆっくり)
+	 * @param method       実行したいメソッド名
 	 */
 	public static final void execute(MouseEvent e, Entity targetObject, String method) {
 		try {
@@ -81,12 +82,13 @@ public class BodyMethodDispatcher {
 
 	/**
 	 * ゆっくりにメソッド実行
-	 * <br>パラメータあり、SHIFTで全体実行系のコマンド用
+	 * <br>
+	 * パラメータあり、SHIFTで全体実行系のコマンド用
 	 *
-	 * @param e      入力されたマウスの動作
-	 * @param targetObject  対象オブジェクト(主にゆっくり)
-	 * @param method 実行したいメソッド名
-	 * @param prm    指定パラメータ
+	 * @param e            入力されたマウスの動作
+	 * @param targetObject 対象オブジェクト(主にゆっくり)
+	 * @param method       実行したいメソッド名
+	 * @param prm          指定パラメータ
 	 */
 	public static final void execute(MouseEvent e, Entity targetObject, String method, int prm) {
 		try {
@@ -114,15 +116,17 @@ public class BodyMethodDispatcher {
 
 	/**
 	 * ゆっくりにメソッド実行
-	 * <br>パラメータboolean、SHIFTで全体、CTRLで反転実行系のコマンド用
+	 * <br>
+	 * パラメータboolean、SHIFTで全体、CTRLで反転実行系のコマンド用
 	 *
-	 * @param e         入力されたマウスの動作
-	 * @param targetObject     対象オブジェクト(主にゆっくり)
-	 * @param getMethod 取得メソッド名
-	 * @param setMethod 設定メソッド名
-	 * @param invMethod 反転実行メソッド名
+	 * @param e            入力されたマウスの動作
+	 * @param targetObject 対象オブジェクト(主にゆっくり)
+	 * @param getMethod    取得メソッド名
+	 * @param setMethod    設定メソッド名
+	 * @param invMethod    反転実行メソッド名
 	 */
-	public static final void execute(MouseEvent e, Entity targetObject, String getMethod, String setMethod, String invMethod) {
+	public static final void execute(MouseEvent e, Entity targetObject, String getMethod, String setMethod,
+			String invMethod) {
 		try {
 			Yukkuri targetBody = asBody(targetObject);
 			List<Yukkuri> bodyList = getBodies();

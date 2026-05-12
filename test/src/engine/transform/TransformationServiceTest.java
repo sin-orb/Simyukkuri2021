@@ -8,13 +8,12 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
-import src.base.Yukkuri;
 import src.draw.MyPane;
-import src.enums.AgeState;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.living.yukkuri.impl.Deibu;
+import src.entity.core.living.yukkuri.impl.Reimu;
 import src.enums.YukkuriType;
 import src.util.WorldTestHelper;
-import src.yukkuri.Deibu;
-import src.yukkuri.Reimu;
 
 public class TransformationServiceTest {
 

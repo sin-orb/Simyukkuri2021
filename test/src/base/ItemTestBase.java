@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
 import src.draw.World;
+import src.entity.core.world.WorldEntity;
 import src.util.WorldTestHelper;
 
 public abstract class ItemTestBase {

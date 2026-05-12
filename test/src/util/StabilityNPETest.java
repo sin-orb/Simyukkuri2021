@@ -1,14 +1,16 @@
 package src.util;
 
-import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-import src.base.Yukkuri;
-import src.yukkuri.HybridYukkuri;
-import src.yukkuri.Reimu;
-import src.system.MessagePool;
-import src.system.BodyLayer;
+import org.junit.jupiter.api.Test;
+
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.living.yukkuri.impl.HybridYukkuri;
+import src.entity.core.living.yukkuri.impl.Reimu;
 import src.enums.AgeState;
+import src.system.BodyLayer;
+import src.system.MessagePool;
 
 /**
  * 過去に報告された NullPointerException (NPE) の再発を防止するためのテスト
@@ -22,7 +24,7 @@ public class StabilityNPETest {
     public void testHybridYukkuri_getImage_withNullElements_shouldNotThrow() {
         HybridYukkuri hybrid = new HybridYukkuri();
         BodyLayer layer = new BodyLayer();
-        
+
         // 1. images 配列自体が null の場合
         hybrid.setImages(null);
         assertDoesNotThrow(() -> hybrid.getImage(0, 0, layer, 0));
@@ -42,11 +44,19 @@ public class StabilityNPETest {
         // Yukkuri のサブクラスを作成し、意図的に null 名前を返させる
         Yukkuri glitchyBody = new Reimu() {
             @Override
-            public String getMyName() { return null; }
+            public String getMyName() {
+                return null;
+            }
+
             @Override
-            public String getNameJ() { return null; }
+            public String getNameJ() {
+                return null;
+            }
+
             @Override
-            public String getNameE() { return null; }
+            public String getNameE() {
+                return null;
+            }
         };
 
         // getMessage 内で name.isEmpty() が呼ばれて NPE にならないことを検証
@@ -62,7 +72,7 @@ public class StabilityNPETest {
     public void testBody_Constructor_withoutGameWorld_shouldNotThrow() {
         // GameWorld.get() が null の状態を確実にする
         GameWorld.set(null);
-        
+
         assertDoesNotThrow(() -> {
             new Reimu(0, 0, 0, AgeState.BABY, null, null);
         });

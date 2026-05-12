@@ -40,9 +40,9 @@ import src.enums.PredatorType;
 import src.field.impl.Barrier;
 import src.item.Trampoline;
 import src.draw.Translate;
-import src.game.Dna;
-import src.game.Shit;
-import src.game.Stalk;
+import src.entity.core.living.yukkuri.Dna;
+import src.entity.core.world.mobile.Shit;
+import src.entity.core.world.bodylinked.Stalk;
 import src.event.AvoidMoldEvent;
 import src.event.HateNoOkazariEvent;
 import src.event.PredatorsGameEvent;
@@ -61,7 +61,7 @@ import src.enums.Burst;
 import src.enums.PlayStyle;
 import src.entity.world.bodylinked.Okazari;
 import src.field.FieldShape;
-import src.game.Stalk;
+import src.entity.core.world.bodylinked.Stalk;
 import src.draw.Rectangle4y;
 import src.draw.Dimension4y;
 import src.draw.Terrarium;
@@ -77,8 +77,8 @@ import java.lang.reflect.Field;
 
 import src.event.CutPenipeniEvent;
 import src.event.SuperEatingTimeEvent;
-import src.yukkuri.Reimu;
-import src.base.Entity;
+import src.entity.core.living.yukkuri.impl.Reimu;
+import src.entity.core.Entity;
 import src.attachment.VeryShitAmpoule;
 import src.attachment.ANYDAmpoule;
 import src.attachment.Ants;
@@ -2606,7 +2606,7 @@ public class BodyTest {
         public void testCheckHungryWithStalk() {
             body.setSleeping(false);
             body.setHasStalk(true);
-            body.getStalks().add(new src.game.Stalk());
+            body.getStalks().add(new src.entity.core.world.bodylinked.Stalk());
             body.setHungry(1000);
             body.checkHungry();
             // 通常 + 茎の数*5
@@ -2792,7 +2792,7 @@ public class BodyTest {
         public void testNearToBirthWithStalkFarFromBirth() {
             body.setPregnantPeriod(0); // far from birth
             body.setHasStalk(true);
-            body.getStalks().add(new src.game.Stalk());
+            body.getStalks().add(new src.entity.core.world.bodylinked.Stalk());
             assertFalse(body.nearToBirth());
         }
 
@@ -2802,7 +2802,7 @@ public class BodyTest {
             int pregPeriod = body.getPregPeriodBase();
             body.setPregnantPeriod(pregPeriod - 100); // very close
             body.setHasStalk(true);
-            body.getStalks().add(new src.game.Stalk());
+            body.getStalks().add(new src.entity.core.world.bodylinked.Stalk());
             assertTrue(body.nearToBirth());
         }
     }
@@ -3342,7 +3342,7 @@ public class BodyTest {
         @Test
         public void testRapidPregnantPeriodWithBaby() {
             body.setHasStalk(true);
-            body.getStalks().add(new src.game.Stalk());
+            body.getStalks().add(new src.entity.core.world.bodylinked.Stalk());
             int boostBefore = body.getPregnancyPeriodBoost();
             body.rapidPregnantPeriod();
             assertTrue(body.getPregnancyPeriodBoost() > boostBefore);
@@ -3374,7 +3374,7 @@ public class BodyTest {
         @Test
         public void testDisPlantStalksWithStalks() {
             body.setHasStalk(true);
-            src.game.Stalk s = new src.game.Stalk();
+            src.entity.core.world.bodylinked.Stalk s = new src.entity.core.world.bodylinked.Stalk();
             s.setPlantYukkuri(body);
             body.getStalks().add(s);
             body.disPlantStalks();
@@ -4049,7 +4049,7 @@ public class BodyTest {
             body.setFootBakePeriod(0);
             body.setCriticalDamege(null);
             body.setHasStalk(true);
-            body.getStalks().add(new src.game.Stalk());
+            body.getStalks().add(new src.entity.core.world.bodylinked.Stalk());
             assertTrue(body.isDontJump());
         }
 
@@ -4631,8 +4631,8 @@ public class BodyTest {
         @Test
         public void testRemoveAllStalksWithStalks() {
             body.setHasStalk(true);
-            body.getStalks().add(new src.game.Stalk());
-            body.getStalks().add(new src.game.Stalk());
+            body.getStalks().add(new src.entity.core.world.bodylinked.Stalk());
+            body.getStalks().add(new src.entity.core.world.bodylinked.Stalk());
             body.removeAllStalks();
             assertTrue(body.getStalks().isEmpty());
         }
@@ -5520,7 +5520,7 @@ public class BodyTest {
         @Test
         public void testCheckDamageOrangeSteamHealsWhenUnbirthConnected() {
             StubBody parent = createBody(AgeState.ADULT);
-            src.game.Stalk stalk = new src.game.Stalk();
+            src.entity.core.world.bodylinked.Stalk stalk = new src.entity.core.world.bodylinked.Stalk();
             stalk.setPlantYukkuri(parent.getUniqueID());
 
             body.setUnBirth(true);
@@ -7700,7 +7700,7 @@ public class BodyTest {
         public void testPregnantPeriodBoostAccumulates() {
             body.setPregnancyPeriodBoost(0);
             body.setHasStalk(true);
-            body.getStalks().add(new src.game.Stalk());
+            body.getStalks().add(new src.entity.core.world.bodylinked.Stalk());
             body.rapidPregnantPeriod();
             int first = body.getPregnancyPeriodBoost();
             body.rapidPregnantPeriod();
@@ -12463,7 +12463,7 @@ public class BodyTest {
             body.setBx(0);
             body.setBy(0);
             body.setBz(0);
-            body.setBindStalk(new src.game.Stalk());
+            body.setBindStalk(new src.entity.core.world.bodylinked.Stalk());
             int zBefore = body.getZ();
 
             body.moveBody(true);

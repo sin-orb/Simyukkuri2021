@@ -1,9 +1,6 @@
 package src.logic;
 
-import src.base.Yukkuri;
-
-
-import src.enums.Intelligence;
+import src.entity.core.living.yukkuri.Yukkuri;
 
 /**
  * かび・病気の見分けに関する判定を集約する.
@@ -15,7 +12,7 @@ public final class BodyIllnessRule {
 	/**
 	 * この個体が相手の病気を見抜けるかを返却する.
 	 *
-	 * @param self 判定元
+	 * @param self       判定元
 	 * @param targetBody 判定対象
 	 * @return 病気を見抜けるならtrue
 	 */

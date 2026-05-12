@@ -1,11 +1,9 @@
 package src.logic;
 
-import src.base.Yukkuri;
-
-import src.attachment.Ants;
-import src.base.Yukkuri;
 import src.draw.Point4y;
 import src.draw.Translate;
+import src.entity.core.attachment.impl.Ants;
+import src.entity.core.living.yukkuri.Yukkuri;
 import src.field.impl.Barrier;
 
 /**
@@ -67,7 +65,8 @@ public final class BodyParentRule {
 				return;
 			}
 
-			int moveDistance = (int) Math.sqrt(distanceToParent) - (int) Math.sqrt(nearestDistance / parentDistanceRatio);
+			int moveDistance = (int) Math.sqrt(distanceToParent)
+					- (int) Math.sqrt(nearestDistance / parentDistanceRatio);
 			double radian = Translate.getRadian(body.getX(), body.getY(), parentBody.getX(), parentBody.getY());
 			Point4y destination = Translate.getPointByDistAndRad(body.getX(), body.getY(), moveDistance, radian);
 			body.moveTo(destination.getX(), destination.getY(), body.getZ());

@@ -1,9 +1,7 @@
 package src.logic;
 
-import src.base.Yukkuri;
-
-import src.base.Yukkuri;
-import src.entity.world.bodylinked.Okazari.OkazariType;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.world.bodylinked.Okazari.OkazariType;
 import src.enums.Happiness;
 import src.enums.PublicRank;
 import src.system.MessagePool;
@@ -21,11 +19,12 @@ public final class BodyStealRule {
 	 * Handle the steal branch in doActionOther.
 	 *
 	 * @param targetBody target body
-	 * @param actorBody actor body
+	 * @param actorBody  actor body
 	 * @return true when the steal branch handled the action
 	 */
 	public static boolean handleOkazariSteal(Yukkuri targetBody, Yukkuri actorBody) {
-		if (!actorBody.hasOkazari() && targetBody.hasOkazari() && actorBody.getBodyAgeState() == targetBody.getBodyAgeState()
+		if (!actorBody.hasOkazari() && targetBody.hasOkazari()
+				&& actorBody.getBodyAgeState() == targetBody.getBodyAgeState()
 				&& actorBody.getType() == targetBody.getType() && !actorBody.isHybrid()
 				&& targetBody.getOkazari().getOkazariType() == OkazariType.DEFAULT
 				&& (targetBody.getPublicRank() == PublicRank.NONE || actorBody.getPublicRank() == PublicRank.UnunSlave)
@@ -39,7 +38,8 @@ public final class BodyStealRule {
 					targetBody.takeOkazari(false);
 					actorBody.giveOkazari(OkazariType.DEFAULT);
 					actorBody.setHappiness(Happiness.HAPPY);
-					actorBody.setMessage(GameMessages.getMessage(actorBody, MessagePool.Action.GetOtherAccessoryStealthily));
+					actorBody.setMessage(
+							GameMessages.getMessage(actorBody, MessagePool.Action.GetOtherAccessoryStealthily));
 					actorBody.addMemories(100);
 					actorBody.addStress(-actorBody.getStressLimit() / 2);
 					actorBody.clearActions();

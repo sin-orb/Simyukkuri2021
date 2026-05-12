@@ -10,15 +10,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
-import src.base.Yukkuri;
+import src.entity.core.living.yukkuri.Yukkuri;
 import src.draw.World;
+import src.entity.core.world.mobile.Shit;
 import src.enums.AgeState;
 import src.enums.PredatorType;
-import src.game.Shit;
 import src.util.WorldTestHelper;
-import src.yukkuri.HybridYukkuri;
-import src.yukkuri.Kimeemaru;
-import src.yukkuri.TarinaiReimu;
+import src.entity.core.living.yukkuri.impl.HybridYukkuri;
+import src.entity.core.living.yukkuri.impl.Kimeemaru;
+import src.entity.core.living.yukkuri.impl.TarinaiReimu;
 
 class LoggerYukkuriTest {
 
@@ -271,7 +271,8 @@ class LoggerYukkuriTest {
     @Test
     void testRunWithNormalBody() {
         Yukkuri b = WorldTestHelper.createBody();
-        b.setX(100); b.setY(100);
+        b.setX(100);
+        b.setY(100);
         SimYukkuri.world.getCurrentMap().getBody().put(b.getUniqueID(), b);
         assertDoesNotThrow(() -> LoggerYukkuri.run());
     }
@@ -279,7 +280,8 @@ class LoggerYukkuriTest {
     @Test
     void testRunWithBabyBody() {
         Yukkuri b = WorldTestHelper.createBody();
-        b.setX(100); b.setY(100);
+        b.setX(100);
+        b.setY(100);
         b.setAgeState(AgeState.BABY);
         SimYukkuri.world.getCurrentMap().getBody().put(b.getUniqueID(), b);
         assertDoesNotThrow(() -> LoggerYukkuri.run());
@@ -288,7 +290,8 @@ class LoggerYukkuriTest {
     @Test
     void testRunWithChildBody() {
         Yukkuri b = WorldTestHelper.createBody();
-        b.setX(100); b.setY(100);
+        b.setX(100);
+        b.setY(100);
         b.setAgeState(AgeState.CHILD);
         SimYukkuri.world.getCurrentMap().getBody().put(b.getUniqueID(), b);
         assertDoesNotThrow(() -> LoggerYukkuri.run());
@@ -297,7 +300,8 @@ class LoggerYukkuriTest {
     @Test
     void testRunWithPredatorBody() {
         Yukkuri b = WorldTestHelper.createBody();
-        b.setX(100); b.setY(100);
+        b.setX(100);
+        b.setY(100);
         b.setPredatorType(PredatorType.BITE);
         SimYukkuri.world.getCurrentMap().getBody().put(b.getUniqueID(), b);
         assertDoesNotThrow(() -> LoggerYukkuri.run());
@@ -306,7 +310,8 @@ class LoggerYukkuriTest {
     @Test
     void testRunWithDeadBody() {
         Yukkuri b = WorldTestHelper.createBody();
-        b.setX(100); b.setY(100);
+        b.setX(100);
+        b.setY(100);
         b.setDead(true);
         SimYukkuri.world.getCurrentMap().getBody().put(b.getUniqueID(), b);
         assertDoesNotThrow(() -> LoggerYukkuri.run());
@@ -315,7 +320,8 @@ class LoggerYukkuriTest {
     @Test
     void testRunWithSickBody() {
         Yukkuri b = WorldTestHelper.createBody();
-        b.setX(100); b.setY(100);
+        b.setX(100);
+        b.setY(100);
         // sickはHPが低い状態で発動するのでHP=1に設定
         // sickPeriod > incubationPeriodBaseにしてisSick()=trueにする
         b.setSickPeriod(b.getIncubationPeriodBase() + 1);
@@ -327,7 +333,8 @@ class LoggerYukkuriTest {
     void testRunWithMultipleBodies() {
         for (int i = 0; i < 5; i++) {
             Yukkuri b = WorldTestHelper.createBody();
-            b.setX(50 + i * 10); b.setY(50);
+            b.setX(50 + i * 10);
+            b.setY(50);
             SimYukkuri.world.getCurrentMap().getBody().put(b.getUniqueID(), b);
         }
         assertDoesNotThrow(() -> LoggerYukkuri.run());
@@ -364,7 +371,8 @@ class LoggerYukkuriTest {
     @Test
     void testRunWithHybridBody() {
         HybridYukkuri hybrid = new HybridYukkuri();
-        hybrid.setX(100); hybrid.setY(100);
+        hybrid.setX(100);
+        hybrid.setY(100);
         SimYukkuri.world.getCurrentMap().getBody().put(hybrid.getUniqueID(), hybrid);
         assertDoesNotThrow(() -> LoggerYukkuri.run());
     }
@@ -372,7 +380,8 @@ class LoggerYukkuriTest {
     @Test
     void testRunWithTarinaiBody() {
         TarinaiReimu tarinai = new TarinaiReimu();
-        tarinai.setX(100); tarinai.setY(100);
+        tarinai.setX(100);
+        tarinai.setY(100);
         SimYukkuri.world.getCurrentMap().getBody().put(tarinai.getUniqueID(), tarinai);
         assertDoesNotThrow(() -> LoggerYukkuri.run());
     }
@@ -380,7 +389,8 @@ class LoggerYukkuriTest {
     @Test
     void testRunWithRareBody_Kimeemaru() {
         Kimeemaru rare = new Kimeemaru();
-        rare.setX(100); rare.setY(100);
+        rare.setX(100);
+        rare.setY(100);
         SimYukkuri.world.getCurrentMap().getBody().put(rare.getUniqueID(), rare);
         assertDoesNotThrow(() -> LoggerYukkuri.run());
     }
@@ -392,7 +402,8 @@ class LoggerYukkuriTest {
         assertDoesNotThrow(() -> LoggerYukkuri.run());
     }
 
-    // --- displayLog (ResourceUtil returns null → NPE in drawString is expected) ---
+    // --- displayLog (ResourceUtil returns null → NPE in drawString is expected)
+    // ---
 
     private Graphics2D createG2() {
         WorldTestHelper.initializeStandardTranslate500();

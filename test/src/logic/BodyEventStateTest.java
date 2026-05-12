@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import src.base.Yukkuri;
+import src.entity.core.living.yukkuri.Yukkuri;
 import src.event.EventPacket;
 import src.enums.Event;
 import src.util.WorldTestHelper;

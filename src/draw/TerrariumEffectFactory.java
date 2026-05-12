@@ -1,10 +1,10 @@
 package src.draw;
 
-import src.effect.Effect;
-import src.effect.BakeSmoke;
-import src.effect.Hit;
-import src.effect.Mix;
-import src.effect.Steam;
+import src.entity.core.effect.Effect;
+import src.entity.core.effect.impl.BakeSmoke;
+import src.entity.core.effect.impl.Hit;
+import src.entity.core.effect.impl.Mix;
+import src.entity.core.effect.impl.Steam;
 import src.enums.EffectType;
 
 /**

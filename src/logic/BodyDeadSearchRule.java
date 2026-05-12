@@ -1,13 +1,11 @@
 package src.logic;
 
-import src.base.Yukkuri;
-
-import src.base.Yukkuri;
+import src.entity.core.living.yukkuri.Yukkuri;
 import src.enums.Happiness;
 import src.system.MessagePool;
+import src.util.GameEnvironment;
 import src.util.GameMessages;
 import src.util.GameRandom;
-import src.util.GameEnvironment;
 
 /**
  * Dead-body handling used by BodyLogic.checkPartner.
@@ -20,10 +18,10 @@ public final class BodyDeadSearchRule {
 	/**
 	 * Handle the dead-body branch of partner search.
 	 *
-	 * @param actorBody actor body
+	 * @param actorBody  actor body
 	 * @param targetBody target dead body
-	 * @param colX      collision-adjusted x coordinate
-	 * @param mz        destination z coordinate
+	 * @param colX       collision-adjusted x coordinate
+	 * @param mz         destination z coordinate
 	 * @return true when a branch consumed the action
 	 */
 	public static boolean handleDeadFound(Yukkuri actorBody, Yukkuri targetBody, int colX, int mz) {
@@ -43,7 +41,8 @@ public final class BodyDeadSearchRule {
 			if (!actorBody.isRaper()) {
 				// 家族の死体に嘆く
 				if (actorBody.isAdult()) {
-					if (actorBody.isParent(targetBody) || actorBody.isPartner(targetBody) || targetBody.isParent(actorBody)) {
+					if (actorBody.isParent(targetBody) || actorBody.isPartner(targetBody)
+							|| targetBody.isParent(actorBody)) {
 						actorBody.moveToBody(targetBody, targetBody.getX() + colX, targetBody.getY(), mz);
 						actorBody.setTargetBind(false);
 						handled = true;

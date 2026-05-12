@@ -1,6 +1,4 @@
 package src.field.impl;
-import src.util.GameView;
-import src.util.GameText;
 
 import java.awt.BasicStroke;
 import java.awt.BorderLayout;
@@ -28,21 +26,21 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import src.SimYukkuri;
-import src.util.GameWorld;
-import src.base.Yukkuri;
-import src.base.Entity;
 import src.draw.ModLoader;
 import src.draw.Point4y;
 import src.draw.Translate;
+import src.entity.core.Entity;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.world.bodylinked.Stalk;
+import src.entity.core.world.item.Food;
 import src.enums.Numbering;
-import src.game.Stalk;
 import src.field.FieldShape;
 import src.system.ItemMenu.ShapeMenu;
 import src.system.ItemMenu.ShapeMenuTarget;
 import src.system.MapPlaceData;
-import src.item.Food;
-import src.system.ResourceUtil;
+import src.util.GameText;
+import src.util.GameView;
+import src.util.GameWorld;
 
 /***************************************************
  * ベルコン
@@ -205,7 +203,8 @@ public class Beltconveyor extends FieldShape {
 	private static transient BufferedImage[] images = new BufferedImage[4];
 	private static transient TexturePaint[] texture = new TexturePaint[4];
 
-	private boolean[][] setting = new boolean[SetupMenu.values().length][3];// = WorldEntity.YUKKURI | WorldEntity.SHIT | WorldEntity.FOOD
+	private boolean[][] setting = new boolean[SetupMenu.values().length][3];// = WorldEntity.YUKKURI | WorldEntity.SHIT
+																			// | WorldEntity.FOOD
 																			// | WorldEntity.VOMIT | WorldEntity.STALK;
 	private DirectCombo direction;
 	private SpeedCombo beltSpeed;
@@ -302,6 +301,7 @@ public class Beltconveyor extends FieldShape {
 		g2.fillPolygon(polygonX, polygonY, 4);
 		return;
 	}
+
 	/**
 	 * コンストラクタ
 	 *

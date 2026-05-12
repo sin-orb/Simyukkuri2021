@@ -1,10 +1,8 @@
 package src.logic;
 
-import src.base.Yukkuri;
-
-import src.base.Yukkuri;
-import src.event.AvoidMoldEvent;
-import src.event.HateNoOkazariEvent;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.event.impl.AvoidMoldEvent;
+import src.event.impl.HateNoOkazariEvent;
 import src.system.MessagePool;
 import src.util.GameMessages;
 import src.util.GameRandom;
@@ -21,7 +19,7 @@ public final class BodyContactEffectRule {
 	 * Handle mold avoidance and hate-no-okazari reaction branches.
 	 *
 	 * @param targetBody target body
-	 * @param actorBody actor body
+	 * @param actorBody  actor body
 	 * @return true when the branch handled the action
 	 */
 	public static boolean handleContactEffects(Yukkuri targetBody, Yukkuri actorBody) {
@@ -36,7 +34,8 @@ public final class BodyContactEffectRule {
 			return true;
 		}
 		// 相手が子供でも、子供にお飾りがなくてかつ親がバカならなら制裁する
-		if (actorBody.isAdult() && !targetBody.isAdult() && (targetBody.isChild(actorBody) || actorBody.isMother(targetBody))
+		if (actorBody.isAdult() && !targetBody.isAdult()
+				&& (targetBody.isChild(actorBody) || actorBody.isMother(targetBody))
 				&& (actorBody.getIntelligence() == src.enums.Intelligence.FOOL && !targetBody.hasOkazari())) {
 			if (actorBody.getCurrentEvent() == null && targetBody.isNYD() && GameRandom.nextBoolean()) {
 				actorBody.clearActions();

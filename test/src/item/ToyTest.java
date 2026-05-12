@@ -3,12 +3,13 @@ package src.item;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import src.SimYukkuri;
-import src.base.Yukkuri;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.world.WorldEntity;
+import src.entity.core.world.WorldEntity.ItemRank;
+import src.entity.core.world.item.Toy;
 import src.base.ItemTestBase;
-import src.base.WorldEntity;
-import src.base.WorldEntity.ItemRank;
 import src.util.WorldTestHelper;
-import src.yukkuri.Reimu;
+import src.entity.core.living.yukkuri.impl.Reimu;
 import static org.junit.jupiter.api.Assertions.*;
 import java.awt.image.BufferedImage;
 

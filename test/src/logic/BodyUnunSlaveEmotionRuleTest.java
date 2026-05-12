@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 
 import src.ConstState;
 import src.SimYukkuri;
-import src.base.Yukkuri;
+import src.entity.core.living.yukkuri.Yukkuri;
 import src.enums.PublicRank;
 import src.util.WorldTestHelper;
 

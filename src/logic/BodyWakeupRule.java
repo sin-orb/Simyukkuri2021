@@ -1,15 +1,13 @@
 package src.logic;
 
-import src.base.Yukkuri;
-
 import java.util.Map;
 
-import src.base.Yukkuri;
+import src.draw.Translate;
+import src.entity.core.living.yukkuri.Yukkuri;
 import src.enums.BurialState;
 import src.enums.PublicRank;
-import src.util.GameWorld;
-import src.draw.Translate;
 import src.field.impl.Barrier;
+import src.util.GameWorld;
 
 /**
  * Other-body wakeup checks used by BodyLogic.

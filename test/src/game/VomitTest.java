@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import src.SimYukkuri;
 import src.draw.Translate;
 import src.draw.World;
+import src.entity.core.world.mobile.Vomit;
 import src.enums.AgeState;
 import src.enums.Event;
 import src.system.ItemMenu.GetMenuTarget;
@@ -302,16 +303,20 @@ class VomitTest {
     @Test
     void testLoadImages_headless_executesCode() {
         try {
-            src.game.Vomit.loadImages(src.game.Vomit.class.getClassLoader(), null);
-        } catch (Exception e) { }
+            src.entity.core.world.mobile.Vomit.loadImages(src.entity.core.world.mobile.Vomit.class.getClassLoader(),
+                    null);
+        } catch (Exception e) {
+        }
     }
 
     @Test
     void testConstructorWithArgs_headless_executesCode() {
         try {
-            src.base.Yukkuri body = src.util.WorldTestHelper.createBody();
-            src.game.Vomit v = new src.game.Vomit(100, 100, 0, body, src.enums.YukkuriType.REIMU);
-        } catch (Exception e) { }
+            src.entity.core.living.yukkuri.Yukkuri body = src.util.WorldTestHelper.createBody();
+            src.entity.core.world.mobile.Vomit v = new src.entity.core.world.mobile.Vomit(100, 100, 0, body,
+                    src.enums.YukkuriType.REIMU);
+        } catch (Exception e) {
+        }
     }
 
     @Nested

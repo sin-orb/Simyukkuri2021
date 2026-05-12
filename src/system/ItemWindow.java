@@ -1,5 +1,4 @@
 package src.system;
-import src.util.GameText;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
@@ -26,10 +25,11 @@ import javax.swing.event.ListDataEvent;
 import javax.swing.event.ListDataListener;
 
 import src.SimYukkuri;
-import src.util.GameWorld;
-import src.base.Entity;
 import src.draw.Translate;
+import src.entity.core.Entity;
 import src.system.MainCommandUI.ToolButtonLabel;
+import src.util.GameText;
+import src.util.GameWorld;
 
 /**
  * 持ち物ウィンドウの設計図クラス
@@ -37,7 +37,9 @@ import src.system.MainCommandUI.ToolButtonLabel;
 public class ItemWindow extends JDialog implements WindowListener, MouseListener, ActionListener, ListDataListener {
 	private static final long serialVersionUID = 1359537638021473531L;
 
-	private static final String TITLE = Locale.getDefault().getLanguage().equals(new Locale("ja").getLanguage())? "持ちもの": "Belongings";
+	private static final String TITLE = Locale.getDefault().getLanguage().equals(new Locale("ja").getLanguage())
+			? "持ちもの"
+			: "Belongings";
 
 	@SuppressWarnings("rawtypes")
 	private JList itemList;
@@ -66,7 +68,7 @@ public class ItemWindow extends JDialog implements WindowListener, MouseListener
 		bp.setLayout(new BoxLayout(bp, BoxLayout.X_AXIS));
 
 		delButton = new JButton(GameText.read("system_throwaway"));
-//		delButton.setPreferredSize(new Dimension(80, 30));
+		// delButton.setPreferredSize(new Dimension(80, 30));
 		delButton.addActionListener(this);
 		bp.add(delButton);
 		panel.add(bp, BorderLayout.SOUTH);
@@ -113,16 +115,16 @@ public class ItemWindow extends JDialog implements WindowListener, MouseListener
 	public void windowDeactivated(WindowEvent e) {
 	}
 
-
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		if(itemList.getSelectedIndices().length == 1) {
+		if (itemList.getSelectedIndices().length == 1) {
 			int index = itemList.locationToIndex(e.getPoint());
 			GameWorld.get().getPlayer().setHoldItem(GameWorld.get().getPlayer().getItemList().get(index));
 		} else {
 			GameWorld.get().getPlayer().setHoldItem(null);
 		}
 	}
+
 	@Override
 	public void mousePressed(MouseEvent e) {
 	}
@@ -140,19 +142,21 @@ public class ItemWindow extends JDialog implements WindowListener, MouseListener
 	}
 
 	/**
-	 *  捨てるボタン
+	 * 捨てるボタン
 	 */
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		if(itemList.getSelectedIndex() == -1) return;
-		
+		if (itemList.getSelectedIndex() == -1)
+			return;
+
 		int[] idx = itemList.getSelectedIndices();
 		Entity[] obj = new Entity[idx.length];
-		for(int i = 0; i < idx.length; i++) {
+		for (int i = 0; i < idx.length; i++) {
 			obj[i] = GameWorld.get().getPlayer().getItemList().get(idx[i]);
-			if(obj[i] != null) obj[i].remove();
+			if (obj[i] != null)
+				obj[i].remove();
 		}
-		for(int i = 0; i < obj.length; i++) {
+		for (int i = 0; i < obj.length; i++) {
 			GameWorld.get().getPlayer().getItemList().removeElement(obj[i]);
 		}
 		itemList.setSelectedIndex(-1);
@@ -173,14 +177,9 @@ public class ItemWindow extends JDialog implements WindowListener, MouseListener
 	public void contentsChanged(ListDataEvent e) {
 		itemList.setSelectedIndex(-1);
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	public JList getItemList() {
 		return itemList;
 	}
 }
-
-
-
-
-

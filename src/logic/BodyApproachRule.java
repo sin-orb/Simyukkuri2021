@@ -1,9 +1,7 @@
 package src.logic;
 
-import src.base.Yukkuri;
-
-import src.base.Yukkuri;
 import src.draw.Translate;
+import src.entity.core.living.yukkuri.Yukkuri;
 import src.util.GameRandom;
 
 /**
@@ -18,7 +16,7 @@ public final class BodyApproachRule {
 	 * Handle the non-contact approach branch in doActionOther.
 	 *
 	 * @param targetBody target body
-	 * @param actorBody actor body
+	 * @param actorBody  actor body
 	 */
 	public static void handleApproach(Yukkuri targetBody, Yukkuri actorBody, int offsetX) {
 		int directionSign = 1;

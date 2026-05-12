@@ -21,7 +21,7 @@ import src.enums.Type;
 import src.system.Sprite;
 import src.util.GameRandom;
 import src.util.RandomSource;
-import src.yukkuri.Reimu;
+import src.entity.core.living.yukkuri.impl.Reimu;
 
 public class OkazariTest {
 

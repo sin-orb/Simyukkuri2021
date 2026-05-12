@@ -11,7 +11,8 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
-import src.base.Yukkuri;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.world.item.HotPlate;
 import src.base.ItemTestBase;
 import src.enums.Happiness;
 import src.enums.ImageCode;

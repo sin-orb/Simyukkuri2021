@@ -1,7 +1,7 @@
 package src.logic;
 
-import src.attachment.Ants;
-import src.base.Yukkuri;
+import src.entity.core.attachment.impl.Ants;
+import src.entity.core.living.yukkuri.Yukkuri;
 import src.util.GameRandom;
 
 /**
@@ -14,17 +14,17 @@ public final class AntInfestationPolicy {
 	public static void judgeNewAnt(Yukkuri body) {
 		int antProbability = 1;
 		switch (body.getBodyAgeState()) {
-		case BABY:
-			antProbability = 240000;
-			break;
-		case CHILD:
-			antProbability = 480000;
-			break;
-		case ADULT:
-			antProbability = 960000;
-			break;
-		default:
-			// NOP.
+			case BABY:
+				antProbability = 240000;
+				break;
+			case CHILD:
+				antProbability = 480000;
+				break;
+			case ADULT:
+				antProbability = 960000;
+				break;
+			default:
+				// NOP.
 		}
 		if (body.isDirty() || body.isDamaged()) {
 			antProbability /= 2;

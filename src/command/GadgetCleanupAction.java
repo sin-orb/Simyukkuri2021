@@ -3,13 +3,13 @@ package src.command;
 import java.util.LinkedList;
 import java.util.List;
 
-import src.base.Yukkuri;
 import src.command.GadgetMenu.GadgetList;
-import src.game.Shit;
-import src.game.Stalk;
-import src.game.Vomit;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.world.bodylinked.Stalk;
+import src.entity.core.world.item.Food;
+import src.entity.core.world.mobile.Shit;
+import src.entity.core.world.mobile.Vomit;
 import src.field.impl.Barrier;
-import src.item.Food;
 import src.system.MapPlaceData;
 import src.util.GameWorld;
 

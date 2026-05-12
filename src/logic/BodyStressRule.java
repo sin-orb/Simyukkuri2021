@@ -1,8 +1,6 @@
 package src.logic;
 
-import src.base.Yukkuri;
-
-
+import src.entity.core.living.yukkuri.Yukkuri;
 
 /**
  * Bodyのストレスに関する単純判定を集約する.

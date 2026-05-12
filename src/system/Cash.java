@@ -1,22 +1,25 @@
 package src.system;
 
-import src.SimYukkuri;
+import src.entity.core.Entity;
+import src.entity.core.living.yukkuri.Yukkuri;
 import src.util.GameWorld;
-import src.base.Yukkuri;
-import src.base.Entity;
+
 /**
  * プレイヤーの所持金
  */
 public class Cash {
 	/**
 	 * 所持金に加える.
+	 * 
 	 * @param val 加えたい金額
 	 */
 	public static void addCash(int val) {
 		GameWorld.get().getPlayer().addCash(val);
 	}
+
 	/**
 	 * アイテムを購入し所持金を減らす.
+	 * 
 	 * @param item アイテム
 	 * @return アイテムの金額
 	 */
@@ -24,15 +27,17 @@ public class Cash {
 		addCash(-item.getValue());
 		return item.getValue();
 	}
+
 	/**
 	 * ゆっくりを購入し所持金を減らす.
+	 * 
 	 * @param body ゆっくり
 	 * @return ゆっくりの金額
 	 */
 	public static long buyYukkuri(Yukkuri body) {
 		int val = 0;
 		val = body.getCost();
-		switch(body.getBodyAgeState()) {
+		switch (body.getBodyAgeState()) {
 			case BABY:
 				val /= 3;
 				break;
@@ -46,19 +51,21 @@ public class Cash {
 		addCash(-val);
 		return val;
 	}
+
 	/**
 	 * ゆっくりを売り所持金を増やす.
+	 * 
 	 * @param body ゆっくり
 	 * @return ゆっくりの金額
 	 */
 	public static long sellYukkuri(Yukkuri body) {
 		int val = 0;
-		//工業製品として出荷
-		//加工品チェック
-		if((body.isPealed() && body.isCrushed()) || body.isPacked()){
+		// 工業製品として出荷
+		// 加工品チェック
+		if ((body.isPealed() && body.isCrushed()) || body.isPacked()) {
 			val = body.getSellingPrice(1);
 			// 年齢補正
-			switch(body.getBodyAgeState()) {
+			switch (body.getBodyAgeState()) {
 				case BABY:
 					val /= 27;
 					break;
@@ -68,41 +75,46 @@ public class Cash {
 				case ADULT:
 					break;
 			}
-			//ストレス度査定
-			float G =body.getStress()/body.getStressLimit();
-			if(G<=0)G=0;
-			//else if(G<=2)G*=1;
-			else if(G>2 && G<=20) G=(G/6)+(5/3);
-			else G=5;
-			val *=G;
+			// ストレス度査定
+			float G = body.getStress() / body.getStressLimit();
+			if (G <= 0)
+				G = 0;
+			// else if(G<=2)G*=1;
+			else if (G > 2 && G <= 20)
+				G = (G / 6) + (5 / 3);
+			else
+				G = 5;
+			val *= G;
 			addCash(val);
 			return val;
 		}
 
-		//飼いゆとして出荷
+		// 飼いゆとして出荷
 		// 無価値チェック
-		if(body.isSick() || body.isDead() || body.isDamaged()
+		if (body.isSick() || body.isDead() || body.isDamaged()
 				|| body.getCriticalDamegeType() != null || body.isGotBurned()) {
 			return 0;
 		}
 		// 基本価値
 		val = body.getSellingPrice(0);
 		// 年齢補正
-		switch(body.getBodyAgeState()) {
+		switch (body.getBodyAgeState()) {
 			case BABY:
 				val /= 2;
 				break;
 			case CHILD:
-				//無補正
+				// 無補正
 				break;
 			case ADULT:
 				val /= 3;
 				break;
 		}
 		// 増減額
-		if(body.hasDisorder()) val /= 4;
-		if(!body.hasOkazari()) val /= 2;
-		switch(body.getAttitude()) {
+		if (body.hasDisorder())
+			val /= 4;
+		if (!body.hasOkazari())
+			val /= 2;
+		switch (body.getAttitude()) {
 			case VERY_NICE:
 				val *= 4;
 				break;
@@ -110,7 +122,7 @@ public class Cash {
 				val *= 2;
 				break;
 			case AVERAGE:
-				//無補正
+				// 無補正
 				break;
 			case SHITHEAD:
 				val /= 8;
@@ -119,12 +131,13 @@ public class Cash {
 				val /= 20;
 				break;
 		}
-		switch(body.getIntelligence()) {
+		switch (body.getIntelligence()) {
 			case WISE:
-				if(!body.isRude())val *= 3/2;
+				if (!body.isRude())
+					val *= 3 / 2;
 				break;
 			case AVERAGE:
-				//無補正
+				// 無補正
 				break;
 			case FOOL:
 				val /= 10;

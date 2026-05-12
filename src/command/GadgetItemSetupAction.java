@@ -2,26 +2,26 @@ package src.command;
 
 import java.awt.event.MouseEvent;
 
-import src.base.Entity;
 import src.command.GadgetMenu.GadgetList;
-import src.field.impl.Beltconveyor;
-import src.item.BeltconveyorObj;
-import src.item.BreedingPool;
-import src.item.Diffuser;
-import src.item.OrangePool;
-import src.item.Yunba;
+import src.entity.core.Entity;
+import src.entity.core.world.item.BeltconveyorObj;
+import src.entity.core.world.item.BreedingPool;
+import src.entity.core.world.item.Diffuser;
+import src.entity.core.world.item.OrangePool;
+import src.entity.core.world.item.Yunba;
 
 /**
  * アイテムのセットアップコマンド群
- * <br>床設置、おもちゃ、コンベアカテゴリの実行
+ * <br>
+ * 床設置、おもちゃ、コンベアカテゴリの実行
  */
 public class GadgetItemSetupAction {
 
 	/**
 	 * 床設置カテゴリの実行
 	 *
-	 * @param actionItem  実行内容
-	 * @param ev          入力されたマウスの動作
+	 * @param actionItem   実行内容
+	 * @param ev           入力されたマウスの動作
 	 * @param targetObject 対象オブジェクト
 	 */
 	public static void evaluateFloorItems(GadgetList actionItem, MouseEvent ev, Entity targetObject) {
@@ -49,8 +49,8 @@ public class GadgetItemSetupAction {
 	/**
 	 * おもちゃカテゴリの実行
 	 *
-	 * @param actionItem  実行内容
-	 * @param ev          入力されたマウスの動作
+	 * @param actionItem   実行内容
+	 * @param ev           入力されたマウスの動作
 	 * @param targetObject 対象オブジェクト
 	 */
 	public static void evaluateToys(GadgetList actionItem, MouseEvent ev, Entity targetObject) {
@@ -68,8 +68,8 @@ public class GadgetItemSetupAction {
 	/**
 	 * コンベアカテゴリの実行
 	 *
-	 * @param actionItem  実行内容
-	 * @param ev          入力されたマウスの動作
+	 * @param actionItem   実行内容
+	 * @param ev           入力されたマウスの動作
 	 * @param targetObject 対象オブジェクト
 	 */
 	public static void evaluateConveyor(GadgetList actionItem, MouseEvent ev, Entity targetObject) {

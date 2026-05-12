@@ -1,5 +1,4 @@
 package src.system;
-import src.util.GameLocale;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -7,10 +6,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import src.SimYukkuri;
-import src.util.GameRandom;
-import src.base.Yukkuri;
 import src.draw.ModLoader;
+import src.entity.core.living.yukkuri.Yukkuri;
 import src.enums.AgeState;
 import src.enums.BodyRank;
 import src.enums.FootBake;
@@ -18,6 +15,8 @@ import src.enums.Intelligence;
 import src.enums.LovePlayer;
 import src.enums.PublicRank;
 import src.enums.YukkuriType;
+import src.util.GameLocale;
+import src.util.GameRandom;
 
 /*****************************************************
  * 全キャラのメッセージ管理

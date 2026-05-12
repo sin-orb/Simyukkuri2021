@@ -3,11 +3,11 @@ package src.logic;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 import src.SimYukkuri;
-import src.base.Yukkuri;
-import src.base.Entity;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.Entity;
 import src.draw.Translate;
 import src.enums.PublicRank;
-import src.game.Shit;
+import src.entity.core.world.mobile.Shit;
 import src.util.WorldTestHelper;
 
 public class UnunSlaveDebug {

@@ -7,6 +7,10 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.awt.image.BufferedImage;
 import src.SimYukkuri;
 import src.draw.World;
+import src.entity.core.effect.impl.BakeSmoke;
+import src.entity.core.effect.impl.Hit;
+import src.entity.core.effect.impl.Mix;
+import src.entity.core.effect.impl.Steam;
 import src.util.WorldTestHelper;
 
 public class EffectCoverageTest {

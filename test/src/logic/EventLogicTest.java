@@ -4,9 +4,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
-import src.base.Yukkuri;
+import src.entity.core.living.yukkuri.Yukkuri;
 import src.event.EventPacket;
-import src.yukkuri.Reimu;
+import src.entity.core.living.yukkuri.impl.Reimu;
 
 /**
  * Test class for EventLogic.

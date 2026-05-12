@@ -7,7 +7,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import src.base.Yukkuri;
+import src.entity.core.living.yukkuri.Yukkuri;
 import src.enums.Intelligence;
 import src.util.WorldTestHelper;
 

@@ -7,9 +7,9 @@ import java.awt.image.BufferedImage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import src.effect.Effect;
 import src.SimYukkuri;
 import src.draw.World;
+import src.entity.core.effect.Effect;
 import src.enums.Event;
 import src.enums.Type;
 
@@ -17,7 +17,7 @@ public class EffectTest {
 
     private static class DummyEffect extends Effect {
         DummyEffect(int sX, int sY, int sZ, int vX, int vY, int vZ, boolean invert,
-                    int life, int loop, boolean end, boolean grav, boolean front) {
+                int life, int loop, boolean end, boolean grav, boolean front) {
             super(sX, sY, sZ, vX, vY, vZ, invert, life, loop, end, grav, front);
         }
 

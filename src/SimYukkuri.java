@@ -1,10 +1,6 @@
 package src;
-import src.util.GameLocale;
-import src.util.GameMessages;
-import src.util.GameText;
 
 import java.awt.BorderLayout;
-import java.awt.Cursor;
 import java.awt.Dialog;
 import java.awt.GraphicsEnvironment;
 import java.awt.GridLayout;
@@ -15,10 +11,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.io.File;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Random;
 
 import javax.swing.BoxLayout;
@@ -34,44 +26,24 @@ import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import javax.swing.JRadioButton;
 import javax.swing.SwingWorker;
-import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
-import src.base.Yukkuri;
-import src.base.Entity;
-import src.base.WorldEntity;
-import src.command.GadgetAction;
 import src.command.GadgetMenu;
-import src.command.GadgetMenu.ActionControl;
-import src.command.GadgetMenu.ActionTarget;
-import src.command.GadgetMenu.GadgetList;
-import src.command.GadgetMenu.MainCategoryName;
 import src.draw.ModLoader;
 import src.draw.MyPane;
-import src.draw.ObjDrawComp;
-import src.draw.Point4y;
-import src.draw.Rectangle4y;
 import src.draw.TerrainField;
 import src.draw.Terrarium;
 import src.draw.Translate;
 import src.draw.World;
-import src.game.Dna;
-import src.game.Stalk;
-import src.field.impl.Beltconveyor;
-import src.item.BeltconveyorObj;
-import src.field.impl.Farm;
-import src.field.impl.Pool;
-import src.field.FieldShape;
+import src.entity.core.living.yukkuri.Dna;
 import src.system.IconPool;
-import src.system.ItemMenu;
-import src.system.ItemMenu.ShapeMenuTarget;
 import src.system.InputController;
-import src.system.MouseInputController;
+import src.system.ItemMenu;
 import src.system.MainCommandUI;
-import src.system.MapPlaceData;
-import src.system.MessagePool;
-import src.system.ResourceUtil;
-import src.util.GameWorld;
+import src.system.MouseInputController;
+import src.util.GameLocale;
+import src.util.GameMessages;
+import src.util.GameText;
 
 /**
  * しむゆっくりメイン
@@ -93,7 +65,7 @@ public class SimYukkuri extends JFrame {
 	/** 時間最小単位 */
 	public static final int TICK = 1;
 	/** フィールド倍率 */
-	public static final String[] fieldScaleTbl = { "x0.5", "x1", "x2" };//, "x4", "x8"};
+	public static final String[] fieldScaleTbl = { "x0.5", "x1", "x2" };// , "x4", "x8"};
 	/** フィールド大きさ */
 	public static final int[] fieldScaleData = { 50, 100, 200, 400, 800 };
 	/** バッファ大きさ */
@@ -133,13 +105,13 @@ public class SimYukkuri extends JFrame {
 	/** 「フィールド」オブジェクトのタイプ */
 	public static int fieldType = 0;
 
-	/** マウス処理の座標保存*/
+	/** マウス処理の座標保存 */
 	public static int mouseNewX = 0, mouseNewY = 0, mouseOldX = 0, mouseOldY = 0, mouseVX = 0, mouseVY = 0;
-	/**マウススクロール処理の座標保存*/
+	/** マウススクロール処理の座標保存 */
 	public static int scrollOldX = 0, scrollOldY = 0;
-	/**マウスのポイント座標*/
+	/** マウスのポイント座標 */
 	public static int[] fieldMousePos = new int[2];
-	/**精子餡インスタンス*/
+	/** 精子餡インスタンス */
 	public static Dna sperm = null;
 	/** ランダム */
 	public static Random RND = new Random();
@@ -292,6 +264,7 @@ public class SimYukkuri extends JFrame {
 
 	/**
 	 * メインメソッド
+	 * 
 	 * @param args 引数
 	 */
 	public static void main(String[] args) {
@@ -346,7 +319,7 @@ public class SimYukkuri extends JFrame {
 		}
 	}
 
-	/**マウスの運動量取得*/
+	/** マウスの運動量取得 */
 	public static void checkMouseVel() {
 		mouseVX = (mouseNewX - mouseOldX) + mouseVX / 3 * 2;
 		mouseVY = (mouseNewY - mouseOldY) + mouseVY / 3 * 2;
@@ -356,7 +329,8 @@ public class SimYukkuri extends JFrame {
 
 	/**
 	 * ウィンドウの大きさ指定
-	 * @param size ウィンドウのサイズ
+	 * 
+	 * @param size  ウィンドウのサイズ
 	 * @param scale 拡大倍率
 	 */
 	public void setWindowMode(int size, int scale) {
@@ -376,6 +350,7 @@ public class SimYukkuri extends JFrame {
 
 	/**
 	 * フルスクにする処理
+	 * 
 	 * @param scale 拡大倍率
 	 */
 	public void setFullScreenMode(int scale) {
@@ -397,7 +372,7 @@ public class SimYukkuri extends JFrame {
 		mypane.setMaximumSize(new java.awt.Dimension(Translate.getCanvasW(), Translate.getCanvasH()));
 	}
 
-	/**最初に出てくるウィンドウの作成*/
+	/** 最初に出てくるウィンドウの作成 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	void initTerrariumSize() {
 		String[] screen;
@@ -517,5 +492,3 @@ public class SimYukkuri extends JFrame {
 		}
 	}
 }
-
-

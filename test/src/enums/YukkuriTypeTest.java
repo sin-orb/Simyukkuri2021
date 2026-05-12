@@ -1,8 +1,13 @@
 package src.enums;
 
-import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
 /**
  * YukkuriType enum のテスト.
@@ -60,8 +65,9 @@ public class YukkuriTypeTest {
 
     @Test
     public void testNormalizeOffspringType() {
-        assertEquals(YukkuriType.MARISA.getTypeID(), YukkuriType.normalizeOffspringType(YukkuriType.DOSMARISA.getTypeID()));
-        assertEquals(YukkuriType.REIMU.getTypeID(), YukkuriType.normalizeOffspringType(YukkuriType.DEIBU.getTypeID()));
-        assertEquals(YukkuriType.ALICE.getTypeID(), YukkuriType.normalizeOffspringType(YukkuriType.ALICE.getTypeID()));
+        assertEquals(YukkuriType.MARISA.getTypeID(),
+                YukkuriType.normalizeOffspringType(YukkuriType.DOSMARISA));
+        assertEquals(YukkuriType.REIMU.getTypeID(), YukkuriType.normalizeOffspringType(YukkuriType.DEIBU));
+        assertEquals(YukkuriType.ALICE.getTypeID(), YukkuriType.normalizeOffspringType(YukkuriType.ALICE));
     }
 }

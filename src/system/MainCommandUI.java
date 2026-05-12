@@ -1,6 +1,4 @@
 package src.system;
-import src.util.GameLocale;
-import src.util.GameText;
 
 import java.awt.Dimension;
 import java.awt.GridLayout;
@@ -20,11 +18,13 @@ import javax.swing.JToggleButton;
 import javax.swing.border.EmptyBorder;
 
 import src.SimYukkuri;
-import src.util.GameWorld;
-import src.base.Yukkuri;
 import src.command.GadgetMenu;
+import src.entity.core.living.yukkuri.Yukkuri;
 import src.enums.BodyRank;
 import src.enums.PublicRank;
+import src.util.GameLocale;
+import src.util.GameText;
+import src.util.GameWorld;
 
 /**
  * メインコマンドUI（右ペイン）
@@ -41,12 +41,16 @@ public class MainCommandUI {
 		NEXT(">>"),
 		LOGCLEAR(GameText.read("logclear")),
 		;
-        private final String label;
-        SystemButtonLabel(String str) { this.label = str; }
 
-        public String getLabel() {
-        	return label;
-        }
+		private final String label;
+
+		SystemButtonLabel(String str) {
+			this.label = str;
+		}
+
+		public String getLabel() {
+			return label;
+		}
 	}
 
 	/** ツールボタン */
@@ -54,12 +58,16 @@ public class MainCommandUI {
 		MOVE(GameText.read("system_move")),
 		BAG(GameText.read("system_belongings")),
 		;
-        private final String label;
-        ToolButtonLabel(String str) { this.label = str; }
 
-        public String getLabel() {
-        	return label;
-        }
+		private final String label;
+
+		ToolButtonLabel(String str) {
+			this.label = str;
+		}
+
+		public String getLabel() {
+			return label;
+		}
 	}
 
 	/** ステータスのラベル */
@@ -77,33 +85,39 @@ public class MainCommandUI {
 		SHIT(GameText.read("system_unun")),
 		LOVEPLAYER(GameText.read("system_familiality")),
 		;
-        private final String label;
-        StatusLabel(String str) { this.label = str; }
 
-        public String getLabel() {
-        	return label;
-        }
-	}
-
-	/** オプションポップアップ */
-	static enum OptionPopup {
-		INI_RELOAD(GameText.read("system_inireload"))
-		;
 		private final String label;
-		OptionPopup(String str) { this.label = str; }
+
+		StatusLabel(String str) {
+			this.label = str;
+		}
 
 		public String getLabel() {
 			return label;
 		}
 	}
 
+	/** オプションポップアップ */
+	static enum OptionPopup {
+		INI_RELOAD(GameText.read("system_inireload"));
 
-	private static final String[] ATTITUDE_LEVEL_J = { "超善良", "善良", "普通", "ゲス", "ドゲス"};
-	private static final String[] ATTITUDE_LEVEL_E = { "Very Nice", "Nice", "Normal", "Shithead", "Very Shithead"};
-	private static final String[] INTEL_LEVEL_J = { "バッジ級", "普通", "餡子脳"};
-	private static final String[] INTEL_LEVEL_E = { "Badge Class", "Normal", "Fool"};
-	private static final String[] TANG_LEVEL_J = { "バカ舌", "普通", "肥えてる"};
-	private static final String[] TANG_LEVEL_E = { "Paralyzed", "Normal", "Destroyed"};
+		private final String label;
+
+		OptionPopup(String str) {
+			this.label = str;
+		}
+
+		public String getLabel() {
+			return label;
+		}
+	}
+
+	private static final String[] ATTITUDE_LEVEL_J = { "超善良", "善良", "普通", "ゲス", "ドゲス" };
+	private static final String[] ATTITUDE_LEVEL_E = { "Very Nice", "Nice", "Normal", "Shithead", "Very Shithead" };
+	private static final String[] INTEL_LEVEL_J = { "バッジ級", "普通", "餡子脳" };
+	private static final String[] INTEL_LEVEL_E = { "Badge Class", "Normal", "Fool" };
+	private static final String[] TANG_LEVEL_J = { "バカ舌", "普通", "肥えてる" };
+	private static final String[] TANG_LEVEL_E = { "Paralyzed", "Normal", "Destroyed" };
 	/** ゲームスピード */
 	private static int selectedGameSpeed = 1;
 	/** ズームスケール */
@@ -138,8 +152,10 @@ public class MainCommandUI {
 
 	/** メニューエリアの幅 */
 	public static final int MENU_PANE_X = 124;
+
 	/**
 	 * インターフェイス作成
+	 * 
 	 * @param windowHeight ウィンドウの高さ
 	 * @return パネルインスタンス
 	 */
@@ -272,7 +288,7 @@ public class MainCommandUI {
 		OptionPopupListener opl = new OptionPopupListener();
 		optionPopup.addPopupMenuListener(opl);
 		int size = OptionPopup.values().length;
-		for(int i = 0; i < size; i++) {
+		for (int i = 0; i < size; i++) {
 			JMenuItem menu = new JMenuItem(OptionPopup.values()[i].getLabel());
 			menu.addActionListener(oml);
 			menu.setActionCommand(OptionPopup.values()[i].name());
@@ -301,7 +317,7 @@ public class MainCommandUI {
 		// アイテムアイコン
 		JPanel itemPane = new JPanel();
 		itemPane.setLayout(new GridLayout(1, 6, 0, 0));
-		for(int i = 0; i < itemIconLabel.length; i++) {
+		for (int i = 0; i < itemIconLabel.length; i++) {
 			itemIconLabel[i] = new JLabel();
 			itemPane.add(itemIconLabel[i]);
 		}
@@ -312,8 +328,8 @@ public class MainCommandUI {
 		JPanel item = new JPanel();
 		item.setLayout(new GridLayout(1, 11, 0, 0));
 		item.setBorder(new EmptyBorder(0, 0, 0, 0));
-		for(int i = 0; i < yuStatusLabel.length; i++) {
-			if(i == 1) {
+		for (int i = 0; i < yuStatusLabel.length; i++) {
+			if (i == 1) {
 				yuStatusLabel[i] = new JLabel(enums[i].getLabel());
 			} else {
 				yuStatusLabel[i] = new JLabel(enums[i].getLabel() + " - ");
@@ -346,7 +362,7 @@ public class MainCommandUI {
 		// 状態異常アイコン
 		JPanel statPane = new JPanel();
 		statPane.setLayout(new GridLayout(1, 6, 0, 0));
-		for(int i = 0; i < statIconLabel.length; i++) {
+		for (int i = 0; i < statIconLabel.length; i++) {
 			statIconLabel[i] = new JLabel();
 			statPane.add(statIconLabel[i]);
 		}
@@ -361,11 +377,13 @@ public class MainCommandUI {
 
 		return retpanel;
 	}
+
 	/**
 	 * ステータスをクリアする.
 	 */
 	public static void clearStatus() {
-		yuStatusLabel[StatusLabel.MONEY.ordinal()].setText(StatusLabel.MONEY.getLabel() + GameWorld.get().getPlayer().getCash());
+		yuStatusLabel[StatusLabel.MONEY.ordinal()]
+				.setText(StatusLabel.MONEY.getLabel() + GameWorld.get().getPlayer().getCash());
 		yuStatusLabel[StatusLabel.NAME.ordinal()].setText("");
 		yuStatusLabel[StatusLabel.RANK.ordinal()].setText(StatusLabel.RANK.getLabel());
 		yuStatusLabel[StatusLabel.PERSONALITY.ordinal()].setText(StatusLabel.PERSONALITY.getLabel());
@@ -389,21 +407,22 @@ public class MainCommandUI {
 		statIconLabel[4].setIcon(null);
 		statIconLabel[4].setToolTipText(null);
 	}
+
 	/**
 	 * プレイヤーのステータスを表示する.
 	 */
 	public static void showPlayerStatus() {
-		if( GameWorld.get() == null )
-		{
+		if (GameWorld.get() == null) {
 			return;
 		}
 		// 現金更新
-		yuStatusLabel[StatusLabel.MONEY.ordinal()].setText(StatusLabel.MONEY.getLabel() + GameWorld.get().getPlayer().getCash());
+		yuStatusLabel[StatusLabel.MONEY.ordinal()]
+				.setText(StatusLabel.MONEY.getLabel() + GameWorld.get().getPlayer().getCash());
 
 		IconPool.StatusIcon[] stat = IconPool.StatusIcon.values();
 		ImageIcon[] img = IconPool.getStatusIconImageArray();
-		//　精子餡保持状態更新
-		if(SimYukkuri.sperm != null) {
+		// 精子餡保持状態更新
+		if (SimYukkuri.sperm != null) {
 			itemIconLabel[0].setIcon(img[IconPool.StatusIcon.SPERM.ordinal()]);
 			itemIconLabel[0].setToolTipText(stat[IconPool.StatusIcon.SPERM.ordinal()].getHelp());
 		} else {
@@ -412,8 +431,10 @@ public class MainCommandUI {
 		}
 
 	}
+
 	/**
 	 * ゆっくりのステータスを表示する.
+	 * 
 	 * @param b ゆっくり
 	 */
 	public static void showStatus(Yukkuri b) {
@@ -423,87 +444,86 @@ public class MainCommandUI {
 		int stress = 100 * b.getStress() / b.getStressLimit();
 		int lovePlayerPercent = 100 * b.getLovePlayer() / b.getLovePlayerLimitBase();
 
-		yuStatusLabel[StatusLabel.MONEY.ordinal()].setText(StatusLabel.MONEY.getLabel() + GameWorld.get().getPlayer().getCash());
-		yuStatusLabel[StatusLabel.NAME.ordinal()].setText(" " + (GameLocale.isJapanese() ? b.getNameJ() : b.getNameE()));
-		yuStatusLabel[StatusLabel.RANK.ordinal()].setText(StatusLabel.RANK.getLabel() + BodyRank.values()[b.getBodyRank().ordinal()].getDisplayName());
+		yuStatusLabel[StatusLabel.MONEY.ordinal()]
+				.setText(StatusLabel.MONEY.getLabel() + GameWorld.get().getPlayer().getCash());
+		yuStatusLabel[StatusLabel.NAME.ordinal()]
+				.setText(" " + (GameLocale.isJapanese() ? b.getNameJ() : b.getNameE()));
+		yuStatusLabel[StatusLabel.RANK.ordinal()]
+				.setText(StatusLabel.RANK.getLabel() + BodyRank.values()[b.getBodyRank().ordinal()].getDisplayName());
 		yuStatusLabel[StatusLabel.PERSONALITY.ordinal()].setText(StatusLabel.PERSONALITY.getLabel() +
-				(GameLocale.isJapanese() ? ATTITUDE_LEVEL_J[b.getAttitude().ordinal()] : ATTITUDE_LEVEL_E[b.getAttitude().ordinal()]));
-		yuStatusLabel[StatusLabel.INTEL.ordinal()].setText(StatusLabel.INTEL.getLabel() + 
-				(GameLocale.isJapanese() ? INTEL_LEVEL_J[b.getIntelligence().ordinal()] : INTEL_LEVEL_E[b.getIntelligence().ordinal()] ));
+				(GameLocale.isJapanese() ? ATTITUDE_LEVEL_J[b.getAttitude().ordinal()]
+						: ATTITUDE_LEVEL_E[b.getAttitude().ordinal()]));
+		yuStatusLabel[StatusLabel.INTEL.ordinal()].setText(StatusLabel.INTEL.getLabel() +
+				(GameLocale.isJapanese() ? INTEL_LEVEL_J[b.getIntelligence().ordinal()]
+						: INTEL_LEVEL_E[b.getIntelligence().ordinal()]));
 		yuStatusLabel[StatusLabel.DAMAGE.ordinal()].setText(StatusLabel.DAMAGE.getLabel() + damage + "%");
 		yuStatusLabel[StatusLabel.STRESS.ordinal()].setText(StatusLabel.STRESS.getLabel() + stress + "%");
 		yuStatusLabel[StatusLabel.HUNGER.ordinal()].setText(StatusLabel.HUNGER.getLabel() + hungry + "%");
-		yuStatusLabel[StatusLabel.TANG.ordinal()].setText(StatusLabel.TANG.getLabel() + 
-				(GameLocale.isJapanese() ? TANG_LEVEL_J[b.getTangType().ordinal()] : TANG_LEVEL_E[b.getTangType().ordinal()]));
+		yuStatusLabel[StatusLabel.TANG.ordinal()].setText(StatusLabel.TANG.getLabel() +
+				(GameLocale.isJapanese() ? TANG_LEVEL_J[b.getTangType().ordinal()]
+						: TANG_LEVEL_E[b.getTangType().ordinal()]));
 		yuStatusLabel[StatusLabel.SHIT.ordinal()].setText(StatusLabel.SHIT.getLabel() + shit + "%");
-		yuStatusLabel[StatusLabel.LOVEPLAYER.ordinal()].setText(StatusLabel.LOVEPLAYER.getLabel() + lovePlayerPercent + "%");
+		yuStatusLabel[StatusLabel.LOVEPLAYER.ordinal()]
+				.setText(StatusLabel.LOVEPLAYER.getLabel() + lovePlayerPercent + "%");
 
 		pinButton.setSelected(b.isPinned());
 
 		IconPool.StatusIcon[] stat = IconPool.StatusIcon.values();
 		ImageIcon[] img = IconPool.getStatusIconImageArray();
 
-		if(b.isAnalClose()) {
+		if (b.isAnalClose()) {
 			statIconLabel[0].setIcon(img[IconPool.StatusIcon.UNSHIT.ordinal()]);
 			statIconLabel[0].setToolTipText(stat[IconPool.StatusIcon.UNSHIT.ordinal()].getHelp());
-		}
-		else {
+		} else {
 			statIconLabel[0].setIcon(null);
 			statIconLabel[0].setToolTipText(null);
 		}
-		if(b.isStalkCastration()) {
+		if (b.isStalkCastration()) {
 			statIconLabel[1].setIcon(img[IconPool.StatusIcon.UNSTALK.ordinal()]);
 			statIconLabel[1].setToolTipText(stat[IconPool.StatusIcon.UNSTALK.ordinal()].getHelp());
-		}
-		else {
+		} else {
 			statIconLabel[1].setIcon(null);
 			statIconLabel[1].setToolTipText(null);
 		}
-		if(b.isBodyCastration()) {
+		if (b.isBodyCastration()) {
 			statIconLabel[2].setIcon(img[IconPool.StatusIcon.UNBABY.ordinal()]);
 			statIconLabel[2].setToolTipText(stat[IconPool.StatusIcon.UNBABY.ordinal()].getHelp());
-		}
-		else {
+		} else {
 			statIconLabel[2].setIcon(null);
 			statIconLabel[2].setToolTipText(null);
 		}
-		if(b.isPredatorType()) {
+		if (b.isPredatorType()) {
 			statIconLabel[3].setIcon(img[IconPool.StatusIcon.PREDATOR.ordinal()]);
 			statIconLabel[3].setToolTipText(stat[IconPool.StatusIcon.PREDATOR.ordinal()].getHelp());
-		}
-		else {
+		} else {
 			statIconLabel[3].setIcon(null);
 			statIconLabel[3].setToolTipText(null);
 		}
-		if(b.isRaper()) {
+		if (b.isRaper()) {
 			statIconLabel[4].setIcon(img[IconPool.StatusIcon.RAPER.ordinal()]);
 			statIconLabel[4].setToolTipText(stat[IconPool.StatusIcon.RAPER.ordinal()].getHelp());
-		}
-		else {
+		} else {
 			statIconLabel[4].setIcon(null);
 			statIconLabel[4].setToolTipText(null);
 		}
-		if(b.isPenipeniCutted()) {
+		if (b.isPenipeniCutted()) {
 			statIconLabel[5].setIcon(img[IconPool.StatusIcon.PENIPENICUT.ordinal()]);
 			statIconLabel[5].setToolTipText(stat[IconPool.StatusIcon.PENIPENICUT.ordinal()].getHelp());
-		}
-		else {
+		} else {
 			statIconLabel[5].setIcon(null);
 			statIconLabel[5].setToolTipText(null);
 		}
-		if(b.isPheromone()) {
+		if (b.isPheromone()) {
 			statIconLabel[6].setIcon(img[IconPool.StatusIcon.PHEROMONE.ordinal()]);
 			statIconLabel[6].setToolTipText(stat[IconPool.StatusIcon.PHEROMONE.ordinal()].getHelp());
-		}
-		else {
+		} else {
 			statIconLabel[6].setIcon(null);
 			statIconLabel[6].setToolTipText(null);
 		}
-		if(b.getPublicRank() == PublicRank.UnunSlave) {
+		if (b.getPublicRank() == PublicRank.UnunSlave) {
 			statIconLabel[7].setIcon(img[IconPool.StatusIcon.UNUNSLAVE.ordinal()]);
 			statIconLabel[7].setToolTipText(stat[IconPool.StatusIcon.UNUNSLAVE.ordinal()].getHelp());
-		}
-		else {
+		} else {
 			statIconLabel[7].setIcon(null);
 			statIconLabel[7].setToolTipText(null);
 		}
@@ -512,155 +532,150 @@ public class MainCommandUI {
 	public static int getSelectedGameSpeed() {
 		return selectedGameSpeed;
 	}
-	
+
 	public static void setSelectedGameSpeed(int selectedGameSpeed) {
 		MainCommandUI.selectedGameSpeed = selectedGameSpeed;
 	}
-	
+
 	public static int getSelectedZoomScale() {
 		return selectedZoomScale;
 	}
-	
+
 	public static void setSelectedZoomScale(int selectedZoomScale) {
 		MainCommandUI.selectedZoomScale = selectedZoomScale;
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	public static JComboBox getGameSpeedCombo() {
 		return gameSpeedCombo;
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	public static void setGameSpeedCombo(JComboBox gameSpeedCombo) {
 		MainCommandUI.gameSpeedCombo = gameSpeedCombo;
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	public static JComboBox getMainItemCombo() {
 		return mainItemCombo;
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	public static void setMainItemCombo(JComboBox mainItemCombo) {
 		MainCommandUI.mainItemCombo = mainItemCombo;
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	public static JComboBox getSubItemCombo() {
 		return subItemCombo;
 	}
-	
+
 	@SuppressWarnings("rawtypes")
 	public static void setSubItemCombo(JComboBox subItemCombo) {
 		MainCommandUI.subItemCombo = subItemCombo;
 	}
-	
+
 	public static JLabel[] getYuStatusLabel() {
 		return yuStatusLabel;
 	}
-	
+
 	public static void setYuStatusLabel(JLabel[] yuStatusLabel) {
 		MainCommandUI.yuStatusLabel = yuStatusLabel;
 	}
-	
+
 	public static JLabel[] getStatIconLabel() {
 		return statIconLabel;
 	}
-	
+
 	public static void setStatIconLabel(JLabel[] statIconLabel) {
 		MainCommandUI.statIconLabel = statIconLabel;
 	}
-	
+
 	public static JLabel[] getItemIconLabel() {
 		return itemIconLabel;
 	}
-	
+
 	public static void setItemIconLabel(JLabel[] itemIconLabel) {
 		MainCommandUI.itemIconLabel = itemIconLabel;
 	}
-	
+
 	public static JButton[] getSystemButton() {
 		return systemButton;
 	}
-	
+
 	public static void setSystemButton(JButton[] systemButton) {
 		MainCommandUI.systemButton = systemButton;
 	}
-	
+
 	public static JToggleButton getScriptButton() {
 		return scriptButton;
 	}
-	
+
 	public static void setScriptButton(JToggleButton scriptButton) {
 		MainCommandUI.scriptButton = scriptButton;
 	}
-	
+
 	public static JToggleButton getTargetButton() {
 		return targetButton;
 	}
-	
+
 	public static void setTargetButton(JToggleButton targetButton) {
 		MainCommandUI.targetButton = targetButton;
 	}
-	
+
 	public static JToggleButton getPinButton() {
 		return pinButton;
 	}
-	
+
 	public static void setPinButton(JToggleButton pinButton) {
 		MainCommandUI.pinButton = pinButton;
 	}
-	
+
 	public static JToggleButton getHelpButton() {
 		return helpButton;
 	}
-	
+
 	public static void setHelpButton(JToggleButton helpButton) {
 		MainCommandUI.helpButton = helpButton;
 	}
-	
+
 	public static JToggleButton getOptionButton() {
 		return optionButton;
 	}
-	
+
 	public static void setOptionButton(JToggleButton optionButton) {
 		MainCommandUI.optionButton = optionButton;
 	}
-	
+
 	public static JToggleButton[] getPlayerButton() {
 		return playerButton;
 	}
-	
+
 	public static void setPlayerButton(JToggleButton[] playerButton) {
 		MainCommandUI.playerButton = playerButton;
 	}
-	
+
 	public static JPopupMenu getOptionPopup() {
 		return optionPopup;
 	}
-	
+
 	public static void setOptionPopup(JPopupMenu optionPopup) {
 		MainCommandUI.optionPopup = optionPopup;
 	}
-	
+
 	public static MapWindow getMapWindow() {
 		return mapWindow;
 	}
-	
+
 	public static void setMapWindow(MapWindow mapWindow) {
 		MainCommandUI.mapWindow = mapWindow;
 	}
-	
+
 	public static ItemWindow getItemWindow() {
 		return itemWindow;
 	}
-	
+
 	public static void setItemWindow(ItemWindow itemWindow) {
 		MainCommandUI.itemWindow = itemWindow;
 	}
 }
-
-
-
-
-

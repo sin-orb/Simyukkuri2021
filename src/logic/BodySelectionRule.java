@@ -4,7 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import src.base.Yukkuri;
+import src.entity.core.living.yukkuri.Yukkuri;
 import src.enums.PublicRank;
 import src.util.GameRandom;
 import src.util.GameWorld;
@@ -18,7 +18,7 @@ public class BodySelectionRule {
 	 * 婚姻候補のリストを作る。既婚の場合は、相手のみを含むリストを作る.
 	 * 
 	 * @param body 自分
-	 * @param age ゆん生のステージ
+	 * @param age  ゆん生のステージ
 	 * @return 婚姻候補のリスト
 	 */
 	public static final List<Yukkuri> createActiveFianceeList(Yukkuri body, int age) {
@@ -88,7 +88,7 @@ public class BodySelectionRule {
 	/**
 	 * アクティブな赤ゆ/子ゆのリストを作成する.
 	 * 
-	 * @param body ゆっくり
+	 * @param body            ゆっくり
 	 * @param includeChildren 子ゆっくりを入れるかどうか（これがfalseなら赤ゆのみのリストになる）
 	 * @return アクティブな赤ゆ/子ゆのリスト
 	 */

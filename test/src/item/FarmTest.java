@@ -8,9 +8,10 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
-import src.base.Yukkuri;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.world.item.Food;
+import src.entity.core.world.mobile.Shit;
 import src.enums.Event;
-import src.game.Shit;
 import src.system.ItemMenu.ShapeMenu;
 import src.system.ItemMenu.ShapeMenuTarget;
 import src.util.WorldTestHelper;
@@ -174,7 +175,7 @@ class FarmTest {
     @Test
     void testGetSetAnPointX() {
         Farm item = new Farm();
-        int[] pts = {10, 20, 30, 40};
+        int[] pts = { 10, 20, 30, 40 };
         item.setPolygonX(pts);
         assertArrayEquals(pts, item.getPolygonX());
     }
@@ -182,7 +183,7 @@ class FarmTest {
     @Test
     void testGetSetAnPointY() {
         Farm item = new Farm();
-        int[] pts = {15, 25, 35, 45};
+        int[] pts = { 15, 25, 35, 45 };
         item.setPolygonY(pts);
         assertArrayEquals(pts, item.getPolygonY());
     }
@@ -195,8 +196,10 @@ class FarmTest {
         assertFalse(item.checkHitObj(null));
     }
 
-    // checkHitObj with non-null obj calls checkContain() → invertLimit() which requires
-    // full Translate field initialization. Only the null-check path is easily testable.
+    // checkHitObj with non-null obj calls checkContain() → invertLimit() which
+    // requires
+    // full Translate field initialization. Only the null-check path is easily
+    // testable.
 
     // --- objHitProcess ---
 
@@ -212,7 +215,8 @@ class FarmTest {
         Food food = new Food(200, 200, 0);
         food.setZ(5); // airborne
         // non-Yukkuri airborne: o.getMostDepth() != 0 → setMostDepth(0) → returns 1
-        // But initially mostDepth == 0 → returns 1 only if different... let's just check no throw
+        // But initially mostDepth == 0 → returns 1 only if different... let's just
+        // check no throw
         assertDoesNotThrow(() -> item.objHitProcess(food));
     }
 
@@ -355,7 +359,8 @@ class FarmTest {
     @Test
     void testDrawPreview_doesNotThrow() {
         WorldTestHelper.initializeStandardTranslate200();
-        java.awt.image.BufferedImage img = new java.awt.image.BufferedImage(800, 600, java.awt.image.BufferedImage.TYPE_INT_RGB);
+        java.awt.image.BufferedImage img = new java.awt.image.BufferedImage(800, 600,
+                java.awt.image.BufferedImage.TYPE_INT_RGB);
         java.awt.Graphics2D g2 = img.createGraphics();
         assertDoesNotThrow(() -> Farm.drawPreview(g2, 10, 10, 100, 100));
         g2.dispose();
@@ -368,7 +373,8 @@ class FarmTest {
         WorldTestHelper.initializeStandardTranslate200();
         Farm item = new Farm();
         item.setMapPos(100, 100, 300, 300);
-        java.awt.image.BufferedImage img = new java.awt.image.BufferedImage(800, 600, java.awt.image.BufferedImage.TYPE_INT_RGB);
+        java.awt.image.BufferedImage img = new java.awt.image.BufferedImage(800, 600,
+                java.awt.image.BufferedImage.TYPE_INT_RGB);
         java.awt.Graphics2D g2 = img.createGraphics();
         assertDoesNotThrow(() -> item.drawShape(g2));
         g2.dispose();
@@ -398,8 +404,9 @@ class FarmTest {
         Farm item = new Farm();
         item.setMapPos(0, 0, 1000, 1000);
         item.setAmount(5000);
-        src.base.Yukkuri body = WorldTestHelper.createBody();
-        body.setX(200); body.setY(200);
+        src.entity.core.living.yukkuri.Yukkuri body = WorldTestHelper.createBody();
+        body.setX(200);
+        body.setY(200);
         assertDoesNotThrow(() -> item.giveAmount(body));
     }
 
@@ -444,8 +451,10 @@ class FarmTest {
     void testCheckHitObj_yukkuriInside_doesNotThrow() {
         Farm item = new Farm();
         item.setMapPos(0, 0, 1000, 1000);
-        src.base.Yukkuri body = WorldTestHelper.createBody();
-        body.setX(200); body.setY(200); body.setZ(0);
+        src.entity.core.living.yukkuri.Yukkuri body = WorldTestHelper.createBody();
+        body.setX(200);
+        body.setY(200);
+        body.setZ(0);
         // Result depends on coordinate mapping, just verify no crash
         assertDoesNotThrow(() -> item.checkHitObj(body));
     }
@@ -455,8 +464,10 @@ class FarmTest {
         Farm item = new Farm();
         item.setMapPos(0, 0, 1000, 1000);
         item.setAmount(100);
-        src.base.Yukkuri body = WorldTestHelper.createBody();
-        body.setX(200); body.setY(200); body.setZ(0);
+        src.entity.core.living.yukkuri.Yukkuri body = WorldTestHelper.createBody();
+        body.setX(200);
+        body.setY(200);
+        body.setZ(0);
         assertDoesNotThrow(() -> item.objHitProcess(body));
     }
 
@@ -465,8 +476,9 @@ class FarmTest {
         Farm item = new Farm();
         item.setMapPos(0, 0, 1000, 1000);
         item.setAmount(100);
-        src.base.Yukkuri body = WorldTestHelper.createBody();
-        body.setX(200); body.setY(200);
+        src.entity.core.living.yukkuri.Yukkuri body = WorldTestHelper.createBody();
+        body.setX(200);
+        body.setY(200);
         assertDoesNotThrow(() -> item.getAmount(body));
     }
 

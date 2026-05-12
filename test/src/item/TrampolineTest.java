@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
 import src.base.ItemTestBase;
+import src.entity.core.world.item.Trampoline;
 
 class TrampolineTest extends ItemTestBase {
 
@@ -97,7 +98,8 @@ class TrampolineTest extends ItemTestBase {
     void testLoadImages_headless_executesCode() {
         try {
             Trampoline.loadImages(Trampoline.class.getClassLoader(), null);
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
     }
 
     @Test
@@ -110,14 +112,14 @@ class TrampolineTest extends ItemTestBase {
     @Test
     void testCheckHitObj_singleArg_doesNotThrow() {
         Trampoline item = new Trampoline();
-        src.base.Entity body = src.util.WorldTestHelper.createBody();
+        src.entity.core.Entity body = src.util.WorldTestHelper.createBody();
         org.junit.jupiter.api.Assertions.assertDoesNotThrow(() -> item.checkHitObj(body));
     }
 
     @Test
     void testCheckHitObj_twoArgs_doesNotThrow() {
         Trampoline item = new Trampoline();
-        src.base.Entity body = src.util.WorldTestHelper.createBody();
+        src.entity.core.Entity body = src.util.WorldTestHelper.createBody();
         org.junit.jupiter.api.Assertions.assertDoesNotThrow(() -> item.checkHitObj(null, body));
     }
 
@@ -126,7 +128,8 @@ class TrampolineTest extends ItemTestBase {
         Trampoline item = new Trampoline();
         try {
             Trampoline.setupTrampoline(item);
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
     }
 
     @Test
@@ -134,6 +137,7 @@ class TrampolineTest extends ItemTestBase {
         try {
             Trampoline t = new Trampoline(100, 100, 0);
             org.junit.jupiter.api.Assertions.assertNotNull(t);
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
     }
 }

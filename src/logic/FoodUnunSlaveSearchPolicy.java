@@ -2,17 +2,15 @@ package src.logic;
 
 import java.util.Map;
 
-import src.base.Yukkuri;
-import src.base.Entity;
 import src.draw.Translate;
+import src.entity.core.Entity;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.world.item.Food;
+import src.entity.core.world.mobile.Shit;
+import src.entity.core.world.mobile.Vomit;
 import src.enums.AgeState;
-import src.enums.BodyRank;
-import src.enums.PublicRank;
 import src.enums.TakeoutItemType;
-import src.game.Shit;
-import src.game.Vomit;
 import src.field.impl.Barrier;
-import src.item.Food;
 import src.util.GameWorld;
 
 /**
@@ -53,7 +51,8 @@ public final class FoodUnunSlaveSearchPolicy {
 					}
 					if (FoodLogic.checkTakeout(body, shit)) {
 						boolean hasOtherTarget = false;
-						for (Map.Entry<Integer, Yukkuri> entry2 : GameWorld.get().getCurrentMap().getBody().entrySet()) {
+						for (Map.Entry<Integer, Yukkuri> entry2 : GameWorld.get().getCurrentMap().getBody()
+								.entrySet()) {
 							Yukkuri otherBody = entry2.getValue();
 							if (body == otherBody || otherBody == null || otherBody.isDead() || otherBody.isRemoved()) {
 								continue;

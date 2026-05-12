@@ -3,26 +3,25 @@ package src.draw;
 import java.util.List;
 import java.util.Map;
 
-import src.attachment.Fire;
-import src.base.Yukkuri;
 import src.command.GadgetAction;
+import src.entity.core.attachment.impl.Fire;
+import src.entity.core.living.yukkuri.Dna;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.world.bodylinked.Stalk;
 import src.enums.AgeState;
 import src.enums.Event;
 import src.enums.PanicType;
-import src.game.Dna;
-import src.game.Stalk;
 import src.field.impl.Barrier;
-import src.system.MapPlaceData;
-import src.draw.Translate;
-import src.util.GameRandom;
-import src.util.GameWorld;
-import src.logic.BodyLogic;
 import src.logic.BedLogic;
+import src.logic.BodyLogic;
 import src.logic.EventLogic;
 import src.logic.FamilyActionLogic;
 import src.logic.FoodLogic;
 import src.logic.StoneLogic;
 import src.logic.ToiletLogic;
+import src.system.MapPlaceData;
+import src.util.GameRandom;
+import src.util.GameWorld;
 
 /**
  * Terrarium の 1 体分の更新処理を担当する。
@@ -35,10 +34,10 @@ public final class BodyTickProcessor {
 	/**
 	 * 1 体分の更新を実行する。
 	 *
-	 * @param terrarium 生成補助を提供する Terrarium
-	 * @param curMap 現在のマップ
-	 * @param b 更新対象
-	 * @param babyList 生成待ちの赤ゆリスト
+	 * @param terrarium  生成補助を提供する Terrarium
+	 * @param curMap     現在のマップ
+	 * @param b          更新対象
+	 * @param babyList   生成待ちの赤ゆリスト
 	 * @param transCheck 突然変異チェックを行うか
 	 * @return 突然変異候補。なければ null
 	 */
@@ -227,14 +226,14 @@ public final class BodyTickProcessor {
 
 	private static void handleBirthBaby(Terrarium terrarium, Yukkuri b, List<Yukkuri> babyList) {
 		if (b.getAge() % 10 == 0 && !b.isHasPants()) {
-				Dna babyType = b.getBabyTypesDequeue();
-				if (babyType != null) {
-					Yukkuri baby = terrarium.makeBody(b.getX(), b.getY(), b.getZ() + b.getSize() / 15, babyType,
-							AgeState.BABY, b, src.util.BodyRegistry.getBodyInstance(b.getPartner()));
-					baby.kick(0, 5, -2);
-					babyList.add(baby);
-				}
+			Dna babyType = b.getBabyTypesDequeue();
+			if (babyType != null) {
+				Yukkuri baby = terrarium.makeBody(b.getX(), b.getY(), b.getZ() + b.getSize() / 15, babyType,
+						AgeState.BABY, b, src.util.BodyRegistry.getBodyInstance(b.getPartner()));
+				baby.kick(0, 5, -2);
+				babyList.add(baby);
 			}
+		}
 		if (b.getStalks() != null) {
 			for (Stalk s : b.getStalks()) {
 				if (s != null) {
@@ -265,8 +264,9 @@ public final class BodyTickProcessor {
 						fx = Math.min(fx, Translate.getMapW());
 						fy = Math.max(0, fy);
 						fy = Math.min(fy, Translate.getMapH());
-						src.item.Food food = (src.item.Food) GadgetAction.putObjEX(src.item.Food.class, fx, fy,
-								src.item.Food.FoodType.STALK.ordinal());
+						src.entity.core.world.item.Food food = (src.entity.core.world.item.Food) GadgetAction.putObjEX(
+								src.entity.core.world.item.Food.class, fx, fy,
+								src.entity.core.world.item.Food.FoodType.STALK.ordinal());
 						GameWorld.get().getCurrentMap().getFood().put(food.objId, food);
 					}
 					s.remove();

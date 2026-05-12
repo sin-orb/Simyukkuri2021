@@ -9,13 +9,13 @@ import org.junit.jupiter.api.Test;
 
 import src.ConstState;
 import src.SimYukkuri;
-import src.base.Yukkuri;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.world.item.Bed;
+import src.entity.core.world.item.Food;
+import src.entity.core.world.item.Toilet;
+import src.entity.core.world.mobile.Shit;
 import src.enums.FavItemType;
 import src.enums.PublicRank;
-import src.game.Shit;
-import src.item.Bed;
-import src.item.Food;
-import src.item.Toilet;
 import src.util.WorldTestHelper;
 
 class FoodTakeoutPolicyTest {

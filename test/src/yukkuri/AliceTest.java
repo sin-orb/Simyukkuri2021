@@ -8,7 +8,7 @@ import src.ConstState;
 import src.SimYukkuri;
 import src.enums.AgeState;
 import src.draw.Point4y;
-import src.base.Yukkuri;
+import src.entity.core.living.yukkuri.Yukkuri;
 
 public class AliceTest {
 
@@ -159,7 +159,7 @@ public class AliceTest {
 
             // checkTransform() checks if transformation should occur
             // Returns this if transformation triggered, null otherwise
-            src.base.Yukkuri result = obj.checkTransform();
+            src.entity.core.living.yukkuri.Yukkuri result = obj.checkTransform();
 
             // Method should execute without crashing
             assertNotNull(obj);

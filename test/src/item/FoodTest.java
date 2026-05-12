@@ -2,10 +2,11 @@ package src.item;
 
 import org.junit.jupiter.api.Test;
 import src.base.ItemTestBase;
+import src.entity.core.world.item.Food;
+import src.entity.core.world.item.Food.EmptyImage;
+import src.entity.core.world.item.Food.FoodType;
 import src.SimYukkuri;
 import src.enums.WorldEntityKind;
-import src.item.Food.FoodType;
-import src.item.Food.EmptyImage;
 
 import static org.junit.jupiter.api.Assertions.*;
 

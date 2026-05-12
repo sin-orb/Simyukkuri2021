@@ -4,17 +4,17 @@ import java.awt.event.MouseEvent;
 import java.util.LinkedList;
 import java.util.List;
 
-import src.attachment.ANYDAmpoule;
-import src.attachment.AccelAmpoule;
-import src.attachment.BreedingAmpoule;
-import src.attachment.HungryAmpoule;
-import src.attachment.OrangeAmpoule;
-import src.attachment.PoisonAmpoule;
-import src.attachment.StopAmpoule;
-import src.attachment.VeryShitAmpoule;
-import src.base.Yukkuri;
-import src.base.Entity;
 import src.command.GadgetMenu.GadgetList;
+import src.entity.core.Entity;
+import src.entity.core.attachment.impl.ANYDAmpoule;
+import src.entity.core.attachment.impl.AccelAmpoule;
+import src.entity.core.attachment.impl.BreedingAmpoule;
+import src.entity.core.attachment.impl.HungryAmpoule;
+import src.entity.core.attachment.impl.OrangeAmpoule;
+import src.entity.core.attachment.impl.PoisonAmpoule;
+import src.entity.core.attachment.impl.StopAmpoule;
+import src.entity.core.attachment.impl.VeryShitAmpoule;
+import src.entity.core.living.yukkuri.Yukkuri;
 import src.util.GameWorld;
 
 final class GadgetAmpouleAction {

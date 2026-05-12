@@ -6,9 +6,9 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import src.SimYukkuri;
 import src.draw.World;
+import src.entity.core.world.mobile.Vomit;
 import src.draw.MyPane;
 import src.draw.Terrarium;
-import src.game.Vomit;
 import src.system.MapPlaceData;
 import src.enums.*;
 import java.lang.reflect.Method;

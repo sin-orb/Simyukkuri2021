@@ -9,15 +9,15 @@ import java.awt.Panel;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
-import src.base.Yukkuri;
-import src.effect.Effect;
 import src.draw.MyPane;
 import src.draw.Terrarium;
+import src.entity.core.effect.Effect;
+import src.entity.core.living.yukkuri.Dna;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.world.mobile.Vomit;
 import src.enums.AgeState;
 import src.enums.EffectType;
 import src.enums.YukkuriType;
-import src.game.Dna;
-import src.game.Vomit;
 
 public class GameViewTest {
 
@@ -52,8 +52,8 @@ public class GameViewTest {
 		RecordingViewSource source = new RecordingViewSource();
 		GameView.setOverride(source);
 
-		GameView.addBody(1, 2, 3, 4, AgeState.BABY, null, null);
-		GameView.makeBody(1, 2, 3, 4, null, AgeState.BABY, null, null, true);
+		GameView.addBody(1, 2, 3, YukkuriType.fromTypeID(4), AgeState.BABY, null, null);
+		GameView.makeBody(1, 2, 3, YukkuriType.fromTypeID(4), null, AgeState.BABY, null, null, true);
 		GameView.addVomit(1, 2, 3, null, YukkuriType.REIMU);
 		GameView.addCrushedVomit(1, 2, 3, null, YukkuriType.REIMU);
 		GameView.addCrushedShit(1, 2, 3, null, YukkuriType.REIMU);
@@ -125,13 +125,13 @@ public class GameViewTest {
 		}
 
 		@Override
-		public Yukkuri addBody(int x, int y, int z, int type, AgeState age, Yukkuri p1, Yukkuri p2) {
+		public Yukkuri addBody(int x, int y, int z, YukkuriType type, AgeState age, Yukkuri p1, Yukkuri p2) {
 			addBody = true;
 			return null;
 		}
 
 		@Override
-		public Yukkuri makeBody(int x, int y, int z, int type, Dna dna, AgeState age, Yukkuri p1, Yukkuri p2,
+		public Yukkuri makeBody(int x, int y, int z, YukkuriType type, Dna dna, AgeState age, Yukkuri p1, Yukkuri p2,
 				boolean adjust) {
 			makeBody = adjust;
 			return null;

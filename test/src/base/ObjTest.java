@@ -10,12 +10,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import src.effect.Effect;
 import src.SimYukkuri;
 import src.draw.Point4y;
 import src.draw.Rectangle4y;
 import src.draw.Translate;
 import src.draw.World;
+import src.entity.core.effect.Effect;
 import src.enums.Event;
 import src.enums.Type;
 import src.enums.Where;

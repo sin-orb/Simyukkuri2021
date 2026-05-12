@@ -1,9 +1,13 @@
 
 package src.util;
 
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
-import src.yukkuri.Reimu;
+
+import src.entity.core.living.yukkuri.impl.Reimu;
 
 public class IniFileUtilTest {
 

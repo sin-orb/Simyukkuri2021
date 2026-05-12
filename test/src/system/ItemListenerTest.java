@@ -13,15 +13,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
-import src.base.Yukkuri;
+import src.entity.core.living.yukkuri.Yukkuri;
 import src.draw.World;
+import src.entity.core.world.bodylinked.Stalk;
+import src.entity.core.world.mobile.Shit;
+import src.entity.core.world.mobile.Vomit;
 import src.enums.AgeState;
-import src.game.Shit;
-import src.game.Stalk;
-import src.game.Vomit;
 import src.system.ItemMenu.GetMenu;
 import src.util.WorldTestHelper;
-import src.yukkuri.Reimu;
+import src.entity.core.living.yukkuri.impl.Reimu;
 
 public class ItemListenerTest {
 

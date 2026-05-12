@@ -4,23 +4,24 @@ import java.awt.event.MouseEvent;
 import java.util.LinkedList;
 import java.util.List;
 
-import src.base.Yukkuri;
-import src.base.Entity;
-import src.entity.world.bodylinked.Okazari;
 import src.command.GadgetMenu.GadgetList;
+import src.entity.core.Entity;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.world.bodylinked.Okazari;
 import src.util.GameWorld;
 
 /**
  * Yukkuri に対する操作コマンド群
- * <br>清掃、おかざり、おくるみ、声かけカテゴリの実行
+ * <br>
+ * 清掃、おかざり、おくるみ、声かけカテゴリの実行
  */
 public class GadgetBodyAction {
 
 	/**
 	 * 清掃カテゴリの実行
 	 *
-	 * @param item  実行内容
-	 * @param ev    入力されたマウスの動作
+	 * @param item         実行内容
+	 * @param ev           入力されたマウスの動作
 	 * @param targetObject 対象オブジェクト
 	 */
 	public static void evaluateClean(GadgetList item, MouseEvent ev, Entity targetObject) {
@@ -45,8 +46,8 @@ public class GadgetBodyAction {
 	/**
 	 * おかざりカテゴリの実行
 	 *
-	 * @param item  実行内容
-	 * @param ev    入力されたマウスの動作
+	 * @param item         実行内容
+	 * @param ev           入力されたマウスの動作
 	 * @param targetObject 対象オブジェクト
 	 */
 	public static void evaluateAccessory(GadgetList item, MouseEvent ev, Entity targetObject) {
@@ -86,8 +87,8 @@ public class GadgetBodyAction {
 	/**
 	 * おくるみカテゴリの実行
 	 *
-	 * @param item  実行内容
-	 * @param ev    入力されたマウスの動作
+	 * @param item         実行内容
+	 * @param ev           入力されたマウスの動作
 	 * @param targetObject 対象オブジェクト
 	 */
 	public static void evaluatePants(GadgetList item, MouseEvent ev, Entity targetObject) {
@@ -123,8 +124,8 @@ public class GadgetBodyAction {
 	/**
 	 * 声かけカテゴリの実行
 	 *
-	 * @param item  実行内容
-	 * @param ev    入力されたマウスの動作
+	 * @param item         実行内容
+	 * @param ev           入力されたマウスの動作
 	 * @param targetObject 対象オブジェクト
 	 */
 	public static void evaluateCommunicate(GadgetList item, MouseEvent ev, Entity targetObject) {

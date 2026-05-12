@@ -11,9 +11,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 import src.SimYukkuri;
-import src.base.Yukkuri;
-import src.base.Entity;
-import src.base.WorldEntity;
 import src.command.GadgetAction;
 import src.command.GadgetMenu;
 import src.command.GadgetMenu.ActionControl;
@@ -25,14 +22,16 @@ import src.draw.ObjDrawComp;
 import src.draw.Point4y;
 import src.draw.Rectangle4y;
 import src.draw.Translate;
-import src.game.Stalk;
+import src.entity.core.Entity;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.world.WorldEntity;
+import src.entity.core.world.bodylinked.Stalk;
+import src.entity.core.world.item.BeltconveyorObj;
+import src.field.FieldShape;
 import src.field.impl.Beltconveyor;
-import src.item.BeltconveyorObj;
 import src.field.impl.Farm;
 import src.field.impl.Pool;
-import src.field.FieldShape;
 import src.system.ItemMenu.ShapeMenuTarget;
-import src.system.MapPlaceData;
 
 /**
  * マウス入力をまとめる helper.
@@ -312,11 +311,11 @@ public class MouseInputController extends MouseAdapter {
 					if (grabbedObj instanceof Yukkuri) {
 						Yukkuri b = (Yukkuri) grabbedObj;
 
-					if (b.getBindStalk() != null) {
-						b.detachFromStalk();
-						b.setZ(0);
-						b.setCalcZ(0);
-						b.kick(0, 0, 0);
+						if (b.getBindStalk() != null) {
+							b.detachFromStalk();
+							b.setZ(0);
+							b.setCalcZ(0);
+							b.kick(0, 0, 0);
 							b.setZ(b.getZ() - 1);
 							b.setCalcZ(b.getZ());
 						}
@@ -410,41 +409,41 @@ public class MouseInputController extends MouseAdapter {
 					int newZ = startZ - SimYukkuri.fieldMousePos[1];
 					int hitX;
 					switch (grabbedObj.getObjType()) {
-					case YUKKURI:
-						Yukkuri b = (Yukkuri) grabbedObj;
-						if (b.canPullOrPush() && !b.isDead()) {
-							b.wakeup();
-							if (b.getZ() <= 0)
-								b.lockSetZ(newZ * Translate.getMapZ() / Translate.getCanvasH());
-						} else {
-							hitX = 4;
+						case YUKKURI:
+							Yukkuri b = (Yukkuri) grabbedObj;
+							if (b.canPullOrPush() && !b.isDead()) {
+								b.wakeup();
+								if (b.getZ() <= 0)
+									b.lockSetZ(newZ * Translate.getMapZ() / Translate.getCanvasH());
+							} else {
+								hitX = 4;
+								altitude = startZ - SimYukkuri.fieldMousePos[1];
+								Translate.invertFlying(newX, newY, newZ, hitX, translatePos);
+								grabbedObj.setCalcX(translatePos.getX());
+								if (newZ > 0) {
+									grabbedObj.setCalcZ(translatePos.getY());
+								}
+							}
+							break;
+						case SHIT:
+						case VOMIT:
+						case OBJECT:
+						case FIX_OBJECT:
+							hitX = grabbedObj.getPivotX();
 							altitude = startZ - SimYukkuri.fieldMousePos[1];
 							Translate.invertFlying(newX, newY, newZ, hitX, translatePos);
 							grabbedObj.setCalcX(translatePos.getX());
-							if (newZ > 0) {
-								grabbedObj.setCalcZ(translatePos.getY());
-							}
-						}
-						break;
-					case SHIT:
-					case VOMIT:
-					case OBJECT:
-					case FIX_OBJECT:
-						hitX = grabbedObj.getPivotX();
-						altitude = startZ - SimYukkuri.fieldMousePos[1];
-						Translate.invertFlying(newX, newY, newZ, hitX, translatePos);
-						grabbedObj.setCalcX(translatePos.getX());
-						grabbedObj.setCalcZ(translatePos.getY());
-						break;
-					case PLATFORM:
-						hitX = grabbedObj.getPivotX();
-						altitude = startZ - SimYukkuri.fieldMousePos[1];
-						Translate.invertFlying(newX, newY, newZ, hitX, translatePos);
-						grabbedObj.setCalcX(translatePos.getX());
-						break;
-					default:
-						hitX = 1;
-						break;
+							grabbedObj.setCalcZ(translatePos.getY());
+							break;
+						case PLATFORM:
+							hitX = grabbedObj.getPivotX();
+							altitude = startZ - SimYukkuri.fieldMousePos[1];
+							Translate.invertFlying(newX, newY, newZ, hitX, translatePos);
+							grabbedObj.setCalcX(translatePos.getX());
+							break;
+						default:
+							hitX = 1;
+							break;
 					}
 				}
 
@@ -454,30 +453,30 @@ public class MouseInputController extends MouseAdapter {
 					int hitX;
 					int hitY;
 					switch (grabbedObj.getObjType()) {
-					case YUKKURI:
-						hitX = 4;
-						hitY = 4;
-						break;
-					case SHIT:
-					case VOMIT:
-					case OBJECT:
-					case FIX_OBJECT:
-						hitX = grabbedObj.getPivotX();
-						hitY = 4;
-						break;
-					case PLATFORM:
-						if (grabbedObj instanceof BeltconveyorObj) {
+						case YUKKURI:
 							hitX = 4;
-							hitY = grabbedObj.getPivotY();
-						} else {
+							hitY = 4;
+							break;
+						case SHIT:
+						case VOMIT:
+						case OBJECT:
+						case FIX_OBJECT:
 							hitX = grabbedObj.getPivotX();
-							hitY = grabbedObj.getPivotY();
-						}
-						break;
-					default:
-						hitX = 1;
-						hitY = 1;
-						break;
+							hitY = 4;
+							break;
+						case PLATFORM:
+							if (grabbedObj instanceof BeltconveyorObj) {
+								hitX = 4;
+								hitY = grabbedObj.getPivotY();
+							} else {
+								hitX = grabbedObj.getPivotX();
+								hitY = grabbedObj.getPivotY();
+							}
+							break;
+						default:
+							hitX = 1;
+							hitY = 1;
+							break;
 
 					}
 					Translate.invertGround(newX, newY, hitX, hitY, translatePos);

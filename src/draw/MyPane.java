@@ -1,7 +1,4 @@
 package src.draw;
-import src.util.GameLocale;
-import src.util.GameEnvironment;
-import src.util.GameText;
 
 import java.awt.BasicStroke;
 import java.awt.Color;
@@ -9,8 +6,6 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.GridLayout;
-import java.awt.Image;
-import java.awt.LinearGradientPaint;
 import java.awt.RenderingHints;
 import java.awt.Stroke;
 import java.awt.event.ActionEvent;
@@ -23,14 +18,8 @@ import java.awt.font.TextAttribute;
 import java.awt.font.TextLayout;
 import java.awt.geom.Ellipse2D;
 import java.awt.image.BufferedImage;
-import java.awt.image.ImageObserver;
-import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.text.AttributedCharacterIterator;
 import java.text.AttributedString;
-import java.util.Collections;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -42,110 +31,19 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import src.SimYukkuri;
-import src.util.GameRandom;
-import src.util.GameWorld;
-import src.attachment.ANYDAmpoule;
-import src.attachment.AccelAmpoule;
-import src.attachment.Ants;
-import src.attachment.Badge;
-import src.attachment.BreedingAmpoule;
-import src.attachment.Fire;
-import src.attachment.HungryAmpoule;
-import src.attachment.Needle;
-import src.attachment.OrangeAmpoule;
-import src.attachment.PoisonAmpoule;
-import src.attachment.StopAmpoule;
-import src.attachment.VeryShitAmpoule;
-import src.base.Yukkuri;
-import src.effect.Effect;
-import src.base.Entity;
-import src.base.WorldEntity;
-import src.entity.world.bodylinked.Okazari;
-import src.command.GadgetMenu;
-import src.command.GadgetMenu.GadgetList;
-import src.command.GadgetMenu.MainCategoryName;
-import src.effect.BakeSmoke;
-import src.effect.Hit;
-import src.effect.Mix;
-import src.effect.Steam;
+import src.entity.core.Entity;
+import src.entity.core.living.yukkuri.Yukkuri;
+
 import src.enums.AgeState;
-import src.enums.BurialState;
 import src.enums.BodyRank;
 import src.enums.YukkuriType;
-import src.game.Shit;
-import src.game.Stalk;
-import src.game.Vomit;
-import src.item.AutoFeeder;
-import src.field.impl.Barrier;
-import src.item.Bed;
-import src.field.impl.Beltconveyor;
-import src.item.BeltconveyorObj;
-import src.item.BreedingPool;
-import src.item.Diffuser;
-import src.field.impl.Farm;
-import src.item.Food;
-import src.item.FoodMaker;
-import src.item.GarbageChute;
-import src.item.GarbageStation;
-import src.item.Generator;
-import src.item.HotPlate;
-import src.item.House;
-import src.item.MachinePress;
-import src.item.Mixer;
-import src.item.OrangePool;
-import src.field.impl.Pool;
-import src.item.ProcesserPlate;
-import src.item.ProductChute;
-import src.item.StickyPlate;
-import src.item.Stone;
-import src.item.Sui;
-import src.item.Toilet;
-import src.item.Toy;
-import src.item.Trampoline;
-import src.item.Trash;
-import src.item.Yunba;
 import src.system.Cash;
-import src.field.FieldShape;
 import src.system.FrameRate;
-import src.system.IconPool;
-import src.system.LoadWindow;
-import src.system.LoggerYukkuri;
-import src.system.MainCommandUI;
-import src.system.MapPlaceData;
-import src.system.ResourceUtil;
 import src.system.Sprite;
-import src.util.BodyUtil;
-import src.yukkuri.Alice;
-import src.yukkuri.Ayaya;
-import src.yukkuri.Chen;
-import src.yukkuri.Chiruno;
-import src.yukkuri.Deibu;
-import src.yukkuri.DosMarisa;
-import src.yukkuri.Eiki;
-import src.yukkuri.Fran;
-import src.yukkuri.Kimeemaru;
-import src.yukkuri.Marisa;
-import src.yukkuri.MarisaKotatsumuri;
-import src.yukkuri.MarisaReimu;
-import src.yukkuri.MarisaTsumuri;
-import src.yukkuri.Meirin;
-import src.yukkuri.Myon;
-import src.yukkuri.Nitori;
-import src.yukkuri.Patch;
-import src.yukkuri.Ran;
-import src.yukkuri.Reimu;
-import src.yukkuri.ReimuMarisa;
-import src.yukkuri.Remirya;
-import src.yukkuri.Sakuya;
-import src.yukkuri.Suwako;
-import src.yukkuri.Tarinai;
-import src.yukkuri.TarinaiReimu;
-import src.yukkuri.Tenko;
-import src.yukkuri.Udonge;
-import src.yukkuri.WasaReimu;
-import src.yukkuri.Yurusanae;
-import src.yukkuri.Yuuka;
-import src.yukkuri.Yuyuko;
+import src.util.GameLocale;
+import src.util.GameRandom;
+import src.util.GameText;
+import src.util.GameWorld;
 
 /**
  * SimYukuri.javaの補完
@@ -201,21 +99,35 @@ public class MyPane extends JPanel implements Runnable {
 	static JComboBox cb5;
 	static JCheckBox cb6;
 	/** ゆっくり追加ウィンドウ用チェックボックス群 */
-	static final String[] namesCommonJ = { Marisa.nameJ, Reimu.nameJ, Alice.nameJ, Patch.nameJ, Chen.nameJ,
-			Myon.nameJ };
+	static final String[] namesCommonJ = { YukkuriType.MARISA.getJapaneseName(),
+			YukkuriType.REIMU.getJapaneseName(), YukkuriType.ALICE.getJapaneseName(),
+			YukkuriType.PATCH.getJapaneseName(), YukkuriType.CHEN.getJapaneseName(),
+			YukkuriType.MYON.getJapaneseName() };
 	/** ゆっくり追加ウィンドウ用チェックボックス群(英語) */
-	static final String[] namesCommonE = { Marisa.nameE, Reimu.nameE, Alice.nameE, Patch.nameE, Chen.nameE,
-			Myon.nameE };
+	static final String[] namesCommonE = { YukkuriType.MARISA.getEnglishName(),
+			YukkuriType.REIMU.getEnglishName(), YukkuriType.ALICE.getEnglishName(),
+			YukkuriType.PATCH.getEnglishName(), YukkuriType.CHEN.getEnglishName(),
+			YukkuriType.MYON.getEnglishName() };
 	/** ゆっくり追加ウィンドウの、希少種用名前欄 */
-	static final String[] namesRareJ = { Yurusanae.nameJ, Ayaya.nameJ, Tenko.nameJ, Udonge.nameJ, Meirin.nameJ,
-			Suwako.nameJ, Chiruno.nameJ, Eiki.nameJ, Ran.nameJ, Nitori.nameJ, Yuuka.nameJ, Sakuya.nameJ };
+	static final String[] namesRareJ = { YukkuriType.YURUSANAE.getJapaneseName(), YukkuriType.AYAYA.getJapaneseName(),
+			YukkuriType.TENKO.getJapaneseName(), YukkuriType.UDONGE.getJapaneseName(),
+			YukkuriType.MEIRIN.getJapaneseName(), YukkuriType.SUWAKO.getJapaneseName(),
+			YukkuriType.CHIRUNO.getJapaneseName(), YukkuriType.EIKI.getJapaneseName(),
+			YukkuriType.RAN.getJapaneseName(), YukkuriType.NITORI.getJapaneseName(),
+			YukkuriType.YUUKA.getJapaneseName(), YukkuriType.SAKUYA.getJapaneseName() };
 	/** ゆっくり追加ウィンドウの、希少種用名前欄（英語） */
-	static final String[] namesRareE = { Yurusanae.nameE, Ayaya.nameE, Tenko.nameE, Udonge.nameE, Meirin.nameE,
-			Suwako.nameE, Chiruno.nameE, Eiki.nameE, Ran.nameE, Nitori.nameE, Yuuka.nameE, Sakuya.nameE };
+	static final String[] namesRareE = { YukkuriType.YURUSANAE.getEnglishName(), YukkuriType.AYAYA.getEnglishName(),
+			YukkuriType.TENKO.getEnglishName(), YukkuriType.UDONGE.getEnglishName(),
+			YukkuriType.MEIRIN.getEnglishName(), YukkuriType.SUWAKO.getEnglishName(),
+			YukkuriType.CHIRUNO.getEnglishName(), YukkuriType.EIKI.getEnglishName(),
+			YukkuriType.RAN.getEnglishName(), YukkuriType.NITORI.getEnglishName(),
+			YukkuriType.YUUKA.getEnglishName(), YukkuriType.SAKUYA.getEnglishName() };
 	/** ゆっくり追加ウィンドウの、捕食種用名前欄 */
-	static final String[] namesPredatorJ = { Remirya.nameJ, Fran.nameJ, Yuyuko.nameJ };
+	static final String[] namesPredatorJ = { YukkuriType.REMIRYA.getJapaneseName(),
+			YukkuriType.FRAN.getJapaneseName(), YukkuriType.YUYUKO.getJapaneseName() };
 	/** ゆっくり追加ウィンドウの、捕食種用名前欄(英語) */
-	static final String[] namesPredatorE = { Remirya.nameE, Fran.nameE, Yuyuko.nameE };
+	static final String[] namesPredatorE = { YukkuriType.REMIRYA.getEnglishName(),
+			YukkuriType.FRAN.getEnglishName(), YukkuriType.YUYUKO.getEnglishName() };
 
 	/** 描画設定フラグ群 */
 	private static boolean isDisableScript = false;
@@ -509,25 +421,27 @@ public class MyPane extends JPanel implements Runnable {
 			final String loadingMsg = GameLocale.isJapanese() ? "読み込み中..." : "Loading...";
 			SimYukkuri.simYukkuri.runWithLoadingDialog(loadingMsg, () -> {
 				for (int i = 0; i < fMaxNum; i++) {
-					int selectType;
+					YukkuriType selectType;
 					int selectAge;
 					switch (fRndType) {
 						case 0:
 						default:
-							selectType = fBaseType;
+							selectType = YukkuriType.fromTypeID(fBaseType);
 							if (fRareType == 1) {
-								selectType += 1000;
+								int type = selectType.getTypeID() + 1000;
+								selectType = YukkuriType.fromTypeID(type);
 							} else if (fRareType == 2) {
-								selectType += 3000;
+								int type = selectType.getTypeID() + 3000;
+								selectType = YukkuriType.fromTypeID(type);
 							}
 							selectAge = fAgeType;
 							break;
 						case 1:
-							selectType = GameRandom.nextInt(namesCommonJ.length);
+							selectType = YukkuriType.fromTypeID(GameRandom.nextInt(namesCommonJ.length));
 							selectAge = GameRandom.nextInt(3);
 							break;
 						case 2:
-							selectType = GameRandom.nextInt(namesRareJ.length) + 1000;
+							selectType = YukkuriType.fromTypeID(GameRandom.nextInt(namesRareJ.length) + 1000);
 							selectAge = GameRandom.nextInt(3);
 							break;
 						case 3:
@@ -535,10 +449,10 @@ public class MyPane extends JPanel implements Runnable {
 							switch (selectRare) {
 								case 0:
 								default:
-									selectType = GameRandom.nextInt(namesCommonJ.length);
+									selectType = YukkuriType.fromTypeID(GameRandom.nextInt(namesCommonJ.length));
 									break;
 								case 1:
-									selectType = GameRandom.nextInt(namesRareJ.length) + 1000;
+									selectType = YukkuriType.fromTypeID(GameRandom.nextInt(namesRareJ.length) + 1000);
 									break;
 							}
 							selectAge = GameRandom.nextInt(3);
@@ -546,16 +460,16 @@ public class MyPane extends JPanel implements Runnable {
 					}
 
 					boolean imageNagasiMode = false;
-					if (selectType == Reimu.type && GameRandom.nextInt(20) == 0)
-						selectType = WasaReimu.type;
-					if (selectType == Reimu.type && GameRandom.nextInt(15) == 0)
-						selectType = Deibu.type;
-					if (selectType == Marisa.type && GameRandom.nextInt(50) == 0)
-						selectType = MarisaTsumuri.type;
-					if (selectType == Marisa.type && GameRandom.nextInt(50) == 0)
-						selectType = MarisaKotatsumuri.type;
-					if (selectType == Ayaya.type && GameRandom.nextInt(20) == 0)
-						selectType = Kimeemaru.type;
+					if (selectType == YukkuriType.REIMU && GameRandom.nextInt(20) == 0)
+						selectType = YukkuriType.REMIRYA;
+					if (selectType == YukkuriType.REIMU && GameRandom.nextInt(15) == 0)
+						selectType = YukkuriType.DEIBU;
+					if (selectType == YukkuriType.MARISA && GameRandom.nextInt(50) == 0)
+						selectType = YukkuriType.MARISATSUMURI;
+					if (selectType == YukkuriType.MARISA && GameRandom.nextInt(50) == 0)
+						selectType = YukkuriType.MARISAKOTATSUMURI;
+					if (selectType == YukkuriType.AYAYA && GameRandom.nextInt(20) == 0)
+						selectType = YukkuriType.KIMEEMARU;
 
 					// if(selectType == Reimu.type || selectType == Marisa.type)
 					{
@@ -709,7 +623,6 @@ public class MyPane extends JPanel implements Runnable {
 	public void setTerrarium(Terrarium terrarium) {
 		this.terrarium = terrarium;
 	}
-
 
 	public List<Entity> getList4sort() {
 		return list4sort;

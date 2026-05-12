@@ -1,6 +1,6 @@
 package src.util;
 
-import src.base.Yukkuri;
+import src.entity.core.living.yukkuri.Yukkuri;
 import src.system.MessagePool;
 
 public interface MessageSource {

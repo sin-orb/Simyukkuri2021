@@ -6,46 +6,43 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import src.SimYukkuri;
-import src.util.GameWorld;
-import src.base.Yukkuri;
-import src.effect.Effect;
-import src.event.EventPacket;
-import src.entity.world.bodylinked.Okazari;
 import src.draw.Translate;
-import src.game.Shit;
-import src.game.Stalk;
-import src.game.Vomit;
-import src.item.AutoFeeder;
+import src.entity.core.effect.Effect;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.world.bodylinked.Okazari;
+import src.entity.core.world.bodylinked.Stalk;
+import src.entity.core.world.item.AutoFeeder;
+import src.entity.core.world.item.Bed;
+import src.entity.core.world.item.BeltconveyorObj;
+import src.entity.core.world.item.BreedingPool;
+import src.entity.core.world.item.Diffuser;
+import src.entity.core.world.item.Food;
+import src.entity.core.world.item.FoodMaker;
+import src.entity.core.world.item.GarbageChute;
+import src.entity.core.world.item.GarbageStation;
+import src.entity.core.world.item.HotPlate;
+import src.entity.core.world.item.House;
+import src.entity.core.world.item.MachinePress;
+import src.entity.core.world.item.Mixer;
+import src.entity.core.world.item.OrangePool;
+import src.entity.core.world.item.ProcesserPlate;
+import src.entity.core.world.item.ProductChute;
+import src.entity.core.world.item.StickyPlate;
+import src.entity.core.world.item.Stone;
+import src.entity.core.world.item.Sui;
+import src.entity.core.world.item.Toilet;
+import src.entity.core.world.item.Toy;
+import src.entity.core.world.item.Trampoline;
+import src.entity.core.world.item.Trash;
+import src.entity.core.world.item.Yunba;
+import src.entity.core.world.mobile.Shit;
+import src.entity.core.world.mobile.Vomit;
+import src.event.EventPacket;
 import src.field.impl.Barrier;
-import src.item.Bed;
 import src.field.impl.Beltconveyor;
-import src.item.BeltconveyorObj;
-import src.item.BreedingPool;
-import src.item.Diffuser;
 import src.field.impl.Farm;
-import src.item.Food;
-import src.item.FoodMaker;
-import src.item.GarbageChute;
-import src.item.GarbageStation;
-import src.item.HotPlate;
-import src.item.House;
-import src.item.MachinePress;
-import src.item.Mixer;
-import src.item.OrangePool;
 import src.field.impl.Pool;
-import src.item.ProcesserPlate;
-import src.item.ProductChute;
-import src.item.StickyPlate;
-import src.item.Stone;
-import src.item.Sui;
-import src.item.Toilet;
-import src.item.Toy;
-import src.item.Trampoline;
-import src.item.Trash;
-import src.item.Yunba;
-
-
+import src.util.GameWorld;
 
 /**************************************************
  * 1つのマップ内のオブジェクトなど
@@ -139,15 +136,17 @@ public class MapPlaceData implements Serializable {
 	/** おかざりリスト */
 	private Map<Integer, Okazari> okazari;
 	/** 発電機リスト */
-	//public List<Generator> generator;
+	// public List<Generator> generator;
 	/** マップにドスがいるかどうかのフラグ */
 	private volatile boolean hasDos;
 	/** 壁 */
 	private int wallMap[][];
 	/** フィールド */
 	private int fieldMap[][];
+
 	/**
 	 * コンストラクタ
+	 * 
 	 * @param idx インデックス(0：部屋)
 	 */
 	public MapPlaceData(int idx) {
@@ -194,17 +193,17 @@ public class MapPlaceData implements Serializable {
 		okazari = new HashMap<Integer, Okazari>();
 		takenOutFood = new HashMap<>();
 		takenOutShit = new HashMap<>();
-		//generator = new LinkedList<Generator>();
+		// generator = new LinkedList<Generator>();
 
 		int mapW = Translate.getMapW();
 		int mapH = Translate.getMapH();
 
-		wallMap = new int[mapW+1][mapH+1];
+		wallMap = new int[mapW + 1][mapH + 1];
 		clearMap(wallMap);
-		fieldMap = new int[mapW+1][mapH+1];
+		fieldMap = new int[mapW + 1][mapH + 1];
 		clearMap(fieldMap);
 	}
-	
+
 	public MapPlaceData() {
 
 		alarmPeriod = 0;
@@ -248,36 +247,39 @@ public class MapPlaceData implements Serializable {
 		okazari = new HashMap<Integer, Okazari>();
 		takenOutFood = new HashMap<>();
 		takenOutShit = new HashMap<>();
-		//generator = new LinkedList<Generator>();
+		// generator = new LinkedList<Generator>();
 
 		int mapW = Translate.getMapW();
 		int mapH = Translate.getMapH();
 
-		wallMap = new int[mapW+1][mapH+1];
+		wallMap = new int[mapW + 1][mapH + 1];
 		clearMap(wallMap);
-		fieldMap = new int[mapW+1][mapH+1];
+		fieldMap = new int[mapW + 1][mapH + 1];
 		clearMap(fieldMap);
 	}
 
 	/**
-	 *  フラグマップ処理もろもろ
+	 * フラグマップ処理もろもろ
+	 * 
 	 * @param map フラグマップ
 	 */
 	public static void clearMap(int[][] map) {
-		for(int x = 0; x < map.length; x++) {
-			for(int y = 0; y < map[x].length; y++) {
+		for (int x = 0; x < map.length; x++) {
+			for (int y = 0; y < map[x].length; y++) {
 				map[x][y] = 0;
 			}
 		}
 	}
+
 	/**
 	 * フィールドフラグを設定する.
-	 * @param map フラグマップ
-	 * @param x X座標
-	 * @param y Y座標
-	 * @param w 横
-	 * @param h 縦
-	 * @param setFlag 追加モードフラグ
+	 * 
+	 * @param map       フラグマップ
+	 * @param x         X座標
+	 * @param y         Y座標
+	 * @param w         横
+	 * @param h         縦
+	 * @param setFlag   追加モードフラグ
 	 * @param attribute 属性
 	 */
 	public static void setFiledFlag(int[][] map, int x, int y, int w, int h, boolean setFlag, int attribute) {
@@ -290,8 +292,8 @@ public class MapPlaceData implements Serializable {
 			int ey = y + h;
 			ex = Math.max(0, Math.min(ex, Translate.getMapW()));
 			ey = Math.max(0, Math.min(ey, Translate.getMapH()));
-			for(int py = sy; py < ey; py++) {
-				for(int px = sx; px < ex; px++) {
+			for (int py = sy; py < ey; py++) {
+				for (int px = sx; px < ex; px++) {
 					tmp.getFieldMap()[px][py] = tmp.getFieldMap()[px][py] | attribute;
 				}
 			}
@@ -301,46 +303,48 @@ public class MapPlaceData implements Serializable {
 			int ey = y + h;
 			ex = Math.max(0, Math.min(ex, Translate.getMapW()));
 			ey = Math.max(0, Math.min(ey, Translate.getMapH()));
-			for(int py = sy; py < ey; py++) {
-				for(int px = sx; px < ex; px++) {
+			for (int py = sy; py < ey; py++) {
+				for (int px = sx; px < ex; px++) {
 					tmp.getFieldMap()[px][py] = tmp.getFieldMap()[px][py] & (~attribute);
 				}
 			}
 		}
 	}
+
 	/**
 	 * 壁ラインを設定する.
-	 * @param map フラグマップ
-	 * @param x1 始まりのX座標
-	 * @param y1 始まりのY座標
-	 * @param x2 終わりのX座標
-	 * @param y2 終わりのY座標
-	 * @param setFlag 追加フラグ
+	 * 
+	 * @param map       フラグマップ
+	 * @param x1        始まりのX座標
+	 * @param y1        始まりのY座標
+	 * @param x2        終わりのX座標
+	 * @param y2        終わりのY座標
+	 * @param setFlag   追加フラグ
 	 * @param attribute 属性
 	 */
 	public static void setWallLine(int[][] map, int x1, int y1, int x2, int y2, boolean setFlag, int attribute) {
-		int distance = (int)Math.sqrt(Translate.distance(x1, y1, x2, y2));
-		double deltaX = (double)(x2 - x1) / (double)distance;
-		double deltaY = (double)(y2 - y1) / (double)distance;
+		int distance = (int) Math.sqrt(Translate.distance(x1, y1, x2, y2));
+		double deltaX = (double) (x2 - x1) / (double) distance;
+		double deltaY = (double) (y2 - y1) / (double) distance;
 		int sX = x1;
 		int sY = y1;
-		if(setFlag) {
+		if (setFlag) {
 			for (int t = 0; t <= distance; t++) {
-				int x = sX + (int)(deltaX * t);
-				int y = sY + (int)(deltaY * t);
-				int nx = Math.min(x+1, Translate.getMapW());
-				int ny = Math.min(y+1, Translate.getMapH());
+				int x = sX + (int) (deltaX * t);
+				int y = sY + (int) (deltaY * t);
+				int nx = Math.min(x + 1, Translate.getMapW());
+				int ny = Math.min(y + 1, Translate.getMapH());
 
-					map[x][y] = map[x][y] | attribute;
-					map[nx][y] = map[nx][y] | attribute;
-					map[x][ny] = map[x][ny] | attribute;
+				map[x][y] = map[x][y] | attribute;
+				map[nx][y] = map[nx][y] | attribute;
+				map[x][ny] = map[x][ny] | attribute;
 			}
 		} else {
 			for (int t = 0; t <= distance; t++) {
-				int x = sX + (int)(deltaX * t);
-				int y = sY + (int)(deltaY * t);
-				int nx = Math.min(x+1, Translate.getMapW());
-				int ny = Math.min(y+1, Translate.getMapH());
+				int x = sX + (int) (deltaX * t);
+				int y = sY + (int) (deltaY * t);
+				int nx = Math.min(x + 1, Translate.getMapW());
+				int ny = Math.min(y + 1, Translate.getMapH());
 
 				map[x][y] = map[x][y] & (~attribute);
 				map[nx][y] = map[nx][y] & (~attribute);
@@ -348,9 +352,10 @@ public class MapPlaceData implements Serializable {
 			}
 		}
 	}
-	
+
 	/**
 	 * ドスを作る/殺す
+	 * 
 	 * @param make 作る場合true、殺す場合false
 	 * @return ドス作成、または殺害に成功した場合true
 	 */
@@ -723,9 +728,5 @@ public class MapPlaceData implements Serializable {
 	public void setFieldMap(int[][] fieldMap) {
 		this.fieldMap = fieldMap;
 	}
-	
+
 }
-
-
-
-

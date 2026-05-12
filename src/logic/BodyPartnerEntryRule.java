@@ -1,12 +1,10 @@
 package src.logic;
 
-import src.base.Yukkuri;
-
-import src.base.Yukkuri;
-import src.event.EventPacket.EventPriority;
-import src.base.Entity;
 import src.draw.Translate;
+import src.entity.core.Entity;
+import src.entity.core.living.yukkuri.Yukkuri;
 import src.enums.TakeoutItemType;
+import src.event.EventPacket.EventPriority;
 import src.field.impl.Barrier;
 import src.util.GameRandom;
 

@@ -9,15 +9,18 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
-import src.base.Yukkuri;
+import src.entity.core.living.yukkuri.Yukkuri;
 import src.base.ItemTestBase;
-import src.base.WorldEntity.ItemRank;
 import src.draw.Translate;
+import src.entity.core.world.WorldEntity.ItemRank;
+import src.entity.core.world.item.Diffuser;
+import src.entity.core.world.item.Food;
+import src.entity.core.world.item.GarbageChute;
 import src.enums.AgeState;
 import src.enums.Happiness;
 import src.enums.WorldEntityKind;
 import src.system.Sprite;
-import src.yukkuri.Reimu;
+import src.entity.core.living.yukkuri.impl.Reimu;
 
 class GarbageChuteTest extends ItemTestBase {
 
@@ -113,7 +116,7 @@ class GarbageChuteTest extends ItemTestBase {
     @Test
     void testGetSetBindObjList() {
         GarbageChute item = new GarbageChute();
-        List<src.base.Entity> list = new LinkedList<>();
+        List<src.entity.core.Entity> list = new LinkedList<>();
         item.setBindObjList(list);
         assertEquals(list, item.getBindObjList());
     }
@@ -162,7 +165,7 @@ class GarbageChuteTest extends ItemTestBase {
         GarbageChute item = new GarbageChute(100, 100, 0);
         Food food = new Food(50, 50, 0);
         food.setRemoved(true);
-        List<src.base.Entity> list = new LinkedList<>();
+        List<src.entity.core.Entity> list = new LinkedList<>();
         list.add(food);
         item.setBindObjList(list);
         // upDate calls translateZ which needs rateX - already set by ItemTestBase.setUp

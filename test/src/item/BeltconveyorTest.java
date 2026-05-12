@@ -12,18 +12,19 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
-import src.base.Yukkuri;
-import src.base.Entity;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.world.bodylinked.Stalk;
+import src.entity.core.world.item.Food;
+import src.entity.core.world.mobile.Shit;
+import src.entity.core.world.mobile.Vomit;
+import src.entity.core.Entity;
 import src.enums.AgeState;
 import src.enums.Type;
-import src.game.Shit;
-import src.game.Stalk;
-import src.game.Vomit;
 import src.field.FieldShape;
 import src.field.impl.Beltconveyor;
 import src.system.Sprite;
 import src.util.WorldTestHelper;
-import src.yukkuri.Reimu;
+import src.entity.core.living.yukkuri.impl.Reimu;
 
 class BeltconveyorTest {
 
@@ -332,8 +333,10 @@ class BeltconveyorTest {
             Class<?> dirClass = null;
             Class<?> spdClass = null;
             for (Class<?> c : inner) {
-                if (c.getSimpleName().equals("DirectCombo")) dirClass = c;
-                if (c.getSimpleName().equals("SpeedCombo")) spdClass = c;
+                if (c.getSimpleName().equals("DirectCombo"))
+                    dirClass = c;
+                if (c.getSimpleName().equals("SpeedCombo"))
+                    spdClass = c;
             }
             Object[] dirVals = dirClass.getEnumConstants(); // RIGHT=0
             Object[] spdVals = spdClass.getEnumConstants(); // SLOW=0, MIDDLE=1
@@ -359,7 +362,10 @@ class BeltconveyorTest {
             Class<?>[] inner = Beltconveyor.class.getDeclaredClasses();
             Class<?> dirClass = null;
             for (Class<?> c : inner) {
-                if (c.getSimpleName().equals("DirectCombo")) { dirClass = c; break; }
+                if (c.getSimpleName().equals("DirectCombo")) {
+                    dirClass = c;
+                    break;
+                }
             }
             Object[] dirVals = dirClass.getEnumConstants();
             java.lang.reflect.Field dirField = Beltconveyor.class.getDeclaredField("direction");
@@ -368,7 +374,8 @@ class BeltconveyorTest {
         } catch (Exception e) {
             return;
         }
-        java.awt.image.BufferedImage img = new java.awt.image.BufferedImage(200, 200, java.awt.image.BufferedImage.TYPE_INT_RGB);
+        java.awt.image.BufferedImage img = new java.awt.image.BufferedImage(200, 200,
+                java.awt.image.BufferedImage.TYPE_INT_RGB);
         java.awt.Graphics2D g2 = img.createGraphics();
         try {
             item.drawShape(g2);
@@ -433,7 +440,8 @@ class BeltconveyorTest {
         }
     }
 
-    private static void setPrivateEnumField(Beltconveyor item, String fieldName, String enumSimpleName, String constantName) {
+    private static void setPrivateEnumField(Beltconveyor item, String fieldName, String enumSimpleName,
+            String constantName) {
         try {
             Class<?> enumClass = Class.forName("src.field.impl.Beltconveyor$" + enumSimpleName);
             @SuppressWarnings({ "rawtypes", "unchecked" })

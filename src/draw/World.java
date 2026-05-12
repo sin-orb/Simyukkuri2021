@@ -1,5 +1,4 @@
 package src.draw;
-import src.util.GameView;
 
 import java.beans.Transient;
 import java.io.Serializable;
@@ -10,15 +9,16 @@ import java.util.Map;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import src.SimYukkuri;
-import src.base.Yukkuri;
-import src.effect.Effect;
-import src.base.Entity;
-import src.base.WorldEntity;
-import src.meta.Player;
+import src.entity.core.Entity;
+import src.entity.core.effect.Effect;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.living.yukkuri.impl.HybridYukkuri;
+import src.entity.core.meta.Player;
+import src.entity.core.world.WorldEntity;
 import src.field.FieldShape;
 import src.system.MapPlaceData;
 import src.system.MapWindow;
-import src.yukkuri.HybridYukkuri;
+import src.util.GameView;
 
 /***********************************************
  * 
@@ -196,10 +196,14 @@ public class World implements Serializable {
 				Yukkuri b = entry.getValue();
 				if (b.getType() == HybridYukkuri.type) {
 					HybridYukkuri hb = (HybridYukkuri) b;
-					GameView.loadBodyImage(src.enums.YukkuriType.fromClassName(hb.getBaseBody(0).getClass().getSimpleName()));
-					GameView.loadBodyImage(src.enums.YukkuriType.fromClassName(hb.getBaseBody(1).getClass().getSimpleName()));
-					GameView.loadBodyImage(src.enums.YukkuriType.fromClassName(hb.getBaseBody(2).getClass().getSimpleName()));
-					GameView.loadBodyImage(src.enums.YukkuriType.fromClassName(hb.getBaseBody(3).getClass().getSimpleName()));
+					GameView.loadBodyImage(
+							src.enums.YukkuriType.fromClassName(hb.getBaseBody(0).getClass().getSimpleName()));
+					GameView.loadBodyImage(
+							src.enums.YukkuriType.fromClassName(hb.getBaseBody(1).getClass().getSimpleName()));
+					GameView.loadBodyImage(
+							src.enums.YukkuriType.fromClassName(hb.getBaseBody(2).getClass().getSimpleName()));
+					GameView.loadBodyImage(
+							src.enums.YukkuriType.fromClassName(hb.getBaseBody(3).getClass().getSimpleName()));
 				} else {
 					GameView.loadBodyImage(src.enums.YukkuriType.fromClassName(b.getClass().getSimpleName()));
 				}

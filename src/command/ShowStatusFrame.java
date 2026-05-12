@@ -1,5 +1,4 @@
 package src.command;
-import src.util.GameText;
 
 import java.awt.Color;
 import java.awt.event.ActionEvent;
@@ -20,17 +19,16 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
-import src.SimYukkuri;
-import src.util.GameRandom;
-import src.util.GameWorld;
-import src.attachment.Attachment;
-import src.base.Yukkuri;
-import src.base.Entity;
 import src.draw.MyPane;
+import src.entity.core.Entity;
+import src.entity.core.attachment.Attachment;
+import src.entity.core.living.yukkuri.Yukkuri;
 import src.enums.FavItemType;
 import src.enums.Pain;
 import src.enums.TakeoutItemType;
-import src.system.ResourceUtil;
+import src.util.GameRandom;
+import src.util.GameText;
+import src.util.GameWorld;
 
 /**
  * ゆっくりのステータスを表示するFrame.
@@ -102,7 +100,7 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		JButton btnNewButton = new JButton(GameText.read("command_status_new"));
 		btnNewButton.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				//ワールドのゆっくりリストから目的のゆっくりを探し出し、その情報を更新する。すでにいない場合は更新されない。
+				// ワールドのゆっくりリストから目的のゆっくりを探し出し、その情報を更新する。すでにいない場合は更新されない。
 				int idTemp = 0;
 				try {
 					idTemp = Integer.parseInt(textField.getText());
@@ -131,7 +129,8 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 					return;
 				}
 				final int id = idTemp;
-				List<Yukkuri> sorted = new LinkedList<Yukkuri>(GameWorld.get().getCurrentMap().getBody().values()).stream()
+				List<Yukkuri> sorted = new LinkedList<Yukkuri>(GameWorld.get().getCurrentMap().getBody().values())
+						.stream()
 						.sorted().collect(Collectors.toList());
 				int target = -1;
 				for (int i = 0; i < sorted.size(); i++) {
@@ -166,7 +165,8 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 					return;
 				}
 				final int id = idTemp;
-				List<Yukkuri> sorted = (List<Yukkuri>)new LinkedList<Yukkuri>(GameWorld.get().getCurrentMap().getBody().values()).stream()
+				List<Yukkuri> sorted = (List<Yukkuri>) new LinkedList<Yukkuri>(
+						GameWorld.get().getCurrentMap().getBody().values()).stream()
 						.sorted(Comparator.reverseOrder()).collect(Collectors.toList());
 				int target = -1;
 				for (int i = 0; i < sorted.size(); i++) {
@@ -195,7 +195,8 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		JButton btnNewButton_3 = new JButton(GameText.read("command_status_first"));
 		btnNewButton_3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				List<Yukkuri> sorted = new LinkedList<Yukkuri>(GameWorld.get().getCurrentMap().getBody().values()).stream()
+				List<Yukkuri> sorted = new LinkedList<Yukkuri>(GameWorld.get().getCurrentMap().getBody().values())
+						.stream()
 						.sorted().collect(Collectors.toList());
 				if (sorted.size() == 0) {
 					showError(GameText.read("command_status_noexistyukkurierror"));
@@ -212,7 +213,8 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		btnNewButton_4.addActionListener(new ActionListener() {
 			@SuppressWarnings("unchecked")
 			public void actionPerformed(ActionEvent e) {
-				List<Yukkuri> sorted = (List<Yukkuri>) new LinkedList<>(GameWorld.get().getCurrentMap().getBody().values()).stream()
+				List<Yukkuri> sorted = (List<Yukkuri>) new LinkedList<>(
+						GameWorld.get().getCurrentMap().getBody().values()).stream()
 						.sorted(Comparator.reverseOrder()).collect(Collectors.toList());
 				if (sorted.size() == 0) {
 					showError(GameText.read("command_status_noexistyukkurierror"));
@@ -293,7 +295,8 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 						showError(GameText.read("command_status_noexistyukkurierror"));
 						return;
 					} else {
-						ShowStatusFrame.getInstance().giveBodyInfo(src.util.BodyRegistry.getBodyInstance(children.get(0)));
+						ShowStatusFrame.getInstance()
+								.giveBodyInfo(src.util.BodyRegistry.getBodyInstance(children.get(0)));
 					}
 				}
 			}
@@ -322,7 +325,8 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 						showError(GameText.read("command_status_noexistyukkurierror"));
 						return;
 					} else {
-						ShowStatusFrame.getInstance().giveBodyInfo(src.util.BodyRegistry.getBodyInstance(elderSisters.get(0)));
+						ShowStatusFrame.getInstance()
+								.giveBodyInfo(src.util.BodyRegistry.getBodyInstance(elderSisters.get(0)));
 					}
 				}
 			}
@@ -351,7 +355,8 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 						showError(GameText.read("command_status_noexistyukkurierror"));
 						return;
 					} else {
-						ShowStatusFrame.getInstance().giveBodyInfo(src.util.BodyRegistry.getBodyInstance(sisters.get(0)));
+						ShowStatusFrame.getInstance()
+								.giveBodyInfo(src.util.BodyRegistry.getBodyInstance(sisters.get(0)));
 					}
 				}
 			}
@@ -656,21 +661,22 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		textField_25.setBounds(552, 365, 96, 19);
 		contentPane.add(textField_25);
 		textField_25.setColumns(10);
-		
+
 		JLabel lblNewLabel_26 = new JLabel(GameText.read("command_attitudepoint"));
 		lblNewLabel_26.setBounds(226, 188, 96, 13);
 		contentPane.add(lblNewLabel_26);
-		
+
 		textField_26 = new JTextField();
 		textField_26.setEditable(false);
 		textField_26.setBounds(315, 184, 128, 19);
 		contentPane.add(textField_26);
 		textField_26.setColumns(10);
-		
+
 	}
 
 	/**
 	 * ゆっくりの情報を表示する.
+	 * 
 	 * @param body ゆっくり
 	 */
 	public void giveBodyInfo(Yukkuri body) {
@@ -679,29 +685,29 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		textField_2.setText(String.valueOf(body.getAge()));
 		String purpose = null;
 		switch (body.getPurposeOfMoving()) {
-		case BED:
-			purpose = GameText.read("command_status_wantsleep");
-			break;
-		case FOOD:
-			purpose = GameText.read("command_status_wanteat");
-			break;
-		case NONE:
-			purpose = GameText.read("command_status_noespecially");
-			break;
-		case SHIT:
-			purpose = GameText.read("command_status_wantunun");
-			break;
-		case STEAL:
-			purpose = GameText.read("command_status_wantsteal");
-			break;
-		case SUKKIRI:
-			purpose = GameText.read("command_status_wantsukkiri");
-			break;
-		case TAKEOUT:
-			purpose = GameText.read("command_status_wanttakeout");
-			break;
-		default:
-			purpose = GameText.read("command_status_wantyukkuri");
+			case BED:
+				purpose = GameText.read("command_status_wantsleep");
+				break;
+			case FOOD:
+				purpose = GameText.read("command_status_wanteat");
+				break;
+			case NONE:
+				purpose = GameText.read("command_status_noespecially");
+				break;
+			case SHIT:
+				purpose = GameText.read("command_status_wantunun");
+				break;
+			case STEAL:
+				purpose = GameText.read("command_status_wantsteal");
+				break;
+			case SUKKIRI:
+				purpose = GameText.read("command_status_wantsukkiri");
+				break;
+			case TAKEOUT:
+				purpose = GameText.read("command_status_wanttakeout");
+				break;
+			default:
+				purpose = GameText.read("command_status_wantyukkuri");
 		}
 		textField_3.setText(purpose);
 		String moveTargetId = GameText.read("command_status_nothing");
@@ -725,14 +731,14 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		textField_12.setText(String.valueOf(body.getAnkoAmount()));
 		String footBake = null;
 		switch (body.getFootBakeLevel()) {
-		case CRITICAL:
-			footBake = GameText.read("command_status_fatal");
-			break;
-		case MIDIUM:
-			footBake = GameText.read("command_status_middle");
-			break;
-		default:
-			footBake = GameText.read("command_status_nothing");
+			case CRITICAL:
+				footBake = GameText.read("command_status_fatal");
+				break;
+			case MIDIUM:
+				footBake = GameText.read("command_status_middle");
+				break;
+			default:
+				footBake = GameText.read("command_status_nothing");
 		}
 		textField_13.setText(footBake);
 		String fav = "";
@@ -747,14 +753,14 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 		textField_14.setText(fav);
 		String trauma = null;
 		switch (body.getTrauma()) {
-		case Factory:
-			trauma = GameText.read("command_status_plant");
-			break;
-		case Ubuse:
-			trauma = GameText.read("command_status_abuse");
-			break;
-		default:
-			trauma = GameText.read("command_status_nothing");
+			case Factory:
+				trauma = GameText.read("command_status_plant");
+				break;
+			case Ubuse:
+				trauma = GameText.read("command_status_abuse");
+				break;
+			default:
+				trauma = GameText.read("command_status_nothing");
 		}
 		textField_15.setText(trauma);
 		String elder = "";
@@ -787,23 +793,24 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 			child = GameText.read("command_status_nothing");
 		}
 		textField_18.setText(child);
-		textField_19.setText(src.util.BodyRegistry.getBodyInstance(body.getPartner()) != null ? 
-				String.valueOf(body.getPartner()) : GameText.read("command_status_nothing"));
+		textField_19.setText(
+				src.util.BodyRegistry.getBodyInstance(body.getPartner()) != null ? String.valueOf(body.getPartner())
+						: GameText.read("command_status_nothing"));
 		String bring = "";
 		if (body.getCarryItems().size() != 0) {
 			for (TakeoutItemType item : body.getCarryItems().keySet()) {
 				switch (item) {
-				case FOOD:
-					bring = GameText.read("command_status_food");
-					break;
-				case SHIT:
-					bring = GameText.read("command_status_unun");
-					break;
-				case TOY:
-					bring = GameText.read("command_status_toys");
-					break;
-				default:
-					bring = GameText.read("command_status_children");
+					case FOOD:
+						bring = GameText.read("command_status_food");
+						break;
+					case SHIT:
+						bring = GameText.read("command_status_unun");
+						break;
+					case TOY:
+						bring = GameText.read("command_status_toys");
+						break;
+					default:
+						bring = GameText.read("command_status_children");
 				}
 			}
 		} else {
@@ -886,7 +893,8 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 
 		textField_23.setText(String.valueOf(body.getAntCount()));
 		textField_24.setText(String.valueOf(body.getBlockedTicks()));
-		textField_25.setText(body.isLockmove() || body.isDead() ? GameText.read("command_status_cantmove") : GameText.read("command_status_canmove"));
+		textField_25.setText(body.isLockmove() || body.isDead() ? GameText.read("command_status_cantmove")
+				: GameText.read("command_status_canmove"));
 		textField_26.setText(String.valueOf(body.getAttitudePoint()));
 		MyPane.setSelectBody(body);
 	}
@@ -931,10 +939,10 @@ public class ShowStatusFrame extends JFrame implements ActionListener, WindowLis
 
 	/**
 	 * インスタンスを返す.
+	 * 
 	 * @return インスタンス
 	 */
 	public static ShowStatusFrame getInstance() {
 		return instance;
 	}
 }
-

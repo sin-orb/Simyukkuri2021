@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import src.SimYukkuri;
 import src.draw.Translate;
 import src.draw.World;
+import src.entity.core.world.WorldEntity;
 import src.enums.Event;
 import src.enums.Type;
 import src.draw.Point4y;
@@ -334,7 +335,7 @@ public class ObjEXTest {
         obj.setInterval(5);
 
         assertTrue(obj.checkInterval(10)); // 10 % 5 == 0
-        assertTrue(obj.checkInterval(0));  // 0 % 5 == 0
+        assertTrue(obj.checkInterval(0)); // 0 % 5 == 0
     }
 
     @Test

@@ -1,30 +1,39 @@
 
 package src.util;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotSame;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.awt.image.BufferedImage;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
-import java.awt.image.BufferedImage;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Arrays;
+
 import src.ConstState;
-import src.SimYukkuri;
 import src.SequenceRNG;
-import src.attachment.Ants;
-import src.enums.YukkuriType;
-import src.util.BodyRegistry;
-import src.logic.AntInfestationPolicy;
+import src.SimYukkuri;
 import src.engine.birth.YukkuriBirthTypeResolver;
 import src.engine.transform.TransformationBodyCopier;
 import src.engine.transform.TransformationPolicy;
-import src.game.Dna;
-import src.yukkuri.Reimu;
-import src.yukkuri.Marisa;
-import src.yukkuri.DosMarisa;
-import src.util.WorldTestHelper;
+import src.entity.core.attachment.impl.Ants;
+import src.entity.core.living.yukkuri.Dna;
+import src.entity.core.living.yukkuri.impl.DosMarisa;
+import src.entity.core.living.yukkuri.impl.Marisa;
+import src.entity.core.living.yukkuri.impl.Reimu;
+import src.enums.YukkuriType;
+import src.logic.AntInfestationPolicy;
 
 public class YukkuriUtilTest {
 
@@ -78,11 +87,11 @@ public class YukkuriUtilTest {
         // Test changeling type generation with controlled RNG
         SimYukkuri.RND = new SequenceRNG(5);
 
-        Integer changelingType = YukkuriBirthTypeResolver.getChangelingBabyType();
+        YukkuriType changelingType = YukkuriBirthTypeResolver.getChangelingBabyType();
 
         // Should return a valid yukkuri type
         assertNotNull(changelingType);
-        assertTrue(changelingType >= 0);
+        assertTrue(changelingType.getTypeID() >= 0);
     }
 
     @Test
@@ -102,10 +111,10 @@ public class YukkuriUtilTest {
         SimYukkuri.RND = new SequenceRNG(10);
 
         Reimu parent = new Reimu();
-        int randomType = YukkuriBirthTypeResolver.getRandomYukkuriType(parent);
+        YukkuriType randomType = YukkuriBirthTypeResolver.getRandomYukkuriType(parent);
 
         // Should return a valid type
-        assertTrue(randomType >= 0);
+        assertTrue(randomType.getTypeID() >= 0);
     }
 
     @Test
@@ -113,10 +122,10 @@ public class YukkuriUtilTest {
         // Test with null parent
         SimYukkuri.RND = new SequenceRNG(5);
 
-        int randomType = YukkuriBirthTypeResolver.getRandomYukkuriType(null);
+        YukkuriType randomType = YukkuriBirthTypeResolver.getRandomYukkuriType(null);
 
         // Should still return a valid type
-        assertTrue(randomType >= 0);
+        assertTrue(randomType.getTypeID() >= 0);
     }
 
     @Test
@@ -130,7 +139,7 @@ public class YukkuriUtilTest {
             Reimu to = new Reimu();
 
             // Perform copy
-            copyTransformedBody(to, from);
+            TransformationBodyCopier.copy(to, from);
 
             // Verify field copy
             assertEquals(500, to.getDamage(), "Damage should be copied");
@@ -149,7 +158,7 @@ public class YukkuriUtilTest {
 
             // This will likely return null without actual bodies in the map
             // but should not crash. Use Integer.MIN_VALUE as ID that can't be assigned.
-            src.base.Yukkuri body = src.util.BodyRegistry.getBodyInstance(Integer.MIN_VALUE);
+            src.entity.core.living.yukkuri.Yukkuri body = src.util.BodyRegistry.getBodyInstance(Integer.MIN_VALUE);
 
             // Null is expected for non-existent ID
             assertNull(body);
@@ -165,7 +174,7 @@ public class YukkuriUtilTest {
         try {
             src.util.WorldTestHelper.initializeMinimalWorld();
 
-            src.base.Yukkuri[] bodies = BodyRegistry.getBodyInstances();
+            src.entity.core.living.yukkuri.Yukkuri[] bodies = BodyRegistry.getBodyInstances();
 
             // Should return an array (possibly empty)
             assertNotNull(bodies);
@@ -193,7 +202,7 @@ public class YukkuriUtilTest {
         Reimu body = new Reimu();
         body.setObjId(42);
         SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
-        src.base.Yukkuri result = BodyRegistry.getBodyInstanceFromObjId(42);
+        src.entity.core.living.yukkuri.Yukkuri result = BodyRegistry.getBodyInstanceFromObjId(42);
         assertNotNull(result);
         assertEquals(42, result.getObjId());
     }
@@ -215,17 +224,17 @@ public class YukkuriUtilTest {
 
     @Test
     public void testChangeBody_ReimuToReimu_DoesNotThrow() throws Exception {
-            Reimu from = new Reimu();
-            Reimu to = new Reimu();
-            from.setX(123);
-            from.setY(456);
-            assertDoesNotThrow(() -> {
-                try {
-                    copyTransformedBody(to, from);
-                } catch (Exception e) {
-                    // reflection exception possible in some environments
-                }
-            });
+        Reimu from = new Reimu();
+        Reimu to = new Reimu();
+        from.setX(123);
+        from.setY(456);
+        assertDoesNotThrow(() -> {
+            try {
+                copyTransformedBody(to, from);
+            } catch (Exception e) {
+                // reflection exception possible in some environments
+            }
+        });
     }
 
     @Test
@@ -497,7 +506,7 @@ public class YukkuriUtilTest {
         assertTrue(type >= 0);
     }
 
-        // --- getMarisaType ---
+    // --- getMarisaType ---
 
     @Test
     public void testGetMarisaType_ReturnsValidType() {
@@ -505,7 +514,7 @@ public class YukkuriUtilTest {
         assertTrue(type >= 0);
     }
 
-    private static void copyTransformedBody(src.base.Yukkuri to, src.base.Yukkuri from) {
+    private static void copyTransformedBody(src.entity.core.living.yukkuri.Yukkuri to, src.entity.core.living.yukkuri.Yukkuri from) {
         TransformationBodyCopier.copy(to, from);
         TransformationPolicy.normalizeTransformedAge(to, from);
     }
@@ -632,6 +641,7 @@ public class YukkuriUtilTest {
         void testScenario_JudgeNewAntDirtyAndDontJumpHalveProbabilityTwice() {
             class BoundRecordingRandom extends java.util.Random {
                 int lastBound;
+
                 @Override
                 public int nextInt(int bound) {
                     lastBound = bound;

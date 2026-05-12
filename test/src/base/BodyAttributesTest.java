@@ -8,10 +8,10 @@ import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import src.attachment.Attachment;
 import src.ConstState;
 import src.SimYukkuri;
 import src.draw.World;
+import src.entity.core.attachment.Attachment;
 import src.enums.AgeState;
 import src.enums.Attitude;
 import src.enums.BurialState;
@@ -110,8 +110,8 @@ public class BodyAttributesTest {
 
         @Test
         void testScenario_BabyTypesDequeuePreservesInsertionOrderAcrossMultipleEntries() {
-            src.game.Dna first = new src.game.Dna(1, Attitude.NICE, Intelligence.AVERAGE, false);
-            src.game.Dna second = new src.game.Dna(2, Attitude.SHITHEAD, Intelligence.WISE, true);
+            src.entity.core.living.yukkuri.Dna first = new src.entity.core.living.yukkuri.Dna(1, Attitude.NICE, Intelligence.AVERAGE, false);
+            src.entity.core.living.yukkuri.Dna second = new src.entity.core.living.yukkuri.Dna(2, Attitude.SHITHEAD, Intelligence.WISE, true);
             body.getBabyTypes().add(first);
             body.getBabyTypes().add(second);
 
@@ -1436,11 +1436,11 @@ public class BodyAttributesTest {
 
         @Test
         public void testGetBabyTypesDequeueWithItem() {
-            src.game.Dna dna = new src.game.Dna();
+            src.entity.core.living.yukkuri.Dna dna = new src.entity.core.living.yukkuri.Dna();
             body.getBabyTypes().add(dna);
             assertEquals(1, body.getBabyTypes().size());
 
-            src.game.Dna result = body.getBabyTypesDequeue();
+            src.entity.core.living.yukkuri.Dna result = body.getBabyTypesDequeue();
             assertSame(dna, result);
             assertEquals(0, body.getBabyTypes().size());
         }
@@ -1452,11 +1452,11 @@ public class BodyAttributesTest {
 
         @Test
         public void testGetStalksDequeueWithItem() {
-            src.game.Stalk stalk = new src.game.Stalk();
+            src.entity.core.world.bodylinked.Stalk stalk = new src.entity.core.world.bodylinked.Stalk();
             body.getStalks().add(stalk);
             assertEquals(1, body.getStalks().size());
 
-            src.game.Stalk result = body.getStalksDequeue();
+            src.entity.core.world.bodylinked.Stalk result = body.getStalksDequeue();
             assertSame(stalk, result);
             assertEquals(0, body.getStalks().size());
         }
@@ -2823,7 +2823,7 @@ public class BodyAttributesTest {
             body.setCarryItems(map);
 
             // Create a shit object using no-arg constructor and register
-            src.game.Shit shit = new src.game.Shit();
+            src.entity.core.world.mobile.Shit shit = new src.entity.core.world.mobile.Shit();
             SimYukkuri.world.getCurrentMap().getTakenOutShit().put(itemId, shit);
 
             Entity result = body.getCarryItem(src.enums.TakeoutItemType.SHIT);
@@ -3302,7 +3302,7 @@ public class BodyAttributesTest {
 
         @BeforeEach
         public void setUpBody() {
-            reimuBody = new src.yukkuri.Reimu();
+            reimuBody = new src.entity.core.living.yukkuri.impl.Reimu();
             reimuBody.setAgeState(AgeState.ADULT);
             Sprite[] spr = new Sprite[3];
             for (int i = 0; i < 3; i++) {

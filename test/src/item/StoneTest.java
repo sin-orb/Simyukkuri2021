@@ -4,16 +4,18 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterEach;
 import src.base.ItemTestBase;
-import src.base.WorldEntity;
-import src.base.WorldEntity.ItemRank;
 import src.SimYukkuri;
 import src.draw.Translate;
+import src.entity.core.world.WorldEntity;
+import src.entity.core.world.WorldEntity.ItemRank;
+import src.entity.core.world.item.Stone;
+import src.entity.core.world.item.Trash;
 import src.enums.WorldEntityKind;
 import src.enums.Type;
 import src.enums.CriticalDamegeType;
-import src.base.Yukkuri;
+import src.entity.core.living.yukkuri.Yukkuri;
 import src.util.WorldTestHelper;
-import src.yukkuri.Marisa;
+import src.entity.core.living.yukkuri.impl.Marisa;
 import static org.junit.jupiter.api.Assertions.*;
 
 class StoneTest extends ItemTestBase {
@@ -68,7 +70,7 @@ class StoneTest extends ItemTestBase {
     void testConstructor_MapIndex2_BecomesNora() {
         // MapIndex=2 -> NORA に上書き
         SimYukkuri.world.setCurrentMapIdx(2);
-        Stone stone = new Stone(100, 200, 0);  // option=HOUSE だが上書き
+        Stone stone = new Stone(100, 200, 0); // option=HOUSE だが上書き
         assertEquals(ItemRank.NORA, stone.getItemRank());
         // 後始末
         SimYukkuri.world.setCurrentMapIdx(0);
@@ -180,7 +182,7 @@ class StoneTest extends ItemTestBase {
         Stone stone = new Stone(100, 100, 0);
         stone.kick();
         // kick() calls kick(0, -8, -4)
-        assertEquals(0,  stone.getVx());
+        assertEquals(0, stone.getVx());
         assertEquals(-8, stone.getVy());
         assertEquals(-4, stone.getVz());
     }

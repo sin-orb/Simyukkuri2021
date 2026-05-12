@@ -4,7 +4,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import src.SimYukkuri;
-import src.base.Yukkuri;
+import src.entity.core.living.yukkuri.Yukkuri;
 import src.enums.AgeState;
 import src.system.BodyLayer;
 import src.enums.BodyRank;
@@ -262,7 +262,7 @@ public class HybridYukkuriTest {
         try {
             HybridYukkuri hybrid = new HybridYukkuri();
             // Pre-set dorei field so doreiTmp2 = dorei won't be null
-            src.yukkuri.Reimu reimuDorei = new src.yukkuri.Reimu();
+            src.entity.core.living.yukkuri.impl.Reimu reimuDorei = new src.entity.core.living.yukkuri.impl.Reimu();
             java.lang.reflect.Field doreiField = HybridYukkuri.class.getDeclaredField("dorei");
             doreiField.setAccessible(true);
             doreiField.set(hybrid, reimuDorei);

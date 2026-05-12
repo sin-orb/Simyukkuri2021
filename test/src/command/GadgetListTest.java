@@ -74,7 +74,7 @@ public class GadgetListTest {
     @Test
     public void testNormalFoodHasFoodClass() {
         assertNotNull(GadgetList.NORMAL.getGadgetClass());
-        assertEquals(src.item.Food.class, GadgetList.NORMAL.getGadgetClass());
+        assertEquals(src.entity.core.world.item.Food.class, GadgetList.NORMAL.getGadgetClass());
     }
 
     @Test

@@ -13,7 +13,7 @@ import src.SimYukkuri;
 import src.draw.World;
 import src.enums.AgeState;
 import src.system.Sprite;
-import src.yukkuri.Reimu;
+import src.entity.core.living.yukkuri.impl.Reimu;
 
 import org.junit.jupiter.api.Nested;
 

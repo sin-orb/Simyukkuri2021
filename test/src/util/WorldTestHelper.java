@@ -1,20 +1,23 @@
 package src.util;
 
-import src.SimYukkuri;
-import src.draw.World;
-import src.base.Yukkuri;
-import src.draw.Terrarium;
-import java.util.Random;
 import java.lang.reflect.Field;
 import java.util.HashMap;
-import javax.swing.JComboBox;
-import src.system.MapPlaceData;
-import src.system.MainCommandUI;
-import src.system.MessagePool;
-import src.system.LoggerYukkuri;
-import src.draw.Translate;
 import java.util.List;
+import java.util.Random;
+
+import javax.swing.JComboBox;
+
+import src.SimYukkuri;
+import src.draw.Terrarium;
+import src.draw.Translate;
+import src.draw.World;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.living.yukkuri.impl.Marisa;
 import src.enums.YukkuriType;
+import src.system.LoggerYukkuri;
+import src.system.MainCommandUI;
+import src.system.MapPlaceData;
+import src.system.MessagePool;
 
 /**
  * Test helper to initialize minimal World infrastructure for testing
@@ -160,14 +163,14 @@ public class WorldTestHelper {
     }
 
     public static Yukkuri createBody() {
-        Yukkuri b = new src.yukkuri.Marisa();
+        Yukkuri b = new Marisa();
         b.setObjId(src.enums.Numbering.INSTANCE.numberingObjId());
         b.setUniqueID(src.enums.Numbering.INSTANCE.numberingYukkuriID());
         return b;
     }
 
     public static void setParents(Yukkuri body, int fatherId, int motherId) {
-        body.setParents(new int[]{ fatherId, motherId });
+        body.setParents(new int[] { fatherId, motherId });
     }
 
     public static void addChild(Yukkuri body, int childId) {
@@ -266,7 +269,8 @@ public class WorldTestHelper {
     }
 
     /**
-     * Initialize MessagePool with empty maps for tests that only need lookup safety.
+     * Initialize MessagePool with empty maps for tests that only need lookup
+     * safety.
      */
     public static void initializeEmptyMessagePool() {
         try {

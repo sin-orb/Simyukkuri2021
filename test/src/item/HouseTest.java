@@ -15,8 +15,9 @@ import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
 import src.base.ItemTestBase;
-import src.base.WorldEntity;
 import src.draw.Rectangle4y;
+import src.entity.core.world.WorldEntity;
+import src.entity.core.world.item.House;
 
 class HouseTest extends ItemTestBase {
 
@@ -119,7 +120,8 @@ class HouseTest extends ItemTestBase {
     void testLoadImages_headless_executesCode() {
         try {
             House.loadImages(House.class.getClassLoader(), null);
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
     }
 
     @Test
@@ -139,7 +141,8 @@ class HouseTest extends ItemTestBase {
         try {
             House h = new House(100, 100, 0);
             org.junit.jupiter.api.Assertions.assertNotNull(h);
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
     }
 
     @Nested

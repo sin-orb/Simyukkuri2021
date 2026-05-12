@@ -10,23 +10,22 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
-import src.SimYukkuri;
-import src.util.GameRandom;
-import src.util.GameWorld;
-import src.base.Yukkuri;
-import src.base.Entity;
 import src.command.GadgetAction;
 import src.draw.ModLoader;
 import src.draw.Point4y;
 import src.draw.Translate;
+import src.entity.core.Entity;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.world.bodylinked.Stalk;
+import src.entity.core.world.mobile.Shit;
+import src.entity.core.world.mobile.Vomit;
 import src.enums.BurialState;
-import src.game.Shit;
-import src.game.Stalk;
-import src.game.Vomit;
 import src.field.FieldShape;
 import src.system.ItemMenu.ShapeMenu;
 import src.system.ItemMenu.ShapeMenuTarget;
 import src.system.MapPlaceData;
+import src.util.GameRandom;
+import src.util.GameWorld;
 
 /***************************************************
  * 畑
@@ -199,13 +198,15 @@ public class Farm extends FieldShape {
 
 	/** 削除 */
 	public static void deleteFarm(Farm farm) {
-		MapPlaceData.setFiledFlag(GameWorld.get().getCurrentMap().getFieldMap(), farm.mapSX, farm.mapSY, farm.mapW, farm.mapH,
+		MapPlaceData.setFiledFlag(GameWorld.get().getCurrentMap().getFieldMap(), farm.mapSX, farm.mapSY, farm.mapW,
+				farm.mapH,
 				false,
 				FIELD_FARM);
 		GameWorld.get().getCurrentMap().getFarm().remove(farm);
 		// 重なってた部分の復元
 		for (Farm targetFarm : GameWorld.get().getCurrentMap().getFarm()) {
-			MapPlaceData.setFiledFlag(GameWorld.get().getCurrentMap().getFieldMap(), targetFarm.mapSX, targetFarm.mapSY, targetFarm.mapW,
+			MapPlaceData.setFiledFlag(GameWorld.get().getCurrentMap().getFieldMap(), targetFarm.mapSX, targetFarm.mapSY,
+					targetFarm.mapW,
 					targetFarm.mapH,
 					true,
 					FIELD_FARM);
@@ -215,8 +216,8 @@ public class Farm extends FieldShape {
 	/**
 	 * ある点が畑の範囲内かどうか
 	 * 
-	 * @param inX      ある点のX座標
-	 * @param inY      ある点Y座標
+	 * @param inX     ある点のX座標
+	 * @param inY     ある点Y座標
 	 * @param isField 渡された座標がフィールド座標かどうか
 	 */
 	public boolean checkContain(int inX, int inY, boolean isField) {
@@ -371,30 +372,30 @@ public class Farm extends FieldShape {
 					}
 				}
 
-					if (!body.isHasStalk() && 1000 < amount) {
-						Stalk stalk = (Stalk) GadgetAction.putObjEX(Stalk.class, body.getX(), body.getY(),
-								body.getDirection().ordinal());
-						GameWorld.get().getCurrentMap().getStalk().put(stalk.objId, stalk);
-						if (body.getStalks() != null) {
-							body.getStalks().add(stalk);
-							stalk.setPlantYukkuri(body);
-							body.setHasStalk(true);
+				if (!body.isHasStalk() && 1000 < amount) {
+					Stalk stalk = (Stalk) GadgetAction.putObjEX(Stalk.class, body.getX(), body.getY(),
+							body.getDirection().ordinal());
+					GameWorld.get().getCurrentMap().getStalk().put(stalk.objId, stalk);
+					if (body.getStalks() != null) {
+						body.getStalks().add(stalk);
+						stalk.setPlantYukkuri(body);
+						body.setHasStalk(true);
+						amount -= 200;
+					}
+				} else {
+					// 余裕がありそうならランダムで茎を生やす
+					if (3000 < amount && !body.isDamaged()) {
+						if (GameRandom.nextInt(100) == 0) {
+							Stalk stalk = (Stalk) GadgetAction.putObjEX(Stalk.class, body.getX(), body.getY(),
+									body.getDirection().ordinal());
+							GameWorld.get().getCurrentMap().getStalk().put(stalk.objId, stalk);
+							if (body.getStalks() != null) {
+								body.getStalks().add(stalk);
+								stalk.setPlantYukkuri(body);
+								body.setHasStalk(true);
+							}
 							amount -= 200;
 						}
-					} else {
-						// 余裕がありそうならランダムで茎を生やす
-						if (3000 < amount && !body.isDamaged()) {
-							if (GameRandom.nextInt(100) == 0) {
-								Stalk stalk = (Stalk) GadgetAction.putObjEX(Stalk.class, body.getX(), body.getY(),
-										body.getDirection().ordinal());
-								GameWorld.get().getCurrentMap().getStalk().put(stalk.objId, stalk);
-								if (body.getStalks() != null) {
-									body.getStalks().add(stalk);
-									stalk.setPlantYukkuri(body);
-									body.setHasStalk(true);
-								}
-								amount -= 200;
-							}
 					}
 				}
 			}

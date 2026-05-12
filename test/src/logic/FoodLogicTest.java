@@ -15,9 +15,9 @@ import org.junit.jupiter.api.Test;
 
 import src.ConstState;
 import src.SimYukkuri;
-import src.base.Yukkuri;
+import src.entity.core.living.yukkuri.Yukkuri;
 import src.event.EventPacket;
-import src.base.Entity;
+import src.entity.core.Entity;
 import src.entity.world.bodylinked.Okazari;
 import src.draw.Point4y;
 import src.draw.Translate;
@@ -34,8 +34,8 @@ import src.enums.TakeoutItemType;
 import src.enums.YukkuriType;
 import src.event.FlyingEatEvent;
 import src.event.SuperEatingTimeEvent;
-import src.game.Shit;
-import src.game.Stalk;
+import src.entity.core.world.mobile.Shit;
+import src.entity.core.world.bodylinked.Stalk;
 import src.game.Vomit;
 import src.item.Bed;
 import src.item.Food;
@@ -43,11 +43,11 @@ import src.item.Stone;
 import src.item.Toilet;
 import src.util.WorldTestHelper;
 import src.enums.FootBake;
-import src.yukkuri.Fran;
-import src.yukkuri.Meirin;
-import src.yukkuri.Remirya;
-import src.yukkuri.Sakuya;
-import src.yukkuri.TarinaiReimu;
+import src.entity.core.living.yukkuri.impl.Fran;
+import src.entity.core.living.yukkuri.impl.Meirin;
+import src.entity.core.living.yukkuri.impl.Remirya;
+import src.entity.core.living.yukkuri.impl.Sakuya;
+import src.entity.core.living.yukkuri.impl.TarinaiReimu;
 
 class FoodLogicTest {
 
@@ -588,14 +588,14 @@ class FoodLogicTest {
     @Test
     void testSearchFoodPredetor_WithPreyNearby_FindsPrey() {
         // Create Remirya (predator) as b
-        src.yukkuri.Remirya remirya = new src.yukkuri.Remirya();
+        src.entity.core.living.yukkuri.impl.Remirya remirya = new src.entity.core.living.yukkuri.impl.Remirya();
         remirya.setX(100);
         remirya.setY(100);
         remirya.setHungry(0);
         SimYukkuri.world.getCurrentMap().getBody().put(remirya.getUniqueID(), remirya);
 
         // Create Reimu (prey) nearby
-        src.yukkuri.Reimu prey = new src.yukkuri.Reimu();
+        src.entity.core.living.yukkuri.impl.Reimu prey = new src.entity.core.living.yukkuri.impl.Reimu();
         prey.setX(110);
         prey.setY(110);
         prey.setAgeState(src.enums.AgeState.BABY); // smaller → first found candidate
@@ -611,14 +611,14 @@ class FoodLogicTest {
     @Test
     void testSearchFoodPredetor_AdultPrey_SameSize_DoesNotThrow() {
         // Remirya as predator, adult Reimu as same-size prey (found2 branch)
-        src.yukkuri.Remirya remirya = new src.yukkuri.Remirya();
+        src.entity.core.living.yukkuri.impl.Remirya remirya = new src.entity.core.living.yukkuri.impl.Remirya();
         remirya.setX(100);
         remirya.setY(100);
         remirya.setAgeState(src.enums.AgeState.ADULT);
         remirya.setHungry(0);
         SimYukkuri.world.getCurrentMap().getBody().put(remirya.getUniqueID(), remirya);
 
-        src.yukkuri.Reimu prey = new src.yukkuri.Reimu();
+        src.entity.core.living.yukkuri.impl.Reimu prey = new src.entity.core.living.yukkuri.impl.Reimu();
         prey.setX(120);
         prey.setY(120);
         prey.setAgeState(src.enums.AgeState.ADULT);
@@ -630,13 +630,13 @@ class FoodLogicTest {
     @Test
     void testSearchFoodPredetor_DeadPrey_DoesNotThrow() {
         // Dead prey → found3 (dead body candidate) branch
-        src.yukkuri.Remirya remirya = new src.yukkuri.Remirya();
+        src.entity.core.living.yukkuri.impl.Remirya remirya = new src.entity.core.living.yukkuri.impl.Remirya();
         remirya.setX(100);
         remirya.setY(100);
         remirya.setHungry(0);
         SimYukkuri.world.getCurrentMap().getBody().put(remirya.getUniqueID(), remirya);
 
-        src.yukkuri.Reimu deadPrey = new src.yukkuri.Reimu();
+        src.entity.core.living.yukkuri.impl.Reimu deadPrey = new src.entity.core.living.yukkuri.impl.Reimu();
         deadPrey.setX(110);
         deadPrey.setY(110);
         deadPrey.setDead(true);
@@ -650,13 +650,13 @@ class FoodLogicTest {
     @Test
     void testCheckFood_PredatorType_WithPrey_DoesNotThrow() {
         // Remirya (predator) + hungry → reaches searchFoodPredetor branch
-        src.yukkuri.Remirya remirya = new src.yukkuri.Remirya();
+        src.entity.core.living.yukkuri.impl.Remirya remirya = new src.entity.core.living.yukkuri.impl.Remirya();
         remirya.setX(100);
         remirya.setY(100);
         remirya.setHungry(0); // very hungry
         SimYukkuri.world.getCurrentMap().getBody().put(remirya.getUniqueID(), remirya);
 
-        src.yukkuri.Reimu prey = new src.yukkuri.Reimu();
+        src.entity.core.living.yukkuri.impl.Reimu prey = new src.entity.core.living.yukkuri.impl.Reimu();
         prey.setX(110);
         prey.setY(110);
         SimYukkuri.world.getCurrentMap().getBody().put(prey.getUniqueID(), prey);
@@ -669,7 +669,7 @@ class FoodLogicTest {
     @Test
     void testSearchFoodStandard_WithDeadBody_DoesNotThrow() {
         body.setHungry(0); // very hungry
-        src.yukkuri.Reimu deadBody = new src.yukkuri.Reimu();
+        src.entity.core.living.yukkuri.impl.Reimu deadBody = new src.entity.core.living.yukkuri.impl.Reimu();
         deadBody.setX(110);
         deadBody.setY(110);
         deadBody.setDead(true);
@@ -680,7 +680,7 @@ class FoodLogicTest {
     @Test
     void testSearchFoodStandard_WithStalk_DoesNotThrow() {
         body.setHungry(0);
-        src.game.Stalk stalk = new src.game.Stalk(110, 110, 0);
+        src.entity.core.world.bodylinked.Stalk stalk = new src.entity.core.world.bodylinked.Stalk(110, 110, 0);
         stalk.setAmount(100);
         SimYukkuri.world.getCurrentMap().getStalk().put(stalk.getObjId(), stalk);
         assertDoesNotThrow(() -> FoodLogic.searchFoodStandard(body, new boolean[] { false }));
@@ -690,12 +690,12 @@ class FoodLogicTest {
 
     @Test
     void testCheckFood_IdiotBody_WithStalk_DoesNotThrow() {
-        src.yukkuri.TarinaiReimu tarinai = new src.yukkuri.TarinaiReimu();
+        src.entity.core.living.yukkuri.impl.TarinaiReimu tarinai = new src.entity.core.living.yukkuri.impl.TarinaiReimu();
         tarinai.setX(100);
         tarinai.setY(100);
         tarinai.setHungry(0);
         SimYukkuri.world.getCurrentMap().getBody().put(tarinai.getUniqueID(), tarinai);
-        src.game.Stalk stalk = new src.game.Stalk(120, 120, 0);
+        src.entity.core.world.bodylinked.Stalk stalk = new src.entity.core.world.bodylinked.Stalk(120, 120, 0);
         stalk.setAmount(100);
         SimYukkuri.world.getCurrentMap().getStalk().put(stalk.getObjId(), stalk);
         assertDoesNotThrow(() -> FoodLogic.checkFood(tarinai));
@@ -727,7 +727,7 @@ class FoodLogicTest {
     @Test
     void testEatFood_Poor_BodyType_DoesNotThrow() {
         body.setTang(200); // POOR
-        src.yukkuri.Reimu deadBody = new src.yukkuri.Reimu();
+        src.entity.core.living.yukkuri.impl.Reimu deadBody = new src.entity.core.living.yukkuri.impl.Reimu();
         deadBody.setDead(true);
         deadBody.setX(100);
         deadBody.setY(100);
@@ -863,7 +863,7 @@ class FoodLogicTest {
 
         body.setEyesightBase(1000000);
 
-        src.game.Shit shit = new src.game.Shit();
+        src.entity.core.world.mobile.Shit shit = new src.entity.core.world.mobile.Shit();
         shit.setX(100);
         shit.setY(100);
         body.setX(50);
@@ -872,10 +872,10 @@ class FoodLogicTest {
         SimYukkuri.world.getCurrentMap().getToilet().clear();
 
         // Invoke searchFoodForUnunSlave directly to verify search logic
-        java.lang.reflect.Method m = FoodLogic.class.getDeclaredMethod("searchFoodForUnunSlave", src.base.Yukkuri.class,
+        java.lang.reflect.Method m = FoodLogic.class.getDeclaredMethod("searchFoodForUnunSlave", src.entity.core.living.yukkuri.Yukkuri.class,
                 boolean[].class);
         m.setAccessible(true);
-        src.base.Entity found = (src.base.Entity) m.invoke(null, body, new boolean[] { false });
+        src.entity.core.Entity found = (src.entity.core.Entity) m.invoke(null, body, new boolean[] { false });
 
         assertTrue(found != null, "UnunSlave should find the shit");
     }
@@ -1234,12 +1234,12 @@ class FoodLogicTest {
     @Test
     void testSearchFoodPredetor_FamilyPrey_Skipped_DoesNotThrow() {
         // Predator skips family members (isFamily → continue)
-        src.yukkuri.Remirya remirya = new src.yukkuri.Remirya();
+        src.entity.core.living.yukkuri.impl.Remirya remirya = new src.entity.core.living.yukkuri.impl.Remirya();
         remirya.setX(100); remirya.setY(100);
         remirya.setHungry(0);
         SimYukkuri.world.getCurrentMap().getBody().put(remirya.getUniqueID(), remirya);
 
-        src.yukkuri.Reimu prey = new src.yukkuri.Reimu();
+        src.entity.core.living.yukkuri.impl.Reimu prey = new src.entity.core.living.yukkuri.impl.Reimu();
         prey.setX(110); prey.setY(110);
         prey.setAgeState(src.enums.AgeState.BABY);
         // Make remirya the parent of prey → isFamily=true → skip
@@ -1252,12 +1252,12 @@ class FoodLogicTest {
     @Test
     void testSearchFoodPredetor_PredatorTypePrey_Skipped_DoesNotThrow() {
         // Predator skips prey that is also a predator type (isPredatorType → continue)
-        src.yukkuri.Remirya predator = new src.yukkuri.Remirya();
+        src.entity.core.living.yukkuri.impl.Remirya predator = new src.entity.core.living.yukkuri.impl.Remirya();
         predator.setX(100); predator.setY(100);
         predator.setHungry(0);
         SimYukkuri.world.getCurrentMap().getBody().put(predator.getUniqueID(), predator);
 
-        src.yukkuri.Remirya prey = new src.yukkuri.Remirya();
+        src.entity.core.living.yukkuri.impl.Remirya prey = new src.entity.core.living.yukkuri.impl.Remirya();
         prey.setX(110); prey.setY(110);
         prey.setAgeState(src.enums.AgeState.BABY);
         SimYukkuri.world.getCurrentMap().getBody().put(prey.getUniqueID(), prey);
@@ -1268,12 +1268,12 @@ class FoodLogicTest {
     @Test
     void testSearchFoodPredetor_SickPrey_NotFool_Skipped_DoesNotThrow() {
         // Non-FOOL predator skips sick prey (!isTooHungry + findSick → continue)
-        src.yukkuri.Remirya remirya = new src.yukkuri.Remirya();
+        src.entity.core.living.yukkuri.impl.Remirya remirya = new src.entity.core.living.yukkuri.impl.Remirya();
         remirya.setX(100); remirya.setY(100);
         remirya.setIntelligence(src.enums.Intelligence.AVERAGE);
         SimYukkuri.world.getCurrentMap().getBody().put(remirya.getUniqueID(), remirya);
 
-        src.yukkuri.Reimu sickPrey = new src.yukkuri.Reimu();
+        src.entity.core.living.yukkuri.impl.Reimu sickPrey = new src.entity.core.living.yukkuri.impl.Reimu();
         sickPrey.setX(110); sickPrey.setY(110);
         sickPrey.setAgeState(src.enums.AgeState.BABY);
         sickPrey.forceSetSick(); // isSick()=true
@@ -1384,11 +1384,11 @@ class FoodLogicTest {
     void testCheckFood_MiddlePriorityEvent_ReturnsFalse() {
         body.setHungry(0); // isVeryHungry=true so L70 won't block
         EventPacket midEv = new EventPacket(null, null, null, 1) {
-            @Override public boolean checkEventResponse(src.base.Yukkuri b) { return false; }
-            @Override public void start(src.base.Yukkuri b) {}
-            @Override public UpdateState update(src.base.Yukkuri b) { return null; }
-            @Override public boolean execute(src.base.Yukkuri b) { return false; }
-            @Override public void end(src.base.Yukkuri b) {}
+            @Override public boolean checkEventResponse(src.entity.core.living.yukkuri.Yukkuri b) { return false; }
+            @Override public void start(src.entity.core.living.yukkuri.Yukkuri b) {}
+            @Override public UpdateState update(src.entity.core.living.yukkuri.Yukkuri b) { return null; }
+            @Override public boolean execute(src.entity.core.living.yukkuri.Yukkuri b) { return false; }
+            @Override public void end(src.entity.core.living.yukkuri.Yukkuri b) {}
             @Override public EventPriority getPriority() { return EventPriority.MIDDLE; }
         };
         body.setCurrentEvent(midEv);
@@ -1401,11 +1401,11 @@ class FoodLogicTest {
         // ev != null + priority == LOW → L108 condition false → continue (bForceEat=false)
         body.setHungry(0);
         EventPacket lowEv = new EventPacket(null, null, null, 1) {
-            @Override public boolean checkEventResponse(src.base.Yukkuri b) { return false; }
-            @Override public void start(src.base.Yukkuri b) {}
-            @Override public UpdateState update(src.base.Yukkuri b) { return null; }
-            @Override public boolean execute(src.base.Yukkuri b) { return false; }
-            @Override public void end(src.base.Yukkuri b) {}
+            @Override public boolean checkEventResponse(src.entity.core.living.yukkuri.Yukkuri b) { return false; }
+            @Override public void start(src.entity.core.living.yukkuri.Yukkuri b) {}
+            @Override public UpdateState update(src.entity.core.living.yukkuri.Yukkuri b) { return null; }
+            @Override public boolean execute(src.entity.core.living.yukkuri.Yukkuri b) { return false; }
+            @Override public void end(src.entity.core.living.yukkuri.Yukkuri b) {}
             @Override public EventPriority getPriority() { return EventPriority.LOW; }
         };
         body.setCurrentEvent(lowEv);
@@ -2069,7 +2069,7 @@ class FoodLogicTest {
         // purposeOfMoving is a single field: setToBody then setToFood overwrites it.
         // Use an anonymous subclass that overrides isToBody() so both can be "true" at once.
         SimYukkuri.RND = new ConstState(1);
-        Yukkuri bodyWithToBody = new src.yukkuri.Marisa() {
+        Yukkuri bodyWithToBody = new src.entity.core.living.yukkuri.impl.Marisa() {
             @Override public boolean isToBody() { return true; }
             @Override public int getCollisionX() { return 10; }
         };
@@ -2320,10 +2320,10 @@ class FoodLogicTest {
         body.setPredatorType(PredatorType.BITE);
         body.setHungry(body.getHungryLimit() / 2); // hungry
         body.setToFood(true);
-        src.yukkuri.Marisa prey = new src.yukkuri.Marisa() {
+        src.entity.core.living.yukkuri.impl.Marisa prey = new src.entity.core.living.yukkuri.impl.Marisa() {
             @Override public int getCollisionX() { return 10; }
             @Override public void bodyInjure() { /* no-op to avoid headless NPE */ }
-            @Override public void eatBody(int amount, src.base.Yukkuri attacker) { /* no-op to avoid bodyCut NPE */ }
+            @Override public void eatBody(int amount, src.entity.core.living.yukkuri.Yukkuri attacker) { /* no-op to avoid bodyCut NPE */ }
         };
         prey.setX(body.getX());
         prey.setY(body.getY());
@@ -2341,10 +2341,10 @@ class FoodLogicTest {
         body.setRaper(true);
         body.setHungry(body.getHungryLimit() / 2); // isHungry=true
         body.setToFood(true);
-        src.yukkuri.Marisa prey = new src.yukkuri.Marisa() {
+        src.entity.core.living.yukkuri.impl.Marisa prey = new src.entity.core.living.yukkuri.impl.Marisa() {
             @Override public int getCollisionX() { return 10; }
             @Override public void bodyInjure() { /* no-op to avoid headless NPE */ }
-            @Override public void eatBody(int amount, src.base.Yukkuri attacker) { /* no-op to avoid bodyCut NPE */ }
+            @Override public void eatBody(int amount, src.entity.core.living.yukkuri.Yukkuri attacker) { /* no-op to avoid bodyCut NPE */ }
         };
         prey.setX(body.getX());
         prey.setY(body.getY());
@@ -4291,7 +4291,7 @@ class FoodLogicTest {
         SimYukkuri.world.getCurrentMap().getBody().put(remirya.getUniqueID(), remirya);
 
         // Create a live prey with overridden bodyInjure() to avoid headless NPE
-        src.yukkuri.Marisa prey = new src.yukkuri.Marisa() {
+        src.entity.core.living.yukkuri.impl.Marisa prey = new src.entity.core.living.yukkuri.impl.Marisa() {
             @Override public int getCollisionX() { return 10; }
             @Override public void bodyInjure() { /* no-op to avoid headless NPE */ }
         };
@@ -4349,7 +4349,7 @@ class FoodLogicTest {
         body.setToFood(true);
 
         // Create live prey with overridden bodyInjure() to avoid headless NPE
-        src.yukkuri.Marisa prey = new src.yukkuri.Marisa() {
+        src.entity.core.living.yukkuri.impl.Marisa prey = new src.entity.core.living.yukkuri.impl.Marisa() {
             @Override public int getCollisionX() { return 10; }
             @Override public void bodyInjure() { /* no-op */ }
         };
@@ -4718,10 +4718,10 @@ class FoodLogicTest {
         body.setPredatorType(PredatorType.BITE);
         body.setHungry(body.getHungryLimit() / 2);
         body.setToFood(true);
-        src.yukkuri.Marisa prey = new src.yukkuri.Marisa() {
+        src.entity.core.living.yukkuri.impl.Marisa prey = new src.entity.core.living.yukkuri.impl.Marisa() {
             @Override public int getCollisionX() { return 10; }
             @Override public void bodyInjure() { /* no-op to avoid headless NPE */ }
-            @Override public void eatBody(int amount, src.base.Yukkuri attacker) { /* no-op to avoid bodyCut NPE */ }
+            @Override public void eatBody(int amount, src.entity.core.living.yukkuri.Yukkuri attacker) { /* no-op to avoid bodyCut NPE */ }
         };
         prey.setX(body.getX());
         prey.setY(body.getY());
@@ -4758,10 +4758,10 @@ class FoodLogicTest {
         mother.setY(150);
         SimYukkuri.world.getCurrentMap().getBody().put(mother.getUniqueID(), mother);
         // Create prey with mother set
-        src.yukkuri.Marisa prey = new src.yukkuri.Marisa() {
+        src.entity.core.living.yukkuri.impl.Marisa prey = new src.entity.core.living.yukkuri.impl.Marisa() {
             @Override public int getCollisionX() { return 10; }
             @Override public void bodyInjure() { /* no-op */ }
-            @Override public void eatBody(int amount, src.base.Yukkuri attacker) { /* no-op */ }
+            @Override public void eatBody(int amount, src.entity.core.living.yukkuri.Yukkuri attacker) { /* no-op */ }
         };
         prey.setX(body.getX());
         prey.setY(body.getY());
@@ -4788,10 +4788,10 @@ class FoodLogicTest {
         Yukkuri mother = WorldTestHelper.createBody();
         mother.setDead(true);
         SimYukkuri.world.getCurrentMap().getBody().put(mother.getUniqueID(), mother);
-        src.yukkuri.Marisa prey = new src.yukkuri.Marisa() {
+        src.entity.core.living.yukkuri.impl.Marisa prey = new src.entity.core.living.yukkuri.impl.Marisa() {
             @Override public int getCollisionX() { return 10; }
             @Override public void bodyInjure() { /* no-op */ }
-            @Override public void eatBody(int amount, src.base.Yukkuri attacker) { /* no-op */ }
+            @Override public void eatBody(int amount, src.entity.core.living.yukkuri.Yukkuri attacker) { /* no-op */ }
         };
         prey.setX(body.getX());
         prey.setY(body.getY());
@@ -4818,10 +4818,10 @@ class FoodLogicTest {
         Yukkuri mother = WorldTestHelper.createBody();
         mother.setRemoved(true);
         SimYukkuri.world.getCurrentMap().getBody().put(mother.getUniqueID(), mother);
-        src.yukkuri.Marisa prey = new src.yukkuri.Marisa() {
+        src.entity.core.living.yukkuri.impl.Marisa prey = new src.entity.core.living.yukkuri.impl.Marisa() {
             @Override public int getCollisionX() { return 10; }
             @Override public void bodyInjure() { /* no-op */ }
-            @Override public void eatBody(int amount, src.base.Yukkuri attacker) { /* no-op */ }
+            @Override public void eatBody(int amount, src.entity.core.living.yukkuri.Yukkuri attacker) { /* no-op */ }
         };
         prey.setX(body.getX());
         prey.setY(body.getY());
@@ -4840,10 +4840,10 @@ class FoodLogicTest {
         body.setRaper(true);
         body.setHungry(body.getHungryLimit() / 2);
         body.setToFood(true);
-        src.yukkuri.Marisa prey = new src.yukkuri.Marisa() {
+        src.entity.core.living.yukkuri.impl.Marisa prey = new src.entity.core.living.yukkuri.impl.Marisa() {
             @Override public int getCollisionX() { return 10; }
             @Override public void bodyInjure() { /* no-op */ }
-            @Override public void eatBody(int amount, src.base.Yukkuri attacker) { /* no-op */ }
+            @Override public void eatBody(int amount, src.entity.core.living.yukkuri.Yukkuri attacker) { /* no-op */ }
         };
         prey.setX(body.getX());
         prey.setY(body.getY());
@@ -5172,7 +5172,7 @@ class FoodLogicTest {
     void testSearchFoodForUnunSlave_Body_SoHungryAndTooHungry_Found() {
         // UnunSlave body loop: isSoHungry AND isTooHungry → L1309-1316: found=d
         // Use checkFood with UnunSlave (routes to searchFoodForUnunSlave)
-        Yukkuri ununSlave = new src.yukkuri.Marisa() {
+        Yukkuri ununSlave = new src.entity.core.living.yukkuri.impl.Marisa() {
             @Override public int getCollisionX() { return 10; }
         };
         ununSlave.setX(100);
@@ -5196,7 +5196,7 @@ class FoodLogicTest {
     void testSearchFoodForUnunSlave_WasteNora_TooHungry_Found() {
         // UnunSlave food loop: WASTE_NORA + isTooHungry → L1337-1339: found=f, break
         // Use checkFood with UnunSlave body
-        Yukkuri ununSlave = new src.yukkuri.Marisa() {
+        Yukkuri ununSlave = new src.entity.core.living.yukkuri.impl.Marisa() {
             @Override public int getCollisionX() { return 10; }
         };
         ununSlave.setX(100);
@@ -5418,7 +5418,7 @@ class FoodLogicTest {
         SimYukkuri.RND = new ConstState(1);
         // Use a Marisa body with explicit predator and flying properties set
         // (Remirya() no-arg constructor doesn't set flyingType or predatorType)
-        Yukkuri predator = new src.yukkuri.Marisa() {
+        Yukkuri predator = new src.entity.core.living.yukkuri.impl.Marisa() {
             @Override public int getCollisionX() { return 10; }
         };
         predator.setX(100);
@@ -6001,7 +6001,7 @@ class FoodLogicTest {
     void testSearchFoodForUnunSlave_MinDistanceLessThanOne_Break2() {
         // UnunSlave shit loop: minDistance becomes 0 → L1245-1246: break on next iteration
         // Need shit at exact body position AND another shit
-        Yukkuri ununSlave = new src.yukkuri.Marisa() {
+        Yukkuri ununSlave = new src.entity.core.living.yukkuri.impl.Marisa() {
             @Override public int getCollisionX() { return 10; }
         };
         ununSlave.setX(100);
@@ -6029,7 +6029,7 @@ class FoodLogicTest {
     @Test
     void testSearchFoodForUnunSlave_ShitTargetedByOther_Skip() {
         // UnunSlave shit loop: another body already targets this shit → bOtherTarget=true → continue
-        Yukkuri ununSlave = new src.yukkuri.Marisa() {
+        Yukkuri ununSlave = new src.entity.core.living.yukkuri.impl.Marisa() {
             @Override public int getCollisionX() { return 10; }
         };
         ununSlave.setX(100);
@@ -6058,7 +6058,7 @@ class FoodLogicTest {
     @Test
     void testSearchFoodForUnunSlave_VomitLoop_Found() {
         // UnunSlave: found==null after shit loop + vomit in range → found=vomit (L1283-1295)
-        Yukkuri ununSlave = new src.yukkuri.Marisa() {
+        Yukkuri ununSlave = new src.entity.core.living.yukkuri.impl.Marisa() {
             @Override public int getCollisionX() { return 10; }
         };
         ununSlave.setX(100);
@@ -6080,7 +6080,7 @@ class FoodLogicTest {
     @Test
     void testSearchFoodForUnunSlave_BodyLoop_NotSoHungry_Break2() {
         // UnunSlave body loop: !isSoHungry → L1306-1307: break
-        Yukkuri ununSlave = new src.yukkuri.Marisa() {
+        Yukkuri ununSlave = new src.entity.core.living.yukkuri.impl.Marisa() {
             @Override public int getCollisionX() { return 10; }
         };
         ununSlave.setX(100);
@@ -6102,7 +6102,7 @@ class FoodLogicTest {
     @Test
     void testSearchFoodForUnunSlave_WasteYasei_TooHungry_Found() {
         // UnunSlave food loop: WASTE_YASEI + isTooHungry → L1334-1339: found=f, break
-        Yukkuri ununSlave = new src.yukkuri.Marisa() {
+        Yukkuri ununSlave = new src.entity.core.living.yukkuri.impl.Marisa() {
             @Override public int getCollisionX() { return 10; }
         };
         ununSlave.setX(100);
@@ -6119,7 +6119,7 @@ class FoodLogicTest {
     @Test
     void testSearchFoodForUnunSlave_NonWasteFood_Skip() {
         // UnunSlave food loop: FOOD type (not waste) → L1333-1340 not entered → null found
-        Yukkuri ununSlave = new src.yukkuri.Marisa() {
+        Yukkuri ununSlave = new src.entity.core.living.yukkuri.impl.Marisa() {
             @Override public int getCollisionX() { return 10; }
         };
         ununSlave.setX(100);
@@ -6140,7 +6140,7 @@ class FoodLogicTest {
     void testSearchFoodForUnunSlave_WasteFood_NotTooHungry_NoBrk() {
         // UnunSlave food loop: WASTE + !isTooHungry → L1337 false → L1343 closes if
         // next food or end of loop
-        Yukkuri ununSlave = new src.yukkuri.Marisa() {
+        Yukkuri ununSlave = new src.entity.core.living.yukkuri.impl.Marisa() {
             @Override public int getCollisionX() { return 10; }
         };
         ununSlave.setX(100);
@@ -6949,12 +6949,12 @@ class FoodLogicTest {
         // L995-997: b is Remirya + d is Sakuya → continue (skip)
         // Remove the default body from setUp to avoid it being found as prey
         SimYukkuri.world.getCurrentMap().getBody().clear();
-        src.yukkuri.Remirya remirya = new src.yukkuri.Remirya();
+        src.entity.core.living.yukkuri.impl.Remirya remirya = new src.entity.core.living.yukkuri.impl.Remirya();
         remirya.setX(100);
         remirya.setY(100);
         remirya.setHungry(0);
         SimYukkuri.world.getCurrentMap().getBody().put(remirya.getUniqueID(), remirya);
-        src.yukkuri.Sakuya sakuya = new src.yukkuri.Sakuya();
+        src.entity.core.living.yukkuri.impl.Sakuya sakuya = new src.entity.core.living.yukkuri.impl.Sakuya();
         sakuya.setX(105);
         sakuya.setY(100);
         SimYukkuri.world.getCurrentMap().getBody().put(sakuya.getUniqueID(), sakuya);
@@ -6968,12 +6968,12 @@ class FoodLogicTest {
     void testSearchFoodPredetor_Remirya_SkipsMeirin() {
         // L995-997: b is Remirya + d is Meirin → continue (skip)
         SimYukkuri.world.getCurrentMap().getBody().clear();
-        src.yukkuri.Remirya remirya = new src.yukkuri.Remirya();
+        src.entity.core.living.yukkuri.impl.Remirya remirya = new src.entity.core.living.yukkuri.impl.Remirya();
         remirya.setX(100);
         remirya.setY(100);
         remirya.setHungry(0);
         SimYukkuri.world.getCurrentMap().getBody().put(remirya.getUniqueID(), remirya);
-        src.yukkuri.Meirin meirin = new src.yukkuri.Meirin();
+        src.entity.core.living.yukkuri.impl.Meirin meirin = new src.entity.core.living.yukkuri.impl.Meirin();
         meirin.setX(105);
         meirin.setY(100);
         SimYukkuri.world.getCurrentMap().getBody().put(meirin.getUniqueID(), meirin);
@@ -6987,12 +6987,12 @@ class FoodLogicTest {
     void testSearchFoodPredetor_Fran_SkipsSakuya() {
         // L995-997: b is Fran + d is Sakuya → continue (skip)
         SimYukkuri.world.getCurrentMap().getBody().clear();
-        src.yukkuri.Fran fran = new src.yukkuri.Fran();
+        src.entity.core.living.yukkuri.impl.Fran fran = new src.entity.core.living.yukkuri.impl.Fran();
         fran.setX(100);
         fran.setY(100);
         fran.setHungry(0);
         SimYukkuri.world.getCurrentMap().getBody().put(fran.getUniqueID(), fran);
-        src.yukkuri.Sakuya sakuya = new src.yukkuri.Sakuya();
+        src.entity.core.living.yukkuri.impl.Sakuya sakuya = new src.entity.core.living.yukkuri.impl.Sakuya();
         sakuya.setX(105);
         sakuya.setY(100);
         SimYukkuri.world.getCurrentMap().getBody().put(sakuya.getUniqueID(), sakuya);
@@ -9061,13 +9061,13 @@ class FoodLogicTest {
         // body(Marisa) を除去して prey だけ残す
         SimYukkuri.world.getCurrentMap().getBody().remove(body.getUniqueID());
 
-        src.yukkuri.Remirya remirya = new src.yukkuri.Remirya();
+        src.entity.core.living.yukkuri.impl.Remirya remirya = new src.entity.core.living.yukkuri.impl.Remirya();
         remirya.setX(100);
         remirya.setY(100);
         remirya.setAgeState(src.enums.AgeState.ADULT);
         SimYukkuri.world.getCurrentMap().getBody().put(remirya.getUniqueID(), remirya);
 
-        src.yukkuri.Reimu prey = new src.yukkuri.Reimu();
+        src.entity.core.living.yukkuri.impl.Reimu prey = new src.entity.core.living.yukkuri.impl.Reimu();
         prey.setX(110);
         prey.setY(110);
         prey.setAgeState(src.enums.AgeState.CHILD);
@@ -9082,19 +9082,19 @@ class FoodLogicTest {
         // L970: 2体の CHILD prey → minDistance > distance(2体目) → found 上書き
         SimYukkuri.world.getCurrentMap().getBody().remove(body.getUniqueID());
 
-        src.yukkuri.Remirya remirya = new src.yukkuri.Remirya();
+        src.entity.core.living.yukkuri.impl.Remirya remirya = new src.entity.core.living.yukkuri.impl.Remirya();
         remirya.setX(100);
         remirya.setY(100);
         remirya.setAgeState(src.enums.AgeState.ADULT);
         SimYukkuri.world.getCurrentMap().getBody().put(remirya.getUniqueID(), remirya);
 
-        src.yukkuri.Reimu prey1 = new src.yukkuri.Reimu();
+        src.entity.core.living.yukkuri.impl.Reimu prey1 = new src.entity.core.living.yukkuri.impl.Reimu();
         prey1.setX(150);
         prey1.setY(150);
         prey1.setAgeState(src.enums.AgeState.CHILD);
         SimYukkuri.world.getCurrentMap().getBody().put(prey1.getUniqueID(), prey1);
 
-        src.yukkuri.Reimu prey2 = new src.yukkuri.Reimu();
+        src.entity.core.living.yukkuri.impl.Reimu prey2 = new src.entity.core.living.yukkuri.impl.Reimu();
         prey2.setX(110);
         prey2.setY(110);
         prey2.setAgeState(src.enums.AgeState.CHILD);
@@ -9111,14 +9111,14 @@ class FoodLogicTest {
         // 最初 CHILD prey → found, size=1; 次に BABY prey → ordinal(0) < size(1) → 上書き
         SimYukkuri.world.getCurrentMap().getBody().remove(body.getUniqueID());
 
-        src.yukkuri.Remirya remirya = new src.yukkuri.Remirya();
+        src.entity.core.living.yukkuri.impl.Remirya remirya = new src.entity.core.living.yukkuri.impl.Remirya();
         remirya.setX(100);
         remirya.setY(100);
         remirya.setAgeState(src.enums.AgeState.ADULT);
         SimYukkuri.world.getCurrentMap().getBody().put(remirya.getUniqueID(), remirya);
 
         // 近い CHILD prey (距離小→minDistance設定)
-        src.yukkuri.Reimu childPrey = new src.yukkuri.Reimu();
+        src.entity.core.living.yukkuri.impl.Reimu childPrey = new src.entity.core.living.yukkuri.impl.Reimu();
         childPrey.setX(105);
         childPrey.setY(105);
         childPrey.setAgeState(src.enums.AgeState.CHILD);
@@ -9126,7 +9126,7 @@ class FoodLogicTest {
 
         // 遠い BABY prey (CHILD より距離大だが ordinal<size) → L970 右辺 true → 上書き
         // 座標は Barrier.wallMap(152x152) 範囲内に収める
-        src.yukkuri.Reimu babyPrey = new src.yukkuri.Reimu();
+        src.entity.core.living.yukkuri.impl.Reimu babyPrey = new src.entity.core.living.yukkuri.impl.Reimu();
         babyPrey.setX(115);
         babyPrey.setY(115);
         babyPrey.setAgeState(src.enums.AgeState.BABY);
@@ -9201,7 +9201,7 @@ class FoodLogicTest {
         // L1042: predator + STALK + !isBaby + !isRude + !isVeryHungry + isRaper=true → flag=true
         // hungry=100 → isVeryHungry=false (hungry>0) → L1039 skip → L1042 評価
         SimYukkuri.world.getCurrentMap().getBody().remove(body.getUniqueID());
-        src.yukkuri.Remirya remirya = new src.yukkuri.Remirya();
+        src.entity.core.living.yukkuri.impl.Remirya remirya = new src.entity.core.living.yukkuri.impl.Remirya();
         remirya.setX(100);
         remirya.setY(100);
         remirya.setAgeState(AgeState.ADULT);
@@ -9220,7 +9220,7 @@ class FoodLogicTest {
         // L1042: isRude=true → !isRude=false → else if skip
         // L1036前提: isRude=true && isSoHungry=false(hungry=5000>1920) → false → L1042評価
         SimYukkuri.world.getCurrentMap().getBody().remove(body.getUniqueID());
-        src.yukkuri.Remirya remirya = new src.yukkuri.Remirya();
+        src.entity.core.living.yukkuri.impl.Remirya remirya = new src.entity.core.living.yukkuri.impl.Remirya();
         remirya.setX(100);
         remirya.setY(100);
         remirya.setAgeState(AgeState.ADULT);
@@ -9237,7 +9237,7 @@ class FoodLogicTest {
         // L1042: !isRude=true, isRaper=false → else if false
         // L1039前提: !isRude=true && isVeryHungry=false(hungry=5000>0) → false → L1042評価
         SimYukkuri.world.getCurrentMap().getBody().remove(body.getUniqueID());
-        src.yukkuri.Remirya remirya = new src.yukkuri.Remirya();
+        src.entity.core.living.yukkuri.impl.Remirya remirya = new src.entity.core.living.yukkuri.impl.Remirya();
         remirya.setX(100);
         remirya.setY(100);
         remirya.setAgeState(AgeState.ADULT);
@@ -9255,7 +9255,7 @@ class FoodLogicTest {
     void testSearchFoodPredetor_SWEETS_TooFull_Normal_ForceEat() {
         // L1057: predator + SWEETS + isTooFull=true + !isOverEating + isNormal=true → flag=true
         SimYukkuri.world.getCurrentMap().getBody().remove(body.getUniqueID());
-        src.yukkuri.Remirya remirya = new src.yukkuri.Remirya();
+        src.entity.core.living.yukkuri.impl.Remirya remirya = new src.entity.core.living.yukkuri.impl.Remirya();
         remirya.setX(100);
         remirya.setY(100);
         remirya.setAgeState(AgeState.ADULT);
@@ -9275,7 +9275,7 @@ class FoodLogicTest {
         // L1057: isOverEating=true → else if skip → forceEat=false
         // hungry=15000 → isTooFull=true(>=9600), isOverEating=true(>=12480)
         SimYukkuri.world.getCurrentMap().getBody().remove(body.getUniqueID());
-        src.yukkuri.Remirya remirya = new src.yukkuri.Remirya();
+        src.entity.core.living.yukkuri.impl.Remirya remirya = new src.entity.core.living.yukkuri.impl.Remirya();
         remirya.setX(100);
         remirya.setY(100);
         remirya.setAgeState(AgeState.ADULT);
@@ -9291,7 +9291,7 @@ class FoodLogicTest {
     void testSearchFoodPredetor_SWEETS_TooFull_Rude_ForceEat() {
         // L1057: isRude=true → (isRude||isNormal)=true → forceEat=true
         SimYukkuri.world.getCurrentMap().getBody().remove(body.getUniqueID());
-        src.yukkuri.Remirya remirya = new src.yukkuri.Remirya();
+        src.entity.core.living.yukkuri.impl.Remirya remirya = new src.entity.core.living.yukkuri.impl.Remirya();
         remirya.setX(100);
         remirya.setY(100);
         remirya.setAgeState(AgeState.ADULT);
@@ -9308,7 +9308,7 @@ class FoodLogicTest {
     void testSearchFoodPredetor_SWEETS_TooFull_Nice_NoForceEat() {
         // L1057: NICE → !isRude && !isNormal → condition false → forceEat=false
         SimYukkuri.world.getCurrentMap().getBody().remove(body.getUniqueID());
-        src.yukkuri.Remirya remirya = new src.yukkuri.Remirya();
+        src.entity.core.living.yukkuri.impl.Remirya remirya = new src.entity.core.living.yukkuri.impl.Remirya();
         remirya.setX(100);
         remirya.setY(100);
         remirya.setAgeState(AgeState.ADULT);
@@ -9412,7 +9412,7 @@ class FoodLogicTest {
     void testSearchFoodPredetor_Found3Food_Found_WISE_PrioritizesFood() {
         // L1090: found3(food)!=null, found(prey)!=null, WISE → found=food
         SimYukkuri.world.getCurrentMap().getBody().remove(body.getUniqueID());
-        src.yukkuri.Remirya remirya = new src.yukkuri.Remirya();
+        src.entity.core.living.yukkuri.impl.Remirya remirya = new src.entity.core.living.yukkuri.impl.Remirya();
         remirya.setX(100);
         remirya.setY(100);
         remirya.setAgeState(AgeState.ADULT);
@@ -9420,7 +9420,7 @@ class FoodLogicTest {
         remirya.setIntelligence(Intelligence.WISE);
         SimYukkuri.world.getCurrentMap().getBody().put(remirya.getUniqueID(), remirya);
         // prey CHILD at (130,130): distance=1800 → found=prey, minDistance=1800
-        src.yukkuri.Reimu prey = new src.yukkuri.Reimu();
+        src.entity.core.living.yukkuri.impl.Reimu prey = new src.entity.core.living.yukkuri.impl.Reimu();
         prey.setX(130);
         prey.setY(130);
         prey.setAgeState(AgeState.CHILD);
@@ -9435,7 +9435,7 @@ class FoodLogicTest {
     void testSearchFoodPredetor_Found3Food_Found_Damaged_PrioritizesFood() {
         // L1090: found3(food)!=null, found(prey)!=null, !WISE, isDamaged=true → found=food
         SimYukkuri.world.getCurrentMap().getBody().remove(body.getUniqueID());
-        src.yukkuri.Remirya remirya = new src.yukkuri.Remirya();
+        src.entity.core.living.yukkuri.impl.Remirya remirya = new src.entity.core.living.yukkuri.impl.Remirya();
         remirya.setX(100);
         remirya.setY(100);
         remirya.setAgeState(AgeState.ADULT);
@@ -9444,7 +9444,7 @@ class FoodLogicTest {
         WorldTestHelper.setDamage(remirya,
                 remirya.getDamageLimitBase()[AgeState.ADULT.ordinal()] / 2 + 1);
         SimYukkuri.world.getCurrentMap().getBody().put(remirya.getUniqueID(), remirya);
-        src.yukkuri.Reimu prey = new src.yukkuri.Reimu();
+        src.entity.core.living.yukkuri.impl.Reimu prey = new src.entity.core.living.yukkuri.impl.Reimu();
         prey.setX(130);
         prey.setY(130);
         prey.setAgeState(AgeState.CHILD);
@@ -9495,7 +9495,7 @@ class FoodLogicTest {
         // food/stalk/vomit なし → found=null → 死体ループへ
         // L867 null分岐: d==null → null check true → continue
         SimYukkuri.world.getCurrentMap().getBody().put(99999, null);
-        src.yukkuri.Reimu deadBody = new src.yukkuri.Reimu();
+        src.entity.core.living.yukkuri.impl.Reimu deadBody = new src.entity.core.living.yukkuri.impl.Reimu();
         deadBody.setX(105); deadBody.setY(100); // distance=25 < 100 (視野内)
         deadBody.setDead(true);
         deadBody.setRemoved(true); // isRemoved=true → L867 continue (L885,L886 の前にスキップ)
@@ -9513,7 +9513,7 @@ class FoodLogicTest {
         body.setEyesightBase(100);
         body.setRaper(true);
         // food なし → found=null → 死体ループへ
-        src.yukkuri.Reimu deadBody = new src.yukkuri.Reimu();
+        src.entity.core.living.yukkuri.impl.Reimu deadBody = new src.entity.core.living.yukkuri.impl.Reimu();
         deadBody.setX(105); deadBody.setY(100); // 視野内(distance=25<100)
         deadBody.setDead(true);
         // Stalk() は自動で getStalk() に追加されるので除去する
@@ -9533,7 +9533,7 @@ class FoodLogicTest {
         body.setHungry(3000);
         body.setEyesightBase(100);
         // food/stalk/vomit なし → found=null → 死体ループへ
-        src.yukkuri.Reimu deadBody = new src.yukkuri.Reimu();
+        src.entity.core.living.yukkuri.impl.Reimu deadBody = new src.entity.core.living.yukkuri.impl.Reimu();
         deadBody.setX(115); deadBody.setY(100); // distance=225 > 100 → L886: 100>225 = false
         deadBody.setDead(true);
         deadBody.setOkazari(null); // hasOkazari()=false → checkCanEatBody が true を返してL886に到達
@@ -9580,7 +9580,7 @@ class FoodLogicTest {
         // L817: getBurialState()!=ALL(true) && !(NEARLY_ALL && !hasOkazari) = !(true&&false) = true → continue
         body.setAgeState(AgeState.ADULT);
         body.setHungry(3000);
-        src.yukkuri.Reimu plantBody = new src.yukkuri.Reimu();
+        src.entity.core.living.yukkuri.impl.Reimu plantBody = new src.entity.core.living.yukkuri.impl.Reimu();
         plantBody.setX(105); plantBody.setY(100);
         plantBody.setBurialState(BurialState.NEARLY_ALL);
         // plantBody はデフォルトで hasOkazari()=true (Yukkuri コンストラクタで setOkazari(DEFAULT))
@@ -9640,11 +9640,11 @@ class FoodLogicTest {
         // null entry → bodyOther==null → L1223 null ブランチ
         SimYukkuri.world.getCurrentMap().getBody().put(99997, null);
         // removed body → bodyOther.isRemoved()=true → L1223 isRemoved ブランチ
-        src.yukkuri.Reimu removed = new src.yukkuri.Reimu();
+        src.entity.core.living.yukkuri.impl.Reimu removed = new src.entity.core.living.yukkuri.impl.Reimu();
         removed.setRemoved(true);
         SimYukkuri.world.getCurrentMap().getBody().put(removed.getUniqueID(), removed);
         java.lang.reflect.Method m = FoodLogic.class.getDeclaredMethod(
-            "searchFoodForUnunSlave", src.base.Yukkuri.class, boolean[].class);
+            "searchFoodForUnunSlave", src.entity.core.living.yukkuri.Yukkuri.class, boolean[].class);
         m.setAccessible(true);
         Entity found = (Entity) m.invoke(null, body, new boolean[]{false});
         assertNotNull(found); // shit が found されるはず
@@ -9725,7 +9725,7 @@ class FoodLogicTest {
         body.setHungry(5000); // isHungry=true
         SimYukkuri.RND = new ConstState(300); // nextInt(300)=299≠0 → L158 スキップ
         // plant yukkuri (BaryState=ALL)
-        Yukkuri plant = new src.yukkuri.Marisa() {
+        Yukkuri plant = new src.entity.core.living.yukkuri.impl.Marisa() {
             @Override public int getCollisionX() { return 10; }
         };
         plant.setX(120); plant.setY(100);
@@ -9748,7 +9748,7 @@ class FoodLogicTest {
         body.setX(100); body.setY(100); // stalk と同位置 → 距離チェック通過
         SimYukkuri.RND = new ConstState(300);
         // plant yukkuri (BaryState=NEARLY_ALL, okazari=null)
-        Yukkuri plant = new src.yukkuri.Marisa() {
+        Yukkuri plant = new src.entity.core.living.yukkuri.impl.Marisa() {
             @Override public int getCollisionX() { return 10; }
         };
         plant.setX(120); plant.setY(100);
@@ -9793,7 +9793,7 @@ class FoodLogicTest {
     void testSearchFoodPredetor_Found3Food_Found_NotWise_NotDamaged_KeepsPreyAsFound() {
         // L1090: found3(food)!=null, found(prey)!=null, !WISE, !isDamaged → false → found=prey のまま
         SimYukkuri.world.getCurrentMap().getBody().remove(body.getUniqueID());
-        src.yukkuri.Remirya remirya = new src.yukkuri.Remirya();
+        src.entity.core.living.yukkuri.impl.Remirya remirya = new src.entity.core.living.yukkuri.impl.Remirya();
         remirya.setX(100); remirya.setY(100);
         remirya.setAgeState(AgeState.ADULT);
         remirya.setHungry(5000); // !isTooFull → SWEETS flag=true
@@ -9801,7 +9801,7 @@ class FoodLogicTest {
         // isDamaged=false (default)
         SimYukkuri.world.getCurrentMap().getBody().put(remirya.getUniqueID(), remirya);
         // prey CHILD at (130,130): dist=(30^2+30^2)=1800 < eyesight → found=prey
-        src.yukkuri.Reimu prey = new src.yukkuri.Reimu();
+        src.entity.core.living.yukkuri.impl.Reimu prey = new src.entity.core.living.yukkuri.impl.Reimu();
         prey.setX(130); prey.setY(130);
         prey.setAgeState(AgeState.CHILD);
         SimYukkuri.world.getCurrentMap().getBody().put(prey.getUniqueID(), prey);
@@ -9929,7 +9929,7 @@ class FoodLogicTest {
         body.setX(100); body.setY(100); // stalk と同位置 → 距離チェック通過
         SimYukkuri.RND = new ConstState(5000);
         // 植え付けゆっくり (p): BaryState=ALL (完全地中)
-        src.base.Yukkuri p = WorldTestHelper.createBody();
+        src.entity.core.living.yukkuri.Yukkuri p = WorldTestHelper.createBody();
         p.setX(100); p.setY(100);
         p.setBurialState(src.enums.BurialState.ALL); // B1: != ALL が false → skip B1
         SimYukkuri.world.getCurrentMap().getBody().put(p.getUniqueID(), p);
@@ -9948,7 +9948,7 @@ class FoodLogicTest {
         body.setHungry(0);
         SimYukkuri.RND = new ConstState(5000);
         // 植え付けゆっくり (p): BaryState=NONE → B1: clearActions; return false
-        src.base.Yukkuri p = WorldTestHelper.createBody();
+        src.entity.core.living.yukkuri.Yukkuri p = WorldTestHelper.createBody();
         p.setX(100); p.setY(100);
         // BaryState=NONE (デフォルト) → B1 条件 true (BaryNONE != ALL=true, !(false)=true) → return false
         SimYukkuri.world.getCurrentMap().getBody().put(p.getUniqueID(), p);
@@ -10009,7 +10009,7 @@ class FoodLogicTest {
         vomit.setX(300); vomit.setY(100);
         SimYukkuri.world.getCurrentMap().getVomit().put(vomit.getObjId(), vomit);
         // 死体 Yukkuri (400,100): dist=90000 > 1 → checkCanEatBody=true → L637 false
-        src.yukkuri.Reimu deadBody = new src.yukkuri.Reimu() {
+        src.entity.core.living.yukkuri.impl.Reimu deadBody = new src.entity.core.living.yukkuri.impl.Reimu() {
             @Override public int getCollisionX() { return 10; }
         };
         deadBody.setX(400); deadBody.setY(100);
@@ -10154,7 +10154,7 @@ class FoodLogicTest {
         body.setAgeState(AgeState.ADULT);
         body.setHungry(0); // isVeryHungry=true
         SimYukkuri.RND = new ConstState(5000);
-        src.yukkuri.Reimu livePrey = new src.yukkuri.Reimu();
+        src.entity.core.living.yukkuri.impl.Reimu livePrey = new src.entity.core.living.yukkuri.impl.Reimu();
         livePrey.setX(100); livePrey.setY(100);
         SimYukkuri.world.getCurrentMap().getBody().put(livePrey.getUniqueID(), livePrey);
         body.setMoveTargetId(livePrey.getObjId());
@@ -10165,17 +10165,17 @@ class FoodLogicTest {
     // --- L313: predator + prey with removed mother → m.isRemoved()=true → false ---
     @Test
     void testCheckFood_PredatorType_PreyRemovedMother_L313_RemovedFalse() {
-        src.yukkuri.Remirya remirya = new src.yukkuri.Remirya();
+        src.entity.core.living.yukkuri.impl.Remirya remirya = new src.entity.core.living.yukkuri.impl.Remirya();
         remirya.setX(100); remirya.setY(100);
         remirya.setHungry(0);
         remirya.setAgeState(AgeState.ADULT);
         SimYukkuri.world.getCurrentMap().getBody().put(remirya.getUniqueID(), remirya);
 
-        src.yukkuri.Reimu livePrey = new src.yukkuri.Reimu();
+        src.entity.core.living.yukkuri.impl.Reimu livePrey = new src.entity.core.living.yukkuri.impl.Reimu();
         livePrey.setX(100); livePrey.setY(100);
         SimYukkuri.world.getCurrentMap().getBody().put(livePrey.getUniqueID(), livePrey);
 
-        src.yukkuri.Reimu mother = new src.yukkuri.Reimu();
+        src.entity.core.living.yukkuri.impl.Reimu mother = new src.entity.core.living.yukkuri.impl.Reimu();
         mother.setRemoved(true);
         SimYukkuri.world.getCurrentMap().getBody().put(mother.getUniqueID(), mother);
         livePrey.setParents(new int[]{-1, mother.getUniqueID()});
@@ -10195,7 +10195,7 @@ class FoodLogicTest {
         rng.setFixedBoolean(true);
         SimYukkuri.RND = rng;
 
-        src.yukkuri.Reimu deadPrey = new src.yukkuri.Reimu();
+        src.entity.core.living.yukkuri.impl.Reimu deadPrey = new src.entity.core.living.yukkuri.impl.Reimu();
         deadPrey.setX(100); deadPrey.setY(100);
         deadPrey.setDead(true);
         deadPrey.forceSetSick();
@@ -10225,7 +10225,7 @@ class FoodLogicTest {
     @Test
     void testCheckFood_FeelHardPain_NoScare_L154_FeelHardPainTrue() {
         // isFeelHardPain=true で isScare=false のパスをカバー (B=true → C evaluation)
-        Yukkuri painBody = new src.yukkuri.Marisa() {
+        Yukkuri painBody = new src.entity.core.living.yukkuri.impl.Marisa() {
             @Override public boolean isFeelHardPain() { return true; }
             @Override public int getCollisionX() { return 10; }
         };
@@ -10247,7 +10247,7 @@ class FoodLogicTest {
         body.setRaper(true);
         // isExciting=false → L72, L98 をスキップ
         SimYukkuri.RND = new ConstState(5000);
-        src.yukkuri.Reimu livePrey = new src.yukkuri.Reimu();
+        src.entity.core.living.yukkuri.impl.Reimu livePrey = new src.entity.core.living.yukkuri.impl.Reimu();
         livePrey.setX(100); livePrey.setY(100);
         // isUnBirth=false (default)
         SimYukkuri.world.getCurrentMap().getBody().put(livePrey.getUniqueID(), livePrey);
@@ -10262,7 +10262,7 @@ class FoodLogicTest {
         body.setAgeState(AgeState.ADULT);
         body.setHungry(0);
         SimYukkuri.RND = new ConstState(5000); // nextBoolean=false
-        src.yukkuri.Reimu deadPrey = new src.yukkuri.Reimu();
+        src.entity.core.living.yukkuri.impl.Reimu deadPrey = new src.entity.core.living.yukkuri.impl.Reimu();
         deadPrey.setX(100); deadPrey.setY(100);
         deadPrey.setDead(true);
         deadPrey.forceSetSick(); // isSick=true
@@ -10687,7 +10687,7 @@ class FoodLogicTest {
         body.setPublicRank(PublicRank.UnunSlave);
         body.setHungry(1); // !isVeryHungry
         // Use LinkedHashMap to guarantee insertion order: close→far
-        java.util.LinkedHashMap<Integer, src.game.Shit> orderedShit = new java.util.LinkedHashMap<>();
+        java.util.LinkedHashMap<Integer, src.entity.core.world.mobile.Shit> orderedShit = new java.util.LinkedHashMap<>();
         SimYukkuri.world.getCurrentMap().setShit(orderedShit);
         // Shit() default ctor does NOT assign objId → must assign manually
         // 1st shit: close at (110,100) → iterate first → found=s1, min=100
@@ -10696,7 +10696,7 @@ class FoodLogicTest {
         // 2nd shit: farther at (130,100) → dist=900 > min=100 → L1214 false branch
         Shit s2 = new Shit(); s2.setObjId(src.enums.Numbering.INSTANCE.numberingObjId()); s2.setX(130); s2.setY(100);
         orderedShit.put(s2.getObjId(), s2);
-        java.lang.reflect.Method m = FoodLogic.class.getDeclaredMethod("searchFoodForUnunSlave", src.base.Yukkuri.class, boolean[].class);
+        java.lang.reflect.Method m = FoodLogic.class.getDeclaredMethod("searchFoodForUnunSlave", src.entity.core.living.yukkuri.Yukkuri.class, boolean[].class);
         m.setAccessible(true);
         m.invoke(null, body, new boolean[]{false});
     }
@@ -10715,7 +10715,7 @@ class FoodLogicTest {
         orderedVomit.put(v1.getObjId(), v1);
         Vomit v2 = new Vomit(); v2.setObjId(src.enums.Numbering.INSTANCE.numberingObjId()); v2.setX(130); v2.setY(100);
         orderedVomit.put(v2.getObjId(), v2);
-        java.lang.reflect.Method m = FoodLogic.class.getDeclaredMethod("searchFoodForUnunSlave", src.base.Yukkuri.class, boolean[].class);
+        java.lang.reflect.Method m = FoodLogic.class.getDeclaredMethod("searchFoodForUnunSlave", src.entity.core.living.yukkuri.Yukkuri.class, boolean[].class);
         m.setAccessible(true);
         m.invoke(null, body, new boolean[]{false});
     }
@@ -10748,14 +10748,14 @@ class FoodLogicTest {
     // ===== L993 false branch: dead body + isRude → skip しない (fall through) =====
     @Test
     void testSearchFoodPredetor_DeadBody_Rude_L993_FalseBranch() {
-        src.yukkuri.Remirya remirya = new src.yukkuri.Remirya() {
+        src.entity.core.living.yukkuri.impl.Remirya remirya = new src.entity.core.living.yukkuri.impl.Remirya() {
             @Override public int getCollisionX() { return 10; }
         };
         remirya.setX(100); remirya.setY(100); remirya.setHungry(0);
         remirya.setAttitude(src.enums.Attitude.SHITHEAD); // isRude=true
         SimYukkuri.world.getCurrentMap().getBody().put(remirya.getUniqueID(), remirya);
         // dead body with okazari and family → but isRude=true → L993 false (skip しない)
-        src.base.Yukkuri deadBody = new src.yukkuri.Marisa() {
+        src.entity.core.living.yukkuri.Yukkuri deadBody = new src.entity.core.living.yukkuri.impl.Marisa() {
             @Override public int getCollisionX() { return 10; }
         };
         deadBody.setX(110); deadBody.setY(100);
@@ -10767,25 +10767,25 @@ class FoodLogicTest {
     // ===== L996: dead body 2つ、2nd が遠い → L996 false branch =====
     @Test
     void testSearchFoodPredetor_TwoDeadBodies_SecondFar_L996_FalseBranch() {
-        src.yukkuri.Remirya remirya = new src.yukkuri.Remirya() {
+        src.entity.core.living.yukkuri.impl.Remirya remirya = new src.entity.core.living.yukkuri.impl.Remirya() {
             @Override public int getCollisionX() { return 10; }
         };
         remirya.setX(100); remirya.setY(100); remirya.setHungry(0);
         SimYukkuri.world.getCurrentMap().getBody().put(remirya.getUniqueID(), remirya);
         // Use LinkedHashMap for Yukkuri to guarantee insertion order
-        java.util.LinkedHashMap<Integer, src.base.Yukkuri> orderedBody = new java.util.LinkedHashMap<>();
+        java.util.LinkedHashMap<Integer, src.entity.core.living.yukkuri.Yukkuri> orderedBody = new java.util.LinkedHashMap<>();
         // keep remirya in map too
         orderedBody.put(remirya.getUniqueID(), remirya);
         SimYukkuri.world.getCurrentMap().setBody(orderedBody);
         // dead1: close (110,100) → iterate first → found3=dead1, min3=100
-        src.base.Yukkuri dead1 = new src.yukkuri.Marisa() {
+        src.entity.core.living.yukkuri.Yukkuri dead1 = new src.entity.core.living.yukkuri.impl.Marisa() {
             @Override public int getCollisionX() { return 10; }
         };
         dead1.setX(110); dead1.setY(100);
         dead1.setDead(true);
         orderedBody.put(dead1.getUniqueID(), dead1);
         // dead2: far (130,100) → dist=900 > 100 → L996 false branch
-        src.base.Yukkuri dead2 = new src.yukkuri.Marisa() {
+        src.entity.core.living.yukkuri.Yukkuri dead2 = new src.entity.core.living.yukkuri.impl.Marisa() {
             @Override public int getCollisionX() { return 10; }
         };
         dead2.setX(130); dead2.setY(100);
@@ -10802,14 +10802,14 @@ class FoodLogicTest {
         body.setHungry(0); // isSoHungry=true (hungry <= 0.2*limit)
         WorldTestHelper.setDamage(body, body.getDamageLimitBase()[src.enums.AgeState.ADULT.ordinal()] / 2 + 1); // 8401 < 16800 → VERY, not dead
         // prey: dead body (checkCanEatBody needs p.isDead)
-        src.base.Yukkuri prey = new src.yukkuri.Marisa() {
+        src.entity.core.living.yukkuri.Yukkuri prey = new src.entity.core.living.yukkuri.impl.Marisa() {
             @Override public int getCollisionX() { return 10; }
         };
         prey.setX(110); prey.setY(100);
         prey.setDead(true);
         prey.setOkazari(null); // hasOkazari=false → checkCanEatBody step4 をパス
         SimYukkuri.world.getCurrentMap().getBody().put(prey.getUniqueID(), prey);
-        java.lang.reflect.Method m = FoodLogic.class.getDeclaredMethod("searchFoodForUnunSlave", src.base.Yukkuri.class, boolean[].class);
+        java.lang.reflect.Method m = FoodLogic.class.getDeclaredMethod("searchFoodForUnunSlave", src.entity.core.living.yukkuri.Yukkuri.class, boolean[].class);
         m.setAccessible(true);
         m.invoke(null, body, new boolean[]{false});
     }
@@ -10822,11 +10822,11 @@ class FoodLogicTest {
         body.setHungry(0); // isSoHungry=true
         WorldTestHelper.setDamage(body, body.getDamageLimitBase()[src.enums.AgeState.ADULT.ordinal()] / 2 + 1); // 8401 < 16800 → VERY, not dead
         // LinkedHashMap for Yukkuri
-        java.util.LinkedHashMap<Integer, src.base.Yukkuri> orderedBody = new java.util.LinkedHashMap<>();
+        java.util.LinkedHashMap<Integer, src.entity.core.living.yukkuri.Yukkuri> orderedBody = new java.util.LinkedHashMap<>();
         orderedBody.put(body.getUniqueID(), body);
         SimYukkuri.world.getCurrentMap().setBody(orderedBody);
         // dead1 close
-        src.base.Yukkuri dead1 = new src.yukkuri.Marisa() {
+        src.entity.core.living.yukkuri.Yukkuri dead1 = new src.entity.core.living.yukkuri.impl.Marisa() {
             @Override public int getCollisionX() { return 10; }
         };
         dead1.setX(110); dead1.setY(100);
@@ -10834,14 +10834,14 @@ class FoodLogicTest {
         dead1.setOkazari(null); // hasOkazari=false → checkCanEatBody をパス
         orderedBody.put(dead1.getUniqueID(), dead1);
         // dead2 far
-        src.base.Yukkuri dead2 = new src.yukkuri.Marisa() {
+        src.entity.core.living.yukkuri.Yukkuri dead2 = new src.entity.core.living.yukkuri.impl.Marisa() {
             @Override public int getCollisionX() { return 10; }
         };
         dead2.setX(130); dead2.setY(100);
         dead2.setDead(true);
         dead2.setOkazari(null); // hasOkazari=false
         orderedBody.put(dead2.getUniqueID(), dead2);
-        java.lang.reflect.Method m = FoodLogic.class.getDeclaredMethod("searchFoodForUnunSlave", src.base.Yukkuri.class, boolean[].class);
+        java.lang.reflect.Method m = FoodLogic.class.getDeclaredMethod("searchFoodForUnunSlave", src.entity.core.living.yukkuri.Yukkuri.class, boolean[].class);
         m.setAccessible(true);
         m.invoke(null, body, new boolean[]{false});
     }
@@ -10860,7 +10860,7 @@ class FoodLogicTest {
         // food2 out of EYESIGHT range (distance > 16,000,000 → L1293 false)
         Food f2 = new Food(body.getX() + 4100, 100, Food.FoodType.FOOD.ordinal());
         orderedFood.put(f2.getObjId(), f2);
-        java.lang.reflect.Method m = FoodLogic.class.getDeclaredMethod("searchFoodForUnunSlave", src.base.Yukkuri.class, boolean[].class);
+        java.lang.reflect.Method m = FoodLogic.class.getDeclaredMethod("searchFoodForUnunSlave", src.entity.core.living.yukkuri.Yukkuri.class, boolean[].class);
         m.setAccessible(true);
         m.invoke(null, body, new boolean[]{false});
     }
@@ -10919,7 +10919,7 @@ class FoodLogicTest {
     @Test
     void testCheckFood_Predator_Full_Prey_L465_False() {
         SimYukkuri.RND = new ConstState(1);
-        src.yukkuri.Remirya remirya = new src.yukkuri.Remirya() {
+        src.entity.core.living.yukkuri.impl.Remirya remirya = new src.entity.core.living.yukkuri.impl.Remirya() {
             @Override public int getCollisionX() { return 10; }
         };
         remirya.setX(100); remirya.setY(100);
@@ -10929,7 +10929,7 @@ class FoodLogicTest {
         remirya.setHungry(remirya.getHungryLimitBase()[src.enums.AgeState.ADULT.ordinal()]); // 9600 > 4800 → isHungry=false
         SimYukkuri.world.getCurrentMap().getBody().put(remirya.getUniqueID(), remirya);
         // BABY prey (age=0 → BABY < ADULT) → searchFoodPredetor sets found=prey
-        src.base.Yukkuri prey = new src.yukkuri.Marisa() {
+        src.entity.core.living.yukkuri.Yukkuri prey = new src.entity.core.living.yukkuri.impl.Marisa() {
             @Override public int getCollisionX() { return 10; }
         };
         prey.setX(110); prey.setY(100); // alive, default age=0 → BABY
@@ -10955,7 +10955,7 @@ class FoodLogicTest {
         body.setAgeState(src.enums.AgeState.ADULT); // ADULT → HUNGRYLIMIT[ADULT]=9600
         body.setHungry(1); // isSoHungry: 1 <= 9600*0.2=1920 → true; isTooHungry: hungry=1>0 → false
         // dead prey (okazari=null → checkCanEatBody returns true)
-        src.base.Yukkuri prey = new src.yukkuri.Marisa() {
+        src.entity.core.living.yukkuri.Yukkuri prey = new src.entity.core.living.yukkuri.impl.Marisa() {
             @Override public int getCollisionX() { return 10; }
         };
         prey.setX(110); prey.setY(100);
@@ -10963,7 +10963,7 @@ class FoodLogicTest {
         prey.setOkazari(null); // hasOkazari=false → checkCanEatBody step4 をパス → return true
         SimYukkuri.world.getCurrentMap().getBody().put(prey.getUniqueID(), prey);
         // No shit, no vomit → found=null → Yukkuri loop → checkCanEatBody=true → L1271: isSoHungry=true,isTooHungry=false → break
-        java.lang.reflect.Method m = FoodLogic.class.getDeclaredMethod("searchFoodForUnunSlave", src.base.Yukkuri.class, boolean[].class);
+        java.lang.reflect.Method m = FoodLogic.class.getDeclaredMethod("searchFoodForUnunSlave", src.entity.core.living.yukkuri.Yukkuri.class, boolean[].class);
         m.setAccessible(true);
         m.invoke(null, body, new boolean[]{false});
     }
@@ -10988,7 +10988,7 @@ class FoodLogicTest {
     void testCheckFood_Idiot_VomitFound_L519_TrueBranch() {
         SimYukkuri.RND = new ConstState(0);
         // TarinaiReimu: isIdiot()=true → searchFoodNearlest が使われる
-        src.yukkuri.TarinaiReimu idiot = new src.yukkuri.TarinaiReimu() {
+        src.entity.core.living.yukkuri.impl.TarinaiReimu idiot = new src.entity.core.living.yukkuri.impl.TarinaiReimu() {
             @Override public int getCollisionX() { return 10; }
         };
         idiot.setX(100); idiot.setY(100);
@@ -11009,7 +11009,7 @@ class FoodLogicTest {
         body.setPredatorType(PredatorType.BITE);
         body.setIntelligence(Intelligence.FOOL);
         body.setHungry(1); // isHungry=true
-        src.base.Yukkuri prey = new src.yukkuri.Marisa() {
+        src.entity.core.living.yukkuri.Yukkuri prey = new src.entity.core.living.yukkuri.impl.Marisa() {
             @Override public int getCollisionX() { return 10; }
         };
         prey.setObjId(src.enums.Numbering.INSTANCE.numberingObjId());
@@ -11026,7 +11026,7 @@ class FoodLogicTest {
         SimYukkuri.RND = new ConstState(1);
         body.setPredatorType(PredatorType.BITE);
         body.setHungry(1);
-        src.base.Yukkuri prey = new src.yukkuri.Marisa() {
+        src.entity.core.living.yukkuri.Yukkuri prey = new src.entity.core.living.yukkuri.impl.Marisa() {
             @Override public int getCollisionX() { return 10; }
         };
         prey.setObjId(src.enums.Numbering.INSTANCE.numberingObjId());
@@ -11043,7 +11043,7 @@ class FoodLogicTest {
         SimYukkuri.RND = new ConstState(1);
         body.setPredatorType(PredatorType.BITE);
         body.setHungry(1);
-        src.base.Yukkuri prey = new src.yukkuri.Marisa() {
+        src.entity.core.living.yukkuri.Yukkuri prey = new src.entity.core.living.yukkuri.impl.Marisa() {
             @Override public int getCollisionX() { return 10; }
         };
         prey.setObjId(src.enums.Numbering.INSTANCE.numberingObjId());

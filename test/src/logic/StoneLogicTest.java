@@ -5,16 +5,16 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import src.SimYukkuri;
-import src.base.Yukkuri;
+import src.entity.core.living.yukkuri.Yukkuri;
 import src.draw.World;
+import src.entity.core.world.item.Stone;
 import src.enums.AgeState;
 import src.enums.BurialState;
 import src.enums.CriticalDamegeType;
 import src.enums.Intelligence;
-import src.item.Stone;
 import src.system.Sprite;
 import src.util.WorldTestHelper;
-import src.yukkuri.Reimu;
+import src.entity.core.living.yukkuri.impl.Reimu;
 
 /**
  * Test class for StoneLogic.
@@ -35,7 +35,9 @@ public class StoneLogicTest {
             spr[i] = new Sprite(10, 10, Sprite.PIVOT_CENTER_BOTTOM);
         }
         b.setBodySpr(spr);
-        b.setX(x); b.setY(y); b.setZ(0);
+        b.setX(x);
+        b.setY(y);
+        b.setZ(0);
         SimYukkuri.world.getCurrentMap().getBody().put(b.getUniqueID(), b);
         return b;
     }
@@ -111,13 +113,17 @@ public class StoneLogicTest {
 
     @Test
     public void testCheckPubble_babyBody_bodyCut() {
-        // BABY: getStepDist()=1, stone at same pos → distance=0, 1>0 → isBaby=true → bodyCut()
+        // BABY: getStepDist()=1, stone at same pos → distance=0, 1>0 → isBaby=true →
+        // bodyCut()
         Reimu baby = new Reimu();
         baby.setAgeState(AgeState.BABY);
         Sprite[] spr = new Sprite[3];
-        for (int i = 0; i < 3; i++) spr[i] = new Sprite(10, 10, Sprite.PIVOT_CENTER_BOTTOM);
+        for (int i = 0; i < 3; i++)
+            spr[i] = new Sprite(10, 10, Sprite.PIVOT_CENTER_BOTTOM);
         baby.setBodySpr(spr);
-        baby.setX(100); baby.setY(100); baby.setZ(0);
+        baby.setX(100);
+        baby.setY(100);
+        baby.setZ(0);
         baby.setBurialState(BurialState.HALF); // NONE だと addVomit で mypane NPE になる
         SimYukkuri.world.getCurrentMap().getBody().put(baby.getUniqueID(), baby);
         new Stone(100, 100, 0); // auto-registers; distance=0 → stepDist(1)>0 → bodyCut
@@ -139,7 +145,8 @@ public class StoneLogicTest {
         // runAway is called (no exception expected)
     }
 
-    // --- stepDist*3>distance but non-WISE → skip (line 46 A=true B=false branch) ---
+    // --- stepDist*3>distance but non-WISE → skip (line 46 A=true B=false branch)
+    // ---
 
     @Test
     public void testCheckPubble_nonWiseModerateDistance_noRunAway() {

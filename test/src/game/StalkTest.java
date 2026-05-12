@@ -14,7 +14,8 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
-import src.base.Yukkuri;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.world.bodylinked.Stalk;
 import src.enums.Direction;
 import src.enums.Event;
 import src.enums.WorldEntityKind;
@@ -339,7 +340,7 @@ class StalkTest {
     @Test
     void testLoadImages_headless_executesCode() {
         try {
-            src.game.Stalk.loadImages(src.game.Stalk.class.getClassLoader(), null);
+            src.entity.core.world.bodylinked.Stalk.loadImages(src.entity.core.world.bodylinked.Stalk.class.getClassLoader(), null);
         } catch (Exception e) {
         }
     }

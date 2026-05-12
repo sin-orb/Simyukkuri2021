@@ -1,16 +1,16 @@
 package src.command;
 
 import src.SimYukkuri;
-import src.base.WorldEntity;
 import src.command.GadgetMenu.ActionTarget;
 import src.command.GadgetMenu.GadgetList;
 import src.command.GadgetMenu.MainCategoryName;
 import src.field.impl.Barrier;
 import src.field.impl.Beltconveyor;
-import src.item.BeltconveyorObj;
 import src.field.impl.Farm;
 import src.field.impl.Pool;
 import src.draw.Translate;
+import src.entity.core.world.WorldEntity;
+import src.entity.core.world.item.BeltconveyorObj;
 
 /**
  * バリア/フィールド/コンベアの複数クリック設置処理

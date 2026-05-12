@@ -5,14 +5,13 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-import src.base.Entity;
-import src.base.WorldEntity;
 import src.command.GadgetMenu.ActionTarget;
 import src.command.GadgetMenu.GadgetList;
-import src.command.GadgetMenu.MainCategoryName;
 import src.draw.Point4y;
 import src.draw.Rectangle4y;
 import src.draw.Translate;
+import src.entity.core.Entity;
+import src.entity.core.world.WorldEntity;
 import src.field.impl.Barrier;
 import src.field.impl.Beltconveyor;
 import src.field.impl.Farm;
@@ -46,7 +45,8 @@ public class GadgetAction {
 	 * @param fieldMousePos マウスの座標
 	 * @return
 	 */
-	public static final WorldEntity leftClickEvaluate(GadgetList actionItem, Entity targetObject, MouseEvent ev, int[] fieldMousePos) {
+	public static final WorldEntity leftClickEvaluate(GadgetList actionItem, Entity targetObject, MouseEvent ev,
+			int[] fieldMousePos) {
 		WorldEntity placedObject = null;
 		ActionTarget actionTarget = actionItem.getActionTarget();
 
@@ -62,12 +62,12 @@ public class GadgetAction {
 		// クリック対象とガジェットの選択モードチェック
 		if (actionTarget == ActionTarget.TERRAIN) {
 			// 背景設置物
-				if (targetObject != null)
-					return null;
+			if (targetObject != null)
+				return null;
 
 			// 今のところキーは使用しないので未チェック
 			// 座標変換と設置可能範囲チェック
-				Class<?> cls = actionItem.getGadgetClass();
+			Class<?> cls = actionItem.getGadgetClass();
 			Method mtd;
 			Rectangle4y bound = null;
 			try {
@@ -84,9 +84,9 @@ public class GadgetAction {
 				// 設置実行
 				try {
 					Constructor<?> cst = cls.getConstructor(int.class, int.class, int.class);
-						placedObject = (WorldEntity) cst.newInstance(pos.getX(), pos.getY(), actionItem.getInitOption());
-						if (placedObject != null) {
-							Cash.buyItem(placedObject);
+					placedObject = (WorldEntity) cst.newInstance(pos.getX(), pos.getY(), actionItem.getInitOption());
+					if (placedObject != null) {
+						Cash.buyItem(placedObject);
 					}
 				} catch (NoSuchMethodException | SecurityException | InstantiationException
 						| IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
@@ -108,9 +108,9 @@ public class GadgetAction {
 				default:
 					break;
 			}
-			} else if (actionItem.getActionTarget() == ActionTarget.FIELD) {
+		} else if (actionItem.getActionTarget() == ActionTarget.FIELD) {
 			// フィールド選択
-				switch (actionItem) {
+			switch (actionItem) {
 				case FIELD_DELETE:
 					Beltconveyor belt = Beltconveyor.getBeltconveyor(fieldMousePos[0], fieldMousePos[1]);
 					if (belt != null) {
@@ -184,7 +184,8 @@ public class GadgetAction {
 	 * @param fieldMousePos マウスの座標
 	 * @return
 	 */
-	public static final WorldEntity leftMultiClickEvaluate(GadgetList item, Entity target, MouseEvent ev, int[] fieldMousePos) {
+	public static final WorldEntity leftMultiClickEvaluate(GadgetList item, Entity target, MouseEvent ev,
+			int[] fieldMousePos) {
 		return GadgetFieldPlacementAction.leftMultiClickEvaluate(item, fieldMousePos);
 	}
 
@@ -216,8 +217,8 @@ public class GadgetAction {
 	 * <br>
 	 * Toolカテゴリの実行
 	 *
-	 * @param item  実行内容
-	 * @param ev    入力されたマウスの動作
+	 * @param item         実行内容
+	 * @param ev           入力されたマウスの動作
 	 * @param targetObject 対象オブジェクト
 	 */
 	public static void evaluateTool(GadgetList actionItem, MouseEvent ev, Entity targetObject) {
@@ -229,8 +230,8 @@ public class GadgetAction {
 	 * <br>
 	 * 道具2カテゴリの実行
 	 *
-	 * @param item  実行内容
-	 * @param ev    入力されたマウスの動作
+	 * @param item         実行内容
+	 * @param ev           入力されたマウスの動作
 	 * @param targetObject 対象オブジェクト
 	 */
 	public static void evaluateTool2(GadgetList actionItem, MouseEvent ev, Entity targetObject) {
@@ -242,8 +243,8 @@ public class GadgetAction {
 	 * <br>
 	 * アンプルカテゴリの実行
 	 *
-	 * @param item  実行内容
-	 * @param ev    入力されたマウスの動作
+	 * @param item         実行内容
+	 * @param ev           入力されたマウスの動作
 	 * @param targetObject 対象オブジェクト
 	 */
 	public static void evaluateAmpoule(GadgetList actionItem, MouseEvent ev, Entity targetObject) {
@@ -255,8 +256,8 @@ public class GadgetAction {
 	 * <br>
 	 * 清掃カテゴリの実行
 	 *
-	 * @param item  実行内容
-	 * @param ev    入力されたマウスの動作
+	 * @param item         実行内容
+	 * @param ev           入力されたマウスの動作
 	 * @param targetObject 対象オブジェクト
 	 */
 	public static void evaluateClean(GadgetList actionItem, MouseEvent ev, Entity targetObject) {
@@ -268,8 +269,8 @@ public class GadgetAction {
 	 * <br>
 	 * おかざりカテゴリの実行
 	 *
-	 * @param item  実行内容
-	 * @param ev    入力されたマウスの動作
+	 * @param item         実行内容
+	 * @param ev           入力されたマウスの動作
 	 * @param targetObject 対象オブジェクト
 	 */
 	public static void evaluateAccessory(GadgetList actionItem, MouseEvent ev, Entity targetObject) {
@@ -281,8 +282,8 @@ public class GadgetAction {
 	 * <br>
 	 * おくるみカテゴリの実行
 	 *
-	 * @param item  実行内容
-	 * @param ev    入力されたマウスの動作
+	 * @param item         実行内容
+	 * @param ev           入力されたマウスの動作
 	 * @param targetObject 対象オブジェクト
 	 */
 	public static void evaluatePants(GadgetList actionItem, MouseEvent ev, Entity targetObject) {
@@ -294,8 +295,8 @@ public class GadgetAction {
 	 * <br>
 	 * 床設置カテゴリの実行
 	 *
-	 * @param item  実行内容
-	 * @param ev    入力されたマウスの動作
+	 * @param item         実行内容
+	 * @param ev           入力されたマウスの動作
 	 * @param targetObject 対象オブジェクト
 	 */
 	public static void evaluateFloorItems(GadgetList actionItem, MouseEvent ev, Entity targetObject) {
@@ -307,8 +308,8 @@ public class GadgetAction {
 	 * <br>
 	 * おもちゃカテゴリの実行
 	 *
-	 * @param item  実行内容
-	 * @param ev    入力されたマウスの動作
+	 * @param item         実行内容
+	 * @param ev           入力されたマウスの動作
 	 * @param targetObject 対象オブジェクト
 	 */
 	public static void evaluateToys(GadgetList actionItem, MouseEvent ev, Entity targetObject) {
@@ -320,8 +321,8 @@ public class GadgetAction {
 	 * <br>
 	 * コンベアカテゴリの実行
 	 *
-	 * @param item  実行内容
-	 * @param ev    入力されたマウスの動作
+	 * @param item         実行内容
+	 * @param ev           入力されたマウスの動作
 	 * @param targetObject 対象オブジェクト
 	 */
 	public static void evaluateConveyor(GadgetList actionItem, MouseEvent ev, Entity targetObject) {
@@ -333,8 +334,8 @@ public class GadgetAction {
 	 * <br>
 	 * 声かけカテゴリの実行
 	 *
-	 * @param item  実行内容
-	 * @param ev    入力されたマウスの動作
+	 * @param item         実行内容
+	 * @param ev           入力されたマウスの動作
 	 * @param targetObject 対象オブジェクト
 	 */
 	public static void evaluateCommunicate(GadgetList actionItem, MouseEvent ev, Entity targetObject) {
@@ -346,12 +347,11 @@ public class GadgetAction {
 	 * <br>
 	 * テストカテゴリの実行
 	 *
-	 * @param item  実行内容
-	 * @param ev    入力されたマウスの動作
+	 * @param item         実行内容
+	 * @param ev           入力されたマウスの動作
 	 * @param targetObject 対象オブジェクト
 	 */
 	public static void evaluateTest(GadgetList actionItem, MouseEvent ev, Entity targetObject) {
 		GadgetDebugAction.evaluateTest(actionItem, ev, targetObject);
 	}
 }
-

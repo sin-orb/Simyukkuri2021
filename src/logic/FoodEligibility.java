@@ -1,6 +1,6 @@
 package src.logic;
 
-import src.base.Yukkuri;
+import src.entity.core.living.yukkuri.Yukkuri;
 
 /**
  * 死体を食べられるかどうかの判定ロジックを集約するクラス。
@@ -18,7 +18,7 @@ public final class FoodEligibility {
 	 * 対象の死体を食べられるかどうかを判定する。
 	 *
 	 * @param eater 食べる側のゆっくり
-	 * @param prey 食べられるか調べる対象
+	 * @param prey  食べられるか調べる対象
 	 * @return 食べられる場合はtrue
 	 */
 	public static boolean checkCanEatBody(Yukkuri eater, Yukkuri prey) {

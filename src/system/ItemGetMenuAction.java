@@ -4,12 +4,11 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import src.SimYukkuri;
-import src.base.Yukkuri;
 import src.command.ShowStatusFrame;
-import src.game.Shit;
-import src.game.Vomit;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.world.mobile.Shit;
+import src.entity.core.world.mobile.Vomit;
 import src.system.ItemMenu.GetMenu;
-import src.system.MapPlaceData;
 import src.util.GameWorld;
 
 /**
@@ -26,34 +25,34 @@ public final class ItemGetMenuAction implements ActionListener {
 		MapPlaceData curMap = GameWorld.get().getCurrentMap();
 
 		switch (m) {
-		case PICKUP:
-			synchronized (SimYukkuri.lock) {
-				GameWorld.get().getPlayer().getItemList().addElement(ItemMenu.getGetTarget());
-				if (ItemMenu.getGetTarget() instanceof Yukkuri) {
-					Yukkuri b = (Yukkuri) ItemMenu.getGetTarget();
-					if (b.getBindStalk() != null) {
-						b.detachFromStalk();
+			case PICKUP:
+				synchronized (SimYukkuri.lock) {
+					GameWorld.get().getPlayer().getItemList().addElement(ItemMenu.getGetTarget());
+					if (ItemMenu.getGetTarget() instanceof Yukkuri) {
+						Yukkuri b = (Yukkuri) ItemMenu.getGetTarget();
+						if (b.getBindStalk() != null) {
+							b.detachFromStalk();
+						}
+						b.removeAllStalks();
+						b.setTaken(true);
+						curMap.getBody().remove(b.getUniqueID());
+					} else if (ItemMenu.getGetTarget() instanceof Shit) {
+						curMap.getShit().remove(ItemMenu.getGetTarget().objId);
+					} else if (ItemMenu.getGetTarget() instanceof Vomit) {
+						curMap.getVomit().remove(ItemMenu.getGetTarget().objId);
 					}
-					b.removeAllStalks();
-					b.setTaken(true);
-					curMap.getBody().remove(b.getUniqueID());
-				} else if (ItemMenu.getGetTarget() instanceof Shit) {
-					curMap.getShit().remove(ItemMenu.getGetTarget().objId);
-				} else if (ItemMenu.getGetTarget() instanceof Vomit) {
-					curMap.getVomit().remove(ItemMenu.getGetTarget().objId);
+					ItemMenu.setGetTarget(null);
 				}
-				ItemMenu.setGetTarget(null);
-			}
-			break;
-		case STATUS:
-			if (ItemMenu.getGetTarget() == null) {
-				return;
-			}
-			Yukkuri b = (Yukkuri) ItemMenu.getGetTarget();
-			ShowStatusFrame instance = ShowStatusFrame.getInstance();
-			instance.giveBodyInfo(b);
-			instance.setVisible(true);
-			break;
+				break;
+			case STATUS:
+				if (ItemMenu.getGetTarget() == null) {
+					return;
+				}
+				Yukkuri b = (Yukkuri) ItemMenu.getGetTarget();
+				ShowStatusFrame instance = ShowStatusFrame.getInstance();
+				instance.giveBodyInfo(b);
+				instance.setVisible(true);
+				break;
 		}
 	}
 }

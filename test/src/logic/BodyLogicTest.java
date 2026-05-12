@@ -19,7 +19,7 @@ import org.junit.jupiter.api.Test;
 
 import src.ConstState;
 import src.SimYukkuri;
-import src.base.Yukkuri;
+import src.entity.core.living.yukkuri.Yukkuri;
 import src.draw.Translate;
 import src.enums.AgeState;
 import src.enums.Attitude;
@@ -42,9 +42,9 @@ import src.enums.TakeoutItemType;
 import src.event.AvoidMoldEvent;
 import src.item.Food;
 import src.enums.GatheringDirection;
-import src.yukkuri.TarinaiReimu;
-import src.yukkuri.Remirya;
-import src.yukkuri.Sakuya;
+import src.entity.core.living.yukkuri.impl.TarinaiReimu;
+import src.entity.core.living.yukkuri.impl.Remirya;
+import src.entity.core.living.yukkuri.impl.Sakuya;
 import src.entity.world.bodylinked.Okazari;
 import src.attachment.Ants;
 import src.item.Toilet;
@@ -102,7 +102,7 @@ class BodyLogicTest {
             me.setPublicRank(PublicRank.NONE);
             you.setPublicRank(PublicRank.NONE);
 
-            src.game.Shit carried = new src.game.Shit();
+            src.entity.core.world.mobile.Shit carried = new src.entity.core.world.mobile.Shit();
             SimYukkuri.world.getCurrentMap().getTakenOutShit().put(carried.getObjId(), carried);
             me.getCarryItems().put(TakeoutItemType.SHIT, carried.getObjId());
 
@@ -2402,7 +2402,7 @@ class BodyLogicTest {
         void testScenario_CheckPartnerNonExcitingWithCarriedShitKeepsTakeoutAndStartsNothing() {
             me.setBodySpr(makeSprites(1, 1));
             you.setBodySpr(makeSprites(1, 1));
-            src.game.Shit carried = new src.game.Shit();
+            src.entity.core.world.mobile.Shit carried = new src.entity.core.world.mobile.Shit();
             carried.setObjId(9999);
             SimYukkuri.world.getCurrentMap().getTakenOutShit().put(9999, carried);
             me.getCarryItems().put(TakeoutItemType.SHIT, 9999);
@@ -2876,7 +2876,7 @@ class BodyLogicTest {
 
     @Test
     void testCheckPartner_hasSHITTakeout_notExciting_returnsFalse() {
-        src.game.Shit s = new src.game.Shit();
+        src.entity.core.world.mobile.Shit s = new src.entity.core.world.mobile.Shit();
         s.setObjId(9999);
         SimYukkuri.world.getCurrentMap().getTakenOutShit().put(9999, s);
         me.getCarryItems().put(src.enums.TakeoutItemType.SHIT, 9999);
@@ -3455,7 +3455,7 @@ class BodyLogicTest {
     @Test
     void testCheckPartner_ExcitingWithShitTakeout_Drops_L125() {
         // L125: exciting + SHIT takeout → drop, continues
-        src.game.Shit s = new src.game.Shit();
+        src.entity.core.world.mobile.Shit s = new src.entity.core.world.mobile.Shit();
         SimYukkuri.world.getCurrentMap().getTakenOutShit().put(s.getObjId(), s);
         me.getCarryItems().put(src.enums.TakeoutItemType.SHIT, s.getObjId());
         me.setExciting(true);
@@ -3587,7 +3587,7 @@ class BodyLogicTest {
     void testCheckPartner_ExcitingFoundIsIdiot_SetCalm_L395() {
         // L393-395: exciting + found.isIdiot=true, me not idiot → setCalm, true
         me.setBodySpr(makeSprites(1, 1));
-        Yukkuri idiot = new src.yukkuri.Marisa() {
+        Yukkuri idiot = new src.entity.core.living.yukkuri.impl.Marisa() {
             @Override public boolean isIdiot() { return true; }
             @Override public int getCollisionX() { return 1; }
         };

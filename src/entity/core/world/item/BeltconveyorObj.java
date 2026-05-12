@@ -1,0 +1,833 @@
+// Decompiled by Jad v1.5.8g. Copyright 2001 Pavel Kouznetsov.
+// Jad home page: http://www.kpdus.com/jad.html
+// Decompiler options: packimports(3) ansi
+// Source File Name:   Beltconveyor.java
+
+package src.entity.core.world.item;
+
+import java.awt.Graphics2D;
+import java.awt.GridLayout;
+import java.awt.Image;
+import java.awt.Rectangle;
+import java.awt.TexturePaint;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.geom.Rectangle2D;
+import java.awt.image.BufferedImage;
+import java.awt.image.ImageObserver;
+import java.beans.Transient;
+import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
+
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+
+import src.SimYukkuri;
+import src.draw.ModLoader;
+import src.draw.Point4y;
+import src.draw.Rectangle4y;
+import src.draw.Translate;
+import src.entity.core.Entity;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.world.WorldEntity;
+import src.entity.core.world.bodylinked.Stalk;
+import src.entity.core.world.mobile.Shit;
+import src.entity.core.world.mobile.Vomit;
+import src.enums.Type;
+import src.enums.WorldEntityKind;
+import src.enums.YukkuriType;
+import src.field.impl.Barrier;
+import src.field.impl.Beltconveyor;
+import src.system.Cash;
+import src.system.YukkuriFilterPanel;
+import src.util.GameText;
+import src.util.GameView;
+import src.util.GameWorld;
+
+/***************************************************
+ * ベルコン2
+ * <br>
+ * 拡張、YukkuriFilterPanel
+ */
+public class BeltconveyorObj extends WorldEntity {
+
+	private static final long serialVersionUID = -2840212904501204971L;
+	public static final int hitCheckObjType = WorldEntity.YUKKURI + WorldEntity.SHIT + WorldEntity.FOOD
+			+ WorldEntity.TOY + WorldEntity.VOMIT
+			+ WorldEntity.STALK;
+	private static final int images_num = 10;
+	private static int AnimeImagesNum[] = {
+			5, 5
+	};
+	private static BufferedImage[] images = new BufferedImage[images_num];
+	private static Rectangle4y boundary = new Rectangle4y();
+	static int hou_default = 0;
+	static int obj_default = 0;
+	static int move_default = 0;
+	static int speed_default = 0;
+	static int x_default = 50;
+	static int y_default = 50;
+	private int beltSpeed;
+	private int hou_before = 0;
+	private int obj_before = 0;
+	private int move_before = 0;
+	private int speed_before = 0;
+	private int targetType;
+	private int cantmove = 0;
+	private boolean moveOnce = false;
+	protected List<Entity> bindObjList = new LinkedList<Entity>(); // ベルトコンベア上で移動不可能な状態になっているアイテムのリスト
+
+	protected List<YukkuriType> selectedYukkuriType = new LinkedList<YukkuriType>(); // 処理対象のゆっくり
+	static protected List<String> istrOptionList = new LinkedList<String>(); // 処理対象設定(オプション)
+	protected List<Boolean> obOptionSelectionList = new LinkedList<Boolean>(); // 処理対象設定(オプション)の選択状態
+
+	protected boolean filter = false;
+	protected int fieldSX;
+	protected int fieldSY;
+	protected int fieldEX;
+	protected int fieldEY;
+	protected int firstX;
+	protected int firstY;
+	protected int[] polygonX = new int[4];
+	protected int[] polygonY = new int[4];
+
+	public static enum Action {
+		YUKKURI_FILTER(GameText.read("item_filtersettings"), ""),
+		;
+
+		private String name;
+
+		Action(String nameJ, String nameE) {
+			this.name = nameJ;
+		}
+
+		public String toString() {
+			return name;
+		}
+	}
+
+	public static void loadImages(ClassLoader loader, ImageObserver io)
+			throws IOException {
+		for (int i = 0; i < 10; i++)
+			images[i] = ModLoader.loadItemImage(loader,
+					(new StringBuilder("beltconveyor/beltconveyor")).append(String.format("%03d", new Object[] {
+							Integer.valueOf(i + 1)
+					})).append(".png").toString());
+
+		boundary.setWidth(images[0].getWidth(io));
+		boundary.setHeight(images[0].getHeight(io));
+		boundary.setX(boundary.getWidth() >> 1);
+		boundary.setY(boundary.getHeight() >> 1);
+
+		// オプション
+		istrOptionList.add(GameText.read("attitude_verynice"));
+		istrOptionList.add(GameText.read("attitude_nice"));
+		istrOptionList.add(GameText.read("attitude_normal"));
+		istrOptionList.add(GameText.read("attitude_shithead"));
+		istrOptionList.add(GameText.read("attitude_supershithead"));
+		istrOptionList.add(GameText.read("intel_badge"));
+		istrOptionList.add(GameText.read("intel_normal"));
+		istrOptionList.add(GameText.read("intel_fool"));
+		istrOptionList.add(GameText.read("item_onlydeadbody"));
+	}
+
+	@Override
+	public int getImageLayer(BufferedImage[] layer) {
+		int frame = 0;
+
+		if (enabled)
+			frame = (int) getAge();
+
+		switch (option) { // 楽にアニメ指定できるようにしたいが後で
+			case 0:
+			default:
+				layer[0] = images[frame / 4 % AnimeImagesNum[0]]; // 4フレームに1回画像更新
+				break;
+			case 1:
+				layer[0] = images[4 - (frame / 4 % AnimeImagesNum[0])];
+				break;
+			case 2:
+				layer[0] = images[9 - frame / 4 % AnimeImagesNum[1]];
+				break;
+			case 3:
+				layer[0] = images[5 + (frame / 4 % AnimeImagesNum[1])];
+				break;
+		}
+
+		return 1;
+	}
+
+	public int getImageLayer(Graphics2D g2, BufferedImage[] layer) {
+		int[] basePolygonX = new int[2];
+		int[] basePolygonY = new int[2];
+		Translate.getMovedPoint(fieldSX, fieldSY, fieldEX, fieldEY, firstX, firstY, x, y, basePolygonX, basePolygonY);
+		Translate.getPolygonPoint(basePolygonX[0], basePolygonY[0], basePolygonX[1], basePolygonY[1], polygonX,
+				polygonY);
+		TexturePaint texture = new TexturePaint(layer[0],
+				new Rectangle2D.Float(0, 0, layer[0].getWidth() - 10, layer[0].getHeight() - 10));
+		g2.setPaint(texture);
+		g2.fillPolygon(polygonX, polygonY, 4);
+		return 1;
+	}
+
+	public Image getImage(int idx) {
+		return null;
+	}
+
+	@Transient
+	public int getImageLayerCount() {
+		return 0;
+	}
+
+	@Override
+	@Transient
+	public BufferedImage getShadowImage() {
+		return null;
+	}
+
+	public static void drawPreview(Graphics2D g2, int sx, int sy, int ex, int ey) {
+		int[] polygonX = new int[4];
+		int[] polygonY = new int[4];
+		Translate.getPolygonPoint(sx, sy, ex, ey, polygonX, polygonY);
+		g2.drawPolygon(polygonX, polygonY, 4);
+	}
+
+	public static Rectangle4y getBounding() {
+		return boundary;
+	}
+
+	@Transient
+	public int getHitCheckObjType() {
+		return hitCheckObjType;
+	}
+
+	public boolean checkContain(int inX, int inY, boolean isField) {
+		int xCoord = inX;
+		int yCoord = inY;
+		if (isField) {
+			Point4y pos = Translate.invertLimit(inX, inY);
+			xCoord = pos.getX();
+			yCoord = pos.getY();
+		}
+
+		Point4y posFirst = Translate.invertLimit(polygonX[0], polygonY[0]);
+		Point4y posSecond = Translate.invertLimit(polygonX[2], polygonY[2]);
+		if (posFirst != null && posSecond != null) {
+			if (posFirst.getX() <= xCoord && xCoord <= posSecond.getX() && posFirst.getY() <= yCoord
+					&& yCoord <= posSecond.getY()) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public boolean checkHitObj(Rectangle colRect, Entity o) {
+		if ((o instanceof Yukkuri) && ((Yukkuri) o).isLockmove())
+			return false;
+		if (o.isRemoved()) {
+			bindObjList.remove(o);
+		}
+		if (o.getZ() == 0) {
+			if (checkContain(o.getX(), o.getY(), false)) {
+				objHitProcess(o);
+				return true;
+			}
+			if (bindObjList != null && bindObjList.contains(o)) {
+				if (o instanceof Yukkuri) {
+					((Yukkuri) o).setOnNonMovingConveyor(false);
+				}
+				bindObjList.remove(o);
+			}
+		}
+		return false;
+	}
+
+	// 箱を斜めから見下ろしている形式なので奥のxと手前のxで同じ座標でも垂直にならない
+	public int objHitProcess(Entity o) {
+		int objX = o.getX();
+		int objY = o.getY();
+		int objW = o.getW();
+		int objH = o.getH();
+		int attr = 16;
+
+		// フィルター有効時
+		if (o instanceof Yukkuri && filter) {
+			Yukkuri bodyTarget = (Yukkuri) o;
+			YukkuriType type = YukkuriType.fromClassName(bodyTarget.getClass().getSimpleName());
+			// ゆっくりタイプチェック
+			if (selectedYukkuriType != null && selectedYukkuriType.contains(type)) {
+				return 0;
+			}
+			if (obOptionSelectionList != null && obOptionSelectionList.size() == 9) {
+				// 性格
+				switch (bodyTarget.getAttitude()) {
+					case VERY_NICE:
+						if (!obOptionSelectionList.get(0))
+							return 0;
+						break;
+					case NICE:
+						if (!obOptionSelectionList.get(1))
+							return 0;
+						break;
+					case AVERAGE:
+						if (!obOptionSelectionList.get(2))
+							return 0;
+						break;
+					case SHITHEAD:
+						if (!obOptionSelectionList.get(3))
+							return 0;
+						break;
+					case SUPER_SHITHEAD:
+						if (!obOptionSelectionList.get(4))
+							return 0;
+						break;
+				}
+				// 知性
+				switch (bodyTarget.getIntelligence()) {
+					case WISE:
+						if (!obOptionSelectionList.get(5))
+							return 0;
+						break;
+					case AVERAGE:
+						if (!obOptionSelectionList.get(6))
+							return 0;
+						break;
+					case FOOL:
+						if (!obOptionSelectionList.get(7))
+							return 0;
+						break;
+				}
+				// 死体のみチェック
+				if (obOptionSelectionList.get(8)) {
+					if (!bodyTarget.isDead()) {
+						return 0;
+					}
+				}
+			}
+		}
+
+		if (targetType != 0) {
+			switch (targetType) {
+				case 1:
+					if (!(o instanceof Yukkuri))
+						return 0;
+					break;
+				case 2:
+					if (!(o instanceof Shit || o instanceof Vomit))
+						return 0;
+					break;
+				case 3:
+					if (!(o instanceof Food) || o instanceof Shit || o instanceof Vomit || o instanceof Yukkuri)
+						return 0;
+					break;
+				case 4:
+					if (!(o instanceof Stalk))
+						return 0;
+					break;
+				default:
+					if (o instanceof Yukkuri)
+						return 0;
+					break;
+			}
+		}
+		if (o instanceof Yukkuri)
+			attr = Barrier.MAP_BODY[((Yukkuri) o).getBodyAgeState().ordinal()];
+		if (!Barrier.onBarrier(objX, objY, objW >> 1, objH >> 2, attr)) {
+			boolean shouldMove = true;
+			// 一体づつ流す設定の時
+			if (moveOnce == true) {
+				if ((bindObjList != null) && bindObjList.contains(o) == true) {
+					for (Entity oBind : bindObjList) {
+						if (oBind == null || oBind.isRemoved()) {
+							continue;
+						}
+						// 対象が優先度最大になったらスキップ
+						if (oBind == o) {
+							break;
+						}
+						int attrBind = 16;
+						if (oBind instanceof Yukkuri) {
+							attrBind = Barrier.MAP_BODY[((Yukkuri) oBind).getBodyAgeState().ordinal()];
+						}
+						// リスト上の優先データがフィールドにひかかっていないなら終了
+						if (!Barrier.onBarrier(oBind.getX(), oBind.getY(), oBind.getW() >> 1, oBind.getH() >> 2,
+								attrBind)) {
+							shouldMove = false;
+							break;
+						}
+					}
+				}
+			}
+			if (shouldMove == true) {
+				switch (option) {
+					case 0: // '\0'
+					default:
+						o.setCalcY(objY - beltSpeed);
+						break;
+					case 1: // '\001'
+						o.setCalcY(objY + beltSpeed);
+						break;
+					case 2: // '\002'
+						o.setCalcX(objX + beltSpeed);
+						break;
+					case 3: // '\003'
+						o.setCalcX(objX - beltSpeed);
+						break;
+				}
+			}
+		}
+
+		if (cantmove != 0) {
+			// 移動不可
+			if (o instanceof Yukkuri) {
+				((Yukkuri) o).setOnNonMovingConveyor(true);
+			}
+			if ((bindObjList != null) && !bindObjList.contains(o)) {
+				bindObjList.add(o);
+			}
+		}
+		return 0;
+	}
+
+	public void upDate() {
+		if (getAge() % 2400L == 0L)
+			Cash.addCash(-getCost());
+	}
+
+	public int getBeltSpeed() {
+		return beltSpeed;
+	}
+
+	public void removeListData() {
+		if (bindObjList != null) {
+			for (Entity o : bindObjList) {
+				if (o == null) {
+					continue;
+				}
+				if (o instanceof Yukkuri) {
+					((Yukkuri) o).setOnNonMovingConveyor(false);
+				}
+			}
+			bindObjList.clear();
+		}
+
+		GameWorld.get().getCurrentMap().getBeltconveyorObj().remove(objId);
+	}
+
+	public boolean checkInterval(int cnt) {
+		return true;
+	}
+
+	// 設定メニュー
+	public static boolean setupBeltconveyor(Beltconveyor target) {
+		return true;
+	}
+
+	public BeltconveyorObj(int initX, int initY, int initOption) {
+		super(initX, initY, initOption);
+		// 初期設定
+		obOptionSelectionList.add(true);
+		obOptionSelectionList.add(true);
+		obOptionSelectionList.add(true);
+		obOptionSelectionList.add(true);
+		obOptionSelectionList.add(true);
+		obOptionSelectionList.add(true);
+		obOptionSelectionList.add(true);
+		obOptionSelectionList.add(true);
+		obOptionSelectionList.add(false);
+
+		boolean setupSuccess = setBeltconveyor(this, false);
+		if (!setupSuccess) {
+			remove();
+			return;
+		}
+		firstX = x;
+		firstY = y;
+		setBoundary(boundary);
+		setCollisionSize(getPivotX(), getPivotY());
+		GameWorld.get().getCurrentMap().getBeltconveyorObj().put(objId, this);
+		objType = Type.PLATFORM;
+		worldEntityType = WorldEntityKind.BELTCONVEYOR;
+		value = 3000;
+		cost = 25;
+	}
+
+	public BeltconveyorObj() {
+
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public static boolean setBeltconveyor(BeltconveyorObj belt, boolean init) {
+		String HOU_LIST[] = {
+				GameText.read("inside"),
+				GameText.read("outside"),
+				GameText.read("right"),
+				GameText.read("left")
+		};
+		String OBJ_LIST[] = {
+				GameText.read("all"),
+				GameText.read("item_onlyyu"),
+				GameText.read("item_onlyanko"),
+				GameText.read("item_onlyfood"),
+				GameText.read("item_onlystalk"),
+				GameText.read("item_exceptyu")
+		};
+		String MOVE_LIST[] = {
+				GameText.read("item_movable"),
+				GameText.read("item_immovable"),
+				GameText.read("item_immovableonlyone")
+		};
+		String SPEED_LIST[] = {
+				"x1.00", "x2.00", "x3.00", "x4.00"
+		};
+
+		JPanel mainPanel = new JPanel();
+		mainPanel.setLayout(new GridLayout(5, 2));
+		JComboBox hou_Box = new JComboBox(HOU_LIST);
+		hou_Box.setSelectedIndex(hou_default);
+		mainPanel.add(new JLabel(GameText.read("item_direction")));
+		mainPanel.add(hou_Box);
+		JComboBox obj_Box = new JComboBox(OBJ_LIST);
+		obj_Box.setSelectedIndex(obj_default);
+		mainPanel.add(new JLabel(GameText.read("item_target")));
+		mainPanel.add(obj_Box);
+		JComboBox move_Box = new JComboBox(MOVE_LIST);
+		move_Box.setSelectedIndex(move_default);
+		mainPanel.add(new JLabel(GameText.read("item_moveornot")));
+		mainPanel.add(move_Box);
+		JComboBox speed_Box = new JComboBox(SPEED_LIST);
+		speed_Box.setSelectedIndex(speed_default);
+		mainPanel.add(new JLabel(GameText.read("item_speed")));
+		mainPanel.add(speed_Box);
+
+		ButtonListener buttonListener = new ButtonListener();
+		buttonListener.master = belt;
+
+		Action[] action = Action.values();
+		for (int i = 0; i < action.length; i++) {
+			JButton but = new JButton(action[i].toString());
+			but.setActionCommand(action[i].name());
+			but.addActionListener(buttonListener);
+			mainPanel.add(but);
+		}
+
+		if (init) {
+			hou_Box.setSelectedIndex(belt.hou_before);
+			obj_Box.setSelectedIndex(belt.obj_before);
+			move_Box.setSelectedIndex(belt.move_before);
+			speed_Box.setSelectedIndex(belt.speed_before);
+		}
+
+		int dlgRet = JOptionPane.showConfirmDialog(GameView.getDialogParent(), mainPanel,
+				GameText.read("item_belconsettings"), 2, -1);
+		if (dlgRet != 0) {
+			return false;
+		}
+
+		int hou;
+		belt.hou_before = hou_default = hou = hou_Box.getSelectedIndex();
+		int obj;
+		belt.obj_before = obj_default = obj = obj_Box.getSelectedIndex();
+		int move;
+		belt.move_before = move_default = move = move_Box.getSelectedIndex();
+		int speed;
+		belt.speed_before = speed_default = speed = speed_Box.getSelectedIndex();
+
+		belt.setOption(hou);
+		switch (obj) {
+			case 0:
+				belt.targetType = 0;
+				break;
+			case 1:
+				belt.targetType = 1;
+				break;
+			case 2:
+				belt.targetType = 2;
+				break;
+			case 3:
+				belt.targetType = 3;
+				break;
+			case 4:
+				belt.targetType = 4;
+				break;
+			default:
+				belt.targetType = 5;
+				break;
+		}
+
+		/*
+		 * if(obj == 0){
+		 * belt.targetType = 0;
+		 * }
+		 * else if(obj == 1){
+		 * belt.targetType = 1;
+		 * }
+		 * else if(obj == 2){
+		 * belt.targetType = 2;
+		 * // belt.targetType2 = src.Entity.Type.VOMIT;
+		 * }
+		 * else if(obj == 3){
+		 * belt.targetType = 3;
+		 * }
+		 * else if(obj == 4){
+		 * belt.targetType = 4;
+		 * }
+		 * else{
+		 * belt.targetType = 5;
+		 * }
+		 */
+		if (move == 0) {
+			// 移動可能
+			belt.cantmove = 0;
+		} else if (move == 1) {
+			belt.cantmove = 1;
+			belt.moveOnce = false;
+		} else {
+			// 移動不可能
+			belt.cantmove = 1;
+			belt.moveOnce = true;
+		}
+		belt.beltSpeed = speed + 1;
+		// ----------------------
+		if (!init) {
+			Point4y pS = Translate.getFieldLimitForMap(SimYukkuri.fieldSX, SimYukkuri.fieldSY);
+			Point4y pE = Translate.getFieldLimitForMap(SimYukkuri.fieldEX, SimYukkuri.fieldEY);
+			belt.fieldSX = pS.getX();
+			belt.fieldSY = pS.getY();
+			belt.fieldEX = pE.getX();
+			belt.fieldEY = pE.getY();
+
+			int[] basePolygonX = new int[2];
+			int[] basePolygonY = new int[2];
+			Translate.getMovedPoint(belt.fieldSX, belt.fieldSY, belt.fieldEX, belt.fieldEY, 0, 0, 0, 0, basePolygonX,
+					basePolygonY);
+
+			int centerX = basePolygonX[0] + Math.abs(basePolygonX[1] - basePolygonX[0]) / 2;
+			int centerY = basePolygonY[0] + Math.abs(basePolygonY[1] - basePolygonY[0]) / 2;
+			Point4y pos = Translate.invertLimit(centerX, centerY);
+			BeltconveyorObj.x_default = pos.getX();
+			BeltconveyorObj.y_default = pos.getY();
+			belt.setCalcX(pos.getX());
+			belt.setCalcY(pos.getY());
+
+			BeltconveyorObj.boundary.setWidth(Math.abs(basePolygonX[1] - basePolygonX[0]));
+			BeltconveyorObj.boundary.setHeight(Math.abs(SimYukkuri.fieldEY - SimYukkuri.fieldSY));
+			BeltconveyorObj.boundary.setX(Math.abs(basePolygonX[1] - basePolygonX[0]) >> 1);
+			BeltconveyorObj.boundary.setY(Math.abs(basePolygonY[1] - basePolygonY[0]) >> 1);
+		}
+		return true;
+	}
+
+	public void applyFilterSetting(boolean filterEnabled) {
+		filter = filterEnabled;
+	}
+
+	public List<YukkuriType> getYukkuriFilter() {
+		return selectedYukkuriType;
+	}
+
+	public void setYukkuriFilter(List<YukkuriType> arrayTemp) {
+		selectedYukkuriType = arrayTemp;
+	}
+
+	public List<String> getOptionFilter() {
+		return istrOptionList;
+	}
+
+	public List<Boolean> getOptionResultFilter() {
+		return obOptionSelectionList;
+	}
+
+	public void setOptionResultFilter(List<Boolean> arrayTemp) {
+		obOptionSelectionList = arrayTemp;
+	}
+
+	public int getHou_before() {
+		return hou_before;
+	}
+
+	public void setHou_before(int hou_before) {
+		this.hou_before = hou_before;
+	}
+
+	public int getObj_before() {
+		return obj_before;
+	}
+
+	public void setObj_before(int obj_before) {
+		this.obj_before = obj_before;
+	}
+
+	public int getMove_before() {
+		return move_before;
+	}
+
+	public void setMove_before(int move_before) {
+		this.move_before = move_before;
+	}
+
+	public int getSpeed_before() {
+		return speed_before;
+	}
+
+	public void setSpeed_before(int speed_before) {
+		this.speed_before = speed_before;
+	}
+
+	public int getTargetType() {
+		return targetType;
+	}
+
+	public void setTargetType(int targetType) {
+		this.targetType = targetType;
+	}
+
+	public int getCantmove() {
+		return cantmove;
+	}
+
+	public void setCantmove(int cantmove) {
+		this.cantmove = cantmove;
+	}
+
+	public boolean isMoveOnce() {
+		return moveOnce;
+	}
+
+	public void setMoveOnce(boolean moveOnce) {
+		this.moveOnce = moveOnce;
+	}
+
+	public List<Entity> getBindObjList() {
+		return bindObjList;
+	}
+
+	public void setBindObjList(List<Entity> bindObjList) {
+		this.bindObjList = bindObjList;
+	}
+
+	public List<YukkuriType> getSelectedYukkuriType() {
+		return selectedYukkuriType;
+	}
+
+	public void setSelectedYukkuriType(List<YukkuriType> selectedYukkuriType) {
+		this.selectedYukkuriType = selectedYukkuriType;
+	}
+
+	public List<Boolean> getObOptionSelectionList() {
+		return obOptionSelectionList;
+	}
+
+	public void setObOptionSelectionList(List<Boolean> obOptionSelectionList) {
+		this.obOptionSelectionList = obOptionSelectionList;
+	}
+
+	public boolean isFilter() {
+		return filter;
+	}
+
+	public void setFilter(boolean filter) {
+		this.filter = filter;
+	}
+
+	public int getFieldSX() {
+		return fieldSX;
+	}
+
+	public void setFieldSX(int fieldSX) {
+		this.fieldSX = fieldSX;
+	}
+
+	public int getFieldSY() {
+		return fieldSY;
+	}
+
+	public void setFieldSY(int fieldSY) {
+		this.fieldSY = fieldSY;
+	}
+
+	public int getFieldEX() {
+		return fieldEX;
+	}
+
+	public void setFieldEX(int fieldEX) {
+		this.fieldEX = fieldEX;
+	}
+
+	public int getFieldEY() {
+		return fieldEY;
+	}
+
+	public void setFieldEY(int fieldEY) {
+		this.fieldEY = fieldEY;
+	}
+
+	public int getFirstX() {
+		return firstX;
+	}
+
+	public void setFirstX(int firstX) {
+		this.firstX = firstX;
+	}
+
+	public int getFirstY() {
+		return firstY;
+	}
+
+	public void setFirstY(int firstY) {
+		this.firstY = firstY;
+	}
+
+	public int[] getPolygonX() {
+		return polygonX;
+	}
+
+	public void setPolygonX(int[] polygonX) {
+		this.polygonX = polygonX;
+	}
+
+	public int[] getPolygonY() {
+		return polygonY;
+	}
+
+	public void setPolygonY(int[] polygonY) {
+		this.polygonY = polygonY;
+	}
+
+	public void setBeltSpeed(int beltSpeed) {
+		this.beltSpeed = beltSpeed;
+	}
+
+	public static class ButtonListener implements ActionListener {
+		public BeltconveyorObj master = null;
+
+		public void actionPerformed(ActionEvent e) {
+			String command = e.getActionCommand();
+			Action select = Action.valueOf(command);
+			if (master == null) {
+				return;
+			}
+			switch (select) {
+				case YUKKURI_FILTER:
+					List<String> istrOptionList = master.getOptionFilter();
+					List<Boolean> obOptionSelectionList = master.getOptionResultFilter();
+					List<YukkuriType> arrayTemp = master.getYukkuriFilter();
+					boolean filterEnabled = YukkuriFilterPanel.openFilterPanel(
+							GameText.read("item_targetsettings"),
+							GameText.read("item_explanation"),
+							istrOptionList, arrayTemp, obOptionSelectionList);
+					if (filterEnabled) {
+						master.setFilter(filterEnabled);
+						master.setYukkuriFilter(arrayTemp);
+						master.setOptionResultFilter(obOptionSelectionList);
+					}
+				default:
+					break;
+			}
+		}
+	}
+}

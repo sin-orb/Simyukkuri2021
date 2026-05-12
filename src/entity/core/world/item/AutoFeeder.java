@@ -1,0 +1,429 @@
+package src.entity.core.world.item;
+
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.awt.image.BufferedImage;
+import java.awt.image.ImageObserver;
+import java.beans.Transient;
+import java.io.File;
+import java.io.IOException;
+import java.util.Map;
+
+import javax.swing.ButtonGroup;
+import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JRadioButton;
+
+import src.command.GadgetAction;
+import src.draw.ModLoader;
+import src.draw.Rectangle4y;
+import src.engine.birth.YukkuriBirthTypeResolver;
+import src.entity.core.Entity;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.world.WorldEntity;
+import src.entity.core.world.item.Food.FoodType;
+import src.enums.AgeState;
+import src.enums.TakeoutItemType;
+import src.enums.Type;
+import src.enums.WorldEntityKind;
+import src.enums.YukkuriType;
+import src.system.Cash;
+import src.util.GameRandom;
+import src.util.GameText;
+import src.util.GameView;
+import src.util.GameWorld;
+
+/***************************************************
+ * 自動給餌機
+ */
+public class AutoFeeder extends WorldEntity {
+
+	private static final long serialVersionUID = -1132194333169381556L;
+
+	/** 出てくるエサタイプ */
+	public static enum FeedType {
+		NORMAL(GameText.read("command_food_normal")),
+		BITTER(GameText.read("command_food_bitter")),
+		LEMON_POP(GameText.read("command_food_ramune")),
+		HOT(GameText.read("command_food_hot")),
+		VIYUGRA(GameText.read("command_food_viagra")),
+		SWEETS2(GameText.read("command_food_sweet1")),
+		SWEETS1(GameText.read("command_food_sweet2")),
+		WASTE(GameText.read("command_food_garbage")),
+		BODY(GameText.read("item_noprocess")),
+		PROCESSED_BODY(GameText.read("item_processed")),
+		;
+
+		private String name;
+
+		FeedType(String name) {
+			this.name = name;
+		}
+
+		public String toString() {
+			return name;
+		}
+	}
+
+	/** 給餌モード */
+	public static enum FeedMode {
+		NORMAL_MODE(GameText.read("command_food_auto")),
+		REGULAR_MODE(GameText.read("item_fixedterm")),
+		;
+
+		private String name;
+
+		FeedMode(String name) {
+			this.name = name;
+		}
+
+		public String toString() {
+			return name;
+		}
+	}
+
+	/** 当たり判定 */
+	public static final int hitCheckObjType = 0;
+	private static final int IMAGE_COUNT = 2;
+	private static BufferedImage[] imageLayers = new BufferedImage[IMAGE_COUNT];
+	private static Rectangle4y boundary = new Rectangle4y();
+	private int type = 0;
+	private int mode = 0;
+	private int feedingInterval = 6 * 100;
+	private int feedingP = 2;
+	private Entity food = null;
+
+	/**
+	 * イメージをロードする.
+	 * 
+	 * @param loader ローダ
+	 * @param io     イメージオブザーバ
+	 * @throws IOException IO例外
+	 */
+	public static void loadImages(ClassLoader loader, ImageObserver io) throws IOException {
+		imageLayers[0] = ModLoader.loadItemImage(loader, "autofeeder" + File.separator + "autofeed.png");
+		imageLayers[1] = ModLoader.loadItemImage(loader, "autofeeder" + File.separator + "autofeed_off.png");
+		boundary.setWidth(imageLayers[0].getWidth(io));
+		boundary.setHeight(imageLayers[0].getHeight(io));
+		boundary.setX(boundary.getWidth() >> 1);
+		boundary.setY(boundary.getHeight() >> 1);
+	}
+
+	@Override
+	public int getImageLayer(BufferedImage[] layer) {
+		if (enabled) {
+			layer[0] = imageLayers[0];
+		} else {
+			layer[0] = imageLayers[1];
+		}
+		return 1;
+	}
+
+	@Override
+	@Transient
+	public BufferedImage getShadowImage() {
+		return null;
+	}
+
+	/**
+	 * 境界を取得する.
+	 * 
+	 * @return 境界
+	 */
+	public static Rectangle4y getBounding() {
+		return boundary;
+	}
+
+	@Override
+	@Transient
+	public int getHitCheckObjType() {
+		return hitCheckObjType;
+	}
+
+	@Override
+	public int getValue() {
+		return value;
+	}
+
+	@Override
+	public int getCost() {
+		return cost;
+	}
+
+	@Override
+	public void removeListData() {
+		GameWorld.get().getCurrentMap().getAutofeeder().remove(objId);
+	}
+
+	@Override
+	public void upDate() {
+		if (!enabled)
+			return;
+
+		if ((getAge() % 20) != 0)
+			return;
+
+		// お持ち帰りされていたりしたら初期化
+		if (food != null && !GameWorld.get().getCurrentMap().getFood().containsValue(food) &&
+				isTakenOut()) {
+			food = null;
+		}
+
+		if (food != null) {
+			if (type == FeedType.BODY.ordinal() || type == FeedType.PROCESSED_BODY.ordinal()) {
+				Yukkuri b = (Yukkuri) food;
+				if (b.isDead()) {
+					b.remove();
+				}
+				if (b.isRemoved()) {
+					food = null;
+				}
+			} else {
+				Food f = (Food) food;
+				if (f.isRemoved()) {
+					food = null;
+				} else if (f.isEmpty()) {
+					f.remove();
+				}
+			}
+		} else if (mode == 0 || (getAge() % feedingInterval) == 0 && GameRandom.nextInt(feedingP) == 0) {
+			if (type == FeedType.PROCESSED_BODY.ordinal()) {
+				// オートフィーダで出るゆっくりのタイプを決める。
+				YukkuriType type = makeRandomType();
+				food = GameView.addBody(getX(), getY(), 0, type, AgeState.BABY, null, null);
+				Cash.buyYukkuri((Yukkuri) food);
+				Cash.addCash(-getCost());
+				// レイパーは生まれないようにする
+				((Yukkuri) food).setRaper(false);
+				// 静音仕様
+				((Yukkuri) food).setShutmouth(true);
+				// 糞害防止
+				((Yukkuri) food).setForceAnalClose(true);
+			} else if (type == FeedType.BODY.ordinal()) {
+				// オートフィーダで出るゆっくりのタイプを決める。
+				YukkuriType type = makeRandomType();
+				food = GameView.addBody(getX(), getY(), 0, type, AgeState.BABY, null, null);
+				Cash.buyYukkuri((Yukkuri) food);
+				Cash.addCash(-getCost() + 5);
+			} else {
+				FoodType f = FoodType.FOOD;
+				switch (type) {
+					case 0:
+						f = FoodType.FOOD;
+						break;
+					case 1:
+						f = FoodType.BITTER;
+						break;
+					case 2:
+						f = FoodType.LEMONPOP;
+						break;
+					case 3:
+						f = FoodType.HOT;
+						break;
+					case 4:
+						f = FoodType.VIYUGRA;
+						break;
+					case 5:
+						f = FoodType.SWEETS1;
+						break;
+					case 6:
+						f = FoodType.SWEETS2;
+						break;
+					case 7:
+						f = FoodType.WASTE;
+						break;
+				}
+				food = GadgetAction.putObjEX(Food.class, getX(), getY(), f.ordinal());
+				GameWorld.get().getCurrentMap().getFood().put(food.objId, (Food) food);
+				Cash.buyItem(food);
+				Cash.addCash(-getCost());
+			}
+		}
+	}
+
+	private boolean isTakenOut() {
+		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
+			Yukkuri b = entry.getValue();
+			Integer i = b.getCarryItems().get(TakeoutItemType.FOOD);
+			if (i == null) {
+				continue;
+			}
+			if (i.intValue() == food.objId) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private YukkuriType makeRandomType() {
+		return YukkuriBirthTypeResolver.getRandomYukkuriType(null);
+	}
+
+	/**
+	 * コンストラクタ.
+	 */
+	public AutoFeeder(int initX, int initY, int initOption) {
+		super(initX, initY, initOption);
+		setBoundary(boundary);
+		setCollisionSize(getPivotX(), getPivotY());
+		GameWorld.get().getCurrentMap().getAutofeeder().put(objId, this);
+
+		objType = Type.PLATFORM;
+		worldEntityType = WorldEntityKind.AUTOFEEDER;
+
+		boolean ret = setupFeeder(this, false);
+		if (setupFeederMode(this, false)) {
+			readIniFile();
+			ret = true;
+		} else
+			ret = false;
+		if (!ret) {
+			GameWorld.get().getCurrentMap().getAutofeeder().remove(objId);
+		}
+		value = 10000;
+		cost = 30;
+	}
+
+	public AutoFeeder() {
+
+	}
+
+	/**
+	 * 設定メニュー
+	 * 
+	 * @param o    自動給餌器
+	 * @param init 初期化するかどうか
+	 * @return 設定されたかどうか
+	 */
+	public static boolean setupFeeder(AutoFeeder o, boolean init) {
+
+		JPanel mainPanel = new JPanel();
+		JRadioButton[] but = new JRadioButton[FeedType.values().length];
+		boolean ret = false;
+
+		mainPanel.setLayout(new GridLayout(5, 2));
+		mainPanel.setPreferredSize(new Dimension(250, 150));
+		ButtonGroup bg = new ButtonGroup();
+
+		for (int i = 0; i < but.length; i++) {
+			but[i] = new JRadioButton(FeedType.values()[i].toString());
+			bg.add(but[i]);
+
+			mainPanel.add(but[i]);
+		}
+		but[0].setSelected(true);
+		int dlgRet = JOptionPane.showConfirmDialog(GameView.getDialogParent(), mainPanel,
+				GameText.read("item_autosetting"), JOptionPane.OK_CANCEL_OPTION,
+				JOptionPane.PLAIN_MESSAGE);
+
+		if (dlgRet == JOptionPane.OK_OPTION) {
+			for (int i = 0; i < but.length; i++) {
+				if (but[i].isSelected()) {
+					o.type = i;
+					break;
+				}
+			}
+			ret = true;
+		}
+		return ret;
+	}
+
+	/**
+	 * 設定メニュー02
+	 * 
+	 * @param o    自動給餌器
+	 * @param init 初期化するか
+	 * @return 設定されたかどうか
+	 */
+	public static boolean setupFeederMode(AutoFeeder o, boolean init) {
+
+		JPanel mainPanel = new JPanel();
+		JRadioButton[] but = new JRadioButton[FeedMode.values().length];
+		boolean ret = false;
+
+		mainPanel.setLayout(new GridLayout(5, 2));
+		mainPanel.setPreferredSize(new Dimension(250, 150));
+		ButtonGroup bg = new ButtonGroup();
+
+		for (int i = 0; i < but.length; i++) {
+			but[i] = new JRadioButton(FeedMode.values()[i].toString());
+			bg.add(but[i]);
+
+			mainPanel.add(but[i]);
+		}
+		but[0].setSelected(true);
+		int dlgRet = JOptionPane.showConfirmDialog(GameView.getDialogParent(), mainPanel,
+				GameText.read("item_movetypesettings"),
+				JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+
+		if (dlgRet == JOptionPane.OK_OPTION) {
+			for (int i = 0; i < but.length; i++) {
+				if (but[i].isSelected()) {
+					o.mode = i;
+					break;
+				}
+			}
+			ret = true;
+		}
+		return ret;
+	}
+
+	/**
+	 * INIファイルを読む.
+	 */
+	public void readIniFile() {
+		ClassLoader loader = this.getClass().getClassLoader();
+		int iniValue = 0;
+		// 間隔
+		iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataItemIniDir(), "AutoFeeder",
+				"FeedingInterval");
+		if (iniValue != 0)
+			feedingInterval = iniValue;
+		// 確率
+		iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataItemIniDir(), "AutoFeeder",
+				"FeedingProbability");
+		if (iniValue != 0)
+			feedingP = iniValue;
+	}
+
+	public int getType() {
+		return type;
+	}
+
+	public void setType(int type) {
+		this.type = type;
+	}
+
+	public int getMode() {
+		return mode;
+	}
+
+	public void setMode(int mode) {
+		this.mode = mode;
+	}
+
+	public int getFeedingInterval() {
+		return feedingInterval;
+	}
+
+	public void setFeedingInterval(int feedingInterval) {
+		this.feedingInterval = feedingInterval;
+	}
+
+	public int getFeedingP() {
+		return feedingP;
+	}
+
+	public void setFeedingP(int feedingP) {
+		this.feedingP = feedingP;
+	}
+
+	public Entity getFood() {
+		return food;
+	}
+
+	public void setFood(Entity food) {
+		this.food = food;
+	}
+
+}

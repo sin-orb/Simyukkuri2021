@@ -1,9 +1,7 @@
 package src.logic;
 
-import src.base.Yukkuri;
-
-import src.attachment.Ants;
-import src.base.Yukkuri;
+import src.entity.core.attachment.impl.Ants;
+import src.entity.core.living.yukkuri.Yukkuri;
 import src.enums.Intelligence;
 import src.util.GameRandom;
 
@@ -18,10 +16,10 @@ public final class BodyFoundAffinityRule {
 	/**
 	 * Handle the target-directed approach rules for a target body.
 	 *
-	 * @param actorBody actor body
+	 * @param actorBody  actor body
 	 * @param targetBody target body
-	 * @param colX      collision-adjusted x coordinate
-	 * @param mz        destination z coordinate
+	 * @param colX       collision-adjusted x coordinate
+	 * @param mz         destination z coordinate
 	 * @return true when a branch consumed the action
 	 */
 	public static boolean handleFoundAffinity(Yukkuri actorBody, Yukkuri targetBody, int colX, int mz) {

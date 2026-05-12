@@ -1,7 +1,7 @@
 package src.logic;
 
-import src.base.Yukkuri;
-import src.base.Entity;
+import src.entity.core.Entity;
+import src.entity.core.living.yukkuri.Yukkuri;
 
 /**
  * 到着前の餌追従.

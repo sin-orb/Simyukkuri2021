@@ -4,14 +4,14 @@ import java.awt.Rectangle;
 import java.util.Iterator;
 import java.util.List;
 
-import src.base.Yukkuri;
-import src.base.Entity;
-import src.base.WorldEntity;
+import src.entity.core.Entity;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.world.WorldEntity;
 import src.enums.Event;
+import src.field.FieldShape;
 import src.field.impl.Beltconveyor;
 import src.field.impl.Farm;
 import src.field.impl.Pool;
-import src.field.FieldShape;
 import src.system.MapPlaceData;
 import src.util.GameWorld;
 
@@ -26,7 +26,7 @@ public final class TerrariumCollisionProcessor {
 	/**
 	 * 床置き、ベルト、プール、畑の判定を実行する。
 	 *
-	 * @param curMap 現在のマップ
+	 * @param curMap        現在のマップ
 	 * @param intervalCount 処理インターバル
 	 */
 	public static void processCollisions(MapPlaceData curMap, int intervalCount) {

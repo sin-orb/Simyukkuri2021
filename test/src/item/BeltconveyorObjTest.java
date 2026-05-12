@@ -3,11 +3,12 @@ package src.item;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import src.SimYukkuri;
-import src.base.Yukkuri;
+import src.entity.core.living.yukkuri.Yukkuri;
 import src.base.ItemTestBase;
 import src.draw.Rectangle4y;
+import src.entity.core.world.item.BeltconveyorObj;
+import src.entity.core.world.mobile.Shit;
 import src.enums.YukkuriType;
-import src.game.Shit;
 import src.system.Sprite;
 import src.util.WorldTestHelper;
 
@@ -145,7 +146,7 @@ class BeltconveyorObjTest extends ItemTestBase {
     @Test
     void testGetSetBindObjList() {
         BeltconveyorObj belt = new BeltconveyorObj();
-        List<src.base.Entity> list = new LinkedList<>();
+        List<src.entity.core.Entity> list = new LinkedList<>();
         belt.setBindObjList(list);
         assertEquals(list, belt.getBindObjList());
     }
@@ -260,7 +261,7 @@ class BeltconveyorObjTest extends ItemTestBase {
     @Test
     void testGetSetAnPointX() {
         BeltconveyorObj belt = new BeltconveyorObj();
-        int[] pts = {1, 2, 3, 4};
+        int[] pts = { 1, 2, 3, 4 };
         belt.setPolygonX(pts);
         assertArrayEquals(pts, belt.getPolygonX());
     }
@@ -268,7 +269,7 @@ class BeltconveyorObjTest extends ItemTestBase {
     @Test
     void testGetSetAnPointY() {
         BeltconveyorObj belt = new BeltconveyorObj();
-        int[] pts = {10, 20, 30, 40};
+        int[] pts = { 10, 20, 30, 40 };
         belt.setPolygonY(pts);
         assertArrayEquals(pts, belt.getPolygonY());
     }
@@ -293,7 +294,7 @@ class BeltconveyorObjTest extends ItemTestBase {
 
         Yukkuri body = createBodyWithSprites();
         body.setOnNonMovingConveyor(true);
-        List<src.base.Entity> list = new LinkedList<>();
+        List<src.entity.core.Entity> list = new LinkedList<>();
         list.add(body);
         belt.setBindObjList(list);
 
@@ -309,7 +310,7 @@ class BeltconveyorObjTest extends ItemTestBase {
         belt.setObjId(97);
         SimYukkuri.world.getCurrentMap().getBeltconveyorObj().put(97, belt);
 
-        List<src.base.Entity> list = new LinkedList<>();
+        List<src.entity.core.Entity> list = new LinkedList<>();
         list.add(null);
         belt.setBindObjList(list);
 
@@ -404,7 +405,8 @@ class BeltconveyorObjTest extends ItemTestBase {
         belt.setBeltSpeed(5);
         belt.setOption(0); // default: setCalcY(y - speed)
         Shit shit = new Shit();
-        shit.setX(100); shit.setY(100);
+        shit.setX(100);
+        shit.setY(100);
         assertDoesNotThrow(() -> belt.objHitProcess(shit));
     }
 
@@ -495,10 +497,11 @@ class BeltconveyorObjTest extends ItemTestBase {
     @Test
     void testCheckHitObj_NotContained_ReturnsFalse() {
         BeltconveyorObj belt = new BeltconveyorObj();
-        belt.setPolygonX(new int[]{0, 0, 0, 0});
-        belt.setPolygonY(new int[]{0, 0, 0, 0});
+        belt.setPolygonX(new int[] { 0, 0, 0, 0 });
+        belt.setPolygonY(new int[] { 0, 0, 0, 0 });
         Shit shit = new Shit();
-        shit.setX(500); shit.setY(500); // far from belt bounds
+        shit.setX(500);
+        shit.setY(500); // far from belt bounds
         assertFalse(belt.checkHitObj(null, shit));
     }
 
@@ -507,8 +510,8 @@ class BeltconveyorObjTest extends ItemTestBase {
     @Test
     void testCheckContain_mapCoords_doesNotThrow() {
         BeltconveyorObj belt = new BeltconveyorObj();
-        belt.setPolygonX(new int[]{0, 0, 100, 100});
-        belt.setPolygonY(new int[]{0, 100, 100, 0});
+        belt.setPolygonX(new int[] { 0, 0, 100, 100 });
+        belt.setPolygonY(new int[] { 0, 100, 100, 0 });
         // bIsField=false → uses nX/nY directly, anPoints converted via invertLimit
         assertDoesNotThrow(() -> belt.checkContain(50, 50, false));
     }
@@ -516,8 +519,8 @@ class BeltconveyorObjTest extends ItemTestBase {
     @Test
     void testCheckContain_outsideBounds_returnsFalse() {
         BeltconveyorObj belt = new BeltconveyorObj();
-        belt.setPolygonX(new int[]{0, 0, 0, 0});
-        belt.setPolygonY(new int[]{0, 0, 0, 0});
+        belt.setPolygonX(new int[] { 0, 0, 0, 0 });
+        belt.setPolygonY(new int[] { 0, 0, 0, 0 });
         // All anPoints at origin → very small region → large point is outside
         assertFalse(belt.checkContain(999, 999, false));
     }
@@ -525,8 +528,8 @@ class BeltconveyorObjTest extends ItemTestBase {
     @Test
     void testCheckContain_fieldCoords_doesNotThrow() {
         BeltconveyorObj belt = new BeltconveyorObj();
-        belt.setPolygonX(new int[]{0, 0, 100, 100});
-        belt.setPolygonY(new int[]{0, 100, 100, 0});
+        belt.setPolygonX(new int[] { 0, 0, 100, 100 });
+        belt.setPolygonY(new int[] { 0, 100, 100, 0 });
         // bIsField=true → calls Translate.invertLimit for input coords too
         assertDoesNotThrow(() -> belt.checkContain(50, 50, true));
     }
@@ -570,11 +573,11 @@ class BeltconveyorObjTest extends ItemTestBase {
     @Test
     void testGetImageLayer_g2_withImage_returnsOne() {
         BeltconveyorObj belt = new BeltconveyorObj();
-        belt.setPolygonX(new int[]{0, 0, 100, 100});
-        belt.setPolygonY(new int[]{0, 100, 100, 0});
+        belt.setPolygonX(new int[] { 0, 0, 100, 100 });
+        belt.setPolygonY(new int[] { 0, 100, 100, 0 });
         BufferedImage img = new BufferedImage(10, 10, BufferedImage.TYPE_INT_RGB);
         java.awt.Graphics2D g2 = img.createGraphics();
-        BufferedImage[] layer = new BufferedImage[]{img};
+        BufferedImage[] layer = new BufferedImage[] { img };
         assertDoesNotThrow(() -> belt.getImageLayer(g2, layer));
         g2.dispose();
     }

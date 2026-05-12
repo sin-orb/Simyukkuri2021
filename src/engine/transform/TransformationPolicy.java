@@ -1,6 +1,6 @@
 package src.engine.transform;
 
-import src.base.Yukkuri;
+import src.entity.core.living.yukkuri.Yukkuri;
 import src.enums.AgeState;
 import src.enums.YukkuriType;
 
@@ -32,16 +32,16 @@ public final class TransformationPolicy {
 		}
 		AgeState ageState = from.getBodyAgeState();
 		switch (ageState) {
-		case BABY:
-			to.setAge(0);
-			break;
-		case CHILD:
-			to.setAge(to.getBabyLimitBase() + 1);
-			break;
-		case ADULT:
-		default:
-			to.setAge(to.getChildLimitBase() + 1);
-			break;
+			case BABY:
+				to.setAge(0);
+				break;
+			case CHILD:
+				to.setAge(to.getBabyLimitBase() + 1);
+				break;
+			case ADULT:
+			default:
+				to.setAge(to.getChildLimitBase() + 1);
+				break;
 		}
 	}
 }

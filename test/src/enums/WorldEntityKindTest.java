@@ -5,8 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import org.junit.jupiter.api.Test;
 
-import src.game.Stalk;
-import src.item.Food;
+import src.entity.core.world.bodylinked.Stalk;
+import src.entity.core.world.item.Food;
 
 class ObjEXTypeTest {
 

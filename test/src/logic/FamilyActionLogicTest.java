@@ -10,10 +10,10 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import src.util.WorldTestHelper;
-import src.base.Yukkuri;
+import src.entity.core.living.yukkuri.Yukkuri;
 import src.item.Food;
 import src.item.Toilet;
-import src.base.Entity;
+import src.entity.core.Entity;
 import src.SimYukkuri;
 import src.enums.AgeState;
 import src.enums.PublicRank;
@@ -1002,7 +1002,7 @@ class FamilyActionLogicTest {
 
     @Test
     void testCheckFamilyAction_IsIdiot_ReturnsFalse() {
-        Yukkuri idiotBody = new src.yukkuri.Marisa() {
+        Yukkuri idiotBody = new src.entity.core.living.yukkuri.impl.Marisa() {
             @Override public boolean isIdiot() { return true; }
         };
         idiotBody.setX(50); idiotBody.setY(50);
@@ -1309,7 +1309,7 @@ class FamilyActionLogicTest {
     @Test
     void testCheckFamilyAction_NoChildren_ReturnsFalse() {
         // 子なし大人: createActiveChildList → null/空 → L94 → false
-        Yukkuri loner = new src.yukkuri.Marisa() {
+        Yukkuri loner = new src.entity.core.living.yukkuri.impl.Marisa() {
             @Override public int getCollisionX() { return 10; }
         };
         loner.setX(50); loner.setY(50);

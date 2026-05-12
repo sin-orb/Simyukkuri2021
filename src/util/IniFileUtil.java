@@ -3,9 +3,8 @@ package src.util;
 import java.util.HashMap;
 import java.util.Map;
 
-import src.SimYukkuri;
-import src.base.Yukkuri;
 import src.draw.ModLoader;
+import src.entity.core.living.yukkuri.Yukkuri;
 
 /**
  * INIファイルのためのUtility
@@ -20,7 +19,8 @@ public class IniFileUtil {
 
 	/**
 	 * INIファイルを読み込む
-	 * @param b ゆっくり
+	 * 
+	 * @param b     ゆっくり
 	 * @param force 強制読み込みフラグ
 	 */
 	@SuppressWarnings("rawtypes")
@@ -53,14 +53,14 @@ public class IniFileUtil {
 			b.getTangLevelBase()[0] = (int) conf.get("TANGLEVEL.baby");
 			b.getTangLevelBase()[1] = (int) conf.get("TANGLEVEL.child");
 			b.getTangLevelBase()[2] = (int) conf.get("TANGLEVEL.adult");
-			b.setBabyLimitBase((int)conf.get("BABYLIMIT"));
-			b.setChildLimitBase((int)conf.get("CHILDLIMIT"));
-			b.setLifeLimitBase((int)conf.get("LIFELIMIT"));
-			b.setRottingTimeBase((int)conf.get("ROTTINGTIME"));
-			b.setSurisuriAccidentProb((int)conf.get("SurisuriAccidentProbablity"));
-			b.setCarAccidentProb((int)conf.get("CarAccidentProbablity"));
-			b.setBreakBodyByShitProb((int)conf.get("BreakBodyByShitProbability"));
-			b.setExciteProb((int)conf.get("GetExcitedProbablity"));
+			b.setBabyLimitBase((int) conf.get("BABYLIMIT"));
+			b.setChildLimitBase((int) conf.get("CHILDLIMIT"));
+			b.setLifeLimitBase((int) conf.get("LIFELIMIT"));
+			b.setRottingTimeBase((int) conf.get("ROTTINGTIME"));
+			b.setSurisuriAccidentProb((int) conf.get("SurisuriAccidentProbablity"));
+			b.setCarAccidentProb((int) conf.get("CarAccidentProbablity"));
+			b.setBreakBodyByShitProb((int) conf.get("BreakBodyByShitProbability"));
+			b.setExciteProb((int) conf.get("GetExcitedProbablity"));
 			b.getImmunity()[0] = (int) conf.get("Immunity.0");
 			b.getImmunity()[1] = (int) conf.get("Immunity.1");
 			b.getImmunity()[2] = (int) conf.get("Immunity.2");
@@ -85,23 +85,25 @@ public class IniFileUtil {
 			Map<String, Object> conf = new HashMap<String, Object>();
 			ClassLoader loader = bodyClass.getClassLoader();
 			int iniValue = 0;
-			//		public int EATAMOUNT[] = {100*6, 100*12, 100*24};		// 一回の食事量
+			// public int EATAMOUNT[] = {100*6, 100*12, 100*24}; // 一回の食事量
 			iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "EATAMOUNT.baby");
 			if (iniValue != 0) {
 				b.getEatAmountBase()[0] = iniValue;
 			}
 			conf.put("EATAMOUNT.baby", b.getEatAmountBase()[0]);
-			iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "EATAMOUNT.child");
+			iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play",
+					"EATAMOUNT.child");
 			if (iniValue != 0) {
 				b.getEatAmountBase()[1] = iniValue;
 			}
 			conf.put("EATAMOUNT.child", b.getEatAmountBase()[1]);
-			iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "EATAMOUNT.adult");
+			iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play",
+					"EATAMOUNT.adult");
 			if (iniValue != 0) {
 				b.getEatAmountBase()[2] = iniValue;
 			}
 			conf.put("EATAMOUNT.adult", b.getEatAmountBase()[2]);
-			//		public int WEIGHT[] = {100, 300, 600};					// 体重
+			// public int WEIGHT[] = {100, 300, 600}; // 体重
 			iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "WEIGHT.baby");
 			if (iniValue != 0) {
 				b.getWeightBase()[0] = iniValue;
@@ -117,7 +119,7 @@ public class IniFileUtil {
 				b.getWeightBase()[2] = iniValue;
 			}
 			conf.put("WEIGHT.adult", b.getWeightBase()[2]);
-			//		public int STRENGTH[] = {500, 1000, 3000};					// 基準の攻撃力
+			// public int STRENGTH[] = {500, 1000, 3000}; // 基準の攻撃力
 			iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "STRENGTH.baby");
 			if (iniValue != 0) {
 				b.getStrengthBase()[0] = iniValue;
@@ -133,92 +135,105 @@ public class IniFileUtil {
 				b.getStrengthBase()[2] = iniValue;
 			}
 			conf.put("STRENGTH.adult", b.getStrengthBase()[2]);
-			//		public int HUNGRYLIMIT[] = {100*24, 100*24*2, 100*24*4}; // 空腹限界
-			iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "HUNGRYLIMIT.baby");
+			// public int HUNGRYLIMIT[] = {100*24, 100*24*2, 100*24*4}; // 空腹限界
+			iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play",
+					"HUNGRYLIMIT.baby");
 			if (iniValue != 0) {
 				b.getHungryLimitBase()[0] = iniValue;
 			}
 			conf.put("HUNGRYLIMIT.baby", b.getHungryLimitBase()[0]);
-			iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "HUNGRYLIMIT.child");
+			iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play",
+					"HUNGRYLIMIT.child");
 			if (iniValue != 0) {
 				b.getHungryLimitBase()[1] = iniValue;
 			}
 			conf.put("HUNGRYLIMIT.child", b.getHungryLimitBase()[1]);
-			iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "HUNGRYLIMIT.adult");
+			iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play",
+					"HUNGRYLIMIT.adult");
 			if (iniValue != 0) {
 				b.getHungryLimitBase()[2] = iniValue;
 			}
 			conf.put("HUNGRYLIMIT.adult", b.getHungryLimitBase()[2]);
 
-			//		public int SHITLIMIT[] = {100*12, 100*24, 100*24};		// うんうん限界
+			// public int SHITLIMIT[] = {100*12, 100*24, 100*24}; // うんうん限界
 			iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "SHITLIMIT.baby");
 			if (iniValue != 0) {
 				b.getShitLimitBase()[0] = iniValue;
 			}
 			conf.put("SHITLIMIT.baby", b.getShitLimitBase()[0]);
-			iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "SHITLIMIT.child");
+			iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play",
+					"SHITLIMIT.child");
 			if (iniValue != 0) {
 				b.getShitLimitBase()[1] = iniValue;
 			}
 			conf.put("SHITLIMIT.child", b.getShitLimitBase()[1]);
-			iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "SHITLIMIT.adult");
+			iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play",
+					"SHITLIMIT.adult");
 			if (iniValue != 0) {
 				b.getShitLimitBase()[2] = iniValue;
 			}
 			conf.put("SHITLIMIT.adult", b.getShitLimitBase()[2]);
 
-			//		public int DAMAGELIMIT[] = {100*24, 100*24*3, 100*24*7}; // ダメージ限界
-			iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "DAMAGELIMIT.baby");
+			// public int DAMAGELIMIT[] = {100*24, 100*24*3, 100*24*7}; // ダメージ限界
+			iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play",
+					"DAMAGELIMIT.baby");
 			if (iniValue != 0) {
 				b.getDamageLimitBase()[0] = iniValue;
 			}
 			conf.put("DAMAGELIMIT.baby", b.getDamageLimitBase()[0]);
-			iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "DAMAGELIMIT.child");
+			iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play",
+					"DAMAGELIMIT.child");
 			if (iniValue != 0) {
 				b.getDamageLimitBase()[1] = iniValue;
 			}
 			conf.put("DAMAGELIMIT.child", b.getDamageLimitBase()[1]);
-			iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "DAMAGELIMIT.adult");
+			iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play",
+					"DAMAGELIMIT.adult");
 			if (iniValue != 0) {
 				b.getDamageLimitBase()[2] = iniValue;
 			}
 			conf.put("DAMAGELIMIT.adult", b.getDamageLimitBase()[2]);
 
-			//		public int STRESSLIMIT[] = {100*24, 100*24*3, 100*24*7}; // ストレス限界
-			iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "STRESSLIMIT.baby");
+			// public int STRESSLIMIT[] = {100*24, 100*24*3, 100*24*7}; // ストレス限界
+			iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play",
+					"STRESSLIMIT.baby");
 			if (iniValue != 0) {
 				b.getStressLimitBase()[0] = iniValue;
 			}
 			conf.put("STRESSLIMIT.baby", b.getStressLimitBase()[0]);
-			iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "STRESSLIMIT.child");
+			iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play",
+					"STRESSLIMIT.child");
 			if (iniValue != 0) {
 				b.getStressLimitBase()[1] = iniValue;
 			}
 			conf.put("STRESSLIMIT.child", b.getStressLimitBase()[1]);
-			iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "STRESSLIMIT.adult");
+			iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play",
+					"STRESSLIMIT.adult");
 			if (iniValue != 0) {
 				b.getStressLimitBase()[2] = iniValue;
 			}
 			conf.put("STRESSLIMIT.adult", b.getStressLimitBase()[2]);
-			//		public int TANGLEVEL[] = {300, 600, 1000};				// 味覚レベル
+			// public int TANGLEVEL[] = {300, 600, 1000}; // 味覚レベル
 			iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "TANGLEVEL.baby");
 			if (iniValue != 0) {
 				b.getTangLevelBase()[0] = iniValue;
 			}
 			conf.put("TANGLEVEL.baby", b.getTangLevelBase()[0]);
-			iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "TANGLEVEL.child");
+			iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play",
+					"TANGLEVEL.child");
 			if (iniValue != 0) {
 				b.getTangLevelBase()[1] = iniValue;
 			}
 			conf.put("TANGLEVEL.child", b.getTangLevelBase()[1]);
-			iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "TANGLEVEL.adult");
+			iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play",
+					"TANGLEVEL.adult");
 			if (iniValue != 0) {
 				b.getTangLevelBase()[2] = iniValue;
 			}
 			conf.put("TANGLEVEL.adult", b.getTangLevelBase()[2]);
-			//		public int BABYLIMIT = 100*24*7;
-			//		public int CHILDLIMIT = 100*24*21;
-			//		public int LIFELIMIT = 100*24*365;
+			// public int BABYLIMIT = 100*24*7;
+			// public int CHILDLIMIT = 100*24*21;
+			// public int LIFELIMIT = 100*24*365;
 			iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "BABYLIMIT");
 			if (iniValue != 0) {
 				b.setBabyLimitBase(iniValue);
@@ -242,46 +257,48 @@ public class IniFileUtil {
 			}
 			conf.put("ROTTINGTIME", b.getRottingTimeBase());
 
-			//赤ゆの免疫力
+			// 赤ゆの免疫力
 			iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "BabyImmunity");
 			b.getImmunity()[0] = iniValue;
 			conf.put("Immunity.0", iniValue);
-			//子ゆの免疫力
+			// 子ゆの免疫力
 			iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "ChildImmunity");
 			b.getImmunity()[1] = iniValue;
 			conf.put("Immunity.1", iniValue);
-			//成ゆの免疫力
+			// 成ゆの免疫力
 			iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "AdultImmunity");
 			b.getImmunity()[2] = iniValue;
 			conf.put("Immunity.2", iniValue);
-			//老ゆの免疫力
+			// 老ゆの免疫力
 			iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "OldImmunity");
 			b.getImmunity()[3] = iniValue;
 			conf.put("Immunity.3", iniValue);
-			//性格変更入り切り
-			iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "ChangeCharacter");
+			// 性格変更入り切り
+			iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play",
+					"ChangeCharacter");
 			if (iniValue == 0) {
 				b.setNotChangeCharacter(true);
 			}
 			conf.put("NotChangeCharacter", iniValue);
-			//超善良限界
+			// 超善良限界
 			iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "VeryNiceLimit");
 			b.getNiceLimit()[1] = iniValue + GameRandom.nextInt(20) - 10;
 			conf.put("VeryNiceLimit", iniValue);
-			//善良限界
+			// 善良限界
 			iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "niceLimit");
 			b.getNiceLimit()[0] = iniValue + GameRandom.nextInt(20) - 10;
 			conf.put("niceLimit", iniValue);
-			//ゲス限界
+			// ゲス限界
 			iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "rudeLimit");
 			b.getRudeLimit()[0] = -iniValue + GameRandom.nextInt(20) - 10;
 			conf.put("rudeLimit", -iniValue);
-			//ドゲス限界
+			// ドゲス限界
 			iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "SuperRudeLimit");
 			b.getRudeLimit()[1] = -iniValue + GameRandom.nextInt(20) - 10;
 			conf.put("VeryRudeLimit", -iniValue);
-			//リアルな妊娠限界の入り切り
-			iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "RealPregnantLimit");
+			// リアルな妊娠限界の入り切り
+			iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play",
+					"RealPregnantLimit");
 			if (iniValue == 1) {
 				b.setUseRealPregnantLimit(true);
 			} else {
@@ -289,25 +306,26 @@ public class IniFileUtil {
 			}
 			conf.put("RealPregnantLimit", iniValue);
 			// せいっさいっ！時にお飾りが破壊される割合
-			iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "BraidBreakChance");
+			iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play",
+					"BraidBreakChance");
 			b.setBraidBreakChance(iniValue);
 			conf.put("BraidBreakChance", iniValue);
-			//すりすりで事故る確率
+			// すりすりで事故る確率
 			iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play",
 					"SurisuriAccidentProbablity");
 			b.setSurisuriAccidentProb(iniValue);
 			conf.put("SurisuriAccidentProbablity", iniValue);
-			//路上で踏み潰される確率
+			// 路上で踏み潰される確率
 			iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play",
 					"CarAccidentProbablity");
 			b.setCarAccidentProb(iniValue);
 			conf.put("CarAccidentProbablity", iniValue);
-			//あんよが傷ついていた場合、一定確率であんよが爆ぜる確率
+			// あんよが傷ついていた場合、一定確率であんよが爆ぜる確率
 			iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play",
 					"BreakBodyByShitProbability");
 			b.setBreakBodyByShitProb(iniValue);
 			conf.put("BreakBodyByShitProbability", iniValue);
-			//発情する確率
+			// 発情する確率
 			iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play",
 					"GetExcitedProbablity");
 			if (iniValue != 0) {
@@ -377,6 +395,7 @@ public class IniFileUtil {
 
 	/**
 	 * ゆっくり用のINIファイルを読み込む
+	 * 
 	 * @param b ゆっくり
 	 */
 	public static void readYukkuriIniFile(Yukkuri b) {
@@ -385,10 +404,11 @@ public class IniFileUtil {
 
 	/**
 	 * ゆっくり用のINIファイルを読み込む
-	 * @param b ゆっくり
+	 * 
+	 * @param b     ゆっくり
 	 * @param force 強制読み込みフラグ
 	 */
-	@SuppressWarnings({"rawtypes"})
+	@SuppressWarnings({ "rawtypes" })
 	public static void readYukkuriIniFile(Yukkuri b, boolean force) {
 		Class bodyClass = b.getClass();
 		if (yukkuriIniConfigs.containsKey(bodyClass) && !force) {
@@ -401,51 +421,57 @@ public class IniFileUtil {
 			b.setChildNamesDamaged((String[]) conf.get("CHILDNAME_DAMAGED"));
 			b.setAdultNamesDamaged((String[]) conf.get("ADULTNAME_DAMAGED"));
 			setFirstPersonName(b);
-			
-			b.setCost((int)conf.get("cost"));
-			b.setOkazariPosition((int)conf.get("OkazariPosition"));
-			b.setSaleValues((int[])conf.get("saleValue"));
-			b.setPregnantLimit((int)conf.get("pregnantLimit")+ GameRandom.nextInt(100));
-			b.setDiarrheaProb((int)conf.get("GetDiarrheaProbability")+ GameRandom.nextInt(2));
-			
+
+			b.setCost((int) conf.get("cost"));
+			b.setOkazariPosition((int) conf.get("OkazariPosition"));
+			b.setSaleValues((int[]) conf.get("saleValue"));
+			b.setPregnantLimit((int) conf.get("pregnantLimit") + GameRandom.nextInt(100));
+			b.setDiarrheaProb((int) conf.get("GetDiarrheaProbability") + GameRandom.nextInt(2));
+
 		} else {
 			Map<String, Object> conf = new HashMap<String, Object>();
 			ClassLoader loader = bodyClass.getClassLoader();
 			// 一人称取得
 			String[] nameParts;
-			nameParts = ModLoader.loadBodyIniMapForArrayString(loader, ModLoader.getDataIniDir(), b.getBaseBodyFileName(),
+			nameParts = ModLoader.loadBodyIniMapForArrayString(loader, ModLoader.getDataIniDir(),
+					b.getBaseBodyFileName(),
 					"BABYNAME");
 			if (nameParts != null) {
 				b.setBabyNames(nameParts);
 			}
 			conf.put("BABYNAME", b.getBabyNames());
-			nameParts = ModLoader.loadBodyIniMapForArrayString(loader, ModLoader.getDataIniDir(), b.getBaseBodyFileName(),
+			nameParts = ModLoader.loadBodyIniMapForArrayString(loader, ModLoader.getDataIniDir(),
+					b.getBaseBodyFileName(),
 					"CHILDNAME");
 			if (nameParts != null) {
 				b.setChildNames(nameParts);
 			}
 			conf.put("CHILDNAME", b.getChildNames());
-			nameParts = ModLoader.loadBodyIniMapForArrayString(loader, ModLoader.getDataIniDir(), b.getBaseBodyFileName(),
+			nameParts = ModLoader.loadBodyIniMapForArrayString(loader, ModLoader.getDataIniDir(),
+					b.getBaseBodyFileName(),
 					"ADULTNAME");
 			if (nameParts != null) {
 				b.setAdultNames(nameParts);
 			}
 			conf.put("ADULTNAME", b.getAdultNames());
-			
-			//ダメージ時一人称取得
-			nameParts = ModLoader.loadBodyIniMapForArrayString(loader, ModLoader.getDataIniDir(), b.getBaseBodyFileName(),
+
+			// ダメージ時一人称取得
+			nameParts = ModLoader.loadBodyIniMapForArrayString(loader, ModLoader.getDataIniDir(),
+					b.getBaseBodyFileName(),
 					"BABYNAME_DAMAGED");
 			if (nameParts != null) {
 				b.setBabyNamesDamaged(nameParts);
 			}
 			conf.put("BABYNAME_DAMAGED", b.getBabyNamesDamaged());
-			nameParts = ModLoader.loadBodyIniMapForArrayString(loader, ModLoader.getDataIniDir(), b.getBaseBodyFileName(),
+			nameParts = ModLoader.loadBodyIniMapForArrayString(loader, ModLoader.getDataIniDir(),
+					b.getBaseBodyFileName(),
 					"CHILDNAME_DAMAGED");
 			if (nameParts != null) {
 				b.setChildNamesDamaged(nameParts);
 			}
 			conf.put("CHILDNAME_DAMAGED", b.getChildNamesDamaged());
-			nameParts = ModLoader.loadBodyIniMapForArrayString(loader, ModLoader.getDataIniDir(), b.getBaseBodyFileName(),
+			nameParts = ModLoader.loadBodyIniMapForArrayString(loader, ModLoader.getDataIniDir(),
+					b.getBaseBodyFileName(),
 					"ADULTNAME_DAMAGED");
 			if (nameParts != null) {
 				b.setAdultNamesDamaged(nameParts);
@@ -455,27 +481,29 @@ public class IniFileUtil {
 			setFirstPersonName(b);
 			// 値段取得
 			int loadedValue;
-			loadedValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataIniDir(), b.getBaseBodyFileName(), "cost");
+			loadedValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataIniDir(), b.getBaseBodyFileName(),
+					"cost");
 			b.setCost(loadedValue);
 			conf.put("cost", b.getCost());
-			loadedValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataIniDir(), b.getBaseBodyFileName(), "value");
+			loadedValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataIniDir(), b.getBaseBodyFileName(),
+					"value");
 			b.getSaleValues()[0] = loadedValue;
 			loadedValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataIniDir(), b.getBaseBodyFileName(),
 					"contentValue");
 			b.getSaleValues()[1] = loadedValue;
 			conf.put("saleValue", b.getSaleValues());
-			
-			//妊娠限界取得
+
+			// 妊娠限界取得
 			loadedValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataIniDir(), b.getBaseBodyFileName(),
 					"pregnantLimit");
 			b.setPregnantLimit(loadedValue + GameRandom.nextInt(100));
 			conf.put("pregnantLimit", loadedValue);
-			//下痢になる確率取得
+			// 下痢になる確率取得
 			loadedValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataIniDir(), b.getBaseBodyFileName(),
 					"GetDiarrheaProbability");
 			b.setDiarrheaProb(loadedValue + GameRandom.nextInt(2));
 			conf.put("GetDiarrheaProbability", loadedValue);
-			//お飾りの位置設定
+			// お飾りの位置設定
 			loadedValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataIniDir(), b.getBaseBodyFileName(),
 					"OkazariPosition");
 			b.setOkazariPosition(loadedValue);
@@ -483,10 +511,10 @@ public class IniFileUtil {
 			yukkuriIniConfigs.put(bodyClass, conf);
 		}
 	}
-	
+
 	private static void setFirstPersonName(Yukkuri b) {
 		int previousNameIndex = -1;
-		//一人称設定
+		// 一人称設定
 		if (b.getBabyNames() != null && 0 < b.getBabyNames().length) {
 			int nameCount = b.getBabyNames().length;
 			int nameIndex = GameRandom.nextInt(nameCount);
@@ -514,7 +542,7 @@ public class IniFileUtil {
 		}
 		int previousNameDIndex = -1;
 
-		//ダメージ時一人称設定
+		// ダメージ時一人称設定
 		if (b.getBabyNamesDamaged() != null && 0 < b.getBabyNamesDamaged().length) {
 			int nameCount = b.getBabyNamesDamaged().length;
 			int nameIndex = GameRandom.nextInt(nameCount);

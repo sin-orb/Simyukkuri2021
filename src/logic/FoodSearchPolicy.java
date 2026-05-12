@@ -3,27 +3,18 @@ package src.logic;
 import java.util.List;
 import java.util.Map;
 
-import src.base.Yukkuri;
-import src.base.Entity;
 import src.draw.Translate;
+import src.entity.core.Entity;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.world.bodylinked.Stalk;
+import src.entity.core.world.item.Food;
+import src.entity.core.world.mobile.Shit;
+import src.entity.core.world.mobile.Vomit;
 import src.enums.AgeState;
 import src.enums.BurialState;
-import src.enums.BodyRank;
-import src.enums.FavItemType;
-import src.enums.FootBake;
-import src.enums.Happiness;
-import src.enums.PublicRank;
 import src.enums.TakeoutItemType;
 import src.enums.TangType;
-import src.game.Shit;
-import src.game.Stalk;
-import src.game.Vomit;
 import src.field.impl.Barrier;
-import src.item.Food;
-import src.item.Food.FoodType;
-import src.util.GameEnvironment;
-import src.util.GameMessages;
-import src.util.GameRandom;
 import src.util.GameWorld;
 
 /**
@@ -68,59 +59,59 @@ public final class FoodSearchPolicy {
 				boolean acceptable = false;
 				boolean takeoutCandidate = false;
 				switch (f.getFoodType()) {
-				case STALK:
-					if (body.isBaby()) {
-						if (!body.isFirstEatStalk()) {
+					case STALK:
+						if (body.isBaby()) {
+							if (!body.isFirstEatStalk()) {
+								acceptable = true;
+								forceEat[0] = true;
+							} else if (body.isHungry()) {
+								acceptable = true;
+							}
+						} else if (body.isRude() && body.isSoHungry()) {
 							acceptable = true;
-							forceEat[0] = true;
-						} else if (body.isHungry()) {
+						} else if (!body.isRude() && body.isVeryHungry()) {
+							acceptable = true;
+						} else if (body.isRaper() && body.isExciting()) {
 							acceptable = true;
 						}
-					} else if (body.isRude() && body.isSoHungry()) {
-						acceptable = true;
-					} else if (!body.isRude() && body.isVeryHungry()) {
-						acceptable = true;
-					} else if (body.isRaper() && body.isExciting()) {
-						acceptable = true;
-					}
-					break;
-				case SWEETS1:
-				case SWEETS2:
-				case SWEETS_NORA1:
-				case SWEETS_NORA2:
-				case SWEETS_YASEI1:
-				case SWEETS_YASEI2:
-					if (!body.isTooFull()) {
-						acceptable = true;
-					} else if (!body.isOverEating() && (body.isRude() || body.isNormal())) {
-						acceptable = true;
-						forceEat[0] = true;
-					} else {
-						takeoutCandidate = true;
-					}
-					break;
-				case WASTE:
-				case WASTE_NORA:
-				case WASTE_YASEI:
-					if (body.getTangType() == TangType.GOURMET && body.isStarving()) {
-						acceptable = true;
-					} else if (body.getTangType() == TangType.NORMAL && body.isTooHungry()) {
-						acceptable = true;
-					} else if (body.getTangType() == TangType.POOR) {
+						break;
+					case SWEETS1:
+					case SWEETS2:
+					case SWEETS_NORA1:
+					case SWEETS_NORA2:
+					case SWEETS_YASEI1:
+					case SWEETS_YASEI2:
+						if (!body.isTooFull()) {
+							acceptable = true;
+						} else if (!body.isOverEating() && (body.isRude() || body.isNormal())) {
+							acceptable = true;
+							forceEat[0] = true;
+						} else {
+							takeoutCandidate = true;
+						}
+						break;
+					case WASTE:
+					case WASTE_NORA:
+					case WASTE_YASEI:
+						if (body.getTangType() == TangType.GOURMET && body.isStarving()) {
+							acceptable = true;
+						} else if (body.getTangType() == TangType.NORMAL && body.isTooHungry()) {
+							acceptable = true;
+						} else if (body.getTangType() == TangType.POOR) {
+							if (body.isHungry()) {
+								acceptable = true;
+							} else {
+								takeoutCandidate = true;
+							}
+						}
+						break;
+					default:
 						if (body.isHungry()) {
 							acceptable = true;
 						} else {
 							takeoutCandidate = true;
 						}
-					}
-					break;
-				default:
-					if (body.isHungry()) {
-						acceptable = true;
-					} else {
-						takeoutCandidate = true;
-					}
-					break;
+						break;
 				}
 
 				if (acceptable) {

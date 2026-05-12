@@ -1,11 +1,9 @@
 package src.logic;
 
-import src.base.Yukkuri;
-
-import src.base.Yukkuri;
+import src.entity.core.living.yukkuri.Yukkuri;
 import src.enums.Happiness;
 import src.enums.ImageCode;
-import src.event.FuneralEvent;
+import src.event.impl.FuneralEvent;
 import src.system.MessagePool;
 import src.util.GameMessages;
 
@@ -21,7 +19,7 @@ public final class BodyDeadActionRule {
 	 * Handle interaction with a dead target.
 	 *
 	 * @param targetBody target body
-	 * @param actorBody actor body
+	 * @param actorBody  actor body
 	 * @return true when the dead-body branch handled the action
 	 */
 	public static boolean handleDeadBodyInteraction(Yukkuri targetBody, Yukkuri actorBody) {

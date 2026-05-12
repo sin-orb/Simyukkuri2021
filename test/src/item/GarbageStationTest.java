@@ -10,10 +10,12 @@ import org.junit.jupiter.api.Test;
 import src.ConstState;
 import src.SimYukkuri;
 import src.base.ItemTestBase;
-import src.base.Entity;
+import src.entity.core.world.item.Food;
+import src.entity.core.world.item.GarbageStation;
+import src.entity.core.world.item.Food.FoodType;
+import src.entity.core.world.item.GarbageStation.GomiType;
+import src.entity.core.Entity;
 import src.enums.WorldEntityKind;
-import src.item.Food.FoodType;
-import src.item.GarbageStation.GomiType;
 
 class GarbageStationTest extends ItemTestBase {
 
@@ -140,7 +142,7 @@ class GarbageStationTest extends ItemTestBase {
     @Test
     void testGetSetEnable() {
         GarbageStation item = new GarbageStation();
-        boolean[] enable = new boolean[]{true, false, true};
+        boolean[] enable = new boolean[] { true, false, true };
         item.setEnable(enable);
         assertArrayEquals(enable, item.getEnable());
     }
@@ -183,7 +185,8 @@ class GarbageStationTest extends ItemTestBase {
         GarbageStation item = new GarbageStation();
         item.setEnabled(true);
         // food array is null → if timing matches, NullPointerException would occur
-        // but timing check: (operationTime - throwingTime) % 2400 == 0 usually won't match
+        // but timing check: (operationTime - throwingTime) % 2400 == 0 usually won't
+        // match
         assertDoesNotThrow(() -> item.upDate());
     }
 
@@ -237,7 +240,8 @@ class GarbageStationTest extends ItemTestBase {
     void testLoadImages_headless_executesCode() {
         try {
             GarbageStation.loadImages(GarbageStation.class.getClassLoader(), null);
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
     }
 
     @Test
@@ -252,7 +256,8 @@ class GarbageStationTest extends ItemTestBase {
         GarbageStation item = new GarbageStation();
         try {
             GarbageStation.setupGarbageSt(item);
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
     }
 
     @Test
@@ -260,7 +265,8 @@ class GarbageStationTest extends ItemTestBase {
         try {
             GarbageStation g = new GarbageStation(100, 100, 0);
             org.junit.jupiter.api.Assertions.assertNotNull(g);
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
     }
 
     // --- feedAction via upDate: set throwingTime=0, enable[]=true, gettingP=1 ---
@@ -286,7 +292,8 @@ class GarbageStationTest extends ItemTestBase {
             enableField.setAccessible(true);
             boolean[] enable = (boolean[]) enableField.get(item);
             if (enable != null) {
-                for (int i = 0; i < enable.length; i++) enable[i] = true;
+                for (int i = 0; i < enable.length; i++)
+                    enable[i] = true;
             }
 
             // Use ConstState(0) so nextInt always returns 0
@@ -314,14 +321,16 @@ class GarbageStationTest extends ItemTestBase {
             java.lang.reflect.Field enableField = GarbageStation.class.getDeclaredField("enable");
             enableField.setAccessible(true);
             boolean[] enable = (boolean[]) enableField.get(item);
-            if (enable != null) for (int i = 0; i < enable.length; i++) enable[i] = true;
+            if (enable != null)
+                for (int i = 0; i < enable.length; i++)
+                    enable[i] = true;
 
             // Set food[0] to a removed Food
             Food food = new Food(100, 100, 0);
             food.remove();
             java.lang.reflect.Field foodField = GarbageStation.class.getDeclaredField("food");
             foodField.setAccessible(true);
-            src.base.Entity[] foods = (src.base.Entity[]) foodField.get(item);
+            src.entity.core.Entity[] foods = (src.entity.core.Entity[]) foodField.get(item);
             foods[0] = food;
             foods[1] = food;
 

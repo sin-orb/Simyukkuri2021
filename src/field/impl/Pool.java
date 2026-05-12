@@ -12,20 +12,19 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
-import src.SimYukkuri;
-import src.util.GameRandom;
-import src.util.GameWorld;
-import src.base.Yukkuri;
-import src.base.Entity;
 import src.draw.ModLoader;
 import src.draw.Point4y;
 import src.draw.Translate;
+import src.entity.core.Entity;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.world.item.BeltconveyorObj;
 import src.enums.AgeState;
 import src.field.FieldShape;
 import src.system.ItemMenu.ShapeMenu;
 import src.system.ItemMenu.ShapeMenuTarget;
-import src.item.BeltconveyorObj;
 import src.system.MapPlaceData;
+import src.util.GameRandom;
+import src.util.GameWorld;
 
 /***************************************************
  * 池
@@ -227,8 +226,8 @@ public class Pool extends FieldShape {
 	/**
 	 * ある点が畑の範囲内かどうか
 	 * 
-	 * @param inX      ある点のX座標
-	 * @param inY      ある点Y座標
+	 * @param inX     ある点のX座標
+	 * @param inY     ある点Y座標
 	 * @param isField 渡された座標がフィールド座標かどうか
 	 */
 	public boolean checkContain(int inX, int inY, boolean isField) {

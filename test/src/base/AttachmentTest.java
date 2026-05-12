@@ -12,15 +12,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import src.attachment.Attachment;
 import src.SimYukkuri;
 import src.draw.Point4y;
 import src.draw.World;
+import src.entity.core.attachment.Attachment;
 import src.enums.AgeState;
 import src.enums.AttachProperty;
 import src.enums.Event;
 import src.enums.Type;
-import src.yukkuri.Reimu;
+import src.entity.core.living.yukkuri.impl.Reimu;
 
 /**
  * Attachmentベースクラスのテスト.

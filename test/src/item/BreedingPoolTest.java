@@ -9,7 +9,8 @@ import org.junit.jupiter.api.Test;
 
 import src.ConstState;
 import src.SimYukkuri;
-import src.base.Yukkuri;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.world.item.BreedingPool;
 import src.base.ItemTestBase;
 import src.enums.CoreAnkoState;
 import src.util.WorldTestHelper;
@@ -88,27 +89,43 @@ class BreedingPoolTest extends ItemTestBase {
     @Test
     void testGetValue_AllOptions() {
         BreedingPool item = new BreedingPool();
-        item.setOption(0); assertEquals(1000, item.getValue());
-        item.setOption(1); assertEquals(5000, item.getValue());
-        item.setOption(2); assertEquals(50000, item.getValue());
-        item.setOption(3); assertEquals(450000, item.getValue());
-        item.setOption(4); assertEquals(1000, item.getValue());
-        item.setOption(5); assertEquals(5000, item.getValue());
-        item.setOption(6); assertEquals(50000, item.getValue());
-        item.setOption(7); assertEquals(600000, item.getValue());
+        item.setOption(0);
+        assertEquals(1000, item.getValue());
+        item.setOption(1);
+        assertEquals(5000, item.getValue());
+        item.setOption(2);
+        assertEquals(50000, item.getValue());
+        item.setOption(3);
+        assertEquals(450000, item.getValue());
+        item.setOption(4);
+        assertEquals(1000, item.getValue());
+        item.setOption(5);
+        assertEquals(5000, item.getValue());
+        item.setOption(6);
+        assertEquals(50000, item.getValue());
+        item.setOption(7);
+        assertEquals(600000, item.getValue());
     }
 
     @Test
     void testGetCost_AllOptions() {
         BreedingPool item = new BreedingPool();
-        item.setOption(0); assertEquals(10, item.getCost());
-        item.setOption(1); assertEquals(50, item.getCost());
-        item.setOption(2); assertEquals(50, item.getCost());
-        item.setOption(3); assertEquals(1500, item.getCost());
-        item.setOption(4); assertEquals(10, item.getCost());
-        item.setOption(5); assertEquals(50, item.getCost());
-        item.setOption(6); assertEquals(50, item.getCost());
-        item.setOption(7); assertEquals(1500, item.getCost());
+        item.setOption(0);
+        assertEquals(10, item.getCost());
+        item.setOption(1);
+        assertEquals(50, item.getCost());
+        item.setOption(2);
+        assertEquals(50, item.getCost());
+        item.setOption(3);
+        assertEquals(1500, item.getCost());
+        item.setOption(4);
+        assertEquals(10, item.getCost());
+        item.setOption(5);
+        assertEquals(50, item.getCost());
+        item.setOption(6);
+        assertEquals(50, item.getCost());
+        item.setOption(7);
+        assertEquals(1500, item.getCost());
     }
 
     @Test
@@ -271,7 +288,8 @@ class BreedingPoolTest extends ItemTestBase {
         }
     }
 
-    // --- Constructor(int, int, int): headless setupPool fails → item removed from map ---
+    // --- Constructor(int, int, int): headless setupPool fails → item removed from
+    // map ---
 
     @Test
     void testConstructor_WithCoords_doesNotThrow() {
@@ -286,7 +304,8 @@ class BreedingPoolTest extends ItemTestBase {
     void testLoadImages_headless_executesCode() {
         try {
             BreedingPool.loadImages(BreedingPool.class.getClassLoader(), null);
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
     }
 
     @Nested

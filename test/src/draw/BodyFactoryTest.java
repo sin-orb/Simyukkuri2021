@@ -8,12 +8,12 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
-import src.base.Yukkuri;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.living.yukkuri.impl.DosMarisa;
+import src.entity.core.living.yukkuri.impl.Marisa;
+import src.entity.core.living.yukkuri.impl.Reimu;
 import src.enums.AgeState;
 import src.enums.YukkuriType;
-import src.yukkuri.DosMarisa;
-import src.yukkuri.Marisa;
-import src.yukkuri.Reimu;
 import src.util.WorldTestHelper;
 
 public class BodyFactoryTest {

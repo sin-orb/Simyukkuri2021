@@ -3,8 +3,8 @@ package src.engine.transform;
 import java.util.function.BooleanSupplier;
 
 import src.SimYukkuri;
-import src.base.Yukkuri;
 import src.draw.BodyFactory;
+import src.entity.core.living.yukkuri.Yukkuri;
 import src.enums.YukkuriType;
 import src.util.GameView;
 import src.util.GameWorld;
@@ -20,7 +20,7 @@ public final class TransformationService {
 	/**
 	 * 指定タイプへ body を置換する.
 	 *
-	 * @param from 変身前
+	 * @param from       変身前
 	 * @param targetType 変身先種別
 	 */
 	public static void transform(Yukkuri from, YukkuriType targetType) {
@@ -30,9 +30,9 @@ public final class TransformationService {
 	/**
 	 * 指定タイプへ body を置換する.
 	 *
-	 * @param from 変身前
+	 * @param from       変身前
 	 * @param targetType 変身先種別
-	 * @param dosMaker DOSまりさ判定用 callback
+	 * @param dosMaker   DOSまりさ判定用 callback
 	 */
 	public static void transform(Yukkuri from, YukkuriType targetType, BooleanSupplier dosMaker) {
 		if (from == null || targetType == null) {
@@ -46,7 +46,7 @@ public final class TransformationService {
 			}
 
 			int originalId = from.getUniqueID();
-			Yukkuri to = BodyFactory.create(from.getX(), from.getY(), from.getZ(), targetType.getTypeID(), null,
+			Yukkuri to = BodyFactory.create(from.getX(), from.getY(), from.getZ(), targetType, null,
 					from.getBodyAgeState(), null, null, false, GameView::loadBodyImage, dosMaker);
 			TransformationBodyCopier.copy(to, from);
 			TransformationPolicy.normalizeTransformedAge(to, from);

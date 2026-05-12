@@ -8,13 +8,13 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import src.attachment.Ants;
-import src.base.Yukkuri;
-import src.base.Entity;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.Entity;
 import src.enums.AgeState;
 import src.enums.CriticalDamegeType;
 import src.enums.PredatorType;
 import src.draw.Translate;
+import src.entity.core.attachment.impl.Ants;
 import src.system.Sprite;
 import src.util.GameRandom;
 import src.util.GameWorld;

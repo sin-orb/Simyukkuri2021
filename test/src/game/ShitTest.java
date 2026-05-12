@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import src.SimYukkuri;
 import src.draw.Translate;
 import src.draw.World;
+import src.entity.core.world.mobile.Shit;
 import src.enums.AgeState;
 import src.enums.Event;
 import src.system.ItemMenu.GetMenuTarget;
@@ -341,16 +342,20 @@ class ShitTest {
     @Test
     void testLoadImages_headless_executesCode() {
         try {
-            src.game.Shit.loadImages(src.game.Shit.class.getClassLoader(), null);
-        } catch (Exception e) { }
+            src.entity.core.world.mobile.Shit.loadImages(src.entity.core.world.mobile.Shit.class.getClassLoader(),
+                    null);
+        } catch (Exception e) {
+        }
     }
 
     @Test
     void testConstructorWithArgs_headless_executesCode() {
         try {
-            src.base.Yukkuri body = src.util.WorldTestHelper.createBody();
-            src.game.Shit s = new src.game.Shit(100, 100, 0, body, src.enums.YukkuriType.REIMU);
-        } catch (Exception e) { }
+            src.entity.core.living.yukkuri.Yukkuri body = src.util.WorldTestHelper.createBody();
+            src.entity.core.world.mobile.Shit s = new src.entity.core.world.mobile.Shit(100, 100, 0, body,
+                    src.enums.YukkuriType.REIMU);
+        } catch (Exception e) {
+        }
     }
 
     @Nested

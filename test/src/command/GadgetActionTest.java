@@ -1,37 +1,40 @@
 
 package src.command;
 
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
-import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.awt.event.MouseEvent;
 import java.util.Random;
 
 import javax.swing.JPanel;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+
 import src.ConstState;
 import src.SimYukkuri;
-import src.attachment.Ants;
-import src.attachment.OrangeAmpoule;
-import src.attachment.PoisonAmpoule;
-import src.base.Yukkuri;
 import src.command.GadgetMenu.GadgetList;
 import src.draw.World;
+import src.entity.core.attachment.impl.Ants;
+import src.entity.core.attachment.impl.OrangeAmpoule;
+import src.entity.core.attachment.impl.PoisonAmpoule;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.living.yukkuri.impl.Reimu;
+import src.entity.core.world.item.Food;
+import src.entity.core.world.mobile.Shit;
+import src.entity.core.world.mobile.Vomit;
 import src.enums.AgeState;
 import src.enums.BodyRank;
 import src.enums.Intelligence;
 import src.enums.YukkuriType;
-import src.game.Shit;
-import src.game.Vomit;
-import src.item.Food;
 import src.system.Sprite;
 import src.util.WorldTestHelper;
-import src.yukkuri.Reimu;
 
 public class GadgetActionTest {
 
@@ -232,23 +235,24 @@ public class GadgetActionTest {
         @Test
         public void testOrangeAmpouleAddsAttachment() {
             Yukkuri b = createReimuBody(AgeState.ADULT);
-            assertEquals(0, b.getAttachmentSize(src.attachment.OrangeAmpoule.class));
+            assertEquals(0, b.getAttachmentSize(src.entity.core.attachment.impl.OrangeAmpoule.class));
             MouseEvent ev = createEvent(0);
 
             GadgetAction.evaluateAmpoule(GadgetList.ORANGE_AMP, ev, b);
 
-            assertEquals(1, b.getAttachmentSize(src.attachment.OrangeAmpoule.class), "オレンジアンプルが追加されるべき");
+            assertEquals(1, b.getAttachmentSize(src.entity.core.attachment.impl.OrangeAmpoule.class),
+                    "オレンジアンプルが追加されるべき");
         }
 
         @Test
         public void testPoisonAmpouleAddsAttachment() {
             Yukkuri b = createReimuBody(AgeState.ADULT);
-            assertEquals(0, b.getAttachmentSize(src.attachment.PoisonAmpoule.class));
+            assertEquals(0, b.getAttachmentSize(src.entity.core.attachment.impl.PoisonAmpoule.class));
             MouseEvent ev = createEvent(0);
 
             GadgetAction.evaluateAmpoule(GadgetList.POISON_AMP, ev, b);
 
-            assertEquals(1, b.getAttachmentSize(src.attachment.PoisonAmpoule.class), "毒アンプルが追加されるべき");
+            assertEquals(1, b.getAttachmentSize(src.entity.core.attachment.impl.PoisonAmpoule.class), "毒アンプルが追加されるべき");
         }
     }
 

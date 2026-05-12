@@ -1,29 +1,36 @@
 package src.util;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
-import static org.junit.jupiter.api.Assertions.*;
 
-import src.SimYukkuri;
 import src.ConstState;
 import src.SequenceRNG;
-import src.engine.birth.BabyDnaFactory;
+import src.SimYukkuri;
 import src.draw.Terrarium;
+import src.engine.birth.BabyDnaFactory;
+import src.entity.core.living.yukkuri.Dna;
+import src.entity.core.living.yukkuri.impl.Deibu;
+import src.entity.core.living.yukkuri.impl.DosMarisa;
+import src.entity.core.living.yukkuri.impl.HybridYukkuri;
+import src.entity.core.living.yukkuri.impl.Marisa;
+import src.entity.core.living.yukkuri.impl.MarisaTsumuri;
+import src.entity.core.living.yukkuri.impl.Reimu;
+import src.entity.core.living.yukkuri.impl.Tarinai;
+import src.entity.core.living.yukkuri.impl.TarinaiReimu;
+import src.entity.core.living.yukkuri.impl.WasaReimu;
 import src.enums.Attitude;
 import src.enums.Intelligence;
 import src.enums.Numbering;
-import src.game.Dna;
-import src.yukkuri.Deibu;
-import src.yukkuri.DosMarisa;
-import src.yukkuri.HybridYukkuri;
-import src.yukkuri.Marisa;
-import src.yukkuri.MarisaTsumuri;
-import src.yukkuri.Reimu;
-import src.yukkuri.Tarinai;
-import src.yukkuri.TarinaiReimu;
-import src.yukkuri.WasaReimu;
+import src.enums.YukkuriType;
 
 public class YukkuriUtilCreateBabyDnaTest {
 
@@ -86,7 +93,8 @@ public class YukkuriUtilCreateBabyDnaTest {
 
     @Test
     public void testCreateBabyDnaWithNullMother() {
-        Dna dna = BabyDnaFactory.createBabyDna(null, null, 0, Attitude.AVERAGE, Intelligence.AVERAGE,
+        Dna dna = BabyDnaFactory.createBabyDna(null, null, YukkuriType.fromTypeID(0), Attitude.AVERAGE,
+                Intelligence.AVERAGE,
                 false, false, true);
         assertNull(dna);
     }
@@ -102,7 +110,7 @@ public class YukkuriUtilCreateBabyDnaTest {
                 Intelligence.AVERAGE, false, false, true);
 
         assertNotNull(dna);
-        assertTrue(dna.getType() >= 0);
+        assertTrue(dna.getType().getTypeID() >= 0);
     }
 
     @Test
@@ -281,7 +289,7 @@ public class YukkuriUtilCreateBabyDnaTest {
         @Test
         void testScenario_MotherAncestorAtavismCanOverrideBabyType() {
             Reimu mother = new Reimu();
-            mother.getAncestorList().add(Marisa.type);
+            mother.getAncestorList().add(Marisa.type.getTypeID());
             Reimu father = new Reimu();
             SimYukkuri.RND = new SequenceBooleanRng(
                     new int[] { 0, 0, 1, 1, 1, 1, 1, 1, 1 }, false);

@@ -6,10 +6,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
+import src.entity.core.living.yukkuri.impl.Marisa;
+import src.entity.core.living.yukkuri.impl.Reimu;
 import src.enums.AgeState;
 import src.enums.YukkuriType;
-import src.yukkuri.Marisa;
-import src.yukkuri.Reimu;
 
 public class TransformationPolicyTest {
 

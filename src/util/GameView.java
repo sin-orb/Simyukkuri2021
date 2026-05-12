@@ -3,15 +3,15 @@ package src.util;
 import java.awt.Component;
 
 import src.SimYukkuri;
-import src.base.Yukkuri;
-import src.effect.Effect;
 import src.draw.MyPane;
 import src.draw.Terrarium;
+import src.entity.core.effect.Effect;
+import src.entity.core.living.yukkuri.Dna;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.world.mobile.Vomit;
 import src.enums.AgeState;
 import src.enums.EffectType;
 import src.enums.YukkuriType;
-import src.game.Dna;
-import src.game.Vomit;
 
 public final class GameView {
 	private static final ViewSource DEFAULT = new ViewSource() {
@@ -58,12 +58,12 @@ public final class GameView {
 		}
 
 		@Override
-		public Yukkuri addBody(int x, int y, int z, int type, AgeState age, Yukkuri p1, Yukkuri p2) {
+		public Yukkuri addBody(int x, int y, int z, YukkuriType type, AgeState age, Yukkuri p1, Yukkuri p2) {
 			return getPane().getTerrarium().addBody(x, y, z, type, age, p1, p2);
 		}
 
 		@Override
-		public Yukkuri makeBody(int x, int y, int z, int type, Dna dna, AgeState age, Yukkuri p1, Yukkuri p2,
+		public Yukkuri makeBody(int x, int y, int z, YukkuriType type, Dna dna, AgeState age, Yukkuri p1, Yukkuri p2,
 				boolean adjust) {
 			return getPane().getTerrarium().makeBody(x, y, z, type, dna, age, p1, p2, adjust);
 		}
@@ -129,11 +129,11 @@ public final class GameView {
 		source().createBackBuffer();
 	}
 
-	public static Yukkuri addBody(int x, int y, int z, int type, AgeState age, Yukkuri p1, Yukkuri p2) {
+	public static Yukkuri addBody(int x, int y, int z, YukkuriType type, AgeState age, Yukkuri p1, Yukkuri p2) {
 		return source().addBody(x, y, z, type, age, p1, p2);
 	}
 
-	public static Yukkuri makeBody(int x, int y, int z, int type, Dna dna, AgeState age, Yukkuri p1, Yukkuri p2,
+	public static Yukkuri makeBody(int x, int y, int z, YukkuriType type, Dna dna, AgeState age, Yukkuri p1, Yukkuri p2,
 			boolean adjust) {
 		return source().makeBody(x, y, z, type, dna, age, p1, p2, adjust);
 	}

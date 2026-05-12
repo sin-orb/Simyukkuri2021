@@ -7,9 +7,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import src.entity.core.living.yukkuri.Dna;
 import src.enums.Attitude;
 import src.enums.Intelligence;
-import src.yukkuri.Tarinai;
+import src.entity.core.living.yukkuri.impl.Tarinai;
 
 class DnaTest {
 

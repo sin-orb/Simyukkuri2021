@@ -7,11 +7,11 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import src.SimYukkuri;
 import src.draw.World;
+import src.entity.core.living.yukkuri.Dna;
+import src.entity.core.world.bodylinked.Stalk;
+import src.entity.core.world.mobile.Vomit;
 import src.draw.MyPane;
 import src.draw.Terrarium;
-import src.game.Vomit;
-import src.game.Stalk;
-import src.game.Dna;
 import src.system.MapPlaceData;
 import src.util.WorldTestHelper;
 import src.enums.*;

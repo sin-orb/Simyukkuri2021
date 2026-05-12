@@ -9,8 +9,9 @@ import org.junit.jupiter.api.Test;
 
 import src.ConstState;
 import src.SimYukkuri;
-import src.base.Yukkuri;
-import src.effect.Effect;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.effect.Effect;
+import src.entity.core.world.item.Mixer;
 import src.base.ItemTestBase;
 import src.enums.CriticalDamegeType;
 import src.enums.Happiness;
@@ -201,7 +202,8 @@ class MixerTest extends ItemTestBase {
     void testLoadImages_headless_executesCode() {
         try {
             Mixer.loadImages(Mixer.class.getClassLoader(), null);
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
     }
 
     @Test

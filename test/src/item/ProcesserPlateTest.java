@@ -9,14 +9,15 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
-import src.base.Yukkuri;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.world.item.ProcesserPlate;
 import src.base.ItemTestBase;
 import src.enums.Numbering;
 import src.enums.HairState;
 import src.enums.Happiness;
 import src.enums.ImageCode;
 import src.util.WorldTestHelper;
-import src.yukkuri.Reimu;
+import src.entity.core.living.yukkuri.impl.Reimu;
 
 class ProcesserPlateTest extends ItemTestBase {
 
@@ -102,7 +103,7 @@ class ProcesserPlateTest extends ItemTestBase {
     @Test
     void testGetSetRunningCost() {
         ProcesserPlate item = new ProcesserPlate();
-        int[] costs = {100, 200, 300, 400};
+        int[] costs = { 100, 200, 300, 400 };
         item.setRunningCost(costs);
         assertArrayEquals(costs, item.getRunningCost());
     }
@@ -182,7 +183,7 @@ class ProcesserPlateTest extends ItemTestBase {
     @Test
     void testGetSetProcessedBodyEffectList() {
         ProcesserPlate item = new ProcesserPlate();
-        List<src.effect.Effect> list = new LinkedList<>();
+        List<src.entity.core.effect.Effect> list = new LinkedList<>();
         item.setProcessedBodyEffectList(list);
         assertEquals(list, item.getProcessedBodyEffectList());
     }
@@ -294,9 +295,12 @@ class ProcesserPlateTest extends ItemTestBase {
     void testCheckHitObj_zNotZero_returnsFalse() {
         ProcesserPlate item = new ProcesserPlate();
         item.setEnabled(true);
-        item.setX(100); item.setY(100);
+        item.setX(100);
+        item.setY(100);
         Yukkuri body = WorldTestHelper.createBody();
-        body.setX(100); body.setY(100); body.setZ(5); // airborne
+        body.setX(100);
+        body.setY(100);
+        body.setZ(5); // airborne
         java.awt.Rectangle rect = new java.awt.Rectangle(0, 0, 1000, 1000);
         assertFalse(item.checkHitObj(rect, body));
     }
@@ -308,9 +312,12 @@ class ProcesserPlateTest extends ItemTestBase {
         WorldTestHelper.initializeStandardTranslate200();
         ProcesserPlate item = new ProcesserPlate();
         item.setEnabled(true);
-        item.setX(500); item.setY(500);
+        item.setX(500);
+        item.setY(500);
         Yukkuri body = WorldTestHelper.createBody();
-        body.setX(500); body.setY(500); body.setZ(0);
+        body.setX(500);
+        body.setY(500);
+        body.setZ(0);
         java.awt.Rectangle rect = new java.awt.Rectangle(0, 0, 1, 1); // tiny rect
         assertDoesNotThrow(() -> item.checkHitObj(rect, body));
     }

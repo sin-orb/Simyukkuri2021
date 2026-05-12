@@ -17,41 +17,41 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
-import src.base.Yukkuri;
-import src.effect.Effect;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.effect.Effect;
+import src.entity.core.world.bodylinked.Okazari;
+import src.entity.core.world.bodylinked.Stalk;
+import src.entity.core.world.item.AutoFeeder;
+import src.entity.core.world.item.Bed;
+import src.entity.core.world.item.BeltconveyorObj;
+import src.entity.core.world.item.BreedingPool;
+import src.entity.core.world.item.Diffuser;
+import src.entity.core.world.item.Food;
+import src.entity.core.world.item.FoodMaker;
+import src.entity.core.world.item.GarbageChute;
+import src.entity.core.world.item.GarbageStation;
+import src.entity.core.world.item.HotPlate;
+import src.entity.core.world.item.House;
+import src.entity.core.world.item.MachinePress;
+import src.entity.core.world.item.Mixer;
+import src.entity.core.world.item.OrangePool;
+import src.entity.core.world.item.ProcesserPlate;
+import src.entity.core.world.item.ProductChute;
+import src.entity.core.world.item.StickyPlate;
+import src.entity.core.world.item.Stone;
+import src.entity.core.world.item.Sui;
+import src.entity.core.world.item.Toilet;
+import src.entity.core.world.item.Toy;
+import src.entity.core.world.item.Trampoline;
+import src.entity.core.world.item.Trash;
+import src.entity.core.world.item.Yunba;
+import src.entity.core.world.mobile.Shit;
+import src.entity.core.world.mobile.Vomit;
 import src.event.EventPacket;
-import src.entity.world.bodylinked.Okazari;
-import src.game.Shit;
-import src.game.Stalk;
-import src.game.Vomit;
-import src.item.AutoFeeder;
 import src.field.impl.Barrier;
-import src.item.Bed;
 import src.field.impl.Beltconveyor;
-import src.item.BeltconveyorObj;
-import src.item.BreedingPool;
-import src.item.Diffuser;
 import src.field.impl.Farm;
-import src.item.Food;
-import src.item.FoodMaker;
-import src.item.GarbageChute;
-import src.item.GarbageStation;
-import src.item.HotPlate;
-import src.item.House;
-import src.item.MachinePress;
-import src.item.Mixer;
-import src.item.OrangePool;
 import src.field.impl.Pool;
-import src.item.ProcesserPlate;
-import src.item.ProductChute;
-import src.item.StickyPlate;
-import src.item.Stone;
-import src.item.Sui;
-import src.item.Toilet;
-import src.item.Toy;
-import src.item.Trampoline;
-import src.item.Trash;
-import src.item.Yunba;
 import src.util.WorldTestHelper;
 
 class MapPlaceDataTest {
@@ -362,7 +362,8 @@ class MapPlaceDataTest {
         assertEquals(m, data.getProductchute());
     }
 
-    // --- stickyPlate / hotPlate / processerPlate / mixer / autoFeeder / machinePress ---
+    // --- stickyPlate / hotPlate / processerPlate / mixer / autoFeeder /
+    // machinePress ---
 
     @Test
     void testSetGetStickyPlate() {
@@ -412,7 +413,8 @@ class MapPlaceDataTest {
         assertEquals(m, data.getMachinePress());
     }
 
-    // --- stalk / diffuser / yunba / sui / trash / garbageStation / house / beltconveyorObj ---
+    // --- stalk / diffuser / yunba / sui / trash / garbageStation / house /
+    // beltconveyorObj ---
 
     @Test
     void testSetGetStalk() {

@@ -1,62 +1,74 @@
 package src.draw;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.io.File;
+import java.nio.file.Files;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
+
 import src.SimYukkuri;
-import src.attachment.Ants;
-import src.attachment.Badge;
-import src.attachment.BreedingAmpoule;
-import src.attachment.Fire;
-import src.attachment.PoisonAmpoule;
-import src.base.Yukkuri;
-import src.effect.Effect;
-import src.event.EventPacket;
-import src.base.Entity;
-import src.entity.world.bodylinked.Okazari.OkazariType;
+import src.entity.core.Entity;
+import src.entity.core.attachment.Attachment;
+import src.entity.core.attachment.impl.Ants;
+import src.entity.core.attachment.impl.Badge;
+import src.entity.core.attachment.impl.BreedingAmpoule;
+import src.entity.core.attachment.impl.Fire;
+import src.entity.core.attachment.impl.PoisonAmpoule;
+import src.entity.core.effect.Effect;
+import src.entity.core.living.yukkuri.Dna;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.living.yukkuri.impl.Deibu;
+import src.entity.core.living.yukkuri.impl.DosMarisa;
+import src.entity.core.living.yukkuri.impl.Marisa;
+import src.entity.core.living.yukkuri.impl.MarisaReimu;
+import src.entity.core.living.yukkuri.impl.Reimu;
+import src.entity.core.living.yukkuri.impl.ReimuMarisa;
+import src.entity.core.living.yukkuri.impl.Remirya;
+import src.entity.core.world.bodylinked.Okazari.OkazariType;
+import src.entity.core.world.bodylinked.Stalk;
+import src.entity.core.world.item.AutoFeeder;
+import src.entity.core.world.item.Bed;
+import src.entity.core.world.item.Diffuser;
+import src.entity.core.world.item.Food;
+import src.entity.core.world.item.GarbageChute;
+import src.entity.core.world.item.GarbageStation;
+import src.entity.core.world.item.HotPlate;
+import src.entity.core.world.item.Mixer;
+import src.entity.core.world.item.ProcesserPlate;
+import src.entity.core.world.item.StickyPlate;
+import src.entity.core.world.item.Sui;
+import src.entity.core.world.item.Yunba;
 import src.enums.ActionState;
+import src.enums.AgeState;
 import src.enums.BurialState;
+import src.enums.FavItemType;
 import src.enums.PanicType;
 import src.enums.TakeoutItemType;
-import src.enums.AgeState;
-import src.enums.FavItemType;
 import src.enums.YukkuriType;
-import src.game.Dna;
-import src.game.Stalk;
-import src.event.BegForLifeEvent;
-import src.event.FuneralEvent;
-import src.event.PredatorsGameEvent;
-import src.event.ProposeEvent;
-import src.event.ProudChildEvent;
-import src.event.RaperReactionEvent;
-import src.event.ShitExercisesEvent;
-import src.event.SuperEatingTimeEvent;
-import src.item.AutoFeeder;
-import src.item.Bed;
+import src.event.EventPacket;
+import src.event.impl.BegForLifeEvent;
+import src.event.impl.FuneralEvent;
+import src.event.impl.PredatorsGameEvent;
+import src.event.impl.ProposeEvent;
+import src.event.impl.ProudChildEvent;
+import src.event.impl.RaperReactionEvent;
+import src.event.impl.ShitExercisesEvent;
+import src.event.impl.SuperEatingTimeEvent;
 import src.field.impl.Beltconveyor;
 import src.field.impl.Farm;
-import src.item.Diffuser;
-import src.item.Food;
-import src.item.GarbageChute;
-import src.item.GarbageStation;
-import src.item.HotPlate;
-import src.item.Mixer;
-import src.item.ProcesserPlate;
-import src.item.StickyPlate;
-import src.item.Sui;
-import src.item.Yunba;
 import src.system.Sprite;
 import src.util.WorldTestHelper;
-import src.yukkuri.Deibu;
-import src.yukkuri.Marisa;
-import src.yukkuri.MarisaReimu;
-import src.yukkuri.Reimu;
-import src.yukkuri.ReimuMarisa;
-import src.yukkuri.DosMarisa;
-import src.yukkuri.Remirya;
-import java.io.File;
-import java.nio.file.Files;
 
 class TerrariumTest {
 
@@ -99,7 +111,7 @@ class TerrariumTest {
     }
 
     private Fire findFireAttachment(Yukkuri body) {
-        for (src.attachment.Attachment attachment : body.getAttach()) {
+        for (Attachment attachment : body.getAttach()) {
             if (attachment instanceof Fire) {
                 return (Fire) attachment;
             }
@@ -108,7 +120,7 @@ class TerrariumTest {
     }
 
     private <T> T findAttachment(Yukkuri body, Class<T> type) {
-        for (src.attachment.Attachment attachment : body.getAttach()) {
+        for (Attachment attachment : body.getAttach()) {
             if (type.isInstance(attachment)) {
                 return type.cast(attachment);
             }
@@ -292,7 +304,7 @@ class TerrariumTest {
         int initialBodyCount = SimYukkuri.world.getCurrentMap().getBody().size();
         // addBody(int x, int y, int z, int type, AgeState age, Yukkuri p1, Yukkuri p2)
         // Use getTypeID() instead of ordinal()
-        terrarium.addBody(100, 100, 0, YukkuriType.REIMU.getTypeID(), AgeState.ADULT, null, null);
+        terrarium.addBody(100, 100, 0, YukkuriType.REIMU, AgeState.ADULT, null, null);
         assertEquals(initialBodyCount + 1, SimYukkuri.world.getCurrentMap().getBody().size());
     }
 
@@ -314,7 +326,7 @@ class TerrariumTest {
     void testSaveLoadState_Basic() throws Exception {
         File tempFile = Files.createTempFile("simyukkuri_test_save", ".sav").toFile();
         try {
-            terrarium.addBody(100, 100, 0, YukkuriType.REIMU.getTypeID(), AgeState.ADULT, null, null);
+            terrarium.addBody(100, 100, 0, YukkuriType.REIMU, AgeState.ADULT, null, null);
             // saveState(File) and loadState(File) are likely static based on lint feedback
             Terrarium.saveState(tempFile);
 
@@ -1199,8 +1211,10 @@ class TerrariumTest {
                 garbageStation.setEnable(enable);
                 SimYukkuri.world.getCurrentMap().getGarbageStation().put(garbageStation.getObjId(), garbageStation);
 
-                Food leftFood = new Food(garbageStation.getX() - 20, garbageStation.getY(), Food.FoodType.WASTE_NORA.ordinal());
-                Food rightFood = new Food(garbageStation.getX() + 20, garbageStation.getY(), Food.FoodType.FOOD_NORA.ordinal());
+                Food leftFood = new Food(garbageStation.getX() - 20, garbageStation.getY(),
+                        Food.FoodType.WASTE_NORA.ordinal());
+                Food rightFood = new Food(garbageStation.getX() + 20, garbageStation.getY(),
+                        Food.FoodType.FOOD_NORA.ordinal());
                 SimYukkuri.world.getCurrentMap().getFood().put(leftFood.getObjId(), leftFood);
                 SimYukkuri.world.getCurrentMap().getFood().put(rightFood.getObjId(), rightFood);
                 garbageStation.setFood(new Entity[] { leftFood, rightFood });
@@ -1368,8 +1382,10 @@ class TerrariumTest {
                 restoredYunba.clockTick();
 
                 assertEquals(0, restoredTarget.getDamage(), "restored yunba should still heal its restored target");
-                assertNull(restoredYunba.getAction(), "yunba should clear the action after finishing the restored task");
-                assertNull(restoredYunba.getTarget(), "yunba should clear the target after finishing the restored task");
+                assertNull(restoredYunba.getAction(),
+                        "yunba should clear the action after finishing the restored task");
+                assertNull(restoredYunba.getTarget(),
+                        "yunba should clear the target after finishing the restored task");
             } finally {
                 tempFile.delete();
             }
@@ -1783,7 +1799,7 @@ class TerrariumTest {
         void testScenario_LoadStateRejectsCorruptedSaveWithoutReplacingWorld() throws Exception {
             File tempFile = Files.createTempFile("simyukkuri_test_save_corrupt", ".sav").toFile();
             try {
-                terrarium.addBody(100, 100, 0, YukkuriType.REIMU.getTypeID(), AgeState.ADULT, null, null);
+                terrarium.addBody(100, 100, 0, YukkuriType.REIMU, AgeState.ADULT, null, null);
                 int originalBodyCount = SimYukkuri.world.getCurrentMap().getBody().size();
                 long originalCash = SimYukkuri.world.getPlayer().getCash();
 

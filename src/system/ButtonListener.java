@@ -6,8 +6,8 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 
 import src.SimYukkuri;
-import src.base.Yukkuri;
 import src.draw.MyPane;
+import src.entity.core.living.yukkuri.Yukkuri;
 import src.util.GameEnvironment;
 import src.util.GameView;
 import src.util.GameWorld;

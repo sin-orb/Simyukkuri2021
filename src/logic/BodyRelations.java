@@ -1,10 +1,11 @@
 package src.logic;
 
-import src.base.Yukkuri;
-import src.entity.living.SocialEntity;
-import src.enums.Parent;
-import src.enums.EnumRelationMine;
 import java.util.Iterator;
+
+import src.entity.core.living.SocialEntity;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.enums.EnumRelationMine;
+import src.enums.Parent;
 
 /**
  * Body同士の家族関係を判定するためのロジック集約クラス。
@@ -41,7 +42,7 @@ public final class BodyRelations {
 	/**
 	 * {@code self}が{@code other}にとって何にあたるかを判定する。
 	 *
-	 * @param self 自分側のゆっくり
+	 * @param self  自分側のゆっくり
 	 * @param other 相手側のゆっくり
 	 * @return 関係性
 	 */
@@ -73,7 +74,7 @@ public final class BodyRelations {
 	/**
 	 * 2体の間に親子、番、姉妹のいずれかの関係があるかを判定する。
 	 *
-	 * @param self 判定元のゆっくり
+	 * @param self  判定元のゆっくり
 	 * @param other 判定対象のゆっくり
 	 * @return 家族関係がある場合はtrue
 	 */
@@ -96,7 +97,7 @@ public final class BodyRelations {
 	/**
 	 * {@code self}が{@code other}の父親または母親として登録されているかを判定する。
 	 *
-	 * @param self 親かどうかを調べるゆっくり
+	 * @param self  親かどうかを調べるゆっくり
 	 * @param other 子かどうかを調べるゆっくり
 	 * @return {@code self}が{@code other}の親ならtrue
 	 */
@@ -111,7 +112,7 @@ public final class BodyRelations {
 	/**
 	 * {@code self}が{@code other}の父親として登録されているかを判定する。
 	 *
-	 * @param self 父親かどうかを調べるゆっくり
+	 * @param self  父親かどうかを調べるゆっくり
 	 * @param other 子かどうかを調べるゆっくり
 	 * @return {@code self}が{@code other}の父親ならtrue
 	 */
@@ -125,7 +126,7 @@ public final class BodyRelations {
 	/**
 	 * {@code self}が{@code other}の母親として登録されているかを判定する。
 	 *
-	 * @param self 母親かどうかを調べるゆっくり
+	 * @param self  母親かどうかを調べるゆっくり
 	 * @param other 子かどうかを調べるゆっくり
 	 * @return {@code self}が{@code other}の母親ならtrue
 	 */
@@ -139,7 +140,7 @@ public final class BodyRelations {
 	/**
 	 * {@code other}が{@code self}の親として登録されているかを判定する。
 	 *
-	 * @param self 子かどうかを調べるゆっくり
+	 * @param self  子かどうかを調べるゆっくり
 	 * @param other 親かどうかを調べるゆっくり
 	 * @return {@code self}が{@code other}の子ならtrue
 	 */
@@ -153,7 +154,7 @@ public final class BodyRelations {
 	/**
 	 * {@code other}が{@code self}の番として登録されているかを判定する。
 	 *
-	 * @param self 番情報を持つゆっくり
+	 * @param self  番情報を持つゆっくり
 	 * @param other 番かどうかを調べるゆっくり
 	 * @return {@code other}が{@code self}の番ならtrue
 	 */
@@ -173,7 +174,7 @@ public final class BodyRelations {
 	 * Phase 2の初期抽出では挙動を変えないため、このメソッドも同じnull挙動を維持する。
 	 * </p>
 	 *
-	 * @param self 判定元のゆっくり
+	 * @param self  判定元のゆっくり
 	 * @param other 姉妹かどうかを調べるゆっくり
 	 * @return 既知の親が同じならtrue
 	 */
@@ -190,7 +191,7 @@ public final class BodyRelations {
 	/**
 	 * {@code other}が{@code self}より若い姉妹かどうかを判定する。
 	 *
-	 * @param self 年上側かどうかを調べるゆっくり
+	 * @param self  年上側かどうかを調べるゆっくり
 	 * @param other 年下側かどうかを調べるゆっくり
 	 * @return 姉妹で、かつ{@code self}の年齢が{@code other}以上ならtrue
 	 */
@@ -201,7 +202,7 @@ public final class BodyRelations {
 	/**
 	 * {@code self}の妹をインデックス指定で取得する。
 	 *
-	 * @param self 参照元のゆっくり
+	 * @param self  参照元のゆっくり
 	 * @param index 何番目の妹か
 	 * @return 妹のインスタンス
 	 */
@@ -212,7 +213,7 @@ public final class BodyRelations {
 	/**
 	 * {@code self}の姉をインデックス指定で取得する。
 	 *
-	 * @param self 参照元のゆっくり
+	 * @param self  参照元のゆっくり
 	 * @param index 何番目の姉か
 	 * @return 姉のインスタンス
 	 */
@@ -223,7 +224,7 @@ public final class BodyRelations {
 	/**
 	 * {@code self}の子をインデックス指定で取得する。
 	 *
-	 * @param self 参照元のゆっくり
+	 * @param self  参照元のゆっくり
 	 * @param index 何番目の子か
 	 * @return 子のインスタンス
 	 */
@@ -277,7 +278,7 @@ public final class BodyRelations {
 	/**
 	 * {@code self}の子リストから指定個体を除去する。
 	 *
-	 * @param self 参照元のゆっくり
+	 * @param self       参照元のゆっくり
 	 * @param targetBody 除去対象
 	 */
 	public static void removeChildrenList(SocialEntity self, SocialEntity targetBody) {
@@ -296,7 +297,7 @@ public final class BodyRelations {
 	/**
 	 * {@code self}の姉リストから指定個体を除去する。
 	 *
-	 * @param self 参照元のゆっくり
+	 * @param self       参照元のゆっくり
 	 * @param targetBody 除去対象
 	 */
 	public static void removeElderSisterList(SocialEntity self, SocialEntity targetBody) {
@@ -315,7 +316,7 @@ public final class BodyRelations {
 	/**
 	 * {@code self}の妹リストから指定個体を除去する。
 	 *
-	 * @param self 参照元のゆっくり
+	 * @param self       参照元のゆっくり
 	 * @param targetBody 除去対象
 	 */
 	public static void removeSisterList(SocialEntity self, SocialEntity targetBody) {

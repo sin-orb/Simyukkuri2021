@@ -3,14 +3,14 @@ package src.command;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
-import src.attachment.Ants;
-import src.attachment.Badge;
-import src.base.Yukkuri;
-import src.base.Entity;
 import src.command.GadgetMenu.GadgetList;
+import src.entity.core.Entity;
+import src.entity.core.attachment.impl.Ants;
+import src.entity.core.attachment.impl.Badge;
+import src.entity.core.living.yukkuri.Yukkuri;
 import src.enums.BodyRank;
 import src.enums.PublicRank;
-import src.event.PredatorsGameEvent;
+import src.event.impl.PredatorsGameEvent;
 import src.logic.BadgeLogic;
 import src.logic.BodyLogic;
 import src.logic.EventLogic;
@@ -26,8 +26,8 @@ public class GadgetDebugAction {
 	/**
 	 * テストカテゴリの実行
 	 *
-	 * @param item  実行内容
-	 * @param ev    入力されたマウスの動作
+	 * @param item         実行内容
+	 * @param ev           入力されたマウスの動作
 	 * @param targetObject 対象オブジェクト
 	 */
 	public static void evaluateTest(GadgetList item, MouseEvent ev, Entity targetObject) {

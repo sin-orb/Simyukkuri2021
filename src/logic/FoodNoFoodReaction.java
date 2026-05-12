@@ -1,6 +1,6 @@
 package src.logic;
 
-import src.base.Yukkuri;
+import src.entity.core.living.yukkuri.Yukkuri;
 import src.enums.Happiness;
 import src.system.MessagePool;
 import src.util.GameMessages;

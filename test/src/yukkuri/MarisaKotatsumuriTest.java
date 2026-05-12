@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import src.enums.AgeState;
 import src.draw.Point4y;
-import src.base.Yukkuri;
+import src.entity.core.living.yukkuri.Yukkuri;
 
 public class MarisaKotatsumuriTest {
 
@@ -30,7 +30,7 @@ public class MarisaKotatsumuriTest {
     @Test
     public void testMarisaKotatsumuriExtendsBody() {
         MarisaKotatsumuri marisaKotatsumuri = new MarisaKotatsumuri();
-        assertTrue(marisaKotatsumuri instanceof src.base.Yukkuri);
+        assertTrue(marisaKotatsumuri instanceof src.entity.core.living.yukkuri.Yukkuri);
     }
 
     @Test

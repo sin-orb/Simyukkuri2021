@@ -3,18 +3,16 @@ package src.logic;
 import java.util.List;
 import java.util.Map;
 
-import src.base.Yukkuri;
-import src.base.Entity;
 import src.draw.Translate;
+import src.entity.core.Entity;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.world.bodylinked.Stalk;
+import src.entity.core.world.item.Food;
+import src.entity.core.world.mobile.Shit;
+import src.entity.core.world.mobile.Vomit;
 import src.enums.AgeState;
 import src.enums.BurialState;
-import src.enums.Intelligence;
-import src.game.Shit;
-import src.game.Stalk;
-import src.game.Vomit;
 import src.field.impl.Barrier;
-import src.item.Food;
-import src.item.Food.FoodType;
 import src.util.GameWorld;
 
 /**

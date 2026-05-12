@@ -1,6 +1,4 @@
 package src.draw;
-import src.util.GameImages;
-import src.util.GameText;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -18,12 +16,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Vector;
 
-import javax.imageio.ImageIO;
-
 import src.Const;
 import src.enums.ImageCode;
 import src.system.IniFileReader;
-import src.system.ResourceUtil;
+import src.util.GameImages;
+import src.util.GameText;
 
 /*****************************************************
  * データの読み込み拡張
@@ -613,7 +610,8 @@ public class ModLoader {
 		// 既存のデータをクリア
 		for (BufferedImage[][] a2 : images) {
 			for (BufferedImage[] a1 : a2) {
-				for (int j = 0; j < a1.length; j++) a1[j] = null;
+				for (int j = 0; j < a1.length; j++)
+					a1[j] = null;
 			}
 		}
 		for (int i = 0; i < dirOfs.length; i++) {
@@ -707,7 +705,8 @@ public class ModLoader {
 		for (BufferedImage[][][] a3 : images) {
 			for (BufferedImage[][] a2 : a3) {
 				for (BufferedImage[] a1 : a2) {
-					for (int j = 0; j < a1.length; j++) a1[j] = null;
+					for (int j = 0; j < a1.length; j++)
+						a1[j] = null;
 				}
 			}
 		}

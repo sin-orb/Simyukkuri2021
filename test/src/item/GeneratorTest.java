@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 import src.SimYukkuri;
 import src.base.ItemTestBase;
+import src.entity.core.world.item.Generator;
 
 class GeneratorTest extends ItemTestBase {
     @Test

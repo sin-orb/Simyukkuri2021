@@ -10,9 +10,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
-import src.base.Yukkuri;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.world.WorldEntity;
+import src.entity.core.world.item.StickyPlate;
 import src.base.ItemTestBase;
-import src.base.WorldEntity;
 import src.util.WorldTestHelper;
 
 class StickyPlateTest extends ItemTestBase {
@@ -198,7 +199,8 @@ class StickyPlateTest extends ItemTestBase {
     void testLoadImages_headless_executesCode() {
         try {
             StickyPlate.loadImages(StickyPlate.class.getClassLoader(), null);
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
     }
 
     @Test
@@ -213,7 +215,8 @@ class StickyPlateTest extends ItemTestBase {
         StickyPlate item = new StickyPlate();
         try {
             StickyPlate.setupStickyPlate(item);
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
     }
 
     @Test
@@ -221,6 +224,7 @@ class StickyPlateTest extends ItemTestBase {
         try {
             StickyPlate s = new StickyPlate(100, 100, 0);
             org.junit.jupiter.api.Assertions.assertNotNull(s);
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
     }
 }

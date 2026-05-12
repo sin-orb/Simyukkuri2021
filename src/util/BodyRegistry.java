@@ -4,7 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import src.base.Yukkuri;
+import src.entity.core.living.yukkuri.Yukkuri;
 
 /**
  * 現在のマップに属する body の参照を引く.

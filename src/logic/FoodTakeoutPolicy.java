@@ -2,16 +2,16 @@ package src.logic;
 
 import java.util.Map;
 
-import src.base.Yukkuri;
-import src.base.Entity;
-import src.base.WorldEntity;
+import src.entity.core.Entity;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.world.WorldEntity;
+import src.entity.core.world.item.Bed;
+import src.entity.core.world.item.Food;
+import src.entity.core.world.item.Toilet;
+import src.entity.core.world.mobile.Shit;
 import src.enums.FavItemType;
 import src.enums.PublicRank;
 import src.enums.TakeoutItemType;
-import src.game.Shit;
-import src.item.Bed;
-import src.item.Food;
-import src.item.Toilet;
 import src.util.GameWorld;
 
 /**
@@ -28,7 +28,7 @@ public final class FoodTakeoutPolicy {
 	/**
 	 * お持ち帰り対象かどうかを判定する。
 	 *
-	 * @param body 判定するゆっくり
+	 * @param body   判定するゆっくり
 	 * @param target 対象オブジェクト
 	 * @return 持ち帰るならtrue
 	 */

@@ -1,9 +1,8 @@
 package src.draw;
 
-import src.base.Yukkuri;
-import src.game.Shit;
-import src.game.Vomit;
-import src.item.Diffuser;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.world.mobile.Shit;
+import src.entity.core.world.mobile.Vomit;
 import src.enums.YukkuriType;
 import src.util.GameWorld;
 

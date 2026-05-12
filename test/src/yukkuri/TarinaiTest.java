@@ -9,7 +9,7 @@ import src.SimYukkuri;
 import src.enums.AgeState;
 import src.enums.Attitude;
 import src.draw.Point4y;
-import src.base.Yukkuri;
+import src.entity.core.living.yukkuri.Yukkuri;
 
 public class TarinaiTest {
 

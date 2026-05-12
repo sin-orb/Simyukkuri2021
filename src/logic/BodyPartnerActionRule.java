@@ -1,15 +1,11 @@
 package src.logic;
 
-import src.base.Yukkuri;
-
-import src.base.Yukkuri;
-import src.event.EventPacket.EventPriority;
-import src.entity.world.bodylinked.Okazari.OkazariType;
-import src.draw.Translate;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.world.bodylinked.Okazari.OkazariType;
 import src.enums.Attitude;
 import src.enums.PublicRank;
-import src.event.HateNoOkazariEvent;
-import src.event.ProposeEvent;
+import src.event.impl.HateNoOkazariEvent;
+import src.event.impl.ProposeEvent;
 import src.system.MessagePool;
 import src.util.GameMessages;
 import src.util.GameRandom;
@@ -25,14 +21,15 @@ public final class BodyPartnerActionRule {
 	/**
 	 * 目標が見つかった場合の行動を処理する.
 	 *
-	 * @param body 自分
-	 * @param targetBody 対象
-	 * @param bodyHasOkazari おかざり対象
+	 * @param body             自分
+	 * @param targetBody       対象
+	 * @param bodyHasOkazari   おかざり対象
 	 * @param collisionOffsetX 衝突補正X
-	 * @param zOffset Z移動量
+	 * @param zOffset          Z移動量
 	 * @return 行動したかどうか
 	 */
-	public static boolean handleFoundTarget(Yukkuri body, Yukkuri targetBody, Yukkuri bodyHasOkazari, int collisionOffsetX, int zOffset) {
+	public static boolean handleFoundTarget(Yukkuri body, Yukkuri targetBody, Yukkuri bodyHasOkazari,
+			int collisionOffsetX, int zOffset) {
 		// 相手が死体でなく、かつ除去されてなければ
 		if (!targetBody.isDead() && !targetBody.isRemoved()) {
 			// 生まれていない
@@ -66,7 +63,8 @@ public final class BodyPartnerActionRule {
 						return true;
 					} else if (body.getAttitude() == Attitude.SUPER_SHITHEAD) {
 						// ドゲスの場合は50%の確率でレイプだけする
-						body.moveToSukkiri(targetBody, targetBody.getX() + collisionOffsetX, targetBody.getY(), zOffset);
+						body.moveToSukkiri(targetBody, targetBody.getX() + collisionOffsetX, targetBody.getY(),
+								zOffset);
 						body.setTargetBind(true);
 					}
 				}
@@ -86,7 +84,8 @@ public final class BodyPartnerActionRule {
 								if (body.getPublicRank() != PublicRank.UnunSlave) {
 									// 非ゆっくり症は参加しない
 									if (body.isNotNYD() && targetBody.isNotNYD()) {
-										EventLogic.addWorldEvent(new HateNoOkazariEvent(body, targetBody, null, 10), body,
+										EventLogic.addWorldEvent(new HateNoOkazariEvent(body, targetBody, null, 10),
+												body,
 												GameMessages.getMessage(body, MessagePool.Action.HateYukkuri));
 									}
 								}
@@ -117,7 +116,8 @@ public final class BodyPartnerActionRule {
 				body.setToSteal(false);
 				// 視界内に起きているゆっくりがいない
 				if (!BodyLogic.checkWakeupOtherYukkuri(body) || GameRandom.nextInt(20) == 0) {
-					body.moveToBody(bodyHasOkazari, bodyHasOkazari.getX() + collisionOffsetX, bodyHasOkazari.getY(), zOffset);
+					body.moveToBody(bodyHasOkazari, bodyHasOkazari.getX() + collisionOffsetX, bodyHasOkazari.getY(),
+							zOffset);
 					body.setTargetBind(false);
 					body.setToSteal(true);
 					return true;

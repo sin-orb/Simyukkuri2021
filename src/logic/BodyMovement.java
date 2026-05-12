@@ -3,18 +3,19 @@ package src.logic;
 import java.util.Map;
 
 import src.SimYukkuri;
-import src.attachment.Ants;
-import src.base.Yukkuri;
 import src.draw.Translate;
+import src.entity.core.Entity;
+import src.entity.core.attachment.impl.Ants;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.world.item.Trampoline;
 import src.enums.AgeState;
 import src.enums.Damage;
 import src.enums.Direction;
 import src.enums.Happiness;
 import src.enums.Intelligence;
-import src.event.SuperEatingTimeEvent;
-import src.field.impl.Barrier;
-import src.item.Trampoline;
+import src.event.impl.SuperEatingTimeEvent;
 import src.field.FieldShape;
+import src.field.impl.Barrier;
 import src.system.MessagePool;
 import src.util.GameMessages;
 import src.util.GameRandom;
@@ -301,7 +302,7 @@ public final class BodyMovement {
 	 * @param toY    Y座標
 	 * @param toZ    Z座標
 	 */
-	public static void moveToBody(Yukkuri body, src.base.Entity target, int toX, int toY, int toZ) {
+	public static void moveToBody(Yukkuri body, Entity target, int toX, int toY, int toZ) {
 		body.clearActions();
 		body.setToBody(true);
 		body.setMoveTargetId(target.objId);
@@ -609,7 +610,8 @@ public final class BodyMovement {
 			}
 
 			if (damageCut != 4) {
-				for (Map.Entry<Integer, Trampoline> entry : GameWorld.get().getCurrentMap().getTrampoline().entrySet()) {
+				for (Map.Entry<Integer, Trampoline> entry : GameWorld.get().getCurrentMap().getTrampoline()
+						.entrySet()) {
 					Trampoline trampoline = entry.getValue();
 					if (trampoline.checkHitObj(body)) {
 						damageCut = 100;

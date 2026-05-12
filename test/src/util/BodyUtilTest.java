@@ -1,24 +1,23 @@
 package src.util;
 
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.BeforeEach;
-
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
 import java.util.Map;
-import java.util.ArrayList;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
-import src.base.Yukkuri;
-import src.entity.world.bodylinked.Okazari.OkazariType;
+import src.entity.core.living.yukkuri.Dna;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.world.bodylinked.Okazari.OkazariType;
 import src.enums.AgeState;
-import src.enums.HairState;
-import src.enums.Direction;
-import src.enums.CriticalDamegeType;
 import src.enums.CoreAnkoState;
-import src.system.Sprite;
+import src.enums.CriticalDamegeType;
+import src.enums.Direction;
+import src.enums.HairState;
 import src.system.MapPlaceData;
-import src.game.Dna;
+import src.system.Sprite;
 
 public class BodyUtilTest {
 
@@ -31,7 +30,8 @@ public class BodyUtilTest {
         img = new BufferedImage(800, 600, BufferedImage.TYPE_INT_ARGB);
         g2 = img.createGraphics();
         try {
-            java.lang.reflect.Field imagePackField = src.yukkuri.Marisa.class.getDeclaredField("imagePack");
+            java.lang.reflect.Field imagePackField = src.entity.core.living.yukkuri.impl.Marisa.class
+                    .getDeclaredField("imagePack");
             imagePackField.setAccessible(true);
             BufferedImage[][][][] dummyPack = new BufferedImage[src.enums.BodyRank.values().length][200][20][20];
             BufferedImage dummyImage = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
@@ -163,7 +163,8 @@ public class BodyUtilTest {
         try {
             java.lang.reflect.Field mapBodyField = MapPlaceData.class.getDeclaredField("body");
             mapBodyField.setAccessible(true);
-            ((Map<Integer, Yukkuri>) mapBodyField.get(SimYukkuri.world.getCurrentMap())).put(parent.getUniqueID(), parent);
+            ((Map<Integer, Yukkuri>) mapBodyField.get(SimYukkuri.world.getCurrentMap())).put(parent.getUniqueID(),
+                    parent);
         } catch (Exception e) {
         }
         body.setParentLinkId(parent.getUniqueID());

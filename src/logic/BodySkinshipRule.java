@@ -1,14 +1,12 @@
 package src.logic;
 
-import src.base.Yukkuri;
-
-import src.attachment.Ants;
-import src.base.Yukkuri;
+import src.entity.core.attachment.impl.Ants;
+import src.entity.core.living.yukkuri.Yukkuri;
 import src.enums.Happiness;
 import src.enums.TakeoutItemType;
+import src.system.MessagePool;
 import src.util.GameMessages;
 import src.util.GameRandom;
-import src.system.MessagePool;
 
 /**
  * Skinship and family-contact handling used by BodyLogic.
@@ -22,7 +20,7 @@ public final class BodySkinshipRule {
 	 * Handle the family-contact and skinship branches in doActionOther.
 	 *
 	 * @param targetBody target body
-	 * @param actorBody actor body
+	 * @param actorBody  actor body
 	 * @return true when the branch handled the action
 	 */
 	public static boolean handleSkinship(Yukkuri targetBody, Yukkuri actorBody) {
@@ -37,14 +35,16 @@ public final class BodySkinshipRule {
 		}
 
 		// 餌を保持している
-		if (actorBody.isParent(targetBody) && targetBody.isVeryHungry() && !targetBody.isAdult() && actorBody.getCarryItem(TakeoutItemType.FOOD) != null) {
+		if (actorBody.isParent(targetBody) && targetBody.isVeryHungry() && !targetBody.isAdult()
+				&& actorBody.getCarryItem(TakeoutItemType.FOOD) != null) {
 			// 吐き出す
 			actorBody.setMessage(GameMessages.getMessage(actorBody, MessagePool.Action.GiveFood), false);
 			actorBody.dropTakeoutItem(TakeoutItemType.FOOD);
 			return true;
 		}
 
-		if (actorBody.isAdult() && !targetBody.isAdult() && (targetBody.isChild(actorBody) || actorBody.isParent(targetBody))) {
+		if (actorBody.isAdult() && !targetBody.isAdult()
+				&& (targetBody.isChild(actorBody) || actorBody.isParent(targetBody))) {
 			// 自分が親で相手が子供の時のスキンシップ
 			actorBody.constraintDirection(targetBody, false);
 			// 相手が汚れていてかつ自分が母親の時か、ランダムでぺろぺろ
@@ -92,7 +92,8 @@ public final class BodySkinshipRule {
 			} else {
 				if (targetBody.isDamaged() && GameRandom.nextBoolean()) {
 					if (actorBody.isElderSister(targetBody)) {
-						actorBody.setMessage(GameMessages.getMessage(actorBody, MessagePool.Action.ConcernAboutEldersister));
+						actorBody.setMessage(
+								GameMessages.getMessage(actorBody, MessagePool.Action.ConcernAboutEldersister));
 					} else {
 						actorBody.setMessage(GameMessages.getMessage(actorBody, MessagePool.Action.ConcernAboutSister));
 					}

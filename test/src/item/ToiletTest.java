@@ -3,10 +3,11 @@ package src.item;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import src.SimYukkuri;
-import src.base.Yukkuri;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.world.WorldEntity;
+import src.entity.core.world.item.Toilet;
+import src.entity.core.world.mobile.Shit;
 import src.base.ItemTestBase;
-import src.base.WorldEntity;
-import src.game.Shit;
 import src.util.WorldTestHelper;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -146,7 +147,8 @@ class ToiletTest extends ItemTestBase {
 
     @Test
     void testObjHitProcess() {
-        // Toilet.objHitProcess(Entity o): o.remove(); Cash.addCash(-getCost()); return 1
+        // Toilet.objHitProcess(Entity o): o.remove(); Cash.addCash(-getCost()); return
+        // 1
         // Cash.addCash requires SimYukkuri.world (already initialized by setUp()).
         Toilet toilet = new Toilet();
         // cost defaults to 0, so Cash.addCash(0) is safe.
@@ -188,14 +190,14 @@ class ToiletTest extends ItemTestBase {
     @Test
     void testCheckHitObj_singleArg_doesNotThrow() {
         Toilet toilet = new Toilet();
-        src.base.Entity body = src.util.WorldTestHelper.createBody();
+        src.entity.core.Entity body = src.util.WorldTestHelper.createBody();
         org.junit.jupiter.api.Assertions.assertDoesNotThrow(() -> toilet.checkHitObj(body));
     }
 
     @Test
     void testCheckHitObj_twoArgs_doesNotThrow() {
         Toilet toilet = new Toilet();
-        src.base.Entity body = src.util.WorldTestHelper.createBody();
+        src.entity.core.Entity body = src.util.WorldTestHelper.createBody();
         org.junit.jupiter.api.Assertions.assertDoesNotThrow(() -> toilet.checkHitObj(null, body));
     }
 

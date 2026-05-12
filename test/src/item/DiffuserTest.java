@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
 import src.base.ItemTestBase;
+import src.entity.core.world.item.Diffuser;
 
 class DiffuserTest extends ItemTestBase {
 
@@ -56,7 +57,8 @@ class DiffuserTest extends ItemTestBase {
         assertNotNull(types);
         assertEquals(Diffuser.SteamType.values().length, types.length);
         // set first type true
-        item.setSteamType(new boolean[]{true, false, false, false, false, false, false, false, false, false, false, false, false, false});
+        item.setSteamType(new boolean[] { true, false, false, false, false, false, false, false, false, false, false,
+                false, false, false });
         assertTrue(item.getSteamType()[0]);
     }
 

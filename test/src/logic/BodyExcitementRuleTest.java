@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import src.ConstState;
 import src.SimYukkuri;
-import src.base.Yukkuri;
+import src.entity.core.living.yukkuri.Yukkuri;
 import src.base.StubBodyAttributes;
 import src.enums.AgeState;
 import src.enums.PublicRank;

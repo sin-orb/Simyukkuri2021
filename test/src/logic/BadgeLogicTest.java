@@ -5,15 +5,16 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import src.SimYukkuri;
-import src.attachment.Badge;
-import src.base.Yukkuri;
+import src.entity.core.living.yukkuri.Yukkuri;
 import src.draw.World;
+import src.entity.core.attachment.Attachment;
+import src.entity.core.attachment.impl.Badge;
 import src.enums.Attitude;
 import src.enums.BodyRank;
 import src.enums.Intelligence;
 import src.util.WorldTestHelper;
-import src.yukkuri.Reimu;
-import src.attachment.Attachment;
+import src.entity.core.living.yukkuri.impl.Reimu;
+
 import java.util.List;
 
 /**
@@ -136,7 +137,7 @@ public class BadgeLogicTest {
 
     @Test
     public void testIdiotGetsFake() {
-        src.yukkuri.Tarinai yukkuri = new src.yukkuri.Tarinai();
+        src.entity.core.living.yukkuri.impl.Tarinai yukkuri = new src.entity.core.living.yukkuri.impl.Tarinai();
         yukkuri.setBodyRank(BodyRank.KAIYU);
         assertTrue(BadgeLogic.badgeTest(yukkuri));
         assertEquals(Badge.BadgeRank.FAKE, getBadgeRank(yukkuri));
@@ -163,7 +164,8 @@ public class BadgeLogicTest {
 
     /**
      * Creates a yukkuri with specified attitude and intelligence.
-     * Note: Yukkuri doesn't have setBodyRank/setIdiot setters, so we just set what we
+     * Note: Yukkuri doesn't have setBodyRank/setIdiot setters, so we just set what
+     * we
      * can.
      */
     private Reimu createKaiyuYukkuri(Attitude attitude, Intelligence intelligence) {

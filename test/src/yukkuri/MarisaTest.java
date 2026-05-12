@@ -7,12 +7,12 @@ import static org.junit.jupiter.api.Assertions.*;
 import src.ConstState;
 import src.SimYukkuri;
 import src.enums.AgeState;
-import src.base.Yukkuri;
+import src.entity.core.living.yukkuri.Yukkuri;
 import src.draw.MyPane;
 import src.system.BodyLayer;
 import src.system.ResourceUtil;
 import src.draw.Point4y;
-import src.game.Dna;
+import src.entity.core.living.yukkuri.Dna;
 import src.util.WorldTestHelper;
 
 public class MarisaTest {

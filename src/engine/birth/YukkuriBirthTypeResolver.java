@@ -1,23 +1,13 @@
 package src.engine.birth;
 
-import src.base.Yukkuri;
-import src.enums.Intelligence;
-import src.enums.Attitude;
-import src.enums.YukkuriType;
 import java.util.List;
-import src.util.GameRandom;
+
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.enums.Attitude;
+import src.enums.Intelligence;
+import src.enums.YukkuriType;
 import src.util.GameEnvironment;
-import src.yukkuri.Ayaya;
-import src.yukkuri.DosMarisa;
-import src.yukkuri.HybridYukkuri;
-import src.yukkuri.Kimeemaru;
-import src.yukkuri.Marisa;
-import src.yukkuri.MarisaKotatsumuri;
-import src.yukkuri.MarisaTsumuri;
-import src.yukkuri.Reimu;
-import src.yukkuri.Tarinai;
-import src.yukkuri.TarinaiReimu;
-import src.yukkuri.WasaReimu;
+import src.util.GameRandom;
 
 /**
  * 産まれるゆっくりの種別決定ロジック.
@@ -32,34 +22,34 @@ public final class YukkuriBirthTypeResolver {
 	 *
 	 * @return チェンジリング後のゆっくりのタイプ
 	 */
-	public static int getChangelingBabyType() {
+	public static YukkuriType getChangelingBabyType() {
 		// 66%で通常種、33%で希少種
 		if (GameRandom.nextInt(3) == 0) {
-			//希少種
-			return 1000 + GameRandom.nextInt(12);
+			// 希少種
+			return YukkuriType.fromTypeID(1000 + GameRandom.nextInt(12));
 		} else {
-			//通常種
+			// 通常種
 			int i = GameRandom.nextInt(6);
-			if (i == 0) {//まりさ
+			if (i == 0) {// まりさ
 				switch (GameRandom.nextInt(5)) {
-				case 1:
-					return 2004;//こたつむり
-				case 2:
-					return 2002;//つむり
-				default:
-					return 0;//普通のまりさ
+					case 1:
+						return YukkuriType.MARISAKOTATSUMURI;
+					case 2:
+						return YukkuriType.MARISATSUMURI;
+					default:
+						return YukkuriType.MARISA;
 				}
-			} else if (i == 1) {//れいむ
+			} else if (i == 1) {// れいむ
 				switch (GameRandom.nextInt(4)) {
-				case 2:
-					return 2001;//わされいむ
-				case 3:
-					return 2005;//でいぶ
-				default:
-					return 1;//普通のれいむ
+					case 2:
+						return YukkuriType.WASAREIMU;
+					case 3:
+						return YukkuriType.DEIBU;
+					default:
+						return YukkuriType.REIMU;
 				}
 			} else {
-				return i;
+				return YukkuriType.fromTypeID(i);
 			}
 		}
 	}
@@ -71,70 +61,70 @@ public final class YukkuriBirthTypeResolver {
 	 * @param parent 親のゆっくり（ドスチェック）
 	 * @return ランダムなタイプのゆっくりタイプ（int）
 	 */
-	public static int getRandomYukkuriType(Yukkuri parent) {
+	public static YukkuriType getRandomYukkuriType(Yukkuri parent) {
 		int babyType = 0;
 		int i = GameRandom.nextInt(5);
 		if (i == 0 || i == 1) {
 			babyType = GameRandom.nextInt(12);
 			switch (babyType) {
-			case 0: // まりさ
-			case 8:
-				babyType = getMarisaType();
-				break;
-			case 1: // れいむ
-			case 9:
-				switch (GameRandom.nextInt(5)) {
-				case 0:
-				case 2:
-					babyType = 1;//普通のれいむ
+				case 0: // まりさ
+				case 8:
+					babyType = getMarisaType();
 					break;
-				case 1:
-					babyType = 2001;//わされいむ
+				case 1: // れいむ
+				case 9:
+					switch (GameRandom.nextInt(5)) {
+						case 0:
+						case 2:
+							babyType = YukkuriType.REIMU.getTypeID();// 普通のれいむ
+							break;
+						case 1:
+							babyType = YukkuriType.WASAREIMU.getTypeID();// わされいむ
+							break;
+						case 4:
+							babyType = YukkuriType.TARINAI.getTypeID();// たりないれいむ
+							break;
+						case 3:
+							babyType = YukkuriType.DEIBU.getTypeID();// でいぶ
+							break;
+						default:
+							babyType = YukkuriType.REIMU.getTypeID();// 普通のれいむ
+					}
 					break;
-				case 4:
-					babyType = 2007;//たりないれいむ
+				case 3: // ありす
+					babyType = YukkuriType.ALICE.getTypeID();
 					break;
-				case 3:
-					babyType = 2005;//でいぶ
+				case 4: // みょん
+					babyType = YukkuriType.MYON.getTypeID();
 					break;
-				default:
-					babyType = 1;
-				}
-				break;
-			case 3: // ありす
-				babyType = 2;
-				break;
-			case 4: // みょん
-				babyType = 5;
-				break;
-			case 5: // ちぇん
-				babyType = 4;
-				break;
-			case 6: // たりないゆ
-				babyType = 2000;
-				break;
-			case 7: // ゆるさなえ
-				babyType = 1000;
-				break;
-			case 10: // ぱちゅりー
-				babyType = 3;
-				break;
-			case 11: // 希少種
-				babyType = 1000 + GameRandom.nextInt(12);
-				break;
+				case 5: // ちぇん
+					babyType = YukkuriType.CHEN.getTypeID();
+					break;
+				case 6: // たりないゆ
+					babyType = YukkuriType.TARINAI.getTypeID();
+					break;
+				case 7: // ゆるさなえ
+					babyType = YukkuriType.YURUSANAE.getTypeID();
+					break;
+				case 10: // ぱちゅりー
+					babyType = YukkuriType.PATCH.getTypeID();
+					break;
+				case 11: // 希少種
+					babyType = 1000 + GameRandom.nextInt(12);
+					break;
 			}
 		} else {
 			if (parent != null) {
-				babyType = parent.getType();
+				babyType = parent.getType().getTypeID();
 				// 親がドスなら他のまりさが均等に出る
-				if (babyType == 2006) {
+				if (babyType == YukkuriType.DOSMARISA.getTypeID()) {
 					babyType = getMarisaType();
 				}
 			} else {
 				babyType = GameRandom.nextInt(6);
 			}
 		}
-		return babyType;
+		return YukkuriType.fromTypeID(babyType);
 	}
 
 	/**
@@ -144,30 +134,30 @@ public final class YukkuriBirthTypeResolver {
 	 */
 	public static int getMarisaType() {
 		switch (GameRandom.nextInt(5)) {
-		case 1:
-			return 2004;//こたつむり
-		case 2:
-			return 2002;//つむり
-		default:
-			return 0;
+			case 1:
+				return YukkuriType.MARISAKOTATSUMURI.getTypeID();// こたつむり
+			case 2:
+				return YukkuriType.MARISATSUMURI.getTypeID();// つむり
+			default:
+				return YukkuriType.MARISA.getTypeID();
 		}
 	}
 
 	/**
 	 * createBabyDna 用の子タイプ決定.
 	 *
-	 * @param mother 母体
-	 * @param father 父体
-	 * @param iFatherType 父タイプ
-	 * @param forceCreate 強制作成フラグ
+	 * @param mother       母体
+	 * @param father       父体
+	 * @param iFatherType  父タイプ
+	 * @param forceCreate  強制作成フラグ
 	 * @param fatherDamage 父ダメージ
 	 * @return 子タイプ
 	 */
-	public static int resolveBabyType(Yukkuri mother, Yukkuri father, int iFatherType, boolean forceCreate,
+	public static YukkuriType resolveBabyType(Yukkuri mother, Yukkuri father, YukkuriType fatherType,
+			boolean forceCreate,
 			boolean fatherDamage) {
-		int babyType;
-		int motherType = mother.getType();
-		int fatherType = iFatherType;
+		YukkuriType babyType;
+		YukkuriType motherType = mother.getType();
 
 		motherType = applyAncestorReversion(mother.getAncestorList(), motherType);
 		if (father != null) {
@@ -175,19 +165,19 @@ public final class YukkuriBirthTypeResolver {
 		}
 
 		if (GameRandom.nextInt(2) == 0 && !forceCreate) {
-			return -1;
+			return null;
 		}
 
 		boolean hybrid = false;
 		boolean hybrid2 = false;
-		if ((fatherType != HybridYukkuri.type) && (motherType != HybridYukkuri.type)) {
+		if ((fatherType != YukkuriType.HYBRIDYUKKURI) && (motherType != YukkuriType.HYBRIDYUKKURI)) {
 			if (fatherType != motherType) {
 				if (GameRandom.nextInt(70) == 0) {
 					hybrid = true;
 					hybrid2 = true;
 				}
 			}
-		} else if ((fatherType == HybridYukkuri.type) && (motherType == HybridYukkuri.type)) {
+		} else if ((fatherType == YukkuriType.HYBRIDYUKKURI) && (motherType == YukkuriType.HYBRIDYUKKURI)) {
 			if (GameRandom.nextInt(20) == 0) {
 				hybrid = true;
 			}
@@ -197,7 +187,7 @@ public final class YukkuriBirthTypeResolver {
 			}
 		}
 
-		if (fatherType == DosMarisa.type || motherType == DosMarisa.type) {
+		if (fatherType == YukkuriType.DOSMARISA || motherType == YukkuriType.DOSMARISA) {
 			hybrid = false;
 		}
 
@@ -205,7 +195,7 @@ public final class YukkuriBirthTypeResolver {
 			if (hybrid2 && mother != null && GameRandom.nextBoolean()) {
 				babyType = mother.getHybridType(fatherType);
 			} else {
-				babyType = HybridYukkuri.type;
+				babyType = YukkuriType.HYBRIDYUKKURI;
 			}
 		} else {
 			if (GameRandom.nextBoolean()) {
@@ -221,14 +211,14 @@ public final class YukkuriBirthTypeResolver {
 		}
 
 		if (GameEnvironment.isHybridSteam()) {
-			if ((fatherType == Reimu.type) && (motherType == Marisa.type) && (mother != null)
+			if ((fatherType == YukkuriType.REIMU) && (motherType == YukkuriType.MARISA) && (mother != null)
 					&& GameRandom.nextBoolean()) {
 				babyType = mother.getHybridType(fatherType);
-			} else if ((fatherType == Marisa.type) && (motherType == Reimu.type) && (mother != null)
+			} else if ((fatherType == YukkuriType.MARISA) && (motherType == YukkuriType.REIMU) && (mother != null)
 					&& GameRandom.nextBoolean()) {
 				babyType = mother.getHybridType(fatherType);
 			} else if (fatherType != motherType) {
-				babyType = HybridYukkuri.type;
+				babyType = YukkuriType.HYBRIDYUKKURI;
 			}
 		}
 
@@ -236,38 +226,43 @@ public final class YukkuriBirthTypeResolver {
 		return applyConditionCorrection(mother, fatherDamage, babyType);
 	}
 
-	private static int applyAncestorReversion(List<Integer> ancestorList, int type) {
+	private static YukkuriType applyAncestorReversion(List<Integer> ancestorList, YukkuriType type) {
 		if (ancestorList != null && !ancestorList.isEmpty() && GameRandom.nextInt(100) == 0) {
-			return ancestorList.get(GameRandom.nextInt(ancestorList.size()));
+			return YukkuriType.fromTypeID(ancestorList.get(GameRandom.nextInt(ancestorList.size())));
 		}
 		return type;
 	}
 
-	private static int applyMutation(int babyType) {
-		if ((babyType == Reimu.type) && GameRandom.nextInt(20) == 0) {
-			return WasaReimu.type;
-		} else if ((babyType == WasaReimu.type) && GameRandom.nextInt(20) != 0) {
-			return Reimu.type;
-		} else if ((babyType == Marisa.type || babyType == MarisaKotatsumuri.type) && GameRandom.nextInt(20) == 0) {
-			return MarisaTsumuri.type;
-		} else if ((babyType == Marisa.type || babyType == MarisaTsumuri.type) && GameRandom.nextInt(20) == 0) {
-			return MarisaKotatsumuri.type;
-		} else if ((babyType == MarisaTsumuri.type || babyType == MarisaKotatsumuri.type) && GameRandom.nextInt(20) != 0) {
-			return Marisa.type;
-		} else if ((babyType == Kimeemaru.type) && GameRandom.nextInt(20) != 0) {
-			return Ayaya.type;
-		} else if ((babyType == Ayaya.type) && GameRandom.nextInt(20) == 0) {
-			return Kimeemaru.type;
+	private static YukkuriType applyMutation(YukkuriType babyType) {
+		if ((babyType == YukkuriType.REIMU) && GameRandom.nextInt(20) == 0) {
+			return YukkuriType.WASAREIMU;
+		} else if ((babyType == YukkuriType.WASAREIMU) && GameRandom.nextInt(20) != 0) {
+			return YukkuriType.REIMU;
+		} else if ((babyType == YukkuriType.MARISA || babyType == YukkuriType.MARISAKOTATSUMURI)
+				&& GameRandom.nextInt(20) == 0) {
+			return YukkuriType.MARISATSUMURI;
+		} else if ((babyType == YukkuriType.MARISA || babyType == YukkuriType.MARISATSUMURI)
+				&& GameRandom.nextInt(20) == 0) {
+			return YukkuriType.MARISAKOTATSUMURI;
+		} else if ((babyType == YukkuriType.MARISATSUMURI
+				|| babyType == YukkuriType.MARISAKOTATSUMURI)
+				&& GameRandom.nextInt(20) != 0) {
+			return YukkuriType.MARISA;
+		} else if ((babyType == YukkuriType.KIMEEMARU) && GameRandom.nextInt(20) != 0) {
+			return YukkuriType.AYAYA;
+		} else if ((babyType == YukkuriType.AYAYA) && GameRandom.nextInt(20) == 0) {
+			return YukkuriType.KIMEEMARU;
 		}
 		return babyType;
 	}
 
-	private static int applyConditionCorrection(Yukkuri mother, boolean fatherDamage, int babyType) {
+	private static YukkuriType applyConditionCorrection(Yukkuri mother, boolean fatherDamage, YukkuriType babyType) {
 		if (mother.isOverPregnantLimit() || mother.isSick() || mother.isDamagedHeavily() || fatherDamage) {
-			if (GameRandom.nextBoolean() && (babyType == Reimu.type || babyType == WasaReimu.type)) {
-				return TarinaiReimu.type;
+			if (GameRandom.nextBoolean()
+					&& (babyType == YukkuriType.REIMU || babyType == YukkuriType.WASAREIMU)) {
+				return YukkuriType.TARINAIREIMU;
 			}
-			return Tarinai.type;
+			return YukkuriType.TARINAI;
 		}
 		return babyType;
 	}
@@ -276,48 +271,48 @@ public final class YukkuriBirthTypeResolver {
 		if (father == null) {
 			return iFatherType;
 		}
-		return applyAncestorReversion(father.getAncestorList(), iFatherType);
+		return applyAncestorReversion(father.getAncestorList(), YukkuriType.fromTypeID(iFatherType)).getTypeID();
 	}
 
 	public static int resolveMotherType(Yukkuri mother) {
-		return applyAncestorReversion(mother.getAncestorList(), mother.getType());
+		return applyAncestorReversion(mother.getAncestorList(), mother.getType()).getTypeID();
 	}
 
 	public static Attitude resolveAttitude(Yukkuri mother, Attitude fatherrAtt) {
 		int attBase = mother.getAttitude().ordinal() + fatherrAtt.ordinal();
 		Attitude[] attitude = Attitude.values();
 		switch (attBase) {
-		case 0:
-			if (GameRandom.nextInt(20) == 0) {
-				return attitude[2 + GameRandom.nextInt(2)];
-			}
-			return attitude[GameRandom.nextInt(3)];
-		case 1:
-		case 2:
-		case 3:
-			if (GameRandom.nextInt(15) == 0) {
-				return attitude[GameRandom.nextInt(2)];
-			}
-			return attitude[1 + GameRandom.nextInt(4)];
-		case 4:
-			if (GameRandom.nextInt(10) == 0) {
+			case 0:
+				if (GameRandom.nextInt(20) == 0) {
+					return attitude[2 + GameRandom.nextInt(2)];
+				}
 				return attitude[GameRandom.nextInt(3)];
-			}
-			return attitude[1 + GameRandom.nextInt(4)];
-		case 5:
-		case 6:
-		case 7:
-			if (GameRandom.nextInt(15) == 0) {
-				return attitude[1 + GameRandom.nextInt(3)];
-			}
-			return attitude[2 + GameRandom.nextInt(3)];
-		case 8:
-			if (GameRandom.nextInt(20) == 0) {
-				return attitude[GameRandom.nextInt(3)];
-			}
-			return attitude[3 + GameRandom.nextInt(2)];
-		default:
-			return attitude[0];
+			case 1:
+			case 2:
+			case 3:
+				if (GameRandom.nextInt(15) == 0) {
+					return attitude[GameRandom.nextInt(2)];
+				}
+				return attitude[1 + GameRandom.nextInt(4)];
+			case 4:
+				if (GameRandom.nextInt(10) == 0) {
+					return attitude[GameRandom.nextInt(3)];
+				}
+				return attitude[1 + GameRandom.nextInt(4)];
+			case 5:
+			case 6:
+			case 7:
+				if (GameRandom.nextInt(15) == 0) {
+					return attitude[1 + GameRandom.nextInt(3)];
+				}
+				return attitude[2 + GameRandom.nextInt(3)];
+			case 8:
+				if (GameRandom.nextInt(20) == 0) {
+					return attitude[GameRandom.nextInt(3)];
+				}
+				return attitude[3 + GameRandom.nextInt(2)];
+			default:
+				return attitude[0];
 		}
 	}
 
@@ -325,21 +320,21 @@ public final class YukkuriBirthTypeResolver {
 		int intBase = mother.getIntelligence().ordinal() + fatherInt.ordinal();
 		Intelligence[] intel = Intelligence.values();
 		switch (intBase) {
-		case 0:
-			if (GameRandom.nextInt(15) == 0) {
-				return intel[1 + GameRandom.nextInt(2)];
-			}
-			return intel[GameRandom.nextInt(2)];
-		case 4:
-			if (GameRandom.nextInt(15) == 0) {
+			case 0:
+				if (GameRandom.nextInt(15) == 0) {
+					return intel[1 + GameRandom.nextInt(2)];
+				}
 				return intel[GameRandom.nextInt(2)];
-			}
-			return intel[1 + GameRandom.nextInt(2)];
-		default:
-			if (GameRandom.nextInt(10) == 0) {
-				return intel[GameRandom.nextInt(3)];
-			}
-			return intel[1];
+			case 4:
+				if (GameRandom.nextInt(15) == 0) {
+					return intel[GameRandom.nextInt(2)];
+				}
+				return intel[1 + GameRandom.nextInt(2)];
+			default:
+				if (GameRandom.nextInt(10) == 0) {
+					return intel[GameRandom.nextInt(3)];
+				}
+				return intel[1];
 		}
 	}
 }

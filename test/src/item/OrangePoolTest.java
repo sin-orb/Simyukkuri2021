@@ -11,11 +11,12 @@ import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
 import src.base.ItemTestBase;
-import src.base.WorldEntity;
 import src.draw.Rectangle4y;
+import src.entity.core.world.WorldEntity;
+import src.entity.core.world.item.OrangePool;
 import src.enums.AgeState;
 import src.system.Sprite;
-import src.yukkuri.Reimu;
+import src.entity.core.living.yukkuri.impl.Reimu;
 
 class OrangePoolTest extends ItemTestBase {
 
@@ -161,7 +162,8 @@ class OrangePoolTest extends ItemTestBase {
     void testLoadImages_headless_executesCode() {
         try {
             OrangePool.loadImages(OrangePool.class.getClassLoader(), null);
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
     }
 
     @Test
@@ -176,7 +178,8 @@ class OrangePoolTest extends ItemTestBase {
         OrangePool item = new OrangePool();
         try {
             OrangePool.setupOrange(item, true);
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
     }
 
     @Test
@@ -184,7 +187,8 @@ class OrangePoolTest extends ItemTestBase {
         try {
             OrangePool o = new OrangePool(100, 100, 0);
             org.junit.jupiter.api.Assertions.assertNotNull(o);
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
     }
 
     @Nested

@@ -11,7 +11,8 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
-import src.base.Entity;
+import src.entity.core.Entity;
+import src.entity.core.world.item.Food;
 import src.enums.Event;
 import src.field.impl.Pool;
 import src.field.impl.Pool.DEPTH;
@@ -191,7 +192,7 @@ class PoolTest {
     @Test
     void testGetSetAnWaterPointX() {
         Pool item = new Pool();
-        int[] pts = {10, 20, 30, 40};
+        int[] pts = { 10, 20, 30, 40 };
         item.setWaterPolygonX(pts);
         assertArrayEquals(pts, item.getWaterPolygonX());
     }
@@ -199,7 +200,7 @@ class PoolTest {
     @Test
     void testGetSetAnWaterPointY() {
         Pool item = new Pool();
-        int[] pts = {15, 25, 35, 45};
+        int[] pts = { 15, 25, 35, 45 };
         item.setWaterPolygonY(pts);
         assertArrayEquals(pts, item.getWaterPolygonY());
     }
@@ -212,7 +213,8 @@ class PoolTest {
         assertFalse(item.checkHitObj(null));
     }
 
-    // checkHitObj with a non-null obj calls checkContain() → invertLimit() which requires
+    // checkHitObj with a non-null obj calls checkContain() → invertLimit() which
+    // requires
     // full Translate field initialization. Only the null-check path is tested here.
     @Test
     void testCheckHitObj_Null_ReturnsFalse2() {
@@ -372,7 +374,8 @@ class PoolTest {
     @Test
     void testDrawPreview_doesNotThrow() {
         WorldTestHelper.initializeStandardTranslate200();
-        java.awt.image.BufferedImage img = new java.awt.image.BufferedImage(800, 600, java.awt.image.BufferedImage.TYPE_INT_RGB);
+        java.awt.image.BufferedImage img = new java.awt.image.BufferedImage(800, 600,
+                java.awt.image.BufferedImage.TYPE_INT_RGB);
         java.awt.Graphics2D g2 = img.createGraphics();
         assertDoesNotThrow(() -> Pool.drawPreview(g2, 10, 10, 100, 100));
         g2.dispose();
@@ -385,7 +388,8 @@ class PoolTest {
         WorldTestHelper.initializeStandardTranslate200();
         Pool item = new Pool();
         item.setMapPos(100, 100, 300, 300);
-        java.awt.image.BufferedImage img = new java.awt.image.BufferedImage(800, 600, java.awt.image.BufferedImage.TYPE_INT_RGB);
+        java.awt.image.BufferedImage img = new java.awt.image.BufferedImage(800, 600,
+                java.awt.image.BufferedImage.TYPE_INT_RGB);
         java.awt.Graphics2D g2 = img.createGraphics();
         assertDoesNotThrow(() -> item.drawShape(g2));
         g2.dispose();
@@ -416,8 +420,10 @@ class PoolTest {
     void testObjHitProcess_BodyInsidePool_executesCode() {
         Pool item = new Pool();
         item.setMapPos(0, 0, 1000, 1000);
-        src.base.Yukkuri body = WorldTestHelper.createBody();
-        body.setX(200); body.setY(200); body.setZ(0);
+        src.entity.core.living.yukkuri.Yukkuri body = WorldTestHelper.createBody();
+        body.setX(200);
+        body.setY(200);
+        body.setZ(0);
         try {
             item.objHitProcess(body);
         } catch (NullPointerException e) {

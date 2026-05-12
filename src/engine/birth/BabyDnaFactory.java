@@ -1,9 +1,10 @@
 package src.engine.birth;
 
-import src.base.Yukkuri;
+import src.entity.core.living.yukkuri.Dna;
+import src.entity.core.living.yukkuri.Yukkuri;
 import src.enums.Attitude;
 import src.enums.Intelligence;
-import src.game.Dna;
+import src.enums.YukkuriType;
 
 /**
  * 赤ゆDNAの組み立て.
@@ -12,13 +13,14 @@ public final class BabyDnaFactory {
 	private BabyDnaFactory() {
 	}
 
-	public static Dna createBabyDna(Yukkuri mother, Yukkuri father, int iFatherType, Attitude fatherrAtt,
+	public static Dna createBabyDna(Yukkuri mother, Yukkuri father, YukkuriType fatherType, Attitude fatherrAtt,
 			Intelligence fatherInt, boolean isRape, boolean fatherDamage, boolean forceCreate) {
 		if (mother == null) {
 			return null;
 		}
-		int babyType = YukkuriBirthTypeResolver.resolveBabyType(mother, father, iFatherType, forceCreate, fatherDamage);
-		if (babyType < 0) {
+		YukkuriType babyType = YukkuriBirthTypeResolver.resolveBabyType(mother, father, fatherType, forceCreate,
+				fatherDamage);
+		if (babyType == null) {
 			return null;
 		}
 		Dna ret = new Dna();

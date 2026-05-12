@@ -1,8 +1,6 @@
 package src.logic;
 
-import src.base.Yukkuri;
-
-
+import src.entity.core.living.yukkuri.Yukkuri;
 import src.enums.BodyRank;
 import src.util.GameRandom;
 

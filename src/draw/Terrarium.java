@@ -1,119 +1,44 @@
 package src.draw;
-import src.util.GameView;
 
 import java.awt.Rectangle;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
-import java.io.DataOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.security.GeneralSecurityException;
-import java.security.SecureRandom;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Enumeration;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.zip.GZIPInputStream;
-import java.util.zip.GZIPOutputStream;
-
-import javax.crypto.Cipher;
-import javax.crypto.Mac;
-import javax.crypto.spec.IvParameterSpec;
-import javax.crypto.spec.SecretKeySpec;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 import src.SimYukkuri;
-import src.util.GameRandom;
-import src.util.GameWorld;
-import src.attachment.Fire;
-import src.base.Yukkuri;
-import src.effect.Effect;
-import src.base.Entity;
-import src.base.WorldEntity;
-import src.entity.world.bodylinked.Okazari;
-import src.command.GadgetAction;
-import src.effect.BakeSmoke;
-import src.effect.Hit;
-import src.effect.Mix;
-import src.effect.Steam;
+import src.entity.core.Entity;
+import src.entity.core.attachment.impl.Fire;
+import src.entity.core.effect.Effect;
+import src.entity.core.living.yukkuri.Dna;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.world.bodylinked.Stalk;
+import src.entity.core.world.item.AutoFeeder;
+import src.entity.core.world.item.Diffuser;
+import src.entity.core.world.item.Food;
+import src.entity.core.world.item.GarbageChute;
+import src.entity.core.world.item.GarbageStation;
+import src.entity.core.world.item.HotPlate;
+import src.entity.core.world.item.Mixer;
+import src.entity.core.world.item.StickyPlate;
+import src.entity.core.world.item.Sui;
+import src.entity.core.world.item.Yunba;
+import src.entity.core.world.mobile.Shit;
+import src.entity.core.world.mobile.Vomit;
 import src.enums.AgeState;
 import src.enums.EffectType;
-import src.enums.Event;
 import src.enums.Numbering;
-import src.enums.WorldEntityKind;
-import src.enums.PanicType;
 import src.enums.YukkuriType;
-import src.game.Dna;
-import src.game.Shit;
-import src.game.Stalk;
-import src.game.Vomit;
 import src.field.impl.Barrier;
-import src.item.AutoFeeder;
-import src.field.impl.Beltconveyor;
-import src.item.Diffuser;
-import src.field.impl.Farm;
-import src.item.Food;
-import src.item.GarbageChute;
-import src.item.GarbageStation;
-import src.item.HotPlate;
-import src.item.Mixer;
-import src.field.impl.Pool;
-import src.item.StickyPlate;
-import src.item.Sui;
-import src.item.Toilet;
-import src.item.Toy;
-import src.item.Yunba;
-import src.logic.BedLogic;
-import src.logic.BodyLogic;
-import src.logic.EventLogic;
-import src.logic.FamilyActionLogic;
-import src.logic.FoodLogic;
-import src.logic.StoneLogic;
-import src.logic.ToiletLogic;
-import src.field.FieldShape;
 import src.system.MainCommandUI;
 import src.system.MapPlaceData;
-import src.yukkuri.Alice;
-import src.yukkuri.Ayaya;
-import src.yukkuri.Chen;
-import src.yukkuri.Chiruno;
-import src.yukkuri.Deibu;
-import src.yukkuri.DosMarisa;
-import src.yukkuri.Eiki;
-import src.yukkuri.Fran;
-import src.yukkuri.HybridYukkuri;
-import src.yukkuri.Kimeemaru;
-import src.yukkuri.Marisa;
-import src.yukkuri.MarisaKotatsumuri;
-import src.yukkuri.MarisaReimu;
-import src.yukkuri.MarisaTsumuri;
-import src.yukkuri.Meirin;
-import src.yukkuri.Myon;
-import src.yukkuri.Nitori;
-import src.yukkuri.Patch;
-import src.yukkuri.Ran;
-import src.yukkuri.Reimu;
-import src.yukkuri.ReimuMarisa;
-import src.yukkuri.Remirya;
-import src.yukkuri.Sakuya;
-import src.yukkuri.Suwako;
-import src.yukkuri.Tarinai;
-import src.yukkuri.TarinaiReimu;
-import src.yukkuri.Tenko;
-import src.yukkuri.Udonge;
-import src.yukkuri.WasaReimu;
-import src.yukkuri.Yurusanae;
-import src.yukkuri.Yuuka;
-import src.yukkuri.Yuyuko;
+import src.util.GameView;
+import src.util.GameWorld;
 
 /***************************************************
  * 各種オブジェクトの更新命令の発令所
@@ -354,7 +279,8 @@ public class Terrarium implements Serializable {
 				Yukkuri restoredOwner = null;
 				int restoredBindCount = 0;
 
-				if (sui.getBindobj() instanceof Yukkuri && ((Yukkuri) sui.getBindobj()).getParentLinkId() == sui.getObjId()) {
+				if (sui.getBindobj() instanceof Yukkuri
+						&& ((Yukkuri) sui.getBindobj()).getParentLinkId() == sui.getObjId()) {
 					restoredOwner = (Yukkuri) sui.getBindobj();
 				}
 
@@ -677,7 +603,7 @@ public class Terrarium implements Serializable {
 	 * @param buildNewFamily 家族を作成するかどうか
 	 * @return 生成したゆっくり
 	 */
-	public Yukkuri makeBody(int x, int y, int z, int type, Dna dna, AgeState age, Yukkuri p1, Yukkuri p2,
+	public Yukkuri makeBody(int x, int y, int z, YukkuriType type, Dna dna, AgeState age, Yukkuri p1, Yukkuri p2,
 			boolean buildNewFamily) {
 		Yukkuri b = BodyFactory.create(x, y, z, type, dna, age, p1, p2, buildNewFamily,
 				TerrariumViewBridge::loadBodyImageSafe,
@@ -698,7 +624,7 @@ public class Terrarium implements Serializable {
 	 * @param p2   父親
 	 * @return 生成したゆっくり
 	 */
-	public Yukkuri addBody(int x, int y, int z, int type, AgeState age, Yukkuri p1, Yukkuri p2) {
+	public Yukkuri addBody(int x, int y, int z, YukkuriType type, AgeState age, Yukkuri p1, Yukkuri p2) {
 		Yukkuri ret = makeBody(x, y, z, type, null, age, p1, p2, true);
 		TerrariumBodyRegistry.register(ret);
 		return ret;

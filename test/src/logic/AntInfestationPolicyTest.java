@@ -8,9 +8,9 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
+import src.entity.core.attachment.impl.Ants;
 import src.ConstState;
-import src.attachment.Ants;
-import src.yukkuri.Reimu;
+import src.entity.core.living.yukkuri.impl.Reimu;
 import src.util.WorldTestHelper;
 
 public class AntInfestationPolicyTest {
@@ -57,7 +57,7 @@ public class AntInfestationPolicyTest {
 		body.setAge(100000);
 		body.setDirty(true);
 		body.setHasBaby(true);
-		body.getBabyTypes().add(new src.game.Dna());
+		body.getBabyTypes().add(new src.entity.core.living.yukkuri.Dna());
 
 		AntInfestationPolicy.judgeNewAnt(body);
 

@@ -14,16 +14,16 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import src.base.Entity;
+import src.entity.core.Entity;
 import src.system.IniFileReader;
 import src.system.MapWindow;
 import src.visual.TerrainBillboard;
 
 /***********************************************************
-
-	背景データクラス
-
-*/
+ * 
+ * 背景データクラス
+ * 
+ */
 public class TerrainField implements Serializable {
 
 	private static final long serialVersionUID = 2617040226660851211L;
@@ -69,7 +69,7 @@ public class TerrainField implements Serializable {
 	// 時間帯空気色
 	private static Color[][] defaultDayColor = {
 			{ new Color(0, 0, 71, 12), new Color(0, 0, 73, 57) }, // 朝
-			{ null, null }, // 昼	
+			{ null, null }, // 昼
 			{ new Color(255, 54, 19, 37), new Color(177, 72, 49, 21) }, // 夕
 			{ new Color(0, 0, 20, 113), new Color(0, 0, 40, 70) }, // 夜
 	};
@@ -98,7 +98,7 @@ public class TerrainField implements Serializable {
 		scaleRateW = (double) Translate.getBufferW() / (double) BG_W;
 		scaleRateH = (double) Translate.getBufferH() / (double) BG_H;
 		try {
-			//現在いるマップの種類(室内、路上1/2、加工所1/2、、、といったもの)
+			// 現在いるマップの種類(室内、路上1/2、加工所1/2、、、といったもの)
 			String mapName = MapWindow.MAP.values()[index].getFilePath();
 			// 読み込みフォーマット判定
 			reader = ModLoader.loadTerrainData(loader, mapName, BG_FILE_NAME, OLD_BG_NAME);
@@ -149,7 +149,8 @@ public class TerrainField implements Serializable {
 
 	/**
 	 * バックグラウンドイメージを描画する.
-	 * @param g2 Graphics2D
+	 * 
+	 * @param g2  Graphics2D
 	 * @param obs イメージオブザーバ
 	 */
 	public static void drawBackGroundImage(Graphics2D g2, ImageObserver obs) {
@@ -158,7 +159,8 @@ public class TerrainField implements Serializable {
 
 	/**
 	 * 空の色を取得する.
-	 * @param idx インデックス 
+	 * 
+	 * @param idx インデックス
 	 * @return 空の色
 	 */
 	public static LinearGradientPaint getSkyGrad(int idx) {
@@ -167,6 +169,7 @@ public class TerrainField implements Serializable {
 
 	/**
 	 * INIファイルキーが"Objcet"のものを取得する.
+	 * 
 	 * @return 構造物リスト
 	 */
 	public static List<Entity> getStructList() {
@@ -175,6 +178,7 @@ public class TerrainField implements Serializable {
 
 	/**
 	 * 旧フォーマットかどうかを取得する.
+	 * 
 	 * @return 旧フォーマットかどうか
 	 */
 	public static boolean isPers() {
@@ -183,6 +187,7 @@ public class TerrainField implements Serializable {
 
 	/**
 	 * オーナータイプ（旧フォーマットの場合は0）を取得する.
+	 * 
 	 * @return オーナータイプ
 	 */
 	@Transient
@@ -192,7 +197,8 @@ public class TerrainField implements Serializable {
 
 	/**
 	 * フロアを描画する.
-	 * @param g2 Graphics2D
+	 * 
+	 * @param g2  Graphics2D
 	 * @param obs イメージオブザーバ
 	 */
 	public static void drawFloor(Graphics2D g2, ImageObserver obs) {
@@ -204,7 +210,8 @@ public class TerrainField implements Serializable {
 
 	/**
 	 * 天井を描画する.
-	 * @param g2 Graphics2D
+	 * 
+	 * @param g2  Graphics2D
 	 * @param obs イメージオブザーバ
 	 */
 	public static void drawCeiling(Graphics2D g2, ImageObserver obs) {
@@ -216,10 +223,11 @@ public class TerrainField implements Serializable {
 
 	/**
 	 * 背景アセット読み込み
-	 * @param loader ローダ
-	 * @param ini INIファイルリーダ
+	 * 
+	 * @param loader  ローダ
+	 * @param ini     INIファイルリーダ
 	 * @param mapName マップ名
-	 * @param io イメージオブザーバ
+	 * @param io      イメージオブザーバ
 	 */
 	private static void loadTerrainAsset(ClassLoader loader, IniFileReader ini, String mapName, ImageObserver io) {
 
@@ -237,78 +245,78 @@ public class TerrainField implements Serializable {
 			String value = map.get(IniFileReader.INI_VALUE);
 
 			switch (section) {
-			case SECTION_ASSET:
-				switch (key) {
-				case ASSET_IMG:
-					try {
-						BufferedImage img = ModLoader.loadBackImage(loader, mapName, value);
-						assetMap.put(value, img);
-					} catch (IOException e) {
-						e.printStackTrace();
+				case SECTION_ASSET:
+					switch (key) {
+						case ASSET_IMG:
+							try {
+								BufferedImage img = ModLoader.loadBackImage(loader, mapName, value);
+								assetMap.put(value, img);
+							} catch (IOException e) {
+								e.printStackTrace();
+							}
+							break;
+						default:
+							break;
 					}
 					break;
-				default:
+				case SECTION_ENV:
+					switch (key) {
+						case ENV_BASE:
+							backGround = assetMap.get(value);
+							bgXform = new AffineTransform(scaleRateW, 0.0, 0.0, scaleRateH, 0.0, 0.0);
+							break;
+						case ENV_TOP_MORNING:
+							setSkyColor(topCol, 0, value);
+							break;
+						case ENV_BOTTOM_MORNING:
+							setSkyColor(botCol, 0, value);
+							break;
+						case ENV_TOP_DAY:
+							setSkyColor(topCol, 1, value);
+							break;
+						case ENV_BOTTOM_DAY:
+							setSkyColor(botCol, 1, value);
+							break;
+						case ENV_TOP_EVENING:
+							setSkyColor(topCol, 2, value);
+							break;
+						case ENV_BOTTOM_EVENING:
+							setSkyColor(botCol, 2, value);
+							break;
+						case ENV_TOP_NIGHT:
+							setSkyColor(topCol, 3, value);
+							break;
+						case ENV_BOTTOM_NIGHT:
+							setSkyColor(botCol, 3, value);
+							break;
+						default:
+							break;
+					}
 					break;
-				}
-				break;
-			case SECTION_ENV:
-				switch (key) {
-				case ENV_BASE:
-					backGround = assetMap.get(value);
-					bgXform = new AffineTransform(scaleRateW, 0.0, 0.0, scaleRateH, 0.0, 0.0);
+				case SECTION_OBJ:
+					board = createBillboard(0, key, value, io);
+					structList.add(board);
 					break;
-				case ENV_TOP_MORNING:
-					setSkyColor(topCol, 0, value);
+				case SECTION_FLOOR:
+					board = createBillboard(1, key, value, io);
+					floorList.add(board);
 					break;
-				case ENV_BOTTOM_MORNING:
-					setSkyColor(botCol, 0, value);
+				case SECTION_CEIL:
+					board = createBillboard(2, key, value, io);
+					ceilingList.add(board);
 					break;
-				case ENV_TOP_DAY:
-					setSkyColor(topCol, 1, value);
+				case SECTION_OWNER:
+					switch (key) {
+						case OWN_PERS:
+							setPers(key, value);
+							break;
+						case OWN_OWNER:
+							setOwner(key, value);
+							break;
+						default:
+							break;
+					}
 					break;
-				case ENV_BOTTOM_DAY:
-					setSkyColor(botCol, 1, value);
-					break;
-				case ENV_TOP_EVENING:
-					setSkyColor(topCol, 2, value);
-					break;
-				case ENV_BOTTOM_EVENING:
-					setSkyColor(botCol, 2, value);
-					break;
-				case ENV_TOP_NIGHT:
-					setSkyColor(topCol, 3, value);
-					break;
-				case ENV_BOTTOM_NIGHT:
-					setSkyColor(botCol, 3, value);
-					break;
-				default:
-					break;
-				}
-				break;
-			case SECTION_OBJ:
-				board = createBillboard(0, key, value, io);
-				structList.add(board);
-				break;
-			case SECTION_FLOOR:
-				board = createBillboard(1, key, value, io);
-				floorList.add(board);
-				break;
-			case SECTION_CEIL:
-				board = createBillboard(2, key, value, io);
-				ceilingList.add(board);
-				break;
-			case SECTION_OWNER:
-				switch (key) {
-				case OWN_PERS:
-					setPers(key, value);
-					break;
-				case OWN_OWNER:
-					setOwner(key, value);
-					break;
-				default:
-					break;
-				}
-				break;
 			}
 		}
 		ini.close();
@@ -334,9 +342,10 @@ public class TerrainField implements Serializable {
 	}
 
 	/**
-	 *  空の色をデコード
-	 * @param col 色
-	 * @param i 色のインデックス
+	 * 空の色をデコード
+	 * 
+	 * @param col   色
+	 * @param i     色のインデックス
 	 * @param value カンマ区切り前のrgba文字列
 	 */
 	private static void setSkyColor(Color[] col, int i, String value) {
@@ -351,11 +360,12 @@ public class TerrainField implements Serializable {
 	}
 
 	/**
-	 *  スプライトをデコード
-	 * @param type タイプ（0だとソートあり）
-	 * @param key 取得キー
+	 * スプライトをデコード
+	 * 
+	 * @param type  タイプ（0だとソートあり）
+	 * @param key   取得キー
 	 * @param value x,y,zのカンマ区切り文字列
-	 * @param io イメージオブザーバ
+	 * @param io    イメージオブザーバ
 	 * @return 背景部品画像管理クラスのオブジェクト
 	 */
 	private static TerrainBillboard createBillboard(int type, String key, String value, ImageObserver io) {
@@ -372,30 +382,30 @@ public class TerrainField implements Serializable {
 		z = Double.valueOf(pos[2]);
 
 		switch (type) {
-		case 0:
-			// ストラクチャは表示ソートがあるのでobjの座標も計算
-			ret = new TerrainBillboard(assetMap.get(key));
-			ret.scale(scaleRateW, scaleRateH);
-			w = (int) ((double) ret.getImage().getWidth(io) * scaleRateW);
-			h = (int) ((double) ret.getImage().getHeight(io) * scaleRateH);
-			pivX = x * (double) Translate.getBufferW() - ((double) w * 0.5);
-			pivY = (y * (double) Translate.getBufferH() - z * (double) Translate.getBufferH()) - ((double) h - 1.0);
-			ret.trans(pivX, pivY);
-			int oy = (int) (y * (double) Translate.getBufferH());
-			ret.setCalcY(Translate.invertBgY(oy));
-			break;
-		case 1:
-		case 2:
-		default:
-			// 最前面、最下面はソートの必要が無いので描画座標は固定
-			ret = new TerrainBillboard(assetMap.get(key));
-			ret.scale(scaleRateW, scaleRateH);
-			w = (int) ((double) ret.getImage().getWidth(io) * scaleRateW);
-			h = (int) ((double) ret.getImage().getHeight(io) * scaleRateH);
-			pivX = x * (double) Translate.getBufferW() - ((double) w * 0.5);
-			pivY = (y * (double) Translate.getBufferH() - z * (double) Translate.getBufferH()) - ((double) h * 0.5);
-			ret.trans(pivX, pivY);
-			break;
+			case 0:
+				// ストラクチャは表示ソートがあるのでobjの座標も計算
+				ret = new TerrainBillboard(assetMap.get(key));
+				ret.scale(scaleRateW, scaleRateH);
+				w = (int) ((double) ret.getImage().getWidth(io) * scaleRateW);
+				h = (int) ((double) ret.getImage().getHeight(io) * scaleRateH);
+				pivX = x * (double) Translate.getBufferW() - ((double) w * 0.5);
+				pivY = (y * (double) Translate.getBufferH() - z * (double) Translate.getBufferH()) - ((double) h - 1.0);
+				ret.trans(pivX, pivY);
+				int oy = (int) (y * (double) Translate.getBufferH());
+				ret.setCalcY(Translate.invertBgY(oy));
+				break;
+			case 1:
+			case 2:
+			default:
+				// 最前面、最下面はソートの必要が無いので描画座標は固定
+				ret = new TerrainBillboard(assetMap.get(key));
+				ret.scale(scaleRateW, scaleRateH);
+				w = (int) ((double) ret.getImage().getWidth(io) * scaleRateW);
+				h = (int) ((double) ret.getImage().getHeight(io) * scaleRateH);
+				pivX = x * (double) Translate.getBufferW() - ((double) w * 0.5);
+				pivY = (y * (double) Translate.getBufferH() - z * (double) Translate.getBufferH()) - ((double) h * 0.5);
+				ret.trans(pivX, pivY);
+				break;
 		}
 		return ret;
 	}

@@ -1,19 +1,15 @@
 package src.logic;
 
-import src.base.Yukkuri;
-
 import java.util.Map;
 
-import src.attachment.Ants;
-import src.attachment.Fire;
-import src.base.Yukkuri;
-import src.entity.world.bodylinked.Okazari.OkazariType;
 import src.draw.Translate;
-import src.enums.AgeState;
+import src.entity.core.attachment.impl.Fire;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.world.bodylinked.Okazari.OkazariType;
 import src.enums.BurialState;
 import src.enums.PanicType;
 import src.enums.PublicRank;
-import src.event.KillPredeatorEvent;
+import src.event.impl.KillPredeatorEvent;
 import src.field.impl.Barrier;
 import src.util.GameEnvironment;
 import src.util.GameRandom;
@@ -92,11 +88,15 @@ public final class BodyPartnerSearchRule {
 					body.setPanic(false, null);
 					body.setAngry();
 				} else {
-					int distance = Translate.distance(body.getX(), body.getY(), candidateBody.getX(), candidateBody.getY());
-					if (candidateBody.isPredatorType() && distance <= body.getEyesightBase() && body.getPanicType() == null) {
-						if (body.canAction() && !body.isPredatorType() && !candidateBody.isFamily(body) && !body.isSleeping()) {
+					int distance = Translate.distance(body.getX(), body.getY(), candidateBody.getX(),
+							candidateBody.getY());
+					if (candidateBody.isPredatorType() && distance <= body.getEyesightBase()
+							&& body.getPanicType() == null) {
+						if (body.canAction() && !body.isPredatorType() && !candidateBody.isFamily(body)
+								&& !body.isSleeping()) {
 							if (candidateBody.getZ() < Translate.getFlyHeightLimit() || body.canflyCheck()) {
-								if (!Barrier.acrossBarrier(body.getX(), body.getY(), candidateBody.getX(), candidateBody.getY(),
+								if (!Barrier.acrossBarrier(body.getX(), body.getY(), candidateBody.getX(),
+										candidateBody.getY(),
 										Barrier.MAP_BODY[body.getBodyAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
 									if (body.isNotNYD() && !body.isNeedled() && !body.isRaper()) {
 										body.setPanic(true, PanicType.REMIRYA);
@@ -119,7 +119,8 @@ public final class BodyPartnerSearchRule {
 					continue;
 				}
 				if (body.isRaper()) {
-					if ((candidateBody.isDead() && candidateBody.isCrushed()) || candidateBody.isUnBirth() || candidateBody.isRaper()) {
+					if ((candidateBody.isDead() && candidateBody.isCrushed()) || candidateBody.isUnBirth()
+							|| candidateBody.isRaper()) {
 						continue;
 					}
 				} else {
@@ -130,7 +131,8 @@ public final class BodyPartnerSearchRule {
 						if (body.getPublicRank() != candidateBody.getPublicRank()) {
 							continue;
 						}
-						if (body.getBodyAgeState().ordinal() > candidateBody.getBodyAgeState().ordinal() || candidateBody.isChild(body)
+						if (body.getBodyAgeState().ordinal() > candidateBody.getBodyAgeState().ordinal()
+								|| candidateBody.isChild(body)
 								|| candidateBody.isParent(body)) {
 							continue;
 						}
@@ -165,10 +167,12 @@ public final class BodyPartnerSearchRule {
 					targetBody = candidateBody;
 				}
 			}
-			if (!body.hasOkazari() && candidateBody.hasOkazari() && body.getBodyAgeState() == candidateBody.getBodyAgeState()
+			if (!body.hasOkazari() && candidateBody.hasOkazari()
+					&& body.getBodyAgeState() == candidateBody.getBodyAgeState()
 					&& body.getType() == candidateBody.getType() && !body.isHybrid()
 					&& candidateBody.getOkazari().getOkazariType() == OkazariType.DEFAULT
-					&& (candidateBody.getPublicRank() == PublicRank.NONE || body.getPublicRank() == PublicRank.UnunSlave)
+					&& (candidateBody.getPublicRank() == PublicRank.NONE
+							|| body.getPublicRank() == PublicRank.UnunSlave)
 					&& !body.isLockmove()) {
 				if (body.isRude()) {
 					bodyHasOkazari = candidateBody;

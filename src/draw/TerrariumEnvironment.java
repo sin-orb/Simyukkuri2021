@@ -1,6 +1,6 @@
 package src.draw;
 
-import src.item.Diffuser;
+import src.entity.core.world.item.Diffuser;
 
 /**
  * Terrarium の全体環境状態を保持する。

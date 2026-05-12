@@ -11,7 +11,7 @@ import src.draw.World;
 import src.draw.MyPane;
 import src.draw.Terrarium;
 import src.enums.*;
-import src.event.BegForLifeEvent;
+import src.event.impl.BegForLifeEvent;
 import src.util.WorldTestHelper;
 import java.security.SecureRandom;
 import java.lang.reflect.Method;

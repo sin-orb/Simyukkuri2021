@@ -3,14 +3,14 @@ package src.logic;
 import java.util.List;
 import java.util.Map;
 
-import src.base.Yukkuri;
-import src.base.Entity;
 import src.draw.Translate;
-import src.field.impl.Barrier;
-import src.item.Food;
-import src.game.Shit;
-import src.game.Vomit;
+import src.entity.core.Entity;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.world.bodylinked.Stalk;
+import src.entity.core.world.mobile.Shit;
+import src.entity.core.world.mobile.Vomit;
 import src.enums.BurialState;
+import src.field.impl.Barrier;
 import src.util.GameWorld;
 
 /**
@@ -24,7 +24,8 @@ public final class FoodPredatorFallbackPolicy {
 	/**
 	 * 残りの食候補を探索する.
 	 */
-	public static Entity searchFallbackFood(Yukkuri body, Entity nearestFood, Entity fallbackFood, int nearestDistance, int wallMode) {
+	public static Entity searchFallbackFood(Yukkuri body, Entity nearestFood, Entity fallbackFood, int nearestDistance,
+			int wallMode) {
 		if (nearestFood == null && body.isFull()) {
 			return nearestFood;
 		}
@@ -32,8 +33,8 @@ public final class FoodPredatorFallbackPolicy {
 		Entity selectedFood = nearestFood;
 
 		// 非常食検索
-		for (Map.Entry<Integer, src.game.Stalk> entry : GameWorld.get().getCurrentMap().getStalk().entrySet()) {
-			src.game.Stalk stalk = entry.getValue();
+		for (Map.Entry<Integer, Stalk> entry : GameWorld.get().getCurrentMap().getStalk().entrySet()) {
+			Stalk stalk = entry.getValue();
 			Yukkuri plantBody = GameWorld.get().getCurrentMap().getBody().get(stalk.getPlantYukkuri());
 			if (plantBody != null) {
 				if (plantBody == body) {

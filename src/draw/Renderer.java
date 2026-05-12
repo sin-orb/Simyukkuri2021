@@ -11,30 +11,31 @@ import java.util.Collections;
 import java.util.List;
 
 import src.SimYukkuri;
-import src.base.Yukkuri;
-import src.effect.Effect;
-import src.base.Entity;
-import src.base.WorldEntity;
 import src.command.GadgetMenu;
 import src.command.GadgetMenu.GadgetList;
 import src.command.GadgetMenu.MainCategoryName;
+import src.entity.core.Entity;
+import src.entity.core.effect.Effect;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.world.WorldEntity;
+import src.entity.core.world.item.BeltconveyorObj;
+import src.entity.core.world.mobile.Shit;
+import src.entity.core.world.mobile.Vomit;
 import src.enums.AgeState;
-import src.game.Shit;
-import src.game.Vomit;
+import src.enums.YukkuriType;
+import src.field.FieldShape;
 import src.field.impl.Barrier;
 import src.field.impl.Beltconveyor;
-import src.item.BeltconveyorObj;
 import src.field.impl.Farm;
 import src.field.impl.Pool;
-import src.field.FieldShape;
 import src.system.IconPool;
 import src.system.LoggerYukkuri;
 import src.system.MainCommandUI;
 import src.system.MapPlaceData;
 import src.system.Sprite;
-import src.util.GameWorld;
-import src.util.GameEnvironment;
 import src.util.BodyUtil;
+import src.util.GameEnvironment;
+import src.util.GameWorld;
 import src.visual.TerrainBillboard;
 
 final class Renderer {
@@ -92,7 +93,8 @@ final class Renderer {
 				} else {
 					for (int j = 0; j < layerCount; j++) {
 						pane.getBackBufferG2().drawImage(pane.getLayerTmp()[j], pane.getTmpRect().getX(),
-								pane.getTmpRect().getY(), pane.getTmpRect().getWidth(), pane.getTmpRect().getHeight(), pane);
+								pane.getTmpRect().getY(), pane.getTmpRect().getWidth(), pane.getTmpRect().getHeight(),
+								pane);
 					}
 				}
 			}
@@ -131,26 +133,30 @@ final class Renderer {
 							drawShadow = false;
 						}
 						if (drawShadow && body.isShadowVisible() && !body.isUnBirth() && 0 <= body.getZ()) {
-							if (body.getType() == src.yukkuri.Remirya.type && body.isImageNagasiMode()) {
+							if (body.getType() == YukkuriType.REMIRYA && body.isImageNagasiMode()) {
 								pane.getBackBufferG2().drawImage(body.getShadowImage(),
 										bodyExpandedSprite.getScreenRect()[direction].getX(),
 										bodyExpandedSprite.getScreenRect()[direction].getY()
-												+ bodyExpandedSprite.getScreenRect()[direction].getHeight() * 11 / 12 - shadowHeight,
+												+ bodyExpandedSprite.getScreenRect()[direction].getHeight() * 11 / 12
+												- shadowHeight,
 										bodyExpandedSprite.getScreenRect()[direction].getWidth(), shadowHeight, pane);
 							} else {
 								pane.getBackBufferG2().drawImage(body.getShadowImage(),
 										bodyExpandedSprite.getScreenRect()[direction].getX(),
 										bodyExpandedSprite.getScreenRect()[direction].getY()
-												+ bodyExpandedSprite.getScreenRect()[direction].getHeight() - shadowHeight,
+												+ bodyExpandedSprite.getScreenRect()[direction].getHeight()
+												- shadowHeight,
 										bodyExpandedSprite.getScreenRect()[direction].getWidth(), shadowHeight, pane);
 							}
 						}
 						int zOffset = Translate.translateZ(body.getZ());
 						bodyBaseSprite.getScreenRect()[0].setY(bodyBaseSprite.getScreenRect()[0].getY() - zOffset);
-						bodyExpandedSprite.getScreenRect()[0].setY(bodyExpandedSprite.getScreenRect()[0].getY() - zOffset);
+						bodyExpandedSprite.getScreenRect()[0]
+								.setY(bodyExpandedSprite.getScreenRect()[0].getY() - zOffset);
 						braidSprite.getScreenRect()[0].setY(braidSprite.getScreenRect()[0].getY() - zOffset);
 						bodyBaseSprite.getScreenRect()[1].setY(bodyBaseSprite.getScreenRect()[1].getY() - zOffset);
-						bodyExpandedSprite.getScreenRect()[1].setY(bodyExpandedSprite.getScreenRect()[1].getY() - zOffset);
+						bodyExpandedSprite.getScreenRect()[1]
+								.setY(bodyExpandedSprite.getScreenRect()[1].getY() - zOffset);
 						braidSprite.getScreenRect()[1].setY(braidSprite.getScreenRect()[1].getY() - zOffset);
 						body.setScreenPivot(pane.getTmpPoint());
 						body.setScreenRect(bodyExpandedSprite.getScreenRect()[0]);
@@ -168,7 +174,8 @@ final class Renderer {
 					case SHIT: {
 						Shit shit = (Shit) o;
 						pane.calcDrawPosition(shit, pane.getTmpRect());
-						if (MyPane.getDrawShadowShitBaby() == 1 || shit.getAgeState() != AgeState.BABY || 0 < shit.getZ()) {
+						if (MyPane.getDrawShadowShitBaby() == 1 || shit.getAgeState() != AgeState.BABY
+								|| 0 < shit.getZ()) {
 							pane.getBackBufferG2().drawImage(shit.getShadowImage(), pane.getTmpRect().getX(),
 									pane.getTmpRect().getY(), pane.getTmpRect().getWidth(),
 									pane.getTmpRect().getHeight(), pane);
@@ -182,7 +189,8 @@ final class Renderer {
 					case VOMIT: {
 						Vomit vomit = (Vomit) o;
 						pane.calcDrawPosition(vomit, pane.getTmpRect());
-						if (MyPane.getDrawShadowVomitBaby() == 1 || vomit.getAgeState() != AgeState.BABY || 0 < vomit.getZ()) {
+						if (MyPane.getDrawShadowVomitBaby() == 1 || vomit.getAgeState() != AgeState.BABY
+								|| 0 < vomit.getZ()) {
 							pane.getBackBufferG2().drawImage(vomit.getShadowImage(), pane.getTmpRect().getX(),
 									pane.getTmpRect().getY(), pane.getTmpRect().getWidth(),
 									pane.getTmpRect().getHeight(), pane);
@@ -254,10 +262,12 @@ final class Renderer {
 				int cursorBaseIndex = IconPool.CursorIcon.CUR_LB.ordinal();
 				for (Rectangle4y rect : MyPane.markList) {
 					pane.getBackBufferG2().drawImage(cursor[cursorBaseIndex + 1], rect.getX(), rect.getY(), pane);
-					pane.getBackBufferG2().drawImage(cursor[cursorBaseIndex + 0], rect.getX(), rect.getY() + rect.getWidth() - 20, pane);
+					pane.getBackBufferG2().drawImage(cursor[cursorBaseIndex + 0], rect.getX(),
+							rect.getY() + rect.getWidth() - 20, pane);
 					pane.getBackBufferG2().drawImage(cursor[cursorBaseIndex + 2], rect.getX() + rect.getWidth() - 20,
 							rect.getY() + rect.getWidth() - 20, pane);
-					pane.getBackBufferG2().drawImage(cursor[cursorBaseIndex + 3], rect.getX() + rect.getWidth() - 20, rect.getY(),
+					pane.getBackBufferG2().drawImage(cursor[cursorBaseIndex + 3], rect.getX() + rect.getWidth() - 20,
+							rect.getY(),
 							pane);
 				}
 			}

@@ -1,7 +1,7 @@
 package src.command;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.junit.jupiter.api.Assumptions.*;
+import static org.junit.jupiter.api.Assertions.assertSame;
+import static org.junit.jupiter.api.Assumptions.assumeTrue;
 
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -9,15 +9,15 @@ import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
-import src.base.Yukkuri;
 import src.draw.MyPane;
 import src.draw.World;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.living.yukkuri.impl.Reimu;
 import src.enums.AgeState;
 import src.enums.Intelligence;
 import src.enums.YukkuriType;
 import src.system.Sprite;
 import src.util.WorldTestHelper;
-import src.yukkuri.Reimu;
 
 @Disabled("GUI-dependent")
 public class ShowStatusFrameTest {

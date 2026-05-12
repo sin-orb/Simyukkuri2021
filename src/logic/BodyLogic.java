@@ -1,15 +1,13 @@
 package src.logic;
 
-import java.util.LinkedList;
 import java.util.List;
 
-import src.base.Yukkuri;
-import src.event.EventPacket;
-import src.base.Entity;
 import src.draw.Translate;
+import src.entity.core.Entity;
+import src.entity.core.living.yukkuri.Yukkuri;
 import src.enums.EnumRelationMine;
 import src.enums.GatheringDirection;
-import src.enums.PublicRank;
+import src.event.EventPacket;
 
 /***************************************************
  * ゆっくり同士の処理
@@ -57,8 +55,6 @@ public class BodyLogic {
 		// 移動判定
 		/////////////////////////////////
 		Yukkuri bodyHasOkazari = null;
-		Yukkuri bodyHasOkazariAndPherommone = null;
-		Yukkuri bodyHasPheromone = null;
 		Yukkuri bodyOldMoveTarget = BodyPartnerEntryRule.resolveMoveTarget(body);
 
 		// 発情時
@@ -111,7 +107,7 @@ public class BodyLogic {
 	/**
 	 * 接触している場合の動作
 	 * 
-	 * @param self 自分
+	 * @param self   自分
 	 * @param target 相手
 	 * @return 動作を行った場合
 	 */
@@ -141,7 +137,8 @@ public class BodyLogic {
 			}
 		}
 
-		int collisionOffsetX = Translate.invertX((int) ((target.getCollisionX() + self.getCollisionX()) * 0.6f), self.getY());
+		int collisionOffsetX = Translate.invertX((int) ((target.getCollisionX() + self.getCollisionX()) * 0.6f),
+				self.getY());
 		collisionOffsetX = Translate.transSize(collisionOffsetX);
 		int distanceX = Math.abs(target.getX() - self.getX());
 		int distanceY = Math.abs(target.getY() - self.getY());
@@ -190,7 +187,7 @@ public class BodyLogic {
 	/**
 	 * 他のゆっくりがプレイヤーにすりすりされていた場合の行動判定
 	 * 
-	 * @param body 自分
+	 * @param body       自分
 	 * @param bodyTarget 相手
 	 * @return 行動をしたかどうか
 	 */
@@ -202,7 +199,7 @@ public class BodyLogic {
 	 * 婚姻候補のリストを作る。既婚の場合は、相手のみを含むリストを作る
 	 * 
 	 * @param body 自分
-	 * @param age ゆん生のステージ
+	 * @param age  ゆん生のステージ
 	 * @return 婚姻候補のリスト
 	 */
 	public static final List<Yukkuri> createActiveFianceeList(Yukkuri body, int age) {
@@ -212,7 +209,7 @@ public class BodyLogic {
 	/**
 	 * アクティブな赤ゆ/子ゆのリストを作成する.
 	 * 
-	 * @param body ゆっくり
+	 * @param body            ゆっくり
 	 * @param includeChildren 子ゆっくりを入れるかどうか（これがfalseなら赤ゆのみのリストになる）
 	 * @return アクティブな赤ゆ/子ゆのリスト
 	 */
@@ -230,7 +227,7 @@ public class BodyLogic {
 	/**
 	 * ぜんゆん集合(四角形前面)
 	 * 
-	 * @param topBody   先頭ゆ
+	 * @param topBody    先頭ゆ
 	 * @param targetList 並べるゆっくりのリスト
 	 * @return 並んだかどうか
 	 */
@@ -241,9 +238,9 @@ public class BodyLogic {
 	/**
 	 * ぜんゆん集合(四角形前面)
 	 * 
-	 * @param topBody   先頭ゆ
+	 * @param topBody    先頭ゆ
 	 * @param targetList 並べるゆっくりのリスト
-	 * @param event     イベント
+	 * @param event      イベント
 	 * @return 並んだかどうか
 	 */
 	public static final boolean gatheringYukkuriFront(Yukkuri topBody, List<Yukkuri> targetList, EventPacket event) {
@@ -259,7 +256,8 @@ public class BodyLogic {
 	 * @param event      イベント
 	 * @return 並んだかどうか
 	 */
-	public static final boolean gatheringYukkuriSquare(Entity topObject, Yukkuri[] targetList, GatheringDirection direction,
+	public static final boolean gatheringYukkuriSquare(Entity topObject, Yukkuri[] targetList,
+			GatheringDirection direction,
 			EventPacket event) {
 		return BodyGatheringRule.gatheringYukkuriSquare(topObject, targetList, direction, event);
 	}
@@ -267,9 +265,9 @@ public class BodyLogic {
 	/**
 	 * ぜんゆん集合(先頭の後ろに一列)
 	 * 
-	 * @param topBody   先頭ゆ
+	 * @param topBody    先頭ゆ
 	 * @param targetList 並べるゆっくりのリスト
-	 * @param event     イベント
+	 * @param event      イベント
 	 * @return 並んだかどうか
 	 */
 	public static final boolean gatheringYukkuriBackLine(Yukkuri topBody, List<Yukkuri> targetList, EventPacket event) {
@@ -279,7 +277,7 @@ public class BodyLogic {
 	/**
 	 * うんうんどれいの感情処理
 	 * 
-	 * @param body 自分
+	 * @param body       自分
 	 * @param bodyTarget 相手
 	 * @return 処理を行ったかどうか
 	 */

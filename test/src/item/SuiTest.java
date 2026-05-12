@@ -3,7 +3,8 @@ package src.item;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 import src.SimYukkuri;
-import src.base.Yukkuri;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.world.item.Sui;
 import src.base.ItemTestBase;
 import src.util.WorldTestHelper;
 
@@ -11,7 +12,8 @@ class SuiTest extends ItemTestBase {
 
     private Yukkuri createBody() {
         Yukkuri b = WorldTestHelper.createBody();
-        b.setX(100); b.setY(100);
+        b.setX(100);
+        b.setY(100);
         SimYukkuri.world.getCurrentMap().getBody().put(b.getUniqueID(), b);
         return b;
     }
@@ -367,6 +369,7 @@ class SuiTest extends ItemTestBase {
     void testLoadImages_headless_executesCode() {
         try {
             Sui.loadImages(Sui.class.getClassLoader(), null);
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
     }
 }

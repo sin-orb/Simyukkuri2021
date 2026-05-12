@@ -6,11 +6,11 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import src.ConstState;
 import src.SimYukkuri;
-import src.base.Yukkuri;
+import src.entity.core.living.yukkuri.Yukkuri;
 import src.draw.MyPane;
 import src.draw.Point4y;
 import src.enums.AgeState;
-import src.game.Dna;
+import src.entity.core.living.yukkuri.Dna;
 import src.system.BodyLayer;
 import src.util.WorldTestHelper;
 

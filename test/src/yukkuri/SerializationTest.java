@@ -9,7 +9,7 @@ import java.util.zip.GZIPOutputStream;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import src.base.Yukkuri;
+import src.entity.core.living.yukkuri.Yukkuri;
 
 public class SerializationTest {
 

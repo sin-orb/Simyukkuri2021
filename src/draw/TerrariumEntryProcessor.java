@@ -4,10 +4,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import src.entity.world.bodylinked.Okazari;
+import src.entity.core.world.bodylinked.Okazari;
+import src.entity.core.world.mobile.Shit;
+import src.entity.core.world.mobile.Vomit;
 import src.enums.Event;
-import src.game.Shit;
-import src.game.Vomit;
 import src.system.MapPlaceData;
 
 /**

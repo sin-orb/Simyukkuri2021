@@ -6,21 +6,23 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.beans.Transient;
 
-import src.base.Entity;
+import src.entity.core.Entity;
 import src.enums.Type;
 
 /*************************************************
-背景の部品画像管理
-*/
+ * 背景の部品画像管理
+ */
 public class TerrainBillboard extends Entity {
 
 	private static final long serialVersionUID = -587830180580728404L;
-	/**画像*/
+	/** 画像 */
 	private BufferedImage image;
-	/**変形用ベクトル*/
+	/** 変形用ベクトル */
 	private AffineTransform xform;
+
 	/**
 	 * コンストラクタ.
+	 * 
 	 * @param img 背景部品の画像
 	 */
 	public TerrainBillboard(BufferedImage img) {
@@ -28,7 +30,8 @@ public class TerrainBillboard extends Entity {
 		image = img;
 		xform = new AffineTransform();
 	}
-	/**イメージ取得*/
+
+	/** イメージ取得 */
 	@Transient
 	public BufferedImage getImage() {
 		return image;
@@ -53,18 +56,22 @@ public class TerrainBillboard extends Entity {
 	public void trans(double tx, double ty) {
 		xform.translate(tx, ty);
 	}
-	/**描画*/
+
+	/** 描画 */
 	public void draw(Graphics2D g2, ImageObserver obs) {
 		g2.drawImage(image, xform, obs);
 	}
+
 	public AffineTransform getXform() {
 		return xform;
 	}
+
 	public void setXform(AffineTransform xform) {
 		this.xform = xform;
 	}
+
 	public void setImage(BufferedImage image) {
 		this.image = image;
 	}
-	
+
 }

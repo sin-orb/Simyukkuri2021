@@ -3,12 +3,12 @@ package src.logic;
 import java.awt.Color;
 
 import src.Const;
-import src.base.Yukkuri;
-import src.event.EventPacket;
-import src.enums.Event;
-import src.enums.WindowType;
-import src.enums.Intelligence;
 import src.draw.Translate;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.enums.Event;
+import src.enums.Intelligence;
+import src.enums.WindowType;
+import src.event.EventPacket;
 import src.system.MessagePool;
 import src.util.GameMessages;
 import src.util.GameRandom;
@@ -120,7 +120,8 @@ public final class BodyEventState {
 	 * @param interrupt 割り込み可否
 	 * @param piko      ピコピコ有無
 	 */
-	public static void setWorldEventResMessage(Yukkuri body, String message, int count, boolean interrupt, boolean piko) {
+	public static void setWorldEventResMessage(Yukkuri body, String message, int count, boolean interrupt,
+			boolean piko) {
 		setMessage(body, message, WindowType.WORLD_RES, count, interrupt, piko, false);
 	}
 
@@ -144,7 +145,8 @@ public final class BodyEventState {
 	 * @param interrupt 割り込み可否
 	 * @param piko      ピコピコ有無
 	 */
-	public static void setBodyEventResMessage(Yukkuri body, String message, int count, boolean interrupt, boolean piko) {
+	public static void setBodyEventResMessage(Yukkuri body, String message, int count, boolean interrupt,
+			boolean piko) {
 		setMessage(body, message, WindowType.BODY_RES, count, interrupt, piko, false);
 	}
 
@@ -384,7 +386,8 @@ public final class BodyEventState {
 		}
 	}
 
-	private static boolean shouldExecuteCurrentEvent(Yukkuri body, EventPacket currentEvent, EventPacket.UpdateState state) {
+	private static boolean shouldExecuteCurrentEvent(Yukkuri body, EventPacket currentEvent,
+			EventPacket.UpdateState state) {
 		if (EventPacket.UpdateState.FORCE_EXEC == state) {
 			return true;
 		}

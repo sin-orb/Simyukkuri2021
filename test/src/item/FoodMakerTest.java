@@ -6,13 +6,15 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
-import src.base.Yukkuri;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.world.item.Food;
+import src.entity.core.world.item.FoodMaker;
+import src.entity.core.world.item.Food.FoodType;
+import src.entity.core.world.mobile.Shit;
+import src.entity.core.world.mobile.Vomit;
 import src.base.ItemTestBase;
 import src.enums.AgeState;
 import src.enums.Type;
-import src.game.Shit;
-import src.game.Vomit;
-import src.item.Food.FoodType;
 import src.util.WorldTestHelper;
 
 class FoodMakerTest extends ItemTestBase {
@@ -135,7 +137,8 @@ class FoodMakerTest extends ItemTestBase {
         item.setProcessReady(true);
         Shit shit = new Shit();
         shit.setObjType(Type.SHIT);
-        shit.setX(100); shit.setY(100);
+        shit.setX(100);
+        shit.setY(100);
         SimYukkuri.world.getCurrentMap().getShit().put(shit.getObjId(), shit);
 
         assertEquals(0, item.objHitProcess(shit));
@@ -327,7 +330,8 @@ class FoodMakerTest extends ItemTestBase {
         SimYukkuri.world.getCurrentMap().getFood().put(food.getObjId(), food);
         try {
             item.objHitProcess(food);
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
     }
 
     @Test
@@ -343,7 +347,8 @@ class FoodMakerTest extends ItemTestBase {
         SimYukkuri.world.getCurrentMap().getFood().put(food.getObjId(), food);
         try {
             item.objHitProcess(food);
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
     }
 
     @Test
@@ -359,7 +364,8 @@ class FoodMakerTest extends ItemTestBase {
         SimYukkuri.world.getCurrentMap().getFood().put(food.getObjId(), food);
         try {
             item.objHitProcess(food);
-        } catch (Exception e) { }
+        } catch (Exception e) {
+        }
     }
 
     @Test
@@ -402,7 +408,7 @@ class FoodMakerTest extends ItemTestBase {
         item.setProcessReady(true);
         item.setStockFood(0); // FOOD stock
 
-        src.yukkuri.Reimu body = new src.yukkuri.Reimu();
+        src.entity.core.living.yukkuri.impl.Reimu body = new src.entity.core.living.yukkuri.impl.Reimu();
         body.setObjType(Type.YUKKURI);
         body.setCrushed(true); // isCrushed=true → enters branch
         body.setAgeState(src.enums.AgeState.BABY);

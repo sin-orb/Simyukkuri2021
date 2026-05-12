@@ -1,12 +1,10 @@
 package src.logic;
 
-import src.attachment.Badge;
-import src.base.Yukkuri;
+import src.entity.core.attachment.impl.Badge;
+import src.entity.core.living.yukkuri.Yukkuri;
 import src.enums.Attitude;
 import src.enums.BodyRank;
 import src.enums.Intelligence;
-
-
 
 /***************************************************
  * バッジ関連
@@ -15,13 +13,12 @@ public class BadgeLogic {
 
 	/**
 	 * バッジ試験を受けさせる（自動的）
+	 * 
 	 * @param body 受けさせるゆっくり
 	 * @return 現状は常にTrue
 	 */
-	public static boolean badgeTest( Yukkuri body )
-	{
-		if( body == null || body.isDead()|| body.isRemoved())
-		{
+	public static boolean badgeTest(Yukkuri body) {
+		if (body == null || body.isDead() || body.isRemoved()) {
 			return false;
 		}
 
@@ -29,19 +26,15 @@ public class BadgeLogic {
 		Intelligence intelligence = body.getIntelligence();
 		boolean isIdiot = body.isIdiot();
 		BodyRank bodyRank = body.getBodyRank();
-		
+
 		Badge.BadgeRank badgeRank = Badge.BadgeRank.FAKE;
 		// 飼いゆ以外,足りないゆは偽バッチのみ
-		if( bodyRank != BodyRank.KAIYU || isIdiot )
-		{
+		if (bodyRank != BodyRank.KAIYU || isIdiot) {
 			badgeRank = Badge.BadgeRank.FAKE;
-		}
-		else{
-			switch(attitude)
-			{
+		} else {
+			switch (attitude) {
 				case VERY_NICE:
-					switch(intelligence)
-					{
+					switch (intelligence) {
 						case WISE:
 							badgeRank = Badge.BadgeRank.GOLD;
 							break;
@@ -53,11 +46,10 @@ public class BadgeLogic {
 							break;
 						default:
 							break;
-					}				
+					}
 					break;
 				case NICE:
-					switch(intelligence)
-					{
+					switch (intelligence) {
 						case WISE:
 							badgeRank = Badge.BadgeRank.GOLD;
 							break;
@@ -69,11 +61,10 @@ public class BadgeLogic {
 							break;
 						default:
 							break;
-					}			
+					}
 					break;
 				case AVERAGE:
-					switch(intelligence)
-					{
+					switch (intelligence) {
 						case WISE:
 							badgeRank = Badge.BadgeRank.SILVER;
 							break;
@@ -85,11 +76,10 @@ public class BadgeLogic {
 							break;
 						default:
 							break;
-					}			
+					}
 					break;
 				case SHITHEAD:
-					switch(intelligence)
-					{
+					switch (intelligence) {
 						case WISE:
 							badgeRank = Badge.BadgeRank.BRONZE;
 							break;
@@ -101,11 +91,10 @@ public class BadgeLogic {
 							break;
 						default:
 							break;
-					}			
+					}
 					break;
 				case SUPER_SHITHEAD:
-					switch(intelligence)
-					{
+					switch (intelligence) {
 						case WISE:
 							badgeRank = Badge.BadgeRank.BRONZE;
 							break;
@@ -117,22 +106,20 @@ public class BadgeLogic {
 							break;
 						default:
 							break;
-					}			
+					}
 					break;
 				default:
 					break;
 			}
 		}
-		
-		if(body.getAttachmentSize(Badge.class) != 0 ){
+
+		if (body.getAttachmentSize(Badge.class) != 0) {
 			body.removeAttachment(Badge.class);
-		}
-		else{
+		} else {
 			body.addAttachment(new Badge(body, badgeRank));
 			body.getInVain(true);
 		}
-		
+
 		return true;
 	}
 }
-

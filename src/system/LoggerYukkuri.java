@@ -1,6 +1,4 @@
 package src.system;
-import src.util.GameEnvironment;
-import src.util.GameText;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -17,16 +15,16 @@ import java.util.logging.Level;
 //import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
-import src.SimYukkuri;
-import src.util.GameWorld;
-import src.base.Yukkuri;
-import src.draw.Terrarium;
 import src.draw.Translate;
-import src.yukkuri.Deibu;
-import src.yukkuri.Kimeemaru;
-import src.yukkuri.MarisaKotatsumuri;
-import src.yukkuri.MarisaTsumuri;
-import src.yukkuri.WasaReimu;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.living.yukkuri.impl.Deibu;
+import src.entity.core.living.yukkuri.impl.Kimeemaru;
+import src.entity.core.living.yukkuri.impl.MarisaKotatsumuri;
+import src.entity.core.living.yukkuri.impl.MarisaTsumuri;
+import src.entity.core.living.yukkuri.impl.WasaReimu;
+import src.util.GameEnvironment;
+import src.util.GameText;
+import src.util.GameWorld;
 
 public class LoggerYukkuri {
 	/** 処理の最小単位（ティック） */
@@ -158,12 +156,13 @@ public class LoggerYukkuri {
 					} else if (b.isIdiot()) {
 						// 足りない
 						logData[NUM_OF_TARINAI]++;
-					} else if (b.getType() < 100 || b.getType() == Deibu.type
+					} else if (b.getType().getTypeID() < 100 || b.getType() == Deibu.type
 							|| b.getType() == MarisaTsumuri.type || b.getType() == MarisaKotatsumuri.type
 							|| b.getType() == WasaReimu.type) {
 						// 通常種
 						logData[NUM_OF_NORMAL]++;
-					} else if ((b.getType() >= 1000 && b.getType() < 2000) || b.getType() == Kimeemaru.type) {
+					} else if ((b.getType().getTypeID() >= 1000 && b.getType().getTypeID() < 2000)
+							|| b.getType() == Kimeemaru.type) {
 						// 希少種
 						logData[NUM_OF_RARE]++;
 					}

@@ -3,10 +3,12 @@ package src.draw;
 import java.util.Iterator;
 import java.util.List;
 
-import src.base.WorldEntity;
+import src.entity.core.Entity;
+import src.entity.core.world.WorldEntity;
+import src.entity.core.world.bodylinked.Stalk;
+import src.entity.core.world.item.Diffuser;
 import src.enums.Event;
 import src.enums.WorldEntityKind;
-import src.item.Diffuser;
 import src.system.MapPlaceData;
 import src.util.GameWorld;
 
@@ -21,7 +23,7 @@ public final class TerrariumTickProcessor {
 	/**
 	 * 床置き、ベルト、プール、畑、固定オブジェクト、エフェクトを更新する。
 	 *
-	 * @param curMap 現在のマップ
+	 * @param curMap        現在のマップ
 	 * @param intervalCount 処理インターバル
 	 */
 	public static void processMapTicks(MapPlaceData curMap, int intervalCount) {
@@ -43,7 +45,7 @@ public final class TerrariumTickProcessor {
 		TerrariumEntryProcessor.processEntries(curMap);
 	}
 
-	static int toObjExType(src.base.Entity o) {
+	static int toObjExType(Entity o) {
 		switch (o.getObjType()) {
 			case YUKKURI:
 				return WorldEntity.YUKKURI;
@@ -54,16 +56,16 @@ public final class TerrariumTickProcessor {
 			case FIX_OBJECT:
 				return WorldEntity.FIX_OBJECT;
 			case OBJECT:
-				if (o instanceof src.item.Food) {
+				if (o instanceof src.entity.core.world.item.Food) {
 					return WorldEntity.FOOD;
 				}
-				if (o instanceof src.item.Toilet) {
+				if (o instanceof src.entity.core.world.item.Toilet) {
 					return WorldEntity.TOILET;
 				}
-				if (o instanceof src.item.Toy) {
+				if (o instanceof src.entity.core.world.item.Toy) {
 					return WorldEntity.TOY;
 				}
-				if (o instanceof src.game.Stalk) {
+				if (o instanceof Stalk) {
 					return WorldEntity.STALK;
 				}
 				return WorldEntity.OBJECT;

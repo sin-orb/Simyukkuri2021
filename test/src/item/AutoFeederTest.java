@@ -7,6 +7,8 @@ import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
 import src.base.ItemTestBase;
+import src.entity.core.world.item.AutoFeeder;
+import src.entity.core.world.item.Food;
 
 class AutoFeederTest extends ItemTestBase {
 
@@ -182,7 +184,8 @@ class AutoFeederTest extends ItemTestBase {
         assertDoesNotThrow(() -> item.upDate());
     }
 
-    // --- upDate: food set, type=NORMAL, food is not removed and not empty → no change ---
+    // --- upDate: food set, type=NORMAL, food is not removed and not empty → no
+    // change ---
 
     @Test
     void testUpDate_FoodSet_FoodValid_NoChange() {
@@ -258,7 +261,8 @@ class AutoFeederTest extends ItemTestBase {
         item.setEnabled(true);
         java.awt.image.BufferedImage[] layer = new java.awt.image.BufferedImage[1];
         assertDoesNotThrow(() -> item.getImageLayer(layer));
-        // images[0] may be null (no loadImages called) but method runs without exception
+        // images[0] may be null (no loadImages called) but method runs without
+        // exception
     }
 
     // --- getImageLayer (enabled=false) ---
@@ -271,7 +275,8 @@ class AutoFeederTest extends ItemTestBase {
         assertDoesNotThrow(() -> item.getImageLayer(layer));
     }
 
-    // --- upDate: food not in world → isTakenOut check (no body in map → returns false) ---
+    // --- upDate: food not in world → isTakenOut check (no body in map → returns
+    // false) ---
 
     @Test
     void testUpDate_foodNotInWorldMap_clearsFood() {
@@ -281,7 +286,8 @@ class AutoFeederTest extends ItemTestBase {
         item.setType(0); // FOOD type
         Food food = new Food(100, 100, 0);
         // food is NOT added to world food map → containsValue returns false
-        // isTakenOut scans body map → empty → returns false → food stays (condition short-circuits)
+        // isTakenOut scans body map → empty → returns false → food stays (condition
+        // short-circuits)
         item.setFood(food);
         assertDoesNotThrow(() -> item.upDate());
     }
@@ -321,7 +327,8 @@ class AutoFeederTest extends ItemTestBase {
         }
     }
 
-    // --- isTakenOut: body map contains body with FOOD takeout = food.objId → returns true ---
+    // --- isTakenOut: body map contains body with FOOD takeout = food.objId →
+    // returns true ---
 
     @Test
     void testIsTakenOut_bodyHoldingFood_returnsTrue() {
@@ -336,12 +343,13 @@ class AutoFeederTest extends ItemTestBase {
             item.setFood(food);
 
             // Create a body in the world body map that holds this food
-            src.base.Yukkuri body = src.util.WorldTestHelper.createBody();
+            src.entity.core.living.yukkuri.Yukkuri body = src.util.WorldTestHelper.createBody();
             body.getCarryItems().put(src.enums.TakeoutItemType.FOOD, food.objId);
             SimYukkuri.world.getCurrentMap().getBody().put(body.objId, body);
 
             // food is NOT in world.food map → containsValue(food) is false
-            // isTakenOut should find body holding food → returns true → food stays null condition short-circuits
+            // isTakenOut should find body holding food → returns true → food stays null
+            // condition short-circuits
             assertDoesNotThrow(() -> item.upDate());
         } catch (Exception e) {
             // If World init fails, skip

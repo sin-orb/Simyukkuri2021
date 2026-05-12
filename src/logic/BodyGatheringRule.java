@@ -1,19 +1,17 @@
 package src.logic;
 
-import src.base.Yukkuri;
-
 import java.util.List;
 import java.util.Map;
 
-import src.base.Yukkuri;
-import src.event.EventPacket;
-import src.base.Entity;
 import src.draw.Point4y;
 import src.draw.Translate;
+import src.entity.core.Entity;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.world.item.Toilet;
 import src.enums.Direction;
 import src.enums.GatheringDirection;
+import src.event.EventPacket;
 import src.field.impl.Barrier;
-import src.item.Toilet;
 import src.util.BodyRegistry;
 import src.util.GameWorld;
 
@@ -188,7 +186,8 @@ public final class BodyGatheringRule {
 							if (row == 1) {
 								gap = gap / 2;
 							}
-							x = frontCenter.getX() + (collisionOffset * row + gap * 3 / 2 * row - 1) * horizontalDirection;
+							x = frontCenter.getX()
+									+ (collisionOffset * row + gap * 3 / 2 * row - 1) * horizontalDirection;
 							y = frontCenter.getY() + lineOffset;
 						}
 						break;

@@ -6,48 +6,16 @@ import java.util.List;
 import java.util.Map;
 
 import src.SimYukkuri;
-import src.attachment.ANYDAmpoule;
-import src.attachment.AccelAmpoule;
-import src.attachment.Ants;
-import src.attachment.Badge;
-import src.attachment.BreedingAmpoule;
-import src.attachment.HungryAmpoule;
-import src.attachment.OrangeAmpoule;
-import src.attachment.PoisonAmpoule;
-import src.attachment.StopAmpoule;
-import src.attachment.VeryShitAmpoule;
-import src.base.Yukkuri;
-import src.base.Entity;
-import src.base.WorldEntity;
 import src.command.GadgetMenu.GadgetList;
-import src.draw.Point4y;
-import src.draw.Rectangle4y;
 import src.draw.Translate;
-import src.enums.BodyRank;
+import src.entity.core.Entity;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.world.bodylinked.Stalk;
+import src.entity.core.world.mobile.Shit;
+import src.entity.core.world.mobile.Vomit;
 import src.enums.Direction;
-import src.enums.PublicRank;
-import src.event.PredatorsGameEvent;
-import src.game.Shit;
-import src.game.Stalk;
-import src.game.Vomit;
-import src.item.BeltconveyorObj;
-import src.item.Diffuser;
-import src.item.OrangePool;
-import src.field.impl.Pool;
-import src.item.BreedingPool;
-import src.field.impl.Farm;
-import src.field.impl.Barrier;
-import src.field.impl.Beltconveyor;
-import src.item.Yunba;
-import src.logic.BadgeLogic;
-import src.logic.BodyLogic;
-import src.logic.EventLogic;
-import src.logic.FamilyActionLogic;
-import src.system.Cash;
-import src.util.GameView;
-import src.system.MainCommandUI;
-import src.system.MapPlaceData;
 import src.util.GameEnvironment;
+import src.util.GameView;
 import src.util.GameWorld;
 
 final class GadgetToolAction {
@@ -106,7 +74,8 @@ final class GadgetToolAction {
 								offsetX = -offsetX;
 							}
 							if (!body.isPacked() && !body.isShutmouth()) {
-								GameView.addVomit(body.getX() + offsetX, body.getY(), body.getZ(), body, body.getShitType());
+								GameView.addVomit(body.getX() + offsetX, body.getY(), body.getZ(), body,
+										body.getShitType());
 							}
 							body.stay();
 						}
@@ -122,7 +91,8 @@ final class GadgetToolAction {
 							offsetX = -offsetX;
 						}
 						if (!body.isPacked() && !body.isShutmouth()) {
-							GameView.addVomit(body.getX() + offsetX, body.getY(), body.getZ(), body, body.getShitType());
+							GameView.addVomit(body.getX() + offsetX, body.getY(), body.getZ(), body,
+									body.getShitType());
 						}
 						body.stay();
 					}
@@ -163,7 +133,8 @@ final class GadgetToolAction {
 								offsetX = -offsetX;
 							}
 							if (!body.isPacked() && !body.isShutmouth()) {
-								GameView.addVomit(body.getX() + offsetX, body.getY(), body.getZ(), body, body.getShitType());
+								GameView.addVomit(body.getX() + offsetX, body.getY(), body.getZ(), body,
+										body.getShitType());
 							}
 							body.stay();
 						}
@@ -179,7 +150,8 @@ final class GadgetToolAction {
 							offsetX = -offsetX;
 						}
 						if (!body.isPacked() && !body.isShutmouth()) {
-							GameView.addVomit(body.getX() + offsetX, body.getY(), body.getZ(), body, body.getShitType());
+							GameView.addVomit(body.getX() + offsetX, body.getY(), body.getZ(), body,
+									body.getShitType());
 						}
 						body.stay();
 					}
@@ -189,7 +161,8 @@ final class GadgetToolAction {
 				break;
 			case GODHAND:
 				if (ev.isShiftDown()) {
-					List<Yukkuri> bodyList = new LinkedList<Yukkuri>(GameWorld.get().getCurrentMap().getBody().values());
+					List<Yukkuri> bodyList = new LinkedList<Yukkuri>(
+							GameWorld.get().getCurrentMap().getBody().values());
 					int bodyCount = bodyList.size();
 					for (int i = bodyCount - 1; -1 < i; i--) {
 						Yukkuri body = bodyList.get(i);
@@ -307,7 +280,8 @@ final class GadgetToolAction {
 				GadgetMenu.executeBodyMethod(ev, targetObject, "isAnalClose", "setAnalClose", "invAnalClose");
 				break;
 			case STALK_CUT:
-				GadgetMenu.executeBodyMethod(ev, targetObject, "getStalkCastration", "castrateStalk", "invStalkCastration");
+				GadgetMenu.executeBodyMethod(ev, targetObject, "getStalkCastration", "castrateStalk",
+						"invStalkCastration");
 				break;
 			case STALK_UNPLUG:
 				if (targetObject instanceof Stalk) {
@@ -320,7 +294,8 @@ final class GadgetToolAction {
 				}
 				break;
 			case CASTRATION:
-				GadgetMenu.executeBodyMethod(ev, targetObject, "getBodyCastration", "castrateBody", "invBodyCastration");
+				GadgetMenu.executeBodyMethod(ev, targetObject, "getBodyCastration", "castrateBody",
+						"invBodyCastration");
 				break;
 			case LIGHTER:
 				GadgetMenu.executeBodyMethod(ev, targetObject, "giveFire");

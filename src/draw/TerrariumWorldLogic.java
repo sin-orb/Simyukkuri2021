@@ -2,7 +2,7 @@ package src.draw;
 
 import java.util.Map;
 
-import src.base.Yukkuri;
+import src.entity.core.living.yukkuri.Yukkuri;
 import src.enums.PanicType;
 import src.field.impl.Barrier;
 import src.util.GameWorld;

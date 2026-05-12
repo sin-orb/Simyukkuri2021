@@ -40,6 +40,7 @@ public enum YukkuriType {
 	YUUKA("Yuuka", "yuuka", "yuuka", "ゆうか", "Yuuka", 1010),
 	YUYUKO("Yuyuko", "yuyuko", "yuyuko", "ゆゆこ", "Yuyuko", 3002),
 	;
+
 	private static final Map<String, YukkuriType> BY_CLASS_NAME = new HashMap<String, YukkuriType>();
 	private static final Map<Integer, YukkuriType> BY_TYPE_ID = new HashMap<Integer, YukkuriType>();
 
@@ -56,6 +57,7 @@ public enum YukkuriType {
 	private final String nameJ;
 	private final String nameE;
 	private final int typeID;
+
 	YukkuriType(String clsName, String msgFile, String imgDir, String nameJ, String nameE, int id) {
 		this.className = clsName;
 		this.messageFileName = msgFile;
@@ -107,14 +109,14 @@ public enum YukkuriType {
 		return BY_TYPE_ID.get(Integer.valueOf(typeID));
 	}
 
-	public static int normalizeOffspringType(int typeID) {
+	public static YukkuriType normalizeOffspringType(YukkuriType typeID) {
 		switch (typeID) {
-		case 2006:
-			return MARISA.getTypeID();
-		case 2005:
-			return REIMU.getTypeID();
-		default:
-			return typeID;
+			case DOSMARISA:
+				return MARISA;
+			case DEIBU:
+				return REIMU;
+			default:
+				return typeID;
 		}
 	}
 }

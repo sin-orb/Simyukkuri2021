@@ -1,12 +1,10 @@
 package src.logic;
 
-import src.base.Yukkuri;
-import src.base.Entity;
 import src.draw.Translate;
+import src.entity.core.Entity;
+import src.entity.core.living.yukkuri.Yukkuri;
 import src.enums.Intelligence;
-import src.enums.PredatorType;
 import src.field.impl.Barrier;
-import src.util.GameRandom;
 
 /**
  * 捕食種向けの body 候補更新.
@@ -20,7 +18,8 @@ public final class FoodPredatorCandidatePolicy {
 	 * live body を候補として評価する.
 	 */
 	public static BodyCandidateResult considerLiveBody(Yukkuri hunter, Yukkuri candidate, int nearestLiveDistance,
-			int nearestOtherDistance, int candidateSize, int wallMode, Entity nearestLiveObject, Entity nearestOtherObject) {
+			int nearestOtherDistance, int candidateSize, int wallMode, Entity nearestLiveObject,
+			Entity nearestOtherObject) {
 		if (hunter.getIntelligence() != Intelligence.FOOL && hunter.findSick(candidate) && !hunter.isTooHungry()) {
 			return new BodyCandidateResult(nearestLiveObject, nearestOtherObject, nearestLiveDistance,
 					nearestOtherDistance, candidateSize);
@@ -72,7 +71,8 @@ public final class FoodPredatorCandidatePolicy {
 	/**
 	 * 死体候補を評価する.
 	 */
-	public static BodyCandidateResult considerDeadBody(Yukkuri hunter, Yukkuri candidate, int nearestDeadDistance, int wallMode,
+	public static BodyCandidateResult considerDeadBody(Yukkuri hunter, Yukkuri candidate, int nearestDeadDistance,
+			int wallMode,
 			Entity nearestDeadObject) {
 		if (!hunter.isRude() && candidate.hasOkazari() && hunter.isFamily(candidate)) {
 			return new BodyCandidateResult(null, null, 0, 0, 0, nearestDeadObject, nearestDeadDistance);
@@ -98,11 +98,13 @@ public final class FoodPredatorCandidatePolicy {
 		private final Entity nearestDeadObject;
 		private final int nearestDeadDistance;
 
-		BodyCandidateResult(Entity nearestLiveObject, Entity nearestOtherObject, int nearestLiveDistance, int nearestOtherDistance, int size) {
+		BodyCandidateResult(Entity nearestLiveObject, Entity nearestOtherObject, int nearestLiveDistance,
+				int nearestOtherDistance, int size) {
 			this(nearestLiveObject, nearestOtherObject, nearestLiveDistance, nearestOtherDistance, size, null, 0);
 		}
 
-		BodyCandidateResult(Entity nearestLiveObject, Entity nearestOtherObject, int nearestLiveDistance, int nearestOtherDistance, int size, Entity nearestDeadObject,
+		BodyCandidateResult(Entity nearestLiveObject, Entity nearestOtherObject, int nearestLiveDistance,
+				int nearestOtherDistance, int size, Entity nearestDeadObject,
 				int nearestDeadDistance) {
 			this.nearestLiveObject = nearestLiveObject;
 			this.nearestOtherObject = nearestOtherObject;

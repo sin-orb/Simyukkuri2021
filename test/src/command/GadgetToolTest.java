@@ -1,18 +1,25 @@
 
 package src.command;
 
+import static org.junit.jupiter.api.Assertions.assertArrayEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.Random;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 import src.ConstState;
 import src.SimYukkuri;
-import src.base.Yukkuri;
 import src.draw.World;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.living.yukkuri.impl.Reimu;
 import src.enums.AgeState;
 import src.enums.BurialState;
 import src.enums.CriticalDamegeType;
@@ -20,9 +27,6 @@ import src.enums.Intelligence;
 import src.enums.YukkuriType;
 import src.system.Sprite;
 import src.util.WorldTestHelper;
-import src.yukkuri.Reimu;
-
-import java.util.Random;
 
 public class GadgetToolTest {
 
@@ -99,7 +103,7 @@ public class GadgetToolTest {
             // 安全な方法: ConstState(0)で、body基底のjudgeCanTransForGodHand=falseを使う
             // → StubBodyを使う代わりに、Body基底を直接newする方法は抽象メソッドのため不可
             // → 判定としてReimuを使うが、unBirthにしてfalseを返す or
-            //   別のアプローチ: rapistの初期値を記録し、case0でrapist toggleされることを確認
+            // 別のアプローチ: rapistの初期値を記録し、case0でrapist toggleされることを確認
 
             // 実はReimuのjudgeCanTransForGodHandはunBirthでなければtrueを返すので
             // execTransformが呼ばれる → SimYukkuri.mypane=nullでNPE
@@ -221,7 +225,7 @@ public class GadgetToolTest {
             GadgetTool.doGodHand(b);
 
             assertEquals(YukkuriType.TARINAIREIMU, b.getMsgType(),
-                "Reimuタイプの場合TARINAIREIMUになるべき");
+                    "Reimuタイプの場合TARINAIREIMUになるべき");
         }
 
         @Test

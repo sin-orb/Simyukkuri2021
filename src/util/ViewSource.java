@@ -2,15 +2,15 @@ package src.util;
 
 import java.awt.Component;
 
-import src.base.Yukkuri;
-import src.effect.Effect;
 import src.draw.MyPane;
 import src.draw.Terrarium;
+import src.entity.core.effect.Effect;
+import src.entity.core.living.yukkuri.Dna;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.world.mobile.Vomit;
 import src.enums.AgeState;
 import src.enums.EffectType;
 import src.enums.YukkuriType;
-import src.game.Dna;
-import src.game.Vomit;
 
 public interface ViewSource {
 	MyPane getPane();
@@ -29,9 +29,10 @@ public interface ViewSource {
 
 	void createBackBuffer();
 
-	Yukkuri addBody(int x, int y, int z, int type, AgeState age, Yukkuri p1, Yukkuri p2);
+	Yukkuri addBody(int x, int y, int z, YukkuriType type, AgeState age, Yukkuri p1, Yukkuri p2);
 
-	Yukkuri makeBody(int x, int y, int z, int type, Dna dna, AgeState age, Yukkuri p1, Yukkuri p2, boolean adjust);
+	Yukkuri makeBody(int x, int y, int z, YukkuriType type, Dna dna, AgeState age, Yukkuri p1, Yukkuri p2,
+			boolean adjust);
 
 	Vomit addVomit(int x, int y, int z, Yukkuri body, YukkuriType type);
 

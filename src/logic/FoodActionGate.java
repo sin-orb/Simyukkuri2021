@@ -1,13 +1,13 @@
 package src.logic;
 
-import src.base.Yukkuri;
-import src.event.EventPacket;
+import src.entity.core.living.yukkuri.Yukkuri;
 import src.enums.BodyRank;
 import src.enums.CoreAnkoState;
 import src.enums.PublicRank;
 import src.enums.TakeoutItemType;
-import src.event.FlyingEatEvent;
-import src.event.SuperEatingTimeEvent;
+import src.event.EventPacket;
+import src.event.impl.FlyingEatEvent;
+import src.event.impl.SuperEatingTimeEvent;
 import src.util.GameRandom;
 
 /**
@@ -19,7 +19,8 @@ public final class FoodActionGate {
 
 	public static boolean shouldSkipBeforeSearch(Yukkuri body, boolean[] forceEat) {
 		if (!body.isVeryHungry()) {
-			if (body.isToBody() || body.isToBed() || (body.isToShit() && body.getIntelligence() == src.enums.Intelligence.WISE)
+			if (body.isToBody() || body.isToBed()
+					|| (body.isToShit() && body.getIntelligence() == src.enums.Intelligence.WISE)
 					|| (body.isAdult() && body.isToSukkiri()) || body.isToSteal()
 					|| (body.isRaper() && body.isExciting())) {
 				if (body.isToFood()) {
@@ -33,7 +34,8 @@ public final class FoodActionGate {
 		}
 		if (body.isSleepy()) {
 			if ((!body.isHungry() && body.isSmart() && body.getBodyRank() == BodyRank.KAIYU)
-					|| (body.isFull() && body.getIntelligence() != src.enums.Intelligence.WISE && body.getBodyRank() != BodyRank.KAIYU)) {
+					|| (body.isFull() && body.getIntelligence() != src.enums.Intelligence.WISE
+							&& body.getBodyRank() != BodyRank.KAIYU)) {
 				return true;
 			}
 		}

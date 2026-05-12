@@ -1,58 +1,63 @@
 package src.logic;
-import src.util.GameEnvironment;
 
 import java.util.Map;
 
-import src.util.GameWorld;
-import src.base.Yukkuri;
-import src.base.Entity;
 import src.draw.Translate;
+import src.entity.core.Entity;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.world.bodylinked.Stalk;
+import src.entity.core.world.item.Food.FoodType;
 import src.enums.AgeState;
 import src.enums.BurialState;
 import src.enums.FootBake;
 import src.enums.PublicRank;
-import src.game.Stalk;
-import src.item.Food;
-import src.item.Food.FoodType;
+import src.util.GameEnvironment;
+import src.util.GameWorld;
 
 /***************************************************
-	餌関係の処理
+ * 餌関係の処理
  */
 public class FoodLogic {
 
-
 	/**
-	 *  フィールド内から餌候補の検索と移動、捕食処理
+	 * フィールド内から餌候補の検索と移動、捕食処理
+	 * 
 	 * @param body ゆっくり
 	 * @return 処理が行われたか
 	 */
 	public static final boolean checkFood(Yukkuri body) {
-		/*流れとしては、C1→C2→B1→B2　(Aはキャンセル判定)といった感じ
-		*/
+		/*
+		 * 流れとしては、C1→C2→B1→B2 (Aはキャンセル判定)といった感じ
+		 */
 		boolean[] forceEat = { false };
 
-		//A.餌行動の終了
-		/*		// 他の用事がある場合
-				if(body.isToBody() || body.isToBed() || (body.isToShit() && !body.isSoHungry() && !(body.isAdult() && body.intelligence == Intelligence.WISE)) || (body.isAdult() && body.isToSukkiri()) || body.isToSteal() ){
-					return false;
-				}*/
+		// A.餌行動の終了
+		/*
+		 * // 他の用事がある場合
+		 * if(body.isToBody() || body.isToBed() || (body.isToShit() &&
+		 * !body.isSoHungry() && !(body.isAdult() && body.intelligence ==
+		 * Intelligence.WISE)) || (body.isAdult() && body.isToSukkiri()) ||
+		 * body.isToSteal() ){
+		 * return false;
+		 * }
+		 */
 
 		if (FoodActionGate.shouldSkipBeforeSearch(body, forceEat)) {
 			return false;
 		}
 
-		//B1.餌補足済みの時の特殊行動
+		// B1.餌補足済みの時の特殊行動
 		// 食べる対象が決まっていたら到達したかチェック
 		Entity food = body.takeMoveTarget();
 
-		//対象が決まってる時
+		// 対象が決まってる時
 		if ((body.isToFood() || body.isToTakeout()) && food != null) {
 			// 途中で消されてたら他の餌候補を探す
 			if (food.isRemoved()) {
 				body.clearActions();
 				return false;
 			}
-			//茎の場合の探索
+			// 茎の場合の探索
 			if (food instanceof Stalk) {
 				Yukkuri plantBody = GameWorld.get().getCurrentMap().getBody().get(((Stalk) food).getPlantYukkuri());
 				// 自分の茎は無視
@@ -80,13 +85,13 @@ public class FoodLogic {
 			if ((body.getStepDist() + 2) >= Translate.distance(body.getX(), body.getY(), food.getX(), food.getY())) {
 				return FoodArrivalActionPolicy.handleArrivedFood(body, food, forceEat);
 			}
-			//餌に未到着の時
+			// 餌に未到着の時
 			else {
 				return FoodApproachPolicy.handleUnarrivedFood(body, food);
 			}
 		}
 
-		//C.餌探索
+		// C.餌探索
 		Entity candidate = null;
 		// うんうん奴隷の場合
 		if (body.getPublicRank() == PublicRank.UnunSlave) {
@@ -107,11 +112,11 @@ public class FoodLogic {
 			}
 		}
 
-		//C2.探索して補足した餌に対する反応
+		// C2.探索して補足した餌に対する反応
 		if (candidate != null) {
 			return FoodFoundReaction.handleFoundFood(body, candidate, forceEat);
 		}
-		//何も見つからなかったとき
+		// 何も見つからなかったとき
 		else {
 			FoodNoFoodReaction.handleNoFoodFound(body);
 		}
@@ -126,8 +131,9 @@ public class FoodLogic {
 
 	// 餌検索C
 	/**
-	 *  捕食種用エサ検索
-	 * @param body 捕食種
+	 * 捕食種用エサ検索
+	 * 
+	 * @param body     捕食種
 	 * @param forceEat 強制給餌フラグ
 	 * @return 検索されたエサオブジェクト
 	 */
@@ -155,7 +161,8 @@ public class FoodLogic {
 			}
 			if (!candidateBody.isDead()) {
 				FoodPredatorCandidatePolicy.BodyCandidateResult result = FoodPredatorCandidatePolicy
-						.considerLiveBody(body, candidateBody, nearestDistance, secondaryNearestDistance, size, wallMode, candidate, candidate2);
+						.considerLiveBody(body, candidateBody, nearestDistance, secondaryNearestDistance, size,
+								wallMode, candidate, candidate2);
 				candidate = result.getFound();
 				candidate2 = result.getFound2();
 				nearestDistance = result.getMinDistance();
@@ -196,10 +203,11 @@ public class FoodLogic {
 	}
 
 	/**
-	 *  食事処理
-	 * @param body ゆっくり
+	 * 食事処理
+	 * 
+	 * @param body     ゆっくり
 	 * @param foodType エサタイプ
-	 * @param amount 食事量
+	 * @param amount   食事量
 	 */
 	public static final void eatFood(Yukkuri body, FoodType foodType, int amount) {
 		FoodConsumptionPolicy.eatFood(body, foodType, amount);
@@ -207,8 +215,9 @@ public class FoodLogic {
 
 	/**
 	 * お持ち帰り判定
+	 * 
 	 * @param body ゆっくり
-	 * @param o エサオブジェクト
+	 * @param o    エサオブジェクト
 	 * @return 持ち帰るかどうか
 	 */
 	public static boolean checkTakeout(Yukkuri body, Entity target) {
@@ -217,7 +226,8 @@ public class FoodLogic {
 
 	/**
 	 * 死体食べ判定
-	 * @param body ゆっくり
+	 * 
+	 * @param body   ゆっくり
 	 * @param target 死体
 	 * @return 食べるかどうか
 	 */

@@ -1,18 +1,25 @@
 package src.draw;
 
-import static org.junit.jupiter.api.Assertions.*;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.io.TempDir;
-import java.io.File;
-import java.nio.file.Path;
-import java.nio.file.Files;
-import java.lang.reflect.Field;
-import java.awt.image.BufferedImage;
-import javax.imageio.ImageIO;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
 import java.awt.LinearGradientPaint;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.lang.reflect.Field;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.List;
-import src.base.Entity;
+
+import javax.imageio.ImageIO;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.io.TempDir;
+
+import src.entity.core.Entity;
 import src.system.MapWindow;
 import src.util.WorldTestHelper;
 

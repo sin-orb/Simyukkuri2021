@@ -1,8 +1,6 @@
 package src.logic;
 
-import src.base.Yukkuri;
-
-import src.base.Yukkuri;
+import src.entity.core.living.yukkuri.Yukkuri;
 import src.enums.EnumRelationMine;
 import src.enums.Happiness;
 import src.enums.PublicRank;
@@ -21,7 +19,7 @@ public final class BodyUnunSlaveEmotionRule {
 	/**
 	 * Process the special emotion reaction for unun slave bodies.
 	 *
-	 * @param body actor body
+	 * @param body       actor body
 	 * @param bodyTarget target body
 	 * @return true if a reaction was handled
 	 */

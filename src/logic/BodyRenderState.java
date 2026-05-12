@@ -2,16 +2,17 @@ package src.logic;
 
 import src.Const;
 import src.SimYukkuri;
-import src.base.Yukkuri;
-import src.entity.world.bodylinked.Okazari;
-import src.entity.world.bodylinked.Okazari.OkazariType;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.world.bodylinked.Okazari;
+import src.entity.core.world.bodylinked.Okazari.OkazariType;
+import src.entity.core.world.item.Sui;
 import src.enums.BodyBake;
 import src.enums.BodyRank;
 import src.enums.CriticalDamegeType;
 import src.enums.FootBake;
 import src.enums.HairState;
 import src.enums.ImageCode;
-import src.item.Sui;
+import src.enums.YukkuriType;
 import src.system.BodyLayer;
 import src.system.MainCommandUI;
 import src.util.GameRandom;
@@ -59,7 +60,8 @@ public final class BodyRenderState {
 			idx += appendFace(body, ImageCode.PEALEDFACE.ordinal(), direction, layer, idx);
 		} else if (body.isNYD()) {
 			idx += appendFace(body,
-					body.isUnBirth() ? ImageCode.NYD_FRONT_CRY2.ordinal() : ImageCode.NYD_FRONT_WIDE.ordinal(), direction,
+					body.isUnBirth() ? ImageCode.NYD_FRONT_CRY2.ordinal() : ImageCode.NYD_FRONT_WIDE.ordinal(),
+					direction,
 					layer, idx);
 		} else if (body.getCriticalDamege() == src.enums.CriticalDamegeType.CUT) {
 			idx += appendFace(body, ImageCode.PAIN.ordinal(), direction, layer, idx);
@@ -108,7 +110,8 @@ public final class BodyRenderState {
 		} else if (body.isShitting() || body.isBirth() && body.getBabyTypes().size() > 0
 				|| (body.isFixBack() && !body.isFurifuri())) {
 			idx += appendFrontBody(body, layer, idx);
-		} else if (body.isFurifuri() && !body.isUnBirth() && !body.isSleeping() && (!body.isLockmove() || body.isFixBack())) {
+		} else if (body.isFurifuri() && !body.isUnBirth() && !body.isSleeping()
+				&& (!body.isLockmove() || body.isFixBack())) {
 			idx += appendRollingBody(body, layer, idx);
 		} else {
 			idx += appendNormalBody(body, direction, layer, idx);
@@ -364,7 +367,8 @@ public final class BodyRenderState {
 			return appendBlinkingFace(body, direction, layer, idx, ImageCode.RUDE.ordinal(), ImageCode.RUDE0.ordinal());
 		}
 		if (body.isTalking() && !body.isRude()) {
-			return appendBlinkingFace(body, direction, layer, idx, ImageCode.CHEER.ordinal(), ImageCode.CHEER0.ordinal());
+			return appendBlinkingFace(body, direction, layer, idx, ImageCode.CHEER.ordinal(),
+					ImageCode.CHEER0.ordinal());
 		}
 		if ((!body.canflyCheck() && body.getZ() != 0) && !body.isLockmove()
 				&& !(body.takeMappedObj(body.getParentLinkId()) instanceof Sui)) {
@@ -431,7 +435,7 @@ public final class BodyRenderState {
 	}
 
 	private static boolean supportsNormalBlinkImages(Yukkuri body) {
-		return body.getType() != 20000;
+		return body.getType() != YukkuriType.HYBRIDYUKKURI;
 	}
 
 	private static int appendFace(Yukkuri body, int imageCode, int direction, BodyLayer layer, int idx) {
@@ -515,7 +519,8 @@ public final class BodyRenderState {
 					Const.LEFT, layer, idx);
 		}
 		if (body.getCriticalDamege() == CriticalDamegeType.INJURED) {
-			idx += appendFace(body, left ? ImageCode.ROLL_LEFT_INJURED.ordinal() : ImageCode.ROLL_RIGHT_INJURED.ordinal(),
+			idx += appendFace(body,
+					left ? ImageCode.ROLL_LEFT_INJURED.ordinal() : ImageCode.ROLL_RIGHT_INJURED.ordinal(),
 					Const.LEFT, layer, idx);
 		}
 		if (body.isBlind()) {
