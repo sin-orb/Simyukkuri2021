@@ -1,5 +1,17 @@
 package src.draw;
 
+import src.entity.core.Entity;
+import src.entity.core.attachment.*;
+import src.entity.core.attachment.impl.*;
+import src.entity.core.effect.*;
+import src.entity.core.effect.impl.*;
+import src.entity.core.living.yukkuri.Dna;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.living.yukkuri.impl.*;
+import src.entity.core.world.bodylinked.*;
+import src.entity.core.world.item.*;
+import src.entity.core.world.mobile.*;
+
 import static org.junit.jupiter.api.Assertions.assertArrayEquals;
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -1834,7 +1846,7 @@ class TerrariumTest {
                 SimYukkuri.world.getCurrentMap().getBody().put(child.getUniqueID(), child);
 
                 FuneralEvent event = new FuneralEvent(from, deceased, null, 10);
-                Class<?> funeralStateClass = Class.forName("src.event.FuneralEvent$STATE");
+                Class<?> funeralStateClass = Class.forName("src.event.impl.FuneralEvent$STATE");
                 java.lang.reflect.Method setState = FuneralEvent.class.getMethod("setState", funeralStateClass);
                 Object goodbyeState = Enum.valueOf((Class) funeralStateClass, "GOODBYE");
                 setState.invoke(event, goodbyeState);
@@ -1994,7 +2006,7 @@ class TerrariumTest {
                 SimYukkuri.world.getCurrentMap().getBody().put(child.getUniqueID(), child);
 
                 ProudChildEvent event = new ProudChildEvent(from, null, null, 10);
-                Class<?> stateClass = Class.forName("src.event.ProudChildEvent$STATE");
+                Class<?> stateClass = Class.forName("src.event.impl.ProudChildEvent$STATE");
                 java.lang.reflect.Method setState = ProudChildEvent.class.getMethod("setState", stateClass);
                 Object proudState = Enum.valueOf((Class) stateClass, "PROUD");
                 setState.invoke(event, proudState);
@@ -2049,7 +2061,7 @@ class TerrariumTest {
                 SimYukkuri.world.getCurrentMap().getBody().put(child.getUniqueID(), child);
 
                 ShitExercisesEvent event = new ShitExercisesEvent(from, null, null, 10);
-                Class<?> stateClass = Class.forName("src.event.ShitExercisesEvent$STATE");
+                Class<?> stateClass = Class.forName("src.event.impl.ShitExercisesEvent$STATE");
                 java.lang.reflect.Method setState = ShitExercisesEvent.class.getMethod("setState", stateClass);
                 Object ununState = Enum.valueOf((Class) stateClass, "UNUN");
                 setState.invoke(event, ununState);

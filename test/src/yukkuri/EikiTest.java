@@ -1,5 +1,17 @@
 package src.yukkuri;
 
+import src.entity.core.Entity;
+import src.entity.core.attachment.*;
+import src.entity.core.attachment.impl.*;
+import src.entity.core.effect.*;
+import src.entity.core.effect.impl.*;
+import src.entity.core.living.yukkuri.Dna;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.living.yukkuri.impl.*;
+import src.entity.core.world.bodylinked.*;
+import src.entity.core.world.item.*;
+import src.entity.core.world.mobile.*;
+
 import src.SimYukkuri;
 
 import org.junit.jupiter.api.Test;
@@ -13,7 +25,7 @@ public class EikiTest {
     @Test
     public void testEikiIdentity() {
         Eiki eiki = new Eiki();
-        assertEquals(1007, eiki.getType());
+        assertEquals(Eiki.type, eiki.getType());
         assertEquals("えーき", eiki.getNameJ());
         assertEquals("Eiki", eiki.getNameE());
     }

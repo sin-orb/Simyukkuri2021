@@ -264,9 +264,7 @@ public class ShitExercisesEvent extends EventPacket {
 								targetObject.getX(), targetObject.getY() - 20);
 					}
 					if (distanceToToilet <= 1) {
-						if (gathered) {
-							state = STATE.WAIT;
-						}
+						state = STATE.WAIT;
 						sourceBody.stay();
 					} else if (targetObject != null) {
 						sourceBody.moveToEvent(this, targetObject.getX(), targetObject.getY() - 20);
@@ -353,13 +351,15 @@ public class ShitExercisesEvent extends EventPacket {
 									GameMessages.getMessage(sourceBody, MessagePool.Action.ShitExercisesUNUNFrom), 52,
 									true,
 									false);
-							actionFlag = true;
+							sourceBody.stay(stayTicks);
+							sourceBody.addMemories(10);
+						} else {
 							sourceBody.stay(stayTicks);
 							sourceBody.addMemories(10);
 						}
-						if (ununActionFlag) {
-							actionFlag = false;
-						}
+						ununActionFlag = true;
+						actionFlag = false;
+						state = STATE.END;
 					}
 					break;
 				case END:
@@ -368,11 +368,10 @@ public class ShitExercisesEvent extends EventPacket {
 							sourceBody.setBodyEventResMessage(
 									GameMessages.getMessage(sourceBody, MessagePool.Action.ShitExercisesENDFrom), 52,
 									true, false);
-							actionFlag = true;
 							sourceBody.stay(stayTicks);
 							sourceBody.addMemories(10);
-							return UpdateState.ABORT;
 						}
+						return UpdateState.ABORT;
 					}
 					break;
 				default:
@@ -467,6 +466,8 @@ public class ShitExercisesEvent extends EventPacket {
 							}
 							body.stay();
 							ununActionFlag = true;
+							actionFlag = false;
+							state = STATE.END;
 						}
 					} else if (ununActionFlag) {
 						body.addMemories(5);

@@ -3,10 +3,7 @@ set -eu
 
 cd "$(dirname "$0")/.."
 
-if [ -d bin ]; then
-  find bin -depth -mindepth 1 -exec rm -rf {} +
-  rmdir bin
-fi
+rm -rf bin
 mkdir -p bin
 
 find src -name '*.java' | sort > /tmp/simyukkuri_sources.txt

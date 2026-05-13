@@ -1,0 +1,201 @@
+package src.entity.core.living.yukkuri;
+
+import src.entity.core.attachment.impl.Ants;
+import src.enums.EnumRelationMine;
+import src.enums.Happiness;
+import src.enums.Intelligence;
+import src.logic.BodyLogic;
+import src.system.MessagePool;
+import src.util.GameMessages;
+import src.util.GameRandom;
+
+/**
+ * 家族以外の他ゆっくりとの関係処理をまとめる委譲クラス。
+ */
+public final class YukkuriOtherRelationDelegate {
+	private final Yukkuri body;
+
+	/**
+	 * 他個体関係の委譲を生成する.
+	 *
+	 * @param body 対象のゆっくり
+	 */
+	public YukkuriOtherRelationDelegate(Yukkuri body) {
+		this.body = body;
+	}
+
+	/**
+	 * すりすりする.
+	 *
+	 * @param p すりすり相手
+	 */
+	public void doSurisuri(Yukkuri p) {
+		if (body.isDead() || p.isDead()) {
+			return;
+		}
+		if (body.isVeryHungry()) {
+			return;
+		}
+		if (body.isPeropero()) {
+			return;
+		}
+		if (!body.canAction()) {
+			return;
+		}
+		EnumRelationMine relation = BodyLogic.checkMyRelation(body, p);
+		if (body.findSick(p) || p.isFeelHardPain() || p.isDamaged()) {
+			switch (relation) {
+				case FATHER:
+				case MOTHER:
+					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.TreatChildBySurisuri));
+					break;
+				case PARTNAR:
+					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.TreatPartnerBySurisuri));
+					break;
+				case CHILD_FATHER:
+					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.TreatFatherBySurisuri));
+					break;
+				case CHILD_MOTHER:
+					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.TreatMotherBySurisuri));
+					break;
+				case ELDERSISTER:
+					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.TreatSisterBySurisuri));
+					break;
+				case YOUNGSISTER:
+					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.TreatElderSisterBySurisuri));
+					break;
+				default:
+					break;
+			}
+			body.setHappiness(Happiness.SAD);
+			body.addStress(-50);
+			p.addStress(-50);
+		} else {
+			body.setMessage(GameMessages.getMessage(body, MessagePool.Action.SuriSuri));
+			body.addStress(-100);
+			p.addStress(-100);
+			body.setHappiness(Happiness.VERY_HAPPY);
+			if (body.isNotNYD()) {
+				p.setHappiness(Happiness.VERY_HAPPY);
+			}
+		}
+		if (p.getAttachmentSize(Ants.class) > 0 && GameRandom.nextInt(200) == 0) {
+			if (body.getAntCount() <= 0) {
+				body.setAntCount(0);
+				body.addAttachment(new Ants(body));
+				body.addStress(50);
+				body.setHappiness(Happiness.VERY_SAD);
+				body.addMemories(-1);
+			}
+			body.setAntCount(body.getAntCount() + 10);
+		}
+		body.setNobinobi(true);
+		body.stay(40);
+		p.stay(40);
+		if (body.getIntelligence() != Intelligence.WISE && body.getSurisuriAccidentProb() != 0
+				&& GameRandom.nextInt(body.getSurisuriAccidentProb()) == 0) {
+			body.doSukkiri(p);
+		}
+		if (body.isSick() && GameRandom.nextInt(5) == 0) {
+			p.addSickPeriod(100);
+		}
+		if (p.isSick() && GameRandom.nextInt(5) == 0) {
+			body.addSickPeriod(100);
+		}
+	}
+
+	/**
+	 * ぺろぺろする.
+	 *
+	 * @param p ぺろぺろ対象
+	 */
+	public void doPeropero(Yukkuri p) {
+		if (body.isDead() || p.isDead()) {
+			return;
+		}
+		if (body.isNobinobi() || body.isShutmouth()) {
+			return;
+		}
+		if (!body.canAction()) {
+			return;
+		}
+		if (body.isSleeping()) {
+			return;
+		}
+
+		EnumRelationMine relation = BodyLogic.checkMyRelation(body, p);
+		if (body.findSick(p) || p.isFeelHardPain() || p.isDamaged() || p.getAttachmentSize(Ants.class) != 0) {
+			switch (relation) {
+				case FATHER:
+				case MOTHER:
+					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.TreatChildByPeropero));
+					break;
+				case PARTNAR:
+					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.TreatPartnerByPeropero));
+					break;
+				case CHILD_FATHER:
+					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.TreatFatherBySurisuri));
+					break;
+				case CHILD_MOTHER:
+					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.TreatMotherBySurisuri));
+					break;
+				case ELDERSISTER:
+					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.TreatSisterByPeropero));
+					break;
+				case YOUNGSISTER:
+					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.TreatElderSisterByPeropero));
+					break;
+				default:
+					break;
+			}
+			body.setHappiness(Happiness.SAD);
+			p.addMemories(1);
+			p.addStress(-75);
+		} else {
+			body.setMessage(GameMessages.getMessage(body, MessagePool.Action.PeroPero));
+			body.setHappiness(Happiness.VERY_HAPPY);
+			body.addStress(-50);
+			p.setHappiness(Happiness.VERY_HAPPY);
+			p.addMemories(1);
+			p.addStress(-200);
+			if (body.getIntelligence() == Intelligence.WISE) {
+				p.addStress(-25);
+			}
+		}
+
+		int ant = p.getAntCount();
+		ant -= 40;
+		if (ant <= 0) {
+			ant = 0;
+			p.removeAnts();
+		}
+		p.setAntCount(ant);
+		if (ant > 0 && GameRandom.nextInt(200) == 0) {
+			if (body.getAntCount() <= 0) {
+				body.addAttachment(new Ants(body));
+				body.addStress(50);
+				body.setHappiness(Happiness.VERY_SAD);
+				body.addMemories(-1);
+			}
+			body.setAntCount(body.getAntCount() + 10);
+		}
+
+		body.setNobinobi(true);
+		body.setPeropero(true);
+		body.stay(40);
+		p.stay(40);
+		p.addDamage(-10);
+		if (p.getAttachmentSize(Ants.class) == 0) {
+			body.substractNumOfAnts(10 * body.getBodyAgeState().ordinal() * body.getBodyAgeState().ordinal());
+		}
+		if (!p.isHasPants()) {
+			p.makeDirty(false);
+		}
+		if (body.isSick() && GameRandom.nextBoolean()) {
+			p.addSickPeriod(100);
+		}
+		if (p.isSick() && GameRandom.nextBoolean()) {
+			body.addSickPeriod(100);
+		}
+	}
+}

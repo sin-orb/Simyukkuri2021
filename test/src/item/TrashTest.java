@@ -1,8 +1,20 @@
 package src.item;
 
+import src.entity.core.Entity;
+import src.entity.core.attachment.*;
+import src.entity.core.attachment.impl.*;
+import src.entity.core.effect.*;
+import src.entity.core.effect.impl.*;
+import src.entity.core.living.yukkuri.Dna;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.living.yukkuri.impl.*;
+import src.entity.core.world.bodylinked.*;
+import src.entity.core.world.item.*;
+import src.entity.core.world.mobile.*;
+
 import org.junit.jupiter.api.Test;
-import src.base.ItemTestBase;
-import src.base.WorldEntity;
+import src.entity.core.world.item.ItemTestBase;
+import src.entity.core.world.WorldEntity;
 import src.SimYukkuri;
 import src.draw.Translate;
 import src.enums.WorldEntityKind;
@@ -452,25 +464,25 @@ class TrashTest extends ItemTestBase {
     @Test
     void testSetBxyz_ResetBPos() {
         Trash trash = new Trash(100, 100, 0);
-        trash.setBx(1);
-        trash.setBy(2);
-        trash.setBz(3);
-        assertEquals(1, trash.getBx());
-        assertEquals(2, trash.getBy());
-        assertEquals(3, trash.getBz());
+        trash.setMotionX(1);
+        trash.setMotionY(2);
+        trash.setMotionZ(3);
+        assertEquals(1, trash.getMotionX());
+        assertEquals(2, trash.getMotionY());
+        assertEquals(3, trash.getMotionZ());
         trash.resetMotion();
-        assertEquals(0, trash.getBx());
-        assertEquals(0, trash.getBy());
-        assertEquals(0, trash.getBz());
+        assertEquals(0, trash.getMotionX());
+        assertEquals(0, trash.getMotionY());
+        assertEquals(0, trash.getMotionZ());
     }
 
     @Test
     void testAddBxyz() {
         Trash trash = new Trash(100, 100, 0);
         trash.addMotion(5, 6, 7);
-        assertEquals(5, trash.getBx());
-        assertEquals(6, trash.getBy());
-        assertEquals(7, trash.getBz());
+        assertEquals(5, trash.getMotionX());
+        assertEquals(6, trash.getMotionY());
+        assertEquals(7, trash.getMotionZ());
     }
 
     @Test

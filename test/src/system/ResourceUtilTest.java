@@ -1,9 +1,21 @@
 package src.system;
 
+import src.entity.core.Entity;
+import src.entity.core.attachment.*;
+import src.entity.core.attachment.impl.*;
+import src.entity.core.effect.*;
+import src.entity.core.effect.impl.*;
+import src.entity.core.living.yukkuri.Dna;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.living.yukkuri.impl.*;
+import src.entity.core.world.bodylinked.*;
+import src.entity.core.world.item.*;
+import src.entity.core.world.mobile.*;
+import src.util.GameLocale;
+
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 import java.util.Locale;
-
 /**
  * Test class for ResourceUtil.
  */
@@ -44,10 +56,8 @@ public class ResourceUtilTest {
     }
 
     @Test
-    public void testIS_JP() {
-        // Just verify it doesn't crash accessing the static field
-        boolean isJp = ResourceUtil.IS_JP;
-        // Result depends on environment, so we just check it matches Locale
-        assertEquals(Locale.getDefault().getLanguage().equals(new Locale("ja").getLanguage()), isJp);
+    public void testGameLocaleIsJapanese() {
+        boolean isJp = GameLocale.isJapanese();
+        assertEquals(Locale.JAPANESE.getLanguage().equals(GameLocale.getLocale().getLanguage()), isJp);
     }
 }

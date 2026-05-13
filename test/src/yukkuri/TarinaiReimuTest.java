@@ -1,5 +1,17 @@
 package src.yukkuri;
 
+import src.entity.core.Entity;
+import src.entity.core.attachment.*;
+import src.entity.core.attachment.impl.*;
+import src.entity.core.effect.*;
+import src.entity.core.effect.impl.*;
+import src.entity.core.living.yukkuri.Dna;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.living.yukkuri.impl.*;
+import src.entity.core.world.bodylinked.*;
+import src.entity.core.world.item.*;
+import src.entity.core.world.mobile.*;
+
 import src.SimYukkuri;
 
 import org.junit.jupiter.api.Test;
@@ -13,7 +25,7 @@ public class TarinaiReimuTest {
     @Test
     public void testTarinaiReimuIdentity() {
         TarinaiReimu tarinaiReimu = new TarinaiReimu();
-        assertEquals(2007, tarinaiReimu.getType());
+        assertEquals(TarinaiReimu.type, tarinaiReimu.getType());
     }
 
     @Test
@@ -246,7 +258,7 @@ public class TarinaiReimuTest {
     public void testGetHybridType_default() {
         TarinaiReimu obj = new TarinaiReimu();
         // Default → returns TarinaiReimu.type
-        assertEquals(TarinaiReimu.type, obj.getHybridType(-999));
+        assertEquals(TarinaiReimu.type, obj.getHybridType(src.enums.YukkuriType.ALICE));
     }
 
     @Test

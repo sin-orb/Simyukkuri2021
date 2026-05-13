@@ -120,7 +120,7 @@ public final class ImageLoadService {
 
 			if (isBody) {
 				win.addLine("Load Shadow/Poo-poo/Vomit");
-				Yukkuri.loadShadowImages(loader, pane);
+				src.entity.core.living.yukkuri.YukkuriSprite.loadShadowImages(loader, pane);
 				src.entity.core.world.mobile.Shit.loadImages(loader, pane);
 				src.entity.core.world.mobile.Vomit.loadImages(loader, pane);
 			}

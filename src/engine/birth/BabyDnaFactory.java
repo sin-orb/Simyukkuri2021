@@ -27,7 +27,7 @@ public final class BabyDnaFactory {
 		ret.setType(babyType);
 		ret.setRaperChild(isRape);
 		ret.setMother(mother.getUniqueID());
-		ret.setFather(father.getUniqueID());
+		ret.setFather(father == null ? -1 : father.getUniqueID());
 		ret.setAttitude(YukkuriBirthTypeResolver.resolveAttitude(mother, fatherrAtt));
 		ret.setIntelligence(YukkuriBirthTypeResolver.resolveIntelligence(mother, fatherInt));
 		return ret;

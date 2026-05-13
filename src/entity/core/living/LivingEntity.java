@@ -1,40 +1,62 @@
 package src.entity.core.living;
 
+import java.awt.Rectangle;
+import java.beans.Transient;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import src.Const;
+import src.SimYukkuri;
 import src.draw.Color4y;
+import src.draw.Rectangle4y;
+import src.draw.Translate;
+import src.draw.Terrarium;
 import src.entity.core.Entity;
 import src.entity.core.attachment.Attachment;
+import src.entity.core.attachment.impl.Ants;
+import src.entity.core.attachment.impl.Badge;
 import src.entity.core.living.yukkuri.Dna;
+import src.entity.core.living.yukkuri.Yukkuri;
 import src.entity.core.world.bodylinked.Okazari;
 import src.entity.core.world.bodylinked.Stalk;
+import src.entity.core.world.item.Bed;
 import src.enums.AgeState;
 import src.enums.BodyBake;
 import src.enums.BurialState;
+import src.enums.Burst;
 import src.enums.CoreAnkoState;
 import src.enums.CriticalDamegeType;
 import src.enums.Damage;
 import src.enums.Direction;
+import src.enums.ImageCode;
 import src.enums.Event;
 import src.enums.FavItemType;
 import src.enums.FootBake;
 import src.enums.HairState;
+import src.enums.Happiness;
 import src.enums.PanicType;
+import src.enums.Pain;
 import src.enums.PlayStyle;
-import src.enums.PredatorType;
+import src.enums.PublicRank;
 import src.enums.PurposeOfMoving;
 import src.enums.TakeoutItemType;
 import src.enums.TangType;
 import src.enums.Trauma;
+import src.enums.WindowType;
 import src.enums.YukkuriType;
 import src.event.EventPacket;
+import src.logic.AntInfestationPolicy;
 import src.logic.BodyRelations;
 import src.system.BasicStrokeEX;
+import src.system.MessagePool;
 import src.system.MapPlaceData;
 import src.system.Sprite;
+import src.util.GameMessages;
+import src.util.GameEnvironment;
+import src.util.GameRandom;
 import src.util.GameWorld;
 
 /**
@@ -104,36 +126,22 @@ public abstract class LivingEntity extends Entity {
 	protected boolean pheromone = false;
 	/** おさげ、羽、尻尾有無 種族として何も持っていないものはtrue */
 	protected boolean hasBraid = true;
-	/** 種族としてお下げ、羽、尻尾を持つか */
-	protected boolean braidType = true;
 	/** おくるみ有無 true if having pants */
 	protected boolean hasPants = false;
-	/** あにゃるふさぎ有無 */
-	protected boolean analClose = false;
-	/** 胎生去勢有無 */
-	protected boolean bodyCastration = false;
-	/** 茎去勢有無 */
-	protected boolean stalkCastration = false;
 	/** ぺにぺにの去勢有無 */
 	protected boolean penipeniCutted = false;
+	/** 水が平気か */
+	protected boolean likeWater = false;
 	/** 髪の状態 */
 	protected HairState hairState = HairState.DEFAULT;
 	/** 空を飛ぶか */
 	protected boolean flyingType = false;
-	/** 希少種か */
-	protected boolean rareType = false;
-	/** 捕食種タイプ */
-	protected PredatorType predatorType = null;
-	/** 苦いえさが好きか */
-	protected boolean likeBitterFood = false;
-	/** 辛いえさが好きか */
-	protected boolean likeHotFood = false;
-	/** 水が平気か */
-	protected boolean likeWater = false;
 	/** 誕生済みか否か */
 	protected boolean birth = false;
 	/** 生まれてからの基準年齢 */
 	protected long birthAge = -1;
+	/** 出生直後イベントから除外する残り tick 数 */
+	protected int birthEventBlockedTicks = 0;
 	/** 実ゆかどうか */
 	protected boolean unBirth = false;
 	/** 妊娠期間 */
@@ -180,6 +188,308 @@ public abstract class LivingEntity extends Entity {
 	protected BurialState burialState = BurialState.NONE;
 
 	/**
+	 * 通常メッセージを出す.
+	 *
+	 * @param message メッセージ
+	 */
+	public abstract void setMessage(String message);
+
+	/**
+	 * ピコピコメッセージを出す.
+	 *
+	 * @param message   メッセージ
+	 * @param interrupt 割り込み可否
+	 */
+	public abstract void setPikoMessage(String message, boolean interrupt);
+
+	/**
+	 * ピコピコメッセージを出す.
+	 *
+	 * @param message   メッセージ
+	 * @param count     表示時間
+	 * @param interrupt 割り込み可否
+	 */
+	public abstract void setPikoMessage(String message, int count, boolean interrupt);
+
+	/**
+	 * 時間指定メッセージを出す.
+	 *
+	 * @param message メッセージ
+	 * @param count   表示時間
+	 */
+	public abstract void setMessage(String message, int count);
+
+	/**
+	 * 割り込み可否付きでメッセージを出す.
+	 *
+	 * @param message   メッセージ
+	 * @param interrupt 割り込み可否
+	 */
+	public abstract void setMessage(String message, boolean interrupt);
+
+	/**
+	 * 全指定メッセージを出す.
+	 *
+	 * @param message   メッセージ
+	 * @param count     表示時間
+	 * @param interrupt 割り込み可否
+	 * @param piko      ピコピコ可否
+	 */
+	public abstract void setMessage(String message, int count, boolean interrupt, boolean piko);
+
+	/**
+	 * ワールドイベント発生メッセージを出す.
+	 *
+	 * @param message メッセージ
+	 * @param count   表示時間
+	 */
+	public abstract void setWorldEventSendMessage(String message, int count);
+
+	/**
+	 * ワールドイベント応答メッセージを出す.
+	 *
+	 * @param message   メッセージ
+	 * @param count     表示時間
+	 * @param interrupt 割り込み可否
+	 * @param piko      ピコピコ可否
+	 */
+	public abstract void setWorldEventResMessage(String message, int count, boolean interrupt, boolean piko);
+
+	/**
+	 * 個体イベント発生メッセージを出す.
+	 *
+	 * @param message メッセージ
+	 * @param count   表示時間
+	 */
+	public abstract void setBodyEventSendMessage(String message, int count);
+
+	/**
+	 * 個体イベント応答メッセージを出す.
+	 *
+	 * @param message   メッセージ
+	 * @param count     表示時間
+	 * @param interrupt 割り込み可否
+	 * @param piko      ピコピコ可否
+	 */
+	public abstract void setBodyEventResMessage(String message, int count, boolean interrupt, boolean piko);
+
+	/**
+	 * 非ゆっくり症＆口封じ用メッセージを出す.
+	 *
+	 * @param message メッセージ
+	 * @param piko    ピコピコ可否
+	 */
+	public abstract void setNYDMessage(String message, boolean piko);
+
+	/**
+	 * ウィンドウ種別付きメッセージを出す.
+	 *
+	 * @param message   メッセージ
+	 * @param type      ウィンドウ種別
+	 * @param count     表示時間
+	 * @param interrupt 割り込み可否
+	 * @param piko      ピコピコ可否
+	 * @param NYD       非ゆっくり症かどうか
+	 */
+	public abstract void setMessage(String message, WindowType type, int count, boolean interrupt, boolean piko,
+			boolean NYD);
+
+	/**
+	 * ねぎぃメッセージを出す.
+	 *
+	 * @param message メッセージ
+	 * @param piko    ピコピコ可否
+	 */
+	public abstract void setNegiMessage(String message, boolean piko);
+
+	/**
+	 * ねぎぃメッセージを出す.
+	 *
+	 * @param message メッセージ
+	 * @param count   表示時間
+	 * @param piko    ピコピコ可否
+	 */
+	public abstract void setNegiMessage(String message, int count, boolean piko);
+
+	/**
+	 * 圧搾処理を受ける.
+	 */
+	public abstract void strikeByPress();
+
+	/**
+	 * ダメージ状態が軽いかを返す.
+	 *
+	 * @return ダメージ状態が軽いか
+	 */
+	@Transient
+	public boolean isDamagedLightly() {
+		return getDamageState() == Damage.SOME || getDamageState() == Damage.VERY || getDamageState() == Damage.TOOMUCH;
+	}
+
+	/**
+	 * 痛み状態を返す.
+	 *
+	 * @return 痛み状態
+	 */
+	@Transient
+	public Pain getPainState() {
+		if (getBurstState() == Burst.NEAR || getBurstState() == Burst.BURST || isNeedled()) {
+			return Pain.VERY;
+		}
+		if (getBurstState() == Burst.HALF || criticalDamege != null) {
+			return Pain.SOME;
+		}
+		return Pain.NONE;
+	}
+
+	/**
+	 * 痛みを感じているかを返す.
+	 *
+	 * @return 痛みを感じているか
+	 */
+	@Transient
+	public boolean isFeelPain() {
+		return getPainState() == Pain.VERY || getPainState() == Pain.SOME;
+	}
+
+	/**
+	 * 激しい痛みを感じているかを返す.
+	 *
+	 * @return 激しい痛みを感じているか
+	 */
+	@Transient
+	public boolean isFeelHardPain() {
+		return getPainState() == Pain.VERY;
+	}
+
+	/**
+	 * 出生からしばらく経っていないかどうかを返す.
+	 *
+	 * @return 出生直後ならtrue
+	 */
+	@Transient
+	public boolean isNewborn() {
+		return birthAge >= 0 && (getAge() - birthAge) < 300;
+	}
+
+	/**
+	 * 群れ内ランクを返す.
+	 *
+	 * @return 群れ内ランク
+	 */
+	public abstract PublicRank getPublicRank();
+
+	/**
+	 * 強制顔を設定する.
+	 *
+	 * @param forceFace 強制顔
+	 */
+	public abstract void setForceFace(int forceFace);
+
+	/**
+	 * 汚れ状態を設定する.
+	 *
+	 * @param flag 汚れ状態
+	 */
+	public abstract void makeDirty(boolean flag);
+
+	/**
+	 * ぺろぺろ状態を設定する.
+	 *
+	 * @param peropero ぺろぺろ状態
+	 */
+	public abstract void setPeropero(boolean peropero);
+
+	/**
+	 * 思い出を加算する.
+	 *
+	 * @param memoryDelta 加算量
+	 */
+	public abstract void addMemories(int memoryDelta);
+
+	/**
+	 * かしこいかどうかを返す.
+	 *
+	 * @return かしこいかどうか
+	 */
+	public abstract boolean isSmart();
+
+	/**
+	 * 行動を消す.
+	 */
+	public abstract void clearActions();
+
+	/**
+	 * 感情を設定する.
+	 *
+	 * @param happiness 感情
+	 */
+	public abstract void setHappiness(Happiness happiness);
+
+	/**
+	 * ふりふりしたいか.
+	 *
+	 * @return ふりふりしたいか
+	 */
+	public abstract boolean willingFurifuri();
+
+	/**
+	 * イベントを消す.
+	 */
+	public abstract void clearEvent();
+
+	/**
+	 * つぶされたときの吐瀉物を出す.
+	 *
+	 * @param x X座標
+	 * @param y Y座標
+	 * @param z Z座標
+	 */
+	protected abstract void addCrushedVomit(int x, int y, int z);
+
+	/**
+	 * 致命傷種別を返す.
+	 *
+	 * @return 致命傷種別
+	 */
+	public abstract CriticalDamegeType getCriticalDamegeType();
+
+	/**
+	 * うにょ行動可能判定を返す.
+	 *
+	 * @return うにょ行動可能判定
+	 */
+	public abstract boolean isUnyoActionAll();
+
+	/**
+	 * 親リンクIDを返す.
+	 *
+	 * @return 親リンクID
+	 */
+	public abstract int getParentLinkId();
+
+	/**
+	 * ぺろぺろ中かどうかを返す.
+	 *
+	 * @return ぺろぺろ中かどうか
+	 */
+	public abstract boolean isPeropero();
+
+	/**
+	 * うにょオフセットを加算する.
+	 *
+	 * @param x x
+	 * @param y y
+	 * @param z z
+	 */
+	public abstract void changeUnyo(int x, int y, int z);
+
+	/**
+	 * うにょオフセットを戻す.
+	 */
+	public abstract void changeReUnyo();
+
+	/**
 	 * 蓄積ダメージ counter indicating damage を取得する. @return 蓄積ダメージ counter indicating
 	 * damage
 	 */
@@ -210,6 +520,190 @@ public abstract class LivingEntity extends Entity {
 	/** ダメージ外観 を設定する. @param damageState ダメージ外観 */
 	public void setDamageState(Damage damageState) {
 		this.damageState = damageState;
+	}
+
+	/**
+	 * ストレス値に加える.
+	 *
+	 * @param s ストレス値に加えたい値
+	 */
+	public void addStress(int s) {
+		if (dead) {
+			return;
+		}
+		if (s > 0 && coreAnkoState == CoreAnkoState.DEFAULT && getBurstState() != Burst.HALF) {
+			plusShit(s / 5);
+		}
+		stress += TICK * s;
+		if (stress < 0) {
+			stress = 0;
+		}
+	}
+
+	/** 環境からダメージを回復できるかどうかを返す. */
+	protected boolean canHealDamageFromEnvironment() {
+		return !isUnBirth() || isPlantForUnbirthChild();
+	}
+
+	/**
+	 * 時間経過によるダメージ変動を処理する.
+	 */
+	protected void applyDamageOverTime() {
+		if (isSick()) {
+			if (getSickPeriod() > (getIncubationPeriodBase() * 32) && isDamagedHeavily()) {
+				if (GameRandom.nextInt(3) == 0) {
+					damage += TICK;
+				}
+			} else if (getSickPeriod() > (getIncubationPeriodBase() * 32)) {
+				damage += TICK * 3;
+			} else if (getSickPeriod() > (getIncubationPeriodBase() * 8)) {
+				damage += TICK * 2;
+			} else if (getSickPeriod() > getIncubationPeriodBase()) {
+				damage += TICK;
+			}
+		} else if (!isHungry()) {
+			damage -= TICK;
+		}
+		if (hungry <= 0) {
+			damage += TICK;
+		}
+	}
+
+	/**
+	 * 体の状態異常によるダメージを処理する.
+	 */
+	protected void applyBodyConditionDamage() {
+		if (isPealed()) {
+			if (isSleeping()) {
+				wakeup();
+			}
+			damage += TICK * 50;
+			setSickPeriod(0);
+			GameEnvironment.setAlarm();
+			setPeropero(false);
+			addStress(200);
+			addMemories(-5);
+			if (getCoreAnkoState() == CoreAnkoState.NonYukkuriDiseaseNear) {
+				setNYDMessage(GameMessages.getMessage(this, MessagePool.Action.Dying2), false);
+			}
+			setMessage(GameMessages.getMessage(this, MessagePool.Action.Dying2));
+		}
+		if (isPacked()) {
+			GameEnvironment.setAlarm();
+			setPeropero(false);
+			addStress(50);
+			addMemories(-2);
+			setCanTalk(false);
+			if (GameRandom.nextInt(200) == 0) {
+				stayPurupuru(20);
+			}
+		}
+		if (GameWorld.get().getCurrentMap().getMapIndex() == 2 && !(isSmart() && getAttachmentSize(Badge.class) != 0)
+				&& getCarAccidentProb() != 0 && GameRandom.nextInt(getCarAccidentProb()) == 0) {
+			strikeByPress();
+		}
+	}
+
+	/**
+	 * 環境由来のダメージを処理する.
+	 */
+	protected void applyExternalDamage(boolean healFlag) {
+		if (GameEnvironment.isOrangeSteam() && healFlag) {
+			damage -= TICK * 50;
+		}
+		if (GameEnvironment.isSugerSteam() && damage >= getDamageLimitBase()[getBodyAgeState().ordinal()] * 80 / 100
+				&& healFlag) {
+			damage -= TICK * 100;
+		}
+		if (GameEnvironment.isPoisonSteam()) {
+			damage += TICK * 100;
+			clearActions();
+			setExciting(false);
+			setShitting(false);
+			setFurifuri(false);
+			wakeup();
+			if (isNotNYD()) {
+				setHappiness(Happiness.VERY_SAD);
+				if (getDamageState() != Damage.NONE) {
+					setNegiMessage(GameMessages.getMessage(this, MessagePool.Action.PoisonDamage), true);
+				} else {
+					setMessage(GameMessages.getMessage(this, MessagePool.Action.PoisonDamage), Const.HOLDMESSAGE, false,
+							true);
+				}
+			}
+		}
+	}
+
+	/**
+	 * 致命傷によるダメージを処理する.
+	 */
+	protected void applyCriticalDamage() {
+		if (getCriticalDamege() == null) {
+			return;
+		}
+		if (getCriticalDamege() == CriticalDamegeType.CUT) {
+			damage += TICK * 100;
+			addStress(50);
+			if (isSleeping()) {
+				wakeup();
+			}
+			GameEnvironment.setAlarm();
+			if (GameRandom.nextInt(50) == 0) {
+				if (getCoreAnkoState() != CoreAnkoState.NonYukkuriDiseaseNear) {
+					setNYDMessage(GameMessages.getMessage(this, MessagePool.Action.Dying2), false);
+				} else {
+					setMessage(GameMessages.getMessage(this, MessagePool.Action.Dying2));
+				}
+			}
+			return;
+		}
+		if (getCriticalDamege() == CriticalDamegeType.INJURED && !isSleeping()) {
+			if (GameRandom.nextInt(300) == 0) {
+				addCrushedVomit(getX() + 3 - GameRandom.nextInt(6), getY() - 2, 0);
+				setMessage(GameMessages.getMessage(this, MessagePool.Action.Scream));
+				setForceFace(ImageCode.PAIN.ordinal());
+				makeDirty(true);
+				addStress(5);
+				addDamage(50);
+			}
+			if (isFull() && isNoDamaged() && GameRandom.nextInt(4800) == 0) {
+				setCriticalDamege(null);
+			} else if (!isDamagedHeavily() && GameRandom.nextInt(33600) == 0) {
+				setCriticalDamege(null);
+			}
+		}
+	}
+
+	/**
+	 * ダメージ更新を行う.
+	 */
+	public void checkDamage() {
+		boolean healFlag = canHealDamageFromEnvironment();
+		applyDamageOverTime();
+		applyCriticalDamage();
+		applyBodyConditionDamage();
+		applyExternalDamage(healFlag);
+		finalizeDamageState();
+	}
+
+	/**
+	 * ダメージ状態を最終更新する.
+	 */
+	protected void finalizeDamageState() {
+		if (damage < 0) {
+			damage = 0;
+		}
+		Damage newDamageState = getDamageState();
+		if (getDamageState() == Damage.NONE && newDamageState == Damage.NONE && !isSleeping()) {
+			noDamagePeriod += TICK;
+		} else {
+			noDamagePeriod = 0;
+		}
+		setDamageState(newDamageState);
+		if (getDamageState() == Damage.TOOMUCH && getCurrentEvent() != null
+				&& getCurrentEvent().getPriority() != EventPacket.EventPriority.HIGH) {
+			clearEvent();
+		}
 	}
 
 	@com.fasterxml.jackson.annotation.JsonIgnore
@@ -276,6 +770,16 @@ public abstract class LivingEntity extends Entity {
 	/** 死亡フラグdead of alive を設定する. @param dead 死亡フラグdead of alive */
 	public void setDead(boolean dead) {
 		this.dead = dead;
+	}
+
+	/**
+	 * 死に向かわせる.
+	 */
+	public void toDead() {
+		if (!isCantDie() && !dead) {
+			dead = true;
+			godHandHoldCount = 0;// 死んだらゆ虐神拳1をリセット
+		}
 	}
 
 	/** 死んでからの期間 を取得する. @return 死んでからの期間 */
@@ -407,6 +911,35 @@ public abstract class LivingEntity extends Entity {
 		this.dirtyPeriod = dirtyPeriod;
 	}
 
+	/** 汚れている期間 を進ませる. */
+	public final void advanceDirtyPeriod(boolean humid, boolean wetOrMelt, boolean stubbornlyDirty) {
+		if (humid) {
+			dirtyPeriod += TICK * 4;
+		} else {
+			dirtyPeriod += TICK;
+		}
+		if (wetOrMelt) {
+			dirtyPeriod += TICK;
+		}
+		if (stubbornlyDirty) {
+			dirtyPeriod += TICK;
+		}
+	}
+
+	/**
+	 * 汚れからゆかびへ進行させる.
+	 *
+	 * @return ゆかびに進行したか
+	 */
+	public final boolean promoteDirtyToSickIfNeeded() {
+		if (dirtyPeriod > getDirtyPeriodBase()) {
+			addSickPeriod(100);
+			dirtyPeriod = 0;
+			return true;
+		}
+		return false;
+	}
+
 	/** 汚れて泣き叫ぶ期間 を取得する. @return 汚れて泣き叫ぶ期間 */
 	public int getDirtyScreamPeriod() {
 		return dirtyScreamPeriod;
@@ -477,6 +1010,89 @@ public abstract class LivingEntity extends Entity {
 		this.blind = blind;
 	}
 
+	/**
+	 * 盲目時の生理ペナルティを適用する.
+	 *
+	 * @return 盲目なら true, それ以外は false
+	 */
+	protected boolean applyBlindnessPenalty() {
+		if (!isBlind()) {
+			return false;
+		}
+		setEyesightBase(5 * 5);
+		addStress(5);
+		return true;
+	}
+
+	/**
+	 * 口封じ時の生理ペナルティを適用する.
+	 *
+	 * @return 口封じ中なら true, それ以外は false
+	 */
+	protected boolean applyCantSpeakPenalty() {
+		if (!isShutmouth()) {
+			return false;
+		}
+		addStress(2);
+		setPeropero(false);
+		return true;
+	}
+
+	/**
+	 * 動けない時の前提条件を更新する.
+	 *
+	 * @return 反応を継続できるなら true, 条件未満なら false
+	 */
+	protected boolean beginLockmoveEmotion() {
+		if (!isLockmove() || isSukkiri() || (getFootBakeLevel() != FootBake.NONE
+				&& (getBurialState() == BurialState.NONE || getBurialState() == BurialState.HALF))) {
+			return false;
+		}
+		if (isSleeping() || grabbed) {
+			setLockmovePeriod(0);
+			return false;
+		}
+		if (getCurrentEvent() != null) {
+			setLockmovePeriod(0);
+			return false;
+		}
+		setLockmovePeriod(getLockmovePeriod() + 1);
+		return !isTalking();
+	}
+
+	/**
+	 * 足焼き時の前提条件を更新する.
+	 *
+	 * @return 反応を継続できるなら true, 条件未満なら false
+	 */
+	protected boolean beginFootBakeEmotion() {
+		if (getFootBakeLevel() == FootBake.NONE || isSukkiri()) {
+			return false;
+		}
+		if (isSleeping() || grabbed) {
+			setLockmovePeriod(0);
+			return false;
+		}
+		setLockmovePeriod(getLockmovePeriod() + 1);
+		return !isTalking();
+	}
+
+	/**
+	 * おかざり、ぴこぴこなし時の前提条件を確認する.
+	 *
+	 * @return 反応を継続できるなら true, 条件未満なら false
+	 */
+	protected boolean beginNoOkazariEmotion() {
+		if ((hasOkazari() && isHasBraid()) || isSukkiri()) {
+			return false;
+		}
+		if (isSleeping() || grabbed) {
+			lockmovePeriod = 0;
+			return false;
+		}
+		return !isTalking();
+	}
+
 	/** 針の有無 を取得する. @return 針の有無 */
 	public boolean isNeedled() {
 		return !dead && needled;
@@ -533,14 +1149,14 @@ public abstract class LivingEntity extends Entity {
 		this.hasBraid = hasBraid;
 	}
 
-	/** 種族としてお下げ、羽、尻尾を持つか を取得する. @return 種族としてお下げ、羽、尻尾を持つか */
-	public boolean isBraidType() {
-		return braidType;
+	/** 髪の状態 を取得する. @return 髪の状態 */
+	public HairState getHairState() {
+		return hairState;
 	}
 
-	/** 種族としてお下げ、羽、尻尾を持つか を設定する. @param braidType 種族としてお下げ、羽、尻尾を持つか */
-	public void setBraidType(boolean braidType) {
-		this.braidType = braidType;
+	/** 髪の状態 を設定する. @param hairState 髪の状態 */
+	public void setHairState(HairState hairState) {
+		this.hairState = hairState;
 	}
 
 	/** おくるみ有無 true if having pants を取得する. @return おくるみ有無 true if having pants */
@@ -556,36 +1172,6 @@ public abstract class LivingEntity extends Entity {
 		this.hasPants = hasPants;
 	}
 
-	/** あにゃるふさぎ有無 を取得する. @return あにゃるふさぎ有無 */
-	public boolean isAnalClose() {
-		return analClose;
-	}
-
-	/** あにゃるふさぎ有無 を設定する. @param analClose あにゃるふさぎ有無 */
-	public void setAnalClose(boolean analClose) {
-		this.analClose = analClose;
-	}
-
-	/** 胎生去勢有無 を取得する. @return 胎生去勢有無 */
-	public boolean isBodyCastration() {
-		return bodyCastration;
-	}
-
-	/** 胎生去勢有無 を設定する. @param bodyCastration 胎生去勢有無 */
-	public void setBodyCastration(boolean bodyCastration) {
-		this.bodyCastration = bodyCastration;
-	}
-
-	/** 茎去勢有無 を取得する. @return 茎去勢有無 */
-	public boolean isStalkCastration() {
-		return stalkCastration;
-	}
-
-	/** 茎去勢有無 を設定する. @param stalkCastration 茎去勢有無 */
-	public void setStalkCastration(boolean stalkCastration) {
-		this.stalkCastration = stalkCastration;
-	}
-
 	/** ぺにぺにの去勢有無 を取得する. @return ぺにぺにの去勢有無 */
 	public boolean isPenipeniCutted() {
 		return penipeniCutted;
@@ -596,14 +1182,14 @@ public abstract class LivingEntity extends Entity {
 		this.penipeniCutted = penipeniCutted;
 	}
 
-	/** 髪の状態 を取得する. @return 髪の状態 */
-	public HairState getHairState() {
-		return hairState;
+	/** 水が平気か を取得する. @return 水が平気か */
+	public boolean isLikeWater() {
+		return likeWater;
 	}
 
-	/** 髪の状態 を設定する. @param hairState 髪の状態 */
-	public void setHairState(HairState hairState) {
-		this.hairState = hairState;
+	/** 水が平気か を設定する. @param likeWater 水が平気か */
+	public void setLikeWater(boolean likeWater) {
+		this.likeWater = likeWater;
 	}
 
 	/** 空を飛ぶか を取得する. @return 空を飛ぶか */
@@ -616,54 +1202,33 @@ public abstract class LivingEntity extends Entity {
 		this.flyingType = flyingType;
 	}
 
-	/** 希少種か を取得する. @return 希少種か */
-	public boolean isRareType() {
-		return rareType;
+	/** 捕食種（れみりゃ・ふらん）であれば {@code true}. */
+	@JsonIgnore
+	public boolean isPredator() {
+		return false;
 	}
 
-	/** 希少種か を設定する. @param rareType 希少種か */
-	public void setRareType(boolean rareType) {
-		this.rareType = rareType;
+	/** ハイブリッドゆっくりであれば {@code true}. */
+	@JsonIgnore
+	public boolean isHybrid() {
+		return false;
 	}
 
-	/** 捕食種タイプ を取得する. @return 捕食種タイプ */
-	public PredatorType getPredatorType() {
-		return predatorType;
+	/** 捕食種に仕える従者種（咲夜・美鈴）であれば {@code true}. */
+	@JsonIgnore
+	public boolean isServant() {
+		return false;
 	}
 
-	/** 捕食種タイプ を設定する. @param predatorType 捕食種タイプ */
-	public void setPredatorType(PredatorType predatorType) {
-		this.predatorType = predatorType;
-	}
-
-	/** 苦いえさが好きか を取得する. @return 苦いえさが好きか */
-	public boolean isLikeBitterFood() {
-		return likeBitterFood;
-	}
-
-	/** 苦いえさが好きか を設定する. @param likeBitterFood 苦いえさが好きか */
-	public void setLikeBitterFood(boolean likeBitterFood) {
-		this.likeBitterFood = likeBitterFood;
-	}
-
-	/** 辛いえさが好きか を取得する. @return 辛いえさが好きか */
-	public boolean isLikeHotFood() {
-		return likeHotFood;
-	}
-
-	/** 辛いえさが好きか を設定する. @param likeHotFood 辛いえさが好きか */
-	public void setLikeHotFood(boolean likeHotFood) {
-		this.likeHotFood = likeHotFood;
-	}
-
-	/** 水が平気か を取得する. @return 水が平気か */
-	public boolean isLikeWater() {
-		return likeWater;
-	}
-
-	/** 水が平気か を設定する. @param likeWater 水が平気か */
-	public void setLikeWater(boolean likeWater) {
-		this.likeWater = likeWater;
+	/**
+	 * 指定した主種族に仕える従者種であれば {@code true}.
+	 *
+	 * @param masterType 主の種族ID
+	 * @return 指定種族の従者かどうか
+	 */
+	@JsonIgnore
+	public boolean isServantOf(YukkuriType masterType) {
+		return false;
 	}
 
 	/** 誕生済みか否か を取得する. @return 誕生済みか否か */
@@ -694,6 +1259,22 @@ public abstract class LivingEntity extends Entity {
 	/** 実ゆかどうか を設定する. @param unBirth 実ゆかどうか */
 	public void setUnBirth(boolean unBirth) {
 		this.unBirth = unBirth;
+		if (unBirth) {
+			birthEventBlockedTicks = 0;
+		}
+	}
+
+	/** 出生直後イベントから除外する残り tick 数 を取得する. @return 出生直後イベントから除外する残り tick 数 */
+	public int getBirthEventBlockedTicks() {
+		return birthEventBlockedTicks;
+	}
+
+	/**
+	 * 出生直後イベントから除外する残り tick 数 を設定する. @param birthEventBlockedTicks 出生直後イベントから除外する残り
+	 * tick 数
+	 */
+	public void setBirthEventBlockedTicks(int birthEventBlockedTicks) {
+		this.birthEventBlockedTicks = birthEventBlockedTicks;
 	}
 
 	/** 妊娠期間 を取得する. @return 妊娠期間 */
@@ -724,6 +1305,96 @@ public abstract class LivingEntity extends Entity {
 	/** パニック状態の期間 を設定する. @param panicPeriod パニック状態の期間 */
 	public void setPanicPeriod(int panicPeriod) {
 		this.panicPeriod = panicPeriod;
+	}
+
+	/** パニック状態を解除する. */
+	protected final void clearPanic() {
+		setPanicType(null);
+		setPanicPeriod(0);
+		setHappiness(Happiness.SAD);
+	}
+
+	/**
+	 * 怖がり判定.
+	 *
+	 * @return 何もしない
+	 */
+	public Event checkFear() {
+		if (isNYD() || isUnBirth()) {
+			clearPanic();
+			return Event.DONOTHING;
+		}
+		if (!isDead()) {
+			messageTicks--;
+			if (messageTicks <= 0) {
+				switch (getPanicType()) {
+					case FEAR:
+						setMessage(src.util.GameMessages.getMessage(this, src.system.MessagePool.Action.Fear));
+						break;
+					case REMIRYA:
+						setMessage(src.util.GameMessages.getMessage(this, src.system.MessagePool.Action.EscapeFromRemirya));
+						break;
+					default:
+						break;
+				}
+			}
+		}
+		if (getPanicType() != null && getPanicType() != PanicType.BURN) {
+			panicPeriod += TICK;
+		}
+		if (panicPeriod > 50) {
+			clearPanic();
+		}
+		return Event.DONOTHING;
+	}
+
+	/**
+	 * メッセージ消費と共通の前処理を行う.
+	 *
+	 * @return この後の個体固有メッセージ分岐を続けるか
+	 */
+	public final boolean updateMessageCommon() {
+		--messageTicks;
+		if (messageTicks <= 5) {
+			// stop to show the message 0.5 sec. before.
+			setMessageBuffer(null);
+		}
+		if (messageTicks <= 0) {
+			messageTicks = 0;
+			setFurifuri(false);
+			setStrike(false);
+			setEating(false);
+			setEatingShit(false);
+			setPeropero(false);
+			setSukkiri(false);
+			setNobinobi(false);
+			setBeVain(false);
+			setPikopiko(false);
+			setYunnyaa(false);
+			setInOutTakeoutItem(false);
+		}
+		// しゃべれないor生まれていないor非ゆっくり症
+		if (isSilent() || isUnBirth() || isNYD()) {
+			if (isUnBirth()) {
+				setMessageTicks(0);
+				setMessageBuffer(null);
+			}
+			return false;
+		}
+
+		if (isDead()) {
+			if (!isSilent()) {
+				String messages = GameMessages.getMessage(this, MessagePool.Action.Dead);
+				setMessage(messages);
+				setBirthMessageForced(false);
+				if (getMessageBuffer() == messages) {
+					// if the message is set successfully, be silent.
+					setSilent(true);
+				}
+			}
+			return false;
+		}
+		return true;
 	}
 
 	/** 致命傷種別 を取得する. @return 致命傷種別 */
@@ -870,6 +1541,187 @@ public abstract class LivingEntity extends Entity {
 		setWakeUpTime(getAge());
 	}
 
+	/**
+	 * 指定の座標まで動く.
+	 *
+	 * @param toZ Z座標
+	 */
+	public final void moveToZ(int toZ) {
+		if (isDead()) {
+			return;
+		}
+		destZ = Math.max(0, Math.min(toZ, Translate.getMapZ()));
+	}
+
+	/**
+	 * 眠いかどうかを取得する.
+	 *
+	 * @return 眠いかどうか
+	 */
+	@JsonIgnore
+	public boolean isSleepy() {
+		return !isSleeping() && getWakeUpTime() + getActivePeriodBase() < getAge();
+	}
+
+	/**
+	 * 睡眠状態を更新する.
+	 *
+	 * @return 睡眠中かどうか
+	 */
+	public boolean checkSleep() {
+		// ディフューザーで睡眠妨害されている場合、眠気をなくす
+		if (GameEnvironment.isNoSleepSteam()) {
+			// 正常な実ゆ以外なら
+			if (!isUnBirth() || !isPlantForUnbirthChild()) {
+				setSleepingPeriod(0);
+				setSleeping(false);
+				setNightmare(false);
+				return false;
+			}
+		}
+
+		// 飛行種で眠くなったら地面に降りる
+		if (canflyCheck() && isSleepy()) {
+			moveToZ(0);
+			if (getZ() != 0) {
+				return false;
+			}
+		}
+
+		if (isSleeping()) {
+			// ストレスフルだと悪夢
+			if (!isNightmare()
+					&& ((isStressful() && GameRandom.nextInt(75) == 0)
+							|| (isVeryStressful() && GameRandom.nextInt(25) == 0))) {
+				setNightmare(true);
+				setForceFace(ImageCode.NIGHTMARE.ordinal());
+			} else if (!isStressful() || GameRandom.nextInt(100) == 0) {
+				setNightmare(false);
+				setForceFace(ImageCode.SLEEPING.ordinal());
+			}
+		}
+
+		// 飢餓状態の時は起きる
+		if (isSleeping() && isStarving()) {
+			setMessage(GameMessages.getMessage(this, MessagePool.Action.Hungry));
+			setHappiness(Happiness.SAD);
+			stay();
+			wakeup();
+		} else if (isSleeping()
+				|| (wakeUpTime + getActivePeriodBase() * 3 / 2 < getAge() && !isExciting() && !isScare()
+						&& !isVerySad() && !isEating() && !isNeedled() && !isTooHungry()
+						&& !(isVeryHungry() && isToFood()))
+				|| (wakeUpTime + getActivePeriodBase() * 3 < getAge() && !isExciting() && !isScare()
+						&& !isEating() && !isNeedled() && !(isTooHungry() && isToFood()))
+				|| (isUnBirth() && !isNeedled())) {
+			clearActions();
+			setSleeping(true);
+			setAngry(false);
+			setScare(false);
+			damage -= TICK;
+			if (!isUnBirth()) {
+				setHappiness(Happiness.AVERAGE);
+			} else {
+				return isSleeping();
+			}
+			if (GameEnvironment.getDayState() == Terrarium.DayState.NIGHT) {
+				if ((getAge() % (GameEnvironment.getNightTime() / getSleepPeriodBase() + 1)) == 0) {
+					sleepingPeriod += TICK;
+				}
+			} else {
+				sleepingPeriod += TICK;
+			}
+			if (sleepingPeriod > getSleepPeriodBase()) {
+				setMessage(GameMessages.getMessage(this, MessagePool.Action.Wakeup), true);
+				stay();
+				wakeup();
+			}
+		} else {
+			// 実験 イベント中は空腹、睡眠、便意が増えないように
+			if (getCurrentEvent() != null) {
+				return false;
+			}
+			sleepingPeriod = 0;
+			setSleeping(false);
+			setNightmare(false);
+			if (GameEnvironment.getDayState() == Terrarium.DayState.NIGHT) {
+				wakeUpTime -= TICK * 3;
+			}
+		}
+
+		return isSleeping();
+	}
+
+	/**
+	 * 出産チェックをする.
+	 *
+	 * @return このあと動かなくなるフラグ
+	 */
+	public boolean checkChildbirth() {
+		boolean cantMove = false;
+		if (hasBabyOrStalk() || (!hasBabyOrStalk() && isBirth())) {
+			pregnantPeriod += TICK + (pregnancyPeriodBoost / 2);
+			if (pregnantPeriod > getPregPeriodBase() - TICK * 100) {
+				if (!isBirth() && hasBabyOrStalk()) {
+					setMessage(GameMessages.getMessage(this, MessagePool.Action.Breed), true);
+					wakeup();
+				}
+				cantMove = true;
+				setBirth(true);
+				pregnancyPeriodBoost = 0;
+			}
+			if (pregnantPeriod > getPregPeriodBase() && isPealed()) {
+				damage += 40000;
+				toDead();
+			} else if (pregnantPeriod > getPregPeriodBase()) {
+				wakeup();
+				setHasBaby(false);
+				setHasStalk(false);
+				if (getBabyTypes().size() <= 0) {
+					setBirth(false);
+					pregnantPeriod = 0;
+					if (isNotNYD()) {
+						setMessage(GameMessages.getMessage(this, MessagePool.Action.Breed2), true);
+						if (!isHasPants()) {
+							if (willingFurifuri()) {
+								setFurifuri(true);
+							}
+							stay();
+						}
+					}
+					return cantMove;
+				}
+				cantMove = true;
+				boolean birthAllowed = true;
+				if (isHasPants() || (isFixBack() && isNeedled())) {
+					birthAllowed = false;
+				}
+				if ((isLockmove() && (!isFixBack() || getCoreAnkoState() != CoreAnkoState.NonYukkuriDisease))
+						&& !isShitting()) {
+					birthAllowed = false;
+				}
+				if (!birthAllowed) {
+					getBabyTypes().clear();
+					makeDirty(true);
+					if (isNotNYD()) {
+						if (isLockmove() && !isHasPants()) {
+							setHasPants(true);
+							setMessage(GameMessages.getMessage(this, MessagePool.Action.Breed2), true);
+							setHasPants(false);
+						} else {
+							setMessage(GameMessages.getMessage(this, MessagePool.Action.Breed2), true);
+						}
+					}
+					setBirth(false);
+					pregnantPeriod = 0;
+					pregnancyPeriodBoost = 0;
+					setHappiness(Happiness.VERY_SAD);
+				}
+			}
+		}
+		return cantMove;
+	}
+
 	/** 動かなくする. */
 	public final void stay() {
 		setStaying(true);
@@ -908,6 +1760,11 @@ public abstract class LivingEntity extends Entity {
 	/** ゆかびに侵されている期間 を設定する. @param sickPeriod ゆかびに侵されている期間 */
 	public void setSickPeriod(int sickPeriod) {
 		this.sickPeriod = sickPeriod;
+	}
+
+	/** ゆかびに侵されている期間 を進ませる. */
+	public void addSickPeriod(int i) {
+		sickPeriod += i;
 	}
 
 	/** 落下ダメージ を取得する. @return 落下ダメージ */
@@ -1295,6 +2152,100 @@ public abstract class LivingEntity extends Entity {
 		this.externalPressure = externalPressure;
 	}
 
+	/**
+	 * 動けないかどうかを返却する.
+	 *
+	 * @return 動けないかどうか
+	 */
+	@Transient
+	public final boolean isDontMove() {
+		if (isDead()
+				|| isRemoved()
+				|| isUnBirth()
+				|| isSleeping()
+				|| isNeedled()
+				|| getFootBakeLevel() == FootBake.CRITICAL
+				|| isLockmove()
+				|| isMelt()
+				|| getBurialState() != BurialState.NONE
+				|| isBirth()
+				|| isGrabbed()
+				|| isOnNonMovingConveyor()
+				|| getCoreAnkoState() == CoreAnkoState.NonYukkuriDisease
+				|| getCriticalDamegeType() == CriticalDamegeType.CUT
+				|| isPealed()
+				|| isBlind()
+				|| isPacked()) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * 大丈夫じゃないかどうかを返却する.
+	 *
+	 * @return 大丈夫じゃないかどうか
+	 */
+	@Transient
+	public final boolean isNotAllright() {
+		if (isDead()
+				|| isRemoved()
+				|| isUnBirth()
+				|| isNeedled()
+				|| isLockmove()
+				|| isMelt()
+				|| getBurialState() != BurialState.NONE
+				|| isBirth()
+				|| isOnNonMovingConveyor()
+				|| getCoreAnkoState() == CoreAnkoState.NonYukkuriDisease
+				|| getCriticalDamegeType() == CriticalDamegeType.CUT
+				|| isPealed()
+				|| isBlind()
+				|| isPacked()) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * ピョンピョンできないかどうかを返却する.
+	 *
+	 * @return ピョンピョンできないかどうか
+	 */
+	@Transient
+	public final boolean isDontJump() {
+		if (isDontMove()) {
+			return true;
+		}
+		if (getCriticalDamegeType() != null) {
+			return true;
+		}
+		if (hasBabyOrStalk()) {
+			return true;
+		}
+		if (isNYD()) {
+			return true;
+		}
+		if (isGotBurnedHeavily()) {
+			return true;
+		}
+		if (getAttachmentSize(Ants.class) != 0) {
+			return true;
+		}
+		if (!isFlyingType()) {
+			if (isDamaged()) {
+				return true;
+			}
+			if (isSickHeavily()) {
+				return true;
+			}
+			if (isFeelPain()) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	/** 移動対象（移動先） */
 	protected int moveTargetId = -1;
 
@@ -1580,6 +2531,12 @@ public abstract class LivingEntity extends Entity {
 		this.playingLimit = playingLimit;
 	}
 
+	/** 遊ぶのをやめる. */
+	public void stopPlaying() {
+		setPlaying(null);
+		setPlayingLimit(0);
+	}
+
 	/** ぷるぷるアニメーションの位相(左右揺れのトグル) */
 	protected boolean shakePhase = false;
 
@@ -1754,6 +2711,543 @@ public abstract class LivingEntity extends Entity {
 		this.birthMessageForced = birthMessageForced;
 	}
 
+	/**
+	 * 実ゆの親が存在し、実ゆの状態に気が付けるならそのインスタンスを取得する
+	 *
+	 * @return 気づいた実ゆの親インスタンス
+	 */
+	@Transient
+	public final int getBindStalkMotherCanNotice() {
+		// 実ゆの場合、親が反応する
+		if (getBindStalk() != null) {
+			int id = getBindStalk().getPlantYukkuri();
+			Yukkuri bodyMother = GameWorld.get().getCurrentMap().getBody().get(id);
+			if (bodyMother != null) {
+				if (!bodyMother.isDead() || bodyMother.isSleeping()) {
+					return bodyMother.getUniqueID();
+				}
+			}
+		}
+		return -1;
+	}
+
+	/**
+	 * 茎のあるゆっくりの基本反応
+	 *
+	 * @param state 実ゆの状態
+	 */
+	public void checkReactionStalkMother(src.enums.UnbirthBabyState state) {
+		Yukkuri bodyMother = GameWorld.get().getCurrentMap().getBody().get(getBindStalkMotherCanNotice());
+		if (bodyMother == null) {
+			return;
+		}
+
+		if (bodyMother.isDead() || bodyMother.isSleeping() || bodyMother.isBurned() || bodyMother.isShitting()
+				|| bodyMother.isBirth() || bodyMother.nearToBirth()) {
+			return;
+		}
+
+		// 非ゆっくり症の場合
+		if (bodyMother.isNYD()) {
+			return;
+		}
+
+		switch (state) {
+			case ATTAKED:// 実ゆが攻撃されている
+				// 攻撃されて生きている場合
+				if (!isDead()) {
+					bodyMother.setHappiness(src.enums.Happiness.SAD);
+					bodyMother.setMessage(src.util.GameMessages.getMessage(bodyMother,
+							src.system.MessagePool.Action.AbuseBaby));
+					bodyMother.addStress(30);
+					bodyMother.stay();
+					break;
+				}
+				// 攻撃されて死んでいる場合はKilled
+			case KILLED:// 実ゆが死んでる事に気がつく
+				bodyMother.setHappiness(src.enums.Happiness.VERY_SAD);
+				bodyMother.setMessage(src.util.GameMessages.getMessage(bodyMother,
+						src.system.MessagePool.Action.AbuseBabyKilled));
+				bodyMother.addStress(500);
+				bodyMother.stay();
+				break;
+			case SAD:// 実ゆが悲しんでいる、苦しんでいるのを心配する
+				bodyMother.setHappiness(src.enums.Happiness.SAD);
+				bodyMother.setMessage(src.util.GameMessages.getMessage(bodyMother,
+						src.system.MessagePool.Action.ConcernAboutChild));
+				bodyMother.addStress(20);
+				bodyMother.stay();
+				break;
+			case HAPPY:// 実ゆの状態を喜んでいる
+				bodyMother.setHappiness(src.enums.Happiness.VERY_HAPPY);
+				bodyMother.setMessage(src.util.GameMessages.getMessage(bodyMother,
+						src.system.MessagePool.Action.GladAboutChild));
+				bodyMother.addStress(-100);
+				bodyMother.stay();
+				break;
+			default:
+				break;
+		}
+	}
+
+	/**
+	 * 実ゆ（自分）が茎で生きている親につながっているかを返却する.
+	 *
+	 * @return 実ゆ（自分）が茎で生きている親につながっているか
+	 */
+	@Transient
+	public final boolean isPlantForUnbirthChild() {
+		if (isUnBirth()) {
+			// 茎があって親が生きてる
+			if (getBindStalk() != null) {
+				int id = getBindStalk().getPlantYukkuri();
+				Entity oBind = GameWorld.get().getCurrentMap().getBody().get(id);
+				if (oBind != null && oBind instanceof Yukkuri) {
+					Yukkuri bodyBind = (Yukkuri) oBind;
+					if (bodyBind != null && !bodyBind.isDead() && !bodyBind.isRemoved()) {
+						return true;
+					}
+				}
+			}
+			// 救命オレンジプール上にいる
+			for (src.entity.core.world.item.OrangePool pool : GameWorld.get().getCurrentMap().getOrangePool()
+					.values()) {
+				if (!pool.isRescue())
+					continue;
+				src.draw.Rectangle4y b = src.entity.core.world.item.OrangePool.getBounding();
+				int halfW = b.getWidth() >> 1;
+				int halfH = b.getHeight() >> 1;
+				if (Math.abs(getX() - pool.getX()) <= halfW && Math.abs(getY() - pool.getY()) <= halfH) {
+					return true;
+				}
+			}
+			return false;
+		}
+		return false;
+	}
+
+	/**
+	 * ベッドの上にいるかどうかをチェックする.
+	 *
+	 * @return ベッドの上にいるかどうか
+	 */
+	public boolean checkOnBed() {
+		Rectangle r = takeScreenRect();
+		for (java.util.Map.Entry<Integer, Bed> entry : GameWorld.get().getCurrentMap().getBed().entrySet()) {
+			Bed bd = entry.getValue();
+			if (takeScreenRect(bd.getScreenRect()).intersects(r))
+				return true;
+		}
+		return false;
+	}
+
+	private Rectangle takeScreenRect(Rectangle4y screenRect) {
+		return new Rectangle(screenRect.getX(), screenRect.getY(), screenRect.getWidth(), screenRect.getHeight());
+	}
+
+	private Rectangle takeScreenRect() {
+		return new Rectangle(screenRect.getX(), screenRect.getY(), screenRect.getWidth(), screenRect.getHeight());
+	}
+
+	/**
+	 * 死ねない期間かどうかをチェックする.
+	 * TICKで期間を1減らす.
+	 */
+	public void checkCantDie() {
+		if (cantDiePeriod > 0) {
+			cantDiePeriod -= TICK;
+		}
+	}
+
+	/** 死ねない期間中かどうかを取得する. */
+	@Transient
+	public boolean isCantDie() {
+		return getCantDiePeriod() > 0;
+	}
+
+	/** 茎または腹ではらんでいるかどうかを取得する. */
+	@Transient
+	public boolean hasBabyOrStalk() {
+		return isHasBaby() || isHasStalk();
+	}
+
+	/** おかざりがあるかどうかを取得する. */
+	@Transient
+	public final boolean hasOkazari() {
+		return getOkazari() != null;
+	}
+
+	/** 動物（というか現在はアリ一択か）に食べられてるか */
+	@Transient
+	public boolean isEatenByAnimals() {
+		return getAttachmentSize(Ants.class) != 0;
+	}
+
+	/** アリを除去する. */
+	public void removeAnts() {
+		removeAttachment(Ants.class);
+		antCount = 0;
+	}
+
+	/**
+	 * アリの数を減らす.
+	 *
+	 * @param A 減らしたいアリの数
+	 */
+	public void substractNumOfAnts(int A) {
+		antCount -= A;
+		if (antCount < 0) {
+			antCount = 0;
+		}
+	}
+
+	/** ダメージなしかどうかを返却する. */
+	@Transient
+	public boolean isNoDamaged() {
+		return getDamageState() == Damage.NONE;
+	}
+
+	/** 現在飛行可能か */
+	@Transient
+	public final boolean canflyCheck() {
+		return (isFlyingType() && isHasBraid() && !isDead() && !isSleeping() && !isNeedled()
+				&& getCriticalDamege() == null);
+	}
+
+	/**
+	 * 移動目的がフードかどうかを取得する.
+	 *
+	 * @return 移動目的がフードかどうか
+	 */
+	@JsonIgnore
+	public boolean isToFood() {
+		return getPurposeOfMoving() == PurposeOfMoving.FOOD;
+	}
+
+	/**
+	 * checkといいつつ空腹操作をしているメソッド.
+	 * ゆっくりの様々な状態に応じて腹を減らしている。
+	 */
+	public void checkHungry() {
+		if (0 < getSuperEatingNoHungryPeriod()) {
+			superEatingNoHungryPeriod--;
+			if (hungry <= getHungryLimit()) {
+				hungry += TICK;
+			}
+			return;
+		}
+		if (isPealed() || isPacked()) {
+			if (getAge() % 7 == 0)
+				hungry -= TICK;
+		}
+		if (isUnBirth()) {
+			if (!isPlantForUnbirthChild()) {
+				hungry -= TICK * 100;
+			} else {
+				hungry = getHungryLimit();
+			}
+		} else if (isSleeping()) {
+			if (getAge() % 2 == 0)
+				hungry -= TICK;
+		} else if (isExciting() && !isRaper()) {
+			hungry -= TICK * (getBabyTypes().size() + 1);
+		} else {
+			hungry -= TICK;
+		}
+		if (isHasStalk() && getStalks() != null) {
+			hungry -= TICK * getStalks().size() * 5;
+		}
+		if (isHasBaby()) {
+			hungry -= TICK * getBabyTypes().size();
+		}
+		if (hungry <= 0) {
+			damage += (-hungry);
+			hungry = 0;
+		}
+		if (!isHungry() && !isSleeping()) {
+			noHungryPeriod += TICK;
+		} else {
+			noHungryPeriod = 0;
+		}
+	}
+
+	/**
+	 * 自身が突然変異可能な状態かどうかチェック
+	 *
+	 * @return 自身が突然変異可能な状態かどうか
+	 */
+	public boolean canTransform() {
+		if (isDead())
+			return false;
+		if (getStress() > 0)
+			return false;
+		if (getTangType() == TangType.POOR)
+			return false;
+		if (isDamaged())
+			return false;
+		if (isFeelPain())
+			return false;
+		if (isUnBirth())
+			return false;
+		if (getPublicRank() == PublicRank.UnunSlave)
+			return false;
+		if (isNYD())
+			return false;
+		if (isBlind() || isPealed() || isPacked() || isShutmouth())
+			return false;
+		if (getHairState() != HairState.DEFAULT)
+			return false;
+		return true;
+	}
+
+	/**
+	 * 行動できる状態かチェックする
+	 * ここでは動いたら見た目におかしくなる状況のみチェック
+	 *
+	 * @return
+	 */
+	public final boolean canAction() {
+		if (isDead() || getCriticalDamege() == CriticalDamegeType.CUT || isPealed() ||
+				isPacked() || isSleeping() || isShitting() || isBirth() || isSukkiri() || isNeedled() ||
+				getCurrentEvent() != null || isNYD() ||
+				getBurialState() != BurialState.NONE) {
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * 行動できる状態かチェックする
+	 * ここでは動いたら見た目におかしくなる状況のみチェック
+	 *
+	 * @return
+	 */
+	public final boolean canActionForEvent() {
+		if (isDead() || getCriticalDamege() == CriticalDamegeType.CUT || isPealed() ||
+				isPacked() || isSleeping() || isShitting() || isBirth() || isSukkiri() || isNeedled() ||
+				isNYD() || getBurialState() != BurialState.NONE) {
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * アリ関連の処理.
+	 */
+	public void checkAnts() {
+		if (isCrushed() || GameEnvironment.isEndlessFurifuriSteam()) {
+			removeAnts();
+			return;
+		}
+		if (getAttachmentSize(Ants.class) != 0 && getAge() % 5 == 0) {
+			antCount += TICK * 2;
+			clearEvent();
+			return;
+		}
+		if (GameWorld.get().getCurrentMap().getMapIndex() == 0 || getZ() != 0) {
+			return;
+		}
+		AntInfestationPolicy.judgeNewAnt((Yukkuri) this);
+	}
+
+	/**
+	 * うにょ機能。
+	 * ゆっくりがうにょうにょ動く機能、のようだ。
+	 * 重いため、シムゆっくり起動時にチェックボックスで機能をONにするかどうかを決めることができる。
+	 */
+	public void checkUnyo() {
+		if (SimYukkuri.UNYO) {
+			if (getAge() % 9 == 0) {
+				if (!isDead() && !isLockmove()) {
+					if (getCriticalDamegeType() != CriticalDamegeType.CUT && !grabbed && !isPealed() && !isPacked()) {
+						if (!isUnyoActionAll() && !isSleeping()) {
+							if (!canflyCheck()) {
+								if (getFootBakeLevel() == FootBake.NONE &&
+										!isDamaged() && !isSick() && !isFeelPain()
+										&& takeMappedObj(getParentLinkId()) == null
+										&& !isPeropero() && !(isEating() && !isPikopiko())) {
+									changeUnyo(0, 0,
+											(int) (GameRandom
+													.nextInt(((int) UNYOSTRENGTH[getBodyAgeState().ordinal()] / 3)))
+													+ UNYOSTRENGTH[getBodyAgeState().ordinal()]);
+								}
+							} else if (z == 0) {
+								if (getFootBakeLevel() == FootBake.NONE &&
+										!isDamaged() && !isSick() && !isFeelPain()
+										&& takeMappedObj(getParentLinkId()) == null
+										&& !isPeropero() && !(isEating() && !isPikopiko())) {
+									changeUnyo(0, 0,
+											(int) (GameRandom
+													.nextInt(((int) UNYOSTRENGTH[getBodyAgeState().ordinal()] / 3)))
+													+ UNYOSTRENGTH[getBodyAgeState().ordinal()]);
+								}
+							}
+						}
+					}
+				}
+			}
+			if (GameRandom.nextInt(30) == 0 && (isSleeping() ? GameRandom.nextBoolean() : true)) {
+				changeUnyo((int) (GameRandom.nextInt(2)), (int) (GameRandom.nextInt(2)),
+						(int) (GameRandom.nextInt(2)));
+			}
+			if (isDamaged() ? (GameRandom.nextInt(5) == 0) : true) {
+				changeReUnyo();
+			}
+		}
+	}
+
+	/** 従者/支配種かどうかを返却する. */
+	@Transient
+	public abstract boolean isRaper();
+
+	/** ストレスフルかどうかを取得する. */
+	@Transient
+	public abstract boolean isStressful();
+
+	/** とてもストレスフルかどうかを取得する. */
+	@Transient
+	public abstract boolean isVeryStressful();
+
+	/** とても悲しいかどうかを取得する. */
+	@Transient
+	public abstract boolean isVerySad();
+
+	/** 現在Braidがちぎられてないか */
+	@Transient
+	public final boolean hasBraidCheck() {
+		return isHasBraid();
+	}
+
+	/** 破裂しているかどうかを取得する. */
+	@Transient
+	public boolean isBurst() {
+		return getBurstState() == Burst.BURST;
+	}
+
+	/** まさに破裂するところかどうかを取得する. */
+	@Transient
+	public boolean isAboutToBurst() {
+		return getBurstState() == Burst.NEAR;
+	}
+
+	/** 破裂状態が通常でないかどうかを取得する. */
+	@Transient
+	public boolean isInfration() {
+		return getBurstState() != Burst.NONE;
+	}
+
+	/**
+	 * この個体がどれくらい破裂しそうか、相当するBurst(Enum)を返却する.
+	 *
+	 * @return この個体に相当するBurst
+	 */
+	@Transient
+	public Burst getBurstState() {
+		int origin = getOriginSize();
+		if (origin <= 0) {
+			return Burst.NONE;
+		}
+		if (getSize() * 4 / origin >= 8) {
+			return Burst.BURST;
+		} else if (getSize() * 4 / origin >= 7) {
+			return Burst.NEAR;
+		} else if (getSize() * 4 / origin >= 6) {
+			return Burst.HALF;
+		} else if (getSize() * 4 / origin >= 5) {
+			return Burst.SAFE;
+		}
+		return Burst.NONE;
+	}
+
+	/**
+	 * 画像上のゆっくりの大きさを取得する.
+	 *
+	 * @return 画像上のゆっくりの大きさ
+	 */
+	@Transient
+	public int getSize() {
+		if (getBodySpr() == null) {
+			return 0;
+		}
+		Sprite spr = getBodySpr()[getBodyAgeState().ordinal()];
+		if (spr == null) {
+			return 0;
+		}
+		if (SimYukkuri.UNYO) {
+			return spr.getImageW() + getExpandSizeW() + unyoOffsetW;
+		}
+		return spr.getImageW() + getExpandSizeW();
+	}
+
+	/**
+	 * 画像上のゆっくりのオリジナルサイズを取得する.
+	 *
+	 * @return 画像上のゆっくりのオリジナルサイズ
+	 */
+	@Transient
+	public int getOriginSize() {
+		if (getBodySpr() == null) {
+			return 0;
+		}
+		Sprite spr = getBodySpr()[getBodyAgeState().ordinal()];
+		if (spr == null) {
+			return 0;
+		}
+		return spr.getImageW();
+	}
+
+	/**
+	 * 妊娠、うんうん、過食などによる横方向の体型のふくらみ取得
+	 */
+	@Transient
+	public int getExpandSizeW() {
+		int OE = 100 * hungry / getHungryLimit();
+		if (OE <= 5)
+			OE = 85;
+		else if (OE <= 20) {
+			OE += 80;
+		} else if (OE <= 100)
+			OE = 100;
+		return (20 - 20 / (getBabyTypes().size() + 1)) + getBabyTypes().size() * 2
+				+ ((shit * 4 / 5) / getShitLimitBase()[getBodyAgeState().ordinal()]) * 5
+				+ getBodySpr()[getBodyAgeState().ordinal()].getImageW() * (OE - 100) / 100
+				+ getGodHandHoldCount() / 2;
+	}
+
+	/**
+	 * 妊娠、うんうんなどによる縦方向の体型のふくらみ取得
+	 */
+	@Transient
+	public int getExpandSizeH() {
+		return (20 - 20 / (getBabyTypes().size() + 1)) + getBabyTypes().size() * 2
+				+ ((shit * 4 / 5) / getShitLimitBase()[getBodyAgeState().ordinal()]) * 5
+				+ getGodHandHoldCount() / 2;
+	}
+
+	/**
+	 * ひっぱり、押しつぶしによる体型の変形を取得する.
+	 *
+	 * @return ひっぱり、押しつぶしによる体型の変形
+	 */
+	@Transient
+	public int getExternalForceW() {
+		int ret = 0;
+		if (externalPressure < 0)
+			ret = -externalPressure;
+		return ret;
+	}
+
+	@Transient
+	public int getExternalForceH() {
+		int ret = 0;
+		if (externalPressure > 0) {
+			ret = externalPressure * 6;
+		} else if (externalPressure < 0) {
+			ret = externalPressure * 2;
+		}
+		return ret;
+	}
+
 	/** 影の表示有無 */
 	protected boolean shadowVisible = true;
 
@@ -1808,6 +3302,9 @@ public abstract class LivingEntity extends Entity {
 
 	/** うにょ機能を使用するかどうかのフラグ */
 	protected int unyoMode = 1;
+
+	/** うにょの強さ */
+	protected static final int UNYOSTRENGTH[] = { 4, 7, 10 };
 
 	/** うにょ機能を使用するかどうかのフラグ を取得する. @return うにょ機能を使用するかどうかのフラグ */
 	public int getUnyoMode() {
@@ -1897,6 +3394,35 @@ public abstract class LivingEntity extends Entity {
 		this.uniqueID = uniqueID;
 	}
 
+	@Override
+	public boolean equals(Object o) {
+		if (o == null) {
+			return false;
+		}
+		if (!(o instanceof LivingEntity)) {
+			return false;
+		}
+		LivingEntity other = (LivingEntity) o;
+		return getUniqueID() == other.getUniqueID();
+	}
+
+	@Override
+	public int hashCode() {
+		return getUniqueID() * 13;
+	}
+
+	@Override
+	public int compareTo(Object o) {
+		if (o == null) {
+			return 0;
+		}
+		if (!(o instanceof LivingEntity)) {
+			return 0;
+		}
+		LivingEntity other = (LivingEntity) o;
+		return getUniqueID() - other.getUniqueID();
+	}
+
 	/** どのゆっくり的なメッセージを言うか */
 	protected YukkuriType msgType = null;
 
@@ -1972,12 +3498,12 @@ public abstract class LivingEntity extends Entity {
 	protected boolean isPinned = false;
 
 	/** 右ペインメニューのピン留めをされているかどうか を取得する. @return 右ペインメニューのピン留めをされているかどうか */
-	public boolean isIsPinned() {
+	public boolean isPinned() {
 		return isPinned;
 	}
 
 	/** 右ペインメニューのピン留めをされているかどうか を設定する. @param isPinned 右ペインメニューのピン留めをされているかどうか */
-	public void setIsPinned(boolean isPinned) {
+	public void setPinned(boolean isPinned) {
 		this.isPinned = isPinned;
 	}
 
@@ -2101,9 +3627,19 @@ public abstract class LivingEntity extends Entity {
 		return nonMovingConveyor;
 	}
 
+	/** 移動不可ベルトコンベアの有無 を取得する. @return 移動不可ベルトコンベアの有無 */
+	public final boolean isOnNonMovingConveyor() {
+		return isNonMovingConveyor();
+	}
+
 	/** 移動不可ベルトコンベアの有無 を設定する. @param nonMovingConveyor 移動不可ベルトコンベアの有無 */
 	public void setNonMovingConveyor(boolean nonMovingConveyor) {
 		this.nonMovingConveyor = nonMovingConveyor;
+	}
+
+	/** 移動不可ベルトコンベアの有無 を設定する. @param nonMovingConveyor 移動不可ベルトコンベアの有無 */
+	public final void setOnNonMovingConveyor(boolean nonMovingConveyor) {
+		setNonMovingConveyor(nonMovingConveyor);
 	}
 
 	/** 最後にプレイヤーがアクションを行った時間 */
@@ -2117,6 +3653,11 @@ public abstract class LivingEntity extends Entity {
 	/** 最後にプレイヤーがアクションを行った時間 を設定する. @param lastActionTime 最後にプレイヤーがアクションを行った時間 */
 	public void setLastActionTime(long lastActionTime) {
 		this.lastActionTime = lastActionTime;
+	}
+
+	/** 最後にプレイヤーがアクションを行った時間を現在時刻で更新する. */
+	public void setLastActionTime() {
+		this.lastActionTime = System.currentTimeMillis();
 	}
 
 	/** 壁に引っかかった回数 */
@@ -2808,6 +4349,45 @@ public abstract class LivingEntity extends Entity {
 		this.pregnantLimit = pregnantLimit;
 	}
 
+	/**
+	 * 妊娠限界かどうか
+	 *
+	 * @return 妊娠限界かどうか
+	 */
+	@JsonIgnore
+	public boolean isOverPregnantLimit() {
+		if (isUseRealPregnantLimit()) {
+			if (getPregnantLimit() <= 0) {
+				return GameRandom.nextInt(20) != 0;
+			}
+			int tarinaiFactor = getPregnantLimit() > 100 ? 100 : getPregnantLimit();
+			return GameRandom.nextInt(tarinaiFactor) == 0;
+		}
+		return getPregnantLimit() <= 0;
+	}
+
+	/**
+	 * 妊娠限界を一つ早める.
+	 * すでに妊娠限界の場合は何もしない.
+	 */
+	public void subtractPregnantLimit() {
+		if (pregnantLimit > 0) {
+			pregnantLimit--;
+		} else if (pregnantLimit < 0) {
+			pregnantLimit = 0;
+		}
+	}
+
+	/**
+	 * 生まれてる赤ゆの数から、最大で何人まで持てるかを取得する.
+	 *
+	 * @return 最大子数
+	 */
+	@JsonIgnore
+	public int getMaxHaveBaby() {
+		return getDamageLimit() / 300;
+	}
+
 	/** よりリアルな妊娠限界を使用するか */
 	protected boolean useRealPregnantLimit = true;
 
@@ -2846,19 +4426,6 @@ public abstract class LivingEntity extends Entity {
 	/** 拡幅分のスプライト定義（年齢別） を設定する. @param expandSpr 拡幅分のスプライト定義（年齢別） */
 	public void setExpandSpr(Sprite[] expandSpr) {
 		this.expandSpr = expandSpr;
-	}
-
-	/** おさげのスプライト定義（年齢別） */
-	protected Sprite[] braidSpr = new Sprite[3];
-
-	/** おさげのスプライト定義（年齢別） を取得する. @return おさげのスプライト定義（年齢別） */
-	public Sprite[] getBraidSpr() {
-		return braidSpr;
-	}
-
-	/** おさげのスプライト定義（年齢別） を設定する. @param braidSpr おさげのスプライト定義（年齢別） */
-	public void setBraidSpr(Sprite[] braidSpr) {
-		this.braidSpr = braidSpr;
 	}
 
 	// ===== Step6-1: BodyAttributes から移動したメソッド群 =====
@@ -3211,21 +4778,14 @@ public abstract class LivingEntity extends Entity {
 		l.setCrushed(crushed);
 		l.setPheromone(pheromone);
 		l.setHasBraid(hasBraid);
-		l.setBraidType(braidType);
 		l.setHasPants(hasPants);
-		l.setAnalClose(analClose);
-		l.setBodyCastration(bodyCastration);
-		l.setStalkCastration(stalkCastration);
 		l.setPenipeniCutted(penipeniCutted);
+		l.setLikeWater(likeWater);
 		l.setHairState(hairState);
 		l.setFlyingType(flyingType);
-		l.setRareType(rareType);
-		l.setPredatorType(predatorType);
-		l.setLikeBitterFood(likeBitterFood);
-		l.setLikeHotFood(likeHotFood);
-		l.setLikeWater(likeWater);
 		l.setBirth(birth);
 		l.setBirthAge(birthAge);
+		l.setBirthEventBlockedTicks(birthEventBlockedTicks);
 		l.setUnBirth(unBirth);
 		l.setPregnantPeriod(pregnantPeriod);
 		l.setPanicType(panicType);
@@ -3325,7 +4885,7 @@ public abstract class LivingEntity extends Entity {
 		l.setShitType(shitType);
 		// --- その他状態 ---
 		l.setTaken(taken);
-		l.setIsPinned(isPinned);
+		l.setPinned(isPinned);
 		l.setSurisuriFromPlayer(surisuriFromPlayer);
 		l.setLastSurisuriTime(lastSurisuriTime);
 		l.setInOutTakeoutItem(inOutTakeoutItem);

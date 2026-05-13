@@ -859,66 +859,6 @@ public class Entity implements java.io.Serializable, Comparable {
 		this.motionY = motionY;
 	}
 
-	/**
-	 * 後方互換のための旧API.
-	 *
-	 * @deprecated use {@link #getMotionX()}
-	 */
-	@Deprecated
-	public int getBx() {
-		return getMotionX();
-	}
-
-	/**
-	 * 後方互換のための旧API.
-	 *
-	 * @deprecated use {@link #setMotionX(int)}
-	 */
-	@Deprecated
-	public void setBx(int bx) {
-		setMotionX(bx);
-	}
-
-	/**
-	 * 後方互換のための旧API.
-	 *
-	 * @deprecated use {@link #getMotionY()}
-	 */
-	@Deprecated
-	public int getBy() {
-		return getMotionY();
-	}
-
-	/**
-	 * 後方互換のための旧API.
-	 *
-	 * @deprecated use {@link #setMotionY(int)}
-	 */
-	@Deprecated
-	public void setBy(int by) {
-		setMotionY(by);
-	}
-
-	/**
-	 * 後方互換のための旧API.
-	 *
-	 * @deprecated use {@link #getMotionZ()}
-	 */
-	@Deprecated
-	public int getBz() {
-		return getMotionZ();
-	}
-
-	/**
-	 * 後方互換のための旧API.
-	 *
-	 * @deprecated use {@link #setMotionZ(int)}
-	 */
-	@Deprecated
-	public void setBz(int bz) {
-		setMotionZ(bz);
-	}
-
 	@Override
 	public int compareTo(Object o) {
 		return 0;

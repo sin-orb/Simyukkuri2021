@@ -1,5 +1,17 @@
 package src.yukkuri;
 
+import src.entity.core.Entity;
+import src.entity.core.attachment.*;
+import src.entity.core.attachment.impl.*;
+import src.entity.core.effect.*;
+import src.entity.core.effect.impl.*;
+import src.entity.core.living.yukkuri.Dna;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.living.yukkuri.impl.*;
+import src.entity.core.world.bodylinked.*;
+import src.entity.core.world.item.*;
+import src.entity.core.world.mobile.*;
+
 import src.SimYukkuri;
 
 import org.junit.jupiter.api.Test;
@@ -20,7 +32,7 @@ public class WasaReimuTest {
     public void testWasaReimuDefaultConstructor() {
         WasaReimu wasaReimu = new WasaReimu();
         assertNotNull(wasaReimu);
-        assertEquals(2001, wasaReimu.getType());
+        assertEquals(WasaReimu.type, wasaReimu.getType());
     }
 
     @Test
@@ -114,7 +126,7 @@ public class WasaReimuTest {
     public void testWasaReimuHybridTypeWithOther() {
         WasaReimu obj = new WasaReimu();
         // Test with a type not specifically handled - should return Reimu type
-        assertEquals(Reimu.type, obj.getHybridType(Alice.type));
+        assertEquals(Reimu.type, obj.getHybridType(src.enums.YukkuriType.ALICE));
     }
     @Test
     public void testWasaReimuJudgeCanTransForGodHandWhenUnbirth() {

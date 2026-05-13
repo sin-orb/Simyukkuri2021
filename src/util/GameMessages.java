@@ -1,5 +1,6 @@
 package src.util;
 
+import src.entity.core.living.LivingEntity;
 import src.entity.core.living.yukkuri.Yukkuri;
 import src.system.MessagePool;
 
@@ -22,6 +23,13 @@ public final class GameMessages {
 			return override.getMessage(body, action);
 		}
 		return MessagePool.getMessage(body, action);
+	}
+
+	public static String getMessage(LivingEntity body, MessagePool.Action action) {
+		if (body instanceof Yukkuri) {
+			return getMessage((Yukkuri) body, action);
+		}
+		return null;
 	}
 
 	public static void setOverride(MessageSource source) {

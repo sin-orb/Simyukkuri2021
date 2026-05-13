@@ -1,5 +1,17 @@
 package src.item;
 
+import src.entity.core.Entity;
+import src.entity.core.attachment.*;
+import src.entity.core.attachment.impl.*;
+import src.entity.core.effect.*;
+import src.entity.core.effect.impl.*;
+import src.entity.core.living.yukkuri.Dna;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.living.yukkuri.impl.*;
+import src.entity.core.world.bodylinked.*;
+import src.entity.core.world.item.*;
+import src.entity.core.world.mobile.*;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Nested;
@@ -12,7 +24,7 @@ import src.entity.core.world.item.FoodMaker;
 import src.entity.core.world.item.Food.FoodType;
 import src.entity.core.world.mobile.Shit;
 import src.entity.core.world.mobile.Vomit;
-import src.base.ItemTestBase;
+import src.entity.core.world.item.ItemTestBase;
 import src.enums.AgeState;
 import src.enums.Type;
 import src.util.WorldTestHelper;

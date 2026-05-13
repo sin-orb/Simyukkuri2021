@@ -1,5 +1,17 @@
 package src.logic;
 
+import src.entity.core.Entity;
+import src.entity.core.attachment.*;
+import src.entity.core.attachment.impl.*;
+import src.entity.core.effect.*;
+import src.entity.core.effect.impl.*;
+import src.entity.core.living.yukkuri.Dna;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.living.yukkuri.impl.*;
+import src.entity.core.world.bodylinked.*;
+import src.entity.core.world.item.*;
+import src.entity.core.world.mobile.*;
+
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -32,22 +44,22 @@ import src.enums.PublicRank;
 import src.logic.BodyLogic.ActionGo;
 import src.util.WorldTestHelper;
 import src.util.GameRandom;
-import src.event.KillPredeatorEvent;
-import src.event.ProposeEvent;
-import src.event.FuneralEvent;
-import src.event.HateNoOkazariEvent;
+import src.event.impl.KillPredeatorEvent;
+import src.event.impl.ProposeEvent;
+import src.event.impl.FuneralEvent;
+import src.event.impl.HateNoOkazariEvent;
 import src.enums.Intelligence;
 import src.enums.CoreAnkoState;
 import src.enums.TakeoutItemType;
-import src.event.AvoidMoldEvent;
-import src.item.Food;
+import src.event.impl.AvoidMoldEvent;
+import src.entity.core.world.item.Food;
 import src.enums.GatheringDirection;
 import src.entity.core.living.yukkuri.impl.TarinaiReimu;
 import src.entity.core.living.yukkuri.impl.Remirya;
 import src.entity.core.living.yukkuri.impl.Sakuya;
-import src.entity.world.bodylinked.Okazari;
-import src.attachment.Ants;
-import src.item.Toilet;
+import src.entity.core.world.bodylinked.Okazari;
+import src.entity.core.attachment.impl.Ants;
+import src.entity.core.world.item.Toilet;
 import src.enums.PredatorType;
 import src.enums.Where;
 
@@ -2860,7 +2872,7 @@ class BodyLogicTest {
 
     @Test
     void testCheckPartner_highPriorityEvent_returnsFalse() {
-        src.event.EventPacket evt = new src.event.HateNoOkazariEvent();
+        src.event.EventPacket evt = new src.event.impl.HateNoOkazariEvent();
         // Set priority to HIGH via checkEventResponse or reflection
         try {
             java.lang.reflect.Field f = src.event.EventPacket.class.getDeclaredField("priority");
@@ -3594,7 +3606,7 @@ class BodyLogicTest {
         idiot.setBodySpr(makeSprites(1, 1));
         idiot.setX(100); idiot.setY(100);
         idiot.setAgeState(AgeState.ADULT);
-        idiot.giveOkazari(src.entity.world.bodylinked.Okazari.OkazariType.DEFAULT);
+        idiot.giveOkazari(src.entity.core.world.bodylinked.Okazari.OkazariType.DEFAULT);
         SimYukkuri.world.getCurrentMap().getBody().put(idiot.getUniqueID(), idiot);
         me.setExciting(true);
         me.setAgeState(AgeState.ADULT);
@@ -5569,6 +5581,28 @@ class BodyLogicTest {
         Yukkuri child = WorldTestHelper.createBody();
         child.setAgeState(AgeState.BABY);
         child.setPublicRank(PublicRank.UnunSlave);
+        SimYukkuri.world.getCurrentMap().getBody().put(child.getUniqueID(), child);
+        WorldTestHelper.addChild(me, child.getUniqueID());
+        List<Yukkuri> list = BodyLogic.createActiveChildList(me, true);
+        assertFalse(list.contains(child));
+    }
+
+    @Test
+    void testCreateActiveChildList_BirthMessageForcedChild_Skipped() {
+        Yukkuri child = WorldTestHelper.createBody();
+        child.setAgeState(AgeState.BABY);
+        child.setBirthMessageForced(true);
+        SimYukkuri.world.getCurrentMap().getBody().put(child.getUniqueID(), child);
+        WorldTestHelper.addChild(me, child.getUniqueID());
+        List<Yukkuri> list = BodyLogic.createActiveChildList(me, true);
+        assertFalse(list.contains(child));
+    }
+
+    @Test
+    void testCreateActiveChildList_BirthEventBlockedChild_Skipped() {
+        Yukkuri child = WorldTestHelper.createBody();
+        child.setAgeState(AgeState.BABY);
+        child.setBirthEventBlockedTicks(300);
         SimYukkuri.world.getCurrentMap().getBody().put(child.getUniqueID(), child);
         WorldTestHelper.addChild(me, child.getUniqueID());
         List<Yukkuri> list = BodyLogic.createActiveChildList(me, true);

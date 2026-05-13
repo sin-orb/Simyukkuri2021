@@ -1,4 +1,4 @@
-package src.entity.core.attachment;
+package src.entity.core.attachment.impl;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -11,9 +11,8 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
-import src.draw.World;
 import src.entity.core.Entity;
-import src.entity.core.attachment.impl.AccelAmpoule;
+import src.draw.World;
 import src.entity.core.living.yukkuri.Yukkuri;
 import src.entity.core.living.yukkuri.impl.Reimu;
 import src.enums.AgeState;
@@ -60,9 +59,10 @@ public class AccelAmpouleTest {
     public void testUpdateIncreasesAgeForNonAdult() {
         Yukkuri parent = createParent(AgeState.CHILD);
         AccelAmpoule ampoule = new AccelAmpoule(parent);
+        ampoule.setProcessInterval(1);
 
         long before = parent.getAge();
-        Event result = ampoule.update();
+        Event result = ampoule.clockTick();
 
         assertEquals(Event.DONOTHING, result);
         assertEquals(before + Entity.TICK * 10000, parent.getAge());
@@ -125,7 +125,8 @@ public class AccelAmpouleTest {
         Yukkuri parent = new Reimu();
         parent.setAgeState(AgeState.CHILD);
         AccelAmpoule ampoule = new AccelAmpoule(parent);
-        assertNull(ampoule.update());
+        ampoule.setProcessInterval(1);
+        assertNull(ampoule.clockTick());
     }
 
     @Test
@@ -135,7 +136,7 @@ public class AccelAmpouleTest {
         parent.setDead(true);
 
         long before = parent.getAge();
-        Event result = ampoule.update();
+        Event result = ampoule.clockTick();
 
         assertEquals(Event.DONOTHING, result);
         assertEquals(before, parent.getAge());
@@ -147,7 +148,7 @@ public class AccelAmpouleTest {
         AccelAmpoule ampoule = new AccelAmpoule(parent);
 
         long before = parent.getAge();
-        Event result = ampoule.update();
+        Event result = ampoule.clockTick();
 
         assertEquals(Event.DONOTHING, result);
         assertEquals(before, parent.getAge());
@@ -210,8 +211,9 @@ public class AccelAmpouleTest {
             Yukkuri parent = createParent(AgeState.CHILD);
             parent.setAge(100);
             AccelAmpoule ampoule = new AccelAmpoule(parent);
+            ampoule.setProcessInterval(1);
 
-            Event result = ampoule.update();
+            Event result = ampoule.clockTick();
 
             assertEquals(Event.DONOTHING, result);
             assertEquals(100 + Entity.TICK * 10000, parent.getAge());
@@ -224,7 +226,7 @@ public class AccelAmpouleTest {
             AccelAmpoule ampoule = new AccelAmpoule(parent);
             long before = parent.getAge();
 
-            Event result = ampoule.update();
+            Event result = ampoule.clockTick();
 
             assertEquals(Event.DONOTHING, result);
             assertEquals(before, parent.getAge());

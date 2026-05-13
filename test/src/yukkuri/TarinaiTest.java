@@ -1,5 +1,17 @@
 package src.yukkuri;
 
+import src.entity.core.Entity;
+import src.entity.core.attachment.*;
+import src.entity.core.attachment.impl.*;
+import src.entity.core.effect.*;
+import src.entity.core.effect.impl.*;
+import src.entity.core.living.yukkuri.Dna;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.living.yukkuri.impl.*;
+import src.entity.core.world.bodylinked.*;
+import src.entity.core.world.item.*;
+import src.entity.core.world.mobile.*;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,7 +40,7 @@ public class TarinaiTest {
     @Test
     public void testTarinaiIdentity() {
         Tarinai tarinai = new Tarinai();
-        assertEquals(2000, tarinai.getType());
+        assertEquals(Tarinai.type, tarinai.getType());
         assertEquals("たりないゆ", tarinai.getNameJ());
         assertEquals("Tarinaiyu", tarinai.getNameE());
     }
@@ -48,7 +60,7 @@ public class TarinaiTest {
         // Tarinai + Marisa = MarisaReimu
         assertEquals(MarisaReimu.type, tarinai.getHybridType(Marisa.type));
         // Tarinai + other = Tarinai
-        assertEquals(Tarinai.type, tarinai.getHybridType(Alice.type));
+        assertEquals(Tarinai.type, tarinai.getHybridType(src.enums.YukkuriType.ALICE));
     }
 
     @Test
@@ -79,7 +91,7 @@ public class TarinaiTest {
     public void testTarinaiDefaultConstructor() {
         Tarinai tarinai = new Tarinai();
         assertNotNull(tarinai);
-        assertEquals(2000, tarinai.getType());
+        assertEquals(Tarinai.type, tarinai.getType());
     }
 
     @Test

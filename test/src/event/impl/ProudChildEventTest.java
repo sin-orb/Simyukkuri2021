@@ -1,5 +1,17 @@
 package src.event.impl;
 
+import src.entity.core.Entity;
+import src.entity.core.attachment.*;
+import src.entity.core.attachment.impl.*;
+import src.entity.core.effect.*;
+import src.entity.core.effect.impl.*;
+import src.entity.core.living.yukkuri.Dna;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.living.yukkuri.impl.*;
+import src.entity.core.world.bodylinked.*;
+import src.entity.core.world.item.*;
+import src.entity.core.world.mobile.*;
+
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -109,6 +121,17 @@ public class ProudChildEventTest {
         b.setPublicRank(PublicRank.UnunSlave);
         ProudChildEvent event = new ProudChildEvent(from, null, null, 10);
         assertFalse(event.checkEventResponse(b));
+    }
+
+    @Test
+    public void testCheckEventResponse_returnsFalseForBirthMessageForcedBaby() {
+        Yukkuri from = createBody();
+        Yukkuri baby = createBody();
+        baby.setAgeState(AgeState.BABY);
+        baby.setBirthMessageForced(true);
+        WorldTestHelper.setParents(baby, -1, from.getUniqueID());
+        ProudChildEvent event = new ProudChildEvent(from, null, null, 10);
+        assertFalse(event.checkEventResponse(baby));
     }
 
     @Test
@@ -238,6 +261,20 @@ public class ProudChildEventTest {
         ProudChildEvent event = new ProudChildEvent(from, null, null, 10);
         from.setCurrentEvent(event);
         assertEquals(EventPacket.UpdateState.ABORT, event.update(baby));
+    }
+
+    @Test
+    public void testCheckEventResponse_birthEventBlockedBaby_returnsFalse() {
+        Yukkuri from = createBody();
+        Yukkuri baby = createBody();
+        WorldTestHelper.setParents(baby, -1, from.getUniqueID());
+        baby.setAgeState(AgeState.BABY);
+        baby.setFirstGround(false);
+        baby.setBirthMessageForced(false);
+        baby.setBirthEventBlockedTicks(300);
+        ProudChildEvent event = new ProudChildEvent(from, null, null, 10);
+        from.setCurrentEvent(event);
+        assertFalse(event.checkEventResponse(baby));
     }
 
     @Test

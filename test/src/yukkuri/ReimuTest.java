@@ -1,5 +1,17 @@
 package src.yukkuri;
 
+import src.entity.core.Entity;
+import src.entity.core.attachment.*;
+import src.entity.core.attachment.impl.*;
+import src.entity.core.effect.*;
+import src.entity.core.effect.impl.*;
+import src.entity.core.living.yukkuri.Dna;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.living.yukkuri.impl.*;
+import src.entity.core.world.bodylinked.*;
+import src.entity.core.world.item.*;
+import src.entity.core.world.mobile.*;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,7 +43,7 @@ public class ReimuTest {
     @Test
     public void testReimuIdentity() {
         Reimu reimu = new Reimu();
-        assertEquals(1, reimu.getType());
+        assertEquals(Reimu.type, reimu.getType());
         assertEquals("れいむ", reimu.getNameJ());
         assertEquals("Reimu", reimu.getNameE());
     }
@@ -53,14 +65,14 @@ public class ReimuTest {
         // Reimu + DosMarisa = MarisaReimu
         assertEquals(Reimu.type, reimu.getHybridType(DosMarisa.type));
         // Reimu + other = Reimu
-        assertEquals(Reimu.type, reimu.getHybridType(Alice.type));
+        assertEquals(Reimu.type, reimu.getHybridType(src.enums.YukkuriType.ALICE));
     }
 
     @Test
     public void testReimuDefaultConstructor() {
         Reimu reimu = new Reimu();
         assertNotNull(reimu);
-        assertEquals(1, reimu.getType());
+        assertEquals(Reimu.type, reimu.getType());
     }
 
     @Test
@@ -108,7 +120,7 @@ public class ReimuTest {
         Reimu reimu = new Reimu(100, 200, 0, AgeState.ADULT, parent1, parent2);
 
         assertNotNull(reimu);
-        assertEquals(1, reimu.getType());
+        assertEquals(Reimu.type, reimu.getType());
     }
 
     @Test
@@ -163,7 +175,7 @@ public class ReimuTest {
     public void testReimuHybridTypeWithOther() {
         Reimu obj = new Reimu();
         // Test with a type not specifically handled - should return own type
-        assertEquals(Reimu.type, obj.getHybridType(Alice.type));
+        assertEquals(Reimu.type, obj.getHybridType(src.enums.YukkuriType.ALICE));
     }
     @Test
     public void testReimuJudgeCanTransForGodHandWhenUnbirth() {

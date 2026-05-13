@@ -1,8 +1,20 @@
 package src.item;
 
+import src.entity.core.Entity;
+import src.entity.core.attachment.*;
+import src.entity.core.attachment.impl.*;
+import src.entity.core.effect.*;
+import src.entity.core.effect.impl.*;
+import src.entity.core.living.yukkuri.Dna;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.living.yukkuri.impl.*;
+import src.entity.core.world.bodylinked.*;
+import src.entity.core.world.item.*;
+import src.entity.core.world.mobile.*;
+
 import org.junit.jupiter.api.Test;
-import src.base.ItemTestBase;
-import src.base.WorldEntity.ItemRank;
+import src.entity.core.world.item.ItemTestBase;
+import src.entity.core.world.WorldEntity.ItemRank;
 import src.SimYukkuri;
 import src.draw.Translate;
 import src.enums.WorldEntityKind;
@@ -515,25 +527,25 @@ class BedTest extends ItemTestBase {
     @Test
     void testSetBxyz_ResetBPos() {
         Bed bed = new Bed(100, 100, 0);
-        bed.setBx(3);
-        bed.setBy(4);
-        bed.setBz(5);
-        assertEquals(3, bed.getBx());
-        assertEquals(4, bed.getBy());
-        assertEquals(5, bed.getBz());
+        bed.setMotionX(3);
+        bed.setMotionY(4);
+        bed.setMotionZ(5);
+        assertEquals(3, bed.getMotionX());
+        assertEquals(4, bed.getMotionY());
+        assertEquals(5, bed.getMotionZ());
         bed.resetMotion();
-        assertEquals(0, bed.getBx());
-        assertEquals(0, bed.getBy());
-        assertEquals(0, bed.getBz());
+        assertEquals(0, bed.getMotionX());
+        assertEquals(0, bed.getMotionY());
+        assertEquals(0, bed.getMotionZ());
     }
 
     @Test
     void testAddBxyz() {
         Bed bed = new Bed(100, 100, 0);
         bed.addMotion(2, 3, 4);
-        assertEquals(2, bed.getBx());
-        assertEquals(3, bed.getBy());
-        assertEquals(4, bed.getBz());
+        assertEquals(2, bed.getMotionX());
+        assertEquals(3, bed.getMotionY());
+        assertEquals(4, bed.getMotionZ());
     }
 
     @Test

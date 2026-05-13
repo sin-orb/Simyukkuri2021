@@ -1,5 +1,17 @@
 package src.yukkuri;
 
+import src.entity.core.Entity;
+import src.entity.core.attachment.*;
+import src.entity.core.attachment.impl.*;
+import src.entity.core.effect.*;
+import src.entity.core.effect.impl.*;
+import src.entity.core.living.yukkuri.Dna;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.living.yukkuri.impl.*;
+import src.entity.core.world.bodylinked.*;
+import src.entity.core.world.item.*;
+import src.entity.core.world.mobile.*;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -14,6 +26,7 @@ import src.system.ResourceUtil;
 import src.draw.Point4y;
 import src.entity.core.living.yukkuri.Dna;
 import src.util.WorldTestHelper;
+import src.util.GameLocale;
 
 public class MarisaTest {
 
@@ -32,7 +45,7 @@ public class MarisaTest {
     @Test
     public void testMarisaIdentity() {
         Marisa marisa = new Marisa();
-        assertEquals(0, marisa.getType());
+        assertEquals(Marisa.type, marisa.getType());
         assertEquals("まりさ", marisa.getNameJ());
         assertEquals("Marisa", marisa.getNameE());
     }
@@ -40,7 +53,7 @@ public class MarisaTest {
     @Test
     public void testMarisaNames() {
         Marisa marisa = new Marisa();
-        if (ResourceUtil.IS_JP) {
+        if (GameLocale.isJapanese()) {
             assertEquals("まりさ", marisa.getMyName());
             assertEquals("まりさ", marisa.getMyNameD());
         } else {
@@ -59,7 +72,7 @@ public class MarisaTest {
         // Marisa + WasaReimu = ReimuMarisa
         assertEquals(ReimuMarisa.type, marisa.getHybridType(WasaReimu.type));
         // Marisa + other = Marisa
-        assertEquals(Marisa.type, marisa.getHybridType(Alice.type));
+        assertEquals(Marisa.type, marisa.getHybridType(src.enums.YukkuriType.ALICE));
     }
 
     @Test
@@ -172,7 +185,7 @@ public class MarisaTest {
     public void testMarisaHybridTypeWithOther() {
         Marisa obj = new Marisa();
         // Test with a type not specifically handled - should return own type
-        assertEquals(Marisa.type, obj.getHybridType(Alice.type));
+        assertEquals(Marisa.type, obj.getHybridType(src.enums.YukkuriType.ALICE));
     }
     @Test
     public void testMarisaJudgeCanTransForGodHandWhenUnbirth() {

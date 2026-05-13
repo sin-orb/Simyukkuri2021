@@ -4,6 +4,7 @@ import java.util.List;
 
 import src.draw.Translate;
 import src.entity.core.Entity;
+import src.entity.core.living.SocialEntity;
 import src.entity.core.living.yukkuri.Yukkuri;
 import src.enums.EnumRelationMine;
 import src.enums.GatheringDirection;
@@ -292,6 +293,15 @@ public class BodyLogic {
 	 */
 	public static void checkNearParent(Yukkuri body) {
 		BodyParentRule.checkNearParent(body);
+	}
+
+	/**
+	 * 近い親をチェックする.
+	 *
+	 * @param body 赤ゆなど
+	 */
+	public static void checkNearParent(SocialEntity body) {
+		BodyParentRule.checkNearParent((Yukkuri) body);
 	}
 
 	/**

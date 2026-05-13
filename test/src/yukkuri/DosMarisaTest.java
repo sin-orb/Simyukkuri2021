@@ -1,5 +1,17 @@
 package src.yukkuri;
 
+import src.entity.core.Entity;
+import src.entity.core.attachment.*;
+import src.entity.core.attachment.impl.*;
+import src.entity.core.effect.*;
+import src.entity.core.effect.impl.*;
+import src.entity.core.living.yukkuri.Dna;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.living.yukkuri.impl.*;
+import src.entity.core.world.bodylinked.*;
+import src.entity.core.world.item.*;
+import src.entity.core.world.mobile.*;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,7 +39,7 @@ public class DosMarisaTest {
     @Test
     public void testDosMarisaIdentity() {
         DosMarisa dosMarisa = new DosMarisa();
-        assertEquals(2006, dosMarisa.getType());
+        assertEquals(DosMarisa.type, dosMarisa.getType());
         assertEquals("ドスまりさ", dosMarisa.getNameJ());
         assertEquals("DosMarisa", dosMarisa.getNameE());
     }
@@ -49,7 +61,7 @@ public class DosMarisaTest {
         // DosMarisa + WasaReimu = ReimuMarisa
         assertEquals(ReimuMarisa.type, dosMarisa.getHybridType(WasaReimu.type));
         // DosMarisa + other = DosMarisa
-        assertEquals(DosMarisa.type, dosMarisa.getHybridType(Alice.type));
+        assertEquals(DosMarisa.type, dosMarisa.getHybridType(src.enums.YukkuriType.ALICE));
     }
 
     @Test
@@ -81,7 +93,7 @@ public class DosMarisaTest {
         DosMarisa dosMarisa = new DosMarisa(130, 230, 0, AgeState.ADULT, parent1, parent2);
 
         assertNotNull(dosMarisa);
-        assertEquals(2006, dosMarisa.getType());
+        assertEquals(DosMarisa.type, dosMarisa.getType());
     }
 
     @Test
@@ -144,7 +156,7 @@ public class DosMarisaTest {
     public void testDosMarisaHybridTypeWithOther() {
         DosMarisa obj = new DosMarisa();
         // Test with a type not specifically handled - should return own type
-        assertEquals(DosMarisa.type, obj.getHybridType(Alice.type));
+        assertEquals(DosMarisa.type, obj.getHybridType(src.enums.YukkuriType.ALICE));
     }
     @Test
     public void testDosMarisaJudgeCanTransForGodHandWhenUnbirth() {

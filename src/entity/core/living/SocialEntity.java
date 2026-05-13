@@ -4,15 +4,28 @@ import java.beans.Transient;
 import java.util.LinkedList;
 import java.util.List;
 
+import src.Const;
 import src.entity.core.Entity;
+import src.entity.core.attachment.impl.Ants;
+import src.entity.core.living.yukkuri.Yukkuri;
 import src.enums.Attitude;
 import src.enums.BodyRank;
+import src.enums.BurialState;
+import src.enums.CoreAnkoState;
+import src.enums.CriticalDamegeType;
+import src.enums.FootBake;
 import src.enums.Happiness;
+import src.enums.ImageCode;
 import src.enums.Intelligence;
 import src.enums.LovePlayer;
 import src.enums.Parent;
 import src.enums.PublicRank;
+import src.logic.BodyIllnessRule;
+import src.logic.BodyLogic;
 import src.logic.BodyRelations;
+import src.system.MessagePool;
+import src.util.GameMessages;
+import src.util.GameRandom;
 
 /**
  * 社会的行動を持つ生命エンティティの抽象基底クラス。
@@ -85,7 +98,39 @@ public abstract class SocialEntity extends LivingEntity {
 
 	/** 幸福度 を設定する. @param happiness 幸福度 */
 	public void setHappiness(Happiness happiness) {
-		this.happiness = happiness;
+		if (isDead() || isIdiot()) {
+			this.happiness = Happiness.AVERAGE;
+			return;
+		}
+		if (isNYD()) {
+			this.happiness = Happiness.VERY_SAD;
+			sadPeriod = 1200 + GameRandom.nextInt(400) - 200;
+			return;
+		}
+		if (happiness == Happiness.SAD) {
+			if (getHappiness() != Happiness.VERY_SAD) {
+				sadPeriod = 0;
+				this.happiness = happiness;
+			}
+		} else if (happiness == Happiness.HAPPY) {
+			if (getHappiness() != Happiness.VERY_HAPPY) {
+				sadPeriod = 0;
+				this.happiness = happiness;
+			}
+		} else {
+			if (happiness == Happiness.VERY_SAD) {
+				sadPeriod = 1200 + GameRandom.nextInt(400) - 200;
+			} else {
+				sadPeriod = 0;
+			}
+			this.happiness = happiness;
+		}
+		if (getHappiness() == Happiness.HAPPY || getHappiness() == Happiness.VERY_HAPPY) {
+			setScare(false);
+			setAngry(false);
+		} else if (getHappiness() == Happiness.SAD || getHappiness() == Happiness.VERY_SAD) {
+			setAngry(false);
+		}
 	}
 
 	/** 喜んでいるか. @return 喜んでいるかどうか */
@@ -331,6 +376,57 @@ public abstract class SocialEntity extends LivingEntity {
 		this.parentLinkId = parentLinkId;
 	}
 
+	/**
+	 * 濡れているときの基本反応.
+	 */
+	public void checkWet() {
+		// 濡れても溶けてもないなら抜ける
+		if (!isWet() && !isMelt()) {
+			return;
+		}
+
+		wetPeriod += TICK;
+		if (wetPeriod > 300) {
+			setWet(false);
+			wetPeriod = 0;
+		}
+		if (!isLikeWater()) {
+			// 50%以上のダメージ中か、皮がない時に濡れたら溶ける
+			if (isDamaged() || isPealed()) {
+				setMelt(true);
+			}
+			damage += TICK * 5;
+			getDamageState();
+			if (getAge() % 5 == 0) {
+				addStress(20);
+			}
+		}
+	}
+
+	/**
+	 * ふりふり可能な状態かどうかを返却する.
+	 *
+	 * @return ふりふり可能な状態かどうか
+	 */
+	public boolean canFurifuri() {
+		if (getFootBakeLevel() != FootBake.CRITICAL && coreAnkoState == CoreAnkoState.DEFAULT) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * 自主的にふりふりするかどうかを返却する.
+	 *
+	 * @return 自主的にふりふりするかどうか
+	 */
+	public boolean willingFurifuri() {
+		if (isRude() && GameRandom.nextInt(furifuriDiscipline + 1) == 0 && canFurifuri()) {
+			return true;
+		}
+		return false;
+	}
+
 	/** 対象を呼び止めるほど強い動機を持っているかどうか */
 	protected boolean targetBind = false;
 
@@ -420,6 +516,25 @@ public abstract class SocialEntity extends LivingEntity {
 		}
 	}
 
+	/**
+	 * ストレス値に加える.
+	 *
+	 * @param s ストレス値に加えたい値
+	 */
+	public void addStress(int s) {
+		if (dead) {
+			return;
+		}
+		// ストレスに応じてうんうん増加
+		if (s > 0 && coreAnkoState == CoreAnkoState.DEFAULT && getBurstState() != src.enums.Burst.HALF) {
+			plusShit(s / 5);
+		}
+		stress += TICK * s;
+		if (stress < 0) {
+			stress = 0;
+		}
+	}
+
 	public final void addAmaamaDiscipline(int val) {
 		amaamaDiscipline += val;
 		if (amaamaDiscipline > 100) {
@@ -428,6 +543,455 @@ public abstract class SocialEntity extends LivingEntity {
 		if (amaamaDiscipline < 0) {
 			amaamaDiscipline = 0;
 		}
+	}
+
+	/**
+	 * 障害の有無を返却する.
+	 *
+	 * @return 障害の有無
+	 */
+	public final boolean hasDisorder() {
+		if (isIdiot())
+			return true;
+		if (isNYD())
+			return true;
+		if (!hasOkazari())
+			return true;
+		if (!hasBraidCheck())
+			return true;
+		if (isBlind())
+			return true;
+		if (isPacked())
+			return true;
+		if (isGotBurned())
+			return true;
+		if (getCriticalDamege() == CriticalDamegeType.CUT)
+			return true;
+
+		return false;
+	}
+
+	/**
+	 * 子ゆっくりが病気かどうかを判定する.
+	 *
+	 * @param b 判定対象
+	 * @return 病気ならtrue
+	 */
+	public boolean findSick(Yukkuri b) {
+		return BodyIllnessRule.findSick(getIntelligence(), b);
+	}
+
+	/**
+	 * 非ゆっくり症耐性を計算する.
+	 *
+	 * @return 耐性値
+	 */
+	public int checkNonYukkuriDiseaseTolerance() {
+		int tolerance = 100;
+		if (isIdiot()) {
+			tolerance += 50000;
+		}
+		if (getPublicRank() == PublicRank.UnunSlave) {
+			tolerance += 10000;
+		}
+		switch (getIntelligence()) {
+			case WISE:
+				tolerance += 5;
+				break;
+			case FOOL:
+				tolerance += 10;
+				break;
+			default:
+				break;
+		}
+		switch (getAttitude()) {
+			case VERY_NICE:
+				tolerance += 5;
+				break;
+			case NICE:
+				tolerance += 10;
+				break;
+			case SHITHEAD:
+				tolerance += 30;
+				break;
+			case SUPER_SHITHEAD:
+				tolerance += 50;
+				break;
+			default:
+				break;
+		}
+		switch (getBodyAgeState()) {
+			case BABY:
+				break;
+			case CHILD:
+				tolerance += 30;
+				break;
+			case ADULT:
+				tolerance += 50;
+				break;
+		}
+		if (isRapist()) {
+			tolerance += 5000;
+		}
+		if (isSoHungry()) {
+			if (isVeryHungry())
+				tolerance -= 5;
+			else
+				tolerance -= 3;
+		}
+		switch (getFootBakeLevel()) {
+			case MIDIUM:
+				tolerance -= 30;
+				break;
+			case CRITICAL:
+				tolerance -= 50;
+				break;
+			default:
+				break;
+		}
+		switch (getBodyBakeLevel()) {
+			case MIDIUM:
+				tolerance -= 15;
+				break;
+			case CRITICAL:
+				tolerance -= 25;
+				break;
+			default:
+				break;
+		}
+		if (isSick()) {
+			tolerance -= 15;
+		}
+		if (!hasOkazari()) {
+			tolerance -= 25;
+		}
+		if (!isHasBraid()) {
+			tolerance -= 10;
+		}
+		if (isPenipeniCutted()) {
+			tolerance -= 20;
+		}
+		if (isDirty()) {
+			tolerance -= 5;
+		}
+		if (isLockmove()) {
+			tolerance -= 5;
+		}
+		if (isBlind()) {
+			tolerance -= 20;
+		}
+		if (isShutmouth()) {
+			tolerance -= 10;
+		}
+		if (getCriticalDamege() == CriticalDamegeType.INJURED) {
+			tolerance -= 10;
+		}
+		if (getChildrenList() != null) {
+			for (int iChild : getChildrenList()) {
+				Yukkuri childBody = BodyRelations.getBody(iChild);
+				if (childBody == null || childBody.isAdult()) {
+					continue;
+				}
+				if (childBody.isRemoved() || childBody.isDead()) {
+					tolerance -= 10;
+					continue;
+				}
+				if (childBody.isCrushed() || childBody.isDamaged() || childBody.isBurned() || findSick(childBody)
+						|| childBody.isTooHungry()) {
+					tolerance -= 3;
+					continue;
+				}
+				if (hasDisorder()) {
+					tolerance -= 5;
+					continue;
+				}
+				tolerance += 10;
+			}
+		}
+		tolerance += memories;
+		if (tolerance <= -1) {
+			tolerance = -1;
+		}
+		return tolerance;
+	}
+
+	/**
+	 * 盲目時の基本反応.
+	 *
+	 * @return その後の処理をキャンセルするかどうか
+	 */
+	public boolean checkEmotionBlind() {
+		if (applyBlindnessPenalty()) {
+			setHappiness(Happiness.SAD);
+			if (GameRandom.nextInt(40) <= 5) {
+				setMessage(GameMessages.getMessage(this, MessagePool.Action.CANTSEE));
+			} else if (GameRandom.nextInt(40) == 20) {
+				setMessage(GameMessages.getMessage(this, MessagePool.Action.LamentNoYukkuri));
+			}
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * 口封じ時の基本反応.
+	 *
+	 * @return その後の処理をキャンセルするかどうか
+	 */
+	public boolean checkEmotionCantSpeak() {
+		if (applyCantSpeakPenalty()) {
+			setHappiness(Happiness.SAD);
+			if (GameRandom.nextInt(80) == 0 && !isSleeping()) {
+				setMessage(GameMessages.getMessage(this, MessagePool.Action.CantTalk));
+			}
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * 動けない時の基本反応.
+	 *
+	 * @return その後の処理をキャンセルするかどうか
+	 */
+	public boolean checkEmotionLockmove() {
+		if (!beginLockmoveEmotion()) {
+			return false;
+		}
+
+		if (getLockmovePeriod() < 400) {
+			if (GameRandom.nextInt(15) == 0) {
+				clearActions();
+				if (getBurialState() == BurialState.ALL || getBurialState() == BurialState.NEARLY_ALL) {
+					setHappiness(Happiness.VERY_SAD);
+					setMessage(GameMessages.getMessage(this, MessagePool.Action.BaryInUnderGround));
+					stay();
+				} else {
+					setMessage(GameMessages.getMessage(this, MessagePool.Action.CantMove));
+					setAngry(true);
+					if (GameRandom.nextInt(10) == 0) {
+						setNobinobi(true);
+					}
+				}
+				return true;
+			}
+			if (isHungry() && GameRandom.nextInt(50) == 0) {
+				setMessage(GameMessages.getMessage(this, MessagePool.Action.Hungry), 30);
+				setHappiness(Happiness.SAD);
+				stay(30);
+			} else if (GameRandom.nextInt(15) == 0) {
+				clearActions();
+				if (getBurialState() == BurialState.ALL || getBurialState() == BurialState.NEARLY_ALL) {
+					setHappiness(Happiness.VERY_SAD);
+					setMessage(GameMessages.getMessage(this, MessagePool.Action.BaryInUnderGround));
+					stay();
+				} else {
+					setAngry(true);
+					setHappiness(Happiness.VERY_SAD);
+					setMessage(GameMessages.getMessage(this, MessagePool.Action.CantMove2));
+					if (GameRandom.nextInt(10) == 0) {
+						setNobinobi(true);
+					}
+				}
+				return true;
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * 足焼き済みの基本反応
+	 *
+	 * @return その後の処理をキャンセルするかどうか
+	 */
+	public boolean checkEmotionFootbake() {
+		if (!beginFootBakeEmotion()) {
+			return false;
+		}
+
+		if (getFootBakeLevel() == FootBake.MIDIUM) {
+			if (GameRandom.nextInt(15) == 0) {
+				clearActions();
+				setAngry(true);
+				setHappiness(Happiness.SAD);
+				setMessage(GameMessages.getMessage(this, MessagePool.Action.LamentLowYukkuri));
+				return true;
+			}
+			if (isHungry() && GameRandom.nextInt(400) == 0) {
+				setMessage(GameMessages.getMessage(this, MessagePool.Action.Hungry), 30);
+				setHappiness(Happiness.SAD);
+				return true;
+			}
+		} else if (getFootBakeLevel() == FootBake.CRITICAL) {
+			if (lockmovePeriod < 300) {
+				if (GameRandom.nextInt(15) == 0) {
+					clearActions();
+					setAngry(true);
+					setHappiness(Happiness.SAD);
+					if (GameRandom.nextInt(5) == 0) {
+						setMessage(GameMessages.getMessage(this, MessagePool.Action.LamentLowYukkuri));
+					} else {
+						setMessage(GameMessages.getMessage(this, MessagePool.Action.CantMove));
+					}
+					return true;
+				}
+				if (isHungry() && GameRandom.nextInt(50) == 0) {
+					setMessage(GameMessages.getMessage(this, MessagePool.Action.Hungry), 30);
+					setHappiness(Happiness.VERY_SAD);
+					stay();
+					return true;
+				}
+			} else {
+				if (GameRandom.nextInt(15) == 0) {
+					clearActions();
+					setAngry(true);
+					setHappiness(Happiness.VERY_SAD);
+					if (GameRandom.nextInt(5) != 0) {
+						setMessage(GameMessages.getMessage(this, MessagePool.Action.CantMove2));
+					} else {
+						setMessage(GameMessages.getMessage(this, MessagePool.Action.LamentNoYukkuri));
+					}
+					return true;
+				}
+			}
+		}
+		return true;
+	}
+
+	/**
+	 * おかざり、ぴこぴこなしのときの基本反応
+	 *
+	 * @return その後の処理をキャンセルするかどうか
+	 */
+	public boolean checkEmotionNoOkazariPikopiko() {
+		if (!beginNoOkazariEmotion()) {
+			return false;
+		}
+		if (GameRandom.nextInt(50) == 0) {
+			clearActions();
+			setAngry(true);
+			setHappiness(Happiness.SAD);
+			setForceFace(ImageCode.TIRED.ordinal());
+			setMessage(GameMessages.getMessage(this, MessagePool.Action.LamentLowYukkuri));
+			stay();
+			return true;
+		}
+		return true;
+	}
+
+	/**
+	 * 自主的洗浄を行う.
+	 */
+	public final void cleaningItself() {
+		stay();
+		setMessage(GameMessages.getMessage(this, MessagePool.Action.CleanItself));
+		if (!isAdult()) {
+			setHappiness(Happiness.SAD);
+			setForceFace(ImageCode.TIRED.ordinal());
+		}
+		if (canFurifuri())
+			setFurifuri(true);
+		makeDirty(false);
+		int ageIndex = isBaby() ? 0 : (isChild() ? 1 : 2);
+		int P = 1;
+		switch (getIntelligence()) {
+			case WISE:
+				P = getCleaningFailProbWise()[ageIndex];
+				break;
+			case AVERAGE:
+				P = getCleaningFailProbAverage()[ageIndex];
+				break;
+			case FOOL:
+				P = getCleaningFailProbFool()[ageIndex];
+				break;
+		}
+		if (P <= 0) {
+			P = 1;
+		}
+		if (GameRandom.nextInt(P) != 0) {
+			setStubbornlyDirty(true);
+		}
+	}
+
+	/**
+	 * 親を呼んで泣きわめく.
+	 */
+	public final void callParent() {
+		if (!canAction()) {
+			dirtyScreamPeriod = 0;
+			setCallingParents(false);
+			return;
+		}
+
+		if (getAttachmentSize(Ants.class) != 0) {
+			setHappiness(Happiness.VERY_SAD);
+			BodyLogic.checkNearParent(this);
+			setCallingParents(true);
+		}
+
+		if (isDirty()) {
+			if (isVeryHungry() || isDamagedHeavily() || isGotBurnedHeavily()) {
+				dirtyScreamPeriod = 0;
+				setCallingParents(false);
+				return;
+			}
+
+			boolean kusogaki = (isRude() && isBaby()) || (isChild() && isVeryRude());
+			int c = kusogaki ? 20 : 40;
+			if (getAge() % c != 0)
+				return;
+			if (kusogaki) {
+				setHappiness(Happiness.VERY_SAD);
+				setPikoMessage(GameMessages.getMessage(this, MessagePool.Action.Dirty), false);
+				BodyLogic.checkNearParent(this);
+				setCallingParents(true);
+			} else {
+				setHappiness(Happiness.SAD);
+				setMessage(GameMessages.getMessage(this, MessagePool.Action.Dirty));
+				BodyLogic.checkNearParent(this);
+				setCallingParents(true);
+			}
+			dirtyScreamPeriod--;
+			if (dirtyScreamPeriod <= 0) {
+				cleaningItself();
+			}
+		}
+	}
+
+	/**
+	 * うんうんがしたいかどうかを返却する.
+	 *
+	 * @return うんうんがしたいかどうか
+	 */
+	public boolean wantToShit() {
+		int step = (!isHungry() ? TICK * 2 : TICK);
+		int adjust = 50 * (isRude() ? 1 : 2) * shittingDiscipline / (isBaby() ? 2 : 1);
+		return (getShitLimitBase()[getBodyAgeState().ordinal()] - shit) < (Const.DIAGONAL * step + adjust);
+	}
+
+	/**
+	 * 生まれそうかどうかを返却する.
+	 *
+	 * @return 生まれそうかどうか
+	 */
+	public boolean nearToBirth() {
+		int step = (!isHungry() ? TICK * 2 : TICK);
+		int adjust = 100 * (isRude() ? 1 : 2);
+		int limit = getPregPeriodBase() - pregnantPeriod - (pregnancyPeriodBoost / 2);
+		int diagonal = Const.DIAGONAL * step + adjust;
+		return limit < diagonal && hasBabyOrStalk();
+	}
+
+	/** ストレスフルかどうかを返却する. */
+	@Transient
+	public boolean isStressful() {
+		return getStressLimit() * checkNonYukkuriDiseaseTolerance() / 100 * 2 / 5 < getStress();
+	}
+
+	/** とてもストレスフルかどうかを返却する. */
+	@Transient
+	public boolean isVeryStressful() {
+		return getStressLimit() * checkNonYukkuriDiseaseTolerance() / 100 * 3 / 5 < getStress();
 	}
 
 	/**
@@ -610,6 +1174,92 @@ public abstract class SocialEntity extends LivingEntity {
 			speechDiscipline = speechDiscipline + (p / 2);
 			setMessageBuffer(null);
 		}
+	}
+
+	/**
+	 * しつけ反応の前提条件を確認する.
+	 *
+	 * @return 反応を継続できるなら true, ふりふりに吸われたなら false
+	 */
+	private boolean beginDisciplineEmotion() {
+		if (isRude() && GameRandom.nextInt(getFurifuriDiscipline() + 1) == 0 && canFurifuri()) {
+			setFurifuri(true);
+			return false;
+		}
+		return true;
+	}
+
+	/**
+	 * しつけ値を経年減衰させる.
+	 */
+	public final void checkDiscipline() {
+		// ゲス餡子脳は自制しない
+		if (isRude() && getIntelligence() == Intelligence.FOOL) {
+			setShittingDiscipline(0);
+			setExcitingDiscipline(0);
+			setFurifuriDiscipline(0);
+			setSpeechDiscipline(0);
+			return;
+		}
+		// 基本ゲーム内時間12分に1回
+		int period = getDeclinePeriodBase();
+		// int period = (isRude() ? 1 : 2) * DECLINEPERIOD;
+		// 知性による補正
+		switch (getIntelligence()) {
+			case WISE:
+				period = period * 3 / 2;
+				break;
+			case FOOL:
+				period = period * 2;
+				break;
+			default:
+				break;
+		}
+		// 減衰
+		if (getAge() % period == 0) {
+			shittingDiscipline--;
+			excitingDiscipline--;
+			furifuriDiscipline--;
+			speechDiscipline--;
+			if (shittingDiscipline < 0) {
+				shittingDiscipline = 0;
+			}
+			if (shittingDiscipline > 20) {
+				shittingDiscipline = 20;
+			}
+			if (excitingDiscipline < 0) {
+				excitingDiscipline = 0;
+			}
+			if (furifuriDiscipline < 0) {
+				furifuriDiscipline = 0;
+			}
+			if (furifuriDiscipline > 20) {
+				furifuriDiscipline = 20;
+			}
+			if (speechDiscipline < 0) {
+				speechDiscipline = 0;
+			}
+			if (speechDiscipline > 20) {
+				speechDiscipline = 20;
+			}
+		}
+	}
+
+	/**
+	 * キリッ！する.
+	 *
+	 * @param showMessage キリッ！メッセージを出すかどうか
+	 */
+	public void getInVain(boolean showMessage) {
+		if (showMessage) {
+			setMessage(GameMessages.getMessage(this, MessagePool.Action.BeVain), 30);
+		}
+		if (isRude() && GameRandom.nextBoolean()) {
+			setForceFace(ImageCode.RUDE.ordinal());
+		}
+		setBeVain(true);
+		addStress(-90);
+		stayPurupuru(10);
 	}
 
 	// --- 家族関係 ---

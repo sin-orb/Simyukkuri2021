@@ -1,5 +1,17 @@
 package src.logic;
 
+import src.entity.core.Entity;
+import src.entity.core.attachment.*;
+import src.entity.core.attachment.impl.*;
+import src.entity.core.effect.*;
+import src.entity.core.effect.impl.*;
+import src.entity.core.living.yukkuri.Dna;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.living.yukkuri.impl.*;
+import src.entity.core.world.bodylinked.*;
+import src.entity.core.world.item.*;
+import src.entity.core.world.mobile.*;
+
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.Test;
 import src.SimYukkuri;
@@ -24,7 +36,7 @@ public class UnunSlaveDebug {
         body.setPublicRank(PublicRank.UnunSlave);
 
         // Set eyesightBase via reflection
-        java.lang.reflect.Field eyesightField = src.entity.living.LivingEntity.class.getDeclaredField("eyesightBase");
+        java.lang.reflect.Field eyesightField = src.entity.core.living.LivingEntity.class.getDeclaredField("eyesightBase");
         eyesightField.setAccessible(true);
         eyesightField.set(body, 1000000);
 

@@ -1,5 +1,17 @@
 package src.logic;
 
+import src.entity.core.Entity;
+import src.entity.core.attachment.*;
+import src.entity.core.attachment.impl.*;
+import src.entity.core.effect.*;
+import src.entity.core.effect.impl.*;
+import src.entity.core.living.yukkuri.Dna;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.living.yukkuri.impl.*;
+import src.entity.core.world.bodylinked.*;
+import src.entity.core.world.item.*;
+import src.entity.core.world.mobile.*;
+
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.lang.reflect.Field;
@@ -11,13 +23,13 @@ import org.junit.jupiter.api.Test;
 
 import src.SimYukkuri;
 import src.entity.core.living.yukkuri.Yukkuri;
-import src.entity.world.bodylinked.Okazari;
-import src.base.StubBody;
+import src.entity.core.world.bodylinked.Okazari;
+import src.entity.core.living.yukkuri.StubBody;
 import src.draw.World;
 import src.enums.CoreAnkoState;
 import src.enums.CriticalDamegeType;
 import src.enums.ImageCode;
-import src.entity.world.bodylinked.Okazari.OkazariType;
+import src.entity.core.world.bodylinked.Okazari.OkazariType;
 import src.system.BodyLayer;
 
 class BodyRenderStateTest {

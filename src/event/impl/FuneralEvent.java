@@ -109,12 +109,19 @@ public class FuneralEvent extends EventPacket {
 	@Override
 	public boolean checkEventResponse(Yukkuri b) {
 		Yukkuri from = src.util.BodyRegistry.getBodyInstance(getFrom());
+		if (from == null || b == null) {
+			return false;
+		}
 		if (from.getUniqueID() == b.getUniqueID()) {
 			return true;
 		}
 		// うんうん奴隷の場合は参加しない
-		if (from == null || b.getPublicRank() == PublicRank.UnunSlave)
+		if (b.getPublicRank() == PublicRank.UnunSlave)
 			return false;
+		// 葬式の発端が別イベント進行中なら、子を巻き込まない
+		if (from.getCurrentEvent() != null && from.getCurrentEvent() != this) {
+			return false;
+		}
 		// 父母がいない場合は参加しない
 		if (src.util.BodyRegistry.getBodyInstance(b.getFather()) == null &&
 				src.util.BodyRegistry.getBodyInstance(b.getMother()) == null)

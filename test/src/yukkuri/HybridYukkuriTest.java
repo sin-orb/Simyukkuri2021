@@ -1,5 +1,17 @@
 package src.yukkuri;
 
+import src.entity.core.Entity;
+import src.entity.core.attachment.*;
+import src.entity.core.attachment.impl.*;
+import src.entity.core.effect.*;
+import src.entity.core.effect.impl.*;
+import src.entity.core.living.yukkuri.Dna;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.living.yukkuri.impl.*;
+import src.entity.core.world.bodylinked.*;
+import src.entity.core.world.item.*;
+import src.entity.core.world.mobile.*;
+
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -15,7 +27,7 @@ public class HybridYukkuriTest {
     @Test
     public void testHybridYukkuriIdentity() {
         HybridYukkuri hybrid = new HybridYukkuri();
-        assertEquals(20000, hybrid.getType());
+        assertEquals(HybridYukkuri.type, hybrid.getType());
     }
 
     @Test
@@ -298,8 +310,8 @@ public class HybridYukkuriTest {
     @Test
     public void testGetHybridType_alwaysReturnsHybridType() {
         HybridYukkuri hybrid = new HybridYukkuri();
-        assertEquals(HybridYukkuri.type, hybrid.getHybridType(0));
-        assertEquals(HybridYukkuri.type, hybrid.getHybridType(1));
-        assertEquals(HybridYukkuri.type, hybrid.getHybridType(999));
+        assertEquals(HybridYukkuri.type, hybrid.getHybridType(Reimu.type));
+        assertEquals(HybridYukkuri.type, hybrid.getHybridType(Marisa.type));
+        assertEquals(HybridYukkuri.type, hybrid.getHybridType(src.enums.YukkuriType.ALICE));
     }
 }

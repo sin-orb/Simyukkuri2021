@@ -1,5 +1,17 @@
 package src.event.impl;
 
+import src.entity.core.Entity;
+import src.entity.core.attachment.*;
+import src.entity.core.attachment.impl.*;
+import src.entity.core.effect.*;
+import src.entity.core.effect.impl.*;
+import src.entity.core.living.yukkuri.Dna;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.living.yukkuri.impl.*;
+import src.entity.core.world.bodylinked.*;
+import src.entity.core.world.item.*;
+import src.entity.core.world.mobile.*;
+
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -258,6 +270,32 @@ public class ShitExercisesEventTest {
         assertDoesNotThrow(() -> event.update(partner));
     }
 
+    @Test
+    public void testUpdate_parentBody_stateGO_atToilet_entersWaitEvenIfGatheringIncomplete() {
+        Yukkuri from = createBody();
+        Yukkuri child = createBody();
+        child.setAgeState(AgeState.BABY);
+        child.setParents(new int[] { from.getUniqueID(), -1 });
+        java.util.LinkedList<Integer> children = new java.util.LinkedList<>();
+        children.add(child.getUniqueID());
+        from.setChildrenList(children);
+        child.setX(from.getX() + 200);
+        child.setY(from.getY() + 200);
+
+        Toilet toilet = new Toilet();
+        toilet.setX(from.getX());
+        toilet.setY(from.getY() + 20);
+        SimYukkuri.world.getCurrentMap().getToilet().put(toilet.getObjId(), toilet);
+
+        ShitExercisesEvent event = new ShitExercisesEvent(from, null, toilet, 10);
+        from.setCurrentEvent(event);
+        child.setCurrentEvent(event);
+        event.setTick(20);
+
+        assertNull(event.update(from));
+        assertEquals(ShitExercisesEvent.STATE.WAIT, event.getState());
+    }
+
     // --- update: child path (b != from, not partner) ---
 
     @Test
@@ -350,6 +388,22 @@ public class ShitExercisesEventTest {
         from.setCurrentEvent(event);
         child.setCurrentEvent(event);
         assertEquals(EventPacket.UpdateState.ABORT, event.update(child));
+    }
+
+    @Test
+    public void testUpdate_parentBody_stateEND_actionFlagTrue_aborts() {
+        Yukkuri from = createBody();
+        Yukkuri child = createBody();
+        child.setAgeState(AgeState.BABY);
+        int[] parents = new int[] { from.getUniqueID(), -1 };
+        child.setParents(parents);
+        ShitExercisesEvent event = new ShitExercisesEvent(from, null, null, 10);
+        event.setState(ShitExercisesEvent.STATE.END);
+        event.actionFlag = true;
+        from.setCurrentEvent(event);
+        child.setCurrentEvent(event);
+
+        assertEquals(EventPacket.UpdateState.ABORT, event.update(from));
     }
 
     // --- checkEventResponse: !canEventResponse → false ---
@@ -468,6 +522,28 @@ public class ShitExercisesEventTest {
         from.setCurrentEvent(event);
         child.setCurrentEvent(event);
         assertDoesNotThrow(() -> event.update(child));
+        assertEquals(ShitExercisesEvent.STATE.END, event.getState());
+    }
+
+    @Test
+    public void testUpdate_parentBody_UNUN_actionFlagTrue_transitionsToEnd() {
+        Yukkuri from = createBody();
+        Yukkuri child = createBody();
+        child.setAgeState(AgeState.BABY);
+        int[] parents = new int[] { from.getUniqueID(), -1 };
+        child.setParents(parents);
+        java.util.LinkedList<Integer> children = new java.util.LinkedList<>();
+        children.add(child.getUniqueID());
+        from.setChildrenList(children);
+        ShitExercisesEvent event = new ShitExercisesEvent(from, null, null, 10);
+        event.setState(ShitExercisesEvent.STATE.UNUN);
+        event.actionFlag = true;
+        event.ununActionFlag = false;
+        from.setCurrentEvent(event);
+        child.setCurrentEvent(event);
+        event.setFromWaitCount(20);
+
+        assertNull(event.update(from));
         assertEquals(ShitExercisesEvent.STATE.END, event.getState());
     }
 

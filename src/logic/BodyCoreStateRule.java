@@ -12,7 +12,7 @@ public final class BodyCoreStateRule {
 
 	public static Damage getDamageState(Yukkuri body) {
 		int limit = body.getDamageLimitBase()[body.getBodyAgeState().ordinal()];
-		int damage = body.getDamageRaw();
+		int damage = body.getDamage();
 		if (damage > limit) {
 			body.toDead();
 			return Damage.TOOMUCH;

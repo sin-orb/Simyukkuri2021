@@ -1,5 +1,17 @@
 package src.yukkuri;
 
+import src.entity.core.Entity;
+import src.entity.core.attachment.*;
+import src.entity.core.attachment.impl.*;
+import src.entity.core.effect.*;
+import src.entity.core.effect.impl.*;
+import src.entity.core.living.yukkuri.Dna;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.living.yukkuri.impl.*;
+import src.entity.core.world.bodylinked.*;
+import src.entity.core.world.item.*;
+import src.entity.core.world.mobile.*;
+
 import src.SimYukkuri;
 
 import org.junit.jupiter.api.Test;
@@ -13,7 +25,7 @@ public class ChenTest {
     @Test
     public void testChenIdentity() {
         Chen chen = new Chen();
-        assertEquals(4, chen.getType());
+        assertEquals(Chen.type, chen.getType());
         assertEquals("ちぇん", chen.getNameJ());
         assertEquals("Chen", chen.getNameE());
     }
@@ -44,7 +56,7 @@ public class ChenTest {
     public void testChenDefaultConstructor() {
         Chen chen = new Chen();
         assertNotNull(chen);
-        assertEquals(4, chen.getType());
+        assertEquals(Chen.type, chen.getType());
     }
 
     @Test

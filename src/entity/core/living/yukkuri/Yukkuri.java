@@ -6,13 +6,8 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.beans.Transient;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.TreeSet;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -21,37 +16,20 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
 import src.Const;
 import src.SimYukkuri;
-import src.draw.Color4y;
 import src.draw.Dimension4y;
-import src.draw.ModLoader;
 import src.draw.MyPane;
 import src.draw.Point4y;
 import src.draw.Rectangle4y;
-import src.draw.Terrarium;
 import src.draw.Translate;
-import src.engine.birth.BabyDnaFactory;
 import src.entity.core.Entity;
 import src.entity.core.attachment.Attachment;
-import src.entity.core.attachment.impl.ANYDAmpoule;
 import src.entity.core.attachment.impl.AccelAmpoule;
-import src.entity.core.attachment.impl.Ants;
-import src.entity.core.attachment.impl.Badge;
-import src.entity.core.attachment.impl.Fire;
-import src.entity.core.attachment.impl.Needle;
-import src.entity.core.attachment.impl.PoisonAmpoule;
 import src.entity.core.attachment.impl.StopAmpoule;
-import src.entity.core.attachment.impl.VeryShitAmpoule;
 import src.entity.core.living.SocialEntity;
 import src.entity.core.world.bodylinked.Okazari;
 import src.entity.core.world.bodylinked.Okazari.OkazariType;
 import src.entity.core.world.bodylinked.Stalk;
-import src.entity.core.world.item.Bed;
 import src.entity.core.world.item.Food;
-import src.entity.core.world.item.StickyPlate;
-import src.entity.core.world.item.Sui;
-import src.entity.core.world.item.Toilet;
-import src.entity.core.world.mobile.Shit;
-import src.entity.core.world.mobile.Vomit;
 import src.enums.AgeState;
 import src.enums.Attitude;
 import src.enums.BodyRank;
@@ -61,66 +39,39 @@ import src.enums.CoreAnkoState;
 import src.enums.CriticalDamegeType;
 import src.enums.Damage;
 import src.enums.Direction;
-import src.enums.EnumRelationMine;
 import src.enums.Event;
 import src.enums.FavItemType;
 import src.enums.FootBake;
 import src.enums.HairState;
+import src.enums.PredatorType;
 import src.enums.Happiness;
 import src.enums.ImageCode;
 import src.enums.Intelligence;
-import src.enums.LovePlayer;
 import src.enums.Numbering;
-import src.enums.Pain;
 import src.enums.PanicType;
 import src.enums.Parent;
-import src.enums.PlayStyle;
 import src.enums.PublicRank;
 import src.enums.PurposeOfMoving;
 import src.enums.TakeoutItemType;
 import src.enums.TangType;
-import src.enums.Trauma;
 import src.enums.Type;
-import src.enums.UnbirthBabyState;
 import src.enums.Where;
 import src.enums.WindowType;
 import src.enums.YukkuriType;
 import src.event.EventPacket;
-import src.event.impl.AvoidMoldEvent;
-import src.event.impl.BegForLifeEvent;
-import src.event.impl.BreedEvent;
-import src.event.impl.CutPenipeniEvent;
-import src.event.impl.HateNoOkazariEvent;
-import src.event.impl.KillPredeatorEvent;
-import src.event.impl.PredatorsGameEvent;
-import src.event.impl.ProposeEvent;
-import src.event.impl.RaperReactionEvent;
-import src.event.impl.RaperWakeupEvent;
-import src.event.impl.RevengeAttackEvent;
-import src.field.FieldShape;
 import src.field.impl.Pool;
-import src.logic.AntInfestationPolicy;
 import src.logic.BodyCoreStateRule;
 import src.logic.BodyEventState;
 import src.logic.BodyExcretionRule;
-import src.logic.BodyLogic;
 import src.logic.BodyMovement;
 import src.logic.BodyRelations;
-import src.logic.BodyRenderState;
-import src.logic.BodyStressRule;
-import src.logic.EventLogic;
-import src.logic.FamilyActionLogic;
-import src.logic.ToyLogic;
-import src.logic.TrashLogic;
 import src.system.BodyLayer;
 import src.system.ItemMenu.GetMenuTarget;
 import src.system.ItemMenu.UseMenuTarget;
 import src.system.MainCommandUI;
-import src.system.MapPlaceData;
 import src.system.MessagePool;
 import src.system.Sprite;
 import src.util.GameEnvironment;
-import src.util.GameImages;
 import src.util.GameLocale;
 import src.util.GameMessages;
 import src.util.GameRandom;
@@ -145,6 +96,176 @@ import src.util.ListUtil;
 @JsonTypeInfo(use = Id.CLASS)
 public abstract class Yukkuri extends SocialEntity {
 	private static final long serialVersionUID = 8856385435939508588L;
+
+	@JsonIgnore
+	private transient YukkuriSprite spriteDelegate;
+
+	@JsonIgnore
+	private transient YukkuriMessage messageDelegate;
+
+	@JsonIgnore
+	private transient YukkuriPlayerRelation playerRelationDelegate;
+
+	@JsonIgnore
+	private transient YukkuriOtherRelationDelegate otherRelationDelegate;
+
+	@JsonIgnore
+	private transient YukkuriDamageDelegate damageDelegate;
+
+	@JsonIgnore
+	private transient YukkuriShitDelegate shitDelegate;
+
+	@JsonIgnore
+	private transient YukkuriCarryDelegate carryDelegate;
+
+	@JsonIgnore
+	private transient YukkuriAdornmentDelegate adornmentDelegate;
+
+	@JsonIgnore
+	private transient YukkuriEmotionDelegate emotionDelegate;
+
+	@JsonIgnore
+	private transient YukkuriMoveDelegate moveDelegate;
+
+	@JsonIgnore
+	private transient YukkuriStateDelegate stateDelegate;
+
+	@JsonIgnore
+	private transient YukkuriNydDelegate nydDelegate;
+
+	@JsonIgnore
+	private transient YukkuriSexualDelegate sexualDelegate;
+
+	@JsonIgnore
+	private transient YukkuriEventDelegate eventDelegate;
+
+	@JsonIgnore
+	private transient YukkuriStalkDelegate stalkDelegate;
+
+	@JsonIgnore
+	private transient YukkuriAbuseDelegate abuseDelegate;
+
+	@JsonIgnore
+	private transient YukkuriFamilyDelegate familyDelegate;
+
+	private YukkuriSprite spriteDelegate() {
+		if (spriteDelegate == null) {
+			spriteDelegate = new YukkuriSprite(this);
+		}
+		return spriteDelegate;
+	}
+
+	private YukkuriMessage messageDelegate() {
+		if (messageDelegate == null) {
+			messageDelegate = new YukkuriMessage(this);
+		}
+		return messageDelegate;
+	}
+
+	private YukkuriPlayerRelation playerRelationDelegate() {
+		if (playerRelationDelegate == null) {
+			playerRelationDelegate = new YukkuriPlayerRelation(this);
+		}
+		return playerRelationDelegate;
+	}
+
+	private YukkuriOtherRelationDelegate otherRelationDelegate() {
+		if (otherRelationDelegate == null) {
+			otherRelationDelegate = new YukkuriOtherRelationDelegate(this);
+		}
+		return otherRelationDelegate;
+	}
+
+	private YukkuriDamageDelegate damageDelegate() {
+		if (damageDelegate == null) {
+			damageDelegate = new YukkuriDamageDelegate(this);
+		}
+		return damageDelegate;
+	}
+
+	private YukkuriShitDelegate shitDelegate() {
+		if (shitDelegate == null) {
+			shitDelegate = new YukkuriShitDelegate(this);
+		}
+		return shitDelegate;
+	}
+
+	private YukkuriCarryDelegate carryDelegate() {
+		if (carryDelegate == null) {
+			carryDelegate = new YukkuriCarryDelegate(this);
+		}
+		return carryDelegate;
+	}
+
+	private YukkuriAdornmentDelegate adornmentDelegate() {
+		if (adornmentDelegate == null) {
+			adornmentDelegate = new YukkuriAdornmentDelegate(this);
+		}
+		return adornmentDelegate;
+	}
+
+	private YukkuriEmotionDelegate emotionDelegate() {
+		if (emotionDelegate == null) {
+			emotionDelegate = new YukkuriEmotionDelegate(this);
+		}
+		return emotionDelegate;
+	}
+
+	private YukkuriMoveDelegate moveDelegate() {
+		if (moveDelegate == null) {
+			moveDelegate = new YukkuriMoveDelegate(this);
+		}
+		return moveDelegate;
+	}
+
+	private YukkuriStateDelegate stateDelegate() {
+		if (stateDelegate == null) {
+			stateDelegate = new YukkuriStateDelegate(this);
+		}
+		return stateDelegate;
+	}
+
+	private YukkuriNydDelegate nydDelegate() {
+		if (nydDelegate == null) {
+			nydDelegate = new YukkuriNydDelegate(this);
+		}
+		return nydDelegate;
+	}
+
+	private YukkuriSexualDelegate sexualDelegate() {
+		if (sexualDelegate == null) {
+			sexualDelegate = new YukkuriSexualDelegate(this);
+		}
+		return sexualDelegate;
+	}
+
+	private YukkuriEventDelegate eventDelegate() {
+		if (eventDelegate == null) {
+			eventDelegate = new YukkuriEventDelegate(this);
+		}
+		return eventDelegate;
+	}
+
+	private YukkuriStalkDelegate stalkDelegate() {
+		if (stalkDelegate == null) {
+			stalkDelegate = new YukkuriStalkDelegate(this);
+		}
+		return stalkDelegate;
+	}
+
+	private YukkuriAbuseDelegate abuseDelegate() {
+		if (abuseDelegate == null) {
+			abuseDelegate = new YukkuriAbuseDelegate(this);
+		}
+		return abuseDelegate;
+	}
+
+	private YukkuriFamilyDelegate familyDelegate() {
+		if (familyDelegate == null) {
+			familyDelegate = new YukkuriFamilyDelegate(this);
+		}
+		return familyDelegate;
+	}
 
 	/**
 	 * ゆ虐神拳を受けてドス等にトランスフォーム可能かどうかを返却する.
@@ -202,421 +323,66 @@ public abstract class Yukkuri extends SocialEntity {
 	}
 
 	/**
-	 * checkといいつつ空腹操作をしているメソッド.
-	 * ゆっくりの様々な状態に応じて腹を減らしている。
-	 */
-	public void checkHungry() {
-		// すーぱーむーしゃむーしゃたいむ実施後は一定期間お腹が減らない、というかむしろ腹いっぱいになっていく
-		if (0 < getSuperEatingNoHungryPeriod()) {
-			superEatingNoHungryPeriod--;
-			if (hungry <= getHungryLimit()) {
-				hungry += TICK;
-			}
-			return;
-		}
-
-		// 皮がむかれている/饅頭化させられている場合は通常の1/7の速度で腹が減る
-		if (isPealed() || isPacked()) {
-			if (getAge() % 7 == 0)
-				hungry -= TICK;
-		}
-
-		// 生まれていない場合
-		if (isUnBirth()) {
-			if (!isPlantForUnbirthChild()) {
-				// 親と茎で繋がっていない場合のみ通常の100倍空腹になる
-				hungry -= TICK * 100;
-			} else {
-				// 親か救命オレンジプールから供給あり → 満腹度を満タンに維持
-				hungry = getHungryLimit();
-			}
-		}
-		// 寝ている場合の空腹は通常の1/2倍
-		else if (isSleeping()) {
-			if (getAge() % 2 == 0)
-				hungry -= TICK;
-		}
-		// レイパーではないが発情している場合の空腹は通常の(抱えている胎生ゆの数+1)倍空腹になる
-		else if (isExciting() && !isRaper()) {
-			hungry -= TICK * (getBabyTypes().size() + 1);
-		}
-		// それ以外の場合は通常の腹減り
-		else {
-			hungry -= TICK;
-		}
-
-		// 茎が生えていると茎の数*5倍だけさらに腹が減る
-		if (isHasStalk() && getStalks() != null) {
-			hungry -= TICK * getStalks().size() * 5;
-		}
-		// 胎生ゆがいるとその分さらに腹が減る
-		if (isHasBaby()) {
-			hungry -= TICK * getBabyTypes().size();
-		}
-		// 満腹度が0になって腹が減るとその分ダメージになる
-		if (hungry <= 0) {
-			damage += (-hungry);
-			hungry = 0;
-		}
-		// 腹が減っておらず、寝てもいない状態でこの1Tickを過ごすと「飢餓状態になっていない期間」を1増やす
-		if (!isHungry() && !isSleeping()) {
-			noHungryPeriod += TICK;
-		} else {
-			noHungryPeriod = 0;
-		}
-	}
-
-	/**
-	 * checkといいつつダメージ計算をしているメソッド.
-	 */
-	public void checkDamage() {
-		// オレンジジュースや砂糖水などで体力が回復するかどうかのフラグ
-		boolean healFlag = true;
-		// 実ゆの場合、茎で生きている親につながっているなら回復フラグON
-		if (isUnBirth()) {
-			healFlag = isPlantForUnbirthChild();
-		}
-
-		// かびてる時のダメージ加算
-		if (isSick()) {
-			// かびている期間が潜伏期間の32倍を超え、かつダメージをヘビーに受けている場合
-			if (getSickPeriod() > (getIncubationPeriodBase() * 32) && isDamagedHeavily()) {
-				// 追加ダメージは1/3の確率で1
-				if (GameRandom.nextInt(3) == 0)
-					damage += TICK;
-			}
-			// かびている期間が潜伏期間の32倍を超えていて、ダメージがヘビーでない場合
-			else if (getSickPeriod() > (getIncubationPeriodBase() * 32)) {
-				// 通常の3倍ダメージ
-				damage += TICK * 3;
-			}
-			// かびている期間が潜伏期間の8倍を超えている場合
-			else if (getSickPeriod() > (getIncubationPeriodBase() * 8)) {
-				// 通常の2倍のダメージ
-				damage += TICK * 2;
-			}
-			// かびている期間が潜伏期間と同じ
-			else if (getSickPeriod() > getIncubationPeriodBase()) {
-				// 通常ダメージ
-				damage += TICK;
-			}
-		}
-		// 非空腹状態では回復する(かびてるときは非適用)
-		else if (!isHungry()) {
-			damage -= TICK;
-		}
-		// 空腹による消耗（空腹時に更に腹がへることによって受けるダメージとは別。そちらはダメージ計算メソッドで行う。）
-		if (hungry <= 0) {
-			damage += TICK;
-		}
-
-		// ケガしてる時
-		if (getCriticalDamege() != null) {
-			// 切られてるとき
-			if (getCriticalDamege() == CriticalDamegeType.CUT) {
-				// 100倍のダメージ
-				damage += TICK * 100;
-				addStress(50);
-				if (isSleeping())
-					wakeup();
-				GameEnvironment.setAlarm();
-				// 1/50の確率でしゃべる
-				if (GameRandom.nextInt(50) == 0) {
-					if (getCoreAnkoState() != CoreAnkoState.NonYukkuriDiseaseNear)
-						setNYDMessage(GameMessages.getMessage(this, MessagePool.Action.Dying2), false);
-					else
-						setMessage(GameMessages.getMessage(this, MessagePool.Action.Dying2));
-				}
-			}
-			// 傷を負っているとき
-			else if (getCriticalDamege() == CriticalDamegeType.INJURED && !isSleeping()) {
-				// 1/300の確率で餡子を漏らす
-				if (GameRandom.nextInt(300) == 0) {
-					GameView.addCrushedVomit(getX() + 3 - GameRandom.nextInt(6), getY() - 2,
-							0,
-							this,
-							getShitType());
-					setMessage(GameMessages.getMessage(this, MessagePool.Action.Scream));
-					setForceFace(ImageCode.PAIN.ordinal());
-					makeDirty(true);
-					addStress(5);
-					addDamage(50);
-				}
-				// お腹が一杯で、ダメージがないときに1/4800の確率で傷が治る
-				if (isFull() && isNoDamaged() && GameRandom.nextInt(4800) == 0) {
-					setCriticalDamege(null);
-				}
-				// ダメージがヘビーでない場合は1/33600の確率で傷が治る
-				else if (!isDamagedHeavily() && GameRandom.nextInt(33600) == 0) {
-					setCriticalDamege(null);
-				}
-			}
-		}
-		// 皮むき時の基本反応
-		if (isPealed()) {
-			if (isSleeping())
-				wakeup();
-			damage += TICK * 50;
-			setSickPeriod(0);
-			GameEnvironment.setAlarm();
-			setPeropero(false);
-			addStress(200);
-			addMemories(-5);
-			if (getCoreAnkoState() == CoreAnkoState.NonYukkuriDiseaseNear) {
-				setNYDMessage(GameMessages.getMessage(this, MessagePool.Action.Dying2), false);
-			}
-			setMessage(GameMessages.getMessage(this, MessagePool.Action.Dying2));
-		}
-		// 饅頭化されたときの基本反応
-		if (isPacked()) {
-			GameEnvironment.setAlarm();
-			setPeropero(false);
-			addStress(50);
-			addMemories(-2);
-			setCanTalk(false);
-			if (GameRandom.nextInt(200) == 0)
-				stayPurupuru(20);
-		}
-
-		// 路上だと、善良なバッジ付き以外は、一定確率で踏み潰される
-		if (GameWorld.get().getCurrentMap().getMapIndex() == 2 && !(isSmart() && getAttachmentSize(Badge.class) != 0)
-				&& getCarAccidentProb() != 0 && GameRandom.nextInt(getCarAccidentProb()) == 0) {
-			strikeByPress();
-		}
-
-		// ディヒューザーオレンジ
-		if (GameEnvironment.isOrangeSteam()) {
-			if (healFlag) {
-				damage -= TICK * 50;
-			}
-		}
-		// ディヒューザー砂糖水
-		if (GameEnvironment.isSugerSteam()) {
-			// ダメージ限界の8割以上の場合
-			if (damage >= getDamageLimitBase()[getBodyAgeState().ordinal()] * 80 / 100) {
-				if (healFlag) {
-					damage -= TICK * 100;
-				}
-			}
-		}
-		// ディヒューザー駆除剤
-		if (GameEnvironment.isPoisonSteam()) {
-			damage += TICK * 100;
-			clearActions();
-			setExciting(false);
-			setShitting(false);
-			setFurifuri(false);
-			wakeup();
-			if (isNotNYD()) {
-				setHappiness(Happiness.VERY_SAD);
-				if (getDamageState() != Damage.NONE) {
-					setNegiMessage(GameMessages.getMessage(this, MessagePool.Action.PoisonDamage), true);
-				} else {
-					setMessage(GameMessages.getMessage(this, MessagePool.Action.PoisonDamage), Const.HOLDMESSAGE, false,
-							true);
-				}
-			}
-		}
-
-		// 微調整
-		if (damage < 0) {
-			damage = 0;
-		}
-		Damage newDamageState = getDamageState();
-		// ダメージ外観と今回判定含めたダメージ判定がノーダメの場合、寝ていない時間をノーダメージ期間に加算
-		if (getDamageState() == Damage.NONE && newDamageState == Damage.NONE && !isSleeping()) {
-			noDamagePeriod += TICK;
-		} else {
-			noDamagePeriod = 0;
-		}
-		// ダメージ外観と今回のダメージを合わせる
-		setDamageState(newDamageState);
-		if (getDamageState() == Damage.TOOMUCH && getCurrentEvent() != null
-				&& getCurrentEvent().getPriority() != EventPacket.EventPriority.HIGH) {
-			// ダメージおいすぎてる場合、イベント優先度が高でないすべてのイベントをクリア。
-			clearEvent();
-		}
-	}
-
-	/**
-	 * 自身が突然変異可能な状態かどうかチェック
-	 * 
-	 * @return 自身が突然変異可能な状態かどうか
-	 */
-	public boolean canTransform() {
-		if (isDead())
-			return false; // 生きてて
-		if (getStress() > 0)
-			return false; // ストレスがなく
-		if (getTangType() == TangType.POOR)
-			return false; // バカ舌ではなく
-		if (isDamaged())
-			return false; // 致命的ダメージ無く
-		if (isFeelPain())
-			return false; // 破裂しかけていなく
-		if (isUnBirth())
-			return false; // 実ゆではなく
-		if (getPublicRank() == PublicRank.UnunSlave)
-			return false; // うんうん奴隷ではなく
-		if (isNYD())
-			return false; // 非ゆっくり症ではく
-		if (isBlind() || isPealed() || isPacked() || isShutmouth())
-			return false; // 目抜き/皮むき/あにゃる封印/口封じされておらず
-		if (getHairState() != HairState.DEFAULT)
-			return false; // はげまんじゅうにされていない
-		return true;// そのような場合のみ、突然変異可能
-	}
-
-	/**
-	 * アリ関連の処理.
-	 */
-	public void checkAnts() {
-		// すでに潰れてるかアリの数が0かディフューザー無限もるんもるんの場合、アリ解除
-		if (isCrushed() || GameEnvironment.isEndlessFurifuriSteam()) {
-			removeAnts();
-			return;
-		}
-		// すでにアリがたかっていると、5回に1回、アリの数が2増える
-		if (getAttachmentSize(Ants.class) != 0 && getAge() % 5 == 0) {
-			antCount += TICK * 2;
-			// アリにたかられてたらイベントどころじゃないでしょ
-			clearEvent();
-			return;
-		}
-		// マップが部屋のとき、もしくは飛んでいるやつにアリはたからない
-		if (GameWorld.get().getCurrentMap().getMapIndex() == 0 || getZ() != 0) {
-			return;
-		}
-		// 新規でアリたかる？
-		AntInfestationPolicy.judgeNewAnt(this);
-	}
-
-	/**
-	 * うにょ機能。
-	 * ゆっくりがうにょうにょ動く機能、のようだ。
-	 * 重いため、シムゆっくり起動時にチェックボックスで機能をONにするかどうかを決めることができる。
-	 */
-	public void checkUnyo() {
-		if (SimYukkuri.UNYO) {
-			// 移動時にサイズを変更、z座標では管理しておらずlayerのmodeとage % 9で判定されているもよう
-			// 条件式は顔画像のlayer条件を流用
-			if (getAge() % 9 == 0) {
-				if (!isDead() && !isLockmove()) {
-					if (getCriticalDamegeType() != CriticalDamegeType.CUT && !grabbed && !isPealed() && !isPacked()) {
-						if (!isUnyoActionAll() && !isSleeping()) {
-							if (!canflyCheck()) {
-								if (getFootBakeLevel() == FootBake.NONE &&
-										!isDamaged() && !isSick() && !isFeelPain()
-										&& takeMappedObj(getParentLinkId()) == null
-										&& !isPeropero() && !(isEating() && !isPikopiko())) {
-									changeUnyo(0, 0,
-											(int) (GameRandom
-													.nextInt(((int) UNYOSTRENGTH[getBodyAgeState().ordinal()] / 3)))
-													+ UNYOSTRENGTH[getBodyAgeState().ordinal()]);
-								}
-							} else if (z == 0) {
-								if (getFootBakeLevel() == FootBake.NONE &&
-										!isDamaged() && !isSick() && !isFeelPain()
-										&& takeMappedObj(getParentLinkId()) == null
-										&& !isPeropero() && !(isEating() && !isPikopiko())) {
-									changeUnyo(0, 0,
-											(int) (GameRandom
-													.nextInt(((int) UNYOSTRENGTH[getBodyAgeState().ordinal()] / 3)))
-													+ UNYOSTRENGTH[getBodyAgeState().ordinal()]);
-								}
-							}
-						}
-					}
-				}
-			}
-			// 常時ランダムで動く
-			if (GameRandom.nextInt(30) == 0 && (isSleeping() ? GameRandom.nextBoolean() : true)) {
-				changeUnyo((int) (GameRandom.nextInt(2)), (int) (GameRandom.nextInt(2)),
-						(int) (GameRandom.nextInt(2)));
-			}
-			if (isDamaged() ? (GameRandom.nextInt(5) == 0) : true) {
-				changeReUnyo();
-			}
-		}
-	}
-
-	/**
 	 * うにょ機能が使用されるゆっくりのアクション
-	 * 
+	 *
 	 * @return 現在の状態でうにょ機能を適用できるかどうか
 	 */
 	@Transient
 	public boolean isUnyoActionAll() {
-		return isShitting() || isBirth() || isFurifuri() || isEating() || isPeropero() || isSukkiri() ||
-				isEatingShit() || isNobinobi() || isVain() || isPikopiko() || isYunnyaa();
-		// return shitting || birth || furifuri || strike || eating || peropero ||
-		// sukkiri ||
-		// eatingShit || silent || nobinobi || pikopiko;
+		return spriteDelegate().isUnyoActionAll();
 	}
 
 	/**
 	 * Adjusts unyo offsets based on input deltas.
-	 * 
+	 *
 	 * @param x x offset
 	 * @param y y offset
 	 * @param z z offset
 	 */
 	public void changeUnyo(int x, int y, int z) {
-		if (!isDead() && !isCrushed()) {
-			if (x != 0) {
-				unyoOffsetH += x;
-				unyoOffsetW -= x;
-			}
-			if (y != 0) {
-				unyoOffsetH -= y;
-				unyoOffsetW += y;
-			}
-			if (z != 0) {
-				unyoOffsetH -= z;
-				unyoOffsetW += z;
-			}
-			// 限界を越えていると描画が裏返るので調整
-			if (unyoOffsetH > Const.EXT_FORCE_PULL_LIMIT[getBodyAgeState().ordinal()])
-				unyoOffsetH = Const.EXT_FORCE_PULL_LIMIT[getBodyAgeState().ordinal()];
-			else if (unyoOffsetH < Const.EXT_FORCE_PUSH_LIMIT[getBodyAgeState().ordinal()])
-				unyoOffsetH = Const.EXT_FORCE_PUSH_LIMIT[getBodyAgeState().ordinal()];
-			if (unyoOffsetW < Const.EXT_FORCE_PUSH_LIMIT[getBodyAgeState().ordinal()])
-				unyoOffsetW = Const.EXT_FORCE_PUSH_LIMIT[getBodyAgeState().ordinal()];
-			else if (unyoOffsetW > Const.EXT_FORCE_PULL_LIMIT[getBodyAgeState().ordinal()])
-				unyoOffsetW = Const.EXT_FORCE_PULL_LIMIT[getBodyAgeState().ordinal()];
-		}
+		spriteDelegate().changeUnyo(x, y, z);
 	}
 
 	/**
 	 * Eases unyo offsets back toward neutral.
 	 */
 	public void changeReUnyo() {
-		if (unyoOffsetH == 0) {
-		} else if (unyoOffsetH < Const.EXT_FORCE_PUSH_LIMIT[getBodyAgeState().ordinal()] * 0.6)
-			unyoOffsetH += GameRandom.nextInt(3) + 5;
-		else if (unyoOffsetH < 0)
-			unyoOffsetH += GameRandom.nextInt(3) + 2;
-		else if (unyoOffsetH > Const.EXT_FORCE_PULL_LIMIT[getBodyAgeState().ordinal()] * 0.6)
-			unyoOffsetH -= GameRandom.nextInt(3) + 5;
-		else if (unyoOffsetH > 0)
-			unyoOffsetH -= GameRandom.nextInt(3) + 2;
-		if (unyoOffsetW == 0) {
-		} else if (unyoOffsetW < Const.EXT_FORCE_PUSH_LIMIT[getBodyAgeState().ordinal()] * 0.6)
-			unyoOffsetW += GameRandom.nextInt(3) + 5;
-		else if (unyoOffsetW < 0)
-			unyoOffsetW += GameRandom.nextInt(3) + 2;
-		else if (unyoOffsetW > Const.EXT_FORCE_PULL_LIMIT[getBodyAgeState().ordinal()] * 0.6)
-			unyoOffsetW -= GameRandom.nextInt(3) + 5;
-		else if (unyoOffsetW > 0)
-			unyoOffsetW -= GameRandom.nextInt(3) + 2;
+		spriteDelegate().changeReUnyo();
 	}
 
 	/**
 	 * Resets unyo offsets to neutral.
 	 */
 	public void resetUnyo() {
-		unyoOffsetH = 0;
-		unyoOffsetW = 0;
+		spriteDelegate().resetUnyo();
+	}
+
+	/**
+	 * 行動・イベントの取り消し
+	 */
+	public void clearActions() {
+		eventDelegate().clearActions();
+	}
+
+	/**
+	 * イベントをクリアする.
+	 */
+	public void clearEvent() {
+		eventDelegate().clearEvent();
+	}
+
+	/**
+	 * イベントのためのアクションのみのクリア
+	 */
+	public void clearActionsForEvent() {
+		eventDelegate().clearActionsForEvent();
+	}
+
+	/**
+	 * 強制的に寝かせる.
+	 */
+	public void forceToSleep() {
+		eventDelegate().forceToSleep();
 	}
 
 	/**
@@ -628,1193 +394,24 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @return このあと動くかどうか
 	 */
 	public boolean checkShit() {
-		// 実ゆっくりの場合
-		if (isUnBirth()) {
-			// うんうんアンプルが刺さっている
-			if (getAttachmentSize(VeryShitAmpoule.class) != 0) {
-				// 限界を超えた場合のチェック
-				if (shit > getShitLimitBase()[getBodyAgeState().ordinal()]) {
-					int currentDamagePercent = 100 * damage / getDamageLimit();
-					// 現在のダメージがダメージ限界の1/10以下ならダメージを与える
-					if (currentDamagePercent < 10) {
-						addDamage(Const.NEEDLE * 5);
-					}
-					// あなる閉鎖時
-					if (isAnalClose() || (isFixBack() && isNeedled())) {
-						setHappiness(Happiness.VERY_SAD);
-						// 破裂寸前までうんうんをためる
-						if (getBurstState() != Burst.NEAR) {
-							shit += TICK * 2 + (excretionBoost * 20);
-						}
-					} else {
-						// あなる未閉鎖
-						makeDirty(true);
-						// おくるみあり
-						if (isHasPants()) {
-							setHappiness(Happiness.VERY_SAD);
-							shit = 1;
-							clearActions();
-						} else {
-							setHappiness(Happiness.SAD);
-							shit = 0;
-							clearActions();
-						}
-					}
-					setShitting(false);
-					addStress(100);
-					// 実ゆの場合、親が反応する
-					if (GameRandom.nextInt(20) == 0) {
-						checkReactionStalkMother(UnbirthBabyState.SAD);
-					}
-				} else {
-					shit += TICK * 2 + (excretionBoost * 20);
-				}
-			}
-			return true;
-		}
-
-		// うんうん無効判定
-		// 溶けている場合,完全足焼きした場合,食事中、ぺろぺろ中、すっきり中はうんうんしない
-		if ((getFootBakeLevel() == FootBake.CRITICAL && !isPealed()) ||
-				isMelt() || isEating() || isPeropero() || isSukkiri() || isPacked()) {
-			return false;
-		}
-		// レイパー発情中はうんうん無効
-		if (isRaper() && isExciting()) {
-			setShitting(false);
-			shit--;
-			if (purposeOfMoving == PurposeOfMoving.SHIT) {
-				purposeOfMoving = null;
-			}
-			setStaying(false);
-			return false;
-		}
-		// 実験 イベント中は空腹、睡眠、便意が増えないように
-		if (getCurrentEvent() != null && getCurrentEvent().getPriority() != EventPacket.EventPriority.LOW) {
-			return false;
-		}
-
-		// うんうん蓄積処理
-		// うんうんの蓄積の減少度判定
-		int dropChanceDivisor = 1;
-		// うんうん奴隷
-		if (getPublicRank() == PublicRank.UnunSlave) {
-			if (!isShitting()) {
-				dropChanceDivisor = 5;
-			}
-		}
-		// 地中
-		if (getBurialState() != BurialState.NONE) {
-			dropChanceDivisor = 10;
-		}
-
-		boolean cantMove = false;
-		// 蓄積実行
-		if (GameRandom.nextInt(dropChanceDivisor) == 0) {
-			if (isFull()) {
-				shit += TICK * 2 + (excretionBoost * 20);
-			} else {
-				shit += TICK + (excretionBoost * 20);
-			}
-		}
-
-		// ちぎれ状態の場合は餡子を漏らす
-		if ((getCriticalDamege() == CriticalDamegeType.CUT || isPealed()) && getBurialState() == BurialState.NONE) {
-			if (shit > getShitLimitBase()[getBodyAgeState().ordinal()] - TICK * Const.SHITSTAY * 2) {
-				GameView.addCrushedVomit(getX() + 3 - GameRandom.nextInt(6), getY() - 2, 0,
-						this,
-						getShitType());
-				addDamage(Const.NEEDLE * 2);
-				shit = 1;
-				if (excretionBoost > 0) {
-					excretionBoost--;
-					strike(Const.NEEDLE * 2);
-				}
-				return true;
-			}
-		}
-
-		// 寝ている場合はうんうん限界の1.5倍までは我慢できる
-		if (isSleeping()) {
-			if (shit < (getShitLimitBase()[getBodyAgeState().ordinal()] * 1.5f)) {
-				setShitting(false);
-				return false;
-			}
-		}
-
-		// 非ゆっくり症ではない場合
-		if (isNotNYD() && getBurialState() == BurialState.NONE) {
-			// うんうん奴隷ではない場合
-			if (getPublicRank() != PublicRank.UnunSlave) {
-				Entity oTarget = takeMoveTarget();
-				// もしトイレに到着していたら即排泄へ
-				if (isToShit() && oTarget instanceof Toilet) {
-					if (((Toilet) oTarget).checkHitObj(this)) {
-						if (shit < getShitLimitBase()[getBodyAgeState().ordinal()] - TICK * Const.SHITSTAY + 1) {
-							shit = getShitLimitBase()[getBodyAgeState().ordinal()] - TICK * Const.SHITSTAY + 1;
-						}
-					} else if (checkOnBed()) {// トイレがある場合
-						// 大人で寝てたなら起きる
-						if (getBodyAgeState() == AgeState.ADULT && isSleeping()) {
-							wakeup();
-						}
-						// トイレに到着していないかつベッドの上では我慢する
-						if (shit < (getShitLimitBase()[getBodyAgeState().ordinal()] * 1.5f)) {
-							setShitting(false);
-							return false;
-						}
-					} else if ((getAttitude() == Attitude.NICE || getAttitude() == Attitude.VERY_NICE)
-							|| (getAttitude() == Attitude.AVERAGE && getIntelligence() == Intelligence.WISE)) {
-						// 性格が善良か普通でも知能が高ければトイレに着くまで150%まで我慢できる
-						if (shit < (getShitLimitBase()[getBodyAgeState().ordinal()] * 1.5f)) {
-							setShitting(false);
-							return false;
-						}
-					}
-				}
-				// トイレがない場合
-				else if (checkOnBed()) {
-					// ベッドの上では我慢する
-					if (shit < (getShitLimitBase()[getBodyAgeState().ordinal()] * 1.5f)) {
-						setShitting(false);
-						return false;
-					}
-				}
-			}
-
-			// 限界が近づいたら排泄チェック
-			if (shit > getShitLimitBase()[getBodyAgeState().ordinal()] - TICK * Const.SHITSTAY) {
-				// あなるがふさがれていない
-				if (!isAnalClose() && !(isFixBack() && isNeedled())) {
-					// 寝ているか埋まっているか粘着床(あんよ固定)についているか針が刺さっていたら体勢をかえられずに漏らす
-					if ((isLockmove() && !isFixBack()) || isSleeping() || isNeedled()
-							|| getBurialState() != BurialState.NONE) {
-						makeDirty(true);
-						setHappiness(Happiness.VERY_SAD);
-						addStress(150);
-						shit = 0;
-						clearActions();
-						if (excretionBoost > 0) {
-							excretionBoost--;
-							addDamage(Const.NEEDLE * 2);
-							addStress(400);
-						}
-						return true;
-					}
-				}
-
-				// 排泄準備
-				if (isHasPants()) {
-					setHappiness(Happiness.SAD);
-				}
-
-				// あなるがふさがれていない
-				if (!isAnalClose() && !(isFixBack() && isNeedled())) {
-					if (getAge() % 100 == 0) {
-						if (!isShitting()) {
-							setMessage(GameMessages.getMessage(this, MessagePool.Action.Shit), TICK * Const.SHITSTAY);
-							stay();
-							wakeup();
-							setShitting(true);
-							cantMove = true;
-							return cantMove;
-						}
-					}
-				}
-				if (isShitting()) {
-					cantMove = true;
-				}
-			} else {
-				// While shitting is true, the yukkuri might grow up. So, these flags should be
-				// clear.
-				setShitting(false);
-				cantMove = false;
-			}
-		}
-
-		// 限界を超えた場合のチェック
-		if (shit > getShitLimitBase()[getBodyAgeState().ordinal()]) {
-			// 肛門が塞がれてなければ排泄
-			if (!isAnalClose() && !(isFixBack() || isNeedled()) && getBurialState() == BurialState.NONE) {
-				setShitting(false);
-				clearActions();
-				shit = 0;
-				if (getBodyAgeState() == AgeState.BABY) {
-					makeDirty(true);
-					setHappiness(Happiness.SAD);
-					addStress(200);
-				}
-
-				if (isHasPants() || isNYD()) {
-					makeDirty(true);
-					setHappiness(Happiness.VERY_SAD);
-					addStress(400);
-				}
-
-				if (isNotNYD()) {
-					setMessage(GameMessages.getMessage(this, MessagePool.Action.Shit2));
-					stay();
-					if (!isHasPants()) {
-						if (willingFurifuri()) {
-							setFurifuri(true);
-							addStress(-200);
-						}
-						stay();
-						addStress(-100);
-					}
-				}
-
-				if (excretionBoost > 0) {
-					excretionBoost--;
-					addDamage(Const.NEEDLE * 2);
-					addStress(400);
-				}
-			} else {
-				// 塞がってたら膨らんで破裂
-				wakeup();
-				if (isNotNYD()) {
-					if (getBurstState() == Burst.NEAR) {
-						if (GameRandom.nextInt(10) == 0) {
-							setMessage(GameMessages.getMessage(this, MessagePool.Action.Inflation));
-							stay();
-						}
-					} else {
-						if (GameRandom.nextInt(10) == 0) {
-							setMessage(GameMessages.getMessage(this, MessagePool.Action.CantShit), true);
-							stay();
-						}
-					}
-				}
-
-				setHappiness(Happiness.SAD);
-				// if(GameRandom.nextInt(4) == 0){
-				shit += TICK + (excretionBoost * 10);
-				// }
-
-				if (!isAnalClose() || getAge() % 100 == 0) {
-					setShitting(false);
-				}
-				addStress(1);
-			}
-		}
-		return cantMove;
-	}
-
-	/**
-	 * 出産関連チェック.
-	 * 
-	 * @return trueで出産に向けてゆっくりが動かなくなる。
-	 */
-	public boolean checkChildbirth() {
-		// このあと動かなくなるフラグ
-		boolean cantMove = false;
-		if (hasBabyOrStalk() || (!hasBabyOrStalk() && isBirth())) {
-			pregnantPeriod += TICK + (pregnancyPeriodBoost / 2);
-			// 出産直前
-			if (pregnantPeriod > getPregPeriodBase() - TICK * 100) {
-				if (!isBirth() && hasBabyOrStalk()) {
-					setMessage(GameMessages.getMessage(this, MessagePool.Action.Breed), true);
-					wakeup();
-				}
-				cantMove = true;
-				setBirth(true);
-				pregnancyPeriodBoost = 0;
-			}
-			// 皮がない時の出産
-			if (pregnantPeriod > getPregPeriodBase() && isPealed()) {
-				damage += 40000;
-				toDead();
-			}
-			// 出産
-			else if (pregnantPeriod > getPregPeriodBase()) {
-				// Keep babyType for generating baby.
-				wakeup();
-				setHasBaby(false);
-				setHasStalk(false);
-				if (getBabyTypes().size() <= 0) {
-					setBirth(false);
-					pregnantPeriod = 0;
-					if (isNotNYD()) {
-						setMessage(GameMessages.getMessage(this, MessagePool.Action.Breed2), true);
-						if (!isHasPants()) {
-							if (willingFurifuri()) {
-								setFurifuri(true);
-							}
-							stay();
-						}
-					}
-					return cantMove;
-				} else {
-					cantMove = true;
-				}
-				boolean birthAllowed = true;
-				// 穴がふさがれている
-				if (isHasPants() || (isFixBack() && isNeedled())) {
-					birthAllowed = false;
-				}
-				// 動けない
-				if ((isLockmove() && (!isFixBack() || getCoreAnkoState() != CoreAnkoState.NonYukkuriDisease))
-						&& !isShitting()) {
-					birthAllowed = false;
-				}
-				// 非ゆっくり症
-				// 20210415 削除。非ゆっくり症だって出産くらいするでしょ
-				// if (isNYD()) {
-				// birthAllowed = false;
-				// }
-				if (!birthAllowed) {
-					// お腹の赤ゆだけクリア
-					getBabyTypes().clear();
-					makeDirty(true);
-					if (isNotNYD()) {
-						if (isLockmove() && !isHasPants()) {
-							setHasPants(true);
-							setMessage(GameMessages.getMessage(this, MessagePool.Action.Breed2), true);
-							setHasPants(false);
-						} else {
-							setMessage(GameMessages.getMessage(this, MessagePool.Action.Breed2), true);
-						}
-					}
-					// 出産不能なら妊娠状態を継続させず、一度ここで終わらせる。
-					setBirth(false);
-					pregnantPeriod = 0;
-					pregnancyPeriodBoost = 0;
-					setHappiness(Happiness.VERY_SAD);
-				}
-			}
-		}
-		return cantMove;
-	}
-
-	/**
-	 * 睡眠チェックをする.
-	 * 
-	 * @return このあと動けなくなるフラグ
-	 */
-	public boolean checkSleep() {
-		// ディフューザーで睡眠妨害されている場合、眠気をなくす
-		if (GameEnvironment.isNoSleepSteam()) {
-			// 正常な実ゆ以外なら
-			if (!isUnBirth() || !isPlantForUnbirthChild()) {
-				setSleepingPeriod(0);
-				setSleeping(false);
-				setNightmare(false);
-				return false;
-			}
-		}
-
-		// 飛行種で眠くなったら地面に降りる
-		if (canflyCheck() && isSleepy()) {
-			moveToZ(0);
-			if (z != 0) {
-				return false;
-			}
-		}
-
-		if (isSleeping()) {
-			// ストレスフルだと悪夢
-			if (!isNightmare()
-					&& ((isStressful() && GameRandom.nextInt(75) == 0)
-							|| (isVeryStressful() && GameRandom.nextInt(25) == 0))) {
-				setNightmare(true);
-				setForceFace(ImageCode.NIGHTMARE.ordinal());
-			} else if (!isStressful() || GameRandom.nextInt(100) == 0) {
-				setNightmare(false);
-				setForceFace(ImageCode.SLEEPING.ordinal());
-			}
-		}
-
-		// 飢餓状態の時は起きる
-		if (isSleeping() && isStarving()) {
-			setMessage(GameMessages.getMessage(this, MessagePool.Action.Hungry));
-			setHappiness(Happiness.SAD);
-			stay();
-			wakeup();
-		} else if (isSleeping()
-				|| (wakeUpTime + getActivePeriodBase() * 3 / 2 < getAge() && !isExciting() && !isScare() && !isVerySad()
-						&& !isEating() && !isNeedled() && !isTooHungry() && !(isVeryHungry() && isToFood()))
-				|| (wakeUpTime + getActivePeriodBase() * 3 < getAge() && !isExciting() && !isScare() && !isEating()
-						&& !isNeedled() && !(isTooHungry() && isToFood()))
-				|| (isUnBirth() && !isNeedled())) {
-			clearActions();
-			setSleeping(true);
-			setAngry(false);
-			setScare(false);
-			damage -= TICK;
-			if (!isUnBirth()) {
-				setHappiness(Happiness.AVERAGE);
-			} else {
-				return isSleeping();
-			}
-			if (GameEnvironment.getDayState() == Terrarium.DayState.NIGHT) {
-				if ((getAge() % (GameEnvironment.getNightTime() / getSleepPeriodBase() + 1)) == 0) {
-					sleepingPeriod += TICK;
-				}
-			} else {
-				sleepingPeriod += TICK;
-			}
-			if (sleepingPeriod > getSleepPeriodBase()) {
-				setMessage(GameMessages.getMessage(this, MessagePool.Action.Wakeup), true);
-				stay();
-				wakeup();
-			}
-		} else {
-			// 実験 イベント中は空腹、睡眠、便意が増えないように
-			if (getCurrentEvent() != null)
-				return false;
-			sleepingPeriod = 0;
-			setSleeping(false);
-			setNightmare(false);
-			if (GameEnvironment.getDayState() == Terrarium.DayState.NIGHT) {
-				wakeUpTime -= TICK * 3;
-			}
-		}
-
-		return isSleeping();
-	}
-
-	/**
-	 * ベッドの上にいるかどうかをチェックする.
-	 * 
-	 * @return ベッドの上にいるかどうか
-	 */
-	public boolean checkOnBed() {
-		Rectangle r = takeScreenRect();
-		for (Map.Entry<Integer, Bed> entry : GameWorld.get().getCurrentMap().getBed().entrySet()) {
-			Bed bd = entry.getValue();
-			if (takeScreenRect(bd.getScreenRect()).intersects(r))
-				return true;
-		}
-		return false;
-	}
-
-	private Rectangle takeScreenRect(Rectangle4y screenRect) {
-		return new Rectangle(screenRect.getX(), screenRect.getY(), screenRect.getWidth(), screenRect.getHeight());
-	}
-
-	private Rectangle takeScreenRect() {
-		return new Rectangle(screenRect.getX(), screenRect.getY(), screenRect.getWidth(), screenRect.getHeight());
-	}
-
-	/**
-	 * 死ねない期間かどうかをチェックする.
-	 * TICKで期間を1減らす.
-	 */
-	public void checkCantDie() {
-		if (cantDiePeriod > 0) {
-			cantDiePeriod -= TICK;
-		}
+		return shitDelegate().checkShit();
 	}
 
 	/**
 	 * プレイヤーにすりすりされたときの処理.
 	 * 
+	 * 
 	 * @return 感情処理を終えるかどうか
 	 */
 	public boolean doSurisuriByPlayer() {
-		// プレイヤーにすりすりされていないなら終了
-		if (!isSurisuriFromPlayer()) {
-			return false;
-		}
-
-		boolean foundTarget = false;
-		// 初回なら時間を初期化
-		if (lastSurisuriTime == 0) {
-			lastSurisuriTime = System.currentTimeMillis();
-			foundTarget = true;
-		} else {
-			// 二回目以降は前回より3秒以上経過してたら処理実行
-			long lnTimeNow = System.currentTimeMillis();
-			long lnSec = lnTimeNow - lastSurisuriTime;
-			if (2000 < lnSec) {
-				lastSurisuriTime = lnTimeNow;
-				foundTarget = true;
-			}
-		}
-
-		if (!foundTarget) {
-			return false;
-		}
-
-		// 動けない場合,パニック中,すぃーに乗っている
-		if ((isLockmove()) ||
-				(getPanicType() != null) ||
-				(isSleeping()) ||
-				(takeMappedObj(getParentLinkId()) instanceof Sui)) {
-			return false;
-		}
-
-		// -----------------------------------------------------------
-		// 処理を分けよう
-		// 無反応：ホットプレート、ミキサー、足焼き、寝ている時、すぃーに乗っている、
-		// すっきりー：興奮中
-		// 痛み：針が刺さっている、足カット、痛みを感じている、瀕死
-		// 拒絶：レイプされている、うんうん中、食事中、出産中、攻撃している、攻撃されている、
-		// -----------------------------------------------------------
-		if (isNYD()) {
-			return false;
-		}
-
-		// すりすり実行
-		// 興奮時
-		if (isExciting()) {
-			// すっきりー
-			if (GameRandom.nextInt(5) == 0) {
-				setMessage(GameMessages.getMessage(this, MessagePool.Action.Sukkiri), 60, true, false);
-				setStress(0);
-				stayPurupuru(60);
-				setSukkiri(true);
-				setExciting(false);
-				setHappiness(Happiness.HAPPY);
-				clearActions();
-				// なつき度設定
-				addLovePlayer(100);
-
-				// おくるみはいてたら茎が生える
-				if (isHasPants()) {
-					dripSperm(getDna());
-				}
-			} else {
-				stayPurupuru(30);
-				// なつき度設定
-				addLovePlayer(10);
-				if (isRaper()) {
-					setMessage(GameMessages.getMessage(this, MessagePool.Action.ExciteForRaper));
-				} else {
-					setMessage(GameMessages.getMessage(this, MessagePool.Action.Excite));
-				}
-			}
-			addMemories(1);
-			return true;
-		}
-
-		// 切断されている場合
-		if ((getCriticalDamege() == CriticalDamegeType.CUT) ||
-				(getFootBakeLevel() == FootBake.CRITICAL) ||
-				isDamaged() ||
-				isPealed() ||
-				isPacked()) {
-			stayPurupuru(20);
-			setHappiness(Happiness.VERY_SAD);
-			addStress(100);
-			// なつき度設定
-			addLovePlayer(-20);
-			setForceFace(ImageCode.PAIN.ordinal());
-			clearActions();
-
-			if (GameRandom.nextInt(2) == 0) {
-				setMessage(GameMessages.getMessage(this, MessagePool.Action.Dying2), 30, true, false);
-			} else {
-				setMessage(GameMessages.getMessage(this, MessagePool.Action.Dying), 30, true, false);
-			}
-			return true;
-		}
-
-		// 針が刺さっている場合
-		if (isNeedled()) {
-			stayPurupuru(40);
-			setHappiness(Happiness.VERY_SAD);
-			addStress(50);
-			// なつき度設定
-			addLovePlayer(-20);
-			setForceFace(ImageCode.PAIN.ordinal());
-			// ぐーりぐーりされた時のメッセージ
-			if (GameRandom.nextBoolean())
-				setMessage(GameMessages.getMessage(this, MessagePool.Action.NeedlePain), 60, true, false);
-			else
-				setMessage(GameMessages.getMessage(this, MessagePool.Action.NeedlePain), 60, true, true);
-			clearActions();
-			return true;
-		}
-
-		// デフォルトすりすり
-		addStress(-100);
-		stay(40);
-		// なつき度設定
-		addLovePlayer(10);
-		setHappiness(Happiness.VERY_HAPPY);
-		setForceFace(ImageCode.CHEER.ordinal());
-		setMessage(GameMessages.getMessage(this, MessagePool.Action.SuriSuriByPlayer), true);
-		setNobinobi(true);
-		addMemories(1);
-
-		int randomIndex = GameRandom.nextInt(5);
-		if (randomIndex == 0) {
-			setForceFace(ImageCode.SMILE.ordinal());
-		} else if (0 < randomIndex && randomIndex < 3) {
-			setForceFace(ImageCode.NORMAL.ordinal());
-		} else {
-			setForceFace(ImageCode.CHEER.ordinal());
-		}
-
-		clearActions();
-		// 低確率で寝る
-		if (GameRandom.nextInt(20) == 0) {
-			forceToSleep();
-		}
-		return true;
+		return playerRelationDelegate().doSurisuriByPlayer();
 	}
 
 	/**
 	 * 自身の状態に対する反応を記述する.
 	 */
 	public void checkEmotion() {
-		// 怒り状態の経過
-		if (isAngry()) {
-			angryPeriod += TICK;
-			if (angryPeriod > getAngryPeriodBase()) {
-				angryPeriod = 0;
-				setAngry(false);
-			}
-		}
-		// 恐怖状態の経過
-		if (isScare()) {
-			scarePeriod += TICK;
-			if (scarePeriod > getScarePeriodBase()) {
-				scarePeriod = 0;
-				setScare(false);
-			}
-		}
-		// 落ち込み状態の経過
-		if (getHappiness() == Happiness.VERY_SAD) {
-			sadPeriod--;
-			if (sadPeriod < 0) {
-				sadPeriod = 0;
-				setHappiness(Happiness.SAD);
-			}
-		}
-		// お遊び状態の経過
-		if (getPlaying() != null) {
-			playingLimit--;
-			boolean P = false;
-			switch (getPlaying()) {
-				case BALL:
-					P = ToyLogic.checkToy(this);
-					break;
-				case SUI:
-					P = ToyLogic.checkSui(this);
-					break;
-				case TRAMPOLINE:
-					P = ToyLogic.checkTrampoline(this);
-					break;
-				default:
-					P = false;
-					break;
-			}
-			if (isSleeping() || playingLimit < 0 || !P) {
-				stopPlaying();
-			}
-		}
-
-		// 非ゆっくり症チェック
-		if (checkNonYukkuriDisease()) {
-			return;
-		}
-		// イベント中
-		else if (getCurrentEvent() != null) {
-			return;
-		}
-		// プレイヤーにすりすりされている
-		else if (doSurisuriByPlayer()) {
-			return;
-		}
-
-		// ゆんやー
-		if (isYunnyaa() && !isSleeping()) {
-			setMessage(GameMessages.getMessage(this, MessagePool.Action.Yunnyaa), 30, false, true);
-			setYunnyaa(true);
-			stay(40);
-			setHappiness(Happiness.VERY_SAD);
-			return;
-		}
-		// 加工中を想定した反応
-		else if ((isDamaged() || hasDisorder()) && isOnNonMovingConveyor() && !hasBabyOrStalk() && !isPealed()) {
-			if (GameRandom.nextInt(80) == 0) {
-				begForLife();
-			} else if (GameRandom.nextInt(40) == 0) {
-				doYunnyaa(true);
-			} else if (GameRandom.nextInt(3) == 0) {
-				setMessage(GameMessages.getMessage(this, MessagePool.Action.KilledInFactory), WindowType.NORMAL,
-						Const.HOLDMESSAGE, true, GameRandom.nextBoolean(), false);
-			}
-		}
-		// 状態異常時
-		// 足切断
-		else if (getCriticalDamege() == CriticalDamegeType.CUT || isPealed() || isPacked()) {
-			return;
-		}
-		// 盲目
-		else if (checkEmotionBlind()) {
-			return;
-		}
-		// しゃべれない
-		else if (checkEmotionCantSpeak()) {
-			return;
-		}
-		// 粘着系オブジェクトの貼り付け状態
-		else if (checkEmotionLockmove()) {
-			return;
-		}
-		// 足焼き済み
-		else if (checkEmotionFootbake()) {
-			return;
-		}
-		// 代替おかざりの捜索
-		else if (TrashLogic.checkTrashOkazari(this)) {
-			return;
-		}
-		// おかざり、ぴこぴこなし
-		else if (checkEmotionNoOkazariPikopiko()) {
-			return;
-		}
-		// 興奮時
-		else if (isExciting()) {
-			setRelax(false);
-			return;
-		}
-
-		// 空腹時
-		if (isHungry() && GameRandom.nextInt(50) == 0) {
-			if (isSoHungry())
-				setHappiness(Happiness.SAD);
-			setMessage(GameMessages.getMessage(this, MessagePool.Action.Hungry), 30);
-			stay();
-		}
-
-		// 通常時
-		// うんうん奴隷の場合
-		// 食事検索、トイレ検索時にもろもろのセリフを吐く
-		if (getPublicRank() == PublicRank.UnunSlave || isMelt()) {
-			setHappiness(Happiness.SAD);
-			excitingPeriod = 0;
-			// 強制発情ではない場合
-			if ((!isVeryRude() || getIntelligence() != Intelligence.FOOL) && isExciting() && !isForceExciting()) {
-				setCalm();
-				setForceFace(ImageCode.TIRED.ordinal());
-				setMessage(GameMessages.getMessage(this, MessagePool.Action.CantUsePenipeni));
-			}
-			setRelax(false);
-			setAngry(false);
-			setScare(false);
-			return;
-		}
-
-		// 汚れ時の反応
-		if (isNormalDirty() && !isSleeping()) {
-			// 大人と、善良子ゆは勝手にきれいにする
-			if (isAdult() || (isChild() && isSmart())) {
-				if (GameRandom.nextInt(600) == 0)
-					cleaningItself();
-			} else {
-				if (dirtyScreamPeriod == 0) {
-					if (isRude())
-						dirtyScreamPeriod = 10 + GameRandom.nextInt(15);
-					else
-						dirtyScreamPeriod = 5 + GameRandom.nextInt(10);
-				} else
-					callParent();
-			}
-		} else {
-			setCallingParents(false);
-			dirtyScreamPeriod = 0;
-		}
-
-		// ゆっくりしてるとき
-		if (noHungryPeriod > getRelaxPeriodBase() && noDamagePeriod > getRelaxPeriodBase()
-				&& !isSleeping() && !isShitting() && !isEating()
-				&& !isSad() && !isVerySad() && !isFeelPain()
-				&& getAttachmentSize(PoisonAmpoule.class) == 0) {
-			// && moveTargetId == null) {
-			// すっきり発動条件
-			if (!isExciting() && isNotNYD() && GameRandom.nextInt(getExciteProb()) == 0) {
-				int r = 1;
-				int adjust = excitingDiscipline * (isRude() ? 1 : 2);
-				if (isSuperRapist()) {
-					r = GameRandom.nextInt(1 + adjust);
-				} else if (isRapist() && isRude()) {
-					r = GameRandom.nextInt(6 + adjust);
-				} else if (isRapist() || isRude()) {
-					r = GameRandom.nextInt(12 + adjust);
-				} else if (!isSoHungry() && !wantToShit()) {
-					r = GameRandom.nextInt(24 + adjust);
-				}
-				// すっきりーしにいく条件判定
-				boolean shouldExcite = false;
-				// ぺにぺにがないとダメ
-				if (isPenipeniCutted()) {
-					r = 1;
-				}
-				// 大人じゃないとやらない(ドゲスの子ゆ除く)
-				if (!isAdult() && !(isChild() && isVeryRude())) {
-					r = 1;
-				}
-				// 妊娠してるとしない
-				if (hasBabyOrStalk() && !isRaper()) {
-					r = 1;
-				}
-				// if (isRaper() && (isExciting() || isForceExciting())) {
-				// setCurrentEvent(null);
-				// }
-				if (r == 0 && getCurrentEvent() == null) {
-					List<Yukkuri> fianceList = BodyLogic.createActiveFianceeList(this, getBodyAgeState().ordinal());
-					if (fianceList == null || fianceList.size() < 1) {
-						setHappiness(Happiness.SAD);
-						setMessage(GameMessages.getMessage(this, MessagePool.Action.WantPartner));
-					}
-					// 他にゆっくりがいる
-					else {
-						// レイパー
-						if (isRapist()) {
-							if (isRapist() && FamilyActionLogic.isRapeTarget()) {
-								shouldExcite = true;
-							}
-						} else {
-							// 自分の通常の子ゆリスト作成
-							List<Yukkuri> childrenList = BodyLogic.createActiveChildList(this, true);
-							// パートナーがいる場合
-							Yukkuri pa = BodyRelations.getPartnerBody(this);
-							if (pa != null) {
-								if (isVeryRude()) {
-									// ドゲスはすぐ興奮
-									shouldExcite = true;
-								} else if (!pa.hasBabyOrStalk()) {
-									if (childrenList == null || childrenList.size() == 0) {
-										shouldExcite = true;
-									} else {
-										switch (getIntelligence()) {
-											case WISE:
-												// 賢いのは3匹以下で子づくり
-												if (childrenList.size() <= 3) {
-													shouldExcite = true;
-												}
-												break;
-											case AVERAGE:
-												// 普通の知能は10匹以下で子づくり
-												if (childrenList.size() <= 10) {
-													shouldExcite = true;
-												}
-												break;
-											case FOOL:
-												// 餡子脳は子の数を気にしない
-												shouldExcite = true;
-												break;
-										}
-									}
-								}
-							} else {
-								// 独身orバツイチは、相手を探すために興奮する
-								shouldExcite = true;
-							}
-						}
-					}
-				}
-
-				if (shouldExcite) {
-					clearActionsForEvent();
-					setExciting(true);
-					excitingPeriod = 0;
-					if (isRaper()) {
-						EventLogic.addWorldEvent(new RaperWakeupEvent(this, null, null, 1), this,
-								GameMessages.getMessage(this, MessagePool.Action.ExciteForRaper));
-					} else {
-						setMessage(GameMessages.getMessage(this, MessagePool.Action.Excite));
-					}
-				} else {
-					setRelax(true);
-					excitingPeriod = 0;
-					if (GameRandom.nextInt(75) == 0)
-						killTime();
-				}
-				setAngry(false);
-				setScare(false);
-			} else {
-				excitingPeriod += TICK + getExcitementPeriodBoost();
-				if (excitingPeriod > getExcitePeriodBase()) {
-					excitingPeriod = 0;
-					if (!isRaper()) {
-						setCalm();
-					}
-					setRelax(false);
-				}
-				// 興奮している場合、たまにつぶやく
-				if (isExciting()) {
-					if (GameRandom.nextInt(30) == 0) {
-						if (isRaper()) {
-							setMessage(GameMessages.getMessage(this, MessagePool.Action.ExciteForRaper));
-						} else {
-							setMessage(GameMessages.getMessage(this, MessagePool.Action.Excite));
-						}
-					}
-				}
-			}
-		}
-	}
-
-	/**
-	 * ゆっくりしてる時のアクション.
-	 * 個別の動作がある種ははこれをオーバーライドしているので注意.
-	 */
-	public void killTime() {
-		if (getCurrentEvent() != null)
-			return;
-		if (getPlaying() != null)
-			return;
-		int p = GameRandom.nextInt(50);
-		// 6/50でキリッ
-		if (p <= 5) {
-			getInVain(true);
-		}
-		// 6/50でのびのび
-		else if (p <= 11) {
-			// if yukkuri is not rude, she goes into her shell by discipline.
-			setMessage(GameMessages.getMessage(this, MessagePool.Action.Nobinobi), 40);
-			setNobinobi(true);
-			addStress(-50);
-			stay(40);
-		}
-		// 6/50でふりふり
-		else if (p <= 17 && willingFurifuri()) {
-			// if yukkuri is rude, she will not do furifuri by discipline.
-			setMessage(GameMessages.getMessage(this, MessagePool.Action.FuriFuri), 40);
-			setFurifuri(true);
-			addStress(-70);
-			stay(30);
-		}
-		// 6/50で腹減った
-		else if ((p <= 23 && isHungry()) || isSoHungry()) {
-			// 空腹時
-			setMessage(GameMessages.getMessage(this, MessagePool.Action.Hungry), 30);
-			stay(30);
-		}
-		// 6/50でおもちゃで遊ぶ
-		else if (p <= 29) {
-			if (ToyLogic.checkToy(this)) {
-				setPlaying(PlayStyle.BALL);
-				playingLimit = 150 + GameRandom.nextInt(100) - 49;
-				return;
-			} else
-				killTime();
-		}
-		// 6/50でトランポリンで遊ぶ
-		else if (p <= 35) {
-			if (ToyLogic.checkTrampoline(this)) {
-				setPlaying(PlayStyle.TRAMPOLINE);
-				playingLimit = 150 + GameRandom.nextInt(100) - 49;
-				return;
-			} else
-				killTime();
-		}
-		// 6/50ですいーで遊ぶ
-		else if (p <= 41) {
-			if (ToyLogic.checkSui(this)) {
-				setPlaying(PlayStyle.SUI);
-				playingLimit = 150 + GameRandom.nextInt(100) - 49;
-				return;
-			} else
-				killTime();
-		} else {
-			// おくるみありで汚れていない場合
-			if ((isHasPants()) && !isDirty() && (GameRandom.nextInt(10) == 0)) {
-				setMessage(GameMessages.getMessage(this, MessagePool.Action.RelaxOkurumi));
-			} else {
-				setMessage(GameMessages.getMessage(this, MessagePool.Action.Relax));
-			}
-			addStress(-60);
-			stay(30);
-		}
-	}
-
-	/**
-	 * 遊ぶのをやめる.
-	 */
-	public void stopPlaying() {
-		setPlaying(null);
-		playingLimit = 0;
-	}
-
-	/**
-	 * キリッとする
-	 * 
-	 * @param TF キリッ！メッセージを出すかどうか
-	 */
-	public void getInVain(boolean TF) {
-		if (TF)
-			setMessage(GameMessages.getMessage(this, MessagePool.Action.BeVain), 30);
-		if (isRude() && GameRandom.nextBoolean())
-			setForceFace(ImageCode.RUDE.ordinal());
-		setBeVain(true);
-		addStress(-90);
-		stayPurupuru(10);
-	}
-
-	/**
-	 * 非ゆっくり症チェックを行う。
-	 * ・基礎
-	 * 足りないゆはほぼ非ゆっくり症にならない
-	 * うんうん奴隷は常に甘いもの（うんうん）を食べているのでほぼ非ゆっくり症にならない
-	 * 善良＜ゲスで耐性高い
-	 * 赤ゆ、実ゆ＜子供＜大人で耐性高い
-	 * バッヂ級＜餡子脳で耐性高い
-	 * レイパーは非ゆっくり症にならない
-	 * ・環境
-	 * 完全空腹の場合に耐性Down
-	 * 足焼きの度合いに応じて耐性Down
-	 * カビが生えると耐性Down
-	 * お飾りがないと耐性Down
-	 * ぴこぴこがないと耐性Down
-	 * ぺにぺにがないと耐性超Down
-	 * 汚れていると耐性Down
-	 * 固定されていると耐性Down
-	 * 盲目だと耐性Down
-	 * 口がふさがれてると耐性Down
-	 * ケガしてると耐性Down
-	 * 生きている子供の数だけ耐性Up
-	 * 死んでいる子供の数だけ耐性Down
-	 * ・つらい思い出
-	 * 他ゆの死体を見ると耐性Down
-	 * 他ゆ食いで吐餡してたら耐性Down
-	 * 生ごみ、辛い餌、苦い餌を食べると耐性Down
-	 * 出産失敗で耐性超Down
-	 * ・いい思い出
-	 * すっきりすると耐性Up
-	 * 出産時に応援する、応援されると耐性Up
-	 * 出産成功で耐性Up
-	 * 茎を食べると耐性超Up
-	 * あまあまを食べると耐性超Up
-	 * すりすりされると耐性Up
-	 * ぺろぺろされると耐性Up
-	 * うんうん体操に参加すると耐性Up
-	 * すぃーにのると耐性Up
-	 */
-	public int checkNonYukkuriDiseaseTolerance() {
-		int tolerance = 100;
-		if (isIdiot()) {
-			tolerance += 50000;
-		}
-		if (getPublicRank() == PublicRank.UnunSlave) {
-			tolerance += 10000;
-		}
-		switch (getIntelligence()) {
-			case WISE:
-				tolerance += 5;
-				break;
-			case FOOL:
-				tolerance += 10;
-				break;
-			default:
-				break;
-		}
-		switch (getAttitude()) {
-			case VERY_NICE:
-				tolerance += 5;
-				break;
-			case NICE:
-				tolerance += 10;
-				break;
-			case SHITHEAD:
-				tolerance += 30;
-				break;
-			case SUPER_SHITHEAD:
-				tolerance += 50;
-				break;
-			default:
-				break;
-		}
-		switch (getBodyAgeState()) {
-			case BABY:
-				break;
-			case CHILD:
-				tolerance += 30;
-				break;
-			case ADULT:
-				tolerance += 50;
-				break;
-		}
-		if (isRapist()) {
-			tolerance += 5000;
-		}
-		if (isSoHungry()) {
-			if (isVeryHungry())
-				tolerance -= 5;
-			else
-				tolerance -= 3;
-		}
-		switch (getFootBakeLevel()) {
-			case MIDIUM:
-				tolerance -= 30;
-				break;
-			case CRITICAL:
-				tolerance -= 50;
-				break;
-			default:
-				break;
-		}
-		switch (getBodyBakeLevel()) {
-			case MIDIUM:
-				tolerance -= 15;
-				break;
-			case CRITICAL:
-				tolerance -= 25;
-				break;
-			default:
-				break;
-		}
-		if (isSick()) {
-			tolerance -= 15;
-		}
-		if (!hasOkazari()) {
-			tolerance -= 25;
-		}
-		if (!isHasBraid()) {
-			tolerance -= 10;
-		}
-		if (isPenipeniCutted()) {
-			tolerance -= 20;
-		}
-		if (isDirty()) {
-			tolerance -= 5;
-		}
-		if (isLockmove()) {
-			tolerance -= 5;
-		}
-		if (isBlind()) {
-			tolerance -= 20;
-		}
-		if (isShutmouth()) {
-			tolerance -= 10;
-		}
-		if (getCriticalDamege() == CriticalDamegeType.INJURED) {
-			tolerance -= 10;
-		}
-		if (getChildrenList() != null) {
-			for (int iChild : getChildrenList()) {
-				Yukkuri childBody = BodyRelations.getBody(iChild);
-				if (childBody == null || childBody.isAdult()) {
-					continue;
-				}
-				// 死んでる
-				if (childBody.isRemoved() || childBody.isDead()) {
-					tolerance -= 10;
-					continue;
-				}
-				// 死にかけてる
-				if (childBody.isCrushed() || childBody.isDamaged() || childBody.isBurned() || findSick(childBody)
-						|| childBody.isTooHungry()) {
-					tolerance -= 3;
-					continue;
-				}
-				if (hasDisorder()) {
-					tolerance -= 5;
-					continue;
-				}
-				// 大丈夫っぽい
-				tolerance += 10;
-			}
-		}
-		tolerance += memories;
-		if (tolerance <= -1)
-			tolerance = -1;
-		return tolerance;
+		emotionDelegate().checkEmotion();
 	}
 
 	/**
@@ -1822,672 +419,30 @@ public abstract class Yukkuri extends SocialEntity {
 	 * 
 	 * @return その後の処理をキャンセルするかどうか
 	 */
-	private boolean checkNonYukkuriDisease() {
-		// 非ゆっくり症防止ディフューザー、非ゆっくり症防止アンプルの際は非ゆっくり症にならない/治る
-		if (GameEnvironment.isAntiNonYukkuriDiseaseSteam() || getAttachmentSize(ANYDAmpoule.class) != 0) {
-			setCoreAnkoState(CoreAnkoState.DEFAULT);
-			return false;
-		}
-
-		int stressLimit = getStressLimitBase()[getBodyAgeState().ordinal()];
-		int tolerance = checkNonYukkuriDiseaseTolerance();
-		// ストレス限界を超えている場合
-		if (stressLimit * tolerance / 100 < getStress()) {
-			// 初回
-			if (isNotNYD()) {
-				setCalm();
-				setCoreAnkoState(CoreAnkoState.NonYukkuriDiseaseNear);
-				nonYukkuriDiseasePeriod = 0;
-				speed = speed / 2;
-			}
-			// ストレス限界の2倍を超えている場合
-			if (stressLimit * tolerance / 100 * 2 < getStress()) {
-				// 初回
-				if (getCoreAnkoState() == CoreAnkoState.NonYukkuriDiseaseNear) {
-					setCalm();
-					setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
-					nonYukkuriDiseasePeriod = 0;
-				}
-			}
-		} else {
-			// 復帰時
-			if (isNYD()) {
-				speed = speed * 2;
-			}
-			setCoreAnkoState(CoreAnkoState.DEFAULT);
-		}
-
-		// 通常のままなら終了
-		if (isNotNYD()) {
-			nonYukkuriDiseasePeriod = 0;
-			return false;
-		}
-
-		// 生まれていないなら反応は示さないけど判定チェックにひかかる
-		if (isUnBirth()) {
-			return true;
-		}
-		int randomThreshold = 40;
-		wakeup();
-		setBirth(false);
-
-		// 起こす
-		if (isNYD() && isSleeping()) {
-			wakeup();
-		}
-		// 非ゆっくり症初期
-		if (getCoreAnkoState() == CoreAnkoState.NonYukkuriDiseaseNear && GameRandom.nextInt(randomThreshold) == 0) {
-			switch (nonYukkuriDiseasePeriod) {
-				case 0:
-					if (GameRandom.nextBoolean()) {
-						nonYukkuriDiseasePeriod = 1;
-					} else {
-						nonYukkuriDiseasePeriod = 3;
-					}
-					if (!isFixBack()) {
-						clearActions();
-						if (nonYukkuriDiseasePeriod == 1) {
-							setNYDForceFace(ImageCode.NYD_FRONT.ordinal());
-						} else {
-							setNYDForceFace(ImageCode.NYD_DOWN.ordinal());
-							nonYukkuriDiseasePeriod = 3;
-						}
-					}
-					break;
-				case 1:
-					nonYukkuriDiseasePeriod = 2;
-					if (!isFixBack()) {
-						clearActions();
-						setNYDForceFace(ImageCode.NYD_FRONT_CRY1.ordinal());
-					}
-					break;
-				case 2:
-					nonYukkuriDiseasePeriod = 0;
-					if (!isFixBack()) {
-						clearActions();
-						setNYDForceFace(ImageCode.NYD_FRONT_CRY2.ordinal());
-					}
-					stayPurupuru(20);
-					break;
-				case 3:
-					nonYukkuriDiseasePeriod = 4;
-					if (!isFixBack()) {
-						clearActions();
-						setNYDForceFace(ImageCode.NYD_DOWN_CRY1.ordinal());
-					}
-					break;
-				case 4:
-					nonYukkuriDiseasePeriod = 0;
-					if (!isFixBack()) {
-						clearActions();
-						setNYDForceFace(ImageCode.NYD_DOWN_CRY2.ordinal());
-					}
-					stayPurupuru(20);
-					break;
-				default:
-					break;
-			}
-			addStress(100);
-			addMemories(-1);// 耐性が減っていく
-			setHappiness(Happiness.VERY_SAD);
-			setNYDMessage(GameMessages.getMessage(this, MessagePool.Action.NonYukkuriDiseaseNear), false);
-		}
-		randomThreshold = 20;
-		// 非ゆっくり症
-		if (getCoreAnkoState() == CoreAnkoState.NonYukkuriDisease && GameRandom.nextInt(randomThreshold) == 0) {
-			switch (nonYukkuriDiseasePeriod) {
-				case 0:
-					if (GameRandom.nextBoolean()) {
-						nonYukkuriDiseasePeriod = 1;
-						if (!isFixBack()) {
-							clearActions();
-							setNYDForceFace(ImageCode.NYD_UP.ordinal());
-						}
-					} else {
-						nonYukkuriDiseasePeriod = 4;
-						if (!isFixBack()) {
-							clearActions();
-							setNYDForceFace(ImageCode.NYD_FRONT_WIDE.ordinal());
-						}
-					}
-					break;
-				case 1:
-					if (GameRandom.nextBoolean()) {
-						nonYukkuriDiseasePeriod = 2;
-					}
-					if (!isFixBack()) {
-						clearActions();
-						setNYDForceFace(ImageCode.NYD_UP.ordinal());
-					}
-					break;
-				case 2:
-					if (GameRandom.nextBoolean()) {
-						nonYukkuriDiseasePeriod = 3;
-					}
-					if (!isFixBack()) {
-						clearActions();
-						setNYDForceFace(ImageCode.NYD_UP_CRY1.ordinal());
-					}
-					break;
-				case 3:
-					nonYukkuriDiseasePeriod = 1;
-					if (!isFixBack()) {
-						clearActions();
-						setNYDForceFace(ImageCode.NYD_UP_CRY2.ordinal());
-					}
-					stayPurupuru(20);
-					break;
-				case 4:
-					if (GameRandom.nextBoolean()) {
-						nonYukkuriDiseasePeriod = 5;
-					}
-					if (!isFixBack()) {
-						clearActions();
-						setNYDForceFace(ImageCode.NYD_FRONT_WIDE.ordinal());
-					}
-					break;
-				case 5:
-					if (GameRandom.nextBoolean()) {
-						nonYukkuriDiseasePeriod = 6;
-					}
-					if (!isFixBack()) {
-						clearActions();
-						setNYDForceFace(ImageCode.NYD_FRONT_WIDE_CRY1.ordinal());
-					}
-					break;
-				case 6:
-					nonYukkuriDiseasePeriod = 4;
-					if (!isFixBack()) {
-						clearActions();
-						setNYDForceFace(ImageCode.NYD_FRONT_WIDE_CRY2.ordinal());
-					}
-					stayPurupuru(20);
-					break;
-				default:
-					break;
-			}
-			addStress(300);
-			addMemories(-5);// 耐性が減っていく
-			setHappiness(Happiness.VERY_SAD);
-			setNYDMessage(GameMessages.getMessage(this, MessagePool.Action.NonYukkuriDisease), false);
-			if (GameRandom.nextInt(randomThreshold) == 0)
-				nonYukkuriDiseasePeriod = 0;
-		}
-		return true;
+	public boolean checkNonYukkuriDisease() {
+		return nydDelegate().checkNonYukkuriDisease();
 	}
 
 	/**
-	 * 盲目時の基本反応.
-	 * 
-	 * @return その後の処理をキャンセルするかどうか
+	 * ゆっくりしてる時のアクション.
+	 * 個別の動作がある種ははこれをオーバーライドしているので注意.
 	 */
-	public boolean checkEmotionBlind() {
-		if (isBlind()) {
-			setEyesightBase(5 * 5);
-			addStress(5);
-			setHappiness(Happiness.SAD);
-			if (GameRandom.nextInt(40) <= 5) {
-				setMessage(GameMessages.getMessage(this, MessagePool.Action.CANTSEE));
-			} else if (GameRandom.nextInt(40) == 20) {
-				setMessage(GameMessages.getMessage(this, MessagePool.Action.LamentNoYukkuri));
-			}
-			return true;
-		}
-		return false;
-	}
-
-	/**
-	 * 口封じ時の基本反応
-	 * 
-	 * @return その後の処理をキャンセルするかどうか
-	 */
-	public boolean checkEmotionCantSpeak() {
-		//
-		if (isShutmouth()) {
-			addStress(2);
-			setHappiness(Happiness.SAD);
-			setPeropero(false);
-			if (GameRandom.nextInt(80) == 0 && !isSleeping()) {
-				setMessage(GameMessages.getMessage(this, MessagePool.Action.CantTalk));
-			}
-			return true;
-		}
-		return false;
-	}
-
-	/**
-	 * 動けない時の基本反応.
-	 * 
-	 * @return その後の処理をキャンセルするかどうか
-	 */
-	public boolean checkEmotionLockmove() {
-		// 動けるとき、すっきりしてる時、埋まってない時はリターン
-		if (!isLockmove() || isSukkiri() || (getFootBakeLevel() != FootBake.NONE
-				&& (getBurialState() == BurialState.NONE || getBurialState() == BurialState.HALF))) {
-			return false;
-		}
-
-		// 寝てる時と掴まれてる時も
-		if (isSleeping() || grabbed) {
-			setLockmovePeriod(0);
-			return false;
-		}
-		// イベント中も
-		if (getCurrentEvent() != null) {
-			setLockmovePeriod(0);
-			return false;
-		}
-
-		lockmovePeriod++;
-		if (isTalking()) {
-			return false;
-		}
-		// 以下、しゃべってない時
-
-		if (lockmovePeriod < 400) {
-			if (GameRandom.nextInt(15) == 0) {
-				clearActions();
-				// 土に埋まっている場合は苦しむ
-				if (getBurialState() == BurialState.ALL || getBurialState() == BurialState.NEARLY_ALL) {
-					setHappiness(Happiness.VERY_SAD);
-					setMessage(GameMessages.getMessage(this, MessagePool.Action.BaryInUnderGround));
-					stay();
-				} else {
-					setMessage(GameMessages.getMessage(this, MessagePool.Action.CantMove));
-					setAngry();
-					if (GameRandom.nextInt(10) == 0) {
-						setNobinobi(true);
-					}
-				}
-				return true;
-			}
-			if (isHungry() && GameRandom.nextInt(50) == 0) {
-				// 空腹時
-				setMessage(GameMessages.getMessage(this, MessagePool.Action.Hungry), 30);
-				setHappiness(Happiness.SAD);
-				stay(30);
-			} else if (GameRandom.nextInt(15) == 0) {
-				clearActions();
-				// 土に埋まっている場合は苦しむ
-				if (getBurialState() == BurialState.ALL || getBurialState() == BurialState.NEARLY_ALL) {
-					setHappiness(Happiness.VERY_SAD);
-					setMessage(GameMessages.getMessage(this, MessagePool.Action.BaryInUnderGround));
-					stay();
-				} else {
-					setAngry();
-					setHappiness(Happiness.VERY_SAD);
-					setMessage(GameMessages.getMessage(this, MessagePool.Action.CantMove2));
-					if (GameRandom.nextInt(10) == 0) {
-						setNobinobi(true);
-					}
-				}
-				return true;
-			}
-		}
-		return true;
-	}
-
-	/**
-	 * 足焼き済みの基本反応
-	 * 
-	 * @return その後の処理をキャンセルするかどうか
-	 */
-	public boolean checkEmotionFootbake() {
-		// すっきり中と、足焼き無しは除外
-		if (getFootBakeLevel() == FootBake.NONE || isSukkiri()) {
-			return false;
-		}
-		// 寝ているとき、掴まれているときも除外
-		if (isSleeping() || grabbed) {
-			lockmovePeriod = 0;
-			return false;
-		}
-
-		lockmovePeriod++;
-		if (isTalking()) {
-			return false;
-		}
-
-		// 足焼き（中）
-		if (getFootBakeLevel() == FootBake.MIDIUM) {
-			if (GameRandom.nextInt(15) == 0) {
-				clearActions();
-				setAngry();
-				setHappiness(Happiness.SAD);
-				setMessage(GameMessages.getMessage(this, MessagePool.Action.LamentLowYukkuri));
-				return true;
-			}
-			if (isHungry() && GameRandom.nextInt(400) == 0) {
-				// 空腹時
-				setMessage(GameMessages.getMessage(this, MessagePool.Action.Hungry), 30);
-				setHappiness(Happiness.SAD);
-				return true;
-			}
-		}
-		// 足焼き(完全)
-		else if (getFootBakeLevel() == FootBake.CRITICAL) {
-			if (lockmovePeriod < 300) {
-				if (GameRandom.nextInt(15) == 0) {
-					clearActions();
-					setAngry();
-					setHappiness(Happiness.SAD);
-					if (GameRandom.nextInt(5) == 0) {
-						setMessage(GameMessages.getMessage(this, MessagePool.Action.LamentLowYukkuri));
-					} else {
-						setMessage(GameMessages.getMessage(this, MessagePool.Action.CantMove));
-					}
-					return true;
-				}
-				if (isHungry() && GameRandom.nextInt(50) == 0) {
-					// 空腹時
-					setMessage(GameMessages.getMessage(this, MessagePool.Action.Hungry), 30);
-					setHappiness(Happiness.VERY_SAD);
-					stay();
-					return true;
-				}
-			} else {
-				if (GameRandom.nextInt(15) == 0) {
-					clearActions();
-					setAngry();
-					setHappiness(Happiness.VERY_SAD);
-					if (GameRandom.nextInt(5) != 0) {
-						setMessage(GameMessages.getMessage(this, MessagePool.Action.CantMove2));
-					} else {
-						setMessage(GameMessages.getMessage(this, MessagePool.Action.LamentNoYukkuri));
-					}
-					return true;
-				}
-			}
-		}
-		return true;
-	}
-
-	/**
-	 * おかざり、ぴこぴこなしのときの基本反応
-	 * 
-	 * @return その後の処理をキャンセルするかどうか
-	 */
-	public boolean checkEmotionNoOkazariPikopiko() {
-		// おかざりとぴこぴこあり、またはすっきり中は除外
-		if ((hasOkazari() && isHasBraid()) || isSukkiri()) {
-			return false;
-		}
-		// 寝ているとき、または掴まれているときも除外
-		if (isSleeping() || grabbed) {
-			lockmovePeriod = 0;
-			return false;
-		}
-		// 喋っているときも除外
-		if (isTalking()) {
-			return false;
-		}
-		if (GameRandom.nextInt(50) == 0) {
-			clearActions();
-			setAngry();
-			setHappiness(Happiness.SAD);
-			setForceFace(ImageCode.TIRED.ordinal());
-			setMessage(GameMessages.getMessage(this, MessagePool.Action.LamentLowYukkuri));
-			stay();
-			return true;
-		}
-		return true;
+	public void killTime() {
+		eventDelegate().killTime();
 	}
 
 	/**
 	 * ゆかびに感染している際の基本反応
 	 */
 	public void checkSick() {
-		// （汚くてダメージを受けている、またはディフューザーで湿度が高まっていてダメージを受けている）、かつディフューザーでゆかび禁止になっていないとき
-		if (((isDirty() && isDamaged()) || (GameEnvironment.isHumid() && damage > 0))
-				&& !GameEnvironment.isAntifungalSteam()) {
-			if (GameEnvironment.isHumid()) {
-				dirtyPeriod += TICK * 4;
-			} else {
-				dirtyPeriod += TICK;
-			}
-			if (isWet() || isMelt()) {
-				dirtyPeriod += TICK;
-			}
-			if (isStubbornlyDirty()) {
-				dirtyPeriod += TICK;
-			}
-			if (dirtyPeriod > getDirtyPeriodBase()) {
-				addSickPeriod(100);
-				dirtyPeriod = 0;
-			}
-		} else {
-			dirtyPeriod = 0;
-		}
-		if (isSick()) {
-			if (GameEnvironment.isHumid()) {
-				sickPeriod += 4;
-			} else {
-				sickPeriod++;
-			}
-			if (sickPeriod > getIncubationPeriodBase() * 32
-					&& (damage >= getDamageLimitBase()[getBodyAgeState().ordinal()] * 85 / 100) && !isTalking()) {
-				if (isSleeping())
-					wakeup();
-				// 末期症状
-				setPikoMessage(GameMessages.getMessage(this, MessagePool.Action.MoldySeriousry), 40, true);
-				addStress(TICK * 100);
-				addMemories(-5);
-				if (GameRandom.nextInt(60) == 0) {
-					setForceFace(ImageCode.PAIN.ordinal());
-				}
-				if (GameRandom.nextInt(10) == 0) {
-					if (GameRandom.nextBoolean())
-						doYunnyaa(false);
-					else
-						setNobinobi(true);
-				}
-				setHappiness(Happiness.VERY_SAD);
-				if (getCurrentEvent() != null && getCurrentEvent().getPriority() != EventPacket.EventPriority.HIGH) {
-					clearEvent();
-				}
-				return;
-			}
-			if (isSickHeavily() && GameRandom.nextInt(600) == 0) {
-				if (isSickTooHeavily())
-					setPikoMessage(GameMessages.getMessage(this, MessagePool.Action.Scream2), true);
-				else
-					setPikoMessage(GameMessages.getMessage(this, MessagePool.Action.Scream), true);
-				setForceFace(ImageCode.PAIN.ordinal());
-			}
-			if (isSick() && GameRandom.nextInt(50) == 0) {
-				setMessage(GameMessages.getMessage(this, MessagePool.Action.Moldy));
-			}
-			setHappiness(Happiness.SAD);
-			addStress(TICK);
-			if (isSickTooHeavily() && getCurrentEvent() != null
-					&& getCurrentEvent().getPriority() != EventPacket.EventPriority.HIGH) {
-				clearEvent();
-			}
-		}
+		stateDelegate().checkSick();
 	}
-
-	/**
-	 * SickePeriodを進ませる
-	 * 
-	 * @param i 進ませる期間
-	 */
-	public void addSickPeriod(int i) {
-		sickPeriod += i;
-	}
-
-	/**
-	 * ただのパニック汎用
-	 * 
-	 * @return 何もしないイベント
-	 */
-	public Event checkFear() {
-		if (isNYD() || isUnBirth()) {
-			setPanic(false, null);
-			return Event.DONOTHING;
-		}
-		if (!isDead()) {
-			messageTicks--;
-			if (messageTicks <= 0) {
-				switch (getPanicType()) {
-					case FEAR:
-						setMessage(GameMessages.getMessage(this, MessagePool.Action.Fear));
-						break;
-					case REMIRYA:
-						setMessage(GameMessages.getMessage(this, MessagePool.Action.EscapeFromRemirya));
-						break;
-					default:
-						break;
-				}
-			}
-		}
-		if (getPanicType() != null && getPanicType() != PanicType.BURN) {
-			panicPeriod += TICK;
-		}
-		if (panicPeriod > 50) {
-			setPanic(false, null);
-		}
-		return Event.DONOTHING;
-	}
-
-	/**
-	 * 濡れているときの基本反応.
-	 */
-	public void checkWet() {
-		// 濡れても溶けてもないなら抜ける
-		if (!isWet() && !isMelt())
-			return;
-
-		wetPeriod += TICK;
-		if (wetPeriod > 300) {
-			setWet(false);
-			wetPeriod = 0;
-		}
-		if (!isLikeWater()) {
-			// 50%以上のダメージ中か、皮がない時に濡れたら溶ける
-			if (isDamaged() || isPealed()) {
-				setMelt(true);
-			}
-			damage += TICK * 5;
-			getDamageState();
-			if (getAge() % 5 == 0) {
-				addStress(20);
-			}
-		}
-	}
-
-	/**
-	 * ストレスチェック.
-	 * ストレスがマイナスなら0にする.
-	 */
 
 	/**
 	 * メッセージを出すかどうか.
 	 */
 	public void checkMessage() {
-		--messageTicks;
-		if (messageTicks <= 5) {
-			// stop to show the message 0.5 sec. before.
-			setMessageBuffer(null);
-		}
-		if (messageTicks <= 0) {
-			messageTicks = 0;
-			setFurifuri(false);
-			setStrike(false);
-			setEating(false);
-			setEatingShit(false);
-			setPeropero(false);
-			setSukkiri(false);
-			setNobinobi(false);
-			setBeVain(false);
-			setPikopiko(false);
-			setYunnyaa(false);
-			setInOutTakeoutItem(false);
-		}
-		// しゃべれないor生まれていないor非ゆっくり症
-		if (isSilent() || isUnBirth() || isNYD()) {
-			if (isUnBirth()) {
-				setMessageTicks(0);
-				setMessageBuffer(null);
-			}
-			return;
-		}
-
-		if (isDead()) {
-			if (!isSilent()) {
-				String messages = GameMessages.getMessage(this, MessagePool.Action.Dead);
-				setMessage(messages);
-				setBirthMessageForced(false);
-				if (getMessageBuffer() == messages) {
-					// if the message is set successfully, be silent.
-					setSilent(true);
-				}
-			}
-			return;
-		} else if (getMessageBuffer() == null) {
-			if (isSleeping()) {
-				if (GameRandom.nextInt(10) == 0) {
-					if (isNightmare()) {
-						setNYDMessage(GameMessages.getMessage(this, MessagePool.Action.Nightmare), false);
-						addStress(20);
-					} else {
-						setNYDMessage(GameMessages.getMessage(this, MessagePool.Action.Sleep), false);
-						addStress(-20);
-					}
-				}
-			} else if (!isUnBirth() && isBirthMessageForced()) {
-				setBirthMessageForced(false);
-				setPikoMessage(GameMessages.getMessage(this, MessagePool.Action.Birth), true);
-				addMemories(10);
-			} else if (!isFlyingType() && getZ() > 15 && getPanicType() == null && !isLockmove()
-					&& getCriticalDamege() != CriticalDamegeType.CUT && !isPealed() && !isBlind()) {
-				// 持ち上げたとき
-				// 妊娠限界を超えている場合
-				if (isStressful() && isOverPregnantLimit() && GameRandom.nextBoolean()) {
-					setPikoMessage(GameMessages.getMessage(this, MessagePool.Action.DontThrowMeAway), true);
-					setForceFace(ImageCode.CRYING.ordinal());
-					addStress(100);
-					// なつき度設定
-					addLovePlayer(-10);
-				}
-				// おそらとんでるみたい！
-				else {
-					setPikoMessage(GameMessages.getMessage(this, MessagePool.Action.Flying), true);
-					addStress(-10);
-					// なつき度設定
-					addLovePlayer(10);
-				}
-			} else if (isStressful() && isOverPregnantLimit() && GameRandom.nextBoolean() && grabbed) {
-				setPikoMessage(GameMessages.getMessage(this, MessagePool.Action.DontThrowMeAway), true);
-				setForceFace(ImageCode.CRYING.ordinal());
-				addStress(100);
-				// なつき度設定
-				addLovePlayer(-10);
-			} else if (getBurstState() == Burst.NEAR) {
-				if (isSleeping())
-					wakeup();
-				if (GameRandom.nextInt(8) == 0) {
-					setPikoMessage(GameMessages.getMessage(this, MessagePool.Action.Inflation),
-							GameRandom.nextBoolean());
-				}
-			} else if (nearToBirth() && !isBirth()) {
-				// if( burialState == Yukkuri.BurialState.NONE ){
-				if (!isTalking() && getBurialState() == BurialState.NONE && GameRandom.nextInt(8) == 0) {
-					setMessage(GameMessages.getMessage(this, MessagePool.Action.NearToBirth));
-					// BreedEventの重複作成を防ぐ（同じfromのイベントが既にあれば追加しない）
-					boolean hasBreedEvent = false;
-					for (EventPacket ep : GameWorld.get().getCurrentMap().getEvent()) {
-						if (ep instanceof BreedEvent && BodyRelations.getBody(ep.getFrom()) == this) {
-							hasBreedEvent = true;
-							break;
-						}
-					}
-					if (!hasBreedEvent) {
-						EventLogic.addWorldEvent(new BreedEvent(this, null, null, 2), null, null);
-					}
-				}
-				// }
-			}
-		}
+		stateDelegate().checkMessage();
 	}
 
 	/**
@@ -2497,18 +452,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @return 方向の数字
 	 */
 	public final int randomDirection(int curDir) {
-		switch (curDir) {
-			case 0:
-				curDir = (GameRandom.nextBoolean() ? 1 : -1);
-				break;
-			case 1:
-				curDir = (GameRandom.nextBoolean() ? 0 : curDir);
-				break;
-			case -1:
-				curDir = (GameRandom.nextBoolean() ? 0 : curDir);
-				break;
-		}
-		return curDir;
+		return moveDelegate().randomDirection(curDir);
 	}
 
 	/**
@@ -2520,57 +464,14 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @return よいかどうかの数値
 	 */
 	public int decideDirection(int curPos, int destPos, int range) {
-		if (destPos - curPos > range) {
-			return 1;
-		} else if (curPos - destPos > range) {
-			return -1;
-		}
-		return 0;
+		return moveDelegate().decideDirection(curPos, destPos, range);
 	}
 
 	/**
 	 * 茎の位置等を更新する.
 	 */
 	public void upDate() {
-		// Move Stalk
-		if (getStalks() != null && getStalks().size() > 0) {
-			int direction = getDirection().ordinal();
-			int centerH = (getBodySpr()[getBodyAgeState().ordinal()].getImageH() + getExpandSizeW()
-					+ getExternalForceW());
-			// うにょ機能
-			if (SimYukkuri.UNYO) {
-				centerH = (getBodySpr()[getBodyAgeState().ordinal()].getImageH() + getExpandSizeH()
-						+ getExternalForceW()
-						+ unyoOffsetH);
-			}
-			int sX;
-			int ofsX;
-			int k = 0;
-			for (Stalk stalk : getStalks()) {
-				if (stalk != null) {
-					sX = stalk.getPivotX() + Const.STALK_OF_S_X[k] - (int) ((3 - getBodyAgeState().ordinal()) * 8.75f);
-					if (direction == Const.RIGHT) {
-						stalk.setDirection(0);
-					} else {
-						stalk.setDirection(1);
-						sX = -sX;
-					}
-					ofsX = Translate.invertX(sX, getY());
-					ofsX = Translate.transSize(ofsX);
-					stalk.setMostDepth(getMostDepth());
-					stalk.setCalcX(getX() + ofsX);
-					stalk.setCalcY(getY());
-					// 完全に埋まっていたら茎だけ地上に出す
-					if (getBurialState() == BurialState.ALL) {
-						stalk.setCalcZ(0);
-					} else {
-						stalk.setCalcZ(getZ() + (int) (centerH * 0.09f) + Const.STALK_OF_S_Y[k]);
-					}
-					stalk.upDate();
-				}
-				k = (k + 1) & 7;
-			}
-		}
+		moveDelegate().upDate();
 	}
 
 	/**
@@ -2579,73 +480,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param dontMove 動けない場合
 	 */
 	public void moveBody(boolean dontMove) {
-		if (grabbed || takeMappedObj(getParentLinkId()) != null) {
-			// if grabbed, it cannot move.
-			setFalldownDamage(0);
-			setNoDamageNextFall(false);
-			setMotionX(0);
-			setMotionY(0);
-			setMotionZ(0);
-			return;
-		}
-		if (BodyMovement.applyExternalMotion(this)) {
-			return;
-		}
-
-		x = Math.max(0, x);
-		x = Math.min(x, Translate.getMapW());
-		y = Math.max(0, y);
-		y = Math.min(y, Translate.getMapH());
-		// z = Math.max(0, z);
-		z = Math.min(z, Translate.getMapZ());
-
-		if (dontMove || isLockmove()) {
-			setMotionX(0);
-			setMotionY(0);
-			setMotionZ(0);
-			return;
-		}
-		// 仮の処理 コンベア移動中は動けなくする
-		if ((getMotionX() + getMotionY() + motionZ) != 0) {
-			setMotionX(0);
-			setMotionY(0);
-			setMotionZ(0);
-			return;
-		}
-
-		// moving
-		int step = BodyMovement.calculateMovementStep(this);
-		int freq = BodyMovement.calculateMovementFrequency(this, step);
-		if (getAge() % freq != 0) {
-			setMotionX(0);
-			setMotionY(0);
-			setMotionZ(0);
-			return;
-		}
-
-		// calculate x direction
-		if (destX >= 0) {
-			BodyMovement.updateDestinationDirectionX(this);
-		} else {
-			BodyMovement.updateRandomDirectionX(this);
-		}
-		// calculate y direction
-		if (destY >= 0) {
-			BodyMovement.updateDestinationDirectionY(this);
-		} else {
-			BodyMovement.updateRandomDirectionY(this);
-		}
-		// calculate z direction
-		BodyMovement.updateFlightDestination(this);
-
-		// move to the direction
-		step = BodyMovement.calculateDirectionalStep(this);
-		BodyMovement.MovementVector vector = BodyMovement.calculateMovementVector(this, step);
-		BodyMovement.applyDirectedMovement(this, vector);
-		BodyMovement.resolveDirectedMovement(this, vector);
-		setMotionX(0);
-		setMotionY(0);
-		setMotionZ(0);
+		moveDelegate().moveBody(dontMove);
 	}
 
 	/**
@@ -2654,7 +489,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param message メッセージ
 	 */
 	public void setMessage(String message) {
-		BodyEventState.setMessage(this, message);
+		messageDelegate().setMessage(message);
 	}
 
 	/**
@@ -2664,7 +499,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param interrupt 現在メッセージ中でも割り込むかどうか
 	 */
 	public void setPikoMessage(String message, boolean interrupt) {
-		BodyEventState.setPikoMessage(this, message, interrupt);
+		messageDelegate().setPikoMessage(message, interrupt);
 	}
 
 	/**
@@ -2675,7 +510,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param interrupt 現在メッセージ中でも割り込むかどうか
 	 */
 	public void setPikoMessage(String message, int count, boolean interrupt) {
-		BodyEventState.setPikoMessage(this, message, count, interrupt);
+		messageDelegate().setPikoMessage(message, count, interrupt);
 	}
 
 	/**
@@ -2685,7 +520,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param count   メッセージ時間
 	 */
 	public void setMessage(String message, int count) {
-		BodyEventState.setMessage(this, message, count);
+		messageDelegate().setMessage(message, count);
 	}
 
 	/**
@@ -2695,7 +530,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param interrupt 現在メッセージ中でも割り込むかどうか
 	 */
 	public void setMessage(String message, boolean interrupt) {
-		BodyEventState.setMessage(this, message, interrupt);
+		messageDelegate().setMessage(message, interrupt);
 	}
 
 	/**
@@ -2707,7 +542,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param piko      ピコピコするかどうか
 	 */
 	public void setMessage(String message, int count, boolean interrupt, boolean piko) {
-		BodyEventState.setMessage(this, message, count, interrupt, piko);
+		messageDelegate().setMessage(message, count, interrupt, piko);
 	}
 
 	/**
@@ -2717,7 +552,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param count   メッセージ時間
 	 */
 	public void setWorldEventSendMessage(String message, int count) {
-		BodyEventState.setWorldEventSendMessage(this, message, count);
+		messageDelegate().setWorldEventSendMessage(message, count);
 	}
 
 	/**
@@ -2729,7 +564,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param piko      ピコピコするかどうか
 	 */
 	public void setWorldEventResMessage(String message, int count, boolean interrupt, boolean piko) {
-		BodyEventState.setWorldEventResMessage(this, message, count, interrupt, piko);
+		messageDelegate().setWorldEventResMessage(message, count, interrupt, piko);
 	}
 
 	/**
@@ -2739,7 +574,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param count   メッセージ時間
 	 */
 	public void setBodyEventSendMessage(String message, int count) {
-		BodyEventState.setBodyEventSendMessage(this, message, count);
+		messageDelegate().setBodyEventSendMessage(message, count);
 	}
 
 	/**
@@ -2751,7 +586,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param piko      ピコピコするかどうか
 	 */
 	public void setBodyEventResMessage(String message, int count, boolean interrupt, boolean piko) {
-		BodyEventState.setBodyEventResMessage(this, message, count, interrupt, piko);
+		messageDelegate().setBodyEventResMessage(message, count, interrupt, piko);
 	}
 
 	/**
@@ -2761,7 +596,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param piko    ピコピコするかどうか
 	 */
 	public void setNYDMessage(String message, boolean piko) {
-		BodyEventState.setNYDMessage(this, message, piko);
+		messageDelegate().setNYDMessage(message, piko);
 	}
 
 	/**
@@ -2775,7 +610,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param NYD       非ゆっくり症
 	 */
 	public void setMessage(String message, WindowType type, int count, boolean interrupt, boolean piko, boolean NYD) {
-		BodyEventState.setMessage(this, message, type, count, interrupt, piko, NYD);
+		messageDelegate().setMessage(message, type, count, interrupt, piko, NYD);
 	}
 
 	/**
@@ -2785,7 +620,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param piko    ピコピコするかどうか
 	 */
 	public void setNegiMessage(String message, boolean piko) {
-		BodyEventState.setNegiMessage(this, message, piko);
+		messageDelegate().setNegiMessage(message, piko);
 	}
 
 	/**
@@ -2796,15 +631,19 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param piko    ピコピコするかどうか
 	 */
 	public void setNegiMessage(String message, int count, boolean piko) {
-		BodyEventState.setNegiMessage(this, message, count, piko);
+		messageDelegate().setNegiMessage(message, count, piko);
+	}
+
+	@Override
+	protected void addCrushedVomit(int x, int y, int z) {
+		GameView.addCrushedVomit(x, y, z, this, getShitType());
 	}
 
 	/**
 	 * 茎に触ったときの反応.
 	 */
 	public final void touchStalk() {
-		setMessage(GameMessages.getMessage(this, MessagePool.Action.AbuseBaby));
-		setHappiness(Happiness.SAD);
+		stalkDelegate().touchStalk();
 	}
 
 	/**
@@ -2812,66 +651,49 @@ public abstract class Yukkuri extends SocialEntity {
 	 */
 	@JsonIgnore
 	public void setUnBirth(boolean flag) {
-		unBirth = flag;
-		enableWall = !flag;
+		stalkDelegate().setUnBirth(flag);
+	}
+
+	@JsonProperty("unBirth")
+	public void setUnBirthForLoad(boolean flag) {
+		stalkDelegate().setUnBirthForLoad(flag);
+	}
+
+	/**
+	 * 未誕生フラグの基底状態を設定する.
+	 *
+	 * @param flag 未誕生かどうか
+	 */
+	public void setUnBirthState(boolean flag) {
+		super.setUnBirth(flag);
+		setEnableWall(!flag);
 		setCanTalk(!flag);
 		setFirstGround(true);
 		if (flag) {
 			setMessage(null);
 			forceToSleep();
 			setBirthAge(-1);
+			setBirthEventBlockedTicks(0);
 		} else {
-			// うまれたての赤ゆならリセット
 			if (getBodyAgeState() == AgeState.BABY) {
 				setAge(0);
 				setBirthAge(getAge());
+				setBirthEventBlockedTicks(300);
 			}
 			wakeup();
 		}
 	}
 
-	@JsonProperty("unBirth")
-	public void setUnBirthForLoad(boolean flag) {
+	/**
+	 * ロード時向けに未誕生フラグの基底状態を設定する.
+	 *
+	 * @param flag 未誕生かどうか
+	 */
+	public void setUnBirthStateForLoad(boolean flag) {
 		super.setUnBirth(flag);
-		enableWall = !flag;
+		setEnableWall(!flag);
 		setCanTalk(!flag);
 		setFirstGround(true);
-	}
-
-	/**
-	 * 実ゆ（自分）が茎で生きている親につながっているかを返却する.
-	 * 
-	 * @return 実ゆ（自分）が茎で生きている親につながっているか
-	 */
-	@Transient
-	public final boolean isPlantForUnbirthChild() {
-		if (isUnBirth()) {
-			// 茎があって親が生きてる
-			if (getBindStalk() != null) {
-				int id = getBindStalk().getPlantYukkuri();
-				Entity oBind = GameWorld.get().getCurrentMap().getBody().get(id);
-				if (oBind != null && oBind instanceof Yukkuri) {
-					Yukkuri bodyBind = (Yukkuri) oBind;
-					if (bodyBind != null && !bodyBind.isDead() && !bodyBind.isRemoved()) {
-						return true;
-					}
-				}
-			}
-			// 救命オレンジプール上にいる
-			for (src.entity.core.world.item.OrangePool pool : GameWorld.get().getCurrentMap().getOrangePool()
-					.values()) {
-				if (!pool.isRescue())
-					continue;
-				src.draw.Rectangle4y b = src.entity.core.world.item.OrangePool.getBounding();
-				int halfW = b.getWidth() >> 1;
-				int halfH = b.getHeight() >> 1;
-				if (Math.abs(getX() - pool.getX()) <= halfW && Math.abs(getY() - pool.getY()) <= halfH) {
-					return true;
-				}
-			}
-			return false;
-		}
-		return false;
 	}
 
 	/**
@@ -2884,62 +706,6 @@ public abstract class Yukkuri extends SocialEntity {
 		Dna ret = new Dna(getType(), getAttitude(), getIntelligence(), false);
 		ret.setFather(getUniqueID());
 		return ret;
-	}
-
-	/**
-	 * うんうん、興奮、ふりふり、セリフの抑制効果の減衰と確認をする.
-	 */
-	public final void checkDiscipline() {
-		// ゲス餡子脳は自制しない
-		if (isRude() && getIntelligence() == Intelligence.FOOL) {
-			setShittingDiscipline(0);
-			setExcitingDiscipline(0);
-			setFurifuriDiscipline(0);
-			setSpeechDiscipline(0);
-			return;
-		}
-		// 基本ゲーム内時間12分に1回
-		int period = getDeclinePeriodBase();
-		// int period = (isRude() ? 1 : 2) * DECLINEPERIOD;
-		// 知性による補正
-		switch (getIntelligence()) {
-			case WISE:
-				period = period * 3 / 2;
-				break;
-			case FOOL:
-				period = period * 2;
-				break;
-			default:
-				break;
-		}
-		// 減衰
-		if (getAge() % period == 0) {
-			shittingDiscipline--;
-			excitingDiscipline--;
-			furifuriDiscipline--;
-			speechDiscipline--;
-			if (shittingDiscipline < 0) {
-				shittingDiscipline = 0;
-			}
-			if (shittingDiscipline > 20) {
-				shittingDiscipline = 20;
-			}
-			if (excitingDiscipline < 0) {
-				excitingDiscipline = 0;
-			}
-			if (furifuriDiscipline < 0) {
-				furifuriDiscipline = 0;
-			}
-			if (furifuriDiscipline > 20) {
-				furifuriDiscipline = 20;
-			}
-			if (speechDiscipline < 0) {
-				speechDiscipline = 0;
-			}
-			if (speechDiscipline > 20) {
-				speechDiscipline = 20;
-			}
-		}
 	}
 
 	/**
@@ -2981,122 +747,28 @@ public abstract class Yukkuri extends SocialEntity {
 	}
 
 	/**
-	 * 妊娠、うんうん、過食などによる横方向の体型のふくらみ取得
-	 */
-	@Transient
-	public int getExpandSizeW() {
-		int OE = 100 * hungry / getHungryLimit();
-		if (OE <= 5)
-			OE = 85;
-		else if (OE <= 20) {
-			OE += 80;
-		} else if (OE <= 100)
-			OE = 100;
-		return (20 - 20 / (getBabyTypes().size() + 1)) + getBabyTypes().size() * 2
-				+ ((shit * 4 / 5) / getShitLimitBase()[getBodyAgeState().ordinal()]) * 5
-				+ getBodySpr()[getBodyAgeState().ordinal()].getImageW() * (OE - 100) / 100
-				+ getGodHandHoldCount() / 2;
-	}
-
-	/**
-	 * 妊娠、うんうんなどによる縦方向の体型のふくらみ取得
-	 */
-	@Transient
-	public int getExpandSizeH() {
-		return (20 - 20 / (getBabyTypes().size() + 1)) + getBabyTypes().size() * 2
-				+ ((shit * 4 / 5) / getShitLimitBase()[getBodyAgeState().ordinal()]) * 5
-				+ getGodHandHoldCount() / 2;
-	}
-
-	/**
-	 * ひっぱり、押しつぶしによる体型の変形を取得する.
-	 * 
-	 * @return ひっぱり、押しつぶしによる体型の変形
-	 */
-	@Transient
-	private int getExternalForceW() {
-		int ret = 0;
-		// +ひっぱり -押しつぶし
-		if (externalPressure < 0)
-			ret = -externalPressure;
-		return ret;
-	}
-
-	@Transient
-	private int getExternalForceH() {
-		int ret = 0;
-		// +ひっぱり -押しつぶし
-		if (externalPressure > 0) {
-			ret = externalPressure * 6;
-		} else if (externalPressure < 0) {
-			ret = externalPressure * 2;
-		}
-		return ret;
-	}
-
-	/**
 	 * スプライト画像のサイズ初期設定をする.
 	 * 
 	 * @param body
 	 * @param braid
 	 */
 	public void setBoundary(Dimension4y[] body, Dimension4y[] braid) {
-		int bodyLen = getBodySpr().length;
-		for (int i = 0; i < bodyLen; i++) {
-			int w = 0;
-			int h = 0;
-			if (body != null && i < body.length && body[i] != null) {
-				w = body[i].getWidth();
-				h = body[i].getHeight();
-			}
-			getBodySpr()[i] = new Sprite(w, h, Sprite.PIVOT_CENTER_BOTTOM);
-			getExpandSpr()[i] = new Sprite(w, h, Sprite.PIVOT_CENTER_BOTTOM);
-		}
-		int braidLen = getBraidSpr().length;
-		for (int i = 0; i < braidLen; i++) {
-			int w = 0;
-			int h = 0;
-			if (braid != null && i < braid.length && braid[i] != null) {
-				w = braid[i].getWidth();
-				h = braid[i].getHeight();
-			}
-			getBraidSpr()[i] = new Sprite(w, h, Sprite.PIVOT_CENTER_BOTTOM);
-		}
+		spriteDelegate().setBoundary(body, braid);
 	}
 
 	/**
 	 * スプライト画像サイズのアップデートをする.
 	 */
 	public final void updateSpriteSize() {
-		int forceW = getExternalForceW();
-		int forceH = getExternalForceH();
-		if (SimYukkuri.UNYO) {
-			forceW = getExternalForceW() + unyoOffsetW;
-			forceH = getExternalForceH() + unyoOffsetH;
-		}
-
-		int expSizeW = getExpandSizeW();
-		int expSizeH = getExpandSizeH();
-		getExpandSpr()[getBodyAgeState().ordinal()].addSpriteSize(forceW + expSizeW, forceH + expSizeH);
+		spriteDelegate().updateSpriteSize();
 	}
 
 	public final void getBoundaryShape(Rectangle r) {
-		r.x = getBodySpr()[getBodyAgeState().ordinal()].getPivotX();
-		r.y = getBodySpr()[getBodyAgeState().ordinal()].getPivotY();
-		r.width = getBodySpr()[getBodyAgeState().ordinal()].getImageW();
-		r.height = getBodySpr()[getBodyAgeState().ordinal()].getImageH();
+		spriteDelegate().getBoundaryShape(r);
 	}
 
 	public final void getExpandShape(Rectangle4y r) {
-		r.setWidth(getExpandSpr()[getBodyAgeState().ordinal()].getScreenRect()[0].getWidth());
-		r.setHeight(getExpandSpr()[getBodyAgeState().ordinal()].getScreenRect()[0].getHeight());
-		if (SimYukkuri.UNYO) {
-			r.setWidth(getExpandSpr()[getBodyAgeState().ordinal()].getScreenRect()[0].getWidth() + unyoOffsetW);
-			r.setHeight(getExpandSpr()[getBodyAgeState().ordinal()].getScreenRect()[0].getHeight() + unyoOffsetH);
-		}
-
-		r.setX(r.getWidth() >> 1);
-		r.setY(r.getHeight() - 1);
+		spriteDelegate().getExpandShape(r);
 	}
 
 	/**
@@ -3156,28 +828,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param val 持つアイテムのオブジェクト
 	 */
 	public void setCarryItem(TakeoutItemType key, Entity val) {
-		getCarryItems().put(key, val.objId);
-		// 動作の表現と、フラグ管理
-		setInOutTakeoutItem(true);
-		setToTakeout(false);
-		if (purposeOfMoving == PurposeOfMoving.TAKEOUT) {
-			purposeOfMoving = PurposeOfMoving.NONE;
-		}
-
-		// val.remove();
-		if (val instanceof Shit) {
-			Map<Integer, Shit> shits = GameWorld.get().getCurrentMap().getShit();
-			shits.remove(val.objId);
-			GameWorld.get().getCurrentMap().getTakenOutShit().put(val.objId, (Shit) val);
-			val.setWhere(Where.IN_YUKKURI);
-		}
-
-		if (val instanceof Food) {
-			Map<Integer, Food> foods = GameWorld.get().getCurrentMap().getFood();
-			foods.remove(val.objId);
-			GameWorld.get().getCurrentMap().getTakenOutFood().put(val.objId, (Food) val);
-			val.setWhere(Where.IN_YUKKURI);
-		}
+		carryDelegate().setCarryItem(key, val);
 	}
 
 	/**
@@ -3187,75 +838,14 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @return 持っていたアイテムのオブジェクト
 	 */
 	public Entity dropTakeoutItem(TakeoutItemType key) {
-		Entity val = takeTakenOutItem(key);
-		if (val == null) {
-			getCarryItems().remove(key);
-			return null;
-		}
-		// 動作の表現
-		setInOutTakeoutItem(true);
-		setMessage(GameMessages.getMessage(this, MessagePool.Action.DropItem));
-
-		// 落としたもの（うんうん）の処理
-		if (val instanceof Shit) {
-			Map<Integer, Shit> shits = GameWorld.get().getCurrentMap().getShit();
-			shits.put(val.objId, (Shit) val);
-			GameWorld.get().getCurrentMap().getTakenOutShit().remove(val.objId);
-			val.setCalcX(x);
-			if (y + 3 <= Translate.getMapH()) {
-				val.setCalcY(y);
-			} else {
-				val.setCalcY(y + 3);
-			}
-			val.setCalcZ(z + 10);
-			val.setWhere(Where.ON_FLOOR);
-			getCarryItems().remove(key);
-		}
-		// 落としたもの(餌)の処理
-		if (val instanceof Food) {
-			Map<Integer, Food> foods = GameWorld.get().getCurrentMap().getFood();
-			foods.put(val.objId, (Food) val);
-			GameWorld.get().getCurrentMap().getTakenOutFood().remove(val.objId);
-			val.setCalcX(x);
-			if (y + 3 <= Translate.getMapH()) {
-				val.setCalcY(y + 3);
-			} else {
-				val.setCalcY(y);
-			}
-			val.setCalcZ(z + 10);
-			val.setWhere(Where.ON_FLOOR);
-			getCarryItems().remove(key);
-		}
-		return val;
-	}
-
-	private Entity takeTakenOutItem(TakeoutItemType key) {
-		Integer i = getCarryItems().get(key);
-		if (i == null)
-			return null;
-		MapPlaceData m = GameWorld.get().getCurrentMap();
-		if (m.getTakenOutFood().containsKey(i.intValue())) {
-			return m.getTakenOutFood().get(i.intValue());
-		}
-		if (m.getTakenOutShit().containsKey(i.intValue())) {
-			return m.getTakenOutShit().get(i.intValue());
-		}
-		return null;
+		return carryDelegate().dropTakeoutItem(key);
 	}
 
 	/**
 	 * 全部落とす.
 	 */
 	public void dropAllTakeoutItem() {
-		// 運んでいるものがなかったらリターン
-		if (getCarryItems() == null || getCarryItems().size() == 0) {
-			return;
-		}
-		Set<TakeoutItemType> keyset = getCarryItems().keySet();
-		// 運んでいるものすべてに対して落とす処理をする
-		for (TakeoutItemType key : keyset) {
-			dropTakeoutItem(key);
-		}
+		carryDelegate().dropAllTakeoutItem();
 	}
 
 	/**
@@ -3266,81 +856,21 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @throws IOException
 	 */
 	public static void loadShadowImages(ClassLoader loader, ImageObserver io) throws IOException {
-		final String path = "images/";
-		int sx, sy;
-
-		getShadowImages()[Const.ADULT_INDEX] = GameImages.read(loader.getResourceAsStream(path + "shadow.png"));
-
-		sx = (int) ((float) getShadowImages()[Const.ADULT_INDEX].getWidth(io) * Const.BODY_SIZE[1]);
-		sy = (int) ((float) getShadowImages()[Const.ADULT_INDEX].getHeight(io) * Const.BODY_SIZE[1]);
-		getShadowImages()[Const.CHILD_INDEX] = ModLoader.scaleImage(getShadowImages()[Const.ADULT_INDEX], sx, sy);
-		sx = (int) ((float) getShadowImages()[Const.ADULT_INDEX].getWidth(io) * Const.BODY_SIZE[0]);
-		sy = (int) ((float) getShadowImages()[Const.ADULT_INDEX].getHeight(io) * Const.BODY_SIZE[0]);
-		getShadowImages()[Const.BABY_INDEX] = ModLoader.scaleImage(getShadowImages()[Const.ADULT_INDEX], sx, sy);
-
-		for (int i = 0; i < 3; i++) {
-			getShadowImgW()[i] = getShadowImages()[i].getWidth(io);
-			getShadowImgH()[i] = getShadowImages()[i].getHeight(io);
-			getShadowPivX()[i] = getShadowImgW()[i] >> 1;
-			getShadowPivY()[i] = getShadowImgH()[i] >> 1;
-		}
+		YukkuriSprite.loadShadowImages(loader, io);
 	}
 
 	/**
 	 * 怒らせる.
 	 */
 	public final void setAngry() {
-		if (isDead() || isNYD() || isSleeping()) {
-			return;
-		}
-		if (getDamageState() == Damage.NONE && !isVerySad()) {
-			setAngry(true);
-			setScare(false);
-		}
-
-		if (isFixBack() && isFurifuri()) {
-			setFurifuri(true);
-		} else {
-			setFurifuri(false);
-		}
-		if (!isRaper()) {
-			setExciting(false);
-		}
-		setForceExciting(false);
-		setRelax(false);
-		setBeVain(false);
-		setNobinobi(false);
-		setYunnyaa(false);
-		excitingPeriod = 0;
-		noDamagePeriod = 0;
-		noHungryPeriod = 0;
+		stateDelegate().setAngry();
 	}
 
 	/**
 	 * 汚れさせる.
 	 */
 	public final void makeDirty(boolean flag) {
-		dirty = flag;
-		// 死んでる場合はスキップ
-		if (isDead()) {
-			return;
-		}
-		if (isDirty()) {
-			setHappiness(Happiness.SAD);
-			addStress(50);
-			checkReactionStalkMother(UnbirthBabyState.ATTAKED);
-		} else {
-			setStubbornlyDirty(false);
-			setHappiness(Happiness.HAPPY);
-			addStress(-50);
-			// 起きてたらセリフ
-			if (!isSleeping()) {
-				setMessage(GameMessages.getMessage(this, MessagePool.Action.Cleaned), 60);
-				stay(60);
-			}
-			// 実ゆの場合、親が反応する
-			checkReactionStalkMother(UnbirthBabyState.HAPPY);
-		}
+		stateDelegate().makeDirty(flag);
 	}
 
 	/**
@@ -3350,99 +880,6 @@ public abstract class Yukkuri extends SocialEntity {
 	 */
 	public final void setDirtyFlag(boolean b) {
 		makeDirty(b);
-	}
-
-	/**
-	 * 自主的洗浄を行う.
-	 */
-	public final void cleaningItself() {
-		stay();
-		setMessage(GameMessages.getMessage(this, MessagePool.Action.CleanItself));
-		if (!isAdult()) {
-			setHappiness(Happiness.SAD);
-			setForceFace(ImageCode.TIRED.ordinal());
-		}
-		if (canFurifuri())
-			setFurifuri(true);
-		makeDirty(false);
-		// 年齢インデックス: 0=赤ゆ, 1=子ゆ, 2=成ゆ
-		int ageIndex = isBaby() ? 0 : (isChild() ? 1 : 2);
-		int P = 1;
-		switch (getIntelligence()) {
-			case WISE:
-				P = getCleaningFailProbWise()[ageIndex];
-				break;
-			case AVERAGE:
-				P = getCleaningFailProbAverage()[ageIndex];
-				break;
-			case FOOL:
-				P = getCleaningFailProbFool()[ageIndex];
-				break;
-		}
-		// P が 0 以下の場合は失敗しない（安全対策）
-		if (P <= 0) {
-			P = 1;
-		}
-		// 汚れが残る
-		if (GameRandom.nextInt(P) != 0) {
-			setStubbornlyDirty(true);
-		}
-	}
-
-	/**
-	 * 親を呼んで泣きわめく.
-	 */
-	public final void callParent() {
-		// 死んでる、反応する余裕が無い場合はスキップ
-		if (!canAction()) {
-			dirtyScreamPeriod = 0;
-			setCallingParents(false);
-			return;
-		}
-
-		// ｱﾘに食べられてる時
-		if (getAttachmentSize(Ants.class) != 0) {
-			setHappiness(Happiness.VERY_SAD);
-			// setPikoMessage(GameMessages.getMessage(this,
-			// MessagePool.Action.HelpMe),false);
-			BodyLogic.checkNearParent(this);
-			setCallingParents(true);
-		}
-
-		// 汚れてる時
-		if (isDirty()) {
-			// 死んでる、反応する余裕が無い場合はスキップ
-			if (isVeryHungry() || isDamagedHeavily() || isGotBurnedHeavily()) {
-				dirtyScreamPeriod = 0;
-				setCallingParents(false);
-				return;
-			}
-
-			boolean kusogaki = (isRude() && isBaby()) || (isChild() && isVeryRude());
-			int c = kusogaki ? 20 : 40;
-			if (getAge() % c != 0)
-				return;
-			// 自分がゲス赤ゆか、ドゲス子ゆなら、短いスパンで泣き叫ぶ
-			if (kusogaki) {
-				setHappiness(Happiness.VERY_SAD);
-				setPikoMessage(GameMessages.getMessage(this, MessagePool.Action.Dirty), false);
-				BodyLogic.checkNearParent(this);
-				setCallingParents(true);
-			}
-			// 他は長いスパン
-			else {
-				setHappiness(Happiness.SAD);
-				setMessage(GameMessages.getMessage(this, MessagePool.Action.Dirty));
-				BodyLogic.checkNearParent(this);
-				setCallingParents(true);
-			}
-			dirtyScreamPeriod--;
-			// 泣き疲れたら勝手にきれいにする
-			if (dirtyScreamPeriod <= 0) {
-				cleaningItself();
-			}
-		}
-
 	}
 
 	// ゆんやー関連
@@ -3465,7 +902,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * 命乞いをする.
 	 */
 	public void begForLife() {
-		begForLife(false);
+		eventDelegate().begForLife();
 	}
 
 	/**
@@ -3474,46 +911,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param Ffrag 強制命乞いフラグ
 	 */
 	public void begForLife(boolean Ffrag) {
-		// 死体、非ゆっくり症を除外
-		if (!canAction())
-			return;
-		// ダメージが50%を超えないと行われない
-		if (!isDamaged() && !Ffrag)
-			return;
-
-		int NormalP = 2;
-		int RudeP = 3;
-		boolean frag = false;
-		// 性格によって頑固さが決まる
-		switch (getAttitude()) {
-			case VERY_NICE:
-				if (GameRandom.nextInt(NormalP) == 0)
-					frag = true;
-				break;
-			case NICE:
-			case AVERAGE:
-				if (isStressful() && GameRandom.nextInt(NormalP) == 0)
-					frag = true;
-				break;
-			case SHITHEAD:
-				if (isStressful() && getIntelligence() != Intelligence.FOOL && GameRandom.nextInt(NormalP) == 0) {
-					frag = true;
-				} else if (isVeryStressful() && GameRandom.nextInt(RudeP) == 0) {
-					frag = true;
-				}
-				break;
-			case SUPER_SHITHEAD:
-				if (isStressful() && getIntelligence() != Intelligence.FOOL && GameRandom.nextInt(RudeP) == 0) {
-					frag = true;
-				} else if (isVeryStressful() && isDamagedHeavily() && GameRandom.nextInt(RudeP) == 0) {
-					frag = true;
-				}
-				break;
-		}
-		if (Ffrag || frag) {
-			EventLogic.addBodyEvent(this, new BegForLifeEvent(this, null, null, 1), null, null);
-			return;
-		}
+		eventDelegate().begForLife(Ffrag);
 	}
 
 	/**
@@ -3534,109 +932,21 @@ public abstract class Yukkuri extends SocialEntity {
 		getAncestorList().addAll(iAncList);
 	}
 
-	/**
-	 * 障害の有無を返却する.
-	 * 
-	 * @return 障害の有無
-	 */
-	public final boolean hasDisorder() {
-		if (isIdiot())
-			return true;
-		if (isNYD())
-			return true;
-		if (!hasOkazari())
-			return true;
-		if (!hasBraidCheck())
-			return true;
-		if (isBlind())
-			return true;
-		if (isPacked())
-			return true;
-		if (isGotBurned())
-			return true;
-		if (getCriticalDamege() == CriticalDamegeType.CUT)
-			return true;
-
-		return false;
-	}
-
 	// 飛行種かどうか
 	// 種族としてのフラグを返すので現在飛べるかはcanflyCheckでチェック
-
-	/**
-	 * 現在飛行可能か
-	 * 
-	 * @return 現在飛行可能か
-	 */
-	public final boolean canflyCheck() {
-		return (isFlyingType() && isHasBraid() && !isDead() && !isSleeping() && !isNeedled()
-				&& getCriticalDamege() == null);
-	}
-
-	// 現在おさげ、羽、尻尾があるか
-	/**
-	 * 現在Braidがちぎられてないか
-	 * 
-	 * @return 現在Braidがちぎられてないか
-	 */
-	public final boolean hasBraidCheck() {
-		return isHasBraid();
-	}
 
 	/**
 	 * おさげを破壊する.
 	 */
 	public void takeBraid() {
-		if (isDead() || !isBraidType())
-			return;
-
-		// なつき度設定
-		wakeup();
-		clearActions();
-		if (isHasBraid()) {
-			addLovePlayer(-300);
-			addStress(1200);
-			setHasBraid(false);
-			setForceFace(ImageCode.CRYING.ordinal());
-			setHappiness(Happiness.VERY_SAD);
-			setMessage(GameMessages.getMessage(this, MessagePool.Action.BraidCut), true);
-			// 実ゆの場合、親が反応する
-			checkReactionStalkMother(UnbirthBabyState.SAD);
-		} else {
-			addLovePlayer(200);
-			addStress(-1000);
-			setHasBraid(true);
-			setForceFace(ImageCode.EMBARRASSED.ordinal());
-			setHappiness(Happiness.HAPPY);
-		}
+		abuseDelegate().takeBraid();
 	}
 
 	/**
 	 * 皮むきまたは皮修復（トグル）
 	 */
 	public void peal() {
-		if (isDead())
-			return;
-		if (isPealed()) {
-			setMelt(false);
-			setCriticalDamege(null);
-			bodyBakePeriod = 0;
-			setPealed(false);
-			return;
-		}
-		if (isPacked())
-			pack();
-		// なつき度設定
-		wakeup();
-		clearActions();
-		addLovePlayer(-300);
-		setPealed(true);
-		setShutmouth(false);
-		setHairState(HairState.BALDHEAD);
-		setHappiness(Happiness.VERY_SAD);
-		setMessage(GameMessages.getMessage(this, MessagePool.Action.PEALING), true);
-		// 実ゆの場合、親が反応する
-		checkReactionStalkMother(UnbirthBabyState.SAD);
+		abuseDelegate().peal();
 	}
 
 	/**
@@ -3668,244 +978,28 @@ public abstract class Yukkuri extends SocialEntity {
 	 * 饅頭化または治す（トグル）
 	 */
 	public void pack() {
-		if (isDead())
-			return;
-		if (isPacked()) {
-			setCanTalk(true);
-			closeAnal(false);
-			castrateBody(false);
-			// stalkCastration = false;
-			setPacked(false);
-			peal();
-			return;
-		}
-		// なつき度設定
-		wakeup();
-		clearActions();
-		addLovePlayer(-300);
-		setPealed(false);
-		setOkazari(null);
-		setHasBaby(false);
-		closeAnal(true);
-		castrateBody(true);
-		setCanTalk(false);
-		setBlind(true);
-		setHairState(HairState.BALDHEAD);
-		if (isBraidType())
-			setHasBraid(false);
-		setPacked(true);
-		setHappiness(Happiness.VERY_SAD);
-		// 実ゆの場合、親が反応する
-		checkReactionStalkMother(UnbirthBabyState.KILLED);
+		abuseDelegate().pack();
 	}
 
 	/**
 	 * 目破壊または修復（トグル）
 	 */
 	public void breakeyes() {
-		if (isDead())
-			return;
-		if (isBlind()) {
-			setBlind(false);
-			setEyesightBase(400 * 400);
-			return;
-		}
-
-		// なつき度設定
-		if (isSleeping())
-			wakeup();
-		clearActions();
-		addLovePlayer(-200);
-		setBlind(true);
-		setHappiness(Happiness.VERY_SAD);
-		setPikoMessage(GameMessages.getMessage(this, MessagePool.Action.BLINDING), true);
-		// 実ゆの場合、親が反応する
-		checkReactionStalkMother(UnbirthBabyState.SAD);
+		abuseDelegate().breakeyes();
 	}
 
 	/**
 	 * 口ふさぎまたは修復（トグル）
 	 */
 	public void ShutMouth() {
-		if (isDead())
-			return;
-		if (isShutmouth()) {
-			setShutmouth(false);
-			return;
-		}
-		// なつき度設定
-		wakeup();
-		clearActions();
-		addLovePlayer(-200);
-		setShutmouth(true);
-		setPikoMessage(GameMessages.getMessage(this, MessagePool.Action.CantTalk), true);
-		// eating = false;
-		// eatingShit = false;
-		setHappiness(Happiness.VERY_SAD);
-		// 実ゆの場合、親が反応する
-		checkReactionStalkMother(UnbirthBabyState.SAD);
+		abuseDelegate().ShutMouth();
 	}
 
 	/**
 	 * むしる.
 	 */
 	public void pickHair() {
-		if (isDead())
-			return;
-		switch (getHairState()) {
-			case BALDHEAD:
-				setHairState(HairState.DEFAULT);
-				setHappiness(Happiness.HAPPY);
-				addLovePlayer(100);
-				return;
-			case DEFAULT:
-				setHairState(HairState.BRINDLED1);
-				break;
-			case BRINDLED1:
-				setHairState(HairState.BRINDLED2);
-				break;
-			case BRINDLED2:
-				setHairState(HairState.BALDHEAD);
-				break;
-			default:
-		}
-
-		wakeup();
-		clearActions();
-		addLovePlayer(-200);
-		addStress(500);
-		if (GameRandom.nextInt(3) == 0) {
-			setMessage(GameMessages.getMessage(this, MessagePool.Action.Scream), true);
-			setForceFace(ImageCode.PAIN.ordinal());
-		} else {
-			setMessage(GameMessages.getMessage(this, MessagePool.Action.PLUNCKING), true);
-			setForceFace(ImageCode.CRYING.ordinal());
-		}
-
-		stayPurupuru(30);
-		setHappiness(Happiness.VERY_SAD);
-		// 実ゆの場合、親が反応する
-		checkReactionStalkMother(UnbirthBabyState.ATTAKED);
-	}
-
-	/**
-	 * 動けないかどうかを返却する.
-	 * 
-	 * @return 動けないかどうか
-	 */
-	@Transient
-	public final boolean isDontMove() {
-		if (isDead()
-				|| isRemoved()
-				|| isUnBirth()
-				|| isSleeping()
-				|| isNeedled()
-				|| getFootBakeLevel() == FootBake.CRITICAL
-				|| isLockmove()
-				|| isMelt()
-				|| getBurialState() != BurialState.NONE
-				|| isBirth()
-				|| isGrabbed()
-				|| isOnNonMovingConveyor()
-				|| getCoreAnkoState() == CoreAnkoState.NonYukkuriDisease
-				|| getCriticalDamegeType() == CriticalDamegeType.CUT
-				|| isPealed()
-				|| isBlind()
-				|| isPacked()) {
-			return true;
-		} else {
-			return false;
-		}
-	}
-
-	/**
-	 * 大丈夫じゃないかどうかを返却する.
-	 * 
-	 * @return 大丈夫じゃないかどうか
-	 */
-	@Transient
-	public final boolean isNotAllright() {
-		if (isDead()
-				|| isRemoved()
-				|| isUnBirth()
-				|| isNeedled()
-				|| isLockmove()
-				|| isMelt()
-				|| getBurialState() != BurialState.NONE
-				|| isBirth()
-				|| isOnNonMovingConveyor()
-				|| getCoreAnkoState() == CoreAnkoState.NonYukkuriDisease
-				|| getCriticalDamegeType() == CriticalDamegeType.CUT
-				|| isPealed()
-				|| isBlind()
-				|| isPacked()) {
-			return true;
-		} else
-			return false;
-	}
-
-	/**
-	 * ピョンピョンできないかどうかを返却する.
-	 * 
-	 * @return ピョンピョンできないかどうか
-	 */
-	@Transient
-	public final boolean isDontJump() {
-		if (isDontMove())
-			return true;
-
-		if (getCriticalDamegeType() != null)
-			return true;
-		if (hasBabyOrStalk())
-			return true;
-		if (isNYD())
-			return true;
-		if (isGotBurnedHeavily())
-			return true;
-		if (getAttachmentSize(Ants.class) != 0)
-			return true;
-
-		// 非飛行種用
-		if (!isFlyingType()) {
-			if (isDamaged())
-				return true;
-			if (isSickHeavily())
-				return true;
-			if (isFeelPain())
-				return true;
-		}
-		return false;
-	}
-
-	/**
-	 * うんうんがしたいかどうかを返却する.
-	 * 
-	 * @return うんうんがしたいかどうか
-	 */
-	public boolean wantToShit() {
-		int step = (!isHungry() ? TICK * 2 : TICK);
-		int adjust = 50 * (isRude() ? 1 : 2) * shittingDiscipline / (isBaby() ? 2 : 1);
-		if ((getShitLimitBase()[getBodyAgeState().ordinal()] - shit) < (Const.DIAGONAL * step + adjust)) {
-			return true;
-		}
-		return false;
-	}
-
-	/**
-	 * 生まれそうかどうかを返却する.
-	 * 
-	 * @return 生まれそうかどうか
-	 */
-	public boolean nearToBirth() {
-		int step = (!isHungry() ? TICK * 2 : TICK);
-		int adjust = 100 * (isRude() ? 1 : 2);
-
-		int limit = getPregPeriodBase() - pregnantPeriod - (pregnancyPeriodBoost / 2);
-		int diagonal = Const.DIAGONAL * step + adjust;
-		if (limit < diagonal && hasBabyOrStalk()) {
-			return true;
-		}
-		return false;
+		abuseDelegate().pickHair();
 	}
 
 	/**
@@ -3914,28 +1008,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param s 茎のインスタンス
 	 */
 	public final void removeStalk(Stalk s) {
-		if (!isDead() && !isSleeping()) {
-			if (isNotNYD()) {
-				setHappiness(Happiness.VERY_SAD);
-				addStress(700);
-				setMessage(GameMessages.getMessage(this, MessagePool.Action.AbuseBaby));
-			}
-		}
-		if (getStalks() != null) {
-			if (s != null && s.getBindBabies() != null) {
-				for (Integer childId : s.getBindBabies()) {
-					if (childId == null)
-						continue;
-					Yukkuri child = BodyRelations.getBody(childId);
-					if (child != null) {
-						child.setParentLinkId(-1);
-					}
-				}
-			}
-			getStalks().remove(s);
-			if (getStalks().size() == 0)
-				setHasStalk(false);
-		}
+		stalkDelegate().removeStalk(s);
 	}
 
 	/**
@@ -3944,106 +1017,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * 茎を「取る」ことはできないが、実ゆは個別に「取る」で取ることができる。
 	 */
 	public void removeAllStalks() {
-		setHasStalk(false);
-		// 残念ながら茎だけ残して掃除することはできないので、茎も死んだ実ゆももろともに掃除される。
-		if (getStalks() != null) {
-			Iterator<Stalk> itr = getStalks().iterator();
-			while (itr.hasNext()) {
-				try {
-					Stalk s = itr.next();
-					Iterator<Integer> chit = s.getBindBabies().iterator();
-					while (chit.hasNext()) {
-						Yukkuri child = BodyRelations.getBody(chit.next());
-						if (child != null && (child.isDead() || child.isRemoved())) {
-							// まだ死んでない無い実ゆだけは茎から落ちる。
-							child.remove();
-						}
-					}
-					s.setPlantYukkuri(null);
-					s.remove();
-				} catch (Exception e) {
-					continue;
-				}
-			}
-			setStalks(new LinkedList<>());
-		}
-	}
-
-	/**
-	 * 実ゆの親が存在し、実ゆの状態に気が付けるならそのインスタンスを取得する
-	 * 
-	 * @return 気づいた実ゆの親インスタンス
-	 */
-	@Transient
-	public final int getBindStalkMotherCanNotice() {
-		// 実ゆの場合、親が反応する
-		if (getBindStalk() != null) {
-			int id = getBindStalk().getPlantYukkuri();
-			Yukkuri bodyMother = GameWorld.get().getCurrentMap().getBody().get(id);
-			if (bodyMother != null) {
-				if (!bodyMother.isDead() || bodyMother.isSleeping()) {
-					return bodyMother.getUniqueID();
-				}
-			}
-		}
-		return -1;
-	}
-
-	/**
-	 * 茎のあるゆっくりの基本反応
-	 * 
-	 * @param state 実ゆの状態
-	 */
-	public void checkReactionStalkMother(UnbirthBabyState state) {
-		Yukkuri bodyMother = GameWorld.get().getCurrentMap().getBody().get(getBindStalkMotherCanNotice());
-		if (bodyMother == null) {
-			return;
-		}
-
-		if (bodyMother.isDead() || bodyMother.isSleeping() || bodyMother.isBurned() || bodyMother.isShitting()
-				|| bodyMother.isBirth() || bodyMother.nearToBirth()) {
-			return;
-		}
-
-		// 非ゆっくり症の場合
-		if (bodyMother.isNYD()) {
-			return;
-		}
-
-		switch (state) {
-			case ATTAKED:// 実ゆが攻撃されている
-				// 攻撃されて生きている場合
-				if (!isDead()) {
-					bodyMother.setHappiness(Happiness.SAD);
-					bodyMother.setMessage(GameMessages.getMessage(bodyMother, MessagePool.Action.AbuseBaby));
-					bodyMother.addStress(30);
-					bodyMother.stay();
-					break;
-				}
-				// 攻撃されて死んでいる場合はKilled
-			case KILLED:// 実ゆが死んでる事に気がつく
-				bodyMother.setHappiness(Happiness.VERY_SAD);
-				bodyMother.setMessage(GameMessages.getMessage(bodyMother, MessagePool.Action.AbuseBabyKilled));
-				bodyMother.addStress(500);
-				bodyMother.stay();
-				break;
-			case SAD:// 実ゆが悲しんでいる、苦しんでいるのを心配する
-				bodyMother.setHappiness(Happiness.SAD);
-				bodyMother.setMessage(GameMessages.getMessage(bodyMother, MessagePool.Action.ConcernAboutChild));
-				bodyMother.addStress(20);
-				bodyMother.stay();
-				break;
-			case HAPPY:// 実ゆの状態を喜んでいる
-				bodyMother.setHappiness(Happiness.VERY_HAPPY);
-				bodyMother.setMessage(GameMessages.getMessage(bodyMother, MessagePool.Action.GladAboutChild));
-				bodyMother.addStress(-100);
-				bodyMother.stay();
-				break;
-			default:
-				break;
-		}
-
-		return;
+		stalkDelegate().removeAllStalks();
 	}
 
 	// 妊娠関連
@@ -4053,99 +1027,14 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param p すっきり相手
 	 */
 	public void doSukkiri(Yukkuri p) {
-		if (isDead()) {
-			return;
-		}
-		if (isNYD()) {
-			return;
-		}
-		// change own state
-		setMessage(GameMessages.getMessage(this, MessagePool.Action.Sukkiri), 60, true, false);
-		setStress(0);
-		addMemories(20);
-		stay(60);
-		clearActions();
-		setSukkiri(true);
-		setCalm();
-		setHappiness(Happiness.HAPPY);
-		hungry -= getHungryLimitBase()[AgeState.BABY.ordinal()];
-		// hungryState = checkHungryState();
-		// if it has pants, cannot get pregnant
-		if (isHasPants() || p.isHasPants()) {
-			if (isHasPants()) {
-				makeDirty(true);
-			} else {
-				p.makeDirty(true);
-			}
-			return;
-		}
-		if (isSick() && GameRandom.nextBoolean()) {
-			p.addSickPeriod(100);
-		}
-		if (p.isSick() && GameRandom.nextBoolean()) {
-			addSickPeriod(100);
-		}
-		if (p.isDead()) {
-			return;
-		}
-		if (p.isNotNYD()) {
-			p.setStress(0);
-			p.addMemories(20);
-			// 相手の妊娠判定
-			p.setMessage(GameMessages.getMessage(p, MessagePool.Action.Sukkiri), 60, true, false);
-			p.clearActions();
-			p.setSukkiri(true);
-			p.setHappiness(Happiness.HAPPY);
-		}
-		p.stay(60);
-		p.setCalm();
-		p.hungry -= (getHungryLimitBase()[AgeState.BABY.ordinal()] * 2);
-
-		// 妊娠タイプはランダムで決定
-		boolean stalkMode = GameRandom.nextBoolean();
-		// 該当タイプが避妊されてたら妊娠失敗
-		if ((stalkMode && p.isStalkCastration())
-				|| (!stalkMode && p.isBodyCastration())
-				|| (!stalkMode && p.getFootBakeLevel() == FootBake.CRITICAL)) {
-			p.setHappiness(Happiness.VERY_SAD);
-			p.setMessage(GameMessages.getMessage(p, MessagePool.Action.NoPregnancy));
-			p.addStress(1000);
-			return;
-		}
-		// 子供の生成
-		if (stalkMode) {
-			p.setHasStalk(true);
-		} else {
-			p.setHasBaby(true);
-		}
-		/*
-		 * カップルの設定は結婚イベントでやるので、ここではなし
-		 * if (isAdult() && p.isAdult()){
-		 * partner = p;
-		 * p.partner = this;
-		 * }
-		 */
-		Dna baby;
-		for (int i = 0; i < 5; i++) {
-			baby = BabyDnaFactory.createBabyDna(p, this, getType(), getAttitude(), getIntelligence(), false,
-					(isSickHeavily() || isStarving()), i == 4);
-			if (stalkMode) {
-				p.getStalkBabyTypes().add(baby);
-			} else {
-				if (baby != null)
-					p.getBabyTypes().add(baby);
-			}
-		}
-		p.subtractPregnantLimit();
+		sexualDelegate().doSukkiri(p);
 	}
 
 	/**
 	 * 早いすっきり抑制を行う
 	 */
 	public void rapidExcitingDiscipline() {
-		if (excitingDiscipline > 0) {
-			excitingDiscipline -= TICK;
-		}
+		sexualDelegate().rapidExcitingDiscipline();
 	}
 
 	/**
@@ -4154,100 +1043,14 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param p れいぽぅ相手
 	 */
 	public void doRape(Yukkuri p) {
-		if (isDead() || isSukkiri()) {
-			return;
-		}
-		// 相手がレイパーなら何もしない
-		if (p.isRaper()) {
-			clearActions();
-			return;
-		}
-
-		// change own state
-		setMessage(GameMessages.getMessage(this, MessagePool.Action.SukkiriForRaper), 60, true, false);
-		setStress(0);
-		stay(65);
-		addMemories(100);
-		p.clearActions();
-		p.addStress(500);
-		p.stay(65);
-
-		setSukkiri(true);
-		setHappiness(Happiness.HAPPY);
-		if (isRaper()) {
-			hungry -= (getHungryLimitBase()[AgeState.BABY.ordinal()] / 4);
-		} else {
-			hungry -= (getHungryLimitBase()[AgeState.BABY.ordinal()] * 4);
-		}
-		// hungryState = checkHungryState();
-		// if it has pants, cannot get pregnant
-		if (isHasPants() || p.isHasPants()) {
-			p.setMessage(GameMessages.getMessage(p, MessagePool.Action.ScareRapist));
-			p.setHappiness(Happiness.SAD);
-			if (isHasPants()) {
-				makeDirty(true);
-			} else {
-				p.makeDirty(true);
-			}
-			return;
-		}
-		// ゆかび持ちとすっきりすると1/2の確率で伝染る
-		if ((isSick() || p.isSick()) && GameRandom.nextBoolean()) {
-			p.addSickPeriod(100);
-			addSickPeriod(100);
-		}
-		if (p.isDead()) {
-			if (GameRandom.nextInt(3) == 0) {
-				p.setCrushed(true);
-			}
-			// 死体とすっきりすると死体がゆかび持ちでなくとも1/4の確率でゆかび感染
-			if (GameRandom.nextInt(4) == 0) {
-				addSickPeriod(100);
-			}
-			return;
-		}
-
-		// 相手の妊娠判定
-		p.wakeup();
-		if (p.isNotNYD()) {
-			p.setMessage(GameMessages.getMessage(p, MessagePool.Action.RaperSukkiri), 60, true, false);
-			p.setSukkiri(true);
-			setCalm();
-			p.setHappiness(Happiness.VERY_SAD);
-			p.setForceFace(ImageCode.CRYING.ordinal());
-		}
-		p.subtractPregnantLimit();
-		p.hungry -= getHungryLimitBase()[AgeState.BABY.ordinal()];
-
-		// 避妊されてたら妊娠失敗
-		if (p.isStalkCastration()) {
-			return;
-		}
-
-		// 子供の生成
-		p.setHasStalk(true);
-		Dna baby;
-		for (int i = 0; i < 5; i++) {
-			baby = BabyDnaFactory.createBabyDna(p, this, getType(), getAttitude(), getIntelligence(), true,
-					(isSickHeavily() || isStarving()), i == 4);
-			p.getStalkBabyTypes().add(baby);
-		}
-		if (isRaper()) {
-			// れいぱーは強制れいぽぅ
-			forceToRaperExcite(true);
-			EventLogic.addWorldEvent(new RaperWakeupEvent(this, null, null, 1), null, null);
-		} else if (getAttitude() == Attitude.SUPER_SHITHEAD) {
-			// ドゲスは婚姻関係を保ちつつもれいぽぅ
-			forceToRaperExcite(false);
-		}
-		p.subtractPregnantLimit();
+		sexualDelegate().doRape(p);
 	}
 
 	/**
 	 * オナニーする.
 	 */
 	public void doOnanism() {
-		doOnanism(null);
+		sexualDelegate().doOnanism(null);
 	}
 
 	/**
@@ -4256,38 +1059,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param p 相手（死体など
 	 */
 	public void doOnanism(Yukkuri p) {
-		if (!canAction()) {
-			return;
-		}
-		// change own state
-		setMessage(GameMessages.getMessage(this, MessagePool.Action.Sukkiri), 60, true, false);
-		addStress(-50);
-		addMemories(5);
-		stay(60);
-		clearActions();
-		setCalm();
-		setHappiness(Happiness.HAPPY);
-		hungry -= getHungryLimitBase()[AgeState.BABY.ordinal()];
-		// hungryState = checkHungryState();
-		// パンツは汚れる
-		if (isHasPants()) {
-			makeDirty(true);
-		}
-		if (p != null) {
-			// 性病持ちと死姦はカビの原因
-			if ((p.isDead() || p.isSick()) && GameRandom.nextBoolean()) {
-				addSickPeriod(100);
-			}
-			if (p.canAction()) {
-				p.addStress(50);
-				p.addMemories(-5);
-				p.setMessage(GameMessages.getMessage(p, MessagePool.Action.Surprise), 60, true, false);
-				p.clearActions();
-				p.setHappiness(Happiness.SAD);
-			}
-			p.stay(60);
-			p.setCalm();
-		}
+		sexualDelegate().doOnanism(p);
 	}
 
 	/**
@@ -4296,19 +1068,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param dna DNA
 	 */
 	public void injectInto(Dna dna) {
-		if (isDead()) {
-			return;
-		}
-		strikeByPunish();
-		GameEnvironment.setAlarm();
-		if (dna == null || isBodyCastration()) {
-			return;
-		}
-		Dna baby = BabyDnaFactory.createBabyDna(this, BodyRelations.getBody(dna.getFather()),
-				dna.getType(), dna.getAttitude(), dna.getIntelligence(), false, false, true);
-		getBabyTypes().add(baby);
-		setHasBaby(true);
-		subtractPregnantLimit();
+		sexualDelegate().injectInto(dna);
 	}
 
 	/**
@@ -4317,129 +1077,22 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param dna DNA
 	 */
 	public void dripSperm(Dna dna) {
-		if (isDead()) {
-			return;
-		}
-		if (dna == null || isStalkCastration()) {
-			return;
-		}
-		for (int i = 0; i < 5; i++) {
-			Dna baby = BabyDnaFactory.createBabyDna(this, BodyRelations.getBody(dna.getFather()),
-					dna.getType(), dna.getAttitude(), dna.getIntelligence(), false, false, true);
-			getStalkBabyTypes().add((GameRandom.nextBoolean() ? baby : null));
-		}
-		setHasStalk(true);
-		subtractPregnantLimit();
+		sexualDelegate().dripSperm(dna);
 	}
 
 	// 妊娠限界関連
 	/**
-	 * 妊娠限界のチェック
-	 * 
-	 * @return 妊娠限界かどうか
-	 */
-	@Transient
-	public boolean isOverPregnantLimit() {
-		// 20210327
-		// リアルな妊娠限界のとき
-		if (isUseRealPregnantLimit()) {
-			// 妊娠限界を超えてたら
-			if (getPregnantLimit() <= 0) {
-				// 1/20の確率でまともなゆっくり
-				if (GameRandom.nextInt(20) == 0) {
-					return false;
-				}
-				// 19/20で足りないゆ
-				return true;
-			}
-			// 妊娠限界に近づくにつれ、足りないゆ確率が高まる。
-			// 妊娠限界が100以上の場合は、1/100で足りないゆ。
-			int tarinaiFactor = getPregnantLimit() > 100 ? 100 : getPregnantLimit();
-			// 1/100 または 1/妊娠限界 の確率で足りないゆ。
-			if (GameRandom.nextInt(tarinaiFactor) == 0) {
-				return true;
-			}
-			return false;
-		}
-		// リアルでない妊娠限界のときは、妊娠限界を超えたら即足りないゆが生まれるのみ。
-		if (getPregnantLimit() <= 0) {
-			return true;
-		}
-		return false;
-	}
-
-	/**
-	 * 妊娠限界を一つ早める.
-	 * すでに妊娠限界の場合は何もしない.
-	 */
-	public void subtractPregnantLimit() {
-		if (getPregnantLimit() > 0)
-			setPregnantLimit(getPregnantLimit() - 1);
-		else
-			setPregnantLimit(0);
-	}
-
-	/**
 	 * 強制的に発情させる.
 	 */
 	public void forceToExcite() {
-		if (isRaper() && !isDead()) {
-			forceToRaperExcite(true);
-			EventLogic.addWorldEvent(new RaperWakeupEvent(this, null, null, 1), this,
-					GameMessages.getMessage(this, MessagePool.Action.ExciteForRaper));
-			return;
-		}
-
-		if (isNYD() || isMelt()) {
-			stayPurupuru(20);
-			return;
-		}
-
-		// 興奮中にさらにバイブしたら強制発情
-		if (isExciting()) {
-			setForceExciting(true);
-		}
-
-		// 興奮できる状態ではないなら終了
-		if (!canAction()) {
-			return;
-		}
-
-		// ぺにぺにが切断されている場合
-		if (isPenipeniCutted()) {
-			setMessage(GameMessages.getMessage(this, MessagePool.Action.PenipeniCutted));
-			setHappiness(Happiness.VERY_SAD);
-			setForceFace(ImageCode.TIRED.ordinal());
-			stayPurupuru(20);
-			addStress(30);
-			// なつき度設定
-			addLovePlayer(-50);
-			return;
-		}
-		clearActionsForEvent();
-		setToSukkiri(true);
-		wakeup();
-		setMessage(GameMessages.getMessage(this, MessagePool.Action.Excite));
-		setForceFace(ImageCode.EXCITING.ordinal());
-		setExciting(true);
-		stayPurupuru(Const.STAYLIMIT);
+		sexualDelegate().forceToExcite();
 	}
 
 	/**
 	 * ぺにぺに切断のトグル
 	 */
 	public void cutPenipeni() {
-		// ぺにぺにがないなら復活
-		if (isPenipeniCutted()) {
-			// Penipeni restoration happens immediately; consider event-based recovery if
-			// needed.
-			setPenipeniCutted(false);
-			return;
-		}
-		clearActions();
-		setSleeping(false);
-		EventLogic.addBodyEvent(this, new CutPenipeniEvent(this, null, null, 1), null, null);
-		checkReactionStalkMother(UnbirthBabyState.ATTAKED);
+		sexualDelegate().cutPenipeni();
 	}
 
 	/**
@@ -4448,37 +1101,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param raper れいぱーかどうか
 	 */
 	public void forceToRaperExcite(boolean raper) {
-		if (isDead() || isExciting() || isPenipeniCutted()) {
-			return;
-		}
-		wakeup();
-		clearActions();
-		setExciting(raper);
-		setForceExciting(raper);
-		if (raper) {
-			setPartner(-1);
-		}
-		stay();
-	}
-
-	/**
-	 * 強制的に寝かせる.
-	 */
-	public void forceToSleep() {
-		if (isDead()) {
-			return;
-		}
-		// 矛盾が発生しそうな状況はここでチェック
-		if (getPanicType() == PanicType.BURN || getCriticalDamegeType() == CriticalDamegeType.CUT) {
-			return;
-		}
-		clearActions();
-		setCalm();
-		excitingPeriod = 0;
-		setPanicType(null);
-		panicPeriod = 0;
-		sleepingPeriod = 0;
-		setSleeping(true);
+		sexualDelegate().forceToRaperExcite(raper);
 	}
 
 	/**
@@ -4494,87 +1117,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param p すりすり相手
 	 */
 	public void doSurisuri(Yukkuri p) {
-		if (isDead() || p.isDead()) {
-			return;
-		}
-		if (isVeryHungry()) {
-			return;
-		}
-		if (isPeropero()) {
-			return;
-		}
-		if (!canAction()) {
-			return;
-		}
-		// 自分との関係
-		EnumRelationMine relation = BodyLogic.checkMyRelation(this, p);
-		if (findSick(p) || p.isFeelHardPain() || p.isDamaged()) {
-			switch (relation) {
-				case FATHER: // 父
-				case MOTHER: // 母
-					// 子供を治そうとする
-					setMessage(GameMessages.getMessage(this, MessagePool.Action.TreatChildBySurisuri));
-					break;
-				case PARTNAR: // つがい
-					// つがいを治そうとする
-					setMessage(GameMessages.getMessage(this, MessagePool.Action.TreatPartnerBySurisuri));
-					break;
-				case CHILD_FATHER: // 父の子供
-					// 父を治そうとする
-					setMessage(GameMessages.getMessage(this, MessagePool.Action.TreatFatherBySurisuri));
-					break;
-				case CHILD_MOTHER: // 母の子供
-					// 母を治そうとする
-					setMessage(GameMessages.getMessage(this, MessagePool.Action.TreatMotherBySurisuri));
-					break;
-				case ELDERSISTER: // 姉
-					// 妹を治そうとする
-					setMessage(GameMessages.getMessage(this, MessagePool.Action.TreatSisterBySurisuri));
-					break;
-				case YOUNGSISTER: // 妹
-					// 姉を治そうとする
-					setMessage(GameMessages.getMessage(this, MessagePool.Action.TreatElderSisterBySurisuri));
-					break;
-				default: // 他人
-					break;
-			}
-			setHappiness(Happiness.SAD);
-			addStress(-50);
-			p.addStress(-50);
-		} else {
-			setMessage(GameMessages.getMessage(this, MessagePool.Action.SuriSuri));
-			addStress(-100);
-			p.addStress(-100);
-			setHappiness(Happiness.VERY_HAPPY);
-			if (isNotNYD()) {
-				p.setHappiness(Happiness.VERY_HAPPY);
-			}
-		}
-		// 確率ですりすりしてる方にもアリ伝染る
-		if (p.getAttachmentSize(Ants.class) > 0 && GameRandom.nextInt(200) == 0) {
-			if (getAntCount() <= 0) {
-				setAntCount(0);
-				addAttachment(new Ants(this));
-				addStress(50);
-				setHappiness(Happiness.VERY_SAD);
-				addMemories(-1);
-			}
-			setAntCount(getAntCount() + 10);
-		}
-		setNobinobi(true);
-		stay(40);
-		p.stay(40);
-		if (getIntelligence() != Intelligence.WISE && getSurisuriAccidentProb() != 0
-				&& GameRandom.nextInt(getSurisuriAccidentProb()) == 0) {
-			// すりすり事故、すっきりーになる
-			doSukkiri(p);
-		}
-		if (isSick() && GameRandom.nextInt(5) == 0) {
-			p.addSickPeriod(100);
-		}
-		if (p.isSick() && GameRandom.nextInt(5) == 0) {
-			addSickPeriod(100);
-		}
+		otherRelationDelegate().doSurisuri(p);
 	}
 
 	/**
@@ -4583,97 +1126,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param p ぺろぺろ対象
 	 */
 	public void doPeropero(Yukkuri p) {
-		if (isDead() || p.isDead()) {
-			return;
-		}
-		if (isNobinobi() || isShutmouth()) {
-			return;
-		}
-		if (!canAction()) {
-			return;
-		}
-		if (isSleeping())
-			return;
-
-		// 自分との関係
-		EnumRelationMine relation = BodyLogic.checkMyRelation(this, p);
-		if (findSick(p) || p.isFeelHardPain() || p.isDamaged() || p.getAttachmentSize(Ants.class) != 0) {
-			switch (relation) {
-				case FATHER: // 父
-				case MOTHER: // 母
-					// 子供を治そうとする
-					setMessage(GameMessages.getMessage(this, MessagePool.Action.TreatChildByPeropero));
-					break;
-				case PARTNAR: // つがい
-					// つがいを治そうとする
-					setMessage(GameMessages.getMessage(this, MessagePool.Action.TreatPartnerByPeropero));
-					break;
-				case CHILD_FATHER: // 父の子供
-					// 父を治そうとする
-					setMessage(GameMessages.getMessage(this, MessagePool.Action.TreatFatherBySurisuri));
-					break;
-				case CHILD_MOTHER: // 母の子供
-					// 母を治そうとする
-					setMessage(GameMessages.getMessage(this, MessagePool.Action.TreatMotherBySurisuri));
-					break;
-				case ELDERSISTER: // 姉
-					// 妹を治そうとする
-					setMessage(GameMessages.getMessage(this, MessagePool.Action.TreatSisterByPeropero));
-					break;
-				case YOUNGSISTER: // 妹
-					// 姉を治そうとする
-					setMessage(GameMessages.getMessage(this, MessagePool.Action.TreatElderSisterByPeropero));
-					break;
-				default: // 他人
-					break;
-			}
-			setHappiness(Happiness.SAD);
-			p.addMemories(1);
-			p.addStress(-75);
-		} else {
-			setMessage(GameMessages.getMessage(this, MessagePool.Action.PeroPero));
-
-			setHappiness(Happiness.VERY_HAPPY);
-			addStress(-50);
-			p.setHappiness(Happiness.VERY_HAPPY);
-			p.addMemories(1);
-			p.addStress(-200);
-		}
-		// アリ減少
-		int ant = p.getAntCount();
-		ant -= 40;
-		if (ant <= 0) {
-			ant = 0;
-			p.removeAnts();
-		}
-		p.setAntCount(ant);
-		// しかし確率でぺろぺろしてる方にもアリ伝染る
-		if (ant > 0 && GameRandom.nextInt(200) == 0) {
-			if (getAntCount() <= 0) {
-				addAttachment(new Ants(this));
-				addStress(50);
-				setHappiness(Happiness.VERY_SAD);
-				addMemories(-1);
-			}
-			setAntCount(getAntCount() + 10);
-		}
-
-		setPeropero(true);
-		stay(40);
-		p.stay(40);
-		p.addDamage(-10);
-		if (p.getAttachmentSize(Ants.class) == 0) {
-			substractNumOfAnts(10 * getBodyAgeState().ordinal() * getBodyAgeState().ordinal());
-		}
-		if (!p.isHasPants()) {
-			p.makeDirty(false);
-		}
-		if (isSick() && GameRandom.nextBoolean()) {
-			p.addSickPeriod(100);
-		}
-		if (p.isSick() && GameRandom.nextBoolean()) {
-			addSickPeriod(100);
-		}
+		otherRelationDelegate().doPeropero(p);
 	}
 
 	/**
@@ -4682,35 +1135,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param p 子供
 	 */
 	public void doGuriguri(Yukkuri p) {
-		if (isDead() || p.isDead()) {
-			return;
-		}
-
-		if (!canAction()) {
-			return;
-		}
-
-		// ぐーりぐーり時のメッセージ
-		if (p.isAdult()) {
-			// つがいが対象
-			setMessage(GameMessages.getMessage(this, MessagePool.Action.ExtractingNeedlePartner));
-		} else {
-			// 子供が対象
-			setMessage(GameMessages.getMessage(this, MessagePool.Action.ExtractingNeedleChild));
-		}
-
-		if (p.isNotNYD()) {
-			// ぐーりぐーりされた時のメッセージ
-			p.setMessage(GameMessages.getMessage(p, MessagePool.Action.NeedlePain), 60, true, false);
-			p.stayPurupuru(40);
-			p.setHappiness(Happiness.VERY_SAD);
-			p.setForceFace(ImageCode.PAIN.ordinal());
-		}
-		p.addStress(80);
-		stay(40);
-		setHappiness(Happiness.VERY_SAD);
-		addStress(30);
-		setForceFace(ImageCode.CRYING.ordinal());
+		familyDelegate().doGuriguri(p);
 	}
 
 	/**
@@ -4756,21 +1181,8 @@ public abstract class Yukkuri extends SocialEntity {
 		BodyMovement.moveTo(this, toX, toY, toZ);
 	}
 
-	/**
-	 * 指定の座標まで動く
-	 * 
-	 * @param toZ Z座標
-	 */
-	public final void moveToZ(int toZ) {
-		if (isDead()) {
-			return;
-		}
-		destZ = Math.max(0, Math.min(toZ, Translate.getMapZ()));
-	}
-
 	public final void setTargetMoveOffset(int ox, int oy) {
-		setTargetOffsetX(ox);
-		setTargetOffsetY(oy);
+		moveDelegate().setTargetMoveOffset(ox, oy);
 	}
 
 	/**
@@ -4975,34 +1387,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param amount 食われる量
 	 */
 	public void eatBody(int amount) {
-		setAnkoAmount(getAnkoAmount() - amount);
-		if (isDead()) {
-			// 死体食べ
-			if (getAnkoAmount() <= getDamageLimitBase()[getBodyAgeState().ordinal()] / 2) {
-				setCrushed(true);
-				if (getAnkoAmount() <= 0) {
-					remove();
-					setAnkoAmount(0);
-				}
-			}
-		} else {
-			// 生きたまま食べられる
-			addHungry(-amount);
-			if (hungry <= 0) {
-				addDamage(amount);
-			}
-			wakeup();
-			if (getAnkoAmount() <= getDamageLimitBase()[getBodyAgeState().ordinal()] / 2) {
-				bodyCut();
-				if (getAnkoAmount() <= 0) {
-					toDead();
-					setCrushed(true);
-					setAnkoAmount(1);
-				}
-			}
-		}
-		// 実ゆの場合、親が反応する
-		checkReactionStalkMother(UnbirthBabyState.ATTAKED);
+		damageDelegate().eatBody(amount);
 	}
 
 	/**
@@ -5012,27 +1397,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param eater  食べてくるゆっくり
 	 */
 	public void eatBody(int amount, Yukkuri eater) {
-		eatBody(amount);
-		if (isDead())
-			return;
-		if (isUnBirth())
-			return;
-		Vomit v = GameView.addVomit(getX(), getY(), getZ(), this, getShitType());
-		v.crushVomit();
-		if (isNotNYD()) {
-			if (isSmart() || getBodyAgeState().ordinal() < eater.getBodyAgeState().ordinal() || isLockmove()
-					|| isGotBurnedHeavily()) {
-				// 善良か動けない状態か自分より大きい相手は逃げる
-				setMessage(GameMessages.getMessage(this, MessagePool.Action.EatenByBody));
-				setHappiness(Happiness.VERY_SAD);
-				runAway(getX(), getY());
-			} else {
-				// 反撃
-				setAngry();
-				setMessage(GameMessages.getMessage(this, MessagePool.Action.EatenByBody));
-				EventLogic.addBodyEvent(this, new RevengeAttackEvent(this, eater, null, 1), null, null);
-			}
-		}
+		damageDelegate().eatBody(amount, eater);
 	}
 
 	/**
@@ -5043,62 +1408,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param AV     食べられた際に吐くかどうか
 	 */
 	public void beEaten(int amount, int P, boolean AV) {
-		eatBody(amount);
-		makeDirty(true);
-		if (isDead())
-			return;
-		if (isUnBirth())
-			return;
-		if (AV) {
-			Vomit v = GameView.addVomit(getX(), getY(), getZ(), this, getShitType());
-			v.crushVomit();
-		}
-		if (isNotNYD()) {
-			// アリの場合の反応
-			if (P == 0) {
-				setHappiness(Happiness.VERY_SAD);
-				if (GameRandom.nextInt(4) == 0) {
-					if (!isAdult() && GameRandom.nextInt(4) == 0) {
-						callParent();
-					}
-					if (GameRandom.nextInt(3) == 0) {
-						setMessage(GameMessages.getMessage(this, MessagePool.Action.Scream));
-						setForceFace(ImageCode.PAIN.ordinal());
-					} else {
-						setMessage(GameMessages.getMessage(this, MessagePool.Action.EatenByAnts));
-					}
-					if (isDamaged() || isLockmove() || isGotBurnedHeavily()) {
-						// 動けない状態
-						stayPurupuru(10);
-					} else {
-						// 反撃
-						if (GameRandom.nextInt(3) == 0) {
-							switch (GameRandom.nextInt(3)) {
-								case 0:
-									if (!isShutmouth()) {
-										setPeropero(true);
-										substractNumOfAnts(10);
-									}
-									break;
-								case 1:
-									setNobinobi(true);
-									substractNumOfAnts(5);
-									break;
-								case 2:
-									if (canFurifuri()) {
-										setFurifuri(true);
-										substractNumOfAnts(35);
-									}
-								default:
-									// NOP.
-							}
-							stay();
-							setPikoMessage(GameMessages.getMessage(this, MessagePool.Action.RevengeAnts), true);
-						}
-					}
-				}
-			}
-		}
+		damageDelegate().beEaten(amount, P, AV);
 	}
 
 	/**
@@ -5123,131 +1433,35 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param amount ダメージ量
 	 */
 	public final void strike(int amount) {
-		if (isDead()) {
-			return;
-		}
-		damage += amount;
-		addStress(amount >> 2);
-		setStaying(false);
-		setStrike(true);
-		stay();
-		setDamageState(getDamageState());
-		wakeup();
-		// 背面固定でかつ針が刺さっていない場合
-		if (isFixBack() && !isNeedled()) {
-			setFurifuri(true);
-		}
+		damageDelegate().strike(amount);
 	}
 
 	/**
 	 * お仕置き
 	 */
 	public void strikeByPunish() {
-		if (isDead()) {
-			return;
-		}
-		if (isIdiot()) {
-			strike(Const.NEEDLE);
-			setMessage(GameMessages.getMessage(this, MessagePool.Action.Scream), true);
-			setAngry();
-			return;
-		}
-
-		// なつき度設定
-		addLovePlayer(-10);
-		// しつけ効果
-		teachManner(1);
-		// disclipline(2);
-		strike(Const.NEEDLE);
-		if (getCurrentEvent() instanceof ProposeEvent) {
-			setForceFace(ImageCode.CRYING.ordinal());
-			if (isDamaged())
-				setMessage(GameMessages.getMessage(this, MessagePool.Action.Scream), true);
-			else
-				setMessage(GameMessages.getMessage(this, MessagePool.Action.Surprise), true);
-		} else
-			setMessage(GameMessages.getMessage(this, MessagePool.Action.Scream), true);
-		clearActions();
-		setAngry();
-
-		// 持ち物を全部落とす
-		dropAllTakeoutItem();
-		// dropOkazari();
-		// 実ゆの場合、親が反応する
-		checkReactionStalkMother(UnbirthBabyState.ATTAKED);
-
+		abuseDelegate().strikeByPunish();
 	}
 
 	/**
 	 * ハンマー
 	 */
 	public void strikeByHammer() {
-		if (isDead()) {
-			return;
-		}
-		// なつき度設定
-		addLovePlayer(-200);
-		strike(Const.HAMMER);
-		setPikoMessage(GameMessages.getMessage(this, MessagePool.Action.Scream), true);
-		setAngry();
-		if (isDead()) {
-			setMessage(GameMessages.getMessage(this, MessagePool.Action.Dying), true);
-			stay();
-			if (getBodyAgeState() != AgeState.ADULT) {
-				setCrushed(true);
-			}
-		}
-
-		begForLife();
-
-		// 持ち物を全部落とす
-		dropAllTakeoutItem();
-
-		// 実ゆの場合、親が反応する
-		checkReactionStalkMother(UnbirthBabyState.ATTAKED);
+		abuseDelegate().strikeByHammer();
 	}
 
 	/**
 	 * 押さえつけ
 	 */
 	public void strikeByPress() {
-		if (!isDead()) {
-			strike(Const.HAMMER * 10);
-			setPikoMessage(GameMessages.getMessage(this, MessagePool.Action.Scream), true);
-			setAngry();
-		}
-		if (isDead()) {
-			setMessage(GameMessages.getMessage(this, MessagePool.Action.Dying), 40, true, true);
-			stay();
-			setCrushed(true);
-		}
+		abuseDelegate().strikeByPress();
 	}
 
 	/**
 	 * パンチ
 	 */
 	public void strikeByPunch() {
-		if (isDead()) {
-			return;
-		}
-
-		// なつき度設定
-		addLovePlayer(-500);
-		strike(getDamageLimitBase()[getBodyAgeState().ordinal()] / 5);
-		setCalm();
-
-		setPikoMessage(GameMessages.getMessage(this, MessagePool.Action.Scream), true);
-		setAngry();
-		if (isDead()) {
-			setMessage(GameMessages.getMessage(this, MessagePool.Action.Dying), true);
-			stay();
-		}
-
-		begForLife();
-		// 持ち物を全部落とす
-		dropAllTakeoutItem();
-		// 実ゆの場合、親が反応する
-		checkReactionStalkMother(UnbirthBabyState.ATTAKED);
+		abuseDelegate().strikeByPunch();
 	}
 
 	/**
@@ -5258,143 +1472,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param allowDamageCap 手加減ありの場合
 	 */
 	public void strikeByYukkuri(Yukkuri enemy, EventPacket event, boolean allowDamageCap) {
-		if (isDead()) {
-			return;
-		}
-		// 相手のベース攻撃力計算
-		int ap = enemy.getStrength();
-		// 状態によるダメージ変化
-		if (enemy.isDamaged()) {
-			ap *= 0.75f;
-		}
-		if (isMelt()) {
-			ap *= 2.5f;
-		} else if (isWet()) {
-			ap *= 1.5f;
-		}
-		if (isHasPants()) {
-			ap *= 0.8f;
-		}
-		if (isExciting()) {
-			ap *= 0.25f;
-		}
-		if (isPredatorType() && !enemy.isPredatorType()) {
-			ap *= 0.25f;
-		}
-		if (!isPredatorType() && enemy.isPredatorType()) {
-			ap *= 2f;
-		}
-		// 吹っ飛び設定
-		// 体重差
-		int kickX = (enemy.getWeight() - getWeight()) / 100;
-		int kickY = (enemy.getWeight() - getWeight()) / 500;
-		if (kickX < 0)
-			kickX = 0;
-		if (kickY < 0)
-			kickY = 0;
-		kickX += 3;
-		if (enemy.getDirection() == Direction.LEFT) {
-			kickX = -kickX;
-		}
-		if (enemy.getY() >= getY()) {
-			kickY = -kickY;
-		}
-		if (SimYukkuri.UNYO) {
-			// ダメージが高いので補正
-			if (ap > 0)
-				ap = (int) (ap * 0.25f);
-		}
-		// 手加減あり
-		if (allowDamageCap) {
-			int damageAfterHit = damage + ap;
-			// 次の一撃でダメージが75%を超える場合
-			if (getDamageLimitBase()[getBodyAgeState().ordinal()] * 3 / 4 < damageAfterHit) {
-				ap = getDamageLimitBase()[getBodyAgeState().ordinal()] * 4 / 5 - damage;
-				if (ap < 0) {
-					ap = 0;
-				}
-			}
-		}
-
-		// 実行
-		// 持ち物を落とす
-		dropAllTakeoutItem();
-		strike(ap);
-		// ぴこぴこ破壊
-		if (!isBraidType() && isHasBraid() && 0 < getBraidBreakChance()
-				&& GameRandom.nextInt(getBraidBreakChance()) == 0) {
-			setHasBraid(false);
-		}
-		setHappiness(Happiness.SAD);
-		// 土に埋まっていないなら吹っ飛ぶ
-		if (getBurialState() == BurialState.NONE) {
-			kick(kickX, kickY, -4);
-		}
-
-		// リアクション
-		if (isDead()) {
-			setMessage(GameMessages.getMessage(this, MessagePool.Action.Dying), true);
-			stay();
-			setCrushed(true);
-		} else {
-			if (SimYukkuri.UNYO) {
-				// 0.25 多すぎる 0.01 少なすぎる 0.06 少なすぎる
-				changeUnyo((int) (ap * 0.11f), 0, 0);
-				enemy.changeUnyo(GameRandom.nextInt(3), 0, 0);
-			}
-			if (isNotNYD() && !isUnBirth()) {
-				if (event instanceof HateNoOkazariEvent) {
-					// お飾りの迫害
-					setMessage(GameMessages.getMessage(this, MessagePool.Action.Scream), true);
-					if (getPublicRank() != PublicRank.UnunSlave
-							&& (isRude() || (getAttitude() == Attitude.AVERAGE && GameRandom.nextBoolean()))) {
-						setAngry();
-						EventLogic.addBodyEvent(this, new RevengeAttackEvent(this, enemy, null, 1), null, null);
-					}
-				} else if (event instanceof PredatorsGameEvent) {
-					// 自分が捕食種のおもちゃにされたとき
-					// 逃げる
-					runAway(enemy.getX(), enemy.getY());
-					setPikoMessage(GameMessages.getMessage(this, MessagePool.Action.DontPlayMe), true);
-					// おもちゃにされたとき、母がいたら33%の確率で「捕食種はあっちいってね！」イベントが発生。
-					Yukkuri m = BodyRelations.getMotherBody(this);
-					if (m != null) {
-						if (GameRandom.nextInt(3) == 0 && m != null && !m.isDead() && !m.isRemoved()) {
-							m.clearEvent();
-							m.setAngry();
-							m.setPanic(false, null);
-							m.setPeropero(false);
-							EventLogic.addBodyEvent(m, new KillPredeatorEvent(m, enemy, null, 10),
-									null, null);
-						}
-					}
-					if (GameRandom.nextInt(10) == 0) {
-						bodyInjure();
-					}
-				} else if (event instanceof RaperReactionEvent) {
-					// 自分がレイパーで攻撃されたとき
-					// 相手をレイプ対象に
-					int colX = BodyLogic.calcCollisionX(this, enemy);
-					moveToSukkiri(enemy, enemy.getX() + colX, enemy.getY());
-					if (GameRandom.nextInt(200) == 0) {
-						bodyInjure();
-					}
-				} else if (event instanceof AvoidMoldEvent) {
-					// 自分がかびてる時
-					setMessage(GameMessages.getMessage(this, MessagePool.Action.Scream), true);
-					if (!isBaby() && !isSmart() && getIntelligence() == Intelligence.FOOL) {
-						setAngry();
-						EventLogic.addBodyEvent(this, new RevengeAttackEvent(this, enemy, null, 1), null, null);
-					}
-				} else {
-					setMessage(GameMessages.getMessage(this, MessagePool.Action.Scream), true);
-					if (getAttitude() != Attitude.VERY_NICE) {
-						setAngry();
-						EventLogic.addBodyEvent(this, new RevengeAttackEvent(this, enemy, null, 1), null, null);
-					}
-				}
-			}
-		}
+		damageDelegate().strikeByYukkuri(enemy, event, allowDamageCap);
 	}
 
 	/**
@@ -5417,116 +1495,28 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param vecY           Y方向のベクトル
 	 */
 	public void strikeByObject(int ap, int weight, boolean allowDamageCap, int vecX, int vecY) {
-		if (isDead()) {
-			return;
-		}
-		// 状態によるダメージ変化
-		if (isMelt()) {
-			ap *= 2.5f;
-		} else if (isWet()) {
-			ap *= 1.5f;
-		}
-		if (isHasPants()) {
-			ap *= 0.8;
-		}
-		// 吹っ飛び設定
-		// 体重差
-		int kick = (weight - getWeight()) / 100;
-		if (kick < 1)
-			kick = 1;
-		vecX *= kick;
-		vecY *= kick;
-		// 手加減あり
-		if (allowDamageCap) {
-			int damageAfterHit = damage + ap;
-			// 次の一撃でダメージが85%を超える場合
-			if (getDamageLimitBase()[getBodyAgeState().ordinal()] * 85 / 100 < damageAfterHit) {
-				ap = getDamageLimitBase()[getBodyAgeState().ordinal()] * 85 / 100 - damage;
-				if (ap < 0) {
-					ap = 0;
-				}
-			}
-		}
-		strike(ap);
-		// 土に埋まっていないなら吹っ飛ぶ
-		if (getBurialState() == BurialState.NONE) {
-			kick(vecX, vecY, -5);
-		}
-		if (isDead()) {
-			setMessage(GameMessages.getMessage(this, MessagePool.Action.Dying), true);
-			stay();
-			setCrushed(true);
-		} else {
-			setMessage(GameMessages.getMessage(this, MessagePool.Action.Scream), true);
-		}
-		// 持ち物を全部落とす
-		dropAllTakeoutItem();
-		// 実ゆの場合、親が反応する
-		checkReactionStalkMother(UnbirthBabyState.ATTAKED);
+		damageDelegate().strikeByObject(ap, weight, allowDamageCap, vecX, vecY);
 	}
 
 	/**
 	 * 体の爆発
 	 */
 	public void bodyBurst() {
-		if (!isCrushed()) {
-			strike(Const.HAMMER * 30);
-			toDead();
-		}
-		if (isDead() && getBurialState() != BurialState.ALL) {
-			setMessage(GameMessages.getMessage(this, MessagePool.Action.Dying), true);
-			stay();
-			setCrushed(true);
-			if (GameView.getTerrarium() != null) {
-				for (int i = 0; i < (GameRandom.nextInt(5) + 5); i++) {
-					GameView.addCrushedVomit(getX() + 7 - GameRandom.nextInt(14),
-							getY() + 7 - GameRandom.nextInt(14),
-							0, this, getShitType());
-				}
-			}
-		}
+		stateDelegate().bodyBurst();
 	}
 
 	/**
 	 * 体の切断
 	 */
 	public void bodyCut() {
-		clearActions();
-		setCriticalDamege(CriticalDamegeType.CUT);
-		if (getBurialState() == BurialState.NONE) {
-			for (int i = 0; i < 5; i++) {
-				GameView.addVomit(getX() + 7 - GameRandom.nextInt(14),
-						getY() + 7 - GameRandom.nextInt(14), 0,
-						this, getShitType());
-			}
-		}
-		// 実ゆの場合、親が反応する
-		checkReactionStalkMother(UnbirthBabyState.ATTAKED);
+		stateDelegate().bodyCut();
 	}
 
 	/**
 	 * 体のケガ
 	 */
 	public void bodyInjure() {
-		clearActions();
-		if (getCriticalDamege() == CriticalDamegeType.CUT)
-			return;
-		if (getCriticalDamege() == CriticalDamegeType.INJURED && GameRandom.nextInt(50) == 0) {
-			bodyCut();
-			return;
-		}
-		setCalm();
-		setForceFace(ImageCode.PAIN.ordinal());
-		setHappiness(Happiness.VERY_SAD);
-		setMessage(GameMessages.getMessage(this, MessagePool.Action.Scream), 40, true, true);
-		setCriticalDamege(CriticalDamegeType.INJURED);
-		if (getBurialState() == BurialState.NONE) {
-			GameView.addVomit(getX() + 7 - GameRandom.nextInt(14),
-					getY() + 7 - GameRandom.nextInt(14), 0, this,
-					getShitType());
-		}
-		// 実ゆの場合、親が反応する
-		checkReactionStalkMother(UnbirthBabyState.ATTAKED);
+		stateDelegate().bodyInjure();
 	}
 
 	/**
@@ -5546,21 +1536,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * お飾りが無いことを認識
 	 */
 	public void noticeNoOkazari() {
-		if (isDead() || isRemoved() || isUnBirth()) {
-			return;
-		}
-
-		if (getOkazari() != null || isNoticeNoOkazari()) {
-			return;
-		}
-
-		// 起きてる
-		if (!isSleeping()) {
-			setMessage(GameMessages.getMessage(this, MessagePool.Action.NoticeNoAccessory), true);
-			setHappiness(Happiness.VERY_SAD);
-			addStress(1200);
-			setNoticeNoOkazari(true);
-		}
+		adornmentDelegate().noticeNoOkazari();
 	}
 
 	/**
@@ -5569,38 +1545,14 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param takenByPlayer プレイヤーに取られたかどうか
 	 */
 	public void takeOkazari(boolean takenByPlayer) {
-		setOkazari(null);
-		if (isIdiot())
-			return;
-		if (!isDead()) {
-			if (!isSleeping()) {
-				setMessage(GameMessages.getMessage(this, MessagePool.Action.NoAccessory), true);
-				setHappiness(Happiness.VERY_SAD);
-				addStress(1200);
-				if (takenByPlayer) {
-					// なつき度設定
-					addLovePlayer(-100);
-				}
-				setNoticeNoOkazari(true);
-			} else {
-				setNoticeNoOkazari(false);
-			}
-		}
-		// 実ゆの場合、親が反応する
-		checkReactionStalkMother(UnbirthBabyState.SAD);
+		adornmentDelegate().takeOkazari(takenByPlayer);
 	}
 
 	/**
 	 * お飾りを落とす(未使用)
 	 */
 	public void dropOkazari() {
-		if (getOkazari() != null) {
-			getOkazari().setCalcX(x);
-			getOkazari().setCalcY(y);
-			getOkazari().setCalcZ(z + 10);
-			GameWorld.get().getCurrentMap().getOkazari().put(getOkazari().objId, getOkazari());
-			setOkazari(null);
-		}
+		adornmentDelegate().dropOkazari();
 	}
 
 	/**
@@ -5610,116 +1562,28 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param type お飾りのタイプ
 	 */
 	public void giveOkazari(OkazariType type) {
-		setOkazari(new Okazari(this, type));
-		setNoticeNoOkazari(false);
-		if (!isDead() && !isIdiot()) {
-			if (getOkazari().getOkazariType() == OkazariType.DEFAULT) {
-				setHappiness(Happiness.VERY_HAPPY);
-				addStress(-1250);
-				// なつき度設定
-				addLovePlayer(10);
-				// 実ゆの場合、親が反応する
-				checkReactionStalkMother(UnbirthBabyState.HAPPY);
-			} else {
-				setHappiness(Happiness.SAD);
-				addStress(-100);
-				// なつき度設定
-				addLovePlayer(10);
-			}
-		}
+		adornmentDelegate().giveOkazari(type);
 	}
 
 	/**
 	 * おくるみをあげる
 	 */
 	public void givePants() {
-		setHasPants(true);
-		if (canAction()) {
-			if (!isDirty() && hasOkazari()) {
-				setMessage(GameMessages.getMessage(this, MessagePool.Action.RelaxOkurumi), 30);
-				setHappiness(Happiness.HAPPY);
-				addStress(-250);
-				// なつき度設定
-				addLovePlayer(100);
-				// 実ゆの場合、親が反応する
-				checkReactionStalkMother(UnbirthBabyState.HAPPY);
-			}
-		}
+		adornmentDelegate().givePants();
 	}
 
 	/**
 	 * ジュース
 	 */
 	public void giveJuice() {
-		if (isDead()) {
-			return;
-		}
-		if (!isCantDie() /* && !isTalking() */) {
-			setMessage(GameMessages.getMessage(this, MessagePool.Action.Healing), Const.HOLDMESSAGE, true, true);
-			// stay();
-		}
-		if (getCriticalDamegeType() == CriticalDamegeType.INJURED) {
-			setCriticalDamege(null);
-		}
-		bodyBakePeriod = 0;
-		damage = 0;
-		setDamageState(getDamageState());
-		hungry = getHungryLimit();
-		bodyBakePeriod = 0;
-		setAngry(false);
-		setScare(false);
-		setCalm();
-
-		if (getAttachmentSize(Fire.class) != 0) {
-			removeAttachment(Fire.class);
-		}
-		setHappiness(Happiness.VERY_HAPPY);
-		setStress(0);
-		addMemories(20);
-		setForcePanicClear();
-		if (getCurrentEvent() instanceof BegForLifeEvent) {
-			// 空処理
-		} else {
-			clearActions();
-		}
-		// なつき度設定
-		addLovePlayer(200);
-		// 実ゆの場合、親が反応する
-		checkReactionStalkMother(UnbirthBabyState.HAPPY);
+		stateDelegate().giveJuice();
 	}
 
 	/**
 	 * ジュース注入
 	 */
 	public void injectJuice() {
-		if (isDead()) {
-			return;
-		}
-		// 反応
-		if (isSleeping()) {
-			wakeup();
-		}
-		if (!(getCurrentEvent() instanceof BegForLifeEvent)) {
-			clearActions();
-		}
-		setForceFace(ImageCode.PAIN.ordinal());
-		setMessage(GameMessages.getMessage(this, MessagePool.Action.Scream), Const.HOLDMESSAGE, true, true);
-		setHappiness(Happiness.VERY_SAD);
-		setCalm();
-		addStress(50);
-		addMemories(-10);
-		// 回復
-		if (getCriticalDamegeType() == CriticalDamegeType.INJURED) {
-			setCriticalDamege(null);
-		}
-		bodyBakePeriod = 0;
-		damage = 0;
-		setDamageState(getDamageState());
-		hungry = getHungryLimit();
-		// なつき度設定
-		addLovePlayer(-50);
-		// 実ゆの場合、親が反応する
-		checkReactionStalkMother(UnbirthBabyState.ATTAKED);
+		stateDelegate().injectJuice();
 	}
 
 	/**
@@ -5749,25 +1613,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * あにゃる閉鎖する.
 	 */
 	public final void closeAnal(boolean flag) {
-		if (isDead()) {
-			return;
-		}
-		analClose = flag;
-		// 寝ていたらリアクションなし
-		if (!canAction()) {
-			return;
-		}
-
-		if (isAnalClose()) {
-			// 閉鎖
-			setHappiness(Happiness.HAPPY);
-			setMessage(GameMessages.getMessage(this, MessagePool.Action.AnalSealed));
-		} else {
-			// 開放
-			setHappiness(Happiness.AVERAGE);
-			setMessage(GameMessages.getMessage(this, MessagePool.Action.ToFreedom));
-			stay();
-		}
+		abuseDelegate().closeAnal(flag);
 	}
 
 	/**
@@ -5801,113 +1647,21 @@ public abstract class Yukkuri extends SocialEntity {
 	 * 茎去勢を設定する.
 	 */
 	public void castrateStalk(boolean flag) {
-		if (isDead()) {
-			return;
-		}
-		stalkCastration = flag;
-		// 寝ていたらリアクションなし
-		if (!canAction()) {
-			return;
-		}
-		if (isNotNYD()) {
-			if (isStalkCastration()) {
-				// 閉鎖
-				setHappiness(Happiness.VERY_SAD);
-				addStress(1000);
-				setMessage(GameMessages.getMessage(this, MessagePool.Action.Alarm));
-				// なつき度設定
-				addLovePlayer(-400);
-				if (GameRandom.nextBoolean())
-					doYunnyaa(true);
-			} else {
-				// 開放
-				setHappiness(Happiness.AVERAGE);
-				setMessage(GameMessages.getMessage(this, MessagePool.Action.ToFreedom));
-				// なつき度設定
-				addLovePlayer(400);
-			}
-		}
+		abuseDelegate().castrateStalk(flag);
 	}
 
 	/**
 	 * 胎生去勢を設定する.
 	 */
 	public void castrateBody(boolean flag) {
-		if (isDead()) {
-			return;
-		}
-		bodyCastration = flag;
-		// 寝ていたらリアクションなし
-		if (!canAction()) {
-			return;
-		}
-		if (isNotNYD()) {
-			if (isBodyCastration()) {
-				// 閉鎖
-				setHappiness(Happiness.VERY_SAD);
-				addStress(1000);
-				// なつき度設定
-				addLovePlayer(-400);
-				setMessage(GameMessages.getMessage(this, MessagePool.Action.Alarm));
-				if (GameRandom.nextBoolean())
-					doYunnyaa(true);
-			} else {
-				// 開放
-				setHappiness(Happiness.AVERAGE);
-				// なつき度設定
-				addLovePlayer(400);
-				setMessage(GameMessages.getMessage(this, MessagePool.Action.ToFreedom));
-			}
-		}
+		abuseDelegate().castrateBody(flag);
 	}
 
 	/**
 	 * 火をつける
 	 */
 	public void giveFire() {
-		if (isBurned() || getAttachmentSize(Fire.class) != 0 || isCrushed()) {
-			return;
-		}
-
-		clearActions();
-		if (!isDead()) {
-			// 寝てたら起きる
-			if (isSleeping())
-				wakeup();
-			setCalm();
-			setStayTicks(0);
-			setStaying(false);
-			setToFood(false);
-			setToSukkiri(false);
-			setToShit(false);
-			setShitting(false);
-			setBirth(false);
-			setAngry(false);
-			if (!isFixBack()) {
-				setFurifuri(false);
-			}
-			setEating(false);
-			setPeropero(false);
-			setSukkiri(false);
-			setScare(false);
-			setEatingShit(false);
-			setBeVain(false);
-			setNobinobi(false);
-			setYunnyaa(false);
-			setInOutTakeoutItem(false);
-			setHappiness(Happiness.VERY_SAD);
-			// なつき度設定
-			addLovePlayer(-500);
-			// 実ゆの場合、親が反応する
-			checkReactionStalkMother(UnbirthBabyState.ATTAKED);
-		}
-
-		if (isNotNYD() && !isUnBirth()) {
-			setPanicType(PanicType.BURN);
-		}
-		setWet(false);
-		wetPeriod = 0;
-		getAttach().add(new Fire(this));
+		abuseDelegate().giveFire();
 	}
 
 	/**
@@ -5932,81 +1686,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param needleOn 針刺し
 	 */
 	public void setNeedle(boolean needleOn) {
-		if (getAttachmentSize(Needle.class) != 0) {
-			// 針が刺さっている場合は抜く
-			if (!needleOn) {
-				// 生まれていなくてもしゃべれるようにする
-				if (isUnBirth()) {
-					setCanTalk(false);
-				}
-
-				setNeedled(false);
-				setMessage(GameMessages.getMessage(this, MessagePool.Action.NeedleRemove));
-				removeAttachment(Needle.class);
-
-				// 粘着板で固定されていないなら背面固定解除
-				Map<Integer, StickyPlate> stickyPlates = GameWorld.get().getCurrentMap().getStickyPlate();
-				boolean resetBackFix = true;
-				for (Map.Entry<Integer, StickyPlate> entry : stickyPlates.entrySet()) {
-					StickyPlate s = entry.getValue();
-					if (s.getBindBody() == this) {
-						resetBackFix = false;
-						break;
-					}
-				}
-				if (resetBackFix) {
-					setFixBack(false);
-				}
-			}
-		} else {
-			// 針が刺さっていない場合は刺す
-			if (needleOn) {
-				getAttach().add(new Needle(this));
-
-				// 針を刺す際に判定するので刺した後で初期化する
-				if (!isDead()) {
-					// 生まれていなくてもしゃべれるようにする
-					if (isUnBirth()) {
-						setCanTalk(true);
-					}
-
-					// 寝てたら起きる
-					if (isSleeping())
-						wakeup();
-					setCalm();
-					setStayTicks(0);
-					setStaying(false);
-					setToFood(false);
-					setToSukkiri(false);
-					setToShit(false);
-					setShitting(false);
-					setBirth(false);
-					setAngry(false);
-					setFurifuri(false);
-					setBeVain(false);
-					setEating(false);
-					setPeropero(false);
-					setSukkiri(false);
-					setScare(false);
-					setEatingShit(false);
-					setNobinobi(false);
-					setYunnyaa(false);
-					setInOutTakeoutItem(false);
-					// 飛行種なら墜落させる
-					if (canflyCheck()) {
-						moveToZ(0);
-					}
-					clearActions();
-					// なつき度設定
-					addLovePlayer(-20);
-					setHappiness(Happiness.VERY_SAD);
-					setMessage(GameMessages.getMessage(this, MessagePool.Action.NeedleStick), true);
-					// 実ゆの場合、親が反応する
-					checkReactionStalkMother(UnbirthBabyState.ATTAKED);
-				}
-				setNeedled(true);
-			}
-		}
+		abuseDelegate().setNeedle(needleOn);
 	}
 
 	/**
@@ -6038,55 +1718,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * 水をかける
 	 */
 	public void giveWater() {
-		if (!isDead() && !isUnBirth()) {
-			// 寝てたら起きる
-			if (isSleeping())
-				wakeup();
-			setCalm();
-			setStayTicks(0);
-			setStaying(false);
-			setToFood(false);
-			setToSukkiri(false);
-			setToShit(false);
-			setShitting(false);
-			setBirth(false);
-			setAngry(false);
-			if (!isFixBack())
-				setFurifuri(false);
-			setEating(false);
-			setPeropero(false);
-			setSukkiri(false);
-			setScare(false);
-			setEatingShit(false);
-			setBeVain(false);
-			setNobinobi(false);
-			setYunnyaa(false);
-			setInOutTakeoutItem(false);
-			// 水が平気なら幸福度アップ
-			if (isLikeWater()) {
-				if (getPanicType() != PanicType.BURN) {
-					setHappiness(Happiness.HAPPY);
-					setMessage(GameMessages.getMessage(this, MessagePool.Action.Cleaned));
-				} else {
-					setHappiness(Happiness.VERY_SAD);
-				}
-			} else {
-				setHappiness(Happiness.VERY_SAD);
-				// なつき度設定
-				addLovePlayer(-100);
-				if (getPanicType() != PanicType.BURN) {
-					setMessage(GameMessages.getMessage(this, MessagePool.Action.Wet), true);
-					// 実ゆの場合、親が反応する
-					checkReactionStalkMother(UnbirthBabyState.SAD);
-				}
-			}
-		}
-		setWet(true);
-		wetPeriod = 0;
-		if (getAttachmentSize(Fire.class) != 0) {
-			removeAttachment(Fire.class);
-		}
-		setForcePanicClear();
+		stateDelegate().giveWater();
 	}
 
 	/**
@@ -6095,110 +1727,14 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param depth 深さ
 	 */
 	public void inWater(Pool.DEPTH depth) {
-		if (!isDead() && !isUnBirth()) {
-			// 寝てたら起きる
-			if (isSleeping())
-				wakeup();
-			setCalm();
-			setStayTicks(0);
-			setStaying(false);
-			setToFood(false);
-			setToSukkiri(false);
-			setToShit(false);
-			setShitting(false);
-			setBirth(false);
-			setAngry(false);
-			if (!isFixBack())
-				setFurifuri(false);
-			setEating(false);
-			setPeropero(false);
-			setSukkiri(false);
-			setScare(false);
-			setEatingShit(false);
-			setBeVain(false);
-			setNobinobi(false);
-			setYunnyaa(false);
-			setInOutTakeoutItem(false);
-
-			// 水が平気なら幸福度アップ
-			if (isLikeWater()) {
-				if (getPanicType() != PanicType.BURN) {
-					setHappiness(Happiness.HAPPY);
-					setMessage(GameMessages.getMessage(this, MessagePool.Action.Cleaned));
-				} else {
-					setHappiness(Happiness.VERY_SAD);
-				}
-			} else {
-				setHappiness(Happiness.VERY_SAD);
-				if (getPanicType() != PanicType.BURN) {
-					switch (depth) {
-						case SHALLOW:
-							setMessage(GameMessages.getMessage(this, MessagePool.Action.WetInShallowWater), true);
-							break;
-						case DEEP:
-							setMessage(GameMessages.getMessage(this, MessagePool.Action.WetInDeepwWater), true);
-							break;
-						default:
-							break;
-					}
-					// 実ゆの場合、親が反応する
-					checkReactionStalkMother(UnbirthBabyState.SAD);
-				}
-			}
-		}
-		// if( wet )
-		// {
-		// melt = true;
-		// }
-		if (getAttachmentSize(Fire.class) != 0) {
-			removeAttachment(Fire.class);
-		}
-		setWet(true);
-		wetPeriod = 0;
+		stateDelegate().inWater(depth);
 	}
 
 	/**
 	 * 土に埋める
 	 */
 	public void baryInUnderGround() {
-		// 接地してるか
-		if (0 < z) {
-			return;
-		}
-
-		// 畑にいるか
-		int xCoord = getX();
-		int yCoord = getY();
-		if ((Translate.getCurrentFieldMapNum(xCoord, yCoord) & FieldShape.FIELD_FARM) == 0) {
-			return;
-		}
-
-		int collisionHeight = getCollisionY();
-		setLockmove(true);
-
-		// 現在の深さチェック
-		switch (getBurialState()) {
-			case NONE:
-				setBurialState(BurialState.HALF);
-				setMostDepth(-collisionHeight / 16);
-				setCalcZ(-collisionHeight / 16);
-				break;
-			case HALF:
-				setBurialState(BurialState.NEARLY_ALL);
-				setMostDepth(-collisionHeight / 8);
-				setCalcZ(-collisionHeight / 8);
-				break;
-			case NEARLY_ALL:
-				setBurialState(BurialState.ALL);
-				setMostDepth(-collisionHeight / 3);
-				setCalcZ(-collisionHeight / 3);
-				break;
-			case ALL:
-				break;
-			default:
-				break;
-		}
-		begForLife();
+		stateDelegate().baryInUnderGround();
 	}
 
 	/**
@@ -6208,55 +1744,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param pType パニックのタイプ
 	 */
 	public void setPanic(boolean flag, PanicType pType) {
-		if (isDead() || isSleeping() || isUnBirth())
-			return;
-		// 足りないゆは不動
-		if (isIdiot())
-			return;
-		// 発情レイパーにはパニック無効 燃えようがれみりゃがいようがれいぷっぷする
-		if (isRaper() && isExciting()) {
-			setForcePanicClear();
-			return;
-		}
-		if (flag) {
-			// 既にパニック状態の場合はカウンタのリセットのみ
-			if (getPanicType() != null) {
-				panicPeriod = 0;
-				return;
-			}
-			setPanicType(pType);
-			panicPeriod = 0;
-			setStayTicks(0);
-			setCalm();
-			setStaying(false);
-			setToFood(false);
-			setToSukkiri(false);
-			setToShit(false);
-			setShitting(false);
-			setBirth(false);
-			setAngry(false);
-			if (!isFixBack()) {
-				setFurifuri(false);
-			} else {
-				if (!isSleeping() && isNeedled() && GameRandom.nextInt(10) == 0) {
-					setFurifuri(true);
-				}
-			}
-			setEating(false);
-			setPeropero(false);
-			setSukkiri(false);
-			setScare(false);
-			setEatingShit(false);
-			setBeVain(false);
-			setNobinobi(false);
-			setYunnyaa(false);
-			setInOutTakeoutItem(false);
-			setHappiness(Happiness.VERY_SAD);
-		} else {
-			setPanicType(null);
-			panicPeriod = 0;
-			setHappiness(Happiness.SAD);
-		}
+		stateDelegate().setPanic(flag, pType);
 	}
 
 	/**
@@ -6265,98 +1753,14 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param type 声掛けタイプ（0:ゆっくりしていってね 1:ゆっくりしないで死んでね 2:もるんもるんしてね）
 	 */
 	public void voiceReaction(int type) {
-		if (getPanicType() != null || isDead()) {
-			return;
-		}
-		if (!canAction()) {
-			return;
-		}
-		switch (type) {
-			case 0: {
-				// ゆっくりしていってね
-				clearActions();
-				setScare(false);
-				setAngry(false);
-				setFurifuri(false);
-				if (!isRaper())
-					setExciting(false);
-				setForceExciting(false);
-				setNobinobi(false);
-				setYunnyaa(false);
-				excitingPeriod = 0;
-				setRelax(true);
-				setMessage(GameMessages.getMessage(this, MessagePool.Action.TakeItEasy));
-				addStress(-100);
-				wakeup();
-				// なつき度設定
-				addLovePlayer(100);
-				break;
-			}
-			case 1: {
-				// ゆっくりしないでしんでね
-				wakeup();
-				clearActions();
-				setAngry();
-				setMessage(GameMessages.getMessage(this, MessagePool.Action.Alarm));
-				addStress(150);
-				// なつき度設定
-				addLovePlayer(-100);
-				if (GameRandom.nextBoolean())
-					doYunnyaa(true);
-				break;
-			}
-			case 2: {
-				// もるんもるん
-				wakeup();
-				clearActions();
-				if (isNeedled() || (isGotBurnedHeavily()) && getFootBakeLevel() != FootBake.CRITICAL) {
-					if (isDamaged())
-						setMessage(GameMessages.getMessage(this, MessagePool.Action.Scream2), 30);
-					else
-						setMessage(GameMessages.getMessage(this, MessagePool.Action.Scream), 30);
-					setHappiness(Happiness.VERY_SAD);
-					setForceFace(ImageCode.PAIN.ordinal());
-					setFurifuri(false);
-					addStress(50);
-				} else if (getFootBakeLevel() == FootBake.CRITICAL) {
-					setMessage(GameMessages.getMessage(this, MessagePool.Action.CantMove), 30);
-					setHappiness(Happiness.VERY_SAD);
-					setFurifuri(false);
-					addStress(50);
-				} else {
-					setMessage(GameMessages.getMessage(this, MessagePool.Action.FuriFuri), 30);
-					setFurifuri(true);
-					addStress(-50);
-				}
-				stay(30);
-				break;
-			}
-			default:
-				break;
-		}
+		emotionDelegate().voiceReaction(type);
 	}
 
 	/**
 	 * 持つ
 	 */
 	public void Hold() {
-		if (isDead())
-			return;
-		if (canPullOrPush()) {
-			setCanPullOrPush(false);
-			setLockmove(false);
-			return;
-		}
-		// なつき度設定
-		if (getZ() > 0)
-			setCalcZ(0);
-		GameEnvironment.setAlarm();
-		setCanPullOrPush(true);
-		setLockmove(true);
-		setHappiness(Happiness.SAD);
-		setMessage(GameMessages.getMessage(this, MessagePool.Action.Press));
-		// 実ゆの場合、親が反応する
-		// checkReactionStalkMother(UnbirthBabyState.SAD);
+		abuseDelegate().Hold();
 	}
 
 	/**
@@ -6365,66 +1769,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param force 強制かどうか
 	 */
 	public void lockSetZ(int force) {
-		externalPressure = force;
-		if (externalPressure == 0) {
-			return;
-		}
-		if (isDead()) {
-			return;
-		}
-		clearActions();
-		setAngry();
-		if (externalPressure < 0) {
-			// つぶれ
-			if (externalPressure < Const.EXT_FORCE_PUSH_LIMIT[getBodyAgeState().ordinal()]) {
-				// 圧死
-				setLockmove(false);
-				externalPressure = 0;
-				setCalcZ(0);
-				bodyBurst();
-			} else if (externalPressure < (Const.EXT_FORCE_PUSH_LIMIT[getBodyAgeState().ordinal()] >> 1)) {
-				// 限界
-				if (GameRandom.nextInt(10) == 0) {
-					setHappiness(Happiness.VERY_SAD);
-					setMessage(GameMessages.getMessage(this, MessagePool.Action.Press2), Const.HOLDMESSAGE, true, true);
-					addStress(25);
-				}
-				if (GameRandom.nextInt(80) == 0) {
-					// あんこを吐き出す
-					int ofsX = Translate.invertX(getCollisionX() >> 1, y);
-					if (getDirection() == Direction.LEFT)
-						ofsX = -ofsX;
-					GameView.addVomit(getX() + ofsX, getY() + 2, getZ(), this, getShitType());
-					damage += Const.HAMMER / 2;
-					setMessage(GameMessages.getMessage(this, MessagePool.Action.Vomit), 30);
-				}
-			} else {
-				if (GameRandom.nextInt(10) == 0) {
-					setHappiness(Happiness.AVERAGE);
-					setMessage(GameMessages.getMessage(this, MessagePool.Action.Press));
-				}
-			}
-		} else if (externalPressure > 0) {
-			// ひっぱり
-			if (externalPressure > Const.EXT_FORCE_PULL_LIMIT[getBodyAgeState().ordinal()]) {
-				// ちぎれ
-				externalPressure = 0;
-				setLockmove(false);
-				bodyCut();
-			} else if (externalPressure > Const.EXT_FORCE_PULL_LIMIT[getBodyAgeState().ordinal()] >> 1) {
-				// 限界
-				if (GameRandom.nextInt(10) == 0) {
-					setHappiness(Happiness.VERY_SAD);
-					setMessage(GameMessages.getMessage(this, MessagePool.Action.Pull2), Const.HOLDMESSAGE, true, true);
-					addStress(20);
-				}
-			} else {
-				if (GameRandom.nextInt(10) == 0) {
-					setHappiness(Happiness.AVERAGE);
-					setMessage(GameMessages.getMessage(this, MessagePool.Action.Pull));
-				}
-			}
-		}
+		abuseDelegate().lockSetZ(force);
 	}
 
 	/**
@@ -6515,31 +1860,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * 親子関係をなくす
 	 */
 	public void clearRelation() {
-		if (BodyRelations.getParentBody(getParents()[Parent.PAPA.ordinal()]) != null)
-			if (BodyRelations.getParentBody(getParents()[Parent.PAPA.ordinal()]).isRemoved())
-				getParents()[Parent.PAPA.ordinal()] = -1;
-		if (BodyRelations.getParentBody(getParents()[Parent.MAMA.ordinal()]) != null)
-			if (BodyRelations.getParentBody(getParents()[Parent.MAMA.ordinal()]).isRemoved())
-				getParents()[Parent.MAMA.ordinal()] = -1;
-		if (getPartner() != -1) {
-			Yukkuri partnerCandidate = BodyRelations.getPartnerBody(this);
-			if (partnerCandidate == null || partnerCandidate.isRemoved())
-				setPartner(-1);
-		}
-	}
-
-	/**
-	 * 行動・イベントの取り消し
-	 */
-	public void clearActions() {
-		BodyEventState.clearActions(this);
-	}
-
-	/**
-	 * イベントをクリアする.
-	 */
-	public void clearEvent() {
-		BodyEventState.clearEvent(this);
+		familyDelegate().clearRelation();
 	}
 
 	/**
@@ -6564,14 +1885,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * 茎を完全に取り除きたい場合はremoveAllStalks()を使用する.
 	 */
 	public void disPlantStalks() {
-		if (getStalks() != null) {
-			for (Stalk s : getStalks()) {
-				if (s != null) {
-					s.setPlantYukkuri(null);
-				}
-			}
-			getStalks().clear();
-		}
+		stalkDelegate().disPlantStalks();
 	}
 
 	/**
@@ -6583,7 +1897,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @return index
 	 */
 	public int getBodyBaseImage(BodyLayer layer) {
-		return BodyRenderState.getBodyBaseImage(this, layer);
+		return spriteDelegate().getBodyBaseImage(layer);
 	}
 
 	/**
@@ -6593,7 +1907,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @return index
 	 */
 	public int getAbnormalBodyImage(BodyLayer layer) {
-		return BodyRenderState.getAbnormalBodyImage(this, layer);
+		return spriteDelegate().getAbnormalBodyImage(layer);
 	}
 
 	/**
@@ -6604,7 +1918,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @return index
 	 */
 	public int getOlazariImage(BodyLayer layer, int type) {
-		return BodyRenderState.getOlazariImage(this, layer, type);
+		return spriteDelegate().getOlazariImage(layer, type);
 	}
 
 	/**
@@ -6614,7 +1928,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @return index
 	 */
 	public int getEffectImage(BodyLayer layer) {
-		return BodyRenderState.getEffectImage(this, layer);
+		return spriteDelegate().getEffectImage(layer);
 	}
 
 	/**
@@ -6624,7 +1938,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @return index
 	 */
 	public int getFaceImage(BodyLayer layer) {
-		return BodyRenderState.getFaceImage(this, layer);
+		return spriteDelegate().getFaceImage(layer);
 	}
 
 	/**
@@ -6634,7 +1948,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 */
 	@JsonIgnore
 	public final boolean isAliceRaperForRender() {
-		return isAliceRaper();
+		return spriteDelegate().isAliceRaperForRender();
 	}
 
 	/**
@@ -6679,84 +1993,12 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @return index
 	 */
 	public int getBraidImage(BodyLayer layer, int type) {
-		return BodyRenderState.getBraidImage(this, layer, type);
-	}
-
-	/**
-	 * イベントに反応できる状態かチェックする
-	 * イベントの重要度で寝ていても起きたりできるようにするため
-	 * ここでは動いたら見た目におかしくなる状況のみチェック
-	 * 
-	 * @return
-	 */
-	public final boolean canEventResponse() {
-		if (isDead() || getCriticalDamege() == CriticalDamegeType.CUT || isPealed() ||
-				isPacked() || (isBlind() && !isCutPeni()) || isSleeping() || isShitting() || isBirth() || isSukkiri() ||
-				isNeedled() || getCurrentEvent() != null || isNYD() || isTaken()
-				|| getBurialState() != BurialState.NONE || isLockmove() || isStarving()) {
-			return false;
-		}
-		// Rapers ignore events while exciting and continue their action.
-		if (isRaper() && (isExciting() || isForceExciting())) {
-			return false;
-		}
-		return true;
-	}
-
-	/**
-	 * ぺにぺに切断のみ、盲目状態でも起きて良い
-	 * 
-	 * @return ぺにぺに切断イベントが溜まってるかどうか
-	 */
-	@Transient
-	protected boolean isCutPeni() {
-		if (getEventList() == null || getEventList().size() == 0) {
-			return false;
-		}
-		if (getEventList().get(0) instanceof CutPenipeniEvent) {
-			return true;
-		}
-		return false;
-	}
-
-	/**
-	 * 行動できる状態かチェックする
-	 * ここでは動いたら見た目におかしくなる状況のみチェック
-	 * 
-	 * @return
-	 */
-	public final boolean canAction() {
-		if (isDead() || getCriticalDamege() == CriticalDamegeType.CUT || isPealed() ||
-				isPacked() || isSleeping() || isShitting() || isBirth() || isSukkiri() || isNeedled() ||
-				getCurrentEvent() != null || isNYD() ||
-				getBurialState() != BurialState.NONE) {
-			return false;
-		}
-		return true;
-	}
-
-	/**
-	 * 行動できる状態かチェックする
-	 * ここでは動いたら見た目におかしくなる状況のみチェック
-	 * 
-	 * @return
-	 */
-	public final boolean canActionForEvent() {
-		if (isDead() || getCriticalDamege() == CriticalDamegeType.CUT || isPealed() ||
-				isPacked() || isSleeping() || isShitting() || isBirth() || isSukkiri() || isNeedled() ||
-				isNYD() || getBurialState() != BurialState.NONE) {
-			return false;
-		}
-		return true;
+		return spriteDelegate().getBraidImage(layer, type);
 	}
 
 	@Override
 	public void grab() {
-		grabbed = true;
-		if (getBindStalk() != null) {
-			checkReactionStalkMother(UnbirthBabyState.KILLED);
-			detachFromStalk();
-		}
+		stalkDelegate().grab();
 	}
 
 	/**
@@ -6767,17 +2009,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * </p>
 	 */
 	public final void detachFromStalk() {
-		if (getBindStalk() == null) {
-			return;
-		}
-		if (getBindStalk().getBindBabies() != null) {
-			int idx = getBindStalk().getBindBabies().indexOf(this.getUniqueID());
-			if (idx >= 0) {
-				getBindStalk().getBindBabies().set(idx, null);
-			}
-		}
-		setBindStalk(null);
-		setParentLinkId(-1);
+		stalkDelegate().detachFromStalk();
 	}
 
 	/**
@@ -6881,6 +2113,9 @@ public abstract class Yukkuri extends SocialEntity {
 		// check age
 		// ageが変化しないと状態が変化しないロジックになっているのでそっとしておく
 		setAge(getAge() + TICK);
+		if (birthEventBlockedTicks > 0) {
+			birthEventBlockedTicks--;
+		}
 
 		if (getAge() > getLifeLimitBase()) {
 			toDead();
@@ -7102,79 +2337,22 @@ public abstract class Yukkuri extends SocialEntity {
 		// イベントで処理が設定された場合に実行する
 		retval = BodyEventState.resolveEventResultAction(this, retval);
 		calcPos();
-		calcMoveTarget();
+		moveDelegate().calcMoveTarget();
 		return retval;
 	}
 
 	/**
-	 * moveTargetIdが範囲外のとき、範囲内に収める
+	 * moveTargetIdが範囲外のとき、範囲内に収める.
 	 */
 	public void calcMoveTarget() {
-		Entity o = takeMoveTarget();
-		if (o == null) {
-			return;
-		}
-		int mapX = Translate.getMapW();
-		int mapY = Translate.getMapH();
-		if (o.getX() < 0) {
-			o.setCalcX(0);
-		}
-		if (o.getY() < 0) {
-			o.setCalcY(0);
-		}
-		if (o.getX() > mapX) {
-			o.setCalcX(mapX);
-		}
-		if (o.getX() > mapY) {
-			o.setCalcX(mapY);
-		}
+		moveDelegate().calcMoveTarget();
 	}
 
 	/**
 	 * Removeされたゆっくりが姉妹リスト、子リストにいたら削除する
 	 */
 	private void checkRemovedFamilyList() {
-		Yukkuri[] sisters = getArrayOfBody(getSisterList());
-		getSisterList().clear();
-		Set<Integer> set = new TreeSet<>();
-		for (Yukkuri sister : sisters) {
-			if (sister == null) {
-				continue;
-			}
-			if (!sister.isRemoved()) {
-				set.add(sister.getUniqueID());
-			}
-		}
-		setSisterList(new LinkedList<Integer>(set));
-		Collections.sort(getSisterList());
-
-		Yukkuri[] elderSisters = getArrayOfBody(getElderSisterList());
-		getElderSisterList().clear();
-		set.clear();
-		for (Yukkuri elderSister : elderSisters) {
-			if (elderSister == null) {
-				continue;
-			}
-			if (!elderSister.isRemoved()) {
-				set.add(elderSister.getUniqueID());
-			}
-		}
-		setElderSisterList(new LinkedList<Integer>(set));
-		Collections.sort(getElderSisterList());
-
-		Yukkuri[] children = getArrayOfBody(getChildrenList());
-		getChildrenList().clear();
-		set.clear();
-		for (Yukkuri child : children) {
-			if (child == null) {
-				continue;
-			}
-			if (!child.isRemoved()) {
-				set.add(child.getUniqueID());
-			}
-		}
-		setChildrenList(new LinkedList<Integer>(set));
-		Collections.sort(getChildrenList());
+		familyDelegate().checkRemovedFamilyList();
 	}
 
 	/**
@@ -7467,44 +2645,33 @@ public abstract class Yukkuri extends SocialEntity {
 		setRaper(!isRaper());
 	}
 
-	/**
-	 * イベントのためのアクションのみのクリア
-	 */
-	public void clearActionsForEvent() {
-		BodyEventState.clearActionsForEvent(this);
-	}
-
-	/** 捕食種（れみりゃ・ふらん）であれば {@code true}. */
-	@JsonIgnore
-	public boolean isPredator() {
-		return false;
-	}
-
-	/** ハイブリッドゆっくりであれば {@code true}. */
-	@JsonIgnore
-	public boolean isHybrid() {
-		return false;
-	}
-
-	/** 捕食種に仕える従者種（咲夜・美鈴）であれば {@code true}. */
-	@JsonIgnore
-	public boolean isServant() {
-		return false;
-	}
-
-	/**
-	 * 指定した主種族に仕える従者種であれば {@code true}.
-	 *
-	 * @param masterType 主の種族ID
-	 * @return 指定種族の従者かどうか
-	 */
-	@JsonIgnore
-	public boolean isServantOf(YukkuriType masterType) {
-		return false;
-	}
-
 	/** おかざりがなくなっていることに気がついているか */
 	protected boolean noticeNoOkazari = false;
+
+	// ===== Step 7-1: LivingEntity から移動した種族固有フィールド =====
+
+	/** 種族としてお下げ、羽、尻尾を持つか */
+	protected boolean braidType = true;
+	/** あにゃるふさぎ有無 */
+	protected boolean analClose = false;
+
+	/** あにゃるふさぎ有無 を取得する. @return あにゃるふさぎ有無 */
+	public boolean isAnalClose() {
+		return analClose;
+	}
+
+	/** 胎生去勢有無 */
+	protected boolean bodyCastration = false;
+	/** 茎去勢有無 */
+	protected boolean stalkCastration = false;
+	/** 希少種か */
+	protected boolean rareType = false;
+	/** 捕食種タイプ */
+	protected PredatorType predatorType = null;
+	/** 苦いえさが好きか */
+	protected boolean likeBitterFood = false;
+	/** 辛いえさが好きか */
+	protected boolean likeHotFood = false;
 
 	public boolean isNoticeNoOkazari() {
 		return noticeNoOkazari;
@@ -7512,6 +2679,84 @@ public abstract class Yukkuri extends SocialEntity {
 
 	public void setNoticeNoOkazari(boolean noticeNoOkazari) {
 		this.noticeNoOkazari = noticeNoOkazari;
+	}
+
+	// ===== Step 7-1: 種族固有フィールドの getter/setter =====
+
+	/** 種族としてお下げ、羽、尻尾を持つか を取得する. @return 種族としてお下げ、羽、尻尾を持つか */
+	public boolean isBraidType() {
+		return braidType;
+	}
+
+	/** 種族としてお下げ、羽、尻尾を持つか を設定する. @param braidType 種族としてお下げ、羽、尻尾を持つか */
+	public void setBraidType(boolean braidType) {
+		this.braidType = braidType;
+	}
+
+	/** 胎生去勢有無 を取得する. @return 胎生去勢有無 */
+	public boolean isBodyCastration() {
+		return bodyCastration;
+	}
+
+	/** 胎生去勢有無 を設定する. @param bodyCastration 胎生去勢有無 */
+	public void setBodyCastration(boolean bodyCastration) {
+		this.bodyCastration = bodyCastration;
+	}
+
+	/** 茎去勢有無 を取得する. @return 茎去勢有無 */
+	public boolean isStalkCastration() {
+		return stalkCastration;
+	}
+
+	/** 茎去勢有無 を設定する. @param stalkCastration 茎去勢有無 */
+	public void setStalkCastration(boolean stalkCastration) {
+		this.stalkCastration = stalkCastration;
+	}
+
+	/** 希少種か を取得する. @return 希少種か */
+	public boolean isRareType() {
+		return rareType;
+	}
+
+	/** 希少種か を設定する. @param rareType 希少種か */
+	public void setRareType(boolean rareType) {
+		this.rareType = rareType;
+	}
+
+	/** 捕食種タイプ を取得する. @return 捕食種タイプ */
+	public PredatorType getPredatorType() {
+		return predatorType;
+	}
+
+	/** 捕食種タイプ を設定する. @param predatorType 捕食種タイプ */
+	public void setPredatorType(PredatorType predatorType) {
+		this.predatorType = predatorType;
+	}
+
+	/** 捕食種かどうかを取得する. */
+	@JsonIgnore
+	public boolean isPredatorType() {
+		return getPredatorType() != null;
+	}
+
+	/** 苦いえさが好きか を取得する. @return 苦いえさが好きか */
+	public boolean isLikeBitterFood() {
+		return likeBitterFood;
+	}
+
+	/** 苦いえさが好きか を設定する. @param likeBitterFood 苦いえさが好きか */
+	public void setLikeBitterFood(boolean likeBitterFood) {
+		this.likeBitterFood = likeBitterFood;
+	}
+
+	/** 辛いえさが好きか を取得する. @return 辛いえさが好きか */
+	public boolean isLikeHotFood() {
+		return likeHotFood;
+	}
+
+	/** 辛いえさが好きか を設定する. @param likeHotFood 辛いえさが好きか */
+	public void setLikeHotFood(boolean likeHotFood) {
+		this.likeHotFood = likeHotFood;
 	}
 
 	// --- BodyNameSet fields ---
@@ -7640,6 +2885,14 @@ public abstract class Yukkuri extends SocialEntity {
 		super.copyStateTo(to);
 		Yukkuri y = (Yukkuri) to;
 		y.setNoticeNoOkazari(noticeNoOkazari);
+		y.setBraidType(braidType);
+		y.setAnalClose(analClose);
+		y.setBodyCastration(bodyCastration);
+		y.setStalkCastration(stalkCastration);
+		y.setRareType(rareType);
+		y.setPredatorType(predatorType);
+		y.setLikeBitterFood(likeBitterFood);
+		y.setLikeHotFood(likeHotFood);
 		y.copyBodyNameSetFrom(this);
 		y.copyBodySpriteSetFrom(this);
 	}
@@ -7679,13 +2932,6 @@ public abstract class Yukkuri extends SocialEntity {
 	/** 各ゆっくり用iniファイルからマウントポイントを取得する */
 	public abstract Point4y[] getMountPoint(String key);
 
-	/**
-	 * 非ゆっくり症のチェックメソッド.
-	 * Bodyでのオーバーライド.
-	 * 
-	 * @return 非ゆっくり症かどうか
-	 */
-
 	// BodyNameSet — 各ゆっくり固有の名前データ（Yukkuri で実装）
 
 	/**
@@ -7714,67 +2960,20 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param from 複製元
 	 */
 	public void copyBodySpriteSetFrom(Yukkuri from) {
-		if (from == null) {
-			return;
-		}
-		setBodySpr(copySprites(from.getBodySpr()));
-		setExpandSpr(copySprites(from.getExpandSpr()));
-		setBraidSpr(copySprites(from.getBraidSpr()));
-	}
-
-	private static Sprite[] copySprites(Sprite[] src) {
-		if (src == null) {
-			return null;
-		}
-		Sprite[] ret = new Sprite[src.length];
-		for (int i = 0; i < src.length; i++) {
-			ret[i] = copySprite(src[i]);
-		}
-		return ret;
-	}
-
-	private static Sprite copySprite(Sprite src) {
-		if (src == null) {
-			return null;
-		}
-		Sprite ret = new Sprite();
-		ret.setOriginalW(src.getOriginalW());
-		ret.setOriginalH(src.getOriginalH());
-		ret.setImageW(src.getImageW());
-		ret.setImageH(src.getImageH());
-		ret.setPivotX(src.getPivotX());
-		ret.setPivotY(src.getPivotY());
-		ret.setPivotType(src.getPivotType());
-		Rectangle4y[] rect = src.getScreenRect();
-		if (rect != null) {
-			Rectangle4y[] rectCopy = new Rectangle4y[rect.length];
-			for (int i = 0; i < rect.length; i++) {
-				Rectangle4y r = rect[i];
-				rectCopy[i] = (r == null) ? null : new Rectangle4y(r.getX(), r.getY(), r.getWidth(), r.getHeight());
-			}
-			ret.setScreenRect(rectCopy);
-		}
-		return ret;
+		spriteDelegate().copyBodySpriteSetFrom(from);
 	}
 
 	// public variables
-
-	// Used in image loading.
-	private static BufferedImage[] shadowImages = new BufferedImage[3];
-	/** 影画像のサイズ定義 */
-	protected static int[] shadowImgW = new int[3], shadowImgH = new int[3];
-	/** 影画像の中心定義 */
-	protected static int[] shadowPivX = new int[3], shadowPivY = new int[3];
 	// .INIファイルで変更可能な各ゆっくりのパラメータ.
 	/** うにょの動きの強さ */
 	public final static int UNYOSTRENGTH[] = { 4, 7, 10 };
 
 	public static BufferedImage[] getShadowImages() {
-		return shadowImages;
+		return YukkuriSprite.getShadowImages();
 	}
 
 	public static void setShadowImages(BufferedImage[] shadowImages) {
-		Yukkuri.shadowImages = shadowImages;
+		YukkuriSprite.setShadowImages(shadowImages);
 	}
 
 	/**
@@ -7783,7 +2982,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @return 影画像のサイズ定義
 	 */
 	public static int[] getShadowImgW() {
-		return shadowImgW;
+		return YukkuriSprite.getShadowImgW();
 	}
 
 	/**
@@ -7792,15 +2991,15 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param shadowImgW 影画像のサイズ定義
 	 */
 	public static void setShadowImgW(int[] shadowImgW) {
-		Yukkuri.shadowImgW = shadowImgW;
+		YukkuriSprite.setShadowImgW(shadowImgW);
 	}
 
 	public static int[] getShadowImgH() {
-		return shadowImgH;
+		return YukkuriSprite.getShadowImgH();
 	}
 
 	public static void setShadowImgH(int[] shadowImgH) {
-		Yukkuri.shadowImgH = shadowImgH;
+		YukkuriSprite.setShadowImgH(shadowImgH);
 	}
 
 	/**
@@ -7809,7 +3008,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @return 影画像の中心定義
 	 */
 	public static int[] getShadowPivX() {
-		return shadowPivX;
+		return YukkuriSprite.getShadowPivX();
 	}
 
 	/**
@@ -7818,15 +3017,28 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param shadowPivX 影画像の中心定義
 	 */
 	public static void setShadowPivX(int[] shadowPivX) {
-		Yukkuri.shadowPivX = shadowPivX;
+		YukkuriSprite.setShadowPivX(shadowPivX);
 	}
 
 	public static int[] getShadowPivY() {
-		return shadowPivY;
+		return YukkuriSprite.getShadowPivY();
 	}
 
 	public static void setShadowPivY(int[] shadowPivY) {
-		Yukkuri.shadowPivY = shadowPivY;
+		YukkuriSprite.setShadowPivY(shadowPivY);
+	}
+
+	/** おさげのスプライト定義（年齢別） */
+	protected Sprite[] braidSpr = new Sprite[3];
+
+	/** おさげのスプライト定義（年齢別） を取得する. @return おさげのスプライト定義（年齢別） */
+	public Sprite[] getBraidSpr() {
+		return braidSpr;
+	}
+
+	/** おさげのスプライト定義（年齢別） を設定する. @param braidSpr おさげのスプライト定義（年齢別） */
+	public void setBraidSpr(Sprite[] braidSpr) {
+		this.braidSpr = braidSpr;
 	}
 
 	/**
@@ -7840,11 +3052,6 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @return 画像がまりちゃ流しか
 	 */
 	public boolean isImageNagasiMode() {
-		return isImageNagasiModeRaw();
-	}
-
-	@JsonIgnore
-	public boolean isImageNagasiModeRaw() {
 		return imageNagasiMode;
 	}
 
@@ -7862,97 +3069,10 @@ public abstract class Yukkuri extends SocialEntity {
 	 * 
 	 * @return 蓄積ダメージ counter indicating damage
 	 */
-
-	@JsonIgnore
-	public void setAttitudeRaw(Attitude attitude) {
-		this.attitude = attitude;
-	}
-
-	@JsonIgnore
-	public int getDamageRaw() {
-		return damage;
-	}
-
-	@JsonIgnore
-	public void setDamageRaw(int damage) {
-		this.damage = damage;
-	}
-
-	@JsonIgnore
-	public void setStressRaw(int stress) {
-		this.stress = stress;
-	}
-
-	@Override
 	public void setStress(int s) {
 		if (s > 0) {
-			setStressRaw(s);
+			this.stress = s;
 		}
-	}
-
-	@JsonIgnore
-	public void setTangRaw(int tang) {
-		this.tang = tang;
-	}
-
-	@JsonIgnore
-	public void setDamageStateRaw(Damage damageState) {
-		this.damageState = damageState;
-	}
-
-	@JsonIgnore
-	public void setIntelligenceRaw(Intelligence intelligence) {
-		this.intelligence = intelligence;
-	}
-
-	@JsonIgnore
-	public void setShitRaw(int shit) {
-		this.shit = shit;
-	}
-
-	@JsonIgnore
-	public void setMemoriesRaw(int memories) {
-		this.memories = memories;
-	}
-
-	@JsonIgnore
-	public void setTraumaRaw(Trauma trauma) {
-		this.trauma = trauma;
-	}
-
-	@JsonIgnore
-	public void setLovePlayerRaw(int lovePlayer) {
-		this.lovePlayer = lovePlayer;
-	}
-
-	@JsonIgnore
-	public void setLovePlayerStateRaw(LovePlayer lovePlayerState) {
-		this.lovePlayerState = lovePlayerState;
-	}
-
-	@JsonIgnore
-	public void setHairStateRaw(HairState hairState) {
-		this.hairState = hairState;
-	}
-
-	/**
-	 * うまれて初めての地面か を設定する.
-	 * 
-	 * @param firstGround うまれて初めての地面か
-	 */
-	@JsonProperty("firstGround")
-	public void setFirstGround(boolean firstGround) {
-		this.firstGround = firstGround;
-	}
-
-	/**
-	 * うまれて初めての食事か を設定する.
-	 * 
-	 * @param firstEatStalk うまれて初めての食事か
-	 */
-	@JsonProperty("firstEatStalk")
-	public void setFirstEatStalk(boolean firstEatStalk) {
-		this.firstEatStalk = firstEatStalk;
 	}
 
 	/**
@@ -7968,75 +3088,12 @@ public abstract class Yukkuri extends SocialEntity {
 	 */
 
 	/**
-	 * 移動不可ベルトコンベアの有無 を取得する.
-	 * 
-	 * @return 移動不可ベルトコンベアの有無
-	 */
-	public boolean isOnNonMovingConveyor() {
-		return isOnDontMoveBeltconveyorRaw();
-	}
-
-	@JsonIgnore
-	public boolean isOnDontMoveBeltconveyorRaw() {
-		return nonMovingConveyor;
-	}
-
-	/**
-	 * 移動不可ベルトコンベアの有無 を設定する.
-	 * 
-	 * @param nonMovingConveyor 移動不可ベルトコンベアの有無
-	 */
-	@JsonProperty("nonMovingConveyor")
-	public void setOnNonMovingConveyor(boolean nonMovingConveyor) {
-		this.nonMovingConveyor = nonMovingConveyor;
-	}
-
-	@JsonIgnore
-	public void setRareTypeRaw(boolean rareType) {
-		this.rareType = rareType;
-	}
-
-	@JsonIgnore
-	public void setLikeBitterFoodRaw(boolean likeBitterFood) {
-		this.likeBitterFood = likeBitterFood;
-	}
-
-	@JsonIgnore
-	public void setLikeHotFoodRaw(boolean likeHotFood) {
-		this.likeHotFood = likeHotFood;
-	}
-
-	@JsonIgnore
-	public void setLikeWaterRaw(boolean likeWater) {
-		this.likeWater = likeWater;
-	}
-
-	@JsonIgnore
-	public void setFlyingTypeRaw(boolean flyingType) {
-		this.flyingType = flyingType;
-	}
-
-	@JsonIgnore
-	public void setBraidTypeRaw(boolean braidType) {
-		this.braidType = braidType;
-	}
-
-	/**
 	 * 動けないかどうか を設定する.
 	 * 
 	 * @param lockmove 動けないかどうか
 	 */
 	public void setLockmove(boolean lockmove) {
 		this.lockmove = lockmove;
-	}
-
-	/**
-	 * ひっぱり、押しつぶし可能か を設定する.
-	 * 
-	 * @param canPullOrPush ひっぱり、押しつぶし可能か
-	 */
-	public void setCanPullOrPush(boolean canPullOrPush) {
-		this.canPullOrPush = canPullOrPush;
 	}
 
 	/**
@@ -8049,36 +3106,12 @@ public abstract class Yukkuri extends SocialEntity {
 	}
 
 	/**
-	 * 動けない期間（押さえられてる等で） を設定する.
-	 * 
-	 * @param lockmovePeriod 動けない期間（押さえられてる等で）
-	 */
-	public void setLockmovePeriod(int lockmovePeriod) {
-		this.lockmovePeriod = lockmovePeriod;
-	}
-
-	/**
 	 * プレイヤーにすりすりされているか を取得する.
 	 * 
 	 * @return プレイヤーにすりすりされているか
 	 */
 	public boolean isSurisuriFromPlayer() {
-		return isSurisuriFromPlayerRaw();
-	}
-
-	@JsonIgnore
-	public boolean isSurisuriFromPlayerRaw() {
 		return surisuriFromPlayer;
-	}
-
-	/**
-	 * プレイヤーにすりすりされているか を設定する.
-	 * 
-	 * @param surisuriFromPlayer プレイヤーにすりすりされているか
-	 */
-	@JsonProperty("surisuriFromPlayer")
-	public void setSurisuriFromPlayer(boolean surisuriFromPlayer) {
-		this.surisuriFromPlayer = surisuriFromPlayer;
 	}
 
 	/**
@@ -8088,30 +3121,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 */
 	@JsonIgnore
 	public boolean isShakePhase() {
-		return isShakePhaseRaw();
-	}
-
-	@JsonIgnore
-	public boolean isShakePhaseRaw() {
 		return shakePhase;
-	}
-
-	/**
-	 * ぷるぷるアニメーション位相 を設定する.
-	 *
-	 * @param shakePhase ぷるぷるアニメーション位相
-	 */
-	public void setShakePhase(boolean shakePhase) {
-		this.shakePhase = shakePhase;
-	}
-
-	/**
-	 * 粘着板で背中を固定されているかを設定する.
-	 * 
-	 * @param 粘着板で背中を固定されているか
-	 */
-	public void setFixBack(boolean fixBack) {
-		this.fixBack = fixBack;
 	}
 
 	/**
@@ -8120,11 +3130,6 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @return 対象を呼び止めるほど強い動機を持っているかどうか
 	 */
 	public boolean isTargetBind() {
-		return isTargetBindRaw();
-	}
-
-	@JsonIgnore
-	public boolean isTargetBindRaw() {
 		return targetBind;
 	}
 
@@ -8138,25 +3143,12 @@ public abstract class Yukkuri extends SocialEntity {
 	}
 
 	/**
-	 * 移動目的がフードかどうかを取得する.
-	 * 
-	 * @return 移動目的がフードかどうか
-	 */
-	public boolean isToFood() {
-		return getPurposeOfMoving() == PurposeOfMoving.FOOD;
-	}
-
-	/**
 	 * 移動目的がフードかどうかを設定する.
 	 * 
 	 * @param b 移動目的がフードかどうか
 	 */
 	public void setToFood(boolean b) {
-		if (b) {
-			purposeOfMoving = PurposeOfMoving.FOOD;
-		} else if (purposeOfMoving == PurposeOfMoving.FOOD) {
-			purposeOfMoving = PurposeOfMoving.NONE;
-		}
+		moveDelegate().setToFood(b);
 	}
 
 	/**
@@ -8174,11 +3166,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param b 移動目的がすっきりかどうか
 	 */
 	public void setToSukkiri(boolean b) {
-		if (b) {
-			purposeOfMoving = PurposeOfMoving.SUKKIRI;
-		} else if (purposeOfMoving == PurposeOfMoving.SUKKIRI) {
-			purposeOfMoving = PurposeOfMoving.NONE;
-		}
+		moveDelegate().setToSukkiri(b);
 	}
 
 	/**
@@ -8196,11 +3184,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param flag 移動目的がうんうんかどうか
 	 */
 	public void setToShit(boolean flag) {
-		if (flag) {
-			purposeOfMoving = PurposeOfMoving.SHIT;
-		} else if (purposeOfMoving == PurposeOfMoving.SHIT) {
-			purposeOfMoving = PurposeOfMoving.NONE;
-		}
+		moveDelegate().setToShit(flag);
 	}
 
 	/**
@@ -8218,11 +3202,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param flag 移動目的がベッドかどうか
 	 */
 	public void setToBed(boolean flag) {
-		if (flag) {
-			purposeOfMoving = PurposeOfMoving.BED;
-		} else if (purposeOfMoving == PurposeOfMoving.BED) {
-			purposeOfMoving = PurposeOfMoving.NONE;
-		}
+		moveDelegate().setToBed(flag);
 	}
 
 	/**
@@ -8240,11 +3220,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param flag 移動目的が他のゆっくりかどうか
 	 */
 	public void setToBody(boolean flag) {
-		if (flag) {
-			purposeOfMoving = PurposeOfMoving.YUKKURI;
-		} else if (purposeOfMoving == PurposeOfMoving.YUKKURI) {
-			purposeOfMoving = PurposeOfMoving.NONE;
-		}
+		moveDelegate().setToBody(flag);
 	}
 
 	/**
@@ -8262,11 +3238,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param flag 移動目的がおかざりを盗むためかどうか
 	 */
 	public void setToSteal(boolean flag) {
-		if (flag) {
-			purposeOfMoving = PurposeOfMoving.STEAL;
-		} else if (purposeOfMoving == PurposeOfMoving.STEAL) {
-			purposeOfMoving = PurposeOfMoving.NONE;
-		}
+		moveDelegate().setToSteal(flag);
 	}
 
 	/**
@@ -8284,17 +3256,12 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param flag 移動目的がアイテムを持つことかどうか
 	 */
 	public void setToTakeout(boolean flag) {
-		if (flag) {
-			purposeOfMoving = PurposeOfMoving.TAKEOUT;
-		} else if (purposeOfMoving == PurposeOfMoving.TAKEOUT) {
-			purposeOfMoving = PurposeOfMoving.NONE;
-		}
+		moveDelegate().setToTakeout(flag);
 	}
 
 	/** 移動目標のみキャンセル */
 	public final void clearTargets() {
-		purposeOfMoving = PurposeOfMoving.NONE;
-		stopStaying();
+		moveDelegate().clearTargets();
 	}
 
 	/**
@@ -8309,15 +3276,6 @@ public abstract class Yukkuri extends SocialEntity {
 	 */
 	public final void stopStaying() {
 		stayTicks = 0;
-	}
-
-	/**
-	 * アイテムを出し入れする動作フラグ を設定する.
-	 * 
-	 * @param inOutTakeoutItem アイテムを出し入れする動作フラグ
-	 */
-	public void setInOutTakeoutItem(boolean inOutTakeoutItem) {
-		this.inOutTakeoutItem = inOutTakeoutItem;
 	}
 
 	/**
@@ -8342,36 +3300,12 @@ public abstract class Yukkuri extends SocialEntity {
 	 */
 
 	/**
-	 * 喋れる状態かどうか を取得する.
-	 * 
-	 * @return 喋れる状態かどうか
-	 */
-	public boolean isCanTalk() {
-		return isCanTalkRaw();
-	}
-
-	@JsonIgnore
-	public boolean isCanTalkRaw() {
-		return canTalk;
-	}
-
-	/**
-	 * 喋れる状態かどうか を設定する.
-	 * 
-	 * @param canTalk 喋れる状態かどうか
-	 */
-	public void setCanTalk(boolean canTalk) {
-		this.canTalk = canTalk;
-	}
-
-	/**
 	 * メッセージラインの色 を設定する.
 	 * 
 	 * @param messageLineColor メッセージラインの色
 	 */
 	public void setOrigMessageLineColor(Color messageLineColor) {
-		this.messageLineColor = new Color4y(messageLineColor.getRed(), messageLineColor.getGreen(),
-				messageLineColor.getBlue(), messageLineColor.getAlpha());
+		messageDelegate().setOrigMessageLineColor(messageLineColor);
 	}
 
 	/**
@@ -8380,8 +3314,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param messageBoxColor メッセージボックスの色
 	 */
 	public void setOrigMessageBoxColor(Color messageBoxColor) {
-		this.messageBoxColor = new Color4y(messageBoxColor.getRed(), messageBoxColor.getGreen(),
-				messageBoxColor.getBlue(), messageBoxColor.getAlpha());
+		messageDelegate().setOrigMessageBoxColor(messageBoxColor);
 	}
 
 	/**
@@ -8390,40 +3323,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param messageTextColor メッセージテキストの色
 	 */
 	public void setOrigMessageTextColor(Color messageTextColor) {
-		this.messageTextColor = new Color4y(messageTextColor.getRed(), messageTextColor.getGreen(),
-				messageTextColor.getBlue(), messageTextColor.getAlpha());
-	}
-
-	/**
-	 * 強制的に誕生時メッセージを言わされるかどうか を設定する.
-	 * 
-	 * @param birthMessageForced 強制的に誕生時メッセージを言わされるかどうか
-	 */
-	public void setBirthMessageForced(boolean birthMessageForced) {
-		this.birthMessageForced = birthMessageForced;
-	}
-
-	/**
-	 * 右ペインメニューのピン留めをされているかどうかを取得する.
-	 * 
-	 * @return 右ペインメニューのピン留めをされているかどうか
-	 */
-	public boolean isPinned() {
-		return isPinRaw();
-	}
-
-	@JsonIgnore
-	public boolean isPinRaw() {
-		return isPinned;
-	}
-
-	/**
-	 * 右ペインメニューのピン留めをされているかどうか を設定する.
-	 * 
-	 * @param isPinned 右ペインメニューのピン留めをされているかどうか
-	 */
-	public void setPinned(boolean isPinned) {
-		this.isPinned = isPinned;
+		messageDelegate().setOrigMessageTextColor(messageTextColor);
 	}
 
 	/**
@@ -8431,29 +3331,6 @@ public abstract class Yukkuri extends SocialEntity {
 	 * 
 	 * @param speed ゆっくりの移動速度
 	 */
-
-	/**
-	 * 影の表示有無 を取得する.
-	 * 
-	 * @return 影の表示有無
-	 */
-	public boolean isShadowVisible() {
-		return isDropShadowRaw();
-	}
-
-	@JsonIgnore
-	public boolean isDropShadowRaw() {
-		return shadowVisible;
-	}
-
-	/**
-	 * 影の表示有無 を設定する.
-	 * 
-	 * @param shadowVisible 影の表示有無
-	 */
-	public void setShadowVisible(boolean shadowVisible) {
-		this.shadowVisible = shadowVisible;
-	}
 
 	/**
 	 * たかっているアリの数 を設定する.
@@ -8475,14 +3352,6 @@ public abstract class Yukkuri extends SocialEntity {
 	 */
 	public static int[] getUnyostrength() {
 		return UNYOSTRENGTH;
-	}
-
-	/**
-	 * 最後に行動した時間を設定する.
-	 */
-	public void setLastActionTime() {
-		long lnNowTime = System.currentTimeMillis();
-		lastActionTime = lnNowTime;
 	}
 
 	/**
@@ -8563,26 +3432,6 @@ public abstract class Yukkuri extends SocialEntity {
 	}
 
 	/**
-	 * ダメージなしかどうかを返却する.
-	 * 
-	 * @return ダメージなしかどうか
-	 */
-	@Transient
-	public boolean isNoDamaged() {
-		return getDamageState() == Damage.NONE;
-	}
-
-	/**
-	 * 軽いダメージかどうかを返却する.
-	 * 
-	 * @return 軽いダメージかどうか
-	 */
-	@Transient
-	public boolean isDamagedLightly() {
-		return getDamageState() == Damage.SOME || getDamageState() == Damage.VERY || getDamageState() == Damage.TOOMUCH;
-	}
-
-	/**
 	 * 命乞い中かどうかを設定する.
 	 * 埋まっていないときが条件。
 	 * 
@@ -8598,112 +3447,6 @@ public abstract class Yukkuri extends SocialEntity {
 	 * 
 	 * @return 痛みを感じているか
 	 */
-	@Transient
-	public boolean isFeelPain() {
-		return getPainState() == Pain.VERY || getPainState() == Pain.SOME;
-	}
-
-	/**
-	 * 激しい痛みを感じているかどうかを取得する.
-	 * 
-	 * @return 激しい痛みを感じているかどうか
-	 */
-	@Transient
-	public boolean isFeelHardPain() {
-		return getPainState() == Pain.VERY;
-	}
-
-	/**
-	 * 出生からしばらく経っていないかどうかを返却する.
-	 *
-	 * @return 出生直後ならtrue
-	 */
-	@Transient
-	public boolean isNewborn() {
-		return isNewbornRaw();
-	}
-
-	@JsonIgnore
-	public boolean isNewbornRaw() {
-		return birthAge >= 0 && (getAge() - birthAge) < 300;
-	}
-
-	/**
-	 * この個体の痛みを感じている程度から、相当するPain(Enum)を返却する.
-	 * 
-	 * @return この個体に相当するPain
-	 */
-	@Transient
-	public Pain getPainState() {
-		if (getBurstState() == Burst.NEAR || getBurstState() == Burst.BURST || isNeedled()) {
-			return Pain.VERY;
-		}
-		if (getBurstState() == Burst.HALF || criticalDamege != null) {
-			return Pain.SOME;
-		}
-		return Pain.NONE;
-	}
-
-	/**
-	 * この個体がどれくらい破裂しそうか、相当するBurst(Enum)を返却する.
-	 * 
-	 * @return この個体に相当するBurst
-	 */
-	@Transient
-	public Burst getBurstState() {
-		int origin = getOriginSize();
-		if (origin <= 0) {
-			return Burst.NONE;
-		}
-		if (getSize() * 4 / origin >= 8) {
-			return Burst.BURST;
-		} else if (getSize() * 4 / origin >= 7) {
-			return Burst.NEAR;
-		} else if (getSize() * 4 / origin >= 6) {
-			return Burst.HALF;
-		} else if (getSize() * 4 / origin >= 5) {
-			return Burst.SAFE;
-		}
-		return Burst.NONE;
-	}
-
-	/**
-	 * 画像上のゆっくりの大きさを取得する.
-	 * 
-	 * @return 画像上のゆっくりの大きさ
-	 */
-	@Transient
-	public int getSize() {
-		if (getBodySpr() == null) {
-			return 0;
-		}
-		Sprite spr = getBodySpr()[getBodyAgeState().ordinal()];
-		if (spr == null) {
-			return 0;
-		}
-		if (SimYukkuri.UNYO) {
-			return spr.getImageW() + getExpandSizeW() + unyoOffsetW;
-		}
-		return spr.getImageW() + getExpandSizeW();
-	}
-
-	/**
-	 * 画像上のゆっくりのオリジナルサイズを取得する.
-	 * 
-	 * @return 画像上のゆっくりのオリジナルサイズ
-	 */
-	@Transient
-	public int getOriginSize() {
-		if (getBodySpr() == null) {
-			return 0;
-		}
-		Sprite spr = getBodySpr()[getBodyAgeState().ordinal()];
-		if (spr == null) {
-			return 0;
-		}
-		return spr.getImageW();
-	}
-
 	/**
 	 * この個体の属する、精神のAgeState(Enum)を返却する.
 	 * 
@@ -8719,17 +3462,6 @@ public abstract class Yukkuri extends SocialEntity {
 	 * 
 	 * @return この個体のダメージ具合から計算した、相当するDamage(Enum)
 	 */
-	@Transient
-	/**
-	 * 死に向かわせる
-	 */
-	public void toDead() {
-		if (!isCantDie() && !dead) {
-			dead = true;
-			godHandHoldCount = 0;// 死んだらゆ虐神拳1をリセット
-		}
-	}
-
 	/**
 	 * 死ねない期間中かどうかを取得する.
 	 * 
@@ -8738,36 +3470,6 @@ public abstract class Yukkuri extends SocialEntity {
 	@Transient
 	public boolean isCantDie() {
 		return getCantDiePeriod() > 0;
-	}
-
-	/**
-	 * 破裂しているかどうかを取得する.
-	 * 
-	 * @return 破裂しているかどうか
-	 */
-	@Transient
-	public boolean isBurst() {
-		return getBurstState() == Burst.BURST;
-	}
-
-	/**
-	 * まさに破裂するところかどうかを取得する.
-	 * 
-	 * @return まさに破裂するところかどうか
-	 */
-	@Transient
-	public boolean isAboutToBurst() {
-		return getBurstState() == Burst.NEAR;
-	}
-
-	/**
-	 * 破裂状態が通常でないかどうかを取得する.
-	 * 
-	 * @return 破裂状態が通常でないかどうか
-	 */
-	@Transient
-	public boolean isInfration() {
-		return getBurstState() != Burst.NONE;
 	}
 
 	/**
@@ -8805,22 +3507,6 @@ public abstract class Yukkuri extends SocialEntity {
 	 * 
 	 * @return 睡眠中かどうか
 	 */
-	@JsonIgnore
-	public boolean isSleepingRaw() {
-		return sleeping;
-	}
-
-	/**
-	 * 眠いかどうかを取得する.
-	 * 死んでいないことが条件.
-	 * 
-	 * @return 眠いかどうか
-	 */
-	@Transient
-	public boolean isSleepy() {
-		return !isSleepingRaw() && getWakeUpTime() + getActivePeriodBase() < getAge();
-	}
-
 	/**
 	 * 発情状態を設定する.
 	 * 
@@ -8847,43 +3533,6 @@ public abstract class Yukkuri extends SocialEntity {
 	 * 
 	 * @return ハイブリッドかどうか
 	 */
-	@Transient
-
-	@JsonIgnore
-	public boolean isDirtyRaw() {
-		return dirty;
-	}
-
-	/**
-	 * 動物（というか現在はアリ一択か）に食べられてるかを返却する.
-	 * 
-	 * @return 動物（というか現在はアリ一択か）に食べられてるか
-	 */
-	@Transient
-	public boolean isEatenByAnimals() {
-		return getAttachmentSize(Ants.class) != 0;
-	}
-
-	/**
-	 * アリを除去する.
-	 */
-	public void removeAnts() {
-		removeAttachment(Ants.class);
-		antCount = 0;
-	}
-
-	/**
-	 * アリの数を減らす.
-	 * 
-	 * @param A 減らしたいアリの数
-	 */
-	public void substractNumOfAnts(int A) {
-		antCount -= A;
-		if (antCount < 0) {
-			antCount = 0;
-		}
-	}
-
 	/**
 	 * 胎生妊娠してる赤ゆを取得
 	 * <br>
@@ -8893,12 +3542,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 **/
 	@Transient
 	public Dna getBabyTypesDequeue() {
-		Dna babyType = null;
-		if (getBabyTypes().size() > 0) {
-			babyType = getBabyTypes().get(0);
-			getBabyTypes().remove(0);
-		}
-		return babyType;
+		return familyDelegate().getBabyTypesDequeue();
 	}
 
 	/**
@@ -8910,72 +3554,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 **/
 	@Transient
 	public Stalk getStalksDequeue() {
-		Stalk stalk = null;
-		if (getStalks().size() > 0) {
-			stalk = getStalks().get(0);
-			getStalks().remove(0);
-		}
-		return stalk;
-	}
-
-	/**
-	 * ストレス値に加える.
-	 * 
-	 * @param s ストレス値に加えたい値
-	 */
-	public void addStress(int s) {
-		if (dead)
-			return;
-		// ストレスに応じてうんうん増加
-		if (s > 0 && coreAnkoState == CoreAnkoState.DEFAULT && getBurstState() != Burst.HALF)
-			plusShit(s / 5);
-		stress += TICK * s;
-		if (stress < 0)
-			stress = 0;
-	}
-
-	/**
-	 * ストレスフルかどうかを返却する.
-	 * 
-	 * @return ストレスフルかどうか
-	 */
-	@Transient
-	public boolean isStressful() {
-		return BodyStressRule.isStressful(this);
-	}
-
-	/**
-	 * とてもストレスフルかどうかを返却する.
-	 * 
-	 * @return とてもストレスフルかどうか
-	 */
-	@Transient
-	public boolean isVeryStressful() {
-		return BodyStressRule.isVeryStressful(this);
-	}
-
-	/**
-	 * 自主的にふりふりするかどうかを返却する.
-	 * 
-	 * @return 自主的にふりふりするかどうか
-	 */
-	public boolean willingFurifuri() {
-		if (isRude() && GameRandom.nextInt(furifuriDiscipline + 1) == 0 && canFurifuri()) {
-			return true;
-		}
-		return false;
-	}
-
-	/**
-	 * ふりふり可能な状態かどうかを返却する.
-	 * 
-	 * @return ふりふり可能な状態かどうか
-	 */
-	public boolean canFurifuri() {
-		if (getFootBakeLevel() != FootBake.CRITICAL && coreAnkoState == CoreAnkoState.DEFAULT) {
-			return true;
-		}
-		return false;
+		return stalkDelegate().getStalksDequeue();
 	}
 
 	/**
@@ -9014,12 +3593,12 @@ public abstract class Yukkuri extends SocialEntity {
 
 	@Transient
 	public int getCollisionX() {
-		return (getBodySpr()[getBodyAgeState().ordinal()].getImageW() + getExpandSizeW()) >> 1;
+		return spriteDelegate().getCollisionX();
 	}
 
 	@Transient
 	public int getCollisionY() {
-		return (getBodySpr()[getBodyAgeState().ordinal()].getImageH() + getExpandSizeH()) >> 1;
+		return spriteDelegate().getCollisionY();
 	}
 
 	/**
@@ -9029,73 +3608,67 @@ public abstract class Yukkuri extends SocialEntity {
 	 */
 	@Transient
 	public int getStep() {
-		return (getStepBase()[getBodyAgeState().ordinal()]);
+		return moveDelegate().getStep();
 	}
 
 	@Transient
 	public int getStepDist() {
-		int p = (getStepBase()[getBodyAgeState().ordinal()]) * (getStepBase()[getBodyAgeState().ordinal()]);
-		return p;
+		return moveDelegate().getStepDist();
 	}
 
 	@Transient
 	public Sprite getBodyBaseSpr() {
-		return getBodySpr()[getBodyAgeState().ordinal()];
+		return spriteDelegate().getBodyBaseSpr();
 	}
 
 	@Transient
 	public Sprite getBodyExpandSpr() {
-		return getExpandSpr()[getBodyAgeState().ordinal()];
+		return spriteDelegate().getBodyExpandSpr();
 	}
 
 	@Transient
 	public Sprite getBraidSprite() {
-		return getBraidSpr()[getBodyAgeState().ordinal()];
+		return spriteDelegate().getBraidSprite();
 	}
 
 	@Transient
 	public BufferedImage getShadowImage() {
-		return shadowImages[getBodyAgeState().ordinal()];
+		return spriteDelegate().getShadowImage();
 	}
 
 	@Transient
 	public int getShadowH() {
-		return shadowImgH[getBodyAgeState().ordinal()];
+		return spriteDelegate().getShadowH();
 	}
 
 	@Transient
 	public int getW() {
-		return getBodySpr()[getBodyAgeState().ordinal()].getImageW();
+		return spriteDelegate().getW();
 	}
 
 	@Transient
 	public int getH() {
-		return getBodySpr()[getBodyAgeState().ordinal()].getImageH();
+		return spriteDelegate().getH();
 	}
 
 	@Transient
 	public int getPivotX() {
-		return getBodySpr()[getBodyAgeState().ordinal()].getPivotX();
+		return spriteDelegate().getPivotX();
 	}
 
 	@Transient
 	public int getPivotY() {
-		return getBodySpr()[getBodyAgeState().ordinal()].getPivotY();
+		return spriteDelegate().getPivotY();
 	}
 
 	@Transient
 	public int getBraidW() {
-		return getBraidSpr()[getBodyAgeState().ordinal()].getImageW();
+		return spriteDelegate().getBraidW();
 	}
 
 	@Transient
 	public int getBraidH() {
-		return getBraidSpr()[getBodyAgeState().ordinal()].getImageH();
-	}
-
-	@Transient
-	public int getMaxHaveBaby() {
-		return getDamageLimit() / 300;
+		return spriteDelegate().getBraidH();
 	}
 
 	/**
@@ -9136,36 +3709,6 @@ public abstract class Yukkuri extends SocialEntity {
 	}
 
 	/**
-	 * 捕食種かどうかを取得する.
-	 * 
-	 * @return
-	 */
-	@Transient
-	public boolean isPredatorType() {
-		return getPredatorType() != null;
-	}
-
-	/**
-	 * 茎または腹ではらんでいるかどうかを取得する.
-	 * 
-	 * @return 茎または腹ではらんでいるかどうか
-	 */
-	@Transient
-	public boolean hasBabyOrStalk() {
-		return isHasBaby() || isHasStalk();
-	}
-
-	/**
-	 * おかざりがあるかどうかを取得する.
-	 * 
-	 * @return おかざりがあるかどうか
-	 */
-	@Transient
-	public final boolean hasOkazari() {
-		return getOkazari() != null;
-	}
-
-	/**
 	 * 次の落下でのダメージをなくす.
 	 */
 	public final void setNoDamageNextFall() {
@@ -9180,92 +3723,10 @@ public abstract class Yukkuri extends SocialEntity {
 	}
 
 	/**
-	 * かび判定を行う
-	 * 
-	 * @return かびているかどうか
-	 */
-	public boolean findSick(Yukkuri b) {
-		return src.logic.BodyIllnessRule.findSick(this, b);
-	}
-
-	/**
-	 * 幸福度を設定する.
-	 * 
-	 * @param happy 幸福度
-	 */
-	public void setHappiness(Happiness happy) {
-		if (isDead() || isIdiot()) {
-			happiness = Happiness.AVERAGE;
-			return;
-		}
-		if (isNYD()) {
-			happiness = Happiness.VERY_SAD;
-			sadPeriod = 1200 + GameRandom.nextInt(400) - 200;
-			return;
-		}
-		if (happy == Happiness.SAD) {
-			if (getHappiness() != Happiness.VERY_SAD) {
-				sadPeriod = 0;
-				happiness = happy;
-			}
-		} else if (happy == Happiness.HAPPY) {
-			if (getHappiness() != Happiness.VERY_HAPPY) {
-				sadPeriod = 0;
-				happiness = happy;
-			}
-		} else {
-			if (happy == Happiness.VERY_SAD) {
-				sadPeriod = 1200 + GameRandom.nextInt(400) - 200;
-			} else {
-				sadPeriod = 0;
-			}
-			happiness = happy;
-		}
-		if (getHappiness() == Happiness.HAPPY || getHappiness() == Happiness.VERY_HAPPY) {
-			setScare(false);
-			setAngry(false);
-		} else if (getHappiness() == Happiness.SAD || getHappiness() == Happiness.VERY_SAD) {
-			setAngry(false);
-		}
-	}
-
-	/**
 	 * 行動目的を設定する.
 	 *
 	 * @param purposeOfMoving 行動目的
 	 */
-
-	@Override
-	public boolean equals(Object o) {
-		if (o == null) {
-			return false;
-		}
-		if (!(o instanceof Yukkuri)) {
-			return false;
-		}
-		Yukkuri dest = (Yukkuri) o;
-		if (getUniqueID() == dest.getUniqueID()) {
-			return true;
-		}
-		return false;
-	}
-
-	@Override
-	public int hashCode() {
-		return getUniqueID() * 13;
-	}
-
-	@Override
-	public int compareTo(Object o) {
-		if (o == null) {
-			return 0;
-		}
-		if (!(o instanceof Yukkuri)) {
-			return 0;
-		}
-		Yukkuri b = (Yukkuri) o;
-		return getUniqueID() - b.getUniqueID();
-	}
 
 	/**
 	 * 取られているかどうかを設定する.
@@ -9284,6 +3745,17 @@ public abstract class Yukkuri extends SocialEntity {
 	@Transient
 	public Damage getDamageState() {
 		return BodyCoreStateRule.getDamageState(this);
+	}
+
+	/**
+	 * イベントに反応できる状態かチェックする
+	 * イベントの重要度で寝ていても起きたりできるようにするため
+	 * ここでは動いたら見た目におかしくなる状況のみチェック
+	 *
+	 * @return
+	 */
+	public final boolean canEventResponse() {
+		return eventDelegate().canEventResponse();
 	}
 
 }

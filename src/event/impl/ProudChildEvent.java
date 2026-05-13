@@ -139,6 +139,10 @@ public class ProudChildEvent extends EventPacket {
 		// Fromの子供だけ参加する(※Fromが教育係のときは全ての子供が参加するようにする？)
 		if (!body.isChild(sourceBody))
 			return false;
+		// うまれたての赤ゆは参加しない
+		if (body.isBirthMessageForced() || body.getBirthEventBlockedTicks() > 0) {
+			return false;
+		}
 		// 赤、子ゆのみ参加
 		if (body.isAdult())
 			return false;
@@ -200,7 +204,7 @@ public class ProudChildEvent extends EventPacket {
 			body.setHappiness(Happiness.SAD);
 			return UpdateState.ABORT;
 		}
-		if ((body.isFirstGround() || body.isNewborn() || body.getZ() > body.getMostDepth())
+		if ((body.isFirstGround() || body.isNewborn() || body.getBirthEventBlockedTicks() > 0 || body.getZ() > body.getMostDepth())
 				&& !body.isPartner(sourceBody)) {
 			return UpdateState.ABORT;
 		}

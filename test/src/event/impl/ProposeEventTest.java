@@ -1,5 +1,17 @@
 package src.event.impl;
 
+import src.entity.core.Entity;
+import src.entity.core.attachment.*;
+import src.entity.core.attachment.impl.*;
+import src.entity.core.effect.*;
+import src.entity.core.effect.impl.*;
+import src.entity.core.living.yukkuri.Dna;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.living.yukkuri.impl.*;
+import src.entity.core.world.bodylinked.*;
+import src.entity.core.world.item.*;
+import src.entity.core.world.mobile.*;
+
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -590,6 +602,7 @@ public class ProposeEventTest extends EventTestBase {
     void testUpdate_ToGrabbed_ResetsStarted() {
         Yukkuri from = createSprBody(100, 100);
         Yukkuri to = createSprBody(120, 120);
+        from.setIntelligence(src.enums.Intelligence.FOOL);
         ProposeEvent event = new ProposeEvent(from, to, null, 10);
         event.started = true;
         to.setGrabbed(true);

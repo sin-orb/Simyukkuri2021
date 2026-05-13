@@ -1,5 +1,17 @@
 package src.item;
 
+import src.entity.core.Entity;
+import src.entity.core.attachment.*;
+import src.entity.core.attachment.impl.*;
+import src.entity.core.effect.*;
+import src.entity.core.effect.impl.*;
+import src.entity.core.living.yukkuri.Dna;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.living.yukkuri.impl.*;
+import src.entity.core.world.bodylinked.*;
+import src.entity.core.world.item.*;
+import src.entity.core.world.mobile.*;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -13,7 +25,7 @@ import src.entity.core.world.item.Diffuser;
 import src.entity.core.world.item.ProductChute;
 import src.entity.core.world.item.Stone;
 import src.entity.core.world.item.Yunba;
-import src.base.ItemTestBase;
+import src.entity.core.world.item.ItemTestBase;
 import src.enums.WorldEntityKind;
 import src.enums.Type;
 import src.util.WorldTestHelper;

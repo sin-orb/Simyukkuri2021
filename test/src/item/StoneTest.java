@@ -1,9 +1,21 @@
 package src.item;
 
+import src.entity.core.Entity;
+import src.entity.core.attachment.*;
+import src.entity.core.attachment.impl.*;
+import src.entity.core.effect.*;
+import src.entity.core.effect.impl.*;
+import src.entity.core.living.yukkuri.Dna;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.living.yukkuri.impl.*;
+import src.entity.core.world.bodylinked.*;
+import src.entity.core.world.item.*;
+import src.entity.core.world.mobile.*;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.AfterEach;
-import src.base.ItemTestBase;
+import src.entity.core.world.item.ItemTestBase;
 import src.SimYukkuri;
 import src.draw.Translate;
 import src.entity.core.world.WorldEntity;
@@ -488,33 +500,33 @@ class StoneTest extends ItemTestBase {
     @Test
     void testSetBxyz_GetBxyz() {
         Stone stone = new Stone(100, 100, 0);
-        stone.setBx(5);
-        stone.setBy(7);
-        stone.setBz(2);
-        assertEquals(5, stone.getBx());
-        assertEquals(7, stone.getBy());
-        assertEquals(2, stone.getBz());
+        stone.setMotionX(5);
+        stone.setMotionY(7);
+        stone.setMotionZ(2);
+        assertEquals(5, stone.getMotionX());
+        assertEquals(7, stone.getMotionY());
+        assertEquals(2, stone.getMotionZ());
     }
 
     @Test
     void testAddBxyz() {
         Stone stone = new Stone(100, 100, 0);
         stone.addMotion(1, 2, 3);
-        assertEquals(1, stone.getBx());
-        assertEquals(2, stone.getBy());
-        assertEquals(3, stone.getBz());
+        assertEquals(1, stone.getMotionX());
+        assertEquals(2, stone.getMotionY());
+        assertEquals(3, stone.getMotionZ());
     }
 
     @Test
     void testResetBPos() {
         Stone stone = new Stone(100, 100, 0);
-        stone.setBx(5);
-        stone.setBy(7);
-        stone.setBz(2);
+        stone.setMotionX(5);
+        stone.setMotionY(7);
+        stone.setMotionZ(2);
         stone.resetMotion();
-        assertEquals(0, stone.getBx());
-        assertEquals(0, stone.getBy());
-        assertEquals(0, stone.getBz());
+        assertEquals(0, stone.getMotionX());
+        assertEquals(0, stone.getMotionY());
+        assertEquals(0, stone.getMotionZ());
     }
 
     @Test

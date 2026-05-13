@@ -1,5 +1,17 @@
 package src.yukkuri;
 
+import src.entity.core.Entity;
+import src.entity.core.attachment.*;
+import src.entity.core.attachment.impl.*;
+import src.entity.core.effect.*;
+import src.entity.core.effect.impl.*;
+import src.entity.core.living.yukkuri.Dna;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.living.yukkuri.impl.*;
+import src.entity.core.world.bodylinked.*;
+import src.entity.core.world.item.*;
+import src.entity.core.world.mobile.*;
+
 import src.SimYukkuri;
 
 import org.junit.jupiter.api.Test;
@@ -13,7 +25,7 @@ public class MyonTest {
     @Test
     public void testMyonIdentity() {
         Myon myon = new Myon();
-        assertEquals(5, myon.getType());
+        assertEquals(Myon.type, myon.getType());
         assertEquals("みょん", myon.getNameJ());
         assertEquals("Myon", myon.getNameE());
     }
@@ -44,7 +56,7 @@ public class MyonTest {
     public void testMyonDefaultConstructor() {
         Myon myon = new Myon();
         assertNotNull(myon);
-        assertEquals(5, myon.getType());
+        assertEquals(Myon.type, myon.getType());
     }
 
     @Test

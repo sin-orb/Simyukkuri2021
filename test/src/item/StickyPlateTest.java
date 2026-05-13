@@ -1,5 +1,17 @@
 package src.item;
 
+import src.entity.core.Entity;
+import src.entity.core.attachment.*;
+import src.entity.core.attachment.impl.*;
+import src.entity.core.effect.*;
+import src.entity.core.effect.impl.*;
+import src.entity.core.living.yukkuri.Dna;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.living.yukkuri.impl.*;
+import src.entity.core.world.bodylinked.*;
+import src.entity.core.world.item.*;
+import src.entity.core.world.mobile.*;
+
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -13,7 +25,7 @@ import src.SimYukkuri;
 import src.entity.core.living.yukkuri.Yukkuri;
 import src.entity.core.world.WorldEntity;
 import src.entity.core.world.item.StickyPlate;
-import src.base.ItemTestBase;
+import src.entity.core.world.item.ItemTestBase;
 import src.util.WorldTestHelper;
 
 class StickyPlateTest extends ItemTestBase {

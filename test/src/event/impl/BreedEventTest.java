@@ -1,5 +1,17 @@
 package src.event.impl;
 
+import src.entity.core.Entity;
+import src.entity.core.attachment.*;
+import src.entity.core.attachment.impl.*;
+import src.entity.core.effect.*;
+import src.entity.core.effect.impl.*;
+import src.entity.core.living.yukkuri.Dna;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.living.yukkuri.impl.*;
+import src.entity.core.world.bodylinked.*;
+import src.entity.core.world.item.*;
+import src.entity.core.world.mobile.*;
+
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -39,6 +51,20 @@ public class BreedEventTest extends EventTestBase {
         WorldTestHelper.setParents(baby, -1, parent.getUniqueID());
         baby.setAgeState(src.enums.AgeState.BABY);
         baby.setBirthMessageForced(true);
+
+        BreedEvent event = new BreedEvent(parent, baby, null, 10);
+
+        assertFalse(event.checkEventResponse(baby));
+    }
+
+    @Test
+    void testCheckEventResponse_BabyChildOfFromBirthEventBlockedDoesNotParticipate() {
+        Yukkuri parent = createBody(1, 100, 100);
+        Yukkuri baby = createBody(2, 120, 120);
+        WorldTestHelper.setParents(baby, -1, parent.getUniqueID());
+        baby.setAgeState(src.enums.AgeState.BABY);
+        baby.setBirthMessageForced(false);
+        baby.setBirthEventBlockedTicks(300);
 
         BreedEvent event = new BreedEvent(parent, baby, null, 10);
 
@@ -252,6 +278,21 @@ public class BreedEventTest extends EventTestBase {
     }
 
     @Test
+    void testUpdate_BabyChildBirthEventBlocked_returnsAbort() {
+        Yukkuri from = createBody(1, 100, 100);
+        Yukkuri b = createBody(2, 105, 105);
+        WorldTestHelper.setParents(b, -1, from.getUniqueID());
+        b.setAgeState(src.enums.AgeState.BABY);
+        b.setBirthMessageForced(false);
+        b.setBirthEventBlockedTicks(300);
+        from.setBirth(true);
+
+        BreedEvent event = new BreedEvent(from, null, null, 10);
+
+        assertEquals(src.event.EventPacket.UpdateState.ABORT, event.update(b));
+    }
+
+    @Test
     void testUpdate_fromDead_returnsAbort() {
         Yukkuri from = createBody(1, 100, 100);
         Yukkuri b = createBody(2, 500, 500); // far
@@ -282,12 +323,12 @@ public class BreedEventTest extends EventTestBase {
     }
 
     @Test
-    void testExecute_fromIsBirth_returnsFalse() {
+    void testExecute_fromIsBirth_returnsTrue() {
         Yukkuri from = createBody(1, 100, 100);
         Yukkuri b = createBody(2, 120, 120);
         from.setBirth(true);
         BreedEvent event = new BreedEvent(from, null, null, 10);
-        assertFalse(event.execute(b));
+        assertTrue(event.execute(b));
     }
 
     @Test
@@ -305,26 +346,42 @@ public class BreedEventTest extends EventTestBase {
         Yukkuri b = createBody(2, 120, 120);
         from.setHasBaby(true); // still pregnant → else branch → return false
         BreedEvent event = new BreedEvent(from, null, null, 10);
-        assertFalse(event.execute(b));
+        assertTrue(event.execute(b));
     }
 
     @Nested
     class RegressionScenarios {
 
         @Test
-        void testScenario_BirthSuccessMakesResponderVeryHappyAndAddsGoodMemories() {
-            Yukkuri from = createBody(1, 100, 100);
-            Yukkuri b = createBody(2, 120, 120);
-            b.setStress(100);
-            int beforeStress = b.getStress();
+    void testScenario_BirthSuccessMakesResponderVeryHappyAndAddsGoodMemories() {
+        Yukkuri from = createBody(1, 100, 100);
+        Yukkuri b = createBody(2, 120, 120);
+        b.setStress(100);
+        int beforeStress = b.getStress();
             int beforeMemories = b.getMemories();
 
             BreedEvent event = new BreedEvent(from, null, null, 10);
 
-            assertTrue(event.execute(b));
-            assertEquals(Happiness.VERY_HAPPY, b.getHappiness());
-            assertEquals(beforeStress - 30, b.getStress());
-            assertTrue(b.getMemories() > beforeMemories);
-        }
+        assertTrue(event.execute(b));
+        assertEquals(Happiness.VERY_HAPPY, b.getHappiness());
+        assertEquals(beforeStress - 30, b.getStress());
+        assertTrue(b.getMemories() > beforeMemories);
+    }
+
+    @Test
+    void testScenario_ChildResponderLeavesEventAfterGreeting() {
+        Yukkuri from = createBody(1, 100, 100);
+        Yukkuri child = createBody(2, 120, 120);
+        WorldTestHelper.setParents(child, -1, from.getUniqueID());
+        child.setAgeState(src.enums.AgeState.BABY);
+        child.setBirthMessageForced(false);
+        from.setHasBaby(true);
+
+        BreedEvent event = new BreedEvent(from, null, null, 10);
+
+        assertTrue(event.execute(child));
+        assertTrue(child.getBirthEventBlockedTicks() > 0);
+        assertFalse(event.checkEventResponse(child));
+    }
     }
 }

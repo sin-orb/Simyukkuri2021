@@ -128,6 +128,10 @@ public class BodySelectionRule {
 			if (childBody.getPublicRank() == PublicRank.UnunSlave) {
 				continue;
 			}
+			// うまれたての赤ゆは、家族イベントの対象にしない。
+			if (childBody.isBirthMessageForced() || childBody.getBirthEventBlockedTicks() > 0) {
+				continue;
+			}
 			// 生まれた直後や落下中の赤ゆは、家族イベントの対象にしない。
 			if (childBody.isFirstGround() || childBody.isNewborn() || childBody.getZ() > childBody.getMostDepth()) {
 				continue;

@@ -1,5 +1,17 @@
 package src.logic;
 
+import src.entity.core.Entity;
+import src.entity.core.attachment.*;
+import src.entity.core.attachment.impl.*;
+import src.entity.core.effect.*;
+import src.entity.core.effect.impl.*;
+import src.entity.core.living.yukkuri.Dna;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.living.yukkuri.impl.*;
+import src.entity.core.world.bodylinked.*;
+import src.entity.core.world.item.*;
+import src.entity.core.world.mobile.*;
+
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -18,7 +30,7 @@ import src.SimYukkuri;
 import src.entity.core.living.yukkuri.Yukkuri;
 import src.event.EventPacket;
 import src.entity.core.Entity;
-import src.entity.world.bodylinked.Okazari;
+import src.entity.core.world.bodylinked.Okazari;
 import src.draw.Point4y;
 import src.draw.Translate;
 import src.enums.AgeState;
@@ -32,15 +44,15 @@ import src.enums.PredatorType;
 import src.enums.PublicRank;
 import src.enums.TakeoutItemType;
 import src.enums.YukkuriType;
-import src.event.FlyingEatEvent;
-import src.event.SuperEatingTimeEvent;
+import src.event.impl.FlyingEatEvent;
+import src.event.impl.SuperEatingTimeEvent;
 import src.entity.core.world.mobile.Shit;
 import src.entity.core.world.bodylinked.Stalk;
-import src.game.Vomit;
-import src.item.Bed;
-import src.item.Food;
-import src.item.Stone;
-import src.item.Toilet;
+import src.entity.core.world.mobile.Vomit;
+import src.entity.core.world.item.Bed;
+import src.entity.core.world.item.Food;
+import src.entity.core.world.item.Stone;
+import src.entity.core.world.item.Toilet;
 import src.util.WorldTestHelper;
 import src.enums.FootBake;
 import src.entity.core.living.yukkuri.impl.Fran;
@@ -897,10 +909,10 @@ class FoodLogicTest {
 
         WorldTestHelper.initializeStandardTranslate200();
 
-        src.item.Bed bed = new src.item.Bed(800, 800, 0);
+        src.entity.core.world.item.Bed bed = new src.entity.core.world.item.Bed(800, 800, 0);
         SimYukkuri.world.getCurrentMap().getBed().put(bed.getObjId(), bed);
 
-        java.lang.reflect.Field boundaryField = src.item.Bed.class.getDeclaredField("boundary");
+        java.lang.reflect.Field boundaryField = src.entity.core.world.item.Bed.class.getDeclaredField("boundary");
         boundaryField.setAccessible(true);
         src.draw.Rectangle4y b = (src.draw.Rectangle4y) boundaryField.get(null);
         b.setWidth(100);
@@ -4001,7 +4013,7 @@ class FoodLogicTest {
         body.setAmaamaDiscipline(100);
         body.setIntelligence(Intelligence.AVERAGE);
         try {
-            FoodLogic.eatFood(body, src.item.Food.FoodType.FOOD, 10);
+            FoodLogic.eatFood(body, src.entity.core.world.item.Food.FoodType.FOOD, 10);
         } catch (NullPointerException e) {
             // GUI dependency (mypane.getTerrarium()) NPE is expected in headless tests
         }
@@ -4682,7 +4694,7 @@ class FoodLogicTest {
         body.setHungry(body.getHungryLimit() / 2); // not soHungry
         // Force wantToShit=true by setting shit to near limit
         try {
-            java.lang.reflect.Field shitField = src.entity.living.LivingEntity.class.getDeclaredField("shit");
+            java.lang.reflect.Field shitField = src.entity.core.living.LivingEntity.class.getDeclaredField("shit");
             shitField.setAccessible(true);
             int[] shitLimit = body.getShitLimitBase();
             int limit = shitLimit[AgeState.ADULT.ordinal()];
@@ -5459,7 +5471,7 @@ class FoodLogicTest {
         // Need ankoAmount > damageLimitBase[ageState] / 2 to avoid the crushed/remove path.
         deadBody.setAnkoAmount(20000);
         // Add okazari so !isVeryRude fails checkCanEatBody → !checkCanEatBody=true → L357-358 EatBodyEvent
-        deadBody.setOkazari(new src.entity.world.bodylinked.Okazari());
+        deadBody.setOkazari(new src.entity.core.world.bodylinked.Okazari());
         SimYukkuri.world.getCurrentMap().getBody().put(deadBody.getUniqueID(), deadBody);
         body.setMoveTargetId(deadBody.getObjId());
         body.setToFood(true);
@@ -6293,7 +6305,7 @@ class FoodLogicTest {
         deadFamily.setY(body.getY());
         deadFamily.setDead(true);
         // Add okazari to dead family
-        deadFamily.setOkazari(new src.entity.world.bodylinked.Okazari());
+        deadFamily.setOkazari(new src.entity.core.world.bodylinked.Okazari());
         // Make deadFamily a family member
         WorldTestHelper.setParents(body, deadFamily.getUniqueID(), 0);
         SimYukkuri.world.getCurrentMap().getBody().put(deadFamily.getUniqueID(), deadFamily);
@@ -7386,10 +7398,10 @@ class FoodLogicTest {
         slaveToilet.setForSlave(true);
         // Set collision size large enough to contain the shit's screen position
         try {
-            java.lang.reflect.Field colWField = src.base.WorldEntity.class.getDeclaredField("colW");
+            java.lang.reflect.Field colWField = src.entity.core.world.WorldEntity.class.getDeclaredField("colW");
             colWField.setAccessible(true);
             colWField.setInt(slaveToilet, 200);
-            java.lang.reflect.Field colHField = src.base.WorldEntity.class.getDeclaredField("colH");
+            java.lang.reflect.Field colHField = src.entity.core.world.WorldEntity.class.getDeclaredField("colH");
             colHField.setAccessible(true);
             colHField.setInt(slaveToilet, 200);
         } catch (Exception e) {
@@ -8392,10 +8404,10 @@ class FoodLogicTest {
             int[][] dummyPivY = new int[yukkuriTypeCount][ageStateCount];
             int[][] dummyImgW = new int[yukkuriTypeCount][ageStateCount];
             int[][] dummyImgH = new int[yukkuriTypeCount][ageStateCount];
-            java.lang.reflect.Field pivXField = src.game.Vomit.class.getDeclaredField("pivX");
-            java.lang.reflect.Field pivYField = src.game.Vomit.class.getDeclaredField("pivY");
-            java.lang.reflect.Field imgWField = src.game.Vomit.class.getDeclaredField("imgW");
-            java.lang.reflect.Field imgHField = src.game.Vomit.class.getDeclaredField("imgH");
+            java.lang.reflect.Field pivXField = src.entity.core.world.mobile.Vomit.class.getDeclaredField("pivX");
+            java.lang.reflect.Field pivYField = src.entity.core.world.mobile.Vomit.class.getDeclaredField("pivY");
+            java.lang.reflect.Field imgWField = src.entity.core.world.mobile.Vomit.class.getDeclaredField("imgW");
+            java.lang.reflect.Field imgHField = src.entity.core.world.mobile.Vomit.class.getDeclaredField("imgH");
             pivXField.setAccessible(true); pivYField.setAccessible(true);
             imgWField.setAccessible(true); imgHField.setAccessible(true);
             pivXField.set(null, dummyPivX); pivYField.set(null, dummyPivY);
@@ -10707,7 +10719,7 @@ class FoodLogicTest {
         body.setPublicRank(PublicRank.UnunSlave);
         body.setHungry(1); // !isVeryHungry
         // Use LinkedHashMap for guaranteed insertion order: close→far
-        java.util.LinkedHashMap<Integer, src.game.Vomit> orderedVomit = new java.util.LinkedHashMap<>();
+        java.util.LinkedHashMap<Integer, src.entity.core.world.mobile.Vomit> orderedVomit = new java.util.LinkedHashMap<>();
         SimYukkuri.world.getCurrentMap().setVomit(orderedVomit);
         // Vomit() default ctor does NOT assign objId → must assign manually
         // No shit → found==null → vomit search
@@ -10852,7 +10864,7 @@ class FoodLogicTest {
         body.setPublicRank(PublicRank.UnunSlave);
         body.setHungry(1); // !isSoHungry
         // LinkedHashMap for Food
-        java.util.LinkedHashMap<Integer, src.item.Food> orderedFood = new java.util.LinkedHashMap<>();
+        java.util.LinkedHashMap<Integer, src.entity.core.world.item.Food> orderedFood = new java.util.LinkedHashMap<>();
         SimYukkuri.world.getCurrentMap().setFood(orderedFood);
         // food1 close (distance<EYESIGHT → L1293 true)
         Food f1 = new Food(110, 100, Food.FoodType.FOOD.ordinal());

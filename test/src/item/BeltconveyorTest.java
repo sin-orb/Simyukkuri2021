@@ -1,5 +1,17 @@
 package src.item;
 
+import src.entity.core.Entity;
+import src.entity.core.attachment.*;
+import src.entity.core.attachment.impl.*;
+import src.entity.core.effect.*;
+import src.entity.core.effect.impl.*;
+import src.entity.core.living.yukkuri.Dna;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.living.yukkuri.impl.*;
+import src.entity.core.world.bodylinked.*;
+import src.entity.core.world.item.*;
+import src.entity.core.world.mobile.*;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.awt.image.BufferedImage;
@@ -419,13 +431,13 @@ class BeltconveyorTest {
             setPrivateEnumField(item, "beltSpeed", "SpeedCombo", "MIDDLE");
 
             Yukkuri body = WorldTestHelper.createBody();
-            assertEquals(0, body.getBx());
-            assertEquals(0, body.getBy());
+            assertEquals(0, body.getMotionX());
+            assertEquals(0, body.getMotionY());
 
             item.processHitObj(body);
 
-            assertEquals(2, body.getBx());
-            assertEquals(0, body.getBy());
+            assertEquals(2, body.getMotionX());
+            assertEquals(0, body.getMotionY());
         }
     }
 

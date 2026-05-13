@@ -1040,6 +1040,95 @@ public boolean isBurst() { return getBurstState() == Burst.BURST; }
 
 ---
 
+## Step 7: LivingEntity の責務純化（現在の課題）
+
+Delegate パターン導入によって `Yukkuri.java` は 9,396行 → 3,649行 に削減された。
+しかし `LivingEntity.java`（5,068行）に「ゆっくり固有」の概念が多数混入している。
+
+### 発見した問題一覧
+
+| # | 問題 | 深刻度 | 対処 |
+|---|-----|--------|------|
+| 7-1 | LivingEntity に種族固有フィールド混入 | 高 | Yukkuri へ移動 |
+| 7-2 | LivingEntity に ゆっくり固有 abstract メソッド混入 | 高 | Yukkuri / SocialEntity へ移動 |
+| 7-3 | `exciting` / `forceExciting` が LivingEntity にある | 中 | SocialEntity へ移動 |
+| 7-4 | `setMessage` 系の3段間接呼び出し | 低 | YukkuriMessage の要否を再検討 |
+| 7-5 | Delegate lazy init にスレッドセーフティなし | 低 | シングルスレッド前提をコメント明記 |
+
+---
+
+### Step 7-1: 種族固有フィールドを LivingEntity から Yukkuri へ移動
+
+**対象フィールド（LivingEntity → Yukkuri）**
+
+| フィールド | 理由 |
+|-----------|------|
+| `braidType` | 「お下げ・羽・尻尾を持つ種族か」→ ゆっくり固有の見た目 |
+| `flyingType` | 「空を飛ぶ種族か」→ ゆっくり固有の種族特性 |
+| `predatorType` | 捕食者タイプ → ゆっくり固有 |
+| `rareType` | 希少種か → ゆっくり固有 |
+| `likeBitterFood` | 食の好み → ゆっくり固有の嗜好 |
+| `likeHotFood` | 同上 |
+| `likeWater` | 同上 |
+| `hasPants` | パンツ → ゆっくり固有の装備状態 |
+| `analClose` | ゆっくり固有の身体的状態 |
+| `bodyCastration` | 去勢 → ゆっくり固有 |
+| `stalkCastration` | 同上 |
+| `penipeniCutted` | ゆっくり固有の身体的特徴 |
+
+**完了条件**: `grep "braidType\|flyingType\|predatorType" LivingEntity.java` が 0件になること
+
+---
+
+### Step 7-2: ゆっくり固有 abstract メソッドを LivingEntity から追い出す
+
+**setMessage 系 13個 → Yukkuri 直接実装（abstract 廃止）**
+
+`setMessage(String)` 等は「ゆっくりがしゃべる」UI 処理で、生物一般には不要。
+現在は `LivingEntity(abstract) → Yukkuri(override) → messageDelegate → BodyEventState` の4段。
+`LivingEntity` の abstract 宣言を削除し、`Yukkuri` に直接 `public` 実装を持てばよい。
+`LivingEntity` 内の呼び出し箇所は、呼び出す理由が正当か再検討すること。
+
+**その他の abstract メソッド（配置が間違っている）**
+
+| メソッド | 正しい層 | 理由 |
+|---------|---------|------|
+| `getPublicRank()` | SocialEntity | `publicRank` フィールドが SocialEntity にある |
+| `isRaper()` | SocialEntity | `rapist` フィールドが SocialEntity にある |
+| `setForceFace(int)` | Yukkuri | スプライト制御 = ゆっくり固有 |
+| `makeDirty(boolean)` | Yukkuri | ゆっくり固有の外見変化 |
+| `setPeropero(boolean)` | Yukkuri | ゆっくり固有の行動フラグ |
+| `willingFurifuri()` | Yukkuri | ゆっくり固有の感情表現 |
+| `changeUnyo(int,int,int)` | Yukkuri | うんうん = ゆっくり固有 |
+| `changeReUnyo()` | Yukkuri | 同上 |
+| `isUnyoActionAll()` | Yukkuri | 同上 |
+
+---
+
+### Step 7-3: exciting / forceExciting を SocialEntity へ移動
+
+```java
+// 現状 LivingEntity にある
+protected boolean exciting = false;
+protected boolean forceExciting = false;
+```
+
+「性的興奮」は他者との社会的関係・刺激から生じる状態。`SocialEntity` に属する。
+
+---
+
+### Step 7-4: YukkuriMessage の中間層を評価する
+
+```
+現状: Yukkuri → YukkuriMessage → BodyEventState
+```
+
+`YukkuriMessage` が `BodyEventState` への単純転送しかしていないなら、
+`Yukkuri.setMessage()` が直接 `BodyEventState` を呼べばよく、`YukkuriMessage` は削除できる。
+ただしカラー設定などの付加ロジックがある場合は残す。
+
+---
+
 ## 制約事項・注意事項
 
 - **Java 8**: 多重継承不可、interface default method 不可

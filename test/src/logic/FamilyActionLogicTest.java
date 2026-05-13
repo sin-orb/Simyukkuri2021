@@ -1,5 +1,17 @@
 package src.logic;
 
+import src.entity.core.Entity;
+import src.entity.core.attachment.*;
+import src.entity.core.attachment.impl.*;
+import src.entity.core.effect.*;
+import src.entity.core.effect.impl.*;
+import src.entity.core.living.yukkuri.Dna;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.living.yukkuri.impl.*;
+import src.entity.core.world.bodylinked.*;
+import src.entity.core.world.item.*;
+import src.entity.core.world.mobile.*;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -11,17 +23,17 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import src.util.WorldTestHelper;
 import src.entity.core.living.yukkuri.Yukkuri;
-import src.item.Food;
-import src.item.Toilet;
+import src.entity.core.world.item.Food;
+import src.entity.core.world.item.Toilet;
 import src.entity.core.Entity;
 import src.SimYukkuri;
 import src.enums.AgeState;
 import src.enums.PublicRank;
-import src.event.ProudChildEvent;
-import src.event.ShitExercisesEvent;
-import src.event.SuperEatingTimeEvent;
-import src.event.YukkuriRideEvent;
-import src.event.FuneralEvent;
+import src.event.impl.ProudChildEvent;
+import src.event.impl.ShitExercisesEvent;
+import src.event.impl.SuperEatingTimeEvent;
+import src.event.impl.YukkuriRideEvent;
+import src.event.impl.FuneralEvent;
 
 import src.ConstState;
 
@@ -47,8 +59,8 @@ class FamilyActionLogicTest {
         child.setY(55);
         child.setAge(0); // BABY
         child.setFirstEatStalk(true);
-        child.giveOkazari(src.entity.world.bodylinked.Okazari.OkazariType.DEFAULT); // Ensure proper OKAZARI
-        parent.giveOkazari(src.entity.world.bodylinked.Okazari.OkazariType.DEFAULT);
+        child.giveOkazari(src.entity.core.world.bodylinked.Okazari.OkazariType.DEFAULT); // Ensure proper OKAZARI
+        parent.giveOkazari(src.entity.core.world.bodylinked.Okazari.OkazariType.DEFAULT);
 
         WorldTestHelper.addChild(parent, child.getUniqueID());
         WorldTestHelper.setParents(child, parent.getUniqueID(), -1);
@@ -142,7 +154,7 @@ class FamilyActionLogicTest {
 
         parent.takeOkazari(true);
         assertFalse(FamilyActionLogic.checkFamilyAction(parent));
-        parent.giveOkazari(src.entity.world.bodylinked.Okazari.OkazariType.DEFAULT);
+        parent.giveOkazari(src.entity.core.world.bodylinked.Okazari.OkazariType.DEFAULT);
 
         parent.setPublicRank(PublicRank.UnunSlave);
         assertFalse(FamilyActionLogic.checkFamilyAction(parent));
@@ -164,7 +176,7 @@ class FamilyActionLogicTest {
         Yukkuri partner = WorldTestHelper.createBody();
         // Make partner older to pass the age delegation check
         partner.setAge(parent.getAge() + 100);
-        partner.giveOkazari(src.entity.world.bodylinked.Okazari.OkazariType.DEFAULT);
+        partner.giveOkazari(src.entity.core.world.bodylinked.Okazari.OkazariType.DEFAULT);
 
         parent.setPartner(partner.getUniqueID());
         SimYukkuri.world.getCurrentMap().getBody().put(partner.getUniqueID(), partner);
@@ -456,7 +468,7 @@ class FamilyActionLogicTest {
         parent.setPartner(partner.getUniqueID());
         partner.setPartner(parent.getUniqueID());
         partner.setHungry(0); // Not full
-        partner.giveOkazari(src.entity.world.bodylinked.Okazari.OkazariType.DEFAULT);
+        partner.giveOkazari(src.entity.core.world.bodylinked.Okazari.OkazariType.DEFAULT);
 
         SimYukkuri.world.getCurrentMap().getBody().put(partner.getUniqueID(), partner);
         WorldTestHelper.setParents(child, parent.getUniqueID(), partner.getUniqueID());
@@ -545,7 +557,7 @@ class FamilyActionLogicTest {
     void testCheckFamilyAction_PartnerLockmove_ReturnsFalse() {
         Yukkuri partner2 = WorldTestHelper.createBody();
         partner2.setAge(parent.getAge() + 100);
-        partner2.giveOkazari(src.entity.world.bodylinked.Okazari.OkazariType.DEFAULT);
+        partner2.giveOkazari(src.entity.core.world.bodylinked.Okazari.OkazariType.DEFAULT);
         partner2.setLockmove(true);
         parent.setPartner(partner2.getUniqueID());
         SimYukkuri.world.getCurrentMap().getBody().put(partner2.getUniqueID(), partner2);
@@ -556,7 +568,7 @@ class FamilyActionLogicTest {
     void testCheckFamilyAction_PartnerNearToBirth_ReturnsFalse() {
         Yukkuri partner2 = WorldTestHelper.createBody();
         partner2.setAge(parent.getAge() + 100);
-        partner2.giveOkazari(src.entity.world.bodylinked.Okazari.OkazariType.DEFAULT);
+        partner2.giveOkazari(src.entity.core.world.bodylinked.Okazari.OkazariType.DEFAULT);
         partner2.setHasBaby(true);
         partner2.setPregnantPeriod(partner2.getPregPeriodBase());
         parent.setPartner(partner2.getUniqueID());
@@ -568,7 +580,7 @@ class FamilyActionLogicTest {
     void testCheckFamilyAction_PartnerShitting_ReturnsFalse() {
         Yukkuri partner2 = WorldTestHelper.createBody();
         partner2.setAge(parent.getAge() + 100);
-        partner2.giveOkazari(src.entity.world.bodylinked.Okazari.OkazariType.DEFAULT);
+        partner2.giveOkazari(src.entity.core.world.bodylinked.Okazari.OkazariType.DEFAULT);
         partner2.setShitting(true);
         parent.setPartner(partner2.getUniqueID());
         SimYukkuri.world.getCurrentMap().getBody().put(partner2.getUniqueID(), partner2);
@@ -579,7 +591,7 @@ class FamilyActionLogicTest {
     void testCheckFamilyAction_PartnerBirth_ReturnsFalse() {
         Yukkuri partner2 = WorldTestHelper.createBody();
         partner2.setAge(parent.getAge() + 100);
-        partner2.giveOkazari(src.entity.world.bodylinked.Okazari.OkazariType.DEFAULT);
+        partner2.giveOkazari(src.entity.core.world.bodylinked.Okazari.OkazariType.DEFAULT);
         partner2.setBirth(true);
         parent.setPartner(partner2.getUniqueID());
         SimYukkuri.world.getCurrentMap().getBody().put(partner2.getUniqueID(), partner2);
@@ -590,7 +602,7 @@ class FamilyActionLogicTest {
     void testCheckFamilyAction_PartnerNeedled_ReturnsFalse() {
         Yukkuri partner2 = WorldTestHelper.createBody();
         partner2.setAge(parent.getAge() + 100);
-        partner2.giveOkazari(src.entity.world.bodylinked.Okazari.OkazariType.DEFAULT);
+        partner2.giveOkazari(src.entity.core.world.bodylinked.Okazari.OkazariType.DEFAULT);
         partner2.setNeedled(true);
         parent.setPartner(partner2.getUniqueID());
         SimYukkuri.world.getCurrentMap().getBody().put(partner2.getUniqueID(), partner2);
@@ -1007,7 +1019,7 @@ class FamilyActionLogicTest {
         };
         idiotBody.setX(50); idiotBody.setY(50);
         idiotBody.setAge(idiotBody.getChildLimitBase() + 1);
-        idiotBody.giveOkazari(src.entity.world.bodylinked.Okazari.OkazariType.DEFAULT);
+        idiotBody.giveOkazari(src.entity.core.world.bodylinked.Okazari.OkazariType.DEFAULT);
         WorldTestHelper.addChild(idiotBody, child.getUniqueID());
         SimYukkuri.world.getCurrentMap().getBody().put(idiotBody.getUniqueID(), idiotBody);
         assertFalse(FamilyActionLogic.checkFamilyAction(idiotBody));
@@ -1019,7 +1031,7 @@ class FamilyActionLogicTest {
     void testCheckFamilyAction_PartnerCriticalDamage_SecondBlock_ReturnsFalse() {
         Yukkuri partner = WorldTestHelper.createBody();
         partner.setAge(parent.getAge() + 100);
-        partner.giveOkazari(src.entity.world.bodylinked.Okazari.OkazariType.DEFAULT);
+        partner.giveOkazari(src.entity.core.world.bodylinked.Okazari.OkazariType.DEFAULT);
         partner.setCriticalDamegeType(src.enums.CriticalDamegeType.INJURED);
         parent.setPartner(partner.getUniqueID());
         SimYukkuri.world.getCurrentMap().getBody().put(partner.getUniqueID(), partner);
@@ -1063,7 +1075,7 @@ class FamilyActionLogicTest {
         };
         // ride loop: same child !hasOkazari -> L216 continue -> empty ride list -> false
         assertFalse(FamilyActionLogic.checkFamilyAction(parent));
-        child.giveOkazari(src.entity.world.bodylinked.Okazari.OkazariType.DEFAULT);
+        child.giveOkazari(src.entity.core.world.bodylinked.Okazari.OkazariType.DEFAULT);
     }
 
     // ---- ride loop: child has currentEvent -> skip (L213-214) ----
@@ -1141,7 +1153,7 @@ class FamilyActionLogicTest {
         child.setShit(0); // bWantToShit=false
         child.setWakeUpTime(Long.MIN_VALUE / 2); // isSleepy=true even at age=0
 
-        src.item.Bed bed = new src.item.Bed();
+        src.entity.core.world.item.Bed bed = new src.entity.core.world.item.Bed();
         bed.setX(300); bed.setY(300);
         SimYukkuri.world.getCurrentMap().getBed().put(bed.getObjId(), bed);
 
@@ -1314,7 +1326,7 @@ class FamilyActionLogicTest {
         };
         loner.setX(50); loner.setY(50);
         loner.setAge(loner.getChildLimitBase() + 1); // adult
-        loner.giveOkazari(src.entity.world.bodylinked.Okazari.OkazariType.DEFAULT);
+        loner.giveOkazari(src.entity.core.world.bodylinked.Okazari.OkazariType.DEFAULT);
         // addChild を呼ばない → 子リスト空
         SimYukkuri.world.getCurrentMap().getBody().put(loner.getUniqueID(), loner);
         assertFalse(FamilyActionLogic.checkFamilyAction(loner));
@@ -1369,7 +1381,7 @@ class FamilyActionLogicTest {
             child.setShit(0);
             child.setWakeUpTime(Long.MIN_VALUE / 2);
 
-            src.item.Bed bed = new src.item.Bed();
+            src.entity.core.world.item.Bed bed = new src.entity.core.world.item.Bed();
             bed.setX(300);
             bed.setY(300);
             SimYukkuri.world.getCurrentMap().getBed().put(bed.getObjId(), bed);

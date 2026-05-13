@@ -1,5 +1,17 @@
 package src.logic;
 
+import src.entity.core.Entity;
+import src.entity.core.attachment.*;
+import src.entity.core.attachment.impl.*;
+import src.entity.core.effect.*;
+import src.entity.core.effect.impl.*;
+import src.entity.core.living.yukkuri.Dna;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.living.yukkuri.impl.*;
+import src.entity.core.world.bodylinked.*;
+import src.entity.core.world.item.*;
+import src.entity.core.world.mobile.*;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
@@ -360,9 +372,9 @@ class BodyMovementTest {
 		body.setVx(-5);
 		body.setVy(0);
 		body.setVz(0);
-		body.setBx(0);
-		body.setBy(0);
-		body.setBz(0);
+		body.setMotionX(0);
+		body.setMotionY(0);
+		body.setMotionZ(0);
 
 		boolean handled = BodyMovement.applyExternalMotion(body);
 
@@ -380,9 +392,9 @@ class BodyMovementTest {
 		body.setVx(0);
 		body.setVy(5);
 		body.setVz(0);
-		body.setBx(0);
-		body.setBy(0);
-		body.setBz(0);
+		body.setMotionX(0);
+		body.setMotionY(0);
+		body.setMotionZ(0);
 
 		boolean handled = BodyMovement.applyExternalMotion(body);
 
@@ -400,9 +412,9 @@ class BodyMovementTest {
 		body.setVx(0);
 		body.setVy(0);
 		body.setVz(0);
-		body.setBx(0);
-		body.setBy(0);
-		body.setBz(0);
+		body.setMotionX(0);
+		body.setMotionY(0);
+		body.setMotionZ(0);
 
 		boolean handled = BodyMovement.applyExternalMotion(body);
 
@@ -417,9 +429,9 @@ class BodyMovementTest {
 		body.setVx(0);
 		body.setVy(0);
 		body.setVz(1);
-		body.setBx(0);
-		body.setBy(0);
-		body.setBz(0);
+		body.setMotionX(0);
+		body.setMotionY(0);
+		body.setMotionZ(0);
 		body.setFalldownDamage(10);
 		body.setNoDamageNextFall(true);
 

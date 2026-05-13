@@ -1,5 +1,17 @@
 package src.enums;
 
+import src.entity.core.Entity;
+import src.entity.core.attachment.*;
+import src.entity.core.attachment.impl.*;
+import src.entity.core.effect.*;
+import src.entity.core.effect.impl.*;
+import src.entity.core.living.yukkuri.Dna;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.living.yukkuri.impl.*;
+import src.entity.core.world.bodylinked.*;
+import src.entity.core.world.item.*;
+import src.entity.core.world.mobile.*;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -65,9 +77,8 @@ public class YukkuriTypeTest {
 
     @Test
     public void testNormalizeOffspringType() {
-        assertEquals(YukkuriType.MARISA.getTypeID(),
-                YukkuriType.normalizeOffspringType(YukkuriType.DOSMARISA));
-        assertEquals(YukkuriType.REIMU.getTypeID(), YukkuriType.normalizeOffspringType(YukkuriType.DEIBU));
-        assertEquals(YukkuriType.ALICE.getTypeID(), YukkuriType.normalizeOffspringType(YukkuriType.ALICE));
+        assertEquals(YukkuriType.MARISA, YukkuriType.normalizeOffspringType(YukkuriType.DOSMARISA));
+        assertEquals(YukkuriType.REIMU, YukkuriType.normalizeOffspringType(YukkuriType.DEIBU));
+        assertEquals(YukkuriType.ALICE, YukkuriType.normalizeOffspringType(YukkuriType.ALICE));
     }
 }

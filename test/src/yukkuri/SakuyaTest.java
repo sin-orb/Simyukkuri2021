@@ -1,5 +1,17 @@
 package src.yukkuri;
 
+import src.entity.core.Entity;
+import src.entity.core.attachment.*;
+import src.entity.core.attachment.impl.*;
+import src.entity.core.effect.*;
+import src.entity.core.effect.impl.*;
+import src.entity.core.living.yukkuri.Dna;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.living.yukkuri.impl.*;
+import src.entity.core.world.bodylinked.*;
+import src.entity.core.world.item.*;
+import src.entity.core.world.mobile.*;
+
 import src.SimYukkuri;
 
 import org.junit.jupiter.api.Test;
@@ -13,7 +25,7 @@ public class SakuyaTest {
     @Test
     public void testSakuyaIdentity() {
         Sakuya sakuya = new Sakuya();
-        assertEquals(1011, sakuya.getType());
+        assertEquals(Sakuya.type, sakuya.getType());
         assertEquals("さくや", sakuya.getNameJ());
         assertEquals("Sakuya", sakuya.getNameE());
     }

@@ -56,7 +56,7 @@ public class BreedEvent extends EventPacket {
 			return false;
 		// 生まれたての赤ゆは親の出産応援イベントに参加させない。
 		// 既に生まれていて見に来る赤ゆは参加してよいので、出生直後の一時フラグだけを見る。
-		if (sourceBody.isParent(body) && body.isBirthMessageForced()) {
+		if (sourceBody.isParent(body) && (body.isBirthMessageForced() || body.getBirthEventBlockedTicks() > 0)) {
 			return false;
 		}
 		if (sourceBody == body)
@@ -114,7 +114,7 @@ public class BreedEvent extends EventPacket {
 		Yukkuri sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
 		if (sourceBody == null)
 			return UpdateState.ABORT;
-		if (sourceBody.isParent(body) && body.isBirthMessageForced()) {
+		if (sourceBody.isParent(body) && (body.isBirthMessageForced() || body.getBirthEventBlockedTicks() > 0)) {
 			return UpdateState.ABORT;
 		}
 		if (body.nearToBirth())
@@ -157,6 +157,9 @@ public class BreedEvent extends EventPacket {
 		Yukkuri sourceBody = src.util.BodyRegistry.getBodyInstance(getFrom());
 		if (sourceBody == null)
 			return true;
+		if (sourceBody.isParent(body) && body.getBirthEventBlockedTicks() > 0) {
+			return true;
+		}
 		// 相手が出産前なら応援
 		if (sourceBody.isBirth()) {
 			body.setHappiness(Happiness.AVERAGE);
@@ -165,7 +168,7 @@ public class BreedEvent extends EventPacket {
 					false);
 			sourceBody.addMemories(1);
 			body.addMemories(1);
-			return false;
+			return true;
 		} else {
 			// 誕生
 			if (!sourceBody.hasBabyOrStalk()) {
@@ -187,7 +190,10 @@ public class BreedEvent extends EventPacket {
 			} else {
 				body.setHappiness(Happiness.AVERAGE);
 				body.lookTo(sourceBody.getX(), sourceBody.getY());
-				return false;
+			}
+			if (sourceBody.isParent(body)) {
+				// 出生直後の祝福を見た赤ゆは、同じイベントへ即再参加しないよう一時的に外す。
+				body.setBirthEventBlockedTicks(Math.max(body.getBirthEventBlockedTicks(), 300));
 			}
 			return true;
 		}

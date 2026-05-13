@@ -1,5 +1,17 @@
 package src.yukkuri;
 
+import src.entity.core.Entity;
+import src.entity.core.attachment.*;
+import src.entity.core.attachment.impl.*;
+import src.entity.core.effect.*;
+import src.entity.core.effect.impl.*;
+import src.entity.core.living.yukkuri.Dna;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.living.yukkuri.impl.*;
+import src.entity.core.world.bodylinked.*;
+import src.entity.core.world.item.*;
+import src.entity.core.world.mobile.*;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -27,7 +39,7 @@ public class AliceTest {
     @Test
     public void testAliceIdentity() {
         Alice alice = new Alice();
-        assertEquals(2, alice.getType());
+        assertEquals(src.enums.YukkuriType.ALICE, alice.getType());
         assertEquals("ありす", alice.getNameJ());
         assertEquals("Alice", alice.getNameE());
     }
@@ -45,9 +57,9 @@ public class AliceTest {
     public void testAliceHybridType() {
         Alice alice = new Alice();
         // Alice always returns Alice type regardless of partner
-        assertEquals(Alice.type, alice.getHybridType(Reimu.type));
-        assertEquals(Alice.type, alice.getHybridType(Marisa.type));
-        assertEquals(Alice.type, alice.getHybridType(Chen.type));
+        assertEquals(src.enums.YukkuriType.ALICE, alice.getHybridType(src.enums.YukkuriType.REIMU));
+        assertEquals(src.enums.YukkuriType.ALICE, alice.getHybridType(src.enums.YukkuriType.MARISA));
+        assertEquals(src.enums.YukkuriType.ALICE, alice.getHybridType(src.enums.YukkuriType.CHEN));
     }
 
     @Test
@@ -83,8 +95,7 @@ public class AliceTest {
     @Test
     public void testAliceIsAliceRaperWhenNotRaper() {
         Alice alice = new Alice();
-        // Default Alice is not a raper
-        assertFalse(alice.isAliceRaper());
+        assertFalse(invokeBoolean(alice, "isAliceRaper"));
     }
 
     @Test
@@ -94,7 +105,7 @@ public class AliceTest {
         Alice alice = new Alice();
         alice.tuneParameters(); // This sets rapist flag
 
-        assertTrue(alice.isAliceRaper());
+        assertTrue(invokeBoolean(alice, "isAliceRaper"));
     }
 
     @Test
@@ -104,17 +115,28 @@ public class AliceTest {
         Alice alice = new Alice();
         alice.tuneParameters(); // This sets rapist flag
 
-        // isRaperExcitingFace checks if Alice is raper AND has exciting face
-        // The method takes ImageCode ordinal as parameter
-        // We can't fully test without image setup, but we can verify it doesn't crash
-        assertFalse(alice.isRaperExcitingFace(0)); // Normal face
+        assertFalse(invokeBoolean(alice, "isRaperExcitingFace", new Class<?>[] { int.class }, new Object[] { 0 }));
+    }
+
+    private static boolean invokeBoolean(Object target, String methodName) {
+        return invokeBoolean(target, methodName, new Class<?>[0], new Object[0]);
+    }
+
+    private static boolean invokeBoolean(Object target, String methodName, Class<?>[] parameterTypes, Object[] args) {
+        try {
+            java.lang.reflect.Method method = target.getClass().getDeclaredMethod(methodName, parameterTypes);
+            method.setAccessible(true);
+            return (boolean) method.invoke(target, args);
+        } catch (ReflectiveOperationException e) {
+            throw new AssertionError(e);
+        }
     }
 
     @Test
     public void testAliceDefaultConstructor() {
         Alice alice = new Alice();
         assertNotNull(alice);
-        assertEquals(2, alice.getType());
+        assertEquals(src.enums.YukkuriType.ALICE, alice.getType());
     }
 
     @Test
@@ -125,7 +147,7 @@ public class AliceTest {
         Alice alice = new Alice(150, 250, 0, AgeState.ADULT, parent1, parent2);
 
         assertNotNull(alice);
-        assertEquals(2, alice.getType());
+        assertEquals(src.enums.YukkuriType.ALICE, alice.getType());
     }
 
     @Test

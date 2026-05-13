@@ -1,5 +1,6 @@
 package src.logic;
 
+import src.enums.Intelligence;
 import src.entity.core.living.yukkuri.Yukkuri;
 
 /**
@@ -17,23 +18,28 @@ public final class BodyIllnessRule {
 	 * @return 病気を見抜けるならtrue
 	 */
 	public static boolean findSick(Yukkuri self, Yukkuri targetBody) {
-		switch (self.getIntelligence()) {
-			case WISE:
-				if (targetBody.isSick()) {
-					return true;
-				}
-				break;
-			case AVERAGE:
-				if (targetBody.isSick()) {
-					return true;
-				}
-				break;
-			case FOOL:
-				if (targetBody.isSickHeavily()) {
-					return true;
-				}
-				break;
+		return findSick(self.getIntelligence(), targetBody);
+	}
+
+	/**
+	 * この知能が相手の病気を見抜けるかを返却する.
+	 *
+	 * @param intelligence 判定元の知能
+	 * @param targetBody   判定対象
+	 * @return 病気を見抜けるならtrue
+	 */
+	public static boolean findSick(Intelligence intelligence, Yukkuri targetBody) {
+		if (targetBody == null) {
+			return false;
 		}
-		return false;
+		switch (intelligence) {
+			case WISE:
+			case AVERAGE:
+				return targetBody.isSick();
+			case FOOL:
+				return targetBody.isSickHeavily();
+			default:
+				return false;
+		}
 	}
 }

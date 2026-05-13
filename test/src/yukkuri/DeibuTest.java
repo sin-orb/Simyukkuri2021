@@ -1,5 +1,17 @@
 package src.yukkuri;
 
+import src.entity.core.Entity;
+import src.entity.core.attachment.*;
+import src.entity.core.attachment.impl.*;
+import src.entity.core.effect.*;
+import src.entity.core.effect.impl.*;
+import src.entity.core.living.yukkuri.Dna;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.living.yukkuri.impl.*;
+import src.entity.core.world.bodylinked.*;
+import src.entity.core.world.item.*;
+import src.entity.core.world.mobile.*;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -29,7 +41,7 @@ public class DeibuTest {
     public void testDeibuIdentity() {
         Deibu deibu = new Deibu();
         // Verify the Deibu was created with correct type
-        assertEquals(2005, deibu.getType());
+        assertEquals(Deibu.type, deibu.getType());
         assertEquals("れいむ", deibu.getNameJ());
         assertEquals("Reimu", deibu.getNameE());
     }
@@ -42,7 +54,7 @@ public class DeibuTest {
         Deibu deibu = new Deibu(140, 240, 0, AgeState.ADULT, parent1, parent2);
 
         assertNotNull(deibu);
-        assertEquals(2005, deibu.getType());
+        assertEquals(Deibu.type, deibu.getType());
     }
 
     @Test
@@ -60,7 +72,7 @@ public class DeibuTest {
         // Deibu + Marisa = MarisaReimu
         assertEquals(MarisaReimu.type, deibu.getHybridType(Marisa.type));
         // Deibu + other = Deibu
-        assertEquals(Deibu.type, deibu.getHybridType(Alice.type));
+        assertEquals(Deibu.type, deibu.getHybridType(src.enums.YukkuriType.ALICE));
     }
 
     @Test
@@ -148,7 +160,7 @@ public class DeibuTest {
     public void testDeibuHybridTypeWithOther() {
         Deibu obj = new Deibu();
         // Test with a type not specifically handled - should return own type
-        assertEquals(Deibu.type, obj.getHybridType(Alice.type));
+        assertEquals(Deibu.type, obj.getHybridType(src.enums.YukkuriType.ALICE));
     }
     @Test
     public void testDeibuJudgeCanTransForGodHandWhenUnbirth() {

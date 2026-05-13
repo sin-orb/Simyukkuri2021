@@ -1,5 +1,18 @@
 package src.event.impl;
 
+import src.entity.core.Entity;
+import src.entity.core.attachment.*;
+import src.entity.core.attachment.impl.*;
+import src.entity.core.effect.*;
+import src.entity.core.effect.impl.*;
+import src.entity.core.living.yukkuri.Dna;
+import src.entity.core.living.yukkuri.Yukkuri;
+import src.entity.core.living.yukkuri.impl.*;
+import src.entity.core.world.bodylinked.*;
+import src.entity.core.world.item.*;
+import src.entity.core.world.mobile.*;
+import src.event.impl.ShitExercisesEvent;
+
 import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -102,6 +115,16 @@ class FuneralEventTest {
         responder.setPublicRank(src.enums.PublicRank.UnunSlave);
         FuneralEvent event = new FuneralEvent(from, null, null, 10);
         assertFalse(event.checkEventResponse(responder));
+    }
+
+    @Test
+    void testCheckEventResponse_returnsFalseWhenSourceBodyIsAlreadyInAnotherEvent() {
+        Yukkuri from = createBody();
+        Yukkuri child = createBody();
+        WorldTestHelper.setParents(child, -1, from.getUniqueID());
+        from.setCurrentEvent(new ShitExercisesEvent(from, null, null, 10));
+        FuneralEvent event = new FuneralEvent(from, null, null, 10);
+        assertFalse(event.checkEventResponse(child));
     }
 
     @Test

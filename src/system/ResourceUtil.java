@@ -12,6 +12,8 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import src.util.GameLocale;
+
 /**
  * Singleton class to read localized "properties" files.
  */
@@ -20,12 +22,6 @@ public class ResourceUtil {
 	private static Locale enLocale = new Locale("en");
 	private static Locale jaLocale = new Locale("ja");
 	public static final Locale JAPANESE = jaLocale;
-	/**
-	 * @deprecated Use {@code GameLocale.getLocale()} or the migration helper
-	 *             {@code GameLocale.isJapanese()} instead.
-	 */
-	@Deprecated
-	public static final boolean IS_JP = thisLocale.getLanguage().equals(jaLocale.getLanguage());
 	private static ResourceUtil instance;
 	private static Map<String, Map<String, String>> strings = new HashMap<String, Map<String, String>>();
 
@@ -144,10 +140,10 @@ public class ResourceUtil {
 		Map<String, String> en = strings.get(enLocale.getLanguage());
 		Map<String, String> ja = strings.get(jaLocale.getLanguage());
 		if (null == props)
-			return IS_JP ? ja.get(property) : en.get(property);
+			return GameLocale.isJapanese() ? ja.get(property) : en.get(property);
 		String v = props.get(property);
 		if (null == v)
-			return IS_JP ? ja.get(property) : en.get(property);
+			return GameLocale.isJapanese() ? ja.get(property) : en.get(property);
 		return v;
 	}
 }
