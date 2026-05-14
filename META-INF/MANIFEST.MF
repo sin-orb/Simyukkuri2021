@@ -1,2 +1,2 @@
 # MANIFEST.MF
-Main-Class: src.SimYukkuri
+Main-Class: org.simyukkuri.SimYukkuri
