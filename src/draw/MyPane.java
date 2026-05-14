@@ -412,29 +412,29 @@ public class MyPane extends JPanel implements Runnable {
 			} catch (NumberFormatException ne) {
 				maxNum = 1;
 			}
-			final int fMaxNum = maxNum;
-			final int fRndType = cb4.getSelectedIndex();
-			final int fBaseType = cb1.getSelectedIndex();
-			final int fRareType = cb3.getSelectedIndex();
-			final int fAgeType = cb2.getSelectedIndex();
-			final boolean fRaper = cb6.isSelected();
+			final int maxBodyCount = maxNum;
+			final int randomTypeIndex = cb4.getSelectedIndex();
+			final int baseTypeIndex = cb1.getSelectedIndex();
+			final int rareTypeIndex = cb3.getSelectedIndex();
+			final int ageTypeIndex = cb2.getSelectedIndex();
+			final boolean isRaper = cb6.isSelected();
 			final String loadingMsg = GameLocale.isJapanese() ? "読み込み中..." : "Loading...";
 			SimYukkuri.simYukkuri.runWithLoadingDialog(loadingMsg, () -> {
-				for (int i = 0; i < fMaxNum; i++) {
+				for (int i = 0; i < maxBodyCount; i++) {
 					YukkuriType selectType;
 					int selectAge;
-					switch (fRndType) {
+					switch (randomTypeIndex) {
 						case 0:
 						default:
-							selectType = YukkuriType.fromTypeID(fBaseType);
-							if (fRareType == 1) {
+							selectType = YukkuriType.fromTypeID(baseTypeIndex);
+							if (rareTypeIndex == 1) {
 								int type = selectType.getTypeID() + 1000;
 								selectType = YukkuriType.fromTypeID(type);
-							} else if (fRareType == 2) {
+							} else if (rareTypeIndex == 2) {
 								int type = selectType.getTypeID() + 3000;
 								selectType = YukkuriType.fromTypeID(type);
 							}
-							selectAge = fAgeType;
+							selectAge = ageTypeIndex;
 							break;
 						case 1:
 							selectType = YukkuriType.fromTypeID(GameRandom.nextInt(namesCommonJ.length));
@@ -503,7 +503,7 @@ public class MyPane extends JPanel implements Runnable {
 								null, age, null, null, true);
 					}
 					b.addAge(256);
-					if (fRaper) {
+					if (isRaper) {
 						b.setRaper(true);
 					} else {
 						b.setRaper(false);

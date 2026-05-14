@@ -183,11 +183,11 @@ public class Barrier extends FieldShape {
 			int distance = (int) Math.sqrt(Translate.distance(x1, y1, x2, y2));
 			double deltaX = (double) (x2 - x1) / (double) distance;
 			double deltaY = (double) (y2 - y1) / (double) distance;
-			int sX = x1;
-			int sY = y1;
+			int startX = x1;
+			int startY = y1;
 			for (int t = 0; t <= distance; t++) {
-				int x = sX + (int) (deltaX * t);
-				int y = sY + (int) (deltaY * t);
+				int x = startX + (int) (deltaX * t);
+				int y = startY + (int) (deltaY * t);
 				if ((Math.abs(x - cx) <= thickness) && (Math.abs(y - cy) <= thickness)) {
 					return targetBarrier;
 				}
@@ -217,11 +217,11 @@ public class Barrier extends FieldShape {
 		int distance = (int) Math.sqrt(Translate.distance(x1, y1, x2, y2));
 		double deltaX = (double) (x2 - x1) / (double) distance;
 		double deltaY = (double) (y2 - y1) / (double) distance;
-		int sX = x1;
-		int sY = y1;
+		int startX = x1;
+		int startY = y1;
 		for (int t = 0; t <= distance; t++) {
-			int x = sX + (int) (deltaX * t);
-			int y = sY + (int) (deltaY * t);
+			int x = startX + (int) (deltaX * t);
+			int y = startY + (int) (deltaY * t);
 			if ((tmp.getWallMap()[x][y] & attr) != 0) {
 				return true;
 			}

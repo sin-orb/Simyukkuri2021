@@ -3,6 +3,8 @@ package src.entity.core.living.yukkuri;
 import src.Const;
 import src.draw.Translate;
 import src.entity.core.Entity;
+import src.enums.CoreAnkoState;
+import src.enums.Damage;
 import src.entity.core.attachment.impl.Fire;
 import src.field.FieldShape;
 import src.field.impl.Pool;
@@ -578,5 +580,67 @@ public final class YukkuriStateDelegate {
 			body.setPanicPeriod(0);
 			body.setHappiness(Happiness.SAD);
 		}
+	}
+
+	/** 皮を剥がされているときのメモリ減少・メッセージ反応. */
+	public void onPealed() {
+		body.setPeropero(false);
+		body.addMemories(-5);
+		if (body.getCoreAnkoState() == CoreAnkoState.NonYukkuriDiseaseNear) {
+			body.setNYDMessage(GameMessages.getMessage(body, MessagePool.Action.Dying2), false);
+		}
+		body.setMessage(GameMessages.getMessage(body, MessagePool.Action.Dying2));
+	}
+
+	/** 詰め込まれているときのメモリ減少反応. */
+	public void onPacked() {
+		body.setPeropero(false);
+		body.addMemories(-2);
+	}
+
+	/** 毒スチーム被曝時の行動停止・感情・メッセージ反応. */
+	public void onPoisonSteam() {
+		body.clearActions();
+		if (body.isNotNYD()) {
+			body.setHappiness(Happiness.VERY_SAD);
+			if (body.getDamageState() != Damage.NONE) {
+				body.setNegiMessage(GameMessages.getMessage(body, MessagePool.Action.PoisonDamage), true);
+			} else {
+				body.setMessage(GameMessages.getMessage(body, MessagePool.Action.PoisonDamage), Const.HOLDMESSAGE, false, true);
+			}
+		}
+	}
+
+	/** CUT 致命傷時のメッセージ反応. */
+	public void onCutDamageReaction() {
+		if (body.getCoreAnkoState() != CoreAnkoState.NonYukkuriDiseaseNear) {
+			body.setNYDMessage(GameMessages.getMessage(body, MessagePool.Action.Dying2), false);
+		} else {
+			body.setMessage(GameMessages.getMessage(body, MessagePool.Action.Dying2));
+		}
+	}
+
+	/** INJURED 致命傷時の悲鳴・吐瀉物・汚れ反応. */
+	public void onInjuredScream(int x, int y) {
+		body.addCrushedVomit(x, y, 0);
+		body.setMessage(GameMessages.getMessage(body, MessagePool.Action.Scream));
+		body.setForceFace(ImageCode.PAIN.ordinal());
+		body.makeDirty(true);
+	}
+
+	/** 悪夢/通常睡眠に応じた顔変化. nightmare=true なら悪夢顔. */
+	public void onNightmare(boolean nightmare) {
+		body.setForceFace(nightmare ? ImageCode.NIGHTMARE.ordinal() : ImageCode.SLEEPING.ordinal());
+	}
+
+	/** 飢餓による強制起床時のメッセージ・感情反応. */
+	public void onWakeByHunger() {
+		body.setMessage(GameMessages.getMessage(body, MessagePool.Action.Hungry));
+		body.setHappiness(Happiness.SAD);
+	}
+
+	/** 自然起床時のメッセージ反応. */
+	public void onWakeupNaturally() {
+		body.setMessage(GameMessages.getMessage(body, MessagePool.Action.Wakeup), true);
 	}
 }

@@ -7,17 +7,14 @@ import src.entity.core.attachment.impl.Fire;
 import src.entity.core.attachment.impl.Needle;
 import src.entity.core.world.item.StickyPlate;
 import src.enums.AgeState;
-import src.enums.BurialState;
-import src.enums.CriticalDamegeType;
 import src.enums.HairState;
 import src.enums.Happiness;
 import src.enums.ImageCode;
 import src.enums.PanicType;
 import src.enums.UnbirthBabyState;
 import src.event.impl.ProposeEvent;
-import src.util.GameEnvironment;
-import src.util.GameView;
 import src.system.MessagePool;
+import src.util.GameEnvironment;
 import src.util.GameMessages;
 import src.util.GameRandom;
 import src.util.GameWorld;
@@ -458,7 +455,8 @@ public final class YukkuriAbuseDelegate {
 				body.setExternalPressure(0);
 				body.setCalcZ(0);
 				body.bodyBurst();
-			} else if (body.getExternalPressure() < (Const.EXT_FORCE_PUSH_LIMIT[body.getBodyAgeState().ordinal()] >> 1)) {
+			} else if (body
+					.getExternalPressure() < (Const.EXT_FORCE_PUSH_LIMIT[body.getBodyAgeState().ordinal()] >> 1)) {
 				if (GameRandom.nextInt(10) == 0) {
 					body.setHappiness(Happiness.VERY_SAD);
 					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.Press2), Const.HOLDMESSAGE, true,

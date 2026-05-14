@@ -2,17 +2,15 @@ package src.entity.core.living.yukkuri;
 
 import java.util.Collections;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
 import src.enums.Happiness;
 import src.enums.ImageCode;
+import src.enums.Parent;
+import src.logic.BodyRelations;
 import src.system.MessagePool;
 import src.util.GameMessages;
-import src.logic.BodyRelations;
-import src.enums.Parent;
-import src.util.ListUtil;
 
 /**
  * ゆっくりの家族関係と出生キューをまとめる委譲クラス。

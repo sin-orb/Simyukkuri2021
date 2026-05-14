@@ -524,7 +524,7 @@ class BeltconveyorObjTest extends ItemTestBase {
         BeltconveyorObj belt = new BeltconveyorObj();
         belt.setPolygonX(new int[] { 0, 0, 100, 100 });
         belt.setPolygonY(new int[] { 0, 100, 100, 0 });
-        // bIsField=false → uses nX/nY directly, anPoints converted via invertLimit
+        // isField=false → uses x/y directly, polygon points converted via invertLimit
         assertDoesNotThrow(() -> belt.checkContain(50, 50, false));
     }
 

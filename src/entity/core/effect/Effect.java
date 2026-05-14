@@ -53,12 +53,12 @@ public abstract class Effect extends Entity {
 	/**
 	 * コンストラクタ
 	 *
-	 * @param sX     初期値のX座標
-	 * @param sY     初期値のY座標
-	 * @param sZ     初期値のZ座標
-	 * @param vX     初期の移動量ベクトルX成分
-	 * @param vY     初期の移動量ベクトルY成分
-	 * @param vZ     初期の移動量ベクトルZ成分
+	 * @param startX 初期値のX座標
+	 * @param startY 初期値のY座標
+	 * @param startZ 初期値のZ座標
+	 * @param velocityX 初期の移動量ベクトルX成分
+	 * @param velocityY 初期の移動量ベクトルY成分
+	 * @param velocityZ 初期の移動量ベクトルZ成分
 	 * @param invert 初期の向き(0で左、1で右)
 	 * @param life   継続時間
 	 * @param loop   アニメのループの有無
@@ -66,7 +66,7 @@ public abstract class Effect extends Entity {
 	 * @param grav   重力の影響の有無
 	 * @param front  エフェクトが親オブジェクトの前後どっちか(trueが前)
 	 */
-	public Effect(int sX, int sY, int sZ, int vX, int vY, int vZ, boolean invert,
+	public Effect(int startX, int startY, int startZ, int velocityX, int velocityY, int velocityZ, boolean invert,
 			int life, int loop, boolean end, boolean grav, boolean front) {
 
 		if (front) {
@@ -75,12 +75,12 @@ public abstract class Effect extends Entity {
 			GameWorld.get().getCurrentMap().getSortEffect().put(objId, this);
 		}
 		objType = Type.LIGHT_EFFECT;
-		x = sX;
-		y = sY;
-		z = sZ;
-		vx = vX;
-		vy = vY;
-		vz = vZ;
+		x = startX;
+		y = startY;
+		z = startZ;
+		vx = velocityX;
+		vy = velocityY;
+		vz = velocityZ;
 		if (invert)
 			direction = 1;
 		else

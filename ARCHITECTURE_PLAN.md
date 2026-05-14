@@ -1049,11 +1049,18 @@ Delegate パターン導入によって `Yukkuri.java` は 9,396行 → 3,649行
 
 | # | 問題 | 深刻度 | 対処 |
 |---|-----|--------|------|
-| 7-1 | LivingEntity に種族固有フィールド混入 | 高 | Yukkuri へ移動 |
-| 7-2 | LivingEntity に ゆっくり固有 abstract メソッド混入 | 高 | Yukkuri / SocialEntity へ移動 |
-| 7-3 | `exciting` / `forceExciting` が LivingEntity にある | 中 | SocialEntity へ移動 |
-| 7-4 | `setMessage` 系の3段間接呼び出し | 低 | YukkuriMessage の要否を再検討 |
-| 7-5 | Delegate lazy init にスレッドセーフティなし | 低 | シングルスレッド前提をコメント明記 |
+| 7-1 | LivingEntity に種族固有フィールド混入 | 高 | ✅ Yukkuri へ移動完了 |
+| 7-2 | LivingEntity に ゆっくり固有 abstract メソッド混入 | 高 | ✅ デフォルト no-op 実装に変換（abstract 廃止） |
+| 7-3 | `exciting` / `forceExciting` が LivingEntity にある | 中 | ✅ SocialEntity へ移動完了 |
+| 7-4 | `setMessage` 系の3段間接呼び出し | 低 | ✅ 評価済: YukkuriMessage に Color→Color4y 変換ロジックがあるため存続 |
+| 7-5 | Delegate lazy init にスレッドセーフティなし | 低 | ✅ Yukkuri.java にシングルスレッド前提コメントを追加 |
+
+また、Step 7-1 追加分として以下も完了済み:
+
+| # | 問題 | 深刻度 | 対処 |
+|---|-----|--------|------|
+| 7-1b | `penipeniCutted`/`likeWater` が LivingEntity にある（SocialEntity で使用） | 高 | ✅ SocialEntity へ移動完了 |
+| 7-1c | `flyingType` が LivingEntity にある | 高 | ✅ Yukkuri へ移動完了（`canflyCheck()` は LivingEntity に final で残存） |
 
 ---
 

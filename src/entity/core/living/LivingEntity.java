@@ -13,11 +13,9 @@ import src.SimYukkuri;
 import src.draw.Color4y;
 import src.draw.Rectangle4y;
 import src.draw.Translate;
-import src.draw.Terrarium;
 import src.entity.core.Entity;
 import src.entity.core.attachment.Attachment;
 import src.entity.core.attachment.impl.Ants;
-import src.entity.core.attachment.impl.Badge;
 import src.entity.core.living.yukkuri.Dna;
 import src.entity.core.living.yukkuri.Yukkuri;
 import src.entity.core.world.bodylinked.Okazari;
@@ -31,14 +29,12 @@ import src.enums.CoreAnkoState;
 import src.enums.CriticalDamegeType;
 import src.enums.Damage;
 import src.enums.Direction;
-import src.enums.ImageCode;
 import src.enums.Event;
 import src.enums.FavItemType;
 import src.enums.FootBake;
 import src.enums.HairState;
-import src.enums.Happiness;
-import src.enums.PanicType;
 import src.enums.Pain;
+import src.enums.PanicType;
 import src.enums.PlayStyle;
 import src.enums.PublicRank;
 import src.enums.PurposeOfMoving;
@@ -51,11 +47,11 @@ import src.event.EventPacket;
 import src.logic.AntInfestationPolicy;
 import src.logic.BodyRelations;
 import src.system.BasicStrokeEX;
-import src.system.MessagePool;
 import src.system.MapPlaceData;
+import src.system.MessagePool;
 import src.system.Sprite;
-import src.util.GameMessages;
 import src.util.GameEnvironment;
+import src.util.GameMessages;
 import src.util.GameRandom;
 import src.util.GameWorld;
 
@@ -65,6 +61,50 @@ import src.util.GameWorld;
  */
 public abstract class LivingEntity extends Entity {
 	private static final long serialVersionUID = -6112543281740502011L;
+
+	// --- Delegate lazy init（シングルスレッド前提）---
+	private transient LivingBodyDamageDelegate bodyDamageDelegate;
+	private transient LivingSleepDelegate sleepDelegate;
+	private transient LivingPanicDelegate panicDelegate;
+	private transient LivingHungerDelegate hungerDelegate;
+	private transient LivingBodyConditionDelegate bodyConditionDelegate;
+	private transient LivingActionDelegate actionDelegate;
+
+	LivingBodyDamageDelegate bodyDamageDelegate() {
+		if (bodyDamageDelegate == null)
+			bodyDamageDelegate = new LivingBodyDamageDelegate(this);
+		return bodyDamageDelegate;
+	}
+
+	LivingSleepDelegate sleepDelegate() {
+		if (sleepDelegate == null)
+			sleepDelegate = new LivingSleepDelegate(this);
+		return sleepDelegate;
+	}
+
+	LivingPanicDelegate panicDelegate() {
+		if (panicDelegate == null)
+			panicDelegate = new LivingPanicDelegate(this);
+		return panicDelegate;
+	}
+
+	LivingHungerDelegate hungerDelegate() {
+		if (hungerDelegate == null)
+			hungerDelegate = new LivingHungerDelegate(this);
+		return hungerDelegate;
+	}
+
+	LivingBodyConditionDelegate bodyConditionDelegate() {
+		if (bodyConditionDelegate == null)
+			bodyConditionDelegate = new LivingBodyConditionDelegate(this);
+		return bodyConditionDelegate;
+	}
+
+	LivingActionDelegate actionDelegate() {
+		if (actionDelegate == null)
+			actionDelegate = new LivingActionDelegate(this);
+		return actionDelegate;
+	}
 
 	/** 蓄積ダメージ counter indicating damage */
 	protected int damage = 0;
@@ -90,10 +130,6 @@ public abstract class LivingEntity extends Entity {
 	protected boolean nightmare = false;
 	/** 前回起きた時間 */
 	protected long wakeUpTime;
-	/** 発情フラグ want to sukkiri or not */
-	protected boolean exciting = false;
-	/** 強制発情フラグ want to sukkiri or not */
-	protected boolean forceExciting = false;
 	/** ゆっくりしてるかどうか */
 	protected boolean relax = false;
 	/** 汚れ有無 */
@@ -126,16 +162,8 @@ public abstract class LivingEntity extends Entity {
 	protected boolean pheromone = false;
 	/** おさげ、羽、尻尾有無 種族として何も持っていないものはtrue */
 	protected boolean hasBraid = true;
-	/** おくるみ有無 true if having pants */
-	protected boolean hasPants = false;
-	/** ぺにぺにの去勢有無 */
-	protected boolean penipeniCutted = false;
-	/** 水が平気か */
-	protected boolean likeWater = false;
 	/** 髪の状態 */
 	protected HairState hairState = HairState.DEFAULT;
-	/** 空を飛ぶか */
-	protected boolean flyingType = false;
 	/** 誕生済みか否か */
 	protected boolean birth = false;
 	/** 生まれてからの基準年齢 */
@@ -172,8 +200,6 @@ public abstract class LivingEntity extends Entity {
 	protected int scarePeriod = 0;
 	/** 悲しんでいる期間 */
 	protected int sadPeriod = 0;
-	/** 発情期間 */
-	protected int excitingPeriod = 0;
 	/** 睡眠期間 */
 	protected int sleepingPeriod = 0;
 	/** ゆかびに侵されている期間 */
@@ -192,7 +218,8 @@ public abstract class LivingEntity extends Entity {
 	 *
 	 * @param message メッセージ
 	 */
-	public abstract void setMessage(String message);
+	public void setMessage(String message) {
+	}
 
 	/**
 	 * ピコピコメッセージを出す.
@@ -200,7 +227,8 @@ public abstract class LivingEntity extends Entity {
 	 * @param message   メッセージ
 	 * @param interrupt 割り込み可否
 	 */
-	public abstract void setPikoMessage(String message, boolean interrupt);
+	public void setPikoMessage(String message, boolean interrupt) {
+	}
 
 	/**
 	 * ピコピコメッセージを出す.
@@ -209,7 +237,8 @@ public abstract class LivingEntity extends Entity {
 	 * @param count     表示時間
 	 * @param interrupt 割り込み可否
 	 */
-	public abstract void setPikoMessage(String message, int count, boolean interrupt);
+	public void setPikoMessage(String message, int count, boolean interrupt) {
+	}
 
 	/**
 	 * 時間指定メッセージを出す.
@@ -217,7 +246,8 @@ public abstract class LivingEntity extends Entity {
 	 * @param message メッセージ
 	 * @param count   表示時間
 	 */
-	public abstract void setMessage(String message, int count);
+	public void setMessage(String message, int count) {
+	}
 
 	/**
 	 * 割り込み可否付きでメッセージを出す.
@@ -225,7 +255,8 @@ public abstract class LivingEntity extends Entity {
 	 * @param message   メッセージ
 	 * @param interrupt 割り込み可否
 	 */
-	public abstract void setMessage(String message, boolean interrupt);
+	public void setMessage(String message, boolean interrupt) {
+	}
 
 	/**
 	 * 全指定メッセージを出す.
@@ -235,7 +266,8 @@ public abstract class LivingEntity extends Entity {
 	 * @param interrupt 割り込み可否
 	 * @param piko      ピコピコ可否
 	 */
-	public abstract void setMessage(String message, int count, boolean interrupt, boolean piko);
+	public void setMessage(String message, int count, boolean interrupt, boolean piko) {
+	}
 
 	/**
 	 * ワールドイベント発生メッセージを出す.
@@ -243,7 +275,8 @@ public abstract class LivingEntity extends Entity {
 	 * @param message メッセージ
 	 * @param count   表示時間
 	 */
-	public abstract void setWorldEventSendMessage(String message, int count);
+	public void setWorldEventSendMessage(String message, int count) {
+	}
 
 	/**
 	 * ワールドイベント応答メッセージを出す.
@@ -253,7 +286,8 @@ public abstract class LivingEntity extends Entity {
 	 * @param interrupt 割り込み可否
 	 * @param piko      ピコピコ可否
 	 */
-	public abstract void setWorldEventResMessage(String message, int count, boolean interrupt, boolean piko);
+	public void setWorldEventResMessage(String message, int count, boolean interrupt, boolean piko) {
+	}
 
 	/**
 	 * 個体イベント発生メッセージを出す.
@@ -261,7 +295,8 @@ public abstract class LivingEntity extends Entity {
 	 * @param message メッセージ
 	 * @param count   表示時間
 	 */
-	public abstract void setBodyEventSendMessage(String message, int count);
+	public void setBodyEventSendMessage(String message, int count) {
+	}
 
 	/**
 	 * 個体イベント応答メッセージを出す.
@@ -271,15 +306,8 @@ public abstract class LivingEntity extends Entity {
 	 * @param interrupt 割り込み可否
 	 * @param piko      ピコピコ可否
 	 */
-	public abstract void setBodyEventResMessage(String message, int count, boolean interrupt, boolean piko);
-
-	/**
-	 * 非ゆっくり症＆口封じ用メッセージを出す.
-	 *
-	 * @param message メッセージ
-	 * @param piko    ピコピコ可否
-	 */
-	public abstract void setNYDMessage(String message, boolean piko);
+	public void setBodyEventResMessage(String message, int count, boolean interrupt, boolean piko) {
+	}
 
 	/**
 	 * ウィンドウ種別付きメッセージを出す.
@@ -291,30 +319,9 @@ public abstract class LivingEntity extends Entity {
 	 * @param piko      ピコピコ可否
 	 * @param NYD       非ゆっくり症かどうか
 	 */
-	public abstract void setMessage(String message, WindowType type, int count, boolean interrupt, boolean piko,
-			boolean NYD);
-
-	/**
-	 * ねぎぃメッセージを出す.
-	 *
-	 * @param message メッセージ
-	 * @param piko    ピコピコ可否
-	 */
-	public abstract void setNegiMessage(String message, boolean piko);
-
-	/**
-	 * ねぎぃメッセージを出す.
-	 *
-	 * @param message メッセージ
-	 * @param count   表示時間
-	 * @param piko    ピコピコ可否
-	 */
-	public abstract void setNegiMessage(String message, int count, boolean piko);
-
-	/**
-	 * 圧搾処理を受ける.
-	 */
-	public abstract void strikeByPress();
+	public void setMessage(String message, WindowType type, int count, boolean interrupt, boolean piko,
+			boolean NYD) {
+	}
 
 	/**
 	 * ダメージ状態が軽いかを返す.
@@ -377,117 +384,47 @@ public abstract class LivingEntity extends Entity {
 	 *
 	 * @return 群れ内ランク
 	 */
-	public abstract PublicRank getPublicRank();
-
-	/**
-	 * 強制顔を設定する.
-	 *
-	 * @param forceFace 強制顔
-	 */
-	public abstract void setForceFace(int forceFace);
-
-	/**
-	 * 汚れ状態を設定する.
-	 *
-	 * @param flag 汚れ状態
-	 */
-	public abstract void makeDirty(boolean flag);
+	public PublicRank getPublicRank() {
+		return null;
+	}
 
 	/**
 	 * ぺろぺろ状態を設定する.
 	 *
 	 * @param peropero ぺろぺろ状態
 	 */
-	public abstract void setPeropero(boolean peropero);
-
-	/**
-	 * 思い出を加算する.
-	 *
-	 * @param memoryDelta 加算量
-	 */
-	public abstract void addMemories(int memoryDelta);
+	public void setPeropero(boolean peropero) {
+	}
 
 	/**
 	 * かしこいかどうかを返す.
 	 *
 	 * @return かしこいかどうか
 	 */
-	public abstract boolean isSmart();
+	public boolean isSmart() {
+		return false;
+	}
 
 	/**
 	 * 行動を消す.
 	 */
-	public abstract void clearActions();
-
-	/**
-	 * 感情を設定する.
-	 *
-	 * @param happiness 感情
-	 */
-	public abstract void setHappiness(Happiness happiness);
-
-	/**
-	 * ふりふりしたいか.
-	 *
-	 * @return ふりふりしたいか
-	 */
-	public abstract boolean willingFurifuri();
+	public void clearActions() {
+	}
 
 	/**
 	 * イベントを消す.
 	 */
-	public abstract void clearEvent();
-
-	/**
-	 * つぶされたときの吐瀉物を出す.
-	 *
-	 * @param x X座標
-	 * @param y Y座標
-	 * @param z Z座標
-	 */
-	protected abstract void addCrushedVomit(int x, int y, int z);
+	public void clearEvent() {
+	}
 
 	/**
 	 * 致命傷種別を返す.
 	 *
 	 * @return 致命傷種別
 	 */
-	public abstract CriticalDamegeType getCriticalDamegeType();
-
-	/**
-	 * うにょ行動可能判定を返す.
-	 *
-	 * @return うにょ行動可能判定
-	 */
-	public abstract boolean isUnyoActionAll();
-
-	/**
-	 * 親リンクIDを返す.
-	 *
-	 * @return 親リンクID
-	 */
-	public abstract int getParentLinkId();
-
-	/**
-	 * ぺろぺろ中かどうかを返す.
-	 *
-	 * @return ぺろぺろ中かどうか
-	 */
-	public abstract boolean isPeropero();
-
-	/**
-	 * うにょオフセットを加算する.
-	 *
-	 * @param x x
-	 * @param y y
-	 * @param z z
-	 */
-	public abstract void changeUnyo(int x, int y, int z);
-
-	/**
-	 * うにょオフセットを戻す.
-	 */
-	public abstract void changeReUnyo();
+	public CriticalDamegeType getCriticalDamegeType() {
+		return null;
+	}
 
 	/**
 	 * 蓄積ダメージ counter indicating damage を取得する. @return 蓄積ダメージ counter indicating
@@ -540,170 +477,35 @@ public abstract class LivingEntity extends Entity {
 		}
 	}
 
-	/** 環境からダメージを回復できるかどうかを返す. */
-	protected boolean canHealDamageFromEnvironment() {
-		return !isUnBirth() || isPlantForUnbirthChild();
-	}
-
-	/**
-	 * 時間経過によるダメージ変動を処理する.
-	 */
-	protected void applyDamageOverTime() {
-		if (isSick()) {
-			if (getSickPeriod() > (getIncubationPeriodBase() * 32) && isDamagedHeavily()) {
-				if (GameRandom.nextInt(3) == 0) {
-					damage += TICK;
-				}
-			} else if (getSickPeriod() > (getIncubationPeriodBase() * 32)) {
-				damage += TICK * 3;
-			} else if (getSickPeriod() > (getIncubationPeriodBase() * 8)) {
-				damage += TICK * 2;
-			} else if (getSickPeriod() > getIncubationPeriodBase()) {
-				damage += TICK;
-			}
-		} else if (!isHungry()) {
-			damage -= TICK;
-		}
-		if (hungry <= 0) {
-			damage += TICK;
-		}
-	}
-
-	/**
-	 * 体の状態異常によるダメージを処理する.
-	 */
-	protected void applyBodyConditionDamage() {
-		if (isPealed()) {
-			if (isSleeping()) {
-				wakeup();
-			}
-			damage += TICK * 50;
-			setSickPeriod(0);
-			GameEnvironment.setAlarm();
-			setPeropero(false);
-			addStress(200);
-			addMemories(-5);
-			if (getCoreAnkoState() == CoreAnkoState.NonYukkuriDiseaseNear) {
-				setNYDMessage(GameMessages.getMessage(this, MessagePool.Action.Dying2), false);
-			}
-			setMessage(GameMessages.getMessage(this, MessagePool.Action.Dying2));
-		}
-		if (isPacked()) {
-			GameEnvironment.setAlarm();
-			setPeropero(false);
-			addStress(50);
-			addMemories(-2);
-			setCanTalk(false);
-			if (GameRandom.nextInt(200) == 0) {
-				stayPurupuru(20);
-			}
-		}
-		if (GameWorld.get().getCurrentMap().getMapIndex() == 2 && !(isSmart() && getAttachmentSize(Badge.class) != 0)
-				&& getCarAccidentProb() != 0 && GameRandom.nextInt(getCarAccidentProb()) == 0) {
-			strikeByPress();
-		}
-	}
-
-	/**
-	 * 環境由来のダメージを処理する.
-	 */
-	protected void applyExternalDamage(boolean healFlag) {
-		if (GameEnvironment.isOrangeSteam() && healFlag) {
-			damage -= TICK * 50;
-		}
-		if (GameEnvironment.isSugerSteam() && damage >= getDamageLimitBase()[getBodyAgeState().ordinal()] * 80 / 100
-				&& healFlag) {
-			damage -= TICK * 100;
-		}
-		if (GameEnvironment.isPoisonSteam()) {
-			damage += TICK * 100;
-			clearActions();
-			setExciting(false);
-			setShitting(false);
-			setFurifuri(false);
-			wakeup();
-			if (isNotNYD()) {
-				setHappiness(Happiness.VERY_SAD);
-				if (getDamageState() != Damage.NONE) {
-					setNegiMessage(GameMessages.getMessage(this, MessagePool.Action.PoisonDamage), true);
-				} else {
-					setMessage(GameMessages.getMessage(this, MessagePool.Action.PoisonDamage), Const.HOLDMESSAGE, false,
-							true);
-				}
-			}
-		}
-	}
-
-	/**
-	 * 致命傷によるダメージを処理する.
-	 */
-	protected void applyCriticalDamage() {
-		if (getCriticalDamege() == null) {
-			return;
-		}
-		if (getCriticalDamege() == CriticalDamegeType.CUT) {
-			damage += TICK * 100;
-			addStress(50);
-			if (isSleeping()) {
-				wakeup();
-			}
-			GameEnvironment.setAlarm();
-			if (GameRandom.nextInt(50) == 0) {
-				if (getCoreAnkoState() != CoreAnkoState.NonYukkuriDiseaseNear) {
-					setNYDMessage(GameMessages.getMessage(this, MessagePool.Action.Dying2), false);
-				} else {
-					setMessage(GameMessages.getMessage(this, MessagePool.Action.Dying2));
-				}
-			}
-			return;
-		}
-		if (getCriticalDamege() == CriticalDamegeType.INJURED && !isSleeping()) {
-			if (GameRandom.nextInt(300) == 0) {
-				addCrushedVomit(getX() + 3 - GameRandom.nextInt(6), getY() - 2, 0);
-				setMessage(GameMessages.getMessage(this, MessagePool.Action.Scream));
-				setForceFace(ImageCode.PAIN.ordinal());
-				makeDirty(true);
-				addStress(5);
-				addDamage(50);
-			}
-			if (isFull() && isNoDamaged() && GameRandom.nextInt(4800) == 0) {
-				setCriticalDamege(null);
-			} else if (!isDamagedHeavily() && GameRandom.nextInt(33600) == 0) {
-				setCriticalDamege(null);
-			}
-		}
-	}
-
-	/**
-	 * ダメージ更新を行う.
-	 */
+	/** ダメージ更新を行う. */
 	public void checkDamage() {
-		boolean healFlag = canHealDamageFromEnvironment();
-		applyDamageOverTime();
-		applyCriticalDamage();
-		applyBodyConditionDamage();
-		applyExternalDamage(healFlag);
-		finalizeDamageState();
+		bodyDamageDelegate().checkDamage();
+	}
+
+	/** 皮を剥がされているときの反応（メッセージ・感情等）。サブクラスで override して実装する. */
+	protected void onPealed() {
+	}
+
+	/** 詰め込まれているときの反応（メモリ減少等）。サブクラスで override して実装する. */
+	protected void onPacked() {
+	}
+
+	/** 車の事故に遭ったときの反応。サブクラスで override して実装する. */
+	protected void onCarAccident() {
+	}
+
+	/** 毒スチーム被曝時の反応（行動停止・感情・メッセージ）。サブクラスで override して実装する. */
+	protected void onPoisonSteam() {
+	}
+
+	/** 致命傷(CUT)時のメッセージ反応。サブクラスで override して実装する. */
+	protected void onCutDamageReaction() {
 	}
 
 	/**
-	 * ダメージ状態を最終更新する.
+	 * 致命傷(INJURED)時の悲鳴反応。サブクラスで override して実装する. @param x 吐瀉物X座標 @param y 吐瀉物Y座標
 	 */
-	protected void finalizeDamageState() {
-		if (damage < 0) {
-			damage = 0;
-		}
-		Damage newDamageState = getDamageState();
-		if (getDamageState() == Damage.NONE && newDamageState == Damage.NONE && !isSleeping()) {
-			noDamagePeriod += TICK;
-		} else {
-			noDamagePeriod = 0;
-		}
-		setDamageState(newDamageState);
-		if (getDamageState() == Damage.TOOMUCH && getCurrentEvent() != null
-				&& getCurrentEvent().getPriority() != EventPacket.EventPriority.HIGH) {
-			clearEvent();
-		}
+	protected void onInjuredScream(int x, int y) {
 	}
 
 	@com.fasterxml.jackson.annotation.JsonIgnore
@@ -834,35 +636,25 @@ public abstract class LivingEntity extends Entity {
 
 	/** 発情フラグ want to sukkiri or not を取得する. @return 発情フラグ want to sukkuri or not */
 	public boolean isExciting() {
-		return !dead && exciting;
+		return false;
 	}
 
-	/**
-	 * 発情フラグ want to sukkiri or not を設定する. @param exciting 発情フラグ want to sukkiri or
-	 * not
-	 */
+	/** 発情フラグ want to sukkiri or not を設定する. */
 	public void setExciting(boolean exciting) {
-		this.exciting = exciting;
 	}
 
 	/**
-	 * 強制発情フラグ want to sukkiri or not を取得する. @return 強制発情フラグ want to sukkiri or not
+	 * 強制発情フラグ want to sukkiri or not を取得する. @return 強制発情フラグ want to sukkuri or not
 	 */
 	public boolean isForceExciting() {
-		return !dead && exciting && forceExciting;
+		return false;
 	}
 
-	/**
-	 * 強制発情フラグ want to sukkiri or not を設定する. @param forceExciting 強制発情フラグ want to
-	 * sukkiri or not
-	 */
+	/** 強制発情フラグ want to sukkiri or not を設定する. */
 	public void setForceExciting(boolean forceExciting) {
-		this.forceExciting = forceExciting;
 	}
 
 	public void setCalm() {
-		forceExciting = false;
-		exciting = false;
 	}
 
 	/** ゆっくりしてるかどうか を取得する. @return ゆっくりしてるかどうか */
@@ -913,17 +705,7 @@ public abstract class LivingEntity extends Entity {
 
 	/** 汚れている期間 を進ませる. */
 	public final void advanceDirtyPeriod(boolean humid, boolean wetOrMelt, boolean stubbornlyDirty) {
-		if (humid) {
-			dirtyPeriod += TICK * 4;
-		} else {
-			dirtyPeriod += TICK;
-		}
-		if (wetOrMelt) {
-			dirtyPeriod += TICK;
-		}
-		if (stubbornlyDirty) {
-			dirtyPeriod += TICK;
-		}
+		bodyConditionDelegate().advanceDirtyPeriod(humid, wetOrMelt, stubbornlyDirty);
 	}
 
 	/**
@@ -932,12 +714,7 @@ public abstract class LivingEntity extends Entity {
 	 * @return ゆかびに進行したか
 	 */
 	public final boolean promoteDirtyToSickIfNeeded() {
-		if (dirtyPeriod > getDirtyPeriodBase()) {
-			addSickPeriod(100);
-			dirtyPeriod = 0;
-			return true;
-		}
-		return false;
+		return bodyConditionDelegate().promoteDirtyToSickIfNeeded();
 	}
 
 	/** 汚れて泣き叫ぶ期間 を取得する. @return 汚れて泣き叫ぶ期間 */
@@ -1016,12 +793,7 @@ public abstract class LivingEntity extends Entity {
 	 * @return 盲目なら true, それ以外は false
 	 */
 	protected boolean applyBlindnessPenalty() {
-		if (!isBlind()) {
-			return false;
-		}
-		setEyesightBase(5 * 5);
-		addStress(5);
-		return true;
+		return actionDelegate().applyBlindnessPenalty();
 	}
 
 	/**
@@ -1030,12 +802,7 @@ public abstract class LivingEntity extends Entity {
 	 * @return 口封じ中なら true, それ以外は false
 	 */
 	protected boolean applyCantSpeakPenalty() {
-		if (!isShutmouth()) {
-			return false;
-		}
-		addStress(2);
-		setPeropero(false);
-		return true;
+		return actionDelegate().applyCantSpeakPenalty();
 	}
 
 	/**
@@ -1044,20 +811,7 @@ public abstract class LivingEntity extends Entity {
 	 * @return 反応を継続できるなら true, 条件未満なら false
 	 */
 	protected boolean beginLockmoveEmotion() {
-		if (!isLockmove() || isSukkiri() || (getFootBakeLevel() != FootBake.NONE
-				&& (getBurialState() == BurialState.NONE || getBurialState() == BurialState.HALF))) {
-			return false;
-		}
-		if (isSleeping() || grabbed) {
-			setLockmovePeriod(0);
-			return false;
-		}
-		if (getCurrentEvent() != null) {
-			setLockmovePeriod(0);
-			return false;
-		}
-		setLockmovePeriod(getLockmovePeriod() + 1);
-		return !isTalking();
+		return actionDelegate().beginLockmoveEmotion();
 	}
 
 	/**
@@ -1066,15 +820,7 @@ public abstract class LivingEntity extends Entity {
 	 * @return 反応を継続できるなら true, 条件未満なら false
 	 */
 	protected boolean beginFootBakeEmotion() {
-		if (getFootBakeLevel() == FootBake.NONE || isSukkiri()) {
-			return false;
-		}
-		if (isSleeping() || grabbed) {
-			setLockmovePeriod(0);
-			return false;
-		}
-		setLockmovePeriod(getLockmovePeriod() + 1);
-		return !isTalking();
+		return actionDelegate().beginFootBakeEmotion();
 	}
 
 	/**
@@ -1083,14 +829,7 @@ public abstract class LivingEntity extends Entity {
 	 * @return 反応を継続できるなら true, 条件未満なら false
 	 */
 	protected boolean beginNoOkazariEmotion() {
-		if ((hasOkazari() && isHasBraid()) || isSukkiri()) {
-			return false;
-		}
-		if (isSleeping() || grabbed) {
-			lockmovePeriod = 0;
-			return false;
-		}
-		return !isTalking();
+		return actionDelegate().beginNoOkazariEmotion();
 	}
 
 	/** 針の有無 を取得する. @return 針の有無 */
@@ -1159,47 +898,31 @@ public abstract class LivingEntity extends Entity {
 		this.hairState = hairState;
 	}
 
-	/** おくるみ有無 true if having pants を取得する. @return おくるみ有無 true if having pants */
-	public boolean isHasPants() {
-		return hasPants;
-	}
-
-	/**
-	 * おくるみ有無 true if having pants を設定する. @param hasPants おくるみ有無 true if having
-	 * pants
-	 */
-	public void setHasPants(boolean hasPants) {
-		this.hasPants = hasPants;
-	}
-
 	/** ぺにぺにの去勢有無 を取得する. @return ぺにぺにの去勢有無 */
 	public boolean isPenipeniCutted() {
-		return penipeniCutted;
+		return false;
 	}
 
-	/** ぺにぺにの去勢有無 を設定する. @param penipeniCutted ぺにぺにの去勢有無 */
+	/** ぺにぺにの去勢有無 を設定する. */
 	public void setPenipeniCutted(boolean penipeniCutted) {
-		this.penipeniCutted = penipeniCutted;
 	}
 
 	/** 水が平気か を取得する. @return 水が平気か */
 	public boolean isLikeWater() {
-		return likeWater;
+		return false;
 	}
 
-	/** 水が平気か を設定する. @param likeWater 水が平気か */
+	/** 水が平気か を設定する. */
 	public void setLikeWater(boolean likeWater) {
-		this.likeWater = likeWater;
 	}
 
 	/** 空を飛ぶか を取得する. @return 空を飛ぶか */
 	public boolean isFlyingType() {
-		return flyingType;
+		return false;
 	}
 
-	/** 空を飛ぶか を設定する. @param flyingType 空を飛ぶか */
+	/** 空を飛ぶか を設定する. */
 	public void setFlyingType(boolean flyingType) {
-		this.flyingType = flyingType;
 	}
 
 	/** 捕食種（れみりゃ・ふらん）であれば {@code true}. */
@@ -1309,9 +1032,11 @@ public abstract class LivingEntity extends Entity {
 
 	/** パニック状態を解除する. */
 	protected final void clearPanic() {
-		setPanicType(null);
-		setPanicPeriod(0);
-		setHappiness(Happiness.SAD);
+		panicDelegate().clearPanic();
+	}
+
+	/** パニック解除時の感情反応。サブクラスで override して実装する. */
+	protected void onClearPanic() {
 	}
 
 	/**
@@ -1320,32 +1045,7 @@ public abstract class LivingEntity extends Entity {
 	 * @return 何もしない
 	 */
 	public Event checkFear() {
-		if (isNYD() || isUnBirth()) {
-			clearPanic();
-			return Event.DONOTHING;
-		}
-		if (!isDead()) {
-			messageTicks--;
-			if (messageTicks <= 0) {
-				switch (getPanicType()) {
-					case FEAR:
-						setMessage(src.util.GameMessages.getMessage(this, src.system.MessagePool.Action.Fear));
-						break;
-					case REMIRYA:
-						setMessage(src.util.GameMessages.getMessage(this, src.system.MessagePool.Action.EscapeFromRemirya));
-						break;
-					default:
-						break;
-				}
-			}
-		}
-		if (getPanicType() != null && getPanicType() != PanicType.BURN) {
-			panicPeriod += TICK;
-		}
-		if (panicPeriod > 50) {
-			clearPanic();
-		}
-		return Event.DONOTHING;
+		return panicDelegate().checkFear();
 	}
 
 	/**
@@ -1515,12 +1215,11 @@ public abstract class LivingEntity extends Entity {
 
 	/** 発情期間 を取得する. @return 発情期間 */
 	public int getExcitingPeriod() {
-		return excitingPeriod;
+		return 0;
 	}
 
-	/** 発情期間 を設定する. @param excitingPeriod 発情期間 */
+	/** 発情期間 を設定する. */
 	public void setExcitingPeriod(int excitingPeriod) {
-		this.excitingPeriod = excitingPeriod;
 	}
 
 	/** 睡眠期間 を取得する. @return 睡眠期間 */
@@ -1569,157 +1268,26 @@ public abstract class LivingEntity extends Entity {
 	 * @return 睡眠中かどうか
 	 */
 	public boolean checkSleep() {
-		// ディフューザーで睡眠妨害されている場合、眠気をなくす
-		if (GameEnvironment.isNoSleepSteam()) {
-			// 正常な実ゆ以外なら
-			if (!isUnBirth() || !isPlantForUnbirthChild()) {
-				setSleepingPeriod(0);
-				setSleeping(false);
-				setNightmare(false);
-				return false;
-			}
-		}
-
-		// 飛行種で眠くなったら地面に降りる
-		if (canflyCheck() && isSleepy()) {
-			moveToZ(0);
-			if (getZ() != 0) {
-				return false;
-			}
-		}
-
-		if (isSleeping()) {
-			// ストレスフルだと悪夢
-			if (!isNightmare()
-					&& ((isStressful() && GameRandom.nextInt(75) == 0)
-							|| (isVeryStressful() && GameRandom.nextInt(25) == 0))) {
-				setNightmare(true);
-				setForceFace(ImageCode.NIGHTMARE.ordinal());
-			} else if (!isStressful() || GameRandom.nextInt(100) == 0) {
-				setNightmare(false);
-				setForceFace(ImageCode.SLEEPING.ordinal());
-			}
-		}
-
-		// 飢餓状態の時は起きる
-		if (isSleeping() && isStarving()) {
-			setMessage(GameMessages.getMessage(this, MessagePool.Action.Hungry));
-			setHappiness(Happiness.SAD);
-			stay();
-			wakeup();
-		} else if (isSleeping()
-				|| (wakeUpTime + getActivePeriodBase() * 3 / 2 < getAge() && !isExciting() && !isScare()
-						&& !isVerySad() && !isEating() && !isNeedled() && !isTooHungry()
-						&& !(isVeryHungry() && isToFood()))
-				|| (wakeUpTime + getActivePeriodBase() * 3 < getAge() && !isExciting() && !isScare()
-						&& !isEating() && !isNeedled() && !(isTooHungry() && isToFood()))
-				|| (isUnBirth() && !isNeedled())) {
-			clearActions();
-			setSleeping(true);
-			setAngry(false);
-			setScare(false);
-			damage -= TICK;
-			if (!isUnBirth()) {
-				setHappiness(Happiness.AVERAGE);
-			} else {
-				return isSleeping();
-			}
-			if (GameEnvironment.getDayState() == Terrarium.DayState.NIGHT) {
-				if ((getAge() % (GameEnvironment.getNightTime() / getSleepPeriodBase() + 1)) == 0) {
-					sleepingPeriod += TICK;
-				}
-			} else {
-				sleepingPeriod += TICK;
-			}
-			if (sleepingPeriod > getSleepPeriodBase()) {
-				setMessage(GameMessages.getMessage(this, MessagePool.Action.Wakeup), true);
-				stay();
-				wakeup();
-			}
-		} else {
-			// 実験 イベント中は空腹、睡眠、便意が増えないように
-			if (getCurrentEvent() != null) {
-				return false;
-			}
-			sleepingPeriod = 0;
-			setSleeping(false);
-			setNightmare(false);
-			if (GameEnvironment.getDayState() == Terrarium.DayState.NIGHT) {
-				wakeUpTime -= TICK * 3;
-			}
-		}
-
-		return isSleeping();
+		return sleepDelegate().checkSleep();
 	}
 
 	/**
-	 * 出産チェックをする.
-	 *
-	 * @return このあと動かなくなるフラグ
+	 * 悪夢状態になった/解除されたときの顔変化。nightmare=true なら悪夢顔、false なら通常睡眠顔。サブクラスで override
+	 * して実装する.
 	 */
-	public boolean checkChildbirth() {
-		boolean cantMove = false;
-		if (hasBabyOrStalk() || (!hasBabyOrStalk() && isBirth())) {
-			pregnantPeriod += TICK + (pregnancyPeriodBoost / 2);
-			if (pregnantPeriod > getPregPeriodBase() - TICK * 100) {
-				if (!isBirth() && hasBabyOrStalk()) {
-					setMessage(GameMessages.getMessage(this, MessagePool.Action.Breed), true);
-					wakeup();
-				}
-				cantMove = true;
-				setBirth(true);
-				pregnancyPeriodBoost = 0;
-			}
-			if (pregnantPeriod > getPregPeriodBase() && isPealed()) {
-				damage += 40000;
-				toDead();
-			} else if (pregnantPeriod > getPregPeriodBase()) {
-				wakeup();
-				setHasBaby(false);
-				setHasStalk(false);
-				if (getBabyTypes().size() <= 0) {
-					setBirth(false);
-					pregnantPeriod = 0;
-					if (isNotNYD()) {
-						setMessage(GameMessages.getMessage(this, MessagePool.Action.Breed2), true);
-						if (!isHasPants()) {
-							if (willingFurifuri()) {
-								setFurifuri(true);
-							}
-							stay();
-						}
-					}
-					return cantMove;
-				}
-				cantMove = true;
-				boolean birthAllowed = true;
-				if (isHasPants() || (isFixBack() && isNeedled())) {
-					birthAllowed = false;
-				}
-				if ((isLockmove() && (!isFixBack() || getCoreAnkoState() != CoreAnkoState.NonYukkuriDisease))
-						&& !isShitting()) {
-					birthAllowed = false;
-				}
-				if (!birthAllowed) {
-					getBabyTypes().clear();
-					makeDirty(true);
-					if (isNotNYD()) {
-						if (isLockmove() && !isHasPants()) {
-							setHasPants(true);
-							setMessage(GameMessages.getMessage(this, MessagePool.Action.Breed2), true);
-							setHasPants(false);
-						} else {
-							setMessage(GameMessages.getMessage(this, MessagePool.Action.Breed2), true);
-						}
-					}
-					setBirth(false);
-					pregnantPeriod = 0;
-					pregnancyPeriodBoost = 0;
-					setHappiness(Happiness.VERY_SAD);
-				}
-			}
-		}
-		return cantMove;
+	protected void onNightmare(boolean nightmare) {
+	}
+
+	/** 飢餓で強制起床したときのメッセージ・感情反応。サブクラスで override して実装する. */
+	protected void onWakeByHunger() {
+	}
+
+	/** 自然に目覚めたときのメッセージ反応。サブクラスで override して実装する. */
+	protected void onWakeupNaturally() {
+	}
+
+	/** 眠りについたときの感情設定。サブクラスで override して実装する. */
+	protected void onStartSleeping() {
 	}
 
 	/** 動かなくする. */
@@ -2752,42 +2320,11 @@ public abstract class LivingEntity extends Entity {
 			return;
 		}
 
-		switch (state) {
-			case ATTAKED:// 実ゆが攻撃されている
-				// 攻撃されて生きている場合
-				if (!isDead()) {
-					bodyMother.setHappiness(src.enums.Happiness.SAD);
-					bodyMother.setMessage(src.util.GameMessages.getMessage(bodyMother,
-							src.system.MessagePool.Action.AbuseBaby));
-					bodyMother.addStress(30);
-					bodyMother.stay();
-					break;
-				}
-				// 攻撃されて死んでいる場合はKilled
-			case KILLED:// 実ゆが死んでる事に気がつく
-				bodyMother.setHappiness(src.enums.Happiness.VERY_SAD);
-				bodyMother.setMessage(src.util.GameMessages.getMessage(bodyMother,
-						src.system.MessagePool.Action.AbuseBabyKilled));
-				bodyMother.addStress(500);
-				bodyMother.stay();
-				break;
-			case SAD:// 実ゆが悲しんでいる、苦しんでいるのを心配する
-				bodyMother.setHappiness(src.enums.Happiness.SAD);
-				bodyMother.setMessage(src.util.GameMessages.getMessage(bodyMother,
-						src.system.MessagePool.Action.ConcernAboutChild));
-				bodyMother.addStress(20);
-				bodyMother.stay();
-				break;
-			case HAPPY:// 実ゆの状態を喜んでいる
-				bodyMother.setHappiness(src.enums.Happiness.VERY_HAPPY);
-				bodyMother.setMessage(src.util.GameMessages.getMessage(bodyMother,
-						src.system.MessagePool.Action.GladAboutChild));
-				bodyMother.addStress(-100);
-				bodyMother.stay();
-				break;
-			default:
-				break;
-		}
+		bodyMother.onChildStateNotify(state, isDead());
+	}
+
+	/** 茎の実ゆの状態を母親が感知したときの感情・メッセージ反応。サブクラスで override して実装する. */
+	public void onChildStateNotify(src.enums.UnbirthBabyState state, boolean childDead) {
 	}
 
 	/**
@@ -2854,9 +2391,7 @@ public abstract class LivingEntity extends Entity {
 	 * TICKで期間を1減らす.
 	 */
 	public void checkCantDie() {
-		if (cantDiePeriod > 0) {
-			cantDiePeriod -= TICK;
-		}
+		bodyConditionDelegate().checkCantDie();
 	}
 
 	/** 死ねない期間中かどうかを取得する. */
@@ -2929,46 +2464,7 @@ public abstract class LivingEntity extends Entity {
 	 * ゆっくりの様々な状態に応じて腹を減らしている。
 	 */
 	public void checkHungry() {
-		if (0 < getSuperEatingNoHungryPeriod()) {
-			superEatingNoHungryPeriod--;
-			if (hungry <= getHungryLimit()) {
-				hungry += TICK;
-			}
-			return;
-		}
-		if (isPealed() || isPacked()) {
-			if (getAge() % 7 == 0)
-				hungry -= TICK;
-		}
-		if (isUnBirth()) {
-			if (!isPlantForUnbirthChild()) {
-				hungry -= TICK * 100;
-			} else {
-				hungry = getHungryLimit();
-			}
-		} else if (isSleeping()) {
-			if (getAge() % 2 == 0)
-				hungry -= TICK;
-		} else if (isExciting() && !isRaper()) {
-			hungry -= TICK * (getBabyTypes().size() + 1);
-		} else {
-			hungry -= TICK;
-		}
-		if (isHasStalk() && getStalks() != null) {
-			hungry -= TICK * getStalks().size() * 5;
-		}
-		if (isHasBaby()) {
-			hungry -= TICK * getBabyTypes().size();
-		}
-		if (hungry <= 0) {
-			damage += (-hungry);
-			hungry = 0;
-		}
-		if (!isHungry() && !isSleeping()) {
-			noHungryPeriod += TICK;
-		} else {
-			noHungryPeriod = 0;
-		}
+		hungerDelegate().checkHungry();
 	}
 
 	/**
@@ -3050,67 +2546,29 @@ public abstract class LivingEntity extends Entity {
 		AntInfestationPolicy.judgeNewAnt((Yukkuri) this);
 	}
 
-	/**
-	 * うにょ機能。
-	 * ゆっくりがうにょうにょ動く機能、のようだ。
-	 * 重いため、シムゆっくり起動時にチェックボックスで機能をONにするかどうかを決めることができる。
-	 */
-	public void checkUnyo() {
-		if (SimYukkuri.UNYO) {
-			if (getAge() % 9 == 0) {
-				if (!isDead() && !isLockmove()) {
-					if (getCriticalDamegeType() != CriticalDamegeType.CUT && !grabbed && !isPealed() && !isPacked()) {
-						if (!isUnyoActionAll() && !isSleeping()) {
-							if (!canflyCheck()) {
-								if (getFootBakeLevel() == FootBake.NONE &&
-										!isDamaged() && !isSick() && !isFeelPain()
-										&& takeMappedObj(getParentLinkId()) == null
-										&& !isPeropero() && !(isEating() && !isPikopiko())) {
-									changeUnyo(0, 0,
-											(int) (GameRandom
-													.nextInt(((int) UNYOSTRENGTH[getBodyAgeState().ordinal()] / 3)))
-													+ UNYOSTRENGTH[getBodyAgeState().ordinal()]);
-								}
-							} else if (z == 0) {
-								if (getFootBakeLevel() == FootBake.NONE &&
-										!isDamaged() && !isSick() && !isFeelPain()
-										&& takeMappedObj(getParentLinkId()) == null
-										&& !isPeropero() && !(isEating() && !isPikopiko())) {
-									changeUnyo(0, 0,
-											(int) (GameRandom
-													.nextInt(((int) UNYOSTRENGTH[getBodyAgeState().ordinal()] / 3)))
-													+ UNYOSTRENGTH[getBodyAgeState().ordinal()]);
-								}
-							}
-						}
-					}
-				}
-			}
-			if (GameRandom.nextInt(30) == 0 && (isSleeping() ? GameRandom.nextBoolean() : true)) {
-				changeUnyo((int) (GameRandom.nextInt(2)), (int) (GameRandom.nextInt(2)),
-						(int) (GameRandom.nextInt(2)));
-			}
-			if (isDamaged() ? (GameRandom.nextInt(5) == 0) : true) {
-				changeReUnyo();
-			}
-		}
-	}
-
 	/** 従者/支配種かどうかを返却する. */
 	@Transient
-	public abstract boolean isRaper();
+	public boolean isRaper() {
+		return false;
+	}
 
 	/** ストレスフルかどうかを取得する. */
 	@Transient
-	public abstract boolean isStressful();
+	public boolean isStressful() {
+		return false;
+	}
 
 	/** とてもストレスフルかどうかを取得する. */
 	@Transient
-	public abstract boolean isVeryStressful();
+	public boolean isVeryStressful() {
+		return false;
+	}
 
 	/** とても悲しいかどうかを取得する. */
 	@Transient
-	public abstract boolean isVerySad();
+	public boolean isVerySad() {
+		return false;
+	}
 
 	/** 現在Braidがちぎられてないか */
 	@Transient
@@ -4491,16 +3949,12 @@ public abstract class LivingEntity extends Entity {
 
 	/** ストレスが負の場合0にリセットする. */
 	public final void checkStress() {
-		if (stress < 0)
-			stress = 0;
+		hungerDelegate().checkStress();
 	}
 
 	/** バカ舌値を上下限にクランプする. */
 	public final void checkTang() {
-		if (getTang() < 0)
-			setTang(0);
-		if (getTang() > getTangLevelBase()[2])
-			setTang(getTangLevelBase()[2]);
+		hungerDelegate().checkTang();
 	}
 
 	@com.fasterxml.jackson.annotation.JsonIgnore
@@ -4760,8 +4214,6 @@ public abstract class LivingEntity extends Entity {
 		l.setSleeping(sleeping);
 		l.setNightmare(nightmare);
 		l.setWakeUpTime(wakeUpTime);
-		l.setExciting(exciting);
-		l.setForceExciting(forceExciting);
 		l.setRelax(relax);
 		l.setDirty(dirty);
 		l.setStubbornlyDirty(stubbornlyDirty);
@@ -4778,11 +4230,7 @@ public abstract class LivingEntity extends Entity {
 		l.setCrushed(crushed);
 		l.setPheromone(pheromone);
 		l.setHasBraid(hasBraid);
-		l.setHasPants(hasPants);
-		l.setPenipeniCutted(penipeniCutted);
-		l.setLikeWater(likeWater);
 		l.setHairState(hairState);
-		l.setFlyingType(flyingType);
 		l.setBirth(birth);
 		l.setBirthAge(birthAge);
 		l.setBirthEventBlockedTicks(birthEventBlockedTicks);
@@ -4801,7 +4249,6 @@ public abstract class LivingEntity extends Entity {
 		l.setAngryPeriod(angryPeriod);
 		l.setScarePeriod(scarePeriod);
 		l.setSadPeriod(sadPeriod);
-		l.setExcitingPeriod(excitingPeriod);
 		l.setSleepingPeriod(sleepingPeriod);
 		l.setSickPeriod(sickPeriod);
 		l.setFalldownDamage(falldownDamage);

@@ -42,10 +42,10 @@ public final class YukkuriPlayerRelation {
 			foundTarget = true;
 		} else {
 			// 二回目以降は前回より3秒以上経過してたら処理実行
-			long lnTimeNow = System.currentTimeMillis();
-			long lnSec = lnTimeNow - body.getLastSurisuriTime();
-			if (2000 < lnSec) {
-				body.setLastSurisuriTime(lnTimeNow);
+			long nowTimeMillis = System.currentTimeMillis();
+			long elapsedMillis = nowTimeMillis - body.getLastSurisuriTime();
+			if (2000 < elapsedMillis) {
+				body.setLastSurisuriTime(nowTimeMillis);
 				foundTarget = true;
 			}
 		}

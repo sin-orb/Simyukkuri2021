@@ -56,6 +56,16 @@ public abstract class SocialEntity extends LivingEntity {
 	protected boolean superRapist = false;
 	/** うんうん抑制 */
 	protected int shittingDiscipline = 0;
+	/** ぺにぺにの去勢有無 */
+	protected boolean penipeniCutted = false;
+	/** 水が平気か */
+	protected boolean likeWater = false;
+	/** 発情フラグ want to sukkiri or not */
+	protected boolean exciting = false;
+	/** 強制発情フラグ want to sukkiri or not */
+	protected boolean forceExciting = false;
+	/** 発情期間 */
+	protected int excitingPeriod = 0;
 	/** 興奮抑制 */
 	protected int excitingDiscipline = 0;
 	/** ふりふり抑制 */
@@ -238,6 +248,52 @@ public abstract class SocialEntity extends LivingEntity {
 	public void setShittingDiscipline(int shittingDiscipline) {
 		this.shittingDiscipline = shittingDiscipline;
 	}
+
+	/** ぺにぺにの去勢有無 を取得する. @return ぺにぺにの去勢有無 */
+	@Override
+	public boolean isPenipeniCutted() { return penipeniCutted; }
+
+	/** ぺにぺにの去勢有無 を設定する. */
+	@Override
+	public void setPenipeniCutted(boolean penipeniCutted) { this.penipeniCutted = penipeniCutted; }
+
+	/** 水が平気か を取得する. @return 水が平気か */
+	@Override
+	public boolean isLikeWater() { return likeWater; }
+
+	/** 水が平気か を設定する. */
+	@Override
+	public void setLikeWater(boolean likeWater) { this.likeWater = likeWater; }
+
+	/** 発情フラグ want to sukkiri or not を取得する. @return 発情フラグ want to sukkuri or not */
+	@Override
+	public boolean isExciting() { return !dead && exciting; }
+
+	/** 発情フラグ want to sukkiri or not を設定する. */
+	@Override
+	public void setExciting(boolean exciting) { this.exciting = exciting; }
+
+	/** 強制発情フラグ want to sukkiri or not を取得する. @return 強制発情フラグ want to sukkuri or not */
+	@Override
+	public boolean isForceExciting() { return !dead && exciting && forceExciting; }
+
+	/** 強制発情フラグ want to sukkiri or not を設定する. */
+	@Override
+	public void setForceExciting(boolean forceExciting) { this.forceExciting = forceExciting; }
+
+	@Override
+	public void setCalm() {
+		forceExciting = false;
+		exciting = false;
+	}
+
+	/** 発情期間 を取得する. @return 発情期間 */
+	@Override
+	public int getExcitingPeriod() { return excitingPeriod; }
+
+	/** 発情期間 を設定する. */
+	@Override
+	public void setExcitingPeriod(int excitingPeriod) { this.excitingPeriod = excitingPeriod; }
 
 	/** 興奮抑制 を取得する. @return 興奮抑制 */
 	public int getExcitingDiscipline() {
@@ -1012,6 +1068,11 @@ public abstract class SocialEntity extends LivingEntity {
 		s.setMemories(memories);
 		s.setRapist(rapist);
 		s.setSuperRapist(superRapist);
+		s.setPenipeniCutted(penipeniCutted);
+		s.setLikeWater(likeWater);
+		s.setExciting(exciting);
+		s.setForceExciting(forceExciting);
+		s.setExcitingPeriod(excitingPeriod);
 		s.setShittingDiscipline(shittingDiscipline);
 		s.setExcitingDiscipline(excitingDiscipline);
 		s.setFurifuriDiscipline(furifuriDiscipline);
@@ -1029,6 +1090,19 @@ public abstract class SocialEntity extends LivingEntity {
 		s.setPeropero(peropero);
 		s.setCallingParents(callingParents);
 		s.setForceFace(forceFace);
+	}
+
+	/** 汚れ状態を設定する。Yukkuri でオーバーライドして実装する. */
+	protected void makeDirty(boolean flag) {}
+
+	@Override
+	protected void onStartSleeping() {
+		setHappiness(Happiness.AVERAGE);
+	}
+
+	@Override
+	protected void onClearPanic() {
+		setHappiness(Happiness.SAD);
 	}
 
 	// --- 性格種別判定 ---

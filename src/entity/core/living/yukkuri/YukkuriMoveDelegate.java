@@ -77,15 +77,15 @@ public final class YukkuriMoveDelegate {
 			int k = 0;
 			for (Stalk stalk : body.getStalks()) {
 				if (stalk != null) {
-					int sX = stalk.getPivotX() + Const.STALK_OF_S_X[k]
+					int sourceX = stalk.getPivotX() + Const.STALK_OF_S_X[k]
 							- (int) ((3 - body.getBodyAgeState().ordinal()) * 8.75f);
 					if (direction == Const.RIGHT) {
 						stalk.setDirection(0);
 					} else {
 						stalk.setDirection(1);
-						sX = -sX;
+						sourceX = -sourceX;
 					}
-					int ofsX = Translate.invertX(sX, body.getY());
+					int ofsX = Translate.invertX(sourceX, body.getY());
 					ofsX = Translate.transSize(ofsX);
 					stalk.setMostDepth(body.getMostDepth());
 					stalk.setCalcX(body.getX() + ofsX);

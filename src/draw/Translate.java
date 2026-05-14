@@ -151,18 +151,18 @@ public class Translate {
 	}
 
 	/**
-	 * dW, dH : 描画範囲のパネルサイズ
+	 * canvasWidth, canvasHeight : 描画範囲のパネルサイズ
 	 * fieldSize, bufSizeを掛けるとマップ全体のサイズになる
 	 * 
-	 * @param dW        描画範囲のパネルサイズの幅
-	 * @param dH        描画範囲のパネルサイズの奥行き
+	 * @param canvasWidth  描画範囲のパネルサイズの幅
+	 * @param canvasHeight 描画範囲のパネルサイズの奥行き
 	 * @param fieldSize フィールドサイズ
 	 * @param bufSize   バッファサイズ
 	 * @param rate      ズームレート
 	 */
-	public static final void setCanvasSize(int dW, int dH, int fieldSize, int bufSize, float[] rate) {
-		canvasW = dW;
-		canvasH = dH;
+	public static final void setCanvasSize(int canvasWidth, int canvasHeight, int fieldSize, int bufSize, float[] rate) {
+		canvasW = canvasWidth;
+		canvasH = canvasHeight;
 
 		fieldW = canvasW * fieldSize / 100;
 		fieldH = canvasH * fieldSize / 100;

@@ -326,12 +326,12 @@ public class MapPlaceData implements Serializable {
 		int distance = (int) Math.sqrt(Translate.distance(x1, y1, x2, y2));
 		double deltaX = (double) (x2 - x1) / (double) distance;
 		double deltaY = (double) (y2 - y1) / (double) distance;
-		int sX = x1;
-		int sY = y1;
+		int startX = x1;
+		int startY = y1;
 		if (setFlag) {
 			for (int t = 0; t <= distance; t++) {
-				int x = sX + (int) (deltaX * t);
-				int y = sY + (int) (deltaY * t);
+				int x = startX + (int) (deltaX * t);
+				int y = startY + (int) (deltaY * t);
 				int nx = Math.min(x + 1, Translate.getMapW());
 				int ny = Math.min(y + 1, Translate.getMapH());
 
@@ -341,8 +341,8 @@ public class MapPlaceData implements Serializable {
 			}
 		} else {
 			for (int t = 0; t <= distance; t++) {
-				int x = sX + (int) (deltaX * t);
-				int y = sY + (int) (deltaY * t);
+				int x = startX + (int) (deltaX * t);
+				int y = startY + (int) (deltaY * t);
 				int nx = Math.min(x + 1, Translate.getMapW());
 				int ny = Math.min(y + 1, Translate.getMapH());
 

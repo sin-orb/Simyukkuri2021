@@ -55,6 +55,7 @@ import src.enums.PurposeOfMoving;
 import src.enums.TakeoutItemType;
 import src.enums.TangType;
 import src.enums.Type;
+import src.enums.UnbirthBabyState;
 import src.enums.Where;
 import src.enums.WindowType;
 import src.enums.YukkuriType;
@@ -147,6 +148,9 @@ public abstract class Yukkuri extends SocialEntity {
 
 	@JsonIgnore
 	private transient YukkuriFamilyDelegate familyDelegate;
+
+	// Delegate の lazy init はスレッドセーフではない。
+	// このゲームはシングルスレッド前提（Swingイベントスレッドのみ）なので意図的に synchronized なし。
 
 	private YukkuriSprite spriteDelegate() {
 		if (spriteDelegate == null) {
@@ -439,6 +443,84 @@ public abstract class Yukkuri extends SocialEntity {
 	}
 
 	/**
+	 * うにょ機能。
+	 * ゆっくりがうにょうにょ動く機能、のようだ。
+	 * 重いため、シムゆっくり起動時にチェックボックスで機能をONにするかどうかを決めることができる。
+	 */
+	public void checkUnyo() {
+		if (SimYukkuri.UNYO) {
+			if (getAge() % 9 == 0) {
+				if (!isDead() && !isLockmove()) {
+					if (getCriticalDamegeType() != CriticalDamegeType.CUT && !grabbed && !isPealed() && !isPacked()) {
+						if (!isUnyoActionAll() && !isSleeping()) {
+							if (!canflyCheck()) {
+								if (getFootBakeLevel() == FootBake.NONE &&
+										!isDamaged() && !isSick() && !isFeelPain()
+										&& takeMappedObj(getParentLinkId()) == null
+										&& !isPeropero() && !(isEating() && !isPikopiko())) {
+									changeUnyo(0, 0,
+											(int) (GameRandom
+													.nextInt(((int) UNYOSTRENGTH[getBodyAgeState().ordinal()] / 3)))
+													+ UNYOSTRENGTH[getBodyAgeState().ordinal()]);
+								}
+							} else if (z == 0) {
+								if (getFootBakeLevel() == FootBake.NONE &&
+										!isDamaged() && !isSick() && !isFeelPain()
+										&& takeMappedObj(getParentLinkId()) == null
+										&& !isPeropero() && !(isEating() && !isPikopiko())) {
+									changeUnyo(0, 0,
+											(int) (GameRandom
+													.nextInt(((int) UNYOSTRENGTH[getBodyAgeState().ordinal()] / 3)))
+													+ UNYOSTRENGTH[getBodyAgeState().ordinal()]);
+								}
+							}
+						}
+					}
+				}
+			}
+			if (GameRandom.nextInt(30) == 0 && (isSleeping() ? GameRandom.nextBoolean() : true)) {
+				changeUnyo((int) (GameRandom.nextInt(2)), (int) (GameRandom.nextInt(2)),
+						(int) (GameRandom.nextInt(2)));
+			}
+			if (isDamaged() ? (GameRandom.nextInt(5) == 0) : true) {
+				changeReUnyo();
+			}
+		}
+	}
+
+	@Override
+	protected void onPealed() { stateDelegate().onPealed(); }
+
+	@Override
+	protected void onPacked() { stateDelegate().onPacked(); }
+
+	@Override
+	protected void onCarAccident() { abuseDelegate().strikeByPress(); }
+
+	@Override
+	protected void onPoisonSteam() { stateDelegate().onPoisonSteam(); }
+
+	@Override
+	protected void onCutDamageReaction() { stateDelegate().onCutDamageReaction(); }
+
+	@Override
+	protected void onInjuredScream(int x, int y) { stateDelegate().onInjuredScream(x, y); }
+
+	@Override
+	protected void onNightmare(boolean nightmare) { stateDelegate().onNightmare(nightmare); }
+
+	@Override
+	protected void onWakeByHunger() { stateDelegate().onWakeByHunger(); }
+
+	@Override
+	protected void onWakeupNaturally() { stateDelegate().onWakeupNaturally(); }
+
+	@Override
+	public void onChildStateNotify(UnbirthBabyState state, boolean childDead) {
+		stalkDelegate().onChildStateNotify(state, childDead);
+	}
+
+	/**
 	 * メッセージを出すかどうか.
 	 */
 	public void checkMessage() {
@@ -634,7 +716,6 @@ public abstract class Yukkuri extends SocialEntity {
 		messageDelegate().setNegiMessage(message, count, piko);
 	}
 
-	@Override
 	protected void addCrushedVomit(int x, int y, int z) {
 		GameView.addCrushedVomit(x, y, z, this, getShitType());
 	}
@@ -2604,8 +2685,8 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @return 待ち時間が過ぎたらtrue
 	 */
 	public final boolean checkWait(int waitTime) {
-		long lnNowTime = System.currentTimeMillis();
-		long lnLastActionTime = getLastActionTime();
+		long nowTimeMillis = System.currentTimeMillis();
+		long lastActionTimeMillis = getLastActionTime();
 		int speed = 100; // default NORMAL
 		String osName = System.getProperty("os.name", "").toLowerCase();
 		boolean hasDisplay = System.getenv("DISPLAY") != null;
@@ -2617,10 +2698,10 @@ public abstract class Yukkuri extends SocialEntity {
 				speed = 100;
 			}
 		}
-		if (lnNowTime - lnLastActionTime < waitTime * speed / 100) {
+		if (nowTimeMillis - lastActionTimeMillis < waitTime * speed / 100) {
 			return false;
 		}
-		// setlnLastActionTime(lnNowTime);
+		// setLastActionTime(nowTimeMillis);
 		return true;
 	}
 
@@ -2759,6 +2840,29 @@ public abstract class Yukkuri extends SocialEntity {
 		this.likeHotFood = likeHotFood;
 	}
 
+	/** 空を飛ぶか */
+	protected boolean flyingType = false;
+	/** ぱんつ着用状態か */
+	protected boolean hasPants = false;
+
+	/** 空を飛ぶか を取得する. @return 空を飛ぶか */
+	@Override
+	public boolean isFlyingType() { return flyingType; }
+
+	/** 空を飛ぶか を設定する. */
+	@Override
+	public void setFlyingType(boolean flyingType) { this.flyingType = flyingType; }
+
+	/** ぱんつ着用状態か を取得する. @return ぱんつ着用状態か */
+	public boolean isHasPants() {
+		return hasPants;
+	}
+
+	/** ぱんつ着用状態か を設定する. @param hasPants ぱんつ着用状態か */
+	public void setHasPants(boolean hasPants) {
+		this.hasPants = hasPants;
+	}
+
 	// --- BodyNameSet fields ---
 	/** 種族固有の画像ファイルベース名 */
 	protected String baseBodyFileName;
@@ -2893,8 +2997,79 @@ public abstract class Yukkuri extends SocialEntity {
 		y.setPredatorType(predatorType);
 		y.setLikeBitterFood(likeBitterFood);
 		y.setLikeHotFood(likeHotFood);
+		y.setFlyingType(flyingType);
+		y.setHasPants(hasPants);
 		y.copyBodyNameSetFrom(this);
 		y.copyBodySpriteSetFrom(this);
+	}
+
+	/**
+	 * 出産チェックをする.
+	 * @return このあと動かなくなるフラグ
+	 */
+	public boolean checkChildbirth() {
+		boolean cantMove = false;
+		if (hasBabyOrStalk() || (!hasBabyOrStalk() && isBirth())) {
+			pregnantPeriod += TICK + (pregnancyPeriodBoost / 2);
+			if (pregnantPeriod > getPregPeriodBase() - TICK * 100) {
+				if (!isBirth() && hasBabyOrStalk()) {
+					setMessage(GameMessages.getMessage(this, MessagePool.Action.Breed), true);
+					wakeup();
+				}
+				cantMove = true;
+				setBirth(true);
+				pregnancyPeriodBoost = 0;
+			}
+			if (pregnantPeriod > getPregPeriodBase() && isPealed()) {
+				damage += 40000;
+				toDead();
+			} else if (pregnantPeriod > getPregPeriodBase()) {
+				wakeup();
+				setHasBaby(false);
+				setHasStalk(false);
+				if (getBabyTypes().size() <= 0) {
+					setBirth(false);
+					pregnantPeriod = 0;
+					if (isNotNYD()) {
+						setMessage(GameMessages.getMessage(this, MessagePool.Action.Breed2), true);
+						if (!isHasPants()) {
+							if (willingFurifuri()) {
+								setFurifuri(true);
+							}
+							stay();
+						}
+					}
+					return cantMove;
+				}
+				cantMove = true;
+				boolean birthAllowed = true;
+				if (isHasPants() || (isFixBack() && isNeedled())) {
+					birthAllowed = false;
+				}
+				if ((isLockmove() && (!isFixBack() || getCoreAnkoState() != CoreAnkoState.NonYukkuriDisease))
+						&& !isShitting()) {
+					birthAllowed = false;
+				}
+				if (!birthAllowed) {
+					getBabyTypes().clear();
+					makeDirty(true);
+					if (isNotNYD()) {
+						if (isLockmove() && !isHasPants()) {
+							setHasPants(true);
+							setMessage(GameMessages.getMessage(this, MessagePool.Action.Breed2), true);
+							setHasPants(false);
+						} else {
+							setMessage(GameMessages.getMessage(this, MessagePool.Action.Breed2), true);
+						}
+					}
+					setBirth(false);
+					pregnantPeriod = 0;
+					pregnancyPeriodBoost = 0;
+					setHappiness(Happiness.VERY_SAD);
+				}
+			}
+		}
+		return cantMove;
 	}
 
 	// ===== Step6-3: BodyAttributes から移動したメソッド群 =====

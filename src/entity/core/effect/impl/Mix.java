@@ -53,9 +53,9 @@ public class Mix extends Effect {
 	/**
 	 * コンストラクタ.
 	 */
-	public Mix(int sX, int sY, int sZ, int vX, int vY, int vZ, boolean invert,
+	public Mix(int startX, int startY, int startZ, int velocityX, int velocityY, int velocityZ, boolean invert,
 			int life, int loop, boolean end, boolean grav, boolean front) {
-		super(sX, sY, sZ, vX, vY, vZ, invert, life, loop, end, grav, front);
+		super(startX, startY, startZ, velocityX, velocityY, velocityZ, invert, life, loop, end, grav, front);
 		setBoundary(pivotX, pivotY, imageWidth, imageHeight);
 		interval = 0;
 		frames = 3;

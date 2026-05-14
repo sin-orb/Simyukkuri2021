@@ -3,7 +3,6 @@ package src.entity.core.living.yukkuri;
 import src.entity.core.world.bodylinked.Okazari;
 import src.entity.core.world.bodylinked.Okazari.OkazariType;
 import src.enums.Happiness;
-import src.enums.ImageCode;
 import src.enums.UnbirthBabyState;
 import src.system.MessagePool;
 import src.util.GameMessages;

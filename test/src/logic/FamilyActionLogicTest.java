@@ -662,7 +662,7 @@ class FamilyActionLogicTest {
             @Override
             public boolean nextBoolean() { return false; }
         };
-        // bWantToShit=false (child shitting), bWantToEat=false (dHungryPer>=80)
+        // wantToShit=false (child shitting), wantToEat=false (hungryPercent>=80)
         // rideOnParent: child isShitting → continue → empty list → false
         assertFalse(FamilyActionLogic.checkFamilyAction(parent));
         child.setShitting(false);
@@ -685,20 +685,20 @@ class FamilyActionLogicTest {
     }
 
     // =========================================================
-    // Group 9: Child isHungry + isBaby → bWantToShit=false; dShitPer>50 → bWantToEat=false
+    // Group 9: Child isHungry + isBaby → wantToShit=false; shitPercent>50 → wantToEat=false
     // =========================================================
 
     @Test
     void testCheckFamilyAction_BabyChildHungryAndShit60_BothFalse() {
         setReady(parent);
         child.setShit((int)(child.getShitLimit() * 0.6)); // 60% shit > 50
-        // hungry <= 50% of limit → isHungry=true, and dHungryPer<80
+        // hungry <= 50% of limit → isHungry=true, and hungryPercent<80
         child.setHungry((int)(child.getHungryLimit() * 0.3));
         SimYukkuri.RND = new ConstState(0) {
             @Override
             public boolean nextBoolean() { return false; }
         };
-        // bWantToShit=false (child isHungry), bWantToEat=false (dShitPer>50)
+        // wantToShit=false (child isHungry), wantToEat=false (shitPercent>50)
         // rideOnParent: child isHungry, searchFood=null → no target → false
         assertFalse(FamilyActionLogic.checkFamilyAction(parent));
     }
@@ -757,7 +757,7 @@ class FamilyActionLogicTest {
             public boolean nextBoolean() { return false; }
         };
         // bIsBaby=false → bWantToShit=false
-        // bWantToEat=false (dHungryPer>=80)
+        // wantToEat=false (hungryPercent>=80)
         // rideOnParent: child.isBaby()=false → skipped → false
         assertFalse(FamilyActionLogic.checkFamilyAction(parent));
     }
@@ -1104,7 +1104,7 @@ class FamilyActionLogicTest {
     @Test
     void testCheckFamilyAction_HungryChildNoFood_GoesToEatFails() {
         setReady(parent);
-        child.setHungry(0); // hungry -> dHungryPer<80 -> bWantToEat stays true; isHungry=true -> bWantToShit=false
+        child.setHungry(0); // hungry -> hungryPercent<80 -> wantToEat stays true; isHungry=true -> wantToShit=false
         child.setShit(0);
         SimYukkuri.RND = new ConstState(0) {
             @Override public boolean nextBoolean() { return false; }
@@ -1119,7 +1119,7 @@ class FamilyActionLogicTest {
     @Test
     void testCheckFamilyAction_WantToShitGoToShitCheckWaitFails() {
         // Do NOT call setReady(parent) -> checkWait fails
-        child.setHungry((int)(child.getHungryLimit() * 0.9)); // dHungryPer=90>=80 -> bWantToEat=false; isHungry=false
+        child.setHungry((int)(child.getHungryLimit() * 0.9)); // hungryPercent=90>=80 -> wantToEat=false; isHungry=false
         child.setShit((int)(child.getShitLimit() * 0.5)); // 50% -> bWantToShit stays true for baby
         parent.setLastActionTime(); // goToShit checkWait(2000) fails
         SimYukkuri.RND = new ConstState(0) {
@@ -1149,7 +1149,7 @@ class FamilyActionLogicTest {
     @Test
     void testCheckFamilyAction_RideOnParentReturnsTrueViaBed() {
         setReady(parent);
-        child.setHungry((int)(child.getHungryLimit() * 0.9)); // dHungryPer=90>=80 -> bWantToEat=false; isHungry=false
+        child.setHungry((int)(child.getHungryLimit() * 0.9)); // hungryPercent=90>=80 -> wantToEat=false; isHungry=false
         child.setShit(0); // bWantToShit=false
         child.setWakeUpTime(Long.MIN_VALUE / 2); // isSleepy=true even at age=0
 
@@ -1257,7 +1257,7 @@ class FamilyActionLogicTest {
         // Set child to middle age: not baby, not adult
         int midAge = child.getBabyLimitBase() + 1; // just past baby threshold
         child.setAge(midAge);
-        child.setHungry(child.getHungryLimit()); // full -> dHungryPer>=80 -> bWantToEat=false
+        child.setHungry(child.getHungryLimit()); // full -> hungryPercent>=80 -> wantToEat=false
         child.setShit(0);
         // After child loop: bIsBaby=false -> bWantToShit=false. bWantToEat=false.
         // Ride loop: child.isBaby()=false -> L231 true -> L232 continue -> empty ride list

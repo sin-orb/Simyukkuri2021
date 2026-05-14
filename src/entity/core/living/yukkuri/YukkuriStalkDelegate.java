@@ -4,6 +4,7 @@ import java.util.Iterator;
 
 import src.entity.core.world.bodylinked.Stalk;
 import src.enums.Happiness;
+import src.enums.UnbirthBabyState;
 import src.logic.BodyRelations;
 import src.system.MessagePool;
 import src.util.GameMessages;
@@ -163,5 +164,39 @@ public final class YukkuriStalkDelegate {
 		}
 		body.setBindStalk(null);
 		body.setParentLinkId(-1);
+	}
+
+	/** 茎の実ゆの状態を母親が感知したときの感情・メッセージ反応. */
+	public void onChildStateNotify(UnbirthBabyState state, boolean childDead) {
+		switch (state) {
+			case ATTAKED:
+				if (!childDead) {
+					body.setHappiness(Happiness.SAD);
+					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.AbuseBaby));
+					body.addStress(30);
+					body.stay();
+					break;
+				}
+			case KILLED:
+				body.setHappiness(Happiness.VERY_SAD);
+				body.setMessage(GameMessages.getMessage(body, MessagePool.Action.AbuseBabyKilled));
+				body.addStress(500);
+				body.stay();
+				break;
+			case SAD:
+				body.setHappiness(Happiness.SAD);
+				body.setMessage(GameMessages.getMessage(body, MessagePool.Action.ConcernAboutChild));
+				body.addStress(20);
+				body.stay();
+				break;
+			case HAPPY:
+				body.setHappiness(Happiness.VERY_HAPPY);
+				body.setMessage(GameMessages.getMessage(body, MessagePool.Action.GladAboutChild));
+				body.addStress(-100);
+				body.stay();
+				break;
+			default:
+				break;
+		}
 	}
 }

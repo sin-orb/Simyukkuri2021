@@ -306,7 +306,7 @@ public class ProudChildEvent extends EventPacket {
 						body.setMessage(GameMessages.getMessage(body, MessagePool.Action.ProudChildsGOFrom), true);
 					}
 					body.setHappiness(Happiness.HAPPY);
-					// b.setBodyEventResMessage(GameMessages.getMessage(b,
+					// body.setBodyEventResMessage(GameMessages.getMessage(body,
 					// MessagePool.Action.ShitExercisesWAITFrom), 52, true, false);
 					boolean gathered = BodyLogic.gatheringYukkuriFront(sourceBody, childrenList, this);
 					if (gathered) {
@@ -317,14 +317,13 @@ public class ProudChildEvent extends EventPacket {
 					break;
 				/*
 				 * case WAIT:
-				 * if( checkWait(b,nWait) )
-				 * {
-				 * b.setBodyEventResMessage(GameMessages.getMessage(b,
+				 * if (checkWait(body, waitTicks)) {
+				 * body.setBodyEventResMessage(GameMessages.getMessage(body,
 				 * MessagePool.Action.ProudChildsWAITFrom), 52, true, false);
 				 * state = STATE.START;
-				 * actionFlag = false;
+				 * childActionEnabled = false;
 				 * }
-				 * b.stay(nWait2);
+				 * body.stay(stayTicks);
 				 * break;
 				 */
 				case START:
@@ -415,16 +414,16 @@ public class ProudChildEvent extends EventPacket {
 					}
 
 					break;
-				/*
-				 * case WAIT:
-				 * if( checkWait(b,nWait)){
-				 * b.setBodyEventResMessage(GameMessages.getMessage(b,
-				 * MessagePool.Action.ProudChildsWAIT), 52, true, false);
-				 * b.addMemories(5);
-				 * }
-				 * b.stay();
-				 * break;
-				 */
+					/*
+					 * case WAIT:
+					 * if (checkWait(body, waitTicks)) {
+					 * body.setBodyEventResMessage(GameMessages.getMessage(body,
+					 * MessagePool.Action.ProudChildsWAIT), 52, true, false);
+					 * body.addMemories(5);
+					 * }
+					 * body.stay();
+					 * break;
+					 */
 				case START:
 					if (childActionEnabled) {
 						if (checkWait(body, waitTicks)) {

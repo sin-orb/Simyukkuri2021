@@ -28,9 +28,9 @@ import src.enums.Type;
 public class EffectTest {
 
     private static class DummyEffect extends Effect {
-        DummyEffect(int sX, int sY, int sZ, int vX, int vY, int vZ, boolean invert,
+        DummyEffect(int startX, int startY, int startZ, int velocityX, int velocityY, int velocityZ, boolean invert,
                 int life, int loop, boolean end, boolean grav, boolean front) {
-            super(sX, sY, sZ, vX, vY, vZ, invert, life, loop, end, grav, front);
+            super(startX, startY, startZ, velocityX, velocityY, velocityZ, invert, life, loop, end, grav, front);
         }
 
         @Override

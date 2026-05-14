@@ -166,7 +166,7 @@ public class FamilyActionLogic {
 
 			// -------------------------------------
 			// うんうん判定
-			double dShitPer = 100 * bodyChild.getShit() / bodyChild.getShitLimit();
+			double shitPercent = 100 * bodyChild.getShit() / bodyChild.getShitLimit();
 			// 赤ゆのみチェック
 			if (bodyChild.isBaby()) {
 				hasBaby = true;
@@ -175,7 +175,7 @@ public class FamilyActionLogic {
 					wantToShit = false;
 				}
 				// 各子供のうんうん量が25%以下、100%以上ならスキップ
-				if (dShitPer <= 25 || 100 <= dShitPer) {
+				if (shitPercent <= 25 || 100 <= shitPercent) {
 					wantToShit = false;
 				}
 				// 子供が空腹ならスキップ
@@ -189,13 +189,13 @@ public class FamilyActionLogic {
 			if (bodyChild.isEating()) {
 				wantToEat = false;
 			}
-			double dHungryPer = 100 * bodyChild.getHungry() / bodyChild.getHungryLimit();
+			double hungryPercent = 100 * bodyChild.getHungry() / bodyChild.getHungryLimit();
 			// 各子供の満腹度が80%以上ならスキップ
-			if (dHungryPer >= 80) {
+			if (hungryPercent >= 80) {
 				wantToEat = false;
 			} else {
 				// うんうん量が多いならやらない
-				if (50 < dShitPer) {
+				if (50 < shitPercent) {
 					wantToEat = false;
 				}
 			}
