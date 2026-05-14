@@ -6,11 +6,11 @@ cd /d "%~dp0.."
 if exist bin rmdir /s /q bin
 mkdir bin
 
-dir /s /b src\*.java > sources.txt
+dir /s /b src\main\java\*.java > sources.txt
 javac -source 8 -target 8 -d bin -cp "lib\*" -encoding UTF-8 @sources.txt
 if %ERRORLEVEL% NEQ 0 goto :fail
 
-dir /s /b test\src\*.java > test_sources.txt
+dir /s /b src\test\java\*.java > test_sources.txt
 javac -source 8 -target 8 -d bin -cp "bin;lib\*" -encoding UTF-8 @test_sources.txt
 if %ERRORLEVEL% NEQ 0 goto :fail
 
