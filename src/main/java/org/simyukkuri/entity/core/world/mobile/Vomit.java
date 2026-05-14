@@ -175,7 +175,7 @@ public class Vomit extends Entity {
 			ageState = AgeState.ADULT;
 		} else {
 			ownerName = GameLocale.isJapanese() ? b.getNameJ() : b.getNameE();
-			ageState = b.getBodyAgeState();
+			ageState = b.getAgeState();
 		}
 		switch (ageState) {
 			case BABY:

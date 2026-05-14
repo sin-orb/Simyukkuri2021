@@ -46,7 +46,7 @@ class BodyIllnessRuleTest {
 		self.setIntelligence(Intelligence.WISE);
 		target.forceSetSick();
 
-		assertTrue(BodyIllnessRule.findSick(self, target));
+		assertTrue(YukkuriIllnessRule.findSick(self, target));
 	}
 
 	@Test
@@ -54,13 +54,13 @@ class BodyIllnessRuleTest {
 		self.setIntelligence(Intelligence.FOOL);
 		target.forceSetSick();
 
-		assertTrue(BodyIllnessRule.findSick(self, target));
+		assertTrue(YukkuriIllnessRule.findSick(self, target));
 	}
 
 	@Test
 	void healthyTargetIsIgnored() {
 		self.setIntelligence(Intelligence.AVERAGE);
 
-		assertFalse(BodyIllnessRule.findSick(self, target));
+		assertFalse(YukkuriIllnessRule.findSick(self, target));
 	}
 }

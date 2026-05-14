@@ -1,0 +1,14 @@
+{
+    "java.project.referencedLibraries": [
+        "lib/**/*.jar"
+    ],
+    "java.project.sourcePaths": [
+        "src/main/java",
+        "src/test/java"
+    ],
+    "java.test.config": {
+        "vmArgs": ["-Djava.awt.headless=true"],
+        "args": ["--config", "junit.jupiter.execution.timeout.default=30s"]
+    },
+    "git.ignoreLimitWarning": true
+}

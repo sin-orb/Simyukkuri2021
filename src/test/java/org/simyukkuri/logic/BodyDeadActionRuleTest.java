@@ -24,7 +24,7 @@ import org.simyukkuri.enums.Happiness;
 import org.simyukkuri.util.WorldTestHelper;
 
 /**
- * Tests for BodyDeadActionRule.
+ * Tests for YukkuriDeadActionRule.
  */
 public class BodyDeadActionRuleTest {
 
@@ -42,7 +42,7 @@ public class BodyDeadActionRuleTest {
 		me.setRaper(true);
 		dead.setDead(true);
 
-		assertTrue(BodyDeadActionRule.handleDeadBodyInteraction(dead, me));
+		assertTrue(YukkuriDeadActionRule.handleDeadYukkuriInteraction(dead, me));
 	}
 
 	@Test
@@ -53,7 +53,7 @@ public class BodyDeadActionRuleTest {
 		parent.setDead(true);
 		WorldTestHelper.setParents(me, -1, parent.getUniqueID());
 
-		assertTrue(BodyDeadActionRule.handleDeadBodyInteraction(parent, me));
+		assertTrue(YukkuriDeadActionRule.handleDeadYukkuriInteraction(parent, me));
 		assertEquals(Happiness.VERY_SAD, me.getHappiness());
 	}
 }

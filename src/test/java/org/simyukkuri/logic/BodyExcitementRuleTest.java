@@ -28,7 +28,7 @@ import org.simyukkuri.system.Sprite;
 import org.simyukkuri.util.WorldTestHelper;
 
 /**
- * Tests for BodyExcitementRule.
+ * Tests for YukkuriExcitementRule.
  */
 class BodyExcitementRuleTest {
 
@@ -38,8 +38,8 @@ class BodyExcitementRuleTest {
 		SimYukkuri.world.getCurrentMap().getEvent().clear();
 		Yukkuri me = WorldTestHelper.createBody();
 		Yukkuri you = WorldTestHelper.createBody();
-		me.setBodySpr(makeSprites(1, 1));
-		you.setBodySpr(makeSprites(1, 1));
+		me.setSpriteSet(makeSprites(1, 1));
+		you.setSpriteSet(makeSprites(1, 1));
 		me.setX(100);
 		me.setY(100);
 		you.setX(120);
@@ -53,8 +53,8 @@ class BodyExcitementRuleTest {
 		you.setRaper(false);
 		SimYukkuri.RND = new ConstState(0);
 
-		assertDoesNotThrow(() -> assertTrue(BodyExcitementRule.handleExcitingContact(you, me)));
-		assertFalse(me.isToBody(), "rape branch should consume the contact action without switching targets");
+		assertDoesNotThrow(() -> assertTrue(YukkuriExcitementRule.handleExcitingContact(you, me)));
+		assertFalse(me.isToYukkuri(), "rape branch should consume the contact action without switching targets");
 	}
 
 	@Test
@@ -63,8 +63,8 @@ class BodyExcitementRuleTest {
 		SimYukkuri.world.getCurrentMap().getEvent().clear();
 		Yukkuri me = WorldTestHelper.createBody();
 		Yukkuri you = WorldTestHelper.createBody();
-		me.setBodySpr(makeSprites(1, 1));
-		you.setBodySpr(makeSprites(1, 1));
+		me.setSpriteSet(makeSprites(1, 1));
+		you.setSpriteSet(makeSprites(1, 1));
 		me.setX(100);
 		me.setY(100);
 		you.setX(120);
@@ -80,7 +80,7 @@ class BodyExcitementRuleTest {
 		me.setPartner(you.getUniqueID());
 		you.setPartner(me.getUniqueID());
 
-		assertDoesNotThrow(() -> assertTrue(BodyExcitementRule.handleExcitingContact(you, me)));
+		assertDoesNotThrow(() -> assertTrue(YukkuriExcitementRule.handleExcitingContact(you, me)));
 	}
 
 	@Test
@@ -89,8 +89,8 @@ class BodyExcitementRuleTest {
 		SimYukkuri.world.getCurrentMap().getEvent().clear();
 		Yukkuri me = WorldTestHelper.createBody();
 		Yukkuri you = WorldTestHelper.createBody();
-		me.setBodySpr(makeSprites(1, 1));
-		you.setBodySpr(makeSprites(1, 1));
+		me.setSpriteSet(makeSprites(1, 1));
+		you.setSpriteSet(makeSprites(1, 1));
 		me.setX(100);
 		me.setY(100);
 		you.setX(120);
@@ -103,7 +103,7 @@ class BodyExcitementRuleTest {
 		me.setForceExciting(true);
 		me.setRaper(false);
 
-		assertDoesNotThrow(() -> assertFalse(BodyExcitementRule.handleExcitingContact(you, me)));
+		assertDoesNotThrow(() -> assertFalse(YukkuriExcitementRule.handleExcitingContact(you, me)));
 		assertTrue(me.isSukkiri(), "force exciting should still trigger sukkiri side effect");
 	}
 

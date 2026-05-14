@@ -70,7 +70,7 @@ public class GadgetTool {
 			case 4:// 回復
 					// 痛めつけてから回復
 					// ダメージがある状態から復活した場合のセリフをしゃべる
-				body.setDamage(body.getDamageLimitBase()[body.getBodyAgeState().ordinal()] / 2);
+				body.setDamage(body.getDamageLimitBase()[body.getAgeState().ordinal()] / 2);
 				// 実ゆの場合、親が反応する
 				body.checkReactionStalkMother(UnbirthBabyState.HAPPY);
 				body.giveJuice();
@@ -89,7 +89,7 @@ public class GadgetTool {
 				body.dropAllTakeoutItem();
 				// 二回目なら爆発的拡大
 				if (body.getAbFlagGodHand()[0]) {
-					body.setShit(body.getShitLimitBase()[body.getBodyAgeState().ordinal()] * 10);
+					body.setShit(body.getShitLimitBase()[body.getAgeState().ordinal()] * 10);
 					body.setAnalClose(true);
 				}
 				// 膨らむ

@@ -248,14 +248,14 @@ public class GarbageStation extends WorldEntity {
 		ClassLoader loader = this.getClass().getClassLoader();
 		int iniValue = 0;
 		// 時間
-		iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataItemIniDir(), "GarbageStation",
+		iniValue = ModLoader.loadYukkuriIniMapForInt(loader, ModLoader.getDataItemIniDir(), "GarbageStation",
 				"throwingTime");
 		if (iniValue >= 6)
 			throwingTime = iniValue * 100 - 600;
 		else if (iniValue >= 0)
 			throwingTime = iniValue * 100 + 1800;
 		// 確率
-		iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataItemIniDir(), "GarbageStation",
+		iniValue = ModLoader.loadYukkuriIniMapForInt(loader, ModLoader.getDataItemIniDir(), "GarbageStation",
 				"gettingProbability");
 		if (iniValue != 0)
 			gettingP = iniValue;

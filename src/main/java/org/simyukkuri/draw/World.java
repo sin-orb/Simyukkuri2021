@@ -186,26 +186,26 @@ public class World implements Serializable {
 	/**
 	 * 全マップのゆっくりリストをスキャンして遅延読み込みの復元
 	 */
-	public void loadInterBodyImage() {
+	public void loadInterYukkuriImage() {
 		if (GameView.getPane() == null) {
 			return;
 		}
 		// 遅延読み込みの復元
 		for (MapPlaceData m : mapList) {
-			for (Map.Entry<Integer, Yukkuri> entry : m.getBody().entrySet()) {
+			for (Map.Entry<Integer, Yukkuri> entry : m.getYukkuriMap().entrySet()) {
 				Yukkuri b = entry.getValue();
 				if (b.getType() == HybridYukkuri.type) {
 					HybridYukkuri hb = (HybridYukkuri) b;
-					GameView.loadBodyImage(
-							org.simyukkuri.enums.YukkuriType.fromClassName(hb.getBaseBody(0).getClass().getSimpleName()));
-					GameView.loadBodyImage(
-							org.simyukkuri.enums.YukkuriType.fromClassName(hb.getBaseBody(1).getClass().getSimpleName()));
-					GameView.loadBodyImage(
-							org.simyukkuri.enums.YukkuriType.fromClassName(hb.getBaseBody(2).getClass().getSimpleName()));
-					GameView.loadBodyImage(
-							org.simyukkuri.enums.YukkuriType.fromClassName(hb.getBaseBody(3).getClass().getSimpleName()));
+					GameView.loadYukkuriImage(
+							org.simyukkuri.enums.YukkuriType.fromClassName(hb.getBaseYukkuri(0).getClass().getSimpleName()));
+					GameView.loadYukkuriImage(
+							org.simyukkuri.enums.YukkuriType.fromClassName(hb.getBaseYukkuri(1).getClass().getSimpleName()));
+					GameView.loadYukkuriImage(
+							org.simyukkuri.enums.YukkuriType.fromClassName(hb.getBaseYukkuri(2).getClass().getSimpleName()));
+					GameView.loadYukkuriImage(
+							org.simyukkuri.enums.YukkuriType.fromClassName(hb.getBaseYukkuri(3).getClass().getSimpleName()));
 				} else {
-					GameView.loadBodyImage(org.simyukkuri.enums.YukkuriType.fromClassName(b.getClass().getSimpleName()));
+					GameView.loadYukkuriImage(org.simyukkuri.enums.YukkuriType.fromClassName(b.getClass().getSimpleName()));
 				}
 			}
 		}
@@ -219,7 +219,7 @@ public class World implements Serializable {
 	@Transient
 	public List<Entity> getYukkuriList() {
 		List<Entity> yukkuriGroupList = new LinkedList<>();
-		for (Map.Entry<Integer, Yukkuri> entry : mapList.get(currentMapIdx).getBody().entrySet()) {
+		for (Map.Entry<Integer, Yukkuri> entry : mapList.get(currentMapIdx).getYukkuriMap().entrySet()) {
 			yukkuriGroupList.add(entry.getValue());
 		}
 		yukkuriGroupList.addAll(new LinkedList<Entity>(mapList.get(currentMapIdx).getShit().values()));
@@ -246,7 +246,7 @@ public class World implements Serializable {
 		platformGroupList.addAll(new LinkedList<WorldEntity>(mapList.get(currentMapIdx).getProductchute().values()));
 		platformGroupList.addAll(new LinkedList<WorldEntity>(mapList.get(currentMapIdx).getStickyPlate().values()));
 		platformGroupList.addAll(new LinkedList<WorldEntity>(mapList.get(currentMapIdx).getHotPlate().values()));
-		platformGroupList.addAll(new LinkedList<WorldEntity>(mapList.get(currentMapIdx).getProcesserPlate().values()));
+		platformGroupList.addAll(new LinkedList<WorldEntity>(mapList.get(currentMapIdx).getProcessorPlate().values()));
 		platformGroupList.addAll(new LinkedList<WorldEntity>(mapList.get(currentMapIdx).getMixer().values()));
 		platformGroupList.addAll(new LinkedList<WorldEntity>(mapList.get(currentMapIdx).getAutofeeder().values()));
 		platformGroupList.addAll(new LinkedList<WorldEntity>(mapList.get(currentMapIdx).getHouse().values()));
@@ -341,7 +341,7 @@ public class World implements Serializable {
 		hitBaseGroupList.addAll(new LinkedList<WorldEntity>(mapList.get(currentMapIdx).getProductchute().values()));
 		hitBaseGroupList.addAll(new LinkedList<WorldEntity>(mapList.get(currentMapIdx).getStickyPlate().values()));
 		hitBaseGroupList.addAll(new LinkedList<WorldEntity>(mapList.get(currentMapIdx).getHotPlate().values()));
-		hitBaseGroupList.addAll(new LinkedList<WorldEntity>(mapList.get(currentMapIdx).getProcesserPlate().values()));
+		hitBaseGroupList.addAll(new LinkedList<WorldEntity>(mapList.get(currentMapIdx).getProcessorPlate().values()));
 		hitBaseGroupList.addAll(new LinkedList<WorldEntity>(mapList.get(currentMapIdx).getMixer().values()));
 		hitBaseGroupList.addAll(new LinkedList<WorldEntity>(mapList.get(currentMapIdx).getHouse().values()));
 		hitBaseGroupList.addAll(new LinkedList<WorldEntity>(mapList.get(currentMapIdx).getMachinePress().values()));
@@ -361,7 +361,7 @@ public class World implements Serializable {
 	@Transient
 	public List<Entity> getHitTargetList() {
 		List<Entity> hitTargetGroupList = new LinkedList<>();
-		for (Map.Entry<Integer, Yukkuri> entry : mapList.get(currentMapIdx).getBody().entrySet()) {
+		for (Map.Entry<Integer, Yukkuri> entry : mapList.get(currentMapIdx).getYukkuriMap().entrySet()) {
 			hitTargetGroupList.add(entry.getValue());
 		}
 		hitTargetGroupList.addAll(new LinkedList<Entity>(mapList.get(currentMapIdx).getShit().values()));

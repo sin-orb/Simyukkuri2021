@@ -23,7 +23,7 @@ public class EmotionLogic {
 		boolean isRude = b.isRude();
 
 		// 自分との関係
-		EnumRelationMine relation = BodyLogic.checkMyRelation(b, bodyTarget);
+		EnumRelationMine relation = YukkuriLogic.checkMyRelation(b, bodyTarget);
 
 		// 自分の幸福度
 		Happiness happinessMine = b.getHappiness();

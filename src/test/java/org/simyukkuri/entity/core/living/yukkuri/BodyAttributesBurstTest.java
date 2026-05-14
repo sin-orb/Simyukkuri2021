@@ -25,18 +25,18 @@ public class BodyAttributesBurstTest {
     @Test
     public void testBurstStateWithNullSprites() {
         StubBodyAttributes body = new StubBodyAttributes();
-        body.setBodySpr(null);
+        body.setSpriteSet(null);
         assertEquals(Burst.NONE, body.getBurstState());
     }
 
     @Test
     public void testBurstStateWithZeroOriginSize() {
         StubBodyAttributes body = new StubBodyAttributes();
-        body.setBodySpr(new Sprite[3]);
-        for (int i = 0; i < body.getBodySpr().length; i++) {
-            body.getBodySpr()[i] = new Sprite();
-            body.getBodySpr()[i].setImageW(0);
-            body.getBodySpr()[i].setImageH(0);
+        body.setSpriteSet(new Sprite[3]);
+        for (int i = 0; i < body.getSpriteSet().length; i++) {
+            body.getSpriteSet()[i] = new Sprite();
+            body.getSpriteSet()[i].setImageW(0);
+            body.getSpriteSet()[i].setImageH(0);
         }
         assertEquals(Burst.NONE, body.getBurstState());
     }
@@ -83,8 +83,8 @@ public class BodyAttributesBurstTest {
     private static StubBodyAttributes createBodyWithOriginWidth(int width) {
         StubBodyAttributes body = new StubBodyAttributes();
         body.setAgeState(AgeState.ADULT);
-        body.setBodySpr(new Sprite[3]);
-        body.getBodySpr()[AgeState.ADULT.ordinal()] = new Sprite(width, 50, Sprite.PIVOT_CENTER_CENTER);
+        body.setSpriteSet(new Sprite[3]);
+        body.getSpriteSet()[AgeState.ADULT.ordinal()] = new Sprite(width, 50, Sprite.PIVOT_CENTER_CENTER);
         return body;
     }
 }

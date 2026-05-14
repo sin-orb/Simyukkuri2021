@@ -11,7 +11,7 @@ import org.simyukkuri.enums.UnbirthBabyState;
 import org.simyukkuri.event.impl.CutPenipeniEvent;
 import org.simyukkuri.event.impl.RaperWakeupEvent;
 import org.simyukkuri.logic.EventLogic;
-import org.simyukkuri.logic.BodyRelations;
+import org.simyukkuri.logic.YukkuriRelations;
 import org.simyukkuri.system.MessagePool;
 import org.simyukkuri.util.GameMessages;
 import org.simyukkuri.util.GameEnvironment;
@@ -90,7 +90,7 @@ public final class YukkuriSexualDelegate {
 		boolean stalkMode = GameRandom.nextBoolean();
 		// 該当タイプが避妊されてたら妊娠失敗
 		if ((stalkMode && p.isStalkCastration())
-				|| (!stalkMode && p.isBodyCastration())
+				|| (!stalkMode && p.isCastrated())
 				|| (!stalkMode && p.getFootBakeLevel() == FootBake.CRITICAL)) {
 			p.setHappiness(Happiness.VERY_SAD);
 			p.setMessage(GameMessages.getMessage(p, MessagePool.Action.NoPregnancy));
@@ -263,10 +263,10 @@ public final class YukkuriSexualDelegate {
 		}
 		body.strikeByPunish();
 		GameEnvironment.setAlarm();
-		if (dna == null || body.isBodyCastration()) {
+		if (dna == null || body.isCastrated()) {
 			return;
 		}
-		Dna baby = BabyDnaFactory.createBabyDna(body, BodyRelations.getBody(dna.getFather()),
+		Dna baby = BabyDnaFactory.createBabyDna(body, YukkuriRelations.getYukkuriById(dna.getFather()),
 				dna.getType(), dna.getAttitude(), dna.getIntelligence(), false, false, true);
 		body.getBabyTypes().add(baby);
 		body.setHasBaby(true);
@@ -286,7 +286,7 @@ public final class YukkuriSexualDelegate {
 			return;
 		}
 		for (int i = 0; i < 5; i++) {
-			Dna baby = BabyDnaFactory.createBabyDna(body, BodyRelations.getBody(dna.getFather()),
+			Dna baby = BabyDnaFactory.createBabyDna(body, YukkuriRelations.getYukkuriById(dna.getFather()),
 					dna.getType(), dna.getAttitude(), dna.getIntelligence(), false, false, true);
 			body.getStalkBabyTypes().add((GameRandom.nextBoolean() ? baby : null));
 		}
@@ -344,7 +344,7 @@ public final class YukkuriSexualDelegate {
 		}
 		body.clearActions();
 		body.setSleeping(false);
-		EventLogic.addBodyEvent(body, new CutPenipeniEvent(body, null, null, 1), null, null);
+		EventLogic.addYukkuriEvent(body, new CutPenipeniEvent(body, null, null, 1), null, null);
 		body.checkReactionStalkMother(UnbirthBabyState.ATTAKED);
 	}
 

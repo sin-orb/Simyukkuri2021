@@ -9,7 +9,7 @@ import org.simyukkuri.enums.EffectType;
 import org.simyukkuri.enums.Happiness;
 import org.simyukkuri.enums.ImageCode;
 import org.simyukkuri.event.EventPacket;
-import org.simyukkuri.logic.BodyLogic;
+import org.simyukkuri.logic.YukkuriLogic;
 import org.simyukkuri.system.MessagePool;
 import org.simyukkuri.util.GameMessages;
 import org.simyukkuri.util.GameRandom;
@@ -50,7 +50,7 @@ public class RevengeAttackEvent extends EventPacket {
 	// イベント開始動作
 	@Override
 	public void start(Yukkuri body) {
-		Yukkuri targetBody = org.simyukkuri.util.BodyRegistry.getBodyInstance(getTo());
+		Yukkuri targetBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getTo());
 		body.setToFood(false);
 		body.setToBed(false);
 		body.setToShit(false);
@@ -59,7 +59,7 @@ public class RevengeAttackEvent extends EventPacket {
 		body.setToTakeout(true);
 		body.setWakeUpTime(body.getAge());// 眠気が覚める
 		if (targetBody != null) {
-			int colX = BodyLogic.calcCollisionX(body, targetBody);
+			int colX = YukkuriLogic.calcCollisionX(body, targetBody);
 			body.moveToEvent(this, targetBody.getX() + colX, targetBody.getY());
 		}
 	}
@@ -68,7 +68,7 @@ public class RevengeAttackEvent extends EventPacket {
 	// UpdateState.ABORTを返すとイベント終了
 	@Override
 	public UpdateState update(Yukkuri body) {
-		Yukkuri targetBody = org.simyukkuri.util.BodyRegistry.getBodyInstance(getTo());
+		Yukkuri targetBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getTo());
 		// 相手が消えてしまったらイベント中断
 		if (targetBody == null || targetBody.isRemoved() || targetBody.isTaken())
 			return UpdateState.ABORT;
@@ -76,7 +76,7 @@ public class RevengeAttackEvent extends EventPacket {
 		if (Translate.distance(body.getX(), body.getY(), targetBody.getX(), targetBody.getY()) < 2500) {
 			targetBody.stay();
 		}
-		int colX = BodyLogic.calcCollisionX(body, targetBody);
+		int colX = YukkuriLogic.calcCollisionX(body, targetBody);
 		body.moveToEvent(this, targetBody.getX() + colX, targetBody.getY());
 		return null;
 	}
@@ -91,7 +91,7 @@ public class RevengeAttackEvent extends EventPacket {
 			body.setHappiness(Happiness.SAD);
 			return true;
 		}
-		Yukkuri targetBody = org.simyukkuri.util.BodyRegistry.getBodyInstance(getTo());
+		Yukkuri targetBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getTo());
 		// 相手が残っていたら攻撃
 		if (targetBody != null && !targetBody.isRemoved() && targetBody.getZ() < 5) {
 			body.setWorldEventResMessage(GameMessages.getMessage(body, MessagePool.Action.RevengeAttack),

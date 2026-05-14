@@ -82,7 +82,7 @@ public class ANYDAmpouleTest {
         ANYDAmpoule ampoule = new ANYDAmpoule(parent);
 
         // parentをマップから削除
-        SimYukkuri.world.getCurrentMap().getBody().remove(parent.getUniqueID());
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().remove(parent.getUniqueID());
 
         BufferedImage image = ampoule.getImage(parent);
         assertNull(image);
@@ -135,7 +135,7 @@ public class ANYDAmpouleTest {
         int origPivotY = ampoule.getPivotY();
 
         // parentをマップから削除
-        SimYukkuri.world.getCurrentMap().getBody().remove(parent.getUniqueID());
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().remove(parent.getUniqueID());
 
         ampoule.resetBoundary();
 
@@ -171,7 +171,7 @@ public class ANYDAmpouleTest {
     private static Yukkuri createParent(AgeState ageState) {
         Yukkuri parent = new Reimu();
         parent.setAgeState(ageState);
-        SimYukkuri.world.getCurrentMap().getBody().put(parent.getUniqueID(), parent);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(parent.getUniqueID(), parent);
         return parent;
     }
 

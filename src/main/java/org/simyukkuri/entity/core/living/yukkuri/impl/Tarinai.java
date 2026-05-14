@@ -15,10 +15,10 @@ import org.simyukkuri.entity.core.world.bodylinked.Okazari;
 import org.simyukkuri.entity.core.world.bodylinked.Okazari.OkazariType;
 import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.Attitude;
-import org.simyukkuri.enums.BodyRank;
+import org.simyukkuri.enums.YukkuriRank;
 import org.simyukkuri.enums.ImageCode;
 import org.simyukkuri.enums.YukkuriType;
-import org.simyukkuri.system.BodyLayer;
+import org.simyukkuri.system.YukkuriLayer;
 import org.simyukkuri.util.GameRandom;
 import org.simyukkuri.util.IniFileUtil;
 
@@ -36,7 +36,7 @@ public class Tarinai extends Yukkuri {
 	/** たりないゆベースファイル名 */
 	public static final String baseFileName = "tarinai";
 
-	private static BufferedImage[][][][] imagePack = new BufferedImage[BodyRank.values().length][][][];
+	private static BufferedImage[][][][] imagePack = new BufferedImage[YukkuriRank.values().length][][][];
 	private static BufferedImage[][][] imagesKai = new BufferedImage[ImageCode.values().length][2][3];
 	private static BufferedImage[][][] imagesNora = new BufferedImage[ImageCode.values().length][2][3];
 	private static int directionOffset[][] = new int[ImageCode.values().length][2];
@@ -55,20 +55,20 @@ public class Tarinai extends Yukkuri {
 			return;
 
 		boolean res;
-		res = ModLoader.loadBodyImagePack(loader, imagesNora, directionOffset, ModLoader.getYkWordNora(), baseFileName,
+		res = ModLoader.loadYukkuriImagePack(loader, imagesNora, directionOffset, ModLoader.getYkWordNora(), baseFileName,
 				io);
 		if (!res) {
 			imagesNora = null;
 		}
-		res = ModLoader.loadBodyImagePack(loader, imagesKai, directionOffset, null, baseFileName, io);
+		res = ModLoader.loadYukkuriImagePack(loader, imagesKai, directionOffset, null, baseFileName, io);
 		if (!res) {
 			imagesKai = null;
 		}
-		imagePack[BodyRank.KAIYU.getImageIndex()] = imagesKai;
+		imagePack[YukkuriRank.KAIYU.getImageIndex()] = imagesKai;
 		if (imagesNora != null) {
-			imagePack[BodyRank.NORAYU.getImageIndex()] = imagesNora;
+			imagePack[YukkuriRank.NORAYU.getImageIndex()] = imagesNora;
 		} else {
-			imagePack[BodyRank.NORAYU.getImageIndex()] = imagesKai;
+			imagePack[YukkuriRank.NORAYU.getImageIndex()] = imagesKai;
 		}
 		ModLoader.setImageSize(imagesKai, boundary, braidBoundary, io);
 
@@ -83,14 +83,14 @@ public class Tarinai extends Yukkuri {
 
 	/** INIファイルをロードする */
 	public static void loadIniFile(ClassLoader loader) {
-		AttachOffset = ModLoader.loadBodyIniMap(loader, ModLoader.getDataIniDir(), baseFileName);
-		baseSpeed = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataIniDir(), baseFileName, "speed");
+		AttachOffset = ModLoader.loadYukkuriIniMap(loader, ModLoader.getDataIniDir(), baseFileName);
+		baseSpeed = ModLoader.loadYukkuriIniMapForInt(loader, ModLoader.getDataIniDir(), baseFileName, "speed");
 	}
 
 	@Override
-	public int getImage(int type, int direction, BodyLayer layer, int index) {
-		layer.getImage()[index] = imagePack[getBodyRank().getImageIndex()][type][direction
-				* directionOffset[type][0]][getBodyAgeState().ordinal()];
+	public int getImage(int type, int direction, YukkuriLayer layer, int index) {
+		layer.getImage()[index] = imagePack[getRank().getImageIndex()][type][direction
+				* directionOffset[type][0]][getAgeState().ordinal()];
 		layer.getDir()[index] = direction * directionOffset[type][1];
 		return 1;
 	}
@@ -125,8 +125,8 @@ public class Tarinai extends Yukkuri {
 	@Override
 	@Transient
 	public String getMyName() {
-		if (getMyNames()[getBodyAgeState().ordinal()] != null) {
-			return getMyNames()[getBodyAgeState().ordinal()];
+		if (getMyNames()[getAgeState().ordinal()] != null) {
+			return getMyNames()[getAgeState().ordinal()];
 		}
 		return nameJ;
 	}
@@ -134,8 +134,8 @@ public class Tarinai extends Yukkuri {
 	@Override
 	@Transient
 	public String getMyNameD() {
-		if (getMyNamesDamaged()[getBodyAgeState().ordinal()] != null) {
-			return getMyNamesDamaged()[getBodyAgeState().ordinal()];
+		if (getMyNamesDamaged()[getAgeState().ordinal()] != null) {
+			return getMyNamesDamaged()[getAgeState().ordinal()];
 		}
 		return getMyName();
 	}
@@ -164,7 +164,7 @@ public class Tarinai extends Yukkuri {
 		setBoundary(boundary, braidBoundary);
 		setMsgType(YukkuriType.TARINAI);
 		setShitType(YukkuriType.TARINAI);
-		setBaseBodyFileName(baseFileName);
+		setBaseYukkuriFileName(baseFileName);
 		IniFileUtil.readYukkuriIniFile(this);
 	}
 
@@ -190,7 +190,7 @@ public class Tarinai extends Yukkuri {
 	 */
 	public void giveOkazari(OkazariType type) {
 		if (type == OkazariType.DEFAULT) {
-			OkazariType newType = Okazari.getRandomOkazari(getBodyAgeState());
+			OkazariType newType = Okazari.getRandomOkazari(getAgeState());
 			setOkazari(new Okazari(this, newType));
 			// なつき度設定
 			addLovePlayer(10);

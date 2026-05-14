@@ -52,7 +52,7 @@ public final class YukkuriShitDelegate {
 			// うんうんアンプルが刺さっている
 			if (body.getAttachmentSize(VeryShitAmpoule.class) != 0) {
 				// 限界を超えた場合のチェック
-				if (shit > body.getShitLimitBase()[body.getBodyAgeState().ordinal()]) {
+				if (shit > body.getShitLimitBase()[body.getAgeState().ordinal()]) {
 					int currentDamagePercent = 100 * body.getDamage() / body.getDamageLimit();
 					// 現在のダメージがダメージ限界の1/10以下ならダメージを与える
 					if (currentDamagePercent < 10) {
@@ -144,7 +144,7 @@ public final class YukkuriShitDelegate {
 		// ちぎれ状態の場合は餡子を漏らす
 		if ((body.getCriticalDamege() == CriticalDamegeType.CUT || body.isPealed()) &&
 				body.getBurialState() == BurialState.NONE) {
-			if (shit > body.getShitLimitBase()[body.getBodyAgeState().ordinal()] - Entity.TICK * Const.SHITSTAY * 2) {
+			if (shit > body.getShitLimitBase()[body.getAgeState().ordinal()] - Entity.TICK * Const.SHITSTAY * 2) {
 				GameView.addCrushedVomit(body.getX() + 3 - GameRandom.nextInt(6), body.getY() - 2, 0,
 						body,
 						body.getShitType());
@@ -161,7 +161,7 @@ public final class YukkuriShitDelegate {
 
 		// 寝ている場合はうんうん限界の1.5倍までは我慢できる
 		if (body.isSleeping()) {
-			if (shit < (body.getShitLimitBase()[body.getBodyAgeState().ordinal()] * 1.5f)) {
+			if (shit < (body.getShitLimitBase()[body.getAgeState().ordinal()] * 1.5f)) {
 				body.setShitting(false);
 				body.setShit(shit);
 				return false;
@@ -176,18 +176,18 @@ public final class YukkuriShitDelegate {
 				// もしトイレに到着していたら即排泄へ
 				if (body.isToShit() && oTarget instanceof Toilet) {
 					if (((Toilet) oTarget).checkHitObj(body)) {
-						if (shit < body.getShitLimitBase()[body.getBodyAgeState().ordinal()]
+						if (shit < body.getShitLimitBase()[body.getAgeState().ordinal()]
 								- Entity.TICK * Const.SHITSTAY + 1) {
-							shit = body.getShitLimitBase()[body.getBodyAgeState().ordinal()]
+							shit = body.getShitLimitBase()[body.getAgeState().ordinal()]
 									- Entity.TICK * Const.SHITSTAY + 1;
 						}
 					} else if (body.checkOnBed()) {// トイレがある場合
 						// 大人で寝てたなら起きる
-						if (body.getBodyAgeState() == AgeState.ADULT && body.isSleeping()) {
+						if (body.getAgeState() == AgeState.ADULT && body.isSleeping()) {
 							body.wakeup();
 						}
 						// トイレに到着していないかつベッドの上では我慢する
-						if (shit < (body.getShitLimitBase()[body.getBodyAgeState().ordinal()] * 1.5f)) {
+						if (shit < (body.getShitLimitBase()[body.getAgeState().ordinal()] * 1.5f)) {
 							body.setShitting(false);
 							body.setShit(shit);
 							return false;
@@ -196,7 +196,7 @@ public final class YukkuriShitDelegate {
 							|| (body.getAttitude() == Attitude.AVERAGE
 									&& body.getIntelligence() == Intelligence.WISE)) {
 						// 性格が善良か普通でも知能が高ければトイレに着くまで150%まで我慢できる
-						if (shit < (body.getShitLimitBase()[body.getBodyAgeState().ordinal()] * 1.5f)) {
+						if (shit < (body.getShitLimitBase()[body.getAgeState().ordinal()] * 1.5f)) {
 							body.setShitting(false);
 							body.setShit(shit);
 							return false;
@@ -206,7 +206,7 @@ public final class YukkuriShitDelegate {
 				// トイレがない場合
 				else if (body.checkOnBed()) {
 					// ベッドの上では我慢する
-					if (shit < (body.getShitLimitBase()[body.getBodyAgeState().ordinal()] * 1.5f)) {
+					if (shit < (body.getShitLimitBase()[body.getAgeState().ordinal()] * 1.5f)) {
 						body.setShitting(false);
 						body.setShit(shit);
 						return false;
@@ -215,7 +215,7 @@ public final class YukkuriShitDelegate {
 			}
 
 			// 限界が近づいたら排泄チェック
-			if (shit > body.getShitLimitBase()[body.getBodyAgeState().ordinal()] - Entity.TICK * Const.SHITSTAY) {
+			if (shit > body.getShitLimitBase()[body.getAgeState().ordinal()] - Entity.TICK * Const.SHITSTAY) {
 				// あなるがふさがれていない
 				if (!body.isAnalClose() && !(body.isFixBack() && body.isNeedled())) {
 					// 寝ているか埋まっているか粘着床(あんよ固定)についているか針が刺さっていたら体勢をかえられずに漏らす
@@ -268,14 +268,14 @@ public final class YukkuriShitDelegate {
 		}
 
 		// 限界を超えた場合のチェック
-		if (shit > body.getShitLimitBase()[body.getBodyAgeState().ordinal()]) {
+		if (shit > body.getShitLimitBase()[body.getAgeState().ordinal()]) {
 			// 肛門が塞がれてなければ排泄
 			if (!body.isAnalClose() && !(body.isFixBack() || body.isNeedled())
 					&& body.getBurialState() == BurialState.NONE) {
 				body.setShitting(false);
 				body.clearActions();
 				shit = 0;
-				if (body.getBodyAgeState() == AgeState.BABY) {
+				if (body.getAgeState() == AgeState.BABY) {
 					body.makeDirty(true);
 					body.setHappiness(Happiness.SAD);
 					body.addStress(200);

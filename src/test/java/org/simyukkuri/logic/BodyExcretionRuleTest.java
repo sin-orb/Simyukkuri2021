@@ -19,7 +19,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 import org.simyukkuri.entity.core.living.yukkuri.StubBodyAttributes;
-import org.simyukkuri.enums.BodyRank;
+import org.simyukkuri.enums.YukkuriRank;
 import org.simyukkuri.util.GameRandom;
 import org.simyukkuri.util.RandomSource;
 
@@ -32,27 +32,27 @@ class BodyExcretionRuleTest {
 	@Test
 	void kaiyuAlwaysCausesDiarrhea() {
 		StubBodyAttributes body = new StubBodyAttributes();
-		body.setBodyRank(BodyRank.KAIYU);
+		body.setRank(YukkuriRank.KAIYU);
 
-		assertTrue(BodyExcretionRule.getDiarrhea(body));
+		assertTrue(YukkuriExcretionRule.getDiarrhea(body));
 	}
 
 	@Test
 	void sicknessAndDamageHalveTheProbabilityBound() {
 		StubBodyAttributes body = new StubBodyAttributes();
-		body.setBodyRank(BodyRank.NORAYU);
+		body.setRank(YukkuriRank.NORAYU);
 		body.setDiarrheaProb(10);
 
 		CapturingRandom random = new CapturingRandom();
 		GameRandom.setOverride(random);
 
-		assertTrue(BodyExcretionRule.getDiarrhea(body));
+		assertTrue(YukkuriExcretionRule.getDiarrhea(body));
 		assertEquals(10, random.lastBound);
 
 		body.setSickPeriod(body.getIncubationPeriodBase() + 1);
 		body.setDamage(1);
 
-		assertTrue(BodyExcretionRule.getDiarrhea(body));
+		assertTrue(YukkuriExcretionRule.getDiarrhea(body));
 		assertEquals(5, random.lastBound);
 	}
 

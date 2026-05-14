@@ -82,7 +82,7 @@ public class MouseInputController extends MouseAdapter {
 				}
 			} else if (!stalkMode && o instanceof Stalk) {
 				stalk = (Stalk) o;
-				Yukkuri b = org.simyukkuri.util.GameWorld.get().getCurrentMap().getBody().get(stalk.getPlantYukkuri());
+				Yukkuri b = org.simyukkuri.util.GameWorld.get().getCurrentMap().getYukkuriMap().get(stalk.getPlantYukkuri());
 				if (b != null) {
 					parent = b;
 				} else {
@@ -247,7 +247,7 @@ public class MouseInputController extends MouseAdapter {
 
 			if (found instanceof Yukkuri) {
 				MainCommandUI.showStatus((Yukkuri) found);
-				MyPane.setSelectBody((Yukkuri) found);
+				MyPane.setSelectedYukkuri((Yukkuri) found);
 				foundType = ActionTarget.BODY;
 			} else if (found != null) {
 				foundType = ActionTarget.GADGET;
@@ -329,7 +329,7 @@ public class MouseInputController extends MouseAdapter {
 					grabbedObj.grab();
 					if (grabbedObj instanceof Yukkuri) {
 						MainCommandUI.showStatus((Yukkuri) grabbedObj);
-						MyPane.setSelectBody((Yukkuri) grabbedObj);
+						MyPane.setSelectedYukkuri((Yukkuri) grabbedObj);
 					}
 				}
 			}

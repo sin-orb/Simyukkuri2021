@@ -65,11 +65,11 @@ public class YukkuriRideEvent extends EventPacket {
 	// また、イベント優先度も必要に応じて設定できる
 	@Override
 	public boolean checkEventResponse(Yukkuri body) {
-		Yukkuri targetBody = org.simyukkuri.util.BodyRegistry.getBodyInstance(getTo());
+		Yukkuri targetBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getTo());
 		if (targetBody == null) {
 			return false;
 		}
-		Yukkuri sourceBody = org.simyukkuri.util.BodyRegistry.getBodyInstance(getFrom());
+		Yukkuri sourceBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
 		if (sourceBody == body) {
 			return true;
 		}
@@ -79,7 +79,7 @@ public class YukkuriRideEvent extends EventPacket {
 	// イベント開始動作
 	@Override
 	public void start(Yukkuri body) {
-		Yukkuri targetBody = org.simyukkuri.util.BodyRegistry.getBodyInstance(getTo());
+		Yukkuri targetBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getTo());
 		if (targetBody == null) {
 			return;
 		}
@@ -92,11 +92,11 @@ public class YukkuriRideEvent extends EventPacket {
 	@Override
 	public UpdateState update(Yukkuri body) {
 		tick++;
-		Yukkuri sourceBody = org.simyukkuri.util.BodyRegistry.getBodyInstance(getFrom());
+		Yukkuri sourceBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
 		if (sourceBody == null || !sourceBody.canActionForEvent() || sourceBody.isRemoved()) {
 			return UpdateState.ABORT;
 		}
-		Yukkuri targetBody = org.simyukkuri.util.BodyRegistry.getBodyInstance(getTo());
+		Yukkuri targetBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getTo());
 		if (targetBody == null || targetBody.isDead() || targetBody.isRemoved()) {
 			return UpdateState.ABORT;
 		}
@@ -264,7 +264,7 @@ public class YukkuriRideEvent extends EventPacket {
 	public void end(Yukkuri body) {
 		// 他のイベントで強制的にイベントが終わることがある
 		// 子供をおろす
-		Yukkuri targetBody = org.simyukkuri.util.BodyRegistry.getBodyInstance(getTo());
+		Yukkuri targetBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getTo());
 		if (targetBody != null) {
 			targetBody.setParentLinkId(-1);
 		}

@@ -45,7 +45,7 @@ public class GameViewTest {
 
 		GameView.initBodies();
 		GameView.loadImage(false, false, false, false, false, true);
-		GameView.loadBodyImage(YukkuriType.REIMU);
+		GameView.loadYukkuriImage(YukkuriType.REIMU);
 		GameView.loadTerrainFile();
 		GameView.createBackBuffer();
 
@@ -54,7 +54,7 @@ public class GameViewTest {
 		assertSame(source.terrarium, GameView.getTerrarium());
 		assertTrue(source.initBodies);
 		assertTrue(source.loadImage);
-		assertTrue(source.loadBodyImage);
+		assertTrue(source.loadYukkuriImage);
 		assertTrue(source.loadTerrainFile);
 		assertTrue(source.createBackBuffer);
 	}
@@ -64,15 +64,15 @@ public class GameViewTest {
 		RecordingViewSource source = new RecordingViewSource();
 		GameView.setOverride(source);
 
-		GameView.addBody(1, 2, 3, YukkuriType.fromTypeID(4), AgeState.BABY, null, null);
-		GameView.makeBody(1, 2, 3, YukkuriType.fromTypeID(4), null, AgeState.BABY, null, null, true);
+		GameView.addYukkuri(1, 2, 3, YukkuriType.fromTypeID(4), AgeState.BABY, null, null);
+		GameView.makeYukkuri(1, 2, 3, YukkuriType.fromTypeID(4), null, AgeState.BABY, null, null, true);
 		GameView.addVomit(1, 2, 3, null, YukkuriType.REIMU);
 		GameView.addCrushedVomit(1, 2, 3, null, YukkuriType.REIMU);
 		GameView.addCrushedShit(1, 2, 3, null, YukkuriType.REIMU);
 		GameView.addEffect(EffectType.HIT, 1, 2, 3, 4, 5, 6, true, 7, 8, false, true, false);
 
-		assertTrue(source.addBody);
-		assertTrue(source.makeBody);
+		assertTrue(source.addYukkuri);
+		assertTrue(source.makeYukkuri);
 		assertTrue(source.addVomit);
 		assertTrue(source.addCrushedVomit);
 		assertTrue(source.addCrushedShit);
@@ -85,11 +85,11 @@ public class GameViewTest {
 		private final Terrarium terrarium = new Terrarium();
 		private boolean initBodies;
 		private boolean loadImage;
-		private boolean loadBodyImage;
+		private boolean loadYukkuriImage;
 		private boolean loadTerrainFile;
 		private boolean createBackBuffer;
-		private boolean addBody;
-		private boolean makeBody;
+		private boolean addYukkuri;
+		private boolean makeYukkuri;
 		private boolean addVomit;
 		private boolean addCrushedVomit;
 		private boolean addCrushedShit;
@@ -122,8 +122,8 @@ public class GameViewTest {
 		}
 
 		@Override
-		public void loadBodyImage(YukkuriType type) {
-			loadBodyImage = type == YukkuriType.REIMU;
+		public void loadYukkuriImage(YukkuriType type) {
+			loadYukkuriImage = type == YukkuriType.REIMU;
 		}
 
 		@Override
@@ -137,15 +137,15 @@ public class GameViewTest {
 		}
 
 		@Override
-		public Yukkuri addBody(int x, int y, int z, YukkuriType type, AgeState age, Yukkuri p1, Yukkuri p2) {
-			addBody = true;
+		public Yukkuri addYukkuri(int x, int y, int z, YukkuriType type, AgeState age, Yukkuri p1, Yukkuri p2) {
+			addYukkuri = true;
 			return null;
 		}
 
 		@Override
-		public Yukkuri makeBody(int x, int y, int z, YukkuriType type, Dna dna, AgeState age, Yukkuri p1, Yukkuri p2,
+		public Yukkuri makeYukkuri(int x, int y, int z, YukkuriType type, Dna dna, AgeState age, Yukkuri p1, Yukkuri p2,
 				boolean adjust) {
-			makeBody = adjust;
+			makeYukkuri = adjust;
 			return null;
 		}
 

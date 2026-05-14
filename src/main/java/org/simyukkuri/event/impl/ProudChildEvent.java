@@ -11,7 +11,7 @@ import org.simyukkuri.event.EventPacket;
 import org.simyukkuri.event.EventPacket.EventPriority;
 import org.simyukkuri.event.EventPacket.UpdateState;
 import org.simyukkuri.field.impl.Barrier;
-import org.simyukkuri.logic.BodyLogic;
+import org.simyukkuri.logic.YukkuriLogic;
 import org.simyukkuri.system.MessagePool;
 import org.simyukkuri.util.GameMessages;
 import org.simyukkuri.util.GameRandom;
@@ -97,7 +97,7 @@ public class ProudChildEvent extends EventPacket {
 
 	@Override
 	public boolean simpleEventAction(Yukkuri body) {
-		Yukkuri sourceBody = org.simyukkuri.util.BodyRegistry.getBodyInstance(getFrom());
+		Yukkuri sourceBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
 
 		if (sourceBody == null || sourceBody.isShutmouth()) {
 			return true;
@@ -117,10 +117,10 @@ public class ProudChildEvent extends EventPacket {
 		if (body.getPublicRank() == PublicRank.UnunSlave)
 			return false;
 		// 父母がいない場合は参加しない
-		if (org.simyukkuri.util.BodyRegistry.getBodyInstance(body.getFather()) == null &&
-				org.simyukkuri.util.BodyRegistry.getBodyInstance(body.getMother()) == null)
+		if (org.simyukkuri.util.YukkuriLookup.getYukkuriById(body.getFather()) == null &&
+				org.simyukkuri.util.YukkuriLookup.getYukkuriById(body.getMother()) == null)
 			return false;
-		Yukkuri sourceBody = org.simyukkuri.util.BodyRegistry.getBodyInstance(getFrom());
+		Yukkuri sourceBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
 		if (sourceBody == null)
 			return false;
 		// つがいも参加する
@@ -175,7 +175,7 @@ public class ProudChildEvent extends EventPacket {
 	// 親→子供→次のステート、の順で処理をする
 	@Override
 	public UpdateState update(Yukkuri body) {
-		Yukkuri sourceBody = org.simyukkuri.util.BodyRegistry.getBodyInstance(getFrom());
+		Yukkuri sourceBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
 		// イベント中止のお知らせ
 		if (body == null || sourceBody == null) {
 			return UpdateState.ABORT;
@@ -253,7 +253,7 @@ public class ProudChildEvent extends EventPacket {
 			if (state != STATE.GO) {
 				body.stay();
 			} else {
-				int collisionX = BodyLogic.calcCollisionX(body, sourceBody);
+				int collisionX = YukkuriLogic.calcCollisionX(body, sourceBody);
 				body.moveTo(sourceBody.getX() + collisionX * 2, sourceBody.getY());
 			}
 			return null;
@@ -271,7 +271,7 @@ public class ProudChildEvent extends EventPacket {
 			fromWaitTicks++;
 
 			// 子のみ集合
-			List<Yukkuri> childrenList = BodyLogic.createActiveChildList(sourceBody, false);
+			List<Yukkuri> childrenList = YukkuriLogic.createActiveChildList(sourceBody, false);
 			if ((childrenList == null) || (childrenList.size() == 0)) {
 				return UpdateState.ABORT;
 			}
@@ -306,9 +306,9 @@ public class ProudChildEvent extends EventPacket {
 						body.setMessage(GameMessages.getMessage(body, MessagePool.Action.ProudChildsGOFrom), true);
 					}
 					body.setHappiness(Happiness.HAPPY);
-					// body.setBodyEventResMessage(GameMessages.getMessage(body,
+					// body.setEventResMessage(GameMessages.getMessage(body,
 					// MessagePool.Action.ShitExercisesWAITFrom), 52, true, false);
-					boolean gathered = BodyLogic.gatheringYukkuriFront(sourceBody, childrenList, this);
+					boolean gathered = YukkuriLogic.gatheringYukkuriFront(sourceBody, childrenList, this);
 					if (gathered) {
 						state = STATE.START;
 						childActionEnabled = false;
@@ -318,7 +318,7 @@ public class ProudChildEvent extends EventPacket {
 				/*
 				 * case WAIT:
 				 * if (checkWait(body, waitTicks)) {
-				 * body.setBodyEventResMessage(GameMessages.getMessage(body,
+				 * body.setEventResMessage(GameMessages.getMessage(body,
 				 * MessagePool.Action.ProudChildsWAITFrom), 52, true, false);
 				 * state = STATE.START;
 				 * childActionEnabled = false;
@@ -329,7 +329,7 @@ public class ProudChildEvent extends EventPacket {
 				case START:
 					if (checkWait(body, waitTicks)) {
 						if (!childActionEnabled) {
-							body.setBodyEventResMessage(
+							body.setEventResMessage(
 									GameMessages.getMessage(body, MessagePool.Action.ProudChildsSTARTFrom),
 									52,
 									true, false);
@@ -345,7 +345,7 @@ public class ProudChildEvent extends EventPacket {
 				case SING:
 					if (checkWait(body, waitTicks)) {
 						if (!childActionEnabled) {
-							body.setBodyEventResMessage(
+							body.setEventResMessage(
 									GameMessages.getMessage(body, MessagePool.Action.ProudChildsSING), 52,
 									true, false);
 							if (GameRandom.nextBoolean())
@@ -363,7 +363,7 @@ public class ProudChildEvent extends EventPacket {
 				case PROUD:
 					if (checkWait(body, waitTicks)) {
 						if (!childActionEnabled) {
-							body.setBodyEventResMessage(
+							body.setEventResMessage(
 									GameMessages.getMessage(body, MessagePool.Action.ProudChildsPROUDFrom),
 									52,
 									true, false);
@@ -380,7 +380,7 @@ public class ProudChildEvent extends EventPacket {
 					break;
 				case END:
 					if (!childActionEnabled) {
-						body.setBodyEventResMessage(
+						body.setEventResMessage(
 								GameMessages.getMessage(body, MessagePool.Action.ProudChildsENDFrom),
 								52,
 								true, false);
@@ -399,7 +399,7 @@ public class ProudChildEvent extends EventPacket {
 				case GO:
 					// 壁に引っかかってるなら終了
 					if (Barrier.onBarrier(body.getX(), body.getY(), sourceBody.getX(), sourceBody.getY(),
-							Barrier.MAP_BODY[body.getBodyAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
+							Barrier.MAP_BODY[body.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
 						return UpdateState.ABORT;
 					}
 
@@ -417,7 +417,7 @@ public class ProudChildEvent extends EventPacket {
 					/*
 					 * case WAIT:
 					 * if (checkWait(body, waitTicks)) {
-					 * body.setBodyEventResMessage(GameMessages.getMessage(body,
+					 * body.setEventResMessage(GameMessages.getMessage(body,
 					 * MessagePool.Action.ProudChildsWAIT), 52, true, false);
 					 * body.addMemories(5);
 					 * }
@@ -427,7 +427,7 @@ public class ProudChildEvent extends EventPacket {
 				case START:
 					if (childActionEnabled) {
 						if (checkWait(body, waitTicks)) {
-							body.setBodyEventResMessage(
+							body.setEventResMessage(
 									GameMessages.getMessage(body, MessagePool.Action.ProudChildsSTART), 52,
 									true, false);
 							body.stay(stayTicks);
@@ -438,7 +438,7 @@ public class ProudChildEvent extends EventPacket {
 				case SING:
 					if (!childActionEnabled) {
 						if (checkWait(body, waitTicks)) {
-							body.setBodyEventResMessage(
+							body.setEventResMessage(
 									GameMessages.getMessage(body, MessagePool.Action.ProudChildsSING), 52,
 									true, false);
 							body.setNobinobi(true);
@@ -450,7 +450,7 @@ public class ProudChildEvent extends EventPacket {
 				case PROUD:
 					if (childActionEnabled) {
 						if (checkWait(body, waitTicks)) {
-							body.setBodyEventResMessage(
+							body.setEventResMessage(
 									GameMessages.getMessage(body, MessagePool.Action.ProudChildsPROUD), 52,
 									true, false);
 							if (body.isRude() && GameRandom.nextBoolean()) {
@@ -464,7 +464,7 @@ public class ProudChildEvent extends EventPacket {
 					break;
 				case END:
 					if (body.isRude())
-						body.setBodyEventResMessage(GameMessages.getMessage(body, MessagePool.Action.ProudChildsEND),
+						body.setEventResMessage(GameMessages.getMessage(body, MessagePool.Action.ProudChildsEND),
 								52, true,
 								false);
 					body.stay(52);

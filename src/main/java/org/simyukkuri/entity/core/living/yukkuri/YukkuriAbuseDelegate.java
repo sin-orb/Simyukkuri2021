@@ -70,7 +70,7 @@ public final class YukkuriAbuseDelegate {
 		if (body.isPealed()) {
 			body.setMelt(false);
 			body.setCriticalDamege(null);
-			body.setBodyBakePeriod(0);
+			body.setBakePeriod(0);
 			body.setPealed(false);
 			return;
 		}
@@ -99,7 +99,7 @@ public final class YukkuriAbuseDelegate {
 		if (body.isPacked()) {
 			body.setCanTalk(true);
 			body.closeAnal(false);
-			body.castrateBody(false);
+			body.castrateYukkuri(false);
 			body.setPacked(false);
 			peal();
 			return;
@@ -111,7 +111,7 @@ public final class YukkuriAbuseDelegate {
 		body.setOkazari(null);
 		body.setHasBaby(false);
 		body.closeAnal(true);
-		body.castrateBody(true);
+		body.castrateYukkuri(true);
 		body.setCanTalk(false);
 		body.setBlind(true);
 		body.setHairState(HairState.BALDHEAD);
@@ -263,16 +263,16 @@ public final class YukkuriAbuseDelegate {
 	/**
 	 * 胎生去勢を設定する.
 	 */
-	public void castrateBody(boolean flag) {
+	public void castrateYukkuri(boolean flag) {
 		if (body.isDead()) {
 			return;
 		}
-		body.setBodyCastration(flag);
+		body.setCastrated(flag);
 		if (!body.canAction()) {
 			return;
 		}
 		if (body.isNotNYD()) {
-			if (body.isBodyCastration()) {
+			if (body.isCastrated()) {
 				body.setHappiness(Happiness.VERY_SAD);
 				body.addStress(1000);
 				body.addLovePlayer(-400);
@@ -355,7 +355,7 @@ public final class YukkuriAbuseDelegate {
 				boolean resetBackFix = true;
 				for (Map.Entry<Integer, StickyPlate> entry : stickyPlates.entrySet()) {
 					StickyPlate s = entry.getValue();
-					if (s.getBindBody() == body) {
+					if (s.getBoundYukkuri() == body) {
 						resetBackFix = false;
 						break;
 					}
@@ -412,7 +412,7 @@ public final class YukkuriAbuseDelegate {
 	/**
 	 * 持つ.
 	 */
-	public void Hold() {
+	public void hold() {
 		if (body.isDead()) {
 			return;
 		}
@@ -450,13 +450,13 @@ public final class YukkuriAbuseDelegate {
 		body.clearActions();
 		body.setAngry();
 		if (body.getExternalPressure() < 0) {
-			if (body.getExternalPressure() < Const.EXT_FORCE_PUSH_LIMIT[body.getBodyAgeState().ordinal()]) {
+			if (body.getExternalPressure() < Const.EXT_FORCE_PUSH_LIMIT[body.getAgeState().ordinal()]) {
 				body.setLockmove(false);
 				body.setExternalPressure(0);
 				body.setCalcZ(0);
 				body.bodyBurst();
 			} else if (body
-					.getExternalPressure() < (Const.EXT_FORCE_PUSH_LIMIT[body.getBodyAgeState().ordinal()] >> 1)) {
+					.getExternalPressure() < (Const.EXT_FORCE_PUSH_LIMIT[body.getAgeState().ordinal()] >> 1)) {
 				if (GameRandom.nextInt(10) == 0) {
 					body.setHappiness(Happiness.VERY_SAD);
 					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.Press2), Const.HOLDMESSAGE, true,
@@ -468,11 +468,11 @@ public final class YukkuriAbuseDelegate {
 				}
 			}
 		} else if (body.getExternalPressure() > 0) {
-			if (body.getExternalPressure() > Const.EXT_FORCE_PULL_LIMIT[body.getBodyAgeState().ordinal()]) {
+			if (body.getExternalPressure() > Const.EXT_FORCE_PULL_LIMIT[body.getAgeState().ordinal()]) {
 				body.setLockmove(false);
 				body.setExternalPressure(0);
 				body.bodyCut();
-			} else if (body.getExternalPressure() > Const.EXT_FORCE_PULL_LIMIT[body.getBodyAgeState().ordinal()] >> 1) {
+			} else if (body.getExternalPressure() > Const.EXT_FORCE_PULL_LIMIT[body.getAgeState().ordinal()] >> 1) {
 				if (GameRandom.nextInt(10) == 0) {
 					body.setHappiness(Happiness.VERY_SAD);
 					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.Press2), Const.HOLDMESSAGE, true,
@@ -533,7 +533,7 @@ public final class YukkuriAbuseDelegate {
 		if (body.isDead()) {
 			body.setMessage(GameMessages.getMessage(body, MessagePool.Action.Dying), true);
 			body.stay();
-			if (body.getBodyAgeState() != AgeState.ADULT) {
+			if (body.getAgeState() != AgeState.ADULT) {
 				body.setCrushed(true);
 			}
 		}
@@ -568,7 +568,7 @@ public final class YukkuriAbuseDelegate {
 		}
 
 		body.addLovePlayer(-500);
-		body.strike(body.getDamageLimitBase()[body.getBodyAgeState().ordinal()] / 5);
+		body.strike(body.getDamageLimitBase()[body.getAgeState().ordinal()] / 5);
 		body.setCalm();
 
 		body.setPikoMessage(GameMessages.getMessage(body, MessagePool.Action.Scream), true);
@@ -586,7 +586,7 @@ public final class YukkuriAbuseDelegate {
 	private void packInternal() {
 		body.setCanTalk(true);
 		body.closeAnal(false);
-		body.castrateBody(false);
+		body.castrateYukkuri(false);
 		body.setPacked(false);
 		peal();
 	}

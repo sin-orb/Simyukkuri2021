@@ -16,7 +16,7 @@ import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.world.bodylinked.Okazari.OkazariType;
 import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.Attitude;
-import org.simyukkuri.enums.BodyRank;
+import org.simyukkuri.enums.YukkuriRank;
 import org.simyukkuri.enums.CriticalDamegeType;
 import org.simyukkuri.enums.HairState;
 import org.simyukkuri.enums.ImageCode;
@@ -24,7 +24,7 @@ import org.simyukkuri.enums.Intelligence;
 import org.simyukkuri.enums.PlayStyle;
 import org.simyukkuri.enums.YukkuriType;
 import org.simyukkuri.logic.ToyLogic;
-import org.simyukkuri.system.BodyLayer;
+import org.simyukkuri.system.YukkuriLayer;
 import org.simyukkuri.system.MessagePool;
 import org.simyukkuri.util.GameEnvironment;
 import org.simyukkuri.util.GameMessages;
@@ -45,7 +45,7 @@ public class Reimu extends Yukkuri {
 	/** れいむベースファイル名 */
 	public static final String baseFileName = "reimu";
 
-	private static BufferedImage[][][][] imagePack = new BufferedImage[BodyRank.values().length][][][];
+	private static BufferedImage[][][][] imagePack = new BufferedImage[YukkuriRank.values().length][][][];
 	private static BufferedImage[][][] imagesKai = new BufferedImage[ImageCode.values().length][2][3];
 	private static BufferedImage[][][] imagesNora = new BufferedImage[ImageCode.values().length][2][3];
 	private static BufferedImage[][][][] imagesNagasi = new BufferedImage[ImageCode
@@ -69,22 +69,22 @@ public class Reimu extends Yukkuri {
 			return;
 
 		boolean res;
-		res = ModLoader.loadBodyImagePack(loader, imagesNora, directionOffset, ModLoader.getYkWordNora(), baseFileName,
+		res = ModLoader.loadYukkuriImagePack(loader, imagesNora, directionOffset, ModLoader.getYkWordNora(), baseFileName,
 				io);
 		if (!res) {
 			imagesNora = null;
 		}
-		res = ModLoader.loadBodyImagePack(loader, imagesKai, directionOffset, null, baseFileName, io);
+		res = ModLoader.loadYukkuriImagePack(loader, imagesKai, directionOffset, null, baseFileName, io);
 		if (!res) {
 			imagesKai = null;
 		}
-		imagePack[BodyRank.KAIYU.getImageIndex()] = imagesKai;
+		imagePack[YukkuriRank.KAIYU.getImageIndex()] = imagesKai;
 		if (imagesNora != null) {
-			imagePack[BodyRank.NORAYU.getImageIndex()] = imagesNora;
+			imagePack[YukkuriRank.NORAYU.getImageIndex()] = imagesNora;
 		} else {
-			imagePack[BodyRank.NORAYU.getImageIndex()] = imagesKai;
+			imagePack[YukkuriRank.NORAYU.getImageIndex()] = imagesKai;
 		}
-		res = ModLoader.loadBodyImagePack(loader, imagesNagasi, directionOffsetNagasi, ModLoader.getYkWordNagasi(),
+		res = ModLoader.loadYukkuriImagePack(loader, imagesNagasi, directionOffsetNagasi, ModLoader.getYkWordNagasi(),
 				baseFileName, io);
 		if (!res) {
 			imagesNagasi = null;
@@ -101,8 +101,8 @@ public class Reimu extends Yukkuri {
 	 * @param loader クラスローダ
 	 */
 	public static void loadIniFile(ClassLoader loader) {
-		AttachOffset = ModLoader.loadBodyIniMap(loader, ModLoader.getDataIniDir(), baseFileName);
-		baseSpeed = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataIniDir(), baseFileName, "speed");
+		AttachOffset = ModLoader.loadYukkuriIniMap(loader, ModLoader.getDataIniDir(), baseFileName);
+		baseSpeed = ModLoader.loadYukkuriIniMapForInt(loader, ModLoader.getDataIniDir(), baseFileName, "speed");
 	}
 
 	@Override
@@ -112,10 +112,10 @@ public class Reimu extends Yukkuri {
 	}
 
 	@Override
-	public int getImage(int type, int direction, BodyLayer layer, int index) {
+	public int getImage(int type, int direction, YukkuriLayer layer, int index) {
 		if (!isImageNagasiMode() || imagesNagasi == null) {
-			layer.getImage()[index] = imagePack[getBodyRank().getImageIndex()][type][direction
-					* directionOffset[type][0]][getBodyAgeState().ordinal()];
+			layer.getImage()[index] = imagePack[getRank().getImageIndex()][type][direction
+					* directionOffset[type][0]][getAgeState().ordinal()];
 			layer.getDir()[index] = direction * directionOffset[type][1];
 		} else {
 			// インターバル毎に初期化する
@@ -129,13 +129,13 @@ public class Reimu extends Yukkuri {
 			if (imageVariantState[type][1] == 1) {
 				int imageIndex = imageVariantState[type][0];
 				layer.getImage()[index] = imagesNagasi[type][direction
-						* directionOffsetNagasi[type][0]][getBodyAgeState()
+						* directionOffsetNagasi[type][0]][getAgeState()
 								.ordinal()][imageIndex];
 
 			} else {
 				int otherVersionCount = 0;
 				for (int i = 0; i < ModLoader.getMaxImgOtherVer(); i++) {
-					if (imagesNagasi[type][direction * directionOffsetNagasi[type][0]][getBodyAgeState().ordinal()][i
+					if (imagesNagasi[type][direction * directionOffsetNagasi[type][0]][getAgeState().ordinal()][i
 							+ 1] != null) {
 						otherVersionCount++;
 					}
@@ -145,11 +145,11 @@ public class Reimu extends Yukkuri {
 					int randomIndex = GameRandom.nextInt(otherVersionCount + 1);
 					imageVariantState[type][0] = randomIndex;
 					layer.getImage()[index] = imagesNagasi[type][direction
-							* directionOffsetNagasi[type][0]][getBodyAgeState().ordinal()][randomIndex];
+							* directionOffsetNagasi[type][0]][getAgeState().ordinal()][randomIndex];
 				} else {
 					imageVariantState[type][0] = 0;
 					layer.getImage()[index] = imagesNagasi[type][direction
-							* directionOffsetNagasi[type][0]][getBodyAgeState().ordinal()][0];
+							* directionOffsetNagasi[type][0]][getAgeState().ordinal()][0];
 				}
 
 				imageVariantState[type][1] = 1;
@@ -196,14 +196,14 @@ public class Reimu extends Yukkuri {
 		if (!canTransform())
 			return null;
 		// 大人であり、夫がいて夫がゲスではなく、自身がゲス
-		Yukkuri partner = org.simyukkuri.util.BodyRegistry.getBodyInstance(getPartner());
+		Yukkuri partner = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getPartner());
 		if (isAdult() && partner != null && !partner.isRude() && isRude()) {
 			if (GameRandom.nextInt(1000) == 0) {
 				return this;
 			}
 		}
 		// または、ゲスでいぶの子供である
-		Yukkuri mother = org.simyukkuri.util.BodyRegistry.getBodyInstance(getMother());
+		Yukkuri mother = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getMother());
 		if (!isAdult() && mother != null && mother.getType() == Deibu.type && mother.isRude()) {
 			// ゲスバカとドゲスは確実にでいぶ化
 			if ((isRude() && getIntelligence() != Intelligence.FOOL) || getAttitude() == Attitude.SUPER_SHITHEAD) {
@@ -248,8 +248,8 @@ public class Reimu extends Yukkuri {
 	@Override
 	@Transient
 	public String getMyName() {
-		if (getMyNames()[getBodyAgeState().ordinal()] != null) {
-			return getMyNames()[getBodyAgeState().ordinal()];
+		if (getMyNames()[getAgeState().ordinal()] != null) {
+			return getMyNames()[getAgeState().ordinal()];
 		}
 		return nameJ;
 	}
@@ -257,8 +257,8 @@ public class Reimu extends Yukkuri {
 	@Override
 	@Transient
 	public String getMyNameD() {
-		if (getMyNamesDamaged()[getBodyAgeState().ordinal()] != null) {
-			return getMyNamesDamaged()[getBodyAgeState().ordinal()];
+		if (getMyNamesDamaged()[getAgeState().ordinal()] != null) {
+			return getMyNamesDamaged()[getAgeState().ordinal()];
 		}
 		return getMyName();
 	}
@@ -284,7 +284,7 @@ public class Reimu extends Yukkuri {
 	// 胴体のベースグラフィックを返す
 	// mode[0] 正面向きか横向きか
 	@Override
-	public int getBodyBaseImage(BodyLayer layer) {
+	public int getImageIndex(YukkuriLayer layer) {
 		int direction = this.getDirection().ordinal();
 		int idx = 0;
 
@@ -595,7 +595,7 @@ public class Reimu extends Yukkuri {
 		setBoundary(boundary, braidBoundary);
 		setMsgType(YukkuriType.REIMU);
 		setShitType(YukkuriType.REIMU);
-		setBaseBodyFileName(baseFileName);
+		setBaseYukkuriFileName(baseFileName);
 		IniFileUtil.readYukkuriIniFile(this);
 	}
 

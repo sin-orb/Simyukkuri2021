@@ -51,7 +51,7 @@ class BedLogicTest {
         body.setY(100);
         body.setZ(0); // On floor
 
-        SimYukkuri.world.getCurrentMap().getBody().put(body.getObjId(), body);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(body.getObjId(), body);
     }
 
     @Test
@@ -309,7 +309,7 @@ class BedLogicTest {
         tarinai.setY(100);
         tarinai.setObjId(org.simyukkuri.enums.Numbering.INSTANCE.numberingObjId());
         tarinai.setUniqueID(org.simyukkuri.enums.Numbering.INSTANCE.numberingYukkuriID());
-        SimYukkuri.world.getCurrentMap().getBody().put(tarinai.getObjId(), tarinai);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(tarinai.getObjId(), tarinai);
         // line 43: isIdiot()=true → return false
         assertFalse(BedLogic.checkBed(tarinai));
     }
@@ -413,7 +413,7 @@ class BedLogicTest {
         remirya.setY(100);
         remirya.setObjId(org.simyukkuri.enums.Numbering.INSTANCE.numberingObjId());
         remirya.setUniqueID(org.simyukkuri.enums.Numbering.INSTANCE.numberingYukkuriID());
-        SimYukkuri.world.getCurrentMap().getBody().put(remirya.getObjId(), remirya);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(remirya.getObjId(), remirya);
         // line 168-170: canflyCheck()=true → wallMode=AgeState.ADULT.ordinal()
         assertDoesNotThrow(() -> BedLogic.searchBed(remirya));
     }

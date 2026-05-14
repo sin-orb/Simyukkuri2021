@@ -192,7 +192,7 @@ public class SuiSpeakeTest {
             Yukkuri b = createBody();
             // Use parameterized constructor with null bodies to ensure from=-1, target=-1
             SuiSpeake event = new SuiSpeake((Yukkuri) null, null, null, 1);
-            // from=null, target=null, nextBoolean=true → setBodyEventResMessage +
+            // from=null, target=null, nextBoolean=true → setEventResMessage +
             // addWorldEvent
             assertDoesNotThrow(() -> event.simpleEventAction(b));
         } finally {
@@ -453,7 +453,7 @@ public class SuiSpeakeTest {
         }
     }
 
-    // --- from==null, target!=null: no relationship → addBodyEvent ---
+    // --- from==null, target!=null: no relationship → addYukkuriEvent ---
     @Test
     public void testSimpleEventAction_fromNull_targetSui_noRelationship_doesNotThrow() {
         java.util.Random savedRND = SimYukkuri.RND;
@@ -777,8 +777,8 @@ public class SuiSpeakeTest {
         for (int i = 0; i < 3; i++) {
             spr[i] = new Sprite(10, 10, Sprite.PIVOT_CENTER_BOTTOM);
         }
-        b.setBodySpr(spr);
-        SimYukkuri.world.getCurrentMap().getBody().put(b.getUniqueID(), b);
+        b.setSpriteSet(spr);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(b.getUniqueID(), b);
         return b;
     }
 

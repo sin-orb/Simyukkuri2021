@@ -43,8 +43,8 @@ class GarbageChuteTest extends ItemTestBase {
         for (int i = 0; i < 3; i++) {
             spr[i] = new Sprite(10, 10, Sprite.PIVOT_CENTER_BOTTOM);
         }
-        b.setBodySpr(spr);
-        SimYukkuri.world.getCurrentMap().getBody().put(b.getUniqueID(), b);
+        b.setSpriteSet(spr);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(b.getUniqueID(), b);
         return b;
     }
 
@@ -146,10 +146,10 @@ class GarbageChuteTest extends ItemTestBase {
     void testGetSetBindBody() {
         GarbageChute item = new GarbageChute();
         Yukkuri b = createBody();
-        item.setBindBody(b);
-        assertEquals(b, item.getBindBody());
-        item.setBindBody(null);
-        assertNull(item.getBindBody());
+        item.setBoundYukkuri(b);
+        assertEquals(b, item.getBoundYukkuri());
+        item.setBoundYukkuri(null);
+        assertNull(item.getBoundYukkuri());
     }
 
     // --- upDate: empty bindObjList ---
@@ -273,7 +273,7 @@ class GarbageChuteTest extends ItemTestBase {
 
             assertEquals(0, item.objHitProcess(body));
 
-            assertSame(body, item.getBindBody());
+            assertSame(body, item.getBoundYukkuri());
             assertTrue(item.getBindObjList().contains(body));
             assertEquals(Happiness.VERY_SAD, body.getHappiness());
             assertTrue(body.isFallingUnderGround());

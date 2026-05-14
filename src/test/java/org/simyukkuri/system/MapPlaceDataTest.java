@@ -47,7 +47,7 @@ import org.simyukkuri.entity.core.world.item.House;
 import org.simyukkuri.entity.core.world.item.MachinePress;
 import org.simyukkuri.entity.core.world.item.Mixer;
 import org.simyukkuri.entity.core.world.item.OrangePool;
-import org.simyukkuri.entity.core.world.item.ProcesserPlate;
+import org.simyukkuri.entity.core.world.item.ProcessorPlate;
 import org.simyukkuri.entity.core.world.item.ProductChute;
 import org.simyukkuri.entity.core.world.item.StickyPlate;
 import org.simyukkuri.entity.core.world.item.Stone;
@@ -163,7 +163,7 @@ class MapPlaceDataTest {
     void testGetters() {
         MapPlaceData data = new MapPlaceData(1);
         assertEquals(1, data.getMapIndex());
-        assertNotNull(data.getBody());
+        assertNotNull(data.getYukkuriMap());
         assertNotNull(data.getShit());
     }
 
@@ -202,8 +202,8 @@ class MapPlaceDataTest {
     void testSetGetBody() {
         MapPlaceData data = new MapPlaceData(0);
         Map<Integer, Yukkuri> m = new HashMap<>();
-        data.setBody(m);
-        assertEquals(m, data.getBody());
+        data.setYukkuriMap(m);
+        assertEquals(m, data.getYukkuriMap());
     }
 
     // --- shit ---
@@ -374,7 +374,7 @@ class MapPlaceDataTest {
         assertEquals(m, data.getProductchute());
     }
 
-    // --- stickyPlate / hotPlate / processerPlate / mixer / autoFeeder /
+    // --- stickyPlate / hotPlate / processorPlate / mixer / autoFeeder /
     // machinePress ---
 
     @Test
@@ -394,11 +394,11 @@ class MapPlaceDataTest {
     }
 
     @Test
-    void testSetGetProcesserPlate() {
+    void testSetGetProcessorPlate() {
         MapPlaceData data = new MapPlaceData(0);
-        Map<Integer, ProcesserPlate> m = new HashMap<>();
-        data.setProcesserPlate(m);
-        assertEquals(m, data.getProcesserPlate());
+        Map<Integer, ProcessorPlate> m = new HashMap<>();
+        data.setProcessorPlate(m);
+        assertEquals(m, data.getProcessorPlate());
     }
 
     @Test

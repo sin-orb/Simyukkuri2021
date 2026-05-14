@@ -107,7 +107,7 @@ public class EventLogicTest {
         MockEventPacket event = new MockEventPacket();
 
         // Should not crash - uses default HOLDMESSAGE count
-        EventLogic.addBodyEvent(target, event, speaker, "test message");
+        EventLogic.addYukkuriEvent(target, event, speaker, "test message");
 
         // Event should be added to target's event list
         assertEquals(1, target.getEventList().size(), "Event should be added to body");
@@ -120,7 +120,7 @@ public class EventLogicTest {
         MockEventPacket event = new MockEventPacket();
 
         // Should not crash - uses custom count
-        EventLogic.addBodyEvent(target, event, speaker, "test message", 100);
+        EventLogic.addYukkuriEvent(target, event, speaker, "test message", 100);
 
         // Event should be added to target's event list
         assertEquals(1, target.getEventList().size(), "Event should be added to body");
@@ -132,7 +132,7 @@ public class EventLogicTest {
         Reimu speaker = new Reimu();
         MockEventPacket event = new MockEventPacket();
 
-        EventLogic.addBodyEvent(target, event, speaker, "body-message", 24);
+        EventLogic.addYukkuriEvent(target, event, speaker, "body-message", 24);
 
         assertEquals(1, target.getEventList().size());
         assertSame(event, target.getEventList().get(0));
@@ -146,7 +146,7 @@ public class EventLogicTest {
         MockEventPacket event = new MockEventPacket();
 
         // Should not crash with null message body
-        EventLogic.addBodyEvent(target, event, null, null);
+        EventLogic.addYukkuriEvent(target, event, null, null);
 
         // Event should be added to target's event list
         assertEquals(1, target.getEventList().size(), "Event should be added to body");
@@ -202,12 +202,12 @@ public class EventLogicTest {
         assertNotNull(yukkuri.getCurrentEvent());
     }
 
-    // --- checkBodyEvent ---
+    // --- checkYukkuriEvent ---
 
     @Test
     public void testCheckBodyEvent_noEvents_returnsNull() {
         Reimu yukkuri = new Reimu();
-        assertNull(EventLogic.checkBodyEvent(yukkuri));
+        assertNull(EventLogic.checkYukkuriEvent(yukkuri));
     }
 
     @Test
@@ -215,7 +215,7 @@ public class EventLogicTest {
         Reimu yukkuri = new Reimu();
         MockSimpleEventTruePacket event = new MockSimpleEventTruePacket();
         yukkuri.getEventList().add(event);
-        EventLogic.checkBodyEvent(yukkuri); // simpleEventAction=true → removed
+        EventLogic.checkYukkuriEvent(yukkuri); // simpleEventAction=true → removed
         assertEquals(0, yukkuri.getEventList().size());
     }
 
@@ -224,7 +224,7 @@ public class EventLogicTest {
         Reimu yukkuri = new Reimu();
         MockCheckResponseTruePacket event = new MockCheckResponseTruePacket();
         yukkuri.getEventList().add(event);
-        EventPacket result = EventLogic.checkBodyEvent(yukkuri);
+        EventPacket result = EventLogic.checkYukkuriEvent(yukkuri);
         assertNotNull(result);
     }
 
@@ -302,7 +302,7 @@ public class EventLogicTest {
         assertDoesNotThrow(() -> new EventLogic());
     }
 
-    // --- checkBodyEvent: countDown でイベント除去 ---
+    // --- checkYukkuriEvent: countDown でイベント除去 ---
 
     @Test
     public void testCheckBodyEvent_countDownTrue_removesEvent() {
@@ -310,7 +310,7 @@ public class EventLogicTest {
         Reimu yukkuri = new Reimu();
         MockCountDownEvent event = new MockCountDownEvent();
         yukkuri.getEventList().add(event);
-        assertNull(EventLogic.checkBodyEvent(yukkuri));
+        assertNull(EventLogic.checkYukkuriEvent(yukkuri));
         assertEquals(0, yukkuri.getEventList().size(), "countDown=true so event should be removed");
     }
 
@@ -323,7 +323,7 @@ public class EventLogicTest {
         MockCountDownEvent event2 = new MockCountDownEvent();
         yukkuri.getEventList().add(event1);
         yukkuri.getEventList().add(event2);
-        EventPacket result = EventLogic.checkBodyEvent(yukkuri);
+        EventPacket result = EventLogic.checkYukkuriEvent(yukkuri);
         assertNotNull(result);
         assertEquals(0, yukkuri.getEventList().size(), "both events should be removed");
     }
@@ -334,27 +334,27 @@ public class EventLogicTest {
     public void testCheckSimpleWorldEvent_FromEqualsBody_Skips() {
         Reimu yukkuri = new Reimu();
         yukkuri.setUniqueID(4001);
-        org.simyukkuri.SimYukkuri.world.getCurrentMap().getBody().put(4001, yukkuri);
+        org.simyukkuri.SimYukkuri.world.getCurrentMap().getYukkuriMap().put(4001, yukkuri);
 
         MockEventPacket event = new MockEventPacket(); // simpleEventAction → sets wasSimpleActionCalled
         event.setFrom(yukkuri); // from = 4001
         org.simyukkuri.SimYukkuri.world.getCurrentMap().getEvent().add(event);
 
-        EventLogic.checkSimpleWorldEvent(yukkuri); // getBodyInstance(4001)==yukkuri → from==b → skip
+        EventLogic.checkSimpleWorldEvent(yukkuri); // getYukkuriMap(4001)==yukkuri → from==b → skip
         assertFalse(event.wasSimpleActionCalled, "simpleEventAction should be skipped when from==b");
 
         org.simyukkuri.SimYukkuri.world.getCurrentMap().getEvent().clear();
-        org.simyukkuri.SimYukkuri.world.getCurrentMap().getBody().remove(4001);
+        org.simyukkuri.SimYukkuri.world.getCurrentMap().getYukkuriMap().remove(4001);
     }
 
-    // --- checkSimpleBodyEvent: 完全未カバー (lines 154-162) ---
+    // --- checkSimpleYukkuriEvent: 完全未カバー (lines 154-162) ---
 
     @Test
     public void testCheckSimpleBodyEvent_simpleTrue_removed() {
         Reimu yukkuri = new Reimu();
         MockSimpleEventTruePacket event = new MockSimpleEventTruePacket();
         yukkuri.getEventList().add(event);
-        EventLogic.checkSimpleBodyEvent(yukkuri);
+        EventLogic.checkSimpleYukkuriEvent(yukkuri);
         assertEquals(0, yukkuri.getEventList().size(), "simpleEventAction=true → removed");
     }
 
@@ -363,7 +363,7 @@ public class EventLogicTest {
         Reimu yukkuri = new Reimu();
         MockEventPacket event = new MockEventPacket(); // simpleEventAction returns false
         yukkuri.getEventList().add(event);
-        EventLogic.checkSimpleBodyEvent(yukkuri);
+        EventLogic.checkSimpleYukkuriEvent(yukkuri);
         assertEquals(1, yukkuri.getEventList().size(), "simpleEventAction=false → kept");
     }
 
@@ -416,7 +416,7 @@ public class EventLogicTest {
         org.simyukkuri.SimYukkuri.world.getCurrentMap().getEvent().clear();
     }
 
-    // --- checkBodyEvent: countDown=false → イベント残留 (line 123 false branch) ---
+    // --- checkYukkuriEvent: countDown=false → イベント残留 (line 123 false branch) ---
 
     @Test
     public void testCheckBodyEvent_countDownFalse_keepsEvent() {
@@ -424,7 +424,7 @@ public class EventLogicTest {
         Reimu yukkuri = new Reimu();
         MockEventPacket event = new MockEventPacket(); // countDown not overridden → false
         yukkuri.getEventList().add(event);
-        assertNull(EventLogic.checkBodyEvent(yukkuri));
+        assertNull(EventLogic.checkYukkuriEvent(yukkuri));
         assertEquals(1, yukkuri.getEventList().size(), "countDown=false なのでイベントは残るはず");
     }
 
@@ -534,7 +534,7 @@ public class EventLogicTest {
             yukkuri.getEventList().add(selected);
             yukkuri.getEventList().add(trailing);
 
-            EventPacket result = EventLogic.checkBodyEvent(yukkuri);
+            EventPacket result = EventLogic.checkYukkuriEvent(yukkuri);
 
             assertSame(selected, result);
             assertEquals(1, yukkuri.getEventList().size());
@@ -550,7 +550,7 @@ public class EventLogicTest {
             yukkuri.getEventList().add(simple);
             yukkuri.getEventList().add(trailing);
 
-            EventLogic.checkSimpleBodyEvent(yukkuri);
+            EventLogic.checkSimpleYukkuriEvent(yukkuri);
 
             assertEquals(1, yukkuri.getEventList().size());
             assertSame(trailing, yukkuri.getEventList().get(0));

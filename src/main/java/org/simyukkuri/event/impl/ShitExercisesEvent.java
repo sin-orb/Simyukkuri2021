@@ -14,7 +14,7 @@ import org.simyukkuri.event.EventPacket;
 import org.simyukkuri.event.EventPacket.EventPriority;
 import org.simyukkuri.event.EventPacket.UpdateState;
 import org.simyukkuri.field.impl.Barrier;
-import org.simyukkuri.logic.BodyLogic;
+import org.simyukkuri.logic.YukkuriLogic;
 import org.simyukkuri.system.MessagePool;
 import org.simyukkuri.util.GameMessages;
 import org.simyukkuri.util.GameRandom;
@@ -104,7 +104,7 @@ public class ShitExercisesEvent extends EventPacket {
 
 	@Override
 	public boolean simpleEventAction(Yukkuri body) {
-		Yukkuri sourceBody = org.simyukkuri.util.BodyRegistry.getBodyInstance(getFrom());
+		Yukkuri sourceBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
 		if (sourceBody == null || sourceBody.isShutmouth()) {
 			return true;
 		}
@@ -116,7 +116,7 @@ public class ShitExercisesEvent extends EventPacket {
 	// また、イベント優先度も必要に応じて設定できる
 	@Override
 	public boolean checkEventResponse(Yukkuri body) {
-		Yukkuri sourceBody = org.simyukkuri.util.BodyRegistry.getBodyInstance(getFrom());
+		Yukkuri sourceBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
 		if (sourceBody == null)
 			return false;
 		boolean accepted = false;
@@ -170,7 +170,7 @@ public class ShitExercisesEvent extends EventPacket {
 	// 親→子供→次のステート、の順で処理をする
 	@Override
 	public UpdateState update(Yukkuri body) {
-		Yukkuri sourceBody = org.simyukkuri.util.BodyRegistry.getBodyInstance(getFrom());
+		Yukkuri sourceBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
 		if (body == null || sourceBody == null) {
 			return UpdateState.ABORT;
 		}
@@ -219,7 +219,7 @@ public class ShitExercisesEvent extends EventPacket {
 			if (state != STATE.GO) {
 				body.stay();
 			} else {
-				int collisionX = BodyLogic.calcCollisionX(body, sourceBody);
+				int collisionX = YukkuriLogic.calcCollisionX(body, sourceBody);
 				body.moveTo(sourceBody.getX() + collisionX * 2, sourceBody.getY());
 			}
 			return null;
@@ -233,7 +233,7 @@ public class ShitExercisesEvent extends EventPacket {
 			}
 			fromWaitCount++;
 
-			List<Yukkuri> childrenList = BodyLogic.createActiveChildList(sourceBody, false);
+			List<Yukkuri> childrenList = YukkuriLogic.createActiveChildList(sourceBody, false);
 			if (childrenList == null || childrenList.isEmpty()) {
 				return UpdateState.ABORT;
 			}
@@ -256,7 +256,7 @@ public class ShitExercisesEvent extends EventPacket {
 						sourceBody.setMessage(
 								GameMessages.getMessage(sourceBody, MessagePool.Action.ShitExercisesGOFrom), true);
 					}
-					boolean gathered = BodyLogic.gatheringYukkuriFront(sourceBody, childrenList, this);
+					boolean gathered = YukkuriLogic.gatheringYukkuriFront(sourceBody, childrenList, this);
 					int distanceToToilet = 0;
 					Entity targetObject = sourceBody.takeMappedObj(this.target);
 					if (targetObject != null) {
@@ -272,7 +272,7 @@ public class ShitExercisesEvent extends EventPacket {
 					break;
 				case WAIT:
 					if (checkWait(sourceBody, waitTicks)) {
-						sourceBody.setBodyEventResMessage(
+						sourceBody.setEventResMessage(
 								GameMessages.getMessage(sourceBody, MessagePool.Action.ShitExercisesWAITFrom), 52, true,
 								false);
 						state = STATE.START;
@@ -283,7 +283,7 @@ public class ShitExercisesEvent extends EventPacket {
 				case START:
 					if (checkWait(sourceBody, waitTicks)) {
 						if (!actionFlag) {
-							sourceBody.setBodyEventResMessage(
+							sourceBody.setEventResMessage(
 									GameMessages.getMessage(sourceBody, MessagePool.Action.ShitExercisesSTARTFrom), 52,
 									true,
 									false);
@@ -299,7 +299,7 @@ public class ShitExercisesEvent extends EventPacket {
 				case YURAYURA:
 					if (checkWait(sourceBody, waitTicks)) {
 						if (!actionFlag) {
-							sourceBody.setBodyEventResMessage(
+							sourceBody.setEventResMessage(
 									GameMessages.getMessage(sourceBody, MessagePool.Action.ShitExercisesYURAYURAFrom),
 									52, true,
 									false);
@@ -315,7 +315,7 @@ public class ShitExercisesEvent extends EventPacket {
 				case NOBINOBI:
 					if (checkWait(sourceBody, waitTicks)) {
 						if (!actionFlag) {
-							sourceBody.setBodyEventResMessage(
+							sourceBody.setEventResMessage(
 									GameMessages.getMessage(sourceBody, MessagePool.Action.ShitExercisesNOBINOBIFrom),
 									52, true,
 									false);
@@ -331,7 +331,7 @@ public class ShitExercisesEvent extends EventPacket {
 				case POKAPOKA:
 					if (checkWait(sourceBody, waitTicks)) {
 						if (!actionFlag) {
-							sourceBody.setBodyEventResMessage(
+							sourceBody.setEventResMessage(
 									GameMessages.getMessage(sourceBody, MessagePool.Action.ShitExercisesPOKAPOKAFrom),
 									52,
 									true, false);
@@ -347,7 +347,7 @@ public class ShitExercisesEvent extends EventPacket {
 				case UNUN:
 					if (checkWait(sourceBody, waitTicks)) {
 						if (!actionFlag) {
-							sourceBody.setBodyEventResMessage(
+							sourceBody.setEventResMessage(
 									GameMessages.getMessage(sourceBody, MessagePool.Action.ShitExercisesUNUNFrom), 52,
 									true,
 									false);
@@ -365,7 +365,7 @@ public class ShitExercisesEvent extends EventPacket {
 				case END:
 					if (checkWait(sourceBody, waitTicks)) {
 						if (!actionFlag) {
-							sourceBody.setBodyEventResMessage(
+							sourceBody.setEventResMessage(
 									GameMessages.getMessage(sourceBody, MessagePool.Action.ShitExercisesENDFrom), 52,
 									true, false);
 							sourceBody.stay(stayTicks);
@@ -381,7 +381,7 @@ public class ShitExercisesEvent extends EventPacket {
 			switch (state) {
 				case GO:
 					if (Barrier.onBarrier(body.getX(), body.getY(), sourceBody.getX(), sourceBody.getY(),
-							Barrier.MAP_BODY[body.getBodyAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
+							Barrier.MAP_BODY[body.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
 						return UpdateState.ABORT;
 					}
 					if (body.isDontMove()) {
@@ -394,7 +394,7 @@ public class ShitExercisesEvent extends EventPacket {
 					break;
 				case WAIT:
 					if (checkWait(body, waitTicks)) {
-						body.setBodyEventResMessage(GameMessages.getMessage(body, MessagePool.Action.ShitExercisesWAIT),
+						body.setEventResMessage(GameMessages.getMessage(body, MessagePool.Action.ShitExercisesWAIT),
 								52, true,
 								false);
 						body.addMemories(5);
@@ -403,7 +403,7 @@ public class ShitExercisesEvent extends EventPacket {
 					break;
 				case START:
 					if (actionFlag && checkWait(body, waitTicks)) {
-						body.setBodyEventResMessage(
+						body.setEventResMessage(
 								GameMessages.getMessage(body, MessagePool.Action.ShitExercisesSTART), 52, true,
 								false);
 						body.stay(stayTicks);
@@ -412,7 +412,7 @@ public class ShitExercisesEvent extends EventPacket {
 					break;
 				case YURAYURA:
 					if (actionFlag && checkWait(body, waitTicks)) {
-						body.setBodyEventResMessage(
+						body.setEventResMessage(
 								GameMessages.getMessage(body, MessagePool.Action.ShitExercisesYURAYURA), 52,
 								true, false);
 						body.stay(stayTicks);
@@ -421,7 +421,7 @@ public class ShitExercisesEvent extends EventPacket {
 					break;
 				case NOBINOBI:
 					if (actionFlag && checkWait(body, waitTicks)) {
-						body.setBodyEventResMessage(
+						body.setEventResMessage(
 								GameMessages.getMessage(body, MessagePool.Action.ShitExercisesNOBINOBI), 52,
 								true, false);
 						body.setNobinobi(true);
@@ -431,7 +431,7 @@ public class ShitExercisesEvent extends EventPacket {
 					break;
 				case POKAPOKA:
 					if (actionFlag && checkWait(body, waitTicks)) {
-						body.setBodyEventResMessage(
+						body.setEventResMessage(
 								GameMessages.getMessage(body, MessagePool.Action.ShitExercisesPOKAPOKA), 52,
 								true, false);
 						body.setFurifuri(true);
@@ -443,18 +443,18 @@ public class ShitExercisesEvent extends EventPacket {
 				case UNUN:
 					if (actionFlag) {
 						if (checkWait(body, waitTicks)) {
-							body.setBodyEventResMessage(
+							body.setEventResMessage(
 									GameMessages.getMessage(body, MessagePool.Action.ShitExercisesUNUN), 52,
 									true, false);
 							body.setFurifuri(true);
 							if (!body.isAnalClose() && !body.isHasPants()) {
-								if (body.getBodyAgeState() == AgeState.BABY) {
+								if (body.getAgeState() == AgeState.BABY) {
 									body.setHappiness(Happiness.VERY_HAPPY);
 									body.addStress(250);
 									if (GameRandom.nextInt(4) == 0) {
 										body.makeDirty(true);
-										int collisionX = BodyLogic.calcCollisionX(body, sourceBody);
-										body.moveToBody(sourceBody, sourceBody.getX() + collisionX, sourceBody.getY());
+										int collisionX = YukkuriLogic.calcCollisionX(body, sourceBody);
+										body.moveToYukkuri(sourceBody, sourceBody.getX() + collisionX, sourceBody.getY());
 										body.setTargetBind(true);
 									}
 								}

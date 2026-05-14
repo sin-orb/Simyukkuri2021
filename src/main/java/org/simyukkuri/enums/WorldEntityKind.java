@@ -21,7 +21,7 @@ public enum WorldEntityKind {
 	YUNBA(org.simyukkuri.entity.core.world.item.Yunba.class),
 	STICKYPLATE(org.simyukkuri.entity.core.world.item.StickyPlate.class),
 	HOTPLATE(org.simyukkuri.entity.core.world.item.HotPlate.class),
-	PROCESSERPLATE(org.simyukkuri.entity.core.world.item.ProcesserPlate.class),
+	PROCESSORPLATE(org.simyukkuri.entity.core.world.item.ProcessorPlate.class),
 	MIXER(org.simyukkuri.entity.core.world.item.Mixer.class),
 	AUTOFEEDER(org.simyukkuri.entity.core.world.item.AutoFeeder.class),
 	SUI(org.simyukkuri.entity.core.world.item.Sui.class),

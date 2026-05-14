@@ -114,28 +114,28 @@ public final class FoodArrivalActionPolicy {
 					candidateBody.bodyInjure();
 					if (body.canflyCheck()) {
 						body.clearActions();
-						EventLogic.addBodyEvent(body, new FlyingEatEvent(body, candidateBody, null, 1), null, null);
+						EventLogic.addYukkuriEvent(body, new FlyingEatEvent(body, candidateBody, null, 1), null, null);
 					} else {
 						eatFood(body, FoodType.BODY, Math.min(body.getEatAmount(), candidateBody.getAnkoAmount()));
-						candidateBody.eatBody(Math.min(body.getEatAmount(), candidateBody.getAnkoAmount()), body);
+						candidateBody.eatYukkuri(Math.min(body.getEatAmount(), candidateBody.getAnkoAmount()), body);
 						if (candidateBody.isSick()) {
 							body.addSickPeriod(100);
 						}
 					}
-					Yukkuri motherBody = org.simyukkuri.util.BodyRegistry.getBodyInstance(candidateBody.getMother());
+					Yukkuri motherBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(candidateBody.getMother());
 					if (GameRandom.nextInt(3) == 0 && motherBody != null && !motherBody.isDead()
 							&& !motherBody.isRemoved()) {
 						motherBody.clearEvent();
 						motherBody.setPanic(false, null);
 						motherBody.setPeropero(false);
 						motherBody.setAngry();
-						EventLogic.addBodyEvent(motherBody, new KillPredeatorEvent(motherBody, body, null, 10), null,
+						EventLogic.addYukkuriEvent(motherBody, new KillPredeatorEvent(motherBody, body, null, 10), null,
 								null);
 					}
 				} else {
 					if (body.isRaper() && candidateBody.isUnBirth()) {
 						eatFood(body, FoodType.BODY, Math.min(body.getEatAmount(), candidateBody.getAnkoAmount()));
-						candidateBody.eatBody(Math.min(body.getEatAmount(), candidateBody.getAnkoAmount()), body);
+						candidateBody.eatYukkuri(Math.min(body.getEatAmount(), candidateBody.getAnkoAmount()), body);
 						if (candidateBody.isSick()) {
 							body.addSickPeriod(100);
 						}
@@ -147,10 +147,10 @@ public final class FoodArrivalActionPolicy {
 				}
 			} else {
 				eatFood(body, FoodType.BODY, Math.min(body.getEatAmount(), candidateBody.getAnkoAmount()));
-				candidateBody.eatBody(Math.min(body.getEatAmount(), candidateBody.getAnkoAmount()));
-				if (!FoodLogic.checkCanEatBody(body, candidateBody)) {
+				candidateBody.eatYukkuri(Math.min(body.getEatAmount(), candidateBody.getAnkoAmount()));
+				if (!FoodLogic.checkCanEatYukkuri(body, candidateBody)) {
 					body.clearActions();
-					EventLogic.addBodyEvent(body, new EatBodyEvent(body, candidateBody, null, 30), null, null);
+					EventLogic.addYukkuriEvent(body, new EatBodyEvent(body, candidateBody, null, 30), null, null);
 				}
 				if (candidateBody.isSick() && GameRandom.nextBoolean()) {
 					body.forceSetSick();
@@ -158,7 +158,7 @@ public final class FoodArrivalActionPolicy {
 			}
 		} else if (targetObject instanceof Stalk) {
 			Stalk stalk = (Stalk) targetObject;
-			Yukkuri plantBody = GameWorld.get().getCurrentMap().getBody().get(stalk.getPlantYukkuri());
+			Yukkuri plantBody = GameWorld.get().getCurrentMap().getYukkuriMap().get(stalk.getPlantYukkuri());
 			if (stalk.getZ() == 0 && plantBody == null) {
 				eatFood(body, FoodType.STALK, Math.min(body.getEatAmount(), stalk.getAmount()));
 				stalk.eatStalk(Math.min(body.getEatAmount(), stalk.getAmount()));

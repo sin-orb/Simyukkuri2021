@@ -45,15 +45,15 @@ public class NonYukkuriDiseaseEstrusTest {
     private StubBody createBody(AgeState age) {
         StubBody b = new StubBody();
         for (int i = 0; i < 3; i++) {
-            b.getBodySpr()[i] = new Sprite();
-            b.getBodySpr()[i].setImageW(100);
-            b.getBodySpr()[i].setImageH(100);
+            b.getSpriteSet()[i] = new Sprite();
+            b.getSpriteSet()[i].setImageW(100);
+            b.getSpriteSet()[i].setImageH(100);
             b.getExpandSpr()[i] = new Sprite();
             b.getBraidSpr()[i] = new Sprite();
         }
         b.setAgeState(age);
         b.setMsgType(YukkuriType.REIMU);
-        SimYukkuri.world.getCurrentMap().getBody().put(b.getUniqueID(), b);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(b.getUniqueID(), b);
         return b;
     }
 
@@ -68,7 +68,7 @@ public class NonYukkuriDiseaseEstrusTest {
         target.setCriticalDamege(null);
         target.setExciting(false);
         target.setExciteProb(1);
-        target.setHungry(target.getHungryLimitBase()[target.getBodyAgeState().ordinal()]);
+        target.setHungry(target.getHungryLimitBase()[target.getAgeState().ordinal()]);
         target.setShit(0);
         target.setHasBraid(true);
         target.setDirty(false);
@@ -110,7 +110,7 @@ public class NonYukkuriDiseaseEstrusTest {
 
     private void invokeCheckNonYukkuriDisease(Yukkuri b) {
         try {
-            java.lang.reflect.Method m = Yukkuri.class.getDeclaredMethod("checkNonYukkuriDisease");
+            java.lang.reflect.Method m = Yukkuri.class.getDeclaredMethod("hasNonYukkuriDisease");
             m.setAccessible(true);
             m.invoke(b);
         } catch (Exception e) {

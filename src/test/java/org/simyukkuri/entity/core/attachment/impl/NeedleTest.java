@@ -147,7 +147,7 @@ public class NeedleTest {
         Yukkuri parent = createParent(AgeState.CHILD);
         Needle needle = new Needle(parent);
 
-        SimYukkuri.world.getCurrentMap().getBody().remove(parent.getUniqueID());
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().remove(parent.getUniqueID());
 
         BufferedImage image = needle.getImage(parent);
         assertNull(image);
@@ -215,7 +215,7 @@ public class NeedleTest {
         int origPivotX = needle.getPivotX();
         int origPivotY = needle.getPivotY();
 
-        SimYukkuri.world.getCurrentMap().getBody().remove(parent.getUniqueID());
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().remove(parent.getUniqueID());
 
         needle.resetBoundary();
 
@@ -379,8 +379,8 @@ public class NeedleTest {
         for (int i = 0; i < 3; i++) {
             spr[i] = new Sprite(10, 10, Sprite.PIVOT_CENTER_BOTTOM);
         }
-        parent.setBodySpr(spr);
-        SimYukkuri.world.getCurrentMap().getBody().put(parent.getUniqueID(), parent);
+        parent.setSpriteSet(spr);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(parent.getUniqueID(), parent);
         return parent;
     }
 

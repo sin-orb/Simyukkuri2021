@@ -22,7 +22,7 @@ import org.simyukkuri.entity.core.living.yukkuri.StubBodyAttributes;
 class BodyStressRuleTest {
 	private static final class StressBody extends StubBodyAttributes {
 		@Override
-		public int checkNonYukkuriDiseaseTolerance() {
+		public int getNonYukkuriDiseaseTolerance() {
 			return 100;
 		}
 	}
@@ -33,16 +33,16 @@ class BodyStressRuleTest {
 		int limit = body.getStressLimit();
 
 		body.setStress(limit * 2 / 5);
-		assertFalse(BodyStressRule.isStressful(body));
-		assertFalse(BodyStressRule.isVeryStressful(body));
+		assertFalse(YukkuriStressRule.isStressful(body));
+		assertFalse(YukkuriStressRule.isVeryStressful(body));
 
 		body.setStress(limit * 2 / 5 + 1);
-		assertTrue(BodyStressRule.isStressful(body));
-		assertFalse(BodyStressRule.isVeryStressful(body));
+		assertTrue(YukkuriStressRule.isStressful(body));
+		assertFalse(YukkuriStressRule.isVeryStressful(body));
 
 		body.setStress(limit * 3 / 5 + 1);
-		assertTrue(BodyStressRule.isStressful(body));
-		assertTrue(BodyStressRule.isVeryStressful(body));
+		assertTrue(YukkuriStressRule.isStressful(body));
+		assertTrue(YukkuriStressRule.isVeryStressful(body));
 	}
 
 	@Test
@@ -51,7 +51,7 @@ class BodyStressRuleTest {
 		body.setStress(body.getStressLimit());
 		body.setDead(true);
 
-		assertTrue(BodyStressRule.isStressful(body));
-		assertTrue(BodyStressRule.isVeryStressful(body));
+		assertTrue(YukkuriStressRule.isStressful(body));
+		assertTrue(YukkuriStressRule.isVeryStressful(body));
 	}
 }

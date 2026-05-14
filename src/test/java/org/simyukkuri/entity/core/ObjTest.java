@@ -817,7 +817,7 @@ public class ObjTest {
         Entity obj = new Entity();
         StubBody body = new StubBody();
         body.objId = 2222;
-        SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(body.getUniqueID(), body);
 
         assertEquals(body, obj.takeMappedObj(2222));
     }

@@ -23,7 +23,7 @@ import org.simyukkuri.entity.core.world.item.House;
 import org.simyukkuri.entity.core.world.item.MachinePress;
 import org.simyukkuri.entity.core.world.item.Mixer;
 import org.simyukkuri.entity.core.world.item.OrangePool;
-import org.simyukkuri.entity.core.world.item.ProcesserPlate;
+import org.simyukkuri.entity.core.world.item.ProcessorPlate;
 import org.simyukkuri.entity.core.world.item.ProductChute;
 import org.simyukkuri.entity.core.world.item.StickyPlate;
 import org.simyukkuri.entity.core.world.item.Stone;
@@ -311,7 +311,7 @@ public class GadgetMenu {
 				ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null, null),
 		HOT_PLATE(MainCategoryName.FLOOR, GameText.read("command_floor_hotplate"), HotPlate.class, 0,
 				ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null, null),
-		PROCESSER_PLATE(MainCategoryName.FLOOR, GameText.read("command_floor_process"), ProcesserPlate.class, 0,
+		PROCESSER_PLATE(MainCategoryName.FLOOR, GameText.read("command_floor_process"), ProcessorPlate.class, 0,
 				ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null, null),
 		FOOD_MAKER(MainCategoryName.FLOOR, GameText.read("command_floor_foodmaker"), FoodMaker.class, 0,
 				ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null, null),
@@ -1101,8 +1101,8 @@ public class GadgetMenu {
 	 * @param targetObject 対象オブジェクト(主にゆっくり)
 	 * @param method       実行したいメソッド名
 	 */
-	public static final void executeBodyMethod(MouseEvent e, Entity targetObject, String method) {
-		BodyMethodDispatcher.execute(e, targetObject, method);
+	public static final void executeYukkuriMethod(MouseEvent e, Entity targetObject, String method) {
+		YukkuriMethodDispatcher.execute(e, targetObject, method);
 	}
 
 	/**
@@ -1115,8 +1115,8 @@ public class GadgetMenu {
 	 * @param method       実行したいメソッド名
 	 * @param prm          指定パラメータ
 	 */
-	public static final void executeBodyMethod(MouseEvent e, Entity targetObject, String method, int prm) {
-		BodyMethodDispatcher.execute(e, targetObject, method, prm);
+	public static final void executeYukkuriMethod(MouseEvent e, Entity targetObject, String method, int prm) {
+		YukkuriMethodDispatcher.execute(e, targetObject, method, prm);
 	}
 
 	/**
@@ -1130,8 +1130,8 @@ public class GadgetMenu {
 	 * @param setMethod    実行したいメソッド名(その他用)
 	 * @param invMethod    反転実行系コマンド実行
 	 */
-	public static final void executeBodyMethod(MouseEvent e, Entity targetObject, String getMethod, String setMethod,
+	public static final void executeYukkuriMethod(MouseEvent e, Entity targetObject, String getMethod, String setMethod,
 			String invMethod) {
-		BodyMethodDispatcher.execute(e, targetObject, getMethod, setMethod, invMethod);
+		YukkuriMethodDispatcher.execute(e, targetObject, getMethod, setMethod, invMethod);
 	}
 }

@@ -28,7 +28,7 @@ import org.simyukkuri.enums.PublicRank;
 import org.simyukkuri.util.WorldTestHelper;
 
 /**
- * Tests for BodyUnunSlaveEmotionRule.
+ * Tests for YukkuriUnunSlaveEmotionRule.
  */
 public class BodyUnunSlaveEmotionRuleTest {
 
@@ -44,7 +44,7 @@ public class BodyUnunSlaveEmotionRuleTest {
 
 	@Test
 	void testCheckEmotionFromUnunSlave_returnsFalseForNull() {
-		assertFalse(BodyUnunSlaveEmotionRule.checkEmotionFromUnunSlave(null, null));
+		assertFalse(YukkuriUnunSlaveEmotionRule.checkEmotionFromUnunSlave(null, null));
 	}
 
 	@Test
@@ -58,6 +58,6 @@ public class BodyUnunSlaveEmotionRuleTest {
 		you.setPartner(me.getUniqueID());
 		SimYukkuri.RND = new ConstState(0);
 
-		assertDoesNotThrow(() -> BodyUnunSlaveEmotionRule.checkEmotionFromUnunSlave(me, you));
+		assertDoesNotThrow(() -> YukkuriUnunSlaveEmotionRule.checkEmotionFromUnunSlave(me, you));
 	}
 }

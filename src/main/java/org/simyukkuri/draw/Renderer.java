@@ -33,7 +33,7 @@ import org.simyukkuri.system.LoggerYukkuri;
 import org.simyukkuri.system.MainCommandUI;
 import org.simyukkuri.system.MapPlaceData;
 import org.simyukkuri.system.Sprite;
-import org.simyukkuri.util.BodyUtil;
+import org.simyukkuri.util.YukkuriUtil;
 import org.simyukkuri.util.GameEnvironment;
 import org.simyukkuri.util.GameWorld;
 import org.simyukkuri.visual.TerrainBillboard;
@@ -61,10 +61,10 @@ final class Renderer {
 
 			pane.getMsgList().clear();
 			MyPane.markList.clear();
-			Yukkuri selectedBody = MyPane.getSelectBody();
+			Yukkuri selectedBody = MyPane.getSelectedYukkuri();
 			if (selectedBody != null) {
 				if (selectedBody.isRemoved()) {
-					MyPane.setSelectBody(null);
+					MyPane.setSelectedYukkuri(null);
 					selectedBody = null;
 				} else {
 					MainCommandUI.showStatus(selectedBody);
@@ -114,13 +114,13 @@ final class Renderer {
 				switch (o.getObjType()) {
 					case YUKKURI: {
 						Yukkuri body = (Yukkuri) o;
-						if (body == MyPane.getSelectBody()) {
+						if (body == MyPane.getSelectedYukkuri()) {
 							selectedBodyCheck = body;
 						}
 						int direction = body.getDirection().ordinal();
 						body.updateSpriteSize();
-						bodyBaseSprite = body.getBodyBaseSpr();
-						bodyExpandedSprite = body.getBodyExpandSpr();
+						bodyBaseSprite = body.getSpriteSetite();
+						bodyExpandedSprite = body.getExpandedSpriteSet();
 						braidSprite = body.getBraidSprite();
 						int shadowHeight = body.getShadowH();
 						Translate.translate(body.getDrawOfsX(), body.getDrawOfsY(), pane.getTmpPoint());
@@ -164,7 +164,7 @@ final class Renderer {
 							MyPane.markList.add(bodyExpandedSprite.getScreenRect()[0]);
 						}
 						if (body.getBurialState() != org.simyukkuri.enums.BurialState.ALL) {
-							BodyUtil.drawBody(pane.getBackBufferG2(), pane, body);
+							YukkuriUtil.drawYukkuri(pane.getBackBufferG2(), pane, body);
 						}
 						if (body.getMessageBuffer() != null && !MyPane.isDisableScript()) {
 							pane.getMsgList().add(body);
@@ -273,9 +273,9 @@ final class Renderer {
 			}
 
 			if (selectedBodyCheck == null) {
-				MyPane.setSelectBody(null);
+				MyPane.setSelectedYukkuri(null);
 			}
-			selectedBody = MyPane.getSelectBody();
+			selectedBody = MyPane.getSelectedYukkuri();
 			if (selectedBody != null) {
 				Image[] select = IconPool.getCursorIconImageArray();
 				int st = IconPool.CursorIcon.SEL_0.ordinal();

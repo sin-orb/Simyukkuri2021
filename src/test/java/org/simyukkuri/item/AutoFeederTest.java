@@ -357,7 +357,7 @@ class AutoFeederTest extends ItemTestBase {
             // Create a body in the world body map that holds this food
             org.simyukkuri.entity.core.living.yukkuri.Yukkuri body = org.simyukkuri.util.WorldTestHelper.createBody();
             body.getCarryItems().put(org.simyukkuri.enums.TakeoutItemType.FOOD, food.objId);
-            SimYukkuri.world.getCurrentMap().getBody().put(body.objId, body);
+            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(body.objId, body);
 
             // food is NOT in world.food map → containsValue(food) is false
             // isTakenOut should find body holding food → returns true → food stays null

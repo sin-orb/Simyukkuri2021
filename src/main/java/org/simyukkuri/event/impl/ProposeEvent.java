@@ -8,7 +8,7 @@ import org.simyukkuri.enums.Intelligence;
 import org.simyukkuri.event.EventPacket;
 import org.simyukkuri.event.EventPacket.EventPriority;
 import org.simyukkuri.event.EventPacket.UpdateState;
-import org.simyukkuri.logic.BodyLogic;
+import org.simyukkuri.logic.YukkuriLogic;
 import org.simyukkuri.system.MessagePool;
 import org.simyukkuri.util.GameMessages;
 import org.simyukkuri.util.GameRandom;
@@ -58,8 +58,8 @@ public class ProposeEvent extends EventPacket {
 	// 参加チェック
 	@Override
 	public boolean checkEventResponse(Yukkuri body) {
-		Yukkuri targetBody = org.simyukkuri.util.BodyRegistry.getBodyInstance(getTo());
-		Yukkuri sourceBody = org.simyukkuri.util.BodyRegistry.getBodyInstance(getFrom());
+		Yukkuri targetBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getTo());
+		Yukkuri sourceBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
 		if (body == sourceBody || body == targetBody)
 			return true;
 
@@ -69,13 +69,13 @@ public class ProposeEvent extends EventPacket {
 	// イベント開始動作
 	@Override
 	public void start(Yukkuri body) {
-		Yukkuri targetBody = org.simyukkuri.util.BodyRegistry.getBodyInstance(getTo());
-		Yukkuri sourceBody = org.simyukkuri.util.BodyRegistry.getBodyInstance(getFrom());
+		Yukkuri targetBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getTo());
+		Yukkuri sourceBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
 		if (targetBody != null && sourceBody != null) {
 			targetBody.wakeup();
 			sourceBody.setCurrentEvent(this);
 			targetBody.setCurrentEvent(this);
-			int collisionX = BodyLogic.calcCollisionX(body, targetBody);
+			int collisionX = YukkuriLogic.calcCollisionX(body, targetBody);
 			if (sourceBody.canflyCheck()) {
 				sourceBody.moveToEvent(this, targetBody.getX() + collisionX, targetBody.getY(), targetBody.getZ());
 			} else {
@@ -88,15 +88,15 @@ public class ProposeEvent extends EventPacket {
 	// UpdateState.ABORTを返すとイベント終了
 	@Override
 	public UpdateState update(Yukkuri body) {
-		Yukkuri targetBody = org.simyukkuri.util.BodyRegistry.getBodyInstance(getTo());
-		Yukkuri sourceBody = org.simyukkuri.util.BodyRegistry.getBodyInstance(getFrom());
+		Yukkuri targetBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getTo());
+		Yukkuri sourceBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
 		if (sourceBody == null || targetBody == null || sourceBody.isDead() || sourceBody.isRemoved()
 				|| sourceBody.isNYD())
 			return UpdateState.ABORT;
 		// 相手が死んだか 相手が消えてしまったか非ゆっくり症発症したか取られたらイベント中断
 		if (targetBody.isDead() || targetBody.isRemoved() || targetBody.isNYD() || targetBody.isTaken()) {
 			sourceBody.setCalm();
-			sourceBody.setBodyEventResMessage(GameMessages.getMessage(sourceBody, MessagePool.Action.Surprise), 30,
+			sourceBody.setEventResMessage(GameMessages.getMessage(sourceBody, MessagePool.Action.Surprise), 30,
 					true,
 					false);
 			sourceBody.setHappiness(Happiness.VERY_SAD);
@@ -111,10 +111,10 @@ public class ProposeEvent extends EventPacket {
 			return UpdateState.ABORT;
 		}
 
-		int collisionX = BodyLogic.calcCollisionX(body, targetBody);
+		int collisionX = YukkuriLogic.calcCollisionX(body, targetBody);
 		// 相手がつかまれているとき
 		if (targetBody.isGrabbed()) {
-			sourceBody.setBodyEventResMessage(GameMessages.getMessage(sourceBody, MessagePool.Action.DontPreventUs), 30,
+			sourceBody.setEventResMessage(GameMessages.getMessage(sourceBody, MessagePool.Action.DontPreventUs), 30,
 					false, GameRandom.nextBoolean());
 			sourceBody.setForceFace(ImageCode.PUFF.ordinal());
 			sourceBody.setAngry();
@@ -128,12 +128,12 @@ public class ProposeEvent extends EventPacket {
 			// ランダムであきらめる
 			if (sourceBody.getIntelligence() != Intelligence.FOOL && GameRandom.nextInt(1500) == 0) {
 				if (GameRandom.nextBoolean()) {
-					sourceBody.setBodyEventResMessage(
+					sourceBody.setEventResMessage(
 							GameMessages.getMessage(sourceBody, MessagePool.Action.LamentNoYukkuri), 30, true, true);
 					sourceBody.setHappiness(Happiness.VERY_SAD);
 					sourceBody.setForceFace(ImageCode.CRYING.ordinal());
 				} else {
-					sourceBody.setBodyEventResMessage(
+					sourceBody.setEventResMessage(
 							GameMessages.getMessage(sourceBody, MessagePool.Action.LamentLowYukkuri), 30, true, true);
 					sourceBody.setHappiness(Happiness.SAD);
 					sourceBody.setForceFace(ImageCode.TIRED.ordinal());
@@ -166,11 +166,11 @@ public class ProposeEvent extends EventPacket {
 		targetBody.stay();
 		if (GameRandom.nextInt(20) == 0) {
 			if (GameRandom.nextBoolean())
-				sourceBody.setBodyEventResMessage(GameMessages.getMessage(sourceBody, MessagePool.Action.PleaseWait),
+				sourceBody.setEventResMessage(GameMessages.getMessage(sourceBody, MessagePool.Action.PleaseWait),
 						30,
 						true, false);
 			else
-				sourceBody.setBodyEventResMessage(GameMessages.getMessage(sourceBody, MessagePool.Action.Excite), 30,
+				sourceBody.setEventResMessage(GameMessages.getMessage(sourceBody, MessagePool.Action.Excite), 30,
 						true,
 						false);
 		}
@@ -181,8 +181,8 @@ public class ProposeEvent extends EventPacket {
 	// trueを返すとイベント終了
 	@Override
 	public boolean execute(Yukkuri body) {
-		Yukkuri targetBody = org.simyukkuri.util.BodyRegistry.getBodyInstance(getTo());
-		Yukkuri sourceBody = org.simyukkuri.util.BodyRegistry.getBodyInstance(getFrom());
+		Yukkuri targetBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getTo());
+		Yukkuri sourceBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
 		if (targetBody == null || sourceBody == null)
 			return true;
 		// to から呼ばれた場合は tick を進めない（2倍速防止）
@@ -194,7 +194,7 @@ public class ProposeEvent extends EventPacket {
 		// 相手がかびてるor食われてる時の挙動
 		if (sourceBody.findSick(targetBody) || targetBody.isEatenByAnimals() || targetBody.hasDisorder()) {
 			sourceBody.setCalm();
-			sourceBody.setBodyEventResMessage(GameMessages.getMessage(sourceBody, MessagePool.Action.Surprise), 30,
+			sourceBody.setEventResMessage(GameMessages.getMessage(sourceBody, MessagePool.Action.Surprise), 30,
 					true,
 					false);
 			sourceBody.setHappiness(Happiness.VERY_SAD);
@@ -223,7 +223,7 @@ public class ProposeEvent extends EventPacket {
 				sourceBody.setForceFace(ImageCode.VAIN.ordinal());
 			else
 				sourceBody.setForceFace(ImageCode.EMBARRASSED.ordinal());
-			sourceBody.setBodyEventResMessage(GameMessages.getMessage(sourceBody, MessagePool.Action.PleaseWait), 30,
+			sourceBody.setEventResMessage(GameMessages.getMessage(sourceBody, MessagePool.Action.PleaseWait), 30,
 					true,
 					false);
 			started = true;
@@ -242,7 +242,7 @@ public class ProposeEvent extends EventPacket {
 			// カップルの設定(ただし、ここではやる側のみ)
 			sourceBody.setPartner(targetBody.getUniqueID());
 			// 告白セリフ
-			sourceBody.setBodyEventResMessage(GameMessages.getMessage(sourceBody, MessagePool.Action.Propose), 30, true,
+			sourceBody.setEventResMessage(GameMessages.getMessage(sourceBody, MessagePool.Action.Propose), 30, true,
 					false);
 			sourceBody.stayPurupuru(50);
 			targetBody.setForceFace(ImageCode.EMBARRASSED.ordinal());
@@ -255,7 +255,7 @@ public class ProposeEvent extends EventPacket {
 			if (sayOK) {
 				targetBody.setForceFace(ImageCode.SMILE.ordinal());
 				targetBody.setPartner(sourceBody.getUniqueID());
-				targetBody.setBodyEventResMessage(GameMessages.getMessage(targetBody, MessagePool.Action.ProposeYes),
+				targetBody.setEventResMessage(GameMessages.getMessage(targetBody, MessagePool.Action.ProposeYes),
 						30, true,
 						false);
 				// ゲスほど幸福度は低い
@@ -301,12 +301,12 @@ public class ProposeEvent extends EventPacket {
 			// 失敗
 			else {
 				if (targetBody.findSick(sourceBody)) {
-					targetBody.setBodyEventResMessage(
+					targetBody.setEventResMessage(
 							GameMessages.getMessage(targetBody, MessagePool.Action.HateMoldyYukkuri),
 							30, true, false);
 					targetBody.setForceFace(ImageCode.PUFF.ordinal());
 				} else {
-					targetBody.setBodyEventResMessage(GameMessages.getMessage(targetBody, MessagePool.Action.ProposeNo),
+					targetBody.setEventResMessage(GameMessages.getMessage(targetBody, MessagePool.Action.ProposeNo),
 							30,
 							true, false);
 					if (targetBody.isRude()) {
@@ -359,9 +359,9 @@ public class ProposeEvent extends EventPacket {
 				sourceBody.clearActionsForEvent();
 				sourceBody.setExciting(true);
 				sourceBody.setForceFace(ImageCode.EXCITING.ordinal());
-				sourceBody.setBodyEventResMessage(GameMessages.getMessage(sourceBody, MessagePool.Action.LetsPlay), 30,
+				sourceBody.setEventResMessage(GameMessages.getMessage(sourceBody, MessagePool.Action.LetsPlay), 30,
 						true, false);
-				targetBody.setBodyEventResMessage(GameMessages.getMessage(targetBody, MessagePool.Action.OKcome), 30,
+				targetBody.setEventResMessage(GameMessages.getMessage(targetBody, MessagePool.Action.OKcome), 30,
 						true,
 						false);
 			}
@@ -369,7 +369,7 @@ public class ProposeEvent extends EventPacket {
 			else {
 				sourceBody.setHappiness(Happiness.VERY_SAD);
 				sourceBody.setForceFace(ImageCode.CRYING.ordinal());
-				sourceBody.setBodyEventResMessage(GameMessages.getMessage(sourceBody, MessagePool.Action.Heartbreak),
+				sourceBody.setEventResMessage(GameMessages.getMessage(sourceBody, MessagePool.Action.Heartbreak),
 						30,
 						true, false);
 				sourceBody.runAway(targetBody.getX(), targetBody.getY());
@@ -393,7 +393,7 @@ public class ProposeEvent extends EventPacket {
 	 */
 	public boolean acceptPropose(Yukkuri f, Yukkuri t) {
 		// 既婚
-		if (org.simyukkuri.util.BodyRegistry.getBodyInstance(t.getPartner()) != null)
+		if (org.simyukkuri.util.YukkuriLookup.getYukkuriById(t.getPartner()) != null)
 			return false;
 		// カビ発見
 		if (t.findSick(f))
@@ -411,8 +411,8 @@ public class ProposeEvent extends EventPacket {
 	// イベント終了処理
 	@Override
 	public void end(Yukkuri body) {
-		Yukkuri targetBody = org.simyukkuri.util.BodyRegistry.getBodyInstance(getTo());
-		Yukkuri sourceBody = org.simyukkuri.util.BodyRegistry.getBodyInstance(getFrom());
+		Yukkuri targetBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getTo());
+		Yukkuri sourceBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
 		if (sourceBody != null) {
 			sourceBody.setCalm();
 			sourceBody.setCurrentEvent(null);

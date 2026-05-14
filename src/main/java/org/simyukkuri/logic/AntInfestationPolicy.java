@@ -13,7 +13,7 @@ public final class AntInfestationPolicy {
 
 	public static void judgeNewAnt(Yukkuri body) {
 		int antProbability = 1;
-		switch (body.getBodyAgeState()) {
+		switch (body.getAgeState()) {
 			case BABY:
 				antProbability = 240000;
 				break;

@@ -21,7 +21,7 @@ import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.living.yukkuri.impl.HybridYukkuri;
 import org.simyukkuri.entity.core.living.yukkuri.impl.Reimu;
 import org.simyukkuri.enums.AgeState;
-import org.simyukkuri.system.BodyLayer;
+import org.simyukkuri.system.YukkuriLayer;
 import org.simyukkuri.system.MessagePool;
 
 /**
@@ -35,7 +35,7 @@ public class StabilityNPETest {
     @Test
     public void testHybridYukkuri_getImage_withNullElements_shouldNotThrow() {
         HybridYukkuri hybrid = new HybridYukkuri();
-        BodyLayer layer = new BodyLayer();
+        YukkuriLayer layer = new YukkuriLayer();
 
         // 1. images 配列自体が null の場合
         hybrid.setImages(null);

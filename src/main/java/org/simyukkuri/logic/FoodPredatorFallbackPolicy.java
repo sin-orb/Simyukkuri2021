@@ -35,7 +35,7 @@ public final class FoodPredatorFallbackPolicy {
 		// 非常食検索
 		for (Map.Entry<Integer, Stalk> entry : GameWorld.get().getCurrentMap().getStalk().entrySet()) {
 			Stalk stalk = entry.getValue();
-			Yukkuri plantBody = GameWorld.get().getCurrentMap().getBody().get(stalk.getPlantYukkuri());
+			Yukkuri plantBody = GameWorld.get().getCurrentMap().getYukkuriMap().get(stalk.getPlantYukkuri());
 			if (plantBody != null) {
 				if (plantBody == body) {
 					continue;
@@ -51,7 +51,7 @@ public final class FoodPredatorFallbackPolicy {
 				if (babyList != null && babyList.size() != 0) {
 					boolean hasBaby = false;
 					for (int babyId : babyList) {
-						Yukkuri baby = org.simyukkuri.util.BodyRegistry.getBodyInstance(babyId);
+						Yukkuri baby = org.simyukkuri.util.YukkuriLookup.getYukkuriById(babyId);
 						if (baby == null) {
 							continue;
 						}

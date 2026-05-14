@@ -23,7 +23,7 @@ public final class FoodUnunSlaveSearchPolicy {
 	public static Entity searchFoodForUnunSlave(Yukkuri body, boolean[] forceEat) {
 		Entity targetObject = null;
 		int minDistance = body.getEyesightBase();
-		int wallMode = body.getBodyAgeState().ordinal();
+		int wallMode = body.getAgeState().ordinal();
 
 		forceEat[0] = false;
 
@@ -51,7 +51,7 @@ public final class FoodUnunSlaveSearchPolicy {
 					}
 					if (FoodLogic.checkTakeout(body, shit)) {
 						boolean hasOtherTarget = false;
-						for (Map.Entry<Integer, Yukkuri> entry2 : GameWorld.get().getCurrentMap().getBody()
+						for (Map.Entry<Integer, Yukkuri> entry2 : GameWorld.get().getCurrentMap().getYukkuriMap()
 								.entrySet()) {
 							Yukkuri otherBody = entry2.getValue();
 							if (body == otherBody || otherBody == null || otherBody.isDead() || otherBody.isRemoved()) {
@@ -93,12 +93,12 @@ public final class FoodUnunSlaveSearchPolicy {
 		}
 
 		if (targetObject == null) {
-			for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
+			for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getYukkuriMap().entrySet()) {
 				Yukkuri candidateBody = entry.getValue();
 				if (body == candidateBody) {
 					continue;
 				}
-				if (!FoodLogic.checkCanEatBody(body, candidateBody)) {
+				if (!FoodLogic.checkCanEatYukkuri(body, candidateBody)) {
 					continue;
 				}
 				if (!body.isSoHungry() || !body.isTooHungry()) {

@@ -145,7 +145,7 @@ public class FoodMaker extends WorldEntity {
 					} else {// 通常種・
 						stockFood = 0;
 					}
-					switch (b.getBodyAgeState()) {
+					switch (b.getAgeState()) {
 						case BABY:
 							foodAmount += 1;
 							break;
@@ -225,7 +225,7 @@ public class FoodMaker extends WorldEntity {
 					} else {// 通常種
 						foodType = foodTable[makeTable[stockFood][0]];
 					}
-					switch (b.getBodyAgeState()) {
+					switch (b.getAgeState()) {
 						case BABY:
 							foodAmount += 1;
 							break;

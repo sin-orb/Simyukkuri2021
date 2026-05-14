@@ -23,7 +23,7 @@ import org.simyukkuri.draw.World;
 import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.Happiness;
 import org.simyukkuri.system.Sprite;
-import org.simyukkuri.system.BodyLayer;
+import org.simyukkuri.system.YukkuriLayer;
 
 /**
  * StubBodyAttributes の未カバーメソッドのカバレッジ向上テスト.
@@ -54,9 +54,9 @@ public class StubBodyAttributesTest {
 
     private static void initSprites(StubBodyAttributes b) {
         for (int i = 0; i < 3; i++) {
-            b.getBodySpr()[i] = new Sprite();
-            b.getBodySpr()[i].setImageW(100);
-            b.getBodySpr()[i].setImageH(100);
+            b.getSpriteSet()[i] = new Sprite();
+            b.getSpriteSet()[i].setImageW(100);
+            b.getSpriteSet()[i].setImageH(100);
             b.getExpandSpr()[i] = new Sprite();
             b.getBraidSpr()[i] = new Sprite();
         }
@@ -111,12 +111,12 @@ public class StubBodyAttributesTest {
 
     @Test
     public void testGetImageReturnsZero() {
-        assertEquals(0, body.getImage(0, 0, new BodyLayer(), 0));
+        assertEquals(0, body.getImage(0, 0, new YukkuriLayer(), 0));
     }
 
     @Test
     public void testGetImageWithVariousArgs() {
-        assertEquals(0, body.getImage(1, 1, new BodyLayer(), 3));
+        assertEquals(0, body.getImage(1, 1, new YukkuriLayer(), 3));
     }
 
     // ---------------------------------------------------------------
@@ -215,10 +215,10 @@ public class StubBodyAttributesTest {
         assertEquals("", body.getNameE2());
         assertEquals("MyTest", body.getMyName());
         assertEquals("MyTestD", body.getMyNameD());
-        assertEquals(0, body.getImage(0, 0, new BodyLayer(), 0));
+        assertEquals(0, body.getImage(0, 0, new YukkuriLayer(), 0));
         assertDoesNotThrow(() -> body.tuneParameters());
         assertTrue(body.isImageLoaded());
         assertNull(body.getMountPoint("test_key"));
-        assertEquals(0, body.checkNonYukkuriDiseaseTolerance());
+        assertEquals(0, body.getNonYukkuriDiseaseTolerance());
     }
 }

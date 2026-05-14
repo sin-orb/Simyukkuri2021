@@ -25,7 +25,7 @@ import org.simyukkuri.enums.PublicRank;
 import org.simyukkuri.util.WorldTestHelper;
 
 /**
- * Tests for BodyStealRule.
+ * Tests for YukkuriStealRule.
  */
 public class BodyStealRuleTest {
 
@@ -52,7 +52,7 @@ public class BodyStealRuleTest {
 		thief.setX(100);
 		thief.setY(100);
 
-		assertTrue(BodyStealRule.handleOkazariSteal(target, thief));
+		assertTrue(YukkuriStealRule.handleOkazariSteal(target, thief));
 		assertTrue(thief.hasOkazari());
 		assertFalse(target.hasOkazari());
 	}
@@ -76,11 +76,11 @@ public class BodyStealRuleTest {
 		witness.setX(200);
 		witness.setY(200);
 		WorldTestHelper.initializeMinimalWorld();
-		org.simyukkuri.SimYukkuri.world.getCurrentMap().getBody().put(thief.getUniqueID(), thief);
-		org.simyukkuri.SimYukkuri.world.getCurrentMap().getBody().put(target.getUniqueID(), target);
-		org.simyukkuri.SimYukkuri.world.getCurrentMap().getBody().put(witness.getUniqueID(), witness);
+		org.simyukkuri.SimYukkuri.world.getCurrentMap().getYukkuriMap().put(thief.getUniqueID(), thief);
+		org.simyukkuri.SimYukkuri.world.getCurrentMap().getYukkuriMap().put(target.getUniqueID(), target);
+		org.simyukkuri.SimYukkuri.world.getCurrentMap().getYukkuriMap().put(witness.getUniqueID(), witness);
 
-		assertFalse(BodyStealRule.handleOkazariSteal(target, thief));
+		assertFalse(YukkuriStealRule.handleOkazariSteal(target, thief));
 		assertFalse(thief.hasOkazari());
 		assertTrue(target.hasOkazari());
 	}

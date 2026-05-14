@@ -43,7 +43,7 @@ import org.simyukkuri.entity.core.world.item.Food;
 import org.simyukkuri.entity.core.world.mobile.Shit;
 import org.simyukkuri.entity.core.world.mobile.Vomit;
 import org.simyukkuri.enums.AgeState;
-import org.simyukkuri.enums.BodyRank;
+import org.simyukkuri.enums.YukkuriRank;
 import org.simyukkuri.enums.Intelligence;
 import org.simyukkuri.enums.YukkuriType;
 import org.simyukkuri.system.Sprite;
@@ -94,13 +94,13 @@ public class GadgetActionTest {
             expSpr[i] = new Sprite();
             brdSpr[i] = new Sprite();
         }
-        b.setBodySpr(spr);
+        b.setSpriteSet(spr);
         b.setExpandSpr(expSpr);
         b.setBraidSpr(brdSpr);
         b.setAgeState(age);
         b.setMsgType(YukkuriType.REIMU);
         b.setIntelligence(Intelligence.AVERAGE);
-        SimYukkuri.world.getCurrentMap().getBody().put(b.getUniqueID(), b);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(b.getUniqueID(), b);
         return b;
     }
 
@@ -454,23 +454,23 @@ public class GadgetActionTest {
         @Test
         public void testRankSetTogglesKaiyuToNorayu() {
             Yukkuri b = createReimuBody(AgeState.ADULT);
-            b.setBodyRank(BodyRank.KAIYU);
+            b.setRank(YukkuriRank.KAIYU);
             MouseEvent ev = createEvent(0);
 
             GadgetAction.evaluateTest(GadgetList.RANKSET, ev, b);
 
-            assertEquals(BodyRank.NORAYU, b.getBodyRank(), "KAIYU→NORAYUに変わるべき");
+            assertEquals(YukkuriRank.NORAYU, b.getRank(), "KAIYU→NORAYUに変わるべき");
         }
 
         @Test
         public void testRankSetTogglesNorayuToKaiyu() {
             Yukkuri b = createReimuBody(AgeState.ADULT);
-            b.setBodyRank(BodyRank.NORAYU);
+            b.setRank(YukkuriRank.NORAYU);
             MouseEvent ev = createEvent(0);
 
             GadgetAction.evaluateTest(GadgetList.RANKSET, ev, b);
 
-            assertEquals(BodyRank.KAIYU, b.getBodyRank(), "NORAYU→KAIYUに変わるべき");
+            assertEquals(YukkuriRank.KAIYU, b.getRank(), "NORAYU→KAIYUに変わるべき");
         }
 
         @Test

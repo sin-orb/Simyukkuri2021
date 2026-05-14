@@ -37,7 +37,7 @@ public class Cash {
 	public static long buyYukkuri(Yukkuri body) {
 		int val = 0;
 		val = body.getCost();
-		switch (body.getBodyAgeState()) {
+		switch (body.getAgeState()) {
 			case BABY:
 				val /= 3;
 				break;
@@ -65,7 +65,7 @@ public class Cash {
 		if ((body.isPealed() && body.isCrushed()) || body.isPacked()) {
 			val = body.getSellingPrice(1);
 			// 年齢補正
-			switch (body.getBodyAgeState()) {
+			switch (body.getAgeState()) {
 				case BABY:
 					val /= 27;
 					break;
@@ -98,7 +98,7 @@ public class Cash {
 		// 基本価値
 		val = body.getSellingPrice(0);
 		// 年齢補正
-		switch (body.getBodyAgeState()) {
+		switch (body.getAgeState()) {
 			case BABY:
 				val /= 2;
 				break;

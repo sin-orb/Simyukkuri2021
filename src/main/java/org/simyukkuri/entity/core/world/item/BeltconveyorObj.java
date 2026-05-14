@@ -335,7 +335,7 @@ public class BeltconveyorObj extends WorldEntity {
 			}
 		}
 		if (o instanceof Yukkuri)
-			attr = Barrier.MAP_BODY[((Yukkuri) o).getBodyAgeState().ordinal()];
+			attr = Barrier.MAP_BODY[((Yukkuri) o).getAgeState().ordinal()];
 		if (!Barrier.onBarrier(objX, objY, objW >> 1, objH >> 2, attr)) {
 			boolean shouldMove = true;
 			// 一体づつ流す設定の時
@@ -351,7 +351,7 @@ public class BeltconveyorObj extends WorldEntity {
 						}
 						int attrBind = 16;
 						if (oBind instanceof Yukkuri) {
-							attrBind = Barrier.MAP_BODY[((Yukkuri) oBind).getBodyAgeState().ordinal()];
+							attrBind = Barrier.MAP_BODY[((Yukkuri) oBind).getAgeState().ordinal()];
 						}
 						// リスト上の優先データがフィールドにひかかっていないなら終了
 						if (!Barrier.onBarrier(oBind.getX(), oBind.getY(), oBind.getW() >> 1, oBind.getH() >> 2,

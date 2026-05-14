@@ -4,7 +4,7 @@ import org.simyukkuri.Const;
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.world.bodylinked.Stalk;
-import org.simyukkuri.logic.BodyMovement;
+import org.simyukkuri.logic.YukkuriMovement;
 import org.simyukkuri.util.GameRandom;
 import org.simyukkuri.draw.Translate;
 import org.simyukkuri.enums.BurialState;
@@ -68,17 +68,17 @@ public final class YukkuriMoveDelegate {
 	public void upDate() {
 		if (body.getStalks() != null && body.getStalks().size() > 0) {
 			int direction = body.getDirection().ordinal();
-			int centerH = (body.getBodySpr()[body.getBodyAgeState().ordinal()].getImageH() + body.getExpandSizeW()
+			int centerH = (body.getSpriteSet()[body.getAgeState().ordinal()].getImageH() + body.getExpandSizeW()
 					+ body.getExternalForceW());
 			if (SimYukkuri.UNYO) {
-				centerH = (body.getBodySpr()[body.getBodyAgeState().ordinal()].getImageH() + body.getExpandSizeH()
+				centerH = (body.getSpriteSet()[body.getAgeState().ordinal()].getImageH() + body.getExpandSizeH()
 						+ body.getExternalForceW() + body.getUnyoOffsetH());
 			}
 			int k = 0;
 			for (Stalk stalk : body.getStalks()) {
 				if (stalk != null) {
 					int sourceX = stalk.getPivotX() + Const.STALK_OF_S_X[k]
-							- (int) ((3 - body.getBodyAgeState().ordinal()) * 8.75f);
+							- (int) ((3 - body.getAgeState().ordinal()) * 8.75f);
 					if (direction == Const.RIGHT) {
 						stalk.setDirection(0);
 					} else {
@@ -107,7 +107,7 @@ public final class YukkuriMoveDelegate {
 	 *
 	 * @param dontMove 移動禁止かどうか
 	 */
-	public void moveBody(boolean dontMove) {
+	public void moveYukkuri(boolean dontMove) {
 		if (body.isGrabbed() || body.takeMappedObj(body.getParentLinkId()) != null) {
 			body.setFalldownDamage(0);
 			body.setNoDamageNextFall(false);
@@ -116,7 +116,7 @@ public final class YukkuriMoveDelegate {
 			body.setMotionZ(0);
 			return;
 		}
-		if (BodyMovement.applyExternalMotion(body)) {
+		if (YukkuriMovement.applyExternalMotion(body)) {
 			return;
 		}
 
@@ -137,8 +137,8 @@ public final class YukkuriMoveDelegate {
 			return;
 		}
 
-		int step = BodyMovement.calculateMovementStep(body);
-		int freq = BodyMovement.calculateMovementFrequency(body, step);
+		int step = YukkuriMovement.calculateMovementStep(body);
+		int freq = YukkuriMovement.calculateMovementFrequency(body, step);
 		if (body.getAge() % freq != 0) {
 			body.setMotionX(0);
 			body.setMotionY(0);
@@ -147,21 +147,21 @@ public final class YukkuriMoveDelegate {
 		}
 
 		if (body.getDestX() >= 0) {
-			BodyMovement.updateDestinationDirectionX(body);
+			YukkuriMovement.updateDestinationDirectionX(body);
 		} else {
-			BodyMovement.updateRandomDirectionX(body);
+			YukkuriMovement.updateRandomDirectionX(body);
 		}
 		if (body.getDestY() >= 0) {
-			BodyMovement.updateDestinationDirectionY(body);
+			YukkuriMovement.updateDestinationDirectionY(body);
 		} else {
-			BodyMovement.updateRandomDirectionY(body);
+			YukkuriMovement.updateRandomDirectionY(body);
 		}
-		BodyMovement.updateFlightDestination(body);
+		YukkuriMovement.updateFlightDestination(body);
 
-		step = BodyMovement.calculateDirectionalStep(body);
-		BodyMovement.MovementVector vector = BodyMovement.calculateMovementVector(body, step);
-		BodyMovement.applyDirectedMovement(body, vector);
-		BodyMovement.resolveDirectedMovement(body, vector);
+		step = YukkuriMovement.calculateDirectionalStep(body);
+		YukkuriMovement.MovementVector vector = YukkuriMovement.calculateMovementVector(body, step);
+		YukkuriMovement.applyDirectedMovement(body, vector);
+		YukkuriMovement.resolveDirectedMovement(body, vector);
 		body.setMotionX(0);
 		body.setMotionY(0);
 		body.setMotionZ(0);
@@ -212,7 +212,7 @@ public final class YukkuriMoveDelegate {
 	 *
 	 * @param flag 移動目的が他のゆっくりかどうか
 	 */
-	public void setToBody(boolean flag) {
+	public void setToYukkuri(boolean flag) {
 		body.setPurposeOfMoving(flag ? org.simyukkuri.enums.PurposeOfMoving.YUKKURI : body.getPurposeOfMoving() == org.simyukkuri.enums.PurposeOfMoving.YUKKURI
 				? org.simyukkuri.enums.PurposeOfMoving.NONE : body.getPurposeOfMoving());
 	}
@@ -286,7 +286,7 @@ public final class YukkuriMoveDelegate {
 	 * @return 移動速度
 	 */
 	public int getStep() {
-		return body.getStepBase()[body.getBodyAgeState().ordinal()];
+		return body.getStepBase()[body.getAgeState().ordinal()];
 	}
 
 	/**
@@ -295,7 +295,7 @@ public final class YukkuriMoveDelegate {
 	 * @return 移動速度の二乗値
 	 */
 	public int getStepDist() {
-		int p = body.getStepBase()[body.getBodyAgeState().ordinal()];
+		int p = body.getStepBase()[body.getAgeState().ordinal()];
 		return p * p;
 	}
 }

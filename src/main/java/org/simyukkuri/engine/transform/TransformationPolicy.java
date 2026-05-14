@@ -15,22 +15,22 @@ public final class TransformationPolicy {
 		return targetType == YukkuriType.DOSMARISA;
 	}
 
-	public static String resolveBaseBodyFileName(YukkuriType targetType) {
+	public static String resolveBaseYukkuriFileName(YukkuriType targetType) {
 		if (targetType == null) {
 			return null;
 		}
 		return targetType.getClassName().toLowerCase();
 	}
 
-	public static boolean isSelectedBody(Yukkuri body) {
-		return body != null && org.simyukkuri.draw.MyPane.getSelectBody() == body;
+	public static boolean isSelectedYukkuri(Yukkuri body) {
+		return body != null && org.simyukkuri.draw.MyPane.getSelectedYukkuri() == body;
 	}
 
 	public static void normalizeTransformedAge(Yukkuri to, Yukkuri from) {
 		if (to == null || from == null) {
 			return;
 		}
-		AgeState ageState = from.getBodyAgeState();
+		AgeState ageState = from.getAgeState();
 		switch (ageState) {
 			case BABY:
 				to.setAge(0);

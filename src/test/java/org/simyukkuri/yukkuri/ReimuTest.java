@@ -23,7 +23,7 @@ import org.simyukkuri.draw.MyPane;
 import org.simyukkuri.draw.Point4y;
 import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.entity.core.living.yukkuri.Dna;
-import org.simyukkuri.system.BodyLayer;
+import org.simyukkuri.system.YukkuriLayer;
 import org.simyukkuri.util.WorldTestHelper;
 
 public class ReimuTest {
@@ -278,7 +278,7 @@ public class ReimuTest {
             fp.set(null, null);
         } catch (Exception e) { }
         Reimu reimu = new Reimu();
-        BodyLayer layer = new BodyLayer();
+        YukkuriLayer layer = new YukkuriLayer();
         assertThrows(NullPointerException.class,
                 () -> reimu.getImage(0, 0, layer, 0));
     }
@@ -290,7 +290,7 @@ public class ReimuTest {
         org.simyukkuri.util.WorldTestHelper.initializeMinimalWorld();
         try {
             Reimu reimu = new Reimu();
-            SimYukkuri.world.getCurrentMap().getBody().put(reimu.getUniqueID(), reimu);
+            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(reimu.getUniqueID(), reimu);
             reimu.execTransform();
         } catch (NullPointerException e) {
             // mypane is null in headless environment
@@ -311,13 +311,13 @@ public class ReimuTest {
             Reimu reimu = new Reimu();
             reimu.setAge(100000);
             WorldTestHelper.makeTransformationReady(reimu);
-            SimYukkuri.world.getCurrentMap().getBody().put(reimu.getUniqueID(), reimu);
+            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(reimu.getUniqueID(), reimu);
 
             int originalId = reimu.getUniqueID();
 
             reimu.execTransform();
 
-            Yukkuri transformed = SimYukkuri.world.getCurrentMap().getBody().get(originalId);
+            Yukkuri transformed = SimYukkuri.world.getCurrentMap().getYukkuriMap().get(originalId);
             assertNotNull(transformed);
             assertInstanceOf(Deibu.class, transformed);
             assertEquals(originalId, transformed.getUniqueID());
@@ -346,9 +346,9 @@ public class ReimuTest {
             child.setParents(new int[] { reimu.getUniqueID(), -1 });
             reimu.getChildrenList().add(child.getUniqueID());
 
-            SimYukkuri.world.getCurrentMap().getBody().put(reimu.getUniqueID(), reimu);
-            SimYukkuri.world.getCurrentMap().getBody().put(partner.getUniqueID(), partner);
-            SimYukkuri.world.getCurrentMap().getBody().put(child.getUniqueID(), child);
+            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(reimu.getUniqueID(), reimu);
+            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(partner.getUniqueID(), partner);
+            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(child.getUniqueID(), child);
 
             int originalId = reimu.getUniqueID();
             int partnerId = partner.getUniqueID();
@@ -356,7 +356,7 @@ public class ReimuTest {
 
             reimu.execTransform();
 
-            Yukkuri transformed = SimYukkuri.world.getCurrentMap().getBody().get(originalId);
+            Yukkuri transformed = SimYukkuri.world.getCurrentMap().getYukkuriMap().get(originalId);
             assertNotNull(transformed);
             assertEquals(partnerId, transformed.getPartner());
             assertTrue(transformed.getChildrenList().contains(childId));
@@ -387,16 +387,16 @@ public class ReimuTest {
             child.setParents(new int[] { reimu.getUniqueID(), -1 });
             reimu.getChildrenList().add(child.getUniqueID());
 
-            SimYukkuri.world.getCurrentMap().getBody().put(reimu.getUniqueID(), reimu);
-            SimYukkuri.world.getCurrentMap().getBody().put(partner.getUniqueID(), partner);
-            SimYukkuri.world.getCurrentMap().getBody().put(child.getUniqueID(), child);
+            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(reimu.getUniqueID(), reimu);
+            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(partner.getUniqueID(), partner);
+            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(child.getUniqueID(), child);
 
             int originalId = reimu.getUniqueID();
             int childId = child.getUniqueID();
 
             reimu.execTransform();
 
-            Yukkuri transformed = SimYukkuri.world.getCurrentMap().getBody().get(originalId);
+            Yukkuri transformed = SimYukkuri.world.getCurrentMap().getYukkuriMap().get(originalId);
             assertNotNull(transformed);
             assertTrue(transformed.isHasBaby());
             assertEquals(1, transformed.getBabyTypes().size());
@@ -429,16 +429,16 @@ public class ReimuTest {
             child.setParents(new int[] { reimu.getUniqueID(), -1 });
             reimu.getChildrenList().add(child.getUniqueID());
 
-            SimYukkuri.world.getCurrentMap().getBody().put(reimu.getUniqueID(), reimu);
-            SimYukkuri.world.getCurrentMap().getBody().put(partner.getUniqueID(), partner);
-            SimYukkuri.world.getCurrentMap().getBody().put(child.getUniqueID(), child);
+            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(reimu.getUniqueID(), reimu);
+            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(partner.getUniqueID(), partner);
+            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(child.getUniqueID(), child);
 
             int originalId = reimu.getUniqueID();
             int childId = child.getUniqueID();
 
             reimu.execTransform();
 
-            Yukkuri transformed = SimYukkuri.world.getCurrentMap().getBody().get(originalId);
+            Yukkuri transformed = SimYukkuri.world.getCurrentMap().getYukkuriMap().get(originalId);
             assertNotNull(transformed);
             assertTrue(transformed.isHasStalk());
             assertEquals(1, transformed.getStalkBabyTypes().size());
@@ -470,9 +470,9 @@ public class ReimuTest {
             fp.set(null, null);
         } catch (Exception e) { }
         Reimu reimu = new Reimu();
-        BodyLayer layer = new BodyLayer();
+        YukkuriLayer layer = new YukkuriLayer();
         assertThrows(NullPointerException.class,
-                () -> reimu.getBodyBaseImage(layer));
+                () -> reimu.getImageIndex(layer));
     }
 
     // --- loadImages: executes code path (IOException expected in headless) ---
@@ -508,7 +508,7 @@ public class ReimuTest {
     private static java.awt.image.BufferedImage[][][][] setupImagePack(Class<?> cls) throws Exception {
         java.lang.reflect.Field fp = cls.getDeclaredField("imagePack");
         fp.setAccessible(true);
-        int ranks = org.simyukkuri.enums.BodyRank.values().length;
+        int ranks = org.simyukkuri.enums.YukkuriRank.values().length;
         java.awt.image.BufferedImage[][][][] pack = new java.awt.image.BufferedImage[ranks][300][20][20];
         java.awt.image.BufferedImage dummy = new java.awt.image.BufferedImage(1, 1, java.awt.image.BufferedImage.TYPE_INT_ARGB);
         for (int i = 0; i < ranks; i++)
@@ -525,9 +525,9 @@ public class ReimuTest {
         try {
             setupImagePack(Reimu.class);
             Reimu reimu = new Reimu();
-            org.simyukkuri.system.BodyLayer layer = new org.simyukkuri.system.BodyLayer();
+            org.simyukkuri.system.YukkuriLayer layer = new org.simyukkuri.system.YukkuriLayer();
             // Normal state - default walking/standing
-            assertDoesNotThrow(() -> reimu.getBodyBaseImage(layer));
+            assertDoesNotThrow(() -> reimu.getImageIndex(layer));
         } catch (Exception e) { }
     }
 
@@ -538,8 +538,8 @@ public class ReimuTest {
             Reimu reimu = new Reimu();
             reimu.setBurned(true);
             reimu.setDead(true);
-            org.simyukkuri.system.BodyLayer layer = new org.simyukkuri.system.BodyLayer();
-            assertDoesNotThrow(() -> reimu.getBodyBaseImage(layer));
+            org.simyukkuri.system.YukkuriLayer layer = new org.simyukkuri.system.YukkuriLayer();
+            assertDoesNotThrow(() -> reimu.getImageIndex(layer));
         } catch (Exception e) { }
     }
 
@@ -549,8 +549,8 @@ public class ReimuTest {
             setupImagePack(Reimu.class);
             Reimu reimu = new Reimu();
             reimu.setCrushed(true);
-            org.simyukkuri.system.BodyLayer layer = new org.simyukkuri.system.BodyLayer();
-            assertDoesNotThrow(() -> reimu.getBodyBaseImage(layer));
+            org.simyukkuri.system.YukkuriLayer layer = new org.simyukkuri.system.YukkuriLayer();
+            assertDoesNotThrow(() -> reimu.getImageIndex(layer));
         } catch (Exception e) { }
     }
 
@@ -561,8 +561,8 @@ public class ReimuTest {
             Reimu reimu = new Reimu();
             reimu.setCrushed(true);
             reimu.setPealed(true);
-            org.simyukkuri.system.BodyLayer layer = new org.simyukkuri.system.BodyLayer();
-            assertDoesNotThrow(() -> reimu.getBodyBaseImage(layer));
+            org.simyukkuri.system.YukkuriLayer layer = new org.simyukkuri.system.YukkuriLayer();
+            assertDoesNotThrow(() -> reimu.getImageIndex(layer));
         } catch (Exception e) { }
     }
 
@@ -571,7 +571,7 @@ public class ReimuTest {
         try {
             setupImagePack(Reimu.class);
             Reimu reimu = new Reimu();
-            org.simyukkuri.system.BodyLayer layer = new org.simyukkuri.system.BodyLayer();
+            org.simyukkuri.system.YukkuriLayer layer = new org.simyukkuri.system.YukkuriLayer();
             assertDoesNotThrow(() -> reimu.getImage(0, 0, layer, 0));
         } catch (Exception e) { }
     }

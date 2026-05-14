@@ -14,7 +14,7 @@ import org.simyukkuri.event.EventPacket;
 import org.simyukkuri.event.EventPacket.EventPriority;
 import org.simyukkuri.event.EventPacket.UpdateState;
 import org.simyukkuri.field.impl.Barrier;
-import org.simyukkuri.logic.BodyLogic;
+import org.simyukkuri.logic.YukkuriLogic;
 import org.simyukkuri.system.MessagePool;
 import org.simyukkuri.util.GameMessages;
 import org.simyukkuri.util.GameRandom;
@@ -61,7 +61,7 @@ public class KillPredeatorEvent extends RevengeAttackEvent {
 			return false;
 		boolean isNearPredator = false;
 		// 全ゆっくりに対してチェック
-		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
+		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getYukkuriMap().entrySet()) {
 			Yukkuri predatorBody = entry.getValue();
 			// 自分同士のチェックは無意味なのでスキップ
 			if (predatorBody == body) {
@@ -74,7 +74,7 @@ public class KillPredeatorEvent extends RevengeAttackEvent {
 			}
 			// 相手との間に壁があればスキップ
 			if (Barrier.acrossBarrier(body.getX(), body.getY(), predatorBody.getX(), predatorBody.getY(),
-					Barrier.MAP_BODY[body.getBodyAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
+					Barrier.MAP_BODY[body.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
 				continue;
 			}
 			isNearPredator = true;
@@ -95,7 +95,7 @@ public class KillPredeatorEvent extends RevengeAttackEvent {
 	 */
 	public Yukkuri searchNextTarget() {
 		Yukkuri nextTarget = null;
-		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
+		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getYukkuriMap().entrySet()) {
 			Yukkuri body = entry.getValue();
 			if (body.isPredatorType()) {
 				nextTarget = body;
@@ -111,17 +111,17 @@ public class KillPredeatorEvent extends RevengeAttackEvent {
 		if (GameRandom.nextInt(1000) == 0) {
 			return UpdateState.ABORT;
 		}
-		Yukkuri from = org.simyukkuri.util.BodyRegistry.getBodyInstance(getFrom());
+		Yukkuri from = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
 		// 相手が消えてしまったら他の捕食種を捜索
 		if (from.isRemoved() || from.isDead() || !from.isPredatorType()) {
 			setFrom(searchNextTarget());
-			from = org.simyukkuri.util.BodyRegistry.getBodyInstance(getFrom());
+			from = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
 			if (from == null)
 				return UpdateState.ABORT;
 		}
 
 		body.setForceFace(ImageCode.PUFF.ordinal());
-		int colX = BodyLogic.calcCollisionX(body, from);
+		int colX = YukkuriLogic.calcCollisionX(body, from);
 		body.moveToEvent(this, from.getX() + colX, from.getY());
 		if (body.getType() == YukkuriType.DOSMARISA ||
 				(body.isAdult() && body.getPublicRank() != PublicRank.UnunSlave)) {
@@ -139,18 +139,18 @@ public class KillPredeatorEvent extends RevengeAttackEvent {
 			return;
 		}
 		body.setAngry();
-		Yukkuri from = org.simyukkuri.util.BodyRegistry.getBodyInstance(getFrom());
-		int colX = BodyLogic.calcCollisionX(body, from);
+		Yukkuri from = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
+		int colX = YukkuriLogic.calcCollisionX(body, from);
 		body.moveToEvent(this, from.getX() + colX, from.getY());
 	}
 
 	@Override
 	public boolean execute(Yukkuri body) {
-		Yukkuri from = org.simyukkuri.util.BodyRegistry.getBodyInstance(getFrom());
+		Yukkuri from = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
 		// 相手が消えてしまったら他の捕食種を捜索
 		if (from == null || from.isRemoved() || from.isDead()) {
 			setFrom(searchNextTarget());
-			from = org.simyukkuri.util.BodyRegistry.getBodyInstance(getFrom());
+			from = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
 			// 捕食種全滅でイベント終了
 			if (from == null)
 				return true;

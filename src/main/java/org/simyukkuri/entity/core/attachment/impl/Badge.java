@@ -116,10 +116,10 @@ public class Badge extends Attachment {
 
 	@Override
 	public BufferedImage getImage(Yukkuri b) {
-		Yukkuri pa = org.simyukkuri.util.BodyRegistry.getBodyInstance(parent);
+		Yukkuri pa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(parent);
 		if (pa == null)
 			return null;
-		return images[pa.getBodyAgeState().ordinal()][badgeRank.ordinal()];
+		return images[pa.getAgeState().ordinal()][badgeRank.ordinal()];
 	}
 
 	/** バッジランク取得 */
@@ -131,13 +131,13 @@ public class Badge extends Attachment {
 
 	@Override
 	public void resetBoundary() {
-		Yukkuri pa = org.simyukkuri.util.BodyRegistry.getBodyInstance(parent);
+		Yukkuri pa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(parent);
 		if (pa == null)
 			return;
-		setBoundary(pivX[pa.getBodyAgeState().ordinal()],
-				pivY[pa.getBodyAgeState().ordinal()],
-				imgW[pa.getBodyAgeState().ordinal()],
-				imgH[pa.getBodyAgeState().ordinal()]);
+		setBoundary(pivX[pa.getAgeState().ordinal()],
+				pivY[pa.getAgeState().ordinal()],
+				imgW[pa.getAgeState().ordinal()],
+				imgH[pa.getAgeState().ordinal()]);
 	}
 
 	/**
@@ -150,12 +150,12 @@ public class Badge extends Attachment {
 		super(body);
 		setAttachProperty(property, POS_KEY);
 		this.badgeRank = badgeRank;
-		Yukkuri pa = org.simyukkuri.util.BodyRegistry.getBodyInstance(parent);
+		Yukkuri pa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(parent);
 		if (pa != null) {
-			setBoundary(pivX[pa.getBodyAgeState().ordinal()],
-					pivY[pa.getBodyAgeState().ordinal()],
-					imgW[pa.getBodyAgeState().ordinal()],
-					imgH[pa.getBodyAgeState().ordinal()]);
+			setBoundary(pivX[pa.getAgeState().ordinal()],
+					pivY[pa.getAgeState().ordinal()],
+					imgW[pa.getAgeState().ordinal()],
+					imgH[pa.getAgeState().ordinal()]);
 		}
 		value = 0;
 		cost = 0;

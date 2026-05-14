@@ -51,8 +51,8 @@ class BegForLifeEventTest {
         for (int i = 0; i < 3; i++) {
             spr[i] = new org.simyukkuri.system.Sprite(10, 10, org.simyukkuri.system.Sprite.PIVOT_CENTER_BOTTOM);
         }
-        b.setBodySpr(spr);
-        SimYukkuri.world.getCurrentMap().getBody().put(b.getUniqueID(), b);
+        b.setSpriteSet(spr);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(b.getUniqueID(), b);
         return b;
     }
 

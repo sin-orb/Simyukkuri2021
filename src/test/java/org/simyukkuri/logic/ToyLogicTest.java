@@ -57,7 +57,7 @@ class ToyLogicTest {
         // Set hungry positive so isStarving() returns false
         body.setHungry(10000);
 
-        SimYukkuri.world.getCurrentMap().getBody().put(body.getObjId(), body);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(body.getObjId(), body);
     }
 
     @AfterEach
@@ -106,7 +106,7 @@ class ToyLogicTest {
         if (!result) {
             System.out.println("canPlay: " + ToyLogic.canPlay(body));
             System.out.println("isToFood: " + body.isToFood());
-            System.out.println("isToBody: " + body.isToBody());
+            System.out.println("isToYukkuri: " + body.isToYukkuri());
             System.out.println("isToSukkiri: " + body.isToSukkiri());
             System.out.println("isToSteal: " + body.isToSteal());
             System.out.println("isToBed: " + body.isToBed());
@@ -395,11 +395,11 @@ class ToyLogicTest {
         assertDoesNotThrow(() -> ToyLogic.checkSui(body));
     }
 
-    // --- canPlay: isToBody=true → false ---
+    // --- canPlay: isToYukkuri=true → false ---
 
     @Test
     void testCanPlay_IsToBody_ReturnsFalse() {
-        body.setToBody(true); // canPlay line 321: isToBody=true → return false
+        body.setToYukkuri(true); // canPlay line 321: isToYukkuri=true → return false
         assertFalse(ToyLogic.canPlay(body));
     }
 
@@ -582,7 +582,7 @@ class ToyLogicTest {
         Sui sui = new Sui(body.getX(), body.getY(), 0);
         sui.setBindobj(other); // NoCanBind()=(bindobj!=null)=true; other is not family
         SimYukkuri.world.getCurrentMap().getSui().put(sui.getObjId(), sui);
-        SimYukkuri.world.getCurrentMap().getBody().put(other.getObjId(), other);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(other.getObjId(), other);
         // body has no favoriteItems SUI → enters loop → NoCanBind+non-family → skip →
         // found=null
         assertDoesNotThrow(() -> ToyLogic.checkSui(body));

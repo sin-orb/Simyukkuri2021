@@ -80,7 +80,7 @@ public class ItemListenerTest {
     public void testGetMenuAction_PICKUP_Body() {
         Yukkuri b = new Reimu();
         b.setAgeState(AgeState.ADULT);
-        SimYukkuri.world.getCurrentMap().getBody().put(b.getUniqueID(), b);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(b.getUniqueID(), b);
         ItemMenu.setGetTarget(b);
 
         ItemGetMenuAction action = new ItemGetMenuAction();
@@ -88,7 +88,7 @@ public class ItemListenerTest {
 
         action.actionPerformed(e);
 
-        assertFalse(SimYukkuri.world.getCurrentMap().getBody().containsKey(b.getUniqueID()));
+        assertFalse(SimYukkuri.world.getCurrentMap().getYukkuriMap().containsKey(b.getUniqueID()));
         assertTrue(SimYukkuri.world.getPlayer().getItemList().contains(b));
         assertTrue(b.isTaken());
         assertNull(ItemMenu.getGetTarget());
@@ -102,7 +102,7 @@ public class ItemListenerTest {
         stalk.getBindBabies().add(b.getUniqueID());
         b.setBindStalk(stalk);
         b.setParentLinkId(123);
-        SimYukkuri.world.getCurrentMap().getBody().put(b.getUniqueID(), b);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(b.getUniqueID(), b);
         ItemMenu.setGetTarget(b);
 
         ItemGetMenuAction action = new ItemGetMenuAction();
@@ -110,7 +110,7 @@ public class ItemListenerTest {
 
         action.actionPerformed(e);
 
-        assertFalse(SimYukkuri.world.getCurrentMap().getBody().containsKey(b.getUniqueID()));
+        assertFalse(SimYukkuri.world.getCurrentMap().getYukkuriMap().containsKey(b.getUniqueID()));
         assertTrue(SimYukkuri.world.getPlayer().getItemList().contains(b));
         assertTrue(b.isTaken());
         assertNull(b.getBindStalk());

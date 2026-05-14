@@ -50,8 +50,8 @@ class HateNoOkazariEventTest {
         for (int i = 0; i < 3; i++) {
             spr[i] = new org.simyukkuri.system.Sprite(10, 10, org.simyukkuri.system.Sprite.PIVOT_CENTER_BOTTOM);
         }
-        b.setBodySpr(spr);
-        SimYukkuri.world.getCurrentMap().getBody().put(b.getUniqueID(), b);
+        b.setSpriteSet(spr);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(b.getUniqueID(), b);
         return b;
     }
 
@@ -185,7 +185,7 @@ class HateNoOkazariEventTest {
     @Test
     void testExecute_toNull_returnsTrue() {
         Yukkuri from = createBody();
-        // to not set → getTo() = -1 → getBodyInstance returns null → returns true
+        // to not set → getTo() = -1 → getBodyMap returns null → returns true
         HateNoOkazariEvent event = new HateNoOkazariEvent(from, null, null, 10);
         assertTrue(event.execute(from));
     }

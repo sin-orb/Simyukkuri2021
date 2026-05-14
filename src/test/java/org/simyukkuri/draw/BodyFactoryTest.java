@@ -35,7 +35,7 @@ public class BodyFactoryTest {
 		WorldTestHelper.resetStates();
 		WorldTestHelper.initializeMinimalWorld();
 		List<YukkuriType> loaded = new ArrayList<YukkuriType>();
-		Yukkuri body = BodyFactory.create(10, 20, 0, Reimu.type, null, AgeState.BABY, null, null, true,
+		Yukkuri body = YukkuriFactory.create(10, 20, 0, Reimu.type, null, AgeState.BABY, null, null, true,
 				loaded::add, () -> true);
 
 		assertInstanceOf(Reimu.class, body);
@@ -48,7 +48,7 @@ public class BodyFactoryTest {
 		WorldTestHelper.resetStates();
 		WorldTestHelper.initializeMinimalWorld();
 		List<YukkuriType> loaded = new ArrayList<YukkuriType>();
-		Yukkuri body = BodyFactory.create(10, 20, 0, DosMarisa.type, null, AgeState.BABY, null, null, true,
+		Yukkuri body = YukkuriFactory.create(10, 20, 0, DosMarisa.type, null, AgeState.BABY, null, null, true,
 				loaded::add, () -> false);
 
 		assertInstanceOf(Marisa.class, body);

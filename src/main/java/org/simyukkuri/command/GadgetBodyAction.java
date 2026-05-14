@@ -51,7 +51,7 @@ public class GadgetBodyAction {
 	 * @param targetObject 対象オブジェクト
 	 */
 	public static void evaluateAccessory(GadgetList item, MouseEvent ev, Entity targetObject) {
-		List<Yukkuri> bodyList = new LinkedList<Yukkuri>(GameWorld.get().getCurrentMap().getBody().values());
+		List<Yukkuri> bodyList = new LinkedList<Yukkuri>(GameWorld.get().getCurrentMap().getYukkuriMap().values());
 		if (ev.isShiftDown()) {
 			boolean shouldGiveAccessory = true;
 			if (targetObject instanceof Yukkuri) {
@@ -92,7 +92,7 @@ public class GadgetBodyAction {
 	 * @param targetObject 対象オブジェクト
 	 */
 	public static void evaluatePants(GadgetList item, MouseEvent ev, Entity targetObject) {
-		List<Yukkuri> bodyList = new LinkedList<Yukkuri>(GameWorld.get().getCurrentMap().getBody().values());
+		List<Yukkuri> bodyList = new LinkedList<Yukkuri>(GameWorld.get().getCurrentMap().getYukkuriMap().values());
 		if (ev.isShiftDown()) {
 			boolean shouldGivePants = true;
 			if (targetObject instanceof Yukkuri) {
@@ -131,13 +131,13 @@ public class GadgetBodyAction {
 	public static void evaluateCommunicate(GadgetList item, MouseEvent ev, Entity targetObject) {
 		switch (item) {
 			case YUKKURISITEITTENE:
-				BodyMethodDispatcher.execute(ev, targetObject, "voiceReaction", 0);
+				YukkuriMethodDispatcher.execute(ev, targetObject, "voiceReaction", 0);
 				return;
 			case YUKKURIDIE:
-				BodyMethodDispatcher.execute(ev, targetObject, "voiceReaction", 1);
+				YukkuriMethodDispatcher.execute(ev, targetObject, "voiceReaction", 1);
 				return;
 			case YUKKURIFURIFURI:
-				BodyMethodDispatcher.execute(ev, targetObject, "voiceReaction", 2);
+				YukkuriMethodDispatcher.execute(ev, targetObject, "voiceReaction", 2);
 				return;
 			default:
 				break;

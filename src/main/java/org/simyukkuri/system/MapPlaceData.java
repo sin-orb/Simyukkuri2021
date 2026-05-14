@@ -25,7 +25,7 @@ import org.simyukkuri.entity.core.world.item.House;
 import org.simyukkuri.entity.core.world.item.MachinePress;
 import org.simyukkuri.entity.core.world.item.Mixer;
 import org.simyukkuri.entity.core.world.item.OrangePool;
-import org.simyukkuri.entity.core.world.item.ProcesserPlate;
+import org.simyukkuri.entity.core.world.item.ProcessorPlate;
 import org.simyukkuri.entity.core.world.item.ProductChute;
 import org.simyukkuri.entity.core.world.item.StickyPlate;
 import org.simyukkuri.entity.core.world.item.Stone;
@@ -60,7 +60,7 @@ public class MapPlaceData implements Serializable {
 
 	// シーン内の各オブジェクトリスト
 	/** ゆっくりのリスト */
-	private Map<Integer, Yukkuri> body;
+	private Map<Integer, Yukkuri> yukkuriMap;
 	/** うんうんリスト */
 	private Map<Integer, Shit> shit;
 	/** 吐餡リスト */
@@ -104,7 +104,7 @@ public class MapPlaceData implements Serializable {
 	/** ホットプレートリスト */
 	private Map<Integer, HotPlate> hotPlate;
 	/** 加工プレートリスト */
-	private Map<Integer, ProcesserPlate> processerPlate;
+	private Map<Integer, ProcessorPlate> processorPlate;
 	/** ミキサーリスト */
 	private Map<Integer, Mixer> mixer;
 	/** 自動給餌器リスト */
@@ -155,7 +155,7 @@ public class MapPlaceData implements Serializable {
 		alarmPeriod = 0;
 		alarm = false;
 
-		body = new HashMap<Integer, Yukkuri>();
+		yukkuriMap = new HashMap<Integer, Yukkuri>();
 		shit = new HashMap<Integer, Shit>();
 		vomit = new HashMap<Integer, Vomit>();
 		barrier = new LinkedList<Barrier>();
@@ -175,7 +175,7 @@ public class MapPlaceData implements Serializable {
 		productchute = new HashMap<Integer, ProductChute>();
 		stickyPlate = new HashMap<Integer, StickyPlate>();
 		hotPlate = new HashMap<Integer, HotPlate>();
-		processerPlate = new HashMap<Integer, ProcesserPlate>();
+		processorPlate = new HashMap<Integer, ProcessorPlate>();
 		mixer = new HashMap<Integer, Mixer>();
 		autofeeder = new HashMap<Integer, AutoFeeder>();
 		machinePress = new HashMap<Integer, MachinePress>();
@@ -209,7 +209,7 @@ public class MapPlaceData implements Serializable {
 		alarmPeriod = 0;
 		alarm = false;
 
-		body = new HashMap<Integer, Yukkuri>();
+		yukkuriMap = new HashMap<Integer, Yukkuri>();
 		shit = new HashMap<Integer, Shit>();
 		vomit = new HashMap<Integer, Vomit>();
 		barrier = new LinkedList<Barrier>();
@@ -229,7 +229,7 @@ public class MapPlaceData implements Serializable {
 		productchute = new HashMap<Integer, ProductChute>();
 		stickyPlate = new HashMap<Integer, StickyPlate>();
 		hotPlate = new HashMap<Integer, HotPlate>();
-		processerPlate = new HashMap<Integer, ProcesserPlate>();
+		processorPlate = new HashMap<Integer, ProcessorPlate>();
 		mixer = new HashMap<Integer, Mixer>();
 		autofeeder = new HashMap<Integer, AutoFeeder>();
 		machinePress = new HashMap<Integer, MachinePress>();
@@ -401,12 +401,12 @@ public class MapPlaceData implements Serializable {
 		this.alarm = alarm;
 	}
 
-	public Map<Integer, Yukkuri> getBody() {
-		return body;
+	public Map<Integer, Yukkuri> getYukkuriMap() {
+		return yukkuriMap;
 	}
 
-	public void setBody(Map<Integer, Yukkuri> body) {
-		this.body = body;
+	public void setYukkuriMap(Map<Integer, Yukkuri> yukkuriMap) {
+		this.yukkuriMap = yukkuriMap;
 	}
 
 	public Map<Integer, Shit> getShit() {
@@ -577,12 +577,12 @@ public class MapPlaceData implements Serializable {
 		this.hotPlate = hotPlate;
 	}
 
-	public Map<Integer, ProcesserPlate> getProcesserPlate() {
-		return processerPlate;
+	public Map<Integer, ProcessorPlate> getProcessorPlate() {
+		return processorPlate;
 	}
 
-	public void setProcesserPlate(Map<Integer, ProcesserPlate> processerPlate) {
-		this.processerPlate = processerPlate;
+	public void setProcessorPlate(Map<Integer, ProcessorPlate> processorPlate) {
+		this.processorPlate = processorPlate;
 	}
 
 	public Map<Integer, Mixer> getMixer() {

@@ -29,7 +29,7 @@ public final class FoodNearestSearchPolicy {
 	public static Entity searchFoodNearest(Yukkuri body, boolean[] forceEat) {
 		Entity nearestFood = null;
 		int nearestDistance = body.getEyesightBase();
-		int wallMode = body.getBodyAgeState().ordinal();
+		int wallMode = body.getAgeState().ordinal();
 		forceEat[0] = false;
 		if (body.isFull()) {
 			return null;
@@ -59,7 +59,7 @@ public final class FoodNearestSearchPolicy {
 		}
 		for (Map.Entry<Integer, Stalk> entry : GameWorld.get().getCurrentMap().getStalk().entrySet()) {
 			Stalk stalk = entry.getValue();
-			Yukkuri plantBody = GameWorld.get().getCurrentMap().getBody().get(stalk.getPlantYukkuri());
+			Yukkuri plantBody = GameWorld.get().getCurrentMap().getYukkuriMap().get(stalk.getPlantYukkuri());
 			if (plantBody != null) {
 				if (plantBody == body) {
 					continue;
@@ -73,7 +73,7 @@ public final class FoodNearestSearchPolicy {
 				if (babyList != null && babyList.size() != 0) {
 					boolean hasBaby = false;
 					for (int babyId : babyList) {
-						Yukkuri baby = org.simyukkuri.util.BodyRegistry.getBodyInstance(babyId);
+						Yukkuri baby = org.simyukkuri.util.YukkuriLookup.getYukkuriById(babyId);
 						if (baby == null) {
 							continue;
 						}
@@ -107,12 +107,12 @@ public final class FoodNearestSearchPolicy {
 				nearestDistance = distance;
 			}
 		}
-		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
+		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getYukkuriMap().entrySet()) {
 			Yukkuri candidateBody = entry.getValue();
 			if (body == candidateBody) {
 				continue;
 			}
-			if (!FoodLogic.checkCanEatBody(body, candidateBody)) {
+			if (!FoodLogic.checkCanEatYukkuri(body, candidateBody)) {
 				continue;
 			}
 			int distance = Translate.distance(body.getX(), body.getY(), candidateBody.getX(), candidateBody.getY());

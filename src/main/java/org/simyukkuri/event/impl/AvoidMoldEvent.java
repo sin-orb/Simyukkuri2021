@@ -9,7 +9,7 @@ import org.simyukkuri.enums.Intelligence;
 import org.simyukkuri.enums.PublicRank;
 import org.simyukkuri.event.EventPacket;
 import org.simyukkuri.field.impl.Barrier;
-import org.simyukkuri.logic.BodyLogic;
+import org.simyukkuri.logic.YukkuriLogic;
 import org.simyukkuri.system.MessagePool;
 import org.simyukkuri.util.GameMessages;
 import org.simyukkuri.util.GameRandom;
@@ -55,9 +55,9 @@ public class AvoidMoldEvent extends EventPacket {
 		if (!body.canEventResponse())
 			return false;
 		// 相手との間に壁があればスキップ
-		Yukkuri targetBody = org.simyukkuri.util.BodyRegistry.getBodyInstance(getTo());
+		Yukkuri targetBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getTo());
 		if (targetBody != null && Barrier.acrossBarrier(body.getX(), body.getY(), targetBody.getX(), targetBody.getY(),
-				Barrier.MAP_BODY[body.getBodyAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
+				Barrier.MAP_BODY[body.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
 			return false;
 		}
 		return true;
@@ -68,11 +68,11 @@ public class AvoidMoldEvent extends EventPacket {
 	 */
 	@Override
 	public void start(Yukkuri body) {
-		Yukkuri targetBody = org.simyukkuri.util.BodyRegistry.getBodyInstance(getTo());
+		Yukkuri targetBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getTo());
 		if (targetBody == null) {
 			return;
 		}
-		int collisionX = BodyLogic.calcCollisionX(body, targetBody);
+		int collisionX = YukkuriLogic.calcCollisionX(body, targetBody);
 		body.moveToEvent(this, targetBody.getX() + collisionX, targetBody.getY());
 	}
 
@@ -83,13 +83,13 @@ public class AvoidMoldEvent extends EventPacket {
 	@Override
 	public UpdateState update(Yukkuri body) {
 		// 相手が消えてしまったらイベント中断
-		Yukkuri targetBody = org.simyukkuri.util.BodyRegistry.getBodyInstance(getTo());
+		Yukkuri targetBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getTo());
 		if (targetBody == null)
 			return UpdateState.ABORT;
 		if (targetBody.isDead() || targetBody.isRemoved())
 			return UpdateState.ABORT;
 		targetBody.stay();
-		int collisionX = BodyLogic.calcCollisionX(body, targetBody);
+		int collisionX = YukkuriLogic.calcCollisionX(body, targetBody);
 		body.moveToEvent(this, targetBody.getX() + collisionX, targetBody.getY());
 		return null;
 	}
@@ -100,14 +100,14 @@ public class AvoidMoldEvent extends EventPacket {
 	 */
 	@Override
 	public boolean execute(Yukkuri body) {
-		Yukkuri targetBody = org.simyukkuri.util.BodyRegistry.getBodyInstance(getTo());
-		Yukkuri sourceBody = org.simyukkuri.util.BodyRegistry.getBodyInstance(getFrom());
+		Yukkuri targetBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getTo());
+		Yukkuri sourceBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
 		if (sourceBody == null || targetBody == null) {
 			return true;
 		}
 		// ドゲスの場合、楽しんで制裁
 		if (sourceBody.isVeryRude()) {
-			sourceBody.setBodyEventResMessage(GameMessages.getMessage(sourceBody, MessagePool.Action.HateMoldyYukkuri),
+			sourceBody.setEventResMessage(GameMessages.getMessage(sourceBody, MessagePool.Action.HateMoldyYukkuri),
 					Const.HOLDMESSAGE, true, false);
 			targetBody.strikeByYukkuri(sourceBody, this, false);
 			sourceBody.setForceFace(ImageCode.PUFF.ordinal());
@@ -181,7 +181,7 @@ public class AvoidMoldEvent extends EventPacket {
 				}
 				// 家族でない場合
 				else {
-					sourceBody.setBodyEventResMessage(
+					sourceBody.setEventResMessage(
 							GameMessages.getMessage(sourceBody, MessagePool.Action.HateMoldyYukkuri),
 							Const.HOLDMESSAGE, true, false);
 					targetBody.strikeByYukkuri(sourceBody, this, false);
@@ -267,7 +267,7 @@ public class AvoidMoldEvent extends EventPacket {
 			}
 			// 家族でない場合
 			else {
-				sourceBody.setBodyEventResMessage(
+				sourceBody.setEventResMessage(
 						GameMessages.getMessage(sourceBody, MessagePool.Action.HateMoldyYukkuri),
 						Const.HOLDMESSAGE, true, false);
 				sourceBody.runAway(targetBody.getX(), targetBody.getY());
@@ -287,7 +287,7 @@ public class AvoidMoldEvent extends EventPacket {
 	 * @param To   イベント対象
 	 */
 	public void saySadMessage(Yukkuri From, Yukkuri To) {
-		Yukkuri sourceBody = org.simyukkuri.util.BodyRegistry.getBodyInstance(getFrom());
+		Yukkuri sourceBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
 		if (sourceBody == null)
 			return;
 		String message = null;
@@ -306,7 +306,7 @@ public class AvoidMoldEvent extends EventPacket {
 			else
 				message = GameMessages.getMessage(sourceBody, MessagePool.Action.SadnessForMoldySister);
 		}
-		From.setBodyEventResMessage(message, Const.HOLDMESSAGE, true, GameRandom.nextBoolean());
+		From.setEventResMessage(message, Const.HOLDMESSAGE, true, GameRandom.nextBoolean());
 	}
 
 	/**
@@ -316,7 +316,7 @@ public class AvoidMoldEvent extends EventPacket {
 	 * @param To   イベント対象
 	 */
 	public void sayApologyMessage(Yukkuri From, Yukkuri To) {
-		Yukkuri sourceBody = org.simyukkuri.util.BodyRegistry.getBodyInstance(getFrom());
+		Yukkuri sourceBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
 		if (sourceBody == null)
 			return;
 		String message = null;
@@ -325,7 +325,7 @@ public class AvoidMoldEvent extends EventPacket {
 		} else if (To.isFamily(From)) {
 			message = GameMessages.getMessage(sourceBody, MessagePool.Action.ApologyToFamily);
 		}
-		From.setBodyEventResMessage(message, Const.HOLDMESSAGE, true, GameRandom.nextBoolean());
+		From.setEventResMessage(message, Const.HOLDMESSAGE, true, GameRandom.nextBoolean());
 	}
 
 	@Override

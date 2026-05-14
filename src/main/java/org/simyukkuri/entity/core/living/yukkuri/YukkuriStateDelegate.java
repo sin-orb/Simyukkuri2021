@@ -18,7 +18,7 @@ import org.simyukkuri.enums.UnbirthBabyState;
 import org.simyukkuri.event.EventPacket;
 import org.simyukkuri.event.impl.BegForLifeEvent;
 import org.simyukkuri.event.impl.BreedEvent;
-import org.simyukkuri.logic.BodyRelations;
+import org.simyukkuri.logic.YukkuriRelations;
 import org.simyukkuri.logic.EventLogic;
 import org.simyukkuri.system.MessagePool;
 import org.simyukkuri.util.GameEnvironment;
@@ -57,7 +57,7 @@ public final class YukkuriStateDelegate {
 		if (body.isSick()) {
 			body.addSickPeriod(GameEnvironment.isHumid() ? 4 : 1);
 			if (body.getSickPeriod() > body.getIncubationPeriodBase() * 32
-					&& (body.getDamage() >= body.getDamageLimitBase()[body.getBodyAgeState().ordinal()] * 85 / 100)
+					&& (body.getDamage() >= body.getDamageLimitBase()[body.getAgeState().ordinal()] * 85 / 100)
 					&& !body.isTalking()) {
 				if (body.isSleeping()) {
 					body.wakeup();
@@ -113,10 +113,10 @@ public final class YukkuriStateDelegate {
 		if (body.isSleeping()) {
 			if (GameRandom.nextInt(10) == 0) {
 				if (body.isNightmare()) {
-					body.setNYDMessage(GameMessages.getMessage(body, MessagePool.Action.Nightmare), false);
+					body.setNydMessage(GameMessages.getMessage(body, MessagePool.Action.Nightmare), false);
 					body.addStress(20);
 				} else {
-					body.setNYDMessage(GameMessages.getMessage(body, MessagePool.Action.Sleep), false);
+					body.setNydMessage(GameMessages.getMessage(body, MessagePool.Action.Sleep), false);
 					body.addStress(-20);
 				}
 			}
@@ -162,7 +162,7 @@ public final class YukkuriStateDelegate {
 				// BreedEventの重複作成を防ぐ（同じfromのイベントが既にあれば追加しない）
 				boolean hasBreedEvent = false;
 				for (org.simyukkuri.event.EventPacket ep : GameWorld.get().getCurrentMap().getEvent()) {
-					if (ep instanceof BreedEvent && BodyRelations.getBody(ep.getFrom()) == body) {
+					if (ep instanceof BreedEvent && YukkuriRelations.getYukkuriById(ep.getFrom()) == body) {
 						hasBreedEvent = true;
 						break;
 					}
@@ -250,11 +250,11 @@ public final class YukkuriStateDelegate {
 		if (body.getCriticalDamegeType() == CriticalDamegeType.INJURED) {
 			body.setCriticalDamege(null);
 		}
-		body.setBodyBakePeriod(0);
+		body.setBakePeriod(0);
 		body.setDamage(0);
 		body.setDamageState(body.getDamageState());
 		body.setHungry(body.getHungryLimit());
-		body.setBodyBakePeriod(0);
+		body.setBakePeriod(0);
 		body.setAngry(false);
 		body.setScare(false);
 		body.setCalm();
@@ -301,7 +301,7 @@ public final class YukkuriStateDelegate {
 		if (body.getCriticalDamegeType() == CriticalDamegeType.INJURED) {
 			body.setCriticalDamege(null);
 		}
-		body.setBodyBakePeriod(0);
+		body.setBakePeriod(0);
 		body.setDamage(0);
 		body.setDamageState(body.getDamageState());
 		body.setHungry(body.getHungryLimit());
@@ -587,7 +587,7 @@ public final class YukkuriStateDelegate {
 		body.setPeropero(false);
 		body.addMemories(-5);
 		if (body.getCoreAnkoState() == CoreAnkoState.NonYukkuriDiseaseNear) {
-			body.setNYDMessage(GameMessages.getMessage(body, MessagePool.Action.Dying2), false);
+			body.setNydMessage(GameMessages.getMessage(body, MessagePool.Action.Dying2), false);
 		}
 		body.setMessage(GameMessages.getMessage(body, MessagePool.Action.Dying2));
 	}
@@ -614,7 +614,7 @@ public final class YukkuriStateDelegate {
 	/** CUT 致命傷時のメッセージ反応. */
 	public void onCutDamageReaction() {
 		if (body.getCoreAnkoState() != CoreAnkoState.NonYukkuriDiseaseNear) {
-			body.setNYDMessage(GameMessages.getMessage(body, MessagePool.Action.Dying2), false);
+			body.setNydMessage(GameMessages.getMessage(body, MessagePool.Action.Dying2), false);
 		} else {
 			body.setMessage(GameMessages.getMessage(body, MessagePool.Action.Dying2));
 		}

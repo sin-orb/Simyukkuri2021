@@ -385,7 +385,7 @@ public class Beltconveyor extends FieldShape {
 		switch (o.getObjType()) {
 			case YUKKURI:
 				Yukkuri b = (Yukkuri) o;
-				int ageIdx = b.getBodyAgeState().ordinal();
+				int ageIdx = b.getAgeState().ordinal();
 				int bodyIdx;
 				// settingのインデックスはSetupButton.ordinal() + SetupMenu.NORMAL_BABY.ordinal()
 				// setupBeltで連続した行(2,3,4,5,6)に保存しているため

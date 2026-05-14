@@ -100,7 +100,7 @@ public class BadgeTest {
         Yukkuri parent = createParent(AgeState.CHILD);
         Badge badge = new Badge(parent, BadgeRank.BRONZE);
 
-        SimYukkuri.world.getCurrentMap().getBody().remove(parent.getUniqueID());
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().remove(parent.getUniqueID());
 
         BufferedImage image = badge.getImage(parent);
         assertNull(image);
@@ -170,7 +170,7 @@ public class BadgeTest {
         int origPivotX = badge.getPivotX();
         int origPivotY = badge.getPivotY();
 
-        SimYukkuri.world.getCurrentMap().getBody().remove(parent.getUniqueID());
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().remove(parent.getUniqueID());
 
         badge.resetBoundary();
 
@@ -206,7 +206,7 @@ public class BadgeTest {
     private static Yukkuri createParent(AgeState ageState) {
         Yukkuri parent = new Reimu();
         parent.setAgeState(ageState);
-        SimYukkuri.world.getCurrentMap().getBody().put(parent.getUniqueID(), parent);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(parent.getUniqueID(), parent);
         return parent;
     }
 

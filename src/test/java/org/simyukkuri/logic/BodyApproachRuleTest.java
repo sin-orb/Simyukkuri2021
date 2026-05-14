@@ -23,7 +23,7 @@ import org.simyukkuri.enums.PublicRank;
 import org.simyukkuri.util.WorldTestHelper;
 
 /**
- * Tests for BodyApproachRule.
+ * Tests for YukkuriApproachRule.
  */
 class BodyApproachRuleTest {
 
@@ -40,7 +40,7 @@ class BodyApproachRuleTest {
 		me.setPublicRank(PublicRank.NONE);
 		you.setPublicRank(PublicRank.NONE);
 
-		assertDoesNotThrow(() -> BodyApproachRule.handleApproach(you, me, 20));
+		assertDoesNotThrow(() -> YukkuriApproachRule.handleApproach(you, me, 20));
 		assertEquals(you.getX() - 20, me.getDestX(), "approach should move toward the target with the computed offset");
 		assertEquals(you.getY(), me.getDestY(), "approach should keep the target Y position");
 	}

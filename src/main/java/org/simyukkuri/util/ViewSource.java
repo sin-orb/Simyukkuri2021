@@ -23,15 +23,15 @@ public interface ViewSource {
 
 	void loadImage(boolean isBg, boolean isItem, boolean isEffect, boolean isBody, boolean isAttach, boolean isIni);
 
-	void loadBodyImage(YukkuriType type);
+	void loadYukkuriImage(YukkuriType type);
 
 	void loadTerrainFile();
 
 	void createBackBuffer();
 
-	Yukkuri addBody(int x, int y, int z, YukkuriType type, AgeState age, Yukkuri p1, Yukkuri p2);
+	Yukkuri addYukkuri(int x, int y, int z, YukkuriType type, AgeState age, Yukkuri p1, Yukkuri p2);
 
-	Yukkuri makeBody(int x, int y, int z, YukkuriType type, Dna dna, AgeState age, Yukkuri p1, Yukkuri p2,
+	Yukkuri makeYukkuri(int x, int y, int z, YukkuriType type, Dna dna, AgeState age, Yukkuri p1, Yukkuri p2,
 			boolean adjust);
 
 	Vomit addVomit(int x, int y, int z, Yukkuri body, YukkuriType type);

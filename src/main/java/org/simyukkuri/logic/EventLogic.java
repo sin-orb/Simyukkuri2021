@@ -46,8 +46,8 @@ public class EventLogic {
 	 * @param msgBody イベント開始時にしゃべる個体
 	 * @param message しゃべる内容
 	 */
-	public static final void addBodyEvent(Yukkuri to, EventPacket event, Yukkuri msgBody, String message) {
-		addBodyEvent(to, event, msgBody, message, Const.HOLDMESSAGE);
+	public static final void addYukkuriEvent(Yukkuri to, EventPacket event, Yukkuri msgBody, String message) {
+		addYukkuriEvent(to, event, msgBody, message, Const.HOLDMESSAGE);
 	}
 
 	/**
@@ -59,10 +59,10 @@ public class EventLogic {
 	 * @param message しゃべる内容
 	 *                * @param count しゃべる時間
 	 */
-	public static final void addBodyEvent(Yukkuri to, EventPacket event, Yukkuri msgBody, String message, int count) {
+	public static final void addYukkuriEvent(Yukkuri to, EventPacket event, Yukkuri msgBody, String message, int count) {
 		to.getEventList().add(event);
 		if (msgBody != null) {
-			msgBody.setBodyEventSendMessage(message, count);
+			msgBody.setEventSendMessage(message, count);
 		}
 	}
 
@@ -91,7 +91,7 @@ public class EventLogic {
 		for (Iterator<EventPacket> i = GameWorld.get().getCurrentMap().getEvent().iterator(); i.hasNext();) {
 			e = i.next();
 			// from が設定されていてかつ実体が消えていればイベントを除去
-			if (e.getFrom() != -1 && org.simyukkuri.util.BodyRegistry.getBodyInstance(e.getFrom()) == null) {
+			if (e.getFrom() != -1 && org.simyukkuri.util.YukkuriLookup.getYukkuriById(e.getFrom()) == null) {
 				i.remove();
 				continue;
 			}
@@ -113,7 +113,7 @@ public class EventLogic {
 	 * @param b 対象ゆっくり
 	 * @return 始めるイベント
 	 */
-	public static final EventPacket checkBodyEvent(Yukkuri body) {
+	public static final EventPacket checkYukkuriEvent(Yukkuri body) {
 		EventPacket eventPacket = null;
 		EventPacket e;
 
@@ -148,7 +148,7 @@ public class EventLogic {
 		// リストに登録されているイベントすべてをチェック
 		for (Iterator<EventPacket> i = GameWorld.get().getCurrentMap().getEvent().iterator(); i.hasNext();) {
 			e = i.next();
-			Yukkuri from = org.simyukkuri.util.BodyRegistry.getBodyInstance(e.getFrom());
+			Yukkuri from = org.simyukkuri.util.YukkuriLookup.getYukkuriById(e.getFrom());
 			if (from == body)
 				continue;
 			if (e.simpleEventAction(body)) {
@@ -162,7 +162,7 @@ public class EventLogic {
 	 * 
 	 * @param b ゆっくり
 	 */
-	public static final void checkSimpleBodyEvent(Yukkuri body) {
+	public static final void checkSimpleYukkuriEvent(Yukkuri body) {
 		EventPacket e;
 
 		for (Iterator<EventPacket> i = body.getEventList().iterator(); i.hasNext();) {
@@ -181,6 +181,6 @@ public class EventLogic {
 	 * @param b ゆっくり
 	 */
 	public static final void eventUpdate(Yukkuri body) {
-		BodyEventState.updateCurrentEvent(body);
+		YukkuriEventState.updateCurrentEvent(body);
 	}
 }

@@ -21,7 +21,7 @@ import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.draw.MyPane;
-import org.simyukkuri.system.BodyLayer;
+import org.simyukkuri.system.YukkuriLayer;
 import org.simyukkuri.system.ResourceUtil;
 import org.simyukkuri.draw.Point4y;
 import org.simyukkuri.entity.core.living.yukkuri.Dna;
@@ -285,7 +285,7 @@ public class MarisaTest {
             // Set up imagePack so getImage doesn't NPE
             java.lang.reflect.Field fp = Marisa.class.getDeclaredField("imagePack");
             fp.setAccessible(true);
-            int ranks = org.simyukkuri.enums.BodyRank.values().length;
+            int ranks = org.simyukkuri.enums.YukkuriRank.values().length;
             java.awt.image.BufferedImage[][][][] pack = new java.awt.image.BufferedImage[ranks][200][20][20];
             java.awt.image.BufferedImage dummy = new java.awt.image.BufferedImage(1, 1, java.awt.image.BufferedImage.TYPE_INT_ARGB);
             for (int i = 0; i < ranks; i++)
@@ -295,7 +295,7 @@ public class MarisaTest {
                             pack[i][j][k][l] = dummy;
             fp.set(null, pack);
             Marisa obj = new Marisa();
-            org.simyukkuri.system.BodyLayer layer = new org.simyukkuri.system.BodyLayer();
+            org.simyukkuri.system.YukkuriLayer layer = new org.simyukkuri.system.YukkuriLayer();
             obj.getImage(0, 0, layer, 0);
         } catch (Exception e) { }
     }
@@ -324,13 +324,13 @@ public class MarisaTest {
             Marisa marisa = new Marisa();
             marisa.setAge(100000);
             WorldTestHelper.makeTransformationReady(marisa);
-            SimYukkuri.world.getCurrentMap().getBody().put(marisa.getUniqueID(), marisa);
+            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(marisa.getUniqueID(), marisa);
 
             int originalId = marisa.getUniqueID();
 
             marisa.execTransform();
 
-            Yukkuri transformed = SimYukkuri.world.getCurrentMap().getBody().get(originalId);
+            Yukkuri transformed = SimYukkuri.world.getCurrentMap().getYukkuriMap().get(originalId);
             assertNotNull(transformed);
             assertInstanceOf(DosMarisa.class, transformed);
             assertEquals(originalId, transformed.getUniqueID());
@@ -359,9 +359,9 @@ public class MarisaTest {
             child.setParents(new int[] { marisa.getUniqueID(), -1 });
             marisa.getChildrenList().add(child.getUniqueID());
 
-            SimYukkuri.world.getCurrentMap().getBody().put(marisa.getUniqueID(), marisa);
-            SimYukkuri.world.getCurrentMap().getBody().put(partner.getUniqueID(), partner);
-            SimYukkuri.world.getCurrentMap().getBody().put(child.getUniqueID(), child);
+            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(marisa.getUniqueID(), marisa);
+            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(partner.getUniqueID(), partner);
+            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(child.getUniqueID(), child);
 
             int originalId = marisa.getUniqueID();
             int partnerId = partner.getUniqueID();
@@ -369,7 +369,7 @@ public class MarisaTest {
 
             marisa.execTransform();
 
-            Yukkuri transformed = SimYukkuri.world.getCurrentMap().getBody().get(originalId);
+            Yukkuri transformed = SimYukkuri.world.getCurrentMap().getYukkuriMap().get(originalId);
             assertNotNull(transformed);
             assertEquals(partnerId, transformed.getPartner());
             assertTrue(transformed.getChildrenList().contains(childId));
@@ -400,16 +400,16 @@ public class MarisaTest {
             child.setParents(new int[] { marisa.getUniqueID(), -1 });
             marisa.getChildrenList().add(child.getUniqueID());
 
-            SimYukkuri.world.getCurrentMap().getBody().put(marisa.getUniqueID(), marisa);
-            SimYukkuri.world.getCurrentMap().getBody().put(partner.getUniqueID(), partner);
-            SimYukkuri.world.getCurrentMap().getBody().put(child.getUniqueID(), child);
+            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(marisa.getUniqueID(), marisa);
+            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(partner.getUniqueID(), partner);
+            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(child.getUniqueID(), child);
 
             int originalId = marisa.getUniqueID();
             int childId = child.getUniqueID();
 
             marisa.execTransform();
 
-            Yukkuri transformed = SimYukkuri.world.getCurrentMap().getBody().get(originalId);
+            Yukkuri transformed = SimYukkuri.world.getCurrentMap().getYukkuriMap().get(originalId);
             assertNotNull(transformed);
             assertTrue(transformed.isHasBaby());
             assertEquals(1, transformed.getBabyTypes().size());
@@ -442,16 +442,16 @@ public class MarisaTest {
             child.setParents(new int[] { marisa.getUniqueID(), -1 });
             marisa.getChildrenList().add(child.getUniqueID());
 
-            SimYukkuri.world.getCurrentMap().getBody().put(marisa.getUniqueID(), marisa);
-            SimYukkuri.world.getCurrentMap().getBody().put(partner.getUniqueID(), partner);
-            SimYukkuri.world.getCurrentMap().getBody().put(child.getUniqueID(), child);
+            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(marisa.getUniqueID(), marisa);
+            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(partner.getUniqueID(), partner);
+            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(child.getUniqueID(), child);
 
             int originalId = marisa.getUniqueID();
             int childId = child.getUniqueID();
 
             marisa.execTransform();
 
-            Yukkuri transformed = SimYukkuri.world.getCurrentMap().getBody().get(originalId);
+            Yukkuri transformed = SimYukkuri.world.getCurrentMap().getYukkuriMap().get(originalId);
             assertNotNull(transformed);
             assertTrue(transformed.isHasStalk());
             assertEquals(1, transformed.getStalkBabyTypes().size());
@@ -505,7 +505,7 @@ public class MarisaTest {
     private static java.awt.image.BufferedImage[][][][] setupImagePack(Class<?> cls) throws Exception {
         java.lang.reflect.Field fp = cls.getDeclaredField("imagePack");
         fp.setAccessible(true);
-        int ranks = org.simyukkuri.enums.BodyRank.values().length;
+        int ranks = org.simyukkuri.enums.YukkuriRank.values().length;
         java.awt.image.BufferedImage[][][][] pack = new java.awt.image.BufferedImage[ranks][300][20][20];
         java.awt.image.BufferedImage dummy = new java.awt.image.BufferedImage(1, 1, java.awt.image.BufferedImage.TYPE_INT_ARGB);
         for (int i = 0; i < ranks; i++)
@@ -522,8 +522,8 @@ public class MarisaTest {
         try {
             setupImagePack(Marisa.class);
             Marisa marisa = new Marisa();
-            org.simyukkuri.system.BodyLayer layer = new org.simyukkuri.system.BodyLayer();
-            assertDoesNotThrow(() -> marisa.getBodyBaseImage(layer));
+            org.simyukkuri.system.YukkuriLayer layer = new org.simyukkuri.system.YukkuriLayer();
+            assertDoesNotThrow(() -> marisa.getImageIndex(layer));
         } catch (Exception e) { }
     }
 
@@ -534,8 +534,8 @@ public class MarisaTest {
             Marisa marisa = new Marisa();
             marisa.setBurned(true);
             marisa.setDead(true);
-            org.simyukkuri.system.BodyLayer layer = new org.simyukkuri.system.BodyLayer();
-            assertDoesNotThrow(() -> marisa.getBodyBaseImage(layer));
+            org.simyukkuri.system.YukkuriLayer layer = new org.simyukkuri.system.YukkuriLayer();
+            assertDoesNotThrow(() -> marisa.getImageIndex(layer));
         } catch (Exception e) { }
     }
 
@@ -545,8 +545,8 @@ public class MarisaTest {
             setupImagePack(Marisa.class);
             Marisa marisa = new Marisa();
             marisa.setCrushed(true);
-            org.simyukkuri.system.BodyLayer layer = new org.simyukkuri.system.BodyLayer();
-            assertDoesNotThrow(() -> marisa.getBodyBaseImage(layer));
+            org.simyukkuri.system.YukkuriLayer layer = new org.simyukkuri.system.YukkuriLayer();
+            assertDoesNotThrow(() -> marisa.getImageIndex(layer));
         } catch (Exception e) { }
     }
 
@@ -557,8 +557,8 @@ public class MarisaTest {
             Marisa marisa = new Marisa();
             marisa.setCrushed(true);
             marisa.setPealed(true);
-            org.simyukkuri.system.BodyLayer layer = new org.simyukkuri.system.BodyLayer();
-            assertDoesNotThrow(() -> marisa.getBodyBaseImage(layer));
+            org.simyukkuri.system.YukkuriLayer layer = new org.simyukkuri.system.YukkuriLayer();
+            assertDoesNotThrow(() -> marisa.getImageIndex(layer));
         } catch (Exception e) { }
     }
 }

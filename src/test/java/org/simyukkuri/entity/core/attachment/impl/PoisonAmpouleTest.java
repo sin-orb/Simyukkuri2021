@@ -141,7 +141,7 @@ public class PoisonAmpouleTest {
         Yukkuri parent = createParent(AgeState.CHILD);
         PoisonAmpoule ampoule = new PoisonAmpoule(parent);
 
-        SimYukkuri.world.getCurrentMap().getBody().remove(parent.getUniqueID());
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().remove(parent.getUniqueID());
 
         BufferedImage image = ampoule.getImage(parent);
         assertNull(image);
@@ -209,7 +209,7 @@ public class PoisonAmpouleTest {
         int origPivotX = ampoule.getPivotX();
         int origPivotY = ampoule.getPivotY();
 
-        SimYukkuri.world.getCurrentMap().getBody().remove(parent.getUniqueID());
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().remove(parent.getUniqueID());
 
         ampoule.resetBoundary();
 
@@ -291,8 +291,8 @@ public class PoisonAmpouleTest {
         for (int i = 0; i < 3; i++) {
             spr[i] = new Sprite(10, 10, Sprite.PIVOT_CENTER_BOTTOM);
         }
-        parent.setBodySpr(spr);
-        SimYukkuri.world.getCurrentMap().getBody().put(parent.getUniqueID(), parent);
+        parent.setSpriteSet(spr);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(parent.getUniqueID(), parent);
         return parent;
     }
 

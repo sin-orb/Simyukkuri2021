@@ -4,7 +4,7 @@ import org.simyukkuri.entity.core.attachment.impl.Ants;
 import org.simyukkuri.enums.EnumRelationMine;
 import org.simyukkuri.enums.Happiness;
 import org.simyukkuri.enums.Intelligence;
-import org.simyukkuri.logic.BodyLogic;
+import org.simyukkuri.logic.YukkuriLogic;
 import org.simyukkuri.system.MessagePool;
 import org.simyukkuri.util.GameMessages;
 import org.simyukkuri.util.GameRandom;
@@ -42,7 +42,7 @@ public final class YukkuriOtherRelationDelegate {
 		if (!body.canAction()) {
 			return;
 		}
-		EnumRelationMine relation = BodyLogic.checkMyRelation(body, p);
+		EnumRelationMine relation = YukkuriLogic.checkMyRelation(body, p);
 		if (body.findSick(p) || p.isFeelHardPain() || p.isDamaged()) {
 			switch (relation) {
 				case FATHER:
@@ -123,7 +123,7 @@ public final class YukkuriOtherRelationDelegate {
 			return;
 		}
 
-		EnumRelationMine relation = BodyLogic.checkMyRelation(body, p);
+		EnumRelationMine relation = YukkuriLogic.checkMyRelation(body, p);
 		if (body.findSick(p) || p.isFeelHardPain() || p.isDamaged() || p.getAttachmentSize(Ants.class) != 0) {
 			switch (relation) {
 				case FATHER:
@@ -186,7 +186,7 @@ public final class YukkuriOtherRelationDelegate {
 		p.stay(40);
 		p.addDamage(-10);
 		if (p.getAttachmentSize(Ants.class) == 0) {
-			body.substractNumOfAnts(10 * body.getBodyAgeState().ordinal() * body.getBodyAgeState().ordinal());
+			body.substractNumOfAnts(10 * body.getAgeState().ordinal() * body.getAgeState().ordinal());
 		}
 		if (!p.isHasPants()) {
 			p.makeDirty(false);

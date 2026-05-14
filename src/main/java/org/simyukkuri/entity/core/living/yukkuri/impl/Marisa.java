@@ -17,12 +17,12 @@ import org.simyukkuri.engine.transform.TransformationService;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.world.bodylinked.Okazari.OkazariType;
 import org.simyukkuri.enums.AgeState;
-import org.simyukkuri.enums.BodyRank;
+import org.simyukkuri.enums.YukkuriRank;
 import org.simyukkuri.enums.CriticalDamegeType;
 import org.simyukkuri.enums.HairState;
 import org.simyukkuri.enums.ImageCode;
 import org.simyukkuri.enums.YukkuriType;
-import org.simyukkuri.system.BodyLayer;
+import org.simyukkuri.system.YukkuriLayer;
 import org.simyukkuri.util.GameEnvironment;
 import org.simyukkuri.util.GameLocale;
 import org.simyukkuri.util.GameRandom;
@@ -44,7 +44,7 @@ public class Marisa extends Yukkuri {
 	/** まりさベースファイル名 */
 	public static final String baseFileName = "marisa";
 
-	private static BufferedImage[][][][] imagePack = new BufferedImage[BodyRank.values().length][][][];
+	private static BufferedImage[][][][] imagePack = new BufferedImage[YukkuriRank.values().length][][][];
 	private static BufferedImage[][][] imagesKai = new BufferedImage[ImageCode.values().length][2][3];
 	private static BufferedImage[][][] imagesNora = new BufferedImage[ImageCode.values().length][2][3];
 	private static BufferedImage[][][][] imagesNagasi = new BufferedImage[ImageCode
@@ -68,29 +68,29 @@ public class Marisa extends Yukkuri {
 			return;
 
 		boolean res;
-		res = ModLoader.loadBodyImagePack(loader, imagesNagasi, directionOffsetNagasi, ModLoader.getYkWordNagasi(),
+		res = ModLoader.loadYukkuriImagePack(loader, imagesNagasi, directionOffsetNagasi, ModLoader.getYkWordNagasi(),
 				baseFileName, io);
 		if (!res) {
 			imagesNagasi = null;
 		}
-		res = ModLoader.loadBodyImagePack(loader, imagesNora, directionOffset, ModLoader.getYkWordNora(), baseFileName,
+		res = ModLoader.loadYukkuriImagePack(loader, imagesNora, directionOffset, ModLoader.getYkWordNora(), baseFileName,
 				io);
 		if (!res) {
 			imagesNora = null;
 		}
-		res = ModLoader.loadBodyImagePack(loader, imagesKai, directionOffset, null, baseFileName, io);
+		res = ModLoader.loadYukkuriImagePack(loader, imagesKai, directionOffset, null, baseFileName, io);
 		if (!res) {
 			imagesKai = null;
 		}
 
 		// 飼い
-		imagePack[BodyRank.KAIYU.getImageIndex()] = imagesKai;
+		imagePack[YukkuriRank.KAIYU.getImageIndex()] = imagesKai;
 
 		// 野良
 		if (imagesNora != null) {
-			imagePack[BodyRank.NORAYU.getImageIndex()] = imagesNora;
+			imagePack[YukkuriRank.NORAYU.getImageIndex()] = imagesNora;
 		} else {
-			imagePack[BodyRank.NORAYU.getImageIndex()] = imagesKai;
+			imagePack[YukkuriRank.NORAYU.getImageIndex()] = imagesKai;
 		}
 
 		ModLoader.setImageSize(imagesKai, boundary, braidBoundary, io);
@@ -110,15 +110,15 @@ public class Marisa extends Yukkuri {
 	 * @param loader クラスローダ
 	 */
 	public static void loadIniFile(ClassLoader loader) {
-		AttachOffset = ModLoader.loadBodyIniMap(loader, ModLoader.getDataIniDir(), baseFileName);
-		baseSpeed = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataIniDir(), baseFileName, "speed");
+		AttachOffset = ModLoader.loadYukkuriIniMap(loader, ModLoader.getDataIniDir(), baseFileName);
+		baseSpeed = ModLoader.loadYukkuriIniMapForInt(loader, ModLoader.getDataIniDir(), baseFileName, "speed");
 	}
 
 	@Override
-	public int getImage(int type, int direction, BodyLayer layer, int index) {
+	public int getImage(int type, int direction, YukkuriLayer layer, int index) {
 		if (!isImageNagasiMode() || imagesNagasi == null) {
-			layer.getImage()[index] = imagePack[getBodyRank().getImageIndex()][type][direction
-					* directionOffset[type][0]][getBodyAgeState().ordinal()];
+			layer.getImage()[index] = imagePack[getRank().getImageIndex()][type][direction
+					* directionOffset[type][0]][getAgeState().ordinal()];
 			layer.getDir()[index] = direction * directionOffset[type][1];
 		}
 		// 流し絵の場合
@@ -133,12 +133,12 @@ public class Marisa extends Yukkuri {
 			if (imageVariantState[type][1] == 1) {
 				int imageIndex = imageVariantState[type][0];
 				layer.getImage()[index] = imagesNagasi[type][direction
-						* directionOffsetNagasi[type][0]][getBodyAgeState()
+						* directionOffsetNagasi[type][0]][getAgeState()
 								.ordinal()][imageIndex];
 			} else {
 				int otherVersionCount = 0;
 				for (int i = 0; i < ModLoader.getMaxImgOtherVer(); i++) {
-					if (imagesNagasi[type][direction * directionOffsetNagasi[type][0]][getBodyAgeState().ordinal()][i
+					if (imagesNagasi[type][direction * directionOffsetNagasi[type][0]][getAgeState().ordinal()][i
 							+ 1] != null) {
 						otherVersionCount++;
 					}
@@ -147,11 +147,11 @@ public class Marisa extends Yukkuri {
 					int randomIndex = GameRandom.nextInt(otherVersionCount + 1);
 					imageVariantState[type][0] = randomIndex;
 					layer.getImage()[index] = imagesNagasi[type][direction
-							* directionOffsetNagasi[type][0]][getBodyAgeState().ordinal()][randomIndex];
+							* directionOffsetNagasi[type][0]][getAgeState().ordinal()][randomIndex];
 				} else {
 					imageVariantState[type][0] = 0;
 					layer.getImage()[index] = imagesNagasi[type][direction
-							* directionOffsetNagasi[type][0]][getBodyAgeState().ordinal()][0];
+							* directionOffsetNagasi[type][0]][getAgeState().ordinal()][0];
 				}
 				imageVariantState[type][1] = 1;
 			}
@@ -204,7 +204,7 @@ public class Marisa extends Yukkuri {
 
 		// 自分以外に幸せを感じている大人のゆっくりが10体以上いる
 		int adultCount = 0;
-		List<Yukkuri> bodyList = new LinkedList<Yukkuri>(GameWorld.get().getCurrentMap().getBody().values());
+		List<Yukkuri> bodyList = new LinkedList<Yukkuri>(GameWorld.get().getCurrentMap().getYukkuriMap().values());
 		for (Yukkuri otherBody : bodyList) {
 			if (otherBody == this) {
 				continue;
@@ -254,8 +254,8 @@ public class Marisa extends Yukkuri {
 	@Override
 	@Transient
 	public String getMyName() {
-		if (getMyNames()[getBodyAgeState().ordinal()] != null) {
-			return getMyNames()[getBodyAgeState().ordinal()];
+		if (getMyNames()[getAgeState().ordinal()] != null) {
+			return getMyNames()[getAgeState().ordinal()];
 		}
 		if (GameLocale.isJapanese()) {
 			return nameJ;
@@ -267,8 +267,8 @@ public class Marisa extends Yukkuri {
 	@Override
 	@Transient
 	public String getMyNameD() {
-		if (getMyNamesDamaged()[getBodyAgeState().ordinal()] != null) {
-			return getMyNamesDamaged()[getBodyAgeState().ordinal()];
+		if (getMyNamesDamaged()[getAgeState().ordinal()] != null) {
+			return getMyNamesDamaged()[getAgeState().ordinal()];
 		}
 		return getMyName();
 	}
@@ -294,7 +294,7 @@ public class Marisa extends Yukkuri {
 	// 胴体のベースグラフィックを返す
 	// option[0] 正面向きか横向きか
 	@Override
-	public int getBodyBaseImage(BodyLayer layer) {
+	public int getImageIndex(YukkuriLayer layer) {
 		int direction = this.getDirection().ordinal();
 		int idx = 0;
 
@@ -604,7 +604,7 @@ public class Marisa extends Yukkuri {
 		setBoundary(boundary, braidBoundary);
 		setMsgType(YukkuriType.MARISA);
 		setShitType(YukkuriType.MARISA);
-		setBaseBodyFileName(baseFileName);
+		setBaseYukkuriFileName(baseFileName);
 		IniFileUtil.readYukkuriIniFile(this);
 	}
 

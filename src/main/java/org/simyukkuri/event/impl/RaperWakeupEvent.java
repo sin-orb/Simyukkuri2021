@@ -32,7 +32,7 @@ public class RaperWakeupEvent extends EventPacket {
 	@Override
 	public boolean simpleEventAction(Yukkuri body) {
 		// 自分自身はスキップ、またはレイパーが既に消えていればスキップ
-		Yukkuri sourceBody = org.simyukkuri.util.BodyRegistry.getBodyInstance(getFrom());
+		Yukkuri sourceBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
 		if (sourceBody == null || body == sourceBody)
 			return false;
 		// 死体、睡眠、皮なし、目無しはスキップ
@@ -46,7 +46,7 @@ public class RaperWakeupEvent extends EventPacket {
 
 		// 相手との間に壁があればスキップ
 		if (Barrier.acrossBarrier(body.getX(), body.getY(), sourceBody.getX(), sourceBody.getY(),
-				Barrier.MAP_BODY[body.getBodyAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
+				Barrier.MAP_BODY[body.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
 			return false;
 		}
 
@@ -58,7 +58,7 @@ public class RaperWakeupEvent extends EventPacket {
 
 		// 一般人の反応
 		// 固体ごとに異なる行動をするため新しいイベントのインスタンスを作成して固体イベントに登録
-		EventLogic.addBodyEvent(body, new RaperReactionEvent(sourceBody, null, null, 1), null, null);
+		EventLogic.addYukkuriEvent(body, new RaperReactionEvent(sourceBody, null, null, 1), null, null);
 		return true;
 	}
 

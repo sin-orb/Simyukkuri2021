@@ -193,11 +193,11 @@ public class GarbageChute extends WorldEntity {
 		this.itemRank = itemRank;
 	}
 
-	public Yukkuri getBindBody() {
+	public Yukkuri getBoundYukkuri() {
 		return bindBody;
 	}
 
-	public void setBindBody(Yukkuri bindBody) {
+	public void setBoundYukkuri(Yukkuri bindBody) {
 		this.bindBody = bindBody;
 	}
 

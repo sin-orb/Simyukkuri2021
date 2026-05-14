@@ -17,8 +17,8 @@ import org.simyukkuri.event.impl.KillPredeatorEvent;
 import org.simyukkuri.event.impl.PredatorsGameEvent;
 import org.simyukkuri.event.impl.RaperReactionEvent;
 import org.simyukkuri.event.impl.RevengeAttackEvent;
-import org.simyukkuri.logic.BodyLogic;
-import org.simyukkuri.logic.BodyRelations;
+import org.simyukkuri.logic.YukkuriLogic;
+import org.simyukkuri.logic.YukkuriRelations;
 import org.simyukkuri.logic.EventLogic;
 import org.simyukkuri.system.MessagePool;
 import org.simyukkuri.util.GameMessages;
@@ -45,10 +45,10 @@ public final class YukkuriDamageDelegate {
 	 *
 	 * @param amount 食われる量
 	 */
-	public void eatBody(int amount) {
+	public void eatYukkuri(int amount) {
 		body.setAnkoAmount(body.getAnkoAmount() - amount);
 		if (body.isDead()) {
-			if (body.getAnkoAmount() <= body.getDamageLimitBase()[body.getBodyAgeState().ordinal()] / 2) {
+			if (body.getAnkoAmount() <= body.getDamageLimitBase()[body.getAgeState().ordinal()] / 2) {
 				body.setCrushed(true);
 				if (body.getAnkoAmount() <= 0) {
 					body.remove();
@@ -61,7 +61,7 @@ public final class YukkuriDamageDelegate {
 				body.addDamage(amount);
 			}
 			body.wakeup();
-			if (body.getAnkoAmount() <= body.getDamageLimitBase()[body.getBodyAgeState().ordinal()] / 2) {
+			if (body.getAnkoAmount() <= body.getDamageLimitBase()[body.getAgeState().ordinal()] / 2) {
 				body.bodyCut();
 				if (body.getAnkoAmount() <= 0) {
 					body.toDead();
@@ -79,8 +79,8 @@ public final class YukkuriDamageDelegate {
 	 * @param amount 食べられる量
 	 * @param eater  食べてくるゆっくり
 	 */
-	public void eatBody(int amount, Yukkuri eater) {
-		eatBody(amount);
+	public void eatYukkuri(int amount, Yukkuri eater) {
+		eatYukkuri(amount);
 		if (body.isDead()) {
 			return;
 		}
@@ -90,7 +90,7 @@ public final class YukkuriDamageDelegate {
 		Vomit vomit = GameView.addVomit(body.getX(), body.getY(), body.getZ(), body, body.getShitType());
 		vomit.crushVomit();
 		if (body.isNotNYD()) {
-			if (body.isSmart() || body.getBodyAgeState().ordinal() < eater.getBodyAgeState().ordinal()
+			if (body.isSmart() || body.getAgeState().ordinal() < eater.getAgeState().ordinal()
 					|| body.isLockmove() || body.isGotBurnedHeavily()) {
 				body.setMessage(GameMessages.getMessage(body, MessagePool.Action.EatenByBody));
 				body.setHappiness(Happiness.VERY_SAD);
@@ -98,7 +98,7 @@ public final class YukkuriDamageDelegate {
 			} else {
 				body.setAngry();
 				body.setMessage(GameMessages.getMessage(body, MessagePool.Action.EatenByBody));
-				EventLogic.addBodyEvent(body, new RevengeAttackEvent(body, eater, null, 1), null, null);
+				EventLogic.addYukkuriEvent(body, new RevengeAttackEvent(body, eater, null, 1), null, null);
 			}
 		}
 	}
@@ -111,7 +111,7 @@ public final class YukkuriDamageDelegate {
 	 * @param av     食べられた際に吐くかどうか
 	 */
 	public void beEaten(int amount, int p, boolean av) {
-		eatBody(amount);
+		eatYukkuri(amount);
 		body.makeDirty(true);
 		if (body.isDead()) {
 			return;
@@ -244,8 +244,8 @@ public final class YukkuriDamageDelegate {
 		}
 		if (allowDamageCap) {
 			int damageAfterHit = body.getDamage() + ap;
-			if (body.getDamageLimitBase()[body.getBodyAgeState().ordinal()] * 3 / 4 < damageAfterHit) {
-				ap = body.getDamageLimitBase()[body.getBodyAgeState().ordinal()] * 4 / 5 - body.getDamage();
+			if (body.getDamageLimitBase()[body.getAgeState().ordinal()] * 3 / 4 < damageAfterHit) {
+				ap = body.getDamageLimitBase()[body.getAgeState().ordinal()] * 4 / 5 - body.getDamage();
 				if (ap < 0) {
 					ap = 0;
 				}
@@ -276,26 +276,26 @@ public final class YukkuriDamageDelegate {
 					if (body.getPublicRank() != PublicRank.UnunSlave
 							&& (body.isRude() || (body.getAttitude() == Attitude.AVERAGE && GameRandom.nextBoolean()))) {
 						body.setAngry();
-						EventLogic.addBodyEvent(body, new RevengeAttackEvent(body, enemy, null, 1), null, null);
+						EventLogic.addYukkuriEvent(body, new RevengeAttackEvent(body, enemy, null, 1), null, null);
 					}
 				} else if (event instanceof PredatorsGameEvent) {
 					body.runAway(enemy.getX(), enemy.getY());
 					body.setPikoMessage(GameMessages.getMessage(body, MessagePool.Action.DontPlayMe), true);
-					Yukkuri m = BodyRelations.getMotherBody(body);
+					Yukkuri m = YukkuriRelations.getMotherYukkuri(body);
 					if (m != null) {
 						if (GameRandom.nextInt(3) == 0 && !m.isDead() && !m.isRemoved()) {
 							m.clearEvent();
 							m.setAngry();
 							m.setPanic(false, null);
 							m.setPeropero(false);
-							EventLogic.addBodyEvent(m, new KillPredeatorEvent(m, enemy, null, 10), null, null);
+							EventLogic.addYukkuriEvent(m, new KillPredeatorEvent(m, enemy, null, 10), null, null);
 						}
 					}
 					if (GameRandom.nextInt(10) == 0) {
 						body.bodyInjure();
 					}
 				} else if (event instanceof RaperReactionEvent) {
-					int colX = BodyLogic.calcCollisionX(body, enemy);
+					int colX = YukkuriLogic.calcCollisionX(body, enemy);
 					body.moveToSukkiri(enemy, enemy.getX() + colX, enemy.getY());
 					if (GameRandom.nextInt(200) == 0) {
 						body.bodyInjure();
@@ -304,13 +304,13 @@ public final class YukkuriDamageDelegate {
 					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.Scream), true);
 					if (!body.isBaby() && !body.isSmart() && body.getIntelligence() == Intelligence.FOOL) {
 						body.setAngry();
-						EventLogic.addBodyEvent(body, new RevengeAttackEvent(body, enemy, null, 1), null, null);
+						EventLogic.addYukkuriEvent(body, new RevengeAttackEvent(body, enemy, null, 1), null, null);
 					}
 				} else {
 					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.Scream), true);
 					if (body.getAttitude() != Attitude.VERY_NICE) {
 						body.setAngry();
-						EventLogic.addBodyEvent(body, new RevengeAttackEvent(body, enemy, null, 1), null, null);
+						EventLogic.addYukkuriEvent(body, new RevengeAttackEvent(body, enemy, null, 1), null, null);
 					}
 				}
 			}
@@ -350,8 +350,8 @@ public final class YukkuriDamageDelegate {
 		// 手加減あり
 		if (allowDamageCap) {
 			int damageAfterHit = body.getDamage() + ap;
-			if (body.getDamageLimitBase()[body.getBodyAgeState().ordinal()] * 85 / 100 < damageAfterHit) {
-				ap = body.getDamageLimitBase()[body.getBodyAgeState().ordinal()] * 85 / 100 - body.getDamage();
+			if (body.getDamageLimitBase()[body.getAgeState().ordinal()] * 85 / 100 < damageAfterHit) {
+				ap = body.getDamageLimitBase()[body.getAgeState().ordinal()] * 85 / 100 - body.getDamage();
 				if (ap < 0) {
 					ap = 0;
 				}

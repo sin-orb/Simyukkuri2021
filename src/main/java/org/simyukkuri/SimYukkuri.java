@@ -168,7 +168,7 @@ public class SimYukkuri extends JFrame {
 
 		// 初期設定
 
-		NAGASI_MODE = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "NAGASI_MODE");
+		NAGASI_MODE = ModLoader.loadYukkuriIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "NAGASI_MODE");
 	}
 
 	/**
@@ -438,7 +438,7 @@ public class SimYukkuri extends JFrame {
 		modPanel.add(new JLabel(mess3, JLabel.RIGHT));
 		modPanel.add(itemModCombo);
 
-		yukkuriModCombo = new JComboBox(ModLoader.getBodyThemeList());
+		yukkuriModCombo = new JComboBox(ModLoader.getYukkuriThemeList());
 		yukkuriModCombo.setSelectedIndex(0);
 		modPanel.add(new JLabel(mess4, JLabel.RIGHT));
 		modPanel.add(yukkuriModCombo);
@@ -486,9 +486,9 @@ public class SimYukkuri extends JFrame {
 		}
 
 		if (yukkuriModCombo.getSelectedIndex() == 0) {
-			ModLoader.setBodyThemePath(null);
+			ModLoader.setYukkuriThemePath(null);
 		} else {
-			ModLoader.setBodyThemePath(yukkuriModCombo.getSelectedItem().toString());
+			ModLoader.setYukkuriThemePath(yukkuriModCombo.getSelectedItem().toString());
 		}
 	}
 }

@@ -454,7 +454,7 @@ public class AttachmentTest {
 	private Yukkuri createParent(AgeState ageState) {
 		Yukkuri parent = new Reimu();
 		parent.setAgeState(ageState);
-		SimYukkuri.world.getCurrentMap().getBody().put(parent.getUniqueID(), parent);
+		SimYukkuri.world.getCurrentMap().getYukkuriMap().put(parent.getUniqueID(), parent);
 		return parent;
 	}
 
@@ -475,7 +475,7 @@ public class AttachmentTest {
 			}
 		};
 		parent.setAgeState(ageState);
-		SimYukkuri.world.getCurrentMap().getBody().put(parent.getUniqueID(), parent);
+		SimYukkuri.world.getCurrentMap().getYukkuriMap().put(parent.getUniqueID(), parent);
 		return parent;
 	}
 

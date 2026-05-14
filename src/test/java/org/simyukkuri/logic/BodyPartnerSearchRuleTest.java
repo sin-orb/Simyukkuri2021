@@ -29,7 +29,7 @@ import org.simyukkuri.entity.core.living.yukkuri.impl.Remirya;
 import org.simyukkuri.entity.core.living.yukkuri.impl.Sakuya;
 
 /**
- * Tests for BodyPartnerSearchRule.
+ * Tests for YukkuriPartnerSearchRule.
  */
 class BodyPartnerSearchRuleTest {
 
@@ -63,14 +63,14 @@ class BodyPartnerSearchRuleTest {
 		pheromone.setY(40);
 		pheromone.setPheromone(true);
 
-		SimYukkuri.world.getCurrentMap().getBody().put(me.getUniqueID(), me);
-		SimYukkuri.world.getCurrentMap().getBody().put(closer.getUniqueID(), closer);
-		SimYukkuri.world.getCurrentMap().getBody().put(pheromone.getUniqueID(), pheromone);
+		SimYukkuri.world.getCurrentMap().getYukkuriMap().put(me.getUniqueID(), me);
+		SimYukkuri.world.getCurrentMap().getYukkuriMap().put(closer.getUniqueID(), closer);
+		SimYukkuri.world.getCurrentMap().getYukkuriMap().put(pheromone.getUniqueID(), pheromone);
 
-		BodyPartnerSearchRule.SearchResult result = BodyPartnerSearchRule.selectTargets(me, null, me.getEyesightBase(),
+		YukkuriPartnerSearchRule.SearchResult result = YukkuriPartnerSearchRule.selectTargets(me, null, me.getEyesightBase(),
 				me.getEyesightBase());
 		assertNotNull(result);
-		assertEquals(pheromone, result.getFound());
+		assertEquals(pheromone, result.getTargetBody());
 	}
 
 	@Test
@@ -85,13 +85,13 @@ class BodyPartnerSearchRuleTest {
 		target.setX(50);
 		target.setY(40);
 
-		SimYukkuri.world.getCurrentMap().getBody().put(me.getUniqueID(), me);
-		SimYukkuri.world.getCurrentMap().getBody().put(target.getUniqueID(), target);
+		SimYukkuri.world.getCurrentMap().getYukkuriMap().put(me.getUniqueID(), me);
+		SimYukkuri.world.getCurrentMap().getYukkuriMap().put(target.getUniqueID(), target);
 
-		BodyPartnerSearchRule.SearchResult result = BodyPartnerSearchRule.selectTargets(me, null, me.getEyesightBase(),
+		YukkuriPartnerSearchRule.SearchResult result = YukkuriPartnerSearchRule.selectTargets(me, null, me.getEyesightBase(),
 				me.getEyesightBase());
 		assertNotNull(result);
-		assertEquals(target, result.getBodyHasOkazari());
+		assertEquals(target, result.getTargetHasOkazari());
 	}
 
 	@Test
@@ -112,13 +112,13 @@ class BodyPartnerSearchRuleTest {
 		normal.setY(40);
 		normal.setOkazari(null);
 
-		SimYukkuri.world.getCurrentMap().getBody().put(me.getUniqueID(), me);
-		SimYukkuri.world.getCurrentMap().getBody().put(predator.getUniqueID(), predator);
-		SimYukkuri.world.getCurrentMap().getBody().put(normal.getUniqueID(), normal);
+		SimYukkuri.world.getCurrentMap().getYukkuriMap().put(me.getUniqueID(), me);
+		SimYukkuri.world.getCurrentMap().getYukkuriMap().put(predator.getUniqueID(), predator);
+		SimYukkuri.world.getCurrentMap().getYukkuriMap().put(normal.getUniqueID(), normal);
 
-		BodyPartnerSearchRule.SearchResult result = BodyPartnerSearchRule.selectTargets(me, null, me.getEyesightBase(),
+		YukkuriPartnerSearchRule.SearchResult result = YukkuriPartnerSearchRule.selectTargets(me, null, me.getEyesightBase(),
 				me.getEyesightBase());
 		assertNotNull(result);
-		assertEquals(normal, result.getFound());
+		assertEquals(normal, result.getTargetBody());
 	}
 }

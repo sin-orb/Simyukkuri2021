@@ -381,7 +381,7 @@ public class EmotionLogicTest {
 
     private void registerBodies(Yukkuri... bodies) {
         for (Yukkuri b : bodies) {
-            org.simyukkuri.SimYukkuri.world.getCurrentMap().getBody().put(b.getUniqueID(), b);
+            org.simyukkuri.SimYukkuri.world.getCurrentMap().getYukkuriMap().put(b.getUniqueID(), b);
         }
     }
 

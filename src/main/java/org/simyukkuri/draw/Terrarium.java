@@ -238,12 +238,12 @@ public class Terrarium implements Serializable {
 		Translate.createTransTable(TerrainField.isPers());
 
 		// 遅延読み込みの復元
-		GameWorld.get().loadInterBodyImage();
+		GameWorld.get().loadInterYukkuriImage();
 
 		// 茎と実ゆの参照を復元
 		for (MapPlaceData mpd : GameWorld.get().getMapList()) {
 			for (Stalk s : mpd.getStalk().values()) {
-				Yukkuri b = mpd.getBody().get(s.getPlantYukkuri());
+				Yukkuri b = mpd.getYukkuriMap().get(s.getPlantYukkuri());
 				if (b != null) {
 					// ゾンビ除去: ID一致のStalkを除去してから、Map側のインスタンスで上書き
 					b.getStalks().removeIf(z -> z.getStalkId().equals(s.getStalkId()));
@@ -251,10 +251,10 @@ public class Terrarium implements Serializable {
 				}
 			}
 			for (Stalk s : mpd.getStalk().values()) {
-				Yukkuri parent = mpd.getBody().get(s.getPlantYukkuri());
+				Yukkuri parent = mpd.getYukkuriMap().get(s.getPlantYukkuri());
 
 				for (Integer babyId : s.getBindBabies()) {
-					Yukkuri baby = mpd.getBody().get(babyId);
+					Yukkuri baby = mpd.getYukkuriMap().get(babyId);
 
 					if (baby != null && parent != null && baby.isUnBirth()) {
 						baby.setParentLinkId(parent.getUniqueID());
@@ -274,7 +274,7 @@ public class Terrarium implements Serializable {
 		// すぃーと乗客の参照を復元
 		for (MapPlaceData mpd : GameWorld.get().getMapList()) {
 			for (Sui sui : mpd.getSui().values()) {
-				Yukkuri[] previousBindBodies = sui.getBindBody();
+				Yukkuri[] previousBindBodies = sui.getBoundYukkuri();
 				Yukkuri[] restoredBindBodies = new Yukkuri[previousBindBodies == null ? 3 : previousBindBodies.length];
 				Yukkuri restoredOwner = null;
 				int restoredBindCount = 0;
@@ -284,7 +284,7 @@ public class Terrarium implements Serializable {
 					restoredOwner = (Yukkuri) sui.getBindobj();
 				}
 
-				for (Yukkuri b : mpd.getBody().values()) {
+				for (Yukkuri b : mpd.getYukkuriMap().values()) {
 					if (b.getParentLinkId() != sui.getObjId()) {
 						continue;
 					}
@@ -298,7 +298,7 @@ public class Terrarium implements Serializable {
 					}
 				}
 
-				sui.setBindBody(restoredBindBodies);
+				sui.setBoundYukkuri(restoredBindBodies);
 				sui.setCurrent_bindbody_num(restoredBindCount);
 				sui.setBindobj(restoredOwner);
 				sui.upDate();
@@ -315,7 +315,7 @@ public class Terrarium implements Serializable {
 
 				Entity restoredFood = null;
 				if (food instanceof Yukkuri) {
-					restoredFood = mpd.getBody().values().stream()
+					restoredFood = mpd.getYukkuriMap().values().stream()
 							.filter(b -> b.getObjId() == food.getObjId())
 							.findFirst()
 							.orElse(null);
@@ -332,13 +332,13 @@ public class Terrarium implements Serializable {
 		// ホットプレートの拘束中個体と煙参照を復元
 		for (MapPlaceData mpd : GameWorld.get().getMapList()) {
 			for (HotPlate hotPlate : mpd.getHotPlate().values()) {
-				Yukkuri bindBody = hotPlate.getBindBody();
+				Yukkuri bindBody = hotPlate.getBoundYukkuri();
 				if (bindBody != null) {
-					Yukkuri restoredBody = mpd.getBody().values().stream()
+					Yukkuri restoredBody = mpd.getYukkuriMap().values().stream()
 							.filter(b -> b.getObjId() == bindBody.getObjId())
 							.findFirst()
 							.orElse(null);
-					hotPlate.setBindBody(restoredBody);
+					hotPlate.setBoundYukkuri(restoredBody);
 				}
 
 				Effect smoke = hotPlate.getSmoke();
@@ -355,13 +355,13 @@ public class Terrarium implements Serializable {
 		// 粘着板の拘束中個体を復元
 		for (MapPlaceData mpd : GameWorld.get().getMapList()) {
 			for (StickyPlate stickyPlate : mpd.getStickyPlate().values()) {
-				Yukkuri bindBody = stickyPlate.getBindBody();
+				Yukkuri bindBody = stickyPlate.getBoundYukkuri();
 				if (bindBody != null) {
-					Yukkuri restoredBody = mpd.getBody().values().stream()
+					Yukkuri restoredBody = mpd.getYukkuriMap().values().stream()
 							.filter(b -> b.getObjId() == bindBody.getObjId())
 							.findFirst()
 							.orElse(null);
-					stickyPlate.setBindBody(restoredBody);
+					stickyPlate.setBoundYukkuri(restoredBody);
 				}
 			}
 		}
@@ -391,7 +391,7 @@ public class Terrarium implements Serializable {
 						}
 						Entity restoredObj = null;
 						if (bindObj instanceof Yukkuri) {
-							restoredObj = mpd.getBody().values().stream()
+							restoredObj = mpd.getYukkuriMap().values().stream()
 									.filter(b -> b.getObjId() == bindObj.getObjId())
 									.findFirst()
 									.orElse(null);
@@ -411,13 +411,13 @@ public class Terrarium implements Serializable {
 				}
 				garbageChute.setBindObjList(restoredBindObjList);
 
-				Yukkuri bindBody = garbageChute.getBindBody();
+				Yukkuri bindBody = garbageChute.getBoundYukkuri();
 				if (bindBody != null) {
-					Yukkuri restoredBody = mpd.getBody().values().stream()
+					Yukkuri restoredBody = mpd.getYukkuriMap().values().stream()
 							.filter(b -> b.getObjId() == bindBody.getObjId())
 							.findFirst()
 							.orElse(null);
-					garbageChute.setBindBody(restoredBody);
+					garbageChute.setBoundYukkuri(restoredBody);
 				}
 			}
 		}
@@ -451,7 +451,7 @@ public class Terrarium implements Serializable {
 
 				Entity restoredTarget = null;
 				if (target instanceof Yukkuri) {
-					restoredTarget = mpd.getBody().values().stream()
+					restoredTarget = mpd.getYukkuriMap().values().stream()
 							.filter(b -> b.getObjId() == target.getObjId())
 							.findFirst()
 							.orElse(null);
@@ -495,7 +495,7 @@ public class Terrarium implements Serializable {
 			return;
 		}
 		// 全ゆっくりに対してチェック
-		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
+		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getYukkuriMap().entrySet()) {
 			Yukkuri p = entry.getValue();
 			// 自分同士のチェックは無意味なのでスキップ
 			if (p == b) {
@@ -506,7 +506,7 @@ public class Terrarium implements Serializable {
 			}
 			// 相手との間に壁があればスキップ
 			if (Barrier.acrossBarrier(b.getX(), b.getY(), p.getX(), p.getY(),
-					Barrier.MAP_BODY[b.getBodyAgeState().ordinal()])) {
+					Barrier.MAP_BODY[b.getAgeState().ordinal()])) {
 				continue;
 			}
 
@@ -529,7 +529,7 @@ public class Terrarium implements Serializable {
 	 * @param p2  父親
 	 */
 	private void addBaby(int x, int y, int z, Dna dna, Yukkuri p1, Yukkuri p2) {
-		babyList.add(makeBody(x, y, z + 1, dna, AgeState.BABY, p1, p2));
+		babyList.add(makeYukkuri(x, y, z + 1, dna, AgeState.BABY, p1, p2));
 		babyList.get(babyList.size() - 1).kick(0, 5, -2);
 
 	}
@@ -546,7 +546,7 @@ public class Terrarium implements Serializable {
 	 * @param stalk 出生もとの茎(なければnull)
 	 */
 	private void addBaby(int x, int y, int z, Dna dna, Yukkuri p1, Yukkuri p2, Stalk stalk) {
-		babyList.add(makeBody(x, y, z, dna, AgeState.BABY, p1, p2));
+		babyList.add(makeYukkuri(x, y, z, dna, AgeState.BABY, p1, p2));
 		Yukkuri b = babyList.get(babyList.size() - 1);
 		stalk.setBindBaby(b);
 		b.setBindStalk(stalk);
@@ -568,7 +568,7 @@ public class Terrarium implements Serializable {
 	 * @param p2  父親
 	 */
 	private void addBaby(int x, int y, int z, int vx, int vy, int vz, Dna dna, Yukkuri p1, Yukkuri p2) {
-		babyList.add(makeBody(x, y, z + 1, dna, AgeState.BABY, p1, p2));
+		babyList.add(makeYukkuri(x, y, z + 1, dna, AgeState.BABY, p1, p2));
 		babyList.get(babyList.size() - 1).kick(vx, vy, vz);
 
 	}
@@ -585,8 +585,8 @@ public class Terrarium implements Serializable {
 	 * @param p2  父親
 	 * @return 生成したゆっくり
 	 */
-	public Yukkuri makeBody(int x, int y, int z, Dna dna, AgeState age, Yukkuri p1, Yukkuri p2) {
-		return makeBody(x, y, z, dna.getType(), dna, age, p1, p2, true);
+	public Yukkuri makeYukkuri(int x, int y, int z, Dna dna, AgeState age, Yukkuri p1, Yukkuri p2) {
+		return makeYukkuri(x, y, z, dna.getType(), dna, age, p1, p2, true);
 	}
 
 	/**
@@ -603,10 +603,10 @@ public class Terrarium implements Serializable {
 	 * @param buildNewFamily 家族を作成するかどうか
 	 * @return 生成したゆっくり
 	 */
-	public Yukkuri makeBody(int x, int y, int z, YukkuriType type, Dna dna, AgeState age, Yukkuri p1, Yukkuri p2,
+	public Yukkuri makeYukkuri(int x, int y, int z, YukkuriType type, Dna dna, AgeState age, Yukkuri p1, Yukkuri p2,
 			boolean buildNewFamily) {
-		Yukkuri b = BodyFactory.create(x, y, z, type, dna, age, p1, p2, buildNewFamily,
-				TerrariumViewBridge::loadBodyImageSafe,
+		Yukkuri b = YukkuriFactory.create(x, y, z, type, dna, age, p1, p2, buildNewFamily,
+				TerrariumViewBridge::loadYukkuriImageSafe,
 				() -> GameWorld.get().getCurrentMap().makeOrKillDos(true),
 				TerrariumWorldLogic::setNewFamily);
 		return b;
@@ -624,15 +624,15 @@ public class Terrarium implements Serializable {
 	 * @param p2   父親
 	 * @return 生成したゆっくり
 	 */
-	public Yukkuri addBody(int x, int y, int z, YukkuriType type, AgeState age, Yukkuri p1, Yukkuri p2) {
-		Yukkuri ret = makeBody(x, y, z, type, null, age, p1, p2, true);
-		TerrariumBodyRegistry.register(ret);
+	public Yukkuri addYukkuri(int x, int y, int z, YukkuriType type, AgeState age, Yukkuri p1, Yukkuri p2) {
+		Yukkuri ret = makeYukkuri(x, y, z, type, null, age, p1, p2, true);
+		TerrariumYukkuriLookup.register(ret);
 		return ret;
 	}
 
 	/** ゆっくりをリストに登録 */
-	public void addBody(Yukkuri b) {
-		TerrariumBodyRegistry.register(b);
+	public void addYukkuri(Yukkuri b) {
+		TerrariumYukkuriLookup.register(b);
 	}
 
 	/**
@@ -818,19 +818,19 @@ public class Terrarium implements Serializable {
 		TerrariumTickProcessor.processMapTicks(curMap, intervalCount);
 		boolean transCheckNow = (operationTime % 60 == 0);
 		Yukkuri transBodyNow = null;
-		List<Yukkuri> bodiesNow = new LinkedList<Yukkuri>(curMap.getBody().values());
+		List<Yukkuri> bodiesNow = new LinkedList<Yukkuri>(curMap.getYukkuriMap().values());
 		if (Terrarium.getInterval() == 0) {
 			Collections.shuffle(bodiesNow);
 		}
 		for (Yukkuri b : bodiesNow) {
-			Yukkuri candidate = BodyTickProcessor.processBody(this, curMap, b, babyList, transCheckNow);
+			Yukkuri candidate = YukkuriTickProcessor.processYukkuri(this, curMap, b, babyList, transCheckNow);
 			if (transCheckNow && transBodyNow == null && candidate != null) {
 				transBodyNow = candidate;
 			}
 		}
 		if (!babyList.isEmpty()) {
 			for (Yukkuri baby : babyList) {
-				curMap.getBody().put(baby.getUniqueID(), baby);
+				curMap.getYukkuriMap().put(baby.getUniqueID(), baby);
 			}
 			babyList.clear();
 		}

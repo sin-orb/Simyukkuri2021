@@ -114,14 +114,14 @@ public class PredatorsGameEvent extends EventPacket {
 
 		if (b.isDead())
 			return false;
-		Yukkuri from = org.simyukkuri.util.BodyRegistry.getBodyInstance(getFrom());
+		Yukkuri from = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
 		if (b.isPredatorType() && b == from) {
 			// 遊び相手の決定
-			for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
+			for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getYukkuriMap().entrySet()) {
 				Yukkuri d = entry.getValue();
 				int minDistance = b.getEyesightBase();
-				int wallMode = b.getBodyAgeState().ordinal();
-				int size = b.getBodyAgeState().ordinal();
+				int wallMode = b.getAgeState().ordinal();
+				int size = b.getAgeState().ordinal();
 				// 飛行可能なら壁以外は通過可能
 				if (b.canflyCheck()) {
 					wallMode = AgeState.ADULT.ordinal();
@@ -152,16 +152,16 @@ public class PredatorsGameEvent extends EventPacket {
 						break;
 					}
 					int distance = Translate.distance(b.getX(), b.getY(), d.getX(), d.getY());
-					if (d.getBodyAgeState().ordinal() <= b.getBodyAgeState().ordinal()) {
+					if (d.getAgeState().ordinal() <= b.getAgeState().ordinal()) {
 						// 自分以下の大きさの相手の場合
-						if (minDistance > distance || d.getBodyAgeState().ordinal() <= size) {
+						if (minDistance > distance || d.getAgeState().ordinal() <= size) {
 							if (Barrier.acrossBarrier(b.getX(), b.getY(), d.getX(), d.getY(),
 									Barrier.MAP_BODY[wallMode] + Barrier.BARRIER_KEKKAI)) {
 								continue;
 							}
 							toy = d.objId;
 							minDistance = distance;
-							size = d.getBodyAgeState().ordinal();
+							size = d.getAgeState().ordinal();
 						}
 					}
 				}
@@ -181,8 +181,8 @@ public class PredatorsGameEvent extends EventPacket {
 	// UpdateState.ABORTを返すとイベント終了
 	@Override
 	public UpdateState update(Yukkuri b) {
-		Yukkuri from = org.simyukkuri.util.BodyRegistry.getBodyInstance(getFrom());
-		Yukkuri toy = org.simyukkuri.util.BodyRegistry.getBodyInstance(this.toy);
+		Yukkuri from = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
+		Yukkuri toy = org.simyukkuri.util.YukkuriLookup.getYukkuriById(this.toy);
 		// 対象が決定できなかったり、捕食防止ディフューザー環境だったりしたら中止。ボール遊びを試す
 		if (from == null || toy == null || GameEnvironment.isPredatorSteam()) {
 			if (ToyLogic.checkToy(from)) {
@@ -283,7 +283,7 @@ public class PredatorsGameEvent extends EventPacket {
 				// 相手の座標を縛る
 				toy.setCalcX(b.getX());
 				toy.setCalcY(b.getY() + 1);
-				int toysHeight = b.getZ() + ofsZ[toy.getBodyAgeState().ordinal()];
+				int toysHeight = b.getZ() + ofsZ[toy.getAgeState().ordinal()];
 				if (toysHeight >= 0)
 					toy.setCalcZ(toysHeight);
 				else
@@ -348,18 +348,18 @@ public class PredatorsGameEvent extends EventPacket {
 	// trueを返すとイベント終了
 	@Override
 	public boolean execute(Yukkuri b) {
-		Yukkuri toy = org.simyukkuri.util.BodyRegistry.getBodyInstance(this.toy);
+		Yukkuri toy = org.simyukkuri.util.YukkuriLookup.getYukkuriById(this.toy);
 		// 相手が消えてしまったらイベント中断
 		if (toy == null || toy.isRemoved()) {
 			toy.setParentLinkId(-1);
 			return true;
 		}
-		Yukkuri from = org.simyukkuri.util.BodyRegistry.getBodyInstance(getFrom());
+		Yukkuri from = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
 		if (from == null)
 			return true;
 		// 相手が捕まれたらイベント中断
 		if (toy.isGrabbed()) {
-			Yukkuri to = org.simyukkuri.util.BodyRegistry.getBodyInstance(getTo());
+			Yukkuri to = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getTo());
 			if (to != null)
 				to.setParentLinkId(-1);
 			return true;
@@ -372,13 +372,13 @@ public class PredatorsGameEvent extends EventPacket {
 		// 相手の座標を縛る
 		toy.setCalcX(from.getX());
 		toy.setCalcY(from.getY() + 1);
-		toy.setCalcZ(from.getZ() + ofsZ[toy.getBodyAgeState().ordinal()]);
+		toy.setCalcZ(from.getZ() + ofsZ[toy.getAgeState().ordinal()]);
 
 		tick2++;
 		if (tick2 == 20) {
 			tick2 = 0;
 			FoodLogic.eatFood(b, Food.FoodType.BODY, Math.min(b.getEatAmount(), toy.getAnkoAmount()));
-			toy.eatBody(Math.min(b.getEatAmount(), toy.getAnkoAmount()));
+			toy.eatYukkuri(Math.min(b.getEatAmount(), toy.getAnkoAmount()));
 			if (toy.isSick() && GameRandom.nextBoolean())
 				b.addSickPeriod(100);
 			if (toy.isDead()) {
@@ -401,7 +401,7 @@ public class PredatorsGameEvent extends EventPacket {
 	public void end(Yukkuri b) {
 		b.setMessage(GameMessages.getMessage(b, MessagePool.Action.GameEnd));
 		grabbing = false;
-		Yukkuri toy = org.simyukkuri.util.BodyRegistry.getBodyInstance(this.toy);
+		Yukkuri toy = org.simyukkuri.util.YukkuriLookup.getYukkuriById(this.toy);
 		if (toy != null) {
 			toy.setParentLinkId(-1);
 			toy = null;

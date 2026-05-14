@@ -43,8 +43,8 @@ public final class GameView {
 		}
 
 		@Override
-		public void loadBodyImage(YukkuriType type) {
-			getPane().loadBodyImage(type);
+		public void loadYukkuriImage(YukkuriType type) {
+			getPane().loadYukkuriImage(type);
 		}
 
 		@Override
@@ -58,14 +58,14 @@ public final class GameView {
 		}
 
 		@Override
-		public Yukkuri addBody(int x, int y, int z, YukkuriType type, AgeState age, Yukkuri p1, Yukkuri p2) {
-			return getPane().getTerrarium().addBody(x, y, z, type, age, p1, p2);
+		public Yukkuri addYukkuri(int x, int y, int z, YukkuriType type, AgeState age, Yukkuri p1, Yukkuri p2) {
+			return getPane().getTerrarium().addYukkuri(x, y, z, type, age, p1, p2);
 		}
 
 		@Override
-		public Yukkuri makeBody(int x, int y, int z, YukkuriType type, Dna dna, AgeState age, Yukkuri p1, Yukkuri p2,
+		public Yukkuri makeYukkuri(int x, int y, int z, YukkuriType type, Dna dna, AgeState age, Yukkuri p1, Yukkuri p2,
 				boolean adjust) {
-			return getPane().getTerrarium().makeBody(x, y, z, type, dna, age, p1, p2, adjust);
+			return getPane().getTerrarium().makeYukkuri(x, y, z, type, dna, age, p1, p2, adjust);
 		}
 
 		@Override
@@ -117,8 +117,8 @@ public final class GameView {
 		source().loadImage(isBg, isItem, isEffect, isBody, isAttach, isIni);
 	}
 
-	public static void loadBodyImage(YukkuriType type) {
-		source().loadBodyImage(type);
+	public static void loadYukkuriImage(YukkuriType type) {
+		source().loadYukkuriImage(type);
 	}
 
 	public static void loadTerrainFile() {
@@ -129,13 +129,13 @@ public final class GameView {
 		source().createBackBuffer();
 	}
 
-	public static Yukkuri addBody(int x, int y, int z, YukkuriType type, AgeState age, Yukkuri p1, Yukkuri p2) {
-		return source().addBody(x, y, z, type, age, p1, p2);
+	public static Yukkuri addYukkuri(int x, int y, int z, YukkuriType type, AgeState age, Yukkuri p1, Yukkuri p2) {
+		return source().addYukkuri(x, y, z, type, age, p1, p2);
 	}
 
-	public static Yukkuri makeBody(int x, int y, int z, YukkuriType type, Dna dna, AgeState age, Yukkuri p1, Yukkuri p2,
+	public static Yukkuri makeYukkuri(int x, int y, int z, YukkuriType type, Dna dna, AgeState age, Yukkuri p1, Yukkuri p2,
 			boolean adjust) {
-		return source().makeBody(x, y, z, type, dna, age, p1, p2, adjust);
+		return source().makeYukkuri(x, y, z, type, dna, age, p1, p2, adjust);
 	}
 
 	public static Vomit addVomit(int x, int y, int z, Yukkuri body, YukkuriType type) {

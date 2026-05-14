@@ -144,7 +144,7 @@ public class LoggerYukkuri {
 
 		long logData[] = new long[NUM_OF_LOGDATA_TYPE];
 		try {
-			for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
+			for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getYukkuriMap().entrySet()) {
 				Yukkuri b = entry.getValue();
 				if (!b.isDead()) {
 					if (b.isPredatorType()) {
@@ -167,7 +167,7 @@ public class LoggerYukkuri {
 						logData[NUM_OF_RARE]++;
 					}
 
-					switch (b.getBodyAgeState()) {
+					switch (b.getAgeState()) {
 						case BABY:
 							logData[NUM_OF_BABY]++;
 							break;

@@ -21,7 +21,7 @@ public class BodyLayerTest {
 
     @Test
     public void testConstructorInitializesArrays() {
-        BodyLayer layer = new BodyLayer();
+        YukkuriLayer layer = new YukkuriLayer();
         assertNotNull(layer.getImage());
         assertNotNull(layer.getDir());
         assertNotNull(layer.getOption());
@@ -32,7 +32,7 @@ public class BodyLayerTest {
 
     @Test
     public void testSetAndGetImage() {
-        BodyLayer layer = new BodyLayer();
+        YukkuriLayer layer = new YukkuriLayer();
         BufferedImage[] images = new BufferedImage[5];
         images[0] = new BufferedImage(1, 1, BufferedImage.TYPE_INT_ARGB);
         layer.setImage(images);
@@ -41,7 +41,7 @@ public class BodyLayerTest {
 
     @Test
     public void testSetAndGetDir() {
-        BodyLayer layer = new BodyLayer();
+        YukkuriLayer layer = new YukkuriLayer();
         int[] dirs = { 1, 0, 1, 0 };
         layer.setDir(dirs);
         assertSame(dirs, layer.getDir());
@@ -49,7 +49,7 @@ public class BodyLayerTest {
 
     @Test
     public void testSetAndGetOption() {
-        BodyLayer layer = new BodyLayer();
+        YukkuriLayer layer = new YukkuriLayer();
         int[] opts = { 2, 3, 4 };
         layer.setOption(opts);
         assertSame(opts, layer.getOption());

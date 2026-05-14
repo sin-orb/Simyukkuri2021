@@ -121,7 +121,7 @@ public class BreedingAmpouleTest {
         Yukkuri parent = createParent(AgeState.CHILD);
         BreedingAmpoule ampoule = new BreedingAmpoule(parent);
 
-        SimYukkuri.world.getCurrentMap().getBody().remove(parent.getUniqueID());
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().remove(parent.getUniqueID());
 
         BufferedImage image = ampoule.getImage(parent);
         assertNull(image);
@@ -170,7 +170,7 @@ public class BreedingAmpouleTest {
         int origPivotX = ampoule.getPivotX();
         int origPivotY = ampoule.getPivotY();
 
-        SimYukkuri.world.getCurrentMap().getBody().remove(parent.getUniqueID());
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().remove(parent.getUniqueID());
 
         ampoule.resetBoundary();
 
@@ -224,7 +224,7 @@ public class BreedingAmpouleTest {
         Yukkuri parent = createParent(AgeState.ADULT);
         BreedingAmpoule ampoule = new BreedingAmpoule(parent);
 
-        parent.setBodyCastration(true);
+        parent.setCastrated(true);
 
         int babyTypesBefore = parent.getBabyTypes().size();
         Event result = ampoule.update();
@@ -236,7 +236,7 @@ public class BreedingAmpouleTest {
     private static Yukkuri createParent(AgeState ageState) {
         Yukkuri parent = new Reimu();
         parent.setAgeState(ageState);
-        SimYukkuri.world.getCurrentMap().getBody().put(parent.getUniqueID(), parent);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(parent.getUniqueID(), parent);
         return parent;
     }
 
@@ -289,7 +289,7 @@ public class BreedingAmpouleTest {
             Yukkuri parent = createParent(AgeState.ADULT);
             parent.setHungry(10);
             parent.addDamage(300);
-            parent.setBodyCastration(true);
+            parent.setCastrated(true);
             BreedingAmpoule ampoule = new BreedingAmpoule(parent);
 
             int damageBefore = parent.getDamage();

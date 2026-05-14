@@ -41,7 +41,7 @@ public class AntInfestationPolicyTest {
 		Ants.setPivY(new int[] { 4, 5, 6 });
 
 		Reimu body = new Reimu();
-		SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
+		SimYukkuri.world.getCurrentMap().getYukkuriMap().put(body.getUniqueID(), body);
 		SimYukkuri.RND = new ConstState(1);
 
 		AntInfestationPolicy.judgeNewAnt(body);

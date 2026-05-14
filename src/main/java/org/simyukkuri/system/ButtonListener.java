@@ -69,7 +69,7 @@ public final class ButtonListener implements ActionListener {
 				MainCommandUI.getOptionPopup().setVisible(false);
 			}
 		} else if (source.equals(MainCommandUI.getPinButton())) {
-			Yukkuri selected = MyPane.getSelectBody();
+			Yukkuri selected = MyPane.getSelectedYukkuri();
 			if (selected != null && !selected.isRemoved()) {
 				selected.setPinned(MainCommandUI.getPinButton().isSelected());
 			}

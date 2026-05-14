@@ -40,7 +40,7 @@ import org.simyukkuri.entity.core.world.item.House;
 import org.simyukkuri.entity.core.world.item.MachinePress;
 import org.simyukkuri.entity.core.world.item.Mixer;
 import org.simyukkuri.entity.core.world.item.OrangePool;
-import org.simyukkuri.entity.core.world.item.ProcesserPlate;
+import org.simyukkuri.entity.core.world.item.ProcessorPlate;
 import org.simyukkuri.entity.core.world.item.ProductChute;
 import org.simyukkuri.entity.core.world.item.StickyPlate;
 import org.simyukkuri.entity.core.world.item.Stone;
@@ -97,7 +97,7 @@ public final class ImageLoadService {
 				Yunba.loadImages(loader, pane);
 				StickyPlate.loadImages(loader, pane);
 				HotPlate.loadImages(loader, pane);
-				ProcesserPlate.loadImages(loader, pane);
+				ProcessorPlate.loadImages(loader, pane);
 				Mixer.loadImages(loader, pane);
 				AutoFeeder.loadImages(loader, pane);
 				Sui.loadImages(loader, pane);
@@ -120,7 +120,7 @@ public final class ImageLoadService {
 
 			if (isBody) {
 				win.addLine("Load Shadow/Poo-poo/Vomit");
-				org.simyukkuri.entity.core.living.yukkuri.YukkuriSprite.loadShadowImages(loader, pane);
+				org.simyukkuri.entity.core.living.yukkuri.YukkuriSpriteDelegate.loadShadowImages(loader, pane);
 				org.simyukkuri.entity.core.world.mobile.Shit.loadImages(loader, pane);
 				org.simyukkuri.entity.core.world.mobile.Vomit.loadImages(loader, pane);
 			}
@@ -176,7 +176,7 @@ public final class ImageLoadService {
 				org.simyukkuri.entity.core.living.yukkuri.impl.Yuuka.loadIniFile(loader);
 				org.simyukkuri.entity.core.living.yukkuri.impl.Yuyuko.loadIniFile(loader);
 
-				SimYukkuri.NAGASI_MODE = org.simyukkuri.draw.ModLoader.loadBodyIniMapForInt(loader,
+				SimYukkuri.NAGASI_MODE = org.simyukkuri.draw.ModLoader.loadYukkuriIniMapForInt(loader,
 						org.simyukkuri.draw.ModLoader.getDataWorldIniDir(),
 						"play", "NAGASI_MODE");
 			}
@@ -191,7 +191,7 @@ public final class ImageLoadService {
 		}
 	}
 
-	public static void loadBodyImage(MyPane pane, YukkuriType type) {
+	public static void loadYukkuriImage(MyPane pane, YukkuriType type) {
 		synchronized (SimYukkuri.lock) {
 			try {
 				ClassLoader loader = pane.getClass().getClassLoader();

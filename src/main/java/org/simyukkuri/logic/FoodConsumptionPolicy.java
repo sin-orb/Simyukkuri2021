@@ -2,7 +2,7 @@ package org.simyukkuri.logic;
 
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.world.item.Food.FoodType;
-import org.simyukkuri.enums.BodyRank;
+import org.simyukkuri.enums.YukkuriRank;
 import org.simyukkuri.enums.Happiness;
 import org.simyukkuri.system.MessagePool;
 import org.simyukkuri.util.GameMessages;
@@ -87,7 +87,7 @@ public final class FoodConsumptionPolicy {
 				b.addStress(100);
 				b.addTang(-10);
 				// 飼いゆの場合のみ。野良ならうんうん奴隷の可能性があるので
-				if (b.getBodyRank() == BodyRank.KAIYU) {
+				if (b.getRank() == YukkuriRank.KAIYU) {
 					// なつき度設定
 					b.addLovePlayer(lovePointTable[0][0]);
 				}
@@ -166,7 +166,7 @@ public final class FoodConsumptionPolicy {
 				b.addTang(50);
 				b.addMemories(5);
 				// 飼いゆの場合のみ
-				if (b.getBodyRank() == BodyRank.KAIYU) {
+				if (b.getRank() == YukkuriRank.KAIYU) {
 					// なつき度設定
 					b.addLovePlayer(lovePointTable[5][0]);
 				}
@@ -178,7 +178,7 @@ public final class FoodConsumptionPolicy {
 				b.addDamage(-500);
 				b.addMemories(20);
 				// 飼いゆの場合のみ
-				if (b.getBodyRank() == BodyRank.KAIYU) {
+				if (b.getRank() == YukkuriRank.KAIYU) {
 					// なつき度設定
 					b.addLovePlayer(lovePointTable[6][0]);
 				}
@@ -215,7 +215,7 @@ public final class FoodConsumptionPolicy {
 				b.addTang(-30);
 				b.addMemories(-1);
 				// 飼いゆの場合のみ
-				if (b.getBodyRank() == BodyRank.KAIYU) {
+				if (b.getRank() == YukkuriRank.KAIYU) {
 					// なつき度設定
 					b.addLovePlayer(lovePointTable[9][0]);
 				}
@@ -248,7 +248,7 @@ public final class FoodConsumptionPolicy {
 				b.addStress(200);
 				b.addTang(-10);
 				// 飼いゆの場合のみ。野良ならうんうん奴隷の可能性があるので
-				if (b.getBodyRank() == BodyRank.KAIYU) {
+				if (b.getRank() == YukkuriRank.KAIYU) {
 					// なつき度設定
 					b.addLovePlayer(lovePointTable[0][1]);
 				}
@@ -329,7 +329,7 @@ public final class FoodConsumptionPolicy {
 					b.addTang(10);
 				}
 				// 飼いゆの場合のみ
-				if (b.getBodyRank() == BodyRank.KAIYU) {
+				if (b.getRank() == YukkuriRank.KAIYU) {
 					// なつき度設定
 					b.addLovePlayer(lovePointTable[5][1]);
 				}
@@ -341,7 +341,7 @@ public final class FoodConsumptionPolicy {
 				b.addDamage(-500);
 				b.addMemories(20);
 				// 飼いゆの場合のみ
-				if (b.getBodyRank() == BodyRank.KAIYU) {
+				if (b.getRank() == YukkuriRank.KAIYU) {
 					// なつき度設定
 					b.addLovePlayer(lovePointTable[6][1]);
 				}
@@ -379,7 +379,7 @@ public final class FoodConsumptionPolicy {
 				b.addTang(-30);
 				b.addMemories(-1);
 				// 飼いゆの場合のみ
-				if (b.getBodyRank() == BodyRank.KAIYU) {
+				if (b.getRank() == YukkuriRank.KAIYU) {
 					// なつき度設定
 					b.addLovePlayer(lovePointTable[9][1]);
 				}
@@ -413,7 +413,7 @@ public final class FoodConsumptionPolicy {
 				b.addStress(500);
 				b.addTang(-10);
 				// 飼いゆの場合のみ。野良ならうんうん奴隷の可能性があるので
-				if (b.getBodyRank() == BodyRank.KAIYU) {
+				if (b.getRank() == YukkuriRank.KAIYU) {
 					// なつき度設定
 					b.addLovePlayer(lovePointTable[0][2]);
 				}
@@ -494,7 +494,7 @@ public final class FoodConsumptionPolicy {
 					b.addTang(10);
 				}
 				// 飼いゆの場合のみ
-				if (b.getBodyRank() == BodyRank.KAIYU) {
+				if (b.getRank() == YukkuriRank.KAIYU) {
 					// なつき度設定
 					b.addLovePlayer(lovePointTable[5][2]);
 				}
@@ -506,7 +506,7 @@ public final class FoodConsumptionPolicy {
 				b.addDamage(-500);
 				b.addMemories(30);
 				// 飼いゆの場合のみ
-				if (b.getBodyRank() == BodyRank.KAIYU) {
+				if (b.getRank() == YukkuriRank.KAIYU) {
 					// なつき度設定
 					b.addLovePlayer(lovePointTable[6][2]);
 				}
@@ -543,7 +543,7 @@ public final class FoodConsumptionPolicy {
 				b.addTang(-30);
 				b.addMemories(-1);
 				// 飼いゆの場合のみ
-				if (b.getBodyRank() == BodyRank.KAIYU) {
+				if (b.getRank() == YukkuriRank.KAIYU) {
 					// なつき度設定
 					b.addLovePlayer(lovePointTable[9][2]);
 				}

@@ -36,7 +36,7 @@ import org.simyukkuri.draw.Translate;
 import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.Attitude;
 import org.simyukkuri.enums.BurialState;
-import org.simyukkuri.enums.BodyRank;
+import org.simyukkuri.enums.YukkuriRank;
 import org.simyukkuri.enums.CoreAnkoState;
 import org.simyukkuri.enums.FavItemType;
 import org.simyukkuri.enums.Intelligence;
@@ -76,7 +76,7 @@ class FoodLogicTest {
         body.setX(100);
         body.setY(100);
 
-        SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(body.getUniqueID(), body);
     }
 
     @AfterEach
@@ -182,8 +182,8 @@ class FoodLogicTest {
         Yukkuri prey = WorldTestHelper.createBody();
         prey.setX(120);
         prey.setY(120);
-        SimYukkuri.world.getCurrentMap().getBody().put(prey.getUniqueID(), prey);
-        assertTrue(FoodLogic.checkCanEatBody(body, prey));
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(prey.getUniqueID(), prey);
+        assertTrue(FoodLogic.checkCanEatYukkuri(body, prey));
     }
 
     @Test
@@ -191,9 +191,9 @@ class FoodLogicTest {
         Yukkuri prey = WorldTestHelper.createBody();
         prey.setX(120);
         prey.setY(120);
-        SimYukkuri.world.getCurrentMap().getBody().put(prey.getUniqueID(), prey);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(prey.getUniqueID(), prey);
         // 非捕食種かつ生存中 → false
-        assertFalse(FoodLogic.checkCanEatBody(body, prey));
+        assertFalse(FoodLogic.checkCanEatYukkuri(body, prey));
     }
 
     @Test
@@ -202,10 +202,10 @@ class FoodLogicTest {
         prey.setX(120);
         prey.setY(120);
         prey.setDead(true);
-        SimYukkuri.world.getCurrentMap().getBody().put(prey.getUniqueID(), prey);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(prey.getUniqueID(), prey);
         // 非捕食種かつ死亡中は条件によって変わる
         org.junit.jupiter.api.Assertions.assertDoesNotThrow(
-                () -> FoodLogic.checkCanEatBody(body, prey));
+                () -> FoodLogic.checkCanEatYukkuri(body, prey));
     }
 
     @Test
@@ -236,7 +236,7 @@ class FoodLogicTest {
     @Test
     void testCheckFood_ToBody_NotVeryHungry_ReturnsFalse() {
         body.setHungry(0);
-        body.setToBody(true);
+        body.setToYukkuri(true);
         assertFalse(FoodLogic.checkFood(body));
     }
 
@@ -288,14 +288,14 @@ class FoodLogicTest {
         assertFalse(FoodLogic.checkTakeout(body, food));
     }
 
-    // --- checkCanEatBody additional ---
+    // --- checkCanEatYukkuri additional ---
 
     @Test
     void testCheckCanEatBody_DeadPrey_DoesNotThrow() {
         Yukkuri prey = WorldTestHelper.createBody();
         prey.setDead(true);
-        SimYukkuri.world.getCurrentMap().getBody().put(prey.getUniqueID(), prey);
-        assertDoesNotThrow(() -> FoodLogic.checkCanEatBody(body, prey));
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(prey.getUniqueID(), prey);
+        assertDoesNotThrow(() -> FoodLogic.checkCanEatYukkuri(body, prey));
     }
 
     // --- searchFoodStandard ---
@@ -341,7 +341,7 @@ class FoodLogicTest {
         tarinai.setX(100);
         tarinai.setY(100);
         tarinai.setHungry(0); // very hungry
-        SimYukkuri.world.getCurrentMap().getBody().put(tarinai.getUniqueID(), tarinai);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(tarinai.getUniqueID(), tarinai);
         assertDoesNotThrow(() -> FoodLogic.checkFood(tarinai));
     }
 
@@ -351,7 +351,7 @@ class FoodLogicTest {
         tarinai.setX(100);
         tarinai.setY(100);
         tarinai.setHungry(0); // very hungry
-        SimYukkuri.world.getCurrentMap().getBody().put(tarinai.getUniqueID(), tarinai);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(tarinai.getUniqueID(), tarinai);
         Food food = new Food(110, 110, Food.FoodType.SWEETS1.ordinal());
         SimYukkuri.world.getCurrentMap().getFood().put(food.getObjId(), food);
         assertDoesNotThrow(() -> FoodLogic.checkFood(tarinai));
@@ -363,7 +363,7 @@ class FoodLogicTest {
         tarinai.setX(100);
         tarinai.setY(100);
         tarinai.setHungry(0);
-        SimYukkuri.world.getCurrentMap().getBody().put(tarinai.getUniqueID(), tarinai);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(tarinai.getUniqueID(), tarinai);
         Shit shit = new Shit();
         shit.setX(110);
         shit.setY(110);
@@ -604,14 +604,14 @@ class FoodLogicTest {
         remirya.setX(100);
         remirya.setY(100);
         remirya.setHungry(0);
-        SimYukkuri.world.getCurrentMap().getBody().put(remirya.getUniqueID(), remirya);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(remirya.getUniqueID(), remirya);
 
         // Create Reimu (prey) nearby
         org.simyukkuri.entity.core.living.yukkuri.impl.Reimu prey = new org.simyukkuri.entity.core.living.yukkuri.impl.Reimu();
         prey.setX(110);
         prey.setY(110);
         prey.setAgeState(org.simyukkuri.enums.AgeState.BABY); // smaller → first found candidate
-        SimYukkuri.world.getCurrentMap().getBody().put(prey.getUniqueID(), prey);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(prey.getUniqueID(), prey);
 
         boolean[] forceEat = { false };
         FoodLogic.searchFoodPredetor(remirya, forceEat);
@@ -628,13 +628,13 @@ class FoodLogicTest {
         remirya.setY(100);
         remirya.setAgeState(org.simyukkuri.enums.AgeState.ADULT);
         remirya.setHungry(0);
-        SimYukkuri.world.getCurrentMap().getBody().put(remirya.getUniqueID(), remirya);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(remirya.getUniqueID(), remirya);
 
         org.simyukkuri.entity.core.living.yukkuri.impl.Reimu prey = new org.simyukkuri.entity.core.living.yukkuri.impl.Reimu();
         prey.setX(120);
         prey.setY(120);
         prey.setAgeState(org.simyukkuri.enums.AgeState.ADULT);
-        SimYukkuri.world.getCurrentMap().getBody().put(prey.getUniqueID(), prey);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(prey.getUniqueID(), prey);
 
         assertDoesNotThrow(() -> FoodLogic.searchFoodPredetor(remirya, new boolean[] { false }));
     }
@@ -646,13 +646,13 @@ class FoodLogicTest {
         remirya.setX(100);
         remirya.setY(100);
         remirya.setHungry(0);
-        SimYukkuri.world.getCurrentMap().getBody().put(remirya.getUniqueID(), remirya);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(remirya.getUniqueID(), remirya);
 
         org.simyukkuri.entity.core.living.yukkuri.impl.Reimu deadPrey = new org.simyukkuri.entity.core.living.yukkuri.impl.Reimu();
         deadPrey.setX(110);
         deadPrey.setY(110);
         deadPrey.setDead(true);
-        SimYukkuri.world.getCurrentMap().getBody().put(deadPrey.getUniqueID(), deadPrey);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(deadPrey.getUniqueID(), deadPrey);
 
         assertDoesNotThrow(() -> FoodLogic.searchFoodPredetor(remirya, new boolean[] { false }));
     }
@@ -666,12 +666,12 @@ class FoodLogicTest {
         remirya.setX(100);
         remirya.setY(100);
         remirya.setHungry(0); // very hungry
-        SimYukkuri.world.getCurrentMap().getBody().put(remirya.getUniqueID(), remirya);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(remirya.getUniqueID(), remirya);
 
         org.simyukkuri.entity.core.living.yukkuri.impl.Reimu prey = new org.simyukkuri.entity.core.living.yukkuri.impl.Reimu();
         prey.setX(110);
         prey.setY(110);
-        SimYukkuri.world.getCurrentMap().getBody().put(prey.getUniqueID(), prey);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(prey.getUniqueID(), prey);
 
         assertDoesNotThrow(() -> FoodLogic.checkFood(remirya));
     }
@@ -685,7 +685,7 @@ class FoodLogicTest {
         deadBody.setX(110);
         deadBody.setY(110);
         deadBody.setDead(true);
-        SimYukkuri.world.getCurrentMap().getBody().put(deadBody.getUniqueID(), deadBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(deadBody.getUniqueID(), deadBody);
         assertDoesNotThrow(() -> FoodLogic.searchFoodStandard(body, new boolean[] { false }));
     }
 
@@ -706,7 +706,7 @@ class FoodLogicTest {
         tarinai.setX(100);
         tarinai.setY(100);
         tarinai.setHungry(0);
-        SimYukkuri.world.getCurrentMap().getBody().put(tarinai.getUniqueID(), tarinai);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(tarinai.getUniqueID(), tarinai);
         org.simyukkuri.entity.core.world.bodylinked.Stalk stalk = new org.simyukkuri.entity.core.world.bodylinked.Stalk(120, 120, 0);
         stalk.setAmount(100);
         SimYukkuri.world.getCurrentMap().getStalk().put(stalk.getObjId(), stalk);
@@ -743,7 +743,7 @@ class FoodLogicTest {
         deadBody.setDead(true);
         deadBody.setX(100);
         deadBody.setY(100);
-        SimYukkuri.world.getCurrentMap().getBody().put(deadBody.getUniqueID(), deadBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(deadBody.getUniqueID(), deadBody);
         assertDoesNotThrow(() -> FoodLogic.eatFood(body, Food.FoodType.BODY, 100));
     }
 
@@ -839,7 +839,7 @@ class FoodLogicTest {
         deadBody.setDead(true);
         deadBody.setX(100);
         deadBody.setY(100);
-        SimYukkuri.world.getCurrentMap().getBody().put(deadBody.getUniqueID(), deadBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(deadBody.getUniqueID(), deadBody);
         body.setToFood(true);
         body.setMoveTargetId(deadBody.getObjId());
         assertDoesNotThrow(() -> FoodLogic.checkFood(body));
@@ -939,7 +939,7 @@ class FoodLogicTest {
         Yukkuri rival = WorldTestHelper.createBody();
         rival.setToFood(true);
         rival.setMoveTargetId(food.getObjId());
-        SimYukkuri.world.getCurrentMap().getBody().put(rival.getUniqueID(), rival);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(rival.getUniqueID(), rival);
 
         assertDoesNotThrow(() -> FoodLogic.searchFoodStandard(body, new boolean[] { false }));
     }
@@ -1018,7 +1018,7 @@ class FoodLogicTest {
         deadBody.setDead(true);
         deadBody.setX(110);
         deadBody.setY(110);
-        SimYukkuri.world.getCurrentMap().getBody().put(deadBody.getUniqueID(), deadBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(deadBody.getUniqueID(), deadBody);
         SimYukkuri.RND = new ConstState(0);
         try {
             FoodLogic.checkFood(body);
@@ -1037,7 +1037,7 @@ class FoodLogicTest {
         prey.setAgeState(org.simyukkuri.enums.AgeState.BABY); // smaller → found candidate
         prey.setX(110);
         prey.setY(110);
-        SimYukkuri.world.getCurrentMap().getBody().put(prey.getUniqueID(), prey);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(prey.getUniqueID(), prey);
         SimYukkuri.RND = new ConstState(0);
         try {
             FoodLogic.checkFood(body);
@@ -1249,14 +1249,14 @@ class FoodLogicTest {
         org.simyukkuri.entity.core.living.yukkuri.impl.Remirya remirya = new org.simyukkuri.entity.core.living.yukkuri.impl.Remirya();
         remirya.setX(100); remirya.setY(100);
         remirya.setHungry(0);
-        SimYukkuri.world.getCurrentMap().getBody().put(remirya.getUniqueID(), remirya);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(remirya.getUniqueID(), remirya);
 
         org.simyukkuri.entity.core.living.yukkuri.impl.Reimu prey = new org.simyukkuri.entity.core.living.yukkuri.impl.Reimu();
         prey.setX(110); prey.setY(110);
         prey.setAgeState(org.simyukkuri.enums.AgeState.BABY);
         // Make remirya the parent of prey → isFamily=true → skip
         WorldTestHelper.setParents(prey, remirya.getUniqueID(), -1);
-        SimYukkuri.world.getCurrentMap().getBody().put(prey.getUniqueID(), prey);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(prey.getUniqueID(), prey);
 
         assertDoesNotThrow(() -> FoodLogic.searchFoodPredetor(remirya, new boolean[]{false}));
     }
@@ -1267,12 +1267,12 @@ class FoodLogicTest {
         org.simyukkuri.entity.core.living.yukkuri.impl.Remirya predator = new org.simyukkuri.entity.core.living.yukkuri.impl.Remirya();
         predator.setX(100); predator.setY(100);
         predator.setHungry(0);
-        SimYukkuri.world.getCurrentMap().getBody().put(predator.getUniqueID(), predator);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(predator.getUniqueID(), predator);
 
         org.simyukkuri.entity.core.living.yukkuri.impl.Remirya prey = new org.simyukkuri.entity.core.living.yukkuri.impl.Remirya();
         prey.setX(110); prey.setY(110);
         prey.setAgeState(org.simyukkuri.enums.AgeState.BABY);
-        SimYukkuri.world.getCurrentMap().getBody().put(prey.getUniqueID(), prey);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(prey.getUniqueID(), prey);
 
         assertDoesNotThrow(() -> FoodLogic.searchFoodPredetor(predator, new boolean[]{false}));
     }
@@ -1283,13 +1283,13 @@ class FoodLogicTest {
         org.simyukkuri.entity.core.living.yukkuri.impl.Remirya remirya = new org.simyukkuri.entity.core.living.yukkuri.impl.Remirya();
         remirya.setX(100); remirya.setY(100);
         remirya.setIntelligence(org.simyukkuri.enums.Intelligence.AVERAGE);
-        SimYukkuri.world.getCurrentMap().getBody().put(remirya.getUniqueID(), remirya);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(remirya.getUniqueID(), remirya);
 
         org.simyukkuri.entity.core.living.yukkuri.impl.Reimu sickPrey = new org.simyukkuri.entity.core.living.yukkuri.impl.Reimu();
         sickPrey.setX(110); sickPrey.setY(110);
         sickPrey.setAgeState(org.simyukkuri.enums.AgeState.BABY);
         sickPrey.forceSetSick(); // isSick()=true
-        SimYukkuri.world.getCurrentMap().getBody().put(sickPrey.getUniqueID(), sickPrey);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(sickPrey.getUniqueID(), sickPrey);
 
         assertDoesNotThrow(() -> FoodLogic.searchFoodPredetor(remirya, new boolean[]{false}));
     }
@@ -1345,7 +1345,7 @@ class FoodLogicTest {
         // L71: isAdult=true → evaluate isToSukkiri → false → isToSteal (both false) → L72 false
         body.setAgeState(AgeState.ADULT);
         body.setHungry(body.getHungryLimit()); // !isVeryHungry → L69 block entered
-        // isToBody=false, isToBed=false, isToShit=false, isToSukkiri=false (default)
+        // isToYukkuri=false, isToBed=false, isToShit=false, isToSukkiri=false (default)
         // isToSteal=false → L72: isRaper && isExciting=false → whole false → continue
         assertDoesNotThrow(() -> FoodLogic.checkFood(body));
     }
@@ -1366,7 +1366,7 @@ class FoodLogicTest {
         body.setAge(1000);           // wakeUpTime(0) + ACTIVEPERIODorg(600) < 1000 → isSleepy=true
         body.setHungry(body.getHungryLimit()); // isFull → !isHungry
         body.setAttitude(Attitude.NICE); // isSmart()=true
-        body.setBodyRank(BodyRank.KAIYU);
+        body.setRank(YukkuriRank.KAIYU);
         assertFalse(FoodLogic.checkFood(body));
     }
 
@@ -1376,7 +1376,7 @@ class FoodLogicTest {
         body.setAge(1000);           // isSleepy=true
         body.setHungry(body.getHungryLimit()); // isFull
         body.setIntelligence(Intelligence.FOOL); // not WISE
-        body.setBodyRank(BodyRank.YASEIYU);      // not KAIYU
+        body.setRank(YukkuriRank.YASEIYU);      // not KAIYU
         assertFalse(FoodLogic.checkFood(body));
     }
 
@@ -1579,7 +1579,7 @@ class FoodLogicTest {
         assertTrue(body.isSleeping(), "LEMONPOP should force sleep");
     }
 
-    // ===== checkCanEatBody 追加テスト =====
+    // ===== checkCanEatYukkuri 追加テスト =====
 
     @Test
     void testCheckCanEatBody_BindStalk_ReturnsFalse() {
@@ -1588,7 +1588,7 @@ class FoodLogicTest {
         prey.setDead(true);
         Stalk stalk = new Stalk();
         prey.setBindStalk(stalk);
-        assertFalse(FoodLogic.checkCanEatBody(body, prey));
+        assertFalse(FoodLogic.checkCanEatYukkuri(body, prey));
     }
 
     @Test
@@ -1598,7 +1598,7 @@ class FoodLogicTest {
         Yukkuri prey = WorldTestHelper.createBody();
         prey.setDead(true);
         prey.setOkazari(new Okazari(prey, Okazari.OkazariType.DEFAULT));
-        assertFalse(FoodLogic.checkCanEatBody(body, prey));
+        assertFalse(FoodLogic.checkCanEatYukkuri(body, prey));
     }
 
     @Test
@@ -1610,7 +1610,7 @@ class FoodLogicTest {
         prey.setDead(true);
         prey.setOkazari(null); // L2031をスキップしてL2034に到達させる
         prey.setSickPeriod(2000); // > incubationPeriodBase(1200) → isSick=true
-        assertFalse(FoodLogic.checkCanEatBody(body, prey));
+        assertFalse(FoodLogic.checkCanEatYukkuri(body, prey));
     }
 
     // ===== checkTakeout 追加テスト =====
@@ -1709,7 +1709,7 @@ class FoodLogicTest {
         deadPrey.setDead(true);
         deadPrey.setOkazari(new Okazari(deadPrey, Okazari.OkazariType.DEFAULT));
         deadPrey.setX(110); deadPrey.setY(100);
-        SimYukkuri.world.getCurrentMap().getBody().put(deadPrey.getUniqueID(), deadPrey);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(deadPrey.getUniqueID(), deadPrey);
 
         boolean[] forceEat = {false};
         assertDoesNotThrow(() -> FoodLogic.searchFoodPredetor(body, forceEat));
@@ -1728,7 +1728,7 @@ class FoodLogicTest {
         // make them "family" by setting common parent
         WorldTestHelper.setParents(body, 1, 2);
         WorldTestHelper.setParents(deadPrey, 1, 2);
-        SimYukkuri.world.getCurrentMap().getBody().put(deadPrey.getUniqueID(), deadPrey);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(deadPrey.getUniqueID(), deadPrey);
 
         boolean[] forceEat = {false};
         Entity result = FoodLogic.searchFoodPredetor(body, forceEat);
@@ -1765,7 +1765,7 @@ class FoodLogicTest {
     @Test
     void testEatFood_Poor_Shit_Kaiyu_DoesNotThrow() {
         body.setTang(200);
-        body.setBodyRank(BodyRank.KAIYU);
+        body.setRank(YukkuriRank.KAIYU);
         assertDoesNotThrow(() -> FoodLogic.eatFood(body, Food.FoodType.SHIT, 100));
     }
 
@@ -1774,7 +1774,7 @@ class FoodLogicTest {
         // POOR + BITTER + !likeBitter + KAIYU(diarrhea=true) → rapidShit
         body.setTang(200);
         body.setLikeBitterFood(false);
-        body.setBodyRank(BodyRank.KAIYU);
+        body.setRank(YukkuriRank.KAIYU);
         assertDoesNotThrow(() -> FoodLogic.eatFood(body, Food.FoodType.BITTER, 100));
         assertEquals(Happiness.SAD, body.getHappiness());
     }
@@ -1800,21 +1800,21 @@ class FoodLogicTest {
     @Test
     void testEatFood_Poor_Body_Kaiyu_DoesNotThrow() {
         body.setTang(200);
-        body.setBodyRank(BodyRank.KAIYU);
+        body.setRank(YukkuriRank.KAIYU);
         assertDoesNotThrow(() -> FoodLogic.eatFood(body, Food.FoodType.BODY, 100));
     }
 
     @Test
     void testEatFood_Poor_Stalk_Kaiyu_DoesNotThrow() {
         body.setTang(200);
-        body.setBodyRank(BodyRank.KAIYU);
+        body.setRank(YukkuriRank.KAIYU);
         assertDoesNotThrow(() -> FoodLogic.eatFood(body, Food.FoodType.STALK, 100));
     }
 
     @Test
     void testEatFood_Poor_Waste_Kaiyu_DoesNotThrow() {
         body.setTang(200);
-        body.setBodyRank(BodyRank.KAIYU);
+        body.setRank(YukkuriRank.KAIYU);
         assertDoesNotThrow(() -> FoodLogic.eatFood(body, Food.FoodType.WASTE, 100));
     }
 
@@ -1823,7 +1823,7 @@ class FoodLogicTest {
     @Test
     void testEatFood_Normal_Shit_Kaiyu_DoesNotThrow() {
         body.setTang(400);
-        body.setBodyRank(BodyRank.KAIYU);
+        body.setRank(YukkuriRank.KAIYU);
         assertDoesNotThrow(() -> FoodLogic.eatFood(body, Food.FoodType.SHIT, 100));
     }
 
@@ -1831,7 +1831,7 @@ class FoodLogicTest {
     void testEatFood_Normal_Bitter_DislikeBitter_Diarrhea_DoesNotThrow() {
         body.setTang(400);
         body.setLikeBitterFood(false);
-        body.setBodyRank(BodyRank.KAIYU);
+        body.setRank(YukkuriRank.KAIYU);
         assertDoesNotThrow(() -> FoodLogic.eatFood(body, Food.FoodType.BITTER, 100));
         assertEquals(Happiness.SAD, body.getHappiness());
     }
@@ -1864,21 +1864,21 @@ class FoodLogicTest {
     @Test
     void testEatFood_Normal_Body_Kaiyu_DoesNotThrow() {
         body.setTang(400);
-        body.setBodyRank(BodyRank.KAIYU);
+        body.setRank(YukkuriRank.KAIYU);
         assertDoesNotThrow(() -> FoodLogic.eatFood(body, Food.FoodType.BODY, 100));
     }
 
     @Test
     void testEatFood_Normal_Stalk_Kaiyu_DoesNotThrow() {
         body.setTang(400);
-        body.setBodyRank(BodyRank.KAIYU);
+        body.setRank(YukkuriRank.KAIYU);
         assertDoesNotThrow(() -> FoodLogic.eatFood(body, Food.FoodType.STALK, 100));
     }
 
     @Test
     void testEatFood_Normal_Waste_Kaiyu_DoesNotThrow() {
         body.setTang(400);
-        body.setBodyRank(BodyRank.KAIYU);
+        body.setRank(YukkuriRank.KAIYU);
         assertDoesNotThrow(() -> FoodLogic.eatFood(body, Food.FoodType.WASTE, 100));
     }
 
@@ -1904,7 +1904,7 @@ class FoodLogicTest {
     @Test
     void testEatFood_Gourmet_Shit_Kaiyu_DoesNotThrow() {
         body.setTang(700);
-        body.setBodyRank(BodyRank.KAIYU);
+        body.setRank(YukkuriRank.KAIYU);
         assertDoesNotThrow(() -> FoodLogic.eatFood(body, Food.FoodType.SHIT, 100));
     }
 
@@ -1912,7 +1912,7 @@ class FoodLogicTest {
     void testEatFood_Gourmet_Bitter_DislikeBitter_Diarrhea_DoesNotThrow() {
         body.setTang(700);
         body.setLikeBitterFood(false);
-        body.setBodyRank(BodyRank.KAIYU);
+        body.setRank(YukkuriRank.KAIYU);
         assertDoesNotThrow(() -> FoodLogic.eatFood(body, Food.FoodType.BITTER, 100));
         assertEquals(Happiness.VERY_SAD, body.getHappiness());
     }
@@ -1962,21 +1962,21 @@ class FoodLogicTest {
     @Test
     void testEatFood_Gourmet_Body_Kaiyu_DoesNotThrow() {
         body.setTang(700);
-        body.setBodyRank(BodyRank.KAIYU);
+        body.setRank(YukkuriRank.KAIYU);
         assertDoesNotThrow(() -> FoodLogic.eatFood(body, Food.FoodType.BODY, 100));
     }
 
     @Test
     void testEatFood_Gourmet_Stalk_Kaiyu_DoesNotThrow() {
         body.setTang(700);
-        body.setBodyRank(BodyRank.KAIYU);
+        body.setRank(YukkuriRank.KAIYU);
         assertDoesNotThrow(() -> FoodLogic.eatFood(body, Food.FoodType.STALK, 100));
     }
 
     @Test
     void testEatFood_Gourmet_Waste_Kaiyu_DoesNotThrow() {
         body.setTang(700);
-        body.setBodyRank(BodyRank.KAIYU);
+        body.setRank(YukkuriRank.KAIYU);
         assertDoesNotThrow(() -> FoodLogic.eatFood(body, Food.FoodType.WASTE, 100));
     }
 
@@ -2036,7 +2036,7 @@ class FoodLogicTest {
         assertFalse(FoodLogic.checkTakeout(body, food));
     }
 
-    // ===== checkCanEatBody 追加テスト =====
+    // ===== checkCanEatYukkuri 追加テスト =====
 
     @Test
     void testCheckCanEatBody_IsVeryRude_HasOkazari_ReturnsTrue() {
@@ -2045,7 +2045,7 @@ class FoodLogicTest {
         Yukkuri prey = WorldTestHelper.createBody();
         prey.setDead(true);
         prey.setOkazari(new Okazari(prey, Okazari.OkazariType.DEFAULT));
-        assertTrue(FoodLogic.checkCanEatBody(body, prey));
+        assertTrue(FoodLogic.checkCanEatYukkuri(body, prey));
     }
 
     @Test
@@ -2058,7 +2058,7 @@ class FoodLogicTest {
         prey.setDead(true);
         prey.setOkazari(null); // デフォルトでokazariが設定されているのでクリア
         prey.setSickPeriod(2000);
-        assertTrue(FoodLogic.checkCanEatBody(body, prey));
+        assertTrue(FoodLogic.checkCanEatYukkuri(body, prey));
     }
 
     @Test
@@ -2070,19 +2070,19 @@ class FoodLogicTest {
         prey.setDead(true);
         prey.setOkazari(null); // デフォルトでokazariが設定されているのでクリア
         prey.setSickPeriod(2000);
-        assertTrue(FoodLogic.checkCanEatBody(body, prey));
+        assertTrue(FoodLogic.checkCanEatYukkuri(body, prey));
     }
 
-    // ===== checkFood L74: !isVeryHungry && isToFood && (isToBody||isToBed...) → setToFood(false) =====
+    // ===== checkFood L74: !isVeryHungry && isToFood && (isToYukkuri||isToBed...) → setToFood(false) =====
 
     @Test
     void testCheckFood_NotVeryHungry_ToBody_IsToFood_SetsToFoodFalse() {
-        // !isVeryHungry() && isToFood() && (isToBody()) → L74: setToFood(false)
-        // purposeOfMoving is a single field: setToBody then setToFood overwrites it.
-        // Use an anonymous subclass that overrides isToBody() so both can be "true" at once.
+        // !isVeryHungry() && isToFood() && (isToYukkuri()) → L74: setToFood(false)
+        // purposeOfMoving is a single field: setToYukkuri then setToFood overwrites it.
+        // Use an anonymous subclass that overrides isToYukkuri() so both can be "true" at once.
         SimYukkuri.RND = new ConstState(1);
         Yukkuri bodyWithToBody = new org.simyukkuri.entity.core.living.yukkuri.impl.Marisa() {
-            @Override public boolean isToBody() { return true; }
+            @Override public boolean isToYukkuri() { return true; }
             @Override public int getCollisionX() { return 10; }
         };
         bodyWithToBody.setX(100);
@@ -2091,7 +2091,7 @@ class FoodLogicTest {
         bodyWithToBody.setToFood(true); // isToFood()=true
         bodyWithToBody.setUniqueID(org.simyukkuri.enums.Numbering.INSTANCE.numberingYukkuriID());
         bodyWithToBody.setObjId(org.simyukkuri.enums.Numbering.INSTANCE.numberingObjId());
-        SimYukkuri.world.getCurrentMap().getBody().put(bodyWithToBody.getUniqueID(), bodyWithToBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(bodyWithToBody.getUniqueID(), bodyWithToBody);
         assertFalse(FoodLogic.checkFood(bodyWithToBody));
         assertFalse(bodyWithToBody.isToFood(), "L74: setToFood(false) should have been called");
     }
@@ -2190,8 +2190,8 @@ class FoodLogicTest {
         plantBody.setX(102);
         plantBody.setY(102);
         plantBody.setBurialState(BurialState.NONE);
-        // uniqueIDキーでBodyマップに登録（FoodLogicはgetBody().get(uniqueID)で検索）
-        SimYukkuri.world.getCurrentMap().getBody().put(plantBody.getUniqueID(), plantBody);
+        // uniqueIDキーでBodyマップに登録（FoodLogicはgetYukkuriMap().get(uniqueID)で検索）
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(plantBody.getUniqueID(), plantBody);
         Stalk stalk = new Stalk(101, 101, 0);
         stalk.setPlantYukkuri(plantBody.getUniqueID());
         body.setMoveTargetId(stalk.getObjId());
@@ -2335,11 +2335,11 @@ class FoodLogicTest {
         org.simyukkuri.entity.core.living.yukkuri.impl.Marisa prey = new org.simyukkuri.entity.core.living.yukkuri.impl.Marisa() {
             @Override public int getCollisionX() { return 10; }
             @Override public void bodyInjure() { /* no-op to avoid headless NPE */ }
-            @Override public void eatBody(int amount, org.simyukkuri.entity.core.living.yukkuri.Yukkuri attacker) { /* no-op to avoid bodyCut NPE */ }
+            @Override public void eatYukkuri(int amount, org.simyukkuri.entity.core.living.yukkuri.Yukkuri attacker) { /* no-op to avoid bodyCut NPE */ }
         };
         prey.setX(body.getX());
         prey.setY(body.getY());
-        SimYukkuri.world.getCurrentMap().getBody().put(prey.getUniqueID(), prey);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(prey.getUniqueID(), prey);
         body.setMoveTargetId(prey.getObjId());
         assertDoesNotThrow(() -> FoodLogic.checkFood(body));
     }
@@ -2356,12 +2356,12 @@ class FoodLogicTest {
         org.simyukkuri.entity.core.living.yukkuri.impl.Marisa prey = new org.simyukkuri.entity.core.living.yukkuri.impl.Marisa() {
             @Override public int getCollisionX() { return 10; }
             @Override public void bodyInjure() { /* no-op to avoid headless NPE */ }
-            @Override public void eatBody(int amount, org.simyukkuri.entity.core.living.yukkuri.Yukkuri attacker) { /* no-op to avoid bodyCut NPE */ }
+            @Override public void eatYukkuri(int amount, org.simyukkuri.entity.core.living.yukkuri.Yukkuri attacker) { /* no-op to avoid bodyCut NPE */ }
         };
         prey.setX(body.getX());
         prey.setY(body.getY());
         prey.setUnBirth(true);
-        SimYukkuri.world.getCurrentMap().getBody().put(prey.getUniqueID(), prey);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(prey.getUniqueID(), prey);
         body.setMoveTargetId(prey.getObjId());
         assertDoesNotThrow(() -> FoodLogic.checkFood(body));
     }
@@ -2377,7 +2377,7 @@ class FoodLogicTest {
         Yukkuri prey = WorldTestHelper.createBody();
         prey.setX(body.getX());
         prey.setY(body.getY());
-        SimYukkuri.world.getCurrentMap().getBody().put(prey.getUniqueID(), prey);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(prey.getUniqueID(), prey);
         body.setMoveTargetId(prey.getObjId());
         boolean result = FoodLogic.checkFood(body);
         assertFalse(result);
@@ -2396,7 +2396,7 @@ class FoodLogicTest {
         prey.setX(body.getX());
         prey.setY(body.getY());
         prey.setDead(true);
-        SimYukkuri.world.getCurrentMap().getBody().put(prey.getUniqueID(), prey);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(prey.getUniqueID(), prey);
         body.setMoveTargetId(prey.getObjId());
         assertDoesNotThrow(() -> FoodLogic.checkFood(body));
     }
@@ -2413,7 +2413,7 @@ class FoodLogicTest {
         plantBody.setX(body.getX());
         plantBody.setY(body.getY());
         plantBody.setBurialState(BurialState.ALL);
-        SimYukkuri.world.getCurrentMap().getBody().put(plantBody.getUniqueID(), plantBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(plantBody.getUniqueID(), plantBody);
         Stalk stalk = new Stalk(body.getX(), body.getY(), 0);
         stalk.setPlantYukkuri(plantBody.getUniqueID());
         body.setMoveTargetId(stalk.getObjId());
@@ -2493,7 +2493,7 @@ class FoodLogicTest {
         idiotBody.setY(100);
         idiotBody.setHungry(idiotBody.getHungryLimit());
         idiotBody.setCoreAnkoState(CoreAnkoState.NonYukkuriDiseaseNear);
-        SimYukkuri.world.getCurrentMap().getBody().put(idiotBody.getUniqueID(), idiotBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(idiotBody.getUniqueID(), idiotBody);
         assertFalse(FoodLogic.checkFood(idiotBody));
     }
 
@@ -2512,7 +2512,7 @@ class FoodLogicTest {
         idiotBody.setY(100);
         idiotBody.setHungry(idiotBody.getHungryLimit());
         idiotBody.setCoreAnkoState(CoreAnkoState.NonYukkuriDiseaseNear);
-        SimYukkuri.world.getCurrentMap().getBody().put(idiotBody.getUniqueID(), idiotBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(idiotBody.getUniqueID(), idiotBody);
         assertFalse(FoodLogic.checkFood(idiotBody));
     }
 
@@ -2610,7 +2610,7 @@ class FoodLogicTest {
         idiotBody.setX(100);
         idiotBody.setY(100);
         idiotBody.setHungry(idiotBody.getHungryLimit() / 2); // isHungry=true, isFull=false
-        SimYukkuri.world.getCurrentMap().getBody().put(idiotBody.getUniqueID(), idiotBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(idiotBody.getUniqueID(), idiotBody);
         Shit shit = new Shit(); shit.setX(idiotBody.getX() + 2); shit.setY(idiotBody.getY());
         SimYukkuri.world.getCurrentMap().getShit().put(shit.getObjId(), shit);
         assertDoesNotThrow(() -> FoodLogic.checkFood(idiotBody));
@@ -2626,7 +2626,7 @@ class FoodLogicTest {
         Yukkuri prey = WorldTestHelper.createBody();
         prey.setX(body.getX() + 5);
         prey.setY(body.getY());
-        SimYukkuri.world.getCurrentMap().getBody().put(prey.getUniqueID(), prey);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(prey.getUniqueID(), prey);
         assertDoesNotThrow(() -> FoodLogic.checkFood(body));
     }
 
@@ -2643,7 +2643,7 @@ class FoodLogicTest {
         idiotBody.setX(100);
         idiotBody.setY(100);
         idiotBody.setHungry(idiotBody.getHungryLimit());
-        SimYukkuri.world.getCurrentMap().getBody().put(idiotBody.getUniqueID(), idiotBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(idiotBody.getUniqueID(), idiotBody);
         // Stalk with no plantYukkuri (can be eaten)
         Stalk stalk = new Stalk(idiotBody.getX() + 5, idiotBody.getY(), 0);
         // stalk already in map
@@ -2663,7 +2663,7 @@ class FoodLogicTest {
         idiotBody.setX(100);
         idiotBody.setY(100);
         idiotBody.setHungry(idiotBody.getHungryLimit());
-        SimYukkuri.world.getCurrentMap().getBody().put(idiotBody.getUniqueID(), idiotBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(idiotBody.getUniqueID(), idiotBody);
         Vomit vomit = new Vomit(); vomit.setX(idiotBody.getX() + 5); vomit.setY(idiotBody.getY());
         SimYukkuri.world.getCurrentMap().getVomit().put(vomit.getObjId(), vomit);
         assertDoesNotThrow(() -> FoodLogic.checkFood(idiotBody));
@@ -2717,7 +2717,7 @@ class FoodLogicTest {
         idiotBody.setX(100);
         idiotBody.setY(100);
         idiotBody.setHungry(idiotBody.getHungryLimit()); // truly full (hungry=limit)
-        SimYukkuri.world.getCurrentMap().getBody().put(idiotBody.getUniqueID(), idiotBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(idiotBody.getUniqueID(), idiotBody);
         assertFalse(FoodLogic.checkFood(idiotBody));
     }
 
@@ -2735,11 +2735,11 @@ class FoodLogicTest {
         idiotBody.setX(100);
         idiotBody.setY(100);
         idiotBody.setHungry(idiotBody.getHungryLimit() / 2); // isHungry=true, isFull=false
-        SimYukkuri.world.getCurrentMap().getBody().put(idiotBody.getUniqueID(), idiotBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(idiotBody.getUniqueID(), idiotBody);
         assertDoesNotThrow(() -> FoodLogic.checkFood(idiotBody));
     }
 
-    // ===== searchFoodNearlest: body loop (checkCanEatBody=true for dead Yukkuri) =====
+    // ===== searchFoodNearlest: body loop (checkCanEatYukkuri=true for dead Yukkuri) =====
 
     @Test
     void testCheckFood_IdiotBody_FindsDeadBody() {
@@ -2752,12 +2752,12 @@ class FoodLogicTest {
         idiotBody.setY(100);
         idiotBody.setHungry(idiotBody.getHungryLimit() / 2); // isHungry=true, isFull=false
         idiotBody.setAttitude(Attitude.SUPER_SHITHEAD); // isVeryRude → can eat dead body
-        SimYukkuri.world.getCurrentMap().getBody().put(idiotBody.getUniqueID(), idiotBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(idiotBody.getUniqueID(), idiotBody);
         Yukkuri deadBody = WorldTestHelper.createBody();
         deadBody.setX(105);
         deadBody.setY(100);
         deadBody.setDead(true);
-        SimYukkuri.world.getCurrentMap().getBody().put(deadBody.getUniqueID(), deadBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(deadBody.getUniqueID(), deadBody);
         assertDoesNotThrow(() -> FoodLogic.checkFood(idiotBody));
     }
 
@@ -2917,7 +2917,7 @@ class FoodLogicTest {
         Yukkuri partner = WorldTestHelper.createBody();
         partner.setX(200);
         partner.setY(200);
-        SimYukkuri.world.getCurrentMap().getBody().put(partner.getUniqueID(), partner);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(partner.getUniqueID(), partner);
         body.setPartner(partner.getUniqueID());
         // Set up a Bed as favourite item
         Bed bed = new Bed(500, 500, 0);
@@ -2941,7 +2941,7 @@ class FoodLogicTest {
         unBirthBody.setX(body.getX() + 5);
         unBirthBody.setY(body.getY());
         unBirthBody.setUnBirth(true);
-        SimYukkuri.world.getCurrentMap().getBody().put(unBirthBody.getUniqueID(), unBirthBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(unBirthBody.getUniqueID(), unBirthBody);
         boolean[] forceEat = { false };
         Entity found = FoodLogic.searchFoodStandard(body, forceEat);
         assertNotNull(found);
@@ -2987,7 +2987,7 @@ class FoodLogicTest {
         remirya.setX(100);
         remirya.setY(100);
         remirya.setHungry(remirya.getHungryLimit());
-        SimYukkuri.world.getCurrentMap().getBody().put(remirya.getUniqueID(), remirya);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(remirya.getUniqueID(), remirya);
         boolean[] forceEat = { false };
         assertDoesNotThrow(() -> FoodLogic.searchFoodPredetor(remirya, forceEat));
     }
@@ -3004,7 +3004,7 @@ class FoodLogicTest {
         sickPrey.setX(body.getX() + 5);
         sickPrey.setY(body.getY());
         sickPrey.setSickPeriod(2000);
-        SimYukkuri.world.getCurrentMap().getBody().put(sickPrey.getUniqueID(), sickPrey);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(sickPrey.getUniqueID(), sickPrey);
         boolean[] forceEat = { false };
         Entity found = FoodLogic.searchFoodPredetor(body, forceEat);
         // sick prey should be skipped
@@ -3022,7 +3022,7 @@ class FoodLogicTest {
         predatorPrey.setX(body.getX() + 5);
         predatorPrey.setY(body.getY());
         predatorPrey.setPredatorType(PredatorType.BITE);
-        SimYukkuri.world.getCurrentMap().getBody().put(predatorPrey.getUniqueID(), predatorPrey);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(predatorPrey.getUniqueID(), predatorPrey);
         boolean[] forceEat = { false };
         assertDoesNotThrow(() -> FoodLogic.searchFoodPredetor(body, forceEat));
     }
@@ -3037,7 +3037,7 @@ class FoodLogicTest {
         Yukkuri familyPrey = WorldTestHelper.createBody();
         familyPrey.setX(body.getX() + 5);
         familyPrey.setY(body.getY());
-        SimYukkuri.world.getCurrentMap().getBody().put(familyPrey.getUniqueID(), familyPrey);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(familyPrey.getUniqueID(), familyPrey);
         body.setPartner(familyPrey.getUniqueID()); // make it partner → isFamily=true
         boolean[] forceEat = { false };
         assertDoesNotThrow(() -> FoodLogic.searchFoodPredetor(body, forceEat));
@@ -3054,7 +3054,7 @@ class FoodLogicTest {
         airPrey.setX(body.getX() + 5);
         airPrey.setY(body.getY());
         airPrey.setZ(10); // in the air
-        SimYukkuri.world.getCurrentMap().getBody().put(airPrey.getUniqueID(), airPrey);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(airPrey.getUniqueID(), airPrey);
         boolean[] forceEat = { false };
         assertDoesNotThrow(() -> FoodLogic.searchFoodPredetor(body, forceEat));
     }
@@ -3070,7 +3070,7 @@ class FoodLogicTest {
         Yukkuri samePrey = WorldTestHelper.createBody();
         samePrey.setX(body.getX() + 5);
         samePrey.setY(body.getY());
-        SimYukkuri.world.getCurrentMap().getBody().put(samePrey.getUniqueID(), samePrey);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(samePrey.getUniqueID(), samePrey);
         boolean[] forceEat = { false };
         // found2 will be returned if found is null (same size not < size)
         assertDoesNotThrow(() -> FoodLogic.searchFoodPredetor(body, forceEat));
@@ -3088,7 +3088,7 @@ class FoodLogicTest {
         deadFamily.setY(body.getY());
         deadFamily.setDead(true);
         deadFamily.setOkazari(new Okazari(deadFamily, Okazari.OkazariType.DEFAULT));
-        SimYukkuri.world.getCurrentMap().getBody().put(deadFamily.getUniqueID(), deadFamily);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(deadFamily.getUniqueID(), deadFamily);
         body.setPartner(deadFamily.getUniqueID());
         boolean[] forceEat = { false };
         assertDoesNotThrow(() -> FoodLogic.searchFoodPredetor(body, forceEat));
@@ -3281,7 +3281,7 @@ class FoodLogicTest {
         other.setX(200);
         other.setY(200);
         other.setMoveTargetId(shit.getObjId());
-        SimYukkuri.world.getCurrentMap().getBody().put(other.getUniqueID(), other);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(other.getUniqueID(), other);
         assertDoesNotThrow(() -> FoodLogic.checkFood(body));
     }
 
@@ -3314,15 +3314,15 @@ class FoodLogicTest {
 
     @Test
     void testCheckFood_UnunSlave_BodyLoop_SoHungry_CanEatBody() {
-        // UnunSlave + soHungry + tooHungry + checkCanEatBody=true → found=body (L1298-1318)
+        // UnunSlave + soHungry + tooHungry + checkCanEatYukkuri=true → found=body (L1298-1318)
         body.setPublicRank(PublicRank.UnunSlave);
         body.setHungry(body.getHungryLimit());
-        body.setAttitude(Attitude.SUPER_SHITHEAD); // isVeryRude → checkCanEatBody returns true
+        body.setAttitude(Attitude.SUPER_SHITHEAD); // isVeryRude → checkCanEatYukkuri returns true
         Yukkuri deadBody = WorldTestHelper.createBody();
         deadBody.setX(body.getX() + 5);
         deadBody.setY(body.getY());
         deadBody.setDead(true);
-        SimYukkuri.world.getCurrentMap().getBody().put(deadBody.getUniqueID(), deadBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(deadBody.getUniqueID(), deadBody);
         assertDoesNotThrow(() -> FoodLogic.checkFood(body));
     }
 
@@ -3344,7 +3344,7 @@ class FoodLogicTest {
     void testEatFood_Gourmet_Sweets2_Kaiyu_HoldMessage() {
         // GOURMET + SWEETS2 → L1870-1880 branch: setMessage with HOLDMESSAGE
         body.setTang(700);
-        body.setBodyRank(BodyRank.KAIYU);
+        body.setRank(YukkuriRank.KAIYU);
         assertDoesNotThrow(() -> FoodLogic.eatFood(body, Food.FoodType.SWEETS2, 100));
     }
 
@@ -3409,7 +3409,7 @@ class FoodLogicTest {
         Yukkuri partner = WorldTestHelper.createBody();
         partner.setX(200);
         partner.setY(200);
-        SimYukkuri.world.getCurrentMap().getBody().put(partner.getUniqueID(), partner);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(partner.getUniqueID(), partner);
         body.setPartner(partner.getUniqueID());
         Bed bed = new Bed(500, 500, 0);
         body.setFavoriteItem(FavItemType.BED, bed);
@@ -3430,7 +3430,7 @@ class FoodLogicTest {
         Yukkuri partner = WorldTestHelper.createBody();
         partner.setX(200);
         partner.setY(200);
-        SimYukkuri.world.getCurrentMap().getBody().put(partner.getUniqueID(), partner);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(partner.getUniqueID(), partner);
         body.setPartner(partner.getUniqueID());
         Bed favBed = new Bed(500, 500, 0);
         body.setFavoriteItem(FavItemType.BED, favBed);
@@ -3469,7 +3469,7 @@ class FoodLogicTest {
         plantBody.setX(body.getX() + 5);
         plantBody.setY(body.getY());
         plantBody.setBurialState(BurialState.ALL);
-        SimYukkuri.world.getCurrentMap().getBody().put(plantBody.getUniqueID(), plantBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(plantBody.getUniqueID(), plantBody);
         Stalk stalk = new Stalk(body.getX() + 5, body.getY(), 0);
         stalk.setPlantYukkuri(plantBody.getUniqueID());
         boolean[] forceEat = { false };
@@ -3487,7 +3487,7 @@ class FoodLogicTest {
         assertDoesNotThrow(() -> FoodLogic.searchFoodStandard(body, forceEat));
     }
 
-    // ===== searchFoodStandard: body loop (dead body + checkCanEatBody) =====
+    // ===== searchFoodStandard: body loop (dead body + checkCanEatYukkuri) =====
 
     @Test
     void testSearchFoodStandard_DeadBodyWithStalk_Skip() {
@@ -3498,7 +3498,7 @@ class FoodLogicTest {
         deadBody.setY(body.getY());
         deadBody.setDead(true);
         deadBody.setAttitude(Attitude.SUPER_SHITHEAD);
-        SimYukkuri.world.getCurrentMap().getBody().put(deadBody.getUniqueID(), deadBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(deadBody.getUniqueID(), deadBody);
         // Create stalk bound to dead body
         Stalk stalk = new Stalk(body.getX() + 5, body.getY(), 0);
         stalk.setPlantYukkuri(deadBody.getUniqueID());
@@ -3548,7 +3548,7 @@ class FoodLogicTest {
         deadBody.setX(body.getX() + 5);
         deadBody.setY(body.getY());
         deadBody.setDead(true);
-        SimYukkuri.world.getCurrentMap().getBody().put(deadBody.getUniqueID(), deadBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(deadBody.getUniqueID(), deadBody);
         boolean[] forceEat = { false };
         assertDoesNotThrow(() -> FoodLogic.searchFoodPredetor(body, forceEat));
     }
@@ -3613,7 +3613,7 @@ class FoodLogicTest {
         remirya.setY(100);
         remirya.setHungry(remirya.getHungryLimit() / 2); // not full, not very hungry
         remirya.setToFood(true);
-        SimYukkuri.world.getCurrentMap().getBody().put(remirya.getUniqueID(), remirya);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(remirya.getUniqueID(), remirya);
         // Food far from body (z!=0 to require canflyCheck for the non-fly path)
         Food food = new Food(600, 100, Food.FoodType.FOOD.ordinal());
         food.setZ(10);
@@ -3654,7 +3654,7 @@ class FoodLogicTest {
         idiotBody.setY(100);
         idiotBody.setHungry(idiotBody.getHungryLimit() / 2); // not full → proceed into loops
         idiotBody.setBurialState(BurialState.ALL);
-        SimYukkuri.world.getCurrentMap().getBody().put(idiotBody.getUniqueID(), idiotBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(idiotBody.getUniqueID(), idiotBody);
         // Stalk planted by idiotBody itself → p==b → skip
         Stalk stalk = new Stalk(102, 100, 0);
         stalk.setPlantYukkuri(idiotBody.getUniqueID());
@@ -3672,7 +3672,7 @@ class FoodLogicTest {
         plantBody.setX(body.getX() + 5);
         plantBody.setY(body.getY());
         plantBody.setBurialState(BurialState.ALL);
-        SimYukkuri.world.getCurrentMap().getBody().put(plantBody.getUniqueID(), plantBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(plantBody.getUniqueID(), plantBody);
         Stalk stalk = new Stalk(body.getX() + 5, body.getY(), 0);
         stalk.setPlantYukkuri(plantBody.getUniqueID());
         boolean[] forceEat = { false };
@@ -3692,7 +3692,7 @@ class FoodLogicTest {
         idiotBody.setX(100);
         idiotBody.setY(100);
         idiotBody.setHungry(idiotBody.getHungryLimit() / 2); // not full → proceed into loops
-        SimYukkuri.world.getCurrentMap().getBody().put(idiotBody.getUniqueID(), idiotBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(idiotBody.getUniqueID(), idiotBody);
         Vomit vomit = new Vomit();
         vomit.setX(102);
         vomit.setY(100);
@@ -3713,7 +3713,7 @@ class FoodLogicTest {
         idiotBody.setX(100);
         idiotBody.setY(100);
         idiotBody.setHungry(idiotBody.getHungryLimit() / 2); // not full → proceed into loops
-        SimYukkuri.world.getCurrentMap().getBody().put(idiotBody.getUniqueID(), idiotBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(idiotBody.getUniqueID(), idiotBody);
         Shit shit = new Shit();
         shit.setX(102);
         shit.setY(100);
@@ -3748,7 +3748,7 @@ class FoodLogicTest {
         plantBody.setX(body.getX() + 5);
         plantBody.setY(body.getY());
         plantBody.setBurialState(BurialState.ALL);
-        SimYukkuri.world.getCurrentMap().getBody().put(plantBody.getUniqueID(), plantBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(plantBody.getUniqueID(), plantBody);
         Stalk stalk = new Stalk(body.getX() + 5, body.getY(), 0);
         stalk.setPlantYukkuri(plantBody.getUniqueID());
         boolean[] forceEat = { false };
@@ -3778,7 +3778,7 @@ class FoodLogicTest {
         liveBody.setX(body.getX() + 5);
         liveBody.setY(body.getY());
         liveBody.setUnBirth(false); // not unBirth → skip for raper
-        SimYukkuri.world.getCurrentMap().getBody().put(liveBody.getUniqueID(), liveBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(liveBody.getUniqueID(), liveBody);
         boolean[] forceEat = { false };
         Entity found = FoodLogic.searchFoodStandard(body, forceEat);
         // Live non-unBirth body should be skipped for raper
@@ -3790,11 +3790,11 @@ class FoodLogicTest {
     @Test
     void testSearchFoodStandard_DeadBodyWithBindStalk_Skip() {
         // dead body with isbindStalk=true → skip (L918-919)
-        // checkCanEatBody returns false if isbindStalk=true (unless isPredatorType)
-        // So to reach L918-919, use isPredatorType=true so checkCanEatBody returns true immediately
+        // checkCanEatYukkuri returns false if isbindStalk=true (unless isPredatorType)
+        // So to reach L918-919, use isPredatorType=true so checkCanEatYukkuri returns true immediately
         body.setAgeState(AgeState.ADULT);
         body.setHungry(body.getHungryLimit());
-        body.setPredatorType(PredatorType.BITE); // isPredatorType=true → checkCanEatBody returns true immediately
+        body.setPredatorType(PredatorType.BITE); // isPredatorType=true → checkCanEatYukkuri returns true immediately
         // Remove setUp body from body map to avoid interference (setUp body is 'body' itself)
         // setUp body IS 'body', it's already the predator
         Yukkuri deadBody = WorldTestHelper.createBody();
@@ -3805,9 +3805,9 @@ class FoodLogicTest {
         Stalk stalk = new Stalk(body.getX() + 5, body.getY(), 0);
         stalk.setPlantYukkuri(deadBody.getUniqueID());
         deadBody.setBindStalk(stalk);
-        SimYukkuri.world.getCurrentMap().getBody().put(deadBody.getUniqueID(), deadBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(deadBody.getUniqueID(), deadBody);
         boolean[] forceEat = { false };
-        // searchFoodStandard body loop: isPredatorType → checkCanEatBody=true → d.isbindStalk()=true → L919 continue
+        // searchFoodStandard body loop: isPredatorType → checkCanEatYukkuri=true → d.isbindStalk()=true → L919 continue
         Entity found = FoodLogic.searchFoodStandard(body, forceEat);
         // dead body with stalk should be skipped → found=null (no other targets)
         assertNull(found);
@@ -3942,7 +3942,7 @@ class FoodLogicTest {
         Yukkuri partner = WorldTestHelper.createBody();
         partner.setX(200);
         partner.setY(200);
-        SimYukkuri.world.getCurrentMap().getBody().put(partner.getUniqueID(), partner);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(partner.getUniqueID(), partner);
         body.setPartner(partner.getUniqueID());
         // Set up fav bed
         Bed bed = new Bed(500, 500, 0);
@@ -3962,7 +3962,7 @@ class FoodLogicTest {
         Yukkuri partner = WorldTestHelper.createBody();
         partner.setX(200);
         partner.setY(200);
-        SimYukkuri.world.getCurrentMap().getBody().put(partner.getUniqueID(), partner);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(partner.getUniqueID(), partner);
         body.setPartner(partner.getUniqueID());
         // Create bed and set as fav
         Bed bed = new Bed(200, 200, 0);
@@ -3991,7 +3991,7 @@ class FoodLogicTest {
         Yukkuri partner = WorldTestHelper.createBody();
         partner.setX(200);
         partner.setY(200);
-        SimYukkuri.world.getCurrentMap().getBody().put(partner.getUniqueID(), partner);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(partner.getUniqueID(), partner);
         body.setPartner(partner.getUniqueID());
         Bed bed = new Bed(300, 300, 0);
         SimYukkuri.world.getCurrentMap().getBed().put(bed.getObjId(), bed);
@@ -4043,7 +4043,7 @@ class FoodLogicTest {
         plantBody.setX(body.getX() + 5);
         plantBody.setY(body.getY());
         plantBody.setBurialState(BurialState.NONE); // not buried
-        SimYukkuri.world.getCurrentMap().getBody().put(plantBody.getUniqueID(), plantBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(plantBody.getUniqueID(), plantBody);
         Stalk stalk = new Stalk(body.getX() + 5, body.getY(), 0);
         stalk.setPlantYukkuri(plantBody.getUniqueID());
         boolean[] forceEat = { false };
@@ -4061,7 +4061,7 @@ class FoodLogicTest {
         plantBody.setX(body.getX() + 5);
         plantBody.setY(body.getY());
         plantBody.setBurialState(BurialState.ALL);
-        SimYukkuri.world.getCurrentMap().getBody().put(plantBody.getUniqueID(), plantBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(plantBody.getUniqueID(), plantBody);
         Stalk stalk = new Stalk(body.getX() + 5, body.getY(), 0);
         stalk.setPlantYukkuri(plantBody.getUniqueID());
         boolean[] forceEat = { false };
@@ -4120,7 +4120,7 @@ class FoodLogicTest {
         // Has okazari → hasOkazari=true → condition (NEARLY_ALL && !hasOkazari) = (true && false) = false
         // → !(false) = true → DOES clear actions (L186-187)
         plantBody.setOkazari(new Okazari(plantBody, Okazari.OkazariType.DEFAULT));
-        SimYukkuri.world.getCurrentMap().getBody().put(plantBody.getUniqueID(), plantBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(plantBody.getUniqueID(), plantBody);
         Stalk stalk = new Stalk(body.getX(), body.getY(), 0);
         stalk.setPlantYukkuri(plantBody.getUniqueID());
         body.setMoveTargetId(stalk.getObjId());
@@ -4195,7 +4195,7 @@ class FoodLogicTest {
         prey.setY(body.getY());
         // Make prey smaller (BABY) so predator can eat it
         prey.setAgeState(AgeState.BABY);
-        SimYukkuri.world.getCurrentMap().getBody().put(prey.getUniqueID(), prey);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(prey.getUniqueID(), prey);
         // No move target set → goes to search path
         boolean result = FoodLogic.checkFood(body);
         // may or may not be true depending on predator logic
@@ -4227,14 +4227,14 @@ class FoodLogicTest {
         idiotBody.setX(100);
         idiotBody.setY(100);
         idiotBody.setHungry(idiotBody.getHungryLimit() / 2); // not full
-        SimYukkuri.world.getCurrentMap().getBody().put(idiotBody.getUniqueID(), idiotBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(idiotBody.getUniqueID(), idiotBody);
 
         // Create a plant body that is buried
         Yukkuri plantBody = WorldTestHelper.createBody();
         plantBody.setX(102);
         plantBody.setY(100);
         plantBody.setBurialState(BurialState.ALL);
-        SimYukkuri.world.getCurrentMap().getBody().put(plantBody.getUniqueID(), plantBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(plantBody.getUniqueID(), plantBody);
 
         // Create stalk attached to plant body
         Stalk stalk = new Stalk(102, 100, 0);
@@ -4245,7 +4245,7 @@ class FoodLogicTest {
         babyBody.setX(102);
         babyBody.setY(100);
         babyBody.setAgeState(AgeState.BABY);
-        SimYukkuri.world.getCurrentMap().getBody().put(babyBody.getUniqueID(), babyBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(babyBody.getUniqueID(), babyBody);
         stalk.setBindBaby(babyBody); // set baby body on stalk → bBabyFlag=true → skip
 
         // checkFood should not find the stalk (baby present → skip)
@@ -4265,7 +4265,7 @@ class FoodLogicTest {
         plantBody.setX(102);
         plantBody.setY(100);
         plantBody.setBurialState(BurialState.ALL);
-        SimYukkuri.world.getCurrentMap().getBody().put(plantBody.getUniqueID(), plantBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(plantBody.getUniqueID(), plantBody);
 
         // Create stalk attached to plant body
         Stalk stalk = new Stalk(102, 100, 0);
@@ -4276,7 +4276,7 @@ class FoodLogicTest {
         babyBody.setX(102);
         babyBody.setY(100);
         babyBody.setAgeState(AgeState.BABY);
-        SimYukkuri.world.getCurrentMap().getBody().put(babyBody.getUniqueID(), babyBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(babyBody.getUniqueID(), babyBody);
         stalk.setBindBaby(babyBody); // set baby body on stalk → bBabyFlag=true → skip
 
         // Standard search should skip this stalk due to baby
@@ -4288,7 +4288,7 @@ class FoodLogicTest {
 
     @Test
     void testCheckFood_PredatorType_LivePrey_CanFly_FlyingEatEvent() {
-        // isPredatorType && !predatorSteam && canflyCheck → L317-320: addBodyEvent(FlyingEatEvent)
+        // isPredatorType && !predatorSteam && canflyCheck → L317-320: addYukkuriEvent(FlyingEatEvent)
         // Override bodyInjure() on prey to avoid headless NPE (addVomit)
         SimYukkuri.RND = new ConstState(1); // prevent random cancel at L158
         Remirya remirya = new Remirya() {
@@ -4300,7 +4300,7 @@ class FoodLogicTest {
         remirya.setY(100);
         remirya.setHungry(remirya.getHungryLimit() / 2); // hungry (not full)
         remirya.setToFood(true);
-        SimYukkuri.world.getCurrentMap().getBody().put(remirya.getUniqueID(), remirya);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(remirya.getUniqueID(), remirya);
 
         // Create a live prey with overridden bodyInjure() to avoid headless NPE
         org.simyukkuri.entity.core.living.yukkuri.impl.Marisa prey = new org.simyukkuri.entity.core.living.yukkuri.impl.Marisa() {
@@ -4310,15 +4310,15 @@ class FoodLogicTest {
         prey.setX(100);
         prey.setY(100);
         prey.setAgeState(AgeState.BABY); // smaller prey
-        SimYukkuri.world.getCurrentMap().getBody().put(prey.getUniqueID(), prey);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(prey.getUniqueID(), prey);
 
         remirya.setMoveTargetId(prey.getObjId());
-        // Should reach L317-320: FlyingEatEvent (EventLogic.addBodyEvent may NPE in headless)
+        // Should reach L317-320: FlyingEatEvent (EventLogic.addYukkuriEvent may NPE in headless)
         assertDoesNotThrow(() -> {
             try {
                 FoodLogic.checkFood(remirya);
             } catch (NullPointerException e) {
-                // EventLogic.addBodyEvent (FlyingEatEvent) may NPE in headless (acceptable)
+                // EventLogic.addYukkuriEvent (FlyingEatEvent) may NPE in headless (acceptable)
             }
         });
     }
@@ -4367,13 +4367,13 @@ class FoodLogicTest {
         };
         prey.setX(body.getX());
         prey.setY(body.getY());
-        SimYukkuri.world.getCurrentMap().getBody().put(prey.getUniqueID(), prey);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(prey.getUniqueID(), prey);
 
         // Create mother body in the map
         Yukkuri mother = WorldTestHelper.createBody();
         mother.setX(body.getX() + 10);
         mother.setY(body.getY());
-        SimYukkuri.world.getCurrentMap().getBody().put(mother.getUniqueID(), mother);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(mother.getUniqueID(), mother);
 
         // Set prey's mother reference (setParents: father=0, mother=motherUniqueID)
         WorldTestHelper.setParents(prey, 0, mother.getUniqueID());
@@ -4384,7 +4384,7 @@ class FoodLogicTest {
             try {
                 FoodLogic.checkFood(body);
             } catch (NullPointerException e) {
-                // EventLogic.addBodyEvent (KillPredeatorEvent) may NPE in headless
+                // EventLogic.addYukkuriEvent (KillPredeatorEvent) may NPE in headless
             }
         });
     }
@@ -4407,7 +4407,7 @@ class FoodLogicTest {
         prey.setY(body.getY());
         prey.setDead(true);
         prey.setSickPeriod(1300); // sickPeriod > incubationPeriodBase(1200) → isSick()=true
-        SimYukkuri.world.getCurrentMap().getBody().put(prey.getUniqueID(), prey);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(prey.getUniqueID(), prey);
         body.setMoveTargetId(prey.getObjId());
 
         assertDoesNotThrow(() -> FoodLogic.checkFood(body));
@@ -4479,7 +4479,7 @@ class FoodLogicTest {
         liveBody.setX(body.getX() + 5);
         liveBody.setY(body.getY());
         // liveBody is not dead, not unBirth → raper would skip it at L910-911
-        SimYukkuri.world.getCurrentMap().getBody().put(liveBody.getUniqueID(), liveBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(liveBody.getUniqueID(), liveBody);
         boolean[] forceEat = { false };
         assertDoesNotThrow(() -> FoodLogic.searchFoodStandard(body, forceEat));
     }
@@ -4497,7 +4497,7 @@ class FoodLogicTest {
         deadBody.setX(body.getX() + 5);
         deadBody.setY(body.getY());
         deadBody.setDead(true);
-        SimYukkuri.world.getCurrentMap().getBody().put(deadBody.getUniqueID(), deadBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(deadBody.getUniqueID(), deadBody);
         // No shit/vomit in map → found==null → reaches body loop → breaks immediately
         assertDoesNotThrow(() -> FoodLogic.checkFood(body));
     }
@@ -4521,7 +4521,7 @@ class FoodLogicTest {
         Okazari okazari = new Okazari();
         okazari.setObjId(org.simyukkuri.enums.Numbering.INSTANCE.numberingObjId());
         deadFamily.setOkazari(okazari);
-        SimYukkuri.world.getCurrentMap().getBody().put(deadFamily.getUniqueID(), deadFamily);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(deadFamily.getUniqueID(), deadFamily);
         boolean[] forceEat = { false };
         assertDoesNotThrow(() -> FoodLogic.searchFoodPredetor(body, forceEat));
     }
@@ -4530,7 +4530,7 @@ class FoodLogicTest {
 
     @Test
     void testSearchFoodPredetor_LivePrey_SameSize_Found2() {
-        // live prey same age → d.getBodyAgeState().ordinal() >= b.getBodyAgeState().ordinal()
+        // live prey same age → d.getAgeState().ordinal() >= b.getAgeState().ordinal()
         // → goes to else branch L1014-1023: found2=d
         body.setPredatorType(PredatorType.BITE);
         body.setHungry(body.getHungryLimit() / 2);
@@ -4539,7 +4539,7 @@ class FoodLogicTest {
         prey.setX(body.getX() + 5);
         prey.setY(body.getY());
         prey.setAgeState(AgeState.ADULT); // same size → found2 path
-        SimYukkuri.world.getCurrentMap().getBody().put(prey.getUniqueID(), prey);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(prey.getUniqueID(), prey);
         boolean[] forceEat = { false };
         assertDoesNotThrow(() -> FoodLogic.searchFoodPredetor(body, forceEat));
     }
@@ -4597,7 +4597,7 @@ class FoodLogicTest {
         idiotBody.setX(100);
         idiotBody.setY(100);
         idiotBody.setHungry(idiotBody.getHungryLimit() / 2); // not full
-        SimYukkuri.world.getCurrentMap().getBody().put(idiotBody.getUniqueID(), idiotBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(idiotBody.getUniqueID(), idiotBody);
         // Food at same position → distance=0 → minDistance=0 → next iter: minDistance<1 → break
         Food food1 = new Food(idiotBody.getX(), idiotBody.getY(), Food.FoodType.FOOD.ordinal());
         Food food2 = new Food(idiotBody.getX() + 100, idiotBody.getY(), Food.FoodType.FOOD.ordinal());
@@ -4638,12 +4638,12 @@ class FoodLogicTest {
         prey1.setX(body.getX());
         prey1.setY(body.getY());
         prey1.setAgeState(AgeState.BABY); // smaller → found path
-        SimYukkuri.world.getCurrentMap().getBody().put(prey1.getUniqueID(), prey1);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(prey1.getUniqueID(), prey1);
         Yukkuri prey2 = WorldTestHelper.createBody();
         prey2.setX(body.getX() + 100);
         prey2.setY(body.getY());
         prey2.setAgeState(AgeState.BABY);
-        SimYukkuri.world.getCurrentMap().getBody().put(prey2.getUniqueID(), prey2);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(prey2.getUniqueID(), prey2);
         boolean[] forceEat = { false };
         assertDoesNotThrow(() -> FoodLogic.searchFoodPredetor(body, forceEat));
     }
@@ -4733,17 +4733,17 @@ class FoodLogicTest {
         org.simyukkuri.entity.core.living.yukkuri.impl.Marisa prey = new org.simyukkuri.entity.core.living.yukkuri.impl.Marisa() {
             @Override public int getCollisionX() { return 10; }
             @Override public void bodyInjure() { /* no-op to avoid headless NPE */ }
-            @Override public void eatBody(int amount, org.simyukkuri.entity.core.living.yukkuri.Yukkuri attacker) { /* no-op to avoid bodyCut NPE */ }
+            @Override public void eatYukkuri(int amount, org.simyukkuri.entity.core.living.yukkuri.Yukkuri attacker) { /* no-op to avoid bodyCut NPE */ }
         };
         prey.setX(body.getX());
         prey.setY(body.getY());
         prey.setSickPeriod(1300); // isSick() = sickPeriod > 1200
-        SimYukkuri.world.getCurrentMap().getBody().put(prey.getUniqueID(), prey);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(prey.getUniqueID(), prey);
         body.setMoveTargetId(prey.getObjId());
         int sickBefore = body.getSickPeriod();
         assertDoesNotThrow(() -> FoodLogic.checkFood(body));
         // After eating sick prey: sickPeriod should increase (if L325 executed)
-        // Note: with eatBody no-op, L325 not reached unless we remove override
+        // Note: with eatYukkuri no-op, L325 not reached unless we remove override
         // This test just ensures no exception
     }
 
@@ -4768,16 +4768,16 @@ class FoodLogicTest {
         Yukkuri mother = WorldTestHelper.createBody();
         mother.setX(150);
         mother.setY(150);
-        SimYukkuri.world.getCurrentMap().getBody().put(mother.getUniqueID(), mother);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(mother.getUniqueID(), mother);
         // Create prey with mother set
         org.simyukkuri.entity.core.living.yukkuri.impl.Marisa prey = new org.simyukkuri.entity.core.living.yukkuri.impl.Marisa() {
             @Override public int getCollisionX() { return 10; }
             @Override public void bodyInjure() { /* no-op */ }
-            @Override public void eatBody(int amount, org.simyukkuri.entity.core.living.yukkuri.Yukkuri attacker) { /* no-op */ }
+            @Override public void eatYukkuri(int amount, org.simyukkuri.entity.core.living.yukkuri.Yukkuri attacker) { /* no-op */ }
         };
         prey.setX(body.getX());
         prey.setY(body.getY());
-        SimYukkuri.world.getCurrentMap().getBody().put(prey.getUniqueID(), prey);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(prey.getUniqueID(), prey);
         WorldTestHelper.setParents(prey, 0, mother.getUniqueID());
         body.setMoveTargetId(prey.getObjId());
         assertDoesNotThrow(() -> FoodLogic.checkFood(body));
@@ -4799,15 +4799,15 @@ class FoodLogicTest {
         body.setToFood(true);
         Yukkuri mother = WorldTestHelper.createBody();
         mother.setDead(true);
-        SimYukkuri.world.getCurrentMap().getBody().put(mother.getUniqueID(), mother);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(mother.getUniqueID(), mother);
         org.simyukkuri.entity.core.living.yukkuri.impl.Marisa prey = new org.simyukkuri.entity.core.living.yukkuri.impl.Marisa() {
             @Override public int getCollisionX() { return 10; }
             @Override public void bodyInjure() { /* no-op */ }
-            @Override public void eatBody(int amount, org.simyukkuri.entity.core.living.yukkuri.Yukkuri attacker) { /* no-op */ }
+            @Override public void eatYukkuri(int amount, org.simyukkuri.entity.core.living.yukkuri.Yukkuri attacker) { /* no-op */ }
         };
         prey.setX(body.getX());
         prey.setY(body.getY());
-        SimYukkuri.world.getCurrentMap().getBody().put(prey.getUniqueID(), prey);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(prey.getUniqueID(), prey);
         WorldTestHelper.setParents(prey, 0, mother.getUniqueID());
         body.setMoveTargetId(prey.getObjId());
         assertDoesNotThrow(() -> FoodLogic.checkFood(body));
@@ -4829,15 +4829,15 @@ class FoodLogicTest {
         body.setToFood(true);
         Yukkuri mother = WorldTestHelper.createBody();
         mother.setRemoved(true);
-        SimYukkuri.world.getCurrentMap().getBody().put(mother.getUniqueID(), mother);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(mother.getUniqueID(), mother);
         org.simyukkuri.entity.core.living.yukkuri.impl.Marisa prey = new org.simyukkuri.entity.core.living.yukkuri.impl.Marisa() {
             @Override public int getCollisionX() { return 10; }
             @Override public void bodyInjure() { /* no-op */ }
-            @Override public void eatBody(int amount, org.simyukkuri.entity.core.living.yukkuri.Yukkuri attacker) { /* no-op */ }
+            @Override public void eatYukkuri(int amount, org.simyukkuri.entity.core.living.yukkuri.Yukkuri attacker) { /* no-op */ }
         };
         prey.setX(body.getX());
         prey.setY(body.getY());
-        SimYukkuri.world.getCurrentMap().getBody().put(prey.getUniqueID(), prey);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(prey.getUniqueID(), prey);
         WorldTestHelper.setParents(prey, 0, mother.getUniqueID());
         body.setMoveTargetId(prey.getObjId());
         assertDoesNotThrow(() -> FoodLogic.checkFood(body));
@@ -4855,13 +4855,13 @@ class FoodLogicTest {
         org.simyukkuri.entity.core.living.yukkuri.impl.Marisa prey = new org.simyukkuri.entity.core.living.yukkuri.impl.Marisa() {
             @Override public int getCollisionX() { return 10; }
             @Override public void bodyInjure() { /* no-op */ }
-            @Override public void eatBody(int amount, org.simyukkuri.entity.core.living.yukkuri.Yukkuri attacker) { /* no-op */ }
+            @Override public void eatYukkuri(int amount, org.simyukkuri.entity.core.living.yukkuri.Yukkuri attacker) { /* no-op */ }
         };
         prey.setX(body.getX());
         prey.setY(body.getY());
         prey.setUnBirth(true);
         prey.setSickPeriod(1300); // isSick()=true
-        SimYukkuri.world.getCurrentMap().getBody().put(prey.getUniqueID(), prey);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(prey.getUniqueID(), prey);
         body.setMoveTargetId(prey.getObjId());
         assertDoesNotThrow(() -> FoodLogic.checkFood(body));
     }
@@ -4934,7 +4934,7 @@ class FoodLogicTest {
         idiotBody.setX(100);
         idiotBody.setY(100);
         idiotBody.setHungry(idiotBody.getHungryLimit() / 2); // not full
-        SimYukkuri.world.getCurrentMap().getBody().put(idiotBody.getUniqueID(), idiotBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(idiotBody.getUniqueID(), idiotBody);
         // Add an empty food item
         Food emptyFood = new Food(idiotBody.getX() + 5, idiotBody.getY(), Food.FoodType.FOOD.ordinal());
         emptyFood.eatFood(emptyFood.getAmount() + 100); // make it empty
@@ -4947,7 +4947,7 @@ class FoodLogicTest {
 
     @Test
     void testSearchFoodNearlest_DeadBody_Found() {
-        // searchFoodNearlest body loop: dead body → checkCanEatBody → found (L677-678)
+        // searchFoodNearlest body loop: dead body → checkCanEatYukkuri → found (L677-678)
         Yukkuri idiotBody = new TarinaiReimu() {
             @Override public int getCollisionX() { return 10; }
         };
@@ -4955,12 +4955,12 @@ class FoodLogicTest {
         idiotBody.setY(100);
         idiotBody.setHungry(idiotBody.getHungryLimit() / 2); // not full → proceed into loops
         idiotBody.setAttitude(Attitude.SUPER_SHITHEAD); // isVeryRude → can eat dead bodies
-        SimYukkuri.world.getCurrentMap().getBody().put(idiotBody.getUniqueID(), idiotBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(idiotBody.getUniqueID(), idiotBody);
         Yukkuri deadPrey = WorldTestHelper.createBody();
         deadPrey.setX(idiotBody.getX() + 5);
         deadPrey.setY(idiotBody.getY());
         deadPrey.setDead(true);
-        SimYukkuri.world.getCurrentMap().getBody().put(deadPrey.getUniqueID(), deadPrey);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(deadPrey.getUniqueID(), deadPrey);
         assertDoesNotThrow(() -> FoodLogic.checkFood(idiotBody));
     }
 
@@ -5054,13 +5054,13 @@ class FoodLogicTest {
         babyBody.setX(body.getX() + 5);
         babyBody.setY(body.getY());
         babyBody.setAgeState(AgeState.BABY);
-        SimYukkuri.world.getCurrentMap().getBody().put(babyBody.getUniqueID(), babyBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(babyBody.getUniqueID(), babyBody);
         // Create a plant body (buried)
         Yukkuri plantBody = WorldTestHelper.createBody();
         plantBody.setX(body.getX() + 5);
         plantBody.setY(body.getY());
         plantBody.setBurialState(BurialState.ALL);
-        SimYukkuri.world.getCurrentMap().getBody().put(plantBody.getUniqueID(), plantBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(plantBody.getUniqueID(), plantBody);
         // Create stalk with baby
         Stalk stalk = new Stalk(body.getX() + 5, body.getY(), 0);
         stalk.setPlantYukkuri(plantBody.getUniqueID());
@@ -5171,7 +5171,7 @@ class FoodLogicTest {
         sameSizePrey.setX(body.getX() + 5);
         sameSizePrey.setY(body.getY());
         sameSizePrey.setAgeState(AgeState.ADULT); // same size
-        SimYukkuri.world.getCurrentMap().getBody().put(sameSizePrey.getUniqueID(), sameSizePrey);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(sameSizePrey.getUniqueID(), sameSizePrey);
         boolean[] forceEat = { false };
         Entity found = FoodLogic.searchFoodPredetor(body, forceEat);
         // found2 should be the same-size prey
@@ -5192,13 +5192,13 @@ class FoodLogicTest {
         ununSlave.setPublicRank(PublicRank.UnunSlave);
         ununSlave.setHungry(0); // isSoHungry=true (hungry<=limit*0.2=0)
         WorldTestHelper.setDamage(ununSlave, 8400); // getDamageState()==VERY → isTooHungry()=true
-        SimYukkuri.world.getCurrentMap().getBody().put(ununSlave.getUniqueID(), ununSlave);
-        // Add a dead body as potential food (checkCanEatBody requires dead body for non-predator)
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(ununSlave.getUniqueID(), ununSlave);
+        // Add a dead body as potential food (checkCanEatYukkuri requires dead body for non-predator)
         Yukkuri deadPrey = WorldTestHelper.createBody();
         deadPrey.setX(ununSlave.getX() + 5);
         deadPrey.setY(ununSlave.getY());
         deadPrey.setDead(true);
-        SimYukkuri.world.getCurrentMap().getBody().put(deadPrey.getUniqueID(), deadPrey);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(deadPrey.getUniqueID(), deadPrey);
         assertDoesNotThrow(() -> FoodLogic.checkFood(ununSlave));
     }
 
@@ -5216,7 +5216,7 @@ class FoodLogicTest {
         ununSlave.setPublicRank(PublicRank.UnunSlave);
         ununSlave.setHungry(0); // hungry=0 needed for isTooHungry
         WorldTestHelper.setDamage(ununSlave, 8400); // getDamageState()==VERY → isTooHungry()=true
-        SimYukkuri.world.getCurrentMap().getBody().put(ununSlave.getUniqueID(), ununSlave);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(ununSlave.getUniqueID(), ununSlave);
         Food wasteNora = new Food(ununSlave.getX() + 5, ununSlave.getY(), Food.FoodType.WASTE_NORA.ordinal());
         SimYukkuri.world.getCurrentMap().getFood().put(wasteNora.getObjId(), wasteNora);
         assertDoesNotThrow(() -> FoodLogic.checkFood(ununSlave));
@@ -5253,7 +5253,7 @@ class FoodLogicTest {
         plantBody.setY(body.getY());
         plantBody.setBurialState(BurialState.NEARLY_ALL);
         // hasOkazari should be false by default
-        SimYukkuri.world.getCurrentMap().getBody().put(plantBody.getUniqueID(), plantBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(plantBody.getUniqueID(), plantBody);
         // Create stalk at body position (so distance=0, body reaches it)
         Stalk stalk = new Stalk(body.getX(), body.getY(), 0);
         stalk.setPlantYukkuri(plantBody.getUniqueID());
@@ -5275,7 +5275,7 @@ class FoodLogicTest {
         idiotBody.setX(100);
         idiotBody.setY(100);
         idiotBody.setHungry(idiotBody.getHungryLimit() / 2); // not full
-        SimYukkuri.world.getCurrentMap().getBody().put(idiotBody.getUniqueID(), idiotBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(idiotBody.getUniqueID(), idiotBody);
         Food food = new Food(idiotBody.getX() + 5, idiotBody.getY(), Food.FoodType.FOOD.ordinal());
         SimYukkuri.world.getCurrentMap().getFood().put(food.getObjId(), food);
         boolean result = FoodLogic.checkFood(idiotBody);
@@ -5293,7 +5293,7 @@ class FoodLogicTest {
         idiotBody.setX(100);
         idiotBody.setY(100);
         idiotBody.setHungry(idiotBody.getHungryLimit() / 2);
-        SimYukkuri.world.getCurrentMap().getBody().put(idiotBody.getUniqueID(), idiotBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(idiotBody.getUniqueID(), idiotBody);
         // Add an empty food
         Food emptyFood = new Food(idiotBody.getX() + 10, idiotBody.getY(), Food.FoodType.FOOD.ordinal());
         emptyFood.eatFood(emptyFood.getAmount() + 100);
@@ -5317,7 +5317,7 @@ class FoodLogicTest {
         idiotBody.setX(100);
         idiotBody.setY(100);
         idiotBody.setHungry(idiotBody.getHungryLimit() / 2);
-        SimYukkuri.world.getCurrentMap().getBody().put(idiotBody.getUniqueID(), idiotBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(idiotBody.getUniqueID(), idiotBody);
         // Food at exact body position → distance=0 → minDistance becomes 0
         Food food1 = new Food(100, 100, Food.FoodType.FOOD.ordinal());
         SimYukkuri.world.getCurrentMap().getFood().put(food1.getObjId(), food1);
@@ -5341,13 +5341,13 @@ class FoodLogicTest {
         idiotBody.setX(100);
         idiotBody.setY(100);
         idiotBody.setHungry(idiotBody.getHungryLimit() / 2);
-        SimYukkuri.world.getCurrentMap().getBody().put(idiotBody.getUniqueID(), idiotBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(idiotBody.getUniqueID(), idiotBody);
         // Plant NOT buried (NONE state)
         Yukkuri plantBody = WorldTestHelper.createBody();
         plantBody.setX(105);
         plantBody.setY(100);
         plantBody.setBurialState(BurialState.NONE); // not buried → skip
-        SimYukkuri.world.getCurrentMap().getBody().put(plantBody.getUniqueID(), plantBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(plantBody.getUniqueID(), plantBody);
         Stalk stalk = new Stalk(105, 100, 0);
         stalk.setPlantYukkuri(plantBody.getUniqueID());
         SimYukkuri.world.getCurrentMap().getStalk().put(stalk.getObjId(), stalk);
@@ -5361,7 +5361,7 @@ class FoodLogicTest {
 
     @Test
     void testSearchFoodNearlest_BodyLoop_SelfSkip_ThenDeadBodyFound() {
-        // searchFoodNearlest body loop: b==d skip, then dead body found via checkCanEatBody
+        // searchFoodNearlest body loop: b==d skip, then dead body found via checkCanEatYukkuri
         SimYukkuri.RND = new ConstState(1);
         Yukkuri idiotBody = new TarinaiReimu() {
             @Override public int getCollisionX() { return 10; }
@@ -5369,15 +5369,15 @@ class FoodLogicTest {
         idiotBody.setX(100);
         idiotBody.setY(100);
         idiotBody.setHungry(idiotBody.getHungryLimit() / 2);
-        // isVeryRude for checkCanEatBody to pass with okazari body
+        // isVeryRude for checkCanEatYukkuri to pass with okazari body
         idiotBody.setAttitude(Attitude.SUPER_SHITHEAD);
-        SimYukkuri.world.getCurrentMap().getBody().put(idiotBody.getUniqueID(), idiotBody);
-        // Dead body nearby (checkCanEatBody: not predator, isDead=true, !bindStalk, !hasOkazari → true)
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(idiotBody.getUniqueID(), idiotBody);
+        // Dead body nearby (checkCanEatYukkuri: not predator, isDead=true, !bindStalk, !hasOkazari → true)
         Yukkuri deadBody = WorldTestHelper.createBody();
         deadBody.setX(105);
         deadBody.setY(100);
         deadBody.setDead(true);
-        SimYukkuri.world.getCurrentMap().getBody().put(deadBody.getUniqueID(), deadBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(deadBody.getUniqueID(), deadBody);
         assertDoesNotThrow(() -> FoodLogic.checkFood(idiotBody));
     }
 
@@ -5439,7 +5439,7 @@ class FoodLogicTest {
         predator.setAgeState(AgeState.ADULT);
         predator.setFlyingType(true); // enables canflyCheck
         predator.setPredatorType(PredatorType.SUCTION); // isPredatorType=true
-        SimYukkuri.world.getCurrentMap().getBody().put(predator.getUniqueID(), predator);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(predator.getUniqueID(), predator);
         // Create a live small prey
         Yukkuri prey = WorldTestHelper.createBody();
         prey.setX(predator.getX());
@@ -5447,18 +5447,18 @@ class FoodLogicTest {
         prey.setAgeState(AgeState.BABY);
         // Set burialState != NONE to prevent bodyInjure() from calling mypane.getTerrarium()
         prey.setBurialState(BurialState.NEARLY_ALL);
-        SimYukkuri.world.getCurrentMap().getBody().put(prey.getUniqueID(), prey);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(prey.getUniqueID(), prey);
         // Set prey as move target
         predator.setMoveTargetId(prey.getObjId());
         predator.setToFood(true);
         assertDoesNotThrow(() -> FoodLogic.checkFood(predator));
     }
 
-    // ===== checkFood L357-358: dead body + !checkCanEatBody → EatBodyEvent =====
+    // ===== checkFood L357-358: dead body + !checkCanEatYukkuri → EatBodyEvent =====
 
     @Test
     void testCheckFood_DeadBody_NotCheckCanEat_EatBodyEvent() {
-        // dead body + !checkCanEatBody (not predator + has okazari + !isVeryRude) → L356-358: EatBodyEvent
+        // dead body + !checkCanEatYukkuri (not predator + has okazari + !isVeryRude) → L356-358: EatBodyEvent
         SimYukkuri.RND = new ConstState(0); // nextBoolean=false → no sick period
         body.setHungry(body.getHungryLimit() / 2);
         // Make body NOT very rude (default) and NOT predator
@@ -5466,13 +5466,13 @@ class FoodLogicTest {
         deadBody.setX(body.getX());
         deadBody.setY(body.getY());
         deadBody.setDead(true);
-        // Set high ankoAmount so eatBody(0) does NOT call remove() and clear okazari.
-        // Default ankoAmount=0 causes remove() which clears okazari before L356 checkCanEatBody.
+        // Set high ankoAmount so eatYukkuri(0) does NOT call remove() and clear okazari.
+        // Default ankoAmount=0 causes remove() which clears okazari before L356 checkCanEatYukkuri.
         // Need ankoAmount > damageLimitBase[ageState] / 2 to avoid the crushed/remove path.
         deadBody.setAnkoAmount(20000);
-        // Add okazari so !isVeryRude fails checkCanEatBody → !checkCanEatBody=true → L357-358 EatBodyEvent
+        // Add okazari so !isVeryRude fails checkCanEatYukkuri → !checkCanEatYukkuri=true → L357-358 EatBodyEvent
         deadBody.setOkazari(new org.simyukkuri.entity.core.world.bodylinked.Okazari());
-        SimYukkuri.world.getCurrentMap().getBody().put(deadBody.getUniqueID(), deadBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(deadBody.getUniqueID(), deadBody);
         body.setMoveTargetId(deadBody.getObjId());
         body.setToFood(true);
         assertDoesNotThrow(() -> FoodLogic.checkFood(body));
@@ -5491,7 +5491,7 @@ class FoodLogicTest {
         plantBody.setX(body.getX());
         plantBody.setY(body.getY());
         plantBody.setBurialState(BurialState.ALL); // fully buried → L376 condition true
-        SimYukkuri.world.getCurrentMap().getBody().put(plantBody.getUniqueID(), plantBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(plantBody.getUniqueID(), plantBody);
         // Create stalk at body position
         Stalk stalk = new Stalk(body.getX(), body.getY(), 0);
         stalk.setPlantYukkuri(plantBody.getUniqueID());
@@ -5533,17 +5533,17 @@ class FoodLogicTest {
     void testCheckFood_OnlyAmaama_FoundNonFoodBody_ReturnsFalse() {
         // isOnlyAmaama + found is a Yukkuri (non-Food) + !starving → L494-495: return false
         // To get found=Yukkuri via searchFoodStandard secondary body loop:
-        // need found==null from food loop AND dead body + checkCanEatBody=true
+        // need found==null from food loop AND dead body + checkCanEatYukkuri=true
         SimYukkuri.RND = new ConstState(1);
         body.setTang(700); // GOURMET
         body.setAmaamaDiscipline(30); // isOnlyAmaama=true
         body.setHungry(body.getHungryLimit() / 2); // hungry, !starving
-        // Dead body that checkCanEatBody returns true for (not predator, isDead, !bindStalk, !hasOkazari)
+        // Dead body that checkCanEatYukkuri returns true for (not predator, isDead, !bindStalk, !hasOkazari)
         Yukkuri deadBody = WorldTestHelper.createBody();
         deadBody.setX(body.getX() + 5);
         deadBody.setY(body.getY());
         deadBody.setDead(true);
-        SimYukkuri.world.getCurrentMap().getBody().put(deadBody.getUniqueID(), deadBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(deadBody.getUniqueID(), deadBody);
         // No food in map → food loop finds nothing → body found in secondary dead loop
         assertDoesNotThrow(() -> FoodLogic.checkFood(body));
     }
@@ -5682,7 +5682,7 @@ class FoodLogicTest {
         Yukkuri partner = WorldTestHelper.createBody();
         partner.setX(200);
         partner.setY(200);
-        SimYukkuri.world.getCurrentMap().getBody().put(partner.getUniqueID(), partner);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(partner.getUniqueID(), partner);
         body.setPartner(partner.getUniqueID());
         // Set up fav bed at (500,500)
         Bed bed = new Bed(500, 500, 0);
@@ -5711,7 +5711,7 @@ class FoodLogicTest {
         plantBody.setX(body.getX() + 5);
         plantBody.setY(body.getY());
         plantBody.setBurialState(BurialState.ALL); // buried
-        SimYukkuri.world.getCurrentMap().getBody().put(plantBody.getUniqueID(), plantBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(plantBody.getUniqueID(), plantBody);
         Stalk stalk = new Stalk(body.getX() + 5, body.getY(), 0);
         stalk.setPlantYukkuri(plantBody.getUniqueID());
         SimYukkuri.world.getCurrentMap().getStalk().put(stalk.getObjId(), stalk);
@@ -5728,7 +5728,7 @@ class FoodLogicTest {
         plantBody.setX(body.getX() + 5);
         plantBody.setY(body.getY());
         plantBody.setBurialState(BurialState.NONE); // not buried → skip
-        SimYukkuri.world.getCurrentMap().getBody().put(plantBody.getUniqueID(), plantBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(plantBody.getUniqueID(), plantBody);
         Stalk stalk = new Stalk(body.getX() + 5, body.getY(), 0);
         stalk.setPlantYukkuri(plantBody.getUniqueID());
         SimYukkuri.world.getCurrentMap().getStalk().put(stalk.getObjId(), stalk);
@@ -5757,17 +5757,17 @@ class FoodLogicTest {
 
     @Test
     void testSearchFoodStandard_SecondaryDeadBody_Found() {
-        // secondary dead body loop: found==null + dead body + checkCanEatBody=true → found=d (L899-930)
+        // secondary dead body loop: found==null + dead body + checkCanEatYukkuri=true → found=d (L899-930)
         body.setHungry(body.getHungryLimit() / 2);
-        // Dead body that passes checkCanEatBody (not predator, isDead, !bindStalk, !hasOkazari)
+        // Dead body that passes checkCanEatYukkuri (not predator, isDead, !bindStalk, !hasOkazari)
         Yukkuri deadBody = WorldTestHelper.createBody();
         deadBody.setX(body.getX() + 5);
         deadBody.setY(body.getY());
         deadBody.setDead(true);
-        // By default createBody() sets okazari → hasOkazari()=true → checkCanEatBody returns false
-        // Clear okazari so checkCanEatBody passes
+        // By default createBody() sets okazari → hasOkazari()=true → checkCanEatYukkuri returns false
+        // Clear okazari so checkCanEatYukkuri passes
         deadBody.setOkazari(null);
-        SimYukkuri.world.getCurrentMap().getBody().put(deadBody.getUniqueID(), deadBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(deadBody.getUniqueID(), deadBody);
         boolean[] forceEat = { false };
         Entity found = FoodLogic.searchFoodStandard(body, forceEat);
         assertNotNull(found, "secondary dead body loop should find dead body without okazari");
@@ -5782,7 +5782,7 @@ class FoodLogicTest {
         unBirthBody.setX(body.getX() + 5);
         unBirthBody.setY(body.getY());
         unBirthBody.setUnBirth(true); // isUnBirth=true → raper can eat
-        SimYukkuri.world.getCurrentMap().getBody().put(unBirthBody.getUniqueID(), unBirthBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(unBirthBody.getUniqueID(), unBirthBody);
         boolean[] forceEat = { false };
         Entity found = FoodLogic.searchFoodStandard(body, forceEat);
         assertNotNull(found, "raper should find live unBirth body");
@@ -5791,20 +5791,20 @@ class FoodLogicTest {
     @Test
     void testSearchFoodStandard_SecondaryDeadBody_BindStalk_Skip() {
         // secondary dead body: isbindStalk=true → L918-919: continue
-        // Also clear okazari so checkCanEatBody would pass (if not for isbindStalk)
+        // Also clear okazari so checkCanEatYukkuri would pass (if not for isbindStalk)
         body.setHungry(body.getHungryLimit() / 2);
         Yukkuri stalkBody = WorldTestHelper.createBody();
         stalkBody.setX(body.getX() + 5);
         stalkBody.setY(body.getY());
         stalkBody.setDead(true);
-        stalkBody.setOkazari(null); // allow checkCanEatBody to reach isbindStalk check
+        stalkBody.setOkazari(null); // allow checkCanEatYukkuri to reach isbindStalk check
         // isbindStalk = bindStalk != null; set via setBindStalk(stalk)
         // Note: Stalk constructor auto-adds to stalk map → remove immediately after
         Stalk bindStalk = new Stalk(stalkBody.getX(), stalkBody.getY(), 0);
         // Remove from stalk map so stalk secondary loop won't find it
         SimYukkuri.world.getCurrentMap().getStalk().remove(bindStalk.getObjId());
         stalkBody.setBindStalk(bindStalk); // isbindStalk=true → dead body loop skips it
-        SimYukkuri.world.getCurrentMap().getBody().put(stalkBody.getUniqueID(), stalkBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(stalkBody.getUniqueID(), stalkBody);
         boolean[] forceEat = { false };
         Entity found = FoodLogic.searchFoodStandard(body, forceEat);
         assertNull(found, "dead body with bindStalk should be skipped, and stalk not in map → null");
@@ -5870,7 +5870,7 @@ class FoodLogicTest {
         airPrey.setX(body.getX() + 5);
         airPrey.setY(body.getY());
         airPrey.setZ(10); // in the air → skip for non-flying predator
-        SimYukkuri.world.getCurrentMap().getBody().put(airPrey.getUniqueID(), airPrey);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(airPrey.getUniqueID(), airPrey);
         boolean[] forceEat = { false };
         Entity found = FoodLogic.searchFoodPredetor(body, forceEat);
         assertNull(found, "non-flying predator should skip air target");
@@ -5885,7 +5885,7 @@ class FoodLogicTest {
         predatorPrey.setX(body.getX() + 5);
         predatorPrey.setY(body.getY());
         predatorPrey.setPredatorType(PredatorType.BITE); // also predator → skip
-        SimYukkuri.world.getCurrentMap().getBody().put(predatorPrey.getUniqueID(), predatorPrey);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(predatorPrey.getUniqueID(), predatorPrey);
         boolean[] forceEat = { false };
         Entity found = FoodLogic.searchFoodPredetor(body, forceEat);
         // predator prey is skipped
@@ -5930,7 +5930,7 @@ class FoodLogicTest {
         plantBody.setX(body.getX() + 5);
         plantBody.setY(body.getY());
         plantBody.setBurialState(BurialState.NONE); // not buried → skip
-        SimYukkuri.world.getCurrentMap().getBody().put(plantBody.getUniqueID(), plantBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(plantBody.getUniqueID(), plantBody);
         Stalk stalk = new Stalk(body.getX() + 5, body.getY(), 0);
         stalk.setPlantYukkuri(plantBody.getUniqueID());
         SimYukkuri.world.getCurrentMap().getStalk().put(stalk.getObjId(), stalk);
@@ -5948,7 +5948,7 @@ class FoodLogicTest {
         plantBody.setX(body.getX() + 5);
         plantBody.setY(body.getY());
         plantBody.setBurialState(BurialState.ALL); // buried
-        SimYukkuri.world.getCurrentMap().getBody().put(plantBody.getUniqueID(), plantBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(plantBody.getUniqueID(), plantBody);
         Stalk stalk = new Stalk(body.getX() + 5, body.getY(), 0);
         stalk.setPlantYukkuri(plantBody.getUniqueID());
         SimYukkuri.world.getCurrentMap().getStalk().put(stalk.getObjId(), stalk);
@@ -6020,7 +6020,7 @@ class FoodLogicTest {
         ununSlave.setY(100);
         ununSlave.setHungry(ununSlave.getHungryLimit() / 2);
         ununSlave.setPublicRank(PublicRank.UnunSlave);
-        SimYukkuri.world.getCurrentMap().getBody().put(ununSlave.getUniqueID(), ununSlave);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(ununSlave.getUniqueID(), ununSlave);
         // Shit at exact position → distance=0 → minDistance=0 → next iteration: break
         Shit shit1 = new Shit();
         shit1.setX(100);
@@ -6048,7 +6048,7 @@ class FoodLogicTest {
         ununSlave.setY(100);
         ununSlave.setHungry(ununSlave.getHungryLimit() / 2);
         ununSlave.setPublicRank(PublicRank.UnunSlave);
-        SimYukkuri.world.getCurrentMap().getBody().put(ununSlave.getUniqueID(), ununSlave);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(ununSlave.getUniqueID(), ununSlave);
         // Create shit
         Shit shit = new Shit();
         shit.setX(105);
@@ -6059,7 +6059,7 @@ class FoodLogicTest {
         otherBody.setX(200);
         otherBody.setY(200);
         otherBody.setMoveTargetId(shit.getObjId());
-        SimYukkuri.world.getCurrentMap().getBody().put(otherBody.getUniqueID(), otherBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(otherBody.getUniqueID(), otherBody);
         // checkTakeout for UnunSlave needs isForSlave toilet to return true
         // Without it, checkTakeout returns false → b.isToTakeout() stays false → found=s (L1275-1276)
         assertDoesNotThrow(() -> FoodLogic.checkFood(ununSlave));
@@ -6077,7 +6077,7 @@ class FoodLogicTest {
         ununSlave.setY(100);
         ununSlave.setHungry(ununSlave.getHungryLimit() / 2);
         ununSlave.setPublicRank(PublicRank.UnunSlave);
-        SimYukkuri.world.getCurrentMap().getBody().put(ununSlave.getUniqueID(), ununSlave);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(ununSlave.getUniqueID(), ununSlave);
         // No shit → found==null → vomit loop
         // Use no-arg Vomit constructor to avoid NPE from null shitType
         Vomit vomit = new Vomit();
@@ -6099,13 +6099,13 @@ class FoodLogicTest {
         ununSlave.setY(100);
         ununSlave.setHungry(ununSlave.getHungryLimit() / 2); // !soHungry
         ununSlave.setPublicRank(PublicRank.UnunSlave);
-        SimYukkuri.world.getCurrentMap().getBody().put(ununSlave.getUniqueID(), ununSlave);
-        // Dead body that would pass checkCanEatBody
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(ununSlave.getUniqueID(), ununSlave);
+        // Dead body that would pass checkCanEatYukkuri
         Yukkuri deadBody = WorldTestHelper.createBody();
         deadBody.setX(105);
         deadBody.setY(100);
         deadBody.setDead(true);
-        SimYukkuri.world.getCurrentMap().getBody().put(deadBody.getUniqueID(), deadBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(deadBody.getUniqueID(), deadBody);
         assertDoesNotThrow(() -> FoodLogic.checkFood(ununSlave));
     }
 
@@ -6122,7 +6122,7 @@ class FoodLogicTest {
         ununSlave.setPublicRank(PublicRank.UnunSlave);
         ununSlave.setHungry(0);
         WorldTestHelper.setDamage(ununSlave, 8400); // VERY → isTooHungry=true
-        SimYukkuri.world.getCurrentMap().getBody().put(ununSlave.getUniqueID(), ununSlave);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(ununSlave.getUniqueID(), ununSlave);
         Food wasteYasei = new Food(ununSlave.getX() + 5, ununSlave.getY(), Food.FoodType.WASTE_YASEI.ordinal());
         SimYukkuri.world.getCurrentMap().getFood().put(wasteYasei.getObjId(), wasteYasei);
         assertDoesNotThrow(() -> FoodLogic.checkFood(ununSlave));
@@ -6139,7 +6139,7 @@ class FoodLogicTest {
         ununSlave.setPublicRank(PublicRank.UnunSlave);
         ununSlave.setHungry(0);
         WorldTestHelper.setDamage(ununSlave, 8400);
-        SimYukkuri.world.getCurrentMap().getBody().put(ununSlave.getUniqueID(), ununSlave);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(ununSlave.getUniqueID(), ununSlave);
         // Regular FOOD (not waste) → not selected by UnunSlave food loop
         Food regularFood = new Food(ununSlave.getX() + 5, ununSlave.getY(), Food.FoodType.FOOD.ordinal());
         SimYukkuri.world.getCurrentMap().getFood().put(regularFood.getObjId(), regularFood);
@@ -6159,7 +6159,7 @@ class FoodLogicTest {
         ununSlave.setY(100);
         ununSlave.setPublicRank(PublicRank.UnunSlave);
         ununSlave.setHungry(ununSlave.getHungryLimit() / 2); // not tooHungry (hungry > 0)
-        SimYukkuri.world.getCurrentMap().getBody().put(ununSlave.getUniqueID(), ununSlave);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(ununSlave.getUniqueID(), ununSlave);
         Food waste = new Food(ununSlave.getX() + 5, ununSlave.getY(), Food.FoodType.WASTE.ordinal());
         SimYukkuri.world.getCurrentMap().getFood().put(waste.getObjId(), waste);
         assertDoesNotThrow(() -> FoodLogic.checkFood(ununSlave));
@@ -6217,7 +6217,7 @@ class FoodLogicTest {
         Yukkuri partner = WorldTestHelper.createBody();
         partner.setX(200);
         partner.setY(200);
-        SimYukkuri.world.getCurrentMap().getBody().put(partner.getUniqueID(), partner);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(partner.getUniqueID(), partner);
         body.setPartner(partner.getUniqueID());
         Bed bed = new Bed(500, 500, 0);
         SimYukkuri.world.getCurrentMap().getBed().put(bed.getObjId(), bed);
@@ -6240,7 +6240,7 @@ class FoodLogicTest {
         Yukkuri partner = WorldTestHelper.createBody();
         partner.setX(200);
         partner.setY(200);
-        SimYukkuri.world.getCurrentMap().getBody().put(partner.getUniqueID(), partner);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(partner.getUniqueID(), partner);
         body.setPartner(partner.getUniqueID());
         // Bed at known position
         Bed favBed = new Bed(500, 500, 0);
@@ -6263,7 +6263,7 @@ class FoodLogicTest {
         Yukkuri partner = WorldTestHelper.createBody();
         partner.setX(200);
         partner.setY(200);
-        SimYukkuri.world.getCurrentMap().getBody().put(partner.getUniqueID(), partner);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(partner.getUniqueID(), partner);
         body.setPartner(partner.getUniqueID());
         // Fav bed at far position (no food on it)
         Bed favBed = new Bed(800, 800, 0);
@@ -6292,7 +6292,7 @@ class FoodLogicTest {
         assertNotNull(found, "predator not full should find regular food");
     }
 
-    // ===== searchFoodPredetor: dead body loop + checkCanEatBody (non-predator case via body being predator) =====
+    // ===== searchFoodPredetor: dead body loop + checkCanEatYukkuri (non-predator case via body being predator) =====
 
     @Test
     void testSearchFoodPredetor_DeadBodyLoop_Family_Skip() {
@@ -6308,7 +6308,7 @@ class FoodLogicTest {
         deadFamily.setOkazari(new org.simyukkuri.entity.core.world.bodylinked.Okazari());
         // Make deadFamily a family member
         WorldTestHelper.setParents(body, deadFamily.getUniqueID(), 0);
-        SimYukkuri.world.getCurrentMap().getBody().put(deadFamily.getUniqueID(), deadFamily);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(deadFamily.getUniqueID(), deadFamily);
         boolean[] forceEat = { false };
         // Dead family member with okazari → skip for !isRude predator
         assertDoesNotThrow(() -> FoodLogic.searchFoodPredetor(body, forceEat));
@@ -6378,12 +6378,12 @@ class FoodLogicTest {
         assertDoesNotThrow(() -> FoodLogic.checkFood(body));
     }
 
-    // ===== NEW TESTS: L357-358 dead body + !checkCanEatBody → EatBodyEvent =====
+    // ===== NEW TESTS: L357-358 dead body + !checkCanEatYukkuri → EatBodyEvent =====
 
     @Test
     void testCheckFood_DeadBody_CannotEatBody_EatBodyEvent_DoesNotThrow() {
-        // L356-358: dead body at same position, !checkCanEatBody → addBodyEvent(EatBodyEvent)
-        // checkCanEatBody(b, deadBody)=false when: !isPredatorType && isDead && isbindStalk → return false
+        // L356-358: dead body at same position, !checkCanEatYukkuri → addYukkuriEvent(EatBodyEvent)
+        // checkCanEatYukkuri(b, deadBody)=false when: !isPredatorType && isDead && isbindStalk → return false
         body.setHungry(0);
         body.setX(100);
         body.setY(100);
@@ -6393,12 +6393,12 @@ class FoodLogicTest {
         deadBody.setDead(true);
         deadBody.setX(100);
         deadBody.setY(100);
-        // Give deadBody a bindStalk → checkCanEatBody returns false → L357-358 executed
+        // Give deadBody a bindStalk → checkCanEatYukkuri returns false → L357-358 executed
         Stalk bindStalk = new Stalk(deadBody.getX(), deadBody.getY(), 0);
         // Remove the stalk from the stalk map so it won't be found as food by the main food search
         SimYukkuri.world.getCurrentMap().getStalk().remove(bindStalk.getObjId());
         deadBody.setBindStalk(bindStalk);
-        SimYukkuri.world.getCurrentMap().getBody().put(deadBody.getUniqueID(), deadBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(deadBody.getUniqueID(), deadBody);
         body.setToFood(true);
         body.setMoveTargetId(deadBody.getObjId());
         assertDoesNotThrow(() -> FoodLogic.checkFood(body));
@@ -6418,7 +6418,7 @@ class FoodLogicTest {
         plantBody.setX(105);
         plantBody.setY(105);
         plantBody.setBurialState(BurialState.ALL);
-        SimYukkuri.world.getCurrentMap().getBody().put(plantBody.getUniqueID(), plantBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(plantBody.getUniqueID(), plantBody);
         // Create stalk associated with plant body
         Stalk stalk = new Stalk(100, 100, 0);
         stalk.setPlantYukkuri(plantBody.getUniqueID());
@@ -6441,7 +6441,7 @@ class FoodLogicTest {
         plantBody.setY(105);
         plantBody.setBurialState(BurialState.NEARLY_ALL);
         plantBody.setOkazari(null); // no okazari → condition met
-        SimYukkuri.world.getCurrentMap().getBody().put(plantBody.getUniqueID(), plantBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(plantBody.getUniqueID(), plantBody);
         Stalk stalk = new Stalk(100, 100, 0);
         stalk.setPlantYukkuri(plantBody.getUniqueID());
         SimYukkuri.world.getCurrentMap().getStalk().put(stalk.getObjId(), stalk);
@@ -6561,7 +6561,7 @@ class FoodLogicTest {
         tarinai.setX(100);
         tarinai.setY(100);
         tarinai.setHungry(0); // very hungry
-        SimYukkuri.world.getCurrentMap().getBody().put(tarinai.getUniqueID(), tarinai);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(tarinai.getUniqueID(), tarinai);
         // Stalk planted by tarinai itself
         Stalk stalk = new Stalk(105, 100, 0);
         stalk.setPlantYukkuri(tarinai.getUniqueID());
@@ -6588,20 +6588,20 @@ class FoodLogicTest {
         tarinai.setX(100);
         tarinai.setY(100);
         tarinai.setHungry(0);
-        SimYukkuri.world.getCurrentMap().getBody().put(tarinai.getUniqueID(), tarinai);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(tarinai.getUniqueID(), tarinai);
         // Plant body buried ALL
         Yukkuri plantBody = WorldTestHelper.createBody();
         plantBody.setX(105);
         plantBody.setY(100);
         plantBody.setBurialState(BurialState.ALL);
-        SimYukkuri.world.getCurrentMap().getBody().put(plantBody.getUniqueID(), plantBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(plantBody.getUniqueID(), plantBody);
         Stalk stalk = new Stalk(105, 100, 0);
         stalk.setPlantYukkuri(plantBody.getUniqueID());
         // Add a baby to the stalk's bindBabies list
         Yukkuri baby = WorldTestHelper.createBody();
         baby.setX(105);
         baby.setY(100);
-        SimYukkuri.world.getCurrentMap().getBody().put(baby.getUniqueID(), baby);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(baby.getUniqueID(), baby);
         stalk.setBindBaby(baby);
         SimYukkuri.world.getCurrentMap().getStalk().put(stalk.getObjId(), stalk);
         // Should skip this stalk because it has a baby
@@ -6615,12 +6615,12 @@ class FoodLogicTest {
         tarinai.setX(100);
         tarinai.setY(100);
         tarinai.setHungry(0);
-        SimYukkuri.world.getCurrentMap().getBody().put(tarinai.getUniqueID(), tarinai);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(tarinai.getUniqueID(), tarinai);
         Yukkuri plantBody = WorldTestHelper.createBody();
         plantBody.setX(105);
         plantBody.setY(100);
         plantBody.setBurialState(BurialState.ALL);
-        SimYukkuri.world.getCurrentMap().getBody().put(plantBody.getUniqueID(), plantBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(plantBody.getUniqueID(), plantBody);
         Stalk stalk = new Stalk(105, 100, 0);
         stalk.setPlantYukkuri(plantBody.getUniqueID());
         // No babies on stalk
@@ -6644,7 +6644,7 @@ class FoodLogicTest {
         tarinai.setX(100);
         tarinai.setY(100);
         tarinai.setHungry(0);
-        SimYukkuri.world.getCurrentMap().getBody().put(tarinai.getUniqueID(), tarinai);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(tarinai.getUniqueID(), tarinai);
         Vomit vomit = new Vomit();
         vomit.setX(105);
         vomit.setY(100);
@@ -6668,14 +6668,14 @@ class FoodLogicTest {
         tarinai.setX(100);
         tarinai.setY(100);
         tarinai.setHungry(0);
-        SimYukkuri.world.getCurrentMap().getBody().put(tarinai.getUniqueID(), tarinai);
-        // Dead body that checkCanEatBody returns true for: dead + no okazari + not sick
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(tarinai.getUniqueID(), tarinai);
+        // Dead body that checkCanEatYukkuri returns true for: dead + no okazari + not sick
         Yukkuri deadBody = WorldTestHelper.createBody();
         deadBody.setDead(true);
         deadBody.setX(105);
         deadBody.setY(100);
         deadBody.setOkazari(null);
-        SimYukkuri.world.getCurrentMap().getBody().put(deadBody.getUniqueID(), deadBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(deadBody.getUniqueID(), deadBody);
         SimYukkuri.RND = new ConstState(1);
         boolean[] forceEat = { false };
         try {
@@ -6695,7 +6695,7 @@ class FoodLogicTest {
         tarinai.setX(100);
         tarinai.setY(100);
         tarinai.setHungry(0);
-        SimYukkuri.world.getCurrentMap().getBody().put(tarinai.getUniqueID(), tarinai);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(tarinai.getUniqueID(), tarinai);
         Shit shit = new Shit();
         shit.setX(105);
         shit.setY(100);
@@ -6804,7 +6804,7 @@ class FoodLogicTest {
         plantBody.setX(body.getX() + 5);
         plantBody.setY(body.getY());
         plantBody.setBurialState(BurialState.NONE); // not buried → skip
-        SimYukkuri.world.getCurrentMap().getBody().put(plantBody.getUniqueID(), plantBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(plantBody.getUniqueID(), plantBody);
         Stalk stalk = new Stalk(body.getX() + 5, body.getY(), 0);
         stalk.setPlantYukkuri(plantBody.getUniqueID());
         SimYukkuri.world.getCurrentMap().getStalk().put(stalk.getObjId(), stalk);
@@ -6821,13 +6821,13 @@ class FoodLogicTest {
         plantBody.setX(body.getX() + 5);
         plantBody.setY(body.getY());
         plantBody.setBurialState(BurialState.ALL); // buried
-        SimYukkuri.world.getCurrentMap().getBody().put(plantBody.getUniqueID(), plantBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(plantBody.getUniqueID(), plantBody);
         Stalk stalk = new Stalk(body.getX() + 5, body.getY(), 0);
         stalk.setPlantYukkuri(plantBody.getUniqueID());
         Yukkuri baby = WorldTestHelper.createBody();
         baby.setX(body.getX() + 5);
         baby.setY(body.getY());
-        SimYukkuri.world.getCurrentMap().getBody().put(baby.getUniqueID(), baby);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(baby.getUniqueID(), baby);
         stalk.setBindBaby(baby);
         SimYukkuri.world.getCurrentMap().getStalk().put(stalk.getObjId(), stalk);
         boolean[] forceEat = { false };
@@ -6844,7 +6844,7 @@ class FoodLogicTest {
         plantBody.setX(body.getX() + 5);
         plantBody.setY(body.getY());
         plantBody.setBurialState(BurialState.ALL); // buried ALL
-        SimYukkuri.world.getCurrentMap().getBody().put(plantBody.getUniqueID(), plantBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(plantBody.getUniqueID(), plantBody);
         Stalk stalk = new Stalk(body.getX() + 5, body.getY(), 0);
         stalk.setPlantYukkuri(plantBody.getUniqueID());
         // No babies
@@ -6883,7 +6883,7 @@ class FoodLogicTest {
         liveBody.setX(body.getX() + 5);
         liveBody.setY(body.getY());
         // Live body not unbirth → raper skips it
-        SimYukkuri.world.getCurrentMap().getBody().put(liveBody.getUniqueID(), liveBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(liveBody.getUniqueID(), liveBody);
         boolean[] forceEat = { false };
         Entity found = FoodLogic.searchFoodStandard(body, forceEat);
         // Should not find live non-unbirth body
@@ -6899,7 +6899,7 @@ class FoodLogicTest {
         unbirthBody.setX(body.getX() + 5);
         unbirthBody.setY(body.getY());
         unbirthBody.setUnBirth(true); // isUnBirth=true → raper can eat
-        SimYukkuri.world.getCurrentMap().getBody().put(unbirthBody.getUniqueID(), unbirthBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(unbirthBody.getUniqueID(), unbirthBody);
         boolean[] forceEat = { false };
         Entity found = FoodLogic.searchFoodStandard(body, forceEat);
         assertNotNull(found, "Raper should find unbirth body");
@@ -6918,7 +6918,7 @@ class FoodLogicTest {
         // Remove the stalk from the stalk map so it isn't found as secondary food
         SimYukkuri.world.getCurrentMap().getStalk().remove(bindStalk.getObjId());
         deadBody.setBindStalk(bindStalk);
-        SimYukkuri.world.getCurrentMap().getBody().put(deadBody.getUniqueID(), deadBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(deadBody.getUniqueID(), deadBody);
         boolean[] forceEat = { false };
         Entity found = FoodLogic.searchFoodStandard(body, forceEat);
         // Yukkuri with bindStalk should be skipped
@@ -6960,16 +6960,16 @@ class FoodLogicTest {
     void testSearchFoodPredetor_Remirya_SkipsSakuya() {
         // L995-997: b is Remirya + d is Sakuya → continue (skip)
         // Remove the default body from setUp to avoid it being found as prey
-        SimYukkuri.world.getCurrentMap().getBody().clear();
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().clear();
         org.simyukkuri.entity.core.living.yukkuri.impl.Remirya remirya = new org.simyukkuri.entity.core.living.yukkuri.impl.Remirya();
         remirya.setX(100);
         remirya.setY(100);
         remirya.setHungry(0);
-        SimYukkuri.world.getCurrentMap().getBody().put(remirya.getUniqueID(), remirya);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(remirya.getUniqueID(), remirya);
         org.simyukkuri.entity.core.living.yukkuri.impl.Sakuya sakuya = new org.simyukkuri.entity.core.living.yukkuri.impl.Sakuya();
         sakuya.setX(105);
         sakuya.setY(100);
-        SimYukkuri.world.getCurrentMap().getBody().put(sakuya.getUniqueID(), sakuya);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(sakuya.getUniqueID(), sakuya);
         boolean[] forceEat = { false };
         Entity found = FoodLogic.searchFoodPredetor(remirya, forceEat);
         // Remirya should skip Sakuya
@@ -6979,16 +6979,16 @@ class FoodLogicTest {
     @Test
     void testSearchFoodPredetor_Remirya_SkipsMeirin() {
         // L995-997: b is Remirya + d is Meirin → continue (skip)
-        SimYukkuri.world.getCurrentMap().getBody().clear();
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().clear();
         org.simyukkuri.entity.core.living.yukkuri.impl.Remirya remirya = new org.simyukkuri.entity.core.living.yukkuri.impl.Remirya();
         remirya.setX(100);
         remirya.setY(100);
         remirya.setHungry(0);
-        SimYukkuri.world.getCurrentMap().getBody().put(remirya.getUniqueID(), remirya);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(remirya.getUniqueID(), remirya);
         org.simyukkuri.entity.core.living.yukkuri.impl.Meirin meirin = new org.simyukkuri.entity.core.living.yukkuri.impl.Meirin();
         meirin.setX(105);
         meirin.setY(100);
-        SimYukkuri.world.getCurrentMap().getBody().put(meirin.getUniqueID(), meirin);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(meirin.getUniqueID(), meirin);
         boolean[] forceEat = { false };
         Entity found = FoodLogic.searchFoodPredetor(remirya, forceEat);
         // Remirya should skip Meirin
@@ -6998,16 +6998,16 @@ class FoodLogicTest {
     @Test
     void testSearchFoodPredetor_Fran_SkipsSakuya() {
         // L995-997: b is Fran + d is Sakuya → continue (skip)
-        SimYukkuri.world.getCurrentMap().getBody().clear();
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().clear();
         org.simyukkuri.entity.core.living.yukkuri.impl.Fran fran = new org.simyukkuri.entity.core.living.yukkuri.impl.Fran();
         fran.setX(100);
         fran.setY(100);
         fran.setHungry(0);
-        SimYukkuri.world.getCurrentMap().getBody().put(fran.getUniqueID(), fran);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(fran.getUniqueID(), fran);
         org.simyukkuri.entity.core.living.yukkuri.impl.Sakuya sakuya = new org.simyukkuri.entity.core.living.yukkuri.impl.Sakuya();
         sakuya.setX(105);
         sakuya.setY(100);
-        SimYukkuri.world.getCurrentMap().getBody().put(sakuya.getUniqueID(), sakuya);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(sakuya.getUniqueID(), sakuya);
         boolean[] forceEat = { false };
         Entity found = FoodLogic.searchFoodPredetor(fran, forceEat);
         assertNull(found, "Fran should skip Sakuya");
@@ -7025,7 +7025,7 @@ class FoodLogicTest {
         smallPrey.setX(body.getX() + 5);
         smallPrey.setY(body.getY());
         smallPrey.setAgeState(AgeState.BABY); // smaller than ADULT
-        SimYukkuri.world.getCurrentMap().getBody().put(smallPrey.getUniqueID(), smallPrey);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(smallPrey.getUniqueID(), smallPrey);
         boolean[] forceEat = { false };
         Entity found = FoodLogic.searchFoodPredetor(body, forceEat);
         assertNotNull(found, "Predator should find smaller prey");
@@ -7042,7 +7042,7 @@ class FoodLogicTest {
         samePrey.setX(body.getX() + 5);
         samePrey.setY(body.getY());
         samePrey.setAgeState(AgeState.ADULT); // same size → found2
-        SimYukkuri.world.getCurrentMap().getBody().put(samePrey.getUniqueID(), samePrey);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(samePrey.getUniqueID(), samePrey);
         boolean[] forceEat = { false };
         Entity found = FoodLogic.searchFoodPredetor(body, forceEat);
         // found=null, found=found2 → found=samePrey
@@ -7107,10 +7107,10 @@ class FoodLogicTest {
         // Actually, secondary stalk runs when found==null && !isFull
         // Make body full so found=null is returned without secondary stalk
         // Instead, use a body without prey: clear body map except self
-        SimYukkuri.world.getCurrentMap().getBody().clear();
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().clear();
         body.setPredatorType(PredatorType.BITE);
         body.setHungry(body.getHungryLimit() / 2);
-        SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(body.getUniqueID(), body);
         Stalk stalk = new Stalk(body.getX() + 5, body.getY(), 0);
         stalk.setPlantYukkuri(body.getUniqueID()); // body is plant → skip
         SimYukkuri.world.getCurrentMap().getStalk().put(stalk.getObjId(), stalk);
@@ -7123,16 +7123,16 @@ class FoodLogicTest {
     void testSearchFoodPredetor_SecondaryStalk_NotBuriedNotAll_Skip() {
         // L1146-1148: p.burialState != ALL and !(NEARLY_ALL && !hasOkazari) → continue
         // Clear body map to prevent other bodies from being found as prey
-        SimYukkuri.world.getCurrentMap().getBody().clear();
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().clear();
         body.setPredatorType(PredatorType.BITE);
         body.setHungry(body.getHungryLimit() / 2);
-        SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(body.getUniqueID(), body);
         Yukkuri plantBody = WorldTestHelper.createBody();
         plantBody.setX(body.getX() + 5);
         plantBody.setY(body.getY());
         plantBody.setBurialState(BurialState.HALF); // not buried enough → skip
         plantBody.setPredatorType(PredatorType.BITE); // also predator → skipped in body loop
-        SimYukkuri.world.getCurrentMap().getBody().put(plantBody.getUniqueID(), plantBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(plantBody.getUniqueID(), plantBody);
         Stalk stalk = new Stalk(body.getX() + 5, body.getY(), 0);
         stalk.setPlantYukkuri(plantBody.getUniqueID());
         SimYukkuri.world.getCurrentMap().getStalk().put(stalk.getObjId(), stalk);
@@ -7145,22 +7145,22 @@ class FoodLogicTest {
     void testSearchFoodPredetor_SecondaryStalk_BabyInStalk_Skip() {
         // L1151-1165: stalk has baby → continue
         // Clear body map to prevent other bodies from being found as prey
-        SimYukkuri.world.getCurrentMap().getBody().clear();
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().clear();
         body.setPredatorType(PredatorType.BITE);
         body.setHungry(body.getHungryLimit() / 2);
-        SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(body.getUniqueID(), body);
         Yukkuri plantBody = WorldTestHelper.createBody();
         plantBody.setX(body.getX() + 5);
         plantBody.setY(body.getY());
         plantBody.setBurialState(BurialState.ALL); // buried
         plantBody.setPredatorType(PredatorType.BITE); // also predator → skipped in body loop
-        SimYukkuri.world.getCurrentMap().getBody().put(plantBody.getUniqueID(), plantBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(plantBody.getUniqueID(), plantBody);
         Stalk stalk = new Stalk(body.getX() + 5, body.getY(), 0);
         stalk.setPlantYukkuri(plantBody.getUniqueID());
         Yukkuri baby = WorldTestHelper.createBody();
         baby.setX(body.getX() + 5);
         baby.setY(body.getY());
-        SimYukkuri.world.getCurrentMap().getBody().put(baby.getUniqueID(), baby);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(baby.getUniqueID(), baby);
         baby.setPredatorType(PredatorType.BITE); // also predator → skipped in body loop
         stalk.setBindBaby(baby);
         SimYukkuri.world.getCurrentMap().getStalk().put(stalk.getObjId(), stalk);
@@ -7178,7 +7178,7 @@ class FoodLogicTest {
         plantBody.setX(body.getX() + 5);
         plantBody.setY(body.getY());
         plantBody.setBurialState(BurialState.ALL);
-        SimYukkuri.world.getCurrentMap().getBody().put(plantBody.getUniqueID(), plantBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(plantBody.getUniqueID(), plantBody);
         Stalk stalk = new Stalk(body.getX() + 5, body.getY(), 0);
         stalk.setPlantYukkuri(plantBody.getUniqueID());
         SimYukkuri.world.getCurrentMap().getStalk().put(stalk.getObjId(), stalk);
@@ -7271,7 +7271,7 @@ class FoodLogicTest {
         other.setY(50);
         other.setToFood(true);
         other.setMoveTargetId(shit.getObjId());
-        SimYukkuri.world.getCurrentMap().getBody().put(other.getUniqueID(), other);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(other.getUniqueID(), other);
         SimYukkuri.RND = new ConstState(1);
         assertDoesNotThrow(() -> FoodLogic.checkFood(body));
     }
@@ -7316,8 +7316,8 @@ class FoodLogicTest {
         deadBody.setDead(true);
         deadBody.setX(55);
         deadBody.setY(50);
-        deadBody.setOkazari(null); // checkCanEatBody=true
-        SimYukkuri.world.getCurrentMap().getBody().put(deadBody.getUniqueID(), deadBody);
+        deadBody.setOkazari(null); // checkCanEatYukkuri=true
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(deadBody.getUniqueID(), deadBody);
         boolean[] forceEat = { false };
         try {
             java.lang.reflect.Method m = FoodLogic.class.getDeclaredMethod("searchFoodForUnunSlave", Yukkuri.class, boolean[].class);
@@ -7424,7 +7424,7 @@ class FoodLogicTest {
         Yukkuri partner = WorldTestHelper.createBody();
         partner.setX(200);
         partner.setY(200);
-        SimYukkuri.world.getCurrentMap().getBody().put(partner.getUniqueID(), partner);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(partner.getUniqueID(), partner);
         body.setPartner(partner.getUniqueID());
         // Create fav bed
         Bed favBed = new Bed(100, 100, 0);
@@ -7450,7 +7450,7 @@ class FoodLogicTest {
         Yukkuri partner = WorldTestHelper.createBody();
         partner.setX(200);
         partner.setY(200);
-        SimYukkuri.world.getCurrentMap().getBody().put(partner.getUniqueID(), partner);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(partner.getUniqueID(), partner);
         body.setPartner(partner.getUniqueID());
         // Fav bed at far position (no food on it)
         Bed favBed = new Bed(800, 800, 0);
@@ -7489,7 +7489,7 @@ class FoodLogicTest {
         idiotBody.setY(100);
         idiotBody.setHungry(idiotBody.getHungryLimit() / 2);
         // Register in world
-        SimYukkuri.world.getCurrentMap().getBody().put(idiotBody.getUniqueID(), idiotBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(idiotBody.getUniqueID(), idiotBody);
         // Place food at (200, 100) - map coords
         Food food = new Food(200, 100, Food.FoodType.FOOD.ordinal());
         food.setAmount(100);
@@ -7510,7 +7510,7 @@ class FoodLogicTest {
         idiotBody.setX(100);
         idiotBody.setY(100);
         idiotBody.setHungry(idiotBody.getHungryLimit() / 2);
-        SimYukkuri.world.getCurrentMap().getBody().put(idiotBody.getUniqueID(), idiotBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(idiotBody.getUniqueID(), idiotBody);
         // Place stalk at (200, 100)
         Stalk stalk = new Stalk(200, 100, 0);
         SimYukkuri.world.getCurrentMap().getStalk().put(stalk.getObjId(), stalk);
@@ -7529,7 +7529,7 @@ class FoodLogicTest {
         idiotBody.setX(50);
         idiotBody.setY(50);
         idiotBody.setHungry(idiotBody.getHungryLimit() / 2);
-        SimYukkuri.world.getCurrentMap().getBody().put(idiotBody.getUniqueID(), idiotBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(idiotBody.getUniqueID(), idiotBody);
         Vomit vomit = new Vomit();
         vomit.setX(80);
         vomit.setY(50);
@@ -7543,9 +7543,9 @@ class FoodLogicTest {
     @Test
     void testSearchFoodNearlest_BodyBarrierContinue_L675() {
         // L675: barrier blocks dead body in searchFoodNearlest body loop
-        // checkCanEatBody: need isVeryRude()=true → SUPER_SHITHEAD → !isVeryRude=false → passes hasOkazari check
+        // checkCanEatYukkuri: need isVeryRude()=true → SUPER_SHITHEAD → !isVeryRude=false → passes hasOkazari check
         // Use reflection to call searchFoodNearlest directly to avoid checkFood guards
-        body.setAttitude(Attitude.SUPER_SHITHEAD); // isVeryRude=true → checkCanEatBody returns true
+        body.setAttitude(Attitude.SUPER_SHITHEAD); // isVeryRude=true → checkCanEatYukkuri returns true
         body.setX(50);
         body.setY(50);
         body.setHungry(body.getHungryLimit() / 2);
@@ -7557,7 +7557,7 @@ class FoodLogicTest {
         int babyLimit = deadBody.getDamageLimitBase()[AgeState.BABY.ordinal()];
         WorldTestHelper.setDamage(deadBody, babyLimit + 1);
         deadBody.getDamageState(); // trigger toDead()
-        SimYukkuri.world.getCurrentMap().getBody().put(deadBody.getUniqueID(), deadBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(deadBody.getUniqueID(), deadBody);
         // Barrier at (65,50) between body (50,50) and dead body (80,50)
         setWallMapBarrier(65, 50);
         // Use reflection to call searchFoodNearlest directly
@@ -7580,7 +7580,7 @@ class FoodLogicTest {
         idiotBody.setX(100);
         idiotBody.setY(100);
         idiotBody.setHungry(idiotBody.getHungryLimit() / 2);
-        SimYukkuri.world.getCurrentMap().getBody().put(idiotBody.getUniqueID(), idiotBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(idiotBody.getUniqueID(), idiotBody);
         Shit shit = new Shit();
         shit.setX(200);
         shit.setY(100);
@@ -7614,7 +7614,7 @@ class FoodLogicTest {
         plantBody.setY(50);
         plantBody.setBurialState(BurialState.NEARLY_ALL);
         // hasOkazari() returns true by default (okazari set in Yukkuri constructor)
-        SimYukkuri.world.getCurrentMap().getBody().put(plantBody.getUniqueID(), plantBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(plantBody.getUniqueID(), plantBody);
         Stalk stalk = new Stalk(80, 50, 0);
         stalk.setPlantYukkuri(plantBody.getUniqueID());
         SimYukkuri.world.getCurrentMap().getStalk().put(stalk.getObjId(), stalk);
@@ -7639,14 +7639,14 @@ class FoodLogicTest {
         plantBody.setX(80);
         plantBody.setY(50);
         plantBody.setBurialState(BurialState.ALL);
-        SimYukkuri.world.getCurrentMap().getBody().put(plantBody.getUniqueID(), plantBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(plantBody.getUniqueID(), plantBody);
         Stalk stalk = new Stalk(80, 50, 0);
         stalk.setPlantYukkuri(plantBody.getUniqueID());
         // Add a baby to the stalk so that the baby loop hits L633 (baby != null → bBabyFlag=true)
         Yukkuri baby = WorldTestHelper.createBody();
         baby.setX(80);
         baby.setY(50);
-        SimYukkuri.world.getCurrentMap().getBody().put(baby.getUniqueID(), baby);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(baby.getUniqueID(), baby);
         stalk.getBindBabies().add(baby.getUniqueID());
         SimYukkuri.world.getCurrentMap().getStalk().put(stalk.getObjId(), stalk);
         // baby != null in loop → bBabyFlag=true → continue skips stalk
@@ -7727,7 +7727,7 @@ class FoodLogicTest {
         plantBody.setY(100);
         plantBody.setBurialState(BurialState.NEARLY_ALL);
         // hasOkazari() returns true by default
-        SimYukkuri.world.getCurrentMap().getBody().put(plantBody.getUniqueID(), plantBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(plantBody.getUniqueID(), plantBody);
         Stalk stalk = new Stalk(110, 100, 0);
         stalk.setPlantYukkuri(plantBody.getUniqueID());
         SimYukkuri.world.getCurrentMap().getStalk().put(stalk.getObjId(), stalk);
@@ -7748,10 +7748,10 @@ class FoodLogicTest {
         plantBody.setX(80);
         plantBody.setY(50);
         plantBody.setBurialState(BurialState.ALL);
-        SimYukkuri.world.getCurrentMap().getBody().put(plantBody.getUniqueID(), plantBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(plantBody.getUniqueID(), plantBody);
         Stalk stalk = new Stalk(80, 50, 0);
         stalk.setPlantYukkuri(plantBody.getUniqueID());
-        // Add a baby ID that does NOT exist in getBody() → BodyRegistry lookup returns null → L862 continue
+        // Add a baby ID that does NOT exist in getYukkuriMap() → YukkuriLookup lookup returns null → L862 continue
         stalk.getBindBabies().add(999999);
         SimYukkuri.world.getCurrentMap().getStalk().put(stalk.getObjId(), stalk);
         boolean[] forceEat = {false};
@@ -7769,7 +7769,7 @@ class FoodLogicTest {
         plantBody.setX(200);
         plantBody.setY(100);
         plantBody.setBurialState(BurialState.ALL);
-        SimYukkuri.world.getCurrentMap().getBody().put(plantBody.getUniqueID(), plantBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(plantBody.getUniqueID(), plantBody);
         Stalk stalk = new Stalk(200, 100, 0);
         stalk.setPlantYukkuri(plantBody.getUniqueID());
         SimYukkuri.world.getCurrentMap().getStalk().put(stalk.getObjId(), stalk);
@@ -7810,7 +7810,7 @@ class FoodLogicTest {
         removedBody.setX(150);
         removedBody.setY(100);
         removedBody.remove();
-        SimYukkuri.world.getCurrentMap().getBody().put(removedBody.getUniqueID(), removedBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(removedBody.getUniqueID(), removedBody);
         boolean[] forceEat = {false};
         assertDoesNotThrow(() -> FoodLogic.searchFoodStandard(body, forceEat));
     }
@@ -7820,15 +7820,15 @@ class FoodLogicTest {
     @Test
     void testSearchFoodStandard_BindStalkBody_Continue_L919() {
         // L919: d.isbindStalk() = true → continue
-        // Need: checkCanEatBody(b,d)=true (non-raper path)
-        // For checkCanEatBody: b.isPredatorType()=false (Marisa), p.isDead()=true,
-        //   p.isbindStalk()=false (for checkCanEatBody), !b.isVeryRude()&&p.hasOkazari() → false
-        //   → use b.setAttitude(SUPER_SHITHEAD) so isVeryRude()=true → checkCanEatBody returns true
+        // Need: checkCanEatYukkuri(b,d)=true (non-raper path)
+        // For checkCanEatYukkuri: b.isPredatorType()=false (Marisa), p.isDead()=true,
+        //   p.isbindStalk()=false (for checkCanEatYukkuri), !b.isVeryRude()&&p.hasOkazari() → false
+        //   → use b.setAttitude(SUPER_SHITHEAD) so isVeryRude()=true → checkCanEatYukkuri returns true
         // Then d.isbindStalk() = true → L919 continue
         body.setX(50);
         body.setY(50);
         body.setHungry(body.getHungryLimit() / 2);
-        body.setAttitude(Attitude.SUPER_SHITHEAD); // isVeryRude=true → checkCanEatBody passes hasOkazari check
+        body.setAttitude(Attitude.SUPER_SHITHEAD); // isVeryRude=true → checkCanEatYukkuri passes hasOkazari check
         // Dead body WITH bindStalk: isbindStalk()=true → L919 continue
         Yukkuri deadTarget = WorldTestHelper.createBody();
         deadTarget.setX(80);
@@ -7841,7 +7841,7 @@ class FoodLogicTest {
         Stalk boundStalk = new Stalk(80, 50, 0);
         boundStalk.setPlantYukkuri(deadTarget.getUniqueID());
         deadTarget.setBindStalk(boundStalk);
-        SimYukkuri.world.getCurrentMap().getBody().put(deadTarget.getUniqueID(), deadTarget);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(deadTarget.getUniqueID(), deadTarget);
         boolean[] forceEat = {false};
         assertDoesNotThrow(() -> FoodLogic.searchFoodStandard(body, forceEat));
     }
@@ -7851,11 +7851,11 @@ class FoodLogicTest {
     @Test
     void testSearchFoodStandard_DeadBodyBarrier_Continue_L924() {
         // L924: barrier blocks dead body (no stalk)
-        // checkCanEatBody: need isVeryRude=true so !isVeryRude&&hasOkazari is false → returns true
+        // checkCanEatYukkuri: need isVeryRude=true so !isVeryRude&&hasOkazari is false → returns true
         body.setX(50);
         body.setY(50);
         body.setHungry(body.getHungryLimit() / 2);
-        body.setAttitude(Attitude.SUPER_SHITHEAD); // isVeryRude=true → checkCanEatBody returns true
+        body.setAttitude(Attitude.SUPER_SHITHEAD); // isVeryRude=true → checkCanEatYukkuri returns true
         Yukkuri deadTarget = WorldTestHelper.createBody();
         deadTarget.setX(80);
         deadTarget.setY(50);
@@ -7863,7 +7863,7 @@ class FoodLogicTest {
         WorldTestHelper.setDamage(deadTarget, babyLimit + 1);
         deadTarget.getDamageState(); // trigger toDead
         // No stalk bound: isbindStalk()=false → passes L918 → reaches barrier check at L922
-        SimYukkuri.world.getCurrentMap().getBody().put(deadTarget.getUniqueID(), deadTarget);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(deadTarget.getUniqueID(), deadTarget);
         setWallMapBarrier(65, 50);
         boolean[] forceEat = {false};
         assertDoesNotThrow(() -> FoodLogic.searchFoodStandard(body, forceEat));
@@ -7893,7 +7893,7 @@ class FoodLogicTest {
         // L1008: barrier blocks in the "d.ordinal() < b.ordinal()" branch (smaller target)
         // Need predator to be ADULT so targets (BABY) are smaller
         // Also remove body from setUp to avoid interference (body at same position as predator)
-        SimYukkuri.world.getCurrentMap().getBody().remove(body.getUniqueID());
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().remove(body.getUniqueID());
         Remirya predator = new Remirya() {
             @Override public int getCollisionX() { return 10; }
         };
@@ -7901,13 +7901,13 @@ class FoodLogicTest {
         predator.setX(100);
         predator.setY(100);
         predator.setHungry(predator.getHungryLimit() / 2);
-        SimYukkuri.world.getCurrentMap().getBody().put(predator.getUniqueID(), predator);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(predator.getUniqueID(), predator);
         // Baby target (BABY age state, ordinal=0 < ADULT ordinal=2) at (130, 100)
         Yukkuri babyTarget = WorldTestHelper.createBody();
         // babyTarget defaults to BABY age (age=0)
         babyTarget.setX(130);
         babyTarget.setY(100);
-        SimYukkuri.world.getCurrentMap().getBody().put(babyTarget.getUniqueID(), babyTarget);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(babyTarget.getUniqueID(), babyTarget);
         // Barrier at (115, 100) between predator (100,100) and target (130,100)
         setWallMapBarrier(115, 100);
         boolean[] forceEat = {false};
@@ -7921,19 +7921,19 @@ class FoodLogicTest {
         // L1019: barrier blocks in the "else" branch (d.ordinal() >= b.ordinal())
         // Need target.ordinal() >= predator.ordinal(). With both BABY: 0 >= 0 = true → else.
         // Remove setUp's body to avoid it being found first with distance=0
-        SimYukkuri.world.getCurrentMap().getBody().remove(body.getUniqueID());
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().remove(body.getUniqueID());
         Remirya predator = new Remirya() {
             @Override public int getCollisionX() { return 10; }
         };
         predator.setX(100);
         predator.setY(100);
         predator.setHungry(predator.getHungryLimit() / 2);
-        SimYukkuri.world.getCurrentMap().getBody().put(predator.getUniqueID(), predator);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(predator.getUniqueID(), predator);
         // Target also BABY (both ordinal=0, 0 >= 0 = true → else branch at L1014)
         Yukkuri target = WorldTestHelper.createBody();
         target.setX(130);
         target.setY(100);
-        SimYukkuri.world.getCurrentMap().getBody().put(target.getUniqueID(), target);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(target.getUniqueID(), target);
         // Barrier at (115,100) - close enough to be within wallMap bounds (wallMap=152x152)
         setWallMapBarrier(115, 100);
         boolean[] forceEat = {false};
@@ -7950,13 +7950,13 @@ class FoodLogicTest {
         predator.setX(100);
         predator.setY(100);
         predator.setHungry(predator.getHungryLimit() / 2);
-        SimYukkuri.world.getCurrentMap().getBody().put(predator.getUniqueID(), predator);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(predator.getUniqueID(), predator);
         Yukkuri deadTarget = WorldTestHelper.createBody();
         deadTarget.setX(200);
         deadTarget.setY(100);
         WorldTestHelper.setDamage(deadTarget, deadTarget.getDamageLimitBase()[AgeState.ADULT.ordinal()] + 1);
         deadTarget.getDamageState();
-        SimYukkuri.world.getCurrentMap().getBody().put(deadTarget.getUniqueID(), deadTarget);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(deadTarget.getUniqueID(), deadTarget);
         setWallMapBarrier(150, 100);
         boolean[] forceEat = {false};
         assertDoesNotThrow(() -> FoodLogic.searchFoodPredetor(predator, forceEat));
@@ -7972,7 +7972,7 @@ class FoodLogicTest {
         predator.setX(100);
         predator.setY(100);
         predator.setHungry(predator.getHungryLimit() / 2);
-        SimYukkuri.world.getCurrentMap().getBody().put(predator.getUniqueID(), predator);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(predator.getUniqueID(), predator);
         Food food = new Food(200, 100, Food.FoodType.FOOD.ordinal());
         food.setAmount(100);
         SimYukkuri.world.getCurrentMap().getFood().put(food.getObjId(), food);
@@ -7993,12 +7993,12 @@ class FoodLogicTest {
         predator.setX(100);
         predator.setY(100);
         predator.setHungry(predator.getHungryLimit() / 2);
-        SimYukkuri.world.getCurrentMap().getBody().put(predator.getUniqueID(), predator);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(predator.getUniqueID(), predator);
         Yukkuri plantBody = WorldTestHelper.createBody();
         plantBody.setX(110);
         plantBody.setY(100);
         plantBody.setBurialState(BurialState.NEARLY_ALL); // NEARLY_ALL + hasOkazari=true → continue L1148
-        SimYukkuri.world.getCurrentMap().getBody().put(plantBody.getUniqueID(), plantBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(plantBody.getUniqueID(), plantBody);
         Stalk stalk = new Stalk(110, 100, 0);
         stalk.setPlantYukkuri(plantBody.getUniqueID());
         SimYukkuri.world.getCurrentMap().getStalk().put(stalk.getObjId(), stalk);
@@ -8016,15 +8016,15 @@ class FoodLogicTest {
         predator.setX(50);
         predator.setY(50);
         predator.setHungry(predator.getHungryLimit() / 2);
-        SimYukkuri.world.getCurrentMap().getBody().put(predator.getUniqueID(), predator);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(predator.getUniqueID(), predator);
         Yukkuri plantBody = WorldTestHelper.createBody();
         plantBody.setX(80);
         plantBody.setY(50);
         plantBody.setBurialState(BurialState.ALL);
-        SimYukkuri.world.getCurrentMap().getBody().put(plantBody.getUniqueID(), plantBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(plantBody.getUniqueID(), plantBody);
         Stalk stalk = new Stalk(80, 50, 0);
         stalk.setPlantYukkuri(plantBody.getUniqueID());
-        // Non-existent baby ID → getBodyInstance returns null → L1158 continue
+        // Non-existent baby ID → getBodyMap returns null → L1158 continue
         stalk.getBindBabies().add(999998);
         SimYukkuri.world.getCurrentMap().getStalk().put(stalk.getObjId(), stalk);
         boolean[] forceEat = {false};
@@ -8041,12 +8041,12 @@ class FoodLogicTest {
         predator.setX(100);
         predator.setY(100);
         predator.setHungry(predator.getHungryLimit() / 2);
-        SimYukkuri.world.getCurrentMap().getBody().put(predator.getUniqueID(), predator);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(predator.getUniqueID(), predator);
         Yukkuri plantBody = WorldTestHelper.createBody();
         plantBody.setX(200);
         plantBody.setY(100);
         plantBody.setBurialState(BurialState.ALL);
-        SimYukkuri.world.getCurrentMap().getBody().put(plantBody.getUniqueID(), plantBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(plantBody.getUniqueID(), plantBody);
         Stalk stalk = new Stalk(200, 100, 0);
         stalk.setPlantYukkuri(plantBody.getUniqueID());
         SimYukkuri.world.getCurrentMap().getStalk().put(stalk.getObjId(), stalk);
@@ -8065,7 +8065,7 @@ class FoodLogicTest {
         predator.setX(50);
         predator.setY(50);
         predator.setHungry(predator.getHungryLimit() / 2);
-        SimYukkuri.world.getCurrentMap().getBody().put(predator.getUniqueID(), predator);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(predator.getUniqueID(), predator);
         // No live prey → found=null → enters vomit section
         Vomit vomit = new Vomit();
         vomit.setX(80);
@@ -8087,7 +8087,7 @@ class FoodLogicTest {
         predator.setY(100);
         predator.setHungry(0); // isTooHungry=true (need damage)
         WorldTestHelper.setDamage(predator, predator.getDamageLimitBase()[AgeState.ADULT.ordinal()] / 2 + 1);
-        SimYukkuri.world.getCurrentMap().getBody().put(predator.getUniqueID(), predator);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(predator.getUniqueID(), predator);
         Shit shit = new Shit();
         shit.setX(200);
         shit.setY(100);
@@ -8133,7 +8133,7 @@ class FoodLogicTest {
         deadTarget.setY(100);
         WorldTestHelper.setDamage(deadTarget, deadTarget.getDamageLimitBase()[AgeState.ADULT.ordinal()] + 1);
         deadTarget.getDamageState(); // trigger toDead
-        SimYukkuri.world.getCurrentMap().getBody().put(deadTarget.getUniqueID(), deadTarget);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(deadTarget.getUniqueID(), deadTarget);
         assertDoesNotThrow(() -> FoodLogic.checkFood(body));
     }
 
@@ -8155,7 +8155,7 @@ class FoodLogicTest {
         otherBody.setY(100);
         otherBody.setMoveTargetId(shit.getObjId());
         otherBody.setToFood(true);
-        SimYukkuri.world.getCurrentMap().getBody().put(otherBody.getUniqueID(), otherBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(otherBody.getUniqueID(), otherBody);
         assertDoesNotThrow(() -> FoodLogic.checkFood(body));
     }
 
@@ -8200,13 +8200,13 @@ class FoodLogicTest {
         body.setY(100);
         body.setHungry(0);
         WorldTestHelper.setDamage(body, body.getDamageLimitBase()[AgeState.ADULT.ordinal()] / 2 + 1);
-        // Dead target body that passes checkCanEatBody
+        // Dead target body that passes checkCanEatYukkuri
         Yukkuri deadTarget = WorldTestHelper.createBody();
         deadTarget.setX(200);
         deadTarget.setY(100);
         WorldTestHelper.setDamage(deadTarget, deadTarget.getDamageLimitBase()[AgeState.ADULT.ordinal()] + 1);
         deadTarget.getDamageState();
-        SimYukkuri.world.getCurrentMap().getBody().put(deadTarget.getUniqueID(), deadTarget);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(deadTarget.getUniqueID(), deadTarget);
         setWallMapBarrier(150, 100);
         assertDoesNotThrow(() -> FoodLogic.checkFood(body));
     }
@@ -8295,7 +8295,7 @@ class FoodLogicTest {
         plantBody.setX(102);
         plantBody.setY(100);
         plantBody.setBurialState(BurialState.ALL);
-        SimYukkuri.world.getCurrentMap().getBody().put(plantBody.getUniqueID(), plantBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(plantBody.getUniqueID(), plantBody);
         stalk.setPlantYukkuri(plantBody.getUniqueID());
         SimYukkuri.world.getCurrentMap().getStalk().put(stalk.getObjId(), stalk);
         SimYukkuri.RND = new ConstState(1);
@@ -8432,23 +8432,23 @@ class FoodLogicTest {
 
     @Test
     void testSearchFoodNearlest_StalkBabyNullId_Continue_L633() {
-        // L630-634: babyList has entry with ibaby=-1 → getBodyInstance(-1)=null → L633 continue
+        // L630-634: babyList has entry with ibaby=-1 → getYukkuriMap(-1)=null → L633 continue
         // Then bBabyFlag=false → stalk is NOT skipped
         // Need: idiot body (TarinaiReimu), stalk with plant buried ALL, stalk baby list has null (ID=-1)
         TarinaiReimu idiotBody = new TarinaiReimu();
         idiotBody.setX(100);
         idiotBody.setY(100);
         idiotBody.setHungry(0);
-        SimYukkuri.world.getCurrentMap().getBody().put(idiotBody.getUniqueID(), idiotBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(idiotBody.getUniqueID(), idiotBody);
         // Plant body buried ALL so the stalk passes the burialState check (L621-623)
         Yukkuri plantBody = WorldTestHelper.createBody();
         plantBody.setX(105);
         plantBody.setY(100);
         plantBody.setBurialState(BurialState.ALL);
-        SimYukkuri.world.getCurrentMap().getBody().put(plantBody.getUniqueID(), plantBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(plantBody.getUniqueID(), plantBody);
         Stalk stalk = new Stalk(105, 100, 0);
         stalk.setPlantYukkuri(plantBody.getUniqueID());
-        // Add null baby (adds -1 to babyList): getBodyInstance(-1)=null → L633 continue
+        // Add null baby (adds -1 to babyList): getYukkuriMap(-1)=null → L633 continue
         stalk.setBindBaby(null); // adds -1 to bindBabies list
         SimYukkuri.world.getCurrentMap().getStalk().put(stalk.getObjId(), stalk);
         SimYukkuri.RND = new ConstState(1);
@@ -8465,15 +8465,15 @@ class FoodLogicTest {
         }
     }
 
-    // ===== L919: searchFoodStandard body loop with isPredatorType → checkCanEatBody=true → isbindStalk=true → L919 =====
+    // ===== L919: searchFoodStandard body loop with isPredatorType → checkCanEatYukkuri=true → isbindStalk=true → L919 =====
 
     @Test
     void testSearchFoodStandard_PredatorBody_DeadBindStalk_L919() {
-        // To reach L919: body.isRaper()=false AND checkCanEatBody(b,d)=true AND d.isbindStalk()=true
-        // checkCanEatBody returns true if b.isPredatorType()=true (short-circuits before isbindStalk check)
+        // To reach L919: body.isRaper()=false AND checkCanEatYukkuri(b,d)=true AND d.isbindStalk()=true
+        // checkCanEatYukkuri returns true if b.isPredatorType()=true (short-circuits before isbindStalk check)
         // So: predator body + dead body with bindStalk → L919 continue
         body.setAgeState(AgeState.ADULT);
-        body.setPredatorType(PredatorType.BITE); // isPredatorType=true → checkCanEatBody returns true
+        body.setPredatorType(PredatorType.BITE); // isPredatorType=true → checkCanEatYukkuri returns true
         body.setHungry(body.getHungryLimit());
         // Remove setUp body from predator tests doesn't matter since body IS the predator
         // No other bodies without bindStalk → found should be null
@@ -8494,9 +8494,9 @@ class FoodLogicTest {
         stalk.setPlantYukkuri(deadBody.getUniqueID());
         deadBody.setBindStalk(stalk);
         assertTrue(deadBody.hasBindStalk(), "deadBody should have bindStalk");
-        SimYukkuri.world.getCurrentMap().getBody().put(deadBody.getUniqueID(), deadBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(deadBody.getUniqueID(), deadBody);
         boolean[] forceEat = { false };
-        // predator isPredatorType → checkCanEatBody=true → d.isbindStalk()=true → L919 continue → found=null
+        // predator isPredatorType → checkCanEatYukkuri=true → d.isbindStalk()=true → L919 continue → found=null
         Entity found = FoodLogic.searchFoodStandard(body, forceEat);
         assertNull(found, "Dead body with bindStalk should be skipped via L919");
     }
@@ -8508,19 +8508,19 @@ class FoodLogicTest {
         // L1005: condition true (minDistance>distance) → L1006-1008: barrier → L1008 continue
         // Need: predator ADULT, prey BABY (ordinal 0 < 2), barrier between them
         // Remove setUp's body from map to avoid interference
-        SimYukkuri.world.getCurrentMap().getBody().remove(body.getUniqueID());
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().remove(body.getUniqueID());
         Yukkuri predator = WorldTestHelper.createBody();
         predator.setX(50);
         predator.setY(50);
         predator.setAgeState(AgeState.ADULT);
         predator.setPredatorType(PredatorType.BITE);
         predator.setHungry(predator.getHungryLimit() / 2);
-        SimYukkuri.world.getCurrentMap().getBody().put(predator.getUniqueID(), predator);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(predator.getUniqueID(), predator);
         Yukkuri smallPrey = WorldTestHelper.createBody();
         smallPrey.setX(80);
         smallPrey.setY(50);
         smallPrey.setAgeState(AgeState.BABY); // ordinal 0 < ADULT ordinal 2
-        SimYukkuri.world.getCurrentMap().getBody().put(smallPrey.getUniqueID(), smallPrey);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(smallPrey.getUniqueID(), smallPrey);
         // Place barrier between predator (50,50) and prey (80,50): barrier at (65,50)
         setWallMapBarrier(65, 50);
         boolean[] forceEat = { false };
@@ -8536,14 +8536,14 @@ class FoodLogicTest {
         // L1188-1190: found==null + vomit + barrier → L1190 continue
         // Need predator with no alive prey/food → found==null → vomit loop
         // Remove setUp body from map
-        SimYukkuri.world.getCurrentMap().getBody().remove(body.getUniqueID());
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().remove(body.getUniqueID());
         Yukkuri predator = WorldTestHelper.createBody();
         predator.setX(50);
         predator.setY(50);
         predator.setAgeState(AgeState.ADULT);
         predator.setPredatorType(PredatorType.BITE);
         predator.setHungry(predator.getHungryLimit() / 2);
-        SimYukkuri.world.getCurrentMap().getBody().put(predator.getUniqueID(), predator);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(predator.getUniqueID(), predator);
         Vomit vomit = new Vomit();
         vomit.setX(80);
         vomit.setY(50);
@@ -8561,7 +8561,7 @@ class FoodLogicTest {
     @Test
     void testSearchFoodPredetor_ShitBarrier_L1207() {
         // L1205-1207: found==null + isTooHungry + shit + barrier → L1207 continue
-        SimYukkuri.world.getCurrentMap().getBody().remove(body.getUniqueID());
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().remove(body.getUniqueID());
         Yukkuri predator = WorldTestHelper.createBody();
         predator.setX(50);
         predator.setY(50);
@@ -8570,7 +8570,7 @@ class FoodLogicTest {
         predator.setHungry(0); // very hungry
         // isTooHungry needs damage!=NONE
         WorldTestHelper.setDamage(predator, predator.getDamageLimitBase()[AgeState.ADULT.ordinal()] / 2 + 1);
-        SimYukkuri.world.getCurrentMap().getBody().put(predator.getUniqueID(), predator);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(predator.getUniqueID(), predator);
         Shit shit = new Shit();
         shit.setX(80);
         shit.setY(50);
@@ -8613,13 +8613,13 @@ class FoodLogicTest {
         int babyLimit = deadBody.getDamageLimitBase()[AgeState.BABY.ordinal()];
         WorldTestHelper.setDamage(deadBody, babyLimit + 1);
         deadBody.getDamageState(); // trigger toDead
-        SimYukkuri.world.getCurrentMap().getBody().put(deadBody.getUniqueID(), deadBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(deadBody.getUniqueID(), deadBody);
         // Another alive body that does NOT target the shit → loop ends normally → L1266
         Yukkuri aliveOther = WorldTestHelper.createBody();
         aliveOther.setX(70);
         aliveOther.setY(50);
         // aliveOther does not target shit (no moveTargetId set)
-        SimYukkuri.world.getCurrentMap().getBody().put(aliveOther.getUniqueID(), aliveOther);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(aliveOther.getUniqueID(), aliveOther);
         SimYukkuri.RND = new ConstState(1);
         boolean[] forceEat = { false };
         try {
@@ -8676,8 +8676,8 @@ class FoodLogicTest {
         deadBody.setX(55);
         deadBody.setY(50);
         deadBody.setDead(true);
-        deadBody.setOkazari(null); // so checkCanEatBody returns true
-        SimYukkuri.world.getCurrentMap().getBody().put(deadBody.getUniqueID(), deadBody);
+        deadBody.setOkazari(null); // so checkCanEatYukkuri returns true
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(deadBody.getUniqueID(), deadBody);
         SimYukkuri.RND = new ConstState(1);
         boolean[] forceEat = { false };
         try {
@@ -8704,14 +8704,14 @@ class FoodLogicTest {
         body.setX(50);
         body.setY(50);
         // No shit or vomit in map
-        // Dead body that passes checkCanEatBody, behind barrier
+        // Dead body that passes checkCanEatYukkuri, behind barrier
         Yukkuri deadBody = WorldTestHelper.createBody();
         deadBody.setX(80);
         deadBody.setY(50);
         deadBody.setDead(true);
-        deadBody.setOkazari(null); // checkCanEatBody: !isPredatorType → !dead? no (isDead=true) → !isbindStalk=true (no stalk) → !isVeryRude && hasOkazari? hasOkazari=false → doesn't return false → isTooHungry=true → returns true
-        // Actually: checkCanEatBody: isPredatorType=false → isDead=true (pass L2027) → isbindStalk=false (pass) → !isVeryRude && hasOkazari(null=false)? false → don't return false → intelligence=AVERAGE (not FOOL) → findSick? likely false → return true
-        SimYukkuri.world.getCurrentMap().getBody().put(deadBody.getUniqueID(), deadBody);
+        deadBody.setOkazari(null); // checkCanEatYukkuri: !isPredatorType → !dead? no (isDead=true) → !isbindStalk=true (no stalk) → !isVeryRude && hasOkazari? hasOkazari=false → doesn't return false → isTooHungry=true → returns true
+        // Actually: checkCanEatYukkuri: isPredatorType=false → isDead=true (pass L2027) → isbindStalk=false (pass) → !isVeryRude && hasOkazari(null=false)? false → don't return false → intelligence=AVERAGE (not FOOL) → findSick? likely false → return true
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(deadBody.getUniqueID(), deadBody);
         // Place barrier between UnunSlave and dead body
         setWallMapBarrier(65, 50);
         SimYukkuri.RND = new ConstState(1);
@@ -8733,11 +8733,11 @@ class FoodLogicTest {
     void testCheckTakeout_FoodOnFavBed_L1993() {
         // L1991-1993: food on fav bed → oExFav.checkHitObj(foodOnMyBed)=true → return false
         body.setHungry(body.getHungryLimit() / 2); // not veryHungry
-        // Set up partner so org.simyukkuri.util.BodyRegistry.getBodyInstance(partner)!=null
+        // Set up partner so org.simyukkuri.util.YukkuriLookup.getYukkuriById(partner)!=null
         Yukkuri partner = WorldTestHelper.createBody();
         partner.setX(200);
         partner.setY(200);
-        SimYukkuri.world.getCurrentMap().getBody().put(partner.getUniqueID(), partner);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(partner.getUniqueID(), partner);
         body.setPartner(partner.getUniqueID());
         // Fav bed at specific position
         Bed favBed = new Bed(300, 300, 0);
@@ -8778,7 +8778,7 @@ class FoodLogicTest {
         Yukkuri partner = WorldTestHelper.createBody();
         partner.setX(200);
         partner.setY(200);
-        SimYukkuri.world.getCurrentMap().getBody().put(partner.getUniqueID(), partner);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(partner.getUniqueID(), partner);
         body.setPartner(partner.getUniqueID());
         // Fav bed at far position - keep colW/colH=0 (default) so checkHitObj returns false for all foods
         // (avoids L1993 early return, so we can reach L2001 bed loop)
@@ -8828,7 +8828,7 @@ class FoodLogicTest {
         plantBody.setX(body.getX() + 5); // close
         plantBody.setY(body.getY());
         plantBody.setBurialState(BurialState.ALL); // buried ALL → stalk is valid food candidate
-        SimYukkuri.world.getCurrentMap().getBody().put(plantBody.getUniqueID(), plantBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(plantBody.getUniqueID(), plantBody);
         // Create stalk bound to plant body - stalk constructor auto-adds to stalk map
         Stalk stalk = new Stalk(plantBody.getX(), plantBody.getY(), 0);
         stalk.setPlantYukkuri(plantBody.getUniqueID());
@@ -9071,19 +9071,19 @@ class FoodLogicTest {
         // L968=true: prey(CHILD) < predator(ADULT) → L970 if-body 実行
         // L970: minDistance(EYESIGHT≫distance) > distance = true → found=prey
         // body(Marisa) を除去して prey だけ残す
-        SimYukkuri.world.getCurrentMap().getBody().remove(body.getUniqueID());
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().remove(body.getUniqueID());
 
         org.simyukkuri.entity.core.living.yukkuri.impl.Remirya remirya = new org.simyukkuri.entity.core.living.yukkuri.impl.Remirya();
         remirya.setX(100);
         remirya.setY(100);
         remirya.setAgeState(org.simyukkuri.enums.AgeState.ADULT);
-        SimYukkuri.world.getCurrentMap().getBody().put(remirya.getUniqueID(), remirya);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(remirya.getUniqueID(), remirya);
 
         org.simyukkuri.entity.core.living.yukkuri.impl.Reimu prey = new org.simyukkuri.entity.core.living.yukkuri.impl.Reimu();
         prey.setX(110);
         prey.setY(110);
         prey.setAgeState(org.simyukkuri.enums.AgeState.CHILD);
-        SimYukkuri.world.getCurrentMap().getBody().put(prey.getUniqueID(), prey);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(prey.getUniqueID(), prey);
 
         Entity result = FoodLogic.searchFoodPredetor(remirya, new boolean[]{false});
         assertEquals(prey, result);
@@ -9092,25 +9092,25 @@ class FoodLogicTest {
     @Test
     void testSearchFoodPredetor_AdultPredator_TwoChildPrey_CloserWins() {
         // L970: 2体の CHILD prey → minDistance > distance(2体目) → found 上書き
-        SimYukkuri.world.getCurrentMap().getBody().remove(body.getUniqueID());
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().remove(body.getUniqueID());
 
         org.simyukkuri.entity.core.living.yukkuri.impl.Remirya remirya = new org.simyukkuri.entity.core.living.yukkuri.impl.Remirya();
         remirya.setX(100);
         remirya.setY(100);
         remirya.setAgeState(org.simyukkuri.enums.AgeState.ADULT);
-        SimYukkuri.world.getCurrentMap().getBody().put(remirya.getUniqueID(), remirya);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(remirya.getUniqueID(), remirya);
 
         org.simyukkuri.entity.core.living.yukkuri.impl.Reimu prey1 = new org.simyukkuri.entity.core.living.yukkuri.impl.Reimu();
         prey1.setX(150);
         prey1.setY(150);
         prey1.setAgeState(org.simyukkuri.enums.AgeState.CHILD);
-        SimYukkuri.world.getCurrentMap().getBody().put(prey1.getUniqueID(), prey1);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(prey1.getUniqueID(), prey1);
 
         org.simyukkuri.entity.core.living.yukkuri.impl.Reimu prey2 = new org.simyukkuri.entity.core.living.yukkuri.impl.Reimu();
         prey2.setX(110);
         prey2.setY(110);
         prey2.setAgeState(org.simyukkuri.enums.AgeState.CHILD);
-        SimYukkuri.world.getCurrentMap().getBody().put(prey2.getUniqueID(), prey2);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(prey2.getUniqueID(), prey2);
 
         Entity result = FoodLogic.searchFoodPredetor(remirya, new boolean[]{false});
         // 近い prey2 が選ばれる (minDistance>distance 分岐で上書き)
@@ -9119,22 +9119,22 @@ class FoodLogicTest {
 
     @Test
     void testSearchFoodPredetor_AdultPredator_BabyPrey_SmallerSize_UpdatesFound() {
-        // L970 右辺: d.getBodyAgeState().ordinal() < size で既存 found より小さいのを優先
+        // L970 右辺: d.getAgeState().ordinal() < size で既存 found より小さいのを優先
         // 最初 CHILD prey → found, size=1; 次に BABY prey → ordinal(0) < size(1) → 上書き
-        SimYukkuri.world.getCurrentMap().getBody().remove(body.getUniqueID());
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().remove(body.getUniqueID());
 
         org.simyukkuri.entity.core.living.yukkuri.impl.Remirya remirya = new org.simyukkuri.entity.core.living.yukkuri.impl.Remirya();
         remirya.setX(100);
         remirya.setY(100);
         remirya.setAgeState(org.simyukkuri.enums.AgeState.ADULT);
-        SimYukkuri.world.getCurrentMap().getBody().put(remirya.getUniqueID(), remirya);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(remirya.getUniqueID(), remirya);
 
         // 近い CHILD prey (距離小→minDistance設定)
         org.simyukkuri.entity.core.living.yukkuri.impl.Reimu childPrey = new org.simyukkuri.entity.core.living.yukkuri.impl.Reimu();
         childPrey.setX(105);
         childPrey.setY(105);
         childPrey.setAgeState(org.simyukkuri.enums.AgeState.CHILD);
-        SimYukkuri.world.getCurrentMap().getBody().put(childPrey.getUniqueID(), childPrey);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(childPrey.getUniqueID(), childPrey);
 
         // 遠い BABY prey (CHILD より距離大だが ordinal<size) → L970 右辺 true → 上書き
         // 座標は Barrier.wallMap(152x152) 範囲内に収める
@@ -9142,7 +9142,7 @@ class FoodLogicTest {
         babyPrey.setX(115);
         babyPrey.setY(115);
         babyPrey.setAgeState(org.simyukkuri.enums.AgeState.BABY);
-        SimYukkuri.world.getCurrentMap().getBody().put(babyPrey.getUniqueID(), babyPrey);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(babyPrey.getUniqueID(), babyPrey);
 
         Entity result = FoodLogic.searchFoodPredetor(remirya, new boolean[]{false});
         // BABY が最終的に選ばれる (ordinal < size で優先)
@@ -9212,7 +9212,7 @@ class FoodLogicTest {
     void testSearchFoodPredetor_STALK_Adult_NotRude_Raper_FlagTrue() {
         // L1042: predator + STALK + !isBaby + !isRude + !isVeryHungry + isRaper=true → flag=true
         // hungry=100 → isVeryHungry=false (hungry>0) → L1039 skip → L1042 評価
-        SimYukkuri.world.getCurrentMap().getBody().remove(body.getUniqueID());
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().remove(body.getUniqueID());
         org.simyukkuri.entity.core.living.yukkuri.impl.Remirya remirya = new org.simyukkuri.entity.core.living.yukkuri.impl.Remirya();
         remirya.setX(100);
         remirya.setY(100);
@@ -9220,7 +9220,7 @@ class FoodLogicTest {
         remirya.setHungry(100); // isVeryHungry=false
         remirya.setRaper(true);
         // isRude=false (default attitude=AVERAGE)
-        SimYukkuri.world.getCurrentMap().getBody().put(remirya.getUniqueID(), remirya);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(remirya.getUniqueID(), remirya);
         Food food = new Food(110, 110, Food.FoodType.STALK.ordinal());
         SimYukkuri.world.getCurrentMap().getFood().put(food.getObjId(), food);
         Entity result = FoodLogic.searchFoodPredetor(remirya, new boolean[]{false});
@@ -9231,14 +9231,14 @@ class FoodLogicTest {
     void testSearchFoodPredetor_STALK_Rude_NotSoHungry_L1042Skip() {
         // L1042: isRude=true → !isRude=false → else if skip
         // L1036前提: isRude=true && isSoHungry=false(hungry=5000>1920) → false → L1042評価
-        SimYukkuri.world.getCurrentMap().getBody().remove(body.getUniqueID());
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().remove(body.getUniqueID());
         org.simyukkuri.entity.core.living.yukkuri.impl.Remirya remirya = new org.simyukkuri.entity.core.living.yukkuri.impl.Remirya();
         remirya.setX(100);
         remirya.setY(100);
         remirya.setAgeState(AgeState.ADULT);
         remirya.setHungry(5000); // isSoHungry=false(>1920), isVeryHungry=false(>0)
         remirya.setAttitude(Attitude.SHITHEAD); // isRude=true
-        SimYukkuri.world.getCurrentMap().getBody().put(remirya.getUniqueID(), remirya);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(remirya.getUniqueID(), remirya);
         new Food(110, 110, Food.FoodType.STALK.ordinal());
         Entity result = FoodLogic.searchFoodPredetor(remirya, new boolean[]{false});
         assertNull(result);
@@ -9248,14 +9248,14 @@ class FoodLogicTest {
     void testSearchFoodPredetor_STALK_NotRude_NotRaper_L1042Skip() {
         // L1042: !isRude=true, isRaper=false → else if false
         // L1039前提: !isRude=true && isVeryHungry=false(hungry=5000>0) → false → L1042評価
-        SimYukkuri.world.getCurrentMap().getBody().remove(body.getUniqueID());
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().remove(body.getUniqueID());
         org.simyukkuri.entity.core.living.yukkuri.impl.Remirya remirya = new org.simyukkuri.entity.core.living.yukkuri.impl.Remirya();
         remirya.setX(100);
         remirya.setY(100);
         remirya.setAgeState(AgeState.ADULT);
         remirya.setHungry(5000); // isVeryHungry=false, isSoHungry=false
         // isRude=false (AVERAGE default), isRaper=false (default)
-        SimYukkuri.world.getCurrentMap().getBody().put(remirya.getUniqueID(), remirya);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(remirya.getUniqueID(), remirya);
         new Food(110, 110, Food.FoodType.STALK.ordinal());
         Entity result = FoodLogic.searchFoodPredetor(remirya, new boolean[]{false});
         assertNull(result);
@@ -9266,7 +9266,7 @@ class FoodLogicTest {
     @Test
     void testSearchFoodPredetor_SWEETS_TooFull_Normal_ForceEat() {
         // L1057: predator + SWEETS + isTooFull=true + !isOverEating + isNormal=true → flag=true
-        SimYukkuri.world.getCurrentMap().getBody().remove(body.getUniqueID());
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().remove(body.getUniqueID());
         org.simyukkuri.entity.core.living.yukkuri.impl.Remirya remirya = new org.simyukkuri.entity.core.living.yukkuri.impl.Remirya();
         remirya.setX(100);
         remirya.setY(100);
@@ -9274,7 +9274,7 @@ class FoodLogicTest {
         // ADULT hungryLimitBase[2]=9600 → setHungry(10000) → isTooFull=true, 10000<9600*1.3=12480 → !isOverEating=true
         remirya.setHungry(10000);
         // attitude=AVERAGE(default) → isNormal=true
-        SimYukkuri.world.getCurrentMap().getBody().put(remirya.getUniqueID(), remirya);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(remirya.getUniqueID(), remirya);
         Food food = new Food(110, 110, Food.FoodType.SWEETS1.ordinal());
         SimYukkuri.world.getCurrentMap().getFood().put(food.getObjId(), food);
         boolean[] forceEat = {false};
@@ -9286,13 +9286,13 @@ class FoodLogicTest {
     void testSearchFoodPredetor_SWEETS_OverEating_NoForceEat() {
         // L1057: isOverEating=true → else if skip → forceEat=false
         // hungry=15000 → isTooFull=true(>=9600), isOverEating=true(>=12480)
-        SimYukkuri.world.getCurrentMap().getBody().remove(body.getUniqueID());
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().remove(body.getUniqueID());
         org.simyukkuri.entity.core.living.yukkuri.impl.Remirya remirya = new org.simyukkuri.entity.core.living.yukkuri.impl.Remirya();
         remirya.setX(100);
         remirya.setY(100);
         remirya.setAgeState(AgeState.ADULT);
         remirya.setHungry(15000);
-        SimYukkuri.world.getCurrentMap().getBody().put(remirya.getUniqueID(), remirya);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(remirya.getUniqueID(), remirya);
         new Food(110, 110, Food.FoodType.SWEETS1.ordinal());
         boolean[] forceEat = {false};
         FoodLogic.searchFoodPredetor(remirya, forceEat);
@@ -9302,14 +9302,14 @@ class FoodLogicTest {
     @Test
     void testSearchFoodPredetor_SWEETS_TooFull_Rude_ForceEat() {
         // L1057: isRude=true → (isRude||isNormal)=true → forceEat=true
-        SimYukkuri.world.getCurrentMap().getBody().remove(body.getUniqueID());
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().remove(body.getUniqueID());
         org.simyukkuri.entity.core.living.yukkuri.impl.Remirya remirya = new org.simyukkuri.entity.core.living.yukkuri.impl.Remirya();
         remirya.setX(100);
         remirya.setY(100);
         remirya.setAgeState(AgeState.ADULT);
         remirya.setHungry(10000); // isTooFull=true, !isOverEating=true
         remirya.setAttitude(Attitude.SHITHEAD); // isRude=true
-        SimYukkuri.world.getCurrentMap().getBody().put(remirya.getUniqueID(), remirya);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(remirya.getUniqueID(), remirya);
         new Food(110, 110, Food.FoodType.SWEETS1.ordinal());
         boolean[] forceEat = {false};
         FoodLogic.searchFoodPredetor(remirya, forceEat);
@@ -9319,14 +9319,14 @@ class FoodLogicTest {
     @Test
     void testSearchFoodPredetor_SWEETS_TooFull_Nice_NoForceEat() {
         // L1057: NICE → !isRude && !isNormal → condition false → forceEat=false
-        SimYukkuri.world.getCurrentMap().getBody().remove(body.getUniqueID());
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().remove(body.getUniqueID());
         org.simyukkuri.entity.core.living.yukkuri.impl.Remirya remirya = new org.simyukkuri.entity.core.living.yukkuri.impl.Remirya();
         remirya.setX(100);
         remirya.setY(100);
         remirya.setAgeState(AgeState.ADULT);
         remirya.setHungry(10000); // isTooFull=true, !isOverEating=true
         remirya.setAttitude(Attitude.NICE); // !isRude, !isNormal
-        SimYukkuri.world.getCurrentMap().getBody().put(remirya.getUniqueID(), remirya);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(remirya.getUniqueID(), remirya);
         new Food(110, 110, Food.FoodType.SWEETS1.ordinal());
         boolean[] forceEat = {false};
         FoodLogic.searchFoodPredetor(remirya, forceEat);
@@ -9356,7 +9356,7 @@ class FoodLogicTest {
         plant.setX(100);
         plant.setY(100);
         plant.setBurialState(BurialState.NEARLY_ALL);
-        SimYukkuri.world.getCurrentMap().getBody().put(plant.getUniqueID(), plant);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(plant.getUniqueID(), plant);
 
         Stalk stalk = new Stalk(100, 100, 0);
         stalk.setAmount(100);
@@ -9378,7 +9378,7 @@ class FoodLogicTest {
         plant.setY(100);
         plant.setBurialState(BurialState.NEARLY_ALL);
         plant.setOkazari(new Okazari(plant, Okazari.OkazariType.DEFAULT));
-        SimYukkuri.world.getCurrentMap().getBody().put(plant.getUniqueID(), plant);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(plant.getUniqueID(), plant);
 
         Stalk stalk = new Stalk(100, 100, 0);
         stalk.setAmount(100);
@@ -9423,20 +9423,20 @@ class FoodLogicTest {
     @Test
     void testSearchFoodPredetor_Found3Food_Found_WISE_PrioritizesFood() {
         // L1090: found3(food)!=null, found(prey)!=null, WISE → found=food
-        SimYukkuri.world.getCurrentMap().getBody().remove(body.getUniqueID());
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().remove(body.getUniqueID());
         org.simyukkuri.entity.core.living.yukkuri.impl.Remirya remirya = new org.simyukkuri.entity.core.living.yukkuri.impl.Remirya();
         remirya.setX(100);
         remirya.setY(100);
         remirya.setAgeState(AgeState.ADULT);
         remirya.setHungry(5000); // !isTooFull → SWEETS: flag=true
         remirya.setIntelligence(Intelligence.WISE);
-        SimYukkuri.world.getCurrentMap().getBody().put(remirya.getUniqueID(), remirya);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(remirya.getUniqueID(), remirya);
         // prey CHILD at (130,130): distance=1800 → found=prey, minDistance=1800
         org.simyukkuri.entity.core.living.yukkuri.impl.Reimu prey = new org.simyukkuri.entity.core.living.yukkuri.impl.Reimu();
         prey.setX(130);
         prey.setY(130);
         prey.setAgeState(AgeState.CHILD);
-        SimYukkuri.world.getCurrentMap().getBody().put(prey.getUniqueID(), prey);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(prey.getUniqueID(), prey);
         // SWEETS food near (110,110): distance=200 < 1800 → flag=true → found3=food
         Food food = new Food(110, 110, Food.FoodType.SWEETS1.ordinal());
         Entity result = FoodLogic.searchFoodPredetor(remirya, new boolean[]{false});
@@ -9446,7 +9446,7 @@ class FoodLogicTest {
     @Test
     void testSearchFoodPredetor_Found3Food_Found_Damaged_PrioritizesFood() {
         // L1090: found3(food)!=null, found(prey)!=null, !WISE, isDamaged=true → found=food
-        SimYukkuri.world.getCurrentMap().getBody().remove(body.getUniqueID());
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().remove(body.getUniqueID());
         org.simyukkuri.entity.core.living.yukkuri.impl.Remirya remirya = new org.simyukkuri.entity.core.living.yukkuri.impl.Remirya();
         remirya.setX(100);
         remirya.setY(100);
@@ -9455,12 +9455,12 @@ class FoodLogicTest {
         remirya.setIntelligence(Intelligence.AVERAGE); // !WISE
         WorldTestHelper.setDamage(remirya,
                 remirya.getDamageLimitBase()[AgeState.ADULT.ordinal()] / 2 + 1);
-        SimYukkuri.world.getCurrentMap().getBody().put(remirya.getUniqueID(), remirya);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(remirya.getUniqueID(), remirya);
         org.simyukkuri.entity.core.living.yukkuri.impl.Reimu prey = new org.simyukkuri.entity.core.living.yukkuri.impl.Reimu();
         prey.setX(130);
         prey.setY(130);
         prey.setAgeState(AgeState.CHILD);
-        SimYukkuri.world.getCurrentMap().getBody().put(prey.getUniqueID(), prey);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(prey.getUniqueID(), prey);
         Food food = new Food(110, 110, Food.FoodType.SWEETS1.ordinal());
         Entity result = FoodLogic.searchFoodPredetor(remirya, new boolean[]{false});
         assertEquals(food, result);
@@ -9506,12 +9506,12 @@ class FoodLogicTest {
         body.setEyesightBase(100);
         // food/stalk/vomit なし → found=null → 死体ループへ
         // L867 null分岐: d==null → null check true → continue
-        SimYukkuri.world.getCurrentMap().getBody().put(99999, null);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(99999, null);
         org.simyukkuri.entity.core.living.yukkuri.impl.Reimu deadBody = new org.simyukkuri.entity.core.living.yukkuri.impl.Reimu();
         deadBody.setX(105); deadBody.setY(100); // distance=25 < 100 (視野内)
         deadBody.setDead(true);
         deadBody.setRemoved(true); // isRemoved=true → L867 continue (L885,L886 の前にスキップ)
-        SimYukkuri.world.getCurrentMap().getBody().put(deadBody.getUniqueID(), deadBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(deadBody.getUniqueID(), deadBody);
         Entity result = FoodLogic.searchFoodStandard(body, new boolean[]{false});
         assertNull(result);
     }
@@ -9532,7 +9532,7 @@ class FoodLogicTest {
         Stalk s = new Stalk();
         SimYukkuri.world.getCurrentMap().getStalk().remove(s.getObjId()); // 茎ループから除外
         deadBody.setBindStalk(s); // isbindStalk=true → L883 continue
-        SimYukkuri.world.getCurrentMap().getBody().put(deadBody.getUniqueID(), deadBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(deadBody.getUniqueID(), deadBody);
         Entity result = FoodLogic.searchFoodStandard(body, new boolean[]{false});
         assertNull(result);
     }
@@ -9548,8 +9548,8 @@ class FoodLogicTest {
         org.simyukkuri.entity.core.living.yukkuri.impl.Reimu deadBody = new org.simyukkuri.entity.core.living.yukkuri.impl.Reimu();
         deadBody.setX(115); deadBody.setY(100); // distance=225 > 100 → L886: 100>225 = false
         deadBody.setDead(true);
-        deadBody.setOkazari(null); // hasOkazari()=false → checkCanEatBody が true を返してL886に到達
-        SimYukkuri.world.getCurrentMap().getBody().put(deadBody.getUniqueID(), deadBody);
+        deadBody.setOkazari(null); // hasOkazari()=false → checkCanEatYukkuri が true を返してL886に到達
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(deadBody.getUniqueID(), deadBody);
         Entity result = FoodLogic.searchFoodStandard(body, new boolean[]{false});
         assertNull(result);
     }
@@ -9596,7 +9596,7 @@ class FoodLogicTest {
         plantBody.setX(105); plantBody.setY(100);
         plantBody.setBurialState(BurialState.NEARLY_ALL);
         // plantBody はデフォルトで hasOkazari()=true (Yukkuri コンストラクタで setOkazari(DEFAULT))
-        SimYukkuri.world.getCurrentMap().getBody().put(plantBody.getUniqueID(), plantBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(plantBody.getUniqueID(), plantBody);
         Stalk stalk = new Stalk(105, 100, 0);
         stalk.setPlantYukkuri(plantBody); // plantYukkuri = plantBody.uniqueID
         Entity result2 = FoodLogic.searchFoodStandard(body, new boolean[]{false});
@@ -9650,11 +9650,11 @@ class FoodLogicTest {
         shit.setX(110); shit.setY(100); // body(100,100)からdistance=100
         SimYukkuri.world.getCurrentMap().getShit().put(shit.getObjId(), shit);
         // null entry → bodyOther==null → L1223 null ブランチ
-        SimYukkuri.world.getCurrentMap().getBody().put(99997, null);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(99997, null);
         // removed body → bodyOther.isRemoved()=true → L1223 isRemoved ブランチ
         org.simyukkuri.entity.core.living.yukkuri.impl.Reimu removed = new org.simyukkuri.entity.core.living.yukkuri.impl.Reimu();
         removed.setRemoved(true);
-        SimYukkuri.world.getCurrentMap().getBody().put(removed.getUniqueID(), removed);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(removed.getUniqueID(), removed);
         java.lang.reflect.Method m = FoodLogic.class.getDeclaredMethod(
             "searchFoodForUnunSlave", org.simyukkuri.entity.core.living.yukkuri.Yukkuri.class, boolean[].class);
         m.setAccessible(true);
@@ -9719,7 +9719,7 @@ class FoodLogicTest {
     // --- L356: Stalk eating Z>0 かつ p=null → if(p!=null) false (L356 false 分岐) ---
     @Test
     void testCheckFood_StalkEating_ZAbove_NullPlant_L356False() {
-        // Stalk.plantYukkuri=0(default), getBody().get(0)=null → p=null, Z=10 → L352 false → L356 false
+        // Stalk.plantYukkuri=0(default), getYukkuriMap().get(0)=null → p=null, Z=10 → L352 false → L356 false
         body.setAgeState(AgeState.ADULT);
         body.setHungry(5000);
         SimYukkuri.RND = new ConstState(300);
@@ -9742,7 +9742,7 @@ class FoodLogicTest {
         };
         plant.setX(120); plant.setY(100);
         plant.setBurialState(BurialState.ALL);
-        SimYukkuri.world.getCurrentMap().getBody().put(plant.getUniqueID(), plant);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(plant.getUniqueID(), plant);
         // stalk を body と同じ位置に配置
         Stalk stalk = new Stalk(100, 100, 0);
         stalk.setPlantYukkuri(plant.getUniqueID());
@@ -9766,7 +9766,7 @@ class FoodLogicTest {
         plant.setX(120); plant.setY(100);
         plant.setBurialState(BurialState.NEARLY_ALL);
         plant.setOkazari(null); // hasOkazari=false
-        SimYukkuri.world.getCurrentMap().getBody().put(plant.getUniqueID(), plant);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(plant.getUniqueID(), plant);
         Stalk stalk = new Stalk(100, 100, 0);
         stalk.setPlantYukkuri(plant.getUniqueID());
         body.setMoveTargetId(stalk.getObjId());
@@ -9804,19 +9804,19 @@ class FoodLogicTest {
     @Test
     void testSearchFoodPredetor_Found3Food_Found_NotWise_NotDamaged_KeepsPreyAsFound() {
         // L1090: found3(food)!=null, found(prey)!=null, !WISE, !isDamaged → false → found=prey のまま
-        SimYukkuri.world.getCurrentMap().getBody().remove(body.getUniqueID());
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().remove(body.getUniqueID());
         org.simyukkuri.entity.core.living.yukkuri.impl.Remirya remirya = new org.simyukkuri.entity.core.living.yukkuri.impl.Remirya();
         remirya.setX(100); remirya.setY(100);
         remirya.setAgeState(AgeState.ADULT);
         remirya.setHungry(5000); // !isTooFull → SWEETS flag=true
         remirya.setIntelligence(Intelligence.AVERAGE); // !WISE
         // isDamaged=false (default)
-        SimYukkuri.world.getCurrentMap().getBody().put(remirya.getUniqueID(), remirya);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(remirya.getUniqueID(), remirya);
         // prey CHILD at (130,130): dist=(30^2+30^2)=1800 < eyesight → found=prey
         org.simyukkuri.entity.core.living.yukkuri.impl.Reimu prey = new org.simyukkuri.entity.core.living.yukkuri.impl.Reimu();
         prey.setX(130); prey.setY(130);
         prey.setAgeState(AgeState.CHILD);
-        SimYukkuri.world.getCurrentMap().getBody().put(prey.getUniqueID(), prey);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(prey.getUniqueID(), prey);
         // SWEETS1 food at (110,110): dist=200 < 1800 → flag=true → found3=food
         Food food = new Food(110, 110, Food.FoodType.SWEETS1.ordinal());
         Entity result = FoodLogic.searchFoodPredetor(remirya, new boolean[]{false});
@@ -9828,7 +9828,7 @@ class FoodLogicTest {
     @Test
     void testCheckFood_FlyingCriticalFootBake_L422FalseBranch() {
         // L422: isIdiot=false → CRITICAL=true → !canflyCheck()=false → false → searchFoodPredetor へ
-        SimYukkuri.world.getCurrentMap().getBody().remove(body.getUniqueID());
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().remove(body.getUniqueID());
         Remirya remirya = new Remirya();
         remirya.setX(100); remirya.setY(100);
         remirya.setAgeState(AgeState.ADULT);
@@ -9837,7 +9837,7 @@ class FoodLogicTest {
         remirya.setFootBakePeriod(remirya.getDamageLimitBase()[AgeState.ADULT.ordinal()] + 1);
         remirya.setFlyingType(true); // tuneParameters 未呼び出しのため手動設定
         remirya.setHasBraid(true); // canflyCheck = isFlyingType && hasBraid && !dead
-        SimYukkuri.world.getCurrentMap().getBody().put(remirya.getUniqueID(), remirya);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(remirya.getUniqueID(), remirya);
         assertDoesNotThrow(() -> FoodLogic.checkFood(remirya));
     }
 
@@ -9856,13 +9856,13 @@ class FoodLogicTest {
         steamField.setAccessible(true);
         steamField.set(null, true);
         try {
-            SimYukkuri.world.getCurrentMap().getBody().remove(body.getUniqueID());
+            SimYukkuri.world.getCurrentMap().getYukkuriMap().remove(body.getUniqueID());
             Remirya remirya = new Remirya();
             remirya.setX(100); remirya.setY(100);
             remirya.setAgeState(AgeState.ADULT);
             remirya.setHungry(5000);
             remirya.setPredatorType(PredatorType.BITE); // isPredatorType=true
-            SimYukkuri.world.getCurrentMap().getBody().put(remirya.getUniqueID(), remirya);
+            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(remirya.getUniqueID(), remirya);
             // L426: isPredatorType=true, !isPredatorSteam=false → false → searchFoodStandard
             assertDoesNotThrow(() -> FoodLogic.checkFood(remirya));
         } finally {
@@ -9944,7 +9944,7 @@ class FoodLogicTest {
         org.simyukkuri.entity.core.living.yukkuri.Yukkuri p = WorldTestHelper.createBody();
         p.setX(100); p.setY(100);
         p.setBurialState(org.simyukkuri.enums.BurialState.ALL); // B1: != ALL が false → skip B1
-        SimYukkuri.world.getCurrentMap().getBody().put(p.getUniqueID(), p);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(p.getUniqueID(), p);
         // Stalk を body と同じ位置に配置
         Stalk stalk = new Stalk(100, 100, 0);
         stalk.setPlantYukkuri(p); // p が関連ゆっくり
@@ -9963,7 +9963,7 @@ class FoodLogicTest {
         org.simyukkuri.entity.core.living.yukkuri.Yukkuri p = WorldTestHelper.createBody();
         p.setX(100); p.setY(100);
         // BaryState=NONE (デフォルト) → B1 条件 true (BaryNONE != ALL=true, !(false)=true) → return false
-        SimYukkuri.world.getCurrentMap().getBody().put(p.getUniqueID(), p);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(p.getUniqueID(), p);
         Stalk stalk = new Stalk(100, 100, 0);
         stalk.setPlantYukkuri(p);
         body.setMoveTargetId(stalk.getObjId());
@@ -9995,7 +9995,7 @@ class FoodLogicTest {
         tarinai.setX(100); tarinai.setY(100);
         tarinai.setHungry(0); // very hungry → isFull=false
         tarinai.setEyesightBase(50_000_000); // 大きな視野
-        SimYukkuri.world.getCurrentMap().getBody().put(tarinai.getUniqueID(), tarinai);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(tarinai.getUniqueID(), tarinai);
         // Food1: 近い (distance=1)
         Food f1 = new Food(101, 100, Food.FoodType.SWEETS1.ordinal());
         // Food2: 遠い (distance=20000 > 1) → L569 false
@@ -10011,7 +10011,7 @@ class FoodLogicTest {
         tarinai.setX(100); tarinai.setY(100);
         tarinai.setHungry(0);
         tarinai.setEyesightBase(50_000_000);
-        SimYukkuri.world.getCurrentMap().getBody().put(tarinai.getUniqueID(), tarinai);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(tarinai.getUniqueID(), tarinai);
         // Food (101,100): dist=1 → minDistance=1
         Food f1 = new Food(101, 100, Food.FoodType.SWEETS1.ordinal());
         // Stalk (200,200): dist=20000 > 1 → L609 false
@@ -10020,14 +10020,14 @@ class FoodLogicTest {
         Vomit vomit = new Vomit();
         vomit.setX(300); vomit.setY(100);
         SimYukkuri.world.getCurrentMap().getVomit().put(vomit.getObjId(), vomit);
-        // 死体 Yukkuri (400,100): dist=90000 > 1 → checkCanEatBody=true → L637 false
+        // 死体 Yukkuri (400,100): dist=90000 > 1 → checkCanEatYukkuri=true → L637 false
         org.simyukkuri.entity.core.living.yukkuri.impl.Reimu deadBody = new org.simyukkuri.entity.core.living.yukkuri.impl.Reimu() {
             @Override public int getCollisionX() { return 10; }
         };
         deadBody.setX(400); deadBody.setY(100);
         deadBody.setDead(true);
-        deadBody.setOkazari(null); // hasOkazari=false → checkCanEatBody=true
-        SimYukkuri.world.getCurrentMap().getBody().put(deadBody.getUniqueID(), deadBody);
+        deadBody.setOkazari(null); // hasOkazari=false → checkCanEatYukkuri=true
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(deadBody.getUniqueID(), deadBody);
         // Shit (500,100): dist=160000 > 1 → L649 false
         Shit shit = new Shit();
         shit.setX(500); shit.setY(100);
@@ -10168,7 +10168,7 @@ class FoodLogicTest {
         SimYukkuri.RND = new ConstState(5000);
         org.simyukkuri.entity.core.living.yukkuri.impl.Reimu livePrey = new org.simyukkuri.entity.core.living.yukkuri.impl.Reimu();
         livePrey.setX(100); livePrey.setY(100);
-        SimYukkuri.world.getCurrentMap().getBody().put(livePrey.getUniqueID(), livePrey);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(livePrey.getUniqueID(), livePrey);
         body.setMoveTargetId(livePrey.getObjId());
         body.setToFood(true);
         assertFalse(FoodLogic.checkFood(body));
@@ -10181,15 +10181,15 @@ class FoodLogicTest {
         remirya.setX(100); remirya.setY(100);
         remirya.setHungry(0);
         remirya.setAgeState(AgeState.ADULT);
-        SimYukkuri.world.getCurrentMap().getBody().put(remirya.getUniqueID(), remirya);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(remirya.getUniqueID(), remirya);
 
         org.simyukkuri.entity.core.living.yukkuri.impl.Reimu livePrey = new org.simyukkuri.entity.core.living.yukkuri.impl.Reimu();
         livePrey.setX(100); livePrey.setY(100);
-        SimYukkuri.world.getCurrentMap().getBody().put(livePrey.getUniqueID(), livePrey);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(livePrey.getUniqueID(), livePrey);
 
         org.simyukkuri.entity.core.living.yukkuri.impl.Reimu mother = new org.simyukkuri.entity.core.living.yukkuri.impl.Reimu();
         mother.setRemoved(true);
-        SimYukkuri.world.getCurrentMap().getBody().put(mother.getUniqueID(), mother);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(mother.getUniqueID(), mother);
         livePrey.setParents(new int[]{-1, mother.getUniqueID()});
 
         SimYukkuri.RND = new ConstState(0); // nextInt(3)=0 → true
@@ -10211,7 +10211,7 @@ class FoodLogicTest {
         deadPrey.setX(100); deadPrey.setY(100);
         deadPrey.setDead(true);
         deadPrey.forceSetSick();
-        SimYukkuri.world.getCurrentMap().getBody().put(deadPrey.getUniqueID(), deadPrey);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(deadPrey.getUniqueID(), deadPrey);
 
         body.setMoveTargetId(deadPrey.getObjId());
         body.setToFood(true);
@@ -10247,7 +10247,7 @@ class FoodLogicTest {
         ConstState rng = new ConstState(5000);
         rng.setFixedBoolean(false); // nextBoolean=false → condition false → don't return
         SimYukkuri.RND = rng;
-        SimYukkuri.world.getCurrentMap().getBody().put(painBody.getUniqueID(), painBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(painBody.getUniqueID(), painBody);
         assertDoesNotThrow(() -> FoodLogic.checkFood(painBody));
     }
 
@@ -10262,7 +10262,7 @@ class FoodLogicTest {
         org.simyukkuri.entity.core.living.yukkuri.impl.Reimu livePrey = new org.simyukkuri.entity.core.living.yukkuri.impl.Reimu();
         livePrey.setX(100); livePrey.setY(100);
         // isUnBirth=false (default)
-        SimYukkuri.world.getCurrentMap().getBody().put(livePrey.getUniqueID(), livePrey);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(livePrey.getUniqueID(), livePrey);
         body.setMoveTargetId(livePrey.getObjId());
         body.setToFood(true);
         assertFalse(FoodLogic.checkFood(body));
@@ -10278,7 +10278,7 @@ class FoodLogicTest {
         deadPrey.setX(100); deadPrey.setY(100);
         deadPrey.setDead(true);
         deadPrey.forceSetSick(); // isSick=true
-        SimYukkuri.world.getCurrentMap().getBody().put(deadPrey.getUniqueID(), deadPrey);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(deadPrey.getUniqueID(), deadPrey);
         body.setMoveTargetId(deadPrey.getObjId());
         body.setToFood(true);
         assertDoesNotThrow(() -> FoodLogic.checkFood(body));
@@ -10321,7 +10321,7 @@ class FoodLogicTest {
         idiot.setX(100); idiot.setY(100);
         idiot.setAgeState(AgeState.ADULT);
         idiot.setHungry(0);
-        SimYukkuri.world.getCurrentMap().getBody().put(idiot.getUniqueID(), idiot);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(idiot.getUniqueID(), idiot);
         SimYukkuri.RND = new ConstState(5000);
         Vomit vomit = new Vomit();
         vomit.setX(105); vomit.setY(105);
@@ -10356,33 +10356,33 @@ class FoodLogicTest {
 
     @Test
     void testEatFood_Poor_Shit_KaiyuTrue_L1397() {
-        body.setBodyRank(BodyRank.KAIYU);
+        body.setRank(YukkuriRank.KAIYU);
         SimYukkuri.RND = new ConstState(5000);
         assertDoesNotThrow(() -> FoodLogic.eatFood(body, Food.FoodType.SHIT, 100));
     }
 
     @Test
     void testEatFood_Poor_Bitter_KaiyuDiarrhea_L1417() {
-        body.setBodyRank(BodyRank.KAIYU); // getDiarrhea()=true for KAIYU
+        body.setRank(YukkuriRank.KAIYU); // getDiarrhea()=true for KAIYU
         SimYukkuri.RND = new ConstState(5000);
         assertDoesNotThrow(() -> FoodLogic.eatFood(body, Food.FoodType.BITTER, 100));
     }
 
     @Test
     void testEatFood_Poor_Body_KaiyuTrue_L1476() {
-        body.setBodyRank(BodyRank.KAIYU);
+        body.setRank(YukkuriRank.KAIYU);
         assertDoesNotThrow(() -> FoodLogic.eatFood(body, Food.FoodType.BODY, 100));
     }
 
     @Test
     void testEatFood_Poor_Stalk_KaiyuTrue_L1488() {
-        body.setBodyRank(BodyRank.KAIYU);
+        body.setRank(YukkuriRank.KAIYU);
         assertDoesNotThrow(() -> FoodLogic.eatFood(body, Food.FoodType.STALK, 100));
     }
 
     @Test
     void testEatFood_Poor_Waste_KaiyuTrue_L1525() {
-        body.setBodyRank(BodyRank.KAIYU);
+        body.setRank(YukkuriRank.KAIYU);
         assertDoesNotThrow(() -> FoodLogic.eatFood(body, Food.FoodType.WASTE, 100));
     }
 
@@ -10391,7 +10391,7 @@ class FoodLogicTest {
     @Test
     void testEatFood_Normal_Shit_KaiyuTrue_L1558() {
         body.setTang(400);
-        body.setBodyRank(BodyRank.KAIYU);
+        body.setRank(YukkuriRank.KAIYU);
         SimYukkuri.RND = new ConstState(5000);
         assertDoesNotThrow(() -> FoodLogic.eatFood(body, Food.FoodType.SHIT, 100));
     }
@@ -10399,7 +10399,7 @@ class FoodLogicTest {
     @Test
     void testEatFood_Normal_Bitter_KaiyuDiarrhea_L1578() {
         body.setTang(400);
-        body.setBodyRank(BodyRank.KAIYU);
+        body.setRank(YukkuriRank.KAIYU);
         SimYukkuri.RND = new ConstState(5000);
         assertDoesNotThrow(() -> FoodLogic.eatFood(body, Food.FoodType.BITTER, 100));
     }
@@ -10415,21 +10415,21 @@ class FoodLogicTest {
     @Test
     void testEatFood_Normal_Body_KaiyuTrue_L1639() {
         body.setTang(400);
-        body.setBodyRank(BodyRank.KAIYU);
+        body.setRank(YukkuriRank.KAIYU);
         assertDoesNotThrow(() -> FoodLogic.eatFood(body, Food.FoodType.BODY, 100));
     }
 
     @Test
     void testEatFood_Normal_Stalk_KaiyuTrue_L1651() {
         body.setTang(400);
-        body.setBodyRank(BodyRank.KAIYU);
+        body.setRank(YukkuriRank.KAIYU);
         assertDoesNotThrow(() -> FoodLogic.eatFood(body, Food.FoodType.STALK, 100));
     }
 
     @Test
     void testEatFood_Normal_Waste_KaiyuTrue_L1689() {
         body.setTang(400);
-        body.setBodyRank(BodyRank.KAIYU);
+        body.setRank(YukkuriRank.KAIYU);
         assertDoesNotThrow(() -> FoodLogic.eatFood(body, Food.FoodType.WASTE, 100));
     }
 
@@ -10438,7 +10438,7 @@ class FoodLogicTest {
     @Test
     void testEatFood_Gourmet_Shit_KaiyuTrue_L1723() {
         body.setTang(700);
-        body.setBodyRank(BodyRank.KAIYU);
+        body.setRank(YukkuriRank.KAIYU);
         SimYukkuri.RND = new ConstState(5000);
         assertDoesNotThrow(() -> FoodLogic.eatFood(body, Food.FoodType.SHIT, 100));
     }
@@ -10446,7 +10446,7 @@ class FoodLogicTest {
     @Test
     void testEatFood_Gourmet_Bitter_KaiyuDiarrhea_L1742() {
         body.setTang(700);
-        body.setBodyRank(BodyRank.KAIYU);
+        body.setRank(YukkuriRank.KAIYU);
         SimYukkuri.RND = new ConstState(5000);
         assertDoesNotThrow(() -> FoodLogic.eatFood(body, Food.FoodType.BITTER, 100));
     }
@@ -10462,21 +10462,21 @@ class FoodLogicTest {
     @Test
     void testEatFood_Gourmet_Body_KaiyuTrue_L1807() {
         body.setTang(700);
-        body.setBodyRank(BodyRank.KAIYU);
+        body.setRank(YukkuriRank.KAIYU);
         assertDoesNotThrow(() -> FoodLogic.eatFood(body, Food.FoodType.BODY, 100));
     }
 
     @Test
     void testEatFood_Gourmet_Stalk_KaiyuTrue_L1819() {
         body.setTang(700);
-        body.setBodyRank(BodyRank.KAIYU);
+        body.setRank(YukkuriRank.KAIYU);
         assertDoesNotThrow(() -> FoodLogic.eatFood(body, Food.FoodType.STALK, 100));
     }
 
     @Test
     void testEatFood_Gourmet_Waste_KaiyuTrue_L1857() {
         body.setTang(700);
-        body.setBodyRank(BodyRank.KAIYU);
+        body.setRank(YukkuriRank.KAIYU);
         assertDoesNotThrow(() -> FoodLogic.eatFood(body, Food.FoodType.WASTE, 100));
     }
 
@@ -10496,7 +10496,7 @@ class FoodLogicTest {
     @Test
     void testEatFood_Poor_Shit_NonKaiyu_L1397_FalseBranch() {
         body.setTang(200);
-        body.setBodyRank(BodyRank.NORAYU);
+        body.setRank(YukkuriRank.NORAYU);
         SimYukkuri.RND = new ConstState(5000);
         assertDoesNotThrow(() -> FoodLogic.eatFood(body, Food.FoodType.SHIT, 100));
     }
@@ -10504,7 +10504,7 @@ class FoodLogicTest {
     @Test
     void testEatFood_Poor_Bitter_NonKaiyu_NoDiarrhea_L1417_FalseBranch() {
         body.setTang(200);
-        body.setBodyRank(BodyRank.NORAYU);
+        body.setRank(YukkuriRank.NORAYU);
         body.setLikeBitterFood(false);
         SimYukkuri.RND = new ConstState(5000); // nextInt(5)=4 != 0 → getDiarrhea()=false
         assertDoesNotThrow(() -> FoodLogic.eatFood(body, Food.FoodType.BITTER, 100));
@@ -10513,21 +10513,21 @@ class FoodLogicTest {
     @Test
     void testEatFood_Poor_Body_NonKaiyu_L1476_FalseBranch() {
         body.setTang(200);
-        body.setBodyRank(BodyRank.NORAYU);
+        body.setRank(YukkuriRank.NORAYU);
         assertDoesNotThrow(() -> FoodLogic.eatFood(body, Food.FoodType.BODY, 100));
     }
 
     @Test
     void testEatFood_Poor_Stalk_NonKaiyu_L1488_FalseBranch() {
         body.setTang(200);
-        body.setBodyRank(BodyRank.NORAYU);
+        body.setRank(YukkuriRank.NORAYU);
         assertDoesNotThrow(() -> FoodLogic.eatFood(body, Food.FoodType.STALK, 100));
     }
 
     @Test
     void testEatFood_Poor_Waste_NonKaiyu_L1525_FalseBranch() {
         body.setTang(200);
-        body.setBodyRank(BodyRank.NORAYU);
+        body.setRank(YukkuriRank.NORAYU);
         assertDoesNotThrow(() -> FoodLogic.eatFood(body, Food.FoodType.WASTE, 100));
     }
 
@@ -10535,7 +10535,7 @@ class FoodLogicTest {
     @Test
     void testEatFood_Normal_Shit_NonKaiyu_L1558_FalseBranch() {
         body.setTang(400);
-        body.setBodyRank(BodyRank.NORAYU);
+        body.setRank(YukkuriRank.NORAYU);
         SimYukkuri.RND = new ConstState(5000);
         assertDoesNotThrow(() -> FoodLogic.eatFood(body, Food.FoodType.SHIT, 100));
     }
@@ -10543,7 +10543,7 @@ class FoodLogicTest {
     @Test
     void testEatFood_Normal_Bitter_NonKaiyu_NoDiarrhea_L1578_FalseBranch() {
         body.setTang(400);
-        body.setBodyRank(BodyRank.NORAYU);
+        body.setRank(YukkuriRank.NORAYU);
         body.setLikeBitterFood(false);
         SimYukkuri.RND = new ConstState(5000); // getDiarrhea()=false
         assertDoesNotThrow(() -> FoodLogic.eatFood(body, Food.FoodType.BITTER, 100));
@@ -10552,21 +10552,21 @@ class FoodLogicTest {
     @Test
     void testEatFood_Normal_Body_NonKaiyu_L1639_FalseBranch() {
         body.setTang(400);
-        body.setBodyRank(BodyRank.NORAYU);
+        body.setRank(YukkuriRank.NORAYU);
         assertDoesNotThrow(() -> FoodLogic.eatFood(body, Food.FoodType.BODY, 100));
     }
 
     @Test
     void testEatFood_Normal_Stalk_NonKaiyu_L1651_FalseBranch() {
         body.setTang(400);
-        body.setBodyRank(BodyRank.NORAYU);
+        body.setRank(YukkuriRank.NORAYU);
         assertDoesNotThrow(() -> FoodLogic.eatFood(body, Food.FoodType.STALK, 100));
     }
 
     @Test
     void testEatFood_Normal_Waste_NonKaiyu_L1689_FalseBranch() {
         body.setTang(400);
-        body.setBodyRank(BodyRank.NORAYU);
+        body.setRank(YukkuriRank.NORAYU);
         assertDoesNotThrow(() -> FoodLogic.eatFood(body, Food.FoodType.WASTE, 100));
     }
 
@@ -10574,7 +10574,7 @@ class FoodLogicTest {
     @Test
     void testEatFood_Gourmet_Shit_NonKaiyu_L1723_FalseBranch() {
         body.setTang(700);
-        body.setBodyRank(BodyRank.NORAYU);
+        body.setRank(YukkuriRank.NORAYU);
         SimYukkuri.RND = new ConstState(5000);
         assertDoesNotThrow(() -> FoodLogic.eatFood(body, Food.FoodType.SHIT, 100));
     }
@@ -10582,7 +10582,7 @@ class FoodLogicTest {
     @Test
     void testEatFood_Gourmet_Bitter_NonKaiyu_NoDiarrhea_L1742_FalseBranch() {
         body.setTang(700);
-        body.setBodyRank(BodyRank.NORAYU);
+        body.setRank(YukkuriRank.NORAYU);
         body.setLikeBitterFood(false);
         SimYukkuri.RND = new ConstState(5000); // getDiarrhea()=false
         assertDoesNotThrow(() -> FoodLogic.eatFood(body, Food.FoodType.BITTER, 100));
@@ -10591,21 +10591,21 @@ class FoodLogicTest {
     @Test
     void testEatFood_Gourmet_Body_NonKaiyu_L1807_FalseBranch() {
         body.setTang(700);
-        body.setBodyRank(BodyRank.NORAYU);
+        body.setRank(YukkuriRank.NORAYU);
         assertDoesNotThrow(() -> FoodLogic.eatFood(body, Food.FoodType.BODY, 100));
     }
 
     @Test
     void testEatFood_Gourmet_Stalk_NonKaiyu_L1819_FalseBranch() {
         body.setTang(700);
-        body.setBodyRank(BodyRank.NORAYU);
+        body.setRank(YukkuriRank.NORAYU);
         assertDoesNotThrow(() -> FoodLogic.eatFood(body, Food.FoodType.STALK, 100));
     }
 
     @Test
     void testEatFood_Gourmet_Waste_NonKaiyu_L1857_FalseBranch() {
         body.setTang(700);
-        body.setBodyRank(BodyRank.NORAYU);
+        body.setRank(YukkuriRank.NORAYU);
         assertDoesNotThrow(() -> FoodLogic.eatFood(body, Food.FoodType.WASTE, 100));
     }
 
@@ -10641,12 +10641,12 @@ class FoodLogicTest {
         };
         remirya.setX(100); remirya.setY(100);
         remirya.setHungry(0);
-        SimYukkuri.world.getCurrentMap().getBody().put(remirya.getUniqueID(), remirya);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(remirya.getUniqueID(), remirya);
         Sakuya sakuya = new Sakuya() {
             @Override public int getCollisionX() { return 10; }
         };
         sakuya.setX(110); sakuya.setY(110);
-        SimYukkuri.world.getCurrentMap().getBody().put(sakuya.getUniqueID(), sakuya);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(sakuya.getUniqueID(), sakuya);
         assertDoesNotThrow(() -> FoodLogic.searchFoodPredetor(remirya, new boolean[]{false}));
     }
 
@@ -10659,7 +10659,7 @@ class FoodLogicTest {
         remirya.setX(100); remirya.setY(100);
         remirya.setHungry(0); // hungry=0, but getDamageState()=NONE → !isTooHungry
         remirya.setTang(400); // NORMAL tang
-        SimYukkuri.world.getCurrentMap().getBody().put(remirya.getUniqueID(), remirya);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(remirya.getUniqueID(), remirya);
         new Food(110, 110, Food.FoodType.WASTE.ordinal()); // auto-registered, flag=false → skip
         assertDoesNotThrow(() -> FoodLogic.searchFoodPredetor(remirya, new boolean[]{false}));
     }
@@ -10672,7 +10672,7 @@ class FoodLogicTest {
         };
         remirya.setX(100); remirya.setY(100);
         remirya.setHungry(remirya.getHungryLimit()); // isFull=true
-        SimYukkuri.world.getCurrentMap().getBody().put(remirya.getUniqueID(), remirya);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(remirya.getUniqueID(), remirya);
         new Food(110, 110, Food.FoodType.FOOD.ordinal()); // auto-registered, flag=false (isFull)
         assertDoesNotThrow(() -> FoodLogic.searchFoodPredetor(remirya, new boolean[]{false}));
     }
@@ -10685,7 +10685,7 @@ class FoodLogicTest {
         };
         remirya.setX(100); remirya.setY(100);
         remirya.setHungry(0);
-        SimYukkuri.world.getCurrentMap().getBody().put(remirya.getUniqueID(), remirya);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(remirya.getUniqueID(), remirya);
         // 1st food: close with high looks (SWEETS2 → looks=999)
         new Food(105, 100, Food.FoodType.SWEETS2.ordinal()); // distance small
         // 2nd food: also close but lower looks (BITTER → looks=300) same distance
@@ -10765,14 +10765,14 @@ class FoodLogicTest {
         };
         remirya.setX(100); remirya.setY(100); remirya.setHungry(0);
         remirya.setAttitude(org.simyukkuri.enums.Attitude.SHITHEAD); // isRude=true
-        SimYukkuri.world.getCurrentMap().getBody().put(remirya.getUniqueID(), remirya);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(remirya.getUniqueID(), remirya);
         // dead body with okazari and family → but isRude=true → L993 false (skip しない)
         org.simyukkuri.entity.core.living.yukkuri.Yukkuri deadBody = new org.simyukkuri.entity.core.living.yukkuri.impl.Marisa() {
             @Override public int getCollisionX() { return 10; }
         };
         deadBody.setX(110); deadBody.setY(100);
         deadBody.setDead(true);
-        SimYukkuri.world.getCurrentMap().getBody().put(deadBody.getUniqueID(), deadBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(deadBody.getUniqueID(), deadBody);
         assertDoesNotThrow(() -> FoodLogic.searchFoodPredetor(remirya, new boolean[]{false}));
     }
 
@@ -10783,12 +10783,12 @@ class FoodLogicTest {
             @Override public int getCollisionX() { return 10; }
         };
         remirya.setX(100); remirya.setY(100); remirya.setHungry(0);
-        SimYukkuri.world.getCurrentMap().getBody().put(remirya.getUniqueID(), remirya);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(remirya.getUniqueID(), remirya);
         // Use LinkedHashMap for Yukkuri to guarantee insertion order
         java.util.LinkedHashMap<Integer, org.simyukkuri.entity.core.living.yukkuri.Yukkuri> orderedBody = new java.util.LinkedHashMap<>();
         // keep remirya in map too
         orderedBody.put(remirya.getUniqueID(), remirya);
-        SimYukkuri.world.getCurrentMap().setBody(orderedBody);
+        SimYukkuri.world.getCurrentMap().setYukkuriMap(orderedBody);
         // dead1: close (110,100) → iterate first → found3=dead1, min3=100
         org.simyukkuri.entity.core.living.yukkuri.Yukkuri dead1 = new org.simyukkuri.entity.core.living.yukkuri.impl.Marisa() {
             @Override public int getCollisionX() { return 10; }
@@ -10813,14 +10813,14 @@ class FoodLogicTest {
         body.setAge(body.getChildLimitBase()); // 50400 → ADULT (DAMAGELIMIT[ADULT]=16800)
         body.setHungry(0); // isSoHungry=true (hungry <= 0.2*limit)
         WorldTestHelper.setDamage(body, body.getDamageLimitBase()[org.simyukkuri.enums.AgeState.ADULT.ordinal()] / 2 + 1); // 8401 < 16800 → VERY, not dead
-        // prey: dead body (checkCanEatBody needs p.isDead)
+        // prey: dead body (checkCanEatYukkuri needs p.isDead)
         org.simyukkuri.entity.core.living.yukkuri.Yukkuri prey = new org.simyukkuri.entity.core.living.yukkuri.impl.Marisa() {
             @Override public int getCollisionX() { return 10; }
         };
         prey.setX(110); prey.setY(100);
         prey.setDead(true);
-        prey.setOkazari(null); // hasOkazari=false → checkCanEatBody step4 をパス
-        SimYukkuri.world.getCurrentMap().getBody().put(prey.getUniqueID(), prey);
+        prey.setOkazari(null); // hasOkazari=false → checkCanEatYukkuri step4 をパス
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(prey.getUniqueID(), prey);
         java.lang.reflect.Method m = FoodLogic.class.getDeclaredMethod("searchFoodForUnunSlave", org.simyukkuri.entity.core.living.yukkuri.Yukkuri.class, boolean[].class);
         m.setAccessible(true);
         m.invoke(null, body, new boolean[]{false});
@@ -10836,14 +10836,14 @@ class FoodLogicTest {
         // LinkedHashMap for Yukkuri
         java.util.LinkedHashMap<Integer, org.simyukkuri.entity.core.living.yukkuri.Yukkuri> orderedBody = new java.util.LinkedHashMap<>();
         orderedBody.put(body.getUniqueID(), body);
-        SimYukkuri.world.getCurrentMap().setBody(orderedBody);
+        SimYukkuri.world.getCurrentMap().setYukkuriMap(orderedBody);
         // dead1 close
         org.simyukkuri.entity.core.living.yukkuri.Yukkuri dead1 = new org.simyukkuri.entity.core.living.yukkuri.impl.Marisa() {
             @Override public int getCollisionX() { return 10; }
         };
         dead1.setX(110); dead1.setY(100);
         dead1.setDead(true);
-        dead1.setOkazari(null); // hasOkazari=false → checkCanEatBody をパス
+        dead1.setOkazari(null); // hasOkazari=false → checkCanEatYukkuri をパス
         orderedBody.put(dead1.getUniqueID(), dead1);
         // dead2 far
         org.simyukkuri.entity.core.living.yukkuri.Yukkuri dead2 = new org.simyukkuri.entity.core.living.yukkuri.impl.Marisa() {
@@ -10939,13 +10939,13 @@ class FoodLogicTest {
         remirya.setAge(remirya.getChildLimitBase()); // ADULT
         // setHungry to full: ADULT HUNGRYLIMIT = 9600
         remirya.setHungry(remirya.getHungryLimitBase()[org.simyukkuri.enums.AgeState.ADULT.ordinal()]); // 9600 > 4800 → isHungry=false
-        SimYukkuri.world.getCurrentMap().getBody().put(remirya.getUniqueID(), remirya);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(remirya.getUniqueID(), remirya);
         // BABY prey (age=0 → BABY < ADULT) → searchFoodPredetor sets found=prey
         org.simyukkuri.entity.core.living.yukkuri.Yukkuri prey = new org.simyukkuri.entity.core.living.yukkuri.impl.Marisa() {
             @Override public int getCollisionX() { return 10; }
         };
         prey.setX(110); prey.setY(100); // alive, default age=0 → BABY
-        SimYukkuri.world.getCurrentMap().getBody().put(prey.getUniqueID(), prey);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(prey.getUniqueID(), prey);
         assertDoesNotThrow(() -> FoodLogic.checkFood(remirya));
     }
 
@@ -10966,15 +10966,15 @@ class FoodLogicTest {
         body.setPublicRank(PublicRank.UnunSlave);
         body.setAgeState(org.simyukkuri.enums.AgeState.ADULT); // ADULT → HUNGRYLIMIT[ADULT]=9600
         body.setHungry(1); // isSoHungry: 1 <= 9600*0.2=1920 → true; isTooHungry: hungry=1>0 → false
-        // dead prey (okazari=null → checkCanEatBody returns true)
+        // dead prey (okazari=null → checkCanEatYukkuri returns true)
         org.simyukkuri.entity.core.living.yukkuri.Yukkuri prey = new org.simyukkuri.entity.core.living.yukkuri.impl.Marisa() {
             @Override public int getCollisionX() { return 10; }
         };
         prey.setX(110); prey.setY(100);
         prey.setDead(true);
-        prey.setOkazari(null); // hasOkazari=false → checkCanEatBody step4 をパス → return true
-        SimYukkuri.world.getCurrentMap().getBody().put(prey.getUniqueID(), prey);
-        // No shit, no vomit → found=null → Yukkuri loop → checkCanEatBody=true → L1271: isSoHungry=true,isTooHungry=false → break
+        prey.setOkazari(null); // hasOkazari=false → checkCanEatYukkuri step4 をパス → return true
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(prey.getUniqueID(), prey);
+        // No shit, no vomit → found=null → Yukkuri loop → checkCanEatYukkuri=true → L1271: isSoHungry=true,isTooHungry=false → break
         java.lang.reflect.Method m = FoodLogic.class.getDeclaredMethod("searchFoodForUnunSlave", org.simyukkuri.entity.core.living.yukkuri.Yukkuri.class, boolean[].class);
         m.setAccessible(true);
         m.invoke(null, body, new boolean[]{false});
@@ -11005,7 +11005,7 @@ class FoodLogicTest {
         };
         idiot.setX(100); idiot.setY(100);
         idiot.setHungry(1); // isHungry=true, isFull=false
-        SimYukkuri.world.getCurrentMap().getBody().put(idiot.getUniqueID(), idiot);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(idiot.getUniqueID(), idiot);
         // Vomit を body の隣 (近距離) に配置 (Food/Stalk は置かない)
         Vomit v = new Vomit();
         v.setObjId(org.simyukkuri.enums.Numbering.INSTANCE.numberingObjId());
@@ -11027,7 +11027,7 @@ class FoodLogicTest {
         prey.setObjId(org.simyukkuri.enums.Numbering.INSTANCE.numberingObjId());
         prey.setUniqueID(org.simyukkuri.enums.Numbering.INSTANCE.numberingYukkuriID());
         prey.setX(110); prey.setY(100);
-        SimYukkuri.world.getCurrentMap().getBody().put(prey.getUniqueID(), prey);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(prey.getUniqueID(), prey);
         // L946: b.getIntelligence()==FOOL → condition false → skip continue → fall through to distance check
         assertDoesNotThrow(() -> FoodLogic.checkFood(body));
     }
@@ -11045,7 +11045,7 @@ class FoodLogicTest {
         prey.setUniqueID(org.simyukkuri.enums.Numbering.INSTANCE.numberingYukkuriID());
         prey.setX(110); prey.setY(100);
         prey.setZ(10); // Z!=0 → !canflyCheck(Marisa)=true && Z!=0=true → L957 condition true → continue
-        SimYukkuri.world.getCurrentMap().getBody().put(prey.getUniqueID(), prey);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(prey.getUniqueID(), prey);
         assertDoesNotThrow(() -> FoodLogic.checkFood(body));
     }
 
@@ -11063,7 +11063,7 @@ class FoodLogicTest {
         prey.setX(110); prey.setY(100);
         prey.setDead(true); // dead body
         // hasOkazari=true (Marisa default: Yukkuri() constructor calls setOkazari)
-        SimYukkuri.world.getCurrentMap().getBody().put(prey.getUniqueID(), prey);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(prey.getUniqueID(), prey);
         body.setPartner(prey.getUniqueID()); // isPartner(prey)=true → isFamily(prey)=true
         // L993: !isRude=true && hasOkazari=true && isFamily=true → continue
         assertDoesNotThrow(() -> FoodLogic.checkFood(body));
@@ -11140,7 +11140,7 @@ class FoodLogicTest {
         Yukkuri prey = WorldTestHelper.createBody();
         prey.setX(body.getX() + 5); prey.setY(body.getY());
         prey.setZ(10); // airborne prey
-        SimYukkuri.world.getCurrentMap().getBody().put(prey.getUniqueID(), prey);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(prey.getUniqueID(), prey);
         boolean[] forceEat = {false};
         assertDoesNotThrow(() -> FoodLogic.searchFoodPredetor(body, forceEat));
     }
@@ -11157,7 +11157,7 @@ class FoodLogicTest {
         Yukkuri sickPrey = WorldTestHelper.createBody();
         sickPrey.setSickPeriod(1201); // > incubationPeriodBase(1200) → isSick()=true → findSick=true
         sickPrey.setX(body.getX() + 5); sickPrey.setY(body.getY());
-        SimYukkuri.world.getCurrentMap().getBody().put(sickPrey.getUniqueID(), sickPrey);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(sickPrey.getUniqueID(), sickPrey);
         boolean[] forceEat = {false};
         assertDoesNotThrow(() -> FoodLogic.searchFoodPredetor(body, forceEat));
     }
@@ -11173,7 +11173,7 @@ class FoodLogicTest {
         deadPrey.setDead(true);
         deadPrey.setOkazari(null); // hasOkazari=false (constructor sets DEFAULT, must clear) → B1: IFEQ taken
         deadPrey.setX(body.getX() + 5); deadPrey.setY(body.getY());
-        SimYukkuri.world.getCurrentMap().getBody().put(deadPrey.getUniqueID(), deadPrey);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(deadPrey.getUniqueID(), deadPrey);
         boolean[] forceEat = {false};
         assertDoesNotThrow(() -> FoodLogic.searchFoodPredetor(body, forceEat));
     }
@@ -11190,7 +11190,7 @@ class FoodLogicTest {
         deadPrey.setOkazari(new Okazari(deadPrey, Okazari.OkazariType.DEFAULT)); // hasOkazari=true
         deadPrey.setX(body.getX() + 5); deadPrey.setY(body.getY());
         // No family relationship → isFamily=false (C1: IFEQ taken → don't continue)
-        SimYukkuri.world.getCurrentMap().getBody().put(deadPrey.getUniqueID(), deadPrey);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(deadPrey.getUniqueID(), deadPrey);
         boolean[] forceEat = {false};
         assertDoesNotThrow(() -> FoodLogic.searchFoodPredetor(body, forceEat));
     }
@@ -11205,7 +11205,7 @@ class FoodLogicTest {
             @Override public int getCollisionX() { return 10; }
         };
         sakuya.setX(body.getX() + 5); sakuya.setY(body.getY());
-        SimYukkuri.world.getCurrentMap().getBody().put(sakuya.getUniqueID(), sakuya);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(sakuya.getUniqueID(), sakuya);
         boolean[] forceEat = {false};
         assertDoesNotThrow(() -> FoodLogic.searchFoodPredetor(body, forceEat));
     }
@@ -11219,12 +11219,12 @@ class FoodLogicTest {
         };
         fran.setX(100); fran.setY(100);
         fran.setHungry(fran.getHungryLimit());
-        SimYukkuri.world.getCurrentMap().getBody().put(fran.getUniqueID(), fran);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(fran.getUniqueID(), fran);
         Sakuya sakuya = new Sakuya() {
             @Override public int getCollisionX() { return 10; }
         };
         sakuya.setX(110); sakuya.setY(100);
-        SimYukkuri.world.getCurrentMap().getBody().put(sakuya.getUniqueID(), sakuya);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(sakuya.getUniqueID(), sakuya);
         boolean[] forceEat = {false};
         assertDoesNotThrow(() -> FoodLogic.searchFoodPredetor(fran, forceEat));
     }
@@ -11240,11 +11240,11 @@ class FoodLogicTest {
         Yukkuri prey1 = WorldTestHelper.createBody();
         prey1.setAgeState(AgeState.CHILD); // ordinal=1 < ADULT=2 → L968 true
         prey1.setX(body.getX() + 5); prey1.setY(body.getY()); // dist^2=25
-        SimYukkuri.world.getCurrentMap().getBody().put(prey1.getUniqueID(), prey1);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(prey1.getUniqueID(), prey1);
         Yukkuri prey2 = WorldTestHelper.createBody();
         prey2.setAgeState(AgeState.CHILD); // same size → ordinal=1 >= size(1) after prey1 update
         prey2.setX(body.getX() + 50); prey2.setY(body.getY()); // dist^2=2500: minDist(25)>2500=false
-        SimYukkuri.world.getCurrentMap().getBody().put(prey2.getUniqueID(), prey2);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(prey2.getUniqueID(), prey2);
         boolean[] forceEat = {false};
         assertDoesNotThrow(() -> FoodLogic.searchFoodPredetor(body, forceEat));
     }
@@ -11261,7 +11261,7 @@ class FoodLogicTest {
         plantBody.setBurialState(BurialState.NEARLY_ALL);
         plantBody.setOkazari(null); // hasOkazari=false → inner cond true → !true=false → don't continue
         plantBody.setX(body.getX() + 5); plantBody.setY(body.getY());
-        SimYukkuri.world.getCurrentMap().getBody().put(plantBody.getUniqueID(), plantBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(plantBody.getUniqueID(), plantBody);
         Stalk stalk = new Stalk(body.getX() + 5, body.getY(), 0);
         stalk.setPlantYukkuri(plantBody.getUniqueID()); // p=plantBody != null
         boolean[] forceEat = {false};

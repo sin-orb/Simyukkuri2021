@@ -57,7 +57,7 @@ import org.simyukkuri.entity.core.world.item.GarbageChute;
 import org.simyukkuri.entity.core.world.item.GarbageStation;
 import org.simyukkuri.entity.core.world.item.HotPlate;
 import org.simyukkuri.entity.core.world.item.Mixer;
-import org.simyukkuri.entity.core.world.item.ProcesserPlate;
+import org.simyukkuri.entity.core.world.item.ProcessorPlate;
 import org.simyukkuri.entity.core.world.item.StickyPlate;
 import org.simyukkuri.entity.core.world.item.Sui;
 import org.simyukkuri.entity.core.world.item.Yunba;
@@ -103,7 +103,7 @@ class TerrariumTest {
 
     private Yukkuri findBodyAcrossMaps(int uniqueId) {
         for (org.simyukkuri.system.MapPlaceData map : SimYukkuri.world.getMapList()) {
-            Yukkuri found = map.getBody().get(uniqueId);
+            Yukkuri found = map.getYukkuriMap().get(uniqueId);
             if (found != null) {
                 return found;
             }
@@ -288,7 +288,7 @@ class TerrariumTest {
             expandSpr[i] = new Sprite(width, height, Sprite.PIVOT_CENTER_BOTTOM);
             braidSpr[i] = new Sprite(width, height, Sprite.PIVOT_CENTER_BOTTOM);
         }
-        body.setBodySpr(bodySpr);
+        body.setSpriteSet(bodySpr);
         body.setExpandSpr(expandSpr);
         body.setBraidSpr(braidSpr);
     }
@@ -313,11 +313,11 @@ class TerrariumTest {
 
     @Test
     void testAddBody_Success() {
-        int initialBodyCount = SimYukkuri.world.getCurrentMap().getBody().size();
-        // addBody(int x, int y, int z, int type, AgeState age, Yukkuri p1, Yukkuri p2)
+        int initialBodyCount = SimYukkuri.world.getCurrentMap().getYukkuriMap().size();
+        // addYukkuri(int x, int y, int z, int type, AgeState age, Yukkuri p1, Yukkuri p2)
         // Use getTypeID() instead of ordinal()
-        terrarium.addBody(100, 100, 0, YukkuriType.REIMU, AgeState.ADULT, null, null);
-        assertEquals(initialBodyCount + 1, SimYukkuri.world.getCurrentMap().getBody().size());
+        terrarium.addYukkuri(100, 100, 0, YukkuriType.REIMU, AgeState.ADULT, null, null);
+        assertEquals(initialBodyCount + 1, SimYukkuri.world.getCurrentMap().getYukkuriMap().size());
     }
 
     @Test
@@ -338,7 +338,7 @@ class TerrariumTest {
     void testSaveLoadState_Basic() throws Exception {
         File tempFile = Files.createTempFile("simyukkuri_test_save", ".sav").toFile();
         try {
-            terrarium.addBody(100, 100, 0, YukkuriType.REIMU, AgeState.ADULT, null, null);
+            terrarium.addYukkuri(100, 100, 0, YukkuriType.REIMU, AgeState.ADULT, null, null);
             // saveState(File) and loadState(File) are likely static based on lint feedback
             Terrarium.saveState(tempFile);
 
@@ -352,7 +352,7 @@ class TerrariumTest {
 
             Terrarium.loadState(tempFile);
             // After load, we should have the body back
-            assertEquals(1, SimYukkuri.world.getCurrentMap().getBody().size());
+            assertEquals(1, SimYukkuri.world.getCurrentMap().getYukkuriMap().size());
         } finally {
             tempFile.delete();
         }
@@ -437,10 +437,10 @@ class TerrariumTest {
             far.setY(1000);
             far.setEyesightBase(10);
 
-            SimYukkuri.world.getCurrentMap().getBody().put(source.getUniqueID(), source);
-            SimYukkuri.world.getCurrentMap().getBody().put(nearby.getUniqueID(), nearby);
-            SimYukkuri.world.getCurrentMap().getBody().put(nearbyRaper.getUniqueID(), nearbyRaper);
-            SimYukkuri.world.getCurrentMap().getBody().put(far.getUniqueID(), far);
+            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(source.getUniqueID(), source);
+            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(nearby.getUniqueID(), nearby);
+            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(nearbyRaper.getUniqueID(), nearbyRaper);
+            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(far.getUniqueID(), far);
 
             assertTrue(nearbyRaper.isRaper());
             assertNull(nearbyRaper.getPanicType());
@@ -460,11 +460,11 @@ class TerrariumTest {
             try {
                 Yukkuri pickedUp = WorldTestHelper.createBody();
                 int pickedUpId = pickedUp.getUniqueID();
-                SimYukkuri.world.getCurrentMap().getBody().put(pickedUpId, pickedUp);
+                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(pickedUpId, pickedUp);
 
                 SimYukkuri.world.getPlayer().getItemList().addElement(pickedUp);
                 pickedUp.setTaken(true);
-                SimYukkuri.world.getCurrentMap().getBody().remove(pickedUpId);
+                SimYukkuri.world.getCurrentMap().getYukkuriMap().remove(pickedUpId);
 
                 Terrarium.saveState(tempFile);
 
@@ -474,7 +474,7 @@ class TerrariumTest {
 
                 Terrarium.loadState(tempFile);
 
-                assertTrue(SimYukkuri.world.getCurrentMap().getBody().isEmpty(),
+                assertTrue(SimYukkuri.world.getCurrentMap().getYukkuriMap().isEmpty(),
                         "picked-up body should stay out of the field body map after load");
                 assertEquals(1, SimYukkuri.world.getPlayer().getItemList().getSize(),
                         "picked-up body should be restored into player inventory after load");
@@ -497,7 +497,7 @@ class TerrariumTest {
                 Yukkuri carrier = WorldTestHelper.createBody();
                 carrier.setX(100);
                 carrier.setY(100);
-                SimYukkuri.world.getCurrentMap().getBody().put(carrier.getUniqueID(), carrier);
+                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(carrier.getUniqueID(), carrier);
 
                 Food carriedFood = new Food(100, 100, Food.FoodType.FOOD.ordinal());
                 int carriedFoodObjId = carriedFood.getObjId();
@@ -516,8 +516,8 @@ class TerrariumTest {
                 boolean carriedFoodFoundInTakenOutMap = false;
                 boolean carriedFoodFoundInFieldFoodMap = false;
                 for (org.simyukkuri.system.MapPlaceData map : SimYukkuri.world.getMapList()) {
-                    if (restoredCarrier == null && map.getBody().size() == 1) {
-                        restoredCarrier = map.getBody().values().iterator().next();
+                    if (restoredCarrier == null && map.getYukkuriMap().size() == 1) {
+                        restoredCarrier = map.getYukkuriMap().values().iterator().next();
                     }
                     carriedFoodFoundInTakenOutMap |= map.getTakenOutFood().containsKey(carriedFoodObjId);
                     carriedFoodFoundInFieldFoodMap |= map.getFood().containsKey(carriedFoodObjId);
@@ -544,7 +544,7 @@ class TerrariumTest {
                 Yukkuri carrier = WorldTestHelper.createBody();
                 carrier.setX(100);
                 carrier.setY(100);
-                SimYukkuri.world.getCurrentMap().getBody().put(carrier.getUniqueID(), carrier);
+                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(carrier.getUniqueID(), carrier);
 
                 Food carriedFood = new Food(100, 100, Food.FoodType.FOOD.ordinal());
                 int carrierId = carrier.getUniqueID();
@@ -574,9 +574,9 @@ class TerrariumTest {
                 Reimu partner = new Reimu();
                 Marisa child = new Marisa();
 
-                SimYukkuri.world.getCurrentMap().getBody().put(parent.getUniqueID(), parent);
-                SimYukkuri.world.getCurrentMap().getBody().put(partner.getUniqueID(), partner);
-                SimYukkuri.world.getCurrentMap().getBody().put(child.getUniqueID(), child);
+                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(parent.getUniqueID(), parent);
+                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(partner.getUniqueID(), partner);
+                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(child.getUniqueID(), child);
 
                 parent.setPartner(partner.getUniqueID());
                 partner.setPartner(parent.getUniqueID());
@@ -615,9 +615,9 @@ class TerrariumTest {
                 Marisa partner = new Marisa();
                 Reimu child = new Reimu();
 
-                SimYukkuri.world.getCurrentMap().getBody().put(mother.getUniqueID(), mother);
-                SimYukkuri.world.getCurrentMap().getBody().put(partner.getUniqueID(), partner);
-                SimYukkuri.world.getCurrentMap().getBody().put(child.getUniqueID(), child);
+                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(mother.getUniqueID(), mother);
+                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(partner.getUniqueID(), partner);
+                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(child.getUniqueID(), child);
 
                 mother.setPartner(partner.getUniqueID());
                 partner.setPartner(mother.getUniqueID());
@@ -664,8 +664,8 @@ class TerrariumTest {
                 Reimu unbornBaby = new Reimu();
                 unbornBaby.setUnBirth(true);
 
-                SimYukkuri.world.getCurrentMap().getBody().put(parent.getUniqueID(), parent);
-                SimYukkuri.world.getCurrentMap().getBody().put(unbornBaby.getUniqueID(), unbornBaby);
+                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(parent.getUniqueID(), parent);
+                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(unbornBaby.getUniqueID(), unbornBaby);
 
                 parent.setHasStalk(true);
                 parent.getStalkBabyTypes().add(new Dna());
@@ -722,9 +722,9 @@ class TerrariumTest {
                 child.setParents(new int[] { reimu.getUniqueID(), -1 });
                 reimu.getChildrenList().add(child.getUniqueID());
 
-                SimYukkuri.world.getCurrentMap().getBody().put(reimu.getUniqueID(), reimu);
-                SimYukkuri.world.getCurrentMap().getBody().put(partner.getUniqueID(), partner);
-                SimYukkuri.world.getCurrentMap().getBody().put(child.getUniqueID(), child);
+                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(reimu.getUniqueID(), reimu);
+                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(partner.getUniqueID(), partner);
+                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(child.getUniqueID(), child);
 
                 int transformedId = reimu.getUniqueID();
                 int partnerId = partner.getUniqueID();
@@ -772,9 +772,9 @@ class TerrariumTest {
                 child.setParents(new int[] { marisa.getUniqueID(), -1 });
                 marisa.getChildrenList().add(child.getUniqueID());
 
-                SimYukkuri.world.getCurrentMap().getBody().put(marisa.getUniqueID(), marisa);
-                SimYukkuri.world.getCurrentMap().getBody().put(partner.getUniqueID(), partner);
-                SimYukkuri.world.getCurrentMap().getBody().put(child.getUniqueID(), child);
+                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(marisa.getUniqueID(), marisa);
+                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(partner.getUniqueID(), partner);
+                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(child.getUniqueID(), child);
 
                 int transformedId = marisa.getUniqueID();
                 int partnerId = partner.getUniqueID();
@@ -808,7 +808,7 @@ class TerrariumTest {
             File tempFile = Files.createTempFile("simyukkuri_test_save_favorite_bed", ".sav").toFile();
             try {
                 Yukkuri body = WorldTestHelper.createBody();
-                SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
+                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(body.getUniqueID(), body);
 
                 Bed bed = new Bed(120, 120, 1);
                 int bodyId = body.getUniqueID();
@@ -834,7 +834,7 @@ class TerrariumTest {
             File tempFile = Files.createTempFile("simyukkuri_test_save_sleeping_bed_body", ".sav").toFile();
             try {
                 Reimu body = new Reimu();
-                SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
+                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(body.getUniqueID(), body);
 
                 Bed bed = new Bed(160, 160, Bed.ItemRank.NORA.ordinal());
                 body.setFavoriteItem(FavItemType.BED, bed);
@@ -877,16 +877,16 @@ class TerrariumTest {
                 SimYukkuri.world.getCurrentMap().getAutofeeder().put(feeder.getObjId(), feeder);
                 int feederId = feeder.getObjId();
 
-                ProcesserPlate plate = new ProcesserPlate();
-                plate.setEnumProcessType(ProcesserPlate.ProcessType.PACKING);
-                SimYukkuri.world.getCurrentMap().getProcesserPlate().put(plate.getObjId(), plate);
+                ProcessorPlate plate = new ProcessorPlate();
+                plate.setEnumProcessType(ProcessorPlate.ProcessType.PACKING);
+                SimYukkuri.world.getCurrentMap().getProcessorPlate().put(plate.getObjId(), plate);
                 int plateId = plate.getObjId();
 
                 roundTripSaveLoad(tempFile);
 
                 Bed restoredBed = null;
                 AutoFeeder restoredFeeder = null;
-                ProcesserPlate restoredPlate = null;
+                ProcessorPlate restoredPlate = null;
                 for (org.simyukkuri.system.MapPlaceData map : SimYukkuri.world.getMapList()) {
                     if (restoredBed == null && map.getBed().containsKey(bedId)) {
                         restoredBed = map.getBed().get(bedId);
@@ -894,8 +894,8 @@ class TerrariumTest {
                     if (restoredFeeder == null && map.getAutofeeder().containsKey(feederId)) {
                         restoredFeeder = map.getAutofeeder().get(feederId);
                     }
-                    if (restoredPlate == null && map.getProcesserPlate().containsKey(plateId)) {
-                        restoredPlate = map.getProcesserPlate().get(plateId);
+                    if (restoredPlate == null && map.getProcessorPlate().containsKey(plateId)) {
+                        restoredPlate = map.getProcessorPlate().get(plateId);
                     }
                 }
 
@@ -911,7 +911,7 @@ class TerrariumTest {
                         "autofeeder feeding probability should survive save/load");
 
                 assertNotNull(restoredPlate);
-                assertEquals(ProcesserPlate.ProcessType.PACKING, restoredPlate.getEnumProcessType(),
+                assertEquals(ProcessorPlate.ProcessType.PACKING, restoredPlate.getEnumProcessType(),
                         "processer plate process type should survive save/load");
             } finally {
                 tempFile.delete();
@@ -1022,7 +1022,7 @@ class TerrariumTest {
                 body.setCalcY(hotPlate.getY());
                 body.setCalcZ(hotPlate.getZ());
                 body.setSleeping(true);
-                SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
+                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(body.getUniqueID(), body);
 
                 hotPlate.objHitProcess(body);
                 body.setX(hotPlate.getX());
@@ -1046,7 +1046,7 @@ class TerrariumTest {
                 assertNotNull(restoredHotPlate);
                 assertNotNull(restoredBody);
                 assertNotNull(restoredSmoke);
-                assertSame(restoredBody, restoredHotPlate.getBindBody(),
+                assertSame(restoredBody, restoredHotPlate.getBoundYukkuri(),
                         "loaded hot plate should still point at the restored bound body");
                 assertSame(restoredSmoke, restoredHotPlate.getSmoke(),
                         "loaded hot plate should still point at the restored smoke effect");
@@ -1061,7 +1061,7 @@ class TerrariumTest {
                         "damage should continue accumulating after load");
                 assertEquals(stressBeforeSave + 20, restoredBody.getStress(),
                         "stress should continue accumulating after load");
-                assertSame(restoredBody, restoredHotPlate.getBindBody(),
+                assertSame(restoredBody, restoredHotPlate.getBoundYukkuri(),
                         "hot plate should remain in the active burning state after one loaded tick");
             } finally {
                 tempFile.delete();
@@ -1080,7 +1080,7 @@ class TerrariumTest {
 
                 Yukkuri body = WorldTestHelper.createBody();
                 body.setObjId(5325);
-                SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
+                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(body.getUniqueID(), body);
 
                 stickyPlate.objHitProcess(body);
                 body.setX(stickyPlate.getX());
@@ -1097,11 +1097,11 @@ class TerrariumTest {
 
                 assertNotNull(restoredPlate);
                 assertNotNull(restoredBody);
-                assertSame(restoredBody, restoredPlate.getBindBody());
+                assertSame(restoredBody, restoredPlate.getBoundYukkuri());
 
                 restoredPlate.upDate();
 
-                assertSame(restoredBody, restoredPlate.getBindBody(),
+                assertSame(restoredBody, restoredPlate.getBoundYukkuri(),
                         "sticky plate should keep the restored body bound after load");
                 assertTrue(restoredBody.isLockmove(),
                         "restored sticky plate binding should keep the body immobilized");
@@ -1125,7 +1125,7 @@ class TerrariumTest {
                 Yukkuri body = WorldTestHelper.createBody();
                 body.setObjId(5326);
                 body.setAnkoAmount(2000);
-                SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
+                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(body.getUniqueID(), body);
 
                 mixer.objHitProcess(body);
                 body.setX(mixer.getX());
@@ -1180,7 +1180,7 @@ class TerrariumTest {
                 Yukkuri body = WorldTestHelper.createBody();
                 body.setObjId(5327);
                 installSyntheticBodySprites(body, 32, 32);
-                SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
+                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(body.getUniqueID(), body);
 
                 garbageChute.objHitProcess(body);
                 body.setX(garbageChute.getX());
@@ -1200,7 +1200,7 @@ class TerrariumTest {
                 assertNotNull(restoredBody);
                 assertEquals(1, restoredChute.getBindObjList().size());
                 assertSame(restoredBody, restoredChute.getBindObjList().get(0));
-                assertSame(restoredBody, restoredChute.getBindBody());
+                assertSame(restoredBody, restoredChute.getBoundYukkuri());
 
                 restoredChute.upDate();
 
@@ -1278,7 +1278,7 @@ class TerrariumTest {
                 spawnedBody.setAgeState(AgeState.BABY);
                 spawnedBody.setX(feeder.getX());
                 spawnedBody.setY(feeder.getY());
-                SimYukkuri.world.getCurrentMap().getBody().put(spawnedBody.getUniqueID(), spawnedBody);
+                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(spawnedBody.getUniqueID(), spawnedBody);
                 feeder.setFood(spawnedBody);
 
                 int feederId = feeder.getObjId();
@@ -1296,7 +1296,7 @@ class TerrariumTest {
 
                 int bodyCountBeforeUpdate = 0;
                 for (org.simyukkuri.system.MapPlaceData map : SimYukkuri.world.getMapList()) {
-                    bodyCountBeforeUpdate += map.getBody().size();
+                    bodyCountBeforeUpdate += map.getYukkuriMap().size();
                 }
 
                 restoredFeeder.setAge(0);
@@ -1304,7 +1304,7 @@ class TerrariumTest {
 
                 int bodyCountAfterUpdate = 0;
                 for (org.simyukkuri.system.MapPlaceData map : SimYukkuri.world.getMapList()) {
-                    bodyCountAfterUpdate += map.getBody().size();
+                    bodyCountAfterUpdate += map.getYukkuriMap().size();
                 }
 
                 assertEquals(bodyCountBeforeUpdate, bodyCountAfterUpdate,
@@ -1338,7 +1338,7 @@ class TerrariumTest {
                 yunba.getActionFlags()[Yunba.Action.CLEAN.ordinal()][1] = true;
                 yunba.getActionFlags2()[0][2] = true;
                 yunba.getActionFlags3()[0][1] = true;
-                yunba.setBodyCheck(true);
+                yunba.setYukkuriCheck(true);
                 yunba.setShitCheck(true);
                 yunba.setStalkCheck(true);
                 yunba.setNorndCheck(true);
@@ -1353,7 +1353,7 @@ class TerrariumTest {
                 WorldTestHelper.setDamage(targetBody, 50);
                 targetBody.setX(100);
                 targetBody.setY(100);
-                SimYukkuri.world.getCurrentMap().getBody().put(targetBody.getUniqueID(), targetBody);
+                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(targetBody.getUniqueID(), targetBody);
                 yunba.setTarget(targetBody);
 
                 int yunbaId = yunba.getObjId();
@@ -1377,7 +1377,7 @@ class TerrariumTest {
                         "yunba second flag table should survive save/load");
                 assertTrue(restoredYunba.getActionFlags3()[0][1],
                         "yunba third flag table should survive save/load");
-                assertTrue(restoredYunba.isBodyCheck(), "yunba body check should survive save/load");
+                assertTrue(restoredYunba.isYukkuriCheck(), "yunba body check should survive save/load");
                 assertTrue(restoredYunba.isShitCheck(), "yunba shit check should survive save/load");
                 assertTrue(restoredYunba.isStalkCheck(), "yunba stalk check should survive save/load");
                 assertTrue(restoredYunba.isNorndCheck(), "yunba no-random check should survive save/load");
@@ -1409,7 +1409,7 @@ class TerrariumTest {
             try {
                 Reimu body = new Reimu();
                 body.giveOkazari(OkazariType.ADULT3);
-                SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
+                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(body.getUniqueID(), body);
 
                 int bodyId = body.getUniqueID();
 
@@ -1431,7 +1431,7 @@ class TerrariumTest {
             try {
                 Marisa body = new Marisa();
                 body.setOkazari(null);
-                SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
+                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(body.getUniqueID(), body);
 
                 int bodyId = body.getUniqueID();
 
@@ -1452,7 +1452,7 @@ class TerrariumTest {
             try {
                 MarisaReimu body = new MarisaReimu();
                 body.giveOkazari(OkazariType.ADULT1);
-                SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
+                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(body.getUniqueID(), body);
 
                 int bodyId = body.getUniqueID();
 
@@ -1475,7 +1475,7 @@ class TerrariumTest {
             try {
                 ReimuMarisa body = new ReimuMarisa();
                 body.giveOkazari(OkazariType.ADULT2);
-                SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
+                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(body.getUniqueID(), body);
 
                 int bodyId = body.getUniqueID();
 
@@ -1497,7 +1497,7 @@ class TerrariumTest {
             File tempFile = Files.createTempFile("simyukkuri_test_save_pre_burn_body", ".sav").toFile();
             try {
                 Reimu body = new Reimu();
-                SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
+                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(body.getUniqueID(), body);
 
                 int bodyId = body.getUniqueID();
 
@@ -1522,7 +1522,7 @@ class TerrariumTest {
                 Fire fire = new Fire(body);
                 fire.setBurnPeriod(450);
                 body.addAttachment(fire);
-                SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
+                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(body.getUniqueID(), body);
 
                 int bodyId = body.getUniqueID();
 
@@ -1548,7 +1548,7 @@ class TerrariumTest {
                 Reimu body = new Reimu();
                 body.setDead(true);
                 body.setBurned(true);
-                SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
+                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(body.getUniqueID(), body);
 
                 int bodyId = body.getUniqueID();
 
@@ -1573,7 +1573,7 @@ class TerrariumTest {
                 body.setAntCount(120);
                 body.addAttachment(new Ants(body));
                 body.setAntCount(120);
-                SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
+                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(body.getUniqueID(), body);
 
                 int bodyId = body.getUniqueID();
 
@@ -1595,7 +1595,7 @@ class TerrariumTest {
             try {
                 Reimu body = new Reimu();
                 body.addAttachment(new Badge(body, Badge.BadgeRank.GOLD));
-                SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
+                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(body.getUniqueID(), body);
 
                 int bodyId = body.getUniqueID();
 
@@ -1618,11 +1618,11 @@ class TerrariumTest {
             try {
                 Reimu poisonBody = new Reimu();
                 poisonBody.addAttachment(new PoisonAmpoule(poisonBody));
-                SimYukkuri.world.getCurrentMap().getBody().put(poisonBody.getUniqueID(), poisonBody);
+                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(poisonBody.getUniqueID(), poisonBody);
 
                 Marisa breedingBody = new Marisa();
                 breedingBody.addAttachment(new BreedingAmpoule(breedingBody));
-                SimYukkuri.world.getCurrentMap().getBody().put(breedingBody.getUniqueID(), breedingBody);
+                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(breedingBody.getUniqueID(), breedingBody);
 
                 int poisonBodyId = poisonBody.getUniqueID();
                 int breedingBodyId = breedingBody.getUniqueID();
@@ -1650,7 +1650,7 @@ class TerrariumTest {
                 Yukkuri rider = WorldTestHelper.createBody();
                 rider.setX(140);
                 rider.setY(140);
-                SimYukkuri.world.getCurrentMap().getBody().put(rider.getUniqueID(), rider);
+                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(rider.getUniqueID(), rider);
 
                 Sui sui = new Sui();
                 sui.setObjId(org.simyukkuri.enums.Numbering.INSTANCE.numberingObjId());
@@ -1685,14 +1685,14 @@ class TerrariumTest {
                 Reimu parent = new Reimu();
                 parent.setX(180);
                 parent.setY(180);
-                SimYukkuri.world.getCurrentMap().getBody().put(parent.getUniqueID(), parent);
+                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(parent.getUniqueID(), parent);
 
                 Reimu child = new Reimu();
                 child.setAgeState(AgeState.BABY);
                 child.setX(180);
                 child.setY(180);
                 child.setParentLinkId(parent.getObjId());
-                SimYukkuri.world.getCurrentMap().getBody().put(child.getUniqueID(), child);
+                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(child.getUniqueID(), child);
 
                 int parentId = parent.getUniqueID();
                 int childId = child.getUniqueID();
@@ -1721,7 +1721,7 @@ class TerrariumTest {
                 body.setX((farm.getMapSX() + farm.getMapEX()) / 2);
                 body.setY((farm.getMapSY() + farm.getMapEY()) / 2);
                 body.setBurialState(BurialState.NEARLY_ALL);
-                SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
+                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(body.getUniqueID(), body);
 
                 int bodyId = body.getUniqueID();
                 int mapSX = farm.getMapSX();
@@ -1752,7 +1752,7 @@ class TerrariumTest {
                 body.setGodHandHoldCount(80);
                 assertTrue(body.getSize() > body.getOriginSize(),
                         "fixture should observe the enlarged body before save");
-                SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
+                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(body.getUniqueID(), body);
 
                 int bodyId = body.getUniqueID();
                 int expectedHoldCount = body.getGodHandHoldCount();
@@ -1785,7 +1785,7 @@ class TerrariumTest {
                 body.setX((belt.getMapSX() + belt.getMapEX()) / 2);
                 body.setY((belt.getMapSY() + belt.getMapEY()) / 2);
                 body.setOnNonMovingConveyor(true);
-                SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
+                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(body.getUniqueID(), body);
 
                 int bodyId = body.getUniqueID();
                 int mapSX = belt.getMapSX();
@@ -1811,8 +1811,8 @@ class TerrariumTest {
         void testScenario_LoadStateRejectsCorruptedSaveWithoutReplacingWorld() throws Exception {
             File tempFile = Files.createTempFile("simyukkuri_test_save_corrupt", ".sav").toFile();
             try {
-                terrarium.addBody(100, 100, 0, YukkuriType.REIMU, AgeState.ADULT, null, null);
-                int originalBodyCount = SimYukkuri.world.getCurrentMap().getBody().size();
+                terrarium.addYukkuri(100, 100, 0, YukkuriType.REIMU, AgeState.ADULT, null, null);
+                int originalBodyCount = SimYukkuri.world.getCurrentMap().getYukkuriMap().size();
                 long originalCash = SimYukkuri.world.getPlayer().getCash();
 
                 Terrarium.saveState(tempFile);
@@ -1822,7 +1822,7 @@ class TerrariumTest {
 
                 assertThrows(Exception.class, () -> Terrarium.loadState(tempFile),
                         "corrupted save should fail to load");
-                assertEquals(originalBodyCount, SimYukkuri.world.getCurrentMap().getBody().size(),
+                assertEquals(originalBodyCount, SimYukkuri.world.getCurrentMap().getYukkuriMap().size(),
                         "failed load should not replace the in-memory world body map");
                 assertEquals(originalCash, SimYukkuri.world.getPlayer().getCash(),
                         "failed load should not replace the in-memory player state");
@@ -1841,9 +1841,9 @@ class TerrariumTest {
                 child.setAgeState(AgeState.BABY);
                 child.setParents(new int[] { from.getUniqueID(), -1 });
 
-                SimYukkuri.world.getCurrentMap().getBody().put(from.getUniqueID(), from);
-                SimYukkuri.world.getCurrentMap().getBody().put(deceased.getUniqueID(), deceased);
-                SimYukkuri.world.getCurrentMap().getBody().put(child.getUniqueID(), child);
+                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(from.getUniqueID(), from);
+                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(deceased.getUniqueID(), deceased);
+                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(child.getUniqueID(), child);
 
                 FuneralEvent event = new FuneralEvent(from, deceased, null, 10);
                 Class<?> funeralStateClass = Class.forName("org.simyukkuri.event.impl.FuneralEvent$STATE");
@@ -1903,8 +1903,8 @@ class TerrariumTest {
                 child.setParents(new int[] { from.getUniqueID(), -1 });
                 Food food = new Food(100, 100, Food.FoodType.FOOD.ordinal());
 
-                SimYukkuri.world.getCurrentMap().getBody().put(from.getUniqueID(), from);
-                SimYukkuri.world.getCurrentMap().getBody().put(child.getUniqueID(), child);
+                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(from.getUniqueID(), from);
+                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(child.getUniqueID(), child);
 
                 SuperEatingTimeEvent event = new SuperEatingTimeEvent(from, null, food, 10);
                 event.setState(SuperEatingTimeEvent.STATE.START);
@@ -1953,8 +1953,8 @@ class TerrariumTest {
             try {
                 Reimu from = new Reimu();
                 Reimu to = new Reimu();
-                SimYukkuri.world.getCurrentMap().getBody().put(from.getUniqueID(), from);
-                SimYukkuri.world.getCurrentMap().getBody().put(to.getUniqueID(), to);
+                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(from.getUniqueID(), from);
+                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(to.getUniqueID(), to);
 
                 ProposeEvent event = new ProposeEvent(from, to, null, 10);
                 event.setTick(21);
@@ -2002,8 +2002,8 @@ class TerrariumTest {
                 child.setAgeState(AgeState.BABY);
                 child.setParents(new int[] { from.getUniqueID(), -1 });
 
-                SimYukkuri.world.getCurrentMap().getBody().put(from.getUniqueID(), from);
-                SimYukkuri.world.getCurrentMap().getBody().put(child.getUniqueID(), child);
+                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(from.getUniqueID(), from);
+                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(child.getUniqueID(), child);
 
                 ProudChildEvent event = new ProudChildEvent(from, null, null, 10);
                 Class<?> stateClass = Class.forName("org.simyukkuri.event.impl.ProudChildEvent$STATE");
@@ -2057,8 +2057,8 @@ class TerrariumTest {
                 child.setAgeState(AgeState.BABY);
                 child.setParents(new int[] { from.getUniqueID(), -1 });
 
-                SimYukkuri.world.getCurrentMap().getBody().put(from.getUniqueID(), from);
-                SimYukkuri.world.getCurrentMap().getBody().put(child.getUniqueID(), child);
+                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(from.getUniqueID(), from);
+                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(child.getUniqueID(), child);
 
                 ShitExercisesEvent event = new ShitExercisesEvent(from, null, null, 10);
                 Class<?> stateClass = Class.forName("org.simyukkuri.event.impl.ShitExercisesEvent$STATE");
@@ -2110,8 +2110,8 @@ class TerrariumTest {
                 Reimu raper = new Reimu();
                 Marisa target = new Marisa();
 
-                SimYukkuri.world.getCurrentMap().getBody().put(raper.getUniqueID(), raper);
-                SimYukkuri.world.getCurrentMap().getBody().put(target.getUniqueID(), target);
+                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(raper.getUniqueID(), raper);
+                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(target.getUniqueID(), target);
 
                 RaperReactionEvent event = new RaperReactionEvent(raper, null, null, 1);
                 event.setState(ActionState.ATTACK);
@@ -2144,8 +2144,8 @@ class TerrariumTest {
                 Reimu actor = new Reimu();
                 Reimu attacker = new Reimu();
 
-                SimYukkuri.world.getCurrentMap().getBody().put(actor.getUniqueID(), actor);
-                SimYukkuri.world.getCurrentMap().getBody().put(attacker.getUniqueID(), attacker);
+                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(actor.getUniqueID(), actor);
+                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(attacker.getUniqueID(), attacker);
 
                 BegForLifeEvent event = new BegForLifeEvent(actor, attacker, null, 10);
                 event.setRoop(3);
@@ -2185,8 +2185,8 @@ class TerrariumTest {
                 Remirya predator = new Remirya();
                 Reimu toy = new Reimu();
 
-                SimYukkuri.world.getCurrentMap().getBody().put(predator.getUniqueID(), predator);
-                SimYukkuri.world.getCurrentMap().getBody().put(toy.getUniqueID(), toy);
+                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(predator.getUniqueID(), predator);
+                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(toy.getUniqueID(), toy);
 
                 PredatorsGameEvent event = new PredatorsGameEvent(predator, null, null, 1);
                 event.setTick(13);

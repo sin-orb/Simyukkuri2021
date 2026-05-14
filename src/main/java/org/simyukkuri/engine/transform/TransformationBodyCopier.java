@@ -14,7 +14,7 @@ public final class TransformationBodyCopier {
 	 * ゆっくりのステータスを from → to へ複製する.
 	 * 種族固有ベースパラメータ (xxxBase 配列, speed, cost 等) はコピーしない.
 	 * スプライト・名前セットは copyStateTo チェーン内の BodyAttributes レイヤで処理する.
-	 * NameSet (種族名称) は TransformationService 側の setBaseBodyFileName +
+	 * NameSet (種族名称) は TransformationService 側の setBaseYukkuriFileName +
 	 * readYukkuriIniFile で上書きされる.
 	 *
 	 * @param to   変身後のゆっくり

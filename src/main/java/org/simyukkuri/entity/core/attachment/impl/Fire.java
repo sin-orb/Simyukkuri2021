@@ -94,15 +94,15 @@ public class Fire extends Attachment {
 
 	@Override
 	public BufferedImage getImage(Yukkuri b) {
-		Yukkuri pa = org.simyukkuri.util.BodyRegistry.getBodyInstance(parent);
+		Yukkuri pa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(parent);
 		if (pa == null)
 			return null;
-		return images[pa.getBodyAgeState().ordinal()][animeFrame];
+		return images[pa.getAgeState().ordinal()][animeFrame];
 	}
 
 	@Override
 	protected Event update() {
-		Yukkuri pa = org.simyukkuri.util.BodyRegistry.getBodyInstance(parent);
+		Yukkuri pa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(parent);
 		if (pa == null)
 			return Event.DONOTHING;
 		// 生きてたらセリフとダメージ加算
@@ -131,7 +131,7 @@ public class Fire extends Attachment {
 		}
 		// 燃焼時間
 		burnPeriod += TICK * 90;
-		pa.addBodyBakePeriod(90);
+		pa.addBakePeriod(90);
 		// お飾り消失
 		if (burnPeriod > (pa.getDamageLimit() / 3) && pa.hasOkazari()) {
 			pa.takeOkazari(false);
@@ -149,7 +149,7 @@ public class Fire extends Attachment {
 
 		// 実ゆの場合、親が反応する
 		if (GameRandom.nextInt(3) == 0) {
-			Yukkuri bodyMother = org.simyukkuri.util.BodyRegistry.getBodyInstance(pa.getBindStalkMotherCanNotice());
+			Yukkuri bodyMother = org.simyukkuri.util.YukkuriLookup.getYukkuriById(pa.getBindStalkMotherCanNotice());
 			if (bodyMother != null) {
 				if (bodyMother.isNotNYD()) {
 					bodyMother.setHappiness(Happiness.VERY_SAD);
@@ -163,19 +163,19 @@ public class Fire extends Attachment {
 
 	@Override
 	public void resetBoundary() {
-		Yukkuri pa = org.simyukkuri.util.BodyRegistry.getBodyInstance(parent);
+		Yukkuri pa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(parent);
 		if (pa == null)
 			return;
 		if (pivX == null || pivY == null || imgW == null || imgH == null)
 			return;
-		int idx = pa.getBodyAgeState().ordinal();
+		int idx = pa.getAgeState().ordinal();
 		if (idx < 0 || idx >= pivX.length || idx >= pivY.length || idx >= imgW.length || idx >= imgH.length) {
 			return;
 		}
-		setBoundary(pivX[pa.getBodyAgeState().ordinal()],
-				pivY[pa.getBodyAgeState().ordinal()],
-				imgW[pa.getBodyAgeState().ordinal()],
-				imgH[pa.getBodyAgeState().ordinal()]);
+		setBoundary(pivX[pa.getAgeState().ordinal()],
+				pivY[pa.getAgeState().ordinal()],
+				imgW[pa.getAgeState().ordinal()],
+				imgH[pa.getAgeState().ordinal()]);
 	}
 
 	/**
@@ -186,9 +186,9 @@ public class Fire extends Attachment {
 	public Fire(Yukkuri body) {
 		super(body);
 		setAttachProperty(property, POS_KEY);
-		Yukkuri pa = org.simyukkuri.util.BodyRegistry.getBodyInstance(parent);
+		Yukkuri pa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(parent);
 		if (pa != null && pivX != null && pivY != null && imgW != null && imgH != null) {
-			int idx = pa.getBodyAgeState().ordinal();
+			int idx = pa.getAgeState().ordinal();
 			if (idx >= 0 && idx < pivX.length && idx < pivY.length && idx < imgW.length && idx < imgH.length) {
 				setBoundary(pivX[idx], pivY[idx], imgW[idx], imgH[idx]);
 			}

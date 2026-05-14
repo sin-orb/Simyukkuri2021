@@ -3,7 +3,7 @@ package org.simyukkuri.logic;
 import org.simyukkuri.entity.core.attachment.impl.Badge;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.enums.Attitude;
-import org.simyukkuri.enums.BodyRank;
+import org.simyukkuri.enums.YukkuriRank;
 import org.simyukkuri.enums.Intelligence;
 
 /***************************************************
@@ -25,11 +25,11 @@ public class BadgeLogic {
 		Attitude attitude = body.getAttitude();
 		Intelligence intelligence = body.getIntelligence();
 		boolean isIdiot = body.isIdiot();
-		BodyRank bodyRank = body.getBodyRank();
+		YukkuriRank bodyRank = body.getRank();
 
 		Badge.BadgeRank badgeRank = Badge.BadgeRank.FAKE;
 		// 飼いゆ以外,足りないゆは偽バッチのみ
-		if (bodyRank != BodyRank.KAIYU || isIdiot) {
+		if (bodyRank != YukkuriRank.KAIYU || isIdiot) {
 			badgeRank = Badge.BadgeRank.FAKE;
 		} else {
 			switch (attitude) {

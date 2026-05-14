@@ -76,7 +76,7 @@ public class ModLoader {
 		return MOD_ITEM_DIR;
 	}
 
-	public static String getModBodyDir() {
+	public static String getModYukkuriDir() {
 		return MOD_BODY_DIR;
 	}
 
@@ -158,7 +158,7 @@ public class ModLoader {
 	 * 
 	 * @return mod/yukkuri/内のフォルダ一覧
 	 */
-	public static Vector<String> getBodyThemeList() {
+	public static Vector<String> getYukkuriThemeList() {
 		return createThemeList(jarPath + MOD_ROOT_DIR + File.separator + MOD_BODY_DIR);
 	}
 
@@ -229,7 +229,7 @@ public class ModLoader {
 	 * 
 	 * @return ボディテーマパス
 	 */
-	public static String getBodyThemePath() {
+	public static String getYukkuriThemePath() {
 		return bodyTheme;
 	}
 
@@ -238,7 +238,7 @@ public class ModLoader {
 	 * 
 	 * @param path ボディテーマパス
 	 */
-	public static void setBodyThemePath(String path) {
+	public static void setYukkuriThemePath(String path) {
 		if (path == null) {
 			bodyTheme = null;
 		} else {
@@ -434,7 +434,7 @@ public class ModLoader {
 	 * @param name   ファイル名
 	 * @return INIファイルマップ
 	 */
-	public static Map<String, Point4y[]> loadBodyIniMap(ClassLoader loader, String path, String name) {
+	public static Map<String, Point4y[]> loadYukkuriIniMap(ClassLoader loader, String path, String name) {
 
 		Map<String, Point4y[]> ret = null;
 		IniFileReader iniFile = null;
@@ -510,7 +510,7 @@ public class ModLoader {
 	 * @param inKey  目的のキー
 	 * @return キーから取得されたINIファイル上の数値
 	 */
-	public static int loadBodyIniMapForInt(ClassLoader loader, String path, String name, String inKey) {
+	public static int loadYukkuriIniMapForInt(ClassLoader loader, String path, String name, String inKey) {
 		int result = 0;
 		IniFileReader iniFile = null;
 		boolean jarTry = true;
@@ -555,7 +555,7 @@ public class ModLoader {
 	 * @param inKey  目的のキー
 	 * @return キーから取得されたINIファイル上の文字列
 	 */
-	public static String[] loadBodyIniMapForArrayString(ClassLoader loader, String path, String name, String inKey) {
+	public static String[] loadYukkuriIniMapForArrayString(ClassLoader loader, String path, String name, String inKey) {
 		IniFileReader iniFile = null;
 		boolean jarTry = true;
 
@@ -605,7 +605,7 @@ public class ModLoader {
 	 * @param io       イメージオブザーバ
 	 * @return 読み込めたかどうか
 	 */
-	public static boolean loadBodyImagePack(ClassLoader loader, BufferedImage[][][] images, int[][] dirOfs,
+	public static boolean loadYukkuriImagePack(ClassLoader loader, BufferedImage[][][] images, int[][] dirOfs,
 			String suffix, String bodyName, ImageObserver io) {
 		// 既存のデータをクリア
 		for (BufferedImage[][] a2 : images) {
@@ -634,7 +634,7 @@ public class ModLoader {
 		ImageCode[] parts = ImageCode.values();
 		int max = parts.length;
 		for (int i = 0; i < max; i++) {
-			tmp = loadBodyImage(loader, bodyTheme, suffix, bodyName, parts[i]);
+			tmp = loadYukkuriImage(loader, bodyTheme, suffix, bodyName, parts[i]);
 			images[i][Const.LEFT][adultIndex] = tmp.getImg()[Const.LEFT];
 			images[i][Const.RIGHT][adultIndex] = tmp.getImg()[Const.RIGHT];
 			if (tmp.isFlip()) {
@@ -699,7 +699,7 @@ public class ModLoader {
 	 * @param io       イメージオブザーバ
 	 * @return 読み込めたかどうか
 	 */
-	public static boolean loadBodyImagePack(ClassLoader loader, BufferedImage[][][][] images, int[][] dirOfs,
+	public static boolean loadYukkuriImagePack(ClassLoader loader, BufferedImage[][][][] images, int[][] dirOfs,
 			String suffix, String bodyName, ImageObserver io) {
 		// 既存のデータをクリア
 		for (BufferedImage[][][] a3 : images) {
@@ -730,7 +730,7 @@ public class ModLoader {
 		ImageCode[] parts = ImageCode.values();
 		int max = parts.length;
 		for (int i = 0; i < max; i++) {
-			tmp = loadBodyImage(loader, bodyTheme, suffix, bodyName, parts[i]);
+			tmp = loadYukkuriImage(loader, bodyTheme, suffix, bodyName, parts[i]);
 			images[i][Const.LEFT][adultIndex][0] = tmp.getImg()[Const.LEFT];
 			images[i][Const.RIGHT][adultIndex][0] = tmp.getImg()[Const.RIGHT];
 
@@ -846,7 +846,7 @@ public class ModLoader {
 	}
 
 	// ボディパーツ1つ読み込み
-	private static BodyImage loadBodyImage(ClassLoader loader, String root, String suffix, String bodyName,
+	private static BodyImage loadYukkuriImage(ClassLoader loader, String root, String suffix, String bodyName,
 			ImageCode parts) {
 		BodyImage ret = new BodyImage();
 		boolean jarTry = false;

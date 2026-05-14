@@ -35,7 +35,7 @@ import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 
 import org.simyukkuri.enums.AgeState;
-import org.simyukkuri.enums.BodyRank;
+import org.simyukkuri.enums.YukkuriRank;
 import org.simyukkuri.enums.YukkuriType;
 import org.simyukkuri.system.Cash;
 import org.simyukkuri.system.FrameRate;
@@ -168,11 +168,11 @@ public class MyPane extends JPanel implements Runnable {
 		isDisableHelp = disableHelp;
 	}
 
-	public static Yukkuri getSelectBody() {
+	public static Yukkuri getSelectedYukkuri() {
 		return selectBody;
 	}
 
-	public static void setSelectBody(Yukkuri body) {
+	public static void setSelectedYukkuri(Yukkuri body) {
 		selectBody = body;
 	}
 
@@ -224,8 +224,8 @@ public class MyPane extends JPanel implements Runnable {
 	 *
 	 * @param type 読み込むゆっくりの種
 	 */
-	public void loadBodyImage(YukkuriType type) {
-		ImageLoadService.loadBodyImage(this, type);
+	public void loadYukkuriImage(YukkuriType type) {
+		ImageLoadService.loadYukkuriImage(this, type);
 	}
 
 	/** 背景ファイルリロード */
@@ -498,7 +498,7 @@ public class MyPane extends JPanel implements Runnable {
 					}
 					Yukkuri b;
 					synchronized (SimYukkuri.lock) {
-						b = terrarium.makeBody(GameRandom.nextInt(Translate.getMapW()),
+						b = terrarium.makeYukkuri(GameRandom.nextInt(Translate.getMapW()),
 								GameRandom.nextInt(Translate.getMapH()), 0, selectType,
 								null, age, null, null, true);
 					}
@@ -519,8 +519,8 @@ public class MyPane extends JPanel implements Runnable {
 		}
 		for (Yukkuri b : bodies) {
 			synchronized (SimYukkuri.lock) {
-				terrarium.addBody(b);
-				if (b.getBodyRank() == BodyRank.KAIYU)
+				terrarium.addYukkuri(b);
+				if (b.getRank() == YukkuriRank.KAIYU)
 					Cash.buyYukkuri(b);
 			}
 		}

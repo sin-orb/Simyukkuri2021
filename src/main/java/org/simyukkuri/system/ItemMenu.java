@@ -316,7 +316,7 @@ public class ItemMenu {
 		if (item instanceof Yukkuri) {
 			Yukkuri b = (Yukkuri) item;
 			b.setTaken(false);
-			curMap.getBody().put(b.getUniqueID(), b);
+			curMap.getYukkuriMap().put(b.getUniqueID(), b);
 		} else if (item instanceof Shit) {
 			curMap.getShit().put(item.objId, (Shit) item);
 		} else if (item instanceof Vomit) {

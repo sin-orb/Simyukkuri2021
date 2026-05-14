@@ -119,13 +119,13 @@ public class Stalk extends WorldEntity {
 		if (getBindBabies() == null) {
 			return;
 		}
-		Yukkuri parent = org.simyukkuri.util.BodyRegistry.getBodyInstance(this.getPlantYukkuri());
+		Yukkuri parent = org.simyukkuri.util.YukkuriLookup.getYukkuriById(this.getPlantYukkuri());
 		for (Integer j : getBindBabies()) {
 			if (j == null) {
 				i++;
 				continue;
 			}
-			Yukkuri b = org.simyukkuri.util.BodyRegistry.getBodyInstance(j);
+			Yukkuri b = org.simyukkuri.util.YukkuriLookup.getYukkuriById(j);
 			if (b == null) {
 				i++;
 				continue;
@@ -221,14 +221,14 @@ public class Stalk extends WorldEntity {
 	 */
 	public void disBindBabys() {
 		if (plantYukkuri != -1) {
-			Yukkuri planted = org.simyukkuri.util.BodyRegistry.getBodyInstance(plantYukkuri);
+			Yukkuri planted = org.simyukkuri.util.YukkuriLookup.getYukkuriById(plantYukkuri);
 			if (planted != null && planted.getStalks() != null) {
 				planted.getStalks().set(planted.getStalks().indexOf(this), null);
 			}
 		}
 
 		for (int i : bindBabies) {
-			Yukkuri b = org.simyukkuri.util.BodyRegistry.getBodyInstance(i);
+			Yukkuri b = org.simyukkuri.util.YukkuriLookup.getYukkuriById(i);
 			if (b != null) {
 				b.setBindStalk(null);
 			}
@@ -295,7 +295,7 @@ public class Stalk extends WorldEntity {
 	@Transient
 	public boolean isPlantYukkuri() {
 		for (int i : bindBabies) {
-			Yukkuri b = org.simyukkuri.util.BodyRegistry.getBodyInstance(i);
+			Yukkuri b = org.simyukkuri.util.YukkuriLookup.getYukkuriById(i);
 			if (b != null) {
 				return true;
 			}
@@ -316,7 +316,7 @@ public class Stalk extends WorldEntity {
 				if (i == null) {
 					continue;
 				}
-				Yukkuri b = org.simyukkuri.util.BodyRegistry.getBodyInstance(i);
+				Yukkuri b = org.simyukkuri.util.YukkuriLookup.getYukkuriById(i);
 				if (b != null) {
 					b.setBindStalk(null);
 				}
@@ -341,7 +341,7 @@ public class Stalk extends WorldEntity {
 	 * @return 生えているゆっくり
 	 */
 	public Yukkuri takePlantYukkuri() {
-		return GameWorld.get().getCurrentMap().getBody().get(plantYukkuri);
+		return GameWorld.get().getCurrentMap().getYukkuriMap().get(plantYukkuri);
 	}
 
 	@Override
@@ -441,7 +441,7 @@ public class Stalk extends WorldEntity {
 			if (i == null) {
 				continue;
 			}
-			Yukkuri baby = org.simyukkuri.util.BodyRegistry.getBodyInstance(i);
+			Yukkuri baby = org.simyukkuri.util.YukkuriLookup.getYukkuriById(i);
 			if (baby != null) {
 				baby.setBindStalk(null);
 				baby.setBindObj(-1);
@@ -454,7 +454,7 @@ public class Stalk extends WorldEntity {
 
 	// @Override
 	// public String toString() {
-	// Yukkuri p = org.simyukkuri.util.BodyRegistry.getBodyInstance(plantYukkuri);
+	// Yukkuri p = org.simyukkuri.util.YukkuriLookup.getYukkuriById(plantYukkuri);
 	// String ret = "";
 	// ret += GameText.read("game_stalk1");
 	// if (p != null) {
@@ -472,7 +472,7 @@ public class Stalk extends WorldEntity {
 	// continue;
 	// } else {
 	// Integer b = (Integer)o;
-	// Yukkuri baby = org.simyukkuri.util.BodyRegistry.getBodyInstance(b);
+	// Yukkuri baby = org.simyukkuri.util.YukkuriLookup.getYukkuriById(b);
 	// if (baby == null) {
 	// ret += GameText.read("game_empty");
 	// } else {

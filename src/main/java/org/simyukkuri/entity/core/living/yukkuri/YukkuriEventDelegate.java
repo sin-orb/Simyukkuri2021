@@ -7,7 +7,7 @@ import org.simyukkuri.enums.PanicType;
 import org.simyukkuri.enums.PlayStyle;
 import org.simyukkuri.event.impl.CutPenipeniEvent;
 import org.simyukkuri.event.impl.BegForLifeEvent;
-import org.simyukkuri.logic.BodyEventState;
+import org.simyukkuri.logic.YukkuriEventState;
 import org.simyukkuri.logic.EventLogic;
 import org.simyukkuri.logic.ToyLogic;
 import org.simyukkuri.system.MessagePool;
@@ -33,21 +33,21 @@ public final class YukkuriEventDelegate {
 	 * 行動・イベントの取り消しを行う.
 	 */
 	public void clearActions() {
-		BodyEventState.clearActions(body);
+		YukkuriEventState.clearActions(body);
 	}
 
 	/**
 	 * イベントをクリアする.
 	 */
 	public void clearEvent() {
-		BodyEventState.clearEvent(body);
+		YukkuriEventState.clearEvent(body);
 	}
 
 	/**
 	 * イベント用のアクションだけをクリアする.
 	 */
 	public void clearActionsForEvent() {
-		BodyEventState.clearActionsForEvent(body);
+		YukkuriEventState.clearActionsForEvent(body);
 	}
 
 	/**
@@ -206,7 +206,7 @@ public final class YukkuriEventDelegate {
 				break;
 		}
 		if (forceFlag || requestBeg) {
-			EventLogic.addBodyEvent(body, new BegForLifeEvent(body, null, null, 1), null, null);
+			EventLogic.addYukkuriEvent(body, new BegForLifeEvent(body, null, null, 1), null, null);
 		}
 	}
 

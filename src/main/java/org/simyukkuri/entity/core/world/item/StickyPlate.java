@@ -114,7 +114,7 @@ public class StickyPlate extends WorldEntity {
 		return true;
 	}
 
-	public Yukkuri getBindBody() {
+	public Yukkuri getBoundYukkuri() {
 		return bindBody;
 	}
 
@@ -279,7 +279,7 @@ public class StickyPlate extends WorldEntity {
 		this.itemRank = itemRank;
 	}
 
-	public void setBindBody(Yukkuri bindBody) {
+	public void setBoundYukkuri(Yukkuri bindBody) {
 		this.bindBody = bindBody;
 	}
 

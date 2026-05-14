@@ -128,7 +128,7 @@ public class HungryAmpouleTest {
         Yukkuri parent = createParent(AgeState.CHILD);
         HungryAmpoule ampoule = new HungryAmpoule(parent);
 
-        SimYukkuri.world.getCurrentMap().getBody().remove(parent.getUniqueID());
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().remove(parent.getUniqueID());
 
         BufferedImage image = ampoule.getImage(parent);
         assertNull(image);
@@ -177,7 +177,7 @@ public class HungryAmpouleTest {
         int origPivotX = ampoule.getPivotX();
         int origPivotY = ampoule.getPivotY();
 
-        SimYukkuri.world.getCurrentMap().getBody().remove(parent.getUniqueID());
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().remove(parent.getUniqueID());
 
         ampoule.resetBoundary();
 
@@ -211,7 +211,7 @@ public class HungryAmpouleTest {
     private static Yukkuri createParent(AgeState ageState) {
         Yukkuri parent = new Reimu();
         parent.setAgeState(ageState);
-        SimYukkuri.world.getCurrentMap().getBody().put(parent.getUniqueID(), parent);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(parent.getUniqueID(), parent);
         return parent;
     }
 

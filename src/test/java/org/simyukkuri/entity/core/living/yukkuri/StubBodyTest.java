@@ -22,7 +22,7 @@ import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.draw.World;
 import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.system.Sprite;
-import org.simyukkuri.system.BodyLayer;
+import org.simyukkuri.system.YukkuriLayer;
 
 /**
  * StubBody のカバレッジ向上テスト.
@@ -51,9 +51,9 @@ public class StubBodyTest {
 
     private static void initSprites(StubBody b) {
         for (int i = 0; i < 3; i++) {
-            b.getBodySpr()[i] = new Sprite();
-            b.getBodySpr()[i].setImageW(100);
-            b.getBodySpr()[i].setImageH(100);
+            b.getSpriteSet()[i] = new Sprite();
+            b.getSpriteSet()[i].setImageW(100);
+            b.getSpriteSet()[i].setImageH(100);
             b.getExpandSpr()[i] = new Sprite();
             b.getBraidSpr()[i] = new Sprite();
         }
@@ -129,13 +129,13 @@ public class StubBodyTest {
     @Test
     public void testGetImageReturnsZero() {
         // line 56: getImage() は未カバーだった
-        int result = body.getImage(0, 0, new BodyLayer(), 0);
+        int result = body.getImage(0, 0, new YukkuriLayer(), 0);
         assertEquals(0, result);
     }
 
     @Test
     public void testGetImageWithVariousArgs() {
-        assertEquals(0, body.getImage(1, 1, new BodyLayer(), 2));
+        assertEquals(0, body.getImage(1, 1, new YukkuriLayer(), 2));
     }
 
     // ---------------------------------------------------------------
@@ -183,12 +183,12 @@ public class StubBodyTest {
     }
 
     // ---------------------------------------------------------------
-    // checkNonYukkuriDiseaseTolerance
+    // getNonYukkuriDiseaseTolerance
     // ---------------------------------------------------------------
 
     @Test
     public void testCheckNonYukkuriDiseaseToleranceReturnsZero() {
-        assertEquals(0, body.checkNonYukkuriDiseaseTolerance());
+        assertEquals(0, body.getNonYukkuriDiseaseTolerance());
     }
 
     // ---------------------------------------------------------------
@@ -206,12 +206,12 @@ public class StubBodyTest {
         assertEquals("", body.getNameE2());
         assertEquals("MyTest", body.getMyName());
         assertEquals("MyTestD", body.getMyNameD());
-        assertEquals(0, body.getImage(0, 0, new BodyLayer(), 0));
+        assertEquals(0, body.getImage(0, 0, new YukkuriLayer(), 0));
         assertDoesNotThrow(() -> body.tuneParameters());
         assertTrue(body.isImageLoaded());
         assertNull(body.getMountPoint("test"));
         assertEquals(0, body.getPivotX());
         assertEquals(0, body.getPivotY());
-        assertEquals(0, body.checkNonYukkuriDiseaseTolerance());
+        assertEquals(0, body.getNonYukkuriDiseaseTolerance());
     }
 }

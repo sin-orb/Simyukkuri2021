@@ -9,7 +9,7 @@ import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.attachment.impl.Ants;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.enums.Attitude;
-import org.simyukkuri.enums.BodyRank;
+import org.simyukkuri.enums.YukkuriRank;
 import org.simyukkuri.enums.BurialState;
 import org.simyukkuri.enums.CoreAnkoState;
 import org.simyukkuri.enums.CriticalDamegeType;
@@ -20,9 +20,9 @@ import org.simyukkuri.enums.Intelligence;
 import org.simyukkuri.enums.LovePlayer;
 import org.simyukkuri.enums.Parent;
 import org.simyukkuri.enums.PublicRank;
-import org.simyukkuri.logic.BodyIllnessRule;
-import org.simyukkuri.logic.BodyLogic;
-import org.simyukkuri.logic.BodyRelations;
+import org.simyukkuri.logic.YukkuriIllnessRule;
+import org.simyukkuri.logic.YukkuriLogic;
+import org.simyukkuri.logic.YukkuriRelations;
 import org.simyukkuri.system.MessagePool;
 import org.simyukkuri.util.GameMessages;
 import org.simyukkuri.util.GameRandom;
@@ -45,7 +45,7 @@ public abstract class SocialEntity extends LivingEntity {
 	/** プレイヤーへのなつき度概算 */
 	protected LovePlayer lovePlayerState = LovePlayer.NONE;
 	/** 飼いゆ、野良ゆなどのランク */
-	protected BodyRank bodyRank = BodyRank.KAIYU;
+	protected YukkuriRank bodyRank = YukkuriRank.KAIYU;
 	/** 群れ内のうんうん奴隷などのランク */
 	protected PublicRank publicRank = PublicRank.NONE;
 	/** 思い出（悪夢関連） */
@@ -188,12 +188,12 @@ public abstract class SocialEntity extends LivingEntity {
 	}
 
 	/** 飼いゆ、野良ゆなどのランク を取得する. @return 飼いゆ、野良ゆなどのランク */
-	public BodyRank getBodyRank() {
+	public YukkuriRank getRank() {
 		return bodyRank;
 	}
 
 	/** 飼いゆ、野良ゆなどのランク を設定する. @param bodyRank 飼いゆ、野良ゆなどのランク */
-	public void setBodyRank(BodyRank bodyRank) {
+	public void setRank(YukkuriRank bodyRank) {
 		this.bodyRank = bodyRank;
 	}
 
@@ -634,7 +634,7 @@ public abstract class SocialEntity extends LivingEntity {
 	 * @return 病気ならtrue
 	 */
 	public boolean findSick(Yukkuri b) {
-		return BodyIllnessRule.findSick(getIntelligence(), b);
+		return YukkuriIllnessRule.findSick(getIntelligence(), b);
 	}
 
 	/**
@@ -642,7 +642,8 @@ public abstract class SocialEntity extends LivingEntity {
 	 *
 	 * @return 耐性値
 	 */
-	public int checkNonYukkuriDiseaseTolerance() {
+	@com.fasterxml.jackson.annotation.JsonIgnore
+	public int getNonYukkuriDiseaseTolerance() {
 		int tolerance = 100;
 		if (isIdiot()) {
 			tolerance += 50000;
@@ -676,7 +677,7 @@ public abstract class SocialEntity extends LivingEntity {
 			default:
 				break;
 		}
-		switch (getBodyAgeState()) {
+		switch (getAgeState()) {
 			case BABY:
 				break;
 			case CHILD:
@@ -705,7 +706,7 @@ public abstract class SocialEntity extends LivingEntity {
 			default:
 				break;
 		}
-		switch (getBodyBakeLevel()) {
+		switch (getBakeLevel()) {
 			case MIDIUM:
 				tolerance -= 15;
 				break;
@@ -744,7 +745,7 @@ public abstract class SocialEntity extends LivingEntity {
 		}
 		if (getChildrenList() != null) {
 			for (int iChild : getChildrenList()) {
-				Yukkuri childBody = BodyRelations.getBody(iChild);
+				Yukkuri childBody = YukkuriRelations.getYukkuriById(iChild);
 				if (childBody == null || childBody.isAdult()) {
 					continue;
 				}
@@ -981,7 +982,7 @@ public abstract class SocialEntity extends LivingEntity {
 
 		if (getAttachmentSize(Ants.class) != 0) {
 			setHappiness(Happiness.VERY_SAD);
-			BodyLogic.checkNearParent(this);
+			YukkuriLogic.checkNearParent(this);
 			setCallingParents(true);
 		}
 
@@ -999,12 +1000,12 @@ public abstract class SocialEntity extends LivingEntity {
 			if (kusogaki) {
 				setHappiness(Happiness.VERY_SAD);
 				setPikoMessage(GameMessages.getMessage(this, MessagePool.Action.Dirty), false);
-				BodyLogic.checkNearParent(this);
+				YukkuriLogic.checkNearParent(this);
 				setCallingParents(true);
 			} else {
 				setHappiness(Happiness.SAD);
 				setMessage(GameMessages.getMessage(this, MessagePool.Action.Dirty));
-				BodyLogic.checkNearParent(this);
+				YukkuriLogic.checkNearParent(this);
 				setCallingParents(true);
 			}
 			dirtyScreamPeriod--;
@@ -1022,7 +1023,7 @@ public abstract class SocialEntity extends LivingEntity {
 	public boolean wantToShit() {
 		int step = (!isHungry() ? TICK * 2 : TICK);
 		int adjust = 50 * (isRude() ? 1 : 2) * shittingDiscipline / (isBaby() ? 2 : 1);
-		return (getShitLimitBase()[getBodyAgeState().ordinal()] - shit) < (Const.DIAGONAL * step + adjust);
+		return (getShitLimitBase()[getAgeState().ordinal()] - shit) < (Const.DIAGONAL * step + adjust);
 	}
 
 	/**
@@ -1041,13 +1042,13 @@ public abstract class SocialEntity extends LivingEntity {
 	/** ストレスフルかどうかを返却する. */
 	@Transient
 	public boolean isStressful() {
-		return getStressLimit() * checkNonYukkuriDiseaseTolerance() / 100 * 2 / 5 < getStress();
+		return getStressLimit() * getNonYukkuriDiseaseTolerance() / 100 * 2 / 5 < getStress();
 	}
 
 	/** とてもストレスフルかどうかを返却する. */
 	@Transient
 	public boolean isVeryStressful() {
-		return getStressLimit() * checkNonYukkuriDiseaseTolerance() / 100 * 3 / 5 < getStress();
+		return getStressLimit() * getNonYukkuriDiseaseTolerance() / 100 * 3 / 5 < getStress();
 	}
 
 	/**
@@ -1063,7 +1064,7 @@ public abstract class SocialEntity extends LivingEntity {
 		s.setHappiness(happiness);
 		s.setLovePlayer(lovePlayer);
 		s.setLovePlayerState(lovePlayerState);
-		s.setBodyRank(bodyRank);
+		s.setRank(bodyRank);
 		s.setPublicRank(publicRank);
 		s.setMemories(memories);
 		s.setRapist(rapist);
@@ -1352,42 +1353,42 @@ public abstract class SocialEntity extends LivingEntity {
 
 	/** 2体の間に家族関係があるか */
 	public final boolean isFamily(SocialEntity other) {
-		return BodyRelations.isFamily(this, other);
+		return YukkuriRelations.isFamily(this, other);
 	}
 
 	/** other の親か */
 	public final boolean isParent(SocialEntity other) {
-		return BodyRelations.isParent(this, other);
+		return YukkuriRelations.isParent(this, other);
 	}
 
 	/** other の父親か */
 	public final boolean isFather(SocialEntity other) {
-		return BodyRelations.isFather(this, other);
+		return YukkuriRelations.isFather(this, other);
 	}
 
 	/** other の母親か */
 	public final boolean isMother(SocialEntity other) {
-		return BodyRelations.isMother(this, other);
+		return YukkuriRelations.isMother(this, other);
 	}
 
 	/** other の子か */
 	public final boolean isChild(SocialEntity other) {
-		return BodyRelations.isChild(this, other);
+		return YukkuriRelations.isChild(this, other);
 	}
 
 	/** other が番か */
 	public final boolean isPartner(SocialEntity other) {
-		return BodyRelations.isPartner(this, other);
+		return YukkuriRelations.isPartner(this, other);
 	}
 
 	/** other が姉妹か */
 	public final boolean isSister(SocialEntity other) {
-		return BodyRelations.isSister(this, other);
+		return YukkuriRelations.isSister(this, other);
 	}
 
 	/** other が妹か (自分が年上) */
 	public final boolean isElderSister(SocialEntity other) {
-		return BodyRelations.isElderSister(this, other);
+		return YukkuriRelations.isElderSister(this, other);
 	}
 
 	// --- 家族リスト操作 ---
@@ -1415,7 +1416,7 @@ public abstract class SocialEntity extends LivingEntity {
 	}
 
 	public void removeChildrenList(SocialEntity target) {
-		BodyRelations.removeChildrenList(this, target);
+		YukkuriRelations.removeChildrenList(this, target);
 	}
 
 	public void addElderSisterList(SocialEntity at) {
@@ -1424,7 +1425,7 @@ public abstract class SocialEntity extends LivingEntity {
 	}
 
 	public void removeElderSisterList(SocialEntity target) {
-		BodyRelations.removeElderSisterList(this, target);
+		YukkuriRelations.removeElderSisterList(this, target);
 	}
 
 	public void addSisterList(SocialEntity at) {
@@ -1433,7 +1434,7 @@ public abstract class SocialEntity extends LivingEntity {
 	}
 
 	public void removeSisterList(SocialEntity target) {
-		BodyRelations.removeSisterList(this, target);
+		YukkuriRelations.removeSisterList(this, target);
 	}
 
 }

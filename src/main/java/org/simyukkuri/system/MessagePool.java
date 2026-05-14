@@ -9,7 +9,7 @@ import java.util.List;
 import org.simyukkuri.draw.ModLoader;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.enums.AgeState;
-import org.simyukkuri.enums.BodyRank;
+import org.simyukkuri.enums.YukkuriRank;
 import org.simyukkuri.enums.FootBake;
 import org.simyukkuri.enums.Intelligence;
 import org.simyukkuri.enums.LovePlayer;
@@ -636,7 +636,7 @@ public class MessagePool {
 					true);
 			if (br != null) {
 				try {
-					readMessageMap(br, pool_j[i], RANK_SUFFIX[BodyRank.KAIYU.getMessageIndex()]);
+					readMessageMap(br, pool_j[i], RANK_SUFFIX[YukkuriRank.KAIYU.getMessageIndex()]);
 					br.close();
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -647,7 +647,7 @@ public class MessagePool {
 					true);
 			if (br != null) {
 				try {
-					readMessageMap(br, pool_j[i], RANK_SUFFIX[BodyRank.KAIYU.getMessageIndex()]);
+					readMessageMap(br, pool_j[i], RANK_SUFFIX[YukkuriRank.KAIYU.getMessageIndex()]);
 					br.close();
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -660,7 +660,7 @@ public class MessagePool {
 					yk[i].getMessageFileName() + "_j.txt", false);
 			if (br != null) {
 				try {
-					readMessageMap(br, pool_j[i], RANK_SUFFIX[BodyRank.NORAYU.getMessageIndex()]);
+					readMessageMap(br, pool_j[i], RANK_SUFFIX[YukkuriRank.NORAYU.getMessageIndex()]);
 					br.close();
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -671,7 +671,7 @@ public class MessagePool {
 					yk[i].getMessageFileName() + "_ev_j.txt", false);
 			if (br != null) {
 				try {
-					readMessageMap(br, pool_j[i], RANK_SUFFIX[BodyRank.NORAYU.getMessageIndex()]);
+					readMessageMap(br, pool_j[i], RANK_SUFFIX[YukkuriRank.NORAYU.getMessageIndex()]);
 					br.close();
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -833,10 +833,10 @@ public class MessagePool {
 		String name = "";
 		String name2 = "";
 		String partnerName = "";
-		if (body.getBodyRank() == null) {
+		if (body.getRank() == null) {
 			return null;
 		}
-		String suffix = RANK_SUFFIX[body.getBodyRank().getMessageIndex()];
+		String suffix = RANK_SUFFIX[body.getRank().getMessageIndex()];
 		if (pool_j.length <= body.getMsgType().ordinal()) {
 			return null;
 		}
@@ -858,7 +858,7 @@ public class MessagePool {
 			// name = body.getNameJ() / body.getNameE() fallback already handled above.
 		}
 		name2 = GameLocale.isJapanese() ? body.getNameJ2() : body.getNameE2();
-		Yukkuri pa = org.simyukkuri.util.BodyRegistry.getBodyInstance(body.getPartner());
+		Yukkuri pa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(body.getPartner());
 		if (pa != null)
 			partnerName = GameLocale.isJapanese() ? pa.getNameJ() : pa.getNameE();
 
@@ -867,8 +867,8 @@ public class MessagePool {
 
 		act = map.get(action.name() + suffix);
 		// 読み込み失敗かつ飼いゆメッセージではないなら飼いゆメッセージを読み込む
-		if (act == null && body.getBodyRank().getMessageIndex() != BodyRank.KAIYU.getMessageIndex()) {
-			suffix = RANK_SUFFIX[BodyRank.KAIYU.getMessageIndex()];
+		if (act == null && body.getRank().getMessageIndex() != YukkuriRank.KAIYU.getMessageIndex()) {
+			suffix = RANK_SUFFIX[YukkuriRank.KAIYU.getMessageIndex()];
 			act = map.get(action.name() + suffix);
 		}
 

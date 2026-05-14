@@ -26,7 +26,7 @@ class SuiTest extends ItemTestBase {
         Yukkuri b = WorldTestHelper.createBody();
         b.setX(100);
         b.setY(100);
-        SimYukkuri.world.getCurrentMap().getBody().put(b.getUniqueID(), b);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(b.getUniqueID(), b);
         return b;
     }
 
@@ -191,8 +191,8 @@ class SuiTest extends ItemTestBase {
     void testGetSetBindBody() {
         Sui sui = new Sui();
         Yukkuri[] bodies = new Yukkuri[3];
-        sui.setBindBody(bodies);
-        assertNotNull(sui.getBindBody());
+        sui.setBoundYukkuri(bodies);
+        assertNotNull(sui.getBoundYukkuri());
     }
 
     @Test

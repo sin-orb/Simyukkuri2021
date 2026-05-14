@@ -91,7 +91,7 @@ public class PoisonAmpoule extends Attachment {
 
 	@Override
 	protected Event update() {
-		Yukkuri pa = org.simyukkuri.util.BodyRegistry.getBodyInstance(parent);
+		Yukkuri pa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(parent);
 		if (pa == null)
 			return Event.DONOTHING;
 		if (pa.isDead()) {
@@ -118,23 +118,23 @@ public class PoisonAmpoule extends Attachment {
 
 	@Override
 	public BufferedImage getImage(Yukkuri b) {
-		Yukkuri pa = org.simyukkuri.util.BodyRegistry.getBodyInstance(parent);
+		Yukkuri pa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(parent);
 		if (pa == null)
 			return null;
 		if (b.getDirection() == Direction.RIGHT) {
-			return images[pa.getBodyAgeState().ordinal()][1];
+			return images[pa.getAgeState().ordinal()][1];
 		}
-		return images[pa.getBodyAgeState().ordinal()][0];
+		return images[pa.getAgeState().ordinal()][0];
 	}
 
 	@Override
 	public void resetBoundary() {
-		Yukkuri pa = org.simyukkuri.util.BodyRegistry.getBodyInstance(parent);
+		Yukkuri pa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(parent);
 		if (pa != null) {
-			setBoundary(pivX[pa.getBodyAgeState().ordinal()],
-					pivY[pa.getBodyAgeState().ordinal()],
-					imgW[pa.getBodyAgeState().ordinal()],
-					imgH[pa.getBodyAgeState().ordinal()]);
+			setBoundary(pivX[pa.getAgeState().ordinal()],
+					pivY[pa.getAgeState().ordinal()],
+					imgW[pa.getAgeState().ordinal()],
+					imgH[pa.getAgeState().ordinal()]);
 		}
 	}
 
@@ -146,12 +146,12 @@ public class PoisonAmpoule extends Attachment {
 	public PoisonAmpoule(Yukkuri body) {
 		super(body);
 		setAttachProperty(property, POS_KEY);
-		Yukkuri pa = org.simyukkuri.util.BodyRegistry.getBodyInstance(parent);
+		Yukkuri pa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(parent);
 		if (pa != null) {
-			setBoundary(pivX[pa.getBodyAgeState().ordinal()],
-					pivY[pa.getBodyAgeState().ordinal()],
-					imgW[pa.getBodyAgeState().ordinal()],
-					imgH[pa.getBodyAgeState().ordinal()]);
+			setBoundary(pivX[pa.getAgeState().ordinal()],
+					pivY[pa.getAgeState().ordinal()],
+					imgW[pa.getAgeState().ordinal()],
+					imgH[pa.getAgeState().ordinal()]);
 		}
 		value = 500;
 		cost = 0;

@@ -26,7 +26,7 @@ import org.simyukkuri.system.Sprite;
 import org.simyukkuri.util.WorldTestHelper;
 
 /**
- * Tests for BodyDeadSearchRule.
+ * Tests for YukkuriDeadSearchRule.
  */
 class BodyDeadSearchRuleTest {
 
@@ -35,8 +35,8 @@ class BodyDeadSearchRuleTest {
 		WorldTestHelper.initializeMinimalWorld();
 		Yukkuri me = WorldTestHelper.createBody();
 		Yukkuri you = WorldTestHelper.createBody();
-		me.setBodySpr(makeSprites(1, 1));
-		you.setBodySpr(makeSprites(1, 1));
+		me.setSpriteSet(makeSprites(1, 1));
+		you.setSpriteSet(makeSprites(1, 1));
 		me.setX(100);
 		me.setY(100);
 		you.setX(120);
@@ -47,7 +47,7 @@ class BodyDeadSearchRuleTest {
 		you.setDead(true);
 		me.setExciting(true);
 
-		assertDoesNotThrow(() -> assertTrue(BodyDeadSearchRule.handleDeadFound(me, you, 0, 0)));
+		assertDoesNotThrow(() -> assertTrue(YukkuriDeadSearchRule.handleDeadFound(me, you, 0, 0)));
 	}
 
 	@Test
@@ -55,8 +55,8 @@ class BodyDeadSearchRuleTest {
 		WorldTestHelper.initializeMinimalWorld();
 		Yukkuri me = WorldTestHelper.createBody();
 		Yukkuri you = WorldTestHelper.createBody();
-		me.setBodySpr(makeSprites(1, 1));
-		you.setBodySpr(makeSprites(1, 1));
+		me.setSpriteSet(makeSprites(1, 1));
+		you.setSpriteSet(makeSprites(1, 1));
 		me.setX(100);
 		me.setY(100);
 		you.setX(120);
@@ -66,7 +66,7 @@ class BodyDeadSearchRuleTest {
 		me.setAgeState(AgeState.ADULT);
 		you.setDead(true);
 
-		assertDoesNotThrow(() -> assertFalse(BodyDeadSearchRule.handleDeadFound(me, you, 0, 0)));
+		assertDoesNotThrow(() -> assertFalse(YukkuriDeadSearchRule.handleDeadFound(me, you, 0, 0)));
 	}
 
 	private static Sprite[] makeSprites(int w, int h) {

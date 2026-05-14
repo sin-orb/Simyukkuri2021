@@ -129,7 +129,7 @@ class OrangePoolTest extends ItemTestBase {
         for (int i = 0; i < 3; i++) {
             spr[i] = new Sprite(10, 10, Sprite.PIVOT_CENTER_BOTTOM);
         }
-        b.setBodySpr(spr);
+        b.setSpriteSet(spr);
         // enabled=false のとき objHitProcess は即 0 を返す
         assertEquals(0, item.objHitProcess(b));
     }
@@ -218,7 +218,7 @@ class OrangePoolTest extends ItemTestBase {
             for (int i = 0; i < 3; i++) {
                 spr[i] = new Sprite(10, 10, Sprite.PIVOT_CENTER_BOTTOM);
             }
-            body.setBodySpr(spr);
+            body.setSpriteSet(spr);
             body.setDirtyFlag(true);
             body.setDamage(100);
 
@@ -244,7 +244,7 @@ class OrangePoolTest extends ItemTestBase {
             for (int i = 0; i < 3; i++) {
                 spr[i] = new Sprite(10, 10, Sprite.PIVOT_CENTER_BOTTOM);
             }
-            body.setBodySpr(spr);
+            body.setSpriteSet(spr);
             body.setDead(true);
             body.setCrushed(false);
             body.setBurned(false);

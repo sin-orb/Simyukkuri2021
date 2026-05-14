@@ -32,7 +32,7 @@ public class TrashLogic {
 		Entity trashCandidate = searchTrashObj(body);
 
 		if (trashCandidate != null) {
-			EventLogic.addBodyEvent(body, new GetTrashOkazariEvent(body, null, trashCandidate, 1), null, null);
+			EventLogic.addYukkuriEvent(body, new GetTrashOkazariEvent(body, null, trashCandidate, 1), null, null);
 			return true;
 		}
 		return false;
@@ -43,7 +43,7 @@ public class TrashLogic {
 
 		Entity trashCandidate = null;
 		int nearestDistance = body.getEyesightBase();
-		int wallMode = body.getBodyAgeState().ordinal();
+		int wallMode = body.getAgeState().ordinal();
 		// 飛行可能なら壁以外は通過可能
 		if (body.canflyCheck()) {
 			wallMode = AgeState.ADULT.ordinal();

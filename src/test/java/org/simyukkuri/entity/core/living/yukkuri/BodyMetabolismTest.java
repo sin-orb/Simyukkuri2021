@@ -51,7 +51,7 @@ public class BodyMetabolismTest {
         body.setUniqueID(1);
         body.setAge(100000); // Adult
         body.setShitType(YukkuriType.REIMU);
-        gameMap.getBody().put(1, body);
+        gameMap.getYukkuriMap().put(1, body);
     }
 
     private void setupVomitStatics() throws Exception {

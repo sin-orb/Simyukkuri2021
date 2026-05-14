@@ -50,7 +50,7 @@ class HotPlateTest extends ItemTestBase {
     @Test
     void testEnableHitCheck_NoBindBody() {
         HotPlate item = new HotPlate();
-        assertNull(item.getBindBody());
+        assertNull(item.getBoundYukkuri());
         assertTrue(item.enableHitCheck());
     }
 
@@ -58,19 +58,19 @@ class HotPlateTest extends ItemTestBase {
     void testEnableHitCheck_WithBindBody() {
         HotPlate item = new HotPlate();
         Yukkuri body = WorldTestHelper.createBody();
-        item.setBindBody(body);
+        item.setBoundYukkuri(body);
         assertFalse(item.enableHitCheck());
     }
 
     @Test
     void testGetSetBindBody() {
         HotPlate item = new HotPlate();
-        assertNull(item.getBindBody());
+        assertNull(item.getBoundYukkuri());
         Yukkuri body = WorldTestHelper.createBody();
-        item.setBindBody(body);
-        assertEquals(body, item.getBindBody());
-        item.setBindBody(null);
-        assertNull(item.getBindBody());
+        item.setBoundYukkuri(body);
+        assertEquals(body, item.getBoundYukkuri());
+        item.setBoundYukkuri(null);
+        assertNull(item.getBoundYukkuri());
     }
 
     @Test
@@ -111,7 +111,7 @@ class HotPlateTest extends ItemTestBase {
 
         Yukkuri body = WorldTestHelper.createBody();
         body.setLockmove(true);
-        item.setBindBody(body);
+        item.setBoundYukkuri(body);
 
         item.removeListData();
 
@@ -124,7 +124,7 @@ class HotPlateTest extends ItemTestBase {
     @Test
     void testUpDate_NoBindBody() {
         HotPlate item = new HotPlate();
-        assertNull(item.getBindBody());
+        assertNull(item.getBoundYukkuri());
         assertDoesNotThrow(() -> item.upDate());
     }
 
@@ -135,7 +135,7 @@ class HotPlateTest extends ItemTestBase {
         SimYukkuri.world.getCurrentMap().getHotPlate().put(item.getObjId(), item);
 
         Yukkuri body = WorldTestHelper.createBody();
-        item.setBindBody(body);
+        item.setBoundYukkuri(body);
         item.setGrabbed(true);
 
         assertDoesNotThrow(() -> item.upDate());
@@ -149,13 +149,13 @@ class HotPlateTest extends ItemTestBase {
         SimYukkuri.world.getCurrentMap().getHotPlate().put(item.getObjId(), item);
 
         Yukkuri body = WorldTestHelper.createBody();
-        item.setBindBody(body);
+        item.setBoundYukkuri(body);
         // プレートとbodyのX座標を意図的にずらす
         body.setCalcX(item.getX() + 999);
 
         item.upDate();
 
-        assertNull(item.getBindBody());
+        assertNull(item.getBoundYukkuri());
     }
 
     // --- HotPlate(int,int,int) constructor ---
@@ -180,7 +180,7 @@ class HotPlateTest extends ItemTestBase {
     void testGetImageLayer_enabled_withBindBody_doesNotThrow() {
         HotPlate item = new HotPlate();
         Yukkuri body = WorldTestHelper.createBody();
-        item.setBindBody(body);
+        item.setBoundYukkuri(body);
         java.awt.image.BufferedImage[] layer = new java.awt.image.BufferedImage[1];
         assertDoesNotThrow(() -> item.getImageLayer(layer));
     }
@@ -224,7 +224,7 @@ class HotPlateTest extends ItemTestBase {
             body.setSleeping(true);
             body.setHappiness(Happiness.AVERAGE);
 
-            item.setBindBody(body);
+            item.setBoundYukkuri(body);
 
             int damageBefore = body.getDamage();
             int stressBefore = body.getStress();
@@ -238,7 +238,7 @@ class HotPlateTest extends ItemTestBase {
             assertEquals(footBakeBefore + 50, body.getFootBakePeriod());
             assertEquals(Happiness.VERY_SAD, body.getHappiness());
             assertEquals(ImageCode.PAIN.ordinal(), body.getForceFace());
-            assertEquals(body, item.getBindBody());
+            assertEquals(body, item.getBoundYukkuri());
         }
 
         @Test
@@ -254,11 +254,11 @@ class HotPlateTest extends ItemTestBase {
             body.setFootBakePeriod(body.getDamageLimit() + 1);
             body.setCanPullOrPush(false);
 
-            item.setBindBody(body);
+            item.setBoundYukkuri(body);
             item.upDate();
 
             assertTrue(body.canPullOrPush());
-            assertEquals(body, item.getBindBody());
+            assertEquals(body, item.getBoundYukkuri());
         }
 
         @Test
@@ -276,12 +276,12 @@ class HotPlateTest extends ItemTestBase {
             body.setCanPullOrPush(true);
             body.setForceFace(ImageCode.PAIN.ordinal());
 
-            item.setBindBody(body);
+            item.setBoundYukkuri(body);
             body.setCalcX(item.getX() + 1);
 
             item.upDate();
 
-            assertNull(item.getBindBody());
+            assertNull(item.getBoundYukkuri());
             assertFalse(body.isLockmove());
             assertFalse(body.canPullOrPush());
             assertTrue(body.isShadowVisible());

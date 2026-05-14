@@ -12,7 +12,7 @@ import org.simyukkuri.event.EventPacket;
 import org.simyukkuri.event.EventPacket.EventPriority;
 import org.simyukkuri.event.EventPacket.UpdateState;
 import org.simyukkuri.field.impl.Barrier;
-import org.simyukkuri.logic.BodyLogic;
+import org.simyukkuri.logic.YukkuriLogic;
 import org.simyukkuri.system.MessagePool;
 import org.simyukkuri.util.GameMessages;
 import org.simyukkuri.util.GameRandom;
@@ -93,7 +93,7 @@ public class FuneralEvent extends EventPacket {
 
 	@Override
 	public boolean simpleEventAction(Yukkuri b) {
-		Yukkuri from = org.simyukkuri.util.BodyRegistry.getBodyInstance(getFrom());
+		Yukkuri from = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
 		if (from == null || from.isShutmouth()) {
 			return true;
 		}
@@ -108,7 +108,7 @@ public class FuneralEvent extends EventPacket {
 	// また、イベント優先度も必要に応じて設定できる
 	@Override
 	public boolean checkEventResponse(Yukkuri b) {
-		Yukkuri from = org.simyukkuri.util.BodyRegistry.getBodyInstance(getFrom());
+		Yukkuri from = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
 		if (from == null || b == null) {
 			return false;
 		}
@@ -123,8 +123,8 @@ public class FuneralEvent extends EventPacket {
 			return false;
 		}
 		// 父母がいない場合は参加しない
-		if (org.simyukkuri.util.BodyRegistry.getBodyInstance(b.getFather()) == null &&
-				org.simyukkuri.util.BodyRegistry.getBodyInstance(b.getMother()) == null)
+		if (org.simyukkuri.util.YukkuriLookup.getYukkuriById(b.getFather()) == null &&
+				org.simyukkuri.util.YukkuriLookup.getYukkuriById(b.getMother()) == null)
 			return false;
 		// 例外状況
 		if (!b.canEventResponse()) {
@@ -169,7 +169,7 @@ public class FuneralEvent extends EventPacket {
 	// 親→子供→次のステート、の順で処理をする
 	@Override
 	public UpdateState update(Yukkuri b) {
-		Yukkuri from = org.simyukkuri.util.BodyRegistry.getBodyInstance(getFrom());
+		Yukkuri from = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
 		// イベント中止
 		if (b == null || from == null) {
 			return UpdateState.ABORT;
@@ -233,7 +233,7 @@ public class FuneralEvent extends EventPacket {
 			if (state != STATE.GO) {
 				b.stay();
 			} else {
-				int colX = BodyLogic.calcCollisionX(b, from);
+				int colX = YukkuriLogic.calcCollisionX(b, from);
 				b.moveTo(from.getX() + colX * 2, from.getY());
 			}
 			return null;
@@ -250,7 +250,7 @@ public class FuneralEvent extends EventPacket {
 			}
 			fromWaitCount++;
 			// 子のみ集合
-			List<Yukkuri> childrenList = BodyLogic.createActiveChildList(from, false);
+			List<Yukkuri> childrenList = YukkuriLogic.createActiveChildList(from, false);
 			if ((childrenList == null) || (childrenList.size() == 0)) {
 				return UpdateState.ABORT;
 			}
@@ -273,7 +273,7 @@ public class FuneralEvent extends EventPacket {
 						b.setMessage(GameMessages.getMessage(b, MessagePool.Action.ProudChildsGOFrom), true);
 					}
 					b.setHappiness(Happiness.SAD);
-					boolean gathered = BodyLogic.gatheringYukkuriFront(from, childrenList, this);
+					boolean gathered = YukkuriLogic.gatheringYukkuriFront(from, childrenList, this);
 					if (gathered) {
 						state = STATE.FIND;
 						actionFlag = false;
@@ -282,7 +282,7 @@ public class FuneralEvent extends EventPacket {
 					break;
 				case FIND:
 					if (checkWait(b, waitTicks)) {
-						b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.SadnessForChild), 52,
+						b.setEventResMessage(GameMessages.getMessage(b, MessagePool.Action.SadnessForChild), 52,
 								true,
 								false);
 						state = STATE.START;
@@ -293,7 +293,7 @@ public class FuneralEvent extends EventPacket {
 				case START:
 					if (checkWait(b, waitTicks)) {
 						if (!actionFlag) {
-							b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.FuneralSTARTFrom),
+							b.setEventResMessage(GameMessages.getMessage(b, MessagePool.Action.FuneralSTARTFrom),
 									52,
 									true, false);
 							b.setHappiness(Happiness.AVERAGE);
@@ -309,7 +309,7 @@ public class FuneralEvent extends EventPacket {
 				case INTRODUCE:
 					if (checkWait(b, waitTicks)) {
 						if (!actionFlag) {
-							b.setBodyEventResMessage(
+							b.setEventResMessage(
 									GameMessages.getMessage(b, MessagePool.Action.FuneralIntroduceFrom),
 									52,
 									true, false);
@@ -325,7 +325,7 @@ public class FuneralEvent extends EventPacket {
 				case SING:
 					if (checkWait(b, waitTicks)) {
 						if (!actionFlag) {
-							b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.Requiem), 52, true,
+							b.setEventResMessage(GameMessages.getMessage(b, MessagePool.Action.Requiem), 52, true,
 									false);
 							if (GameRandom.nextBoolean())
 								actionFlag = true;
@@ -342,7 +342,7 @@ public class FuneralEvent extends EventPacket {
 				case TALK:
 					if (checkWait(b, waitTicks)) {
 						if (!actionFlag) {
-							b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.FuneralTalkFrom), 52,
+							b.setEventResMessage(GameMessages.getMessage(b, MessagePool.Action.FuneralTalkFrom), 52,
 									true, false);
 							if (GameRandom.nextInt(4) == 0)
 								actionFlag = true;
@@ -358,11 +358,11 @@ public class FuneralEvent extends EventPacket {
 				case GOODBYE:
 					if (checkWait(b, waitTicks)) {
 						if (!actionFlag) {
-							b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.GoodbyeForever), 52,
+							b.setEventResMessage(GameMessages.getMessage(b, MessagePool.Action.GoodbyeForever), 52,
 									true,
 									false);
 							b.getInVain(false);
-							Yukkuri to = org.simyukkuri.util.BodyRegistry.getBodyInstance(getTo());
+							Yukkuri to = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getTo());
 							if (to != null) {
 								to.takeOkazari(false);
 								actionFlag = true;
@@ -378,7 +378,7 @@ public class FuneralEvent extends EventPacket {
 				case END:
 					if (checkWait(b, waitTicks)) {
 						if (!actionFlag) {
-							b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.FuneralENDFrom), 52,
+							b.setEventResMessage(GameMessages.getMessage(b, MessagePool.Action.FuneralENDFrom), 52,
 									true,
 									false);
 							actionFlag = true;
@@ -397,7 +397,7 @@ public class FuneralEvent extends EventPacket {
 				case GO:
 					// 壁に引っかかってるなら終了
 					if (Barrier.onBarrier(b.getX(), b.getY(), from.getX(), from.getY(),
-							Barrier.MAP_BODY[b.getBodyAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
+							Barrier.MAP_BODY[b.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
 						return UpdateState.ABORT;
 					}
 					if (b.isDontMove()) {
@@ -409,14 +409,14 @@ public class FuneralEvent extends EventPacket {
 					break;
 				case FIND:
 					if (checkWait(b, waitTicks)) {
-						Yukkuri to = org.simyukkuri.util.BodyRegistry.getBodyInstance(getTo());
+						Yukkuri to = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getTo());
 						if (to != null) {
 							if (to.isElderSister(b)) {
-								b.setBodyEventResMessage(
+								b.setEventResMessage(
 										GameMessages.getMessage(b, MessagePool.Action.SadnessForEldersister),
 										52, true, false);
 							} else {
-								b.setBodyEventResMessage(
+								b.setEventResMessage(
 										GameMessages.getMessage(b, MessagePool.Action.SadnessForSister),
 										52,
 										true, false);
@@ -431,7 +431,7 @@ public class FuneralEvent extends EventPacket {
 				case START:
 					if (actionFlag) {
 						if (checkWait(b, waitTicks)) {
-							b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.FuneralSTART), 52,
+							b.setEventResMessage(GameMessages.getMessage(b, MessagePool.Action.FuneralSTART), 52,
 									true,
 									false);
 							b.stay(stayTicks);
@@ -442,7 +442,7 @@ public class FuneralEvent extends EventPacket {
 				case INTRODUCE:
 					if (actionFlag) {
 						if (checkWait(b, waitTicks)) {
-							b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.FuneralIntroduce),
+							b.setEventResMessage(GameMessages.getMessage(b, MessagePool.Action.FuneralIntroduce),
 									52,
 									true, false);
 							b.setHappiness(Happiness.SAD);
@@ -454,7 +454,7 @@ public class FuneralEvent extends EventPacket {
 				case SING:
 					if (!actionFlag) {
 						if (checkWait(b, waitTicks)) {
-							b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.Requiem), 52, true,
+							b.setEventResMessage(GameMessages.getMessage(b, MessagePool.Action.Requiem), 52, true,
 									false);
 							b.setNobinobi(true);
 							b.stay(stayTicks);
@@ -465,7 +465,7 @@ public class FuneralEvent extends EventPacket {
 				case TALK:
 					if (actionFlag) {
 						if (checkWait(b, waitTicks)) {
-							b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.FuneralTalk), 52,
+							b.setEventResMessage(GameMessages.getMessage(b, MessagePool.Action.FuneralTalk), 52,
 									true, false);
 							b.setHappiness(Happiness.HAPPY);
 							b.getInVain(false);
@@ -477,7 +477,7 @@ public class FuneralEvent extends EventPacket {
 				case GOODBYE:
 					if (actionFlag) {
 						if (checkWait(b, waitTicks)) {
-							b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.GoodbyeForever), 52,
+							b.setEventResMessage(GameMessages.getMessage(b, MessagePool.Action.GoodbyeForever), 52,
 									true,
 									false);
 							if (b.isRude() && GameRandom.nextBoolean()) {
@@ -491,7 +491,7 @@ public class FuneralEvent extends EventPacket {
 					break;
 				case END:
 					if (b.isRude())
-						b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.FuneralEND), 52, true,
+						b.setEventResMessage(GameMessages.getMessage(b, MessagePool.Action.FuneralEND), 52, true,
 								false);
 					b.setHappiness(Happiness.HAPPY);
 					b.stay(52);

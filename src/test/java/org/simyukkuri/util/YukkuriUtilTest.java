@@ -165,13 +165,13 @@ public class YukkuriUtilTest {
 
     @Test
     public void testGetBodyInstanceWithWorldHelper() {
-        // Test getBodyInstance with World setup
+        // Test getBodyMap with World setup
         try {
             org.simyukkuri.util.WorldTestHelper.initializeMinimalWorld();
 
             // This will likely return null without actual bodies in the map
             // but should not crash. Use Integer.MIN_VALUE as ID that can't be assigned.
-            org.simyukkuri.entity.core.living.yukkuri.Yukkuri body = org.simyukkuri.util.BodyRegistry.getBodyInstance(Integer.MIN_VALUE);
+            org.simyukkuri.entity.core.living.yukkuri.Yukkuri body = org.simyukkuri.util.YukkuriLookup.getYukkuriById(Integer.MIN_VALUE);
 
             // Null is expected for non-existent ID
             assertNull(body);
@@ -183,11 +183,11 @@ public class YukkuriUtilTest {
 
     @Test
     public void testGetBodyInstancesWithWorldHelper() {
-        // Test getBodyInstances with World setup
+        // Test getYukkuriBodies with World setup
         try {
             org.simyukkuri.util.WorldTestHelper.initializeMinimalWorld();
 
-            org.simyukkuri.entity.core.living.yukkuri.Yukkuri[] bodies = BodyRegistry.getBodyInstances();
+            org.simyukkuri.entity.core.living.yukkuri.Yukkuri[] bodies = YukkuriLookup.getYukkuriBodies();
 
             // Should return an array (possibly empty)
             assertNotNull(bodies);
@@ -200,13 +200,13 @@ public class YukkuriUtilTest {
     @Test
     public void testGetBodyInstanceFromObjId_negativeOne_returnsNull() {
         org.simyukkuri.util.WorldTestHelper.initializeMinimalWorld();
-        assertNull(BodyRegistry.getBodyInstanceFromObjId(-1));
+        assertNull(YukkuriLookup.findYukkuriByObjId(-1));
     }
 
     @Test
     public void testGetBodyInstanceFromObjId_notFound_returnsNull() {
         org.simyukkuri.util.WorldTestHelper.initializeMinimalWorld();
-        assertNull(BodyRegistry.getBodyInstanceFromObjId(9999));
+        assertNull(YukkuriLookup.findYukkuriByObjId(9999));
     }
 
     @Test
@@ -214,8 +214,8 @@ public class YukkuriUtilTest {
         org.simyukkuri.util.WorldTestHelper.initializeMinimalWorld();
         Reimu body = new Reimu();
         body.setObjId(42);
-        SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
-        org.simyukkuri.entity.core.living.yukkuri.Yukkuri result = BodyRegistry.getBodyInstanceFromObjId(42);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(body.getUniqueID(), body);
+        org.simyukkuri.entity.core.living.yukkuri.Yukkuri result = YukkuriLookup.findYukkuriByObjId(42);
         assertNotNull(result);
         assertEquals(42, result.getObjId());
     }
@@ -306,7 +306,7 @@ public class YukkuriUtilTest {
     @Test
     public void testChangeBody_CopiesBodyNameSetDeeply() throws Exception {
         Reimu from = new Reimu();
-        from.setBaseBodyFileName("base-01");
+        from.setBaseYukkuriFileName("base-01");
         from.setBabyNames(new String[] { "A1", "A2" });
         from.setMyNames(new String[] { "M1", "M2", "M3" });
         from.setBabyNamesDamaged(new String[] { "DA1", "DA2" });
@@ -315,7 +315,7 @@ public class YukkuriUtilTest {
         Reimu to = new Reimu();
         copyTransformedBody(to, from);
 
-        assertEquals("base-01", to.getBaseBodyFileName());
+        assertEquals("base-01", to.getBaseYukkuriFileName());
         assertArrayEquals(new String[] { "A1", "A2" }, to.getBabyNames());
         assertArrayEquals(new String[] { "M1", "M2", "M3" }, to.getMyNames());
         assertArrayEquals(new String[] { "DA1", "DA2" }, to.getBabyNamesDamaged());
@@ -344,18 +344,18 @@ public class YukkuriUtilTest {
         bodySpr[0].setImageW(11);
         expandSpr[0].setImageW(22);
         braidSpr[0].setImageW(33);
-        from.setBodySpr(bodySpr);
+        from.setSpriteSet(bodySpr);
         from.setExpandSpr(expandSpr);
         from.setBraidSpr(braidSpr);
 
         Reimu to = new Reimu();
         copyTransformedBody(to, from);
 
-        assertSame(bodySpr, from.getBodySpr());
-        assertNotSame(bodySpr, to.getBodySpr());
+        assertSame(bodySpr, from.getSpriteSet());
+        assertNotSame(bodySpr, to.getSpriteSet());
         assertNotSame(expandSpr, to.getExpandSpr());
         assertNotSame(braidSpr, to.getBraidSpr());
-        assertEquals(11, to.getBodySpr()[0].getImageW());
+        assertEquals(11, to.getSpriteSet()[0].getImageW());
         assertEquals(22, to.getExpandSpr()[0].getImageW());
         assertEquals(33, to.getBraidSpr()[0].getImageW());
 
@@ -363,7 +363,7 @@ public class YukkuriUtilTest {
         expandSpr[0].setImageW(55);
         braidSpr[0].setImageW(66);
 
-        assertEquals(11, to.getBodySpr()[0].getImageW());
+        assertEquals(11, to.getSpriteSet()[0].getImageW());
         assertEquals(22, to.getExpandSpr()[0].getImageW());
         assertEquals(33, to.getBraidSpr()[0].getImageW());
     }
@@ -439,7 +439,7 @@ public class YukkuriUtilTest {
         from.setBraidBreakChance(12);
         from.setSurisuriAccidentProb(34);
         from.setCarAccidentProb(56);
-        from.setBreakBodyByShitProb(78);
+        from.setBreakByShitProb(78);
         from.setDiarrheaProb(9);
         from.setExciteProb(10);
         from.setNotChangeCharacter(true);
@@ -456,7 +456,7 @@ public class YukkuriUtilTest {
         assertEquals(12, to.getBraidBreakChance());
         assertEquals(34, to.getSurisuriAccidentProb());
         assertEquals(56, to.getCarAccidentProb());
-        assertEquals(78, to.getBreakBodyByShitProb());
+        assertEquals(78, to.getBreakByShitProb());
         assertEquals(9, to.getDiarrheaProb());
         assertEquals(10, to.getExciteProb());
         assertTrue(to.isNotChangeCharacter());
@@ -470,7 +470,7 @@ public class YukkuriUtilTest {
         from.setBraidBreakChance(21);
         from.setSurisuriAccidentProb(43);
         from.setCarAccidentProb(65);
-        from.setBreakBodyByShitProb(87);
+        from.setBreakByShitProb(87);
         from.setDiarrheaProb(90);
         from.setExciteProb(1);
         from.setNotChangeCharacter(false);
@@ -484,7 +484,7 @@ public class YukkuriUtilTest {
         assertEquals(12, to.getBraidBreakChance());
         assertEquals(34, to.getSurisuriAccidentProb());
         assertEquals(56, to.getCarAccidentProb());
-        assertEquals(78, to.getBreakBodyByShitProb());
+        assertEquals(78, to.getBreakByShitProb());
         assertEquals(9, to.getDiarrheaProb());
         assertEquals(10, to.getExciteProb());
         assertTrue(to.isNotChangeCharacter());
@@ -637,7 +637,7 @@ public class YukkuriUtilTest {
                 Ants.setPivY(new int[] { 4, 5, 6 });
 
                 Reimu body = new Reimu();
-                SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
+                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(body.getUniqueID(), body);
                 SimYukkuri.RND = new ConstState(1);
 
                 AntInfestationPolicy.judgeNewAnt(body);

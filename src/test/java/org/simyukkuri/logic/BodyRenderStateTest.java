@@ -30,18 +30,18 @@ import org.simyukkuri.enums.CoreAnkoState;
 import org.simyukkuri.enums.CriticalDamegeType;
 import org.simyukkuri.enums.ImageCode;
 import org.simyukkuri.entity.core.world.bodylinked.Okazari.OkazariType;
-import org.simyukkuri.system.BodyLayer;
+import org.simyukkuri.system.YukkuriLayer;
 
 class BodyRenderStateTest {
 
 	private RenderingStubBody body;
-	private BodyLayer layer;
+	private YukkuriLayer layer;
 
 	@BeforeEach
 	void setUp() {
 		SimYukkuri.world = new World();
 		body = new RenderingStubBody();
-		layer = new BodyLayer();
+		layer = new YukkuriLayer();
 	}
 
 	@Test
@@ -49,7 +49,7 @@ class BodyRenderStateTest {
 		body.setDead(true);
 		body.setPealed(true);
 
-		BodyRenderState.getFaceImage(body, layer);
+		YukkuriRenderState.getFaceImage(body, layer);
 
 		assertTrue(body.codes.contains(ImageCode.PEALEDDEADFACE.ordinal()));
 	}
@@ -59,7 +59,7 @@ class BodyRenderStateTest {
 		body.setDead(true);
 		body.setUnBirth(true);
 
-		BodyRenderState.getFaceImage(body, layer);
+		YukkuriRenderState.getFaceImage(body, layer);
 
 		assertTrue(body.codes.contains(ImageCode.DEAD.ordinal()));
 	}
@@ -68,7 +68,7 @@ class BodyRenderStateTest {
 	void getFaceImageUsesNydFace() throws Exception {
 		setField(body, "coreAnkoState", CoreAnkoState.NonYukkuriDisease);
 
-		BodyRenderState.getFaceImage(body, layer);
+		YukkuriRenderState.getFaceImage(body, layer);
 
 		assertTrue(body.codes.contains(ImageCode.NYD_FRONT_WIDE.ordinal()));
 	}
@@ -80,7 +80,7 @@ class BodyRenderStateTest {
 			body.setSleeping(true);
 			setField(body, "blinkCount", 1);
 
-			BodyRenderState.getFaceImage(body, layer);
+			YukkuriRenderState.getFaceImage(body, layer);
 
 			assertTrue(body.codes.contains(ImageCode.EYE2.ordinal()));
 		} finally {
@@ -93,7 +93,7 @@ class BodyRenderStateTest {
 		body.setCrushed(true);
 		body.setOkazari(null);
 
-		BodyRenderState.getBodyBaseImage(body, layer);
+		YukkuriRenderState.getImageIndex(body, layer);
 
 		assertTrue(body.codes.contains(ImageCode.CRUSHED2.ordinal()));
 	}
@@ -102,14 +102,14 @@ class BodyRenderStateTest {
 	void getBodyBaseImageUsesFrontShitImageWhileShitting() {
 		body.setShitting(true);
 
-		BodyRenderState.getBodyBaseImage(body, layer);
+		YukkuriRenderState.getImageIndex(body, layer);
 
 		assertTrue(body.codes.contains(ImageCode.FRONT_SHIT.ordinal()));
 	}
 
 	@Test
 	void getBodyBaseImageUsesBodyImageForNormalState() {
-		BodyRenderState.getBodyBaseImage(body, layer);
+		YukkuriRenderState.getImageIndex(body, layer);
 
 		assertTrue(body.codes.contains(ImageCode.BODY.ordinal()));
 		assertTrue(layer.getOption()[0] == 1);
@@ -119,7 +119,7 @@ class BodyRenderStateTest {
 	void getAbnormalBodyImageUsesCutOverlayWhenCriticalDamageIsCut() {
 		body.setCriticalDamege(CriticalDamegeType.CUT);
 
-		BodyRenderState.getAbnormalBodyImage(body, layer);
+		YukkuriRenderState.getDamageImageIndex(body, layer);
 
 		assertTrue(body.codes.contains(ImageCode.BODY_CUT.ordinal()));
 	}
@@ -129,7 +129,7 @@ class BodyRenderStateTest {
 		body.setMelt(true);
 		body.setPealed(true);
 
-		BodyRenderState.getAbnormalBodyImage(body, layer);
+		YukkuriRenderState.getDamageImageIndex(body, layer);
 
 		assertTrue(body.codes.contains(ImageCode.MELT_PEALED.ordinal()));
 	}
@@ -141,7 +141,7 @@ class BodyRenderStateTest {
 		body.setDamage(8400);
 		body.setWet(true);
 
-		BodyRenderState.getEffectImage(body, layer);
+		YukkuriRenderState.getEffectImage(body, layer);
 
 		assertTrue(body.codes.contains(ImageCode.HUNGRY2.ordinal()));
 		assertTrue(body.codes.contains(ImageCode.WET.ordinal()));
@@ -152,7 +152,7 @@ class BodyRenderStateTest {
 		body.setDead(true);
 		body.setUnBirth(true);
 
-		BodyRenderState.getEffectImage(body, layer);
+		YukkuriRenderState.getEffectImage(body, layer);
 
 		assertTrue(body.codes.contains(ImageCode.DEAD_BODY.ordinal()));
 	}
@@ -161,7 +161,7 @@ class BodyRenderStateTest {
 	void getEffectImageUsesHighestSickOverlay() throws Exception {
 		setField(body, "sickPeriod", 100000);
 
-		BodyRenderState.getEffectImage(body, layer);
+		YukkuriRenderState.getEffectImage(body, layer);
 
 		assertTrue(body.codes.contains(ImageCode.SICK3.ordinal()));
 	}
@@ -170,7 +170,7 @@ class BodyRenderStateTest {
 	void getOlazariImageUsesAccessoryForDefaultOkazari() {
 		body.setOkazari(new Okazari(body, OkazariType.DEFAULT));
 
-		BodyRenderState.getOlazariImage(body, layer, 0);
+		YukkuriRenderState.getOkazariImageIndex(body, layer, 0);
 
 		assertTrue(body.codes.contains(ImageCode.ACCESSORY.ordinal()));
 	}
@@ -179,7 +179,7 @@ class BodyRenderStateTest {
 	void getBraidImageUsesCutImageWhenNoBraidExists() {
 		body.setHasBraid(false);
 
-		BodyRenderState.getBraidImage(body, layer, 0);
+		YukkuriRenderState.getBraidImage(body, layer, 0);
 
 		assertTrue(body.codes.contains(ImageCode.BRAID_CUT.ordinal()));
 	}
@@ -188,7 +188,7 @@ class BodyRenderStateTest {
 	void getBraidImageUsesBackImageForTypeOne() {
 		body.setHasBraid(true);
 
-		BodyRenderState.getBraidImage(body, layer, 1);
+		YukkuriRenderState.getBraidImage(body, layer, 1);
 
 		assertTrue(body.codes.contains(ImageCode.BRAID_BACK.ordinal()));
 	}
@@ -217,7 +217,7 @@ class BodyRenderStateTest {
 		private final List<Integer> codes = new ArrayList<Integer>();
 
 		@Override
-		public int getImage(int type, int direction, BodyLayer layer, int index) {
+		public int getImage(int type, int direction, YukkuriLayer layer, int index) {
 			codes.add(type);
 			return 1;
 		}

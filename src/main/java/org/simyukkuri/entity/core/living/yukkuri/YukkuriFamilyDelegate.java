@@ -8,7 +8,7 @@ import java.util.TreeSet;
 import org.simyukkuri.enums.Happiness;
 import org.simyukkuri.enums.ImageCode;
 import org.simyukkuri.enums.Parent;
-import org.simyukkuri.logic.BodyRelations;
+import org.simyukkuri.logic.YukkuriRelations;
 import org.simyukkuri.system.MessagePool;
 import org.simyukkuri.util.GameMessages;
 
@@ -78,7 +78,7 @@ public final class YukkuriFamilyDelegate {
 	 * Removeされたゆっくりが姉妹リスト、子リストにいたら削除する.
 	 */
 	public void checkRemovedFamilyList() {
-		Yukkuri[] sisters = body.getArrayOfBody(body.getSisterList());
+		Yukkuri[] sisters = body.getYukkuriArray(body.getSisterList());
 		body.getSisterList().clear();
 		Set<Integer> set = new TreeSet<>();
 		for (Yukkuri sister : sisters) {
@@ -92,7 +92,7 @@ public final class YukkuriFamilyDelegate {
 		body.setSisterList(new LinkedList<Integer>(set));
 		Collections.sort(body.getSisterList());
 
-		Yukkuri[] elderSisters = body.getArrayOfBody(body.getElderSisterList());
+		Yukkuri[] elderSisters = body.getYukkuriArray(body.getElderSisterList());
 		body.getElderSisterList().clear();
 		set.clear();
 		for (Yukkuri elderSister : elderSisters) {
@@ -106,7 +106,7 @@ public final class YukkuriFamilyDelegate {
 		body.setElderSisterList(new LinkedList<Integer>(set));
 		Collections.sort(body.getElderSisterList());
 
-		Yukkuri[] children = body.getArrayOfBody(body.getChildrenList());
+		Yukkuri[] children = body.getYukkuriArray(body.getChildrenList());
 		body.getChildrenList().clear();
 		set.clear();
 		for (Yukkuri child : children) {
@@ -125,14 +125,14 @@ public final class YukkuriFamilyDelegate {
 	 * 親子関係をなくす.
 	 */
 	public void clearRelation() {
-		if (BodyRelations.getParentBody(body.getParents()[Parent.PAPA.ordinal()]) != null)
-			if (BodyRelations.getParentBody(body.getParents()[Parent.PAPA.ordinal()]).isRemoved())
+		if (YukkuriRelations.getParentYukkuri(body.getParents()[Parent.PAPA.ordinal()]) != null)
+			if (YukkuriRelations.getParentYukkuri(body.getParents()[Parent.PAPA.ordinal()]).isRemoved())
 				body.getParents()[Parent.PAPA.ordinal()] = -1;
-		if (BodyRelations.getParentBody(body.getParents()[Parent.MAMA.ordinal()]) != null)
-			if (BodyRelations.getParentBody(body.getParents()[Parent.MAMA.ordinal()]).isRemoved())
+		if (YukkuriRelations.getParentYukkuri(body.getParents()[Parent.MAMA.ordinal()]) != null)
+			if (YukkuriRelations.getParentYukkuri(body.getParents()[Parent.MAMA.ordinal()]).isRemoved())
 				body.getParents()[Parent.MAMA.ordinal()] = -1;
 		if (body.getPartner() != -1) {
-			Yukkuri partnerCandidate = BodyRelations.getPartnerBody(body);
+			Yukkuri partnerCandidate = YukkuriRelations.getPartnerYukkuri(body);
 			if (partnerCandidate == null || partnerCandidate.isRemoved())
 				body.setPartner(-1);
 		}

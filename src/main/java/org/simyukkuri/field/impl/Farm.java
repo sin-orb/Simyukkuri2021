@@ -328,11 +328,11 @@ public class Farm extends FieldShape {
 			Yukkuri body = (Yukkuri) o;
 			if (body.isDead()) {
 				amount += fertilizerAmount;
-				body.eatBody(fertilizerAmount);
+				body.eatYukkuri(fertilizerAmount);
 				// 潰れてたり溶けてたらもう1回
 				if (body.isCrushed() || body.isMelt()) {
 					amount += fertilizerAmount;
-					body.eatBody(fertilizerAmount);
+					body.eatYukkuri(fertilizerAmount);
 				}
 			}
 

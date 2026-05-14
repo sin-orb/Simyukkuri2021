@@ -3,7 +3,7 @@ package org.simyukkuri.engine.transform;
 import java.util.function.BooleanSupplier;
 
 import org.simyukkuri.SimYukkuri;
-import org.simyukkuri.draw.BodyFactory;
+import org.simyukkuri.draw.YukkuriFactory;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.enums.YukkuriType;
 import org.simyukkuri.util.GameView;
@@ -46,18 +46,18 @@ public final class TransformationService {
 			}
 
 			int originalId = from.getUniqueID();
-			Yukkuri to = BodyFactory.create(from.getX(), from.getY(), from.getZ(), targetType, null,
-					from.getBodyAgeState(), null, null, false, GameView::loadBodyImage, dosMaker);
+			Yukkuri to = YukkuriFactory.create(from.getX(), from.getY(), from.getZ(), targetType, null,
+					from.getAgeState(), null, null, false, GameView::loadYukkuriImage, dosMaker);
 			TransformationBodyCopier.copy(to, from);
 			TransformationPolicy.normalizeTransformedAge(to, from);
 
 			to.setUniqueID(originalId);
-			GameWorld.get().getCurrentMap().getBody().remove(originalId);
-			GameWorld.get().getCurrentMap().getBody().put(originalId, to);
-			to.setBaseBodyFileName(TransformationPolicy.resolveBaseBodyFileName(targetType));
+			GameWorld.get().getCurrentMap().getYukkuriMap().remove(originalId);
+			GameWorld.get().getCurrentMap().getYukkuriMap().put(originalId, to);
+			to.setBaseYukkuriFileName(TransformationPolicy.resolveBaseYukkuriFileName(targetType));
 			IniFileUtil.readYukkuriIniFile(to);
-			if (TransformationPolicy.isSelectedBody(from)) {
-				org.simyukkuri.draw.MyPane.setSelectBody(to);
+			if (TransformationPolicy.isSelectedYukkuri(from)) {
+				org.simyukkuri.draw.MyPane.setSelectedYukkuri(to);
 			}
 			from.setRemoved(true);
 		}

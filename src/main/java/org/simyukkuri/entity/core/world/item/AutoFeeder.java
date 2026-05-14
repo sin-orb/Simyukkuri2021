@@ -190,7 +190,7 @@ public class AutoFeeder extends WorldEntity {
 			if (type == FeedType.PROCESSED_BODY.ordinal()) {
 				// オートフィーダで出るゆっくりのタイプを決める。
 				YukkuriType type = makeRandomType();
-				food = GameView.addBody(getX(), getY(), 0, type, AgeState.BABY, null, null);
+				food = GameView.addYukkuri(getX(), getY(), 0, type, AgeState.BABY, null, null);
 				Cash.buyYukkuri((Yukkuri) food);
 				Cash.addCash(-getCost());
 				// レイパーは生まれないようにする
@@ -202,7 +202,7 @@ public class AutoFeeder extends WorldEntity {
 			} else if (type == FeedType.BODY.ordinal()) {
 				// オートフィーダで出るゆっくりのタイプを決める。
 				YukkuriType type = makeRandomType();
-				food = GameView.addBody(getX(), getY(), 0, type, AgeState.BABY, null, null);
+				food = GameView.addYukkuri(getX(), getY(), 0, type, AgeState.BABY, null, null);
 				Cash.buyYukkuri((Yukkuri) food);
 				Cash.addCash(-getCost() + 5);
 			} else {
@@ -242,7 +242,7 @@ public class AutoFeeder extends WorldEntity {
 	}
 
 	private boolean isTakenOut() {
-		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
+		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getYukkuriMap().entrySet()) {
 			Yukkuri b = entry.getValue();
 			Integer i = b.getCarryItems().get(TakeoutItemType.FOOD);
 			if (i == null) {
@@ -375,12 +375,12 @@ public class AutoFeeder extends WorldEntity {
 		ClassLoader loader = this.getClass().getClassLoader();
 		int iniValue = 0;
 		// 間隔
-		iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataItemIniDir(), "AutoFeeder",
+		iniValue = ModLoader.loadYukkuriIniMapForInt(loader, ModLoader.getDataItemIniDir(), "AutoFeeder",
 				"FeedingInterval");
 		if (iniValue != 0)
 			feedingInterval = iniValue;
 		// 確率
-		iniValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataItemIniDir(), "AutoFeeder",
+		iniValue = ModLoader.loadYukkuriIniMapForInt(loader, ModLoader.getDataItemIniDir(), "AutoFeeder",
 				"FeedingProbability");
 		if (iniValue != 0)
 			feedingP = iniValue;

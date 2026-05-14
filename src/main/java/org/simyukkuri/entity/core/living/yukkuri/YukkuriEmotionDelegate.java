@@ -13,8 +13,8 @@ import org.simyukkuri.enums.Intelligence;
 import org.simyukkuri.enums.PublicRank;
 import org.simyukkuri.enums.WindowType;
 import org.simyukkuri.event.impl.RaperWakeupEvent;
-import org.simyukkuri.logic.BodyLogic;
-import org.simyukkuri.logic.BodyRelations;
+import org.simyukkuri.logic.YukkuriLogic;
+import org.simyukkuri.logic.YukkuriRelations;
 import org.simyukkuri.logic.EventLogic;
 import org.simyukkuri.logic.FamilyActionLogic;
 import org.simyukkuri.logic.ToyLogic;
@@ -90,7 +90,7 @@ public final class YukkuriEmotionDelegate {
 		}
 
 		// 非ゆっくり症チェック
-		if (body.checkNonYukkuriDisease()) {
+		if (body.hasNonYukkuriDisease()) {
 			return;
 		}
 		// イベント中
@@ -245,8 +245,8 @@ public final class YukkuriEmotionDelegate {
 				// setCurrentEvent(null);
 				// }
 				if (r == 0 && body.getCurrentEvent() == null) {
-					List<Yukkuri> fianceList = BodyLogic.createActiveFianceeList(body,
-							body.getBodyAgeState().ordinal());
+					List<Yukkuri> fianceList = YukkuriLogic.createActiveFianceeList(body,
+							body.getAgeState().ordinal());
 					if (fianceList == null || fianceList.size() < 1) {
 						body.setHappiness(Happiness.SAD);
 						body.setMessage(GameMessages.getMessage(body, MessagePool.Action.WantPartner));
@@ -260,9 +260,9 @@ public final class YukkuriEmotionDelegate {
 							}
 						} else {
 							// 自分の通常の子ゆリスト作成
-							List<Yukkuri> childrenList = BodyLogic.createActiveChildList(body, true);
+							List<Yukkuri> childrenList = YukkuriLogic.createActiveChildList(body, true);
 							// パートナーがいる場合
-							Yukkuri pa = BodyRelations.getPartnerBody(body);
+							Yukkuri pa = YukkuriRelations.getPartnerYukkuri(body);
 							if (pa != null) {
 								if (body.isVeryRude()) {
 									// ドゲスはすぐ興奮

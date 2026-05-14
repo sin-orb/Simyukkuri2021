@@ -23,7 +23,7 @@ import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.util.WorldTestHelper;
 
 /**
- * Tests for BodyWakeupRule.
+ * Tests for YukkuriWakeupRule.
  */
 public class BodyWakeupRuleTest {
 
@@ -42,10 +42,10 @@ public class BodyWakeupRuleTest {
 		me.setY(10);
 		you.setX(200);
 		you.setY(200);
-		SimYukkuri.world.getCurrentMap().getBody().put(me.getUniqueID(), me);
-		SimYukkuri.world.getCurrentMap().getBody().put(you.getUniqueID(), you);
+		SimYukkuri.world.getCurrentMap().getYukkuriMap().put(me.getUniqueID(), me);
+		SimYukkuri.world.getCurrentMap().getYukkuriMap().put(you.getUniqueID(), you);
 
-		assertTrue(BodyWakeupRule.checkWakeupOtherYukkuri(me));
+		assertTrue(YukkuriWakeupRule.checkWakeupOtherYukkuri(me));
 	}
 
 	@Test
@@ -58,9 +58,9 @@ public class BodyWakeupRuleTest {
 		you.setX(200);
 		you.setY(200);
 		you.setSleeping(true);
-		SimYukkuri.world.getCurrentMap().getBody().put(me.getUniqueID(), me);
-		SimYukkuri.world.getCurrentMap().getBody().put(you.getUniqueID(), you);
+		SimYukkuri.world.getCurrentMap().getYukkuriMap().put(me.getUniqueID(), me);
+		SimYukkuri.world.getCurrentMap().getYukkuriMap().put(you.getUniqueID(), you);
 
-		assertFalse(BodyWakeupRule.checkWakeupOtherYukkuri(me));
+		assertFalse(YukkuriWakeupRule.checkWakeupOtherYukkuri(me));
 	}
 }

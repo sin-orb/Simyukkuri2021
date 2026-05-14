@@ -14,12 +14,12 @@ import org.simyukkuri.draw.Point4y;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.world.item.Bed;
 import org.simyukkuri.enums.AgeState;
-import org.simyukkuri.enums.BodyRank;
+import org.simyukkuri.enums.YukkuriRank;
 import org.simyukkuri.enums.ImageCode;
 import org.simyukkuri.enums.PlayStyle;
 import org.simyukkuri.enums.YukkuriType;
 import org.simyukkuri.logic.ToyLogic;
-import org.simyukkuri.system.BodyLayer;
+import org.simyukkuri.system.YukkuriLayer;
 import org.simyukkuri.system.MessagePool;
 import org.simyukkuri.util.GameMessages;
 import org.simyukkuri.util.GameRandom;
@@ -41,7 +41,7 @@ public class Alice extends Yukkuri {
 	/** ベースファイル名 */
 	public static final String baseFileName = "alice";
 
-	private static BufferedImage[][][][] imagePack = new BufferedImage[BodyRank.values().length][][][];
+	private static BufferedImage[][][][] imagePack = new BufferedImage[YukkuriRank.values().length][][][];
 	private static BufferedImage[][][] imagesKai = new BufferedImage[ImageCode.values().length][2][3];
 	private static BufferedImage[][][] imagesNora = new BufferedImage[ImageCode.values().length][2][3];
 	private static int directionOffset[][] = new int[ImageCode.values().length][2];
@@ -82,20 +82,20 @@ public class Alice extends Yukkuri {
 			return;
 
 		boolean res;
-		res = ModLoader.loadBodyImagePack(loader, imagesNora, directionOffset, ModLoader.getYkWordNora(), baseFileName,
+		res = ModLoader.loadYukkuriImagePack(loader, imagesNora, directionOffset, ModLoader.getYkWordNora(), baseFileName,
 				io);
 		if (!res) {
 			imagesNora = null;
 		}
-		res = ModLoader.loadBodyImagePack(loader, imagesKai, directionOffset, null, baseFileName, io);
+		res = ModLoader.loadYukkuriImagePack(loader, imagesKai, directionOffset, null, baseFileName, io);
 		if (!res) {
 			imagesKai = null;
 		}
-		imagePack[BodyRank.KAIYU.getImageIndex()] = imagesKai;
+		imagePack[YukkuriRank.KAIYU.getImageIndex()] = imagesKai;
 		if (imagesNora != null) {
-			imagePack[BodyRank.NORAYU.getImageIndex()] = imagesNora;
+			imagePack[YukkuriRank.NORAYU.getImageIndex()] = imagesNora;
 		} else {
-			imagePack[BodyRank.NORAYU.getImageIndex()] = imagesKai;
+			imagePack[YukkuriRank.NORAYU.getImageIndex()] = imagesKai;
 		}
 		ModLoader.setImageSize(imagesKai, boundary, braidBoundary, io);
 
@@ -104,9 +104,9 @@ public class Alice extends Yukkuri {
 
 	/** INIファイルロード */
 	public static void loadIniFile(ClassLoader loader) {
-		AttachOffset = ModLoader.loadBodyIniMap(loader, ModLoader.getDataIniDir(), baseFileName);
+		AttachOffset = ModLoader.loadYukkuriIniMap(loader, ModLoader.getDataIniDir(), baseFileName);
 
-		baseSpeed = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataIniDir(), baseFileName, "speed");
+		baseSpeed = ModLoader.loadYukkuriIniMapForInt(loader, ModLoader.getDataIniDir(), baseFileName, "speed");
 	}
 
 	@Override
@@ -116,9 +116,9 @@ public class Alice extends Yukkuri {
 	}
 
 	@Override
-	public int getImage(int type, int direction, BodyLayer layer, int index) {
-		layer.getImage()[index] = imagePack[getBodyRank().getImageIndex()][type][direction
-				* directionOffset[type][0]][getBodyAgeState().ordinal()];
+	public int getImage(int type, int direction, YukkuriLayer layer, int index) {
+		layer.getImage()[index] = imagePack[getRank().getImageIndex()][type][direction
+				* directionOffset[type][0]][getAgeState().ordinal()];
 		layer.getDir()[index] = direction * directionOffset[type][1];
 		return 1;
 	}
@@ -152,8 +152,8 @@ public class Alice extends Yukkuri {
 	@Override
 	@Transient
 	public String getMyName() {
-		if (getMyNames()[getBodyAgeState().ordinal()] != null) {
-			return getMyNames()[getBodyAgeState().ordinal()];
+		if (getMyNames()[getAgeState().ordinal()] != null) {
+			return getMyNames()[getAgeState().ordinal()];
 		}
 		return nameJ;
 	}
@@ -161,8 +161,8 @@ public class Alice extends Yukkuri {
 	@Override
 	@Transient
 	public String getMyNameD() {
-		if (getMyNamesDamaged()[getBodyAgeState().ordinal()] != null) {
-			return getMyNamesDamaged()[getBodyAgeState().ordinal()];
+		if (getMyNamesDamaged()[getAgeState().ordinal()] != null) {
+			return getMyNamesDamaged()[getAgeState().ordinal()];
 		}
 		return getMyName();
 	}
@@ -207,7 +207,7 @@ public class Alice extends Yukkuri {
 			stay(40);
 		}
 		// 7/50でこーでねーと
-		else if (p <= 21 && getBodyRank() != BodyRank.KAIYU) {
+		else if (p <= 21 && getRank() != YukkuriRank.KAIYU) {
 			coordinate();
 			addStress(-30);
 			stay(40);
@@ -270,8 +270,8 @@ public class Alice extends Yukkuri {
 	public void coordinate() {
 		if (GameWorld.get().getCurrentMap().getBed().size() == 0) {
 			int i = 0;
-			if (getBodyRank() == BodyRank.NORAYU || getBodyRank() == BodyRank.NORAYU_CLEAN
-					|| getBodyRank() == BodyRank.SUTEYU) {
+			if (getRank() == YukkuriRank.NORAYU || getRank() == YukkuriRank.NORAYU_CLEAN
+					|| getRank() == YukkuriRank.SUTEYU) {
 				i = 1;
 			}
 			getInVain(true);
@@ -289,7 +289,7 @@ public class Alice extends Yukkuri {
 		setBoundary(boundary, braidBoundary);
 		setMsgType(YukkuriType.ALICE);
 		setShitType(YukkuriType.ALICE);
-		setBaseBodyFileName(baseFileName);
+		setBaseYukkuriFileName(baseFileName);
 		IniFileUtil.readYukkuriIniFile(this);
 	}
 

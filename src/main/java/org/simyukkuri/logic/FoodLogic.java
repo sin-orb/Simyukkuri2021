@@ -34,7 +34,7 @@ public class FoodLogic {
 		// A.餌行動の終了
 		/*
 		 * // 他の用事がある場合
-		 * if(body.isToBody() || body.isToBed() || (body.isToShit() &&
+		 * if(body.isToYukkuri() || body.isToBed() || (body.isToShit() &&
 		 * !body.isSoHungry() && !(body.isAdult() && body.intelligence ==
 		 * Intelligence.WISE)) || (body.isAdult() && body.isToSukkiri()) ||
 		 * body.isToSteal() ){
@@ -59,7 +59,7 @@ public class FoodLogic {
 			}
 			// 茎の場合の探索
 			if (food instanceof Stalk) {
-				Yukkuri plantBody = GameWorld.get().getCurrentMap().getBody().get(((Stalk) food).getPlantYukkuri());
+				Yukkuri plantBody = GameWorld.get().getCurrentMap().getYukkuriMap().get(((Stalk) food).getPlantYukkuri());
 				// 自分の茎は無視
 				if (plantBody == body) {
 					body.clearActions();
@@ -144,9 +144,9 @@ public class FoodLogic {
 		int nearestDistance = body.getEyesightBase();
 		int secondaryNearestDistance = nearestDistance;
 		int deadNearestDistance = nearestDistance;
-		int size = body.getBodyAgeState().ordinal();
+		int size = body.getAgeState().ordinal();
 		int looks = -1000;
-		int wallMode = body.getBodyAgeState().ordinal();
+		int wallMode = body.getAgeState().ordinal();
 		forceEat[0] = false;
 		// 飛行可能なら壁以外は通過可能
 		if (body.canflyCheck()) {
@@ -154,25 +154,25 @@ public class FoodLogic {
 		}
 
 		// ゆっくりから検索
-		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
+		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getYukkuriMap().entrySet()) {
 			Yukkuri candidateBody = entry.getValue();
 			if (body == candidateBody) {
 				continue;
 			}
 			if (!candidateBody.isDead()) {
-				FoodPredatorCandidatePolicy.BodyCandidateResult result = FoodPredatorCandidatePolicy
-						.considerLiveBody(body, candidateBody, nearestDistance, secondaryNearestDistance, size,
+				FoodPredatorCandidatePolicy.SearchResult result = FoodPredatorCandidatePolicy
+						.considerLiveYukkuri(body, candidateBody, nearestDistance, secondaryNearestDistance, size,
 								wallMode, candidate, candidate2);
-				candidate = result.getFound();
-				candidate2 = result.getFound2();
-				nearestDistance = result.getMinDistance();
-				secondaryNearestDistance = result.getMinDistance2();
+				candidate = result.getNearestLiveObject();
+				candidate2 = result.getNearestOtherObject();
+				nearestDistance = result.getNearestLiveDistance();
+				secondaryNearestDistance = result.getNearestOtherDistance();
 				size = result.getSize();
 			} else {
-				FoodPredatorCandidatePolicy.BodyCandidateResult result = FoodPredatorCandidatePolicy
-						.considerDeadBody(body, candidateBody, deadNearestDistance, wallMode, deadCandidate);
-				deadCandidate = result.getFound3();
-				deadNearestDistance = result.getMinDistance3();
+				FoodPredatorCandidatePolicy.SearchResult result = FoodPredatorCandidatePolicy
+						.considerDeadYukkuri(body, candidateBody, deadNearestDistance, wallMode, deadCandidate);
+				deadCandidate = result.getNearestDeadObject();
+				deadNearestDistance = result.getNearestDeadDistance();
 			}
 		}
 		// 自分より小さい相手がいなかったら副目標にする
@@ -181,8 +181,8 @@ public class FoodLogic {
 
 		FoodPredatorFoodPolicy.FoodSearchResult foodResult = FoodPredatorFoodPolicy.searchFood(body, forceEat, wallMode,
 				candidate, deadCandidate, nearestDistance, looks);
-		candidate = foodResult.getFound();
-		nearestDistance = foodResult.getMinDistance();
+		candidate = foodResult.getNearestObject();
+		nearestDistance = foodResult.getNearestDistance();
 		looks = foodResult.getLooks();
 		if (candidate == null && body.isFull()) {
 			return candidate;
@@ -231,8 +231,8 @@ public class FoodLogic {
 	 * @param target 死体
 	 * @return 食べるかどうか
 	 */
-	public static boolean checkCanEatBody(Yukkuri body, Yukkuri target) {
-		return FoodEligibility.checkCanEatBody(body, target);
+	public static boolean checkCanEatYukkuri(Yukkuri body, Yukkuri target) {
+		return FoodEligibility.checkCanEatYukkuri(body, target);
 	}
 
 }

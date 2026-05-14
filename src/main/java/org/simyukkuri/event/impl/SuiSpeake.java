@@ -42,11 +42,11 @@ public class SuiSpeake extends EventPacket {
 			return false;
 		}
 		Entity target = b.takeMappedObj(this.target);
-		Yukkuri sourceBody = org.simyukkuri.util.BodyRegistry.getBodyInstance(getFrom());
+		Yukkuri sourceBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
 		if (sourceBody == null) {
 			if (target == null) {
 				if (b.isRude() || GameRandom.nextBoolean()) {
-					b.setBodyEventResMessage(GameMessages.getMessage(b, MessagePool.Action.WantingSui),
+					b.setEventResMessage(GameMessages.getMessage(b, MessagePool.Action.WantingSui),
 							Const.HOLDMESSAGE, true, false);
 					EventLogic.addWorldEvent(new SuiSpeake(b, null, null, 10), null, null);
 				} else {
@@ -76,7 +76,7 @@ public class SuiSpeake extends EventPacket {
 						}
 
 					} else {
-						EventLogic.addBodyEvent(b, new SuiSpeake(null, null, null, 1), null, null);
+						EventLogic.addYukkuriEvent(b, new SuiSpeake(null, null, null, 1), null, null);
 					}
 				}
 			}

@@ -65,14 +65,14 @@ public final class YukkuriNydDelegate {
 	 *
 	 * @return その後の処理をキャンセルするかどうか
 	 */
-	public boolean checkNonYukkuriDisease() {
+	public boolean hasNonYukkuriDisease() {
 		if (GameEnvironment.isAntiNonYukkuriDiseaseSteam() || body.getAttachmentSize(ANYDAmpoule.class) != 0) {
 			body.setCoreAnkoState(CoreAnkoState.DEFAULT);
 			return false;
 		}
 
-		int stressLimit = body.getStressLimitBase()[body.getBodyAgeState().ordinal()];
-		int tolerance = body.checkNonYukkuriDiseaseTolerance();
+		int stressLimit = body.getStressLimitBase()[body.getAgeState().ordinal()];
+		int tolerance = body.getNonYukkuriDiseaseTolerance();
 		if (stressLimit * tolerance / 100 < body.getStress()) {
 			if (body.isNotNYD()) {
 				body.setCalm();
@@ -121,9 +121,9 @@ public final class YukkuriNydDelegate {
 					if (!body.isFixBack()) {
 						body.clearActions();
 						if (body.getNonYukkuriDiseasePeriod() == 1) {
-							body.setNYDForceFace(ImageCode.NYD_FRONT.ordinal());
+							body.setNydForceFace(ImageCode.NYD_FRONT.ordinal());
 						} else {
-							body.setNYDForceFace(ImageCode.NYD_DOWN.ordinal());
+							body.setNydForceFace(ImageCode.NYD_DOWN.ordinal());
 							body.setNonYukkuriDiseasePeriod(3);
 						}
 					}
@@ -132,14 +132,14 @@ public final class YukkuriNydDelegate {
 					body.setNonYukkuriDiseasePeriod(2);
 					if (!body.isFixBack()) {
 						body.clearActions();
-						body.setNYDForceFace(ImageCode.NYD_FRONT_CRY1.ordinal());
+						body.setNydForceFace(ImageCode.NYD_FRONT_CRY1.ordinal());
 					}
 					break;
 				case 2:
 					body.setNonYukkuriDiseasePeriod(0);
 					if (!body.isFixBack()) {
 						body.clearActions();
-						body.setNYDForceFace(ImageCode.NYD_FRONT_CRY2.ordinal());
+						body.setNydForceFace(ImageCode.NYD_FRONT_CRY2.ordinal());
 					}
 					body.stayPurupuru(20);
 					break;
@@ -147,14 +147,14 @@ public final class YukkuriNydDelegate {
 					body.setNonYukkuriDiseasePeriod(4);
 					if (!body.isFixBack()) {
 						body.clearActions();
-						body.setNYDForceFace(ImageCode.NYD_DOWN_CRY1.ordinal());
+						body.setNydForceFace(ImageCode.NYD_DOWN_CRY1.ordinal());
 					}
 					break;
 				case 4:
 					body.setNonYukkuriDiseasePeriod(0);
 					if (!body.isFixBack()) {
 						body.clearActions();
-						body.setNYDForceFace(ImageCode.NYD_DOWN_CRY2.ordinal());
+						body.setNydForceFace(ImageCode.NYD_DOWN_CRY2.ordinal());
 					}
 					body.stayPurupuru(20);
 					break;
@@ -164,7 +164,7 @@ public final class YukkuriNydDelegate {
 			body.addStress(100);
 			body.addMemories(-1);
 			body.setHappiness(Happiness.VERY_SAD);
-			body.setNYDMessage(GameMessages.getMessage(body, MessagePool.Action.NonYukkuriDiseaseNear), false);
+			body.setNydMessage(GameMessages.getMessage(body, MessagePool.Action.NonYukkuriDiseaseNear), false);
 		}
 		randomThreshold = 20;
 		if (body.getCoreAnkoState() == CoreAnkoState.NonYukkuriDisease
@@ -175,13 +175,13 @@ public final class YukkuriNydDelegate {
 						body.setNonYukkuriDiseasePeriod(1);
 						if (!body.isFixBack()) {
 							body.clearActions();
-							body.setNYDForceFace(ImageCode.NYD_UP.ordinal());
+							body.setNydForceFace(ImageCode.NYD_UP.ordinal());
 						}
 					} else {
 						body.setNonYukkuriDiseasePeriod(4);
 						if (!body.isFixBack()) {
 							body.clearActions();
-							body.setNYDForceFace(ImageCode.NYD_FRONT_WIDE.ordinal());
+							body.setNydForceFace(ImageCode.NYD_FRONT_WIDE.ordinal());
 						}
 					}
 					break;
@@ -191,7 +191,7 @@ public final class YukkuriNydDelegate {
 					}
 					if (!body.isFixBack()) {
 						body.clearActions();
-						body.setNYDForceFace(ImageCode.NYD_UP.ordinal());
+						body.setNydForceFace(ImageCode.NYD_UP.ordinal());
 					}
 					break;
 				case 2:
@@ -200,14 +200,14 @@ public final class YukkuriNydDelegate {
 					}
 					if (!body.isFixBack()) {
 						body.clearActions();
-						body.setNYDForceFace(ImageCode.NYD_UP_CRY1.ordinal());
+						body.setNydForceFace(ImageCode.NYD_UP_CRY1.ordinal());
 					}
 					break;
 				case 3:
 					body.setNonYukkuriDiseasePeriod(1);
 					if (!body.isFixBack()) {
 						body.clearActions();
-						body.setNYDForceFace(ImageCode.NYD_UP_CRY2.ordinal());
+						body.setNydForceFace(ImageCode.NYD_UP_CRY2.ordinal());
 					}
 					body.stayPurupuru(20);
 					break;
@@ -217,7 +217,7 @@ public final class YukkuriNydDelegate {
 					}
 					if (!body.isFixBack()) {
 						body.clearActions();
-						body.setNYDForceFace(ImageCode.NYD_FRONT_WIDE.ordinal());
+						body.setNydForceFace(ImageCode.NYD_FRONT_WIDE.ordinal());
 					}
 					break;
 				case 5:
@@ -226,14 +226,14 @@ public final class YukkuriNydDelegate {
 					}
 					if (!body.isFixBack()) {
 						body.clearActions();
-						body.setNYDForceFace(ImageCode.NYD_FRONT_WIDE_CRY1.ordinal());
+						body.setNydForceFace(ImageCode.NYD_FRONT_WIDE_CRY1.ordinal());
 					}
 					break;
 				case 6:
 					body.setNonYukkuriDiseasePeriod(4);
 					if (!body.isFixBack()) {
 						body.clearActions();
-						body.setNYDForceFace(ImageCode.NYD_FRONT_WIDE_CRY2.ordinal());
+						body.setNydForceFace(ImageCode.NYD_FRONT_WIDE_CRY2.ordinal());
 					}
 					body.stayPurupuru(20);
 					break;
@@ -243,7 +243,7 @@ public final class YukkuriNydDelegate {
 			body.addStress(300);
 			body.addMemories(-5);
 			body.setHappiness(Happiness.VERY_SAD);
-			body.setNYDMessage(GameMessages.getMessage(body, MessagePool.Action.NonYukkuriDisease), false);
+			body.setNydMessage(GameMessages.getMessage(body, MessagePool.Action.NonYukkuriDisease), false);
 			if (GameRandom.nextInt(randomThreshold) == 0) {
 				body.setNonYukkuriDiseasePeriod(0);
 			}

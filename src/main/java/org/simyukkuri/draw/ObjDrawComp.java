@@ -21,8 +21,8 @@ public final class ObjDrawComp implements Comparator<Entity> {
 		if (c == 0) {
 			// Improve visibility: at the same y-coordinate, draw small
 			// objects after large ones.
-			c = (o2 instanceof Yukkuri ? ((Yukkuri) o2).getBodyAgeState().ordinal() : 1) -
-					(o1 instanceof Yukkuri ? ((Yukkuri) o1).getBodyAgeState().ordinal() : 1);
+			c = (o2 instanceof Yukkuri ? ((Yukkuri) o2).getAgeState().ordinal() : 1) -
+					(o1 instanceof Yukkuri ? ((Yukkuri) o1).getAgeState().ordinal() : 1);
 		}
 		return c;
 	}

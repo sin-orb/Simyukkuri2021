@@ -24,7 +24,7 @@ import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.util.WorldTestHelper;
 
 /**
- * Tests for BodyParentRule.
+ * Tests for YukkuriParentRule.
  */
 public class BodyParentRuleTest {
 
@@ -38,7 +38,7 @@ public class BodyParentRuleTest {
 	void testCheckNearParent_returnsWhenAdult() {
 		Yukkuri me = WorldTestHelper.createBody();
 		me.setAge((long) me.getChildLimitBase());
-		assertDoesNotThrow(() -> BodyParentRule.checkNearParent(me));
+		assertDoesNotThrow(() -> YukkuriParentRule.checkNearParent(me));
 	}
 
 	@Test
@@ -49,10 +49,10 @@ public class BodyParentRuleTest {
 		me.setCallingParents(true);
 		parent.setSleeping(true);
 		WorldTestHelper.setParents(me, -1, parent.getUniqueID());
-		SimYukkuri.world.getCurrentMap().getBody().put(me.getUniqueID(), me);
-		SimYukkuri.world.getCurrentMap().getBody().put(parent.getUniqueID(), parent);
+		SimYukkuri.world.getCurrentMap().getYukkuriMap().put(me.getUniqueID(), me);
+		SimYukkuri.world.getCurrentMap().getYukkuriMap().put(parent.getUniqueID(), parent);
 
-		BodyParentRule.checkNearParent(me);
+		YukkuriParentRule.checkNearParent(me);
 
 		assertFalse(parent.isSleeping());
 	}

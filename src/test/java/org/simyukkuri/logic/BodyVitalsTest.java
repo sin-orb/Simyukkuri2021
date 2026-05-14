@@ -44,38 +44,38 @@ class BodyVitalsTest {
 	@Test
 	void detectsDamageLevels() {
 		body.setDamage(0);
-		assertTrue(BodyVitals.isNoDamaged(body));
-		assertFalse(BodyVitals.isDamaged(body));
-		assertFalse(BodyVitals.isDamagedHeavily(body));
+		assertTrue(YukkuriVitals.isNoDamaged(body));
+		assertFalse(YukkuriVitals.isDamaged(body));
+		assertFalse(YukkuriVitals.isDamagedHeavily(body));
 
 		body.setDamage(body.getDamageLimit() / 2);
-		assertFalse(BodyVitals.isNoDamaged(body));
-		assertTrue(BodyVitals.isDamaged(body));
-		assertFalse(BodyVitals.isDamagedHeavily(body));
+		assertFalse(YukkuriVitals.isNoDamaged(body));
+		assertTrue(YukkuriVitals.isDamaged(body));
+		assertFalse(YukkuriVitals.isDamagedHeavily(body));
 
 		body.setDamage(body.getDamageLimit() * 3 / 4);
-		assertTrue(BodyVitals.isDamaged(body));
-		assertTrue(BodyVitals.isDamagedHeavily(body));
+		assertTrue(YukkuriVitals.isDamaged(body));
+		assertTrue(YukkuriVitals.isDamagedHeavily(body));
 	}
 
 	@Test
 	void detectsHungerLevelsForLivingBody() {
 		body.setHungry(body.getHungryLimit());
-		assertTrue(BodyVitals.isFull(body));
-		assertFalse(BodyVitals.isHungry(body));
-		assertFalse(BodyVitals.isSoHungry(body));
-		assertFalse(BodyVitals.isVeryHungry(body));
+		assertTrue(YukkuriVitals.isFull(body));
+		assertFalse(YukkuriVitals.isHungry(body));
+		assertFalse(YukkuriVitals.isSoHungry(body));
+		assertFalse(YukkuriVitals.isVeryHungry(body));
 
 		body.setHungry(body.getHungryLimit() / 2);
-		assertTrue(BodyVitals.isHungry(body));
-		assertFalse(BodyVitals.isSoHungry(body));
+		assertTrue(YukkuriVitals.isHungry(body));
+		assertFalse(YukkuriVitals.isSoHungry(body));
 
 		body.setHungry(1);
-		assertTrue(BodyVitals.isSoHungry(body));
-		assertFalse(BodyVitals.isVeryHungry(body));
+		assertTrue(YukkuriVitals.isSoHungry(body));
+		assertFalse(YukkuriVitals.isVeryHungry(body));
 
 		body.setHungry(0);
-		assertTrue(BodyVitals.isVeryHungry(body));
+		assertTrue(YukkuriVitals.isVeryHungry(body));
 	}
 
 	@Test
@@ -83,51 +83,51 @@ class BodyVitalsTest {
 		body.setDead(true);
 		body.setHungry(0);
 
-		assertFalse(BodyVitals.isFull(body));
-		assertFalse(BodyVitals.isHungry(body));
-		assertFalse(BodyVitals.isSoHungry(body));
-		assertFalse(BodyVitals.isVeryHungry(body));
-		assertFalse(BodyVitals.isTooHungry(body));
-		assertFalse(BodyVitals.isStarving(body));
+		assertFalse(YukkuriVitals.isFull(body));
+		assertFalse(YukkuriVitals.isHungry(body));
+		assertFalse(YukkuriVitals.isSoHungry(body));
+		assertFalse(YukkuriVitals.isVeryHungry(body));
+		assertFalse(YukkuriVitals.isTooHungry(body));
+		assertFalse(YukkuriVitals.isStarving(body));
 	}
 
 	@Test
 	void detectsTooHungryAndStarvingFromDamageState() {
 		body.setHungry(0);
 		body.setDamage(0);
-		assertFalse(BodyVitals.isTooHungry(body));
-		assertFalse(BodyVitals.isStarving(body));
+		assertFalse(YukkuriVitals.isTooHungry(body));
+		assertFalse(YukkuriVitals.isStarving(body));
 
 		body.setDamage(body.getDamageLimit() / 2);
-		assertTrue(BodyVitals.isTooHungry(body));
-		assertFalse(BodyVitals.isStarving(body));
+		assertTrue(YukkuriVitals.isTooHungry(body));
+		assertFalse(YukkuriVitals.isStarving(body));
 
 		body.setDamage(body.getDamageLimit() * 3 / 4);
-		assertTrue(BodyVitals.isTooHungry(body));
-		assertTrue(BodyVitals.isStarving(body));
+		assertTrue(YukkuriVitals.isTooHungry(body));
+		assertTrue(YukkuriVitals.isStarving(body));
 	}
 
 	@Test
 	void detectsSicknessStages() {
 		body.setSickPeriod(body.getIncubationPeriodBase());
-		assertFalse(BodyVitals.isSick(body));
-		assertFalse(BodyVitals.isSickHeavily(body));
+		assertFalse(YukkuriVitals.isSick(body));
+		assertFalse(YukkuriVitals.isSickHeavily(body));
 
 		body.setSickPeriod(body.getIncubationPeriodBase() + 1);
-		assertTrue(BodyVitals.isSick(body));
-		assertFalse(BodyVitals.isSickHeavily(body));
+		assertTrue(YukkuriVitals.isSick(body));
+		assertFalse(YukkuriVitals.isSickHeavily(body));
 
 		body.setSickPeriod(body.getIncubationPeriodBase() * 8 + 1);
-		assertTrue(BodyVitals.isSickHeavily(body));
+		assertTrue(YukkuriVitals.isSickHeavily(body));
 	}
 
 	@Test
 	void sickTooHeavilyRequiresHeavyStageAndDamage() {
 		body.setSickPeriod(body.getIncubationPeriodBase() * 32 + 1);
 		body.setDamage(0);
-		assertFalse(BodyVitals.isSickTooHeavily(body));
+		assertFalse(YukkuriVitals.isSickTooHeavily(body));
 
 		body.setDamage(body.getDamageLimit() / 2);
-		assertTrue(BodyVitals.isSickTooHeavily(body));
+		assertTrue(YukkuriVitals.isSickTooHeavily(body));
 	}
 }

@@ -28,11 +28,11 @@ public class ToiletLogic {
 	/** うんうんどれい */
 	private static Yukkuri bodyUnunSlave;
 
-	public static Yukkuri getBodyUnunSlave() {
+	public static Yukkuri getUnunSlave() {
 		return bodyUnunSlave;
 	}
 
-	public static void setBodyUnunSlave(Yukkuri bodyUnunSlave) {
+	public static void setUnunSlave(Yukkuri bodyUnunSlave) {
 		ToiletLogic.bodyUnunSlave = bodyUnunSlave;
 	}
 
@@ -87,7 +87,7 @@ public class ToiletLogic {
 		}
 		// うんうん奴隷がいれば運ばない
 		if (canTransport) {
-			for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
+			for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getYukkuriMap().entrySet()) {
 				Yukkuri bodyOther = entry.getValue();
 				if (bodyOther == body || bodyOther.isDead() || bodyOther.isRemoved()) {
 					continue;
@@ -112,7 +112,7 @@ public class ToiletLogic {
 
 				// 壁があるなら無視
 				if (Barrier.acrossBarrier(body.getX(), body.getY(), s.getX(), s.getY(),
-						Barrier.MAP_BODY[body.getBodyAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
+						Barrier.MAP_BODY[body.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
 					continue;
 				}
 				// トイレの上にあるか
@@ -125,7 +125,7 @@ public class ToiletLogic {
 						} else {
 							// 壁があるなら無視
 							if (!Barrier.acrossBarrier(body.getX(), body.getY(), t.getX(), t.getY(),
-									Barrier.MAP_BODY[body.getBodyAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
+									Barrier.MAP_BODY[body.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
 								foundMyToilet = true;
 								break;
 							}
@@ -148,7 +148,7 @@ public class ToiletLogic {
 				continue;
 			// 壁があるなら無視
 			if (Barrier.acrossBarrier(body.getX(), body.getY(), s.getX(), s.getY(),
-					Barrier.MAP_BODY[body.getBodyAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
+					Barrier.MAP_BODY[body.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
 				continue;
 			}
 
@@ -157,7 +157,7 @@ public class ToiletLogic {
 			if (canTransport && distance < collisionX && !hasShit && !foundMyShitOutOfToilet && foundMyToilet) {
 				int bodyOwnerId = s.getOwnerId();
 				Yukkuri owner = null;
-				for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
+				for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getYukkuriMap().entrySet()) {
 					Yukkuri otherBody = entry.getValue();
 					if (otherBody.getUniqueID() == bodyOwnerId) {
 						owner = otherBody;
@@ -184,7 +184,7 @@ public class ToiletLogic {
 							body.stay();
 							body.clearActions();
 						} else {
-							body.moveToBody(s, s.getX(), s.getY());
+							body.moveToYukkuri(s, s.getX(), s.getY());
 						}
 						break;
 					}
@@ -224,7 +224,7 @@ public class ToiletLogic {
 	public static final boolean checkToilet(Yukkuri body) {
 		// A.トイレ行動の中止
 		// 他の用事がある場合
-		if (body.isToFood() || body.isToBody() || body.isToSukkiri() || body.isToBed()
+		if (body.isToFood() || body.isToYukkuri() || body.isToSukkiri() || body.isToBed()
 				|| /* body.isToShit() || */ body.isToSteal()) {
 			return false;
 		}
@@ -345,7 +345,7 @@ public class ToiletLogic {
 		boolean foundToilet = false;
 		Toilet targetToilet = null;
 		int minDistance = body.getEyesightBase();
-		int wallMode = body.getBodyAgeState().ordinal();
+		int wallMode = body.getAgeState().ordinal();
 		// 飛行可能なら壁以外は通過可能
 		if (body.canflyCheck()) {
 			wallMode = AgeState.ADULT.ordinal();
@@ -382,7 +382,7 @@ public class ToiletLogic {
 		if (targetToilet != null) {
 			if (!body.wantToShit()) {
 				// うんうんをしない
-				body.moveToBody(targetToilet, targetToilet.getX(), targetToilet.getY());
+				body.moveToYukkuri(targetToilet, targetToilet.getX(), targetToilet.getY());
 			} else {
 				// うんうんをする
 				body.moveToToilet(targetToilet, targetToilet.getX(), targetToilet.getY(), 0);

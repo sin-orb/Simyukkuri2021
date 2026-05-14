@@ -128,7 +128,7 @@ public class StopAmpouleTest {
         Yukkuri parent = createParent(AgeState.CHILD);
         StopAmpoule ampoule = new StopAmpoule(parent);
 
-        SimYukkuri.world.getCurrentMap().getBody().remove(parent.getUniqueID());
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().remove(parent.getUniqueID());
 
         BufferedImage image = ampoule.getImage(parent);
         assertNull(image);
@@ -196,7 +196,7 @@ public class StopAmpouleTest {
         int origPivotX = ampoule.getPivotX();
         int origPivotY = ampoule.getPivotY();
 
-        SimYukkuri.world.getCurrentMap().getBody().remove(parent.getUniqueID());
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().remove(parent.getUniqueID());
 
         ampoule.resetBoundary();
 
@@ -230,7 +230,7 @@ public class StopAmpouleTest {
     private static Yukkuri createParent(AgeState ageState) {
         Yukkuri parent = new Reimu();
         parent.setAgeState(ageState);
-        SimYukkuri.world.getCurrentMap().getBody().put(parent.getUniqueID(), parent);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(parent.getUniqueID(), parent);
         return parent;
     }
 

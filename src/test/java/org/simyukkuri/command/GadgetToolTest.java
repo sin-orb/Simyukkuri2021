@@ -74,13 +74,13 @@ public class GadgetToolTest {
             expSpr[i] = new Sprite();
             brdSpr[i] = new Sprite();
         }
-        b.setBodySpr(spr);
+        b.setSpriteSet(spr);
         b.setExpandSpr(expSpr);
         b.setBraidSpr(brdSpr);
         b.setAgeState(age);
         b.setMsgType(YukkuriType.REIMU);
         b.setIntelligence(Intelligence.AVERAGE);
-        SimYukkuri.world.getCurrentMap().getBody().put(b.getUniqueID(), b);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(b.getUniqueID(), b);
         return b;
     }
 

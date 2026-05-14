@@ -172,8 +172,8 @@ public class RaperReactionEventTest {
         for (int i = 0; i < 3; i++) {
             spr[i] = new Sprite(10, 10, Sprite.PIVOT_CENTER_BOTTOM);
         }
-        b.setBodySpr(spr);
-        SimYukkuri.world.getCurrentMap().getBody().put(b.getUniqueID(), b);
+        b.setSpriteSet(spr);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(b.getUniqueID(), b);
         return b;
     }
 
@@ -195,7 +195,7 @@ public class RaperReactionEventTest {
 
     @Test
     public void testCheckConditionOfTarget_fromNull_returnsFalse() {
-        // unregistered from → getBodyInstance returns null → returns false
+        // unregistered from → getBodyMap returns null → returns false
         Yukkuri unregistered = new Reimu();
         RaperReactionEvent event = new RaperReactionEvent(unregistered, null, null, 10);
         assertFalse(event.checkConditionOfTarget());
@@ -220,7 +220,7 @@ public class RaperReactionEventTest {
         Yukkuri b = createBody();
         Yukkuri unregistered = new Reimu();
         RaperReactionEvent event = new RaperReactionEvent(unregistered, null, null, 10);
-        // from not registered → getBodyInstance returns null → early return
+        // from not registered → getBodyMap returns null → early return
         assertDoesNotThrow(() -> event.moveTargetId(b));
     }
 

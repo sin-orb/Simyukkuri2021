@@ -29,7 +29,7 @@ public final class FoodSearchPolicy {
 		Entity takeoutTargetObject = null;
 		int minDistance = body.getEyesightBase();
 		int looks = -1000;
-		int wallMode = body.getBodyAgeState().ordinal();
+		int wallMode = body.getAgeState().ordinal();
 		forceEat[0] = false;
 		if (body.canflyCheck()) {
 			wallMode = AgeState.ADULT.ordinal();
@@ -145,7 +145,7 @@ public final class FoodSearchPolicy {
 
 		for (Map.Entry<Integer, Stalk> entry : GameWorld.get().getCurrentMap().getStalk().entrySet()) {
 			Stalk s = entry.getValue();
-			Yukkuri plantBody = GameWorld.get().getCurrentMap().getBody().get(s.getPlantYukkuri());
+			Yukkuri plantBody = GameWorld.get().getCurrentMap().getYukkuriMap().get(s.getPlantYukkuri());
 			if (plantBody != null) {
 				if (plantBody == body) {
 					continue;
@@ -158,7 +158,7 @@ public final class FoodSearchPolicy {
 				if (babyList != null && babyList.size() != 0) {
 					boolean hasBaby = false;
 					for (int babyId : babyList) {
-						Yukkuri baby = org.simyukkuri.util.BodyRegistry.getBodyInstance(babyId);
+						Yukkuri baby = org.simyukkuri.util.YukkuriLookup.getYukkuriById(babyId);
 						if (baby == null) {
 							continue;
 						}
@@ -196,7 +196,7 @@ public final class FoodSearchPolicy {
 			}
 		}
 		if (targetObject == null) {
-			for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
+			for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getYukkuriMap().entrySet()) {
 				Yukkuri deadCandidate = entry.getValue();
 				if (deadCandidate == null || deadCandidate.isRemoved()) {
 					continue;
@@ -209,7 +209,7 @@ public final class FoodSearchPolicy {
 						continue;
 					}
 				} else {
-					if (!FoodLogic.checkCanEatBody(body, deadCandidate)) {
+					if (!FoodLogic.checkCanEatYukkuri(body, deadCandidate)) {
 						continue;
 					}
 				}

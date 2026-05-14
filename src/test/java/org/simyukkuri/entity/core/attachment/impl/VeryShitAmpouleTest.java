@@ -125,7 +125,7 @@ public class VeryShitAmpouleTest {
         Yukkuri parent = createParent(AgeState.CHILD);
         VeryShitAmpoule ampoule = new VeryShitAmpoule(parent);
 
-        SimYukkuri.world.getCurrentMap().getBody().remove(parent.getUniqueID());
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().remove(parent.getUniqueID());
 
         BufferedImage image = ampoule.getImage(parent);
         assertNull(image);
@@ -193,7 +193,7 @@ public class VeryShitAmpouleTest {
         int origPivotX = ampoule.getPivotX();
         int origPivotY = ampoule.getPivotY();
 
-        SimYukkuri.world.getCurrentMap().getBody().remove(parent.getUniqueID());
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().remove(parent.getUniqueID());
 
         ampoule.resetBoundary();
 
@@ -226,7 +226,7 @@ public class VeryShitAmpouleTest {
 
     private static Yukkuri createParent(AgeState ageState) {
         Yukkuri parent = new Reimu();
-        // 適切な年齢を設定（getBodyAgeState()はageの値から計算される）
+        // 適切な年齢を設定（getAgeState()はageの値から計算される）
         switch (ageState) {
             case BABY:
                 parent.setAge(1000); // BABY: age < 16800
@@ -238,7 +238,7 @@ public class VeryShitAmpouleTest {
                 parent.setAge(60000); // ADULT: age >= 50400
                 break;
         }
-        SimYukkuri.world.getCurrentMap().getBody().put(parent.getUniqueID(), parent);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(parent.getUniqueID(), parent);
         return parent;
     }
 

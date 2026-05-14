@@ -51,7 +51,7 @@ class MixerTest extends ItemTestBase {
     void testEnableHitCheck_NoBind() {
         Mixer item = new Mixer();
         item.setBind(-1);
-        // bind=-1 → getBodyInstance returns null → true
+        // bind=-1 → getBodyMap returns null → true
         assertTrue(item.enableHitCheck());
     }
 
@@ -126,7 +126,7 @@ class MixerTest extends ItemTestBase {
         SimYukkuri.world.getCurrentMap().getMixer().put(item.getObjId(), item);
         Yukkuri body = WorldTestHelper.createBody();
         body.setLockmove(true);
-        SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(body.getUniqueID(), body);
         item.setBind(body.getUniqueID());
         item.removeListData();
         assertFalse(body.isLockmove());
@@ -148,7 +148,7 @@ class MixerTest extends ItemTestBase {
         item.setX(100);
         item.setY(100);
         Yukkuri body = WorldTestHelper.createBody();
-        SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(body.getUniqueID(), body);
         assertEquals(1, item.objHitProcess(body));
         assertEquals(body.getUniqueID(), item.getBind());
         assertTrue(body.isLockmove());
@@ -168,7 +168,7 @@ class MixerTest extends ItemTestBase {
         Mixer item = new Mixer();
         Yukkuri body = WorldTestHelper.createBody();
         body.setLockmove(true);
-        SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(body.getUniqueID(), body);
         item.setBind(body.getUniqueID());
         item.setEnabled(false);
         // enabled=false → mix=null branch
@@ -186,7 +186,7 @@ class MixerTest extends ItemTestBase {
         body.setX(100);
         body.setY(100);
         body.setLockmove(true);
-        SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(body.getUniqueID(), body);
         item.setBind(body.getUniqueID());
         assertDoesNotThrow(() -> item.upDate());
     }
@@ -203,7 +203,7 @@ class MixerTest extends ItemTestBase {
         body.setX(200);
         body.setY(200);
         body.setLockmove(true);
-        SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(body.getUniqueID(), body);
         item.setBind(body.getUniqueID());
         item.upDate();
         // bind should be reset to -1
@@ -256,7 +256,7 @@ class MixerTest extends ItemTestBase {
             body.setLockmove(true);
             body.setAnkoAmount(1000);
             int beforeDamage = body.getDamage();
-            SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
+            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(body.getUniqueID(), body);
             item.setBind(body.getUniqueID());
             SimYukkuri.RND = new ConstState(1);
 
@@ -288,7 +288,7 @@ class MixerTest extends ItemTestBase {
             body.setLockmove(true);
             body.setShadowVisible(false);
             body.setForceFace(ImageCode.PAIN.ordinal());
-            SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
+            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(body.getUniqueID(), body);
             item.setBind(body.getUniqueID());
 
             item.upDate();

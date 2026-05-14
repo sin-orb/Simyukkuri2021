@@ -57,22 +57,22 @@ public class ShowStatusFrameTest {
             expSpr[i] = new Sprite();
             brdSpr[i] = new Sprite();
         }
-        b.setBodySpr(spr);
+        b.setSpriteSet(spr);
         b.setExpandSpr(expSpr);
         b.setBraidSpr(brdSpr);
         b.setAgeState(age);
         b.setMsgType(YukkuriType.REIMU);
         b.setIntelligence(Intelligence.AVERAGE);
-        SimYukkuri.world.getCurrentMap().getBody().put(b.getUniqueID(), b);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(b.getUniqueID(), b);
         return b;
     }
 
     @Test
     public void testGiveBodyInfoUpdatesSelectBody() {
         Yukkuri b = createReimuBody(AgeState.ADULT);
-        ShowStatusFrame.getInstance().giveBodyInfo(b);
+        ShowStatusFrame.getInstance().giveYukkuriInfo(b);
 
-        assertSame(b, MyPane.getSelectBody());
+        assertSame(b, MyPane.getSelectedYukkuri());
     }
 
     private static boolean hasDisplay() {

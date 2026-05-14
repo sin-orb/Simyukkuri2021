@@ -5,7 +5,7 @@ import java.util.Iterator;
 import org.simyukkuri.entity.core.world.bodylinked.Stalk;
 import org.simyukkuri.enums.Happiness;
 import org.simyukkuri.enums.UnbirthBabyState;
-import org.simyukkuri.logic.BodyRelations;
+import org.simyukkuri.logic.YukkuriRelations;
 import org.simyukkuri.system.MessagePool;
 import org.simyukkuri.util.GameMessages;
 
@@ -69,7 +69,7 @@ public final class YukkuriStalkDelegate {
 				if (childId == null) {
 					continue;
 				}
-				Yukkuri child = BodyRelations.getBody(childId);
+				Yukkuri child = YukkuriRelations.getYukkuriById(childId);
 				if (child != null) {
 					child.setParentLinkId(-1);
 				}
@@ -95,7 +95,7 @@ public final class YukkuriStalkDelegate {
 				Stalk stalk = itr.next();
 				Iterator<Integer> childIds = stalk.getBindBabies().iterator();
 				while (childIds.hasNext()) {
-					Yukkuri child = BodyRelations.getBody(childIds.next());
+					Yukkuri child = YukkuriRelations.getYukkuriById(childIds.next());
 					if (child != null && (child.isDead() || child.isRemoved())) {
 						child.remove();
 					}

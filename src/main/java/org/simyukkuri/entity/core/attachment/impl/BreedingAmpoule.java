@@ -86,11 +86,11 @@ public class BreedingAmpoule extends Attachment {
 
 	@Override
 	protected Event update() {
-		Yukkuri pa = org.simyukkuri.util.BodyRegistry.getBodyInstance(parent);
+		Yukkuri pa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(parent);
 		if (pa == null)
 			return Event.DONOTHING;
 		// 死んでる/焼かれてる/壊れてる/胎生去勢 の場合は何もしない
-		if (pa.isDead() || pa.isBurned() || pa.isCrushed() || pa.isBodyCastration()) {
+		if (pa.isDead() || pa.isBurned() || pa.isCrushed() || pa.isCastrated()) {
 			return Event.DONOTHING;
 		}
 		pa.setHungry(100);
@@ -103,24 +103,24 @@ public class BreedingAmpoule extends Attachment {
 
 	@Override
 	public BufferedImage getImage(Yukkuri b) {
-		Yukkuri pa = org.simyukkuri.util.BodyRegistry.getBodyInstance(parent);
+		Yukkuri pa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(parent);
 		if (pa == null)
 			return null;
 		if (b.getDirection() == Direction.RIGHT) {
-			return images[pa.getBodyAgeState().ordinal()][1];
+			return images[pa.getAgeState().ordinal()][1];
 		}
-		return images[pa.getBodyAgeState().ordinal()][0];
+		return images[pa.getAgeState().ordinal()][0];
 	}
 
 	@Override
 	public void resetBoundary() {
-		Yukkuri pa = org.simyukkuri.util.BodyRegistry.getBodyInstance(parent);
+		Yukkuri pa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(parent);
 		if (pa == null)
 			return;
-		setBoundary(pivX[pa.getBodyAgeState().ordinal()],
-				pivY[pa.getBodyAgeState().ordinal()],
-				imgW[pa.getBodyAgeState().ordinal()],
-				imgH[pa.getBodyAgeState().ordinal()]);
+		setBoundary(pivX[pa.getAgeState().ordinal()],
+				pivY[pa.getAgeState().ordinal()],
+				imgW[pa.getAgeState().ordinal()],
+				imgH[pa.getAgeState().ordinal()]);
 	}
 
 	/**
@@ -131,12 +131,12 @@ public class BreedingAmpoule extends Attachment {
 	public BreedingAmpoule(Yukkuri body) {
 		super(body);
 		setAttachProperty(property, POS_KEY);
-		Yukkuri pa = org.simyukkuri.util.BodyRegistry.getBodyInstance(parent);
+		Yukkuri pa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(parent);
 		if (pa != null) {
-			setBoundary(pivX[pa.getBodyAgeState().ordinal()],
-					pivY[pa.getBodyAgeState().ordinal()],
-					imgW[pa.getBodyAgeState().ordinal()],
-					imgH[pa.getBodyAgeState().ordinal()]);
+			setBoundary(pivX[pa.getAgeState().ordinal()],
+					pivY[pa.getAgeState().ordinal()],
+					imgW[pa.getAgeState().ordinal()],
+					imgH[pa.getAgeState().ordinal()]);
 		}
 		value = 1000;
 		cost = 0;

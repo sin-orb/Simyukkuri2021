@@ -46,7 +46,7 @@ class ToiletLogicTest {
         WorldTestHelper.initializeMinimalWorld();
         WorldTestHelper.initializeStandardTranslate200();
 
-        ToiletLogic.setBodyUnunSlave(null);
+        ToiletLogic.setUnunSlave(null);
 
         body = new org.simyukkuri.entity.core.living.yukkuri.impl.Marisa() {
             @Override
@@ -55,14 +55,14 @@ class ToiletLogicTest {
             }
 
             @Override
-            public org.simyukkuri.enums.AgeState getBodyAgeState() {
+            public org.simyukkuri.enums.AgeState getAgeState() {
                 return org.simyukkuri.enums.AgeState.ADULT;
             }
         };
         body.setX(100);
         body.setY(100);
 
-        SimYukkuri.world.getCurrentMap().getBody().put(body.getObjId(), body);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(body.getObjId(), body);
     }
 
     @AfterEach
@@ -145,11 +145,11 @@ class ToiletLogicTest {
 
     @Test
     void testGetSetBodyUnunSlave() {
-        assertNull(ToiletLogic.getBodyUnunSlave());
+        assertNull(ToiletLogic.getUnunSlave());
         Yukkuri slave = WorldTestHelper.createBody();
-        ToiletLogic.setBodyUnunSlave(slave);
-        assertNotNull(ToiletLogic.getBodyUnunSlave());
-        ToiletLogic.setBodyUnunSlave(null);
+        ToiletLogic.setUnunSlave(slave);
+        assertNotNull(ToiletLogic.getUnunSlave());
+        ToiletLogic.setUnunSlave(null);
     }
 
     @Test
@@ -174,7 +174,7 @@ class ToiletLogicTest {
 
     @Test
     void testCheckToilet_IsToBody_returnsFalse() {
-        body.setToBody(true);
+        body.setToYukkuri(true);
         assertFalse(ToiletLogic.checkToilet(body));
     }
 
@@ -224,7 +224,7 @@ class ToiletLogicTest {
         // Add UnunSlave → bCanTransport=false
         Yukkuri slave = WorldTestHelper.createBody();
         slave.setPublicRank(PublicRank.UnunSlave);
-        SimYukkuri.world.getCurrentMap().getBody().put(slave.getUniqueID(), slave);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(slave.getUniqueID(), slave);
         // Section C still runs even when bCanTransport=false
         assertTrue(ToiletLogic.checkShit(body));
     }
@@ -338,7 +338,7 @@ class ToiletLogicTest {
             }
 
             @Override
-            public org.simyukkuri.enums.AgeState getBodyAgeState() {
+            public org.simyukkuri.enums.AgeState getAgeState() {
                 return org.simyukkuri.enums.AgeState.CHILD;
             }
         };
@@ -346,7 +346,7 @@ class ToiletLogicTest {
         child.setY(100);
         child.setAge(0); // 0 % 15 == 0
         child.setIntelligence(org.simyukkuri.enums.Intelligence.FOOL);
-        SimYukkuri.world.getCurrentMap().getBody().put(child.getObjId(), child);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(child.getObjId(), child);
 
         Shit shit = new Shit();
         shit.setX(101);
@@ -525,13 +525,13 @@ class ToiletLogicTest {
             }
 
             @Override
-            public AgeState getBodyAgeState() {
+            public AgeState getAgeState() {
                 return AgeState.ADULT;
             }
         };
         other.setX(300);
         other.setY(300);
-        SimYukkuri.world.getCurrentMap().getBody().put(other.getObjId(), other);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(other.getObjId(), other);
 
         body.setAge(0);
         // loop: body itself → L92 continue; other body (non-slave) → L99 fall-through
@@ -684,11 +684,11 @@ class ToiletLogicTest {
         assertFalse(ToiletLogic.checkToilet(body));
     }
 
-    // --- checkToilet: bHasShit=true, !wantToShit, no target → moveToBody (L379)
+    // --- checkToilet: bHasShit=true, !wantToShit, no target → moveToYukkuri (L379)
     // ---
 
     @Test
-    void testCheckToilet_HasShit_NotWantShit_NoTarget_moveToBody() {
+    void testCheckToilet_HasShit_NotWantShit_NoTarget_moveToYukkuri() {
         Shit shit = new Shit();
         SimYukkuri.world.getCurrentMap().getTakenOutShit().put(shit.getObjId(), shit);
         body.getCarryItems().put(TakeoutItemType.SHIT, shit.getObjId());
@@ -698,7 +698,7 @@ class ToiletLogicTest {
         toilet.setX(140);
         toilet.setY(140);
         SimYukkuri.world.getCurrentMap().getToilet().put(toilet.getObjId(), toilet);
-        // found != null, !wantToShit → moveToBody (L379) → returns true
+        // found != null, !wantToShit → moveToYukkuri (L379) → returns true
         assertTrue(ToiletLogic.checkToilet(body));
     }
 
@@ -724,7 +724,7 @@ class ToiletLogicTest {
     void testCheckShit_PreExistingUnunSlave_bCanTransportFalse_returnsTrue() {
         Yukkuri slave = WorldTestHelper.createBody();
         slave.setPublicRank(PublicRank.UnunSlave);
-        ToiletLogic.setBodyUnunSlave(slave); // pre-existing alive UnunSlave → L73
+        ToiletLogic.setUnunSlave(slave); // pre-existing alive UnunSlave → L73
 
         Shit shit = new Shit();
         shit.setX(101);
@@ -756,14 +756,14 @@ class ToiletLogicTest {
             }
 
             @Override
-            public AgeState getBodyAgeState() {
+            public AgeState getAgeState() {
                 return AgeState.ADULT;
             }
         };
         other.setX(300);
         other.setY(300);
         other.setHungry(body.getHungryLimitBase()[AgeState.ADULT.ordinal()]);
-        SimYukkuri.world.getCurrentMap().getBody().put(other.getObjId(), other);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(other.getObjId(), other);
 
         body.setAge(0);
         // bCanTransport=true → loop: body(self)→L85 continue,
@@ -783,7 +783,7 @@ class ToiletLogicTest {
             }
 
             @Override
-            public AgeState getBodyAgeState() {
+            public AgeState getAgeState() {
                 return AgeState.CHILD;
             }
 
@@ -795,7 +795,7 @@ class ToiletLogicTest {
         flyingBody.setX(100);
         flyingBody.setY(100);
         flyingBody.setShit(flyingBody.getShitLimit()); // wantToShit=true
-        SimYukkuri.world.getCurrentMap().getBody().put(flyingBody.getObjId(), flyingBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(flyingBody.getObjId(), flyingBody);
 
         Toilet toilet = new Toilet();
         toilet.setX(140);
@@ -812,7 +812,7 @@ class ToiletLogicTest {
     void testCheckShit_BodyUnunSlave_NotSlaveRank_elseBranch() {
         Yukkuri notSlave = WorldTestHelper.createBody();
         // default rank is NONE (not UnunSlave) → L63 false → else
-        ToiletLogic.setBodyUnunSlave(notSlave);
+        ToiletLogic.setUnunSlave(notSlave);
         Shit shit = new Shit();
         shit.setX(101);
         shit.setY(101);
@@ -828,7 +828,7 @@ class ToiletLogicTest {
         Yukkuri deadSlave = WorldTestHelper.createBody();
         deadSlave.setPublicRank(PublicRank.UnunSlave);
         deadSlave.setDead(true); // !isDead()=false → AND short-circuits at L64
-        ToiletLogic.setBodyUnunSlave(deadSlave);
+        ToiletLogic.setUnunSlave(deadSlave);
         Shit shit = new Shit();
         shit.setX(101);
         shit.setY(101);
@@ -844,7 +844,7 @@ class ToiletLogicTest {
         Yukkuri removedSlave = WorldTestHelper.createBody();
         removedSlave.setPublicRank(PublicRank.UnunSlave);
         removedSlave.setRemoved(true); // !isRemoved()=false → AND short-circuits at L65
-        ToiletLogic.setBodyUnunSlave(removedSlave);
+        ToiletLogic.setUnunSlave(removedSlave);
         Shit shit = new Shit();
         shit.setX(101);
         shit.setY(101);
@@ -864,7 +864,7 @@ class ToiletLogicTest {
             }
 
             @Override
-            public AgeState getBodyAgeState() {
+            public AgeState getAgeState() {
                 return AgeState.ADULT;
             }
 
@@ -877,7 +877,7 @@ class ToiletLogicTest {
         painBody.setY(100);
         // setHungry to avoid isSoHungry short-circuiting before isFeelPain
         painBody.setHungry(painBody.getHungryLimitBase()[AgeState.ADULT.ordinal()]);
-        SimYukkuri.world.getCurrentMap().getBody().put(painBody.getObjId(), painBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(painBody.getObjId(), painBody);
         Shit shit = new Shit();
         shit.setX(101);
         shit.setY(101);
@@ -899,15 +899,15 @@ class ToiletLogicTest {
             }
 
             @Override
-            public AgeState getBodyAgeState() {
+            public AgeState getAgeState() {
                 return AgeState.ADULT;
             }
         };
         deadBody.setDead(true);
         // clear and re-add with explicit unique keys to avoid collision
-        SimYukkuri.world.getCurrentMap().getBody().clear();
-        SimYukkuri.world.getCurrentMap().getBody().put(99997, deadBody); // isDead=true → continue
-        SimYukkuri.world.getCurrentMap().getBody().put(99998, body); // self → bodyOther==b → continue
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().clear();
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(99997, deadBody); // isDead=true → continue
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(99998, body); // self → bodyOther==b → continue
         Shit shit = new Shit();
         shit.setX(101);
         shit.setY(101);
@@ -947,7 +947,7 @@ class ToiletLogicTest {
             }
 
             @Override
-            public AgeState getBodyAgeState() {
+            public AgeState getAgeState() {
                 return AgeState.CHILD;
             }
         };
@@ -955,7 +955,7 @@ class ToiletLogicTest {
         childSlave.setY(100);
         childSlave.setAge(0);
         childSlave.setPublicRank(PublicRank.UnunSlave); // not NONE → L103 B false → else
-        SimYukkuri.world.getCurrentMap().getBody().put(childSlave.getObjId(), childSlave);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(childSlave.getObjId(), childSlave);
         Shit shit = new Shit();
         shit.setX(101);
         shit.setY(101);
@@ -975,7 +975,7 @@ class ToiletLogicTest {
             }
 
             @Override
-            public AgeState getBodyAgeState() {
+            public AgeState getAgeState() {
                 return AgeState.CHILD;
             }
         };
@@ -983,7 +983,7 @@ class ToiletLogicTest {
         childNormal.setY(100);
         childNormal.setAge(0);
         childNormal.setIntelligence(org.simyukkuri.enums.Intelligence.AVERAGE); // not FOOL → L103 C false → else
-        SimYukkuri.world.getCurrentMap().getBody().put(childNormal.getObjId(), childNormal);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(childNormal.getObjId(), childNormal);
         Shit shit = new Shit();
         shit.setX(101);
         shit.setY(101);
@@ -1003,7 +1003,7 @@ class ToiletLogicTest {
             }
 
             @Override
-            public AgeState getBodyAgeState() {
+            public AgeState getAgeState() {
                 return AgeState.CHILD;
             }
         };
@@ -1011,7 +1011,7 @@ class ToiletLogicTest {
         childFool.setY(100);
         childFool.setAge(0);
         childFool.setIntelligence(org.simyukkuri.enums.Intelligence.FOOL);
-        SimYukkuri.world.getCurrentMap().getBody().put(childFool.getObjId(), childFool);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(childFool.getObjId(), childFool);
         Shit shit = new Shit();
         shit.setX(101);
         shit.setY(101);
@@ -1231,9 +1231,9 @@ class ToiletLogicTest {
             }
         };
         removedBody.setRemoved(true); // isRemoved=true → L77 continue
-        SimYukkuri.world.getCurrentMap().getBody().clear();
-        SimYukkuri.world.getCurrentMap().getBody().put(99990, removedBody);
-        SimYukkuri.world.getCurrentMap().getBody().put(99991, body);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().clear();
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(99990, removedBody);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(99991, body);
         Shit shit = new Shit();
         shit.setX(101);
         shit.setY(101);

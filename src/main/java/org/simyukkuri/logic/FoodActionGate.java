@@ -1,7 +1,7 @@
 package org.simyukkuri.logic;
 
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
-import org.simyukkuri.enums.BodyRank;
+import org.simyukkuri.enums.YukkuriRank;
 import org.simyukkuri.enums.CoreAnkoState;
 import org.simyukkuri.enums.PublicRank;
 import org.simyukkuri.enums.TakeoutItemType;
@@ -19,7 +19,7 @@ public final class FoodActionGate {
 
 	public static boolean shouldSkipBeforeSearch(Yukkuri body, boolean[] forceEat) {
 		if (!body.isVeryHungry()) {
-			if (body.isToBody() || body.isToBed()
+			if (body.isToYukkuri() || body.isToBed()
 					|| (body.isToShit() && body.getIntelligence() == org.simyukkuri.enums.Intelligence.WISE)
 					|| (body.isAdult() && body.isToSukkiri()) || body.isToSteal()
 					|| (body.isRaper() && body.isExciting())) {
@@ -33,9 +33,9 @@ public final class FoodActionGate {
 			return true;
 		}
 		if (body.isSleepy()) {
-			if ((!body.isHungry() && body.isSmart() && body.getBodyRank() == BodyRank.KAIYU)
+			if ((!body.isHungry() && body.isSmart() && body.getRank() == YukkuriRank.KAIYU)
 					|| (body.isFull() && body.getIntelligence() != org.simyukkuri.enums.Intelligence.WISE
-							&& body.getBodyRank() != BodyRank.KAIYU)) {
+							&& body.getRank() != YukkuriRank.KAIYU)) {
 				return true;
 			}
 		}

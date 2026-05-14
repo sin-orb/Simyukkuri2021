@@ -14,7 +14,7 @@ import org.simyukkuri.entity.core.world.bodylinked.*;
 import org.simyukkuri.entity.core.world.item.*;
 import org.simyukkuri.entity.core.world.mobile.*;
 
-import org.simyukkuri.system.BodyLayer;
+import org.simyukkuri.system.YukkuriLayer;
 import org.simyukkuri.draw.Point4y;
 import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.YukkuriType;
@@ -66,7 +66,7 @@ public class StubBody extends Yukkuri {
     }
 
     @Override
-    public int getImage(int type, int direction, BodyLayer layer, int index) {
+    public int getImage(int type, int direction, YukkuriLayer layer, int index) {
         return 0;
     }
 
@@ -95,7 +95,7 @@ public class StubBody extends Yukkuri {
     }
 
     @Override
-    public int checkNonYukkuriDiseaseTolerance() {
+    public int getNonYukkuriDiseaseTolerance() {
         return 0;
     }
 }

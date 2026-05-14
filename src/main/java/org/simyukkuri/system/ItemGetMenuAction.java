@@ -35,7 +35,7 @@ public final class ItemGetMenuAction implements ActionListener {
 						}
 						b.removeAllStalks();
 						b.setTaken(true);
-						curMap.getBody().remove(b.getUniqueID());
+						curMap.getYukkuriMap().remove(b.getUniqueID());
 					} else if (ItemMenu.getGetTarget() instanceof Shit) {
 						curMap.getShit().remove(ItemMenu.getGetTarget().objId);
 					} else if (ItemMenu.getGetTarget() instanceof Vomit) {
@@ -50,7 +50,7 @@ public final class ItemGetMenuAction implements ActionListener {
 				}
 				Yukkuri b = (Yukkuri) ItemMenu.getGetTarget();
 				ShowStatusFrame instance = ShowStatusFrame.getInstance();
-				instance.giveBodyInfo(b);
+				instance.giveYukkuriInfo(b);
 				instance.setVisible(true);
 				break;
 		}

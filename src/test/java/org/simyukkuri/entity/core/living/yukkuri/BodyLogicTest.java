@@ -54,7 +54,7 @@ public class BodyLogicTest {
         body.setUniqueID(1);
         body.setAge(100000);
         body.setShitType(YukkuriType.REIMU);
-        gameMap.getBody().put(1, body);
+        gameMap.getYukkuriMap().put(1, body);
     }
 
     private void setupVomitStatics() throws Exception {
@@ -76,7 +76,7 @@ public class BodyLogicTest {
         body.setDead(true);
         body.setAnkoAmount(10000);
         // limit/2 for Adult is 8400.
-        body.eatBody(2000);
+        body.eatYukkuri(2000);
         assertTrue(body.isCrushed(), "Should be crushed when amount <= limit/2 (8400)");
     }
 
@@ -84,7 +84,7 @@ public class BodyLogicTest {
     public void testEatBody_DeadBodyRemove() {
         body.setDead(true);
         body.setAnkoAmount(1000);
-        body.eatBody(1000);
+        body.eatYukkuri(1000);
         assertTrue(body.isRemoved());
     }
 
@@ -93,7 +93,7 @@ public class BodyLogicTest {
         body.setDead(false);
         body.setHungry(100);
         body.setAnkoAmount(10000);
-        body.eatBody(200);
+        body.eatYukkuri(200);
         assertEquals(-100, body.getHungry());
         assertTrue(body.getDamage() > 0);
     }
@@ -102,7 +102,7 @@ public class BodyLogicTest {
     public void testEatBody_LiveBodyDeath() {
         body.setDead(false);
         body.setAnkoAmount(1000);
-        body.eatBody(1000);
+        body.eatYukkuri(1000);
         assertTrue(body.isDead());
         assertTrue(body.isCrushed());
     }
@@ -111,12 +111,12 @@ public class BodyLogicTest {
     public void testCheckRemovedFamilyList() throws Exception {
         StubBody sister = new StubBody();
         sister.setUniqueID(2);
-        gameMap.getBody().put(2, sister);
+        gameMap.getYukkuriMap().put(2, sister);
 
         StubBody removedChild = new StubBody();
         removedChild.setUniqueID(3);
         removedChild.remove();
-        gameMap.getBody().put(3, removedChild);
+        gameMap.getYukkuriMap().put(3, removedChild);
 
         body.getSisterList().add(2);
         body.getChildrenList().add(3);

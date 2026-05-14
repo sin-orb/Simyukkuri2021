@@ -33,8 +33,8 @@ public class TransformationPolicyTest {
 
 	@Test
 	public void testResolveBaseBodyFileName() {
-		assertEquals("marisa", TransformationPolicy.resolveBaseBodyFileName(YukkuriType.MARISA));
-		assertEquals("deibu", TransformationPolicy.resolveBaseBodyFileName(YukkuriType.DEIBU));
+		assertEquals("marisa", TransformationPolicy.resolveBaseYukkuriFileName(YukkuriType.MARISA));
+		assertEquals("deibu", TransformationPolicy.resolveBaseYukkuriFileName(YukkuriType.DEIBU));
 	}
 
 	@Test

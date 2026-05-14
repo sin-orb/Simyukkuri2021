@@ -110,7 +110,7 @@ public final class FoodPredatorFoodPolicy {
 
 		for (Map.Entry<Integer, Stalk> entry : GameWorld.get().getCurrentMap().getStalk().entrySet()) {
 			Stalk stalk = entry.getValue();
-			Yukkuri plantBody = GameWorld.get().getCurrentMap().getBody().get(stalk.getPlantYukkuri());
+			Yukkuri plantBody = GameWorld.get().getCurrentMap().getYukkuriMap().get(stalk.getPlantYukkuri());
 			if (plantBody != null) {
 				if (plantBody == body) {
 					continue;
@@ -123,7 +123,7 @@ public final class FoodPredatorFoodPolicy {
 				if (babyList != null && babyList.size() != 0) {
 					boolean hasBaby = false;
 					for (int babyId : babyList) {
-						Yukkuri baby = org.simyukkuri.util.BodyRegistry.getBodyInstance(babyId);
+						Yukkuri baby = org.simyukkuri.util.YukkuriLookup.getYukkuriById(babyId);
 						if (baby == null) {
 							continue;
 						}
@@ -195,11 +195,11 @@ public final class FoodPredatorFoodPolicy {
 			this.looks = looks;
 		}
 
-		public Entity getFound() {
+		public Entity getNearestObject() {
 			return nearestObject;
 		}
 
-		public int getMinDistance() {
+		public int getNearestDistance() {
 			return nearestDistance;
 		}
 

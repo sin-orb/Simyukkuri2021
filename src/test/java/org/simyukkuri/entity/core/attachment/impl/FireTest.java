@@ -121,7 +121,7 @@ public class FireTest {
         Yukkuri parent = createParent(AgeState.CHILD);
         Fire fire = new Fire(parent);
 
-        SimYukkuri.world.getCurrentMap().getBody().remove(parent.getUniqueID());
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().remove(parent.getUniqueID());
 
         BufferedImage image = fire.getImage(parent);
         assertNull(image);
@@ -193,7 +193,7 @@ public class FireTest {
         int origPivotX = fire.getPivotX();
         int origPivotY = fire.getPivotY();
 
-        SimYukkuri.world.getCurrentMap().getBody().remove(parent.getUniqueID());
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().remove(parent.getUniqueID());
 
         fire.resetBoundary();
 
@@ -471,8 +471,8 @@ public class FireTest {
         for (int i = 0; i < 3; i++) {
             spr[i] = new Sprite(10, 10, Sprite.PIVOT_CENTER_BOTTOM);
         }
-        parent.setBodySpr(spr);
-        SimYukkuri.world.getCurrentMap().getBody().put(parent.getUniqueID(), parent);
+        parent.setSpriteSet(spr);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(parent.getUniqueID(), parent);
         return parent;
     }
 

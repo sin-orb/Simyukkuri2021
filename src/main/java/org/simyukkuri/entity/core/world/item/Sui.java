@@ -377,7 +377,7 @@ public class Sui extends WorldEntity {
 
 			}
 		} else {
-			moveBody();
+			moveYukkuri();
 		}
 
 		return Event.DONOTHING;
@@ -397,7 +397,7 @@ public class Sui extends WorldEntity {
 		return 0;
 	}
 
-	private void moveBody() {
+	private void moveYukkuri() {
 
 		int step = 1;
 		int dirX = 0;
@@ -530,11 +530,11 @@ public class Sui extends WorldEntity {
 		this.current_bindbody_num = current_bindbody_num;
 	}
 
-	public Yukkuri[] getBindBody() {
+	public Yukkuri[] getBoundYukkuri() {
 		return bindBody;
 	}
 
-	public void setBindBody(Yukkuri[] bindBody) {
+	public void setBoundYukkuri(Yukkuri[] bindBody) {
 		this.bindBody = bindBody;
 	}
 

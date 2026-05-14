@@ -48,19 +48,19 @@ class FoodEligibilityTest {
 	@Test
 	void predatorBodiesCanAlwaysEatBody() {
 		eater.setPredatorType(PredatorType.BITE);
-		assertTrue(FoodEligibility.checkCanEatBody(eater, prey));
+		assertTrue(FoodEligibility.checkCanEatYukkuri(eater, prey));
 	}
 
 	@Test
 	void nonPredatorCannotEatLivingBody() {
 		prey.setDead(false);
-		assertFalse(FoodEligibility.checkCanEatBody(eater, prey));
+		assertFalse(FoodEligibility.checkCanEatYukkuri(eater, prey));
 	}
 
 	@Test
 	void nonRudeBodiesRejectOkazariBodies() {
 		prey.setDead(true);
 		prey.setOkazari(new Okazari());
-		assertFalse(FoodEligibility.checkCanEatBody(eater, prey));
+		assertFalse(FoodEligibility.checkCanEatYukkuri(eater, prey));
 	}
 }

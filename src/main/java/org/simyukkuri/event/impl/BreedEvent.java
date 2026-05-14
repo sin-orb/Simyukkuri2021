@@ -46,7 +46,7 @@ public class BreedEvent extends EventPacket {
 		boolean accepted = false;
 
 		priority = EventPriority.MIDDLE;
-		Yukkuri sourceBody = org.simyukkuri.util.BodyRegistry.getBodyInstance(getFrom());
+		Yukkuri sourceBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
 		if (sourceBody == null)
 			return false;
 
@@ -100,7 +100,7 @@ public class BreedEvent extends EventPacket {
 	 */
 	@Override
 	public void start(Yukkuri body) {
-		Yukkuri sourceBody = org.simyukkuri.util.BodyRegistry.getBodyInstance(getFrom());
+		Yukkuri sourceBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
 		if (sourceBody != null)
 			body.moveToEvent(this, sourceBody.getX(), sourceBody.getY());
 	}
@@ -111,7 +111,7 @@ public class BreedEvent extends EventPacket {
 	 */
 	@Override
 	public UpdateState update(Yukkuri body) {
-		Yukkuri sourceBody = org.simyukkuri.util.BodyRegistry.getBodyInstance(getFrom());
+		Yukkuri sourceBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
 		if (sourceBody == null)
 			return UpdateState.ABORT;
 		if (sourceBody.isParent(body) && (body.isBirthMessageForced() || body.getBirthEventBlockedTicks() > 0)) {
@@ -154,7 +154,7 @@ public class BreedEvent extends EventPacket {
 		if (body.isNYD()) {
 			return false;
 		}
-		Yukkuri sourceBody = org.simyukkuri.util.BodyRegistry.getBodyInstance(getFrom());
+		Yukkuri sourceBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
 		if (sourceBody == null)
 			return true;
 		if (sourceBody.isParent(body) && body.getBirthEventBlockedTicks() > 0) {
@@ -164,7 +164,7 @@ public class BreedEvent extends EventPacket {
 		if (sourceBody.isBirth()) {
 			body.setHappiness(Happiness.AVERAGE);
 			body.lookTo(sourceBody.getX(), sourceBody.getY());
-			body.setBodyEventResMessage(GameMessages.getMessage(body, MessagePool.Action.RootForPartner), 40, false,
+			body.setEventResMessage(GameMessages.getMessage(body, MessagePool.Action.RootForPartner), 40, false,
 					false);
 			sourceBody.addMemories(1);
 			body.addMemories(1);
@@ -175,13 +175,13 @@ public class BreedEvent extends EventPacket {
 				body.lookTo(sourceBody.getX(), sourceBody.getY());
 				if (sourceBody.isHasPants()) {
 					body.setHappiness(Happiness.VERY_SAD);
-					body.setBodyEventResMessage(GameMessages.getMessage(body, MessagePool.Action.Surprise), 40, true,
+					body.setEventResMessage(GameMessages.getMessage(body, MessagePool.Action.Surprise), 40, true,
 							true);
 					body.addStress(1800);
 					body.addMemories(-30);
 				} else {
 					body.setHappiness(Happiness.VERY_HAPPY);
-					body.setBodyEventResMessage(GameMessages.getMessage(body, MessagePool.Action.FirstGreeting), 40,
+					body.setEventResMessage(GameMessages.getMessage(body, MessagePool.Action.FirstGreeting), 40,
 							true,
 							false);
 					body.addStress(-30);

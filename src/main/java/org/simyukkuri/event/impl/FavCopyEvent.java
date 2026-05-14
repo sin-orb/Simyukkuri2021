@@ -32,13 +32,13 @@ public class FavCopyEvent extends EventPacket {
 
 	@Override
 	public boolean simpleEventAction(Yukkuri body) {
-		Yukkuri sourceBody = org.simyukkuri.util.BodyRegistry.getBodyInstance(getFrom());
+		Yukkuri sourceBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
 		if (sourceBody == body || sourceBody == null)
 			return false;
 		// イベントの発信者が家族かチェック
 		if (body.isParent(sourceBody) || sourceBody.isParent(body) || body.isPartner(sourceBody)) {
 			if (!Barrier.acrossBarrier(body.getX(), body.getY(), sourceBody.getX(), sourceBody.getY(),
-					Barrier.MAP_BODY[body.getBodyAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
+					Barrier.MAP_BODY[body.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
 
 				// 片方だけがうんうん奴隷の場合はなにもしない
 				if (((body.getPublicRank() == PublicRank.UnunSlave)

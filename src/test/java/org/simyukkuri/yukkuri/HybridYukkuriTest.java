@@ -18,8 +18,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.enums.AgeState;
-import org.simyukkuri.system.BodyLayer;
-import org.simyukkuri.enums.BodyRank;
+import org.simyukkuri.system.YukkuriLayer;
+import org.simyukkuri.enums.YukkuriRank;
 import org.simyukkuri.util.WorldTestHelper;
 
 public class HybridYukkuriTest {
@@ -78,10 +78,10 @@ public class HybridYukkuriTest {
         hybrid.setDorei3(dorei3);
         hybrid.setDorei4(dorei4);
 
-        assertSame(dorei1, hybrid.getBaseBody(0));
-        assertSame(dorei2, hybrid.getBaseBody(1));
-        assertSame(dorei3, hybrid.getBaseBody(2));
-        assertSame(dorei4, hybrid.getBaseBody(3));
+        assertSame(dorei1, hybrid.getBaseYukkuri(0));
+        assertSame(dorei2, hybrid.getBaseYukkuri(1));
+        assertSame(dorei3, hybrid.getBaseYukkuri(2));
+        assertSame(dorei4, hybrid.getBaseYukkuri(3));
     }
 
     @Test
@@ -134,8 +134,8 @@ public class HybridYukkuriTest {
     public void testSetBodyRank_NullDoreis_DoesNotThrow() {
         HybridYukkuri hybrid = new HybridYukkuri();
         // All doreis are null → null checks prevent NPE
-        assertDoesNotThrow(() -> hybrid.setBodyRank(BodyRank.KAIYU));
-        assertEquals(BodyRank.KAIYU, hybrid.getBodyRank());
+        assertDoesNotThrow(() -> hybrid.setRank(YukkuriRank.KAIYU));
+        assertEquals(YukkuriRank.KAIYU, hybrid.getRank());
     }
 
     @Test
@@ -149,9 +149,9 @@ public class HybridYukkuriTest {
         hybrid.setDorei2(d2);
         hybrid.setDorei3(d3);
         hybrid.setDorei4(d4);
-        hybrid.setBodyRank(BodyRank.SUTEYU);
-        assertEquals(BodyRank.SUTEYU, hybrid.getBodyRank());
-        assertEquals(BodyRank.SUTEYU, d1.getBodyRank());
+        hybrid.setRank(YukkuriRank.SUTEYU);
+        assertEquals(YukkuriRank.SUTEYU, hybrid.getRank());
+        assertEquals(YukkuriRank.SUTEYU, d1.getRank());
     }
 
     @Test
@@ -159,7 +159,7 @@ public class HybridYukkuriTest {
         HybridYukkuri hybrid = new HybridYukkuri();
         Chen d4 = new Chen();
         hybrid.setDorei4(d4);
-        assertSame(d4, hybrid.getBaseBody(99));
+        assertSame(d4, hybrid.getBaseYukkuri(99));
     }
 
     @Test
@@ -219,7 +219,7 @@ public class HybridYukkuriTest {
     @Test
     public void testGetImage_imagesNull_throwsNPE() {
         HybridYukkuri hybrid = new HybridYukkuri();
-        BodyLayer layer = new BodyLayer();
+        YukkuriLayer layer = new YukkuriLayer();
         // images is null by default (tuneParameters not called)
         assertEquals(0, hybrid.getImage(0, 0, layer, 0));
     }
@@ -231,7 +231,7 @@ public class HybridYukkuriTest {
         HybridYukkuri hybrid = new HybridYukkuri();
         hybrid.tuneParameters(); // images = new Yukkuri[size], but elements are null
         hybrid.setImages(new Yukkuri[org.simyukkuri.enums.ImageCode.values().length]);
-        BodyLayer layer = new BodyLayer();
+        YukkuriLayer layer = new YukkuriLayer();
         // images[0] == null → images[0].setAgeState → NPE
         assertEquals(0, hybrid.getImage(0, 0, layer, 0));
     }

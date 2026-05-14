@@ -50,7 +50,7 @@ public class CutPenipeniEvent extends EventPacket {
 	public boolean checkEventResponse(Yukkuri body) {
 
 		priority = EventPriority.HIGH;
-		Yukkuri fromBody = org.simyukkuri.util.BodyRegistry.getBodyInstance(getFrom());
+		Yukkuri fromBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
 		if (body == fromBody)
 			return true;
 		return false;
@@ -78,7 +78,7 @@ public class CutPenipeniEvent extends EventPacket {
 			body.setForceFace(ImageCode.CUTPENIPENI.ordinal());
 			body.setHappiness(Happiness.VERY_SAD);
 			body.setCanTalk(true);
-			body.setBodyEventResMessage(GameMessages.getMessage(body, MessagePool.Action.Scream2), 50, true, true);
+			body.setEventResMessage(GameMessages.getMessage(body, MessagePool.Action.Scream2), 50, true, true);
 			body.setCanTalk(false);
 			return UpdateState.FORCE_EXEC;
 		}
@@ -103,16 +103,16 @@ public class CutPenipeniEvent extends EventPacket {
 			if (body.isNotNYD()) {
 				body.setForceFace(ImageCode.SURPRISE.ordinal());
 				if (GameRandom.nextInt(2) == 0)
-					body.setBodyEventResMessage(GameMessages.getMessage(body, MessagePool.Action.Scream2), 30, true,
+					body.setEventResMessage(GameMessages.getMessage(body, MessagePool.Action.Scream2), 30, true,
 							false);
 				else
-					body.setBodyEventResMessage(GameMessages.getMessage(body, MessagePool.Action.Surprise), 30, true,
+					body.setEventResMessage(GameMessages.getMessage(body, MessagePool.Action.Surprise), 30, true,
 							false);
 			}
 		} else if (tick == 40) {
 			// 反応する
 			if (body.isNotNYD()) {
-				body.setBodyEventResMessage(GameMessages.getMessage(body, MessagePool.Action.PenipeniCutting), 50, true,
+				body.setEventResMessage(GameMessages.getMessage(body, MessagePool.Action.PenipeniCutting), 50, true,
 						true);
 				body.setHappiness(Happiness.VERY_SAD);
 				body.setForceFace(ImageCode.CRYING.ordinal());

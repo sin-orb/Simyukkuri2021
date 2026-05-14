@@ -50,8 +50,8 @@ class AvoidMoldEventTest {
         for (int i = 0; i < 3; i++) {
             spr[i] = new org.simyukkuri.system.Sprite(10, 10, org.simyukkuri.system.Sprite.PIVOT_CENTER_BOTTOM);
         }
-        b.setBodySpr(spr);
-        SimYukkuri.world.getCurrentMap().getBody().put(b.getUniqueID(), b);
+        b.setSpriteSet(spr);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(b.getUniqueID(), b);
         return b;
     }
 
@@ -216,7 +216,7 @@ class AvoidMoldEventTest {
 
     @Test
     void testSaySadMessage_fromNull_doesNotThrow() {
-        // unregistered from → getBodyInstance returns null → early return
+        // unregistered from → getBodyMap returns null → early return
         Yukkuri unregistered = new Reimu();
         Yukkuri to = createBody();
         AvoidMoldEvent event = new AvoidMoldEvent(unregistered, to, null, 10);

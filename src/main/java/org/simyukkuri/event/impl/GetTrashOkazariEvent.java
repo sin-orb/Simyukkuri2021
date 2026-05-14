@@ -66,7 +66,7 @@ public class GetTrashOkazariEvent extends EventPacket {
 		if (targetObject.isRemoved())
 			return true;
 		// おかざりランダム入手
-		body.giveOkazari(Okazari.getRandomOkazari(body.getBodyAgeState()));
+		body.giveOkazari(Okazari.getRandomOkazari(body.getAgeState()));
 		return true;
 	}
 

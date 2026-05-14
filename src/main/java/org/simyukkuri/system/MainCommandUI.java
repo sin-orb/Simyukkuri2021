@@ -20,7 +20,7 @@ import javax.swing.border.EmptyBorder;
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.command.GadgetMenu;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
-import org.simyukkuri.enums.BodyRank;
+import org.simyukkuri.enums.YukkuriRank;
 import org.simyukkuri.enums.PublicRank;
 import org.simyukkuri.util.GameLocale;
 import org.simyukkuri.util.GameText;
@@ -449,7 +449,7 @@ public class MainCommandUI {
 		yuStatusLabel[StatusLabel.NAME.ordinal()]
 				.setText(" " + (GameLocale.isJapanese() ? b.getNameJ() : b.getNameE()));
 		yuStatusLabel[StatusLabel.RANK.ordinal()]
-				.setText(StatusLabel.RANK.getLabel() + BodyRank.values()[b.getBodyRank().ordinal()].getDisplayName());
+				.setText(StatusLabel.RANK.getLabel() + YukkuriRank.values()[b.getRank().ordinal()].getDisplayName());
 		yuStatusLabel[StatusLabel.PERSONALITY.ordinal()].setText(StatusLabel.PERSONALITY.getLabel() +
 				(GameLocale.isJapanese() ? ATTITUDE_LEVEL_J[b.getAttitude().ordinal()]
 						: ATTITUDE_LEVEL_E[b.getAttitude().ordinal()]));
@@ -485,7 +485,7 @@ public class MainCommandUI {
 			statIconLabel[1].setIcon(null);
 			statIconLabel[1].setToolTipText(null);
 		}
-		if (b.isBodyCastration()) {
+		if (b.isCastrated()) {
 			statIconLabel[2].setIcon(img[IconPool.StatusIcon.UNBABY.ordinal()]);
 			statIconLabel[2].setToolTipText(stat[IconPool.StatusIcon.UNBABY.ordinal()].getHelp());
 		} else {

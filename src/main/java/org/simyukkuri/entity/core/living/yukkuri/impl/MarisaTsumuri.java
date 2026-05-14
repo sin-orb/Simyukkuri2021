@@ -12,10 +12,10 @@ import org.simyukkuri.draw.ModLoader;
 import org.simyukkuri.draw.Point4y;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.enums.AgeState;
-import org.simyukkuri.enums.BodyRank;
+import org.simyukkuri.enums.YukkuriRank;
 import org.simyukkuri.enums.ImageCode;
 import org.simyukkuri.enums.YukkuriType;
-import org.simyukkuri.system.BodyLayer;
+import org.simyukkuri.system.YukkuriLayer;
 import org.simyukkuri.util.GameEnvironment;
 import org.simyukkuri.util.GameRandom;
 import org.simyukkuri.util.IniFileUtil;
@@ -40,7 +40,7 @@ public class MarisaTsumuri extends Marisa {
 	/** 素材としての売却基本額 */
 	public static int AValue = 100;
 
-	private static BufferedImage[][][][] imagePack = new BufferedImage[BodyRank.values().length][][][];
+	private static BufferedImage[][][][] imagePack = new BufferedImage[YukkuriRank.values().length][][][];
 	private static BufferedImage[][][] imagesKai = new BufferedImage[ImageCode.values().length][2][3];
 	private static BufferedImage[][][] imagesNora = new BufferedImage[ImageCode.values().length][2][3];
 	private static BufferedImage[][][][] imagesNagasi = new BufferedImage[ImageCode.values().length][2][3][ModLoader
@@ -64,25 +64,25 @@ public class MarisaTsumuri extends Marisa {
 			return;
 
 		boolean res;
-		res = ModLoader.loadBodyImagePack(loader, imagesNagasi, directionOffsetNagasi, ModLoader.getYkWordNagasi(),
+		res = ModLoader.loadYukkuriImagePack(loader, imagesNagasi, directionOffsetNagasi, ModLoader.getYkWordNagasi(),
 				baseFileName, io);
 		if (!res) {
 			imagesNagasi = null;
 		}
-		res = ModLoader.loadBodyImagePack(loader, imagesNora, directionOffset, ModLoader.getYkWordNora(), baseFileName,
+		res = ModLoader.loadYukkuriImagePack(loader, imagesNora, directionOffset, ModLoader.getYkWordNora(), baseFileName,
 				io);
 		if (!res) {
 			imagesNora = null;
 		}
-		res = ModLoader.loadBodyImagePack(loader, imagesKai, directionOffset, null, baseFileName, io);
+		res = ModLoader.loadYukkuriImagePack(loader, imagesKai, directionOffset, null, baseFileName, io);
 		if (!res) {
 			imagesKai = null;
 		}
-		imagePack[BodyRank.KAIYU.getImageIndex()] = imagesKai;
+		imagePack[YukkuriRank.KAIYU.getImageIndex()] = imagesKai;
 		if (imagesNora != null) {
-			imagePack[BodyRank.NORAYU.getImageIndex()] = imagesNora;
+			imagePack[YukkuriRank.NORAYU.getImageIndex()] = imagesNora;
 		} else {
-			imagePack[BodyRank.NORAYU.getImageIndex()] = imagesKai;
+			imagePack[YukkuriRank.NORAYU.getImageIndex()] = imagesKai;
 		}
 		ModLoader.setImageSize(imagesKai, boundary, braidBoundary, io);
 
@@ -95,11 +95,11 @@ public class MarisaTsumuri extends Marisa {
 	 * @param loader クラスローダ
 	 */
 	public static void loadIniFile(ClassLoader loader) {
-		AttachOffset = ModLoader.loadBodyIniMap(loader, ModLoader.getDataIniDir(), baseFileName);
-		baseSpeed = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataIniDir(), baseFileName, "speed");
-		cost = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataIniDir(), baseFileName, "cost");
-		YValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataIniDir(), baseFileName, "Value");
-		AValue = ModLoader.loadBodyIniMapForInt(loader, ModLoader.getDataIniDir(), baseFileName, "contentValue");
+		AttachOffset = ModLoader.loadYukkuriIniMap(loader, ModLoader.getDataIniDir(), baseFileName);
+		baseSpeed = ModLoader.loadYukkuriIniMapForInt(loader, ModLoader.getDataIniDir(), baseFileName, "speed");
+		cost = ModLoader.loadYukkuriIniMapForInt(loader, ModLoader.getDataIniDir(), baseFileName, "cost");
+		YValue = ModLoader.loadYukkuriIniMapForInt(loader, ModLoader.getDataIniDir(), baseFileName, "Value");
+		AValue = ModLoader.loadYukkuriIniMapForInt(loader, ModLoader.getDataIniDir(), baseFileName, "contentValue");
 	}
 
 	@Override
@@ -109,10 +109,10 @@ public class MarisaTsumuri extends Marisa {
 	}
 
 	@Override
-	public int getImage(int type, int direction, BodyLayer layer, int index) {
+	public int getImage(int type, int direction, YukkuriLayer layer, int index) {
 		if (!isImageNagasiMode() || imagesNagasi == null) {
-			layer.getImage()[index] = imagePack[getBodyRank().getImageIndex()][type][direction
-					* directionOffset[type][0]][getBodyAgeState().ordinal()];
+			layer.getImage()[index] = imagePack[getRank().getImageIndex()][type][direction
+					* directionOffset[type][0]][getAgeState().ordinal()];
 			layer.getDir()[index] = direction * directionOffset[type][1];
 		} else {
 			if (GameEnvironment.getInterval() == 0 && !isDead()) {
@@ -124,12 +124,12 @@ public class MarisaTsumuri extends Marisa {
 			if (imageVariantState[type][1] == 1) {
 				int variantIndex = imageVariantState[type][0];
 				layer.getImage()[index] = imagesNagasi[type][direction
-						* directionOffsetNagasi[type][0]][getBodyAgeState().ordinal()][variantIndex];
+						* directionOffsetNagasi[type][0]][getAgeState().ordinal()][variantIndex];
 
 			} else {
 				int otherVariantCount = 0;
 				for (int i = 0; i < ModLoader.getMaxImgOtherVer(); i++) {
-					if (imagesNagasi[type][direction * directionOffsetNagasi[type][0]][getBodyAgeState().ordinal()][i
+					if (imagesNagasi[type][direction * directionOffsetNagasi[type][0]][getAgeState().ordinal()][i
 							+ 1] != null) {
 						otherVariantCount++;
 					}
@@ -139,11 +139,11 @@ public class MarisaTsumuri extends Marisa {
 					int randomVariantIndex = GameRandom.nextInt(otherVariantCount + 1);
 					imageVariantState[type][0] = randomVariantIndex;
 					layer.getImage()[index] = imagesNagasi[type][direction
-							* directionOffsetNagasi[type][0]][getBodyAgeState().ordinal()][randomVariantIndex];
+							* directionOffsetNagasi[type][0]][getAgeState().ordinal()][randomVariantIndex];
 				} else {
 					imageVariantState[type][0] = 0;
 					layer.getImage()[index] = imagesNagasi[type][direction
-							* directionOffsetNagasi[type][0]][getBodyAgeState().ordinal()][0];
+							* directionOffsetNagasi[type][0]][getAgeState().ordinal()][0];
 				}
 
 				imageVariantState[type][1] = 1;
@@ -174,8 +174,8 @@ public class MarisaTsumuri extends Marisa {
 	@Override
 	@Transient
 	public String getMyName() {
-		if (getMyNames()[getBodyAgeState().ordinal()] != null) {
-			return getMyNames()[getBodyAgeState().ordinal()];
+		if (getMyNames()[getAgeState().ordinal()] != null) {
+			return getMyNames()[getAgeState().ordinal()];
 		}
 		return nameJ;
 	}
@@ -183,8 +183,8 @@ public class MarisaTsumuri extends Marisa {
 	@Override
 	@Transient
 	public String getMyNameD() {
-		if (getMyNamesDamaged()[getBodyAgeState().ordinal()] != null) {
-			return getMyNamesDamaged()[getBodyAgeState().ordinal()];
+		if (getMyNamesDamaged()[getAgeState().ordinal()] != null) {
+			return getMyNamesDamaged()[getAgeState().ordinal()];
 		}
 		return getMyName();
 	}
@@ -213,7 +213,7 @@ public class MarisaTsumuri extends Marisa {
 		setBoundary(boundary, braidBoundary);
 		setMsgType(YukkuriType.MARISATSUMURI);
 		setShitType(YukkuriType.MARISATSUMURI);
-		setBaseBodyFileName(baseFileName);
+		setBaseYukkuriFileName(baseFileName);
 		IniFileUtil.readYukkuriIniFile(this);
 	}
 

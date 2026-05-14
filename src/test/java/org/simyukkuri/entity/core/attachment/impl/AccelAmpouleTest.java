@@ -114,7 +114,7 @@ public class AccelAmpouleTest {
     public void testConstructorWithParentNotInWorld() {
         Yukkuri parent = new Reimu();
         parent.setAgeState(AgeState.CHILD);
-        // parentをworldに登録しないのでBodyRegistryでは見つからない
+        // parentをworldに登録しないのでYukkuriLookupでは見つからない
         AccelAmpoule ampoule = new AccelAmpoule(parent);
         assertEquals(1000, ampoule.getValue());
         assertEquals(0, ampoule.getCost());
@@ -180,7 +180,7 @@ public class AccelAmpouleTest {
     private static Yukkuri createParent(AgeState ageState) {
         Yukkuri parent = new Reimu();
         parent.setAgeState(ageState);
-        SimYukkuri.world.getCurrentMap().getBody().put(parent.getUniqueID(), parent);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(parent.getUniqueID(), parent);
         return parent;
     }
 

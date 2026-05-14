@@ -124,7 +124,7 @@ public class AntsTest {
         Ants ants = new Ants(parent);
         assertEquals(50, parent.getAntCount());
         // parent should be retrievable from world map
-        assertSame(parent, org.simyukkuri.util.BodyRegistry.getBodyInstance(ants.getParent()));
+        assertSame(parent, org.simyukkuri.util.YukkuriLookup.getYukkuriById(ants.getParent()));
     }
 
     @Test
@@ -140,7 +140,7 @@ public class AntsTest {
         parent.setAntCount(60);
         parent.setHappiness(Happiness.HAPPY);
         parent.setDamage(0);
-        parent.setHungry(0); // hungry<=0 triggers addDamage in eatBody
+        parent.setHungry(0); // hungry<=0 triggers addDamage in eatYukkuri
         parent.initAmount(AgeState.ADULT); // ankoAmount = DAMAGELIMIT[ADULT] so body is alive
         // Ensure coreAnkoState is DEFAULT so isNotNYD() is true -> happiness set to
         // VERY_SAD
@@ -154,9 +154,9 @@ public class AntsTest {
         Ants ants = new Ants(parent);
         ants.update();
 
-        // pa.beEaten(60/3=20, 0, false) -> eatBody reduces ankoAmount; makeDirty sets
+        // pa.beEaten(60/3=20, 0, false) -> eatYukkuri reduces ankoAmount; makeDirty sets
         // flag
-        assertTrue(parent.getAnkoAmount() < bodyAmountBefore, "ankoAmount should decrease after eatBody");
+        assertTrue(parent.getAnkoAmount() < bodyAmountBefore, "ankoAmount should decrease after eatYukkuri");
         assertTrue(parent.isDirty(), "body should be marked dirty by beEaten");
         // With coreAnkoState=DEFAULT, P=0 -> setHappiness(VERY_SAD)
         assertEquals(Happiness.VERY_SAD, parent.getHappiness(), "happiness should be set to VERY_SAD by beEaten");
@@ -169,7 +169,7 @@ public class AntsTest {
 
         parent.setAntCount(0);
         BufferedImage img = ants.getImage(parent);
-        assertSame(Ants.getImages()[parent.getBodyAgeState().ordinal()][0], img);
+        assertSame(Ants.getImages()[parent.getAgeState().ordinal()][0], img);
     }
 
     @Test
@@ -180,7 +180,7 @@ public class AntsTest {
         // ants >= getDamageLimit()/3 -> image index 1
         parent.setAntCount(parent.getDamageLimit() / 3);
         BufferedImage img = ants.getImage(parent);
-        assertSame(Ants.getImages()[parent.getBodyAgeState().ordinal()][1], img);
+        assertSame(Ants.getImages()[parent.getAgeState().ordinal()][1], img);
     }
 
     @Test
@@ -191,7 +191,7 @@ public class AntsTest {
         // ants >= getDamageLimit()*2/3 -> image index 2
         parent.setAntCount(parent.getDamageLimit() * 2 / 3);
         BufferedImage img = ants.getImage(parent);
-        assertSame(Ants.getImages()[parent.getBodyAgeState().ordinal()][2], img);
+        assertSame(Ants.getImages()[parent.getAgeState().ordinal()][2], img);
     }
 
     @Test
@@ -237,8 +237,8 @@ public class AntsTest {
         int origPivotX = ants.getPivotX();
         int origPivotY = ants.getPivotY();
 
-        // Remove parent from world map so getBodyInstance returns null
-        SimYukkuri.world.getCurrentMap().getBody().remove(parent.getUniqueID());
+        // Remove parent from world map so getBodyMap returns null
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().remove(parent.getUniqueID());
         ants.resetBoundary();
 
         // Boundary should remain unchanged since parent is null
@@ -249,7 +249,7 @@ public class AntsTest {
     private static Yukkuri createParent(AgeState ageState) {
         Yukkuri parent = new Reimu();
         parent.setAgeState(ageState);
-        SimYukkuri.world.getCurrentMap().getBody().put(parent.getUniqueID(), parent);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(parent.getUniqueID(), parent);
         return parent;
     }
 
@@ -295,7 +295,7 @@ public class AntsTest {
         }
 
         @Test
-        void testScenario_LockmoveBodyHitByAntsEntersPainPurupuruBranchWithoutReducingAntCount() {
+        void testScenario_LockmoveYukkuriHitByAntsEntersPainPurupuruBranchWithoutReducingAntCount() {
             Yukkuri parent = createParent(AgeState.ADULT);
             parent.initAmount(AgeState.ADULT);
             parent.setAntCount(12);

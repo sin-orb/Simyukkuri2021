@@ -177,7 +177,7 @@ public class Shit extends Entity {
 		x = initX;
 		y = initY;
 		z = initZ;
-		ageState = b.getBodyAgeState();
+		ageState = b.getAgeState();
 		amount = imgW[shitType][ageState.ordinal()] * 12;
 		setRemoved(false);
 		setBoundary(pivX[shitType][ageState.ordinal()], pivY[shitType][ageState.ordinal()],

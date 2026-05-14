@@ -21,7 +21,7 @@ public final class OptionMenuListener implements ActionListener {
 		switch (sel) {
 			case INI_RELOAD:
 				GameView.loadImage(false, false, false, false, false, true);
-				for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
+				for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getYukkuriMap().entrySet()) {
 					Yukkuri b = entry.getValue();
 					IniFileUtil.readIniFile(b, true);
 					IniFileUtil.readYukkuriIniFile(b, true);

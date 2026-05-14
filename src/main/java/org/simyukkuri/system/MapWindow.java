@@ -113,7 +113,7 @@ public class MapWindow extends JDialog implements ActionListener, WindowListener
 		GameView.loadTerrainFile();
 		Translate.createTransTable(TerrainField.isPers());
 		GameWorld.get().changeMap();
-		MyPane.setSelectBody(null);
+		MyPane.setSelectedYukkuri(null);
 	}
 
 	@Override

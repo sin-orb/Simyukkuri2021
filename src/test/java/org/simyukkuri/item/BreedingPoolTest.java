@@ -165,7 +165,7 @@ class BreedingPoolTest extends ItemTestBase {
         item.setEnabled(true);
         item.setStalkPool(false);
         Yukkuri body = WorldTestHelper.createBody();
-        body.setBodyCastration(true);
+        body.setCastrated(true);
         assertEquals(0, item.objHitProcess(body));
     }
 
@@ -209,7 +209,7 @@ class BreedingPoolTest extends ItemTestBase {
         item.setAge(0); // 0 % 10 == 0
         Yukkuri body = WorldTestHelper.createBody();
         body.setDead(false);
-        body.setBodyCastration(false);
+        body.setCastrated(false);
         assertDoesNotThrow(() -> item.objHitProcess(body));
     }
 
@@ -234,7 +234,7 @@ class BreedingPoolTest extends ItemTestBase {
         assertDoesNotThrow(() -> item.cry(body));
     }
 
-    // --- cry: hasBabyOrStalk=true, isNYD=true → setNYDMessage path ---
+    // --- cry: hasBabyOrStalk=true, isNYD=true → setNydMessage path ---
 
     @Test
     void testCry_WithBabyOrStalk_IsNYD() {

@@ -15,9 +15,9 @@ public final class TerrariumViewBridge {
 	 *
 	 * @param type 読み直す種別
 	 */
-	public static void loadBodyImageSafe(YukkuriType type) {
+	public static void loadYukkuriImageSafe(YukkuriType type) {
 		if (GameView.getPane() != null) {
-			GameView.loadBodyImage(type);
+			GameView.loadYukkuriImage(type);
 		}
 	}
 }

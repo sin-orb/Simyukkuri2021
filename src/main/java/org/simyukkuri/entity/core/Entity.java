@@ -661,8 +661,8 @@ public class Entity implements java.io.Serializable, Comparable {
 		if (m.getOrangePool().containsKey(i)) {
 			return m.getOrangePool().get(i);
 		}
-		if (m.getProcesserPlate().containsKey(i)) {
-			return m.getProcesserPlate().get(i);
+		if (m.getProcessorPlate().containsKey(i)) {
+			return m.getProcessorPlate().get(i);
 		}
 		if (m.getProductchute().containsKey(i)) {
 			return m.getProductchute().get(i);
@@ -703,7 +703,7 @@ public class Entity implements java.io.Serializable, Comparable {
 		if (m.getYunba().containsKey(i)) {
 			return m.getYunba().get(i);
 		}
-		for (Map.Entry<Integer, Yukkuri> entry : m.getBody().entrySet()) {
+		for (Map.Entry<Integer, Yukkuri> entry : m.getYukkuriMap().entrySet()) {
 			Yukkuri b = entry.getValue();
 			if (b.objId == i) {
 				return b;

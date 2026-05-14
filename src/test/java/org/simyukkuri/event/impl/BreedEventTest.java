@@ -111,12 +111,12 @@ public class BreedEventTest extends EventTestBase {
 
     @Test
     void testStart_fromNull_doesNotThrow() {
-        // from is not registered in body map → getBodyInstance returns null
+        // from is not registered in body map → getBodyMap returns null
         Yukkuri child = createBody(2, 120, 120);
         // Create event with an unregistered body as from
         Yukkuri unregistered = WorldTestHelper.createBody();
         BreedEvent event = new BreedEvent(unregistered, child, null, 10);
-        // from is not in world map, so getBodyInstance returns null → no moveToEvent
+        // from is not in world map, so getBodyMap returns null → no moveToEvent
         assertDoesNotThrow(() -> event.start(child));
     }
 
@@ -130,7 +130,7 @@ public class BreedEventTest extends EventTestBase {
 
     @Test
     void testUpdate_fromNull_returnsAbort() {
-        // from not registered → getBodyInstance returns null → ABORT
+        // from not registered → getBodyMap returns null → ABORT
         Yukkuri child = createBody(2, 120, 120);
         Yukkuri unregistered = WorldTestHelper.createBody();
         BreedEvent event = new BreedEvent(unregistered, child, null, 10);
@@ -147,7 +147,7 @@ public class BreedEventTest extends EventTestBase {
 
     @Test
     void testExecute_fromNull_returnsTrue() {
-        // from not registered → getBodyInstance returns null → true
+        // from not registered → getBodyMap returns null → true
         Yukkuri child = createBody(2, 120, 120);
         Yukkuri unregistered = WorldTestHelper.createBody();
         BreedEvent event = new BreedEvent(unregistered, child, null, 10);

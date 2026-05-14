@@ -48,7 +48,7 @@ class BeltconveyorObjTest extends ItemTestBase {
         for (int i = 0; i < 3; i++) {
             spr[i] = new Sprite(10, 10, Sprite.PIVOT_CENTER_BOTTOM);
         }
-        body.setBodySpr(spr);
+        body.setSpriteSet(spr);
         return body;
     }
 
@@ -490,7 +490,7 @@ class BeltconveyorObjTest extends ItemTestBase {
     // --- checkHitObj ---
 
     @Test
-    void testCheckHitObj_LockmoveBody_ReturnsFalse() {
+    void testCheckHitObj_LockmoveYukkuri_ReturnsFalse() {
         BeltconveyorObj belt = new BeltconveyorObj();
         Yukkuri body = WorldTestHelper.createBody();
         body.setLockmove(true);

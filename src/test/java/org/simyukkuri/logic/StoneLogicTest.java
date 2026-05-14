@@ -46,11 +46,11 @@ public class StoneLogicTest {
         for (int i = 0; i < 3; i++) {
             spr[i] = new Sprite(10, 10, Sprite.PIVOT_CENTER_BOTTOM);
         }
-        b.setBodySpr(spr);
+        b.setSpriteSet(spr);
         b.setX(x);
         b.setY(y);
         b.setZ(0);
-        SimYukkuri.world.getCurrentMap().getBody().put(b.getUniqueID(), b);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(b.getUniqueID(), b);
         return b;
     }
 
@@ -132,12 +132,12 @@ public class StoneLogicTest {
         Sprite[] spr = new Sprite[3];
         for (int i = 0; i < 3; i++)
             spr[i] = new Sprite(10, 10, Sprite.PIVOT_CENTER_BOTTOM);
-        baby.setBodySpr(spr);
+        baby.setSpriteSet(spr);
         baby.setX(100);
         baby.setY(100);
         baby.setZ(0);
         baby.setBurialState(BurialState.HALF); // NONE だと addVomit で mypane NPE になる
-        SimYukkuri.world.getCurrentMap().getBody().put(baby.getUniqueID(), baby);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(baby.getUniqueID(), baby);
         new Stone(100, 100, 0); // auto-registers; distance=0 → stepDist(1)>0 → bodyCut
         assertDoesNotThrow(() -> StoneLogic.checkPubble(baby));
         assertEquals(CriticalDamegeType.CUT, baby.getCriticalDamege(),

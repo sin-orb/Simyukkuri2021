@@ -118,7 +118,7 @@ public class OkazariTest {
     public void testConstructorWithNamedTypeAndBodyNotInWorld() {
         Yukkuri body = new Reimu();
         body.setAgeState(AgeState.ADULT);
-        // worldに追加しない → BodyRegistry では見つからない
+        // worldに追加しない → YukkuriLookup では見つからない
 
         Okazari okazari = new Okazari(body, Okazari.OkazariType.BABY1);
 
@@ -243,7 +243,7 @@ public class OkazariTest {
         okazari.setOwner(-1);
         okazari.setOffsetPos(new Point4y[] { new Point4y(), new Point4y(), new Point4y() });
 
-        // owner=-1 → getBodyInstance returns null
+        // owner=-1 → getBodyMap returns null
         assertNull(okazari.takeOkazariOfsPos());
     }
 
@@ -293,8 +293,8 @@ public class OkazariTest {
         for (int i = 0; i < 3; i++) {
             spr[i] = new Sprite(10, 10, Sprite.PIVOT_CENTER_BOTTOM);
         }
-        body.setBodySpr(spr);
-        SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
+        body.setSpriteSet(spr);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(body.getUniqueID(), body);
         return body;
     }
 

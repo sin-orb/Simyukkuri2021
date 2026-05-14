@@ -21,7 +21,7 @@ public final class FoodEligibility {
 	 * @param prey  食べられるか調べる対象
 	 * @return 食べられる場合はtrue
 	 */
-	public static boolean checkCanEatBody(Yukkuri eater, Yukkuri prey) {
+	public static boolean checkCanEatYukkuri(Yukkuri eater, Yukkuri prey) {
 		if (eater.isPredatorType()) {
 			return true;
 		}

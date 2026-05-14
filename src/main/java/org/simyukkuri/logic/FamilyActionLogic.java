@@ -40,7 +40,7 @@ public class FamilyActionLogic {
 	 */
 	public static final boolean checkFamilyAction(Yukkuri body) {
 		// 他の用事がある場合
-		if (body.isToFood() || body.isToBody() || body.isToSukkiri() ||
+		if (body.isToFood() || body.isToYukkuri() || body.isToSukkiri() ||
 				body.isToBed() || body.isToShit() || body.isToSteal() || body.isToTakeout()) {
 			return false;
 		}
@@ -67,7 +67,7 @@ public class FamilyActionLogic {
 		}
 
 		// パートナーもチェック
-		Yukkuri partnerBody = org.simyukkuri.util.BodyRegistry.getBodyInstance(body.getPartner());
+		Yukkuri partnerBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(body.getPartner());
 		if (partnerBody != null) {
 			// イベント中なら終了
 			if (partnerBody.getCurrentEvent() != null) {
@@ -94,7 +94,7 @@ public class FamilyActionLogic {
 			return false;
 		}
 		// 子供のリストに生きている子供がいるか
-		List<Yukkuri> childrenList = BodyLogic.createActiveChildList(body, true);
+		List<Yukkuri> childrenList = YukkuriLogic.createActiveChildList(body, true);
 		if (childrenList == null || childrenList.size() == 0) {
 			return false;
 		}
@@ -436,7 +436,7 @@ public class FamilyActionLogic {
 		boolean hasRapeTarget = isRapeTarget();
 		// レイプ対象がいない
 		if (!hasRapeTarget) {
-			for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
+			for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getYukkuriMap().entrySet()) {
 				Yukkuri body = entry.getValue();
 				if (body.isRaper()) {
 					body.setExciting(false);
@@ -453,7 +453,7 @@ public class FamilyActionLogic {
 	 * @return れいぱーのターゲットかどうか
 	 */
 	public static final boolean isRapeTarget() {
-		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
+		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getYukkuriMap().entrySet()) {
 			Yukkuri body = entry.getValue();
 			// レイプの対象がいる
 			if (!body.isUnBirth() && !body.isDead() && !body.isRemoved() && !body.isRaper()) {

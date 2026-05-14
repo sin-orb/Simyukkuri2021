@@ -91,7 +91,7 @@ public class ProudChildEventTest {
     public void testSimpleEventAction_returnsTrueWhenFromIsNull() {
         Yukkuri b = createBody();
         ProudChildEvent event = new ProudChildEvent();
-        // from is -1 (null lookup), so BodyRegistry lookup returns null
+        // from is -1 (null lookup), so YukkuriLookup lookup returns null
         assertTrue(event.simpleEventAction(b));
     }
 
@@ -635,8 +635,8 @@ public class ProudChildEventTest {
         for (int i = 0; i < 3; i++) {
             spr[i] = new Sprite(10, 10, Sprite.PIVOT_CENTER_BOTTOM);
         }
-        b.setBodySpr(spr);
-        SimYukkuri.world.getCurrentMap().getBody().put(b.getUniqueID(), b);
+        b.setSpriteSet(spr);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(b.getUniqueID(), b);
         return b;
     }
 }

@@ -30,7 +30,7 @@ import org.simyukkuri.draw.World;
 import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.Attitude;
 import org.simyukkuri.enums.BurialState;
-import org.simyukkuri.enums.BodyRank;
+import org.simyukkuri.enums.YukkuriRank;
 import org.simyukkuri.enums.CoreAnkoState;
 import org.simyukkuri.enums.CriticalDamegeType;
 import org.simyukkuri.enums.Damage;
@@ -148,30 +148,30 @@ public class BodyTest {
     private StubBody createBody(AgeState age) {
         StubBody b = new StubBody();
         for (int i = 0; i < 3; i++) {
-            b.getBodySpr()[i] = new Sprite();
-            b.getBodySpr()[i].setImageW(100);
-            b.getBodySpr()[i].setImageH(100);
+            b.getSpriteSet()[i] = new Sprite();
+            b.getSpriteSet()[i].setImageW(100);
+            b.getSpriteSet()[i].setImageH(100);
             b.getExpandSpr()[i] = new Sprite();
             b.getBraidSpr()[i] = new Sprite();
         }
         b.setAgeState(age);
         b.setMsgType(YukkuriType.REIMU); // MessagePoolで使用
-        SimYukkuri.world.getCurrentMap().getBody().put(b.getUniqueID(), b);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(b.getUniqueID(), b);
         return b;
     }
 
     private FixedToleranceBody createFixedBody(AgeState age) {
         FixedToleranceBody b = new FixedToleranceBody();
         for (int i = 0; i < 3; i++) {
-            b.getBodySpr()[i] = new Sprite();
-            b.getBodySpr()[i].setImageW(100);
-            b.getBodySpr()[i].setImageH(100);
+            b.getSpriteSet()[i] = new Sprite();
+            b.getSpriteSet()[i].setImageW(100);
+            b.getSpriteSet()[i].setImageH(100);
             b.getExpandSpr()[i] = new Sprite();
             b.getBraidSpr()[i] = new Sprite();
         }
         b.setAgeState(age);
         b.setMsgType(YukkuriType.REIMU);
-        SimYukkuri.world.getCurrentMap().getBody().put(b.getUniqueID(), b);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(b.getUniqueID(), b);
         return b;
     }
 
@@ -186,7 +186,7 @@ public class BodyTest {
         target.setCriticalDamege(null);
         target.setExciting(false);
         target.setExciteProb(1);
-        target.setHungry(target.getHungryLimitBase()[target.getBodyAgeState().ordinal()]);
+        target.setHungry(target.getHungryLimitBase()[target.getAgeState().ordinal()]);
         target.setShit(0);
         target.setOkazari(new Okazari(target, Okazari.OkazariType.DEFAULT));
         target.setHasBraid(true);
@@ -339,7 +339,7 @@ public class BodyTest {
 
     private static boolean invokeCheckNonYukkuriDisease(Yukkuri b) {
         try {
-            java.lang.reflect.Method m = Yukkuri.class.getDeclaredMethod("checkNonYukkuriDisease");
+            java.lang.reflect.Method m = Yukkuri.class.getDeclaredMethod("hasNonYukkuriDisease");
             m.setAccessible(true);
             return (Boolean) m.invoke(b);
         } catch (Exception e) {
@@ -371,7 +371,7 @@ public class BodyTest {
         }
 
         @Override
-        public int checkNonYukkuriDiseaseTolerance() {
+        public int getNonYukkuriDiseaseTolerance() {
             return 100;
         }
     }
@@ -409,14 +409,14 @@ public class BodyTest {
             expSpr[i] = new Sprite();
             brdSpr[i] = new Sprite();
         }
-        b.setBodySpr(spr);
+        b.setSpriteSet(spr);
         b.setExpandSpr(expSpr);
         b.setBraidSpr(brdSpr);
         b.setAgeState(age);
         b.setMsgType(YukkuriType.REIMU);
         // Yukkuri()コンストラクタがIntelligenceをランダム設定するのでリセット
         b.setIntelligence(Intelligence.AVERAGE);
-        SimYukkuri.world.getCurrentMap().getBody().put(b.getUniqueID(), b);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(b.getUniqueID(), b);
         return b;
     }
 
@@ -960,7 +960,7 @@ public class BodyTest {
             body.setPacked(false);
             body.setCriticalDamege(null);
             body.setFootBakePeriod(0);
-            body.setBodyBakePeriod(0);
+            body.setBakePeriod(0);
             // okazariがあり、braidがある状態
             body.setOkazari(new Okazari());
             body.setHasBraid(true);
@@ -1230,7 +1230,7 @@ public class BodyTest {
         @Test
         public void testScenarioBurstStateChangesByExpandSize() {
             body.setAgeState(AgeState.ADULT);
-            body.getBodySpr()[AgeState.ADULT.ordinal()].setImageW(100);
+            body.getSpriteSet()[AgeState.ADULT.ordinal()].setImageW(100);
             body.setHungry(body.getHungryLimit());
             body.setShit(0);
             body.setUnyoOffsetW(0);
@@ -1523,7 +1523,7 @@ public class BodyTest {
             body.setToBed(true);
             body.setToFood(true);
             body.setToShit(true);
-            body.setToBody(true);
+            body.setToYukkuri(true);
             body.setToSteal(true);
 
             body.clearActions();
@@ -1532,7 +1532,7 @@ public class BodyTest {
             assertFalse(body.isToBed());
             assertFalse(body.isToFood());
             assertFalse(body.isToShit());
-            assertFalse(body.isToBody());
+            assertFalse(body.isToYukkuri());
             assertFalse(body.isToSteal());
         }
 
@@ -2031,7 +2031,7 @@ public class BodyTest {
     }
 
     // ===========================================
-    // Hold
+    // hold
     // ===========================================
 
     @Nested
@@ -2040,20 +2040,20 @@ public class BodyTest {
         @Test
         public void testHoldIgnoredWhenDead() {
             body.setDead(true);
-            body.Hold();
+            body.hold();
             assertFalse(body.canPullOrPush());
         }
 
         @Test
         public void testHoldSetsLockmoveAndPullPush() {
-            // Hold() は setMessage(MessagePool.getMessage(...)) を呼ぶ
+            // hold() は setMessage(MessagePool.getMessage(...)) を呼ぶ
             // MessagePoolが初期化されていない場合NPEになるため、
             // Hold前後でのフラグ変化をPullAndPush=trueのトグルオフ経由で検証
             body.setDead(false);
             body.setCanPullOrPush(true);
             body.setLockmove(true);
             // toggle off
-            body.Hold();
+            body.hold();
             assertFalse(body.canPullOrPush());
             assertFalse(body.isLockmove());
             // この状態でもう一度Holdを呼べないので、トグルオフの動作のみ検証
@@ -2064,7 +2064,7 @@ public class BodyTest {
             body.setDead(false);
             body.setCanPullOrPush(true);
             body.setLockmove(true);
-            body.Hold();
+            body.hold();
             assertFalse(body.canPullOrPush());
             assertFalse(body.isLockmove());
         }
@@ -2086,9 +2086,9 @@ public class BodyTest {
         @Test
         public void testRemoveRemovesFromWorld() {
             int id = body.getUniqueID();
-            assertTrue(SimYukkuri.world.getCurrentMap().getBody().containsKey(id));
+            assertTrue(SimYukkuri.world.getCurrentMap().getYukkuriMap().containsKey(id));
             body.remove();
-            assertFalse(SimYukkuri.world.getCurrentMap().getBody().containsKey(id));
+            assertFalse(SimYukkuri.world.getCurrentMap().getYukkuriMap().containsKey(id));
         }
 
         @Test
@@ -2182,13 +2182,13 @@ public class BodyTest {
             body.setDead(false);
             body.setPealed(true);
             body.setMelt(true);
-            body.setBodyBakePeriod(100);
+            body.setBakePeriod(100);
 
             body.peal();
 
             assertFalse(body.isPealed());
             assertFalse(body.isMelt());
-            assertEquals(0, body.getBodyBakePeriod());
+            assertEquals(0, body.getBakePeriod());
             assertNull(body.getCriticalDamege());
         }
 
@@ -2263,12 +2263,12 @@ public class BodyTest {
         @Test
         public void testGiveJuiceClearsBodyBake() {
             body.setDead(false);
-            body.setBodyBakePeriod(500);
+            body.setBakePeriod(500);
             body.setCantDiePeriod(3);
 
             body.giveJuice();
 
-            assertEquals(0, body.getBodyBakePeriod());
+            assertEquals(0, body.getBakePeriod());
         }
 
         @Test
@@ -3242,7 +3242,7 @@ public class BodyTest {
     }
 
     // ===========================================
-    // eatBody (捕食)
+    // eatYukkuri (捕食)
     // ===========================================
 
     @Nested
@@ -3254,7 +3254,7 @@ public class BodyTest {
             body.setAnkoAmount(10000);
             body.setDamageLimitBase(new int[] { 100000, 100000, 100000 });
             int amountBefore = body.getAnkoAmount();
-            body.eatBody(100);
+            body.eatYukkuri(100);
             assertEquals(amountBefore - 100, body.getAnkoAmount());
         }
 
@@ -3265,20 +3265,20 @@ public class BodyTest {
             body.setAnkoAmount(100000);
             body.setDamageLimitBase(new int[] { 1000, 1000, 1000 }); // low limit but high ankoAmount
             body.setHungry(500);
-            body.eatBody(100);
+            body.eatYukkuri(100);
             // addHungry(-amount) is called, so hungry decreases
             assertTrue(body.getHungry() < 500);
         }
 
         @Test
         public void testEatBodyWithEaterDeadReturnsEarly() {
-            // eatBody(amount, eater) returns early if dead
+            // eatYukkuri(amount, eater) returns early if dead
             StubBody eater = createBody(AgeState.ADULT);
             body.setDead(true);
             body.setAnkoAmount(10000);
             body.setDamageLimitBase(new int[] { 100000, 100000, 100000 });
             int amountBefore = body.getAnkoAmount();
-            body.eatBody(100, eater);
+            body.eatYukkuri(100, eater);
             assertEquals(amountBefore - 100, body.getAnkoAmount());
         }
     }
@@ -3406,7 +3406,7 @@ public class BodyTest {
     }
 
     // ===========================================
-    // castrateStalk / castrateBody
+    // castrateStalk / castrateYukkuri
     // ===========================================
 
     @Nested
@@ -3441,8 +3441,8 @@ public class BodyTest {
         @Test
         public void testCastrateBodyWhenDead() {
             body.setDead(true);
-            body.castrateBody(true);
-            assertFalse(body.isBodyCastration());
+            body.castrateYukkuri(true);
+            assertFalse(body.isCastrated());
         }
 
         @Test
@@ -3450,8 +3450,8 @@ public class BodyTest {
             body.setDead(false);
             body.setSleeping(false);
             body.setCoreAnkoState(CoreAnkoState.DEFAULT); // Not NYD
-            body.castrateBody(true);
-            assertTrue(body.isBodyCastration());
+            body.castrateYukkuri(true);
+            assertTrue(body.isCastrated());
             assertEquals(Happiness.VERY_SAD, body.getHappiness());
         }
 
@@ -3460,9 +3460,9 @@ public class BodyTest {
             body.setDead(false);
             body.setSleeping(false);
             body.setCoreAnkoState(CoreAnkoState.DEFAULT); // Not NYD
-            body.setBodyCastration(true);
-            body.castrateBody(false);
-            assertFalse(body.isBodyCastration());
+            body.setCastrated(true);
+            body.castrateYukkuri(false);
+            assertFalse(body.isCastrated());
         }
     }
 
@@ -3591,14 +3591,14 @@ public class BodyTest {
             body.setToBed(true);
             body.setToFood(true);
             body.setToShit(true);
-            body.setToBody(true);
+            body.setToYukkuri(true);
             body.setToSteal(true);
             body.clearActionsForEvent();
             assertFalse(body.isToSukkiri());
             assertFalse(body.isToBed());
             assertFalse(body.isToFood());
             assertFalse(body.isToShit());
-            assertFalse(body.isToBody());
+            assertFalse(body.isToYukkuri());
             assertFalse(body.isToSteal());
         }
     }
@@ -3765,7 +3765,7 @@ public class BodyTest {
     }
 
     // ===========================================
-    // Hold
+    // hold
     // ===========================================
 
     @Nested
@@ -3773,7 +3773,7 @@ public class BodyTest {
         @Test
         public void testHoldWhenDead() {
             body.setDead(true);
-            body.Hold();
+            body.hold();
             // Should not crash
             assertTrue(body.isDead());
         }
@@ -3782,7 +3782,7 @@ public class BodyTest {
         public void testHoldWhenAlive() {
             body.setDead(false);
             body.setLockmove(false);
-            body.Hold();
+            body.hold();
             assertTrue(body.isLockmove());
         }
     }
@@ -4087,7 +4087,7 @@ public class BodyTest {
             body.setBabyTypes(new java.util.LinkedList<>());
             body.setDamage(0);
             body.setSickPeriod(0);
-            body.setBodyBakePeriod(0);
+            body.setBakePeriod(0);
             assertFalse(body.isDontJump());
         }
     }
@@ -5614,7 +5614,7 @@ public class BodyTest {
 
         @Test
         public void testCheckDamageSugarSteamHealsWhenHighDamage() {
-            int limit = body.getDamageLimitBase()[body.getBodyAgeState().ordinal()];
+            int limit = body.getDamageLimitBase()[body.getAgeState().ordinal()];
             body.setDamage(limit * 80 / 100);
             body.setUnBirth(false);
             body.setSickPeriod(0);
@@ -5630,7 +5630,7 @@ public class BodyTest {
 
         @Test
         public void testCheckDamageSugarSteamNoHealWhenLowDamage() {
-            int limit = body.getDamageLimitBase()[body.getBodyAgeState().ordinal()];
+            int limit = body.getDamageLimitBase()[body.getAgeState().ordinal()];
             body.setDamage(limit * 79 / 100);
             body.setUnBirth(false);
             body.setSickPeriod(0);
@@ -5645,7 +5645,7 @@ public class BodyTest {
 
         @Test
         public void testCheckDamageSugarSteamNoHealWhenUnbirthDisconnected() {
-            int limit = body.getDamageLimitBase()[body.getBodyAgeState().ordinal()];
+            int limit = body.getDamageLimitBase()[body.getAgeState().ordinal()];
             body.setDamage(limit * 80 / 100);
             body.setUnBirth(true);
             body.setBindStalk(null);
@@ -5835,7 +5835,7 @@ public class BodyTest {
 
         @Test
         public void testCheckDamageTooMuchClearsLowPriorityEvent() {
-            int limit = body.getDamageLimitBase()[body.getBodyAgeState().ordinal()];
+            int limit = body.getDamageLimitBase()[body.getAgeState().ordinal()];
             body.setDamage(limit + 10);
             body.setCurrentEvent(new TestEventPacket(EventPacket.EventPriority.LOW));
 
@@ -6102,7 +6102,7 @@ public class BodyTest {
             body.setMessageBuffer(null);
             body.setMessageTicks(1);
             body.setGrabbed(true);
-            body.setStress(body.getStressLimitBase()[body.getBodyAgeState().ordinal()]);
+            body.setStress(body.getStressLimitBase()[body.getAgeState().ordinal()]);
             body.setPregnantLimit(0);
             SimYukkuri.RND = new java.util.Random() {
                 private int nextIntCalls = 0;
@@ -6152,12 +6152,12 @@ public class BodyTest {
 
             body.setBoundary(bodyDims, braidDims);
 
-            assertEquals(10, body.getBodySpr()[0].getImageW());
-            assertEquals(20, body.getBodySpr()[0].getImageH());
-            assertEquals(15, body.getBodySpr()[1].getImageW());
-            assertEquals(25, body.getBodySpr()[1].getImageH());
-            assertEquals(30, body.getBodySpr()[2].getImageW());
-            assertEquals(40, body.getBodySpr()[2].getImageH());
+            assertEquals(10, body.getSpriteSet()[0].getImageW());
+            assertEquals(20, body.getSpriteSet()[0].getImageH());
+            assertEquals(15, body.getSpriteSet()[1].getImageW());
+            assertEquals(25, body.getSpriteSet()[1].getImageH());
+            assertEquals(30, body.getSpriteSet()[2].getImageW());
+            assertEquals(40, body.getSpriteSet()[2].getImageH());
             assertEquals(5, body.getBraidSpr()[0].getImageW());
             assertEquals(6, body.getBraidSpr()[0].getImageH());
             // null braid -> size 0 sprite
@@ -6181,7 +6181,7 @@ public class BodyTest {
             boolean prevUnyo = SimYukkuri.UNYO;
             SimYukkuri.UNYO = true;
             Rectangle4y r = new Rectangle4y();
-            Sprite exp = body.getExpandSpr()[body.getBodyAgeState().ordinal()];
+            Sprite exp = body.getExpandSpr()[body.getAgeState().ordinal()];
             exp.calcScreenRect(new org.simyukkuri.draw.Point4y(0, 0), exp.getPivotX(), exp.getPivotY(), exp.getImageW(),
                     exp.getImageH());
             try {
@@ -6278,14 +6278,14 @@ public class BodyTest {
     class BodyAttributesCoverageTests {
         @Test
         public void testGetDiarrheaKaiyuAlwaysTrue() {
-            body.setBodyRank(BodyRank.KAIYU);
+            body.setRank(YukkuriRank.KAIYU);
             SimYukkuri.RND = new ConstState(1);
             assertTrue(body.getDiarrhea());
         }
 
         @Test
         public void testGetDiarrheaProbability() {
-            body.setBodyRank(BodyRank.NORAYU);
+            body.setRank(YukkuriRank.NORAYU);
             body.setDiarrheaProb(2);
             SimYukkuri.RND = new ConstState(0);
             assertTrue(body.getDiarrhea());
@@ -6295,7 +6295,7 @@ public class BodyTest {
 
         @Test
         public void testSetShitWithVeryShit() {
-            int limit = body.getShitLimitBase()[body.getBodyAgeState().ordinal()];
+            int limit = body.getShitLimitBase()[body.getAgeState().ordinal()];
             body.setShitting(false);
             body.setShit(0);
             body.setShit(1, true);
@@ -6347,7 +6347,7 @@ public class BodyTest {
 
         @Test
         public void testOverEatingAndTooFull() {
-            int limit = body.getHungryLimitBase()[body.getBodyAgeState().ordinal()];
+            int limit = body.getHungryLimitBase()[body.getAgeState().ordinal()];
             body.setHungry(limit);
             assertTrue(body.isTooFull());
             body.setHungry((int) (limit * 1.3f) + 1);
@@ -6452,7 +6452,7 @@ public class BodyTest {
                     new Sprite(1, 1, Sprite.PIVOT_CENTER_CENTER), s };
             Sprite[] braidSpr = new Sprite[] { new Sprite(1, 1, Sprite.PIVOT_CENTER_CENTER),
                     new Sprite(1, 1, Sprite.PIVOT_CENTER_CENTER), b };
-            target.setBodySpr(bodySpr);
+            target.setSpriteSet(bodySpr);
             target.setBraidSpr(braidSpr);
             assertEquals(5, target.getCollisionY());
             assertEquals(10, target.getPivotX());
@@ -6558,7 +6558,7 @@ public class BodyTest {
             FixedToleranceBody b = createFixedBody(AgeState.ADULT);
             b.setSleeping(true);
             b.setNightmare(false);
-            int limit = b.getStressLimitBase()[b.getBodyAgeState().ordinal()];
+            int limit = b.getStressLimitBase()[b.getAgeState().ordinal()];
             b.setStress(limit * 2);
             SimYukkuri.RND = new ConstState(0);
 
@@ -6623,7 +6623,7 @@ public class BodyTest {
         @Test
         public void testDoSurisuriDamagedPartnerSetsSad() {
             StubBody partner = createBody(AgeState.ADULT);
-            partner.setDamage(partner.getDamageLimit() / 2);
+            partner.setDamage(partner.getDamageLimit() / 2 + 1);
             int stressBefore = body.getStress();
             body.doSurisuri(partner);
             assertEquals(Happiness.SAD, body.getHappiness());
@@ -6782,7 +6782,7 @@ public class BodyTest {
         @Test
         public void testCheckEmotionHungryMessage() {
             SimYukkuri.RND = new ConstState(0);
-            body.setHungry(body.getHungryLimitBase()[body.getBodyAgeState().ordinal()] - 1);
+            body.setHungry(body.getHungryLimitBase()[body.getAgeState().ordinal()] - 1);
             body.setEating(false);
             body.setSleeping(false);
             body.setShitting(false);
@@ -6896,7 +6896,7 @@ public class BodyTest {
     class CheckShitAdditionalTests {
         @Test
         public void testCheckShitLimitLockmoveLeaks() {
-            int limit = body.getShitLimitBase()[body.getBodyAgeState().ordinal()];
+            int limit = body.getShitLimitBase()[body.getAgeState().ordinal()];
             body.setShit(limit - SimYukkuri.TICK * Const.SHITSTAY + 1);
             body.setLockmove(true);
             body.setFixBack(false);
@@ -6913,7 +6913,7 @@ public class BodyTest {
 
         @Test
         public void testCheckShitPreparesShittingOnAgeBoundary() {
-            int limit = body.getShitLimitBase()[body.getBodyAgeState().ordinal()];
+            int limit = body.getShitLimitBase()[body.getAgeState().ordinal()];
             body.setShit(limit - SimYukkuri.TICK * Const.SHITSTAY + 1);
             body.setAge(100);
             body.setShitting(false);
@@ -6969,7 +6969,7 @@ public class BodyTest {
 
         @Test
         public void testCheckShitSleepingBelowLimitReturnsFalse() {
-            int limit = body.getShitLimitBase()[body.getBodyAgeState().ordinal()];
+            int limit = body.getShitLimitBase()[body.getAgeState().ordinal()];
             body.setSleeping(true);
             body.setShit((int) (limit * 1.2));
 
@@ -6981,7 +6981,7 @@ public class BodyTest {
 
         @Test
         public void testCheckShitOverLimitAnalCloseInflates() {
-            int limit = body.getShitLimitBase()[body.getBodyAgeState().ordinal()];
+            int limit = body.getShitLimitBase()[body.getAgeState().ordinal()];
             body.setShit(limit + 10);
             body.setAnalClose(true);
             body.setFixBack(false);
@@ -7000,7 +7000,7 @@ public class BodyTest {
         @Test
         public void testCheckShitBabyOverLimitMakesDirty() {
             StubBody baby = createBody(AgeState.BABY);
-            int limit = baby.getShitLimitBase()[baby.getBodyAgeState().ordinal()];
+            int limit = baby.getShitLimitBase()[baby.getAgeState().ordinal()];
             baby.setShit(limit + 10);
             baby.setAge(1);
             baby.setAnalClose(false);
@@ -7146,7 +7146,7 @@ public class BodyTest {
             body.setSleeping(false);
             body.setMessageTicks(0);
 
-            body.setBodyEventSendMessage("body-send", 17);
+            body.setEventSendMessage("body-send", 17);
 
             assertEquals("body-send", body.getMessageBuffer());
             assertEquals(17, body.getMessageTicks());
@@ -7182,7 +7182,7 @@ public class BodyTest {
             body.setSleeping(false);
             body.setMessageTicks(0);
 
-            body.setBodyEventResMessage("body-res", 9, true, false);
+            body.setEventResMessage("body-res", 9, true, false);
 
             assertEquals("body-res", body.getMessageBuffer());
             assertEquals(9, body.getMessageTicks());
@@ -7215,11 +7215,11 @@ public class BodyTest {
         @Test
         public void testGetBodyCastration() {
             body.setDead(false);
-            body.castrateBody(true);
-            assertTrue(body.getBodyCastration());
+            body.castrateYukkuri(true);
+            assertTrue(body.isCastrated());
 
-            body.castrateBody(false);
-            assertFalse(body.getBodyCastration());
+            body.castrateYukkuri(false);
+            assertFalse(body.isCastrated());
         }
 
         @Test
@@ -7645,17 +7645,17 @@ public class BodyTest {
         public void testBodyAttributesRemainingNonGuiAccessors() {
             PlainBodyAttributes attrs = new PlainBodyAttributes();
 
-            attrs.setBaseBodyFileName("base-01");
-            assertEquals("base-01", attrs.getBaseBodyFileName());
+            attrs.setBaseYukkuriFileName("base-01");
+            assertEquals("base-01", attrs.getBaseYukkuriFileName());
 
-            attrs.setBreakBodyByShitProb(7);
-            assertEquals(7, attrs.getBreakBodyByShitProb());
+            attrs.setBreakByShitProb(7);
+            assertEquals(7, attrs.getBreakByShitProb());
 
             attrs.setImageNagasiMode(true);
             assertTrue(attrs.isImageNagasiMode());
 
-            attrs.setBodyBakePeriod(42);
-            assertEquals(42, attrs.getBodyBakePeriod());
+            attrs.setBakePeriod(42);
+            assertEquals(42, attrs.getBakePeriod());
 
             attrs.setForceFace(3);
             assertEquals(3, attrs.getForceFace());
@@ -7861,8 +7861,8 @@ public class BodyTest {
         public void testMoveToBodySetsFlags() {
             body.setDead(false);
             body.setBlockedTicks(0);
-            body.moveToBody(target, 100, 200);
-            assertTrue(body.isToBody());
+            body.moveToYukkuri(target, 100, 200);
+            assertTrue(body.isToYukkuri());
             assertEquals(target.objId, body.getMoveTargetId());
         }
 
@@ -8104,7 +8104,7 @@ public class BodyTest {
     }
 
     // ===========================================
-    // Hold 詳細テスト
+    // hold 詳細テスト
     // ===========================================
 
     @Nested
@@ -8114,7 +8114,7 @@ public class BodyTest {
         public void testHoldFirstTimePicksUp() {
             body.setDead(false);
             body.setCanPullOrPush(false);
-            body.Hold();
+            body.hold();
             assertTrue(body.canPullOrPush());
             assertTrue(body.isLockmove());
         }
@@ -8123,9 +8123,9 @@ public class BodyTest {
         public void testHoldSecondTimeReleases() {
             body.setDead(false);
             body.setCanPullOrPush(false);
-            body.Hold();
+            body.hold();
             assertTrue(body.canPullOrPush());
-            body.Hold();
+            body.hold();
             assertFalse(body.canPullOrPush());
             assertFalse(body.isLockmove());
         }
@@ -8134,7 +8134,7 @@ public class BodyTest {
         public void testHoldIgnoredWhenDead() {
             body.setDead(true);
             body.setCanPullOrPush(false);
-            body.Hold();
+            body.hold();
             assertFalse(body.canPullOrPush());
         }
 
@@ -8142,7 +8142,7 @@ public class BodyTest {
         public void testHoldSetsHappinessSad() {
             body.setDead(false);
             body.setCanPullOrPush(false);
-            body.Hold();
+            body.hold();
             assertEquals(Happiness.SAD, body.getHappiness());
         }
 
@@ -8151,8 +8151,8 @@ public class BodyTest {
             body.setDead(false);
             body.setCanPullOrPush(false);
             body.setZ(50);
-            body.Hold();
-            // Hold calls setCalcZ(0) when z > 0
+            body.hold();
+            // hold calls setCalcZ(0) when z > 0
             assertTrue(body.canPullOrPush());
         }
     }
@@ -8618,7 +8618,7 @@ public class BodyTest {
         public void testLockSetZNegativeCrushCausesDeath() {
             body.setDead(false);
             body.setBurialState(BurialState.ALL); // avoid mypane in bodyBurst
-            int force = Const.EXT_FORCE_PUSH_LIMIT[body.getBodyAgeState().ordinal()] - 1;
+            int force = Const.EXT_FORCE_PUSH_LIMIT[body.getAgeState().ordinal()] - 1;
             body.lockSetZ(force);
             assertEquals(0, body.getExternalPressure());
             assertFalse(body.isLockmove());
@@ -8629,7 +8629,7 @@ public class BodyTest {
         public void testLockSetZNegativeLimitMessageNoVomit() {
             body.setDead(false);
             body.setBurialState(BurialState.ALL);
-            int force = (Const.EXT_FORCE_PUSH_LIMIT[body.getBodyAgeState().ordinal()] >> 1) - 1;
+            int force = (Const.EXT_FORCE_PUSH_LIMIT[body.getAgeState().ordinal()] >> 1) - 1;
             SimYukkuri.RND = new java.util.Random() {
                 private int nextIntCalls = 0;
 
@@ -8648,7 +8648,7 @@ public class BodyTest {
         public void testLockSetZPositiveCut() {
             body.setDead(false);
             body.setBurialState(BurialState.ALL); // avoid mypane in bodyCut
-            int force = Const.EXT_FORCE_PULL_LIMIT[body.getBodyAgeState().ordinal()] + 1;
+            int force = Const.EXT_FORCE_PULL_LIMIT[body.getAgeState().ordinal()] + 1;
             body.lockSetZ(force);
             assertEquals(0, body.getExternalPressure());
             assertFalse(body.isLockmove());
@@ -8658,7 +8658,7 @@ public class BodyTest {
         @Test
         public void testLockSetZPositiveLimitMessage() {
             body.setDead(false);
-            int force = (Const.EXT_FORCE_PULL_LIMIT[body.getBodyAgeState().ordinal()] >> 1) + 1;
+            int force = (Const.EXT_FORCE_PULL_LIMIT[body.getAgeState().ordinal()] >> 1) + 1;
             SimYukkuri.RND = new ConstState(0);
             body.lockSetZ(force);
             assertEquals(Happiness.VERY_SAD, body.getHappiness());
@@ -8961,7 +8961,7 @@ public class BodyTest {
             Yukkuri child = new StubBody();
             body.setUniqueID(100);
             child.setUniqueID(200);
-            org.simyukkuri.util.GameWorld.get().getCurrentMap().getBody().put(child.getUniqueID(), child);
+            org.simyukkuri.util.GameWorld.get().getCurrentMap().getYukkuriMap().put(child.getUniqueID(), child);
 
             Stalk stalk = new Stalk();
             LinkedList<Stalk> stalks = new LinkedList<>();
@@ -9011,35 +9011,35 @@ public class BodyTest {
     class CheckNonYukkuriDiseaseToleranceTests {
         @Test
         public void testToleranceReturnValue() {
-            int tol = body.checkNonYukkuriDiseaseTolerance();
+            int tol = body.getNonYukkuriDiseaseTolerance();
             assertTrue(tol >= -1);
         }
 
         @Test
         public void testToleranceFoolBranch() {
             body.setIntelligence(Intelligence.FOOL);
-            int tol = body.checkNonYukkuriDiseaseTolerance();
+            int tol = body.getNonYukkuriDiseaseTolerance();
             assertTrue(tol >= -1);
         }
 
         @Test
         public void testToleranceWiseBranch() {
             body.setIntelligence(Intelligence.WISE);
-            int tol = body.checkNonYukkuriDiseaseTolerance();
+            int tol = body.getNonYukkuriDiseaseTolerance();
             assertTrue(tol >= -1);
         }
 
         @Test
         public void testToleranceBabyBranch() {
             StubBody baby = createBody(AgeState.BABY);
-            int tol = baby.checkNonYukkuriDiseaseTolerance();
+            int tol = baby.getNonYukkuriDiseaseTolerance();
             assertTrue(tol >= -1);
         }
 
         @Test
         public void testToleranceChildBranch() {
             StubBody child = createBody(AgeState.CHILD);
-            int tol = child.checkNonYukkuriDiseaseTolerance();
+            int tol = child.getNonYukkuriDiseaseTolerance();
             assertTrue(tol >= -1);
         }
     }
@@ -9150,7 +9150,7 @@ public class BodyTest {
             // DEFAULT = isNotNYD() → returnで何もしない
             body.setCoreAnkoState(CoreAnkoState.DEFAULT);
             body.setForceFace(-1);
-            body.setNYDForceFace(5);
+            body.setNydForceFace(5);
             assertEquals(-1, body.getForceFace());
         }
 
@@ -9160,7 +9160,7 @@ public class BodyTest {
             body.setCoreAnkoState(CoreAnkoState.NonYukkuriDiseaseNear);
             body.setPealed(true);
             body.setForceFace(-1);
-            body.setNYDForceFace(5);
+            body.setNydForceFace(5);
             assertEquals(-1, body.getForceFace());
         }
 
@@ -9170,7 +9170,7 @@ public class BodyTest {
             body.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
             body.setPealed(false);
             body.setForceFace(-1);
-            body.setNYDForceFace(5);
+            body.setNydForceFace(5);
             // コードパスを通ればOK（値の検証は副作用に依存しない）
             assertTrue(body.getForceFace() == 5 || body.getForceFace() == -1);
         }
@@ -9180,16 +9180,16 @@ public class BodyTest {
     class InvToggleTests {
         @Test
         public void testInvBodyCastrationToggleOn() {
-            body.castrateBody(false);
-            body.invBodyCastration();
-            assertTrue(body.isBodyCastration());
+            body.castrateYukkuri(false);
+            body.toggleCastration();
+            assertTrue(body.isCastrated());
         }
 
         @Test
         public void testInvBodyCastrationToggleOff() {
-            body.castrateBody(true);
-            body.invBodyCastration();
-            assertFalse(body.isBodyCastration());
+            body.castrateYukkuri(true);
+            body.toggleCastration();
+            assertFalse(body.isCastrated());
         }
 
         @Test
@@ -9559,10 +9559,10 @@ public class BodyTest {
         @Test
         public void testAddBodyBakePeriod() {
             int footBefore = body.getFootBakePeriod();
-            int bodyBefore = body.getBodyBakePeriod();
-            body.addBodyBakePeriod(50);
+            int bodyBefore = body.getBakePeriod();
+            body.addBakePeriod(50);
             assertEquals(footBefore + 10, body.getFootBakePeriod()); // 50/5=10
-            assertEquals(bodyBefore + 50, body.getBodyBakePeriod());
+            assertEquals(bodyBefore + 50, body.getBakePeriod());
         }
 
         @Test
@@ -9637,7 +9637,7 @@ public class BodyTest {
     }
 
     // ===========================================
-    // checkNonYukkuriDiseaseTolerance 詳細テスト
+    // getNonYukkuriDiseaseTolerance 詳細テスト
     // (StubBodyはoverrideして0返すのでReimu実体を使う)
     // ===========================================
     @Nested
@@ -9654,49 +9654,49 @@ public class BodyTest {
         public void testBaseline() {
             // ADULT基本値: 100 + 50(age) = 150
             // 新Reimuはokazari有り、braid有り
-            int result = reimu.checkNonYukkuriDiseaseTolerance();
+            int result = reimu.getNonYukkuriDiseaseTolerance();
             assertEquals(150, result);
         }
 
         @Test
         public void testUnunSlaveBonus() {
             reimu.setPublicRank(PublicRank.UnunSlave);
-            int result = reimu.checkNonYukkuriDiseaseTolerance();
+            int result = reimu.getNonYukkuriDiseaseTolerance();
             assertEquals(150 + 10000, result);
         }
 
         @Test
         public void testIntelligenceWiseBonus() {
             reimu.setIntelligence(Intelligence.WISE);
-            int result = reimu.checkNonYukkuriDiseaseTolerance();
+            int result = reimu.getNonYukkuriDiseaseTolerance();
             assertEquals(150 + 5, result);
         }
 
         @Test
         public void testIntelligenceFoolBonus() {
             reimu.setIntelligence(Intelligence.FOOL);
-            int result = reimu.checkNonYukkuriDiseaseTolerance();
+            int result = reimu.getNonYukkuriDiseaseTolerance();
             assertEquals(150 + 10, result);
         }
 
         @Test
         public void testAttitudeVeryNiceBonus() {
             reimu.setAttitude(Attitude.VERY_NICE);
-            int result = reimu.checkNonYukkuriDiseaseTolerance();
+            int result = reimu.getNonYukkuriDiseaseTolerance();
             assertEquals(150 + 5, result);
         }
 
         @Test
         public void testAttitudeSuperShitheadBonus() {
             reimu.setAttitude(Attitude.SUPER_SHITHEAD);
-            int result = reimu.checkNonYukkuriDiseaseTolerance();
+            int result = reimu.getNonYukkuriDiseaseTolerance();
             assertEquals(150 + 50, result);
         }
 
         @Test
         public void testRapistBonus() {
             reimu.setRapist(true);
-            int result = reimu.checkNonYukkuriDiseaseTolerance();
+            int result = reimu.getNonYukkuriDiseaseTolerance();
             assertEquals(150 + 5000, result);
         }
 
@@ -9704,7 +9704,7 @@ public class BodyTest {
         public void testChildAgeBonus() {
             Yukkuri childReimu = createReimuBody(AgeState.CHILD);
             // CHILD: 100 + 30 = 130
-            int result = childReimu.checkNonYukkuriDiseaseTolerance();
+            int result = childReimu.getNonYukkuriDiseaseTolerance();
             assertEquals(130, result);
         }
 
@@ -9712,7 +9712,7 @@ public class BodyTest {
         public void testBabyAgeBonus() {
             Yukkuri babyReimu = createReimuBody(AgeState.BABY);
             // BABY: 100 + 0 = 100
-            int result = babyReimu.checkNonYukkuriDiseaseTolerance();
+            int result = babyReimu.getNonYukkuriDiseaseTolerance();
             assertEquals(100, result);
         }
 
@@ -9720,70 +9720,70 @@ public class BodyTest {
         public void testSickPenalty() {
             // sickPeriod > incubationPeriodBase(1200) → isSick()=true → -15
             reimu.setSickPeriod(1300);
-            int result = reimu.checkNonYukkuriDiseaseTolerance();
+            int result = reimu.getNonYukkuriDiseaseTolerance();
             assertEquals(150 - 15, result);
         }
 
         @Test
         public void testNoOkazariPenalty() {
             reimu.setOkazari(null);
-            int result = reimu.checkNonYukkuriDiseaseTolerance();
+            int result = reimu.getNonYukkuriDiseaseTolerance();
             assertEquals(150 - 25, result);
         }
 
         @Test
         public void testNoBraidPenalty() {
             reimu.setHasBraid(false);
-            int result = reimu.checkNonYukkuriDiseaseTolerance();
+            int result = reimu.getNonYukkuriDiseaseTolerance();
             assertEquals(150 - 10, result);
         }
 
         @Test
         public void testBlindPenalty() {
             reimu.setBlind(true);
-            int result = reimu.checkNonYukkuriDiseaseTolerance();
+            int result = reimu.getNonYukkuriDiseaseTolerance();
             assertEquals(150 - 20, result);
         }
 
         @Test
         public void testShutmouthPenalty() {
             reimu.setShutmouth(true);
-            int result = reimu.checkNonYukkuriDiseaseTolerance();
+            int result = reimu.getNonYukkuriDiseaseTolerance();
             assertEquals(150 - 10, result);
         }
 
         @Test
         public void testInjuredPenalty() {
             reimu.setCriticalDamege(CriticalDamegeType.INJURED);
-            int result = reimu.checkNonYukkuriDiseaseTolerance();
+            int result = reimu.getNonYukkuriDiseaseTolerance();
             assertEquals(150 - 10, result);
         }
 
         @Test
         public void testDirtyPenalty() {
             reimu.setDirty(true);
-            int result = reimu.checkNonYukkuriDiseaseTolerance();
+            int result = reimu.getNonYukkuriDiseaseTolerance();
             assertEquals(150 - 5, result);
         }
 
         @Test
         public void testLockmovePenalty() {
             reimu.setLockmove(true);
-            int result = reimu.checkNonYukkuriDiseaseTolerance();
+            int result = reimu.getNonYukkuriDiseaseTolerance();
             assertEquals(150 - 5, result);
         }
 
         @Test
         public void testPenipeniCuttedPenalty() {
             reimu.setPenipeniCutted(true);
-            int result = reimu.checkNonYukkuriDiseaseTolerance();
+            int result = reimu.getNonYukkuriDiseaseTolerance();
             assertEquals(150 - 20, result);
         }
 
         @Test
         public void testMemoriesAdded() {
             reimu.setMemories(100);
-            int result = reimu.checkNonYukkuriDiseaseTolerance();
+            int result = reimu.getNonYukkuriDiseaseTolerance();
             assertEquals(150 + 100, result);
         }
 
@@ -9791,7 +9791,7 @@ public class BodyTest {
         public void testMinimumClamp() {
             // 大幅マイナスmemories → clamp to -1
             reimu.setMemories(-100000);
-            int result = reimu.checkNonYukkuriDiseaseTolerance();
+            int result = reimu.getNonYukkuriDiseaseTolerance();
             assertEquals(-1, result);
         }
 
@@ -9804,7 +9804,7 @@ public class BodyTest {
             reimu.setDirty(true); // -5
             reimu.setLockmove(true); // -5
             // 150 - 25 - 10 - 20 - 10 - 5 - 5 = 75
-            int result = reimu.checkNonYukkuriDiseaseTolerance();
+            int result = reimu.getNonYukkuriDiseaseTolerance();
             assertEquals(75, result);
         }
 
@@ -9815,7 +9815,7 @@ public class BodyTest {
             children.add(child.getUniqueID());
             reimu.setChildrenList(children);
             // 子供が生きていて健康、かつ reimuにhasDisorder=false → +10
-            int result = reimu.checkNonYukkuriDiseaseTolerance();
+            int result = reimu.getNonYukkuriDiseaseTolerance();
             assertEquals(150 + 10, result);
         }
 
@@ -9827,7 +9827,7 @@ public class BodyTest {
             children.add(child.getUniqueID());
             reimu.setChildrenList(children);
             // 子供がdead → -10
-            int result = reimu.checkNonYukkuriDiseaseTolerance();
+            int result = reimu.getNonYukkuriDiseaseTolerance();
             assertEquals(150 - 10, result);
         }
     }
@@ -10110,10 +10110,10 @@ public class BodyTest {
             initVeryShitAmpouleImages();
             body.setUnBirth(true);
             body.setAge(body.getChildLimitBase() + 1);
-            assertEquals(AgeState.ADULT, body.getBodyAgeState());
+            assertEquals(AgeState.ADULT, body.getAgeState());
             body.getAttach().add(new VeryShitAmpoule(body));
             assertEquals(1, body.getAttachmentSize(VeryShitAmpoule.class));
-            int limit = body.getShitLimitBase()[body.getBodyAgeState().ordinal()];
+            int limit = body.getShitLimitBase()[body.getAgeState().ordinal()];
             body.setShit(limit + 1);
             body.setAnalClose(true);
             SimYukkuri.RND = new ConstState(1);
@@ -10131,12 +10131,12 @@ public class BodyTest {
             try {
                 body.setUnBirth(true);
                 body.setAge(body.getChildLimitBase() + 1);
-                assertEquals(AgeState.ADULT, body.getBodyAgeState());
+                assertEquals(AgeState.ADULT, body.getAgeState());
                 body.getAttach().add(new VeryShitAmpoule(body));
                 assertEquals(1, body.getAttachmentSize(VeryShitAmpoule.class));
                 body.setUnyoOffsetW(80); // size 180 -> Burst.NEAR
                 assertEquals(Burst.NEAR, body.getBurstState());
-                int limit = body.getShitLimitBase()[body.getBodyAgeState().ordinal()];
+                int limit = body.getShitLimitBase()[body.getAgeState().ordinal()];
                 body.setShit(limit + 1);
                 body.setAnalClose(true);
                 SimYukkuri.RND = new ConstState(1);
@@ -10154,10 +10154,10 @@ public class BodyTest {
             initVeryShitAmpouleImages();
             body.setUnBirth(true);
             body.setAge(body.getChildLimitBase() + 1);
-            assertEquals(AgeState.ADULT, body.getBodyAgeState());
+            assertEquals(AgeState.ADULT, body.getAgeState());
             body.getAttach().add(new VeryShitAmpoule(body));
             assertEquals(1, body.getAttachmentSize(VeryShitAmpoule.class));
-            int limit = body.getShitLimitBase()[body.getBodyAgeState().ordinal()];
+            int limit = body.getShitLimitBase()[body.getAgeState().ordinal()];
             body.setShit(limit + 1);
             body.setHasPants(true);
             body.setAnalClose(false);
@@ -10173,10 +10173,10 @@ public class BodyTest {
             initVeryShitAmpouleImages();
             body.setUnBirth(true);
             body.setAge(body.getChildLimitBase() + 1);
-            assertEquals(AgeState.ADULT, body.getBodyAgeState());
+            assertEquals(AgeState.ADULT, body.getAgeState());
             body.getAttach().add(new VeryShitAmpoule(body));
             assertEquals(1, body.getAttachmentSize(VeryShitAmpoule.class));
-            int limit = body.getShitLimitBase()[body.getBodyAgeState().ordinal()];
+            int limit = body.getShitLimitBase()[body.getAgeState().ordinal()];
             body.setShit(limit + 1);
             body.setHasPants(false);
             body.setAnalClose(false);
@@ -10192,7 +10192,7 @@ public class BodyTest {
             initVeryShitAmpouleImages();
             body.setUnBirth(true);
             body.setAge(body.getChildLimitBase() + 1);
-            assertEquals(AgeState.ADULT, body.getBodyAgeState());
+            assertEquals(AgeState.ADULT, body.getAgeState());
             body.getAttach().add(new VeryShitAmpoule(body));
             assertEquals(1, body.getAttachmentSize(VeryShitAmpoule.class));
             body.setShit(0);
@@ -10606,7 +10606,7 @@ public class BodyTest {
         @Test
         public void testDamagedOnBeltConveyorBegForLifeAddsEvent() {
             body.setOnNonMovingConveyor(true);
-            body.setDamage(body.getDamageLimitBase()[body.getBodyAgeState().ordinal()] / 2);
+            body.setDamage(body.getDamageLimitBase()[body.getAgeState().ordinal()] / 2);
             body.setAttitude(Attitude.VERY_NICE);
             body.getEventList().clear();
             SimYukkuri.RND = new ConstState(0);
@@ -10617,7 +10617,7 @@ public class BodyTest {
         @Test
         public void testDamagedOnBeltConveyorYunnyaaBranch() {
             body.setOnNonMovingConveyor(true);
-            body.setDamage(body.getDamageLimitBase()[body.getBodyAgeState().ordinal()] / 2);
+            body.setDamage(body.getDamageLimitBase()[body.getAgeState().ordinal()] / 2);
             body.setPealed(false);
             body.setHasBaby(false);
             body.setHasStalk(false);
@@ -10640,7 +10640,7 @@ public class BodyTest {
         @Test
         public void testDamagedOnBeltConveyorKilledInFactoryMessage() {
             body.setOnNonMovingConveyor(true);
-            body.setDamage(body.getDamageLimitBase()[body.getBodyAgeState().ordinal()] / 2);
+            body.setDamage(body.getDamageLimitBase()[body.getAgeState().ordinal()] / 2);
             body.setPealed(false);
             body.setHasBaby(false);
             body.setHasStalk(false);
@@ -10764,7 +10764,7 @@ public class BodyTest {
             body.setCriticalDamege(null);
             body.setExciting(false);
             body.setExciteProb(1);
-            body.setHungry(body.getHungryLimitBase()[body.getBodyAgeState().ordinal()]);
+            body.setHungry(body.getHungryLimitBase()[body.getAgeState().ordinal()]);
             body.setShit(0);
             body.setOkazari(new Okazari(body, Okazari.OkazariType.DEFAULT));
             body.setHasBraid(true);
@@ -10808,7 +10808,7 @@ public class BodyTest {
             body.setCriticalDamege(null);
             body.setOkazari(new Okazari(body, Okazari.OkazariType.DEFAULT));
             body.setHasBraid(true);
-            body.setHungry(body.getHungryLimitBase()[body.getBodyAgeState().ordinal()]);
+            body.setHungry(body.getHungryLimitBase()[body.getAgeState().ordinal()]);
             body.setExciting(false);
             body.setExciteProb(1);
             body.setSpeechDiscipline(0);
@@ -10968,7 +10968,7 @@ public class BodyTest {
         @Test
         public void testCheckEmotionFootbakeCriticalBranchTriggersSad() {
             body.setLockmove(false);
-            int limit = body.getDamageLimitBase()[body.getBodyAgeState().ordinal()];
+            int limit = body.getDamageLimitBase()[body.getAgeState().ordinal()];
             body.setFootBakePeriod(limit + 1);
             body.setSleeping(false);
             body.setBurialState(BurialState.NONE);
@@ -11002,7 +11002,7 @@ public class BodyTest {
         }
     }
 
-    // ========== moveBody テスト ==========
+    // ========== moveYukkuri テスト ==========
     @Nested
     class MoveBodyTests {
 
@@ -11012,7 +11012,7 @@ public class BodyTest {
             body.setFalldownDamage(100);
             body.setMotionX(10);
             body.setMotionY(10);
-            body.moveBody(false);
+            body.moveYukkuri(false);
             assertEquals(0, body.getFalldownDamage());
             assertEquals(0, body.getMotionX());
             assertEquals(0, body.getMotionY());
@@ -11024,7 +11024,7 @@ public class BodyTest {
             body.setVy(0);
             body.setMotionX(0);
             body.setMotionY(0);
-            body.moveBody(true);
+            body.moveYukkuri(true);
             assertEquals(0, body.getMotionX());
             assertEquals(0, body.getMotionY());
         }
@@ -11036,7 +11036,7 @@ public class BodyTest {
             body.setVy(0);
             body.setMotionX(0);
             body.setMotionY(0);
-            body.moveBody(false);
+            body.moveYukkuri(false);
             assertEquals(0, body.getMotionX());
             assertEquals(0, body.getMotionY());
         }
@@ -11050,7 +11050,7 @@ public class BodyTest {
             body.setVy(0);
             body.setMotionX(0);
             body.setMotionY(0);
-            body.moveBody(true); // dontMove=true → returns after clamp
+            body.moveYukkuri(true); // dontMove=true → returns after clamp
             assertEquals(0, body.getX());
         }
 
@@ -11061,7 +11061,7 @@ public class BodyTest {
             body.setVy(0);
             body.setMotionX(0);
             body.setMotionY(0);
-            body.moveBody(true);
+            body.moveYukkuri(true);
             assertEquals(0, body.getY());
         }
 
@@ -11077,7 +11077,7 @@ public class BodyTest {
             body.setMotionY(0);
             body.setMotionZ(0);
 
-            body.moveBody(true);
+            body.moveYukkuri(true);
 
             assertTrue(body.getZ() < 10);
             assertEquals(0, body.getMotionX());
@@ -11096,7 +11096,7 @@ public class BodyTest {
             body.setMotionY(0);
             body.setMotionZ(0);
 
-            body.moveBody(true);
+            body.moveYukkuri(true);
 
             assertEquals(0, body.getZ());
             assertEquals(0, body.getVx());
@@ -11115,7 +11115,7 @@ public class BodyTest {
             body.setMotionY(0);
             body.setMotionZ(0);
 
-            body.moveBody(true);
+            body.moveYukkuri(true);
 
             assertEquals(0, body.getMotionX());
             assertEquals(0, body.getMotionY());
@@ -11136,7 +11136,7 @@ public class BodyTest {
             int xBefore = body.getX();
             int yBefore = body.getY();
 
-            body.moveBody(true);
+            body.moveYukkuri(true);
 
             assertEquals(xBefore, body.getX());
             assertEquals(yBefore, body.getY());
@@ -11155,7 +11155,7 @@ public class BodyTest {
             body.setAge(0);
             body.setDestX(body.getX());
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(-1, body.getDestX());
         }
@@ -11178,7 +11178,7 @@ public class BodyTest {
             rnd.setFixedBoolean(true); // randomDirection(0) -> 1
             SimYukkuri.RND = rnd;
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertNotEquals(0, body.getDirX());
         }
@@ -11200,7 +11200,7 @@ public class BodyTest {
             SimYukkuri.RND = new ConstState(0); // nextInt(100)=0 < 50
             int xBefore = body.getX();
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(xBefore + 2, body.getX());
         }
@@ -11223,7 +11223,7 @@ public class BodyTest {
             body.setExciting(true);
             int xBefore = body.getX();
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(xBefore + 2, body.getX());
         }
@@ -11240,9 +11240,9 @@ public class BodyTest {
             body.setMotionZ(0);
             body.setX(10);
             body.setY(10);
-            Translate.setCurrentWallMapNum(11, 10, Barrier.MAP_BODY[body.getBodyAgeState().ordinal()]);
+            Translate.setCurrentWallMapNum(11, 10, Barrier.MAP_BODY[body.getAgeState().ordinal()]);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(10, body.getX());
             assertEquals(0, body.getVx());
@@ -11265,9 +11265,9 @@ public class BodyTest {
             body.setBlockedTicks(body.getBlockedLimitBase() + 1);
             body.setIntelligence(Intelligence.FOOL);
             body.setPanicType(PanicType.FEAR);
-            Translate.setCurrentWallMapNum(21, 20, Barrier.MAP_BODY[body.getBodyAgeState().ordinal()]);
+            Translate.setCurrentWallMapNum(21, 20, Barrier.MAP_BODY[body.getAgeState().ordinal()]);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(-1, body.getDestX());
         }
@@ -11294,7 +11294,7 @@ public class BodyTest {
             int xBefore = body.getX();
             int yBefore = body.getY();
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(xBefore, body.getX());
             assertEquals(yBefore, body.getY());
@@ -11317,7 +11317,7 @@ public class BodyTest {
             body.setDestX(20);
             body.setDestY(-1);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(11, body.getX());
         }
@@ -11339,7 +11339,7 @@ public class BodyTest {
             body.setDestX(11);
             body.setDestY(-1);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(11, body.getX());
         }
@@ -11361,7 +11361,7 @@ public class BodyTest {
             body.setDestX(-1);
             body.setDestY(20);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(11, body.getY());
         }
@@ -11383,7 +11383,7 @@ public class BodyTest {
             body.setDestX(-1);
             body.setDestY(11);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(11, body.getY());
         }
@@ -11402,7 +11402,7 @@ public class BodyTest {
             falling.setMotionZ(0);
             falling.setHasBraid(false);
 
-            falling.moveBody(false);
+            falling.moveYukkuri(false);
 
             assertEquals(0, falling.getZ());
         }
@@ -11422,7 +11422,7 @@ public class BodyTest {
             falling.setMotionY(0);
             falling.setMotionZ(1); // mz != 0
 
-            falling.moveBody(false);
+            falling.moveYukkuri(false);
 
             assertEquals(0, falling.getZ());
         }
@@ -11442,7 +11442,7 @@ public class BodyTest {
             falling.setFalldownDamage(20);
             falling.setNoDamageNextFall(true);
 
-            falling.moveBody(false);
+            falling.moveYukkuri(false);
 
             assertFalse(falling.isNoDamageNextFall());
             assertEquals(0, falling.getFalldownDamage());
@@ -11463,7 +11463,7 @@ public class BodyTest {
             falling.setFalldownDamage(0);
             falling.setNoDamageNextFall(true);
 
-            falling.moveBody(false);
+            falling.moveYukkuri(false);
 
             assertTrue(falling.isNoDamageNextFall());
         }
@@ -11482,7 +11482,7 @@ public class BodyTest {
             body.setMotionZ(0);
             body.setAge(0);
             body.setSpeed(100);
-            body.setHungry(body.getHungryLimitBase()[body.getBodyAgeState().ordinal()] + 100);
+            body.setHungry(body.getHungryLimitBase()[body.getAgeState().ordinal()] + 100);
             body.setDamage(0);
             body.setFlyingType(false);
             body.setHasBaby(false);
@@ -11493,7 +11493,7 @@ public class BodyTest {
             body.setDestX(startX + 1);
             body.setDestY(-1);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(startX + 1, body.getX());
         }
@@ -11521,9 +11521,9 @@ public class BodyTest {
             body.setSpeechDiscipline(0);
             body.setMessageBuffer(null);
             SimYukkuri.RND = new ConstState(0);
-            Translate.setCurrentWallMapNum(111, 110, Barrier.MAP_BODY[body.getBodyAgeState().ordinal()]);
+            Translate.setCurrentWallMapNum(111, 110, Barrier.MAP_BODY[body.getAgeState().ordinal()]);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertTrue(body.isTalking());
         }
@@ -11551,7 +11551,7 @@ public class BodyTest {
             Translate.setCurrentFieldMapNum(61, 60, FieldShape.FIELD_POOL);
             Translate.setCurrentFieldMapNum(60, 60, 0);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(61, body.getX());
             assertEquals(60, body.getY());
@@ -11570,7 +11570,7 @@ public class BodyTest {
             body.setMotionY(0);
             body.setMotionZ(0);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertTrue(body.getX() >= 0);
             assertEquals(0, body.getVx());
@@ -11590,7 +11590,7 @@ public class BodyTest {
             body.setMotionY(0);
             body.setMotionZ(0);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertTrue(body.getX() <= Translate.getMapW());
             assertEquals(0, body.getVx());
@@ -11610,7 +11610,7 @@ public class BodyTest {
             body.setMotionY(0);
             body.setMotionZ(0);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertTrue(body.getY() >= 0);
             assertEquals(0, body.getVy());
@@ -11630,7 +11630,7 @@ public class BodyTest {
             body.setMotionY(0);
             body.setMotionZ(0);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertTrue(body.getY() <= Translate.getMapH());
             assertEquals(0, body.getVy());
@@ -11651,7 +11651,7 @@ public class BodyTest {
             body.setFalldownDamage(10);
             body.setNoDamageNextFall(true);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(0, body.getZ());
             assertFalse(body.isNoDamageNextFall());
@@ -11672,7 +11672,7 @@ public class BodyTest {
             body.setFalldownDamage(10);
             body.setFirstGround(true);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(0, body.getZ());
             assertFalse(body.isFirstGround());
@@ -11692,7 +11692,7 @@ public class BodyTest {
             body.setFalldownDamage(10);
             body.setPealed(true);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertTrue(body.isDead());
         }
@@ -11713,7 +11713,7 @@ public class BodyTest {
             body.setAge(0);
             body.setDestZ(-1);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(Translate.getFlyHeightLimit(), body.getDestZ());
         }
@@ -11734,7 +11734,7 @@ public class BodyTest {
             body.setDestX(9);
             body.setDestY(body.getY());
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(body.getDestX(), body.getX());
         }
@@ -11759,9 +11759,9 @@ public class BodyTest {
             body.setIntelligence(Intelligence.FOOL);
             body.setPanicType(PanicType.FEAR);
             body.setAttitude(Attitude.AVERAGE);
-            Translate.setCurrentWallMapNum(41, 40, Barrier.MAP_BODY[body.getBodyAgeState().ordinal()]);
+            Translate.setCurrentWallMapNum(41, 40, Barrier.MAP_BODY[body.getAgeState().ordinal()]);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(Happiness.SAD, body.getHappiness());
         }
@@ -11787,7 +11787,7 @@ public class BodyTest {
             Translate.setCurrentFieldMapNum(50, 50, 0);
             int xBefore = body.getX();
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertNotEquals(xBefore, body.getX());
         }
@@ -11808,7 +11808,7 @@ public class BodyTest {
             body.setDestX(9);
             body.setDestY(body.getY());
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(Direction.LEFT, body.getDirection());
         }
@@ -11830,7 +11830,7 @@ public class BodyTest {
             SimYukkuri.RND = new ConstState(99); // nextInt(100)=99 -> no extra
             int xBefore = body.getX();
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(xBefore + 1, body.getX());
         }
@@ -11857,7 +11857,7 @@ public class BodyTest {
             rnd.setFixedBoolean(true); // randomDirection -> 1
             SimYukkuri.RND = rnd;
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(0, body.getCountX());
         }
@@ -11883,9 +11883,9 @@ public class BodyTest {
             body.setPanicType(null);
             body.setToFood(true);
             body.setCurrentEvent(new SuperEatingTimeEvent());
-            Translate.setCurrentWallMapNum(61, 60, Barrier.MAP_BODY[body.getBodyAgeState().ordinal()]);
+            Translate.setCurrentWallMapNum(61, 60, Barrier.MAP_BODY[body.getAgeState().ordinal()]);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertFalse(body.isToFood());
             assertNotNull(body.getCurrentEvent());
@@ -11910,9 +11910,9 @@ public class BodyTest {
             body.setBlockedTicks(body.getBlockedLimitBase() + 1);
             body.setIntelligence(Intelligence.AVERAGE);
             body.setPanicType(PanicType.FEAR);
-            Translate.setCurrentWallMapNum(191, 190, Barrier.MAP_BODY[body.getBodyAgeState().ordinal()]);
+            Translate.setCurrentWallMapNum(191, 190, Barrier.MAP_BODY[body.getAgeState().ordinal()]);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertNotEquals(Happiness.VERY_SAD, body.getHappiness());
         }
@@ -11936,9 +11936,9 @@ public class BodyTest {
             body.setBlockedTicks(body.getBlockedLimitBase() + 1);
             body.setIntelligence(Intelligence.FOOL);
             body.setPanicType(null);
-            Translate.setCurrentWallMapNum(181, 180, Barrier.MAP_BODY[body.getBodyAgeState().ordinal()]);
+            Translate.setCurrentWallMapNum(181, 180, Barrier.MAP_BODY[body.getAgeState().ordinal()]);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertNotEquals(Happiness.VERY_SAD, body.getHappiness());
         }
@@ -11964,9 +11964,9 @@ public class BodyTest {
             body.setPanicType(PanicType.FEAR);
             body.setMessageBuffer(null);
             body.setSpeechDiscipline(0);
-            Translate.setCurrentWallMapNum(176, 175, Barrier.MAP_BODY[body.getBodyAgeState().ordinal()]);
+            Translate.setCurrentWallMapNum(176, 175, Barrier.MAP_BODY[body.getAgeState().ordinal()]);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertFalse(body.isTalking());
         }
@@ -11991,9 +11991,9 @@ public class BodyTest {
             body.setIntelligence(Intelligence.FOOL);
             body.setPanicType(null);
             body.setAttitude(Attitude.SHITHEAD);
-            Translate.setCurrentWallMapNum(201, 200, Barrier.MAP_BODY[body.getBodyAgeState().ordinal()]);
+            Translate.setCurrentWallMapNum(201, 200, Barrier.MAP_BODY[body.getAgeState().ordinal()]);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertFalse(body.isAngry());
         }
@@ -12018,9 +12018,9 @@ public class BodyTest {
             body.setIntelligence(Intelligence.FOOL);
             body.setPanicType(PanicType.FEAR);
             body.setAttitude(Attitude.SHITHEAD);
-            Translate.setCurrentWallMapNum(186, 185, Barrier.MAP_BODY[body.getBodyAgeState().ordinal()]);
+            Translate.setCurrentWallMapNum(186, 185, Barrier.MAP_BODY[body.getAgeState().ordinal()]);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertFalse(body.isAngry());
             assertNotEquals(Happiness.SAD, body.getHappiness());
@@ -12046,9 +12046,9 @@ public class BodyTest {
             body.setIntelligence(Intelligence.AVERAGE);
             body.setPanicType(PanicType.FEAR);
             body.setAttitude(Attitude.SHITHEAD);
-            Translate.setCurrentWallMapNum(166, 165, Barrier.MAP_BODY[body.getBodyAgeState().ordinal()]);
+            Translate.setCurrentWallMapNum(166, 165, Barrier.MAP_BODY[body.getAgeState().ordinal()]);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertFalse(body.isAngry());
             assertNotEquals(Happiness.SAD, body.getHappiness());
@@ -12074,9 +12074,9 @@ public class BodyTest {
             body.setIntelligence(Intelligence.FOOL);
             body.setPanicType(PanicType.FEAR);
             body.setAttitude(Attitude.SHITHEAD);
-            Translate.setCurrentWallMapNum(71, 70, Barrier.MAP_BODY[body.getBodyAgeState().ordinal()]);
+            Translate.setCurrentWallMapNum(71, 70, Barrier.MAP_BODY[body.getAgeState().ordinal()]);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertTrue(body.isAngry());
         }
@@ -12099,7 +12099,7 @@ public class BodyTest {
             body.setDestZ(9);
             body.setCurrentEvent(new SuperEatingTimeEvent());
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(9, body.getZ());
         }
@@ -12122,7 +12122,7 @@ public class BodyTest {
             body.setDestZ(12);
             body.setCurrentEvent(new SuperEatingTimeEvent());
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(12, body.getZ());
         }
@@ -12136,16 +12136,16 @@ public class BodyTest {
                 }
             };
             for (int i = 0; i < 3; i++) {
-                onBed.getBodySpr()[i] = new Sprite();
-                onBed.getBodySpr()[i].setImageW(100);
-                onBed.getBodySpr()[i].setImageH(100);
+                onBed.getSpriteSet()[i] = new Sprite();
+                onBed.getSpriteSet()[i].setImageW(100);
+                onBed.getSpriteSet()[i].setImageH(100);
                 onBed.getExpandSpr()[i] = new Sprite();
                 onBed.getBraidSpr()[i] = new Sprite();
             }
             onBed.setAgeState(AgeState.BABY);
             onBed.setMsgType(YukkuriType.REIMU);
             onBed.setIntelligence(Intelligence.AVERAGE);
-            SimYukkuri.world.getCurrentMap().getBody().put(onBed.getUniqueID(), onBed);
+            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(onBed.getUniqueID(), onBed);
 
             onBed.setGrabbed(false);
             onBed.setZ(1);
@@ -12159,7 +12159,7 @@ public class BodyTest {
             onBed.setFalldownDamage(20);
             onBed.setDamage(0);
 
-            onBed.moveBody(false);
+            onBed.moveYukkuri(false);
 
             assertEquals(0, onBed.getDamage());
         }
@@ -12178,7 +12178,7 @@ public class BodyTest {
             body.setMotionY(0);
             body.setMotionZ(0);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertTrue(body.getZ() < 5);
         }
@@ -12196,7 +12196,7 @@ public class BodyTest {
             body.setAge(0);
             body.setDestY(body.getY());
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(-1, body.getDestY());
         }
@@ -12216,7 +12216,7 @@ public class BodyTest {
             body.setY(10);
             body.setDestY(9);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(9, body.getY());
         }
@@ -12241,9 +12241,9 @@ public class BodyTest {
             ConstState rnd = new ConstState();
             rnd.setFixedBoolean(true);
             SimYukkuri.RND = rnd;
-            Translate.setCurrentWallMapNum(81, 80, Barrier.MAP_BODY[body.getBodyAgeState().ordinal()]);
+            Translate.setCurrentWallMapNum(81, 80, Barrier.MAP_BODY[body.getAgeState().ordinal()]);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertTrue(body.getDirX() != 0 || body.getDirY() != 0);
         }
@@ -12272,9 +12272,9 @@ public class BodyTest {
             ConstState rnd = new ConstState();
             rnd.setFixedBoolean(true); // randomDirection keeps dirX=1
             SimYukkuri.RND = rnd;
-            Translate.setCurrentWallMapNum(11, 10, Barrier.MAP_BODY[body.getBodyAgeState().ordinal()]);
+            Translate.setCurrentWallMapNum(11, 10, Barrier.MAP_BODY[body.getAgeState().ordinal()]);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(5, body.getBlockedTicks());
         }
@@ -12283,16 +12283,16 @@ public class BodyTest {
         public void testFallOnTrampolineCutsDamage() {
             StubBody falling = new StubBody();
             for (int i = 0; i < 3; i++) {
-                falling.getBodySpr()[i] = new Sprite();
-                falling.getBodySpr()[i].setImageW(100);
-                falling.getBodySpr()[i].setImageH(100);
+                falling.getSpriteSet()[i] = new Sprite();
+                falling.getSpriteSet()[i].setImageW(100);
+                falling.getSpriteSet()[i].setImageH(100);
                 falling.getExpandSpr()[i] = new Sprite();
                 falling.getBraidSpr()[i] = new Sprite();
             }
             falling.setAgeState(AgeState.ADULT);
             falling.setMsgType(YukkuriType.REIMU);
             falling.setIntelligence(Intelligence.AVERAGE);
-            SimYukkuri.world.getCurrentMap().getBody().put(falling.getUniqueID(), falling);
+            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(falling.getUniqueID(), falling);
 
             Trampoline tramp = new Trampoline() {
                 @Override
@@ -12314,7 +12314,7 @@ public class BodyTest {
             falling.setFalldownDamage(20);
             falling.setDamage(0);
 
-            falling.moveBody(false);
+            falling.moveYukkuri(false);
 
             assertTrue(falling.getDamage() < 20);
         }
@@ -12336,7 +12336,7 @@ public class BodyTest {
             body.setDestZ(10);
             body.setCurrentEvent(new SuperEatingTimeEvent());
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(-1, body.getDestZ());
         }
@@ -12349,7 +12349,7 @@ public class BodyTest {
             body.setMotionX(5);
             body.setMotionY(5);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(0, body.getFalldownDamage());
             assertEquals(0, body.getMotionX());
@@ -12368,9 +12368,9 @@ public class BodyTest {
             body.setMotionZ(0);
             body.setX(120);
             body.setY(120);
-            Translate.setCurrentWallMapNum(120, 121, Barrier.MAP_BODY[body.getBodyAgeState().ordinal()]);
+            Translate.setCurrentWallMapNum(120, 121, Barrier.MAP_BODY[body.getAgeState().ordinal()]);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(120, body.getY());
             assertEquals(0, body.getVy());
@@ -12391,7 +12391,7 @@ public class BodyTest {
             body.setY(10);
             body.setDestY(11);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(11, body.getY());
         }
@@ -12417,7 +12417,7 @@ public class BodyTest {
             Translate.setCurrentFieldMapNum(140, 140, 0);
             int xBefore = body.getX();
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(xBefore, body.getX());
         }
@@ -12443,7 +12443,7 @@ public class BodyTest {
             Translate.setCurrentFieldMapNum(60, 60, 0);
             int xBefore = body.getX();
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(xBefore, body.getX());
         }
@@ -12462,7 +12462,7 @@ public class BodyTest {
             body.setFallingUnderGround(true);
             int zBefore = body.getZ();
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(zBefore, body.getZ());
         }
@@ -12481,7 +12481,7 @@ public class BodyTest {
             body.setBindStalk(new org.simyukkuri.entity.core.world.bodylinked.Stalk());
             int zBefore = body.getZ();
 
-            body.moveBody(true);
+            body.moveYukkuri(true);
 
             assertEquals(zBefore, body.getZ());
         }
@@ -12501,7 +12501,7 @@ public class BodyTest {
             body.setMotionZ(0);
             int zBefore = body.getZ();
 
-            body.moveBody(true);
+            body.moveYukkuri(true);
 
             assertEquals(zBefore, body.getZ());
         }
@@ -12528,9 +12528,9 @@ public class BodyTest {
             ConstState rnd = new ConstState();
             rnd.setFixedBoolean(false); // choose dirY randomization
             SimYukkuri.RND = rnd;
-            Translate.setCurrentWallMapNum(91, 90, Barrier.MAP_BODY[body.getBodyAgeState().ordinal()]);
+            Translate.setCurrentWallMapNum(91, 90, Barrier.MAP_BODY[body.getAgeState().ordinal()]);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertNotEquals(0, body.getDirY());
             assertEquals(-1, body.getDestX());
@@ -12552,7 +12552,7 @@ public class BodyTest {
             falling.setFalldownDamage(10);
             falling.setNoDamageNextFall(false);
 
-            falling.moveBody(false);
+            falling.moveYukkuri(false);
 
             assertFalse(falling.isNoDamageNextFall());
         }
@@ -12582,9 +12582,9 @@ public class BodyTest {
             ConstState rnd = new ConstState();
             rnd.setFixedBoolean(true); // randomDirection -> 1
             SimYukkuri.RND = rnd;
-            Translate.setCurrentWallMapNum(101, 100, Barrier.MAP_BODY[body.getBodyAgeState().ordinal()]);
+            Translate.setCurrentWallMapNum(101, 100, Barrier.MAP_BODY[body.getAgeState().ordinal()]);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(1, body.getBlockedTicks());
         }
@@ -12607,9 +12607,9 @@ public class BodyTest {
             body.setDestY(111);
             body.setDestZ(-1);
             body.setBlockedTicks(0);
-            Translate.setCurrentWallMapNum(110, 111, Barrier.MAP_BODY[body.getBodyAgeState().ordinal()]);
+            Translate.setCurrentWallMapNum(110, 111, Barrier.MAP_BODY[body.getAgeState().ordinal()]);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(1, body.getBlockedTicks());
         }
@@ -12638,7 +12638,7 @@ public class BodyTest {
             rnd.setFixedBoolean(true);
             SimYukkuri.RND = rnd;
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(0, body.getMessageTicks());
         }
@@ -12667,7 +12667,7 @@ public class BodyTest {
             rnd.setFixedBoolean(true);
             SimYukkuri.RND = rnd;
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(0, body.getCountY());
         }
@@ -12696,7 +12696,7 @@ public class BodyTest {
             rnd.setFixedBoolean(true);
             SimYukkuri.RND = rnd;
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(0, body.getCountX());
         }
@@ -12720,7 +12720,7 @@ public class BodyTest {
             Translate.setCurrentFieldMapNum(100, 100, 0);
             int xBefore = body.getX();
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertNotEquals(xBefore, body.getX());
         }
@@ -12745,7 +12745,7 @@ public class BodyTest {
             Translate.setCurrentFieldMapNum(200, 200, FieldShape.FIELD_POOL);
             int xBefore = body.getX();
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertNotEquals(xBefore, body.getX());
         }
@@ -12761,14 +12761,14 @@ public class BodyTest {
             body.setMotionY(0);
             body.setMotionZ(0);
             body.setAge(1);
-            body.setHungry(body.getHungryLimitBase()[body.getBodyAgeState().ordinal()]);
+            body.setHungry(body.getHungryLimitBase()[body.getAgeState().ordinal()]);
             body.setHasBaby(false);
             body.setHasStalk(false);
             body.setFlyingType(false);
             body.forceSetSick(); // step/=2 -> freq=2
             int xBefore = body.getX();
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(xBefore, body.getX());
         }
@@ -12787,7 +12787,7 @@ public class BodyTest {
             body.setBlind(true); // step/=2 -> freq=2
             int xBefore = body.getX();
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(xBefore, body.getX());
         }
@@ -12806,7 +12806,7 @@ public class BodyTest {
             body.setHasBaby(true); // step/=2 -> freq=2
             int xBefore = body.getX();
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(xBefore, body.getX());
         }
@@ -12825,7 +12825,7 @@ public class BodyTest {
             body.setHasStalk(true); // step/=2 -> freq=2
             int xBefore = body.getX();
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(xBefore, body.getX());
         }
@@ -12841,14 +12841,14 @@ public class BodyTest {
             body.setMotionY(0);
             body.setMotionZ(0);
             body.setAge(1);
-            body.setHungry(body.getHungryLimitBase()[body.getBodyAgeState().ordinal()]);
+            body.setHungry(body.getHungryLimitBase()[body.getAgeState().ordinal()]);
             body.setHasBaby(false);
             body.setHasStalk(false);
             body.setFlyingType(false);
             body.setDamageState(Damage.SOME); // step/=2 -> freq=2
             int xBefore = body.getX();
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(xBefore, body.getX());
         }
@@ -12868,7 +12868,7 @@ public class BodyTest {
             body.setPredatorType(null); // not predator
             int xBefore = body.getX();
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(xBefore, body.getX());
         }
@@ -12890,7 +12890,7 @@ public class BodyTest {
             body.setDestY(body.getY());
             int xBefore = body.getX();
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertNotEquals(xBefore, body.getX());
         }
@@ -12906,14 +12906,14 @@ public class BodyTest {
             body.setMotionY(0);
             body.setMotionZ(0);
             body.setAge(1);
-            body.setHungry(body.getHungryLimitBase()[body.getBodyAgeState().ordinal()]);
+            body.setHungry(body.getHungryLimitBase()[body.getAgeState().ordinal()]);
             body.setHasBaby(false);
             body.setHasStalk(false);
             body.setFlyingType(true);
             body.setHasBraid(false); // canflyCheck=false
             int xBefore = body.getX();
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(xBefore, body.getX());
         }
@@ -12929,14 +12929,14 @@ public class BodyTest {
             body.setMotionY(0);
             body.setMotionZ(0);
             body.setAge(1);
-            body.setHungry(body.getHungryLimitBase()[body.getBodyAgeState().ordinal()]);
+            body.setHungry(body.getHungryLimitBase()[body.getAgeState().ordinal()]);
             body.setHasBaby(false);
             body.setHasStalk(false);
             body.setFlyingType(false);
             body.setCriticalDamege(CriticalDamegeType.INJURED); // isFeelPain=true
             int xBefore = body.getX();
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(xBefore, body.getX());
         }
@@ -12952,14 +12952,14 @@ public class BodyTest {
             body.setMotionY(0);
             body.setMotionZ(0);
             body.setAge(1);
-            body.setHungry(body.getHungryLimitBase()[body.getBodyAgeState().ordinal()]);
+            body.setHungry(body.getHungryLimitBase()[body.getAgeState().ordinal()]);
             body.setHasBaby(false);
             body.setHasStalk(false);
             body.setFlyingType(false);
             body.setFootBakePeriod(1); // isGotBurnedHeavily=true
             int xBefore = body.getX();
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(xBefore, body.getX());
         }
@@ -12975,7 +12975,7 @@ public class BodyTest {
             body.setMotionY(0);
             body.setMotionZ(0);
             body.setAge(1);
-            body.setHungry(body.getHungryLimitBase()[body.getBodyAgeState().ordinal()]);
+            body.setHungry(body.getHungryLimitBase()[body.getAgeState().ordinal()]);
             body.setDamage(0);
             body.setFlyingType(false);
             body.setHasBaby(false);
@@ -12983,7 +12983,7 @@ public class BodyTest {
             body.setFootBakePeriod(1);
             int xBefore = body.getX();
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(xBefore, body.getX());
         }
@@ -13000,7 +13000,7 @@ public class BodyTest {
             body.setMotionZ(0);
             body.setAge(0);
             body.setSpeed(100);
-            body.setHungry(body.getHungryLimitBase()[body.getBodyAgeState().ordinal()]);
+            body.setHungry(body.getHungryLimitBase()[body.getAgeState().ordinal()]);
             body.setDamage(0);
             body.setFlyingType(true);
             body.setHasBraid(true); // canflyCheck=true
@@ -13011,7 +13011,7 @@ public class BodyTest {
             body.setDestY(body.getY());
             int xBefore = body.getX();
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertNotEquals(xBefore, body.getX());
         }
@@ -13027,7 +13027,7 @@ public class BodyTest {
             body.setMotionY(0);
             body.setMotionZ(0);
             body.setAge(0);
-            body.setHungry(body.getHungryLimitBase()[body.getBodyAgeState().ordinal()] + 100);
+            body.setHungry(body.getHungryLimitBase()[body.getAgeState().ordinal()] + 100);
             body.setDamage(0);
             body.setFlyingType(true);
             body.setHasBraid(true); // canflyCheck=true
@@ -13037,7 +13037,7 @@ public class BodyTest {
             body.setDestY(body.getY());
             int xBefore = body.getX();
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertNotEquals(xBefore, body.getX());
         }
@@ -13058,7 +13058,7 @@ public class BodyTest {
             body.setDestY(body.getY());
             int xBefore = body.getX();
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(xBefore, body.getX());
         }
@@ -13081,7 +13081,7 @@ public class BodyTest {
             body.setDestY(body.getY());
             int xBefore = body.getX();
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertNotEquals(xBefore, body.getX());
         }
@@ -13106,7 +13106,7 @@ public class BodyTest {
             body.setCurrentEvent(event);
             int xBefore = body.getX();
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(xBefore, body.getX());
         }
@@ -13128,7 +13128,7 @@ public class BodyTest {
             body.setDestZ(10);
             body.setCurrentEvent(new SuperEatingTimeEvent());
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(-1, body.getDestZ());
         }
@@ -13153,7 +13153,7 @@ public class BodyTest {
             body.setDestY(body.getY());
             body.setCurrentEvent(new SuperEatingTimeEvent());
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(11, body.getZ());
         }
@@ -13169,7 +13169,7 @@ public class BodyTest {
             body.setMotionY(0);
             body.setMotionZ(1);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(0, body.getMotionZ());
         }
@@ -13189,7 +13189,7 @@ public class BodyTest {
             body.setDestY(-1);
             body.setAge(0);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(0, body.getMotionX());
             assertEquals(0, body.getMotionY());
@@ -13207,15 +13207,15 @@ public class BodyTest {
                     }
                 };
                 for (int i = 0; i < 3; i++) {
-                    falling.getBodySpr()[i] = new Sprite();
-                    falling.getBodySpr()[i].setImageW(100);
-                    falling.getBodySpr()[i].setImageH(100);
+                    falling.getSpriteSet()[i] = new Sprite();
+                    falling.getSpriteSet()[i].setImageW(100);
+                    falling.getSpriteSet()[i].setImageH(100);
                     falling.getExpandSpr()[i] = new Sprite();
                     falling.getBraidSpr()[i] = new Sprite();
                 }
                 falling.setAgeState(AgeState.ADULT);
                 falling.setMsgType(YukkuriType.REIMU);
-                SimYukkuri.world.getCurrentMap().getBody().put(falling.getUniqueID(), falling);
+                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(falling.getUniqueID(), falling);
 
                 Trampoline tramp = new Trampoline() {
                     @Override
@@ -13237,7 +13237,7 @@ public class BodyTest {
                 falling.setFalldownDamage(10);
                 falling.setNoDamageNextFall(true);
 
-                falling.moveBody(false);
+                falling.moveYukkuri(false);
 
                 assertFalse(falling.isNoDamageNextFall());
             } finally {
@@ -13257,15 +13257,15 @@ public class BodyTest {
                     }
                 };
                 for (int i = 0; i < 3; i++) {
-                    falling.getBodySpr()[i] = new Sprite();
-                    falling.getBodySpr()[i].setImageW(100);
-                    falling.getBodySpr()[i].setImageH(100);
+                    falling.getSpriteSet()[i] = new Sprite();
+                    falling.getSpriteSet()[i].setImageW(100);
+                    falling.getSpriteSet()[i].setImageH(100);
                     falling.getExpandSpr()[i] = new Sprite();
                     falling.getBraidSpr()[i] = new Sprite();
                 }
                 falling.setAgeState(AgeState.ADULT);
                 falling.setMsgType(YukkuriType.REIMU);
-                SimYukkuri.world.getCurrentMap().getBody().put(falling.getUniqueID(), falling);
+                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(falling.getUniqueID(), falling);
 
                 Trampoline tramp = new Trampoline() {
                     @Override
@@ -13287,7 +13287,7 @@ public class BodyTest {
                 falling.setFalldownDamage(20);
                 falling.setNoDamageNextFall(true);
 
-                falling.moveBody(false);
+                falling.moveYukkuri(false);
 
                 assertFalse(falling.isNoDamageNextFall());
             } finally {
@@ -13318,7 +13318,7 @@ public class BodyTest {
             rnd.setFixedBoolean(true);
             SimYukkuri.RND = rnd;
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertTrue(body.getMessageTicks() > 0);
         }
@@ -13346,7 +13346,7 @@ public class BodyTest {
             rnd.setFixedBoolean(true);
             SimYukkuri.RND = rnd;
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertTrue(body.getMessageTicks() > 0);
         }
@@ -13374,7 +13374,7 @@ public class BodyTest {
             rnd.setFixedBoolean(true);
             SimYukkuri.RND = rnd;
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(0, body.getMessageTicks());
         }
@@ -13402,7 +13402,7 @@ public class BodyTest {
             rnd.setFixedBoolean(true);
             SimYukkuri.RND = rnd;
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(0, body.getMessageTicks());
         }
@@ -13429,7 +13429,7 @@ public class BodyTest {
             rnd.setFixedBoolean(true);
             SimYukkuri.RND = rnd;
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(0, body.getMessageTicks());
         }
@@ -13446,15 +13446,15 @@ public class BodyTest {
                     }
                 };
                 for (int i = 0; i < 3; i++) {
-                    falling.getBodySpr()[i] = new Sprite();
-                    falling.getBodySpr()[i].setImageW(100);
-                    falling.getBodySpr()[i].setImageH(100);
+                    falling.getSpriteSet()[i] = new Sprite();
+                    falling.getSpriteSet()[i].setImageW(100);
+                    falling.getSpriteSet()[i].setImageH(100);
                     falling.getExpandSpr()[i] = new Sprite();
                     falling.getBraidSpr()[i] = new Sprite();
                 }
                 falling.setAgeState(AgeState.ADULT);
                 falling.setMsgType(YukkuriType.REIMU);
-                SimYukkuri.world.getCurrentMap().getBody().put(falling.getUniqueID(), falling);
+                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(falling.getUniqueID(), falling);
 
                 falling.setGrabbed(false);
                 falling.setZ(1);
@@ -13468,7 +13468,7 @@ public class BodyTest {
                 falling.setFalldownDamage(20);
                 falling.setNoDamageNextFall(true);
 
-                falling.moveBody(false);
+                falling.moveYukkuri(false);
 
                 assertFalse(falling.isNoDamageNextFall());
                 assertEquals(0, falling.getFalldownDamage());
@@ -13493,7 +13493,7 @@ public class BodyTest {
             body.setDestY(body.getY());
             int xBefore = body.getX();
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(xBefore + 1, body.getX());
         }
@@ -13520,7 +13520,7 @@ public class BodyTest {
             rnd.setFixedBoolean(true);
             SimYukkuri.RND = rnd;
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertTrue(body.getMessageTicks() > 0);
         }
@@ -13547,7 +13547,7 @@ public class BodyTest {
             rnd.setFixedBoolean(true);
             SimYukkuri.RND = rnd;
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertTrue(body.getMessageTicks() > 0);
         }
@@ -13569,7 +13569,7 @@ public class BodyTest {
             body.setMoveTargetId(-1);
             body.setCurrentEvent(null);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(Translate.getFlyHeightLimit(), body.getDestZ());
         }
@@ -13590,7 +13590,7 @@ public class BodyTest {
             body.setDestZ(-1);
             body.setCurrentEvent(new SuperEatingTimeEvent());
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(-1, body.getDestZ());
         }
@@ -13611,7 +13611,7 @@ public class BodyTest {
                 body.setMotionZ(0);
                 body.setFalldownDamage(10);
 
-                body.moveBody(false);
+                body.moveYukkuri(false);
 
                 assertTrue(body.getZ() <= 5);
             } finally {
@@ -13635,7 +13635,7 @@ public class BodyTest {
             body.setDestX(11);
             body.setDestY(body.getY());
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(11, body.getX());
         }
@@ -13656,7 +13656,7 @@ public class BodyTest {
             body.setDestX(20);
             body.setDestY(body.getY());
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(11, body.getX());
         }
@@ -13676,7 +13676,7 @@ public class BodyTest {
             body.setY(10);
             body.setDestY(9);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(9, body.getY());
         }
@@ -13696,7 +13696,7 @@ public class BodyTest {
             body.setY(10);
             body.setDestY(0);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(9, body.getY());
         }
@@ -13713,15 +13713,15 @@ public class BodyTest {
                     }
                 };
                 for (int i = 0; i < 3; i++) {
-                    falling.getBodySpr()[i] = new Sprite();
-                    falling.getBodySpr()[i].setImageW(100);
-                    falling.getBodySpr()[i].setImageH(100);
+                    falling.getSpriteSet()[i] = new Sprite();
+                    falling.getSpriteSet()[i].setImageW(100);
+                    falling.getSpriteSet()[i].setImageH(100);
                     falling.getExpandSpr()[i] = new Sprite();
                     falling.getBraidSpr()[i] = new Sprite();
                 }
                 falling.setAgeState(AgeState.BABY);
                 falling.setMsgType(YukkuriType.REIMU);
-                SimYukkuri.world.getCurrentMap().getBody().put(falling.getUniqueID(), falling);
+                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(falling.getUniqueID(), falling);
 
                 falling.setGrabbed(false);
                 falling.setZ(1);
@@ -13735,7 +13735,7 @@ public class BodyTest {
                 falling.setFalldownDamage(20);
                 falling.setNoDamageNextFall(true);
 
-                falling.moveBody(false);
+                falling.moveYukkuri(false);
 
                 assertFalse(falling.isNoDamageNextFall());
                 assertEquals(0, falling.getFalldownDamage());
@@ -13762,7 +13762,7 @@ public class BodyTest {
                 body.setUnyoOffsetH(0);
                 body.setUnyoOffsetW(0);
 
-                body.moveBody(false);
+                body.moveYukkuri(false);
 
                 assertTrue(body.getUnyoOffsetH() != 0 || body.getUnyoOffsetW() != 0);
             } finally {
@@ -13786,7 +13786,7 @@ public class BodyTest {
             body.setDestX(11);
             body.setDestY(body.getY());
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(11, body.getX());
         }
@@ -13807,7 +13807,7 @@ public class BodyTest {
             body.setDestX(20);
             body.setDestY(body.getY());
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(11, body.getX());
         }
@@ -13828,7 +13828,7 @@ public class BodyTest {
             body.setDestZ(-1);
             body.setCurrentEvent(null);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(Translate.getFlyHeightLimit(), body.getDestZ());
         }
@@ -13853,7 +13853,7 @@ public class BodyTest {
             body.setDestY(body.getY());
             body.setCurrentEvent(new SuperEatingTimeEvent());
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(9, body.getZ());
         }
@@ -13891,7 +13891,7 @@ public class BodyTest {
             body.setSpeed(100);
             int xBefore = body.getX();
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(xBefore + 2, body.getX());
         }
@@ -13911,7 +13911,7 @@ public class BodyTest {
             body.setY(10);
             body.setDestY(20);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(11, body.getY());
         }
@@ -13931,7 +13931,7 @@ public class BodyTest {
             body.setY(10);
             body.setDestY(0);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(9, body.getY());
         }
@@ -13956,7 +13956,7 @@ public class BodyTest {
             body.setDestY(body.getY());
             body.setCurrentEvent(new SuperEatingTimeEvent());
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(9, body.getZ());
         }
@@ -13978,7 +13978,7 @@ public class BodyTest {
             body.setDestY(body.getY());
             body.setDestZ(-1);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertTrue(body.getZ() < 0);
         }
@@ -14001,7 +14001,7 @@ public class BodyTest {
                 body.setUnyoOffsetH(0);
                 body.setUnyoOffsetW(0);
 
-                body.moveBody(false);
+                body.moveYukkuri(false);
 
                 assertTrue(body.getUnyoOffsetH() != 0 || body.getUnyoOffsetW() != 0);
             } finally {
@@ -14029,7 +14029,7 @@ public class BodyTest {
             Translate.setCurrentFieldMapNum(181, 180, FieldShape.FIELD_POOL);
             Translate.setCurrentFieldMapNum(180, 180, 0);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(0, Translate.getCurrentFieldMapNum(body.getX(), body.getY()) & FieldShape.FIELD_POOL);
         }
@@ -14049,7 +14049,7 @@ public class BodyTest {
             body.setY(Translate.getMapH());
             body.setDestY(Translate.getMapH() + 5);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(Translate.getMapH(), body.getY());
             assertEquals(-1, body.getDirY());
@@ -14064,16 +14064,16 @@ public class BodyTest {
                 }
             };
             for (int i = 0; i < 3; i++) {
-                faller.getBodySpr()[i] = new Sprite();
-                faller.getBodySpr()[i].setImageW(100);
-                faller.getBodySpr()[i].setImageH(100);
+                faller.getSpriteSet()[i] = new Sprite();
+                faller.getSpriteSet()[i].setImageW(100);
+                faller.getSpriteSet()[i].setImageH(100);
                 faller.getExpandSpr()[i] = new Sprite();
                 faller.getBraidSpr()[i] = new Sprite();
             }
             faller.setAgeState(AgeState.ADULT);
             faller.setMsgType(YukkuriType.REIMU);
             faller.setIntelligence(Intelligence.AVERAGE);
-            SimYukkuri.world.getCurrentMap().getBody().put(faller.getUniqueID(), faller);
+            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(faller.getUniqueID(), faller);
 
             faller.setGrabbed(false);
             faller.setZ(1);
@@ -14087,7 +14087,7 @@ public class BodyTest {
             faller.setFalldownDamage(20);
             faller.setDamage(0);
 
-            faller.moveBody(false);
+            faller.moveYukkuri(false);
 
             assertTrue(faller.getDamage() > 0);
         }
@@ -14105,7 +14105,7 @@ public class BodyTest {
             body.setMotionZ(0);
             body.setFalldownDamage(0);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertTrue(body.getFalldownDamage() >= 0);
         }
@@ -14131,14 +14131,14 @@ public class BodyTest {
             ConstState rnd = new ConstState();
             rnd.setFixedBoolean(true);
             SimYukkuri.RND = rnd;
-            int wallAttr = Barrier.MAP_BODY[body.getBodyAgeState().ordinal()];
+            int wallAttr = Barrier.MAP_BODY[body.getAgeState().ordinal()];
             for (int dx = -30; dx <= 30; dx++) {
                 for (int dy = -30; dy <= 30; dy++) {
                     Translate.setCurrentWallMapNum(161 + dx, 160 + dy, wallAttr);
                 }
             }
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(Happiness.VERY_SAD, body.getHappiness());
             assertTrue(body.isTalking());
@@ -14157,7 +14157,7 @@ public class BodyTest {
             body.setX(Translate.getMapW());
             body.setY(10);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(-1, body.getDirX());
         }
@@ -14175,7 +14175,7 @@ public class BodyTest {
             body.setX(10);
             body.setY(Translate.getMapH());
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(-1, body.getDirY());
         }
@@ -14198,7 +14198,7 @@ public class BodyTest {
             body.setDestZ(Translate.getMapZ() + 5);
             body.setCurrentEvent(new SuperEatingTimeEvent());
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(Translate.getMapZ(), body.getZ());
         }
@@ -14220,7 +14220,7 @@ public class BodyTest {
             falling.setNoDamageNextFall(true);
             falling.setDamage(0);
 
-            falling.moveBody(false);
+            falling.moveYukkuri(false);
 
             assertFalse(falling.isNoDamageNextFall());
             assertEquals(0, falling.getFalldownDamage());
@@ -14240,7 +14240,7 @@ public class BodyTest {
             falling.setMotionZ(0);
             falling.setFalldownDamage(10);
 
-            falling.moveBody(false);
+            falling.moveYukkuri(false);
 
             assertEquals(0, falling.getZ());
         }
@@ -14261,9 +14261,9 @@ public class BodyTest {
             body.setSpeed(100);
             body.setDestX(startX + 10);
             body.setDestY(-1);
-            body.setFootBakePeriod(body.getDamageLimitBase()[body.getBodyAgeState().ordinal()] / 2 + 1);
+            body.setFootBakePeriod(body.getDamageLimitBase()[body.getAgeState().ordinal()] / 2 + 1);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(startX, body.getX());
         }
@@ -14287,7 +14287,7 @@ public class BodyTest {
             body.setDestX(9);
             body.setDestY(-1);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(9, body.getX());
         }
@@ -14311,7 +14311,7 @@ public class BodyTest {
             body.setDestX(-1);
             body.setDestY(11);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(11, body.getY());
         }
@@ -14337,9 +14337,9 @@ public class BodyTest {
             body.setIntelligence(Intelligence.FOOL);
             body.setPanicType(PanicType.FEAR);
             body.setAttitude(Attitude.SHITHEAD);
-            Translate.setCurrentWallMapNum(61, 60, Barrier.MAP_BODY[body.getBodyAgeState().ordinal()]);
+            Translate.setCurrentWallMapNum(61, 60, Barrier.MAP_BODY[body.getAgeState().ordinal()]);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(Happiness.VERY_SAD, body.getHappiness());
         }
@@ -14365,9 +14365,9 @@ public class BodyTest {
             body.setIntelligence(Intelligence.FOOL);
             body.setPanicType(PanicType.FEAR);
             body.setAttitude(Attitude.NICE);
-            Translate.setCurrentWallMapNum(71, 70, Barrier.MAP_BODY[body.getBodyAgeState().ordinal()]);
+            Translate.setCurrentWallMapNum(71, 70, Barrier.MAP_BODY[body.getAgeState().ordinal()]);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(Happiness.SAD, body.getHappiness());
         }
@@ -14393,7 +14393,7 @@ public class BodyTest {
             body.setMotionY(0);
             body.setMotionZ(0);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(0, body.getZ());
         }
@@ -14415,7 +14415,7 @@ public class BodyTest {
                 falling.setMotionZ(0);
                 falling.setFalldownDamage(20);
 
-                falling.moveBody(false);
+                falling.moveYukkuri(false);
 
                 assertEquals(0, falling.getZ());
             } finally {
@@ -14438,7 +14438,7 @@ public class BodyTest {
             falling.setFalldownDamage(20);
             falling.setNoDamageNextFall(false);
 
-            falling.moveBody(false);
+            falling.moveYukkuri(false);
 
             assertFalse(falling.isNoDamageNextFall());
         }
@@ -14458,7 +14458,7 @@ public class BodyTest {
             falling.setFalldownDamage(20);
             falling.setDamage(0);
 
-            falling.moveBody(false);
+            falling.moveYukkuri(false);
 
             assertTrue(falling.getDamage() > 0);
         }
@@ -14482,7 +14482,7 @@ public class BodyTest {
             body.setDestX(startX + 10);
             body.setDestY(-1);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(startX, body.getX());
         }
@@ -14504,7 +14504,7 @@ public class BodyTest {
             body.setDestZ(-1);
             body.setCurrentEvent(new SuperEatingTimeEvent());
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(-1, body.getDestZ());
         }
@@ -14528,7 +14528,7 @@ public class BodyTest {
             body.setDestX(11);
             body.setDestY(-1);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(11, body.getX());
         }
@@ -14556,9 +14556,9 @@ public class BodyTest {
             ConstState rnd = new ConstState();
             rnd.setFixedBoolean(true);
             SimYukkuri.RND = rnd;
-            Translate.setCurrentWallMapNum(80, 80, Barrier.MAP_BODY[body.getBodyAgeState().ordinal()]);
+            Translate.setCurrentWallMapNum(80, 80, Barrier.MAP_BODY[body.getAgeState().ordinal()]);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertTrue(body.getDirX() != 0 || body.getDirY() != 0);
         }
@@ -14577,7 +14577,7 @@ public class BodyTest {
             falling.setMotionZ(0);
             falling.setFallingUnderGround(true);
 
-            falling.moveBody(false);
+            falling.moveYukkuri(false);
 
             assertEquals(0, falling.getZ());
         }
@@ -14605,7 +14605,7 @@ public class BodyTest {
             falling.setFalldownDamage(20);
             falling.setDamage(0);
 
-            falling.moveBody(false);
+            falling.moveYukkuri(false);
 
             assertTrue(falling.getDamage() < 20);
         }
@@ -14619,15 +14619,15 @@ public class BodyTest {
                 }
             };
             for (int i = 0; i < 3; i++) {
-                onBed.getBodySpr()[i] = new Sprite();
-                onBed.getBodySpr()[i].setImageW(100);
-                onBed.getBodySpr()[i].setImageH(100);
+                onBed.getSpriteSet()[i] = new Sprite();
+                onBed.getSpriteSet()[i].setImageW(100);
+                onBed.getSpriteSet()[i].setImageH(100);
                 onBed.getExpandSpr()[i] = new Sprite();
                 onBed.getBraidSpr()[i] = new Sprite();
             }
             onBed.setAgeState(AgeState.BABY);
             onBed.setMsgType(YukkuriType.REIMU);
-            SimYukkuri.world.getCurrentMap().getBody().put(onBed.getUniqueID(), onBed);
+            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(onBed.getUniqueID(), onBed);
 
             onBed.setGrabbed(false);
             onBed.setZ(1);
@@ -14641,7 +14641,7 @@ public class BodyTest {
             onBed.setFalldownDamage(20);
             onBed.setDamage(0);
 
-            onBed.moveBody(false);
+            onBed.moveYukkuri(false);
 
             assertEquals(0, onBed.getDamage());
         }
@@ -14661,7 +14661,7 @@ public class BodyTest {
             falling.setFalldownDamage(20);
             falling.setPealed(true);
 
-            falling.moveBody(false);
+            falling.moveYukkuri(false);
 
             assertTrue(falling.isDead());
         }
@@ -14684,7 +14684,7 @@ public class BodyTest {
             body.setDestX(startX + 10);
             body.setDestY(-1);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(startX, body.getX());
         }
@@ -14700,7 +14700,7 @@ public class BodyTest {
             body.setMotionX(0);
             body.setMotionY(0);
             body.setMotionZ(0);
-            body.setAge(body.getSameDirectionFactor() * body.getStepBase()[body.getBodyAgeState().ordinal()]);
+            body.setAge(body.getSameDirectionFactor() * body.getStepBase()[body.getAgeState().ordinal()]);
             body.setDestX(-1);
             body.setDestY(-1);
             body.setDirX(1);
@@ -14708,10 +14708,10 @@ public class BodyTest {
             body.setHappiness(Happiness.VERY_SAD);
             body.setSpeechDiscipline(0);
             body.setMessageBuffer(null);
-            body.setCountX(body.getSameDirectionFactor() * body.getStepBase()[body.getBodyAgeState().ordinal()]);
+            body.setCountX(body.getSameDirectionFactor() * body.getStepBase()[body.getAgeState().ordinal()]);
             SimYukkuri.RND = new ConstState(0);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertTrue(body.isTalking());
         }
@@ -14727,7 +14727,7 @@ public class BodyTest {
             body.setMotionX(0);
             body.setMotionY(0);
             body.setMotionZ(0);
-            body.setAge(body.getSameDirectionFactor() * body.getStepBase()[body.getBodyAgeState().ordinal()]);
+            body.setAge(body.getSameDirectionFactor() * body.getStepBase()[body.getAgeState().ordinal()]);
             body.setDestX(-1);
             body.setDestY(-1);
             body.setDirY(1);
@@ -14735,10 +14735,10 @@ public class BodyTest {
             body.setHappiness(Happiness.SAD);
             body.setSpeechDiscipline(0);
             body.setMessageBuffer(null);
-            body.setCountY(body.getSameDirectionFactor() * body.getStepBase()[body.getBodyAgeState().ordinal()]);
+            body.setCountY(body.getSameDirectionFactor() * body.getStepBase()[body.getAgeState().ordinal()]);
             SimYukkuri.RND = new ConstState(0);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertTrue(body.isTalking());
         }
@@ -14764,7 +14764,7 @@ public class BodyTest {
             body.setDestZ(-1);
             body.setMoveTargetId(1234);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(-1, body.getDestZ());
         }
@@ -14794,9 +14794,9 @@ public class BodyTest {
             ConstState rnd = new ConstState();
             rnd.setFixedBoolean(false); // choose Y direction
             SimYukkuri.RND = rnd;
-            Translate.setCurrentWallMapNum(91, 90, Barrier.MAP_BODY[body.getBodyAgeState().ordinal()]);
+            Translate.setCurrentWallMapNum(91, 90, Barrier.MAP_BODY[body.getAgeState().ordinal()]);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(-1, body.getDestX());
             assertEquals(-1, body.getDestY());
@@ -14812,15 +14812,15 @@ public class BodyTest {
                 }
             };
             for (int i = 0; i < 3; i++) {
-                onBed.getBodySpr()[i] = new Sprite();
-                onBed.getBodySpr()[i].setImageW(100);
-                onBed.getBodySpr()[i].setImageH(100);
+                onBed.getSpriteSet()[i] = new Sprite();
+                onBed.getSpriteSet()[i].setImageW(100);
+                onBed.getSpriteSet()[i].setImageH(100);
                 onBed.getExpandSpr()[i] = new Sprite();
                 onBed.getBraidSpr()[i] = new Sprite();
             }
             onBed.setAgeState(AgeState.ADULT);
             onBed.setMsgType(YukkuriType.REIMU);
-            SimYukkuri.world.getCurrentMap().getBody().put(onBed.getUniqueID(), onBed);
+            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(onBed.getUniqueID(), onBed);
 
             onBed.setGrabbed(false);
             onBed.setZ(1);
@@ -14834,7 +14834,7 @@ public class BodyTest {
             onBed.setFalldownDamage(20);
             onBed.setDamage(0);
 
-            onBed.moveBody(false);
+            onBed.moveYukkuri(false);
 
             assertTrue(onBed.getDamage() > 0);
         }
@@ -14857,7 +14857,7 @@ public class BodyTest {
             body.setDestX(startX + 10);
             body.setDestY(-1);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(startX, body.getX());
         }
@@ -14881,7 +14881,7 @@ public class BodyTest {
             body.setDestX(startX + 10);
             body.setDestY(-1);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(startX, body.getX());
         }
@@ -14907,9 +14907,9 @@ public class BodyTest {
             body.setIntelligence(Intelligence.FOOL);
             body.setPanicType(PanicType.FEAR);
             body.setAttitude(Attitude.SHITHEAD);
-            Translate.setCurrentWallMapNum(96, 95, Barrier.MAP_BODY[body.getBodyAgeState().ordinal()]);
+            Translate.setCurrentWallMapNum(96, 95, Barrier.MAP_BODY[body.getAgeState().ordinal()]);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertTrue(body.isAngry());
         }
@@ -14939,9 +14939,9 @@ public class BodyTest {
             ConstState rnd = new ConstState();
             rnd.setFixedBoolean(true); // choose X direction
             SimYukkuri.RND = rnd;
-            Translate.setCurrentWallMapNum(101, 100, Barrier.MAP_BODY[body.getBodyAgeState().ordinal()]);
+            Translate.setCurrentWallMapNum(101, 100, Barrier.MAP_BODY[body.getAgeState().ordinal()]);
 
-            body.moveBody(false);
+            body.moveYukkuri(false);
 
             assertEquals(-1, body.getDestX());
             assertEquals(-1, body.getDestY());
@@ -15447,7 +15447,7 @@ public class BodyTest {
             StubBody father = createBody(AgeState.ADULT);
             Dna dna = new Dna();
             dna.setFather(father.getUniqueID());
-            body.setBodyCastration(true);
+            body.setCastrated(true);
             int before = body.getBabyTypes().size();
             body.injectInto(dna);
             assertEquals(before, body.getBabyTypes().size());
@@ -15511,7 +15511,7 @@ public class BodyTest {
 
         @Test
         public void testStrikeByObjectAllowanceCapsDamage() {
-            int limit = body.getDamageLimitBase()[body.getBodyAgeState().ordinal()];
+            int limit = body.getDamageLimitBase()[body.getAgeState().ordinal()];
             body.setDamage(limit * 85 / 100);
             body.strikeByObject(1000, 1000, true, 1, 1);
             assertEquals(limit * 85 / 100, body.getDamage());
@@ -15558,7 +15558,7 @@ public class BodyTest {
         @Test
         public void testStrikeByYukkuriAllowanceCapsDamage() {
             StubBody enemy = createBody(AgeState.ADULT);
-            int limit = body.getDamageLimitBase()[body.getBodyAgeState().ordinal()];
+            int limit = body.getDamageLimitBase()[body.getAgeState().ordinal()];
             body.setDamage(limit * 4 / 5);
             body.strikeByYukkuri(enemy, null, true);
             assertEquals(limit * 4 / 5, body.getDamage());
@@ -15591,7 +15591,7 @@ public class BodyTest {
         @Test
         public void testStrikeByYukkuriKilledSetsCrushed() {
             StubBody enemy = createBody(AgeState.ADULT);
-            int limit = body.getDamageLimitBase()[body.getBodyAgeState().ordinal()];
+            int limit = body.getDamageLimitBase()[body.getAgeState().ordinal()];
             body.setDamage(limit - 1);
 
             body.strikeByYukkuri(enemy, null, false);
@@ -15741,7 +15741,7 @@ public class BodyTest {
         @Test
         public void testStrikeByYukkuriAllowanceCapsToFourFifths() {
             StubBody enemy = createBody(AgeState.ADULT);
-            int limit = body.getDamageLimitBase()[body.getBodyAgeState().ordinal()];
+            int limit = body.getDamageLimitBase()[body.getAgeState().ordinal()];
             body.setDamage(limit * 3 / 4);
 
             body.strikeByYukkuri(enemy, null, true);
@@ -15752,7 +15752,7 @@ public class BodyTest {
         @Test
         public void testStrikeByYukkuriAllowanceNoIncreaseWhenAlreadyOverFourFifths() {
             StubBody enemy = createBody(AgeState.ADULT);
-            int limit = body.getDamageLimitBase()[body.getBodyAgeState().ordinal()];
+            int limit = body.getDamageLimitBase()[body.getAgeState().ordinal()];
             body.setDamage(limit * 9 / 10);
 
             body.strikeByYukkuri(enemy, null, true);
@@ -16092,7 +16092,7 @@ public class BodyTest {
             SimYukkuri.RND = new ConstState(0);
 
             StubBody child = new StubBody(0, 0, 0, AgeState.BABY, null, null);
-            assertEquals(BodyRank.YASEIYU, child.getBodyRank());
+            assertEquals(YukkuriRank.YASEIYU, child.getRank());
 
             SimYukkuri.world.getCurrentMap().setMapIndex(prev);
         }
@@ -16173,7 +16173,7 @@ public class BodyTest {
         }
     }
 
-    // ========== checkNonYukkuriDisease ==========
+    // ========== hasNonYukkuriDisease ==========
     @Nested
     class CheckNonYukkuriDiseaseTests {
 
@@ -16203,8 +16203,8 @@ public class BodyTest {
             FixedToleranceBody b = new FixedToleranceBody();
             b.setCoreAnkoState(CoreAnkoState.DEFAULT);
             b.setSpeed(100);
-            int limit = b.getStressLimitBase()[b.getBodyAgeState().ordinal()];
-            int tol = b.checkNonYukkuriDiseaseTolerance();
+            int limit = b.getStressLimitBase()[b.getAgeState().ordinal()];
+            int tol = b.getNonYukkuriDiseaseTolerance();
             int threshold = limit * tol / 100;
             b.setStress(threshold + 1);
             SimYukkuri.RND = new ConstState(0);
@@ -16218,8 +16218,8 @@ public class BodyTest {
         public void testCheckNonYukkuriDiseaseStressTriggersNYD() {
             FixedToleranceBody b = new FixedToleranceBody();
             b.setCoreAnkoState(CoreAnkoState.DEFAULT);
-            int limit = b.getStressLimitBase()[b.getBodyAgeState().ordinal()];
-            int tol = b.checkNonYukkuriDiseaseTolerance();
+            int limit = b.getStressLimitBase()[b.getAgeState().ordinal()];
+            int tol = b.getNonYukkuriDiseaseTolerance();
             int threshold = limit * tol / 100;
             b.setStress(threshold * 2 + 1);
             SimYukkuri.RND = new ConstState(0);
@@ -16246,8 +16246,8 @@ public class BodyTest {
             FixedToleranceBody b = new FixedToleranceBody();
             b.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
             b.setUnBirth(true);
-            int limit = b.getStressLimitBase()[b.getBodyAgeState().ordinal()];
-            int tol = b.checkNonYukkuriDiseaseTolerance();
+            int limit = b.getStressLimitBase()[b.getAgeState().ordinal()];
+            int tol = b.getNonYukkuriDiseaseTolerance();
             int threshold = limit * tol / 100;
             b.setStress(threshold * 2 + 1);
             assertTrue(invokeCheckNonYukkuriDisease(b));
@@ -16259,8 +16259,8 @@ public class BodyTest {
             FixedToleranceBody b = new FixedToleranceBody();
             b.setCoreAnkoState(CoreAnkoState.NonYukkuriDiseaseNear);
             b.setNonYukkuriDiseasePeriod(0);
-            int limit = b.getStressLimitBase()[b.getBodyAgeState().ordinal()];
-            int tol = b.checkNonYukkuriDiseaseTolerance();
+            int limit = b.getStressLimitBase()[b.getAgeState().ordinal()];
+            int tol = b.getNonYukkuriDiseaseTolerance();
             int threshold = limit * tol / 100;
             b.setStress(threshold + 1);
             ConstState rnd = new ConstState(0);
@@ -16276,8 +16276,8 @@ public class BodyTest {
             FixedToleranceBody b = new FixedToleranceBody();
             b.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
             b.setNonYukkuriDiseasePeriod(0);
-            int limit = b.getStressLimitBase()[b.getBodyAgeState().ordinal()];
-            int tol = b.checkNonYukkuriDiseaseTolerance();
+            int limit = b.getStressLimitBase()[b.getAgeState().ordinal()];
+            int tol = b.getNonYukkuriDiseaseTolerance();
             int threshold = limit * tol / 100;
             b.setStress(threshold * 2 + 1);
             SimYukkuri.RND = new Random() {
@@ -16308,8 +16308,8 @@ public class BodyTest {
             FixedToleranceBody b = new FixedToleranceBody();
             b.setCoreAnkoState(CoreAnkoState.NonYukkuriDiseaseNear);
             b.setNonYukkuriDiseasePeriod(3);
-            int limit = b.getStressLimitBase()[b.getBodyAgeState().ordinal()];
-            int tol = b.checkNonYukkuriDiseaseTolerance();
+            int limit = b.getStressLimitBase()[b.getAgeState().ordinal()];
+            int tol = b.getNonYukkuriDiseaseTolerance();
             int threshold = limit * tol / 100;
             b.setStress(threshold + 1);
             SimYukkuri.RND = new ConstState(0);
@@ -16324,8 +16324,8 @@ public class BodyTest {
             FixedToleranceBody b = new FixedToleranceBody();
             b.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
             b.setNonYukkuriDiseasePeriod(4);
-            int limit = b.getStressLimitBase()[b.getBodyAgeState().ordinal()];
-            int tol = b.checkNonYukkuriDiseaseTolerance();
+            int limit = b.getStressLimitBase()[b.getAgeState().ordinal()];
+            int tol = b.getNonYukkuriDiseaseTolerance();
             int threshold = limit * tol / 100;
             b.setStress(threshold * 2 + 1);
             SimYukkuri.RND = new java.util.Random() {
@@ -16353,8 +16353,8 @@ public class BodyTest {
             FixedToleranceBody b = new FixedToleranceBody();
             b.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
             b.setNonYukkuriDiseasePeriod(0);
-            int limit = b.getStressLimitBase()[b.getBodyAgeState().ordinal()];
-            int tol = b.checkNonYukkuriDiseaseTolerance();
+            int limit = b.getStressLimitBase()[b.getAgeState().ordinal()];
+            int tol = b.getNonYukkuriDiseaseTolerance();
             int threshold = limit * tol / 100;
             b.setStress(threshold * 2 + 1);
             SimYukkuri.RND = new Random() {
@@ -16504,7 +16504,7 @@ public class BodyTest {
 
         @Test
         public void testCutDyingMessageNYDNear() {
-            // CUT, nextInt(50)==0, NYDNear → setNYDMessage分岐
+            // CUT, nextInt(50)==0, NYDNear → setNydMessage分岐
             body.setCriticalDamegeType(CriticalDamegeType.CUT);
             body.setCoreAnkoState(CoreAnkoState.NonYukkuriDiseaseNear);
             SimYukkuri.RND = new ConstState(0);
@@ -16683,7 +16683,7 @@ public class BodyTest {
             body.setAge(0);
             body.setWakeUpTime(0);
             body.setShitting(false);
-            body.setShit(body.getShitLimitBase()[body.getBodyAgeState().ordinal()] * 2);
+            body.setShit(body.getShitLimitBase()[body.getAgeState().ordinal()] * 2);
             body.setHasPants(false);
             body.setAnalClose(false);
             body.setFixBack(false);
@@ -16764,7 +16764,7 @@ public class BodyTest {
         public void testClockTickEndlessFurifuriWhenCantFurifuriNotNYD() {
             setTerrariumBool("endlessFurifuriSteam", true);
             try {
-                body.setFootBakePeriod(body.getDamageLimitBase()[body.getBodyAgeState().ordinal()] + 1);
+                body.setFootBakePeriod(body.getDamageLimitBase()[body.getAgeState().ordinal()] + 1);
                 body.setFurifuri(false);
                 Event result = body.clockTick();
                 assertEquals(Event.DONOTHING, result);
@@ -16833,7 +16833,7 @@ public class BodyTest {
 
         @Test
         public void testClockTickShitEventDoshitWhenNotBlocked() {
-            int limit = body.getShitLimitBase()[body.getBodyAgeState().ordinal()];
+            int limit = body.getShitLimitBase()[body.getAgeState().ordinal()];
             body.setShit(limit + 10);
             body.setHasPants(false);
             body.setAnalClose(false);
@@ -16851,7 +16851,7 @@ public class BodyTest {
 
         @Test
         public void testClockTickShitEventCrushedWhenSleeping() {
-            int limit = body.getShitLimitBase()[body.getBodyAgeState().ordinal()];
+            int limit = body.getShitLimitBase()[body.getAgeState().ordinal()];
             body.setShit(limit * 2);
             body.setHasPants(false);
             body.setAnalClose(false);
@@ -16871,7 +16871,7 @@ public class BodyTest {
         public void testClockTickPanicDontMoveBranch() {
             body.setPanic(true, PanicType.FEAR);
             body.setCriticalDamege(CriticalDamegeType.CUT);
-            body.setFootBakePeriod(body.getDamageLimitBase()[body.getBodyAgeState().ordinal()] + 1);
+            body.setFootBakePeriod(body.getDamageLimitBase()[body.getAgeState().ordinal()] + 1);
             body.setFlyingType(false);
             body.setCoreAnkoState(CoreAnkoState.DEFAULT);
 

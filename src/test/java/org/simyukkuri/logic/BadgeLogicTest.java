@@ -22,7 +22,7 @@ import org.simyukkuri.draw.World;
 import org.simyukkuri.entity.core.attachment.Attachment;
 import org.simyukkuri.entity.core.attachment.impl.Badge;
 import org.simyukkuri.enums.Attitude;
-import org.simyukkuri.enums.BodyRank;
+import org.simyukkuri.enums.YukkuriRank;
 import org.simyukkuri.enums.Intelligence;
 import org.simyukkuri.util.WorldTestHelper;
 import org.simyukkuri.entity.core.living.yukkuri.impl.Reimu;
@@ -70,7 +70,7 @@ public class BadgeLogicTest {
     }
 
     // ========== Non-Kaiyu Tests ==========
-    // Note: Yukkuri doesn't have setBodyRank/setIdiot setters
+    // Note: Yukkuri doesn't have setRank/setIdiot setters
     // These tests are simplified to test the method signature
 
     // ========== Kaiyu Badge Tests (Attitude x Intelligence combinations)
@@ -142,7 +142,7 @@ public class BadgeLogicTest {
     @Test
     public void testStrayFoolGetsFake() {
         Reimu yukkuri = createKaiyuYukkuri(Attitude.AVERAGE, Intelligence.FOOL);
-        yukkuri.setBodyRank(BodyRank.NORAYU);
+        yukkuri.setRank(YukkuriRank.NORAYU);
         assertTrue(BadgeLogic.badgeTest(yukkuri));
         assertEquals(Badge.BadgeRank.FAKE, getBadgeRank(yukkuri));
     }
@@ -150,7 +150,7 @@ public class BadgeLogicTest {
     @Test
     public void testIdiotGetsFake() {
         org.simyukkuri.entity.core.living.yukkuri.impl.Tarinai yukkuri = new org.simyukkuri.entity.core.living.yukkuri.impl.Tarinai();
-        yukkuri.setBodyRank(BodyRank.KAIYU);
+        yukkuri.setRank(YukkuriRank.KAIYU);
         assertTrue(BadgeLogic.badgeTest(yukkuri));
         assertEquals(Badge.BadgeRank.FAKE, getBadgeRank(yukkuri));
     }
@@ -176,7 +176,7 @@ public class BadgeLogicTest {
 
     /**
      * Creates a yukkuri with specified attitude and intelligence.
-     * Note: Yukkuri doesn't have setBodyRank/setIdiot setters, so we just set what
+     * Note: Yukkuri doesn't have setRank/setIdiot setters, so we just set what
      * we
      * can.
      */
@@ -184,7 +184,7 @@ public class BadgeLogicTest {
         Reimu yukkuri = new Reimu();
         yukkuri.setAttitude(attitude);
         yukkuri.setIntelligence(intelligence);
-        yukkuri.setBodyRank(BodyRank.KAIYU);
+        yukkuri.setRank(YukkuriRank.KAIYU);
         return yukkuri;
     }
 

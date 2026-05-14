@@ -32,7 +32,7 @@ import org.simyukkuri.entity.core.world.bodylinked.Stalk;
 import org.simyukkuri.entity.core.world.item.Food;
 import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.Attitude;
-import org.simyukkuri.enums.BodyRank;
+import org.simyukkuri.enums.YukkuriRank;
 import org.simyukkuri.enums.BurialState;
 import org.simyukkuri.enums.Burst;
 import org.simyukkuri.enums.CoreAnkoState;
@@ -61,12 +61,12 @@ import org.simyukkuri.enums.WindowType;
 import org.simyukkuri.enums.YukkuriType;
 import org.simyukkuri.event.EventPacket;
 import org.simyukkuri.field.impl.Pool;
-import org.simyukkuri.logic.BodyCoreStateRule;
-import org.simyukkuri.logic.BodyEventState;
-import org.simyukkuri.logic.BodyExcretionRule;
-import org.simyukkuri.logic.BodyMovement;
-import org.simyukkuri.logic.BodyRelations;
-import org.simyukkuri.system.BodyLayer;
+import org.simyukkuri.logic.YukkuriCoreStateRule;
+import org.simyukkuri.logic.YukkuriEventState;
+import org.simyukkuri.logic.YukkuriExcretionRule;
+import org.simyukkuri.logic.YukkuriMovement;
+import org.simyukkuri.logic.YukkuriRelations;
+import org.simyukkuri.system.YukkuriLayer;
 import org.simyukkuri.system.ItemMenu.GetMenuTarget;
 import org.simyukkuri.system.ItemMenu.UseMenuTarget;
 import org.simyukkuri.system.MainCommandUI;
@@ -86,7 +86,7 @@ import org.simyukkuri.util.ListUtil;
  * ゆっくり本体の元となる抽象クラス（動作のみ。）
  * 属性に関しては親クラスのBodyAttributesにすべて定義。
  *
- * まりさとれいむは特殊なため各クラスで"public int getBodyBaseImage(BodyLayer
+ * まりさとれいむは特殊なため各クラスで"public int getImageIndex(YukkuriLayer
  * layer)"をオーバーライドしているため要確認
  * 暇なときの挙動は"public void
  * killTime()"にまとめてあるので、各種ごとに固有の挙動を追加したいときはそれを各種classでオーバーライドしてください。
@@ -99,13 +99,13 @@ public abstract class Yukkuri extends SocialEntity {
 	private static final long serialVersionUID = 8856385435939508588L;
 
 	@JsonIgnore
-	private transient YukkuriSprite spriteDelegate;
+	private transient YukkuriSpriteDelegate spriteDelegate;
 
 	@JsonIgnore
-	private transient YukkuriMessage messageDelegate;
+	private transient YukkuriMessageDelegate messageDelegate;
 
 	@JsonIgnore
-	private transient YukkuriPlayerRelation playerRelationDelegate;
+	private transient YukkuriPlayerRelationDelegate playerRelationDelegate;
 
 	@JsonIgnore
 	private transient YukkuriOtherRelationDelegate otherRelationDelegate;
@@ -152,23 +152,23 @@ public abstract class Yukkuri extends SocialEntity {
 	// Delegate の lazy init はスレッドセーフではない。
 	// このゲームはシングルスレッド前提（Swingイベントスレッドのみ）なので意図的に synchronized なし。
 
-	private YukkuriSprite spriteDelegate() {
+	private YukkuriSpriteDelegate spriteDelegate() {
 		if (spriteDelegate == null) {
-			spriteDelegate = new YukkuriSprite(this);
+			spriteDelegate = new YukkuriSpriteDelegate(this);
 		}
 		return spriteDelegate;
 	}
 
-	private YukkuriMessage messageDelegate() {
+	private YukkuriMessageDelegate messageDelegate() {
 		if (messageDelegate == null) {
-			messageDelegate = new YukkuriMessage(this);
+			messageDelegate = new YukkuriMessageDelegate(this);
 		}
 		return messageDelegate;
 	}
 
-	private YukkuriPlayerRelation playerRelationDelegate() {
+	private YukkuriPlayerRelationDelegate playerRelationDelegate() {
 		if (playerRelationDelegate == null) {
-			playerRelationDelegate = new YukkuriPlayerRelation(this);
+			playerRelationDelegate = new YukkuriPlayerRelationDelegate(this);
 		}
 		return playerRelationDelegate;
 	}
@@ -320,7 +320,7 @@ public abstract class Yukkuri extends SocialEntity {
 		if (isUnBirth()) {
 			ret.append("(" + GameText.read("base_fruit") + ")");
 		} else {
-			ret.append(" (" + getBodyAgeState().getName() + ")");
+			ret.append(" (" + getAgeState().getName() + ")");
 		}
 
 		return ret.toString();
@@ -423,8 +423,8 @@ public abstract class Yukkuri extends SocialEntity {
 	 * 
 	 * @return その後の処理をキャンセルするかどうか
 	 */
-	public boolean checkNonYukkuriDisease() {
-		return nydDelegate().checkNonYukkuriDisease();
+	public boolean hasNonYukkuriDisease() {
+		return nydDelegate().hasNonYukkuriDisease();
 	}
 
 	/**
@@ -460,8 +460,8 @@ public abstract class Yukkuri extends SocialEntity {
 										&& !isPeropero() && !(isEating() && !isPikopiko())) {
 									changeUnyo(0, 0,
 											(int) (GameRandom
-													.nextInt(((int) UNYOSTRENGTH[getBodyAgeState().ordinal()] / 3)))
-													+ UNYOSTRENGTH[getBodyAgeState().ordinal()]);
+													.nextInt(((int) UNYOSTRENGTH[getAgeState().ordinal()] / 3)))
+													+ UNYOSTRENGTH[getAgeState().ordinal()]);
 								}
 							} else if (z == 0) {
 								if (getFootBakeLevel() == FootBake.NONE &&
@@ -470,8 +470,8 @@ public abstract class Yukkuri extends SocialEntity {
 										&& !isPeropero() && !(isEating() && !isPikopiko())) {
 									changeUnyo(0, 0,
 											(int) (GameRandom
-													.nextInt(((int) UNYOSTRENGTH[getBodyAgeState().ordinal()] / 3)))
-													+ UNYOSTRENGTH[getBodyAgeState().ordinal()]);
+													.nextInt(((int) UNYOSTRENGTH[getAgeState().ordinal()] / 3)))
+													+ UNYOSTRENGTH[getAgeState().ordinal()]);
 								}
 							}
 						}
@@ -561,8 +561,8 @@ public abstract class Yukkuri extends SocialEntity {
 	 * 
 	 * @param dontMove 動けない場合
 	 */
-	public void moveBody(boolean dontMove) {
-		moveDelegate().moveBody(dontMove);
+	public void moveYukkuri(boolean dontMove) {
+		moveDelegate().moveYukkuri(dontMove);
 	}
 
 	/**
@@ -655,8 +655,8 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param message メッセージ
 	 * @param count   メッセージ時間
 	 */
-	public void setBodyEventSendMessage(String message, int count) {
-		messageDelegate().setBodyEventSendMessage(message, count);
+	public void setEventSendMessage(String message, int count) {
+		messageDelegate().setEventSendMessage(message, count);
 	}
 
 	/**
@@ -667,8 +667,8 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param interrupt 現在メッセージ中でも割り込むかどうか
 	 * @param piko      ピコピコするかどうか
 	 */
-	public void setBodyEventResMessage(String message, int count, boolean interrupt, boolean piko) {
-		messageDelegate().setBodyEventResMessage(message, count, interrupt, piko);
+	public void setEventResMessage(String message, int count, boolean interrupt, boolean piko) {
+		messageDelegate().setEventResMessage(message, count, interrupt, piko);
 	}
 
 	/**
@@ -677,8 +677,8 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param message メッセージ
 	 * @param piko    ピコピコするかどうか
 	 */
-	public void setNYDMessage(String message, boolean piko) {
-		messageDelegate().setNYDMessage(message, piko);
+	public void setNydMessage(String message, boolean piko) {
+		messageDelegate().setNydMessage(message, piko);
 	}
 
 	/**
@@ -756,7 +756,7 @@ public abstract class Yukkuri extends SocialEntity {
 			setBirthAge(-1);
 			setBirthEventBlockedTicks(0);
 		} else {
-			if (getBodyAgeState() == AgeState.BABY) {
+			if (getAgeState() == AgeState.BABY) {
 				setAge(0);
 				setBirthAge(getAge());
 				setBirthEventBlockedTicks(300);
@@ -893,7 +893,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * 
 	 * @param f 表情の数字
 	 */
-	public final void setNYDForceFace(int f) {
+	public final void setNydForceFace(int f) {
 		// 非ゆっくり症未発症個体、皮むき済み個体は顔変化なし
 		if (isPealed() || isNotNYD())
 			return;
@@ -937,7 +937,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @throws IOException
 	 */
 	public static void loadShadowImages(ClassLoader loader, ImageObserver io) throws IOException {
-		YukkuriSprite.loadShadowImages(loader, io);
+		YukkuriSpriteDelegate.loadShadowImages(loader, io);
 	}
 
 	/**
@@ -1041,9 +1041,9 @@ public abstract class Yukkuri extends SocialEntity {
 	/**
 	 * 胎生去勢をする.
 	 */
-	public final void invBodyCastration() {
-		boolean bodyCastration = !isBodyCastration();
-		castrateBody(bodyCastration);
+	public final void toggleCastration() {
+		boolean bodyCastration = !isCastrated();
+		castrateYukkuri(bodyCastration);
 	}
 
 	/**
@@ -1259,7 +1259,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param toZ Z座標
 	 */
 	public final void moveTo(int toX, int toY, int toZ) {
-		BodyMovement.moveTo(this, toX, toY, toZ);
+		YukkuriMovement.moveTo(this, toX, toY, toZ);
 	}
 
 	public final void setTargetMoveOffset(int ox, int oy) {
@@ -1380,8 +1380,8 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param toX    X座標
 	 * @param toY    Y座標
 	 */
-	public final void moveToBody(Entity target, int toX, int toY) {
-		moveToBody(target, toX, toY, 0);
+	public final void moveToYukkuri(Entity target, int toX, int toY) {
+		moveToYukkuri(target, toX, toY, 0);
 	}
 
 	/**
@@ -1392,8 +1392,8 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param toY    Y座標
 	 * @param toZ    Z座標
 	 */
-	public final void moveToBody(Entity target, int toX, int toY, int toZ) {
-		BodyMovement.moveToBody(this, target, toX, toY, toZ);
+	public final void moveToYukkuri(Entity target, int toX, int toY, int toZ) {
+		YukkuriMovement.moveToYukkuri(this, target, toX, toY, toZ);
 	}
 
 	/**
@@ -1467,8 +1467,8 @@ public abstract class Yukkuri extends SocialEntity {
 	 * 
 	 * @param amount 食われる量
 	 */
-	public void eatBody(int amount) {
-		damageDelegate().eatBody(amount);
+	public void eatYukkuri(int amount) {
+		damageDelegate().eatYukkuri(amount);
 	}
 
 	/**
@@ -1477,8 +1477,8 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param amount 食べられる量
 	 * @param eater  食べてくるゆっくり
 	 */
-	public void eatBody(int amount, Yukkuri eater) {
-		damageDelegate().eatBody(amount, eater);
+	public void eatYukkuri(int amount, Yukkuri eater) {
+		damageDelegate().eatYukkuri(amount, eater);
 	}
 
 	/**
@@ -1563,7 +1563,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 */
 	@Transient
 	public final int getStrength() {
-		return getStrengthBase()[getBodyAgeState().ordinal()];
+		return getStrengthBase()[getAgeState().ordinal()];
 	}
 
 	/**
@@ -1607,7 +1607,7 @@ public abstract class Yukkuri extends SocialEntity {
 		// 土に埋まっていないなら吹っ飛ぶ
 		if (getBurialState() == BurialState.NONE) {
 			int blowLevel[] = { -4, -3, -2 };
-			kick(0, blowLevel[getBodyAgeState().ordinal()] * 2, blowLevel[getBodyAgeState().ordinal()]);
+			kick(0, blowLevel[getAgeState().ordinal()] * 2, blowLevel[getAgeState().ordinal()]);
 		}
 		strikeByPunish();
 		begForLife();
@@ -1716,15 +1716,6 @@ public abstract class Yukkuri extends SocialEntity {
 	}
 
 	/**
-	 * Shiftキー押下での動作.
-	 * 
-	 * @return 胎生去勢有無
-	 */
-	public final boolean getBodyCastration() {
-		return isBodyCastration();
-	}
-
-	/**
 	 * 茎去勢を設定する.
 	 */
 	public void castrateStalk(boolean flag) {
@@ -1734,8 +1725,8 @@ public abstract class Yukkuri extends SocialEntity {
 	/**
 	 * 胎生去勢を設定する.
 	 */
-	public void castrateBody(boolean flag) {
-		abuseDelegate().castrateBody(flag);
+	public void castrateYukkuri(boolean flag) {
+		abuseDelegate().castrateYukkuri(flag);
 	}
 
 	/**
@@ -1782,13 +1773,13 @@ public abstract class Yukkuri extends SocialEntity {
 		}
 		if (getAbFlagGodHand()[1]) {
 			// 伸ばす
-			if (getGodHandStretchCount() < Const.EXT_FORCE_PULL_LIMIT[getBodyAgeState().ordinal()]) {
+			if (getGodHandStretchCount() < Const.EXT_FORCE_PULL_LIMIT[getAgeState().ordinal()]) {
 				setGodHandStretchCount(getGodHandStretchCount() + 1);
 			}
 			lockSetZ(getGodHandStretchCount());
 		} else if (getAbFlagGodHand()[2]) {
 			// 縮める
-			if (Const.EXT_FORCE_PUSH_LIMIT[getBodyAgeState().ordinal()] < getGodHandCompressCount()) {
+			if (Const.EXT_FORCE_PUSH_LIMIT[getAgeState().ordinal()] < getGodHandCompressCount()) {
 				setGodHandCompressCount(getGodHandCompressCount() - 1);
 			}
 			lockSetZ(getGodHandCompressCount());
@@ -1840,8 +1831,8 @@ public abstract class Yukkuri extends SocialEntity {
 	/**
 	 * 持つ
 	 */
-	public void Hold() {
-		abuseDelegate().Hold();
+	public void hold() {
+		abuseDelegate().hold();
 	}
 
 	/**
@@ -1888,7 +1879,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param fromY Y座標
 	 */
 	public void runAway(int fromX, int fromY) {
-		BodyMovement.runAway(this, fromX, fromY);
+		YukkuriMovement.runAway(this, fromX, fromY);
 	}
 	// ------------------------------------------
 
@@ -1899,19 +1890,19 @@ public abstract class Yukkuri extends SocialEntity {
 			setRemoved(true);
 			int[] is = { -1, -1 };
 			setParents(is);
-			Yukkuri pa = BodyRelations.getPartnerBody(this);
+			Yukkuri pa = YukkuriRelations.getPartnerYukkuri(this);
 			if (pa != null)
 				pa.setPartner(-1);
 			setPartner(-1);
 			removeAllStalks();
 			setStalks(null);
-			if (GameWorld.get().getCurrentMap().getBody().containsKey(this.getUniqueID())) {
-				GameWorld.get().getCurrentMap().getBody().remove(this.getUniqueID());
+			if (GameWorld.get().getCurrentMap().getYukkuriMap().containsKey(this.getUniqueID())) {
+				GameWorld.get().getCurrentMap().getYukkuriMap().remove(this.getUniqueID());
 			}
 			getChildrenList().clear();
 			getElderSisterList().clear();
 			getSisterList().clear();
-			List<Yukkuri> bodies = new LinkedList<Yukkuri>(GameWorld.get().getCurrentMap().getBody().values());
+			List<Yukkuri> bodies = new LinkedList<Yukkuri>(GameWorld.get().getCurrentMap().getYukkuriMap().values());
 			for (Yukkuri b : bodies) {
 				if (b.getChildrenList() != null) {
 					ListUtil.removeContent(b.getChildrenList(), getUniqueID());
@@ -1970,36 +1961,36 @@ public abstract class Yukkuri extends SocialEntity {
 	}
 
 	/**
-	 * 胴体のベースグラフィックを返す
+ * 胴体のベース画像インデックスを返す
 	 * まりケツは特殊なためまりさ(とそれを継承している、つむりまりさ＆れいむまりさ)は各クラスでオーバーライドしているため要確認
 	 * れいむ(とそれを継承している、わさ＆まりされいむ)もゆんやぁぁが特殊なため、同様
 	 * 
 	 * @param layer レイヤ
 	 * @return index
 	 */
-	public int getBodyBaseImage(BodyLayer layer) {
-		return spriteDelegate().getBodyBaseImage(layer);
+	public int getImageIndex(YukkuriLayer layer) {
+		return spriteDelegate().getImageIndex(layer);
 	}
 
 	/**
-	 * 切断等の通常ではないボディイメージ
+ * 切断等の通常ではないボディ画像インデックス
 	 * 
 	 * @param layer レイヤ
 	 * @return index
 	 */
-	public int getAbnormalBodyImage(BodyLayer layer) {
-		return spriteDelegate().getAbnormalBodyImage(layer);
+	public int getDamageImageIndex(YukkuriLayer layer) {
+		return spriteDelegate().getDamageImageIndex(layer);
 	}
 
 	/**
-	 * おかざりグラフィックを返す。
+ * おかざり画像インデックスを返す。
 	 * 
 	 * @param layer レイヤ
 	 * @param type  0だと前方、1だと後方の分を返す
 	 * @return index
 	 */
-	public int getOlazariImage(BodyLayer layer, int type) {
-		return spriteDelegate().getOlazariImage(layer, type);
+	public int getOkazariImageIndex(YukkuriLayer layer, int type) {
+		return spriteDelegate().getOkazariImageIndex(layer, type);
 	}
 
 	/**
@@ -2008,7 +1999,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param layer レイヤ
 	 * @return index
 	 */
-	public int getEffectImage(BodyLayer layer) {
+	public int getEffectImage(YukkuriLayer layer) {
 		return spriteDelegate().getEffectImage(layer);
 	}
 
@@ -2018,7 +2009,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param layer レイヤ
 	 * @return index
 	 */
-	public int getFaceImage(BodyLayer layer) {
+	public int getFaceImage(YukkuriLayer layer) {
 		return spriteDelegate().getFaceImage(layer);
 	}
 
@@ -2073,7 +2064,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param type  0だと手前側の分、1だと奥側の分が返される
 	 * @return index
 	 */
-	public int getBraidImage(BodyLayer layer, int type) {
+	public int getBraidImage(YukkuriLayer layer, int type) {
 		return spriteDelegate().getBraidImage(layer, type);
 	}
 
@@ -2128,7 +2119,7 @@ public abstract class Yukkuri extends SocialEntity {
 		if (isDead()) {
 			dropAllTakeoutItem();
 			clearActions();
-			moveBody(true); // for falling the body
+			moveYukkuri(true); // for falling the body
 			if (isUnBirth()) {
 				setMessageTicks(0);
 				setMessageBuffer(null);
@@ -2160,7 +2151,7 @@ public abstract class Yukkuri extends SocialEntity {
 		// 爆発処理
 		if (isBurst()) {
 			toDead();
-			moveBody(true); // for falling the body
+			moveYukkuri(true); // for falling the body
 			checkMessage();
 			if (isDead()) {
 				bodyBurst();
@@ -2180,7 +2171,7 @@ public abstract class Yukkuri extends SocialEntity {
 		}
 
 		if (GameEnvironment.getInterval() == 0) {
-			if (GameEnvironment.isAgeBoostSteam() && getBodyAgeState() != AgeState.ADULT)
+			if (GameEnvironment.isAgeBoostSteam() && getAgeState() != AgeState.ADULT)
 				addAge(10000);
 			if (GameEnvironment.isAgeStopSteam() && !accelAgeSteamAmple)
 				addAge(-256);
@@ -2200,7 +2191,7 @@ public abstract class Yukkuri extends SocialEntity {
 
 		if (getAge() > getLifeLimitBase()) {
 			toDead();
-			moveBody(true); // for falling the body
+			moveYukkuri(true); // for falling the body
 			checkMessage();
 			if (isDead()) {
 				return Event.DEAD;
@@ -2208,24 +2199,24 @@ public abstract class Yukkuri extends SocialEntity {
 		}
 
 		// 年齢チェック
-		AgeState curAge = getBodyAgeState();
+		AgeState curAge = getAgeState();
 		FootBake foot = getFootBakeLevel();
-		if (curAge.ordinal() < getBodyAgeState().ordinal()) {
+		if (curAge.ordinal() < getAgeState().ordinal()) {
 			// 状態変更有かつ成長抑制されている場合は強制的に元に戻す。成長促進アンプルが刺さっていたら成長する
 			if (((GameEnvironment.isAgeStopSteam()) || (stopAgeSteamAmple)) && !accelAgeSteamAmple) {
 				setAgeState(curAge);
 				setAge(getAge() + TICK);
 			} else {
 				// 加齢
-				initAmount(getBodyAgeState());
+				initAmount(getAgeState());
 				resetAttachmentBoundary();
 				// DamageLimitを流用してるパラメータは状態を維持するためここで再計算
 				switch (foot) {
 					case MIDIUM:
-						footBakePeriod = (getDamageLimitBase()[getBodyAgeState().ordinal()] >> 1) + 1;
+						footBakePeriod = (getDamageLimitBase()[getAgeState().ordinal()] >> 1) + 1;
 						break;
 					case CRITICAL:
-						footBakePeriod = getDamageLimitBase()[getBodyAgeState().ordinal()] + 1;
+						footBakePeriod = getDamageLimitBase()[getAgeState().ordinal()] + 1;
 						break;
 					default:
 						break;
@@ -2252,12 +2243,12 @@ public abstract class Yukkuri extends SocialEntity {
 				setMessage(GameMessages.getMessage(this, MessagePool.Action.CantMove), 30);
 				setHappiness(Happiness.VERY_SAD);
 			} else {
-				setNYDMessage(GameMessages.getMessage(this, MessagePool.Action.NonYukkuriDisease), false);
+				setNydMessage(GameMessages.getMessage(this, MessagePool.Action.NonYukkuriDisease), false);
 			}
 			shit = 0;
 			hungry = getHungryLimit();
-			if (damage > getDamageLimitBase()[getBodyAgeState().ordinal()] * 80 / 100) {
-				damage = getDamageLimitBase()[getBodyAgeState().ordinal()] * 80 / 100;
+			if (damage > getDamageLimitBase()[getAgeState().ordinal()] * 80 / 100) {
+				damage = getDamageLimitBase()[getAgeState().ordinal()] * 80 / 100;
 			}
 			stay();
 			checkDamage();
@@ -2266,7 +2257,7 @@ public abstract class Yukkuri extends SocialEntity {
 			checkStress();
 			checkSick();
 			checkCantDie();
-			moveBody(true);
+			moveYukkuri(true);
 			return Event.DONOTHING;
 		}
 		// check status
@@ -2330,7 +2321,7 @@ public abstract class Yukkuri extends SocialEntity {
 			if (isUnBirth())
 				dontMove = true;
 			setHappiness(Happiness.VERY_SAD);
-			moveBody(dontMove);
+			moveYukkuri(dontMove);
 			return retval;
 		}
 
@@ -2372,8 +2363,8 @@ public abstract class Yukkuri extends SocialEntity {
 				}
 			}
 			// あんよが傷ついていた場合、一定確率であんよが爆ぜる
-			if (getCriticalDamegeType() == CriticalDamegeType.INJURED && getBreakBodyByShitProb() != 0
-					&& GameRandom.nextInt(getBreakBodyByShitProb()) == 0) {
+			if (getCriticalDamegeType() == CriticalDamegeType.INJURED && getBreakByShitProb() != 0
+					&& GameRandom.nextInt(getBreakByShitProb()) == 0) {
 				bodyCut();
 			}
 		}
@@ -2398,25 +2389,25 @@ public abstract class Yukkuri extends SocialEntity {
 		}
 
 		// イベントに反応できる状態かチェック
-		BodyEventState.processPendingEvents(this);
+		YukkuriEventState.processPendingEvents(this);
 
 		// move to destination
 		// if there is no destination, walking randomly.
 		if (getCoreAnkoState() == CoreAnkoState.NonYukkuriDiseaseNear) {
 			// 非ゆっくり症初期の場合はあまり動かない
 			if (GameRandom.nextInt(5) == 0) {
-				moveBody(true);
+				moveYukkuri(true);
 			} else {
-				moveBody(dontMove);
+				moveYukkuri(dontMove);
 			}
 		} else {
-			moveBody(dontMove);
+			moveYukkuri(dontMove);
 		}
 
 		checkMessage();
 
 		// イベントで処理が設定された場合に実行する
-		retval = BodyEventState.resolveEventResultAction(this, retval);
+		retval = YukkuriEventState.resolveEventResultAction(this, retval);
 		calcPos();
 		moveDelegate().calcMoveTarget();
 		return retval;
@@ -2442,10 +2433,10 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param list ユニークIDのlist
 	 * @return ゆっくりの配列
 	 */
-	public Yukkuri[] getArrayOfBody(List<Integer> list) {
+	public Yukkuri[] getYukkuriArray(List<Integer> list) {
 		List<Yukkuri> bodies = new LinkedList<Yukkuri>();
 		for (int i : list) {
-			bodies.add(BodyRelations.getBody(i));
+			bodies.add(YukkuriRelations.getYukkuriById(i));
 		}
 		return bodies.toArray(new Yukkuri[0]);
 	}
@@ -2540,17 +2531,17 @@ public abstract class Yukkuri extends SocialEntity {
 				break;
 		}
 		setAge(getAge() + GameRandom.nextInt(100));
-		getBodyAgeState();
+		getAgeState();
 		getMindAgeState();
 		initAmount(initAgeState);
 		wakeUpTime = getAge();
-		shit = GameRandom.nextInt(getShitLimitBase()[getBodyAgeState().ordinal()] / 2);
-		if (getBodyAgeState() == AgeState.BABY) {
+		shit = GameRandom.nextInt(getShitLimitBase()[getAgeState().ordinal()] / 2);
+		if (getAgeState() == AgeState.BABY) {
 			if (mama != null) {
 				if (mama.isDamaged()) {
 					damage = GameRandom.nextInt(mama.damage) * getDamageLimitBase()[Const.BABY_INDEX]
 							/ mama.getDamageLimit();
-					getBodyAgeState();
+					getAgeState();
 					getDamageState();
 				}
 				if (mama.isSick()) {
@@ -2569,10 +2560,10 @@ public abstract class Yukkuri extends SocialEntity {
 		setMessageTextSize(12);
 		setUniqueID(Numbering.INSTANCE.numberingYukkuriID());
 		// 生い立ちの設定
-		BodyRank bodyRank = BodyRank.KAIYU;
+		YukkuriRank bodyRank = YukkuriRank.KAIYU;
 		PublicRank publicRank = PublicRank.NONE;
 		if (mama != null) {
-			bodyRank = mama.getBodyRank();
+			bodyRank = mama.getRank();
 			// 階級の設定
 			PublicRank motherPublicRank = mama.getPublicRank();
 			// 母親のランクに応じて変更
@@ -2589,10 +2580,10 @@ public abstract class Yukkuri extends SocialEntity {
 		} else if (GameWorld.get() != null) {
 			if (GameWorld.get().getCurrentMap().getMapIndex() == 5
 					|| GameWorld.get().getCurrentMap().getMapIndex() == 6)
-				bodyRank = BodyRank.YASEIYU;
+				bodyRank = YukkuriRank.YASEIYU;
 		}
 		// 生い立ちを設定
-		setBodyRank(bodyRank);
+		setRank(bodyRank);
 		setPublicRank(publicRank);
 
 		// 先祖の情報を引き継ぐ
@@ -2609,7 +2600,7 @@ public abstract class Yukkuri extends SocialEntity {
 			addAncestorList(ancestorType.getTypeID());
 		}
 
-		hungry = getHungryLimitBase()[getBodyAgeState().ordinal()] + (100 * getBodyAgeState().ordinal());
+		hungry = getHungryLimitBase()[getAgeState().ordinal()] + (100 * getAgeState().ordinal());
 
 	}
 
@@ -2642,22 +2633,22 @@ public abstract class Yukkuri extends SocialEntity {
 		IniFileUtil.readIniFile(this, false); // iniファイル読み込み
 
 		setAge(getAge() + GameRandom.nextInt(100));
-		getBodyAgeState();
+		getAgeState();
 		getMindAgeState();
 		wakeUpTime = getAge();
-		shit = GameRandom.nextInt(getShitLimitBase()[getBodyAgeState().ordinal()] / 2);
+		shit = GameRandom.nextInt(getShitLimitBase()[getAgeState().ordinal()] / 2);
 		dirX = randomDirection(dirX);
 		dirY = randomDirection(dirY);
 		setMessageTextSize(12);
 		setUniqueID(Numbering.INSTANCE.numberingYukkuriID());
 		// 生い立ちの設定
-		BodyRank bodyRank = BodyRank.KAIYU;
+		YukkuriRank bodyRank = YukkuriRank.KAIYU;
 		PublicRank publicRank = PublicRank.NONE;
 		// 生い立ちを設定
-		setBodyRank(bodyRank);
+		setRank(bodyRank);
 		setPublicRank(publicRank);
 
-		hungry = getHungryLimitBase()[getBodyAgeState().ordinal()] + (100 * getBodyAgeState().ordinal());
+		hungry = getHungryLimitBase()[getAgeState().ordinal()] + (100 * getAgeState().ordinal());
 	}
 
 	@Transient
@@ -2775,12 +2766,12 @@ public abstract class Yukkuri extends SocialEntity {
 	}
 
 	/** 胎生去勢有無 を取得する. @return 胎生去勢有無 */
-	public boolean isBodyCastration() {
+	public boolean isCastrated() {
 		return bodyCastration;
 	}
 
 	/** 胎生去勢有無 を設定する. @param bodyCastration 胎生去勢有無 */
-	public void setBodyCastration(boolean bodyCastration) {
+	public void setCastrated(boolean bodyCastration) {
 		this.bodyCastration = bodyCastration;
 	}
 
@@ -2868,12 +2859,12 @@ public abstract class Yukkuri extends SocialEntity {
 	protected String baseBodyFileName;
 
 	/** 種族固有の画像ファイルベース名 を取得する. @return 種族固有の画像ファイルベース名 */
-	public String getBaseBodyFileName() {
+	public String getBaseYukkuriFileName() {
 		return baseBodyFileName;
 	}
 
 	/** 種族固有の画像ファイルベース名 を設定する. @param baseBodyFileName 種族固有の画像ファイルベース名 */
-	public void setBaseBodyFileName(String baseBodyFileName) {
+	public void setBaseYukkuriFileName(String baseBodyFileName) {
 		this.baseBodyFileName = baseBodyFileName;
 	}
 
@@ -2991,7 +2982,7 @@ public abstract class Yukkuri extends SocialEntity {
 		y.setNoticeNoOkazari(noticeNoOkazari);
 		y.setBraidType(braidType);
 		y.setAnalClose(analClose);
-		y.setBodyCastration(bodyCastration);
+		y.setCastrated(bodyCastration);
 		y.setStalkCastration(stalkCastration);
 		y.setRareType(rareType);
 		y.setPredatorType(predatorType);
@@ -2999,8 +2990,8 @@ public abstract class Yukkuri extends SocialEntity {
 		y.setLikeHotFood(likeHotFood);
 		y.setFlyingType(flyingType);
 		y.setHasPants(hasPants);
-		y.copyBodyNameSetFrom(this);
-		y.copyBodySpriteSetFrom(this);
+		y.copyNameSetFrom(this);
+		y.copySpriteSetFrom(this);
 	}
 
 	/**
@@ -3096,7 +3087,7 @@ public abstract class Yukkuri extends SocialEntity {
 	public abstract String getMyNameD();
 
 	/** ゆっくりのタイプ、向き、レイヤー、indexからイメージ画像を取得する */
-	public abstract int getImage(int type, int direction, BodyLayer layer, int index);
+	public abstract int getImage(int type, int direction, YukkuriLayer layer, int index);
 
 	/** 各ゆっくりのパラメータを作成時に調整する */
 	public abstract void tuneParameters();
@@ -3114,11 +3105,11 @@ public abstract class Yukkuri extends SocialEntity {
 	 * 
 	 * @param from 複製元
 	 */
-	public void copyBodyNameSetFrom(Yukkuri from) {
+	public void copyNameSetFrom(Yukkuri from) {
 		if (from == null) {
 			return;
 		}
-		setBaseBodyFileName(from.getBaseBodyFileName());
+		setBaseYukkuriFileName(from.getBaseYukkuriFileName());
 		setBabyNames(from.getBabyNames() != null ? from.getBabyNames().clone() : null);
 		setChildNames(from.getChildNames() != null ? from.getChildNames().clone() : null);
 		setAdultNames(from.getAdultNames() != null ? from.getAdultNames().clone() : null);
@@ -3134,8 +3125,8 @@ public abstract class Yukkuri extends SocialEntity {
 	 * 
 	 * @param from 複製元
 	 */
-	public void copyBodySpriteSetFrom(Yukkuri from) {
-		spriteDelegate().copyBodySpriteSetFrom(from);
+	public void copySpriteSetFrom(Yukkuri from) {
+		spriteDelegate().copySpriteSetFrom(from);
 	}
 
 	// public variables
@@ -3144,11 +3135,11 @@ public abstract class Yukkuri extends SocialEntity {
 	public final static int UNYOSTRENGTH[] = { 4, 7, 10 };
 
 	public static BufferedImage[] getShadowImages() {
-		return YukkuriSprite.getShadowImages();
+		return YukkuriSpriteDelegate.getShadowImages();
 	}
 
 	public static void setShadowImages(BufferedImage[] shadowImages) {
-		YukkuriSprite.setShadowImages(shadowImages);
+		YukkuriSpriteDelegate.setShadowImages(shadowImages);
 	}
 
 	/**
@@ -3157,7 +3148,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @return 影画像のサイズ定義
 	 */
 	public static int[] getShadowImgW() {
-		return YukkuriSprite.getShadowImgW();
+		return YukkuriSpriteDelegate.getShadowImgW();
 	}
 
 	/**
@@ -3166,15 +3157,15 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param shadowImgW 影画像のサイズ定義
 	 */
 	public static void setShadowImgW(int[] shadowImgW) {
-		YukkuriSprite.setShadowImgW(shadowImgW);
+		YukkuriSpriteDelegate.setShadowImgW(shadowImgW);
 	}
 
 	public static int[] getShadowImgH() {
-		return YukkuriSprite.getShadowImgH();
+		return YukkuriSpriteDelegate.getShadowImgH();
 	}
 
 	public static void setShadowImgH(int[] shadowImgH) {
-		YukkuriSprite.setShadowImgH(shadowImgH);
+		YukkuriSpriteDelegate.setShadowImgH(shadowImgH);
 	}
 
 	/**
@@ -3183,7 +3174,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @return 影画像の中心定義
 	 */
 	public static int[] getShadowPivX() {
-		return YukkuriSprite.getShadowPivX();
+		return YukkuriSpriteDelegate.getShadowPivX();
 	}
 
 	/**
@@ -3192,15 +3183,15 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @param shadowPivX 影画像の中心定義
 	 */
 	public static void setShadowPivX(int[] shadowPivX) {
-		YukkuriSprite.setShadowPivX(shadowPivX);
+		YukkuriSpriteDelegate.setShadowPivX(shadowPivX);
 	}
 
 	public static int[] getShadowPivY() {
-		return YukkuriSprite.getShadowPivY();
+		return YukkuriSpriteDelegate.getShadowPivY();
 	}
 
 	public static void setShadowPivY(int[] shadowPivY) {
-		YukkuriSprite.setShadowPivY(shadowPivY);
+		YukkuriSpriteDelegate.setShadowPivY(shadowPivY);
 	}
 
 	/** おさげのスプライト定義（年齢別） */
@@ -3385,7 +3376,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * 
 	 * @return 移動目的が他のゆっくりかどうか
 	 */
-	public boolean isToBody() {
+	public boolean isToYukkuri() {
 		return getPurposeOfMoving() == PurposeOfMoving.YUKKURI;
 	}
 
@@ -3394,8 +3385,8 @@ public abstract class Yukkuri extends SocialEntity {
 	 * 
 	 * @param flag 移動目的が他のゆっくりかどうか
 	 */
-	public void setToBody(boolean flag) {
-		moveDelegate().setToBody(flag);
+	public void setToYukkuri(boolean flag) {
+		moveDelegate().setToYukkuri(flag);
 	}
 
 	/**
@@ -3555,7 +3546,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @return 妹のインスタンス
 	 */
 	public Yukkuri getSister(int sisterIndex) {
-		return BodyRelations.getSister(this, sisterIndex);
+		return YukkuriRelations.getSister(this, sisterIndex);
 	}
 
 	/**
@@ -3565,7 +3556,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @return 姉のインスタンス
 	 */
 	public Yukkuri getElderSister(int elderSisterIndex) {
-		return BodyRelations.getElderSister(this, elderSisterIndex);
+		return YukkuriRelations.getElderSister(this, elderSisterIndex);
 	}
 
 	/**
@@ -3578,7 +3569,7 @@ public abstract class Yukkuri extends SocialEntity {
 		if (getChildrenList() == null) {
 			return null;
 		}
-		return BodyRelations.getChildren(this, childIndex);
+		return YukkuriRelations.getChildren(this, childIndex);
 	}
 
 	/**
@@ -3603,7 +3594,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 */
 	@Transient
 	public boolean getDiarrhea() {
-		return BodyExcretionRule.getDiarrhea(this);
+		return YukkuriExcretionRule.getDiarrhea(this);
 	}
 
 	/**
@@ -3629,7 +3620,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 */
 	@Transient
 	public AgeState getMindAgeState() {
-		return getBodyAgeState();
+		return getAgeState();
 	}
 
 	/**
@@ -3792,13 +3783,13 @@ public abstract class Yukkuri extends SocialEntity {
 	}
 
 	@Transient
-	public Sprite getBodyBaseSpr() {
-		return spriteDelegate().getBodyBaseSpr();
+	public Sprite getSpriteSetite() {
+		return spriteDelegate().getSpriteSetite();
 	}
 
 	@Transient
-	public Sprite getBodyExpandSpr() {
-		return spriteDelegate().getBodyExpandSpr();
+	public Sprite getExpandedSpriteSet() {
+		return spriteDelegate().getExpandedSpriteSet();
 	}
 
 	@Transient
@@ -3854,7 +3845,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 */
 	@Transient
 	public int getWeight() {
-		return (getWeightBase()[getBodyAgeState().ordinal()]
+		return (getWeightBase()[getAgeState().ordinal()]
 				+ (getBabyTypes().size() + getStalkBabyTypes().size()) * 50);
 	}
 
@@ -3919,7 +3910,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 */
 	@Transient
 	public Damage getDamageState() {
-		return BodyCoreStateRule.getDamageState(this);
+		return YukkuriCoreStateRule.getDamageState(this);
 	}
 
 	/**

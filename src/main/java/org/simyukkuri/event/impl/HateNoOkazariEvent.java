@@ -16,7 +16,7 @@ import org.simyukkuri.event.EventPacket;
 import org.simyukkuri.event.EventPacket.EventPriority;
 import org.simyukkuri.event.EventPacket.UpdateState;
 import org.simyukkuri.field.impl.Barrier;
-import org.simyukkuri.logic.BodyLogic;
+import org.simyukkuri.logic.YukkuriLogic;
 import org.simyukkuri.system.MessagePool;
 import org.simyukkuri.util.GameMessages;
 import org.simyukkuri.util.GameRandom;
@@ -63,7 +63,7 @@ public class HateNoOkazariEvent extends EventPacket {
 		// 足りないゆは参加しない
 		if (body.isIdiot())
 			return false;
-		Yukkuri targetBody = org.simyukkuri.util.BodyRegistry.getBodyInstance(getTo());
+		Yukkuri targetBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getTo());
 		if (targetBody == null)
 			return false;
 		// 自分が賢い場合はおかざりがなくても家族を認識して参加しない
@@ -97,12 +97,12 @@ public class HateNoOkazariEvent extends EventPacket {
 		}
 		// 相手との間に壁があればスキップ
 		if (Barrier.acrossBarrier(body.getX(), body.getY(), targetBody.getX(), targetBody.getY(),
-				Barrier.MAP_BODY[body.getBodyAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
+				Barrier.MAP_BODY[body.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
 			return false;
 		}
 
 		if (accepted) {
-			Yukkuri sourceBody = org.simyukkuri.util.BodyRegistry.getBodyInstance(getFrom());
+			Yukkuri sourceBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
 			if (sourceBody != body) {
 				body.setWorldEventResMessage(GameMessages.getMessage(body, MessagePool.Action.HateYukkuri),
 						Const.HOLDMESSAGE,
@@ -115,10 +115,10 @@ public class HateNoOkazariEvent extends EventPacket {
 	// イベント開始動作
 	@Override
 	public void start(Yukkuri body) {
-		Yukkuri targetBody = org.simyukkuri.util.BodyRegistry.getBodyInstance(getTo());
+		Yukkuri targetBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getTo());
 		if (targetBody == null)
 			return;
-		int collisionX = BodyLogic.calcCollisionX(body, targetBody);
+		int collisionX = YukkuriLogic.calcCollisionX(body, targetBody);
 		body.moveToEvent(this, targetBody.getX() + collisionX, targetBody.getY());
 	}
 
@@ -126,7 +126,7 @@ public class HateNoOkazariEvent extends EventPacket {
 	// UpdateState.ABORTを返すとイベント終了
 	@Override
 	public UpdateState update(Yukkuri body) {
-		Yukkuri targetBody = org.simyukkuri.util.BodyRegistry.getBodyInstance(getTo());
+		Yukkuri targetBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getTo());
 		// 相手が消えてしまったらイベント中断
 		if (targetBody == null || targetBody.isRemoved())
 			return UpdateState.ABORT;
@@ -134,7 +134,7 @@ public class HateNoOkazariEvent extends EventPacket {
 		if (Translate.distance(body.getX(), body.getY(), targetBody.getX(), targetBody.getY()) < 2500) {
 			targetBody.stay();
 		}
-		int collisionX = BodyLogic.calcCollisionX(body, targetBody);
+		int collisionX = YukkuriLogic.calcCollisionX(body, targetBody);
 		body.moveToEvent(this, targetBody.getX() + collisionX, targetBody.getY());
 		return null;
 	}
@@ -143,7 +143,7 @@ public class HateNoOkazariEvent extends EventPacket {
 	// trueを返すとイベント終了
 	@Override
 	public boolean execute(Yukkuri body) {
-		Yukkuri targetBody = org.simyukkuri.util.BodyRegistry.getBodyInstance(getTo());
+		Yukkuri targetBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getTo());
 		// 相手が残っていたら攻撃
 		if (targetBody != null && !targetBody.isDead() && !targetBody.isRemoved() && targetBody.getZ() < 5) {
 			// うんうん奴隷ではない場合
@@ -160,7 +160,7 @@ public class HateNoOkazariEvent extends EventPacket {
 				if (hasSlaveToilet) {
 					targetBody.setPublicRank(PublicRank.UnunSlave); // うんうんどれい認定
 					targetBody.getFavoriteItems().clear();
-					Yukkuri partnerBody = org.simyukkuri.util.BodyRegistry.getBodyInstance(body.getPartner());
+					Yukkuri partnerBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(body.getPartner());
 					if (partnerBody != null) {
 						// うんうんどれいになるようなくずとは りこんっ！だよ！！
 						body.setPartner(-1);

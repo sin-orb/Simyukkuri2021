@@ -32,7 +32,7 @@ import org.simyukkuri.util.WorldTestHelper;
 import org.simyukkuri.system.Sprite;
 
 /**
- * Tests for BodyContactEffectRule.
+ * Tests for YukkuriContactEffectRule.
  */
 class BodyContactEffectRuleTest {
 
@@ -42,14 +42,14 @@ class BodyContactEffectRuleTest {
 		SimYukkuri.world.getCurrentMap().getEvent().clear();
 		Yukkuri me = WorldTestHelper.createBody();
 		Yukkuri you = WorldTestHelper.createBody();
-		me.setBodySpr(makeSprites(1, 1));
-		you.setBodySpr(makeSprites(1, 1));
+		me.setSpriteSet(makeSprites(1, 1));
+		you.setSpriteSet(makeSprites(1, 1));
 		me.setX(100);
 		me.setY(100);
 		you.setX(100);
 		you.setY(100);
-		SimYukkuri.world.getCurrentMap().getBody().put(me.getUniqueID(), me);
-		SimYukkuri.world.getCurrentMap().getBody().put(you.getUniqueID(), you);
+		SimYukkuri.world.getCurrentMap().getYukkuriMap().put(me.getUniqueID(), me);
+		SimYukkuri.world.getCurrentMap().getYukkuriMap().put(you.getUniqueID(), you);
 		me.setAgeState(AgeState.ADULT);
 		you.setAgeState(AgeState.ADULT);
 		me.setPublicRank(PublicRank.NONE);
@@ -57,7 +57,7 @@ class BodyContactEffectRuleTest {
 		me.setIntelligence(org.simyukkuri.enums.Intelligence.AVERAGE);
 		you.setSickPeriod(you.getIncubationPeriodBase() + 1);
 
-		assertDoesNotThrow(() -> assertTrue(BodyContactEffectRule.handleContactEffects(you, me)));
+		assertDoesNotThrow(() -> assertTrue(YukkuriContactEffectRule.handleContactEffects(you, me)));
 		assertEquals(1, me.getEventList().size(), "actor should receive exactly one body event");
 		assertTrue(me.getEventList().get(0) instanceof AvoidMoldEvent,
 				"actor should receive an AvoidMoldEvent");
@@ -70,14 +70,14 @@ class BodyContactEffectRuleTest {
 		SimYukkuri.world.getCurrentMap().getEvent().clear();
 		Yukkuri me = WorldTestHelper.createBody();
 		Yukkuri you = WorldTestHelper.createBody();
-		me.setBodySpr(makeSprites(1, 1));
-		you.setBodySpr(makeSprites(1, 1));
+		me.setSpriteSet(makeSprites(1, 1));
+		you.setSpriteSet(makeSprites(1, 1));
 		me.setX(100);
 		me.setY(100);
 		you.setX(100);
 		you.setY(100);
-		SimYukkuri.world.getCurrentMap().getBody().put(me.getUniqueID(), me);
-		SimYukkuri.world.getCurrentMap().getBody().put(you.getUniqueID(), you);
+		SimYukkuri.world.getCurrentMap().getYukkuriMap().put(me.getUniqueID(), me);
+		SimYukkuri.world.getCurrentMap().getYukkuriMap().put(you.getUniqueID(), you);
 		me.setAgeState(AgeState.ADULT);
 		you.setAgeState(AgeState.BABY);
 		me.setPublicRank(PublicRank.NONE);
@@ -90,7 +90,7 @@ class BodyContactEffectRuleTest {
 		rnd.setFixedBoolean(true);
 		SimYukkuri.RND = rnd;
 
-		assertDoesNotThrow(() -> assertTrue(BodyContactEffectRule.handleContactEffects(you, me)));
+		assertDoesNotThrow(() -> assertTrue(YukkuriContactEffectRule.handleContactEffects(you, me)));
 		assertFalse(SimYukkuri.world.getCurrentMap().getEvent().isEmpty(),
 				"world event queue should receive a HateNoOkazariEvent");
 		assertTrue(SimYukkuri.world.getCurrentMap().getEvent().get(0) instanceof HateNoOkazariEvent,

@@ -517,7 +517,7 @@ public class SuiRideEventTest extends EventTestBase {
         sui.setCurrent_bindbody_num(3);
         sui.setCurrent_condition(2); // not waiting
         SuiRideEvent event = new SuiRideEvent(b, null, sui, 100);
-        // condition != 1 => setBodyEventResMessage path
+        // condition != 1 => setEventResMessage path
         assertDoesNotThrow(() -> event.update(b));
     }
 
@@ -528,7 +528,7 @@ public class SuiRideEventTest extends EventTestBase {
         Sui sui = createSui(999);
         sui.rideOn(from); // from is owner/rider
         // Manually make b ride in slot 1
-        sui.getBindBody()[1] = b;
+        sui.getBoundYukkuri()[1] = b;
         sui.setCurrent_bindbody_num(2);
         b.setParentLinkId(sui.getObjId());
         b.setFavoriteItem(FavItemType.SUI, sui);
@@ -546,7 +546,7 @@ public class SuiRideEventTest extends EventTestBase {
         Yukkuri b = createBody(2, 200, 200);
         Sui sui = createSui(999);
         sui.rideOn(from);
-        sui.getBindBody()[1] = b;
+        sui.getBoundYukkuri()[1] = b;
         sui.setCurrent_bindbody_num(2);
         b.setParentLinkId(sui.getObjId());
         b.setFavoriteItem(FavItemType.SUI, sui);

@@ -324,7 +324,7 @@ public class Pool extends FieldShape {
 
 		if (o instanceof Yukkuri) {
 			Yukkuri bodyTarget = (Yukkuri) o;
-			AgeState ageState = bodyTarget.getBodyAgeState();
+			AgeState ageState = bodyTarget.getAgeState();
 			boolean likesWater = bodyTarget.isLikeWater();
 			int depthLimit = -2;
 

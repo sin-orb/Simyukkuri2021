@@ -344,7 +344,7 @@ public class Yunba extends WorldEntity {
 						if (norndCheck == false && GameRandom.nextBoolean())
 							continue;
 						int id = s.getPlantYukkuri();
-						if (GameWorld.get().getCurrentMap().getBody().get(id) != null)
+						if (GameWorld.get().getCurrentMap().getYukkuriMap().get(id) != null)
 							continue;
 						if (!actionFlags[Action.WALLTHROUGH.ordinal()][0]
 								&& Barrier.acrossBarrier(getX(), getY(), s.getX(), s.getY(), Barrier.MAP_ITEM)) {
@@ -396,7 +396,7 @@ public class Yunba extends WorldEntity {
 			}
 
 			if (bodyCheck && action == null) {
-				for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
+				for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getYukkuriMap().entrySet()) {
 					Yukkuri b = entry.getValue();
 					if (norndCheck == false && GameRandom.nextBoolean())
 						continue;
@@ -494,7 +494,7 @@ public class Yunba extends WorldEntity {
 							break;
 						}
 					} else {
-						if (b.isDirty() && actionFlags[Action.CLEAN.ordinal()][b.getBodyAgeState().ordinal()]) {
+						if (b.isDirty() && actionFlags[Action.CLEAN.ordinal()][b.getAgeState().ordinal()]) {
 
 							// 他のゆんばのターゲットならスキップ
 							if (!cheackOtherYunbaTarget(b)) {
@@ -505,7 +505,7 @@ public class Yunba extends WorldEntity {
 							action = Action.CLEAN;
 							target = b;
 							break;
-						} else if (b.isDamaged() && actionFlags[Action.HEAL.ordinal()][b.getBodyAgeState().ordinal()]) {
+						} else if (b.isDamaged() && actionFlags[Action.HEAL.ordinal()][b.getAgeState().ordinal()]) {
 
 							// 他のゆんばのターゲットならスキップ
 							if (!cheackOtherYunbaTarget(b)) {
@@ -516,7 +516,7 @@ public class Yunba extends WorldEntity {
 							action = Action.HEAL;
 							target = b;
 							break;
-						} else if (b.isSick() && actionFlags[Action.KABI.ordinal()][b.getBodyAgeState().ordinal()]) {
+						} else if (b.isSick() && actionFlags[Action.KABI.ordinal()][b.getAgeState().ordinal()]) {
 
 							// 他のゆんばのターゲットならスキップ
 							if (!cheackOtherYunbaTarget(b)) {
@@ -530,7 +530,7 @@ public class Yunba extends WorldEntity {
 						}
 						// ゲスの場合必ず実行
 						else if (b.isRude() && (b.isFurifuri() || b.getFurifuriDiscipline() != 0)
-								&& actionFlags[Action.RUDE.ordinal()][b.getBodyAgeState().ordinal()]) {
+								&& actionFlags[Action.RUDE.ordinal()][b.getAgeState().ordinal()]) {
 
 							// 他のゆんばのターゲットならスキップ
 							if (!cheackOtherYunbaTarget(b)) {
@@ -542,7 +542,7 @@ public class Yunba extends WorldEntity {
 							target = b;
 							break;
 						} else if (b.hasOkazari() && (b.getOkazari().getOkazariType() == OkazariType.DEFAULT)
-								&& actionFlags[Action.OKAZARI.ordinal()][b.getBodyAgeState().ordinal()]) {
+								&& actionFlags[Action.OKAZARI.ordinal()][b.getAgeState().ordinal()]) {
 
 							// 他のゆんばのターゲットならスキップ
 							if (!cheackOtherYunbaTarget(b)) {
@@ -554,7 +554,7 @@ public class Yunba extends WorldEntity {
 							target = b;
 							break;
 						} else if (GameRandom.nextBoolean()
-								&& actionFlags[Action.DESTROY.ordinal()][b.getBodyAgeState().ordinal()]) {
+								&& actionFlags[Action.DESTROY.ordinal()][b.getAgeState().ordinal()]) {
 
 							// 他のゆんばのターゲットならスキップ
 							if (!cheackOtherYunbaTarget(b)) {
@@ -623,7 +623,7 @@ public class Yunba extends WorldEntity {
 		} else {
 			int vecX = destX - x;
 			int vecY = destY - y;
-			moveBody();
+			moveYukkuri();
 			boolean nearTarget = false;
 			if (target != null) {
 				// 距離が20以内なら掃除する
@@ -748,7 +748,7 @@ public class Yunba extends WorldEntity {
 		return 0;
 	}
 
-	private void moveBody() {
+	private void moveYukkuri() {
 
 		int step = 1;
 		int dirX = 0;
@@ -1258,11 +1258,11 @@ public class Yunba extends WorldEntity {
 		this.actionFlags3 = actionFlags3;
 	}
 
-	public boolean isBodyCheck() {
+	public boolean isYukkuriCheck() {
 		return bodyCheck;
 	}
 
-	public void setBodyCheck(boolean bodyCheck) {
+	public void setYukkuriCheck(boolean bodyCheck) {
 		this.bodyCheck = bodyCheck;
 	}
 

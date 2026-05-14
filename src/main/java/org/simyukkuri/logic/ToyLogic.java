@@ -60,7 +60,7 @@ public class ToyLogic {
 			if (nearestDistance > distance) {
 				if (!body.isRude()) {
 					if (Barrier.acrossBarrier(body.getX(), body.getY(), toy.getX(), toy.getY(),
-							Barrier.MAP_BODY[body.getBodyAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
+							Barrier.MAP_BODY[body.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
 						continue;
 					}
 				}
@@ -116,7 +116,7 @@ public class ToyLogic {
 					body.getInVain(true);
 				} else {
 					foundToy.kick(body.getDirX() * body.getStep(), body.getDirY() * body.getStep(),
-							kickStrength[body.getBodyAgeState().ordinal()]);
+							kickStrength[body.getAgeState().ordinal()]);
 				}
 			} else {
 				if (body.getFavoriteItem(FavItemType.BALL) == foundToy && !ownedByFamily) {
@@ -181,7 +181,7 @@ public class ToyLogic {
 				if (nearestDistance > distance) {
 					// 壁の向こうならなにもしない
 					if (Barrier.acrossBarrier(body.getX(), body.getY(), sui.getX(), sui.getY(),
-							Barrier.MAP_BODY[body.getBodyAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
+							Barrier.MAP_BODY[body.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
 						continue;
 					}
 
@@ -233,7 +233,7 @@ public class ToyLogic {
 				}
 			}
 		} else if (GameWorld.get().getCurrentMap().getSui().size() > 0) {
-			EventLogic.addBodyEvent(body, new SuiSpeake(null, null, null, 10), null, null);
+			EventLogic.addYukkuriEvent(body, new SuiSpeake(null, null, null, 10), null, null);
 		}
 		return handled;
 	}
@@ -271,7 +271,7 @@ public class ToyLogic {
 			int distance = Translate.distance(body.getX(), body.getY(), trampoline.getX(), trampoline.getY());
 			if (nearestDistance > distance && (body.isRude()
 					|| !Barrier.acrossBarrier(body.getX(), body.getY(), trampoline.getX(), trampoline.getY(),
-							Barrier.MAP_BODY[body.getBodyAgeState().ordinal()] + Barrier.BARRIER_KEKKAI))) {
+							Barrier.MAP_BODY[body.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI))) {
 				foundTrampoline = trampoline;
 				nearestDistance = distance;
 			}
@@ -296,13 +296,13 @@ public class ToyLogic {
 							|| body.getIntelligence() != Intelligence.FOOL
 									&& GameRandom.nextInt(100) + 1 < foundTrampoline.getAccident1()) {
 						body.kick(0, 0,
-								((kickStrength[body.getBodyAgeState().ordinal()]
-										+ kickStrength[body.getBodyAgeState().ordinal()] * GameRandom.nextInt(1))
+								((kickStrength[body.getAgeState().ordinal()]
+										+ kickStrength[body.getAgeState().ordinal()] * GameRandom.nextInt(1))
 										- GameRandom.nextInt(5)) * 3);
 					} else {
 						body.kick(0, 0,
-								(kickStrength[body.getBodyAgeState().ordinal()]
-										+ kickStrength[body.getBodyAgeState().ordinal()] * GameRandom.nextInt(1))
+								(kickStrength[body.getAgeState().ordinal()]
+										+ kickStrength[body.getAgeState().ordinal()] * GameRandom.nextInt(1))
 										- GameRandom.nextInt(5));
 					}
 				} else {
@@ -311,13 +311,13 @@ public class ToyLogic {
 							|| body.getIntelligence() != Intelligence.FOOL
 									&& GameRandom.nextInt(100) + 1 < foundTrampoline.getAccident1()) {
 						body.kick(body.getDirX() * body.getStep(), body.getDirY() * body.getStep(),
-								((kickStrength[body.getBodyAgeState().ordinal()]
-										+ kickStrength[body.getBodyAgeState().ordinal()] * GameRandom.nextInt(1))
+								((kickStrength[body.getAgeState().ordinal()]
+										+ kickStrength[body.getAgeState().ordinal()] * GameRandom.nextInt(1))
 										- GameRandom.nextInt(5)) * 3);
 					} else {
 						body.kick(body.getDirX() * body.getStep(), body.getDirY() * body.getStep(),
-								(kickStrength[body.getBodyAgeState().ordinal()]
-										+ kickStrength[body.getBodyAgeState().ordinal()] * GameRandom.nextInt(1))
+								(kickStrength[body.getAgeState().ordinal()]
+										+ kickStrength[body.getAgeState().ordinal()] * GameRandom.nextInt(1))
 										- GameRandom.nextInt(5));
 					}
 				}
@@ -336,7 +336,7 @@ public class ToyLogic {
 	 */
 	public static boolean canPlay(Yukkuri body) {
 		// 他の用事がある場合
-		if (body.isToFood() || body.isToBody() || body.isToSukkiri() || body.isToSteal() || body.isToBed()
+		if (body.isToFood() || body.isToYukkuri() || body.isToSukkiri() || body.isToSteal() || body.isToBed()
 				|| body.isToShit()) {
 			return false;
 		}

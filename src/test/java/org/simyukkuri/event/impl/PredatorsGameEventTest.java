@@ -48,8 +48,8 @@ class PredatorsGameEventTest {
         for (int i = 0; i < 3; i++) {
             spr[i] = new org.simyukkuri.system.Sprite(10, 10, org.simyukkuri.system.Sprite.PIVOT_CENTER_BOTTOM);
         }
-        b.setBodySpr(spr);
-        SimYukkuri.world.getCurrentMap().getBody().put(b.getUniqueID(), b);
+        b.setSpriteSet(spr);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(b.getUniqueID(), b);
         return b;
     }
 
@@ -92,7 +92,7 @@ class PredatorsGameEventTest {
     void testExecute_whenToyIsNull() {
         Yukkuri from = createBody();
         PredatorsGameEvent event = new PredatorsGameEvent(from, null, null, 1);
-        // toy field defaults to -1, so getBodyInstance returns null
+        // toy field defaults to -1, so getBodyMap returns null
         // execute accesses toy and may throw NPE when toy is null and code does
         // toy.setLinkParent
         try {

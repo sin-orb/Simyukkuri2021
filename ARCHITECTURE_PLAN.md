@@ -830,6 +830,18 @@ public boolean isServantOf(int masterType)       { return false; }
 
 Step 2 までで導入した正規名を基準に、旧名の残骸を消す。
 
+**公開APIの棚卸し（消すべき / 残すべき）**
+
+| 区分 | 例 | 方針 |
+|---|---|---|
+| 消すべき | `getBodyInstance*`, `getBody*` 系の registry / lookup / facade ラッパー | 旧名の再生産を止める。必要なら `find*` / `lookup*` / delegate 直呼びへ寄せる |
+| 消すべき | `setBodyEventSendMessage`, `setBodyEventResMessage`, `setNYDMessage`, `setNYDForceFace` | メッセージ送出や特殊表示は `YukkuriMessage` / `YukkuriStateDelegate` 側へ集約する |
+| 消すべき | `getBodyBaseImage`, `getBodyBaseSpr`, `getBodyExpandSpr`, `getBraidSprite`, `getBraidW`, `getBraidH`, `getBraidImage` | 画像系は `YukkuriSprite` に閉じる。`Yukkuri` 直下の facade は最小限にする |
+| 消すべき | `getBodySpr`, `setBodySpr`, `getBodyAgeState`, `getBodyBakePeriod`, `setBodyBakePeriod`, `getBodyBakeLevel`, `getBodyCastration`, `setBodyCastration`, `isBraidType`, `setBraidType` | `Yukkuri` 側の状態束を減らし、`LivingEntity` / `SocialEntity` / delegate へ移す |
+| 消すべき | `getBodyHasOkazari`, `setBody`, `getBodyFromObjId` など、責務が名前から読めない helper | 責務名が読める API に置換する |
+| 残すべき | `getBodyRank`, `setBodyRank`, `getBraidBreakChance`, `setBraidBreakChance`, `isNYD` | 現行のドメイン名として意味が通るものは保持する。必要なら後段で再命名する |
+| 残すべき | `Yukkuri` / `LivingEntity` / `SocialEntity` の責務に直結する正規 getter / setter | これ以上の互換ラッパーを増やさない |
+
 1. `gete...` / `sete...` を `get...` / `set...` に統一する
 2. `b...` プレフィックスを持つ boolean / state フィールドを `...` に改名する
 3. `e...` プレフィックスを持つ enum / state フィールドを `...State` / `...Type` などに改名する

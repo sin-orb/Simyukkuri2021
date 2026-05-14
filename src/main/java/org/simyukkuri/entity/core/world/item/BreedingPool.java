@@ -127,7 +127,7 @@ public class BreedingPool extends WorldEntity {
 		if (targetObject.getObjType() == Type.YUKKURI) {
 			Yukkuri body = (Yukkuri) targetObject;
 			// 避妊されてたら妊娠しない
-			if (body.isBodyCastration() && !stalkPool)
+			if (body.isCastrated() && !stalkPool)
 				return 0;
 			if (body.isStalkCastration() && stalkPool)
 				return 0;
@@ -262,7 +262,7 @@ public class BreedingPool extends WorldEntity {
 	public void cry(Yukkuri body) {
 		if (body.hasBabyOrStalk()) {
 			if (body.isNYD()) {
-				body.setNYDMessage(GameMessages.getMessage(body, MessagePool.Action.NonYukkuriDisease), false);
+				body.setNydMessage(GameMessages.getMessage(body, MessagePool.Action.NonYukkuriDisease), false);
 			} else if (GameRandom.nextInt(40) == 0) {
 				body.setPikoMessage(GameMessages.getMessage(body, MessagePool.Action.PoolSukkiri), true);
 			} else {

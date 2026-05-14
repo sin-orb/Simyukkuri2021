@@ -17,79 +17,79 @@ public final class FoodPredatorCandidatePolicy {
 	/**
 	 * live body を候補として評価する.
 	 */
-	public static BodyCandidateResult considerLiveBody(Yukkuri hunter, Yukkuri candidate, int nearestLiveDistance,
+	public static SearchResult considerLiveYukkuri(Yukkuri hunter, Yukkuri candidate, int nearestLiveDistance,
 			int nearestOtherDistance, int candidateSize, int wallMode, Entity nearestLiveObject,
 			Entity nearestOtherObject) {
 		if (hunter.getIntelligence() != Intelligence.FOOL && hunter.findSick(candidate) && !hunter.isTooHungry()) {
-			return new BodyCandidateResult(nearestLiveObject, nearestOtherObject, nearestLiveDistance,
+			return new SearchResult(nearestLiveObject, nearestOtherObject, nearestLiveDistance,
 					nearestOtherDistance, candidateSize);
 		}
 		if (candidate.isPredatorType()) {
-			return new BodyCandidateResult(nearestLiveObject, nearestOtherObject, nearestLiveDistance,
+			return new SearchResult(nearestLiveObject, nearestOtherObject, nearestLiveDistance,
 					nearestOtherDistance, candidateSize);
 		}
 		if (hunter.isFamily(candidate)) {
-			return new BodyCandidateResult(nearestLiveObject, nearestOtherObject, nearestLiveDistance,
+			return new SearchResult(nearestLiveObject, nearestOtherObject, nearestLiveDistance,
 					nearestOtherDistance, candidateSize);
 		}
 		if (!hunter.canflyCheck() && candidate.getZ() != 0) {
-			return new BodyCandidateResult(nearestLiveObject, nearestOtherObject, nearestLiveDistance,
+			return new SearchResult(nearestLiveObject, nearestOtherObject, nearestLiveDistance,
 					nearestOtherDistance, candidateSize);
 		}
 		if (candidate.isServantOf(hunter.getType()) && hunter.isPredator()) {
-			return new BodyCandidateResult(nearestLiveObject, nearestOtherObject, nearestLiveDistance,
+			return new SearchResult(nearestLiveObject, nearestOtherObject, nearestLiveDistance,
 					nearestOtherDistance, candidateSize);
 		}
 
 		int distance = Translate.distance(hunter.getX(), hunter.getY(), candidate.getX(), candidate.getY());
-		if (candidate.getBodyAgeState().ordinal() < hunter.getBodyAgeState().ordinal()) {
-			if (nearestLiveDistance > distance || candidate.getBodyAgeState().ordinal() < candidateSize) {
+		if (candidate.getAgeState().ordinal() < hunter.getAgeState().ordinal()) {
+			if (nearestLiveDistance > distance || candidate.getAgeState().ordinal() < candidateSize) {
 				if (Barrier.acrossBarrier(hunter.getX(), hunter.getY(), candidate.getX(), candidate.getY(),
 						Barrier.MAP_BODY[wallMode] + Barrier.BARRIER_KEKKAI)) {
-					return new BodyCandidateResult(nearestLiveObject, nearestOtherObject, nearestLiveDistance,
+					return new SearchResult(nearestLiveObject, nearestOtherObject, nearestLiveDistance,
 							nearestOtherDistance, candidateSize);
 				}
 				nearestLiveObject = candidate;
 				nearestLiveDistance = distance;
-				candidateSize = candidate.getBodyAgeState().ordinal();
+				candidateSize = candidate.getAgeState().ordinal();
 			}
 		} else {
 			if (nearestOtherDistance > distance) {
 				if (Barrier.acrossBarrier(hunter.getX(), hunter.getY(), candidate.getX(), candidate.getY(),
 						Barrier.MAP_BODY[wallMode] + Barrier.BARRIER_KEKKAI)) {
-					return new BodyCandidateResult(nearestLiveObject, nearestOtherObject, nearestLiveDistance,
+					return new SearchResult(nearestLiveObject, nearestOtherObject, nearestLiveDistance,
 							nearestOtherDistance, candidateSize);
 				}
 				nearestOtherObject = candidate;
 				nearestOtherDistance = distance;
 			}
 		}
-		return new BodyCandidateResult(nearestLiveObject, nearestOtherObject, nearestLiveDistance,
+		return new SearchResult(nearestLiveObject, nearestOtherObject, nearestLiveDistance,
 				nearestOtherDistance, candidateSize);
 	}
 
 	/**
 	 * 死体候補を評価する.
 	 */
-	public static BodyCandidateResult considerDeadBody(Yukkuri hunter, Yukkuri candidate, int nearestDeadDistance,
+	public static SearchResult considerDeadYukkuri(Yukkuri hunter, Yukkuri candidate, int nearestDeadDistance,
 			int wallMode,
 			Entity nearestDeadObject) {
 		if (!hunter.isRude() && candidate.hasOkazari() && hunter.isFamily(candidate)) {
-			return new BodyCandidateResult(null, null, 0, 0, 0, nearestDeadObject, nearestDeadDistance);
+			return new SearchResult(null, null, 0, 0, 0, nearestDeadObject, nearestDeadDistance);
 		}
 		int distance = Translate.distance(hunter.getX(), hunter.getY(), candidate.getX(), candidate.getY());
 		if (nearestDeadDistance > distance) {
 			if (Barrier.acrossBarrier(hunter.getX(), hunter.getY(), candidate.getX(), candidate.getY(),
 					Barrier.MAP_BODY[wallMode] + Barrier.BARRIER_KEKKAI)) {
-				return new BodyCandidateResult(null, null, 0, 0, 0, nearestDeadObject, nearestDeadDistance);
+				return new SearchResult(null, null, 0, 0, 0, nearestDeadObject, nearestDeadDistance);
 			}
 			nearestDeadObject = candidate;
 			nearestDeadDistance = distance;
 		}
-		return new BodyCandidateResult(null, null, 0, 0, 0, nearestDeadObject, nearestDeadDistance);
+		return new SearchResult(null, null, 0, 0, 0, nearestDeadObject, nearestDeadDistance);
 	}
 
-	public static final class BodyCandidateResult {
+	public static final class SearchResult {
 		private final Entity nearestLiveObject;
 		private final Entity nearestOtherObject;
 		private final int nearestLiveDistance;
@@ -98,12 +98,12 @@ public final class FoodPredatorCandidatePolicy {
 		private final Entity nearestDeadObject;
 		private final int nearestDeadDistance;
 
-		BodyCandidateResult(Entity nearestLiveObject, Entity nearestOtherObject, int nearestLiveDistance,
+		SearchResult(Entity nearestLiveObject, Entity nearestOtherObject, int nearestLiveDistance,
 				int nearestOtherDistance, int size) {
 			this(nearestLiveObject, nearestOtherObject, nearestLiveDistance, nearestOtherDistance, size, null, 0);
 		}
 
-		BodyCandidateResult(Entity nearestLiveObject, Entity nearestOtherObject, int nearestLiveDistance,
+		SearchResult(Entity nearestLiveObject, Entity nearestOtherObject, int nearestLiveDistance,
 				int nearestOtherDistance, int size, Entity nearestDeadObject,
 				int nearestDeadDistance) {
 			this.nearestLiveObject = nearestLiveObject;
@@ -115,19 +115,19 @@ public final class FoodPredatorCandidatePolicy {
 			this.nearestDeadDistance = nearestDeadDistance;
 		}
 
-		public Entity getFound() {
+		public Entity getNearestLiveObject() {
 			return nearestLiveObject;
 		}
 
-		public Entity getFound2() {
+		public Entity getNearestOtherObject() {
 			return nearestOtherObject;
 		}
 
-		public int getMinDistance() {
+		public int getNearestLiveDistance() {
 			return nearestLiveDistance;
 		}
 
-		public int getMinDistance2() {
+		public int getNearestOtherDistance() {
 			return nearestOtherDistance;
 		}
 
@@ -135,11 +135,11 @@ public final class FoodPredatorCandidatePolicy {
 			return size;
 		}
 
-		public Entity getFound3() {
+		public Entity getNearestDeadObject() {
 			return nearestDeadObject;
 		}
 
-		public int getMinDistance3() {
+		public int getNearestDeadDistance() {
 			return nearestDeadDistance;
 		}
 	}

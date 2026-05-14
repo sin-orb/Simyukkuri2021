@@ -98,8 +98,8 @@ class ObjDrawCompTest {
         adult.setAge(100000); // age >= CHILDLIMITorg -> ADULT
 
         // Verify age states are what we expect
-        assertEquals(AgeState.BABY, baby.getBodyAgeState());
-        assertEquals(AgeState.ADULT, adult.getBodyAgeState());
+        assertEquals(AgeState.BABY, baby.getAgeState());
+        assertEquals(AgeState.ADULT, adult.getAgeState());
 
         // baby as o1, adult as o2: o2 ordinal (2) - o1 ordinal (0) = 2 > 0
         int result = ObjDrawComp.getInstance().compare(baby, adult);

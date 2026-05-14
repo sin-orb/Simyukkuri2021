@@ -52,7 +52,7 @@ public class MessagePoolTest {
         DummyBody partner = new DummyBody();
         partner.setMyNameCustom("PartnerReimu");
         body.setPartner(partner.getUniqueID());
-        org.simyukkuri.util.BodyRegistry.getBodyInstance(partner.getUniqueID()); // ensure it's in world
+        org.simyukkuri.util.YukkuriLookup.getYukkuriById(partner.getUniqueID()); // ensure it's in world
 
         // FindPartner or similar likely uses %partner
         String msg = MessagePool.getMessage(body, MessagePool.Action.ProposeYes);
@@ -96,10 +96,10 @@ public class MessagePoolTest {
         public DummyBody() {
             super();
             setMsgType(YukkuriType.REIMU);
-            setBodyRank(BodyRank.KAIYU);
+            setRank(YukkuriRank.KAIYU);
             setAgeState(AgeState.ADULT);
             // Put in world so MessagePool can resolve %partner from the registry
-            SimYukkuri.world.getCurrentMap().getBody().put(getUniqueID(), this);
+            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(getUniqueID(), this);
         }
 
         public void setMyNameCustom(String name) {
@@ -179,7 +179,7 @@ public class MessagePoolTest {
         }
 
         @Override
-        public int getImage(int type, int direction, BodyLayer layer, int index) {
+        public int getImage(int type, int direction, YukkuriLayer layer, int index) {
             return 0;
         }
 
@@ -198,7 +198,7 @@ public class MessagePoolTest {
         }
 
         @Override
-        public int checkNonYukkuriDiseaseTolerance() {
+        public int getNonYukkuriDiseaseTolerance() {
             return 100;
         }
     }

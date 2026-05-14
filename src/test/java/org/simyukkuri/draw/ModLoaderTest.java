@@ -73,9 +73,9 @@ public class ModLoaderTest {
         assertNotNull(ModLoader.getItemThemePath());
         assertTrue(ModLoader.getItemThemePath().contains("test_item"));
 
-        ModLoader.setBodyThemePath("test_body");
-        assertNotNull(ModLoader.getBodyThemePath());
-        assertTrue(ModLoader.getBodyThemePath().contains("test_body"));
+        ModLoader.setYukkuriThemePath("test_body");
+        assertNotNull(ModLoader.getYukkuriThemePath());
+        assertTrue(ModLoader.getYukkuriThemePath().contains("test_body"));
 
         ModLoader.setBackThemePath(null);
         assertNull(ModLoader.getBackThemePath());
@@ -110,7 +110,7 @@ public class ModLoaderTest {
         Vector<String> itemList = ModLoader.getItemThemeList();
         assertTrue(itemList.contains("item_theme"));
 
-        Vector<String> bodyList = ModLoader.getBodyThemeList();
+        Vector<String> bodyList = ModLoader.getYukkuriThemeList();
         assertTrue(bodyList.contains("body_theme"));
 
         // Restore jarPath

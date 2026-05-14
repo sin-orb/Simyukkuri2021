@@ -425,7 +425,7 @@ class FoodMakerTest extends ItemTestBase {
         body.setCrushed(true); // isCrushed=true → enters branch
         body.setAgeState(org.simyukkuri.enums.AgeState.BABY);
         body.setObjId(206);
-        SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(body.getUniqueID(), body);
         try {
             item.objHitProcess(body);
         } catch (Exception e) {
@@ -453,7 +453,7 @@ class FoodMakerTest extends ItemTestBase {
             body.setObjType(Type.YUKKURI);
             body.setCrushed(true);
             body.setAgeState(AgeState.BABY);
-            SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
+            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(body.getUniqueID(), body);
 
             assertEquals(0, item.objHitProcess(body));
             assertEquals(0, item.getStockFood());

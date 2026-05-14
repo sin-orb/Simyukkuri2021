@@ -20,7 +20,7 @@ import org.simyukkuri.event.EventPacket;
 import org.simyukkuri.event.EventPacket.EventPriority;
 import org.simyukkuri.event.EventPacket.UpdateState;
 import org.simyukkuri.field.impl.Barrier;
-import org.simyukkuri.logic.BodyLogic;
+import org.simyukkuri.logic.YukkuriLogic;
 import org.simyukkuri.logic.FamilyActionLogic;
 import org.simyukkuri.system.MessagePool;
 import org.simyukkuri.util.GameMessages;
@@ -75,7 +75,7 @@ public class RaperReactionEvent extends EventPacket {
 			boolean foundRaper = false;
 
 			// 全ゆっくりに対してチェック
-			for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
+			for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getYukkuriMap().entrySet()) {
 				Yukkuri predatorBody = entry.getValue();
 				// 自分同士のチェックは無意味なのでスキップ
 				if (predatorBody == body) {
@@ -89,7 +89,7 @@ public class RaperReactionEvent extends EventPacket {
 
 				// 相手との間に壁があればスキップ
 				if (Barrier.acrossBarrier(body.getX(), body.getY(), predatorBody.getX(), predatorBody.getY(),
-						Barrier.MAP_BODY[body.getBodyAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
+						Barrier.MAP_BODY[body.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
 					continue;
 				}
 
@@ -153,7 +153,7 @@ public class RaperReactionEvent extends EventPacket {
 	// 毎フレーム処理
 	@Override
 	public UpdateState update(Yukkuri body) {
-		Yukkuri sourceBody = org.simyukkuri.util.BodyRegistry.getBodyInstance(getFrom());
+		Yukkuri sourceBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
 		// 相手が消えてしまったら他のレイパーを捜索
 		if (sourceBody == null || sourceBody.isRemoved() || sourceBody.isDead() || !sourceBody.isRaper()) {
 			setFrom(searchNextTarget());
@@ -199,7 +199,7 @@ public class RaperReactionEvent extends EventPacket {
 					if (targetBody != null) {
 						int participantCount = 0;
 						// 反撃対象が見つかったら同イベント実行中の固体イベントを書き換え
-						for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
+						for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getYukkuriMap().entrySet()) {
 							Yukkuri eventBody = entry.getValue();
 							if (eventBody.getCurrentEvent() instanceof RaperReactionEvent) {
 								// うんうん奴隷は不参加
@@ -279,7 +279,7 @@ public class RaperReactionEvent extends EventPacket {
 	 * @return !制裁条件
 	 */
 	public boolean checkConditionOfTarget() {
-		Yukkuri sourceBody = org.simyukkuri.util.BodyRegistry.getBodyInstance(getFrom());
+		Yukkuri sourceBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
 		if (sourceBody == null) {
 			setFrom(-1);
 			return false;
@@ -291,11 +291,11 @@ public class RaperReactionEvent extends EventPacket {
 	// trueを返すとイベント終了
 	@Override
 	public boolean execute(Yukkuri body) {
-		Yukkuri sourceBody = org.simyukkuri.util.BodyRegistry.getBodyInstance(getFrom());
+		Yukkuri sourceBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
 		// 相手が消えてしまったら他のレイパーを捜索
 		if (sourceBody == null || sourceBody.isRemoved() || sourceBody.isDead()) {
 			setFrom(searchNextTarget());
-			sourceBody = org.simyukkuri.util.BodyRegistry.getBodyInstance(getFrom());
+			sourceBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
 			// レイパー全滅でイベント終了
 			if (sourceBody == null)
 				return true;
@@ -336,7 +336,7 @@ public class RaperReactionEvent extends EventPacket {
 	 */
 	public Yukkuri searchNextTarget() {
 		Yukkuri nextTargetBody = null;
-		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
+		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getYukkuriMap().entrySet()) {
 			Yukkuri candidateBody = entry.getValue();
 			if (candidateBody.isRaper() && candidateBody.isExciting() && !candidateBody.isDead()) {
 				nextTargetBody = candidateBody;
@@ -354,7 +354,7 @@ public class RaperReactionEvent extends EventPacket {
 	 */
 	public Yukkuri searchAttackTarget() {
 		Yukkuri attackTargetBody = null;
-		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
+		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getYukkuriMap().entrySet()) {
 			Yukkuri candidateBody = entry.getValue();
 			if (!candidateBody.isDead() && candidateBody.isExciting() && candidateBody.isRaper()
 					&& candidateBody.isSukkiri()) {
@@ -371,11 +371,11 @@ public class RaperReactionEvent extends EventPacket {
 	 * @param body ターゲット
 	 */
 	public void moveTargetId(Yukkuri body) {
-		Yukkuri sourceBody = org.simyukkuri.util.BodyRegistry.getBodyInstance(getFrom());
+		Yukkuri sourceBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
 		if (sourceBody == null) {
 			return;
 		}
-		int collisionX = BodyLogic.calcCollisionX(body, sourceBody);
+		int collisionX = YukkuriLogic.calcCollisionX(body, sourceBody);
 		body.moveToEvent(this, sourceBody.getX() + collisionX, sourceBody.getY());
 	}
 
@@ -387,7 +387,7 @@ public class RaperReactionEvent extends EventPacket {
 	protected void escapeTarget(Yukkuri body) {
 		int mapX = Translate.getMapW();
 		int mapY = Translate.getMapH();
-		Yukkuri sourceBody = org.simyukkuri.util.BodyRegistry.getBodyInstance(getFrom());
+		Yukkuri sourceBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
 		if (sourceBody == null) {
 			return;
 		}

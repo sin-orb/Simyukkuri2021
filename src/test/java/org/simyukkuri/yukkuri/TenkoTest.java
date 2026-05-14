@@ -218,7 +218,7 @@ public class TenkoTest {
             // Set up imagePack so getImage doesn't NPE
             java.lang.reflect.Field fp = Tenko.class.getDeclaredField("imagePack");
             fp.setAccessible(true);
-            int ranks = org.simyukkuri.enums.BodyRank.values().length;
+            int ranks = org.simyukkuri.enums.YukkuriRank.values().length;
             java.awt.image.BufferedImage[][][][] pack = new java.awt.image.BufferedImage[ranks][200][20][20];
             java.awt.image.BufferedImage dummy = new java.awt.image.BufferedImage(1, 1, java.awt.image.BufferedImage.TYPE_INT_ARGB);
             for (int i = 0; i < ranks; i++)
@@ -228,7 +228,7 @@ public class TenkoTest {
                             pack[i][j][k][l] = dummy;
             fp.set(null, pack);
             Tenko obj = new Tenko();
-            org.simyukkuri.system.BodyLayer layer = new org.simyukkuri.system.BodyLayer();
+            org.simyukkuri.system.YukkuriLayer layer = new org.simyukkuri.system.YukkuriLayer();
             obj.getImage(0, 0, layer, 0);
         } catch (Exception e) { }
     }

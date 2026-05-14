@@ -36,7 +36,7 @@ public class SerializationTest {
             reimu.tuneParameters();
 
             // Capture the tuned limit and age state
-            int ageStateIndex = reimu.getBodyAgeState().ordinal();
+            int ageStateIndex = reimu.getAgeState().ordinal();
             int tunedLimit = reimu.getDamageLimitBase()[ageStateIndex];
 
             System.out.println("Original Tuned DAMAGELIMIT: " + tunedLimit);
@@ -61,7 +61,7 @@ public class SerializationTest {
             Reimu loadedReimu = loadYukkuri(tempFile);
 
             // 6. Verify
-            int loadedLimit = loadedReimu.getDamageLimitBase()[loadedReimu.getBodyAgeState().ordinal()];
+            int loadedLimit = loadedReimu.getDamageLimitBase()[loadedReimu.getAgeState().ordinal()];
             int loadedDamage = loadedReimu.getDamage();
 
             System.out.println("Loaded DAMAGELIMIT: " + loadedLimit);

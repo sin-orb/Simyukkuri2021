@@ -14,7 +14,7 @@ import org.simyukkuri.entity.core.world.bodylinked.*;
 import org.simyukkuri.entity.core.world.item.*;
 import org.simyukkuri.entity.core.world.mobile.*;
 
-import org.simyukkuri.system.BodyLayer;
+import org.simyukkuri.system.YukkuriLayer;
 import org.simyukkuri.draw.Point4y;
 import org.simyukkuri.enums.Happiness;
 import org.simyukkuri.enums.YukkuriType;
@@ -78,7 +78,7 @@ public class StubBodyAttributes extends Yukkuri {
     }
 
     @Override
-    public int getImage(int type, int direction, BodyLayer layer, int index) {
+    public int getImage(int type, int direction, YukkuriLayer layer, int index) {
         return 0;
     }
 
@@ -97,7 +97,7 @@ public class StubBodyAttributes extends Yukkuri {
     }
 
     @Override
-    public int checkNonYukkuriDiseaseTolerance() {
+    public int getNonYukkuriDiseaseTolerance() {
         return 0;
     }
 
@@ -111,8 +111,8 @@ public class StubBodyAttributes extends Yukkuri {
     private String[] adultNamesDamaged;
     private String[] myNamesDamaged = new String[3];
 
-    @Override public String getBaseBodyFileName() { return baseBodyFileName; }
-    @Override public void setBaseBodyFileName(String v) { baseBodyFileName = v; }
+    @Override public String getBaseYukkuriFileName() { return baseBodyFileName; }
+    @Override public void setBaseYukkuriFileName(String v) { baseBodyFileName = v; }
     @Override public String[] getBabyNames() { return babyNames; }
     @Override public void setBabyNames(String[] v) { babyNames = v; }
     @Override public String[] getChildNames() { return childNames; }

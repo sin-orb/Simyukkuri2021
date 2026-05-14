@@ -19,7 +19,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.draw.World;
 import org.simyukkuri.enums.*;
-import org.simyukkuri.system.BodyLayer;
+import org.simyukkuri.system.YukkuriLayer;
 import org.simyukkuri.draw.Point4y;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,7 +28,7 @@ import java.lang.reflect.Field;
 public class BodyRenderingTest {
 
     private RenderingStubBody body;
-    private BodyLayer layer;
+    private YukkuriLayer layer;
 
     public static class RenderingStubBody extends StubBody {
         public List<Integer> codes = new ArrayList<>();
@@ -38,7 +38,7 @@ public class BodyRenderingTest {
         }
 
         @Override
-        public int getImage(int type, int direction, BodyLayer layer, int index) {
+        public int getImage(int type, int direction, YukkuriLayer layer, int index) {
             codes.add(type);
             return 1;
         }
@@ -48,9 +48,9 @@ public class BodyRenderingTest {
     public void setUp() {
         SimYukkuri.world = new World();
         body = new RenderingStubBody();
-        layer = new BodyLayer();
+        layer = new YukkuriLayer();
         for (int i = 0; i < 3; i++) {
-            body.getBodySpr()[i] = new org.simyukkuri.system.Sprite();
+            body.getSpriteSet()[i] = new org.simyukkuri.system.Sprite();
             body.getExpandSpr()[i] = new org.simyukkuri.system.Sprite();
             body.getBraidSpr()[i] = new org.simyukkuri.system.Sprite();
         }
@@ -114,14 +114,14 @@ public class BodyRenderingTest {
     public void testGetBodyBaseImage_Crushed() throws Exception {
         body.setCrushed(true);
         body.setOkazari(null);
-        body.getBodyBaseImage(layer);
+        body.getImageIndex(layer);
         assertTrue(body.codes.contains(ImageCode.CRUSHED2.ordinal()), "Actual: " + body.codes);
     }
 
     @Test
     public void testGetBodyBaseImage_Shitting() {
         body.setShitting(true);
-        body.getBodyBaseImage(layer);
+        body.getImageIndex(layer);
         assertTrue(body.codes.contains(ImageCode.FRONT_SHIT.ordinal()));
     }
 
@@ -153,7 +153,7 @@ public class BodyRenderingTest {
     @Test
     public void testGetAbnormalBodyImage_Melt() {
         body.setMelt(true);
-        body.getAbnormalBodyImage(layer);
+        body.getDamageImageIndex(layer);
         assertTrue(body.codes.contains(ImageCode.MELT.ordinal()));
     }
 

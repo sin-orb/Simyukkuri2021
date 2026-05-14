@@ -88,7 +88,7 @@ public final class FoodTakeoutPolicy {
 			return false;
 		}
 		WorldEntity favoriteBedObj = (WorldEntity) favoriteBed;
-		if (org.simyukkuri.util.BodyRegistry.getBodyInstance(body.getPartner()) == null && body.getChildrenListSize() == 0) {
+		if (org.simyukkuri.util.YukkuriLookup.getYukkuriById(body.getPartner()) == null && body.getChildrenListSize() == 0) {
 			return false;
 		}
 		for (Map.Entry<Integer, Food> entry : GameWorld.get().getCurrentMap().getFood().entrySet()) {

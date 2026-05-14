@@ -61,7 +61,7 @@ class BodyMovementTest {
 
 	@Test
 	void normalAdultUsesConfiguredStep() {
-		assertEquals(body.getStepBase()[AgeState.ADULT.ordinal()], BodyMovement.calculateMovementStep(body));
+		assertEquals(body.getStepBase()[AgeState.ADULT.ordinal()], YukkuriMovement.calculateMovementStep(body));
 	}
 
 	@Test
@@ -69,7 +69,7 @@ class BodyMovementTest {
 		body.setHungry(0);
 		body.setPredatorType(null);
 
-		assertEquals(2, BodyMovement.calculateMovementStep(body));
+		assertEquals(2, YukkuriMovement.calculateMovementStep(body));
 	}
 
 	@Test
@@ -77,25 +77,25 @@ class BodyMovementTest {
 		body.setHungry(0);
 		body.setPredatorType(PredatorType.BITE);
 
-		assertEquals(4, BodyMovement.calculateMovementStep(body));
+		assertEquals(4, YukkuriMovement.calculateMovementStep(body));
 	}
 
 	@Test
 	void damageSicknessPainAndCarryingHalveStep() {
 		body.setDamage(body.getDamageLimit() / 2);
-		assertEquals(2, BodyMovement.calculateMovementStep(body));
+		assertEquals(2, YukkuriMovement.calculateMovementStep(body));
 
 		body.setDamage(0);
 		body.forceSetSick();
-		assertEquals(2, BodyMovement.calculateMovementStep(body));
+		assertEquals(2, YukkuriMovement.calculateMovementStep(body));
 
 		body.setSickPeriod(0);
 		body.setCriticalDamege(CriticalDamegeType.INJURED);
-		assertEquals(2, BodyMovement.calculateMovementStep(body));
+		assertEquals(2, YukkuriMovement.calculateMovementStep(body));
 
 		body.setCriticalDamege(null);
 		body.setHasBaby(true);
-		assertEquals(2, BodyMovement.calculateMovementStep(body));
+		assertEquals(2, YukkuriMovement.calculateMovementStep(body));
 	}
 
 	@Test
@@ -103,20 +103,20 @@ class BodyMovementTest {
 		body.addAttachment(new Ants());
 		body.setBlind(true);
 
-		assertEquals(1, BodyMovement.calculateMovementStep(body));
+		assertEquals(1, YukkuriMovement.calculateMovementStep(body));
 	}
 
 	@Test
 	void stepZeroIsCorrectedToOne() {
 		body.setStepBase(new int[] { 0, 0, 0 });
 
-		assertEquals(1, BodyMovement.calculateMovementStep(body));
+		assertEquals(1, YukkuriMovement.calculateMovementStep(body));
 	}
 
 	@Test
 	void movementFrequencyUsesAdultStepAsBase() {
-		assertEquals(2, BodyMovement.calculateMovementFrequency(body, 2));
-		assertEquals(4, BodyMovement.calculateMovementFrequency(body, 1));
+		assertEquals(2, YukkuriMovement.calculateMovementFrequency(body, 2));
+		assertEquals(4, YukkuriMovement.calculateMovementFrequency(body, 1));
 	}
 
 	@Test
@@ -124,7 +124,7 @@ class BodyMovementTest {
 		body.setX(10);
 		body.setDestX(20);
 
-		BodyMovement.updateDestinationDirectionX(body);
+		YukkuriMovement.updateDestinationDirectionX(body);
 
 		assertEquals(1, body.getDirX());
 		assertEquals(20, body.getDestX());
@@ -135,7 +135,7 @@ class BodyMovementTest {
 		body.setX(20);
 		body.setDestX(10);
 
-		BodyMovement.updateDestinationDirectionX(body);
+		YukkuriMovement.updateDestinationDirectionX(body);
 
 		assertEquals(-1, body.getDirX());
 		assertEquals(10, body.getDestX());
@@ -146,7 +146,7 @@ class BodyMovementTest {
 		body.setX(10);
 		body.setDestX(10);
 
-		BodyMovement.updateDestinationDirectionX(body);
+		YukkuriMovement.updateDestinationDirectionX(body);
 
 		assertEquals(0, body.getDirX());
 		assertEquals(-1, body.getDestX());
@@ -157,7 +157,7 @@ class BodyMovementTest {
 		body.setY(10);
 		body.setDestY(20);
 
-		BodyMovement.updateDestinationDirectionY(body);
+		YukkuriMovement.updateDestinationDirectionY(body);
 
 		assertEquals(1, body.getDirY());
 		assertEquals(20, body.getDestY());
@@ -168,7 +168,7 @@ class BodyMovementTest {
 		body.setY(20);
 		body.setDestY(10);
 
-		BodyMovement.updateDestinationDirectionY(body);
+		YukkuriMovement.updateDestinationDirectionY(body);
 
 		assertEquals(-1, body.getDirY());
 		assertEquals(10, body.getDestY());
@@ -179,7 +179,7 @@ class BodyMovementTest {
 		body.setY(10);
 		body.setDestY(10);
 
-		BodyMovement.updateDestinationDirectionY(body);
+		YukkuriMovement.updateDestinationDirectionY(body);
 
 		assertEquals(0, body.getDirY());
 		assertEquals(-1, body.getDestY());
@@ -191,7 +191,7 @@ class BodyMovementTest {
 		body.setCountX(body.getSameDirectionFactor() * body.getStepBase()[AgeState.ADULT.ordinal()] - 1);
 		body.setDirX(1);
 
-		BodyMovement.updateRandomDirectionX(body);
+		YukkuriMovement.updateRandomDirectionX(body);
 
 		assertEquals(body.getSameDirectionFactor() * body.getStepBase()[AgeState.ADULT.ordinal()], body.getCountX());
 		assertEquals(1, body.getDirX());
@@ -204,7 +204,7 @@ class BodyMovementTest {
 		body.setDirX(0);
 		GameRandom.setOverride(fixedRandom(0, true));
 
-		BodyMovement.updateRandomDirectionX(body);
+		YukkuriMovement.updateRandomDirectionX(body);
 
 		assertEquals(0, body.getCountX());
 		assertEquals(1, body.getDirX());
@@ -216,7 +216,7 @@ class BodyMovementTest {
 		body.setCountY(body.getSameDirectionFactor() * body.getStepBase()[AgeState.ADULT.ordinal()] - 1);
 		body.setDirY(-1);
 
-		BodyMovement.updateRandomDirectionY(body);
+		YukkuriMovement.updateRandomDirectionY(body);
 
 		assertEquals(body.getSameDirectionFactor() * body.getStepBase()[AgeState.ADULT.ordinal()], body.getCountY());
 		assertEquals(-1, body.getDirY());
@@ -229,7 +229,7 @@ class BodyMovementTest {
 		body.setDirY(0);
 		GameRandom.setOverride(fixedRandom(0, false));
 
-		BodyMovement.updateRandomDirectionY(body);
+		YukkuriMovement.updateRandomDirectionY(body);
 
 		assertEquals(0, body.getCountY());
 		assertEquals(-1, body.getDirY());
@@ -237,12 +237,12 @@ class BodyMovementTest {
 
 	@Test
 	void directionalStepDoublesForExcitingRaper() {
-		assertEquals(1, BodyMovement.calculateDirectionalStep(body));
+		assertEquals(1, YukkuriMovement.calculateDirectionalStep(body));
 
 		body.setRaper(true);
 		body.setExciting(true);
 
-		assertEquals(2, BodyMovement.calculateDirectionalStep(body));
+		assertEquals(2, YukkuriMovement.calculateDirectionalStep(body));
 	}
 
 	@Test
@@ -252,7 +252,7 @@ class BodyMovementTest {
 		body.setDirZ(1);
 		body.setSpeed(200);
 
-		BodyMovement.MovementVector vector = BodyMovement.calculateMovementVector(body, 1);
+		YukkuriMovement.MovementVector vector = YukkuriMovement.calculateMovementVector(body, 1);
 
 		assertEquals(2, vector.getX());
 		assertEquals(-2, vector.getY());
@@ -267,7 +267,7 @@ class BodyMovementTest {
 		body.setSpeed(150);
 		GameRandom.setOverride(fixedRandom(0, false));
 
-		BodyMovement.MovementVector vector = BodyMovement.calculateMovementVector(body, 1);
+		YukkuriMovement.MovementVector vector = YukkuriMovement.calculateMovementVector(body, 1);
 
 		assertEquals(2, vector.getX());
 		assertEquals(-2, vector.getY());
@@ -282,7 +282,7 @@ class BodyMovementTest {
 		body.setSpeed(150);
 		GameRandom.setOverride(fixedRandom(99, false));
 
-		BodyMovement.MovementVector vector = BodyMovement.calculateMovementVector(body, 1);
+		YukkuriMovement.MovementVector vector = YukkuriMovement.calculateMovementVector(body, 1);
 
 		assertEquals(1, vector.getX());
 		assertEquals(-1, vector.getY());
@@ -298,7 +298,7 @@ class BodyMovementTest {
 		body.setZ(10);
 		body.setDestZ(20);
 
-		BodyMovement.updateFlightDestination(body);
+		YukkuriMovement.updateFlightDestination(body);
 
 		assertEquals(1, body.getDirZ());
 		assertEquals(20, body.getDestZ());
@@ -313,7 +313,7 @@ class BodyMovementTest {
 		body.setZ(10);
 		body.setDestZ(10);
 
-		BodyMovement.updateFlightDestination(body);
+		YukkuriMovement.updateFlightDestination(body);
 
 		assertEquals(0, body.getDirZ());
 		assertEquals(-1, body.getDestZ());
@@ -326,7 +326,7 @@ class BodyMovementTest {
 		body.setHasBraid(true);
 		body.setDestZ(-1);
 
-		BodyMovement.updateFlightDestination(body);
+		YukkuriMovement.updateFlightDestination(body);
 
 		assertEquals(Translate.getFlyHeightLimit(), body.getDestZ());
 	}
@@ -337,7 +337,7 @@ class BodyMovementTest {
 		body.setDirZ(7);
 		body.setDestZ(20);
 
-		BodyMovement.updateFlightDestination(body);
+		YukkuriMovement.updateFlightDestination(body);
 
 		assertEquals(7, body.getDirZ());
 		assertEquals(20, body.getDestZ());
@@ -357,7 +357,7 @@ class BodyMovementTest {
 		body.setFlyingType(true);
 		body.setHasBraid(true);
 
-		BodyMovement.applyDirectedMovement(body, BodyMovement.MovementVector.of(2, -2, 2));
+		YukkuriMovement.applyDirectedMovement(body, YukkuriMovement.MovementVector.of(2, -2, 2));
 
 		assertEquals(11, body.getX());
 		assertEquals(9, body.getY());
@@ -376,7 +376,7 @@ class BodyMovementTest {
 		body.setMotionY(0);
 		body.setMotionZ(0);
 
-		boolean handled = BodyMovement.applyExternalMotion(body);
+		boolean handled = YukkuriMovement.applyExternalMotion(body);
 
 		assertEquals(0, body.getX());
 		assertEquals(0, body.getVx());
@@ -396,7 +396,7 @@ class BodyMovementTest {
 		body.setMotionY(0);
 		body.setMotionZ(0);
 
-		boolean handled = BodyMovement.applyExternalMotion(body);
+		boolean handled = YukkuriMovement.applyExternalMotion(body);
 
 		assertEquals(Translate.getMapH(), body.getY());
 		assertEquals(0, body.getVy());
@@ -416,7 +416,7 @@ class BodyMovementTest {
 		body.setMotionY(0);
 		body.setMotionZ(0);
 
-		boolean handled = BodyMovement.applyExternalMotion(body);
+		boolean handled = YukkuriMovement.applyExternalMotion(body);
 
 		assertTrue(handled);
 		assertEquals(0, body.getZ());
@@ -435,7 +435,7 @@ class BodyMovementTest {
 		body.setFalldownDamage(10);
 		body.setNoDamageNextFall(true);
 
-		boolean handled = BodyMovement.applyExternalMotion(body);
+		boolean handled = YukkuriMovement.applyExternalMotion(body);
 
 		assertTrue(handled);
 		assertEquals(0, body.getZ());
@@ -453,10 +453,10 @@ class BodyMovementTest {
 		body.setDestY(100);
 		body.setDirX(1);
 		body.setDirY(0);
-		Translate.setCurrentWallMapNum(101, 100, org.simyukkuri.field.impl.Barrier.MAP_BODY[body.getBodyAgeState().ordinal()]);
+		Translate.setCurrentWallMapNum(101, 100, org.simyukkuri.field.impl.Barrier.MAP_BODY[body.getAgeState().ordinal()]);
 
-		BodyMovement.applyDirectedMovement(body, BodyMovement.MovementVector.of(1, 0, 0));
-		BodyMovement.resolveDirectedMovement(body, BodyMovement.MovementVector.of(1, 0, 0));
+		YukkuriMovement.applyDirectedMovement(body, YukkuriMovement.MovementVector.of(1, 0, 0));
+		YukkuriMovement.resolveDirectedMovement(body, YukkuriMovement.MovementVector.of(1, 0, 0));
 
 		assertEquals(100, body.getX());
 		assertEquals(1, body.getBlockedTicks());
@@ -478,15 +478,15 @@ class BodyMovementTest {
 		Translate.setCurrentFieldMapNum(141, 140, org.simyukkuri.field.FieldShape.FIELD_POOL);
 		Translate.setCurrentFieldMapNum(140, 140, 0);
 
-		BodyMovement.applyDirectedMovement(body, BodyMovement.MovementVector.of(1, 0, 0));
-		BodyMovement.resolveDirectedMovement(body, BodyMovement.MovementVector.of(1, 0, 0));
+		YukkuriMovement.applyDirectedMovement(body, YukkuriMovement.MovementVector.of(1, 0, 0));
+		YukkuriMovement.resolveDirectedMovement(body, YukkuriMovement.MovementVector.of(1, 0, 0));
 
 		assertEquals(140, body.getX());
 	}
 
 	@Test
 	void moveToClampsDestinationToMapRange() {
-		BodyMovement.moveTo(body, -10, Translate.getMapH() + 10, Translate.getMapZ() + 20);
+		YukkuriMovement.moveTo(body, -10, Translate.getMapH() + 10, Translate.getMapZ() + 20);
 
 		assertEquals(0, body.getDestX());
 		assertEquals(Translate.getMapH(), body.getDestY());
@@ -494,14 +494,14 @@ class BodyMovementTest {
 	}
 
 	@Test
-	void moveToBodyClearsActionsAndSetsTargetFlag() {
+	void moveToYukkuriClearsActionsAndSetsTargetFlag() {
 		Entity target = createMappedMoveTarget();
 		body.setToShit(true);
 		body.setToSukkiri(true);
 
-		BodyMovement.moveToBody(body, target, 100, 200, 0);
+		YukkuriMovement.moveToYukkuri(body, target, 100, 200, 0);
 
-		assertTrue(body.isToBody());
+		assertTrue(body.isToYukkuri());
 		assertFalse(body.isToShit());
 		assertFalse(body.isToSukkiri());
 		assertEquals(target.getObjId(), body.getMoveTargetId());
@@ -515,7 +515,7 @@ class BodyMovementTest {
 		body.setY(200);
 		body.setScare(false);
 
-		BodyMovement.runAway(body, 100, 100);
+		YukkuriMovement.runAway(body, 100, 100);
 
 		assertEquals(Translate.getMapW(), body.getDestX());
 		assertEquals(Translate.getMapH(), body.getDestY());
@@ -528,7 +528,7 @@ class BodyMovementTest {
 		body.setDestX(-1);
 		body.setDestY(-1);
 
-		BodyMovement.runAway(body, 100, 100);
+		YukkuriMovement.runAway(body, 100, 100);
 
 		assertEquals(-1, body.getDestX());
 		assertEquals(-1, body.getDestY());
@@ -550,7 +550,7 @@ class BodyMovementTest {
 
 	private Yukkuri createMappedMoveTarget() {
 		Yukkuri target = WorldTestHelper.createBody();
-		GameWorld.get().getCurrentMap().getBody().put(target.getUniqueID(), target);
+		GameWorld.get().getCurrentMap().getYukkuriMap().put(target.getUniqueID(), target);
 		return target;
 	}
 
@@ -563,7 +563,7 @@ class BodyMovementTest {
 			expandSprites[i] = new Sprite(100, 100, Sprite.PIVOT_CENTER_BOTTOM);
 			braidSprites[i] = new Sprite(100, 100, Sprite.PIVOT_CENTER_BOTTOM);
 		}
-		target.setBodySpr(bodySprites);
+		target.setSpriteSet(bodySprites);
 		target.setExpandSpr(expandSprites);
 		target.setBraidSpr(braidSprites);
 	}

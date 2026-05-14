@@ -10,12 +10,12 @@ import org.simyukkuri.draw.Dimension4y;
 import org.simyukkuri.draw.Point4y;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.enums.AgeState;
-import org.simyukkuri.enums.BodyRank;
+import org.simyukkuri.enums.YukkuriRank;
 import org.simyukkuri.enums.ImageCode;
 import org.simyukkuri.enums.Parent;
 import org.simyukkuri.enums.PredatorType;
 import org.simyukkuri.enums.YukkuriType;
-import org.simyukkuri.system.BodyLayer;
+import org.simyukkuri.system.YukkuriLayer;
 import org.simyukkuri.util.GameRandom;
 import org.simyukkuri.util.GameView;
 
@@ -67,8 +67,8 @@ public class HybridYukkuri extends Yukkuri {
 		nameE = "Yukkuri";
 		nameJ2 = "ゆっくり";
 		nameE2 = "Yukkuri";
-		Yukkuri mama = org.simyukkuri.util.BodyRegistry.getBodyInstance(getParents()[Parent.MAMA.ordinal()]);
-		Yukkuri papa = org.simyukkuri.util.BodyRegistry.getBodyInstance(getParents()[Parent.PAPA.ordinal()]);
+		Yukkuri mama = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getParents()[Parent.MAMA.ordinal()]);
+		Yukkuri papa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getParents()[Parent.PAPA.ordinal()]);
 
 		if (mama == null && papa == null) {
 			doreiTmp = new Reimu(100, 100, 0, AgeState.BABY, null, null);
@@ -79,7 +79,7 @@ public class HybridYukkuri extends Yukkuri {
 					parentTmp = (HybridYukkuri) mama;
 					doreiTmp = parentTmp.dorei;
 				} else {
-					doreiTmp = GameView.makeBody(0, 0, 0,
+					doreiTmp = GameView.makeYukkuri(0, 0, 0,
 							mama.getType(), null, AgeState.BABY, mama, papa, false);
 				}
 			} else {
@@ -87,7 +87,7 @@ public class HybridYukkuri extends Yukkuri {
 					parentTmp = (HybridYukkuri) papa;
 					doreiTmp = parentTmp.dorei;
 				} else {
-					doreiTmp = GameView.makeBody(0, 0, 0, papa.getType(),
+					doreiTmp = GameView.makeYukkuri(0, 0, 0, papa.getType(),
 							null, AgeState.BABY, mama, papa, false);
 				}
 			}
@@ -97,7 +97,7 @@ public class HybridYukkuri extends Yukkuri {
 					parentTmp2 = (HybridYukkuri) papa;
 					doreiTmp2 = parentTmp2.dorei;
 				} else {
-					doreiTmp2 = GameView.makeBody(0, 0, 0, papa.getType(),
+					doreiTmp2 = GameView.makeYukkuri(0, 0, 0, papa.getType(),
 							null, AgeState.BABY, mama, papa, false);
 				}
 			} else {
@@ -303,28 +303,28 @@ public class HybridYukkuri extends Yukkuri {
 	}
 
 	@Override
-	public void setBodyRank(BodyRank r) {
+	public void setRank(YukkuriRank r) {
 		if (dorei != null) {
-			dorei.setBodyRank(r);
+			dorei.setRank(r);
 		}
 		if (dorei2 != null) {
-			dorei2.setBodyRank(r);
+			dorei2.setRank(r);
 		}
 		if (dorei3 != null) {
-			dorei3.setBodyRank(r);
+			dorei3.setRank(r);
 		}
 		if (dorei4 != null) {
-			dorei4.setBodyRank(r);
+			dorei4.setRank(r);
 		}
 		bodyRank = r;
 	}
 
 	@Override
-	public int getImage(int type, int direction, BodyLayer layer, int index) {
+	public int getImage(int type, int direction, YukkuriLayer layer, int index) {
 		if (images == null || images[type] == null)
 			return 0;
 		try {
-			images[type].setAgeState(getBodyAgeState());
+			images[type].setAgeState(getAgeState());
 			return images[type].getImage(type, direction, layer, index);
 		} catch (Exception e) {
 			return 0;
@@ -337,7 +337,7 @@ public class HybridYukkuri extends Yukkuri {
 	 * @param idx 型のインデックス
 	 * @return 型となるゆっくり
 	 */
-	public Yukkuri getBaseBody(int idx) {
+	public Yukkuri getBaseYukkuri(int idx) {
 		if (idx == 0)
 			return dorei;
 		else if (idx == 1)
@@ -373,8 +373,8 @@ public class HybridYukkuri extends Yukkuri {
 	@Override
 	@Transient
 	public String getMyName() {
-		if (getMyNames()[getBodyAgeState().ordinal()] != null) {
-			return getMyNames()[getBodyAgeState().ordinal()];
+		if (getMyNames()[getAgeState().ordinal()] != null) {
+			return getMyNames()[getAgeState().ordinal()];
 		}
 		return nameJ;
 	}
@@ -382,8 +382,8 @@ public class HybridYukkuri extends Yukkuri {
 	@Override
 	@Transient
 	public String getMyNameD() {
-		if (getMyNamesDamaged()[getBodyAgeState().ordinal()] != null) {
-			return getMyNamesDamaged()[getBodyAgeState().ordinal()];
+		if (getMyNamesDamaged()[getAgeState().ordinal()] != null) {
+			return getMyNamesDamaged()[getAgeState().ordinal()];
 		}
 		return nameJ;
 	}

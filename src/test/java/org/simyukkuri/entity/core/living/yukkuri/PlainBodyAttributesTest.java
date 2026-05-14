@@ -23,9 +23,9 @@ import org.simyukkuri.draw.World;
 import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.Happiness;
 import org.simyukkuri.system.Sprite;
-import org.simyukkuri.system.BodyLayer;
+import org.simyukkuri.system.YukkuriLayer;
 
-// BodyLayer は定数を持たないクラスなので new BodyLayer() でインスタンス生成して渡す
+// YukkuriLayer は定数を持たないクラスなので new YukkuriLayer() でインスタンス生成して渡す
 
 /**
  * PlainBodyAttributes のカバレッジ向上テスト.
@@ -56,9 +56,9 @@ public class PlainBodyAttributesTest {
     /** bodySpr / expandSpr / braidSpr を初期化する（getSizeなどで参照されるため） */
     private static void initSprites(PlainBodyAttributes b) {
         for (int i = 0; i < 3; i++) {
-            b.getBodySpr()[i] = new Sprite();
-            b.getBodySpr()[i].setImageW(100);
-            b.getBodySpr()[i].setImageH(100);
+            b.getSpriteSet()[i] = new Sprite();
+            b.getSpriteSet()[i].setImageW(100);
+            b.getSpriteSet()[i].setImageH(100);
             b.getExpandSpr()[i] = new Sprite();
             b.getBraidSpr()[i] = new Sprite();
         }
@@ -162,13 +162,13 @@ public class PlainBodyAttributesTest {
 
     @Test
     public void testGetImageReturnsZero() {
-        int result = body.getImage(0, 0, new BodyLayer(), 0);
+        int result = body.getImage(0, 0, new YukkuriLayer(), 0);
         assertEquals(0, result);
     }
 
     @Test
     public void testGetImageWithVariousArgs() {
-        assertEquals(0, body.getImage(1, 1, new BodyLayer(), 1));
+        assertEquals(0, body.getImage(1, 1, new YukkuriLayer(), 1));
     }
 
     // ---------------------------------------------------------------
@@ -204,12 +204,12 @@ public class PlainBodyAttributesTest {
     }
 
     // ---------------------------------------------------------------
-    // checkNonYukkuriDiseaseTolerance
+    // getNonYukkuriDiseaseTolerance
     // ---------------------------------------------------------------
 
     @Test
     public void testCheckNonYukkuriDiseaseToleranceReturnsZero() {
-        assertEquals(0, body.checkNonYukkuriDiseaseTolerance());
+        assertEquals(0, body.getNonYukkuriDiseaseTolerance());
     }
 
     // ---------------------------------------------------------------
@@ -221,12 +221,12 @@ public class PlainBodyAttributesTest {
         body.setAgeState(AgeState.BABY);
         body.forceSetHappiness(Happiness.HAPPY);
         assertEquals(Happiness.HAPPY, body.getHappiness());
-        assertEquals(AgeState.BABY, body.getBodyAgeState());
+        assertEquals(AgeState.BABY, body.getAgeState());
         assertEquals(org.simyukkuri.enums.YukkuriType.TARINAI, body.getType());
         assertEquals("TestJ", body.getNameJ());
         assertEquals("TestE", body.getNameE());
         assertTrue(body.isImageLoaded());
-        assertEquals(0, body.checkNonYukkuriDiseaseTolerance());
+        assertEquals(0, body.getNonYukkuriDiseaseTolerance());
     }
 
     @Test

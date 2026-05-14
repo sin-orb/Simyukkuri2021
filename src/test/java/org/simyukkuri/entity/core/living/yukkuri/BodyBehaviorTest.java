@@ -73,9 +73,9 @@ public class BodyBehaviorTest {
         body = new StubBody();
         body.setUniqueID(1);
         body.setAge(100000); // Adult
-        body.setBodyRank(BodyRank.KAIYU);
+        body.setRank(YukkuriRank.KAIYU);
         body.setMsgType(YukkuriType.REIMU);
-        world.getCurrentMap().getBody().put(1, body);
+        world.getCurrentMap().getYukkuriMap().put(1, body);
     }
 
     @AfterEach
@@ -133,7 +133,7 @@ public class BodyBehaviorTest {
         neighbor.setUniqueID(2);
         neighbor.setX(body.getX() + 10);
         neighbor.setY(body.getY());
-        world.getCurrentMap().getBody().put(2, neighbor);
+        world.getCurrentMap().getYukkuriMap().put(2, neighbor);
 
         Method m = Terrarium.class.getDeclaredMethod("checkPanic", Yukkuri.class);
         m.setAccessible(true);
@@ -151,7 +151,7 @@ public class BodyBehaviorTest {
         neighbor.setUniqueID(2);
         neighbor.setX(body.getX() + 1);
         neighbor.setY(body.getY());
-        world.getCurrentMap().getBody().put(2, neighbor);
+        world.getCurrentMap().getYukkuriMap().put(2, neighbor);
 
         Method m = Terrarium.class.getDeclaredMethod("checkFire", Yukkuri.class);
         m.setAccessible(true);
@@ -184,7 +184,7 @@ public class BodyBehaviorTest {
             raper.setX(body.getX() + 10);
             raper.setY(body.getY());
             raper.setRaper(true);
-            world.getCurrentMap().getBody().put(2, raper);
+            world.getCurrentMap().getYukkuriMap().put(2, raper);
 
             Method m = Terrarium.class.getDeclaredMethod("checkPanic", Yukkuri.class);
             m.setAccessible(true);
@@ -201,7 +201,7 @@ public class BodyBehaviorTest {
             distant.setUniqueID(2);
             distant.setX(body.getX() + 1000);
             distant.setY(body.getY() + 1000);
-            world.getCurrentMap().getBody().put(2, distant);
+            world.getCurrentMap().getYukkuriMap().put(2, distant);
 
             Method m = Terrarium.class.getDeclaredMethod("checkFire", Yukkuri.class);
             m.setAccessible(true);

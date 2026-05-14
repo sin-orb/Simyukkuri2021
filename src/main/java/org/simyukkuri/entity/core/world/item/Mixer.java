@@ -58,7 +58,7 @@ public class Mixer extends WorldEntity {
 
 	@Override
 	public int getImageLayer(BufferedImage[] layer) {
-		Yukkuri bindBody = org.simyukkuri.util.BodyRegistry.getBodyInstance(bind);
+		Yukkuri bindBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(bind);
 		if (enabled) {
 			if (bindBody != null) {
 				if (counter > 60) {
@@ -97,7 +97,7 @@ public class Mixer extends WorldEntity {
 
 	@Override
 	public boolean enableHitCheck() {
-		Yukkuri bindBody = org.simyukkuri.util.BodyRegistry.getBodyInstance(bind);
+		Yukkuri bindBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(bind);
 		if (bindBody != null)
 			return false;
 		return true;
@@ -123,7 +123,7 @@ public class Mixer extends WorldEntity {
 		if (getAge() % 2400 == 0) {
 			Cash.addCash(-getCost());
 		}
-		Yukkuri bindBody = org.simyukkuri.util.BodyRegistry.getBodyInstance(bind);
+		Yukkuri bindBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(bind);
 		if (bindBody != null && enabled) {
 			bindBody.setShadowVisible(false);
 			if (grabbed) {
@@ -206,7 +206,7 @@ public class Mixer extends WorldEntity {
 
 	@Override
 	public void removeListData() {
-		Yukkuri bindBody = org.simyukkuri.util.BodyRegistry.getBodyInstance(bind);
+		Yukkuri bindBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(bind);
 		if (bindBody != null) {
 			bindBody.setForceFace(-1);
 			bindBody.setLockmove(false);

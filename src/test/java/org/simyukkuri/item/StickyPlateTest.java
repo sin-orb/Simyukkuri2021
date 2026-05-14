@@ -59,7 +59,7 @@ class StickyPlateTest extends ItemTestBase {
     @Test
     void testEnableHitCheck_NoBindBody() {
         StickyPlate item = new StickyPlate();
-        assertNull(item.getBindBody());
+        assertNull(item.getBoundYukkuri());
         assertTrue(item.enableHitCheck());
     }
 
@@ -67,19 +67,19 @@ class StickyPlateTest extends ItemTestBase {
     void testEnableHitCheck_WithBindBody() {
         StickyPlate item = new StickyPlate();
         Yukkuri body = WorldTestHelper.createBody();
-        item.setBindBody(body);
+        item.setBoundYukkuri(body);
         assertFalse(item.enableHitCheck());
     }
 
     @Test
     void testGetSetBindBody() {
         StickyPlate item = new StickyPlate();
-        assertNull(item.getBindBody());
+        assertNull(item.getBoundYukkuri());
         Yukkuri body = WorldTestHelper.createBody();
-        item.setBindBody(body);
-        assertEquals(body, item.getBindBody());
-        item.setBindBody(null);
-        assertNull(item.getBindBody());
+        item.setBoundYukkuri(body);
+        assertEquals(body, item.getBoundYukkuri());
+        item.setBoundYukkuri(null);
+        assertNull(item.getBoundYukkuri());
     }
 
     @Test
@@ -133,7 +133,7 @@ class StickyPlateTest extends ItemTestBase {
         Yukkuri body = WorldTestHelper.createBody();
         body.setLockmove(true);
         body.setCanPullOrPush(true);
-        item.setBindBody(body);
+        item.setBoundYukkuri(body);
 
         item.removeListData();
 
@@ -172,13 +172,13 @@ class StickyPlateTest extends ItemTestBase {
         Yukkuri body = WorldTestHelper.createBody();
 
         assertDoesNotThrow(() -> item.objHitProcess(body));
-        assertEquals(body, item.getBindBody());
+        assertEquals(body, item.getBoundYukkuri());
     }
 
     @Test
     void testUpDate_NoBindBody() {
         StickyPlate item = new StickyPlate();
-        assertNull(item.getBindBody());
+        assertNull(item.getBoundYukkuri());
         assertDoesNotThrow(() -> item.upDate());
     }
 
@@ -189,7 +189,7 @@ class StickyPlateTest extends ItemTestBase {
 
         Yukkuri body = WorldTestHelper.createBody();
         body.setLockmove(true);
-        item.setBindBody(body);
+        item.setBoundYukkuri(body);
 
         item.upDate();
 

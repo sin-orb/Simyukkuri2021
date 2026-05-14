@@ -49,7 +49,7 @@ public class EatBodyEvent extends EventPacket {
 	// また、イベント優先度も必要に応じて設定できる
 	@Override
 	public boolean checkEventResponse(Yukkuri body) {
-		if (org.simyukkuri.util.BodyRegistry.getBodyInstance(getFrom()) == body && body.canEventResponse()
+		if (org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom()) == body && body.canEventResponse()
 				&& body.getAttitude() != Attitude.SUPER_SHITHEAD)
 			return true;
 		return false;
@@ -58,7 +58,7 @@ public class EatBodyEvent extends EventPacket {
 	// イベント開始動作
 	@Override
 	public void start(Yukkuri body) {
-		Yukkuri targetBody = org.simyukkuri.util.BodyRegistry.getBodyInstance(getTo());
+		Yukkuri targetBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getTo());
 		if (targetBody == null)
 			return;
 		// ゆっくりが隠れないように死体の奥に出る
@@ -69,7 +69,7 @@ public class EatBodyEvent extends EventPacket {
 	// trueを返すとイベント終了
 	@Override
 	public boolean execute(Yukkuri body) {
-		Yukkuri targetBody = org.simyukkuri.util.BodyRegistry.getBodyInstance(getTo());
+		Yukkuri targetBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getTo());
 		// 複数の動作を順次行うのでtickで管理
 		if (tick == 0) {
 			// 固まる
@@ -85,14 +85,14 @@ public class EatBodyEvent extends EventPacket {
 				body.lookTo(targetBody.getX(), targetBody.getY());
 			body.setLockmove(false);
 			body.setForceFace(ImageCode.SURPRISE.ordinal());
-			body.setBodyEventResMessage(GameMessages.getMessage(body, MessagePool.Action.Surprise), 52, true, false);
+			body.setEventResMessage(GameMessages.getMessage(body, MessagePool.Action.Surprise), 52, true, false);
 			body.stay();
 		} else if (tick == 70) {
 			// 吐く
 			if (targetBody != null)
 				body.lookTo(targetBody.getX(), targetBody.getY());
 			body.setForceFace(ImageCode.CRYING.ordinal());
-			body.setBodyEventResMessage(GameMessages.getMessage(body, MessagePool.Action.Vomit), 62, true, false);
+			body.setEventResMessage(GameMessages.getMessage(body, MessagePool.Action.Vomit), 62, true, false);
 			int ofsX = Translate.invertX(body.getCollisionX() >> 1, body.getY());
 			if (body.getDirection() == Direction.LEFT)
 				ofsX = -ofsX;

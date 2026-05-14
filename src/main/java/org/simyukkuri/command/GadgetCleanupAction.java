@@ -53,7 +53,7 @@ final class GadgetCleanupAction {
 				break;
 		}
 
-		List<Yukkuri> bodyList = new LinkedList<Yukkuri>(GameWorld.get().getCurrentMap().getBody().values());
+		List<Yukkuri> bodyList = new LinkedList<Yukkuri>(GameWorld.get().getCurrentMap().getYukkuriMap().values());
 		List<Shit> shitList = new LinkedList<Shit>(GameWorld.get().getCurrentMap().getShit().values());
 		List<Vomit> vomitList = new LinkedList<Vomit>(GameWorld.get().getCurrentMap().getVomit().values());
 		List<Food> foodList = new LinkedList<Food>(GameWorld.get().getCurrentMap().getFood().values());
@@ -90,7 +90,7 @@ final class GadgetCleanupAction {
 			Stalk[] stalks = stalkList.toArray(new Stalk[0]);
 			for (Stalk s : stalks) {
 				int id = s.getPlantYukkuri();
-				if (GameWorld.get().getCurrentMap().getBody().get(id) == null) {
+				if (GameWorld.get().getCurrentMap().getYukkuriMap().get(id) == null) {
 					s.remove();
 				} else if (checkNoBabyStalk(s)) {
 					s.remove();
@@ -124,7 +124,7 @@ final class GadgetCleanupAction {
 
 			for (Stalk s : stalkList) {
 				int id = s.getPlantYukkuri();
-				if (GameWorld.get().getCurrentMap().getBody().get(id) == null) {
+				if (GameWorld.get().getCurrentMap().getYukkuriMap().get(id) == null) {
 					s.remove();
 				}
 			}
@@ -140,7 +140,7 @@ final class GadgetCleanupAction {
 			if (i == null) {
 				continue;
 			}
-			Yukkuri body = org.simyukkuri.util.BodyRegistry.getBodyInstance(i);
+			Yukkuri body = org.simyukkuri.util.YukkuriLookup.getYukkuriById(i);
 			if (body != null && !body.isDead()) {
 				return false;
 			}

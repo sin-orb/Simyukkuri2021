@@ -56,7 +56,7 @@ public class TrashLogicTest {
         // Ensure no okazari
         body.setOkazari(null);
 
-        SimYukkuri.world.getCurrentMap().getBody().put(body.getObjId(), body);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(body.getObjId(), body);
     }
 
     @AfterEach
@@ -108,7 +108,7 @@ public class TrashLogicTest {
         boolean result = TrashLogic.checkTrashOkazari(body);
 
         assertTrue(result, "視野内に Trash があるとき true を返すべき");
-        // GetTrashOkazariEvent が addBodyEvent で body のイベントリストに追加される
+        // GetTrashOkazariEvent が addYukkuriEvent で body のイベントリストに追加される
         assertFalse(body.getEventList().isEmpty(), "イベントが body に追加されるべき");
     }
 
@@ -250,7 +250,7 @@ public class TrashLogicTest {
         body2.setX(30);
         body2.setY(30);
         body2.setOkazari(null);
-        SimYukkuri.world.getCurrentMap().getBody().put(body2.getObjId(), body2);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(body2.getObjId(), body2);
 
         // body2 近くに Trash を配置（wallMap 範囲内）
         Trash trash = new Trash(35, 35, 0);

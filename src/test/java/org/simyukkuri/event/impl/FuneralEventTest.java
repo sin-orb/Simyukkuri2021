@@ -50,8 +50,8 @@ class FuneralEventTest {
         for (int i = 0; i < 3; i++) {
             spr[i] = new org.simyukkuri.system.Sprite(10, 10, org.simyukkuri.system.Sprite.PIVOT_CENTER_BOTTOM);
         }
-        b.setBodySpr(spr);
-        SimYukkuri.world.getCurrentMap().getBody().put(b.getUniqueID(), b);
+        b.setSpriteSet(spr);
+        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(b.getUniqueID(), b);
         return b;
     }
 
@@ -549,7 +549,7 @@ class FuneralEventTest {
         Yukkuri child = createBody();
         child.setParents(new int[] { from.getUniqueID(), -1 });
         child.setAgeState(AgeState.BABY);
-        child.setBodySpr(from.getBodySpr()); // ensure sprites set
+        child.setSpriteSet(from.getSpriteSet()); // ensure sprites set
         FuneralEvent event = new FuneralEvent(from, null, null, 10);
         from.setCurrentEvent(event);
         child.setCurrentEvent(event);

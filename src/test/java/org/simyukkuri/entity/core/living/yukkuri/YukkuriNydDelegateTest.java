@@ -7,10 +7,10 @@ import org.junit.jupiter.api.Test;
 
 class YukkuriNydDelegateTest {
 	@Test
-	void checkNonYukkuriDisease_defaultBodyReturnsFalse() {
+	void hasNonYukkuriDisease_defaultBodyReturnsFalse() {
 		StubBody body = new StubBody();
 
-		assertFalse(new YukkuriNydDelegate(body).checkNonYukkuriDisease());
+		assertFalse(new YukkuriNydDelegate(body).hasNonYukkuriDisease());
 		assertTrue(body.isNotNYD());
 	}
 }

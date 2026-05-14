@@ -49,19 +49,19 @@ public abstract class Attachment extends Entity {
 	/** X方向の描画座標オフセット分 */
 	@Transient
 	public int getOfsX() {
-		Yukkuri pa = org.simyukkuri.util.BodyRegistry.getBodyInstance(parent);
+		Yukkuri pa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(parent);
 		if (pa == null)
 			return -1;
-		return posOfs[pa.getBodyAgeState().ordinal()].getX();
+		return posOfs[pa.getAgeState().ordinal()].getX();
 	}
 
 	/** Y方向の描画座標オフセット分 */
 	@Transient
 	public int getOfsY() {
-		Yukkuri pa = org.simyukkuri.util.BodyRegistry.getBodyInstance(parent);
+		Yukkuri pa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(parent);
 		if (pa == null)
 			return -1;
-		return posOfs[pa.getBodyAgeState().ordinal()].getY();
+		return posOfs[pa.getAgeState().ordinal()].getY();
 	}
 
 	/** 親オブジェクトの原点取得 */
@@ -72,7 +72,7 @@ public abstract class Attachment extends Entity {
 
 	/** アタッチメントの詳細設定 */
 	protected void setAttachProperty(int[] property, String ofsKey) {
-		Yukkuri pa = org.simyukkuri.util.BodyRegistry.getBodyInstance(parent);
+		Yukkuri pa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(parent);
 		if (pa == null)
 			return;
 		posOfs = pa.getMountPoint(ofsKey);

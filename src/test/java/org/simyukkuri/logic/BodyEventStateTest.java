@@ -43,17 +43,17 @@ class BodyEventStateTest {
 		body.setToBed(true);
 		body.setToFood(true);
 		body.setToShit(true);
-		body.setToBody(true);
+		body.setToYukkuri(true);
 		body.setToSteal(true);
 		body.setMoveTargetId(42);
 
-		BodyEventState.clearActions(body);
+		YukkuriEventState.clearActions(body);
 
 		assertFalse(body.isToSukkiri());
 		assertFalse(body.isToBed());
 		assertFalse(body.isToFood());
 		assertFalse(body.isToShit());
-		assertFalse(body.isToBody());
+		assertFalse(body.isToYukkuri());
 		assertFalse(body.isToSteal());
 		assertEquals(-1, body.getMoveTargetId());
 	}
@@ -63,7 +63,7 @@ class BodyEventStateTest {
 		body.setForceFace(5);
 		body.setCurrentEvent(null);
 
-		BodyEventState.clearEvent(body);
+		YukkuriEventState.clearEvent(body);
 
 		assertNull(body.getCurrentEvent());
 		assertEquals(-1, body.getForceFace());
@@ -73,7 +73,7 @@ class BodyEventStateTest {
 	void setMessageIgnoresEmptyString() {
 		body.setMessageTicks(0);
 
-		BodyEventState.setMessage(body, "");
+		YukkuriEventState.setMessage(body, "");
 
 		assertEquals(0, body.getMessageTicks());
 	}
@@ -82,7 +82,7 @@ class BodyEventStateTest {
 	void setPikoMessageWithCountUpdatesMessageCount() {
 		body.setMessageTicks(0);
 
-		BodyEventState.setPikoMessage(body, "hi", 3, true);
+		YukkuriEventState.setPikoMessage(body, "hi", 3, true);
 
 		assertEquals(3, body.getMessageTicks());
 	}
@@ -94,7 +94,7 @@ class BodyEventStateTest {
 		org.simyukkuri.SimYukkuri.world.getCurrentMap().getEvent().add(worldEvent);
 		body.getEventList().add(bodyEvent);
 
-		BodyEventState.processPendingEvents(body);
+		YukkuriEventState.processPendingEvents(body);
 
 		assertSame(bodyEvent, body.getCurrentEvent());
 		assertTrue(bodyEvent.started);
@@ -112,7 +112,7 @@ class BodyEventStateTest {
 		body.getEventList().add(bodyEvent);
 		org.simyukkuri.SimYukkuri.world.getCurrentMap().getEvent().add(worldEvent);
 
-		BodyEventState.processPendingEvents(body);
+		YukkuriEventState.processPendingEvents(body);
 
 		assertNull(body.getCurrentEvent());
 		assertTrue(bodyEvent.simpleActionCalled);
@@ -125,7 +125,7 @@ class BodyEventStateTest {
 		body.setCurrentEvent(new TrackingEventPacket(EventPacket.EventPriority.LOW));
 		body.setEventResult(Event.DOSHIT);
 
-		Event result = BodyEventState.resolveEventResultAction(body, Event.DONOTHING);
+		Event result = YukkuriEventState.resolveEventResultAction(body, Event.DONOTHING);
 
 		assertEquals(Event.DOSHIT, result);
 		assertEquals(Event.DONOTHING, body.getEventResult());
@@ -136,7 +136,7 @@ class BodyEventStateTest {
 		body.setCurrentEvent(new TrackingEventPacket(EventPacket.EventPriority.LOW));
 		body.setEventResult(Event.DOSHIT);
 
-		Event result = BodyEventState.resolveEventResultAction(body, Event.BIRTHBABY);
+		Event result = YukkuriEventState.resolveEventResultAction(body, Event.BIRTHBABY);
 
 		assertEquals(Event.BIRTHBABY, result);
 		assertEquals(Event.DOSHIT, body.getEventResult());
@@ -147,7 +147,7 @@ class BodyEventStateTest {
 		body.setCurrentEvent(new TrackingEventPacket(EventPacket.EventPriority.HIGH));
 		body.setEventResult(Event.DOSHIT);
 
-		Event result = BodyEventState.resolveEventResultAction(body, Event.BIRTHBABY);
+		Event result = YukkuriEventState.resolveEventResultAction(body, Event.BIRTHBABY);
 
 		assertEquals(Event.DOSHIT, result);
 		assertEquals(Event.DONOTHING, body.getEventResult());
@@ -159,7 +159,7 @@ class BodyEventStateTest {
 		event.updateState = EventPacket.UpdateState.ABORT;
 		body.setCurrentEvent(event);
 
-		BodyEventState.updateCurrentEvent(body);
+		YukkuriEventState.updateCurrentEvent(body);
 
 		assertTrue(event.ended);
 		assertNull(body.getCurrentEvent());
@@ -176,7 +176,7 @@ class BodyEventStateTest {
 		event.setToZ(0);
 		body.setCurrentEvent(event);
 
-		BodyEventState.updateCurrentEvent(body);
+		YukkuriEventState.updateCurrentEvent(body);
 
 		assertTrue(event.executed);
 		assertTrue(event.ended);
@@ -194,7 +194,7 @@ class BodyEventStateTest {
 		event.setToZ(0);
 		body.setCurrentEvent(event);
 
-		BodyEventState.updateCurrentEvent(body);
+		YukkuriEventState.updateCurrentEvent(body);
 
 		assertFalse(event.executed);
 		assertSame(event, body.getCurrentEvent());

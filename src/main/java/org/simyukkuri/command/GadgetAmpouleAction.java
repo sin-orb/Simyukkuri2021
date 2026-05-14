@@ -23,7 +23,7 @@ final class GadgetAmpouleAction {
 	}
 
 	static void evaluateAmpoule(GadgetList item, MouseEvent ev, Entity targetObject) {
-		List<Yukkuri> bodyList = new LinkedList<Yukkuri>(GameWorld.get().getCurrentMap().getBody().values());
+		List<Yukkuri> bodyList = new LinkedList<Yukkuri>(GameWorld.get().getCurrentMap().getYukkuriMap().values());
 		switch (item) {
 			case ORANGE_AMP:
 				if (ev.isShiftDown()) {

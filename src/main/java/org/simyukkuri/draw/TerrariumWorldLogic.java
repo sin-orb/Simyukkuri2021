@@ -28,13 +28,13 @@ public final class TerrariumWorldLogic {
 			return;
 		}
 		int minDistance;
-		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getBody().entrySet()) {
+		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getYukkuriMap().entrySet()) {
 			Yukkuri p = entry.getValue();
 			if (p == b) {
 				continue;
 			}
 			if (Barrier.acrossBarrier(b.getX(), b.getY(), p.getX(), p.getY(),
-					Barrier.MAP_BODY[b.getBodyAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
+					Barrier.MAP_BODY[b.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
 				continue;
 			}
 			minDistance = Translate.distance(b.getX(), b.getY(), p.getX(), p.getY());
@@ -58,7 +58,7 @@ public final class TerrariumWorldLogic {
 			return;
 		}
 		for (Integer childId : b.getChildrenList()) {
-			Yukkuri child = org.simyukkuri.util.BodyRegistry.getBodyInstance(childId);
+			Yukkuri child = org.simyukkuri.util.YukkuriLookup.getYukkuriById(childId);
 			if (child == null) {
 				continue;
 			}

@@ -32,7 +32,7 @@ class SimpleEnumsTest {
 
     @Test
     void testBodyBake() {
-        verifyEnum(BodyBake.values());
+        verifyEnum(YukkuriBake.values());
     }
 
     @Test

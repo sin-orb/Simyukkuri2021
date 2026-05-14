@@ -35,7 +35,7 @@ public class BedLogic {
 	 */
 	public static final boolean checkBed(Yukkuri body) {
 		// 他の用事がある場合
-		if (body.isToFood() || body.isToBody() || /* body.isToBed() || */ body.isToShit() ||
+		if (body.isToFood() || body.isToYukkuri() || /* body.isToBed() || */ body.isToShit() ||
 				body.isToSukkiri() || body.isToSteal() || body.isToTakeout()) {
 			return false;
 		}
@@ -164,7 +164,7 @@ public class BedLogic {
 			body.setFavoriteItem(FavItemType.BED, null);
 			targetObject = null;
 		}
-		int wallMode = body.getBodyAgeState().ordinal();
+		int wallMode = body.getAgeState().ordinal();
 		// 飛行可能なら壁以外は通過可能
 		if (body.canflyCheck()) {
 			wallMode = AgeState.ADULT.ordinal();

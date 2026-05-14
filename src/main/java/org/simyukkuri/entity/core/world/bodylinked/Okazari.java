@@ -116,10 +116,10 @@ public class Okazari extends WorldEntity {
 		if (offsetPos == null) {
 			return null;
 		}
-		Yukkuri body = org.simyukkuri.util.BodyRegistry.getBodyInstance(owner);
+		Yukkuri body = org.simyukkuri.util.YukkuriLookup.getYukkuriById(owner);
 		if (body == null)
 			return null;
-		return offsetPos[body.getBodyAgeState().ordinal()];
+		return offsetPos[body.getAgeState().ordinal()];
 	}
 
 	/**
@@ -136,7 +136,7 @@ public class Okazari extends WorldEntity {
 			offsetPos = null;
 			setBoundary(64, 127, 128, 128);
 		} else {
-			Yukkuri ownerBody = org.simyukkuri.util.BodyRegistry.getBodyInstance(owner);
+			Yukkuri ownerBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(owner);
 			if (ownerBody != null) {
 				offsetPos = ownerBody.getMountPoint(okazariType.getFileName());
 				setBoundary(boundary[type.ordinal()]);

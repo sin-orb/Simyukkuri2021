@@ -22,7 +22,7 @@ import org.simyukkuri.entity.core.world.bodylinked.Okazari;
 import org.simyukkuri.entity.core.world.bodylinked.Stalk;
 import org.simyukkuri.entity.core.world.item.Bed;
 import org.simyukkuri.enums.AgeState;
-import org.simyukkuri.enums.BodyBake;
+import org.simyukkuri.enums.YukkuriBake;
 import org.simyukkuri.enums.BurialState;
 import org.simyukkuri.enums.Burst;
 import org.simyukkuri.enums.CoreAnkoState;
@@ -45,7 +45,7 @@ import org.simyukkuri.enums.WindowType;
 import org.simyukkuri.enums.YukkuriType;
 import org.simyukkuri.event.EventPacket;
 import org.simyukkuri.logic.AntInfestationPolicy;
-import org.simyukkuri.logic.BodyRelations;
+import org.simyukkuri.logic.YukkuriRelations;
 import org.simyukkuri.system.BasicStrokeEX;
 import org.simyukkuri.system.MapPlaceData;
 import org.simyukkuri.system.MessagePool;
@@ -63,46 +63,46 @@ public abstract class LivingEntity extends Entity {
 	private static final long serialVersionUID = -6112543281740502011L;
 
 	// --- Delegate lazy init（シングルスレッド前提）---
-	private transient LivingBodyDamageDelegate bodyDamageDelegate;
-	private transient LivingSleepDelegate sleepDelegate;
-	private transient LivingPanicDelegate panicDelegate;
-	private transient LivingHungerDelegate hungerDelegate;
-	private transient LivingBodyConditionDelegate bodyConditionDelegate;
-	private transient LivingActionDelegate actionDelegate;
+	private transient LivingEntityBodyDamageDelegate bodyDamageDelegate;
+	private transient LivingEntitySleepDelegate sleepDelegate;
+	private transient LivingEntityPanicDelegate panicDelegate;
+	private transient LivingEntityHungerDelegate hungerDelegate;
+	private transient LivingEntityBodyConditionDelegate bodyConditionDelegate;
+	private transient LivingEntityActionDelegate actionDelegate;
 
-	LivingBodyDamageDelegate bodyDamageDelegate() {
+	LivingEntityBodyDamageDelegate bodyDamageDelegate() {
 		if (bodyDamageDelegate == null)
-			bodyDamageDelegate = new LivingBodyDamageDelegate(this);
+			bodyDamageDelegate = new LivingEntityBodyDamageDelegate(this);
 		return bodyDamageDelegate;
 	}
 
-	LivingSleepDelegate sleepDelegate() {
+	LivingEntitySleepDelegate sleepDelegate() {
 		if (sleepDelegate == null)
-			sleepDelegate = new LivingSleepDelegate(this);
+			sleepDelegate = new LivingEntitySleepDelegate(this);
 		return sleepDelegate;
 	}
 
-	LivingPanicDelegate panicDelegate() {
+	LivingEntityPanicDelegate panicDelegate() {
 		if (panicDelegate == null)
-			panicDelegate = new LivingPanicDelegate(this);
+			panicDelegate = new LivingEntityPanicDelegate(this);
 		return panicDelegate;
 	}
 
-	LivingHungerDelegate hungerDelegate() {
+	LivingEntityHungerDelegate hungerDelegate() {
 		if (hungerDelegate == null)
-			hungerDelegate = new LivingHungerDelegate(this);
+			hungerDelegate = new LivingEntityHungerDelegate(this);
 		return hungerDelegate;
 	}
 
-	LivingBodyConditionDelegate bodyConditionDelegate() {
+	LivingEntityBodyConditionDelegate bodyConditionDelegate() {
 		if (bodyConditionDelegate == null)
-			bodyConditionDelegate = new LivingBodyConditionDelegate(this);
+			bodyConditionDelegate = new LivingEntityBodyConditionDelegate(this);
 		return bodyConditionDelegate;
 	}
 
-	LivingActionDelegate actionDelegate() {
+	LivingEntityActionDelegate actionDelegate() {
 		if (actionDelegate == null)
-			actionDelegate = new LivingActionDelegate(this);
+			actionDelegate = new LivingEntityActionDelegate(this);
 		return actionDelegate;
 	}
 
@@ -295,7 +295,7 @@ public abstract class LivingEntity extends Entity {
 	 * @param message メッセージ
 	 * @param count   表示時間
 	 */
-	public void setBodyEventSendMessage(String message, int count) {
+	public void setEventSendMessage(String message, int count) {
 	}
 
 	/**
@@ -306,7 +306,7 @@ public abstract class LivingEntity extends Entity {
 	 * @param interrupt 割り込み可否
 	 * @param piko      ピコピコ可否
 	 */
-	public void setBodyEventResMessage(String message, int count, boolean interrupt, boolean piko) {
+	public void setEventResMessage(String message, int count, boolean interrupt, boolean piko) {
 	}
 
 	/**
@@ -1164,12 +1164,12 @@ public abstract class LivingEntity extends Entity {
 	}
 
 	/** 焼かれている期間 を取得する. @return 焼かれている期間 */
-	public int getBodyBakePeriod() {
+	public int getBakePeriod() {
 		return bodyBakePeriod;
 	}
 
 	/** 焼かれている期間 を設定する. @param bodyBakePeriod 焼かれている期間 */
-	public void setBodyBakePeriod(int bodyBakePeriod) {
+	public void setBakePeriod(int bodyBakePeriod) {
 		this.bodyBakePeriod = bodyBakePeriod;
 	}
 
@@ -2289,7 +2289,7 @@ public abstract class LivingEntity extends Entity {
 		// 実ゆの場合、親が反応する
 		if (getBindStalk() != null) {
 			int id = getBindStalk().getPlantYukkuri();
-			Yukkuri bodyMother = GameWorld.get().getCurrentMap().getBody().get(id);
+			Yukkuri bodyMother = GameWorld.get().getCurrentMap().getYukkuriMap().get(id);
 			if (bodyMother != null) {
 				if (!bodyMother.isDead() || bodyMother.isSleeping()) {
 					return bodyMother.getUniqueID();
@@ -2305,7 +2305,7 @@ public abstract class LivingEntity extends Entity {
 	 * @param state 実ゆの状態
 	 */
 	public void checkReactionStalkMother(org.simyukkuri.enums.UnbirthBabyState state) {
-		Yukkuri bodyMother = GameWorld.get().getCurrentMap().getBody().get(getBindStalkMotherCanNotice());
+		Yukkuri bodyMother = GameWorld.get().getCurrentMap().getYukkuriMap().get(getBindStalkMotherCanNotice());
 		if (bodyMother == null) {
 			return;
 		}
@@ -2338,7 +2338,7 @@ public abstract class LivingEntity extends Entity {
 			// 茎があって親が生きてる
 			if (getBindStalk() != null) {
 				int id = getBindStalk().getPlantYukkuri();
-				Entity oBind = GameWorld.get().getCurrentMap().getBody().get(id);
+				Entity oBind = GameWorld.get().getCurrentMap().getYukkuriMap().get(id);
 				if (oBind != null && oBind instanceof Yukkuri) {
 					Yukkuri bodyBind = (Yukkuri) oBind;
 					if (bodyBind != null && !bodyBind.isDead() && !bodyBind.isRemoved()) {
@@ -2624,10 +2624,10 @@ public abstract class LivingEntity extends Entity {
 	 */
 	@Transient
 	public int getSize() {
-		if (getBodySpr() == null) {
+		if (getSpriteSet() == null) {
 			return 0;
 		}
-		Sprite spr = getBodySpr()[getBodyAgeState().ordinal()];
+		Sprite spr = getSpriteSet()[getAgeState().ordinal()];
 		if (spr == null) {
 			return 0;
 		}
@@ -2644,10 +2644,10 @@ public abstract class LivingEntity extends Entity {
 	 */
 	@Transient
 	public int getOriginSize() {
-		if (getBodySpr() == null) {
+		if (getSpriteSet() == null) {
 			return 0;
 		}
-		Sprite spr = getBodySpr()[getBodyAgeState().ordinal()];
+		Sprite spr = getSpriteSet()[getAgeState().ordinal()];
 		if (spr == null) {
 			return 0;
 		}
@@ -2667,8 +2667,8 @@ public abstract class LivingEntity extends Entity {
 		} else if (OE <= 100)
 			OE = 100;
 		return (20 - 20 / (getBabyTypes().size() + 1)) + getBabyTypes().size() * 2
-				+ ((shit * 4 / 5) / getShitLimitBase()[getBodyAgeState().ordinal()]) * 5
-				+ getBodySpr()[getBodyAgeState().ordinal()].getImageW() * (OE - 100) / 100
+				+ ((shit * 4 / 5) / getShitLimitBase()[getAgeState().ordinal()]) * 5
+				+ getSpriteSet()[getAgeState().ordinal()].getImageW() * (OE - 100) / 100
 				+ getGodHandHoldCount() / 2;
 	}
 
@@ -2678,7 +2678,7 @@ public abstract class LivingEntity extends Entity {
 	@Transient
 	public int getExpandSizeH() {
 		return (20 - 20 / (getBabyTypes().size() + 1)) + getBabyTypes().size() * 2
-				+ ((shit * 4 / 5) / getShitLimitBase()[getBodyAgeState().ordinal()]) * 5
+				+ ((shit * 4 / 5) / getShitLimitBase()[getAgeState().ordinal()]) * 5
 				+ getGodHandHoldCount() / 2;
 	}
 
@@ -3705,14 +3705,14 @@ public abstract class LivingEntity extends Entity {
 	protected int breakBodyByShitProb = 100;
 
 	/** うんうんによるあんよ破壊確率（N回に1回） を取得する. @return うんうんによるあんよ破壊確率（N回に1回） */
-	public int getBreakBodyByShitProb() {
+	public int getBreakByShitProb() {
 		return breakBodyByShitProb;
 	}
 
 	/**
 	 * うんうんによるあんよ破壊確率（N回に1回） を設定する. @param breakBodyByShitProb うんうんによるあんよ破壊確率（N回に1回）
 	 */
-	public void setBreakBodyByShitProb(int breakBodyByShitProb) {
+	public void setBreakByShitProb(int breakBodyByShitProb) {
 		this.breakBodyByShitProb = breakBodyByShitProb;
 	}
 
@@ -3864,12 +3864,12 @@ public abstract class LivingEntity extends Entity {
 	protected Sprite[] bodySpr = new Sprite[3];
 
 	/** 本体のスプライト定義（年齢別） を取得する. @return 本体のスプライト定義（年齢別） */
-	public Sprite[] getBodySpr() {
+	public Sprite[] getSpriteSet() {
 		return bodySpr;
 	}
 
 	/** 本体のスプライト定義（年齢別） を設定する. @param bodySpr 本体のスプライト定義（年齢別） */
-	public void setBodySpr(Sprite[] bodySpr) {
+	public void setSpriteSet(Sprite[] bodySpr) {
 		this.bodySpr = bodySpr;
 	}
 
@@ -3889,7 +3889,7 @@ public abstract class LivingEntity extends Entity {
 	// ===== Step6-1: BodyAttributes から移動したメソッド群 =====
 
 	@com.fasterxml.jackson.annotation.JsonIgnore
-	public AgeState getBodyAgeState() {
+	public AgeState getAgeState() {
 		if (getAge() < getBabyLimitBase()) {
 			return AgeState.BABY;
 		} else if (getAge() < getChildLimitBase()) {
@@ -3900,7 +3900,7 @@ public abstract class LivingEntity extends Entity {
 
 	@com.fasterxml.jackson.annotation.JsonIgnore
 	public int getHungryLimit() {
-		return getHungryLimitBase()[getBodyAgeState().ordinal()];
+		return getHungryLimitBase()[getAgeState().ordinal()];
 	}
 
 	@com.fasterxml.jackson.annotation.JsonIgnore
@@ -3969,27 +3969,27 @@ public abstract class LivingEntity extends Entity {
 
 	@com.fasterxml.jackson.annotation.JsonIgnore
 	public boolean isAdult() {
-		return getBodyAgeState() == AgeState.ADULT;
+		return getAgeState() == AgeState.ADULT;
 	}
 
 	@com.fasterxml.jackson.annotation.JsonIgnore
 	public boolean isChild() {
-		return getBodyAgeState() == AgeState.CHILD;
+		return getAgeState() == AgeState.CHILD;
 	}
 
 	@com.fasterxml.jackson.annotation.JsonIgnore
 	public boolean isBaby() {
-		return getBodyAgeState() == AgeState.BABY;
+		return getAgeState() == AgeState.BABY;
 	}
 
 	@com.fasterxml.jackson.annotation.JsonIgnore
 	public int getDamageLimit() {
-		return getDamageLimitBase()[getBodyAgeState().ordinal()];
+		return getDamageLimitBase()[getAgeState().ordinal()];
 	}
 
 	@com.fasterxml.jackson.annotation.JsonIgnore
 	public int getStressLimit() {
-		return getStressLimitBase()[getBodyAgeState().ordinal()];
+		return getStressLimitBase()[getAgeState().ordinal()];
 	}
 
 	@com.fasterxml.jackson.annotation.JsonIgnore
@@ -4033,19 +4033,19 @@ public abstract class LivingEntity extends Entity {
 
 	@com.fasterxml.jackson.annotation.JsonIgnore
 	public int getEatAmount() {
-		return getEatAmountBase()[getBodyAgeState().ordinal()];
+		return getEatAmountBase()[getAgeState().ordinal()];
 	}
 
 	@com.fasterxml.jackson.annotation.JsonIgnore
-	public final BodyBake getBodyBakeLevel() {
-		BodyBake ret = BodyBake.NONE;
+	public final YukkuriBake getBakeLevel() {
+		YukkuriBake ret = YukkuriBake.NONE;
 		if (bodyBakePeriod < 0) {
 			footBakePeriod = 0;
 		}
-		if (bodyBakePeriod > getDamageLimitBase()[getBodyAgeState().ordinal()] * 3 / 4) {
-			ret = BodyBake.CRITICAL;
-		} else if (bodyBakePeriod > (getDamageLimitBase()[getBodyAgeState().ordinal()] * 2 / 5)) {
-			ret = BodyBake.MIDIUM;
+		if (bodyBakePeriod > getDamageLimitBase()[getAgeState().ordinal()] * 3 / 4) {
+			ret = YukkuriBake.CRITICAL;
+		} else if (bodyBakePeriod > (getDamageLimitBase()[getAgeState().ordinal()] * 2 / 5)) {
+			ret = YukkuriBake.MIDIUM;
 		}
 		return ret;
 	}
@@ -4056,9 +4056,9 @@ public abstract class LivingEntity extends Entity {
 		if (footBakePeriod < 0) {
 			footBakePeriod = 0;
 		}
-		if (footBakePeriod > getDamageLimitBase()[getBodyAgeState().ordinal()]) {
+		if (footBakePeriod > getDamageLimitBase()[getAgeState().ordinal()]) {
 			ret = FootBake.CRITICAL;
-		} else if (footBakePeriod > (getDamageLimitBase()[getBodyAgeState().ordinal()] >> 1)) {
+		} else if (footBakePeriod > (getDamageLimitBase()[getAgeState().ordinal()] >> 1)) {
 			ret = FootBake.MIDIUM;
 		}
 		return ret;
@@ -4066,15 +4066,15 @@ public abstract class LivingEntity extends Entity {
 
 	@com.fasterxml.jackson.annotation.JsonIgnore
 	public boolean isGotBurned() {
-		return getFootBakeLevel() != FootBake.NONE || getBodyBakeLevel() != BodyBake.NONE;
+		return getFootBakeLevel() != FootBake.NONE || getBakeLevel() != YukkuriBake.NONE;
 	}
 
 	@com.fasterxml.jackson.annotation.JsonIgnore
 	public boolean isGotBurnedHeavily() {
-		return getFootBakeLevel() != FootBake.NONE || getBodyBakeLevel() == BodyBake.CRITICAL;
+		return getFootBakeLevel() != FootBake.NONE || getBakeLevel() == YukkuriBake.CRITICAL;
 	}
 
-	public void addBodyBakePeriod(int s) {
+	public void addBakePeriod(int s) {
 		footBakePeriod += (s / 5);
 		bodyBakePeriod += s;
 	}
@@ -4163,7 +4163,7 @@ public abstract class LivingEntity extends Entity {
 		if (m.getTakenOutShit().containsKey(getCarryItems().get(key))) {
 			return m.getTakenOutShit().get(getCarryItems().get(key));
 		}
-		return BodyRelations.getBodyFromObjId(getCarryItems().get(key));
+		return YukkuriRelations.findYukkuriByObjId(getCarryItems().get(key));
 	}
 
 	public void removeCarryItem(TakeoutItemType key) {
@@ -4172,7 +4172,7 @@ public abstract class LivingEntity extends Entity {
 
 	@com.fasterxml.jackson.annotation.JsonIgnore
 	public int getShitLimit() {
-		return getShitLimitBase()[getBodyAgeState().ordinal()];
+		return getShitLimitBase()[getAgeState().ordinal()];
 	}
 
 	public void plusShit(int s) {
@@ -4185,8 +4185,8 @@ public abstract class LivingEntity extends Entity {
 		if (shitting)
 			return;
 		if (ibVeryShit) {
-			if (shit < getShitLimitBase()[getBodyAgeState().ordinal()]) {
-				shit = getShitLimitBase()[getBodyAgeState().ordinal()] - inShit;
+			if (shit < getShitLimitBase()[getAgeState().ordinal()]) {
+				shit = getShitLimitBase()[getAgeState().ordinal()] - inShit;
 			}
 		} else {
 			shit = inShit;
@@ -4244,7 +4244,7 @@ public abstract class LivingEntity extends Entity {
 		l.setNoHungryPeriod(noHungryPeriod);
 		l.setSuperEatingNoHungryPeriod(superEatingNoHungryPeriod);
 		l.setFootBakePeriod(footBakePeriod);
-		l.setBodyBakePeriod(bodyBakePeriod);
+		l.setBakePeriod(bodyBakePeriod);
 		l.setNonYukkuriDiseasePeriod(nonYukkuriDiseasePeriod);
 		l.setAngryPeriod(angryPeriod);
 		l.setScarePeriod(scarePeriod);
@@ -4391,7 +4391,7 @@ public abstract class LivingEntity extends Entity {
 		l.setBraidBreakChance(braidBreakChance);
 		l.setSurisuriAccidentProb(surisuriAccidentProb);
 		l.setCarAccidentProb(carAccidentProb);
-		l.setBreakBodyByShitProb(breakBodyByShitProb);
+		l.setBreakByShitProb(breakBodyByShitProb);
 		l.setDiarrheaProb(diarrheaProb);
 		l.setExciteProb(exciteProb);
 		l.setNotChangeCharacter(notChangeCharacter);
