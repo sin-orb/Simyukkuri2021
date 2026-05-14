@@ -6,10 +6,10 @@ cd "$(dirname "$0")/.."
 rm -rf bin
 mkdir -p bin
 
-find src -name '*.java' | sort > /tmp/simyukkuri_sources.txt
+find src/main/java -name '*.java' | sort > /tmp/simyukkuri_sources.txt
 javac -source 8 -target 8 -d bin -cp "lib/*" -encoding UTF-8 @/tmp/simyukkuri_sources.txt
 
-find test -name '*.java' | sort > /tmp/simyukkuri_tests.txt
+find src/test/java -name '*.java' | sort > /tmp/simyukkuri_tests.txt
 javac -source 8 -target 8 -d bin -cp "bin:lib/*" -encoding UTF-8 @/tmp/simyukkuri_tests.txt
 
 CP="bin:."

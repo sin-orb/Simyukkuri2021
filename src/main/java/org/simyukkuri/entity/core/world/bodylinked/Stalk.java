@@ -1,0 +1,510 @@
+package org.simyukkuri.entity.core.world.bodylinked;
+
+import java.awt.image.BufferedImage;
+import java.awt.image.ImageObserver;
+import java.beans.Transient;
+import java.io.IOException;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.UUID;
+
+import javax.imageio.ImageIO;
+
+import org.simyukkuri.draw.ModLoader;
+import org.simyukkuri.draw.Rectangle4y;
+import org.simyukkuri.draw.Translate;
+import org.simyukkuri.entity.core.Entity;
+import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
+import org.simyukkuri.entity.core.world.WorldEntity;
+import org.simyukkuri.enums.Direction;
+import org.simyukkuri.enums.Event;
+import org.simyukkuri.enums.Type;
+import org.simyukkuri.enums.WorldEntityKind;
+import org.simyukkuri.field.impl.Barrier;
+import org.simyukkuri.system.ItemMenu.GetMenuTarget;
+import org.simyukkuri.util.GameImages;
+import org.simyukkuri.util.GameWorld;
+
+/**
+ * 茎
+ */
+public class Stalk extends WorldEntity {
+
+	private static final long serialVersionUID = -7644967944795406729L;
+	private static final int IMAGE_COUNT = 1; // このクラスの総使用画像数
+	private static transient BufferedImage[] imageLayers = new BufferedImage[IMAGE_COUNT * 2 + 1];
+	private static Rectangle4y boundary = new Rectangle4y();
+
+	private int plantYukkuri = -1; // この茎が生えてる親
+	private List<Integer> bindBabies = new LinkedList<Integer>(); // この茎にぶら下がってる子のID
+	/** （食べたときの）量 */
+	private int amount = 0;
+	private UUID stalkId = UUID.randomUUID();
+
+	/**
+	 * StalkのUUIDを取得する.
+	 * 
+	 * @return StalkのUUID
+	 */
+	public UUID getStalkId() {
+		return stalkId;
+	}
+
+	/**
+	 * StalkのUUIDを設定する.
+	 * 
+	 * @param id StalkのUUID
+	 */
+	public void setStalkId(UUID id) {
+		this.stalkId = id;
+	}
+
+	/**
+	 * イメージをロードする.
+	 * 
+	 * @param loader ローダ
+	 * @param io     イメージオブザーバ
+	 * @throws IOException IO例外
+	 */
+	public static void loadImages(ClassLoader loader, ImageObserver io) throws IOException {
+		final String path = "images/yukkuri/general/";
+		for (int i = 0; IMAGE_COUNT > i; i++) {
+			imageLayers[i * 2] = ImageIO
+					.read(loader.getResourceAsStream(path + "stalk" + String.format("%03d", i + 1) + ".png"));
+			imageLayers[i * 2 + 1] = ModLoader.flipImage(imageLayers[i * 2]);
+		}
+		imageLayers[IMAGE_COUNT * 2] = GameImages.read(loader.getResourceAsStream(path + "stalk_shadow.png"));
+		boundary.setWidth(imageLayers[0].getWidth(io));
+		boundary.setHeight(imageLayers[0].getHeight(io));
+		boundary.setX(boundary.getWidth() >> 1);
+		boundary.setY(boundary.getHeight() - 1);
+	}
+
+	@Override
+	public int getImageLayer(BufferedImage[] layer) {
+		if (option == 0) {
+			layer[0] = imageLayers[1];
+		} else {
+			layer[0] = imageLayers[0];
+		}
+		return 1;
+	}
+
+	@Override
+	@Transient
+	public BufferedImage getShadowImage() {
+		if (plantYukkuri == -1)
+			return imageLayers[2];
+		return null;
+	}
+
+	/**
+	 * 方向を設定する.
+	 * 
+	 * @param dir 方向
+	 */
+	public void setDirection(int dir) {
+		if (dir == 0) {
+			option = 0;
+		} else {
+			option = 1;
+		}
+	}
+
+	@Override
+	public void upDate() {
+		int i = 0;
+		int babyX = 0;
+		int babyZ = 0;
+		if (getBindBabies() == null) {
+			return;
+		}
+		Yukkuri parent = org.simyukkuri.util.BodyRegistry.getBodyInstance(this.getPlantYukkuri());
+		for (Integer j : getBindBabies()) {
+			if (j == null) {
+				i++;
+				continue;
+			}
+			Yukkuri b = org.simyukkuri.util.BodyRegistry.getBodyInstance(j);
+			if (b == null) {
+				i++;
+				continue;
+			}
+			if (parent != null && b.isUnBirth()) {
+				b.setParentLinkId(parent.getUniqueID());
+				b.setBindStalk(this);
+			}
+			if (option == 0) {
+				babyX = ((i % 5) * -5 + 14);
+				b.setDirection(Direction.RIGHT);
+			} else {
+				babyX = ((i % 5) * -5 + 14) * -1;
+				b.setDirection(Direction.LEFT);
+			}
+			babyZ = ((i % 5) * -2 + 14);
+			b.setCalcX(getX() + babyX);
+			b.setCalcY(getY() + 1);
+			b.setCalcZ(getZ() + babyZ);
+			b.kick(0, 0, 0);
+			i++;
+		}
+	}
+
+	@Override
+	public void removeListData() {
+		remove();
+		GameWorld.get().getCurrentMap().getStalk().remove(objId);
+	}
+
+	/**
+	 * この茎をはやしているゆっくりを設定する.
+	 * 
+	 * @param b この茎をはやしているゆっくり
+	 */
+	@Transient
+	public void setPlantYukkuri(Yukkuri b) {
+		if (b == null) {
+			plantYukkuri = -1;
+		} else {
+			plantYukkuri = b.getUniqueID();
+		}
+		bindObj = plantYukkuri;
+	}
+
+	/**
+	 * この茎をはやしているゆっくりを取得する.
+	 * 
+	 * @return この茎をはやしているゆっくり
+	 */
+	public int getPlantYukkuri() {
+		return plantYukkuri;
+	}
+
+	public Integer getPyForSeri() {
+		return plantYukkuri;
+	}
+
+	public void setPyForSeri(Integer s) {
+		this.plantYukkuri = s;
+		this.bindObj = s;
+	}
+
+	/*
+	 * @Override
+	 * public int getBindObj() {
+	 * return plantYukkuri;
+	 * }
+	 */
+	/**
+	 * この茎に実ゆっくりを追加する.
+	 * 
+	 * @param b この茎に生やそうとしている実ゆっくり
+	 */
+	@Transient
+	public void setBindBaby(Yukkuri b) {
+		if (bindBabies.size() < 5) {
+			bindBabies.add(b == null ? -1 : b.getUniqueID());
+		}
+	}
+
+	/**
+	 * この茎に生えている実ゆっくりを取得する.
+	 * 
+	 * @return この茎に生えている実ゆっくり
+	 */
+	public List<Integer> getBindBabies() {
+		return bindBabies;
+	}
+
+	/**
+	 * 茎から実ゆっくりをすべて取り除く.
+	 */
+	public void disBindBabys() {
+		if (plantYukkuri != -1) {
+			Yukkuri planted = org.simyukkuri.util.BodyRegistry.getBodyInstance(plantYukkuri);
+			if (planted != null && planted.getStalks() != null) {
+				planted.getStalks().set(planted.getStalks().indexOf(this), null);
+			}
+		}
+
+		for (int i : bindBabies) {
+			Yukkuri b = org.simyukkuri.util.BodyRegistry.getBodyInstance(i);
+			if (b != null) {
+				b.setBindStalk(null);
+			}
+		}
+	}
+
+	/**
+	 * X座標を設定する.
+	 * 
+	 * @param X座標
+	 */
+	@Transient
+	public void setCalcX(int X) {
+		if (X < 0 && plantYukkuri == -1) {
+			x = 0;
+		} else if (X > Translate.getMapW() && plantYukkuri == -1) {
+			x = Translate.getMapW();
+		} else {
+			x = X;
+		}
+	}
+
+	/**
+	 * Y座標を設定する.
+	 * 
+	 * @param Y座標
+	 */
+	@Transient
+	public void setCalcY(int Y) {
+		if (Y < 0 && plantYukkuri == -1) {
+			y = 0;
+		} else if (Y > Translate.getMapH() && plantYukkuri == -1) {
+			y = Translate.getMapH();
+		} else {
+			y = Y;
+		}
+	}
+
+	/**
+	 * Z座標を設定する.
+	 * 
+	 * @param Z座標
+	 */
+	@Transient
+	public void setCalcZ(int Z) {
+		if (Z < mostDepth && plantYukkuri == -1) {
+			if (isFallingUnderGround()) {
+				z = Z;
+			} else {
+				z = mostDepth;
+			}
+		} else if (Z > Translate.getMapZ() && plantYukkuri == -1) {
+			z = Translate.getMapZ();
+		} else {
+			z = Z;
+		}
+	}
+
+	/**
+	 * この茎がゆっくりから生えている状態であるかどうかを取得する.
+	 * 
+	 * @return この茎がゆっくりから生えている状態であるかどうか
+	 */
+	@Transient
+	public boolean isPlantYukkuri() {
+		for (int i : bindBabies) {
+			Yukkuri b = org.simyukkuri.util.BodyRegistry.getBodyInstance(i);
+			if (b != null) {
+				return true;
+			}
+		}
+		return (plantYukkuri != -1);
+	}
+
+	/**
+	 * 茎を食べる.
+	 * 
+	 * @param eatAmount 食べる量
+	 */
+	public void eatStalk(int eatAmount) {
+		amount -= eatAmount;
+		if (amount <= 0) {
+			amount = 0;
+			for (Integer i : bindBabies) {
+				if (i == null) {
+					continue;
+				}
+				Yukkuri b = org.simyukkuri.util.BodyRegistry.getBodyInstance(i);
+				if (b != null) {
+					b.setBindStalk(null);
+				}
+			}
+			remove();
+			GameWorld.get().getCurrentMap().getStalk().remove(objId);
+		}
+	}
+
+	@Override
+	public void grab() {
+		grabbed = true;
+		if (takePlantYukkuri() != null) {
+			takePlantYukkuri().removeStalk(this);
+		}
+		setPlantYukkuri(null);
+	}
+
+	/**
+	 * 生えているゆっくりを取得する.
+	 * 
+	 * @return 生えているゆっくり
+	 */
+	public Yukkuri takePlantYukkuri() {
+		return GameWorld.get().getCurrentMap().getBody().get(plantYukkuri);
+	}
+
+	@Override
+	public Event clockTick() {
+		setAge(getAge() + TICK);
+		if (isRemoved()) {
+			removeListData();
+			disBindBabys();
+			return Event.REMOVED;
+		}
+		if (!grabbed && plantYukkuri == -1) {
+			if (vx != 0) {
+				x += vx;
+				if (x < 0) {
+					x = 0;
+					vx *= -1;
+				} else if (x > Translate.getMapW()) {
+					x = Translate.getMapW();
+					vx *= -1;
+				} else if (Barrier.onBarrier(x, y, getW() >> 2, getH() >> 2, Barrier.MAP_ITEM)) {
+					x -= vx;
+					vx = 0;
+				}
+			}
+			if (vy != 0) {
+				y += vy;
+				if (y < 0) {
+					y = 0;
+					vy *= -1;
+				} else if (y > Translate.getMapH()) {
+					y = Translate.getMapH();
+					vy *= -1;
+				} else if (Barrier.onBarrier(x, y, getW() >> 2, getH() >> 2, Barrier.MAP_ITEM)) {
+					y -= vy;
+					vy = 0;
+				}
+			}
+			if (z != 0 || vz != 0) {
+				vz += 1;
+				z -= vz;
+				if (!isFallingUnderGround()) {
+					if (z <= mostDepth) {
+						z = mostDepth;
+						vx = 0;
+						vy = 0;
+						vz = 0;
+					}
+				}
+			}
+		}
+		upDate();
+		calcPos();
+		return Event.DONOTHING;
+	}
+
+	/**
+	 * コンストラクタ.
+	 * 
+	 * @param initX      初期X座標
+	 * @param initY      初期Y座標
+	 * @param initOption オプション
+	 */
+	public Stalk(int initX, int initY, int initOption) {
+		super(initX, initY, initOption);
+		setBoundary(boundary);
+		objType = Type.OBJECT;
+		worldEntityType = WorldEntityKind.STALK;
+		amount = 100 * 24 * 5;
+		GameWorld.get().getCurrentMap().getStalk().put(objId, this);
+		calcPos();
+	}
+
+	public Stalk() {
+		setBoundary(boundary);
+		objType = Type.OBJECT;
+		worldEntityType = WorldEntityKind.STALK;
+		amount = 100 * 24 * 5;
+		GameWorld.get().getCurrentMap().getStalk().put(objId, this);
+		calcPos();
+	}
+
+	@Override
+	@Transient
+	public int getHitCheckObjType() {
+		return 0;
+	}
+
+	@Override
+	public int objHitProcess(Entity o) {
+		return 0;
+	}
+
+	@Override
+	public void remove() {
+		plantYukkuri = -1;
+		for (Integer i : getBindBabies()) {
+			if (i == null) {
+				continue;
+			}
+			Yukkuri baby = org.simyukkuri.util.BodyRegistry.getBodyInstance(i);
+			if (baby != null) {
+				baby.setBindStalk(null);
+				baby.setBindObj(-1);
+			}
+		}
+		bindBabies.clear();
+		// GameWorld.get().getCurrentMap().getStalk().remove(this);
+		super.remove();
+	}
+
+	// @Override
+	// public String toString() {
+	// Yukkuri p = org.simyukkuri.util.BodyRegistry.getBodyInstance(plantYukkuri);
+	// String ret = "";
+	// ret += GameText.read("game_stalk1");
+	// if (p != null) {
+	// ret += (plantYukkuri == -1 ?
+	// GameText.read("command_status_nothing") :
+	// GameLocale.isJapanese() ?
+	// p.getNameJ() : p.getNameE());
+	// }
+	// ret += GameText.read("game_stalk2");
+	// if (bindBabies == null || bindBabies.size() == 0) {
+	// ret += GameText.read("command_status_nothing");
+	// } else {
+	// for (Object o : bindBabies) {
+	// if (o == null) {
+	// continue;
+	// } else {
+	// Integer b = (Integer)o;
+	// Yukkuri baby = org.simyukkuri.util.BodyRegistry.getBodyInstance(b);
+	// if (baby == null) {
+	// ret += GameText.read("game_empty");
+	// } else {
+	// ret += GameLocale.isJapanese() ? baby.getNameJ() : baby.getNameE();
+	// }
+	// ret += ",";
+	// }
+	// }
+	// ret = ret.substring(0, ret.length() - 1);
+	// }
+	// ret += ")";
+	// return ret;
+	// }
+
+	public int getAmount() {
+		return amount;
+	}
+
+	public void setAmount(int amount) {
+		this.amount = amount;
+	}
+
+	public void setPlantYukkuri(int plantYukkuri) {
+		this.plantYukkuri = plantYukkuri;
+	}
+
+	public void setBindBabies(List<Integer> bindBaby) {
+		this.bindBabies = bindBaby;
+	}
+
+	@Override
+	public GetMenuTarget hasGetPopup() {
+		return GetMenuTarget.STALK;
+	}
+}

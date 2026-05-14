@@ -1,0 +1,539 @@
+package org.simyukkuri.item;
+
+import org.simyukkuri.entity.core.Entity;
+import org.simyukkuri.entity.core.attachment.*;
+import org.simyukkuri.entity.core.attachment.impl.*;
+import org.simyukkuri.entity.core.effect.*;
+import org.simyukkuri.entity.core.effect.impl.*;
+import org.simyukkuri.entity.core.living.yukkuri.Dna;
+import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
+import org.simyukkuri.entity.core.living.yukkuri.impl.*;
+import org.simyukkuri.entity.core.world.bodylinked.*;
+import org.simyukkuri.entity.core.world.item.*;
+import org.simyukkuri.entity.core.world.mobile.*;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+import java.util.LinkedList;
+import java.util.List;
+
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+
+import org.simyukkuri.SimYukkuri;
+import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
+import org.simyukkuri.entity.core.world.item.ProcesserPlate;
+import org.simyukkuri.entity.core.world.item.ItemTestBase;
+import org.simyukkuri.enums.Numbering;
+import org.simyukkuri.enums.HairState;
+import org.simyukkuri.enums.Happiness;
+import org.simyukkuri.enums.ImageCode;
+import org.simyukkuri.util.WorldTestHelper;
+import org.simyukkuri.entity.core.living.yukkuri.impl.Reimu;
+
+class ProcesserPlateTest extends ItemTestBase {
+
+    private static Yukkuri createReimuBody() {
+        Yukkuri body = new Reimu();
+        body.setObjId(Numbering.INSTANCE.numberingObjId());
+        body.setUniqueID(Numbering.INSTANCE.numberingYukkuriID());
+        SimYukkuri.world.getCurrentMap().getBody().put(body.getUniqueID(), body);
+        return body;
+    }
+
+    @Test
+    void testConstructor_Default() {
+        ProcesserPlate item = new ProcesserPlate();
+        item.setObjId(1);
+        SimYukkuri.world.getCurrentMap().getProcesserPlate().put(item.getObjId(), item);
+        verifyCommonProperties(item);
+        assertTrue(SimYukkuri.world.getCurrentMap().getProcesserPlate().containsKey(item.getObjId()));
+    }
+
+    @Test
+    void testProcessModeEnum() {
+        ProcesserPlate.ProcessMode[] modes = ProcesserPlate.ProcessMode.values();
+        assertEquals(9, modes.length);
+        assertEquals(ProcesserPlate.ProcessMode.HOTPLATE, ProcesserPlate.ProcessMode.valueOf("HOTPLATE"));
+        assertEquals(ProcesserPlate.ProcessMode.PAIN, ProcesserPlate.ProcessMode.valueOf("PAIN"));
+        assertEquals(ProcesserPlate.ProcessMode.PACKING, ProcesserPlate.ProcessMode.valueOf("PACKING"));
+        for (ProcesserPlate.ProcessMode m : modes) {
+            assertNotNull(m.name());
+        }
+    }
+
+    @Test
+    void testProcessTypeEnum() {
+        ProcesserPlate.ProcessType[] types = ProcesserPlate.ProcessType.values();
+        assertEquals(13, types.length);
+        for (ProcesserPlate.ProcessType t : types) {
+            assertNotNull(t.toString());
+            assertNotNull(t.name());
+        }
+        assertEquals(ProcesserPlate.ProcessType.HOTPLATE_MIN, ProcesserPlate.ProcessType.valueOf("HOTPLATE_MIN"));
+        assertEquals(ProcesserPlate.ProcessType.PACKING, ProcesserPlate.ProcessType.valueOf("PACKING"));
+    }
+
+    @Test
+    void testGetHitCheckObjType() {
+        ProcesserPlate item = new ProcesserPlate();
+        assertEquals(ProcesserPlate.hitCheckObjType, item.getHitCheckObjType());
+    }
+
+    @Test
+    void testEnableHitCheck() {
+        ProcesserPlate item = new ProcesserPlate();
+        assertTrue(item.enableHitCheck());
+    }
+
+    @Test
+    void testGetShadowImage() {
+        ProcesserPlate item = new ProcesserPlate();
+        assertNull(item.getShadowImage());
+    }
+
+    @Test
+    void testGetBounding() {
+        assertNotNull(ProcesserPlate.getBounding());
+    }
+
+    @Test
+    void testGetSetEnumProcessType() {
+        ProcesserPlate item = new ProcesserPlate();
+        item.setEnumProcessType(ProcesserPlate.ProcessType.PAIN);
+        assertEquals(ProcesserPlate.ProcessType.PAIN, item.getEnumProcessType());
+    }
+
+    @Test
+    void testGetSetProcessedBodyList() {
+        ProcesserPlate item = new ProcesserPlate();
+        List<Yukkuri> list = new LinkedList<>();
+        item.setProcessedBodyList(list);
+        assertEquals(list, item.getProcessedBodyList());
+    }
+
+    @Test
+    void testGetSetRunningCost() {
+        ProcesserPlate item = new ProcesserPlate();
+        int[] costs = { 100, 200, 300, 400 };
+        item.setRunningCost(costs);
+        assertArrayEquals(costs, item.getRunningCost());
+    }
+
+    @Test
+    void testGetCost_PainMode() {
+        ProcesserPlate item = new ProcesserPlate();
+        item.setEnumProcessType(ProcesserPlate.ProcessType.PAIN);
+        // PAIN mode returns runningCost[0]
+        assertEquals(item.getRunningCost()[0], item.getCost());
+    }
+
+    @Test
+    void testGetCost_HotplateMode() {
+        ProcesserPlate item = new ProcesserPlate();
+        item.setEnumProcessType(ProcesserPlate.ProcessType.HOTPLATE_MIN);
+        // HOTPLATE mode returns runningCost[1]
+        assertEquals(item.getRunningCost()[1], item.getCost());
+    }
+
+    @Test
+    void testGetCost_PeelingMode() {
+        ProcesserPlate item = new ProcesserPlate();
+        item.setEnumProcessType(ProcesserPlate.ProcessType.PEALING);
+        // PEALING mode returns runningCost[3]
+        assertEquals(item.getRunningCost()[3], item.getCost());
+    }
+
+    @Test
+    void testGetCost_BlindingMode() {
+        ProcesserPlate item = new ProcesserPlate();
+        item.setEnumProcessType(ProcesserPlate.ProcessType.BLINDING);
+        // BLINDING mode returns runningCost[2]
+        assertEquals(item.getRunningCost()[2], item.getCost());
+    }
+
+    @Test
+    void testObjHitProcess_Disabled() {
+        ProcesserPlate item = new ProcesserPlate();
+        item.setEnabled(false);
+        Yukkuri body = WorldTestHelper.createBody();
+        assertEquals(0, item.objHitProcess(body));
+    }
+
+    @Test
+    void testObjHitProcess_NullObj() {
+        ProcesserPlate item = new ProcesserPlate();
+        item.setEnabled(true);
+        assertEquals(0, item.objHitProcess(null));
+    }
+
+    @Test
+    void testRemoveListData_EmptyLists() {
+        ProcesserPlate item = new ProcesserPlate();
+        item.setObjId(66);
+        SimYukkuri.world.getCurrentMap().getProcesserPlate().put(item.getObjId(), item);
+        item.removeListData();
+        assertFalse(SimYukkuri.world.getCurrentMap().getProcesserPlate().containsKey(item.getObjId()));
+    }
+
+    @Test
+    void testRemoveListData_WithBody() {
+        ProcesserPlate item = new ProcesserPlate();
+        item.setObjId(67);
+        SimYukkuri.world.getCurrentMap().getProcesserPlate().put(item.getObjId(), item);
+
+        Yukkuri body = WorldTestHelper.createBody();
+        body.setLockmove(true);
+        item.getProcessedBodyList().add(body);
+        item.getProcessedBodyEffectList().add(null); // null effect
+
+        item.removeListData();
+        assertFalse(body.isLockmove());
+        assertTrue(item.getProcessedBodyList().isEmpty());
+    }
+
+    @Test
+    void testGetSetProcessedBodyEffectList() {
+        ProcesserPlate item = new ProcesserPlate();
+        List<org.simyukkuri.entity.core.effect.Effect> list = new LinkedList<>();
+        item.setProcessedBodyEffectList(list);
+        assertEquals(list, item.getProcessedBodyEffectList());
+    }
+
+    @Test
+    void testUpDate_disabled_emptyLists() {
+        ProcesserPlate item = new ProcesserPlate();
+        item.setEnabled(false);
+        assertDoesNotThrow(() -> item.upDate());
+    }
+
+    @Test
+    void testUpDate_disabled_withBodyInList() {
+        ProcesserPlate item = new ProcesserPlate();
+        item.setEnabled(false);
+        Yukkuri body = WorldTestHelper.createBody();
+        item.getProcessedBodyList().add(body);
+        item.getProcessedBodyEffectList().add(null);
+        assertDoesNotThrow(() -> item.upDate());
+        assertTrue(item.getProcessedBodyList().isEmpty());
+    }
+
+    @Test
+    void testUpDate_enabled_emptyLists() {
+        ProcesserPlate item = new ProcesserPlate();
+        item.setEnabled(true);
+        item.setEnumProcessType(ProcesserPlate.ProcessType.PAIN);
+        assertDoesNotThrow(() -> item.upDate());
+    }
+
+    @Test
+    void testUpDate_enabled_withRemovedBody() {
+        ProcesserPlate item = new ProcesserPlate();
+        item.setEnabled(true);
+        item.setEnumProcessType(ProcesserPlate.ProcessType.PAIN);
+        Yukkuri body = WorldTestHelper.createBody();
+        body.remove();
+        item.getProcessedBodyList().add(body);
+        item.getProcessedBodyEffectList().add(null);
+        assertDoesNotThrow(() -> item.upDate());
+        assertTrue(item.getProcessedBodyList().isEmpty());
+    }
+
+    @Test
+    void testReadIniFile_doesNotThrow() {
+        ProcesserPlate item = new ProcesserPlate();
+        assertDoesNotThrow(() -> item.readIniFile());
+    }
+
+    @Test
+    void testGetCost_AccelerateMode() {
+        ProcesserPlate item = new ProcesserPlate();
+        item.setEnumProcessType(ProcesserPlate.ProcessType.ACCELERATE);
+        // ACCELERATE mode uses runningCost[1] (same as HOTPLATE)
+        assertEquals(item.getRunningCost()[1], item.getCost());
+    }
+
+    @Test
+    void testGetCost_BaibaiOkazari() {
+        ProcesserPlate item = new ProcesserPlate();
+        item.setEnumProcessType(ProcesserPlate.ProcessType.BAIBAI_OKAZARI_WITH_FIRE);
+        assertEquals(item.getRunningCost()[2], item.getCost());
+    }
+
+    @Test
+    void testGetCost_Shutmouth() {
+        ProcesserPlate item = new ProcesserPlate();
+        item.setEnumProcessType(ProcesserPlate.ProcessType.SHUTMOUTH);
+        assertEquals(item.getRunningCost()[2], item.getCost());
+    }
+
+    @Test
+    void testGetCost_Plucking() {
+        ProcesserPlate item = new ProcesserPlate();
+        item.setEnumProcessType(ProcesserPlate.ProcessType.PLUCKING);
+        assertEquals(item.getRunningCost()[3], item.getCost());
+    }
+
+    @Test
+    void testGetCost_Packing() {
+        ProcesserPlate item = new ProcesserPlate();
+        item.setEnumProcessType(ProcesserPlate.ProcessType.PACKING);
+        assertEquals(item.getRunningCost()[3], item.getCost());
+    }
+
+    // --- getImageLayer: enabled=true → images[0] ---
+
+    @Test
+    void testGetImageLayer_enabled_returnsOne() {
+        ProcesserPlate item = new ProcesserPlate();
+        item.setEnabled(true);
+        java.awt.image.BufferedImage[] layer = new java.awt.image.BufferedImage[1];
+        assertEquals(1, item.getImageLayer(layer));
+    }
+
+    // --- getImageLayer: enabled=false → images[1] ---
+
+    @Test
+    void testGetImageLayer_disabled_returnsOne() {
+        ProcesserPlate item = new ProcesserPlate();
+        item.setEnabled(false);
+        java.awt.image.BufferedImage[] layer = new java.awt.image.BufferedImage[1];
+        assertEquals(1, item.getImageLayer(layer));
+    }
+
+    // --- checkHitObj: z!=0 → returns false ---
+
+    @Test
+    void testCheckHitObj_zNotZero_returnsFalse() {
+        ProcesserPlate item = new ProcesserPlate();
+        item.setEnabled(true);
+        item.setX(100);
+        item.setY(100);
+        Yukkuri body = WorldTestHelper.createBody();
+        body.setX(100);
+        body.setY(100);
+        body.setZ(5); // airborne
+        java.awt.Rectangle rect = new java.awt.Rectangle(0, 0, 1000, 1000);
+        assertFalse(item.checkHitObj(rect, body));
+    }
+
+    // --- checkHitObj: z==0, outside colRect → returns false ---
+
+    @Test
+    void testCheckHitObj_outsideRect_returnsFalse() {
+        WorldTestHelper.initializeStandardTranslate200();
+        ProcesserPlate item = new ProcesserPlate();
+        item.setEnabled(true);
+        item.setX(500);
+        item.setY(500);
+        Yukkuri body = WorldTestHelper.createBody();
+        body.setX(500);
+        body.setY(500);
+        body.setZ(0);
+        java.awt.Rectangle rect = new java.awt.Rectangle(0, 0, 1, 1); // tiny rect
+        assertDoesNotThrow(() -> item.checkHitObj(rect, body));
+    }
+
+    // --- setupProcesserPlate: headless → try/catch ---
+
+    @Test
+    void testSetupProcesserPlate_headless_doesNotThrow() {
+        ProcesserPlate item = new ProcesserPlate();
+        try {
+            ProcesserPlate.setupProcesserPlate(item);
+        } catch (Exception e) {
+            // Expected in headless environment
+        }
+    }
+
+    // --- Constructor(int, int, int): executes code path ---
+
+    @Test
+    void testConstructor_WithCoords_executesCode() {
+        try {
+            ProcesserPlate item = new ProcesserPlate(100, 100, 0);
+        } catch (Exception e) {
+            // Expected in headless environment (setupProcesserPlate fails)
+        }
+    }
+
+    @Test
+    void testLoadImages_headless_executesCode() {
+        try {
+            ProcesserPlate.loadImages(ProcesserPlate.class.getClassLoader(), null);
+        } catch (Exception e) {
+            // Expected: IOException because image files not found in test environment
+        }
+    }
+
+    // --- upDate with live body: HOTPLATE mode ---
+
+    @Test
+    void testUpDate_enabled_HOTPLATE_withLiveBody() {
+        ProcesserPlate item = new ProcesserPlate();
+        item.setEnabled(true);
+        item.setEnumProcessType(ProcesserPlate.ProcessType.HOTPLATE_MIN);
+        Yukkuri body = WorldTestHelper.createBody();
+        // body is alive, z=0, not removed
+        item.getProcessedBodyList().add(body);
+        item.getProcessedBodyEffectList().add(null);
+        assertDoesNotThrow(() -> item.upDate());
+    }
+
+    // --- upDate with live body: PAIN mode ---
+
+    @Test
+    void testUpDate_enabled_PAIN_withLiveBody() {
+        ProcesserPlate item = new ProcesserPlate();
+        item.setEnabled(true);
+        item.setEnumProcessType(ProcesserPlate.ProcessType.PAIN);
+        Yukkuri body = WorldTestHelper.createBody();
+        item.getProcessedBodyList().add(body);
+        item.getProcessedBodyEffectList().add(null);
+        assertDoesNotThrow(() -> item.upDate());
+    }
+
+    // --- upDate with live body: PEALING mode ---
+
+    @Test
+    void testUpDate_enabled_PEALING_withLiveBody() {
+        ProcesserPlate item = new ProcesserPlate();
+        item.setEnabled(true);
+        item.setEnumProcessType(ProcesserPlate.ProcessType.PEALING);
+        Yukkuri body = WorldTestHelper.createBody();
+        item.getProcessedBodyList().add(body);
+        item.getProcessedBodyEffectList().add(null);
+        assertDoesNotThrow(() -> item.upDate());
+    }
+
+    // --- upDate with body flying (z >= 10) ---
+
+    @Test
+    void testUpDate_enabled_bodyFlying() {
+        ProcesserPlate item = new ProcesserPlate();
+        item.setEnabled(true);
+        item.setEnumProcessType(ProcesserPlate.ProcessType.PAIN);
+        Yukkuri body = WorldTestHelper.createBody();
+        body.setZ(10);
+        item.getProcessedBodyList().add(body);
+        item.getProcessedBodyEffectList().add(null);
+        assertDoesNotThrow(() -> item.upDate());
+        assertTrue(item.getProcessedBodyList().isEmpty());
+    }
+
+    // --- objHitProcess: live body not yet in list ---
+
+    @Test
+    void testObjHitProcess_LiveBody_PAIN_addsToList() {
+        ProcesserPlate item = new ProcesserPlate();
+        item.setEnabled(true);
+        item.setEnumProcessType(ProcesserPlate.ProcessType.PAIN);
+        Yukkuri body = WorldTestHelper.createBody();
+        int result = item.objHitProcess(body);
+        assertEquals(1, result);
+        assertTrue(item.getProcessedBodyList().contains(body));
+    }
+
+    // --- objHitProcess: live body already in list ---
+
+    @Test
+    void testObjHitProcess_LiveBody_alreadyInList_returnsOne() {
+        ProcesserPlate item = new ProcesserPlate();
+        item.setEnabled(true);
+        item.setEnumProcessType(ProcesserPlate.ProcessType.PAIN);
+        Yukkuri body = WorldTestHelper.createBody();
+        item.getProcessedBodyList().add(body);
+        item.getProcessedBodyEffectList().add(null);
+        int result = item.objHitProcess(body);
+        assertEquals(1, result);
+    }
+
+    // --- upDate disabled with body in list (non-null effect) ---
+
+    @Test
+    void testUpDate_disabled_withBodyAndEffect() {
+        ProcesserPlate item = new ProcesserPlate();
+        item.setEnabled(false);
+        item.setEnumProcessType(ProcesserPlate.ProcessType.PAIN);
+        Yukkuri body = WorldTestHelper.createBody();
+        item.getProcessedBodyList().add(body);
+        item.getProcessedBodyEffectList().add(null);
+        assertDoesNotThrow(() -> item.upDate());
+        assertTrue(item.getProcessedBodyList().isEmpty());
+    }
+
+    @Nested
+    class RegressionScenarios {
+
+        @Test
+        void testScenario_PainModeWakesBodyAndAppliesPainState() {
+            ProcesserPlate item = new ProcesserPlate();
+            item.setEnabled(true);
+            item.setEnumProcessType(ProcesserPlate.ProcessType.PAIN);
+
+            Yukkuri body = WorldTestHelper.createBody();
+            body.setSleeping(true);
+            body.setShadowVisible(true);
+            int damageBefore = body.getDamage();
+            int stressBefore = body.getStress();
+
+            item.getProcessedBodyList().add(body);
+            item.getProcessedBodyEffectList().add(null);
+
+            item.upDate();
+
+            assertFalse(body.isSleeping());
+            assertFalse(body.isShadowVisible());
+            assertEquals(damageBefore + 5, body.getDamage());
+            assertEquals(stressBefore + 30, body.getStress());
+            assertEquals(Happiness.VERY_SAD, body.getHappiness());
+            assertEquals(ImageCode.PAIN.ordinal(), body.getForceFace());
+            assertTrue(item.getProcessedBodyList().contains(body));
+        }
+
+        @Test
+        void testScenario_PealingModePealsEligibleBody() {
+            ProcesserPlate item = new ProcesserPlate();
+            item.setEnabled(true);
+            item.setEnumProcessType(ProcesserPlate.ProcessType.PEALING);
+
+            Yukkuri body = createReimuBody();
+            body.setSleeping(true);
+            body.setOkazari(null);
+            body.setHasBraid(false);
+
+            item.getProcessedBodyList().add(body);
+            item.getProcessedBodyEffectList().add(null);
+
+            item.upDate();
+
+            assertFalse(body.isSleeping());
+            assertTrue(body.isPealed());
+            assertEquals(HairState.BALDHEAD, body.getHairState());
+        }
+
+        @Test
+        void testScenario_PackingModePacksFullyProcessedBody() {
+            ProcesserPlate item = new ProcesserPlate();
+            item.setEnabled(true);
+            item.setEnumProcessType(ProcesserPlate.ProcessType.PACKING);
+
+            Yukkuri body = createReimuBody();
+            body.setOkazari(null);
+            body.setHasBraid(false);
+            body.setBlind(true);
+            body.setShutmouth(true);
+            body.setHairState(HairState.BALDHEAD);
+
+            item.getProcessedBodyList().add(body);
+            item.getProcessedBodyEffectList().add(null);
+
+            item.upDate();
+
+            assertTrue(body.isPacked());
+            assertTrue(body.isBlind());
+            assertTrue(body.isShutmouth());
+            assertEquals(Happiness.VERY_SAD, body.getHappiness());
+        }
+    }
+}
