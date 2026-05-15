@@ -41,7 +41,7 @@ public final class FoodSearchPolicy {
 			}
 		}
 
-		for (Map.Entry<Integer, Food> entry : GameWorld.get().getCurrentMap().getFood().entrySet()) {
+		for (Map.Entry<Integer, Food> entry : GameWorld.get().getCurrentWorldState().getFoods().entrySet()) {
 			Food f = entry.getValue();
 			if (f.isEmpty()) {
 				continue;
@@ -52,7 +52,7 @@ public final class FoodSearchPolicy {
 			int distance = Translate.distance(body.getX(), body.getY(), f.getX(), f.getY());
 			if (minDistance > distance) {
 				if (Barrier.acrossBarrier(body.getX(), body.getY(), f.getX(), f.getY(),
-						Barrier.MAP_BODY[wallMode] + Barrier.BARRIER_KEKKAI)) {
+						Barrier.BODY_BLOCK_FLAGS[wallMode] + Barrier.BARRIER_KEKKAI)) {
 					continue;
 				}
 
@@ -143,9 +143,9 @@ public final class FoodSearchPolicy {
 			return null;
 		}
 
-		for (Map.Entry<Integer, Stalk> entry : GameWorld.get().getCurrentMap().getStalk().entrySet()) {
+		for (Map.Entry<Integer, Stalk> entry : GameWorld.get().getCurrentWorldState().getStalks().entrySet()) {
 			Stalk s = entry.getValue();
-			Yukkuri plantBody = GameWorld.get().getCurrentMap().getYukkuriMap().get(s.getPlantYukkuri());
+			Yukkuri plantBody = GameWorld.get().getCurrentWorldState().getYukkuriRegistry().get(s.getPlantYukkuri());
 			if (plantBody != null) {
 				if (plantBody == body) {
 					continue;
@@ -154,7 +154,7 @@ public final class FoodSearchPolicy {
 						!(plantBody.getBurialState() == BurialState.NEARLY_ALL && !plantBody.hasOkazari())) {
 					continue;
 				}
-				List<Integer> babyList = ((Stalk) s).getBindBabies();
+				List<Integer> babyList = ((Stalk) s).getAttachedBabyIds();
 				if (babyList != null && babyList.size() != 0) {
 					boolean hasBaby = false;
 					for (int babyId : babyList) {
@@ -173,7 +173,7 @@ public final class FoodSearchPolicy {
 			int distance = Translate.distance(body.getX(), body.getY(), s.getX(), s.getY());
 			if (minDistance > distance) {
 				if (Barrier.acrossBarrier(body.getX(), body.getY(), s.getX(), s.getY(),
-						Barrier.MAP_BODY[wallMode] + Barrier.BARRIER_KEKKAI)) {
+						Barrier.BODY_BLOCK_FLAGS[wallMode] + Barrier.BARRIER_KEKKAI)) {
 					continue;
 				}
 				targetObject = s;
@@ -182,12 +182,12 @@ public final class FoodSearchPolicy {
 		}
 
 		if (targetObject == null) {
-			for (Map.Entry<Integer, Vomit> entry : GameWorld.get().getCurrentMap().getVomit().entrySet()) {
+			for (Map.Entry<Integer, Vomit> entry : GameWorld.get().getCurrentWorldState().getVomit().entrySet()) {
 				Vomit vomit = entry.getValue();
 				int distance = Translate.distance(body.getX(), body.getY(), vomit.getX(), vomit.getY());
 				if (minDistance > distance) {
 					if (Barrier.acrossBarrier(body.getX(), body.getY(), vomit.getX(), vomit.getY(),
-							Barrier.MAP_BODY[wallMode] + Barrier.BARRIER_KEKKAI)) {
+							Barrier.BODY_BLOCK_FLAGS[wallMode] + Barrier.BARRIER_KEKKAI)) {
 						continue;
 					}
 					targetObject = vomit;
@@ -196,7 +196,7 @@ public final class FoodSearchPolicy {
 			}
 		}
 		if (targetObject == null) {
-			for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getYukkuriMap().entrySet()) {
+			for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentWorldState().getYukkuriRegistry().entrySet()) {
 				Yukkuri deadCandidate = entry.getValue();
 				if (deadCandidate == null || deadCandidate.isRemoved()) {
 					continue;
@@ -219,7 +219,7 @@ public final class FoodSearchPolicy {
 				int distance = Translate.distance(body.getX(), body.getY(), deadCandidate.getX(), deadCandidate.getY());
 				if (minDistance > distance) {
 					if (Barrier.acrossBarrier(body.getX(), body.getY(), deadCandidate.getX(), deadCandidate.getY(),
-							Barrier.MAP_BODY[wallMode] + Barrier.BARRIER_KEKKAI)) {
+							Barrier.BODY_BLOCK_FLAGS[wallMode] + Barrier.BARRIER_KEKKAI)) {
 						continue;
 					}
 					targetObject = deadCandidate;
@@ -228,7 +228,7 @@ public final class FoodSearchPolicy {
 			}
 		}
 		if (targetObject == null) {
-			for (Map.Entry<Integer, Shit> entry : GameWorld.get().getCurrentMap().getShit().entrySet()) {
+			for (Map.Entry<Integer, Shit> entry : GameWorld.get().getCurrentWorldState().getShit().entrySet()) {
 				Shit shit = entry.getValue();
 				if (!body.isTooHungry()) {
 					break;
@@ -236,7 +236,7 @@ public final class FoodSearchPolicy {
 				int distance = Translate.distance(body.getX(), body.getY(), shit.getX(), shit.getY());
 				if (minDistance > distance) {
 					if (Barrier.acrossBarrier(body.getX(), body.getY(), shit.getX(), shit.getY(),
-							Barrier.MAP_BODY[wallMode] + Barrier.BARRIER_KEKKAI)) {
+							Barrier.BODY_BLOCK_FLAGS[wallMode] + Barrier.BARRIER_KEKKAI)) {
 						continue;
 					}
 					targetObject = shit;

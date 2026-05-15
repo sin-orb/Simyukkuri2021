@@ -5,7 +5,7 @@ import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
 
-import org.simyukkuri.draw.ModLoader;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.engine.birth.YukkuriBirthTypeResolver;
 import org.simyukkuri.entity.core.attachment.Attachment;
 import org.simyukkuri.entity.core.living.yukkuri.Dna;
@@ -13,7 +13,7 @@ import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.AttachProperty;
 import org.simyukkuri.enums.Direction;
-import org.simyukkuri.enums.Event;
+import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.util.GameText;
 
 /****************************************
@@ -85,20 +85,20 @@ public class BreedingAmpoule extends Attachment {
 	}
 
 	@Override
-	protected Event update() {
+	protected TickResult update() {
 		Yukkuri pa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(parent);
 		if (pa == null)
-			return Event.DONOTHING;
+			return TickResult.NONE;
 		// 死んでる/焼かれてる/壊れてる/胎生去勢 の場合は何もしない
 		if (pa.isDead() || pa.isBurned() || pa.isCrushed() || pa.isCastrated()) {
-			return Event.DONOTHING;
+			return TickResult.NONE;
 		}
 		pa.setHungry(100);
 		pa.addDamage(-100);
 		pa.getBabyTypes().add(new Dna(YukkuriBirthTypeResolver.getRandomYukkuriType(pa), null, null, false));
 		pa.setHasBaby(true);
 
-		return Event.DONOTHING;
+		return TickResult.NONE;
 	}
 
 	@Override

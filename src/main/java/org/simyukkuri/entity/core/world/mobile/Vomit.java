@@ -8,12 +8,12 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import org.simyukkuri.Const;
-import org.simyukkuri.draw.ModLoader;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Translate;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.enums.AgeState;
-import org.simyukkuri.enums.Event;
+import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.enums.Numbering;
 import org.simyukkuri.enums.Type;
 import org.simyukkuri.enums.YukkuriType;
@@ -268,7 +268,7 @@ public class Vomit extends Entity {
 	}
 
 	@Override
-	public Event clockTick() {
+	public TickResult clockTick() {
 		if (!isRemoved()) {
 			// age += TICK;
 			if (getAge() >= VOMITLIMIT[ageState.ordinal()]) {
@@ -280,10 +280,10 @@ public class Vomit extends Entity {
 					if (x < 0) {
 						x = 0;
 						vx *= -1;
-					} else if (x > Translate.getMapW()) {
-						x = Translate.getMapW();
+					} else if (x > Translate.getWorldWidth()) {
+						x = Translate.getWorldWidth();
 						vx *= -1;
-					} else if (Barrier.onBarrier(x, y, getW() >> 2, getH() >> 2, Barrier.MAP_ITEM)) {
+					} else if (Barrier.onBarrier(x, y, getW() >> 2, getH() >> 2, Barrier.ITEM_BLOCK_FLAG)) {
 						x -= vx;
 						vx = 0;
 					}
@@ -293,10 +293,10 @@ public class Vomit extends Entity {
 					if (y < 0) {
 						y = 0;
 						vy = 0;
-					} else if (y > Translate.getMapH()) {
-						y = Translate.getMapH();
+					} else if (y > Translate.getWorldHeight()) {
+						y = Translate.getWorldHeight();
 						vy = 0;
-					} else if (Barrier.onBarrier(x, y, getW() >> 2, getH() >> 2, Barrier.MAP_ITEM)) {
+					} else if (Barrier.onBarrier(x, y, getW() >> 2, getH() >> 2, Barrier.ITEM_BLOCK_FLAG)) {
 						y -= vy;
 						vy = 0;
 					}
@@ -320,10 +320,10 @@ public class Vomit extends Entity {
 				}
 			}
 			calcPos();
-			return Event.DONOTHING;
+			return TickResult.NONE;
 		}
 		calcPos();
-		return Event.REMOVED;
+		return TickResult.REMOVED;
 	}
 
 	public String getOwnerName() {

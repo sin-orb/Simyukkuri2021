@@ -13,6 +13,11 @@ import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.world.mobile.Shit;
 import org.simyukkuri.entity.core.world.mobile.Vomit;
 import org.simyukkuri.field.FieldShape;
+import org.simyukkuri.ui.ItemGetMenuAction;
+import org.simyukkuri.ui.ItemPopupNoopAction;
+import org.simyukkuri.ui.ItemPopupSpeedAction;
+import org.simyukkuri.ui.ItemShapeMenuAction;
+import org.simyukkuri.ui.ItemUseMenuAction;
 import org.simyukkuri.util.GameWorld;
 
 /**********************************************
@@ -135,7 +140,7 @@ public class ItemMenu {
 	/** シェイプメニュー */
 	public static enum ShapeMenu {
 		SETUP(Locale.getDefault().getLanguage().equals(new Locale("ja").getLanguage()) ? "設定変更" : "Change Settings"),
-		HERVEST(Locale.getDefault().getLanguage().equals(new Locale("ja").getLanguage()) ? "収穫" : "Harvest"),
+		HARVEST(Locale.getDefault().getLanguage().equals(new Locale("ja").getLanguage()) ? "収穫" : "Harvest"),
 		TOP(Locale.getDefault().getLanguage().equals(new Locale("ja").getLanguage()) ? "最上位へ" : "To Highest"),
 		UP(Locale.getDefault().getLanguage().equals(new Locale("ja").getLanguage()) ? "ひとつ上へ" : "higher one"),
 		DOWN(Locale.getDefault().getLanguage().equals(new Locale("ja").getLanguage()) ? "ひとつ下へ" : "lower one"),
@@ -311,12 +316,12 @@ public class ItemMenu {
 	public static void dropItem(MouseEvent e) {
 		Point4y pos = Translate.invertLimit(e.getX(), e.getY());
 		Entity item = GameWorld.get().getPlayer().getHoldItem();
-		MapPlaceData curMap = GameWorld.get().getCurrentMap();
+		WorldState curMap = GameWorld.get().getCurrentWorldState();
 
 		if (item instanceof Yukkuri) {
 			Yukkuri b = (Yukkuri) item;
 			b.setTaken(false);
-			curMap.getYukkuriMap().put(b.getUniqueID(), b);
+			curMap.getYukkuriRegistry().put(b.getUniqueID(), b);
 		} else if (item instanceof Shit) {
 			curMap.getShit().put(item.objId, (Shit) item);
 		} else if (item instanceof Vomit) {
@@ -325,7 +330,7 @@ public class ItemMenu {
 		item.setCalcX(pos.getX());
 		item.setCalcY(pos.getY());
 		item.setCalcZ(0);
-		GameWorld.get().getPlayer().getItemList().removeElement(item);
+		GameWorld.get().getPlayer().getInventoryView().removeElement(item);
 		GameWorld.get().getPlayer().setHoldItem(null);
 	}
 }

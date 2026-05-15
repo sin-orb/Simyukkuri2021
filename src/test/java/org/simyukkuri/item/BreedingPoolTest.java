@@ -33,9 +33,9 @@ class BreedingPoolTest extends ItemTestBase {
     void testConstructor_Default() {
         BreedingPool item = new BreedingPool();
         item.setObjId(1);
-        SimYukkuri.world.getCurrentMap().getBreedingPool().put(item.getObjId(), item);
+        SimYukkuri.world.getCurrentWorldState().getBreedingPools().put(item.getObjId(), item);
         verifyCommonProperties(item);
-        assertTrue(SimYukkuri.world.getCurrentMap().getBreedingPool().containsKey(item.getObjId()));
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getBreedingPools().containsKey(item.getObjId()));
     }
 
     @Test
@@ -144,9 +144,9 @@ class BreedingPoolTest extends ItemTestBase {
     void testRemoveListData() {
         BreedingPool item = new BreedingPool();
         item.setObjId(50);
-        SimYukkuri.world.getCurrentMap().getBreedingPool().put(item.getObjId(), item);
-        item.removeListData();
-        assertFalse(SimYukkuri.world.getCurrentMap().getBreedingPool().containsKey(item.getObjId()));
+        SimYukkuri.world.getCurrentWorldState().getBreedingPools().put(item.getObjId(), item);
+        item.removeFromWorld();
+        assertFalse(SimYukkuri.world.getCurrentWorldState().getBreedingPools().containsKey(item.getObjId()));
     }
 
     @Test
@@ -241,7 +241,7 @@ class BreedingPoolTest extends ItemTestBase {
         BreedingPool item = new BreedingPool();
         Yukkuri body = WorldTestHelper.createBody();
         body.setHasBaby(true);
-        body.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
+        body.setCoreAnkoState(CoreAnkoState.NON_YUKKURI_DISEASE);
         assertDoesNotThrow(() -> item.cry(body));
     }
 

@@ -345,7 +345,7 @@ public final class YukkuriSexualDelegate {
 		body.clearActions();
 		body.setSleeping(false);
 		EventLogic.addYukkuriEvent(body, new CutPenipeniEvent(body, null, null, 1), null, null);
-		body.checkReactionStalkMother(UnbirthBabyState.ATTAKED);
+		body.checkReactionStalkMother(UnbirthBabyState.ATTACKED);
 	}
 
 	/**

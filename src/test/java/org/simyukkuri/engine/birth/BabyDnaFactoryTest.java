@@ -27,7 +27,7 @@ import org.junit.jupiter.api.Test;
 import org.simyukkuri.ConstState;
 import org.simyukkuri.SequenceRNG;
 import org.simyukkuri.SimYukkuri;
-import org.simyukkuri.draw.Terrarium;
+import org.simyukkuri.engine.Terrarium;
 import org.simyukkuri.engine.birth.BabyDnaFactory;
 import org.simyukkuri.entity.core.living.yukkuri.Dna;
 import org.simyukkuri.entity.core.living.yukkuri.impl.Deibu;
@@ -311,7 +311,7 @@ public class BabyDnaFactoryTest {
         @Test
         void testScenario_MotherAncestorAtavismCanOverrideBabyType() {
             Reimu mother = new Reimu();
-            mother.getAncestorList().add(Marisa.type.getTypeID());
+            mother.getAncestors().add(Marisa.type.getTypeID());
             Reimu father = new Reimu();
             SimYukkuri.RND = new SequenceBooleanRng(
                     new int[] { 0, 0, 1, 1, 1, 1, 1, 1, 1 }, false);

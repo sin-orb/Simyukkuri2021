@@ -34,7 +34,7 @@ import org.simyukkuri.entity.core.world.item.Trampoline;
 import org.simyukkuri.entity.core.world.item.Trash;
 import org.simyukkuri.entity.core.world.item.Yunba;
 import org.simyukkuri.system.IconPool;
-import org.simyukkuri.system.MainCommandUI;
+import org.simyukkuri.ui.MainCommandUI;
 import org.simyukkuri.util.GameText;
 
 /**********************************************
@@ -59,8 +59,8 @@ public class GadgetMenu {
 		WALL(16),
 		/** シェイプにのみ有効 */
 		FIELD(32),
-		/** 何も無いところが有効 */
-		TERRAIN_AND_GADET(12),
+		/** 何も無いところとガジェットが有効 */
+		TERRAIN_AND_GADGET(12),
 		;
 
 		private int mask;
@@ -90,8 +90,8 @@ public class GadgetMenu {
 		MAIN,
 		/** 道具 */
 		TOOL,
-		/** 道具2 */
-		TOOL2,
+		/** 身体変更 */
+		BODY_CHANGE,
 		/** アンプル */
 		AMPOULE,
 		/** えさ */
@@ -112,8 +112,8 @@ public class GadgetMenu {
 		CONVEYOR,
 		/** 声掛け */
 		VOICE,
-		/** テスト */
-		TEST,
+		/** 開発用 */
+		DEBUG,
 	}
 
 	/**
@@ -164,10 +164,10 @@ public class GadgetMenu {
 	}
 
 	/** 全メニュー項目 */
-	public static enum GadgetList {
+	public static enum GadgetMenuChoice {
 		// メインカテゴリ
 		TOOL(MainCategoryName.MAIN, GameText.read("command_item"), null, 0, null, null, null, null),
-		TOOL2(MainCategoryName.MAIN, GameText.read("command_item2"), null, 0, null, null, null, null),
+		BODY_CHANGE(MainCategoryName.MAIN, GameText.read("command_item2"), null, 0, null, null, null, null),
 		AMPOULE(MainCategoryName.MAIN, GameText.read("command_ampoule"), null, 0, null, null, null, null),
 		FOODS(MainCategoryName.MAIN, GameText.read("command_food"), null, 0, null, null, null, null),
 		CLEAN(MainCategoryName.MAIN, GameText.read("command_clean"), null, 0, null, null, null, null),
@@ -178,7 +178,7 @@ public class GadgetMenu {
 		TOYS(MainCategoryName.MAIN, GameText.read("command_toys"), null, 0, null, null, null, null),
 		CONVEYOR(MainCategoryName.MAIN, GameText.read("command_belcon"), null, 0, null, null, null, null),
 		VOICE(MainCategoryName.MAIN, GameText.read("command_approach"), null, 0, null, null, null, null),
-		TEST(MainCategoryName.MAIN, GameText.read("command_test"), null, 0, null, null, null, null),
+		DEBUG(MainCategoryName.MAIN, GameText.read("command_test"), null, 0, null, null, null, null),
 		// ツールカテゴリ
 		PUNISH(MainCategoryName.TOOL, GameText.read("command_chastisement"), null, 0, ActionTarget.BODY,
 				ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL, null),
@@ -196,17 +196,17 @@ public class GadgetMenu {
 				ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL, null),
 		JUICE(MainCategoryName.TOOL, GameText.read("command_juice"), null, 0, ActionTarget.BODY,
 				ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL, null),
-		Medical_JUICE(MainCategoryName.TOOL, GameText.read("command_orangejuice"), null, 0, ActionTarget.BODY,
+		ORANGE_JUICE(MainCategoryName.TOOL, GameText.read("command_orangejuice"), null, 0, ActionTarget.BODY,
 				ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL, null),
 		LEMON_SPLAY(MainCategoryName.TOOL, GameText.read("command_ramune"), null, 0, ActionTarget.BODY,
 				ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL, null),
-		Pheromone_SPLAY(MainCategoryName.TOOL, GameText.read("command_phero"), null, 0, ActionTarget.BODY,
+		PHEROMONE_SPRAY(MainCategoryName.TOOL, GameText.read("command_phero"), null, 0, ActionTarget.BODY,
 				ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL, null),
 		HAMMER(MainCategoryName.TOOL, GameText.read("command_hammer"), null, 0, ActionTarget.BODY,
 				ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL, null),
-		GATHERINJECTINTO(MainCategoryName.TOOL, GameText.read("command_inject"), null, 0, ActionTarget.BODY,
+		INJECT_SPERM(MainCategoryName.TOOL, GameText.read("command_inject"), null, 0, ActionTarget.BODY,
 				ActionControl.LEFT_CLICK, null, null),
-		DRIPSPERM(MainCategoryName.TOOL, GameText.read("command_drip"), null, 0, ActionTarget.BODY,
+		DRIP_SPERM(MainCategoryName.TOOL, GameText.read("command_drip"), null, 0, ActionTarget.BODY,
 				ActionControl.LEFT_CLICK, null, null),
 		PUNCH(MainCategoryName.TOOL, GameText.read("command_hit"), null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK,
 				null, null),
@@ -214,7 +214,7 @@ public class GadgetMenu {
 				ActionControl.LEFT_CLICK, null, null),
 		PEAL(MainCategoryName.TOOL, GameText.read("command_peal"), null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK,
 				null, null),
-		Blind(MainCategoryName.TOOL, GameText.read("command_eyeball"), null, 0, ActionTarget.BODY,
+		BLIND(MainCategoryName.TOOL, GameText.read("command_eyeball"), null, 0, ActionTarget.BODY,
 				ActionControl.LEFT_CLICK, null, null),
 		SHUTMOUTH(MainCategoryName.TOOL, GameText.read("command_mouthshut"), null, 0, ActionTarget.BODY,
 				ActionControl.LEFT_CLICK, null, null),
@@ -225,27 +225,27 @@ public class GadgetMenu {
 		STOMP(MainCategoryName.TOOL, GameText.read("command_crush"), null, 0, ActionTarget.BODY,
 				ActionControl.LEFT_CLICK, null, null),
 		// ツールカテゴリ2
-		BRAID_PLUCK(MainCategoryName.TOOL2, GameText.read("command_nopico"), null, 0, ActionTarget.BODY,
+		BRAID_PLUCK(MainCategoryName.BODY_CHANGE, GameText.read("command_nopico"), null, 0, ActionTarget.BODY,
 				ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL, null),
-		ANAL_CLOSE(MainCategoryName.TOOL2, GameText.read("command_anal"), null, 0, ActionTarget.BODY,
+		ANAL_CLOSE(MainCategoryName.BODY_CHANGE, GameText.read("command_anal"), null, 0, ActionTarget.BODY,
 				ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL_ONOFF, HelpContext.CTRL_LMB_ALL_INVERT),
-		STALK_CUT(MainCategoryName.TOOL2, GameText.read("command_stalkinfer"), null, 0, ActionTarget.BODY,
+		STALK_CUT(MainCategoryName.BODY_CHANGE, GameText.read("command_stalkinfer"), null, 0, ActionTarget.BODY,
 				ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL_ONOFF, HelpContext.CTRL_LMB_ALL_INVERT),
-		CASTRATION(MainCategoryName.TOOL2, GameText.read("command_babyinfer"), null, 0, ActionTarget.BODY,
+		CASTRATION(MainCategoryName.BODY_CHANGE, GameText.read("command_babyinfer"), null, 0, ActionTarget.BODY,
 				ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL_ONOFF, HelpContext.CTRL_LMB_ALL_INVERT),
-		STALK_UNPLUG(MainCategoryName.TOOL2, GameText.read("command_stalkpull"), null, 0, ActionTarget.BODY,
+		STALK_UNPLUG(MainCategoryName.BODY_CHANGE, GameText.read("command_stalkpull"), null, 0, ActionTarget.BODY,
 				ActionControl.LEFT_CLICK, null, null),
-		LIGHTER(MainCategoryName.TOOL2, GameText.read("command_lighter"), null, 0, ActionTarget.BODY,
+		LIGHTER(MainCategoryName.BODY_CHANGE, GameText.read("command_lighter"), null, 0, ActionTarget.BODY,
 				ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL, null),
-		WATER(MainCategoryName.TOOL2, GameText.read("command_water"), null, 0, ActionTarget.BODY,
+		WATER(MainCategoryName.BODY_CHANGE, GameText.read("command_water"), null, 0, ActionTarget.BODY,
 				ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL, null),
-		NEEDLE(MainCategoryName.TOOL2, GameText.read("command_needle"), null, 0, ActionTarget.BODY,
+		NEEDLE(MainCategoryName.BODY_CHANGE, GameText.read("command_needle"), null, 0, ActionTarget.BODY,
 				ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL_ONOFF, HelpContext.CTRL_LMB_ALL_INVERT),
-		BURY(MainCategoryName.TOOL2, GameText.read("command_bury"), null, 0, ActionTarget.BODY,
+		BURY(MainCategoryName.BODY_CHANGE, GameText.read("command_bury"), null, 0, ActionTarget.BODY,
 				ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL_ONOFF, HelpContext.CTRL_LMB_ALL_INVERT),
-		SET_SICK(MainCategoryName.TOOL2, GameText.read("command_mold"), null, 0, ActionTarget.BODY,
+		SET_SICK(MainCategoryName.BODY_CHANGE, GameText.read("command_mold"), null, 0, ActionTarget.BODY,
 				ActionControl.LEFT_CLICK, null, null),
-		SET_RAPER(MainCategoryName.TOOL2, GameText.read("command_raper"), null, 0, ActionTarget.BODY,
+		SET_RAPER(MainCategoryName.BODY_CHANGE, GameText.read("command_raper"), null, 0, ActionTarget.BODY,
 				ActionControl.LEFT_CLICK, null, null),
 		// アンプルカテゴリ
 		ORANGE_AMP(MainCategoryName.AMPOULE, GameText.read("item_orange"), null, 0, ActionTarget.BODY,
@@ -311,18 +311,18 @@ public class GadgetMenu {
 				ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null, null),
 		HOT_PLATE(MainCategoryName.FLOOR, GameText.read("command_floor_hotplate"), HotPlate.class, 0,
 				ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null, null),
-		PROCESSER_PLATE(MainCategoryName.FLOOR, GameText.read("command_floor_process"), ProcessorPlate.class, 0,
+		PROCESSOR_PLATE(MainCategoryName.FLOOR, GameText.read("command_floor_process"), ProcessorPlate.class, 0,
 				ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null, null),
 		FOOD_MAKER(MainCategoryName.FLOOR, GameText.read("command_floor_foodmaker"), FoodMaker.class, 0,
 				ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null, null),
 		MIXER(MainCategoryName.FLOOR, GameText.read("command_floor_mixer"), Mixer.class, 0, ActionTarget.TERRAIN,
 				ActionControl.LEFT_CLICK, null, null),
 		DIFFUSER(MainCategoryName.FLOOR, GameText.read("command_floor_diffuser"), Diffuser.class, 0,
-				ActionTarget.TERRAIN_AND_GADET, ActionControl.LEFT_CLICK, null, null),
+				ActionTarget.TERRAIN_AND_GADGET, ActionControl.LEFT_CLICK, null, null),
 		ORANGE_POOL(MainCategoryName.FLOOR, GameText.read("command_floor_orangepool"), OrangePool.class, 0,
-				ActionTarget.TERRAIN_AND_GADET, ActionControl.LEFT_CLICK, null, null),
+				ActionTarget.TERRAIN_AND_GADGET, ActionControl.LEFT_CLICK, null, null),
 		BREED_POOL(MainCategoryName.FLOOR, GameText.read("command_floor_cultivation"), BreedingPool.class, 0,
-				ActionTarget.TERRAIN_AND_GADET, ActionControl.LEFT_CLICK, null, null),
+				ActionTarget.TERRAIN_AND_GADGET, ActionControl.LEFT_CLICK, null, null),
 		GARBAGE_CHUTE(MainCategoryName.FLOOR, GameText.read("command_floor_dustchute"), GarbageChute.class, 0,
 				ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null, null),
 		MACHINE_PRESS(MainCategoryName.FLOOR, GameText.read("command_floor_press"), MachinePress.class, 0,
@@ -344,7 +344,7 @@ public class GadgetMenu {
 				ActionControl.LEFT_MULTI_CLICK, null, null),
 		ITEM(MainCategoryName.BARRIER, GameText.read("command_field_noitem"), null, 1, ActionTarget.TERRAIN,
 				ActionControl.LEFT_MULTI_CLICK, null, null),
-		NoUNUN(MainCategoryName.BARRIER, GameText.read("command_field_noitemunun"), null, 1, ActionTarget.TERRAIN,
+		NO_UNUN(MainCategoryName.BARRIER, GameText.read("command_field_noitemunun"), null, 1, ActionTarget.TERRAIN,
 				ActionControl.LEFT_MULTI_CLICK, null, null),
 		KEKKAI(MainCategoryName.BARRIER, GameText.read("command_field_kekkai"), null, 1, ActionTarget.TERRAIN,
 				ActionControl.LEFT_MULTI_CLICK, null, null),
@@ -388,49 +388,49 @@ public class GadgetMenu {
 		YUKKURIFURIFURI(MainCategoryName.VOICE, GameText.read("command_say_morunmorun"), null, 0, ActionTarget.BODY,
 				ActionControl.LEFT_CLICK, HelpContext.SHIFT_LMB_ALL_ONOFF, null),
 		// テストコマンド
-		RANKSET(MainCategoryName.TEST, GameText.read("command_test_pick"), null, 0, ActionTarget.BODY,
+		RANKSET(MainCategoryName.DEBUG, GameText.read("command_test_pick"), null, 0, ActionTarget.BODY,
 				ActionControl.LEFT_CLICK, null, null),
-		RANKSET2(MainCategoryName.TEST, GameText.read("command_test_ununslave"), null, 0, ActionTarget.BODY,
+		RANKSET2(MainCategoryName.DEBUG, GameText.read("command_test_ununslave"), null, 0, ActionTarget.BODY,
 				ActionControl.LEFT_CLICK, null, null),
-		GARBAGE_STATION(MainCategoryName.TEST, GameText.read("command_test_garbagepoint"), GarbageStation.class, 0,
+		GARBAGE_STATION(MainCategoryName.DEBUG, GameText.read("command_test_garbagepoint"), GarbageStation.class, 0,
 				ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null, null),
-		BED_NORA(MainCategoryName.TEST, GameText.read("command_test_bednora"), Bed.class, 1, ActionTarget.TERRAIN,
+		BED_NORA(MainCategoryName.DEBUG, GameText.read("command_test_bednora"), Bed.class, 1, ActionTarget.TERRAIN,
 				ActionControl.LEFT_CLICK, null, null),
-		TOILET_NORA(MainCategoryName.TEST, GameText.read("command_test_toiletnora"), Toilet.class, 1,
+		TOILET_NORA(MainCategoryName.DEBUG, GameText.read("command_test_toiletnora"), Toilet.class, 1,
 				ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null, null),
-		HOUSE_NORA(MainCategoryName.TEST, GameText.read("command_test_homenora"), House.class, 1, ActionTarget.TERRAIN,
+		HOUSE_NORA(MainCategoryName.DEBUG, GameText.read("command_test_homenora"), House.class, 1, ActionTarget.TERRAIN,
 				ActionControl.LEFT_CLICK, null, null),
-		GARBAGE_NORA(MainCategoryName.TEST, GameText.read("command_test_dustnora"), GarbageChute.class, 1,
+		GARBAGE_NORA(MainCategoryName.DEBUG, GameText.read("command_test_dustnora"), GarbageChute.class, 1,
 				ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null, null),
-		ORANGE_NORA(MainCategoryName.TEST, GameText.read("command_test_orangenora"), OrangePool.class, 1,
+		ORANGE_NORA(MainCategoryName.DEBUG, GameText.read("command_test_orangenora"), OrangePool.class, 1,
 				ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null, null),
-		STICKY_NORA(MainCategoryName.TEST, GameText.read("command_test_stickynora"), StickyPlate.class, 1,
+		STICKY_NORA(MainCategoryName.DEBUG, GameText.read("command_test_stickynora"), StickyPlate.class, 1,
 				ActionTarget.TERRAIN, ActionControl.LEFT_CLICK, null, null),
-		TOY_NORA(MainCategoryName.TEST, GameText.read("command_test_toynora"), Toy.class, 1, ActionTarget.TERRAIN,
+		TOY_NORA(MainCategoryName.DEBUG, GameText.read("command_test_toynora"), Toy.class, 1, ActionTarget.TERRAIN,
 				ActionControl.LEFT_CLICK, null, null),
-		REMOVEALL(MainCategoryName.TEST, GameText.read("command_test_exterm"), null, 0, ActionTarget.IMMEDIATE,
+		REMOVEALL(MainCategoryName.DEBUG, GameText.read("command_test_exterm"), null, 0, ActionTarget.IMMEDIATE,
 				ActionControl.LEFT_CLICK, null, null),
-		EVENT_SHIT(MainCategoryName.TEST, GameText.read("command_test_ununtaiso"), null, 0, ActionTarget.BODY,
+		EVENT_SHIT(MainCategoryName.DEBUG, GameText.read("command_test_ununtaiso"), null, 0, ActionTarget.BODY,
 				ActionControl.LEFT_CLICK, null, null),
-		EVENT_EAT(MainCategoryName.TEST, GameText.read("command_test_super"), null, 0, ActionTarget.BODY,
+		EVENT_EAT(MainCategoryName.DEBUG, GameText.read("command_test_super"), null, 0, ActionTarget.BODY,
 				ActionControl.LEFT_CLICK, null, null),
-		EVENT_RIDEYUKKURI(MainCategoryName.TEST, GameText.read("command_test_ochibihakobi"), null, 0, ActionTarget.BODY,
+		EVENT_RIDEYUKKURI(MainCategoryName.DEBUG, GameText.read("command_test_ochibihakobi"), null, 0, ActionTarget.BODY,
 				ActionControl.LEFT_CLICK, null, null),
-		EVENT_PROUDCHILD(MainCategoryName.TEST, GameText.read("command_test_ochibijiman"), null, 0, ActionTarget.BODY,
+		EVENT_PROUDCHILD(MainCategoryName.DEBUG, GameText.read("command_test_ochibijiman"), null, 0, ActionTarget.BODY,
 				ActionControl.LEFT_CLICK, null, null),
-		SETVAIN(MainCategoryName.TEST, GameText.read("command_test_vain"), null, 0, ActionTarget.BODY,
+		SETVAIN(MainCategoryName.DEBUG, GameText.read("command_test_vain"), null, 0, ActionTarget.BODY,
 				ActionControl.LEFT_CLICK, null, null),
-		Yunnyaa(MainCategoryName.TEST, GameText.read("command_test_yunyaaa"), null, 0, ActionTarget.BODY,
+		YUNNYAA(MainCategoryName.DEBUG, GameText.read("command_test_yunyaaa"), null, 0, ActionTarget.BODY,
 				ActionControl.LEFT_CLICK, null, null),
-		BEGGINGFORLIFE(MainCategoryName.TEST, GameText.read("command_test_beg"), null, 0, ActionTarget.BODY,
+		BEGGINGFORLIFE(MainCategoryName.DEBUG, GameText.read("command_test_beg"), null, 0, ActionTarget.BODY,
 				ActionControl.LEFT_CLICK, null, null),
-		PREDATORSGAME(MainCategoryName.TEST, GameText.read("command_test_playofpredetor"), null, 0, ActionTarget.BODY,
+		PREDATORSGAME(MainCategoryName.DEBUG, GameText.read("command_test_playofpredetor"), null, 0, ActionTarget.BODY,
 				ActionControl.LEFT_CLICK, null, null),
-		INVITEANTS(MainCategoryName.TEST, GameText.read("command_test_ants"), null, 0, ActionTarget.BODY,
+		INVITEANTS(MainCategoryName.DEBUG, GameText.read("command_test_ants"), null, 0, ActionTarget.BODY,
 				ActionControl.LEFT_CLICK, null, null),
-		FEED(MainCategoryName.TEST, GameText.read("command_test_forcefeed"), null, 0, ActionTarget.BODY,
+		FEED(MainCategoryName.DEBUG, GameText.read("command_test_forcefeed"), null, 0, ActionTarget.BODY,
 				ActionControl.LEFT_CLICK, null, null),
-		BADGE(MainCategoryName.TEST, GameText.read("item_badge"), null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK,
+		BADGE(MainCategoryName.DEBUG, GameText.read("item_badge"), null, 0, ActionTarget.BODY, ActionControl.LEFT_CLICK,
 				null, null),
 				;
 
@@ -443,7 +443,7 @@ public class GadgetMenu {
 		private HelpContext help1;
 		private HelpContext help2;
 
-		GadgetList(MainCategoryName grp, String str, Class<?> cls, int opt, ActionTarget tgt,
+		GadgetMenuChoice(MainCategoryName grp, String str, Class<?> cls, int opt, ActionTarget tgt,
 				ActionControl ctl, HelpContext h1, HelpContext h2) {
 			this.group = grp;
 			this.displayName = str;
@@ -494,233 +494,233 @@ public class GadgetMenu {
 	}
 
 	/** メインカテゴリボタンの種類 */
-	private static final GadgetList[] MainCategory = {
-			GadgetList.TOOL,
-			GadgetList.TOOL2,
-			GadgetList.AMPOULE,
-			GadgetList.FOODS,
-			GadgetList.CLEAN,
-			GadgetList.ACCESSORY,
-			GadgetList.PANTS,
-			GadgetList.FLOOR,
-			GadgetList.BARRIER,
-			GadgetList.TOYS,
-			GadgetList.CONVEYOR,
-			GadgetList.VOICE,
-			GadgetList.TEST
+	private static final GadgetMenuChoice[] MainCategory = {
+			GadgetMenuChoice.TOOL,
+			GadgetMenuChoice.BODY_CHANGE,
+			GadgetMenuChoice.AMPOULE,
+			GadgetMenuChoice.FOODS,
+			GadgetMenuChoice.CLEAN,
+			GadgetMenuChoice.ACCESSORY,
+			GadgetMenuChoice.PANTS,
+			GadgetMenuChoice.FLOOR,
+			GadgetMenuChoice.BARRIER,
+			GadgetMenuChoice.TOYS,
+			GadgetMenuChoice.CONVEYOR,
+			GadgetMenuChoice.VOICE,
+			GadgetMenuChoice.DEBUG
 	};
 	/** メインカテゴリ用コンボボックス定義 */
-	private static final DefaultComboBoxModel<GadgetList> mainModel = new DefaultComboBoxModel<GadgetList>(
+	private static final DefaultComboBoxModel<GadgetMenuChoice> mainModel = new DefaultComboBoxModel<GadgetMenuChoice>(
 			MainCategory);
 
 	/** 道具カテゴリボタンの種類 */
-	private static final GadgetList[] ToolCategory = {
-			GadgetList.PUNISH,
-			GadgetList.SNAPPING,
-			GadgetList.PICKUP,
-			GadgetList.HOLD,
-			GadgetList.SURISURI,
-			GadgetList.VIBRATOR,
-			GadgetList.PENICUT,
-			GadgetList.JUICE,
-			GadgetList.Medical_JUICE,
-			GadgetList.LEMON_SPLAY,
-			GadgetList.Pheromone_SPLAY,
-			GadgetList.HAMMER,
-			GadgetList.GATHERINJECTINTO,
-			GadgetList.DRIPSPERM,
-			GadgetList.PUNCH,
-			GadgetList.PEAL,
-			GadgetList.Blind,
-			GadgetList.SHUTMOUTH,
-			GadgetList.HAIRCUT,
-			GadgetList.PACK,
-			GadgetList.STOMP,
-			GadgetList.GODHAND
+	private static final GadgetMenuChoice[] ToolCategory = {
+			GadgetMenuChoice.PUNISH,
+			GadgetMenuChoice.SNAPPING,
+			GadgetMenuChoice.PICKUP,
+			GadgetMenuChoice.HOLD,
+			GadgetMenuChoice.SURISURI,
+			GadgetMenuChoice.VIBRATOR,
+			GadgetMenuChoice.PENICUT,
+			GadgetMenuChoice.JUICE,
+			GadgetMenuChoice.ORANGE_JUICE,
+			GadgetMenuChoice.LEMON_SPLAY,
+			GadgetMenuChoice.PHEROMONE_SPRAY,
+			GadgetMenuChoice.HAMMER,
+			GadgetMenuChoice.INJECT_SPERM,
+			GadgetMenuChoice.DRIP_SPERM,
+			GadgetMenuChoice.PUNCH,
+			GadgetMenuChoice.PEAL,
+			GadgetMenuChoice.BLIND,
+			GadgetMenuChoice.SHUTMOUTH,
+			GadgetMenuChoice.HAIRCUT,
+			GadgetMenuChoice.PACK,
+			GadgetMenuChoice.STOMP,
+			GadgetMenuChoice.GODHAND
 	};
 	/** 道具カテゴリ用コンボボックス定義 */
-	private static final DefaultComboBoxModel<GadgetList> toolModel = new DefaultComboBoxModel<GadgetList>(
+	private static final DefaultComboBoxModel<GadgetMenuChoice> toolModel = new DefaultComboBoxModel<GadgetMenuChoice>(
 			ToolCategory);
 
 	/** 道具2カテゴリボタンの種類 */
-	private static final GadgetList[] ToolCategory2 = {
-			GadgetList.BRAID_PLUCK,
-			GadgetList.ANAL_CLOSE,
-			GadgetList.STALK_CUT,
-			GadgetList.CASTRATION,
-			GadgetList.STALK_UNPLUG,
-			GadgetList.LIGHTER,
-			GadgetList.NEEDLE,
-			GadgetList.WATER,
-			GadgetList.BURY,
-			GadgetList.SET_SICK,
-			GadgetList.SET_RAPER,
+	private static final GadgetMenuChoice[] ToolCategory2 = {
+			GadgetMenuChoice.BRAID_PLUCK,
+			GadgetMenuChoice.ANAL_CLOSE,
+			GadgetMenuChoice.STALK_CUT,
+			GadgetMenuChoice.CASTRATION,
+			GadgetMenuChoice.STALK_UNPLUG,
+			GadgetMenuChoice.LIGHTER,
+			GadgetMenuChoice.NEEDLE,
+			GadgetMenuChoice.WATER,
+			GadgetMenuChoice.BURY,
+			GadgetMenuChoice.SET_SICK,
+			GadgetMenuChoice.SET_RAPER,
 	};
 	/** 道具2カテゴリ用コンボボックス定義 */
-	private static final DefaultComboBoxModel<GadgetList> toolModel2 = new DefaultComboBoxModel<GadgetList>(
+	private static final DefaultComboBoxModel<GadgetMenuChoice> toolModel2 = new DefaultComboBoxModel<GadgetMenuChoice>(
 			ToolCategory2);
 
 	/** アンプルカテゴリボタンの種類 */
-	private static final GadgetList[] AmpouleCategory = {
-			GadgetList.ORANGE_AMP,
-			GadgetList.ACCEL_AMP,
-			GadgetList.STOP_AMP,
-			GadgetList.HUNGRY_AMP,
-			GadgetList.VERYSHIT_AMP,
-			GadgetList.POISON_AMP,
-			GadgetList.BREEDING_AMP,
-			GadgetList.ANYD_AMP,
+	private static final GadgetMenuChoice[] AmpouleCategory = {
+			GadgetMenuChoice.ORANGE_AMP,
+			GadgetMenuChoice.ACCEL_AMP,
+			GadgetMenuChoice.STOP_AMP,
+			GadgetMenuChoice.HUNGRY_AMP,
+			GadgetMenuChoice.VERYSHIT_AMP,
+			GadgetMenuChoice.POISON_AMP,
+			GadgetMenuChoice.BREEDING_AMP,
+			GadgetMenuChoice.ANYD_AMP,
 	};
 	/** アンプルカテゴリ用コンボボックス定義 */
-	private static final DefaultComboBoxModel<GadgetList> AmpouleModel = new DefaultComboBoxModel<GadgetList>(
+	private static final DefaultComboBoxModel<GadgetMenuChoice> AmpouleModel = new DefaultComboBoxModel<GadgetMenuChoice>(
 			AmpouleCategory);
 
 	/** えさカテゴリボタンの種類 */
-	private static final GadgetList[] FoodCategory = {
-			GadgetList.NORMAL,
-			GadgetList.BITTER,
-			GadgetList.LEMON_POP,
-			GadgetList.HOT,
-			GadgetList.VIYUGRA,
-			GadgetList.SWEETS1,
-			GadgetList.SWEETS2,
-			GadgetList.WASTE,
-			GadgetList.AUTO
+	private static final GadgetMenuChoice[] FoodCategory = {
+			GadgetMenuChoice.NORMAL,
+			GadgetMenuChoice.BITTER,
+			GadgetMenuChoice.LEMON_POP,
+			GadgetMenuChoice.HOT,
+			GadgetMenuChoice.VIYUGRA,
+			GadgetMenuChoice.SWEETS1,
+			GadgetMenuChoice.SWEETS2,
+			GadgetMenuChoice.WASTE,
+			GadgetMenuChoice.AUTO
 	};
 	/** えさカテゴリ用コンボボックス定義 */
-	private static final DefaultComboBoxModel<GadgetList> foodModel = new DefaultComboBoxModel<GadgetList>(
+	private static final DefaultComboBoxModel<GadgetMenuChoice> foodModel = new DefaultComboBoxModel<GadgetMenuChoice>(
 			FoodCategory);
 
 	/** 清掃カテゴリボタンの種類 */
-	private static final GadgetList[] CleanCategory = {
-			GadgetList.INDIVIDUAL,
-			GadgetList.YU_CLEAN,
-			GadgetList.BODY,
-			GadgetList.SHIT,
-			GadgetList.ETC,
-			GadgetList.ALL
+	private static final GadgetMenuChoice[] CleanCategory = {
+			GadgetMenuChoice.INDIVIDUAL,
+			GadgetMenuChoice.YU_CLEAN,
+			GadgetMenuChoice.BODY,
+			GadgetMenuChoice.SHIT,
+			GadgetMenuChoice.ETC,
+			GadgetMenuChoice.ALL
 	};
 	/** 清掃カテゴリ用コンボボックス定義 */
-	private static final DefaultComboBoxModel<GadgetList> cleanModel = new DefaultComboBoxModel<GadgetList>(
+	private static final DefaultComboBoxModel<GadgetMenuChoice> cleanModel = new DefaultComboBoxModel<GadgetMenuChoice>(
 			CleanCategory);
 
 	/** おかざりカテゴリボタンの種類 */
-	private static final GadgetList[] OkazariCategory = {
-			GadgetList.OKAZARI_HIDE,
+	private static final GadgetMenuChoice[] OkazariCategory = {
+			GadgetMenuChoice.OKAZARI_HIDE,
 	};
 	/** おかざりカテゴリ用コンボボックス定義 */
-	private static final DefaultComboBoxModel<GadgetList> okazariModel = new DefaultComboBoxModel<GadgetList>(
+	private static final DefaultComboBoxModel<GadgetMenuChoice> okazariModel = new DefaultComboBoxModel<GadgetMenuChoice>(
 			OkazariCategory);
 
 	/** おくるみカテゴリボタンの種類 */
-	private static final GadgetList[] PantsCategory = {
-			GadgetList.PANTS_NORMAL,
+	private static final GadgetMenuChoice[] PantsCategory = {
+			GadgetMenuChoice.PANTS_NORMAL,
 	};
 	/** おくるみカテゴリ用コンボボックス定義 */
-	private static final DefaultComboBoxModel<GadgetList> pantsModel = new DefaultComboBoxModel<GadgetList>(
+	private static final DefaultComboBoxModel<GadgetMenuChoice> pantsModel = new DefaultComboBoxModel<GadgetMenuChoice>(
 			PantsCategory);
 
 	/** 床設置カテゴリボタンの種類 */
-	private static final GadgetList[] FloorCategory = {
-			GadgetList.TOILET,
-			GadgetList.BED,
-			GadgetList.STICKY_PLATE,
-			GadgetList.HOT_PLATE,
-			GadgetList.PROCESSER_PLATE,
-			GadgetList.FOOD_MAKER,
-			GadgetList.MIXER,
-			GadgetList.DIFFUSER,
-			GadgetList.ORANGE_POOL,
-			GadgetList.BREED_POOL,
-			GadgetList.GARBAGE_CHUTE,
-			GadgetList.MACHINE_PRESS,
-			GadgetList.GENERATOR,
-			GadgetList.PRODUCT_CHUTE
+	private static final GadgetMenuChoice[] FloorCategory = {
+			GadgetMenuChoice.TOILET,
+			GadgetMenuChoice.BED,
+			GadgetMenuChoice.STICKY_PLATE,
+			GadgetMenuChoice.HOT_PLATE,
+			GadgetMenuChoice.PROCESSOR_PLATE,
+			GadgetMenuChoice.FOOD_MAKER,
+			GadgetMenuChoice.MIXER,
+			GadgetMenuChoice.DIFFUSER,
+			GadgetMenuChoice.ORANGE_POOL,
+			GadgetMenuChoice.BREED_POOL,
+			GadgetMenuChoice.GARBAGE_CHUTE,
+			GadgetMenuChoice.MACHINE_PRESS,
+			GadgetMenuChoice.GENERATOR,
+			GadgetMenuChoice.PRODUCT_CHUTE
 	};
 	/** 床設置カテゴリ用コンボボックス定義 */
-	private static final DefaultComboBoxModel<GadgetList> floorModel = new DefaultComboBoxModel<GadgetList>(
+	private static final DefaultComboBoxModel<GadgetMenuChoice> floorModel = new DefaultComboBoxModel<GadgetMenuChoice>(
 			FloorCategory);
 
 	/** フィールドカテゴリボタンの種類 */
-	private static final GadgetList[] BarrierCategory = {
-			GadgetList.GAP_MINI,
-			GadgetList.GAP_BIG,
-			GadgetList.NET_MINI,
-			GadgetList.NET_BIG,
-			GadgetList.WALL,
-			GadgetList.ITEM,
-			GadgetList.NoUNUN,
-			GadgetList.KEKKAI,
-			GadgetList.POOL,
-			GadgetList.FARM,
-			GadgetList.BELTCONVEYOR,
-			GadgetList.WALL_DELETE,
-			GadgetList.FIELD_DELETE,
-			GadgetList.ALL_DELETE
+	private static final GadgetMenuChoice[] BarrierCategory = {
+			GadgetMenuChoice.GAP_MINI,
+			GadgetMenuChoice.GAP_BIG,
+			GadgetMenuChoice.NET_MINI,
+			GadgetMenuChoice.NET_BIG,
+			GadgetMenuChoice.WALL,
+			GadgetMenuChoice.ITEM,
+			GadgetMenuChoice.NO_UNUN,
+			GadgetMenuChoice.KEKKAI,
+			GadgetMenuChoice.POOL,
+			GadgetMenuChoice.FARM,
+			GadgetMenuChoice.BELTCONVEYOR,
+			GadgetMenuChoice.WALL_DELETE,
+			GadgetMenuChoice.FIELD_DELETE,
+			GadgetMenuChoice.ALL_DELETE
 	};
 	/** フィールド用コンボボックス定義 */
-	private static final DefaultComboBoxModel<GadgetList> barrierModel = new DefaultComboBoxModel<GadgetList>(
+	private static final DefaultComboBoxModel<GadgetMenuChoice> barrierModel = new DefaultComboBoxModel<GadgetMenuChoice>(
 			BarrierCategory);
 
 	/** おもちゃカテゴリボタンの種類 */
-	private static final GadgetList[] ToysCategory = {
-			GadgetList.BALL,
-			GadgetList.YUNBA,
-			GadgetList.YUNBA_SETUP,
-			GadgetList.SUI,
-			GadgetList.TRASH,
-			GadgetList.TRAMPOLINE,
-			GadgetList.STONE
+	private static final GadgetMenuChoice[] ToysCategory = {
+			GadgetMenuChoice.BALL,
+			GadgetMenuChoice.YUNBA,
+			GadgetMenuChoice.YUNBA_SETUP,
+			GadgetMenuChoice.SUI,
+			GadgetMenuChoice.TRASH,
+			GadgetMenuChoice.TRAMPOLINE,
+			GadgetMenuChoice.STONE
 	};
 	/** おもちゃ用コンボボックス定義 */
-	private static final DefaultComboBoxModel<GadgetList> toyModel = new DefaultComboBoxModel<GadgetList>(ToysCategory);
+	private static final DefaultComboBoxModel<GadgetMenuChoice> toyModel = new DefaultComboBoxModel<GadgetMenuChoice>(ToysCategory);
 
 	/** コンベアカテゴリボタンの種類 */
-	private static final GadgetList[] ConveyorCategory = {
-			GadgetList.BELTCONVEYOR_CUSTOM,
-			GadgetList.BELTCONVEYOR_SETUP
+	private static final GadgetMenuChoice[] ConveyorCategory = {
+			GadgetMenuChoice.BELTCONVEYOR_CUSTOM,
+			GadgetMenuChoice.BELTCONVEYOR_SETUP
 	};
 	/** コンベアカテゴリ用コンボボックス定義 */
-	private static final DefaultComboBoxModel<GadgetList> conveyorModel = new DefaultComboBoxModel<GadgetList>(
+	private static final DefaultComboBoxModel<GadgetMenuChoice> conveyorModel = new DefaultComboBoxModel<GadgetMenuChoice>(
 			ConveyorCategory);
 
 	/** 声かけカテゴリボタンの種類 */
-	private static final GadgetList[] VoiceCategory = {
-			GadgetList.YUKKURISITEITTENE,
-			GadgetList.YUKKURIDIE,
-			GadgetList.YUKKURIFURIFURI
+	private static final GadgetMenuChoice[] VoiceCategory = {
+			GadgetMenuChoice.YUKKURISITEITTENE,
+			GadgetMenuChoice.YUKKURIDIE,
+			GadgetMenuChoice.YUKKURIFURIFURI
 	};
 	/** 声かけ用コンボボックス定義 */
-	private static final DefaultComboBoxModel<GadgetList> voiceModel = new DefaultComboBoxModel<GadgetList>(
+	private static final DefaultComboBoxModel<GadgetMenuChoice> voiceModel = new DefaultComboBoxModel<GadgetMenuChoice>(
 			VoiceCategory);
 
 	/** テストカテゴリボタンの種類 */
-	private static final GadgetList[] TestCategory = {
-			GadgetList.RANKSET,
-			GadgetList.RANKSET2,
-			GadgetList.GARBAGE_STATION,
-			GadgetList.BED_NORA,
-			GadgetList.TOILET_NORA,
-			GadgetList.HOUSE_NORA,
-			GadgetList.GARBAGE_NORA,
-			GadgetList.ORANGE_NORA,
-			GadgetList.STICKY_NORA,
-			GadgetList.TOY_NORA,
-			GadgetList.REMOVEALL,
-			GadgetList.EVENT_SHIT,
-			GadgetList.EVENT_EAT,
-			GadgetList.EVENT_RIDEYUKKURI,
-			GadgetList.EVENT_PROUDCHILD,
-			GadgetList.SETVAIN,
-			GadgetList.Yunnyaa,
-			GadgetList.BEGGINGFORLIFE,
-			GadgetList.PREDATORSGAME,
-			GadgetList.INVITEANTS,
-			GadgetList.FEED,
-			GadgetList.BADGE
+	private static final GadgetMenuChoice[] TestCategory = {
+			GadgetMenuChoice.RANKSET,
+			GadgetMenuChoice.RANKSET2,
+			GadgetMenuChoice.GARBAGE_STATION,
+			GadgetMenuChoice.BED_NORA,
+			GadgetMenuChoice.TOILET_NORA,
+			GadgetMenuChoice.HOUSE_NORA,
+			GadgetMenuChoice.GARBAGE_NORA,
+			GadgetMenuChoice.ORANGE_NORA,
+			GadgetMenuChoice.STICKY_NORA,
+			GadgetMenuChoice.TOY_NORA,
+			GadgetMenuChoice.REMOVEALL,
+			GadgetMenuChoice.EVENT_SHIT,
+			GadgetMenuChoice.EVENT_EAT,
+			GadgetMenuChoice.EVENT_RIDEYUKKURI,
+			GadgetMenuChoice.EVENT_PROUDCHILD,
+			GadgetMenuChoice.SETVAIN,
+			GadgetMenuChoice.YUNNYAA,
+			GadgetMenuChoice.BEGGINGFORLIFE,
+			GadgetMenuChoice.PREDATORSGAME,
+			GadgetMenuChoice.INVITEANTS,
+			GadgetMenuChoice.FEED,
+			GadgetMenuChoice.BADGE
 	};
 	/** テストカテゴリ用コンボボックス定義 */
-	private static final DefaultComboBoxModel<GadgetList> testModel = new DefaultComboBoxModel<GadgetList>(
+	private static final DefaultComboBoxModel<GadgetMenuChoice> testModel = new DefaultComboBoxModel<GadgetMenuChoice>(
 			TestCategory);
 
 	/** 速度の種類定義 */
@@ -750,13 +750,13 @@ public class GadgetMenu {
 	 * <br>
 	 * 初期は”道具”となってるところ
 	 */
-	private static GadgetList selectMain = GadgetList.TOOL;
+	private static GadgetMenuChoice selectMain = GadgetMenuChoice.TOOL;
 	/**
 	 * 右上の一番下のウィンドウ
 	 * <br>
 	 * 初期は”おしおき”となってるところ
 	 */
-	private static GadgetList selectSub = GadgetList.PUNISH;
+	private static GadgetMenuChoice selectSub = GadgetMenuChoice.PUNISH;
 
 	/** ポップアップ汎用 */
 	private static final JPopupMenu popup = new JPopupMenu();
@@ -778,131 +778,131 @@ public class GadgetMenu {
 	/** ヘルプ */
 	private static HelpContext[] currentHelp = new HelpContext[4];
 
-	public static GadgetList[] getMainCategory() {
+	public static GadgetMenuChoice[] getMainCategory() {
 		return MainCategory;
 	}
 
-	public static DefaultComboBoxModel<GadgetList> getMainModel() {
+	public static DefaultComboBoxModel<GadgetMenuChoice> getMainModel() {
 		return mainModel;
 	}
 
-	public static GadgetList[] getToolCategory() {
+	public static GadgetMenuChoice[] getToolCategory() {
 		return ToolCategory;
 	}
 
-	public static DefaultComboBoxModel<GadgetList> getToolModel() {
+	public static DefaultComboBoxModel<GadgetMenuChoice> getToolModel() {
 		return toolModel;
 	}
 
-	public static GadgetList[] getToolCategory2() {
+	public static GadgetMenuChoice[] getToolCategory2() {
 		return ToolCategory2;
 	}
 
-	public static DefaultComboBoxModel<GadgetList> getToolModel2() {
+	public static DefaultComboBoxModel<GadgetMenuChoice> getToolModel2() {
 		return toolModel2;
 	}
 
-	public static GadgetList[] getAmpouleCategory() {
+	public static GadgetMenuChoice[] getAmpouleCategory() {
 		return AmpouleCategory;
 	}
 
-	public static DefaultComboBoxModel<GadgetList> getAmpouleModel() {
+	public static DefaultComboBoxModel<GadgetMenuChoice> getAmpouleModel() {
 		return AmpouleModel;
 	}
 
-	public static GadgetList[] getFoodCategory() {
+	public static GadgetMenuChoice[] getFoodCategory() {
 		return FoodCategory;
 	}
 
-	public static DefaultComboBoxModel<GadgetList> getFoodModel() {
+	public static DefaultComboBoxModel<GadgetMenuChoice> getFoodModel() {
 		return foodModel;
 	}
 
-	public static GadgetList[] getCleanCategory() {
+	public static GadgetMenuChoice[] getCleanCategory() {
 		return CleanCategory;
 	}
 
-	public static DefaultComboBoxModel<GadgetList> getCleanModel() {
+	public static DefaultComboBoxModel<GadgetMenuChoice> getCleanModel() {
 		return cleanModel;
 	}
 
-	public static GadgetList[] getOkazariCategory() {
+	public static GadgetMenuChoice[] getOkazariCategory() {
 		return OkazariCategory;
 	}
 
-	public static DefaultComboBoxModel<GadgetList> getOkazariModel() {
+	public static DefaultComboBoxModel<GadgetMenuChoice> getOkazariModel() {
 		return okazariModel;
 	}
 
-	public static GadgetList[] getPantsCategory() {
+	public static GadgetMenuChoice[] getPantsCategory() {
 		return PantsCategory;
 	}
 
-	public static DefaultComboBoxModel<GadgetList> getPantsModel() {
+	public static DefaultComboBoxModel<GadgetMenuChoice> getPantsModel() {
 		return pantsModel;
 	}
 
-	public static GadgetList[] getFloorCategory() {
+	public static GadgetMenuChoice[] getFloorCategory() {
 		return FloorCategory;
 	}
 
-	public static DefaultComboBoxModel<GadgetList> getFloorModel() {
+	public static DefaultComboBoxModel<GadgetMenuChoice> getFloorModel() {
 		return floorModel;
 	}
 
-	public static GadgetList[] getBarrierCategory() {
+	public static GadgetMenuChoice[] getBarrierCategory() {
 		return BarrierCategory;
 	}
 
-	public static DefaultComboBoxModel<GadgetList> getBarrierModel() {
+	public static DefaultComboBoxModel<GadgetMenuChoice> getBarrierModel() {
 		return barrierModel;
 	}
 
-	public static GadgetList[] getToysCategory() {
+	public static GadgetMenuChoice[] getToysCategory() {
 		return ToysCategory;
 	}
 
-	public static DefaultComboBoxModel<GadgetList> getToyModel() {
+	public static DefaultComboBoxModel<GadgetMenuChoice> getToyModel() {
 		return toyModel;
 	}
 
-	public static GadgetList[] getConveyorCategory() {
+	public static GadgetMenuChoice[] getConveyorCategory() {
 		return ConveyorCategory;
 	}
 
-	public static DefaultComboBoxModel<GadgetList> getConveyorModel() {
+	public static DefaultComboBoxModel<GadgetMenuChoice> getConveyorModel() {
 		return conveyorModel;
 	}
 
-	public static GadgetList[] getVoiceCategory() {
+	public static GadgetMenuChoice[] getVoiceCategory() {
 		return VoiceCategory;
 	}
 
-	public static DefaultComboBoxModel<GadgetList> getVoiceModel() {
+	public static DefaultComboBoxModel<GadgetMenuChoice> getVoiceModel() {
 		return voiceModel;
 	}
 
-	public static GadgetList[] getTestCategory() {
+	public static GadgetMenuChoice[] getTestCategory() {
 		return TestCategory;
 	}
 
-	public static DefaultComboBoxModel<GadgetList> getTestModel() {
+	public static DefaultComboBoxModel<GadgetMenuChoice> getTestModel() {
 		return testModel;
 	}
 
-	public static GadgetList getSelectMain() {
+	public static GadgetMenuChoice getSelectMain() {
 		return selectMain;
 	}
 
-	public static void setSelectMain(GadgetList selectMain) {
+	public static void setSelectMain(GadgetMenuChoice selectMain) {
 		GadgetMenu.selectMain = selectMain;
 	}
 
-	public static GadgetList getSelectSub() {
+	public static GadgetMenuChoice getSelectSub() {
 		return selectSub;
 	}
 
-	public static void setSelectSub(GadgetList selectSub) {
+	public static void setSelectSub(GadgetMenuChoice selectSub) {
 		GadgetMenu.selectSub = selectSub;
 	}
 
@@ -939,7 +939,7 @@ public class GadgetMenu {
 	}
 
 	/** 最新状態の右上の、中と下のウィンドウの表示のゲッター */
-	public static final GadgetList getCurrentGadget() {
+	public static final GadgetMenuChoice getCurrentGadget() {
 		if (selectSub != null)
 			return selectSub;
 		else if (selectMain != null)
@@ -982,7 +982,7 @@ public class GadgetMenu {
 	 * @param subSel  サブセル
 	 */
 	@SuppressWarnings("unchecked")
-	public static final void setSelectCategory(GadgetList mainSel, int subSel) {
+	public static final void setSelectCategory(GadgetMenuChoice mainSel, int subSel) {
 
 		synchronized (SimYukkuri.lock) {
 			switch (mainSel) {
@@ -990,7 +990,7 @@ public class GadgetMenu {
 					MainCommandUI.getSubItemCombo().setModel(toolModel);
 					GadgetMenu.setSelectSub(GadgetMenu.getToolCategory()[subSel]);
 					break;
-				case TOOL2:
+				case BODY_CHANGE:
 					MainCommandUI.getSubItemCombo().setModel(toolModel2);
 					GadgetMenu.setSelectSub(GadgetMenu.getToolCategory2()[subSel]);
 					break;
@@ -1034,7 +1034,7 @@ public class GadgetMenu {
 					MainCommandUI.getSubItemCombo().setModel(voiceModel);
 					GadgetMenu.setSelectSub(GadgetMenu.getVoiceCategory()[subSel]);
 					break;
-				case TEST:
+				case DEBUG:
 					MainCommandUI.getSubItemCombo().setModel(testModel);
 					GadgetMenu.setSelectSub(GadgetMenu.getTestCategory()[subSel]);
 					break;
@@ -1046,7 +1046,7 @@ public class GadgetMenu {
 	}
 
 	/** 選択コマンドのヘルプを設定 */
-	public static final void setActionHelp(GadgetList item) {
+	public static final void setActionHelp(GadgetMenuChoice item) {
 
 		HelpContext help;
 		currentHelpNum = 0;

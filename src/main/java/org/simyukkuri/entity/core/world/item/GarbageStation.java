@@ -14,7 +14,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import org.simyukkuri.command.GadgetAction;
-import org.simyukkuri.draw.ModLoader;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Rectangle4y;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.world.WorldEntity;
@@ -178,13 +178,13 @@ public class GarbageStation extends WorldEntity {
 			FoodType f = rndTable[type].getFoodType();
 			int px = (idx == 0 ? -20 : 20);
 			food[idx] = GadgetAction.putObjEX(Food.class, getX() + px, getY(), f.ordinal());
-			GameWorld.get().getCurrentMap().getFood().put(food[idx].objId, (Food) food[idx]);
+			GameWorld.get().getCurrentWorldState().getFoods().put(food[idx].objId, (Food) food[idx]);
 		}
 	}
 
 	@Override
-	public void removeListData() {
-		GameWorld.get().getCurrentMap().getGarbageStation().remove(objId);
+	public void removeFromWorld() {
+		GameWorld.get().getCurrentWorldState().getGarbageStations().remove(objId);
 	}
 
 	/** コンストラクタ */
@@ -193,7 +193,7 @@ public class GarbageStation extends WorldEntity {
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), 8);
 
-		GameWorld.get().getCurrentMap().getGarbageStation().put(objId, this);
+		GameWorld.get().getCurrentWorldState().getGarbageStations().put(objId, this);
 		objType = Type.OBJECT;
 		worldEntityType = WorldEntityKind.GARBAGESTATION;
 		enable = new boolean[rndTable.length];
@@ -204,7 +204,7 @@ public class GarbageStation extends WorldEntity {
 		boolean ret = setupGarbageSt(this);
 		readIniFile();
 		if (!ret) {
-			GameWorld.get().getCurrentMap().getGarbageStation().remove(objId);
+			GameWorld.get().getCurrentWorldState().getGarbageStations().remove(objId);
 		}
 	}
 
@@ -248,14 +248,14 @@ public class GarbageStation extends WorldEntity {
 		ClassLoader loader = this.getClass().getClassLoader();
 		int iniValue = 0;
 		// 時間
-		iniValue = ModLoader.loadYukkuriIniMapForInt(loader, ModLoader.getDataItemIniDir(), "GarbageStation",
+		iniValue = ModLoader.loadYukkuriIniValue(loader, ModLoader.getDataItemIniDir(), "GarbageStation",
 				"throwingTime");
 		if (iniValue >= 6)
 			throwingTime = iniValue * 100 - 600;
 		else if (iniValue >= 0)
 			throwingTime = iniValue * 100 + 1800;
 		// 確率
-		iniValue = ModLoader.loadYukkuriIniMapForInt(loader, ModLoader.getDataItemIniDir(), "GarbageStation",
+		iniValue = ModLoader.loadYukkuriIniValue(loader, ModLoader.getDataItemIniDir(), "GarbageStation",
 				"gettingProbability");
 		if (iniValue != 0)
 			gettingP = iniValue;
@@ -269,11 +269,11 @@ public class GarbageStation extends WorldEntity {
 		this.enable = enable;
 	}
 
-	public Entity[] getFood() {
+	public Entity[] getFoods() {
 		return food;
 	}
 
-	public void setFood(Entity[] food) {
+	public void setFoods(Entity[] food) {
 		this.food = food;
 	}
 

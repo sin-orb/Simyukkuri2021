@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.simyukkuri.draw.Dimension4y;
-import org.simyukkuri.draw.ModLoader;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Point4y;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.enums.AgeState;
@@ -95,11 +95,11 @@ public class MarisaTsumuri extends Marisa {
 	 * @param loader クラスローダ
 	 */
 	public static void loadIniFile(ClassLoader loader) {
-		AttachOffset = ModLoader.loadYukkuriIniMap(loader, ModLoader.getDataIniDir(), baseFileName);
-		baseSpeed = ModLoader.loadYukkuriIniMapForInt(loader, ModLoader.getDataIniDir(), baseFileName, "speed");
-		cost = ModLoader.loadYukkuriIniMapForInt(loader, ModLoader.getDataIniDir(), baseFileName, "cost");
-		YValue = ModLoader.loadYukkuriIniMapForInt(loader, ModLoader.getDataIniDir(), baseFileName, "Value");
-		AValue = ModLoader.loadYukkuriIniMapForInt(loader, ModLoader.getDataIniDir(), baseFileName, "contentValue");
+		AttachOffset = ModLoader.loadYukkuriIniOffsets(loader, ModLoader.getDataIniDir(), baseFileName);
+		baseSpeed = ModLoader.loadYukkuriIniValue(loader, ModLoader.getDataIniDir(), baseFileName, "speed");
+		cost = ModLoader.loadYukkuriIniValue(loader, ModLoader.getDataIniDir(), baseFileName, "cost");
+		YValue = ModLoader.loadYukkuriIniValue(loader, ModLoader.getDataIniDir(), baseFileName, "Value");
+		AValue = ModLoader.loadYukkuriIniValue(loader, ModLoader.getDataIniDir(), baseFileName, "contentValue");
 	}
 
 	@Override

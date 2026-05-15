@@ -17,7 +17,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.simyukkuri.SimYukkuri;
-import org.simyukkuri.draw.World;
+import org.simyukkuri.engine.World;
 import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.CoreAnkoState;
 import org.simyukkuri.enums.Happiness;
@@ -53,7 +53,7 @@ public class NonYukkuriDiseaseEstrusTest {
         }
         b.setAgeState(age);
         b.setMsgType(YukkuriType.REIMU);
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(b.getUniqueID(), b);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueID(), b);
         return b;
     }
 
@@ -81,7 +81,7 @@ public class NonYukkuriDiseaseEstrusTest {
         body.setPartner(-1); // 独身
         
         // 非ゆっくり症を設定
-        body.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
+        body.setCoreAnkoState(CoreAnkoState.NON_YUKKURI_DISEASE);
         assertTrue(body.isNYD());
         
         // 感情チェック実行

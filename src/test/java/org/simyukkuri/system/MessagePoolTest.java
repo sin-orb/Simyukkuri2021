@@ -18,7 +18,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.enums.*;
 import org.simyukkuri.draw.Point4y;
-import org.simyukkuri.draw.World;
+import org.simyukkuri.engine.World;
 import java.util.Random;
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.util.WorldTestHelper;
@@ -99,7 +99,7 @@ public class MessagePoolTest {
             setRank(YukkuriRank.KAIYU);
             setAgeState(AgeState.ADULT);
             // Put in world so MessagePool can resolve %partner from the registry
-            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(getUniqueID(), this);
+            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(getUniqueID(), this);
         }
 
         public void setMyNameCustom(String name) {

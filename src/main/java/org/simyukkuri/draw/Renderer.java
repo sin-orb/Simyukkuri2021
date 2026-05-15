@@ -12,7 +12,7 @@ import java.util.List;
 
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.command.GadgetMenu;
-import org.simyukkuri.command.GadgetMenu.GadgetList;
+import org.simyukkuri.command.GadgetMenu.GadgetMenuChoice;
 import org.simyukkuri.command.GadgetMenu.MainCategoryName;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.effect.Effect;
@@ -30,8 +30,8 @@ import org.simyukkuri.field.impl.Farm;
 import org.simyukkuri.field.impl.Pool;
 import org.simyukkuri.system.IconPool;
 import org.simyukkuri.system.LoggerYukkuri;
-import org.simyukkuri.system.MainCommandUI;
-import org.simyukkuri.system.MapPlaceData;
+import org.simyukkuri.ui.MainCommandUI;
+import org.simyukkuri.system.WorldState;
 import org.simyukkuri.system.Sprite;
 import org.simyukkuri.util.YukkuriUtil;
 import org.simyukkuri.util.GameEnvironment;
@@ -42,15 +42,15 @@ final class Renderer {
 
 	void render(MyPane pane, Graphics g) {
 		synchronized (SimYukkuri.lock) {
-			MapPlaceData map = GameWorld.get().getCurrentMap();
+			WorldState map = GameWorld.get().getCurrentWorldState();
 
-			pane.getList4sort().clear();
-			pane.getList4sort().addAll(GameWorld.get().getYukkuriList());
-			pane.getList4sort().addAll(GameWorld.get().getFixObjList());
-			pane.getList4sort().addAll(GameWorld.get().getObjectList());
-			pane.getList4sort().addAll(GameWorld.get().getSortEffectList());
-			pane.getList4sort().addAll(TerrainField.getStructList());
-			Collections.sort(pane.getList4sort(), ObjDrawComp.getInstance());
+			pane.getRenderQueue().clear();
+			pane.getRenderQueue().addAll(GameWorld.get().getWorldEntities());
+			pane.getRenderQueue().addAll(GameWorld.get().getFixedObjects());
+			pane.getRenderQueue().addAll(GameWorld.get().getObjects());
+			pane.getRenderQueue().addAll(GameWorld.get().getSortedEffects());
+			pane.getRenderQueue().addAll(TerrainField.getBillboards());
+			Collections.sort(pane.getRenderQueue(), RenderOrderComparator.getInstance());
 
 			Graphics2D g2 = (Graphics2D) g;
 			g2.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_SPEED);
@@ -59,7 +59,7 @@ final class Renderer {
 			Rectangle4y dispArea = Translate.getDisplayArea();
 			pane.getBackBufferG2().setClip(dispArea.getX(), dispArea.getY(), dispArea.getWidth(), dispArea.getHeight());
 
-			pane.getMsgList().clear();
+			pane.getMessageBodies().clear();
 			MyPane.markList.clear();
 			Yukkuri selectedBody = MyPane.getSelectedYukkuri();
 			if (selectedBody != null) {
@@ -74,17 +74,17 @@ final class Renderer {
 			TerrainField.drawBackGroundImage(pane.getBackBufferG2(), pane);
 			TerrainField.drawFloor(pane.getBackBufferG2(), pane);
 
-			for (int i = map.getFarm().size() - 1; i >= 0; i--) {
-				map.getFarm().get(i).drawShape(pane.getBackBufferG2());
+			for (int i = map.getFarms().size() - 1; i >= 0; i--) {
+				map.getFarms().get(i).drawShape(pane.getBackBufferG2());
 			}
-			for (int i = map.getPool().size() - 1; i >= 0; i--) {
-				map.getPool().get(i).drawShape(pane.getBackBufferG2());
+			for (int i = map.getPools().size() - 1; i >= 0; i--) {
+				map.getPools().get(i).drawShape(pane.getBackBufferG2());
 			}
-			for (int i = map.getBeltconveyor().size() - 1; i >= 0; i--) {
-				map.getBeltconveyor().get(i).drawShape(pane.getBackBufferG2());
+			for (int i = map.getBeltconveyors().size() - 1; i >= 0; i--) {
+				map.getBeltconveyors().get(i).drawShape(pane.getBackBufferG2());
 			}
 
-			List<WorldEntity> platformList = GameWorld.get().getPlatformList();
+			List<WorldEntity> platformList = GameWorld.get().getPlatforms();
 			for (WorldEntity platform : platformList) {
 				pane.calcDrawPosition(platform, pane.getTmpRect());
 				int layerCount = platform.getImageLayer(pane.getLayerTmp());
@@ -100,7 +100,7 @@ final class Renderer {
 			}
 
 			pane.getBackBufferG2().setStroke(Barrier.WALL_STROKE);
-			for (Barrier barrier : map.getBarrier()) {
+			for (Barrier barrier : map.getBarriers()) {
 				barrier.drawShape(pane.getBackBufferG2());
 			}
 			pane.getBackBufferG2().setStroke(MyPane.getDefaultStroke());
@@ -110,10 +110,16 @@ final class Renderer {
 			Sprite braidSprite;
 			Yukkuri selectedBodyCheck = null;
 
-			for (Entity o : pane.getList4sort()) {
-				switch (o.getObjType()) {
+			for (Object o : pane.getRenderQueue()) {
+				if (o instanceof TerrainBillboard) {
+					TerrainBillboard billboard = (TerrainBillboard) o;
+					billboard.draw(pane.getBackBufferG2(), pane);
+					continue;
+				}
+				Entity entity = (Entity) o;
+				switch (entity.getObjType()) {
 					case YUKKURI: {
-						Yukkuri body = (Yukkuri) o;
+						Yukkuri body = (Yukkuri) entity;
 						if (body == MyPane.getSelectedYukkuri()) {
 							selectedBodyCheck = body;
 						}
@@ -167,7 +173,7 @@ final class Renderer {
 							YukkuriUtil.drawYukkuri(pane.getBackBufferG2(), pane, body);
 						}
 						if (body.getMessageBuffer() != null && !MyPane.isDisableScript()) {
-							pane.getMsgList().add(body);
+							pane.getMessageBodies().add(body);
 						}
 						break;
 					}
@@ -202,7 +208,7 @@ final class Renderer {
 						break;
 					}
 					case FIX_OBJECT: {
-						WorldEntity platform = (WorldEntity) o;
+						WorldEntity platform = (WorldEntity) entity;
 						pane.calcDrawPosition(platform, pane.getTmpRect());
 						int layerCount = platform.getImageLayer(pane.getLayerTmp());
 						for (int i = 0; i < layerCount; i++) {
@@ -213,7 +219,7 @@ final class Renderer {
 						break;
 					}
 					case OBJECT: {
-						WorldEntity platform = (WorldEntity) o;
+						WorldEntity platform = (WorldEntity) entity;
 						pane.calcDrawPosition(platform, pane.getTmpRect());
 						pane.getBackBufferG2().drawImage(platform.getShadowImage(), pane.getTmpRect().getX(),
 								pane.getTmpRect().getY(), pane.getTmpRect().getWidth(),
@@ -228,7 +234,7 @@ final class Renderer {
 						break;
 					}
 					case LIGHT_EFFECT: {
-						Effect effect = (Effect) o;
+						Effect effect = (Effect) entity;
 						pane.calcDrawPosition(effect, pane.getTmpRect());
 						pane.getTmpRect().setY(pane.getTmpRect().getY() - Translate.translateZ(effect.getZ()));
 						pane.getBackBufferG2().drawImage(effect.getImage(), pane.getTmpRect().getX(),
@@ -236,17 +242,12 @@ final class Renderer {
 								pane.getTmpRect().getHeight(), pane);
 						break;
 					}
-					case BG_OBJECT: {
-						TerrainBillboard billboard = (TerrainBillboard) o;
-						billboard.draw(pane.getBackBufferG2(), pane);
-						break;
-					}
 					default:
 						break;
 				}
 			}
 
-			for (Entity o : GameWorld.get().getFrontEffectList()) {
+			for (Entity o : GameWorld.get().getFrontEffects()) {
 				Effect effect = (Effect) o;
 				pane.calcDrawPosition(effect, pane.getTmpRect());
 				pane.getTmpRect().setY(pane.getTmpRect().getY() - Translate.translateZ(effect.getZ()));
@@ -293,7 +294,7 @@ final class Renderer {
 				pane.getBackBufferG2().translate(-mousePos.x, -mousePos.y);
 			}
 
-			GadgetList curGadget = GadgetMenu.getCurrentGadget();
+			GadgetMenuChoice curGadget = GadgetMenu.getCurrentGadget();
 			if (curGadget != null && curGadget.getGroup() == MainCategoryName.BARRIER) {
 				if ((SimYukkuri.fieldSX >= 0) && (SimYukkuri.fieldSY >= 0)
 						&& (SimYukkuri.fieldEX >= 0) && (SimYukkuri.fieldEY >= 0)) {
@@ -306,7 +307,7 @@ final class Renderer {
 						case NET_BIG:
 						case WALL:
 						case ITEM:
-						case NoUNUN:
+						case NO_UNUN:
 						case KEKKAI:
 							Barrier.drawPreview(pane.getBackBufferG2(), SimYukkuri.fieldSX, SimYukkuri.fieldSY,
 									SimYukkuri.fieldEX, SimYukkuri.fieldEY);
@@ -347,11 +348,11 @@ final class Renderer {
 			LinearGradientPaint sky = TerrainField.getSkyGrad(GameEnvironment.getDayState().ordinal());
 			if (sky != null) {
 				g2.setPaint(sky);
-				g2.fillRect(0, 0, Translate.getFieldW() * 100 / Translate.getMapScale(),
-						Translate.getFieldH() * 100 / Translate.getMapScale());
+				g2.fillRect(0, 0, Translate.getFieldW() * 100 / Translate.getWorldScale(),
+						Translate.getFieldH() * 100 / Translate.getWorldScale());
 			}
 
-			for (Yukkuri b : pane.getMsgList()) {
+			for (Yukkuri b : pane.getMessageBodies()) {
 				String message = b.getMessageBuffer();
 				int fontSize = b.getMessageTextSize();
 				if (fontSize == 120) {

@@ -5,7 +5,7 @@ import java.util.Map;
 import org.simyukkuri.draw.Translate;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.world.item.Stone;
-import org.simyukkuri.enums.CriticalDamegeType;
+import org.simyukkuri.enums.CriticalDamageType;
 import org.simyukkuri.enums.Intelligence;
 import org.simyukkuri.util.GameWorld;
 
@@ -23,10 +23,10 @@ public class StoneLogic {
 		if (b == null) {
 			return;
 		}
-		if (b.getCriticalDamegeType() == CriticalDamegeType.CUT) {
+		if (b.getCriticalDamageType() == CriticalDamageType.CUT) {
 			return;
 		}
-		for (Map.Entry<Integer, Stone> entry : GameWorld.get().getCurrentMap().getStone().entrySet()) {
+		for (Map.Entry<Integer, Stone> entry : GameWorld.get().getCurrentWorldState().getStones().entrySet()) {
 			Stone t = entry.getValue();
 
 			int distance = Translate.distance(b.getX(), b.getY(), t.getX(), t.getY());

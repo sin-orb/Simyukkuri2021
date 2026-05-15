@@ -46,7 +46,7 @@ public class AvoidMoldEvent extends EventPacket {
 	public boolean checkEventResponse(Yukkuri body) {
 		priority = EventPriority.MIDDLE;
 		// うんうん奴隷は参加しない
-		if (body.getPublicRank() == PublicRank.UnunSlave)
+		if (body.getPublicRank() == PublicRank.UNUN_SLAVE)
 			return false;
 		// 足りないゆは参加しない
 		if (body.isIdiot())
@@ -57,7 +57,7 @@ public class AvoidMoldEvent extends EventPacket {
 		// 相手との間に壁があればスキップ
 		Yukkuri targetBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getTo());
 		if (targetBody != null && Barrier.acrossBarrier(body.getX(), body.getY(), targetBody.getX(), targetBody.getY(),
-				Barrier.MAP_BODY[body.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
+				Barrier.BODY_BLOCK_FLAGS[body.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
 			return false;
 		}
 		return true;

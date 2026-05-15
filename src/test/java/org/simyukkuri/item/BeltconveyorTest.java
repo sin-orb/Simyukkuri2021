@@ -51,11 +51,11 @@ class BeltconveyorTest {
     void testConstructor_Default() {
         Beltconveyor item = new Beltconveyor();
         item.setObjId(1);
-        SimYukkuri.world.getCurrentMap().getBeltconveyor().add(item);
+        SimYukkuri.world.getCurrentWorldState().getBeltconveyors().add(item);
 
         assertTrue(item != null);
         assertTrue(item.getObjId() > 0);
-        assertTrue(SimYukkuri.world.getCurrentMap().getBeltconveyor().contains(item));
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getBeltconveyors().contains(item));
     }
 
     // --- getAttribute ---
@@ -134,9 +134,9 @@ class BeltconveyorTest {
         Beltconveyor item = new Beltconveyor();
         // set fields to allow deleteBelt to work
         item.setObjId(99);
-        SimYukkuri.world.getCurrentMap().getBeltconveyor().add(item);
+        SimYukkuri.world.getCurrentWorldState().getBeltconveyors().add(item);
         assertDoesNotThrow(() -> Beltconveyor.deleteBelt(item));
-        assertFalse(SimYukkuri.world.getCurrentMap().getBeltconveyor().contains(item));
+        assertFalse(SimYukkuri.world.getCurrentWorldState().getBeltconveyors().contains(item));
     }
 
     // --- setupBelt: headless → try/catch ---
@@ -222,7 +222,7 @@ class BeltconveyorTest {
     @Test
     void testExecuteShapePopup_setup_headless_executesCode() {
         Beltconveyor item = new Beltconveyor();
-        SimYukkuri.world.getCurrentMap().getBeltconveyor().add(item);
+        SimYukkuri.world.getCurrentWorldState().getBeltconveyors().add(item);
         try {
             item.executeShapePopup(org.simyukkuri.system.ItemMenu.ShapeMenu.SETUP);
         } catch (Exception e) {
@@ -234,7 +234,7 @@ class BeltconveyorTest {
     void testExecuteShapePopup_top_doesNotThrow() {
         Beltconveyor item = new Beltconveyor();
         Beltconveyor item2 = new Beltconveyor();
-        List<Beltconveyor> list = SimYukkuri.world.getCurrentMap().getBeltconveyor();
+        List<Beltconveyor> list = SimYukkuri.world.getCurrentWorldState().getBeltconveyors();
         list.add(item);
         list.add(item2);
         assertDoesNotThrow(() -> item2.executeShapePopup(org.simyukkuri.system.ItemMenu.ShapeMenu.TOP));
@@ -245,7 +245,7 @@ class BeltconveyorTest {
     void testExecuteShapePopup_down_doesNotThrow() {
         Beltconveyor item = new Beltconveyor();
         Beltconveyor item2 = new Beltconveyor();
-        List<Beltconveyor> list = SimYukkuri.world.getCurrentMap().getBeltconveyor();
+        List<Beltconveyor> list = SimYukkuri.world.getCurrentWorldState().getBeltconveyors();
         list.add(item);
         list.add(item2);
         assertDoesNotThrow(() -> item.executeShapePopup(org.simyukkuri.system.ItemMenu.ShapeMenu.DOWN));
@@ -255,7 +255,7 @@ class BeltconveyorTest {
     void testExecuteShapePopup_bottom_doesNotThrow() {
         Beltconveyor item = new Beltconveyor();
         Beltconveyor item2 = new Beltconveyor();
-        List<Beltconveyor> list = SimYukkuri.world.getCurrentMap().getBeltconveyor();
+        List<Beltconveyor> list = SimYukkuri.world.getCurrentWorldState().getBeltconveyors();
         list.add(item);
         list.add(item2);
         assertDoesNotThrow(() -> item.executeShapePopup(org.simyukkuri.system.ItemMenu.ShapeMenu.BOTTOM));
@@ -279,7 +279,7 @@ class BeltconveyorTest {
     void testGetBeltconveyor_withItem_foundInside() {
         Beltconveyor item = new Beltconveyor();
         // Set field coords manually via reflection or just add and test
-        SimYukkuri.world.getCurrentMap().getBeltconveyor().add(item);
+        SimYukkuri.world.getCurrentWorldState().getBeltconveyors().add(item);
         // item has default fieldSX=fieldSY=fieldEX=fieldEY=0
         Beltconveyor result = Beltconveyor.getBeltconveyor(0, 0);
         assertSame(item, result);

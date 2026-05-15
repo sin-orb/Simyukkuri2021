@@ -1,8 +1,13 @@
 package org.simyukkuri.enums;
-/**エフェクトのタイプ*/
+
+/** エフェクトの状態 */
 public enum EffectType {
-	/** 焼かれている */BAKE,
-	/** 打たれている */HIT,
-	/** ミキサーにかけられている */MIX,
-	/** むされている */STEAM,
+	/** 焼かれている状態 */
+	BAKED,
+	/** 打たれている状態 */
+	HIT,
+	/** ミキサーにかけられている状態 */
+	MIXED,
+	/** むされている状態 */
+	STEAMED,
 }

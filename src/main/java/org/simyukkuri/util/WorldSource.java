@@ -1,6 +1,6 @@
 package org.simyukkuri.util;
 
-import org.simyukkuri.draw.World;
+import org.simyukkuri.engine.World;
 
 public interface WorldSource {
 	World getWorld();

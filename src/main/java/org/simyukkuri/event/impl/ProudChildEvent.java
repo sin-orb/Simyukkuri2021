@@ -114,7 +114,7 @@ public class ProudChildEvent extends EventPacket {
 	@Override
 	public boolean checkEventResponse(Yukkuri body) {
 		// うんうん奴隷の場合は参加しない
-		if (body.getPublicRank() == PublicRank.UnunSlave)
+		if (body.getPublicRank() == PublicRank.UNUN_SLAVE)
 			return false;
 		// 父母がいない場合は参加しない
 		if (org.simyukkuri.util.YukkuriLookup.getYukkuriById(body.getFather()) == null &&
@@ -271,7 +271,7 @@ public class ProudChildEvent extends EventPacket {
 			fromWaitTicks++;
 
 			// 子のみ集合
-			List<Yukkuri> childrenList = YukkuriLogic.createActiveChildList(sourceBody, false);
+			List<Yukkuri> childrenList = YukkuriLogic.createActiveChildren(sourceBody, false);
 			if ((childrenList == null) || (childrenList.size() == 0)) {
 				return UpdateState.ABORT;
 			}
@@ -399,7 +399,7 @@ public class ProudChildEvent extends EventPacket {
 				case GO:
 					// 壁に引っかかってるなら終了
 					if (Barrier.onBarrier(body.getX(), body.getY(), sourceBody.getX(), sourceBody.getY(),
-							Barrier.MAP_BODY[body.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
+							Barrier.BODY_BLOCK_FLAGS[body.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
 						return UpdateState.ABORT;
 					}
 

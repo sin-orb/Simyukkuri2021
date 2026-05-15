@@ -8,7 +8,7 @@ import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.Attitude;
 import org.simyukkuri.enums.BurialState;
 import org.simyukkuri.enums.Burst;
-import org.simyukkuri.enums.CriticalDamegeType;
+import org.simyukkuri.enums.CriticalDamageType;
 import org.simyukkuri.enums.FootBake;
 import org.simyukkuri.enums.Happiness;
 import org.simyukkuri.enums.Intelligence;
@@ -121,7 +121,7 @@ public final class YukkuriShitDelegate {
 		// うんうんの蓄積の減少度判定
 		int dropChanceDivisor = 1;
 		// うんうん奴隷
-		if (body.getPublicRank() == PublicRank.UnunSlave) {
+		if (body.getPublicRank() == PublicRank.UNUN_SLAVE) {
 			if (!body.isShitting()) {
 				dropChanceDivisor = 5;
 			}
@@ -142,7 +142,7 @@ public final class YukkuriShitDelegate {
 		}
 
 		// ちぎれ状態の場合は餡子を漏らす
-		if ((body.getCriticalDamege() == CriticalDamegeType.CUT || body.isPealed()) &&
+		if ((body.getCriticalDamege() == CriticalDamageType.CUT || body.isPealed()) &&
 				body.getBurialState() == BurialState.NONE) {
 			if (shit > body.getShitLimitBase()[body.getAgeState().ordinal()] - Entity.TICK * Const.SHITSTAY * 2) {
 				GameView.addCrushedVomit(body.getX() + 3 - GameRandom.nextInt(6), body.getY() - 2, 0,
@@ -171,7 +171,7 @@ public final class YukkuriShitDelegate {
 		// 非ゆっくり症ではない場合
 		if (body.isNotNYD() && body.getBurialState() == BurialState.NONE) {
 			// うんうん奴隷ではない場合
-			if (body.getPublicRank() != PublicRank.UnunSlave) {
+			if (body.getPublicRank() != PublicRank.UNUN_SLAVE) {
 				Entity oTarget = body.takeMoveTarget();
 				// もしトイレに到着していたら即排泄へ
 				if (body.isToShit() && oTarget instanceof Toilet) {

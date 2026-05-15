@@ -101,7 +101,7 @@ public final class FoodArrivalActionPolicy {
 				body.setCarryItem(org.simyukkuri.enums.TakeoutItemType.SHIT, shit);
 				body.clearActions();
 				body.setToTakeout(true);
-				if (body.getPublicRank() == PublicRank.UnunSlave) {
+				if (body.getPublicRank() == PublicRank.UNUN_SLAVE) {
 					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.HateShit));
 					body.addStress(20);
 					body.stay();
@@ -158,7 +158,7 @@ public final class FoodArrivalActionPolicy {
 			}
 		} else if (targetObject instanceof Stalk) {
 			Stalk stalk = (Stalk) targetObject;
-			Yukkuri plantBody = GameWorld.get().getCurrentMap().getYukkuriMap().get(stalk.getPlantYukkuri());
+			Yukkuri plantBody = GameWorld.get().getCurrentWorldState().getYukkuriRegistry().get(stalk.getPlantYukkuri());
 			if (stalk.getZ() == 0 && plantBody == null) {
 				eatFood(body, FoodType.STALK, Math.min(body.getEatAmount(), stalk.getAmount()));
 				stalk.eatStalk(Math.min(body.getEatAmount(), stalk.getAmount()));

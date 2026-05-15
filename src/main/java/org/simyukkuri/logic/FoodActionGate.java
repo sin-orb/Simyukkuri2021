@@ -39,7 +39,7 @@ public final class FoodActionGate {
 				return true;
 			}
 		}
-		if (body.getCoreAnkoState() == CoreAnkoState.NonYukkuriDisease) {
+		if (body.getCoreAnkoState() == CoreAnkoState.NON_YUKKURI_DISEASE) {
 			return true;
 		}
 		if (body.isRaper() && body.isExciting() && !body.isStarving()) {
@@ -56,7 +56,7 @@ public final class FoodActionGate {
 			}
 		}
 
-		if (body.getPublicRank() != PublicRank.UnunSlave) {
+		if (body.getPublicRank() != PublicRank.UNUN_SLAVE) {
 			if (body.getCarryItem(TakeoutItemType.SHIT) != null) {
 				return true;
 			}
@@ -84,7 +84,7 @@ public final class FoodActionGate {
 			// isVeryHungry かつ currentEvent のみが canAction=false の原因なら食事を許可する
 			if (body.isVeryHungry() && body.getCurrentEvent() != null
 					&& !body.isDead()
-					&& body.getCriticalDamegeType() == null
+					&& body.getCriticalDamageType() == null
 					&& !body.isPealed() && !body.isPacked() && !body.isShitting()
 					&& !body.isBirth() && !body.isSukkiri() && !body.isNeedled()
 					&& !body.isNYD() && body.getBurialState() == org.simyukkuri.enums.BurialState.NONE) {

@@ -1,6 +1,4 @@
 package org.simyukkuri.system;
-import org.simyukkuri.util.GameImages;
-import org.simyukkuri.util.GameText;
 
 import java.awt.Image;
 import java.awt.MediaTracker;
@@ -8,12 +6,11 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.IOException;
 
-import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
 
 import org.simyukkuri.draw.MyPane;
-
-
+import org.simyukkuri.util.GameImages;
+import org.simyukkuri.util.GameText;
 
 /**********************************************
  * 各種アイコン、システム画像の保持
@@ -28,7 +25,9 @@ public class IconPool {
 		NINE_SLICE_UP("button0.png"),
 		NINE_SLICE_DOWN("button1.png"),
 		;
+
 		private final String fileName;
+
 		UISkin(String str) {
 			fileName = str;
 		}
@@ -44,9 +43,10 @@ public class IconPool {
 		OPTION("option.png"),
 		PIN("pin.png"),
 		POPUP_OFF("popup_off.png"),
-		TARGET("target.png")
-		;
+		TARGET("target.png");
+
 		private final String fileName;
+
 		ButtonIcon(String str) {
 			fileName = str;
 		}
@@ -66,10 +66,11 @@ public class IconPool {
 		UNSHIT("unshit.png", GameText.read("system_analclose")),
 		UNSTALK("unstalk.png", GameText.read("system_stalkcas")),
 		PHEROMONE("pheromone.png", GameText.read("system_pheromone")),
-		UNUNSLAVE("ununslave.png", GameText.read("system_ununslave"))
-		;
+		UNUNSLAVE("ununslave.png", GameText.read("system_ununslave"));
+
 		private final String fileName;
 		private final String help;
+
 		StatusIcon(String f, String h) {
 			fileName = f;
 			help = h;
@@ -97,9 +98,10 @@ public class IconPool {
 		SEL_1("sel_1.png"),
 		SEL_2("sel_2.png"),
 		SEL_3("sel_3.png"),
-		SHIFT("shift.png")
-		;
+		SHIFT("shift.png");
+
 		private final String fileName;
+
 		CursorIcon(String str) {
 			fileName = str;
 		}
@@ -114,9 +116,10 @@ public class IconPool {
 		CTRL("ctrl.png"),
 		MOUSE_L("mouse_l.png"),
 		MOUSE_R("mouse_r.png"),
-		SHIFT("shift.png")
-		;
+		SHIFT("shift.png");
+
 		private final String fileName;
+
 		HelpIcon(String str) {
 			fileName = str;
 		}
@@ -126,35 +129,35 @@ public class IconPool {
 		}
 	}
 
-
 	private static BufferedImage[] uiSkinImage = new BufferedImage[UISkin.values().length];
 	private static BufferedImage[] buttonIconImage = new BufferedImage[ButtonIcon.values().length];
 	private static ImageIcon[] statusIconImage = new ImageIcon[StatusIcon.values().length];
 	private static BufferedImage[] cursorIconImage = new BufferedImage[CursorIcon.values().length];
 	private static BufferedImage[] helpIconImage = new BufferedImage[HelpIcon.values().length];
+
 	/** イメージのロード */
 	public static void loadImages(ClassLoader loader, ImageObserver io) throws IOException {
 
-		MediaTracker mt = new MediaTracker((MyPane)io);
+		MediaTracker mt = new MediaTracker((MyPane) io);
 
-		for(UISkin i :UISkin.values()) {
+		for (UISkin i : UISkin.values()) {
 			uiSkinImage[i.ordinal()] = GameImages.read(loader.getResourceAsStream(IMAGE_PATH + i.getFileName()));
 			mt.addImage(uiSkinImage[i.ordinal()], 0);
 		}
-		for(ButtonIcon i :ButtonIcon.values()) {
+		for (ButtonIcon i : ButtonIcon.values()) {
 			buttonIconImage[i.ordinal()] = GameImages.read(loader.getResourceAsStream(IMAGE_PATH + i.getFileName()));
 			mt.addImage(buttonIconImage[i.ordinal()], 0);
 		}
-		for(StatusIcon i :StatusIcon.values()) {
+		for (StatusIcon i : StatusIcon.values()) {
 			Image img = GameImages.read(loader.getResourceAsStream(IMAGE_PATH + i.getFileName()));
 			statusIconImage[i.ordinal()] = new ImageIcon(img);
 			mt.addImage(img, 0);
 		}
-		for(CursorIcon i :CursorIcon.values()) {
+		for (CursorIcon i : CursorIcon.values()) {
 			cursorIconImage[i.ordinal()] = GameImages.read(loader.getResourceAsStream(IMAGE_PATH + i.getFileName()));
 			mt.addImage(cursorIconImage[i.ordinal()], 0);
 		}
-		for(HelpIcon i :HelpIcon.values()) {
+		for (HelpIcon i : HelpIcon.values()) {
 			helpIconImage[i.ordinal()] = GameImages.read(loader.getResourceAsStream(IMAGE_PATH + i.getFileName()));
 			mt.addImage(helpIconImage[i.ordinal()], 0);
 		}
@@ -165,75 +168,95 @@ public class IconPool {
 			e.printStackTrace();
 		}
 	}
+
 	/**
 	 * UIスキンイメージの取得
+	 * 
 	 * @return UIスキンイメージ
 	 */
 	public static BufferedImage[] getUISkinImageArray() {
 		return uiSkinImage;
 	}
+
 	/**
 	 * ボタンアイコンイメージの取得
+	 * 
 	 * @return ボタンアイコンイメージ
 	 */
 	public static BufferedImage[] getButtonIconImageArray() {
 		return buttonIconImage;
 	}
+
 	/**
 	 * ステータスアイコンのイメージの取得
+	 * 
 	 * @return ステータスアイコンのイメージ
 	 */
 	public static ImageIcon[] getStatusIconImageArray() {
 		return statusIconImage;
 	}
+
 	/**
 	 * カーソルアイコンのイメージの取得
+	 * 
 	 * @return カーソルアイコンのイメージ
 	 */
 	public static BufferedImage[] getCursorIconImageArray() {
 		return cursorIconImage;
 	}
+
 	/**
 	 * ヘルプアイコンのイメージの取得
+	 * 
 	 * @return ヘルプアイコンのイメージ
 	 */
 	public static BufferedImage[] getHelpIconImageArray() {
 		return helpIconImage;
 	}
+
 	/**
 	 * UIスキンイメージの取得
+	 * 
 	 * @param idx インデックス
 	 * @return UIスキンイメージ
 	 */
 	public static BufferedImage getUISkinImage(int idx) {
 		return uiSkinImage[idx];
 	}
+
 	/**
 	 * ボタンアイコンのイメージの取得
+	 * 
 	 * @param idx インデックス
 	 * @return ボタンアイコンのイメージ
 	 */
 	public static BufferedImage getButtonIconImage(int idx) {
 		return buttonIconImage[idx];
 	}
+
 	/**
 	 * ステータスアイコンのイメージの取得
+	 * 
 	 * @param idx インデックス
 	 * @return ステータスアイコンのイメージ
 	 */
 	public static ImageIcon getStatusIconImage(int idx) {
 		return statusIconImage[idx];
 	}
+
 	/**
 	 * カーソルアイコンのイメージの取得
+	 * 
 	 * @param idx インデックス
 	 * @return カーソルアイコンのイメージ
 	 */
 	public static BufferedImage getCursorIconImage(int idx) {
 		return cursorIconImage[idx];
 	}
+
 	/**
 	 * ヘルプアイコンのイメージの取得
+	 * 
 	 * @param idx インデックス
 	 * @return ヘルプアイコンのイメージ
 	 */
@@ -241,6 +264,3 @@ public class IconPool {
 		return helpIconImage[idx];
 	}
 }
-
-
-

@@ -31,6 +31,9 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import org.simyukkuri.SimYukkuri;
+import org.simyukkuri.engine.GameLoop;
+import org.simyukkuri.engine.ImageLoadService;
+import org.simyukkuri.engine.Terrarium;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 
@@ -67,8 +70,8 @@ public class MyPane extends JPanel implements Runnable {
 	private Graphics2D backBufferG2 = null;
 
 	/** 描画用テンポラリ */
-	private List<Entity> list4sort = new LinkedList<Entity>();
-	private List<Yukkuri> msgList = new LinkedList<Yukkuri>();
+	private List<Object> renderQueue = new LinkedList<Object>();
+	private List<Yukkuri> messageBodies = new LinkedList<Yukkuri>();
 	private int[] posTmp = new int[10];
 	private BufferedImage[] layerTmp = new BufferedImage[10];
 	/** 拡大表示倍率 */
@@ -231,7 +234,7 @@ public class MyPane extends JPanel implements Runnable {
 	/** 背景ファイルリロード */
 	public void loadTerrainFile() {
 		ClassLoader loader = this.getClass().getClassLoader();
-		TerrainField.loadTerrain(GameWorld.get().getNextMap(), loader, this);
+		TerrainField.loadTerrain(GameWorld.get().getNextWorldStateIndex(), loader, this);
 		System.gc();
 	}
 
@@ -498,8 +501,8 @@ public class MyPane extends JPanel implements Runnable {
 					}
 					Yukkuri b;
 					synchronized (SimYukkuri.lock) {
-						b = terrarium.makeYukkuri(GameRandom.nextInt(Translate.getMapW()),
-								GameRandom.nextInt(Translate.getMapH()), 0, selectType,
+						b = terrarium.makeYukkuri(GameRandom.nextInt(Translate.getWorldWidth()),
+								GameRandom.nextInt(Translate.getWorldHeight()), 0, selectType,
 								null, age, null, null, true);
 					}
 					b.addAge(256);
@@ -612,7 +615,7 @@ public class MyPane extends JPanel implements Runnable {
 		this.isRunning = isRunning;
 	}
 
-	int getLogOutput() {
+	public int getLogOutput() {
 		return logOutput;
 	}
 
@@ -624,20 +627,20 @@ public class MyPane extends JPanel implements Runnable {
 		this.terrarium = terrarium;
 	}
 
-	public List<Entity> getList4sort() {
-		return list4sort;
+	public List<Object> getRenderQueue() {
+		return renderQueue;
 	}
 
-	public void setList4sort(List<Entity> list4sort) {
-		this.list4sort = list4sort;
+	public void setRenderQueue(List<Object> renderQueue) {
+		this.renderQueue = renderQueue;
 	}
 
-	public List<Yukkuri> getMsgList() {
-		return msgList;
+	public List<Yukkuri> getMessageBodies() {
+		return messageBodies;
 	}
 
-	public void setMsgList(List<Yukkuri> msgList) {
-		this.msgList = msgList;
+	public void setMessageBodies(List<Yukkuri> messageBodies) {
+		this.messageBodies = messageBodies;
 	}
 
 	public int[] getPosTmp() {

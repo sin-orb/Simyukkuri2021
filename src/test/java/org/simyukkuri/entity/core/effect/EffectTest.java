@@ -20,9 +20,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import org.simyukkuri.SimYukkuri;
-import org.simyukkuri.draw.World;
+import org.simyukkuri.engine.World;
 import org.simyukkuri.entity.core.effect.Effect;
-import org.simyukkuri.enums.Event;
+import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.enums.Type;
 
 public class EffectTest {
@@ -47,7 +47,7 @@ public class EffectTest {
     @Test
     public void testConstructorRegistersFrontEffectAndInitializesFields() {
         DummyEffect effect = new DummyEffect(1, 2, 3, 4, 5, 6, true, 10, 0, false, false, true);
-        assertTrue(SimYukkuri.world.getCurrentMap().getFrontEffect().containsKey(effect.objId));
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getFrontEffects().containsKey(effect.objId));
         assertEquals(Type.LIGHT_EFFECT, effect.getObjType());
         assertEquals(1, effect.getDirection());
         assertEquals(10, effect.getLifeTime());
@@ -58,14 +58,14 @@ public class EffectTest {
     @Test
     public void testConstructorRegistersSortEffectWhenBack() {
         DummyEffect effect = new DummyEffect(0, 0, 0, 0, 0, 0, false, 5, 1, false, false, false);
-        assertTrue(SimYukkuri.world.getCurrentMap().getSortEffect().containsKey(effect.objId));
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getSortedEffects().containsKey(effect.objId));
         assertEquals(0, effect.getDirection());
     }
 
     @Test
     public void testClockTickRemovesWhenLifetimeExpired() {
         DummyEffect effect = new DummyEffect(0, 0, 0, 0, 0, 0, false, 0, 0, false, false, true);
-        assertEquals(Event.REMOVED, effect.clockTick());
+        assertEquals(TickResult.REMOVED, effect.clockTick());
     }
 
     @Test
@@ -79,11 +79,11 @@ public class EffectTest {
         effect.setAnimeLoop(1);
         effect.setAnimeEnd(false);
 
-        assertEquals(Event.DONOTHING, effect.clockTick());
+        assertEquals(TickResult.NONE, effect.clockTick());
         assertEquals(1, effect.getAnimeFrame());
         assertTrue(effect.isAnimate());
 
-        assertEquals(Event.DONOTHING, effect.clockTick());
+        assertEquals(TickResult.NONE, effect.clockTick());
         assertEquals(0, effect.getAnimeFrame());
         assertFalse(effect.isAnimate());
     }
@@ -99,7 +99,7 @@ public class EffectTest {
         effect.setAnimeLoop(-1);
         effect.setAnimeEnd(true);
 
-        assertEquals(Event.REMOVED, effect.clockTick());
+        assertEquals(TickResult.REMOVED, effect.clockTick());
     }
 
     @Test
@@ -108,7 +108,7 @@ public class EffectTest {
         assertEquals(10, effect.getZ());
         assertEquals(0, effect.getVxyz()[2]);
 
-        assertEquals(Event.DONOTHING, effect.clockTick());
+        assertEquals(TickResult.NONE, effect.clockTick());
         assertEquals(1, effect.getVxyz()[2]);
         assertEquals(9, effect.getZ());
     }

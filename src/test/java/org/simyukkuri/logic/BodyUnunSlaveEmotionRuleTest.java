@@ -51,7 +51,7 @@ public class BodyUnunSlaveEmotionRuleTest {
 	void testCheckEmotionFromUnunSlave_handlesUnunSlaveEnvyReaction() {
 		Yukkuri me = WorldTestHelper.createBody();
 		Yukkuri you = WorldTestHelper.createBody();
-		me.setPublicRank(PublicRank.UnunSlave);
+		me.setPublicRank(PublicRank.UNUN_SLAVE);
 		me.setHappiness(org.simyukkuri.enums.Happiness.AVERAGE);
 		you.setHappiness(org.simyukkuri.enums.Happiness.VERY_HAPPY);
 		me.setPartner(you.getUniqueID());

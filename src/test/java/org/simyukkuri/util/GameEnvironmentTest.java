@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
-import org.simyukkuri.draw.Terrarium;
+import org.simyukkuri.engine.Terrarium;
 
 public class GameEnvironmentTest {
 

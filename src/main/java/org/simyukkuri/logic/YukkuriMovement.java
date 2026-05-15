@@ -288,9 +288,9 @@ public final class YukkuriMovement {
 		if (body.getBlockedTicks() != 0) {
 			return;
 		}
-		body.setDestX(Math.max(0, Math.min(toX, Translate.getMapW())));
-		body.setDestY(Math.max(0, Math.min(toY, Translate.getMapH())));
-		body.setDestZ(Math.max(0, Math.min(toZ, Translate.getMapZ())));
+		body.setDestX(Math.max(0, Math.min(toX, Translate.getWorldWidth())));
+		body.setDestY(Math.max(0, Math.min(toY, Translate.getWorldHeight())));
+		body.setDestZ(Math.max(0, Math.min(toZ, Translate.getWorldDepth())));
 	}
 
 	/**
@@ -320,8 +320,8 @@ public final class YukkuriMovement {
 		if (!body.canAction() || body.isExciting() || body.isAngry() || body.isUnBirth()) {
 			return;
 		}
-		int toX = body.getX() > fromX ? Translate.getMapW() : 0;
-		int toY = body.getY() > fromY ? Translate.getMapH() : 0;
+		int toX = body.getX() > fromX ? Translate.getWorldWidth() : 0;
+		int toY = body.getY() > fromY ? Translate.getWorldHeight() : 0;
 		moveTo(body, toX, toY, 0);
 		body.clearActions();
 		body.setScare(true);
@@ -370,16 +370,16 @@ public final class YukkuriMovement {
 		if (mx != 0) {
 			body.setX(body.getX() + mx);
 			if (Barrier.onBarrier(body.getX(), body.getY(), body.getW() >> 2, body.getH() >> 3,
-					Barrier.MAP_BODY[body.getAgeState().ordinal()])) {
+					Barrier.BODY_BLOCK_FLAGS[body.getAgeState().ordinal()])) {
 				body.setX(body.getX() - mx);
 				body.setVx(0);
 			} else if (body.getX() < 0) {
 				body.setFalldownDamage(body.getFalldownDamage() + Math.abs(body.getVx()));
 				body.setX(0);
 				body.setVx(0);
-			} else if (body.getX() > Translate.getMapW()) {
+			} else if (body.getX() > Translate.getWorldWidth()) {
 				body.setFalldownDamage(body.getFalldownDamage() + Math.abs(body.getVx()));
-				body.setX(Translate.getMapW());
+				body.setX(Translate.getWorldWidth());
 				body.setVx(0);
 			}
 		}
@@ -387,7 +387,7 @@ public final class YukkuriMovement {
 		if (my != 0) {
 			body.setY(body.getY() + my);
 			if (Barrier.onBarrier(body.getX(), body.getY(), body.getW() >> 2, body.getH() >> 3,
-					Barrier.MAP_BODY[body.getAgeState().ordinal()])) {
+					Barrier.BODY_BLOCK_FLAGS[body.getAgeState().ordinal()])) {
 				body.setY(body.getY() - my);
 				body.setVy(0);
 			} else if (body.getY() < 0) {
@@ -395,9 +395,9 @@ public final class YukkuriMovement {
 				body.setY(0);
 				body.setVy(0);
 				body.setDirY(1);
-			} else if (body.getY() > Translate.getMapH()) {
+			} else if (body.getY() > Translate.getWorldHeight()) {
 				body.setFalldownDamage(body.getFalldownDamage() + Math.abs(body.getVy()));
-				body.setY(Translate.getMapH());
+				body.setY(Translate.getWorldHeight());
 				body.setVy(0);
 				body.setDirY(-1);
 			}
@@ -433,7 +433,7 @@ public final class YukkuriMovement {
 	 */
 	public static void resolveDirectedMovement(Yukkuri body, MovementVector vector) {
 		if (Barrier.onBarrier(body.getX(), body.getY(), body.getW() >> 2, body.getH() >> 3,
-				Barrier.MAP_BODY[body.getAgeState().ordinal()])) {
+				Barrier.BODY_BLOCK_FLAGS[body.getAgeState().ordinal()])) {
 			revertDirectedMovement(body, vector);
 			handleWallCollision(body);
 		} else {
@@ -518,10 +518,10 @@ public final class YukkuriMovement {
 	}
 
 	private static void handlePoolEntry(Yukkuri body, MovementVector vector) {
-		if ((Translate.getCurrentFieldMapNum(body.getX(), body.getY()) & FieldShape.FIELD_POOL) == 0) {
+		if ((Translate.getCurrentFieldGridValue(body.getX(), body.getY()) & FieldShape.FIELD_POOL) == 0) {
 			return;
 		}
-		if ((Translate.getCurrentFieldMapNum(body.getX() - vector.getX(), body.getY() - vector.getY())
+		if ((Translate.getCurrentFieldGridValue(body.getX() - vector.getX(), body.getY() - vector.getY())
 				& FieldShape.FIELD_POOL) != 0) {
 			return;
 		}
@@ -554,19 +554,19 @@ public final class YukkuriMovement {
 		if (body.getX() < 0) {
 			body.setX(0);
 			body.setDirX(1);
-		} else if (body.getX() > Translate.getMapW()) {
-			body.setX(Translate.getMapW());
+		} else if (body.getX() > Translate.getWorldWidth()) {
+			body.setX(Translate.getWorldWidth());
 			body.setDirX(-1);
 		}
 		if (body.getY() < 0) {
 			body.setY(0);
 			body.setDirY(1);
-		} else if (body.getY() > Translate.getMapH()) {
-			body.setY(Translate.getMapH());
+		} else if (body.getY() > Translate.getWorldHeight()) {
+			body.setY(Translate.getWorldHeight());
 			body.setDirY(-1);
 		}
-		if (body.getZ() > Translate.getMapZ()) {
-			body.setZ(Translate.getMapZ());
+		if (body.getZ() > Translate.getWorldDepth()) {
+			body.setZ(Translate.getWorldDepth());
 		}
 	}
 
@@ -610,7 +610,7 @@ public final class YukkuriMovement {
 			}
 
 			if (damageCut != 4) {
-				for (Map.Entry<Integer, Trampoline> entry : GameWorld.get().getCurrentMap().getTrampoline()
+				for (Map.Entry<Integer, Trampoline> entry : GameWorld.get().getCurrentWorldState().getTrampolines()
 						.entrySet()) {
 					Trampoline trampoline = entry.getValue();
 					if (trampoline.checkHitObj(body)) {

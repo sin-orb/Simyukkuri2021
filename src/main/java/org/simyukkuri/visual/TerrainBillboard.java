@@ -5,20 +5,20 @@ import java.awt.geom.AffineTransform;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.beans.Transient;
-
-import org.simyukkuri.entity.core.Entity;
-import org.simyukkuri.enums.Type;
+import java.io.Serializable;
 
 /*************************************************
  * 背景の部品画像管理
  */
-public class TerrainBillboard extends Entity {
+public class TerrainBillboard implements Serializable {
 
 	private static final long serialVersionUID = -587830180580728404L;
 	/** 画像 */
 	private BufferedImage image;
 	/** 変形用ベクトル */
 	private AffineTransform xform;
+	/** 描画順用Y座標 */
+	private int sortY;
 
 	/**
 	 * コンストラクタ.
@@ -26,9 +26,9 @@ public class TerrainBillboard extends Entity {
 	 * @param img 背景部品の画像
 	 */
 	public TerrainBillboard(BufferedImage img) {
-		objType = Type.BG_OBJECT;
 		image = img;
 		xform = new AffineTransform();
+		sortY = 0;
 	}
 
 	/** イメージ取得 */
@@ -60,6 +60,16 @@ public class TerrainBillboard extends Entity {
 	/** 描画 */
 	public void draw(Graphics2D g2, ImageObserver obs) {
 		g2.drawImage(image, xform, obs);
+	}
+
+	/** 描画順用Y座標取得 */
+	public int getSortY() {
+		return sortY;
+	}
+
+	/** 描画順用Y座標設定 */
+	public void setSortY(int sortY) {
+		this.sortY = sortY;
 	}
 
 	public AffineTransform getXform() {

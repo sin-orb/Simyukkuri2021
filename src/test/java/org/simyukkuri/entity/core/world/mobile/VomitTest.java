@@ -20,9 +20,9 @@ import org.junit.jupiter.api.Test;
 
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.draw.Translate;
-import org.simyukkuri.draw.World;
+import org.simyukkuri.engine.World;
 import org.simyukkuri.enums.AgeState;
-import org.simyukkuri.enums.Event;
+import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.system.ItemMenu.GetMenuTarget;
 import org.simyukkuri.system.ItemMenu.UseMenuTarget;
 import org.simyukkuri.util.WorldTestHelper;
@@ -157,7 +157,7 @@ class VomitTest {
     @Test
     void testClockTick_alreadyRemoved_returnsREMOVED() {
         vomit.setRemoved(true);
-        assertEquals(Event.REMOVED, vomit.clockTick());
+        assertEquals(TickResult.REMOVED, vomit.clockTick());
     }
 
     @Test
@@ -166,7 +166,7 @@ class VomitTest {
         vomit.setAge(0);
         vomit.setX(100);
         vomit.setY(100);
-        assertEquals(Event.DONOTHING, vomit.clockTick());
+        assertEquals(TickResult.NONE, vomit.clockTick());
     }
 
     @Test
@@ -339,10 +339,10 @@ class VomitTest {
             vomit.setX(999);
             vomit.setVx(5);
 
-            Event result = vomit.clockTick();
+            TickResult result = vomit.clockTick();
 
-            assertEquals(Event.DONOTHING, result);
-            assertEquals(Translate.getMapW(), vomit.getX());
+            assertEquals(TickResult.NONE, result);
+            assertEquals(Translate.getWorldWidth(), vomit.getX());
             assertEquals(-5, vomit.getVx());
         }
 
@@ -353,9 +353,9 @@ class VomitTest {
             vomit.setZ(10);
             vomit.setVz(15);
 
-            Event result = vomit.clockTick();
+            TickResult result = vomit.clockTick();
 
-            assertEquals(Event.DONOTHING, result);
+            assertEquals(TickResult.NONE, result);
             assertEquals(9600, vomit.getAge());
             assertEquals(0, vomit.getZ());
             assertEquals(0, vomit.getVz());

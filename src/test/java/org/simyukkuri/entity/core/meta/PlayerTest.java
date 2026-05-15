@@ -33,7 +33,7 @@ class PlayerTest {
     void testConstructor() {
         Player player = new Player();
         assertEquals(10000, player.getCash());
-        assertNotNull(player.getItemList());
+        assertNotNull(player.getInventoryView());
         assertNull(player.getHoldItem());
         assertNotNull(player.getItemForSave());
     }
@@ -55,8 +55,8 @@ class PlayerTest {
     void testItemList() {
         Player player = new Player();
         DefaultListModel<Entity> newList = new DefaultListModel<>();
-        player.setItemList(newList);
-        assertSame(newList, player.getItemList());
+        player.setInventory(newList);
+        assertSame(newList, player.getInventoryView());
     }
 
     @Test

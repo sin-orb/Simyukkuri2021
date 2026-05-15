@@ -19,9 +19,9 @@ import org.junit.jupiter.api.Nested;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.simyukkuri.SimYukkuri;
-import org.simyukkuri.draw.World;
+import org.simyukkuri.engine.World;
 import org.simyukkuri.draw.MyPane;
-import org.simyukkuri.draw.Terrarium;
+import org.simyukkuri.engine.Terrarium;
 import org.simyukkuri.enums.*;
 import org.simyukkuri.event.impl.BegForLifeEvent;
 import org.simyukkuri.util.WorldTestHelper;
@@ -75,7 +75,7 @@ public class BodyBehaviorTest {
         body.setAge(100000); // Adult
         body.setRank(YukkuriRank.KAIYU);
         body.setMsgType(YukkuriType.REIMU);
-        world.getCurrentMap().getYukkuriMap().put(1, body);
+        world.getCurrentWorldState().getYukkuriRegistry().put(1, body);
     }
 
     @AfterEach
@@ -91,8 +91,8 @@ public class BodyBehaviorTest {
 
         body.begForLife();
 
-        assertFalse(body.getEventList().isEmpty());
-        assertTrue(body.getEventList().get(0) instanceof BegForLifeEvent);
+        assertFalse(body.getEvents().isEmpty());
+        assertTrue(body.getEvents().get(0) instanceof BegForLifeEvent);
     }
 
     @Test
@@ -104,7 +104,7 @@ public class BodyBehaviorTest {
 
         body.begForLife();
 
-        assertFalse(body.getEventList().isEmpty());
+        assertFalse(body.getEvents().isEmpty());
     }
 
     @Test
@@ -133,7 +133,7 @@ public class BodyBehaviorTest {
         neighbor.setUniqueID(2);
         neighbor.setX(body.getX() + 10);
         neighbor.setY(body.getY());
-        world.getCurrentMap().getYukkuriMap().put(2, neighbor);
+        world.getCurrentWorldState().getYukkuriRegistry().put(2, neighbor);
 
         Method m = Terrarium.class.getDeclaredMethod("checkPanic", Yukkuri.class);
         m.setAccessible(true);
@@ -151,7 +151,7 @@ public class BodyBehaviorTest {
         neighbor.setUniqueID(2);
         neighbor.setX(body.getX() + 1);
         neighbor.setY(body.getY());
-        world.getCurrentMap().getYukkuriMap().put(2, neighbor);
+        world.getCurrentWorldState().getYukkuriRegistry().put(2, neighbor);
 
         Method m = Terrarium.class.getDeclaredMethod("checkFire", Yukkuri.class);
         m.setAccessible(true);
@@ -171,8 +171,8 @@ public class BodyBehaviorTest {
 
             body.begForLife(true);
 
-            assertFalse(body.getEventList().isEmpty());
-            assertTrue(body.getEventList().get(0) instanceof BegForLifeEvent);
+            assertFalse(body.getEvents().isEmpty());
+            assertTrue(body.getEvents().get(0) instanceof BegForLifeEvent);
         }
 
         @Test
@@ -184,7 +184,7 @@ public class BodyBehaviorTest {
             raper.setX(body.getX() + 10);
             raper.setY(body.getY());
             raper.setRaper(true);
-            world.getCurrentMap().getYukkuriMap().put(2, raper);
+            world.getCurrentWorldState().getYukkuriRegistry().put(2, raper);
 
             Method m = Terrarium.class.getDeclaredMethod("checkPanic", Yukkuri.class);
             m.setAccessible(true);
@@ -201,7 +201,7 @@ public class BodyBehaviorTest {
             distant.setUniqueID(2);
             distant.setX(body.getX() + 1000);
             distant.setY(body.getY() + 1000);
-            world.getCurrentMap().getYukkuriMap().put(2, distant);
+            world.getCurrentWorldState().getYukkuriRegistry().put(2, distant);
 
             Method m = Terrarium.class.getDeclaredMethod("checkFire", Yukkuri.class);
             m.setAccessible(true);
@@ -219,7 +219,7 @@ public class BodyBehaviorTest {
 
             body.begForLife();
 
-            assertTrue(body.getEventList().isEmpty());
+            assertTrue(body.getEvents().isEmpty());
         }
 
         @Test
@@ -232,7 +232,7 @@ public class BodyBehaviorTest {
 
             body.begForLife();
 
-            assertTrue(body.getEventList().isEmpty());
+            assertTrue(body.getEvents().isEmpty());
         }
     }
 }

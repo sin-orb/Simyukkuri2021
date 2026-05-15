@@ -4,8 +4,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import org.simyukkuri.command.GadgetMenu.ActionTarget;
-import org.simyukkuri.command.GadgetMenu.GadgetList;
-import org.simyukkuri.system.MainCommandUI;
+import org.simyukkuri.command.GadgetMenu.GadgetMenuChoice;
+import org.simyukkuri.ui.MainCommandUI;
 
 /**
  * GadgetMenu popup の選択を UI に反映する listener.
@@ -16,9 +16,9 @@ public final class GadgetMenuPopupAction implements ActionListener {
 	public void actionPerformed(ActionEvent e) {
 		String command = e.getActionCommand();
 
-		GadgetList sel = GadgetList.valueOf(command);
+		GadgetMenuChoice sel = GadgetMenuChoice.valueOf(command);
 		MainCommandUI.getMainItemCombo().setSelectedIndex(sel.getGroup().ordinal() - 1);
-		GadgetMenu.setSelectMain(GadgetList.values()[sel.getGroup().ordinal() - 1]);
+		GadgetMenu.setSelectMain(GadgetMenuChoice.values()[sel.getGroup().ordinal() - 1]);
 		GadgetMenu.setSelectSub(sel);
 		GadgetMenu.setActionHelp(sel);
 		MainCommandUI.getSubItemCombo().setSelectedIndex(getIndex(sel));
@@ -30,7 +30,7 @@ public final class GadgetMenuPopupAction implements ActionListener {
 		GadgetMenu.setPopupDisplay(false);
 	}
 
-	private int getIndex(GadgetList item) {
+	private int getIndex(GadgetMenuChoice item) {
 		int categorySize;
 		categorySize = GadgetMenu.getToolCategory().length;
 		for (int i = 0; i < categorySize; i++) {

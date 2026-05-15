@@ -2,7 +2,7 @@ package org.simyukkuri.command;
 
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.command.GadgetMenu.ActionTarget;
-import org.simyukkuri.command.GadgetMenu.GadgetList;
+import org.simyukkuri.command.GadgetMenu.GadgetMenuChoice;
 import org.simyukkuri.command.GadgetMenu.MainCategoryName;
 import org.simyukkuri.field.impl.Barrier;
 import org.simyukkuri.field.impl.Beltconveyor;
@@ -24,7 +24,7 @@ public class GadgetFieldPlacementAction {
 	 * @param fieldMousePos マウスの座標
 	 * @return 設置されたオブジェクト (通常 null)
 	 */
-	public static WorldEntity leftMultiClickEvaluate(GadgetList item, int[] fieldMousePos) {
+	public static WorldEntity leftMultiClickEvaluate(GadgetMenuChoice item, int[] fieldMousePos) {
 
 		if (item.getActionTarget() != ActionTarget.TERRAIN) {
 			return null;
@@ -41,7 +41,7 @@ public class GadgetFieldPlacementAction {
 		return null;
 	}
 
-	private static void handleBarrierPlacement(GadgetList item, int[] fieldMousePos) {
+	private static void handleBarrierPlacement(GadgetMenuChoice item, int[] fieldMousePos) {
 		if (SimYukkuri.fieldSX == -1 || SimYukkuri.fieldSY == -1) {
 			// 始点のクリック
 			SimYukkuri.fieldType = 0;
@@ -73,7 +73,7 @@ public class GadgetFieldPlacementAction {
 				case BELTCONVEYOR:
 					SimYukkuri.fieldType = 102;
 					break;
-				case NoUNUN:
+				case NO_UNUN:
 					SimYukkuri.fieldType = Barrier.BARRIER_NOUNUN;
 					break;
 				case KEKKAI:
@@ -100,7 +100,7 @@ public class GadgetFieldPlacementAction {
 				case NET_BIG:
 				case WALL:
 				case ITEM:
-				case NoUNUN:
+				case NO_UNUN:
 				case KEKKAI:
 					if (!Translate.inInvertLimit(fieldMousePos[0], fieldMousePos[1])) {
 						break;
@@ -152,7 +152,7 @@ public class GadgetFieldPlacementAction {
 		}
 	}
 
-	private static void handleConveyorPlacement(GadgetList item, int[] fieldMousePos) {
+	private static void handleConveyorPlacement(GadgetMenuChoice item, int[] fieldMousePos) {
 		if (SimYukkuri.fieldSX == -1 || SimYukkuri.fieldSY == -1) {
 			// 始点のクリック
 			switch (item) {

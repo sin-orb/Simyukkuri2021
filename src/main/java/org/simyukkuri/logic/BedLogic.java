@@ -2,7 +2,7 @@ package org.simyukkuri.logic;
 
 import java.util.Map;
 
-import org.simyukkuri.draw.Terrarium;
+import org.simyukkuri.engine.Terrarium;
 import org.simyukkuri.draw.Translate;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
@@ -70,7 +70,7 @@ public class BedLogic {
 			}
 
 			// うんうん奴隷の場合
-			if (body.getPublicRank() == PublicRank.UnunSlave) {
+			if (body.getPublicRank() == PublicRank.UNUN_SLAVE) {
 				// ベッドには向かわない
 				if (target instanceof Bed) {
 					body.setFavoriteItem(FavItemType.BED, null);
@@ -85,7 +85,7 @@ public class BedLogic {
 				// 到着したら待機状態へ
 				if (body.getFavoriteItem(FavItemType.BED) == null) {
 					// うんうん奴隷ではない場合
-					if (body.getPublicRank() != PublicRank.UnunSlave) {
+					if (body.getPublicRank() != PublicRank.UNUN_SLAVE) {
 						// 見つけたベッドをお気に入りにして家族にも伝達
 						body.setFavoriteItem(FavItemType.BED, target);
 						EventLogic.addWorldEvent(new FavCopyEvent(body, null, null, 1), null, null);
@@ -160,7 +160,7 @@ public class BedLogic {
 		Entity targetObject = body.getFavoriteItem(FavItemType.BED);
 		int nearestDistance = body.getEyesightBase();
 		// うんうん奴隷の場合
-		if (body.getPublicRank() == PublicRank.UnunSlave) {
+		if (body.getPublicRank() == PublicRank.UNUN_SLAVE) {
 			body.setFavoriteItem(FavItemType.BED, null);
 			targetObject = null;
 		}
@@ -172,20 +172,20 @@ public class BedLogic {
 		if (targetObject != null) {
 			// お気に入りが壁で到達できなくなってたらリセット
 			if (Barrier.acrossBarrier(body.getX(), body.getY(), targetObject.getX(), targetObject.getY(),
-					Barrier.MAP_BODY[wallMode] + Barrier.BARRIER_KEKKAI)) {
+					Barrier.BODY_BLOCK_FLAGS[wallMode] + Barrier.BARRIER_KEKKAI)) {
 				targetObject = null;
 			}
 		}
 
 		// うんうん奴隷ではない場合
-		if (body.getPublicRank() != PublicRank.UnunSlave) {
+		if (body.getPublicRank() != PublicRank.UNUN_SLAVE) {
 			if (targetObject == null) {
-				for (Map.Entry<Integer, Bed> entry : GameWorld.get().getCurrentMap().getBed().entrySet()) {
+				for (Map.Entry<Integer, Bed> entry : GameWorld.get().getCurrentWorldState().getBeds().entrySet()) {
 					WorldEntity t = entry.getValue();
 					int distance = Translate.distance(body.getX(), body.getY(), t.getX(), t.getY());
 					if (nearestDistance > distance) {
 						if (Barrier.acrossBarrier(body.getX(), body.getY(), t.getX(), t.getY(),
-								Barrier.MAP_BODY[wallMode] + Barrier.BARRIER_KEKKAI)) {
+								Barrier.BODY_BLOCK_FLAGS[wallMode] + Barrier.BARRIER_KEKKAI)) {
 							continue;
 						}
 						targetObject = (Bed) t;
@@ -195,12 +195,12 @@ public class BedLogic {
 			}
 			//// 仮 おうち検索
 			if (targetObject == null) {
-				for (Map.Entry<Integer, House> entry : GameWorld.get().getCurrentMap().getHouse().entrySet()) {
+				for (Map.Entry<Integer, House> entry : GameWorld.get().getCurrentWorldState().getHouses().entrySet()) {
 					WorldEntity t = entry.getValue();
 					int distance = Translate.distance(body.getX(), body.getY(), t.getX(), t.getY());
 					if (nearestDistance > distance) {
 						if (Barrier.acrossBarrier(body.getX(), body.getY(), t.getX(), t.getY(),
-								Barrier.MAP_BODY[wallMode] + Barrier.BARRIER_KEKKAI)) {
+								Barrier.BODY_BLOCK_FLAGS[wallMode] + Barrier.BARRIER_KEKKAI)) {
 							continue;
 						}
 						targetObject = (House) t;
@@ -211,12 +211,12 @@ public class BedLogic {
 		} else {
 			// うんうん奴隷の場合、トイレを探す
 			if (targetObject == null) {
-				for (Map.Entry<Integer, Toilet> entry : GameWorld.get().getCurrentMap().getToilet().entrySet()) {
+				for (Map.Entry<Integer, Toilet> entry : GameWorld.get().getCurrentWorldState().getToilets().entrySet()) {
 					WorldEntity t = entry.getValue();
 					int distance = Translate.distance(body.getX(), body.getY(), t.getX(), t.getY());
 					if (nearestDistance > distance) {
 						if (Barrier.acrossBarrier(body.getX(), body.getY(), t.getX(), t.getY(),
-								Barrier.MAP_BODY[wallMode] + Barrier.BARRIER_KEKKAI)) {
+								Barrier.BODY_BLOCK_FLAGS[wallMode] + Barrier.BARRIER_KEKKAI)) {
 							continue;
 						}
 

@@ -26,14 +26,14 @@ import org.junit.jupiter.api.Test;
 
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.draw.MyPane;
-import org.simyukkuri.draw.World;
+import org.simyukkuri.engine.World;
 import org.simyukkuri.entity.core.attachment.impl.Ants;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.living.yukkuri.impl.Reimu;
 import org.simyukkuri.entity.core.world.mobile.Vomit;
 import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.CoreAnkoState;
-import org.simyukkuri.enums.Event;
+import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.enums.Happiness;
 import org.simyukkuri.enums.ImageCode;
 import org.simyukkuri.enums.YukkuriType;
@@ -130,8 +130,8 @@ public class AntsTest {
     @Test
     public void testUpdateReturnsDoNothingWhenParentIsNull() {
         Ants ants = new Ants();
-        Event result = ants.update();
-        assertEquals(Event.DONOTHING, result);
+        TickResult result = ants.update();
+        assertEquals(TickResult.NONE, result);
     }
 
     @Test
@@ -144,7 +144,7 @@ public class AntsTest {
         parent.initAmount(AgeState.ADULT); // ankoAmount = DAMAGELIMIT[ADULT] so body is alive
         // Ensure coreAnkoState is DEFAULT so isNotNYD() is true -> happiness set to
         // VERY_SAD
-        parent.setCoreAnkoState(CoreAnkoState.DEFAULT);
+        parent.setCoreAnkoState(CoreAnkoState.NORMAL);
         // Ensure parent has a valid Shit type to avoid NPE in Vomit
         parent.setShitType(YukkuriType.REIMU);
         // Initialize MyPane to provide Terrarium for beEaten
@@ -238,7 +238,7 @@ public class AntsTest {
         int origPivotY = ants.getPivotY();
 
         // Remove parent from world map so getBodyMap returns null
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().remove(parent.getUniqueID());
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().remove(parent.getUniqueID());
         ants.resetBoundary();
 
         // Boundary should remain unchanged since parent is null
@@ -249,7 +249,7 @@ public class AntsTest {
     private static Yukkuri createParent(AgeState ageState) {
         Yukkuri parent = new Reimu();
         parent.setAgeState(ageState);
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(parent.getUniqueID(), parent);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(parent.getUniqueID(), parent);
         return parent;
     }
 

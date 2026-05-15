@@ -5,7 +5,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.simyukkuri.draw.Terrarium;
+import org.simyukkuri.engine.Terrarium;
 import org.simyukkuri.draw.Translate;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
@@ -84,7 +84,7 @@ public class FamilyActionLogic {
 		if (body.isIdiot() || body.isDamaged() || !body.hasOkazari())
 			return false;
 		// うんうん奴隷の場合
-		if (body.getPublicRank() == PublicRank.UnunSlave)
+		if (body.getPublicRank() == PublicRank.UNUN_SLAVE)
 			return false;
 		// 非ゆっくり症の場合
 		if (body.isNYD())
@@ -94,7 +94,7 @@ public class FamilyActionLogic {
 			return false;
 		}
 		// 子供のリストに生きている子供がいるか
-		List<Yukkuri> childrenList = YukkuriLogic.createActiveChildList(body, true);
+		List<Yukkuri> childrenList = YukkuriLogic.createActiveChildren(body, true);
 		if (childrenList == null || childrenList.size() == 0) {
 			return false;
 		}
@@ -109,7 +109,7 @@ public class FamilyActionLogic {
 			if (partnerBody.isDamaged() ||
 					partnerBody.isLockmove() ||
 					partnerBody.isNeedled() ||
-					partnerBody.getCriticalDamegeType() != null ||
+					partnerBody.getCriticalDamageType() != null ||
 					!partnerBody.hasOkazari()) {
 				return false;
 			}
@@ -138,7 +138,7 @@ public class FamilyActionLogic {
 			}
 
 			// 怪我をしている
-			if (bodyChild.isDamaged() || bodyChild.isNeedled() || bodyChild.getCriticalDamegeType() != null) {
+			if (bodyChild.isDamaged() || bodyChild.isNeedled() || bodyChild.getCriticalDamageType() != null) {
 				wantToShit = false;
 				wantToEat = false;
 				break;
@@ -314,7 +314,7 @@ public class FamilyActionLogic {
 	public static Entity searchToilet(Yukkuri body) {
 		Entity nearestToilet = null;
 		int minimumDistance = body.getEyesightBase();
-		for (Map.Entry<Integer, Toilet> entry : GameWorld.get().getCurrentMap().getToilet().entrySet()) {
+		for (Map.Entry<Integer, Toilet> entry : GameWorld.get().getCurrentWorldState().getToilets().entrySet()) {
 			Toilet toilet = entry.getValue();
 			// 最小距離のものが見つかっていたら
 			if (minimumDistance < 1) {
@@ -374,7 +374,7 @@ public class FamilyActionLogic {
 		int bestLooks = -1000;
 
 		// フィールドの餌検索
-		for (Map.Entry<Integer, Food> entry : GameWorld.get().getCurrentMap().getFood().entrySet()) {
+		for (Map.Entry<Integer, Food> entry : GameWorld.get().getCurrentWorldState().getFoods().entrySet()) {
 			Food food = entry.getValue();
 			if (food.isEmpty()) {
 				continue;
@@ -436,7 +436,7 @@ public class FamilyActionLogic {
 		boolean hasRapeTarget = isRapeTarget();
 		// レイプ対象がいない
 		if (!hasRapeTarget) {
-			for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getYukkuriMap().entrySet()) {
+			for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentWorldState().getYukkuriRegistry().entrySet()) {
 				Yukkuri body = entry.getValue();
 				if (body.isRaper()) {
 					body.setExciting(false);
@@ -453,7 +453,7 @@ public class FamilyActionLogic {
 	 * @return れいぱーのターゲットかどうか
 	 */
 	public static final boolean isRapeTarget() {
-		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getYukkuriMap().entrySet()) {
+		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentWorldState().getYukkuriRegistry().entrySet()) {
 			Yukkuri body = entry.getValue();
 			// レイプの対象がいる
 			if (!body.isUnBirth() && !body.isDead() && !body.isRemoved() && !body.isRaper()) {

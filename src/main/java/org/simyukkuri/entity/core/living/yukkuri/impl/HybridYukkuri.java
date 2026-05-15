@@ -184,7 +184,7 @@ public class HybridYukkuri extends Yukkuri {
 		images[ImageCode.CRYING.ordinal()] = dorei2;
 		images[ImageCode.DEAD.ordinal()] = dorei2;
 		images[ImageCode.EXCITING.ordinal()] = dorei2;
-		images[ImageCode.EXCITING_raper.ordinal()] = dorei2;
+		images[ImageCode.EXCITING_RAPER.ordinal()] = dorei2;
 		images[ImageCode.CUTPENIPENI.ordinal()] = dorei2;
 		images[ImageCode.NORMAL.ordinal()] = dorei2;
 		images[ImageCode.PAIN.ordinal()] = dorei2;

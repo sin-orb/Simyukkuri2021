@@ -53,7 +53,7 @@ public final class YukkuriPartnerEntryRule {
 			int distanceToTarget = Translate.distance(body.getX(), body.getY(), targetBody.getX(), targetBody.getY());
 			if (nearestDistance > distanceToTarget) {
 				if (Barrier.acrossBarrier(body.getX(), body.getY(), targetBody.getX(), targetBody.getY(),
-						Barrier.MAP_BODY[body.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
+						Barrier.BODY_BLOCK_FLAGS[body.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
 					foundBody = null;
 				}
 			}

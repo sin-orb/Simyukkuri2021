@@ -6,7 +6,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
 import org.simyukkuri.command.GadgetMenu.ActionTarget;
-import org.simyukkuri.command.GadgetMenu.GadgetList;
+import org.simyukkuri.command.GadgetMenu.GadgetMenuChoice;
 import org.simyukkuri.draw.Point4y;
 import org.simyukkuri.draw.Rectangle4y;
 import org.simyukkuri.draw.Translate;
@@ -32,7 +32,7 @@ public class GadgetAction {
 	 *
 	 * @param actionItem 対象オブジェクト
 	 */
-	public static final void immediateEvaluate(GadgetList actionItem) {
+	public static final void immediateEvaluate(GadgetMenuChoice actionItem) {
 		GadgetCleanupAction.immediateEvaluate(actionItem);
 	}
 
@@ -45,13 +45,13 @@ public class GadgetAction {
 	 * @param fieldMousePos マウスの座標
 	 * @return
 	 */
-	public static final WorldEntity leftClickEvaluate(GadgetList actionItem, Entity targetObject, MouseEvent ev,
+	public static final WorldEntity leftClickEvaluate(GadgetMenuChoice actionItem, Entity targetObject, MouseEvent ev,
 			int[] fieldMousePos) {
 		WorldEntity placedObject = null;
 		ActionTarget actionTarget = actionItem.getActionTarget();
 
 		// 実行対象の選別
-		if (actionTarget == ActionTarget.TERRAIN_AND_GADET) {
+		if (actionTarget == ActionTarget.TERRAIN_AND_GADGET) {
 			if (targetObject != null) {
 				actionTarget = ActionTarget.GADGET;
 			} else {
@@ -138,7 +138,7 @@ public class GadgetAction {
 				case TOOL:
 					evaluateTool(actionItem, ev, targetObject);
 					break;
-				case TOOL2:
+				case BODY_CHANGE:
 					evaluateTool2(actionItem, ev, targetObject);
 					break;
 				case AMPOULE:
@@ -165,7 +165,7 @@ public class GadgetAction {
 				case VOICE:
 					evaluateCommunicate(actionItem, ev, targetObject);
 					break;
-				case TEST:
+				case DEBUG:
 					evaluateTest(actionItem, ev, targetObject);
 					break;
 				default:
@@ -184,7 +184,7 @@ public class GadgetAction {
 	 * @param fieldMousePos マウスの座標
 	 * @return
 	 */
-	public static final WorldEntity leftMultiClickEvaluate(GadgetList item, Entity target, MouseEvent ev,
+	public static final WorldEntity leftMultiClickEvaluate(GadgetMenuChoice item, Entity target, MouseEvent ev,
 			int[] fieldMousePos) {
 		return GadgetFieldPlacementAction.leftMultiClickEvaluate(item, fieldMousePos);
 	}
@@ -221,7 +221,7 @@ public class GadgetAction {
 	 * @param ev           入力されたマウスの動作
 	 * @param targetObject 対象オブジェクト
 	 */
-	public static void evaluateTool(GadgetList actionItem, MouseEvent ev, Entity targetObject) {
+	public static void evaluateTool(GadgetMenuChoice actionItem, MouseEvent ev, Entity targetObject) {
 		GadgetToolAction.evaluateTool(actionItem, ev, targetObject);
 	}
 
@@ -234,7 +234,7 @@ public class GadgetAction {
 	 * @param ev           入力されたマウスの動作
 	 * @param targetObject 対象オブジェクト
 	 */
-	public static void evaluateTool2(GadgetList actionItem, MouseEvent ev, Entity targetObject) {
+	public static void evaluateTool2(GadgetMenuChoice actionItem, MouseEvent ev, Entity targetObject) {
 		GadgetToolAction.evaluateTool2(actionItem, ev, targetObject);
 	}
 
@@ -247,7 +247,7 @@ public class GadgetAction {
 	 * @param ev           入力されたマウスの動作
 	 * @param targetObject 対象オブジェクト
 	 */
-	public static void evaluateAmpoule(GadgetList actionItem, MouseEvent ev, Entity targetObject) {
+	public static void evaluateAmpoule(GadgetMenuChoice actionItem, MouseEvent ev, Entity targetObject) {
 		GadgetAmpouleAction.evaluateAmpoule(actionItem, ev, targetObject);
 	}
 
@@ -260,7 +260,7 @@ public class GadgetAction {
 	 * @param ev           入力されたマウスの動作
 	 * @param targetObject 対象オブジェクト
 	 */
-	public static void evaluateClean(GadgetList actionItem, MouseEvent ev, Entity targetObject) {
+	public static void evaluateClean(GadgetMenuChoice actionItem, MouseEvent ev, Entity targetObject) {
 		GadgetBodyAction.evaluateClean(actionItem, ev, targetObject);
 	}
 
@@ -273,7 +273,7 @@ public class GadgetAction {
 	 * @param ev           入力されたマウスの動作
 	 * @param targetObject 対象オブジェクト
 	 */
-	public static void evaluateAccessory(GadgetList actionItem, MouseEvent ev, Entity targetObject) {
+	public static void evaluateAccessory(GadgetMenuChoice actionItem, MouseEvent ev, Entity targetObject) {
 		GadgetBodyAction.evaluateAccessory(actionItem, ev, targetObject);
 	}
 
@@ -286,7 +286,7 @@ public class GadgetAction {
 	 * @param ev           入力されたマウスの動作
 	 * @param targetObject 対象オブジェクト
 	 */
-	public static void evaluatePants(GadgetList actionItem, MouseEvent ev, Entity targetObject) {
+	public static void evaluatePants(GadgetMenuChoice actionItem, MouseEvent ev, Entity targetObject) {
 		GadgetBodyAction.evaluatePants(actionItem, ev, targetObject);
 	}
 
@@ -299,7 +299,7 @@ public class GadgetAction {
 	 * @param ev           入力されたマウスの動作
 	 * @param targetObject 対象オブジェクト
 	 */
-	public static void evaluateFloorItems(GadgetList actionItem, MouseEvent ev, Entity targetObject) {
+	public static void evaluateFloorItems(GadgetMenuChoice actionItem, MouseEvent ev, Entity targetObject) {
 		GadgetItemSetupAction.evaluateFloorItems(actionItem, ev, targetObject);
 	}
 
@@ -312,7 +312,7 @@ public class GadgetAction {
 	 * @param ev           入力されたマウスの動作
 	 * @param targetObject 対象オブジェクト
 	 */
-	public static void evaluateToys(GadgetList actionItem, MouseEvent ev, Entity targetObject) {
+	public static void evaluateToys(GadgetMenuChoice actionItem, MouseEvent ev, Entity targetObject) {
 		GadgetItemSetupAction.evaluateToys(actionItem, ev, targetObject);
 	}
 
@@ -325,7 +325,7 @@ public class GadgetAction {
 	 * @param ev           入力されたマウスの動作
 	 * @param targetObject 対象オブジェクト
 	 */
-	public static void evaluateConveyor(GadgetList actionItem, MouseEvent ev, Entity targetObject) {
+	public static void evaluateConveyor(GadgetMenuChoice actionItem, MouseEvent ev, Entity targetObject) {
 		GadgetItemSetupAction.evaluateConveyor(actionItem, ev, targetObject);
 	}
 
@@ -338,7 +338,7 @@ public class GadgetAction {
 	 * @param ev           入力されたマウスの動作
 	 * @param targetObject 対象オブジェクト
 	 */
-	public static void evaluateCommunicate(GadgetList actionItem, MouseEvent ev, Entity targetObject) {
+	public static void evaluateCommunicate(GadgetMenuChoice actionItem, MouseEvent ev, Entity targetObject) {
 		GadgetBodyAction.evaluateCommunicate(actionItem, ev, targetObject);
 	}
 
@@ -351,7 +351,7 @@ public class GadgetAction {
 	 * @param ev           入力されたマウスの動作
 	 * @param targetObject 対象オブジェクト
 	 */
-	public static void evaluateTest(GadgetList actionItem, MouseEvent ev, Entity targetObject) {
+	public static void evaluateTest(GadgetMenuChoice actionItem, MouseEvent ev, Entity targetObject) {
 		GadgetDebugAction.evaluateTest(actionItem, ev, targetObject);
 	}
 }

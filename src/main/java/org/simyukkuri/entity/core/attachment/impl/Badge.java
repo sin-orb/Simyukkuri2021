@@ -9,13 +9,13 @@ import java.io.IOException;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import org.simyukkuri.draw.ModLoader;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.entity.core.attachment.Attachment;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.AttachProperty;
 //import org.simyukkuri.Attachment.AttachProperty;
-import org.simyukkuri.enums.Event;
+import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.util.GameText;
 
 /****************************************
@@ -110,8 +110,8 @@ public class Badge extends Attachment {
 	}
 
 	@Override
-	protected Event update() {
-		return Event.DONOTHING;
+	protected TickResult update() {
+		return TickResult.NONE;
 	}
 
 	@Override

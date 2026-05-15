@@ -39,9 +39,9 @@ public class TrashLogicTest {
 
     // WorldTestHelper が new World(0,0) を呼び出すため、
     // wallMap のサイズは DEFAULT_MAP_X[0]*fieldScaleData[0]/100 + 1 = 151x151 に固定される
-    // （Translate.setMapSize を後で変えても wallMap はリサイズされない）
+    // （Translate.setWorldSize を後で変えても wallMap はリサイズされない）
     // そのため body と Trash の座標はすべて 0〜149 の範囲内に収める
-    private static final int MAP_LIMIT = 140;
+    private static final int WORLD_SELECTION_LIMIT = 140;
 
     @BeforeEach
     void setUp() {
@@ -54,9 +54,9 @@ public class TrashLogicTest {
         body.setZ(0);
 
         // Ensure no okazari
-        body.setOkazari(null);
+        body.setOkazaris(null);
 
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(body.getObjId(), body);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(body.getObjId(), body);
     }
 
     @AfterEach
@@ -71,7 +71,7 @@ public class TrashLogicTest {
     void testCheckTrashOkazari_HasOkazari_ReturnsFalse() {
         // setOkazari で okazari を持たせる（hasOkazari() == true）
         Okazari okazari = new Okazari();
-        body.setOkazari(okazari);
+        body.setOkazaris(okazari);
         assertTrue(body.hasOkazari(), "前提: okazari を持っていること");
 
         boolean result = TrashLogic.checkTrashOkazari(body);
@@ -85,7 +85,7 @@ public class TrashLogicTest {
     @Test
     void testCheckTrashOkazari_NoOkazari_NoTrash_ReturnsFalse() {
         assertFalse(body.hasOkazari(), "前提: okazari を持っていないこと");
-        assertTrue(SimYukkuri.world.getCurrentMap().getTrash().isEmpty(), "前提: Trash リストが空");
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getTrashObjects().isEmpty(), "前提: Trash リストが空");
 
         boolean result = TrashLogic.checkTrashOkazari(body);
 
@@ -103,13 +103,13 @@ public class TrashLogicTest {
         Trash trash = new Trash(55, 55, 0);
 
         // 視野範囲は eyesightBase = 4000*4000 (デフォルト) なので 5 ピクセル距離は十分近い
-        assertTrue(SimYukkuri.world.getCurrentMap().getTrash().containsKey(trash.getObjId()));
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getTrashObjects().containsKey(trash.getObjId()));
 
         boolean result = TrashLogic.checkTrashOkazari(body);
 
         assertTrue(result, "視野内に Trash があるとき true を返すべき");
         // GetTrashOkazariEvent が addYukkuriEvent で body のイベントリストに追加される
-        assertFalse(body.getEventList().isEmpty(), "イベントが body に追加されるべき");
+        assertFalse(body.getEvents().isEmpty(), "イベントが body に追加されるべき");
     }
 
     // ---------------------------------------------------------------
@@ -169,7 +169,7 @@ public class TrashLogicTest {
     void testCheckTrashOkazari_TrashRemovedFromWorld_ReturnsFalse() {
         assertFalse(body.hasOkazari());
         // ワールドにTrashを入れず、直接登録もしない
-        assertTrue(SimYukkuri.world.getCurrentMap().getTrash().isEmpty());
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getTrashObjects().isEmpty());
 
         boolean result = TrashLogic.checkTrashOkazari(body);
 
@@ -249,8 +249,8 @@ public class TrashLogicTest {
         Yukkuri body2 = new Marisa();
         body2.setX(30);
         body2.setY(30);
-        body2.setOkazari(null);
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(body2.getObjId(), body2);
+        body2.setOkazaris(null);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(body2.getObjId(), body2);
 
         // body2 近くに Trash を配置（wallMap 範囲内）
         Trash trash = new Trash(35, 35, 0);
@@ -265,7 +265,7 @@ public class TrashLogicTest {
     @Test
     void testCheckTrashOkazari_HasOkazari_MultipleTrash_ReturnsFalse() {
         Okazari okazari = new Okazari();
-        body.setOkazari(okazari);
+        body.setOkazaris(okazari);
 
         new Trash(55, 55, 0);
         new Trash(60, 60, 0);

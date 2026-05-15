@@ -23,7 +23,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import org.simyukkuri.SimYukkuri;
-import org.simyukkuri.draw.World;
+import org.simyukkuri.engine.World;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.CoreAnkoState;
@@ -49,7 +49,7 @@ class KillPredeatorEventTest {
             spr[i] = new org.simyukkuri.system.Sprite(10, 10, org.simyukkuri.system.Sprite.PIVOT_CENTER_BOTTOM);
         }
         b.setSpriteSet(spr);
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(b.getUniqueID(), b);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueID(), b);
         return b;
     }
 
@@ -92,7 +92,7 @@ class KillPredeatorEventTest {
     @Test
     void testCheckEventResponse_NYD() {
         Yukkuri b = createBody();
-        b.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
+        b.setCoreAnkoState(CoreAnkoState.NON_YUKKURI_DISEASE);
         KillPredeatorEvent event = new KillPredeatorEvent();
         // NYD body: canEventResponse() may return false → return true(skip)
         // OR if canEventResponse() passes → isNYD() → return false
@@ -156,7 +156,7 @@ class KillPredeatorEventTest {
     @Test
     void testStart_NYDBody_returnsEarly() {
         Yukkuri b = createBody();
-        b.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease); // isNYD() returns true
+        b.setCoreAnkoState(CoreAnkoState.NON_YUKKURI_DISEASE); // isNYD() returns true
         KillPredeatorEvent event = new KillPredeatorEvent();
         assertDoesNotThrow(() -> event.start(b));
     }

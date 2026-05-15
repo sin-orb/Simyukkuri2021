@@ -7,7 +7,7 @@ import org.simyukkuri.draw.Translate;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.enums.AgeState;
-import org.simyukkuri.enums.Event;
+import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.enums.Happiness;
 import org.simyukkuri.enums.PublicRank;
 import org.simyukkuri.event.EventPacket;
@@ -124,7 +124,7 @@ public class ShitExercisesEvent extends EventPacket {
 			return true;
 		}
 		// うんうん奴隷の場合は参加しない
-		if (body.getPublicRank() == PublicRank.UnunSlave)
+		if (body.getPublicRank() == PublicRank.UNUN_SLAVE)
 			return false;
 
 		// つがいも参加する
@@ -233,7 +233,7 @@ public class ShitExercisesEvent extends EventPacket {
 			}
 			fromWaitCount++;
 
-			List<Yukkuri> childrenList = YukkuriLogic.createActiveChildList(sourceBody, false);
+			List<Yukkuri> childrenList = YukkuriLogic.createActiveChildren(sourceBody, false);
 			if (childrenList == null || childrenList.isEmpty()) {
 				return UpdateState.ABORT;
 			}
@@ -381,7 +381,7 @@ public class ShitExercisesEvent extends EventPacket {
 			switch (state) {
 				case GO:
 					if (Barrier.onBarrier(body.getX(), body.getY(), sourceBody.getX(), sourceBody.getY(),
-							Barrier.MAP_BODY[body.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
+							Barrier.BODY_BLOCK_FLAGS[body.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
 						return UpdateState.ABORT;
 					}
 					if (body.isDontMove()) {
@@ -459,7 +459,7 @@ public class ShitExercisesEvent extends EventPacket {
 									}
 								}
 								body.setShit(0, false);
-								body.setEventResult(Event.DOSHIT);
+								body.setEventResult(TickResult.SHIT);
 								body.addMemories(10);
 							} else {
 								body.setShit(10, true);

@@ -26,7 +26,7 @@ class SuiTest extends ItemTestBase {
         Yukkuri b = WorldTestHelper.createBody();
         b.setX(100);
         b.setY(100);
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(b.getUniqueID(), b);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueID(), b);
         return b;
     }
 
@@ -34,9 +34,9 @@ class SuiTest extends ItemTestBase {
     void testConstructor_Default() {
         Sui item = new Sui();
         item.setObjId(1);
-        SimYukkuri.world.getCurrentMap().getSui().put(item.getObjId(), item);
+        SimYukkuri.world.getCurrentWorldState().getSuis().put(item.getObjId(), item);
         verifyCommonProperties(item);
-        assertTrue(SimYukkuri.world.getCurrentMap().getSui().containsKey(item.getObjId()));
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getSuis().containsKey(item.getObjId()));
     }
 
     @Test
@@ -57,7 +57,7 @@ class SuiTest extends ItemTestBase {
     void testRideOn_NYDBody_returnsFalse() {
         Sui sui = new Sui();
         Yukkuri b = createBody();
-        b.setCoreAnkoState(org.simyukkuri.enums.CoreAnkoState.NonYukkuriDisease);
+        b.setCoreAnkoState(org.simyukkuri.enums.CoreAnkoState.NON_YUKKURI_DISEASE);
         assertFalse(sui.rideOn(b));
     }
 
@@ -235,8 +235,8 @@ class SuiTest extends ItemTestBase {
     @Test
     void testRemoveListData_doesNotThrow() {
         Sui sui = new Sui();
-        SimYukkuri.world.getCurrentMap().getSui().put(sui.getObjId(), sui);
-        assertDoesNotThrow(() -> sui.removeListData());
+        SimYukkuri.world.getCurrentWorldState().getSuis().put(sui.getObjId(), sui);
+        assertDoesNotThrow(() -> sui.removeFromWorld());
     }
 
     // --- ChangeY ---

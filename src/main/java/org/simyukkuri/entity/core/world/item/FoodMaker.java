@@ -7,7 +7,7 @@ import java.io.File;
 import java.io.IOException;
 
 import org.simyukkuri.command.GadgetAction;
-import org.simyukkuri.draw.ModLoader;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Rectangle4y;
 import org.simyukkuri.draw.Translate;
 import org.simyukkuri.entity.core.Entity;
@@ -124,9 +124,9 @@ public class FoodMaker extends WorldEntity {
 				if (b.isCrushed() || b.isPealed() || b.isBaby()) {
 					if (b.isSick()) {// カビ
 						stockFood = 11;
-					} else if (b.getCoreAnkoState() == CoreAnkoState.NonYukkuriDiseaseNear) {// 軽度の非ゆっくり症
+					} else if (b.getCoreAnkoState() == CoreAnkoState.NON_YUKKURI_DISEASE_NEAR) {// 軽度の非ゆっくり症
 						stockFood = 12;
-					} else if (b.getCoreAnkoState() == CoreAnkoState.NonYukkuriDisease) {// 重度の非ゆっくり症
+					} else if (b.getCoreAnkoState() == CoreAnkoState.NON_YUKKURI_DISEASE) {// 重度の非ゆっくり症
 						stockFood = 13;
 					} else if (b.getType() == YukkuriType.ALICE) {// ありす
 						stockFood = 2;
@@ -204,9 +204,9 @@ public class FoodMaker extends WorldEntity {
 				if (b.isCrushed() || b.isPealed() || b.isBaby()) {
 					if (b.isSick()) {// カビ
 						foodType = foodTable[makeTable[stockFood][11]];
-					} else if (b.getCoreAnkoState() == CoreAnkoState.NonYukkuriDiseaseNear) {// 軽度の非ゆっくり症
+					} else if (b.getCoreAnkoState() == CoreAnkoState.NON_YUKKURI_DISEASE_NEAR) {// 軽度の非ゆっくり症
 						foodType = foodTable[makeTable[stockFood][12]];
-					} else if (b.getCoreAnkoState() == CoreAnkoState.NonYukkuriDisease) {// 重度の非ゆっくり症
+					} else if (b.getCoreAnkoState() == CoreAnkoState.NON_YUKKURI_DISEASE) {// 重度の非ゆっくり症
 						foodType = foodTable[makeTable[stockFood][13]];
 					} else if (b.getType() == YukkuriType.ALICE) {// ありす
 						foodType = foodTable[makeTable[stockFood][2]];
@@ -281,14 +281,14 @@ public class FoodMaker extends WorldEntity {
 				return 0;
 			}
 			int dir = 1;
-			if (x + 40 >= Translate.getMapW())
+			if (x + 40 >= Translate.getWorldWidth())
 				dir = -1;
 			if (foodType == FoodType.SHIT) {
 				GameView.addVomit(x + (40 * dir), y, 0, null, YukkuriType.REIMU);
 			} else {
 				for (int i = 0; i < (foodAmount >> 1); i++) {
 					Food f = (Food) GadgetAction.putObjEX(Food.class, x + (40 * dir), y, foodType.ordinal());
-					GameWorld.get().getCurrentMap().getFood().put(f.objId, f);
+					GameWorld.get().getCurrentWorldState().getFoods().put(f.objId, f);
 				}
 				foodAmount = 0;
 
@@ -306,8 +306,8 @@ public class FoodMaker extends WorldEntity {
 	}
 
 	@Override
-	public void removeListData() {
-		GameWorld.get().getCurrentMap().getFoodmaker().remove(objId);
+	public void removeFromWorld() {
+		GameWorld.get().getCurrentWorldState().getFoodMakers().remove(objId);
 	}
 
 	/** コンストラクタ */
@@ -315,7 +315,7 @@ public class FoodMaker extends WorldEntity {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		GameWorld.get().getCurrentMap().getFoodmaker().put(objId, this);
+		GameWorld.get().getCurrentWorldState().getFoodMakers().put(objId, this);
 		objType = Type.PLATFORM;
 		worldEntityType = WorldEntityKind.FOODMAKER;
 

@@ -25,13 +25,13 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import org.simyukkuri.SimYukkuri;
-import org.simyukkuri.draw.World;
+import org.simyukkuri.engine.World;
 import org.simyukkuri.entity.core.living.yukkuri.Dna;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.living.yukkuri.impl.Reimu;
 import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.Direction;
-import org.simyukkuri.enums.Event;
+import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.system.ResourceUtil;
 
 public class BreedingAmpouleTest {
@@ -75,9 +75,9 @@ public class BreedingAmpouleTest {
         // parentがnull（マップから削除された等）の場合、DONOTHINGを返す
         BreedingAmpoule ampoule = new BreedingAmpoule();
 
-        Event result = ampoule.update();
+        TickResult result = ampoule.update();
 
-        assertEquals(Event.DONOTHING, result);
+        assertEquals(TickResult.NONE, result);
     }
 
     @Test
@@ -87,9 +87,9 @@ public class BreedingAmpouleTest {
 
         parent.setDead(true);
 
-        Event result = ampoule.update();
+        TickResult result = ampoule.update();
 
-        assertEquals(Event.DONOTHING, result);
+        assertEquals(TickResult.NONE, result);
     }
 
     @Test
@@ -99,9 +99,9 @@ public class BreedingAmpouleTest {
 
         parent.setBurned(true);
 
-        Event result = ampoule.update();
+        TickResult result = ampoule.update();
 
-        assertEquals(Event.DONOTHING, result);
+        assertEquals(TickResult.NONE, result);
     }
 
     @Test
@@ -111,9 +111,9 @@ public class BreedingAmpouleTest {
 
         parent.setCrushed(true);
 
-        Event result = ampoule.update();
+        TickResult result = ampoule.update();
 
-        assertEquals(Event.DONOTHING, result);
+        assertEquals(TickResult.NONE, result);
     }
 
     @Test
@@ -121,7 +121,7 @@ public class BreedingAmpouleTest {
         Yukkuri parent = createParent(AgeState.CHILD);
         BreedingAmpoule ampoule = new BreedingAmpoule(parent);
 
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().remove(parent.getUniqueID());
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().remove(parent.getUniqueID());
 
         BufferedImage image = ampoule.getImage(parent);
         assertNull(image);
@@ -170,7 +170,7 @@ public class BreedingAmpouleTest {
         int origPivotX = ampoule.getPivotX();
         int origPivotY = ampoule.getPivotY();
 
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().remove(parent.getUniqueID());
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().remove(parent.getUniqueID());
 
         ampoule.resetBoundary();
 
@@ -211,9 +211,9 @@ public class BreedingAmpouleTest {
         parent.setCrushed(false);
 
         int babyTypesBefore = parent.getBabyTypes().size();
-        Event result = ampoule.update();
+        TickResult result = ampoule.update();
 
-        assertEquals(Event.DONOTHING, result);
+        assertEquals(TickResult.NONE, result);
         assertEquals(100, parent.getHungry());
         assertTrue(parent.isHasBaby());
         assertEquals(babyTypesBefore + 1, parent.getBabyTypes().size());
@@ -227,16 +227,16 @@ public class BreedingAmpouleTest {
         parent.setCastrated(true);
 
         int babyTypesBefore = parent.getBabyTypes().size();
-        Event result = ampoule.update();
+        TickResult result = ampoule.update();
 
-        assertEquals(Event.DONOTHING, result);
+        assertEquals(TickResult.NONE, result);
         assertEquals(babyTypesBefore, parent.getBabyTypes().size());
     }
 
     private static Yukkuri createParent(AgeState ageState) {
         Yukkuri parent = new Reimu();
         parent.setAgeState(ageState);
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(parent.getUniqueID(), parent);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(parent.getUniqueID(), parent);
         return parent;
     }
 
@@ -271,9 +271,9 @@ public class BreedingAmpouleTest {
             int damageBefore = parent.getDamage();
             int babiesBefore = parent.getBabyTypes().size();
 
-            Event result = ampoule.update();
+            TickResult result = ampoule.update();
 
-            assertEquals(Event.DONOTHING, result);
+            assertEquals(TickResult.NONE, result);
             assertEquals(100, parent.getHungry());
             assertTrue(parent.getDamage() < damageBefore);
             assertTrue(parent.isHasBaby());
@@ -295,9 +295,9 @@ public class BreedingAmpouleTest {
             int damageBefore = parent.getDamage();
             int babiesBefore = parent.getBabyTypes().size();
 
-            Event result = ampoule.update();
+            TickResult result = ampoule.update();
 
-            assertEquals(Event.DONOTHING, result);
+            assertEquals(TickResult.NONE, result);
             assertEquals(10, parent.getHungry());
             assertEquals(damageBefore, parent.getDamage());
             assertEquals(babiesBefore, parent.getBabyTypes().size());

@@ -41,7 +41,7 @@ public class ProposeEventTest extends EventTestBase {
             spr[i] = new Sprite(10, 10, Sprite.PIVOT_CENTER_BOTTOM);
         }
         b.setSpriteSet(spr);
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(b.getUniqueID(), b);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueID(), b);
         return b;
     }
 
@@ -230,7 +230,7 @@ public class ProposeEventTest extends EventTestBase {
     void testUpdate_ToNYD_returnsAbort() {
         Yukkuri from = createSprBody(100, 100);
         Yukkuri to = createSprBody(120, 120);
-        to.setCoreAnkoState(org.simyukkuri.enums.CoreAnkoState.NonYukkuriDisease);
+        to.setCoreAnkoState(org.simyukkuri.enums.CoreAnkoState.NON_YUKKURI_DISEASE);
         ProposeEvent event = new ProposeEvent(from, to, null, 10);
         assertEquals(EventPacket.UpdateState.ABORT, event.update(from));
     }

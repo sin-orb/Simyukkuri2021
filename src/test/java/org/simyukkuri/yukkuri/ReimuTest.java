@@ -290,7 +290,7 @@ public class ReimuTest {
         org.simyukkuri.util.WorldTestHelper.initializeMinimalWorld();
         try {
             Reimu reimu = new Reimu();
-            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(reimu.getUniqueID(), reimu);
+            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(reimu.getUniqueID(), reimu);
             reimu.execTransform();
         } catch (NullPointerException e) {
             // mypane is null in headless environment
@@ -311,13 +311,13 @@ public class ReimuTest {
             Reimu reimu = new Reimu();
             reimu.setAge(100000);
             WorldTestHelper.makeTransformationReady(reimu);
-            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(reimu.getUniqueID(), reimu);
+            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(reimu.getUniqueID(), reimu);
 
             int originalId = reimu.getUniqueID();
 
             reimu.execTransform();
 
-            Yukkuri transformed = SimYukkuri.world.getCurrentMap().getYukkuriMap().get(originalId);
+            Yukkuri transformed = SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().get(originalId);
             assertNotNull(transformed);
             assertInstanceOf(Deibu.class, transformed);
             assertEquals(originalId, transformed.getUniqueID());
@@ -344,11 +344,11 @@ public class ReimuTest {
             reimu.setPartner(partner.getUniqueID());
             partner.setPartner(reimu.getUniqueID());
             child.setParents(new int[] { reimu.getUniqueID(), -1 });
-            reimu.getChildrenList().add(child.getUniqueID());
+            reimu.getChildren().add(child.getUniqueID());
 
-            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(reimu.getUniqueID(), reimu);
-            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(partner.getUniqueID(), partner);
-            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(child.getUniqueID(), child);
+            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(reimu.getUniqueID(), reimu);
+            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(partner.getUniqueID(), partner);
+            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(child.getUniqueID(), child);
 
             int originalId = reimu.getUniqueID();
             int partnerId = partner.getUniqueID();
@@ -356,10 +356,10 @@ public class ReimuTest {
 
             reimu.execTransform();
 
-            Yukkuri transformed = SimYukkuri.world.getCurrentMap().getYukkuriMap().get(originalId);
+            Yukkuri transformed = SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().get(originalId);
             assertNotNull(transformed);
             assertEquals(partnerId, transformed.getPartner());
-            assertTrue(transformed.getChildrenList().contains(childId));
+            assertTrue(transformed.getChildren().contains(childId));
             assertEquals(originalId, partner.getPartner());
             assertEquals(originalId, child.getParents()[0]);
         } finally {
@@ -385,23 +385,23 @@ public class ReimuTest {
             reimu.setPartner(partner.getUniqueID());
             partner.setPartner(reimu.getUniqueID());
             child.setParents(new int[] { reimu.getUniqueID(), -1 });
-            reimu.getChildrenList().add(child.getUniqueID());
+            reimu.getChildren().add(child.getUniqueID());
 
-            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(reimu.getUniqueID(), reimu);
-            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(partner.getUniqueID(), partner);
-            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(child.getUniqueID(), child);
+            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(reimu.getUniqueID(), reimu);
+            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(partner.getUniqueID(), partner);
+            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(child.getUniqueID(), child);
 
             int originalId = reimu.getUniqueID();
             int childId = child.getUniqueID();
 
             reimu.execTransform();
 
-            Yukkuri transformed = SimYukkuri.world.getCurrentMap().getYukkuriMap().get(originalId);
+            Yukkuri transformed = SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().get(originalId);
             assertNotNull(transformed);
             assertTrue(transformed.isHasBaby());
             assertEquals(1, transformed.getBabyTypes().size());
             assertEquals(partner.getUniqueID(), transformed.getPartner());
-            assertTrue(transformed.getChildrenList().contains(childId));
+            assertTrue(transformed.getChildren().contains(childId));
             assertEquals(originalId, partner.getPartner());
             assertEquals(originalId, child.getParents()[0]);
         } finally {
@@ -427,23 +427,23 @@ public class ReimuTest {
             reimu.setPartner(partner.getUniqueID());
             partner.setPartner(reimu.getUniqueID());
             child.setParents(new int[] { reimu.getUniqueID(), -1 });
-            reimu.getChildrenList().add(child.getUniqueID());
+            reimu.getChildren().add(child.getUniqueID());
 
-            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(reimu.getUniqueID(), reimu);
-            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(partner.getUniqueID(), partner);
-            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(child.getUniqueID(), child);
+            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(reimu.getUniqueID(), reimu);
+            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(partner.getUniqueID(), partner);
+            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(child.getUniqueID(), child);
 
             int originalId = reimu.getUniqueID();
             int childId = child.getUniqueID();
 
             reimu.execTransform();
 
-            Yukkuri transformed = SimYukkuri.world.getCurrentMap().getYukkuriMap().get(originalId);
+            Yukkuri transformed = SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().get(originalId);
             assertNotNull(transformed);
             assertTrue(transformed.isHasStalk());
             assertEquals(1, transformed.getStalkBabyTypes().size());
             assertEquals(partner.getUniqueID(), transformed.getPartner());
-            assertTrue(transformed.getChildrenList().contains(childId));
+            assertTrue(transformed.getChildren().contains(childId));
             assertEquals(originalId, partner.getPartner());
             assertEquals(originalId, child.getParents()[0]);
         } finally {

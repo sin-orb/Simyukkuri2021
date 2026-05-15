@@ -144,7 +144,7 @@ public class LoggerYukkuri {
 
 		long logData[] = new long[NUM_OF_LOGDATA_TYPE];
 		try {
-			for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getYukkuriMap().entrySet()) {
+			for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentWorldState().getYukkuriRegistry().entrySet()) {
 				Yukkuri b = entry.getValue();
 				if (!b.isDead()) {
 					if (b.isPredatorType()) {
@@ -189,7 +189,7 @@ public class LoggerYukkuri {
 			// list変更等の際は握りつぶしてしまう
 		}
 
-		logData[NUM_OF_SHIT] = GameWorld.get().getCurrentMap().getShit().size();
+		logData[NUM_OF_SHIT] = GameWorld.get().getCurrentWorldState().getShit().size();
 
 		logData[NUM_OF_CASH] = GameWorld.get().getPlayer().getCash();
 

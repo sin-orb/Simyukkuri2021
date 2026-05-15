@@ -25,9 +25,9 @@ import org.junit.jupiter.api.Test;
 
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.draw.Translate;
-import org.simyukkuri.draw.World;
+import org.simyukkuri.engine.World;
 import org.simyukkuri.enums.AgeState;
-import org.simyukkuri.enums.Event;
+import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.system.ItemMenu.GetMenuTarget;
 import org.simyukkuri.system.ItemMenu.UseMenuTarget;
 import org.simyukkuri.util.WorldTestHelper;
@@ -173,8 +173,8 @@ class ShitTest {
     @Test
     void testClockTick_removed_returnsREMOVED() {
         shit.setRemoved(true);
-        Event result = shit.clockTick();
-        assertEquals(Event.REMOVED, result);
+        TickResult result = shit.clockTick();
+        assertEquals(TickResult.REMOVED, result);
     }
 
     // --- clockTick: not removed, age below limit ---
@@ -183,8 +183,8 @@ class ShitTest {
     void testClockTick_notRemoved_belowLimit_returnsDONOTHING() {
         shit.setRemoved(false);
         shit.setAge(0);
-        Event result = shit.clockTick();
-        assertEquals(Event.DONOTHING, result);
+        TickResult result = shit.clockTick();
+        assertEquals(TickResult.NONE, result);
     }
 
     // --- clockTick: not removed, age exceeds limit → removes ---
@@ -195,9 +195,9 @@ class ShitTest {
         shit.setAgeState(AgeState.ADULT);
         // SHITLIMIT[ADULT] = 100 * 24 * 8 = 19200
         shit.setAge(19200 + 1);
-        Event result = shit.clockTick();
+        TickResult result = shit.clockTick();
         // After remove() is called it becomes removed
-        assertTrue(shit.isRemoved() || result == Event.DONOTHING || result == Event.REMOVED);
+        assertTrue(shit.isRemoved() || result == TickResult.NONE || result == TickResult.REMOVED);
     }
 
     // --- clockTick: not removed, with vx set ---
@@ -378,10 +378,10 @@ class ShitTest {
             shit.setX(999);
             shit.kick(5, 0, 0);
 
-            Event result = shit.clockTick();
+            TickResult result = shit.clockTick();
 
-            assertEquals(Event.DONOTHING, result);
-            assertEquals(Translate.getMapW(), shit.getX());
+            assertEquals(TickResult.NONE, result);
+            assertEquals(Translate.getWorldWidth(), shit.getX());
             assertEquals(-5, shit.getVx());
         }
 
@@ -392,9 +392,9 @@ class ShitTest {
             shit.setZ(10);
             shit.setVz(15);
 
-            Event result = shit.clockTick();
+            TickResult result = shit.clockTick();
 
-            assertEquals(Event.DONOTHING, result);
+            assertEquals(TickResult.NONE, result);
             assertEquals(9600, shit.getAge());
             assertEquals(0, shit.getZ());
             assertEquals(0, shit.getVz());

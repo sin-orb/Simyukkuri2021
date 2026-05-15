@@ -1,7 +1,7 @@
 package org.simyukkuri.logic;
 
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
-import org.simyukkuri.enums.EnumRelationMine;
+import org.simyukkuri.enums.YukkuriRelationType;
 import org.simyukkuri.enums.Happiness;
 
 /**
@@ -23,7 +23,7 @@ public class EmotionLogic {
 		boolean isRude = b.isRude();
 
 		// 自分との関係
-		EnumRelationMine relation = YukkuriLogic.checkMyRelation(b, bodyTarget);
+		YukkuriRelationType relation = YukkuriLogic.checkMyRelation(b, bodyTarget);
 
 		// 自分の幸福度
 		Happiness happinessMine = b.getHappiness();
@@ -57,14 +57,14 @@ public class EmotionLogic {
 						switch (relation) {
 							case FATHER: // 父
 							case MOTHER: // 母
-							case PARTNAR: // つがい
-							case ELDERSISTER: // 姉
+							case PARTNER: // つがい
+							case ELDER_SISTER: // 姉
 								// おちびちゃんとってもゆっくりしてるよ！まりさもゆっくりしてるよ！いもうちょとってもゆっくりしてるのじぇ
 								abEmote[0] = true; // 喜
 								break;
-							case CHILD_FATHER: // 父の子供
-							case CHILD_MOTHER: // 母の子供
-							case YOUNGSISTER: // 妹
+							case CHILD_OF_FATHER: // 父の子供
+							case CHILD_OF_MOTHER: // 母の子供
+							case YOUNGER_SISTER: // 妹
 								// まりちゃもゆっくりしたいのじぇっ！
 								abEmote[5] = true; // うらやましい
 								break;
@@ -78,14 +78,14 @@ public class EmotionLogic {
 						switch (relation) {
 							case FATHER: // 父
 							case MOTHER: // 母
-							case ELDERSISTER: // 姉
+							case ELDER_SISTER: // 姉
 								// おちびちゃんとってもゆっくりしてるよ！いもうちょとってもゆっくりしてるのじぇ
 								abEmote[0] = true; // 喜
 								break;
-							case PARTNAR: // つがい
-							case CHILD_FATHER: // 父の子供
-							case CHILD_MOTHER: // 母の子供
-							case YOUNGSISTER: // 妹
+							case PARTNER: // つがい
+							case CHILD_OF_FATHER: // 父の子供
+							case CHILD_OF_MOTHER: // 母の子供
+							case YOUNGER_SISTER: // 妹
 								// まりちゃもゆっくりしたいのじぇっ！
 								abEmote[5] = true; // うらやましい
 								break;
@@ -102,14 +102,14 @@ public class EmotionLogic {
 								// おちびちゃんとってもゆっくりしてるよ！いもうちょとってもゆっくりしてるのじぇ
 								abEmote[0] = true; // 喜
 								break;
-							case PARTNAR: // つがい
-							case CHILD_FATHER: // 父の子供
-							case CHILD_MOTHER: // 母の子供
-							case ELDERSISTER: // 姉
+							case PARTNER: // つがい
+							case CHILD_OF_FATHER: // 父の子供
+							case CHILD_OF_MOTHER: // 母の子供
+							case ELDER_SISTER: // 姉
 								// まりちゃもゆっくりしたいのじぇっ！
 								abEmote[5] = true; // うらやましい
 								break;
-							case YOUNGSISTER: // 妹
+							case YOUNGER_SISTER: // 妹
 							default: // 他人
 								// まりちゃもゆっくりしたいのじぇっ！
 								abEmote[2] = true; // 哀
@@ -150,11 +150,11 @@ public class EmotionLogic {
 						switch (relation) {
 							case FATHER: // 父
 							case MOTHER: // 母
-							case PARTNAR: // つがい
-							case ELDERSISTER: // 姉
-							case YOUNGSISTER: // 妹
-							case CHILD_FATHER: // 父の子供
-							case CHILD_MOTHER: // 母の子供
+							case PARTNER: // つがい
+							case ELDER_SISTER: // 姉
+							case YOUNGER_SISTER: // 妹
+							case CHILD_OF_FATHER: // 父の子供
+							case CHILD_OF_MOTHER: // 母の子供
 								// おちびちゃん、ゆっくりしてね！
 								abEmote[2] = true; // 哀
 								abEmote[6] = true; // 心配
@@ -179,11 +179,11 @@ public class EmotionLogic {
 						switch (relation) {
 							case FATHER: // 父
 							case MOTHER: // 母
-							case ELDERSISTER: // 姉
-							case PARTNAR: // つがい
-							case CHILD_FATHER: // 父の子供
-							case CHILD_MOTHER: // 母の子供
-							case YOUNGSISTER: // 妹
+							case ELDER_SISTER: // 姉
+							case PARTNER: // つがい
+							case CHILD_OF_FATHER: // 父の子供
+							case CHILD_OF_MOTHER: // 母の子供
+							case YOUNGER_SISTER: // 妹
 								// ゆっくりしてないけどだいじょうぶ？
 								abEmote[6] = true; // 心配
 
@@ -215,11 +215,11 @@ public class EmotionLogic {
 						switch (relation) {
 							case FATHER: // 父
 							case MOTHER: // 母
-							case PARTNAR: // つがい
-							case ELDERSISTER: // 姉
-							case YOUNGSISTER: // 妹
-							case CHILD_FATHER: // 父の子供
-							case CHILD_MOTHER: // 母の子供
+							case PARTNER: // つがい
+							case ELDER_SISTER: // 姉
+							case YOUNGER_SISTER: // 妹
+							case CHILD_OF_FATHER: // 父の子供
+							case CHILD_OF_MOTHER: // 母の子供
 								// おちびちゃん、ゆっくりしてね！
 								abEmote[2] = true; // 哀
 								abEmote[6] = true; // 心配

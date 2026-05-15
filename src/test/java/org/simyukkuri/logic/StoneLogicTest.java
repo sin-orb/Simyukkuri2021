@@ -18,11 +18,11 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
-import org.simyukkuri.draw.World;
+import org.simyukkuri.engine.World;
 import org.simyukkuri.entity.core.world.item.Stone;
 import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.BurialState;
-import org.simyukkuri.enums.CriticalDamegeType;
+import org.simyukkuri.enums.CriticalDamageType;
 import org.simyukkuri.enums.Intelligence;
 import org.simyukkuri.system.Sprite;
 import org.simyukkuri.util.WorldTestHelper;
@@ -50,7 +50,7 @@ public class StoneLogicTest {
         b.setX(x);
         b.setY(y);
         b.setZ(0);
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(b.getUniqueID(), b);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueID(), b);
         return b;
     }
 
@@ -63,7 +63,7 @@ public class StoneLogicTest {
     @Test
     public void testCheckPubbleCutBody() {
         Reimu cut = new Reimu();
-        cut.setCriticalDamege(CriticalDamegeType.CUT);
+        cut.setCriticalDamege(CriticalDamageType.CUT);
         StoneLogic.checkPubble(cut);
         assertTrue(true, "checkPubble should handle cut body gracefully");
     }
@@ -101,7 +101,7 @@ public class StoneLogicTest {
         Stone stone = new Stone(100, 100, 0);
         assertDoesNotThrow(() -> StoneLogic.checkPubble(b));
         // After bodyInjure, damage type should be INJURED
-        assertEquals(CriticalDamegeType.INJURED, b.getCriticalDamege());
+        assertEquals(CriticalDamageType.INJURED, b.getCriticalDamege());
     }
 
     @Test
@@ -137,10 +137,10 @@ public class StoneLogicTest {
         baby.setY(100);
         baby.setZ(0);
         baby.setBurialState(BurialState.HALF); // NONE だと addVomit で mypane NPE になる
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(baby.getUniqueID(), baby);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(baby.getUniqueID(), baby);
         new Stone(100, 100, 0); // auto-registers; distance=0 → stepDist(1)>0 → bodyCut
         assertDoesNotThrow(() -> StoneLogic.checkPubble(baby));
-        assertEquals(CriticalDamegeType.CUT, baby.getCriticalDamege(),
+        assertEquals(CriticalDamageType.CUT, baby.getCriticalDamege(),
                 "Baby body close to stone should get CUT damage");
     }
 

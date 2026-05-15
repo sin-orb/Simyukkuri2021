@@ -23,12 +23,12 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import org.simyukkuri.SimYukkuri;
-import org.simyukkuri.draw.World;
+import org.simyukkuri.engine.World;
 import org.simyukkuri.entity.core.attachment.impl.Badge.BadgeRank;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.living.yukkuri.impl.Reimu;
 import org.simyukkuri.enums.AgeState;
-import org.simyukkuri.enums.Event;
+import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.system.ResourceUtil;
 
 public class BadgeTest {
@@ -90,9 +90,9 @@ public class BadgeTest {
         Yukkuri parent = createParent(AgeState.CHILD);
         Badge badge = new Badge(parent, BadgeRank.SILVER);
 
-        Event result = badge.update();
+        TickResult result = badge.update();
 
-        assertEquals(Event.DONOTHING, result);
+        assertEquals(TickResult.NONE, result);
     }
 
     @Test
@@ -100,7 +100,7 @@ public class BadgeTest {
         Yukkuri parent = createParent(AgeState.CHILD);
         Badge badge = new Badge(parent, BadgeRank.BRONZE);
 
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().remove(parent.getUniqueID());
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().remove(parent.getUniqueID());
 
         BufferedImage image = badge.getImage(parent);
         assertNull(image);
@@ -170,7 +170,7 @@ public class BadgeTest {
         int origPivotX = badge.getPivotX();
         int origPivotY = badge.getPivotY();
 
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().remove(parent.getUniqueID());
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().remove(parent.getUniqueID());
 
         badge.resetBoundary();
 
@@ -206,7 +206,7 @@ public class BadgeTest {
     private static Yukkuri createParent(AgeState ageState) {
         Yukkuri parent = new Reimu();
         parent.setAgeState(ageState);
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(parent.getUniqueID(), parent);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(parent.getUniqueID(), parent);
         return parent;
     }
 

@@ -39,7 +39,7 @@ public final class FoodNearestSearchPolicy {
 			wallMode = AgeState.ADULT.ordinal();
 		}
 
-		for (Map.Entry<Integer, Food> entry : GameWorld.get().getCurrentMap().getFood().entrySet()) {
+		for (Map.Entry<Integer, Food> entry : GameWorld.get().getCurrentWorldState().getFoods().entrySet()) {
 			Food food = entry.getValue();
 			if (food.isEmpty()) {
 				continue;
@@ -50,16 +50,16 @@ public final class FoodNearestSearchPolicy {
 			int distance = Translate.distance(body.getX(), body.getY(), food.getX(), food.getY());
 			if (nearestDistance > distance) {
 				if (Barrier.acrossBarrier(body.getX(), body.getY(), food.getX(), food.getY(),
-						Barrier.MAP_BODY[wallMode] + Barrier.BARRIER_KEKKAI)) {
+						Barrier.BODY_BLOCK_FLAGS[wallMode] + Barrier.BARRIER_KEKKAI)) {
 					continue;
 				}
 				nearestFood = food;
 				nearestDistance = distance;
 			}
 		}
-		for (Map.Entry<Integer, Stalk> entry : GameWorld.get().getCurrentMap().getStalk().entrySet()) {
+		for (Map.Entry<Integer, Stalk> entry : GameWorld.get().getCurrentWorldState().getStalks().entrySet()) {
 			Stalk stalk = entry.getValue();
-			Yukkuri plantBody = GameWorld.get().getCurrentMap().getYukkuriMap().get(stalk.getPlantYukkuri());
+			Yukkuri plantBody = GameWorld.get().getCurrentWorldState().getYukkuriRegistry().get(stalk.getPlantYukkuri());
 			if (plantBody != null) {
 				if (plantBody == body) {
 					continue;
@@ -69,7 +69,7 @@ public final class FoodNearestSearchPolicy {
 					continue;
 				}
 
-				List<Integer> babyList = stalk.getBindBabies();
+				List<Integer> babyList = stalk.getAttachedBabyIds();
 				if (babyList != null && babyList.size() != 0) {
 					boolean hasBaby = false;
 					for (int babyId : babyList) {
@@ -88,26 +88,26 @@ public final class FoodNearestSearchPolicy {
 			int distance = Translate.distance(body.getX(), body.getY(), stalk.getX(), stalk.getY());
 			if (nearestDistance > distance) {
 				if (Barrier.acrossBarrier(body.getX(), body.getY(), stalk.getX(), stalk.getY(),
-						Barrier.MAP_BODY[wallMode] + Barrier.BARRIER_KEKKAI)) {
+						Barrier.BODY_BLOCK_FLAGS[wallMode] + Barrier.BARRIER_KEKKAI)) {
 					continue;
 				}
 				nearestFood = stalk;
 				nearestDistance = distance;
 			}
 		}
-		for (Map.Entry<Integer, Vomit> entry : GameWorld.get().getCurrentMap().getVomit().entrySet()) {
+		for (Map.Entry<Integer, Vomit> entry : GameWorld.get().getCurrentWorldState().getVomit().entrySet()) {
 			Vomit vomit = entry.getValue();
 			int distance = Translate.distance(body.getX(), body.getY(), vomit.getX(), vomit.getY());
 			if (nearestDistance > distance) {
 				if (Barrier.acrossBarrier(body.getX(), body.getY(), vomit.getX(), vomit.getY(),
-						Barrier.MAP_BODY[wallMode] + Barrier.BARRIER_KEKKAI)) {
+						Barrier.BODY_BLOCK_FLAGS[wallMode] + Barrier.BARRIER_KEKKAI)) {
 					continue;
 				}
 				nearestFood = vomit;
 				nearestDistance = distance;
 			}
 		}
-		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getYukkuriMap().entrySet()) {
+		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentWorldState().getYukkuriRegistry().entrySet()) {
 			Yukkuri candidateBody = entry.getValue();
 			if (body == candidateBody) {
 				continue;
@@ -118,19 +118,19 @@ public final class FoodNearestSearchPolicy {
 			int distance = Translate.distance(body.getX(), body.getY(), candidateBody.getX(), candidateBody.getY());
 			if (nearestDistance > distance) {
 				if (Barrier.acrossBarrier(body.getX(), body.getY(), candidateBody.getX(), candidateBody.getY(),
-						Barrier.MAP_BODY[wallMode] + Barrier.BARRIER_KEKKAI)) {
+						Barrier.BODY_BLOCK_FLAGS[wallMode] + Barrier.BARRIER_KEKKAI)) {
 					continue;
 				}
 				nearestFood = candidateBody;
 				nearestDistance = distance;
 			}
 		}
-		for (Map.Entry<Integer, Shit> entry : GameWorld.get().getCurrentMap().getShit().entrySet()) {
+		for (Map.Entry<Integer, Shit> entry : GameWorld.get().getCurrentWorldState().getShit().entrySet()) {
 			Shit shit = entry.getValue();
 			int distance = Translate.distance(body.getX(), body.getY(), shit.getX(), shit.getY());
 			if (nearestDistance > distance) {
 				if (Barrier.acrossBarrier(body.getX(), body.getY(), shit.getX(), shit.getY(),
-						Barrier.MAP_BODY[wallMode] + Barrier.BARRIER_KEKKAI)) {
+						Barrier.BODY_BLOCK_FLAGS[wallMode] + Barrier.BARRIER_KEKKAI)) {
 					continue;
 				}
 				nearestFood = shit;

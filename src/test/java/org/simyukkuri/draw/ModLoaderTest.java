@@ -11,6 +11,7 @@ import org.simyukkuri.entity.core.living.yukkuri.impl.*;
 import org.simyukkuri.entity.core.world.bodylinked.*;
 import org.simyukkuri.entity.core.world.item.*;
 import org.simyukkuri.entity.core.world.mobile.*;
+import org.simyukkuri.engine.ModLoader;
 
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
@@ -104,13 +105,13 @@ public class ModLoaderTest {
         Files.createDirectory(itemDir.resolve("item_theme"));
         Files.createDirectory(yukkuriDir.resolve("body_theme"));
 
-        Vector<String> backList = ModLoader.getBackThemeList();
+        Vector<String> backList = ModLoader.getBackThemes();
         assertTrue(backList.contains("back_theme"));
 
-        Vector<String> itemList = ModLoader.getItemThemeList();
+        Vector<String> itemList = ModLoader.getItemThemes();
         assertTrue(itemList.contains("item_theme"));
 
-        Vector<String> bodyList = ModLoader.getYukkuriThemeList();
+        Vector<String> bodyList = ModLoader.getYukkuriThemes();
         assertTrue(bodyList.contains("body_theme"));
 
         // Restore jarPath

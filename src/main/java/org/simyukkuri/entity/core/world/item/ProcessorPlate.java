@@ -16,7 +16,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
-import org.simyukkuri.draw.ModLoader;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Rectangle4y;
 import org.simyukkuri.draw.Translate;
 import org.simyukkuri.entity.core.Entity;
@@ -24,7 +24,7 @@ import org.simyukkuri.entity.core.attachment.impl.Fire;
 import org.simyukkuri.entity.core.effect.Effect;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.world.WorldEntity;
-import org.simyukkuri.enums.CriticalDamegeType;
+import org.simyukkuri.enums.CriticalDamageType;
 import org.simyukkuri.enums.EffectType;
 import org.simyukkuri.enums.FootBake;
 import org.simyukkuri.enums.HairState;
@@ -184,14 +184,14 @@ public class ProcessorPlate extends WorldEntity {
 		if (targetObject instanceof Yukkuri) {
 			Yukkuri targetBody = (Yukkuri) targetObject;
 			// 切断されていたら何も起きない
-			if (targetBody.getCriticalDamegeType() == CriticalDamegeType.CUT)
+			if (targetBody.getCriticalDamageType() == CriticalDamageType.CUT)
 				return 0;
 			// 初回
 			if (!activeBodies.contains(targetBody)) {
 				Effect effect;
 				switch (processType.mode) {
 					case HOTPLATE:
-						effect = GameView.addEffect(EffectType.BAKE, targetBody.getX(),
+						effect = GameView.addEffect(EffectType.BAKED, targetBody.getX(),
 								targetBody.getY() + 1,
 								-2, 0, 0, 0, false, -1, -1, false, false, false);
 						break;
@@ -260,7 +260,7 @@ public class ProcessorPlate extends WorldEntity {
 						if (targetBody.isSleeping())
 							targetBody.wakeup();
 						if (processType != ProcessType.HOTPLATE_MIDDLE
-								|| targetBody.getFootBakeLevel() != FootBake.MIDIUM) {
+								|| targetBody.getFootBakeLevel() != FootBake.MEDIUM) {
 							// 中火の場合は完全に足を焼かない
 							targetBody.addFootBakePeriod(processType.parameter);
 						}
@@ -451,7 +451,7 @@ public class ProcessorPlate extends WorldEntity {
 	}
 
 	@Override
-	public void removeListData() {
+	public void removeFromWorld() {
 		if (activeBodies != null && activeEffects != null) {
 			for (int i = activeBodies.size() - 1; 0 <= i; i--) {
 				Yukkuri targetBody = activeBodies.get(i);
@@ -465,7 +465,7 @@ public class ProcessorPlate extends WorldEntity {
 			activeBodies.clear();
 			activeEffects.clear();
 		}
-		GameWorld.get().getCurrentMap().getProcessorPlate().remove(objId);
+		GameWorld.get().getCurrentWorldState().getProcessorPlates().remove(objId);
 	}
 
 	/** 設定メニュー */
@@ -535,7 +535,7 @@ public class ProcessorPlate extends WorldEntity {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		GameWorld.get().getCurrentMap().getProcessorPlate().put(objId, this);
+		GameWorld.get().getCurrentWorldState().getProcessorPlates().put(objId, this);
 		// objType = Type.PLATFORM;
 		worldEntityType = WorldEntityKind.PROCESSORPLATE;
 		interval = 5;
@@ -543,7 +543,7 @@ public class ProcessorPlate extends WorldEntity {
 		readIniFile();
 		boolean setupSucceeded = setupProcessorPlate(this);
 		if (!setupSucceeded) {
-			GameWorld.get().getCurrentMap().getProcessorPlate().remove(objId);
+			GameWorld.get().getCurrentWorldState().getProcessorPlates().remove(objId);
 		}
 	}
 
@@ -556,37 +556,37 @@ public class ProcessorPlate extends WorldEntity {
 		ClassLoader loader = this.getClass().getClassLoader();
 		int iniValue = 0;
 		// 自動お仕置きプレートコスト
-		iniValue = ModLoader.loadYukkuriIniMapForInt(loader, ModLoader.getDataItemIniDir(), "ProcessorPlate",
+		iniValue = ModLoader.loadYukkuriIniValue(loader, ModLoader.getDataItemIniDir(), "ProcessorPlate",
 				"MachineCost");
 		runningCost[0] = iniValue;
 		// 軽加工プレートコスト
-		iniValue = ModLoader.loadYukkuriIniMapForInt(loader, ModLoader.getDataItemIniDir(), "ProcessorPlate",
+		iniValue = ModLoader.loadYukkuriIniValue(loader, ModLoader.getDataItemIniDir(), "ProcessorPlate",
 				"LightProcessCost");
 		runningCost[1] = iniValue;
 		// 中加工プレートコスト
-		iniValue = ModLoader.loadYukkuriIniMapForInt(loader, ModLoader.getDataItemIniDir(), "ProcessorPlate",
+		iniValue = ModLoader.loadYukkuriIniValue(loader, ModLoader.getDataItemIniDir(), "ProcessorPlate",
 				"MidiumProcessCost");
 		runningCost[2] = iniValue;
 		// 重加工プレートコスト
-		iniValue = ModLoader.loadYukkuriIniMapForInt(loader, ModLoader.getDataItemIniDir(), "ProcessorPlate",
+		iniValue = ModLoader.loadYukkuriIniValue(loader, ModLoader.getDataItemIniDir(), "ProcessorPlate",
 				"HeavyProcessCost");
 		runningCost[3] = iniValue;
 	}
 
-	public List<Yukkuri> getProcessedYukkuriList() {
+	public List<Yukkuri> getActiveBodies() {
 		return activeBodies;
 	}
 
-	public void setProcessedYukkuriList(List<Yukkuri> processedBodyList) {
-		this.activeBodies = processedBodyList;
+	public void setActiveBodies(List<Yukkuri> activeBodies) {
+		this.activeBodies = activeBodies;
 	}
 
-	public List<Effect> getProcessedYukkuriEffectList() {
+	public List<Effect> getActiveEffects() {
 		return activeEffects;
 	}
 
-	public void setProcessedYukkuriEffectList(List<Effect> processedBodyEffectList) {
-		this.activeEffects = processedBodyEffectList;
+	public void setActiveEffects(List<Effect> activeEffects) {
+		this.activeEffects = activeEffects;
 	}
 
 	public ProcessType getEnumProcessType() {

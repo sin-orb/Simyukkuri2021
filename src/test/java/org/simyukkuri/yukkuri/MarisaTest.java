@@ -324,13 +324,13 @@ public class MarisaTest {
             Marisa marisa = new Marisa();
             marisa.setAge(100000);
             WorldTestHelper.makeTransformationReady(marisa);
-            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(marisa.getUniqueID(), marisa);
+            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(marisa.getUniqueID(), marisa);
 
             int originalId = marisa.getUniqueID();
 
             marisa.execTransform();
 
-            Yukkuri transformed = SimYukkuri.world.getCurrentMap().getYukkuriMap().get(originalId);
+            Yukkuri transformed = SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().get(originalId);
             assertNotNull(transformed);
             assertInstanceOf(DosMarisa.class, transformed);
             assertEquals(originalId, transformed.getUniqueID());
@@ -357,11 +357,11 @@ public class MarisaTest {
             marisa.setPartner(partner.getUniqueID());
             partner.setPartner(marisa.getUniqueID());
             child.setParents(new int[] { marisa.getUniqueID(), -1 });
-            marisa.getChildrenList().add(child.getUniqueID());
+            marisa.getChildren().add(child.getUniqueID());
 
-            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(marisa.getUniqueID(), marisa);
-            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(partner.getUniqueID(), partner);
-            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(child.getUniqueID(), child);
+            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(marisa.getUniqueID(), marisa);
+            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(partner.getUniqueID(), partner);
+            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(child.getUniqueID(), child);
 
             int originalId = marisa.getUniqueID();
             int partnerId = partner.getUniqueID();
@@ -369,10 +369,10 @@ public class MarisaTest {
 
             marisa.execTransform();
 
-            Yukkuri transformed = SimYukkuri.world.getCurrentMap().getYukkuriMap().get(originalId);
+            Yukkuri transformed = SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().get(originalId);
             assertNotNull(transformed);
             assertEquals(partnerId, transformed.getPartner());
-            assertTrue(transformed.getChildrenList().contains(childId));
+            assertTrue(transformed.getChildren().contains(childId));
             assertEquals(originalId, partner.getPartner());
             assertEquals(originalId, child.getParents()[0]);
         } finally {
@@ -398,23 +398,23 @@ public class MarisaTest {
             marisa.setPartner(partner.getUniqueID());
             partner.setPartner(marisa.getUniqueID());
             child.setParents(new int[] { marisa.getUniqueID(), -1 });
-            marisa.getChildrenList().add(child.getUniqueID());
+            marisa.getChildren().add(child.getUniqueID());
 
-            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(marisa.getUniqueID(), marisa);
-            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(partner.getUniqueID(), partner);
-            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(child.getUniqueID(), child);
+            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(marisa.getUniqueID(), marisa);
+            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(partner.getUniqueID(), partner);
+            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(child.getUniqueID(), child);
 
             int originalId = marisa.getUniqueID();
             int childId = child.getUniqueID();
 
             marisa.execTransform();
 
-            Yukkuri transformed = SimYukkuri.world.getCurrentMap().getYukkuriMap().get(originalId);
+            Yukkuri transformed = SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().get(originalId);
             assertNotNull(transformed);
             assertTrue(transformed.isHasBaby());
             assertEquals(1, transformed.getBabyTypes().size());
             assertEquals(partner.getUniqueID(), transformed.getPartner());
-            assertTrue(transformed.getChildrenList().contains(childId));
+            assertTrue(transformed.getChildren().contains(childId));
             assertEquals(originalId, partner.getPartner());
             assertEquals(originalId, child.getParents()[0]);
         } finally {
@@ -440,23 +440,23 @@ public class MarisaTest {
             marisa.setPartner(partner.getUniqueID());
             partner.setPartner(marisa.getUniqueID());
             child.setParents(new int[] { marisa.getUniqueID(), -1 });
-            marisa.getChildrenList().add(child.getUniqueID());
+            marisa.getChildren().add(child.getUniqueID());
 
-            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(marisa.getUniqueID(), marisa);
-            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(partner.getUniqueID(), partner);
-            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(child.getUniqueID(), child);
+            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(marisa.getUniqueID(), marisa);
+            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(partner.getUniqueID(), partner);
+            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(child.getUniqueID(), child);
 
             int originalId = marisa.getUniqueID();
             int childId = child.getUniqueID();
 
             marisa.execTransform();
 
-            Yukkuri transformed = SimYukkuri.world.getCurrentMap().getYukkuriMap().get(originalId);
+            Yukkuri transformed = SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().get(originalId);
             assertNotNull(transformed);
             assertTrue(transformed.isHasStalk());
             assertEquals(1, transformed.getStalkBabyTypes().size());
             assertEquals(partner.getUniqueID(), transformed.getPartner());
-            assertTrue(transformed.getChildrenList().contains(childId));
+            assertTrue(transformed.getChildren().contains(childId));
             assertEquals(originalId, partner.getPartner());
             assertEquals(originalId, child.getParents()[0]);
         } finally {

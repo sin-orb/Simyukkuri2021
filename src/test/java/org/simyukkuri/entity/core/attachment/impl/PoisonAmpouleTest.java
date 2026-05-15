@@ -28,13 +28,13 @@ import org.junit.jupiter.api.Test;
 
 import org.simyukkuri.ConstState;
 import org.simyukkuri.SimYukkuri;
-import org.simyukkuri.draw.World;
+import org.simyukkuri.engine.World;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.living.yukkuri.impl.Reimu;
 import org.simyukkuri.enums.AgeState;
-import org.simyukkuri.enums.CriticalDamegeType;
+import org.simyukkuri.enums.CriticalDamageType;
 import org.simyukkuri.enums.Direction;
-import org.simyukkuri.enums.Event;
+import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.enums.Happiness;
 import org.simyukkuri.enums.ImageCode;
 import org.simyukkuri.enums.YukkuriType;
@@ -90,9 +90,9 @@ public class PoisonAmpouleTest {
     public void testUpdateReturnsDoNothingWhenParentIsNull() {
         PoisonAmpoule ampoule = new PoisonAmpoule();
 
-        Event result = ampoule.update();
+        TickResult result = ampoule.update();
 
-        assertEquals(Event.DONOTHING, result);
+        assertEquals(TickResult.NONE, result);
     }
 
     @Test
@@ -102,9 +102,9 @@ public class PoisonAmpouleTest {
 
         parent.setDead(true);
 
-        Event result = ampoule.update();
+        TickResult result = ampoule.update();
 
-        assertEquals(Event.DONOTHING, result);
+        assertEquals(TickResult.NONE, result);
     }
 
     @Test
@@ -141,7 +141,7 @@ public class PoisonAmpouleTest {
         Yukkuri parent = createParent(AgeState.CHILD);
         PoisonAmpoule ampoule = new PoisonAmpoule(parent);
 
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().remove(parent.getUniqueID());
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().remove(parent.getUniqueID());
 
         BufferedImage image = ampoule.getImage(parent);
         assertNull(image);
@@ -209,7 +209,7 @@ public class PoisonAmpouleTest {
         int origPivotX = ampoule.getPivotX();
         int origPivotY = ampoule.getPivotY();
 
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().remove(parent.getUniqueID());
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().remove(parent.getUniqueID());
 
         ampoule.resetBoundary();
 
@@ -274,7 +274,7 @@ public class PoisonAmpouleTest {
         Yukkuri parent = createParent(AgeState.ADULT);
         PoisonAmpoule ampoule = new PoisonAmpoule(parent);
 
-        parent.setCriticalDamegeType(org.simyukkuri.enums.CriticalDamegeType.CUT);
+        parent.setCriticalDamageType(org.simyukkuri.enums.CriticalDamageType.CUT);
 
         int shitBefore = parent.getShit();
         ampoule.update();
@@ -292,7 +292,7 @@ public class PoisonAmpouleTest {
             spr[i] = new Sprite(10, 10, Sprite.PIVOT_CENTER_BOTTOM);
         }
         parent.setSpriteSet(spr);
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(parent.getUniqueID(), parent);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(parent.getUniqueID(), parent);
         return parent;
     }
 
@@ -329,9 +329,9 @@ public class PoisonAmpouleTest {
             int shitBefore = parent.getShit();
             int damageBefore = parent.getDamage();
 
-            Event result = ampoule.update();
+            TickResult result = ampoule.update();
 
-            assertEquals(Event.DONOTHING, result);
+            assertEquals(TickResult.NONE, result);
             assertFalse(parent.isSleeping());
             assertTrue(parent.getShit() > shitBefore);
             assertTrue(parent.getDamage() > damageBefore);
@@ -345,14 +345,14 @@ public class PoisonAmpouleTest {
             Yukkuri parent = createParent(AgeState.ADULT);
             parent.setSleeping(true);
             parent.setShit(100);
-            parent.setCriticalDamegeType(CriticalDamegeType.CUT);
+            parent.setCriticalDamageType(CriticalDamageType.CUT);
             PoisonAmpoule ampoule = new PoisonAmpoule(parent);
 
             int shitBefore = parent.getShit();
 
-            Event result = ampoule.update();
+            TickResult result = ampoule.update();
 
-            assertEquals(Event.DONOTHING, result);
+            assertEquals(TickResult.NONE, result);
             assertTrue(parent.isSleeping());
             assertEquals(shitBefore, parent.getShit());
             assertEquals(Happiness.SAD, parent.getHappiness());

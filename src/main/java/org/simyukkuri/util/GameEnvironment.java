@@ -1,6 +1,6 @@
 package org.simyukkuri.util;
 
-import org.simyukkuri.draw.Terrarium;
+import org.simyukkuri.engine.Terrarium;
 
 public final class GameEnvironment {
 	private static final EnvironmentSource DEFAULT = new EnvironmentSource() {

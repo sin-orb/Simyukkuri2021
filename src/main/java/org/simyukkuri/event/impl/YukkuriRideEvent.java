@@ -1,6 +1,6 @@
 package org.simyukkuri.event.impl;
 
-import org.simyukkuri.draw.Terrarium;
+import org.simyukkuri.engine.Terrarium;
 import org.simyukkuri.draw.Translate;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;

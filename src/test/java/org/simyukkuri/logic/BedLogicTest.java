@@ -51,7 +51,7 @@ class BedLogicTest {
         body.setY(100);
         body.setZ(0); // On floor
 
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(body.getObjId(), body);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(body.getObjId(), body);
     }
 
     @Test
@@ -62,7 +62,7 @@ class BedLogicTest {
         Bed bed = new Bed();
         bed.setX(150);
         bed.setY(150);
-        SimYukkuri.world.getCurrentMap().getBed().put(bed.getObjId(), bed);
+        SimYukkuri.world.getCurrentWorldState().getBeds().put(bed.getObjId(), bed);
 
         boolean result = BedLogic.checkBed(body);
         // This might depend on implementation details of checkBed (distance etc.)
@@ -74,7 +74,7 @@ class BedLogicTest {
         Bed bed = new Bed();
         bed.setX(150);
         bed.setY(150);
-        SimYukkuri.world.getCurrentMap().getBed().put(bed.getObjId(), bed);
+        SimYukkuri.world.getCurrentWorldState().getBeds().put(bed.getObjId(), bed);
 
         Entity result = BedLogic.searchBed(body);
         assertNotNull(result);
@@ -154,7 +154,7 @@ class BedLogicTest {
             hf.setInt(bed, 20);
         } catch (Exception e) {
         }
-        SimYukkuri.world.getCurrentMap().getBed().put(bed.getObjId(), bed);
+        SimYukkuri.world.getCurrentWorldState().getBeds().put(bed.getObjId(), bed);
         try {
             BedLogic.checkBed(body);
         } catch (Exception e) {
@@ -178,7 +178,7 @@ class BedLogicTest {
         bed.setX(100);
         bed.setY(100);
         bed.setRemoved(true);
-        SimYukkuri.world.getCurrentMap().getBed().put(bed.getObjId(), bed);
+        SimYukkuri.world.getCurrentWorldState().getBeds().put(bed.getObjId(), bed);
 
         body.setToBed(true);
         body.setMoveTargetId(bed.getObjId());
@@ -191,11 +191,11 @@ class BedLogicTest {
         Bed bed = new Bed();
         bed.setX(200);
         bed.setY(200);
-        SimYukkuri.world.getCurrentMap().getBed().put(bed.getObjId(), bed);
+        SimYukkuri.world.getCurrentWorldState().getBeds().put(bed.getObjId(), bed);
 
         body.setToBed(true);
         body.setMoveTargetId(bed.getObjId());
-        body.setPublicRank(PublicRank.UnunSlave);
+        body.setPublicRank(PublicRank.UNUN_SLAVE);
         // UnunSlave heading to Bed → clearActions and return false
         assertFalse(BedLogic.checkBed(body));
     }
@@ -205,7 +205,7 @@ class BedLogicTest {
         Bed bed = new Bed();
         bed.setX(100);
         bed.setY(100); // same position as body → distance=0
-        SimYukkuri.world.getCurrentMap().getBed().put(bed.getObjId(), bed);
+        SimYukkuri.world.getCurrentWorldState().getBeds().put(bed.getObjId(), bed);
 
         body.setToBed(true);
         body.setMoveTargetId(bed.getObjId());
@@ -219,7 +219,7 @@ class BedLogicTest {
         Bed bed = new Bed();
         bed.setX(5000);
         bed.setY(5000); // far away
-        SimYukkuri.world.getCurrentMap().getBed().put(bed.getObjId(), bed);
+        SimYukkuri.world.getCurrentWorldState().getBeds().put(bed.getObjId(), bed);
 
         body.setToBed(true);
         body.setMoveTargetId(bed.getObjId());
@@ -236,7 +236,7 @@ class BedLogicTest {
             Bed bed = new Bed();
             bed.setX(100);
             bed.setY(100);
-            SimYukkuri.world.getCurrentMap().getBed().put(bed.getObjId(), bed);
+            SimYukkuri.world.getCurrentWorldState().getBeds().put(bed.getObjId(), bed);
 
             body.setToBed(true);
             body.setMoveTargetId(bed.getObjId());
@@ -253,17 +253,17 @@ class BedLogicTest {
 
     @Test
     void testSearchBed_UnunSlave_withToilet_findsToilet() {
-        body.setPublicRank(PublicRank.UnunSlave);
+        body.setPublicRank(PublicRank.UNUN_SLAVE);
         org.simyukkuri.entity.core.world.item.Toilet toilet = new org.simyukkuri.entity.core.world.item.Toilet();
         toilet.setX(100);
         toilet.setY(100); // same position as body
-        SimYukkuri.world.getCurrentMap().getToilet().put(toilet.getObjId(), toilet);
+        SimYukkuri.world.getCurrentWorldState().getToilets().put(toilet.getObjId(), toilet);
         assertDoesNotThrow(() -> BedLogic.searchBed(body));
     }
 
     @Test
     void testSearchBed_UnunSlave_noToilet_returnsNull() {
-        body.setPublicRank(PublicRank.UnunSlave);
+        body.setPublicRank(PublicRank.UNUN_SLAVE);
         Entity result = BedLogic.searchBed(body);
         assertNull(result);
     }
@@ -275,7 +275,7 @@ class BedLogicTest {
         House house = new House();
         house.setX(100);
         house.setY(100); // same position as body
-        SimYukkuri.world.getCurrentMap().getHouse().put(house.getObjId(), house);
+        SimYukkuri.world.getCurrentWorldState().getHouses().put(house.getObjId(), house);
         assertDoesNotThrow(() -> BedLogic.searchBed(body));
     }
 
@@ -286,7 +286,7 @@ class BedLogicTest {
         House house = new House();
         house.setX(100);
         house.setY(100);
-        SimYukkuri.world.getCurrentMap().getHouse().put(house.getObjId(), house);
+        SimYukkuri.world.getCurrentWorldState().getHouses().put(house.getObjId(), house);
         body.setActivePeriodBase(0); // make isSleepy() return true
         assertDoesNotThrow(() -> BedLogic.checkBed(body));
     }
@@ -309,7 +309,7 @@ class BedLogicTest {
         tarinai.setY(100);
         tarinai.setObjId(org.simyukkuri.enums.Numbering.INSTANCE.numberingObjId());
         tarinai.setUniqueID(org.simyukkuri.enums.Numbering.INSTANCE.numberingYukkuriID());
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(tarinai.getObjId(), tarinai);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(tarinai.getObjId(), tarinai);
         // line 43: isIdiot()=true → return false
         assertFalse(BedLogic.checkBed(tarinai));
     }
@@ -380,7 +380,7 @@ class BedLogicTest {
     @Test
     void testCheckBed_isNYD_returnsFalse() {
         // NonYukkuriDiseaseNear makes isNYD()=true → line 58: return false
-        body.setCoreAnkoState(org.simyukkuri.enums.CoreAnkoState.NonYukkuriDiseaseNear);
+        body.setCoreAnkoState(org.simyukkuri.enums.CoreAnkoState.NON_YUKKURI_DISEASE_NEAR);
         assertFalse(BedLogic.checkBed(body));
     }
 
@@ -391,14 +391,14 @@ class BedLogicTest {
         Bed bed = new Bed();
         bed.setX(100);
         bed.setY(100); // same position as body → arrived
-        SimYukkuri.world.getCurrentMap().getBed().put(bed.getObjId(), bed);
+        SimYukkuri.world.getCurrentWorldState().getBeds().put(bed.getObjId(), bed);
         body.setToBed(true);
         body.setMoveTargetId(bed.getObjId());
         // Setup FOOD takeout at line 95: getCarryItem(FOOD) != null → dropTakeoutItem
         org.simyukkuri.entity.core.world.item.Food food = new org.simyukkuri.entity.core.world.item.Food(100, 100,
                 org.simyukkuri.entity.core.world.item.Food.FoodType.FOOD.ordinal());
         food.setAmount(100);
-        SimYukkuri.world.getCurrentMap().getTakenOutFood().put(food.getObjId(), food);
+        SimYukkuri.world.getCurrentWorldState().getTakenOutFoods().put(food.getObjId(), food);
         body.getCarryItems().put(org.simyukkuri.enums.TakeoutItemType.FOOD, food.getObjId());
         assertDoesNotThrow(() -> BedLogic.checkBed(body));
     }
@@ -413,7 +413,7 @@ class BedLogicTest {
         remirya.setY(100);
         remirya.setObjId(org.simyukkuri.enums.Numbering.INSTANCE.numberingObjId());
         remirya.setUniqueID(org.simyukkuri.enums.Numbering.INSTANCE.numberingYukkuriID());
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(remirya.getObjId(), remirya);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(remirya.getObjId(), remirya);
         // line 168-170: canflyCheck()=true → wallMode=AgeState.ADULT.ordinal()
         assertDoesNotThrow(() -> BedLogic.searchBed(remirya));
     }

@@ -20,7 +20,7 @@ public final class FoodFoundReaction {
 	}
 
 	public static boolean handleFoundFood(Yukkuri body, Entity targetObject, boolean[] forceEat) {
-		if (body.isOnlyAmaama() && body.getPublicRank() != PublicRank.UnunSlave) {
+		if (body.isOnlyAmaama() && body.getPublicRank() != PublicRank.UNUN_SLAVE) {
 			if (!body.isStarving()) {
 				if (targetObject instanceof Food) {
 					Food food = (Food) targetObject;
@@ -75,7 +75,7 @@ public final class FoodFoundReaction {
 				}
 			} else if (targetObject instanceof Shit) {
 				boolean takeOut = false;
-				if (body.getPublicRank() == PublicRank.UnunSlave && body.isToTakeout()) {
+				if (body.getPublicRank() == PublicRank.UNUN_SLAVE && body.isToTakeout()) {
 					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.TransportShit), false);
 					takeOut = true;
 				} else {

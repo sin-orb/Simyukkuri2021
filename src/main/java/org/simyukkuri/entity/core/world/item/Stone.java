@@ -6,12 +6,12 @@ import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
 
-import org.simyukkuri.draw.ModLoader;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Rectangle4y;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.world.WorldEntity;
-import org.simyukkuri.enums.CriticalDamegeType;
+import org.simyukkuri.enums.CriticalDamageType;
 import org.simyukkuri.enums.Type;
 import org.simyukkuri.enums.WorldEntityKind;
 import org.simyukkuri.util.GameWorld;
@@ -73,7 +73,7 @@ public class Stone extends WorldEntity {
 	public int objHitProcess(Entity targetObject) {
 		if (targetObject instanceof Yukkuri) {
 			Yukkuri body = (Yukkuri) targetObject;
-			if (body.getCriticalDamege() == CriticalDamegeType.CUT) {
+			if (body.getCriticalDamege() == CriticalDamageType.CUT) {
 				return 0;
 			}
 			if (body.isBaby())
@@ -87,8 +87,8 @@ public class Stone extends WorldEntity {
 	}
 
 	@Override
-	public void removeListData() {
-		GameWorld.get().getCurrentMap().getStone().remove(objId);
+	public void removeFromWorld() {
+		GameWorld.get().getCurrentWorldState().getStones().remove(objId);
 	}
 
 	@Override
@@ -112,17 +112,17 @@ public class Stone extends WorldEntity {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		GameWorld.get().getCurrentMap().getStone().put(objId, this);
+		GameWorld.get().getCurrentWorldState().getStones().put(objId, this);
 		objType = Type.OBJECT;
 		worldEntityType = WorldEntityKind.STONE;
 		interval = 5;
 		itemRank = ItemRank.values()[initOption];
-		if (GameWorld.get().getCurrentMap().getMapIndex() == 2 || GameWorld.get().getCurrentMap().getMapIndex() == 3
-				|| GameWorld.get().getCurrentMap().getMapIndex() == 4) {
+		if (GameWorld.get().getCurrentWorldState().getWorldIndex() == 2 || GameWorld.get().getCurrentWorldState().getWorldIndex() == 3
+				|| GameWorld.get().getCurrentWorldState().getWorldIndex() == 4) {
 			itemRank = ItemRank.NORA;
 		}
-		if (GameWorld.get().getCurrentMap().getMapIndex() == 5
-				|| GameWorld.get().getCurrentMap().getMapIndex() == 6) {
+		if (GameWorld.get().getCurrentWorldState().getWorldIndex() == 5
+				|| GameWorld.get().getCurrentWorldState().getWorldIndex() == 6) {
 			itemRank = ItemRank.YASEI;
 		}
 		if (itemRank == ItemRank.HOUSE) {

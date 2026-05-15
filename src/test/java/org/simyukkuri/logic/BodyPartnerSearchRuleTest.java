@@ -50,22 +50,22 @@ class BodyPartnerSearchRuleTest {
 		Yukkuri me = WorldTestHelper.createBody();
 		me.setX(40);
 		me.setY(40);
-		me.setOkazari(null);
+		me.setOkazaris(null);
 		me.setAttitude(Attitude.SUPER_SHITHEAD);
 
 		Yukkuri closer = WorldTestHelper.createBody();
 		closer.setX(50);
 		closer.setY(40);
-		closer.setOkazari(null);
+		closer.setOkazaris(null);
 
 		Yukkuri pheromone = WorldTestHelper.createBody();
 		pheromone.setX(70);
 		pheromone.setY(40);
 		pheromone.setPheromone(true);
 
-		SimYukkuri.world.getCurrentMap().getYukkuriMap().put(me.getUniqueID(), me);
-		SimYukkuri.world.getCurrentMap().getYukkuriMap().put(closer.getUniqueID(), closer);
-		SimYukkuri.world.getCurrentMap().getYukkuriMap().put(pheromone.getUniqueID(), pheromone);
+		SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(me.getUniqueID(), me);
+		SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(closer.getUniqueID(), closer);
+		SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(pheromone.getUniqueID(), pheromone);
 
 		YukkuriPartnerSearchRule.SearchResult result = YukkuriPartnerSearchRule.selectTargets(me, null, me.getEyesightBase(),
 				me.getEyesightBase());
@@ -78,15 +78,15 @@ class BodyPartnerSearchRuleTest {
 		Yukkuri me = WorldTestHelper.createBody();
 		me.setX(40);
 		me.setY(40);
-		me.setOkazari(null);
+		me.setOkazaris(null);
 		me.setAttitude(Attitude.SUPER_SHITHEAD);
 
 		Yukkuri target = WorldTestHelper.createBody();
 		target.setX(50);
 		target.setY(40);
 
-		SimYukkuri.world.getCurrentMap().getYukkuriMap().put(me.getUniqueID(), me);
-		SimYukkuri.world.getCurrentMap().getYukkuriMap().put(target.getUniqueID(), target);
+		SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(me.getUniqueID(), me);
+		SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(target.getUniqueID(), target);
 
 		YukkuriPartnerSearchRule.SearchResult result = YukkuriPartnerSearchRule.selectTargets(me, null, me.getEyesightBase(),
 				me.getEyesightBase());
@@ -99,22 +99,22 @@ class BodyPartnerSearchRuleTest {
 		Sakuya me = new Sakuya();
 		me.setX(40);
 		me.setY(40);
-		me.setOkazari(null);
+		me.setOkazaris(null);
 		me.setAttitude(Attitude.SUPER_SHITHEAD);
 
 		Remirya predator = new Remirya();
 		predator.setX(50);
 		predator.setY(40);
-		predator.setOkazari(null);
+		predator.setOkazaris(null);
 
 		Marisa normal = new Marisa();
 		normal.setX(140);
 		normal.setY(40);
-		normal.setOkazari(null);
+		normal.setOkazaris(null);
 
-		SimYukkuri.world.getCurrentMap().getYukkuriMap().put(me.getUniqueID(), me);
-		SimYukkuri.world.getCurrentMap().getYukkuriMap().put(predator.getUniqueID(), predator);
-		SimYukkuri.world.getCurrentMap().getYukkuriMap().put(normal.getUniqueID(), normal);
+		SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(me.getUniqueID(), me);
+		SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(predator.getUniqueID(), predator);
+		SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(normal.getUniqueID(), normal);
 
 		YukkuriPartnerSearchRule.SearchResult result = YukkuriPartnerSearchRule.selectTargets(me, null, me.getEyesightBase(),
 				me.getEyesightBase());

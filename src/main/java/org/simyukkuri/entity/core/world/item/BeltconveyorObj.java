@@ -27,7 +27,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import org.simyukkuri.SimYukkuri;
-import org.simyukkuri.draw.ModLoader;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Point4y;
 import org.simyukkuri.draw.Rectangle4y;
 import org.simyukkuri.draw.Translate;
@@ -43,7 +43,7 @@ import org.simyukkuri.enums.YukkuriType;
 import org.simyukkuri.field.impl.Barrier;
 import org.simyukkuri.field.impl.Beltconveyor;
 import org.simyukkuri.system.Cash;
-import org.simyukkuri.system.YukkuriFilterPanel;
+import org.simyukkuri.ui.YukkuriFilterPanel;
 import org.simyukkuri.util.GameText;
 import org.simyukkuri.util.GameView;
 import org.simyukkuri.util.GameWorld;
@@ -335,7 +335,7 @@ public class BeltconveyorObj extends WorldEntity {
 			}
 		}
 		if (o instanceof Yukkuri)
-			attr = Barrier.MAP_BODY[((Yukkuri) o).getAgeState().ordinal()];
+			attr = Barrier.BODY_BLOCK_FLAGS[((Yukkuri) o).getAgeState().ordinal()];
 		if (!Barrier.onBarrier(objX, objY, objW >> 1, objH >> 2, attr)) {
 			boolean shouldMove = true;
 			// 一体づつ流す設定の時
@@ -351,7 +351,7 @@ public class BeltconveyorObj extends WorldEntity {
 						}
 						int attrBind = 16;
 						if (oBind instanceof Yukkuri) {
-							attrBind = Barrier.MAP_BODY[((Yukkuri) oBind).getAgeState().ordinal()];
+							attrBind = Barrier.BODY_BLOCK_FLAGS[((Yukkuri) oBind).getAgeState().ordinal()];
 						}
 						// リスト上の優先データがフィールドにひかかっていないなら終了
 						if (!Barrier.onBarrier(oBind.getX(), oBind.getY(), oBind.getW() >> 1, oBind.getH() >> 2,
@@ -402,7 +402,7 @@ public class BeltconveyorObj extends WorldEntity {
 		return beltSpeed;
 	}
 
-	public void removeListData() {
+	public void removeFromWorld() {
 		if (bindObjList != null) {
 			for (Entity o : bindObjList) {
 				if (o == null) {
@@ -415,7 +415,7 @@ public class BeltconveyorObj extends WorldEntity {
 			bindObjList.clear();
 		}
 
-		GameWorld.get().getCurrentMap().getBeltconveyorObj().remove(objId);
+		GameWorld.get().getCurrentWorldState().getBeltconveyorObjects().remove(objId);
 	}
 
 	public boolean checkInterval(int cnt) {
@@ -440,7 +440,7 @@ public class BeltconveyorObj extends WorldEntity {
 		obOptionSelectionList.add(true);
 		obOptionSelectionList.add(false);
 
-		boolean setupSuccess = setBeltconveyor(this, false);
+		boolean setupSuccess = setBeltconveyors(this, false);
 		if (!setupSuccess) {
 			remove();
 			return;
@@ -449,7 +449,7 @@ public class BeltconveyorObj extends WorldEntity {
 		firstY = y;
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		GameWorld.get().getCurrentMap().getBeltconveyorObj().put(objId, this);
+		GameWorld.get().getCurrentWorldState().getBeltconveyorObjects().put(objId, this);
 		objType = Type.PLATFORM;
 		worldEntityType = WorldEntityKind.BELTCONVEYOR;
 		value = 3000;
@@ -461,7 +461,7 @@ public class BeltconveyorObj extends WorldEntity {
 	}
 
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public static boolean setBeltconveyor(BeltconveyorObj belt, boolean init) {
+	public static boolean setBeltconveyors(BeltconveyorObj belt, boolean init) {
 		String HOU_LIST[] = {
 				GameText.read("inside"),
 				GameText.read("outside"),
@@ -594,8 +594,8 @@ public class BeltconveyorObj extends WorldEntity {
 		belt.beltSpeed = speed + 1;
 		// ----------------------
 		if (!init) {
-			Point4y pS = Translate.getFieldLimitForMap(SimYukkuri.fieldSX, SimYukkuri.fieldSY);
-			Point4y pE = Translate.getFieldLimitForMap(SimYukkuri.fieldEX, SimYukkuri.fieldEY);
+			Point4y pS = Translate.getFieldLimitForWorld(SimYukkuri.fieldSX, SimYukkuri.fieldSY);
+			Point4y pE = Translate.getFieldLimitForWorld(SimYukkuri.fieldEX, SimYukkuri.fieldEY);
 			belt.fieldSX = pS.getX();
 			belt.fieldSY = pS.getY();
 			belt.fieldEX = pE.getX();
@@ -626,24 +626,24 @@ public class BeltconveyorObj extends WorldEntity {
 		filter = filterEnabled;
 	}
 
-	public List<YukkuriType> getYukkuriFilter() {
+	public List<YukkuriType> getSelectedYukkuriTypes() {
 		return selectedYukkuriType;
 	}
 
-	public void setYukkuriFilter(List<YukkuriType> arrayTemp) {
-		selectedYukkuriType = arrayTemp;
+	public void setSelectedYukkuriTypes(List<YukkuriType> selectedYukkuriTypes) {
+		selectedYukkuriType = selectedYukkuriTypes;
 	}
 
-	public List<String> getOptionFilter() {
+	public List<String> getOptionLabels() {
 		return istrOptionList;
 	}
 
-	public List<Boolean> getOptionResultFilter() {
+	public List<Boolean> getOptionSelections() {
 		return obOptionSelectionList;
 	}
 
-	public void setOptionResultFilter(List<Boolean> arrayTemp) {
-		obOptionSelectionList = arrayTemp;
+	public void setOptionSelections(List<Boolean> optionSelections) {
+		obOptionSelectionList = optionSelections;
 	}
 
 	public int getHou_before() {
@@ -702,28 +702,12 @@ public class BeltconveyorObj extends WorldEntity {
 		this.moveOnce = moveOnce;
 	}
 
-	public List<Entity> getBindObjList() {
+	public List<Entity> getBoundObjects() {
 		return bindObjList;
 	}
 
-	public void setBindObjList(List<Entity> bindObjList) {
-		this.bindObjList = bindObjList;
-	}
-
-	public List<YukkuriType> getSelectedYukkuriType() {
-		return selectedYukkuriType;
-	}
-
-	public void setSelectedYukkuriType(List<YukkuriType> selectedYukkuriType) {
-		this.selectedYukkuriType = selectedYukkuriType;
-	}
-
-	public List<Boolean> getObOptionSelectionList() {
-		return obOptionSelectionList;
-	}
-
-	public void setObOptionSelectionList(List<Boolean> obOptionSelectionList) {
-		this.obOptionSelectionList = obOptionSelectionList;
+	public void setBoundObjects(List<Entity> boundObjects) {
+		this.bindObjList = boundObjects;
 	}
 
 	public boolean isFilter() {
@@ -813,17 +797,17 @@ public class BeltconveyorObj extends WorldEntity {
 			}
 			switch (select) {
 				case YUKKURI_FILTER:
-					List<String> istrOptionList = master.getOptionFilter();
-					List<Boolean> obOptionSelectionList = master.getOptionResultFilter();
-					List<YukkuriType> arrayTemp = master.getYukkuriFilter();
+					List<String> istrOptionList = master.getOptionLabels();
+					List<Boolean> obOptionSelectionList = master.getOptionSelections();
+					List<YukkuriType> arrayTemp = master.getSelectedYukkuriTypes();
 					boolean filterEnabled = YukkuriFilterPanel.openFilterPanel(
 							GameText.read("item_targetsettings"),
 							GameText.read("item_explanation"),
 							istrOptionList, arrayTemp, obOptionSelectionList);
 					if (filterEnabled) {
 						master.setFilter(filterEnabled);
-						master.setYukkuriFilter(arrayTemp);
-						master.setOptionResultFilter(obOptionSelectionList);
+						master.setSelectedYukkuriTypes(arrayTemp);
+						master.setOptionSelections(obOptionSelectionList);
 					}
 				default:
 					break;

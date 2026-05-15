@@ -7,7 +7,7 @@ import java.util.List;
 import javax.swing.DefaultListModel;
 
 import org.simyukkuri.entity.core.Entity;
-import org.simyukkuri.system.MainCommandUI;
+import org.simyukkuri.ui.MainCommandUI;
 
 /*********************************************
  * 
@@ -70,12 +70,12 @@ public class Player extends Entity {
 	}
 
 	/**
-	 * アイテムリストを設定する.
+	 * 所持アイテム一覧を設定する.
 	 * 
-	 * @param list アイテムリスト
+	 * @param inventory 所持アイテム一覧
 	 */
-	public void setItemList(DefaultListModel<Entity> list) {
-		itemList = list;
+	public void setInventory(DefaultListModel<Entity> inventory) {
+		itemList = inventory;
 	}
 
 	public Entity getHoldItem() {
@@ -87,7 +87,7 @@ public class Player extends Entity {
 	}
 
 	@Transient
-	public DefaultListModel<Entity> getItemList() {
+	public DefaultListModel<Entity> getInventoryView() {
 		return itemList;
 	}
 

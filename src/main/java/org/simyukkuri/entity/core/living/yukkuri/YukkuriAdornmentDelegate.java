@@ -30,7 +30,7 @@ public final class YukkuriAdornmentDelegate {
 			return;
 		}
 
-		if (body.getOkazari() != null || body.isNoticeNoOkazari()) {
+		if (body.getOkazaris() != null || body.isNoticeNoOkazari()) {
 			return;
 		}
 
@@ -48,7 +48,7 @@ public final class YukkuriAdornmentDelegate {
 	 * @param takenByPlayer プレイヤーに取られたかどうか
 	 */
 	public void takeOkazari(boolean takenByPlayer) {
-		body.setOkazari(null);
+		body.setOkazaris(null);
 		if (body.isIdiot()) {
 			return;
 		}
@@ -72,12 +72,12 @@ public final class YukkuriAdornmentDelegate {
 	 * お飾りを落とす(未使用).
 	 */
 	public void dropOkazari() {
-		if (body.getOkazari() != null) {
-			body.getOkazari().setCalcX(body.getX());
-			body.getOkazari().setCalcY(body.getY());
-			body.getOkazari().setCalcZ(body.getZ() + 10);
-			org.simyukkuri.util.GameWorld.get().getCurrentMap().getOkazari().put(body.getOkazari().objId, body.getOkazari());
-			body.setOkazari(null);
+		if (body.getOkazaris() != null) {
+			body.getOkazaris().setCalcX(body.getX());
+			body.getOkazaris().setCalcY(body.getY());
+			body.getOkazaris().setCalcZ(body.getZ() + 10);
+			org.simyukkuri.util.GameWorld.get().getCurrentWorldState().getOkazaris().put(body.getOkazaris().objId, body.getOkazaris());
+			body.setOkazaris(null);
 		}
 	}
 
@@ -87,10 +87,10 @@ public final class YukkuriAdornmentDelegate {
 	 * @param type お飾りのタイプ
 	 */
 	public void giveOkazari(OkazariType type) {
-		body.setOkazari(new Okazari(body, type));
+		body.setOkazaris(new Okazari(body, type));
 		body.setNoticeNoOkazari(false);
 		if (!body.isDead() && !body.isIdiot()) {
-			if (body.getOkazari().getOkazariType() == OkazariType.DEFAULT) {
+			if (body.getOkazaris().getOkazariType() == OkazariType.DEFAULT) {
 				body.setHappiness(Happiness.VERY_HAPPY);
 				body.addStress(-1250);
 				body.addLovePlayer(10);

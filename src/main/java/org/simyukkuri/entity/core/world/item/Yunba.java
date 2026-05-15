@@ -23,7 +23,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
-import org.simyukkuri.draw.ModLoader;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Rectangle4y;
 import org.simyukkuri.draw.Translate;
 import org.simyukkuri.entity.core.Entity;
@@ -34,13 +34,13 @@ import org.simyukkuri.entity.core.world.bodylinked.Stalk;
 import org.simyukkuri.entity.core.world.mobile.Shit;
 import org.simyukkuri.entity.core.world.mobile.Vomit;
 import org.simyukkuri.enums.Attitude;
-import org.simyukkuri.enums.Event;
+import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.enums.Intelligence;
 import org.simyukkuri.enums.Type;
 import org.simyukkuri.enums.WorldEntityKind;
 import org.simyukkuri.field.impl.Barrier;
 import org.simyukkuri.system.Cash;
-import org.simyukkuri.system.MapPlaceData;
+import org.simyukkuri.system.WorldState;
 import org.simyukkuri.util.GameLocale;
 import org.simyukkuri.util.GameRandom;
 import org.simyukkuri.util.GameText;
@@ -237,24 +237,24 @@ public class Yunba extends WorldEntity {
 	}
 
 	@Override
-	public void removeListData() {
-		GameWorld.get().getCurrentMap().getYunba().remove(objId);
+	public void removeFromWorld() {
+		GameWorld.get().getCurrentWorldState().getYunbas().remove(objId);
 	}
 
 	@Override
-	public Event clockTick() {
+	public TickResult clockTick() {
 		setAge(getAge() + TICK);
 		if (isRemoved()) {
 			action = null;
 			target = null;
-			removeListData();
-			return Event.REMOVED;
+			removeFromWorld();
+			return TickResult.REMOVED;
 		}
 		upDate();
 		if (grabbed) {
 			action = null;
 			target = null;
-			return Event.DONOTHING;
+			return TickResult.NONE;
 		}
 
 		if (getZ() > 0) {
@@ -263,11 +263,11 @@ public class Yunba extends WorldEntity {
 				z = 0;
 			action = null;
 			target = null;
-			return Event.DONOTHING;
+			return TickResult.NONE;
 		}
 
 		if (action == null && (getAge() > 10 || norndCheck)) { // 追加
-			MapPlaceData curMap = GameWorld.get().getCurrentMap();
+			WorldState curMap = GameWorld.get().getCurrentWorldState();
 			setAge(0);
 
 			if (shitCheck) {
@@ -277,18 +277,18 @@ public class Yunba extends WorldEntity {
 						continue;
 					// 追加
 					if (!actionFlags[Action.WALLTHROUGH.ordinal()][0]
-							&& Barrier.acrossBarrier(getX(), getY(), o.getX(), o.getY(), Barrier.MAP_ITEM)) {
+							&& Barrier.acrossBarrier(getX(), getY(), o.getX(), o.getY(), Barrier.ITEM_BLOCK_FLAG)) {
 						continue;
 					}
 					// 追加
 					if (!actionFlags[Action.WALLTHROUGH.ordinal()][0]
-							&& Barrier.acrossBarrier(getX(), getY(), o.getX(), o.getY(), Barrier.MAP_NOUNUN)) {
+							&& Barrier.acrossBarrier(getX(), getY(), o.getX(), o.getY(), Barrier.NO_UNUN_BLOCK_FLAG)) {
 						continue;
 					}
 
 					boolean shitOnToilet = false;
 					// トイレの上のうんうんは無視。空中もチェック
-					List<Toilet> toiletList = new LinkedList<>(GameWorld.get().getCurrentMap().getToilet().values());
+					List<Toilet> toiletList = new LinkedList<>(GameWorld.get().getCurrentWorldState().getToilets().values());
 					for (Toilet t : toiletList) {
 						// Hitするなら終了
 						if (t.checkHitObj(o, true)) {
@@ -317,12 +317,12 @@ public class Yunba extends WorldEntity {
 						continue;
 					// 追加
 					if (!actionFlags[Action.WALLTHROUGH.ordinal()][0]
-							&& Barrier.acrossBarrier(getX(), getY(), o.getX(), o.getY(), Barrier.MAP_ITEM)) {
+							&& Barrier.acrossBarrier(getX(), getY(), o.getX(), o.getY(), Barrier.ITEM_BLOCK_FLAG)) {
 						continue;
 					}
 					// 追加
 					if (!actionFlags[Action.WALLTHROUGH.ordinal()][0]
-							&& Barrier.acrossBarrier(getX(), getY(), o.getX(), o.getY(), Barrier.MAP_NOUNUN)) {
+							&& Barrier.acrossBarrier(getX(), getY(), o.getX(), o.getY(), Barrier.NO_UNUN_BLOCK_FLAG)) {
 						continue;
 					}
 
@@ -338,20 +338,20 @@ public class Yunba extends WorldEntity {
 				}
 			}
 			if (stalkCheck && action == null) { // 追加
-				if (curMap.getStalk() != null) {
-					for (Map.Entry<Integer, Stalk> entry : curMap.getStalk().entrySet()) {
+				if (curMap.getStalks() != null) {
+					for (Map.Entry<Integer, Stalk> entry : curMap.getStalks().entrySet()) {
 						Stalk s = entry.getValue();
 						if (norndCheck == false && GameRandom.nextBoolean())
 							continue;
 						int id = s.getPlantYukkuri();
-						if (GameWorld.get().getCurrentMap().getYukkuriMap().get(id) != null)
+						if (GameWorld.get().getCurrentWorldState().getYukkuriRegistry().get(id) != null)
 							continue;
 						if (!actionFlags[Action.WALLTHROUGH.ordinal()][0]
-								&& Barrier.acrossBarrier(getX(), getY(), s.getX(), s.getY(), Barrier.MAP_ITEM)) {
+								&& Barrier.acrossBarrier(getX(), getY(), s.getX(), s.getY(), Barrier.ITEM_BLOCK_FLAG)) {
 							continue;
 						}
 						if (!actionFlags[Action.WALLTHROUGH.ordinal()][0]
-								&& Barrier.acrossBarrier(getX(), getY(), s.getX(), s.getY(), Barrier.MAP_NOUNUN)) {
+								&& Barrier.acrossBarrier(getX(), getY(), s.getX(), s.getY(), Barrier.NO_UNUN_BLOCK_FLAG)) {
 							continue;
 						}
 
@@ -367,19 +367,19 @@ public class Yunba extends WorldEntity {
 					}
 				}
 
-				if (curMap.getFood() != null) {
-					for (Map.Entry<Integer, Food> entry : curMap.getFood().entrySet()) {
+				if (curMap.getFoods() != null) {
+					for (Map.Entry<Integer, Food> entry : curMap.getFoods().entrySet()) {
 						Food f = entry.getValue();
 						if (f.getFoodType() != Food.FoodType.STALK)
 							continue;
 						if (GameRandom.nextBoolean())
 							continue;
 						if (!actionFlags[Action.WALLTHROUGH.ordinal()][0]
-								&& Barrier.acrossBarrier(getX(), getY(), f.getX(), f.getY(), Barrier.MAP_ITEM)) {
+								&& Barrier.acrossBarrier(getX(), getY(), f.getX(), f.getY(), Barrier.ITEM_BLOCK_FLAG)) {
 							continue;
 						}
 						if (!actionFlags[Action.WALLTHROUGH.ordinal()][0]
-								&& Barrier.acrossBarrier(getX(), getY(), f.getX(), f.getY(), Barrier.MAP_NOUNUN)) {
+								&& Barrier.acrossBarrier(getX(), getY(), f.getX(), f.getY(), Barrier.NO_UNUN_BLOCK_FLAG)) {
 							continue;
 						}
 
@@ -396,7 +396,7 @@ public class Yunba extends WorldEntity {
 			}
 
 			if (bodyCheck && action == null) {
-				for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getYukkuriMap().entrySet()) {
+				for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentWorldState().getYukkuriRegistry().entrySet()) {
 					Yukkuri b = entry.getValue();
 					if (norndCheck == false && GameRandom.nextBoolean())
 						continue;
@@ -406,12 +406,12 @@ public class Yunba extends WorldEntity {
 
 					// 追加
 					if (!actionFlags[Action.WALLTHROUGH.ordinal()][0]
-							&& Barrier.acrossBarrier(getX(), getY(), b.getX(), b.getY(), Barrier.MAP_ITEM)) {
+							&& Barrier.acrossBarrier(getX(), getY(), b.getX(), b.getY(), Barrier.ITEM_BLOCK_FLAG)) {
 						continue;
 					}
 					// 追加
 					if (!actionFlags[Action.WALLTHROUGH.ordinal()][0]
-							&& Barrier.acrossBarrier(getX(), getY(), b.getX(), b.getY(), Barrier.MAP_NOUNUN)) {
+							&& Barrier.acrossBarrier(getX(), getY(), b.getX(), b.getY(), Barrier.NO_UNUN_BLOCK_FLAG)) {
 						continue;
 					}
 
@@ -541,7 +541,7 @@ public class Yunba extends WorldEntity {
 							action = Action.RUDE;
 							target = b;
 							break;
-						} else if (b.hasOkazari() && (b.getOkazari().getOkazariType() == OkazariType.DEFAULT)
+						} else if (b.hasOkazari() && (b.getOkazaris().getOkazariType() == OkazariType.DEFAULT)
 								&& actionFlags[Action.OKAZARI.ordinal()][b.getAgeState().ordinal()]) {
 
 							// 他のゆんばのターゲットならスキップ
@@ -583,18 +583,18 @@ public class Yunba extends WorldEntity {
 
 			// 空の餌皿掃除
 			if (foodCheck && action == null) {
-				for (Map.Entry<Integer, Food> entry : curMap.getFood().entrySet()) {
+				for (Map.Entry<Integer, Food> entry : curMap.getFoods().entrySet()) {
 					Food f = entry.getValue();
 					if (GameRandom.nextBoolean())
 						continue;
 					if (!f.isEmpty())
 						continue;
 					if (!actionFlags[Action.WALLTHROUGH.ordinal()][0]
-							&& Barrier.acrossBarrier(getX(), getY(), f.getX(), f.getY(), Barrier.MAP_ITEM)) {
+							&& Barrier.acrossBarrier(getX(), getY(), f.getX(), f.getY(), Barrier.ITEM_BLOCK_FLAG)) {
 						continue;
 					}
 					if (!actionFlags[Action.WALLTHROUGH.ordinal()][0]
-							&& Barrier.acrossBarrier(getX(), getY(), f.getX(), f.getY(), Barrier.MAP_NOUNUN)) {
+							&& Barrier.acrossBarrier(getX(), getY(), f.getX(), f.getY(), Barrier.NO_UNUN_BLOCK_FLAG)) {
 						continue;
 					}
 
@@ -612,8 +612,8 @@ public class Yunba extends WorldEntity {
 			if (action == null) {
 				if (destX == -1 && destY == -1) {
 					moveTo(defaultX, defaultY);
-					// moveTo(GameRandom.nextInt(Translate.getMapW()),
-					// GameRandom.nextInt(Translate.getMapH()));
+					// moveTo(GameRandom.nextInt(Translate.getWorldWidth()),
+					// GameRandom.nextInt(Translate.getWorldHeight()));
 					speed = 400;
 				}
 			} else {
@@ -635,15 +635,15 @@ public class Yunba extends WorldEntity {
 			// 目的地到着
 			if ((destX == -1 && destY == -1) || nearTarget) {
 				if (action == null || target == null)
-					return Event.DONOTHING;
+					return TickResult.NONE;
 				if (target.isRemoved() || target.getZ() > 0) {
 					action = null;
 					target = null;
-					return Event.DONOTHING;
+					return TickResult.NONE;
 				}
 				if (!nearTarget) {
 					moveTo(target.getX(), target.getY());
-					return Event.DONOTHING;
+					return TickResult.NONE;
 				}
 
 				switch (action) {
@@ -710,24 +710,24 @@ public class Yunba extends WorldEntity {
 					// 対象が壁の向こうに移動したらリセット
 					// 追加
 					if (!actionFlags[Action.WALLTHROUGH.ordinal()][0]
-							&& Barrier.acrossBarrier(getX(), getY(), target.getX(), target.getY(), Barrier.MAP_ITEM)) {
+							&& Barrier.acrossBarrier(getX(), getY(), target.getX(), target.getY(), Barrier.ITEM_BLOCK_FLAG)) {
 
 						action = null;
 						target = null;
-						return Event.DONOTHING;
+						return TickResult.NONE;
 					}
 					// 追加
 					if (!actionFlags[Action.WALLTHROUGH.ordinal()][0] && Barrier.acrossBarrier(getX(), getY(),
-							target.getX(), target.getY(), Barrier.MAP_NOUNUN)) {
+							target.getX(), target.getY(), Barrier.NO_UNUN_BLOCK_FLAG)) {
 
 						action = null;
 						target = null;
-						return Event.DONOTHING;
+						return TickResult.NONE;
 					}
 				}
 			}
 		}
-		return Event.DONOTHING;
+		return TickResult.NONE;
 	}
 
 	private int distance(int x1, int y1, int x2, int y2) {
@@ -735,8 +735,8 @@ public class Yunba extends WorldEntity {
 	}
 
 	private void moveTo(int toX, int toY) {
-		destX = Math.max(-10, Math.min(toX, Translate.getMapW() + 10));
-		destY = Math.max(-10, Math.min(toY, Translate.getMapH() + 10));
+		destX = Math.max(-10, Math.min(toX, Translate.getWorldWidth() + 10));
+		destY = Math.max(-10, Math.min(toY, Translate.getWorldHeight() + 10));
 	}
 
 	private int decideDirection(int curPos, int destPos, int range) {
@@ -773,7 +773,7 @@ public class Yunba extends WorldEntity {
 		x += vecX;
 		y += vecY;
 		if (!actionFlags[Action.WALLTHROUGH.ordinal()][0]
-				&& Barrier.onBarrier(x, y, getW() >> 2, getH() >> 2, Barrier.MAP_ITEM)) {
+				&& Barrier.onBarrier(x, y, getW() >> 2, getH() >> 2, Barrier.ITEM_BLOCK_FLAG)) {
 			// 壁付近は半分の速度で動く 2015/05/25
 			x -= vecX / 2;
 			y -= vecY / 2;
@@ -781,7 +781,7 @@ public class Yunba extends WorldEntity {
 			return;
 		}
 		if (!actionFlags[Action.WALLTHROUGH.ordinal()][0]
-				&& Barrier.onBarrier(x, y, getW() >> 2, getH() >> 2, Barrier.MAP_NOUNUN)) {
+				&& Barrier.onBarrier(x, y, getW() >> 2, getH() >> 2, Barrier.NO_UNUN_BLOCK_FLAG)) {
 			// 壁付近は半分の速度で動く 2015/05/25
 			x -= vecX / 2;
 			y -= vecY / 2;
@@ -798,8 +798,8 @@ public class Yunba extends WorldEntity {
 		if (vecY > 0 && y > destY)
 			y = destY;
 
-		int maxX = Translate.getMapW();
-		int maxY = Translate.getMapH();
+		int maxX = Translate.getWorldWidth();
+		int maxY = Translate.getWorldHeight();
 
 		if (x < 0) {
 			x = 0;
@@ -835,7 +835,7 @@ public class Yunba extends WorldEntity {
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
 
-		GameWorld.get().getCurrentMap().getYunba().put(objId, this);
+		GameWorld.get().getCurrentWorldState().getYunbas().put(objId, this);
 		objType = Type.OBJECT;
 		worldEntityType = WorldEntityKind.YUNBA;
 		interval = 5;
@@ -848,17 +848,17 @@ public class Yunba extends WorldEntity {
 
 		boolean ret = setupYunba(this, false);
 		if (ret) {
-			moveTo(GameRandom.nextInt(Translate.getMapW()), GameRandom.nextInt(Translate.getMapH()));
+			moveTo(GameRandom.nextInt(Translate.getWorldWidth()), GameRandom.nextInt(Translate.getWorldHeight()));
 			itemRank = ItemRank.values()[initOption];
 			// 森なら野生に変更
-			if (GameWorld.get().getCurrentMap().getMapIndex() == 5
-					|| GameWorld.get().getCurrentMap().getMapIndex() == 6) {
+			if (GameWorld.get().getCurrentWorldState().getWorldIndex() == 5
+					|| GameWorld.get().getCurrentWorldState().getWorldIndex() == 6) {
 				if (itemRank == ItemRank.HOUSE) {
 					itemRank = ItemRank.YASEI;
 				}
 			}
 		} else {
-			GameWorld.get().getCurrentMap().getYunba().remove(objId);
+			GameWorld.get().getCurrentWorldState().getYunbas().remove(objId);
 		}
 	}
 
@@ -1198,7 +1198,7 @@ public class Yunba extends WorldEntity {
 
 	// 他のゆんばのターゲットになっているか
 	public boolean cheackOtherYunbaTarget(Entity o) {
-		for (Map.Entry<Integer, Yunba> entry : GameWorld.get().getCurrentMap().getYunba().entrySet()) {
+		for (Map.Entry<Integer, Yunba> entry : GameWorld.get().getCurrentWorldState().getYunbas().entrySet()) {
 			Yunba yunba = entry.getValue();
 			if (yunba == this) {
 				continue;

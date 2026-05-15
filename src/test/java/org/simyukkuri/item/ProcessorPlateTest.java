@@ -37,7 +37,7 @@ class ProcessorPlateTest extends ItemTestBase {
         Yukkuri body = new Reimu();
         body.setObjId(Numbering.INSTANCE.numberingObjId());
         body.setUniqueID(Numbering.INSTANCE.numberingYukkuriID());
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(body.getUniqueID(), body);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(body.getUniqueID(), body);
         return body;
     }
 
@@ -45,9 +45,9 @@ class ProcessorPlateTest extends ItemTestBase {
     void testConstructor_Default() {
         ProcessorPlate item = new ProcessorPlate();
         item.setObjId(1);
-        SimYukkuri.world.getCurrentMap().getProcessorPlate().put(item.getObjId(), item);
+        SimYukkuri.world.getCurrentWorldState().getProcessorPlates().put(item.getObjId(), item);
         verifyCommonProperties(item);
-        assertTrue(SimYukkuri.world.getCurrentMap().getProcessorPlate().containsKey(item.getObjId()));
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getProcessorPlates().containsKey(item.getObjId()));
     }
 
     @Test
@@ -108,8 +108,8 @@ class ProcessorPlateTest extends ItemTestBase {
     void testGetSetProcessedBodyList() {
         ProcessorPlate item = new ProcessorPlate();
         List<Yukkuri> list = new LinkedList<>();
-        item.setProcessedYukkuriList(list);
-        assertEquals(list, item.getProcessedYukkuriList());
+        item.setActiveBodies(list);
+        assertEquals(list, item.getActiveBodies());
     }
 
     @Test
@@ -171,33 +171,33 @@ class ProcessorPlateTest extends ItemTestBase {
     void testRemoveListData_EmptyLists() {
         ProcessorPlate item = new ProcessorPlate();
         item.setObjId(66);
-        SimYukkuri.world.getCurrentMap().getProcessorPlate().put(item.getObjId(), item);
-        item.removeListData();
-        assertFalse(SimYukkuri.world.getCurrentMap().getProcessorPlate().containsKey(item.getObjId()));
+        SimYukkuri.world.getCurrentWorldState().getProcessorPlates().put(item.getObjId(), item);
+        item.removeFromWorld();
+        assertFalse(SimYukkuri.world.getCurrentWorldState().getProcessorPlates().containsKey(item.getObjId()));
     }
 
     @Test
     void testRemoveListData_WithBody() {
         ProcessorPlate item = new ProcessorPlate();
         item.setObjId(67);
-        SimYukkuri.world.getCurrentMap().getProcessorPlate().put(item.getObjId(), item);
+        SimYukkuri.world.getCurrentWorldState().getProcessorPlates().put(item.getObjId(), item);
 
         Yukkuri body = WorldTestHelper.createBody();
         body.setLockmove(true);
-        item.getProcessedYukkuriList().add(body);
-        item.getProcessedYukkuriEffectList().add(null); // null effect
+        item.getActiveBodies().add(body);
+        item.getActiveEffects().add(null); // null effect
 
-        item.removeListData();
+        item.removeFromWorld();
         assertFalse(body.isLockmove());
-        assertTrue(item.getProcessedYukkuriList().isEmpty());
+        assertTrue(item.getActiveBodies().isEmpty());
     }
 
     @Test
     void testGetSetProcessedBodyEffectList() {
         ProcessorPlate item = new ProcessorPlate();
         List<org.simyukkuri.entity.core.effect.Effect> list = new LinkedList<>();
-        item.setProcessedYukkuriEffectList(list);
-        assertEquals(list, item.getProcessedYukkuriEffectList());
+        item.setActiveEffects(list);
+        assertEquals(list, item.getActiveEffects());
     }
 
     @Test
@@ -212,10 +212,10 @@ class ProcessorPlateTest extends ItemTestBase {
         ProcessorPlate item = new ProcessorPlate();
         item.setEnabled(false);
         Yukkuri body = WorldTestHelper.createBody();
-        item.getProcessedYukkuriList().add(body);
-        item.getProcessedYukkuriEffectList().add(null);
+        item.getActiveBodies().add(body);
+        item.getActiveEffects().add(null);
         assertDoesNotThrow(() -> item.upDate());
-        assertTrue(item.getProcessedYukkuriList().isEmpty());
+        assertTrue(item.getActiveBodies().isEmpty());
     }
 
     @Test
@@ -233,10 +233,10 @@ class ProcessorPlateTest extends ItemTestBase {
         item.setEnumProcessType(ProcessorPlate.ProcessType.PAIN);
         Yukkuri body = WorldTestHelper.createBody();
         body.remove();
-        item.getProcessedYukkuriList().add(body);
-        item.getProcessedYukkuriEffectList().add(null);
+        item.getActiveBodies().add(body);
+        item.getActiveEffects().add(null);
         assertDoesNotThrow(() -> item.upDate());
-        assertTrue(item.getProcessedYukkuriList().isEmpty());
+        assertTrue(item.getActiveBodies().isEmpty());
     }
 
     @Test
@@ -375,8 +375,8 @@ class ProcessorPlateTest extends ItemTestBase {
         item.setEnumProcessType(ProcessorPlate.ProcessType.HOTPLATE_MIN);
         Yukkuri body = WorldTestHelper.createBody();
         // body is alive, z=0, not removed
-        item.getProcessedYukkuriList().add(body);
-        item.getProcessedYukkuriEffectList().add(null);
+        item.getActiveBodies().add(body);
+        item.getActiveEffects().add(null);
         assertDoesNotThrow(() -> item.upDate());
     }
 
@@ -388,8 +388,8 @@ class ProcessorPlateTest extends ItemTestBase {
         item.setEnabled(true);
         item.setEnumProcessType(ProcessorPlate.ProcessType.PAIN);
         Yukkuri body = WorldTestHelper.createBody();
-        item.getProcessedYukkuriList().add(body);
-        item.getProcessedYukkuriEffectList().add(null);
+        item.getActiveBodies().add(body);
+        item.getActiveEffects().add(null);
         assertDoesNotThrow(() -> item.upDate());
     }
 
@@ -401,8 +401,8 @@ class ProcessorPlateTest extends ItemTestBase {
         item.setEnabled(true);
         item.setEnumProcessType(ProcessorPlate.ProcessType.PEALING);
         Yukkuri body = WorldTestHelper.createBody();
-        item.getProcessedYukkuriList().add(body);
-        item.getProcessedYukkuriEffectList().add(null);
+        item.getActiveBodies().add(body);
+        item.getActiveEffects().add(null);
         assertDoesNotThrow(() -> item.upDate());
     }
 
@@ -415,10 +415,10 @@ class ProcessorPlateTest extends ItemTestBase {
         item.setEnumProcessType(ProcessorPlate.ProcessType.PAIN);
         Yukkuri body = WorldTestHelper.createBody();
         body.setZ(10);
-        item.getProcessedYukkuriList().add(body);
-        item.getProcessedYukkuriEffectList().add(null);
+        item.getActiveBodies().add(body);
+        item.getActiveEffects().add(null);
         assertDoesNotThrow(() -> item.upDate());
-        assertTrue(item.getProcessedYukkuriList().isEmpty());
+        assertTrue(item.getActiveBodies().isEmpty());
     }
 
     // --- objHitProcess: live body not yet in list ---
@@ -431,7 +431,7 @@ class ProcessorPlateTest extends ItemTestBase {
         Yukkuri body = WorldTestHelper.createBody();
         int result = item.objHitProcess(body);
         assertEquals(1, result);
-        assertTrue(item.getProcessedYukkuriList().contains(body));
+        assertTrue(item.getActiveBodies().contains(body));
     }
 
     // --- objHitProcess: live body already in list ---
@@ -442,8 +442,8 @@ class ProcessorPlateTest extends ItemTestBase {
         item.setEnabled(true);
         item.setEnumProcessType(ProcessorPlate.ProcessType.PAIN);
         Yukkuri body = WorldTestHelper.createBody();
-        item.getProcessedYukkuriList().add(body);
-        item.getProcessedYukkuriEffectList().add(null);
+        item.getActiveBodies().add(body);
+        item.getActiveEffects().add(null);
         int result = item.objHitProcess(body);
         assertEquals(1, result);
     }
@@ -456,10 +456,10 @@ class ProcessorPlateTest extends ItemTestBase {
         item.setEnabled(false);
         item.setEnumProcessType(ProcessorPlate.ProcessType.PAIN);
         Yukkuri body = WorldTestHelper.createBody();
-        item.getProcessedYukkuriList().add(body);
-        item.getProcessedYukkuriEffectList().add(null);
+        item.getActiveBodies().add(body);
+        item.getActiveEffects().add(null);
         assertDoesNotThrow(() -> item.upDate());
-        assertTrue(item.getProcessedYukkuriList().isEmpty());
+        assertTrue(item.getActiveBodies().isEmpty());
     }
 
     @Nested
@@ -477,8 +477,8 @@ class ProcessorPlateTest extends ItemTestBase {
             int damageBefore = body.getDamage();
             int stressBefore = body.getStress();
 
-            item.getProcessedYukkuriList().add(body);
-            item.getProcessedYukkuriEffectList().add(null);
+            item.getActiveBodies().add(body);
+            item.getActiveEffects().add(null);
 
             item.upDate();
 
@@ -488,7 +488,7 @@ class ProcessorPlateTest extends ItemTestBase {
             assertEquals(stressBefore + 30, body.getStress());
             assertEquals(Happiness.VERY_SAD, body.getHappiness());
             assertEquals(ImageCode.PAIN.ordinal(), body.getForceFace());
-            assertTrue(item.getProcessedYukkuriList().contains(body));
+            assertTrue(item.getActiveBodies().contains(body));
         }
 
         @Test
@@ -499,11 +499,11 @@ class ProcessorPlateTest extends ItemTestBase {
 
             Yukkuri body = createReimuBody();
             body.setSleeping(true);
-            body.setOkazari(null);
+            body.setOkazaris(null);
             body.setHasBraid(false);
 
-            item.getProcessedYukkuriList().add(body);
-            item.getProcessedYukkuriEffectList().add(null);
+            item.getActiveBodies().add(body);
+            item.getActiveEffects().add(null);
 
             item.upDate();
 
@@ -519,14 +519,14 @@ class ProcessorPlateTest extends ItemTestBase {
             item.setEnumProcessType(ProcessorPlate.ProcessType.PACKING);
 
             Yukkuri body = createReimuBody();
-            body.setOkazari(null);
+            body.setOkazaris(null);
             body.setHasBraid(false);
             body.setBlind(true);
             body.setShutmouth(true);
             body.setHairState(HairState.BALDHEAD);
 
-            item.getProcessedYukkuriList().add(body);
-            item.getProcessedYukkuriEffectList().add(null);
+            item.getActiveBodies().add(body);
+            item.getActiveEffects().add(null);
 
             item.upDate();
 

@@ -39,7 +39,7 @@ public class SuiRideEventTest extends EventTestBase {
     private Sui createSui(int objId) {
         Sui s = new Sui();
         s.setObjId(objId);
-        SimYukkuri.world.getCurrentMap().getSui().put(objId, s);
+        SimYukkuri.world.getCurrentWorldState().getSuis().put(objId, s);
         return s;
     }
 
@@ -255,7 +255,7 @@ public class SuiRideEventTest extends EventTestBase {
         from.setCurrentEvent(event);
         from.setPartner(b.getUniqueID());
         b.setPartner(from.getUniqueID());
-        b.setPublicRank(PublicRank.UnunSlave);
+        b.setPublicRank(PublicRank.UNUN_SLAVE);
         assertFalse(event.checkEventResponse(b));
     }
 
@@ -569,7 +569,7 @@ public class SuiRideEventTest extends EventTestBase {
             owner.setCurrentEvent(event);
             owner.setPartner(partner.getUniqueID());
             partner.setPartner(owner.getUniqueID());
-            partner.setPublicRank(PublicRank.UnunSlave);
+            partner.setPublicRank(PublicRank.UNUN_SLAVE);
 
             assertFalse(event.checkEventResponse(partner));
 

@@ -42,8 +42,8 @@ public class BodyWakeupRuleTest {
 		me.setY(10);
 		you.setX(200);
 		you.setY(200);
-		SimYukkuri.world.getCurrentMap().getYukkuriMap().put(me.getUniqueID(), me);
-		SimYukkuri.world.getCurrentMap().getYukkuriMap().put(you.getUniqueID(), you);
+		SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(me.getUniqueID(), me);
+		SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(you.getUniqueID(), you);
 
 		assertTrue(YukkuriWakeupRule.checkWakeupOtherYukkuri(me));
 	}
@@ -58,8 +58,8 @@ public class BodyWakeupRuleTest {
 		you.setX(200);
 		you.setY(200);
 		you.setSleeping(true);
-		SimYukkuri.world.getCurrentMap().getYukkuriMap().put(me.getUniqueID(), me);
-		SimYukkuri.world.getCurrentMap().getYukkuriMap().put(you.getUniqueID(), you);
+		SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(me.getUniqueID(), me);
+		SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(you.getUniqueID(), you);
 
 		assertFalse(YukkuriWakeupRule.checkWakeupOtherYukkuri(me));
 	}

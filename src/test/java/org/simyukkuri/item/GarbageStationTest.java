@@ -37,9 +37,9 @@ class GarbageStationTest extends ItemTestBase {
     void testConstructor_Default() {
         GarbageStation item = new GarbageStation();
         item.setObjId(1);
-        SimYukkuri.world.getCurrentMap().getGarbageStation().put(item.getObjId(), item);
+        SimYukkuri.world.getCurrentWorldState().getGarbageStations().put(item.getObjId(), item);
         verifyCommonProperties(item);
-        assertTrue(SimYukkuri.world.getCurrentMap().getGarbageStation().containsKey(item.getObjId()));
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getGarbageStations().containsKey(item.getObjId()));
     }
 
     // --- GomiType enum ---
@@ -143,10 +143,10 @@ class GarbageStationTest extends ItemTestBase {
     void testRemoveListData() {
         GarbageStation item = new GarbageStation();
         item.setObjId(42);
-        SimYukkuri.world.getCurrentMap().getGarbageStation().put(42, item);
-        assertTrue(SimYukkuri.world.getCurrentMap().getGarbageStation().containsKey(42));
-        item.removeListData();
-        assertFalse(SimYukkuri.world.getCurrentMap().getGarbageStation().containsKey(42));
+        SimYukkuri.world.getCurrentWorldState().getGarbageStations().put(42, item);
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getGarbageStations().containsKey(42));
+        item.removeFromWorld();
+        assertFalse(SimYukkuri.world.getCurrentWorldState().getGarbageStations().containsKey(42));
     }
 
     // --- getters/setters ---
@@ -163,8 +163,8 @@ class GarbageStationTest extends ItemTestBase {
     void testGetSetFood() {
         GarbageStation item = new GarbageStation();
         Entity[] food = new Entity[2];
-        item.setFood(food);
-        assertArrayEquals(food, item.getFood());
+        item.setFoods(food);
+        assertArrayEquals(food, item.getFoods());
     }
 
     @Test
@@ -209,7 +209,7 @@ class GarbageStationTest extends ItemTestBase {
         GarbageStation item = new GarbageStation();
         item.setEnabled(true);
         item.setEnable(new boolean[GomiType.values().length]);
-        item.setFood(new Entity[2]);
+        item.setFoods(new Entity[2]);
         assertDoesNotThrow(() -> item.upDate());
     }
 
@@ -369,21 +369,21 @@ class GarbageStationTest extends ItemTestBase {
             item.setThrowingTime(0);
             item.setGettingP(1);
             item.setEnable(new boolean[GomiType.values().length]);
-            item.setFood(new Entity[2]);
+            item.setFoods(new Entity[2]);
             item.getEnable()[GomiType.WASTE.ordinal()] = true;
 
-            Field operationTimeField = org.simyukkuri.draw.Terrarium.class.getDeclaredField("operationTime");
+            Field operationTimeField = org.simyukkuri.engine.Terrarium.class.getDeclaredField("operationTime");
             operationTimeField.setAccessible(true);
             operationTimeField.setInt(null, 0);
             SimYukkuri.RND = new ConstState(0);
 
             assertDoesNotThrow(() -> item.upDate());
 
-            assertNotNull(item.getFood()[0]);
-            assertNotNull(item.getFood()[1]);
-            assertEquals(2, SimYukkuri.world.getCurrentMap().getFood().size());
-            assertEquals(FoodType.WASTE_NORA, ((Food) item.getFood()[0]).getFoodType());
-            assertEquals(FoodType.WASTE_NORA, ((Food) item.getFood()[1]).getFoodType());
+            assertNotNull(item.getFoods()[0]);
+            assertNotNull(item.getFoods()[1]);
+            assertEquals(2, SimYukkuri.world.getCurrentWorldState().getFoods().size());
+            assertEquals(FoodType.WASTE_NORA, ((Food) item.getFoods()[0]).getFoodType());
+            assertEquals(FoodType.WASTE_NORA, ((Food) item.getFoods()[1]).getFoodType());
         }
 
         @Test
@@ -393,14 +393,14 @@ class GarbageStationTest extends ItemTestBase {
             item.setThrowingTime(0);
             item.setGettingP(1);
             item.setEnable(new boolean[GomiType.values().length]);
-            item.setFood(new Entity[2]);
+            item.setFoods(new Entity[2]);
             item.getEnable()[GomiType.WASTE.ordinal()] = true;
 
             Food emptyFood = new Food(100, 100, FoodType.WASTE_NORA.ordinal());
             emptyFood.setAmount(0);
-            item.getFood()[0] = emptyFood;
+            item.getFoods()[0] = emptyFood;
 
-            Field operationTimeField = org.simyukkuri.draw.Terrarium.class.getDeclaredField("operationTime");
+            Field operationTimeField = org.simyukkuri.engine.Terrarium.class.getDeclaredField("operationTime");
             operationTimeField.setAccessible(true);
             operationTimeField.setInt(null, 0);
             SimYukkuri.RND = new ConstState(0);
@@ -408,10 +408,10 @@ class GarbageStationTest extends ItemTestBase {
             assertDoesNotThrow(() -> item.upDate());
 
             assertTrue(emptyFood.isRemoved());
-            assertNotNull(item.getFood()[0]);
-            assertNotSame(emptyFood, item.getFood()[0]);
-            assertNotNull(item.getFood()[1]);
-            assertEquals(FoodType.WASTE_NORA, ((Food) item.getFood()[0]).getFoodType());
+            assertNotNull(item.getFoods()[0]);
+            assertNotSame(emptyFood, item.getFoods()[0]);
+            assertNotNull(item.getFoods()[1]);
+            assertEquals(FoodType.WASTE_NORA, ((Food) item.getFoods()[0]).getFoodType());
         }
     }
 }

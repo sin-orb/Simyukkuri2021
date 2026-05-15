@@ -17,7 +17,7 @@ import org.junit.jupiter.api.BeforeEach;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.simyukkuri.SimYukkuri;
-import org.simyukkuri.draw.World;
+import org.simyukkuri.engine.World;
 import org.simyukkuri.enums.*;
 import org.simyukkuri.system.YukkuriLayer;
 import org.simyukkuri.draw.Point4y;
@@ -91,7 +91,7 @@ public class BodyRenderingTest {
 
     @Test
     public void testGetFaceImage_NYD() throws Exception {
-        setField(body, "coreAnkoState", CoreAnkoState.NonYukkuriDisease);
+        setField(body, "coreAnkoState", CoreAnkoState.NON_YUKKURI_DISEASE);
         body.getFaceImage(layer);
         assertTrue(body.codes.contains(ImageCode.NYD_FRONT_WIDE.ordinal()));
     }
@@ -105,7 +105,7 @@ public class BodyRenderingTest {
 
     @Test
     public void testGetFaceImage_Pain() {
-        body.setCriticalDamege(CriticalDamegeType.CUT);
+        body.setCriticalDamege(CriticalDamageType.CUT);
         body.getFaceImage(layer);
         assertTrue(body.codes.contains(ImageCode.PAIN.ordinal()));
     }
@@ -113,7 +113,7 @@ public class BodyRenderingTest {
     @Test
     public void testGetBodyBaseImage_Crushed() throws Exception {
         body.setCrushed(true);
-        body.setOkazari(null);
+        body.setOkazaris(null);
         body.getImageIndex(layer);
         assertTrue(body.codes.contains(ImageCode.CRUSHED2.ordinal()), "Actual: " + body.codes);
     }

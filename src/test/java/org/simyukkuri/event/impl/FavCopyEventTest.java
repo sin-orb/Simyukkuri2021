@@ -123,8 +123,8 @@ public class FavCopyEventTest extends EventTestBase {
     void testSimpleEventAction_bothUnunSlave_returnsTrue() {
         Yukkuri b = createBody(1, 100, 100);
         Yukkuri from = createBody(2, 110, 110);
-        b.setPublicRank(org.simyukkuri.enums.PublicRank.UnunSlave);
-        from.setPublicRank(org.simyukkuri.enums.PublicRank.UnunSlave);
+        b.setPublicRank(org.simyukkuri.enums.PublicRank.UNUN_SLAVE);
+        from.setPublicRank(org.simyukkuri.enums.PublicRank.UNUN_SLAVE);
         b.setPartner(from.getUniqueID());
         from.setPartner(b.getUniqueID());
         FavCopyEvent event = new FavCopyEvent(from, null, null, 1);
@@ -136,7 +136,7 @@ public class FavCopyEventTest extends EventTestBase {
     void testSimpleEventAction_oneUnunSlave_returnsTrue() {
         Yukkuri b = createBody(1, 100, 100);
         Yukkuri from = createBody(2, 110, 110);
-        b.setPublicRank(org.simyukkuri.enums.PublicRank.UnunSlave);
+        b.setPublicRank(org.simyukkuri.enums.PublicRank.UNUN_SLAVE);
         // from stays at default (not UnunSlave)
         b.setPartner(from.getUniqueID());
         from.setPartner(b.getUniqueID());
@@ -154,7 +154,7 @@ public class FavCopyEventTest extends EventTestBase {
             child.setPartner(parent.getUniqueID());
             parent.setPartner(child.getUniqueID());
             Bed bed = new Bed();
-            SimYukkuri.world.getCurrentMap().getBed().put(bed.getObjId(), bed);
+            SimYukkuri.world.getCurrentWorldState().getBeds().put(bed.getObjId(), bed);
             parent.setFavoriteItem(FavItemType.BED, bed);
             child.setFavoriteItem(FavItemType.BED, null);
 

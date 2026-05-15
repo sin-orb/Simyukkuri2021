@@ -108,7 +108,7 @@ public final class YukkuriAbuseDelegate {
 		body.clearActions();
 		body.addLovePlayer(-300);
 		body.setPealed(false);
-		body.setOkazari(null);
+		body.setOkazaris(null);
 		body.setHasBaby(false);
 		body.closeAnal(true);
 		body.castrateYukkuri(true);
@@ -205,7 +205,7 @@ public final class YukkuriAbuseDelegate {
 
 		body.stayPurupuru(30);
 		body.setHappiness(Happiness.VERY_SAD);
-		body.checkReactionStalkMother(UnbirthBabyState.ATTAKED);
+		body.checkReactionStalkMother(UnbirthBabyState.ATTACKED);
 	}
 
 	/**
@@ -324,7 +324,7 @@ public final class YukkuriAbuseDelegate {
 			body.setInOutTakeoutItem(false);
 			body.setHappiness(Happiness.VERY_SAD);
 			body.addLovePlayer(-500);
-			body.checkReactionStalkMother(UnbirthBabyState.ATTAKED);
+			body.checkReactionStalkMother(UnbirthBabyState.ATTACKED);
 		}
 
 		if (body.isNotNYD() && !body.isUnBirth()) {
@@ -351,7 +351,7 @@ public final class YukkuriAbuseDelegate {
 				body.setMessage(GameMessages.getMessage(body, MessagePool.Action.NeedleRemove));
 				body.removeAttachment(Needle.class);
 
-				Map<Integer, StickyPlate> stickyPlates = GameWorld.get().getCurrentMap().getStickyPlate();
+				Map<Integer, StickyPlate> stickyPlates = GameWorld.get().getCurrentWorldState().getStickyPlates();
 				boolean resetBackFix = true;
 				for (Map.Entry<Integer, StickyPlate> entry : stickyPlates.entrySet()) {
 					StickyPlate s = entry.getValue();
@@ -402,7 +402,7 @@ public final class YukkuriAbuseDelegate {
 					body.addLovePlayer(-20);
 					body.setHappiness(Happiness.VERY_SAD);
 					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.NeedleStick), true);
-					body.checkReactionStalkMother(UnbirthBabyState.ATTAKED);
+					body.checkReactionStalkMother(UnbirthBabyState.ATTACKED);
 				}
 				body.setNeedled(true);
 			}
@@ -516,7 +516,7 @@ public final class YukkuriAbuseDelegate {
 		body.clearActions();
 		body.setAngry();
 		body.dropAllTakeoutItem();
-		body.checkReactionStalkMother(UnbirthBabyState.ATTAKED);
+		body.checkReactionStalkMother(UnbirthBabyState.ATTACKED);
 	}
 
 	/**
@@ -540,7 +540,7 @@ public final class YukkuriAbuseDelegate {
 
 		body.begForLife();
 		body.dropAllTakeoutItem();
-		body.checkReactionStalkMother(UnbirthBabyState.ATTAKED);
+		body.checkReactionStalkMother(UnbirthBabyState.ATTACKED);
 	}
 
 	/**
@@ -580,7 +580,7 @@ public final class YukkuriAbuseDelegate {
 
 		body.begForLife();
 		body.dropAllTakeoutItem();
-		body.checkReactionStalkMother(UnbirthBabyState.ATTAKED);
+		body.checkReactionStalkMother(UnbirthBabyState.ATTACKED);
 	}
 
 	private void packInternal() {

@@ -30,7 +30,7 @@ public final class YukkuriGatheringRule {
 		Yukkuri[] bodyList = YukkuriLookup.getYukkuriBodies();
 		if (bodyList.length != 0) {
 			Toilet t = null;
-			for (Map.Entry<Integer, Toilet> entry : GameWorld.get().getCurrentMap().getToilet().entrySet()) {
+			for (Map.Entry<Integer, Toilet> entry : GameWorld.get().getCurrentWorldState().getToilets().entrySet()) {
 				t = entry.getValue();
 				break;
 			}
@@ -143,14 +143,14 @@ public final class YukkuriGatheringRule {
 
 				if (x < 0) {
 					x = 0;
-				} else if (Translate.getMapW() < x) {
-					x = Translate.getMapW();
+				} else if (Translate.getWorldWidth() < x) {
+					x = Translate.getWorldWidth();
 				}
 
 				if (y < 0) {
 					y = 0;
-				} else if (Translate.getMapH() < y) {
-					y = Translate.getMapH();
+				} else if (Translate.getWorldHeight() < y) {
+					y = Translate.getWorldHeight();
 				}
 
 				row = 1;
@@ -219,13 +219,13 @@ public final class YukkuriGatheringRule {
 
 				if (x < 0) {
 					x = 0;
-				} else if (Translate.getMapW() < x) {
-					x = Translate.getMapW();
+				} else if (Translate.getWorldWidth() < x) {
+					x = Translate.getWorldWidth();
 				}
 				if (y < 0) {
 					y = 0;
-				} else if (Translate.getMapH() < y) {
-					y = Translate.getMapH();
+				} else if (Translate.getWorldHeight() < y) {
+					y = Translate.getWorldHeight();
 				}
 
 				if (event == null) {
@@ -243,7 +243,7 @@ public final class YukkuriGatheringRule {
 			}
 
 			if (Barrier.onBarrier(body.getX(), body.getY(), x, y,
-					Barrier.MAP_BODY[body.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
+					Barrier.BODY_BLOCK_FLAGS[body.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
 				continue;
 			}
 
@@ -300,7 +300,7 @@ public final class YukkuriGatheringRule {
 			body.setTargetBind(false);
 			currentBody = body;
 			if (Barrier.onBarrier(body.getX(), body.getY(), x, y,
-					Barrier.MAP_BODY[body.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
+					Barrier.BODY_BLOCK_FLAGS[body.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
 				continue;
 			}
 			if (1 < Translate.distance(body.getX(), body.getY(), x, y)) {

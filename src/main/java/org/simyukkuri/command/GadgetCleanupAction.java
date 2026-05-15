@@ -3,14 +3,14 @@ package org.simyukkuri.command;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.simyukkuri.command.GadgetMenu.GadgetList;
+import org.simyukkuri.command.GadgetMenu.GadgetMenuChoice;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.world.bodylinked.Stalk;
 import org.simyukkuri.entity.core.world.item.Food;
 import org.simyukkuri.entity.core.world.mobile.Shit;
 import org.simyukkuri.entity.core.world.mobile.Vomit;
 import org.simyukkuri.field.impl.Barrier;
-import org.simyukkuri.system.MapPlaceData;
+import org.simyukkuri.system.WorldState;
 import org.simyukkuri.util.GameWorld;
 
 final class GadgetCleanupAction {
@@ -18,7 +18,7 @@ final class GadgetCleanupAction {
 	private GadgetCleanupAction() {
 	}
 
-	static void immediateEvaluate(GadgetList item) {
+	static void immediateEvaluate(GadgetMenuChoice item) {
 		boolean isBody = false;
 		boolean isDead = false;
 		boolean isShit = false;
@@ -53,12 +53,12 @@ final class GadgetCleanupAction {
 				break;
 		}
 
-		List<Yukkuri> bodyList = new LinkedList<Yukkuri>(GameWorld.get().getCurrentMap().getYukkuriMap().values());
-		List<Shit> shitList = new LinkedList<Shit>(GameWorld.get().getCurrentMap().getShit().values());
-		List<Vomit> vomitList = new LinkedList<Vomit>(GameWorld.get().getCurrentMap().getVomit().values());
-		List<Food> foodList = new LinkedList<Food>(GameWorld.get().getCurrentMap().getFood().values());
-		List<Stalk> stalkList = new LinkedList<Stalk>(GameWorld.get().getCurrentMap().getStalk().values());
-		List<Barrier> wallList = GameWorld.get().getCurrentMap().getBarrier();
+		List<Yukkuri> bodyList = new LinkedList<Yukkuri>(GameWorld.get().getCurrentWorldState().getYukkuriRegistry().values());
+		List<Shit> shitList = new LinkedList<Shit>(GameWorld.get().getCurrentWorldState().getShit().values());
+		List<Vomit> vomitList = new LinkedList<Vomit>(GameWorld.get().getCurrentWorldState().getVomit().values());
+		List<Food> foodList = new LinkedList<Food>(GameWorld.get().getCurrentWorldState().getFoods().values());
+		List<Stalk> stalkList = new LinkedList<Stalk>(GameWorld.get().getCurrentWorldState().getStalks().values());
+		List<Barrier> wallList = GameWorld.get().getCurrentWorldState().getBarriers();
 		if (isBody) {
 			for (Yukkuri body : bodyList) {
 				if (!body.isDead()) {
@@ -90,7 +90,7 @@ final class GadgetCleanupAction {
 			Stalk[] stalks = stalkList.toArray(new Stalk[0]);
 			for (Stalk s : stalks) {
 				int id = s.getPlantYukkuri();
-				if (GameWorld.get().getCurrentMap().getYukkuriMap().get(id) == null) {
+				if (GameWorld.get().getCurrentWorldState().getYukkuriRegistry().get(id) == null) {
 					s.remove();
 				} else if (checkNoBabyStalk(s)) {
 					s.remove();
@@ -99,7 +99,7 @@ final class GadgetCleanupAction {
 		}
 		if (isWall) {
 			wallList.clear();
-			MapPlaceData.clearMap(GameWorld.get().getCurrentMap().getWallMap());
+			WorldState.clearGrid(GameWorld.get().getCurrentWorldState().getWallGrid());
 		}
 		if (isRemoveAll) {
 			for (Yukkuri body : bodyList) {
@@ -108,11 +108,11 @@ final class GadgetCleanupAction {
 			for (Shit s : shitList) {
 				s.remove();
 			}
-			GameWorld.get().getCurrentMap().getShit().clear();
+			GameWorld.get().getCurrentWorldState().getShit().clear();
 			for (Vomit v : vomitList) {
 				v.remove();
 			}
-			GameWorld.get().getCurrentMap().getVomit().clear();
+			GameWorld.get().getCurrentWorldState().getVomit().clear();
 			for (Food f : foodList) {
 				if (f.isEmpty()) {
 					f.remove();
@@ -124,19 +124,19 @@ final class GadgetCleanupAction {
 
 			for (Stalk s : stalkList) {
 				int id = s.getPlantYukkuri();
-				if (GameWorld.get().getCurrentMap().getYukkuriMap().get(id) == null) {
+				if (GameWorld.get().getCurrentWorldState().getYukkuriRegistry().get(id) == null) {
 					s.remove();
 				}
 			}
-			MapPlaceData.clearMap(GameWorld.get().getCurrentMap().getWallMap());
+			WorldState.clearGrid(GameWorld.get().getCurrentWorldState().getWallGrid());
 		}
 	}
 
 	private static boolean checkNoBabyStalk(Stalk s) {
-		if (s.getBindBabies().size() == 0) {
+		if (s.getAttachedBabyIds().size() == 0) {
 			return true;
 		}
-		for (Integer i : s.getBindBabies()) {
+		for (Integer i : s.getAttachedBabyIds()) {
 			if (i == null) {
 				continue;
 			}

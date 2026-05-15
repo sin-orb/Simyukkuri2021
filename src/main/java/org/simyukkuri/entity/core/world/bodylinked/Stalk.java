@@ -10,14 +10,14 @@ import java.util.UUID;
 
 import javax.imageio.ImageIO;
 
-import org.simyukkuri.draw.ModLoader;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Rectangle4y;
 import org.simyukkuri.draw.Translate;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.world.WorldEntity;
 import org.simyukkuri.enums.Direction;
-import org.simyukkuri.enums.Event;
+import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.enums.Type;
 import org.simyukkuri.enums.WorldEntityKind;
 import org.simyukkuri.field.impl.Barrier;
@@ -116,11 +116,11 @@ public class Stalk extends WorldEntity {
 		int i = 0;
 		int babyX = 0;
 		int babyZ = 0;
-		if (getBindBabies() == null) {
+		if (getAttachedBabyIds() == null) {
 			return;
 		}
 		Yukkuri parent = org.simyukkuri.util.YukkuriLookup.getYukkuriById(this.getPlantYukkuri());
-		for (Integer j : getBindBabies()) {
+		for (Integer j : getAttachedBabyIds()) {
 			if (j == null) {
 				i++;
 				continue;
@@ -151,9 +151,9 @@ public class Stalk extends WorldEntity {
 	}
 
 	@Override
-	public void removeListData() {
+	public void removeFromWorld() {
 		remove();
-		GameWorld.get().getCurrentMap().getStalk().remove(objId);
+		GameWorld.get().getCurrentWorldState().getStalks().remove(objId);
 	}
 
 	/**
@@ -201,7 +201,7 @@ public class Stalk extends WorldEntity {
 	 * @param b この茎に生やそうとしている実ゆっくり
 	 */
 	@Transient
-	public void setBindBaby(Yukkuri b) {
+	public void addAttachedBaby(Yukkuri b) {
 		if (bindBabies.size() < 5) {
 			bindBabies.add(b == null ? -1 : b.getUniqueID());
 		}
@@ -212,14 +212,14 @@ public class Stalk extends WorldEntity {
 	 * 
 	 * @return この茎に生えている実ゆっくり
 	 */
-	public List<Integer> getBindBabies() {
+	public List<Integer> getAttachedBabyIds() {
 		return bindBabies;
 	}
 
 	/**
 	 * 茎から実ゆっくりをすべて取り除く.
 	 */
-	public void disBindBabys() {
+	public void detachAttachedBabies() {
 		if (plantYukkuri != -1) {
 			Yukkuri planted = org.simyukkuri.util.YukkuriLookup.getYukkuriById(plantYukkuri);
 			if (planted != null && planted.getStalks() != null) {
@@ -244,8 +244,8 @@ public class Stalk extends WorldEntity {
 	public void setCalcX(int X) {
 		if (X < 0 && plantYukkuri == -1) {
 			x = 0;
-		} else if (X > Translate.getMapW() && plantYukkuri == -1) {
-			x = Translate.getMapW();
+		} else if (X > Translate.getWorldWidth() && plantYukkuri == -1) {
+			x = Translate.getWorldWidth();
 		} else {
 			x = X;
 		}
@@ -260,8 +260,8 @@ public class Stalk extends WorldEntity {
 	public void setCalcY(int Y) {
 		if (Y < 0 && plantYukkuri == -1) {
 			y = 0;
-		} else if (Y > Translate.getMapH() && plantYukkuri == -1) {
-			y = Translate.getMapH();
+		} else if (Y > Translate.getWorldHeight() && plantYukkuri == -1) {
+			y = Translate.getWorldHeight();
 		} else {
 			y = Y;
 		}
@@ -280,8 +280,8 @@ public class Stalk extends WorldEntity {
 			} else {
 				z = mostDepth;
 			}
-		} else if (Z > Translate.getMapZ() && plantYukkuri == -1) {
-			z = Translate.getMapZ();
+		} else if (Z > Translate.getWorldDepth() && plantYukkuri == -1) {
+			z = Translate.getWorldDepth();
 		} else {
 			z = Z;
 		}
@@ -322,7 +322,7 @@ public class Stalk extends WorldEntity {
 				}
 			}
 			remove();
-			GameWorld.get().getCurrentMap().getStalk().remove(objId);
+			GameWorld.get().getCurrentWorldState().getStalks().remove(objId);
 		}
 	}
 
@@ -341,16 +341,16 @@ public class Stalk extends WorldEntity {
 	 * @return 生えているゆっくり
 	 */
 	public Yukkuri takePlantYukkuri() {
-		return GameWorld.get().getCurrentMap().getYukkuriMap().get(plantYukkuri);
+		return GameWorld.get().getCurrentWorldState().getYukkuriRegistry().get(plantYukkuri);
 	}
 
 	@Override
-	public Event clockTick() {
+	public TickResult clockTick() {
 		setAge(getAge() + TICK);
 		if (isRemoved()) {
-			removeListData();
-			disBindBabys();
-			return Event.REMOVED;
+			removeFromWorld();
+			detachAttachedBabies();
+			return TickResult.REMOVED;
 		}
 		if (!grabbed && plantYukkuri == -1) {
 			if (vx != 0) {
@@ -358,10 +358,10 @@ public class Stalk extends WorldEntity {
 				if (x < 0) {
 					x = 0;
 					vx *= -1;
-				} else if (x > Translate.getMapW()) {
-					x = Translate.getMapW();
+				} else if (x > Translate.getWorldWidth()) {
+					x = Translate.getWorldWidth();
 					vx *= -1;
-				} else if (Barrier.onBarrier(x, y, getW() >> 2, getH() >> 2, Barrier.MAP_ITEM)) {
+				} else if (Barrier.onBarrier(x, y, getW() >> 2, getH() >> 2, Barrier.ITEM_BLOCK_FLAG)) {
 					x -= vx;
 					vx = 0;
 				}
@@ -371,10 +371,10 @@ public class Stalk extends WorldEntity {
 				if (y < 0) {
 					y = 0;
 					vy *= -1;
-				} else if (y > Translate.getMapH()) {
-					y = Translate.getMapH();
+				} else if (y > Translate.getWorldHeight()) {
+					y = Translate.getWorldHeight();
 					vy *= -1;
-				} else if (Barrier.onBarrier(x, y, getW() >> 2, getH() >> 2, Barrier.MAP_ITEM)) {
+				} else if (Barrier.onBarrier(x, y, getW() >> 2, getH() >> 2, Barrier.ITEM_BLOCK_FLAG)) {
 					y -= vy;
 					vy = 0;
 				}
@@ -394,7 +394,7 @@ public class Stalk extends WorldEntity {
 		}
 		upDate();
 		calcPos();
-		return Event.DONOTHING;
+		return TickResult.NONE;
 	}
 
 	/**
@@ -410,7 +410,7 @@ public class Stalk extends WorldEntity {
 		objType = Type.OBJECT;
 		worldEntityType = WorldEntityKind.STALK;
 		amount = 100 * 24 * 5;
-		GameWorld.get().getCurrentMap().getStalk().put(objId, this);
+		GameWorld.get().getCurrentWorldState().getStalks().put(objId, this);
 		calcPos();
 	}
 
@@ -419,7 +419,7 @@ public class Stalk extends WorldEntity {
 		objType = Type.OBJECT;
 		worldEntityType = WorldEntityKind.STALK;
 		amount = 100 * 24 * 5;
-		GameWorld.get().getCurrentMap().getStalk().put(objId, this);
+		GameWorld.get().getCurrentWorldState().getStalks().put(objId, this);
 		calcPos();
 	}
 
@@ -437,7 +437,7 @@ public class Stalk extends WorldEntity {
 	@Override
 	public void remove() {
 		plantYukkuri = -1;
-		for (Integer i : getBindBabies()) {
+		for (Integer i : getAttachedBabyIds()) {
 			if (i == null) {
 				continue;
 			}
@@ -448,7 +448,7 @@ public class Stalk extends WorldEntity {
 			}
 		}
 		bindBabies.clear();
-		// GameWorld.get().getCurrentMap().getStalk().remove(this);
+		// GameWorld.get().getCurrentWorldState().getStalks().remove(this);
 		super.remove();
 	}
 

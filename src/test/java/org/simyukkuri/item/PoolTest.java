@@ -25,7 +25,7 @@ import org.junit.jupiter.api.Test;
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.world.item.Food;
-import org.simyukkuri.enums.Event;
+import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.field.impl.Pool;
 import org.simyukkuri.field.impl.Pool.DEPTH;
 import org.simyukkuri.system.ItemMenu.ShapeMenu;
@@ -51,9 +51,9 @@ class PoolTest {
     @Test
     void testConstructor_Default() {
         Pool item = new Pool();
-        SimYukkuri.world.getCurrentMap().getPool().add(item);
+        SimYukkuri.world.getCurrentWorldState().getPools().add(item);
         assertNotNull(item);
-        assertTrue(SimYukkuri.world.getCurrentMap().getPool().contains(item));
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getPools().contains(item));
     }
 
     // --- DEPTH enum ---
@@ -112,8 +112,8 @@ class PoolTest {
     void testClockTick_NotRemoved() {
         Pool item = new Pool();
         item.setAge(0);
-        Event result = item.clockTick();
-        assertEquals(Event.DONOTHING, result);
+        TickResult result = item.clockTick();
+        assertEquals(TickResult.NONE, result);
         assertTrue(item.getAge() > 0);
     }
 
@@ -121,21 +121,21 @@ class PoolTest {
     void testClockTick_Removed() {
         Pool item = new Pool();
         item.setRemoved(true);
-        Event result = item.clockTick();
-        assertEquals(Event.REMOVED, result);
+        TickResult result = item.clockTick();
+        assertEquals(TickResult.REMOVED, result);
     }
 
     @Test
     void testMapContains_Inside() {
         Pool item = new Pool();
-        item.setMapPos(100, 100, 300, 300);
+        item.setBounds(100, 100, 300, 300);
         assertTrue(item.mapContains(200, 200));
     }
 
     @Test
     void testMapContains_Outside() {
         Pool item = new Pool();
-        item.setMapPos(100, 100, 300, 300);
+        item.setBounds(100, 100, 300, 300);
         assertFalse(item.mapContains(50, 200));
     }
 
@@ -156,10 +156,10 @@ class PoolTest {
     @Test
     void testGetSetMapW_H() {
         Pool item = new Pool();
-        item.setMapW(200);
-        item.setMapH(100);
-        assertEquals(200, item.getMapW());
-        assertEquals(100, item.getMapH());
+        item.setWorldWidth(200);
+        item.setWorldHeight(100);
+        assertEquals(200, item.getWorldWidth());
+        assertEquals(100, item.getWorldHeight());
     }
 
     @Test
@@ -174,11 +174,11 @@ class PoolTest {
     @Test
     void testGetSetMapPos_Getters() {
         Pool item = new Pool();
-        item.setMapPos(10, 20, 300, 400);
-        assertEquals(10, item.getMapSX());
-        assertEquals(20, item.getMapSY());
-        assertEquals(300, item.getMapEX());
-        assertEquals(400, item.getMapEY());
+        item.setBounds(10, 20, 300, 400);
+        assertEquals(10, item.getStartX());
+        assertEquals(20, item.getStartY());
+        assertEquals(300, item.getEndX());
+        assertEquals(400, item.getEndY());
     }
 
     @Test
@@ -197,8 +197,8 @@ class PoolTest {
     void testGetSetBindObjList() {
         Pool item = new Pool();
         List<Entity> list = new LinkedList<>();
-        item.setBindObjList(list);
-        assertEquals(list, item.getBindObjList());
+        item.setBoundObjects(list);
+        assertEquals(list, item.getBoundObjects());
     }
 
     @Test
@@ -239,14 +239,14 @@ class PoolTest {
     @Test
     void testCheckArea_OutsidePool_ReturnsNONE() {
         Pool item = new Pool();
-        item.setMapPos(100, 100, 300, 300);
+        item.setBounds(100, 100, 300, 300);
         assertEquals(DEPTH.NONE, item.checkArea(50, 200));
     }
 
     @Test
     void testCheckArea_EdgeX_ReturnsEDGE() {
         Pool item = new Pool();
-        item.setMapPos(100, 100, 300, 300);
+        item.setBounds(100, 100, 300, 300);
         // x=105 is in EDGE zone (mapSX <= 105 < mapSX+10)
         // y=200 is in DEEP zone
         assertEquals(DEPTH.EDGE, item.checkArea(105, 200));
@@ -255,7 +255,7 @@ class PoolTest {
     @Test
     void testCheckArea_ShallowX_ReturnsSHALLOW() {
         Pool item = new Pool();
-        item.setMapPos(100, 100, 300, 300);
+        item.setBounds(100, 100, 300, 300);
         // x=115 is in SHALLOW zone (mapSX+10 <= 115 < mapSX+20)
         // y=200 is in DEEP
         assertEquals(DEPTH.SHALLOW, item.checkArea(115, 200));
@@ -264,7 +264,7 @@ class PoolTest {
     @Test
     void testCheckArea_DeepCenter_ReturnsDEEP() {
         Pool item = new Pool();
-        item.setMapPos(100, 100, 300, 300);
+        item.setBounds(100, 100, 300, 300);
         // x=200, y=200 both in DEEP
         assertEquals(DEPTH.DEEP, item.checkArea(200, 200));
     }
@@ -280,7 +280,7 @@ class PoolTest {
     void testGetPool_WithPool_ReturnsPool() {
         Pool item = new Pool();
         item.setFieldPos(100, 100, 300, 300);
-        SimYukkuri.world.getCurrentMap().getPool().add(item);
+        SimYukkuri.world.getCurrentWorldState().getPools().add(item);
         Pool found = Pool.getPool(200, 200);
         assertEquals(item, found);
     }
@@ -289,7 +289,7 @@ class PoolTest {
     void testGetPool_OutsideArea_ReturnsNull() {
         Pool item = new Pool();
         item.setFieldPos(100, 100, 300, 300);
-        SimYukkuri.world.getCurrentMap().getPool().add(item);
+        SimYukkuri.world.getCurrentWorldState().getPools().add(item);
         assertNull(Pool.getPool(50, 50));
     }
 
@@ -298,13 +298,13 @@ class PoolTest {
     @Test
     void testDeletePool_RemovesFromList() {
         Pool item = new Pool();
-        item.setMapPos(0, 0, 10, 10);
-        item.setMapW(11);
-        item.setMapH(11);
-        SimYukkuri.world.getCurrentMap().getPool().add(item);
-        assertTrue(SimYukkuri.world.getCurrentMap().getPool().contains(item));
+        item.setBounds(0, 0, 10, 10);
+        item.setWorldWidth(11);
+        item.setWorldHeight(11);
+        SimYukkuri.world.getCurrentWorldState().getPools().add(item);
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getPools().contains(item));
         Pool.deletePool(item);
-        assertFalse(SimYukkuri.world.getCurrentMap().getPool().contains(item));
+        assertFalse(SimYukkuri.world.getCurrentWorldState().getPools().contains(item));
     }
 
     // --- executeShapePopup ---
@@ -312,7 +312,7 @@ class PoolTest {
     @Test
     void testExecuteShapePopup_SETUP_DoesNotThrow() {
         Pool item = new Pool();
-        SimYukkuri.world.getCurrentMap().getPool().add(item);
+        SimYukkuri.world.getCurrentWorldState().getPools().add(item);
         assertDoesNotThrow(() -> item.executeShapePopup(ShapeMenu.SETUP));
     }
 
@@ -320,43 +320,43 @@ class PoolTest {
     void testExecuteShapePopup_TOP_MovesToFront() {
         Pool item1 = new Pool();
         Pool item2 = new Pool();
-        SimYukkuri.world.getCurrentMap().getPool().add(item1);
-        SimYukkuri.world.getCurrentMap().getPool().add(item2);
+        SimYukkuri.world.getCurrentWorldState().getPools().add(item1);
+        SimYukkuri.world.getCurrentWorldState().getPools().add(item2);
         item2.executeShapePopup(ShapeMenu.TOP);
-        assertEquals(item2, SimYukkuri.world.getCurrentMap().getPool().get(0));
+        assertEquals(item2, SimYukkuri.world.getCurrentWorldState().getPools().get(0));
     }
 
     @Test
     void testExecuteShapePopup_BOTTOM_MovesToEnd() {
         Pool item1 = new Pool();
         Pool item2 = new Pool();
-        SimYukkuri.world.getCurrentMap().getPool().add(item1);
-        SimYukkuri.world.getCurrentMap().getPool().add(item2);
+        SimYukkuri.world.getCurrentWorldState().getPools().add(item1);
+        SimYukkuri.world.getCurrentWorldState().getPools().add(item2);
         item1.executeShapePopup(ShapeMenu.BOTTOM);
-        int size = SimYukkuri.world.getCurrentMap().getPool().size();
-        assertEquals(item1, SimYukkuri.world.getCurrentMap().getPool().get(size - 1));
+        int size = SimYukkuri.world.getCurrentWorldState().getPools().size();
+        assertEquals(item1, SimYukkuri.world.getCurrentWorldState().getPools().get(size - 1));
     }
 
     @Test
     void testExecuteShapePopup_UP_MovesUp() {
         Pool item1 = new Pool();
         Pool item2 = new Pool();
-        SimYukkuri.world.getCurrentMap().getPool().add(item1);
-        SimYukkuri.world.getCurrentMap().getPool().add(item2);
+        SimYukkuri.world.getCurrentWorldState().getPools().add(item1);
+        SimYukkuri.world.getCurrentWorldState().getPools().add(item2);
         // item2 is at index 1, moving UP brings it to index 0
         item2.executeShapePopup(ShapeMenu.UP);
-        assertEquals(item2, SimYukkuri.world.getCurrentMap().getPool().get(0));
+        assertEquals(item2, SimYukkuri.world.getCurrentWorldState().getPools().get(0));
     }
 
     @Test
     void testExecuteShapePopup_DOWN_MovesDown() {
         Pool item1 = new Pool();
         Pool item2 = new Pool();
-        SimYukkuri.world.getCurrentMap().getPool().add(item1);
-        SimYukkuri.world.getCurrentMap().getPool().add(item2);
+        SimYukkuri.world.getCurrentWorldState().getPools().add(item1);
+        SimYukkuri.world.getCurrentWorldState().getPools().add(item2);
         // item1 is at index 0, moving DOWN brings it to index 1
         item1.executeShapePopup(ShapeMenu.DOWN);
-        assertEquals(item1, SimYukkuri.world.getCurrentMap().getPool().get(1));
+        assertEquals(item1, SimYukkuri.world.getCurrentWorldState().getPools().get(1));
     }
 
     // --- objHitProcess with non-Yukkuri, airborne ---
@@ -364,7 +364,7 @@ class PoolTest {
     @Test
     void testObjHitProcess_AirborneObj_ReturnsZero() {
         Pool item = new Pool();
-        item.setMapPos(100, 100, 300, 300);
+        item.setBounds(100, 100, 300, 300);
         Food food = new Food(200, 200, 0);
         food.setZ(5); // airborne
         assertEquals(0, item.objHitProcess(food));
@@ -375,7 +375,7 @@ class PoolTest {
     @Test
     void testObjHitProcess_ObjOnGround_OutsidePool() {
         Pool item = new Pool();
-        item.setMapPos(100, 100, 300, 300);
+        item.setBounds(100, 100, 300, 300);
         Food food = new Food(50, 50, 0); // outside pool
         food.setZ(0);
         assertDoesNotThrow(() -> item.objHitProcess(food));
@@ -399,7 +399,7 @@ class PoolTest {
     void testDrawShape_doesNotThrow() {
         WorldTestHelper.initializeStandardTranslate200();
         Pool item = new Pool();
-        item.setMapPos(100, 100, 300, 300);
+        item.setBounds(100, 100, 300, 300);
         java.awt.image.BufferedImage img = new java.awt.image.BufferedImage(800, 600,
                 java.awt.image.BufferedImage.TYPE_INT_RGB);
         java.awt.Graphics2D g2 = img.createGraphics();
@@ -412,7 +412,7 @@ class PoolTest {
     @Test
     void testCheckContain_mapCoord_insidePool() {
         Pool item = new Pool();
-        item.setMapPos(100, 100, 300, 300);
+        item.setBounds(100, 100, 300, 300);
         // false = map coord check
         assertDoesNotThrow(() -> item.checkContain(200, 200, false));
     }
@@ -421,7 +421,7 @@ class PoolTest {
     void testCheckContain_fieldCoord_outsidePool() {
         WorldTestHelper.initializeStandardTranslate200();
         Pool item = new Pool();
-        item.setMapPos(100, 100, 300, 300);
+        item.setBounds(100, 100, 300, 300);
         // true = field coord check
         assertDoesNotThrow(() -> item.checkContain(50, 50, true));
     }
@@ -431,7 +431,7 @@ class PoolTest {
     @Test
     void testObjHitProcess_BodyInsidePool_executesCode() {
         Pool item = new Pool();
-        item.setMapPos(0, 0, 1000, 1000);
+        item.setBounds(0, 0, 1000, 1000);
         org.simyukkuri.entity.core.living.yukkuri.Yukkuri body = WorldTestHelper.createBody();
         body.setX(200);
         body.setY(200);
@@ -451,7 +451,7 @@ class PoolTest {
         try {
             Pool item = new Pool(100, 100, 300, 300);
             assertNotNull(item);
-            assertTrue(SimYukkuri.world.getCurrentMap().getPool().contains(item));
+            assertTrue(SimYukkuri.world.getCurrentWorldState().getPools().contains(item));
         } catch (Exception e) {
             // May fail in headless if Translate not fully initialized
         }
@@ -463,7 +463,7 @@ class PoolTest {
         @Test
         void testScenario_EdgeObjectIsLiftedBackToSurface() {
             Pool item = new Pool();
-            item.setMapPos(100, 100, 300, 300);
+            item.setBounds(100, 100, 300, 300);
 
             Food food = new Food(105, 200, Food.FoodType.FOOD.ordinal());
             food.setZ(-1);
@@ -477,7 +477,7 @@ class PoolTest {
         @Test
         void testScenario_ShallowObjectSinksOneLevelIntoWater() {
             Pool item = new Pool();
-            item.setMapPos(100, 100, 300, 300);
+            item.setBounds(100, 100, 300, 300);
 
             Food food = new Food(115, 200, Food.FoodType.FOOD.ordinal());
             food.setZ(0);

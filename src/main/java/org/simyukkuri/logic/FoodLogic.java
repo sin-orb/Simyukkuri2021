@@ -59,7 +59,7 @@ public class FoodLogic {
 			}
 			// 茎の場合の探索
 			if (food instanceof Stalk) {
-				Yukkuri plantBody = GameWorld.get().getCurrentMap().getYukkuriMap().get(((Stalk) food).getPlantYukkuri());
+				Yukkuri plantBody = GameWorld.get().getCurrentWorldState().getYukkuriRegistry().get(((Stalk) food).getPlantYukkuri());
 				// 自分の茎は無視
 				if (plantBody == body) {
 					body.clearActions();
@@ -94,7 +94,7 @@ public class FoodLogic {
 		// C.餌探索
 		Entity candidate = null;
 		// うんうん奴隷の場合
-		if (body.getPublicRank() == PublicRank.UnunSlave) {
+		if (body.getPublicRank() == PublicRank.UNUN_SLAVE) {
 			candidate = searchFoodForUnunSlave(body, forceEat);
 		} else {
 			// フィールドの餌検索
@@ -154,7 +154,7 @@ public class FoodLogic {
 		}
 
 		// ゆっくりから検索
-		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getYukkuriMap().entrySet()) {
+		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentWorldState().getYukkuriRegistry().entrySet()) {
 			Yukkuri candidateBody = entry.getValue();
 			if (body == candidateBody) {
 				continue;

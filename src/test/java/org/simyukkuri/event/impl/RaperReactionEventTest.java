@@ -23,7 +23,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import org.simyukkuri.SimYukkuri;
-import org.simyukkuri.draw.World;
+import org.simyukkuri.engine.World;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.living.yukkuri.impl.Reimu;
 import org.simyukkuri.enums.ActionState;
@@ -173,7 +173,7 @@ public class RaperReactionEventTest {
             spr[i] = new Sprite(10, 10, Sprite.PIVOT_CENTER_BOTTOM);
         }
         b.setSpriteSet(spr);
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(b.getUniqueID(), b);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueID(), b);
         return b;
     }
 
@@ -250,7 +250,7 @@ public class RaperReactionEventTest {
     @Test
     public void testCheckEventResponse_raperNearby_UnunSlave_stateEscape_returnsTrue() {
         Yukkuri b = createBody();
-        b.setPublicRank(org.simyukkuri.enums.PublicRank.UnunSlave);
+        b.setPublicRank(org.simyukkuri.enums.PublicRank.UNUN_SLAVE);
         Yukkuri raper = createBody();
         raper.setRapist(true);
         RaperReactionEvent event = new RaperReactionEvent(raper, null, null, 1);
@@ -264,7 +264,7 @@ public class RaperReactionEventTest {
     public void testStart_NYD_earlyReturn() {
         Yukkuri from = createBody();
         Yukkuri b = createBody();
-        b.setCoreAnkoState(org.simyukkuri.enums.CoreAnkoState.NonYukkuriDisease); // isNYD() = true
+        b.setCoreAnkoState(org.simyukkuri.enums.CoreAnkoState.NON_YUKKURI_DISEASE); // isNYD() = true
         RaperReactionEvent event = new RaperReactionEvent(from, null, null, 1);
         event.setState(ActionState.ATTACK);
         assertDoesNotThrow(() -> event.start(b)); // returns early, no throw

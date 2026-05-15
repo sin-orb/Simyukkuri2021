@@ -11,7 +11,7 @@ import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.draw.Point4y;
 import org.simyukkuri.draw.Rectangle4y;
 import org.simyukkuri.draw.Translate;
-import org.simyukkuri.enums.Event;
+import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.enums.Numbering;
 import org.simyukkuri.enums.Type;
 import org.simyukkuri.enums.WorldEntityKind;
@@ -78,7 +78,7 @@ public abstract class WorldEntity extends Entity {
 	abstract public BufferedImage getShadowImage();
 
 	/** リストから除去 */
-	abstract public void removeListData();
+	abstract public void removeFromWorld();
 
 	/** オブジェクトのタイプのゲッター */
 	public WorldEntityKind getWorldEntityType() {
@@ -223,15 +223,15 @@ public abstract class WorldEntity extends Entity {
 	 * <br>
 	 * 主に移動系
 	 */
-	public Event clockTick() {
+	public TickResult clockTick() {
 		setAge(getAge() + TICK);
 		if (isRemoved()) {
-			removeListData();
-			return Event.REMOVED;
+			removeFromWorld();
+			return TickResult.REMOVED;
 		}
 
-		int mapX = Translate.getMapW();
-		int mapY = Translate.getMapH();
+		int mapX = Translate.getWorldWidth();
+		int mapY = Translate.getWorldHeight();
 
 		if (!grabbed) {
 			int mx = vx + getMotionX();
@@ -246,7 +246,7 @@ public abstract class WorldEntity extends Entity {
 				} else if (x > mapX) {
 					x = mapX;
 					vx *= -1;
-				} else if (Barrier.onBarrier(x, y, getW() >> 2, getH() >> 2, Barrier.MAP_ITEM)) {
+				} else if (Barrier.onBarrier(x, y, getW() >> 2, getH() >> 2, Barrier.ITEM_BLOCK_FLAG)) {
 					x -= vx;
 					vx = 0;
 				}
@@ -259,7 +259,7 @@ public abstract class WorldEntity extends Entity {
 				} else if (y > mapY) {
 					y = mapY;
 					vy *= -1;
-				} else if (Barrier.onBarrier(x, y, getW() >> 2, getH() >> 2, Barrier.MAP_ITEM)) {
+				} else if (Barrier.onBarrier(x, y, getW() >> 2, getH() >> 2, Barrier.ITEM_BLOCK_FLAG)) {
 					y -= vy;
 					vy = 0;
 				}
@@ -283,7 +283,7 @@ public abstract class WorldEntity extends Entity {
 		setMotionY(0);
 		setMotionZ(0);
 		calcPos();
-		return Event.DONOTHING;
+		return TickResult.NONE;
 	}
 
 	/**

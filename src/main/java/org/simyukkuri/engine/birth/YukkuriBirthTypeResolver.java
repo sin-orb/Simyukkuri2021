@@ -159,9 +159,9 @@ public final class YukkuriBirthTypeResolver {
 		YukkuriType babyType;
 		YukkuriType motherType = mother.getType();
 
-		motherType = applyAncestorReversion(mother.getAncestorList(), motherType);
+		motherType = applyAncestorReversion(mother.getAncestors(), motherType);
 		if (father != null) {
-			fatherType = applyAncestorReversion(father.getAncestorList(), fatherType);
+			fatherType = applyAncestorReversion(father.getAncestors(), fatherType);
 		}
 
 		if (GameRandom.nextInt(2) == 0 && !forceCreate) {
@@ -271,11 +271,11 @@ public final class YukkuriBirthTypeResolver {
 		if (father == null) {
 			return iFatherType;
 		}
-		return applyAncestorReversion(father.getAncestorList(), YukkuriType.fromTypeID(iFatherType)).getTypeID();
+		return applyAncestorReversion(father.getAncestors(), YukkuriType.fromTypeID(iFatherType)).getTypeID();
 	}
 
 	public static int resolveMotherType(Yukkuri mother) {
-		return applyAncestorReversion(mother.getAncestorList(), mother.getType()).getTypeID();
+		return applyAncestorReversion(mother.getAncestors(), mother.getType()).getTypeID();
 	}
 
 	public static Attitude resolveAttitude(Yukkuri mother, Attitude fatherrAtt) {

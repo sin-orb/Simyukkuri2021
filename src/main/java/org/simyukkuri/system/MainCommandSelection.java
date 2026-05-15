@@ -1,7 +1,7 @@
 package org.simyukkuri.system;
 
 import org.simyukkuri.command.GadgetMenu;
-import org.simyukkuri.command.GadgetMenu.GadgetList;
+import org.simyukkuri.command.GadgetMenu.GadgetMenuChoice;
 
 /**
  * Main command の選択状態補助.
@@ -11,11 +11,11 @@ public final class MainCommandSelection {
 	private MainCommandSelection() {
 	}
 
-	public static GadgetList getSubItem(GadgetList mainSel, int subSel) {
+	public static GadgetMenuChoice getSubItem(GadgetMenuChoice mainSel, int subSel) {
 		switch (mainSel) {
 		case TOOL:
 			return GadgetMenu.getToolCategory()[subSel];
-		case TOOL2:
+		case BODY_CHANGE:
 			return GadgetMenu.getToolCategory2()[subSel];
 		case AMPOULE:
 			return GadgetMenu.getAmpouleCategory()[subSel];
@@ -37,7 +37,7 @@ public final class MainCommandSelection {
 			return GadgetMenu.getConveyorCategory()[subSel];
 		case VOICE:
 			return GadgetMenu.getVoiceCategory()[subSel];
-		case TEST:
+		case DEBUG:
 			return GadgetMenu.getTestCategory()[subSel];
 		default:
 			return null;

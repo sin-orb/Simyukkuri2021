@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.simyukkuri.draw.ModLoader;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Rectangle4y;
 import org.simyukkuri.draw.Translate;
 import org.simyukkuri.entity.core.Entity;
@@ -142,8 +142,8 @@ public class GarbageChute extends WorldEntity {
 	}
 
 	@Override
-	public void removeListData() {
-		GameWorld.get().getCurrentMap().getGarbagechute().remove(objId);
+	public void removeFromWorld() {
+		GameWorld.get().getCurrentWorldState().getGarbageChutes().remove(objId);
 	}
 
 	/**
@@ -157,7 +157,7 @@ public class GarbageChute extends WorldEntity {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		GameWorld.get().getCurrentMap().getGarbagechute().put(objId, this);
+		GameWorld.get().getCurrentWorldState().getGarbageChutes().put(objId, this);
 		objType = Type.PLATFORM;
 		worldEntityType = WorldEntityKind.GARBAGECHUTE;
 
@@ -177,12 +177,12 @@ public class GarbageChute extends WorldEntity {
 
 	}
 
-	public List<Entity> getBindObjList() {
+	public List<Entity> getBoundObjects() {
 		return bindObjList;
 	}
 
-	public void setBindObjList(List<Entity> bindObjList) {
-		this.bindObjList = bindObjList;
+	public void setBoundObjects(List<Entity> boundObjects) {
+		this.bindObjList = boundObjects;
 	}
 
 	public ItemRank getItemRank() {

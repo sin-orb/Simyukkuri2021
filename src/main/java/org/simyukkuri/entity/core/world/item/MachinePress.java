@@ -6,7 +6,7 @@ import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
 
-import org.simyukkuri.draw.ModLoader;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Rectangle4y;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
@@ -100,8 +100,8 @@ public class MachinePress extends WorldEntity {
 	}
 
 	@Override
-	public void removeListData() {
-		GameWorld.get().getCurrentMap().getMachinePress().remove(objId);
+	public void removeFromWorld() {
+		GameWorld.get().getCurrentWorldState().getMachinePresses().remove(objId);
 	}
 
 	/** コンストラクタ */
@@ -109,7 +109,7 @@ public class MachinePress extends WorldEntity {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), 8);
-		GameWorld.get().getCurrentMap().getMachinePress().put(objId, this);
+		GameWorld.get().getCurrentWorldState().getMachinePresses().put(objId, this);
 		objType = Type.FIX_OBJECT;
 		worldEntityType = WorldEntityKind.MACHINEPRESS;
 

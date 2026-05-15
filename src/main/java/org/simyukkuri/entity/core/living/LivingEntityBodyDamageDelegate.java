@@ -2,7 +2,7 @@ package org.simyukkuri.entity.core.living;
 
 import org.simyukkuri.entity.core.attachment.impl.Badge;
 import org.simyukkuri.enums.BurialState;
-import org.simyukkuri.enums.CriticalDamegeType;
+import org.simyukkuri.enums.CriticalDamageType;
 import org.simyukkuri.enums.Damage;
 import org.simyukkuri.event.EventPacket;
 import org.simyukkuri.util.GameEnvironment;
@@ -75,7 +75,7 @@ public final class LivingEntityBodyDamageDelegate {
 			}
 			body.onPacked();
 		}
-		if (GameWorld.get().getCurrentMap().getMapIndex() == 2
+		if (GameWorld.get().getCurrentWorldState().getWorldIndex() == 2
 				&& !(body.isSmart() && body.getAttachmentSize(Badge.class) != 0)
 				&& body.getCarAccidentProb() != 0
 				&& GameRandom.nextInt(body.getCarAccidentProb()) == 0) {
@@ -106,7 +106,7 @@ public final class LivingEntityBodyDamageDelegate {
 		if (body.getCriticalDamege() == null) {
 			return;
 		}
-		if (body.getCriticalDamege() == CriticalDamegeType.CUT) {
+		if (body.getCriticalDamege() == CriticalDamageType.CUT) {
 			body.damage += LivingEntity.TICK * 100;
 			body.addStress(50);
 			if (body.isSleeping()) {
@@ -118,7 +118,7 @@ public final class LivingEntityBodyDamageDelegate {
 			}
 			return;
 		}
-		if (body.getCriticalDamege() == CriticalDamegeType.INJURED && !body.isSleeping()) {
+		if (body.getCriticalDamege() == CriticalDamageType.INJURED && !body.isSleeping()) {
 			if (GameRandom.nextInt(300) == 0) {
 				body.onInjuredScream(body.getX() + 3 - GameRandom.nextInt(6), body.getY() - 2);
 				body.addStress(5);

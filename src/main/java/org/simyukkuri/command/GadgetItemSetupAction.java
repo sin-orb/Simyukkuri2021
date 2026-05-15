@@ -2,7 +2,7 @@ package org.simyukkuri.command;
 
 import java.awt.event.MouseEvent;
 
-import org.simyukkuri.command.GadgetMenu.GadgetList;
+import org.simyukkuri.command.GadgetMenu.GadgetMenuChoice;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.world.item.BeltconveyorObj;
 import org.simyukkuri.entity.core.world.item.BreedingPool;
@@ -24,7 +24,7 @@ public class GadgetItemSetupAction {
 	 * @param ev           入力されたマウスの動作
 	 * @param targetObject 対象オブジェクト
 	 */
-	public static void evaluateFloorItems(GadgetList actionItem, MouseEvent ev, Entity targetObject) {
+	public static void evaluateFloorItems(GadgetMenuChoice actionItem, MouseEvent ev, Entity targetObject) {
 		switch (actionItem) {
 			case DIFFUSER:
 				if (targetObject instanceof Diffuser) {
@@ -53,7 +53,7 @@ public class GadgetItemSetupAction {
 	 * @param ev           入力されたマウスの動作
 	 * @param targetObject 対象オブジェクト
 	 */
-	public static void evaluateToys(GadgetList actionItem, MouseEvent ev, Entity targetObject) {
+	public static void evaluateToys(GadgetMenuChoice actionItem, MouseEvent ev, Entity targetObject) {
 		switch (actionItem) {
 			case YUNBA_SETUP:
 				if (targetObject instanceof Yunba) {
@@ -72,11 +72,11 @@ public class GadgetItemSetupAction {
 	 * @param ev           入力されたマウスの動作
 	 * @param targetObject 対象オブジェクト
 	 */
-	public static void evaluateConveyor(GadgetList actionItem, MouseEvent ev, Entity targetObject) {
+	public static void evaluateConveyor(GadgetMenuChoice actionItem, MouseEvent ev, Entity targetObject) {
 		switch (actionItem) {
 			case BELTCONVEYOR_SETUP:
 				if (targetObject instanceof BeltconveyorObj) {
-					BeltconveyorObj.setBeltconveyor((BeltconveyorObj) targetObject, true);
+					BeltconveyorObj.setBeltconveyors((BeltconveyorObj) targetObject, true);
 				}
 				break;
 			default:

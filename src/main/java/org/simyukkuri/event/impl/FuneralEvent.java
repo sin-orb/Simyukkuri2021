@@ -116,7 +116,7 @@ public class FuneralEvent extends EventPacket {
 			return true;
 		}
 		// うんうん奴隷の場合は参加しない
-		if (b.getPublicRank() == PublicRank.UnunSlave)
+		if (b.getPublicRank() == PublicRank.UNUN_SLAVE)
 			return false;
 		// 葬式の発端が別イベント進行中なら、子を巻き込まない
 		if (from.getCurrentEvent() != null && from.getCurrentEvent() != this) {
@@ -250,7 +250,7 @@ public class FuneralEvent extends EventPacket {
 			}
 			fromWaitCount++;
 			// 子のみ集合
-			List<Yukkuri> childrenList = YukkuriLogic.createActiveChildList(from, false);
+			List<Yukkuri> childrenList = YukkuriLogic.createActiveChildren(from, false);
 			if ((childrenList == null) || (childrenList.size() == 0)) {
 				return UpdateState.ABORT;
 			}
@@ -397,7 +397,7 @@ public class FuneralEvent extends EventPacket {
 				case GO:
 					// 壁に引っかかってるなら終了
 					if (Barrier.onBarrier(b.getX(), b.getY(), from.getX(), from.getY(),
-							Barrier.MAP_BODY[b.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
+							Barrier.BODY_BLOCK_FLAGS[b.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
 						return UpdateState.ABORT;
 					}
 					if (b.isDontMove()) {

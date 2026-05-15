@@ -120,9 +120,9 @@ public final class YukkuriMoveDelegate {
 			return;
 		}
 
-		body.setX(Math.max(0, Math.min(body.getX(), Translate.getMapW())));
-		body.setY(Math.max(0, Math.min(body.getY(), Translate.getMapH())));
-		body.setCalcZ(Math.min(body.getZ(), Translate.getMapZ()));
+		body.setX(Math.max(0, Math.min(body.getX(), Translate.getWorldWidth())));
+		body.setY(Math.max(0, Math.min(body.getY(), Translate.getWorldHeight())));
+		body.setCalcZ(Math.min(body.getZ(), Translate.getWorldDepth()));
 
 		if (dontMove || body.isLockmove()) {
 			body.setMotionX(0);
@@ -264,8 +264,8 @@ public final class YukkuriMoveDelegate {
 		if (target == null) {
 			return;
 		}
-		int mapX = Translate.getMapW();
-		int mapY = Translate.getMapH();
+		int mapX = Translate.getWorldWidth();
+		int mapY = Translate.getWorldHeight();
 		if (target.getX() < 0) {
 			target.setCalcX(0);
 		}

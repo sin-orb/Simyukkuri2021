@@ -3,7 +3,7 @@ package org.simyukkuri.command;
 import java.awt.event.MouseEvent;
 import java.util.List;
 
-import org.simyukkuri.command.GadgetMenu.GadgetList;
+import org.simyukkuri.command.GadgetMenu.GadgetMenuChoice;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.attachment.impl.Ants;
 import org.simyukkuri.entity.core.attachment.impl.Badge;
@@ -30,7 +30,7 @@ public class GadgetDebugAction {
 	 * @param ev           入力されたマウスの動作
 	 * @param targetObject 対象オブジェクト
 	 */
-	public static void evaluateTest(GadgetList item, MouseEvent ev, Entity targetObject) {
+	public static void evaluateTest(GadgetMenuChoice item, MouseEvent ev, Entity targetObject) {
 		switch (item) {
 			case RANKSET:
 				if (targetObject instanceof Yukkuri) {
@@ -48,7 +48,7 @@ public class GadgetDebugAction {
 					Yukkuri body = (Yukkuri) targetObject;
 					PublicRank rank = body.getPublicRank();
 					if (rank == PublicRank.NONE) {
-						body.setPublicRank(PublicRank.UnunSlave);
+						body.setPublicRank(PublicRank.UNUN_SLAVE);
 						body.getFavoriteItems().clear();
 						Yukkuri partnerBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(body.getPartner());
 						if (partnerBody != null) {
@@ -66,7 +66,7 @@ public class GadgetDebugAction {
 				if (targetObject instanceof Yukkuri) {
 					Yukkuri body = (Yukkuri) targetObject;
 					body.wakeup();
-					List<Yukkuri> childrenList = YukkuriLogic.createActiveChildList(body, true);
+					List<Yukkuri> childrenList = YukkuriLogic.createActiveChildren(body, true);
 					if (childrenList != null && childrenList.size() != 0) {
 						FamilyActionLogic.goToShit(body, childrenList);
 					}
@@ -76,7 +76,7 @@ public class GadgetDebugAction {
 				if (targetObject instanceof Yukkuri) {
 					Yukkuri body = (Yukkuri) targetObject;
 					body.wakeup();
-					List<Yukkuri> childrenList = YukkuriLogic.createActiveChildList(body, true);
+					List<Yukkuri> childrenList = YukkuriLogic.createActiveChildren(body, true);
 					if (childrenList != null && childrenList.size() != 0) {
 						FamilyActionLogic.goToEat(body, childrenList);
 					}
@@ -86,7 +86,7 @@ public class GadgetDebugAction {
 				if (targetObject instanceof Yukkuri) {
 					Yukkuri body = (Yukkuri) targetObject;
 					body.wakeup();
-					List<Yukkuri> childrenList = YukkuriLogic.createActiveChildList(body, true);
+					List<Yukkuri> childrenList = YukkuriLogic.createActiveChildren(body, true);
 					if (childrenList != null && childrenList.size() != 0) {
 						FamilyActionLogic.rideOnParent(body, childrenList);
 					}
@@ -96,7 +96,7 @@ public class GadgetDebugAction {
 				if (targetObject instanceof Yukkuri) {
 					Yukkuri body = (Yukkuri) targetObject;
 					body.wakeup();
-					List<Yukkuri> childrenList = YukkuriLogic.createActiveChildList(body, true);
+					List<Yukkuri> childrenList = YukkuriLogic.createActiveChildren(body, true);
 					if (childrenList != null && childrenList.size() != 0) {
 						FamilyActionLogic.proudChild(body, childrenList);
 					}
@@ -108,7 +108,7 @@ public class GadgetDebugAction {
 					body.getInVain(true);
 				}
 				break;
-			case Yunnyaa:
+			case YUNNYAA:
 				if (targetObject instanceof Yukkuri) {
 					Yukkuri body = (Yukkuri) targetObject;
 					body.doYunnyaa(true);

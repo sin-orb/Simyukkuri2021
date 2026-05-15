@@ -9,7 +9,7 @@ import java.util.Map;
 
 import org.simyukkuri.Const;
 import org.simyukkuri.draw.Dimension4y;
-import org.simyukkuri.draw.ModLoader;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Point4y;
 import org.simyukkuri.engine.transform.TransformationService;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
@@ -17,7 +17,7 @@ import org.simyukkuri.entity.core.world.bodylinked.Okazari.OkazariType;
 import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.Attitude;
 import org.simyukkuri.enums.YukkuriRank;
-import org.simyukkuri.enums.CriticalDamegeType;
+import org.simyukkuri.enums.CriticalDamageType;
 import org.simyukkuri.enums.HairState;
 import org.simyukkuri.enums.ImageCode;
 import org.simyukkuri.enums.Intelligence;
@@ -101,8 +101,8 @@ public class Reimu extends Yukkuri {
 	 * @param loader クラスローダ
 	 */
 	public static void loadIniFile(ClassLoader loader) {
-		AttachOffset = ModLoader.loadYukkuriIniMap(loader, ModLoader.getDataIniDir(), baseFileName);
-		baseSpeed = ModLoader.loadYukkuriIniMapForInt(loader, ModLoader.getDataIniDir(), baseFileName, "speed");
+		AttachOffset = ModLoader.loadYukkuriIniOffsets(loader, ModLoader.getDataIniDir(), baseFileName);
+		baseSpeed = ModLoader.loadYukkuriIniValue(loader, ModLoader.getDataIniDir(), baseFileName, "speed");
 	}
 
 	@Override
@@ -302,7 +302,7 @@ public class Reimu extends Yukkuri {
 			} else {
 				if (isPealed()) {
 					idx += getImage(ImageCode.CRUSHED3.ordinal(), Const.LEFT, layer, idx);
-				} else if (getOkazari() != null && getOkazari().getOkazariType() == OkazariType.DEFAULT) {
+				} else if (getOkazaris() != null && getOkazaris().getOkazariType() == OkazariType.DEFAULT) {
 					idx += getImage(ImageCode.CRUSHED.ordinal(), Const.LEFT, layer, idx);
 				} else {
 					idx += getImage(ImageCode.CRUSHED2.ordinal(), Const.LEFT, layer, idx);
@@ -329,7 +329,7 @@ public class Reimu extends Yukkuri {
 			if (isAnalClose()) {
 				idx += getImage(ImageCode.FRONT_SEALED.ordinal(), Const.LEFT, layer, idx);
 			}
-			if (getCriticalDamege() == CriticalDamegeType.INJURED) {
+			if (getCriticalDamege() == CriticalDamageType.INJURED) {
 				idx += getImage(ImageCode.FRONT_INJURED.ordinal(), Const.LEFT, layer, idx);
 			}
 			if (isBlind()) {
@@ -341,7 +341,7 @@ public class Reimu extends Yukkuri {
 			if (isHasBraid()) {
 				idx += getImage(ImageCode.FRONT_BRAID.ordinal(), Const.LEFT, layer, idx);
 			}
-			if (getOkazari() != null && getOkazari().getOkazariType() == OkazariType.DEFAULT) {
+			if (getOkazaris() != null && getOkazaris().getOkazariType() == OkazariType.DEFAULT) {
 				idx += getImage(ImageCode.ROLL_ACCESSORY.ordinal(), Const.LEFT, layer, idx);
 			}
 		} else if (isFurifuri() && !isSleeping() && (!isLockmove() || isFixBack())) {
@@ -358,7 +358,7 @@ public class Reimu extends Yukkuri {
 				if (isAnalClose()) {
 					idx += getImage(ImageCode.ROLL_LEFT_SEALED.ordinal(), Const.LEFT, layer, idx);
 				}
-				if (getCriticalDamege() == CriticalDamegeType.INJURED) {
+				if (getCriticalDamege() == CriticalDamageType.INJURED) {
 					idx += getImage(ImageCode.ROLL_LEFT_INJURED.ordinal(), Const.LEFT, layer, idx);
 				}
 				if (isBlind()) {
@@ -383,7 +383,7 @@ public class Reimu extends Yukkuri {
 				if (isAnalClose()) {
 					idx += getImage(ImageCode.ROLL_RIGHT_SEALED.ordinal(), Const.LEFT, layer, idx);
 				}
-				if (getCriticalDamege() == CriticalDamegeType.INJURED) {
+				if (getCriticalDamege() == CriticalDamageType.INJURED) {
 					idx += getImage(ImageCode.ROLL_RIGHT_INJURED.ordinal(), Const.LEFT, layer, idx);
 				}
 				if (isBlind()) {
@@ -396,7 +396,7 @@ public class Reimu extends Yukkuri {
 					idx += getImage(ImageCode.ROLL_RIGHT_BRAID.ordinal(), Const.LEFT, layer, idx);
 				}
 			}
-			if (getOkazari() != null && getOkazari().getOkazariType() == OkazariType.DEFAULT) {
+			if (getOkazaris() != null && getOkazaris().getOkazariType() == OkazariType.DEFAULT) {
 				idx += getImage(ImageCode.ROLL_ACCESSORY.ordinal(), Const.LEFT, layer, idx);
 			}
 		}
@@ -407,7 +407,7 @@ public class Reimu extends Yukkuri {
 				if (getAge() % 6 <= 1) {
 					idx += getImage(ImageCode.YUNYAA1.ordinal(), direction, layer, idx);
 
-					if (getOkazari() != null && getOkazari().getOkazariType() == OkazariType.DEFAULT) {
+					if (getOkazaris() != null && getOkazaris().getOkazariType() == OkazariType.DEFAULT) {
 						idx += getImage(ImageCode.YUNYAA1_ACCESSORY.ordinal(), direction, layer, idx);
 					}
 					if (getHairState() == HairState.DEFAULT) {
@@ -415,7 +415,7 @@ public class Reimu extends Yukkuri {
 					} else if (getHairState() == HairState.BRINDLED1 || getHairState() == HairState.BRINDLED2) {
 						idx += getImage(ImageCode.YUNYAA1_HAIR2.ordinal(), direction, layer, idx);
 					}
-					if (getCriticalDamege() == CriticalDamegeType.INJURED) {
+					if (getCriticalDamege() == CriticalDamageType.INJURED) {
 						idx += getImage(ImageCode.YUNYAA1_INJURED.ordinal(), direction, layer, idx);
 					}
 					if (isBlind()) {
@@ -436,7 +436,7 @@ public class Reimu extends Yukkuri {
 				} else if (getAge() % 6 == 2 || getAge() % 6 == 5) {
 					idx += getImage(ImageCode.YUNYAA2.ordinal(), direction, layer, idx);
 
-					if (getOkazari() != null && getOkazari().getOkazariType() == OkazariType.DEFAULT) {
+					if (getOkazaris() != null && getOkazaris().getOkazariType() == OkazariType.DEFAULT) {
 						idx += getImage(ImageCode.YUNYAA2_ACCESSORY.ordinal(), direction, layer, idx);
 					}
 					if (getHairState() == HairState.DEFAULT) {
@@ -444,7 +444,7 @@ public class Reimu extends Yukkuri {
 					} else if (getHairState() == HairState.BRINDLED1 || getHairState() == HairState.BRINDLED2) {
 						idx += getImage(ImageCode.YUNYAA2_HAIR2.ordinal(), direction, layer, idx);
 					}
-					if (getCriticalDamege() == CriticalDamegeType.INJURED) {
+					if (getCriticalDamege() == CriticalDamageType.INJURED) {
 						idx += getImage(ImageCode.YUNYAA2_INJURED.ordinal(), direction, layer, idx);
 					}
 					if (isBlind()) {
@@ -465,7 +465,7 @@ public class Reimu extends Yukkuri {
 				} else /* if (getAge() % 6 <= 3) */ {
 					idx += getImage(ImageCode.YUNYAA3.ordinal(), direction, layer, idx);
 
-					if (getOkazari() != null && getOkazari().getOkazariType() == OkazariType.DEFAULT) {
+					if (getOkazaris() != null && getOkazaris().getOkazariType() == OkazariType.DEFAULT) {
 						idx += getImage(ImageCode.YUNYAA3_ACCESSORY.ordinal(), direction, layer, idx);
 					}
 					if (getHairState() == HairState.DEFAULT) {
@@ -473,7 +473,7 @@ public class Reimu extends Yukkuri {
 					} else if (getHairState() == HairState.BRINDLED1 || getHairState() == HairState.BRINDLED2) {
 						idx += getImage(ImageCode.YUNYAA3_HAIR3.ordinal(), direction, layer, idx);
 					}
-					if (getCriticalDamege() == CriticalDamegeType.INJURED) {
+					if (getCriticalDamege() == CriticalDamageType.INJURED) {
 						idx += getImage(ImageCode.YUNYAA3_INJURED.ordinal(), direction, layer, idx);
 					}
 					if (isBlind()) {

@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.Id;
 
 import org.simyukkuri.entity.core.Entity;
-import org.simyukkuri.enums.Event;
+import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.enums.Type;
 import org.simyukkuri.util.GameWorld;
 
@@ -70,9 +70,9 @@ public abstract class Effect extends Entity {
 			int life, int loop, boolean end, boolean grav, boolean front) {
 
 		if (front) {
-			GameWorld.get().getCurrentMap().getFrontEffect().put(objId, this);
+			GameWorld.get().getCurrentWorldState().getFrontEffects().put(objId, this);
 		} else {
-			GameWorld.get().getCurrentMap().getSortEffect().put(objId, this);
+			GameWorld.get().getCurrentWorldState().getSortedEffects().put(objId, this);
 		}
 		objType = Type.LIGHT_EFFECT;
 		x = startX;
@@ -107,10 +107,10 @@ public abstract class Effect extends Entity {
 	}
 
 	@Override
-	public Event clockTick() {
+	public TickResult clockTick() {
 		setAge(getAge() + TICK);
 		if (isRemoved() || (lifeTime != -1 && getAge() > lifeTime)) {
-			return Event.REMOVED;
+			return TickResult.REMOVED;
 		}
 		x += vx;
 		y += vy;
@@ -126,7 +126,7 @@ public abstract class Effect extends Entity {
 				animeFrame++;
 				if (animeFrame == frames) {
 					if (animeEnd)
-						return Event.REMOVED;
+						return TickResult.REMOVED;
 					animeFrame = 0;
 					if (animeLoop != -1) {
 						animeLoop--;
@@ -137,7 +137,7 @@ public abstract class Effect extends Entity {
 			}
 		}
 		calcPos();
-		return Event.DONOTHING;
+		return TickResult.NONE;
 	}
 
 	public int getDirection() {

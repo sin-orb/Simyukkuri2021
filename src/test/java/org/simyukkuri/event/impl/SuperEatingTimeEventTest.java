@@ -24,7 +24,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import org.simyukkuri.SimYukkuri;
-import org.simyukkuri.draw.World;
+import org.simyukkuri.engine.World;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.living.yukkuri.impl.Reimu;
 import org.simyukkuri.entity.core.world.item.Food;
@@ -156,7 +156,7 @@ public class SuperEatingTimeEventTest {
     public void testCheckEventResponse_differentPublicRank_returnsFalse() {
         Yukkuri from = createBody();
         Yukkuri b = createBody();
-        b.setPublicRank(org.simyukkuri.enums.PublicRank.UnunSlave);
+        b.setPublicRank(org.simyukkuri.enums.PublicRank.UNUN_SLAVE);
         SuperEatingTimeEvent event = new SuperEatingTimeEvent(from, null, null, 10);
         assertFalse(event.checkEventResponse(b));
     }
@@ -192,7 +192,7 @@ public class SuperEatingTimeEventTest {
     public void testUpdate_bodyNYD_returnsAbort() {
         Yukkuri from = createBody();
         Yukkuri b = createBody();
-        b.setCoreAnkoState(org.simyukkuri.enums.CoreAnkoState.NonYukkuriDisease);
+        b.setCoreAnkoState(org.simyukkuri.enums.CoreAnkoState.NON_YUKKURI_DISEASE);
         SuperEatingTimeEvent event = new SuperEatingTimeEvent(from, null, null, 10);
         assertEquals(org.simyukkuri.event.EventPacket.UpdateState.ABORT, event.update(b));
     }
@@ -298,7 +298,7 @@ public class SuperEatingTimeEventTest {
     public void testUpdate_parentBranch_withAdultChild_returnsAbort() {
         Yukkuri from = createBody();
         Yukkuri child = createBody(); // createBody() sets ADULT age → filtered from activeChildList
-        from.addChildrenList(child);
+        from.addChild(child);
         Food food = createFood();
         SuperEatingTimeEvent event = new SuperEatingTimeEvent(from, null, food, 10);
         from.setCurrentEvent(event);
@@ -364,8 +364,8 @@ public class SuperEatingTimeEventTest {
         Yukkuri child = createBody();
         child.setAgeState(AgeState.BABY);
         // Add child as from's child so createActiveChildList returns it
-        from.addChildrenList(child);
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(child.getUniqueID(), child);
+        from.addChild(child);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(child.getUniqueID(), child);
         Food food = createFood();
         SuperEatingTimeEvent event = new SuperEatingTimeEvent(from, null, food, 10);
         event.setState(SuperEatingTimeEvent.STATE.WAIT);
@@ -378,8 +378,8 @@ public class SuperEatingTimeEventTest {
         Yukkuri from = createBody();
         Yukkuri child = createBody();
         child.setAgeState(AgeState.BABY);
-        from.addChildrenList(child);
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(child.getUniqueID(), child);
+        from.addChild(child);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(child.getUniqueID(), child);
         Food food = createFood();
         SuperEatingTimeEvent event = new SuperEatingTimeEvent(from, null, food, 10);
         event.setState(SuperEatingTimeEvent.STATE.GO);
@@ -402,7 +402,7 @@ public class SuperEatingTimeEventTest {
     public void testCheckEventResponse_isNYD_returnsFalse() {
         Yukkuri from = createBody();
         Yukkuri b = createBody();
-        b.setCoreAnkoState(org.simyukkuri.enums.CoreAnkoState.NonYukkuriDisease);
+        b.setCoreAnkoState(org.simyukkuri.enums.CoreAnkoState.NON_YUKKURI_DISEASE);
         SuperEatingTimeEvent event = new SuperEatingTimeEvent(from, null, null, 10);
         assertFalse(event.checkEventResponse(b));
     }
@@ -463,8 +463,8 @@ public class SuperEatingTimeEventTest {
         Yukkuri from = createBody();
         Yukkuri child = createBody();
         child.setAgeState(AgeState.BABY);
-        from.addChildrenList(child);
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(child.getUniqueID(), child);
+        from.addChild(child);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(child.getUniqueID(), child);
         Food food = createFood();
         SuperEatingTimeEvent event = new SuperEatingTimeEvent(from, null, food, 10);
         event.setState(SuperEatingTimeEvent.STATE.START_BEFORE);
@@ -483,8 +483,8 @@ public class SuperEatingTimeEventTest {
         Yukkuri from = createBody();
         Yukkuri child = createBody();
         child.setAgeState(AgeState.BABY);
-        from.addChildrenList(child);
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(child.getUniqueID(), child);
+        from.addChild(child);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(child.getUniqueID(), child);
         Food food = createFood();
         SuperEatingTimeEvent event = new SuperEatingTimeEvent(from, null, food, 10);
         event.setState(SuperEatingTimeEvent.STATE.START);
@@ -503,7 +503,7 @@ public class SuperEatingTimeEventTest {
         Yukkuri from = createBody();
         Yukkuri child = createBody();
         child.setAgeState(AgeState.BABY);
-        from.addChildrenList(child);
+        from.addChild(child);
         Food food = createFood();
         food.setAmount(0); // empty food
 
@@ -527,13 +527,13 @@ public class SuperEatingTimeEventTest {
             spr[i] = new Sprite(10, 10, Sprite.PIVOT_CENTER_BOTTOM);
         }
         b.setSpriteSet(spr);
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(b.getUniqueID(), b);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueID(), b);
         return b;
     }
 
     private Food createFood() {
         Food food = new Food(100, 100, Food.FoodType.SWEETS1.ordinal());
-        SimYukkuri.world.getCurrentMap().getFood().put(food.getObjId(), food);
+        SimYukkuri.world.getCurrentWorldState().getFoods().put(food.getObjId(), food);
         return food;
     }
 
@@ -561,8 +561,8 @@ public class SuperEatingTimeEventTest {
             Yukkuri child = createBody();
             child.setAgeState(AgeState.BABY);
             child.setHungry(child.getHungryLimit());
-            from.addChildrenList(child);
-            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(child.getUniqueID(), child);
+            from.addChild(child);
+            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(child.getUniqueID(), child);
             Food food = createFood();
 
             SuperEatingTimeEvent event = new SuperEatingTimeEvent(from, null, food, 10);

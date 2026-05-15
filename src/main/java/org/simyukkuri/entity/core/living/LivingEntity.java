@@ -26,10 +26,10 @@ import org.simyukkuri.enums.YukkuriBake;
 import org.simyukkuri.enums.BurialState;
 import org.simyukkuri.enums.Burst;
 import org.simyukkuri.enums.CoreAnkoState;
-import org.simyukkuri.enums.CriticalDamegeType;
+import org.simyukkuri.enums.CriticalDamageType;
 import org.simyukkuri.enums.Damage;
 import org.simyukkuri.enums.Direction;
-import org.simyukkuri.enums.Event;
+import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.enums.FavItemType;
 import org.simyukkuri.enums.FootBake;
 import org.simyukkuri.enums.HairState;
@@ -47,7 +47,7 @@ import org.simyukkuri.event.EventPacket;
 import org.simyukkuri.logic.AntInfestationPolicy;
 import org.simyukkuri.logic.YukkuriRelations;
 import org.simyukkuri.system.BasicStrokeEX;
-import org.simyukkuri.system.MapPlaceData;
+import org.simyukkuri.system.WorldState;
 import org.simyukkuri.system.MessagePool;
 import org.simyukkuri.system.Sprite;
 import org.simyukkuri.util.GameEnvironment;
@@ -123,7 +123,7 @@ public abstract class LivingEntity extends Entity {
 	/** 死んでからの期間 */
 	protected int deadPeriod = 0;
 	/** 中枢餡の状態（非ゆっくり症フラグ */
-	protected CoreAnkoState coreAnkoState = CoreAnkoState.DEFAULT;
+	protected CoreAnkoState coreAnkoState = CoreAnkoState.NORMAL;
 	/** 睡眠中かどうか */
 	protected boolean sleeping = false;
 	/** 悪夢を見るかどうか */
@@ -179,7 +179,7 @@ public abstract class LivingEntity extends Entity {
 	/** パニック状態の期間 */
 	protected int panicPeriod = 0;
 	/** 致命傷種別 */
-	protected CriticalDamegeType criticalDamege = null;
+	protected CriticalDamageType criticalDamege = null;
 	/** トラウマ */
 	protected Trauma trauma = Trauma.NONE;
 	/** ダメージを受けていない期間 */
@@ -422,7 +422,7 @@ public abstract class LivingEntity extends Entity {
 	 *
 	 * @return 致命傷種別
 	 */
-	public CriticalDamegeType getCriticalDamegeType() {
+	public CriticalDamageType getCriticalDamageType() {
 		return null;
 	}
 
@@ -468,7 +468,7 @@ public abstract class LivingEntity extends Entity {
 		if (dead) {
 			return;
 		}
-		if (s > 0 && coreAnkoState == CoreAnkoState.DEFAULT && getBurstState() != Burst.HALF) {
+		if (s > 0 && coreAnkoState == CoreAnkoState.NORMAL && getBurstState() != Burst.HALF) {
 			plusShit(s / 5);
 		}
 		stress += TICK * s;
@@ -1044,7 +1044,7 @@ public abstract class LivingEntity extends Entity {
 	 *
 	 * @return 何もしない
 	 */
-	public Event checkFear() {
+	public TickResult checkFear() {
 		return panicDelegate().checkFear();
 	}
 
@@ -1098,12 +1098,12 @@ public abstract class LivingEntity extends Entity {
 	}
 
 	/** 致命傷種別 を取得する. @return 致命傷種別 */
-	public CriticalDamegeType getCriticalDamege() {
+	public CriticalDamageType getCriticalDamege() {
 		return criticalDamege;
 	}
 
 	/** 致命傷種別 を設定する. @param criticalDamege 致命傷種別 */
-	public void setCriticalDamege(CriticalDamegeType criticalDamege) {
+	public void setCriticalDamege(CriticalDamageType criticalDamege) {
 		this.criticalDamege = criticalDamege;
 	}
 
@@ -1249,7 +1249,7 @@ public abstract class LivingEntity extends Entity {
 		if (isDead()) {
 			return;
 		}
-		destZ = Math.max(0, Math.min(toZ, Translate.getMapZ()));
+		destZ = Math.max(0, Math.min(toZ, Translate.getWorldDepth()));
 	}
 
 	/**
@@ -1401,12 +1401,12 @@ public abstract class LivingEntity extends Entity {
 	private HashMap<TakeoutItemType, Integer> carryItems = new HashMap<TakeoutItemType, Integer>();
 
 	/** おかざりオブジェクト を取得する. @return おかざりオブジェクト */
-	public Okazari getOkazari() {
+	public Okazari getOkazaris() {
 		return okazari;
 	}
 
 	/** おかざりオブジェクト を設定する. @param okazari おかざりオブジェクト */
-	public void setOkazari(Okazari okazari) {
+	public void setOkazaris(Okazari okazari) {
 		this.okazari = okazari;
 	}
 
@@ -1739,8 +1739,8 @@ public abstract class LivingEntity extends Entity {
 				|| isBirth()
 				|| isGrabbed()
 				|| isOnNonMovingConveyor()
-				|| getCoreAnkoState() == CoreAnkoState.NonYukkuriDisease
-				|| getCriticalDamegeType() == CriticalDamegeType.CUT
+				|| getCoreAnkoState() == CoreAnkoState.NON_YUKKURI_DISEASE
+				|| getCriticalDamageType() == CriticalDamageType.CUT
 				|| isPealed()
 				|| isBlind()
 				|| isPacked()) {
@@ -1765,8 +1765,8 @@ public abstract class LivingEntity extends Entity {
 				|| getBurialState() != BurialState.NONE
 				|| isBirth()
 				|| isOnNonMovingConveyor()
-				|| getCoreAnkoState() == CoreAnkoState.NonYukkuriDisease
-				|| getCriticalDamegeType() == CriticalDamegeType.CUT
+				|| getCoreAnkoState() == CoreAnkoState.NON_YUKKURI_DISEASE
+				|| getCriticalDamageType() == CriticalDamageType.CUT
 				|| isPealed()
 				|| isBlind()
 				|| isPacked()) {
@@ -1785,7 +1785,7 @@ public abstract class LivingEntity extends Entity {
 		if (isDontMove()) {
 			return true;
 		}
-		if (getCriticalDamegeType() != null) {
+		if (getCriticalDamageType() != null) {
 			return true;
 		}
 		if (hasBabyOrStalk()) {
@@ -2289,7 +2289,7 @@ public abstract class LivingEntity extends Entity {
 		// 実ゆの場合、親が反応する
 		if (getBindStalk() != null) {
 			int id = getBindStalk().getPlantYukkuri();
-			Yukkuri bodyMother = GameWorld.get().getCurrentMap().getYukkuriMap().get(id);
+			Yukkuri bodyMother = GameWorld.get().getCurrentWorldState().getYukkuriRegistry().get(id);
 			if (bodyMother != null) {
 				if (!bodyMother.isDead() || bodyMother.isSleeping()) {
 					return bodyMother.getUniqueID();
@@ -2305,7 +2305,7 @@ public abstract class LivingEntity extends Entity {
 	 * @param state 実ゆの状態
 	 */
 	public void checkReactionStalkMother(org.simyukkuri.enums.UnbirthBabyState state) {
-		Yukkuri bodyMother = GameWorld.get().getCurrentMap().getYukkuriMap().get(getBindStalkMotherCanNotice());
+		Yukkuri bodyMother = GameWorld.get().getCurrentWorldState().getYukkuriRegistry().get(getBindStalkMotherCanNotice());
 		if (bodyMother == null) {
 			return;
 		}
@@ -2338,7 +2338,7 @@ public abstract class LivingEntity extends Entity {
 			// 茎があって親が生きてる
 			if (getBindStalk() != null) {
 				int id = getBindStalk().getPlantYukkuri();
-				Entity oBind = GameWorld.get().getCurrentMap().getYukkuriMap().get(id);
+				Entity oBind = GameWorld.get().getCurrentWorldState().getYukkuriRegistry().get(id);
 				if (oBind != null && oBind instanceof Yukkuri) {
 					Yukkuri bodyBind = (Yukkuri) oBind;
 					if (bodyBind != null && !bodyBind.isDead() && !bodyBind.isRemoved()) {
@@ -2347,7 +2347,7 @@ public abstract class LivingEntity extends Entity {
 				}
 			}
 			// 救命オレンジプール上にいる
-			for (org.simyukkuri.entity.core.world.item.OrangePool pool : GameWorld.get().getCurrentMap().getOrangePool()
+			for (org.simyukkuri.entity.core.world.item.OrangePool pool : GameWorld.get().getCurrentWorldState().getOrangePools()
 					.values()) {
 				if (!pool.isRescue())
 					continue;
@@ -2370,7 +2370,7 @@ public abstract class LivingEntity extends Entity {
 	 */
 	public boolean checkOnBed() {
 		Rectangle r = takeScreenRect();
-		for (java.util.Map.Entry<Integer, Bed> entry : GameWorld.get().getCurrentMap().getBed().entrySet()) {
+		for (java.util.Map.Entry<Integer, Bed> entry : GameWorld.get().getCurrentWorldState().getBeds().entrySet()) {
 			Bed bd = entry.getValue();
 			if (takeScreenRect(bd.getScreenRect()).intersects(r))
 				return true;
@@ -2409,7 +2409,7 @@ public abstract class LivingEntity extends Entity {
 	/** おかざりがあるかどうかを取得する. */
 	@Transient
 	public final boolean hasOkazari() {
-		return getOkazari() != null;
+		return getOkazaris() != null;
 	}
 
 	/** 動物（というか現在はアリ一択か）に食べられてるか */
@@ -2485,7 +2485,7 @@ public abstract class LivingEntity extends Entity {
 			return false;
 		if (isUnBirth())
 			return false;
-		if (getPublicRank() == PublicRank.UnunSlave)
+		if (getPublicRank() == PublicRank.UNUN_SLAVE)
 			return false;
 		if (isNYD())
 			return false;
@@ -2503,7 +2503,7 @@ public abstract class LivingEntity extends Entity {
 	 * @return
 	 */
 	public final boolean canAction() {
-		if (isDead() || getCriticalDamege() == CriticalDamegeType.CUT || isPealed() ||
+		if (isDead() || getCriticalDamege() == CriticalDamageType.CUT || isPealed() ||
 				isPacked() || isSleeping() || isShitting() || isBirth() || isSukkiri() || isNeedled() ||
 				getCurrentEvent() != null || isNYD() ||
 				getBurialState() != BurialState.NONE) {
@@ -2519,7 +2519,7 @@ public abstract class LivingEntity extends Entity {
 	 * @return
 	 */
 	public final boolean canActionForEvent() {
-		if (isDead() || getCriticalDamege() == CriticalDamegeType.CUT || isPealed() ||
+		if (isDead() || getCriticalDamege() == CriticalDamageType.CUT || isPealed() ||
 				isPacked() || isSleeping() || isShitting() || isBirth() || isSukkiri() || isNeedled() ||
 				isNYD() || getBurialState() != BurialState.NONE) {
 			return false;
@@ -2540,7 +2540,7 @@ public abstract class LivingEntity extends Entity {
 			clearEvent();
 			return;
 		}
-		if (GameWorld.get().getCurrentMap().getMapIndex() == 0 || getZ() != 0) {
+		if (GameWorld.get().getCurrentWorldState().getWorldIndex() == 0 || getZ() != 0) {
 			return;
 		}
 		AntInfestationPolicy.judgeNewAnt((Yukkuri) this);
@@ -2804,12 +2804,12 @@ public abstract class LivingEntity extends Entity {
 	protected List<EventPacket> eventList = new LinkedList<EventPacket>();
 
 	/** この個体に対して発行されたイベントのリスト を取得する. @return この個体に対して発行されたイベントのリスト */
-	public List<EventPacket> getEventList() {
+	public List<EventPacket> getEvents() {
 		return eventList;
 	}
 
 	/** この個体に対して発行されたイベントのリスト を設定する. @param eventList この個体に対して発行されたイベントのリスト */
-	public void setEventList(List<EventPacket> eventList) {
+	public void setEvents(List<EventPacket> eventList) {
 		this.eventList = eventList;
 	}
 
@@ -2827,15 +2827,15 @@ public abstract class LivingEntity extends Entity {
 	}
 
 	/** イベントで設定されたアクション */
-	protected Event eventResult = Event.DONOTHING;
+	protected TickResult eventResult = TickResult.NONE;
 
 	/** イベントで設定されたアクション を取得する. @return イベントで設定されたアクション */
-	public Event getEventResult() {
+	public TickResult getEventResult() {
 		return eventResult;
 	}
 
 	/** イベントで設定されたアクション を設定する. @param eventResult イベントで設定されたアクション */
-	public void setEventResult(Event eventResult) {
+	public void setEventResult(TickResult eventResult) {
 		this.eventResult = eventResult;
 	}
 
@@ -4013,12 +4013,12 @@ public abstract class LivingEntity extends Entity {
 
 	@com.fasterxml.jackson.annotation.JsonIgnore
 	public final boolean isNYD() {
-		return coreAnkoState != CoreAnkoState.DEFAULT;
+		return coreAnkoState != CoreAnkoState.NORMAL;
 	}
 
 	@com.fasterxml.jackson.annotation.JsonIgnore
 	public final boolean isNotNYD() {
-		return coreAnkoState == CoreAnkoState.DEFAULT;
+		return coreAnkoState == CoreAnkoState.NORMAL;
 	}
 
 	@com.fasterxml.jackson.annotation.JsonIgnore
@@ -4045,7 +4045,7 @@ public abstract class LivingEntity extends Entity {
 		if (bodyBakePeriod > getDamageLimitBase()[getAgeState().ordinal()] * 3 / 4) {
 			ret = YukkuriBake.CRITICAL;
 		} else if (bodyBakePeriod > (getDamageLimitBase()[getAgeState().ordinal()] * 2 / 5)) {
-			ret = YukkuriBake.MIDIUM;
+			ret = YukkuriBake.MEDIUM;
 		}
 		return ret;
 	}
@@ -4059,7 +4059,7 @@ public abstract class LivingEntity extends Entity {
 		if (footBakePeriod > getDamageLimitBase()[getAgeState().ordinal()]) {
 			ret = FootBake.CRITICAL;
 		} else if (footBakePeriod > (getDamageLimitBase()[getAgeState().ordinal()] >> 1)) {
-			ret = FootBake.MIDIUM;
+			ret = FootBake.MEDIUM;
 		}
 		return ret;
 	}
@@ -4156,12 +4156,12 @@ public abstract class LivingEntity extends Entity {
 		if (getCarryItems().get(key) == null) {
 			return null;
 		}
-		MapPlaceData m = GameWorld.get().getCurrentMap();
-		if (m.getTakenOutFood().containsKey(getCarryItems().get(key))) {
-			return m.getTakenOutFood().get(getCarryItems().get(key));
+		WorldState m = GameWorld.get().getCurrentWorldState();
+		if (m.getTakenOutFoods().containsKey(getCarryItems().get(key))) {
+			return m.getTakenOutFoods().get(getCarryItems().get(key));
 		}
-		if (m.getTakenOutShit().containsKey(getCarryItems().get(key))) {
-			return m.getTakenOutShit().get(getCarryItems().get(key));
+		if (m.getTakenOutShits().containsKey(getCarryItems().get(key))) {
+			return m.getTakenOutShits().get(getCarryItems().get(key));
 		}
 		return YukkuriRelations.findYukkuriByObjId(getCarryItems().get(key));
 	}
@@ -4256,7 +4256,7 @@ public abstract class LivingEntity extends Entity {
 		l.setCantDiePeriod(cantDiePeriod);
 		l.setBurialState(burialState);
 		// --- インベントリ ---
-		l.setOkazari(okazari);
+		l.setOkazaris(okazari);
 		l.setOkazariPosition(okazariPosition);
 		l.setHasBaby(hasBaby);
 		l.setHasStalk(hasStalk);
@@ -4323,7 +4323,7 @@ public abstract class LivingEntity extends Entity {
 		l.setUnyoMode(unyoMode);
 		l.setUnyoOffsetH(unyoOffsetH);
 		l.setUnyoOffsetW(unyoOffsetW);
-		l.setEventList(eventList != null ? new LinkedList<>(eventList) : null);
+		l.setEvents(eventList != null ? new LinkedList<>(eventList) : null);
 		l.setCurrentEvent(currentEvent);
 		l.setEventResult(eventResult);
 		// --- ID・識別 ---

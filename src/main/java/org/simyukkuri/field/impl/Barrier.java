@@ -13,7 +13,7 @@ import org.simyukkuri.draw.Color4y;
 import org.simyukkuri.draw.Point4y;
 import org.simyukkuri.draw.Translate;
 import org.simyukkuri.field.FieldShape;
-import org.simyukkuri.system.MapPlaceData;
+import org.simyukkuri.system.WorldState;
 
 /* 
  *    Copyright 2013 Mimisuke
@@ -81,12 +81,12 @@ public class Barrier extends FieldShape {
 		// フィールド座標が渡ってくるのでマップ座標も計算しておく
 		Point4y pos;
 		pos = Translate.invertLimit(fieldSX, fieldSY);
-		mapSX = Math.max(0, Math.min(pos.getX(), Translate.getMapW()));
-		mapSY = Math.max(0, Math.min(pos.getY(), Translate.getMapH()));
+		mapSX = Math.max(0, Math.min(pos.getX(), Translate.getWorldWidth()));
+		mapSY = Math.max(0, Math.min(pos.getY(), Translate.getWorldHeight()));
 
 		pos = Translate.invertLimit(fieldEX, fieldEY);
-		mapEX = Math.max(0, Math.min(pos.getX(), Translate.getMapW()));
-		mapEY = Math.max(0, Math.min(pos.getY(), Translate.getMapH()));
+		mapEX = Math.max(0, Math.min(pos.getX(), Translate.getWorldWidth()));
+		mapEY = Math.max(0, Math.min(pos.getY(), Translate.getWorldHeight()));
 
 		attribute = type;
 		switch (type) {
@@ -116,9 +116,9 @@ public class Barrier extends FieldShape {
 				break;
 		}
 
-		MapPlaceData.setWallLine(GameWorld.get().getCurrentMap().getWallMap(), mapSX, mapSY, mapEX, mapEY, true,
+		WorldState.setWallLine(GameWorld.get().getCurrentWorldState().getWallGrid(), mapSX, mapSY, mapEX, mapEY, true,
 				attribute);
-		GameWorld.get().getCurrentMap().getBarrier().add(this);
+		GameWorld.get().getCurrentWorldState().getBarriers().add(this);
 	}
 
 	public Barrier() {
@@ -138,25 +138,25 @@ public class Barrier extends FieldShape {
 
 	/** 除去 */
 	public static void clearBarrier(Barrier barrier) {
-		int x1 = barrier.getMapSX();
-		int y1 = barrier.getMapSY();
-		int x2 = barrier.getMapEX();
-		int y2 = barrier.getMapEY();
-		if (GameWorld.get().getCurrentMap().getBarrier().remove(barrier)) {
-			MapPlaceData.setWallLine(GameWorld.get().getCurrentMap().getWallMap(), x1, y1, x2, y2, false, barrier.attribute);
+		int x1 = barrier.getStartX();
+		int y1 = barrier.getStartY();
+		int x2 = barrier.getEndX();
+		int y2 = barrier.getEndY();
+		if (GameWorld.get().getCurrentWorldState().getBarriers().remove(barrier)) {
+			WorldState.setWallLine(GameWorld.get().getCurrentWorldState().getWallGrid(), x1, y1, x2, y2, false, barrier.attribute);
 		}
 	}
 
 	/** 壁に引っかかるかのチェック */
 	public static boolean onBarrier(int cx, int cy, int thx, int thy, int attr) {
-		MapPlaceData tmp = GameWorld.get().getCurrentMap();
+		WorldState tmp = GameWorld.get().getCurrentWorldState();
 		int sx = Math.max(0, cx - thx / 2);
 		int sy = Math.max(0, cy - thy / 2);
-		int ex = Math.min(cx + thx / 2, Translate.getMapW());
-		int ey = Math.min(cy + thy / 2, Translate.getMapH());
+		int ex = Math.min(cx + thx / 2, Translate.getWorldWidth());
+		int ey = Math.min(cy + thy / 2, Translate.getWorldHeight());
 		for (int x = sx; x < ex; x++) {
 			for (int y = sy; y < ey; y++) {
-				if ((tmp.getWallMap()[x][y] & attr) != 0) {
+				if ((tmp.getWallGrid()[x][y] & attr) != 0) {
 					return true;
 				}
 			}
@@ -173,13 +173,13 @@ public class Barrier extends FieldShape {
 	 * @return ある点が壁の上か
 	 */
 	public static Barrier getBarrier(int cx, int cy, int thickness) {
-		List<Barrier> barrierList = GameWorld.get().getCurrentMap().getBarrier();
+		List<Barrier> barrierList = GameWorld.get().getCurrentWorldState().getBarriers();
 
 		for (Barrier targetBarrier : barrierList) {
-			int x1 = targetBarrier.getMapSX();
-			int y1 = targetBarrier.getMapSY();
-			int x2 = targetBarrier.getMapEX();
-			int y2 = targetBarrier.getMapEY();
+			int x1 = targetBarrier.getStartX();
+			int y1 = targetBarrier.getStartY();
+			int x2 = targetBarrier.getEndX();
+			int y2 = targetBarrier.getEndY();
 			int distance = (int) Math.sqrt(Translate.distance(x1, y1, x2, y2));
 			double deltaX = (double) (x2 - x1) / (double) distance;
 			double deltaY = (double) (y2 - y1) / (double) distance;
@@ -207,12 +207,12 @@ public class Barrier extends FieldShape {
 	 * @return 壁が動線(視線)上にあるかどうか
 	 */
 	public static boolean acrossBarrier(int x1, int y1, int x2, int y2, int attr) {
-		MapPlaceData tmp = GameWorld.get().getCurrentMap();
+		WorldState tmp = GameWorld.get().getCurrentWorldState();
 
-		x1 = Math.max(0, Math.min(x1, Translate.getMapW()));
-		x2 = Math.max(0, Math.min(x2, Translate.getMapW()));
-		y1 = Math.max(0, Math.min(y1, Translate.getMapH()));
-		y2 = Math.max(0, Math.min(y2, Translate.getMapH()));
+		x1 = Math.max(0, Math.min(x1, Translate.getWorldWidth()));
+		x2 = Math.max(0, Math.min(x2, Translate.getWorldWidth()));
+		y1 = Math.max(0, Math.min(y1, Translate.getWorldHeight()));
+		y2 = Math.max(0, Math.min(y2, Translate.getWorldHeight()));
 
 		int distance = (int) Math.sqrt(Translate.distance(x1, y1, x2, y2));
 		double deltaX = (double) (x2 - x1) / (double) distance;
@@ -222,7 +222,7 @@ public class Barrier extends FieldShape {
 		for (int t = 0; t <= distance; t++) {
 			int x = startX + (int) (deltaX * t);
 			int y = startY + (int) (deltaY * t);
-			if ((tmp.getWallMap()[x][y] & attr) != 0) {
+			if ((tmp.getWallGrid()[x][y] & attr) != 0) {
 				return true;
 			}
 		}

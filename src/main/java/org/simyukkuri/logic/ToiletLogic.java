@@ -65,8 +65,8 @@ public class ToiletLogic {
 			hasShit = true;
 		}
 
-		List<Toilet> toiletList = new LinkedList<>(GameWorld.get().getCurrentMap().getToilet().values());
-		List<Shit> shitList = new LinkedList<>(GameWorld.get().getCurrentMap().getShit().values());
+		List<Toilet> toiletList = new LinkedList<>(GameWorld.get().getCurrentWorldState().getToilets().values());
+		List<Shit> shitList = new LinkedList<>(GameWorld.get().getCurrentWorldState().getShit().values());
 		if (shitList == null || shitList.size() == 0) {
 			return false;
 		}
@@ -76,7 +76,7 @@ public class ToiletLogic {
 		boolean canTransport = true;
 		// 前回チェックしたうんうんどれいがまだいるなら自分で運ばない
 		if (bodyUnunSlave != null &&
-				bodyUnunSlave.getPublicRank() == PublicRank.UnunSlave &&
+				bodyUnunSlave.getPublicRank() == PublicRank.UNUN_SLAVE &&
 				!bodyUnunSlave.isDead() &&
 				!bodyUnunSlave.isRemoved()) {
 			canTransport = false;
@@ -87,12 +87,12 @@ public class ToiletLogic {
 		}
 		// うんうん奴隷がいれば運ばない
 		if (canTransport) {
-			for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getYukkuriMap().entrySet()) {
+			for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentWorldState().getYukkuriRegistry().entrySet()) {
 				Yukkuri bodyOther = entry.getValue();
 				if (bodyOther == body || bodyOther.isDead() || bodyOther.isRemoved()) {
 					continue;
 				}
-				if (bodyOther.getPublicRank() == PublicRank.UnunSlave) {
+				if (bodyOther.getPublicRank() == PublicRank.UNUN_SLAVE) {
 					canTransport = false;
 					bodyUnunSlave = bodyOther;
 					break;
@@ -112,7 +112,7 @@ public class ToiletLogic {
 
 				// 壁があるなら無視
 				if (Barrier.acrossBarrier(body.getX(), body.getY(), s.getX(), s.getY(),
-						Barrier.MAP_BODY[body.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
+						Barrier.BODY_BLOCK_FLAGS[body.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
 					continue;
 				}
 				// トイレの上にあるか
@@ -125,7 +125,7 @@ public class ToiletLogic {
 						} else {
 							// 壁があるなら無視
 							if (!Barrier.acrossBarrier(body.getX(), body.getY(), t.getX(), t.getY(),
-									Barrier.MAP_BODY[body.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
+									Barrier.BODY_BLOCK_FLAGS[body.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
 								foundMyToilet = true;
 								break;
 							}
@@ -148,7 +148,7 @@ public class ToiletLogic {
 				continue;
 			// 壁があるなら無視
 			if (Barrier.acrossBarrier(body.getX(), body.getY(), s.getX(), s.getY(),
-					Barrier.MAP_BODY[body.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
+					Barrier.BODY_BLOCK_FLAGS[body.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
 				continue;
 			}
 
@@ -157,7 +157,7 @@ public class ToiletLogic {
 			if (canTransport && distance < collisionX && !hasShit && !foundMyShitOutOfToilet && foundMyToilet) {
 				int bodyOwnerId = s.getOwnerId();
 				Yukkuri owner = null;
-				for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getYukkuriMap().entrySet()) {
+				for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentWorldState().getYukkuriRegistry().entrySet()) {
 					Yukkuri otherBody = entry.getValue();
 					if (otherBody.getUniqueID() == bodyOwnerId) {
 						owner = otherBody;
@@ -253,12 +253,12 @@ public class ToiletLogic {
 		// B1.トイレに向かわないならリターンを返す
 		PublicRank publicRank = body.getPublicRank();
 		// うんうんどれいの場合
-		if (publicRank == PublicRank.UnunSlave) {
+		if (publicRank == PublicRank.UNUN_SLAVE) {
 			// 盗もうとしてて、かつうんうんしないならトイレには向かわない
 			if (body.isToSteal() && !body.wantToShit()) {
 				return false;
 			}
-			for (Map.Entry<Integer, Toilet> entry : GameWorld.get().getCurrentMap().getToilet().entrySet()) {
+			for (Map.Entry<Integer, Toilet> entry : GameWorld.get().getCurrentWorldState().getToilets().entrySet()) {
 				Toilet t = entry.getValue();
 				// うんうん奴隷用トイレのどれかにいれば終了＝トイレに向かわない
 				if (t.isForSlave() && t.checkHitObj(null, body)) {
@@ -277,7 +277,7 @@ public class ToiletLogic {
 		} else {
 			// うんうん奴隷ではない場合、用がない、かつうんうんを持ってないなら終了
 			if (!body.wantToShit() && !hasShit) {
-				for (Map.Entry<Integer, Toilet> entry : GameWorld.get().getCurrentMap().getToilet().entrySet()) {
+				for (Map.Entry<Integer, Toilet> entry : GameWorld.get().getCurrentWorldState().getToilets().entrySet()) {
 					Toilet t = entry.getValue();
 					// 自動清掃でないトイレに入った時の反応
 					if (!t.getAutoClean() && t.checkHitObj(null, body) && !body.isTalking()) {
@@ -294,7 +294,7 @@ public class ToiletLogic {
 
 		// 対象が決まっていたら到達したかチェック
 		Entity target = body.takeMoveTarget();
-		if ((body.isToShit() || publicRank == PublicRank.UnunSlave || hasShit) && target != null) {
+		if ((body.isToShit() || publicRank == PublicRank.UNUN_SLAVE || hasShit) && target != null) {
 			// 途中で消されてたら他の候補を探す
 			if (target.isRemoved()) {
 				body.clearActions();
@@ -311,7 +311,7 @@ public class ToiletLogic {
 				// うんうんをしたいわけではないとき
 				if (!body.wantToShit()) {
 					// うんうんどれいは常にトイレにいる
-					if (publicRank == PublicRank.UnunSlave) {
+					if (publicRank == PublicRank.UNUN_SLAVE) {
 						if (body.getCarryItem(TakeoutItemType.SHIT) != null) {
 							// うんうん奴隷がうんうんを持っていれば落とす
 							body.dropTakeoutItem(TakeoutItemType.SHIT);
@@ -351,18 +351,18 @@ public class ToiletLogic {
 			wallMode = AgeState.ADULT.ordinal();
 		}
 
-		for (Map.Entry<Integer, Toilet> entry : GameWorld.get().getCurrentMap().getToilet().entrySet()) {
+		for (Map.Entry<Integer, Toilet> entry : GameWorld.get().getCurrentWorldState().getToilets().entrySet()) {
 			Toilet t = entry.getValue();
 			int distance = Translate.distance(body.getX(), body.getY(), t.getX(), t.getY() - t.getH() / 6);
 			if (minDistance > distance) {
 				if (!body.isRude()) {
 					if (Barrier.acrossBarrier(body.getX(), body.getY(), t.getX(), t.getY() - t.getH() / 6,
-							Barrier.MAP_BODY[wallMode] + Barrier.BARRIER_KEKKAI)) {
+							Barrier.BODY_BLOCK_FLAGS[wallMode] + Barrier.BARRIER_KEKKAI)) {
 						continue;
 					}
 				}
 				// うんうん奴隷の場合
-				if (publicRank == PublicRank.UnunSlave) {
+				if (publicRank == PublicRank.UNUN_SLAVE) {
 					// うんうん奴隷用じゃないならスキップ
 					if (!((Toilet) t).isForSlave()) {
 						continue;

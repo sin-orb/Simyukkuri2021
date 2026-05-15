@@ -92,9 +92,9 @@ class ToyTest extends ItemTestBase {
     void testRemoveListData_doesNotThrow() {
         Toy toy = new Toy(0, 0, ItemRank.HOUSE.ordinal());
         int id = toy.getObjId();
-        SimYukkuri.world.getCurrentMap().getToy().put(id, toy);
-        assertDoesNotThrow(() -> toy.removeListData());
-        assertFalse(SimYukkuri.world.getCurrentMap().getToy().containsKey(id));
+        SimYukkuri.world.getCurrentWorldState().getToys().put(id, toy);
+        assertDoesNotThrow(() -> toy.removeFromWorld());
+        assertFalse(SimYukkuri.world.getCurrentWorldState().getToys().containsKey(id));
     }
 
     // --- grab ---

@@ -359,7 +359,7 @@ public class AliceTest {
         try {
             org.simyukkuri.util.WorldTestHelper.initializeMinimalWorld();
             // bed list empty → coordinate() tries to create a Bed
-            SimYukkuri.world.getCurrentMap().getBed().clear();
+            SimYukkuri.world.getCurrentWorldState().getBeds().clear();
             Alice obj = new Alice();
             obj.coordinate();
         } catch (Exception e) {

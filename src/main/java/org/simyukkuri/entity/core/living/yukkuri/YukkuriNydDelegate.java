@@ -67,7 +67,7 @@ public final class YukkuriNydDelegate {
 	 */
 	public boolean hasNonYukkuriDisease() {
 		if (GameEnvironment.isAntiNonYukkuriDiseaseSteam() || body.getAttachmentSize(ANYDAmpoule.class) != 0) {
-			body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+			body.setCoreAnkoState(CoreAnkoState.NORMAL);
 			return false;
 		}
 
@@ -76,14 +76,14 @@ public final class YukkuriNydDelegate {
 		if (stressLimit * tolerance / 100 < body.getStress()) {
 			if (body.isNotNYD()) {
 				body.setCalm();
-				body.setCoreAnkoState(CoreAnkoState.NonYukkuriDiseaseNear);
+				body.setCoreAnkoState(CoreAnkoState.NON_YUKKURI_DISEASE_NEAR);
 				body.setNonYukkuriDiseasePeriod(0);
 				body.setSpeed(body.getSpeed() / 2);
 			}
 			if (stressLimit * tolerance / 100 * 2 < body.getStress()) {
-				if (body.getCoreAnkoState() == CoreAnkoState.NonYukkuriDiseaseNear) {
+				if (body.getCoreAnkoState() == CoreAnkoState.NON_YUKKURI_DISEASE_NEAR) {
 					body.setCalm();
-					body.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
+					body.setCoreAnkoState(CoreAnkoState.NON_YUKKURI_DISEASE);
 					body.setNonYukkuriDiseasePeriod(0);
 				}
 			}
@@ -91,7 +91,7 @@ public final class YukkuriNydDelegate {
 			if (body.isNYD()) {
 				body.setSpeed(body.getSpeed() * 2);
 			}
-			body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+			body.setCoreAnkoState(CoreAnkoState.NORMAL);
 		}
 
 		if (body.isNotNYD()) {
@@ -109,7 +109,7 @@ public final class YukkuriNydDelegate {
 		if (body.isNYD() && body.isSleeping()) {
 			body.wakeup();
 		}
-		if (body.getCoreAnkoState() == CoreAnkoState.NonYukkuriDiseaseNear
+		if (body.getCoreAnkoState() == CoreAnkoState.NON_YUKKURI_DISEASE_NEAR
 				&& GameRandom.nextInt(randomThreshold) == 0) {
 			switch (body.getNonYukkuriDiseasePeriod()) {
 				case 0:
@@ -167,7 +167,7 @@ public final class YukkuriNydDelegate {
 			body.setNydMessage(GameMessages.getMessage(body, MessagePool.Action.NonYukkuriDiseaseNear), false);
 		}
 		randomThreshold = 20;
-		if (body.getCoreAnkoState() == CoreAnkoState.NonYukkuriDisease
+		if (body.getCoreAnkoState() == CoreAnkoState.NON_YUKKURI_DISEASE
 				&& GameRandom.nextInt(randomThreshold) == 0) {
 			switch (body.getNonYukkuriDiseasePeriod()) {
 				case 0:

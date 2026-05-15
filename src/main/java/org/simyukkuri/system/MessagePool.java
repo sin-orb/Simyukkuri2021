@@ -6,7 +6,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.simyukkuri.draw.ModLoader;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.YukkuriRank;
@@ -613,7 +613,7 @@ public class MessagePool {
 	/** クラス別接尾子 */
 	public static final String[] RANK_SUFFIX = { "", "_<nora>" };
 
-	private static HashMap<String, MessageMap>[] pool_j = null;
+	private static HashMap<String, MessageBundle>[] pool_j = null;
 
 	/**
 	 * 全メッセージ読み込み
@@ -629,14 +629,14 @@ public class MessagePool {
 		pool_j = new HashMap[yk.length];
 
 		for (int i = 0; i < yk.length; i++) {
-			pool_j[i] = new HashMap<String, MessageMap>();
+			pool_j[i] = new HashMap<String, MessageBundle>();
 			// 飼いゆ
 			// 汎用メッセージ
 			br = ModLoader.openMessageFile(loader, ModLoader.getDataMsgDir(), yk[i].getMessageFileName() + "_j.txt",
 					true);
 			if (br != null) {
 				try {
-					readMessageMap(br, pool_j[i], RANK_SUFFIX[YukkuriRank.KAIYU.getMessageIndex()]);
+					readMessageBundle(br, pool_j[i], RANK_SUFFIX[YukkuriRank.KAIYU.getMessageIndex()]);
 					br.close();
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -647,7 +647,7 @@ public class MessagePool {
 					true);
 			if (br != null) {
 				try {
-					readMessageMap(br, pool_j[i], RANK_SUFFIX[YukkuriRank.KAIYU.getMessageIndex()]);
+					readMessageBundle(br, pool_j[i], RANK_SUFFIX[YukkuriRank.KAIYU.getMessageIndex()]);
 					br.close();
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -660,7 +660,7 @@ public class MessagePool {
 					yk[i].getMessageFileName() + "_j.txt", false);
 			if (br != null) {
 				try {
-					readMessageMap(br, pool_j[i], RANK_SUFFIX[YukkuriRank.NORAYU.getMessageIndex()]);
+					readMessageBundle(br, pool_j[i], RANK_SUFFIX[YukkuriRank.NORAYU.getMessageIndex()]);
 					br.close();
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -671,7 +671,7 @@ public class MessagePool {
 					yk[i].getMessageFileName() + "_ev_j.txt", false);
 			if (br != null) {
 				try {
-					readMessageMap(br, pool_j[i], RANK_SUFFIX[YukkuriRank.NORAYU.getMessageIndex()]);
+					readMessageBundle(br, pool_j[i], RANK_SUFFIX[YukkuriRank.NORAYU.getMessageIndex()]);
 					br.close();
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -681,10 +681,10 @@ public class MessagePool {
 	}
 
 	// 1ファイル読み込み
-	private static final void readMessageMap(BufferedReader br, HashMap<String, MessageMap> map, String suffix)
+	private static final void readMessageBundle(BufferedReader br, HashMap<String, MessageBundle> map, String suffix)
 			throws IOException {
 		String actName = null;
-		MessageMap act = null;
+		MessageBundle act = null;
 		String line = null;
 		List<String> msg = null;
 		boolean[] flags = null;
@@ -731,7 +731,7 @@ public class MessagePool {
 				if (msg != null && msg.size() > 0) {
 					String key = createTagKey(flags);
 					if (key != null) {
-						act.getMap().put(key, (String[]) msg.toArray(new String[] {}));
+						act.getMessages().put(key, (String[]) msg.toArray(new String[] {}));
 					}
 					msg = new LinkedList<String>();
 				}
@@ -742,11 +742,11 @@ public class MessagePool {
 					int st = line.indexOf("/") + 1;
 					int ed = line.indexOf(">");
 					tagName = line.substring(st, ed);
-					MessageMap.Tag tag = MessageMap.Tag.valueOf(tagName);
+					MessageBundle.MessageTag tag = MessageBundle.MessageTag.valueOf(tagName);
 					flags[tag.ordinal()] = false;
 
 					// normal, rudeタグの区切り
-					if (MessageMap.Tag.normal.equals(tag) || MessageMap.Tag.rude.equals(tag)) {
+					if (MessageBundle.MessageTag.normal.equals(tag) || MessageBundle.MessageTag.rude.equals(tag)) {
 						flags = null;
 						msg = null;
 					}
@@ -756,24 +756,24 @@ public class MessagePool {
 					int ed = line.indexOf(">");
 					tagName = line.substring(st, ed);
 
-					MessageMap.Tag tag = MessageMap.Tag.valueOf(tagName);
+					MessageBundle.MessageTag tag = MessageBundle.MessageTag.valueOf(tagName);
 					if (tag != null) {
-						if (MessageMap.Tag.normal.equals(tag) || MessageMap.Tag.rude.equals(tag)) {
+						if (MessageBundle.MessageTag.normal.equals(tag) || MessageBundle.MessageTag.rude.equals(tag)) {
 							if (act == null) {
-								act = new MessageMap();
+								act = new MessageBundle();
 							}
 							msg = new LinkedList<String>();
-							flags = new boolean[MessageMap.Tag.values().length];
-							if (MessageMap.Tag.rude.equals(tag)) {
+							flags = new boolean[MessageBundle.MessageTag.values().length];
+							if (MessageBundle.MessageTag.rude.equals(tag)) {
 								act.setRudeFlag(true);
 							} else {
 								act.setNormalFlag(true);
 							}
 						}
 						flags[tag.ordinal()] = true;
-						if (flags[MessageMap.Tag.normal.ordinal()]) {
+						if (flags[MessageBundle.MessageTag.normal.ordinal()]) {
 							act.getNormalTag()[tag.ordinal()] = true;
-						} else if (flags[MessageMap.Tag.rude.ordinal()]) {
+						} else if (flags[MessageBundle.MessageTag.rude.ordinal()]) {
 							act.getRudeTag()[tag.ordinal()] = true;
 						}
 					}
@@ -788,7 +788,7 @@ public class MessagePool {
 	// フラグからマップキー作成
 	private static final String createTagKey(boolean[] flags) {
 		StringBuilder key = new StringBuilder("");
-		MessageMap.Tag[] tags = MessageMap.Tag.values();
+		MessageBundle.MessageTag[] tags = MessageBundle.MessageTag.values();
 
 		for (int i = 0; i < tags.length; i++) {
 			if (flags[i]) {
@@ -828,8 +828,8 @@ public class MessagePool {
 				action = MessagePool.Action.CantTalk;
 		}
 
-		HashMap<String, MessageMap> map = null;
-		MessageMap act = null;
+		HashMap<String, MessageBundle> map = null;
+		MessageBundle act = null;
 		String name = "";
 		String name2 = "";
 		String partnerName = "";
@@ -862,9 +862,6 @@ public class MessagePool {
 		if (pa != null)
 			partnerName = GameLocale.isJapanese() ? pa.getNameJ() : pa.getNameE();
 
-		if (map == null)
-			return "NO MESSAGE FILE";
-
 		act = map.get(action.name() + suffix);
 		// 読み込み失敗かつ飼いゆメッセージではないなら飼いゆメッセージを読み込む
 		if (act == null && body.getRank().getMessageIndex() != YukkuriRank.KAIYU.getMessageIndex()) {
@@ -882,119 +879,119 @@ public class MessagePool {
 		// ゲスチェック
 		if ((body.isRude() && act.isRudeFlag()) || !act.isNormalFlag()) {
 			flags = act.getRudeTag();
-			key = new StringBuilder(MessageMap.Tag.rude.name() + "_");
+			key = new StringBuilder(MessageBundle.MessageTag.rude.name() + "_");
 		} else {
 			flags = act.getNormalTag();
-			key = new StringBuilder(MessageMap.Tag.normal.name() + "_");
+			key = new StringBuilder(MessageBundle.MessageTag.normal.name() + "_");
 		}
 
 		// 上位タグの文字列を保存
-		tmpMsg = act.getMap().get(key.toString());
+		tmpMsg = act.getMessages().get(key.toString());
 		if (tmpMsg != null) {
 			beforeMsg = tmpMsg;
 		}
 
 		// 年齢チェック
-		if (body.getMindAgeState() == AgeState.BABY && flags[MessageMap.Tag.baby.ordinal()]) {
-			key.append(MessageMap.Tag.baby.name() + "_");
+		if (body.getMindAgeState() == AgeState.BABY && flags[MessageBundle.MessageTag.baby.ordinal()]) {
+			key.append(MessageBundle.MessageTag.baby.name() + "_");
 
 			// 上位タグの文字列を保存
-			tmpMsg = act.getMap().get(key.toString());
+			tmpMsg = act.getMessages().get(key.toString());
 			if (tmpMsg != null) {
 				beforeMsg = tmpMsg;
 			}
-		} else if (body.getMindAgeState() == AgeState.CHILD && flags[MessageMap.Tag.child.ordinal()]) {
-			key.append(MessageMap.Tag.child.name() + "_");
+		} else if (body.getMindAgeState() == AgeState.CHILD && flags[MessageBundle.MessageTag.child.ordinal()]) {
+			key.append(MessageBundle.MessageTag.child.name() + "_");
 
 			// 上位タグの文字列を保存
-			tmpMsg = act.getMap().get(key.toString());
+			tmpMsg = act.getMessages().get(key.toString());
 			if (tmpMsg != null) {
 				beforeMsg = tmpMsg;
 			}
-		} else if (body.getMindAgeState() == AgeState.ADULT && flags[MessageMap.Tag.adult.ordinal()]) {
-			key.append(MessageMap.Tag.adult.name() + "_");
+		} else if (body.getMindAgeState() == AgeState.ADULT && flags[MessageBundle.MessageTag.adult.ordinal()]) {
+			key.append(MessageBundle.MessageTag.adult.name() + "_");
 			// 上位タグの文字列を保存
-			tmpMsg = act.getMap().get(key.toString());
+			tmpMsg = act.getMessages().get(key.toString());
 			if (tmpMsg != null) {
 				beforeMsg = tmpMsg;
 			}
 		}
 
 		// ダメージチェック
-		if (body.isDamaged() && flags[MessageMap.Tag.damage.ordinal()]) {
-			key.append(MessageMap.Tag.damage.name() + "_");
+		if (body.isDamaged() && flags[MessageBundle.MessageTag.damage.ordinal()]) {
+			key.append(MessageBundle.MessageTag.damage.name() + "_");
 			// 上位タグの文字列を保存
-			tmpMsg = act.getMap().get(key.toString());
+			tmpMsg = act.getMessages().get(key.toString());
 			if (tmpMsg != null) {
 				beforeMsg = tmpMsg;
 			}
 		}
 		// 足焼きチェック
-		if (body.getFootBakeLevel() == FootBake.CRITICAL && flags[MessageMap.Tag.footbake.ordinal()]) {
-			key.append(MessageMap.Tag.footbake.name() + "_");
+		if (body.getFootBakeLevel() == FootBake.CRITICAL && flags[MessageBundle.MessageTag.footbake.ordinal()]) {
+			key.append(MessageBundle.MessageTag.footbake.name() + "_");
 			// 上位タグの文字列を保存
-			tmpMsg = act.getMap().get(key.toString());
+			tmpMsg = act.getMessages().get(key.toString());
 			if (tmpMsg != null) {
 				beforeMsg = tmpMsg;
 			}
 		}
 		// おくるみチェック
-		if (body.isHasPants() && flags[MessageMap.Tag.pants.ordinal()]) {
-			key.append(MessageMap.Tag.pants.name() + "_");
+		if (body.isHasPants() && flags[MessageBundle.MessageTag.pants.ordinal()]) {
+			key.append(MessageBundle.MessageTag.pants.name() + "_");
 			// 上位タグの文字列を保存
-			tmpMsg = act.getMap().get(key.toString());
+			tmpMsg = act.getMessages().get(key.toString());
 			if (tmpMsg != null) {
 				beforeMsg = tmpMsg;
 			}
 		}
 		// なつき度チェック(好き)
-		if ((body.checkLovePlayerState() == LovePlayer.GOOD) && flags[MessageMap.Tag.loveplayer.ordinal()]) {
-			key.append(MessageMap.Tag.loveplayer.name() + "_");
+		if ((body.checkLovePlayerState() == LovePlayer.GOOD) && flags[MessageBundle.MessageTag.loveplayer.ordinal()]) {
+			key.append(MessageBundle.MessageTag.loveplayer.name() + "_");
 			// 上位タグの文字列を保存
-			tmpMsg = act.getMap().get(key.toString());
+			tmpMsg = act.getMessages().get(key.toString());
 			if (tmpMsg != null) {
 				beforeMsg = tmpMsg;
 			}
 			// なつき度チェック(嫌い)
-		} else if ((body.checkLovePlayerState() == LovePlayer.BAD) && flags[MessageMap.Tag.dislikeplayer.ordinal()]) {
-			key.append(MessageMap.Tag.dislikeplayer.name() + "_");
+		} else if ((body.checkLovePlayerState() == LovePlayer.BAD) && flags[MessageBundle.MessageTag.dislikeplayer.ordinal()]) {
+			key.append(MessageBundle.MessageTag.dislikeplayer.name() + "_");
 			// 上位タグの文字列を保存
-			tmpMsg = act.getMap().get(key.toString());
+			tmpMsg = act.getMessages().get(key.toString());
 			if (tmpMsg != null) {
 				beforeMsg = tmpMsg;
 			}
 		}
 
 		// うんうん奴隷チェック
-		if (body.getPublicRank() == PublicRank.UnunSlave && flags[MessageMap.Tag.ununSlave.ordinal()]) {
-			key.append(MessageMap.Tag.ununSlave.name() + "_");
+		if (body.getPublicRank() == PublicRank.UNUN_SLAVE && flags[MessageBundle.MessageTag.ununSlave.ordinal()]) {
+			key.append(MessageBundle.MessageTag.ununSlave.name() + "_");
 			// 上位タグの文字列を保存
-			tmpMsg = act.getMap().get(key.toString());
+			tmpMsg = act.getMessages().get(key.toString());
 			if (tmpMsg != null) {
 				beforeMsg = tmpMsg;
 			}
 		}
 
 		// 賢い子チェック
-		if (body.getIntelligence() == Intelligence.WISE && flags[MessageMap.Tag.wise.ordinal()]) {
-			key.append(MessageMap.Tag.wise.name() + "_");
+		if (body.getIntelligence() == Intelligence.WISE && flags[MessageBundle.MessageTag.wise.ordinal()]) {
+			key.append(MessageBundle.MessageTag.wise.name() + "_");
 			// 上位タグの文字列を保存
-			tmpMsg = act.getMap().get(key.toString());
+			tmpMsg = act.getMessages().get(key.toString());
 			if (tmpMsg != null) {
 				beforeMsg = tmpMsg;
 			}
 		}
 		// あほの子チェック
-		if (body.getIntelligence() == Intelligence.FOOL && flags[MessageMap.Tag.fool.ordinal()]) {
-			key.append(MessageMap.Tag.fool.name() + "_");
+		if (body.getIntelligence() == Intelligence.FOOL && flags[MessageBundle.MessageTag.fool.ordinal()]) {
+			key.append(MessageBundle.MessageTag.fool.name() + "_");
 			// 上位タグの文字列を保存
-			tmpMsg = act.getMap().get(key.toString());
+			tmpMsg = act.getMessages().get(key.toString());
 			if (tmpMsg != null) {
 				beforeMsg = tmpMsg;
 			}
 		}
 
-		String[] msg = act.getMap().get(key.toString());
+		String[] msg = act.getMessages().get(key.toString());
 		if (msg == null) {
 			msg = beforeMsg;
 		}

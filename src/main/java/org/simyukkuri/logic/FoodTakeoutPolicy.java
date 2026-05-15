@@ -39,7 +39,7 @@ public final class FoodTakeoutPolicy {
 		if (body.isVeryHungry()) {
 			return false;
 		}
-		if (body.getPublicRank() == PublicRank.UnunSlave) {
+		if (body.getPublicRank() == PublicRank.UNUN_SLAVE) {
 			return checkShitTakeout(body, target);
 		}
 		return checkFoodTakeout(body, target);
@@ -55,7 +55,7 @@ public final class FoodTakeoutPolicy {
 		Shit shit = (Shit) target;
 		boolean hasSlaveToilet = false;
 		boolean inSlaveToilet = false;
-		for (Map.Entry<Integer, Toilet> entry : GameWorld.get().getCurrentMap().getToilet().entrySet()) {
+		for (Map.Entry<Integer, Toilet> entry : GameWorld.get().getCurrentWorldState().getToilets().entrySet()) {
 			Toilet toilet = entry.getValue();
 			if (!toilet.isForSlave()) {
 				continue;
@@ -88,10 +88,10 @@ public final class FoodTakeoutPolicy {
 			return false;
 		}
 		WorldEntity favoriteBedObj = (WorldEntity) favoriteBed;
-		if (org.simyukkuri.util.YukkuriLookup.getYukkuriById(body.getPartner()) == null && body.getChildrenListSize() == 0) {
+		if (org.simyukkuri.util.YukkuriLookup.getYukkuriById(body.getPartner()) == null && body.getChildrenCount() == 0) {
 			return false;
 		}
-		for (Map.Entry<Integer, Food> entry : GameWorld.get().getCurrentMap().getFood().entrySet()) {
+		for (Map.Entry<Integer, Food> entry : GameWorld.get().getCurrentWorldState().getFoods().entrySet()) {
 			Food foodOnFavoriteBed = entry.getValue();
 			if (foodOnFavoriteBed.isEmpty()) {
 				continue;
@@ -100,7 +100,7 @@ public final class FoodTakeoutPolicy {
 				return false;
 			}
 		}
-		for (Map.Entry<Integer, Bed> entry : GameWorld.get().getCurrentMap().getBed().entrySet()) {
+		for (Map.Entry<Integer, Bed> entry : GameWorld.get().getCurrentWorldState().getBeds().entrySet()) {
 			Bed bed = entry.getValue();
 			if (bed.checkHitObj(target, false)) {
 				return false;

@@ -23,7 +23,7 @@ public final class YukkuriLookup {
 		if (i == -1) {
 			return null;
 		}
-		Map<Integer, Yukkuri> bodies = GameWorld.get().getCurrentMap().getYukkuriMap();
+		Map<Integer, Yukkuri> bodies = GameWorld.get().getCurrentWorldState().getYukkuriRegistry();
 		if (bodies.containsKey(i)) {
 			return bodies.get(i);
 		}
@@ -40,7 +40,7 @@ public final class YukkuriLookup {
 		if (i == -1) {
 			return null;
 		}
-		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getYukkuriMap().entrySet()) {
+		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentWorldState().getYukkuriRegistry().entrySet()) {
 			Yukkuri b = entry.getValue();
 			if (b.objId == i) {
 				return b;
@@ -56,7 +56,7 @@ public final class YukkuriLookup {
 	 */
 	public static Yukkuri[] getYukkuriBodies() {
 		List<Yukkuri> bodies = new LinkedList<>();
-		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getYukkuriMap().entrySet()) {
+		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentWorldState().getYukkuriRegistry().entrySet()) {
 			bodies.add(entry.getValue());
 		}
 		return bodies.toArray(new Yukkuri[0]);

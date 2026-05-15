@@ -26,14 +26,14 @@ public class UnunSlaveDebug {
     @Test
     void testDebug() throws Exception {
         WorldTestHelper.resetStates();
-        Translate.setMapSize(1000, 1000, 200);
+        Translate.setWorldSize(1000, 1000, 200);
         Translate.setCanvasSize(800, 600, 100, 100, new float[] { 1.0f });
         Translate.createTransTable(false);
         WorldTestHelper.initializeMinimalWorld();
 
         Yukkuri body = WorldTestHelper.createBody();
         body.setHungry(body.getHungryLimit() / 4);
-        body.setPublicRank(PublicRank.UnunSlave);
+        body.setPublicRank(PublicRank.UNUN_SLAVE);
 
         // Set eyesightBase via reflection
         java.lang.reflect.Field eyesightField = org.simyukkuri.entity.core.living.LivingEntity.class.getDeclaredField("eyesightBase");
@@ -45,8 +45,8 @@ public class UnunSlaveDebug {
         shit.setY(100);
         body.setX(50);
         body.setY(50);
-        SimYukkuri.world.getCurrentMap().getShit().put(shit.getObjId(), shit);
-        SimYukkuri.world.getCurrentMap().getToilet().clear();
+        SimYukkuri.world.getCurrentWorldState().getShit().put(shit.getObjId(), shit);
+        SimYukkuri.world.getCurrentWorldState().getToilets().clear();
 
         boolean[] forceEat = { false };
         java.lang.reflect.Method m = FoodLogic.class.getDeclaredMethod("searchFoodForUnunSlave", Yukkuri.class,

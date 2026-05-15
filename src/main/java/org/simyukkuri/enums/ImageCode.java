@@ -159,7 +159,7 @@ public enum ImageCode {
 	CRYING("faces", "crying", true),
 	DEAD("faces", "dead", true),
 	EXCITING("faces", "exciting", true),
-	EXCITING_raper("faces","exciting2",true),
+	EXCITING_RAPER("faces","exciting2",true),
 	CUTPENIPENI("faces", "penicut", true),
 	NORMAL("faces", "normal", true),
 	PAIN("faces", "pain", true),

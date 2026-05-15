@@ -1,6 +1,6 @@
 package org.simyukkuri.entity.core.living.yukkuri;
 
-import org.simyukkuri.enums.CriticalDamegeType;
+import org.simyukkuri.enums.CriticalDamageType;
 import org.simyukkuri.enums.FootBake;
 import org.simyukkuri.enums.Happiness;
 import org.simyukkuri.enums.ImageCode;
@@ -107,7 +107,7 @@ public final class YukkuriPlayerRelationDelegate {
 		}
 
 		// 切断されている場合
-		if ((body.getCriticalDamege() == CriticalDamegeType.CUT) ||
+		if ((body.getCriticalDamege() == CriticalDamageType.CUT) ||
 				(body.getFootBakeLevel() == FootBake.CRITICAL) ||
 				body.isDamaged() ||
 				body.isPealed() ||

@@ -14,10 +14,10 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
-import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.system.IniFileReader;
-import org.simyukkuri.system.MapWindow;
+import org.simyukkuri.ui.WorldSelectionWindow;
 import org.simyukkuri.visual.TerrainBillboard;
+import org.simyukkuri.engine.ModLoader;
 
 /***********************************************************
  * 
@@ -81,9 +81,9 @@ public class TerrainField implements Serializable {
 
 	private static LinearGradientPaint[] skyColor; // 空の色
 
-	private static List<Entity> floorList;
-	private static List<Entity> structList;
-	private static List<Entity> ceilingList;
+	private static List<TerrainBillboard> floorList;
+	private static List<TerrainBillboard> structList;
+	private static List<TerrainBillboard> ceilingList;
 
 	private static boolean isPers;
 	private static int ownerType;
@@ -99,7 +99,7 @@ public class TerrainField implements Serializable {
 		scaleRateH = (double) Translate.getBufferH() / (double) BG_H;
 		try {
 			// 現在いるマップの種類(室内、路上1/2、加工所1/2、、、といったもの)
-			String mapName = MapWindow.MAP.values()[index].getFilePath();
+			String mapName = WorldSelectionWindow.WorldSelection.values()[index].getFilePath();
 			// 読み込みフォーマット判定
 			reader = ModLoader.loadTerrainData(loader, mapName, BG_FILE_NAME, OLD_BG_NAME);
 
@@ -112,18 +112,18 @@ public class TerrainField implements Serializable {
 				skyColor[1] = null;
 				skyColor[2] = null;
 				skyColor[3] = null;
-				floorList = new LinkedList<Entity>();
-				structList = new LinkedList<Entity>();
-				ceilingList = new LinkedList<Entity>();
+				floorList = new LinkedList<TerrainBillboard>();
+				structList = new LinkedList<TerrainBillboard>();
+				ceilingList = new LinkedList<TerrainBillboard>();
 				isPers = true;
 				ownerType = 0;
 			} else {
 				// 新フォーマット
 				assetMap = new HashMap<String, BufferedImage>();
 				skyColor = new LinearGradientPaint[4];
-				floorList = new LinkedList<Entity>();
-				structList = new LinkedList<Entity>();
-				ceilingList = new LinkedList<Entity>();
+				floorList = new LinkedList<TerrainBillboard>();
+				structList = new LinkedList<TerrainBillboard>();
+				ceilingList = new LinkedList<TerrainBillboard>();
 				loadTerrainAsset(loader, reader, mapName, io);
 			}
 		} catch (IOException e) {
@@ -172,7 +172,7 @@ public class TerrainField implements Serializable {
 	 * 
 	 * @return 構造物リスト
 	 */
-	public static List<Entity> getStructList() {
+	public static List<TerrainBillboard> getBillboards() {
 		return structList;
 	}
 
@@ -202,8 +202,7 @@ public class TerrainField implements Serializable {
 	 * @param obs イメージオブザーバ
 	 */
 	public static void drawFloor(Graphics2D g2, ImageObserver obs) {
-		for (Entity o : floorList) {
-			TerrainBillboard b = (TerrainBillboard) o;
+		for (TerrainBillboard b : floorList) {
 			b.draw(g2, obs);
 		}
 	}
@@ -215,8 +214,7 @@ public class TerrainField implements Serializable {
 	 * @param obs イメージオブザーバ
 	 */
 	public static void drawCeiling(Graphics2D g2, ImageObserver obs) {
-		for (Entity o : ceilingList) {
-			TerrainBillboard b = (TerrainBillboard) o;
+		for (TerrainBillboard b : ceilingList) {
 			b.draw(g2, obs);
 		}
 	}
@@ -392,7 +390,7 @@ public class TerrainField implements Serializable {
 				pivY = (y * (double) Translate.getBufferH() - z * (double) Translate.getBufferH()) - ((double) h - 1.0);
 				ret.trans(pivX, pivY);
 				int oy = (int) (y * (double) Translate.getBufferH());
-				ret.setCalcY(Translate.invertBgY(oy));
+				ret.setSortY(Translate.invertBgY(oy));
 				break;
 			case 1:
 			case 2:

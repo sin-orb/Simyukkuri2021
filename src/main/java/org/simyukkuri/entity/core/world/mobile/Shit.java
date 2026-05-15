@@ -9,12 +9,12 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 import org.simyukkuri.Const;
-import org.simyukkuri.draw.ModLoader;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Translate;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.enums.AgeState;
-import org.simyukkuri.enums.Event;
+import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.enums.Numbering;
 import org.simyukkuri.enums.Type;
 import org.simyukkuri.enums.YukkuriType;
@@ -249,15 +249,15 @@ public class Shit extends Entity {
 	}
 
 	@Override
-	public Event clockTick() {
+	public TickResult clockTick() {
 		if (!isRemoved()) {
 			// age += TICK;
 			if (getAge() >= SHITLIMIT[ageState.ordinal()]) {
 				remove();
 			}
 
-			int mapX = Translate.getMapW();
-			int mapY = Translate.getMapH();
+			int mapX = Translate.getWorldWidth();
+			int mapY = Translate.getWorldHeight();
 
 			if (!grabbed) {
 				if (vx != 0) {
@@ -268,7 +268,7 @@ public class Shit extends Entity {
 					} else if (x > mapX) {
 						x = mapX;
 						vx *= -1;
-					} else if (Barrier.onBarrier(x, y, getW() >> 2, getH() >> 2, Barrier.MAP_ITEM)) {
+					} else if (Barrier.onBarrier(x, y, getW() >> 2, getH() >> 2, Barrier.ITEM_BLOCK_FLAG)) {
 						x -= vx;
 						vx = 0;
 					}
@@ -281,7 +281,7 @@ public class Shit extends Entity {
 					} else if (y > mapY) {
 						y = mapY;
 						vy = 0;
-					} else if (Barrier.onBarrier(x, y, getW() >> 2, getH() >> 2, Barrier.MAP_ITEM)) {
+					} else if (Barrier.onBarrier(x, y, getW() >> 2, getH() >> 2, Barrier.ITEM_BLOCK_FLAG)) {
 						y -= vy;
 						vy = 0;
 					}
@@ -305,10 +305,10 @@ public class Shit extends Entity {
 				}
 			}
 			calcPos();
-			return Event.DONOTHING;
+			return TickResult.NONE;
 		}
 		calcPos();
-		return Event.REMOVED;
+		return TickResult.REMOVED;
 	}
 
 	public String getOwnerName() {

@@ -76,9 +76,9 @@ public class BodyStealRuleTest {
 		witness.setX(200);
 		witness.setY(200);
 		WorldTestHelper.initializeMinimalWorld();
-		org.simyukkuri.SimYukkuri.world.getCurrentMap().getYukkuriMap().put(thief.getUniqueID(), thief);
-		org.simyukkuri.SimYukkuri.world.getCurrentMap().getYukkuriMap().put(target.getUniqueID(), target);
-		org.simyukkuri.SimYukkuri.world.getCurrentMap().getYukkuriMap().put(witness.getUniqueID(), witness);
+		org.simyukkuri.SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(thief.getUniqueID(), thief);
+		org.simyukkuri.SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(target.getUniqueID(), target);
+		org.simyukkuri.SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(witness.getUniqueID(), witness);
 
 		assertFalse(YukkuriStealRule.handleOkazariSteal(target, thief));
 		assertFalse(thief.hasOkazari());

@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.simyukkuri.draw.Dimension4y;
-import org.simyukkuri.draw.ModLoader;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Point4y;
 import org.simyukkuri.draw.Translate;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
@@ -92,8 +92,8 @@ public class Fran extends Yukkuri {
 	 * @param loader クラスローダ
 	 */
 	public static void loadIniFile(ClassLoader loader) {
-		AttachOffset = ModLoader.loadYukkuriIniMap(loader, ModLoader.getDataIniDir(), baseFileName);
-		baseSpeed = ModLoader.loadYukkuriIniMapForInt(loader, ModLoader.getDataIniDir(), baseFileName, "speed");
+		AttachOffset = ModLoader.loadYukkuriIniOffsets(loader, ModLoader.getDataIniDir(), baseFileName);
+		baseSpeed = ModLoader.loadYukkuriIniValue(loader, ModLoader.getDataIniDir(), baseFileName, "speed");
 	}
 
 	@Override
@@ -289,7 +289,7 @@ public class Fran extends Yukkuri {
 		setFlyingType(true);
 		setPredatorType(PredatorType.SUCTION);
 
-		z = (int) (Translate.getMapZ() * Translate.getFlyLimit());
+		z = (int) (Translate.getWorldDepth() * Translate.getFlyLimit());
 		speed = baseSpeed;
 	}
 

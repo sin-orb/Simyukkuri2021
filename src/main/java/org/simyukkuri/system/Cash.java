@@ -92,7 +92,7 @@ public class Cash {
 		// 飼いゆとして出荷
 		// 無価値チェック
 		if (body.isSick() || body.isDead() || body.isDamaged()
-				|| body.getCriticalDamegeType() != null || body.isGotBurned()) {
+				|| body.getCriticalDamageType() != null || body.isGotBurned()) {
 			return 0;
 		}
 		// 基本価値

@@ -25,7 +25,7 @@ import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.effect.Effect;
 import org.simyukkuri.entity.core.world.item.Mixer;
 import org.simyukkuri.entity.core.world.item.ItemTestBase;
-import org.simyukkuri.enums.CriticalDamegeType;
+import org.simyukkuri.enums.CriticalDamageType;
 import org.simyukkuri.enums.Happiness;
 import org.simyukkuri.enums.ImageCode;
 import org.simyukkuri.util.WorldTestHelper;
@@ -36,9 +36,9 @@ class MixerTest extends ItemTestBase {
     void testConstructor_Default() {
         Mixer item = new Mixer();
         item.setObjId(1);
-        SimYukkuri.world.getCurrentMap().getMixer().put(item.getObjId(), item);
+        SimYukkuri.world.getCurrentWorldState().getMixers().put(item.getObjId(), item);
         verifyCommonProperties(item);
-        assertTrue(SimYukkuri.world.getCurrentMap().getMixer().containsKey(item.getObjId()));
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getMixers().containsKey(item.getObjId()));
     }
 
     @Test
@@ -113,22 +113,22 @@ class MixerTest extends ItemTestBase {
     void testRemoveListData_NoBind() {
         Mixer item = new Mixer();
         item.setObjId(99);
-        SimYukkuri.world.getCurrentMap().getMixer().put(item.getObjId(), item);
+        SimYukkuri.world.getCurrentWorldState().getMixers().put(item.getObjId(), item);
         item.setBind(-1);
-        item.removeListData();
-        assertFalse(SimYukkuri.world.getCurrentMap().getMixer().containsKey(item.getObjId()));
+        item.removeFromWorld();
+        assertFalse(SimYukkuri.world.getCurrentWorldState().getMixers().containsKey(item.getObjId()));
     }
 
     @Test
     void testRemoveListData_WithBind() {
         Mixer item = new Mixer();
         item.setObjId(98);
-        SimYukkuri.world.getCurrentMap().getMixer().put(item.getObjId(), item);
+        SimYukkuri.world.getCurrentWorldState().getMixers().put(item.getObjId(), item);
         Yukkuri body = WorldTestHelper.createBody();
         body.setLockmove(true);
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(body.getUniqueID(), body);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(body.getUniqueID(), body);
         item.setBind(body.getUniqueID());
-        item.removeListData();
+        item.removeFromWorld();
         assertFalse(body.isLockmove());
         assertEquals(-1, item.getBind());
     }
@@ -148,7 +148,7 @@ class MixerTest extends ItemTestBase {
         item.setX(100);
         item.setY(100);
         Yukkuri body = WorldTestHelper.createBody();
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(body.getUniqueID(), body);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(body.getUniqueID(), body);
         assertEquals(1, item.objHitProcess(body));
         assertEquals(body.getUniqueID(), item.getBind());
         assertTrue(body.isLockmove());
@@ -168,7 +168,7 @@ class MixerTest extends ItemTestBase {
         Mixer item = new Mixer();
         Yukkuri body = WorldTestHelper.createBody();
         body.setLockmove(true);
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(body.getUniqueID(), body);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(body.getUniqueID(), body);
         item.setBind(body.getUniqueID());
         item.setEnabled(false);
         // enabled=false → mix=null branch
@@ -186,7 +186,7 @@ class MixerTest extends ItemTestBase {
         body.setX(100);
         body.setY(100);
         body.setLockmove(true);
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(body.getUniqueID(), body);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(body.getUniqueID(), body);
         item.setBind(body.getUniqueID());
         assertDoesNotThrow(() -> item.upDate());
     }
@@ -203,7 +203,7 @@ class MixerTest extends ItemTestBase {
         body.setX(200);
         body.setY(200);
         body.setLockmove(true);
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(body.getUniqueID(), body);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(body.getUniqueID(), body);
         item.setBind(body.getUniqueID());
         item.upDate();
         // bind should be reset to -1
@@ -256,7 +256,7 @@ class MixerTest extends ItemTestBase {
             body.setLockmove(true);
             body.setAnkoAmount(1000);
             int beforeDamage = body.getDamage();
-            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(body.getUniqueID(), body);
+            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(body.getUniqueID(), body);
             item.setBind(body.getUniqueID());
             SimYukkuri.RND = new ConstState(1);
 
@@ -288,13 +288,13 @@ class MixerTest extends ItemTestBase {
             body.setLockmove(true);
             body.setShadowVisible(false);
             body.setForceFace(ImageCode.PAIN.ordinal());
-            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(body.getUniqueID(), body);
+            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(body.getUniqueID(), body);
             item.setBind(body.getUniqueID());
 
             item.upDate();
 
             assertEquals(-1, item.getBind());
-            assertEquals(CriticalDamegeType.CUT, body.getCriticalDamegeType());
+            assertEquals(CriticalDamageType.CUT, body.getCriticalDamageType());
             assertEquals(-1, body.getForceFace());
             assertFalse(body.isLockmove());
             assertTrue(body.isShadowVisible());
@@ -304,16 +304,16 @@ class MixerTest extends ItemTestBase {
         void testScenario_RemoveListDataAlsoRemovesActiveMixEffect() {
             Mixer item = new Mixer();
             item.setObjId(1234);
-            SimYukkuri.world.getCurrentMap().getMixer().put(item.getObjId(), item);
+            SimYukkuri.world.getCurrentWorldState().getMixers().put(item.getObjId(), item);
 
             DummyEffect effect = new DummyEffect();
             item.setMix(effect);
 
-            item.removeListData();
+            item.removeFromWorld();
 
             assertTrue(effect.isRemoved());
             assertNull(item.getMix());
-            assertFalse(SimYukkuri.world.getCurrentMap().getMixer().containsKey(item.getObjId()));
+            assertFalse(SimYukkuri.world.getCurrentWorldState().getMixers().containsKey(item.getObjId()));
         }
     }
 }

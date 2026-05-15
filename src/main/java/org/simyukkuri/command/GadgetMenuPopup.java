@@ -37,7 +37,7 @@ public final class GadgetMenuPopup {
 		popup.add(createSubGroup(GadgetMenu.getMainCategory()[12], GadgetMenu.getTestCategory(), action));
 	}
 
-	private static JMenu createSubGroup(GadgetMenu.GadgetList root, GadgetMenu.GadgetList[] group, ActionListener action) {
+	private static JMenu createSubGroup(GadgetMenu.GadgetMenuChoice root, GadgetMenu.GadgetMenuChoice[] group, ActionListener action) {
 		JMenu menu = new JMenu(root.getDisplayName());
 		for (int i = 0; i < group.length; i++) {
 			JMenuItem subMenu = new JMenuItem(group[i].getDisplayName());

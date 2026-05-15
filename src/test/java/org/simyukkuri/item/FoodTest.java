@@ -42,11 +42,11 @@ class FoodTest extends ItemTestBase {
 
     @Test
     void testConstructor_RegistersInWorldFoodMap() {
-        int before = SimYukkuri.world.getCurrentMap().getFood().size();
+        int before = SimYukkuri.world.getCurrentWorldState().getFoods().size();
         Food food = new Food(50, 50, FoodType.FOOD.ordinal());
-        int after = SimYukkuri.world.getCurrentMap().getFood().size();
+        int after = SimYukkuri.world.getCurrentWorldState().getFoods().size();
         assertEquals(before + 1, after);
-        assertTrue(SimYukkuri.world.getCurrentMap().getFood().containsKey(food.getObjId()));
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getFoods().containsKey(food.getObjId()));
     }
 
     @Test
@@ -710,16 +710,16 @@ class FoodTest extends ItemTestBase {
     void testRemoveListData_RemovesFoodFromWorldMap() {
         Food food = new Food(50, 50, FoodType.FOOD.ordinal());
         int id = food.getObjId();
-        assertTrue(SimYukkuri.world.getCurrentMap().getFood().containsKey(id));
-        food.removeListData();
-        assertFalse(SimYukkuri.world.getCurrentMap().getFood().containsKey(id));
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getFoods().containsKey(id));
+        food.removeFromWorld();
+        assertFalse(SimYukkuri.world.getCurrentWorldState().getFoods().containsKey(id));
     }
 
     @Test
     void testRemoveListData_CalledTwiceDoesNotThrow() {
         Food food = new Food(50, 50, FoodType.FOOD.ordinal());
-        food.removeListData();
-        assertDoesNotThrow(() -> food.removeListData());
+        food.removeFromWorld();
+        assertDoesNotThrow(() -> food.removeFromWorld());
     }
 
     // getBounding / getFoodBounding tests
@@ -831,15 +831,15 @@ class FoodTest extends ItemTestBase {
 
     @Test
     void testMultipleFoods_AllRegisteredInWorldMap() {
-        int before = SimYukkuri.world.getCurrentMap().getFood().size();
+        int before = SimYukkuri.world.getCurrentWorldState().getFoods().size();
         Food f1 = new Food(10, 10, FoodType.FOOD.ordinal());
         Food f2 = new Food(20, 20, FoodType.BITTER.ordinal());
         Food f3 = new Food(30, 30, FoodType.SWEETS1.ordinal());
-        int after = SimYukkuri.world.getCurrentMap().getFood().size();
+        int after = SimYukkuri.world.getCurrentWorldState().getFoods().size();
         assertEquals(before + 3, after);
-        assertTrue(SimYukkuri.world.getCurrentMap().getFood().containsKey(f1.getObjId()));
-        assertTrue(SimYukkuri.world.getCurrentMap().getFood().containsKey(f2.getObjId()));
-        assertTrue(SimYukkuri.world.getCurrentMap().getFood().containsKey(f3.getObjId()));
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getFoods().containsKey(f1.getObjId()));
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getFoods().containsKey(f2.getObjId()));
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getFoods().containsKey(f3.getObjId()));
     }
 
     @Test

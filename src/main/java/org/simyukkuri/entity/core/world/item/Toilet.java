@@ -14,7 +14,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
-import org.simyukkuri.draw.ModLoader;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Rectangle4y;
 import org.simyukkuri.draw.Translate;
 import org.simyukkuri.entity.core.Entity;
@@ -155,8 +155,8 @@ public class Toilet extends WorldEntity {
 	}
 
 	@Override
-	public void removeListData() {
-		GameWorld.get().getCurrentMap().getToilet().remove(objId);
+	public void removeFromWorld() {
+		GameWorld.get().getCurrentWorldState().getToilets().remove(objId);
 	}
 
 	/**
@@ -189,7 +189,7 @@ public class Toilet extends WorldEntity {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		GameWorld.get().getCurrentMap().getToilet().put(objId, this);
+		GameWorld.get().getCurrentWorldState().getToilets().put(objId, this);
 		objType = Type.PLATFORM;
 		worldEntityType = WorldEntityKind.TOILET;
 		interval = 30;
@@ -198,8 +198,8 @@ public class Toilet extends WorldEntity {
 		if (setupSucceeded) {
 			itemRank = ItemRank.values()[initOption];
 			// 森なら野生に変更
-			if (GameWorld.get().getCurrentMap().getMapIndex() == 5
-					|| GameWorld.get().getCurrentMap().getMapIndex() == 6) {
+			if (GameWorld.get().getCurrentWorldState().getWorldIndex() == 5
+					|| GameWorld.get().getCurrentWorldState().getWorldIndex() == 6) {
 				if (itemRank == ItemRank.HOUSE) {
 					itemRank = ItemRank.YASEI;
 				}
@@ -218,7 +218,7 @@ public class Toilet extends WorldEntity {
 				cost = 0;
 			}
 		} else {
-			GameWorld.get().getCurrentMap().getToilet().remove(objId);
+			GameWorld.get().getCurrentWorldState().getToilets().remove(objId);
 		}
 	}
 

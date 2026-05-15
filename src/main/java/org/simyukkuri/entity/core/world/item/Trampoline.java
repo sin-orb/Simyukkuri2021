@@ -15,7 +15,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
-import org.simyukkuri.draw.ModLoader;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Rectangle4y;
 import org.simyukkuri.draw.Translate;
 import org.simyukkuri.entity.core.Entity;
@@ -87,8 +87,8 @@ public class Trampoline extends WorldEntity {
 	}
 
 	@Override
-	public void removeListData() {
-		GameWorld.get().getCurrentMap().getTrampoline().remove(objId);
+	public void removeFromWorld() {
+		GameWorld.get().getCurrentWorldState().getTrampolines().remove(objId);
 	}
 
 	@Override
@@ -145,12 +145,12 @@ public class Trampoline extends WorldEntity {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		GameWorld.get().getCurrentMap().getTrampoline().put(objId, this);
+		GameWorld.get().getCurrentWorldState().getTrampolines().put(objId, this);
 		objType = Type.OBJECT;
 		worldEntityType = WorldEntityKind.TOY;
 		boolean setupSuccess = setupTrampoline(this);
 		if (!setupSuccess) {
-			GameWorld.get().getCurrentMap().getTrampoline().remove(objId);
+			GameWorld.get().getCurrentWorldState().getTrampolines().remove(objId);
 			return;
 		}
 		value = 500;

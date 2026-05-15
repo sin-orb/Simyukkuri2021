@@ -22,7 +22,7 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 
 import org.simyukkuri.draw.MyPane;
-import org.simyukkuri.draw.Terrarium;
+import org.simyukkuri.engine.Terrarium;
 import org.simyukkuri.entity.core.effect.Effect;
 import org.simyukkuri.entity.core.living.yukkuri.Dna;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;

@@ -44,9 +44,9 @@ class HouseTest extends ItemTestBase {
     void testConstructor_Default() {
         House item = new House();
         item.setObjId(1);
-        SimYukkuri.world.getCurrentMap().getHouse().put(item.getObjId(), item);
+        SimYukkuri.world.getCurrentWorldState().getHouses().put(item.getObjId(), item);
         verifyCommonProperties(item);
-        assertTrue(SimYukkuri.world.getCurrentMap().getHouse().containsKey(item.getObjId()));
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getHouses().containsKey(item.getObjId()));
     }
 
     // ---------------------------------------------------------------
@@ -120,12 +120,12 @@ class HouseTest extends ItemTestBase {
         House house = new House();
         int id = 8001;
         house.setObjId(id);
-        SimYukkuri.world.getCurrentMap().getHouse().put(id, house);
-        assertTrue(SimYukkuri.world.getCurrentMap().getHouse().containsKey(id));
+        SimYukkuri.world.getCurrentWorldState().getHouses().put(id, house);
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getHouses().containsKey(id));
 
-        house.removeListData();
+        house.removeFromWorld();
 
-        assertFalse(SimYukkuri.world.getCurrentMap().getHouse().containsKey(id));
+        assertFalse(SimYukkuri.world.getCurrentWorldState().getHouses().containsKey(id));
     }
 
     @Test
@@ -168,7 +168,7 @@ class HouseTest extends ItemTestBase {
 
             assertEquals(House.HouseTable.HOUSE_NORA2, house.getHouseType());
             assertEquals(WorldEntity.ItemRank.NORA, house.getItemRank());
-            assertSame(house, SimYukkuri.world.getCurrentMap().getHouse().get(house.getObjId()));
+            assertSame(house, SimYukkuri.world.getCurrentWorldState().getHouses().get(house.getObjId()));
             assertEquals(60, house.getPivotX());
             assertEquals(20, house.getPivotY());
             assertEquals(120, house.getW());

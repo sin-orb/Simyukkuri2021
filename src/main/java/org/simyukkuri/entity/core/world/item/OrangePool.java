@@ -13,7 +13,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
-import org.simyukkuri.draw.ModLoader;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Rectangle4y;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
@@ -169,8 +169,8 @@ public class OrangePool extends WorldEntity {
 	}
 
 	@Override
-	public void removeListData() {
-		GameWorld.get().getCurrentMap().getOrangePool().remove(objId);
+	public void removeFromWorld() {
+		GameWorld.get().getCurrentWorldState().getOrangePools().remove(objId);
 	}
 
 	/**
@@ -185,7 +185,7 @@ public class OrangePool extends WorldEntity {
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
 
-		GameWorld.get().getCurrentMap().getOrangePool().put(objId, this);
+		GameWorld.get().getCurrentWorldState().getOrangePools().put(objId, this);
 
 		objType = Type.PLATFORM;
 		worldEntityType = WorldEntityKind.ORANGEPOOL;
@@ -195,14 +195,14 @@ public class OrangePool extends WorldEntity {
 		if (setupSucceeded) {
 			itemRank = ItemRank.values()[initOption];
 			// 森なら野生に変更
-			if (GameWorld.get().getCurrentMap().getMapIndex() == 5
-					|| GameWorld.get().getCurrentMap().getMapIndex() == 6) {
+			if (GameWorld.get().getCurrentWorldState().getWorldIndex() == 5
+					|| GameWorld.get().getCurrentWorldState().getWorldIndex() == 6) {
 				if (itemRank == ItemRank.HOUSE) {
 					itemRank = ItemRank.YASEI;
 				}
 			}
 		} else {
-			GameWorld.get().getCurrentMap().getOrangePool().remove(objId);
+			GameWorld.get().getCurrentWorldState().getOrangePools().remove(objId);
 		}
 	}
 

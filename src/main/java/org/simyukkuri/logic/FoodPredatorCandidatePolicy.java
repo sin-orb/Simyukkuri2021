@@ -45,7 +45,7 @@ public final class FoodPredatorCandidatePolicy {
 		if (candidate.getAgeState().ordinal() < hunter.getAgeState().ordinal()) {
 			if (nearestLiveDistance > distance || candidate.getAgeState().ordinal() < candidateSize) {
 				if (Barrier.acrossBarrier(hunter.getX(), hunter.getY(), candidate.getX(), candidate.getY(),
-						Barrier.MAP_BODY[wallMode] + Barrier.BARRIER_KEKKAI)) {
+						Barrier.BODY_BLOCK_FLAGS[wallMode] + Barrier.BARRIER_KEKKAI)) {
 					return new SearchResult(nearestLiveObject, nearestOtherObject, nearestLiveDistance,
 							nearestOtherDistance, candidateSize);
 				}
@@ -56,7 +56,7 @@ public final class FoodPredatorCandidatePolicy {
 		} else {
 			if (nearestOtherDistance > distance) {
 				if (Barrier.acrossBarrier(hunter.getX(), hunter.getY(), candidate.getX(), candidate.getY(),
-						Barrier.MAP_BODY[wallMode] + Barrier.BARRIER_KEKKAI)) {
+						Barrier.BODY_BLOCK_FLAGS[wallMode] + Barrier.BARRIER_KEKKAI)) {
 					return new SearchResult(nearestLiveObject, nearestOtherObject, nearestLiveDistance,
 							nearestOtherDistance, candidateSize);
 				}
@@ -80,7 +80,7 @@ public final class FoodPredatorCandidatePolicy {
 		int distance = Translate.distance(hunter.getX(), hunter.getY(), candidate.getX(), candidate.getY());
 		if (nearestDeadDistance > distance) {
 			if (Barrier.acrossBarrier(hunter.getX(), hunter.getY(), candidate.getX(), candidate.getY(),
-					Barrier.MAP_BODY[wallMode] + Barrier.BARRIER_KEKKAI)) {
+					Barrier.BODY_BLOCK_FLAGS[wallMode] + Barrier.BARRIER_KEKKAI)) {
 				return new SearchResult(null, null, 0, 0, 0, nearestDeadObject, nearestDeadDistance);
 			}
 			nearestDeadObject = candidate;

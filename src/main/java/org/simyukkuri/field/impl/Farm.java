@@ -11,7 +11,7 @@ import java.io.IOException;
 import java.util.List;
 
 import org.simyukkuri.command.GadgetAction;
-import org.simyukkuri.draw.ModLoader;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Point4y;
 import org.simyukkuri.draw.Translate;
 import org.simyukkuri.entity.core.Entity;
@@ -23,7 +23,7 @@ import org.simyukkuri.enums.BurialState;
 import org.simyukkuri.field.FieldShape;
 import org.simyukkuri.system.ItemMenu.ShapeMenu;
 import org.simyukkuri.system.ItemMenu.ShapeMenuTarget;
-import org.simyukkuri.system.MapPlaceData;
+import org.simyukkuri.system.WorldState;
 import org.simyukkuri.util.GameRandom;
 import org.simyukkuri.util.GameWorld;
 
@@ -58,13 +58,13 @@ public class Farm extends FieldShape {
 	@Override
 	public void executeShapePopup(ShapeMenu menu) {
 
-		List<Farm> farmList = GameWorld.get().getCurrentMap().getFarm();
+		List<Farm> farmList = GameWorld.get().getCurrentWorldState().getFarms();
 		int currentIndex;
 
 		switch (menu) {
 			case SETUP:
 				break;
-			case HERVEST:
+			case HARVEST:
 				break;
 			case TOP:
 				farmList.remove(this);
@@ -128,8 +128,8 @@ public class Farm extends FieldShape {
 	 * @param fey 設置終点のY座標
 	 */
 	public Farm(int fsx, int fsy, int fex, int fey) {
-		Point4y startPoint = Translate.getFieldLimitForMap(fsx, fsy);
-		Point4y endPoint = Translate.getFieldLimitForMap(fex, fey);
+		Point4y startPoint = Translate.getFieldLimitForWorld(fsx, fsy);
+		Point4y endPoint = Translate.getFieldLimitForWorld(fex, fey);
 		fieldSX = startPoint.getX();
 		fieldSY = startPoint.getY();
 		fieldEX = endPoint.getX();
@@ -141,25 +141,25 @@ public class Farm extends FieldShape {
 
 		// フィールド座標が渡ってくるのでマップ座標も計算しておく
 		Point4y mapStart = Translate.invertLimit(basePolygonX[0], basePolygonY[0]);
-		mapSX = Math.max(0, Math.min(mapStart.getX(), Translate.getMapW()));
-		mapSY = Math.max(0, Math.min(mapStart.getY(), Translate.getMapH()));
+		mapSX = Math.max(0, Math.min(mapStart.getX(), Translate.getWorldWidth()));
+		mapSY = Math.max(0, Math.min(mapStart.getY(), Translate.getWorldHeight()));
 
 		Point4y mapEnd = Translate.invertLimit(basePolygonX[1], basePolygonY[1]);
-		mapEX = Math.max(0, Math.min(mapEnd.getX(), Translate.getMapW()));
-		mapEY = Math.max(0, Math.min(mapEnd.getY(), Translate.getMapH()));
+		mapEX = Math.max(0, Math.min(mapEnd.getX(), Translate.getWorldWidth()));
+		mapEY = Math.max(0, Math.min(mapEnd.getY(), Translate.getWorldHeight()));
 
 		// 規定サイズと位置へ合わせる
 		if ((mapEX - mapSX) < MIN_SIZE)
 			mapEX = mapSX + MIN_SIZE;
 		if ((mapEY - mapSY) < MIN_SIZE)
 			mapEY = mapSY + MIN_SIZE;
-		if (mapEX > Translate.getMapW()) {
-			mapSX -= (mapEX - Translate.getMapW());
-			mapEX -= (mapEX - Translate.getMapW());
+		if (mapEX > Translate.getWorldWidth()) {
+			mapSX -= (mapEX - Translate.getWorldWidth());
+			mapEX -= (mapEX - Translate.getWorldWidth());
 		}
-		if (mapEY > Translate.getMapH()) {
-			mapSY -= (mapEY - Translate.getMapH());
-			mapEY -= (mapEY - Translate.getMapH());
+		if (mapEY > Translate.getWorldHeight()) {
+			mapSY -= (mapEY - Translate.getWorldHeight());
+			mapEY -= (mapEY - Translate.getWorldHeight());
 		}
 
 		Point4y f = new Point4y();
@@ -175,8 +175,8 @@ public class Farm extends FieldShape {
 		mapW = mapEX - mapSX + 1;
 		mapH = mapEY - mapSY + 1;
 
-		GameWorld.get().getCurrentMap().getFarm().add(this);
-		MapPlaceData.setFiledFlag(GameWorld.get().getCurrentMap().getFieldMap(), mapSX, mapSY, mapW, mapH, true,
+		GameWorld.get().getCurrentWorldState().getFarms().add(this);
+		WorldState.setFieldFlag(GameWorld.get().getCurrentWorldState().getFieldGrid(), mapSX, mapSY, mapW, mapH, true,
 				FIELD_FARM);
 	}
 
@@ -187,7 +187,7 @@ public class Farm extends FieldShape {
 	/** フィールド座標にあるシェイプ取得 */
 	public static Farm getFarm(int fx, int fy) {
 
-		for (Farm targetFarm : GameWorld.get().getCurrentMap().getFarm()) {
+		for (Farm targetFarm : GameWorld.get().getCurrentWorldState().getFarms()) {
 			if (targetFarm.fieldSX <= fx && fx <= targetFarm.fieldEX
 					&& targetFarm.fieldSY <= fy && fy <= targetFarm.fieldEY) {
 				return targetFarm;
@@ -198,14 +198,14 @@ public class Farm extends FieldShape {
 
 	/** 削除 */
 	public static void deleteFarm(Farm farm) {
-		MapPlaceData.setFiledFlag(GameWorld.get().getCurrentMap().getFieldMap(), farm.mapSX, farm.mapSY, farm.mapW,
+		WorldState.setFieldFlag(GameWorld.get().getCurrentWorldState().getFieldGrid(), farm.mapSX, farm.mapSY, farm.mapW,
 				farm.mapH,
 				false,
 				FIELD_FARM);
-		GameWorld.get().getCurrentMap().getFarm().remove(farm);
+		GameWorld.get().getCurrentWorldState().getFarms().remove(farm);
 		// 重なってた部分の復元
-		for (Farm targetFarm : GameWorld.get().getCurrentMap().getFarm()) {
-			MapPlaceData.setFiledFlag(GameWorld.get().getCurrentMap().getFieldMap(), targetFarm.mapSX, targetFarm.mapSY,
+		for (Farm targetFarm : GameWorld.get().getCurrentWorldState().getFarms()) {
+			WorldState.setFieldFlag(GameWorld.get().getCurrentWorldState().getFieldGrid(), targetFarm.mapSX, targetFarm.mapSY,
 					targetFarm.mapW,
 					targetFarm.mapH,
 					true,
@@ -375,7 +375,7 @@ public class Farm extends FieldShape {
 				if (!body.isHasStalk() && 1000 < amount) {
 					Stalk stalk = (Stalk) GadgetAction.putObjEX(Stalk.class, body.getX(), body.getY(),
 							body.getDirection().ordinal());
-					GameWorld.get().getCurrentMap().getStalk().put(stalk.objId, stalk);
+					GameWorld.get().getCurrentWorldState().getStalks().put(stalk.objId, stalk);
 					if (body.getStalks() != null) {
 						body.getStalks().add(stalk);
 						stalk.setPlantYukkuri(body);
@@ -388,7 +388,7 @@ public class Farm extends FieldShape {
 						if (GameRandom.nextInt(100) == 0) {
 							Stalk stalk = (Stalk) GadgetAction.putObjEX(Stalk.class, body.getX(), body.getY(),
 									body.getDirection().ordinal());
-							GameWorld.get().getCurrentMap().getStalk().put(stalk.objId, stalk);
+							GameWorld.get().getCurrentWorldState().getStalks().put(stalk.objId, stalk);
 							if (body.getStalks() != null) {
 								body.getStalks().add(stalk);
 								stalk.setPlantYukkuri(body);

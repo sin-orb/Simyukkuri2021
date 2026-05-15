@@ -145,12 +145,12 @@ class ToiletTest extends ItemTestBase {
         Toilet toilet = new Toilet();
         int id = 9001;
         toilet.setObjId(id);
-        SimYukkuri.world.getCurrentMap().getToilet().put(id, toilet);
-        assertTrue(SimYukkuri.world.getCurrentMap().getToilet().containsKey(id));
+        SimYukkuri.world.getCurrentWorldState().getToilets().put(id, toilet);
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getToilets().containsKey(id));
 
-        toilet.removeListData();
+        toilet.removeFromWorld();
 
-        assertFalse(SimYukkuri.world.getCurrentMap().getToilet().containsKey(id));
+        assertFalse(SimYukkuri.world.getCurrentWorldState().getToilets().containsKey(id));
     }
 
     // ---------------------------------------------------------------

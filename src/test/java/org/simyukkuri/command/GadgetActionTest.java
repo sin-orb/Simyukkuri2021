@@ -32,8 +32,8 @@ import org.junit.jupiter.api.Test;
 
 import org.simyukkuri.ConstState;
 import org.simyukkuri.SimYukkuri;
-import org.simyukkuri.command.GadgetMenu.GadgetList;
-import org.simyukkuri.draw.World;
+import org.simyukkuri.command.GadgetMenu.GadgetMenuChoice;
+import org.simyukkuri.engine.World;
 import org.simyukkuri.entity.core.attachment.impl.Ants;
 import org.simyukkuri.entity.core.attachment.impl.OrangeAmpoule;
 import org.simyukkuri.entity.core.attachment.impl.PoisonAmpoule;
@@ -100,7 +100,7 @@ public class GadgetActionTest {
         b.setAgeState(age);
         b.setMsgType(YukkuriType.REIMU);
         b.setIntelligence(Intelligence.AVERAGE);
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(b.getUniqueID(), b);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueID(), b);
         return b;
     }
 
@@ -123,7 +123,7 @@ public class GadgetActionTest {
             b.makeDirty(true);
             assertTrue(b.isDirty());
 
-            GadgetAction.immediateEvaluate(GadgetList.YU_CLEAN);
+            GadgetAction.immediateEvaluate(GadgetMenuChoice.YU_CLEAN);
 
             assertFalse(b.isDirty(), "清掃後は汚れが取れるべき");
         }
@@ -133,7 +133,7 @@ public class GadgetActionTest {
             Yukkuri dead = createReimuBody(AgeState.ADULT);
             dead.setDead(true);
 
-            GadgetAction.immediateEvaluate(GadgetList.YU_CLEAN);
+            GadgetAction.immediateEvaluate(GadgetMenuChoice.YU_CLEAN);
 
             // YU_CLEANは清掃のみで、死亡Bodyの除去は行わない
             assertFalse(dead.isRemoved(), "YU_CLEANは死亡Bodyを除去しないべき");
@@ -148,7 +148,7 @@ public class GadgetActionTest {
             assertFalse(alive.isRemoved());
             assertFalse(dead.isRemoved());
 
-            GadgetAction.immediateEvaluate(GadgetList.BODY);
+            GadgetAction.immediateEvaluate(GadgetMenuChoice.BODY);
 
             assertFalse(alive.isRemoved(), "生きてるBodyは除去されないべき");
             assertTrue(dead.isRemoved(), "死亡Bodyは除去されるべき");
@@ -158,14 +158,14 @@ public class GadgetActionTest {
         public void testShitRemovesShitAndVomit() {
             // Shit / Vomit をマップに追加
             Shit shit = new Shit();
-            SimYukkuri.world.getCurrentMap().getShit().put(1, shit);
+            SimYukkuri.world.getCurrentWorldState().getShit().put(1, shit);
             Vomit vomit = new Vomit();
-            SimYukkuri.world.getCurrentMap().getVomit().put(1, vomit);
+            SimYukkuri.world.getCurrentWorldState().getVomit().put(1, vomit);
 
             assertFalse(shit.isRemoved());
             assertFalse(vomit.isRemoved());
 
-            GadgetAction.immediateEvaluate(GadgetList.SHIT);
+            GadgetAction.immediateEvaluate(GadgetMenuChoice.SHIT);
 
             assertTrue(shit.isRemoved(), "うんうんは除去されるべき");
             assertTrue(vomit.isRemoved(), "嘔吐は除去されるべき");
@@ -178,9 +178,9 @@ public class GadgetActionTest {
             dead.setDead(true);
 
             Shit shit = new Shit();
-            SimYukkuri.world.getCurrentMap().getShit().put(2, shit);
+            SimYukkuri.world.getCurrentWorldState().getShit().put(2, shit);
 
-            GadgetAction.immediateEvaluate(GadgetList.ALL);
+            GadgetAction.immediateEvaluate(GadgetMenuChoice.ALL);
 
             assertFalse(alive.isRemoved(), "生きてるBodyは除去されないべき");
             assertTrue(dead.isRemoved(), "死亡Bodyは除去されるべき");
@@ -191,9 +191,9 @@ public class GadgetActionTest {
         public void testEtcRemovesEmptyFood() {
             Food food = new Food();
             food.setAmount(0); // empty
-            SimYukkuri.world.getCurrentMap().getFood().put(1, food);
+            SimYukkuri.world.getCurrentWorldState().getFoods().put(1, food);
 
-            GadgetAction.immediateEvaluate(GadgetList.ETC);
+            GadgetAction.immediateEvaluate(GadgetMenuChoice.ETC);
 
             assertTrue(food.isRemoved(), "空の餌は除去されるべき");
         }
@@ -211,7 +211,7 @@ public class GadgetActionTest {
             int damageBefore = b.getDamage();
             MouseEvent ev = createEvent(0);
 
-            GadgetAction.evaluateTool(GadgetList.PUNISH, ev, b);
+            GadgetAction.evaluateTool(GadgetMenuChoice.PUNISH, ev, b);
 
             assertTrue(b.getDamage() > damageBefore, "制裁でダメージが増えるべき");
         }
@@ -221,7 +221,7 @@ public class GadgetActionTest {
             Yukkuri b = createReimuBody(AgeState.ADULT);
             MouseEvent ev = createEvent(0);
 
-            GadgetAction.evaluateTool(GadgetList.SNAPPING, ev, b);
+            GadgetAction.evaluateTool(GadgetMenuChoice.SNAPPING, ev, b);
 
             // kick sets vx, vy, vz in Yukkuri.kick()
             assertTrue(b.getVy() != 0 || b.getVx() != 0, "ケリで移動速度が設定されるべき");
@@ -233,7 +233,7 @@ public class GadgetActionTest {
             assertFalse(b.isExciting());
             MouseEvent ev = createEvent(0);
 
-            GadgetAction.evaluateTool(GadgetList.VIBRATOR, ev, b);
+            GadgetAction.evaluateTool(GadgetMenuChoice.VIBRATOR, ev, b);
 
             assertTrue(b.isExciting(), "バイブで発情するべき");
         }
@@ -251,7 +251,7 @@ public class GadgetActionTest {
             assertEquals(0, b.getAttachmentSize(org.simyukkuri.entity.core.attachment.impl.OrangeAmpoule.class));
             MouseEvent ev = createEvent(0);
 
-            GadgetAction.evaluateAmpoule(GadgetList.ORANGE_AMP, ev, b);
+            GadgetAction.evaluateAmpoule(GadgetMenuChoice.ORANGE_AMP, ev, b);
 
             assertEquals(1, b.getAttachmentSize(org.simyukkuri.entity.core.attachment.impl.OrangeAmpoule.class),
                     "オレンジアンプルが追加されるべき");
@@ -263,7 +263,7 @@ public class GadgetActionTest {
             assertEquals(0, b.getAttachmentSize(org.simyukkuri.entity.core.attachment.impl.PoisonAmpoule.class));
             MouseEvent ev = createEvent(0);
 
-            GadgetAction.evaluateAmpoule(GadgetList.POISON_AMP, ev, b);
+            GadgetAction.evaluateAmpoule(GadgetMenuChoice.POISON_AMP, ev, b);
 
             assertEquals(1, b.getAttachmentSize(org.simyukkuri.entity.core.attachment.impl.PoisonAmpoule.class), "毒アンプルが追加されるべき");
         }
@@ -280,7 +280,7 @@ public class GadgetActionTest {
             Yukkuri b = createReimuBody(AgeState.ADULT);
             MouseEvent ev = createEvent(0);
 
-            GadgetAction.evaluateCommunicate(GadgetList.YUKKURISITEITTENE, ev, b);
+            GadgetAction.evaluateCommunicate(GadgetMenuChoice.YUKKURISITEITTENE, ev, b);
 
             assertNotNull(b.getMessageBuffer(), "ゆっくりしていってね！でメッセージが設定されるべき");
         }
@@ -299,7 +299,7 @@ public class GadgetActionTest {
             b.setDead(true);
             MouseEvent ev = createEvent(0);
 
-            GadgetAction.evaluateClean(GadgetList.INDIVIDUAL, ev, b);
+            GadgetAction.evaluateClean(GadgetMenuChoice.INDIVIDUAL, ev, b);
 
             assertTrue(b.isRemoved(), "死亡Bodyは個別除去されるべき");
         }
@@ -310,7 +310,7 @@ public class GadgetActionTest {
             b.makeDirty(true);
             MouseEvent ev = createEvent(0);
 
-            GadgetAction.evaluateClean(GadgetList.INDIVIDUAL, ev, b);
+            GadgetAction.evaluateClean(GadgetMenuChoice.INDIVIDUAL, ev, b);
 
             assertFalse(b.isDirty(), "生きてるBodyは清掃されるべき");
             assertFalse(b.isRemoved(), "生きてるBodyは除去されないべき");
@@ -322,7 +322,7 @@ public class GadgetActionTest {
             Shit shit = new Shit();
             MouseEvent ev = createEvent(0);
 
-            GadgetAction.evaluateClean(GadgetList.INDIVIDUAL, ev, shit);
+            GadgetAction.evaluateClean(GadgetMenuChoice.INDIVIDUAL, ev, shit);
 
             assertTrue(shit.isRemoved(), "非BodyオブジェクトはINDIVIDUALで除去されるべき");
         }
@@ -342,7 +342,7 @@ public class GadgetActionTest {
             assertTrue(b.hasOkazari());
             MouseEvent ev = createEvent(0);
 
-            GadgetAction.evaluateAccessory(GadgetList.OKAZARI_HIDE, ev, b);
+            GadgetAction.evaluateAccessory(GadgetMenuChoice.OKAZARI_HIDE, ev, b);
 
             assertFalse(b.hasOkazari(), "おかざり付きでクリックすると外れるべき");
         }
@@ -350,11 +350,11 @@ public class GadgetActionTest {
         @Test
         public void testNormalClickGiveOkazariWhenNoOkazari() {
             Yukkuri b = createReimuBody(AgeState.ADULT);
-            b.setOkazari(null); // おかざりを無くす
+            b.setOkazaris(null); // おかざりを無くす
             assertFalse(b.hasOkazari());
             MouseEvent ev = createEvent(0);
 
-            GadgetAction.evaluateAccessory(GadgetList.OKAZARI_HIDE, ev, b);
+            GadgetAction.evaluateAccessory(GadgetMenuChoice.OKAZARI_HIDE, ev, b);
 
             assertTrue(b.hasOkazari(), "おかざり無しでクリックすると付けるべき");
         }
@@ -370,7 +370,7 @@ public class GadgetActionTest {
 
             MouseEvent ev = createEvent(MouseEvent.SHIFT_DOWN_MASK);
 
-            GadgetAction.evaluateAccessory(GadgetList.OKAZARI_HIDE, ev, target);
+            GadgetAction.evaluateAccessory(GadgetMenuChoice.OKAZARI_HIDE, ev, target);
 
             // target has okazari → flag = !true = false
             // !flag && b.hasOkazari() → true → takeOkazari
@@ -384,12 +384,12 @@ public class GadgetActionTest {
             assertTrue(withOkazari.hasOkazari());
 
             Yukkuri withoutOkazari = createReimuBody(AgeState.ADULT);
-            withoutOkazari.setOkazari(null);
+            withoutOkazari.setOkazaris(null);
             assertFalse(withoutOkazari.hasOkazari());
 
             MouseEvent ev = createEvent(MouseEvent.CTRL_DOWN_MASK);
 
-            GadgetAction.evaluateAccessory(GadgetList.OKAZARI_HIDE, ev, withOkazari);
+            GadgetAction.evaluateAccessory(GadgetMenuChoice.OKAZARI_HIDE, ev, withOkazari);
 
             assertFalse(withOkazari.hasOkazari(), "Ctrl: おかざり有り→無しになるべき");
             assertTrue(withoutOkazari.hasOkazari(), "Ctrl: おかざり無し→有りになるべき");
@@ -409,7 +409,7 @@ public class GadgetActionTest {
             assertFalse(b.isHasPants());
             MouseEvent ev = createEvent(0);
 
-            GadgetAction.evaluatePants(GadgetList.PANTS_NORMAL, ev, b);
+            GadgetAction.evaluatePants(GadgetMenuChoice.PANTS_NORMAL, ev, b);
 
             assertTrue(b.isHasPants(), "おくるみ無しでクリックすると付けるべき");
         }
@@ -421,7 +421,7 @@ public class GadgetActionTest {
             assertTrue(b.isHasPants());
             MouseEvent ev = createEvent(0);
 
-            GadgetAction.evaluatePants(GadgetList.PANTS_NORMAL, ev, b);
+            GadgetAction.evaluatePants(GadgetMenuChoice.PANTS_NORMAL, ev, b);
 
             assertFalse(b.isHasPants(), "おくるみ有りでクリックすると外れるべき");
         }
@@ -437,7 +437,7 @@ public class GadgetActionTest {
 
             MouseEvent ev = createEvent(MouseEvent.CTRL_DOWN_MASK);
 
-            GadgetAction.evaluatePants(GadgetList.PANTS_NORMAL, ev, withPants);
+            GadgetAction.evaluatePants(GadgetMenuChoice.PANTS_NORMAL, ev, withPants);
 
             assertFalse(withPants.isHasPants(), "Ctrl: おくるみ有り→無しになるべき");
             assertTrue(withoutPants.isHasPants(), "Ctrl: おくるみ無し→有りになるべき");
@@ -457,7 +457,7 @@ public class GadgetActionTest {
             b.setRank(YukkuriRank.KAIYU);
             MouseEvent ev = createEvent(0);
 
-            GadgetAction.evaluateTest(GadgetList.RANKSET, ev, b);
+            GadgetAction.evaluateTest(GadgetMenuChoice.RANKSET, ev, b);
 
             assertEquals(YukkuriRank.NORAYU, b.getRank(), "KAIYU→NORAYUに変わるべき");
         }
@@ -468,7 +468,7 @@ public class GadgetActionTest {
             b.setRank(YukkuriRank.NORAYU);
             MouseEvent ev = createEvent(0);
 
-            GadgetAction.evaluateTest(GadgetList.RANKSET, ev, b);
+            GadgetAction.evaluateTest(GadgetMenuChoice.RANKSET, ev, b);
 
             assertEquals(YukkuriRank.KAIYU, b.getRank(), "NORAYU→KAIYUに変わるべき");
         }
@@ -482,7 +482,7 @@ public class GadgetActionTest {
             assertFalse(b.isBeVain());
             MouseEvent ev = createEvent(0);
 
-            GadgetAction.evaluateTest(GadgetList.SETVAIN, ev, b);
+            GadgetAction.evaluateTest(GadgetMenuChoice.SETVAIN, ev, b);
 
             assertTrue(b.isBeVain(), "SEtvainでbeVainフラグがONになるべき");
         }
@@ -493,7 +493,7 @@ public class GadgetActionTest {
             MouseEvent ev = createEvent(0);
             int hungryBefore = b.getHungry();
 
-            GadgetAction.evaluateTest(GadgetList.FEED, ev, b);
+            GadgetAction.evaluateTest(GadgetMenuChoice.FEED, ev, b);
 
             // feed() adds 1500 to hungry via eatFood
             assertTrue(b.getHungry() > hungryBefore, "生きてるBodyはfeedで空腹値が増えるべき");
@@ -506,7 +506,7 @@ public class GadgetActionTest {
             MouseEvent ev = createEvent(0);
             int hungryBefore = b.getHungry();
 
-            GadgetAction.evaluateTest(GadgetList.FEED, ev, b);
+            GadgetAction.evaluateTest(GadgetMenuChoice.FEED, ev, b);
 
             assertEquals(hungryBefore, b.getHungry(), "死亡Bodyはfeedされないべき");
         }
@@ -519,7 +519,7 @@ public class GadgetActionTest {
             MouseEvent shiftEv = createEvent(MouseEvent.SHIFT_DOWN_MASK);
             assertEquals(0, b.getAttachmentSize(Ants.class));
 
-            GadgetAction.evaluateTest(GadgetList.INVITEANTS, shiftEv, b);
+            GadgetAction.evaluateTest(GadgetMenuChoice.INVITEANTS, shiftEv, b);
 
             assertEquals(0, b.getAttachmentSize(Ants.class), "Shift時は蟻操作されないべき");
         }
@@ -530,7 +530,7 @@ public class GadgetActionTest {
             MouseEvent ctrlEv = createEvent(MouseEvent.CTRL_DOWN_MASK);
             assertEquals(0, b.getAttachmentSize(Ants.class));
 
-            GadgetAction.evaluateTest(GadgetList.INVITEANTS, ctrlEv, b);
+            GadgetAction.evaluateTest(GadgetMenuChoice.INVITEANTS, ctrlEv, b);
 
             assertEquals(0, b.getAttachmentSize(Ants.class), "Ctrl時は蟻操作されないべき");
         }

@@ -6,7 +6,7 @@ import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
 
-import org.simyukkuri.draw.ModLoader;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Rectangle4y;
 import org.simyukkuri.entity.core.world.WorldEntity;
 import org.simyukkuri.enums.Type;
@@ -198,8 +198,8 @@ public class Food extends WorldEntity {
 	}
 
 	@Override
-	public void removeListData() {
-		GameWorld.get().getCurrentMap().getFood().remove(objId);
+	public void removeFromWorld() {
+		GameWorld.get().getCurrentWorldState().getFoods().remove(objId);
 	}
 
 	@Override
@@ -224,8 +224,8 @@ public class Food extends WorldEntity {
 	public Food(int initX, int initY, int initOption) {
 		super(initX, initY, initOption);
 		// 森なら野生に変更
-		if (GameWorld.get().getCurrentMap().getMapIndex() == 5
-				|| GameWorld.get().getCurrentMap().getMapIndex() == 6) {
+		if (GameWorld.get().getCurrentWorldState().getWorldIndex() == 5
+				|| GameWorld.get().getCurrentWorldState().getWorldIndex() == 6) {
 			foodType = FoodType.values()[initOption];
 			switch (foodType) {
 				case SWEETS1:
@@ -267,7 +267,7 @@ public class Food extends WorldEntity {
 			setBoundary(0, 0, 0, 0); // Default for test environment
 		}
 		setCollisionSize(getPivotX(), getPivotY());
-		GameWorld.get().getCurrentMap().getFood().put(objId, this);
+		GameWorld.get().getCurrentWorldState().getFoods().put(objId, this);
 		objType = Type.OBJECT;
 		worldEntityType = WorldEntityKind.FOOD;
 		setRemoved(false);

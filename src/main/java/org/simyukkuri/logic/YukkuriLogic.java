@@ -6,7 +6,7 @@ import org.simyukkuri.draw.Translate;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.SocialEntity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
-import org.simyukkuri.enums.EnumRelationMine;
+import org.simyukkuri.enums.YukkuriRelationType;
 import org.simyukkuri.enums.GatheringDirection;
 import org.simyukkuri.event.EventPacket;
 
@@ -26,7 +26,7 @@ public class YukkuriLogic {
 	 * @param you 相手
 	 * @return 関係性
 	 */
-	public static final EnumRelationMine checkMyRelation(Yukkuri me, Yukkuri you) {
+	public static final YukkuriRelationType checkMyRelation(Yukkuri me, Yukkuri you) {
 		return YukkuriRelations.checkMyRelation(me, you);
 	}
 
@@ -203,8 +203,8 @@ public class YukkuriLogic {
 	 * @param age  ゆん生のステージ
 	 * @return 婚姻候補のリスト
 	 */
-	public static final List<Yukkuri> createActiveFianceeList(Yukkuri body, int age) {
-		return YukkuriSelectionRule.createActiveFianceeList(body, age);
+	public static final List<Yukkuri> createActiveFiances(Yukkuri body, int age) {
+		return YukkuriSelectionRule.createActiveFiances(body, age);
 	}
 
 	/**
@@ -214,8 +214,8 @@ public class YukkuriLogic {
 	 * @param includeChildren 子ゆっくりを入れるかどうか（これがfalseなら赤ゆのみのリストになる）
 	 * @return アクティブな赤ゆ/子ゆのリスト
 	 */
-	public static final List<Yukkuri> createActiveChildList(Yukkuri body, boolean includeChildren) {
-		return YukkuriSelectionRule.createActiveChildList(body, includeChildren);
+	public static final List<Yukkuri> createActiveChildren(Yukkuri body, boolean includeChildren) {
+		return YukkuriSelectionRule.createActiveChildren(body, includeChildren);
 	}
 
 	/**

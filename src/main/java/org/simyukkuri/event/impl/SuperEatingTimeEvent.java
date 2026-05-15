@@ -208,7 +208,7 @@ public class SuperEatingTimeEvent extends EventPacket {
 			}
 			waitTicks++;
 			// 子ゆがいなければ終了
-			List<Yukkuri> childrenList = YukkuriLogic.createActiveChildList(from, true);
+			List<Yukkuri> childrenList = YukkuriLogic.createActiveChildren(from, true);
 			if ((childrenList == null) || (childrenList.size() == 0)) {
 				return UpdateState.ABORT;
 			}
@@ -460,7 +460,7 @@ public class SuperEatingTimeEvent extends EventPacket {
 			if (b.isPartner(from)) {
 				// 壁に引っかかってるなら終了
 				if (Barrier.onBarrier(b.getX(), b.getY(), from.getX(), from.getY(),
-						Barrier.MAP_BODY[b.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
+						Barrier.BODY_BLOCK_FLAGS[b.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
 					b.clearEvent();
 				}
 				return null;
@@ -471,7 +471,7 @@ public class SuperEatingTimeEvent extends EventPacket {
 				case GO:
 					// 壁に引っかかってるなら終了
 					if (Barrier.onBarrier(b.getX(), b.getY(), from.getX(), from.getY(),
-							Barrier.MAP_BODY[b.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
+							Barrier.BODY_BLOCK_FLAGS[b.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
 						b.clearEvent();
 						return null;
 					}

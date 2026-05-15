@@ -6,7 +6,7 @@ import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
 
-import org.simyukkuri.draw.ModLoader;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Rectangle4y;
 import org.simyukkuri.entity.core.world.WorldEntity;
 import org.simyukkuri.enums.Type;
@@ -52,8 +52,8 @@ public class Trash extends WorldEntity {
 	}
 
 	@Override
-	public void removeListData() {
-		GameWorld.get().getCurrentMap().getTrash().remove(objId);
+	public void removeFromWorld() {
+		GameWorld.get().getCurrentWorldState().getTrashObjects().remove(objId);
 	}
 
 	@Override
@@ -72,7 +72,7 @@ public class Trash extends WorldEntity {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		GameWorld.get().getCurrentMap().getTrash().put(objId, this);
+		GameWorld.get().getCurrentWorldState().getTrashObjects().put(objId, this);
 		objType = Type.OBJECT;
 		worldEntityType = WorldEntityKind.TRASH;
 

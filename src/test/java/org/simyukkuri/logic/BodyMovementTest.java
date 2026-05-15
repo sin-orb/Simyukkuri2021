@@ -23,7 +23,7 @@ import org.junit.jupiter.api.Test;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.enums.AgeState;
-import org.simyukkuri.enums.CriticalDamegeType;
+import org.simyukkuri.enums.CriticalDamageType;
 import org.simyukkuri.enums.PredatorType;
 import org.simyukkuri.draw.Translate;
 import org.simyukkuri.entity.core.attachment.impl.Ants;
@@ -90,7 +90,7 @@ class BodyMovementTest {
 		assertEquals(2, YukkuriMovement.calculateMovementStep(body));
 
 		body.setSickPeriod(0);
-		body.setCriticalDamege(CriticalDamegeType.INJURED);
+		body.setCriticalDamege(CriticalDamageType.INJURED);
 		assertEquals(2, YukkuriMovement.calculateMovementStep(body));
 
 		body.setCriticalDamege(null);
@@ -388,7 +388,7 @@ class BodyMovementTest {
 	void externalMotionYOverflowSetsNegativeDirection() {
 		initializeSprites(body);
 		body.setX(10);
-		body.setY(Translate.getMapH());
+		body.setY(Translate.getWorldHeight());
 		body.setVx(0);
 		body.setVy(5);
 		body.setVz(0);
@@ -398,7 +398,7 @@ class BodyMovementTest {
 
 		boolean handled = YukkuriMovement.applyExternalMotion(body);
 
-		assertEquals(Translate.getMapH(), body.getY());
+		assertEquals(Translate.getWorldHeight(), body.getY());
 		assertEquals(0, body.getVy());
 		assertEquals(-1, body.getDirY());
 		assertFalse(handled);
@@ -453,7 +453,7 @@ class BodyMovementTest {
 		body.setDestY(100);
 		body.setDirX(1);
 		body.setDirY(0);
-		Translate.setCurrentWallMapNum(101, 100, org.simyukkuri.field.impl.Barrier.MAP_BODY[body.getAgeState().ordinal()]);
+		Translate.setCurrentWallGridValue(101, 100, org.simyukkuri.field.impl.Barrier.BODY_BLOCK_FLAGS[body.getAgeState().ordinal()]);
 
 		YukkuriMovement.applyDirectedMovement(body, YukkuriMovement.MovementVector.of(1, 0, 0));
 		YukkuriMovement.resolveDirectedMovement(body, YukkuriMovement.MovementVector.of(1, 0, 0));
@@ -475,8 +475,8 @@ class BodyMovementTest {
 		body.setLikeWater(false);
 		body.setIntelligence(org.simyukkuri.enums.Intelligence.WISE);
 		GameRandom.setOverride(fixedRandom(1, true));
-		Translate.setCurrentFieldMapNum(141, 140, org.simyukkuri.field.FieldShape.FIELD_POOL);
-		Translate.setCurrentFieldMapNum(140, 140, 0);
+		Translate.setCurrentFieldGridValue(141, 140, org.simyukkuri.field.FieldShape.FIELD_POOL);
+		Translate.setCurrentFieldGridValue(140, 140, 0);
 
 		YukkuriMovement.applyDirectedMovement(body, YukkuriMovement.MovementVector.of(1, 0, 0));
 		YukkuriMovement.resolveDirectedMovement(body, YukkuriMovement.MovementVector.of(1, 0, 0));
@@ -486,11 +486,11 @@ class BodyMovementTest {
 
 	@Test
 	void moveToClampsDestinationToMapRange() {
-		YukkuriMovement.moveTo(body, -10, Translate.getMapH() + 10, Translate.getMapZ() + 20);
+		YukkuriMovement.moveTo(body, -10, Translate.getWorldHeight() + 10, Translate.getWorldDepth() + 20);
 
 		assertEquals(0, body.getDestX());
-		assertEquals(Translate.getMapH(), body.getDestY());
-		assertEquals(Translate.getMapZ(), body.getDestZ());
+		assertEquals(Translate.getWorldHeight(), body.getDestY());
+		assertEquals(Translate.getWorldDepth(), body.getDestZ());
 	}
 
 	@Test
@@ -506,7 +506,7 @@ class BodyMovementTest {
 		assertFalse(body.isToSukkiri());
 		assertEquals(target.getObjId(), body.getMoveTargetId());
 		assertEquals(100, body.getDestX());
-		assertEquals(Math.min(200, Translate.getMapH()), body.getDestY());
+		assertEquals(Math.min(200, Translate.getWorldHeight()), body.getDestY());
 	}
 
 	@Test
@@ -517,8 +517,8 @@ class BodyMovementTest {
 
 		YukkuriMovement.runAway(body, 100, 100);
 
-		assertEquals(Translate.getMapW(), body.getDestX());
-		assertEquals(Translate.getMapH(), body.getDestY());
+		assertEquals(Translate.getWorldWidth(), body.getDestX());
+		assertEquals(Translate.getWorldHeight(), body.getDestY());
 		assertTrue(body.isScare());
 	}
 
@@ -550,7 +550,7 @@ class BodyMovementTest {
 
 	private Yukkuri createMappedMoveTarget() {
 		Yukkuri target = WorldTestHelper.createBody();
-		GameWorld.get().getCurrentMap().getYukkuriMap().put(target.getUniqueID(), target);
+		GameWorld.get().getCurrentWorldState().getYukkuriRegistry().put(target.getUniqueID(), target);
 		return target;
 	}
 

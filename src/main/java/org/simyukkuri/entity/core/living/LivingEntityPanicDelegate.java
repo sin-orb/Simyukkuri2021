@@ -1,6 +1,6 @@
 package org.simyukkuri.entity.core.living;
 
-import org.simyukkuri.enums.Event;
+import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.enums.PanicType;
 import org.simyukkuri.system.MessagePool;
 import org.simyukkuri.util.GameMessages;
@@ -24,10 +24,10 @@ public final class LivingEntityPanicDelegate {
 	}
 
 	/** パニック・恐怖状態の更新. @return 常に DONOTHING */
-	public Event checkFear() {
+	public TickResult checkFear() {
 		if (body.isNYD() || body.isUnBirth()) {
 			clearPanic();
-			return Event.DONOTHING;
+			return TickResult.NONE;
 		}
 		if (!body.isDead()) {
 			body.messageTicks--;
@@ -50,6 +50,6 @@ public final class LivingEntityPanicDelegate {
 		if (body.panicPeriod > 50) {
 			clearPanic();
 		}
-		return Event.DONOTHING;
+		return TickResult.NONE;
 	}
 }

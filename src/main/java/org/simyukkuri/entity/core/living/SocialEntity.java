@@ -12,7 +12,7 @@ import org.simyukkuri.enums.Attitude;
 import org.simyukkuri.enums.YukkuriRank;
 import org.simyukkuri.enums.BurialState;
 import org.simyukkuri.enums.CoreAnkoState;
-import org.simyukkuri.enums.CriticalDamegeType;
+import org.simyukkuri.enums.CriticalDamageType;
 import org.simyukkuri.enums.FootBake;
 import org.simyukkuri.enums.Happiness;
 import org.simyukkuri.enums.ImageCode;
@@ -373,42 +373,42 @@ public abstract class SocialEntity extends LivingEntity {
 	}
 
 	/** 子供のIDリスト を取得する. @return 子供のIDリスト */
-	public List<Integer> getChildrenList() {
+	public List<Integer> getChildren() {
 		return childrenList;
 	}
 
 	/** 子供のIDリスト を設定する. @param childrenList 子供のIDリスト */
-	public void setChildrenList(List<Integer> childrenList) {
+	public void setChildren(List<Integer> childrenList) {
 		this.childrenList = childrenList;
 	}
 
 	/** 姉ゆのIDリスト を取得する. @return 姉ゆのIDリスト */
-	public List<Integer> getElderSisterList() {
+	public List<Integer> getElderSisters() {
 		return elderSisterList;
 	}
 
 	/** 姉ゆのIDリスト を設定する. @param elderSisterList 姉ゆのIDリスト */
-	public void setElderSisterList(List<Integer> elderSisterList) {
+	public void setElderSisters(List<Integer> elderSisterList) {
 		this.elderSisterList = elderSisterList;
 	}
 
 	/** 妹ゆのIDリスト を取得する. @return 妹ゆのIDリスト */
-	public List<Integer> getSisterList() {
+	public List<Integer> getSisters() {
 		return sisterList;
 	}
 
 	/** 妹ゆのIDリスト を設定する. @param sisterList 妹ゆのIDリスト */
-	public void setSisterList(List<Integer> sisterList) {
+	public void setSisters(List<Integer> sisterList) {
 		this.sisterList = sisterList;
 	}
 
 	/** 先祖のIDリスト を取得する. @return 先祖のIDリスト */
-	public List<Integer> getAncestorList() {
+	public List<Integer> getAncestors() {
 		return ancestorList;
 	}
 
 	/** 先祖のIDリスト を設定する. @param ancestorList 先祖のIDリスト */
-	public void setAncestorList(List<Integer> ancestorList) {
+	public void setAncestors(List<Integer> ancestorList) {
 		this.ancestorList = ancestorList;
 	}
 
@@ -465,7 +465,7 @@ public abstract class SocialEntity extends LivingEntity {
 	 * @return ふりふり可能な状態かどうか
 	 */
 	public boolean canFurifuri() {
-		if (getFootBakeLevel() != FootBake.CRITICAL && coreAnkoState == CoreAnkoState.DEFAULT) {
+		if (getFootBakeLevel() != FootBake.CRITICAL && coreAnkoState == CoreAnkoState.NORMAL) {
 			return true;
 		}
 		return false;
@@ -582,7 +582,7 @@ public abstract class SocialEntity extends LivingEntity {
 			return;
 		}
 		// ストレスに応じてうんうん増加
-		if (s > 0 && coreAnkoState == CoreAnkoState.DEFAULT && getBurstState() != org.simyukkuri.enums.Burst.HALF) {
+		if (s > 0 && coreAnkoState == CoreAnkoState.NORMAL && getBurstState() != org.simyukkuri.enums.Burst.HALF) {
 			plusShit(s / 5);
 		}
 		stress += TICK * s;
@@ -621,7 +621,7 @@ public abstract class SocialEntity extends LivingEntity {
 			return true;
 		if (isGotBurned())
 			return true;
-		if (getCriticalDamege() == CriticalDamegeType.CUT)
+		if (getCriticalDamege() == CriticalDamageType.CUT)
 			return true;
 
 		return false;
@@ -648,7 +648,7 @@ public abstract class SocialEntity extends LivingEntity {
 		if (isIdiot()) {
 			tolerance += 50000;
 		}
-		if (getPublicRank() == PublicRank.UnunSlave) {
+		if (getPublicRank() == PublicRank.UNUN_SLAVE) {
 			tolerance += 10000;
 		}
 		switch (getIntelligence()) {
@@ -697,7 +697,7 @@ public abstract class SocialEntity extends LivingEntity {
 				tolerance -= 3;
 		}
 		switch (getFootBakeLevel()) {
-			case MIDIUM:
+			case MEDIUM:
 				tolerance -= 30;
 				break;
 			case CRITICAL:
@@ -707,7 +707,7 @@ public abstract class SocialEntity extends LivingEntity {
 				break;
 		}
 		switch (getBakeLevel()) {
-			case MIDIUM:
+			case MEDIUM:
 				tolerance -= 15;
 				break;
 			case CRITICAL:
@@ -740,11 +740,11 @@ public abstract class SocialEntity extends LivingEntity {
 		if (isShutmouth()) {
 			tolerance -= 10;
 		}
-		if (getCriticalDamege() == CriticalDamegeType.INJURED) {
+		if (getCriticalDamege() == CriticalDamageType.INJURED) {
 			tolerance -= 10;
 		}
-		if (getChildrenList() != null) {
-			for (int iChild : getChildrenList()) {
+		if (getChildren() != null) {
+			for (int iChild : getChildren()) {
 				Yukkuri childBody = YukkuriRelations.getYukkuriById(iChild);
 				if (childBody == null || childBody.isAdult()) {
 					continue;
@@ -866,7 +866,7 @@ public abstract class SocialEntity extends LivingEntity {
 			return false;
 		}
 
-		if (getFootBakeLevel() == FootBake.MIDIUM) {
+		if (getFootBakeLevel() == FootBake.MEDIUM) {
 			if (GameRandom.nextInt(15) == 0) {
 				clearActions();
 				setAngry(true);
@@ -1081,10 +1081,10 @@ public abstract class SocialEntity extends LivingEntity {
 		s.setAmaamaDiscipline(amaamaDiscipline);
 		s.setPartner(partner);
 		s.setParents(parents != null ? parents.clone() : null);
-		s.setChildrenList(childrenList != null ? new LinkedList<>(childrenList) : null);
-		s.setElderSisterList(elderSisterList != null ? new LinkedList<>(elderSisterList) : null);
-		s.setSisterList(sisterList != null ? new LinkedList<>(sisterList) : null);
-		s.setAncestorList(ancestorList != null ? new LinkedList<>(ancestorList) : null);
+		s.setChildren(childrenList != null ? new LinkedList<>(childrenList) : null);
+		s.setElderSisters(elderSisterList != null ? new LinkedList<>(elderSisterList) : null);
+		s.setSisters(sisterList != null ? new LinkedList<>(sisterList) : null);
+		s.setAncestors(ancestorList != null ? new LinkedList<>(ancestorList) : null);
 		s.setFatherRaper(fatherRaper);
 		s.setParentLinkId(parentLinkId);
 		s.setTargetBind(targetBind);
@@ -1394,47 +1394,47 @@ public abstract class SocialEntity extends LivingEntity {
 	// --- 家族リスト操作 ---
 
 	@Transient
-	public int getSisterListSize() {
-		return getSisterList().size();
+	public int getSistersCount() {
+		return getSisters().size();
 	}
 
 	@Transient
-	public int getElderSisterListSize() {
-		return getElderSisterList().size();
+	public int getElderSistersCount() {
+		return getElderSisters().size();
 	}
 
 	@Transient
-	public int getChildrenListSize() {
-		if (getChildrenList() == null)
+	public int getChildrenCount() {
+		if (getChildren() == null)
 			return 0;
-		return getChildrenList().size();
+		return getChildren().size();
 	}
 
-	public void addChildrenList(SocialEntity at) {
+	public void addChild(SocialEntity at) {
 		if (at != null)
-			getChildrenList().add(at.getUniqueID());
+			getChildren().add(at.getUniqueID());
 	}
 
-	public void removeChildrenList(SocialEntity target) {
-		YukkuriRelations.removeChildrenList(this, target);
+	public void removeChild(SocialEntity target) {
+		YukkuriRelations.removeChild(this, target);
 	}
 
-	public void addElderSisterList(SocialEntity at) {
+	public void addElderSister(SocialEntity at) {
 		if (at != null)
-			getElderSisterList().add(at.getUniqueID());
+			getElderSisters().add(at.getUniqueID());
 	}
 
-	public void removeElderSisterList(SocialEntity target) {
-		YukkuriRelations.removeElderSisterList(this, target);
+	public void removeElderSister(SocialEntity target) {
+		YukkuriRelations.removeElderSister(this, target);
 	}
 
-	public void addSisterList(SocialEntity at) {
+	public void addSister(SocialEntity at) {
 		if (at != null)
-			getSisterList().add(at.getUniqueID());
+			getSisters().add(at.getUniqueID());
 	}
 
-	public void removeSisterList(SocialEntity target) {
-		YukkuriRelations.removeSisterList(this, target);
+	public void removeSister(SocialEntity target) {
+		YukkuriRelations.removeSister(this, target);
 	}
 
 }

@@ -8,13 +8,13 @@ import org.simyukkuri.entity.core.world.bodylinked.Okazari.OkazariType;
 import org.simyukkuri.entity.core.world.item.Sui;
 import org.simyukkuri.enums.YukkuriBake;
 import org.simyukkuri.enums.YukkuriRank;
-import org.simyukkuri.enums.CriticalDamegeType;
+import org.simyukkuri.enums.CriticalDamageType;
 import org.simyukkuri.enums.FootBake;
 import org.simyukkuri.enums.HairState;
 import org.simyukkuri.enums.ImageCode;
 import org.simyukkuri.enums.YukkuriType;
 import org.simyukkuri.system.YukkuriLayer;
-import org.simyukkuri.system.MainCommandUI;
+import org.simyukkuri.ui.MainCommandUI;
 import org.simyukkuri.util.GameRandom;
 
 /**
@@ -63,11 +63,11 @@ public final class YukkuriRenderState {
 					body.isUnBirth() ? ImageCode.NYD_FRONT_CRY2.ordinal() : ImageCode.NYD_FRONT_WIDE.ordinal(),
 					direction,
 					layer, idx);
-		} else if (body.getCriticalDamege() == org.simyukkuri.enums.CriticalDamegeType.CUT) {
+		} else if (body.getCriticalDamege() == org.simyukkuri.enums.CriticalDamageType.CUT) {
 			idx += appendFace(body, ImageCode.PAIN.ordinal(), direction, layer, idx);
 		} else if (body.isExciting()) {
 			idx += appendFace(body,
-					body.isAliceRaperForRender() ? ImageCode.EXCITING_raper.ordinal() : ImageCode.EXCITING.ordinal(),
+					body.isAliceRaperForRender() ? ImageCode.EXCITING_RAPER.ordinal() : ImageCode.EXCITING.ordinal(),
 					direction, layer, idx);
 		} else if (body.isSleeping() && (!body.isUnBirth() || (body.getDamage() <= 0)) && !body.isNeedled()) {
 			idx += appendSleepingFace(body, direction, layer, idx);
@@ -132,7 +132,7 @@ public final class YukkuriRenderState {
 		int idx = 0;
 
 		if (body.getCriticalDamege() != null) {
-			if (body.getCriticalDamege() == CriticalDamegeType.CUT) {
+			if (body.getCriticalDamege() == CriticalDamageType.CUT) {
 				idx += appendFace(body, ImageCode.BODY_CUT.ordinal(), direction, layer, idx);
 			} else {
 				idx += appendFace(body, ImageCode.BODY_INJURED.ordinal(), direction, layer, idx);
@@ -169,14 +169,14 @@ public final class YukkuriRenderState {
 		}
 
 		FootBake footBake = body.getFootBakeLevel();
-		if (footBake == FootBake.MIDIUM) {
+		if (footBake == FootBake.MEDIUM) {
 			idx += appendFace(body, ImageCode.FOOT_BAKE0.ordinal(), direction, layer, idx);
 		} else if (footBake == FootBake.CRITICAL) {
 			idx += appendFace(body, ImageCode.FOOT_BAKE1.ordinal(), direction, layer, idx);
 		}
 
 		YukkuriBake bodyBake = body.getBakeLevel();
-		if (bodyBake == YukkuriBake.MIDIUM) {
+		if (bodyBake == YukkuriBake.MEDIUM) {
 			idx += appendFace(body, ImageCode.BODY_BAKE0.ordinal(), direction, layer, idx);
 		} else if (bodyBake == YukkuriBake.CRITICAL) {
 			idx += appendFace(body, ImageCode.BODY_BAKE1.ordinal(), direction, layer, idx);
@@ -214,15 +214,15 @@ public final class YukkuriRenderState {
 		int direction = body.getDirection().ordinal();
 		int idx = 0;
 
-		if (body.getOkazari() == null) {
+		if (body.getOkazaris() == null) {
 			layer.getImage()[idx] = null;
 			return idx + 1;
 		}
 		if (type == 0) {
-			if (body.getOkazari().getOkazariType() == OkazariType.DEFAULT) {
+			if (body.getOkazaris().getOkazariType() == OkazariType.DEFAULT) {
 				return idx + appendFace(body, ImageCode.ACCESSORY.ordinal(), direction, layer, idx);
 			}
-			layer.getImage()[idx] = Okazari.getOkazariImage(body.getOkazari().getOkazariType(), direction);
+			layer.getImage()[idx] = Okazari.getOkazariImage(body.getOkazaris().getOkazariType(), direction);
 			return idx + 1;
 		}
 		return idx + appendFace(body, ImageCode.ACCESSORY_BACK.ordinal(), direction, layer, idx);
@@ -449,7 +449,7 @@ public final class YukkuriRenderState {
 		if (body.isPealed()) {
 			return idx + appendFace(body, ImageCode.CRUSHED3.ordinal(), Const.LEFT, layer, idx);
 		}
-		if (body.getOkazari() != null && body.getOkazari().getOkazariType() == OkazariType.DEFAULT) {
+		if (body.getOkazaris() != null && body.getOkazaris().getOkazariType() == OkazariType.DEFAULT) {
 			return idx + appendFace(body, ImageCode.CRUSHED.ordinal(), Const.LEFT, layer, idx);
 		}
 		return idx + appendFace(body, ImageCode.CRUSHED2.ordinal(), Const.LEFT, layer, idx);
@@ -475,7 +475,7 @@ public final class YukkuriRenderState {
 		if (body.isAnalClose()) {
 			idx += appendFace(body, ImageCode.FRONT_SEALED.ordinal(), Const.LEFT, layer, idx);
 		}
-		if (body.getCriticalDamege() == CriticalDamegeType.INJURED) {
+		if (body.getCriticalDamege() == CriticalDamageType.INJURED) {
 			idx += appendFace(body, ImageCode.FRONT_INJURED.ordinal(), Const.LEFT, layer, idx);
 		}
 		if (body.isBlind()) {
@@ -487,7 +487,7 @@ public final class YukkuriRenderState {
 		if (body.isHasBraid()) {
 			idx += appendFace(body, ImageCode.FRONT_BRAID.ordinal(), Const.LEFT, layer, idx);
 		}
-		if (body.getOkazari() != null && body.getOkazari().getOkazariType() == OkazariType.DEFAULT) {
+		if (body.getOkazaris() != null && body.getOkazaris().getOkazariType() == OkazariType.DEFAULT) {
 			idx += appendFace(body, ImageCode.ROLL_ACCESSORY.ordinal(), Const.LEFT, layer, idx);
 		}
 		return idx;
@@ -501,7 +501,7 @@ public final class YukkuriRenderState {
 			idx += appendFace(body, ImageCode.ROLL_RIGHT_SHIT.ordinal(), Const.LEFT, layer, idx);
 			idx += appendRollingStateOverlays(body, layer, idx, false);
 		}
-		if (body.getOkazari() != null && body.getOkazari().getOkazariType() == OkazariType.DEFAULT) {
+		if (body.getOkazaris() != null && body.getOkazaris().getOkazariType() == OkazariType.DEFAULT) {
 			idx += appendFace(body, ImageCode.ROLL_ACCESSORY.ordinal(), Const.LEFT, layer, idx);
 		}
 		return idx;
@@ -518,7 +518,7 @@ public final class YukkuriRenderState {
 			idx += appendFace(body, left ? ImageCode.ROLL_LEFT_SEALED.ordinal() : ImageCode.ROLL_RIGHT_SEALED.ordinal(),
 					Const.LEFT, layer, idx);
 		}
-		if (body.getCriticalDamege() == CriticalDamegeType.INJURED) {
+		if (body.getCriticalDamege() == CriticalDamageType.INJURED) {
 			idx += appendFace(body,
 					left ? ImageCode.ROLL_LEFT_INJURED.ordinal() : ImageCode.ROLL_RIGHT_INJURED.ordinal(),
 					Const.LEFT, layer, idx);

@@ -4,7 +4,7 @@ import java.awt.event.MouseEvent;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.simyukkuri.command.GadgetMenu.GadgetList;
+import org.simyukkuri.command.GadgetMenu.GadgetMenuChoice;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.attachment.impl.ANYDAmpoule;
 import org.simyukkuri.entity.core.attachment.impl.AccelAmpoule;
@@ -22,8 +22,8 @@ final class GadgetAmpouleAction {
 	private GadgetAmpouleAction() {
 	}
 
-	static void evaluateAmpoule(GadgetList item, MouseEvent ev, Entity targetObject) {
-		List<Yukkuri> bodyList = new LinkedList<Yukkuri>(GameWorld.get().getCurrentMap().getYukkuriMap().values());
+	static void evaluateAmpoule(GadgetMenuChoice item, MouseEvent ev, Entity targetObject) {
+		List<Yukkuri> bodyList = new LinkedList<Yukkuri>(GameWorld.get().getCurrentWorldState().getYukkuriRegistry().values());
 		switch (item) {
 			case ORANGE_AMP:
 				if (ev.isShiftDown()) {

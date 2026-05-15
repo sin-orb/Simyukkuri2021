@@ -25,7 +25,7 @@ import org.simyukkuri.entity.core.world.item.Yunba.Action;
 import org.simyukkuri.entity.core.world.mobile.Shit;
 import org.simyukkuri.entity.core.world.mobile.Vomit;
 import org.simyukkuri.entity.core.world.item.ItemTestBase;
-import org.simyukkuri.enums.Event;
+import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.util.WorldTestHelper;
 
 class YunbaTest extends ItemTestBase {
@@ -48,9 +48,9 @@ class YunbaTest extends ItemTestBase {
     void testConstructor_Default() {
         Yunba item = new Yunba();
         item.setObjId(1);
-        SimYukkuri.world.getCurrentMap().getYunba().put(item.getObjId(), item);
+        SimYukkuri.world.getCurrentWorldState().getYunbas().put(item.getObjId(), item);
         verifyCommonProperties(item);
-        assertTrue(SimYukkuri.world.getCurrentMap().getYunba().containsKey(item.getObjId()));
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getYunbas().containsKey(item.getObjId()));
     }
 
     // --- Action enum ---
@@ -281,10 +281,10 @@ class YunbaTest extends ItemTestBase {
     void testRemoveListData() {
         Yunba item = new Yunba();
         item.setObjId(77);
-        SimYukkuri.world.getCurrentMap().getYunba().put(77, item);
-        assertTrue(SimYukkuri.world.getCurrentMap().getYunba().containsKey(77));
-        item.removeListData();
-        assertFalse(SimYukkuri.world.getCurrentMap().getYunba().containsKey(77));
+        SimYukkuri.world.getCurrentWorldState().getYunbas().put(77, item);
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getYunbas().containsKey(77));
+        item.removeFromWorld();
+        assertFalse(SimYukkuri.world.getCurrentWorldState().getYunbas().containsKey(77));
     }
 
     // --- upDate ---
@@ -311,9 +311,9 @@ class YunbaTest extends ItemTestBase {
     void testClockTick_Removed_ReturnsREMOVED() {
         Yunba item = createYunba();
         item.setObjId(88);
-        SimYukkuri.world.getCurrentMap().getYunba().put(88, item);
+        SimYukkuri.world.getCurrentWorldState().getYunbas().put(88, item);
         item.setRemoved(true);
-        assertEquals(Event.REMOVED, item.clockTick());
+        assertEquals(TickResult.REMOVED, item.clockTick());
     }
 
     // --- clockTick: grabbed ---
@@ -322,7 +322,7 @@ class YunbaTest extends ItemTestBase {
     void testClockTick_Grabbed_ReturnsDONOTHING() {
         Yunba item = createYunba();
         item.setGrabbed(true);
-        assertEquals(Event.DONOTHING, item.clockTick());
+        assertEquals(TickResult.NONE, item.clockTick());
     }
 
     // --- clockTick: z > 0 (falling) ---
@@ -331,7 +331,7 @@ class YunbaTest extends ItemTestBase {
     void testClockTick_ZAboveZero_ReturnsDONOTHING() {
         Yunba item = createYunba();
         item.setZ(10);
-        assertEquals(Event.DONOTHING, item.clockTick());
+        assertEquals(TickResult.NONE, item.clockTick());
     }
 
     // --- clockTick: action selection branch, all checks false ---
@@ -345,7 +345,7 @@ class YunbaTest extends ItemTestBase {
         item.setYukkuriCheck(false);
         item.setFoodCheck(false);
         // action == null, no checks active → moves to defaultX/defaultY
-        assertEquals(Event.DONOTHING, item.clockTick());
+        assertEquals(TickResult.NONE, item.clockTick());
     }
 
     // --- clockTick: movement branch, destX/destY set ---
@@ -373,7 +373,7 @@ class YunbaTest extends ItemTestBase {
         item.setDestY(-1);
         item.setAction(null);
         item.setTarget(null);
-        assertEquals(Event.DONOTHING, item.clockTick());
+        assertEquals(TickResult.NONE, item.clockTick());
     }
 
     // --- clockTick: movement, target is removed ---
@@ -405,7 +405,7 @@ class YunbaTest extends ItemTestBase {
         item.setFoodCheck(false);
         item.setStalkCheck(false);
         // No shit in world → action stays null
-        assertEquals(Event.DONOTHING, item.clockTick());
+        assertEquals(TickResult.NONE, item.clockTick());
     }
 
     // --- cheackOtherYunbaTarget ---
@@ -414,7 +414,7 @@ class YunbaTest extends ItemTestBase {
     void testCheackOtherYunbaTarget_NoOtherYunba_ReturnsTrue() {
         Yunba item = createYunba();
         item.setObjId(100);
-        SimYukkuri.world.getCurrentMap().getYunba().put(100, item);
+        SimYukkuri.world.getCurrentWorldState().getYunbas().put(100, item);
         Food food = new Food(100, 100, 0);
         assertTrue(item.cheackOtherYunbaTarget(food));
     }
@@ -423,11 +423,11 @@ class YunbaTest extends ItemTestBase {
     void testCheackOtherYunbaTarget_OtherYunbaHasTarget_ReturnsFalse() {
         Yunba item1 = createYunba();
         item1.setObjId(101);
-        SimYukkuri.world.getCurrentMap().getYunba().put(101, item1);
+        SimYukkuri.world.getCurrentWorldState().getYunbas().put(101, item1);
 
         Yunba item2 = createYunba();
         item2.setObjId(102);
-        SimYukkuri.world.getCurrentMap().getYunba().put(102, item2);
+        SimYukkuri.world.getCurrentWorldState().getYunbas().put(102, item2);
 
         Food food = new Food(100, 100, 0);
         item2.setTarget(food); // item2 already has food as target
@@ -458,12 +458,12 @@ class YunbaTest extends ItemTestBase {
         deadBody.setDead(true);
         deadBody.setX(110);
         deadBody.setY(110);
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(deadBody.getObjId(), deadBody);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(deadBody.getObjId(), deadBody);
 
         item.setX(100);
         item.setY(100);
         item.setObjId(200);
-        SimYukkuri.world.getCurrentMap().getYunba().put(200, item);
+        SimYukkuri.world.getCurrentWorldState().getYunbas().put(200, item);
 
         assertDoesNotThrow(() -> item.clockTick());
     }
@@ -478,12 +478,12 @@ class YunbaTest extends ItemTestBase {
         item.setX(100);
         item.setY(100);
         item.setObjId(300);
-        SimYukkuri.world.getCurrentMap().getYunba().put(300, item);
+        SimYukkuri.world.getCurrentWorldState().getYunbas().put(300, item);
 
         Shit shit = new Shit();
         shit.setX(110);
         shit.setY(110);
-        SimYukkuri.world.getCurrentMap().getShit().put(shit.getObjId(), shit);
+        SimYukkuri.world.getCurrentWorldState().getShit().put(shit.getObjId(), shit);
 
         assertDoesNotThrow(() -> item.clockTick());
     }
@@ -496,12 +496,12 @@ class YunbaTest extends ItemTestBase {
         item.setX(100);
         item.setY(100);
         item.setObjId(301);
-        SimYukkuri.world.getCurrentMap().getYunba().put(301, item);
+        SimYukkuri.world.getCurrentWorldState().getYunbas().put(301, item);
 
         Vomit vomit = new Vomit();
         vomit.setX(110);
         vomit.setY(110);
-        SimYukkuri.world.getCurrentMap().getVomit().put(vomit.getObjId(), vomit);
+        SimYukkuri.world.getCurrentWorldState().getVomit().put(vomit.getObjId(), vomit);
 
         assertDoesNotThrow(() -> item.clockTick());
     }
@@ -519,11 +519,11 @@ class YunbaTest extends ItemTestBase {
         item.setX(100);
         item.setY(100);
         item.setObjId(302);
-        SimYukkuri.world.getCurrentMap().getYunba().put(302, item);
+        SimYukkuri.world.getCurrentWorldState().getYunbas().put(302, item);
 
         Food emptyFood = new Food(110, 110, Food.FoodType.SWEETS1.ordinal());
         emptyFood.setAmount(0); // empty food
-        SimYukkuri.world.getCurrentMap().getFood().put(emptyFood.getObjId(), emptyFood);
+        SimYukkuri.world.getCurrentWorldState().getFoods().put(emptyFood.getObjId(), emptyFood);
 
         assertDoesNotThrow(() -> item.clockTick());
     }
@@ -561,7 +561,7 @@ class YunbaTest extends ItemTestBase {
         Shit shit = new Shit();
         shit.setX(100);
         shit.setY(100);
-        SimYukkuri.world.getCurrentMap().getShit().put(shit.getObjId(), shit);
+        SimYukkuri.world.getCurrentWorldState().getShit().put(shit.getObjId(), shit);
         item.setTarget(shit);
         assertDoesNotThrow(() -> item.clockTick());
     }
@@ -572,7 +572,7 @@ class YunbaTest extends ItemTestBase {
     void testClockTick_Grabbed_DoesNothing() {
         Yunba item = createYunba();
         item.setGrabbed(true);
-        assertEquals(Event.DONOTHING, item.clockTick());
+        assertEquals(TickResult.NONE, item.clockTick());
     }
 
     // --- clockTick: removed ---
@@ -581,7 +581,7 @@ class YunbaTest extends ItemTestBase {
     void testClockTick_Removed_ReturnsRemoved() {
         Yunba item = createYunba();
         item.setRemoved(true);
-        assertEquals(Event.REMOVED, item.clockTick());
+        assertEquals(TickResult.REMOVED, item.clockTick());
     }
 
     // --- clockTick: airborne (z > 0) ---
@@ -590,7 +590,7 @@ class YunbaTest extends ItemTestBase {
     void testClockTick_Airborne_DoesNothing() {
         Yunba item = createYunba();
         item.setZ(10);
-        assertEquals(Event.DONOTHING, item.clockTick());
+        assertEquals(TickResult.NONE, item.clockTick());
     }
 
     // --- Constructor with coordinates (int, int, int) ---
@@ -680,7 +680,7 @@ class YunbaTest extends ItemTestBase {
         deadBody.setDead(true);
         deadBody.setX(100);
         deadBody.setY(100);
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(deadBody.getObjId(), deadBody);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(deadBody.getObjId(), deadBody);
         item.setTarget(deadBody);
         assertDoesNotThrow(() -> item.clockTick());
     }
@@ -695,7 +695,7 @@ class YunbaTest extends ItemTestBase {
         dirtyBody.setDirty(true);
         dirtyBody.setX(100);
         dirtyBody.setY(100);
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(dirtyBody.getObjId(), dirtyBody);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(dirtyBody.getObjId(), dirtyBody);
         item.setTarget(dirtyBody);
         assertDoesNotThrow(() -> item.clockTick());
     }
@@ -710,7 +710,7 @@ class YunbaTest extends ItemTestBase {
         WorldTestHelper.setDamage(damagedBody, 1);
         damagedBody.setX(100);
         damagedBody.setY(100);
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(damagedBody.getObjId(), damagedBody);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(damagedBody.getObjId(), damagedBody);
         item.setTarget(damagedBody);
         assertDoesNotThrow(() -> item.clockTick());
     }
@@ -723,7 +723,7 @@ class YunbaTest extends ItemTestBase {
         item.setAction(Action.STALK);
         org.simyukkuri.entity.core.world.bodylinked.Stalk stalk = new org.simyukkuri.entity.core.world.bodylinked.Stalk(100, 100, 0);
         stalk.setAmount(100);
-        SimYukkuri.world.getCurrentMap().getStalk().put(stalk.getObjId(), stalk);
+        SimYukkuri.world.getCurrentWorldState().getStalks().put(stalk.getObjId(), stalk);
         item.setTarget(stalk);
         assertDoesNotThrow(() -> item.clockTick());
     }
@@ -737,7 +737,7 @@ class YunbaTest extends ItemTestBase {
         org.simyukkuri.entity.core.world.item.Food food = new org.simyukkuri.entity.core.world.item.Food(100, 100,
                 org.simyukkuri.entity.core.world.item.Food.FoodType.SWEETS1.ordinal());
         food.setAmount(0);
-        SimYukkuri.world.getCurrentMap().getFood().put(food.getObjId(), food);
+        SimYukkuri.world.getCurrentWorldState().getFoods().put(food.getObjId(), food);
         item.setTarget(food);
         assertDoesNotThrow(() -> item.clockTick());
     }
@@ -752,7 +752,7 @@ class YunbaTest extends ItemTestBase {
         Yukkuri targetBody = WorldTestHelper.createBody();
         targetBody.setX(100);
         targetBody.setY(100);
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(targetBody.getObjId(), targetBody);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(targetBody.getObjId(), targetBody);
         item.setTarget(targetBody);
         assertDoesNotThrow(() -> item.clockTick());
     }
@@ -766,7 +766,7 @@ class YunbaTest extends ItemTestBase {
         Yukkuri sickBody = WorldTestHelper.createBody();
         sickBody.setX(100);
         sickBody.setY(100);
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(sickBody.getObjId(), sickBody);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(sickBody.getObjId(), sickBody);
         item.setTarget(sickBody);
         assertDoesNotThrow(() -> item.clockTick());
     }
@@ -792,12 +792,12 @@ class YunbaTest extends ItemTestBase {
         dirtyBody.setDirty(true);
         dirtyBody.setX(110);
         dirtyBody.setY(110);
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(dirtyBody.getObjId(), dirtyBody);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(dirtyBody.getObjId(), dirtyBody);
 
         item.setX(100);
         item.setY(100);
         item.setObjId(800);
-        SimYukkuri.world.getCurrentMap().getYunba().put(800, item);
+        SimYukkuri.world.getCurrentWorldState().getYunbas().put(800, item);
 
         assertDoesNotThrow(() -> item.clockTick());
     }
@@ -816,11 +816,11 @@ class YunbaTest extends ItemTestBase {
         item.setX(100);
         item.setY(100);
         item.setObjId(801);
-        SimYukkuri.world.getCurrentMap().getYunba().put(801, item);
+        SimYukkuri.world.getCurrentWorldState().getYunbas().put(801, item);
 
         org.simyukkuri.entity.core.world.bodylinked.Stalk stalk = new org.simyukkuri.entity.core.world.bodylinked.Stalk(110, 110, 0);
         stalk.setAmount(100);
-        SimYukkuri.world.getCurrentMap().getStalk().put(stalk.getObjId(), stalk);
+        SimYukkuri.world.getCurrentWorldState().getStalks().put(stalk.getObjId(), stalk);
 
         assertDoesNotThrow(() -> item.clockTick());
     }

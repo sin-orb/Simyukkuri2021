@@ -36,10 +36,10 @@ import org.simyukkuri.enums.YukkuriRank;
 import org.simyukkuri.enums.BurialState;
 import org.simyukkuri.enums.Burst;
 import org.simyukkuri.enums.CoreAnkoState;
-import org.simyukkuri.enums.CriticalDamegeType;
+import org.simyukkuri.enums.CriticalDamageType;
 import org.simyukkuri.enums.Damage;
 import org.simyukkuri.enums.Direction;
-import org.simyukkuri.enums.Event;
+import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.enums.FavItemType;
 import org.simyukkuri.enums.FootBake;
 import org.simyukkuri.enums.HairState;
@@ -69,7 +69,7 @@ import org.simyukkuri.logic.YukkuriRelations;
 import org.simyukkuri.system.YukkuriLayer;
 import org.simyukkuri.system.ItemMenu.GetMenuTarget;
 import org.simyukkuri.system.ItemMenu.UseMenuTarget;
-import org.simyukkuri.system.MainCommandUI;
+import org.simyukkuri.ui.MainCommandUI;
 import org.simyukkuri.system.MessagePool;
 import org.simyukkuri.system.Sprite;
 import org.simyukkuri.util.GameEnvironment;
@@ -80,7 +80,7 @@ import org.simyukkuri.util.GameText;
 import org.simyukkuri.util.GameView;
 import org.simyukkuri.util.GameWorld;
 import org.simyukkuri.util.IniFileUtil;
-import org.simyukkuri.util.ListUtil;
+import org.simyukkuri.util.ListOperations;
 
 /*********************************************************
  * ゆっくり本体の元となる抽象クラス（動作のみ。）
@@ -451,7 +451,7 @@ public abstract class Yukkuri extends SocialEntity {
 		if (SimYukkuri.UNYO) {
 			if (getAge() % 9 == 0) {
 				if (!isDead() && !isLockmove()) {
-					if (getCriticalDamegeType() != CriticalDamegeType.CUT && !grabbed && !isPealed() && !isPacked()) {
+					if (getCriticalDamageType() != CriticalDamageType.CUT && !grabbed && !isPealed() && !isPacked()) {
 						if (!isUnyoActionAll() && !isSleeping()) {
 							if (!canflyCheck()) {
 								if (getFootBakeLevel() == FootBake.NONE &&
@@ -873,7 +873,7 @@ public abstract class Yukkuri extends SocialEntity {
 		if (isPealed() || isNYD())
 			return;
 		else if (isRaperExcitingFace(f)) {
-			forceFace = ImageCode.EXCITING_raper.ordinal();
+			forceFace = ImageCode.EXCITING_RAPER.ordinal();
 		} else
 			forceFace = f;
 	}
@@ -1000,8 +1000,8 @@ public abstract class Yukkuri extends SocialEntity {
 	 * 
 	 * @param inAnc 加えたいゆっくりのUniqueID
 	 */
-	public final void addAncestorList(int inAnc) {
-		getAncestorList().add(inAnc);
+	public final void addAncestor(int inAnc) {
+		getAncestors().add(inAnc);
 	}
 
 	/**
@@ -1009,8 +1009,8 @@ public abstract class Yukkuri extends SocialEntity {
 	 * 
 	 * @param iAncList 先祖に加えたいリスト
 	 */
-	public final void addAncestorList(List<Integer> iAncList) {
-		getAncestorList().addAll(iAncList);
+	public final void addAncestor(List<Integer> iAncList) {
+		getAncestors().addAll(iAncList);
 	}
 
 	// 飛行種かどうか
@@ -1422,9 +1422,9 @@ public abstract class Yukkuri extends SocialEntity {
 		e.setToX(toX);
 		e.setToY(toY);
 		e.setToZ(toZ);
-		destX = Math.max(0, Math.min(toX, Translate.getMapW()));
-		destY = Math.max(0, Math.min(toY, Translate.getMapH()));
-		destZ = Math.max(0, Math.min(toZ, Translate.getMapZ()));
+		destX = Math.max(0, Math.min(toX, Translate.getWorldWidth()));
+		destY = Math.max(0, Math.min(toY, Translate.getWorldHeight()));
+		destZ = Math.max(0, Math.min(toZ, Translate.getWorldDepth()));
 	}
 
 	/**
@@ -1896,32 +1896,32 @@ public abstract class Yukkuri extends SocialEntity {
 			setPartner(-1);
 			removeAllStalks();
 			setStalks(null);
-			if (GameWorld.get().getCurrentMap().getYukkuriMap().containsKey(this.getUniqueID())) {
-				GameWorld.get().getCurrentMap().getYukkuriMap().remove(this.getUniqueID());
+			if (GameWorld.get().getCurrentWorldState().getYukkuriRegistry().containsKey(this.getUniqueID())) {
+				GameWorld.get().getCurrentWorldState().getYukkuriRegistry().remove(this.getUniqueID());
 			}
-			getChildrenList().clear();
-			getElderSisterList().clear();
-			getSisterList().clear();
-			List<Yukkuri> bodies = new LinkedList<Yukkuri>(GameWorld.get().getCurrentMap().getYukkuriMap().values());
+			getChildren().clear();
+			getElderSisters().clear();
+			getSisters().clear();
+			List<Yukkuri> bodies = new LinkedList<Yukkuri>(GameWorld.get().getCurrentWorldState().getYukkuriRegistry().values());
 			for (Yukkuri b : bodies) {
-				if (b.getChildrenList() != null) {
-					ListUtil.removeContent(b.getChildrenList(), getUniqueID());
+				if (b.getChildren() != null) {
+					ListOperations.removeFirstMatchingValue(b.getChildren(), getUniqueID());
 				}
-				if (b.getElderSisterList() != null) {
-					ListUtil.removeContent(b.getElderSisterList(), getUniqueID());
+				if (b.getElderSisters() != null) {
+					ListOperations.removeFirstMatchingValue(b.getElderSisters(), getUniqueID());
 				}
-				if (b.getSisterList() != null) {
-					ListUtil.removeContent(b.getSisterList(), getUniqueID());
+				if (b.getSisters() != null) {
+					ListOperations.removeFirstMatchingValue(b.getSisters(), getUniqueID());
 				}
 			}
 			getAttach().clear();
-			setOkazari(null);
+			setOkazaris(null);
 			getBabyTypes().clear();
 			getStalkBabyTypes().clear();
-			getAncestorList().clear();
+			getAncestors().clear();
 			setParentLinkId(-1);
 			setMoveTargetId(-1);
-			getEventList().clear();
+			getEvents().clear();
 			setCurrentEvent(null);
 			getFavoriteItems().clear();
 			getCarryItems().clear();
@@ -2088,15 +2088,15 @@ public abstract class Yukkuri extends SocialEntity {
 	 * Tick処理本体
 	 */
 	@Override
-	public Event clockTick() {
+	public TickResult clockTick() {
 		if (GameEnvironment.getOperationTime() % 100 == 0) {
-			checkRemovedFamilyList();
+			pruneRemovedFamilyMembers();
 		}
 		// if removed, remove body
 		if (isRemoved()) {
 			removeAllStalks();
 			remove();
-			return Event.REMOVED;
+			return TickResult.REMOVED;
 		}
 
 		int i = 0;
@@ -2106,7 +2106,7 @@ public abstract class Yukkuri extends SocialEntity {
 			if (at == null || at.isRemoved()) {
 				continue;
 			}
-			if (at.clockTick() == Event.REMOVED) {
+			if (at.clockTick() == TickResult.REMOVED) {
 				getAttach().remove(i);
 			} else {
 				i++;
@@ -2142,10 +2142,10 @@ public abstract class Yukkuri extends SocialEntity {
 					GameView.addCrushedShit(x, y, z, this, getShitType());
 					remove();
 					disPlantStalks();
-					return Event.REMOVED;
+					return TickResult.REMOVED;
 				}
 			}
-			return Event.DEAD;
+			return TickResult.DEAD;
 		}
 
 		// 爆発処理
@@ -2155,11 +2155,11 @@ public abstract class Yukkuri extends SocialEntity {
 			checkMessage();
 			if (isDead()) {
 				bodyBurst();
-				return Event.DEAD;
+				return TickResult.DEAD;
 			}
 		}
 
-		Event retval = Event.DONOTHING;
+		TickResult retval = TickResult.NONE;
 		boolean stopAgeSteamAmple = false;
 		if (getAttachmentSize(StopAmpoule.class) != 0) {
 			stopAgeSteamAmple = true;
@@ -2194,7 +2194,7 @@ public abstract class Yukkuri extends SocialEntity {
 			moveYukkuri(true); // for falling the body
 			checkMessage();
 			if (isDead()) {
-				return Event.DEAD;
+				return TickResult.DEAD;
 			}
 		}
 
@@ -2212,7 +2212,7 @@ public abstract class Yukkuri extends SocialEntity {
 				resetAttachmentBoundary();
 				// DamageLimitを流用してるパラメータは状態を維持するためここで再計算
 				switch (foot) {
-					case MIDIUM:
+					case MEDIUM:
 						footBakePeriod = (getDamageLimitBase()[getAgeState().ordinal()] >> 1) + 1;
 						break;
 					case CRITICAL:
@@ -2227,7 +2227,7 @@ public abstract class Yukkuri extends SocialEntity {
 		plusGodHand();
 
 		boolean dontMove = false;
-		if (getCoreAnkoState() == CoreAnkoState.NonYukkuriDisease ||
+		if (getCoreAnkoState() == CoreAnkoState.NON_YUKKURI_DISEASE ||
 				isOnNonMovingConveyor() || isSurisuriFromPlayer() || isPealed() || isPacked()) {
 			dontMove = true;
 		}
@@ -2258,7 +2258,7 @@ public abstract class Yukkuri extends SocialEntity {
 			checkSick();
 			checkCantDie();
 			moveYukkuri(true);
-			return Event.DONOTHING;
+			return TickResult.NONE;
 		}
 		// check status
 		checkHungry();
@@ -2295,7 +2295,7 @@ public abstract class Yukkuri extends SocialEntity {
 			if (getStalks() != null && getStalks().size() != 0) {
 				setHasStalk(true);
 			}
-			return Event.BIRTHBABY;
+			return TickResult.BIRTH;
 		}
 		// 出産に失敗するとfalseになるのでリセット
 		if (getBabyTypes().size() != 0) {
@@ -2328,7 +2328,7 @@ public abstract class Yukkuri extends SocialEntity {
 		noticeNoOkazari();
 
 		// check can move or not
-		if (getCriticalDamegeType() == CriticalDamegeType.CUT ||
+		if (getCriticalDamageType() == CriticalDamageType.CUT ||
 				(getFootBakeLevel() == FootBake.CRITICAL && !canflyCheck()) ||
 				isNeedled() || getBurialState() != BurialState.NONE || isUnBirth()) {
 			dontMove = true;
@@ -2347,13 +2347,13 @@ public abstract class Yukkuri extends SocialEntity {
 					// 寝ているか粘着床についているか針が刺さっていたら体勢をかえられずに漏らす
 					if ((isLockmove() && isFixBack()) || isSleeping() || isNeedled() ||
 							getBurialState() != BurialState.NONE) {
-						retval = Event.DOCRUSHEDSHIT;
+						retval = TickResult.CRUSHED_SHIT;
 					} else {
 						if (isNotNYD()) {
-							retval = Event.DOSHIT;
+							retval = TickResult.SHIT;
 						} else {
 							// 非ゆっくり症
-							retval = Event.DOCRUSHEDSHIT;
+							retval = TickResult.CRUSHED_SHIT;
 						}
 					}
 					// 300%を肥えてたらうんうん量を増やす
@@ -2363,7 +2363,7 @@ public abstract class Yukkuri extends SocialEntity {
 				}
 			}
 			// あんよが傷ついていた場合、一定確率であんよが爆ぜる
-			if (getCriticalDamegeType() == CriticalDamegeType.INJURED && getBreakByShitProb() != 0
+			if (getCriticalDamageType() == CriticalDamageType.INJURED && getBreakByShitProb() != 0
 					&& GameRandom.nextInt(getBreakByShitProb()) == 0) {
 				bodyCut();
 			}
@@ -2393,7 +2393,7 @@ public abstract class Yukkuri extends SocialEntity {
 
 		// move to destination
 		// if there is no destination, walking randomly.
-		if (getCoreAnkoState() == CoreAnkoState.NonYukkuriDiseaseNear) {
+		if (getCoreAnkoState() == CoreAnkoState.NON_YUKKURI_DISEASE_NEAR) {
 			// 非ゆっくり症初期の場合はあまり動かない
 			if (GameRandom.nextInt(5) == 0) {
 				moveYukkuri(true);
@@ -2423,8 +2423,8 @@ public abstract class Yukkuri extends SocialEntity {
 	/**
 	 * Removeされたゆっくりが姉妹リスト、子リストにいたら削除する
 	 */
-	private void checkRemovedFamilyList() {
-		familyDelegate().checkRemovedFamilyList();
+	private void pruneRemovedFamilyMembers() {
+		familyDelegate().pruneRemovedFamilyMembers();
 	}
 
 	/**
@@ -2512,7 +2512,7 @@ public abstract class Yukkuri extends SocialEntity {
 			setFavoriteItem(FavItemType.BED, mama.getFavoriteItem(FavItemType.BED));
 		}
 
-		setOkazari(new Okazari(this, OkazariType.DEFAULT));
+		setOkazaris(new Okazari(this, OkazariType.DEFAULT));
 
 		IniFileUtil.readIniFile(this, false); // iniファイル読み込み
 		tuneParameters(); // Update individual parameters.
@@ -2571,15 +2571,15 @@ public abstract class Yukkuri extends SocialEntity {
 				case NONE:
 					publicRank = PublicRank.NONE;
 					break;
-				case UnunSlave:// うんうん奴隷
-					publicRank = PublicRank.UnunSlave;
+				case UNUN_SLAVE:// うんうん奴隷
+					publicRank = PublicRank.UNUN_SLAVE;
 					break;
 				default:
 					break;
 			}
 		} else if (GameWorld.get() != null) {
-			if (GameWorld.get().getCurrentMap().getMapIndex() == 5
-					|| GameWorld.get().getCurrentMap().getMapIndex() == 6)
+			if (GameWorld.get().getCurrentWorldState().getWorldIndex() == 5
+					|| GameWorld.get().getCurrentWorldState().getWorldIndex() == 6)
 				bodyRank = YukkuriRank.YASEIYU;
 		}
 		// 生い立ちを設定
@@ -2588,16 +2588,16 @@ public abstract class Yukkuri extends SocialEntity {
 
 		// 先祖の情報を引き継ぐ
 		if (mama != null) {
-			List<Integer> ancestorList = mama.getAncestorList();
+			List<Integer> ancestorList = mama.getAncestors();
 			YukkuriType ancestorType = mama.getType();
-			addAncestorList(ancestorList);
-			addAncestorList(ancestorType.getTypeID());
+			addAncestor(ancestorList);
+			addAncestor(ancestorType.getTypeID());
 		}
 		if (papa != null) {
-			List<Integer> ancestorList = papa.getAncestorList();
+			List<Integer> ancestorList = papa.getAncestors();
 			YukkuriType ancestorType = papa.getType();
-			addAncestorList(ancestorList);
-			addAncestorList(ancestorType.getTypeID());
+			addAncestor(ancestorList);
+			addAncestor(ancestorType.getTypeID());
 		}
 
 		hungry = getHungryLimitBase()[getAgeState().ordinal()] + (100 * getAgeState().ordinal());
@@ -2628,7 +2628,7 @@ public abstract class Yukkuri extends SocialEntity {
 				break;
 		}
 
-		setOkazari(new Okazari(this, OkazariType.DEFAULT));
+		setOkazaris(new Okazari(this, OkazariType.DEFAULT));
 
 		IniFileUtil.readIniFile(this, false); // iniファイル読み込み
 
@@ -3037,7 +3037,7 @@ public abstract class Yukkuri extends SocialEntity {
 				if (isHasPants() || (isFixBack() && isNeedled())) {
 					birthAllowed = false;
 				}
-				if ((isLockmove() && (!isFixBack() || getCoreAnkoState() != CoreAnkoState.NonYukkuriDisease))
+				if ((isLockmove() && (!isFixBack() || getCoreAnkoState() != CoreAnkoState.NON_YUKKURI_DISEASE))
 						&& !isShitting()) {
 					birthAllowed = false;
 				}
@@ -3566,7 +3566,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * @return 子のインスタンス
 	 */
 	public Yukkuri getChildren(int childIndex) {
-		if (getChildrenList() == null) {
+		if (getChildren() == null) {
 			return null;
 		}
 		return YukkuriRelations.getChildren(this, childIndex);
@@ -3854,7 +3854,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * 
 	 * @return 致命傷種別
 	 */
-	public CriticalDamegeType getCriticalDamegeType() {
+	public CriticalDamageType getCriticalDamageType() {
 		return criticalDamege;
 	}
 
@@ -3863,7 +3863,7 @@ public abstract class Yukkuri extends SocialEntity {
 	 * 
 	 * @param type 致命傷種別
 	 */
-	public void setCriticalDamegeType(CriticalDamegeType type) {
+	public void setCriticalDamageType(CriticalDamageType type) {
 		criticalDamege = type;
 	}
 

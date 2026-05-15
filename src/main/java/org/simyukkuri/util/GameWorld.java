@@ -1,9 +1,9 @@
 package org.simyukkuri.util;
 
 import org.simyukkuri.SimYukkuri;
-import org.simyukkuri.draw.World;
+import org.simyukkuri.engine.World;
 import org.simyukkuri.entity.core.meta.Player;
-import org.simyukkuri.system.MapPlaceData;
+import org.simyukkuri.system.WorldState;
 
 public final class GameWorld {
 	private static WorldSource override;
@@ -22,8 +22,8 @@ public final class GameWorld {
 		SimYukkuri.world = world;
 	}
 
-	public static MapPlaceData getCurrentMap() {
-		return get().getCurrentMap();
+	public static WorldState getCurrentWorldState() {
+		return get().getCurrentWorldState();
 	}
 
 	public static Player getPlayer() {

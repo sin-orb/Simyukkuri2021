@@ -24,13 +24,13 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import org.simyukkuri.SimYukkuri;
-import org.simyukkuri.draw.World;
+import org.simyukkuri.engine.World;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.living.yukkuri.impl.Reimu;
 import org.simyukkuri.enums.AgeState;
-import org.simyukkuri.enums.CriticalDamegeType;
+import org.simyukkuri.enums.CriticalDamageType;
 import org.simyukkuri.enums.Direction;
-import org.simyukkuri.enums.Event;
+import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.system.ResourceUtil;
 
 public class VeryShitAmpouleTest {
@@ -72,9 +72,9 @@ public class VeryShitAmpouleTest {
     public void testUpdateReturnsDoNothingWhenParentIsNull() {
         VeryShitAmpoule ampoule = new VeryShitAmpoule();
 
-        Event result = ampoule.update();
+        TickResult result = ampoule.update();
 
-        assertEquals(Event.DONOTHING, result);
+        assertEquals(TickResult.NONE, result);
     }
 
     @Test
@@ -84,9 +84,9 @@ public class VeryShitAmpouleTest {
 
         parent.setDead(true);
 
-        Event result = ampoule.update();
+        TickResult result = ampoule.update();
 
-        assertEquals(Event.DONOTHING, result);
+        assertEquals(TickResult.NONE, result);
     }
 
     @Test
@@ -94,12 +94,12 @@ public class VeryShitAmpouleTest {
         Yukkuri parent = createParent(AgeState.ADULT);
         VeryShitAmpoule ampoule = new VeryShitAmpoule(parent);
 
-        parent.setCriticalDamegeType(CriticalDamegeType.CUT);
+        parent.setCriticalDamageType(CriticalDamageType.CUT);
 
-        Event result = ampoule.update();
+        TickResult result = ampoule.update();
 
         // ちぎれている場合はうんうんを設定しない
-        assertEquals(Event.DONOTHING, result);
+        assertEquals(TickResult.NONE, result);
     }
 
     @Test
@@ -125,7 +125,7 @@ public class VeryShitAmpouleTest {
         Yukkuri parent = createParent(AgeState.CHILD);
         VeryShitAmpoule ampoule = new VeryShitAmpoule(parent);
 
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().remove(parent.getUniqueID());
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().remove(parent.getUniqueID());
 
         BufferedImage image = ampoule.getImage(parent);
         assertNull(image);
@@ -193,7 +193,7 @@ public class VeryShitAmpouleTest {
         int origPivotX = ampoule.getPivotX();
         int origPivotY = ampoule.getPivotY();
 
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().remove(parent.getUniqueID());
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().remove(parent.getUniqueID());
 
         ampoule.resetBoundary();
 
@@ -238,7 +238,7 @@ public class VeryShitAmpouleTest {
                 parent.setAge(60000); // ADULT: age >= 50400
                 break;
         }
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(parent.getUniqueID(), parent);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(parent.getUniqueID(), parent);
         return parent;
     }
 
@@ -270,9 +270,9 @@ public class VeryShitAmpouleTest {
             parent.setSleeping(true);
             parent.setShit(0);
 
-            Event result = ampoule.update();
+            TickResult result = ampoule.update();
 
-            assertEquals(Event.DONOTHING, result);
+            assertEquals(TickResult.NONE, result);
             assertEquals(false, parent.isSleeping());
             assertEquals(parent.getShitLimit(), parent.getShit());
         }
@@ -283,11 +283,11 @@ public class VeryShitAmpouleTest {
             VeryShitAmpoule ampoule = new VeryShitAmpoule(parent);
             parent.setSleeping(true);
             parent.setShit(10);
-            parent.setCriticalDamegeType(CriticalDamegeType.CUT);
+            parent.setCriticalDamageType(CriticalDamageType.CUT);
 
-            Event result = ampoule.update();
+            TickResult result = ampoule.update();
 
-            assertEquals(Event.DONOTHING, result);
+            assertEquals(TickResult.NONE, result);
             assertTrue(parent.isSleeping());
             assertEquals(10, parent.getShit());
         }

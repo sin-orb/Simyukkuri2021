@@ -44,7 +44,7 @@ class FoodTakeoutPolicyTest {
         body = WorldTestHelper.createBody();
         body.setX(100);
         body.setY(100);
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(body.getUniqueID(), body);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(body.getUniqueID(), body);
     }
 
     @AfterEach
@@ -54,31 +54,31 @@ class FoodTakeoutPolicyTest {
 
     @Test
     void checkTakeout_UnunSlaveWithoutSlaveToilet_ReturnsFalse() {
-        body.setPublicRank(PublicRank.UnunSlave);
+        body.setPublicRank(PublicRank.UNUN_SLAVE);
         body.setHungry(body.getHungryLimit() / 2);
 
         Shit shit = new Shit();
         shit.setX(120);
         shit.setY(120);
-        SimYukkuri.world.getCurrentMap().getShit().put(shit.getObjId(), shit);
+        SimYukkuri.world.getCurrentWorldState().getShit().put(shit.getObjId(), shit);
 
         assertFalse(FoodTakeoutPolicy.checkTakeout(body, shit));
     }
 
     @Test
     void checkTakeout_UnunSlaveWithSlaveToiletAndNoHit_ReturnsTrue() {
-        body.setPublicRank(PublicRank.UnunSlave);
+        body.setPublicRank(PublicRank.UNUN_SLAVE);
         body.setHungry(body.getHungryLimit() / 2);
 
         Shit shit = new Shit();
         shit.setX(120);
         shit.setY(120);
-        SimYukkuri.world.getCurrentMap().getShit().put(shit.getObjId(), shit);
+        SimYukkuri.world.getCurrentWorldState().getShit().put(shit.getObjId(), shit);
 
         Toilet slaveToilet = new Toilet();
         slaveToilet.setForSlave(true);
         slaveToilet.setScreenPivot(10, 10);
-        SimYukkuri.world.getCurrentMap().getToilet().put(slaveToilet.getObjId(), slaveToilet);
+        SimYukkuri.world.getCurrentWorldState().getToilets().put(slaveToilet.getObjId(), slaveToilet);
 
         assertTrue(FoodTakeoutPolicy.checkTakeout(body, shit));
     }
@@ -88,12 +88,12 @@ class FoodTakeoutPolicyTest {
         body.setHungry(body.getHungryLimit() / 2);
 
         Bed favBed = new Bed(300, 300, 0);
-        SimYukkuri.world.getCurrentMap().getBed().put(favBed.getObjId(), favBed);
+        SimYukkuri.world.getCurrentWorldState().getBeds().put(favBed.getObjId(), favBed);
         body.setFavoriteItem(FavItemType.BED, favBed);
 
         Food food = new Food(300, 300, Food.FoodType.FOOD.ordinal());
         food.setAmount(100);
-        SimYukkuri.world.getCurrentMap().getFood().put(food.getObjId(), food);
+        SimYukkuri.world.getCurrentWorldState().getFoods().put(food.getObjId(), food);
 
         assertFalse(FoodTakeoutPolicy.checkTakeout(body, food));
     }
@@ -105,16 +105,16 @@ class FoodTakeoutPolicyTest {
         Yukkuri partner = WorldTestHelper.createBody();
         partner.setX(200);
         partner.setY(200);
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(partner.getUniqueID(), partner);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(partner.getUniqueID(), partner);
         body.setPartner(partner.getUniqueID());
 
         Bed favBed = new Bed(300, 300, 0);
-        SimYukkuri.world.getCurrentMap().getBed().put(favBed.getObjId(), favBed);
+        SimYukkuri.world.getCurrentWorldState().getBeds().put(favBed.getObjId(), favBed);
         body.setFavoriteItem(FavItemType.BED, favBed);
 
         Food food = new Food(500, 500, Food.FoodType.FOOD.ordinal());
         food.setAmount(100);
-        SimYukkuri.world.getCurrentMap().getFood().put(food.getObjId(), food);
+        SimYukkuri.world.getCurrentWorldState().getFoods().put(food.getObjId(), food);
 
         assertTrue(FoodTakeoutPolicy.checkTakeout(body, food));
     }

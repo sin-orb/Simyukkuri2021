@@ -30,12 +30,12 @@ import org.junit.jupiter.api.Test;
 
 import org.simyukkuri.ConstState;
 import org.simyukkuri.SimYukkuri;
-import org.simyukkuri.draw.World;
+import org.simyukkuri.engine.World;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.living.yukkuri.impl.Reimu;
 import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.BurialState;
-import org.simyukkuri.enums.CriticalDamegeType;
+import org.simyukkuri.enums.CriticalDamageType;
 import org.simyukkuri.enums.Intelligence;
 import org.simyukkuri.enums.YukkuriType;
 import org.simyukkuri.system.Sprite;
@@ -80,7 +80,7 @@ public class GadgetToolTest {
         b.setAgeState(age);
         b.setMsgType(YukkuriType.REIMU);
         b.setIntelligence(Intelligence.AVERAGE);
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(b.getUniqueID(), b);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueID(), b);
         return b;
     }
 
@@ -136,12 +136,12 @@ public class GadgetToolTest {
             // BurialState.ALL にしてaddVomitをスキップ
             b.setBurialState(BurialState.ALL);
 
-            assertNull(b.getCriticalDamegeType());
+            assertNull(b.getCriticalDamageType());
 
             GadgetTool.doGodHand(b);
 
-            // bodyCut() sets CriticalDamegeType.CUT
-            assertEquals(CriticalDamegeType.CUT, b.getCriticalDamegeType());
+            // bodyCut() sets CriticalDamageType.CUT
+            assertEquals(CriticalDamageType.CUT, b.getCriticalDamageType());
         }
 
         @Test

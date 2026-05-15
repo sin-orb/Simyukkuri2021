@@ -5,12 +5,12 @@ import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
 
-import org.simyukkuri.draw.ModLoader;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.entity.core.attachment.Attachment;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.AttachProperty;
-import org.simyukkuri.enums.Event;
+import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.enums.HairState;
 import org.simyukkuri.enums.Happiness;
 import org.simyukkuri.system.MessagePool;
@@ -101,10 +101,10 @@ public class Fire extends Attachment {
 	}
 
 	@Override
-	protected Event update() {
+	protected TickResult update() {
 		Yukkuri pa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(parent);
 		if (pa == null)
-			return Event.DONOTHING;
+			return TickResult.NONE;
 		// 生きてたらセリフとダメージ加算
 		if (!pa.isDead()) {
 			pa.clearActions();
@@ -144,7 +144,7 @@ public class Fire extends Attachment {
 			}
 		}
 		if (pa.isDead() && pa.isBurned()) {
-			return Event.REMOVED;
+			return TickResult.REMOVED;
 		}
 
 		// 実ゆの場合、親が反応する
@@ -158,7 +158,7 @@ public class Fire extends Attachment {
 				}
 			}
 		}
-		return Event.DONOTHING;
+		return TickResult.NONE;
 	}
 
 	@Override

@@ -9,7 +9,7 @@ import org.simyukkuri.entity.core.world.mobile.Shit;
 import org.simyukkuri.enums.PurposeOfMoving;
 import org.simyukkuri.enums.TakeoutItemType;
 import org.simyukkuri.enums.Where;
-import org.simyukkuri.system.MapPlaceData;
+import org.simyukkuri.system.WorldState;
 import org.simyukkuri.draw.Translate;
 import org.simyukkuri.util.GameWorld;
 import org.simyukkuri.util.GameMessages;
@@ -45,16 +45,16 @@ public final class YukkuriCarryDelegate {
 		}
 
 		if (val instanceof Shit) {
-			Map<Integer, Shit> shits = GameWorld.get().getCurrentMap().getShit();
+			Map<Integer, Shit> shits = GameWorld.get().getCurrentWorldState().getShit();
 			shits.remove(val.objId);
-			GameWorld.get().getCurrentMap().getTakenOutShit().put(val.objId, (Shit) val);
+			GameWorld.get().getCurrentWorldState().getTakenOutShits().put(val.objId, (Shit) val);
 			val.setWhere(Where.IN_YUKKURI);
 		}
 
 		if (val instanceof Food) {
-			Map<Integer, Food> foods = GameWorld.get().getCurrentMap().getFood();
+			Map<Integer, Food> foods = GameWorld.get().getCurrentWorldState().getFoods();
 			foods.remove(val.objId);
-			GameWorld.get().getCurrentMap().getTakenOutFood().put(val.objId, (Food) val);
+			GameWorld.get().getCurrentWorldState().getTakenOutFoods().put(val.objId, (Food) val);
 			val.setWhere(Where.IN_YUKKURI);
 		}
 	}
@@ -75,11 +75,11 @@ public final class YukkuriCarryDelegate {
 		body.setMessage(GameMessages.getMessage(body, MessagePool.Action.DropItem));
 
 		if (val instanceof Shit) {
-			Map<Integer, Shit> shits = GameWorld.get().getCurrentMap().getShit();
+			Map<Integer, Shit> shits = GameWorld.get().getCurrentWorldState().getShit();
 			shits.put(val.objId, (Shit) val);
-			GameWorld.get().getCurrentMap().getTakenOutShit().remove(val.objId);
+			GameWorld.get().getCurrentWorldState().getTakenOutShits().remove(val.objId);
 			val.setCalcX(body.getX());
-			if (body.getY() + 3 <= Translate.getMapH()) {
+			if (body.getY() + 3 <= Translate.getWorldHeight()) {
 				val.setCalcY(body.getY());
 			} else {
 				val.setCalcY(body.getY() + 3);
@@ -89,11 +89,11 @@ public final class YukkuriCarryDelegate {
 			body.getCarryItems().remove(key);
 		}
 		if (val instanceof Food) {
-			Map<Integer, Food> foods = GameWorld.get().getCurrentMap().getFood();
+			Map<Integer, Food> foods = GameWorld.get().getCurrentWorldState().getFoods();
 			foods.put(val.objId, (Food) val);
-			GameWorld.get().getCurrentMap().getTakenOutFood().remove(val.objId);
+			GameWorld.get().getCurrentWorldState().getTakenOutFoods().remove(val.objId);
 			val.setCalcX(body.getX());
-			if (body.getY() + 3 <= Translate.getMapH()) {
+			if (body.getY() + 3 <= Translate.getWorldHeight()) {
 				val.setCalcY(body.getY() + 3);
 			} else {
 				val.setCalcY(body.getY());
@@ -110,12 +110,12 @@ public final class YukkuriCarryDelegate {
 		if (i == null) {
 			return null;
 		}
-		MapPlaceData m = GameWorld.get().getCurrentMap();
-		if (m.getTakenOutFood().containsKey(i.intValue())) {
-			return m.getTakenOutFood().get(i.intValue());
+		WorldState m = GameWorld.get().getCurrentWorldState();
+		if (m.getTakenOutFoods().containsKey(i.intValue())) {
+			return m.getTakenOutFoods().get(i.intValue());
 		}
-		if (m.getTakenOutShit().containsKey(i.intValue())) {
-			return m.getTakenOutShit().get(i.intValue());
+		if (m.getTakenOutShits().containsKey(i.intValue())) {
+			return m.getTakenOutShits().get(i.intValue());
 		}
 		return null;
 	}

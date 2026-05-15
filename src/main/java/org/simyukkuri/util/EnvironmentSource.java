@@ -1,6 +1,6 @@
 package org.simyukkuri.util;
 
-import org.simyukkuri.draw.Terrarium;
+import org.simyukkuri.engine.Terrarium;
 
 public interface EnvironmentSource {
 	int getOperationTime();

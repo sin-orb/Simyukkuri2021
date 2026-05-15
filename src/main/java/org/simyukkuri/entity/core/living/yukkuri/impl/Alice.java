@@ -9,7 +9,7 @@ import java.util.Map;
 
 import org.simyukkuri.command.GadgetAction;
 import org.simyukkuri.draw.Dimension4y;
-import org.simyukkuri.draw.ModLoader;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Point4y;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.world.item.Bed;
@@ -104,9 +104,9 @@ public class Alice extends Yukkuri {
 
 	/** INIファイルロード */
 	public static void loadIniFile(ClassLoader loader) {
-		AttachOffset = ModLoader.loadYukkuriIniMap(loader, ModLoader.getDataIniDir(), baseFileName);
+		AttachOffset = ModLoader.loadYukkuriIniOffsets(loader, ModLoader.getDataIniDir(), baseFileName);
 
-		baseSpeed = ModLoader.loadYukkuriIniMapForInt(loader, ModLoader.getDataIniDir(), baseFileName, "speed");
+		baseSpeed = ModLoader.loadYukkuriIniValue(loader, ModLoader.getDataIniDir(), baseFileName, "speed");
 	}
 
 	@Override
@@ -268,7 +268,7 @@ public class Alice extends Yukkuri {
 	 * こーでぃねーとをする.
 	 */
 	public void coordinate() {
-		if (GameWorld.get().getCurrentMap().getBed().size() == 0) {
+		if (GameWorld.get().getCurrentWorldState().getBeds().size() == 0) {
 			int i = 0;
 			if (getRank() == YukkuriRank.NORAYU || getRank() == YukkuriRank.NORAYU_CLEAN
 					|| getRank() == YukkuriRank.SUTEYU) {
@@ -276,7 +276,7 @@ public class Alice extends Yukkuri {
 			}
 			getInVain(true);
 			Bed bed = (Bed) GadgetAction.putObjEX(Bed.class, getX(), getY(), i);
-			GameWorld.get().getCurrentMap().getBed().put(bed.objId, bed);
+			GameWorld.get().getCurrentWorldState().getBeds().put(bed.objId, bed);
 			return;
 		}
 	}

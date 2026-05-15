@@ -10,7 +10,7 @@ import org.simyukkuri.field.FieldShape;
 import org.simyukkuri.field.impl.Pool;
 import org.simyukkuri.enums.BurialState;
 import org.simyukkuri.enums.Burst;
-import org.simyukkuri.enums.CriticalDamegeType;
+import org.simyukkuri.enums.CriticalDamageType;
 import org.simyukkuri.enums.Happiness;
 import org.simyukkuri.enums.ImageCode;
 import org.simyukkuri.enums.PanicType;
@@ -125,7 +125,7 @@ public final class YukkuriStateDelegate {
 			body.setPikoMessage(GameMessages.getMessage(body, MessagePool.Action.Birth), true);
 			body.addMemories(10);
 		} else if (!body.isFlyingType() && body.getZ() > 15 && body.getPanicType() == null && !body.isLockmove()
-				&& body.getCriticalDamege() != CriticalDamegeType.CUT && !body.isPealed() && !body.isBlind()) {
+				&& body.getCriticalDamege() != CriticalDamageType.CUT && !body.isPealed() && !body.isBlind()) {
 			// 持ち上げたとき
 			// 妊娠限界を超えている場合
 			if (body.isStressful() && body.isOverPregnantLimit() && GameRandom.nextBoolean()) {
@@ -161,7 +161,7 @@ public final class YukkuriStateDelegate {
 				body.setMessage(GameMessages.getMessage(body, MessagePool.Action.NearToBirth));
 				// BreedEventの重複作成を防ぐ（同じfromのイベントが既にあれば追加しない）
 				boolean hasBreedEvent = false;
-				for (org.simyukkuri.event.EventPacket ep : GameWorld.get().getCurrentMap().getEvent()) {
+				for (org.simyukkuri.event.EventPacket ep : GameWorld.get().getCurrentWorldState().getEvents()) {
 					if (ep instanceof BreedEvent && YukkuriRelations.getYukkuriById(ep.getFrom()) == body) {
 						hasBreedEvent = true;
 						break;
@@ -201,7 +201,7 @@ public final class YukkuriStateDelegate {
 	 */
 	public void bodyCut() {
 		body.clearActions();
-		body.setCriticalDamege(CriticalDamegeType.CUT);
+		body.setCriticalDamege(CriticalDamageType.CUT);
 		if (body.getBurialState() == BurialState.NONE) {
 			for (int i = 0; i < 5; i++) {
 				GameView.addVomit(body.getX() + 7 - GameRandom.nextInt(14),
@@ -209,7 +209,7 @@ public final class YukkuriStateDelegate {
 						body, body.getShitType());
 			}
 		}
-		body.checkReactionStalkMother(UnbirthBabyState.ATTAKED);
+		body.checkReactionStalkMother(UnbirthBabyState.ATTACKED);
 	}
 
 	/**
@@ -217,10 +217,10 @@ public final class YukkuriStateDelegate {
 	 */
 	public void bodyInjure() {
 		body.clearActions();
-		if (body.getCriticalDamege() == CriticalDamegeType.CUT) {
+		if (body.getCriticalDamege() == CriticalDamageType.CUT) {
 			return;
 		}
-		if (body.getCriticalDamege() == CriticalDamegeType.INJURED && GameRandom.nextInt(50) == 0) {
+		if (body.getCriticalDamege() == CriticalDamageType.INJURED && GameRandom.nextInt(50) == 0) {
 			bodyCut();
 			return;
 		}
@@ -228,12 +228,12 @@ public final class YukkuriStateDelegate {
 		body.setForceFace(ImageCode.PAIN.ordinal());
 		body.setHappiness(Happiness.VERY_SAD);
 		body.setMessage(GameMessages.getMessage(body, MessagePool.Action.Scream), 40, true, true);
-		body.setCriticalDamege(CriticalDamegeType.INJURED);
+		body.setCriticalDamege(CriticalDamageType.INJURED);
 		if (body.getBurialState() == BurialState.NONE) {
 			GameView.addVomit(body.getX() + 7 - GameRandom.nextInt(14),
 					body.getY() + 7 - GameRandom.nextInt(14), 0, body, body.getShitType());
 		}
-		body.checkReactionStalkMother(UnbirthBabyState.ATTAKED);
+		body.checkReactionStalkMother(UnbirthBabyState.ATTACKED);
 	}
 
 	/**
@@ -247,7 +247,7 @@ public final class YukkuriStateDelegate {
 			body.setMessage(GameMessages.getMessage(body, MessagePool.Action.Healing), Const.HOLDMESSAGE, true, true);
 			// body.stay();
 		}
-		if (body.getCriticalDamegeType() == CriticalDamegeType.INJURED) {
+		if (body.getCriticalDamageType() == CriticalDamageType.INJURED) {
 			body.setCriticalDamege(null);
 		}
 		body.setBakePeriod(0);
@@ -298,7 +298,7 @@ public final class YukkuriStateDelegate {
 		body.addStress(50);
 		body.addMemories(-10);
 		// 回復
-		if (body.getCriticalDamegeType() == CriticalDamegeType.INJURED) {
+		if (body.getCriticalDamageType() == CriticalDamageType.INJURED) {
 			body.setCriticalDamege(null);
 		}
 		body.setBakePeriod(0);
@@ -308,7 +308,7 @@ public final class YukkuriStateDelegate {
 		// なつき度設定
 		body.addLovePlayer(-50);
 		// 実ゆの場合、親が反応する
-		body.checkReactionStalkMother(UnbirthBabyState.ATTAKED);
+		body.checkReactionStalkMother(UnbirthBabyState.ATTACKED);
 	}
 
 	/**
@@ -380,7 +380,7 @@ public final class YukkuriStateDelegate {
 		// 畑にいるか
 		int xCoord = body.getX();
 		int yCoord = body.getY();
-		if ((Translate.getCurrentFieldMapNum(xCoord, yCoord) & FieldShape.FIELD_FARM) == 0) {
+		if ((Translate.getCurrentFieldGridValue(xCoord, yCoord) & FieldShape.FIELD_FARM) == 0) {
 			return;
 		}
 
@@ -452,7 +452,7 @@ public final class YukkuriStateDelegate {
 		if (body.isDirty()) {
 			body.setHappiness(Happiness.SAD);
 			body.addStress(50);
-			body.checkReactionStalkMother(UnbirthBabyState.ATTAKED);
+			body.checkReactionStalkMother(UnbirthBabyState.ATTACKED);
 		} else {
 			body.setStubbornlyDirty(false);
 			body.setHappiness(Happiness.HAPPY);
@@ -586,7 +586,7 @@ public final class YukkuriStateDelegate {
 	public void onPealed() {
 		body.setPeropero(false);
 		body.addMemories(-5);
-		if (body.getCoreAnkoState() == CoreAnkoState.NonYukkuriDiseaseNear) {
+		if (body.getCoreAnkoState() == CoreAnkoState.NON_YUKKURI_DISEASE_NEAR) {
 			body.setNydMessage(GameMessages.getMessage(body, MessagePool.Action.Dying2), false);
 		}
 		body.setMessage(GameMessages.getMessage(body, MessagePool.Action.Dying2));
@@ -613,7 +613,7 @@ public final class YukkuriStateDelegate {
 
 	/** CUT 致命傷時のメッセージ反応. */
 	public void onCutDamageReaction() {
-		if (body.getCoreAnkoState() != CoreAnkoState.NonYukkuriDiseaseNear) {
+		if (body.getCoreAnkoState() != CoreAnkoState.NON_YUKKURI_DISEASE_NEAR) {
 			body.setNydMessage(GameMessages.getMessage(body, MessagePool.Action.Dying2), false);
 		} else {
 			body.setMessage(GameMessages.getMessage(body, MessagePool.Action.Dying2));

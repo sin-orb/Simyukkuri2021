@@ -49,7 +49,7 @@ public class TrashLogic {
 			wallMode = AgeState.ADULT.ordinal();
 		}
 
-		for (Map.Entry<Integer, Trash> entry : GameWorld.get().getCurrentMap().getTrash().entrySet()) {
+		for (Map.Entry<Integer, Trash> entry : GameWorld.get().getCurrentWorldState().getTrashObjects().entrySet()) {
 			Trash t = entry.getValue();
 			// 最小距離のものが見つかっていたら
 			if (nearestDistance < 1) {
@@ -58,7 +58,7 @@ public class TrashLogic {
 			int distance = Translate.distance(body.getX(), body.getY(), t.getX(), t.getY() - t.getH() / 6);
 			if (nearestDistance > distance) {
 				if (Barrier.acrossBarrier(body.getX(), body.getY(), t.getX(), t.getY() - t.getH() / 6,
-						Barrier.MAP_BODY[wallMode] + Barrier.BARRIER_KEKKAI)) {
+						Barrier.BODY_BLOCK_FLAGS[wallMode] + Barrier.BARRIER_KEKKAI)) {
 					continue;
 				}
 				trashCandidate = t;

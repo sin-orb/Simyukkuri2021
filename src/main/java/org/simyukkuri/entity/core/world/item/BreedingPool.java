@@ -13,7 +13,7 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
-import org.simyukkuri.draw.ModLoader;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Rectangle4y;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Dna;
@@ -254,8 +254,8 @@ public class BreedingPool extends WorldEntity {
 	}
 
 	@Override
-	public void removeListData() {
-		GameWorld.get().getCurrentMap().getBreedingPool().remove(objId);
+	public void removeFromWorld() {
+		GameWorld.get().getCurrentWorldState().getBreedingPools().remove(objId);
 	}
 
 	/** プール上のゆっくりを泣かせる処理 */
@@ -277,7 +277,7 @@ public class BreedingPool extends WorldEntity {
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
 
-		GameWorld.get().getCurrentMap().getBreedingPool().put(objId, this);
+		GameWorld.get().getCurrentWorldState().getBreedingPools().put(objId, this);
 
 		objType = Type.PLATFORM;
 		worldEntityType = WorldEntityKind.BREEDINGPOOL;
@@ -286,7 +286,7 @@ public class BreedingPool extends WorldEntity {
 
 		boolean setupSucceeded = setupPool(this, false);
 		if (!setupSucceeded) {
-			GameWorld.get().getCurrentMap().getBreedingPool().remove(objId);
+			GameWorld.get().getCurrentWorldState().getBreedingPools().remove(objId);
 		}
 	}
 

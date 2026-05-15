@@ -75,7 +75,7 @@ public class RaperReactionEvent extends EventPacket {
 			boolean foundRaper = false;
 
 			// 全ゆっくりに対してチェック
-			for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getYukkuriMap().entrySet()) {
+			for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentWorldState().getYukkuriRegistry().entrySet()) {
 				Yukkuri predatorBody = entry.getValue();
 				// 自分同士のチェックは無意味なのでスキップ
 				if (predatorBody == body) {
@@ -89,7 +89,7 @@ public class RaperReactionEvent extends EventPacket {
 
 				// 相手との間に壁があればスキップ
 				if (Barrier.acrossBarrier(body.getX(), body.getY(), predatorBody.getX(), predatorBody.getY(),
-						Barrier.MAP_BODY[body.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
+						Barrier.BODY_BLOCK_FLAGS[body.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
 					continue;
 				}
 
@@ -107,7 +107,7 @@ public class RaperReactionEvent extends EventPacket {
 			}
 
 			// うんうん奴隷は逃げる
-			if (body.getPublicRank() == PublicRank.UnunSlave) {
+			if (body.getPublicRank() == PublicRank.UNUN_SLAVE) {
 				state = ActionState.ESCAPE;
 			} else {
 				// 飛べない固体
@@ -185,7 +185,7 @@ public class RaperReactionEvent extends EventPacket {
 			if ((age % 10) == 0) {
 				if (body.getType() == YukkuriType.DOSMARISA ||
 						(body.isAdult() && body.getIntelligence() == Intelligence.WISE &&
-								body.getPublicRank() != PublicRank.UnunSlave)) {
+								body.getPublicRank() != PublicRank.UNUN_SLAVE)) {
 					Yukkuri targetBody = null;
 					// 何らかの原因で発情が解除されたら制裁
 					if (!checkConditionOfTarget()) {
@@ -199,11 +199,11 @@ public class RaperReactionEvent extends EventPacket {
 					if (targetBody != null) {
 						int participantCount = 0;
 						// 反撃対象が見つかったら同イベント実行中の固体イベントを書き換え
-						for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getYukkuriMap().entrySet()) {
+						for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentWorldState().getYukkuriRegistry().entrySet()) {
 							Yukkuri eventBody = entry.getValue();
 							if (eventBody.getCurrentEvent() instanceof RaperReactionEvent) {
 								// うんうん奴隷は不参加
-								if (eventBody.getPublicRank() == PublicRank.UnunSlave)
+								if (eventBody.getPublicRank() == PublicRank.UNUN_SLAVE)
 									continue;
 								// 妊娠、大人以外は不参加.動けない場合も不参加
 								if (eventBody.hasBabyOrStalk() || eventBody.isSick() || !eventBody.isAdult()
@@ -336,7 +336,7 @@ public class RaperReactionEvent extends EventPacket {
 	 */
 	public Yukkuri searchNextTarget() {
 		Yukkuri nextTargetBody = null;
-		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getYukkuriMap().entrySet()) {
+		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentWorldState().getYukkuriRegistry().entrySet()) {
 			Yukkuri candidateBody = entry.getValue();
 			if (candidateBody.isRaper() && candidateBody.isExciting() && !candidateBody.isDead()) {
 				nextTargetBody = candidateBody;
@@ -354,7 +354,7 @@ public class RaperReactionEvent extends EventPacket {
 	 */
 	public Yukkuri searchAttackTarget() {
 		Yukkuri attackTargetBody = null;
-		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getYukkuriMap().entrySet()) {
+		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentWorldState().getYukkuriRegistry().entrySet()) {
 			Yukkuri candidateBody = entry.getValue();
 			if (!candidateBody.isDead() && candidateBody.isExciting() && candidateBody.isRaper()
 					&& candidateBody.isSukkiri()) {
@@ -385,8 +385,8 @@ public class RaperReactionEvent extends EventPacket {
 	 * @param body 敵
 	 */
 	protected void escapeTarget(Yukkuri body) {
-		int mapX = Translate.getMapW();
-		int mapY = Translate.getMapH();
+		int mapX = Translate.getWorldWidth();
+		int mapY = Translate.getWorldHeight();
 		Yukkuri sourceBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
 		if (sourceBody == null) {
 			return;

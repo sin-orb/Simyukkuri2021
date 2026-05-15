@@ -5,7 +5,7 @@ import java.awt.Color;
 import org.simyukkuri.Const;
 import org.simyukkuri.draw.Translate;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
-import org.simyukkuri.enums.Event;
+import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.enums.Intelligence;
 import org.simyukkuri.enums.WindowType;
 import org.simyukkuri.event.EventPacket;
@@ -331,16 +331,16 @@ public final class YukkuriEventState {
 	 * @param fallbackAction 通常処理が返そうとしているイベント
 	 * @return 反映後の戻り値
 	 */
-	public static Event resolveEventResultAction(Yukkuri body, Event fallbackAction) {
+	public static TickResult resolveEventResultAction(Yukkuri body, TickResult fallbackAction) {
 		EventPacket currentEvent = body.getCurrentEvent();
 		if (currentEvent == null) {
 			return fallbackAction;
 		}
-		if (fallbackAction != Event.DONOTHING && currentEvent.getPriority() == EventPacket.EventPriority.LOW) {
+		if (fallbackAction != TickResult.NONE && currentEvent.getPriority() == EventPacket.EventPriority.LOW) {
 			return fallbackAction;
 		}
-		Event eventResult = body.getEventResult();
-		body.setEventResult(Event.DONOTHING);
+		TickResult eventResult = body.getEventResult();
+		body.setEventResult(TickResult.NONE);
 		return eventResult;
 	}
 

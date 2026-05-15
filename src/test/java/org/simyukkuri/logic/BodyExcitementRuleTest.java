@@ -35,7 +35,7 @@ class BodyExcitementRuleTest {
 	@Test
 	void testHandleExcitingContact_raperBranchConsumesAction() {
 		WorldTestHelper.initializeMinimalWorld();
-		SimYukkuri.world.getCurrentMap().getEvent().clear();
+		SimYukkuri.world.getCurrentWorldState().getEvents().clear();
 		Yukkuri me = WorldTestHelper.createBody();
 		Yukkuri you = WorldTestHelper.createBody();
 		me.setSpriteSet(makeSprites(1, 1));
@@ -60,7 +60,7 @@ class BodyExcitementRuleTest {
 	@Test
 	void testHandleExcitingContact_adultPartnerFallsBackToSukkiri() {
 		WorldTestHelper.initializeMinimalWorld();
-		SimYukkuri.world.getCurrentMap().getEvent().clear();
+		SimYukkuri.world.getCurrentWorldState().getEvents().clear();
 		Yukkuri me = WorldTestHelper.createBody();
 		Yukkuri you = WorldTestHelper.createBody();
 		me.setSpriteSet(makeSprites(1, 1));
@@ -86,7 +86,7 @@ class BodyExcitementRuleTest {
 	@Test
 	void testHandleExcitingContact_forceExcitingContinues() {
 		WorldTestHelper.initializeMinimalWorld();
-		SimYukkuri.world.getCurrentMap().getEvent().clear();
+		SimYukkuri.world.getCurrentWorldState().getEvents().clear();
 		Yukkuri me = WorldTestHelper.createBody();
 		Yukkuri you = WorldTestHelper.createBody();
 		me.setSpriteSet(makeSprites(1, 1));

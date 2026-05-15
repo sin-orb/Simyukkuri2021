@@ -3,7 +3,7 @@ package org.simyukkuri.engine.transform;
 import java.util.function.BooleanSupplier;
 
 import org.simyukkuri.SimYukkuri;
-import org.simyukkuri.draw.YukkuriFactory;
+import org.simyukkuri.engine.YukkuriFactory;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.enums.YukkuriType;
 import org.simyukkuri.util.GameView;
@@ -41,7 +41,7 @@ public final class TransformationService {
 
 		synchronized (SimYukkuri.lock) {
 			if (TransformationPolicy.needsDosReservation(targetType)
-					&& !GameWorld.get().getCurrentMap().makeOrKillDos(true)) {
+					&& !GameWorld.get().getCurrentWorldState().makeDos()) {
 				return;
 			}
 
@@ -52,8 +52,8 @@ public final class TransformationService {
 			TransformationPolicy.normalizeTransformedAge(to, from);
 
 			to.setUniqueID(originalId);
-			GameWorld.get().getCurrentMap().getYukkuriMap().remove(originalId);
-			GameWorld.get().getCurrentMap().getYukkuriMap().put(originalId, to);
+			GameWorld.get().getCurrentWorldState().getYukkuriRegistry().remove(originalId);
+			GameWorld.get().getCurrentWorldState().getYukkuriRegistry().put(originalId, to);
 			to.setBaseYukkuriFileName(TransformationPolicy.resolveBaseYukkuriFileName(targetType));
 			IniFileUtil.readYukkuriIniFile(to);
 			if (TransformationPolicy.isSelectedYukkuri(from)) {

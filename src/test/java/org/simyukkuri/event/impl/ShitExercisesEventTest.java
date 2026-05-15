@@ -24,7 +24,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import org.simyukkuri.SimYukkuri;
-import org.simyukkuri.draw.World;
+import org.simyukkuri.engine.World;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.living.yukkuri.impl.Reimu;
 import org.simyukkuri.enums.AgeState;
@@ -99,7 +99,7 @@ public class ShitExercisesEventTest {
     public void testCheckEventResponse_returnsFalseForUnunSlave() {
         Yukkuri from = createBody();
         Yukkuri b = createBody();
-        b.setPublicRank(PublicRank.UnunSlave);
+        b.setPublicRank(PublicRank.UNUN_SLAVE);
         ShitExercisesEvent event = new ShitExercisesEvent(from, null, null, 10);
         // b is UnunSlave, from != b, and from is not partner => false
         assertFalse(event.checkEventResponse(b));
@@ -189,7 +189,7 @@ public class ShitExercisesEventTest {
     public void testUpdate_bodyNYD_returnsAbort() {
         Yukkuri from = createBody();
         Yukkuri b = createBody();
-        b.setCoreAnkoState(org.simyukkuri.enums.CoreAnkoState.NonYukkuriDisease);
+        b.setCoreAnkoState(org.simyukkuri.enums.CoreAnkoState.NON_YUKKURI_DISEASE);
         ShitExercisesEvent event = new ShitExercisesEvent(from, null, null, 10);
         from.setCurrentEvent(event);
         assertEquals(EventPacket.UpdateState.ABORT, event.update(b));
@@ -278,14 +278,14 @@ public class ShitExercisesEventTest {
         child.setParents(new int[] { from.getUniqueID(), -1 });
         java.util.LinkedList<Integer> children = new java.util.LinkedList<>();
         children.add(child.getUniqueID());
-        from.setChildrenList(children);
+        from.setChildren(children);
         child.setX(from.getX() + 200);
         child.setY(from.getY() + 200);
 
         Toilet toilet = new Toilet();
         toilet.setX(from.getX());
         toilet.setY(from.getY() + 20);
-        SimYukkuri.world.getCurrentMap().getToilet().put(toilet.getObjId(), toilet);
+        SimYukkuri.world.getCurrentWorldState().getToilets().put(toilet.getObjId(), toilet);
 
         ShitExercisesEvent event = new ShitExercisesEvent(from, null, toilet, 10);
         from.setCurrentEvent(event);
@@ -534,7 +534,7 @@ public class ShitExercisesEventTest {
         child.setParents(parents);
         java.util.LinkedList<Integer> children = new java.util.LinkedList<>();
         children.add(child.getUniqueID());
-        from.setChildrenList(children);
+        from.setChildren(children);
         ShitExercisesEvent event = new ShitExercisesEvent(from, null, null, 10);
         event.setState(ShitExercisesEvent.STATE.UNUN);
         event.actionFlag = true;
@@ -637,7 +637,7 @@ public class ShitExercisesEventTest {
             spr[i] = new Sprite(10, 10, Sprite.PIVOT_CENTER_BOTTOM);
         }
         b.setSpriteSet(spr);
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(b.getUniqueID(), b);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueID(), b);
         return b;
     }
 
@@ -705,7 +705,7 @@ public class ShitExercisesEventTest {
             }
 
             assertEquals(0, child.getShit());
-            assertEquals(org.simyukkuri.enums.Event.DOSHIT, child.getEventResult());
+            assertEquals(org.simyukkuri.enums.TickResult.SHIT, child.getEventResult());
             assertTrue(child.isFurifuri());
             assertTrue(child.getMemories() > memoriesBefore);
         }
@@ -728,7 +728,7 @@ public class ShitExercisesEventTest {
 
             assertNull(event.update(child));
             assertTrue(child.getShit() > shitBefore);
-            assertEquals(org.simyukkuri.enums.Event.DONOTHING, child.getEventResult());
+            assertEquals(org.simyukkuri.enums.TickResult.NONE, child.getEventResult());
             assertTrue(child.isFurifuri());
         }
     }

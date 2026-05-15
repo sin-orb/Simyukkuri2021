@@ -24,7 +24,7 @@ import org.simyukkuri.entity.core.world.item.Stone;
 import org.simyukkuri.entity.core.world.item.Trash;
 import org.simyukkuri.enums.WorldEntityKind;
 import org.simyukkuri.enums.Type;
-import org.simyukkuri.enums.CriticalDamegeType;
+import org.simyukkuri.enums.CriticalDamageType;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.util.WorldTestHelper;
 import org.simyukkuri.entity.core.living.yukkuri.impl.Marisa;
@@ -81,43 +81,43 @@ class StoneTest extends ItemTestBase {
     @Test
     void testConstructor_MapIndex2_BecomesNora() {
         // MapIndex=2 -> NORA に上書き
-        SimYukkuri.world.setCurrentMapIdx(2);
+        SimYukkuri.world.setCurrentWorldStateIndex(2);
         Stone stone = new Stone(100, 200, 0); // option=HOUSE だが上書き
         assertEquals(ItemRank.NORA, stone.getItemRank());
         // 後始末
-        SimYukkuri.world.setCurrentMapIdx(0);
+        SimYukkuri.world.setCurrentWorldStateIndex(0);
     }
 
     @Test
     void testConstructor_MapIndex3_BecomesNora() {
-        SimYukkuri.world.setCurrentMapIdx(3);
+        SimYukkuri.world.setCurrentWorldStateIndex(3);
         Stone stone = new Stone(100, 200, 0);
         assertEquals(ItemRank.NORA, stone.getItemRank());
-        SimYukkuri.world.setCurrentMapIdx(0);
+        SimYukkuri.world.setCurrentWorldStateIndex(0);
     }
 
     @Test
     void testConstructor_MapIndex4_BecomesNora() {
-        SimYukkuri.world.setCurrentMapIdx(4);
+        SimYukkuri.world.setCurrentWorldStateIndex(4);
         Stone stone = new Stone(100, 200, 0);
         assertEquals(ItemRank.NORA, stone.getItemRank());
-        SimYukkuri.world.setCurrentMapIdx(0);
+        SimYukkuri.world.setCurrentWorldStateIndex(0);
     }
 
     @Test
     void testConstructor_MapIndex5_BecomesYasei() {
-        SimYukkuri.world.setCurrentMapIdx(5);
+        SimYukkuri.world.setCurrentWorldStateIndex(5);
         Stone stone = new Stone(100, 200, 0);
         assertEquals(ItemRank.YASEI, stone.getItemRank());
-        SimYukkuri.world.setCurrentMapIdx(0);
+        SimYukkuri.world.setCurrentWorldStateIndex(0);
     }
 
     @Test
     void testConstructor_MapIndex6_BecomesYasei() {
-        SimYukkuri.world.setCurrentMapIdx(6);
+        SimYukkuri.world.setCurrentWorldStateIndex(6);
         Stone stone = new Stone(100, 200, 0);
         assertEquals(ItemRank.YASEI, stone.getItemRank());
-        SimYukkuri.world.setCurrentMapIdx(0);
+        SimYukkuri.world.setCurrentWorldStateIndex(0);
     }
 
     // ---------------------------------------------------------------
@@ -126,7 +126,7 @@ class StoneTest extends ItemTestBase {
     @Test
     void testConstructor_RegisteredInWorld() {
         Stone stone = new Stone(300, 400, 0);
-        assertTrue(SimYukkuri.world.getCurrentMap().getStone().containsKey(stone.getObjId()));
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getStones().containsKey(stone.getObjId()));
     }
 
     // ---------------------------------------------------------------
@@ -206,9 +206,9 @@ class StoneTest extends ItemTestBase {
     void testRemoveListData_RemovesFromWorld() {
         Stone stone = new Stone(100, 100, 0);
         int id = stone.getObjId();
-        assertTrue(SimYukkuri.world.getCurrentMap().getStone().containsKey(id));
-        stone.removeListData();
-        assertFalse(SimYukkuri.world.getCurrentMap().getStone().containsKey(id));
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getStones().containsKey(id));
+        stone.removeFromWorld();
+        assertFalse(SimYukkuri.world.getCurrentWorldState().getStones().containsKey(id));
     }
 
     // ---------------------------------------------------------------
@@ -218,7 +218,7 @@ class StoneTest extends ItemTestBase {
     void testObjHitProcess_BodyWithCUT_returnsZero() {
         Stone stone = new Stone(100, 100, 0);
         Yukkuri body = WorldTestHelper.createBody();
-        body.setCriticalDamege(CriticalDamegeType.CUT);
+        body.setCriticalDamege(CriticalDamageType.CUT);
         int result = stone.objHitProcess(body);
         assertEquals(0, result);
     }
@@ -245,7 +245,7 @@ class StoneTest extends ItemTestBase {
         Stone stone = new Stone(100, 100, 0);
         Yukkuri body = WorldTestHelper.createBody();
         // CUT に設定すると bodyInjure/bodyCut を呼ばずに 0 を返す分岐に入る
-        body.setCriticalDamege(CriticalDamegeType.CUT);
+        body.setCriticalDamege(CriticalDamageType.CUT);
         int result = stone.objHitProcess(body);
         assertEquals(0, result);
     }
@@ -705,8 +705,8 @@ class StoneTest extends ItemTestBase {
     @Test
     void testCalcPos_ClampUpperBoundary() {
         Stone stone = new Stone(0, 0, 0);
-        int maxX = Translate.getMapW();
-        int maxY = Translate.getMapH();
+        int maxX = Translate.getWorldWidth();
+        int maxY = Translate.getWorldHeight();
         stone.setX(maxX + 500);
         stone.setY(maxY + 500);
         stone.calcPos();

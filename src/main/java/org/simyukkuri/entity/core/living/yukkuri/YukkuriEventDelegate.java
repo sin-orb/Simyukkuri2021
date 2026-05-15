@@ -1,6 +1,6 @@
 package org.simyukkuri.entity.core.living.yukkuri;
 
-import org.simyukkuri.enums.CriticalDamegeType;
+import org.simyukkuri.enums.CriticalDamageType;
 import org.simyukkuri.enums.BurialState;
 import org.simyukkuri.enums.Intelligence;
 import org.simyukkuri.enums.PanicType;
@@ -57,7 +57,7 @@ public final class YukkuriEventDelegate {
 		if (body.isDead()) {
 			return;
 		}
-		if (body.getPanicType() == PanicType.BURN || body.getCriticalDamegeType() == CriticalDamegeType.CUT) {
+		if (body.getPanicType() == PanicType.BURN || body.getCriticalDamageType() == CriticalDamageType.CUT) {
 			return;
 		}
 		clearActions();
@@ -216,7 +216,7 @@ public final class YukkuriEventDelegate {
 	 * @return イベントに反応できるなら true
 	 */
 	public boolean canEventResponse() {
-		if (body.isDead() || body.getCriticalDamege() == CriticalDamegeType.CUT || body.isPealed() ||
+		if (body.isDead() || body.getCriticalDamege() == CriticalDamageType.CUT || body.isPealed() ||
 				body.isPacked() || (body.isBlind() && !isCutPeni()) || body.isSleeping() || body.isShitting() || body.isBirth() || body.isSukkiri() ||
 				body.isNeedled() || body.getCurrentEvent() != null || body.isNYD() || body.isTaken()
 				|| body.getBurialState() != BurialState.NONE || body.isLockmove() || body.isStarving()) {
@@ -234,9 +234,9 @@ public final class YukkuriEventDelegate {
 	 * @return ぺにぺに切断イベントが先頭にあるかどうか
 	 */
 	public boolean isCutPeni() {
-		if (body.getEventList() == null || body.getEventList().isEmpty()) {
+		if (body.getEvents() == null || body.getEvents().isEmpty()) {
 			return false;
 		}
-		return body.getEventList().get(0) instanceof CutPenipeniEvent;
+		return body.getEvents().get(0) instanceof CutPenipeniEvent;
 	}
 }

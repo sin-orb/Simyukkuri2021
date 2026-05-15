@@ -26,9 +26,9 @@ class DiffuserTest extends ItemTestBase {
     void testConstructor_Default() {
         Diffuser item = new Diffuser();
         item.setObjId(1);
-        SimYukkuri.world.getCurrentMap().getDiffuser().put(item.getObjId(), item);
+        SimYukkuri.world.getCurrentWorldState().getDiffusers().put(item.getObjId(), item);
         verifyCommonProperties(item);
-        assertTrue(SimYukkuri.world.getCurrentMap().getDiffuser().containsKey(item.getObjId()));
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getDiffusers().containsKey(item.getObjId()));
     }
 
     @Test
@@ -86,9 +86,9 @@ class DiffuserTest extends ItemTestBase {
     void testRemoveListData() {
         Diffuser item = new Diffuser();
         item.setObjId(88);
-        SimYukkuri.world.getCurrentMap().getDiffuser().put(item.getObjId(), item);
-        item.removeListData();
-        assertFalse(SimYukkuri.world.getCurrentMap().getDiffuser().containsKey(item.getObjId()));
+        SimYukkuri.world.getCurrentWorldState().getDiffusers().put(item.getObjId(), item);
+        item.removeFromWorld();
+        assertFalse(SimYukkuri.world.getCurrentWorldState().getDiffusers().containsKey(item.getObjId()));
     }
 
     @Test

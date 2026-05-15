@@ -77,9 +77,9 @@ public final class YukkuriFamilyDelegate {
 	/**
 	 * Removeされたゆっくりが姉妹リスト、子リストにいたら削除する.
 	 */
-	public void checkRemovedFamilyList() {
-		Yukkuri[] sisters = body.getYukkuriArray(body.getSisterList());
-		body.getSisterList().clear();
+	public void pruneRemovedFamilyMembers() {
+		Yukkuri[] sisters = body.getYukkuriArray(body.getSisters());
+		body.getSisters().clear();
 		Set<Integer> set = new TreeSet<>();
 		for (Yukkuri sister : sisters) {
 			if (sister == null) {
@@ -89,11 +89,11 @@ public final class YukkuriFamilyDelegate {
 				set.add(sister.getUniqueID());
 			}
 		}
-		body.setSisterList(new LinkedList<Integer>(set));
-		Collections.sort(body.getSisterList());
+		body.setSisters(new LinkedList<Integer>(set));
+		Collections.sort(body.getSisters());
 
-		Yukkuri[] elderSisters = body.getYukkuriArray(body.getElderSisterList());
-		body.getElderSisterList().clear();
+		Yukkuri[] elderSisters = body.getYukkuriArray(body.getElderSisters());
+		body.getElderSisters().clear();
 		set.clear();
 		for (Yukkuri elderSister : elderSisters) {
 			if (elderSister == null) {
@@ -103,11 +103,11 @@ public final class YukkuriFamilyDelegate {
 				set.add(elderSister.getUniqueID());
 			}
 		}
-		body.setElderSisterList(new LinkedList<Integer>(set));
-		Collections.sort(body.getElderSisterList());
+		body.setElderSisters(new LinkedList<Integer>(set));
+		Collections.sort(body.getElderSisters());
 
-		Yukkuri[] children = body.getYukkuriArray(body.getChildrenList());
-		body.getChildrenList().clear();
+		Yukkuri[] children = body.getYukkuriArray(body.getChildren());
+		body.getChildren().clear();
 		set.clear();
 		for (Yukkuri child : children) {
 			if (child == null) {
@@ -117,8 +117,8 @@ public final class YukkuriFamilyDelegate {
 				set.add(child.getUniqueID());
 			}
 		}
-		body.setChildrenList(new LinkedList<Integer>(set));
-		Collections.sort(body.getChildrenList());
+		body.setChildren(new LinkedList<Integer>(set));
+		Collections.sort(body.getChildren());
 	}
 
 	/**

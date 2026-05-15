@@ -6,7 +6,7 @@ import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
 
-import org.simyukkuri.draw.ModLoader;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Rectangle4y;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
@@ -83,8 +83,8 @@ public class ProductChute extends WorldEntity {
 	}
 
 	@Override
-	public void removeListData() {
-		GameWorld.get().getCurrentMap().getProductchute().remove(objId);
+	public void removeFromWorld() {
+		GameWorld.get().getCurrentWorldState().getProductChutes().remove(objId);
 	}
 
 	/**
@@ -94,7 +94,7 @@ public class ProductChute extends WorldEntity {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		GameWorld.get().getCurrentMap().getProductchute().put(objId, this);
+		GameWorld.get().getCurrentWorldState().getProductChutes().put(objId, this);
 		objType = Type.PLATFORM;
 		worldEntityType = WorldEntityKind.PRODUCTCHUTE;
 		interval = 10;

@@ -25,12 +25,12 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import org.simyukkuri.SimYukkuri;
-import org.simyukkuri.draw.World;
+import org.simyukkuri.engine.World;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.living.yukkuri.impl.Reimu;
 import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.Direction;
-import org.simyukkuri.enums.Event;
+import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.enums.YukkuriType;
 import org.simyukkuri.system.ResourceUtil;
 import org.simyukkuri.system.Sprite;
@@ -76,9 +76,9 @@ public class OrangeAmpouleTest {
     public void testUpdateReturnsDoNothingWhenParentIsNull() {
         OrangeAmpoule ampoule = new OrangeAmpoule();
 
-        Event result = ampoule.update();
+        TickResult result = ampoule.update();
 
-        assertEquals(Event.DONOTHING, result);
+        assertEquals(TickResult.NONE, result);
     }
 
     @Test
@@ -129,7 +129,7 @@ public class OrangeAmpouleTest {
         Yukkuri parent = createParent(AgeState.CHILD);
         OrangeAmpoule ampoule = new OrangeAmpoule(parent);
 
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().remove(parent.getUniqueID());
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().remove(parent.getUniqueID());
 
         BufferedImage image = ampoule.getImage(parent);
         assertNull(image);
@@ -197,7 +197,7 @@ public class OrangeAmpouleTest {
         int origPivotX = ampoule.getPivotX();
         int origPivotY = ampoule.getPivotY();
 
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().remove(parent.getUniqueID());
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().remove(parent.getUniqueID());
 
         ampoule.resetBoundary();
 
@@ -267,7 +267,7 @@ public class OrangeAmpouleTest {
             spr[i] = new Sprite(10, 10, Sprite.PIVOT_CENTER_BOTTOM);
         }
         parent.setSpriteSet(spr);
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(parent.getUniqueID(), parent);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(parent.getUniqueID(), parent);
         return parent;
     }
 
@@ -303,9 +303,9 @@ public class OrangeAmpouleTest {
 
             int damageBefore = parent.getDamage();
 
-            Event result = ampoule.update();
+            TickResult result = ampoule.update();
 
-            assertEquals(Event.DONOTHING, result);
+            assertEquals(TickResult.NONE, result);
             assertFalse(parent.isDead());
             assertTrue(parent.getDamage() < damageBefore);
         }
@@ -321,9 +321,9 @@ public class OrangeAmpouleTest {
 
             int damageBefore = parent.getDamage();
 
-            Event result = ampoule.update();
+            TickResult result = ampoule.update();
 
-            assertEquals(Event.DONOTHING, result);
+            assertEquals(TickResult.NONE, result);
             assertTrue(parent.isDead());
             assertEquals(damageBefore, parent.getDamage());
         }

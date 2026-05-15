@@ -46,8 +46,8 @@ class SimpleEnumsTest {
     }
 
     @Test
-    void testCriticalDamegeType() {
-        verifyEnum(CriticalDamegeType.values());
+    void testCriticalDamageType() {
+        verifyEnum(CriticalDamageType.values());
     }
 
     @Test
@@ -66,13 +66,13 @@ class SimpleEnumsTest {
     }
 
     @Test
-    void testEnumRelationMine() {
-        verifyEnum(EnumRelationMine.values());
+    void testYukkuriRelationType() {
+        verifyEnum(YukkuriRelationType.values());
     }
 
     @Test
-    void testEvent() {
-        verifyEnum(Event.values());
+    void testTickResult() {
+        verifyEnum(TickResult.values());
     }
 
     @Test

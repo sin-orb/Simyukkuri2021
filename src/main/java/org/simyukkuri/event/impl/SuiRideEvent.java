@@ -5,7 +5,7 @@ import org.simyukkuri.draw.Translate;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.world.item.Sui;
-import org.simyukkuri.enums.EnumRelationMine;
+import org.simyukkuri.enums.YukkuriRelationType;
 import org.simyukkuri.enums.FavItemType;
 import org.simyukkuri.enums.Happiness;
 import org.simyukkuri.enums.PublicRank;
@@ -83,28 +83,28 @@ public class SuiRideEvent extends EventPacket {
 					return false;
 				}
 				// うんうん奴隷の場合
-				if (body.getPublicRank() == PublicRank.UnunSlave) {
+				if (body.getPublicRank() == PublicRank.UNUN_SLAVE) {
 					// 自分との関係
-					EnumRelationMine relation = YukkuriLogic.checkMyRelation(body, sourceBody);
+					YukkuriRelationType relation = YukkuriLogic.checkMyRelation(body, sourceBody);
 					// 嘆く
 					switch (relation) {
 						case FATHER: // 父
 						case MOTHER: // 母
 							body.setMessage(GameMessages.getMessage(body, MessagePool.Action.HateWithEnvyAboutMother));
 							break;
-						case PARTNAR: // つがい
+						case PARTNER: // つがい
 							body.setMessage(GameMessages.getMessage(body, MessagePool.Action.HateWithEnvyAboutPartner));
 							break;
-						case CHILD_FATHER: // 父の子供
+						case CHILD_OF_FATHER: // 父の子供
 							body.setMessage(GameMessages.getMessage(body, MessagePool.Action.HateWithEnvyAboutFather));
 							break;
-						case CHILD_MOTHER: // 母の子供
+						case CHILD_OF_MOTHER: // 母の子供
 							body.setMessage(GameMessages.getMessage(body, MessagePool.Action.HateWithEnvyAboutMother));
 							break;
-						case ELDERSISTER: // 姉
+						case ELDER_SISTER: // 姉
 							body.setMessage(GameMessages.getMessage(body, MessagePool.Action.HateWithEnvyAboutSister));
 							break;
-						case YOUNGSISTER: // 妹
+						case YOUNGER_SISTER: // 妹
 							body.setMessage(
 									GameMessages.getMessage(body, MessagePool.Action.HateWithEnvyAboutElderSister));
 							break;
@@ -164,8 +164,8 @@ public class SuiRideEvent extends EventPacket {
 						// 乗ろうとしているゆっくりがいない、またはカウントが50の倍数の場合ランダムに移動する
 						// ※移動中はすぃーの状態を変えるなりなんなりした方がいいのでは
 						if (!memberRide || tick % 50 == 0) {
-							body.moveTo(GameRandom.nextInt(Translate.getMapW()),
-									GameRandom.nextInt(Translate.getMapH() - Sui.getBounding().getHeight() / 2));
+							body.moveTo(GameRandom.nextInt(Translate.getWorldWidth()),
+									GameRandom.nextInt(Translate.getWorldHeight() - Sui.getBounding().getHeight() / 2));
 						}
 						// カウントが500を超える場合
 						if (tick > 500) {

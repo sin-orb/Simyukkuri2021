@@ -35,9 +35,9 @@ class FoodMakerTest extends ItemTestBase {
     void testConstructor_Default() {
         FoodMaker item = new FoodMaker();
         item.setObjId(1);
-        SimYukkuri.world.getCurrentMap().getFoodmaker().put(item.getObjId(), item);
+        SimYukkuri.world.getCurrentWorldState().getFoodMakers().put(item.getObjId(), item);
         verifyCommonProperties(item);
-        assertTrue(SimYukkuri.world.getCurrentMap().getFoodmaker().containsKey(item.getObjId()));
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getFoodMakers().containsKey(item.getObjId()));
     }
 
     // --- Static accessors ---
@@ -96,10 +96,10 @@ class FoodMakerTest extends ItemTestBase {
     void testRemoveListData() {
         FoodMaker item = new FoodMaker();
         item.setObjId(50);
-        SimYukkuri.world.getCurrentMap().getFoodmaker().put(50, item);
-        assertTrue(SimYukkuri.world.getCurrentMap().getFoodmaker().containsKey(50));
-        item.removeListData();
-        assertFalse(SimYukkuri.world.getCurrentMap().getFoodmaker().containsKey(50));
+        SimYukkuri.world.getCurrentWorldState().getFoodMakers().put(50, item);
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getFoodMakers().containsKey(50));
+        item.removeFromWorld();
+        assertFalse(SimYukkuri.world.getCurrentWorldState().getFoodMakers().containsKey(50));
     }
 
     // --- upDate ---
@@ -151,7 +151,7 @@ class FoodMakerTest extends ItemTestBase {
         shit.setObjType(Type.SHIT);
         shit.setX(100);
         shit.setY(100);
-        SimYukkuri.world.getCurrentMap().getShit().put(shit.getObjId(), shit);
+        SimYukkuri.world.getCurrentWorldState().getShit().put(shit.getObjId(), shit);
 
         assertEquals(0, item.objHitProcess(shit));
         assertEquals(10, item.getStockFood()); // 5 + 5
@@ -165,7 +165,7 @@ class FoodMakerTest extends ItemTestBase {
         item.setProcessReady(true);
         Vomit vomit = new Vomit();
         vomit.setObjType(Type.VOMIT);
-        SimYukkuri.world.getCurrentMap().getVomit().put(vomit.getObjId(), vomit);
+        SimYukkuri.world.getCurrentWorldState().getVomit().put(vomit.getObjId(), vomit);
 
         assertEquals(0, item.objHitProcess(vomit));
         assertEquals(10, item.getStockFood());
@@ -181,7 +181,7 @@ class FoodMakerTest extends ItemTestBase {
         food.setObjType(Type.OBJECT);
         food.setFoodType(FoodType.FOOD);
         food.setObjId(99);
-        SimYukkuri.world.getCurrentMap().getFood().put(food.getObjId(), food);
+        SimYukkuri.world.getCurrentWorldState().getFoods().put(food.getObjId(), food);
 
         assertEquals(0, item.objHitProcess(food));
         assertEquals(5, item.getStockFood());
@@ -197,7 +197,7 @@ class FoodMakerTest extends ItemTestBase {
         food.setObjType(Type.OBJECT);
         food.setFoodType(FoodType.BITTER);
         food.setObjId(100);
-        SimYukkuri.world.getCurrentMap().getFood().put(food.getObjId(), food);
+        SimYukkuri.world.getCurrentWorldState().getFoods().put(food.getObjId(), food);
 
         assertEquals(0, item.objHitProcess(food));
         assertEquals(6, item.getStockFood());
@@ -213,7 +213,7 @@ class FoodMakerTest extends ItemTestBase {
         food.setObjType(Type.OBJECT);
         food.setFoodType(FoodType.LEMONPOP);
         food.setObjId(101);
-        SimYukkuri.world.getCurrentMap().getFood().put(food.getObjId(), food);
+        SimYukkuri.world.getCurrentWorldState().getFoods().put(food.getObjId(), food);
 
         assertEquals(0, item.objHitProcess(food));
         assertEquals(7, item.getStockFood());
@@ -229,7 +229,7 @@ class FoodMakerTest extends ItemTestBase {
         food.setObjType(Type.OBJECT);
         food.setFoodType(FoodType.HOT);
         food.setObjId(102);
-        SimYukkuri.world.getCurrentMap().getFood().put(food.getObjId(), food);
+        SimYukkuri.world.getCurrentWorldState().getFoods().put(food.getObjId(), food);
 
         assertEquals(0, item.objHitProcess(food));
         assertEquals(8, item.getStockFood());
@@ -245,7 +245,7 @@ class FoodMakerTest extends ItemTestBase {
         food.setObjType(Type.OBJECT);
         food.setFoodType(FoodType.VIYUGRA);
         food.setObjId(103);
-        SimYukkuri.world.getCurrentMap().getFood().put(food.getObjId(), food);
+        SimYukkuri.world.getCurrentWorldState().getFoods().put(food.getObjId(), food);
 
         assertEquals(0, item.objHitProcess(food));
         assertEquals(9, item.getStockFood());
@@ -261,7 +261,7 @@ class FoodMakerTest extends ItemTestBase {
         food.setObjType(Type.OBJECT);
         food.setFoodType(FoodType.WASTE);
         food.setObjId(104);
-        SimYukkuri.world.getCurrentMap().getFood().put(food.getObjId(), food);
+        SimYukkuri.world.getCurrentWorldState().getFoods().put(food.getObjId(), food);
 
         assertEquals(0, item.objHitProcess(food));
         assertEquals(11, item.getStockFood());
@@ -321,7 +321,7 @@ class FoodMakerTest extends ItemTestBase {
         food.setObjType(Type.OBJECT);
         food.setFoodType(FoodType.FOOD);
         food.setObjId(200);
-        SimYukkuri.world.getCurrentMap().getFood().put(food.getObjId(), food);
+        SimYukkuri.world.getCurrentWorldState().getFoods().put(food.getObjId(), food);
         try {
             item.objHitProcess(food);
         } catch (Exception e) {
@@ -339,7 +339,7 @@ class FoodMakerTest extends ItemTestBase {
         food.setObjType(Type.OBJECT);
         food.setFoodType(FoodType.BITTER);
         food.setObjId(201);
-        SimYukkuri.world.getCurrentMap().getFood().put(food.getObjId(), food);
+        SimYukkuri.world.getCurrentWorldState().getFoods().put(food.getObjId(), food);
         try {
             item.objHitProcess(food);
         } catch (Exception e) {
@@ -356,7 +356,7 @@ class FoodMakerTest extends ItemTestBase {
         food.setObjType(Type.OBJECT);
         food.setFoodType(FoodType.LEMONPOP);
         food.setObjId(202);
-        SimYukkuri.world.getCurrentMap().getFood().put(food.getObjId(), food);
+        SimYukkuri.world.getCurrentWorldState().getFoods().put(food.getObjId(), food);
         try {
             item.objHitProcess(food);
         } catch (Exception e) {
@@ -373,7 +373,7 @@ class FoodMakerTest extends ItemTestBase {
         food.setObjType(Type.OBJECT);
         food.setFoodType(FoodType.HOT);
         food.setObjId(203);
-        SimYukkuri.world.getCurrentMap().getFood().put(food.getObjId(), food);
+        SimYukkuri.world.getCurrentWorldState().getFoods().put(food.getObjId(), food);
         try {
             item.objHitProcess(food);
         } catch (Exception e) {
@@ -425,7 +425,7 @@ class FoodMakerTest extends ItemTestBase {
         body.setCrushed(true); // isCrushed=true → enters branch
         body.setAgeState(org.simyukkuri.enums.AgeState.BABY);
         body.setObjId(206);
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(body.getUniqueID(), body);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(body.getUniqueID(), body);
         try {
             item.objHitProcess(body);
         } catch (Exception e) {
@@ -453,7 +453,7 @@ class FoodMakerTest extends ItemTestBase {
             body.setObjType(Type.YUKKURI);
             body.setCrushed(true);
             body.setAgeState(AgeState.BABY);
-            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(body.getUniqueID(), body);
+            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(body.getUniqueID(), body);
 
             assertEquals(0, item.objHitProcess(body));
             assertEquals(0, item.getStockFood());
@@ -474,21 +474,21 @@ class FoodMakerTest extends ItemTestBase {
             bitterFood.setObjType(Type.OBJECT);
             bitterFood.setFoodType(FoodType.BITTER);
             bitterFood.setObjId(300);
-            SimYukkuri.world.getCurrentMap().getFood().put(bitterFood.getObjId(), bitterFood);
+            SimYukkuri.world.getCurrentWorldState().getFoods().put(bitterFood.getObjId(), bitterFood);
 
             long beforeCash = SimYukkuri.world.getPlayer().getCash();
-            int beforeFoodCount = SimYukkuri.world.getCurrentMap().getFood().size();
+            int beforeFoodCount = SimYukkuri.world.getCurrentWorldState().getFoods().size();
 
             assertEquals(0, item.objHitProcess(bitterFood));
 
-            long outputFoodCount = SimYukkuri.world.getCurrentMap().getFood().values().stream()
+            long outputFoodCount = SimYukkuri.world.getCurrentWorldState().getFoods().values().stream()
                     .filter(food -> food.getObjId() != bitterFood.getObjId())
                     .filter(food -> food.getFoodType() == FoodType.FOOD)
                     .count();
 
             assertEquals(beforeCash - item.getCost(), SimYukkuri.world.getPlayer().getCash());
             assertTrue(bitterFood.isRemoved());
-            assertEquals(beforeFoodCount + 2, SimYukkuri.world.getCurrentMap().getFood().size());
+            assertEquals(beforeFoodCount + 2, SimYukkuri.world.getCurrentWorldState().getFoods().size());
             assertEquals(2, outputFoodCount);
             assertEquals(-1, item.getStockFood());
             assertEquals(0, item.getFoodAmount());

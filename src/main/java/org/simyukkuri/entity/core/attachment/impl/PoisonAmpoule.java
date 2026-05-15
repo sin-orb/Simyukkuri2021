@@ -5,14 +5,14 @@ import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
 
-import org.simyukkuri.draw.ModLoader;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.entity.core.attachment.Attachment;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.AttachProperty;
-import org.simyukkuri.enums.CriticalDamegeType;
+import org.simyukkuri.enums.CriticalDamageType;
 import org.simyukkuri.enums.Direction;
-import org.simyukkuri.enums.Event;
+import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.enums.Happiness;
 import org.simyukkuri.enums.ImageCode;
 import org.simyukkuri.system.MessagePool;
@@ -90,16 +90,16 @@ public class PoisonAmpoule extends Attachment {
 	}
 
 	@Override
-	protected Event update() {
+	protected TickResult update() {
 		Yukkuri pa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(parent);
 		if (pa == null)
-			return Event.DONOTHING;
+			return TickResult.NONE;
 		if (pa.isDead()) {
 			// 死んだゆっくりはうんうんしない
-			return Event.DONOTHING;
+			return TickResult.NONE;
 		}
 		// ちぎれていない場合
-		if (pa.getCriticalDamegeType() != CriticalDamegeType.CUT) {
+		if (pa.getCriticalDamageType() != CriticalDamageType.CUT) {
 			// 常にうんうんを足す
 			pa.plusShit(50);
 			pa.wakeup();
@@ -113,7 +113,7 @@ public class PoisonAmpoule extends Attachment {
 			pa.setForceFace(ImageCode.PAIN.ordinal());
 			pa.setMessage(GameMessages.getMessage(pa, MessagePool.Action.PoisonDamage), 20, true, true);
 		}
-		return Event.DONOTHING;
+		return TickResult.NONE;
 	}
 
 	@Override

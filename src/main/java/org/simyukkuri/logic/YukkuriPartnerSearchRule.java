@@ -64,7 +64,7 @@ public final class YukkuriPartnerSearchRule {
 		Yukkuri bodyHasOkazariAndPherommone = null;
 		Yukkuri bodyHasPheromone = null;
 
-		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getYukkuriMap().entrySet()) {
+		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentWorldState().getYukkuriRegistry().entrySet()) {
 			Yukkuri candidateBody = entry.getValue();
 			if (candidateBody == body) {
 				continue;
@@ -97,7 +97,7 @@ public final class YukkuriPartnerSearchRule {
 							if (candidateBody.getZ() < Translate.getFlyHeightLimit() || body.canflyCheck()) {
 								if (!Barrier.acrossBarrier(body.getX(), body.getY(), candidateBody.getX(),
 										candidateBody.getY(),
-										Barrier.MAP_BODY[body.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
+										Barrier.BODY_BLOCK_FLAGS[body.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
 									if (body.isNotNYD() && !body.isNeedled() && !body.isRaper()) {
 										body.setPanic(true, PanicType.REMIRYA);
 									}
@@ -145,7 +145,7 @@ public final class YukkuriPartnerSearchRule {
 				continue;
 			}
 			if (Barrier.acrossBarrier(body.getX(), body.getY(), candidateBody.getX(), candidateBody.getY(),
-					Barrier.MAP_BODY[body.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
+					Barrier.BODY_BLOCK_FLAGS[body.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
 				continue;
 			}
 			if (candidateBody.getBurialState() == BurialState.ALL) {
@@ -170,9 +170,9 @@ public final class YukkuriPartnerSearchRule {
 			if (!body.hasOkazari() && candidateBody.hasOkazari()
 					&& body.getAgeState() == candidateBody.getAgeState()
 					&& body.getType() == candidateBody.getType() && !body.isHybrid()
-					&& candidateBody.getOkazari().getOkazariType() == OkazariType.DEFAULT
+					&& candidateBody.getOkazaris().getOkazariType() == OkazariType.DEFAULT
 					&& (candidateBody.getPublicRank() == PublicRank.NONE
-							|| body.getPublicRank() == PublicRank.UnunSlave)
+							|| body.getPublicRank() == PublicRank.UNUN_SLAVE)
 					&& !body.isLockmove()) {
 				if (body.isRude()) {
 					bodyHasOkazari = candidateBody;

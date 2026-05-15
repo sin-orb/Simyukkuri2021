@@ -6,7 +6,7 @@ import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
 
-import org.simyukkuri.draw.ModLoader;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.entity.core.world.WorldEntity;
 import org.simyukkuri.enums.WorldEntityKind;
 import org.simyukkuri.enums.Type;
@@ -102,7 +102,7 @@ public class Generator extends WorldEntity {
 	// }
 	//
 	@Override
-	public void removeListData() {
+	public void removeFromWorld() {
 		// GameWorld.get().currentMap.generator.remove(this);
 	}
 

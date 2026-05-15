@@ -20,15 +20,15 @@ import java.util.Random;
 import javax.swing.JComboBox;
 
 import org.simyukkuri.SimYukkuri;
-import org.simyukkuri.draw.Terrarium;
+import org.simyukkuri.engine.Terrarium;
 import org.simyukkuri.draw.Translate;
-import org.simyukkuri.draw.World;
+import org.simyukkuri.engine.World;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.living.yukkuri.impl.Marisa;
 import org.simyukkuri.enums.YukkuriType;
 import org.simyukkuri.system.LoggerYukkuri;
-import org.simyukkuri.system.MainCommandUI;
-import org.simyukkuri.system.MapPlaceData;
+import org.simyukkuri.ui.MainCommandUI;
+import org.simyukkuri.system.WorldState;
 import org.simyukkuri.system.MessagePool;
 
 /**
@@ -95,9 +95,9 @@ public class WorldTestHelper {
             Field mapListField = World.class.getDeclaredField("mapList");
             mapListField.setAccessible(true);
             @SuppressWarnings("unchecked")
-            List<MapPlaceData> mapList = (List<MapPlaceData>) mapListField.get(world);
+            List<WorldState> mapList = (List<WorldState>) mapListField.get(world);
             if (mapList.isEmpty()) {
-                MapPlaceData map = new MapPlaceData(0);
+                WorldState map = new WorldState(0);
                 mapList.add(map);
             }
 
@@ -186,7 +186,7 @@ public class WorldTestHelper {
     }
 
     public static void addChild(Yukkuri body, int childId) {
-        body.getChildrenList().add(childId);
+        body.getChildren().add(childId);
     }
 
     public static void setSleeping(Yukkuri body, boolean sleeping) {
@@ -232,7 +232,7 @@ public class WorldTestHelper {
      */
     public static void initializeTranslate(int mapX, int mapY, int mapZ, int canvasW, int canvasH,
             int fieldSize, int bufferSize, float[] zoomRates) {
-        Translate.setMapSize(mapX, mapY, mapZ);
+        Translate.setWorldSize(mapX, mapY, mapZ);
         Translate.setCanvasSize(canvasW, canvasH, fieldSize, bufferSize, zoomRates);
         Translate.createTransTable(false);
     }
@@ -265,7 +265,7 @@ public class WorldTestHelper {
         MainCommandUI.setOptionButton(null);
         MainCommandUI.setPlayerButton(new javax.swing.JToggleButton[2]);
         MainCommandUI.setOptionPopup(new javax.swing.JPopupMenu());
-        MainCommandUI.setMapWindow(null);
+        MainCommandUI.setWorldWindow(null);
         MainCommandUI.setItemWindow(null);
     }
 

@@ -1,6 +1,6 @@
 package org.simyukkuri.draw;
 
-import org.simyukkuri.entity.core.Entity;
+import org.simyukkuri.visual.TerrainBillboard;
 import org.simyukkuri.entity.core.attachment.*;
 import org.simyukkuri.entity.core.attachment.impl.*;
 import org.simyukkuri.entity.core.effect.*;
@@ -11,6 +11,7 @@ import org.simyukkuri.entity.core.living.yukkuri.impl.*;
 import org.simyukkuri.entity.core.world.bodylinked.*;
 import org.simyukkuri.entity.core.world.item.*;
 import org.simyukkuri.entity.core.world.mobile.*;
+import org.simyukkuri.engine.ModLoader;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
@@ -32,7 +33,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
 import org.simyukkuri.entity.core.Entity;
-import org.simyukkuri.system.MapWindow;
+import org.simyukkuri.ui.WorldSelectionWindow;
 import org.simyukkuri.util.WorldTestHelper;
 
 public class TerrainFieldTest {
@@ -92,7 +93,7 @@ public class TerrainFieldTest {
     @Test
     public void testLoadTerrainOldFormat() throws Exception {
         // Set up mock back.jpg in backTheme path
-        String mapPath = MapWindow.MAP.values()[0].getFilePath();
+        String mapPath = WorldSelectionWindow.WorldSelection.values()[0].getFilePath();
         Path backDir = tempDir.resolve("mod").resolve("back").resolve(mapPath);
         Files.createDirectories(backDir);
         BufferedImage img = new BufferedImage(1, 1, BufferedImage.TYPE_INT_RGB);
@@ -106,7 +107,7 @@ public class TerrainFieldTest {
 
         // Check defaults for old format
         assertTrue(TerrainField.isPers());
-        assertNotNull(TerrainField.getStructList());
+        assertNotNull(TerrainField.getBillboards());
 
         // morning sky should have default gradient
         assertNotNull(TerrainField.getSkyGrad(0));
@@ -114,7 +115,7 @@ public class TerrainFieldTest {
 
     @Test
     public void testLoadTerrainNewFormat() throws Exception {
-        String mapPath = MapWindow.MAP.values()[0].getFilePath();
+        String mapPath = WorldSelectionWindow.WorldSelection.values()[0].getFilePath();
         // Modern format is preferred in backTheme too if bg.ini exists there
         Path backDir = tempDir.resolve("mod").resolve("back").resolve(mapPath);
         Files.createDirectories(backDir);
@@ -156,7 +157,7 @@ public class TerrainFieldTest {
         assertNotNull(morning);
 
         // Struct list should have 1 item
-        List<Entity> structList = TerrainField.getStructList();
+        List<TerrainBillboard> structList = TerrainField.getBillboards();
         assertEquals(1, structList.size());
     }
 }

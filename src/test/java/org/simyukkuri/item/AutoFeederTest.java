@@ -32,13 +32,13 @@ class AutoFeederTest extends ItemTestBase {
         item.setY(100);
         item.setOption(0);
 
-        SimYukkuri.world.getCurrentMap().getAutofeeder().put(item.getObjId(), item);
+        SimYukkuri.world.getCurrentWorldState().getAutoFeeders().put(item.getObjId(), item);
 
         verifyCommonProperties(item);
         assertEquals(100, item.getX());
         assertEquals(100, item.getY());
         assertEquals(0, item.getOption());
-        assertTrue(SimYukkuri.world.getCurrentMap().getAutofeeder().containsKey(item.getObjId()));
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getAutoFeeders().containsKey(item.getObjId()));
     }
 
     @Test
@@ -110,10 +110,10 @@ class AutoFeederTest extends ItemTestBase {
     @Test
     void testGetSetFood() {
         AutoFeeder item = new AutoFeeder();
-        assertNull(item.getFood());
+        assertNull(item.getFoods());
         Food food = new Food(100, 100, Food.FoodType.FOOD.ordinal());
-        item.setFood(food);
-        assertEquals(food, item.getFood());
+        item.setFoods(food);
+        assertEquals(food, item.getFoods());
     }
 
     @Test
@@ -131,9 +131,9 @@ class AutoFeederTest extends ItemTestBase {
     void testRemoveListData() {
         AutoFeeder item = new AutoFeeder();
         item.setObjId(77);
-        SimYukkuri.world.getCurrentMap().getAutofeeder().put(item.getObjId(), item);
-        item.removeListData();
-        assertFalse(SimYukkuri.world.getCurrentMap().getAutofeeder().containsKey(item.getObjId()));
+        SimYukkuri.world.getCurrentWorldState().getAutoFeeders().put(item.getObjId(), item);
+        item.removeFromWorld();
+        assertFalse(SimYukkuri.world.getCurrentWorldState().getAutoFeeders().containsKey(item.getObjId()));
     }
 
     @Test
@@ -157,7 +157,7 @@ class AutoFeederTest extends ItemTestBase {
     void testUpDate_FoodNullModeOne() {
         AutoFeeder item = new AutoFeeder();
         item.setEnabled(true);
-        item.setFood(null);
+        item.setFoods(null);
         item.setMode(1); // REGULAR_MODE
         // age=0 → age%20==0 → food==null && mode!=0 → check feedingInterval condition
         // but RND.nextInt(feedingP) might not be 0, so food might stay null
@@ -175,10 +175,10 @@ class AutoFeederTest extends ItemTestBase {
         Food food = new Food(100, 100, 0);
         food.setRemoved(true);
         // Add food to the food map so containsValue check passes (not "taken out" path)
-        SimYukkuri.world.getCurrentMap().getFood().put(food.getObjId(), food);
-        item.setFood(food);
+        SimYukkuri.world.getCurrentWorldState().getFoods().put(food.getObjId(), food);
+        item.setFoods(food);
         assertDoesNotThrow(() -> item.upDate());
-        assertNull(item.getFood());
+        assertNull(item.getFoods());
     }
 
     // --- upDate: food set, type=NORMAL, food is empty → removes food ---
@@ -191,8 +191,8 @@ class AutoFeederTest extends ItemTestBase {
         item.setType(0); // NORMAL
         Food food = new Food(100, 100, 0);
         food.setAmount(0); // isEmpty() returns true
-        SimYukkuri.world.getCurrentMap().getFood().put(food.getObjId(), food);
-        item.setFood(food);
+        SimYukkuri.world.getCurrentWorldState().getFoods().put(food.getObjId(), food);
+        item.setFoods(food);
         assertDoesNotThrow(() -> item.upDate());
     }
 
@@ -207,11 +207,11 @@ class AutoFeederTest extends ItemTestBase {
         item.setType(0); // NORMAL
         Food food = new Food(100, 100, 0);
         food.setAmount(1000); // not empty, not removed
-        SimYukkuri.world.getCurrentMap().getFood().put(food.getObjId(), food);
-        item.setFood(food);
+        SimYukkuri.world.getCurrentWorldState().getFoods().put(food.getObjId(), food);
+        item.setFoods(food);
         assertDoesNotThrow(() -> item.upDate());
         // food should still be set
-        assertEquals(food, item.getFood());
+        assertEquals(food, item.getFoods());
     }
 
     // --- upDate: age % 20 != 0 → early return ---
@@ -232,7 +232,7 @@ class AutoFeederTest extends ItemTestBase {
         AutoFeeder item = new AutoFeeder();
         item.setEnabled(true);
         item.setAge(0);
-        item.setFood(null);
+        item.setFoods(null);
         item.setMode(0); // NORMAL_MODE → always tries to create food
         item.setType(0); // FOOD type
         // GadgetAction.putObjEX might work in headless mode
@@ -300,7 +300,7 @@ class AutoFeederTest extends ItemTestBase {
         // food is NOT added to world food map → containsValue returns false
         // isTakenOut scans body map → empty → returns false → food stays (condition
         // short-circuits)
-        item.setFood(food);
+        item.setFoods(food);
         assertDoesNotThrow(() -> item.upDate());
     }
 
@@ -352,12 +352,12 @@ class AutoFeederTest extends ItemTestBase {
 
             // Create a Food that is NOT in the world food map
             Food food = new Food(100, 100, 0);
-            item.setFood(food);
+            item.setFoods(food);
 
             // Create a body in the world body map that holds this food
             org.simyukkuri.entity.core.living.yukkuri.Yukkuri body = org.simyukkuri.util.WorldTestHelper.createBody();
             body.getCarryItems().put(org.simyukkuri.enums.TakeoutItemType.FOOD, food.objId);
-            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(body.objId, body);
+            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(body.objId, body);
 
             // food is NOT in world.food map → containsValue(food) is false
             // isTakenOut should find body holding food → returns true → food stays null
@@ -398,13 +398,13 @@ class AutoFeederTest extends ItemTestBase {
 
             item.upDate();
 
-            assertNotNull(item.getFood());
-            assertInstanceOf(Food.class, item.getFood());
+            assertNotNull(item.getFoods());
+            assertInstanceOf(Food.class, item.getFoods());
 
-            Food created = (Food) item.getFood();
+            Food created = (Food) item.getFoods();
             assertEquals(140, created.getX());
             assertEquals(220, created.getY());
-            assertSame(created, SimYukkuri.world.getCurrentMap().getFood().get(created.getObjId()));
+            assertSame(created, SimYukkuri.world.getCurrentWorldState().getFoods().get(created.getObjId()));
         }
 
         @Test
@@ -416,13 +416,13 @@ class AutoFeederTest extends ItemTestBase {
 
             Food existing = new Food(120, 160, Food.FoodType.SWEETS1.ordinal());
             existing.setAmount(500);
-            SimYukkuri.world.getCurrentMap().getFood().put(existing.getObjId(), existing);
-            item.setFood(existing);
+            SimYukkuri.world.getCurrentWorldState().getFoods().put(existing.getObjId(), existing);
+            item.setFoods(existing);
 
             item.upDate();
 
-            assertSame(existing, item.getFood());
-            assertSame(existing, SimYukkuri.world.getCurrentMap().getFood().get(existing.getObjId()));
+            assertSame(existing, item.getFoods());
+            assertSame(existing, SimYukkuri.world.getCurrentWorldState().getFoods().get(existing.getObjId()));
         }
 
         @Test
@@ -434,13 +434,13 @@ class AutoFeederTest extends ItemTestBase {
 
             Food removed = new Food(100, 100, Food.FoodType.FOOD.ordinal());
             removed.setRemoved(true);
-            SimYukkuri.world.getCurrentMap().getFood().put(removed.getObjId(), removed);
-            item.setFood(removed);
+            SimYukkuri.world.getCurrentWorldState().getFoods().put(removed.getObjId(), removed);
+            item.setFoods(removed);
 
             item.upDate();
 
-            assertNull(item.getFood());
-            assertSame(removed, SimYukkuri.world.getCurrentMap().getFood().get(removed.getObjId()));
+            assertNull(item.getFoods());
+            assertSame(removed, SimYukkuri.world.getCurrentWorldState().getFoods().get(removed.getObjId()));
         }
 
         @Test
@@ -459,14 +459,14 @@ class AutoFeederTest extends ItemTestBase {
 
             item.upDate();
 
-            assertNotNull(item.getFood());
-            assertInstanceOf(Food.class, item.getFood());
+            assertNotNull(item.getFoods());
+            assertInstanceOf(Food.class, item.getFoods());
 
-            Food created = (Food) item.getFood();
+            Food created = (Food) item.getFoods();
             assertEquals(Food.FoodType.HOT, created.getFoodType());
             assertEquals(180, created.getX());
             assertEquals(260, created.getY());
-            assertSame(created, SimYukkuri.world.getCurrentMap().getFood().get(created.getObjId()));
+            assertSame(created, SimYukkuri.world.getCurrentWorldState().getFoods().get(created.getObjId()));
             assertEquals(beforeCash - created.getValue() - item.getCost(),
                     SimYukkuri.world.getPlayer().getCash());
         }

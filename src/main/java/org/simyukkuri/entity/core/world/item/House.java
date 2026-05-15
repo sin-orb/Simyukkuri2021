@@ -6,7 +6,7 @@ import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
 
-import org.simyukkuri.draw.ModLoader;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Rectangle4y;
 import org.simyukkuri.entity.core.world.WorldEntity;
 import org.simyukkuri.enums.Type;
@@ -104,8 +104,8 @@ public class House extends WorldEntity {
 	}
 
 	@Override
-	public void removeListData() {
-		GameWorld.get().getCurrentMap().getHouse().remove(objId);
+	public void removeFromWorld() {
+		GameWorld.get().getCurrentWorldState().getHouses().remove(objId);
 	}
 
 	@Override
@@ -125,7 +125,7 @@ public class House extends WorldEntity {
 		houseType = HouseTable.values()[initOption];
 		setBoundary(boundary[houseType.ordinal()]);
 		setCollisionSize(getPivotX(), getPivotY());
-		GameWorld.get().getCurrentMap().getHouse().put(objId, this);
+		GameWorld.get().getCurrentWorldState().getHouses().put(objId, this);
 		objType = Type.PLATFORM;
 		worldEntityType = WorldEntityKind.HOUSE;
 		itemRank = ItemRank.values()[houseType.getRank()];

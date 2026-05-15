@@ -7,7 +7,7 @@ import java.awt.Stroke;
 import java.io.Serializable;
 
 import org.simyukkuri.SimYukkuri;
-import org.simyukkuri.enums.Event;
+import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.system.ItemMenu.ShapeMenu;
 import org.simyukkuri.system.ItemMenu.ShapeMenuTarget;
 
@@ -28,26 +28,26 @@ public abstract class FieldShape implements Serializable {
 	public static final Color PREVIEW_COLOR = Color.WHITE;
 
 	/** 各種壁の通過可否で使用されるビットフラグ*/
-	public static final int MAP_BABY = 1,MAP_CHILD = 2,MAP_ADULT = 4,MAP_ITEM =  8;
+	public static final int BABY_BLOCK_FLAG = 1, CHILD_BLOCK_FLAG = 2, ADULT_BLOCK_FLAG = 4, ITEM_BLOCK_FLAG = 8;
 	/** 各種壁の通過可否で使用されるビットフラグ2*/
-	public static final int MAP_NOUNUN = 32,MAP_KEKKAI = 1024;
+	public static final int NO_UNUN_BLOCK_FLAG = 32, KEKKAI_BLOCK_FLAG = 1024;
 	/** 各種壁の通過可否で使用されるビットフラグ3*/
-	public static final int[] MAP_BODY = {MAP_BABY, MAP_CHILD, MAP_ADULT};
+	public static final int[] BODY_BLOCK_FLAGS = {BABY_BLOCK_FLAG, CHILD_BLOCK_FLAG, ADULT_BLOCK_FLAG};
 	/**各種壁の通過可否を決めるビットフラグ1
 	 * <br>段差用*/
-	public static final int BARRIER_GAP_MINI = MAP_BABY, BARRIER_GAP_BIG = MAP_BABY + MAP_CHILD;
+	public static final int BARRIER_GAP_MINI = BABY_BLOCK_FLAG, BARRIER_GAP_BIG = BABY_BLOCK_FLAG + CHILD_BLOCK_FLAG;
 	/**各種壁の通過可否を決めるビットフラグ2
 	 * <br>金網用*/
-	public static final int BARRIER_NET_MINI = MAP_CHILD + MAP_ADULT, BARRIER_NET_BIG = MAP_ADULT;
+	public static final int BARRIER_NET_MINI = CHILD_BLOCK_FLAG + ADULT_BLOCK_FLAG, BARRIER_NET_BIG = ADULT_BLOCK_FLAG;
 	/**各種壁の通過可否を決めるビットフラグ3
 	 * <br>壁用*/
-	public static final int BARRIER_WALL = MAP_BABY + MAP_CHILD + MAP_ADULT + MAP_ITEM;
+	public static final int BARRIER_WALL = BABY_BLOCK_FLAG + CHILD_BLOCK_FLAG + ADULT_BLOCK_FLAG + ITEM_BLOCK_FLAG;
 	/**各種壁の通過可否を決めるビットフラグ4
 	 * <br>特定オブジェクト禁止用*/
-	public static final int BARRIER_ITEM = MAP_ITEM, BARRIER_YUKKURI = MAP_BABY + MAP_CHILD + MAP_ADULT,BARRIER_NOUNUN = MAP_NOUNUN;
+	public static final int BARRIER_ITEM = ITEM_BLOCK_FLAG, BARRIER_YUKKURI = BABY_BLOCK_FLAG + CHILD_BLOCK_FLAG + ADULT_BLOCK_FLAG,BARRIER_NOUNUN = NO_UNUN_BLOCK_FLAG;
 	/**各種壁の通過可否を決めるビットフラグ5
 	 * <br>結界()用*/
-	public static final int BARRIER_KEKKAI = MAP_KEKKAI;
+	public static final int BARRIER_KEKKAI = KEKKAI_BLOCK_FLAG;
 	
 	/** コンベア、池、畑で使用されるビットフラグ
 	 * <br> 床置きオブジェクトのフラグもあるのはゆっくりの危険回避マップとしても使うため*/
@@ -77,23 +77,23 @@ public abstract class FieldShape implements Serializable {
 	/**除去されているか*/
 	protected boolean removed = false;
 	/**マップ座標の設置起点のX座標ゲッター*/
-	public int getMapSX() {
+	public int getStartX() {
 		return mapSX;
 	}
 	/**マップ座標の設置起点のY座標ゲッター*/
-	public int getMapSY() {
+	public int getStartY() {
 		return mapSY;
 	}
 	/**マップ座標の設置終点のX座標ゲッター*/
-	public int getMapEX() {
+	public int getEndX() {
 		return mapEX;
 	}
 	/**マップ座標の設置終点のY座標ゲッター*/
-	public int getMapEY() {
+	public int getEndY() {
 		return mapEY;
 	}
 	/**マップ座標セッター*/
-	public void setMapPos(int sx, int sy, int ex, int ey) {
+	public void setBounds(int sx, int sy, int ex, int ey) {
 		mapSX = sx;
 		mapSY = sy;
 		mapEX = ex;
@@ -166,13 +166,13 @@ public abstract class FieldShape implements Serializable {
 		return removed;
 	}
 	/**毎ティックごとの処理 **/
-	public Event clockTick()
+	public TickResult clockTick()
 	{
 		age += TICK;
 		if (removed) {
-			return Event.REMOVED;
+			return TickResult.REMOVED;
 		}
-		return Event.DONOTHING;
+		return TickResult.NONE;
 	}
 	/**各種属性の汎用ゲッター*/
 	abstract public int getAttribute();
@@ -180,17 +180,17 @@ public abstract class FieldShape implements Serializable {
 	abstract public int getMinimumSize();
 	/**配置時の境界線を描く*/
 	abstract public void drawShape(Graphics2D g2);
-	public int getMapW() {
+	public int getWorldWidth() {
 		return mapW;
 	}
-	public void setMapW(int mapW) {
-		this.mapW = mapW;
+	public void setWorldWidth(int worldWidth) {
+		this.mapW = worldWidth;
 	}
-	public int getMapH() {
+	public int getWorldHeight() {
 		return mapH;
 	}
-	public void setMapH(int mapH) {
-		this.mapH = mapH;
+	public void setWorldHeight(int worldHeight) {
+		this.mapH = worldHeight;
 	}
 	public int getFieldW() {
 		return fieldW;
@@ -210,16 +210,16 @@ public abstract class FieldShape implements Serializable {
 	public void setAge(long age) {
 		this.age = age;
 	}
-	public void setMapSX(int mapSX) {
+	public void setStartX(int mapSX) {
 		this.mapSX = mapSX;
 	}
-	public void setMapSY(int mapSY) {
+	public void setStartY(int mapSY) {
 		this.mapSY = mapSY;
 	}
-	public void setMapEX(int mapEX) {
+	public void setEndX(int mapEX) {
 		this.mapEX = mapEX;
 	}
-	public void setMapEY(int mapEY) {
+	public void setEndY(int mapEY) {
 		this.mapEY = mapEY;
 	}
 	public void setFieldSX(int fieldSX) {
@@ -238,5 +238,4 @@ public abstract class FieldShape implements Serializable {
 		this.removed = removed;
 	}
 }
-
 

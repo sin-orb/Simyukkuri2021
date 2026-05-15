@@ -6,13 +6,13 @@ import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
 
-import org.simyukkuri.draw.ModLoader;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Rectangle4y;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.effect.Effect;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.world.WorldEntity;
-import org.simyukkuri.enums.CriticalDamegeType;
+import org.simyukkuri.enums.CriticalDamageType;
 import org.simyukkuri.enums.EffectType;
 import org.simyukkuri.enums.FootBake;
 import org.simyukkuri.enums.Happiness;
@@ -60,7 +60,7 @@ public class HotPlate extends WorldEntity {
 				f = bindBody.getFootBakeLevel();
 				if (f == FootBake.CRITICAL)
 					layer[0] = images[2];
-				else if (f == FootBake.MIDIUM)
+				else if (f == FootBake.MEDIUM)
 					layer[0] = images[1];
 				else
 					layer[0] = images[0];
@@ -108,14 +108,14 @@ public class HotPlate extends WorldEntity {
 	public int objHitProcess(Entity o) {
 
 		bindBody = (Yukkuri) o;
-		if (bindBody.getCriticalDamegeType() == CriticalDamegeType.CUT)
+		if (bindBody.getCriticalDamageType() == CriticalDamageType.CUT)
 			return 0;
 		bindBody.clearActions();
 		bindBody.setCalcX(x);
 		bindBody.setCalcY(y);
 		bindBody.setLockmove(true);
 		if (smoke == null) {
-			smoke = GameView.addEffect(EffectType.BAKE, bindBody.getX(), bindBody.getY() + 1,
+			smoke = GameView.addEffect(EffectType.BAKED, bindBody.getX(), bindBody.getY() + 1,
 					-2, 0, 0, 0, false, -1, -1, false, false, false);
 		}
 		return 1;
@@ -170,7 +170,7 @@ public class HotPlate extends WorldEntity {
 	}
 
 	@Override
-	public void removeListData() {
+	public void removeFromWorld() {
 		if (bindBody != null) {
 			bindBody.setForceFace(-1);
 			bindBody.setLockmove(false);
@@ -180,7 +180,7 @@ public class HotPlate extends WorldEntity {
 			smoke.remove();
 			smoke = null;
 		}
-		GameWorld.get().getCurrentMap().getHotPlate().remove(objId);
+		GameWorld.get().getCurrentWorldState().getHotPlates().remove(objId);
 	}
 
 	/** コンストラクタ */
@@ -188,7 +188,7 @@ public class HotPlate extends WorldEntity {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		GameWorld.get().getCurrentMap().getHotPlate().put(objId, this);
+		GameWorld.get().getCurrentWorldState().getHotPlates().put(objId, this);
 		objType = Type.PLATFORM;
 		worldEntityType = WorldEntityKind.HOTPLATE;
 

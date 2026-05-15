@@ -29,18 +29,18 @@ import javax.swing.SwingWorker;
 import javax.swing.border.EmptyBorder;
 
 import org.simyukkuri.command.GadgetMenu;
-import org.simyukkuri.draw.ModLoader;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.MyPane;
 import org.simyukkuri.draw.TerrainField;
-import org.simyukkuri.draw.Terrarium;
+import org.simyukkuri.engine.Terrarium;
 import org.simyukkuri.draw.Translate;
-import org.simyukkuri.draw.World;
+import org.simyukkuri.engine.World;
 import org.simyukkuri.entity.core.living.yukkuri.Dna;
-import org.simyukkuri.system.IconPool;
-import org.simyukkuri.system.InputController;
 import org.simyukkuri.system.ItemMenu;
-import org.simyukkuri.system.MainCommandUI;
-import org.simyukkuri.system.MouseInputController;
+import org.simyukkuri.ui.MainCommandUI;
+import org.simyukkuri.ui.InputController;
+import org.simyukkuri.ui.listener.MouseInputController;
+import org.simyukkuri.system.IconPool;
 import org.simyukkuri.util.GameLocale;
 import org.simyukkuri.util.GameMessages;
 import org.simyukkuri.util.GameText;
@@ -168,7 +168,7 @@ public class SimYukkuri extends JFrame {
 
 		// 初期設定
 
-		NAGASI_MODE = ModLoader.loadYukkuriIniMapForInt(loader, ModLoader.getDataWorldIniDir(), "play", "NAGASI_MODE");
+		NAGASI_MODE = ModLoader.loadYukkuriIniValue(loader, ModLoader.getDataWorldIniDir(), "play", "NAGASI_MODE");
 	}
 
 	/**
@@ -428,17 +428,17 @@ public class SimYukkuri extends JFrame {
 		// <-- うにょ版試験マージ
 		winPanel.add(grpPanel);
 
-		bgModCombo = new JComboBox(ModLoader.getBackThemeList());
+		bgModCombo = new JComboBox(ModLoader.getBackThemes());
 		bgModCombo.setSelectedIndex(0);
 		modPanel.add(new JLabel(mess2, JLabel.RIGHT));
 		modPanel.add(bgModCombo);
 
-		itemModCombo = new JComboBox(ModLoader.getItemThemeList());
+		itemModCombo = new JComboBox(ModLoader.getItemThemes());
 		itemModCombo.setSelectedIndex(0);
 		modPanel.add(new JLabel(mess3, JLabel.RIGHT));
 		modPanel.add(itemModCombo);
 
-		yukkuriModCombo = new JComboBox(ModLoader.getYukkuriThemeList());
+		yukkuriModCombo = new JComboBox(ModLoader.getYukkuriThemes());
 		yukkuriModCombo.setSelectedIndex(0);
 		modPanel.add(new JLabel(mess4, JLabel.RIGHT));
 		modPanel.add(yukkuriModCombo);

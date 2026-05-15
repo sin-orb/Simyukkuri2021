@@ -25,9 +25,9 @@ import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.world.bodylinked.Okazari;
 import org.simyukkuri.entity.core.living.yukkuri.StubBody;
-import org.simyukkuri.draw.World;
+import org.simyukkuri.engine.World;
 import org.simyukkuri.enums.CoreAnkoState;
-import org.simyukkuri.enums.CriticalDamegeType;
+import org.simyukkuri.enums.CriticalDamageType;
 import org.simyukkuri.enums.ImageCode;
 import org.simyukkuri.entity.core.world.bodylinked.Okazari.OkazariType;
 import org.simyukkuri.system.YukkuriLayer;
@@ -66,7 +66,7 @@ class BodyRenderStateTest {
 
 	@Test
 	void getFaceImageUsesNydFace() throws Exception {
-		setField(body, "coreAnkoState", CoreAnkoState.NonYukkuriDisease);
+		setField(body, "coreAnkoState", CoreAnkoState.NON_YUKKURI_DISEASE);
 
 		YukkuriRenderState.getFaceImage(body, layer);
 
@@ -91,7 +91,7 @@ class BodyRenderStateTest {
 	@Test
 	void getBodyBaseImageUsesCrushedImageWhenCrushedWithoutAccessory() throws Exception {
 		body.setCrushed(true);
-		body.setOkazari(null);
+		body.setOkazaris(null);
 
 		YukkuriRenderState.getImageIndex(body, layer);
 
@@ -117,7 +117,7 @@ class BodyRenderStateTest {
 
 	@Test
 	void getAbnormalBodyImageUsesCutOverlayWhenCriticalDamageIsCut() {
-		body.setCriticalDamege(CriticalDamegeType.CUT);
+		body.setCriticalDamege(CriticalDamageType.CUT);
 
 		YukkuriRenderState.getDamageImageIndex(body, layer);
 
@@ -168,7 +168,7 @@ class BodyRenderStateTest {
 
 	@Test
 	void getOlazariImageUsesAccessoryForDefaultOkazari() {
-		body.setOkazari(new Okazari(body, OkazariType.DEFAULT));
+		body.setOkazaris(new Okazari(body, OkazariType.DEFAULT));
 
 		YukkuriRenderState.getOkazariImageIndex(body, layer, 0);
 

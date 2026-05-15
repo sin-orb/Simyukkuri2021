@@ -22,12 +22,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import org.simyukkuri.SimYukkuri;
-import org.simyukkuri.draw.World;
+import org.simyukkuri.engine.World;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.living.yukkuri.impl.Reimu;
 import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.Direction;
-import org.simyukkuri.enums.Event;
+import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.system.ResourceUtil;
 
 public class ANYDAmpouleTest {
@@ -71,9 +71,9 @@ public class ANYDAmpouleTest {
         ANYDAmpoule ampoule = new ANYDAmpoule(parent);
 
         // ANYDAmpouleのupdate()は何もせずDONOTHINGを返す
-        Event result = ampoule.update();
+        TickResult result = ampoule.update();
 
-        assertEquals(Event.DONOTHING, result);
+        assertEquals(TickResult.NONE, result);
     }
 
     @Test
@@ -82,7 +82,7 @@ public class ANYDAmpouleTest {
         ANYDAmpoule ampoule = new ANYDAmpoule(parent);
 
         // parentをマップから削除
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().remove(parent.getUniqueID());
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().remove(parent.getUniqueID());
 
         BufferedImage image = ampoule.getImage(parent);
         assertNull(image);
@@ -135,7 +135,7 @@ public class ANYDAmpouleTest {
         int origPivotY = ampoule.getPivotY();
 
         // parentをマップから削除
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().remove(parent.getUniqueID());
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().remove(parent.getUniqueID());
 
         ampoule.resetBoundary();
 
@@ -171,7 +171,7 @@ public class ANYDAmpouleTest {
     private static Yukkuri createParent(AgeState ageState) {
         Yukkuri parent = new Reimu();
         parent.setAgeState(ageState);
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(parent.getUniqueID(), parent);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(parent.getUniqueID(), parent);
         return parent;
     }
 

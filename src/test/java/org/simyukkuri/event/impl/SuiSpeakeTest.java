@@ -23,7 +23,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import org.simyukkuri.SimYukkuri;
-import org.simyukkuri.draw.World;
+import org.simyukkuri.engine.World;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.living.yukkuri.impl.Reimu;
 import org.simyukkuri.enums.AgeState;
@@ -728,12 +728,12 @@ public class SuiSpeakeTest {
 
                 assertTrue(event.simpleEventAction(b));
 
-                assertEquals(1, SimYukkuri.world.getCurrentMap().getEvent().size(),
+                assertEquals(1, SimYukkuri.world.getCurrentWorldState().getEvents().size(),
                         "wanting-sui branch should queue exactly one world event");
-                assertTrue(SimYukkuri.world.getCurrentMap().getEvent().get(0) instanceof SuiSpeake,
+                assertTrue(SimYukkuri.world.getCurrentWorldState().getEvents().get(0) instanceof SuiSpeake,
                         "wanting-sui branch should queue another SuiSpeake world event");
                 assertEquals(b.getUniqueID(),
-                        SimYukkuri.world.getCurrentMap().getEvent().get(0).getFrom(),
+                        SimYukkuri.world.getCurrentWorldState().getEvents().get(0).getFrom(),
                         "queued world event should remember which body started talking about sui");
             } finally {
                 SimYukkuri.RND = savedRND;
@@ -757,9 +757,9 @@ public class SuiSpeakeTest {
 
                 assertTrue(event.simpleEventAction(observer));
 
-                assertEquals(1, observer.getEventList().size(),
+                assertEquals(1, observer.getEvents().size(),
                         "unrelated observer should receive exactly one follow-up body event");
-                assertTrue(observer.getEventList().get(0) instanceof SuiSpeake,
+                assertTrue(observer.getEvents().get(0) instanceof SuiSpeake,
                         "unrelated observer should queue a follow-up SuiSpeake body event");
                 assertNull(observer.getCurrentEvent(), "follow-up sui speak should only be queued at this stage");
             } finally {
@@ -778,7 +778,7 @@ public class SuiSpeakeTest {
             spr[i] = new Sprite(10, 10, Sprite.PIVOT_CENTER_BOTTOM);
         }
         b.setSpriteSet(spr);
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(b.getUniqueID(), b);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueID(), b);
         return b;
     }
 

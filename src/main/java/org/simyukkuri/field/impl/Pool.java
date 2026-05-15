@@ -12,7 +12,7 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.simyukkuri.draw.ModLoader;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Point4y;
 import org.simyukkuri.draw.Translate;
 import org.simyukkuri.entity.core.Entity;
@@ -22,7 +22,7 @@ import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.field.FieldShape;
 import org.simyukkuri.system.ItemMenu.ShapeMenu;
 import org.simyukkuri.system.ItemMenu.ShapeMenuTarget;
-import org.simyukkuri.system.MapPlaceData;
+import org.simyukkuri.system.WorldState;
 import org.simyukkuri.util.GameRandom;
 import org.simyukkuri.util.GameWorld;
 
@@ -66,7 +66,7 @@ public class Pool extends FieldShape {
 	@Override
 	public void executeShapePopup(ShapeMenu menu) {
 
-		List<Pool> list = GameWorld.get().getCurrentMap().getPool();
+		List<Pool> list = GameWorld.get().getCurrentWorldState().getPools();
 		int pos;
 
 		switch (menu) {
@@ -143,8 +143,8 @@ public class Pool extends FieldShape {
 	 * @param fey 設置終点のY座標
 	 */
 	public Pool(int fsx, int fsy, int fex, int fey) {
-		Point4y start = Translate.getFieldLimitForMap(fsx, fsy);
-		Point4y end = Translate.getFieldLimitForMap(fex, fey);
+		Point4y start = Translate.getFieldLimitForWorld(fsx, fsy);
+		Point4y end = Translate.getFieldLimitForWorld(fex, fey);
 		fieldSX = start.getX();
 		fieldSY = start.getY();
 		fieldEX = end.getX();
@@ -156,25 +156,25 @@ public class Pool extends FieldShape {
 
 		// フィールド座標が渡ってくるのでマップ座標も計算しておく
 		Point4y pos = Translate.invertLimit(basePolygonX[0], basePolygonY[0]);
-		mapSX = Math.max(0, Math.min(pos.getX(), Translate.getMapW()));
-		mapSY = Math.max(0, Math.min(pos.getY(), Translate.getMapH()));
+		mapSX = Math.max(0, Math.min(pos.getX(), Translate.getWorldWidth()));
+		mapSY = Math.max(0, Math.min(pos.getY(), Translate.getWorldHeight()));
 
 		pos = Translate.invertLimit(basePolygonX[1], basePolygonY[1]);
-		mapEX = Math.max(0, Math.min(pos.getX(), Translate.getMapW()));
-		mapEY = Math.max(0, Math.min(pos.getY(), Translate.getMapH()));
+		mapEX = Math.max(0, Math.min(pos.getX(), Translate.getWorldWidth()));
+		mapEY = Math.max(0, Math.min(pos.getY(), Translate.getWorldHeight()));
 
 		// 規定サイズと位置へ合わせる
 		if ((mapEX - mapSX) < MIN_SIZE)
 			mapEX = mapSX + MIN_SIZE;
 		if ((mapEY - mapSY) < MIN_SIZE)
 			mapEY = mapSY + MIN_SIZE;
-		if (mapEX > Translate.getMapW()) {
-			mapSX -= (mapEX - Translate.getMapW());
-			mapEX -= (mapEX - Translate.getMapW());
+		if (mapEX > Translate.getWorldWidth()) {
+			mapSX -= (mapEX - Translate.getWorldWidth());
+			mapEX -= (mapEX - Translate.getWorldWidth());
 		}
-		if (mapEY > Translate.getMapH()) {
-			mapSY -= (mapEY - Translate.getMapH());
-			mapEY -= (mapEY - Translate.getMapH());
+		if (mapEY > Translate.getWorldHeight()) {
+			mapSY -= (mapEY - Translate.getWorldHeight());
+			mapEY -= (mapEY - Translate.getWorldHeight());
 		}
 
 		Point4y f = new Point4y();
@@ -190,8 +190,8 @@ public class Pool extends FieldShape {
 		mapW = mapEX - mapSX + 1;
 		mapH = mapEY - mapSY + 1;
 
-		GameWorld.get().getCurrentMap().getPool().add(this);
-		MapPlaceData.setFiledFlag(GameWorld.get().getCurrentMap().getFieldMap(), mapSX, mapSY, mapW, mapH, true,
+		GameWorld.get().getCurrentWorldState().getPools().add(this);
+		WorldState.setFieldFlag(GameWorld.get().getCurrentWorldState().getFieldGrid(), mapSX, mapSY, mapW, mapH, true,
 				FIELD_POOL);
 	}
 
@@ -202,7 +202,7 @@ public class Pool extends FieldShape {
 	/** フィールド座標にあるシェイプ取得 */
 	public static Pool getPool(int fx, int fy) {
 
-		for (Pool bc : GameWorld.get().getCurrentMap().getPool()) {
+		for (Pool bc : GameWorld.get().getCurrentWorldState().getPools()) {
 			if (bc.fieldSX <= fx && fx <= bc.fieldEX
 					&& bc.fieldSY <= fy && fy <= bc.fieldEY) {
 				return bc;
@@ -213,12 +213,12 @@ public class Pool extends FieldShape {
 
 	/** 削除 */
 	public static void deletePool(Pool b) {
-		MapPlaceData.setFiledFlag(GameWorld.get().getCurrentMap().getFieldMap(), b.mapSX, b.mapSY, b.mapW, b.mapH,
+		WorldState.setFieldFlag(GameWorld.get().getCurrentWorldState().getFieldGrid(), b.mapSX, b.mapSY, b.mapW, b.mapH,
 				false, FIELD_POOL);
-		GameWorld.get().getCurrentMap().getPool().remove(b);
+		GameWorld.get().getCurrentWorldState().getPools().remove(b);
 		// 重なってた部分の復元
-		for (Pool bc : GameWorld.get().getCurrentMap().getPool()) {
-			MapPlaceData.setFiledFlag(GameWorld.get().getCurrentMap().getFieldMap(), bc.mapSX, bc.mapSY, bc.mapW,
+		for (Pool bc : GameWorld.get().getCurrentWorldState().getPools()) {
+			WorldState.setFieldFlag(GameWorld.get().getCurrentWorldState().getFieldGrid(), bc.mapSX, bc.mapSY, bc.mapW,
 					bc.mapH, true, FIELD_POOL);
 		}
 	}
@@ -265,7 +265,7 @@ public class Pool extends FieldShape {
 		}
 
 		List<BeltconveyorObj> beltList = new LinkedList<>(
-				GameWorld.get().getCurrentMap().getBeltconveyorObj().values());
+				GameWorld.get().getCurrentWorldState().getBeltconveyorObjects().values());
 		if (beltList != null && beltList.size() != 0) {
 			for (BeltconveyorObj belt : beltList) {
 				// ベルトコンベア上なら池にまだ入ってない
@@ -479,12 +479,12 @@ public class Pool extends FieldShape {
 		this.waterPolygonY = waterPolygonY;
 	}
 
-	public List<Entity> getBindObjList() {
+	public List<Entity> getBoundObjects() {
 		return bindObjList;
 	}
 
-	public void setBindObjList(List<Entity> bindObjList) {
-		this.bindObjList = bindObjList;
+	public void setBoundObjects(List<Entity> boundObjects) {
+		this.bindObjList = boundObjects;
 	}
 
 }

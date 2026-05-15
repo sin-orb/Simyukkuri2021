@@ -21,7 +21,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import org.simyukkuri.SimYukkuri;
-import org.simyukkuri.draw.World;
+import org.simyukkuri.engine.World;
 import org.simyukkuri.entity.core.world.WorldEntity;
 import org.simyukkuri.util.WorldTestHelper;
 
@@ -44,7 +44,7 @@ public abstract class ItemTestBase {
     protected void verifyCommonProperties(WorldEntity item) {
         assertNotNull(item, "Item should not be null");
         assertTrue(item.getObjId() > 0, "Item should have a valid ID");
-        assertNotNull(SimYukkuri.world.getCurrentMap(), "Map should exist");
+        assertNotNull(SimYukkuri.world.getCurrentWorldState(), "Map should exist");
         // Verify it's in the world (subclasses might need to specify WHICH map it goes
         // into,
         // but generally items put themselves in a specific map)

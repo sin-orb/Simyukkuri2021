@@ -36,12 +36,12 @@ class YukkuriStalkDelegateTest {
 		Stalk stalk = new Stalk();
 		body.setBindStalk(stalk);
 		body.setParentLinkId(42);
-		stalk.getBindBabies().add(body.getUniqueID());
+		stalk.getAttachedBabyIds().add(body.getUniqueID());
 
 		new YukkuriStalkDelegate(body).detachFromStalk();
 
 		assertNull(body.getBindStalk());
-		assertFalse(stalk.getBindBabies().contains(body.getUniqueID()));
+		assertFalse(stalk.getAttachedBabyIds().contains(body.getUniqueID()));
 		assertEquals(-1, body.getParentLinkId());
 	}
 

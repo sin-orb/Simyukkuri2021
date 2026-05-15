@@ -60,7 +60,7 @@ class FoodEligibilityTest {
 	@Test
 	void nonRudeBodiesRejectOkazariBodies() {
 		prey.setDead(true);
-		prey.setOkazari(new Okazari());
+		prey.setOkazaris(new Okazari());
 		assertFalse(FoodEligibility.checkCanEatYukkuri(eater, prey));
 	}
 }

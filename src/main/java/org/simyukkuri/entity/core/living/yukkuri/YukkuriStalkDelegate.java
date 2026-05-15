@@ -64,8 +64,8 @@ public final class YukkuriStalkDelegate {
 		if (body.getStalks() == null) {
 			return;
 		}
-		if (stalk != null && stalk.getBindBabies() != null) {
-			for (Integer childId : stalk.getBindBabies()) {
+		if (stalk != null && stalk.getAttachedBabyIds() != null) {
+			for (Integer childId : stalk.getAttachedBabyIds()) {
 				if (childId == null) {
 					continue;
 				}
@@ -93,7 +93,7 @@ public final class YukkuriStalkDelegate {
 		while (itr.hasNext()) {
 			try {
 				Stalk stalk = itr.next();
-				Iterator<Integer> childIds = stalk.getBindBabies().iterator();
+				Iterator<Integer> childIds = stalk.getAttachedBabyIds().iterator();
 				while (childIds.hasNext()) {
 					Yukkuri child = YukkuriRelations.getYukkuriById(childIds.next());
 					if (child != null && (child.isDead() || child.isRemoved())) {
@@ -156,10 +156,10 @@ public final class YukkuriStalkDelegate {
 		if (body.getBindStalk() == null) {
 			return;
 		}
-		if (body.getBindStalk().getBindBabies() != null) {
-			int idx = body.getBindStalk().getBindBabies().indexOf(body.getUniqueID());
+		if (body.getBindStalk().getAttachedBabyIds() != null) {
+			int idx = body.getBindStalk().getAttachedBabyIds().indexOf(body.getUniqueID());
 			if (idx >= 0) {
-				body.getBindStalk().getBindBabies().set(idx, null);
+				body.getBindStalk().getAttachedBabyIds().set(idx, null);
 			}
 		}
 		body.setBindStalk(null);
@@ -169,7 +169,7 @@ public final class YukkuriStalkDelegate {
 	/** 茎の実ゆの状態を母親が感知したときの感情・メッセージ反応. */
 	public void onChildStateNotify(UnbirthBabyState state, boolean childDead) {
 		switch (state) {
-			case ATTAKED:
+			case ATTACKED:
 				if (!childDead) {
 					body.setHappiness(Happiness.SAD);
 					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.AbuseBaby));

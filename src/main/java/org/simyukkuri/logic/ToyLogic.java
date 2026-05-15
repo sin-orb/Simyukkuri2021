@@ -37,7 +37,7 @@ public class ToyLogic {
 			return false;
 		}
 
-		List<Toy> list = new LinkedList<>(GameWorld.get().getCurrentMap().getToy().values());
+		List<Toy> list = new LinkedList<>(GameWorld.get().getCurrentWorldState().getToys().values());
 		if (list.size() == 0) {
 			return false;
 		}
@@ -60,7 +60,7 @@ public class ToyLogic {
 			if (nearestDistance > distance) {
 				if (!body.isRude()) {
 					if (Barrier.acrossBarrier(body.getX(), body.getY(), toy.getX(), toy.getY(),
-							Barrier.MAP_BODY[body.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
+							Barrier.BODY_BLOCK_FLAGS[body.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
 						continue;
 					}
 				}
@@ -146,7 +146,7 @@ public class ToyLogic {
 	 * @return 処理が行われたか
 	 */
 	public static final boolean checkSui(Yukkuri body) {
-		List<Sui> list = new LinkedList<>(GameWorld.get().getCurrentMap().getSui().values());
+		List<Sui> list = new LinkedList<>(GameWorld.get().getCurrentWorldState().getSuis().values());
 		if (list.size() == 0) {
 			return false;
 		}
@@ -181,7 +181,7 @@ public class ToyLogic {
 				if (nearestDistance > distance) {
 					// 壁の向こうならなにもしない
 					if (Barrier.acrossBarrier(body.getX(), body.getY(), sui.getX(), sui.getY(),
-							Barrier.MAP_BODY[body.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
+							Barrier.BODY_BLOCK_FLAGS[body.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
 						continue;
 					}
 
@@ -232,7 +232,7 @@ public class ToyLogic {
 					// body, GameMessages.getMessage(body, MessagePool.Action.HateYukkuri));
 				}
 			}
-		} else if (GameWorld.get().getCurrentMap().getSui().size() > 0) {
+		} else if (GameWorld.get().getCurrentWorldState().getSuis().size() > 0) {
 			EventLogic.addYukkuriEvent(body, new SuiSpeake(null, null, null, 10), null, null);
 		}
 		return handled;
@@ -249,7 +249,7 @@ public class ToyLogic {
 			return false;
 		}
 
-		List<Trampoline> trampolineList = new LinkedList<>(GameWorld.get().getCurrentMap().getTrampoline().values());
+		List<Trampoline> trampolineList = new LinkedList<>(GameWorld.get().getCurrentWorldState().getTrampolines().values());
 		if (trampolineList.size() == 0) {
 			return false;
 		}
@@ -271,7 +271,7 @@ public class ToyLogic {
 			int distance = Translate.distance(body.getX(), body.getY(), trampoline.getX(), trampoline.getY());
 			if (nearestDistance > distance && (body.isRude()
 					|| !Barrier.acrossBarrier(body.getX(), body.getY(), trampoline.getX(), trampoline.getY(),
-							Barrier.MAP_BODY[body.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI))) {
+							Barrier.BODY_BLOCK_FLAGS[body.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI))) {
 				foundTrampoline = trampoline;
 				nearestDistance = distance;
 			}

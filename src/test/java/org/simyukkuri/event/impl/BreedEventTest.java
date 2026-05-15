@@ -198,7 +198,7 @@ public class BreedEventTest extends EventTestBase {
     void testCheckEventResponse_differentPublicRank_returnsFalse() {
         Yukkuri parent = createBody(1, 100, 100);
         Yukkuri b = createBody(2, 120, 120);
-        b.setPublicRank(org.simyukkuri.enums.PublicRank.UnunSlave);
+        b.setPublicRank(org.simyukkuri.enums.PublicRank.UNUN_SLAVE);
         BreedEvent event = new BreedEvent(parent, null, null, 10);
         assertFalse(event.checkEventResponse(b));
     }
@@ -216,7 +216,7 @@ public class BreedEventTest extends EventTestBase {
     void testCheckEventResponse_fromNoOkazariFoolB_returnsFalse() {
         Yukkuri parent = createBody(1, 100, 100);
         Yukkuri b = createBody(2, 120, 120);
-        parent.setOkazari(null); // from has no okazari
+        parent.setOkazaris(null); // from has no okazari
         b.setIntelligence(org.simyukkuri.enums.Intelligence.FOOL);
         BreedEvent event = new BreedEvent(parent, null, null, 10);
         assertFalse(event.checkEventResponse(b));
@@ -317,7 +317,7 @@ public class BreedEventTest extends EventTestBase {
     void testExecute_bIsNYD_returnsFalse() {
         Yukkuri from = createBody(1, 100, 100);
         Yukkuri b = createBody(2, 120, 120);
-        b.setCoreAnkoState(org.simyukkuri.enums.CoreAnkoState.NonYukkuriDisease);
+        b.setCoreAnkoState(org.simyukkuri.enums.CoreAnkoState.NON_YUKKURI_DISEASE);
         BreedEvent event = new BreedEvent(from, null, null, 10);
         assertFalse(event.execute(b));
     }

@@ -1,7 +1,7 @@
 package org.simyukkuri.entity.core.living.yukkuri;
 
 import org.simyukkuri.entity.core.attachment.impl.Ants;
-import org.simyukkuri.enums.EnumRelationMine;
+import org.simyukkuri.enums.YukkuriRelationType;
 import org.simyukkuri.enums.Happiness;
 import org.simyukkuri.enums.Intelligence;
 import org.simyukkuri.logic.YukkuriLogic;
@@ -42,26 +42,26 @@ public final class YukkuriOtherRelationDelegate {
 		if (!body.canAction()) {
 			return;
 		}
-		EnumRelationMine relation = YukkuriLogic.checkMyRelation(body, p);
+		YukkuriRelationType relation = YukkuriLogic.checkMyRelation(body, p);
 		if (body.findSick(p) || p.isFeelHardPain() || p.isDamaged()) {
 			switch (relation) {
 				case FATHER:
 				case MOTHER:
 					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.TreatChildBySurisuri));
 					break;
-				case PARTNAR:
+				case PARTNER:
 					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.TreatPartnerBySurisuri));
 					break;
-				case CHILD_FATHER:
+				case CHILD_OF_FATHER:
 					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.TreatFatherBySurisuri));
 					break;
-				case CHILD_MOTHER:
+				case CHILD_OF_MOTHER:
 					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.TreatMotherBySurisuri));
 					break;
-				case ELDERSISTER:
+				case ELDER_SISTER:
 					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.TreatSisterBySurisuri));
 					break;
-				case YOUNGSISTER:
+				case YOUNGER_SISTER:
 					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.TreatElderSisterBySurisuri));
 					break;
 				default:
@@ -123,26 +123,26 @@ public final class YukkuriOtherRelationDelegate {
 			return;
 		}
 
-		EnumRelationMine relation = YukkuriLogic.checkMyRelation(body, p);
+		YukkuriRelationType relation = YukkuriLogic.checkMyRelation(body, p);
 		if (body.findSick(p) || p.isFeelHardPain() || p.isDamaged() || p.getAttachmentSize(Ants.class) != 0) {
 			switch (relation) {
 				case FATHER:
 				case MOTHER:
 					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.TreatChildByPeropero));
 					break;
-				case PARTNAR:
+				case PARTNER:
 					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.TreatPartnerByPeropero));
 					break;
-				case CHILD_FATHER:
+				case CHILD_OF_FATHER:
 					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.TreatFatherBySurisuri));
 					break;
-				case CHILD_MOTHER:
+				case CHILD_OF_MOTHER:
 					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.TreatMotherBySurisuri));
 					break;
-				case ELDERSISTER:
+				case ELDER_SISTER:
 					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.TreatSisterByPeropero));
 					break;
-				case YOUNGSISTER:
+				case YOUNGER_SISTER:
 					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.TreatElderSisterByPeropero));
 					break;
 				default:

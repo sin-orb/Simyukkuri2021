@@ -10,7 +10,7 @@ import org.simyukkuri.draw.Point4y;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.enums.AttachProperty;
-import org.simyukkuri.enums.Event;
+import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.enums.Type;
 
 /****************************************
@@ -100,7 +100,7 @@ public abstract class Attachment extends Entity {
 	}
 
 	/** 毎ティックごとの処理 */
-	abstract protected Event update();
+	abstract protected TickResult update();
 
 	/** 描画用の境界線のリセット */
 	abstract public void resetBoundary();
@@ -110,8 +110,8 @@ public abstract class Attachment extends Entity {
 	 * 毎ティックごとに呼び出される処理
 	 * アニメ処理をする
 	 */
-	public Event clockTick() {
-		Event ret = Event.DONOTHING;
+	public TickResult clockTick() {
+		TickResult ret = TickResult.NONE;
 		setAge(getAge() + TICK);
 		// 処理量軽減処置
 		if (getAge() % processInterval == 0) {

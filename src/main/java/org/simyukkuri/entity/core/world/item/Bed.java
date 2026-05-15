@@ -7,7 +7,7 @@ import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
 
-import org.simyukkuri.draw.ModLoader;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Rectangle4y;
 import org.simyukkuri.entity.core.world.WorldEntity;
 import org.simyukkuri.enums.Type;
@@ -60,8 +60,8 @@ public class Bed extends WorldEntity {
 	}
 
 	@Override
-	public void removeListData() {
-		GameWorld.get().getCurrentMap().getBed().remove(objId);
+	public void removeFromWorld() {
+		GameWorld.get().getCurrentWorldState().getBeds().remove(objId);
 	}
 
 	@Override
@@ -89,13 +89,13 @@ public class Bed extends WorldEntity {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		GameWorld.get().getCurrentMap().getBed().put(objId, this);
+		GameWorld.get().getCurrentWorldState().getBeds().put(objId, this);
 		objType = Type.PLATFORM;
 		worldEntityType = WorldEntityKind.BED;
 		itemRank = ItemRank.values()[initOption];
 		// 森なら野生に変更
-		if (GameWorld.get().getCurrentMap().getMapIndex() == 5
-				|| GameWorld.get().getCurrentMap().getMapIndex() == 6) {
+		if (GameWorld.get().getCurrentWorldState().getWorldIndex() == 5
+				|| GameWorld.get().getCurrentWorldState().getWorldIndex() == 6) {
 			if (itemRank == ItemRank.HOUSE) {
 				itemRank = ItemRank.YASEI;
 			}

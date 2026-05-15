@@ -20,7 +20,7 @@ import org.junit.jupiter.api.Test;
 import javax.swing.JMenu;
 
 import org.simyukkuri.command.GadgetMenu.ActionTarget;
-import org.simyukkuri.command.GadgetMenu.GadgetList;
+import org.simyukkuri.command.GadgetMenu.GadgetMenuChoice;
 import org.simyukkuri.command.GadgetMenu.HelpContext;
 import org.simyukkuri.command.GadgetMenu.HelpIcon;
 import org.simyukkuri.util.WorldTestHelper;
@@ -57,14 +57,14 @@ public class GadgetMenuTest {
 
     @Test
     public void testCategoryArraysContainExpectedItems() {
-        GadgetList[] main = GadgetMenu.getMainCategory();
-        GadgetList[] tool = GadgetMenu.getToolCategory();
+        GadgetMenuChoice[] main = GadgetMenu.getMainCategory();
+        GadgetMenuChoice[] tool = GadgetMenu.getToolCategory();
 
         assertTrue(main.length > 0);
         assertTrue(tool.length > 0);
 
-        assertEquals(GadgetList.TOOL, main[0]);
-        assertEquals(GadgetList.PUNISH, tool[0]);
+        assertEquals(GadgetMenuChoice.TOOL, main[0]);
+        assertEquals(GadgetMenuChoice.PUNISH, tool[0]);
     }
 
     @Test

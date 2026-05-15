@@ -71,8 +71,8 @@ public final class YukkuriPartnerActionRule {
 				return true;
 			}
 
-			if (!targetBody.hasOkazari() && body.getOkazari() != null
-					&& body.getOkazari().getOkazariType() == OkazariType.DEFAULT && body.isRude() && !body.isIdiot()
+			if (!targetBody.hasOkazari() && body.getOkazaris() != null
+					&& body.getOkazaris().getOkazariType() == OkazariType.DEFAULT && body.isRude() && !body.isIdiot()
 					&& !body.isDamaged() && !targetBody.isUnBirth() && body.getCurrentEvent() == null) {
 				// 自分が通常種で相手が捕食種の場合は参加しない
 				if (body.isPredatorType() || !targetBody.isPredatorType()) {
@@ -81,7 +81,7 @@ public final class YukkuriPartnerActionRule {
 						if (GameRandom.nextInt(20) == 0) {
 							if (!body.isTalking()) {
 								// 自分がうんうん奴隷ではない場合
-								if (body.getPublicRank() != PublicRank.UnunSlave) {
+								if (body.getPublicRank() != PublicRank.UNUN_SLAVE) {
 									// 非ゆっくり症は参加しない
 									if (body.isNotNYD() && targetBody.isNotNYD()) {
 										EventLogic.addWorldEvent(new HateNoOkazariEvent(body, targetBody, null, 10),

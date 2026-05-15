@@ -5,7 +5,7 @@ import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
 
-import org.simyukkuri.draw.ModLoader;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Point4y;
 import org.simyukkuri.draw.Rectangle4y;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
@@ -183,7 +183,7 @@ public class Okazari extends WorldEntity {
 	}
 
 	@Override
-	public void removeListData() {
+	public void removeFromWorld() {
 		// TODO Auto-generated method stub
 		throw new UnsupportedOperationException("Unimplemented method 'removeListData'");
 	}

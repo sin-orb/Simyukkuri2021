@@ -27,7 +27,7 @@ import org.simyukkuri.ConstState;
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.draw.Point4y;
 import org.simyukkuri.draw.Rectangle4y;
-import org.simyukkuri.draw.World;
+import org.simyukkuri.engine.World;
 import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.Type;
 import org.simyukkuri.system.Sprite;
@@ -294,7 +294,7 @@ public class OkazariTest {
             spr[i] = new Sprite(10, 10, Sprite.PIVOT_CENTER_BOTTOM);
         }
         body.setSpriteSet(spr);
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(body.getUniqueID(), body);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(body.getUniqueID(), body);
         return body;
     }
 

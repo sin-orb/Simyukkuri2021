@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.simyukkuri.SimYukkuri;
-import org.simyukkuri.command.GadgetMenu.GadgetList;
+import org.simyukkuri.command.GadgetMenu.GadgetMenuChoice;
 import org.simyukkuri.draw.Translate;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
@@ -23,21 +23,21 @@ final class GadgetToolAction {
 	private GadgetToolAction() {
 	}
 
-	static void evaluateTool(GadgetList item, MouseEvent ev, Entity targetObject) {
+	static void evaluateTool(GadgetMenuChoice item, MouseEvent ev, Entity targetObject) {
 		switch (item) {
 			case PUNISH:
 				GadgetMenu.executeYukkuriMethod(ev, targetObject, "strikeByPunish");
 				break;
 			case SNAPPING:
 				if (ev.isShiftDown()) {
-					for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getYukkuriMap().entrySet()) {
+					for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentWorldState().getYukkuriRegistry().entrySet()) {
 						entry.getValue().kick();
 					}
-					Map<Integer, Shit> shits = GameWorld.get().getCurrentMap().getShit();
+					Map<Integer, Shit> shits = GameWorld.get().getCurrentWorldState().getShit();
 					for (Map.Entry<Integer, Shit> entry : shits.entrySet()) {
 						entry.getValue().kick();
 					}
-					Map<Integer, Vomit> vomits = GameWorld.get().getCurrentMap().getVomit();
+					Map<Integer, Vomit> vomits = GameWorld.get().getCurrentWorldState().getVomit();
 					for (Map.Entry<Integer, Vomit> entry : vomits.entrySet()) {
 						entry.getValue().kick();
 					}
@@ -54,18 +54,18 @@ final class GadgetToolAction {
 			case JUICE:
 				GadgetMenu.executeYukkuriMethod(ev, targetObject, "giveJuice");
 				break;
-			case Medical_JUICE:
+			case ORANGE_JUICE:
 				GadgetMenu.executeYukkuriMethod(ev, targetObject, "injectJuice");
 				break;
 			case LEMON_SPLAY:
 				GadgetMenu.executeYukkuriMethod(ev, targetObject, "forceToSleep");
 				break;
-			case Pheromone_SPLAY:
+			case PHEROMONE_SPRAY:
 				GadgetMenu.executeYukkuriMethod(ev, targetObject, "invPheromone");
 				break;
 			case HAMMER:
 				if (ev.isShiftDown()) {
-					for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getYukkuriMap().entrySet()) {
+					for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentWorldState().getYukkuriRegistry().entrySet()) {
 						Yukkuri body = entry.getValue();
 						body.strikeByHammer();
 						if (!body.isHasPants() && !body.isDead() && !body.isShutmouth()) {
@@ -100,7 +100,7 @@ final class GadgetToolAction {
 					GameEnvironment.setAlarm();
 				}
 				break;
-			case GATHERINJECTINTO:
+			case INJECT_SPERM:
 				if (targetObject instanceof Yukkuri) {
 					Yukkuri body = (Yukkuri) targetObject;
 					if (SimYukkuri.sperm == null) {
@@ -111,7 +111,7 @@ final class GadgetToolAction {
 					}
 				}
 				break;
-			case DRIPSPERM:
+			case DRIP_SPERM:
 				if (targetObject instanceof Yukkuri) {
 					Yukkuri body = (Yukkuri) targetObject;
 					if (SimYukkuri.sperm == null) {
@@ -124,7 +124,7 @@ final class GadgetToolAction {
 				break;
 			case PUNCH:
 				if (ev.isShiftDown()) {
-					for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getYukkuriMap().entrySet()) {
+					for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentWorldState().getYukkuriRegistry().entrySet()) {
 						Yukkuri body = entry.getValue();
 						body.strikeByPunch();
 						if (!body.isHasPants() && !body.isDead() && !body.isShutmouth()) {
@@ -162,7 +162,7 @@ final class GadgetToolAction {
 			case GODHAND:
 				if (ev.isShiftDown()) {
 					List<Yukkuri> bodyList = new LinkedList<Yukkuri>(
-							GameWorld.get().getCurrentMap().getYukkuriMap().values());
+							GameWorld.get().getCurrentWorldState().getYukkuriRegistry().values());
 					int bodyCount = bodyList.size();
 					for (int i = bodyCount - 1; -1 < i; i--) {
 						Yukkuri body = bodyList.get(i);
@@ -176,7 +176,7 @@ final class GadgetToolAction {
 				}
 				break;
 			case PEAL:
-				List<Yukkuri> bodyListP = new LinkedList<Yukkuri>(GameWorld.get().getCurrentMap().getYukkuriMap().values());
+				List<Yukkuri> bodyListP = new LinkedList<Yukkuri>(GameWorld.get().getCurrentWorldState().getYukkuriRegistry().values());
 				if (ev.isShiftDown() || ev.isControlDown()) {
 					for (Yukkuri body : bodyListP) {
 						body.peal();
@@ -187,8 +187,8 @@ final class GadgetToolAction {
 					((Yukkuri) targetObject).setStubbornlyDirty(false);
 				}
 				break;
-			case Blind:
-				List<Yukkuri> bodyListB = new LinkedList<Yukkuri>(GameWorld.get().getCurrentMap().getYukkuriMap().values());
+			case BLIND:
+				List<Yukkuri> bodyListB = new LinkedList<Yukkuri>(GameWorld.get().getCurrentWorldState().getYukkuriRegistry().values());
 				if (ev.isShiftDown()) {
 					boolean shouldBreakEyes = true;
 					if (targetObject instanceof Yukkuri) {
@@ -210,7 +210,7 @@ final class GadgetToolAction {
 				}
 				break;
 			case SHUTMOUTH:
-				List<Yukkuri> bodyListS = new LinkedList<Yukkuri>(GameWorld.get().getCurrentMap().getYukkuriMap().values());
+				List<Yukkuri> bodyListS = new LinkedList<Yukkuri>(GameWorld.get().getCurrentWorldState().getYukkuriRegistry().values());
 				if (ev.isShiftDown()) {
 					boolean shouldShutMouth = true;
 					if (targetObject instanceof Yukkuri) {
@@ -237,7 +237,7 @@ final class GadgetToolAction {
 				}
 				break;
 			case PACK:
-				List<Yukkuri> bodyListPa = new LinkedList<Yukkuri>(GameWorld.get().getCurrentMap().getYukkuriMap().values());
+				List<Yukkuri> bodyListPa = new LinkedList<Yukkuri>(GameWorld.get().getCurrentWorldState().getYukkuriRegistry().values());
 				if (ev.isShiftDown()) {
 					boolean shouldPack = true;
 					if (targetObject instanceof Yukkuri) {
@@ -271,7 +271,7 @@ final class GadgetToolAction {
 		}
 	}
 
-	static void evaluateTool2(GadgetList item, MouseEvent ev, Entity targetObject) {
+	static void evaluateTool2(GadgetMenuChoice item, MouseEvent ev, Entity targetObject) {
 		switch (item) {
 			case BRAID_PLUCK:
 				GadgetMenu.executeYukkuriMethod(ev, targetObject, "takeBraid");
@@ -287,9 +287,9 @@ final class GadgetToolAction {
 				if (targetObject instanceof Stalk) {
 					Stalk s = ((Stalk) targetObject);
 					int id = s.getPlantYukkuri();
-					if (GameWorld.get().getCurrentMap().getYukkuriMap().get(id) == null) {
+					if (GameWorld.get().getCurrentWorldState().getYukkuriRegistry().get(id) == null) {
 						int id2 = s.getPlantYukkuri();
-						GameWorld.get().getCurrentMap().getYukkuriMap().get(id2).touchStalk();
+						GameWorld.get().getCurrentWorldState().getYukkuriRegistry().get(id2).touchStalk();
 					}
 				}
 				break;

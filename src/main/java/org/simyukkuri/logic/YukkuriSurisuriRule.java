@@ -1,7 +1,7 @@
 package org.simyukkuri.logic;
 
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
-import org.simyukkuri.enums.EnumRelationMine;
+import org.simyukkuri.enums.YukkuriRelationType;
 import org.simyukkuri.enums.Happiness;
 import org.simyukkuri.system.MessagePool;
 import org.simyukkuri.util.GameMessages;
@@ -38,7 +38,7 @@ public final class YukkuriSurisuriRule {
 		}
 
 		boolean[] emotionFlags = EmotionLogic.checkEmotionForOther(body, targetBody);
-		EnumRelationMine relation = YukkuriRelations.checkMyRelation(body, targetBody);
+		YukkuriRelationType relation = YukkuriRelations.checkMyRelation(body, targetBody);
 		YukkuriLogic.ActionGo actionGo = YukkuriLogic.ActionGo.NONE;
 
 		if (emotionFlags[0]) {
@@ -50,31 +50,31 @@ public final class YukkuriSurisuriRule {
 					body.stay();
 					actionGo = YukkuriLogic.ActionGo.GO;
 					break;
-				case PARTNAR:
+				case PARTNER:
 					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.GladAboutPartner));
 					body.setHappiness(Happiness.HAPPY);
 					body.stay();
 					actionGo = YukkuriLogic.ActionGo.GO;
 					break;
-				case CHILD_FATHER:
+				case CHILD_OF_FATHER:
 					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.GladAboutFather));
 					body.setHappiness(Happiness.HAPPY);
 					body.stay();
 					actionGo = YukkuriLogic.ActionGo.GO;
 					break;
-				case CHILD_MOTHER:
+				case CHILD_OF_MOTHER:
 					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.GladAboutMother));
 					body.setHappiness(Happiness.HAPPY);
 					body.stay();
 					actionGo = YukkuriLogic.ActionGo.GO;
 					break;
-				case ELDERSISTER:
+				case ELDER_SISTER:
 					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.GladAboutSister));
 					body.setHappiness(Happiness.HAPPY);
 					body.stay();
 					actionGo = YukkuriLogic.ActionGo.GO;
 					break;
-				case YOUNGSISTER:
+				case YOUNGER_SISTER:
 					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.GladAboutElderSister));
 					body.setHappiness(Happiness.HAPPY);
 					body.stay();
@@ -92,16 +92,16 @@ public final class YukkuriSurisuriRule {
 			switch (relation) {
 				case FATHER:
 				case MOTHER:
-				case PARTNAR:
-				case CHILD_FATHER:
-				case CHILD_MOTHER:
-				case ELDERSISTER:
+				case PARTNER:
+				case CHILD_OF_FATHER:
+				case CHILD_OF_MOTHER:
+				case ELDER_SISTER:
 					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.EnvyCryAboutSisterInSurisuri));
 					body.setHappiness(Happiness.VERY_SAD);
 					body.stay();
 					actionGo = YukkuriLogic.ActionGo.GO;
 					break;
-				case YOUNGSISTER:
+				case YOUNGER_SISTER:
 					body.setMessage(
 							GameMessages.getMessage(body, MessagePool.Action.EnvyCryAboutElderSisterInSurisuri));
 					body.setHappiness(Happiness.VERY_SAD);
@@ -124,12 +124,12 @@ public final class YukkuriSurisuriRule {
 			switch (relation) {
 				case FATHER:
 				case MOTHER:
-				case PARTNAR:
-				case CHILD_FATHER:
-				case CHILD_MOTHER:
+				case PARTNER:
+				case CHILD_OF_FATHER:
+				case CHILD_OF_MOTHER:
 					break;
-				case ELDERSISTER:
-				case YOUNGSISTER:
+				case ELDER_SISTER:
+				case YOUNGER_SISTER:
 					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.EnvyAboutSisterInSurisuri));
 					body.setHappiness(Happiness.SAD);
 					body.stay();
@@ -157,31 +157,31 @@ public final class YukkuriSurisuriRule {
 					body.stay();
 					actionGo = YukkuriLogic.ActionGo.WAIT;
 					break;
-				case PARTNAR:
+				case PARTNER:
 					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.HateWithEnvyAboutPartner));
 					body.setHappiness(Happiness.VERY_SAD);
 					body.stay();
 					actionGo = YukkuriLogic.ActionGo.WAIT;
 					break;
-				case CHILD_FATHER:
+				case CHILD_OF_FATHER:
 					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.HateWithEnvyAboutFather));
 					body.setHappiness(Happiness.VERY_SAD);
 					body.stay();
 					actionGo = YukkuriLogic.ActionGo.WAIT;
 					break;
-				case CHILD_MOTHER:
+				case CHILD_OF_MOTHER:
 					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.HateWithEnvyAboutMother));
 					body.setHappiness(Happiness.VERY_SAD);
 					body.stay();
 					actionGo = YukkuriLogic.ActionGo.WAIT;
 					break;
-				case ELDERSISTER:
+				case ELDER_SISTER:
 					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.HateWithEnvyAboutSister));
 					body.setHappiness(Happiness.VERY_SAD);
 					body.stay();
 					actionGo = YukkuriLogic.ActionGo.WAIT;
 					break;
-				case YOUNGSISTER:
+				case YOUNGER_SISTER:
 					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.HateWithEnvyAboutElderSister));
 					body.setHappiness(Happiness.VERY_SAD);
 					body.stay();
@@ -218,31 +218,31 @@ public final class YukkuriSurisuriRule {
 					body.setHappiness(Happiness.VERY_SAD);
 					body.stay();
 					break;
-				case PARTNAR:
+				case PARTNER:
 					actionGo = YukkuriLogic.ActionGo.GO;
 					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.ConcernAboutPartner));
 					body.setHappiness(Happiness.VERY_SAD);
 					body.stay();
 					break;
-				case CHILD_FATHER:
+				case CHILD_OF_FATHER:
 					actionGo = YukkuriLogic.ActionGo.GO;
 					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.ConcernAboutFather));
 					body.setHappiness(Happiness.VERY_SAD);
 					body.stay();
 					break;
-				case CHILD_MOTHER:
+				case CHILD_OF_MOTHER:
 					actionGo = YukkuriLogic.ActionGo.GO;
 					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.ConcernAboutMother));
 					body.setHappiness(Happiness.VERY_SAD);
 					body.stay();
 					break;
-				case ELDERSISTER:
+				case ELDER_SISTER:
 					actionGo = YukkuriLogic.ActionGo.GO;
 					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.ConcernAboutEldersister));
 					body.setHappiness(Happiness.VERY_SAD);
 					body.stay();
 					break;
-				case YOUNGSISTER:
+				case YOUNGER_SISTER:
 					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.ConcernAboutEldersister));
 					body.setHappiness(Happiness.VERY_SAD);
 					body.stay();
@@ -265,31 +265,31 @@ public final class YukkuriSurisuriRule {
 					body.setHappiness(Happiness.SAD);
 					body.stay();
 					break;
-				case PARTNAR:
+				case PARTNER:
 					actionGo = YukkuriLogic.ActionGo.GO;
 					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.ConcernAboutPartner));
 					body.setHappiness(Happiness.SAD);
 					body.stay();
 					break;
-				case CHILD_FATHER:
+				case CHILD_OF_FATHER:
 					actionGo = YukkuriLogic.ActionGo.GO;
 					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.ConcernAboutFather));
 					body.setHappiness(Happiness.SAD);
 					body.stay();
 					break;
-				case CHILD_MOTHER:
+				case CHILD_OF_MOTHER:
 					actionGo = YukkuriLogic.ActionGo.GO;
 					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.ConcernAboutMother));
 					body.setHappiness(Happiness.SAD);
 					body.stay();
 					break;
-				case ELDERSISTER:
+				case ELDER_SISTER:
 					actionGo = YukkuriLogic.ActionGo.GO;
 					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.ConcernAboutEldersister));
 					body.setHappiness(Happiness.SAD);
 					body.stay();
 					break;
-				case YOUNGSISTER:
+				case YOUNGER_SISTER:
 					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.ConcernAboutEldersister));
 					body.setHappiness(Happiness.SAD);
 					body.stay();
@@ -307,11 +307,11 @@ public final class YukkuriSurisuriRule {
 			switch (relation) {
 				case FATHER:
 				case MOTHER:
-				case PARTNAR:
-				case CHILD_FATHER:
-				case CHILD_MOTHER:
-				case ELDERSISTER:
-				case YOUNGSISTER:
+				case PARTNER:
+				case CHILD_OF_FATHER:
+				case CHILD_OF_MOTHER:
+				case ELDER_SISTER:
+				case YOUNGER_SISTER:
 					break;
 				default:
 					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.MercyAboutOther));
@@ -329,11 +329,11 @@ public final class YukkuriSurisuriRule {
 			switch (relation) {
 				case FATHER:
 				case MOTHER:
-				case PARTNAR:
-				case CHILD_FATHER:
-				case CHILD_MOTHER:
-				case ELDERSISTER:
-				case YOUNGSISTER:
+				case PARTNER:
+				case CHILD_OF_FATHER:
+				case CHILD_OF_MOTHER:
+				case ELDER_SISTER:
+				case YOUNGER_SISTER:
 					break;
 				default:
 					actionGo = YukkuriLogic.ActionGo.WAIT;

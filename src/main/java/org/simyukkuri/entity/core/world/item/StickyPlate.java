@@ -13,12 +13,12 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
-import org.simyukkuri.draw.ModLoader;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Rectangle4y;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.world.WorldEntity;
-import org.simyukkuri.enums.CriticalDamegeType;
+import org.simyukkuri.enums.CriticalDamageType;
 import org.simyukkuri.enums.Type;
 import org.simyukkuri.enums.WorldEntityKind;
 import org.simyukkuri.util.GameRandom;
@@ -122,7 +122,7 @@ public class StickyPlate extends WorldEntity {
 	public int objHitProcess(Entity o) {
 		if (((Yukkuri) o).isDead())
 			return 0;
-		if (((Yukkuri) o).getCriticalDamegeType() == CriticalDamegeType.CUT)
+		if (((Yukkuri) o).getCriticalDamageType() == CriticalDamageType.CUT)
 			return 0;
 
 		if (bindBody != (Yukkuri) o) {
@@ -187,13 +187,13 @@ public class StickyPlate extends WorldEntity {
 	}
 
 	@Override
-	public void removeListData() {
+	public void removeFromWorld() {
 		if (bindBody != null) {
 			bindBody.setLockmove(false);
 			bindBody.setCanPullOrPush(false);
 			bindBody = null;
 		}
-		GameWorld.get().getCurrentMap().getStickyPlate().remove(objId);
+		GameWorld.get().getCurrentWorldState().getStickyPlates().remove(objId);
 	}
 
 	/**
@@ -207,12 +207,12 @@ public class StickyPlate extends WorldEntity {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		GameWorld.get().getCurrentMap().getStickyPlate().put(objId, this);
+		GameWorld.get().getCurrentWorldState().getStickyPlates().put(objId, this);
 		objType = Type.PLATFORM;
 		worldEntityType = WorldEntityKind.STICKYPLATE;
 		interval = 5;
 		if (!setupStickyPlate(this)) {
-			GameWorld.get().getCurrentMap().getStickyPlate().remove(objId);
+			GameWorld.get().getCurrentWorldState().getStickyPlates().remove(objId);
 			return;
 		}
 		itemRank = ItemRank.values()[initOption];

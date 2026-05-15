@@ -8,7 +8,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.simyukkuri.draw.Dimension4y;
-import org.simyukkuri.draw.ModLoader;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Point4y;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.world.bodylinked.Okazari;
@@ -83,8 +83,8 @@ public class Tarinai extends Yukkuri {
 
 	/** INIファイルをロードする */
 	public static void loadIniFile(ClassLoader loader) {
-		AttachOffset = ModLoader.loadYukkuriIniMap(loader, ModLoader.getDataIniDir(), baseFileName);
-		baseSpeed = ModLoader.loadYukkuriIniMapForInt(loader, ModLoader.getDataIniDir(), baseFileName, "speed");
+		AttachOffset = ModLoader.loadYukkuriIniOffsets(loader, ModLoader.getDataIniDir(), baseFileName);
+		baseSpeed = ModLoader.loadYukkuriIniValue(loader, ModLoader.getDataIniDir(), baseFileName, "speed");
 	}
 
 	@Override
@@ -191,7 +191,7 @@ public class Tarinai extends Yukkuri {
 	public void giveOkazari(OkazariType type) {
 		if (type == OkazariType.DEFAULT) {
 			OkazariType newType = Okazari.getRandomOkazari(getAgeState());
-			setOkazari(new Okazari(this, newType));
+			setOkazaris(new Okazari(this, newType));
 			// なつき度設定
 			addLovePlayer(10);
 			setNoticeNoOkazari(false);
@@ -203,7 +203,7 @@ public class Tarinai extends Yukkuri {
 
 	@Override
 	public void tuneParameters() {
-		setOkazari(null);
+		setOkazaris(null);
 		setAttitude(Attitude.SUPER_SHITHEAD);
 		double factor = Math.random() * 2 + 1;
 		getHungryLimitBase()[AgeState.ADULT.ordinal()] *= factor;

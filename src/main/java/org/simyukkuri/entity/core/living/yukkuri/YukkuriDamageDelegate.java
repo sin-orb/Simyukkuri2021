@@ -70,7 +70,7 @@ public final class YukkuriDamageDelegate {
 				}
 			}
 		}
-		body.checkReactionStalkMother(UnbirthBabyState.ATTAKED);
+		body.checkReactionStalkMother(UnbirthBabyState.ATTACKED);
 	}
 
 	/**
@@ -273,7 +273,7 @@ public final class YukkuriDamageDelegate {
 			if (body.isNotNYD() && !body.isUnBirth()) {
 				if (event instanceof HateNoOkazariEvent) {
 					body.setMessage(GameMessages.getMessage(body, MessagePool.Action.Scream), true);
-					if (body.getPublicRank() != PublicRank.UnunSlave
+					if (body.getPublicRank() != PublicRank.UNUN_SLAVE
 							&& (body.isRude() || (body.getAttitude() == Attitude.AVERAGE && GameRandom.nextBoolean()))) {
 						body.setAngry();
 						EventLogic.addYukkuriEvent(body, new RevengeAttackEvent(body, enemy, null, 1), null, null);
@@ -372,6 +372,6 @@ public final class YukkuriDamageDelegate {
 		// 持ち物を全部落とす
 		body.dropAllTakeoutItem();
 		// 実ゆの場合、親が反応する
-		body.checkReactionStalkMother(UnbirthBabyState.ATTAKED);
+		body.checkReactionStalkMother(UnbirthBabyState.ATTACKED);
 	}
 }

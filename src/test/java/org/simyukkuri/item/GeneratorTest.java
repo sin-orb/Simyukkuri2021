@@ -25,7 +25,7 @@ class GeneratorTest extends ItemTestBase {
     void testConstructor_Default() {
         Generator item = new Generator(0, 0, 0);
         item.setObjId(1);
-        // Generator is not in MapPlaceData currently
+        // Generator is not in WorldState currently
         verifyCommonProperties(item);
     }
 
@@ -53,6 +53,6 @@ class GeneratorTest extends ItemTestBase {
     @Test
     void testRemoveListData_doesNotThrow() {
         Generator item = new Generator(0, 0, 0);
-        assertDoesNotThrow(() -> item.removeListData());
+        assertDoesNotThrow(() -> item.removeFromWorld());
     }
 }

@@ -4,13 +4,13 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.IOException;
 
-import org.simyukkuri.draw.ModLoader;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.entity.core.attachment.Attachment;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.AttachProperty;
 import org.simyukkuri.enums.Direction;
-import org.simyukkuri.enums.Event;
+import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.enums.Happiness;
 import org.simyukkuri.enums.ImageCode;
 import org.simyukkuri.enums.UnbirthBabyState;
@@ -89,10 +89,10 @@ public class Needle extends Attachment {
 	}
 
 	@Override
-	protected Event update() {
+	protected TickResult update() {
 		Yukkuri pa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(parent);
 		if (pa == null)
-			return Event.DONOTHING;
+			return TickResult.NONE;
 		// 生きてたらセリフとダメージ加算
 		if (!pa.isDead()) {
 			pa.clearActions();
@@ -125,13 +125,13 @@ public class Needle extends Attachment {
 
 			// 実ゆの場合、親が反応する
 			if (GameRandom.nextInt(50) == 0) {
-				pa.checkReactionStalkMother(UnbirthBabyState.ATTAKED);
+				pa.checkReactionStalkMother(UnbirthBabyState.ATTACKED);
 			}
 		} else {
 			// 死んでいたら背面固定解除
 			pa.setFixBack(false);
 		}
-		return Event.DONOTHING;
+		return TickResult.NONE;
 	}
 
 	@Override

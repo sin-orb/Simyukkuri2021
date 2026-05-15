@@ -11,14 +11,14 @@ import java.util.Map;
 
 import org.simyukkuri.Const;
 import org.simyukkuri.draw.Dimension4y;
-import org.simyukkuri.draw.ModLoader;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Point4y;
 import org.simyukkuri.engine.transform.TransformationService;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.world.bodylinked.Okazari.OkazariType;
 import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.YukkuriRank;
-import org.simyukkuri.enums.CriticalDamegeType;
+import org.simyukkuri.enums.CriticalDamageType;
 import org.simyukkuri.enums.HairState;
 import org.simyukkuri.enums.ImageCode;
 import org.simyukkuri.enums.YukkuriType;
@@ -110,8 +110,8 @@ public class Marisa extends Yukkuri {
 	 * @param loader クラスローダ
 	 */
 	public static void loadIniFile(ClassLoader loader) {
-		AttachOffset = ModLoader.loadYukkuriIniMap(loader, ModLoader.getDataIniDir(), baseFileName);
-		baseSpeed = ModLoader.loadYukkuriIniMapForInt(loader, ModLoader.getDataIniDir(), baseFileName, "speed");
+		AttachOffset = ModLoader.loadYukkuriIniOffsets(loader, ModLoader.getDataIniDir(), baseFileName);
+		baseSpeed = ModLoader.loadYukkuriIniValue(loader, ModLoader.getDataIniDir(), baseFileName, "speed");
 	}
 
 	@Override
@@ -204,7 +204,7 @@ public class Marisa extends Yukkuri {
 
 		// 自分以外に幸せを感じている大人のゆっくりが10体以上いる
 		int adultCount = 0;
-		List<Yukkuri> bodyList = new LinkedList<Yukkuri>(GameWorld.get().getCurrentMap().getYukkuriMap().values());
+		List<Yukkuri> bodyList = new LinkedList<Yukkuri>(GameWorld.get().getCurrentWorldState().getYukkuriRegistry().values());
 		for (Yukkuri otherBody : bodyList) {
 			if (otherBody == this) {
 				continue;
@@ -312,7 +312,7 @@ public class Marisa extends Yukkuri {
 			} else {
 				if (isPealed()) {
 					idx += getImage(ImageCode.CRUSHED3.ordinal(), Const.LEFT, layer, idx);
-				} else if (getOkazari() != null && getOkazari().getOkazariType() == OkazariType.DEFAULT) {
+				} else if (getOkazaris() != null && getOkazaris().getOkazariType() == OkazariType.DEFAULT) {
 					idx += getImage(ImageCode.CRUSHED.ordinal(), Const.LEFT, layer, idx);
 				} else {
 					idx += getImage(ImageCode.CRUSHED2.ordinal(), Const.LEFT, layer, idx);
@@ -339,7 +339,7 @@ public class Marisa extends Yukkuri {
 			if (isAnalClose()) {
 				idx += getImage(ImageCode.FRONT_SEALED.ordinal(), Const.LEFT, layer, idx);
 			}
-			if (getCriticalDamege() == CriticalDamegeType.INJURED) {
+			if (getCriticalDamege() == CriticalDamageType.INJURED) {
 				idx += getImage(ImageCode.FRONT_INJURED.ordinal(), Const.LEFT, layer, idx);
 			}
 			if (isBlind()) {
@@ -351,7 +351,7 @@ public class Marisa extends Yukkuri {
 			if (isHasBraid()) {
 				idx += getImage(ImageCode.FRONT_BRAID.ordinal(), Const.LEFT, layer, idx);
 			}
-			if (getOkazari() != null && getOkazari().getOkazariType() == OkazariType.DEFAULT) {
+			if (getOkazaris() != null && getOkazaris().getOkazariType() == OkazariType.DEFAULT) {
 				idx += getImage(ImageCode.ROLL_ACCESSORY.ordinal(), Const.LEFT, layer, idx);
 			}
 		} else if (isFurifuri() && !isSleeping() && (!isLockmove() || isFixBack())) {
@@ -361,7 +361,7 @@ public class Marisa extends Yukkuri {
 				if (getAge() % 8 == 0) {
 					idx += getImage(ImageCode.MROLL_LEFT2_SHIT.ordinal(), Const.LEFT, layer, idx);
 
-					if (getOkazari() != null && getOkazari().getOkazariType() == OkazariType.DEFAULT) {
+					if (getOkazaris() != null && getOkazaris().getOkazariType() == OkazariType.DEFAULT) {
 						idx += getImage(ImageCode.MROLL_ACCESSORY_LEFT2.ordinal(), Const.LEFT, layer, idx);
 					}
 					if (getHairState() == HairState.DEFAULT) {
@@ -373,7 +373,7 @@ public class Marisa extends Yukkuri {
 					if (isAnalClose()) {
 						idx += getImage(ImageCode.MROLL_LEFT2_SEALED.ordinal(), Const.LEFT, layer, idx);
 					}
-					if (getCriticalDamege() == CriticalDamegeType.INJURED) {
+					if (getCriticalDamege() == CriticalDamageType.INJURED) {
 						idx += getImage(ImageCode.MROLL_LEFT2_INJURED.ordinal(), Const.LEFT, layer, idx);
 					}
 					if (isBlind()) {
@@ -391,7 +391,7 @@ public class Marisa extends Yukkuri {
 				} else if (getAge() % 8 <= 2) {
 					idx += getImage(ImageCode.MROLL_LEFT_SHIT.ordinal(), Const.LEFT, layer, idx);
 
-					if (getOkazari() != null && getOkazari().getOkazariType() == OkazariType.DEFAULT) {
+					if (getOkazaris() != null && getOkazaris().getOkazariType() == OkazariType.DEFAULT) {
 						idx += getImage(ImageCode.MROLL_ACCESSORY_LEFT.ordinal(), Const.LEFT, layer, idx);
 					}
 					if (getHairState() == HairState.DEFAULT) {
@@ -403,7 +403,7 @@ public class Marisa extends Yukkuri {
 					if (isAnalClose()) {
 						idx += getImage(ImageCode.MROLL_LEFT_SEALED.ordinal(), Const.LEFT, layer, idx);
 					}
-					if (getCriticalDamege() == CriticalDamegeType.INJURED) {
+					if (getCriticalDamege() == CriticalDamageType.INJURED) {
 						idx += getImage(ImageCode.MROLL_LEFT_INJURED.ordinal(), Const.LEFT, layer, idx);
 					}
 					if (isBlind()) {
@@ -421,7 +421,7 @@ public class Marisa extends Yukkuri {
 				} else if (getAge() % 8 == 3) {
 					idx += getImage(ImageCode.MROLL_LEFT2_SHIT.ordinal(), Const.LEFT, layer, idx);
 
-					if (getOkazari() != null && getOkazari().getOkazariType() == OkazariType.DEFAULT) {
+					if (getOkazaris() != null && getOkazaris().getOkazariType() == OkazariType.DEFAULT) {
 						idx += getImage(ImageCode.MROLL_ACCESSORY_LEFT2.ordinal(), Const.LEFT, layer, idx);
 					}
 					if (getHairState() == HairState.DEFAULT) {
@@ -433,7 +433,7 @@ public class Marisa extends Yukkuri {
 					if (isAnalClose()) {
 						idx += getImage(ImageCode.MROLL_LEFT2_SEALED.ordinal(), Const.LEFT, layer, idx);
 					}
-					if (getCriticalDamege() == CriticalDamegeType.INJURED) {
+					if (getCriticalDamege() == CriticalDamageType.INJURED) {
 						idx += getImage(ImageCode.MROLL_LEFT2_INJURED.ordinal(), Const.LEFT, layer, idx);
 					}
 					if (isBlind()) {
@@ -451,7 +451,7 @@ public class Marisa extends Yukkuri {
 				} else if (getAge() % 8 == 4) {
 					idx += getImage(ImageCode.MROLL_RIGHT2_SHIT.ordinal(), Const.LEFT, layer, idx);
 
-					if (getOkazari() != null && getOkazari().getOkazariType() == OkazariType.DEFAULT) {
+					if (getOkazaris() != null && getOkazaris().getOkazariType() == OkazariType.DEFAULT) {
 						idx += getImage(ImageCode.MROLL_ACCESSORY_RIGHT2.ordinal(), Const.LEFT, layer, idx);
 					}
 					if (getHairState() == HairState.DEFAULT) {
@@ -462,7 +462,7 @@ public class Marisa extends Yukkuri {
 					if (isAnalClose()) {
 						idx += getImage(ImageCode.MROLL_RIGHT2_SEALED.ordinal(), Const.LEFT, layer, idx);
 					}
-					if (getCriticalDamege() == CriticalDamegeType.INJURED) {
+					if (getCriticalDamege() == CriticalDamageType.INJURED) {
 						idx += getImage(ImageCode.MROLL_RIGHT2_INJURED.ordinal(), Const.LEFT, layer, idx);
 					}
 					if (isBlind()) {
@@ -477,7 +477,7 @@ public class Marisa extends Yukkuri {
 				} else if (getAge() % 8 <= 6) {
 					idx += getImage(ImageCode.MROLL_RIGHT_SHIT.ordinal(), Const.LEFT, layer, idx);
 
-					if (getOkazari() != null && getOkazari().getOkazariType() == OkazariType.DEFAULT) {
+					if (getOkazaris() != null && getOkazaris().getOkazariType() == OkazariType.DEFAULT) {
 						idx += getImage(ImageCode.MROLL_ACCESSORY_RIGHT.ordinal(), Const.LEFT, layer, idx);
 					}
 					if (getHairState() == HairState.DEFAULT) {
@@ -488,7 +488,7 @@ public class Marisa extends Yukkuri {
 					if (isAnalClose()) {
 						idx += getImage(ImageCode.MROLL_RIGHT_SEALED.ordinal(), Const.LEFT, layer, idx);
 					}
-					if (getCriticalDamege() == CriticalDamegeType.INJURED) {
+					if (getCriticalDamege() == CriticalDamageType.INJURED) {
 						idx += getImage(ImageCode.MROLL_RIGHT_INJURED.ordinal(), Const.LEFT, layer, idx);
 					}
 					if (isBlind()) {
@@ -503,7 +503,7 @@ public class Marisa extends Yukkuri {
 				} else if (getAge() % 8 == 7) {
 					idx += getImage(ImageCode.MROLL_RIGHT2_SHIT.ordinal(), Const.LEFT, layer, idx);
 
-					if (getOkazari() != null && getOkazari().getOkazariType() == OkazariType.DEFAULT) {
+					if (getOkazaris() != null && getOkazaris().getOkazariType() == OkazariType.DEFAULT) {
 						idx += getImage(ImageCode.MROLL_ACCESSORY_RIGHT2.ordinal(), Const.LEFT, layer, idx);
 					}
 					if (getHairState() == HairState.DEFAULT) {
@@ -514,7 +514,7 @@ public class Marisa extends Yukkuri {
 					if (isAnalClose()) {
 						idx += getImage(ImageCode.MROLL_RIGHT2_SEALED.ordinal(), Const.LEFT, layer, idx);
 					}
-					if (getCriticalDamege() == CriticalDamegeType.INJURED) {
+					if (getCriticalDamege() == CriticalDamageType.INJURED) {
 						idx += getImage(ImageCode.MROLL_RIGHT2_INJURED.ordinal(), Const.LEFT, layer, idx);
 					}
 					if (isBlind()) {
@@ -543,7 +543,7 @@ public class Marisa extends Yukkuri {
 					if (isAnalClose()) {
 						idx += getImage(ImageCode.ROLL_LEFT_SEALED.ordinal(), Const.LEFT, layer, idx);
 					}
-					if (getCriticalDamege() == CriticalDamegeType.INJURED) {
+					if (getCriticalDamege() == CriticalDamageType.INJURED) {
 						idx += getImage(ImageCode.ROLL_LEFT_INJURED.ordinal(), Const.LEFT, layer, idx);
 					}
 					if (isBlind()) {
@@ -567,7 +567,7 @@ public class Marisa extends Yukkuri {
 					if (isAnalClose()) {
 						idx += getImage(ImageCode.ROLL_RIGHT_SEALED.ordinal(), Const.LEFT, layer, idx);
 					}
-					if (getCriticalDamege() == CriticalDamegeType.INJURED) {
+					if (getCriticalDamege() == CriticalDamageType.INJURED) {
 						idx += getImage(ImageCode.ROLL_RIGHT_INJURED.ordinal(), Const.LEFT, layer, idx);
 					}
 					if (isBlind()) {
@@ -580,7 +580,7 @@ public class Marisa extends Yukkuri {
 						idx += getImage(ImageCode.ROLL_RIGHT_BRAID.ordinal(), Const.LEFT, layer, idx);
 					}
 				}
-				if (getOkazari() != null && getOkazari().getOkazariType() == OkazariType.DEFAULT) {
+				if (getOkazaris() != null && getOkazaris().getOkazariType() == OkazariType.DEFAULT) {
 					idx += getImage(ImageCode.ROLL_ACCESSORY.ordinal(), Const.LEFT, layer, idx);
 				}
 			}

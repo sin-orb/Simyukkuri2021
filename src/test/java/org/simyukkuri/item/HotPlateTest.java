@@ -36,9 +36,9 @@ class HotPlateTest extends ItemTestBase {
     void testConstructor_Default() {
         HotPlate item = new HotPlate();
         item.setObjId(1);
-        SimYukkuri.world.getCurrentMap().getHotPlate().put(item.getObjId(), item);
+        SimYukkuri.world.getCurrentWorldState().getHotPlates().put(item.getObjId(), item);
         verifyCommonProperties(item);
-        assertTrue(SimYukkuri.world.getCurrentMap().getHotPlate().containsKey(item.getObjId()));
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getHotPlates().containsKey(item.getObjId()));
     }
 
     @Test
@@ -95,27 +95,27 @@ class HotPlateTest extends ItemTestBase {
     void testRemoveListData_WithoutBindBody() {
         HotPlate item = new HotPlate();
         item.setObjId(200);
-        SimYukkuri.world.getCurrentMap().getHotPlate().put(item.getObjId(), item);
-        assertTrue(SimYukkuri.world.getCurrentMap().getHotPlate().containsKey(200));
+        SimYukkuri.world.getCurrentWorldState().getHotPlates().put(item.getObjId(), item);
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getHotPlates().containsKey(200));
 
-        item.removeListData();
+        item.removeFromWorld();
 
-        assertFalse(SimYukkuri.world.getCurrentMap().getHotPlate().containsKey(200));
+        assertFalse(SimYukkuri.world.getCurrentWorldState().getHotPlates().containsKey(200));
     }
 
     @Test
     void testRemoveListData_WithBindBody() {
         HotPlate item = new HotPlate();
         item.setObjId(201);
-        SimYukkuri.world.getCurrentMap().getHotPlate().put(item.getObjId(), item);
+        SimYukkuri.world.getCurrentWorldState().getHotPlates().put(item.getObjId(), item);
 
         Yukkuri body = WorldTestHelper.createBody();
         body.setLockmove(true);
         item.setBoundYukkuri(body);
 
-        item.removeListData();
+        item.removeFromWorld();
 
-        assertFalse(SimYukkuri.world.getCurrentMap().getHotPlate().containsKey(201));
+        assertFalse(SimYukkuri.world.getCurrentWorldState().getHotPlates().containsKey(201));
         assertFalse(body.isLockmove());
     }
 
@@ -132,7 +132,7 @@ class HotPlateTest extends ItemTestBase {
     void testUpDate_WithBindBody_GrabbedTrue() {
         HotPlate item = new HotPlate();
         item.setObjId(202);
-        SimYukkuri.world.getCurrentMap().getHotPlate().put(item.getObjId(), item);
+        SimYukkuri.world.getCurrentWorldState().getHotPlates().put(item.getObjId(), item);
 
         Yukkuri body = WorldTestHelper.createBody();
         item.setBoundYukkuri(body);
@@ -146,7 +146,7 @@ class HotPlateTest extends ItemTestBase {
     void testUpDate_WithBindBody_BodyMovedAway() {
         HotPlate item = new HotPlate();
         item.setObjId(203);
-        SimYukkuri.world.getCurrentMap().getHotPlate().put(item.getObjId(), item);
+        SimYukkuri.world.getCurrentWorldState().getHotPlates().put(item.getObjId(), item);
 
         Yukkuri body = WorldTestHelper.createBody();
         item.setBoundYukkuri(body);
@@ -164,7 +164,7 @@ class HotPlateTest extends ItemTestBase {
     void testConstructor_WithCoords_doesNotThrow() {
         HotPlate item = new HotPlate(100, 100, 0);
         assertNotNull(item);
-        assertTrue(SimYukkuri.world.getCurrentMap().getHotPlate().containsKey(item.getObjId()));
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getHotPlates().containsKey(item.getObjId()));
     }
 
     // --- getImageLayer ---
@@ -199,7 +199,7 @@ class HotPlateTest extends ItemTestBase {
     void testObjHitProcess_executesCode() {
         HotPlate item = new HotPlate();
         item.setObjId(300);
-        SimYukkuri.world.getCurrentMap().getHotPlate().put(item.getObjId(), item);
+        SimYukkuri.world.getCurrentWorldState().getHotPlates().put(item.getObjId(), item);
         Yukkuri body = WorldTestHelper.createBody();
         try {
             item.objHitProcess(body);

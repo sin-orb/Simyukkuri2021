@@ -12,12 +12,12 @@ import org.junit.jupiter.api.Test;
 
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.entity.core.Entity;
-import org.simyukkuri.draw.World;
+import org.simyukkuri.engine.World;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.living.yukkuri.impl.Reimu;
 import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.Direction;
-import org.simyukkuri.enums.Event;
+import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.system.ResourceUtil;
 
 public class AccelAmpouleTest {
@@ -62,9 +62,9 @@ public class AccelAmpouleTest {
         ampoule.setProcessInterval(1);
 
         long before = parent.getAge();
-        Event result = ampoule.clockTick();
+        TickResult result = ampoule.clockTick();
 
-        assertEquals(Event.DONOTHING, result);
+        assertEquals(TickResult.NONE, result);
         assertEquals(before + Entity.TICK * 10000, parent.getAge());
     }
 
@@ -136,9 +136,9 @@ public class AccelAmpouleTest {
         parent.setDead(true);
 
         long before = parent.getAge();
-        Event result = ampoule.clockTick();
+        TickResult result = ampoule.clockTick();
 
-        assertEquals(Event.DONOTHING, result);
+        assertEquals(TickResult.NONE, result);
         assertEquals(before, parent.getAge());
     }
 
@@ -148,9 +148,9 @@ public class AccelAmpouleTest {
         AccelAmpoule ampoule = new AccelAmpoule(parent);
 
         long before = parent.getAge();
-        Event result = ampoule.clockTick();
+        TickResult result = ampoule.clockTick();
 
-        assertEquals(Event.DONOTHING, result);
+        assertEquals(TickResult.NONE, result);
         assertEquals(before, parent.getAge());
     }
 
@@ -180,7 +180,7 @@ public class AccelAmpouleTest {
     private static Yukkuri createParent(AgeState ageState) {
         Yukkuri parent = new Reimu();
         parent.setAgeState(ageState);
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(parent.getUniqueID(), parent);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(parent.getUniqueID(), parent);
         return parent;
     }
 
@@ -213,9 +213,9 @@ public class AccelAmpouleTest {
             AccelAmpoule ampoule = new AccelAmpoule(parent);
             ampoule.setProcessInterval(1);
 
-            Event result = ampoule.clockTick();
+            TickResult result = ampoule.clockTick();
 
-            assertEquals(Event.DONOTHING, result);
+            assertEquals(TickResult.NONE, result);
             assertEquals(100 + Entity.TICK * 10000, parent.getAge());
             assertEquals(false, parent.isDead());
         }
@@ -226,9 +226,9 @@ public class AccelAmpouleTest {
             AccelAmpoule ampoule = new AccelAmpoule(parent);
             long before = parent.getAge();
 
-            Event result = ampoule.clockTick();
+            TickResult result = ampoule.clockTick();
 
-            assertEquals(Event.DONOTHING, result);
+            assertEquals(TickResult.NONE, result);
             assertEquals(before, parent.getAge());
         }
     }

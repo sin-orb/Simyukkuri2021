@@ -61,7 +61,7 @@ public class KillPredeatorEvent extends RevengeAttackEvent {
 			return false;
 		boolean isNearPredator = false;
 		// 全ゆっくりに対してチェック
-		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getYukkuriMap().entrySet()) {
+		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentWorldState().getYukkuriRegistry().entrySet()) {
 			Yukkuri predatorBody = entry.getValue();
 			// 自分同士のチェックは無意味なのでスキップ
 			if (predatorBody == body) {
@@ -74,7 +74,7 @@ public class KillPredeatorEvent extends RevengeAttackEvent {
 			}
 			// 相手との間に壁があればスキップ
 			if (Barrier.acrossBarrier(body.getX(), body.getY(), predatorBody.getX(), predatorBody.getY(),
-					Barrier.MAP_BODY[body.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
+					Barrier.BODY_BLOCK_FLAGS[body.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
 				continue;
 			}
 			isNearPredator = true;
@@ -95,7 +95,7 @@ public class KillPredeatorEvent extends RevengeAttackEvent {
 	 */
 	public Yukkuri searchNextTarget() {
 		Yukkuri nextTarget = null;
-		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getYukkuriMap().entrySet()) {
+		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentWorldState().getYukkuriRegistry().entrySet()) {
 			Yukkuri body = entry.getValue();
 			if (body.isPredatorType()) {
 				nextTarget = body;
@@ -124,7 +124,7 @@ public class KillPredeatorEvent extends RevengeAttackEvent {
 		int colX = YukkuriLogic.calcCollisionX(body, from);
 		body.moveToEvent(this, from.getX() + colX, from.getY());
 		if (body.getType() == YukkuriType.DOSMARISA ||
-				(body.isAdult() && body.getPublicRank() != PublicRank.UnunSlave)) {
+				(body.isAdult() && body.getPublicRank() != PublicRank.UNUN_SLAVE)) {
 			Yukkuri target = searchNextTarget();
 			setFrom(target);
 			body.setWorldEventResMessage(GameMessages.getMessage(body, MessagePool.Action.RevengeForChild),

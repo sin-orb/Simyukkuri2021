@@ -4,7 +4,7 @@ import java.awt.event.MouseEvent;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.simyukkuri.command.GadgetMenu.GadgetList;
+import org.simyukkuri.command.GadgetMenu.GadgetMenuChoice;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.world.bodylinked.Okazari;
@@ -24,7 +24,7 @@ public class GadgetBodyAction {
 	 * @param ev           入力されたマウスの動作
 	 * @param targetObject 対象オブジェクト
 	 */
-	public static void evaluateClean(GadgetList item, MouseEvent ev, Entity targetObject) {
+	public static void evaluateClean(GadgetMenuChoice item, MouseEvent ev, Entity targetObject) {
 		switch (item) {
 			case INDIVIDUAL:
 				if (targetObject instanceof Yukkuri) {
@@ -50,8 +50,8 @@ public class GadgetBodyAction {
 	 * @param ev           入力されたマウスの動作
 	 * @param targetObject 対象オブジェクト
 	 */
-	public static void evaluateAccessory(GadgetList item, MouseEvent ev, Entity targetObject) {
-		List<Yukkuri> bodyList = new LinkedList<Yukkuri>(GameWorld.get().getCurrentMap().getYukkuriMap().values());
+	public static void evaluateAccessory(GadgetMenuChoice item, MouseEvent ev, Entity targetObject) {
+		List<Yukkuri> bodyList = new LinkedList<Yukkuri>(GameWorld.get().getCurrentWorldState().getYukkuriRegistry().values());
 		if (ev.isShiftDown()) {
 			boolean shouldGiveAccessory = true;
 			if (targetObject instanceof Yukkuri) {
@@ -91,8 +91,8 @@ public class GadgetBodyAction {
 	 * @param ev           入力されたマウスの動作
 	 * @param targetObject 対象オブジェクト
 	 */
-	public static void evaluatePants(GadgetList item, MouseEvent ev, Entity targetObject) {
-		List<Yukkuri> bodyList = new LinkedList<Yukkuri>(GameWorld.get().getCurrentMap().getYukkuriMap().values());
+	public static void evaluatePants(GadgetMenuChoice item, MouseEvent ev, Entity targetObject) {
+		List<Yukkuri> bodyList = new LinkedList<Yukkuri>(GameWorld.get().getCurrentWorldState().getYukkuriRegistry().values());
 		if (ev.isShiftDown()) {
 			boolean shouldGivePants = true;
 			if (targetObject instanceof Yukkuri) {
@@ -128,7 +128,7 @@ public class GadgetBodyAction {
 	 * @param ev           入力されたマウスの動作
 	 * @param targetObject 対象オブジェクト
 	 */
-	public static void evaluateCommunicate(GadgetList item, MouseEvent ev, Entity targetObject) {
+	public static void evaluateCommunicate(GadgetMenuChoice item, MouseEvent ev, Entity targetObject) {
 		switch (item) {
 			case YUKKURISITEITTENE:
 				YukkuriMethodDispatcher.execute(ev, targetObject, "voiceReaction", 0);

@@ -22,7 +22,7 @@ import org.junit.jupiter.api.Test;
 
 import org.simyukkuri.event.EventPacket;
 import org.simyukkuri.SimYukkuri;
-import org.simyukkuri.draw.World;
+import org.simyukkuri.engine.World;
 import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.system.Sprite;
 import org.simyukkuri.entity.core.living.yukkuri.impl.Reimu;
@@ -473,7 +473,7 @@ public class EventPacketTest {
         public void testCheckEventResponse_falseWhenPublicRankMismatch() {
             Yukkuri from = createBody();
             Yukkuri b = createBody();
-            b.setPublicRank(PublicRank.UnunSlave);
+            b.setPublicRank(PublicRank.UNUN_SLAVE);
             BreedEvent event = new BreedEvent(from, null, null, 2);
             assertFalse(event.checkEventResponse(b));
         }
@@ -559,7 +559,7 @@ public class EventPacketTest {
         @Test
         public void testAcceptPropose_falseWhenFromHasDisorder() {
             Yukkuri f = createBody();
-            f.setOkazari(null); // remove okazari → hasDisorder=true
+            f.setOkazaris(null); // remove okazari → hasDisorder=true
             Yukkuri t = createBody();
             ProposeEvent event = new ProposeEvent(f, t, null, 1);
             assertFalse(event.acceptPropose(f, t));
@@ -696,7 +696,7 @@ public class EventPacketTest {
 
     private static Yukkuri createBodyWithOkazari() {
         Yukkuri b = createBody();
-        b.setOkazari(new Okazari());
+        b.setOkazaris(new Okazari());
         return b;
     }
 
@@ -708,7 +708,7 @@ public class EventPacketTest {
             spr[i] = new Sprite(10, 10, Sprite.PIVOT_CENTER_BOTTOM);
         }
         b.setSpriteSet(spr);
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(b.getUniqueID(), b);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueID(), b);
         return b;
     }
 }

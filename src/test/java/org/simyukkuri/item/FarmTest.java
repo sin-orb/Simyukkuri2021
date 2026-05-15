@@ -23,7 +23,7 @@ import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.world.item.Food;
 import org.simyukkuri.entity.core.world.mobile.Shit;
-import org.simyukkuri.enums.Event;
+import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.system.ItemMenu.ShapeMenu;
 import org.simyukkuri.system.ItemMenu.ShapeMenuTarget;
 import org.simyukkuri.util.WorldTestHelper;
@@ -36,7 +36,7 @@ class FarmTest {
     @BeforeEach
     public void setUp() {
         WorldTestHelper.resetWorld();
-        org.simyukkuri.SimYukkuri.world = new org.simyukkuri.draw.World();
+        org.simyukkuri.SimYukkuri.world = new org.simyukkuri.engine.World();
         WorldTestHelper.initializeStandardTranslate200();
     }
 
@@ -49,9 +49,9 @@ class FarmTest {
     @Test
     void testConstructor_Default() {
         Farm item = new Farm();
-        SimYukkuri.world.getCurrentMap().getFarm().add(item);
+        SimYukkuri.world.getCurrentWorldState().getFarms().add(item);
         assertNotNull(item);
-        assertTrue(SimYukkuri.world.getCurrentMap().getFarm().contains(item));
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getFarms().contains(item));
     }
 
     // --- getAttribute / getMinimumSize ---
@@ -95,8 +95,8 @@ class FarmTest {
     void testClockTick_NotRemoved() {
         Farm item = new Farm();
         item.setAge(0);
-        Event result = item.clockTick();
-        assertEquals(Event.DONOTHING, result);
+        TickResult result = item.clockTick();
+        assertEquals(TickResult.NONE, result);
         assertTrue(item.getAge() > 0);
     }
 
@@ -104,21 +104,21 @@ class FarmTest {
     void testClockTick_Removed() {
         Farm item = new Farm();
         item.setRemoved(true);
-        Event result = item.clockTick();
-        assertEquals(Event.REMOVED, result);
+        TickResult result = item.clockTick();
+        assertEquals(TickResult.REMOVED, result);
     }
 
     @Test
     void testMapContains_Inside() {
         Farm item = new Farm();
-        item.setMapPos(100, 100, 300, 300);
+        item.setBounds(100, 100, 300, 300);
         assertTrue(item.mapContains(200, 200));
     }
 
     @Test
     void testMapContains_Outside() {
         Farm item = new Farm();
-        item.setMapPos(100, 100, 300, 300);
+        item.setBounds(100, 100, 300, 300);
         assertFalse(item.mapContains(50, 50));
     }
 
@@ -139,10 +139,10 @@ class FarmTest {
     @Test
     void testGetSetMapW_H() {
         Farm item = new Farm();
-        item.setMapW(200);
-        item.setMapH(100);
-        assertEquals(200, item.getMapW());
-        assertEquals(100, item.getMapH());
+        item.setWorldWidth(200);
+        item.setWorldHeight(100);
+        assertEquals(200, item.getWorldWidth());
+        assertEquals(100, item.getWorldHeight());
     }
 
     @Test
@@ -157,11 +157,11 @@ class FarmTest {
     @Test
     void testGetSetMapPos_Getters() {
         Farm item = new Farm();
-        item.setMapPos(10, 20, 300, 400);
-        assertEquals(10, item.getMapSX());
-        assertEquals(20, item.getMapSY());
-        assertEquals(300, item.getMapEX());
-        assertEquals(400, item.getMapEY());
+        item.setBounds(10, 20, 300, 400);
+        assertEquals(10, item.getStartX());
+        assertEquals(20, item.getStartY());
+        assertEquals(300, item.getEndX());
+        assertEquals(400, item.getEndY());
     }
 
     @Test
@@ -282,7 +282,7 @@ class FarmTest {
     void testGetFarm_WithFarm_ReturnsFarm() {
         Farm item = new Farm();
         item.setFieldPos(100, 100, 300, 300);
-        SimYukkuri.world.getCurrentMap().getFarm().add(item);
+        SimYukkuri.world.getCurrentWorldState().getFarms().add(item);
         Farm found = Farm.getFarm(200, 200);
         assertEquals(item, found);
     }
@@ -291,7 +291,7 @@ class FarmTest {
     void testGetFarm_OutsideArea_ReturnsNull() {
         Farm item = new Farm();
         item.setFieldPos(100, 100, 300, 300);
-        SimYukkuri.world.getCurrentMap().getFarm().add(item);
+        SimYukkuri.world.getCurrentWorldState().getFarms().add(item);
         assertNull(Farm.getFarm(50, 50));
     }
 
@@ -300,13 +300,13 @@ class FarmTest {
     @Test
     void testDeleteFarm_RemovesFromList() {
         Farm item = new Farm();
-        item.setMapPos(0, 0, 10, 10);
-        item.setMapW(11);
-        item.setMapH(11);
-        SimYukkuri.world.getCurrentMap().getFarm().add(item);
-        assertTrue(SimYukkuri.world.getCurrentMap().getFarm().contains(item));
+        item.setBounds(0, 0, 10, 10);
+        item.setWorldWidth(11);
+        item.setWorldHeight(11);
+        SimYukkuri.world.getCurrentWorldState().getFarms().add(item);
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getFarms().contains(item));
         Farm.deleteFarm(item);
-        assertFalse(SimYukkuri.world.getCurrentMap().getFarm().contains(item));
+        assertFalse(SimYukkuri.world.getCurrentWorldState().getFarms().contains(item));
     }
 
     // --- executeShapePopup ---
@@ -314,56 +314,56 @@ class FarmTest {
     @Test
     void testExecuteShapePopup_SETUP_DoesNotThrow() {
         Farm item = new Farm();
-        SimYukkuri.world.getCurrentMap().getFarm().add(item);
+        SimYukkuri.world.getCurrentWorldState().getFarms().add(item);
         assertDoesNotThrow(() -> item.executeShapePopup(ShapeMenu.SETUP));
     }
 
     @Test
-    void testExecuteShapePopup_HERVEST_DoesNotThrow() {
+    void testExecuteShapePopup_HARVEST_DoesNotThrow() {
         Farm item = new Farm();
-        SimYukkuri.world.getCurrentMap().getFarm().add(item);
-        assertDoesNotThrow(() -> item.executeShapePopup(ShapeMenu.HERVEST));
+        SimYukkuri.world.getCurrentWorldState().getFarms().add(item);
+        assertDoesNotThrow(() -> item.executeShapePopup(ShapeMenu.HARVEST));
     }
 
     @Test
     void testExecuteShapePopup_TOP_MovesToFront() {
         Farm item1 = new Farm();
         Farm item2 = new Farm();
-        SimYukkuri.world.getCurrentMap().getFarm().add(item1);
-        SimYukkuri.world.getCurrentMap().getFarm().add(item2);
+        SimYukkuri.world.getCurrentWorldState().getFarms().add(item1);
+        SimYukkuri.world.getCurrentWorldState().getFarms().add(item2);
         item2.executeShapePopup(ShapeMenu.TOP);
-        assertEquals(item2, SimYukkuri.world.getCurrentMap().getFarm().get(0));
+        assertEquals(item2, SimYukkuri.world.getCurrentWorldState().getFarms().get(0));
     }
 
     @Test
     void testExecuteShapePopup_BOTTOM_MovesToEnd() {
         Farm item1 = new Farm();
         Farm item2 = new Farm();
-        SimYukkuri.world.getCurrentMap().getFarm().add(item1);
-        SimYukkuri.world.getCurrentMap().getFarm().add(item2);
+        SimYukkuri.world.getCurrentWorldState().getFarms().add(item1);
+        SimYukkuri.world.getCurrentWorldState().getFarms().add(item2);
         item1.executeShapePopup(ShapeMenu.BOTTOM);
-        int size = SimYukkuri.world.getCurrentMap().getFarm().size();
-        assertEquals(item1, SimYukkuri.world.getCurrentMap().getFarm().get(size - 1));
+        int size = SimYukkuri.world.getCurrentWorldState().getFarms().size();
+        assertEquals(item1, SimYukkuri.world.getCurrentWorldState().getFarms().get(size - 1));
     }
 
     @Test
     void testExecuteShapePopup_UP_MovesUp() {
         Farm item1 = new Farm();
         Farm item2 = new Farm();
-        SimYukkuri.world.getCurrentMap().getFarm().add(item1);
-        SimYukkuri.world.getCurrentMap().getFarm().add(item2);
+        SimYukkuri.world.getCurrentWorldState().getFarms().add(item1);
+        SimYukkuri.world.getCurrentWorldState().getFarms().add(item2);
         item2.executeShapePopup(ShapeMenu.UP);
-        assertEquals(item2, SimYukkuri.world.getCurrentMap().getFarm().get(0));
+        assertEquals(item2, SimYukkuri.world.getCurrentWorldState().getFarms().get(0));
     }
 
     @Test
     void testExecuteShapePopup_DOWN_MovesDown() {
         Farm item1 = new Farm();
         Farm item2 = new Farm();
-        SimYukkuri.world.getCurrentMap().getFarm().add(item1);
-        SimYukkuri.world.getCurrentMap().getFarm().add(item2);
+        SimYukkuri.world.getCurrentWorldState().getFarms().add(item1);
+        SimYukkuri.world.getCurrentWorldState().getFarms().add(item2);
         item1.executeShapePopup(ShapeMenu.DOWN);
-        assertEquals(item1, SimYukkuri.world.getCurrentMap().getFarm().get(1));
+        assertEquals(item1, SimYukkuri.world.getCurrentWorldState().getFarms().get(1));
     }
 
     // --- drawPreview ---
@@ -384,7 +384,7 @@ class FarmTest {
     void testDrawShape_doesNotThrow() {
         WorldTestHelper.initializeStandardTranslate200();
         Farm item = new Farm();
-        item.setMapPos(100, 100, 300, 300);
+        item.setBounds(100, 100, 300, 300);
         java.awt.image.BufferedImage img = new java.awt.image.BufferedImage(800, 600,
                 java.awt.image.BufferedImage.TYPE_INT_RGB);
         java.awt.Graphics2D g2 = img.createGraphics();
@@ -397,7 +397,7 @@ class FarmTest {
     @Test
     void testCheckContain_mapCoord() {
         Farm item = new Farm();
-        item.setMapPos(100, 100, 300, 300);
+        item.setBounds(100, 100, 300, 300);
         assertDoesNotThrow(() -> item.checkContain(200, 200, false));
     }
 
@@ -405,7 +405,7 @@ class FarmTest {
     void testCheckContain_fieldCoord() {
         WorldTestHelper.initializeStandardTranslate200();
         Farm item = new Farm();
-        item.setMapPos(100, 100, 300, 300);
+        item.setBounds(100, 100, 300, 300);
         assertDoesNotThrow(() -> item.checkContain(50, 50, true));
     }
 
@@ -414,7 +414,7 @@ class FarmTest {
     @Test
     void testGiveAmount_withBody_doesNotThrow() {
         Farm item = new Farm();
-        item.setMapPos(0, 0, 1000, 1000);
+        item.setBounds(0, 0, 1000, 1000);
         item.setAmount(5000);
         org.simyukkuri.entity.core.living.yukkuri.Yukkuri body = WorldTestHelper.createBody();
         body.setX(200);
@@ -434,7 +434,7 @@ class FarmTest {
     @Test
     void testExecuteShapePopup_top_doesNotThrow() {
         Farm item = new Farm();
-        java.util.List<Farm> list = SimYukkuri.world.getCurrentMap().getFarm();
+        java.util.List<Farm> list = SimYukkuri.world.getCurrentWorldState().getFarms();
         list.add(item);
         assertDoesNotThrow(() -> item.executeShapePopup(org.simyukkuri.system.ItemMenu.ShapeMenu.TOP));
     }
@@ -447,9 +447,9 @@ class FarmTest {
     @Test
     void testDeleteFarm_doesNotThrow() {
         Farm item = new Farm();
-        SimYukkuri.world.getCurrentMap().getFarm().add(item);
+        SimYukkuri.world.getCurrentWorldState().getFarms().add(item);
         assertDoesNotThrow(() -> Farm.deleteFarm(item));
-        assertFalse(SimYukkuri.world.getCurrentMap().getFarm().contains(item));
+        assertFalse(SimYukkuri.world.getCurrentWorldState().getFarms().contains(item));
     }
 
     @Test
@@ -462,7 +462,7 @@ class FarmTest {
     @Test
     void testCheckHitObj_yukkuriInside_doesNotThrow() {
         Farm item = new Farm();
-        item.setMapPos(0, 0, 1000, 1000);
+        item.setBounds(0, 0, 1000, 1000);
         org.simyukkuri.entity.core.living.yukkuri.Yukkuri body = WorldTestHelper.createBody();
         body.setX(200);
         body.setY(200);
@@ -474,7 +474,7 @@ class FarmTest {
     @Test
     void testObjHitProcess_yukkuriInside_doesNotThrow() {
         Farm item = new Farm();
-        item.setMapPos(0, 0, 1000, 1000);
+        item.setBounds(0, 0, 1000, 1000);
         item.setAmount(100);
         org.simyukkuri.entity.core.living.yukkuri.Yukkuri body = WorldTestHelper.createBody();
         body.setX(200);
@@ -486,7 +486,7 @@ class FarmTest {
     @Test
     void testGetAmount_withObj_doesNotThrow() {
         Farm item = new Farm();
-        item.setMapPos(0, 0, 1000, 1000);
+        item.setBounds(0, 0, 1000, 1000);
         item.setAmount(100);
         org.simyukkuri.entity.core.living.yukkuri.Yukkuri body = WorldTestHelper.createBody();
         body.setX(200);

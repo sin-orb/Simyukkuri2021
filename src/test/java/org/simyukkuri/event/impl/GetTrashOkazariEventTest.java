@@ -64,7 +64,7 @@ public class GetTrashOkazariEventTest extends EventTestBase {
         Yukkuri body = createBody(1, 100, 100);
         Stone stone = new Stone(120, 120, 0);
         // takeMappedObj(stoneId)がStoneを返すようにワールドに登録
-        SimYukkuri.world.getCurrentMap().getStone().put(stone.getObjId(), stone);
+        SimYukkuri.world.getCurrentWorldState().getStones().put(stone.getObjId(), stone);
 
         GetTrashOkazariEvent event = new GetTrashOkazariEvent(body, null, stone, 1);
         org.junit.jupiter.api.Assertions.assertDoesNotThrow(() -> event.start(body));
@@ -74,7 +74,7 @@ public class GetTrashOkazariEventTest extends EventTestBase {
     void testUpdateWithRemovedTargetAbortsEarly() {
         Yukkuri body = createBody(1, 100, 100);
         Stone stone = new Stone(120, 120, 0);
-        SimYukkuri.world.getCurrentMap().getStone().put(stone.getObjId(), stone);
+        SimYukkuri.world.getCurrentWorldState().getStones().put(stone.getObjId(), stone);
         stone.remove();
 
         GetTrashOkazariEvent event = new GetTrashOkazariEvent(body, null, stone, 1);
@@ -86,7 +86,7 @@ public class GetTrashOkazariEventTest extends EventTestBase {
     void testExecuteWithRemovedTargetReturnsTrue() {
         Yukkuri body = createBody(1, 100, 100);
         Stone stone = new Stone(120, 120, 0);
-        SimYukkuri.world.getCurrentMap().getStone().put(stone.getObjId(), stone);
+        SimYukkuri.world.getCurrentWorldState().getStones().put(stone.getObjId(), stone);
         stone.remove();
 
         GetTrashOkazariEvent event = new GetTrashOkazariEvent(body, null, stone, 1);
@@ -98,7 +98,7 @@ public class GetTrashOkazariEventTest extends EventTestBase {
     void testUpdateWithNonRemovedAndNoOkazari() {
         Yukkuri body = createBody(1, 100, 100);
         Stone stone = new Stone(120, 120, 0);
-        SimYukkuri.world.getCurrentMap().getStone().put(stone.getObjId(), stone);
+        SimYukkuri.world.getCurrentWorldState().getStones().put(stone.getObjId(), stone);
 
         GetTrashOkazariEvent event = new GetTrashOkazariEvent(body, null, stone, 1);
         // not removed, no okazari → moveToEvent呼び出し後 null を返す
@@ -120,8 +120,8 @@ public class GetTrashOkazariEventTest extends EventTestBase {
     void testUpdate_bodyHasOkazari_returnsAbort() {
         Yukkuri body = createBody(1, 100, 100);
         Stone stone = new Stone(120, 120, 0);
-        SimYukkuri.world.getCurrentMap().getStone().put(stone.getObjId(), stone);
-        // body already has an okazari (set in Yukkuri constructor: setOkazari(new
+        SimYukkuri.world.getCurrentWorldState().getStones().put(stone.getObjId(), stone);
+        // body already has an okazari (set in Yukkuri constructor: setOkazaris(new
         // Okazari(this, OkazariType.DEFAULT)))
         // so hasOkazari() = true
         GetTrashOkazariEvent event = new GetTrashOkazariEvent(body, null, stone, 1);
@@ -135,9 +135,9 @@ public class GetTrashOkazariEventTest extends EventTestBase {
         @Test
         void testScenario_BareBodyKeepsChasingTrashUntilExecution() {
             Yukkuri body = createBody(1, 100, 100);
-            body.setOkazari(null);
+            body.setOkazaris(null);
             Stone stone = new Stone(120, 120, 0);
-            SimYukkuri.world.getCurrentMap().getStone().put(stone.getObjId(), stone);
+            SimYukkuri.world.getCurrentWorldState().getStones().put(stone.getObjId(), stone);
 
             GetTrashOkazariEvent event = new GetTrashOkazariEvent(body, null, stone, 1);
 

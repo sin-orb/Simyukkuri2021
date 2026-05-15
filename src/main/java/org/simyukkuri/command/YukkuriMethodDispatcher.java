@@ -16,7 +16,7 @@ import org.simyukkuri.util.GameWorld;
 public class YukkuriMethodDispatcher {
 
 	private static List<Yukkuri> getYukkuriBodies() {
-		return new LinkedList<Yukkuri>(GameWorld.get().getCurrentMap().getYukkuriMap().values());
+		return new LinkedList<Yukkuri>(GameWorld.get().getCurrentWorldState().getYukkuriRegistry().values());
 	}
 
 	private static Yukkuri asBody(Entity targetObject) {

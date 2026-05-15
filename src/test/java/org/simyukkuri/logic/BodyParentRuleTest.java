@@ -49,8 +49,8 @@ public class BodyParentRuleTest {
 		me.setCallingParents(true);
 		parent.setSleeping(true);
 		WorldTestHelper.setParents(me, -1, parent.getUniqueID());
-		SimYukkuri.world.getCurrentMap().getYukkuriMap().put(me.getUniqueID(), me);
-		SimYukkuri.world.getCurrentMap().getYukkuriMap().put(parent.getUniqueID(), parent);
+		SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(me.getUniqueID(), me);
+		SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(parent.getUniqueID(), parent);
 
 		YukkuriParentRule.checkNearParent(me);
 

@@ -17,11 +17,11 @@ import org.junit.jupiter.api.BeforeEach;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.simyukkuri.SimYukkuri;
-import org.simyukkuri.draw.World;
+import org.simyukkuri.engine.World;
 import org.simyukkuri.entity.core.world.mobile.Vomit;
 import org.simyukkuri.draw.MyPane;
-import org.simyukkuri.draw.Terrarium;
-import org.simyukkuri.system.MapPlaceData;
+import org.simyukkuri.engine.Terrarium;
+import org.simyukkuri.system.WorldState;
 import org.simyukkuri.enums.*;
 import java.lang.reflect.Method;
 import java.lang.reflect.Field;
@@ -32,14 +32,14 @@ public class BodyLogicTest {
 
     private StubBody body;
     private World world;
-    private MapPlaceData gameMap;
+    private WorldState gameMap;
 
     @BeforeEach
     public void setUp() throws Exception {
         System.setProperty("java.awt.headless", "true");
         SimYukkuri.world = new World(0, 0);
         world = SimYukkuri.world;
-        gameMap = world.getCurrentMap();
+        gameMap = world.getCurrentWorldState();
 
         // Setup MyPane to avoid NPE in bodyCut
         try {
@@ -54,7 +54,7 @@ public class BodyLogicTest {
         body.setUniqueID(1);
         body.setAge(100000);
         body.setShitType(YukkuriType.REIMU);
-        gameMap.getYukkuriMap().put(1, body);
+        gameMap.getYukkuriRegistry().put(1, body);
     }
 
     private void setupVomitStatics() throws Exception {
@@ -108,24 +108,24 @@ public class BodyLogicTest {
     }
 
     @Test
-    public void testCheckRemovedFamilyList() throws Exception {
+	public void testPruneRemovedFamilyMembers() throws Exception {
         StubBody sister = new StubBody();
         sister.setUniqueID(2);
-        gameMap.getYukkuriMap().put(2, sister);
+        gameMap.getYukkuriRegistry().put(2, sister);
 
         StubBody removedChild = new StubBody();
         removedChild.setUniqueID(3);
         removedChild.remove();
-        gameMap.getYukkuriMap().put(3, removedChild);
+        gameMap.getYukkuriRegistry().put(3, removedChild);
 
-        body.getSisterList().add(2);
-        body.getChildrenList().add(3);
+        body.getSisters().add(2);
+        body.getChildren().add(3);
 
-        Method m = Yukkuri.class.getDeclaredMethod("checkRemovedFamilyList");
+		Method m = Yukkuri.class.getDeclaredMethod("pruneRemovedFamilyMembers");
         m.setAccessible(true);
         m.invoke(body);
 
-        assertTrue(body.getSisterList().contains(2));
-        assertFalse(body.getChildrenList().contains(3));
+        assertTrue(body.getSisters().contains(2));
+        assertFalse(body.getChildren().contains(3));
     }
 }

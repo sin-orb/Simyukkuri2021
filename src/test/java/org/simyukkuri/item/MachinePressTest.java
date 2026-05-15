@@ -35,9 +35,9 @@ class MachinePressTest extends ItemTestBase {
     void testConstructor_Default() {
         MachinePress item = new MachinePress();
         item.setObjId(1);
-        SimYukkuri.world.getCurrentMap().getMachinePress().put(item.getObjId(), item);
+        SimYukkuri.world.getCurrentWorldState().getMachinePresses().put(item.getObjId(), item);
         verifyCommonProperties(item);
-        assertTrue(SimYukkuri.world.getCurrentMap().getMachinePress().containsKey(item.getObjId()));
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getMachinePresses().containsKey(item.getObjId()));
     }
 
     @Test
@@ -49,7 +49,7 @@ class MachinePressTest extends ItemTestBase {
         assertEquals(WorldEntityKind.MACHINEPRESS, item.getWorldEntityType());
         assertEquals(500000, item.getValue());
         assertEquals(1500, item.getCost());
-        assertTrue(SimYukkuri.world.getCurrentMap().getMachinePress().containsKey(item.getObjId()));
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getMachinePresses().containsKey(item.getObjId()));
     }
 
     @Test
@@ -69,9 +69,9 @@ class MachinePressTest extends ItemTestBase {
     void testRemoveListData() {
         MachinePress item = new MachinePress(50, 50, 0);
         int id = item.getObjId();
-        assertTrue(SimYukkuri.world.getCurrentMap().getMachinePress().containsKey(id));
-        item.removeListData();
-        assertFalse(SimYukkuri.world.getCurrentMap().getMachinePress().containsKey(id));
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getMachinePresses().containsKey(id));
+        item.removeFromWorld();
+        assertFalse(SimYukkuri.world.getCurrentWorldState().getMachinePresses().containsKey(id));
     }
 
     @Test

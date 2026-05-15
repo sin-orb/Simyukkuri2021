@@ -26,10 +26,10 @@ import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.draw.Point4y;
 import org.simyukkuri.draw.Rectangle4y;
 import org.simyukkuri.draw.Translate;
-import org.simyukkuri.draw.World;
+import org.simyukkuri.engine.World;
 import org.simyukkuri.entity.core.effect.Effect;
 import org.simyukkuri.entity.core.living.yukkuri.StubBody;
-import org.simyukkuri.enums.Event;
+import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.enums.Type;
 import org.simyukkuri.enums.Where;
 import org.simyukkuri.system.ItemMenu.GetMenuTarget;
@@ -57,7 +57,7 @@ public class ObjTest {
         SimYukkuri.world = new World();
         WorldTestHelper.initializeTranslate(999, 999, 499, 800, 600, 100, 100, new float[] { 1.0f });
         int[][] wallMap = new int[1001][1001];
-        SimYukkuri.world.getCurrentMap().setWallMap(wallMap);
+        SimYukkuri.world.getCurrentWorldState().setWallGrid(wallMap);
     }
 
     // --- age ---
@@ -108,8 +108,8 @@ public class ObjTest {
     @Test
     public void testSetCalcXMax() {
         Entity obj = new Entity();
-        obj.setCalcX(Translate.getMapW() + 100);
-        assertEquals(Translate.getMapW(), obj.getX());
+        obj.setCalcX(Translate.getWorldWidth() + 100);
+        assertEquals(Translate.getWorldWidth(), obj.getX());
     }
 
     @Test
@@ -139,8 +139,8 @@ public class ObjTest {
     @Test
     public void testSetCalcYMax() {
         Entity obj = new Entity();
-        obj.setCalcY(Translate.getMapH() + 100);
-        assertEquals(Translate.getMapH(), obj.getY());
+        obj.setCalcY(Translate.getWorldHeight() + 100);
+        assertEquals(Translate.getWorldHeight(), obj.getY());
     }
 
     @Test
@@ -163,8 +163,8 @@ public class ObjTest {
     @Test
     public void testSetCalcZAboveMax() {
         Entity obj = new Entity();
-        obj.setCalcZ(Translate.getMapZ() + 100);
-        assertEquals(Translate.getMapZ(), obj.getZ());
+        obj.setCalcZ(Translate.getWorldDepth() + 100);
+        assertEquals(Translate.getWorldDepth(), obj.getZ());
     }
 
     @Test
@@ -501,19 +501,19 @@ public class ObjTest {
     @Test
     public void testCalcPosClampXHigh() {
         Entity obj = new Entity();
-        obj.setX(Translate.getMapW() + 100);
+        obj.setX(Translate.getWorldWidth() + 100);
         obj.setY(500);
         obj.calcPos();
-        assertEquals(Translate.getMapW(), obj.getX());
+        assertEquals(Translate.getWorldWidth(), obj.getX());
     }
 
     @Test
     public void testCalcPosClampYHigh() {
         Entity obj = new Entity();
         obj.setX(500);
-        obj.setY(Translate.getMapH() + 100);
+        obj.setY(Translate.getWorldHeight() + 100);
         obj.calcPos();
-        assertEquals(Translate.getMapH(), obj.getY());
+        assertEquals(Translate.getWorldHeight(), obj.getY());
     }
 
     @Test
@@ -533,7 +533,7 @@ public class ObjTest {
         Entity obj = new Entity();
         obj.setRemoved(true);
 
-        assertEquals(Event.REMOVED, obj.clockTick());
+        assertEquals(TickResult.REMOVED, obj.clockTick());
     }
 
     @Test
@@ -545,9 +545,9 @@ public class ObjTest {
         obj.setVx(10);
         obj.setVy(10);
 
-        Event result = obj.clockTick();
+        TickResult result = obj.clockTick();
 
-        assertEquals(Event.DONOTHING, result);
+        assertEquals(TickResult.NONE, result);
         assertEquals(0, obj.getMotionX());
         assertEquals(0, obj.getMotionY());
     }
@@ -588,7 +588,7 @@ public class ObjTest {
 
         obj.clockTick();
 
-        assertEquals(Translate.getMapW(), obj.getX());
+        assertEquals(Translate.getWorldWidth(), obj.getX());
         assertEquals(-100, obj.getVx());
     }
 
@@ -627,7 +627,7 @@ public class ObjTest {
 
         obj.clockTick();
 
-        assertEquals(Translate.getMapH(), obj.getY());
+        assertEquals(Translate.getWorldHeight(), obj.getY());
         assertEquals(-100, obj.getVy());
     }
 
@@ -688,8 +688,8 @@ public class ObjTest {
         obj.setY(500);
         obj.setVx(10);
 
-        // wallMapにバリアを設置 (MAP_ITEM=8, 固定16x16チェック)
-        int[][] wallMap = SimYukkuri.world.getCurrentMap().getWallMap();
+        // wallMapにバリアを設置 (ITEM_BLOCK_FLAG=8, 固定16x16チェック)
+        int[][] wallMap = SimYukkuri.world.getCurrentWorldState().getWallGrid();
         for (int xx = 502; xx < 520; xx++) {
             for (int yy = 492; yy < 510; yy++) {
                 if (xx < wallMap.length && yy < wallMap[0].length) {
@@ -711,7 +711,7 @@ public class ObjTest {
         obj.setY(500);
         obj.setVy(10);
 
-        int[][] wallMap = SimYukkuri.world.getCurrentMap().getWallMap();
+        int[][] wallMap = SimYukkuri.world.getCurrentWorldState().getWallGrid();
         for (int xx = 492; xx < 510; xx++) {
             for (int yy = 502; yy < 520; yy++) {
                 if (xx < wallMap.length && yy < wallMap[0].length) {
@@ -732,9 +732,9 @@ public class ObjTest {
         obj.setX(500);
         obj.setY(500);
 
-        Event result = obj.clockTick();
+        TickResult result = obj.clockTick();
 
-        assertEquals(Event.DONOTHING, result);
+        assertEquals(TickResult.NONE, result);
         assertEquals(500, obj.getX());
         assertEquals(500, obj.getY());
     }
@@ -807,7 +807,7 @@ public class ObjTest {
         Entity obj = new Entity();
         DummyEffect effect = new DummyEffect();
         effect.objId = 12345;
-        SimYukkuri.world.getCurrentMap().getFrontEffect().put(effect.objId, effect);
+        SimYukkuri.world.getCurrentWorldState().getFrontEffects().put(effect.objId, effect);
 
         assertEquals(effect, obj.takeMappedObj(12345));
     }
@@ -817,7 +817,7 @@ public class ObjTest {
         Entity obj = new Entity();
         StubBody body = new StubBody();
         body.objId = 2222;
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(body.getUniqueID(), body);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(body.getUniqueID(), body);
 
         assertEquals(body, obj.takeMappedObj(2222));
     }
@@ -834,9 +834,9 @@ public class ObjTest {
             obj.setVy(7);
             obj.setMotion(3, 4, 0);
 
-            Event result = obj.clockTick();
+            TickResult result = obj.clockTick();
 
-            assertEquals(Event.DONOTHING, result);
+            assertEquals(TickResult.NONE, result);
             assertEquals(108, obj.getX());
             assertEquals(111, obj.getY());
             assertEquals(0, obj.getMotionX());
@@ -856,9 +856,9 @@ public class ObjTest {
             obj.setMostDepth(0);
             obj.setFallingUnderGround(true);
 
-            Event result = obj.clockTick();
+            TickResult result = obj.clockTick();
 
-            assertEquals(Event.DONOTHING, result);
+            assertEquals(TickResult.NONE, result);
             assertTrue(obj.getZ() < 0);
             assertEquals(0, obj.getVx());
             assertEquals(0, obj.getVy());

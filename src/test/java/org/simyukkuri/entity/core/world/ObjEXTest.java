@@ -25,9 +25,9 @@ import org.junit.jupiter.api.Test;
 
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.draw.Translate;
-import org.simyukkuri.draw.World;
+import org.simyukkuri.engine.World;
 import org.simyukkuri.entity.core.world.WorldEntity;
-import org.simyukkuri.enums.Event;
+import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.enums.Type;
 import org.simyukkuri.draw.Point4y;
 import org.simyukkuri.util.WorldTestHelper;
@@ -59,7 +59,7 @@ public class ObjEXTest {
         }
 
         @Override
-        public void removeListData() {
+        public void removeFromWorld() {
             removeListDataCalled = true;
         }
 
@@ -81,7 +81,7 @@ public class ObjEXTest {
         WorldTestHelper.initializeTranslate(999, 999, 499, 800, 600, 100, 100, new float[] { 1.0f });
         // wallMapを初期化（Barrier.onBarrierで参照される）
         int[][] wallMap = new int[1001][1001];
-        SimYukkuri.world.getCurrentMap().setWallMap(wallMap);
+        SimYukkuri.world.getCurrentWorldState().setWallGrid(wallMap);
     }
 
     // --- コンストラクタ ---
@@ -112,9 +112,9 @@ public class ObjEXTest {
         StubObjEX obj = new StubObjEX(100, 100, 0);
         obj.setRemoved(true);
 
-        Event result = obj.clockTick();
+        TickResult result = obj.clockTick();
 
-        assertEquals(Event.REMOVED, result);
+        assertEquals(TickResult.REMOVED, result);
         assertTrue(obj.removeListDataCalled);
     }
 
@@ -167,7 +167,7 @@ public class ObjEXTest {
 
         obj.clockTick();
 
-        assertEquals(Translate.getMapW(), obj.getX());
+        assertEquals(Translate.getWorldWidth(), obj.getX());
         assertEquals(-100, obj.getVx());
     }
 
@@ -201,7 +201,7 @@ public class ObjEXTest {
 
         obj.clockTick();
 
-        assertEquals(Translate.getMapH(), obj.getY());
+        assertEquals(Translate.getWorldHeight(), obj.getY());
         assertEquals(-100, obj.getVy());
     }
 
@@ -291,11 +291,11 @@ public class ObjEXTest {
 
         // 移動後 x=510, y=500, thx=10, thy=10
         // sx=510-5=505, sy=500-5=495, ex=510+5=515, ey=500+5=505
-        int[][] wallMap = SimYukkuri.world.getCurrentMap().getWallMap();
+        int[][] wallMap = SimYukkuri.world.getCurrentWorldState().getWallGrid();
         for (int xx = 505; xx < 516; xx++) {
             for (int yy = 495; yy < 506; yy++) {
                 if (xx >= 0 && xx < wallMap.length && yy >= 0 && yy < wallMap[0].length) {
-                    wallMap[xx][yy] = 8; // MAP_ITEM = 8
+                    wallMap[xx][yy] = 8; // WORLD_SELECTION_ITEM = 8
                 }
             }
         }
@@ -315,7 +315,7 @@ public class ObjEXTest {
         obj.setH(40);
 
         // 移動後 x=500, y=510, thx=10, thy=10
-        int[][] wallMap = SimYukkuri.world.getCurrentMap().getWallMap();
+        int[][] wallMap = SimYukkuri.world.getCurrentWorldState().getWallGrid();
         for (int xx = 495; xx < 506; xx++) {
             for (int yy = 505; yy < 516; yy++) {
                 if (xx >= 0 && xx < wallMap.length && yy >= 0 && yy < wallMap[0].length) {
@@ -336,7 +336,7 @@ public class ObjEXTest {
     public void testClockTickNormalReturnsDoNothing() {
         StubObjEX obj = new StubObjEX(500, 500, 0);
 
-        assertEquals(Event.DONOTHING, obj.clockTick());
+        assertEquals(TickResult.NONE, obj.clockTick());
     }
 
     // --- checkInterval ---
@@ -598,9 +598,9 @@ public class ObjEXTest {
             obj.setVy(7);
             obj.setMotion(3, 4, 0);
 
-            Event result = obj.clockTick();
+            TickResult result = obj.clockTick();
 
-            assertEquals(Event.DONOTHING, result);
+            assertEquals(TickResult.NONE, result);
             assertEquals(108, obj.getX());
             assertEquals(111, obj.getY());
             assertEquals(0, obj.getMotionX());
@@ -614,9 +614,9 @@ public class ObjEXTest {
             StubObjEX obj = new StubObjEX(100, 100, 0);
             obj.setRemoved(true);
 
-            Event result = obj.clockTick();
+            TickResult result = obj.clockTick();
 
-            assertEquals(Event.REMOVED, result);
+            assertEquals(TickResult.REMOVED, result);
             assertTrue(obj.removeListDataCalled);
             assertFalse(obj.upDateCalled);
         }

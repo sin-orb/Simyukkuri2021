@@ -21,9 +21,9 @@ public class YukkuriSelectionRule {
 	 * @param age  ゆん生のステージ
 	 * @return 婚姻候補のリスト
 	 */
-	public static final List<Yukkuri> createActiveFianceeList(Yukkuri body, int age) {
+	public static final List<Yukkuri> createActiveFiances(Yukkuri body, int age) {
 		// ほかにいないならスキップ
-		if (GameWorld.get().getCurrentMap().getYukkuriMap().size() <= 1) {
+		if (GameWorld.get().getCurrentWorldState().getYukkuriRegistry().size() <= 1) {
 			return null;
 		}
 
@@ -36,7 +36,7 @@ public class YukkuriSelectionRule {
 			return activeFianceeList;
 		}
 
-		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getYukkuriMap().entrySet()) {
+		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentWorldState().getYukkuriRegistry().entrySet()) {
 			Yukkuri candidate = entry.getValue();
 			// 自身はスキップ
 			if (candidate == body) {
@@ -55,7 +55,7 @@ public class YukkuriSelectionRule {
 				continue;
 			}
 			// 相手に子供がいる場合はスキップ
-			if (candidate.getChildrenListSize() != 0) {
+			if (candidate.getChildrenCount() != 0) {
 				continue;
 			}
 			// 自分とランクが違ったらスキップ
@@ -92,9 +92,9 @@ public class YukkuriSelectionRule {
 	 * @param includeChildren 子ゆっくりを入れるかどうか（これがfalseなら赤ゆのみのリストになる）
 	 * @return アクティブな赤ゆ/子ゆのリスト
 	 */
-	public static final List<Yukkuri> createActiveChildList(Yukkuri body, boolean includeChildren) {
+	public static final List<Yukkuri> createActiveChildren(Yukkuri body, boolean includeChildren) {
 		// 子供がいないならスキップ
-		int childCount = body.getChildrenListSize();
+		int childCount = body.getChildrenCount();
 		if (childCount == 0) {
 			return null;
 		}
@@ -121,11 +121,11 @@ public class YukkuriSelectionRule {
 				continue;
 			}
 			// 子供に子供がいる場合はスキップ
-			if (childBody.getChildrenListSize() != 0) {
+			if (childBody.getChildrenCount() != 0) {
 				continue;
 			}
 			// うんうん奴隷はスキップ
-			if (childBody.getPublicRank() == PublicRank.UnunSlave) {
+			if (childBody.getPublicRank() == PublicRank.UNUN_SLAVE) {
 				continue;
 			}
 			// うまれたての赤ゆは、家族イベントの対象にしない。

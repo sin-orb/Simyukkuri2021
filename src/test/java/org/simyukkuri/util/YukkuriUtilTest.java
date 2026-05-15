@@ -87,11 +87,11 @@ public class YukkuriUtilTest {
         List<Integer> list = new ArrayList<>(Arrays.asList(1, 2, 3, 4, 2, 5));
 
         // Remove existing element (first occurrence)
-        ListUtil.removeContent(list, 2);
+        ListOperations.removeFirstMatchingValue(list, 2);
         assertEquals(Arrays.asList(1, 3, 4, 2, 5), list);
 
         // Remove non-existing
-        ListUtil.removeContent(list, 99);
+        ListOperations.removeFirstMatchingValue(list, 99);
         assertEquals(Arrays.asList(1, 3, 4, 2, 5), list);
     }
 
@@ -214,7 +214,7 @@ public class YukkuriUtilTest {
         org.simyukkuri.util.WorldTestHelper.initializeMinimalWorld();
         Reimu body = new Reimu();
         body.setObjId(42);
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(body.getUniqueID(), body);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(body.getUniqueID(), body);
         org.simyukkuri.entity.core.living.yukkuri.Yukkuri result = YukkuriLookup.findYukkuriByObjId(42);
         assertNotNull(result);
         assertEquals(42, result.getObjId());
@@ -279,28 +279,28 @@ public class YukkuriUtilTest {
         Reimu from = new Reimu();
         from.setPartner(77);
         from.setParents(new int[] { 10, 20 });
-        from.getChildrenList().add(30);
-        from.getElderSisterList().add(40);
-        from.getSisterList().add(50);
+        from.getChildren().add(30);
+        from.getElderSisters().add(40);
+        from.getSisters().add(50);
 
         Reimu to = new Reimu();
         copyTransformedBody(to, from);
 
         assertEquals(77, to.getPartner());
         assertArrayEquals(new int[] { 10, 20 }, to.getParents());
-        assertEquals(Arrays.asList(30), to.getChildrenList());
-        assertEquals(Arrays.asList(40), to.getElderSisterList());
-        assertEquals(Arrays.asList(50), to.getSisterList());
+        assertEquals(Arrays.asList(30), to.getChildren());
+        assertEquals(Arrays.asList(40), to.getElderSisters());
+        assertEquals(Arrays.asList(50), to.getSisters());
 
         from.getParents()[0] = 99;
-        from.getChildrenList().clear();
-        from.getElderSisterList().clear();
-        from.getSisterList().clear();
+        from.getChildren().clear();
+        from.getElderSisters().clear();
+        from.getSisters().clear();
 
         assertArrayEquals(new int[] { 10, 20 }, to.getParents());
-        assertEquals(Arrays.asList(30), to.getChildrenList());
-        assertEquals(Arrays.asList(40), to.getElderSisterList());
-        assertEquals(Arrays.asList(50), to.getSisterList());
+        assertEquals(Arrays.asList(30), to.getChildren());
+        assertEquals(Arrays.asList(40), to.getElderSisters());
+        assertEquals(Arrays.asList(50), to.getSisters());
     }
 
     @Test
@@ -637,7 +637,7 @@ public class YukkuriUtilTest {
                 Ants.setPivY(new int[] { 4, 5, 6 });
 
                 Reimu body = new Reimu();
-                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(body.getUniqueID(), body);
+                SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(body.getUniqueID(), body);
                 SimYukkuri.RND = new ConstState(1);
 
                 AntInfestationPolicy.judgeNewAnt(body);

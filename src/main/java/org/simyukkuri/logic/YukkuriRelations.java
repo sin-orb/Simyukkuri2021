@@ -4,7 +4,7 @@ import java.util.Iterator;
 
 import org.simyukkuri.entity.core.living.SocialEntity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
-import org.simyukkuri.enums.EnumRelationMine;
+import org.simyukkuri.enums.YukkuriRelationType;
 import org.simyukkuri.enums.Parent;
 
 /**
@@ -46,29 +46,29 @@ public final class YukkuriRelations {
 	 * @param other 相手側のゆっくり
 	 * @return 関係性
 	 */
-	public static EnumRelationMine checkMyRelation(SocialEntity self, SocialEntity other) {
+	public static YukkuriRelationType checkMyRelation(SocialEntity self, SocialEntity other) {
 		if (self.isFather(other)) {
-			return EnumRelationMine.FATHER;
+			return YukkuriRelationType.FATHER;
 		}
 		if (self.isMother(other)) {
-			return EnumRelationMine.MOTHER;
+			return YukkuriRelationType.MOTHER;
 		}
 		if (self.isPartner(other)) {
-			return EnumRelationMine.PARTNAR;
+			return YukkuriRelationType.PARTNER;
 		}
 		if (other.isFather(self)) {
-			return EnumRelationMine.CHILD_FATHER;
+			return YukkuriRelationType.CHILD_OF_FATHER;
 		}
 		if (other.isMother(self)) {
-			return EnumRelationMine.CHILD_MOTHER;
+			return YukkuriRelationType.CHILD_OF_MOTHER;
 		}
 		if (self.isElderSister(other)) {
-			return EnumRelationMine.ELDERSISTER;
+			return YukkuriRelationType.ELDER_SISTER;
 		}
 		if (!self.isElderSister(other) && self.isSister(other)) {
-			return EnumRelationMine.YOUNGSISTER;
+			return YukkuriRelationType.YOUNGER_SISTER;
 		}
-		return EnumRelationMine.OTHER;
+		return YukkuriRelationType.OTHER;
 	}
 
 	/**
@@ -207,7 +207,7 @@ public final class YukkuriRelations {
 	 * @return 妹のインスタンス
 	 */
 	public static Yukkuri getSister(SocialEntity self, int index) {
-		return getYukkuriById(self.getSisterList().get(index));
+		return getYukkuriById(self.getSisters().get(index));
 	}
 
 	/**
@@ -218,7 +218,7 @@ public final class YukkuriRelations {
 	 * @return 姉のインスタンス
 	 */
 	public static Yukkuri getElderSister(SocialEntity self, int index) {
-		return getYukkuriById(self.getElderSisterList().get(index));
+		return getYukkuriById(self.getElderSisters().get(index));
 	}
 
 	/**
@@ -229,10 +229,10 @@ public final class YukkuriRelations {
 	 * @return 子のインスタンス
 	 */
 	public static Yukkuri getChildren(SocialEntity self, int index) {
-		if (self.getChildrenList() == null) {
+		if (self.getChildren() == null) {
 			return null;
 		}
-		return getYukkuriById(self.getChildrenList().get(index));
+		return getYukkuriById(self.getChildren().get(index));
 	}
 
 	/**
@@ -281,11 +281,11 @@ public final class YukkuriRelations {
 	 * @param self       参照元のゆっくり
 	 * @param targetBody 除去対象
 	 */
-	public static void removeChildrenList(SocialEntity self, SocialEntity targetBody) {
-		if (self.getChildrenList() == null || targetBody == null) {
+	public static void removeChild(SocialEntity self, SocialEntity targetBody) {
+		if (self.getChildren() == null || targetBody == null) {
 			return;
 		}
-		Iterator<Integer> itr = self.getChildrenList().iterator();
+		Iterator<Integer> itr = self.getChildren().iterator();
 		while (itr.hasNext()) {
 			Yukkuri at = getYukkuriById(itr.next());
 			if (at == targetBody) {
@@ -300,11 +300,11 @@ public final class YukkuriRelations {
 	 * @param self       参照元のゆっくり
 	 * @param targetBody 除去対象
 	 */
-	public static void removeElderSisterList(SocialEntity self, SocialEntity targetBody) {
-		if (self.getElderSisterList() == null || targetBody == null) {
+	public static void removeElderSister(SocialEntity self, SocialEntity targetBody) {
+		if (self.getElderSisters() == null || targetBody == null) {
 			return;
 		}
-		Iterator<Integer> itr = self.getElderSisterList().iterator();
+		Iterator<Integer> itr = self.getElderSisters().iterator();
 		while (itr.hasNext()) {
 			Yukkuri at = getYukkuriById(itr.next());
 			if (at == targetBody) {
@@ -319,11 +319,11 @@ public final class YukkuriRelations {
 	 * @param self       参照元のゆっくり
 	 * @param targetBody 除去対象
 	 */
-	public static void removeSisterList(SocialEntity self, SocialEntity targetBody) {
-		if (self.getSisterList() == null || targetBody == null) {
+	public static void removeSister(SocialEntity self, SocialEntity targetBody) {
+		if (self.getSisters() == null || targetBody == null) {
 			return;
 		}
-		Iterator<Integer> itr = self.getSisterList().iterator();
+		Iterator<Integer> itr = self.getSisters().iterator();
 		while (itr.hasNext()) {
 			Yukkuri at = getYukkuriById(itr.next());
 			if (at == targetBody) {

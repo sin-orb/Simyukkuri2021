@@ -18,13 +18,13 @@ import org.junit.jupiter.api.Nested;
 import static org.junit.jupiter.api.Assertions.*;
 
 import org.simyukkuri.SimYukkuri;
-import org.simyukkuri.draw.World;
+import org.simyukkuri.engine.World;
 import org.simyukkuri.entity.core.living.yukkuri.Dna;
 import org.simyukkuri.entity.core.world.bodylinked.Stalk;
 import org.simyukkuri.entity.core.world.mobile.Vomit;
 import org.simyukkuri.draw.MyPane;
-import org.simyukkuri.draw.Terrarium;
-import org.simyukkuri.system.MapPlaceData;
+import org.simyukkuri.engine.Terrarium;
+import org.simyukkuri.system.WorldState;
 import org.simyukkuri.util.WorldTestHelper;
 import org.simyukkuri.enums.*;
 import java.lang.reflect.Field;
@@ -34,14 +34,14 @@ public class BodyMetabolismTest {
 
     private StubBody body;
     private World world;
-    private MapPlaceData gameMap;
+    private WorldState gameMap;
 
     @BeforeEach
     public void setUp() throws Exception {
         WorldTestHelper.resetWorld();
         SimYukkuri.world = new World(0, 0);
         world = SimYukkuri.world;
-        gameMap = world.getCurrentMap();
+        gameMap = world.getCurrentWorldState();
         SimYukkuri.mypane = new MyPane();
 
         setupVomitStatics();
@@ -51,7 +51,7 @@ public class BodyMetabolismTest {
         body.setUniqueID(1);
         body.setAge(100000); // Adult
         body.setShitType(YukkuriType.REIMU);
-        gameMap.getYukkuriMap().put(1, body);
+        gameMap.getYukkuriRegistry().put(1, body);
     }
 
     private void setupVomitStatics() throws Exception {
@@ -123,7 +123,7 @@ public class BodyMetabolismTest {
     @Test
     public void testCheckDamage_Advanced() throws Exception {
         // Deterministic check for CUT
-        body.setCriticalDamege(CriticalDamegeType.CUT);
+        body.setCriticalDamege(CriticalDamageType.CUT);
         body.setDamage(1000);
         body.setHungry(6000); // Not hungry
         body.checkDamage();

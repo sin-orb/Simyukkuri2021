@@ -44,7 +44,7 @@ class GarbageChuteTest extends ItemTestBase {
             spr[i] = new Sprite(10, 10, Sprite.PIVOT_CENTER_BOTTOM);
         }
         b.setSpriteSet(spr);
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(b.getUniqueID(), b);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueID(), b);
         return b;
     }
 
@@ -54,9 +54,9 @@ class GarbageChuteTest extends ItemTestBase {
     void testConstructor_Default() {
         GarbageChute item = new GarbageChute();
         item.setObjId(1);
-        SimYukkuri.world.getCurrentMap().getGarbagechute().put(item.getObjId(), item);
+        SimYukkuri.world.getCurrentWorldState().getGarbageChutes().put(item.getObjId(), item);
         verifyCommonProperties(item);
-        assertTrue(SimYukkuri.world.getCurrentMap().getGarbagechute().containsKey(item.getObjId()));
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getGarbageChutes().containsKey(item.getObjId()));
     }
 
     // --- Parameterized constructor: HOUSE rank (option=0) ---
@@ -67,7 +67,7 @@ class GarbageChuteTest extends ItemTestBase {
         assertEquals(ItemRank.HOUSE, item.getItemRank());
         assertEquals(5000, item.getValue());
         assertEquals(5, item.getCost());
-        assertTrue(SimYukkuri.world.getCurrentMap().getGarbagechute().containsKey(item.getObjId()));
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getGarbageChutes().containsKey(item.getObjId()));
     }
 
     // --- Parameterized constructor: NORA rank (option=1) ---
@@ -117,10 +117,10 @@ class GarbageChuteTest extends ItemTestBase {
     void testRemoveListData() {
         GarbageChute item = new GarbageChute();
         item.setObjId(99);
-        SimYukkuri.world.getCurrentMap().getGarbagechute().put(99, item);
-        assertTrue(SimYukkuri.world.getCurrentMap().getGarbagechute().containsKey(99));
-        item.removeListData();
-        assertFalse(SimYukkuri.world.getCurrentMap().getGarbagechute().containsKey(99));
+        SimYukkuri.world.getCurrentWorldState().getGarbageChutes().put(99, item);
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getGarbageChutes().containsKey(99));
+        item.removeFromWorld();
+        assertFalse(SimYukkuri.world.getCurrentWorldState().getGarbageChutes().containsKey(99));
     }
 
     // --- getters/setters ---
@@ -129,8 +129,8 @@ class GarbageChuteTest extends ItemTestBase {
     void testGetSetBindObjList() {
         GarbageChute item = new GarbageChute();
         List<org.simyukkuri.entity.core.Entity> list = new LinkedList<>();
-        item.setBindObjList(list);
-        assertEquals(list, item.getBindObjList());
+        item.setBoundObjects(list);
+        assertEquals(list, item.getBoundObjects());
     }
 
     @Test
@@ -157,7 +157,7 @@ class GarbageChuteTest extends ItemTestBase {
     @Test
     void testUpDate_emptyList_doesNothing() {
         GarbageChute item = new GarbageChute();
-        item.setBindObjList(new LinkedList<>());
+        item.setBoundObjects(new LinkedList<>());
         assertDoesNotThrow(() -> item.upDate());
     }
 
@@ -166,7 +166,7 @@ class GarbageChuteTest extends ItemTestBase {
     @Test
     void testUpDate_nullList_doesNothing() {
         GarbageChute item = new GarbageChute();
-        item.setBindObjList(null);
+        item.setBoundObjects(null);
         assertDoesNotThrow(() -> item.upDate());
     }
 
@@ -179,7 +179,7 @@ class GarbageChuteTest extends ItemTestBase {
         food.setRemoved(true);
         List<org.simyukkuri.entity.core.Entity> list = new LinkedList<>();
         list.add(food);
-        item.setBindObjList(list);
+        item.setBoundObjects(list);
         // upDate calls translateZ which needs rateX - already set by ItemTestBase.setUp
         assertDoesNotThrow(() -> item.upDate());
     }
@@ -208,7 +208,7 @@ class GarbageChuteTest extends ItemTestBase {
         GarbageChute item = new GarbageChute(100, 100, 0);
         item.setCost(0); // avoid Cash issues
         Food food = new Food(50, 50, 0);
-        SimYukkuri.world.getCurrentMap().getFood().put(food.getObjId(), food);
+        SimYukkuri.world.getCurrentWorldState().getFoods().put(food.getObjId(), food);
         // First call adds it
         item.objHitProcess(food);
         // Second call with same object → already in bindObjList → returns 0
@@ -222,7 +222,7 @@ class GarbageChuteTest extends ItemTestBase {
         GarbageChute item = new GarbageChute(100, 100, 0);
         item.setCost(0); // avoid Cash deductions from world player
         Food food = new Food(50, 50, 0);
-        SimYukkuri.world.getCurrentMap().getFood().put(food.getObjId(), food);
+        SimYukkuri.world.getCurrentWorldState().getFoods().put(food.getObjId(), food);
         assertFalse(food.isRemoved());
         item.objHitProcess(food);
         assertTrue(food.isRemoved());
@@ -274,7 +274,7 @@ class GarbageChuteTest extends ItemTestBase {
             assertEquals(0, item.objHitProcess(body));
 
             assertSame(body, item.getBoundYukkuri());
-            assertTrue(item.getBindObjList().contains(body));
+            assertTrue(item.getBoundObjects().contains(body));
             assertEquals(Happiness.VERY_SAD, body.getHappiness());
             assertTrue(body.isFallingUnderGround());
             assertEquals(beforeCash - item.getCost(), SimYukkuri.world.getPlayer().getCash());
@@ -285,12 +285,12 @@ class GarbageChuteTest extends ItemTestBase {
             GarbageChute item = new GarbageChute(100, 100, 0);
             Yukkuri body = createBody();
             body.setZ(-1000);
-            item.getBindObjList().add(body);
+            item.getBoundObjects().add(body);
 
             item.upDate();
 
             assertTrue(body.isRemoved());
-            assertFalse(item.getBindObjList().contains(body));
+            assertFalse(item.getBoundObjects().contains(body));
         }
     }
 }

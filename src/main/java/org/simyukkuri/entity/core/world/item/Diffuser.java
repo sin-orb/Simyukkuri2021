@@ -13,7 +13,7 @@ import javax.swing.JCheckBox;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import org.simyukkuri.draw.ModLoader;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Rectangle4y;
 import org.simyukkuri.entity.core.effect.Effect;
 import org.simyukkuri.entity.core.world.WorldEntity;
@@ -115,7 +115,7 @@ public class Diffuser extends WorldEntity {
 
 		if (getAge() % 40 == 0) {
 			if (steamType[steamNum]) {
-				Effect e = GameView.addEffect(EffectType.STEAM, x, y, z + getH() >> 3,
+				Effect e = GameView.addEffect(EffectType.STEAMED, x, y, z + getH() >> 3,
 						0, 0, -1, false, 30, 0, false, false, false);
 
 				e.setAnimeFrame(SteamType.values()[steamNum].getColor());
@@ -131,8 +131,8 @@ public class Diffuser extends WorldEntity {
 	}
 
 	@Override
-	public void removeListData() {
-		GameWorld.get().getCurrentMap().getDiffuser().remove(objId);
+	public void removeFromWorld() {
+		GameWorld.get().getCurrentWorldState().getDiffusers().remove(objId);
 	}
 
 	/**
@@ -150,7 +150,7 @@ public class Diffuser extends WorldEntity {
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), 8);
 
-		GameWorld.get().getCurrentMap().getDiffuser().put(objId, this);
+		GameWorld.get().getCurrentWorldState().getDiffusers().put(objId, this);
 		objType = Type.OBJECT;
 		worldEntityType = WorldEntityKind.DIFFUSER;
 		value = 15000;
@@ -158,7 +158,7 @@ public class Diffuser extends WorldEntity {
 
 		boolean ret = setupDiffuser(this, false);
 		if (!ret) {
-			GameWorld.get().getCurrentMap().getDiffuser().remove(objId);
+			GameWorld.get().getCurrentWorldState().getDiffusers().remove(objId);
 		}
 	}
 

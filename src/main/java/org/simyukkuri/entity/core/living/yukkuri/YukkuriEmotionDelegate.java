@@ -5,7 +5,7 @@ import java.util.List;
 import org.simyukkuri.Const;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.attachment.impl.PoisonAmpoule;
-import org.simyukkuri.enums.CriticalDamegeType;
+import org.simyukkuri.enums.CriticalDamageType;
 import org.simyukkuri.enums.Happiness;
 import org.simyukkuri.enums.ImageCode;
 import org.simyukkuri.enums.FootBake;
@@ -124,7 +124,7 @@ public final class YukkuriEmotionDelegate {
 		}
 		// 状態異常時
 		// 足切断
-		else if (body.getCriticalDamege() == CriticalDamegeType.CUT || body.isPealed() || body.isPacked()) {
+		else if (body.getCriticalDamege() == CriticalDamageType.CUT || body.isPealed() || body.isPacked()) {
 			return;
 		}
 		// 盲目
@@ -169,7 +169,7 @@ public final class YukkuriEmotionDelegate {
 		// 通常時
 		// うんうん奴隷の場合
 		// 食事検索、トイレ検索時にもろもろのセリフを吐く
-		if (body.getPublicRank() == PublicRank.UnunSlave || body.isMelt()) {
+		if (body.getPublicRank() == PublicRank.UNUN_SLAVE || body.isMelt()) {
 			body.setHappiness(Happiness.SAD);
 			body.setExcitingPeriod(0);
 			// 強制発情ではない場合
@@ -245,7 +245,7 @@ public final class YukkuriEmotionDelegate {
 				// setCurrentEvent(null);
 				// }
 				if (r == 0 && body.getCurrentEvent() == null) {
-					List<Yukkuri> fianceList = YukkuriLogic.createActiveFianceeList(body,
+					List<Yukkuri> fianceList = YukkuriLogic.createActiveFiances(body,
 							body.getAgeState().ordinal());
 					if (fianceList == null || fianceList.size() < 1) {
 						body.setHappiness(Happiness.SAD);
@@ -260,7 +260,7 @@ public final class YukkuriEmotionDelegate {
 							}
 						} else {
 							// 自分の通常の子ゆリスト作成
-							List<Yukkuri> childrenList = YukkuriLogic.createActiveChildList(body, true);
+							List<Yukkuri> childrenList = YukkuriLogic.createActiveChildren(body, true);
 							// パートナーがいる場合
 							Yukkuri pa = YukkuriRelations.getPartnerYukkuri(body);
 							if (pa != null) {

@@ -7,13 +7,13 @@ import java.io.File;
 import java.io.IOException;
 
 import org.simyukkuri.command.GadgetAction;
-import org.simyukkuri.draw.ModLoader;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Rectangle4y;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.effect.Effect;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.world.WorldEntity;
-import org.simyukkuri.enums.CriticalDamegeType;
+import org.simyukkuri.enums.CriticalDamageType;
 import org.simyukkuri.enums.EffectType;
 import org.simyukkuri.enums.Happiness;
 import org.simyukkuri.enums.ImageCode;
@@ -136,7 +136,7 @@ public class Mixer extends WorldEntity {
 				bind = bindBody.getUniqueID();
 			} else if (bindBody.getX() != x || bindBody.getY() != y || bindBody.getZ() != z || bindBody.isRemoved()) {
 				if (counter > 60)
-					bindBody.setCriticalDamegeType(CriticalDamegeType.CUT);
+					bindBody.setCriticalDamageType(CriticalDamageType.CUT);
 				bindBody.setForceFace(-1);
 				bindBody.setLockmove(false);
 				bindBody.setShadowVisible(true);
@@ -147,7 +147,7 @@ public class Mixer extends WorldEntity {
 			// ミキサー駆動開始
 			if (counter > 60) {
 				if (mix == null) {
-					mix = GameView.addEffect(EffectType.MIX, bindBody.getX(),
+					mix = GameView.addEffect(EffectType.MIXED, bindBody.getX(),
 							bindBody.getY() + 1,
 							-2, 0, 0, 0, false, -1, -1, false, false, false);
 				}
@@ -159,7 +159,7 @@ public class Mixer extends WorldEntity {
 					bindBody.setHappiness(Happiness.VERY_SAD);
 					bindBody.setForceFace(ImageCode.PAIN.ordinal());
 					if (GameRandom.nextInt(10) == 0) {
-						if (bindBody.getCriticalDamegeType() == CriticalDamegeType.CUT)
+						if (bindBody.getCriticalDamageType() == CriticalDamageType.CUT)
 							bindBody.setMessage(GameMessages.getMessage(bindBody, MessagePool.Action.Scream2), true);
 						else
 							bindBody.setMessage(GameMessages.getMessage(bindBody, MessagePool.Action.Scream), true);
@@ -190,7 +190,7 @@ public class Mixer extends WorldEntity {
 							oex = GadgetAction.putObjEX(Food.class, getX(), getY(), Food.FoodType.FOOD.ordinal());
 					}
 					oex.kick(0, 6, -4);
-					GameWorld.get().getCurrentMap().getFood().put(oex.objId, (Food) oex);
+					GameWorld.get().getCurrentWorldState().getFoods().put(oex.objId, (Food) oex);
 					amount -= 8400;
 					sweet = 0;
 					sick = false;
@@ -205,7 +205,7 @@ public class Mixer extends WorldEntity {
 	}
 
 	@Override
-	public void removeListData() {
+	public void removeFromWorld() {
 		Yukkuri bindBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(bind);
 		if (bindBody != null) {
 			bindBody.setForceFace(-1);
@@ -216,7 +216,7 @@ public class Mixer extends WorldEntity {
 			mix.remove();
 			mix = null;
 		}
-		GameWorld.get().getCurrentMap().getMixer().remove(objId);
+		GameWorld.get().getCurrentWorldState().getMixers().remove(objId);
 	}
 
 	/** コンストラクタ */
@@ -224,7 +224,7 @@ public class Mixer extends WorldEntity {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		GameWorld.get().getCurrentMap().getMixer().put(objId, this);
+		GameWorld.get().getCurrentWorldState().getMixers().put(objId, this);
 		objType = Type.PLATFORM;
 		worldEntityType = WorldEntityKind.MIXER;
 

@@ -26,9 +26,9 @@ class TrampolineTest extends ItemTestBase {
     void testConstructor_Default() {
         Trampoline item = new Trampoline();
         item.setObjId(1);
-        SimYukkuri.world.getCurrentMap().getTrampoline().put(item.getObjId(), item);
+        SimYukkuri.world.getCurrentWorldState().getTrampolines().put(item.getObjId(), item);
         verifyCommonProperties(item);
-        assertTrue(SimYukkuri.world.getCurrentMap().getTrampoline().containsKey(item.getObjId()));
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getTrampolines().containsKey(item.getObjId()));
     }
 
     @Test
@@ -65,9 +65,9 @@ class TrampolineTest extends ItemTestBase {
     void testRemoveListData() {
         Trampoline item = new Trampoline();
         item.setObjId(55);
-        SimYukkuri.world.getCurrentMap().getTrampoline().put(item.getObjId(), item);
-        item.removeListData();
-        assertFalse(SimYukkuri.world.getCurrentMap().getTrampoline().containsKey(item.getObjId()));
+        SimYukkuri.world.getCurrentWorldState().getTrampolines().put(item.getObjId(), item);
+        item.removeFromWorld();
+        assertFalse(SimYukkuri.world.getCurrentWorldState().getTrampolines().containsKey(item.getObjId()));
     }
 
     @Test

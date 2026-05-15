@@ -25,10 +25,10 @@ import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.world.bodylinked.Okazari.OkazariType;
 import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.CoreAnkoState;
-import org.simyukkuri.enums.CriticalDamegeType;
+import org.simyukkuri.enums.CriticalDamageType;
 import org.simyukkuri.enums.Direction;
 import org.simyukkuri.enums.HairState;
-import org.simyukkuri.system.MapPlaceData;
+import org.simyukkuri.system.WorldState;
 import org.simyukkuri.system.Sprite;
 
 public class BodyUtilTest {
@@ -128,10 +128,10 @@ public class BodyUtilTest {
         body.setFlyingType(false);
         body.setExciting(false);
 
-        body.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
+        body.setCoreAnkoState(CoreAnkoState.NON_YUKKURI_DISEASE);
         body.setExciting(true);
         YukkuriUtil.drawYukkuri(g2, null, body);
-        body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+        body.setCoreAnkoState(CoreAnkoState.NORMAL);
         body.setExciting(false);
 
         // --- 3. Front View (Option 0) States ---
@@ -173,9 +173,9 @@ public class BodyUtilTest {
         body.setZ(0);
         parent.setUniqueID(999);
         try {
-            java.lang.reflect.Field mapBodyField = MapPlaceData.class.getDeclaredField("body");
+            java.lang.reflect.Field mapBodyField = WorldState.class.getDeclaredField("body");
             mapBodyField.setAccessible(true);
-            ((Map<Integer, Yukkuri>) mapBodyField.get(SimYukkuri.world.getCurrentMap())).put(parent.getUniqueID(),
+            ((Map<Integer, Yukkuri>) mapBodyField.get(SimYukkuri.world.getCurrentWorldState())).put(parent.getUniqueID(),
                     parent);
         } catch (Exception e) {
         }
@@ -217,9 +217,9 @@ public class BodyUtilTest {
         body.setOkazariPosition(1);
         YukkuriUtil.drawYukkuri(g2, null, body);
 
-        body.setCriticalDamege(CriticalDamegeType.CUT);
+        body.setCriticalDamege(CriticalDamageType.CUT);
         YukkuriUtil.drawYukkuri(g2, null, body);
-        body.setCriticalDamege(CriticalDamegeType.INJURED);
+        body.setCriticalDamege(CriticalDamageType.INJURED);
         YukkuriUtil.drawYukkuri(g2, null, body);
         body.setCriticalDamege(null);
 

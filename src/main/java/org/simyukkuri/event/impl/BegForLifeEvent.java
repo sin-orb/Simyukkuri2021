@@ -3,7 +3,7 @@ package org.simyukkuri.event.impl;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.attachment.impl.Fire;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
-import org.simyukkuri.enums.CriticalDamegeType;
+import org.simyukkuri.enums.CriticalDamageType;
 import org.simyukkuri.enums.Happiness;
 import org.simyukkuri.enums.ImageCode;
 import org.simyukkuri.enums.Intelligence;
@@ -150,7 +150,7 @@ public class BegForLifeEvent extends EventPacket {
 		} else if (wait == 50 && roop == 0 && roop2 == 0 && roop3 != 0) {
 			body.setBegging(false);
 			// 着火状態か足が破れてる状態で見逃してもらう
-			if (body.getAttachmentSize(Fire.class) != 0 || body.getCriticalDamegeType() == CriticalDamegeType.CUT) {
+			if (body.getAttachmentSize(Fire.class) != 0 || body.getCriticalDamageType() == CriticalDamageType.CUT) {
 				body.setEventResMessage(GameMessages.getMessage(body, MessagePool.Action.ThanksHuman2), 25, true,
 						false);
 				body.setHappiness(Happiness.VERY_SAD);

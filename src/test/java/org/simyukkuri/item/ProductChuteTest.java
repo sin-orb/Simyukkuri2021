@@ -35,9 +35,9 @@ class ProductChuteTest extends ItemTestBase {
     void testConstructor_Default() {
         ProductChute item = new ProductChute();
         item.setObjId(1);
-        SimYukkuri.world.getCurrentMap().getProductchute().put(item.getObjId(), item);
+        SimYukkuri.world.getCurrentWorldState().getProductChutes().put(item.getObjId(), item);
         verifyCommonProperties(item);
-        assertTrue(SimYukkuri.world.getCurrentMap().getProductchute().containsKey(item.getObjId()));
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getProductChutes().containsKey(item.getObjId()));
     }
 
     @Test
@@ -50,7 +50,7 @@ class ProductChuteTest extends ItemTestBase {
         assertEquals(5000, item.getValue());
         assertEquals(50, item.getCost());
         assertEquals(10, item.getInterval());
-        assertTrue(SimYukkuri.world.getCurrentMap().getProductchute().containsKey(item.getObjId()));
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getProductChutes().containsKey(item.getObjId()));
     }
 
     @Test
@@ -70,9 +70,9 @@ class ProductChuteTest extends ItemTestBase {
     void testRemoveListData() {
         ProductChute item = new ProductChute(50, 50, 0);
         int id = item.getObjId();
-        assertTrue(SimYukkuri.world.getCurrentMap().getProductchute().containsKey(id));
-        item.removeListData();
-        assertFalse(SimYukkuri.world.getCurrentMap().getProductchute().containsKey(id));
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getProductChutes().containsKey(id));
+        item.removeFromWorld();
+        assertFalse(SimYukkuri.world.getCurrentWorldState().getProductChutes().containsKey(id));
     }
 
     @Test

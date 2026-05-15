@@ -65,23 +65,23 @@ public class Translate {
 		return flyLimit;
 	}
 
-	public static int getMapScale() {
+	public static int getWorldScale() {
 		return mapScale;
 	}
 
-	public static void setMapScale(int scale) {
+	public static void setWorldScale(int scale) {
 		mapScale = scale;
 	}
 
-	public static int getMapW() {
+	public static int getWorldWidth() {
 		return mapW;
 	}
 
-	public static int getMapH() {
+	public static int getWorldHeight() {
 		return mapH;
 	}
 
-	public static int getMapZ() {
+	public static int getWorldDepth() {
 		return mapZ;
 	}
 
@@ -117,7 +117,7 @@ public class Translate {
 		return ofsX;
 	}
 
-	public static int[] getMapToFieldY() {
+	public static int[] getWorldToFieldY() {
 		return mapToFieldY;
 	}
 
@@ -129,7 +129,7 @@ public class Translate {
 		return rateZ;
 	}
 
-	public static int[] getFieldToMapY() {
+	public static int[] getFieldToWorldY() {
 		return fieldToMapY;
 	}
 
@@ -144,7 +144,7 @@ public class Translate {
 	 * @param mH 奥行き
 	 * @param mZ 高さ
 	 */
-	public static final void setMapSize(int mW, int mH, int mZ) {
+	public static final void setWorldSize(int mW, int mH, int mZ) {
 		mapW = mW + 1;
 		mapH = mH + 1;
 		mapZ = mZ + 1;
@@ -859,7 +859,7 @@ public class Translate {
 	 * @param y Y座標
 	 * @return 位置
 	 */
-	public static Point4y getFieldLimitForMap(int x, int y) {
+	public static Point4y getFieldLimitForWorld(int x, int y) {
 		// フィールド座標が渡ってくるのでマップ座標も計算しておく
 		Point4y pos = Translate.invertLimit(x, y);
 		int mSX = Math.max(0, Math.min(pos.getX(), Translate.mapW));
@@ -878,11 +878,11 @@ public class Translate {
 	 * @param y Y座標
 	 * @return 壁の数
 	 */
-	public static int getCurrentWallMapNum(int x, int y) {
+	public static int getCurrentWallGridValue(int x, int y) {
 		int mSX = Math.max(0, Math.min(x, Translate.mapW));
 		int mSY = Math.max(0, Math.min(y, Translate.mapH));
 
-		return GameWorld.get().getCurrentMap().getWallMap()[mSX][mSY];
+		return GameWorld.get().getCurrentWorldState().getWallGrid()[mSX][mSY];
 	}
 
 	/**
@@ -892,11 +892,11 @@ public class Translate {
 	 * @param y   Y座標
 	 * @param num 数
 	 */
-	public static void setCurrentWallMapNum(int x, int y, int num) {
+	public static void setCurrentWallGridValue(int x, int y, int num) {
 		int mSX = Math.max(0, Math.min(x, Translate.mapW));
 		int mSY = Math.max(0, Math.min(y, Translate.mapH));
 
-		GameWorld.get().getCurrentMap().getWallMap()[mSX][mSY] = num;
+		GameWorld.get().getCurrentWorldState().getWallGrid()[mSX][mSY] = num;
 	}
 
 	/**
@@ -906,11 +906,11 @@ public class Translate {
 	 * @param y Y座標
 	 * @return 数
 	 */
-	public static int getCurrentFieldMapNum(int x, int y) {
+	public static int getCurrentFieldGridValue(int x, int y) {
 		int mSX = Math.max(0, Math.min(x, Translate.mapW));
 		int mSY = Math.max(0, Math.min(y, Translate.mapH));
 
-		return GameWorld.get().getCurrentMap().getFieldMap()[mSX][mSY];
+		return GameWorld.get().getCurrentWorldState().getFieldGrid()[mSX][mSY];
 	}
 
 	/**
@@ -920,11 +920,11 @@ public class Translate {
 	 * @param y   Y座標
 	 * @param num 数
 	 */
-	public static void setCurrentFieldMapNum(int x, int y, int num) {
+	public static void setCurrentFieldGridValue(int x, int y, int num) {
 		int mSX = Math.max(0, Math.min(x, Translate.mapW));
 		int mSY = Math.max(0, Math.min(y, Translate.mapH));
 
-		GameWorld.get().getCurrentMap().getFieldMap()[mSX][mSY] = num;
+		GameWorld.get().getCurrentWorldState().getFieldGrid()[mSX][mSY] = num;
 	}
 }
 

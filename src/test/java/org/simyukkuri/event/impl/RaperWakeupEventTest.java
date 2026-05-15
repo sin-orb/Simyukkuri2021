@@ -23,7 +23,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import org.simyukkuri.SimYukkuri;
-import org.simyukkuri.draw.World;
+import org.simyukkuri.engine.World;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.living.yukkuri.impl.Reimu;
 import org.simyukkuri.enums.AgeState;
@@ -128,7 +128,7 @@ public class RaperWakeupEventTest {
     public void testSimpleEventAction_bIsNYD_returnsTrue() {
         Yukkuri from = createBody();
         Yukkuri b = createBody();
-        b.setCoreAnkoState(org.simyukkuri.enums.CoreAnkoState.NonYukkuriDisease);
+        b.setCoreAnkoState(org.simyukkuri.enums.CoreAnkoState.NON_YUKKURI_DISEASE);
         RaperWakeupEvent event = new RaperWakeupEvent(from, null, null, 1);
         assertTrue(event.simpleEventAction(b));
     }
@@ -174,11 +174,11 @@ public class RaperWakeupEventTest {
 
             assertTrue(event.simpleEventAction(bystander));
 
-            assertEquals(1, bystander.getEventList().size(),
+            assertEquals(1, bystander.getEvents().size(),
                     "normal bystander should receive exactly one follow-up body event");
-            assertTrue(bystander.getEventList().get(0) instanceof RaperReactionEvent,
+            assertTrue(bystander.getEvents().get(0) instanceof RaperReactionEvent,
                     "normal bystander should queue a RaperReactionEvent");
-            RaperReactionEvent queued = (RaperReactionEvent) bystander.getEventList().get(0);
+            RaperReactionEvent queued = (RaperReactionEvent) bystander.getEvents().get(0);
             assertEquals(raper.getUniqueID(), queued.getFrom(),
                     "queued reaction should point back to the waking raper");
             assertNull(bystander.getCurrentEvent(), "wake-up notice should only queue the reaction at this stage");
@@ -213,7 +213,7 @@ public class RaperWakeupEventTest {
             spr[i] = new Sprite(10, 10, Sprite.PIVOT_CENTER_BOTTOM);
         }
         b.setSpriteSet(spr);
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(b.getUniqueID(), b);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueID(), b);
         return b;
     }
 }

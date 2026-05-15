@@ -198,8 +198,8 @@ public class YukkuriUtil {
 			}
 
 			// 後方のおかざり
-			if (b.getOkazari() != null && b.getOkazariPosition() != 1) {
-				Okazari okazari = b.getOkazari();
+			if (b.getOkazaris() != null && b.getOkazariPosition() != 1) {
+				Okazari okazari = b.getOkazaris();
 				OkazariType otype = okazari.getOkazariType();
 				if (otype == OkazariType.DEFAULT) {
 					b.getOkazariImageIndex(layer3, 1);
@@ -294,9 +294,9 @@ public class YukkuriUtil {
 			/* 盲目マスク描画は、顔グラ表示のほうに入れたためオミット */
 
 			// 前方おかざり
-			if (b.getOkazari() != null) {
+			if (b.getOkazaris() != null) {
 				b.getOkazariImageIndex(layer3, 0);
-				Okazari okazari = b.getOkazari();
+				Okazari okazari = b.getOkazaris();
 				OkazariType otype = okazari.getOkazariType();
 				if (otype == OkazariType.DEFAULT) {
 					if (b.getOkazariPosition() != 2) {

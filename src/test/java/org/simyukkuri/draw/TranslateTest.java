@@ -18,32 +18,34 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import org.simyukkuri.SimYukkuri;
+import org.simyukkuri.engine.ModLoader;
+import org.simyukkuri.engine.World;
 
 class TranslateTest {
 
     @BeforeEach
     void setUp() {
         SimYukkuri.world = new World();
-        Translate.setMapSize(1000, 1000, 500);
+        Translate.setWorldSize(1000, 1000, 500);
         Translate.setCanvasSize(800, 600, 100, 100, new float[]{1.0f, 0.5f, 0.25f});
         Translate.createTransTable(true);
     }
 
-    // --- setMapSize / getters ---
+    // --- setWorldSize / getters ---
 
     @Test
     void testSetMapSizeWidth() {
-        assertEquals(1001, Translate.getMapW());
+        assertEquals(1001, Translate.getWorldWidth());
     }
 
     @Test
     void testSetMapSizeHeight() {
-        assertEquals(1001, Translate.getMapH());
+        assertEquals(1001, Translate.getWorldHeight());
     }
 
     @Test
     void testSetMapSizeDepth() {
-        assertEquals(501, Translate.getMapZ());
+        assertEquals(501, Translate.getWorldDepth());
     }
 
     // --- flyLimit ---
@@ -127,8 +129,8 @@ class TranslateTest {
 
     @Test
     void testSetMapScaleGetMapScale() {
-        Translate.setMapScale(200);
-        assertEquals(200, Translate.getMapScale());
+        Translate.setWorldScale(200);
+        assertEquals(200, Translate.getWorldScale());
     }
 
     // --- translate ---
@@ -212,7 +214,7 @@ class TranslateTest {
     void testInvertXOverflowMapYClamped() {
         int result = Translate.invertX(100, 99999);
         // mapY clamped to mapH - 1
-        int expected = Translate.invertX(100, Translate.getMapH() - 1);
+        int expected = Translate.invertX(100, Translate.getWorldHeight() - 1);
         assertEquals(expected, result);
     }
 
@@ -248,8 +250,8 @@ class TranslateTest {
     void testInvertLimitLargeCoordinates() {
         Point4y result = Translate.invertLimit(99999, 99999);
         assertNotNull(result);
-        assertTrue(result.getX() <= Translate.getMapW());
-        assertTrue(result.getY() <= Translate.getMapH());
+        assertTrue(result.getX() <= Translate.getWorldWidth());
+        assertTrue(result.getY() <= Translate.getWorldHeight());
     }
 
     // --- inInvertLimit ---

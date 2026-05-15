@@ -8,7 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.enums.HairState;
-import org.simyukkuri.draw.World;
+import org.simyukkuri.engine.World;
 
 class YukkuriAbuseDelegateTest {
 

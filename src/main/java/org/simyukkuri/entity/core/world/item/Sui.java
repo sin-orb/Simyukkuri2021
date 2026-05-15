@@ -6,13 +6,13 @@ import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
 
-import org.simyukkuri.draw.ModLoader;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Rectangle4y;
 import org.simyukkuri.draw.Translate;
 import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.world.WorldEntity;
-import org.simyukkuri.enums.Event;
+import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.enums.FavItemType;
 import org.simyukkuri.enums.Intelligence;
 import org.simyukkuri.enums.Type;
@@ -314,12 +314,12 @@ public class Sui extends WorldEntity {
 	}
 
 	@Override
-	public void removeListData() {
-		GameWorld.get().getCurrentMap().getSui().remove(objId);
+	public void removeFromWorld() {
+		GameWorld.get().getCurrentWorldState().getSuis().remove(objId);
 	}
 
 	@Override
-	public Event clockTick() {
+	public TickResult clockTick() {
 		setAge(getAge() + TICK);
 		if (isRemoved()) {
 			for (Yukkuri r : bindBody) {
@@ -333,21 +333,21 @@ public class Sui extends WorldEntity {
 				((Yukkuri) bindobj).removeFavoriteItem(FavItemType.SUI);
 				bindobj = null;
 			}
-			removeListData();
-			return Event.REMOVED;
+			removeFromWorld();
+			return TickResult.REMOVED;
 		}
 
 		upDate();
 
 		if (grabbed) {
-			return Event.DONOTHING;
+			return TickResult.NONE;
 		}
 
 		if (getZ() > 0) {
 			z -= 5;
 			if (z < 0)
 				z = 0;
-			return Event.DONOTHING;
+			return TickResult.NONE;
 		}
 
 		if (getAge() > 10) {
@@ -366,8 +366,8 @@ public class Sui extends WorldEntity {
 						by = y;
 					}
 					if (b.isIdiot()) {
-						bx = GameRandom.nextInt(Translate.getMapW());
-						by = GameRandom.nextInt(Translate.getMapH() - boundary.getHeight() / 2);
+						bx = GameRandom.nextInt(Translate.getWorldWidth());
+						by = GameRandom.nextInt(Translate.getWorldHeight() - boundary.getHeight() / 2);
 					}
 					if (GameRandom.nextInt(100) == 0 && b.getIntelligence() == Intelligence.FOOL) {
 						speed = 1000;
@@ -380,12 +380,12 @@ public class Sui extends WorldEntity {
 			moveYukkuri();
 		}
 
-		return Event.DONOTHING;
+		return TickResult.NONE;
 	}
 
 	private void moveTo(int toX, int toY) {
-		destX = Math.max(0, Math.min(toX, Translate.getMapW()));
-		destY = Math.max(0, Math.min(toY, (Translate.getMapH() - 1)));
+		destX = Math.max(0, Math.min(toX, Translate.getWorldWidth()));
+		destY = Math.max(0, Math.min(toY, (Translate.getWorldHeight() - 1)));
 	}
 
 	private int decideDirection(int curPos, int destPos, int range) {
@@ -421,7 +421,7 @@ public class Sui extends WorldEntity {
 		vecY = dirY * step * speed / 100;
 		x += vecX;
 		y += vecY;
-		if (Barrier.onBarrier(x, y, getW() >> 2, getH() >> 2, Barrier.MAP_ITEM)) {
+		if (Barrier.onBarrier(x, y, getW() >> 2, getH() >> 2, Barrier.ITEM_BLOCK_FLAG)) {
 			x -= vecX;
 			y -= vecY;
 			destX = -1;
@@ -434,7 +434,7 @@ public class Sui extends WorldEntity {
 			 */
 			return;
 		}
-		if (Barrier.onBarrier(x, y, getW() >> 2, getH() >> 2, Barrier.MAP_NOUNUN)) {
+		if (Barrier.onBarrier(x, y, getW() >> 2, getH() >> 2, Barrier.NO_UNUN_BLOCK_FLAG)) {
 			x -= vecX;
 			y -= vecY;
 			destX = -1;
@@ -453,15 +453,15 @@ public class Sui extends WorldEntity {
 		if (x < 0) {
 			x = 0;
 			dirX = 1;
-		} else if (x > Translate.getMapW()) {
-			x = Translate.getMapW();
+		} else if (x > Translate.getWorldWidth()) {
+			x = Translate.getWorldWidth();
 			dirX = -1;
 		}
 		if (y < 0) {
 			y = 0;
 			dirY = 1;
-		} else if (y > Translate.getMapH() - boundary.getHeight() / 2) {
-			y = Translate.getMapH() - boundary.getHeight() / 2;
+		} else if (y > Translate.getWorldHeight() - boundary.getHeight() / 2) {
+			y = Translate.getWorldHeight() - boundary.getHeight() / 2;
 			dirY = -1;
 		}
 		// update direction of the face
@@ -484,7 +484,7 @@ public class Sui extends WorldEntity {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		GameWorld.get().getCurrentMap().getSui().put(objId, this);
+		GameWorld.get().getCurrentWorldState().getSuis().put(objId, this);
 		objType = Type.OBJECT;
 		worldEntityType = WorldEntityKind.SUI;
 

@@ -5,12 +5,12 @@ import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
 
-import org.simyukkuri.draw.ModLoader;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.entity.core.attachment.Attachment;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.AttachProperty;
-import org.simyukkuri.enums.Event;
+import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.util.GameText;
 
 /****************************************
@@ -77,12 +77,12 @@ public class Ants extends Attachment {
 	}
 
 	@Override
-	protected Event update() {
+	protected TickResult update() {
 		Yukkuri pa = org.simyukkuri.util.YukkuriLookup.getYukkuriById(parent);
 		if (pa == null)
-			return Event.DONOTHING;
+			return TickResult.NONE;
 		pa.beEaten((pa.getAntCount() / 3), 0, false);
-		return Event.DONOTHING;
+		return TickResult.NONE;
 	}
 
 	@Override

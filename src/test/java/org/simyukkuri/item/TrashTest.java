@@ -59,7 +59,7 @@ class TrashTest extends ItemTestBase {
     @Test
     void testConstructor_RegisteredInWorld() {
         Trash trash = new Trash(300, 400, 0);
-        assertTrue(SimYukkuri.world.getCurrentMap().getTrash().containsKey(trash.getObjId()));
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getTrashObjects().containsKey(trash.getObjId()));
     }
 
     @Test
@@ -67,8 +67,8 @@ class TrashTest extends ItemTestBase {
         Trash t1 = new Trash(100, 100, 0);
         Trash t2 = new Trash(200, 200, 0);
         assertNotEquals(t1.getObjId(), t2.getObjId());
-        assertTrue(SimYukkuri.world.getCurrentMap().getTrash().containsKey(t1.getObjId()));
-        assertTrue(SimYukkuri.world.getCurrentMap().getTrash().containsKey(t2.getObjId()));
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getTrashObjects().containsKey(t1.getObjId()));
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getTrashObjects().containsKey(t2.getObjId()));
     }
 
     // ---------------------------------------------------------------
@@ -78,9 +78,9 @@ class TrashTest extends ItemTestBase {
     void testRemoveListData_RemovesFromWorld() {
         Trash trash = new Trash(100, 100, 0);
         int id = trash.getObjId();
-        assertTrue(SimYukkuri.world.getCurrentMap().getTrash().containsKey(id));
-        trash.removeListData();
-        assertFalse(SimYukkuri.world.getCurrentMap().getTrash().containsKey(id));
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getTrashObjects().containsKey(id));
+        trash.removeFromWorld();
+        assertFalse(SimYukkuri.world.getCurrentWorldState().getTrashObjects().containsKey(id));
     }
 
     // ---------------------------------------------------------------
@@ -564,8 +564,8 @@ class TrashTest extends ItemTestBase {
     @Test
     void testCalcPos_ClampUpperBoundary() {
         Trash trash = new Trash(0, 0, 0);
-        int maxX = Translate.getMapW();
-        int maxY = Translate.getMapH();
+        int maxX = Translate.getWorldWidth();
+        int maxY = Translate.getWorldHeight();
         trash.setX(maxX + 500);
         trash.setY(maxY + 500);
         trash.calcPos();

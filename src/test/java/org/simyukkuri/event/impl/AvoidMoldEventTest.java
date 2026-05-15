@@ -24,7 +24,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import org.simyukkuri.SimYukkuri;
-import org.simyukkuri.draw.World;
+import org.simyukkuri.engine.World;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.living.yukkuri.impl.Reimu;
 import org.simyukkuri.enums.AgeState;
@@ -51,7 +51,7 @@ class AvoidMoldEventTest {
             spr[i] = new org.simyukkuri.system.Sprite(10, 10, org.simyukkuri.system.Sprite.PIVOT_CENTER_BOTTOM);
         }
         b.setSpriteSet(spr);
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(b.getUniqueID(), b);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueID(), b);
         return b;
     }
 
@@ -89,7 +89,7 @@ class AvoidMoldEventTest {
         Yukkuri from = createBody();
         Yukkuri to = createBody();
         Yukkuri responder = createBody();
-        responder.setPublicRank(PublicRank.UnunSlave);
+        responder.setPublicRank(PublicRank.UNUN_SLAVE);
         AvoidMoldEvent event = new AvoidMoldEvent(from, to, null, 10);
         assertFalse(event.checkEventResponse(responder));
     }

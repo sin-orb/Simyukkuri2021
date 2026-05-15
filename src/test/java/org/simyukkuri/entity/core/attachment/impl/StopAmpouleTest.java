@@ -24,12 +24,12 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import org.simyukkuri.SimYukkuri;
-import org.simyukkuri.draw.World;
+import org.simyukkuri.engine.World;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.living.yukkuri.impl.Reimu;
 import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.Direction;
-import org.simyukkuri.enums.Event;
+import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.system.ResourceUtil;
 
 public class StopAmpouleTest {
@@ -72,9 +72,9 @@ public class StopAmpouleTest {
     public void testUpdateReturnsDoNothingWhenParentIsNull() {
         StopAmpoule ampoule = new StopAmpoule();
 
-        Event result = ampoule.update();
+        TickResult result = ampoule.update();
 
-        assertEquals(Event.DONOTHING, result);
+        assertEquals(TickResult.NONE, result);
     }
 
     @Test
@@ -128,7 +128,7 @@ public class StopAmpouleTest {
         Yukkuri parent = createParent(AgeState.CHILD);
         StopAmpoule ampoule = new StopAmpoule(parent);
 
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().remove(parent.getUniqueID());
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().remove(parent.getUniqueID());
 
         BufferedImage image = ampoule.getImage(parent);
         assertNull(image);
@@ -196,7 +196,7 @@ public class StopAmpouleTest {
         int origPivotX = ampoule.getPivotX();
         int origPivotY = ampoule.getPivotY();
 
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().remove(parent.getUniqueID());
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().remove(parent.getUniqueID());
 
         ampoule.resetBoundary();
 
@@ -230,7 +230,7 @@ public class StopAmpouleTest {
     private static Yukkuri createParent(AgeState ageState) {
         Yukkuri parent = new Reimu();
         parent.setAgeState(ageState);
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(parent.getUniqueID(), parent);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(parent.getUniqueID(), parent);
         return parent;
     }
 
@@ -261,9 +261,9 @@ public class StopAmpouleTest {
             parent.setAge(20000);
             StopAmpoule ampoule = new StopAmpoule(parent);
 
-            Event result = ampoule.update();
+            TickResult result = ampoule.update();
 
-            assertEquals(Event.DONOTHING, result);
+            assertEquals(TickResult.NONE, result);
             assertEquals(19900, parent.getAge());
         }
 
@@ -273,9 +273,9 @@ public class StopAmpouleTest {
             StopAmpoule ampoule = new StopAmpoule(parent);
             long before = parent.getAge();
 
-            Event result = ampoule.update();
+            TickResult result = ampoule.update();
 
-            assertEquals(Event.DONOTHING, result);
+            assertEquals(TickResult.NONE, result);
             assertEquals(before, parent.getAge());
         }
     }

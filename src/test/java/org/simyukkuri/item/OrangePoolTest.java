@@ -36,9 +36,9 @@ class OrangePoolTest extends ItemTestBase {
     void testConstructor_Default() {
         OrangePool item = new OrangePool();
         item.setObjId(1);
-        SimYukkuri.world.getCurrentMap().getOrangePool().put(item.getObjId(), item);
+        SimYukkuri.world.getCurrentWorldState().getOrangePools().put(item.getObjId(), item);
         verifyCommonProperties(item);
-        assertTrue(SimYukkuri.world.getCurrentMap().getOrangePool().containsKey(item.getObjId()));
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getOrangePools().containsKey(item.getObjId()));
     }
 
     @Test
@@ -111,10 +111,10 @@ class OrangePoolTest extends ItemTestBase {
         OrangePool item = new OrangePool();
         int id = 999;
         item.setObjId(id);
-        SimYukkuri.world.getCurrentMap().getOrangePool().put(id, item);
-        assertTrue(SimYukkuri.world.getCurrentMap().getOrangePool().containsKey(id));
-        item.removeListData();
-        assertFalse(SimYukkuri.world.getCurrentMap().getOrangePool().containsKey(id));
+        SimYukkuri.world.getCurrentWorldState().getOrangePools().put(id, item);
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getOrangePools().containsKey(id));
+        item.removeFromWorld();
+        assertFalse(SimYukkuri.world.getCurrentWorldState().getOrangePools().containsKey(id));
     }
 
     // --- objHitProcess: enabled=false ---

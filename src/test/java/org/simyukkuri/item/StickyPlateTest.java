@@ -34,9 +34,9 @@ class StickyPlateTest extends ItemTestBase {
     void testConstructor_Default() {
         StickyPlate item = new StickyPlate();
         item.setObjId(1);
-        SimYukkuri.world.getCurrentMap().getStickyPlate().put(item.getObjId(), item);
+        SimYukkuri.world.getCurrentWorldState().getStickyPlates().put(item.getObjId(), item);
         verifyCommonProperties(item);
-        assertTrue(SimYukkuri.world.getCurrentMap().getStickyPlate().containsKey(item.getObjId()));
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getStickyPlates().containsKey(item.getObjId()));
     }
 
     @Test
@@ -116,28 +116,28 @@ class StickyPlateTest extends ItemTestBase {
     void testRemoveListData_WithoutBindBody() {
         StickyPlate item = new StickyPlate();
         item.setObjId(100);
-        SimYukkuri.world.getCurrentMap().getStickyPlate().put(item.getObjId(), item);
-        assertTrue(SimYukkuri.world.getCurrentMap().getStickyPlate().containsKey(100));
+        SimYukkuri.world.getCurrentWorldState().getStickyPlates().put(item.getObjId(), item);
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getStickyPlates().containsKey(100));
 
-        item.removeListData();
+        item.removeFromWorld();
 
-        assertFalse(SimYukkuri.world.getCurrentMap().getStickyPlate().containsKey(100));
+        assertFalse(SimYukkuri.world.getCurrentWorldState().getStickyPlates().containsKey(100));
     }
 
     @Test
     void testRemoveListData_WithBindBody() {
         StickyPlate item = new StickyPlate();
         item.setObjId(101);
-        SimYukkuri.world.getCurrentMap().getStickyPlate().put(item.getObjId(), item);
+        SimYukkuri.world.getCurrentWorldState().getStickyPlates().put(item.getObjId(), item);
 
         Yukkuri body = WorldTestHelper.createBody();
         body.setLockmove(true);
         body.setCanPullOrPush(true);
         item.setBoundYukkuri(body);
 
-        item.removeListData();
+        item.removeFromWorld();
 
-        assertFalse(SimYukkuri.world.getCurrentMap().getStickyPlate().containsKey(101));
+        assertFalse(SimYukkuri.world.getCurrentWorldState().getStickyPlates().containsKey(101));
         assertFalse(body.isLockmove());
         assertFalse(body.canPullOrPush());
     }
@@ -146,7 +146,7 @@ class StickyPlateTest extends ItemTestBase {
     void testObjHitProcess_DeadBodyReturnsZero() {
         StickyPlate item = new StickyPlate();
         item.setObjId(102);
-        SimYukkuri.world.getCurrentMap().getStickyPlate().put(item.getObjId(), item);
+        SimYukkuri.world.getCurrentWorldState().getStickyPlates().put(item.getObjId(), item);
 
         Yukkuri body = WorldTestHelper.createBody();
         try {
@@ -167,7 +167,7 @@ class StickyPlateTest extends ItemTestBase {
     void testObjHitProcess_NormalBody() {
         StickyPlate item = new StickyPlate();
         item.setObjId(103);
-        SimYukkuri.world.getCurrentMap().getStickyPlate().put(item.getObjId(), item);
+        SimYukkuri.world.getCurrentWorldState().getStickyPlates().put(item.getObjId(), item);
 
         Yukkuri body = WorldTestHelper.createBody();
 

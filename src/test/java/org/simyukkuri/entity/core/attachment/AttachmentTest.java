@@ -26,12 +26,12 @@ import org.junit.jupiter.api.Test;
 
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.draw.Point4y;
-import org.simyukkuri.draw.World;
+import org.simyukkuri.engine.World;
 import org.simyukkuri.entity.core.attachment.Attachment;
 import org.simyukkuri.entity.core.living.yukkuri.StubBody;
 import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.AttachProperty;
-import org.simyukkuri.enums.Event;
+import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.enums.Type;
 import org.simyukkuri.entity.core.living.yukkuri.impl.Reimu;
 
@@ -44,7 +44,7 @@ public class AttachmentTest {
 	/** テスト用の具象Attachmentスタブ */
 	private static class StubAttachment extends Attachment {
 		private static final long serialVersionUID = 1L;
-		private Event updateResult = Event.DONOTHING;
+		private TickResult updateResult = TickResult.NONE;
 		private int updateCallCount = 0;
 
 		public StubAttachment(Yukkuri body) {
@@ -56,7 +56,7 @@ public class AttachmentTest {
 		}
 
 		@Override
-		protected Event update() {
+		protected TickResult update() {
 			updateCallCount++;
 			return updateResult;
 		}
@@ -70,7 +70,7 @@ public class AttachmentTest {
 			return null;
 		}
 
-		public void setUpdateResult(Event result) {
+		public void setUpdateResult(TickResult result) {
 			this.updateResult = result;
 		}
 
@@ -275,10 +275,10 @@ public class AttachmentTest {
 		StubAttachment att = new StubAttachment(parent);
 		att.setProcessInterval(1); // 毎ティック呼ばれる
 		att.setAnimate(false);
-		att.setUpdateResult(Event.REMOVED);
+		att.setUpdateResult(TickResult.REMOVED);
 
-		Event result = att.clockTick();
-		assertEquals(Event.REMOVED, result);
+		TickResult result = att.clockTick();
+		assertEquals(TickResult.REMOVED, result);
 	}
 
 	@Test
@@ -289,8 +289,8 @@ public class AttachmentTest {
 		att.setAnimate(false);
 
 		// 最初のtickでは processInterval に達しない → DONOTHING
-		Event result = att.clockTick();
-		assertEquals(Event.DONOTHING, result);
+		TickResult result = att.clockTick();
+		assertEquals(TickResult.NONE, result);
 	}
 
 	// --- アニメーション処理のテスト ---
@@ -454,7 +454,7 @@ public class AttachmentTest {
 	private Yukkuri createParent(AgeState ageState) {
 		Yukkuri parent = new Reimu();
 		parent.setAgeState(ageState);
-		SimYukkuri.world.getCurrentMap().getYukkuriMap().put(parent.getUniqueID(), parent);
+		SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(parent.getUniqueID(), parent);
 		return parent;
 	}
 
@@ -475,7 +475,7 @@ public class AttachmentTest {
 			}
 		};
 		parent.setAgeState(ageState);
-		SimYukkuri.world.getCurrentMap().getYukkuriMap().put(parent.getUniqueID(), parent);
+		SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(parent.getUniqueID(), parent);
 		return parent;
 	}
 
@@ -495,9 +495,9 @@ public class AttachmentTest {
 			att.setAttachProperty(prop);
 			att.setAnimeLoop(0);
 
-			Event result = att.clockTick();
+			TickResult result = att.clockTick();
 
-			assertEquals(Event.DONOTHING, result);
+			assertEquals(TickResult.NONE, result);
 			assertEquals(1, att.getUpdateCallCount());
 			assertEquals(1, att.getAnimeFrame());
 		}
@@ -515,9 +515,9 @@ public class AttachmentTest {
 			att.setAttachProperty(prop);
 			att.setAnimeLoop(1);
 
-			Event result = att.clockTick();
+			TickResult result = att.clockTick();
 
-			assertEquals(Event.DONOTHING, result);
+			assertEquals(TickResult.NONE, result);
 			assertEquals(0, att.getAnimeFrame());
 			assertEquals(0, att.getAnimeLoop());
 			assertFalse(att.isAnimate());

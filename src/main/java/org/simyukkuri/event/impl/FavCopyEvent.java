@@ -38,13 +38,13 @@ public class FavCopyEvent extends EventPacket {
 		// イベントの発信者が家族かチェック
 		if (body.isParent(sourceBody) || sourceBody.isParent(body) || body.isPartner(sourceBody)) {
 			if (!Barrier.acrossBarrier(body.getX(), body.getY(), sourceBody.getX(), sourceBody.getY(),
-					Barrier.MAP_BODY[body.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
+					Barrier.BODY_BLOCK_FLAGS[body.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
 
 				// 片方だけがうんうん奴隷の場合はなにもしない
-				if (((body.getPublicRank() == PublicRank.UnunSlave)
-						&& (sourceBody.getPublicRank() == PublicRank.UnunSlave)) ||
-						((body.getPublicRank() != PublicRank.UnunSlave)
-								&& (sourceBody.getPublicRank() != PublicRank.UnunSlave))) {
+				if (((body.getPublicRank() == PublicRank.UNUN_SLAVE)
+						&& (sourceBody.getPublicRank() == PublicRank.UNUN_SLAVE)) ||
+						((body.getPublicRank() != PublicRank.UNUN_SLAVE)
+								&& (sourceBody.getPublicRank() != PublicRank.UNUN_SLAVE))) {
 					body.setFavoriteItem(FavItemType.BED, sourceBody.getFavoriteItem(FavItemType.BED));
 				}
 			}

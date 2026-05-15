@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.awt.image.BufferedImage;
 import org.simyukkuri.SimYukkuri;
-import org.simyukkuri.draw.World;
+import org.simyukkuri.engine.World;
 import org.simyukkuri.entity.core.effect.impl.BakeSmoke;
 import org.simyukkuri.entity.core.effect.impl.Hit;
 import org.simyukkuri.entity.core.effect.impl.Mix;

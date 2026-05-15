@@ -46,7 +46,7 @@ public class RaperWakeupEvent extends EventPacket {
 
 		// 相手との間に壁があればスキップ
 		if (Barrier.acrossBarrier(body.getX(), body.getY(), sourceBody.getX(), sourceBody.getY(),
-				Barrier.MAP_BODY[body.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
+				Barrier.BODY_BLOCK_FLAGS[body.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
 			return false;
 		}
 

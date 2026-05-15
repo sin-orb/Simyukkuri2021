@@ -77,7 +77,7 @@ public class TarinaiTest {
         tarinai.tuneParameters();
 
         // Tarinai should have no okazari
-        assertNull(tarinai.getOkazari());
+        assertNull(tarinai.getOkazaris());
         // Tarinai should have SUPER_SHITHEAD attitude
         assertEquals(Attitude.SUPER_SHITHEAD, tarinai.getAttitude());
         // Tarinai should have no braid

@@ -26,15 +26,15 @@ import org.simyukkuri.Const;
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.entity.core.attachment.Attachment;
 import org.simyukkuri.entity.core.attachment.impl.Fire;
-import org.simyukkuri.draw.World;
+import org.simyukkuri.engine.World;
 import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.Attitude;
 import org.simyukkuri.enums.BurialState;
 import org.simyukkuri.enums.YukkuriRank;
 import org.simyukkuri.enums.CoreAnkoState;
-import org.simyukkuri.enums.CriticalDamegeType;
+import org.simyukkuri.enums.CriticalDamageType;
 import org.simyukkuri.enums.Damage;
-import org.simyukkuri.enums.Event;
+import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.enums.FootBake;
 import org.simyukkuri.enums.Happiness;
 import org.simyukkuri.util.WorldTestHelper;
@@ -77,7 +77,7 @@ import org.simyukkuri.field.FieldShape;
 import org.simyukkuri.entity.core.world.bodylinked.Stalk;
 import org.simyukkuri.draw.Rectangle4y;
 import org.simyukkuri.draw.Dimension4y;
-import org.simyukkuri.draw.Terrarium;
+import org.simyukkuri.engine.Terrarium;
 import org.simyukkuri.draw.Color4y;
 import java.awt.Color;
 import java.awt.Rectangle;
@@ -156,7 +156,7 @@ public class BodyTest {
         }
         b.setAgeState(age);
         b.setMsgType(YukkuriType.REIMU); // MessagePoolで使用
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(b.getUniqueID(), b);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueID(), b);
         return b;
     }
 
@@ -171,7 +171,7 @@ public class BodyTest {
         }
         b.setAgeState(age);
         b.setMsgType(YukkuriType.REIMU);
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(b.getUniqueID(), b);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueID(), b);
         return b;
     }
 
@@ -188,7 +188,7 @@ public class BodyTest {
         target.setExciteProb(1);
         target.setHungry(target.getHungryLimitBase()[target.getAgeState().ordinal()]);
         target.setShit(0);
-        target.setOkazari(new Okazari(target, Okazari.OkazariType.DEFAULT));
+        target.setOkazaris(new Okazari(target, Okazari.OkazariType.DEFAULT));
         target.setHasBraid(true);
         target.setSpeechDiscipline(0);
         target.setMessageBuffer(null);
@@ -199,7 +199,7 @@ public class BodyTest {
         for (int i = 0; i < count; i++) {
             StubBody child = createBody(AgeState.CHILD);
             child.setPublicRank(parent.getPublicRank());
-            parent.addChildrenList(child);
+            parent.addChild(child);
         }
     }
 
@@ -278,8 +278,8 @@ public class BodyTest {
         }
 
         @Override
-        protected Event update() {
-            return Event.DONOTHING;
+        protected TickResult update() {
+            return TickResult.NONE;
         }
 
         @Override
@@ -416,7 +416,7 @@ public class BodyTest {
         b.setMsgType(YukkuriType.REIMU);
         // Yukkuri()コンストラクタがIntelligenceをランダム設定するのでリセット
         b.setIntelligence(Intelligence.AVERAGE);
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(b.getUniqueID(), b);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueID(), b);
         return b;
     }
 
@@ -741,7 +741,7 @@ public class BodyTest {
             body.setNeedled(false);
             body.setSurisuriAccidentProb(0);
             body.setCurrentEvent(null);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setBurialState(BurialState.NONE);
             assertTrue(body.canAction());
         }
@@ -776,14 +776,14 @@ public class BodyTest {
         @Test
         public void testCanActionFalseWhenCut() {
             body.setDead(false);
-            body.setCriticalDamege(CriticalDamegeType.CUT);
+            body.setCriticalDamege(CriticalDamageType.CUT);
             assertFalse(body.canAction());
         }
 
         @Test
         public void testCanActionFalseWhenNYD() {
             body.setDead(false);
-            body.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
+            body.setCoreAnkoState(CoreAnkoState.NON_YUKKURI_DISEASE);
             assertFalse(body.canAction());
         }
 
@@ -812,7 +812,7 @@ public class BodyTest {
             body.setBurialState(BurialState.NONE);
             body.setBirth(false);
             body.setGrabbed(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setCriticalDamege(null);
             body.setPealed(false);
             body.setBlind(false);
@@ -865,7 +865,7 @@ public class BodyTest {
         @Test
         public void testIsDontMoveTrueWhenNYD() {
             body.setDead(false);
-            body.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
+            body.setCoreAnkoState(CoreAnkoState.NON_YUKKURI_DISEASE);
             assertTrue(body.isDontMove());
         }
 
@@ -885,7 +885,7 @@ public class BodyTest {
             body.setMelt(false);
             body.setBurialState(BurialState.NONE);
             body.setBirth(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setCriticalDamege(null);
             body.setPealed(false);
             body.setBlind(false);
@@ -931,7 +931,7 @@ public class BodyTest {
             body.setNeedled(false);
             body.setSurisuriAccidentProb(0);
             body.setCurrentEvent(null);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setBurialState(BurialState.NONE);
             body.setLockmove(false);
             body.setTaken(false);
@@ -955,28 +955,28 @@ public class BodyTest {
 
         @Test
         public void testHasDisorderFalseCleanState() {
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setBlind(false);
             body.setPacked(false);
             body.setCriticalDamege(null);
             body.setFootBakePeriod(0);
             body.setBakePeriod(0);
             // okazariがあり、braidがある状態
-            body.setOkazari(new Okazari());
+            body.setOkazaris(new Okazari());
             body.setHasBraid(true);
             assertFalse(body.hasDisorder());
         }
 
         @Test
         public void testHasDisorderTrueWhenNYD() {
-            body.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
+            body.setCoreAnkoState(CoreAnkoState.NON_YUKKURI_DISEASE);
             assertTrue(body.hasDisorder());
         }
 
         @Test
         public void testHasDisorderTrueWhenBlind() {
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
-            body.setOkazari(new Okazari());
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
+            body.setOkazaris(new Okazari());
             body.setHasBraid(true);
             body.setBlind(true);
             assertTrue(body.hasDisorder());
@@ -984,17 +984,17 @@ public class BodyTest {
 
         @Test
         public void testHasDisorderTrueWhenCut() {
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
-            body.setOkazari(new Okazari());
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
+            body.setOkazaris(new Okazari());
             body.setHasBraid(true);
-            body.setCriticalDamege(CriticalDamegeType.CUT);
+            body.setCriticalDamege(CriticalDamageType.CUT);
             assertTrue(body.hasDisorder());
         }
 
         @Test
         public void testHasDisorderTrueWhenNoOkazari() {
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
-            body.setOkazari(null);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
+            body.setOkazaris(null);
             body.setHasBraid(true);
             assertTrue(body.hasDisorder());
         }
@@ -1187,7 +1187,7 @@ public class BodyTest {
         public void testScenarioStressIncreasesShitWhenAlive() {
             body.setDead(false);
             body.setAgeState(AgeState.ADULT);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setShit(10);
             int shitBefore = body.getShit();
 
@@ -1249,7 +1249,7 @@ public class BodyTest {
         @Test
         public void testScenarioHappinessClearsAngryAndScare() {
             body.setDead(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setAngry(true);
             body.setScare(true);
 
@@ -1263,7 +1263,7 @@ public class BodyTest {
         @Test
         public void testScenarioNydForcesVerySadAndHate() {
             body.setDead(false);
-            body.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
+            body.setCoreAnkoState(CoreAnkoState.NON_YUKKURI_DISEASE);
             body.setHappiness(Happiness.HAPPY);
 
             body.addLovePlayer(100);
@@ -1341,7 +1341,7 @@ public class BodyTest {
         public void testTickStressIncreasesShitOverTime() {
             body.setDead(false);
             body.setAgeState(AgeState.ADULT);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setShit(10);
             int shitBefore = body.getShit();
 
@@ -1743,7 +1743,7 @@ public class BodyTest {
         @Test
         public void testSetAngryWhenNoDamage() {
             body.setDead(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setSleeping(false);
             body.setDamage(0);
             body.setHappiness(Happiness.AVERAGE);
@@ -1764,7 +1764,7 @@ public class BodyTest {
         @Test
         public void testSetAngryIgnoredWhenNYD() {
             body.setDead(false);
-            body.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
+            body.setCoreAnkoState(CoreAnkoState.NON_YUKKURI_DISEASE);
             body.setAngry();
             // NYD なので変更されない
         }
@@ -1772,7 +1772,7 @@ public class BodyTest {
         @Test
         public void testSetAngryIgnoredWhenSleeping() {
             body.setDead(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setSleeping(true);
             body.setAngry();
             // sleeping なので変更されない
@@ -1781,7 +1781,7 @@ public class BodyTest {
         @Test
         public void testSetAngryClearsExciting() {
             body.setDead(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setSleeping(false);
             body.setDamage(0);
             body.setHappiness(Happiness.AVERAGE);
@@ -1796,7 +1796,7 @@ public class BodyTest {
         @Test
         public void testSetAngryResetsRelaxNobinobi() {
             body.setDead(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setSleeping(false);
             body.setDamage(0);
             body.setHappiness(Happiness.AVERAGE);
@@ -2086,9 +2086,9 @@ public class BodyTest {
         @Test
         public void testRemoveRemovesFromWorld() {
             int id = body.getUniqueID();
-            assertTrue(SimYukkuri.world.getCurrentMap().getYukkuriMap().containsKey(id));
+            assertTrue(SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().containsKey(id));
             body.remove();
-            assertFalse(SimYukkuri.world.getCurrentMap().getYukkuriMap().containsKey(id));
+            assertFalse(SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().containsKey(id));
         }
 
         @Test
@@ -2112,7 +2112,7 @@ public class BodyTest {
         @Test
         public void testRemoveClearsChildrenList() {
             body.remove();
-            assertEquals(0, body.getChildrenListSize());
+            assertEquals(0, body.getChildrenCount());
         }
     }
 
@@ -2252,7 +2252,7 @@ public class BodyTest {
         @Test
         public void testGiveJuiceClearsInjury() {
             body.setDead(false);
-            body.setCriticalDamege(CriticalDamegeType.INJURED);
+            body.setCriticalDamege(CriticalDamageType.INJURED);
             body.setCantDiePeriod(3);
 
             body.giveJuice();
@@ -2297,7 +2297,7 @@ public class BodyTest {
         @Test
         public void testGiveJuiceAddsLovePlayer() {
             body.setDead(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setLovePlayer(0);
             body.setCantDiePeriod(3);
 
@@ -2327,7 +2327,7 @@ public class BodyTest {
             baby.setSukkiri(false);
             baby.setNeedled(false);
             baby.setCurrentEvent(null);
-            baby.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            baby.setCoreAnkoState(CoreAnkoState.NORMAL);
             baby.setBurialState(BurialState.NONE);
             assertTrue(baby.canAction());
         }
@@ -2414,7 +2414,7 @@ public class BodyTest {
             body.setDamage(0);
             body.setNeedled(false);
             body.setUnBirth(false);
-            body.setPublicRank(org.simyukkuri.enums.PublicRank.UnunSlave);
+            body.setPublicRank(org.simyukkuri.enums.PublicRank.UNUN_SLAVE);
             assertFalse(body.canTransform());
         }
 
@@ -2427,7 +2427,7 @@ public class BodyTest {
             body.setNeedled(false);
             body.setUnBirth(false);
             body.setPublicRank(org.simyukkuri.enums.PublicRank.NONE);
-            body.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
+            body.setCoreAnkoState(CoreAnkoState.NON_YUKKURI_DISEASE);
             assertFalse(body.canTransform());
         }
 
@@ -2440,7 +2440,7 @@ public class BodyTest {
             body.setNeedled(false);
             body.setUnBirth(false);
             body.setPublicRank(org.simyukkuri.enums.PublicRank.NONE);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setBlind(true);
             assertFalse(body.canTransform());
         }
@@ -2454,7 +2454,7 @@ public class BodyTest {
             body.setNeedled(false);
             body.setUnBirth(false);
             body.setPublicRank(org.simyukkuri.enums.PublicRank.NONE);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setBlind(false);
             body.setPealed(true);
             assertFalse(body.canTransform());
@@ -2469,7 +2469,7 @@ public class BodyTest {
             body.setNeedled(false);
             body.setUnBirth(false);
             body.setPublicRank(org.simyukkuri.enums.PublicRank.NONE);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setBlind(false);
             body.setPealed(false);
             body.setPacked(true);
@@ -2485,7 +2485,7 @@ public class BodyTest {
             body.setNeedled(false);
             body.setUnBirth(false);
             body.setPublicRank(org.simyukkuri.enums.PublicRank.NONE);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setBlind(false);
             body.setPealed(false);
             body.setPacked(false);
@@ -2502,7 +2502,7 @@ public class BodyTest {
             body.setNeedled(false);
             body.setUnBirth(false);
             body.setPublicRank(org.simyukkuri.enums.PublicRank.NONE);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setBlind(false);
             body.setPealed(false);
             body.setPacked(false);
@@ -2520,7 +2520,7 @@ public class BodyTest {
             body.setNeedled(false);
             body.setUnBirth(false);
             body.setPublicRank(org.simyukkuri.enums.PublicRank.NONE);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setBlind(false);
             body.setPealed(false);
             body.setPacked(false);
@@ -3422,7 +3422,7 @@ public class BodyTest {
         public void testCastrateStalkEnable() {
             body.setDead(false);
             body.setSleeping(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT); // Not NYD
+            body.setCoreAnkoState(CoreAnkoState.NORMAL); // Not NYD
             body.castrateStalk(true);
             assertTrue(body.isStalkCastration());
             assertEquals(Happiness.VERY_SAD, body.getHappiness());
@@ -3432,7 +3432,7 @@ public class BodyTest {
         public void testCastrateStalkDisable() {
             body.setDead(false);
             body.setSleeping(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT); // Not NYD
+            body.setCoreAnkoState(CoreAnkoState.NORMAL); // Not NYD
             body.setStalkCastration(true);
             body.castrateStalk(false);
             assertFalse(body.isStalkCastration());
@@ -3449,7 +3449,7 @@ public class BodyTest {
         public void testCastrateBodyEnable() {
             body.setDead(false);
             body.setSleeping(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT); // Not NYD
+            body.setCoreAnkoState(CoreAnkoState.NORMAL); // Not NYD
             body.castrateYukkuri(true);
             assertTrue(body.isCastrated());
             assertEquals(Happiness.VERY_SAD, body.getHappiness());
@@ -3459,7 +3459,7 @@ public class BodyTest {
         public void testCastrateBodyDisable() {
             body.setDead(false);
             body.setSleeping(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT); // Not NYD
+            body.setCoreAnkoState(CoreAnkoState.NORMAL); // Not NYD
             body.setCastrated(true);
             body.castrateYukkuri(false);
             assertFalse(body.isCastrated());
@@ -3494,7 +3494,7 @@ public class BodyTest {
             body.setDead(false);
             body.setBurned(false);
             body.setCrushed(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setUnBirth(false);
             body.giveFire();
             assertEquals(1, body.getAttachmentSize(Fire.class));
@@ -3523,7 +3523,7 @@ public class BodyTest {
             body.setDead(false);
             body.setLikeWater(false);
             body.setWet(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT); // Not NYD
+            body.setCoreAnkoState(CoreAnkoState.NORMAL); // Not NYD
             int loveBefore = body.getLovePlayer();
             body.giveWater();
             assertTrue(body.isWet());
@@ -3671,7 +3671,7 @@ public class BodyTest {
         @Test
         public void testBaryInUnderGroundFromNone() {
             // baryInUnderGround requires z<=0 and being on FIELD_FARM
-            // In test environment, Translate.getCurrentFieldMapNum returns 0 (no farm)
+            // In test environment, Translate.getCurrentFieldGridValue returns 0 (no farm)
             // so the method returns early without changing state
             body.setBurialState(BurialState.NONE);
             body.baryInUnderGround();
@@ -3697,7 +3697,7 @@ public class BodyTest {
         public void testVoiceReactionWhenAlive() {
             body.setDead(false);
             body.setSleeping(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT); // Not NYD
+            body.setCoreAnkoState(CoreAnkoState.NORMAL); // Not NYD
             body.voiceReaction(0);
             // Some reaction occurs
             assertFalse(body.isDead());
@@ -3806,7 +3806,7 @@ public class BodyTest {
             body.setDead(false);
             body.setBlind(false);
             body.setSleeping(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             int loveBefore = body.getLovePlayer();
             body.breakeyes();
             assertTrue(body.isBlind());
@@ -3827,7 +3827,7 @@ public class BodyTest {
             body.setDead(false);
             body.setBlind(false);
             body.setSleeping(true);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.breakeyes();
             assertFalse(body.isSleeping());
             assertTrue(body.isBlind());
@@ -3838,7 +3838,7 @@ public class BodyTest {
             body.setDead(false);
             body.setBlind(false);
             body.setSleeping(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setToFood(true);
             body.setToShit(true);
             body.breakeyes();
@@ -3866,7 +3866,7 @@ public class BodyTest {
             body.setDead(false);
             body.setShutmouth(false);
             body.setSleeping(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             int loveBefore = body.getLovePlayer();
             body.ShutMouth();
             assertTrue(body.isShutmouth());
@@ -3887,7 +3887,7 @@ public class BodyTest {
             body.setDead(false);
             body.setShutmouth(false);
             body.setSleeping(true);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.ShutMouth();
             assertFalse(body.isSleeping());
             assertTrue(body.isShutmouth());
@@ -3898,7 +3898,7 @@ public class BodyTest {
             body.setDead(false);
             body.setShutmouth(false);
             body.setSleeping(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setToFood(true);
             body.setToBed(true);
             body.ShutMouth();
@@ -3926,7 +3926,7 @@ public class BodyTest {
             body.setDead(false);
             body.setHairState(org.simyukkuri.enums.HairState.DEFAULT);
             body.setSleeping(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.pickHair();
             assertEquals(org.simyukkuri.enums.HairState.BRINDLED1, body.getHairState());
         }
@@ -3936,7 +3936,7 @@ public class BodyTest {
             body.setDead(false);
             body.setHairState(org.simyukkuri.enums.HairState.BRINDLED1);
             body.setSleeping(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.pickHair();
             assertEquals(org.simyukkuri.enums.HairState.BRINDLED2, body.getHairState());
         }
@@ -3946,7 +3946,7 @@ public class BodyTest {
             body.setDead(false);
             body.setHairState(org.simyukkuri.enums.HairState.BRINDLED2);
             body.setSleeping(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.pickHair();
             assertEquals(org.simyukkuri.enums.HairState.BALDHEAD, body.getHairState());
         }
@@ -3967,7 +3967,7 @@ public class BodyTest {
             body.setDead(false);
             body.setHairState(org.simyukkuri.enums.HairState.DEFAULT);
             body.setSleeping(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setStress(0);
             body.pickHair();
             assertTrue(body.getStress() > 0);
@@ -3978,7 +3978,7 @@ public class BodyTest {
             body.setDead(false);
             body.setHairState(org.simyukkuri.enums.HairState.DEFAULT);
             body.setSleeping(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setLovePlayer(500);
             body.pickHair();
             assertTrue(body.getLovePlayer() < 500);
@@ -4015,12 +4015,12 @@ public class BodyTest {
             body.setBurialState(BurialState.NONE);
             body.setBirth(false);
             body.setGrabbed(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setPealed(false);
             body.setBlind(false);
             body.setPacked(false);
             body.setFootBakePeriod(0);
-            body.setCriticalDamege(CriticalDamegeType.CUT);
+            body.setCriticalDamege(CriticalDamageType.CUT);
             assertTrue(body.isDontJump());
         }
 
@@ -4040,7 +4040,7 @@ public class BodyTest {
             body.setPacked(false);
             body.setFootBakePeriod(0);
             body.setCriticalDamege(null);
-            body.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
+            body.setCoreAnkoState(CoreAnkoState.NON_YUKKURI_DISEASE);
             assertTrue(body.isDontJump());
         }
 
@@ -4055,7 +4055,7 @@ public class BodyTest {
             body.setBurialState(BurialState.NONE);
             body.setBirth(false);
             body.setGrabbed(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setPealed(false);
             body.setBlind(false);
             body.setPacked(false);
@@ -4077,7 +4077,7 @@ public class BodyTest {
             body.setBurialState(BurialState.NONE);
             body.setBirth(false);
             body.setGrabbed(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setPealed(false);
             body.setBlind(false);
             body.setPacked(false);
@@ -4111,7 +4111,7 @@ public class BodyTest {
         public void testDoSukkiriWhenNYD() {
             StubBody partner = createBody(AgeState.ADULT);
             body.setDead(false);
-            body.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
+            body.setCoreAnkoState(CoreAnkoState.NON_YUKKURI_DISEASE);
             body.doSukkiri(partner);
             // Early return
             assertFalse(body.isSukkiri());
@@ -4123,7 +4123,7 @@ public class BodyTest {
             // So setStress(0) is a no-op, stress remains unchanged
             StubBody partner = createBody(AgeState.ADULT);
             body.setDead(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setStress(500);
             body.doSukkiri(partner);
             assertEquals(500, body.getStress());
@@ -4134,7 +4134,7 @@ public class BodyTest {
         public void testDoSukkiriAddsMemories() {
             StubBody partner = createBody(AgeState.ADULT);
             body.setDead(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             int memoriesBefore = body.getMemories();
             body.doSukkiri(partner);
             assertTrue(body.getMemories() > memoriesBefore);
@@ -4144,7 +4144,7 @@ public class BodyTest {
         public void testDoSukkiriWithPantsDoesNotPregnant() {
             StubBody partner = createBody(AgeState.ADULT);
             body.setDead(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setHasPants(true);
             body.doSukkiri(partner);
             assertFalse(partner.isHasStalk());
@@ -4156,7 +4156,7 @@ public class BodyTest {
             StubBody partner = createBody(AgeState.ADULT);
             partner.setHasPants(true);
             body.setDead(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.doSukkiri(partner);
             assertFalse(partner.isHasStalk());
             assertFalse(partner.isHasBaby());
@@ -4166,7 +4166,7 @@ public class BodyTest {
         public void testDoSukkiriSetsHappyState() {
             StubBody partner = createBody(AgeState.ADULT);
             body.setDead(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.doSukkiri(partner);
             assertEquals(Happiness.HAPPY, body.getHappiness());
         }
@@ -4175,7 +4175,7 @@ public class BodyTest {
         public void testDoSukkiriClearsActions() {
             StubBody partner = createBody(AgeState.ADULT);
             body.setDead(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setToFood(true);
             body.setToBed(true);
             body.doSukkiri(partner);
@@ -4188,7 +4188,7 @@ public class BodyTest {
             StubBody partner = createBody(AgeState.ADULT);
             partner.setDead(true);
             body.setDead(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.doSukkiri(partner);
             assertFalse(partner.isHasStalk());
             assertFalse(partner.isHasBaby());
@@ -4198,7 +4198,7 @@ public class BodyTest {
         public void testDoSukkiriReducesHungry() {
             StubBody partner = createBody(AgeState.ADULT);
             body.setDead(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setHungry(10000);
             int hungryBefore = body.getHungry();
             body.doSukkiri(partner);
@@ -4268,7 +4268,7 @@ public class BodyTest {
             body.setSukkiri(false);
             body.setNeedled(false);
             body.setCurrentEvent(null);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setBurialState(BurialState.NONE);
 
             body.doSurisuri(partner);
@@ -4291,7 +4291,7 @@ public class BodyTest {
             body.setSukkiri(false);
             body.setNeedled(false);
             body.setCurrentEvent(null);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setBurialState(BurialState.NONE);
 
             body.doSurisuri(partner);
@@ -4313,7 +4313,7 @@ public class BodyTest {
             body.setSukkiri(false);
             body.setNeedled(false);
             body.setCurrentEvent(null);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setBurialState(BurialState.NONE);
             partner.setSickPeriod(0);
             partner.setDamage(0);
@@ -4393,7 +4393,7 @@ public class BodyTest {
             body.setSukkiri(false);
             body.setNeedled(false);
             body.setCurrentEvent(null);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setBurialState(BurialState.NONE);
             partner.setStress(500);
             partner.setSickPeriod(0);
@@ -4449,7 +4449,7 @@ public class BodyTest {
             partner.setRaper(false);
             body.setDead(false);
             body.setSukkiri(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setStress(500);
             body.doRape(partner);
             assertEquals(500, body.getStress());
@@ -4461,7 +4461,7 @@ public class BodyTest {
             partner.setRaper(false);
             body.setDead(false);
             body.setSukkiri(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.doRape(partner);
             assertEquals(Happiness.HAPPY, body.getHappiness());
         }
@@ -4473,7 +4473,7 @@ public class BodyTest {
             partner.setStress(0);
             body.setDead(false);
             body.setSukkiri(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.doRape(partner);
             assertTrue(partner.getStress() > 0);
         }
@@ -4485,7 +4485,7 @@ public class BodyTest {
             partner.setHasPants(true);
             body.setDead(false);
             body.setSukkiri(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.doRape(partner);
             assertFalse(partner.isHasStalk());
         }
@@ -4507,7 +4507,7 @@ public class BodyTest {
         @Test
         public void testDoOnanismWhenNYD() {
             body.setDead(false);
-            body.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
+            body.setCoreAnkoState(CoreAnkoState.NON_YUKKURI_DISEASE);
             body.doOnanism();
             // Early return
         }
@@ -4515,7 +4515,7 @@ public class BodyTest {
         @Test
         public void testDoOnanismReducesStress() {
             body.setDead(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setStress(500);
             body.doOnanism();
             assertTrue(body.getStress() < 500);
@@ -4617,7 +4617,7 @@ public class BodyTest {
             body.setDead(false);
             body.setHasBraid(false);
             body.setSleeping(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             int loveBefore = body.getLovePlayer();
             body.takeBraid();
             assertTrue(body.isHasBraid());
@@ -4629,7 +4629,7 @@ public class BodyTest {
             body.setDead(false);
             body.setHasBraid(true);
             body.setSleeping(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.takeBraid();
             assertEquals(Happiness.VERY_SAD, body.getHappiness());
         }
@@ -4795,7 +4795,7 @@ public class BodyTest {
             body.setCriticalDamege(null);
             body.setBurialState(BurialState.ALL); // Avoid mypane access
             body.bodyCut();
-            assertEquals(CriticalDamegeType.CUT, body.getCriticalDamege());
+            assertEquals(CriticalDamageType.CUT, body.getCriticalDamege());
         }
 
         @Test
@@ -4817,11 +4817,11 @@ public class BodyTest {
     class BodyInjureTests {
         @Test
         public void testBodyInjureIgnoredWhenCut() {
-            body.setCriticalDamege(CriticalDamegeType.CUT);
+            body.setCriticalDamege(CriticalDamageType.CUT);
             body.setBurialState(BurialState.ALL);
             body.bodyInjure();
             // Should not change from CUT
-            assertEquals(CriticalDamegeType.CUT, body.getCriticalDamege());
+            assertEquals(CriticalDamageType.CUT, body.getCriticalDamege());
         }
 
         @Test
@@ -4829,10 +4829,10 @@ public class BodyTest {
             body.setCriticalDamege(null);
             body.setBurialState(BurialState.ALL);
             body.setSleeping(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             SimYukkuri.RND = new ConstState(1); // nextInt(50)=1≠0 → bodyCut回避
             body.bodyInjure();
-            assertEquals(CriticalDamegeType.INJURED, body.getCriticalDamege());
+            assertEquals(CriticalDamageType.INJURED, body.getCriticalDamege());
         }
 
         @Test
@@ -4840,7 +4840,7 @@ public class BodyTest {
             body.setCriticalDamege(null);
             body.setBurialState(BurialState.ALL);
             body.setSleeping(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             SimYukkuri.RND = new ConstState(1); // nextInt(50)=1≠0 → bodyCut回避
             body.bodyInjure();
             assertEquals(Happiness.VERY_SAD, body.getHappiness());
@@ -4851,7 +4851,7 @@ public class BodyTest {
             body.setCriticalDamege(null);
             body.setBurialState(BurialState.ALL);
             body.setSleeping(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setToFood(true);
             SimYukkuri.RND = new ConstState(1); // nextInt(50)=1≠0 → bodyCut回避
             body.bodyInjure();
@@ -4895,7 +4895,7 @@ public class BodyTest {
         @Test
         public void testNoticeNoOkazariWhenDead() {
             body.setDead(true);
-            body.setOkazari(null);
+            body.setOkazaris(null);
             body.setNoticeNoOkazari(false);
             body.noticeNoOkazari();
             assertFalse(body.isNoticeNoOkazari());
@@ -4904,7 +4904,7 @@ public class BodyTest {
         @Test
         public void testNoticeNoOkazariWhenRemoved() {
             body.setRemoved(true);
-            body.setOkazari(null);
+            body.setOkazaris(null);
             body.setNoticeNoOkazari(false);
             body.noticeNoOkazari();
             assertFalse(body.isNoticeNoOkazari());
@@ -4914,7 +4914,7 @@ public class BodyTest {
         public void testNoticeNoOkazariWhenHasOkazari() {
             body.setDead(false);
             body.setRemoved(false);
-            body.setOkazari(new Okazari());
+            body.setOkazaris(new Okazari());
             body.setNoticeNoOkazari(false);
             body.noticeNoOkazari();
             assertFalse(body.isNoticeNoOkazari());
@@ -4924,7 +4924,7 @@ public class BodyTest {
         public void testNoticeNoOkazariAlreadyNoticed() {
             body.setDead(false);
             body.setRemoved(false);
-            body.setOkazari(null);
+            body.setOkazaris(null);
             body.setNoticeNoOkazari(true);
             Happiness happinessBefore = body.getHappiness();
             body.noticeNoOkazari();
@@ -4936,7 +4936,7 @@ public class BodyTest {
         public void testNoticeNoOkazariWhenSleeping() {
             body.setDead(false);
             body.setRemoved(false);
-            body.setOkazari(null);
+            body.setOkazaris(null);
             body.setNoticeNoOkazari(false);
             body.setSleeping(true);
             body.noticeNoOkazari();
@@ -4948,7 +4948,7 @@ public class BodyTest {
             body.setDead(false);
             body.setRemoved(false);
             body.setUnBirth(false);
-            body.setOkazari(null);
+            body.setOkazaris(null);
             body.setNoticeNoOkazari(false);
             body.setSleeping(false);
             body.setStress(0);
@@ -4989,7 +4989,7 @@ public class BodyTest {
 
         @Test
         public void testCleaningItselfAdultCleansWithOkazari() {
-            body.setOkazari(new Okazari());
+            body.setOkazaris(new Okazari());
             body.setDirty(true);
             body.setStubbornlyDirty(false);
             body.setIntelligence(Intelligence.AVERAGE);
@@ -5009,7 +5009,7 @@ public class BodyTest {
             // cleaningItself() calls makeDirty(false) regardless of okazari
             // But random stubbornlyDirty may be set based on intelligence
             // Set cleaningFailProb to {1,1,1} to make test deterministic
-            body.setOkazari(null);
+            body.setOkazaris(null);
             body.setDirty(false);
             body.setStubbornlyDirty(false);
             body.setIntelligence(Intelligence.AVERAGE);
@@ -5069,7 +5069,7 @@ public class BodyTest {
     class CheckAttitudeTests {
         @Test
         public void testCheckAttitudeNYDIgnored() {
-            body.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
+            body.setCoreAnkoState(CoreAnkoState.NON_YUKKURI_DISEASE);
             body.setAttitudePoint(100);
             body.checkAttitude();
             assertEquals(0, body.getAttitudePoint());
@@ -5079,7 +5079,7 @@ public class BodyTest {
         public void testCheckAttitudeAverageWithHighPositivePoints() {
             // isIdiot() always returns false in StubBody, so cannot test idiot behavior
             // AVERAGE should stay AVERAGE even if attitude point is positive.
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setIntelligence(Intelligence.AVERAGE);
             body.setAttitude(Attitude.AVERAGE);
             body.setAttitudePoint(200);
@@ -5090,7 +5090,7 @@ public class BodyTest {
 
         @Test
         public void testCheckAttitudeRudeIsCorrectedToAverage() {
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setIntelligence(Intelligence.AVERAGE);
             body.setAttitude(Attitude.SHITHEAD);
             body.setNotChangeCharacter(false);
@@ -5102,7 +5102,7 @@ public class BodyTest {
 
         @Test
         public void testCheckAttitudeSuperShitheadOnlyStepsDownToShithead() {
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setIntelligence(Intelligence.AVERAGE);
             body.setAttitude(Attitude.SUPER_SHITHEAD);
             body.setNotChangeCharacter(false);
@@ -5114,7 +5114,7 @@ public class BodyTest {
 
         @Test
         public void testCheckAttitudeNiceDoesNotDegrade() {
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setIntelligence(Intelligence.AVERAGE);
             body.setAttitude(Attitude.NICE);
             body.setNotChangeCharacter(false);
@@ -5187,7 +5187,7 @@ public class BodyTest {
             body.setSukkiri(false);
             body.setNeedled(false);
             body.setCurrentEvent(null);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setBurialState(BurialState.NONE);
             body.setStress(500);
             partner.setStress(500);
@@ -5212,7 +5212,7 @@ public class BodyTest {
             body.setSukkiri(false);
             body.setNeedled(false);
             body.setCurrentEvent(null);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setBurialState(BurialState.NONE);
             body.doSurisuri(partner);
             assertEquals(Happiness.VERY_HAPPY, body.getHappiness());
@@ -5250,7 +5250,7 @@ public class BodyTest {
             target.setSickPeriod(0);
             target.setHungry(target.getHungryLimit());
             body.setDead(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.doPeropero(target);
             assertTrue(body.isPeropero());
         }
@@ -5284,7 +5284,7 @@ public class BodyTest {
             StubBody child = createBody(AgeState.BABY);
             child.setDead(false);
             body.setDead(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.doGuriguri(child);
             assertTrue(body.isStaying());
         }
@@ -5296,7 +5296,7 @@ public class BodyTest {
             child.setDead(false);
             child.setStress(500);
             body.setDead(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.doGuriguri(child);
             assertTrue(child.getStress() > 500);
         }
@@ -5337,7 +5337,7 @@ public class BodyTest {
         @Test
         public void testInjectJuiceClearsInjured() {
             body.setDead(false);
-            body.setCriticalDamege(CriticalDamegeType.INJURED);
+            body.setCriticalDamege(CriticalDamageType.INJURED);
             body.setCantDiePeriod(3);
             body.injectJuice();
             assertNull(body.getCriticalDamege());
@@ -5346,10 +5346,10 @@ public class BodyTest {
         @Test
         public void testInjectJuiceDoesNotClearCut() {
             body.setDead(false);
-            body.setCriticalDamege(CriticalDamegeType.CUT);
+            body.setCriticalDamege(CriticalDamageType.CUT);
             body.setCantDiePeriod(3);
             body.injectJuice();
-            assertEquals(CriticalDamegeType.CUT, body.getCriticalDamege());
+            assertEquals(CriticalDamageType.CUT, body.getCriticalDamege());
         }
 
         @Test
@@ -5570,7 +5570,7 @@ public class BodyTest {
         @Test
         public void testCheckDamagePoisonSteamSetsVerySadAndMessage() {
             body.setUnBirth(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setDamage(0);
             setTerrariumBool("poisonSteam", true);
 
@@ -5584,7 +5584,7 @@ public class BodyTest {
         @Test
         public void testCheckDamagePoisonSteamWithDamageStateUsesNegiMessage() {
             body.setUnBirth(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setDamage(10);
             body.setDamageState(Damage.SOME);
             setTerrariumBool("poisonSteam", true);
@@ -5686,7 +5686,7 @@ public class BodyTest {
 
         @Test
         public void testCheckDamageInjuredNoVomitWhenRndNonZero() {
-            body.setCriticalDamegeType(CriticalDamegeType.INJURED);
+            body.setCriticalDamageType(CriticalDamageType.INJURED);
             body.setSleeping(false);
             body.setBurialState(BurialState.ALL);
             body.setShitType(YukkuriType.REIMU);
@@ -5699,7 +5699,7 @@ public class BodyTest {
 
         @Test
         public void testCheckDamageInjuredHealsWhenFullNoDamage() {
-            body.setCriticalDamegeType(CriticalDamegeType.INJURED);
+            body.setCriticalDamageType(CriticalDamageType.INJURED);
             body.setSleeping(false);
             body.setBurialState(BurialState.ALL);
             body.setHungry(body.getHungryLimit() + 10);
@@ -5724,7 +5724,7 @@ public class BodyTest {
 
         @Test
         public void testCheckDamageInjuredHealsWhenNotHeavy() {
-            body.setCriticalDamegeType(CriticalDamegeType.INJURED);
+            body.setCriticalDamageType(CriticalDamageType.INJURED);
             body.setSleeping(false);
             body.setBurialState(BurialState.ALL);
             body.setHungry(body.getHungryLimit());
@@ -5749,9 +5749,9 @@ public class BodyTest {
 
         @Test
         public void testCheckDamageCutWakesUpAndTalks() {
-            body.setCriticalDamegeType(CriticalDamegeType.CUT);
+            body.setCriticalDamageType(CriticalDamageType.CUT);
             body.setSleeping(true);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             SimYukkuri.RND = new ConstState(0);
 
             body.checkDamage();
@@ -5823,7 +5823,7 @@ public class BodyTest {
 
         @Test
         public void testCheckDamageRoadPressStrikeOnMapIndex2() {
-            SimYukkuri.world.getCurrentMap().setMapIndex(2);
+            SimYukkuri.world.getCurrentWorldState().setWorldIndex(2);
             body.setCarAccidentProb(1);
             body.setDamage(0);
             SimYukkuri.RND = new ConstState(0);
@@ -5846,7 +5846,7 @@ public class BodyTest {
 
         @Test
         public void testCheckDamagePoisonSteamNydForcesVerySad() {
-            body.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
+            body.setCoreAnkoState(CoreAnkoState.NON_YUKKURI_DISEASE);
             body.setHappiness(Happiness.HAPPY);
             body.setDamage(0);
             setTerrariumBool("poisonSteam", true);
@@ -5869,19 +5869,19 @@ public class BodyTest {
             // giveOkazari creates new Okazari unconditionally, then checks dead for
             // reaction
             body.setDead(true);
-            body.setOkazari(null);
+            body.setOkazaris(null);
             body.giveOkazari(org.simyukkuri.entity.core.world.bodylinked.Okazari.OkazariType.DEFAULT);
-            assertNotNull(body.getOkazari());
+            assertNotNull(body.getOkazaris());
         }
 
         @Test
         public void testGiveOkazariSuccess() {
             body.setDead(false);
-            body.setOkazari(null);
+            body.setOkazaris(null);
             body.setSleeping(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.giveOkazari(org.simyukkuri.entity.core.world.bodylinked.Okazari.OkazariType.DEFAULT);
-            assertNotNull(body.getOkazari());
+            assertNotNull(body.getOkazaris());
             assertEquals(Happiness.VERY_HAPPY, body.getHappiness());
         }
 
@@ -5891,35 +5891,35 @@ public class BodyTest {
             // reaction
             body.setDead(true);
             Okazari okazari = new Okazari();
-            body.setOkazari(okazari);
+            body.setOkazaris(okazari);
             body.takeOkazari(true);
-            assertNull(body.getOkazari());
+            assertNull(body.getOkazaris());
         }
 
         @Test
         public void testTakeOkazariSuccess() {
             body.setDead(false);
-            body.setOkazari(new Okazari());
+            body.setOkazaris(new Okazari());
             body.setSleeping(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.takeOkazari(true);
-            assertNull(body.getOkazari());
+            assertNull(body.getOkazaris());
             assertEquals(Happiness.VERY_SAD, body.getHappiness());
         }
 
         @Test
         public void testDropOkazariWhenNoOkazari() {
-            body.setOkazari(null);
+            body.setOkazaris(null);
             body.dropOkazari();
-            assertNull(body.getOkazari());
+            assertNull(body.getOkazaris());
         }
 
         @Test
         public void testDropOkazariSuccess() {
             body.setDead(false);
-            body.setOkazari(new Okazari());
+            body.setOkazaris(new Okazari());
             body.dropOkazari();
-            assertNull(body.getOkazari());
+            assertNull(body.getOkazaris());
         }
     }
 
@@ -6038,7 +6038,7 @@ public class BodyTest {
             body.setDead(false);
             body.setUnBirth(false);
             body.setSilent(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setMessageBuffer(null);
             body.setMessageTicks(1);
             body.setSleeping(true);
@@ -6057,7 +6057,7 @@ public class BodyTest {
             body.setDead(false);
             body.setUnBirth(false);
             body.setSilent(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setMessageBuffer(null);
             body.setMessageTicks(1);
             body.setBirthMessageForced(true);
@@ -6075,7 +6075,7 @@ public class BodyTest {
             body.setDead(false);
             body.setUnBirth(false);
             body.setSilent(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setMessageBuffer(null);
             body.setMessageTicks(1);
             body.setZ(20);
@@ -6098,7 +6098,7 @@ public class BodyTest {
             body.setDead(false);
             body.setUnBirth(false);
             body.setSilent(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setMessageBuffer(null);
             body.setMessageTicks(1);
             body.setGrabbed(true);
@@ -6313,28 +6313,28 @@ public class BodyTest {
         @Test
         public void testRemoveChildrenList() {
             StubBody child = createBody(AgeState.BABY);
-            body.addChildrenList(child);
-            assertEquals(1, body.getChildrenListSize());
-            body.removeChildrenList(child);
-            assertEquals(0, body.getChildrenListSize());
+            body.addChild(child);
+            assertEquals(1, body.getChildrenCount());
+            body.removeChild(child);
+            assertEquals(0, body.getChildrenCount());
         }
 
         @Test
         public void testRemoveElderSisterList() {
             StubBody sis = createBody(AgeState.ADULT);
-            body.addElderSisterList(sis);
-            assertEquals(1, body.getElderSisterListSize());
-            body.removeElderSisterList(sis);
-            assertEquals(0, body.getElderSisterListSize());
+            body.addElderSister(sis);
+            assertEquals(1, body.getElderSistersCount());
+            body.removeElderSister(sis);
+            assertEquals(0, body.getElderSistersCount());
         }
 
         @Test
         public void testRemoveSisterList() {
             StubBody sis = createBody(AgeState.CHILD);
-            body.addSisterList(sis);
-            assertEquals(1, body.getSisterListSize());
-            body.removeSisterList(sis);
-            assertEquals(0, body.getSisterListSize());
+            body.addSister(sis);
+            assertEquals(1, body.getSistersCount());
+            body.removeSister(sis);
+            assertEquals(0, body.getSistersCount());
         }
 
         @Test
@@ -6398,8 +6398,8 @@ public class BodyTest {
         public void testGetSisterAndElderSister() {
             StubBody sis = createBody(AgeState.CHILD);
             StubBody elder = createBody(AgeState.ADULT);
-            body.addSisterList(sis);
-            body.addElderSisterList(elder);
+            body.addSister(sis);
+            body.addElderSister(elder);
             assertEquals(sis, body.getSister(0));
             assertEquals(elder, body.getElderSister(0));
         }
@@ -6756,7 +6756,7 @@ public class BodyTest {
 
         @Test
         public void testCheckEmotionUnunSlaveExcitingClears() {
-            body.setPublicRank(PublicRank.UnunSlave);
+            body.setPublicRank(PublicRank.UNUN_SLAVE);
             body.setAttitude(Attitude.NICE);
             body.setIntelligence(Intelligence.AVERAGE);
             body.setExciting(true);
@@ -6786,7 +6786,7 @@ public class BodyTest {
             body.setEating(false);
             body.setSleeping(false);
             body.setShitting(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setCurrentEvent(null);
             body.setSurisuriFromPlayer(false);
 
@@ -7008,7 +7008,7 @@ public class BodyTest {
             baby.setNeedled(false);
             baby.setBurialState(BurialState.NONE);
             baby.setHasPants(false);
-            baby.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            baby.setCoreAnkoState(CoreAnkoState.NORMAL);
 
             boolean result = baby.checkShit();
 
@@ -7430,8 +7430,8 @@ public class BodyTest {
 
             List<Integer> ancestors = new LinkedList<>();
             ancestors.add(1);
-            body.setAncestorList(ancestors);
-            assertEquals(1, body.getAncestorList().size());
+            body.setAncestors(ancestors);
+            assertEquals(1, body.getAncestors().size());
 
             body.setFatherRaper(true);
             assertTrue(body.isFatherRaper());
@@ -7567,8 +7567,8 @@ public class BodyTest {
 
             List<EventPacket> events = new LinkedList<>();
             events.add(new TestEventPacket(EventPacket.EventPriority.LOW));
-            body.setEventList(events);
-            assertEquals(1, body.getEventList().size());
+            body.setEvents(events);
+            assertEquals(1, body.getEvents().size());
 
             boolean[] flags = new boolean[] { true, false, true };
             body.setAbFlagGodHand(flags);
@@ -7604,8 +7604,8 @@ public class BodyTest {
 
             List<EventPacket> attrsEvents = new LinkedList<>();
             attrsEvents.add(new TestEventPacket(EventPacket.EventPriority.LOW));
-            attrs.setEventList(attrsEvents);
-            assertEquals(1, attrs.getEventList().size());
+            attrs.setEvents(attrsEvents);
+            assertEquals(1, attrs.getEvents().size());
 
             boolean[] attrsFlags = new boolean[] { true, false, true };
             attrs.setAbFlagGodHand(attrsFlags);
@@ -7735,8 +7735,8 @@ public class BodyTest {
         public void testMoveToNormalCoordinates() {
             body.setDead(false);
             body.setBlockedTicks(0);
-            int targetX = Math.min(100, Translate.getMapW());
-            int targetY = Math.min(100, Translate.getMapH());
+            int targetX = Math.min(100, Translate.getWorldWidth());
+            int targetY = Math.min(100, Translate.getWorldHeight());
             body.moveTo(targetX, targetY);
             assertEquals(targetX, body.getDestX());
             assertEquals(targetY, body.getDestY());
@@ -7767,9 +7767,9 @@ public class BodyTest {
         public void testMoveToWithZ() {
             body.setDead(false);
             body.setBlockedTicks(0);
-            int targetX = Math.min(50, Translate.getMapW());
-            int targetY = Math.min(50, Translate.getMapH());
-            int targetZ = Math.min(30, Translate.getMapZ());
+            int targetX = Math.min(50, Translate.getWorldWidth());
+            int targetY = Math.min(50, Translate.getWorldHeight());
+            int targetZ = Math.min(30, Translate.getWorldDepth());
             body.moveTo(targetX, targetY, targetZ);
             assertEquals(targetX, body.getDestX());
             assertEquals(targetY, body.getDestY());
@@ -7791,9 +7791,9 @@ public class BodyTest {
             body.setDead(false);
             body.setBlockedTicks(0);
             body.moveTo(999999, 999999, 999999);
-            assertEquals(Translate.getMapW(), body.getDestX());
-            assertEquals(Translate.getMapH(), body.getDestY());
-            assertEquals(Translate.getMapZ(), body.getDestZ());
+            assertEquals(Translate.getWorldWidth(), body.getDestX());
+            assertEquals(Translate.getWorldHeight(), body.getDestY());
+            assertEquals(Translate.getWorldDepth(), body.getDestZ());
         }
 
         @Test
@@ -7830,8 +7830,8 @@ public class BodyTest {
         public void testMoveToFoodSetsFlags() {
             body.setDead(false);
             body.setBlockedTicks(0);
-            int targetX = Math.min(50, Translate.getMapW());
-            int targetY = Math.min(50, Translate.getMapH());
+            int targetX = Math.min(50, Translate.getWorldWidth());
+            int targetY = Math.min(50, Translate.getWorldHeight());
             body.moveToFood(target, org.simyukkuri.entity.core.world.item.Food.FoodType.FOOD, targetX, targetY);
             assertTrue(body.isToFood());
             // setToFood(true) overwrites purposeOfMoving to FOOD
@@ -7915,8 +7915,8 @@ public class BodyTest {
                     return true;
                 }
             };
-            int targetX = Math.min(50, Translate.getMapW());
-            int targetY = Math.min(50, Translate.getMapH());
+            int targetX = Math.min(50, Translate.getWorldWidth());
+            int targetY = Math.min(50, Translate.getWorldHeight());
             body.moveToEvent(event, targetX, targetY);
             assertEquals(targetX, body.getDestX());
             assertEquals(targetY, body.getDestY());
@@ -8015,7 +8015,7 @@ public class BodyTest {
 
         @Test
         public void testAddLovePlayerNYDAlwaysMin() {
-            body.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
+            body.setCoreAnkoState(CoreAnkoState.NON_YUKKURI_DISEASE);
             body.setLovePlayer(1000);
             body.addLovePlayer(100);
             assertEquals(-1 * body.getLovePlayerLimitBase(), body.getLovePlayer());
@@ -8171,8 +8171,8 @@ public class BodyTest {
             body.setY(200);
             body.setBlockedTicks(0);
             body.runAway(100, 100);
-            assertEquals(Translate.getMapW(), body.getDestX());
-            assertEquals(Translate.getMapH(), body.getDestY());
+            assertEquals(Translate.getWorldWidth(), body.getDestX());
+            assertEquals(Translate.getWorldHeight(), body.getDestY());
             assertTrue(body.isScare());
         }
 
@@ -8423,7 +8423,7 @@ public class BodyTest {
         public void testNoticeNoOkazariSetsStress() {
             body.setDead(false);
             body.setSleeping(false);
-            body.setOkazari(null);
+            body.setOkazaris(null);
             body.setNoticeNoOkazari(false);
             body.setStress(0);
             body.noticeNoOkazari();
@@ -8435,7 +8435,7 @@ public class BodyTest {
         public void testNoticeNoOkazariWithOkazariDoesNothing() {
             body.setDead(false);
             body.setSleeping(false);
-            body.setOkazari(new org.simyukkuri.entity.core.world.bodylinked.Okazari());
+            body.setOkazaris(new org.simyukkuri.entity.core.world.bodylinked.Okazari());
             body.setStress(0);
             body.noticeNoOkazari();
             assertEquals(0, body.getStress());
@@ -8445,7 +8445,7 @@ public class BodyTest {
         public void testNoticeNoOkazariAlreadyNoticedDoesNothing() {
             body.setDead(false);
             body.setSleeping(false);
-            body.setOkazari(null);
+            body.setOkazaris(null);
             body.setNoticeNoOkazari(true);
             body.setStress(0);
             body.noticeNoOkazari();
@@ -8456,7 +8456,7 @@ public class BodyTest {
         public void testNoticeNoOkazariSleepingDoesNothing() {
             body.setDead(false);
             body.setSleeping(true);
-            body.setOkazari(null);
+            body.setOkazaris(null);
             body.setNoticeNoOkazari(false);
             body.setStress(0);
             body.noticeNoOkazari();
@@ -8466,7 +8466,7 @@ public class BodyTest {
         @Test
         public void testNoticeNoOkazariDeadDoesNothing() {
             body.setDead(true);
-            body.setOkazari(null);
+            body.setOkazaris(null);
             body.setNoticeNoOkazari(false);
             body.setStress(0);
             body.noticeNoOkazari();
@@ -8531,7 +8531,7 @@ public class BodyTest {
         public void testBodyCutSetsCriticalDamage() {
             body.setBurialState(BurialState.ALL);
             body.bodyCut();
-            assertEquals(CriticalDamegeType.CUT, body.getCriticalDamege());
+            assertEquals(CriticalDamageType.CUT, body.getCriticalDamege());
         }
 
         @Test
@@ -8557,14 +8557,14 @@ public class BodyTest {
             body.setCriticalDamege(null);
             body.setBurialState(BurialState.ALL);
             body.bodyInjure();
-            assertEquals(CriticalDamegeType.INJURED, body.getCriticalDamege());
+            assertEquals(CriticalDamageType.INJURED, body.getCriticalDamege());
         }
 
         @Test
         public void testBodyInjureSkipsWhenAlreadyCut() {
-            body.setCriticalDamege(CriticalDamegeType.CUT);
+            body.setCriticalDamege(CriticalDamageType.CUT);
             body.bodyInjure();
-            assertEquals(CriticalDamegeType.CUT, body.getCriticalDamege());
+            assertEquals(CriticalDamageType.CUT, body.getCriticalDamege());
         }
 
         @Test
@@ -8652,7 +8652,7 @@ public class BodyTest {
             body.lockSetZ(force);
             assertEquals(0, body.getExternalPressure());
             assertFalse(body.isLockmove());
-            assertEquals(CriticalDamegeType.CUT, body.getCriticalDamege());
+            assertEquals(CriticalDamageType.CUT, body.getCriticalDamege());
         }
 
         @Test
@@ -8840,7 +8840,7 @@ public class BodyTest {
             body.setBirth(false);
             body.setSukkiri(false);
             body.setNeedled(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setBurialState(BurialState.NONE);
             assertTrue(body.canActionForEvent());
         }
@@ -8853,7 +8853,7 @@ public class BodyTest {
 
         @Test
         public void testCanActionForEventWhenCut() {
-            body.setCriticalDamege(CriticalDamegeType.CUT);
+            body.setCriticalDamege(CriticalDamageType.CUT);
             assertFalse(body.canActionForEvent());
         }
 
@@ -8883,7 +8883,7 @@ public class BodyTest {
 
         @Test
         public void testCanActionForEventWhenNYD() {
-            body.setCoreAnkoState(CoreAnkoState.NonYukkuriDiseaseNear);
+            body.setCoreAnkoState(CoreAnkoState.NON_YUKKURI_DISEASE_NEAR);
             assertFalse(body.canActionForEvent());
         }
 
@@ -8919,7 +8919,7 @@ public class BodyTest {
         public void testRemoveStalkSetsVerySadWhenAlive() {
             body.setDead(false);
             body.setSleeping(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setHappiness(Happiness.HAPPY);
             int stressBefore = body.getStress();
             Stalk stalk = new Stalk();
@@ -8961,14 +8961,14 @@ public class BodyTest {
             Yukkuri child = new StubBody();
             body.setUniqueID(100);
             child.setUniqueID(200);
-            org.simyukkuri.util.GameWorld.get().getCurrentMap().getYukkuriMap().put(child.getUniqueID(), child);
+            org.simyukkuri.util.GameWorld.get().getCurrentWorldState().getYukkuriRegistry().put(child.getUniqueID(), child);
 
             Stalk stalk = new Stalk();
             LinkedList<Stalk> stalks = new LinkedList<>();
             stalks.add(stalk);
             body.setStalks(stalks);
 
-            stalk.getBindBabies().add(child.getUniqueID());
+            stalk.getAttachedBabyIds().add(child.getUniqueID());
             child.setBindStalk(stalk);
             child.setParentLinkId(body.getUniqueID());
 
@@ -9148,7 +9148,7 @@ public class BodyTest {
         @Test
         public void testSetNYDForceFaceWhenNotNYD() {
             // DEFAULT = isNotNYD() → returnで何もしない
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setForceFace(-1);
             body.setNydForceFace(5);
             assertEquals(-1, body.getForceFace());
@@ -9157,7 +9157,7 @@ public class BodyTest {
         @Test
         public void testSetNYDForceFaceWhenPealed() {
             // pealed=true → returnで何もしない
-            body.setCoreAnkoState(CoreAnkoState.NonYukkuriDiseaseNear);
+            body.setCoreAnkoState(CoreAnkoState.NON_YUKKURI_DISEASE_NEAR);
             body.setPealed(true);
             body.setForceFace(-1);
             body.setNydForceFace(5);
@@ -9167,7 +9167,7 @@ public class BodyTest {
         @Test
         public void testSetNYDForceFaceWhenNYDAndNotPealed() {
             // NYD + not pealed → setForceFace(f)が呼ばれるはず
-            body.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
+            body.setCoreAnkoState(CoreAnkoState.NON_YUKKURI_DISEASE);
             body.setPealed(false);
             body.setForceFace(-1);
             body.setNydForceFace(5);
@@ -9274,7 +9274,7 @@ public class BodyTest {
 
         @Test
         public void testCheckEmotionNoOkazariPikopikoHasBoth() {
-            body.setOkazari(new Okazari());
+            body.setOkazaris(new Okazari());
             body.setHasBraid(true);
             boolean result = body.checkEmotionNoOkazariPikopiko();
             assertFalse(result);
@@ -9282,7 +9282,7 @@ public class BodyTest {
 
         @Test
         public void testCheckEmotionNoOkazariPikopikoSukkiri() {
-            body.setOkazari(null);
+            body.setOkazaris(null);
             body.setSukkiri(true);
             boolean result = body.checkEmotionNoOkazariPikopiko();
             assertFalse(result);
@@ -9290,7 +9290,7 @@ public class BodyTest {
 
         @Test
         public void testCheckEmotionNoOkazariPikopikoSleeping() {
-            body.setOkazari(null);
+            body.setOkazaris(null);
             body.setHasBraid(false);
             body.setSukkiri(false);
             body.setSleeping(true);
@@ -9300,7 +9300,7 @@ public class BodyTest {
 
         @Test
         public void testCheckEmotionNoOkazariPikopikoMissing() {
-            body.setOkazari(null);
+            body.setOkazaris(null);
             body.setHasBraid(false);
             body.setSukkiri(false);
             body.setSleeping(false);
@@ -9311,14 +9311,14 @@ public class BodyTest {
 
         @Test
         public void testCheckFearNYD() {
-            body.setCoreAnkoState(CoreAnkoState.NonYukkuriDiseaseNear);
+            body.setCoreAnkoState(CoreAnkoState.NON_YUKKURI_DISEASE_NEAR);
             body.checkFear();
             assertNull(body.getPanicType());
         }
 
         @Test
         public void testCheckFearNormal() {
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setUnBirth(false);
             body.setPanic(true, PanicType.FEAR);
             body.checkFear();
@@ -9328,7 +9328,7 @@ public class BodyTest {
 
         @Test
         public void testCheckFearExceedsPeriod() {
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setUnBirth(false);
             body.setPanic(true, PanicType.FEAR);
             body.setPanicPeriod(51);
@@ -9483,43 +9483,43 @@ public class BodyTest {
         public void testAddChildrenListLazyInit() {
             // childrenListはnullから遅延初期化
             StubBody child = createBody(AgeState.BABY);
-            body.addChildrenList(child);
-            assertNotNull(body.getChildrenList());
-            assertTrue(body.getChildrenList().contains(child.getUniqueID()));
+            body.addChild(child);
+            assertNotNull(body.getChildren());
+            assertTrue(body.getChildren().contains(child.getUniqueID()));
         }
 
         @Test
         public void testAddChildrenListNull() {
-            body.addChildrenList(null);
+            body.addChild(null);
             // nullの場合はIDが追加されない
         }
 
         @Test
         public void testAddElderSisterList() {
             StubBody sister = createBody(AgeState.ADULT);
-            body.addElderSisterList(sister);
-            assertTrue(body.getElderSisterList().contains(sister.getUniqueID()));
+            body.addElderSister(sister);
+            assertTrue(body.getElderSisters().contains(sister.getUniqueID()));
         }
 
         @Test
         public void testAddElderSisterListNull() {
-            int sizeBefore = body.getElderSisterList().size();
-            body.addElderSisterList(null);
-            assertEquals(sizeBefore, body.getElderSisterList().size());
+            int sizeBefore = body.getElderSisters().size();
+            body.addElderSister(null);
+            assertEquals(sizeBefore, body.getElderSisters().size());
         }
 
         @Test
         public void testAddSisterList() {
             StubBody sister = createBody(AgeState.BABY);
-            body.addSisterList(sister);
-            assertTrue(body.getSisterList().contains(sister.getUniqueID()));
+            body.addSister(sister);
+            assertTrue(body.getSisters().contains(sister.getUniqueID()));
         }
 
         @Test
         public void testAddSisterListNull() {
-            int sizeBefore = body.getSisterList().size();
-            body.addSisterList(null);
-            assertEquals(sizeBefore, body.getSisterList().size());
+            int sizeBefore = body.getSisters().size();
+            body.addSister(null);
+            assertEquals(sizeBefore, body.getSisters().size());
         }
     }
 
@@ -9660,7 +9660,7 @@ public class BodyTest {
 
         @Test
         public void testUnunSlaveBonus() {
-            reimu.setPublicRank(PublicRank.UnunSlave);
+            reimu.setPublicRank(PublicRank.UNUN_SLAVE);
             int result = reimu.getNonYukkuriDiseaseTolerance();
             assertEquals(150 + 10000, result);
         }
@@ -9726,7 +9726,7 @@ public class BodyTest {
 
         @Test
         public void testNoOkazariPenalty() {
-            reimu.setOkazari(null);
+            reimu.setOkazaris(null);
             int result = reimu.getNonYukkuriDiseaseTolerance();
             assertEquals(150 - 25, result);
         }
@@ -9754,7 +9754,7 @@ public class BodyTest {
 
         @Test
         public void testInjuredPenalty() {
-            reimu.setCriticalDamege(CriticalDamegeType.INJURED);
+            reimu.setCriticalDamege(CriticalDamageType.INJURED);
             int result = reimu.getNonYukkuriDiseaseTolerance();
             assertEquals(150 - 10, result);
         }
@@ -9797,7 +9797,7 @@ public class BodyTest {
 
         @Test
         public void testMultiplePenalties() {
-            reimu.setOkazari(null); // -25
+            reimu.setOkazaris(null); // -25
             reimu.setHasBraid(false); // -10
             reimu.setBlind(true); // -20
             reimu.setShutmouth(true); // -10
@@ -9813,7 +9813,7 @@ public class BodyTest {
             Yukkuri child = createReimuBody(AgeState.BABY);
             LinkedList<Integer> children = new LinkedList<>();
             children.add(child.getUniqueID());
-            reimu.setChildrenList(children);
+            reimu.setChildren(children);
             // 子供が生きていて健康、かつ reimuにhasDisorder=false → +10
             int result = reimu.getNonYukkuriDiseaseTolerance();
             assertEquals(150 + 10, result);
@@ -9825,7 +9825,7 @@ public class BodyTest {
             child.setDead(true);
             LinkedList<Integer> children = new LinkedList<>();
             children.add(child.getUniqueID());
-            reimu.setChildrenList(children);
+            reimu.setChildren(children);
             // 子供がdead → -10
             int result = reimu.getNonYukkuriDiseaseTolerance();
             assertEquals(150 - 10, result);
@@ -9858,7 +9858,7 @@ public class BodyTest {
         @Test
         public void testReturnsEarlyWhenCantAction() {
             // CUT → canAction()=false
-            body.setCriticalDamege(CriticalDamegeType.CUT);
+            body.setCriticalDamege(CriticalDamageType.CUT);
             int stressBefore = body.getStress();
             body.voiceReaction(0);
             assertEquals(stressBefore, body.getStress());
@@ -10046,7 +10046,7 @@ public class BodyTest {
             ConstState rnd = new ConstState(0); // nextInt always returns 0
             SimYukkuri.RND = rnd;
             body.setShit(0);
-            // isNotNYD = true (default CoreAnkoState.DEFAULT)
+            // isNotNYD = true (default CoreAnkoState.NORMAL)
             // shit < limit, so accumulates
             body.checkShit();
             // TICK=1, excretionBoost=0 → shit += 1 (not full)
@@ -10204,7 +10204,7 @@ public class BodyTest {
         @Test
         public void testUnunSlaveUsesHigherAccumulationRate() {
             SimYukkuri.RND = new ConstState(1);
-            body.setPublicRank(PublicRank.UnunSlave);
+            body.setPublicRank(PublicRank.UNUN_SLAVE);
             body.setShitting(false);
             int before = body.getShit();
             body.checkShit();
@@ -10271,7 +10271,7 @@ public class BodyTest {
             };
             setObjId(toilet, 1234);
             toilet.setWhere(Where.ON_FLOOR);
-            SimYukkuri.world.getCurrentMap().getToilet().put(1234, toilet);
+            SimYukkuri.world.getCurrentWorldState().getToilets().put(1234, toilet);
 
             body.setMoveTargetId(1234);
             body.checkShit();
@@ -10294,7 +10294,7 @@ public class BodyTest {
                     return new Rectangle4y(body.getX(), body.getY(), 10, 10);
                 }
             };
-            SimYukkuri.world.getCurrentMap().getBed().put(2001, bed);
+            SimYukkuri.world.getCurrentWorldState().getBeds().put(2001, bed);
 
             Toilet toilet = new Toilet() {
                 private static final long serialVersionUID = 1L;
@@ -10306,7 +10306,7 @@ public class BodyTest {
             };
             setObjId(toilet, 2002);
             toilet.setWhere(Where.ON_FLOOR);
-            SimYukkuri.world.getCurrentMap().getToilet().put(2002, toilet);
+            SimYukkuri.world.getCurrentWorldState().getToilets().put(2002, toilet);
 
             body.setMoveTargetId(2002);
             boolean result = body.checkShit();
@@ -10334,7 +10334,7 @@ public class BodyTest {
             };
             setObjId(toilet, 2003);
             toilet.setWhere(Where.ON_FLOOR);
-            SimYukkuri.world.getCurrentMap().getToilet().put(2003, toilet);
+            SimYukkuri.world.getCurrentWorldState().getToilets().put(2003, toilet);
 
             body.setMoveTargetId(2003);
             boolean result = body.checkShit();
@@ -10385,7 +10385,7 @@ public class BodyTest {
             body.setShit(limit + 1);
             body.setAnalClose(false);
             body.setHasPants(true);
-            body.setCoreAnkoState(CoreAnkoState.NonYukkuriDiseaseNear);
+            body.setCoreAnkoState(CoreAnkoState.NON_YUKKURI_DISEASE_NEAR);
             body.checkShit();
             assertTrue(body.isDirty());
             assertEquals(Happiness.VERY_SAD, body.getHappiness());
@@ -10402,7 +10402,7 @@ public class BodyTest {
             body.setHasPants(false);
             body.setAttitude(Attitude.SUPER_SHITHEAD);
             body.setFurifuriDiscipline(0);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             assertTrue(body.willingFurifuri());
             int stressBefore = body.getStress();
             body.checkShit();
@@ -10457,7 +10457,7 @@ public class BodyTest {
         public void testCheckEmotionBlindBranch() {
             body.setBlind(true);
             body.setSleeping(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setStress(0);
             body.setMessageBuffer(null);
             SimYukkuri.RND = new ConstState(0);
@@ -10473,7 +10473,7 @@ public class BodyTest {
             body.setShutmouth(true);
             body.setPeropero(true);
             body.setSleeping(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setStress(0);
             body.setMessageBuffer(null);
             SimYukkuri.RND = new ConstState(0);
@@ -10494,7 +10494,7 @@ public class BodyTest {
             body.setCurrentEvent(null);
             body.setLockmovePeriod(0);
             body.setMessageBuffer(null);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setStress(0);
             SimYukkuri.RND = new ConstState(0);
 
@@ -10513,7 +10513,7 @@ public class BodyTest {
             body.setGrabbed(false);
             body.setLockmovePeriod(0);
             body.setMessageBuffer(null);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setStress(0);
             SimYukkuri.RND = new ConstState(0);
 
@@ -10570,7 +10570,7 @@ public class BodyTest {
 
         @Test
         public void testCheckEmotionReturnsWhenNonYukkuriDisease() {
-            body.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
+            body.setCoreAnkoState(CoreAnkoState.NON_YUKKURI_DISEASE);
             body.setUnBirth(true);
             body.setRelax(true);
             body.checkEmotion();
@@ -10608,10 +10608,10 @@ public class BodyTest {
             body.setOnNonMovingConveyor(true);
             body.setDamage(body.getDamageLimitBase()[body.getAgeState().ordinal()] / 2);
             body.setAttitude(Attitude.VERY_NICE);
-            body.getEventList().clear();
+            body.getEvents().clear();
             SimYukkuri.RND = new ConstState(0);
             body.checkEmotion();
-            assertTrue(body.getEventList().size() > 0);
+            assertTrue(body.getEvents().size() > 0);
         }
 
         @Test
@@ -10668,7 +10668,7 @@ public class BodyTest {
 
         @Test
         public void testHungryTriggersStayWhenOkazariPresent() {
-            body.setOkazari(new Okazari(body, Okazari.OkazariType.DEFAULT));
+            body.setOkazaris(new Okazari(body, Okazari.OkazariType.DEFAULT));
             body.setHasBraid(true);
             body.setHungry(0);
             SimYukkuri.RND = new ConstState(0);
@@ -10680,7 +10680,7 @@ public class BodyTest {
         public void testDirtyChildSetsScreamPeriod() {
             body.setAge(0);
             body.setIntelligence(Intelligence.FOOL);
-            body.setOkazari(new Okazari(body, Okazari.OkazariType.DEFAULT));
+            body.setOkazaris(new Okazari(body, Okazari.OkazariType.DEFAULT));
             body.setHasBraid(true);
             body.setDirty(true);
             body.setDirtyScreamPeriod(0);
@@ -10691,7 +10691,7 @@ public class BodyTest {
 
         @Test
         public void testReturnWhenCriticalCut() {
-            body.setCriticalDamege(CriticalDamegeType.CUT);
+            body.setCriticalDamege(CriticalDamageType.CUT);
             // CUT → early return, no further processing
             body.setRelax(true);
             body.checkEmotion();
@@ -10709,7 +10709,7 @@ public class BodyTest {
 
         @Test
         public void testUnunSlaveReaction() {
-            body.setPublicRank(PublicRank.UnunSlave);
+            body.setPublicRank(PublicRank.UNUN_SLAVE);
             body.setExcitingPeriod(100);
             body.setAngry(true);
             body.setScare(true);
@@ -10766,7 +10766,7 @@ public class BodyTest {
             body.setExciteProb(1);
             body.setHungry(body.getHungryLimitBase()[body.getAgeState().ordinal()]);
             body.setShit(0);
-            body.setOkazari(new Okazari(body, Okazari.OkazariType.DEFAULT));
+            body.setOkazaris(new Okazari(body, Okazari.OkazariType.DEFAULT));
             body.setHasBraid(true);
             body.setSpeechDiscipline(0);
             body.setMessageBuffer(null);
@@ -10806,7 +10806,7 @@ public class BodyTest {
             body.setEating(false);
             body.setHappiness(Happiness.AVERAGE);
             body.setCriticalDamege(null);
-            body.setOkazari(new Okazari(body, Okazari.OkazariType.DEFAULT));
+            body.setOkazaris(new Okazari(body, Okazari.OkazariType.DEFAULT));
             body.setHasBraid(true);
             body.setHungry(body.getHungryLimitBase()[body.getAgeState().ordinal()]);
             body.setExciting(false);
@@ -10916,7 +10916,7 @@ public class BodyTest {
         public void testDirtyChildSmartCleansItself() {
             body.setAgeState(AgeState.CHILD);
             body.setAttitude(Attitude.NICE);
-            body.setOkazari(new Okazari(body, Okazari.OkazariType.DEFAULT));
+            body.setOkazaris(new Okazari(body, Okazari.OkazariType.DEFAULT));
             body.setHasBraid(true);
             body.setDirty(true);
             body.setSleeping(false);
@@ -10941,7 +10941,7 @@ public class BodyTest {
             body.setDamage(0);
             body.setDamageState(Damage.NONE);
             body.setNeedled(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setSpeechDiscipline(0);
             body.setMessageBuffer(null);
             SimYukkuri.RND = new ConstState(0);
@@ -10975,7 +10975,7 @@ public class BodyTest {
             body.setDamage(0);
             body.setDamageState(Damage.NONE);
             body.setHappiness(Happiness.HAPPY);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setMessageTicks(0);
             SimYukkuri.RND = new ConstState(0);
 
@@ -10986,13 +10986,13 @@ public class BodyTest {
 
         @Test
         public void testCheckEmotionNoOkazariPikopikoBranchTriggersSad() {
-            body.setOkazari(null);
+            body.setOkazaris(null);
             body.setHasBraid(false);
             body.setSleeping(false);
             body.setDamage(0);
             body.setDamageState(Damage.NONE);
             body.setHappiness(Happiness.HAPPY);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setMessageTicks(0);
             SimYukkuri.RND = new ConstState(0);
 
@@ -11240,7 +11240,7 @@ public class BodyTest {
             body.setMotionZ(0);
             body.setX(10);
             body.setY(10);
-            Translate.setCurrentWallMapNum(11, 10, Barrier.MAP_BODY[body.getAgeState().ordinal()]);
+            Translate.setCurrentWallGridValue(11, 10, Barrier.BODY_BLOCK_FLAGS[body.getAgeState().ordinal()]);
 
             body.moveYukkuri(false);
 
@@ -11265,7 +11265,7 @@ public class BodyTest {
             body.setBlockedTicks(body.getBlockedLimitBase() + 1);
             body.setIntelligence(Intelligence.FOOL);
             body.setPanicType(PanicType.FEAR);
-            Translate.setCurrentWallMapNum(21, 20, Barrier.MAP_BODY[body.getAgeState().ordinal()]);
+            Translate.setCurrentWallGridValue(21, 20, Barrier.BODY_BLOCK_FLAGS[body.getAgeState().ordinal()]);
 
             body.moveYukkuri(false);
 
@@ -11289,8 +11289,8 @@ public class BodyTest {
             body.setLikeWater(false);
             body.setIntelligence(Intelligence.AVERAGE); // nRandom=30
             SimYukkuri.RND = new ConstState(1); // nextInt(30)=1 !=0 -> avoid
-            Translate.setCurrentFieldMapNum(31, 30, FieldShape.FIELD_POOL);
-            Translate.setCurrentFieldMapNum(30, 30, 0);
+            Translate.setCurrentFieldGridValue(31, 30, FieldShape.FIELD_POOL);
+            Translate.setCurrentFieldGridValue(30, 30, 0);
             int xBefore = body.getX();
             int yBefore = body.getY();
 
@@ -11489,7 +11489,7 @@ public class BodyTest {
             body.setHasStalk(false);
             body.setX(startX);
             body.setY(10);
-            Translate.setCurrentWallMapNum(startX + 1, 10, 0);
+            Translate.setCurrentWallGridValue(startX + 1, 10, 0);
             body.setDestX(startX + 1);
             body.setDestY(-1);
 
@@ -11521,7 +11521,7 @@ public class BodyTest {
             body.setSpeechDiscipline(0);
             body.setMessageBuffer(null);
             SimYukkuri.RND = new ConstState(0);
-            Translate.setCurrentWallMapNum(111, 110, Barrier.MAP_BODY[body.getAgeState().ordinal()]);
+            Translate.setCurrentWallGridValue(111, 110, Barrier.BODY_BLOCK_FLAGS[body.getAgeState().ordinal()]);
 
             body.moveYukkuri(false);
 
@@ -11548,8 +11548,8 @@ public class BodyTest {
             body.setDestX(61);
             body.setDestY(60);
             SimYukkuri.RND = new ConstState(0); // nextInt(30)=0 -> do not avoid
-            Translate.setCurrentFieldMapNum(61, 60, FieldShape.FIELD_POOL);
-            Translate.setCurrentFieldMapNum(60, 60, 0);
+            Translate.setCurrentFieldGridValue(61, 60, FieldShape.FIELD_POOL);
+            Translate.setCurrentFieldGridValue(60, 60, 0);
 
             body.moveYukkuri(false);
 
@@ -11582,7 +11582,7 @@ public class BodyTest {
             body.setGrabbed(false);
             body.setZ(0);
             body.setMostDepth(0);
-            body.setX(Translate.getMapW());
+            body.setX(Translate.getWorldWidth());
             body.setY(10);
             body.setVx(5);
             body.setVy(0);
@@ -11592,7 +11592,7 @@ public class BodyTest {
 
             body.moveYukkuri(false);
 
-            assertTrue(body.getX() <= Translate.getMapW());
+            assertTrue(body.getX() <= Translate.getWorldWidth());
             assertEquals(0, body.getVx());
             assertTrue(body.getFalldownDamage() >= 5);
         }
@@ -11623,7 +11623,7 @@ public class BodyTest {
             body.setZ(0);
             body.setMostDepth(0);
             body.setX(10);
-            body.setY(Translate.getMapH());
+            body.setY(Translate.getWorldHeight());
             body.setVx(0);
             body.setVy(5);
             body.setMotionX(0);
@@ -11632,7 +11632,7 @@ public class BodyTest {
 
             body.moveYukkuri(false);
 
-            assertTrue(body.getY() <= Translate.getMapH());
+            assertTrue(body.getY() <= Translate.getWorldHeight());
             assertEquals(0, body.getVy());
             assertEquals(-1, body.getDirY());
         }
@@ -11759,7 +11759,7 @@ public class BodyTest {
             body.setIntelligence(Intelligence.FOOL);
             body.setPanicType(PanicType.FEAR);
             body.setAttitude(Attitude.AVERAGE);
-            Translate.setCurrentWallMapNum(41, 40, Barrier.MAP_BODY[body.getAgeState().ordinal()]);
+            Translate.setCurrentWallGridValue(41, 40, Barrier.BODY_BLOCK_FLAGS[body.getAgeState().ordinal()]);
 
             body.moveYukkuri(false);
 
@@ -11783,8 +11783,8 @@ public class BodyTest {
             body.setLikeWater(false);
             body.setIntelligence(Intelligence.FOOL); // nRandom=10
             SimYukkuri.RND = new ConstState(0); // nextInt(10)=0 -> allow entry
-            Translate.setCurrentFieldMapNum(51, 50, FieldShape.FIELD_POOL);
-            Translate.setCurrentFieldMapNum(50, 50, 0);
+            Translate.setCurrentFieldGridValue(51, 50, FieldShape.FIELD_POOL);
+            Translate.setCurrentFieldGridValue(50, 50, 0);
             int xBefore = body.getX();
 
             body.moveYukkuri(false);
@@ -11883,7 +11883,7 @@ public class BodyTest {
             body.setPanicType(null);
             body.setToFood(true);
             body.setCurrentEvent(new SuperEatingTimeEvent());
-            Translate.setCurrentWallMapNum(61, 60, Barrier.MAP_BODY[body.getAgeState().ordinal()]);
+            Translate.setCurrentWallGridValue(61, 60, Barrier.BODY_BLOCK_FLAGS[body.getAgeState().ordinal()]);
 
             body.moveYukkuri(false);
 
@@ -11910,7 +11910,7 @@ public class BodyTest {
             body.setBlockedTicks(body.getBlockedLimitBase() + 1);
             body.setIntelligence(Intelligence.AVERAGE);
             body.setPanicType(PanicType.FEAR);
-            Translate.setCurrentWallMapNum(191, 190, Barrier.MAP_BODY[body.getAgeState().ordinal()]);
+            Translate.setCurrentWallGridValue(191, 190, Barrier.BODY_BLOCK_FLAGS[body.getAgeState().ordinal()]);
 
             body.moveYukkuri(false);
 
@@ -11936,7 +11936,7 @@ public class BodyTest {
             body.setBlockedTicks(body.getBlockedLimitBase() + 1);
             body.setIntelligence(Intelligence.FOOL);
             body.setPanicType(null);
-            Translate.setCurrentWallMapNum(181, 180, Barrier.MAP_BODY[body.getAgeState().ordinal()]);
+            Translate.setCurrentWallGridValue(181, 180, Barrier.BODY_BLOCK_FLAGS[body.getAgeState().ordinal()]);
 
             body.moveYukkuri(false);
 
@@ -11964,7 +11964,7 @@ public class BodyTest {
             body.setPanicType(PanicType.FEAR);
             body.setMessageBuffer(null);
             body.setSpeechDiscipline(0);
-            Translate.setCurrentWallMapNum(176, 175, Barrier.MAP_BODY[body.getAgeState().ordinal()]);
+            Translate.setCurrentWallGridValue(176, 175, Barrier.BODY_BLOCK_FLAGS[body.getAgeState().ordinal()]);
 
             body.moveYukkuri(false);
 
@@ -11991,7 +11991,7 @@ public class BodyTest {
             body.setIntelligence(Intelligence.FOOL);
             body.setPanicType(null);
             body.setAttitude(Attitude.SHITHEAD);
-            Translate.setCurrentWallMapNum(201, 200, Barrier.MAP_BODY[body.getAgeState().ordinal()]);
+            Translate.setCurrentWallGridValue(201, 200, Barrier.BODY_BLOCK_FLAGS[body.getAgeState().ordinal()]);
 
             body.moveYukkuri(false);
 
@@ -12018,7 +12018,7 @@ public class BodyTest {
             body.setIntelligence(Intelligence.FOOL);
             body.setPanicType(PanicType.FEAR);
             body.setAttitude(Attitude.SHITHEAD);
-            Translate.setCurrentWallMapNum(186, 185, Barrier.MAP_BODY[body.getAgeState().ordinal()]);
+            Translate.setCurrentWallGridValue(186, 185, Barrier.BODY_BLOCK_FLAGS[body.getAgeState().ordinal()]);
 
             body.moveYukkuri(false);
 
@@ -12046,7 +12046,7 @@ public class BodyTest {
             body.setIntelligence(Intelligence.AVERAGE);
             body.setPanicType(PanicType.FEAR);
             body.setAttitude(Attitude.SHITHEAD);
-            Translate.setCurrentWallMapNum(166, 165, Barrier.MAP_BODY[body.getAgeState().ordinal()]);
+            Translate.setCurrentWallGridValue(166, 165, Barrier.BODY_BLOCK_FLAGS[body.getAgeState().ordinal()]);
 
             body.moveYukkuri(false);
 
@@ -12074,7 +12074,7 @@ public class BodyTest {
             body.setIntelligence(Intelligence.FOOL);
             body.setPanicType(PanicType.FEAR);
             body.setAttitude(Attitude.SHITHEAD);
-            Translate.setCurrentWallMapNum(71, 70, Barrier.MAP_BODY[body.getAgeState().ordinal()]);
+            Translate.setCurrentWallGridValue(71, 70, Barrier.BODY_BLOCK_FLAGS[body.getAgeState().ordinal()]);
 
             body.moveYukkuri(false);
 
@@ -12145,7 +12145,7 @@ public class BodyTest {
             onBed.setAgeState(AgeState.BABY);
             onBed.setMsgType(YukkuriType.REIMU);
             onBed.setIntelligence(Intelligence.AVERAGE);
-            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(onBed.getUniqueID(), onBed);
+            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(onBed.getUniqueID(), onBed);
 
             onBed.setGrabbed(false);
             onBed.setZ(1);
@@ -12241,7 +12241,7 @@ public class BodyTest {
             ConstState rnd = new ConstState();
             rnd.setFixedBoolean(true);
             SimYukkuri.RND = rnd;
-            Translate.setCurrentWallMapNum(81, 80, Barrier.MAP_BODY[body.getAgeState().ordinal()]);
+            Translate.setCurrentWallGridValue(81, 80, Barrier.BODY_BLOCK_FLAGS[body.getAgeState().ordinal()]);
 
             body.moveYukkuri(false);
 
@@ -12272,7 +12272,7 @@ public class BodyTest {
             ConstState rnd = new ConstState();
             rnd.setFixedBoolean(true); // randomDirection keeps dirX=1
             SimYukkuri.RND = rnd;
-            Translate.setCurrentWallMapNum(11, 10, Barrier.MAP_BODY[body.getAgeState().ordinal()]);
+            Translate.setCurrentWallGridValue(11, 10, Barrier.BODY_BLOCK_FLAGS[body.getAgeState().ordinal()]);
 
             body.moveYukkuri(false);
 
@@ -12292,7 +12292,7 @@ public class BodyTest {
             falling.setAgeState(AgeState.ADULT);
             falling.setMsgType(YukkuriType.REIMU);
             falling.setIntelligence(Intelligence.AVERAGE);
-            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(falling.getUniqueID(), falling);
+            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(falling.getUniqueID(), falling);
 
             Trampoline tramp = new Trampoline() {
                 @Override
@@ -12300,7 +12300,7 @@ public class BodyTest {
                     return true;
                 }
             };
-            SimYukkuri.world.getCurrentMap().getTrampoline().put(-999, tramp);
+            SimYukkuri.world.getCurrentWorldState().getTrampolines().put(-999, tramp);
 
             falling.setGrabbed(false);
             falling.setZ(1);
@@ -12368,7 +12368,7 @@ public class BodyTest {
             body.setMotionZ(0);
             body.setX(120);
             body.setY(120);
-            Translate.setCurrentWallMapNum(120, 121, Barrier.MAP_BODY[body.getAgeState().ordinal()]);
+            Translate.setCurrentWallGridValue(120, 121, Barrier.BODY_BLOCK_FLAGS[body.getAgeState().ordinal()]);
 
             body.moveYukkuri(false);
 
@@ -12413,8 +12413,8 @@ public class BodyTest {
             body.setLikeWater(false);
             body.setIntelligence(Intelligence.WISE); // nRandom=100
             SimYukkuri.RND = new ConstState(1); // nextInt(100)=1 !=0 -> avoid
-            Translate.setCurrentFieldMapNum(141, 140, FieldShape.FIELD_POOL);
-            Translate.setCurrentFieldMapNum(140, 140, 0);
+            Translate.setCurrentFieldGridValue(141, 140, FieldShape.FIELD_POOL);
+            Translate.setCurrentFieldGridValue(140, 140, 0);
             int xBefore = body.getX();
 
             body.moveYukkuri(false);
@@ -12439,8 +12439,8 @@ public class BodyTest {
             body.setLikeWater(false);
             body.setIntelligence(Intelligence.FOOL); // nRandom=10
             SimYukkuri.RND = new ConstState(1); // nextInt(10)=1 !=0 -> avoid
-            Translate.setCurrentFieldMapNum(61, 60, FieldShape.FIELD_POOL);
-            Translate.setCurrentFieldMapNum(60, 60, 0);
+            Translate.setCurrentFieldGridValue(61, 60, FieldShape.FIELD_POOL);
+            Translate.setCurrentFieldGridValue(60, 60, 0);
             int xBefore = body.getX();
 
             body.moveYukkuri(false);
@@ -12528,7 +12528,7 @@ public class BodyTest {
             ConstState rnd = new ConstState();
             rnd.setFixedBoolean(false); // choose dirY randomization
             SimYukkuri.RND = rnd;
-            Translate.setCurrentWallMapNum(91, 90, Barrier.MAP_BODY[body.getAgeState().ordinal()]);
+            Translate.setCurrentWallGridValue(91, 90, Barrier.BODY_BLOCK_FLAGS[body.getAgeState().ordinal()]);
 
             body.moveYukkuri(false);
 
@@ -12582,7 +12582,7 @@ public class BodyTest {
             ConstState rnd = new ConstState();
             rnd.setFixedBoolean(true); // randomDirection -> 1
             SimYukkuri.RND = rnd;
-            Translate.setCurrentWallMapNum(101, 100, Barrier.MAP_BODY[body.getAgeState().ordinal()]);
+            Translate.setCurrentWallGridValue(101, 100, Barrier.BODY_BLOCK_FLAGS[body.getAgeState().ordinal()]);
 
             body.moveYukkuri(false);
 
@@ -12607,7 +12607,7 @@ public class BodyTest {
             body.setDestY(111);
             body.setDestZ(-1);
             body.setBlockedTicks(0);
-            Translate.setCurrentWallMapNum(110, 111, Barrier.MAP_BODY[body.getAgeState().ordinal()]);
+            Translate.setCurrentWallGridValue(110, 111, Barrier.BODY_BLOCK_FLAGS[body.getAgeState().ordinal()]);
 
             body.moveYukkuri(false);
 
@@ -12716,8 +12716,8 @@ public class BodyTest {
             body.setDestX(101);
             body.setDestY(100);
             body.setLikeWater(true);
-            Translate.setCurrentFieldMapNum(101, 100, FieldShape.FIELD_POOL);
-            Translate.setCurrentFieldMapNum(100, 100, 0);
+            Translate.setCurrentFieldGridValue(101, 100, FieldShape.FIELD_POOL);
+            Translate.setCurrentFieldGridValue(100, 100, 0);
             int xBefore = body.getX();
 
             body.moveYukkuri(false);
@@ -12741,8 +12741,8 @@ public class BodyTest {
             body.setDestY(200);
             body.setLikeWater(false);
             body.setIntelligence(Intelligence.AVERAGE);
-            Translate.setCurrentFieldMapNum(201, 200, FieldShape.FIELD_POOL);
-            Translate.setCurrentFieldMapNum(200, 200, FieldShape.FIELD_POOL);
+            Translate.setCurrentFieldGridValue(201, 200, FieldShape.FIELD_POOL);
+            Translate.setCurrentFieldGridValue(200, 200, FieldShape.FIELD_POOL);
             int xBefore = body.getX();
 
             body.moveYukkuri(false);
@@ -12933,7 +12933,7 @@ public class BodyTest {
             body.setHasBaby(false);
             body.setHasStalk(false);
             body.setFlyingType(false);
-            body.setCriticalDamege(CriticalDamegeType.INJURED); // isFeelPain=true
+            body.setCriticalDamege(CriticalDamageType.INJURED); // isFeelPain=true
             int xBefore = body.getX();
 
             body.moveYukkuri(false);
@@ -13215,7 +13215,7 @@ public class BodyTest {
                 }
                 falling.setAgeState(AgeState.ADULT);
                 falling.setMsgType(YukkuriType.REIMU);
-                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(falling.getUniqueID(), falling);
+                SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(falling.getUniqueID(), falling);
 
                 Trampoline tramp = new Trampoline() {
                     @Override
@@ -13223,7 +13223,7 @@ public class BodyTest {
                         return true;
                     }
                 };
-                SimYukkuri.world.getCurrentMap().getTrampoline().put(-1000, tramp);
+                SimYukkuri.world.getCurrentWorldState().getTrampolines().put(-1000, tramp);
 
                 falling.setGrabbed(false);
                 falling.setZ(1);
@@ -13265,7 +13265,7 @@ public class BodyTest {
                 }
                 falling.setAgeState(AgeState.ADULT);
                 falling.setMsgType(YukkuriType.REIMU);
-                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(falling.getUniqueID(), falling);
+                SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(falling.getUniqueID(), falling);
 
                 Trampoline tramp = new Trampoline() {
                     @Override
@@ -13273,7 +13273,7 @@ public class BodyTest {
                         return false;
                     }
                 };
-                SimYukkuri.world.getCurrentMap().getTrampoline().put(-1001, tramp);
+                SimYukkuri.world.getCurrentWorldState().getTrampolines().put(-1001, tramp);
 
                 falling.setGrabbed(false);
                 falling.setZ(1);
@@ -13310,7 +13310,7 @@ public class BodyTest {
             body.setSameDirectionFactor(0);
             body.setCountX(0);
             body.setDirX(0);
-            body.setOkazari(null);
+            body.setOkazaris(null);
             body.setHappiness(Happiness.SAD);
             body.setSpeechDiscipline(0);
             body.setMessageTicks(0);
@@ -13338,7 +13338,7 @@ public class BodyTest {
             body.setSameDirectionFactor(0);
             body.setCountY(0);
             body.setDirY(0);
-            body.setOkazari(null);
+            body.setOkazaris(null);
             body.setHappiness(Happiness.SAD);
             body.setSpeechDiscipline(0);
             body.setMessageTicks(0);
@@ -13366,7 +13366,7 @@ public class BodyTest {
             body.setSameDirectionFactor(0);
             body.setCountX(0);
             body.setDirX(0);
-            body.setOkazari(null);
+            body.setOkazaris(null);
             body.setHappiness(Happiness.SAD);
             body.setSpeechDiscipline(0);
             body.setMessageTicks(0);
@@ -13394,7 +13394,7 @@ public class BodyTest {
             body.setSameDirectionFactor(0);
             body.setCountY(0);
             body.setDirY(0);
-            body.setOkazari(null);
+            body.setOkazaris(null);
             body.setHappiness(Happiness.SAD);
             body.setSpeechDiscipline(0);
             body.setMessageTicks(0);
@@ -13422,7 +13422,7 @@ public class BodyTest {
             body.setSameDirectionFactor(0);
             body.setCountX(0);
             body.setDirX(0);
-            body.setOkazari(null);
+            body.setOkazaris(null);
             body.setHappiness(Happiness.HAPPY);
             body.setMessageTicks(0);
             ConstState rnd = new ConstState(0);
@@ -13454,7 +13454,7 @@ public class BodyTest {
                 }
                 falling.setAgeState(AgeState.ADULT);
                 falling.setMsgType(YukkuriType.REIMU);
-                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(falling.getUniqueID(), falling);
+                SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(falling.getUniqueID(), falling);
 
                 falling.setGrabbed(false);
                 falling.setZ(1);
@@ -13513,7 +13513,7 @@ public class BodyTest {
             body.setSameDirectionFactor(0);
             body.setCountX(0);
             body.setDirX(0);
-            body.setOkazari(null);
+            body.setOkazaris(null);
             body.setHappiness(Happiness.VERY_SAD);
             body.setMessageTicks(0);
             ConstState rnd = new ConstState(0);
@@ -13540,7 +13540,7 @@ public class BodyTest {
             body.setSameDirectionFactor(0);
             body.setCountY(0);
             body.setDirY(0);
-            body.setOkazari(null);
+            body.setOkazaris(null);
             body.setHappiness(Happiness.VERY_SAD);
             body.setMessageTicks(0);
             ConstState rnd = new ConstState(0);
@@ -13721,7 +13721,7 @@ public class BodyTest {
                 }
                 falling.setAgeState(AgeState.BABY);
                 falling.setMsgType(YukkuriType.REIMU);
-                SimYukkuri.world.getCurrentMap().getYukkuriMap().put(falling.getUniqueID(), falling);
+                SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(falling.getUniqueID(), falling);
 
                 falling.setGrabbed(false);
                 falling.setZ(1);
@@ -14026,12 +14026,12 @@ public class BodyTest {
             body.setLikeWater(false);
             body.setIntelligence(Intelligence.AVERAGE); // nRandom=30
             SimYukkuri.RND = new ConstState(1); // nextInt(30)=1 !=0 -> avoid
-            Translate.setCurrentFieldMapNum(181, 180, FieldShape.FIELD_POOL);
-            Translate.setCurrentFieldMapNum(180, 180, 0);
+            Translate.setCurrentFieldGridValue(181, 180, FieldShape.FIELD_POOL);
+            Translate.setCurrentFieldGridValue(180, 180, 0);
 
             body.moveYukkuri(false);
 
-            assertEquals(0, Translate.getCurrentFieldMapNum(body.getX(), body.getY()) & FieldShape.FIELD_POOL);
+            assertEquals(0, Translate.getCurrentFieldGridValue(body.getX(), body.getY()) & FieldShape.FIELD_POOL);
         }
 
         @Test
@@ -14046,12 +14046,12 @@ public class BodyTest {
             body.setMotionZ(0);
             body.setAge(0);
             body.setSpeed(200);
-            body.setY(Translate.getMapH());
-            body.setDestY(Translate.getMapH() + 5);
+            body.setY(Translate.getWorldHeight());
+            body.setDestY(Translate.getWorldHeight() + 5);
 
             body.moveYukkuri(false);
 
-            assertEquals(Translate.getMapH(), body.getY());
+            assertEquals(Translate.getWorldHeight(), body.getY());
             assertEquals(-1, body.getDirY());
         }
 
@@ -14073,7 +14073,7 @@ public class BodyTest {
             faller.setAgeState(AgeState.ADULT);
             faller.setMsgType(YukkuriType.REIMU);
             faller.setIntelligence(Intelligence.AVERAGE);
-            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(faller.getUniqueID(), faller);
+            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(faller.getUniqueID(), faller);
 
             faller.setGrabbed(false);
             faller.setZ(1);
@@ -14131,10 +14131,10 @@ public class BodyTest {
             ConstState rnd = new ConstState();
             rnd.setFixedBoolean(true);
             SimYukkuri.RND = rnd;
-            int wallAttr = Barrier.MAP_BODY[body.getAgeState().ordinal()];
+            int wallAttr = Barrier.BODY_BLOCK_FLAGS[body.getAgeState().ordinal()];
             for (int dx = -30; dx <= 30; dx++) {
                 for (int dy = -30; dy <= 30; dy++) {
-                    Translate.setCurrentWallMapNum(161 + dx, 160 + dy, wallAttr);
+                    Translate.setCurrentWallGridValue(161 + dx, 160 + dy, wallAttr);
                 }
             }
 
@@ -14154,7 +14154,7 @@ public class BodyTest {
             body.setMotionX(0);
             body.setMotionY(0);
             body.setMotionZ(0);
-            body.setX(Translate.getMapW());
+            body.setX(Translate.getWorldWidth());
             body.setY(10);
 
             body.moveYukkuri(false);
@@ -14173,7 +14173,7 @@ public class BodyTest {
             body.setMotionY(0);
             body.setMotionZ(0);
             body.setX(10);
-            body.setY(Translate.getMapH());
+            body.setY(Translate.getWorldHeight());
 
             body.moveYukkuri(false);
 
@@ -14185,7 +14185,7 @@ public class BodyTest {
             body.setGrabbed(false);
             body.setFlyingType(true);
             body.setHasBraid(true);
-            body.setZ(Translate.getMapZ());
+            body.setZ(Translate.getWorldDepth());
             body.setMostDepth(0);
             body.setVx(0);
             body.setVy(0);
@@ -14195,12 +14195,12 @@ public class BodyTest {
             body.setMotionZ(0);
             body.setAge(0);
             body.setSpeed(200);
-            body.setDestZ(Translate.getMapZ() + 5);
+            body.setDestZ(Translate.getWorldDepth() + 5);
             body.setCurrentEvent(new SuperEatingTimeEvent());
 
             body.moveYukkuri(false);
 
-            assertEquals(Translate.getMapZ(), body.getZ());
+            assertEquals(Translate.getWorldDepth(), body.getZ());
         }
 
         @Test
@@ -14337,7 +14337,7 @@ public class BodyTest {
             body.setIntelligence(Intelligence.FOOL);
             body.setPanicType(PanicType.FEAR);
             body.setAttitude(Attitude.SHITHEAD);
-            Translate.setCurrentWallMapNum(61, 60, Barrier.MAP_BODY[body.getAgeState().ordinal()]);
+            Translate.setCurrentWallGridValue(61, 60, Barrier.BODY_BLOCK_FLAGS[body.getAgeState().ordinal()]);
 
             body.moveYukkuri(false);
 
@@ -14365,7 +14365,7 @@ public class BodyTest {
             body.setIntelligence(Intelligence.FOOL);
             body.setPanicType(PanicType.FEAR);
             body.setAttitude(Attitude.NICE);
-            Translate.setCurrentWallMapNum(71, 70, Barrier.MAP_BODY[body.getAgeState().ordinal()]);
+            Translate.setCurrentWallGridValue(71, 70, Barrier.BODY_BLOCK_FLAGS[body.getAgeState().ordinal()]);
 
             body.moveYukkuri(false);
 
@@ -14556,7 +14556,7 @@ public class BodyTest {
             ConstState rnd = new ConstState();
             rnd.setFixedBoolean(true);
             SimYukkuri.RND = rnd;
-            Translate.setCurrentWallMapNum(80, 80, Barrier.MAP_BODY[body.getAgeState().ordinal()]);
+            Translate.setCurrentWallGridValue(80, 80, Barrier.BODY_BLOCK_FLAGS[body.getAgeState().ordinal()]);
 
             body.moveYukkuri(false);
 
@@ -14591,7 +14591,7 @@ public class BodyTest {
                     return true;
                 }
             };
-            SimYukkuri.world.getCurrentMap().getTrampoline().put(-2000, tramp);
+            SimYukkuri.world.getCurrentWorldState().getTrampolines().put(-2000, tramp);
 
             falling.setGrabbed(false);
             falling.setZ(1);
@@ -14627,7 +14627,7 @@ public class BodyTest {
             }
             onBed.setAgeState(AgeState.BABY);
             onBed.setMsgType(YukkuriType.REIMU);
-            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(onBed.getUniqueID(), onBed);
+            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(onBed.getUniqueID(), onBed);
 
             onBed.setGrabbed(false);
             onBed.setZ(1);
@@ -14704,7 +14704,7 @@ public class BodyTest {
             body.setDestX(-1);
             body.setDestY(-1);
             body.setDirX(1);
-            body.setOkazari(null);
+            body.setOkazaris(null);
             body.setHappiness(Happiness.VERY_SAD);
             body.setSpeechDiscipline(0);
             body.setMessageBuffer(null);
@@ -14731,7 +14731,7 @@ public class BodyTest {
             body.setDestX(-1);
             body.setDestY(-1);
             body.setDirY(1);
-            body.setOkazari(null);
+            body.setOkazaris(null);
             body.setHappiness(Happiness.SAD);
             body.setSpeechDiscipline(0);
             body.setMessageBuffer(null);
@@ -14747,7 +14747,7 @@ public class BodyTest {
         public void testFlyKeepsDestZWhenMoveTargetExists() {
             Food food = new Food();
             food.setWhere(Where.ON_FLOOR);
-            SimYukkuri.world.getCurrentMap().getFood().put(1234, food);
+            SimYukkuri.world.getCurrentWorldState().getFoods().put(1234, food);
 
             body.setGrabbed(false);
             body.setFlyingType(true);
@@ -14794,7 +14794,7 @@ public class BodyTest {
             ConstState rnd = new ConstState();
             rnd.setFixedBoolean(false); // choose Y direction
             SimYukkuri.RND = rnd;
-            Translate.setCurrentWallMapNum(91, 90, Barrier.MAP_BODY[body.getAgeState().ordinal()]);
+            Translate.setCurrentWallGridValue(91, 90, Barrier.BODY_BLOCK_FLAGS[body.getAgeState().ordinal()]);
 
             body.moveYukkuri(false);
 
@@ -14820,7 +14820,7 @@ public class BodyTest {
             }
             onBed.setAgeState(AgeState.ADULT);
             onBed.setMsgType(YukkuriType.REIMU);
-            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(onBed.getUniqueID(), onBed);
+            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(onBed.getUniqueID(), onBed);
 
             onBed.setGrabbed(false);
             onBed.setZ(1);
@@ -14907,7 +14907,7 @@ public class BodyTest {
             body.setIntelligence(Intelligence.FOOL);
             body.setPanicType(PanicType.FEAR);
             body.setAttitude(Attitude.SHITHEAD);
-            Translate.setCurrentWallMapNum(96, 95, Barrier.MAP_BODY[body.getAgeState().ordinal()]);
+            Translate.setCurrentWallGridValue(96, 95, Barrier.BODY_BLOCK_FLAGS[body.getAgeState().ordinal()]);
 
             body.moveYukkuri(false);
 
@@ -14939,7 +14939,7 @@ public class BodyTest {
             ConstState rnd = new ConstState();
             rnd.setFixedBoolean(true); // choose X direction
             SimYukkuri.RND = rnd;
-            Translate.setCurrentWallMapNum(101, 100, Barrier.MAP_BODY[body.getAgeState().ordinal()]);
+            Translate.setCurrentWallGridValue(101, 100, Barrier.BODY_BLOCK_FLAGS[body.getAgeState().ordinal()]);
 
             body.moveYukkuri(false);
 
@@ -15136,7 +15136,7 @@ public class BodyTest {
             body.setSukkiri(false);
             body.setMessageTicks(0); // isTalking=false
             int limit = body.getDamageLimitBase()[AgeState.ADULT.ordinal()];
-            if (level == FootBake.MIDIUM) {
+            if (level == FootBake.MEDIUM) {
                 body.setFootBakePeriod(limit / 2 + 1);
             } else if (level == FootBake.CRITICAL) {
                 body.setFootBakePeriod(limit + 1);
@@ -15145,9 +15145,9 @@ public class BodyTest {
 
         @Test
         public void testMidiumLamentMessage() {
-            // MIDIUM: nextInt(15)==0 → clearActions, setAngry, setHappiness(SAD), message
+            // MEDIUM: nextInt(15)==0 → clearActions, setAngry, setHappiness(SAD), message
             // setHappiness(SAD)内でsetAngry(false)が呼ばれるのでangryはfalseになる
-            setupFootbake(FootBake.MIDIUM);
+            setupFootbake(FootBake.MEDIUM);
             body.setDamage(0);
             SimYukkuri.RND = new ConstState(0);
             assertTrue(body.checkEmotionFootbake());
@@ -15157,21 +15157,21 @@ public class BodyTest {
 
         @Test
         public void testMidiumNoLamentMessage() {
-            // MIDIUM: nextInt(15)=1 (!=0) → skip LamentLowYukkuri
-            setupFootbake(FootBake.MIDIUM);
+            // MEDIUM: nextInt(15)=1 (!=0) → skip LamentLowYukkuri
+            setupFootbake(FootBake.MEDIUM);
             SimYukkuri.RND = new ConstState(1);
             assertTrue(body.checkEmotionFootbake());
         }
 
         @Test
         public void testMidiumHungry() {
-            // MIDIUM: nextInt(15)!=0, isHungry, nextInt(400)==0 → Hungry
-            setupFootbake(FootBake.MIDIUM);
+            // MEDIUM: nextInt(15)!=0, isHungry, nextInt(400)==0 → Hungry
+            setupFootbake(FootBake.MEDIUM);
             body.setHungry(0); // isHungry=true
             SimYukkuri.RND = new ConstState(0);
             // nextInt(15)==0 → true, hits first block → returns true with LamentLowYukkuri
             // Can't reach hungry with ConstState(0) because first check catches
-            // So test that MIDIUM + hungry path is reachable at all
+            // So test that MEDIUM + hungry path is reachable at all
             assertTrue(body.checkEmotionFootbake());
         }
 
@@ -15248,7 +15248,7 @@ public class BodyTest {
             // nextInt(50)==0 → clearActions, setAngry, setHappiness(SAD), forceFace,
             // message
             // setHappiness(SAD)内でsetAngry(false)が呼ばれるのでangryはfalseになる
-            body.setOkazari(null);
+            body.setOkazaris(null);
             body.setHasBraid(false);
             body.setSukkiri(false);
             body.setSleeping(false);
@@ -15264,7 +15264,7 @@ public class BodyTest {
         @Test
         public void testNoOkazariNoLament() {
             // nextInt(50)=1 (!=0) → 分岐スキップ
-            body.setOkazari(null);
+            body.setOkazaris(null);
             body.setHasBraid(false);
             body.setSukkiri(false);
             body.setSleeping(false);
@@ -15348,12 +15348,12 @@ public class BodyTest {
         public void testSetTakeoutItemMovesShitToTakenOut() {
             Shit s = new Shit();
             setObjId(s, 9001);
-            SimYukkuri.world.getCurrentMap().getShit().put(9001, s);
+            SimYukkuri.world.getCurrentWorldState().getShit().put(9001, s);
 
             body.setCarryItem(TakeoutItemType.SHIT, s);
 
-            assertNull(SimYukkuri.world.getCurrentMap().getShit().get(9001));
-            assertEquals(s, SimYukkuri.world.getCurrentMap().getTakenOutShit().get(9001));
+            assertNull(SimYukkuri.world.getCurrentWorldState().getShit().get(9001));
+            assertEquals(s, SimYukkuri.world.getCurrentWorldState().getTakenOutShits().get(9001));
             assertEquals(Where.IN_YUKKURI, s.getWhere());
         }
 
@@ -15361,12 +15361,12 @@ public class BodyTest {
         public void testSetTakeoutItemMovesFoodToTakenOut() {
             Food f = new Food();
             setObjId(f, 9002);
-            SimYukkuri.world.getCurrentMap().getFood().put(9002, f);
+            SimYukkuri.world.getCurrentWorldState().getFoods().put(9002, f);
 
             body.setCarryItem(TakeoutItemType.FOOD, f);
 
-            assertNull(SimYukkuri.world.getCurrentMap().getFood().get(9002));
-            assertEquals(f, SimYukkuri.world.getCurrentMap().getTakenOutFood().get(9002));
+            assertNull(SimYukkuri.world.getCurrentWorldState().getFoods().get(9002));
+            assertEquals(f, SimYukkuri.world.getCurrentWorldState().getTakenOutFoods().get(9002));
             assertEquals(Where.IN_YUKKURI, f.getWhere());
         }
 
@@ -15374,13 +15374,13 @@ public class BodyTest {
         public void testDropTakeoutItemShitPlacesOnFloor() {
             Shit s = new Shit();
             setObjId(s, 9003);
-            SimYukkuri.world.getCurrentMap().getTakenOutShit().put(9003, s);
+            SimYukkuri.world.getCurrentWorldState().getTakenOutShits().put(9003, s);
             body.getCarryItems().put(TakeoutItemType.SHIT, 9003);
 
             Entity dropped = body.dropTakeoutItem(TakeoutItemType.SHIT);
 
             assertEquals(s, dropped);
-            assertEquals(s, SimYukkuri.world.getCurrentMap().getShit().get(9003));
+            assertEquals(s, SimYukkuri.world.getCurrentWorldState().getShit().get(9003));
             assertEquals(Where.ON_FLOOR, s.getWhere());
         }
 
@@ -15388,13 +15388,13 @@ public class BodyTest {
         public void testDropTakeoutItemFoodPlacesOnFloor() {
             Food f = new Food();
             setObjId(f, 9004);
-            SimYukkuri.world.getCurrentMap().getTakenOutFood().put(9004, f);
+            SimYukkuri.world.getCurrentWorldState().getTakenOutFoods().put(9004, f);
             body.getCarryItems().put(TakeoutItemType.FOOD, 9004);
 
             Entity dropped = body.dropTakeoutItem(TakeoutItemType.FOOD);
 
             assertEquals(f, dropped);
-            assertEquals(f, SimYukkuri.world.getCurrentMap().getFood().get(9004));
+            assertEquals(f, SimYukkuri.world.getCurrentWorldState().getFoods().get(9004));
             assertEquals(Where.ON_FLOOR, f.getWhere());
         }
 
@@ -15423,7 +15423,7 @@ public class BodyTest {
 
         @Test
         public void testInjectIntoNullDnaNoBaby() {
-            SimYukkuri.world.getCurrentMap().setAlarm(false);
+            SimYukkuri.world.getCurrentWorldState().setAlarm(false);
             body.injectInto(null);
             assertFalse(body.isHasBaby());
         }
@@ -15787,7 +15787,7 @@ public class BodyTest {
         @Test
         public void testStrikeByYukkuriHateNoOkazariUnunSlaveNotAngry() {
             StubBody enemy = createBody(AgeState.ADULT);
-            body.setPublicRank(PublicRank.UnunSlave);
+            body.setPublicRank(PublicRank.UNUN_SLAVE);
             body.setAttitude(Attitude.AVERAGE);
             ConstState rnd = new ConstState(0);
             rnd.setFixedBoolean(true);
@@ -15877,7 +15877,7 @@ public class BodyTest {
             body.setAttitude(Attitude.SHITHEAD);
             body.setFurifuriDiscipline(0);
             body.setFurifuri(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.killTime();
             assertTrue(body.isFurifuri());
         }
@@ -16076,25 +16076,25 @@ public class BodyTest {
         @Test
         public void testConstructorPublicRankInheritsUnunSlaveFromMama() {
             StubBody mama = createBody(AgeState.ADULT);
-            mama.setPublicRank(PublicRank.UnunSlave);
+            mama.setPublicRank(PublicRank.UNUN_SLAVE);
             ConstState rnd = new ConstState(0);
             rnd.setFixedBoolean(false);
             SimYukkuri.RND = rnd;
 
             StubBody child = new StubBody(0, 0, 0, AgeState.BABY, mama, null);
-            assertEquals(PublicRank.UnunSlave, child.getPublicRank());
+            assertEquals(PublicRank.UNUN_SLAVE, child.getPublicRank());
         }
 
         @Test
         public void testConstructorMapIndexYaseiyuWhenNoMama() {
-            int prev = SimYukkuri.world.getCurrentMap().getMapIndex();
-            SimYukkuri.world.getCurrentMap().setMapIndex(5);
+            int prev = SimYukkuri.world.getCurrentWorldState().getWorldIndex();
+            SimYukkuri.world.getCurrentWorldState().setWorldIndex(5);
             SimYukkuri.RND = new ConstState(0);
 
             StubBody child = new StubBody(0, 0, 0, AgeState.BABY, null, null);
             assertEquals(YukkuriRank.YASEIYU, child.getRank());
 
-            SimYukkuri.world.getCurrentMap().setMapIndex(prev);
+            SimYukkuri.world.getCurrentWorldState().setWorldIndex(prev);
         }
     }
 
@@ -16128,8 +16128,8 @@ public class BodyTest {
             body.setLockmove(false);
             body.setPanicType(null);
             body.setSleeping(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
-            body.setCriticalDamege(CriticalDamegeType.CUT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
+            body.setCriticalDamege(CriticalDamageType.CUT);
             SimYukkuri.RND = new ConstState(0);
 
             assertTrue(body.doSurisuriByPlayer());
@@ -16143,7 +16143,7 @@ public class BodyTest {
             body.setLockmove(false);
             body.setPanicType(null);
             body.setSleeping(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setNeedled(true);
             SimYukkuri.RND = new ConstState(0);
 
@@ -16158,10 +16158,10 @@ public class BodyTest {
             body.setLockmove(false);
             body.setPanicType(null);
             body.setSleeping(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.setExciting(false);
             body.setNeedled(false);
-            body.setCriticalDamege(CriticalDamegeType.INJURED);
+            body.setCriticalDamege(CriticalDamageType.INJURED);
             body.setFootBakePeriod(0);
             body.setDamage(0);
             body.setPealed(false);
@@ -16181,9 +16181,9 @@ public class BodyTest {
         public void testCheckNonYukkuriDiseaseAntiSteamResetsState() {
             setTerrariumBool("antiNonYukkuriDiseaseSteam", true);
             FixedToleranceBody b = new FixedToleranceBody();
-            b.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
+            b.setCoreAnkoState(CoreAnkoState.NON_YUKKURI_DISEASE);
             assertFalse(invokeCheckNonYukkuriDisease(b));
-            assertEquals(CoreAnkoState.DEFAULT, b.getCoreAnkoState());
+            assertEquals(CoreAnkoState.NORMAL, b.getCoreAnkoState());
             setTerrariumBool("antiNonYukkuriDiseaseSteam", false);
         }
 
@@ -16191,17 +16191,17 @@ public class BodyTest {
         public void testCheckNonYukkuriDiseaseAnydAmpouleResetsState() {
             initAnydaAmpouleImages();
             FixedToleranceBody b = new FixedToleranceBody();
-            b.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
+            b.setCoreAnkoState(CoreAnkoState.NON_YUKKURI_DISEASE);
             b.getAttach().add(new ANYDAmpoule(b));
 
             assertFalse(invokeCheckNonYukkuriDisease(b));
-            assertEquals(CoreAnkoState.DEFAULT, b.getCoreAnkoState());
+            assertEquals(CoreAnkoState.NORMAL, b.getCoreAnkoState());
         }
 
         @Test
         public void testCheckNonYukkuriDiseaseStressTriggersNear() {
             FixedToleranceBody b = new FixedToleranceBody();
-            b.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            b.setCoreAnkoState(CoreAnkoState.NORMAL);
             b.setSpeed(100);
             int limit = b.getStressLimitBase()[b.getAgeState().ordinal()];
             int tol = b.getNonYukkuriDiseaseTolerance();
@@ -16210,14 +16210,14 @@ public class BodyTest {
             SimYukkuri.RND = new ConstState(0);
 
             invokeCheckNonYukkuriDisease(b);
-            assertEquals(CoreAnkoState.NonYukkuriDiseaseNear, b.getCoreAnkoState());
+            assertEquals(CoreAnkoState.NON_YUKKURI_DISEASE_NEAR, b.getCoreAnkoState());
             assertEquals(50, b.getSpeed());
         }
 
         @Test
         public void testCheckNonYukkuriDiseaseStressTriggersNYD() {
             FixedToleranceBody b = new FixedToleranceBody();
-            b.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            b.setCoreAnkoState(CoreAnkoState.NORMAL);
             int limit = b.getStressLimitBase()[b.getAgeState().ordinal()];
             int tol = b.getNonYukkuriDiseaseTolerance();
             int threshold = limit * tol / 100;
@@ -16225,26 +16225,26 @@ public class BodyTest {
             SimYukkuri.RND = new ConstState(0);
 
             invokeCheckNonYukkuriDisease(b);
-            assertEquals(CoreAnkoState.NonYukkuriDisease, b.getCoreAnkoState());
+            assertEquals(CoreAnkoState.NON_YUKKURI_DISEASE, b.getCoreAnkoState());
         }
 
         @Test
         public void testCheckNonYukkuriDiseaseRecoveryResetsState() {
             FixedToleranceBody b = new FixedToleranceBody();
-            b.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
+            b.setCoreAnkoState(CoreAnkoState.NON_YUKKURI_DISEASE);
             b.setSpeed(80);
             b.setStress(0);
             SimYukkuri.RND = new ConstState(0);
 
             invokeCheckNonYukkuriDisease(b);
-            assertEquals(CoreAnkoState.DEFAULT, b.getCoreAnkoState());
+            assertEquals(CoreAnkoState.NORMAL, b.getCoreAnkoState());
             assertTrue(b.getSpeed() > 80);
         }
 
         @Test
         public void testCheckNonYukkuriDiseaseUnbirthReturnsTrue() {
             FixedToleranceBody b = new FixedToleranceBody();
-            b.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
+            b.setCoreAnkoState(CoreAnkoState.NON_YUKKURI_DISEASE);
             b.setUnBirth(true);
             int limit = b.getStressLimitBase()[b.getAgeState().ordinal()];
             int tol = b.getNonYukkuriDiseaseTolerance();
@@ -16257,7 +16257,7 @@ public class BodyTest {
         @Test
         public void testCheckNonYukkuriDiseaseNearPeriodProgression() {
             FixedToleranceBody b = new FixedToleranceBody();
-            b.setCoreAnkoState(CoreAnkoState.NonYukkuriDiseaseNear);
+            b.setCoreAnkoState(CoreAnkoState.NON_YUKKURI_DISEASE_NEAR);
             b.setNonYukkuriDiseasePeriod(0);
             int limit = b.getStressLimitBase()[b.getAgeState().ordinal()];
             int tol = b.getNonYukkuriDiseaseTolerance();
@@ -16274,7 +16274,7 @@ public class BodyTest {
         @Test
         public void testCheckNonYukkuriDiseasePeriodProgression() {
             FixedToleranceBody b = new FixedToleranceBody();
-            b.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
+            b.setCoreAnkoState(CoreAnkoState.NON_YUKKURI_DISEASE);
             b.setNonYukkuriDiseasePeriod(0);
             int limit = b.getStressLimitBase()[b.getAgeState().ordinal()];
             int tol = b.getNonYukkuriDiseaseTolerance();
@@ -16306,7 +16306,7 @@ public class BodyTest {
         @Test
         public void testCheckNonYukkuriDiseaseNearPeriodCase3To4() {
             FixedToleranceBody b = new FixedToleranceBody();
-            b.setCoreAnkoState(CoreAnkoState.NonYukkuriDiseaseNear);
+            b.setCoreAnkoState(CoreAnkoState.NON_YUKKURI_DISEASE_NEAR);
             b.setNonYukkuriDiseasePeriod(3);
             int limit = b.getStressLimitBase()[b.getAgeState().ordinal()];
             int tol = b.getNonYukkuriDiseaseTolerance();
@@ -16322,7 +16322,7 @@ public class BodyTest {
         @Test
         public void testCheckNonYukkuriDiseasePeriodCase4To5NoReset() {
             FixedToleranceBody b = new FixedToleranceBody();
-            b.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
+            b.setCoreAnkoState(CoreAnkoState.NON_YUKKURI_DISEASE);
             b.setNonYukkuriDiseasePeriod(4);
             int limit = b.getStressLimitBase()[b.getAgeState().ordinal()];
             int tol = b.getNonYukkuriDiseaseTolerance();
@@ -16351,7 +16351,7 @@ public class BodyTest {
         @Test
         public void testCheckNonYukkuriDiseasePeriodCase0To4() {
             FixedToleranceBody b = new FixedToleranceBody();
-            b.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
+            b.setCoreAnkoState(CoreAnkoState.NON_YUKKURI_DISEASE);
             b.setNonYukkuriDiseasePeriod(0);
             int limit = b.getStressLimitBase()[b.getAgeState().ordinal()];
             int tol = b.getNonYukkuriDiseaseTolerance();
@@ -16438,13 +16438,13 @@ public class BodyTest {
         @Test
         public void testBodyInjureWithBodyCut() {
             // 既にINJURED状態 + nextInt(50)==0 → bodyCut分岐に入る → CUT
-            body.setCriticalDamege(CriticalDamegeType.INJURED);
+            body.setCriticalDamege(CriticalDamageType.INJURED);
             body.setBurialState(BurialState.ALL); // mypane.getTerrarium()回避
             body.setSleeping(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             SimYukkuri.RND = new ConstState(0);
             body.bodyInjure();
-            assertEquals(CriticalDamegeType.CUT, body.getCriticalDamege());
+            assertEquals(CriticalDamageType.CUT, body.getCriticalDamege());
         }
 
         @Test
@@ -16455,23 +16455,23 @@ public class BodyTest {
             body.setCriticalDamege(null);
             body.setBurialState(BurialState.ALL);
             body.setSleeping(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             SimYukkuri.RND = new ConstState(1);
             body.bodyInjure();
-            assertEquals(CriticalDamegeType.INJURED, body.getCriticalDamege());
+            assertEquals(CriticalDamageType.INJURED, body.getCriticalDamege());
         }
 
         @Test
         public void testBodyInjureAlreadyInjuredNoCut() {
             // 既にINJURED状態 + nextInt(50)=1 → bodyCut回避 → 通常のINJURE処理
-            body.setCriticalDamege(CriticalDamegeType.INJURED);
+            body.setCriticalDamege(CriticalDamageType.INJURED);
             body.setBurialState(BurialState.ALL);
             body.setSleeping(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             SimYukkuri.RND = new ConstState(1);
             body.bodyInjure();
             // nextInt(50)=1 ≠0 → bodyCut回避、通常のINJURE処理が走る
-            assertEquals(CriticalDamegeType.INJURED, body.getCriticalDamege());
+            assertEquals(CriticalDamageType.INJURED, body.getCriticalDamege());
             assertEquals(Happiness.VERY_SAD, body.getHappiness());
         }
     }
@@ -16484,8 +16484,8 @@ public class BodyTest {
         @Test
         public void testCutDyingMessageWithRnd() {
             // CUT, nextInt(50)==0 → Dying2メッセージ
-            body.setCriticalDamegeType(CriticalDamegeType.CUT);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCriticalDamageType(CriticalDamageType.CUT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             SimYukkuri.RND = new ConstState(0);
             body.checkDamage();
             // メッセージが設定される（1/50の確率で）
@@ -16495,8 +16495,8 @@ public class BodyTest {
         @Test
         public void testCutNoDyingMessageWithRnd() {
             // CUT, nextInt(50)=1 → メッセージなし
-            body.setCriticalDamegeType(CriticalDamegeType.CUT);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCriticalDamageType(CriticalDamageType.CUT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             SimYukkuri.RND = new ConstState(1);
             body.checkDamage();
             assertFalse(body.isTalking());
@@ -16505,8 +16505,8 @@ public class BodyTest {
         @Test
         public void testCutDyingMessageNYDNear() {
             // CUT, nextInt(50)==0, NYDNear → setNydMessage分岐
-            body.setCriticalDamegeType(CriticalDamegeType.CUT);
-            body.setCoreAnkoState(CoreAnkoState.NonYukkuriDiseaseNear);
+            body.setCriticalDamageType(CriticalDamageType.CUT);
+            body.setCoreAnkoState(CoreAnkoState.NON_YUKKURI_DISEASE_NEAR);
             SimYukkuri.RND = new ConstState(0);
             body.checkDamage();
         }
@@ -16520,7 +16520,7 @@ public class BodyTest {
         @Test
         public void testClockTickRemovedReturnsRemoved() {
             body.setRemoved(true);
-            assertEquals(Event.REMOVED, body.clockTick());
+            assertEquals(TickResult.REMOVED, body.clockTick());
         }
 
         @Test
@@ -16528,7 +16528,7 @@ public class BodyTest {
             body.setDead(true);
             body.setDeadPeriod(0);
             body.setRottingTimeBase(99999);
-            assertEquals(Event.DEAD, body.clockTick());
+            assertEquals(TickResult.DEAD, body.clockTick());
         }
 
         @Test
@@ -16537,7 +16537,7 @@ public class BodyTest {
             body.setCrushed(false);
             body.setRottingTimeBase(0);
             body.setDeadPeriod(10);
-            assertEquals(Event.DEAD, body.clockTick());
+            assertEquals(TickResult.DEAD, body.clockTick());
             assertTrue(body.isCrushed());
             assertEquals(0, body.getDeadPeriod());
         }
@@ -16550,7 +16550,7 @@ public class BodyTest {
                 body.setUnyoOffsetW(100); // force Burst.BURST via getSize
                 body.setBurialState(BurialState.ALL); // avoid mypane in bodyBurst
                 body.setCrushed(true);
-                assertEquals(Event.DEAD, body.clockTick());
+                assertEquals(TickResult.DEAD, body.clockTick());
                 assertTrue(body.isDead());
             } finally {
                 SimYukkuri.UNYO = originalUnyo;
@@ -16583,7 +16583,7 @@ public class BodyTest {
         @Test
         public void testClockTickPanicBranchSetsVerySad() {
             body.setPanic(true, PanicType.FEAR);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
             body.clockTick();
             assertEquals(Happiness.VERY_SAD, body.getHappiness());
         }
@@ -16594,13 +16594,13 @@ public class BodyTest {
                 private static final long serialVersionUID = 1L;
 
                 @Override
-                protected Event update() {
-                    return Event.DONOTHING;
+                protected TickResult update() {
+                    return TickResult.NONE;
                 }
 
                 @Override
-                public Event clockTick() {
-                    return Event.REMOVED;
+                public TickResult clockTick() {
+                    return TickResult.REMOVED;
                 }
 
                 @Override
@@ -16624,17 +16624,17 @@ public class BodyTest {
             body.setBirth(false);
             body.getBabyTypes().clear();
             body.setPregnantPeriod(body.getPregPeriodBase() + 1);
-            assertEquals(Event.BIRTHBABY, body.clockTick());
+            assertEquals(TickResult.BIRTH, body.clockTick());
         }
 
         @Test
         public void testClockTickEventResultAppliedWhenPriorityHigh() {
             body.setCurrentEvent(new TestEventPacket(EventPacket.EventPriority.HIGH));
-            body.setEventResult(Event.DOSHIT);
+            body.setEventResult(TickResult.SHIT);
             body.setActivePeriodBase(1000000);
             body.setAge(0);
             body.setWakeUpTime(0);
-            assertEquals(Event.DOSHIT, body.clockTick());
+            assertEquals(TickResult.SHIT, body.clockTick());
         }
 
         @Test
@@ -16649,7 +16649,7 @@ public class BodyTest {
 
         @Test
         public void testClockTickNonYukkuriDiseaseNearMoveTrue() {
-            body.setCoreAnkoState(CoreAnkoState.NonYukkuriDiseaseNear);
+            body.setCoreAnkoState(CoreAnkoState.NON_YUKKURI_DISEASE_NEAR);
             SimYukkuri.RND = new ConstState(0);
             body.clockTick();
             assertTrue(true);
@@ -16657,7 +16657,7 @@ public class BodyTest {
 
         @Test
         public void testClockTickNonYukkuriDiseaseNearMoveDontMove() {
-            body.setCoreAnkoState(CoreAnkoState.NonYukkuriDiseaseNear);
+            body.setCoreAnkoState(CoreAnkoState.NON_YUKKURI_DISEASE_NEAR);
             SimYukkuri.RND = new ConstState(1);
             body.clockTick();
             assertTrue(true);
@@ -16691,8 +16691,8 @@ public class BodyTest {
             body.setBurialState(BurialState.NONE);
             body.setLockmove(false);
             body.setSleeping(false);
-            Event result = body.clockTick();
-            assertEquals(Event.DOSHIT, result);
+            TickResult result = body.clockTick();
+            assertEquals(TickResult.SHIT, result);
         }
 
         @Test
@@ -16742,8 +16742,8 @@ public class BodyTest {
         public void testClockTickAgeLimitCausesDeath() {
             body.setLifeLimitBase(0);
             body.setAge(0);
-            Event result = body.clockTick();
-            assertEquals(Event.DEAD, result);
+            TickResult result = body.clockTick();
+            assertEquals(TickResult.DEAD, result);
             assertTrue(body.isDead());
         }
 
@@ -16752,8 +16752,8 @@ public class BodyTest {
             setTerrariumBool("endlessFurifuriSteam", true);
             try {
                 body.setFurifuri(false);
-                Event result = body.clockTick();
-                assertEquals(Event.DONOTHING, result);
+                TickResult result = body.clockTick();
+                assertEquals(TickResult.NONE, result);
                 assertTrue(body.isFurifuri());
             } finally {
                 setTerrariumBool("endlessFurifuriSteam", false);
@@ -16766,8 +16766,8 @@ public class BodyTest {
             try {
                 body.setFootBakePeriod(body.getDamageLimitBase()[body.getAgeState().ordinal()] + 1);
                 body.setFurifuri(false);
-                Event result = body.clockTick();
-                assertEquals(Event.DONOTHING, result);
+                TickResult result = body.clockTick();
+                assertEquals(TickResult.NONE, result);
                 assertEquals(Happiness.VERY_SAD, body.getHappiness());
             } finally {
                 setTerrariumBool("endlessFurifuriSteam", false);
@@ -16799,7 +16799,7 @@ public class BodyTest {
         @Test
         public void testClockTickLowPriorityEventAppliesWhenDoNothing() {
             body.setCurrentEvent(new TestEventPacket(EventPacket.EventPriority.LOW));
-            body.setEventResult(Event.DOSHIT);
+            body.setEventResult(TickResult.SHIT);
             body.setActivePeriodBase(1000000);
             body.setAge(0);
             body.setWakeUpTime(0);
@@ -16813,19 +16813,19 @@ public class BodyTest {
             body.setLockmove(false);
             body.setSleeping(false);
 
-            Event result = body.clockTick();
+            TickResult result = body.clockTick();
 
-            assertEquals(Event.DOSHIT, result);
+            assertEquals(TickResult.SHIT, result);
         }
 
         @Test
         public void testClockTickEndlessFurifuriNYDBranch() {
             setTerrariumBool("endlessFurifuriSteam", true);
             try {
-                body.setCoreAnkoState(CoreAnkoState.NonYukkuriDisease);
+                body.setCoreAnkoState(CoreAnkoState.NON_YUKKURI_DISEASE);
                 body.setFurifuri(false);
-                Event result = body.clockTick();
-                assertEquals(Event.DONOTHING, result);
+                TickResult result = body.clockTick();
+                assertEquals(TickResult.NONE, result);
             } finally {
                 setTerrariumBool("endlessFurifuriSteam", false);
             }
@@ -16842,11 +16842,11 @@ public class BodyTest {
             body.setBurialState(BurialState.NONE);
             body.setLockmove(false);
             body.setSleeping(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
 
-            Event result = body.clockTick();
+            TickResult result = body.clockTick();
 
-            assertEquals(Event.DOSHIT, result);
+            assertEquals(TickResult.SHIT, result);
         }
 
         @Test
@@ -16860,22 +16860,22 @@ public class BodyTest {
             body.setBurialState(BurialState.NONE);
             body.setLockmove(false);
             body.setSleeping(true);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
 
-            Event result = body.clockTick();
+            TickResult result = body.clockTick();
 
-            assertEquals(Event.DOCRUSHEDSHIT, result);
+            assertEquals(TickResult.CRUSHED_SHIT, result);
         }
 
         @Test
         public void testClockTickPanicDontMoveBranch() {
             body.setPanic(true, PanicType.FEAR);
-            body.setCriticalDamege(CriticalDamegeType.CUT);
+            body.setCriticalDamege(CriticalDamageType.CUT);
             body.setFootBakePeriod(body.getDamageLimitBase()[body.getAgeState().ordinal()] + 1);
             body.setFlyingType(false);
-            body.setCoreAnkoState(CoreAnkoState.DEFAULT);
+            body.setCoreAnkoState(CoreAnkoState.NORMAL);
 
-            Event result = body.clockTick();
+            TickResult result = body.clockTick();
 
             assertEquals(Happiness.VERY_SAD, body.getHappiness());
             assertNotNull(result);

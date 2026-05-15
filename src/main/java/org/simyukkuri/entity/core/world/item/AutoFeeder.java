@@ -15,7 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
 import org.simyukkuri.command.GadgetAction;
-import org.simyukkuri.draw.ModLoader;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Rectangle4y;
 import org.simyukkuri.engine.birth.YukkuriBirthTypeResolver;
 import org.simyukkuri.entity.core.Entity;
@@ -151,8 +151,8 @@ public class AutoFeeder extends WorldEntity {
 	}
 
 	@Override
-	public void removeListData() {
-		GameWorld.get().getCurrentMap().getAutofeeder().remove(objId);
+	public void removeFromWorld() {
+		GameWorld.get().getCurrentWorldState().getAutoFeeders().remove(objId);
 	}
 
 	@Override
@@ -164,7 +164,7 @@ public class AutoFeeder extends WorldEntity {
 			return;
 
 		// お持ち帰りされていたりしたら初期化
-		if (food != null && !GameWorld.get().getCurrentMap().getFood().containsValue(food) &&
+		if (food != null && !GameWorld.get().getCurrentWorldState().getFoods().containsValue(food) &&
 				isTakenOut()) {
 			food = null;
 		}
@@ -234,7 +234,7 @@ public class AutoFeeder extends WorldEntity {
 						break;
 				}
 				food = GadgetAction.putObjEX(Food.class, getX(), getY(), f.ordinal());
-				GameWorld.get().getCurrentMap().getFood().put(food.objId, (Food) food);
+				GameWorld.get().getCurrentWorldState().getFoods().put(food.objId, (Food) food);
 				Cash.buyItem(food);
 				Cash.addCash(-getCost());
 			}
@@ -242,7 +242,7 @@ public class AutoFeeder extends WorldEntity {
 	}
 
 	private boolean isTakenOut() {
-		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getYukkuriMap().entrySet()) {
+		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentWorldState().getYukkuriRegistry().entrySet()) {
 			Yukkuri b = entry.getValue();
 			Integer i = b.getCarryItems().get(TakeoutItemType.FOOD);
 			if (i == null) {
@@ -266,7 +266,7 @@ public class AutoFeeder extends WorldEntity {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		GameWorld.get().getCurrentMap().getAutofeeder().put(objId, this);
+		GameWorld.get().getCurrentWorldState().getAutoFeeders().put(objId, this);
 
 		objType = Type.PLATFORM;
 		worldEntityType = WorldEntityKind.AUTOFEEDER;
@@ -278,7 +278,7 @@ public class AutoFeeder extends WorldEntity {
 		} else
 			ret = false;
 		if (!ret) {
-			GameWorld.get().getCurrentMap().getAutofeeder().remove(objId);
+			GameWorld.get().getCurrentWorldState().getAutoFeeders().remove(objId);
 		}
 		value = 10000;
 		cost = 30;
@@ -375,12 +375,12 @@ public class AutoFeeder extends WorldEntity {
 		ClassLoader loader = this.getClass().getClassLoader();
 		int iniValue = 0;
 		// 間隔
-		iniValue = ModLoader.loadYukkuriIniMapForInt(loader, ModLoader.getDataItemIniDir(), "AutoFeeder",
+		iniValue = ModLoader.loadYukkuriIniValue(loader, ModLoader.getDataItemIniDir(), "AutoFeeder",
 				"FeedingInterval");
 		if (iniValue != 0)
 			feedingInterval = iniValue;
 		// 確率
-		iniValue = ModLoader.loadYukkuriIniMapForInt(loader, ModLoader.getDataItemIniDir(), "AutoFeeder",
+		iniValue = ModLoader.loadYukkuriIniValue(loader, ModLoader.getDataItemIniDir(), "AutoFeeder",
 				"FeedingProbability");
 		if (iniValue != 0)
 			feedingP = iniValue;
@@ -418,11 +418,11 @@ public class AutoFeeder extends WorldEntity {
 		this.feedingP = feedingP;
 	}
 
-	public Entity getFood() {
+	public Entity getFoods() {
 		return food;
 	}
 
-	public void setFood(Entity food) {
+	public void setFoods(Entity food) {
 		this.food = food;
 	}
 

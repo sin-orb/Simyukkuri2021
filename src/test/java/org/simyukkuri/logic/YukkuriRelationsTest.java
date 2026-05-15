@@ -24,7 +24,7 @@ import org.junit.jupiter.api.Test;
 
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
-import org.simyukkuri.enums.EnumRelationMine;
+import org.simyukkuri.enums.YukkuriRelationType;
 import org.simyukkuri.util.WorldTestHelper;
 
 class BodyRelationsTest {
@@ -89,9 +89,9 @@ class BodyRelationsTest {
 	void resolvesFamilyMembersByIndex() {
 		WorldTestHelper.setParents(child, -1, parent.getUniqueID());
 		WorldTestHelper.setParents(sibling, -1, parent.getUniqueID());
-		child.getChildrenList().add(unrelated.getUniqueID());
-		child.getSisterList().add(sibling.getUniqueID());
-		child.getElderSisterList().add(partner.getUniqueID());
+		child.getChildren().add(unrelated.getUniqueID());
+		child.getSisters().add(sibling.getUniqueID());
+		child.getElderSisters().add(partner.getUniqueID());
 
 		assertSame(sibling, YukkuriRelations.getSister(child, 0));
 		assertSame(partner, YukkuriRelations.getElderSister(child, 0));
@@ -101,17 +101,17 @@ class BodyRelationsTest {
 	@Test
 	void removesFamilyMembersByIndexTarget() {
 		WorldTestHelper.setParents(child, -1, parent.getUniqueID());
-		child.getChildrenList().add(unrelated.getUniqueID());
-		child.getElderSisterList().add(partner.getUniqueID());
-		child.getSisterList().add(sibling.getUniqueID());
+		child.getChildren().add(unrelated.getUniqueID());
+		child.getElderSisters().add(partner.getUniqueID());
+		child.getSisters().add(sibling.getUniqueID());
 
-		YukkuriRelations.removeChildrenList(child, unrelated);
-		YukkuriRelations.removeElderSisterList(child, partner);
-		YukkuriRelations.removeSisterList(child, sibling);
+		YukkuriRelations.removeChild(child, unrelated);
+		YukkuriRelations.removeElderSister(child, partner);
+		YukkuriRelations.removeSister(child, sibling);
 
-		assertTrue(child.getChildrenList().isEmpty());
-		assertTrue(child.getElderSisterList().isEmpty());
-		assertTrue(child.getSisterList().isEmpty());
+		assertTrue(child.getChildren().isEmpty());
+		assertTrue(child.getElderSisters().isEmpty());
+		assertTrue(child.getSisters().isEmpty());
 	}
 
 	@Test
@@ -120,10 +120,10 @@ class BodyRelationsTest {
 		parent.setPartner(partner.getUniqueID());
 		child.setAge(10);
 
-		assertEquals(EnumRelationMine.FATHER, YukkuriRelations.checkMyRelation(parent, child));
-		assertEquals(EnumRelationMine.CHILD_FATHER, YukkuriRelations.checkMyRelation(child, parent));
-		assertEquals(EnumRelationMine.PARTNAR, YukkuriRelations.checkMyRelation(parent, partner));
-		assertEquals(EnumRelationMine.OTHER, YukkuriRelations.checkMyRelation(sibling, child));
+		assertEquals(YukkuriRelationType.FATHER, YukkuriRelations.checkMyRelation(parent, child));
+		assertEquals(YukkuriRelationType.CHILD_OF_FATHER, YukkuriRelations.checkMyRelation(child, parent));
+		assertEquals(YukkuriRelationType.PARTNER, YukkuriRelations.checkMyRelation(parent, partner));
+		assertEquals(YukkuriRelationType.OTHER, YukkuriRelations.checkMyRelation(sibling, child));
 	}
 
 	@Test
@@ -155,7 +155,7 @@ class BodyRelationsTest {
 
 	private Yukkuri createRegisteredBody() {
 		Yukkuri body = WorldTestHelper.createBody();
-		SimYukkuri.world.getCurrentMap().getYukkuriMap().put(body.getUniqueID(), body);
+		SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(body.getUniqueID(), body);
 		return body;
 	}
 }

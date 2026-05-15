@@ -6,7 +6,7 @@ import java.beans.Transient;
 import java.io.File;
 import java.io.IOException;
 
-import org.simyukkuri.draw.ModLoader;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Rectangle4y;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.world.WorldEntity;
@@ -66,8 +66,8 @@ public class Toy extends WorldEntity {
 	}
 
 	@Override
-	public void removeListData() {
-		GameWorld.get().getCurrentMap().getToy().remove(objId);
+	public void removeFromWorld() {
+		GameWorld.get().getCurrentWorldState().getToys().remove(objId);
 	}
 
 	@Override
@@ -121,7 +121,7 @@ public class Toy extends WorldEntity {
 		super(initX, initY, initOption);
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
-		GameWorld.get().getCurrentMap().getToy().put(objId, this);
+		GameWorld.get().getCurrentWorldState().getToys().put(objId, this);
 		objType = Type.OBJECT;
 		worldEntityType = WorldEntityKind.TOY;
 

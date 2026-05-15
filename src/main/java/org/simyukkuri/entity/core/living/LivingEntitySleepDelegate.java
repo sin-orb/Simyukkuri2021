@@ -1,6 +1,6 @@
 package org.simyukkuri.entity.core.living;
 
-import org.simyukkuri.draw.Terrarium;
+import org.simyukkuri.engine.Terrarium;
 import org.simyukkuri.util.GameEnvironment;
 import org.simyukkuri.util.GameRandom;
 

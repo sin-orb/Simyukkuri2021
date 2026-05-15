@@ -78,12 +78,12 @@ class BedTest extends ItemTestBase {
     // ---------------------------------------------------------------
     @Test
     void testConstructor_MapIndex5_HouseBecomesYasei() {
-        SimYukkuri.world.setCurrentMapIdx(5);
+        SimYukkuri.world.setCurrentWorldStateIndex(5);
         Bed bed = new Bed(100, 200, 0); // option=HOUSE
         assertEquals(ItemRank.YASEI, bed.getItemRank());
         // YASEI なので value=0
         assertEquals(0, bed.getValue());
-        SimYukkuri.world.setCurrentMapIdx(0);
+        SimYukkuri.world.setCurrentWorldStateIndex(0);
     }
 
     // ---------------------------------------------------------------
@@ -91,10 +91,10 @@ class BedTest extends ItemTestBase {
     // ---------------------------------------------------------------
     @Test
     void testConstructor_MapIndex6_HouseBecomesYasei() {
-        SimYukkuri.world.setCurrentMapIdx(6);
+        SimYukkuri.world.setCurrentWorldStateIndex(6);
         Bed bed = new Bed(100, 200, 0);
         assertEquals(ItemRank.YASEI, bed.getItemRank());
-        SimYukkuri.world.setCurrentMapIdx(0);
+        SimYukkuri.world.setCurrentWorldStateIndex(0);
     }
 
     // ---------------------------------------------------------------
@@ -102,10 +102,10 @@ class BedTest extends ItemTestBase {
     // ---------------------------------------------------------------
     @Test
     void testConstructor_MapIndex5_NoraStaysNora() {
-        SimYukkuri.world.setCurrentMapIdx(5);
+        SimYukkuri.world.setCurrentWorldStateIndex(5);
         Bed bed = new Bed(100, 200, 1); // option=NORA
         assertEquals(ItemRank.NORA, bed.getItemRank());
-        SimYukkuri.world.setCurrentMapIdx(0);
+        SimYukkuri.world.setCurrentWorldStateIndex(0);
     }
 
     // ---------------------------------------------------------------
@@ -114,7 +114,7 @@ class BedTest extends ItemTestBase {
     @Test
     void testConstructor_RegisteredInWorld() {
         Bed bed = new Bed(300, 400, 0);
-        assertTrue(SimYukkuri.world.getCurrentMap().getBed().containsKey(bed.getObjId()));
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getBeds().containsKey(bed.getObjId()));
     }
 
     // ---------------------------------------------------------------
@@ -210,9 +210,9 @@ class BedTest extends ItemTestBase {
     void testRemoveListData_RemovesFromWorld() {
         Bed bed = new Bed(100, 100, 0);
         int id = bed.getObjId();
-        assertTrue(SimYukkuri.world.getCurrentMap().getBed().containsKey(id));
-        bed.removeListData();
-        assertFalse(SimYukkuri.world.getCurrentMap().getBed().containsKey(id));
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getBeds().containsKey(id));
+        bed.removeFromWorld();
+        assertFalse(SimYukkuri.world.getCurrentWorldState().getBeds().containsKey(id));
     }
 
     // ---------------------------------------------------------------
@@ -626,8 +626,8 @@ class BedTest extends ItemTestBase {
     @Test
     void testCalcPos_ClampUpperBoundary() {
         Bed bed = new Bed(0, 0, 0);
-        int maxX = Translate.getMapW();
-        int maxY = Translate.getMapH();
+        int maxX = Translate.getWorldWidth();
+        int maxY = Translate.getWorldHeight();
         bed.setX(maxX + 500);
         bed.setY(maxY + 500);
         bed.calcPos();
@@ -704,8 +704,8 @@ class BedTest extends ItemTestBase {
         Bed bed1 = new Bed(100, 100, 0);
         Bed bed2 = new Bed(200, 200, 0);
         assertNotEquals(bed1.getObjId(), bed2.getObjId());
-        assertTrue(SimYukkuri.world.getCurrentMap().getBed().containsKey(bed1.getObjId()));
-        assertTrue(SimYukkuri.world.getCurrentMap().getBed().containsKey(bed2.getObjId()));
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getBeds().containsKey(bed1.getObjId()));
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getBeds().containsKey(bed2.getObjId()));
     }
 
     // ---------------------------------------------------------------

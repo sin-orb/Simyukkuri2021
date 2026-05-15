@@ -55,7 +55,7 @@ public class HateNoOkazariEvent extends EventPacket {
 
 		priority = EventPriority.MIDDLE;
 		// うんうん奴隷は参加しない
-		if (body.getPublicRank() == PublicRank.UnunSlave)
+		if (body.getPublicRank() == PublicRank.UNUN_SLAVE)
 			return false;
 		// 善良は参加しない
 		if (body.isSmart())
@@ -97,7 +97,7 @@ public class HateNoOkazariEvent extends EventPacket {
 		}
 		// 相手との間に壁があればスキップ
 		if (Barrier.acrossBarrier(body.getX(), body.getY(), targetBody.getX(), targetBody.getY(),
-				Barrier.MAP_BODY[body.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
+				Barrier.BODY_BLOCK_FLAGS[body.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
 			return false;
 		}
 
@@ -147,9 +147,9 @@ public class HateNoOkazariEvent extends EventPacket {
 		// 相手が残っていたら攻撃
 		if (targetBody != null && !targetBody.isDead() && !targetBody.isRemoved() && targetBody.getZ() < 5) {
 			// うんうん奴隷ではない場合
-			if (targetBody.getPublicRank() != PublicRank.UnunSlave) {
+			if (targetBody.getPublicRank() != PublicRank.UNUN_SLAVE) {
 				boolean hasSlaveToilet = false;
-				for (Map.Entry<Integer, Toilet> entry : GameWorld.get().getCurrentMap().getToilet().entrySet()) {
+				for (Map.Entry<Integer, Toilet> entry : GameWorld.get().getCurrentWorldState().getToilets().entrySet()) {
 					// うんうん奴隷用トイレがあるか
 					if (entry.getValue().isForSlave()) {
 						hasSlaveToilet = true;
@@ -158,7 +158,7 @@ public class HateNoOkazariEvent extends EventPacket {
 				}
 				// うんうん奴隷用トイレがある場合
 				if (hasSlaveToilet) {
-					targetBody.setPublicRank(PublicRank.UnunSlave); // うんうんどれい認定
+					targetBody.setPublicRank(PublicRank.UNUN_SLAVE); // うんうんどれい認定
 					targetBody.getFavoriteItems().clear();
 					Yukkuri partnerBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(body.getPartner());
 					if (partnerBody != null) {

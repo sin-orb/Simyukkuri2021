@@ -23,12 +23,12 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import org.simyukkuri.SimYukkuri;
-import org.simyukkuri.draw.World;
+import org.simyukkuri.engine.World;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.living.yukkuri.impl.Reimu;
 import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.Direction;
-import org.simyukkuri.enums.Event;
+import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.system.ResourceUtil;
 
 public class HungryAmpouleTest {
@@ -70,9 +70,9 @@ public class HungryAmpouleTest {
     public void testUpdateReturnsDoNothingWhenParentIsNull() {
         HungryAmpoule ampoule = new HungryAmpoule();
 
-        Event result = ampoule.update();
+        TickResult result = ampoule.update();
 
-        assertEquals(Event.DONOTHING, result);
+        assertEquals(TickResult.NONE, result);
     }
 
     @Test
@@ -85,9 +85,9 @@ public class HungryAmpouleTest {
         parent.setEating(false);
 
         int hungryBefore = parent.getHungry();
-        Event result = ampoule.update();
+        TickResult result = ampoule.update();
 
-        assertEquals(Event.DONOTHING, result);
+        assertEquals(TickResult.NONE, result);
         // hungryが減少している（TICK * 1000 減少）
         assertEquals(hungryBefore - 1000, parent.getHungry());
     }
@@ -101,9 +101,9 @@ public class HungryAmpouleTest {
         parent.setEating(true);
 
         int hungryBefore = parent.getHungry();
-        Event result = ampoule.update();
+        TickResult result = ampoule.update();
 
-        assertEquals(Event.DONOTHING, result);
+        assertEquals(TickResult.NONE, result);
         // 食事中なのでhungryは変わらない
         assertEquals(hungryBefore, parent.getHungry());
     }
@@ -128,7 +128,7 @@ public class HungryAmpouleTest {
         Yukkuri parent = createParent(AgeState.CHILD);
         HungryAmpoule ampoule = new HungryAmpoule(parent);
 
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().remove(parent.getUniqueID());
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().remove(parent.getUniqueID());
 
         BufferedImage image = ampoule.getImage(parent);
         assertNull(image);
@@ -177,7 +177,7 @@ public class HungryAmpouleTest {
         int origPivotX = ampoule.getPivotX();
         int origPivotY = ampoule.getPivotY();
 
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().remove(parent.getUniqueID());
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().remove(parent.getUniqueID());
 
         ampoule.resetBoundary();
 
@@ -211,7 +211,7 @@ public class HungryAmpouleTest {
     private static Yukkuri createParent(AgeState ageState) {
         Yukkuri parent = new Reimu();
         parent.setAgeState(ageState);
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(parent.getUniqueID(), parent);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(parent.getUniqueID(), parent);
         return parent;
     }
 
@@ -243,9 +243,9 @@ public class HungryAmpouleTest {
             parent.setHungry(4321);
             parent.setEating(false);
 
-            Event result = ampoule.update();
+            TickResult result = ampoule.update();
 
-            assertEquals(Event.DONOTHING, result);
+            assertEquals(TickResult.NONE, result);
             assertEquals(3321, parent.getHungry());
         }
 
@@ -256,9 +256,9 @@ public class HungryAmpouleTest {
             parent.setHungry(200);
             parent.setEating(true);
 
-            Event result = ampoule.update();
+            TickResult result = ampoule.update();
 
-            assertEquals(Event.DONOTHING, result);
+            assertEquals(TickResult.NONE, result);
             assertEquals(200, parent.getHungry());
         }
     }

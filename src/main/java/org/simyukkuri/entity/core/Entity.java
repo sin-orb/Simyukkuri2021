@@ -11,13 +11,13 @@ import org.simyukkuri.draw.Point4y;
 import org.simyukkuri.draw.Rectangle4y;
 import org.simyukkuri.draw.Translate;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
-import org.simyukkuri.enums.Event;
+import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.enums.Type;
 import org.simyukkuri.enums.Where;
 import org.simyukkuri.field.impl.Barrier;
 import org.simyukkuri.system.ItemMenu.GetMenuTarget;
 import org.simyukkuri.system.ItemMenu.UseMenuTarget;
-import org.simyukkuri.system.MapPlaceData;
+import org.simyukkuri.system.WorldState;
 import org.simyukkuri.util.GameWorld;
 
 /*********************************************************
@@ -193,8 +193,8 @@ public class Entity implements java.io.Serializable, Comparable {
 	public void setCalcX(int X) {
 		if (X < 0 && enableWall) {
 			x = 0;
-		} else if (X > Translate.getMapW() && enableWall) {
-			x = Translate.getMapW();
+		} else if (X > Translate.getWorldWidth() && enableWall) {
+			x = Translate.getWorldWidth();
 		} else {
 			x = X;
 		}
@@ -204,8 +204,8 @@ public class Entity implements java.io.Serializable, Comparable {
 	public void setCalcY(int Y) {
 		if (Y < 0 && enableWall) {
 			y = 0;
-		} else if (Y > Translate.getMapH() && enableWall) {
-			y = Translate.getMapH();
+		} else if (Y > Translate.getWorldHeight() && enableWall) {
+			y = Translate.getWorldHeight();
 		} else {
 			y = Y;
 		}
@@ -220,8 +220,8 @@ public class Entity implements java.io.Serializable, Comparable {
 				z = mostDepth;
 			}
 		}
-		if (Z > Translate.getMapZ() && enableWall) {
-			z = Translate.getMapZ();
+		if (Z > Translate.getWorldDepth() && enableWall) {
+			z = Translate.getWorldDepth();
 		} else {
 			z = Z;
 		}
@@ -606,104 +606,104 @@ public class Entity implements java.io.Serializable, Comparable {
 	}
 
 	/**
-	 * MapPlaceDataからobjIdをもつObjを取得する.
+	 * WorldStateからobjIdをもつObjを取得する.
 	 * 
 	 * @param i objId
 	 * @return Entity
 	 */
 	public Entity takeMappedObj(int i) {
-		MapPlaceData m = GameWorld.get().getCurrentMap();
-		if (m.getAutofeeder().containsKey(i)) {
-			return m.getAutofeeder().get(i);
+		WorldState m = GameWorld.get().getCurrentWorldState();
+		if (m.getAutoFeeders().containsKey(i)) {
+			return m.getAutoFeeders().get(i);
 		}
-		if (m.getBed().containsKey(i)) {
-			return m.getBed().get(i);
+		if (m.getBeds().containsKey(i)) {
+			return m.getBeds().get(i);
 		}
-		if (m.getBeltconveyorObj().containsKey(i)) {
-			return m.getBeltconveyorObj().get(i);
+		if (m.getBeltconveyorObjects().containsKey(i)) {
+			return m.getBeltconveyorObjects().get(i);
 		}
-		if (m.getBreedingPool().containsKey(i)) {
-			return m.getBreedingPool().get(i);
+		if (m.getBreedingPools().containsKey(i)) {
+			return m.getBreedingPools().get(i);
 		}
-		if (m.getDiffuser().containsKey(i)) {
-			return m.getDiffuser().get(i);
+		if (m.getDiffusers().containsKey(i)) {
+			return m.getDiffusers().get(i);
 		}
-		if (m.getFood().containsKey(i)) {
-			return m.getFood().get(i);
+		if (m.getFoods().containsKey(i)) {
+			return m.getFoods().get(i);
 		}
-		if (m.getFoodmaker().containsKey(i)) {
-			return m.getFoodmaker().get(i);
+		if (m.getFoodMakers().containsKey(i)) {
+			return m.getFoodMakers().get(i);
 		}
-		if (m.getFrontEffect().containsKey(i)) {
-			return m.getFrontEffect().get(i);
+		if (m.getFrontEffects().containsKey(i)) {
+			return m.getFrontEffects().get(i);
 		}
-		if (m.getGarbagechute().containsKey(i)) {
-			return m.getGarbagechute().get(i);
+		if (m.getGarbageChutes().containsKey(i)) {
+			return m.getGarbageChutes().get(i);
 		}
-		if (m.getGarbageStation().containsKey(i)) {
-			return m.getGarbageStation().get(i);
+		if (m.getGarbageStations().containsKey(i)) {
+			return m.getGarbageStations().get(i);
 		}
-		if (m.getHotPlate().containsKey(i)) {
-			return m.getHotPlate().get(i);
+		if (m.getHotPlates().containsKey(i)) {
+			return m.getHotPlates().get(i);
 		}
-		if (m.getHouse().containsKey(i)) {
-			return m.getHouse().get(i);
+		if (m.getHouses().containsKey(i)) {
+			return m.getHouses().get(i);
 		}
-		if (m.getMachinePress().containsKey(i)) {
-			return m.getMachinePress().get(i);
+		if (m.getMachinePresses().containsKey(i)) {
+			return m.getMachinePresses().get(i);
 		}
-		if (m.getMixer().containsKey(i)) {
-			return m.getMixer().get(i);
+		if (m.getMixers().containsKey(i)) {
+			return m.getMixers().get(i);
 		}
-		if (m.getOkazari().containsKey(i)) {
-			return m.getOkazari().get(i);
+		if (m.getOkazaris().containsKey(i)) {
+			return m.getOkazaris().get(i);
 		}
-		if (m.getOrangePool().containsKey(i)) {
-			return m.getOrangePool().get(i);
+		if (m.getOrangePools().containsKey(i)) {
+			return m.getOrangePools().get(i);
 		}
-		if (m.getProcessorPlate().containsKey(i)) {
-			return m.getProcessorPlate().get(i);
+		if (m.getProcessorPlates().containsKey(i)) {
+			return m.getProcessorPlates().get(i);
 		}
-		if (m.getProductchute().containsKey(i)) {
-			return m.getProductchute().get(i);
+		if (m.getProductChutes().containsKey(i)) {
+			return m.getProductChutes().get(i);
 		}
 		if (m.getShit().containsKey(i)) {
 			return m.getShit().get(i);
 		}
-		if (m.getSortEffect().containsKey(i)) {
-			return m.getSortEffect().get(i);
+		if (m.getSortedEffects().containsKey(i)) {
+			return m.getSortedEffects().get(i);
 		}
-		if (m.getStalk().containsKey(i)) {
-			return m.getStalk().get(i);
+		if (m.getStalks().containsKey(i)) {
+			return m.getStalks().get(i);
 		}
-		if (m.getStickyPlate().containsKey(i)) {
-			return m.getStickyPlate().get(i);
+		if (m.getStickyPlates().containsKey(i)) {
+			return m.getStickyPlates().get(i);
 		}
-		if (m.getStone().containsKey(i)) {
-			return m.getStone().get(i);
+		if (m.getStones().containsKey(i)) {
+			return m.getStones().get(i);
 		}
-		if (m.getSui().containsKey(i)) {
-			return m.getSui().get(i);
+		if (m.getSuis().containsKey(i)) {
+			return m.getSuis().get(i);
 		}
-		if (m.getToilet().containsKey(i)) {
-			return m.getToilet().get(i);
+		if (m.getToilets().containsKey(i)) {
+			return m.getToilets().get(i);
 		}
-		if (m.getToy().containsKey(i)) {
-			return m.getToy().get(i);
+		if (m.getToys().containsKey(i)) {
+			return m.getToys().get(i);
 		}
-		if (m.getTrampoline().containsKey(i)) {
-			return m.getTrampoline().get(i);
+		if (m.getTrampolines().containsKey(i)) {
+			return m.getTrampolines().get(i);
 		}
-		if (m.getTrash().containsKey(i)) {
-			return m.getTrash().get(i);
+		if (m.getTrashObjects().containsKey(i)) {
+			return m.getTrashObjects().get(i);
 		}
 		if (m.getVomit().containsKey(i)) {
 			return m.getVomit().get(i);
 		}
-		if (m.getYunba().containsKey(i)) {
-			return m.getYunba().get(i);
+		if (m.getYunbas().containsKey(i)) {
+			return m.getYunbas().get(i);
 		}
-		for (Map.Entry<Integer, Yukkuri> entry : m.getYukkuriMap().entrySet()) {
+		for (Map.Entry<Integer, Yukkuri> entry : m.getYukkuriRegistry().entrySet()) {
 			Yukkuri b = entry.getValue();
 			if (b.objId == i) {
 				return b;
@@ -732,10 +732,10 @@ public class Entity implements java.io.Serializable, Comparable {
 	 * <br>
 	 * オーバーライドしてるものが多い
 	 */
-	public Event clockTick() {
+	public TickResult clockTick() {
 		setAge(getAge() + TICK);
 		if (isRemoved()) {
-			return Event.REMOVED;
+			return TickResult.REMOVED;
 		}
 
 		if (!grabbed) {
@@ -748,10 +748,10 @@ public class Entity implements java.io.Serializable, Comparable {
 				if (x < 0) {
 					x = 0;
 					vx *= -1;
-				} else if (x > Translate.getMapW()) {
-					x = Translate.getMapW();
+				} else if (x > Translate.getWorldWidth()) {
+					x = Translate.getWorldWidth();
 					vx *= -1;
-				} else if (Barrier.onBarrier(x, y, 16, 16, Barrier.MAP_ITEM)) {
+				} else if (Barrier.onBarrier(x, y, 16, 16, Barrier.ITEM_BLOCK_FLAG)) {
 					x -= vx;
 					vx = 0;
 				}
@@ -761,10 +761,10 @@ public class Entity implements java.io.Serializable, Comparable {
 				if (y < 0) {
 					y = 0;
 					vy *= -1;
-				} else if (y > Translate.getMapH()) {
-					y = Translate.getMapH();
+				} else if (y > Translate.getWorldHeight()) {
+					y = Translate.getWorldHeight();
 					vy *= -1;
-				} else if (Barrier.onBarrier(x, y, 16, 16, Barrier.MAP_ITEM)) {
+				} else if (Barrier.onBarrier(x, y, 16, 16, Barrier.ITEM_BLOCK_FLAG)) {
 					y -= vy;
 					vy = 0;
 				}
@@ -792,7 +792,7 @@ public class Entity implements java.io.Serializable, Comparable {
 		if (y < 0) {
 			y = 5;
 		}
-		return Event.DONOTHING;
+		return TickResult.NONE;
 	}
 
 	/** 最大深度ゲッター */
@@ -868,8 +868,8 @@ public class Entity implements java.io.Serializable, Comparable {
 	 * 座標をマップの範囲内に収める
 	 */
 	public void calcPos() {
-		int mapX = Translate.getMapW();
-		int mapY = Translate.getMapH();
+		int mapX = Translate.getWorldWidth();
+		int mapY = Translate.getWorldHeight();
 		if (x < 0) {
 			x = 0;
 		}

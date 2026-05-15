@@ -25,7 +25,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import org.simyukkuri.SimYukkuri;
-import org.simyukkuri.draw.World;
+import org.simyukkuri.engine.World;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.Attitude;
@@ -51,7 +51,7 @@ class FuneralEventTest {
             spr[i] = new org.simyukkuri.system.Sprite(10, 10, org.simyukkuri.system.Sprite.PIVOT_CENTER_BOTTOM);
         }
         b.setSpriteSet(spr);
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(b.getUniqueID(), b);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueID(), b);
         return b;
     }
 
@@ -112,7 +112,7 @@ class FuneralEventTest {
     void testCheckEventResponse_returnsFalseForUnunSlave() {
         Yukkuri from = createBody();
         Yukkuri responder = createBody();
-        responder.setPublicRank(org.simyukkuri.enums.PublicRank.UnunSlave);
+        responder.setPublicRank(org.simyukkuri.enums.PublicRank.UNUN_SLAVE);
         FuneralEvent event = new FuneralEvent(from, null, null, 10);
         assertFalse(event.checkEventResponse(responder));
     }
@@ -208,7 +208,7 @@ class FuneralEventTest {
     void testUpdate_bodyNYD_returnsAbort() {
         Yukkuri from = createBody();
         Yukkuri b = createBody();
-        b.setCoreAnkoState(org.simyukkuri.enums.CoreAnkoState.NonYukkuriDisease);
+        b.setCoreAnkoState(org.simyukkuri.enums.CoreAnkoState.NON_YUKKURI_DISEASE);
         FuneralEvent event = new FuneralEvent(from, null, null, 10);
         assertEquals(org.simyukkuri.event.EventPacket.UpdateState.ABORT, event.update(b));
     }
@@ -479,7 +479,7 @@ class FuneralEventTest {
             Yukkuri child = createBody();
             child.setParents(new int[] { from.getUniqueID(), -1 });
             child.setAgeState(AgeState.BABY);
-            from.getChildrenList().add(child.getUniqueID());
+            from.getChildren().add(child.getUniqueID());
 
             FuneralEvent event = new FuneralEvent(from, deceased, null, 10);
             from.setCurrentEvent(event);

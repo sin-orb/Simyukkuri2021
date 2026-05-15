@@ -26,7 +26,7 @@ public final class YukkuriWakeupRule {
 	public static boolean checkWakeupOtherYukkuri(Yukkuri body) {
 		boolean isWakeup = false;
 		int nearestDistance = body.getEyesightBase();
-		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getYukkuriMap().entrySet()) {
+		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentWorldState().getYukkuriRegistry().entrySet()) {
 			Yukkuri otherBody = entry.getValue();
 			if (otherBody == body) {
 				continue;
@@ -37,7 +37,7 @@ public final class YukkuriWakeupRule {
 			if (otherBody.isNYD()) {
 				continue;
 			}
-			if (body.getPublicRank() == PublicRank.NONE && otherBody.getPublicRank() == PublicRank.UnunSlave) {
+			if (body.getPublicRank() == PublicRank.NONE && otherBody.getPublicRank() == PublicRank.UNUN_SLAVE) {
 				continue;
 			}
 			if (otherBody.getBurialState() != BurialState.NONE) {
@@ -47,7 +47,7 @@ public final class YukkuriWakeupRule {
 			int distance = Translate.distance(body.getX(), body.getY(), otherBody.getX(), otherBody.getY());
 			if (nearestDistance > distance) {
 				if (Barrier.acrossBarrier(body.getX(), body.getY(), otherBody.getX(), otherBody.getY(),
-						Barrier.MAP_BODY[body.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
+						Barrier.BODY_BLOCK_FLAGS[body.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
 					continue;
 				}
 			}

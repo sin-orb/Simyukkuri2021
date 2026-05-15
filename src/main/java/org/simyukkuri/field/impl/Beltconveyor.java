@@ -26,7 +26,7 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
-import org.simyukkuri.draw.ModLoader;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Point4y;
 import org.simyukkuri.draw.Translate;
 import org.simyukkuri.entity.core.Entity;
@@ -37,7 +37,7 @@ import org.simyukkuri.enums.Numbering;
 import org.simyukkuri.field.FieldShape;
 import org.simyukkuri.system.ItemMenu.ShapeMenu;
 import org.simyukkuri.system.ItemMenu.ShapeMenuTarget;
-import org.simyukkuri.system.MapPlaceData;
+import org.simyukkuri.system.WorldState;
 import org.simyukkuri.util.GameText;
 import org.simyukkuri.util.GameView;
 import org.simyukkuri.util.GameWorld;
@@ -236,7 +236,7 @@ public class Beltconveyor extends FieldShape {
 	@Override
 	public void executeShapePopup(ShapeMenu menu) {
 
-		List<Beltconveyor> list = GameWorld.get().getCurrentMap().getBeltconveyor();
+		List<Beltconveyor> list = GameWorld.get().getCurrentWorldState().getBeltconveyors();
 		int pos;
 
 		switch (menu) {
@@ -312,8 +312,8 @@ public class Beltconveyor extends FieldShape {
 	 */
 	public Beltconveyor(int fsx, int fsy, int fex, int fey) {
 		objId = Numbering.INSTANCE.numberingObjId();
-		Point4y pS = Translate.getFieldLimitForMap(fsx, fsy);
-		Point4y pE = Translate.getFieldLimitForMap(fex, fey);
+		Point4y pS = Translate.getFieldLimitForWorld(fsx, fsy);
+		Point4y pE = Translate.getFieldLimitForWorld(fex, fey);
 		fieldSX = pS.getX();
 		fieldSY = pS.getY();
 		fieldEX = pE.getX();
@@ -325,25 +325,25 @@ public class Beltconveyor extends FieldShape {
 
 		// フィールド座標が渡ってくるのでマップ座標も計算しておく
 		Point4y pos = Translate.invertLimit(basePolygonX[0], basePolygonY[0]);
-		mapSX = Math.max(0, Math.min(pos.getX(), Translate.getMapW()));
-		mapSY = Math.max(0, Math.min(pos.getY(), Translate.getMapH()));
+		mapSX = Math.max(0, Math.min(pos.getX(), Translate.getWorldWidth()));
+		mapSY = Math.max(0, Math.min(pos.getY(), Translate.getWorldHeight()));
 
 		pos = Translate.invertLimit(basePolygonX[1], basePolygonY[1]);
-		mapEX = Math.max(0, Math.min(pos.getX(), Translate.getMapW()));
-		mapEY = Math.max(0, Math.min(pos.getY(), Translate.getMapH()));
+		mapEX = Math.max(0, Math.min(pos.getX(), Translate.getWorldWidth()));
+		mapEY = Math.max(0, Math.min(pos.getY(), Translate.getWorldHeight()));
 
 		// 規定サイズと位置へ合わせる
 		if ((mapEX - mapSX) < MIN_SIZE)
 			mapEX = mapSX + MIN_SIZE;
 		if ((mapEY - mapSY) < MIN_SIZE)
 			mapEY = mapSY + MIN_SIZE;
-		if (mapEX > Translate.getMapW()) {
-			mapSX -= (mapEX - Translate.getMapW());
-			mapEX -= (mapEX - Translate.getMapW());
+		if (mapEX > Translate.getWorldWidth()) {
+			mapSX -= (mapEX - Translate.getWorldWidth());
+			mapEX -= (mapEX - Translate.getWorldWidth());
 		}
-		if (mapEY > Translate.getMapH()) {
-			mapSY -= (mapEY - Translate.getMapH());
-			mapEY -= (mapEY - Translate.getMapH());
+		if (mapEY > Translate.getWorldHeight()) {
+			mapSY -= (mapEY - Translate.getWorldHeight());
+			mapEY -= (mapEY - Translate.getWorldHeight());
 		}
 
 		Point4y f = new Point4y();
@@ -367,8 +367,8 @@ public class Beltconveyor extends FieldShape {
 
 		boolean success = setupBelt(this);
 		if (success) {
-			GameWorld.get().getCurrentMap().getBeltconveyor().add(this);
-			MapPlaceData.setFiledFlag(GameWorld.get().getCurrentMap().getFieldMap(), mapSX, mapSY, mapW, mapH, true,
+			GameWorld.get().getCurrentWorldState().getBeltconveyors().add(this);
+			WorldState.setFieldFlag(GameWorld.get().getCurrentWorldState().getFieldGrid(), mapSX, mapSY, mapW, mapH, true,
 					FIELD_BELT);
 		}
 	}
@@ -453,7 +453,7 @@ public class Beltconveyor extends FieldShape {
 	/** フィールド座標にあるシェイプ取得 */
 	public static Beltconveyor getBeltconveyor(int fx, int fy) {
 
-		for (Beltconveyor bc : GameWorld.get().getCurrentMap().getBeltconveyor()) {
+		for (Beltconveyor bc : GameWorld.get().getCurrentWorldState().getBeltconveyors()) {
 			if (bc.fieldSX <= fx && fx <= bc.fieldEX
 					&& bc.fieldSY <= fy && fy <= bc.fieldEY) {
 				return bc;
@@ -464,13 +464,13 @@ public class Beltconveyor extends FieldShape {
 
 	/** 削除 */
 	public static void deleteBelt(Beltconveyor b) {
-		MapPlaceData.setFiledFlag(GameWorld.get().getCurrentMap().getFieldMap(), b.mapSX, b.mapSY, b.mapW, b.mapH,
+		WorldState.setFieldFlag(GameWorld.get().getCurrentWorldState().getFieldGrid(), b.mapSX, b.mapSY, b.mapW, b.mapH,
 				false,
 				FIELD_BELT);
-		GameWorld.get().getCurrentMap().getBeltconveyor().remove(b);
+		GameWorld.get().getCurrentWorldState().getBeltconveyors().remove(b);
 		// 重なってた部分の復元
-		for (Beltconveyor bc : GameWorld.get().getCurrentMap().getBeltconveyor()) {
-			MapPlaceData.setFiledFlag(GameWorld.get().getCurrentMap().getFieldMap(), bc.mapSX, bc.mapSY, bc.mapW,
+		for (Beltconveyor bc : GameWorld.get().getCurrentWorldState().getBeltconveyors()) {
+			WorldState.setFieldFlag(GameWorld.get().getCurrentWorldState().getFieldGrid(), bc.mapSX, bc.mapSY, bc.mapW,
 					bc.mapH,
 					true,
 					FIELD_BELT);

@@ -23,7 +23,7 @@ import org.junit.jupiter.api.Test;
 
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
-import org.simyukkuri.draw.World;
+import org.simyukkuri.engine.World;
 import org.simyukkuri.entity.core.world.mobile.Shit;
 import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.PredatorType;
@@ -285,7 +285,7 @@ class LoggerYukkuriTest {
         Yukkuri b = WorldTestHelper.createBody();
         b.setX(100);
         b.setY(100);
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(b.getUniqueID(), b);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueID(), b);
         assertDoesNotThrow(() -> LoggerYukkuri.run());
     }
 
@@ -295,7 +295,7 @@ class LoggerYukkuriTest {
         b.setX(100);
         b.setY(100);
         b.setAgeState(AgeState.BABY);
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(b.getUniqueID(), b);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueID(), b);
         assertDoesNotThrow(() -> LoggerYukkuri.run());
     }
 
@@ -305,7 +305,7 @@ class LoggerYukkuriTest {
         b.setX(100);
         b.setY(100);
         b.setAgeState(AgeState.CHILD);
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(b.getUniqueID(), b);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueID(), b);
         assertDoesNotThrow(() -> LoggerYukkuri.run());
     }
 
@@ -315,7 +315,7 @@ class LoggerYukkuriTest {
         b.setX(100);
         b.setY(100);
         b.setPredatorType(PredatorType.BITE);
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(b.getUniqueID(), b);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueID(), b);
         assertDoesNotThrow(() -> LoggerYukkuri.run());
     }
 
@@ -325,7 +325,7 @@ class LoggerYukkuriTest {
         b.setX(100);
         b.setY(100);
         b.setDead(true);
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(b.getUniqueID(), b);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueID(), b);
         assertDoesNotThrow(() -> LoggerYukkuri.run());
     }
 
@@ -337,7 +337,7 @@ class LoggerYukkuriTest {
         // sickはHPが低い状態で発動するのでHP=1に設定
         // sickPeriod > incubationPeriodBaseにしてisSick()=trueにする
         b.setSickPeriod(b.getIncubationPeriodBase() + 1);
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(b.getUniqueID(), b);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueID(), b);
         assertDoesNotThrow(() -> LoggerYukkuri.run());
     }
 
@@ -347,7 +347,7 @@ class LoggerYukkuriTest {
             Yukkuri b = WorldTestHelper.createBody();
             b.setX(50 + i * 10);
             b.setY(50);
-            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(b.getUniqueID(), b);
+            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueID(), b);
         }
         assertDoesNotThrow(() -> LoggerYukkuri.run());
     }
@@ -385,7 +385,7 @@ class LoggerYukkuriTest {
         HybridYukkuri hybrid = new HybridYukkuri();
         hybrid.setX(100);
         hybrid.setY(100);
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(hybrid.getUniqueID(), hybrid);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(hybrid.getUniqueID(), hybrid);
         assertDoesNotThrow(() -> LoggerYukkuri.run());
     }
 
@@ -394,7 +394,7 @@ class LoggerYukkuriTest {
         TarinaiReimu tarinai = new TarinaiReimu();
         tarinai.setX(100);
         tarinai.setY(100);
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(tarinai.getUniqueID(), tarinai);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(tarinai.getUniqueID(), tarinai);
         assertDoesNotThrow(() -> LoggerYukkuri.run());
     }
 
@@ -403,14 +403,14 @@ class LoggerYukkuriTest {
         Kimeemaru rare = new Kimeemaru();
         rare.setX(100);
         rare.setY(100);
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(rare.getUniqueID(), rare);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(rare.getUniqueID(), rare);
         assertDoesNotThrow(() -> LoggerYukkuri.run());
     }
 
     @Test
     void testRunWithShitInMap() {
         Shit shit = new Shit();
-        SimYukkuri.world.getCurrentMap().getShit().put(shit.getObjId(), shit);
+        SimYukkuri.world.getCurrentWorldState().getShit().put(shit.getObjId(), shit);
         assertDoesNotThrow(() -> LoggerYukkuri.run());
     }
 

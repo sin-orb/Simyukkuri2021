@@ -21,7 +21,7 @@ import java.awt.Graphics2D;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import org.simyukkuri.enums.Event;
+import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.field.FieldShape;
 
 class FieldShapeBaseTest {
@@ -54,11 +54,11 @@ class FieldShapeBaseTest {
 
     @Test
     void testMapPosAndContains() {
-        shape.setMapPos(10, 10, 20, 20);
-        assertEquals(10, shape.getMapSX());
-        assertEquals(10, shape.getMapSY());
-        assertEquals(20, shape.getMapEX());
-        assertEquals(20, shape.getMapEY());
+        shape.setBounds(10, 10, 20, 20);
+        assertEquals(10, shape.getStartX());
+        assertEquals(10, shape.getStartY());
+        assertEquals(20, shape.getEndX());
+        assertEquals(20, shape.getEndY());
 
         assertTrue(shape.mapContains(15, 15));
         assertTrue(shape.mapContains(10, 10)); // Boundary
@@ -83,20 +83,20 @@ class FieldShapeBaseTest {
     @Test
     void testRemoveAndClockTick() {
         assertFalse(shape.isRemoved());
-        assertEquals(Event.DONOTHING, shape.clockTick());
+        assertEquals(TickResult.NONE, shape.clockTick());
 
         shape.remove();
         assertTrue(shape.isRemoved());
-        assertEquals(Event.REMOVED, shape.clockTick());
+        assertEquals(TickResult.REMOVED, shape.clockTick());
     }
 
     @Test
     void testDimensions() {
-        shape.setMapW(50);
-        assertEquals(50, shape.getMapW());
+        shape.setWorldWidth(50);
+        assertEquals(50, shape.getWorldWidth());
 
-        shape.setMapH(60);
-        assertEquals(60, shape.getMapH());
+        shape.setWorldHeight(60);
+        assertEquals(60, shape.getWorldHeight());
 
         shape.setFieldW(500);
         assertEquals(500, shape.getFieldW());
@@ -109,14 +109,14 @@ class FieldShapeBaseTest {
 
     @Test
     void testIndividualMapSetters() {
-        shape.setMapSX(11);
-        assertEquals(11, shape.getMapSX());
-        shape.setMapSY(22);
-        assertEquals(22, shape.getMapSY());
-        shape.setMapEX(33);
-        assertEquals(33, shape.getMapEX());
-        shape.setMapEY(44);
-        assertEquals(44, shape.getMapEY());
+        shape.setStartX(11);
+        assertEquals(11, shape.getStartX());
+        shape.setStartY(22);
+        assertEquals(22, shape.getStartY());
+        shape.setEndX(33);
+        assertEquals(33, shape.getEndX());
+        shape.setEndY(44);
+        assertEquals(44, shape.getEndY());
     }
 
     // --- Individual field coordinate setters ---

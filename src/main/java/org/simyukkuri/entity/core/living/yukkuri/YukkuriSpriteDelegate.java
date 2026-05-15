@@ -8,7 +8,7 @@ import java.io.IOException;
 import org.simyukkuri.Const;
 import org.simyukkuri.SimYukkuri;
 import org.simyukkuri.draw.Dimension4y;
-import org.simyukkuri.draw.ModLoader;
+import org.simyukkuri.engine.ModLoader;
 import org.simyukkuri.draw.Rectangle4y;
 import org.simyukkuri.logic.YukkuriRenderState;
 import org.simyukkuri.system.YukkuriLayer;

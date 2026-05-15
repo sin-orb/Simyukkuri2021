@@ -27,7 +27,7 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
 import org.simyukkuri.SimYukkuri;
-import org.simyukkuri.draw.World;
+import org.simyukkuri.engine.World;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.living.yukkuri.impl.Reimu;
 import org.simyukkuri.enums.AgeState;
@@ -118,7 +118,7 @@ public class ProudChildEventTest {
     public void testCheckEventResponse_returnsFalseForUnunSlave() {
         Yukkuri from = createBody();
         Yukkuri b = createBody();
-        b.setPublicRank(PublicRank.UnunSlave);
+        b.setPublicRank(PublicRank.UNUN_SLAVE);
         ProudChildEvent event = new ProudChildEvent(from, null, null, 10);
         assertFalse(event.checkEventResponse(b));
     }
@@ -244,7 +244,7 @@ public class ProudChildEventTest {
     public void testUpdate_bodyNYD_returnsAbort() {
         Yukkuri from = createBody();
         Yukkuri b = createBody();
-        b.setCoreAnkoState(org.simyukkuri.enums.CoreAnkoState.NonYukkuriDisease);
+        b.setCoreAnkoState(org.simyukkuri.enums.CoreAnkoState.NON_YUKKURI_DISEASE);
         ProudChildEvent event = new ProudChildEvent(from, null, null, 10);
         from.setCurrentEvent(event);
         assertEquals(EventPacket.UpdateState.ABORT, event.update(b));
@@ -381,7 +381,7 @@ public class ProudChildEventTest {
         Yukkuri child = createBody();
         child.setParents(new int[] { from.getUniqueID(), -1 });
         child.setAgeState(AgeState.BABY);
-        from.getChildrenList().add(child.getUniqueID());
+        from.getChildren().add(child.getUniqueID());
         ProudChildEvent event = new ProudChildEvent(from, null, null, 10);
         event.setState(ProudChildEvent.STATE.END);
         event.setActionFlag(false);
@@ -397,7 +397,7 @@ public class ProudChildEventTest {
         child.setParents(new int[] { from.getUniqueID(), -1 });
         child.setAgeState(AgeState.BABY);
         child.setSleeping(true);
-        from.getChildrenList().add(child.getUniqueID());
+        from.getChildren().add(child.getUniqueID());
         ProudChildEvent event = new ProudChildEvent(from, null, null, 10);
         from.setCurrentEvent(event);
         child.setCurrentEvent(event);
@@ -575,7 +575,7 @@ public class ProudChildEventTest {
             child.setParents(new int[] { from.getUniqueID(), -1 });
             child.setAgeState(AgeState.BABY);
             from.setIntelligence(Intelligence.FOOL);
-            from.getChildrenList().add(child.getUniqueID());
+            from.getChildren().add(child.getUniqueID());
 
             ProudChildEvent event = new ProudChildEvent(from, null, null, 10);
             from.setCurrentEvent(event);
@@ -636,7 +636,7 @@ public class ProudChildEventTest {
             spr[i] = new Sprite(10, 10, Sprite.PIVOT_CENTER_BOTTOM);
         }
         b.setSpriteSet(spr);
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(b.getUniqueID(), b);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(b.getUniqueID(), b);
         return b;
     }
 }

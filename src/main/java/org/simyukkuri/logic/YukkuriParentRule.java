@@ -30,7 +30,7 @@ public final class YukkuriParentRule {
 			parentBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(body.getFather());
 		}
 		if (parentBody == null) {
-			int elderSisterCount = body.getElderSisterListSize();
+			int elderSisterCount = body.getElderSistersCount();
 			if (0 < elderSisterCount) {
 				parentBody = body.getElderSister(0);
 			}
@@ -61,7 +61,7 @@ public final class YukkuriParentRule {
 
 		if (nearestDistance / parentDistanceRatio <= distanceToParent) {
 			if (Barrier.acrossBarrier(body.getX(), body.getY(), parentBody.getX(), parentBody.getY(),
-					Barrier.MAP_BODY[body.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
+					Barrier.BODY_BLOCK_FLAGS[body.getAgeState().ordinal()] + Barrier.BARRIER_KEKKAI)) {
 				return;
 			}
 

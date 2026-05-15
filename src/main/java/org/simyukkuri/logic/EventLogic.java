@@ -32,7 +32,7 @@ public class EventLogic {
 	 * @param count   しゃべる時間
 	 */
 	public static final void addWorldEvent(EventPacket event, Yukkuri msgBody, String message, int count) {
-		GameWorld.get().getCurrentMap().getEvent().add(event);
+		GameWorld.get().getCurrentWorldState().getEvents().add(event);
 		if (msgBody != null) {
 			msgBody.setWorldEventSendMessage(message, count);
 		}
@@ -60,7 +60,7 @@ public class EventLogic {
 	 *                * @param count しゃべる時間
 	 */
 	public static final void addYukkuriEvent(Yukkuri to, EventPacket event, Yukkuri msgBody, String message, int count) {
-		to.getEventList().add(event);
+		to.getEvents().add(event);
 		if (msgBody != null) {
 			msgBody.setEventSendMessage(message, count);
 		}
@@ -70,7 +70,7 @@ public class EventLogic {
 	public static final void clockWorldEvent() {
 		EventPacket e;
 		// リストに登録されているイベントすべてをチェック
-		for (Iterator<EventPacket> i = GameWorld.get().getCurrentMap().getEvent().iterator(); i.hasNext();) {
+		for (Iterator<EventPacket> i = GameWorld.get().getCurrentWorldState().getEvents().iterator(); i.hasNext();) {
 			e = i.next();
 			if (e.countDown()) {
 				i.remove();
@@ -88,7 +88,7 @@ public class EventLogic {
 		EventPacket eventPacket = null;
 		EventPacket e;
 		// リストに登録されているイベントすべてをチェック
-		for (Iterator<EventPacket> i = GameWorld.get().getCurrentMap().getEvent().iterator(); i.hasNext();) {
+		for (Iterator<EventPacket> i = GameWorld.get().getCurrentWorldState().getEvents().iterator(); i.hasNext();) {
 			e = i.next();
 			// from が設定されていてかつ実体が消えていればイベントを除去
 			if (e.getFrom() != -1 && org.simyukkuri.util.YukkuriLookup.getYukkuriById(e.getFrom()) == null) {
@@ -118,7 +118,7 @@ public class EventLogic {
 		EventPacket e;
 
 		// リストに登録されているイベントすべてをチェック
-		for (Iterator<EventPacket> i = body.getEventList().iterator(); i.hasNext();) {
+		for (Iterator<EventPacket> i = body.getEvents().iterator(); i.hasNext();) {
 			e = i.next();
 			if (e.simpleEventAction(body)) {
 				i.remove();
@@ -146,7 +146,7 @@ public class EventLogic {
 	public static final void checkSimpleWorldEvent(Yukkuri body) {
 		EventPacket e;
 		// リストに登録されているイベントすべてをチェック
-		for (Iterator<EventPacket> i = GameWorld.get().getCurrentMap().getEvent().iterator(); i.hasNext();) {
+		for (Iterator<EventPacket> i = GameWorld.get().getCurrentWorldState().getEvents().iterator(); i.hasNext();) {
 			e = i.next();
 			Yukkuri from = org.simyukkuri.util.YukkuriLookup.getYukkuriById(e.getFrom());
 			if (from == body)
@@ -165,7 +165,7 @@ public class EventLogic {
 	public static final void checkSimpleYukkuriEvent(Yukkuri body) {
 		EventPacket e;
 
-		for (Iterator<EventPacket> i = body.getEventList().iterator(); i.hasNext();) {
+		for (Iterator<EventPacket> i = body.getEvents().iterator(); i.hasNext();) {
 			e = i.next();
 
 			if (e.simpleEventAction(body)) {

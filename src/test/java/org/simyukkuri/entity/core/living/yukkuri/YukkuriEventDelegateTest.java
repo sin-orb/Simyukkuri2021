@@ -6,7 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import org.simyukkuri.enums.CriticalDamegeType;
+import org.simyukkuri.enums.CriticalDamageType;
 import org.simyukkuri.enums.PlayStyle;
 import org.simyukkuri.event.impl.CutPenipeniEvent;
 import org.simyukkuri.event.impl.BegForLifeEvent;
@@ -44,15 +44,15 @@ class YukkuriEventDelegateTest {
 
 		new YukkuriEventDelegate(body).begForLife(true);
 
-		assertFalse(body.getEventList().isEmpty());
-		assertTrue(body.getEventList().get(0) instanceof BegForLifeEvent);
+		assertFalse(body.getEvents().isEmpty());
+		assertTrue(body.getEvents().get(0) instanceof BegForLifeEvent);
 	}
 
 	@Test
 	void canEventResponse_returnsFalseWhenBlindAndNotCutPeni() {
 		StubBody body = new StubBody();
 		body.setDead(false);
-		body.setCriticalDamegeType(CriticalDamegeType.INJURED);
+		body.setCriticalDamageType(CriticalDamageType.INJURED);
 		body.setBlind(true);
 
 		assertFalse(new YukkuriEventDelegate(body).canEventResponse());
@@ -62,9 +62,9 @@ class YukkuriEventDelegateTest {
 	void canEventResponse_returnsTrueWhenBlindButCutPeniEventIsQueued() {
 		StubBody body = new StubBody();
 		body.setDead(false);
-		body.setCriticalDamegeType(CriticalDamegeType.INJURED);
+		body.setCriticalDamageType(CriticalDamageType.INJURED);
 		body.setBlind(true);
-		body.getEventList().add(new CutPenipeniEvent(body, null, null, 1));
+		body.getEvents().add(new CutPenipeniEvent(body, null, null, 1));
 
 		assertTrue(new YukkuriEventDelegate(body).canEventResponse());
 	}
@@ -72,7 +72,7 @@ class YukkuriEventDelegateTest {
 	@Test
 	void isCutPeni_returnsTrueWhenFirstEventIsCutPenipeniEvent() {
 		StubBody body = new StubBody();
-		body.getEventList().add(new CutPenipeniEvent(body, null, null, 1));
+		body.getEvents().add(new CutPenipeniEvent(body, null, null, 1));
 
 		assertTrue(new YukkuriEventDelegate(body).isCutPeni());
 	}

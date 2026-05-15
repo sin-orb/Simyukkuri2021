@@ -74,11 +74,11 @@ public class PredatorsGameEvent extends EventPacket {
 		this.tick2 = tick2;
 	}
 
-	public int getToy() {
+	public int getToys() {
 		return toy;
 	}
 
-	public void setToy(int toy) {
+	public void setToys(int toy) {
 		this.toy = toy;
 	}
 
@@ -117,7 +117,7 @@ public class PredatorsGameEvent extends EventPacket {
 		Yukkuri from = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
 		if (b.isPredatorType() && b == from) {
 			// 遊び相手の決定
-			for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentMap().getYukkuriMap().entrySet()) {
+			for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentWorldState().getYukkuriRegistry().entrySet()) {
 				Yukkuri d = entry.getValue();
 				int minDistance = b.getEyesightBase();
 				int wallMode = b.getAgeState().ordinal();
@@ -156,7 +156,7 @@ public class PredatorsGameEvent extends EventPacket {
 						// 自分以下の大きさの相手の場合
 						if (minDistance > distance || d.getAgeState().ordinal() <= size) {
 							if (Barrier.acrossBarrier(b.getX(), b.getY(), d.getX(), d.getY(),
-									Barrier.MAP_BODY[wallMode] + Barrier.BARRIER_KEKKAI)) {
+									Barrier.BODY_BLOCK_FLAGS[wallMode] + Barrier.BARRIER_KEKKAI)) {
 								continue;
 							}
 							toy = d.objId;

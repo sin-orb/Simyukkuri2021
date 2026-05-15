@@ -23,7 +23,7 @@ import org.junit.jupiter.api.Test;
 
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.event.EventPacket;
-import org.simyukkuri.enums.Event;
+import org.simyukkuri.enums.TickResult;
 import org.simyukkuri.util.WorldTestHelper;
 
 class BodyEventStateTest {
@@ -91,15 +91,15 @@ class BodyEventStateTest {
 	void processPendingEventsStartsBodyEventBeforeWorldEvent() {
 		TrackingEventPacket worldEvent = new TrackingEventPacket();
 		TrackingEventPacket bodyEvent = new TrackingEventPacket();
-		org.simyukkuri.SimYukkuri.world.getCurrentMap().getEvent().add(worldEvent);
-		body.getEventList().add(bodyEvent);
+		org.simyukkuri.SimYukkuri.world.getCurrentWorldState().getEvents().add(worldEvent);
+		body.getEvents().add(bodyEvent);
 
 		YukkuriEventState.processPendingEvents(body);
 
 		assertSame(bodyEvent, body.getCurrentEvent());
 		assertTrue(bodyEvent.started);
 		assertFalse(worldEvent.started);
-		assertEquals(0, body.getEventList().size());
+		assertEquals(0, body.getEvents().size());
 	}
 
 	@Test
@@ -109,48 +109,48 @@ class BodyEventStateTest {
 		bodyEvent.simpleAction = true;
 		worldEvent.simpleAction = true;
 		body.setSleeping(true);
-		body.getEventList().add(bodyEvent);
-		org.simyukkuri.SimYukkuri.world.getCurrentMap().getEvent().add(worldEvent);
+		body.getEvents().add(bodyEvent);
+		org.simyukkuri.SimYukkuri.world.getCurrentWorldState().getEvents().add(worldEvent);
 
 		YukkuriEventState.processPendingEvents(body);
 
 		assertNull(body.getCurrentEvent());
 		assertTrue(bodyEvent.simpleActionCalled);
 		assertTrue(worldEvent.simpleActionCalled);
-		assertEquals(0, body.getEventList().size());
+		assertEquals(0, body.getEvents().size());
 	}
 
 	@Test
 	void resolveEventResultActionOverridesDoNothingWithLowPriorityEvent() {
 		body.setCurrentEvent(new TrackingEventPacket(EventPacket.EventPriority.LOW));
-		body.setEventResult(Event.DOSHIT);
+		body.setEventResult(TickResult.SHIT);
 
-		Event result = YukkuriEventState.resolveEventResultAction(body, Event.DONOTHING);
+		TickResult result = YukkuriEventState.resolveEventResultAction(body, TickResult.NONE);
 
-		assertEquals(Event.DOSHIT, result);
-		assertEquals(Event.DONOTHING, body.getEventResult());
+		assertEquals(TickResult.SHIT, result);
+		assertEquals(TickResult.NONE, body.getEventResult());
 	}
 
 	@Test
 	void resolveEventResultActionKeepsExistingActionForLowPriorityEvent() {
 		body.setCurrentEvent(new TrackingEventPacket(EventPacket.EventPriority.LOW));
-		body.setEventResult(Event.DOSHIT);
+		body.setEventResult(TickResult.SHIT);
 
-		Event result = YukkuriEventState.resolveEventResultAction(body, Event.BIRTHBABY);
+		TickResult result = YukkuriEventState.resolveEventResultAction(body, TickResult.BIRTH);
 
-		assertEquals(Event.BIRTHBABY, result);
-		assertEquals(Event.DOSHIT, body.getEventResult());
+		assertEquals(TickResult.BIRTH, result);
+		assertEquals(TickResult.SHIT, body.getEventResult());
 	}
 
 	@Test
 	void resolveEventResultActionOverridesExistingActionForHighPriorityEvent() {
 		body.setCurrentEvent(new TrackingEventPacket(EventPacket.EventPriority.HIGH));
-		body.setEventResult(Event.DOSHIT);
+		body.setEventResult(TickResult.SHIT);
 
-		Event result = YukkuriEventState.resolveEventResultAction(body, Event.BIRTHBABY);
+		TickResult result = YukkuriEventState.resolveEventResultAction(body, TickResult.BIRTH);
 
-		assertEquals(Event.DOSHIT, result);
-		assertEquals(Event.DONOTHING, body.getEventResult());
+		assertEquals(TickResult.SHIT, result);
+		assertEquals(TickResult.NONE, body.getEventResult());
 	}
 
 	@Test

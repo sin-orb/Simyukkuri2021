@@ -65,8 +65,8 @@ class FamilyActionLogicTest {
         WorldTestHelper.addChild(parent, child.getUniqueID());
         WorldTestHelper.setParents(child, parent.getUniqueID(), -1);
 
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(parent.getUniqueID(), parent);
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(child.getUniqueID(), child);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(parent.getUniqueID(), parent);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(child.getUniqueID(), child);
 
         originalRandom = SimYukkuri.RND;
         // Use ConstState(0) to force nextInt(X) to return 0, ensuring basic
@@ -156,7 +156,7 @@ class FamilyActionLogicTest {
         assertFalse(FamilyActionLogic.checkFamilyAction(parent));
         parent.giveOkazari(org.simyukkuri.entity.core.world.bodylinked.Okazari.OkazariType.DEFAULT);
 
-        parent.setPublicRank(PublicRank.UnunSlave);
+        parent.setPublicRank(PublicRank.UNUN_SLAVE);
         assertFalse(FamilyActionLogic.checkFamilyAction(parent));
         parent.setPublicRank(PublicRank.NONE);
 
@@ -179,7 +179,7 @@ class FamilyActionLogicTest {
         partner.giveOkazari(org.simyukkuri.entity.core.world.bodylinked.Okazari.OkazariType.DEFAULT);
 
         parent.setPartner(partner.getUniqueID());
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(partner.getUniqueID(), partner);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(partner.getUniqueID(), partner);
 
         partner.setCurrentEvent(new org.simyukkuri.event.EventPacket(partner, null, null, 1) {
             @Override
@@ -239,8 +239,8 @@ class FamilyActionLogicTest {
     void testSearchFood_StalkAndWaste() {
         Food stalk = new Food(150, 150, Food.FoodType.STALK.ordinal());
         Food waste = new Food(120, 120, Food.FoodType.WASTE.ordinal());
-        SimYukkuri.world.getCurrentMap().getFood().put(stalk.getObjId(), stalk);
-        SimYukkuri.world.getCurrentMap().getFood().put(waste.getObjId(), waste);
+        SimYukkuri.world.getCurrentWorldState().getFoods().put(stalk.getObjId(), stalk);
+        SimYukkuri.world.getCurrentWorldState().getFoods().put(waste.getObjId(), waste);
 
         // Normal adult doesn't eat waste usually
         Entity found = FamilyActionLogic.searchFood(parent);
@@ -261,7 +261,7 @@ class FamilyActionLogicTest {
         child.setShit(0);
 
         Food food = new Food(150, 150, Food.FoodType.SWEETS1.ordinal());
-        SimYukkuri.world.getCurrentMap().getFood().put(food.getObjId(), food);
+        SimYukkuri.world.getCurrentWorldState().getFoods().put(food.getObjId(), food);
 
         boolean result = FamilyActionLogic.checkFamilyAction(parent);
         assertTrue(result, "Should go to eat");
@@ -277,7 +277,7 @@ class FamilyActionLogicTest {
         Toilet toilet = new Toilet();
         toilet.setX(150);
         toilet.setY(150);
-        SimYukkuri.world.getCurrentMap().getToilet().put(toilet.getObjId(), toilet);
+        SimYukkuri.world.getCurrentWorldState().getToilets().put(toilet.getObjId(), toilet);
 
         boolean result = FamilyActionLogic.checkFamilyAction(parent);
         assertTrue(result, "Should go to shit");
@@ -316,13 +316,13 @@ class FamilyActionLogicTest {
         child.setShit(0);
 
         Food food = new Food(150, 150, Food.FoodType.SWEETS1.ordinal());
-        SimYukkuri.world.getCurrentMap().getFood().put(food.getObjId(), food);
+        SimYukkuri.world.getCurrentWorldState().getFoods().put(food.getObjId(), food);
 
         boolean result = FamilyActionLogic.checkFamilyAction(parent);
 
         assertTrue(result);
-        assertEquals(1, SimYukkuri.world.getCurrentMap().getEvent().size());
-        assertTrue(SimYukkuri.world.getCurrentMap().getEvent().get(0) instanceof SuperEatingTimeEvent);
+        assertEquals(1, SimYukkuri.world.getCurrentWorldState().getEvents().size());
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getEvents().get(0) instanceof SuperEatingTimeEvent);
         assertTrue(parent.getCurrentEvent() instanceof SuperEatingTimeEvent);
     }
 
@@ -336,13 +336,13 @@ class FamilyActionLogicTest {
         Toilet toilet = new Toilet();
         toilet.setX(150);
         toilet.setY(150);
-        SimYukkuri.world.getCurrentMap().getToilet().put(toilet.getObjId(), toilet);
+        SimYukkuri.world.getCurrentWorldState().getToilets().put(toilet.getObjId(), toilet);
 
         boolean result = FamilyActionLogic.checkFamilyAction(parent);
 
         assertTrue(result);
-        assertEquals(1, SimYukkuri.world.getCurrentMap().getEvent().size());
-        assertTrue(SimYukkuri.world.getCurrentMap().getEvent().get(0) instanceof ShitExercisesEvent);
+        assertEquals(1, SimYukkuri.world.getCurrentWorldState().getEvents().size());
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getEvents().get(0) instanceof ShitExercisesEvent);
         assertTrue(parent.getCurrentEvent() instanceof ShitExercisesEvent);
     }
 
@@ -368,8 +368,8 @@ class FamilyActionLogicTest {
         boolean result = FamilyActionLogic.checkFamilyAction(parent);
 
         assertTrue(result);
-        assertEquals(1, SimYukkuri.world.getCurrentMap().getEvent().size());
-        assertTrue(SimYukkuri.world.getCurrentMap().getEvent().get(0) instanceof ProudChildEvent);
+        assertEquals(1, SimYukkuri.world.getCurrentWorldState().getEvents().size());
+        assertTrue(SimYukkuri.world.getCurrentWorldState().getEvents().get(0) instanceof ProudChildEvent);
         assertTrue(parent.getCurrentEvent() instanceof ProudChildEvent);
     }
 
@@ -398,7 +398,7 @@ class FamilyActionLogicTest {
         // Let's create a bed or food. We will make child hungry again.
         child.setHungry((int) (child.getHungryLimit() * 0.1));
         Food food = new Food(80, 80, Food.FoodType.SWEETS1.ordinal());
-        SimYukkuri.world.getCurrentMap().getFood().put(food.getObjId(), food);
+        SimYukkuri.world.getCurrentWorldState().getFoods().put(food.getObjId(), food);
 
         // However, bWantToEat is evaluated in checkFamilyAction!
         // To test ONLY rideOnParent directly, we call it manually
@@ -427,7 +427,7 @@ class FamilyActionLogicTest {
         stray.setX(60);
         stray.setY(60);
         stray.setHungry(0); // Starving
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(stray.getUniqueID(), stray);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(stray.getUniqueID(), stray);
 
         // Child is fine
         child.setHungry(child.getHungryLimit());
@@ -435,7 +435,7 @@ class FamilyActionLogicTest {
 
         // Food is available
         Food food = new Food(150, 150, Food.FoodType.SWEETS1.ordinal());
-        SimYukkuri.world.getCurrentMap().getFood().put(food.getObjId(), food);
+        SimYukkuri.world.getCurrentWorldState().getFoods().put(food.getObjId(), food);
 
         // Should return false because stray is not family
         assertFalse(FamilyActionLogic.checkFamilyAction(parent));
@@ -451,8 +451,8 @@ class FamilyActionLogicTest {
         closeToilet.setX(60);
         closeToilet.setY(60);
 
-        SimYukkuri.world.getCurrentMap().getToilet().put(farToilet.getObjId(), farToilet);
-        SimYukkuri.world.getCurrentMap().getToilet().put(closeToilet.getObjId(), closeToilet);
+        SimYukkuri.world.getCurrentWorldState().getToilets().put(farToilet.getObjId(), farToilet);
+        SimYukkuri.world.getCurrentWorldState().getToilets().put(closeToilet.getObjId(), closeToilet);
 
         Entity found = FamilyActionLogic.searchToilet(parent);
         assertEquals((Object) closeToilet, (Object) found, "Should find the closest toilet");
@@ -470,14 +470,14 @@ class FamilyActionLogicTest {
         partner.setHungry(0); // Not full
         partner.giveOkazari(org.simyukkuri.entity.core.world.bodylinked.Okazari.OkazariType.DEFAULT);
 
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(partner.getUniqueID(), partner);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(partner.getUniqueID(), partner);
         WorldTestHelper.setParents(child, parent.getUniqueID(), partner.getUniqueID());
         WorldTestHelper.addChild(partner, child.getUniqueID()); // Partner also needs to know about child
 
         // Child needs food
         child.setHungry(0);
         Food food = new Food(150, 150, Food.FoodType.SWEETS1.ordinal());
-        SimYukkuri.world.getCurrentMap().getFood().put(food.getObjId(), food);
+        SimYukkuri.world.getCurrentWorldState().getFoods().put(food.getObjId(), food);
 
         // Younger (parent) SHOULD act
         assertTrue(org.simyukkuri.logic.FamilyActionLogic.checkFamilyAction(parent), "Younger partner should act");
@@ -520,7 +520,7 @@ class FamilyActionLogicTest {
 
     @Test
     void testCheckFamilyAction_IsNYD_ReturnsFalse() {
-        parent.setCoreAnkoState(org.simyukkuri.enums.CoreAnkoState.NonYukkuriDiseaseNear);
+        parent.setCoreAnkoState(org.simyukkuri.enums.CoreAnkoState.NON_YUKKURI_DISEASE_NEAR);
         assertFalse(FamilyActionLogic.checkFamilyAction(parent));
     }
 
@@ -560,7 +560,7 @@ class FamilyActionLogicTest {
         partner2.giveOkazari(org.simyukkuri.entity.core.world.bodylinked.Okazari.OkazariType.DEFAULT);
         partner2.setLockmove(true);
         parent.setPartner(partner2.getUniqueID());
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(partner2.getUniqueID(), partner2);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(partner2.getUniqueID(), partner2);
         assertFalse(FamilyActionLogic.checkFamilyAction(parent));
     }
 
@@ -572,7 +572,7 @@ class FamilyActionLogicTest {
         partner2.setHasBaby(true);
         partner2.setPregnantPeriod(partner2.getPregPeriodBase());
         parent.setPartner(partner2.getUniqueID());
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(partner2.getUniqueID(), partner2);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(partner2.getUniqueID(), partner2);
         assertFalse(FamilyActionLogic.checkFamilyAction(parent));
     }
 
@@ -583,7 +583,7 @@ class FamilyActionLogicTest {
         partner2.giveOkazari(org.simyukkuri.entity.core.world.bodylinked.Okazari.OkazariType.DEFAULT);
         partner2.setShitting(true);
         parent.setPartner(partner2.getUniqueID());
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(partner2.getUniqueID(), partner2);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(partner2.getUniqueID(), partner2);
         assertFalse(FamilyActionLogic.checkFamilyAction(parent));
     }
 
@@ -594,7 +594,7 @@ class FamilyActionLogicTest {
         partner2.giveOkazari(org.simyukkuri.entity.core.world.bodylinked.Okazari.OkazariType.DEFAULT);
         partner2.setBirth(true);
         parent.setPartner(partner2.getUniqueID());
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(partner2.getUniqueID(), partner2);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(partner2.getUniqueID(), partner2);
         assertFalse(FamilyActionLogic.checkFamilyAction(parent));
     }
 
@@ -605,7 +605,7 @@ class FamilyActionLogicTest {
         partner2.giveOkazari(org.simyukkuri.entity.core.world.bodylinked.Okazari.OkazariType.DEFAULT);
         partner2.setNeedled(true);
         parent.setPartner(partner2.getUniqueID());
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(partner2.getUniqueID(), partner2);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(partner2.getUniqueID(), partner2);
         assertFalse(FamilyActionLogic.checkFamilyAction(parent));
     }
 
@@ -777,7 +777,7 @@ class FamilyActionLogicTest {
         };
         // bIsBaby=false (子ゆのみ) → proudChild スキップ → rideOnParent も空 → false
         assertFalse(FamilyActionLogic.checkFamilyAction(parent));
-        assertEquals(0, SimYukkuri.world.getCurrentMap().getEvent().size());
+        assertEquals(0, SimYukkuri.world.getCurrentWorldState().getEvents().size());
     }
 
     // =========================================================
@@ -817,7 +817,7 @@ class FamilyActionLogicTest {
     @Test
     void testGoToEat_CheckWaitFails_ReturnsFalse() {
         Food food = new Food(80, 80, Food.FoodType.SWEETS1.ordinal());
-        SimYukkuri.world.getCurrentMap().getFood().put(food.getObjId(), food);
+        SimYukkuri.world.getCurrentWorldState().getFoods().put(food.getObjId(), food);
         parent.setLastActionTime(); // checkWait(5000) fails
         java.util.List<Yukkuri> list = new java.util.ArrayList<>();
         list.add(child);
@@ -828,7 +828,7 @@ class FamilyActionLogicTest {
     void testGoToEat_Success() {
         setReady(parent);
         Food food = new Food(80, 80, Food.FoodType.SWEETS1.ordinal());
-        SimYukkuri.world.getCurrentMap().getFood().put(food.getObjId(), food);
+        SimYukkuri.world.getCurrentWorldState().getFoods().put(food.getObjId(), food);
         java.util.List<Yukkuri> list = new java.util.ArrayList<>();
         list.add(child);
         org.junit.jupiter.api.Assertions.assertDoesNotThrow(() -> {
@@ -889,7 +889,7 @@ class FamilyActionLogicTest {
         child.setHungry(0); // hungry
         // Put food very close to child (at child's location)
         Food food = new Food(child.getX(), child.getY(), Food.FoodType.SWEETS1.ordinal());
-        SimYukkuri.world.getCurrentMap().getFood().put(food.getObjId(), food);
+        SimYukkuri.world.getCurrentWorldState().getFoods().put(food.getObjId(), food);
         java.util.List<Yukkuri> list = new java.util.ArrayList<>();
         list.add(child);
         // distance < 10 → target=null, continue → return false
@@ -901,7 +901,7 @@ class FamilyActionLogicTest {
         setReady(parent);
         child.setHungry(0); // hungry
         Food food = new Food(300, 300, Food.FoodType.SWEETS1.ordinal());
-        SimYukkuri.world.getCurrentMap().getFood().put(food.getObjId(), food);
+        SimYukkuri.world.getCurrentWorldState().getFoods().put(food.getObjId(), food);
         java.util.List<Yukkuri> list = new java.util.ArrayList<>();
         list.add(child);
         // food far → distance >= 10 → YukkuriRideEvent started → return true
@@ -919,7 +919,7 @@ class FamilyActionLogicTest {
         Toilet toilet = new Toilet();
         toilet.setX(300);
         toilet.setY(300);
-        SimYukkuri.world.getCurrentMap().getToilet().put(toilet.getObjId(), toilet);
+        SimYukkuri.world.getCurrentWorldState().getToilets().put(toilet.getObjId(), toilet);
         java.util.List<Yukkuri> list = new java.util.ArrayList<>();
         list.add(child);
         org.junit.jupiter.api.Assertions.assertDoesNotThrow(() -> {
@@ -968,7 +968,7 @@ class FamilyActionLogicTest {
     @Test
     void testSearchFood_SWEETS1_Found() {
         Food sweets = new Food(80, 80, Food.FoodType.SWEETS1.ordinal());
-        SimYukkuri.world.getCurrentMap().getFood().put(sweets.getObjId(), sweets);
+        SimYukkuri.world.getCurrentWorldState().getFoods().put(sweets.getObjId(), sweets);
         Entity found = FamilyActionLogic.searchFood(parent);
         assertNotNull(found);
     }
@@ -976,7 +976,7 @@ class FamilyActionLogicTest {
     @Test
     void testSearchFood_SWEETS2_Found() {
         Food sweets = new Food(80, 80, Food.FoodType.SWEETS2.ordinal());
-        SimYukkuri.world.getCurrentMap().getFood().put(sweets.getObjId(), sweets);
+        SimYukkuri.world.getCurrentWorldState().getFoods().put(sweets.getObjId(), sweets);
         Entity found = FamilyActionLogic.searchFood(parent);
         assertNotNull(found);
     }
@@ -987,7 +987,7 @@ class FamilyActionLogicTest {
             @Override
             public boolean isEmpty() { return true; }
         };
-        SimYukkuri.world.getCurrentMap().getFood().put(empty.getObjId(), empty);
+        SimYukkuri.world.getCurrentWorldState().getFoods().put(empty.getObjId(), empty);
         Entity found = FamilyActionLogic.searchFood(parent);
         org.junit.jupiter.api.Assertions.assertNull(found);
     }
@@ -996,7 +996,7 @@ class FamilyActionLogicTest {
     void testSearchFood_Waste_NormalFullParent_NotFound() {
         // Only waste food, parent is full → waste not taken by normal parent
         Food waste = new Food(80, 80, Food.FoodType.WASTE.ordinal());
-        SimYukkuri.world.getCurrentMap().getFood().put(waste.getObjId(), waste);
+        SimYukkuri.world.getCurrentWorldState().getFoods().put(waste.getObjId(), waste);
         parent.setHungry((int)(parent.getHungryLimit() * 0.9)); // full
         Entity found = FamilyActionLogic.searchFood(parent);
         org.junit.jupiter.api.Assertions.assertNull(found);
@@ -1005,7 +1005,7 @@ class FamilyActionLogicTest {
     @Test
     void testSearchFood_Stalk_Found() {
         Food stalk = new Food(80, 80, Food.FoodType.STALK.ordinal());
-        SimYukkuri.world.getCurrentMap().getFood().put(stalk.getObjId(), stalk);
+        SimYukkuri.world.getCurrentWorldState().getFoods().put(stalk.getObjId(), stalk);
         Entity found = FamilyActionLogic.searchFood(parent);
         assertNotNull(found);
     }
@@ -1021,20 +1021,20 @@ class FamilyActionLogicTest {
         idiotBody.setAge(idiotBody.getChildLimitBase() + 1);
         idiotBody.giveOkazari(org.simyukkuri.entity.core.world.bodylinked.Okazari.OkazariType.DEFAULT);
         WorldTestHelper.addChild(idiotBody, child.getUniqueID());
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(idiotBody.getUniqueID(), idiotBody);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(idiotBody.getUniqueID(), idiotBody);
         assertFalse(FamilyActionLogic.checkFamilyAction(idiotBody));
     }
 
-    // ---- partner second block: getCriticalDamegeType and !hasOkazari ----
+    // ---- partner second block: getCriticalDamageType and !hasOkazari ----
 
     @Test
     void testCheckFamilyAction_PartnerCriticalDamage_SecondBlock_ReturnsFalse() {
         Yukkuri partner = WorldTestHelper.createBody();
         partner.setAge(parent.getAge() + 100);
         partner.giveOkazari(org.simyukkuri.entity.core.world.bodylinked.Okazari.OkazariType.DEFAULT);
-        partner.setCriticalDamegeType(org.simyukkuri.enums.CriticalDamegeType.INJURED);
+        partner.setCriticalDamageType(org.simyukkuri.enums.CriticalDamageType.INJURED);
         parent.setPartner(partner.getUniqueID());
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(partner.getUniqueID(), partner);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(partner.getUniqueID(), partner);
         assertFalse(FamilyActionLogic.checkFamilyAction(parent));
     }
 
@@ -1044,18 +1044,18 @@ class FamilyActionLogicTest {
         partner.setAge(parent.getAge() + 100);
         partner.takeOkazari(true);
         parent.setPartner(partner.getUniqueID());
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(partner.getUniqueID(), partner);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(partner.getUniqueID(), partner);
         assertFalse(FamilyActionLogic.checkFamilyAction(parent));
     }
 
-    // ---- child loop: getCriticalDamegeType != null (INJURED passes isNotAllright) ----
+    // ---- child loop: getCriticalDamageType != null (INJURED passes isNotAllright) ----
 
     @Test
     void testCheckFamilyAction_ChildCriticalDamageInjured_BothFalse() {
         setReady(parent);
         child.setHungry(child.getHungryLimit());
         child.setShit(0);
-        child.setCriticalDamegeType(org.simyukkuri.enums.CriticalDamegeType.INJURED);
+        child.setCriticalDamageType(org.simyukkuri.enums.CriticalDamageType.INJURED);
         SimYukkuri.RND = new ConstState(0) {
             @Override public boolean nextBoolean() { return false; }
         };
@@ -1155,7 +1155,7 @@ class FamilyActionLogicTest {
 
         org.simyukkuri.entity.core.world.item.Bed bed = new org.simyukkuri.entity.core.world.item.Bed();
         bed.setX(300); bed.setY(300);
-        SimYukkuri.world.getCurrentMap().getBed().put(bed.getObjId(), bed);
+        SimYukkuri.world.getCurrentWorldState().getBeds().put(bed.getObjId(), bed);
 
         SimYukkuri.RND = new ConstState(0) {
             @Override public boolean nextBoolean() { return false; }
@@ -1170,7 +1170,7 @@ class FamilyActionLogicTest {
     @Test
     void testSearchFood_DefaultFoodType_Found() {
         Food food = new Food(80, 80, Food.FoodType.FOOD.ordinal());
-        SimYukkuri.world.getCurrentMap().getFood().put(food.getObjId(), food);
+        SimYukkuri.world.getCurrentWorldState().getFoods().put(food.getObjId(), food);
         Entity found = FamilyActionLogic.searchFood(parent);
         assertNotNull(found);
     }
@@ -1239,7 +1239,7 @@ class FamilyActionLogicTest {
         child.setShit(0);
         // Give parent a food takeout item
         Food takenFood = new Food(50, 50, Food.FoodType.SWEETS1.ordinal());
-        SimYukkuri.world.getCurrentMap().getTakenOutFood().put(takenFood.getObjId(), takenFood);
+        SimYukkuri.world.getCurrentWorldState().getTakenOutFoods().put(takenFood.getObjId(), takenFood);
         parent.setCarryItem(org.simyukkuri.enums.TakeoutItemType.FOOD, takenFood);
         java.util.List<Yukkuri> list = new java.util.ArrayList<>();
         list.add(child);
@@ -1288,7 +1288,7 @@ class FamilyActionLogicTest {
     @Test
     void testSearchFood_WasteWithPoorTang_Found() {
         Food waste = new Food(80, 80, Food.FoodType.WASTE.ordinal());
-        SimYukkuri.world.getCurrentMap().getFood().put(waste.getObjId(), waste);
+        SimYukkuri.world.getCurrentWorldState().getFoods().put(waste.getObjId(), waste);
         parent.setTang(100); // tang < 300 -> TangType.POOR -> WASTE accepted
         Entity found = FamilyActionLogic.searchFood(parent);
         assertNotNull(found);
@@ -1301,8 +1301,8 @@ class FamilyActionLogicTest {
         // Two foods at different distances; looks comparison needed
         Food food1 = new Food(70, 70, Food.FoodType.SWEETS1.ordinal()); // closer
         Food food2 = new Food(100, 100, Food.FoodType.STALK.ordinal()); // farther but different looks
-        SimYukkuri.world.getCurrentMap().getFood().put(food1.getObjId(), food1);
-        SimYukkuri.world.getCurrentMap().getFood().put(food2.getObjId(), food2);
+        SimYukkuri.world.getCurrentWorldState().getFoods().put(food1.getObjId(), food1);
+        SimYukkuri.world.getCurrentWorldState().getFoods().put(food2.getObjId(), food2);
         Entity found = FamilyActionLogic.searchFood(parent);
         assertNotNull(found); // some food found; looks comparison was triggered
     }
@@ -1328,7 +1328,7 @@ class FamilyActionLogicTest {
         loner.setAge(loner.getChildLimitBase() + 1); // adult
         loner.giveOkazari(org.simyukkuri.entity.core.world.bodylinked.Okazari.OkazariType.DEFAULT);
         // addChild を呼ばない → 子リスト空
-        SimYukkuri.world.getCurrentMap().getYukkuriMap().put(loner.getUniqueID(), loner);
+        SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(loner.getUniqueID(), loner);
         assertFalse(FamilyActionLogic.checkFamilyAction(loner));
     }
 
@@ -1337,7 +1337,7 @@ class FamilyActionLogicTest {
     @Test
     void testSearchFood_WasteWithIsTooHungry_Found() {
         Food waste = new Food(80, 80, Food.FoodType.WASTE.ordinal());
-        SimYukkuri.world.getCurrentMap().getFood().put(waste.getObjId(), waste);
+        SimYukkuri.world.getCurrentWorldState().getFoods().put(waste.getObjId(), waste);
         parent.setHungry(0);   // hungry <= 0
         // getDamageState() != NONE: damage >= DAMAGELIMIT/2 で VERY になる
         WorldTestHelper.setDamage(parent,
@@ -1358,12 +1358,12 @@ class FamilyActionLogicTest {
             child.setSleeping(false);
 
             Food food = new Food(120, 120, Food.FoodType.SWEETS1.ordinal());
-            SimYukkuri.world.getCurrentMap().getFood().put(food.getObjId(), food);
+            SimYukkuri.world.getCurrentWorldState().getFoods().put(food.getObjId(), food);
 
             Toilet toilet = new Toilet();
             toilet.setX(130);
             toilet.setY(130);
-            SimYukkuri.world.getCurrentMap().getToilet().put(toilet.getObjId(), toilet);
+            SimYukkuri.world.getCurrentWorldState().getToilets().put(toilet.getObjId(), toilet);
 
             java.util.List<Yukkuri> list = new java.util.ArrayList<>();
             list.add(child);
@@ -1384,7 +1384,7 @@ class FamilyActionLogicTest {
             org.simyukkuri.entity.core.world.item.Bed bed = new org.simyukkuri.entity.core.world.item.Bed();
             bed.setX(300);
             bed.setY(300);
-            SimYukkuri.world.getCurrentMap().getBed().put(bed.getObjId(), bed);
+            SimYukkuri.world.getCurrentWorldState().getBeds().put(bed.getObjId(), bed);
 
             SimYukkuri.RND = new ConstState(0) {
                 @Override
@@ -1396,8 +1396,8 @@ class FamilyActionLogicTest {
             assertTrue(FamilyActionLogic.checkFamilyAction(parent));
             assertTrue(parent.getCurrentEvent() instanceof YukkuriRideEvent);
             assertEquals(bed.getObjId(), parent.getCurrentEvent().getTarget());
-            assertEquals(1, SimYukkuri.world.getCurrentMap().getEvent().size());
-            assertTrue(SimYukkuri.world.getCurrentMap().getEvent().get(0) instanceof YukkuriRideEvent);
+            assertEquals(1, SimYukkuri.world.getCurrentWorldState().getEvents().size());
+            assertTrue(SimYukkuri.world.getCurrentWorldState().getEvents().get(0) instanceof YukkuriRideEvent);
         }
 
         @Test
@@ -1405,11 +1405,11 @@ class FamilyActionLogicTest {
             setReady(parent);
 
             Food takenFood = new Food(50, 50, Food.FoodType.SWEETS1.ordinal());
-            SimYukkuri.world.getCurrentMap().getTakenOutFood().put(takenFood.getObjId(), takenFood);
+            SimYukkuri.world.getCurrentWorldState().getTakenOutFoods().put(takenFood.getObjId(), takenFood);
             parent.setCarryItem(org.simyukkuri.enums.TakeoutItemType.FOOD, takenFood);
 
             Food fieldFood = new Food(140, 140, Food.FoodType.SWEETS2.ordinal());
-            SimYukkuri.world.getCurrentMap().getFood().put(fieldFood.getObjId(), fieldFood);
+            SimYukkuri.world.getCurrentWorldState().getFoods().put(fieldFood.getObjId(), fieldFood);
 
             java.util.List<Yukkuri> list = new java.util.ArrayList<>();
             list.add(child);
@@ -1417,8 +1417,8 @@ class FamilyActionLogicTest {
             assertTrue(FamilyActionLogic.goToEat(parent, list));
             assertTrue(parent.getCurrentEvent() instanceof SuperEatingTimeEvent);
             assertEquals(takenFood.getObjId(), parent.getCurrentEvent().getTarget());
-            assertEquals(1, SimYukkuri.world.getCurrentMap().getEvent().size());
-            assertTrue(SimYukkuri.world.getCurrentMap().getEvent().get(0) instanceof SuperEatingTimeEvent);
+            assertEquals(1, SimYukkuri.world.getCurrentWorldState().getEvents().size());
+            assertTrue(SimYukkuri.world.getCurrentWorldState().getEvents().get(0) instanceof SuperEatingTimeEvent);
             assertTrue(parent.getCarryItem(org.simyukkuri.enums.TakeoutItemType.FOOD) == null);
         }
 
@@ -1431,8 +1431,8 @@ class FamilyActionLogicTest {
 
             assertTrue(FamilyActionLogic.proudChild(parent, list));
             assertTrue(parent.getCurrentEvent() instanceof ProudChildEvent);
-            assertEquals(1, SimYukkuri.world.getCurrentMap().getEvent().size());
-            assertTrue(SimYukkuri.world.getCurrentMap().getEvent().get(0) instanceof ProudChildEvent);
+            assertEquals(1, SimYukkuri.world.getCurrentWorldState().getEvents().size());
+            assertTrue(SimYukkuri.world.getCurrentWorldState().getEvents().get(0) instanceof ProudChildEvent);
         }
 
         @Test
@@ -1440,7 +1440,7 @@ class FamilyActionLogicTest {
             Yukkuri raper = WorldTestHelper.createBody();
             raper.setRaper(true);
             raper.setExciting(true);
-            SimYukkuri.world.getCurrentMap().getYukkuriMap().put(raper.getUniqueID(), raper);
+            SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(raper.getUniqueID(), raper);
 
             parent.setUnBirth(true);
             child.setUnBirth(true);

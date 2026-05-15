@@ -26,14 +26,14 @@ public final class YukkuriStealRule {
 		if (!actorBody.hasOkazari() && targetBody.hasOkazari()
 				&& actorBody.getAgeState() == targetBody.getAgeState()
 				&& actorBody.getType() == targetBody.getType() && !actorBody.isHybrid()
-				&& targetBody.getOkazari().getOkazariType() == OkazariType.DEFAULT
-				&& (targetBody.getPublicRank() == PublicRank.NONE || actorBody.getPublicRank() == PublicRank.UnunSlave)
+				&& targetBody.getOkazaris().getOkazariType() == OkazariType.DEFAULT
+				&& (targetBody.getPublicRank() == PublicRank.NONE || actorBody.getPublicRank() == PublicRank.UNUN_SLAVE)
 				&& !actorBody.isLockmove()) {
 			if (actorBody.isRude()) {
 				if (!YukkuriWakeupRule.checkWakeupOtherYukkuri(actorBody)) {
 					if (actorBody.getPublicRank() != PublicRank.NONE && targetBody.getPublicRank() == PublicRank.NONE) {
 						actorBody.setPublicRank(PublicRank.NONE);
-						targetBody.setPublicRank(PublicRank.UnunSlave);
+						targetBody.setPublicRank(PublicRank.UNUN_SLAVE);
 					}
 					targetBody.takeOkazari(false);
 					actorBody.giveOkazari(OkazariType.DEFAULT);
