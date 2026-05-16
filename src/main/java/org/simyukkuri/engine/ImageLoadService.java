@@ -45,6 +45,7 @@ import org.simyukkuri.entity.core.world.item.ProcessorPlate;
 import org.simyukkuri.entity.core.world.item.ProductChute;
 import org.simyukkuri.entity.core.world.item.StickyPlate;
 import org.simyukkuri.entity.core.world.item.Stone;
+import org.simyukkuri.entity.core.world.bodylinked.Okazari;
 import org.simyukkuri.entity.core.world.item.Sui;
 import org.simyukkuri.entity.core.world.item.Toilet;
 import org.simyukkuri.entity.core.world.item.Toy;
@@ -135,6 +136,7 @@ public final class ImageLoadService {
 				OrangeAmpoule.loadImages(loader, pane);
 				AccelAmpoule.loadImages(loader, pane);
 				StopAmpoule.loadImages(loader, pane);
+				Okazari.loadImages(loader, pane);
 				ANYDAmpoule.loadImages(loader, pane);
 				HungryAmpoule.loadImages(loader, pane);
 				VeryShitAmpoule.loadImages(loader, pane);
