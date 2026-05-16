@@ -51,7 +51,7 @@ public final class YukkuriTickProcessor {
 				yukkuri.upDate();
 				return null;
 			case BIRTH:
-				handleBirthBaby(terrarium, yukkuri, babyList);
+				handleBirthBaby(terrarium, yukkuri, curMap, babyList);
 				break;
 			case SHIT:
 				int objId = terrarium.addShit(yukkuri.getX(), yukkuri.getY(), yukkuri.getZ() + yukkuri.getSize() / 15,
@@ -78,11 +78,11 @@ public final class YukkuriTickProcessor {
 			return null;
 		}
 
-		checkFire(yukkuri);
+		checkFire(yukkuri, curMap);
 		StoneLogic.checkPubble(yukkuri, curMap);
 
 		if (yukkuri.getPanicType() != null && !yukkuri.isUnBirth() && !yukkuri.isDamagedHeavily()) {
-			checkPanic(yukkuri);
+			checkPanic(yukkuri, curMap);
 		} else {
 			if (yukkuri.getCurrentEvent() != null) {
 				EventLogic.eventUpdate(yukkuri);
@@ -228,7 +228,7 @@ public final class YukkuriTickProcessor {
 		}
 	}
 
-	private static void handleBirthBaby(Terrarium terrarium, Yukkuri b, List<Yukkuri> babyList) {
+	private static void handleBirthBaby(Terrarium terrarium, Yukkuri b, WorldState curMap, List<Yukkuri> babyList) {
 		if (b.getAge() % 10 == 0 && !b.isHasPants()) {
 			Dna babyType = b.getBabyTypesDequeue();
 			if (babyType != null) {
@@ -271,7 +271,7 @@ public final class YukkuriTickProcessor {
 						org.simyukkuri.entity.core.world.item.Food food = (org.simyukkuri.entity.core.world.item.Food) GadgetAction.putObjEX(
 								org.simyukkuri.entity.core.world.item.Food.class, fx, fy,
 								org.simyukkuri.entity.core.world.item.Food.FoodType.STALK.ordinal());
-						GameWorld.get().getCurrentWorldState().getFoods().put(food.objId, food);
+						curMap.getFoods().put(food.objId, food);
 					}
 					s.remove();
 				}
@@ -286,12 +286,12 @@ public final class YukkuriTickProcessor {
 		}
 	}
 
-	private static void checkPanic(Yukkuri b) {
+	private static void checkPanic(Yukkuri b, WorldState curMap) {
 		if (b.isDead() || b.isPealed()) {
 			return;
 		}
 		int minDistance;
-		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentWorldState().getYukkuriRegistry().entrySet()) {
+		for (Map.Entry<Integer, Yukkuri> entry : curMap.getYukkuriRegistry().entrySet()) {
 			Yukkuri p = entry.getValue();
 			if (p == b) {
 				continue;
@@ -309,12 +309,12 @@ public final class YukkuriTickProcessor {
 		}
 	}
 
-	private static void checkFire(Yukkuri b) {
+	private static void checkFire(Yukkuri b, WorldState curMap) {
 		int minDistance;
 		if (b.getAttachmentSize(Fire.class) == 0) {
 			return;
 		}
-		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentWorldState().getYukkuriRegistry().entrySet()) {
+		for (Map.Entry<Integer, Yukkuri> entry : curMap.getYukkuriRegistry().entrySet()) {
 			Yukkuri p = entry.getValue();
 			if (p == b) {
 				continue;
