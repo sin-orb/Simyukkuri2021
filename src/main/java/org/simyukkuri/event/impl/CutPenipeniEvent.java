@@ -49,7 +49,7 @@ public class CutPenipeniEvent extends EventPacket {
 	@Override
 	public boolean checkEventResponse(Yukkuri body) {
 
-		priority = EventPriority.HIGH;
+		setHighPriority();
 		Yukkuri fromBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
 		if (body == fromBody)
 			return true;

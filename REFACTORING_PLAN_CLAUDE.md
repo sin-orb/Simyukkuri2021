@@ -203,7 +203,7 @@ WorldState
 
 ---
 
-### 3-C. `EventPacket` 実装クラスの共通ロジック集約
+### ✅ 3-C. `EventPacket` 実装クラスの共通ロジック集約
 
 **現状の問題**
 

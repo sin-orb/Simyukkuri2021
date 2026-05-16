@@ -51,7 +51,7 @@ public class FlyingEatEvent extends EventPacket {
 	// 参加チェック
 	@Override
 	public boolean checkEventResponse(Yukkuri body) {
-		priority = EventPriority.HIGH;
+		setHighPriority();
 		return true;
 	}
 

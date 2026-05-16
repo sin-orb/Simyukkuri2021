@@ -32,7 +32,7 @@ public class ProposeEvent extends EventPacket {
 	 */
 	public ProposeEvent(Yukkuri f, Yukkuri t, Entity tgt, int cnt) {
 		super(f, t, tgt, cnt);
-		priority = EventPriority.HIGH;
+		setHighPriority();
 	}
 
 	public ProposeEvent() {

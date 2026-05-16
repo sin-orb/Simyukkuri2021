@@ -52,7 +52,7 @@ public class KillPredeatorEvent extends RevengeAttackEvent {
 	 */
 	@Override
 	public boolean checkEventResponse(Yukkuri body) {
-		priority = EventPriority.HIGH;
+		setHighPriority();
 		// 死体、睡眠、皮なし、目無しはスキップ
 		if (!body.canEventResponse())
 			return true;
@@ -93,6 +93,7 @@ public class KillPredeatorEvent extends RevengeAttackEvent {
 	 * 
 	 * @return 次のターゲット
 	 */
+	@Override
 	public Yukkuri searchNextTarget() {
 		Yukkuri nextTarget = null;
 		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentWorldState().getYukkuriRegistry().entrySet()) {

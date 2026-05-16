@@ -313,4 +313,47 @@ abstract public class EventPacket implements java.io.Serializable {
 	public void setPriority(EventPriority priority) {
 		this.priority = priority;
 	}
+
+	/** checkEventResponse の冒頭で HIGH 優先度を設定するショートカット. */
+	protected final void setHighPriority() {
+		priority = EventPriority.HIGH;
+	}
+
+	/**
+	 * イベント発信者 (from) を取得する.
+	 * 死亡・除去済みの場合は null を返す.
+	 *
+	 * @return 生存中の発信者、または null
+	 */
+	protected final Yukkuri requireLiveSource() {
+		Yukkuri src = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
+		if (src == null || src.isRemoved() || src.isDead()) return null;
+		return src;
+	}
+
+	/**
+	 * イベント発信者を取得し、無効なら次のターゲットを検索して更新する.
+	 * それでも見つからなければ null を返す（呼び出し元で ABORT を返すこと）.
+	 *
+	 * @return 有効な発信者、またはnull
+	 */
+	protected final Yukkuri resolveOrSearchSource() {
+		Yukkuri src = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
+		if (src == null || src.isRemoved() || src.isDead()) {
+			Yukkuri next = searchNextTarget();
+			setFrom(next);
+			src = next;
+		}
+		return src;
+	}
+
+	/**
+	 * 次のターゲットを検索して返す（サブクラスでオーバーライド）.
+	 * デフォルト実装は null を返す.
+	 *
+	 * @return 次のターゲット、または null
+	 */
+	protected Yukkuri searchNextTarget() {
+		return null;
+	}
 }

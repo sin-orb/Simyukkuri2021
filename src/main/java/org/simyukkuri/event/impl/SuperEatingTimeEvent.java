@@ -53,7 +53,7 @@ public class SuperEatingTimeEvent extends EventPacket {
 	 */
 	public SuperEatingTimeEvent(Yukkuri f, Yukkuri t, Entity tgt, int cnt) {
 		super(f, t, tgt, cnt);
-		priority = EventPriority.HIGH;
+		setHighPriority();
 	}
 
 	public SuperEatingTimeEvent() {

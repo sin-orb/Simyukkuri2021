@@ -63,7 +63,7 @@ public class ShitExercisesEvent extends EventPacket {
 	 */
 	public ShitExercisesEvent(Yukkuri f, Yukkuri t, Entity tgt, int cnt) {
 		super(f, t, tgt, cnt);
-		priority = EventPriority.HIGH;
+		setHighPriority();
 	}
 
 	public ShitExercisesEvent() {

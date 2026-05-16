@@ -53,7 +53,7 @@ public class FuneralEvent extends EventPacket {
 	 */
 	public FuneralEvent(Yukkuri f, Yukkuri t, Entity tgt, int cnt) {
 		super(f, t, tgt, cnt);
-		priority = EventPriority.HIGH;
+		setHighPriority();
 	}
 
 	public FuneralEvent() {

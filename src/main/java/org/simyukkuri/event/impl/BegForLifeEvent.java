@@ -89,7 +89,7 @@ public class BegForLifeEvent extends EventPacket {
 	@Override
 	public boolean checkEventResponse(Yukkuri body) {
 
-		priority = EventPriority.HIGH;
+		setHighPriority();
 		Yukkuri sourceBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
 		if (body == sourceBody && !body.isUnBirth())
 			return true;

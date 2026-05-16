@@ -41,7 +41,7 @@ public class RevengeAttackEvent extends EventPacket {
 	// 参加チェック
 	@Override
 	public boolean checkEventResponse(Yukkuri body) {
-		priority = EventPriority.HIGH;
+		setHighPriority();
 		// これは特殊な扱いをするイベントで先に条件をチェックしてから
 		// 自分自身のリストに登録するので無条件にtrue
 		return true;

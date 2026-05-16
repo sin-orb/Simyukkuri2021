@@ -67,7 +67,7 @@ public class RaperReactionEvent extends EventPacket {
 	@Override
 	public boolean checkEventResponse(Yukkuri body) {
 		// 最低限のチェックはRaperWakeupEventで済んでるんで省略
-		priority = EventPriority.HIGH;
+		setHighPriority();
 		if (body.canflyCheck()) {
 			// 飛べる固体
 			return false;
@@ -335,6 +335,7 @@ public class RaperReactionEvent extends EventPacket {
 	 * 
 	 * @return 次のターゲット
 	 */
+	@Override
 	public Yukkuri searchNextTarget() {
 		Yukkuri nextTargetBody = null;
 		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentWorldState().getYukkuriRegistry().entrySet()) {
