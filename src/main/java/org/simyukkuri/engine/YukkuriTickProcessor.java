@@ -79,7 +79,7 @@ public final class YukkuriTickProcessor {
 		}
 
 		checkFire(yukkuri);
-		StoneLogic.checkPubble(yukkuri);
+		StoneLogic.checkPubble(yukkuri, curMap);
 
 		if (yukkuri.getPanicType() != null && !yukkuri.isUnBirth() && !yukkuri.isDamagedHeavily()) {
 			checkPanic(yukkuri);

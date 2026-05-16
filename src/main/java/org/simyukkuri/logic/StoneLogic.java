@@ -7,6 +7,7 @@ import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.world.item.Stone;
 import org.simyukkuri.enums.CriticalDamageType;
 import org.simyukkuri.enums.Intelligence;
+import org.simyukkuri.system.WorldState;
 import org.simyukkuri.util.GameWorld;
 
 /***************************************************
@@ -20,13 +21,17 @@ public class StoneLogic {
 	 * @param b ゆっくり
 	 */
 	public static final void checkPubble(Yukkuri b) {
+		checkPubble(b, GameWorld.get().getCurrentWorldState());
+	}
+
+	public static final void checkPubble(Yukkuri b, WorldState ws) {
 		if (b == null) {
 			return;
 		}
 		if (b.getCriticalDamageType() == CriticalDamageType.CUT) {
 			return;
 		}
-		for (Map.Entry<Integer, Stone> entry : GameWorld.get().getCurrentWorldState().getStones().entrySet()) {
+		for (Map.Entry<Integer, Stone> entry : ws.getStones().entrySet()) {
 			Stone t = entry.getValue();
 
 			int distance = Translate.distance(b.getX(), b.getY(), t.getX(), t.getY());
