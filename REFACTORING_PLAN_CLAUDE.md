@@ -91,7 +91,7 @@ Factory パターンへ移行:
 
 ## 優先度 2 — 肥大クラスの責務分割
 
-### 2-A. `LivingEntity.java`（4403行・751 public/protected メンバ）のさらなる分割
+### ✅ 2-A. `LivingEntity.java`（4403行・751 public/protected メンバ）のさらなる分割
 
 **現状の問題**
 
@@ -117,7 +117,7 @@ LivingEntity は本来「生き物一般」の抽象基底であるべき。
 
 ---
 
-### 2-B. `Yukkuri.java`（3929行）の `clockTick()` 分割
+### ✅ 2-B. `Yukkuri.java`（3929行）の `clockTick()` 分割
 
 **現状の問題**
 

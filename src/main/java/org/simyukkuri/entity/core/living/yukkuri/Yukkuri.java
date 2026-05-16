@@ -2092,176 +2092,30 @@ public abstract class Yukkuri extends SocialEntity {
 		if (GameEnvironment.getOperationTime() % 100 == 0) {
 			pruneRemovedFamilyMembers();
 		}
-		// if removed, remove body
 		if (isRemoved()) {
 			removeAllStalks();
 			remove();
 			return TickResult.REMOVED;
 		}
 
-		int i = 0;
-		Attachment at;
-		while (i < getAttach().size()) {
-			at = getAttach().get(i);
-			if (at == null || at.isRemoved()) {
-				continue;
-			}
-			if (at.clockTick() == TickResult.REMOVED) {
-				getAttach().remove(i);
-			} else {
-				i++;
-			}
-		}
-		// if partner and parents are removed, clean relationship.
+		tickAttachments();
 		clearRelation();
 
-		// 死亡処理 if dead, do nothing.
-		if (isDead()) {
-			dropAllTakeoutItem();
-			clearActions();
-			moveYukkuri(true); // for falling the body
-			if (isUnBirth()) {
-				setMessageTicks(0);
-				setMessageBuffer(null);
-			}
-			checkMessage();
-			if (SimYukkuri.UNYO) {
-				resetUnyo();
-			}
-			setSilent(true);
-			setDeadPeriod(getDeadPeriod() + 1);
-			// 死後3日
-			if (getRottingTimeBase() < getDeadPeriod()) {
-				if (!isCrushed()) {
-					// 初回は潰れる
-					setCrushed(true);
-					setDeadPeriod(0);
-				} else {
-					// うんうんと吐餡に変わって消える
-					GameView.addCrushedVomit(x, y, z, this, getShitType());
-					GameView.addCrushedShit(x, y, z, this, getShitType());
-					remove();
-					disPlantStalks();
-					return TickResult.REMOVED;
-				}
-			}
-			return TickResult.DEAD;
-		}
+		if (isDead()) return tickDeadBody();
+		TickResult burstResult = tickBurstBody();
+		if (burstResult != null) return burstResult;
 
-		// 爆発処理
-		if (isBurst()) {
-			toDead();
-			moveYukkuri(true); // for falling the body
-			checkMessage();
-			if (isDead()) {
-				bodyBurst();
-				return TickResult.DEAD;
-			}
-		}
+		TickResult ageResult = tickAgeAndEnvironment();
+		if (ageResult != null) return ageResult;
+
+		if (!isDead()) plusGodHand();
+
+		boolean dontMove = getCoreAnkoState() == CoreAnkoState.NON_YUKKURI_DISEASE
+				|| isOnNonMovingConveyor() || isSurisuriFromPlayer() || isPealed() || isPacked();
+
+		if (GameEnvironment.isEndlessFurifuriSteam()) return tickEndlessFurifuri();
 
 		TickResult retval = TickResult.NONE;
-		boolean stopAgeSteamAmple = false;
-		if (getAttachmentSize(StopAmpoule.class) != 0) {
-			stopAgeSteamAmple = true;
-		}
-
-		boolean accelAgeSteamAmple = false;
-		if (getAttachmentSize(AccelAmpoule.class) != 0) {
-			accelAgeSteamAmple = true;
-		}
-
-		if (GameEnvironment.getInterval() == 0) {
-			if (GameEnvironment.isAgeBoostSteam() && getAgeState() != AgeState.ADULT)
-				addAge(10000);
-			if (GameEnvironment.isAgeStopSteam() && !accelAgeSteamAmple)
-				addAge(-256);
-		}
-
-		if (getBurialState() == BurialState.NONE || getBurialState() == BurialState.HALF) {
-			if (GameEnvironment.isRapidPregnantSteam())
-				rapidPregnantPeriod();
-		}
-
-		// check age
-		// ageが変化しないと状態が変化しないロジックになっているのでそっとしておく
-		setAge(getAge() + TICK);
-		if (birthEventBlockedTicks > 0) {
-			birthEventBlockedTicks--;
-		}
-
-		if (getAge() > getLifeLimitBase()) {
-			toDead();
-			moveYukkuri(true); // for falling the body
-			checkMessage();
-			if (isDead()) {
-				return TickResult.DEAD;
-			}
-		}
-
-		// 年齢チェック
-		AgeState curAge = getAgeState();
-		FootBake foot = getFootBakeLevel();
-		if (curAge.ordinal() < getAgeState().ordinal()) {
-			// 状態変更有かつ成長抑制されている場合は強制的に元に戻す。成長促進アンプルが刺さっていたら成長する
-			if (((GameEnvironment.isAgeStopSteam()) || (stopAgeSteamAmple)) && !accelAgeSteamAmple) {
-				setAgeState(curAge);
-				setAge(getAge() + TICK);
-			} else {
-				// 加齢
-				initAmount(getAgeState());
-				resetAttachmentBoundary();
-				// DamageLimitを流用してるパラメータは状態を維持するためここで再計算
-				switch (foot) {
-					case MEDIUM:
-						footBakePeriod = (getDamageLimitBase()[getAgeState().ordinal()] >> 1) + 1;
-						break;
-					case CRITICAL:
-						footBakePeriod = getDamageLimitBase()[getAgeState().ordinal()] + 1;
-						break;
-					default:
-						break;
-				}
-			}
-		}
-		// ゆ虐神拳カウント
-		if (!isDead()) {
-			plusGodHand();
-		}
-
-		boolean dontMove = false;
-		if (getCoreAnkoState() == CoreAnkoState.NON_YUKKURI_DISEASE ||
-				isOnNonMovingConveyor() || isSurisuriFromPlayer() || isPealed() || isPacked()) {
-			dontMove = true;
-		}
-
-		// 無限もるんもるん
-		if (GameEnvironment.isEndlessFurifuriSteam()) {
-			clearActions();
-			checkMessage();
-			if (canFurifuri()) {
-				setMessage(GameMessages.getMessage(this, MessagePool.Action.FuriFuri), 30);
-				setFurifuri(true);
-			} else if (isNotNYD()) {
-				setMessage(GameMessages.getMessage(this, MessagePool.Action.CantMove), 30);
-				setHappiness(Happiness.VERY_SAD);
-			} else {
-				setNydMessage(GameMessages.getMessage(this, MessagePool.Action.NonYukkuriDisease), false);
-			}
-			shit = 0;
-			hungry = getHungryLimit();
-			if (damage > getDamageLimitBase()[getAgeState().ordinal()] * 80 / 100) {
-				damage = getDamageLimitBase()[getAgeState().ordinal()] * 80 / 100;
-			}
-			stay();
-			checkDamage();
-			checkAnts();
-			checkUnyo();
-			checkStress();
-			checkSick();
-			checkCantDie();
-			moveYukkuri(true);
-			return TickResult.NONE;
-		}
 		// check status
 		checkHungry();
 		checkDamage();
@@ -2413,6 +2267,139 @@ public abstract class Yukkuri extends SocialEntity {
 		calcPos();
 		moveDelegate().calcMoveTarget();
 		return retval;
+	}
+
+	private void tickAttachments() {
+		int i = 0;
+		Attachment at;
+		while (i < getAttach().size()) {
+			at = getAttach().get(i);
+			if (at == null || at.isRemoved()) {
+				continue;
+			}
+			if (at.clockTick() == TickResult.REMOVED) {
+				getAttach().remove(i);
+			} else {
+				i++;
+			}
+		}
+	}
+
+	private TickResult tickDeadBody() {
+		dropAllTakeoutItem();
+		clearActions();
+		moveYukkuri(true);
+		if (isUnBirth()) {
+			setMessageTicks(0);
+			setMessageBuffer(null);
+		}
+		checkMessage();
+		if (SimYukkuri.UNYO) resetUnyo();
+		setSilent(true);
+		setDeadPeriod(getDeadPeriod() + 1);
+		if (getRottingTimeBase() < getDeadPeriod()) {
+			if (!isCrushed()) {
+				setCrushed(true);
+				setDeadPeriod(0);
+			} else {
+				GameView.addCrushedVomit(x, y, z, this, getShitType());
+				GameView.addCrushedShit(x, y, z, this, getShitType());
+				remove();
+				disPlantStalks();
+				return TickResult.REMOVED;
+			}
+		}
+		return TickResult.DEAD;
+	}
+
+	private TickResult tickBurstBody() {
+		if (!isBurst()) return null;
+		toDead();
+		moveYukkuri(true);
+		checkMessage();
+		if (isDead()) {
+			bodyBurst();
+			return TickResult.DEAD;
+		}
+		return null;
+	}
+
+	private TickResult tickAgeAndEnvironment() {
+		boolean stopAge = getAttachmentSize(StopAmpoule.class) != 0;
+		boolean accelAge = getAttachmentSize(AccelAmpoule.class) != 0;
+
+		if (GameEnvironment.getInterval() == 0) {
+			if (GameEnvironment.isAgeBoostSteam() && getAgeState() != AgeState.ADULT)
+				addAge(10000);
+			if (GameEnvironment.isAgeStopSteam() && !accelAge)
+				addAge(-256);
+		}
+		if (getBurialState() == BurialState.NONE || getBurialState() == BurialState.HALF) {
+			if (GameEnvironment.isRapidPregnantSteam())
+				rapidPregnantPeriod();
+		}
+
+		// ageが変化しないと状態が変化しないロジックになっているのでそっとしておく
+		setAge(getAge() + TICK);
+		if (birthEventBlockedTicks > 0) birthEventBlockedTicks--;
+
+		if (getAge() > getLifeLimitBase()) {
+			toDead();
+			moveYukkuri(true);
+			checkMessage();
+			if (isDead()) return TickResult.DEAD;
+		}
+
+		AgeState curAge = getAgeState();
+		FootBake foot = getFootBakeLevel();
+		if (curAge.ordinal() < getAgeState().ordinal()) {
+			if (((GameEnvironment.isAgeStopSteam()) || stopAge) && !accelAge) {
+				setAgeState(curAge);
+				setAge(getAge() + TICK);
+			} else {
+				initAmount(getAgeState());
+				resetAttachmentBoundary();
+				switch (foot) {
+					case MEDIUM:
+						footBakePeriod = (getDamageLimitBase()[getAgeState().ordinal()] >> 1) + 1;
+						break;
+					case CRITICAL:
+						footBakePeriod = getDamageLimitBase()[getAgeState().ordinal()] + 1;
+						break;
+					default:
+						break;
+				}
+			}
+		}
+		return null;
+	}
+
+	private TickResult tickEndlessFurifuri() {
+		clearActions();
+		checkMessage();
+		if (canFurifuri()) {
+			setMessage(GameMessages.getMessage(this, MessagePool.Action.FuriFuri), 30);
+			setFurifuri(true);
+		} else if (isNotNYD()) {
+			setMessage(GameMessages.getMessage(this, MessagePool.Action.CantMove), 30);
+			setHappiness(Happiness.VERY_SAD);
+		} else {
+			setNydMessage(GameMessages.getMessage(this, MessagePool.Action.NonYukkuriDisease), false);
+		}
+		shit = 0;
+		hungry = getHungryLimit();
+		if (damage > getDamageLimitBase()[getAgeState().ordinal()] * 80 / 100) {
+			damage = getDamageLimitBase()[getAgeState().ordinal()] * 80 / 100;
+		}
+		stay();
+		checkDamage();
+		checkAnts();
+		checkUnyo();
+		checkStress();
+		checkSick();
+		checkCantDie();
+		moveYukkuri(true);
+		return TickResult.NONE;
 	}
 
 	/**
