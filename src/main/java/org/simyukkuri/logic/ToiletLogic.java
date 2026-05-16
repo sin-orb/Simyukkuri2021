@@ -19,6 +19,7 @@ import org.simyukkuri.field.impl.Barrier;
 import org.simyukkuri.system.MessagePool;
 import org.simyukkuri.util.GameMessages;
 import org.simyukkuri.util.GameRandom;
+import org.simyukkuri.system.WorldState;
 import org.simyukkuri.util.GameWorld;
 
 /***************************************************
@@ -38,11 +39,15 @@ public class ToiletLogic {
 
 	/**
 	 * うんうん処理
-	 * 
+	 *
 	 * @param body ゆっくり
 	 * @return 処理が行われたか
 	 */
 	public static final boolean checkShit(Yukkuri body) {
+		return checkShit(body, GameWorld.get().getCurrentWorldState());
+	}
+
+	public static final boolean checkShit(Yukkuri body, WorldState ws) {
 		// A.トイレ行動中止
 		// 毎フレームチェックは重いのでインターバル
 		if (body.getAge() % 15 != 0)
@@ -65,8 +70,8 @@ public class ToiletLogic {
 			hasShit = true;
 		}
 
-		List<Toilet> toiletList = new LinkedList<>(GameWorld.get().getCurrentWorldState().getToilets().values());
-		List<Shit> shitList = new LinkedList<>(GameWorld.get().getCurrentWorldState().getShit().values());
+		List<Toilet> toiletList = new LinkedList<>(ws.getToilets().values());
+		List<Shit> shitList = new LinkedList<>(ws.getShit().values());
 		if (shitList == null || shitList.size() == 0) {
 			return false;
 		}
@@ -87,7 +92,7 @@ public class ToiletLogic {
 		}
 		// うんうん奴隷がいれば運ばない
 		if (canTransport) {
-			for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentWorldState().getYukkuriRegistry().entrySet()) {
+			for (Map.Entry<Integer, Yukkuri> entry : ws.getYukkuriRegistry().entrySet()) {
 				Yukkuri bodyOther = entry.getValue();
 				if (bodyOther == body || bodyOther.isDead() || bodyOther.isRemoved()) {
 					continue;
@@ -157,7 +162,7 @@ public class ToiletLogic {
 			if (canTransport && distance < collisionX && !hasShit && !foundMyShitOutOfToilet && foundMyToilet) {
 				int bodyOwnerId = s.getOwnerId();
 				Yukkuri owner = null;
-				for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentWorldState().getYukkuriRegistry().entrySet()) {
+				for (Map.Entry<Integer, Yukkuri> entry : ws.getYukkuriRegistry().entrySet()) {
 					Yukkuri otherBody = entry.getValue();
 					if (otherBody.getUniqueID() == bodyOwnerId) {
 						owner = otherBody;
@@ -222,6 +227,10 @@ public class ToiletLogic {
 	 * @return 処理が行われたか
 	 */
 	public static final boolean checkToilet(Yukkuri body) {
+		return checkToilet(body, GameWorld.get().getCurrentWorldState());
+	}
+
+	public static final boolean checkToilet(Yukkuri body, WorldState ws) {
 		// A.トイレ行動の中止
 		// 他の用事がある場合
 		if (body.isToFood() || body.isToYukkuri() || body.isToSukkiri() || body.isToBed()
@@ -258,7 +267,7 @@ public class ToiletLogic {
 			if (body.isToSteal() && !body.wantToShit()) {
 				return false;
 			}
-			for (Map.Entry<Integer, Toilet> entry : GameWorld.get().getCurrentWorldState().getToilets().entrySet()) {
+			for (Map.Entry<Integer, Toilet> entry : ws.getToilets().entrySet()) {
 				Toilet t = entry.getValue();
 				// うんうん奴隷用トイレのどれかにいれば終了＝トイレに向かわない
 				if (t.isForSlave() && t.checkHitObj(null, body)) {
@@ -277,7 +286,7 @@ public class ToiletLogic {
 		} else {
 			// うんうん奴隷ではない場合、用がない、かつうんうんを持ってないなら終了
 			if (!body.wantToShit() && !hasShit) {
-				for (Map.Entry<Integer, Toilet> entry : GameWorld.get().getCurrentWorldState().getToilets().entrySet()) {
+				for (Map.Entry<Integer, Toilet> entry : ws.getToilets().entrySet()) {
 					Toilet t = entry.getValue();
 					// 自動清掃でないトイレに入った時の反応
 					if (!t.getAutoClean() && t.checkHitObj(null, body) && !body.isTalking()) {
@@ -351,7 +360,7 @@ public class ToiletLogic {
 			wallMode = AgeState.ADULT.ordinal();
 		}
 
-		for (Map.Entry<Integer, Toilet> entry : GameWorld.get().getCurrentWorldState().getToilets().entrySet()) {
+		for (Map.Entry<Integer, Toilet> entry : ws.getToilets().entrySet()) {
 			Toilet t = entry.getValue();
 			int distance = Translate.distance(body.getX(), body.getY(), t.getX(), t.getY() - t.getH() / 6);
 			if (minDistance > distance) {

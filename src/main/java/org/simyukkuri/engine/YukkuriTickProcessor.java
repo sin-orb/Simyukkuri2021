@@ -122,7 +122,7 @@ public final class YukkuriTickProcessor {
 			}
 
 			if (shouldCheck) {
-				if (ToiletLogic.checkShit(yukkuri)) {
+				if (ToiletLogic.checkShit(yukkuri, curMap)) {
 					shouldCheck = false;
 				} else {
 					shouldCheck = true;
@@ -130,7 +130,7 @@ public final class YukkuriTickProcessor {
 			}
 
 			if (shouldCheck) {
-				if (ToiletLogic.checkToilet(yukkuri)) {
+				if (ToiletLogic.checkToilet(yukkuri, curMap)) {
 					shouldCheck = false;
 				} else {
 					shouldCheck = true;
@@ -138,7 +138,7 @@ public final class YukkuriTickProcessor {
 			}
 
 			if (shouldCheck) {
-				if (BedLogic.checkBed(yukkuri)) {
+				if (BedLogic.checkBed(yukkuri, curMap)) {
 					shouldCheck = false;
 				} else {
 					shouldCheck = true;
