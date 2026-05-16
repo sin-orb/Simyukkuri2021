@@ -11,6 +11,7 @@ import org.simyukkuri.entity.core.world.mobile.Shit;
 import org.simyukkuri.entity.core.world.mobile.Vomit;
 import org.simyukkuri.enums.BurialState;
 import org.simyukkuri.field.impl.Barrier;
+import org.simyukkuri.system.WorldState;
 import org.simyukkuri.util.GameWorld;
 
 /**
@@ -26,6 +27,12 @@ public final class FoodPredatorFallbackPolicy {
 	 */
 	public static Entity searchFallbackFood(Yukkuri body, Entity nearestFood, Entity fallbackFood, int nearestDistance,
 			int wallMode) {
+		return searchFallbackFood(body, nearestFood, fallbackFood, nearestDistance, wallMode,
+				GameWorld.get().getCurrentWorldState());
+	}
+
+	public static Entity searchFallbackFood(Yukkuri body, Entity nearestFood, Entity fallbackFood, int nearestDistance,
+			int wallMode, WorldState ws) {
 		if (nearestFood == null && body.isFull()) {
 			return nearestFood;
 		}
@@ -33,9 +40,9 @@ public final class FoodPredatorFallbackPolicy {
 		Entity selectedFood = nearestFood;
 
 		// 非常食検索
-		for (Map.Entry<Integer, Stalk> entry : GameWorld.get().getCurrentWorldState().getStalks().entrySet()) {
+		for (Map.Entry<Integer, Stalk> entry : ws.getStalks().entrySet()) {
 			Stalk stalk = entry.getValue();
-			Yukkuri plantBody = GameWorld.get().getCurrentWorldState().getYukkuriRegistry().get(stalk.getPlantYukkuri());
+			Yukkuri plantBody = ws.getYukkuriRegistry().get(stalk.getPlantYukkuri());
 			if (plantBody != null) {
 				if (plantBody == body) {
 					continue;
@@ -80,7 +87,7 @@ public final class FoodPredatorFallbackPolicy {
 		}
 
 		if (selectedFood == null) {
-			for (Map.Entry<Integer, Vomit> entry : GameWorld.get().getCurrentWorldState().getVomit().entrySet()) {
+			for (Map.Entry<Integer, Vomit> entry : ws.getVomit().entrySet()) {
 				Vomit vomit = entry.getValue();
 				int distance = Translate.distance(body.getX(), body.getY(), vomit.getX(), vomit.getY());
 				if (nearestDistance > distance) {
@@ -94,7 +101,7 @@ public final class FoodPredatorFallbackPolicy {
 			}
 		}
 		if (selectedFood == null) {
-			for (Map.Entry<Integer, Shit> entry : GameWorld.get().getCurrentWorldState().getShit().entrySet()) {
+			for (Map.Entry<Integer, Shit> entry : ws.getShit().entrySet()) {
 				Shit shit = entry.getValue();
 				if (!body.isTooHungry()) {
 					break;

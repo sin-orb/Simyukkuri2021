@@ -15,6 +15,7 @@ import org.simyukkuri.enums.BurialState;
 import org.simyukkuri.enums.TakeoutItemType;
 import org.simyukkuri.enums.TangType;
 import org.simyukkuri.field.impl.Barrier;
+import org.simyukkuri.system.WorldState;
 import org.simyukkuri.util.GameWorld;
 
 /**
@@ -25,6 +26,10 @@ public final class FoodSearchPolicy {
 	}
 
 	public static Entity searchFoodStandard(Yukkuri body, boolean[] forceEat) {
+		return searchFoodStandard(body, forceEat, GameWorld.get().getCurrentWorldState());
+	}
+
+	public static Entity searchFoodStandard(Yukkuri body, boolean[] forceEat, WorldState ws) {
 		Entity targetObject = null;
 		Entity takeoutTargetObject = null;
 		int minDistance = body.getEyesightBase();
@@ -41,7 +46,7 @@ public final class FoodSearchPolicy {
 			}
 		}
 
-		for (Map.Entry<Integer, Food> entry : GameWorld.get().getCurrentWorldState().getFoods().entrySet()) {
+		for (Map.Entry<Integer, Food> entry : ws.getFoods().entrySet()) {
 			Food f = entry.getValue();
 			if (f.isEmpty()) {
 				continue;
@@ -133,7 +138,7 @@ public final class FoodSearchPolicy {
 
 		if (takeoutTargetObject != null) {
 			if (body.getCarryItem(TakeoutItemType.FOOD) == null) {
-				if (FoodLogic.checkTakeout(body, takeoutTargetObject)) {
+				if (FoodLogic.checkTakeout(body, takeoutTargetObject, ws)) {
 					body.setToTakeout(true);
 					return takeoutTargetObject;
 				}
@@ -143,9 +148,9 @@ public final class FoodSearchPolicy {
 			return null;
 		}
 
-		for (Map.Entry<Integer, Stalk> entry : GameWorld.get().getCurrentWorldState().getStalks().entrySet()) {
+		for (Map.Entry<Integer, Stalk> entry : ws.getStalks().entrySet()) {
 			Stalk s = entry.getValue();
-			Yukkuri plantBody = GameWorld.get().getCurrentWorldState().getYukkuriRegistry().get(s.getPlantYukkuri());
+			Yukkuri plantBody = ws.getYukkuriRegistry().get(s.getPlantYukkuri());
 			if (plantBody != null) {
 				if (plantBody == body) {
 					continue;
@@ -182,7 +187,7 @@ public final class FoodSearchPolicy {
 		}
 
 		if (targetObject == null) {
-			for (Map.Entry<Integer, Vomit> entry : GameWorld.get().getCurrentWorldState().getVomit().entrySet()) {
+			for (Map.Entry<Integer, Vomit> entry : ws.getVomit().entrySet()) {
 				Vomit vomit = entry.getValue();
 				int distance = Translate.distance(body.getX(), body.getY(), vomit.getX(), vomit.getY());
 				if (minDistance > distance) {
@@ -196,7 +201,7 @@ public final class FoodSearchPolicy {
 			}
 		}
 		if (targetObject == null) {
-			for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentWorldState().getYukkuriRegistry().entrySet()) {
+			for (Map.Entry<Integer, Yukkuri> entry : ws.getYukkuriRegistry().entrySet()) {
 				Yukkuri deadCandidate = entry.getValue();
 				if (deadCandidate == null || deadCandidate.isRemoved()) {
 					continue;
@@ -228,7 +233,7 @@ public final class FoodSearchPolicy {
 			}
 		}
 		if (targetObject == null) {
-			for (Map.Entry<Integer, Shit> entry : GameWorld.get().getCurrentWorldState().getShit().entrySet()) {
+			for (Map.Entry<Integer, Shit> entry : ws.getShit().entrySet()) {
 				Shit shit = entry.getValue();
 				if (!body.isTooHungry()) {
 					break;

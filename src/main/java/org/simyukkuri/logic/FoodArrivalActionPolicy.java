@@ -18,6 +18,7 @@ import org.simyukkuri.event.impl.EatBodyEvent;
 import org.simyukkuri.event.impl.FlyingEatEvent;
 import org.simyukkuri.event.impl.KillPredeatorEvent;
 import org.simyukkuri.system.MessagePool;
+import org.simyukkuri.system.WorldState;
 import org.simyukkuri.util.GameEnvironment;
 import org.simyukkuri.util.GameMessages;
 import org.simyukkuri.util.GameRandom;
@@ -35,6 +36,10 @@ public final class FoodArrivalActionPolicy {
 	 * 到着済みの target を処理する.
 	 */
 	public static boolean handleArrivedFood(Yukkuri body, Entity targetObject, boolean[] forceEat) {
+		return handleArrivedFood(body, targetObject, forceEat, GameWorld.get().getCurrentWorldState());
+	}
+
+	public static boolean handleArrivedFood(Yukkuri body, Entity targetObject, boolean[] forceEat, WorldState ws) {
 		boolean sweets = false;
 		boolean goodsweets = false;
 		boolean fullmessage = false;
@@ -158,7 +163,7 @@ public final class FoodArrivalActionPolicy {
 			}
 		} else if (targetObject instanceof Stalk) {
 			Stalk stalk = (Stalk) targetObject;
-			Yukkuri plantBody = GameWorld.get().getCurrentWorldState().getYukkuriRegistry().get(stalk.getPlantYukkuri());
+			Yukkuri plantBody = ws.getYukkuriRegistry().get(stalk.getPlantYukkuri());
 			if (stalk.getZ() == 0 && plantBody == null) {
 				eatFood(body, FoodType.STALK, Math.min(body.getEatAmount(), stalk.getAmount()));
 				stalk.eatStalk(Math.min(body.getEatAmount(), stalk.getAmount()));

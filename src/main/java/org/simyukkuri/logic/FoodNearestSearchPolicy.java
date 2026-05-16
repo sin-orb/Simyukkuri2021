@@ -13,6 +13,7 @@ import org.simyukkuri.entity.core.world.mobile.Vomit;
 import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.BurialState;
 import org.simyukkuri.field.impl.Barrier;
+import org.simyukkuri.system.WorldState;
 import org.simyukkuri.util.GameWorld;
 
 /**
@@ -27,6 +28,10 @@ public final class FoodNearestSearchPolicy {
 	 * 足りないゆ、足焼き用 最も近いものを適当に食べる.
 	 */
 	public static Entity searchFoodNearest(Yukkuri body, boolean[] forceEat) {
+		return searchFoodNearest(body, forceEat, GameWorld.get().getCurrentWorldState());
+	}
+
+	public static Entity searchFoodNearest(Yukkuri body, boolean[] forceEat, WorldState ws) {
 		Entity nearestFood = null;
 		int nearestDistance = body.getEyesightBase();
 		int wallMode = body.getAgeState().ordinal();
@@ -39,7 +44,7 @@ public final class FoodNearestSearchPolicy {
 			wallMode = AgeState.ADULT.ordinal();
 		}
 
-		for (Map.Entry<Integer, Food> entry : GameWorld.get().getCurrentWorldState().getFoods().entrySet()) {
+		for (Map.Entry<Integer, Food> entry : ws.getFoods().entrySet()) {
 			Food food = entry.getValue();
 			if (food.isEmpty()) {
 				continue;
@@ -57,9 +62,9 @@ public final class FoodNearestSearchPolicy {
 				nearestDistance = distance;
 			}
 		}
-		for (Map.Entry<Integer, Stalk> entry : GameWorld.get().getCurrentWorldState().getStalks().entrySet()) {
+		for (Map.Entry<Integer, Stalk> entry : ws.getStalks().entrySet()) {
 			Stalk stalk = entry.getValue();
-			Yukkuri plantBody = GameWorld.get().getCurrentWorldState().getYukkuriRegistry().get(stalk.getPlantYukkuri());
+			Yukkuri plantBody = ws.getYukkuriRegistry().get(stalk.getPlantYukkuri());
 			if (plantBody != null) {
 				if (plantBody == body) {
 					continue;
@@ -95,7 +100,7 @@ public final class FoodNearestSearchPolicy {
 				nearestDistance = distance;
 			}
 		}
-		for (Map.Entry<Integer, Vomit> entry : GameWorld.get().getCurrentWorldState().getVomit().entrySet()) {
+		for (Map.Entry<Integer, Vomit> entry : ws.getVomit().entrySet()) {
 			Vomit vomit = entry.getValue();
 			int distance = Translate.distance(body.getX(), body.getY(), vomit.getX(), vomit.getY());
 			if (nearestDistance > distance) {
@@ -107,7 +112,7 @@ public final class FoodNearestSearchPolicy {
 				nearestDistance = distance;
 			}
 		}
-		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentWorldState().getYukkuriRegistry().entrySet()) {
+		for (Map.Entry<Integer, Yukkuri> entry : ws.getYukkuriRegistry().entrySet()) {
 			Yukkuri candidateBody = entry.getValue();
 			if (body == candidateBody) {
 				continue;
@@ -125,7 +130,7 @@ public final class FoodNearestSearchPolicy {
 				nearestDistance = distance;
 			}
 		}
-		for (Map.Entry<Integer, Shit> entry : GameWorld.get().getCurrentWorldState().getShit().entrySet()) {
+		for (Map.Entry<Integer, Shit> entry : ws.getShit().entrySet()) {
 			Shit shit = entry.getValue();
 			int distance = Translate.distance(body.getX(), body.getY(), shit.getX(), shit.getY());
 			if (nearestDistance > distance) {

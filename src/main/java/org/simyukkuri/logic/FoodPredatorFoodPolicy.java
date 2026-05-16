@@ -14,6 +14,7 @@ import org.simyukkuri.enums.BurialState;
 import org.simyukkuri.enums.Intelligence;
 import org.simyukkuri.enums.TangType;
 import org.simyukkuri.field.impl.Barrier;
+import org.simyukkuri.system.WorldState;
 import org.simyukkuri.util.GameWorld;
 
 /**
@@ -29,12 +30,18 @@ public final class FoodPredatorFoodPolicy {
 	 */
 	public static FoodSearchResult searchFood(Yukkuri body, boolean[] forceEat, int wallMode, Entity nearestObject,
 			Entity nearestDeadObject, int nearestDistance, int looks) {
+		return searchFood(body, forceEat, wallMode, nearestObject, nearestDeadObject, nearestDistance, looks,
+				GameWorld.get().getCurrentWorldState());
+	}
+
+	public static FoodSearchResult searchFood(Yukkuri body, boolean[] forceEat, int wallMode, Entity nearestObject,
+			Entity nearestDeadObject, int nearestDistance, int looks, WorldState ws) {
 		Entity result = nearestObject;
 		Entity deadCandidate = nearestDeadObject;
 		int distanceLimit = nearestDistance;
 		int bestLooks = looks;
 
-		for (Map.Entry<Integer, Food> entry : GameWorld.get().getCurrentWorldState().getFoods().entrySet()) {
+		for (Map.Entry<Integer, Food> entry : ws.getFoods().entrySet()) {
 			Food food = entry.getValue();
 			if (food.isEmpty()) {
 				continue;
@@ -108,9 +115,9 @@ public final class FoodPredatorFoodPolicy {
 			return new FoodSearchResult(result, distanceLimit, bestLooks);
 		}
 
-		for (Map.Entry<Integer, Stalk> entry : GameWorld.get().getCurrentWorldState().getStalks().entrySet()) {
+		for (Map.Entry<Integer, Stalk> entry : ws.getStalks().entrySet()) {
 			Stalk stalk = entry.getValue();
-			Yukkuri plantBody = GameWorld.get().getCurrentWorldState().getYukkuriRegistry().get(stalk.getPlantYukkuri());
+			Yukkuri plantBody = ws.getYukkuriRegistry().get(stalk.getPlantYukkuri());
 			if (plantBody != null) {
 				if (plantBody == body) {
 					continue;
@@ -151,7 +158,7 @@ public final class FoodPredatorFoodPolicy {
 		}
 
 		if (result == null) {
-			for (Map.Entry<Integer, Vomit> entry : GameWorld.get().getCurrentWorldState().getVomit().entrySet()) {
+			for (Map.Entry<Integer, Vomit> entry : ws.getVomit().entrySet()) {
 				Vomit vomit = entry.getValue();
 				int distance = Translate.distance(body.getX(), body.getY(), vomit.getX(), vomit.getY());
 				if (distanceLimit > distance) {
@@ -165,7 +172,7 @@ public final class FoodPredatorFoodPolicy {
 			}
 		}
 		if (result == null) {
-			for (Map.Entry<Integer, Shit> entry : GameWorld.get().getCurrentWorldState().getShit().entrySet()) {
+			for (Map.Entry<Integer, Shit> entry : ws.getShit().entrySet()) {
 				Shit shit = entry.getValue();
 				if (!body.isTooHungry()) {
 					break;

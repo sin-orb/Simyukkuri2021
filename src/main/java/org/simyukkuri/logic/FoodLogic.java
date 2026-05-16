@@ -88,7 +88,7 @@ public class FoodLogic {
 			}
 
 			if ((body.getStepDist() + 2) >= Translate.distance(body.getX(), body.getY(), food.getX(), food.getY())) {
-				return FoodArrivalActionPolicy.handleArrivedFood(body, food, forceEat);
+				return FoodArrivalActionPolicy.handleArrivedFood(body, food, forceEat, ws);
 			}
 			// 餌に未到着の時
 			else {
@@ -100,19 +100,19 @@ public class FoodLogic {
 		Entity candidate = null;
 		// うんうん奴隷の場合
 		if (body.getPublicRank() == PublicRank.UNUN_SLAVE) {
-			candidate = searchFoodForUnunSlave(body, forceEat);
+			candidate = FoodUnunSlaveSearchPolicy.searchFoodForUnunSlave(body, forceEat, ws);
 		} else {
 			// フィールドの餌検索
 			if (body.isIdiot() || (body.getFootBakeLevel() == FootBake.CRITICAL && !body.canflyCheck())) {
 				// 足りないゆ、完全足焼き用
-				candidate = FoodNearestSearchPolicy.searchFoodNearest(body, forceEat);
+				candidate = FoodNearestSearchPolicy.searchFoodNearest(body, forceEat, ws);
 			} else {
 				if (body.isPredatorType() && !GameEnvironment.isPredatorSteam()) {
 					// 捕食種用
 					candidate = searchFoodPredetor(body, forceEat, ws);
 				} else {
 					// 通常種用
-					candidate = searchFoodStandard(body, forceEat);
+					candidate = searchFoodStandard(body, forceEat, ws);
 				}
 			}
 		}
@@ -132,6 +132,10 @@ public class FoodLogic {
 	// 一般用
 	public static final Entity searchFoodStandard(Yukkuri body, boolean[] forceEat) {
 		return FoodSearchPolicy.searchFoodStandard(body, forceEat);
+	}
+
+	public static final Entity searchFoodStandard(Yukkuri body, boolean[] forceEat, WorldState ws) {
+		return FoodSearchPolicy.searchFoodStandard(body, forceEat, ws);
 	}
 
 	// 餌検索C
@@ -189,14 +193,14 @@ public class FoodLogic {
 			candidate = candidate2;
 
 		FoodPredatorFoodPolicy.FoodSearchResult foodResult = FoodPredatorFoodPolicy.searchFood(body, forceEat, wallMode,
-				candidate, deadCandidate, nearestDistance, looks);
+				candidate, deadCandidate, nearestDistance, looks, ws);
 		candidate = foodResult.getNearestObject();
 		nearestDistance = foodResult.getNearestDistance();
 		looks = foodResult.getLooks();
 		if (candidate == null && body.isFull()) {
 			return candidate;
 		}
-		return FoodPredatorFallbackPolicy.searchFallbackFood(body, candidate, deadCandidate, nearestDistance, wallMode);
+		return FoodPredatorFallbackPolicy.searchFallbackFood(body, candidate, deadCandidate, nearestDistance, wallMode, ws);
 	}
 
 	// 餌検索D
@@ -231,6 +235,10 @@ public class FoodLogic {
 	 */
 	public static boolean checkTakeout(Yukkuri body, Entity target) {
 		return FoodTakeoutPolicy.checkTakeout(body, target);
+	}
+
+	public static boolean checkTakeout(Yukkuri body, Entity target, WorldState ws) {
+		return FoodTakeoutPolicy.checkTakeout(body, target, ws);
 	}
 
 	/**

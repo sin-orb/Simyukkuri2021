@@ -12,6 +12,7 @@ import org.simyukkuri.entity.core.world.mobile.Shit;
 import org.simyukkuri.enums.FavItemType;
 import org.simyukkuri.enums.PublicRank;
 import org.simyukkuri.enums.TakeoutItemType;
+import org.simyukkuri.system.WorldState;
 import org.simyukkuri.util.GameWorld;
 
 /**
@@ -33,6 +34,10 @@ public final class FoodTakeoutPolicy {
 	 * @return 持ち帰るならtrue
 	 */
 	public static boolean checkTakeout(Yukkuri body, Entity target) {
+		return checkTakeout(body, target, GameWorld.get().getCurrentWorldState());
+	}
+
+	public static boolean checkTakeout(Yukkuri body, Entity target, WorldState ws) {
 		if (body == null || target == null) {
 			return false;
 		}
@@ -40,12 +45,12 @@ public final class FoodTakeoutPolicy {
 			return false;
 		}
 		if (body.getPublicRank() == PublicRank.UNUN_SLAVE) {
-			return checkShitTakeout(body, target);
+			return checkShitTakeout(body, target, ws);
 		}
-		return checkFoodTakeout(body, target);
+		return checkFoodTakeout(body, target, ws);
 	}
 
-	private static boolean checkShitTakeout(Yukkuri body, Entity target) {
+	private static boolean checkShitTakeout(Yukkuri body, Entity target, WorldState ws) {
 		if (!(target instanceof Shit)) {
 			return false;
 		}
@@ -55,7 +60,7 @@ public final class FoodTakeoutPolicy {
 		Shit shit = (Shit) target;
 		boolean hasSlaveToilet = false;
 		boolean inSlaveToilet = false;
-		for (Map.Entry<Integer, Toilet> entry : GameWorld.get().getCurrentWorldState().getToilets().entrySet()) {
+		for (Map.Entry<Integer, Toilet> entry : ws.getToilets().entrySet()) {
 			Toilet toilet = entry.getValue();
 			if (!toilet.isForSlave()) {
 				continue;
@@ -69,7 +74,7 @@ public final class FoodTakeoutPolicy {
 		return hasSlaveToilet && !inSlaveToilet;
 	}
 
-	private static boolean checkFoodTakeout(Yukkuri body, Entity target) {
+	private static boolean checkFoodTakeout(Yukkuri body, Entity target, WorldState ws) {
 		if (body.isExciting() || body.isRaper()) {
 			return false;
 		}
@@ -91,7 +96,7 @@ public final class FoodTakeoutPolicy {
 		if (org.simyukkuri.util.YukkuriLookup.getYukkuriById(body.getPartner()) == null && body.getChildrenCount() == 0) {
 			return false;
 		}
-		for (Map.Entry<Integer, Food> entry : GameWorld.get().getCurrentWorldState().getFoods().entrySet()) {
+		for (Map.Entry<Integer, Food> entry : ws.getFoods().entrySet()) {
 			Food foodOnFavoriteBed = entry.getValue();
 			if (foodOnFavoriteBed.isEmpty()) {
 				continue;
@@ -100,7 +105,7 @@ public final class FoodTakeoutPolicy {
 				return false;
 			}
 		}
-		for (Map.Entry<Integer, Bed> entry : GameWorld.get().getCurrentWorldState().getBeds().entrySet()) {
+		for (Map.Entry<Integer, Bed> entry : ws.getBeds().entrySet()) {
 			Bed bed = entry.getValue();
 			if (bed.checkHitObj(target, false)) {
 				return false;
