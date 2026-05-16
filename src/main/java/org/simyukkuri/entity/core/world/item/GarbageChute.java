@@ -158,6 +158,7 @@ public class GarbageChute extends WorldEntity {
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
 		GameWorld.get().getCurrentWorldState().getGarbageChutes().put(objId, this);
+		GameWorld.get().getCurrentWorldState().registerEntity(objId, this);
 		objType = Type.PLATFORM;
 		worldEntityType = WorldEntityKind.GARBAGECHUTE;
 

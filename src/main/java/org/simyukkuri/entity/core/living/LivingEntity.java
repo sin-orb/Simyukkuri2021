@@ -580,7 +580,6 @@ public abstract class LivingEntity extends Entity {
 	public void toDead() {
 		if (!isCantDie() && !dead) {
 			dead = true;
-			godHandHoldCount = 0;// 死んだらゆ虐神拳1をリセット
 		}
 	}
 
@@ -2844,7 +2843,7 @@ public abstract class LivingEntity extends Entity {
 
 	/** ゆっくりのオブジェクトのユニークID を取得する. @return ゆっくりのオブジェクトのユニークID */
 	public int getUniqueID() {
-		return uniqueID;
+		return objId;
 	}
 
 	/** ゆっくりのオブジェクトのユニークID を設定する. @param uniqueID ゆっくりのオブジェクトのユニークID */

@@ -110,11 +110,11 @@ public class BodyLogicTest {
     @Test
 	public void testPruneRemovedFamilyMembers() throws Exception {
         StubBody sister = new StubBody();
-        sister.setUniqueID(2);
+        sister.setObjId(2);
         gameMap.getYukkuriRegistry().put(2, sister);
 
         StubBody removedChild = new StubBody();
-        removedChild.setUniqueID(3);
+        removedChild.setObjId(3);
         removedChild.remove();
         gameMap.getYukkuriRegistry().put(3, removedChild);
 

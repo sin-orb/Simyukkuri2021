@@ -186,6 +186,7 @@ public class OrangePool extends WorldEntity {
 		setCollisionSize(getPivotX(), getPivotY());
 
 		GameWorld.get().getCurrentWorldState().getOrangePools().put(objId, this);
+		GameWorld.get().getCurrentWorldState().registerEntity(objId, this);
 
 		objType = Type.PLATFORM;
 		worldEntityType = WorldEntityKind.ORANGEPOOL;

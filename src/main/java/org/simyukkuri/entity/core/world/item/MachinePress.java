@@ -110,6 +110,7 @@ public class MachinePress extends WorldEntity {
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), 8);
 		GameWorld.get().getCurrentWorldState().getMachinePresses().put(objId, this);
+		GameWorld.get().getCurrentWorldState().registerEntity(objId, this);
 		objType = Type.FIX_OBJECT;
 		worldEntityType = WorldEntityKind.MACHINEPRESS;
 

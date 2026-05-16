@@ -278,6 +278,7 @@ public class BreedingPool extends WorldEntity {
 		setCollisionSize(getPivotX(), getPivotY());
 
 		GameWorld.get().getCurrentWorldState().getBreedingPools().put(objId, this);
+		GameWorld.get().getCurrentWorldState().registerEntity(objId, this);
 
 		objType = Type.PLATFORM;
 		worldEntityType = WorldEntityKind.BREEDINGPOOL;

@@ -225,6 +225,7 @@ public class Mixer extends WorldEntity {
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
 		GameWorld.get().getCurrentWorldState().getMixers().put(objId, this);
+		GameWorld.get().getCurrentWorldState().registerEntity(objId, this);
 		objType = Type.PLATFORM;
 		worldEntityType = WorldEntityKind.MIXER;
 

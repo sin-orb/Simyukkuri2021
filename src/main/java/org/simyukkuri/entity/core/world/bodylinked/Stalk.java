@@ -131,7 +131,7 @@ public class Stalk extends WorldEntity {
 				continue;
 			}
 			if (parent != null && b.isUnBirth()) {
-				b.setParentLinkId(parent.getUniqueID());
+				b.setParentLinkId(parent.getObjId());
 				b.setBindStalk(this);
 			}
 			if (option == 0) {
@@ -411,6 +411,7 @@ public class Stalk extends WorldEntity {
 		worldEntityType = WorldEntityKind.STALK;
 		amount = 100 * 24 * 5;
 		GameWorld.get().getCurrentWorldState().getStalks().put(objId, this);
+		GameWorld.get().getCurrentWorldState().registerEntity(objId, this);
 		calcPos();
 	}
 
@@ -420,6 +421,7 @@ public class Stalk extends WorldEntity {
 		worldEntityType = WorldEntityKind.STALK;
 		amount = 100 * 24 * 5;
 		GameWorld.get().getCurrentWorldState().getStalks().put(objId, this);
+		GameWorld.get().getCurrentWorldState().registerEntity(objId, this);
 		calcPos();
 	}
 

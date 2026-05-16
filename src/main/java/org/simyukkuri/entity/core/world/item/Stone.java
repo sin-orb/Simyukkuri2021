@@ -113,6 +113,7 @@ public class Stone extends WorldEntity {
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
 		GameWorld.get().getCurrentWorldState().getStones().put(objId, this);
+		GameWorld.get().getCurrentWorldState().registerEntity(objId, this);
 		objType = Type.OBJECT;
 		worldEntityType = WorldEntityKind.STONE;
 		interval = 5;

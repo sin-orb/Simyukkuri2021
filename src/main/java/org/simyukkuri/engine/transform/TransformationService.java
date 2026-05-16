@@ -51,9 +51,11 @@ public final class TransformationService {
 			TransformationBodyCopier.copy(to, from);
 			TransformationPolicy.normalizeTransformedAge(to, from);
 
+			to.setObjId(originalId);
 			to.setUniqueID(originalId);
 			GameWorld.get().getCurrentWorldState().getYukkuriRegistry().remove(originalId);
 			GameWorld.get().getCurrentWorldState().getYukkuriRegistry().put(originalId, to);
+			GameWorld.get().getCurrentWorldState().registerEntity(originalId, to);
 			to.setBaseYukkuriFileName(TransformationPolicy.resolveBaseYukkuriFileName(targetType));
 			IniFileUtil.readYukkuriIniFile(to);
 			if (TransformationPolicy.isSelectedYukkuri(from)) {

@@ -536,6 +536,7 @@ public class ProcessorPlate extends WorldEntity {
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
 		GameWorld.get().getCurrentWorldState().getProcessorPlates().put(objId, this);
+		GameWorld.get().getCurrentWorldState().registerEntity(objId, this);
 		// objType = Type.PLATFORM;
 		worldEntityType = WorldEntityKind.PROCESSORPLATE;
 		interval = 5;

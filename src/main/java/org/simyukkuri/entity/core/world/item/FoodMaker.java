@@ -316,6 +316,7 @@ public class FoodMaker extends WorldEntity {
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
 		GameWorld.get().getCurrentWorldState().getFoodMakers().put(objId, this);
+		GameWorld.get().getCurrentWorldState().registerEntity(objId, this);
 		objType = Type.PLATFORM;
 		worldEntityType = WorldEntityKind.FOODMAKER;
 

@@ -194,6 +194,7 @@ public class GarbageStation extends WorldEntity {
 		setCollisionSize(getPivotX(), 8);
 
 		GameWorld.get().getCurrentWorldState().getGarbageStations().put(objId, this);
+		GameWorld.get().getCurrentWorldState().registerEntity(objId, this);
 		objType = Type.OBJECT;
 		worldEntityType = WorldEntityKind.GARBAGESTATION;
 		enable = new boolean[rndTable.length];

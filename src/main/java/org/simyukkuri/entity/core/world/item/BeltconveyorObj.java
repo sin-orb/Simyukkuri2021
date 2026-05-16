@@ -450,6 +450,7 @@ public class BeltconveyorObj extends WorldEntity {
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
 		GameWorld.get().getCurrentWorldState().getBeltconveyorObjects().put(objId, this);
+		GameWorld.get().getCurrentWorldState().registerEntity(objId, this);
 		objType = Type.PLATFORM;
 		worldEntityType = WorldEntityKind.BELTCONVEYOR;
 		value = 3000;

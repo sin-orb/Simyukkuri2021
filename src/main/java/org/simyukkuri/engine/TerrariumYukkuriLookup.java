@@ -17,5 +17,6 @@ public final class TerrariumYukkuriLookup {
 	 */
 	public static void register(Yukkuri body) {
 		GameWorld.get().getCurrentWorldState().getYukkuriRegistry().put(body.getUniqueID(), body);
+		GameWorld.get().getCurrentWorldState().registerEntity(body.getUniqueID(), body);
 	}
 }

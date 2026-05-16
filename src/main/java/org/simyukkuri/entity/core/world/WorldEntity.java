@@ -16,6 +16,7 @@ import org.simyukkuri.enums.Numbering;
 import org.simyukkuri.enums.Type;
 import org.simyukkuri.enums.WorldEntityKind;
 import org.simyukkuri.field.impl.Barrier;
+import org.simyukkuri.util.GameWorld;
 
 /*********************************************************
  * ゆっくり以外のゲーム内オブジェクトの元となるクラス
@@ -227,6 +228,7 @@ public abstract class WorldEntity extends Entity {
 		setAge(getAge() + TICK);
 		if (isRemoved()) {
 			removeFromWorld();
+			GameWorld.get().getCurrentWorldState().unregisterEntity(objId);
 			return TickResult.REMOVED;
 		}
 

@@ -2224,7 +2224,9 @@ public abstract class Yukkuri extends SocialEntity {
 			}
 		}
 		// ゆ虐神拳カウント
-		plusGodHand();
+		if (!isDead()) {
+			plusGodHand();
+		}
 
 		boolean dontMove = false;
 		if (getCoreAnkoState() == CoreAnkoState.NON_YUKKURI_DISEASE ||
@@ -2558,7 +2560,6 @@ public abstract class Yukkuri extends SocialEntity {
 		dirX = randomDirection(dirX);
 		dirY = randomDirection(dirY);
 		setMessageTextSize(12);
-		setUniqueID(Numbering.INSTANCE.numberingYukkuriID());
 		// 生い立ちの設定
 		YukkuriRank bodyRank = YukkuriRank.KAIYU;
 		PublicRank publicRank = PublicRank.NONE;
@@ -2606,6 +2607,7 @@ public abstract class Yukkuri extends SocialEntity {
 
 	public Yukkuri() {
 		objType = Type.YUKKURI;
+		objId = Numbering.INSTANCE.numberingObjId();
 		if (z == 0) {
 			setFirstGround(false);
 		} else {
@@ -2640,7 +2642,6 @@ public abstract class Yukkuri extends SocialEntity {
 		dirX = randomDirection(dirX);
 		dirY = randomDirection(dirY);
 		setMessageTextSize(12);
-		setUniqueID(Numbering.INSTANCE.numberingYukkuriID());
 		// 生い立ちの設定
 		YukkuriRank bodyRank = YukkuriRank.KAIYU;
 		PublicRank publicRank = PublicRank.NONE;

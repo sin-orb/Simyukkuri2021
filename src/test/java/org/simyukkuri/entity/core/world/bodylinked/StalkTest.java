@@ -375,7 +375,7 @@ class StalkTest {
 
             planted.upDate();
 
-            assertEquals(parent.getUniqueID(), baby.getParentLinkId());
+            assertEquals(parent.getObjId(), baby.getParentLinkId());
             assertEquals(planted, baby.getBindStalk());
             assertEquals(Direction.RIGHT, baby.getDirection());
             assertEquals(114, baby.getX());

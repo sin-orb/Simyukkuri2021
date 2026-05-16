@@ -836,6 +836,7 @@ public class Yunba extends WorldEntity {
 		setCollisionSize(getPivotX(), getPivotY());
 
 		GameWorld.get().getCurrentWorldState().getYunbas().put(objId, this);
+		GameWorld.get().getCurrentWorldState().registerEntity(objId, this);
 		objType = Type.OBJECT;
 		worldEntityType = WorldEntityKind.YUNBA;
 		interval = 5;

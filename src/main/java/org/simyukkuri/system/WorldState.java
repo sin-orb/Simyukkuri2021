@@ -6,7 +6,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.simyukkuri.draw.Translate;
+import org.simyukkuri.entity.core.Entity;
 import org.simyukkuri.entity.core.effect.Effect;
 import org.simyukkuri.entity.core.living.yukkuri.Yukkuri;
 import org.simyukkuri.entity.core.world.bodylinked.Okazari;
@@ -143,6 +145,8 @@ public class WorldState implements Serializable {
 	private int wallMap[][];
 	/** フィールド */
 	private int fieldMap[][];
+	/** 全エンティティの O(1) ルックアップ用インデックス（セーブ対象外） */
+	private transient Map<Integer, Entity> entityIndex;
 
 	/**
 	 * コンストラクタ
@@ -729,6 +733,66 @@ public class WorldState implements Serializable {
 
 	public void setFieldGrid(int[][] fieldMap) {
 		this.fieldMap = fieldMap;
+	}
+
+	public void registerEntity(int id, Entity e) {
+		if (entityIndex == null) {
+			entityIndex = new HashMap<>();
+		}
+		entityIndex.put(id, e);
+	}
+
+	public void unregisterEntity(int id) {
+		if (entityIndex != null) {
+			entityIndex.remove(id);
+		}
+	}
+
+	/** entityIndex への O(1) アクセス。null の場合は全マップから再構築する. */
+	@JsonIgnore
+	public Map<Integer, Entity> getEntityIndex() {
+		if (entityIndex == null) {
+			rebuildEntityIndex();
+		}
+		return entityIndex;
+	}
+
+	/** 全マップを走査して entityIndex を再構築する（セーブデータロード後に使用）. */
+	public void rebuildEntityIndex() {
+		entityIndex = new HashMap<>();
+		for (Map.Entry<Integer, Yukkuri> e : yukkuriMap.entrySet()) entityIndex.put(e.getKey(), e.getValue());
+		for (Map.Entry<Integer, Shit> e : shit.entrySet()) entityIndex.put(e.getKey(), e.getValue());
+		for (Map.Entry<Integer, Vomit> e : vomit.entrySet()) entityIndex.put(e.getKey(), e.getValue());
+		for (Map.Entry<Integer, Effect> e : sortEffect.entrySet()) entityIndex.put(e.getKey(), e.getValue());
+		for (Map.Entry<Integer, Effect> e : frontEffect.entrySet()) entityIndex.put(e.getKey(), e.getValue());
+		for (Map.Entry<Integer, Food> e : food.entrySet()) entityIndex.put(e.getKey(), e.getValue());
+		for (Map.Entry<Integer, Food> e : takenOutFood.entrySet()) entityIndex.put(e.getKey(), e.getValue());
+		for (Map.Entry<Integer, Shit> e : takenOutShit.entrySet()) entityIndex.put(e.getKey(), e.getValue());
+		for (Map.Entry<Integer, Toilet> e : toilet.entrySet()) entityIndex.put(e.getKey(), e.getValue());
+		for (Map.Entry<Integer, Bed> e : bed.entrySet()) entityIndex.put(e.getKey(), e.getValue());
+		for (Map.Entry<Integer, Toy> e : toy.entrySet()) entityIndex.put(e.getKey(), e.getValue());
+		for (Map.Entry<Integer, Stone> e : stone.entrySet()) entityIndex.put(e.getKey(), e.getValue());
+		for (Map.Entry<Integer, Trampoline> e : trampoline.entrySet()) entityIndex.put(e.getKey(), e.getValue());
+		for (Map.Entry<Integer, BreedingPool> e : breedingPool.entrySet()) entityIndex.put(e.getKey(), e.getValue());
+		for (Map.Entry<Integer, GarbageChute> e : garbagechute.entrySet()) entityIndex.put(e.getKey(), e.getValue());
+		for (Map.Entry<Integer, FoodMaker> e : foodmaker.entrySet()) entityIndex.put(e.getKey(), e.getValue());
+		for (Map.Entry<Integer, OrangePool> e : orangePool.entrySet()) entityIndex.put(e.getKey(), e.getValue());
+		for (Map.Entry<Integer, ProductChute> e : productchute.entrySet()) entityIndex.put(e.getKey(), e.getValue());
+		for (Map.Entry<Integer, StickyPlate> e : stickyPlate.entrySet()) entityIndex.put(e.getKey(), e.getValue());
+		for (Map.Entry<Integer, HotPlate> e : hotPlate.entrySet()) entityIndex.put(e.getKey(), e.getValue());
+		for (Map.Entry<Integer, ProcessorPlate> e : processorPlate.entrySet()) entityIndex.put(e.getKey(), e.getValue());
+		for (Map.Entry<Integer, Mixer> e : mixer.entrySet()) entityIndex.put(e.getKey(), e.getValue());
+		for (Map.Entry<Integer, AutoFeeder> e : autofeeder.entrySet()) entityIndex.put(e.getKey(), e.getValue());
+		for (Map.Entry<Integer, MachinePress> e : machinePress.entrySet()) entityIndex.put(e.getKey(), e.getValue());
+		for (Map.Entry<Integer, Stalk> e : stalk.entrySet()) entityIndex.put(e.getKey(), e.getValue());
+		for (Map.Entry<Integer, Diffuser> e : diffuser.entrySet()) entityIndex.put(e.getKey(), e.getValue());
+		for (Map.Entry<Integer, Yunba> e : yunba.entrySet()) entityIndex.put(e.getKey(), e.getValue());
+		for (Map.Entry<Integer, Sui> e : sui.entrySet()) entityIndex.put(e.getKey(), e.getValue());
+		for (Map.Entry<Integer, Trash> e : trash.entrySet()) entityIndex.put(e.getKey(), e.getValue());
+		for (Map.Entry<Integer, GarbageStation> e : garbageStation.entrySet()) entityIndex.put(e.getKey(), e.getValue());
+		for (Map.Entry<Integer, House> e : house.entrySet()) entityIndex.put(e.getKey(), e.getValue());
+		for (Map.Entry<Integer, BeltconveyorObj> e : beltconveyorObj.entrySet()) entityIndex.put(e.getKey(), e.getValue());
+		for (Map.Entry<Integer, Okazari> e : okazari.entrySet()) entityIndex.put(e.getKey(), e.getValue());
 	}
 
 }

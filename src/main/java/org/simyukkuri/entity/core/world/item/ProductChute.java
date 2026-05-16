@@ -95,6 +95,7 @@ public class ProductChute extends WorldEntity {
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
 		GameWorld.get().getCurrentWorldState().getProductChutes().put(objId, this);
+		GameWorld.get().getCurrentWorldState().registerEntity(objId, this);
 		objType = Type.PLATFORM;
 		worldEntityType = WorldEntityKind.PRODUCTCHUTE;
 		interval = 10;

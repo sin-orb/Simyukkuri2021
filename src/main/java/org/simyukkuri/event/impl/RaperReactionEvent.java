@@ -157,6 +157,7 @@ public class RaperReactionEvent extends EventPacket {
 		// 相手が消えてしまったら他のレイパーを捜索
 		if (sourceBody == null || sourceBody.isRemoved() || sourceBody.isDead() || !sourceBody.isRaper()) {
 			setFrom(searchNextTarget());
+			sourceBody = org.simyukkuri.util.YukkuriLookup.getYukkuriById(getFrom());
 			if (sourceBody == null)
 				return UpdateState.ABORT;
 		}

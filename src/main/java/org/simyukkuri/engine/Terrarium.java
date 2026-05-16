@@ -262,7 +262,7 @@ public class Terrarium implements Serializable {
 					Yukkuri baby = mpd.getYukkuriRegistry().get(babyId);
 
 					if (baby != null && parent != null && baby.isUnBirth()) {
-						baby.setParentLinkId(parent.getUniqueID());
+						baby.setParentLinkId(parent.getObjId());
 						baby.setBindStalk(s);
 						int i = s.getAttachedBabyIds().indexOf(babyId);
 						int babyZ = ((i % 5) * -2 + 14);

@@ -267,6 +267,7 @@ public class AutoFeeder extends WorldEntity {
 		setBoundary(boundary);
 		setCollisionSize(getPivotX(), getPivotY());
 		GameWorld.get().getCurrentWorldState().getAutoFeeders().put(objId, this);
+		GameWorld.get().getCurrentWorldState().registerEntity(objId, this);
 
 		objType = Type.PLATFORM;
 		worldEntityType = WorldEntityKind.AUTOFEEDER;

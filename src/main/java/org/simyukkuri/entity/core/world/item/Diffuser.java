@@ -151,6 +151,7 @@ public class Diffuser extends WorldEntity {
 		setCollisionSize(getPivotX(), 8);
 
 		GameWorld.get().getCurrentWorldState().getDiffusers().put(objId, this);
+		GameWorld.get().getCurrentWorldState().registerEntity(objId, this);
 		objType = Type.OBJECT;
 		worldEntityType = WorldEntityKind.DIFFUSER;
 		value = 15000;

@@ -1495,7 +1495,7 @@ public class BodyAttributesTest {
         public void testEqualsSameUniqueId() {
             StubBodyAttributes other = new StubBodyAttributes();
             initSprites(other);
-            other.setUniqueID(body.getUniqueID());
+            other.setObjId(body.getObjId());
             assertTrue(body.equals(other));
         }
 
@@ -1503,13 +1503,13 @@ public class BodyAttributesTest {
         public void testEqualsDifferentUniqueId() {
             StubBodyAttributes other = new StubBodyAttributes();
             initSprites(other);
-            other.setUniqueID(body.getUniqueID() + 999);
+            // other already has a distinct objId from construction, so equals must be false
             assertFalse(body.equals(other));
         }
 
         @Test
         public void testHashCode() {
-            body.setUniqueID(7);
+            body.setObjId(7);
             assertEquals(7 * 13, body.hashCode());
         }
 
@@ -1527,16 +1527,16 @@ public class BodyAttributesTest {
         public void testCompareToSame() {
             StubBodyAttributes other = new StubBodyAttributes();
             initSprites(other);
-            other.setUniqueID(body.getUniqueID());
+            other.setObjId(body.getObjId());
             assertEquals(0, body.compareTo(other));
         }
 
         @Test
         public void testCompareToSmaller() {
-            body.setUniqueID(10);
+            body.setObjId(10);
             StubBodyAttributes other = new StubBodyAttributes();
             initSprites(other);
-            other.setUniqueID(5);
+            other.setObjId(5);
             assertTrue(body.compareTo(other) > 0);
         }
     }

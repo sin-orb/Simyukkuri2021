@@ -21,6 +21,7 @@ public final class TerrariumObjectFactory {
 	public static int addShit(int x, int y, int z, Yukkuri b, YukkuriType type) {
 		Shit shit = new Shit(x, y, z, b, type);
 		GameWorld.get().getCurrentWorldState().getShit().put(shit.objId, shit);
+		GameWorld.get().getCurrentWorldState().registerEntity(shit.objId, shit);
 		return shit.objId;
 	}
 
@@ -35,6 +36,7 @@ public final class TerrariumObjectFactory {
 			s.setMostDepth(b.getZ());
 		}
 		GameWorld.get().getCurrentWorldState().getShit().put(s.objId, s);
+		GameWorld.get().getCurrentWorldState().registerEntity(s.objId, s);
 	}
 
 	/**
@@ -43,6 +45,7 @@ public final class TerrariumObjectFactory {
 	public static Vomit addVomit(int x, int y, int z, Yukkuri body, YukkuriType type) {
 		Vomit v = new Vomit(x, y, z, body, type);
 		GameWorld.get().getCurrentWorldState().getVomit().put(v.objId, v);
+		GameWorld.get().getCurrentWorldState().registerEntity(v.objId, v);
 		if (body != null && body.getMostDepth() < 0) {
 			v.setMostDepth(body.getMostDepth());
 			v.setMostDepth(body.getZ());
@@ -61,5 +64,6 @@ public final class TerrariumObjectFactory {
 			v.setMostDepth(body.getZ());
 		}
 		GameWorld.get().getCurrentWorldState().getVomit().put(v.objId, v);
+		GameWorld.get().getCurrentWorldState().registerEntity(v.objId, v);
 	}
 }

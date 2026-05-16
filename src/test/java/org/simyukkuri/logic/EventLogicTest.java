@@ -333,7 +333,7 @@ public class EventLogicTest {
     @Test
     public void testCheckSimpleWorldEvent_FromEqualsBody_Skips() {
         Reimu yukkuri = new Reimu();
-        yukkuri.setUniqueID(4001);
+        yukkuri.setObjId(4001);
         org.simyukkuri.SimYukkuri.world.getCurrentWorldState().getYukkuriRegistry().put(4001, yukkuri);
 
         MockEventPacket event = new MockEventPacket(); // simpleEventAction → sets wasSimpleActionCalled

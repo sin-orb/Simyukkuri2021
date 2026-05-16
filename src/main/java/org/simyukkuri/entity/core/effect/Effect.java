@@ -71,8 +71,10 @@ public abstract class Effect extends Entity {
 
 		if (front) {
 			GameWorld.get().getCurrentWorldState().getFrontEffects().put(objId, this);
+			GameWorld.get().getCurrentWorldState().registerEntity(objId, this);
 		} else {
 			GameWorld.get().getCurrentWorldState().getSortedEffects().put(objId, this);
+			GameWorld.get().getCurrentWorldState().registerEntity(objId, this);
 		}
 		objType = Type.LIGHT_EFFECT;
 		x = startX;
