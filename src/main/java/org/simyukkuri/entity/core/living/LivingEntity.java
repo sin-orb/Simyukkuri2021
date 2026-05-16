@@ -168,14 +168,8 @@ public abstract class LivingEntity extends Entity {
 	protected long birthAge = -1;
 	/** 出生直後イベントから除外する残り tick 数 */
 	protected int birthEventBlockedTicks = 0;
-	/** パニック種別 */
-	protected PanicType panicType = null;
-	/** パニック状態の期間 */
-	protected int panicPeriod = 0;
 	/** 致命傷種別 */
 	protected CriticalDamageType criticalDamege = null;
-	/** トラウマ */
-	protected Trauma trauma = Trauma.NONE;
 	/** ダメージを受けていない期間 */
 	protected int noDamagePeriod = 0;
 	/** 飢餓状態になっていない期間 */
@@ -1000,24 +994,16 @@ public abstract class LivingEntity extends Entity {
 	public abstract void setPregnantPeriod(int pregnantPeriod);
 
 	/** パニック種別 を取得する. @return パニック種別 */
-	public PanicType getPanicType() {
-		return panicType;
-	}
+	public abstract PanicType getPanicType();
 
 	/** パニック種別 を設定する. @param panicType パニック種別 */
-	public void setPanicType(PanicType panicType) {
-		this.panicType = panicType;
-	}
+	public abstract void setPanicType(PanicType panicType);
 
 	/** パニック状態の期間 を取得する. @return パニック状態の期間 */
-	public int getPanicPeriod() {
-		return panicPeriod;
-	}
+	public abstract int getPanicPeriod();
 
 	/** パニック状態の期間 を設定する. @param panicPeriod パニック状態の期間 */
-	public void setPanicPeriod(int panicPeriod) {
-		this.panicPeriod = panicPeriod;
-	}
+	public abstract void setPanicPeriod(int panicPeriod);
 
 	/** パニック状態を解除する. */
 	protected final void clearPanic() {
@@ -1097,14 +1083,10 @@ public abstract class LivingEntity extends Entity {
 	}
 
 	/** トラウマ を取得する. @return トラウマ */
-	public Trauma getTrauma() {
-		return trauma;
-	}
+	public abstract Trauma getTrauma();
 
 	/** トラウマ を設定する. @param trauma トラウマ */
-	public void setTrauma(Trauma trauma) {
-		this.trauma = trauma;
-	}
+	public abstract void setTrauma(Trauma trauma);
 
 	/** ダメージを受けていない期間 を取得する. @return ダメージを受けていない期間 */
 	public int getNoDamagePeriod() {
@@ -4087,7 +4069,7 @@ public abstract class LivingEntity extends Entity {
 
 	@com.fasterxml.jackson.annotation.JsonIgnore
 	public boolean hasTrauma() {
-		return trauma != null;
+		return getTrauma() != null;
 	}
 
 	public void addAttachment(Attachment at) {
@@ -4218,10 +4200,7 @@ public abstract class LivingEntity extends Entity {
 		l.setBirth(birth);
 		l.setBirthAge(birthAge);
 		l.setBirthEventBlockedTicks(birthEventBlockedTicks);
-		l.setPanicType(panicType);
-		l.setPanicPeriod(panicPeriod);
 		l.setCriticalDamege(criticalDamege);
-		l.setTrauma(trauma);
 		l.setNoDamagePeriod(noDamagePeriod);
 		l.setNoHungryPeriod(noHungryPeriod);
 		l.setSuperEatingNoHungryPeriod(superEatingNoHungryPeriod);

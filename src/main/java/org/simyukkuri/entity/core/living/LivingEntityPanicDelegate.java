@@ -45,9 +45,9 @@ public final class LivingEntityPanicDelegate {
 			}
 		}
 		if (body.getPanicType() != null && body.getPanicType() != PanicType.BURN) {
-			body.panicPeriod += LivingEntity.TICK;
+			body.setPanicPeriod(body.getPanicPeriod() + LivingEntity.TICK);
 		}
-		if (body.panicPeriod > 50) {
+		if (body.getPanicPeriod() > 50) {
 			clearPanic();
 		}
 		return TickResult.NONE;

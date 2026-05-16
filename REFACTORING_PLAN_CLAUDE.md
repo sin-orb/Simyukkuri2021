@@ -142,7 +142,7 @@ clockTick の目標行数: 50行以下。
 
 ---
 
-### 2-C. `SocialEntity.java`（1440行）と `LivingEntity` の境界明確化
+### ✅ 2-C. `SocialEntity.java`（1440行）と `LivingEntity` の境界明確化
 
 **現状の問題**
 

@@ -18,8 +18,10 @@ import org.simyukkuri.enums.Happiness;
 import org.simyukkuri.enums.ImageCode;
 import org.simyukkuri.enums.Intelligence;
 import org.simyukkuri.enums.LovePlayer;
+import org.simyukkuri.enums.PanicType;
 import org.simyukkuri.enums.Parent;
 import org.simyukkuri.enums.PublicRank;
+import org.simyukkuri.enums.Trauma;
 import org.simyukkuri.logic.YukkuriIllnessRule;
 import org.simyukkuri.logic.YukkuriLogic;
 import org.simyukkuri.logic.YukkuriRelations;
@@ -68,6 +70,30 @@ public abstract class SocialEntity extends LivingEntity {
 	protected int speechDiscipline = 0;
 	/** あまあまへの慣れ具合 */
 	protected int amaamaDiscipline = 0;
+	/** パニック種別 */
+	protected PanicType panicType = null;
+	/** パニック状態の期間 */
+	protected int panicPeriod = 0;
+	/** トラウマ */
+	protected Trauma trauma = Trauma.NONE;
+
+	@Override
+	public PanicType getPanicType() { return panicType; }
+
+	@Override
+	public void setPanicType(PanicType panicType) { this.panicType = panicType; }
+
+	@Override
+	public int getPanicPeriod() { return panicPeriod; }
+
+	@Override
+	public void setPanicPeriod(int panicPeriod) { this.panicPeriod = panicPeriod; }
+
+	@Override
+	public Trauma getTrauma() { return trauma; }
+
+	@Override
+	public void setTrauma(Trauma trauma) { this.trauma = trauma; }
 
 	/**
 	 * 性格 counter indicating shithead/nicehead etc. を取得する. @return 性格 counter
@@ -1070,6 +1096,9 @@ public abstract class SocialEntity extends LivingEntity {
 		s.setFurifuriDiscipline(furifuriDiscipline);
 		s.setSpeechDiscipline(speechDiscipline);
 		s.setAmaamaDiscipline(amaamaDiscipline);
+		s.setPanicType(panicType);
+		s.setPanicPeriod(panicPeriod);
+		s.setTrauma(trauma);
 		s.setPartner(partner);
 		s.setParents(parents != null ? parents.clone() : null);
 		s.setChildren(childrenList != null ? new LinkedList<>(childrenList) : null);
