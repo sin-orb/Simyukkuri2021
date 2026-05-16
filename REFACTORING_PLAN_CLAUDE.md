@@ -178,10 +178,11 @@ Engine 層（YukkuriTickProcessor など）は手元の `curMap` を渡す。
 **進捗**
 - `ToiletLogic.checkShit(body, ws)` / `checkToilet(body, ws)` ✅
 - `BedLogic.searchBed(body, ws)` / `checkBed(body, ws)` ✅
-- `FoodLogic.checkFood(body, ws)` / `searchFoodPredetor(body, forceEat, ws)` ✅
+- `FoodLogic.checkFood(body, ws)` / `searchFoodPredetor(body, forceEat, ws)` / `searchFoodStandard` / `checkTakeout` ✅
+- FoodPolicy 7 クラス (FoodSearchPolicy/FoodNearestSearchPolicy/FoodPredatorFoodPolicy/FoodPredatorFallbackPolicy/FoodUnunSlaveSearchPolicy/FoodTakeoutPolicy/FoodArrivalActionPolicy) ✅
 - `StoneLogic.checkPubble(b, ws)` ✅
-- `YukkuriTickProcessor` から `GameWorld.get().getCurrentWorldState()` が **0 件**に ✅ (checkPanic/checkFire/handleBirthBaby も curMap に統一)
-- 残り: FoodPolicy 系 7 クラス(30件)、FamilyActionLogic(4件)、ToyLogic(4件)、EventLogic(4件)、他
+- `YukkuriTickProcessor` から `GameWorld.get().getCurrentWorldState()` が **0 件**に ✅
+- 残り: ToyLogic(4件)、EventLogic(4件)、FamilyActionLogic(4件)、Yukkuri系Rule/Movement(6件)、TerrariumObjectFactory(8件)（entity/event 層呼び出し元が多く段階的対応）
 
 ---
 
