@@ -176,9 +176,12 @@ clockTick の目標行数: 50行以下。
 Engine 層（YukkuriTickProcessor など）は手元の `curMap` を渡す。
 
 **進捗**
-- `ToiletLogic.checkShit(body, ws)` / `checkToilet(body, ws)` ✅ + YukkuriTickProcessor 更新済み
-- `BedLogic.searchBed(body, ws)` / `checkBed(body, ws)` ✅ + YukkuriTickProcessor 更新済み
-- 残り: FoodLogic, FamilyActionLogic, ToyLogic, EventLogic 等 18 クラス（entity 層呼び出し元が多く段階的に）
+- `ToiletLogic.checkShit(body, ws)` / `checkToilet(body, ws)` ✅
+- `BedLogic.searchBed(body, ws)` / `checkBed(body, ws)` ✅
+- `FoodLogic.checkFood(body, ws)` / `searchFoodPredetor(body, forceEat, ws)` ✅
+- `StoneLogic.checkPubble(b, ws)` ✅
+- `YukkuriTickProcessor` から `GameWorld.get().getCurrentWorldState()` が **0 件**に ✅ (checkPanic/checkFire/handleBirthBaby も curMap に統一)
+- 残り: FoodPolicy 系 7 クラス(30件)、FamilyActionLogic(4件)、ToyLogic(4件)、EventLogic(4件)、他
 
 ---
 
