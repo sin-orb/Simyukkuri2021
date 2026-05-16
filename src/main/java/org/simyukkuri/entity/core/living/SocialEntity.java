@@ -60,12 +60,6 @@ public abstract class SocialEntity extends LivingEntity {
 	protected boolean penipeniCutted = false;
 	/** 水が平気か */
 	protected boolean likeWater = false;
-	/** 発情フラグ want to sukkiri or not */
-	protected boolean exciting = false;
-	/** 強制発情フラグ want to sukkiri or not */
-	protected boolean forceExciting = false;
-	/** 発情期間 */
-	protected int excitingPeriod = 0;
 	/** 興奮抑制 */
 	protected int excitingDiscipline = 0;
 	/** ふりふり抑制 */
@@ -267,33 +261,33 @@ public abstract class SocialEntity extends LivingEntity {
 
 	/** 発情フラグ want to sukkiri or not を取得する. @return 発情フラグ want to sukkuri or not */
 	@Override
-	public boolean isExciting() { return !dead && exciting; }
+	public abstract boolean isExciting();
 
 	/** 発情フラグ want to sukkiri or not を設定する. */
 	@Override
-	public void setExciting(boolean exciting) { this.exciting = exciting; }
+	public abstract void setExciting(boolean exciting);
 
 	/** 強制発情フラグ want to sukkiri or not を取得する. @return 強制発情フラグ want to sukkuri or not */
 	@Override
-	public boolean isForceExciting() { return !dead && exciting && forceExciting; }
+	public abstract boolean isForceExciting();
 
 	/** 強制発情フラグ want to sukkiri or not を設定する. */
 	@Override
-	public void setForceExciting(boolean forceExciting) { this.forceExciting = forceExciting; }
+	public abstract void setForceExciting(boolean forceExciting);
 
 	@Override
 	public void setCalm() {
-		forceExciting = false;
-		exciting = false;
+		setForceExciting(false);
+		setExciting(false);
 	}
 
 	/** 発情期間 を取得する. @return 発情期間 */
 	@Override
-	public int getExcitingPeriod() { return excitingPeriod; }
+	public abstract int getExcitingPeriod();
 
 	/** 発情期間 を設定する. */
 	@Override
-	public void setExcitingPeriod(int excitingPeriod) { this.excitingPeriod = excitingPeriod; }
+	public abstract void setExcitingPeriod(int excitingPeriod);
 
 	/** 興奮抑制 を取得する. @return 興奮抑制 */
 	public int getExcitingDiscipline() {
@@ -465,7 +459,7 @@ public abstract class SocialEntity extends LivingEntity {
 	 * @return ふりふり可能な状態かどうか
 	 */
 	public boolean canFurifuri() {
-		if (getFootBakeLevel() != FootBake.CRITICAL && coreAnkoState == CoreAnkoState.NORMAL) {
+		if (getFootBakeLevel() != FootBake.CRITICAL && getCoreAnkoState() == CoreAnkoState.NORMAL) {
 			return true;
 		}
 		return false;
@@ -582,7 +576,7 @@ public abstract class SocialEntity extends LivingEntity {
 			return;
 		}
 		// ストレスに応じてうんうん増加
-		if (s > 0 && coreAnkoState == CoreAnkoState.NORMAL && getBurstState() != org.simyukkuri.enums.Burst.HALF) {
+		if (s > 0 && getCoreAnkoState() == CoreAnkoState.NORMAL && getBurstState() != org.simyukkuri.enums.Burst.HALF) {
 			plusShit(s / 5);
 		}
 		stress += TICK * s;
@@ -1034,7 +1028,7 @@ public abstract class SocialEntity extends LivingEntity {
 	public boolean nearToBirth() {
 		int step = (!isHungry() ? TICK * 2 : TICK);
 		int adjust = 100 * (isRude() ? 1 : 2);
-		int limit = getPregPeriodBase() - pregnantPeriod - (pregnancyPeriodBoost / 2);
+		int limit = getPregPeriodBase() - getPregnantPeriod() - (pregnancyPeriodBoost / 2);
 		int diagonal = Const.DIAGONAL * step + adjust;
 		return limit < diagonal && hasBabyOrStalk();
 	}
@@ -1071,9 +1065,6 @@ public abstract class SocialEntity extends LivingEntity {
 		s.setSuperRapist(superRapist);
 		s.setPenipeniCutted(penipeniCutted);
 		s.setLikeWater(likeWater);
-		s.setExciting(exciting);
-		s.setForceExciting(forceExciting);
-		s.setExcitingPeriod(excitingPeriod);
 		s.setShittingDiscipline(shittingDiscipline);
 		s.setExcitingDiscipline(excitingDiscipline);
 		s.setFurifuriDiscipline(furifuriDiscipline);

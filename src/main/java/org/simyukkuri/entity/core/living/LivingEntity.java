@@ -122,8 +122,6 @@ public abstract class LivingEntity extends Entity {
 	protected boolean dead = false;
 	/** 死んでからの期間 */
 	protected int deadPeriod = 0;
-	/** 中枢餡の状態（非ゆっくり症フラグ */
-	protected CoreAnkoState coreAnkoState = CoreAnkoState.NORMAL;
 	/** 睡眠中かどうか */
 	protected boolean sleeping = false;
 	/** 悪夢を見るかどうか */
@@ -170,10 +168,6 @@ public abstract class LivingEntity extends Entity {
 	protected long birthAge = -1;
 	/** 出生直後イベントから除外する残り tick 数 */
 	protected int birthEventBlockedTicks = 0;
-	/** 実ゆかどうか */
-	protected boolean unBirth = false;
-	/** 妊娠期間 */
-	protected int pregnantPeriod = 0;
 	/** パニック種別 */
 	protected PanicType panicType = null;
 	/** パニック状態の期間 */
@@ -192,8 +186,6 @@ public abstract class LivingEntity extends Entity {
 	protected int footBakePeriod = 0;
 	/** 焼かれている期間 */
 	protected int bodyBakePeriod = 0;
-	/** 非ゆっくり症にかかっている期間 */
-	protected int nonYukkuriDiseasePeriod = 0;
 	/** 怒っている期間 */
 	protected int angryPeriod = 0;
 	/** 怖がっている期間 */
@@ -468,7 +460,7 @@ public abstract class LivingEntity extends Entity {
 		if (dead) {
 			return;
 		}
-		if (s > 0 && coreAnkoState == CoreAnkoState.NORMAL && getBurstState() != Burst.HALF) {
+		if (s > 0 && getCoreAnkoState() == CoreAnkoState.NORMAL && getBurstState() != Burst.HALF) {
 			plusShit(s / 5);
 		}
 		stress += TICK * s;
@@ -594,14 +586,10 @@ public abstract class LivingEntity extends Entity {
 	}
 
 	/** 中枢餡の状態（非ゆっくり症フラグ を取得する. @return 中枢餡の状態（非ゆっくり症フラグ */
-	public CoreAnkoState getCoreAnkoState() {
-		return coreAnkoState;
-	}
+	public abstract CoreAnkoState getCoreAnkoState();
 
 	/** 中枢餡の状態（非ゆっくり症フラグ を設定する. @param coreAnkoState 中枢餡の状態（非ゆっくり症フラグ */
-	public void setCoreAnkoState(CoreAnkoState coreAnkoState) {
-		this.coreAnkoState = coreAnkoState;
-	}
+	public abstract void setCoreAnkoState(CoreAnkoState coreAnkoState);
 
 	/** 睡眠中かどうか を取得する. @return 睡眠中かどうか */
 	public boolean isSleeping() {
@@ -973,14 +961,20 @@ public abstract class LivingEntity extends Entity {
 		this.birthAge = birthAge;
 	}
 
+	/** 実ゆフラグの生値を取得する（サブクラスで実装）. */
+	protected abstract boolean getUnBirthField();
+
+	/** 実ゆフラグの生値を設定する（サブクラスで実装）. */
+	protected abstract void setUnBirthField(boolean v);
+
 	/** 実ゆかどうか を取得する. @return 実ゆかどうか */
 	public boolean isUnBirth() {
-		return unBirth;
+		return getUnBirthField();
 	}
 
 	/** 実ゆかどうか を設定する. @param unBirth 実ゆかどうか */
 	public void setUnBirth(boolean unBirth) {
-		this.unBirth = unBirth;
+		setUnBirthField(unBirth);
 		if (unBirth) {
 			birthEventBlockedTicks = 0;
 		}
@@ -1000,14 +994,10 @@ public abstract class LivingEntity extends Entity {
 	}
 
 	/** 妊娠期間 を取得する. @return 妊娠期間 */
-	public int getPregnantPeriod() {
-		return pregnantPeriod;
-	}
+	public abstract int getPregnantPeriod();
 
 	/** 妊娠期間 を設定する. @param pregnantPeriod 妊娠期間 */
-	public void setPregnantPeriod(int pregnantPeriod) {
-		this.pregnantPeriod = pregnantPeriod;
-	}
+	public abstract void setPregnantPeriod(int pregnantPeriod);
 
 	/** パニック種別 を取得する. @return パニック種別 */
 	public PanicType getPanicType() {
@@ -1173,14 +1163,10 @@ public abstract class LivingEntity extends Entity {
 	}
 
 	/** 非ゆっくり症にかかっている期間 を取得する. @return 非ゆっくり症にかかっている期間 */
-	public int getNonYukkuriDiseasePeriod() {
-		return nonYukkuriDiseasePeriod;
-	}
+	public abstract int getNonYukkuriDiseasePeriod();
 
 	/** 非ゆっくり症にかかっている期間 を設定する. @param v 非ゆっくり症にかかっている期間 */
-	public void setNonYukkuriDiseasePeriod(int v) {
-		this.nonYukkuriDiseasePeriod = v;
-	}
+	public abstract void setNonYukkuriDiseasePeriod(int v);
 
 	/** 怒っている期間 を取得する. @return 怒っている期間 */
 	public int getAngryPeriod() {
@@ -4012,12 +3998,12 @@ public abstract class LivingEntity extends Entity {
 
 	@com.fasterxml.jackson.annotation.JsonIgnore
 	public final boolean isNYD() {
-		return coreAnkoState != CoreAnkoState.NORMAL;
+		return getCoreAnkoState() != CoreAnkoState.NORMAL;
 	}
 
 	@com.fasterxml.jackson.annotation.JsonIgnore
 	public final boolean isNotNYD() {
-		return coreAnkoState == CoreAnkoState.NORMAL;
+		return getCoreAnkoState() == CoreAnkoState.NORMAL;
 	}
 
 	@com.fasterxml.jackson.annotation.JsonIgnore
@@ -4209,7 +4195,6 @@ public abstract class LivingEntity extends Entity {
 		l.setTang(tang);
 		l.setDead(dead);
 		l.setDeadPeriod(deadPeriod);
-		l.setCoreAnkoState(coreAnkoState);
 		l.setSleeping(sleeping);
 		l.setNightmare(nightmare);
 		l.setWakeUpTime(wakeUpTime);
@@ -4233,8 +4218,6 @@ public abstract class LivingEntity extends Entity {
 		l.setBirth(birth);
 		l.setBirthAge(birthAge);
 		l.setBirthEventBlockedTicks(birthEventBlockedTicks);
-		l.setUnBirth(unBirth);
-		l.setPregnantPeriod(pregnantPeriod);
 		l.setPanicType(panicType);
 		l.setPanicPeriod(panicPeriod);
 		l.setCriticalDamege(criticalDamege);
@@ -4244,7 +4227,6 @@ public abstract class LivingEntity extends Entity {
 		l.setSuperEatingNoHungryPeriod(superEatingNoHungryPeriod);
 		l.setFootBakePeriod(footBakePeriod);
 		l.setBakePeriod(bodyBakePeriod);
-		l.setNonYukkuriDiseasePeriod(nonYukkuriDiseasePeriod);
 		l.setAngryPeriod(angryPeriod);
 		l.setScarePeriod(scarePeriod);
 		l.setSadPeriod(sadPeriod);

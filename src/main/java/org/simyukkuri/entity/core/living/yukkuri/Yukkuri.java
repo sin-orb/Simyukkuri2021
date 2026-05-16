@@ -2718,6 +2718,74 @@ public abstract class Yukkuri extends SocialEntity {
 		setRaper(!isRaper());
 	}
 
+	/** 実ゆかどうか */
+	protected boolean unBirth = false;
+	/** 妊娠期間 */
+	protected int pregnantPeriod = 0;
+
+	@Override
+	protected boolean getUnBirthField() { return unBirth; }
+
+	@Override
+	protected void setUnBirthField(boolean v) { unBirth = v; }
+
+	@Override
+	public int getPregnantPeriod() { return pregnantPeriod; }
+
+	@Override
+	public void setPregnantPeriod(int pregnantPeriod) { this.pregnantPeriod = pregnantPeriod; }
+
+	/** 発情フラグ */
+	protected boolean exciting = false;
+	/** 強制発情フラグ */
+	protected boolean forceExciting = false;
+	/** 発情期間 */
+	protected int excitingPeriod = 0;
+
+	@Override
+	public boolean isExciting() { return !dead && exciting; }
+
+	@Override
+	public void setExciting(boolean exciting) { this.exciting = exciting; }
+
+	@Override
+	public boolean isForceExciting() { return !dead && exciting && forceExciting; }
+
+	@Override
+	public void setForceExciting(boolean forceExciting) { this.forceExciting = forceExciting; }
+
+	@Override
+	public int getExcitingPeriod() { return excitingPeriod; }
+
+	@Override
+	public void setExcitingPeriod(int excitingPeriod) { this.excitingPeriod = excitingPeriod; }
+
+	/** 中枢餡の状態（非ゆっくり症フラグ) */
+	protected CoreAnkoState coreAnkoState = CoreAnkoState.NORMAL;
+
+	/** 非ゆっくり症にかかっている期間 */
+	protected int nonYukkuriDiseasePeriod = 0;
+
+	@Override
+	public CoreAnkoState getCoreAnkoState() {
+		return coreAnkoState;
+	}
+
+	@Override
+	public void setCoreAnkoState(CoreAnkoState coreAnkoState) {
+		this.coreAnkoState = coreAnkoState;
+	}
+
+	@Override
+	public int getNonYukkuriDiseasePeriod() {
+		return nonYukkuriDiseasePeriod;
+	}
+
+	@Override
+	public void setNonYukkuriDiseasePeriod(int v) {
+		this.nonYukkuriDiseasePeriod = v;
+	}
+
 	/** おかざりがなくなっていることに気がついているか */
 	protected boolean noticeNoOkazari = false;
 
@@ -2991,6 +3059,13 @@ public abstract class Yukkuri extends SocialEntity {
 		y.setLikeHotFood(likeHotFood);
 		y.setFlyingType(flyingType);
 		y.setHasPants(hasPants);
+		y.setUnBirthField(unBirth);
+		y.setPregnantPeriod(pregnantPeriod);
+		y.setExciting(exciting);
+		y.setForceExciting(forceExciting);
+		y.setExcitingPeriod(excitingPeriod);
+		y.setCoreAnkoState(coreAnkoState);
+		y.setNonYukkuriDiseasePeriod(nonYukkuriDiseasePeriod);
 		y.copyNameSetFrom(this);
 		y.copySpriteSetFrom(this);
 	}
