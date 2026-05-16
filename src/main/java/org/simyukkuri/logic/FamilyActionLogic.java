@@ -23,6 +23,7 @@ import org.simyukkuri.event.impl.YukkuriRideEvent;
 import org.simyukkuri.field.impl.Barrier;
 import org.simyukkuri.system.MessagePool;
 import org.simyukkuri.util.GameEnvironment;
+import org.simyukkuri.system.WorldState;
 import org.simyukkuri.util.GameMessages;
 import org.simyukkuri.util.GameRandom;
 import org.simyukkuri.util.GameWorld;
@@ -39,6 +40,10 @@ public class FamilyActionLogic {
 	 * @return 処理が行われたか
 	 */
 	public static final boolean checkFamilyAction(Yukkuri body) {
+		return checkFamilyAction(body, GameWorld.get().getCurrentWorldState());
+	}
+
+	public static final boolean checkFamilyAction(Yukkuri body, WorldState ws) {
 		// 他の用事がある場合
 		if (body.isToFood() || body.isToYukkuri() || body.isToSukkiri() ||
 				body.isToBed() || body.isToShit() || body.isToSteal() || body.isToTakeout()) {
@@ -253,7 +258,7 @@ public class FamilyActionLogic {
 		// ・餌まで移動した場合、一緒に食事をする
 		// ・空腹じゃなくても食べて家族で空腹度を合わせる
 		if (wantToEat) {
-			if (goToEat(body, childrenList)) {
+			if (goToEat(body, childrenList, ws)) {
 				return true;
 			}
 		}
@@ -264,7 +269,7 @@ public class FamilyActionLogic {
 		// ・汚れていた場合ぺろぺろする
 		// ・子は親に近づく
 		if (wantToShit) {
-			if (goToShit(body, childrenList)) {
+			if (goToShit(body, childrenList, ws)) {
 				return true;
 			}
 		}
@@ -291,7 +296,11 @@ public class FamilyActionLogic {
 
 	// うんうん体操
 	public static final boolean goToShit(Yukkuri body, List<Yukkuri> childrenList) {
-		Entity targetToilet = searchToilet(body);
+		return goToShit(body, childrenList, GameWorld.get().getCurrentWorldState());
+	}
+
+	public static final boolean goToShit(Yukkuri body, List<Yukkuri> childrenList, WorldState ws) {
+		Entity targetToilet = searchToilet(body, ws);
 		if (!body.checkWait(2000)) {
 			return false;
 		}
@@ -312,9 +321,13 @@ public class FamilyActionLogic {
 	 * @return 探しだしたトイレオブジェクト
 	 */
 	public static Entity searchToilet(Yukkuri body) {
+		return searchToilet(body, GameWorld.get().getCurrentWorldState());
+	}
+
+	public static Entity searchToilet(Yukkuri body, WorldState ws) {
 		Entity nearestToilet = null;
 		int minimumDistance = body.getEyesightBase();
-		for (Map.Entry<Integer, Toilet> entry : GameWorld.get().getCurrentWorldState().getToilets().entrySet()) {
+		for (Map.Entry<Integer, Toilet> entry : ws.getToilets().entrySet()) {
 			Toilet toilet = entry.getValue();
 			// 最小距離のものが見つかっていたら
 			if (minimumDistance < 1) {
@@ -342,11 +355,15 @@ public class FamilyActionLogic {
 	 * @return 処理が行われたか
 	 */
 	public static final boolean goToEat(Yukkuri body, List<Yukkuri> childrenList) {
+		return goToEat(body, childrenList, GameWorld.get().getCurrentWorldState());
+	}
+
+	public static final boolean goToEat(Yukkuri body, List<Yukkuri> childrenList, WorldState ws) {
 		// 餌を持っていたら落とす
 		body.dropTakeoutItem(TakeoutItemType.FOOD);
 		// フィールドの餌検索
 		// 基本普通の餌でしかイベントは起こさない。茎があれば終了。
-		Entity targetFood = searchFood(body);
+		Entity targetFood = searchFood(body, ws);
 		if (targetFood == null) {
 			return false;
 		}
@@ -369,12 +386,16 @@ public class FamilyActionLogic {
 	 * @return 処理が行われたか
 	 */
 	public static final Entity searchFood(Yukkuri body) {
+		return searchFood(body, GameWorld.get().getCurrentWorldState());
+	}
+
+	public static final Entity searchFood(Yukkuri body, WorldState ws) {
 		Entity nearestFood = null;
 		int minimumDistance = body.getEyesightBase();
 		int bestLooks = -1000;
 
 		// フィールドの餌検索
-		for (Map.Entry<Integer, Food> entry : GameWorld.get().getCurrentWorldState().getFoods().entrySet()) {
+		for (Map.Entry<Integer, Food> entry : ws.getFoods().entrySet()) {
 			Food food = entry.getValue();
 			if (food.isEmpty()) {
 				continue;

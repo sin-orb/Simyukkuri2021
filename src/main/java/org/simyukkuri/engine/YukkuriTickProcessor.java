@@ -97,7 +97,7 @@ public final class YukkuriTickProcessor {
 			boolean shouldCheck = yukkuri.getBlockedTicks() == 0;
 			if (hasChildren) {
 				if (shouldCheck) {
-					if (FamilyActionLogic.checkFamilyAction(yukkuri)) {
+					if (FamilyActionLogic.checkFamilyAction(yukkuri, curMap)) {
 						shouldCheck = false;
 					} else {
 						shouldCheck = true;
