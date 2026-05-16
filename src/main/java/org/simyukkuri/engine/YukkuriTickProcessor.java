@@ -106,7 +106,7 @@ public final class YukkuriTickProcessor {
 			}
 
 			if (shouldCheck) {
-				if (FoodLogic.checkFood(yukkuri)) {
+				if (FoodLogic.checkFood(yukkuri, curMap)) {
 					shouldCheck = false;
 				} else {
 					shouldCheck = true;

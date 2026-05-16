@@ -11,6 +11,7 @@ import org.simyukkuri.enums.AgeState;
 import org.simyukkuri.enums.BurialState;
 import org.simyukkuri.enums.FootBake;
 import org.simyukkuri.enums.PublicRank;
+import org.simyukkuri.system.WorldState;
 import org.simyukkuri.util.GameEnvironment;
 import org.simyukkuri.util.GameWorld;
 
@@ -26,6 +27,10 @@ public class FoodLogic {
 	 * @return 処理が行われたか
 	 */
 	public static final boolean checkFood(Yukkuri body) {
+		return checkFood(body, GameWorld.get().getCurrentWorldState());
+	}
+
+	public static final boolean checkFood(Yukkuri body, WorldState ws) {
 		/*
 		 * 流れとしては、C1→C2→B1→B2 (Aはキャンセル判定)といった感じ
 		 */
@@ -59,7 +64,7 @@ public class FoodLogic {
 			}
 			// 茎の場合の探索
 			if (food instanceof Stalk) {
-				Yukkuri plantBody = GameWorld.get().getCurrentWorldState().getYukkuriRegistry().get(((Stalk) food).getPlantYukkuri());
+				Yukkuri plantBody = ws.getYukkuriRegistry().get(((Stalk) food).getPlantYukkuri());
 				// 自分の茎は無視
 				if (plantBody == body) {
 					body.clearActions();
@@ -104,7 +109,7 @@ public class FoodLogic {
 			} else {
 				if (body.isPredatorType() && !GameEnvironment.isPredatorSteam()) {
 					// 捕食種用
-					candidate = searchFoodPredetor(body, forceEat);
+					candidate = searchFoodPredetor(body, forceEat, ws);
 				} else {
 					// 通常種用
 					candidate = searchFoodStandard(body, forceEat);
@@ -138,6 +143,10 @@ public class FoodLogic {
 	 * @return 検索されたエサオブジェクト
 	 */
 	public static final Entity searchFoodPredetor(Yukkuri body, boolean[] forceEat) {
+		return searchFoodPredetor(body, forceEat, GameWorld.get().getCurrentWorldState());
+	}
+
+	public static final Entity searchFoodPredetor(Yukkuri body, boolean[] forceEat, WorldState ws) {
 		Entity candidate = null;
 		Entity candidate2 = null; // 副候補
 		Entity deadCandidate = null; // 死体候補
@@ -154,7 +163,7 @@ public class FoodLogic {
 		}
 
 		// ゆっくりから検索
-		for (Map.Entry<Integer, Yukkuri> entry : GameWorld.get().getCurrentWorldState().getYukkuriRegistry().entrySet()) {
+		for (Map.Entry<Integer, Yukkuri> entry : ws.getYukkuriRegistry().entrySet()) {
 			Yukkuri candidateBody = entry.getValue();
 			if (body == candidateBody) {
 				continue;
